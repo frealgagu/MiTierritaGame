@@ -1,9 +1,10 @@
 import { EventBus } from './EventBus.js';
 import { createInitialState } from '../sim/state.js';
-import { stepSource } from '../sim/production.js';
+import { stepStation } from '../sim/production.js';
+import { CHAIN } from '../sim/chain.js';
 import { stepMules } from '../sim/transport.js';
 import { stepJeep } from '../sim/dispatch.js';
-import { buyUpgrade, quoteUpgrade } from '../sim/upgrades.js';
+import { buyUpgrade, quoteUnlock, quoteUpgrade, unlockStation } from '../sim/upgrades.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
 const INCOME_WINDOW = 60; // s para calcular 💰/s
@@ -29,7 +30,7 @@ export class Game {
 
   step(dt) {
     this.state.playTime += dt;
-    stepSource(this.state, 'farm', dt, this.bus);
+    for (const id of CHAIN) if (this.state.stations[id]) stepStation(this.state, id, dt, this.bus);
     stepMules(this.state, dt, this.bus);
     stepJeep(this.state, dt, this.bus);
   }
@@ -57,5 +58,13 @@ export class Game {
 
   buy(id, mode) {
     return buyUpgrade(this.state, id, mode, this.bus);
+  }
+
+  quoteUnlock(id) {
+    return quoteUnlock(this.state, id);
+  }
+
+  unlock(id) {
+    return unlockStation(this.state, id, this.bus);
   }
 }

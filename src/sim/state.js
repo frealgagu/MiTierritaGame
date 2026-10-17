@@ -1,4 +1,6 @@
-export const SAVE_VERSION = 1;
+import { createStationState } from './production.js';
+
+export const SAVE_VERSION = 2;
 
 export function createInitialState(now = Date.now()) {
   return {
@@ -9,13 +11,14 @@ export function createInitialState(now = Date.now()) {
     savedAt: now,
     nextId: 1,
     stations: {
-      farm: { level: 1, buffer: 0, progress: 0, sinceDeparture: 0, blocked: false },
+      farm: createStationState(), // las demás estaciones aparecen al construirlas
     },
     dispatch: { level: 1 },
     warehouse: {}, // productId -> unidades en bodega
-    mules: [], // { id, productId, amount, t, duration }
+    mules: [], // { id, productId, amount, from, to, s0, s1, t, duration }
     jeep: { phase: 'idle', t: 0, waited: 0, load: {} },
     stats: { produced: {}, sold: {} },
+    hints: [], // avisos ya mostrados
   };
 }
 

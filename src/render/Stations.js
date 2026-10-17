@@ -1,13 +1,13 @@
 import { Container, Graphics, Polygon, Text } from 'pixi.js';
 import { iso, isoPoly, depth, shade } from './iso.js';
-import { PAL, OUTLINE } from './palette.js';
+import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
 import { drawCoffeeBush } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
+import { formatNumber } from '../core/format.js';
 
-const FONT = 'Fredoka, "Baloo 2", system-ui, sans-serif';
 
 // Etiqueta flotante con nombre y nivel, al estilo de los juegos de gestión.
 export class Label extends Container {
@@ -25,14 +25,16 @@ export class Label extends Container {
   }
 
   set(text) {
+    if (text === this.current) return;
+    this.current = text;
     this.text.text = text;
     const w = this.text.width + 18;
     this.bg.clear().roundRect(-w / 2, -11, w, 22, 11).fill({ color: 0x3a2418, alpha: 0.78 }).stroke({ width: 1.5, color: 0xffffff, alpha: 0.35 });
   }
 }
 
-// Base común: contenedor clicable sobre una huella de casillas.
-class StationView extends Container {
+// Base común: contenedor clicable sobre una huella de casillas, con etiqueta e icono de estado.
+export class StationView extends Container {
   constructor(x, y, w, h) {
     super();
     this.foot = { x, y, w, h };
@@ -43,6 +45,15 @@ class StationView extends Container {
     this.highlight = new Graphics();
     this.addChild(this.highlight);
     this.selected = false;
+    this.status = new Text({ text: '', style: { fontSize: 22 }, resolution: 3 });
+    this.status.anchor.set(0.5);
+    this.status.visible = false;
+  }
+
+  // icon: '⛔' | '⏸️' | '↪️' | null
+  setStatus(icon) {
+    this.status.visible = Boolean(icon);
+    if (icon && this.status.text !== icon) this.status.text = icon;
   }
 
   // Punto de anclaje para etiquetas y efectos.
@@ -73,9 +84,6 @@ export class FarmView extends StationView {
     this.art = new Graphics();
     this.addChild(this.art);
     this.label = new Label('Cafetal');
-    this.status = new Text({ text: '⛔', style: { fontSize: 22 }, resolution: 3 });
-    this.status.anchor.set(0.5);
-    this.status.visible = false;
     this.tier = -1;
     this.bushes = [];
   }
@@ -85,7 +93,6 @@ export class FarmView extends StationView {
     const tier = milestoneTier(farm.level);
     if (tier !== this.tier) this.draw(tier);
     this.label.set(`🌳 Cafetal · Nv ${farm.level}`);
-    this.status.visible = farm.blocked;
   }
 
   draw(tier) {
@@ -232,14 +239,15 @@ export class WarehouseView extends StationView {
   }
 }
 
-// Parcela reservada para una estación que llega en una versión futura.
+// Parcela de una estación aún sin construir: cerca, letrero y precio.
 export class PlotView extends StationView {
   constructor(plot, def) {
     super(plot.x, plot.y, 3, 3);
     this.plot = plot;
     this.def = def;
     const g = new Graphics();
-    this.addChild(g);
+    this.glow = new Graphics();
+    this.addChild(this.glow, g);
     const { x, y } = plot;
     // Postes de cerca.
     const posts = [];
@@ -254,16 +262,40 @@ export class PlotView extends StationView {
       const b = iso(bx, by, 7);
       g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.5, color: PAL.woodDark, alpha: 0.8 });
     }
-    // Letrero.
+    // Letrero con icono y precio.
     const s = iso(x + 1.5, y + 1.5);
     g.rect(s.x - 1.5, s.y - 26, 3, 26).fill(PAL.woodDark);
-    g.roundRect(s.x - 18, s.y - 44, 36, 22, 4).fill(PAL.wood).stroke(OUTLINE);
-    const t = new Text({ text: `${def.icon}🔒`, style: { fontSize: 11 }, resolution: 3 });
-    t.anchor.set(0.5);
-    t.position.set(s.x, s.y - 33);
-    this.addChild(t);
+    g.roundRect(s.x - 26, s.y - 48, 52, 26, 5).fill(PAL.wood).stroke(OUTLINE);
+    this.sign = new Text({
+      text: '',
+      style: { fontFamily: FONT, fontSize: 11, fontWeight: '700', fill: 0xfff3d6, align: 'center' },
+      resolution: 3,
+    });
+    this.sign.anchor.set(0.5);
+    this.sign.position.set(s.x, s.y - 35);
+    this.addChild(this.sign);
     this.label = new Label(def.name);
-    this.label.alpha = 0.75;
+    this.label.alpha = 0.8;
     this.label.scale.set(0.85);
+    this.available = false;
+  }
+
+  // quote: resultado de quoteUnlock.
+  sync(quote) {
+    const text = `${this.def.icon} ${formatNumber(quote.cost)}💰`;
+    if (this.sign.text !== text) this.sign.text = text;
+    const available = quote.ok;
+    if (available !== this.available) {
+      this.available = available;
+      const { x, y } = this.plot;
+      this.glow.clear();
+      if (available) this.glow.poly(isoPoly([[x, y], [x + 3, y], [x + 3, y + 3], [x, y + 3]])).fill({ color: 0xffe066, alpha: 0.35 });
+      this.label.alpha = available ? 1 : 0.8;
+    }
+  }
+
+  update(dt, t) {
+    super.update(dt, t);
+    if (this.available) this.glow.alpha = 0.5 + Math.sin(t * 4) * 0.5;
   }
 }

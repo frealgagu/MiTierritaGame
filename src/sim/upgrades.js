@@ -1,5 +1,7 @@
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { bulkUpgrade, MAX_LEVEL, MILESTONES } from './rules.js';
+import { CHAIN, nextToUnlock } from './chain.js';
+import { createStationState } from './production.js';
 
 // Lo que se puede mejorar: 'dispatch' o el id de una estación.
 function target(state, id) {
@@ -32,5 +34,27 @@ export function buyUpgrade(state, id, mode, bus) {
   // Hito más alto alcanzado con esta compra (o null).
   const milestone = MILESTONES.filter((m) => m > from && m <= holder.level).at(-1) ?? null;
   bus.emit('levelUp', { id, from, to: holder.level, milestone });
+  return true;
+}
+
+// ¿Se puede construir esta estación? Hay que seguir el orden de la cadena.
+export function quoteUnlock(state, id) {
+  const def = STATIONS_BY_ID[id];
+  if (state.stations[id]) return { ok: false, reason: 'built', cost: 0 };
+  const cost = def.unlockCost;
+  if (nextToUnlock(state) !== id) {
+    const previous = CHAIN[CHAIN.indexOf(id) - 1];
+    return { ok: false, reason: 'order', previous, cost };
+  }
+  if (state.coins < cost) return { ok: false, reason: 'coins', cost };
+  return { ok: true, cost };
+}
+
+export function unlockStation(state, id, bus) {
+  const q = quoteUnlock(state, id);
+  if (!q.ok) return false;
+  state.coins -= q.cost;
+  state.stations[id] = createStationState();
+  bus.emit('unlocked', { id });
   return true;
 }

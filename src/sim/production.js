@@ -1,24 +1,51 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
-import { stationBufferCap, stationRate } from './rules.js';
+import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
 
-// Fuente ilimitada: produce hasta llenar su patio; si se llena, se detiene.
-export function stepSource(state, stationId, dt, bus) {
-  const def = STATIONS_BY_ID[stationId];
-  const s = state.stations[stationId];
-  const cap = stationBufferCap(def, s.level);
-  if (s.buffer >= cap) {
-    s.blocked = true;
+export function createStationState() {
+  return { level: 1, input: 0, buffer: 0, progress: 0, sinceDeparture: 0, idle: 0, status: 'working' };
+}
+
+// Avanza una estación: consume su entrada (si tiene receta) y deja el producto en su patio.
+//   status: 'working' | 'starved' (falta entrada) | 'blocked' (patio lleno)
+//   idle:   segundos seguidos sin entrada
+export function stepStation(state, id, dt, bus) {
+  const def = STATIONS_BY_ID[id];
+  const s = state.stations[id];
+  const [[outId, outAmt]] = Object.entries(def.out);
+  const need = def.in ? Object.values(def.in)[0] : 0;
+  const space = stationBufferCap(def, s.level) - s.buffer;
+  const byInput = need ? Math.floor(s.input / need) : Infinity;
+  const byOutput = Math.floor(space / outAmt);
+
+  if (byOutput <= 0) {
+    s.status = 'blocked';
     s.progress = 0;
     return;
   }
-  s.blocked = false;
+  if (byInput <= 0) {
+    s.status = 'starved';
+    s.idle = (s.idle ?? 0) + dt;
+    s.progress = 0;
+    return;
+  }
+  s.status = 'working';
+  s.idle = 0;
   s.progress += dt * stationRate(def, s.level);
-  const cycles = Math.floor(s.progress);
+  const cycles = Math.min(Math.floor(s.progress), byInput, byOutput);
   if (cycles <= 0) return;
   s.progress -= cycles;
-  const [[productId, amount]] = Object.entries(def.out);
-  const produced = Math.min(cycles * amount, cap - s.buffer);
-  s.buffer += produced;
-  state.stats.produced[productId] = (state.stats.produced[productId] ?? 0) + produced;
-  bus.emit('produced', { stationId, productId, amount: produced });
+  // Si faltó entrada, no se acumula tiempo de más.
+  if (cycles === byInput) s.progress = Math.min(s.progress, 1);
+  s.input -= cycles * need;
+  s.buffer += cycles * outAmt;
+  state.stats.produced[outId] = (state.stats.produced[outId] ?? 0) + cycles * outAmt;
+  bus.emit('produced', { stationId: id, productId: outId, amount: cycles * outAmt });
+}
+
+// Espacio de entrada libre, contando lo que ya viene en camino.
+export function inputSpace(state, id) {
+  const def = STATIONS_BY_ID[id];
+  const s = state.stations[id];
+  const incoming = state.mules.reduce((n, m) => (m.to === id ? n + m.amount : n), 0);
+  return stationInputCap(def, s.level) - s.input - incoming;
 }

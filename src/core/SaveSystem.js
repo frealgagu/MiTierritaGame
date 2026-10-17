@@ -1,4 +1,6 @@
 import { createInitialState, SAVE_VERSION } from '../sim/state.js';
+import { createStationState } from '../sim/production.js';
+import { ROAD_LENGTH } from '../sim/chain.js';
 
 const KEY = 'cafetal.save';
 
@@ -40,10 +42,16 @@ function migrate(data) {
   if (typeof data !== 'object' || data === null) return null;
   if ((data.version ?? 0) > SAVE_VERSION) return null;
   const base = createInitialState(data.savedAt);
+  // v1 → v2: estaciones con entrada y estado; mulas con origen y destino.
+  const stations = {};
+  for (const [id, st] of Object.entries(data.stations ?? {})) stations[id] = { ...createStationState(), ...st };
+  delete stations.farm?.blocked;
+  const mules = (data.mules ?? []).map((m) => (m.to ? m : { ...m, from: 'farm', to: 'warehouse', s0: 0, s1: ROAD_LENGTH }));
   return {
     ...base,
     ...data,
-    stations: { ...base.stations, ...data.stations },
+    stations: { ...base.stations, ...stations },
+    mules,
     dispatch: { ...base.dispatch, ...data.dispatch },
     jeep: { ...base.jeep, ...data.jeep },
     stats: { ...base.stats, ...data.stats },

@@ -5,6 +5,8 @@ export const ZONE1 = {
   id: 'finca',
   size: 26,
   seed: 7,
+  // Orden de la cadena: cada estación entrega su producto a la siguiente.
+  chain: ['farm', 'wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer'],
   farm: { stationId: 'farm', x: 2, y: 2, w: 6, h: 6 },
   // Parcelas de las estaciones siguientes, en orden de la cadena (3×3 casillas).
   plots: [

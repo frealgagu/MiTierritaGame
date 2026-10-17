@@ -1,18 +1,27 @@
 import { Container, Graphics, Text } from 'pixi.js';
-import { PAL, OUTLINE } from './palette.js';
+import { PAL, OUTLINE, FONT } from './palette.js';
 import { Background } from './Background.js';
 import { Camera } from './Camera.js';
 import { Terrain } from './Terrain.js';
 import { Effects } from './Effects.js';
 import { FarmView, PlotView, WarehouseView } from './Stations.js';
+import { BuildingView } from './Buildings.js';
 import { JeepView, MuleView } from './Carriers.js';
 import { iso } from './iso.js';
-import { pointAt } from '../core/path.js';
+import { pointAt, pointAtDistance } from '../core/path.js';
 import { formatNumber } from '../core/format.js';
 import { ZONE1 } from '../data/zones/zone1_finca.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { dispatchCapacity, warehouseCapacity } from '../sim/rules.js';
+import { CHAIN } from '../sim/chain.js';
+import { quoteUnlock } from '../sim/upgrades.js';
+
+const DIVERT_ICON_TIME = 3; // s que se muestra ↪️ tras un desvío
+const STARVED_ICON_TIME = 8; // s sin entrada antes de mostrar ⏸️
+
+// Altura (px) de la etiqueta sobre cada tipo de edificio.
+const LABEL_HEIGHT = { farm: 70, dispatch: 100, plot: 62, building: 82 };
 
 // Arma el mundo y lo mantiene sincronizado con el estado de la simulación.
 export class Scene {
@@ -35,24 +44,12 @@ export class Scene {
     this.world.addChild(this.terrain.ground, this.objects, this.labels, this.effects.view);
     for (const d of this.terrain.decor) this.objects.addChild(d);
 
+    this.stations = {};
     this.farm = new FarmView(this.zone);
     this.warehouse = new WarehouseView(this.zone);
-    this.plots = this.zone.plots.map((p) => new PlotView(p, STATIONS_BY_ID[p.stationId]));
-    this.stations = { farm: this.farm, dispatch: this.warehouse };
-    for (const p of this.plots) this.stations[p.def.id] = p;
-    for (const [id, view] of Object.entries(this.stations)) {
-      this.objects.addChild(view);
-      view.on('pointertap', () => {
-        if (!this.camera.dragged) this.onSelect(id);
-      });
-      const a = view.anchorPoint(id === 'farm' ? 70 : id === 'dispatch' ? 100 : 62);
-      view.label.position.set(a.x, a.y);
-      this.labels.addChild(view.label);
-    }
-    const s = this.farm.anchorPoint(110);
-    this.farm.status.position.set(s.x, s.y);
-    this.statusY = s.y;
-    this.labels.addChild(this.farm.status);
+    this.addStationView('farm', this.farm, LABEL_HEIGHT.farm);
+    this.addStationView('dispatch', this.warehouse, LABEL_HEIGHT.dispatch);
+    for (const plot of this.zone.plots) this.buildStation(plot.stationId);
 
     this.jeep = new JeepView();
     this.objects.addChild(this.jeep);
@@ -73,12 +70,45 @@ export class Scene {
     this.camera.fit({ minX: l.x, maxX: r.x, minY: top.y, maxY: end.y });
 
     this.bindEvents();
-    this.farm.sync(game.state);
     this.smokeTimer = 0;
   }
 
+  addStationView(id, view, labelHeight) {
+    this.stations[id] = view;
+    this.objects.addChild(view);
+    view.on('pointertap', () => {
+      if (!this.camera.dragged) this.onSelect(id);
+    });
+    const a = view.anchorPoint(labelHeight);
+    view.label.position.set(a.x, a.y);
+    view.status.position.set(a.x, a.y - 30);
+    view.statusY = a.y - 30;
+    this.labels.addChild(view.label, view.status);
+  }
+
+  // Parcela (si no está construida) o edificio de una estación de la cadena.
+  buildStation(id) {
+    const old = this.stations[id];
+    if (old) {
+      const wasSelected = old.selected;
+      old.destroy({ children: true });
+      old.label.destroy({ children: true });
+      old.status.destroy();
+      if (wasSelected) this.pendingSelect = id;
+    }
+    const plot = this.zone.plots.find((p) => p.stationId === id);
+    const def = STATIONS_BY_ID[id];
+    const built = Boolean(this.game.state.stations[id]);
+    const view = built ? new BuildingView(plot, def) : new PlotView(plot, def);
+    this.addStationView(id, view, built ? LABEL_HEIGHT.building : LABEL_HEIGHT.plot);
+    if (this.pendingSelect === id) {
+      view.setSelected(true);
+      this.pendingSelect = null;
+    }
+  }
+
   drawExitSign() {
-    const view = new PlotSign('Al pueblo ➜');
+    const view = new WoodSign('Al pueblo ➜');
     const [gx, gy] = this.zone.exitSign;
     const p = iso(gx, gy);
     view.position.set(p.x, p.y);
@@ -99,21 +129,33 @@ export class Scene {
       this.effects.floatText(p.x, p.y - 20, `+${formatNumber(coins)} 💰`, { color: 0xffe066, size: 20 });
     });
     bus.on('muleArrived', (m) => {
+      if (m.to !== 'warehouse') return;
       const p = iso(...this.zone.muleRoad.at(-1), 40);
       this.effects.floatText(p.x, p.y, `+${m.amount} ${PRODUCTS[m.productId].icon}`, { size: 14 });
     });
-    bus.on('produced', ({ productId, amount }) => {
+    bus.on('produced', ({ stationId, productId, amount }) => {
+      if (stationId !== 'farm') return;
       for (let i = 0; i < Math.min(amount, 3); i++) {
         const p = this.farm.randomBushTop();
         this.effects.hop(p.x, p.y, PRODUCTS[productId].color);
       }
     });
     bus.on('levelUp', ({ id, to, milestone }) => {
-      const view = this.stations[id];
-      const p = view.anchorPoint(30);
+      const p = this.stations[id].anchorPoint(30);
       this.effects.ring(p.x, p.y + 30);
-      this.effects.floatText(p.x, p.y - 20, milestone ? `¡Hito nivel ${milestone}! ×2` : `Nivel ${to}`, { color: milestone ? 0xffe066 : 0xffffff, size: milestone ? 22 : 16, life: milestone ? 2.2 : 1.2 });
+      this.effects.floatText(p.x, p.y - 20, milestone ? `¡Hito nivel ${milestone}! ×2` : `Nivel ${to}`, {
+        color: milestone ? 0xffe066 : 0xffffff,
+        size: milestone ? 22 : 16,
+        life: milestone ? 2.2 : 1.2,
+      });
       if (milestone) this.effects.confetti(p.x, p.y - 10);
+    });
+    bus.on('unlocked', ({ id }) => {
+      this.buildStation(id);
+      const p = this.stations[id].anchorPoint(40);
+      this.effects.ring(p.x, p.y + 40, 0xffffff);
+      this.effects.confetti(p.x, p.y, 60);
+      this.effects.floatText(p.x, p.y - 30, `¡${STATIONS_BY_ID[id].name}!`, { color: 0xffe066, size: 22, life: 2.4 });
     });
   }
 
@@ -127,8 +169,16 @@ export class Scene {
     this.background.update(dt, this.camera);
     this.farm.sync(state);
     this.warehouse.sync(state, warehouseCapacity(state.dispatch.level));
-    for (const view of Object.values(this.stations)) view.update(dt, this.time);
-    this.farm.status.y = this.statusY + Math.sin(this.time * 4) * 3;
+    for (const id of CHAIN) {
+      const view = this.stations[id];
+      if (view instanceof PlotView) view.sync(quoteUnlock(state, id));
+      else if (view instanceof BuildingView) view.sync(state);
+      view.setStatus(statusIcon(state, id));
+    }
+    for (const view of Object.values(this.stations)) {
+      view.update(dt, this.time);
+      if (view.status.visible) view.status.y = view.statusY + Math.sin(this.time * 4) * 3;
+    }
 
     this.syncMules(state);
     this.syncJeep(state);
@@ -137,6 +187,10 @@ export class Scene {
     if (this.smokeTimer <= 0) {
       this.smokeTimer = 0.6;
       this.effects.smoke(this.warehouse.chimney.x, this.warehouse.chimney.y);
+      for (const view of Object.values(this.stations)) {
+        if (!view.working) continue;
+        for (const p of view.smokePoints ?? []) this.effects.smoke(p.x, p.y);
+      }
     }
     this.effects.update(dt);
   }
@@ -151,7 +205,7 @@ export class Scene {
         this.mules.set(m.id, view);
         this.objects.addChild(view);
       }
-      const p = pointAt(this.zone.muleRoad, m.t / m.duration);
+      const p = pointAtDistance(this.zone.muleRoad, m.s0 + (m.s1 - m.s0) * Math.min(m.t / m.duration, 1));
       view.place(p.gx, p.gy, p.dx, p.dy, this.time);
     }
     for (const [id, view] of this.mules) {
@@ -186,14 +240,24 @@ export class Scene {
   }
 }
 
+// Icono sobre la estación: ⛔ patio lleno, ⏸️ esperando entrada, ↪️ desviando a la bodega.
+export function statusIcon(state, id) {
+  const st = state.stations[id];
+  if (!st) return null;
+  if (st.status === 'blocked') return '⛔';
+  if (st.status === 'starved' && st.idle > STARVED_ICON_TIME) return '⏸️';
+  if (st.lastDiverted !== undefined && state.playTime - st.lastDiverted < DIVERT_ICON_TIME) return '↪️';
+  return null;
+}
+
 // Letrero de madera simple.
-class PlotSign extends Container {
+class WoodSign extends Container {
   constructor(text) {
     super();
     const g = new Graphics();
     g.rect(-1.5, -26, 3, 26).fill(PAL.woodDark);
     g.roundRect(-34, -44, 68, 18, 4).fill(PAL.wood).stroke(OUTLINE);
-    const t = new Text({ text, style: { fontFamily: 'Fredoka, system-ui', fontSize: 11, fontWeight: '600', fill: 0xfff3d6 }, resolution: 3 });
+    const t = new Text({ text, style: { fontFamily: FONT, fontSize: 11, fontWeight: '600', fill: 0xfff3d6 }, resolution: 3 });
     t.anchor.set(0.5);
     t.position.set(0, -35);
     this.addChild(g, t);

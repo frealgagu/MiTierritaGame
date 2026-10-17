@@ -68,14 +68,16 @@ Se buscó un tema en el que una cadena larga de transformación sea **natural y 
 
 | # | Estación | Entra | Sale | Ciclo (nv. 1) | Valor unidad | Desbloqueo | Coste base de mejora |
 |---|----------|-------|------|---------------|--------------|------------|----------------------|
-| 1 | **Cafetal** ♾️ | — | 1 🍒 cereza | 2,0 s | 1 | Inicial | 5 |
-| 2 | Beneficiadero (despulpar y lavar) | 2 🍒 | 1 💧 grano lavado | 3,0 s | 3 | 50 | 40 |
-| 3 | Marquesina de secado | 1 💧 | 1 🟫 pergamino | 5,0 s | 6 | 400 | 300 |
-| 4 | Trilladora | 1 🟫 | 1 🟢 café verde | 3,0 s | 10 | 2.500 | 2.000 |
-| 5 | Tostadora | 2 🟢 | 1 🟤 café tostado | 6,0 s | 30 | 15.000 | 12.000 |
-| 6 | Molino | 1 🟤 | 1 ☕ café molido | 3,0 s | 45 | 90.000 | 70.000 |
-| 7 | Empacadora | 4 ☕ | 1 🛍️ bolsa de café | 8,0 s | 250 | 500.000 | 400.000 |
+| 1 | **Cafetal** ♾️ | — | 1 🍒 cereza | 2 s | 1 | Inicial | 5 |
+| 2 | Beneficiadero (despulpar y lavar) | 2 🍒 | 1 💧 grano lavado | 4 s | 3 | 50 | 8 |
+| 3 | Marquesina de secado | 1 💧 | 1 🟫 pergamino | 4 s | 6 | 250 | 12 |
+| 4 | Trilladora | 1 🟫 | 1 🟢 café verde | 4 s | 10 | 1.000 | 20 |
+| 5 | Tostadora | 2 🟢 | 1 🟤 café tostado | 8 s | 30 | 4.000 | 35 |
+| 6 | Molino | 1 🟤 | 1 ☕ café molido | 8 s | 45 | 15.000 | 60 |
+| 7 | Empacadora | 4 ☕ | 1 🛍️ bolsa de café | 32 s | 250 | 60.000 | 100 |
 | — | **Bodega + Despacho** | cualquier producto | 💰 | viaje de 10 s | — | Inicial | 10 |
+
+> **Regla de balance (v0.2):** a igual nivel, cada estación procesa exactamente lo que le entrega la anterior (los ciclos se calcularon a partir de 0,5 🍒/s del Cafetal a nivel 1). Así, subir toda la cadena junta mantiene el flujo equilibrado y el cuello de botella aparece cuando una estación se queda atrás. Simulado: un jugador que sube la cadena en bloque construye la Empacadora a los ~67 min; uno que mejora estación por estación, a las ~2 h 20 min.
 
 - **Al principio solo existen el Cafetal y el Despacho:** se venden cerezas a 1 💰. Desbloquear el Beneficiadero vuelve más rentable cada cereza, y así sucesivamente.
 - **Cada paso aumenta el valor** más de lo que consume (2 🍒 = 2 → 1 💧 = 3), así que procesar siempre conviene, **si la estación da abasto**. Si no, el sobrante también se vende en crudo.

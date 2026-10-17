@@ -1,14 +1,15 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONE1 } from '../data/zones/zone1_finca.js';
-import { pathLength } from '../core/path.js';
 import { muleBatch, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
+import { CHAIN, ROAD_POS, nextStation } from './chain.js';
+import { inputSpace } from './production.js';
 
-export const MULE_TRAVEL_TIME = pathLength(ZONE1.muleRoad) / ZONE1.muleSpeed;
 const MAX_IDLE = 6; // s: si hay algo en el patio y no sale una mula en este tiempo, sale con lo que haya
+const MIN_TRIP = 1.5; // s
 
-export function inTransit(state) {
-  return state.mules.reduce((n, m) => n + m.amount, 0);
+export function inTransit(state, to = 'warehouse') {
+  return state.mules.reduce((n, m) => (m.to === to ? n + m.amount : n), 0);
 }
 
 // Espacio libre en bodega contando lo que ya viene en camino.
@@ -16,7 +17,8 @@ export function warehouseSpace(state) {
   return warehouseCapacity(state.dispatch.level) - sumValues(state.warehouse) - inTransit(state);
 }
 
-// v0.1: mulas ilimitadas del cafetal a la bodega (solo hay retraso, no cuello de botella).
+// v0.2: mulas ilimitadas que recorren el camino de una estación a la siguiente.
+// Si la siguiente no existe o no tiene sitio, el producto se desvía a la bodega y se vende tal cual.
 // Los arrieros con capacidad mejorable llegan en la v0.3.
 export function stepMules(state, dt, bus) {
   const arrived = [];
@@ -26,26 +28,55 @@ export function stepMules(state, dt, bus) {
   }
   if (arrived.length) {
     state.mules = state.mules.filter((m) => m.t < m.duration);
-    for (const m of arrived) {
-      state.warehouse[m.productId] = (state.warehouse[m.productId] ?? 0) + m.amount;
-      bus.emit('muleArrived', m);
-    }
+    for (const m of arrived) deliver(state, m);
+    for (const m of arrived) bus.emit('muleArrived', m);
   }
 
-  const farm = state.stations.farm;
-  const def = STATIONS_BY_ID.farm;
-  farm.sinceDeparture += dt;
-  const batch = muleBatch(def, farm.level);
-  const space = warehouseSpace(state);
-  let amount = 0;
-  if (farm.buffer >= batch && space >= batch) amount = batch;
-  else if (farm.buffer > 0 && farm.sinceDeparture >= MAX_IDLE) amount = Math.min(farm.buffer, space);
-  if (amount <= 0) return;
+  for (const id of CHAIN) {
+    if (state.stations[id]) dispatchFrom(state, id, dt, bus);
+  }
+}
 
-  const [productId] = Object.keys(def.out);
-  farm.buffer -= amount;
-  farm.sinceDeparture = 0;
-  const mule = { id: state.nextId++, productId, amount, t: 0, duration: MULE_TRAVEL_TIME };
+function deliver(state, m) {
+  if (m.to !== 'warehouse' && state.stations[m.to]) state.stations[m.to].input += m.amount;
+  else state.warehouse[m.productId] = (state.warehouse[m.productId] ?? 0) + m.amount;
+}
+
+function dispatchFrom(state, id, dt, bus) {
+  const s = state.stations[id];
+  const def = STATIONS_BY_ID[id];
+  s.sinceDeparture += dt;
+  if (s.buffer <= 0) return;
+  const batch = muleBatch(def, s.level);
+  if (s.buffer < batch && s.sinceDeparture < MAX_IDLE) return;
+  let left = Math.min(s.buffer, batch);
+
+  // A la siguiente estación lo que le quepa; el resto se desvía a la bodega.
+  const next = nextStation(state, id);
+  if (next) {
+    const amount = Math.min(left, Math.floor(inputSpace(state, next)));
+    if (amount > 0) {
+      sendMule(state, id, next, amount, bus);
+      left -= amount;
+    }
+  }
+  if (left > 0) {
+    const amount = Math.min(left, warehouseSpace(state));
+    if (amount > 0) {
+      sendMule(state, id, 'warehouse', amount, bus);
+      if (next) s.lastDiverted = state.playTime;
+    }
+  }
+}
+
+function sendMule(state, from, to, amount, bus) {
+  const s = state.stations[from];
+  const productId = Object.keys(STATIONS_BY_ID[from].out)[0];
+  s.buffer -= amount;
+  s.sinceDeparture = 0;
+  const s0 = ROAD_POS[from];
+  const s1 = ROAD_POS[to];
+  const mule = { id: state.nextId++, productId, amount, from, to, s0, s1, t: 0, duration: Math.max(MIN_TRIP, (s1 - s0) / ZONE1.muleSpeed) };
   state.mules.push(mule);
   bus.emit('muleDeparted', mule);
 }

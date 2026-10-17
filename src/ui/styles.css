@@ -83,6 +83,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: 0.85rem;
   font-weight: 500;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 /* Panel de estación */
@@ -180,6 +181,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: 1.1rem;
   font-weight: 600;
 }
+.recipe.small { margin: 10px 0 0; padding: 6px; font-size: 1rem; }
 .soon { text-align: center; font-size: 0.9rem; color: var(--muted); margin: 0; }
 
 /* Modal y avisos */

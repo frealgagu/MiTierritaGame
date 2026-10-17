@@ -33,12 +33,12 @@ async function start() {
   if (saved) applyOffline(game, (Date.now() - saved.savedAt) / 1000);
 
   const scene = new Scene(app, game);
-  const hud = new HUD(game);
   const panel = new StationPanel(game, () => scene.select(null));
   scene.onSelect = (id) => {
     scene.select(id);
     panel.open(id);
   };
+  const hud = new HUD(game, scene.onSelect);
   window.addEventListener('resize', () => scene.resize(app.screen.width, app.screen.height));
 
   if (!saved) toast('Toca el 🌳 Cafetal y mejóralo cuando tengas monedas.', 6000);

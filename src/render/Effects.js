@@ -1,6 +1,6 @@
 import { Container, Graphics, Text } from 'pixi.js';
+import { FONT } from './palette.js';
 
-const FONT = 'Fredoka, "Baloo 2", system-ui, sans-serif';
 
 // Números flotantes, humo, cerezas que saltan y confeti.
 export class Effects {

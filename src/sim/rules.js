@@ -45,6 +45,12 @@ export function stationBufferCap(def, level) {
   return Math.max(20, Math.ceil(stationOutputRate(def, level) * 15));
 }
 
+// Lo que cabe en la entrada de una estación: ~15 s de consumo (mínimo 20).
+export function stationInputCap(def, level) {
+  const need = def.in ? Object.values(def.in)[0] : 0;
+  return Math.max(20, Math.ceil(stationRate(def, level) * need * 15));
+}
+
 // Carga de cada mula: ~4 s de producción (mínimo 5) para que no haya cientos de mulas.
 export function muleBatch(def, level) {
   return Math.max(5, Math.ceil(stationOutputRate(def, level) * 4));

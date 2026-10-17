@@ -31,7 +31,7 @@ test('si el despacho no da abasto, la bodega se llena y el cafetal se detiene', 
   const game = new Game();
   game.state.stations.farm.level = 60; // produce mucho más de lo que el Willys nivel 1 vende
   run(game, 120);
-  assert.equal(game.state.stations.farm.blocked, true);
+  assert.equal(game.state.stations.farm.status, 'blocked');
 });
 
 test('el progreso sin conexión genera monedas y respeta el tope', () => {
@@ -50,4 +50,24 @@ test('al cruzar un hito se anuncia el hito alcanzado', () => {
   game.buy('farm', 1); // 11 → 12
   assert.equal(events[0].milestone, 10);
   assert.equal(events[1].milestone, null);
+});
+
+test('una partida de la v0.1 se carga en la v0.2', async () => {
+  const store = new Map();
+  globalThis.localStorage = { getItem: (k) => store.get(k) ?? null, setItem: (k, v) => store.set(k, v), removeItem: (k) => store.delete(k) };
+  const { loadGame } = await import('../src/core/SaveSystem.js');
+  const v1 = {
+    version: 1, coins: 12, totalEarned: 30, playTime: 100, savedAt: Date.now(), nextId: 5,
+    stations: { farm: { level: 7, buffer: 3, progress: 0.5, sinceDeparture: 1, blocked: false } },
+    dispatch: { level: 2 }, warehouse: { cherry: 4 },
+    mules: [{ id: 4, productId: 'cherry', amount: 5, t: 2, duration: 9 }],
+    jeep: { phase: 'idle', t: 0, waited: 0, load: {} }, stats: { produced: {}, sold: { cherry: 30 } },
+  };
+  store.set('cafetal.save', JSON.stringify(v1));
+  const game = new Game(loadGame());
+  assert.equal(game.state.stations.farm.level, 7);
+  assert.equal(game.state.stations.farm.input, 0);
+  assert.equal(game.state.mules[0].to, 'warehouse');
+  run(game, 30);
+  assert.ok(game.state.coins > 12);
 });

@@ -8,17 +8,23 @@ import {
   dispatchRate,
   nextMilestone,
   stationBufferCap,
+  stationInputCap,
   stationOutputRate,
   warehouseCapacity,
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
 import { inTransit } from '../sim/transport.js';
+import { analyzeChain } from '../sim/analysis.js';
+import { CHAIN, nextStation } from '../sim/chain.js';
 
 const MODES = [
   { key: 1, label: '×1' },
   { key: 10, label: '×10' },
   { key: 'max', label: 'Máx' },
 ];
+
+const recipe = (obj) => Object.entries(obj).map(([id, n]) => `${n} ${PRODUCTS[id].icon}`).join(' + ');
+const nameOf = (id) => (id === 'dispatch' ? DISPATCH.name : STATIONS_BY_ID[id].name);
 
 // Panel inferior con la información y las mejoras de la estación seleccionada.
 // Se construye al abrir y luego solo se actualizan los textos (para no perder clics).
@@ -30,15 +36,22 @@ export class StationPanel {
     this.id = null;
     this.mode = 1;
     this.refs = {};
+    this.built = null;
   }
 
   open(id) {
     this.id = id;
     this.el.hidden = false;
-    if (id === 'farm') this.renderUpgradable(farmInfo());
-    else if (id === 'dispatch') this.renderUpgradable(dispatchInfo());
-    else this.renderLocked(STATIONS_BY_ID[id]);
+    this.render();
     this.update();
+  }
+
+  render() {
+    const id = this.id;
+    this.built = id === 'dispatch' || Boolean(this.game.state.stations[id]);
+    if (id === 'dispatch') this.renderUpgradable(dispatchInfo());
+    else if (this.built) this.renderUpgradable(stationInfo(id));
+    else this.renderLocked(STATIONS_BY_ID[id]);
   }
 
   close() {
@@ -61,6 +74,7 @@ export class StationPanel {
     this.info = info;
     this.el.innerHTML = `
       ${this.head(info.icon, info.title, info.subtitle, '<span class="level-badge" data-ref="level"></span>')}
+      ${info.recipe ? `<div class="recipe small">${info.recipe}</div>` : ''}
       <div class="stats">
         ${info.rows.map((r) => `<div class="stat"><span>${r.label}</span><b><span data-ref="${r.key}"></span> <span class="next" data-ref="${r.key}Next"></span></b></div>`).join('')}
         <div class="status-line" data-ref="status"></div>
@@ -87,19 +101,25 @@ export class StationPanel {
 
   renderLocked(def) {
     this.info = null;
-    const recipe = (obj) => Object.entries(obj).map(([id, n]) => `${n} ${PRODUCTS[id].icon}`).join(' + ');
     const [outId] = Object.keys(def.out);
+    const [inId] = Object.keys(def.in);
+    const gain = PRODUCTS[outId].value * def.out[outId] - PRODUCTS[inId].value * def.in[inId];
     this.el.innerHTML = `
-      ${this.head(def.icon, def.name, 'Próxima estación de la cadena')}
-      <div class="recipe">${recipe(def.in)} <span>➜</span> ${recipe(def.out)} ${def.by ? `<small>(+ ${recipe(def.by)})</small>` : ''}</div>
+      ${this.head(def.icon, def.name, 'Siguiente paso de la cadena')}
+      <div class="recipe">${recipe(def.in)} <span>➜</span> ${recipe(def.out)}</div>
       <div class="stats">
         <div class="stat"><span>Produce</span><b>${PRODUCTS[outId].name}</b></div>
-        <div class="stat"><span>Valor por unidad</span><b>${PRODUCTS[outId].value} 💰</b></div>
-        <div class="stat"><span>Desbloqueo</span><b>${formatNumber(def.unlockCost)} 💰</b></div>
+        <div class="stat"><span>Precio de venta</span><b>${PRODUCTS[outId].value} 💰 por unidad</b></div>
+        <div class="stat"><span>Ganancia por proceso</span><b class="next">+${gain} 💰</b></div>
+        <div class="status-line" data-ref="status"></div>
       </div>
-      <p class="soon">🚧 Llega en la v${def.release}</p>
+      <button class="btn buy" data-unlock><span>Construir</span><span data-ref="unlockCost"></span></button>
     `;
     this.collectRefs();
+    this.el.querySelector('[data-unlock]').addEventListener('click', () => {
+      if (this.game.unlock(this.id)) this.render();
+      this.update();
+    });
   }
 
   collectRefs() {
@@ -109,13 +129,27 @@ export class StationPanel {
   }
 
   update() {
-    if (!this.id || !this.info) return;
+    if (!this.id) return;
     const state = this.game.state;
+    const r = this.refs;
+    // Si la estación se construyó por otra vía, rehacer el panel.
+    const built = this.id === 'dispatch' || Boolean(state.stations[this.id]);
+    if (built !== this.built) this.render();
+
+    if (!this.info) {
+      const q = this.game.quoteUnlock(this.id);
+      r.unlockCost.textContent = `💰 ${formatNumber(q.cost)}`;
+      this.el.querySelector('[data-unlock]').disabled = !q.ok;
+      r.status.textContent =
+        q.reason === 'order' ? `🔒 Primero construye: ${nameOf(q.previous)}.` : q.ok ? '✅ ¡Listo para construir!' : `💰 Te faltan ${formatNumber(q.cost - state.coins)} monedas.`;
+      r.status.classList.toggle('bad', q.reason === 'order');
+      return;
+    }
+
     const info = this.info;
     const level = info.level(state);
     const q = this.game.quote(this.id, this.mode);
     const after = level + Math.max(q.levels, 1);
-    const r = this.refs;
 
     r.level.textContent = `Nv ${level}`;
     for (const row of info.rows) {
@@ -149,24 +183,54 @@ export class StationPanel {
   }
 }
 
-function farmInfo() {
-  const def = STATIONS_BY_ID.farm;
+function stationInfo(id) {
+  const def = STATIONS_BY_ID[id];
+  const [outId] = Object.keys(def.out);
+  const out = PRODUCTS[outId];
+  const inId = def.in ? Object.keys(def.in)[0] : null;
+  const rows = [
+    { key: 'rate', label: 'Producción', value: (s, l) => `${formatRate(stationOutputRate(def, l))} ${out.icon}/s`, next: (l) => formatRate(stationOutputRate(def, l)) },
+  ];
+  if (inId) {
+    rows.push({ key: 'input', label: 'Entrada', value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l))} ${PRODUCTS[inId].icon}` });
+  }
+  rows.push(
+    { key: 'buffer', label: 'Patio (por enviar)', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l))} ${out.icon}` },
+    { key: 'value', label: 'Precio de venta', value: () => `${out.value} 💰 por ${out.name.toLowerCase()}` },
+  );
   return {
     icon: def.icon,
     title: def.name,
-    subtitle: 'Fuente ilimitada de cerezas de café',
+    subtitle: inId ? `Convierte ${PRODUCTS[inId].name.toLowerCase()} en ${out.name.toLowerCase()}` : 'Fuente ilimitada de cerezas de café',
+    recipe: inId ? `${recipe(def.in)} <span>➜</span> ${recipe(def.out)}` : null,
     milestoneWhat: 'velocidad',
-    level: (s) => s.stations.farm.level,
-    rows: [
-      { key: 'rate', label: 'Producción', value: (s, l) => `${formatRate(stationOutputRate(def, l))} 🍒/s`, next: (l) => formatRate(stationOutputRate(def, l)) },
-      { key: 'buffer', label: 'Patio', value: (s, l) => `${formatNumber(s.stations.farm.buffer)} / ${formatNumber(stationBufferCap(def, l))} 🍒` },
-      { key: 'value', label: 'Precio de venta', value: () => `${PRODUCTS.cherry.value} 💰 por cereza` },
-    ],
-    status: (s) =>
-      s.stations.farm.blocked
-        ? { text: '⛔ Patio lleno: la bodega no tiene espacio. Mejora el Despacho.', bad: true }
-        : { text: '✅ Cosechando. Las mulas llevan las cerezas a la bodega.', bad: false },
+    level: (s) => s.stations[id].level,
+    rows,
+    status: (s) => stationStatus(s, id),
   };
+}
+
+// Explica en una línea qué le pasa a la estación y qué hacer.
+function stationStatus(state, id) {
+  const st = state.stations[id];
+  const analysis = analyzeChain(state);
+  const row = analysis.rows.find((r) => r.id === id);
+  const def = STATIONS_BY_ID[id];
+  if (st.status === 'blocked') return { text: '⛔ Patio lleno: la bodega no tiene espacio. Mejora el Despacho.', bad: true };
+  if (row && row.diverted > row.incoming * 0.02) {
+    const inIcon = PRODUCTS[Object.keys(def.in)[0]].icon;
+    return {
+      text: `↪️ Le llegan ${formatRate(row.incoming)} ${inIcon}/s y procesa ${formatRate(row.capacity)}/s. El resto se vende sin procesar: mejóralo.`,
+      bad: true,
+    };
+  }
+  if (st.status === 'starved' && st.idle > 3) {
+    const prev = CHAIN[CHAIN.indexOf(id) - 1];
+    return { text: `⏸️ Esperando producto de: ${nameOf(prev)}. Mejora las estaciones anteriores.`, bad: false };
+  }
+  const next = nextStation(state, id);
+  const dest = next ? nameOf(next) : 'la bodega';
+  return { text: `✅ Trabajando. Las mulas llevan el producto a ${dest}.`, bad: false };
 }
 
 function dispatchInfo() {

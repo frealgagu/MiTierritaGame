@@ -17,15 +17,17 @@ npm test         # pruebas de la simulación
 npm run build    # versión para publicar en dist/
 ```
 
-## Estado: v0.1
+## Estado: v0.2
 
 - Mapa isométrico de la Zona 1 (La Finca) con cámara: arrastrar para mover, rueda o pellizco para zoom.
-- **Cafetal** (fuente ilimitada): produce cerezas; se mejora del nivel 1 al 100, con hitos que duplican la velocidad y cambian la casa.
-- **Mulas** que llevan las cerezas por el camino hasta la **Bodega**.
-- **Despacho**: el Willys lleva la carga al pueblo y la vende; se mejora su carga por viaje.
-- Compra de mejoras ×1, ×10 y Máx; indicador del cuello de botella.
-- Parcelas de las 6 estaciones siguientes, con su receta (llegan en la v0.2).
-- Guardado automático en el navegador y ganancias sin conexión (máx. 2 h).
+- **Cadena completa de la finca**: Cafetal ♾️ → Beneficiadero → Marquesina → Trilladora → Tostadora → Molino → Empacadora → Bodega.
+  - Cada estación se construye en orden con monedas y tiene receta, entrada, patio y niveles 1–100 con hitos (×2).
+  - Cada edificio tiene su propio dibujo y se anima mientras trabaja (agua, humo, rueda, banda).
+- **Mulas** que llevan el producto por el camino de una estación a la siguiente.
+- **Desvío automático**: si una estación no da abasto, el sobrante va a la bodega y se vende sin procesar (↪️).
+- **Indicadores**: ⛔ patio lleno, ⏸️ sin entrada, ↪️ desviando; aviso del cuello de botella (tócalo para abrir esa estación).
+- **Despacho**: el Willys vende en el pueblo lo que llega a la bodega, lo más valioso primero.
+- Guardado automático en el navegador (las partidas de la v0.1 se conservan) y ganancias sin conexión (máx. 2 h).
 
 ## Estructura
 
