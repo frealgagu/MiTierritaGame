@@ -36,7 +36,7 @@ test('el abono duplica el cafetal en la simulación y en el análisis', () => {
 test('el sello de calidad sube el precio de las bolsas', () => {
   const game = new Game();
   game.state.research.push('sello');
-  game.state.warehouse.coffee_bag = 2;
+  game.state.zones.finca.warehouse.coffee_bag = 2;
   run(game, 12);
   assert.equal(game.state.coins, 2 * 250 * 1.5);
 });
@@ -52,7 +52,7 @@ test('todas las investigaciones y objetivos apuntan a cosas que existen', () => 
   for (const r of RESEARCH) assert.ok(!r.requires || STATIONS_BY_ID[r.requires], r.id);
   const ids = new Set(RESEARCH.map((r) => r.id));
   for (const g of GOALS) {
-    if (g.type === 'research') assert.ok(ids.has(g.id), g.id);
+    if (g.type === 'research') assert.ok(ids.has(g.research), g.id);
     if (g.type === 'unlock') assert.ok(STATIONS_BY_ID[g.station], g.id);
     assert.ok(goalText(g).length > 5, `texto de ${g.id}`);
   }
@@ -76,10 +76,13 @@ test('los objetivos se cobran en orden y dan su recompensa', () => {
 
 test('cobrar el último objetivo completa la zona', () => {
   const game = new Game();
-  game.state.goals.claimed = GOALS.slice(0, -1).map((g) => g.id);
+  game.state.goals.claimed = GOALS.filter((g) => g.id.startsWith('g')).map((g) => g.id);
   game.state.stats.sold.coffee_bag = 1000;
   assert.ok(game.claimGoal('final'));
-  assert.equal(game.state.zoneComplete, true);
+  assert.equal(game.state.zones.finca.complete, true);
+  // …y abre el Trapiche con su Cañaduzal.
+  assert.equal(game.state.zones.trapiche.unlocked, true);
+  assert.ok(game.state.stations.canefield);
 });
 
 test('las ganancias sin conexión se parecen a las de jugar en vivo', () => {
@@ -92,7 +95,7 @@ test('las ganancias sin conexión se parecen a las de jugar en vivo', () => {
       s.stations[id].level = 20;
       s.stations[id].transport.level = 20;
     }
-    s.dispatch.level = 20;
+    s.zones.finca.dispatch.level = 20;
     s.coins = 0;
     return g;
   };
@@ -114,7 +117,7 @@ test('la compostera convierte pulpa en compost que acelera el cafetal', () => {
   // Arrieros y despacho de sobra para que nada frene la cosecha y se vea solo el efecto del compost.
   game.state.stations.farm.transport.level = 60;
   game.state.stations.wetmill.transport.level = 60;
-  game.state.dispatch.level = 60;
+  game.state.zones.finca.dispatch.level = 60;
   run(game, 240);
   assert.ok((game.state.stats.produced.compost ?? 0) > 0, 'produjo compost');
   // Con compost guardado, el Cafetal va a ×1,5.
@@ -145,6 +148,7 @@ test('la compostera no tiene arrieros ni cuenta para «todas las estaciones»', 
 });
 
 test('ningún objetivo pide vender un producto intermedio (podría quedar imposible)', () => {
-  const finals = new Set(['cherry', 'coffee_bag']); // la cereza se vende sí o sí al empezar; la bolsa es el final
+  // Las fuentes se venden sí o sí al empezar cada zona; los productos finales siempre llegan a la bodega.
+  const finals = new Set(['cherry', 'coffee_bag', 'cane', 'panela_powder']);
   for (const g of GOALS) if (g.type === 'sold') assert.ok(finals.has(g.product), `${g.id} pide vender ${g.product}`);
 });

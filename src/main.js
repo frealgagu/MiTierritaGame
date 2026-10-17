@@ -9,6 +9,8 @@ import { ChainView } from './ui/ChainView.js';
 import { GoalsView } from './ui/GoalsView.js';
 import { ResearchView } from './ui/ResearchView.js';
 import { showVictory, showWelcome } from './ui/dialogs.js';
+import { ZonesView } from './ui/ZonesView.js';
+import { ZONES_BY_ID } from './data/zones/index.js';
 import { RESEARCH_BY_ID } from './data/research.js';
 import { offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
@@ -46,23 +48,45 @@ async function start() {
     if (e.target.closest('button')) sound.click();
   });
 
-  const scene = new Scene(app, game, sound);
-  const panel = new StationPanel(game, () => scene.select(null));
-  // id puede ser 'farm', 'dispatch' o 'farm:transport' (abre la pestaña de arrieros).
-  scene.onSelect = (id) => {
+  // Zona que se está viendo (las demás siguen produciendo). Se recuerda con la partida.
+  const view = { zone: game.state.zones[game.state.settings.zone]?.unlocked ? game.state.settings.zone : 'finca' };
+  const getZone = () => view.zone;
+  let scene = null;
+  const panel = new StationPanel(game, () => scene?.select(null));
+  // id puede ser 'farm', 'farm:transport' (pestaña de arrieros) o 'dispatch:<zona>'.
+  const select = (id) => {
     const [stationId, part] = id.split(':');
+    if (stationId === 'dispatch') {
+      scene.select('dispatch');
+      panel.open(id);
+      return;
+    }
     scene.select(stationId);
     panel.open(stationId, part === 'transport' ? 'transport' : 'station');
   };
-  const hud = new HUD(game, scene.onSelect, () => scene.dayNight.hour);
-  const chain = new ChainView(game, scene.onSelect);
-  const goals = new GoalsView(game);
-  const research = new ResearchView(game);
+  const showZone = (zoneId) => {
+    if (scene) scene.destroy();
+    if (panel.id) panel.close();
+    view.zone = zoneId;
+    game.state.settings.zone = zoneId;
+    scene = new Scene(app, game, sound, ZONES_BY_ID[zoneId]);
+    scene.onSelect = select;
+    if (import.meta.env.DEV) window.__cafetal = { game, scene };
+  };
+  showZone(view.zone);
+  const hud = new HUD(game, select, () => scene.dayNight.hour, getZone);
+  const chain = new ChainView(game, select, getZone);
+  const goals = new GoalsView(game, getZone);
+  const research = new ResearchView(game, getZone);
+  const zones = new ZonesView(game, getZone, (z) => {
+    showZone(z);
+    toast(`${ZONES_BY_ID[z].icon} ${ZONES_BY_ID[z].name}`, 2000);
+  });
 
-  game.bus.on('goalClaimed', ({ goal }) => {
+  game.bus.on('goalClaimed', ({ goal, zone }) => {
     if (goal.final) {
       sound.milestone();
-      showVictory(game.state);
+      showVictory(game.state, zone, (next) => showZone(next));
     } else {
       sound.coin();
       toast(`🎯 ¡Objetivo cumplido! +${formatNumber(goal.reward)} 💰`, 3000);
@@ -98,6 +122,7 @@ async function start() {
       chain.update();
       goals.update();
       research.update();
+      zones.update();
     }
   });
 
@@ -120,7 +145,6 @@ async function start() {
   window.addEventListener('pagehide', persist);
 
   bindMenu(game, sound);
-  if (import.meta.env.DEV) window.__cafetal = { game, scene };
   // Jugable sin internet e instalable en el móvil (solo en la versión publicada).
   if (import.meta.env.PROD && 'serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});

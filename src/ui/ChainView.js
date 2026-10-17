@@ -8,8 +8,9 @@ const outIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].out)[0]].icon;
 
 // Diagrama de la cadena: qué procesa cada estación, cuánto llevan sus arrieros y dónde se pierde.
 export class ChainView {
-  constructor(game, onOpen) {
+  constructor(game, onOpen, getZone) {
     this.game = game;
+    this.getZone = getZone;
     this.onOpen = onOpen;
     this.el = document.getElementById('chain');
     this.body = document.getElementById('chain-body');
@@ -37,7 +38,8 @@ export class ChainView {
   update() {
     if (this.el.hidden) return;
     const state = this.game.state;
-    const a = analyzeChain(state);
+    const zone = this.getZone();
+    const a = analyzeChain(state, zone);
     const parts = [];
     for (const row of a.rows) {
       const def = STATIONS_BY_ID[row.id];
@@ -60,7 +62,7 @@ export class ChainView {
           ${row.lost > 0.005 ? `<span class="lost">⛔ ${formatRate(row.lost)} ${icon}/s no alcanzan a salir</span>` : ''}
         </button>`);
     }
-    const locked = nextToUnlock(state);
+    const locked = nextToUnlock(state, zone);
     if (locked) {
       const def = STATIONS_BY_ID[locked];
       parts.push(`
@@ -70,9 +72,9 @@ export class ChainView {
         </button>`);
     }
     parts.push(`
-      <button class="chain-card ${a.bottleneck === 'dispatch' ? 'hot' : ''}" data-open="dispatch">
+      <button class="chain-card ${a.bottleneck === `dispatch:${zone}` ? 'hot' : ''}" data-open="dispatch:${zone}">
         <span class="chain-icon">${DISPATCH.icon}</span>
-        <span class="chain-text"><b>Bodega y Willys</b> <small>Nv ${state.dispatch.level}</small><br>
+        <span class="chain-text"><b>Bodega y Willys</b> <small>Nv ${state.zones[zone].dispatch.level}</small><br>
         <span>Llegan ${formatRate(a.toWarehouse)} u/s · vende hasta ${formatRate(a.dispatch)} u/s</span></span>
       </button>
       <p class="chain-total">Ingreso estimado: <b>${formatRate(a.income)} 💰/s</b></p>`);

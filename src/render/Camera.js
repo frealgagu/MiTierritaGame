@@ -70,14 +70,25 @@ export class Camera {
     return { x: (sx - this.world.position.x) / this.zoom, y: (sy - this.world.position.y) / this.zoom };
   }
 
+  // Suelta los eventos del canvas (al cambiar de zona se crea otra cámara).
+  destroy() {
+    for (const [type, fn, opts] of this.listeners) this.canvas.removeEventListener(type, fn, opts);
+    this.listeners = [];
+  }
+
   bind() {
     const c = this.canvas;
-    c.addEventListener('pointerdown', (e) => {
+    this.listeners = [];
+    const listen = (type, fn, opts) => {
+      c.addEventListener(type, fn, opts);
+      this.listeners.push([type, fn, opts]);
+    };
+    listen('pointerdown', (e) => {
       c.setPointerCapture(e.pointerId);
       this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY });
       if (this.pointers.size === 1) this.dragged = false;
     });
-    c.addEventListener('pointermove', (e) => {
+    listen('pointermove', (e) => {
       const p = this.pointers.get(e.pointerId);
       if (!p) return;
       if (this.pointers.size === 2) {
@@ -101,9 +112,9 @@ export class Camera {
       this.apply();
     });
     const up = (e) => this.pointers.delete(e.pointerId);
-    c.addEventListener('pointerup', up);
-    c.addEventListener('pointercancel', up);
-    c.addEventListener(
+    listen('pointerup', up);
+    listen('pointercancel', up);
+    listen(
       'wheel',
       (e) => {
         e.preventDefault();

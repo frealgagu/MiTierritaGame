@@ -1,41 +1,50 @@
-// La cadena de la zona: orden de las estaciones y su posición sobre el camino de las mulas.
-import { ZONE1 } from '../data/zones/zone1_finca.js';
+// Cadenas de cada zona: orden de las estaciones y su posición sobre el camino de las mulas.
+import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { pathLength, projectOnPath } from '../core/path.js';
 
-export const CHAIN = ZONE1.chain;
-export const ROAD_LENGTH = pathLength(ZONE1.muleRoad);
+export const zoneOf = (stationId) => STATIONS_BY_ID[stationId].zone;
+export const chainOf = (zoneId) => ZONES_BY_ID[zoneId].chain;
+export const sourceOf = (zoneId) => ZONES_BY_ID[zoneId].farm.stationId;
 
-// Distancia (en casillas) desde el inicio del camino hasta la puerta de cada estación.
+// ROAD_POS[zona][estación | 'warehouse']: distancia (en casillas) desde el inicio del camino
+// hasta la puerta de cada estación de la cadena principal.
 export const ROAD_POS = Object.fromEntries(
-  CHAIN.map((id) => {
-    if (id === ZONE1.farm.stationId) return [id, 0];
-    const plot = ZONE1.plots.find((p) => p.stationId === id);
-    return [id, projectOnPath(ZONE1.muleRoad, plot.x + 1.5, plot.y + 1.5)];
+  ZONE_LIST.map((zone) => {
+    const pos = { warehouse: pathLength(zone.muleRoad) };
+    for (const id of zone.chain) {
+      if (id === zone.farm.stationId) pos[id] = 0;
+      else {
+        const plot = zone.plots.find((p) => p.stationId === id);
+        pos[id] = projectOnPath(zone.muleRoad, plot.x + 1.5, plot.y + 1.5);
+      }
+    }
+    return [zone.id, pos];
   }),
 );
-ROAD_POS.warehouse = ROAD_LENGTH;
 
 export function isUnlocked(state, id) {
   return Boolean(state.stations[id]);
 }
 
-// Siguiente estación construida de la cadena (o null: el producto va a la bodega).
+export function zoneUnlocked(state, zoneId) {
+  return Boolean(state.zones[zoneId]?.unlocked);
+}
+
+// Siguiente estación construida de la cadena (o null: el producto va a la bodega de su zona).
 export function nextStation(state, id) {
-  const next = CHAIN[CHAIN.indexOf(id) + 1];
+  const chain = chainOf(zoneOf(id));
+  const next = chain[chain.indexOf(id) + 1];
   return next && isUnlocked(state, next) ? next : null;
 }
 
-// Primera estación de la cadena aún sin construir.
-export function nextToUnlock(state) {
-  return CHAIN.find((id) => !isUnlocked(state, id)) ?? null;
+// Primera estación de la cadena de una zona aún sin construir.
+export function nextToUnlock(state, zoneId = 'finca') {
+  if (!zoneUnlocked(state, zoneId)) return null;
+  return chainOf(zoneId).find((id) => !isUnlocked(state, id)) ?? null;
 }
 
-export function outputProduct(id) {
-  return Object.keys(STATIONS_BY_ID[id].out)[0];
-}
-
-export function inputProduct(id) {
-  const def = STATIONS_BY_ID[id];
-  return def.in ? Object.keys(def.in)[0] : null;
+// Estaciones construidas de una zona (cadena principal y ramas).
+export function builtStations(state, zoneId) {
+  return Object.keys(state.stations).filter((id) => zoneOf(id) === zoneId);
 }

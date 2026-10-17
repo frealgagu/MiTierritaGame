@@ -169,14 +169,21 @@ Los valores son orientativos y se ajustarán con el simulador de balance. ⇄ in
 | 7 | Empacadora | 4 molido | Bolsa de café | 250 |
 | 8 | Compostera *(rama opcional, v1.0)* | 5 pulpa (por canaleta, sin mulas) | Compost → Cafetal ×1,5 mientras haya (1 compost por 20 cerezas) | — |
 
-#### Zona 2 · El Trapiche (caña y panela) — 5 estaciones, 6 productos — v1.1
-| # | Estación | Entrada | Salida | Valor |
-|---|----------|---------|--------|-------|
-| 1 | Cañaduzal ♾️ | — | Caña | 2 |
-| 2 | Molienda | 1 caña | Guarapo + *bagazo* | 5 |
-| 3 | Hornilla | 2 guarapo (+ bagazo como combustible: ×2 de velocidad) | Melado | 12 |
-| 4 | Gaveras (moldeo) | 2 melado | Panela | 30 |
-| 5 | Pulverizadora | 1 panela | Panela pulverizada | 50 |
+#### Zona 2 · El Trapiche (caña y panela) — 5 estaciones, 6 productos — **v1.1** ✅
+Se abre al completar la Finca. Los productos valen ×5 respecto al primer borrador porque la zona arranca con la economía de la Finca (las monedas se comparten y la Finca sigue produciendo). Misma regla de balance: a igual nivel, cada estación procesa lo que le entrega la anterior.
+
+| # | Estación | Entrada | Salida | Ciclo (nv. 1) | Valor | Desbloqueo | Coste base |
+|---|----------|---------|--------|---------------|-------|------------|------------|
+| 1 | Cañaduzal ♾️ | — | Caña | 2 s | 10 | Con la zona | 50 |
+| 2 | Molienda | 1 caña | Guarapo + *bagazo* | 2 s | 25 | 5.000 | 80 |
+| 3 | Hornilla | 2 guarapo (+ bagazo: ×2 de velocidad) | Melado | 4 s | 60 | 25.000 | 120 |
+| 4 | Gaveras | 2 melado | Panela | 8 s | 150 | 80.000 | 200 |
+| 5 | Pulverizadora | 1 panela | Panela pulverizada | 8 s | 250 | 250.000 | 350 |
+
+- **Bagazo**: la Molienda lo produce (1 por ciclo) y pasa directo a la Hornilla, que va pegada a ella. Mientras la Hornilla tenga bagazo, trabaja ×2 y gasta 1 por ciclo.
+- **Investigaciones**: Trapiche con motor (Molienda ×2), Abono para la caña (Cañaduzal ×2), Chiva para el Trapiche (despacho ×2), Gaveras de acero (×2), Panela orgánica (+50 % de valor).
+- **Final**: «Primer cargamento de panela», vender 5.000 panelas pulverizadas (15 objetivos).
+- **Duración medida** (`npm run balance`): entre 1 h 50 min y 3 h después de completar la Finca.
 
 #### Zona 3 · La Lechería — 6 estaciones, 6 productos — v1.2
 | # | Estación | Entrada | Salida | Valor |
@@ -487,8 +494,8 @@ export const COST_GROWTH = 1.15;
 | **v0.4** ✅ | Hitos con cambio de modelo, efectos, día y noche cosmético, sonido básico | Se siente vivo, al estilo Frozen City |
 | **v0.5** ✅ | Objetivos, investigaciones, guardado, ganancias sin conexión, simulador de balance | Se juega de principio a fin |
 | **v1.0** | Contenedor de exportación, pantalla final y balance ajustado | **Zona 1 completa** |
-| v1.1 | **Zona 2: El Trapiche**: caña → panela; subproducto bagazo; primera ruta entre zonas | Expansión |
-| v1.2 | **Zona 3: La Lechería**: ramificación de la leche; arequipe con panela importada | Expansión |
+| v1.1 ✅ | **Zona 2: El Trapiche**: caña → panela; bagazo como combustible; varias zonas a la vez y selector de zonas | Expansión |
+| v1.2 | **Zona 3: La Lechería**: ramificación de la leche; **primera ruta entre zonas** (panela del Trapiche para el arequipe) | Expansión |
 | v1.3 | **Zona 4: El Cacaotal**: chocolate de mesa y chocolatina | Expansión |
 | v1.4 | **Zona 5: El Maizal**: arepas y arepa de queso | Expansión |
 | v1.5 | **Zona 6: El Pueblo**: cafetería, fonda y Contenedor de exportación (**final del juego**) | Expansión final |

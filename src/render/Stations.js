@@ -2,7 +2,7 @@ import { Container, Graphics, Polygon, Sprite, Text } from 'pixi.js';
 import { iso, isoPoly, depth, shade } from './iso.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCoffeeBush } from './Terrain.js';
+import { drawCaneClump, drawCoffeeBush } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -95,23 +95,26 @@ export class StationView extends Container {
   }
 }
 
+// Fuente ilimitada de la zona: Cafetal (cafetos) o Cañaduzal (caña), con la casa que crece.
 export class FarmView extends StationView {
-  constructor(zone) {
+  constructor(zone, def) {
     const f = zone.farm;
     super(f.x, f.y, f.w, f.h);
     this.zoneFarm = f;
+    this.theme = zone.theme;
+    this.def = def;
     this.art = new Graphics();
     this.addChild(this.art);
-    this.label = new Label('Cafetal');
+    this.label = new Label(def.name);
     this.tier = -1;
     this.bushes = [];
   }
 
   sync(state) {
-    const farm = state.stations.farm;
+    const farm = state.stations[this.def.id];
     const tier = milestoneTier(farm.level);
     if (tier !== this.tier) this.draw(tier);
-    this.label.set(`🌳 Cafetal · Nv ${farm.level}`);
+    this.label.set(`${this.def.icon} ${this.def.name} · Nv ${farm.level}`);
   }
 
   draw(tier) {
@@ -122,7 +125,7 @@ export class FarmView extends StationView {
     this.bushes = [];
     this.lights = drawHut(g, x, y, tier);
     this.lightsDirty = true;
-    // Cafetos en filas; con cada hito son más grandes y tienen más cerezas.
+    // Cafetos (o caña) en filas; con cada hito son más grandes.
     const scale = 0.75 + tier * 0.1;
     for (let gx = x; gx < x + w; gx++) {
       for (let gy = y; gy < y + h; gy++) {
@@ -130,7 +133,8 @@ export class FarmView extends StationView {
         for (const ox of [0.28, 0.75]) {
           const p = iso(gx + ox, gy + 0.5);
           this.bushes.push(p);
-          drawCoffeeBush(g, p.x, p.y, scale, rng, 3 + tier * 2);
+          if (this.theme === 'cane') drawCaneClump(g, p.x, p.y, scale, rng);
+          else drawCoffeeBush(g, p.x, p.y, scale, rng, 3 + tier * 2);
         }
       }
     }
@@ -256,15 +260,15 @@ export class WarehouseView extends StationView {
     this.addChild(t);
   }
 
-  // Costales apilados en el patio según lo que hay en bodega.
-  sync(state, capacity) {
-    const stock = Object.values(state.warehouse).reduce((a, b) => a + b, 0);
+  // Costales apilados en el patio según lo que hay en bodega. `zone` es el estado de la zona.
+  sync(zone, capacity) {
+    const stock = Object.values(zone.warehouse).reduce((a, b) => a + b, 0);
     const n = stock <= 0 ? 0 : Math.min(9, Math.ceil((stock / capacity) * 9));
-    this.label.set(`🚙 Bodega · Nv ${state.dispatch.level}`);
+    this.label.set(`🚙 Bodega · Nv ${zone.dispatch.level}`);
     if (n === this.lastSacks) return;
     this.lastSacks = n;
     const g = this.sacks.clear();
-    const ids = Object.keys(state.warehouse);
+    const ids = Object.keys(zone.warehouse);
     const color = ids.length ? PRODUCTS[ids[0]].color : PAL.cherry;
     const slots = [[0, 0, 0], [0.32, 0, 0], [0, 0.32, 0], [0.32, 0.32, 0], [0.64, 0, 0], [0.16, 0.16, 8], [0.48, 0.16, 8], [0.16, 0.0, 8], [0.32, 0.16, 15]];
     const bx = this.wh.x + 2.55;

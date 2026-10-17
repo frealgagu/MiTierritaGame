@@ -1,7 +1,7 @@
 // Flujo teórico de la cadena para mostrar el cuello de botella (no afecta a la simulación).
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { dispatchRate, stationRate } from './rules.js';
-import { CHAIN } from './chain.js';
+import { chainOf, sourceOf, zoneOf } from './chain.js';
 import { teamCapacity } from './transport.js';
 import { COMPOST_BOOST, CHERRIES_PER_COMPOST, dispatchMult, productValue, speedMult } from './modifiers.js';
 
@@ -13,29 +13,47 @@ const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
 //   diverted   lo que se desvía a la bodega     lost  lo que no alcanza a salir (el patio se llena)
 //   transport  capacidad de sus arrieros hacia la siguiente estación (o la bodega)
 // cause: qué limita a esta estación ('station' | 'transport' | null)
-export function analyzeChain(state) {
-  const ids = CHAIN.filter((id) => state.stations[id]);
+export function analyzeChain(state, zoneId = 'finca') {
+  const ids = chainOf(zoneId).filter((id) => state.stations[id]);
   const rows = [];
   let incoming = 0;
   let toWarehouse = 0;
   const flows = []; // { units, value } que llegan a la bodega
+  const byRate = {}; // subproducto que genera cada estación (por s), p. ej. bagazo de la Molienda
+
+  // Ciclos por segundo de una estación, con investigaciones, compost y combustible.
+  const cycleRate = (id) => {
+    const def = STATIONS_BY_ID[id];
+    let rate = stationRate(def, state.stations[id].level) * speedMult(state, id);
+    if (id === 'farm') rate *= expectedCompostBoost(state);
+    if (def.fuel) {
+      // El combustible acelera ×boost mientras alcance: si la estación de origen da menos, en proporción.
+      const demand = rate * def.fuel.boost * def.fuel.perCycle;
+      const supply = byRate[def.fuel.from] ?? 0;
+      rate *= 1 + (def.fuel.boost - 1) * Math.min(1, demand > 0 ? supply / demand : 0);
+    }
+    return rate;
+  };
 
   ids.forEach((id, i) => {
     const st = state.stations[id];
     const def = STATIONS_BY_ID[id];
     const outId = Object.keys(def.out)[0];
     const outAmt = def.out[outId];
-    const rate = stationRate(def, st.level) * speedMult(state, id) * (id === 'farm' ? expectedCompostBoost(state) : 1);
+    const rate = cycleRate(id);
     let capacity;
     let output;
+    let cycles;
     if (def.in) {
       const need = Object.values(def.in)[0];
       capacity = rate * need;
-      output = (Math.min(incoming, capacity) / need) * outAmt;
+      cycles = Math.min(incoming, capacity) / need;
     } else {
       capacity = rate * outAmt;
-      output = capacity;
+      cycles = rate;
     }
+    output = cycles * outAmt;
+    if (def.by) byRate[id] = cycles * Object.values(def.by)[0];
 
     const next = ids[i + 1] ?? null;
     const dest = next ?? 'warehouse';
@@ -44,7 +62,7 @@ export function analyzeChain(state) {
 
     if (next) {
       const nextDef = STATIONS_BY_ID[next];
-      const nextCapacity = stationRate(nextDef, state.stations[next].level) * speedMult(state, next) * Object.values(nextDef.in)[0];
+      const nextCapacity = cycleRate(next) * Object.values(nextDef.in)[0];
       row.toNext = Math.min(output, transport, nextCapacity);
       const left = output - row.toNext;
       // Las mulas que sobran llevan el resto a la bodega (viaje más largo).
@@ -62,7 +80,7 @@ export function analyzeChain(state) {
     incoming = row.toNext;
   });
 
-  const dispatch = dispatchRate(state.dispatch.level, dispatchMult(state));
+  const dispatch = dispatchRate(state.zones[zoneId].dispatch.level, dispatchMult(state, zoneId));
   // El Willys carga primero lo más valioso: si no da abasto, lo que se queda es lo barato.
   let room = dispatch;
   let income = 0;
@@ -81,7 +99,7 @@ export function analyzeChain(state) {
     bottleneck = row.next && row.nextCapacity <= row.transport ? row.next : `${row.id}:transport`;
     break;
   }
-  if (!bottleneck) bottleneck = toWarehouse > dispatch * (1 + LOSS) ? 'dispatch' : 'farm';
+  if (!bottleneck) bottleneck = toWarehouse > dispatch * (1 + LOSS) ? `dispatch:${zoneId}` : sourceOf(zoneId);
   return { rows, toWarehouse, dispatch, bottleneck, income };
 }
 
@@ -103,11 +121,12 @@ export function expectedCompostBoost(state) {
 // cuello de botella. Devuelve { id, cost, gain }. (`quote` es Game.quote, para no duplicar precios.)
 const MIN_GAIN = 0.01; // ganancia mínima, como fracción del ingreso actual
 
-export function recommendUpgrade(state, quote) {
-  const analysis = analyzeChain(state);
+export function recommendUpgrade(state, quote, zoneId = 'finca') {
+  const analysis = analyzeChain(state, zoneId);
   const base = analysis.income;
-  const ids = ['dispatch'];
+  const ids = [`dispatch:${zoneId}`];
   for (const id of Object.keys(state.stations)) {
+    if (zoneOf(id) !== zoneId) continue;
     ids.push(id);
     if (!STATIONS_BY_ID[id].side) ids.push(`${id}:transport`);
   }
@@ -115,15 +134,17 @@ export function recommendUpgrade(state, quote) {
   for (const id of ids) {
     const q = quote(id, 1);
     if (q.maxed) continue;
-    const trial = { ...state, dispatch: { ...state.dispatch }, stations: { ...state.stations } };
-    if (id === 'dispatch') trial.dispatch.level++;
-    else {
+    const trial = { ...state, stations: { ...state.stations } };
+    if (id.startsWith('dispatch')) {
+      const zone = state.zones[zoneId];
+      trial.zones = { ...state.zones, [zoneId]: { ...zone, dispatch: { level: zone.dispatch.level + 1 } } };
+    } else {
       const [sid, part] = id.split(':');
       const st = { ...state.stations[sid], transport: { ...state.stations[sid].transport } };
       (part ? st.transport : st).level++;
       trial.stations[sid] = st;
     }
-    const gain = analyzeChain(trial).income - base;
+    const gain = analyzeChain(trial, zoneId).income - base;
     if (gain <= 1e-9) continue;
     if (!best || gain / q.cost > best.gain / best.cost) best = { id, cost: q.cost, gain };
   }

@@ -3,7 +3,7 @@ import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
 import { compostBoost, consumeCompost, speedMult } from './modifiers.js';
 
 export function createStationState() {
-  return { level: 1, input: 0, buffer: 0, byBuffer: 0, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
+  return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
 }
 
 // Avanza una estación: consume su entrada (si tiene receta) y deja el producto en su patio.
@@ -32,7 +32,8 @@ export function stepStation(state, id, dt, bus) {
   }
   s.status = 'working';
   s.idle = 0;
-  const boost = id === 'farm' ? compostBoost(state) : 1;
+  // Compost en el Cafetal; combustible (bagazo) en la Hornilla.
+  const boost = (id === 'farm' ? compostBoost(state) : 1) * (def.fuel && s.fuel > 0 ? def.fuel.boost : 1);
   s.progress += dt * stationRate(def, s.level) * speedMult(state, id) * boost;
   const cycles = Math.min(Math.floor(s.progress), byInput, byOutput);
   if (cycles <= 0) return;
@@ -47,7 +48,8 @@ export function stepStation(state, id, dt, bus) {
     const [[, byAmt]] = Object.entries(def.by);
     s.byBuffer = Math.min(stationBufferCap(def, s.level), (s.byBuffer ?? 0) + cycles * byAmt);
   }
-  if (boost > 1) consumeCompost(state, cycles * outAmt);
+  if (id === 'farm' && boost > 1) consumeCompost(state, cycles * outAmt);
+  if (def.fuel && s.fuel > 0) s.fuel = Math.max(0, s.fuel - cycles * def.fuel.perCycle);
   bus.emit('produced', { stationId: id, productId: outId, amount: cycles * outAmt });
 }
 
@@ -57,6 +59,19 @@ export function inputSpace(state, id) {
   const s = state.stations[id];
   const incoming = state.mules.reduce((n, m) => (m.to === id && m.phase === 'go' ? n + m.amount : n), 0);
   return stationInputCap(def, s.level) - s.input - incoming;
+}
+
+// Combustible: el subproducto de una estación (bagazo de la Molienda) pasa directo a la que lo
+// quema (Hornilla). Si nadie lo usa, se desecha al llenarse el patio de subproductos.
+export function stepFuel(state, id) {
+  const def = STATIONS_BY_ID[id];
+  const s = state.stations[id];
+  const src = state.stations[def.fuel.from];
+  if (!s || !src?.byBuffer) return;
+  const room = stationInputCap(def, s.level) - (s.fuel ?? 0);
+  const move = Math.max(0, Math.min(room, src.byBuffer));
+  s.fuel = (s.fuel ?? 0) + move;
+  src.byBuffer -= move;
 }
 
 // Compostera: recibe la pulpa del Beneficiadero por una canaleta (sin mulas) y produce compost,

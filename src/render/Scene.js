@@ -10,11 +10,12 @@ import { JeepView, MuleView } from './Carriers.js';
 import { iso } from './iso.js';
 import { pointAt, pointAtDistance } from '../core/path.js';
 import { formatAmount, formatNumber } from '../core/format.js';
-import { ZONE1 } from '../data/zones/zone1_finca.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
-import { dispatchCapacity, warehouseCapacity } from '../sim/rules.js';
-import { ROAD_POS } from '../sim/chain.js';
+import { dispatchCapacity } from '../sim/rules.js';
+import { ROAD_POS, zoneOf } from '../sim/chain.js';
+import { warehouseCap } from '../sim/transport.js';
+import { dispatchMult } from '../sim/modifiers.js';
 import { quoteUnlock } from '../sim/upgrades.js';
 import { DayNight } from './DayNight.js';
 
@@ -24,13 +25,15 @@ const STARVED_ICON_TIME = 8; // s sin entrada antes de mostrar ⏸️
 // Altura (px) de la etiqueta sobre cada tipo de edificio.
 const LABEL_HEIGHT = { farm: 70, dispatch: 100, plot: 62, building: 96 };
 
-// Arma el mundo y lo mantiene sincronizado con el estado de la simulación.
+// Arma el mundo de una zona y lo mantiene sincronizado con el estado de la simulación.
+// Al cambiar de zona se destruye (destroy) y se crea otra.
 export class Scene {
-  constructor(app, game, sound) {
+  constructor(app, game, sound, zone) {
     this.app = app;
     this.game = game;
     this.sound = sound;
-    this.zone = ZONE1;
+    this.zone = zone;
+    this.sourceId = zone.farm.stationId;
     this.time = 0;
     this.onSelect = () => {};
 
@@ -52,12 +55,12 @@ export class Scene {
     for (const d of this.terrain.decor) this.objects.addChild(d);
 
     this.stations = {};
-    this.farm = new FarmView(this.zone);
+    this.farm = new FarmView(this.zone, STATIONS_BY_ID[this.sourceId]);
     this.warehouse = new WarehouseView(this.zone);
-    this.addStationView('farm', this.farm, LABEL_HEIGHT.farm);
+    this.addStationView(this.sourceId, this.farm, LABEL_HEIGHT.farm);
     this.addStationView('dispatch', this.warehouse, LABEL_HEIGHT.dispatch);
     for (const plot of this.zone.plots) this.buildStation(plot.stationId);
-    this.stationIds = ['farm', ...this.zone.plots.map((p) => p.stationId)];
+    this.stationIds = [this.sourceId, ...this.zone.plots.map((p) => p.stationId)];
 
     this.jeep = new JeepView();
     this.objects.addChild(this.jeep);
@@ -94,7 +97,7 @@ export class Scene {
     this.stations[id] = view;
     this.objects.addChild(view);
     view.on('pointertap', () => {
-      if (!this.camera.dragged) this.onSelect(id);
+      if (!this.camera.dragged) this.onSelect(id === 'dispatch' ? `dispatch:${this.zone.id}` : id);
     });
     const a = view.anchorPoint(labelHeight);
     view.label.position.set(a.x, a.y);
@@ -141,42 +144,51 @@ export class Scene {
     this.camera?.resize(w, h);
   }
 
+  // Solo reacciona a lo que pasa en su zona (las demás siguen produciendo sin efectos visuales).
   bindEvents() {
     const bus = this.game.bus;
-    bus.on('sold', ({ coins }) => {
+    const zone = this.zone.id;
+    const on = (type, fn) => this.unsubs.push(bus.on(type, fn));
+    this.unsubs = [];
+    on('sold', ({ zone: z, coins }) => {
+      if (z !== zone) return;
       const p = this.exitPoint;
       this.effects.floatText(p.x, p.y - 20, `+${formatNumber(coins)} 💰`, { color: 0xffe066, size: 20 });
       this.effects.coins(p.x, p.y);
       this.sound.coin();
     });
-    bus.on('muleArrived', (m) => {
-      if (m.to !== 'warehouse') return;
+    on('muleArrived', (m) => {
+      if (m.to !== 'warehouse' || zoneOf(m.from) !== zone) return;
       const p = iso(...this.zone.muleRoad.at(-1), 40);
       this.effects.floatText(p.x, p.y, `+${formatAmount(m.amount)} ${PRODUCTS[m.productId].icon}`, { size: 14 });
     });
-    bus.on('produced', ({ stationId, productId, amount }) => {
-      if (stationId !== 'farm') return;
+    on('produced', ({ stationId, productId, amount }) => {
+      if (stationId !== this.sourceId) return;
       for (let i = 0; i < Math.min(amount, 3); i++) {
         const p = this.farm.randomBushTop();
         this.effects.hop(p.x, p.y, PRODUCTS[productId].color);
       }
     });
-    bus.on('levelUp', ({ id, to, milestone }) => {
-      const view = this.stations[id.split(':')[0]];
+    on('levelUp', ({ id, to, milestone }) => {
+      const [sid, part] = id.split(':');
+      if (sid === 'dispatch' ? part !== zone : zoneOf(sid) !== zone) return;
+      const view = this.stations[sid];
+      if (!view) return;
       const p = view.anchorPoint(30);
       view.bounce?.('bump');
       this.effects.sparkle(p.x, p.y);
       if (milestone) this.sound.milestone();
       else this.sound.levelUp();
       this.effects.ring(p.x, p.y + 30);
-      this.effects.floatText(p.x, p.y - 20, milestone ? `¡Hito nivel ${milestone}! ×2` : id.endsWith(':transport') ? `🐴 Arrieros nivel ${to}` : `Nivel ${to}`, {
+      this.effects.floatText(p.x, p.y - 20, milestone ? `¡Hito nivel ${milestone}! ×2` : part === 'transport' ? `🐴 Arrieros nivel ${to}` : `Nivel ${to}`, {
         color: milestone ? 0xffe066 : 0xffffff,
         size: milestone ? 22 : 16,
         life: milestone ? 2.2 : 1.2,
       });
       if (milestone) this.effects.confetti(p.x, p.y - 10);
     });
-    bus.on('unlocked', ({ id }) => {
+    on('unlocked', ({ id }) => {
+      if (zoneOf(id) !== zone) return;
       this.buildStation(id);
       this.stations[id].bounce('pop');
       this.sound.build();
@@ -187,13 +199,20 @@ export class Scene {
     });
   }
 
+  // Quita la escena del escenario y suelta sus eventos (al cambiar de zona).
+  destroy() {
+    for (const off of this.unsubs) off();
+    this.camera.destroy();
+    for (const child of this.app.stage.removeChildren()) child.destroy({ children: true });
+  }
+
   // id de estación o null.
   setGuide(id) {
     this.guideId = id;
     this.guide.visible = Boolean(id) && Boolean(this.stations[id]);
     if (!this.guide.visible) return;
     const view = this.stations[id];
-    const h = view instanceof PlotView ? LABEL_HEIGHT.plot : id === 'farm' ? LABEL_HEIGHT.farm : id === 'dispatch' ? LABEL_HEIGHT.dispatch : LABEL_HEIGHT.building;
+    const h = view instanceof PlotView ? LABEL_HEIGHT.plot : id === this.sourceId ? LABEL_HEIGHT.farm : id === 'dispatch' ? LABEL_HEIGHT.dispatch : LABEL_HEIGHT.building;
     const p = view.anchorPoint(h + 22);
     this.guideBase = p;
   }
@@ -208,7 +227,7 @@ export class Scene {
     this.dayNight.update(state.playTime);
     this.background.update(dt, this.camera);
     this.farm.sync(state);
-    this.warehouse.sync(state, warehouseCapacity(state.dispatch.level));
+    this.warehouse.sync(state.zones[this.zone.id], warehouseCap(state, this.zone.id));
     for (const id of this.stationIds) {
       const view = this.stations[id];
       if (view instanceof PlotView) view.sync(quoteUnlock(state, id));
@@ -264,7 +283,9 @@ export class Scene {
 
   syncMules(state) {
     const alive = new Set();
+    const pos = ROAD_POS[this.zone.id];
     for (const m of state.mules) {
+      if (zoneOf(m.from) !== this.zone.id) continue;
       alive.add(m.id);
       let view = this.mules.get(m.id);
       if (!view) {
@@ -273,8 +294,8 @@ export class Scene {
         this.objects.addChild(view);
       }
       // Ida: de la estación al destino con carga. Vuelta: vacía, en sentido contrario.
-      const a = ROAD_POS[m.from];
-      const b = ROAD_POS[m.to];
+      const a = pos[m.from];
+      const b = pos[m.to];
       const f = Math.min(m.t / m.duration, 1);
       const going = m.phase === 'go';
       const p = pointAtDistance(this.zone.muleRoad, going ? a + (b - a) * f : b + (a - b) * f);
@@ -290,7 +311,8 @@ export class Scene {
   }
 
   syncJeep(state) {
-    const j = state.jeep;
+    const zone = state.zones[this.zone.id];
+    const j = zone.jeep;
     const half = DISPATCH.tripTime / 2;
     const road = this.zone.jeepRoad;
     let t = 0;
@@ -303,7 +325,7 @@ export class Scene {
     // Suaviza arranque y frenado.
     const eased = t * t * (3 - 2 * t);
     const p = pointAt(road, eased);
-    const load = Object.values(j.load).reduce((a, b) => a + b, 0) / dispatchCapacity(state.dispatch.level);
+    const load = Object.values(j.load).reduce((a, b) => a + b, 0) / dispatchCapacity(zone.dispatch.level, dispatchMult(state, this.zone.id));
     const waiting = j.phase === 'idle' ? Math.min(1, j.waited / DISPATCH.maxWait) * 0.3 : 0;
     this.jeep.place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, j.phase === 'out' ? load : waiting);
   }

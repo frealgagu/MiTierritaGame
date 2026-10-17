@@ -1,8 +1,8 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
-import { ZONE1 } from '../data/zones/zone1_finca.js';
+import { ZONES_BY_ID, ZONE_LIST } from '../data/zones/index.js';
 import { muleCount, muleLoad, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
-import { CHAIN, ROAD_POS, nextStation } from './chain.js';
+import { ROAD_POS, chainOf, nextStation, zoneOf, zoneUnlocked } from './chain.js';
 import { inputSpace } from './production.js';
 import { COMPOST_BOOST, dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
 
@@ -12,13 +12,21 @@ const MIN_LEG = 1; // s por trayecto
 // barato que sobra nunca deja sin sitio al producto final de la cadena.
 export const DIVERT_RESERVE = 0.3;
 
-// Segundos de un trayecto (solo ida) entre dos puntos de la cadena.
+// Segundos de un trayecto (solo ida) entre dos puntos de la cadena de una zona.
+// `to` puede ser otra estación o 'warehouse' (la bodega de la zona de `from`).
 export function legTime(from, to, speedMult = 1) {
-  return Math.max(MIN_LEG, Math.abs(ROAD_POS[to] - ROAD_POS[from]) / (ZONE1.muleSpeed * speedMult));
+  const zone = zoneOf(from);
+  const pos = ROAD_POS[zone];
+  return Math.max(MIN_LEG, Math.abs(pos[to] - pos[from]) / (ZONES_BY_ID[zone].muleSpeed * speedMult));
 }
 
-export function inTransit(state, to = 'warehouse') {
-  return state.mules.reduce((n, m) => (m.to === to && m.phase === 'go' ? n + m.amount : n), 0);
+// Unidades en camino hacia una estación, o hacia la bodega de una zona.
+export function inTransit(state, to = 'warehouse', zoneId = 'finca') {
+  return state.mules.reduce((n, m) => {
+    if (m.phase !== 'go' || m.to !== to) return n;
+    if (to === 'warehouse' && zoneOf(m.from) !== zoneId) return n;
+    return n + m.amount;
+  }, 0);
 }
 
 // Cuánto acelera la producción de una estación (para dimensionar la carga de sus mulas).
@@ -49,9 +57,13 @@ export function busyMules(state, id) {
   return state.mules.reduce((n, m) => (m.from === id ? n + 1 : n), 0);
 }
 
-// Espacio libre en bodega contando lo que ya viene en camino.
-export function warehouseSpace(state) {
-  return warehouseCapacity(state.dispatch.level, dispatchMult(state)) - sumValues(state.warehouse) - inTransit(state);
+export function warehouseCap(state, zoneId) {
+  return warehouseCapacity(state.zones[zoneId].dispatch.level, dispatchMult(state, zoneId));
+}
+
+// Espacio libre en la bodega de una zona contando lo que ya viene en camino.
+export function warehouseSpace(state, zoneId) {
+  return warehouseCap(state, zoneId) - sumValues(state.zones[zoneId].warehouse) - inTransit(state, 'warehouse', zoneId);
 }
 
 // Arrieros (v0.3): cada estación tiene sus mulas. Van a la siguiente estación (o a la bodega si
@@ -76,14 +88,18 @@ export function stepMules(state, dt, bus) {
   }
   if (finished) state.mules = state.mules.filter((m) => !m.done);
 
-  for (const id of CHAIN) {
-    if (state.stations[id]) dispatchFrom(state, id, dt, bus);
+  for (const zone of ZONE_LIST) {
+    if (!zoneUnlocked(state, zone.id)) continue;
+    for (const id of chainOf(zone.id)) if (state.stations[id]) dispatchFrom(state, id, dt, bus);
   }
 }
 
 function deliver(state, m) {
   if (m.to !== 'warehouse' && state.stations[m.to]) state.stations[m.to].input += m.amount;
-  else state.warehouse[m.productId] = (state.warehouse[m.productId] ?? 0) + m.amount;
+  else {
+    const wh = state.zones[zoneOf(m.from)].warehouse;
+    wh[m.productId] = (wh[m.productId] ?? 0) + m.amount;
+  }
 }
 
 function dispatchFrom(state, id, dt, bus) {
@@ -110,8 +126,9 @@ function dispatchFrom(state, id, dt, bus) {
         continue;
       }
     }
-    const reserve = next ? DIVERT_RESERVE * warehouseCapacity(state.dispatch.level, dispatchMult(state)) : 0;
-    const room = warehouseSpace(state) - reserve;
+    const zoneId = zoneOf(id);
+    const reserve = next ? DIVERT_RESERVE * warehouseCap(state, zoneId) : 0;
+    const room = warehouseSpace(state, zoneId) - reserve;
     if (room <= 0) {
       s.waiting = 'space';
       return;

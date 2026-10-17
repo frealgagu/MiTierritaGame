@@ -68,7 +68,7 @@ export class Terrain {
         const v = rng();
         let color;
         if (type === 'road') color = mix(PAL.road, 0xd8b07a, v * 0.4);
-        else if (type === 'farm') color = mix(PAL.soil, 0x6e4529, v * 0.35);
+        else if (type === 'farm') color = this.zone.theme === 'cane' ? mix(0x9c7a4a, 0x7f6038, v * 0.35) : mix(PAL.soil, 0x6e4529, v * 0.35);
         else if (type === 'plot' || type === 'building') color = mix(PAL.plot, 0xc9a06c, v * 0.4);
         else color = mix(PAL.grass, (gx + gy) % 2 ? 0x8cc65a : 0x6fae44, 0.35 + v * 0.3);
         g.poly(isoPoly([[gx, gy], [gx + 1, gy], [gx + 1, gy + 1], [gx, gy + 1]])).fill(color);
@@ -117,10 +117,18 @@ export class Terrain {
         if (!this.isFree(gx, gy)) continue;
         const r = rng();
         let obj = null;
-        if (r < 0.05) obj = palm(rng);
-        else if (r < 0.1) obj = banana(rng);
-        else if (r < 0.15) obj = coffeeBush(rng);
-        else if (r < 0.17) obj = rock(rng);
+        if (this.zone.theme === 'cane') {
+          // Trapiche: guaduales, matas de caña sueltas y algún samán.
+          if (r < 0.05) obj = guadua(rng);
+          else if (r < 0.1) obj = caneClump(rng);
+          else if (r < 0.12) obj = saman(rng);
+          else if (r < 0.14) obj = rock(rng);
+        } else {
+          if (r < 0.05) obj = palm(rng);
+          else if (r < 0.1) obj = banana(rng);
+          else if (r < 0.15) obj = coffeeBush(rng);
+          else if (r < 0.17) obj = rock(rng);
+        }
         if (!obj) continue;
         const ox = 0.3 + rng() * 0.4;
         const oy = 0.3 + rng() * 0.4;
@@ -130,6 +138,67 @@ export class Terrain {
         this.decor.push(obj);
       }
     }
+  }
+}
+
+// Guadual: varias cañas de guadua altas y algo inclinadas, con hojitas en lo alto.
+function guadua(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 4, 2, 18, 7);
+  const n = 4 + Math.floor(rng() * 3);
+  for (let i = 0; i < n; i++) {
+    const bx = (i - n / 2) * 4;
+    const h = 60 + rng() * 35;
+    const lean = (rng() - 0.3) * 22;
+    const tx = bx + lean;
+    g.moveTo(bx, 0).quadraticCurveTo(bx + lean * 0.3, -h * 0.6, tx, -h).stroke({ width: 3.5, color: i % 2 ? 0x7a9a3c : 0x8fae4a, cap: 'round' });
+    for (let k = 1; k < 5; k++) {
+      const t = k / 5;
+      const nx = bx + (tx - bx) * t * t;
+      g.circle(nx, -h * t, 1.6).fill(0x5e7a2a);
+    }
+    for (let k = 0; k < 4; k++) g.ellipse(tx + (k - 1.5) * 5, -h + (k % 2) * 4, 6, 2).fill(0x5e9a3c);
+  }
+  c.addChild(g);
+  return c;
+}
+
+// Mata de caña suelta.
+function caneClump(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  drawCaneClump(g, 0, 0, 0.8 + rng() * 0.3, rng);
+  c.addChild(g);
+  return c;
+}
+
+// Samán: árbol de copa ancha y plana.
+function saman(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const s = 0.9 + rng() * 0.3;
+  shadow(g, 6, 2, 40 * s, 14 * s);
+  g.moveTo(-3, 0).lineTo(-2, -26 * s).lineTo(2, -26 * s).lineTo(3, 0).closePath().fill(0x6b4a2e);
+  for (const [dx, dy, r] of [[-20, -30, 16], [0, -36, 20], [20, -30, 16], [-8, -42, 14], [10, -42, 14]]) {
+    g.ellipse(dx * s, dy * s, r * s * 1.3, r * s * 0.7).fill(dy < -38 ? 0x6fae44 : 0x4e8a33);
+  }
+  c.addChild(g);
+  return c;
+}
+
+// Mata de caña de azúcar: tallos rectos con nudos y hojas largas. La usa también el Cañaduzal.
+export function drawCaneClump(g, x, y, scale, rng) {
+  shadow(g, x + 2, y + 1, 10 * scale, 4 * scale);
+  const stalks = 4;
+  for (let i = 0; i < stalks; i++) {
+    const sx = x + (i - 1.5) * 3 * scale;
+    const h = (24 + rng() * 10) * scale;
+    g.moveTo(sx, y).lineTo(sx + (i - 1.5) * 1.5, y - h).stroke({ width: 2.2 * scale, color: 0x9cc65b });
+    for (let k = 1; k < 4; k++) g.circle(sx + ((i - 1.5) * 1.5 * k) / 4, y - (h * k) / 4, 1.1 * scale).fill(0x6e8f36);
+    const tx = sx + (i - 1.5) * 1.5;
+    g.moveTo(tx, y - h).quadraticCurveTo(tx + 8 * scale, y - h - 6 * scale, tx + 12 * scale, y - h + 4 * scale).stroke({ width: 1.6, color: 0x5e9a3c });
+    g.moveTo(tx, y - h).quadraticCurveTo(tx - 8 * scale, y - h - 5 * scale, tx - 11 * scale, y - h + 5 * scale).stroke({ width: 1.6, color: 0x74b14a });
   }
 }
 

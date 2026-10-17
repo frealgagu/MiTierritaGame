@@ -5,10 +5,10 @@
 //   in:     productos consumidos por ciclo
 //   out:    productos generados por ciclo
 //   by:     subproductos generados por ciclo
-//   boost:  producto que, si está disponible, acelera la estación (no es obligatorio)
 //   cycle:  segundos por ciclo a nivel 1
 //   infinite: fuente ilimitada (no consume nada)
 //   side:     rama secundaria fuera de la cadena principal; requires = estación que la habilita
+//   fuel:     combustible opcional que llega directo de otra estación (subproducto) y la acelera
 
 export const STATIONS = [
   // Zona 1 · La Finca
@@ -24,11 +24,12 @@ export const STATIONS = [
   { id: 'composter', zone: 'finca', name: 'Compostera', icon: '🪱', in: { pulp: 5 }, out: { compost: 1 }, cycle: 20, unlockCost: 1500, upgradeBase: 10, growth: 1.15, release: '1.0', side: true, requires: 'wetmill' },
 
   // Zona 2 · El Trapiche
-  { id: 'canefield', zone: 'trapiche', name: 'Cañaduzal', icon: '🎋', infinite: true, out: { cane: 1 }, cycle: 2, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.1' },
-  { id: 'cane_mill', zone: 'trapiche', name: 'Molienda', icon: '⚙️', in: { cane: 1 }, out: { guarapo: 1 }, by: { bagasse: 1 }, cycle: 3, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.1' },
-  { id: 'furnace', zone: 'trapiche', name: 'Hornilla', icon: '🔥', in: { guarapo: 2 }, out: { melado: 1 }, boost: { bagasse: 2 }, cycle: 5, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.1' },
-  { id: 'molds', zone: 'trapiche', name: 'Gaveras', icon: '🧱', in: { melado: 2 }, out: { panela: 1 }, cycle: 5, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.1' },
-  { id: 'pulverizer', zone: 'trapiche', name: 'Pulverizadora', icon: '🌀', in: { panela: 1 }, out: { panela_powder: 1 }, cycle: 3, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.1' },
+  { id: 'canefield', zone: 'trapiche', name: 'Cañaduzal', icon: '🎋', infinite: true, out: { cane: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '1.1' },
+  { id: 'cane_mill', zone: 'trapiche', name: 'Molienda', icon: '⚙️', in: { cane: 1 }, out: { guarapo: 1 }, by: { bagasse: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '1.1' },
+  // El bagazo de la Molienda pasa directo a la Hornilla como combustible: mientras haya, trabaja ×2.
+  { id: 'furnace', zone: 'trapiche', name: 'Hornilla', icon: '🔥', in: { guarapo: 2 }, out: { melado: 1 }, fuel: { product: 'bagasse', from: 'cane_mill', perCycle: 1, boost: 2 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '1.1' },
+  { id: 'molds', zone: 'trapiche', name: 'Gaveras', icon: '🧱', in: { melado: 2 }, out: { panela: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '1.1' },
+  { id: 'pulverizer', zone: 'trapiche', name: 'Pulverizadora', icon: '🌀', in: { panela: 1 }, out: { panela_powder: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '1.1' },
 
   // Zona 3 · La Lechería
   { id: 'pasture', zone: 'lecheria', name: 'Potrero y establo', icon: '🐄', infinite: true, out: { raw_milk: 1 }, cycle: 2, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.2' },
@@ -67,7 +68,7 @@ export const STATIONS = [
 
 export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));
 
-// Bodega + Despacho (Willys). Uno por zona.
+// Bodega + Despacho (Willys). Uno por zona; el precio de sus mejoras está en los datos de cada zona.
 export const DISPATCH = {
   id: 'dispatch',
   name: 'Bodega y Despacho',
@@ -77,6 +78,4 @@ export const DISPATCH = {
   tripTime: 10, // segundos ida y vuelta
   maxWait: 3, // segundos que espera el Willys con carga parcial antes de salir
   warehouseTrips: 5, // la bodega guarda lo equivalente a N viajes
-  upgradeBase: 10,
-  growth: 1.17,
 };

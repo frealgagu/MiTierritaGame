@@ -38,6 +38,7 @@
     <div id="side" class="side">
       <button id="goals-btn" class="side-btn" aria-label="Objetivos" title="Objetivos">📋<span id="goals-badge" class="badge" hidden></span></button>
       <button id="research-btn" class="side-btn" aria-label="Investigaciones" title="Investigaciones">🔬<span id="research-badge" class="badge" hidden></span></button>
+      <button id="zones-btn" class="side-btn" aria-label="Zonas" title="Zonas" hidden>🗺️<span id="zones-badge" class="badge" hidden></span></button>
     </div>
     <div id="tracker" class="tracker" role="button" tabindex="0" hidden></div>
 
@@ -74,17 +75,30 @@
     <div id="victory" class="modal" hidden>
       <div class="modal-card center victory">
         <div class="victory-icon">🏆</div>
-        <h2>¡Primer gran pedido entregado!</h2>
-        <p>Completaste la <b>Zona 1 · La Finca</b>. Mil bolsas de tu café ya van camino al pueblo.</p>
+        <h2 id="victory-title"></h2>
+        <p id="victory-text"></p>
         <p id="victory-stats"></p>
-        <p class="soon">Próximamente: <b>Zona 2 · El Trapiche</b> 🎋</p>
-        <button id="victory-ok" class="btn buy">Seguir jugando en la finca</button>
+        <p class="soon" id="victory-next"></p>
+        <button id="victory-go" class="btn buy" hidden></button>
+        <button id="victory-ok" class="btn"></button>
       </div>
+    </div>
+
+    <div id="zones" class="modal" hidden>
+      <div class="modal-card list-modal">
+        <div class="chain-head">
+          <h2>🗺️ Zonas</h2>
+          <button id="zones-close" class="close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <p class="chain-help">Todas las zonas abiertas producen a la vez; aquí eliges cuál ver.</p>
+        <div id="zones-body" class="list-body"></div>
+      </div>
+    </div>
     </div>
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Cafetal <small>v1.0.1</small></h2>
+        <h2>Cafetal <small>v1.1</small></h2>
         <p>Tu partida se guarda sola en este navegador.</p>
         <p id="menu-stats"></p>
         <details class="save-box">

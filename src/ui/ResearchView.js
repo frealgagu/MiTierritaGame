@@ -4,8 +4,9 @@ import { STATIONS_BY_ID } from '../data/stations.js';
 
 // Investigaciones: compras únicas que mejoran toda la finca.
 export class ResearchView {
-  constructor(game) {
+  constructor(game, getZone) {
     this.game = game;
+    this.getZone = getZone;
     this.modal = document.getElementById('research');
     this.body = document.getElementById('research-body');
     this.badge = document.getElementById('research-badge');
@@ -29,7 +30,8 @@ export class ResearchView {
   }
 
   update() {
-    const quotes = RESEARCH.map((r) => [r, this.game.quoteResearch(r.id)]);
+    // Las de la zona que se está viendo.
+    const quotes = RESEARCH.filter((r) => r.zone === this.getZone()).map((r) => [r, this.game.quoteResearch(r.id)]);
     const affordable = quotes.filter(([, q]) => q.ok).length;
     this.badge.hidden = affordable === 0;
     this.badge.textContent = affordable;

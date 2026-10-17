@@ -3,22 +3,23 @@ import { dispatchCapacity } from './rules.js';
 import { sumValues } from './state.js';
 import { dispatchMult, productValue } from './modifiers.js';
 
-// El Willys espera en la bodega; sale lleno, o con carga parcial tras `maxWait` s.
+// El Willys de cada zona espera en su bodega; sale lleno, o con carga parcial tras `maxWait` s.
 // Vende al llegar al pueblo (mitad del viaje) y vuelve.
-export function stepJeep(state, dt, bus) {
-  const j = state.jeep;
+export function stepJeep(state, zoneId, dt, bus) {
+  const zone = state.zones[zoneId];
+  const j = zone.jeep;
   const half = DISPATCH.tripTime / 2;
 
   if (j.phase === 'idle') {
-    const stock = sumValues(state.warehouse);
-    const cap = dispatchCapacity(state.dispatch.level, dispatchMult(state));
+    const stock = sumValues(zone.warehouse);
+    const cap = dispatchCapacity(zone.dispatch.level, dispatchMult(state, zoneId));
     j.waited = stock > 0 ? j.waited + dt : 0;
     if (stock >= cap || (stock > 0 && j.waited >= DISPATCH.maxWait)) {
-      j.load = loadJeep(state, cap);
+      j.load = loadJeep(state, zone.warehouse, cap);
       j.phase = 'out';
       j.t = 0;
       j.waited = 0;
-      bus.emit('jeepDeparted', { load: j.load });
+      bus.emit('jeepDeparted', { zone: zoneId, load: j.load });
     }
     return;
   }
@@ -34,7 +35,7 @@ export function stepJeep(state, dt, bus) {
     }
     state.coins += coins;
     state.totalEarned += coins;
-    bus.emit('sold', { coins, load: j.load });
+    bus.emit('sold', { zone: zoneId, coins, load: j.load });
     j.load = {};
     j.phase = 'back';
   } else {
@@ -44,8 +45,7 @@ export function stepJeep(state, dt, bus) {
 }
 
 // Carga primero lo más valioso.
-function loadJeep(state, cap) {
-  const warehouse = state.warehouse;
+function loadJeep(state, warehouse, cap) {
   const load = {};
   let room = cap;
   const ids = Object.keys(warehouse).sort((a, b) => productValue(state, b) - productValue(state, a));

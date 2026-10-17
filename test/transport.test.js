@@ -58,7 +58,7 @@ test('a igual nivel, el patio del cafetal no se llena por falta de mulas (simula
     game.state.research.push(...research);
     game.state.stations.farm.level = 30;
     game.state.stations.farm.transport.level = 30;
-    game.state.dispatch.level = 80;
+    game.state.zones.finca.dispatch.level = 80;
     run(game, 300);
     assert.notEqual(game.state.stations.farm.status, 'blocked', `con ${research.join(', ') || 'nada'}`);
     const produced = game.state.stats.produced.cherry ?? 0;
@@ -71,7 +71,7 @@ test('arrieros por debajo del nivel de la estación son el cuello de botella', (
   const game = new Game();
   game.state.stations.farm.level = 30;
   game.state.stations.farm.transport.level = 15;
-  game.state.dispatch.level = 80;
+  game.state.zones.finca.dispatch.level = 80;
   assert.equal(analyzeChain(game.state).bottleneck, 'farm:transport');
 });
 
@@ -80,7 +80,7 @@ test('mejorar a los arrieros rezagados aumenta lo que se vende', () => {
   const fast = new Game();
   for (const g of [slow, fast]) {
     g.state.stations.farm.level = 20;
-    g.state.dispatch.level = 40;
+    g.state.zones.finca.dispatch.level = 40;
   }
   slow.state.stations.farm.transport.level = 5;
   fast.state.stations.farm.transport.level = 20;
@@ -92,7 +92,7 @@ test('mejorar a los arrieros rezagados aumenta lo que se vende', () => {
 test('si los arrieros no dan abasto, el patio se llena por falta de mulas', () => {
   const game = new Game();
   game.state.stations.farm.level = 50;
-  game.state.dispatch.level = 50;
+  game.state.zones.finca.dispatch.level = 50;
   run(game, 60);
   assert.equal(game.state.stations.farm.status, 'blocked');
   assert.equal(game.state.stations.farm.waiting, 'mules');

@@ -15,7 +15,7 @@ function product(state, type, target) {
 
 export const speedMult = (state, stationId) => product(state, 'stationSpeed', stationId);
 export const muleSpeedMult = (state) => product(state, 'muleSpeed');
-export const dispatchMult = (state) => product(state, 'dispatchCapacity');
+export const dispatchMult = (state, zoneId = 'finca') => product(state, 'dispatchCapacity', zoneId);
 export const productValue = (state, productId) => PRODUCTS[productId].value * product(state, 'productValue', productId);
 
 export function offlineCapSeconds(state) {

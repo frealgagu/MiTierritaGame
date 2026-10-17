@@ -3,6 +3,9 @@
 
 export const ZONE1 = {
   id: 'finca',
+  name: 'La Finca',
+  icon: '☕',
+  theme: 'coffee',
   size: 26,
   seed: 7,
   // Orden de la cadena: cada estación entrega su producto a la siguiente.
@@ -28,4 +31,7 @@ export const ZONE1 = {
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
   exitSign: [21.5, 24.2],
   muleSpeed: 4, // casillas por segundo
+  dispatchCost: { base: 10, growth: 1.17 },
+  unlockedBy: null, // disponible desde el principio
+  next: 'trapiche', // zona que se abre al completarla
 };

@@ -1,16 +1,21 @@
-import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
+import { STATIONS_BY_ID } from '../data/stations.js';
 import { bulkUpgrade, MAX_LEVEL, MILESTONES } from './rules.js';
-import { CHAIN, nextToUnlock } from './chain.js';
+import { chainOf, nextToUnlock, zoneOf, zoneUnlocked } from './chain.js';
+import { ZONES_BY_ID } from '../data/zones/index.js';
 import { createStationState } from './production.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
 
 // Los arrieros cuestan la mitad que la estación a la que sirven.
 const TRANSPORT_COST_FACTOR = 0.5;
 
-// Lo que se puede mejorar: 'dispatch', el id de una estación o 'id:transport' (sus arrieros).
+// Lo que se puede mejorar: 'dispatch:<zona>', el id de una estación o 'id:transport' (sus arrieros).
 function target(state, id) {
-  if (id === 'dispatch') return { base: DISPATCH.upgradeBase, growth: DISPATCH.growth, holder: state.dispatch };
   const [stationId, part] = id.split(':');
+  if (stationId === 'dispatch') {
+    const zone = part ?? 'finca';
+    const cost = ZONES_BY_ID[zone].dispatchCost;
+    return { base: cost.base, growth: cost.growth, holder: state.zones[zone].dispatch };
+  }
   const def = STATIONS_BY_ID[stationId];
   const st = state.stations[stationId];
   if (part === 'transport') return { base: def.upgradeBase * TRANSPORT_COST_FACTOR, growth: def.growth, holder: st.transport };
@@ -49,11 +54,13 @@ export function quoteUnlock(state, id) {
   const def = STATIONS_BY_ID[id];
   if (state.stations[id]) return { ok: false, reason: 'built', cost: 0 };
   const cost = def.unlockCost;
+  if (!zoneUnlocked(state, zoneOf(id))) return { ok: false, reason: 'zone', cost };
   if (def.side) {
     // Rama secundaria: solo pide la estación que la habilita.
     if (!state.stations[def.requires]) return { ok: false, reason: 'order', previous: def.requires, cost };
-  } else if (nextToUnlock(state) !== id) {
-    const previous = CHAIN[CHAIN.indexOf(id) - 1];
+  } else if (nextToUnlock(state, zoneOf(id)) !== id) {
+    const chain = chainOf(zoneOf(id));
+    const previous = chain[chain.indexOf(id) - 1];
     return { ok: false, reason: 'order', previous, cost };
   }
   if (state.coins < cost) return { ok: false, reason: 'coins', cost };
@@ -73,6 +80,7 @@ export function unlockStation(state, id, bus) {
 export function quoteResearch(state, id) {
   const r = RESEARCH_BY_ID[id];
   if (state.research.includes(id)) return { ok: false, reason: 'owned', cost: r.cost };
+  if (!zoneUnlocked(state, r.zone)) return { ok: false, reason: 'zone', cost: r.cost };
   if (r.requires && !state.stations[r.requires]) return { ok: false, reason: 'locked', cost: r.cost };
   if (state.coins < r.cost) return { ok: false, reason: 'coins', cost: r.cost };
   return { ok: true, cost: r.cost };

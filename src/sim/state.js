@@ -1,6 +1,11 @@
 import { createStationState } from './production.js';
 
-export const SAVE_VERSION = 4;
+export const SAVE_VERSION = 5;
+
+// Bodega, Willys y nivel del despacho de una zona.
+export function createZoneState(unlocked = false) {
+  return { unlocked, complete: false, dispatch: { level: 1 }, warehouse: {}, jeep: { phase: 'idle', t: 0, waited: 0, load: {} } };
+}
 
 export function createInitialState(now = Date.now()) {
   return {
@@ -10,19 +15,18 @@ export function createInitialState(now = Date.now()) {
     playTime: 0,
     savedAt: now,
     nextId: 1,
+    // Estaciones de todas las zonas (los ids son únicos); aparecen al construirlas.
     stations: {
-      farm: createStationState(), // las demás estaciones aparecen al construirlas
+      farm: createStationState(),
     },
-    dispatch: { level: 1 },
-    warehouse: {}, // productId -> unidades en bodega
+    // Por zona: desbloqueada, completada, despacho, bodega (productId -> unidades) y Willys.
+    zones: { finca: createZoneState(true), trapiche: createZoneState(false) },
     mules: [], // { id, productId, amount, from, to, phase: 'go' | 'back', t, duration }
-    jeep: { phase: 'idle', t: 0, waited: 0, load: {} },
     stats: { produced: {}, sold: {} },
     hints: [], // avisos ya mostrados
     settings: { sound: true },
     research: [], // ids de investigaciones compradas
     goals: { claimed: [] }, // objetivos cobrados
-    zoneComplete: false,
   };
 }
 

@@ -1,4 +1,5 @@
 // Catálogo completo de productos del juego (las 6 zonas, ver docs/GDD.md §4b).
+// Las zonas posteriores valen más (×5 en el Trapiche) porque arrancan con la economía de las anteriores.
 // `value` es el precio de venta base en monedas; 0 = no se vende (subproducto o final).
 // `color` se usa para los costales de las mulas y los iconos.
 
@@ -24,12 +25,12 @@ export const PRODUCTS = {
   compost: { name: 'Compost', zone: 'finca', value: 0, icon: '🟤', color: 0x5b4636 },
 
   // Zona 2 · El Trapiche
-  cane: { name: 'Caña', zone: 'trapiche', value: 2, icon: '🎋', color: 0x9cc65b },
-  guarapo: { name: 'Guarapo', zone: 'trapiche', value: 5, icon: '🥤', color: 0xd8e2a0 },
+  cane: { name: 'Caña', zone: 'trapiche', value: 10, icon: '🎋', color: 0x9cc65b },
+  guarapo: { name: 'Guarapo', zone: 'trapiche', value: 25, icon: '🥤', color: 0xd8e2a0 },
   bagasse: { name: 'Bagazo', zone: 'trapiche', value: 0, icon: '🌾', color: 0xd9c38c },
-  melado: { name: 'Melado', zone: 'trapiche', value: 12, icon: '🍯', color: 0xc98a2b },
-  panela: { name: 'Panela', zone: 'trapiche', value: 30, icon: '🟧', color: 0xb5651d },
-  panela_powder: { name: 'Panela pulverizada', zone: 'trapiche', value: 50, icon: '🧂', color: 0xd9a066 },
+  melado: { name: 'Melado', zone: 'trapiche', value: 60, icon: '🍯', color: 0xc98a2b },
+  panela: { name: 'Panela', zone: 'trapiche', value: 150, icon: '🟧', color: 0xb5651d },
+  panela_powder: { name: 'Panela pulverizada', zone: 'trapiche', value: 250, icon: '🧂', color: 0xd9a066 },
 
   // Zona 3 · La Lechería
   raw_milk: { name: 'Leche cruda', zone: 'lecheria', value: 5, icon: '🥛', color: 0xf4f1e8 },

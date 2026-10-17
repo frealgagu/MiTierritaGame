@@ -445,6 +445,161 @@ const DRAW = {
     };
   },
 
+  // Molienda: ramada con techo de zinc sobre el trapiche de tres mazas, caña y pila de bagazo.
+  cane_mill(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.0;
+    const d = 1.8;
+    const H = 24 + ctx.up;
+    // Piso de cemento.
+    g.poly(isoPoly([[x0, y0], [x0 + w, y0], [x0 + w, y0 + d], [x0, y0 + d]])).fill(0xc7beb0).stroke(OUTLINE);
+    // Trapiche: base y tres mazas (cilindros).
+    box(g, x0 + 0.6, y0 + 0.6, 0.8, 0.6, 8, 0x5a5a5a);
+    const rollers = [];
+    for (const k of [0, 1, 2]) {
+      const c = iso(x0 + 0.75 + k * 0.25, y0 + 0.9, 18);
+      g.rect(c.x - 5, c.y - 10, 10, 18).fill(0x8a8f94).stroke(OUTLINE);
+      g.ellipse(c.x, c.y - 10, 5, 2.5).fill(0xb0b5ba).stroke(OUTLINE);
+      rollers.push(c);
+    }
+    // Postes y techo de zinc a dos aguas.
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 12, 0x9aa3a8, 0xb08a5a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
+    // Atados de caña a la izquierda y pila de bagazo a la derecha (hacia la Hornilla).
+    for (let i = 0; i < 3; i++) {
+      const p = iso(x + 0.25 + i * 0.12, y + 2.5, i * 3);
+      g.roundRect(p.x - 14, p.y - 5, 28, 6, 3).fill(0x9cc65b).stroke(OUTLINE);
+    }
+    const b = iso(x + 2.5, y + 2.4);
+    g.ellipse(b.x, b.y - 6, 18, 9).fill(PRODUCTS.bagasse.color).stroke(OUTLINE);
+    g.ellipse(b.x - 4, b.y - 10, 8, 3).fill(0xe8d6a8);
+    // Las mazas giran mientras trabaja.
+    const spin = new Graphics();
+    this.anim.addChild(spin);
+    this.animate = (time) => {
+      spin.clear();
+      rollers.forEach((c, k) => {
+        const yy = c.y - 8 + (((time * 30 + k * 6) % 16) | 0);
+        spin.moveTo(c.x - 5, yy).lineTo(c.x + 5, yy).stroke({ width: 1.5, color: 0x5a5a5a });
+      });
+    };
+  },
+
+  // Hornilla: horno largo de ladrillo con pailas de melado hirviendo y chimenea.
+  furnace(g, x, y, ctx) {
+    const brick = 0xb5653a;
+    const x0 = x + 0.25;
+    const y0 = y + 0.6;
+    box(g, x0, y0, 2.5, 1.0, 12, brick);
+    for (let r = 1; r < 3; r++) {
+      const a = iso(x0, y0 + 1.0, r * 4);
+      const b2 = iso(x0 + 2.5, y0 + 1.0, r * 4);
+      g.moveTo(a.x, a.y).lineTo(b2.x, b2.y).stroke({ width: 1, color: shade(brick, 0.7), alpha: 0.5 });
+    }
+    // Boca del horno con fuego (de frente).
+    const mouth = iso(x0 + 0.3, y0 + 1.0, 4);
+    g.ellipse(mouth.x, mouth.y, 7, 5).fill(0x2b1a10).stroke(OUTLINE);
+    this.lights.push({ x: mouth.x, y: mouth.y, r: 26, color: 0xff7a1a });
+    // Pailas: con el segundo hito, una más.
+    const pans = ctx.tier >= 2 ? [0.35, 0.95, 1.55, 2.15] : [0.5, 1.25, 2.0];
+    const tops = [];
+    for (const px of pans) {
+      const c = iso(x0 + px, y0 + 0.5, 12);
+      g.ellipse(c.x, c.y, 15, 7).fill(0xb87333).stroke(OUTLINE);
+      g.ellipse(c.x, c.y, 11, 5).fill(PRODUCTS.melado.color);
+      tops.push(c);
+    }
+    // Chimenea alta al fondo.
+    const chimneyH = 56 + ctx.up;
+    box(g, x0 + 2.2, y0 - 0.45, 0.35, 0.35, chimneyH, shade(brick, 0.9));
+    const top = iso(x0 + 2.37, y0 - 0.28, chimneyH);
+    this.smokePoints.push({ x: top.x, y: top.y - 4 }, { x: top.x + 2, y: top.y - 6 });
+    this.roofTop = iso(x0 + 0.4, y0 - 0.3, 26);
+    // Montón de bagazo (combustible) junto a la boca.
+    const pile = iso(x + 0.3, y + 2.8);
+    g.ellipse(pile.x, pile.y - 4, 13, 6).fill(PRODUCTS.bagasse.color).stroke(OUTLINE);
+    // El melado burbujea y la boca parpadea mientras trabaja.
+    const boil = new Graphics();
+    this.anim.addChild(boil);
+    this.animate = (time) => {
+      boil.clear();
+      tops.forEach((c, k) => {
+        for (let i = 0; i < 2; i++) {
+          const f = (time * 1.5 + k * 0.3 + i * 0.5) % 1;
+          boil.circle(c.x - 4 + i * 7, c.y - f * 3, 1.8 * (1 - f)).fill({ color: 0xffe0a0, alpha: 1 - f });
+        }
+      });
+      boil.ellipse(mouth.x, mouth.y + 1, 5, 3).fill({ color: 0xff7a1a, alpha: 0.6 + Math.sin(time * 9) * 0.3 });
+    };
+  },
+
+  // Gaveras: mesas de madera con moldes llenos de panela, bajo una ramada de teja.
+  molds(g, x, y, ctx) {
+    const x0 = x + 0.25;
+    const y0 = y + 0.3;
+    const w = 2.5;
+    const d = 2.2;
+    const H = 26 + ctx.up;
+    const tables = ctx.tier >= 2 ? [0.25, 0.95, 1.6] : [0.4, 1.3];
+    for (const ty of tables) {
+      box(g, x0 + 0.2, y0 + ty, w - 0.4, 0.5, 9, PAL.wood);
+      // Cuadrícula de moldes con panelas.
+      for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 2; j++) {
+          const p = iso(x0 + 0.38 + i * 0.32, y0 + ty + 0.13 + j * 0.24, 9);
+          g.poly([p.x - 5, p.y, p.x, p.y - 2.5, p.x + 5, p.y, p.x, p.y + 2.5]).fill(PRODUCTS.panela.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+        }
+      }
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 14, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 14);
+    const bulb = iso(x0 + w / 2, y0 + d / 2, H - 4);
+    this.lights.push({ x: bulb.x, y: bulb.y, r: 30 });
+    // Vapor de la panela recién vertida.
+    const steam = new Graphics();
+    this.anim.addChild(steam);
+    this.animate = (time) => {
+      steam.clear();
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.6 + i / 3) % 1;
+        const p = iso(x0 + 0.6 + i * 0.7, y0 + tables[0] + 0.25, 12 + f * 18);
+        steam.circle(p.x, p.y, 3 + f * 4).fill({ color: 0xffffff, alpha: 0.5 * (1 - f) });
+      }
+    };
+  },
+
+  // Pulverizadora: casita con la máquina, bultos de panela pulverizada y polvillo.
+  pulverizer(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.0, 1.6, 28, ctx, { wall: 0xe9d8b4, roofH: 14 });
+    door(g, hx, hy, 1.6, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.0, 0.8, 14, PAL.balconyYellow);
+    // Máquina en el patio: tolva y salida.
+    const m = iso(x + 1.6, y + 2.35, 0);
+    box(g, x + 1.3, y + 2.1, 0.6, 0.5, 12, 0xd7263d);
+    g.poly([m.x - 10, m.y - 22, m.x + 10, m.y - 22, m.x + 4, m.y - 12, m.x - 4, m.y - 12]).fill(0x9aa3a8).stroke(OUTLINE);
+    // Bultos de panela pulverizada.
+    for (const [bx, by, z] of [[2.45, 2.2, 0], [2.7, 2.45, 0], [2.55, 2.3, 10]]) {
+      const p = iso(x + bx, y + by, z);
+      g.roundRect(p.x - 7, p.y - 13, 14, 13, 3).fill(0xf4efe6).stroke(OUTLINE);
+      g.rect(p.x - 5, p.y - 9, 10, 4).fill(PRODUCTS.panela_powder.color);
+    }
+    // Polvillo dorado que sale de la máquina.
+    const dust = new Graphics();
+    this.anim.addChild(dust);
+    this.animate = (time) => {
+      dust.clear();
+      for (let i = 0; i < 5; i++) {
+        const f = (time * 0.8 + i / 5) % 1;
+        dust.circle(m.x + Math.sin(i * 2 + time) * 8, m.y - 22 - f * 16, 1.5).fill({ color: PRODUCTS.panela_powder.color, alpha: 1 - f });
+      }
+    };
+  },
+
   // Empacadora: bodega amarilla con banda transportadora y bolsas.
   packer(g, x, y, ctx) {
     const hx = x + 0.25;

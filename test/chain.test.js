@@ -2,16 +2,22 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { analyzeChain } from '../src/sim/analysis.js';
-import { CHAIN, ROAD_POS } from '../src/sim/chain.js';
+import { ROAD_POS, chainOf } from '../src/sim/chain.js';
+import { ZONE_LIST } from '../src/data/zones/index.js';
+
+const CHAIN = chainOf('finca');
 
 function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-test('las estaciones están en orden sobre el camino', () => {
-  const positions = CHAIN.map((id) => ROAD_POS[id]);
-  for (let i = 1; i < positions.length; i++) assert.ok(positions[i] > positions[i - 1], `${CHAIN[i]} fuera de orden`);
-  assert.ok(ROAD_POS.warehouse > ROAD_POS.packer);
+test('en cada zona, las estaciones están en orden sobre el camino', () => {
+  for (const zone of ZONE_LIST) {
+    const pos = ROAD_POS[zone.id];
+    const positions = zone.chain.map((id) => pos[id]);
+    for (let i = 1; i < positions.length; i++) assert.ok(positions[i] > positions[i - 1], `${zone.chain[i]} fuera de orden`);
+    assert.ok(pos.warehouse > positions.at(-1), `bodega de ${zone.id}`);
+  }
 });
 
 test('solo se construye en orden y con monedas', () => {
@@ -41,7 +47,7 @@ test('si la siguiente estación no da abasto, el sobrante se desvía a la bodega
   game.unlock('wetmill');
   game.state.stations.farm.level = 40; // muchas más cerezas de las que procesa un beneficiadero nivel 1
   game.state.stations.farm.transport.level = 40;
-  game.state.dispatch.level = 40;
+  game.state.zones.finca.dispatch.level = 40;
   run(game, 90);
   assert.equal(game.state.stations.wetmill.status, 'working');
   assert.ok((game.state.stats.sold.cherry ?? 0) > 0, 'se vendieron cerezas desviadas');
@@ -62,7 +68,7 @@ test('la cadena completa produce bolsas de café', () => {
   game.state.coins = 1e9;
   for (const id of CHAIN.slice(1)) assert.ok(game.unlock(id), id);
   for (const id of CHAIN) game.state.stations[id].level = 30;
-  game.state.dispatch.level = 30;
+  game.state.zones.finca.dispatch.level = 30;
   run(game, 300);
   assert.ok((game.state.stats.sold.coffee_bag ?? 0) > 0, 'vendió bolsas');
 });
@@ -77,8 +83,8 @@ test('lo desviado nunca llena la bodega: siempre queda sitio para el producto fi
   game.state.stations.farm.transport.level = 60;
   game.state.stations.wetmill.transport.level = 30;
   run(game, 120);
-  const cap = warehouseCapacity(game.state.dispatch.level);
-  const cherries = game.state.warehouse.cherry ?? 0;
+  const cap = warehouseCapacity(game.state.zones.finca.dispatch.level);
+  const cherries = game.state.zones.finca.warehouse.cherry ?? 0;
   assert.ok(cherries <= cap * (1 - DIVERT_RESERVE) + 1, `cerezas en bodega: ${cherries} de ${cap}`);
   assert.ok((game.state.stats.sold.washed ?? 0) > 0, 'el café lavado sigue llegando y vendiéndose');
 });

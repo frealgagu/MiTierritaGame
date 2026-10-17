@@ -1,11 +1,13 @@
 import { formatNumber } from '../core/format.js';
-import { GOALS } from '../data/goals.js';
+import { GOALS_BY_ZONE } from '../data/goals.js';
+import { ZONES_BY_ID } from '../data/zones/index.js';
 import { activeGoals, goalProgress, goalText } from '../sim/goals.js';
 
 // Objetivos: un marcador abajo a la izquierda con el objetivo actual y una lista con los tres visibles.
 export class GoalsView {
-  constructor(game) {
+  constructor(game, getZone) {
     this.game = game;
+    this.getZone = getZone;
     this.modal = document.getElementById('goals');
     this.body = document.getElementById('goals-body');
     this.tracker = document.getElementById('tracker');
@@ -36,7 +38,8 @@ export class GoalsView {
 
   update() {
     const state = this.game.state;
-    const goals = activeGoals(state);
+    const zone = this.getZone();
+    const goals = activeGoals(state, zone);
     const progress = goals.map((g) => goalProgress(state, g));
     const claimable = progress.filter((p) => p.done).length;
     this.badge.hidden = claimable === 0;
@@ -52,11 +55,12 @@ export class GoalsView {
     }
 
     if (this.modal.hidden) return;
-    const done = state.goals.claimed.length;
+    const list = GOALS_BY_ZONE[zone];
+    const done = list.filter((g) => state.goals.claimed.includes(g.id)).length;
     const html = `
-      <p class="goals-count">Objetivo ${Math.min(done + 1, GOALS.length)} de ${GOALS.length}</p>
+      <p class="goals-count">${ZONES_BY_ID[zone].icon} ${ZONES_BY_ID[zone].name} · objetivo ${Math.min(done + 1, list.length)} de ${list.length}</p>
       ${goals.map((goal, k) => goalCard(goal, progress[k], false)).join('')}
-      ${goals.length === 0 ? '<p class="goals-count">¡Completaste todos los objetivos de la Zona 1!</p>' : ''}`;
+      ${goals.length === 0 ? `<p class="goals-count">¡Completaste todos los objetivos de ${ZONES_BY_ID[zone].name}!</p>` : ''}`;
     if (html !== this.html) this.body.innerHTML = this.html = html;
   }
 }

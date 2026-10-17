@@ -1,4 +1,5 @@
 import { formatDuration, formatNumber } from '../core/format.js';
+import { ZONES_BY_ID, ZONE_LIST } from '../data/zones/index.js';
 
 // Ventana de bienvenida con lo ganado mientras el juego estuvo cerrado.
 export function showWelcome({ seconds, coins, capped, cap }, onCollect) {
@@ -15,10 +16,38 @@ export function showWelcome({ seconds, coins, capped, cap }, onCollect) {
   };
 }
 
-export function showVictory(state) {
-  document.getElementById('victory-stats').textContent =
-    `Tiempo jugado: ${formatDuration(state.playTime)} · Ganado en total: 💰 ${formatNumber(state.totalEarned)} · Bolsas vendidas: ${formatNumber(state.stats.sold.coffee_bag ?? 0)}`;
+// Textos de la pantalla final de cada zona.
+const VICTORY = {
+  finca: { title: '¡Primer gran pedido entregado!', text: 'Completaste la <b>Zona 1 · La Finca</b>. Mil bolsas de tu café ya van camino al pueblo.', stat: (s) => `Bolsas vendidas: ${formatNumber(s.stats.sold.coffee_bag ?? 0)}` },
+  trapiche: { title: '¡Primer cargamento de panela!', text: 'Completaste la <b>Zona 2 · El Trapiche</b>. Cinco mil panelas pulverizadas endulzan el pueblo.', stat: (s) => `Panela pulverizada vendida: ${formatNumber(s.stats.sold.panela_powder ?? 0)}` },
+};
+
+// onGo(zona): ir a la zona que se acaba de abrir.
+export function showVictory(state, zoneId, onGo) {
+  const v = VICTORY[zoneId];
+  const next = ZONES_BY_ID[zoneId].next;
+  document.getElementById('victory-title').textContent = v.title;
+  document.getElementById('victory-text').innerHTML = v.text;
+  document.getElementById('victory-stats').textContent = `Tiempo jugado: ${formatDuration(state.playTime)} · Ganado en total: 💰 ${formatNumber(state.totalEarned)} · ${v.stat(state)}`;
+  const soon = document.getElementById('victory-next');
+  const go = document.getElementById('victory-go');
+  const stay = document.getElementById('victory-ok');
   const modal = document.getElementById('victory');
+  if (next) {
+    soon.innerHTML = `Se abrió la <b>Zona ${zoneIndex(next)} · ${ZONES_BY_ID[next].name}</b> ${ZONES_BY_ID[next].icon}`;
+    go.hidden = false;
+    go.textContent = `Ir a ${ZONES_BY_ID[next].name} ${ZONES_BY_ID[next].icon}`;
+    go.onclick = () => {
+      modal.hidden = true;
+      onGo(next);
+    };
+  } else {
+    soon.innerHTML = 'Próximamente: <b>Zona 3 · La Lechería</b> 🐄';
+    go.hidden = true;
+  }
+  stay.textContent = next ? 'Quedarme aquí' : 'Seguir jugando';
   modal.hidden = false;
-  document.getElementById('victory-ok').onclick = () => (modal.hidden = true);
+  stay.onclick = () => (modal.hidden = true);
 }
+
+const zoneIndex = (id) => ZONE_LIST.findIndex((z) => z.id === id) + 1;

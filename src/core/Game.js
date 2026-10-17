@@ -1,12 +1,13 @@
 import { EventBus } from './EventBus.js';
 import { createInitialState } from '../sim/state.js';
-import { stepComposter, stepStation } from '../sim/production.js';
-import { CHAIN } from '../sim/chain.js';
+import { stepComposter, stepFuel, stepStation } from '../sim/production.js';
+import { ZONE_LIST } from '../data/zones/index.js';
+import { STATIONS_BY_ID } from '../data/stations.js';
 import { stepMules } from '../sim/transport.js';
 import { stepJeep } from '../sim/dispatch.js';
 import { offlineCapSeconds } from '../sim/modifiers.js';
 import { buyResearch, buyUpgrade, quoteResearch, quoteUnlock, quoteUpgrade, unlockStation } from '../sim/upgrades.js';
-import { claimGoal } from '../sim/goals.js';
+import { claimGoal, unlockZone } from '../sim/goals.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
 const INCOME_WINDOW = 60; // s para calcular 💰/s
@@ -31,10 +32,18 @@ export class Game {
 
   step(dt) {
     this.state.playTime += dt;
-    for (const id of CHAIN) if (this.state.stations[id]) stepStation(this.state, id, dt, this.bus);
+    // Todas las zonas abiertas producen a la vez, aunque solo se vea una.
+    for (const zone of ZONE_LIST) {
+      if (!this.state.zones[zone.id]?.unlocked) continue;
+      for (const id of zone.chain) {
+        if (!this.state.stations[id]) continue;
+        if (STATIONS_BY_ID[id].fuel) stepFuel(this.state, id);
+        stepStation(this.state, id, dt, this.bus);
+      }
+    }
     stepComposter(this.state, dt, this.bus);
     stepMules(this.state, dt, this.bus);
-    stepJeep(this.state, dt, this.bus);
+    for (const zone of ZONE_LIST) if (this.state.zones[zone.id]?.unlocked) stepJeep(this.state, zone.id, dt, this.bus);
   }
 
   // Ganancias mientras el juego estuvo cerrado: se simula en pasos de 1 s, sin efectos visuales.
@@ -80,5 +89,9 @@ export class Game {
 
   claimGoal(id) {
     return claimGoal(this.state, id, this.bus);
+  }
+
+  unlockZone(id) {
+    return unlockZone(this.state, id, this.bus);
   }
 }

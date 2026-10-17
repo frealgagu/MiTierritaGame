@@ -46,15 +46,34 @@ function migrate(data) {
   for (const [id, st] of Object.entries(data.stations ?? {})) stations[id] = { ...createStationState(), ...st };
   delete stations.farm?.blocked;
   const mules = (data.mules ?? []).map(({ s0, s1, ...m }) => ({ from: 'farm', to: 'warehouse', phase: 'go', ...m }));
+  // v4 → v5: despacho, bodega y Willys pasan a ser por zona; la Finca completa abre el Trapiche.
+  const zones = {};
+  for (const [id, z] of Object.entries(base.zones)) zones[id] = { ...z, ...data.zones?.[id] };
+  if (!data.zones) {
+    zones.finca = {
+      ...zones.finca,
+      complete: Boolean(data.zoneComplete),
+      dispatch: { ...zones.finca.dispatch, ...data.dispatch },
+      warehouse: { ...data.warehouse },
+      jeep: { ...zones.finca.jeep, ...data.jeep },
+    };
+  }
+  if (zones.finca.complete && !zones.trapiche.unlocked) {
+    zones.trapiche.unlocked = true;
+    stations.canefield ??= createStationState();
+  }
+  // Hasta la v1.0.1 los objetivos de investigación se guardaban con el id de la investigación.
+  const OLD_GOAL_IDS = { abono: 'g05', herraduras: 'g12', sello: 'g26' };
+  const claimed = (data.goals?.claimed ?? []).map((id) => OLD_GOAL_IDS[id] ?? id);
+  const { dispatch, warehouse, jeep, zoneComplete, ...rest } = data;
   return {
     ...base,
-    ...data,
+    ...rest,
     stations: { ...base.stations, ...stations },
+    zones,
     mules,
-    dispatch: { ...base.dispatch, ...data.dispatch },
-    jeep: { ...base.jeep, ...data.jeep },
     stats: { ...base.stats, ...data.stats },
-    goals: { ...base.goals, ...data.goals },
+    goals: { ...base.goals, ...data.goals, claimed },
     version: SAVE_VERSION,
   };
 }

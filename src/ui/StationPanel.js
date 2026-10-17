@@ -17,7 +17,9 @@ import { sumValues } from '../sim/state.js';
 import { busyMules, inTransit, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
 import { analyzeChain, expectedCompostBoost } from '../sim/analysis.js';
 import { COMPOST_BOOST, compostBoost, muleSpeedMult } from '../sim/modifiers.js';
-import { CHAIN, nextStation } from '../sim/chain.js';
+import { chainOf, nextStation, zoneOf } from '../sim/chain.js';
+import { ZONES_BY_ID } from '../data/zones/index.js';
+import { dispatchMult } from '../sim/modifiers.js';
 
 const MODES = [
   { key: 1, label: '×1' },
@@ -26,7 +28,7 @@ const MODES = [
 ];
 
 const recipe = (obj) => Object.entries(obj).map(([id, n]) => `${n} ${PRODUCTS[id].icon}`).join(' + ');
-const nameOf = (id) => (id === 'dispatch' ? DISPATCH.name : id === 'warehouse' ? 'la bodega' : STATIONS_BY_ID[id].name);
+const nameOf = (id) => (id.startsWith('dispatch') ? DISPATCH.name : id === 'warehouse' ? 'la bodega' : STATIONS_BY_ID[id].name);
 
 // Panel inferior con la información y las mejoras de la estación seleccionada.
 // Se construye al abrir y luego solo se actualizan los textos (para no perder clics).
@@ -53,8 +55,8 @@ export class StationPanel {
 
   render() {
     const id = this.id;
-    this.built = id === 'dispatch' || Boolean(this.game.state.stations[id]);
-    if (id === 'dispatch') this.renderUpgradable(dispatchInfo());
+    this.built = id.startsWith('dispatch') || Boolean(this.game.state.stations[id]);
+    if (id.startsWith('dispatch')) this.renderUpgradable(dispatchInfo(id.split(':')[1] ?? 'finca'));
     else if (this.built) this.renderUpgradable(this.tab === 'transport' ? transportInfo(id) : stationInfo(id));
     else this.renderLocked(STATIONS_BY_ID[id]);
   }
@@ -159,7 +161,7 @@ export class StationPanel {
     const state = this.game.state;
     const r = this.refs;
     // Si la estación se construyó por otra vía, rehacer el panel.
-    const built = this.id === 'dispatch' || Boolean(state.stations[this.id]);
+    const built = this.id.startsWith('dispatch') || Boolean(state.stations[this.id]);
     if (built !== this.built) this.render();
 
     if (!this.info) {
@@ -167,7 +169,7 @@ export class StationPanel {
       r.unlockCost.textContent = `💰 ${formatNumber(q.cost)}`;
       this.el.querySelector('[data-unlock]').disabled = !q.ok;
       r.status.textContent =
-        q.reason === 'order' ? `🔒 Primero construye: ${nameOf(q.previous)}.` : q.ok ? '✅ ¡Listo para construir!' : `💰 Te faltan ${formatNumber(q.cost - state.coins)} monedas.`;
+        q.reason === 'order' ? `🔒 Primero construye: ${nameOf(q.previous)}.` : q.ok ? '✅ ¡Listo para construir!' : `💰 Te faltan ${formatNumber(Math.ceil(q.cost - state.coins))} monedas.`;
       r.status.classList.toggle('bad', q.reason === 'order');
       return;
     }
@@ -225,6 +227,14 @@ function stationInfo(id) {
   if (inId) {
     rows.push({ key: 'input', label: 'Entrada', value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l))} ${PRODUCTS[inId].icon}` });
   }
+  if (def.fuel) {
+    const fuel = PRODUCTS[def.fuel.product];
+    rows.push({
+      key: 'fuel',
+      label: `${fuel.name} (combustible)`,
+      value: (s, l) => `${formatAmount(s.stations[id].fuel ?? 0)} / ${formatNumber(stationInputCap(def, l))} ${fuel.icon} · ${(s.stations[id].fuel ?? 0) > 0 ? `×${def.fuel.boost} 🔥` : 'sin fuego extra'}`,
+    });
+  }
   if (def.side) {
     rows.push(
       { key: 'buffer', label: 'Compost guardado', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l))} ${out.icon}` },
@@ -240,7 +250,7 @@ function stationInfo(id) {
   return {
     icon: def.icon,
     title: def.name,
-    subtitle: inId ? `Convierte ${PRODUCTS[inId].name.toLowerCase()} en ${out.name.toLowerCase()}` : 'Fuente ilimitada de cerezas de café',
+    subtitle: inId ? `Convierte ${PRODUCTS[inId].name.toLowerCase()} en ${out.name.toLowerCase()}` : `Fuente ilimitada de ${out.name.toLowerCase()}`,
     recipe: inId ? `${recipe(def.in)} <span>➜</span> ${recipe(def.out)}` : null,
     milestoneWhat: 'velocidad',
     upgradeId: id,
@@ -290,7 +300,7 @@ function stationStatus(state, id) {
   const st = state.stations[id];
   const def = STATIONS_BY_ID[id];
   if (def.side) return composterStatus(state, st);
-  const analysis = analyzeChain(state);
+  const analysis = analyzeChain(state, zoneOf(id));
   const i = analysis.rows.findIndex((r) => r.id === id);
   const row = analysis.rows[i];
   const prev = analysis.rows[i - 1];
@@ -307,7 +317,8 @@ function stationStatus(state, id) {
     };
   }
   if (st.status === 'starved' && st.idle > 3) {
-    const prevId = CHAIN[CHAIN.indexOf(id) - 1];
+    const chain = chainOf(zoneOf(id));
+    const prevId = chain[chain.indexOf(id) - 1];
     return { text: `⏸️ Esperando producto de: ${nameOf(prevId)}. Mejora las estaciones anteriores.`, bad: false };
   }
   const next = nextStation(state, id);
@@ -327,25 +338,27 @@ function composterStatus(state, st) {
   return { text: '✅ Produciendo compost: el Cafetal va a ×1,5.', bad: false };
 }
 
-function dispatchInfo() {
+function dispatchInfo(zoneId) {
+  const z = (s) => s.zones[zoneId];
+  const mult = (s) => dispatchMult(s, zoneId);
   return {
     icon: DISPATCH.icon,
-    title: DISPATCH.name,
+    title: `${DISPATCH.name} · ${ZONES_BY_ID[zoneId].name}`,
     subtitle: 'El Willys vende en el pueblo lo que llega a la bodega',
     milestoneWhat: 'carga',
-    upgradeId: 'dispatch',
-    level: (s) => s.dispatch.level,
+    upgradeId: `dispatch:${zoneId}`,
+    level: (s) => z(s).dispatch.level,
     rows: [
-      { key: 'cap', label: 'Carga por viaje', value: (s, l) => `${formatNumber(dispatchCapacity(l))}`, next: (l) => formatNumber(dispatchCapacity(l)) },
-      { key: 'rate', label: 'Ritmo de venta', value: (s, l) => `${formatRate(dispatchRate(l))} u/s`, next: (l) => formatRate(dispatchRate(l)) },
-      { key: 'stock', label: 'Bodega', value: (s, l) => `${formatNumber(sumValues(s.warehouse))} / ${formatNumber(warehouseCapacity(l))}` },
+      { key: 'cap', label: 'Carga por viaje', value: (s, l) => `${formatNumber(dispatchCapacity(l, mult(s)))}`, next: (l, s) => formatNumber(dispatchCapacity(l, mult(s))) },
+      { key: 'rate', label: 'Ritmo de venta', value: (s, l) => `${formatRate(dispatchRate(l, mult(s)))} u/s`, next: (l, s) => formatRate(dispatchRate(l, mult(s))) },
+      { key: 'stock', label: 'Bodega', value: (s, l) => `${formatNumber(sumValues(z(s).warehouse))} / ${formatNumber(warehouseCapacity(l, mult(s)))}` },
       { key: 'trip', label: 'Viaje (ida y vuelta)', value: () => `${DISPATCH.tripTime} s` },
     ],
     status: (s) => {
-      const full = sumValues(s.warehouse) + inTransit(s) >= warehouseCapacity(s.dispatch.level);
+      const full = sumValues(z(s).warehouse) + inTransit(s, 'warehouse', zoneId) >= warehouseCapacity(z(s).dispatch.level, mult(s));
       if (full) return { text: '⛔ Bodega llena: el Willys no da abasto.', bad: true };
-      const phase = { idle: '🅿️ El Willys está cargando en la bodega.', out: '🚙 El Willys va camino al pueblo.', back: '↩️ El Willys vuelve a la finca.' };
-      return { text: phase[s.jeep.phase], bad: false };
+      const phase = { idle: '🅿️ El Willys está cargando en la bodega.', out: '🚙 El Willys va camino al pueblo.', back: '↩️ El Willys vuelve a la bodega.' };
+      return { text: phase[z(s).jeep.phase], bad: false };
     },
   };
 }
