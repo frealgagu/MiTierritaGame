@@ -54,7 +54,7 @@ function loadJeep(state, cap) {
     if (take <= 0) continue;
     load[id] = take;
     warehouse[id] -= take;
-    if (warehouse[id] === 0) delete warehouse[id];
+    if (warehouse[id] <= 1e-9) delete warehouse[id];
     room -= take;
     if (room === 0) break;
   }

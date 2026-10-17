@@ -1,4 +1,6 @@
 // Objetivos de la Zona 1 (GDD §6): una lista en orden; se ven 3 a la vez y dan monedas al cobrarlos.
+// Ojo: los productos intermedios usan 'produced', no 'sold': solo se venden si se desvían, y un
+// objetivo que dependa de eso puede quedar imposible y bloquear la lista.
 //   sold / produced: { product, amount }   level: { target, level }   unlock: { station }
 //   research: { id }   researchCount: { count }   income: { perSecond }   allLevels: { level }
 export const GOALS = [
@@ -7,7 +9,7 @@ export const GOALS = [
   { id: 'g03', type: 'level', target: 'farm:transport', level: 5, reward: 25 },
   { id: 'g04', type: 'unlock', station: 'wetmill', reward: 30 },
   { id: 'g05', type: 'research', id: 'abono', reward: 60 },
-  { id: 'g06', type: 'sold', product: 'washed', amount: 50, reward: 80 },
+  { id: 'g06', type: 'produced', product: 'washed', amount: 50, reward: 80 },
   { id: 'g07', type: 'level', target: 'farm', level: 10, reward: 100 },
   { id: 'g08', type: 'unlock', station: 'dryer', reward: 150 },
   { id: 'g09', type: 'level', target: 'dispatch', level: 5, reward: 150 },
@@ -18,12 +20,12 @@ export const GOALS = [
   { id: 'g14', type: 'level', target: 'dryer', level: 10, reward: 800 },
   { id: 'g14c', type: 'unlock', station: 'composter', reward: 1000 },
   { id: 'g15', type: 'unlock', station: 'roaster', reward: 1500 },
-  { id: 'g16', type: 'sold', product: 'roasted', amount: 100, reward: 2000 },
+  { id: 'g16', type: 'produced', product: 'roasted', amount: 100, reward: 2000 },
   { id: 'g17', type: 'researchCount', count: 3, reward: 2500 },
   { id: 'g18', type: 'income', perSecond: 20, reward: 4000 },
   { id: 'g19', type: 'allLevels', level: 10, reward: 5000 },
   { id: 'g20', type: 'unlock', station: 'grinder', reward: 8000 },
-  { id: 'g21', type: 'sold', product: 'ground', amount: 500, reward: 12000 },
+  { id: 'g21', type: 'produced', product: 'ground', amount: 500, reward: 12000 },
   { id: 'g22', type: 'level', target: 'farm', level: 25, reward: 15000 },
   { id: 'g23', type: 'income', perSecond: 100, reward: 20000 },
   { id: 'g24', type: 'unlock', station: 'packer', reward: 40000 },

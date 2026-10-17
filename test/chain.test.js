@@ -40,6 +40,7 @@ test('si la siguiente estación no da abasto, el sobrante se desvía a la bodega
   game.state.coins = 50;
   game.unlock('wetmill');
   game.state.stations.farm.level = 40; // muchas más cerezas de las que procesa un beneficiadero nivel 1
+  game.state.stations.farm.transport.level = 40;
   game.state.dispatch.level = 40;
   run(game, 90);
   assert.equal(game.state.stations.wetmill.status, 'working');

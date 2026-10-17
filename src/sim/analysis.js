@@ -1,9 +1,9 @@
 // Flujo teórico de la cadena para mostrar el cuello de botella (no afecta a la simulación).
 import { STATIONS_BY_ID } from '../data/stations.js';
-import { dispatchRate, stationRate, transportCapacity } from './rules.js';
+import { dispatchRate, stationRate } from './rules.js';
 import { CHAIN } from './chain.js';
-import { legTime } from './transport.js';
-import { COMPOST_BOOST, CHERRIES_PER_COMPOST, dispatchMult, muleSpeedMult, productValue, speedMult } from './modifiers.js';
+import { teamCapacity } from './transport.js';
+import { COMPOST_BOOST, CHERRIES_PER_COMPOST, dispatchMult, productValue, speedMult } from './modifiers.js';
 
 const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
 
@@ -20,7 +20,6 @@ export function analyzeChain(state) {
   let toWarehouse = 0;
   const flows = []; // { units, value } que llegan a la bodega
 
-  const muleSpeed = muleSpeedMult(state);
   ids.forEach((id, i) => {
     const st = state.stations[id];
     const def = STATIONS_BY_ID[id];
@@ -40,7 +39,7 @@ export function analyzeChain(state) {
 
     const next = ids[i + 1] ?? null;
     const dest = next ?? 'warehouse';
-    const transport = transportCapacity(def, st.transport.level, 2 * legTime(id, dest, muleSpeed));
+    const transport = teamCapacity(state, id, dest);
     const row = { id, incoming: def.in ? incoming : null, capacity, output, transport, next, toNext: 0, diverted: 0, lost: 0 };
 
     if (next) {
@@ -50,7 +49,7 @@ export function analyzeChain(state) {
       const left = output - row.toNext;
       // Las mulas que sobran llevan el resto a la bodega (viaje más largo).
       const free = Math.max(0, 1 - row.toNext / transport);
-      row.diverted = Math.min(left, free * transportCapacity(def, st.transport.level, 2 * legTime(id, 'warehouse', muleSpeed)));
+      row.diverted = Math.min(left, free * teamCapacity(state, id, 'warehouse'));
       row.lost = left - row.diverted;
       row.nextCapacity = nextCapacity;
     } else {

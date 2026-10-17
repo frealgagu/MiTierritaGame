@@ -9,7 +9,7 @@ import { BuildingView } from './Buildings.js';
 import { JeepView, MuleView } from './Carriers.js';
 import { iso } from './iso.js';
 import { pointAt, pointAtDistance } from '../core/path.js';
-import { formatNumber } from '../core/format.js';
+import { formatAmount, formatNumber } from '../core/format.js';
 import { ZONE1 } from '../data/zones/zone1_finca.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
@@ -152,7 +152,7 @@ export class Scene {
     bus.on('muleArrived', (m) => {
       if (m.to !== 'warehouse') return;
       const p = iso(...this.zone.muleRoad.at(-1), 40);
-      this.effects.floatText(p.x, p.y, `+${m.amount} ${PRODUCTS[m.productId].icon}`, { size: 14 });
+      this.effects.floatText(p.x, p.y, `+${formatAmount(m.amount)} ${PRODUCTS[m.productId].icon}`, { size: 14 });
     });
     bus.on('produced', ({ stationId, productId, amount }) => {
       if (stationId !== 'farm') return;

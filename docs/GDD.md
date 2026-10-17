@@ -252,10 +252,10 @@ Cada estación tiene **dos ejes** de mejora.
 - Cada estación tiene sus propias mulas. Una mula carga, va a la siguiente estación (o a la bodega si la siguiente no existe o tiene la entrada llena), entrega y **vuelve vacía**.
 - Los arrieros tienen su propio **nivel (1–100)**, que cuesta la mitad que el de la estación:
   - **Mulas** = 1 + una más cada 10 niveles (máx. 10).
-  - **Carga por mula**: crece con el nivel y se duplica en los mismos hitos que la estación.
-- **Capacidad del tramo** = mulas × carga / tiempo de ida y vuelta. Está calibrada para que, a igual nivel, mueva un 25 % más de lo que produce la estación en un tramo de 6 s de ida y vuelta: los tramos cortos sobran, los largos (y sobre todo los desvíos a la bodega) se quedan cortos.
-- Si todas las mulas están en camino, el producto se acumula en el **patio** (sacos apilados). Cuando se llena, la estación se detiene (⛔).
-- Al empezar, con solo el Cafetal, la única mula tiene que llegar hasta la bodega: el primer cuello de botella son los arrieros, y así se enseña la mecánica.
+  - **Carga por mula** (puede tener decimales): se calcula para que el equipo mueva un **25 % más de lo que produce la estación al mismo nivel**, contando la distancia real hasta su destino normal y lo que acelera la estación (investigaciones, compost).
+- **Regla simple para el jugador: arrieros al mismo nivel que su estación = llevan todo.** Si van por debajo, son el cuello de botella; Herraduras y Cable aéreo dan margen extra.
+- Los desvíos a la bodega usan las mismas mulas pero el viaje es más largo, así que mueven menos: son un recurso de emergencia, no un camino normal.
+- Si todas las mulas están en camino, el producto se acumula en el **patio**. Cuando se llena, la estación se detiene (⛔).
 - **Vista «Ver cadena» (🔗)**: muestra por estación lo que recibe, procesa y produce, y por tramo lo que llevan los arrieros, lo que se desvía y lo que se pierde, con el cuello de botella en rojo.
 
 ### 5.3 Despacho
@@ -305,8 +305,10 @@ Una lista de **29 objetivos en orden** (`src/data/goals.js`). Se ven 3 a la vez,
 
 | Jugador | Empacadora | Zona completada |
 |---------|-----------|-----------------|
-| Atento: sube toda la cadena junta y elige la compra más rentable | ~57 min | **~1 h 22 min** |
-| Casual: sigue la mejora recomendada y los objetivos, ahorra para construir si le queda cerca | ~2 h 50 min | **~3 h 30 min** |
+| Atento: sube toda la cadena junta y elige la compra más rentable | ~3 h | **~3 h 30 min** |
+| Casual: sigue la mejora recomendada y los objetivos, ahorra para construir si le queda cerca | ~3 h | **~3 h 20 min** |
+
+(Medido en la v1.0.1, después de que los arrieros pasaran a ir al ritmo de su estación.)
 
 ## 7. Ganancias sin conexión
 

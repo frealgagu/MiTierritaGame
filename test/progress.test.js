@@ -143,3 +143,8 @@ test('la compostera no tiene arrieros ni cuenta para «todas las estaciones»', 
   const rec = recommendUpgrade(game.state, (id, mode) => game.quote(id, mode));
   assert.notEqual(rec.id, 'composter:transport');
 });
+
+test('ningún objetivo pide vender un producto intermedio (podría quedar imposible)', () => {
+  const finals = new Set(['cherry', 'coffee_bag']); // la cereza se vende sí o sí al empezar; la bolsa es el final
+  for (const g of GOALS) if (g.type === 'sold') assert.ok(finals.has(g.product), `${g.id} pide vender ${g.product}`);
+});

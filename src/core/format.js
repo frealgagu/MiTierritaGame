@@ -29,3 +29,9 @@ export function formatDuration(seconds) {
   if (m > 0) return `${m} min`;
   return `${s} s`;
 }
+
+// Cantidades que pueden tener decimales (carga de las mulas): 0,8 · 3,5 · 12 · 1,2K
+export function formatAmount(n) {
+  if (n < 10 && Math.abs(n - Math.round(n)) > 0.05) return n.toFixed(1).replace('.', ',');
+  return formatNumber(Math.round(n));
+}

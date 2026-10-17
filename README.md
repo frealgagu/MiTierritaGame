@@ -20,10 +20,10 @@ npm run build    # versión para publicar en dist/
 
 ## Estado: v1.0 — Zona 1 completa
 
-La Zona 1 (La Finca) se juega de principio a fin: unas **1 h 30 min** jugando con atención y **unas 3 h** de forma casual (`npm run balance`). Novedades de cada versión en [`CHANGELOG.md`](CHANGELOG.md).
+La Zona 1 (La Finca) se juega de principio a fin en unas **3 h 30 min** (`npm run balance`). Novedades de cada versión en [`CHANGELOG.md`](CHANGELOG.md).
 
 - **Cadena completa**: Cafetal ♾️ → Beneficiadero → Marquesina → Trilladora → Tostadora → Molino → Empacadora → Bodega, más la **Compostera** como rama opcional (la pulpa se vuelve compost que acelera el Cafetal).
-- **Arrieros** por estación (mulas que van y vuelven) y **Willys** que vende en el pueblo; desvío a la bodega cuando una estación no da abasto.
+- **Arrieros** por estación (mulas que van y vuelven; al mismo nivel que su estación llevan todo) y **Willys** que vende en el pueblo; desvío a la bodega cuando una estación no da abasto.
 - **Mejoras** de nivel 1–100 con hitos ×2, **investigaciones** únicas, **objetivos** con recompensa y final («Primer gran pedido»: 1.000 bolsas).
 - **Guía**: mejora recomendada, flecha en el mapa, vista «La cadena» con el cuello de botella en rojo.
 - **Vida**: edificios que evolucionan con los hitos, día y noche, aves, luciérnagas, efectos y sonido sintetizado.

@@ -4,7 +4,7 @@ import { muleCount, muleLoad, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
 import { CHAIN, ROAD_POS, nextStation } from './chain.js';
 import { inputSpace } from './production.js';
-import { dispatchMult, muleSpeedMult } from './modifiers.js';
+import { COMPOST_BOOST, dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
 
 const MAX_IDLE = 6; // s: si hay algo en el patio y no sale una mula en este tiempo, sale con lo que haya
 const MIN_LEG = 1; // s por trayecto
@@ -19,6 +19,29 @@ export function legTime(from, to, speedMult = 1) {
 
 export function inTransit(state, to = 'warehouse') {
   return state.mules.reduce((n, m) => (m.to === to && m.phase === 'go' ? n + m.amount : n), 0);
+}
+
+// Cuánto acelera la producción de una estación (para dimensionar la carga de sus mulas).
+export function productionMult(state, id) {
+  return speedMult(state, id) * (id === 'farm' && state.stations.composter ? COMPOST_BOOST : 1);
+}
+
+// Destino normal de las mulas de una estación: la siguiente construida o la bodega.
+export function normalDest(state, id) {
+  return nextStation(state, id) ?? 'warehouse';
+}
+
+// Carga de cada mula del equipo de una estación (a su nivel de arrieros o al indicado).
+export function teamLoad(state, id, level = state.stations[id].transport.level) {
+  const def = STATIONS_BY_ID[id];
+  return muleLoad(def, level, 2 * legTime(id, normalDest(state, id)), productionMult(state, id));
+}
+
+// Unidades por segundo que mueven los arrieros de una estación hasta `dest`.
+// Hacia su destino normal: un 25 % más de lo que produce la estación al mismo nivel
+// (más con Herraduras o Cable aéreo). Hacia la bodega en un desvío: menos, el viaje es más largo.
+export function teamCapacity(state, id, dest = normalDest(state, id), level = state.stations[id].transport.level) {
+  return (muleCount(level) * teamLoad(state, id, level)) / (2 * legTime(id, dest, muleSpeedMult(state)));
 }
 
 // Mulas de una estación que están en camino (ida o vuelta).
@@ -69,7 +92,7 @@ function dispatchFrom(state, id, dt, bus) {
   const level = s.transport.level;
   s.sinceDeparture += dt;
   s.waiting = null;
-  const load = muleLoad(def, level);
+  const load = teamLoad(state, id);
   const next = nextStation(state, id);
 
   // Pueden salir varias mulas en el mismo instante si hay producto y mulas libres.
@@ -81,7 +104,7 @@ function dispatchFrom(state, id, dt, bus) {
     if (s.buffer < load && s.sinceDeparture < MAX_IDLE) return;
     const amount = Math.min(s.buffer, load);
     if (next) {
-      const space = Math.floor(inputSpace(state, next));
+      const space = inputSpace(state, next);
       if (space > 0) {
         sendMule(state, id, next, Math.min(amount, space), bus);
         continue;

@@ -1,4 +1,4 @@
-import { formatNumber, formatRate } from '../core/format.js';
+import { formatAmount, formatNumber, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import {
@@ -11,14 +11,12 @@ import {
   stationInputCap,
   stationOutputRate,
   muleCount,
-  muleLoad,
-  transportCapacity,
   warehouseCapacity,
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
-import { busyMules, inTransit, legTime } from '../sim/transport.js';
+import { busyMules, inTransit, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
 import { analyzeChain, expectedCompostBoost } from '../sim/analysis.js';
-import { COMPOST_BOOST, compostBoost } from '../sim/modifiers.js';
+import { COMPOST_BOOST, compostBoost, muleSpeedMult } from '../sim/modifiers.js';
 import { CHAIN, nextStation } from '../sim/chain.js';
 
 const MODES = [
@@ -182,7 +180,7 @@ export class StationPanel {
     r.level.textContent = `Nv ${level}`;
     for (const row of info.rows) {
       r[row.key].textContent = row.value(state, level);
-      r[`${row.key}Next`].textContent = row.next && level < MAX_LEVEL ? `→ ${row.next(after)}` : '';
+      r[`${row.key}Next`].textContent = row.next && level < MAX_LEVEL ? `→ ${row.next(after, state)}` : '';
     }
     const status = info.status(state);
     r.status.textContent = status.text;
@@ -217,7 +215,12 @@ function stationInfo(id) {
   const out = PRODUCTS[outId];
   const inId = def.in ? Object.keys(def.in)[0] : null;
   const rows = [
-    { key: 'rate', label: 'Producción', value: (s, l) => `${formatRate(stationOutputRate(def, l))} ${out.icon}/s`, next: (l) => formatRate(stationOutputRate(def, l)) },
+    {
+      key: 'rate',
+      label: 'Producción',
+      value: (s, l) => `${formatRate(stationOutputRate(def, l) * productionMult(s, id))} ${out.icon}/s`,
+      next: (l, s) => formatRate(stationOutputRate(def, l) * productionMult(s, id)),
+    },
   ];
   if (inId) {
     rows.push({ key: 'input', label: 'Entrada', value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l))} ${PRODUCTS[inId].icon}` });
@@ -251,34 +254,33 @@ function stationInfo(id) {
 function transportInfo(id) {
   const def = STATIONS_BY_ID[id];
   const out = PRODUCTS[Object.keys(def.out)[0]];
-  const dest = (s) => nextStation(s, id) ?? 'warehouse';
-  const roundTrip = (s) => 2 * legTime(id, dest(s));
+  const produce = (s) => stationOutputRate(def, s.stations[id].level) * productionMult(s, id);
   return {
     icon: '🐴',
     title: `Arrieros · ${def.name}`,
-    subtitle: 'Llevan el producto a la siguiente estación y vuelven',
+    subtitle: 'A igual nivel que la estación, llevan todo lo que produce',
     milestoneWhat: 'carga',
     upgradeId: `${id}:transport`,
     tabs: true,
     level: (s) => s.stations[id].transport.level,
     rows: [
       { key: 'mules', label: 'Mulas', value: (s, l) => `${muleCount(l)} (${busyMules(s, id)} en camino)`, next: (l) => muleCount(l) },
-      { key: 'load', label: 'Carga por mula', value: (s, l) => `${formatNumber(muleLoad(def, l))} ${out.icon}`, next: (l) => formatNumber(muleLoad(def, l)) },
-      { key: 'trip', label: 'Viaje (ida y vuelta)', value: (s) => `${formatRate(roundTrip(s))} s hasta ${nameOf(dest(s))}` },
+      { key: 'load', label: 'Carga por mula', value: (s, l) => `${formatAmount(teamLoad(s, id, l))} ${out.icon}`, next: (l, s) => formatAmount(teamLoad(s, id, l)) },
+      { key: 'trip', label: 'Viaje (ida y vuelta)', value: (s) => `${formatRate(2 * legTime(id, normalDest(s, id), muleSpeedMult(s)))} s hasta ${nameOf(normalDest(s, id))}` },
       {
         key: 'cap',
-        label: 'Capacidad',
-        value: (s, l) => `${formatRate(transportCapacity(def, l, roundTrip(s)))} ${out.icon}/s`,
-        next: null,
+        label: 'Llevan',
+        value: (s, l) => `${formatRate(teamCapacity(s, id, undefined, l))} ${out.icon}/s`,
+        next: (l, s) => formatRate(teamCapacity(s, id, undefined, l)),
       },
+      { key: 'produce', label: 'La estación produce', value: (s) => `${formatRate(produce(s))} ${out.icon}/s` },
     ],
     status: (s) => {
       const st = s.stations[id];
-      const produce = stationOutputRate(def, st.level);
-      const cap = transportCapacity(def, st.transport.level, roundTrip(s));
+      const cap = teamCapacity(s, id);
       if (st.status === 'blocked' && st.waiting === 'mules') return { text: '⛔ Las mulas no dan abasto y el patio se llenó: mejora a los arrieros.', bad: true };
-      if (cap < produce) return { text: `⚠️ La estación produce ${formatRate(produce)} ${out.icon}/s y las mulas llevan ${formatRate(cap)}/s.`, bad: true };
-      return { text: `✅ Los arrieros llevan todo lo que produce la estación (${formatRate(produce)} ${out.icon}/s).`, bad: false };
+      if (cap < produce(s)) return { text: `⚠️ La estación produce ${formatRate(produce(s))} ${out.icon}/s y las mulas llevan ${formatRate(cap)}/s. Sube los arrieros al nivel de la estación (${st.level}).`, bad: true };
+      return { text: '✅ Los arrieros llevan todo lo que produce la estación.', bad: false };
     },
   };
 }

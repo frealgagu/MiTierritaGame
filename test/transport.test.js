@@ -27,20 +27,63 @@ test('las mulas vuelven vacías y quedan libres', () => {
   assert.ok(game.state.mules.every((m) => m.phase === 'go' || m.amount === 0));
 });
 
-test('al principio el cuello de botella son los arrieros del cafetal', () => {
-  const game = new Game();
-  assert.equal(analyzeChain(game.state).bottleneck, 'farm:transport');
-  game.state.coins = 1e6;
-  game.buy('farm:transport', 10);
-  assert.equal(game.state.stations.farm.transport.level, 11);
-  assert.equal(muleCount(11), 2);
-  assert.notEqual(analyzeChain(game.state).bottleneck, 'farm:transport');
+test('a igual nivel, los arrieros llevan todo lo que produce su estación (en el análisis)', () => {
+  const cases = [
+    () => {}, // solo el cafetal: viaje largo hasta la bodega
+    (g) => ['wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer'].forEach((id) => g.unlock(id)),
+    (g) => {
+      ['wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer', 'composter'].forEach((id) => g.unlock(id));
+      g.state.research.push('abono', 'castillo', 'secador');
+    },
+  ];
+  for (const setup of cases) {
+    for (const level of [1, 9, 10, 37, 80]) {
+      const game = new Game();
+      game.state.coins = 1e12;
+      setup(game);
+      for (const st of Object.values(game.state.stations)) {
+        st.level = level;
+        st.transport.level = level;
+      }
+      for (const row of analyzeChain(game.state).rows) {
+        assert.ok(row.transport >= row.output * 1.2, `${row.id} nv ${level}: llevan ${row.transport} de ${row.output}`);
+      }
+    }
+  }
 });
 
-test('mejorar a los arrieros aumenta lo que se vende', () => {
+test('a igual nivel, el patio del cafetal no se llena por falta de mulas (simulación real)', () => {
+  for (const research of [[], ['abono', 'castillo']]) {
+    const game = new Game();
+    game.state.research.push(...research);
+    game.state.stations.farm.level = 30;
+    game.state.stations.farm.transport.level = 30;
+    game.state.dispatch.level = 80;
+    run(game, 300);
+    assert.notEqual(game.state.stations.farm.status, 'blocked', `con ${research.join(', ') || 'nada'}`);
+    const produced = game.state.stats.produced.cherry ?? 0;
+    const sold = game.state.stats.sold.cherry ?? 0;
+    assert.ok(sold > produced * 0.85, `vendidas ${sold} de ${produced} producidas`);
+  }
+});
+
+test('arrieros por debajo del nivel de la estación son el cuello de botella', () => {
+  const game = new Game();
+  game.state.stations.farm.level = 30;
+  game.state.stations.farm.transport.level = 15;
+  game.state.dispatch.level = 80;
+  assert.equal(analyzeChain(game.state).bottleneck, 'farm:transport');
+});
+
+test('mejorar a los arrieros rezagados aumenta lo que se vende', () => {
   const slow = new Game();
   const fast = new Game();
-  fast.state.stations.farm.transport.level = 15;
+  for (const g of [slow, fast]) {
+    g.state.stations.farm.level = 20;
+    g.state.dispatch.level = 40;
+  }
+  slow.state.stations.farm.transport.level = 5;
+  fast.state.stations.farm.transport.level = 20;
   run(slow, 300);
   run(fast, 300);
   assert.ok(fast.state.coins > slow.state.coins * 1.5, `${fast.state.coins} vs ${slow.state.coins}`);

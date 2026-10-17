@@ -79,15 +79,16 @@ for (let step = 0; step < hours * 36000 && !s.zoneComplete; step++) {
   }
   // El capataz no sube el ingreso: se compra cuando sobra.
   if (game.quoteResearch('capataz').ok && s.coins > 3 * 10000) game.research('capataz');
-  if (style === 'casual') {
-    for (const g of activeGoals(s)) {
-      if (goalProgress(s, g).done) continue;
-      if (g.type === 'level') game.buy(g.target, 1);
-      if (g.type === 'allLevels') {
-        const lowest = Object.entries(s.stations).filter(([id]) => !STATIONS_BY_ID[id].side).sort((a, b) => a[1].level - b[1].level)[0][0];
-        game.buy(lowest, 1);
-      }
+  // Objetivos de subir niveles: los dos jugadores los atienden.
+  for (const g of activeGoals(s)) {
+    if (goalProgress(s, g).done) continue;
+    if (g.type === 'level') game.buy(g.target, 1);
+    if (g.type === 'allLevels') {
+      const lowest = Object.entries(s.stations).filter(([id]) => !STATIONS_BY_ID[id].side).sort((a, b) => a[1].level - b[1].level)[0][0];
+      game.buy(lowest, 1);
     }
+  }
+  if (style === 'casual') {
     const next = nextToUnlock(s);
     if (next && game.quoteUnlock(next).ok) game.unlock(next);
     // Ahorra si la siguiente estación cuesta menos de 2 minutos de ingresos.
@@ -112,4 +113,4 @@ for (let step = 0; step < hours * 36000 && !s.zoneComplete; step++) {
 
 console.log(events.join('\n'));
 if (!s.zoneComplete) console.log('Objetivos pendientes:', activeGoals(s).map((g) => `${goalText(g)} (${formatNumber(goalProgress(s, g).current)}/${formatNumber(goalProgress(s, g).target)})`).join(' · '));
-console.log(`\n${s.zoneComplete ? '🏁 Zona completada' : '⏱️  Sin terminar'} en ${mmss(s.playTime)} · ingreso ${formatNumber(analyzeChain(s).income)} 💰/s · bolsas vendidas ${s.stats.sold.coffee_bag ?? 0}`);
+console.log(`\n${s.zoneComplete ? '🏁 Zona completada' : '⏱️  Sin terminar'} en ${mmss(s.playTime)} · ingreso ${formatNumber(analyzeChain(s).income)} 💰/s · bolsas vendidas ${Math.round(s.stats.sold.coffee_bag ?? 0)}`);
