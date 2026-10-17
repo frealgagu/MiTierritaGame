@@ -8,6 +8,7 @@ import { nextToUnlock } from '../src/sim/chain.js';
 import { createStationState } from '../src/sim/production.js';
 import { activeGoals, goalProgress, goalText } from '../src/sim/goals.js';
 import { RESEARCH } from '../src/data/research.js';
+import { STATIONS_BY_ID } from '../src/data/stations.js';
 import { formatNumber } from '../src/core/format.js';
 
 const hours = Number(process.argv[2] ?? 4);
@@ -27,7 +28,10 @@ function bestOption() {
   const base = analyzeChain(s).income;
   const opts = [];
   const ids = ['dispatch'];
-  for (const id of Object.keys(s.stations)) ids.push(id, `${id}:transport`);
+  for (const id of Object.keys(s.stations)) {
+    ids.push(id);
+    if (!STATIONS_BY_ID[id].side) ids.push(`${id}:transport`);
+  }
   const consider = (kind, id, cost, mutate) => {
     const t = clone(s);
     mutate(t);
@@ -80,7 +84,7 @@ for (let step = 0; step < hours * 36000 && !s.zoneComplete; step++) {
       if (goalProgress(s, g).done) continue;
       if (g.type === 'level') game.buy(g.target, 1);
       if (g.type === 'allLevels') {
-        const lowest = Object.entries(s.stations).sort((a, b) => a[1].level - b[1].level)[0][0];
+        const lowest = Object.entries(s.stations).filter(([id]) => !STATIONS_BY_ID[id].side).sort((a, b) => a[1].level - b[1].level)[0][0];
         game.buy(lowest, 1);
       }
     }

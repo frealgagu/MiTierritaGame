@@ -73,6 +73,13 @@ async function start() {
     toast(`🔬 ${RESEARCH_BY_ID[id].name}: ${RESEARCH_BY_ID[id].desc}`, 4000);
   });
   window.addEventListener('resize', () => scene.resize(app.screen.width, app.screen.height));
+  // Esc cierra la ventana abierta o, si no hay ninguna, el panel de la estación.
+  window.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const open = [...document.querySelectorAll('.modal')].filter((m) => !m.hidden);
+    if (open.length) open.forEach((m) => (m.hidden = true));
+    else if (panel.id) panel.close();
+  });
 
   if (!saved) toast('Toca el 🌳 Cafetal y mejóralo cuando tengas monedas.', 6000);
   if (offline) showWelcome(offline, () => sound.coin());
@@ -86,6 +93,7 @@ async function start() {
     if (uiTimer <= 0) {
       uiTimer = 0.2;
       hud.update();
+      scene.setGuide(panel.id ? null : hud.guide);
       panel.update();
       chain.update();
       goals.update();
@@ -113,6 +121,10 @@ async function start() {
 
   bindMenu(game, sound);
   if (import.meta.env.DEV) window.__cafetal = { game, scene };
+  // Jugable sin internet e instalable en el móvil (solo en la versión publicada).
+  if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
 }
 
 // Simula el tiempo que el juego estuvo cerrado; devuelve el resumen si hubo ganancias.

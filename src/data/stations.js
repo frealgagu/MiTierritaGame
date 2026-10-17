@@ -8,6 +8,7 @@
 //   boost:  producto que, si está disponible, acelera la estación (no es obligatorio)
 //   cycle:  segundos por ciclo a nivel 1
 //   infinite: fuente ilimitada (no consume nada)
+//   side:     rama secundaria fuera de la cadena principal; requires = estación que la habilita
 
 export const STATIONS = [
   // Zona 1 · La Finca
@@ -18,7 +19,9 @@ export const STATIONS = [
   { id: 'roaster', zone: 'finca', name: 'Tostadora', icon: '🔥', in: { green: 2 }, out: { roasted: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '0.2' },
   { id: 'grinder', zone: 'finca', name: 'Molino', icon: '🌀', in: { roasted: 1 }, out: { ground: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '0.2' },
   { id: 'packer', zone: 'finca', name: 'Empacadora', icon: '📦', in: { ground: 4 }, out: { coffee_bag: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '0.2' },
-  { id: 'composter', zone: 'finca', name: 'Compostera', icon: '🌱', in: { pulp: 5 }, out: { compost: 1 }, cycle: 10, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.0' },
+  // Rama secundaria: la pulpa del Beneficiadero pasa directo por una canaleta (sin mulas) y el
+  // compost acelera el Cafetal mientras haya (ver sim/modifiers.js).
+  { id: 'composter', zone: 'finca', name: 'Compostera', icon: '🪱', in: { pulp: 5 }, out: { compost: 1 }, cycle: 20, unlockCost: 1500, upgradeBase: 10, growth: 1.15, release: '1.0', side: true, requires: 'wetmill' },
 
   // Zona 2 · El Trapiche
   { id: 'canefield', zone: 'trapiche', name: 'Cañaduzal', icon: '🎋', infinite: true, out: { cane: 1 }, cycle: 2, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.1' },

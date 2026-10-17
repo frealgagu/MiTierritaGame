@@ -3,7 +3,7 @@ import { STATIONS_BY_ID } from '../data/stations.js';
 import { dispatchRate, stationRate, transportCapacity } from './rules.js';
 import { CHAIN } from './chain.js';
 import { legTime } from './transport.js';
-import { dispatchMult, muleSpeedMult, productValue, speedMult } from './modifiers.js';
+import { COMPOST_BOOST, CHERRIES_PER_COMPOST, dispatchMult, muleSpeedMult, productValue, speedMult } from './modifiers.js';
 
 const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
 
@@ -26,7 +26,7 @@ export function analyzeChain(state) {
     const def = STATIONS_BY_ID[id];
     const outId = Object.keys(def.out)[0];
     const outAmt = def.out[outId];
-    const rate = stationRate(def, st.level) * speedMult(state, id);
+    const rate = stationRate(def, st.level) * speedMult(state, id) * (id === 'farm' ? expectedCompostBoost(state) : 1);
     let capacity;
     let output;
     if (def.in) {
@@ -86,6 +86,19 @@ export function analyzeChain(state) {
   return { rows, toWarehouse, dispatch, bottleneck, income };
 }
 
+// Aceleración del Cafetal que la Compostera puede sostener: 1 sin compost, 1,5 si alcanza para todo.
+export function expectedCompostBoost(state) {
+  const c = state.stations.composter;
+  const w = state.stations.wetmill;
+  if (!c || !w) return 1;
+  const farmOut = stationRate(STATIONS_BY_ID.farm, state.stations.farm.level) * speedMult(state, 'farm');
+  const demand = (farmOut * COMPOST_BOOST) / CHERRIES_PER_COMPOST; // compost/s
+  const wetCycles = Math.min(stationRate(STATIONS_BY_ID.wetmill, w.level) * speedMult(state, 'wetmill'), (farmOut * COMPOST_BOOST) / 2);
+  const pulpPerCompost = STATIONS_BY_ID.composter.in.pulp;
+  const supply = Math.min(stationRate(STATIONS_BY_ID.composter, c.level) * speedMult(state, 'composter'), wetCycles / pulpPerCompost);
+  return 1 + (COMPOST_BOOST - 1) * Math.min(1, supply / demand);
+}
+
 // Mejora recomendada: la que más 💰/s suma por moneda gastada, entre estaciones, arrieros y despacho.
 // Si ninguna mejora suelta suma lo suficiente (hay que subir varias a la vez), recomienda el
 // cuello de botella. Devuelve { id, cost, gain }. (`quote` es Game.quote, para no duplicar precios.)
@@ -95,7 +108,10 @@ export function recommendUpgrade(state, quote) {
   const analysis = analyzeChain(state);
   const base = analysis.income;
   const ids = ['dispatch'];
-  for (const id of Object.keys(state.stations)) ids.push(id, `${id}:transport`);
+  for (const id of Object.keys(state.stations)) {
+    ids.push(id);
+    if (!STATIONS_BY_ID[id].side) ids.push(`${id}:transport`);
+  }
   let best = null;
   for (const id of ids) {
     const q = quote(id, 1);

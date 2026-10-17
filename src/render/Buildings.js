@@ -412,6 +412,39 @@ const DRAW = {
     };
   },
 
+  // Compostera: tres cajones de madera con compost y una canaleta que trae la pulpa.
+  composter(g, x, y, ctx) {
+    // Canaleta desde el Beneficiadero (a la izquierda).
+    const a = iso(x - 0.6, y + 1.5, 4);
+    const b = iso(x + 0.4, y + 1.5, 4);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 5, color: PAL.wood });
+    g.moveTo(a.x, a.y - 1).lineTo(b.x, b.y - 1).stroke({ width: 2, color: PRODUCTS.pulp.color });
+    const bins = [[0.35, 0.3], [0.35, 1.15], [0.35, 2.0]];
+    for (const [bx, by] of bins) {
+      box(g, x + bx, y + by, 2.2, 0.7, 12 + ctx.up / 2, PAL.wood);
+      // Compost asomando por encima.
+      const c = iso(x + bx + 1.1, y + by + 0.35, 12 + ctx.up / 2);
+      g.ellipse(c.x, c.y, 34, 10).fill(0x4a3424).stroke(OUTLINE);
+      g.ellipse(c.x - 8, c.y - 2, 10, 3).fill(0x5e4430);
+    }
+    // Pala clavada en el compost.
+    const sh = iso(x + 1.6, y + 1.5, 20 + ctx.up / 2);
+    g.moveTo(sh.x, sh.y).lineTo(sh.x + 6, sh.y - 22).stroke({ width: 2.5, color: PAL.woodDark });
+    g.poly([sh.x - 4, sh.y, sh.x + 4, sh.y, sh.x + 2, sh.y + 8, sh.x - 2, sh.y + 8]).fill(0x9aa3a8).stroke(OUTLINE);
+    this.roofTop = iso(x + 1.45, y + 0.65, 22);
+    // Lombrices que asoman mientras trabaja (es compost de verdad).
+    const worms = new Graphics();
+    this.anim.addChild(worms);
+    this.animate = (time) => {
+      worms.clear();
+      bins.forEach(([bx, by], i) => {
+        const up = Math.max(0, Math.sin(time * 2 + i * 2));
+        const c = iso(x + bx + 0.7 + i * 0.3, y + by + 0.35, 12 + ctx.up / 2);
+        worms.moveTo(c.x, c.y).quadraticCurveTo(c.x + 3, c.y - 5 * up, c.x + 1, c.y - 8 * up).stroke({ width: 2, color: 0xd98c8c });
+      });
+    };
+  },
+
   // Empacadora: bodega amarilla con banda transportadora y bolsas.
   packer(g, x, y, ctx) {
     const hx = x + 0.25;

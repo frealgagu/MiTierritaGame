@@ -21,7 +21,7 @@ export const PRODUCTS = {
   roasted: { name: 'Café tostado', zone: 'finca', value: 30, icon: '🟤', color: 0x6b3e26 },
   ground: { name: 'Café molido', zone: 'finca', value: 45, icon: '☕', color: 0x4a2a1a },
   coffee_bag: { name: 'Bolsa de café', zone: 'finca', value: 250, icon: '🛍️', color: 0xc8643b },
-  compost: { name: 'Abono', zone: 'finca', value: 0, icon: '🌱', color: 0x5b4636 },
+  compost: { name: 'Compost', zone: 'finca', value: 0, icon: '🟤', color: 0x5b4636 },
 
   // Zona 2 · El Trapiche
   cane: { name: 'Caña', zone: 'trapiche', value: 2, icon: '🎋', color: 0x9cc65b },

@@ -26,3 +26,18 @@ export function offlineCapSeconds(state) {
   }
   return hours * 3600;
 }
+
+// Compost (Compostera): acelera el Cafetal mientras haya compost guardado.
+export const COMPOST_BOOST = 1.5;
+export const CHERRIES_PER_COMPOST = 20;
+
+export function compostBoost(state) {
+  return (state.stations.composter?.buffer ?? 0) > 0 ? COMPOST_BOOST : 1;
+}
+
+// El Cafetal gasta compost según lo que cosecha.
+export function consumeCompost(state, cherries) {
+  const c = state.stations.composter;
+  if (!c || c.buffer <= 0) return;
+  c.buffer = Math.max(0, c.buffer - cherries / CHERRIES_PER_COMPOST);
+}

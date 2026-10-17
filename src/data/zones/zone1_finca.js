@@ -16,6 +16,8 @@ export const ZONE1 = {
     { stationId: 'roaster', x: 15, y: 11 },
     { stationId: 'grinder', x: 11, y: 14 },
     { stationId: 'packer', x: 16, y: 17 },
+    // Rama secundaria, junto al Beneficiadero.
+    { stationId: 'composter', x: 12, y: 5 },
   ],
   warehouse: { x: 21, y: 16, w: 3, h: 3 },
   // Camino de las mulas: de la salida del cafetal a la puerta de la bodega.

@@ -4,6 +4,9 @@ import { recommendUpgrade } from '../sim/analysis.js';
 import { nextToUnlock } from '../sim/chain.js';
 import { toast } from './toast.js';
 import { clockLabel } from '../render/DayNight.js';
+import { ZONE1 } from '../data/zones/zone1_finca.js';
+
+const STATION_PLOTS = ZONE1.plots.map((p) => p.stationId);
 
 // Nombre legible de lo que se mejora: 'farm', 'farm:transport' o 'dispatch'.
 export function upgradeName(id) {
@@ -27,14 +30,27 @@ export class HUD {
   update() {
     const s = this.game.state;
     this.coins.textContent = formatNumber(s.coins);
+    // Las monedas también en la pestaña del navegador.
+    const title = `💰 ${formatNumber(s.coins)} · Cafetal`;
+    if (document.title !== title) document.title = title;
     this.income.textContent = `+${formatRate(this.game.incomePerSecond())}/s`;
     const hour = this.getHour();
     if (hour !== undefined) this.clock.textContent = clockLabel(hour);
     const rec = recommendUpgrade(s, (id, mode) => this.game.quote(id, mode));
     this.recommended = rec.id;
+    this.guide = this.guideTarget(s, rec);
     this.chip.hidden = false;
     this.chip.textContent = `💡 Mejora recomendada: ${upgradeName(rec.id)}`;
     this.hintUnlock(s);
+  }
+
+  // Qué señalar con la flecha del mapa: algo que ya se puede pagar (construir primero, luego mejorar).
+  guideTarget(s, rec) {
+    for (const id of STATION_PLOTS) {
+      if (!s.stations[id] && this.game.quoteUnlock(id).ok) return id;
+    }
+    if (rec && this.game.quote(rec.id, 1).affordable) return rec.id.split(':')[0];
+    return null;
   }
 
   // Avisa una sola vez cuando alcanza para construir la siguiente estación.

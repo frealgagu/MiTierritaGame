@@ -1,6 +1,6 @@
 import { EventBus } from './EventBus.js';
 import { createInitialState } from '../sim/state.js';
-import { stepStation } from '../sim/production.js';
+import { stepComposter, stepStation } from '../sim/production.js';
 import { CHAIN } from '../sim/chain.js';
 import { stepMules } from '../sim/transport.js';
 import { stepJeep } from '../sim/dispatch.js';
@@ -32,6 +32,7 @@ export class Game {
   step(dt) {
     this.state.playTime += dt;
     for (const id of CHAIN) if (this.state.stations[id]) stepStation(this.state, id, dt, this.bus);
+    stepComposter(this.state, dt, this.bus);
     stepMules(this.state, dt, this.bus);
     stepJeep(this.state, dt, this.bus);
   }

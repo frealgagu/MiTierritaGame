@@ -17,7 +17,8 @@ import {
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
 import { busyMules, inTransit, legTime } from '../sim/transport.js';
-import { analyzeChain } from '../sim/analysis.js';
+import { analyzeChain, expectedCompostBoost } from '../sim/analysis.js';
+import { COMPOST_BOOST, compostBoost } from '../sim/modifiers.js';
 import { CHAIN, nextStation } from '../sim/chain.js';
 
 const MODES = [
@@ -126,13 +127,18 @@ export class StationPanel {
     const [outId] = Object.keys(def.out);
     const [inId] = Object.keys(def.in);
     const gain = PRODUCTS[outId].value * def.out[outId] - PRODUCTS[inId].value * def.in[inId];
+    const rows = def.side
+      ? `<div class="stat"><span>Produce</span><b>${PRODUCTS[outId].name}</b></div>
+         <div class="stat"><span>Efecto</span><b class="next">Cafetal ×${formatRate(COMPOST_BOOST)} mientras haya compost</b></div>
+         <div class="stat"><span>Transporte</span><b>Canaleta directa, sin mulas</b></div>`
+      : `<div class="stat"><span>Produce</span><b>${PRODUCTS[outId].name}</b></div>
+         <div class="stat"><span>Precio de venta</span><b>${PRODUCTS[outId].value} 💰 por unidad</b></div>
+         <div class="stat"><span>Ganancia por proceso</span><b class="next">+${gain} 💰</b></div>`;
     this.el.innerHTML = `
-      ${this.head(def.icon, def.name, 'Siguiente paso de la cadena')}
+      ${this.head(def.icon, def.name, def.side ? 'Rama opcional: aprovecha la pulpa del Beneficiadero' : 'Siguiente paso de la cadena')}
       <div class="recipe">${recipe(def.in)} <span>➜</span> ${recipe(def.out)}</div>
       <div class="stats">
-        <div class="stat"><span>Produce</span><b>${PRODUCTS[outId].name}</b></div>
-        <div class="stat"><span>Precio de venta</span><b>${PRODUCTS[outId].value} 💰 por unidad</b></div>
-        <div class="stat"><span>Ganancia por proceso</span><b class="next">+${gain} 💰</b></div>
+        ${rows}
         <div class="status-line" data-ref="status"></div>
       </div>
       <button class="btn buy" data-unlock><span>Construir</span><span data-ref="unlockCost"></span></button>
@@ -216,10 +222,18 @@ function stationInfo(id) {
   if (inId) {
     rows.push({ key: 'input', label: 'Entrada', value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l))} ${PRODUCTS[inId].icon}` });
   }
-  rows.push(
-    { key: 'buffer', label: 'Patio (por enviar)', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l))} ${out.icon}` },
-    { key: 'value', label: 'Precio de venta', value: () => `${out.value} 💰 por ${out.name.toLowerCase()}` },
-  );
+  if (def.side) {
+    rows.push(
+      { key: 'buffer', label: 'Compost guardado', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l))} ${out.icon}` },
+      { key: 'effect', label: 'Cafetal ahora', value: (s) => (compostBoost(s) > 1 ? `×${formatRate(COMPOST_BOOST)} (hay compost)` : '×1 (sin compost)') },
+      { key: 'sustain', label: 'Puede sostener', value: (s) => `×${formatRate(expectedCompostBoost(s))} de ×${formatRate(COMPOST_BOOST)}` },
+    );
+  } else {
+    rows.push(
+      { key: 'buffer', label: 'Patio (por enviar)', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l))} ${out.icon}` },
+      { key: 'value', label: 'Precio de venta', value: () => `${out.value} 💰 por ${out.name.toLowerCase()}` },
+    );
+  }
   return {
     icon: def.icon,
     title: def.name,
@@ -227,7 +241,7 @@ function stationInfo(id) {
     recipe: inId ? `${recipe(def.in)} <span>➜</span> ${recipe(def.out)}` : null,
     milestoneWhat: 'velocidad',
     upgradeId: id,
-    tabs: true,
+    tabs: !def.side,
     level: (s) => s.stations[id].level,
     rows,
     status: (s) => stationStatus(s, id),
@@ -272,27 +286,43 @@ function transportInfo(id) {
 // Explica en una línea qué le pasa a la estación y qué hacer.
 function stationStatus(state, id) {
   const st = state.stations[id];
-  const analysis = analyzeChain(state);
-  const row = analysis.rows.find((r) => r.id === id);
   const def = STATIONS_BY_ID[id];
+  if (def.side) return composterStatus(state, st);
+  const analysis = analyzeChain(state);
+  const i = analysis.rows.findIndex((r) => r.id === id);
+  const row = analysis.rows[i];
+  const prev = analysis.rows[i - 1];
   if (st.status === 'blocked') {
     if (st.waiting === 'mules') return { text: '⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).', bad: true };
     return { text: '⛔ Patio lleno: la bodega no tiene espacio. Mejora el Despacho.', bad: true };
   }
-  if (row && row.diverted > row.incoming * 0.02) {
+  // La estación anterior produce más de lo que esta puede procesar.
+  if (row && prev && prev.output > row.capacity * 1.02) {
     const inIcon = PRODUCTS[Object.keys(def.in)[0]].icon;
     return {
-      text: `↪️ Le llegan ${formatRate(row.incoming)} ${inIcon}/s y procesa ${formatRate(row.capacity)}/s. El resto se vende sin procesar: mejóralo.`,
+      text: `↪️ La estación anterior produce ${formatRate(prev.output)} ${inIcon}/s y esta procesa ${formatRate(row.capacity)}/s. El resto se vende sin procesar: mejórala.`,
       bad: true,
     };
   }
   if (st.status === 'starved' && st.idle > 3) {
-    const prev = CHAIN[CHAIN.indexOf(id) - 1];
-    return { text: `⏸️ Esperando producto de: ${nameOf(prev)}. Mejora las estaciones anteriores.`, bad: false };
+    const prevId = CHAIN[CHAIN.indexOf(id) - 1];
+    return { text: `⏸️ Esperando producto de: ${nameOf(prevId)}. Mejora las estaciones anteriores.`, bad: false };
   }
   const next = nextStation(state, id);
   const dest = next ? nameOf(next) : 'la bodega';
   return { text: `✅ Trabajando. Las mulas llevan el producto a ${dest}.`, bad: false };
+}
+
+function composterStatus(state, st) {
+  const boost = expectedCompostBoost(state);
+  if (st.status === 'blocked') return { text: '✅ Compost de sobra: el Cafetal va a toda marcha.', bad: false };
+  if (st.status === 'starved' && st.idle > 3) {
+    const w = state.stations.wetmill;
+    if (w?.status === 'blocked') return { text: '⏸️ Sin pulpa: el Beneficiadero está detenido (patio lleno). Mejora sus arrieros o la estación siguiente.', bad: true };
+    return { text: '⏸️ Esperando pulpa del Beneficiadero.', bad: false };
+  }
+  if (boost < COMPOST_BOOST - 0.01) return { text: `⚠️ El Cafetal gasta más compost del que se produce (×${formatRate(boost)}). Mejora la Compostera.`, bad: true };
+  return { text: '✅ Produciendo compost: el Cafetal va a ×1,5.', bad: false };
 }
 
 function dispatchInfo() {

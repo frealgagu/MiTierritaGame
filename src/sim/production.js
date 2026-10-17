@@ -1,9 +1,9 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
-import { speedMult } from './modifiers.js';
+import { compostBoost, consumeCompost, speedMult } from './modifiers.js';
 
 export function createStationState() {
-  return { level: 1, input: 0, buffer: 0, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
+  return { level: 1, input: 0, buffer: 0, byBuffer: 0, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
 }
 
 // Avanza una estación: consume su entrada (si tiene receta) y deja el producto en su patio.
@@ -32,7 +32,8 @@ export function stepStation(state, id, dt, bus) {
   }
   s.status = 'working';
   s.idle = 0;
-  s.progress += dt * stationRate(def, s.level) * speedMult(state, id);
+  const boost = id === 'farm' ? compostBoost(state) : 1;
+  s.progress += dt * stationRate(def, s.level) * speedMult(state, id) * boost;
   const cycles = Math.min(Math.floor(s.progress), byInput, byOutput);
   if (cycles <= 0) return;
   s.progress -= cycles;
@@ -41,6 +42,12 @@ export function stepStation(state, id, dt, bus) {
   s.input -= cycles * need;
   s.buffer += cycles * outAmt;
   state.stats.produced[outId] = (state.stats.produced[outId] ?? 0) + cycles * outAmt;
+  if (def.by) {
+    // Subproducto (pulpa): se guarda aparte; si no hay quien lo use, se desecha al llenarse.
+    const [[, byAmt]] = Object.entries(def.by);
+    s.byBuffer = Math.min(stationBufferCap(def, s.level), (s.byBuffer ?? 0) + cycles * byAmt);
+  }
+  if (boost > 1) consumeCompost(state, cycles * outAmt);
   bus.emit('produced', { stationId: id, productId: outId, amount: cycles * outAmt });
 }
 
@@ -50,4 +57,19 @@ export function inputSpace(state, id) {
   const s = state.stations[id];
   const incoming = state.mules.reduce((n, m) => (m.to === id && m.phase === 'go' ? n + m.amount : n), 0);
   return stationInputCap(def, s.level) - s.input - incoming;
+}
+
+// Compostera: recibe la pulpa del Beneficiadero por una canaleta (sin mulas) y produce compost,
+// que se queda en su patio y que el Cafetal va gastando.
+export function stepComposter(state, dt, bus) {
+  const c = state.stations.composter;
+  if (!c) return;
+  const w = state.stations.wetmill;
+  if (w?.byBuffer > 0) {
+    const room = stationInputCap(STATIONS_BY_ID.composter, c.level) - c.input;
+    const move = Math.max(0, Math.min(room, w.byBuffer));
+    c.input += move;
+    w.byBuffer -= move;
+  }
+  stepStation(state, 'composter', dt, bus);
 }

@@ -103,3 +103,43 @@ test('las ganancias sin conexión se parecen a las de jugar en vivo', () => {
   const ratio = offline.state.coins / live.state.coins;
   assert.ok(ratio > 0.85 && ratio < 1.15, `sin conexión / en vivo = ${ratio.toFixed(2)}`);
 });
+
+test('la compostera convierte pulpa en compost que acelera el cafetal', () => {
+  const game = new Game();
+  game.state.coins = 1e6;
+  assert.equal(game.quoteUnlock('composter').reason, 'order'); // pide el Beneficiadero
+  game.unlock('wetmill');
+  assert.ok(game.unlock('composter'));
+  for (const id of ['farm', 'wetmill', 'composter']) game.state.stations[id].level = 15;
+  // Arrieros y despacho de sobra para que nada frene la cosecha y se vea solo el efecto del compost.
+  game.state.stations.farm.transport.level = 60;
+  game.state.stations.wetmill.transport.level = 60;
+  game.state.dispatch.level = 60;
+  run(game, 240);
+  assert.ok((game.state.stats.produced.compost ?? 0) > 0, 'produjo compost');
+  // Con compost guardado, el Cafetal va a ×1,5.
+  game.state.stations.composter.buffer = 10;
+  const before = game.state.stats.produced.cherry;
+  game.state.stations.farm.buffer = 0;
+  run(game, 20);
+  const boosted = game.state.stats.produced.cherry - before;
+  game.state.stations.composter.buffer = 0;
+  game.state.stations.composter.level = 1;
+  game.state.stations.wetmill.byBuffer = 0;
+  game.state.stations.composter.input = 0;
+  const before2 = game.state.stats.produced.cherry;
+  game.state.stations.farm.buffer = 0;
+  run(game, 20);
+  const plain = game.state.stats.produced.cherry - before2;
+  assert.ok(boosted > plain * 1.3, `con compost ${boosted}, sin compost ${plain}`);
+});
+
+test('la compostera no tiene arrieros ni cuenta para «todas las estaciones»', async () => {
+  const { recommendUpgrade } = await import('../src/sim/analysis.js');
+  const game = new Game();
+  game.state.coins = 1e6;
+  game.unlock('wetmill');
+  game.unlock('composter');
+  const rec = recommendUpgrade(game.state, (id, mode) => game.quote(id, mode));
+  assert.notEqual(rec.id, 'composter:transport');
+});

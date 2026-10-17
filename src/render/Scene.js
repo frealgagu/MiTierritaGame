@@ -14,7 +14,7 @@ import { ZONE1 } from '../data/zones/zone1_finca.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { dispatchCapacity, warehouseCapacity } from '../sim/rules.js';
-import { CHAIN, ROAD_POS } from '../sim/chain.js';
+import { ROAD_POS } from '../sim/chain.js';
 import { quoteUnlock } from '../sim/upgrades.js';
 import { DayNight } from './DayNight.js';
 
@@ -57,6 +57,7 @@ export class Scene {
     this.addStationView('farm', this.farm, LABEL_HEIGHT.farm);
     this.addStationView('dispatch', this.warehouse, LABEL_HEIGHT.dispatch);
     for (const plot of this.zone.plots) this.buildStation(plot.stationId);
+    this.stationIds = ['farm', ...this.zone.plots.map((p) => p.stationId)];
 
     this.jeep = new JeepView();
     this.objects.addChild(this.jeep);
@@ -77,6 +78,13 @@ export class Scene {
     this.camera.fit({ minX: l.x, maxX: r.x, minY: top.y, maxY: end.y });
 
     this.dayNight = new DayNight(this);
+    // Flecha que señala qué tocar (ver HUD.guideTarget).
+    this.guide = new Graphics();
+    this.guide.poly([-12, -18, 12, -18, 0, 0]).fill(0xffe066).stroke({ width: 3, color: 0x3a2418 });
+    this.guide.rect(-5, -32, 10, 15).fill(0xffe066).stroke({ width: 3, color: 0x3a2418 });
+    this.guide.visible = false;
+    this.labels.addChild(this.guide);
+    this.guideId = null;
     this.bindEvents();
     this.smokeTimer = 0;
     this.ambientTimer = 0;
@@ -179,6 +187,17 @@ export class Scene {
     });
   }
 
+  // id de estación o null.
+  setGuide(id) {
+    this.guideId = id;
+    this.guide.visible = Boolean(id) && Boolean(this.stations[id]);
+    if (!this.guide.visible) return;
+    const view = this.stations[id];
+    const h = view instanceof PlotView ? LABEL_HEIGHT.plot : id === 'farm' ? LABEL_HEIGHT.farm : id === 'dispatch' ? LABEL_HEIGHT.dispatch : LABEL_HEIGHT.building;
+    const p = view.anchorPoint(h + 22);
+    this.guideBase = p;
+  }
+
   select(id) {
     for (const [key, view] of Object.entries(this.stations)) view.setSelected(key === id);
   }
@@ -190,7 +209,7 @@ export class Scene {
     this.background.update(dt, this.camera);
     this.farm.sync(state);
     this.warehouse.sync(state, warehouseCapacity(state.dispatch.level));
-    for (const id of CHAIN) {
+    for (const id of this.stationIds) {
       const view = this.stations[id];
       if (view instanceof PlotView) view.sync(quoteUnlock(state, id));
       else if (view instanceof BuildingView) view.sync(state);
@@ -200,6 +219,10 @@ export class Scene {
       if (view.lightsDirty) view.buildLights(this.lightTexture);
       view.update(dt, this.time);
       if (view.status.visible) view.status.y = view.statusY + Math.sin(this.time * 4) * 3;
+    }
+
+    if (this.guide.visible && this.guideBase) {
+      this.guide.position.set(this.guideBase.x, this.guideBase.y - Math.abs(Math.sin(this.time * 3.5)) * 10);
     }
 
     this.syncMules(state);

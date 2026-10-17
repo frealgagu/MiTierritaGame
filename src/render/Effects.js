@@ -2,6 +2,10 @@ import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import { FONT } from './palette.js';
 
 // Números flotantes, humo, cerezas que saltan y confeti.
+// Con «reducir movimiento» activado en el sistema, menos partículas.
+const REDUCED = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const amount = (n) => (REDUCED ? Math.ceil(n * 0.2) : n);
+
 export class Effects {
   constructor() {
     this.view = new Container();
@@ -61,7 +65,7 @@ export class Effects {
 
   // Monedas que saltan (al vender en el pueblo).
   coins(x, y, count = 8) {
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < amount(count); i++) {
       const g = new Graphics().circle(0, 0, 4).fill(0xffd700).stroke({ width: 1.5, color: 0xb8860b });
       g.position.set(x, y);
       const vx = (Math.random() - 0.5) * 90;
@@ -78,7 +82,7 @@ export class Effects {
 
   // Estrellitas al subir de nivel.
   sparkle(x, y, count = 6) {
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < amount(count); i++) {
       const g = new Graphics().star(0, 0, 4, 5, 2).fill(0xfff3b0);
       const a = (i / count) * Math.PI * 2;
       g.position.set(x + Math.cos(a) * 12, y + Math.sin(a) * 6);
@@ -110,7 +114,7 @@ export class Effects {
 
   confetti(x, y, count = 40) {
     const colors = [0xd7263d, 0x2e6fd1, 0xe8b90f, 0x2fa36b, 0xffffff];
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < amount(count); i++) {
       const g = new Graphics().rect(-2.5, -1.5, 5, 3).fill(colors[i % colors.length]);
       g.position.set(x, y);
       const vx = (Math.random() - 0.5) * 220;

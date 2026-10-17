@@ -167,7 +167,7 @@ Los valores son orientativos y se ajustarán con el simulador de balance. ⇄ in
 | 5 | Tostadora | 2 verde | Café tostado | 30 |
 | 6 | Molino | 1 tostado | Café molido | 45 |
 | 7 | Empacadora | 4 molido | Bolsa de café | 250 |
-| 8 | Compostera *(rama secundaria, Zona 1 tardía)* | 5 pulpa | Abono → Cafetal +X % mientras haya | — |
+| 8 | Compostera *(rama opcional, v1.0)* | 5 pulpa (por canaleta, sin mulas) | Compost → Cafetal ×1,5 mientras haya (1 compost por 20 cerezas) | — |
 
 #### Zona 2 · El Trapiche (caña y panela) — 5 estaciones, 6 productos — v1.1
 | # | Estación | Entrada | Salida | Valor |
@@ -479,11 +479,11 @@ export const COST_GROWTH = 1.15;
 
 | Versión | Contenido | Resultado jugable |
 |---------|-----------|-------------------|
-| **v0.1** | Mapa isométrico, cámara, Cafetal + Despacho, mejora de nivel, HUD de monedas | Producir cerezas, venderlas y mejorar |
-| **v0.2** | Las 7 estaciones, recetas, buffers, desvío a bodega, desbloqueos | La cadena completa funciona |
-| **v0.3** | Arrieros reales por el camino, mejoras de transporte, Willys, indicadores de estado, vista «Ver cadena» | Los cuellos de botella son visibles |
-| **v0.4** | Hitos con cambio de modelo, efectos, día y noche cosmético, sonido básico | Se siente vivo, al estilo Frozen City |
-| **v0.5** | Objetivos, investigaciones, guardado, ganancias sin conexión, simulador de balance | Se juega de principio a fin |
+| **v0.1** ✅ | Mapa isométrico, cámara, Cafetal + Despacho, mejora de nivel, HUD de monedas | Producir cerezas, venderlas y mejorar |
+| **v0.2** ✅ | Las 7 estaciones, recetas, buffers, desvío a bodega, desbloqueos | La cadena completa funciona |
+| **v0.3** ✅ | Arrieros reales por el camino, mejoras de transporte, Willys, indicadores de estado, vista «Ver cadena» | Los cuellos de botella son visibles |
+| **v0.4** ✅ | Hitos con cambio de modelo, efectos, día y noche cosmético, sonido básico | Se siente vivo, al estilo Frozen City |
+| **v0.5** ✅ | Objetivos, investigaciones, guardado, ganancias sin conexión, simulador de balance | Se juega de principio a fin |
 | **v1.0** | Contenedor de exportación, pantalla final y balance ajustado | **Zona 1 completa** |
 | v1.1 | **Zona 2: El Trapiche**: caña → panela; subproducto bagazo; primera ruta entre zonas | Expansión |
 | v1.2 | **Zona 3: La Lechería**: ramificación de la leche; arequipe con panela importada | Expansión |

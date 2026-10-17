@@ -53,7 +53,8 @@ export function goalProgress(state, goal) {
       target = goal.perSecond;
       break;
     case 'allLevels': {
-      const levels = Object.values(state.stations).map((s) => s.level);
+      // Solo la cadena principal (la Compostera es opcional).
+      const levels = Object.entries(state.stations).filter(([id]) => !STATIONS_BY_ID[id].side).map(([, s]) => s.level);
       current = levels.length >= 5 ? Math.min(...levels) : 0;
       target = goal.level;
       break;

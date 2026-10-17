@@ -18,25 +18,20 @@ npm run balance  # simula una partida entera (npm run balance -- 6 casual)
 npm run build    # versión para publicar en dist/
 ```
 
-## Estado: v0.5
+## Estado: v1.0 — Zona 1 completa
 
-- Mapa isométrico de la Zona 1 (La Finca) con cámara: arrastrar para mover, rueda o pellizco para zoom.
-- **Cadena completa de la finca**: Cafetal ♾️ → Beneficiadero → Marquesina → Trilladora → Tostadora → Molino → Empacadora → Bodega.
-  - Cada estación se construye en orden con monedas y tiene receta, entrada, patio y niveles 1–100 con hitos (×2).
-  - Cada edificio tiene su propio dibujo y se anima mientras trabaja (agua, humo, rueda, banda).
-- **Arrieros**: cada estación tiene sus mulas, que van, entregan y vuelven vacías. Se mejoran aparte (más mulas y más carga); si no dan abasto, el patio se llena.
-- **Vista «Ver cadena» (🔗)**: flujo de cada estación y cada tramo, con el cuello de botella en rojo; toca una fila para mejorarla.
-- **Desvío automático**: si una estación no da abasto, el sobrante va a la bodega y se vende sin procesar (↪️).
-- **Indicadores**: ⛔ patio lleno, ⏸️ sin entrada, ↪️ desviando; aviso del cuello de botella (tócalo para abrir esa estación).
-- **Despacho**: el Willys vende en el pueblo lo que llega a la bodega, lo más valioso primero.
-- **Edificios que crecen con los hitos**: macetas (nv 10), segundo piso con balcón (nv 25), faroles (nv 50), patio empedrado (nv 75) y bandera de Colombia (nv 100).
-- **Día y noche decorativo** (un día = 8 min): amanecer, atardecer, noche con estrellas, ventanas y faroles encendidos y luciérnagas. No afecta a la producción.
-- **Vida y efectos**: bandadas de pájaros, monedas que saltan al vender, edificios que brotan al construirse y rebotan al mejorar.
-- **Sonido sintetizado** (sin archivos): monedas, mejoras, hitos, construcción, pájaros de día y grillos de noche. Se apaga en el menú ⚙️.
-- **Objetivos** (📋): 29 pasos en orden con recompensa, hasta el final de la zona: vender 1.000 bolsas («Primer gran pedido»).
-- **Investigaciones** (🔬): 9 mejoras únicas (Abono orgánico, Herraduras, Remolque, Capataz, Sello de calidad…).
-- **Mejora recomendada**: el aviso de arriba sugiere la compra más rentable; tócalo para abrirla.
-- Guardado automático en el navegador (las partidas anteriores se conservan), **copia de seguridad** exportable e importable desde ⚙️, y ganancias sin conexión (2 h, o 6 h con el Capataz) con ventana de bienvenida.
+La Zona 1 (La Finca) se juega de principio a fin: unas **1 h 30 min** jugando con atención y **unas 3 h** de forma casual (`npm run balance`). Novedades de cada versión en [`CHANGELOG.md`](CHANGELOG.md).
+
+- **Cadena completa**: Cafetal ♾️ → Beneficiadero → Marquesina → Trilladora → Tostadora → Molino → Empacadora → Bodega, más la **Compostera** como rama opcional (la pulpa se vuelve compost que acelera el Cafetal).
+- **Arrieros** por estación (mulas que van y vuelven) y **Willys** que vende en el pueblo; desvío a la bodega cuando una estación no da abasto.
+- **Mejoras** de nivel 1–100 con hitos ×2, **investigaciones** únicas, **objetivos** con recompensa y final («Primer gran pedido»: 1.000 bolsas).
+- **Guía**: mejora recomendada, flecha en el mapa, vista «La cadena» con el cuello de botella en rojo.
+- **Vida**: edificios que evolucionan con los hitos, día y noche, aves, luciérnagas, efectos y sonido sintetizado.
+- **Guardado** automático, ganancias sin conexión (2 h, 6 h con el Capataz), copia de seguridad exportable.
+- **Instalable en el móvil** (PWA) y jugable sin internet.
+
+### Instalar en el móvil
+Abre https://frealgagu.github.io/Game/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).
 
 ## Estructura
 

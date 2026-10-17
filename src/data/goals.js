@@ -16,6 +16,7 @@ export const GOALS = [
   { id: 'g12', type: 'research', id: 'herraduras', reward: 500 },
   { id: 'g13', type: 'income', perSecond: 5, reward: 600 },
   { id: 'g14', type: 'level', target: 'dryer', level: 10, reward: 800 },
+  { id: 'g14c', type: 'unlock', station: 'composter', reward: 1000 },
   { id: 'g15', type: 'unlock', station: 'roaster', reward: 1500 },
   { id: 'g16', type: 'sold', product: 'roasted', amount: 100, reward: 2000 },
   { id: 'g17', type: 'researchCount', count: 3, reward: 2500 },

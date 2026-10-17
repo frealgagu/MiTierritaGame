@@ -49,7 +49,10 @@ export function quoteUnlock(state, id) {
   const def = STATIONS_BY_ID[id];
   if (state.stations[id]) return { ok: false, reason: 'built', cost: 0 };
   const cost = def.unlockCost;
-  if (nextToUnlock(state) !== id) {
+  if (def.side) {
+    // Rama secundaria: solo pide la estación que la habilita.
+    if (!state.stations[def.requires]) return { ok: false, reason: 'order', previous: def.requires, cost };
+  } else if (nextToUnlock(state) !== id) {
     const previous = CHAIN[CHAIN.indexOf(id) - 1];
     return { ok: false, reason: 'order', previous, cost };
   }
