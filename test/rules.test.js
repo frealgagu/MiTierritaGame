@@ -46,3 +46,16 @@ test('catálogo completo: 41 productos y 39 estaciones con recetas válidas', ()
     }
   }
 });
+
+test('al nivel 100 cada estación produce una potencia de 2 por segundo', async () => {
+  const { STATIONS } = await import('../src/data/stations.js');
+  const { ZONE_LIST } = await import('../src/data/zones/index.js');
+  const { stationOutputRate, MAX_LEVEL } = await import('../src/sim/rules.js');
+  assert.equal(MAX_LEVEL, 100);
+  const playable = new Set(ZONE_LIST.flatMap((z) => [...z.chain, ...z.plots.map((p) => p.stationId)]));
+  for (const def of STATIONS.filter((s) => playable.has(s.id))) {
+    const rate = stationOutputRate(def, 100);
+    const exp = Math.log2(rate);
+    assert.ok(Math.abs(exp - Math.round(exp)) < 1e-9, `${def.id}: ${rate}/s al nivel 100`);
+  }
+});

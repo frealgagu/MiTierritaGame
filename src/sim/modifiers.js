@@ -30,10 +30,10 @@ export function offlineCapSeconds(state) {
 
 // Compost (Compostera): mientras haya compost guardado, todo lo que vende la Finca vale más.
 // No acelera ninguna estación, así que no descompensa la cadena.
-// Se gasta 1 compost por cada 10 cafés lavados del Beneficiadero, que da la pulpa para 2: una
+// Se gasta 1 compost por cada 8 cafés lavados del Beneficiadero, que da la pulpa para 2: una
 // Compostera a la mitad del nivel del Beneficiadero ya alcanza, y subir el Cafetal no lo gasta más rápido.
 export const COMPOST_VALUE = 1.3;
-export const WASHED_PER_COMPOST = 10;
+export const WASHED_PER_COMPOST = 8;
 
 export function compostValueBoost(state) {
   return (state.stations.composter?.buffer ?? 0) > 0 ? COMPOST_VALUE : 1;

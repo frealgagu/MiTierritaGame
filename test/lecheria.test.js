@@ -39,14 +39,14 @@ test('la leche pasteurizada se reparte entre tres ramas', () => {
   assert.deepEqual(CHILDREN.separator, ['churn']);
 });
 
-test('a igual nivel, la Pasteurizadora reparte su leche y cada rama procesa un tercio', () => {
+test('a igual nivel, la Pasteurizadora reparte su leche: la Paila la mitad y las otras ramas un cuarto', () => {
   const game = withLecheria();
   buildLecheria(game);
   const a = analyzeChain(game.state, 'lecheria');
   const row = (id) => a.rows.find((r) => r.id === id);
   const milk = row('pasteurizer').output;
-  for (const id of ['cheesery', 'separator', 'arequipe_pot']) {
-    assert.ok(Math.abs(row(id).capacity - milk / 3) < 1e-9, `${id} procesa ${row(id).capacity} de ${milk}`);
+  for (const [id, share] of [['cheesery', 1 / 4], ['separator', 1 / 4], ['arequipe_pot', 1 / 2]]) {
+    assert.ok(Math.abs(row(id).capacity - milk * share) < 1e-9, `${id} procesa ${row(id).capacity} de ${milk}`);
   }
   assert.ok(row('pasteurizer').diverted < 1e-9, 'no sobra leche');
   // En la simulación, las mulas llevan leche a las tres.

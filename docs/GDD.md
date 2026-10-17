@@ -167,7 +167,7 @@ Los valores son orientativos y se ajustarán con el simulador de balance. ⇄ in
 | 5 | Tostadora | 2 verde | Café tostado | 30 |
 | 6 | Molino | 1 tostado | Café molido | 45 |
 | 7 | Empacadora | 4 molido | Bolsa de café | 250 |
-| 8 | Compostera *(rama opcional, v1.0)* | 5 pulpa (por canaleta, sin mulas) | Compost → todo lo que vende la Finca +30 % mientras haya (1 compost por cada 10 cafés lavados; no acelera ninguna estación, así que no descompensa la cadena) | — |
+| 8 | Compostera *(rama opcional, v1.0)* | 4 pulpa (por canaleta, sin mulas) | Compost → todo lo que vende la Finca +30 % mientras haya (1 compost por cada 8 cafés lavados; no acelera ninguna estación, así que no descompensa la cadena) | — |
 
 #### Zona 2 · El Trapiche (caña y panela) — 5 estaciones, 6 productos — **v1.1** ✅
 Se abre al completar la Finca. Los productos valen ×5 respecto al primer borrador porque la zona arranca con la economía de la Finca (las monedas se comparten y la Finca sigue produciendo). Misma regla de balance: a igual nivel, cada estación procesa lo que le entrega la anterior.
@@ -186,22 +186,22 @@ Se abre al completar la Finca. Los productos valen ×5 respecto al primer borrad
 - **Duración medida** (`npm run balance`): entre 1 h 50 min y 3 h después de completar la Finca.
 
 #### Zona 3 · La Lechería — 6 estaciones, 6 productos — **v1.2** ✅
-Se abre al completar el Trapiche. Productos ×25 respecto al primer borrador (el Trapiche iba ×5). Es la primera zona con **ramas**: la leche pasteurizada se reparte entre la Quesera, la Descremadora y la Paila. A igual nivel, cada rama procesa un tercio de lo que da la Pasteurizadora, así que la regla de balance se mantiene: con todo al mismo nivel, nada sobra. Mientras falta alguna rama, la leche que sobra se vende sin procesar.
+Se abre al completar el Trapiche. Productos ×25 respecto al primer borrador (el Trapiche iba ×5). Es la primera zona con **ramas**: la leche pasteurizada se reparte entre la Quesera, la Descremadora y la Paila. A igual nivel, la Paila procesa la mitad de lo que da la Pasteurizadora y la Quesera y la Descremadora un cuarto cada una, así que la regla de balance se mantiene: con todo al mismo nivel, nada sobra. Mientras falta alguna rama, la leche que sobra se vende sin procesar.
 
 | # | Estación | Entrada | Salida | Ciclo (nv. 1) | Valor | Desbloqueo | Coste base |
 |---|----------|---------|--------|---------------|-------|------------|------------|
 | 1 | Potrero y establo ♾️ | — | Leche cruda | 2 s | 125 | Con la zona | 250 |
 | 2 | Pasteurizadora | 1 cruda | Leche pasteurizada | 2 s | 300 | 200.000 | 400 |
-| 3 | Quesera *(rama 1)* | 6 pasteurizada | Queso campesino | 36 s | 3.500 | 400.000 | 1.300 |
-| 4 | Descremadora *(rama 2)* | 3 pasteurizada | Crema de leche | 18 s | 1.200 | 1.000.000 | 600 |
-| 5 | Batidora | 2 crema | Mantequilla | 36 s | 3.000 | 2.000.000 | 900 |
-| 6 | Paila de arequipe *(rama 3)* | 4 pasteurizada + 1 panela pulverizada ⇄ | Arequipe | 24 s | 6.000 | 4.000.000 | 2.000 |
+| 3 | Quesera *(rama 1, ¼ de la leche)* | 4 pasteurizada | Queso campesino | 32 s | 2.400 | 400.000 | 1.300 |
+| 4 | Descremadora *(rama 2, ¼)* | 2 pasteurizada | Crema de leche | 16 s | 800 | 1.000.000 | 600 |
+| 5 | Batidora | 2 crema | Mantequilla | 32 s | 2.000 | 2.000.000 | 900 |
+| 6 | Paila de arequipe *(rama 3, ½)* | 4 pasteurizada + 1 panela pulverizada ⇄ | Arequipe | 16 s | 4.000 | 4.000.000 | 2.000 |
 
 - **Reparto**: las mulas de la Pasteurizadora llevan cada carga a la rama con la entrada más vacía (contando lo que va en camino); la que trabaja más rápido recibe más, sin que el jugador tenga que repartir a mano. La carga se calcula para el viaje a la más lejana.
 - **Primera ruta entre zonas — Ruta de la panela** (`src/data/routes.js`, `src/sim/routes.js`): una **Chiva** recoge panela pulverizada en la bodega del Trapiche y la lleva a la Paila (60 s ida y vuelta). Tiene su propio nivel (pestaña 🚌 de la Paila): a igual nivel que la Paila lleva todo lo que gasta (un 25 % más), contando sus investigaciones de velocidad. El Willys del Trapiche no vende la panela que espera la Chiva. Sin panela, la Paila espera; el resto de la Lechería sigue igual.
 - **Investigaciones**: Ordeño mecánico y Pasteurizadora de placas (×2, en pareja), Descremadora centrífuga, Batidora eléctrica, Cuajo de calidad, Paila de cobre (×2), Carrotanque (despacho ×2), Queso doble crema y Arequipe de exportación (+50 %).
 - **Final**: «Arequipe para todo el pueblo», vender 3.000 arequipes (17 objetivos).
-- **Duración medida** (`npm run balance`): unas 3 h 15 min (jugador atento) y 3 h 30 min (el que sigue la mejora recomendada) después de completar el Trapiche.
+- **Duración medida** (`npm run balance`, v1.2.2): 1 h 25 min (jugador atento) y 2 h 15 min (el que sigue la mejora recomendada) después de completar el Trapiche.
 
 #### Zona 4 · El Cacaotal (chocolate) — 7 estaciones, 7 productos — v1.3
 | # | Estación | Entrada | Salida | Valor |
@@ -258,7 +258,7 @@ Es la única zona sin recurso ilimitado: **todo llega importado**. Es el «exame
 Cada estación tiene **dos ejes** de mejora.
 
 ### 5.1 Nivel de producción (1–100)
-- **Velocidad:** `vel(L) = base × (1 + 0,15 × (L − 1)) × 2^hitos`.
+- **Velocidad:** `vel(L) = base × (1 + 15/99 × (L − 1)) × 2^hitos`. Con 15/99 (≈ 0,1515) el nivel 100 da exactamente ×512 (16 × 2⁵), y como todos los ciclos son potencias de 2 (2, 4, 8, 16 o 32 s), al nivel 100 cada estación produce una potencia de 2 por segundo: 256, 128, 64, 32 o 16 (hay una prueba que lo exige). El nivel máximo es 100.
 - **Hitos** en los niveles 10, 25, 50, 75 y 100: la velocidad se **duplica** y el edificio cambia de aspecto (ver §8).
 - **Coste:** `coste(L) = costeBase × 1,15^(L − 1)`.
 - Botones de compra ×1, ×10 y «máx».

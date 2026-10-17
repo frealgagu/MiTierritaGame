@@ -3,7 +3,9 @@ import { DISPATCH } from '../data/stations.js';
 
 export const MILESTONES = [10, 25, 50, 75, 100];
 export const MAX_LEVEL = 100;
-export const LEVEL_SPEED_BONUS = 0.15;
+// 15/99 ≈ 0,1515 por nivel: así el nivel 100 da exactamente ×512 (16 × 2⁵ hitos) y, con ciclos que son
+// potencias de 2, cada estación produce al máximo una potencia de 2 por segundo (256, 128, 64, 32, 16).
+export const LEVEL_SPEED_BONUS = 15 / 99;
 
 export function milestoneTier(level) {
   return MILESTONES.filter((m) => level >= m).length;

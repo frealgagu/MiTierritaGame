@@ -136,12 +136,12 @@ test('la compostera convierte pulpa en compost que sube el precio de la Finca si
   game.state.stations.composter.level = 1;
   game.state.stations.wetmill.byBuffer = 0;
   game.state.stations.composter.input = 0;
+  assert.equal(saleValue(game.state, 'washed'), productValue(game.state, 'washed'), 'sin compost, sin bono');
   const before2 = game.state.stats.produced.cherry;
   game.state.stations.farm.buffer = 0;
   run(game, 20);
   const without = game.state.stats.produced.cherry - before2;
   assert.ok(Math.abs(withCompost - without) <= without * 0.1, `con compost ${withCompost}, sin compost ${without}`);
-  assert.equal(saleValue(game.state, 'washed'), productValue(game.state, 'washed'));
 
   // Subir el Cafetal no gasta el compost más rápido: se gasta según el café que lava el Beneficiadero.
   const { expectedCompostValue } = await import('../src/sim/analysis.js');

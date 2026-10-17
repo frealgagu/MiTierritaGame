@@ -35,10 +35,10 @@ export const PRODUCTS = {
   // Zona 3 · La Lechería (×25 respecto al primer borrador, igual que el Trapiche ×5)
   raw_milk: { name: 'Leche cruda', zone: 'lecheria', value: 125, icon: '🥛', color: 0xf4f1e8 },
   milk: { name: 'Leche pasteurizada', zone: 'lecheria', value: 300, icon: '🍼', color: 0xffffff },
-  cream: { name: 'Crema de leche', zone: 'lecheria', value: 1200, icon: '🍦', color: 0xfff3d6 },
-  butter: { name: 'Mantequilla', zone: 'lecheria', value: 3000, icon: '🧈', color: 0xf6d860 },
-  cheese: { name: 'Queso campesino', zone: 'lecheria', value: 3500, icon: '🧀', color: 0xf3e3b0 },
-  arequipe: { name: 'Arequipe', zone: 'lecheria', value: 6000, icon: '🍮', color: 0xa0522d },
+  cream: { name: 'Crema de leche', zone: 'lecheria', value: 800, icon: '🍦', color: 0xfff3d6 },
+  butter: { name: 'Mantequilla', zone: 'lecheria', value: 2000, icon: '🧈', color: 0xf6d860 },
+  cheese: { name: 'Queso campesino', zone: 'lecheria', value: 2400, icon: '🧀', color: 0xf3e3b0 },
+  arequipe: { name: 'Arequipe', zone: 'lecheria', value: 4000, icon: '🍮', color: 0xa0522d },
 
   // Zona 4 · El Cacaotal
   cacao_pod: { name: 'Mazorca de cacao', zone: 'cacaotal', value: 8, icon: '🥭', color: 0xd98e04 },

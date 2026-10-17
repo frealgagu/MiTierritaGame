@@ -20,7 +20,7 @@ npm run build    # versión para publicar en dist/
 
 ## Estado: v1.2 — Zona 3: La Lechería
 
-Tres zonas jugables: **La Finca** (café, unas 3 h), **El Trapiche** (panela, de 2 a 4 h más), que se abre al completar la Finca, y **La Lechería** (unas 3 h 30 min más), que se abre al completar el Trapiche. Todas las zonas abiertas producen a la vez (`npm run balance` simula la partida completa). Novedades de cada versión en [`CHANGELOG.md`](CHANGELOG.md).
+Tres zonas jugables: **La Finca** (café, unas 2 h), **El Trapiche** (panela, de 40 min a 1 h 15 min más), que se abre al completar la Finca, y **La Lechería** (de 1 h 25 min a 2 h 15 min más), que se abre al completar el Trapiche. Al nivel 100 (el máximo) cada estación produce una potencia de 2 por segundo (256, 128, 64, 32 o 16). Todas las zonas abiertas producen a la vez (`npm run balance` simula la partida completa). Novedades de cada versión en [`CHANGELOG.md`](CHANGELOG.md).
 
 - **La Finca**: Cafetal ♾️ → Beneficiadero → Marquesina → Trilladora → Tostadora → Molino → Empacadora → Bodega, más la **Compostera** como rama opcional (la pulpa se vuelve compost y, mientras haya, todo lo que vende la Finca vale un 30 % más).
 - **El Trapiche**: Cañaduzal ♾️ → Molienda → Hornilla → Gaveras → Pulverizadora; el **bagazo** de la Molienda alimenta el fuego de la Hornilla (×2).
