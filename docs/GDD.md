@@ -1,4 +1,4 @@
-# Cafetal — Documento de Diseño (GDD) v0.2
+# Cafetal — Documento de Diseño (GDD) v0.3
 
 > Juego incremental de **cadena de suministros**: un recurso inicial ilimitado pero lento alimenta a una estación, esa estación alimenta a la siguiente, y todo se mejora para producir cada vez más.
 > De Frozen City solo se toman la cadena de producción visible y el estilo gráfico isométrico «de juguete», con personajes que llevan cargas.
@@ -83,6 +83,159 @@ Se buscó un tema en el que una cadena larga de transformación sea **natural y 
 
 ---
 
+## 4b. Mapa completo de la cadena (todas las zonas)
+
+Esto es el **techo del juego**: todo lo que existirá cuando estén las 6 zonas. Se construye por partes (la v1.0 solo trae la Zona 1), pero el diseño, los datos y el balance se piensan desde el principio para que todo encaje.
+
+### Resumen en números
+
+| Concepto | Cantidad |
+|----------|----------|
+| Zonas | **6** |
+| Fuentes ilimitadas | **5** (cafetal, cañaduzal, potrero, cacaotal, maizal) |
+| Productos en total | **41** |
+| Estaciones (edificios de producción) | **39** |
+| Subproductos que potencian otras estaciones | 2 (pulpa → abono, bagazo) |
+| Productos que combinan varias zonas | 11 |
+| Producto final del juego | **Contenedor de exportación** |
+| Profundidad máxima (pasos desde una fuente hasta el final) | 9 |
+
+### Vista general
+
+```mermaid
+flowchart LR
+  subgraph Z1[Zona 1 · La Finca]
+    C1[Cereza] --> C2[Lavado] --> C3[Pergamino] --> C4[Verde] --> C5[Tostado] --> C6[Molido] --> C7[Bolsa de café]
+    C2 -.pulpa.-> AB[Abono] -.potencia.-> C1
+  end
+  subgraph Z2[Zona 2 · El Trapiche]
+    T1[Caña] --> T2[Guarapo] --> T3[Melado] --> T4[Panela] --> T5[Panela pulverizada]
+    T1 -.bagazo.-> T3
+  end
+  subgraph Z3[Zona 3 · La Lechería]
+    L1[Leche cruda] --> L2[Leche pasteurizada] --> L3[Crema] --> L4[Mantequilla]
+    L2 --> L5[Queso campesino]
+    L2 --> L6[Arequipe]
+  end
+  subgraph Z4[Zona 4 · El Cacaotal]
+    K1[Mazorca de cacao] --> K2[Fermentado] --> K3[Seco] --> K4[Tostado] --> K5[Pasta de cacao]
+    K5 --> K6[Chocolate de mesa]
+    K5 --> K7[Chocolatina con leche]
+  end
+  subgraph Z5[Zona 5 · El Maizal]
+    M1[Mazorca de maíz] --> M2[Desgranado] --> M3[Pilado] --> M4[Masa] --> M5[Arepa] --> M6[Arepa de queso]
+  end
+  subgraph Z6[Zona 6 · El Pueblo]
+    P1[Tinto]
+    P2[Café con leche]
+    P3[Capuchino]
+    P4[Chocolate caliente]
+    P5[Desayuno campesino]
+    P6[Canasta de regalo]
+    P7((Contenedor de exportación))
+  end
+  T5 --> L6 & K6 & K7 & P1
+  L2 --> K7 & P2 & P3 & P4
+  L5 --> M6
+  L4 --> M6
+  L3 --> P3
+  C6 --> P1 & P2 & P3
+  K6 --> P4
+  M6 --> P5
+  P4 --> P5
+  C7 --> P6
+  T4 --> P6
+  L6 --> P6
+  K7 --> P6
+  P6 --> P7
+  C7 --> P7
+```
+
+### Detalle por zona
+
+Los valores son orientativos y se ajustarán con el simulador de balance. ⇄ indica un producto importado de otra zona.
+
+#### Zona 1 · La Finca (café) — 8 estaciones, 9 productos — **v1.0**
+| # | Estación | Entrada | Salida | Valor |
+|---|----------|---------|--------|-------|
+| 1 | Cafetal ♾️ | — | Cereza de café | 1 |
+| 2 | Beneficiadero | 2 cerezas | Café lavado + *pulpa* | 3 |
+| 3 | Marquesina de secado | 1 lavado | Café pergamino | 6 |
+| 4 | Trilladora | 1 pergamino | Café verde | 10 |
+| 5 | Tostadora | 2 verde | Café tostado | 30 |
+| 6 | Molino | 1 tostado | Café molido | 45 |
+| 7 | Empacadora | 4 molido | Bolsa de café | 250 |
+| 8 | Compostera *(rama secundaria, Zona 1 tardía)* | 5 pulpa | Abono → Cafetal +X % mientras haya | — |
+
+#### Zona 2 · El Trapiche (caña y panela) — 5 estaciones, 6 productos — v1.1
+| # | Estación | Entrada | Salida | Valor |
+|---|----------|---------|--------|-------|
+| 1 | Cañaduzal ♾️ | — | Caña | 2 |
+| 2 | Molienda | 1 caña | Guarapo + *bagazo* | 5 |
+| 3 | Hornilla | 2 guarapo (+ bagazo como combustible: ×2 de velocidad) | Melado | 12 |
+| 4 | Gaveras (moldeo) | 2 melado | Panela | 30 |
+| 5 | Pulverizadora | 1 panela | Panela pulverizada | 50 |
+
+#### Zona 3 · La Lechería — 6 estaciones, 6 productos — v1.2
+| # | Estación | Entrada | Salida | Valor |
+|---|----------|---------|--------|-------|
+| 1 | Potrero y establo ♾️ | — | Leche cruda | 5 |
+| 2 | Pasteurizadora | 1 cruda | Leche pasteurizada | 12 |
+| 3 | Descremadora | 3 pasteurizada | Crema de leche | 40 |
+| 4 | Batidora | 2 crema | Mantequilla | 90 |
+| 5 | Quesera | 6 pasteurizada | Queso campesino | 120 |
+| 6 | Paila de arequipe | 4 pasteurizada + 1 panela pulverizada ⇄ | Arequipe | 200 |
+
+#### Zona 4 · El Cacaotal (chocolate) — 7 estaciones, 7 productos — v1.3
+| # | Estación | Entrada | Salida | Valor |
+|---|----------|---------|--------|-------|
+| 1 | Cacaotal ♾️ | — | Mazorca de cacao | 8 |
+| 2 | Cajones de fermentación | 1 mazorca | Cacao fermentado | 20 |
+| 3 | Secadero | 1 fermentado | Cacao seco | 35 |
+| 4 | Tostador de cacao | 1 seco | Cacao tostado | 70 |
+| 5 | Molino de cacao | 2 tostado | Pasta de cacao | 150 |
+| 6 | Mesa de chocolate | 1 pasta + 1 panela pulverizada ⇄ | Chocolate de mesa | 400 |
+| 7 | Chocolatería | 1 pasta + 1 panela pulverizada ⇄ + 2 leche pasteurizada ⇄ | Chocolatina con leche | 900 |
+
+#### Zona 5 · El Maizal (arepas) — 6 estaciones, 6 productos — v1.4
+| # | Estación | Entrada | Salida | Valor |
+|---|----------|---------|--------|-------|
+| 1 | Maizal ♾️ | — | Mazorca de maíz | 6 |
+| 2 | Desgranadora | 1 mazorca | Maíz desgranado | 12 |
+| 3 | Piladora | 1 desgranado | Maíz pilado | 25 |
+| 4 | Molino de masa | 2 pilado | Masa de maíz | 50 |
+| 5 | Budare | 1 masa | Arepa | 100 |
+| 6 | Puesto de arepas | 1 arepa + 1 queso ⇄ + 1 mantequilla ⇄ | Arepa de queso | 600 |
+
+#### Zona 6 · El Pueblo (ensamble final, sin fuente propia) — 7 estaciones, 7 productos — v1.5
+Es la única zona sin recurso ilimitado: **todo llega importado**. Es el «examen final» de la logística entre zonas.
+
+| # | Estación | Entrada | Salida | Valor |
+|---|----------|---------|--------|-------|
+| 1 | Greca de tintos | 1 café molido ⇄ + 1 panela pulverizada ⇄ | Tinto | 300 |
+| 2 | Cafetera de leche | 1 molido ⇄ + 2 pasteurizada ⇄ | Café con leche | 500 |
+| 3 | Máquina espresso | 1 molido ⇄ + 1 pasteurizada ⇄ + 1 crema ⇄ | Capuchino | 1.200 |
+| 4 | Chocolatera | 1 chocolate de mesa ⇄ + 2 pasteurizada ⇄ | Chocolate caliente | 1.500 |
+| 5 | Fonda | 1 arepa de queso ⇄ + 1 chocolate caliente | Desayuno campesino | 5.000 |
+| 6 | Taller de canastas | 1 bolsa de café ⇄ + 2 panela ⇄ + 1 arequipe ⇄ + 2 chocolatinas ⇄ | Canasta de regalo | 20.000 |
+| 7 | Muelle de exportación | 250 canastas + 2.000 bolsas de café ⇄ | **Contenedor de exportación** | Final del juego |
+
+### Cómo viajan los productos entre zonas
+- Cada zona tiene una **Bodega de salida**. Entre zonas hay **rutas** con su propio transporte mejorable: **Willys** al principio, **chiva** (más carga) y finalmente **camión**.
+- Una ruta se configura así: *producto X, de la Zona A a la Zona B*. Igual que los arrieros dentro de una zona, la ruta tiene capacidad por minuto y puede ser el cuello de botella.
+- **Cada zona sigue siendo jugable sola:** si no llega el importado, las estaciones que lo necesitan se pausan, pero el resto de la cadena produce y vende normalmente.
+- **Al completar una zona** se desbloquea la siguiente y la anterior sigue produciendo en segundo plano, como si estuviera sin conexión.
+
+### Orden de llegada (por qué este orden)
+1. **Finca:** cadena lineal pura, enseña lo básico.
+2. **Trapiche:** introduce los **subproductos** (bagazo) y es el primer proveedor de otras zonas.
+3. **Lechería:** introduce la **ramificación** (una leche con 4 destinos) y la **primera importación** (arequipe).
+4. **Cacaotal:** combina 2 y 3 importaciones en una sola receta.
+5. **Maizal:** recetas con ingredientes de varias zonas en el producto estrella.
+6. **Pueblo:** todo importado; pone a prueba la red completa.
+
+---
+
 ## 5. Mejoras
 
 Cada estación tiene **dos ejes** de mejora.
@@ -128,9 +281,9 @@ Hay una lista de **objetivos** (3 visibles a la vez), cada uno con una recompens
 5. Produce 100 granos de pergamino.
 6. …
 7. Desbloquea la Empacadora.
-8. **Final: llena el Contenedor de exportación con 1.000 bolsas.**
+8. **Final de la Zona 1: «Primer gran pedido»**, entregar 1.000 bolsas al pueblo.
 
-El contenedor es una barra grande en el puerto del pueblo. Al llenarse aparecen un barco, una animación final, la pantalla de «Zona completada» y el anuncio de la siguiente zona. Después se puede seguir jugando en modo libre.
+Una barra grande en la plaza del pueblo muestra el avance. Al llenarse llega una chiva de celebración, aparece la pantalla de «Zona completada» y se anuncia la Zona 2. Después se puede seguir jugando en modo libre. (El **Contenedor de exportación** es el final de todo el juego, en la Zona 6; ver §4b.)
 
 **Balance objetivo:** unos 30 objetivos. El contenedor debería llenarse hacia las 3–5 horas de juego activo, o un poco más dejándolo correr. Se ajustará con un simulador (ver §10).
 
@@ -303,11 +456,13 @@ export const COST_GROWTH = 1.15;
 | **v0.4** | Hitos con cambio de modelo, efectos, día y noche cosmético, sonido básico | Se siente vivo, al estilo Frozen City |
 | **v0.5** | Objetivos, investigaciones, guardado, ganancias sin conexión, simulador de balance | Se juega de principio a fin |
 | **v1.0** | Contenedor de exportación, pantalla final y balance ajustado | **Zona 1 completa** |
-| v1.1 | **Zona 2: Tostaduría del pueblo.** Recibe café verde de la finca por caravana y produce varios tipos de tueste | Expansión |
-| v1.2 | **Zona 3: Cafetería.** Café + leche (nueva cadena: lechería) + azúcar (trapiche) → bebidas | Expansión con cadenas que se cruzan |
-| v1.3 | **Zona 4: Puerto.** Exportación con barcos y pedidos especiales | Expansión |
+| v1.1 | **Zona 2: El Trapiche**: caña → panela; subproducto bagazo; primera ruta entre zonas | Expansión |
+| v1.2 | **Zona 3: La Lechería**: ramificación de la leche; arequipe con panela importada | Expansión |
+| v1.3 | **Zona 4: El Cacaotal**: chocolate de mesa y chocolatina | Expansión |
+| v1.4 | **Zona 5: El Maizal**: arepas y arepa de queso | Expansión |
+| v1.5 | **Zona 6: El Pueblo**: cafetería, fonda y Contenedor de exportación (**final del juego**) | Expansión final |
 
-**Cómo se conectan las zonas:** cada zona nueva tiene su propio recurso ilimitado y su cadena. Además puede **importar** productos de zonas anteriores mediante una ruta (Willys o caravana), que también se mejora. La cadena de suministros crece entre zonas sin rehacer la primera.
+**Cómo se conectan las zonas:** ver §4b.
 
 ---
 
