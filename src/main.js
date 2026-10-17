@@ -18,6 +18,7 @@ import { offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
 import { bindDevOptions, savedSpeed } from './ui/DevOptions.js';
 import { Sound } from './audio/Sound.js';
+import { Music } from './audio/Music.js';
 
 const AUTOSAVE_MS = 10_000;
 const MIN_OFFLINE_S = 30;
@@ -48,6 +49,8 @@ async function start() {
 
   const sound = new Sound();
   sound.setEnabled(game.state.settings.sound);
+  // Las partidas de antes no tienen el ajuste: la música suena salvo que se haya quitado.
+  const music = new Music(game.state.settings.music !== false);
   // Un clic suave en cada botón de la interfaz.
   document.addEventListener('click', (e) => {
     if (e.target.closest('button')) sound.click();
@@ -170,7 +173,7 @@ async function start() {
   });
   window.addEventListener('pagehide', persist);
 
-  bindMenu(game, sound);
+  bindMenu(game, sound, music);
   bindDevOptions(game);
   // Jugable sin internet e instalable en el móvil (solo en la versión publicada).
   if (import.meta.env.PROD && 'serviceWorker' in navigator) {
@@ -188,7 +191,7 @@ function applyOffline(game, seconds) {
   return r.coins > 0 ? { ...r, cap, capped: seconds * scale > cap, scale } : null;
 }
 
-function bindMenu(game, sound) {
+function bindMenu(game, sound, music) {
   const menu = document.getElementById('menu');
   const soundBtn = document.getElementById('sound-btn');
   const paintSound = () => (soundBtn.textContent = game.state.settings.sound ? '🔊 Sonido: sí' : '🔇 Sonido: no');
@@ -197,6 +200,15 @@ function bindMenu(game, sound) {
     game.state.settings.sound = !game.state.settings.sound;
     sound.setEnabled(game.state.settings.sound);
     paintSound();
+  });
+  const musicBtn = document.getElementById('music-btn');
+  const musicOn = () => game.state.settings.music !== false;
+  const paintMusic = () => (musicBtn.textContent = musicOn() ? '🎵 Música: sí' : '🎵 Música: no');
+  paintMusic();
+  musicBtn.addEventListener('click', () => {
+    game.state.settings.music = !musicOn();
+    music.setEnabled(game.state.settings.music);
+    paintMusic();
   });
   document.getElementById('menu-btn').addEventListener('click', () => {
     const s = game.state;

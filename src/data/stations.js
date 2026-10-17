@@ -54,13 +54,14 @@ export const STATIONS = [
   { id: 'chocolate_table', zone: 'cacaotal', name: 'Mesa de chocolate', icon: '🍫', in: { cacao_paste: 2 }, imports: [{ product: 'panela_powder', perCycle: 1, route: 'panela_cacao' }], out: { table_chocolate: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '1.3' },
   { id: 'chocolatier', zone: 'cacaotal', name: 'Chocolatería', icon: '🍬', in: { cacao_paste: 2 }, imports: [{ product: 'panela_powder', perCycle: 1, route: 'panela_cacao' }, { product: 'milk', perCycle: 4, route: 'leche' }], out: { milk_chocolate: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '1.3' },
 
-  // Zona 5 · El Maizal
-  { id: 'cornfield', zone: 'maizal', name: 'Maizal', icon: '🌽', infinite: true, out: { corn_cob: 1 }, cycle: 2, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.4' },
-  { id: 'sheller', zone: 'maizal', name: 'Desgranadora', icon: '⚙️', in: { corn_cob: 1 }, out: { corn_kernels: 1 }, cycle: 3, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.4' },
-  { id: 'corn_huller', zone: 'maizal', name: 'Piladora', icon: '⚙️', in: { corn_kernels: 1 }, out: { corn_hulled: 1 }, cycle: 3, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.4' },
-  { id: 'dough_mill', zone: 'maizal', name: 'Molino de masa', icon: '🌀', in: { corn_hulled: 2 }, out: { corn_dough: 1 }, cycle: 4, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.4' },
-  { id: 'budare', zone: 'maizal', name: 'Budare', icon: '🔥', in: { corn_dough: 1 }, out: { arepa: 1 }, cycle: 4, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.4' },
-  { id: 'arepa_stand', zone: 'maizal', name: 'Puesto de arepas', icon: '🫓', in: { arepa: 1, cheese: 1, butter: 1 }, out: { cheese_arepa: 1 }, cycle: 6, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.4' },
+  // Zona 5 · El Maizal (v1.4). Cadena lineal; el Puesto de arepas necesita queso y mantequilla de la
+  // Lechería: a igual nivel, todo lo que hacen la Quesera y la Batidora (ver data/routes.js).
+  { id: 'cornfield', zone: 'maizal', name: 'Maizal', icon: '🌽', infinite: true, out: { corn_cob: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '1.4' },
+  { id: 'sheller', zone: 'maizal', name: 'Desgranadora', icon: '⚙️', in: { corn_cob: 1 }, out: { corn_kernels: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '1.4' },
+  { id: 'corn_huller', zone: 'maizal', name: 'Piladora', icon: '🪵', in: { corn_kernels: 2 }, out: { corn_hulled: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '1.4' },
+  { id: 'dough_mill', zone: 'maizal', name: 'Molino de masa', icon: '🌀', in: { corn_hulled: 2 }, out: { corn_dough: 1 }, cycle: 8, unlockCost: 200000000, upgradeBase: 60000, growth: 1.15, release: '1.4' },
+  { id: 'budare', zone: 'maizal', name: 'Budare', icon: '🔥', in: { corn_dough: 1 }, out: { arepa: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '1.4' },
+  { id: 'arepa_stand', zone: 'maizal', name: 'Puesto de arepas', icon: '🥪', in: { arepa: 4 }, imports: [{ product: 'cheese', perCycle: 1, route: 'queso' }, { product: 'butter', perCycle: 1, route: 'mantequilla' }], out: { cheese_arepa: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '1.4' },
 
   // Zona 6 · El Pueblo (sin fuente propia)
   { id: 'greca', zone: 'pueblo', name: 'Greca de tintos', icon: '☕', in: { ground: 1, panela_powder: 1 }, out: { tinto: 1 }, cycle: 4, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.5' },

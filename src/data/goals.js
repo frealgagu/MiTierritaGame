@@ -101,5 +101,25 @@ const CACAOTAL = [
   { id: 'cfinal', type: 'sold', product: 'milk_chocolate', amount: 3000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL];
+const MAIZAL = [
+  { id: 'm01', type: 'sold', product: 'corn_cob', amount: 50, reward: 1000000 },
+  { id: 'm02', type: 'level', target: 'cornfield', level: 10, reward: 2000000 },
+  { id: 'm03', type: 'unlock', station: 'sheller', reward: 4000000 },
+  { id: 'm04', type: 'level', target: 'cornfield:transport', level: 10, reward: 4000000 },
+  { id: 'm05', type: 'unlock', station: 'corn_huller', reward: 8000000 },
+  { id: 'm06', type: 'produced', product: 'corn_hulled', amount: 200, reward: 12000000 },
+  { id: 'm07', type: 'research', research: 'maiz_hibrido', reward: 15000000 },
+  { id: 'm08', type: 'unlock', station: 'dough_mill', reward: 25000000 },
+  { id: 'm09', type: 'level', target: 'dispatch:maizal', level: 10, reward: 25000000 },
+  { id: 'm10', type: 'unlock', station: 'budare', reward: 50000000 },
+  { id: 'm11', type: 'sold', product: 'arepa', amount: 300, reward: 80000000 },
+  { id: 'm12', type: 'unlock', station: 'arepa_stand', reward: 120000000 },
+  { id: 'm13', type: 'imported', product: 'cheese', amount: 200, reward: 150000000 },
+  { id: 'm14', type: 'allLevels', zone: 'maizal', level: 25, reward: 200000000 },
+  { id: 'm15', type: 'sold', product: 'cheese_arepa', amount: 1000, reward: 300000000 },
+  // Final de la Zona 5.
+  { id: 'mfinal', type: 'sold', product: 'cheese_arepa', amount: 3000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL];

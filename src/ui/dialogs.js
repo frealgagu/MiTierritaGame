@@ -22,6 +22,7 @@ export function showWelcome({ seconds, coins, capped, cap, scale = 1 }, onCollec
 const VICTORY = {
   finca: { title: '¡Primer gran pedido entregado!', text: 'Completaste la <b>Zona 1 · La Finca</b>. Mil bolsas de tu café ya van camino al pueblo.', stat: (s) => `Bolsas vendidas: ${formatNumber(s.stats.sold.coffee_bag ?? 0)}` },
   trapiche: { title: '¡Primer cargamento de panela!', text: 'Completaste la <b>Zona 2 · El Trapiche</b>. Cinco mil panelas pulverizadas endulzan el pueblo.', stat: (s) => `Panela pulverizada vendida: ${formatNumber(s.stats.sold.panela_powder ?? 0)}` },
+  maizal: { title: '¡Arepas para toda la plaza!', text: 'Completaste la <b>Zona 5 · El Maizal</b>. Tres mil bandejas de arepas de queso, con el queso y la mantequilla de la Lechería.', stat: (s) => `Arepas de queso vendidas: ${formatNumber(s.stats.sold.cheese_arepa ?? 0)}` },
   cacaotal: { title: '¡Chocolate para la feria!', text: 'Completaste la <b>Zona 4 · El Cacaotal</b>. Tres mil chocolatinas hechas con tu cacao, la panela del Trapiche y la leche de la Lechería.', stat: (s) => `Chocolatinas vendidas: ${formatNumber(s.stats.sold.milk_chocolate ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Tres mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };

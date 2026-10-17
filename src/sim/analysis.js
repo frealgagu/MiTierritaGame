@@ -267,12 +267,14 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
     if (!STATIONS_BY_ID[id].side) ids.push(`${id}:transport`);
   }
   for (const r of ROUTES) if (r.to === zoneId && routeActive(state, r.id)) ids.push(`route:${r.id}`);
-  // Lo que suma comprar `count` niveles de cada uno de `list` a la vez (o null si alguno no se puede).
+  // Lo que suma comprar a la vez `count` niveles de cada uno de `list` (o null si alguno no se puede).
+  // Cada elemento es un id o un par [id, niveles], para subir unos más que otros.
   const trialGain = (list, count) => {
     const trial = { ...state, stations: { ...state.stations }, zones: { ...state.zones }, routes: { ...state.routes } };
     let cost = 0;
-    for (const id of list) {
-      const q = quote(id, count);
+    for (const item of list) {
+      const [id, n] = Array.isArray(item) ? item : [item, count];
+      const q = quote(id, n);
       if (q.maxed || q.locked || q.levels === 0) return null;
       cost += q.cost;
       const levels = q.levels ?? 1;
@@ -289,7 +291,8 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
         trial.stations[sid] = st;
       }
     }
-    return { id: list[0], cost, gain: score(trial) - base };
+    const first = list[0];
+    return { id: Array.isArray(first) ? first[0] : first, cost, gain: score(trial) - base };
   };
   for (const id of ids) {
     // Arrieros, rutas y la Compostera suman poco nivel a nivel (unos arrieros muy atrasados, el bono
@@ -319,6 +322,21 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
       const o = trialGain([gradual[i], gradual[j]], 10);
       if (o && o.gain >= base * MIN_GAIN && (!pair || roi(o) > roi(pair))) pair = o;
     }
+  }
+  // Una estación con importados puede estar frenada a la vez por su nivel, sus rutas y sus arrieros
+  // (el Puesto de arepas espera queso y mantequilla): se prueba subirla un nivel y poner a su altura lo
+  // que va detrás. Se recomienda lo más atrasado del grupo, que es lo que hay que comprar primero.
+  for (const id of ids) {
+    const def = STATIONS_BY_ID[id];
+    if (!def?.imports) continue;
+    const target = state.stations[id].level + 1;
+    const behind = [`${id}:transport`, ...def.imports.filter((imp) => routeActive(state, imp.route)).map((imp) => `route:${imp.route}`)];
+    const group = [[id, 1], ...behind.map((b) => [b, target - upgradeLevel(state, b)]).filter(([, n]) => n > 0)];
+    if (group.length < 2) continue;
+    const o = trialGain(group, 1);
+    if (!o || o.gain < base * MIN_GAIN) continue;
+    const lowest = group.map(([g]) => g).reduce((low, g) => (upgradeLevel(state, g) < upgradeLevel(state, low) ? g : low));
+    if (!pair || roi(o) > roi(pair)) pair = { ...o, id: lowest };
   }
   if (pair) return { ...pair, cost: quote(pair.id, 1).cost };
   // Sin cuello de botella que se pueda mejorar (todo al máximo): no hay recomendación.

@@ -222,15 +222,22 @@ Se abre al completar la Lechería. Productos ×125 respecto al primer borrador. 
 - **Final**: «Chocolate para la feria», vender 3.000 chocolatinas con leche (18 objetivos).
 - **Duración medida** (`npm run balance`, v1.3): 1 h 45 min (jugador atento) y 1 h 55 min (el que sigue la mejora recomendada) después de completar la Lechería. Juego completo hasta aquí: unas 7 h.
 
-#### Zona 5 · El Maizal (arepas) — 6 estaciones, 6 productos — v1.4
-| # | Estación | Entrada | Salida | Valor |
-|---|----------|---------|--------|-------|
-| 1 | Maizal ♾️ | — | Mazorca de maíz | 6 |
-| 2 | Desgranadora | 1 mazorca | Maíz desgranado | 12 |
-| 3 | Piladora | 1 desgranado | Maíz pilado | 25 |
-| 4 | Molino de masa | 2 pilado | Masa de maíz | 50 |
-| 5 | Budare | 1 masa | Arepa | 100 |
-| 6 | Puesto de arepas | 1 arepa + 1 queso ⇄ + 1 mantequilla ⇄ | Arepa de queso | 600 |
+#### Zona 5 · El Maizal (arepas) — 6 estaciones, 6 productos — **v1.4** ✅
+Se abre al completar el Cacaotal. Productos ×1.000 respecto al primer borrador. Cadena lineal; el **Puesto de arepas** necesita queso y mantequilla de la Lechería, que llegan por dos rutas. A igual nivel, el Puesto gasta todo el queso de la Quesera y toda la mantequilla de la Batidora (son productos finales de la Lechería: lo que no se lleva la Chiva, se vende).
+
+| # | Estación | Entrada | Salida | Ciclo (nv. 1) | Valor | Desbloqueo | Coste base |
+|---|----------|---------|--------|---------------|-------|------------|------------|
+| 1 | Maizal ♾️ | — | Mazorca de maíz | 2 s | 6.000 | Con la zona | 20.000 |
+| 2 | Desgranadora | 1 mazorca | Maíz desgranado | 2 s | 12.000 | 30 M | 25.000 |
+| 3 | Piladora | 2 desgranado | Maíz pilado | 4 s | 30.000 | 80 M | 40.000 |
+| 4 | Molino de masa | 2 pilado | Masa de maíz | 8 s | 70.000 | 200 M | 60.000 |
+| 5 | Budare | 1 masa | Arepa | 8 s | 120.000 | 500 M | 90.000 |
+| 6 | Puesto de arepas | 4 arepas + 1 queso ⇄ + 1 mantequilla ⇄ | Arepas de queso (bandeja) | 32 s | 1.200.000 | 600 M | 150.000 |
+
+- **Rutas**: la **Ruta del queso** y la **Ruta de la mantequilla** salen de la bodega de la Lechería (por la carretera de abajo) hacia el Puesto.
+- **Investigaciones**: Maíz híbrido y Desgranadora con motor (×2, en pareja), Piladora eléctrica, Molino de discos, Budare grande, Plancha doble (×2), Camión para el Maizal (despacho ×2) y Receta de la abuela (todo lo que vende el Maizal +50 %).
+- **Final**: «¡Arepas para toda la plaza!», vender 3.000 bandejas de arepas de queso (16 objetivos).
+- **Duración medida** (`npm run balance`, v1.4): 1 h 45 min (jugador atento) y 1 h 10 min (el que sigue la mejora recomendada) después de completar el Cacaotal. Juego completo hasta aquí: unas 8 h 30 min.
 
 #### Zona 6 · El Pueblo (ensamble final, sin fuente propia) — 7 estaciones, 7 productos — v1.5
 Es la única zona sin recurso ilimitado: **todo llega importado**. Es el «examen final» de la logística entre zonas.
@@ -381,6 +388,8 @@ La casa del Cafetal evoluciona aparte (de rancho de madera a casa de dos pisos c
 ### Sonido (v0.4)
 Sintetizado con Web Audio, sin archivos: clic de botones, monedas al vender, arpegio al subir de nivel y al cruzar un hito, martillazos al construir, pájaros de día y grillos de noche. Se apaga desde el menú y la preferencia se guarda con la partida.
 
+**Música (v1.4):** «Apple Cider», de Zane Little (CC0, dominio público, de OpenGameArt), en `public/music/finca.mp3` (recodificada a 96 kbps, 2,4 MB). Suena en bucle al 30 % tras el primer toque, con fundido de entrada y salida, se pausa con la pestaña oculta y tiene su propio botón en el menú.
+
 ### Paleta
 
 | Uso | Hex |
@@ -518,7 +527,7 @@ export const COST_GROWTH = 1.15;
 | v1.1 ✅ | **Zona 2: El Trapiche**: caña → panela; bagazo como combustible; varias zonas a la vez y selector de zonas | Expansión |
 | v1.2 ✅ | **Zona 3: La Lechería**: ramificación de la leche; **primera ruta entre zonas** (panela del Trapiche para el arequipe) | Expansión |
 | v1.3 ✅ | **Zona 4: El Cacaotal**: chocolate de mesa y chocolatina; dos importaciones a la vez y rutas que abastecen varias estaciones | Expansión |
-| v1.4 | **Zona 5: El Maizal**: arepas y arepa de queso | Expansión |
+| v1.4 ✅ | **Zona 5: El Maizal**: arepas y arepas de queso con queso y mantequilla de la Lechería | Expansión |
 | v1.5 | **Zona 6: El Pueblo**: cafetería, fonda y Contenedor de exportación (**final del juego**) | Expansión final |
 
 **Cómo se conectan las zonas:** ver §4b.

@@ -18,7 +18,7 @@ import {
   warehouseCapacity,
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
-import { busyMules, exportsOf, inTransit, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
+import { busyMules, dockStock, exportsOf, legTime, normalDest, productionMult, teamCapacity, teamLoad, warehouseSpace } from '../sim/transport.js';
 import { analyzeChain, expectedCompostValue, routeFlow } from '../sim/analysis.js';
 import { COMPOST_VALUE, compostValueBoost, muleSpeedMult, saleValue } from '../sim/modifiers.js';
 import { PARENT, consumers, zoneOf } from '../sim/chain.js';
@@ -449,11 +449,18 @@ function dispatchInfo(zoneId) {
     rows: [
       { key: 'cap', label: 'Carga por viaje', value: (s, l) => `${formatNumber(dispatchCapacity(l, mult(s)))}`, next: (l, s) => formatNumber(dispatchCapacity(l, mult(s))) },
       { key: 'rate', label: 'Ritmo de venta', value: (s, l) => `${formatRate(dispatchRate(l, mult(s)))} u/s`, next: (l, s) => formatRate(dispatchRate(l, mult(s))) },
-      { key: 'stock', label: 'Bodega', value: (s, l) => `${formatNumber(sumValues(z(s).warehouse))} / ${formatNumber(warehouseCapacity(l, mult(s)))}` },
+      {
+        key: 'stock',
+        label: 'Bodega',
+        value: (s, l) => {
+          const dock = dockStock(s, zoneId);
+          return `${formatNumber(sumValues(z(s).warehouse) - dock)} / ${formatNumber(warehouseCapacity(l, mult(s)))}${dock > 0.5 ? ` · andén de las rutas: ${formatNumber(dock)}` : ''}`;
+        },
+      },
       { key: 'trip', label: 'Viaje (ida y vuelta)', value: () => `${DISPATCH.tripTime} s` },
     ],
     status: (s) => {
-      const full = sumValues(z(s).warehouse) + inTransit(s, 'warehouse', zoneId) >= warehouseCapacity(z(s).dispatch.level, mult(s));
+      const full = warehouseSpace(s, zoneId) <= 0;
       if (full) return { text: '⛔ Bodega llena: el Willys no da abasto.', bad: true };
       const phase = { idle: '🅿️ El Willys está cargando en la bodega.', out: '🚙 El Willys va camino al pueblo.', back: '↩️ El Willys vuelve a la bodega.' };
       return { text: phase[z(s).jeep.phase], bad: false };

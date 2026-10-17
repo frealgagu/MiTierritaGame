@@ -130,7 +130,13 @@ export class Terrain {
         if (!this.isFree(gx, gy)) continue;
         const r = rng();
         let obj = null;
-        if (this.zone.theme === 'cacao') {
+        if (this.zone.theme === 'corn') {
+          // Maizal: girasoles, matas de maíz sueltas, algún espantapájaros y piedras.
+          if (r < 0.04) obj = sunflower(rng);
+          else if (r < 0.08) obj = cornClump(rng);
+          else if (r < 0.09) obj = scarecrow(rng);
+          else if (r < 0.11) obj = rock(rng);
+        } else if (this.zone.theme === 'cacao') {
           // Cacaotal: guamos de sombra, plátano, heliconias y algún cacao suelto.
           if (r < 0.04) obj = guamo(rng);
           else if (r < 0.08) obj = banana(rng);
@@ -171,7 +177,70 @@ const FARM_SOIL = {
   cane: (v) => mix(0x9c7a4a, 0x7f6038, v * 0.35),
   dairy: (v) => mix(0x5e9a3c, 0x6fae44, v * 0.5),
   cacao: (v) => mix(0x5e4630, 0x4a3726, v * 0.5),
+  corn: (v) => mix(0xa47c48, 0x8a6a3a, v * 0.4),
 };
+
+// Girasol: tallo alto, hojas y flor amarilla mirando al frente.
+function sunflower(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const h = 24 + rng() * 10;
+  shadow(g, 0, 1, 7, 3);
+  g.moveTo(0, 0).lineTo(1, -h).stroke({ width: 2, color: 0x4e8a33 });
+  g.ellipse(-4, -h * 0.45, 5, 2).fill(0x5e9a3c);
+  g.ellipse(5, -h * 0.6, 5, 2).fill(0x74b14a);
+  for (let k = 0; k < 10; k++) {
+    const a = (k / 10) * Math.PI * 2;
+    g.ellipse(1 + Math.cos(a) * 5, -h + Math.sin(a) * 5, 3, 1.6).fill(0xf4c430);
+  }
+  g.circle(1, -h, 3.2).fill(0x6b4a2e);
+  c.addChild(g);
+  return c;
+}
+
+function cornClump(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  for (let k = 0; k < 3; k++) drawCornStalk(g, (k - 1) * 5, (k % 2) * 2, 0.75 + rng() * 0.2, rng, 1);
+  c.addChild(g);
+  return c;
+}
+
+// Espantapájaros con sombrero vueltiao y ruana.
+function scarecrow() {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 0, 1, 8, 3);
+  g.rect(-1, -34, 2, 34).fill(0x8b5a2b);
+  g.rect(-12, -26, 24, 2).fill(0x8b5a2b);
+  g.poly([-11, -27, 11, -27, 7, -14, -7, -14]).fill(0xc8643b).stroke({ width: 1, color: 0x3a2418, alpha: 0.5 });
+  g.circle(0, -31, 4).fill(0xe2c56b);
+  g.ellipse(0, -34, 8, 2).fill(0xf4efe6).stroke({ width: 1, color: 0x3a2418, alpha: 0.5 });
+  g.roundRect(-4, -39, 8, 5, 2).fill(0xf4efe6).stroke({ width: 1, color: 0x3a2418, alpha: 0.5 });
+  g.rect(-4, -36, 8, 1).fill(0x222222);
+  c.addChild(g);
+  return c;
+}
+
+// Mata de maíz: caña alta con hojas largas, espiga arriba y mazorcas. La usa también el Maizal.
+export function drawCornStalk(g, x, y, scale, rng, cobs) {
+  const s = scale;
+  const h = (30 + rng() * 8) * s;
+  shadow(g, x + 1, y + 1, 5 * s, 2 * s);
+  g.moveTo(x, y).lineTo(x + 1, y - h).stroke({ width: 2 * s, color: 0x7aa33c });
+  for (let k = 1; k < 5; k++) {
+    const yy = y - (h * k) / 5;
+    const side = k % 2 ? 1 : -1;
+    g.moveTo(x, yy).quadraticCurveTo(x + side * 8 * s, yy - 6 * s, x + side * 12 * s, yy + 2 * s).stroke({ width: 1.6, color: k % 2 ? 0x5e9a3c : 0x74b14a });
+  }
+  // Espiga.
+  g.moveTo(x + 1, y - h).lineTo(x - 2, y - h - 6 * s).moveTo(x + 1, y - h).lineTo(x + 4, y - h - 5 * s).stroke({ width: 1, color: 0xd9c38c });
+  for (let i = 0; i < cobs; i++) {
+    const cy = y - h * (0.45 + i * 0.15);
+    g.ellipse(x + 3 * s, cy, 2 * s, 4 * s).fill(0xf2c94c).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.4 });
+    g.moveTo(x + 2 * s, cy + 3 * s).lineTo(x + 5 * s, cy - 2 * s).stroke({ width: 1, color: 0x8fae4a });
+  }
+}
 
 // Guamo: árbol de sombra del cacaotal, tronco alto y copa ancha y aplanada.
 function guamo(rng) {

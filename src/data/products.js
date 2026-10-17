@@ -49,13 +49,13 @@ export const PRODUCTS = {
   table_chocolate: { name: 'Chocolate de mesa', zone: 'cacaotal', value: 100000, icon: '🍫', color: 0x5a3220 },
   milk_chocolate: { name: 'Chocolatina con leche', zone: 'cacaotal', value: 220000, icon: '🍬', color: 0x8b5a3c },
 
-  // Zona 5 · El Maizal
-  corn_cob: { name: 'Mazorca de maíz', zone: 'maizal', value: 6, icon: '🌽', color: 0xf2c94c },
-  corn_kernels: { name: 'Maíz desgranado', zone: 'maizal', value: 12, icon: '🌽', color: 0xf5d76e },
-  corn_hulled: { name: 'Maíz pilado', zone: 'maizal', value: 25, icon: '⚪', color: 0xf7ecc8 },
-  corn_dough: { name: 'Masa de maíz', zone: 'maizal', value: 50, icon: '🥣', color: 0xf0e0a8 },
-  arepa: { name: 'Arepa', zone: 'maizal', value: 100, icon: '🫓', color: 0xe8c77a },
-  cheese_arepa: { name: 'Arepa de queso', zone: 'maizal', value: 600, icon: '🫓', color: 0xf0d58c },
+  // Zona 5 · El Maizal (×1.000 respecto al primer borrador)
+  corn_cob: { name: 'Mazorca de maíz', zone: 'maizal', value: 6000, icon: '🌽', color: 0xf2c94c },
+  corn_kernels: { name: 'Maíz desgranado', zone: 'maizal', value: 12000, icon: '🌾', color: 0xf5d76e },
+  corn_hulled: { name: 'Maíz pilado', zone: 'maizal', value: 30000, icon: '⚪', color: 0xf7ecc8 },
+  corn_dough: { name: 'Masa de maíz', zone: 'maizal', value: 70000, icon: '🥣', color: 0xf0e0a8 },
+  arepa: { name: 'Arepa', zone: 'maizal', value: 120000, icon: '🫓', color: 0xe8c77a },
+  cheese_arepa: { name: 'Arepas de queso', zone: 'maizal', value: 1200000, icon: '🥪', color: 0xf0d58c },
 
   // Zona 6 · El Pueblo
   tinto: { name: 'Tinto', zone: 'pueblo', value: 300, icon: '☕', color: 0x3b2314 },

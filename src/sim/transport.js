@@ -4,7 +4,7 @@ import { muleCount, muleLoad, stationBufferCap, stationInputCap, warehouseCapaci
 import { sumValues } from './state.js';
 import { CHILDREN, ROAD_POS, chainOf, consumers, zoneOf, zoneUnlocked } from './chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
-import { ROUTE_STOCK, routeActive, routeCapacity } from './routes.js';
+import { ROUTE_STOCK, routeActive, routeCapacity, routeReserve } from './routes.js';
 import { inputSpace } from './production.js';
 import { dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
 
@@ -94,8 +94,16 @@ export function warehouseCap(state, zoneId) {
 }
 
 // Espacio libre en la bodega de una zona contando lo que ya viene en camino.
+// Lo que espera una ruta va en el andén de la bodega: no le quita sitio al resto (antes, la leche
+// guardada para el Cacaotal podía llenar la bodega de la Lechería y parar toda la zona).
+export function dockStock(state, zoneId) {
+  const wh = state.zones[zoneId].warehouse;
+  return Object.entries(routeReserve(state, zoneId)).reduce((n, [p, r]) => n + Math.min(wh[p] ?? 0, r), 0);
+}
+
 export function warehouseSpace(state, zoneId) {
-  return warehouseCap(state, zoneId) - sumValues(state.zones[zoneId].warehouse) - inTransit(state, 'warehouse', zoneId);
+  const wh = state.zones[zoneId].warehouse;
+  return warehouseCap(state, zoneId) - (sumValues(wh) - dockStock(state, zoneId)) - inTransit(state, 'warehouse', zoneId);
 }
 
 // Arrieros (v0.3): cada estación tiene sus mulas. Van a la siguiente estación (o a la bodega si

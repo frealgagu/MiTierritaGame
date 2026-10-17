@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## v1.4 — Zona 5: El Maizal, y música
+- **Nueva zona** que se abre al completar el Cacaotal: Maizal ♾️ → Desgranadora → Piladora → Molino de masa → Budare → **Puesto de arepas**, que hace bandejas de arepas de queso con el queso y la mantequilla de la Lechería. Mapa con milpa de espigas, girasoles y espantapájaros, y cinco edificios nuevos (pilones que suben y bajan, budare con arepas, puesto con parasol de colores).
+- **Rutas del queso y de la mantequilla**: salen de la bodega de la Lechería por la carretera de abajo. A igual nivel, el Puesto gasta justo lo que hacen la Quesera y la Batidora.
+- **Música de fondo**: «Apple Cider», de Zane Little (CC0, dominio público, de OpenGameArt): guitarra acústica y flauta, tranquila, para la finca. Suena en bucle y bajito tras el primer toque, se pausa en segundo plano y se quita en ⚙️ («🎵 Música»). Pesa 2,4 MB.
+- **Arreglo importante (venía de la v1.3)**: lo que la bodega guarda para una ruta (carga y media) podía llenarla entera; con la Ruta de la leche en nivel alto, la bodega de la Lechería se llenaba de leche, todas sus estaciones se paraban y no salía queso ni mantequilla. Ahora lo que espera una ruta va en el **andén** y no le quita sitio a la bodega (el panel del despacho lo muestra aparte).
+- **La mejora recomendada prueba grupos**: el Puesto de arepas puede quedar frenado a la vez por su nivel, sus arrieros y las dos rutas; subir uno solo (o dos) no servía de nada y se recomendaba la Piladora para siempre (en una partida de prueba, el Maizal tardaba más de 10 h). Ahora se prueba subir juntos una estación y lo que va detrás de ella, y se recomienda lo más atrasado.
+- Simulador de balance: el jugador atento, cuando ninguna compra suelta rinde, sigue la mejora recomendada. Duración medida del Maizal: 1 h 45 min (atento) y 1 h 10 min (casual); unas 8 h 30 min de juego en total. Para eso, el Puesto de arepas se construye por 600 M (el atento esperaba hora y media para pagarlo).
+- 16 objetivos y 8 investigaciones nuevas. Partida v8 (las de antes se cargan solas; si el Cacaotal estaba completo, se abre el Maizal).
+
 ## v1.3.2 — El tiempo acelerado también cuenta sin conexión
 - Si cierras el juego con el tiempo acelerado (opciones de desarrollador, ×10, ×100…), al volver **sigue acelerado** y el tiempo que estuviste fuera cuenta a esa velocidad, con el tope (2 h, o 6 h con el Capataz) también multiplicado. El mensaje de bienvenida lo dice: «…trabajando 5 h (a ⏩ ×10)».
 - La vuelta es rápida aunque sean cientos de horas de juego: se simulan de verdad las primeras 2 h y el resto se suma al ritmo de la última hora simulada (monedas, ventas, producción e importados, para que los objetivos también avancen). Comparado con simular 6 h paso a paso, la diferencia es menor al 5 % (hay una prueba).

@@ -81,6 +81,11 @@ function migrate(data) {
     zones.cacaotal.unlocked = true;
     stations.cacao_grove ??= createStationState();
   }
+  // v7 → v8: el Maizal; el Cacaotal completo lo abre.
+  if (zones.cacaotal.complete && !zones.maizal.unlocked) {
+    zones.maizal.unlocked = true;
+    stations.cornfield ??= createStationState();
+  }
   const routes = {};
   for (const id of Object.keys(base.routes)) routes[id] = { ...createRouteState(), ...data.routes?.[id] };
   // Hasta la v1.0.1 los objetivos de investigación se guardaban con el id de la investigación.

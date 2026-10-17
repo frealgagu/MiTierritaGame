@@ -968,6 +968,173 @@ const DRAW = {
     }
   },
 
+  // Desgranadora: casita con la máquina de manivela, un montón de mazorcas y el grano que cae.
+  sheller(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.6, 1.4, 24, ctx, { wall: 0xf3e6c4, roofH: 13 });
+    door(g, hx, hy, 1.4, 0.55, 15, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.6, 0.7, 12, PAL.balconyYellow);
+    // Montón de mazorcas.
+    for (let k = 0; k < 7; k++) {
+      const p = iso(x + 0.5 + (k % 4) * 0.2, y + 2.45 + Math.floor(k / 4) * 0.15, Math.floor(k / 4) * 4);
+      g.ellipse(p.x, p.y - 3, 5, 2.5).fill(PRODUCTS.corn_cob.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+    }
+    // Máquina: tolva roja y manivela que gira.
+    const m = iso(x + 2.35, y + 1.6);
+    box(g, x + 2.1, y + 1.4, 0.5, 0.45, 12, 0xd7263d);
+    g.poly([m.x - 9, m.y - 22, m.x + 9, m.y - 22, m.x + 4, m.y - 12, m.x - 4, m.y - 12]).fill(0x9aa3a8).stroke(OUTLINE);
+    const crank = new Graphics();
+    this.anim.addChild(crank);
+    this.animate = (time) => {
+      crank.clear();
+      const a = time * 6;
+      crank.moveTo(m.x + 6, m.y - 8).lineTo(m.x + 6 + Math.cos(a) * 6, m.y - 8 + Math.sin(a) * 6).stroke({ width: 2, color: 0x5a5a5a });
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 1.2 + i / 4) % 1;
+        crank.circle(m.x - 2 + i * 1.5, m.y - 2 + f * 8, 1.2).fill({ color: PRODUCTS.corn_kernels.color, alpha: 1 - f * 0.5 });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Piladora: dos pilones de madera con sus manos (mazos) que suben y bajan, bajo una ramada.
+  corn_huller(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.3;
+    const d = 2.0;
+    const H = 26 + ctx.up;
+    g.poly(isoPoly([[x0, y0], [x0 + w, y0], [x0 + w, y0 + d], [x0, y0 + d]])).fill(0xc7beb0).stroke(OUTLINE);
+    const mortars = ctx.tier >= 2 ? [[0.6, 0.7], [1.6, 0.7], [1.1, 1.4]] : [[0.7, 0.9], [1.6, 0.9]];
+    const tops = mortars.map(([mx, my]) => {
+      const c = iso(x0 + mx, y0 + my);
+      g.rect(c.x - 7, c.y - 16, 14, 16).fill(0x8b5a2b).stroke(OUTLINE);
+      g.ellipse(c.x, c.y - 16, 7, 3).fill(PRODUCTS.corn_hulled.color).stroke(OUTLINE);
+      return c;
+    });
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 12, PAL.roof, 0xb08a5a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
+    const pestles = new Graphics();
+    this.anim.addChild(pestles);
+    this.animate = (time) => {
+      pestles.clear();
+      tops.forEach((c, k) => {
+        const up = Math.abs(Math.sin(time * 4 + k * 1.6)) * 10;
+        pestles.roundRect(c.x - 2, c.y - 40 - up, 4, 24, 2).fill(0xa0703c).stroke(OUTLINE);
+      });
+    };
+    this.animate(0);
+  },
+
+  // Molino de masa: casa con el molino de corona en la puerta y bolas de masa en una batea.
+  dough_mill(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.8, 1.4, 25, ctx, { wall: 0xf9f2df, roofH: 13 });
+    door(g, hx, hy, 1.4, 0.55, 15, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.8, 0.7, 12, PAL.balconyYellow);
+    // Batea con bolas de masa.
+    box(g, x + 0.4, y + 2.15, 1.2, 0.45, 5, PAL.wood);
+    for (let k = 0; k < 4; k++) {
+      const p = iso(x + 0.55 + k * 0.28, y + 2.37, 5);
+      g.circle(p.x, p.y - 3, 3.5).fill(PRODUCTS.corn_dough.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
+    }
+    // Molino de corona sobre una mesa, con la manivela que gira.
+    const m = iso(x + 2.4, y + 2.2);
+    box(g, x + 2.15, y + 1.95, 0.5, 0.5, 10, PAL.woodDark);
+    g.rect(m.x - 5, m.y - 22, 10, 10).fill(0x6b6f73).stroke(OUTLINE);
+    const crank = new Graphics();
+    this.anim.addChild(crank);
+    this.animate = (time) => {
+      crank.clear();
+      const a = time * 5;
+      crank.moveTo(m.x + 5, m.y - 17).lineTo(m.x + 5 + Math.cos(a) * 8, m.y - 17 + Math.sin(a) * 4).stroke({ width: 2, color: 0x45494d });
+      crank.circle(m.x + 5 + Math.cos(a) * 8, m.y - 17 + Math.sin(a) * 4, 2).fill(PAL.wood);
+    };
+    this.animate(0);
+  },
+
+  // Budare: fogón de barro con el budare redondo lleno de arepas y una chimenea.
+  budare(g, x, y, ctx) {
+    const clay = 0xb5653a;
+    const x0 = x + 0.4;
+    const y0 = y + 0.5;
+    box(g, x0, y0, 1.8, 1.4, 12, clay);
+    const mouth = iso(x0 + 0.5, y0 + 1.4, 4);
+    g.ellipse(mouth.x, mouth.y, 6, 4).fill(0x2b1a10).stroke(OUTLINE);
+    this.lights.push({ x: mouth.x, y: mouth.y, r: 24, color: 0xff7a1a });
+    const c = iso(x0 + 0.9, y0 + 0.7, 12);
+    g.ellipse(c.x, c.y, 24, 12).fill(0x3a3a3a).stroke(OUTLINE);
+    const arepas = ctx.tier >= 2 ? 7 : 5;
+    for (let k = 0; k < arepas; k++) {
+      const a = (k / arepas) * Math.PI * 2;
+      g.ellipse(c.x + Math.cos(a) * 12, c.y + Math.sin(a) * 6, 5, 2.5).fill(PRODUCTS.arepa.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+    }
+    const chimneyH = 44 + ctx.up;
+    box(g, x0 + 1.5, y0 - 0.2, 0.3, 0.3, chimneyH, shade(clay, 0.9));
+    const top = iso(x0 + 1.65, y0 - 0.05, chimneyH);
+    this.smokePoints.push({ x: top.x, y: top.y - 4 });
+    this.roofTop = iso(x0 + 0.3, y0 - 0.2, 26);
+    // Leña.
+    for (let i = 0; i < 3; i++) {
+      const p = iso(x + 0.3 + i * 0.12, y + 2.7, i * 2);
+      g.roundRect(p.x - 10, p.y - 4, 20, 4, 2).fill(0x8b5a2b).stroke(OUTLINE);
+    }
+    const fire = new Graphics();
+    this.anim.addChild(fire);
+    this.animate = (time) => {
+      fire.clear();
+      fire.ellipse(mouth.x, mouth.y + 1, 4, 2.5).fill({ color: 0xff7a1a, alpha: 0.6 + Math.sin(time * 9) * 0.3 });
+      for (let i = 0; i < 2; i++) {
+        const f = (time * 0.7 + i * 0.5) % 1;
+        fire.circle(c.x - 6 + i * 12, c.y - 4 - f * 14, 2 + f * 3).fill({ color: 0xffffff, alpha: 0.4 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Puesto de arepas: kiosco de colores con parasol, mostrador y bandejas de arepas de queso.
+  arepa_stand(g, x, y, ctx) {
+    const x0 = x + 0.5;
+    const y0 = y + 0.5;
+    box(g, x0, y0, 2.0, 0.9, 16, PAL.balconyYellow);
+    box(g, x0, y0 + 0.9, 2.0, 0.1, 16, PAL.balconyRed);
+    // Bandejas sobre el mostrador.
+    for (let k = 0; k < 4; k++) {
+      const p = iso(x0 + 0.3 + k * 0.45, y0 + 0.45, 16);
+      g.ellipse(p.x, p.y, 7, 3.5).fill(0xffffff).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+      g.ellipse(p.x, p.y - 1.5, 5, 2.5).fill(PRODUCTS.cheese_arepa.color);
+      g.ellipse(p.x, p.y - 2.5, 3, 1.2).fill(0xfff3d6);
+    }
+    // Parasol a gajos de colores.
+    const pole = iso(x0 + 1.0, y0 + 1.6);
+    g.rect(pole.x - 1, pole.y - 52 - ctx.up, 2, 52 + ctx.up).fill(0x555555);
+    const top = { x: pole.x, y: pole.y - 52 - ctx.up };
+    const colors = [PAL.balconyRed, 0xffffff, PAL.balconyBlue, PAL.balconyYellow, PAL.balconyGreen, 0xffffff];
+    for (let k = 0; k < 6; k++) {
+      const a0 = (k / 6) * Math.PI * 2;
+      const a1 = ((k + 1) / 6) * Math.PI * 2;
+      g.poly([top.x, top.y - 6, top.x + Math.cos(a0) * 34, top.y + Math.sin(a0) * 12, top.x + Math.cos(a1) * 34, top.y + Math.sin(a1) * 12]).fill(colors[k]).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
+    }
+    this.roofTop = { x: top.x, y: top.y - 6 };
+    this.lights.push({ x: top.x, y: top.y + 10, r: 34 });
+    // Bancos de madera para los clientes.
+    for (const [bx, by] of [[0.4, 2.5], [1.9, 2.5]]) box(g, x + bx, y + by, 0.6, 0.25, 6, PAL.wood);
+    // Vapor de las arepas calientes.
+    const steam = new Graphics();
+    this.anim.addChild(steam);
+    this.animate = (time) => {
+      steam.clear();
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.6 + i / 3) % 1;
+        const p = iso(x0 + 0.5 + i * 0.5, y0 + 0.45, 18 + f * 14);
+        steam.circle(p.x, p.y, 2 + f * 3).fill({ color: 0xffffff, alpha: 0.45 * (1 - f) });
+      }
+    };
+  },
+
   // Empacadora: bodega amarilla con banda transportadora y bolsas.
   packer(g, x, y, ctx) {
     const hx = x + 0.25;

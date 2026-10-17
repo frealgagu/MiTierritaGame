@@ -18,14 +18,15 @@ npm run balance  # simula una partida entera (npm run balance -- 6 casual)
 npm run build    # versión para publicar en dist/
 ```
 
-## Estado: v1.3 — Zona 4: El Cacaotal
+## Estado: v1.4 — Zona 5: El Maizal
 
-Cuatro zonas jugables, cada una se abre al completar la anterior: **La Finca** (café), **El Trapiche** (panela), **La Lechería** (leche, queso, mantequilla y arequipe) y **El Cacaotal** (chocolate). Al nivel 100 (el máximo) cada estación produce una potencia de 2 por segundo (256, 128, 64, 32 o 16). Todas las zonas abiertas producen a la vez (`npm run balance` simula la partida completa). Novedades de cada versión en [`CHANGELOG.md`](CHANGELOG.md).
+Cinco zonas jugables, cada una se abre al completar la anterior: **La Finca** (café), **El Trapiche** (panela), **La Lechería** (leche, queso, mantequilla y arequipe), **El Cacaotal** (chocolate) y **El Maizal** (arepas). Al nivel 100 (el máximo) cada estación produce una potencia de 2 por segundo (256, 128, 64, 32 o 16). Todas las zonas abiertas producen a la vez (`npm run balance` simula la partida completa). Novedades de cada versión en [`CHANGELOG.md`](CHANGELOG.md).
 
 - **La Finca**: Cafetal ♾️ → Beneficiadero → Marquesina → Trilladora → Tostadora → Molino → Empacadora → Bodega, más la **Compostera** como rama opcional (la pulpa se vuelve compost y, mientras haya, todo lo que vende la Finca vale un 30 % más).
 - **El Trapiche**: Cañaduzal ♾️ → Molienda → Hornilla → Gaveras → Pulverizadora; el **bagazo** de la Molienda alimenta el fuego de la Hornilla (×2).
 - **La Lechería**: Potrero ♾️ → Pasteurizadora, que **reparte la leche en tres ramas**: Quesera, Descremadora → Batidora y Paila de arequipe. La Paila necesita **panela pulverizada del Trapiche**, que llega por la **Ruta de la panela** (una chiva con su propio nivel).
 - **El Cacaotal**: Cacaotal ♾️ → Cajones de fermentación → Secadero → Tostador → Molino de cacao, que reparte la pasta entre la **Mesa de chocolate** y la **Chocolatería**. Las dos necesitan panela del Trapiche y la Chocolatería además leche de la Lechería: tres zonas trabajando para una.
+- **El Maizal**: Maizal ♾️ → Desgranadora → Piladora → Molino de masa → Budare → **Puesto de arepas**, que hace arepas de queso con el queso y la mantequilla de la Lechería.
 - **Selector de zonas** 🗺️: cada zona con su bodega, su Willys, sus objetivos e investigaciones; las monedas se comparten.
 - **Arrieros** por estación (mulas que van y vuelven; al mismo nivel que su estación llevan todo) y **Willys** que vende en el pueblo; desvío a la bodega cuando una estación no da abasto.
 - **Mejoras** de nivel 1–100 con hitos ×2, **investigaciones** únicas, **objetivos** con recompensa y final («Primer gran pedido»: 1.000 bolsas).
@@ -33,6 +34,7 @@ Cuatro zonas jugables, cada una se abre al completar la anterior: **La Finca** (
 - **Vida**: edificios que evolucionan con los hitos, día y noche, aves, luciérnagas, efectos y sonido sintetizado.
 - **Guardado** automático, ganancias sin conexión (2 h, 6 h con el Capataz), copia de seguridad exportable.
 - **Instalable en el móvil** (PWA) y jugable sin internet.
+- **Música**: «Apple Cider», de Zane Little (CC0, dominio público, vía OpenGameArt).
 
 ### Instalar en el móvil
 Abre https://frealgagu.github.io/Game/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).

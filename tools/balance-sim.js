@@ -17,6 +17,7 @@ import { routeActive } from '../src/sim/routes.js';
 const hours = Number(process.argv[2] ?? 8);
 const style = process.argv[3] ?? 'bloque';
 const verbose = process.argv.includes('--detalle');
+let dumpAt = process.env.BALANCE_DUMP ? { minute: Number(process.env.BALANCE_DUMP.split(':')[0]), file: process.env.BALANCE_DUMP.split(':').slice(1).join(':') } : null;
 const game = new Game();
 const s = game.state;
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -94,6 +95,11 @@ game.bus.on('zoneUnlocked', ({ zone }) => {
 
 for (let step = 0; step < hours * 36000 && currentZone(); step++) {
   game.step(0.1);
+  // Guarda la partida en ese minuto (BALANCE_DUMP=minuto:archivo) para estudiarla aparte.
+  if (dumpAt && s.playTime >= dumpAt.minute * 60) {
+    (await import('node:fs')).writeFileSync(dumpAt.file, JSON.stringify(s));
+    dumpAt = null;
+  }
   if (verbose && step % 18000 === 0) {
     const lv = Object.entries(s.stations).map(([k, v]) => `${k}:${v.level}/${v.transport.level}`).join(' ');
     events.push(`${mmss(s.playTime)}  📊 ${formatNumber(totalIncome(s))} 💰/s · ${lv} · 💰${formatNumber(s.coins)}`);
@@ -142,9 +148,9 @@ for (let step = 0; step < hours * 36000 && currentZone(); step++) {
   for (let k = 0; k < 30; k++) {
     const o = bestOption();
     if (!o) {
-      // Ninguna compra suelta rinde (hay que subir varias a la vez): como una persona, sube el cuello de botella.
-      const neck = analyzeChain(s, zone).bottleneck;
-      if (!neck || !game.buy(neck, 1)) break;
+      // Ninguna compra suelta rinde (hay que subir varias a la vez): como una persona, sigue la recomendada.
+      const rec = recommendUpgrade(s, (id, mode) => game.quote(id, mode), zone);
+      if (!rec || !(rec.id.startsWith('research:') ? game.research(rec.id.split(':')[1]) : game.buy(rec.id, 1))) break;
       continue;
     }
     if (o.kind === 'unlock') game.unlock(o.id);
