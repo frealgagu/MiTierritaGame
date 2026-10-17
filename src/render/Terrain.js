@@ -30,6 +30,7 @@ export function buildTileMap(zone) {
   fill(zone.warehouse.x, zone.warehouse.y, zone.warehouse.w, zone.warehouse.h, 'building');
   road(zone.muleRoad);
   road(zone.jeepRoad);
+  for (const r of Object.values(zone.routes ?? {})) road(r.road);
   fill(zone.yard.x, zone.yard.y, zone.yard.w, zone.yard.h, 'road');
   return tiles;
 }
@@ -68,7 +69,7 @@ export class Terrain {
         const v = rng();
         let color;
         if (type === 'road') color = mix(PAL.road, 0xd8b07a, v * 0.4);
-        else if (type === 'farm') color = this.zone.theme === 'cane' ? mix(0x9c7a4a, 0x7f6038, v * 0.35) : mix(PAL.soil, 0x6e4529, v * 0.35);
+        else if (type === 'farm') color = FARM_SOIL[this.zone.theme]?.(v) ?? mix(PAL.soil, 0x6e4529, v * 0.35);
         else if (type === 'plot' || type === 'building') color = mix(PAL.plot, 0xc9a06c, v * 0.4);
         else color = mix(PAL.grass, (gx + gy) % 2 ? 0x8cc65a : 0x6fae44, 0.35 + v * 0.3);
         g.poly(isoPoly([[gx, gy], [gx + 1, gy], [gx + 1, gy + 1], [gx, gy + 1]])).fill(color);
@@ -89,7 +90,13 @@ export class Terrain {
           const p = iso(gx + rng(), gy + rng());
           g.ellipse(p.x, p.y, 2.5, 1.2).fill({ color: 0x8a6a45, alpha: 0.5 });
         }
-        if (type === 'farm') {
+        if (type === 'farm' && this.zone.theme === 'dairy') {
+          // Potrero: pasto más alto y tupido, sin surcos.
+          for (let k = 0; k < 3; k++) {
+            const p = iso(gx + rng(), gy + rng());
+            g.moveTo(p.x - 2, p.y).lineTo(p.x - 1, p.y - 5).moveTo(p.x + 1, p.y).lineTo(p.x + 2, p.y - 6).stroke({ width: 1.2, color: 0x3f7a2a });
+          }
+        } else if (type === 'farm') {
           // Surcos.
           const a = iso(gx, gy + 0.5);
           const b = iso(gx + 1, gy + 0.5);
@@ -117,7 +124,13 @@ export class Terrain {
         if (!this.isFree(gx, gy)) continue;
         const r = rng();
         let obj = null;
-        if (this.zone.theme === 'cane') {
+        if (this.zone.theme === 'dairy') {
+          // Lechería: eucaliptos, cipreses, pacas de heno y piedras de la sabana.
+          if (r < 0.04) obj = eucalyptus(rng);
+          else if (r < 0.07) obj = cypress(rng);
+          else if (r < 0.09) obj = hayBale(rng);
+          else if (r < 0.11) obj = rock(rng);
+        } else if (this.zone.theme === 'cane') {
           // Trapiche: guaduales, matas de caña sueltas y algún samán.
           if (r < 0.05) obj = guadua(rng);
           else if (r < 0.1) obj = caneClump(rng);
@@ -139,6 +152,75 @@ export class Terrain {
       }
     }
   }
+}
+
+// Color de la tierra de la fuente ilimitada según el tema de la zona.
+const FARM_SOIL = {
+  cane: (v) => mix(0x9c7a4a, 0x7f6038, v * 0.35),
+  dairy: (v) => mix(0x5e9a3c, 0x6fae44, v * 0.5),
+};
+
+// Eucalipto: tronco claro y alto con copa alargada verde azulada.
+function eucalyptus(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const h = 60 + rng() * 30;
+  shadow(g, 6, 2, 16, 6);
+  g.moveTo(-2.5, 0).lineTo(-1.5, -h).lineTo(1.5, -h).lineTo(2.5, 0).closePath().fill(0xd8cfc0).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+  g.moveTo(-1, -h * 0.4).lineTo(1, -h * 0.55).stroke({ width: 1, color: 0x9a8f80 });
+  for (const [dx, dy, rx, ry] of [[-6, -h + 4, 9, 16], [6, -h + 8, 9, 14], [0, -h - 6, 10, 16]]) {
+    g.ellipse(dx, dy, rx, ry).fill(dy < -h ? 0x7fa892 : 0x5f8f78).stroke({ width: 1, color: 0x3a2418, alpha: 0.25 });
+  }
+  c.addChild(g);
+  return c;
+}
+
+// Ciprés: cono oscuro y estrecho, típico de las cercas de las fincas lecheras.
+function cypress(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const h = 40 + rng() * 20;
+  shadow(g, 4, 2, 10, 4);
+  g.rect(-1.5, -6, 3, 6).fill(0x5e3b1c);
+  g.poly([-9, -5, 0, -h, 9, -5]).fill(0x2f5e3a).stroke({ width: 1, color: 0x3a2418, alpha: 0.35 });
+  g.poly([-3, -10, 0, -h + 4, 2, -12]).fill({ color: 0x3f7a4a, alpha: 0.8 });
+  c.addChild(g);
+  return c;
+}
+
+// Paca de heno redonda.
+function hayBale(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const s = 0.8 + rng() * 0.3;
+  shadow(g, 0, 1, 11 * s, 4 * s);
+  g.ellipse(0, -7 * s, 11 * s, 8 * s).fill(0xe2c56b).stroke({ width: 1, color: 0x3a2418, alpha: 0.5 });
+  g.ellipse(5 * s, -7 * s, 5 * s, 7 * s).fill(0xd4b055).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+  g.ellipse(5 * s, -7 * s, 2.5 * s, 3.5 * s).stroke({ width: 1, color: 0xa88a3c });
+  c.addChild(g);
+  return c;
+}
+
+// Vaca holstein (blanca con manchas negras), de lado. La usa también el Potrero.
+export function drawCow(g, x, y, scale, rng, flip = false) {
+  const f = flip ? -1 : 1;
+  const s = scale;
+  shadow(g, x, y + 1, 13 * s, 4 * s);
+  // Patas.
+  for (const lx of [-7, -3, 4, 8]) g.rect(x + lx * s * f - 1, y - 7 * s, 2 * s, 7 * s).fill(0xf4f1e8).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  // Cuerpo con manchas.
+  g.roundRect(x - 10 * s, y - 15 * s, 20 * s, 9 * s, 4 * s).fill(0xfbf8f1).stroke({ width: 1.2, color: 0x3a2418, alpha: 0.6 });
+  for (let i = 0; i < 3; i++) g.ellipse(x + (-5 + i * 5 + rng() * 2) * s * f, y - (10 + rng() * 3) * s, (2 + rng() * 2) * s, (1.5 + rng()) * s).fill(0x2b2b2b);
+  // Ubre rosada.
+  g.ellipse(x + 3 * s * f, y - 6 * s, 2.5 * s, 1.5 * s).fill(0xf2a7b5);
+  // Cabeza.
+  g.roundRect(x + (f > 0 ? 9 : -15) * s, y - 18 * s, 6 * s, 7 * s, 2 * s).fill(0xfbf8f1).stroke({ width: 1.2, color: 0x3a2418, alpha: 0.6 });
+  g.ellipse(x + 12 * s * f, y - 11.5 * s, 2.8 * s, 1.8 * s).fill(0xf2a7b5);
+  g.circle(x + 11 * s * f, y - 16 * s, 0.9 * s).fill(0x2b2b2b);
+  // Cachos.
+  g.moveTo(x + 10 * s * f, y - 18 * s).lineTo(x + 9 * s * f, y - 21 * s).moveTo(x + 13 * s * f, y - 18 * s).lineTo(x + 14 * s * f, y - 21 * s).stroke({ width: 1.2, color: 0xe8dcc0 });
+  // Cola.
+  g.moveTo(x - 10 * s * f, y - 14 * s).quadraticCurveTo(x - 13 * s * f, y - 10 * s, x - 12 * s * f, y - 6 * s).stroke({ width: 1, color: 0x3a2418 });
 }
 
 // Guadual: varias cañas de guadua altas y algo inclinadas, con hojitas en lo alto.

@@ -1,17 +1,19 @@
 import { formatNumber, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { recommendUpgrade } from '../sim/analysis.js';
-import { nextToUnlock } from '../sim/chain.js';
+import { nextToUnlock, zoneOf } from '../sim/chain.js';
 import { toast } from './toast.js';
 import { clockLabel } from '../render/DayNight.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
+import { ROUTES_BY_ID } from '../data/routes.js';
 
-// Nombre legible de lo que se mejora: 'farm', 'farm:transport' o 'dispatch:<zona>'.
+// Nombre legible de lo que se mejora: 'farm', 'farm:transport', 'dispatch:<zona>' o 'route:<ruta>'.
 export function upgradeName(id) {
   const [sid, part] = id.split(':');
   if (sid === 'research') return `🔬 ${RESEARCH_BY_ID[part].name}`;
   if (sid === 'dispatch') return DISPATCH.name;
+  if (sid === 'route') return `${ROUTES_BY_ID[part].icon} ${ROUTES_BY_ID[part].name}`;
   return part === 'transport' ? `Arrieros del ${STATIONS_BY_ID[sid].name}` : STATIONS_BY_ID[sid].name;
 }
 
@@ -43,7 +45,10 @@ export class HUD {
     this.recommended = rec.id;
     this.guide = this.guideTarget(s, rec, zone);
     this.chip.hidden = false;
-    this.chip.textContent = `💡 Mejora recomendada: ${upgradeName(rec.id)}`;
+    // Puede ser de la zona que la abastece por una ruta: se dice de cuál.
+    const [sid] = rec.id.split(':');
+    const elsewhere = STATIONS_BY_ID[sid] && zoneOf(sid) !== zone ? ` (${ZONES_BY_ID[zoneOf(sid)].icon} ${ZONES_BY_ID[zoneOf(sid)].name})` : '';
+    this.chip.textContent = `💡 Mejora recomendada: ${upgradeName(rec.id)}${elsewhere}`;
     this.hintUnlock(s, zone);
   }
 
@@ -53,8 +58,11 @@ export class HUD {
       if (!s.stations[id] && this.game.quoteUnlock(id).ok) return id;
     }
     if (!rec || rec.id.startsWith('research:')) return null; // la flecha solo señala edificios
-    if (this.game.quote(rec.id, 1).affordable) return rec.id.split(':')[0];
-    return null;
+    const sid = rec.id.split(':')[0];
+    if (STATIONS_BY_ID[sid] && zoneOf(sid) !== zone) return null; // está en otra zona
+    if (!this.game.quote(rec.id, 1).affordable) return null;
+    // La ruta se mejora desde la estación que abastece.
+    return rec.id.startsWith('route:') ? ROUTES_BY_ID[rec.id.split(':')[1]].station : rec.id.split(':')[0];
   }
 
   // Avisa una sola vez cuando alcanza para construir la siguiente estación.

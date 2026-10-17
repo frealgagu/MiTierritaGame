@@ -1,5 +1,6 @@
 import { formatDuration, formatNumber } from '../core/format.js';
 import { ZONES_BY_ID, ZONE_LIST } from '../data/zones/index.js';
+import { ZONES as ALL_ZONES } from '../data/products.js';
 
 // Ventana de bienvenida con lo ganado mientras el juego estuvo cerrado.
 export function showWelcome({ seconds, coins, capped, cap }, onCollect) {
@@ -20,6 +21,7 @@ export function showWelcome({ seconds, coins, capped, cap }, onCollect) {
 const VICTORY = {
   finca: { title: '¡Primer gran pedido entregado!', text: 'Completaste la <b>Zona 1 · La Finca</b>. Mil bolsas de tu café ya van camino al pueblo.', stat: (s) => `Bolsas vendidas: ${formatNumber(s.stats.sold.coffee_bag ?? 0)}` },
   trapiche: { title: '¡Primer cargamento de panela!', text: 'Completaste la <b>Zona 2 · El Trapiche</b>. Cinco mil panelas pulverizadas endulzan el pueblo.', stat: (s) => `Panela pulverizada vendida: ${formatNumber(s.stats.sold.panela_powder ?? 0)}` },
+  lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Tres mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 
 // onGo(zona): ir a la zona que se acaba de abrir.
@@ -42,7 +44,8 @@ export function showVictory(state, zoneId, onGo) {
       onGo(next);
     };
   } else {
-    soon.innerHTML = 'Próximamente: <b>Zona 3 · La Lechería</b> 🐄';
+    const i = ALL_ZONES.findIndex((z) => z.id === zoneId) + 1;
+    soon.innerHTML = ALL_ZONES[i] ? `Próximamente: <b>Zona ${i + 1} · ${ALL_ZONES[i].name}</b> (v${ALL_ZONES[i].release})` : '¡Completaste todas las zonas!';
     go.hidden = true;
   }
   stay.textContent = next ? 'Quedarme aquí' : 'Seguir jugando';

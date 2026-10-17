@@ -1,8 +1,8 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID, ZONE_LIST } from '../data/zones/index.js';
-import { muleCount, muleLoad, warehouseCapacity } from './rules.js';
+import { muleCount, muleLoad, stationInputCap, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
-import { ROAD_POS, chainOf, nextStation, zoneOf, zoneUnlocked } from './chain.js';
+import { ROAD_POS, chainOf, consumers, zoneOf, zoneUnlocked } from './chain.js';
 import { inputSpace } from './production.js';
 import { dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
 
@@ -34,9 +34,12 @@ export function productionMult(state, id) {
   return speedMult(state, id);
 }
 
-// Destino normal de las mulas de una estación: la siguiente construida o la bodega.
+// Destino normal de las mulas de una estación: la siguiente construida o la bodega. Si reparte entre
+// varias (una rama), la más lejana: así la carga alcanza para cualquiera de ellas.
 export function normalDest(state, id) {
-  return nextStation(state, id) ?? 'warehouse';
+  const targets = consumers(state, id);
+  if (!targets.length) return 'warehouse';
+  return targets.reduce((far, c) => (legTime(id, c) > legTime(id, far) ? c : far));
 }
 
 // Carga de cada mula del equipo de una estación (a su nivel de arrieros o al indicado).
@@ -109,7 +112,7 @@ function dispatchFrom(state, id, dt, bus) {
   s.sinceDeparture += dt;
   s.waiting = null;
   const load = teamLoad(state, id);
-  const next = nextStation(state, id);
+  const targets = consumers(state, id);
 
   // Pueden salir varias mulas en el mismo instante si hay producto y mulas libres.
   while (s.buffer > 0) {
@@ -119,23 +122,39 @@ function dispatchFrom(state, id, dt, bus) {
     }
     if (s.buffer < load && s.sinceDeparture < MAX_IDLE) return;
     const amount = Math.min(s.buffer, load);
+    const next = pickConsumer(state, targets);
     if (next) {
-      const space = inputSpace(state, next);
-      if (space > 0) {
-        sendMule(state, id, next, Math.min(amount, space), bus);
-        continue;
-      }
+      sendMule(state, id, next, Math.min(amount, inputSpace(state, next)), bus);
+      continue;
     }
     const zoneId = zoneOf(id);
-    const reserve = next ? DIVERT_RESERVE * warehouseCap(state, zoneId) : 0;
+    const reserve = targets.length ? DIVERT_RESERVE * warehouseCap(state, zoneId) : 0;
     const room = warehouseSpace(state, zoneId) - reserve;
     if (room <= 0) {
       s.waiting = 'space';
       return;
     }
     sendMule(state, id, 'warehouse', Math.min(amount, room), bus);
-    if (next) s.lastDiverted = state.playTime;
+    if (targets.length) s.lastDiverted = state.playTime;
   }
+}
+
+// Entre las estaciones que reciben el producto, la que tiene la entrada más vacía (contando lo que
+// ya va en camino). Así la que trabaja más rápido recibe más, sin que el jugador tenga que repartir.
+function pickConsumer(state, targets) {
+  let best = null;
+  let bestFill = Infinity;
+  for (const c of targets) {
+    const space = inputSpace(state, c);
+    if (space <= 0) continue;
+    const cap = stationInputCap(STATIONS_BY_ID[c], state.stations[c].level);
+    const fill = 1 - space / cap;
+    if (fill < bestFill) {
+      best = c;
+      bestFill = fill;
+    }
+  }
+  return best;
 }
 
 function sendMule(state, from, to, amount, bus) {

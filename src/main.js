@@ -11,6 +11,8 @@ import { ResearchView } from './ui/ResearchView.js';
 import { showVictory, showWelcome } from './ui/dialogs.js';
 import { ZonesView } from './ui/ZonesView.js';
 import { ZONES_BY_ID } from './data/zones/index.js';
+import { ROUTES_BY_ID } from './data/routes.js';
+import { STATIONS_BY_ID } from './data/stations.js';
 import { RESEARCH_BY_ID } from './data/research.js';
 import { offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
@@ -54,7 +56,8 @@ async function start() {
   const getZone = () => view.zone;
   let scene = null;
   const panel = new StationPanel(game, () => scene?.select(null));
-  // id puede ser 'farm', 'farm:transport' (pestaña de arrieros) o 'dispatch:<zona>'.
+  // id puede ser 'farm', 'farm:transport' (pestaña de arrieros), 'dispatch:<zona>', 'route:<ruta>'
+  // (pestaña 🚌 de la estación que abastece, o un panel suelto si se ve otra zona) o 'research:<id>'.
   const select = (id) => {
     const [stationId, part] = id.split(':');
     if (stationId === 'research') {
@@ -65,6 +68,22 @@ async function start() {
       scene.select('dispatch');
       panel.open(id);
       return;
+    }
+    if (stationId === 'route') {
+      const station = ROUTES_BY_ID[part].station;
+      if (scene.stations[station] && game.state.stations[station]) {
+        scene.select(station);
+        panel.open(station, 'route');
+      } else {
+        scene.select(null);
+        panel.open(id);
+      }
+      return;
+    }
+    // Una estación de otra zona (la recomendación puede señalar la que abastece una ruta): ir allá.
+    if (STATIONS_BY_ID[stationId] && STATIONS_BY_ID[stationId].zone !== view.zone) {
+      showZone(STATIONS_BY_ID[stationId].zone);
+      toast(`${ZONES_BY_ID[view.zone].icon} ${ZONES_BY_ID[view.zone].name}`, 2000);
     }
     scene.select(stationId);
     panel.open(stationId, part === 'transport' ? 'transport' : 'station');

@@ -1,5 +1,6 @@
 import { createInitialState, SAVE_VERSION } from '../sim/state.js';
 import { createStationState } from '../sim/production.js';
+import { createRouteState } from '../sim/routes.js';
 
 const KEY = 'cafetal.save';
 
@@ -62,6 +63,13 @@ function migrate(data) {
     zones.trapiche.unlocked = true;
     stations.canefield ??= createStationState();
   }
+  // v5 → v6: la Lechería y las rutas entre zonas; el Trapiche completo abre la Lechería.
+  if (zones.trapiche.complete && !zones.lecheria.unlocked) {
+    zones.lecheria.unlocked = true;
+    stations.pasture ??= createStationState();
+  }
+  const routes = {};
+  for (const id of Object.keys(base.routes)) routes[id] = { ...createRouteState(), ...data.routes?.[id] };
   // Hasta la v1.0.1 los objetivos de investigación se guardaban con el id de la investigación.
   const OLD_GOAL_IDS = { abono: 'g05', herraduras: 'g12', sello: 'g26' };
   const claimed = (data.goals?.claimed ?? []).map((id) => OLD_GOAL_IDS[id] ?? id);
@@ -71,6 +79,7 @@ function migrate(data) {
     ...rest,
     stations: { ...base.stations, ...stations },
     zones,
+    routes,
     mules,
     stats: { ...base.stats, ...data.stats },
     goals: { ...base.goals, ...data.goals, claimed },

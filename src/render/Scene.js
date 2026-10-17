@@ -6,7 +6,7 @@ import { Terrain } from './Terrain.js';
 import { Effects } from './Effects.js';
 import { FarmView, PlotView, WarehouseView } from './Stations.js';
 import { BuildingView } from './Buildings.js';
-import { JeepView, MuleView } from './Carriers.js';
+import { ChivaView, JeepView, MuleView } from './Carriers.js';
 import { iso } from './iso.js';
 import { pointAt, pointAtDistance } from '../core/path.js';
 import { formatAmount, formatNumber } from '../core/format.js';
@@ -17,6 +17,9 @@ import { ROAD_POS, zoneOf } from '../sim/chain.js';
 import { warehouseCap } from '../sim/transport.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { quoteUnlock } from '../sim/upgrades.js';
+import { ROUTES } from '../data/routes.js';
+import { routeActive, routeCapacity } from '../sim/routes.js';
+import { ZONES_BY_ID } from '../data/zones/index.js';
 import { DayNight } from './DayNight.js';
 
 const DIVERT_ICON_TIME = 3; // s que se muestra ↪️ tras un desvío
@@ -66,6 +69,28 @@ export class Scene {
     this.objects.addChild(this.jeep);
     this.mules = new Map();
     this.drawExitSign();
+    // Rutas que salen de esta zona o llegan a ella: carretera, letrero y la Chiva.
+    this.routes = ROUTES.filter((r) => this.zone.routes?.[r.id]).map((r) => {
+      const view = new ChivaView();
+      const open = () => {
+        if (!this.camera?.dragged) this.onSelect(`route:${r.id}`);
+      };
+      view.eventMode = 'static';
+      view.cursor = 'pointer';
+      view.on('pointertap', open);
+      this.objects.addChild(view);
+      const info = this.zone.routes[r.id];
+      const sign = new WoodSign(info.text);
+      const [gx, gy] = info.sign;
+      const p = iso(gx, gy);
+      sign.position.set(p.x, p.y);
+      sign.zIndex = gx + gy;
+      sign.eventMode = 'static';
+      sign.cursor = 'pointer';
+      sign.on('pointertap', open);
+      this.objects.addChild(sign);
+      return { def: r, road: info.road, outgoing: r.from === this.zone.id, view, sign };
+    });
 
     const n = this.zone.size;
     const left = iso(0, n);
@@ -162,6 +187,18 @@ export class Scene {
       const p = iso(...this.zone.muleRoad.at(-1), 40);
       this.effects.floatText(p.x, p.y, `+${formatAmount(m.amount)} ${PRODUCTS[m.productId].icon}`, { size: 14 });
     });
+    on('routeArrived', ({ route, load }) => {
+      const r = ROUTES.find((x) => x.id === route);
+      if (r.to !== zone || !this.stations[r.station]) return;
+      const p = this.stations[r.station].anchorPoint(70);
+      this.effects.floatText(p.x, p.y, `🚌 +${formatAmount(load)} ${PRODUCTS[r.product].icon}`, { size: 16, color: 0xffe066 });
+    });
+    on('routeDeparted', ({ route, load }) => {
+      const r = ROUTES.find((x) => x.id === route);
+      if (r.from !== zone) return;
+      const p = iso(...this.zone.routes[r.id].road[0], 50);
+      this.effects.floatText(p.x, p.y, `🚌 ${formatAmount(load)} ${PRODUCTS[r.product].icon} → ${ZONES_BY_ID[r.to].name}`, { size: 14 });
+    });
     on('produced', ({ stationId, productId, amount }) => {
       if (stationId !== this.sourceId) return;
       for (let i = 0; i < Math.min(amount, 3); i++) {
@@ -246,6 +283,7 @@ export class Scene {
 
     this.syncMules(state);
     this.syncJeep(state);
+    this.syncRoutes(state);
 
     this.smokeTimer -= dt;
     if (this.smokeTimer <= 0) {
@@ -330,6 +368,40 @@ export class Scene {
     this.jeep.place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, j.phase === 'out' ? load : waiting);
   }
 
+  // La Chiva solo se ve en el tramo de carretera de esta zona: al salir de la bodega de origen y al
+  // llegar a la estación de destino; el resto del viaje va por fuera del mapa.
+  syncRoutes(state) {
+    for (const rv of this.routes) {
+      const r = rv.def;
+      const st = state.routes[r.id];
+      const active = routeActive(state, r.id);
+      rv.sign.visible = active;
+      let pos = null;
+      let reverse = false;
+      const f = st.phase === 'idle' ? 0 : st.t / (r.tripTime / 2);
+      if (active && rv.outgoing) {
+        if (st.phase === 'idle') pos = 0;
+        else if (st.phase === 'go' && f < 0.4) pos = f / 0.4;
+        else if (st.phase === 'back' && f > 0.6) {
+          pos = 1 - (f - 0.6) / 0.4;
+          reverse = true;
+        }
+      } else if (active) {
+        if (st.phase === 'go' && f > 0.6) pos = (f - 0.6) / 0.4;
+        else if (st.phase === 'back' && f < 0.4) {
+          pos = 1 - f / 0.4;
+          reverse = true;
+        }
+      }
+      rv.view.visible = pos !== null;
+      if (pos === null) continue;
+      const eased = pos * pos * (3 - 2 * pos);
+      const p = pointAt(rv.road, eased);
+      const load = st.phase === 'go' ? st.load / routeCapacity(state, r.id) : 0;
+      rv.view.place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, load);
+    }
+  }
+
   // Posición en pantalla (px) de una estación, para centrar la cámara.
   stationWorldPoint(id) {
     return this.stations[id].anchorPoint(0);
@@ -366,9 +438,10 @@ class WoodSign extends Container {
   constructor(text) {
     super();
     const g = new Graphics();
-    g.rect(-1.5, -26, 3, 26).fill(PAL.woodDark);
-    g.roundRect(-34, -44, 68, 18, 4).fill(PAL.wood).stroke(OUTLINE);
     const t = new Text({ text, style: { fontFamily: FONT, fontSize: 11, fontWeight: '600', fill: 0xfff3d6 }, resolution: 3 });
+    const w = Math.max(68, t.width + 14);
+    g.rect(-1.5, -26, 3, 26).fill(PAL.woodDark);
+    g.roundRect(-w / 2, -44, w, 18, 4).fill(PAL.wood).stroke(OUTLINE);
     t.anchor.set(0.5);
     t.position.set(0, -35);
     this.addChild(g, t);

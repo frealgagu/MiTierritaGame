@@ -4,17 +4,23 @@ import { chainOf, nextToUnlock, zoneOf, zoneUnlocked } from './chain.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { createStationState } from './production.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
+import { ROUTES_BY_ID } from '../data/routes.js';
+import { routeActive } from './routes.js';
 
 // Los arrieros cuestan la mitad que la estación a la que sirven.
 const TRANSPORT_COST_FACTOR = 0.5;
 
-// Lo que se puede mejorar: 'dispatch:<zona>', el id de una estación o 'id:transport' (sus arrieros).
+// Lo que se puede mejorar: 'dispatch:<zona>', 'route:<ruta>', el id de una estación o 'id:transport' (sus arrieros).
 function target(state, id) {
   const [stationId, part] = id.split(':');
   if (stationId === 'dispatch') {
     const zone = part ?? 'finca';
     const cost = ZONES_BY_ID[zone].dispatchCost;
     return { base: cost.base, growth: cost.growth, holder: state.zones[zone].dispatch };
+  }
+  if (stationId === 'route') {
+    const r = ROUTES_BY_ID[part];
+    return { base: r.costBase, growth: r.growth, holder: state.routes[part] };
   }
   const def = STATIONS_BY_ID[stationId];
   const st = state.stations[stationId];
@@ -26,6 +32,8 @@ function target(state, id) {
 export function quoteUpgrade(state, id, mode) {
   const { base, growth, holder } = target(state, id);
   const level = holder.level;
+  // Una ruta se mejora cuando existe la estación que abastece.
+  if (id.startsWith('route:') && !routeActive(state, id.split(':')[1])) return { ...bulkUpgrade(base, growth, level, 1), affordable: false, maxed: false, locked: true };
   if (level >= MAX_LEVEL) return { levels: 0, cost: 0, affordable: false, maxed: true };
   if (mode === 'max') {
     const q = bulkUpgrade(base, growth, level, Infinity, state.coins);

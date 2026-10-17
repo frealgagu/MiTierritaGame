@@ -2,7 +2,7 @@ import { Container, Graphics, Polygon, Sprite, Text } from 'pixi.js';
 import { iso, isoPoly, depth, shade } from './iso.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCaneClump, drawCoffeeBush } from './Terrain.js';
+import { drawCaneClump, drawCoffeeBush, drawCow } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -95,7 +95,7 @@ export class StationView extends Container {
   }
 }
 
-// Fuente ilimitada de la zona: Cafetal (cafetos) o Cañaduzal (caña), con la casa que crece.
+// Fuente ilimitada de la zona: Cafetal (cafetos), Cañaduzal (caña) o Potrero (vacas), con la casa que crece.
 export class FarmView extends StationView {
   constructor(zone, def) {
     const f = zone.farm;
@@ -125,6 +125,10 @@ export class FarmView extends StationView {
     this.bushes = [];
     this.lights = drawHut(g, x, y, tier);
     this.lightsDirty = true;
+    if (this.theme === 'dairy') {
+      this.drawPasture(g, tier, rng);
+      return;
+    }
     // Cafetos (o caña) en filas; con cada hito son más grandes.
     const scale = 0.75 + tier * 0.1;
     for (let gx = x; gx < x + w; gx++) {
@@ -136,6 +140,51 @@ export class FarmView extends StationView {
           if (this.theme === 'cane') drawCaneClump(g, p.x, p.y, scale, rng);
           else drawCoffeeBush(g, p.x, p.y, scale, rng, 3 + tier * 2);
         }
+      }
+    }
+  }
+
+  // Potrero: cerca de madera, bebedero, cantinas de leche y vacas; con cada hito, más vacas.
+  drawPasture(g, tier, rng) {
+    const { x, y, w, h } = this.zoneFarm;
+    // Bebedero y cantinas junto a la casa.
+    box(g, x + 2.2, y + 0.3, 1.2, 0.35, 6, 0x9aa3a8);
+    const water = iso(x + 2.8, y + 0.47, 6);
+    g.ellipse(water.x, water.y, 12, 3).fill(0x6fa8dc);
+    for (const [cx, cy] of [[0.4, 2.3], [0.75, 2.45], [1.1, 2.3]]) {
+      const p = iso(x + cx, y + cy);
+      g.roundRect(p.x - 4, p.y - 13, 8, 13, 2).fill(0xc7ccd1).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 13, 3, 1.4).fill(0x9aa3a8);
+    }
+    const cows = [];
+    const n = 5 + tier * 2;
+    for (let i = 0; i < 60 && cows.length < n; i++) {
+      const gx = x + 0.6 + rng() * (w - 1.2);
+      const gy = y + 0.6 + rng() * (h - 1.2);
+      if (gx < x + 2.6 && gy < y + 2.8) continue; // sitio de la casa
+      if (cows.some(([cx, cy]) => Math.hypot(cx - gx, cy - gy) < 0.9)) continue;
+      cows.push([gx, gy]);
+    }
+    cows.sort((a, b) => a[0] + a[1] - (b[0] + b[1]));
+    for (const [gx, gy] of cows) {
+      const p = iso(gx, gy);
+      drawCow(g, p.x, p.y, 0.9 + tier * 0.05, rng, rng() < 0.5);
+      this.bushes.push({ x: p.x, y: p.y - 4 });
+    }
+    // Cerca alrededor del potrero (delante de las vacas).
+    const fence = [[x, y + h], [x + w, y + h], [x + w, y]];
+    for (let i = 1; i < fence.length; i++) {
+      const [ax, ay] = fence[i - 1];
+      const [bx, by] = fence[i];
+      const steps = Math.round(Math.hypot(bx - ax, by - ay) * 2);
+      for (let k = 0; k <= steps; k++) {
+        const p = iso(ax + ((bx - ax) * k) / steps, ay + ((by - ay) * k) / steps);
+        g.rect(p.x - 1.2, p.y - 11, 2.4, 11).fill(PAL.wood);
+      }
+      for (const z of [4, 9]) {
+        const a = iso(ax, ay, z);
+        const b = iso(bx, by, z);
+        g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.5, color: PAL.woodDark, alpha: 0.85 });
       }
     }
   }

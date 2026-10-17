@@ -600,6 +600,188 @@ const DRAW = {
     };
   },
 
+  // Pasteurizadora: nave blanca con dos tanques de acero, tubería y vapor.
+  pasteurizer(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.7, 1.5, 26, ctx, { wall: 0xf7f7f2, roofColor: 0x8fa3ad, roofH: 12 });
+    door(g, hx, hy, 1.5, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.7, 0.75, 13, 0xd6ecff);
+    // Tanques de acero inoxidable (cilindros) a la derecha.
+    const tanks = ctx.tier >= 2 ? [[2.35, 0.7], [2.35, 1.5], [2.35, 2.3]] : [[2.35, 0.9], [2.35, 1.9]];
+    const tops = [];
+    for (const [tx, ty] of tanks) {
+      const b = iso(x + tx, y + ty);
+      const H = 30 + ctx.up;
+      g.rect(b.x - 9, b.y - H, 18, H).fill(0xc7ccd1).stroke(OUTLINE);
+      g.rect(b.x + 3, b.y - H, 6, H).fill({ color: 0x9aa3a8, alpha: 0.8 });
+      g.ellipse(b.x, b.y - H, 9, 4.5).fill(0xe6e9ec).stroke(OUTLINE);
+      g.ellipse(b.x, b.y, 9, 4.5).stroke({ width: 1, color: 0x3a2418, alpha: 0.3 });
+      tops.push({ x: b.x, y: b.y - H });
+    }
+    // Tubería que une la nave con los tanques.
+    const a = iso(hx + 1.7, hy + 0.75, 12);
+    const b2 = iso(x + 2.35, y + 0.9, 12);
+    g.moveTo(a.x, a.y).lineTo(b2.x, b2.y).stroke({ width: 3, color: 0x9aa3a8 });
+    this.roofTop = iso(hx + 0.85, hy + 0.75, 26 + ctx.up + 12);
+    // Vapor de la pasteurización.
+    const steam = new Graphics();
+    this.anim.addChild(steam);
+    this.animate = (time) => {
+      steam.clear();
+      tops.forEach((t, k) => {
+        const f = (time * 0.7 + k * 0.4) % 1;
+        steam.circle(t.x, t.y - 4 - f * 18, 3 + f * 4).fill({ color: 0xffffff, alpha: 0.55 * (1 - f) });
+      });
+    };
+  },
+
+  // Descremadora: casita con la centrífuga (gira mientras trabaja) y cantinas de crema.
+  separator(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.6, 1.4, 24, ctx, { wall: 0xfff3d6, roofH: 13 });
+    door(g, hx, hy, 1.4, 0.55, 15, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.6, 0.7, 12, PAL.balconyYellow);
+    // Centrífuga en el patio: base, tazón y la manivela.
+    const c = iso(x + 2.35, y + 1.2);
+    g.rect(c.x - 4, c.y - 14, 8, 14).fill(0x9aa3a8).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 18, 11, 6).fill(0xd8dde2).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 19, 7, 3.5).fill(PRODUCTS.cream.color);
+    // Cantinas de crema.
+    for (const [bx, by] of [[1.0, 2.5], [1.35, 2.62], [1.7, 2.5]]) {
+      const p = iso(x + bx, y + by);
+      g.roundRect(p.x - 4, p.y - 13, 8, 13, 2).fill(0xc7ccd1).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 13, 3, 1.4).fill(PRODUCTS.cream.color);
+    }
+    const spin = new Graphics();
+    this.anim.addChild(spin);
+    this.animate = (time) => {
+      spin.clear();
+      const a = time * 8;
+      spin.moveTo(c.x, c.y - 19).lineTo(c.x + Math.cos(a) * 10, c.y - 19 + Math.sin(a) * 5).stroke({ width: 2, color: 0x5a5a5a });
+      spin.circle(c.x + Math.cos(a) * 10, c.y - 19 + Math.sin(a) * 5, 2).fill(0xd7263d);
+    };
+  },
+
+  // Batidora: mantequera de madera (barril que gira) bajo una ramada, con bloques de mantequilla.
+  churn(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.3;
+    const d = 2.0;
+    const H = 24 + ctx.up;
+    g.poly(isoPoly([[x0, y0], [x0 + w, y0], [x0 + w, y0 + d], [x0, y0 + d]])).fill(0xc7beb0).stroke(OUTLINE);
+    // Soportes y barril.
+    const c = iso(x0 + 1.1, y0 + 1.0, 14);
+    g.rect(c.x - 16, c.y - 2, 3, 16).fill(PAL.woodDark);
+    g.rect(c.x + 13, c.y - 2, 3, 16).fill(PAL.woodDark);
+    const barrel = new Graphics();
+    this.anim.addChild(barrel);
+    // Mesa con bloques de mantequilla.
+    box(g, x0 + 1.5, y0 + 1.5, 0.7, 0.4, 8, PAL.wood);
+    for (const k of [0, 1, 2]) {
+      const p = iso(x0 + 1.6 + k * 0.2, y0 + 1.7, 8);
+      g.rect(p.x - 4, p.y - 4, 8, 4).fill(PRODUCTS.butter.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 12, PAL.roof, 0xb08a5a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
+    const bulb = iso(x0 + w / 2, y0 + d / 2, H - 4);
+    this.lights.push({ x: bulb.x, y: bulb.y, r: 28 });
+    // El barril da vueltas mientras trabaja (se dibuja encogido según el ángulo).
+    this.animate = (time) => {
+      const k = Math.abs(Math.cos(time * 3));
+      barrel.clear();
+      barrel.roundRect(c.x - 13, c.y - 10 - 4 * k, 26, 12 + 8 * k, 5).fill(0xa0703c).stroke(OUTLINE);
+      barrel.moveTo(c.x - 13, c.y - 4).lineTo(c.x + 13, c.y - 4).stroke({ width: 1.5, color: 0x5a5a5a });
+    };
+    this.animate(0);
+  },
+
+  // Quesera: casa con zócalo verde, repisas con ruedas de queso y una prensa de madera.
+  cheesery(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.0, 1.5, 26, ctx, { wall: 0xf9f2df, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.0, 0.75, 13, PAL.balconyYellow);
+    // Repisa con quesos frente a la casa.
+    box(g, x + 0.4, y + 2.15, 1.5, 0.35, 10, PAL.wood);
+    for (let i = 0; i < 4; i++) {
+      const p = iso(x + 0.55 + i * 0.35, y + 2.3, 10);
+      g.ellipse(p.x, p.y - 3, 6, 3).fill(PRODUCTS.cheese.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+      g.ellipse(p.x, p.y - 5, 6, 3).fill(shade(PRODUCTS.cheese.color, 1.05)).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+    }
+    // Prensa de queso (tornillo de madera) que baja y sube.
+    const pr = iso(x + 2.45, y + 2.3);
+    g.rect(pr.x - 9, pr.y - 6, 18, 6).fill(PAL.woodDark).stroke(OUTLINE);
+    g.rect(pr.x - 8, pr.y - 30, 3, 26).fill(PAL.wood);
+    g.rect(pr.x + 5, pr.y - 30, 3, 26).fill(PAL.wood);
+    g.rect(pr.x - 9, pr.y - 33, 18, 4).fill(PAL.woodDark).stroke(OUTLINE);
+    const press = new Graphics();
+    this.anim.addChild(press);
+    this.roofTop = iso(hx + 1.0, hy + 0.75, 26 + ctx.up + 14);
+    this.animate = (time) => {
+      const k = (Math.sin(time * 2) + 1) / 2;
+      press.clear();
+      press.rect(pr.x - 1, pr.y - 30, 2, 8 + k * 8).fill(0x5a5a5a);
+      press.rect(pr.x - 6, pr.y - 22 + k * 8, 12, 4).fill(PAL.wood).stroke(OUTLINE);
+      press.ellipse(pr.x, pr.y - 9, 6, 3).fill(PRODUCTS.cheese.color);
+    };
+    this.animate(0);
+  },
+
+  // Paila de arequipe: gran paila de cobre sobre un fogón, con mecedor y frascos de arequipe.
+  arequipe_pot(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 2.1;
+    const H = 26 + ctx.up;
+    // Fogón de ladrillo con la paila encima.
+    box(g, x0 + 0.5, y0 + 0.5, 1.3, 1.1, 10, 0xb5653a);
+    const c = iso(x0 + 1.15, y0 + 1.05, 10);
+    g.ellipse(c.x, c.y, 26, 13).fill(0xb87333).stroke(OUTLINE);
+    g.ellipse(c.x, c.y, 21, 10).fill(PRODUCTS.arequipe.color);
+    const mouth = iso(x0 + 0.8, y0 + 1.6, 4);
+    g.ellipse(mouth.x, mouth.y, 6, 4).fill(0x2b1a10).stroke(OUTLINE);
+    this.lights.push({ x: mouth.x, y: mouth.y, r: 24, color: 0xff7a1a });
+    // Leña.
+    for (let i = 0; i < 3; i++) {
+      const p = iso(x + 0.3 + i * 0.12, y + 2.65, i * 2);
+      g.roundRect(p.x - 10, p.y - 4, 20, 4, 2).fill(0x8b5a2b).stroke(OUTLINE);
+    }
+    // Frascos de arequipe y bultos de panela pulverizada (lo que trae la Chiva).
+    for (const [bx, by] of [[2.2, 2.5], [2.45, 2.62], [2.7, 2.5]]) {
+      const p = iso(x + bx, y + by);
+      g.roundRect(p.x - 4, p.y - 10, 8, 10, 2).fill(PRODUCTS.arequipe.color).stroke(OUTLINE);
+      g.rect(p.x - 4, p.y - 12, 8, 3).fill(0xd7263d);
+    }
+    const sack2 = iso(x + 2.6, y + 1.2);
+    g.roundRect(sack2.x - 7, sack2.y - 13, 14, 13, 3).fill(0xf4efe6).stroke(OUTLINE);
+    g.rect(sack2.x - 5, sack2.y - 9, 10, 4).fill(PRODUCTS.panela_powder.color);
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 13, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    // El mecedor da vueltas en la paila y el arequipe burbujea.
+    const stir = new Graphics();
+    this.anim.addChild(stir);
+    this.animate = (time) => {
+      stir.clear();
+      const a = time * 2.5;
+      const ex = c.x + Math.cos(a) * 12;
+      const ey = c.y + Math.sin(a) * 5;
+      stir.moveTo(ex, ey).lineTo(ex + 8, ey - 26).stroke({ width: 3, color: PAL.wood });
+      for (let i = 0; i < 2; i++) {
+        const f = (time * 1.2 + i * 0.5) % 1;
+        stir.circle(c.x - 8 + i * 14, c.y - f * 3, 2 * (1 - f)).fill({ color: 0xe0a070, alpha: 1 - f });
+      }
+      stir.ellipse(mouth.x, mouth.y + 1, 4, 2.5).fill({ color: 0xff7a1a, alpha: 0.6 + Math.sin(time * 9) * 0.3 });
+    };
+    this.animate(0);
+  },
+
   // Empacadora: bodega amarilla con banda transportadora y bolsas.
   packer(g, x, y, ctx) {
     const hx = x + 0.25;

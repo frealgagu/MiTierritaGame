@@ -11,6 +11,8 @@ import { RESEARCH } from '../src/data/research.js';
 import { STATIONS_BY_ID } from '../src/data/stations.js';
 import { ZONE_LIST } from '../src/data/zones/index.js';
 import { formatNumber } from '../src/core/format.js';
+import { ROUTES } from '../src/data/routes.js';
+import { routeActive } from '../src/sim/routes.js';
 
 const hours = Number(process.argv[2] ?? 8);
 const style = process.argv[3] ?? 'bloque';
@@ -26,6 +28,7 @@ const totalIncome = (st) => openZones().reduce((n, z) => n + analyzeChain(st, z)
 const bump = (t, id) => {
   const [sid, part] = id.split(':');
   if (sid === 'dispatch') return t.zones[part].dispatch.level++;
+  if (sid === 'route') return t.routes[part].level++;
   (part ? t.stations[sid].transport : t.stations[sid]).level++;
 };
 
@@ -38,6 +41,7 @@ function bestOption() {
     ids.push(id);
     if (!STATIONS_BY_ID[id].side) ids.push(`${id}:transport`);
   }
+  for (const r of ROUTES) if (routeActive(s, r.id)) ids.push(`route:${r.id}`);
   const consider = (kind, id, cost, mutate) => {
     if (cost > s.coins) return;
     const t = clone(s);
@@ -52,7 +56,7 @@ function bestOption() {
   }
   if (style === 'bloque') {
     for (const z of openZones()) {
-      const all = ids.filter((i) => !i.startsWith('dispatch') && zoneOf(i.split(':')[0]) === z);
+      const all = ids.filter((i) => !i.startsWith('dispatch') && !i.startsWith('route') && zoneOf(i.split(':')[0]) === z);
       const cost = all.reduce((n, id) => n + game.quote(id, 1).cost, 0);
       consider('all', all, cost, (t) => all.forEach((id) => bump(t, id)));
     }
@@ -71,7 +75,11 @@ function bestOption() {
 
 const events = [];
 const zoneStart = { finca: 0 };
-game.bus.on('goalClaimed', ({ goal }) => events.push(`${mmss(s.playTime)}  ✅ ${goalText(goal)}  (+${formatNumber(goal.reward)} 💰)`));
+const zoneEnd = {};
+game.bus.on('goalClaimed', ({ goal, zone }) => {
+  events.push(`${mmss(s.playTime)}  ✅ ${goalText(goal)}  (+${formatNumber(goal.reward)} 💰)`);
+  if (goal.final) zoneEnd[zone] = s.playTime;
+});
 game.bus.on('unlocked', ({ id }) => events.push(`${mmss(s.playTime)}  🏗️  construye ${id}`));
 game.bus.on('research', ({ id }) => events.push(`${mmss(s.playTime)}  🔬 investiga ${id}`));
 game.bus.on('zoneUnlocked', ({ zone }) => {
@@ -150,8 +158,7 @@ console.log('');
 for (const z of ZONE_LIST) {
   if (!s.zones[z.id].unlocked) continue;
   const done = s.zones[z.id].complete;
-  const end = done ? events.find((e) => e.includes('✅') && e.includes(z.id === 'finca' ? 'bolsa de café' : 'panela pulverizada') && e.includes('+0 💰')) : null;
-  const endTime = end ? end.split(' ')[0] : null;
-  console.log(`${z.icon} ${z.name}: ${done ? `🏁 completada (empezó ${mmss(zoneStart[z.id])}, terminó ${endTime})` : 'sin terminar'}`);
+  const took = done ? ` → ${mmss(zoneEnd[z.id] - zoneStart[z.id])} en la zona` : '';
+  console.log(`${z.icon} ${z.name}: ${done ? `🏁 completada (empezó ${mmss(zoneStart[z.id])}, terminó ${mmss(zoneEnd[z.id])}${took})` : 'sin terminar'}`);
 }
 console.log(`Ingreso total al final: ${formatNumber(totalIncome(s))} 💰/s`);

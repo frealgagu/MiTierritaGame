@@ -23,6 +23,20 @@ export const ROAD_POS = Object.fromEntries(
   }),
 );
 
+// Quién alimenta a quién: el proveedor de una estación es la de su zona cuyo producto principal
+// está en su receta. La cadena puede ramificarse (la leche pasteurizada va a tres estaciones).
+export const PARENT = {};
+export const CHILDREN = {};
+for (const zone of ZONE_LIST) {
+  for (const id of zone.chain) {
+    CHILDREN[id] = [];
+    const inputs = Object.keys(STATIONS_BY_ID[id].in ?? {});
+    const parent = zone.chain.find((p) => p !== id && inputs.includes(Object.keys(STATIONS_BY_ID[p].out)[0]));
+    if (parent) PARENT[id] = parent;
+  }
+  for (const [id, parent] of Object.entries(PARENT)) if (STATIONS_BY_ID[id].zone === zone.id) CHILDREN[parent].push(id);
+}
+
 export function isUnlocked(state, id) {
   return Boolean(state.stations[id]);
 }
@@ -31,11 +45,9 @@ export function zoneUnlocked(state, zoneId) {
   return Boolean(state.zones[zoneId]?.unlocked);
 }
 
-// Siguiente estación construida de la cadena (o null: el producto va a la bodega de su zona).
-export function nextStation(state, id) {
-  const chain = chainOf(zoneOf(id));
-  const next = chain[chain.indexOf(id) + 1];
-  return next && isUnlocked(state, next) ? next : null;
+// Estaciones construidas que reciben el producto de esta (vacío: va a la bodega de su zona).
+export function consumers(state, id) {
+  return (CHILDREN[id] ?? []).filter((c) => isUnlocked(state, c));
 }
 
 // Primera estación de la cadena de una zona aún sin construir.

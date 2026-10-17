@@ -22,6 +22,8 @@ export const ZONE2 = {
   exitSign: [21.5, 24.2],
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
+  // Carretera de la Ruta de la panela: sale de la bodega hacia la Lechería.
+  routes: { panela: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Lechería ➜' } },
   unlockedBy: 'finca', // se abre al completar la Finca
-  next: null,
+  next: 'lecheria',
 };

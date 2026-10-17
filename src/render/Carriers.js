@@ -139,3 +139,76 @@ export class JeepView extends Container {
     }
   }
 }
+
+// Chiva: bus de escalera pintado de colores, para las rutas entre zonas. Lleva la carga en el techo.
+export class ChivaView extends Container {
+  constructor() {
+    super();
+    this.alongY = this.drawChiva(false);
+    this.alongX = this.drawChiva(true);
+    this.addChild(this.alongY, this.alongX);
+    this.cargo = -1;
+  }
+
+  drawChiva(alongX) {
+    const c = new Container();
+    const g = new Graphics();
+    const [w, d] = alongX ? [1.4, 0.62] : [0.62, 1.4];
+    const x0 = -w / 2;
+    const y0 = -d / 2;
+    const s = iso(0, 0);
+    shadow(g, s.x, s.y + 2, 40, 16, 0.28);
+    const wheels = alongX
+      ? [[x0 + 0.25, y0 + d], [x0 + w - 0.25, y0 + d]]
+      : [[x0 + w, y0 + 0.25], [x0 + w, y0 + d - 0.25]];
+    for (const [wx, wy] of wheels) {
+      const p = iso(wx, wy, 5);
+      g.ellipse(p.x, p.y, 5.5, 5.5).fill(0x2b2b2b);
+      g.circle(p.x, p.y, 2).fill(0xd7263d);
+    }
+    // Carrocería por franjas: rojo, amarillo, azul, verde; techo blanco.
+    const bands = [[4, 5, 0xd7263d], [9, 6, 0xe8b90f], [15, 6, 0x2e6fd1], [21, 3, 0x2fa36b]];
+    for (const [z, h, color] of bands) box(g, x0, y0, w, d, h, color, { z });
+    box(g, x0 - 0.04, y0 - 0.04, w + 0.08, d + 0.08, 2, 0xf4efe6, { z: 24 });
+    // Ventanas: rombos de colores en la franja azul.
+    const n = 4;
+    for (let i = 0; i < n; i++) {
+      const t = (i + 0.5) / n;
+      const p = alongX ? iso(x0 + w * t, y0 + d, 18) : iso(x0 + w, y0 + d * t, 18);
+      g.poly([p.x - 3, p.y, p.x, p.y - 3, p.x + 3, p.y, p.x, p.y + 3]).fill(0xfff3d6);
+    }
+    const cargo = new Graphics();
+    c.addChild(g, cargo);
+    c.cargo = cargo;
+    c.base = { x0, y0, w, d, alongX };
+    return c;
+  }
+
+  drawCargo(view, n) {
+    const g = view.cargo.clear();
+    const { x0, y0, w, d, alongX } = view.base;
+    for (let i = 0; i < n; i++) {
+      const f = (i % 4) / 4 + 0.12;
+      const z = 26 + Math.floor(i / 4) * 6;
+      const p = alongX ? iso(x0 + f * w, y0 + d / 2, z) : iso(x0 + w / 2, y0 + f * d, z);
+      g.roundRect(p.x - 6, p.y - 8, 12, 8, 2).fill(0xf4efe6).stroke(OUTLINE);
+      g.rect(p.x - 4, p.y - 6, 8, 3).fill(PRODUCTS.panela_powder.color);
+    }
+  }
+
+  // load: 0..1 de llenado.
+  place(gx, gy, dx, dy, load) {
+    const p = iso(gx, gy);
+    this.position.set(p.x, p.y);
+    this.zIndex = depth(gx, gy) + 0.3;
+    const alongX = Math.abs(dx) > Math.abs(dy);
+    this.alongX.visible = alongX;
+    this.alongY.visible = !alongX;
+    const n = load <= 0 ? 0 : Math.max(1, Math.round(load * 8));
+    if (n !== this.cargo) {
+      this.cargo = n;
+      this.drawCargo(this.alongX, n);
+      this.drawCargo(this.alongY, n);
+    }
+  }
+}

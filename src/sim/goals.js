@@ -6,6 +6,7 @@ import { STATIONS_BY_ID, DISPATCH } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
 import { formatNumber } from '../core/format.js';
+import { ROUTES_BY_ID } from '../data/routes.js';
 import { analyzeChain } from './analysis.js';
 
 export const VISIBLE_GOALS = 3;
@@ -13,6 +14,7 @@ export const VISIBLE_GOALS = 3;
 function levelOf(state, target) {
   const [id, part] = target.split(':');
   if (id === 'dispatch') return state.zones[part ?? 'finca'].dispatch.level;
+  if (id === 'route') return state.routes[part].level;
   const st = state.stations[id];
   if (!st) return 0;
   return part === 'transport' ? st.transport.level : st.level;
@@ -21,6 +23,7 @@ function levelOf(state, target) {
 function targetName(target) {
   const [id, part] = target.split(':');
   if (id === 'dispatch') return `${DISPATCH.name} (${ZONES_BY_ID[part ?? 'finca'].name})`;
+  if (id === 'route') return `la ${ROUTES_BY_ID[part].name}`;
   return part === 'transport' ? `los arrieros del ${STATIONS_BY_ID[id].name}` : STATIONS_BY_ID[id].name;
 }
 
@@ -35,6 +38,10 @@ export function goalProgress(state, goal) {
       break;
     case 'produced':
       current = state.stats.produced[goal.product] ?? 0;
+      target = goal.amount;
+      break;
+    case 'imported':
+      current = state.stats.imported?.[goal.product] ?? 0;
       target = goal.amount;
       break;
     case 'level':
@@ -76,6 +83,8 @@ export function goalText(goal) {
       return `Vende ${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()}`;
     case 'produced':
       return `Produce ${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()}`;
+    case 'imported':
+      return `Recibe ${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()} por la ruta`;
     case 'level':
       return `Sube ${goal.target.includes(':') ? '' : 'el nivel de '}${targetName(goal.target)} a ${goal.level}`.replace('Sube los', 'Sube a los');
     case 'unlock':

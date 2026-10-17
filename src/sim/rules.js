@@ -52,6 +52,12 @@ export function stationInputCap(def, level) {
   return Math.max(20, Math.ceil(stationRate(def, level) * need * 15));
 }
 
+// Lo que cabe del producto importado por una ruta: ~90 s de consumo (mínimo 10), porque la ruta
+// tarda más que las mulas. `mult` es lo que aceleran las investigaciones a la estación.
+export function stationImportCap(def, level, mult = 1) {
+  return Math.max(10, Math.ceil(stationRate(def, level) * mult * def.import.perCycle * 90));
+}
+
 // Arrieros (GDD §5.2): una mula más cada 10 niveles de transporte (máx. 10).
 export const MAX_MULES = 10;
 // A igual nivel, los arrieros llevan un 25 % más de lo que produce su estación, sea cual sea

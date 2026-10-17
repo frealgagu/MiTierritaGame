@@ -2,6 +2,7 @@ import { DISPATCH } from '../data/stations.js';
 import { dispatchCapacity } from './rules.js';
 import { sumValues } from './state.js';
 import { dispatchMult, productValue, saleValue } from './modifiers.js';
+import { routeReserve } from './routes.js';
 
 // El Willys de cada zona espera en su bodega; sale lleno, o con carga parcial tras `maxWait` s.
 // Vende al llegar al pueblo (mitad del viaje) y vuelve.
@@ -11,11 +12,13 @@ export function stepJeep(state, zoneId, dt, bus) {
   const half = DISPATCH.tripTime / 2;
 
   if (j.phase === 'idle') {
-    const stock = sumValues(zone.warehouse);
+    // Lo que espera una ruta hacia otra zona no se vende.
+    const reserve = routeReserve(state, zoneId);
+    const stock = sumValues(zone.warehouse) - sumValues(reserve);
     const cap = dispatchCapacity(zone.dispatch.level, dispatchMult(state, zoneId));
     j.waited = stock > 0 ? j.waited + dt : 0;
     if (stock >= cap || (stock > 0 && j.waited >= DISPATCH.maxWait)) {
-      j.load = loadJeep(state, zone.warehouse, cap);
+      j.load = loadJeep(state, zone.warehouse, cap, reserve);
       j.phase = 'out';
       j.t = 0;
       j.waited = 0;
@@ -45,12 +48,12 @@ export function stepJeep(state, zoneId, dt, bus) {
 }
 
 // Carga primero lo más valioso.
-function loadJeep(state, warehouse, cap) {
+function loadJeep(state, warehouse, cap, reserve) {
   const load = {};
   let room = cap;
   const ids = Object.keys(warehouse).sort((a, b) => productValue(state, b) - productValue(state, a));
   for (const id of ids) {
-    const take = Math.min(warehouse[id], room);
+    const take = Math.min(warehouse[id] - (reserve[id] ?? 0), room);
     if (take <= 0) continue;
     load[id] = take;
     warehouse[id] -= take;

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { analyzeChain } from '../src/sim/analysis.js';
-import { ROAD_POS, chainOf } from '../src/sim/chain.js';
+import { PARENT, ROAD_POS, chainOf } from '../src/sim/chain.js';
 import { ZONE_LIST } from '../src/data/zones/index.js';
 
 const CHAIN = chainOf('finca');
@@ -11,12 +11,15 @@ function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-test('en cada zona, las estaciones están en orden sobre el camino', () => {
+test('en cada zona, cada estación está después de su proveedor sobre el camino', () => {
   for (const zone of ZONE_LIST) {
     const pos = ROAD_POS[zone.id];
-    const positions = zone.chain.map((id) => pos[id]);
-    for (let i = 1; i < positions.length; i++) assert.ok(positions[i] > positions[i - 1], `${zone.chain[i]} fuera de orden`);
-    assert.ok(pos.warehouse > positions.at(-1), `bodega de ${zone.id}`);
+    for (const id of zone.chain) {
+      if (PARENT[id]) assert.ok(pos[id] > pos[PARENT[id]], `${id} antes que ${PARENT[id]}`);
+      assert.ok(pos.warehouse > pos[id], `bodega de ${zone.id} antes que ${id}`);
+    }
+    // El orden de construcción respeta quién alimenta a quién.
+    for (const id of zone.chain) if (PARENT[id]) assert.ok(zone.chain.indexOf(PARENT[id]) < zone.chain.indexOf(id), id);
   }
 });
 

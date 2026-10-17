@@ -185,15 +185,23 @@ Se abre al completar la Finca. Los productos valen ×5 respecto al primer borrad
 - **Final**: «Primer cargamento de panela», vender 5.000 panelas pulverizadas (15 objetivos).
 - **Duración medida** (`npm run balance`): entre 1 h 50 min y 3 h después de completar la Finca.
 
-#### Zona 3 · La Lechería — 6 estaciones, 6 productos — v1.2
-| # | Estación | Entrada | Salida | Valor |
-|---|----------|---------|--------|-------|
-| 1 | Potrero y establo ♾️ | — | Leche cruda | 5 |
-| 2 | Pasteurizadora | 1 cruda | Leche pasteurizada | 12 |
-| 3 | Descremadora | 3 pasteurizada | Crema de leche | 40 |
-| 4 | Batidora | 2 crema | Mantequilla | 90 |
-| 5 | Quesera | 6 pasteurizada | Queso campesino | 120 |
-| 6 | Paila de arequipe | 4 pasteurizada + 1 panela pulverizada ⇄ | Arequipe | 200 |
+#### Zona 3 · La Lechería — 6 estaciones, 6 productos — **v1.2** ✅
+Se abre al completar el Trapiche. Productos ×25 respecto al primer borrador (el Trapiche iba ×5). Es la primera zona con **ramas**: la leche pasteurizada se reparte entre la Quesera, la Descremadora y la Paila. A igual nivel, cada rama procesa un tercio de lo que da la Pasteurizadora, así que la regla de balance se mantiene: con todo al mismo nivel, nada sobra. Mientras falta alguna rama, la leche que sobra se vende sin procesar.
+
+| # | Estación | Entrada | Salida | Ciclo (nv. 1) | Valor | Desbloqueo | Coste base |
+|---|----------|---------|--------|---------------|-------|------------|------------|
+| 1 | Potrero y establo ♾️ | — | Leche cruda | 2 s | 125 | Con la zona | 250 |
+| 2 | Pasteurizadora | 1 cruda | Leche pasteurizada | 2 s | 300 | 200.000 | 400 |
+| 3 | Quesera *(rama 1)* | 6 pasteurizada | Queso campesino | 36 s | 3.500 | 400.000 | 1.300 |
+| 4 | Descremadora *(rama 2)* | 3 pasteurizada | Crema de leche | 18 s | 1.200 | 1.000.000 | 600 |
+| 5 | Batidora | 2 crema | Mantequilla | 36 s | 3.000 | 2.000.000 | 900 |
+| 6 | Paila de arequipe *(rama 3)* | 4 pasteurizada + 1 panela pulverizada ⇄ | Arequipe | 24 s | 6.000 | 4.000.000 | 2.000 |
+
+- **Reparto**: las mulas de la Pasteurizadora llevan cada carga a la rama con la entrada más vacía (contando lo que va en camino); la que trabaja más rápido recibe más, sin que el jugador tenga que repartir a mano. La carga se calcula para el viaje a la más lejana.
+- **Primera ruta entre zonas — Ruta de la panela** (`src/data/routes.js`, `src/sim/routes.js`): una **Chiva** recoge panela pulverizada en la bodega del Trapiche y la lleva a la Paila (60 s ida y vuelta). Tiene su propio nivel (pestaña 🚌 de la Paila): a igual nivel que la Paila lleva todo lo que gasta (un 25 % más), contando sus investigaciones de velocidad. El Willys del Trapiche no vende la panela que espera la Chiva. Sin panela, la Paila espera; el resto de la Lechería sigue igual.
+- **Investigaciones**: Ordeño mecánico y Pasteurizadora de placas (×2, en pareja), Descremadora centrífuga, Batidora eléctrica, Cuajo de calidad, Paila de cobre (×2), Carrotanque (despacho ×2), Queso doble crema y Arequipe de exportación (+50 %).
+- **Final**: «Arequipe para todo el pueblo», vender 3.000 arequipes (17 objetivos).
+- **Duración medida** (`npm run balance`): unas 3 h 15 min (jugador atento) y 3 h 30 min (el que sigue la mejora recomendada) después de completar el Trapiche.
 
 #### Zona 4 · El Cacaotal (chocolate) — 7 estaciones, 7 productos — v1.3
 | # | Estación | Entrada | Salida | Valor |
@@ -230,7 +238,7 @@ Es la única zona sin recurso ilimitado: **todo llega importado**. Es el «exame
 | 7 | Muelle de exportación | 250 canastas + 2.000 bolsas de café ⇄ | **Contenedor de exportación** | Final del juego |
 
 ### Cómo viajan los productos entre zonas
-- Cada zona tiene una **Bodega de salida**. Entre zonas hay **rutas** con su propio transporte mejorable: **Willys** al principio, **chiva** (más carga) y finalmente **camión**.
+- Cada zona tiene una **Bodega de salida**. Entre zonas hay **rutas** con su propio transporte mejorable (la primera, la Ruta de la panela de la v1.2, usa una **chiva**).
 - Una ruta se configura así: *producto X, de la Zona A a la Zona B*. Igual que los arrieros dentro de una zona, la ruta tiene capacidad por minuto y puede ser el cuello de botella.
 - **Cada zona sigue siendo jugable sola:** si no llega el importado, las estaciones que lo necesitan se pausan, pero el resto de la cadena produce y vende normalmente.
 - **Al completar una zona** se desbloquea la siguiente y la anterior sigue produciendo en segundo plano, como si estuviera sin conexión.
@@ -296,7 +304,7 @@ Cada estación tiene **dos ejes** de mejora.
 **El Trapiche:** Trapiche con motor (Molienda ×2), Abono para la caña (Cañaduzal ×2), Hornilla de más pailas (×2), Chiva (despacho ×2), Gaveras de acero (×2), Pulverizadora eléctrica (×2), Panela orgánica (+50 % de valor).
 
 ### 5.5 Mejora recomendada
-El aviso de arriba recomienda la mejora que más 💰/s suma **al final de la cadena** (lo que sale de la última estación construida) por moneda gastada, entre estaciones, arrieros y despacho. Lo que se vende desviado no cuenta: si contara, la recomendación llevaría a subir arrieros para vender materia prima en lugar de completar la cadena. También recomienda una **investigación** si ya alcanza el dinero y rinde más que el mejor nivel (nunca deja al jugador ahorrando). La Compostera se mide de 10 en 10 niveles (nivel a nivel cubre el bono muy poco a poco). Si ninguna mejora suelta rinde, recomienda el cuello de botella. La vista «La cadena» sigue marcando el cuello de botella en rojo.
+El aviso de arriba recomienda la mejora que más 💰/s suma **al final de la cadena** (lo que sale de la última estación construida) por moneda gastada, entre estaciones, arrieros y despacho. Lo que se vende desviado no cuenta: si contara, la recomendación llevaría a subir arrieros para vender materia prima en lugar de completar la cadena. También recomienda una **investigación** si ya alcanza el dinero y rinde más que el mejor nivel (nunca deja al jugador ahorrando). Los arrieros, las rutas y la Compostera se miden de 10 en 10 niveles cuando un nivel suelto no llega al mínimo (unos arrieros muy atrasados o el bono del compost suman poco nivel a nivel). Si la zona recibe algo por una ruta, también cuentan las estaciones de la zona que lo envía: la recomendación puede decir «Arrieros de la Pulverizadora (El Trapiche)», y tocarla lleva allá. Si ninguna mejora suelta rinde, recomienda el cuello de botella. La vista «La cadena» sigue marcando el cuello de botella en rojo.
 
 ### 5.6 Desvíos y bodega
 Lo que se desvía a la bodega solo puede ocupar hasta el 70 % de su capacidad: el 30 % restante queda siempre libre para el producto final de la cadena, para que el producto barato que sobra no atasque la Empacadora.
@@ -505,7 +513,7 @@ export const COST_GROWTH = 1.15;
 | **v0.5** ✅ | Objetivos, investigaciones, guardado, ganancias sin conexión, simulador de balance | Se juega de principio a fin |
 | **v1.0** | Contenedor de exportación, pantalla final y balance ajustado | **Zona 1 completa** |
 | v1.1 ✅ | **Zona 2: El Trapiche**: caña → panela; bagazo como combustible; varias zonas a la vez y selector de zonas | Expansión |
-| v1.2 | **Zona 3: La Lechería**: ramificación de la leche; **primera ruta entre zonas** (panela del Trapiche para el arequipe) | Expansión |
+| v1.2 ✅ | **Zona 3: La Lechería**: ramificación de la leche; **primera ruta entre zonas** (panela del Trapiche para el arequipe) | Expansión |
 | v1.3 | **Zona 4: El Cacaotal**: chocolate de mesa y chocolatina | Expansión |
 | v1.4 | **Zona 5: El Maizal**: arepas y arepa de queso | Expansión |
 | v1.5 | **Zona 6: El Pueblo**: cafetería, fonda y Contenedor de exportación (**final del juego**) | Expansión final |

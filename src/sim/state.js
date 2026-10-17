@@ -1,6 +1,8 @@
 import { createStationState } from './production.js';
+import { createRouteState } from './routes.js';
+import { ROUTES } from '../data/routes.js';
 
-export const SAVE_VERSION = 5;
+export const SAVE_VERSION = 6;
 
 // Bodega, Willys y nivel del despacho de una zona.
 export function createZoneState(unlocked = false) {
@@ -20,9 +22,11 @@ export function createInitialState(now = Date.now()) {
       farm: createStationState(),
     },
     // Por zona: desbloqueada, completada, despacho, bodega (productId -> unidades) y Willys.
-    zones: { finca: createZoneState(true), trapiche: createZoneState(false) },
+    zones: { finca: createZoneState(true), trapiche: createZoneState(false), lecheria: createZoneState(false) },
+    // Rutas entre zonas: nivel y vehículo (ver sim/routes.js).
+    routes: Object.fromEntries(ROUTES.map((r) => [r.id, createRouteState()])),
     mules: [], // { id, productId, amount, from, to, phase: 'go' | 'back', t, duration }
-    stats: { produced: {}, sold: {} },
+    stats: { produced: {}, sold: {}, imported: {} },
     hints: [], // avisos ya mostrados
     settings: { sound: true },
     research: [], // ids de investigaciones compradas

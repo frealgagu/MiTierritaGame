@@ -3,6 +3,7 @@
 // objetivo que dependa de eso puede quedar imposible y bloquear la lista.
 //   sold / produced: { product, amount }   level: { target, level }   unlock: { station }
 //   research: { research }   researchCount: { count }   income: { perSecond, zone }   allLevels: { level, zone }
+//   imported: { product, amount } (lo que llegó por una ruta entre zonas)
 // Cada zona tiene su lista; el último objetivo (final: true) completa la zona y abre la siguiente.
 const FINCA = [
   { id: 'g01', type: 'sold', product: 'cherry', amount: 20, reward: 15 },
@@ -57,5 +58,26 @@ const TRAPICHE = [
   { id: 'tfinal', type: 'sold', product: 'panela_powder', amount: 5000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE };
-export const GOALS = [...FINCA, ...TRAPICHE];
+const LECHERIA = [
+  { id: 'l01', type: 'sold', product: 'raw_milk', amount: 50, reward: 10000 },
+  { id: 'l02', type: 'level', target: 'pasture', level: 10, reward: 20000 },
+  { id: 'l03', type: 'unlock', station: 'pasteurizer', reward: 40000 },
+  { id: 'l04', type: 'level', target: 'pasture:transport', level: 10, reward: 40000 },
+  { id: 'l05', type: 'unlock', station: 'cheesery', reward: 80000 },
+  { id: 'l06', type: 'produced', product: 'cheese', amount: 100, reward: 120000 },
+  { id: 'l07', type: 'research', research: 'ordeno', reward: 150000 },
+  { id: 'l08', type: 'unlock', station: 'separator', reward: 250000 },
+  { id: 'l09', type: 'level', target: 'dispatch:lecheria', level: 10, reward: 250000 },
+  { id: 'l10', type: 'unlock', station: 'churn', reward: 500000 },
+  { id: 'l11', type: 'produced', product: 'butter', amount: 200, reward: 800000 },
+  { id: 'l12', type: 'unlock', station: 'arequipe_pot', reward: 1200000 },
+  { id: 'l13', type: 'imported', product: 'panela_powder', amount: 200, reward: 1500000 },
+  { id: 'l14', type: 'level', target: 'route:panela', level: 25, reward: 2000000 },
+  { id: 'l15', type: 'allLevels', zone: 'lecheria', level: 25, reward: 3000000 },
+  { id: 'l16', type: 'sold', product: 'arequipe', amount: 1000, reward: 5000000 },
+  // Final de la Zona 3.
+  { id: 'lfinal', type: 'sold', product: 'arequipe', amount: 3000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA];

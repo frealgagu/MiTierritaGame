@@ -266,6 +266,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .chain-link.hot { border-left-color: var(--red); color: #8f1d2c; }
 .chain-link .divert { color: #b45309; }
 .chain-link .lost { color: #8f1d2c; }
+/* Ramas: lo que sale de una estación que reparte entre varias va sangrado. */
+.chain-card.branch, .chain-link.branch { margin-left: 18px; }
 .chain-total { margin: 10px 0 0; text-align: right; }
 
 /* Botones laterales y marcador de objetivo */
