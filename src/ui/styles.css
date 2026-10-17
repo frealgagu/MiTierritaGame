@@ -347,6 +347,19 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .victory-icon { font-size: 3.5rem; animation: pop 0.5s ease-out; }
 
 .save-box { margin: 8px 0 12px; }
+.dev-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+.dev-row label { font-weight: 600; }
+.dev-row input { width: 72px; font: inherit; font-weight: 700; border: 2px solid var(--ink); border-radius: 10px; padding: 4px 8px; background: var(--paper-2); color: var(--ink); }
+.speed-chip {
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 3px 8px;
+  background: var(--yellow);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
 .save-box summary { cursor: pointer; font-weight: 600; }
 .save-box textarea { width: 100%; font: 0.75rem ui-monospace, monospace; border: 2px solid var(--ink); border-radius: 10px; padding: 6px; background: var(--paper-2); color: var(--ink); resize: vertical; }
 

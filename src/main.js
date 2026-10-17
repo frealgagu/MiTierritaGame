@@ -14,6 +14,7 @@ import { ZONES_BY_ID } from './data/zones/index.js';
 import { RESEARCH_BY_ID } from './data/research.js';
 import { offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
+import { bindDevOptions } from './ui/DevOptions.js';
 import { Sound } from './audio/Sound.js';
 
 const AUTOSAVE_MS = 10_000;
@@ -149,6 +150,7 @@ async function start() {
   window.addEventListener('pagehide', persist);
 
   bindMenu(game, sound);
+  bindDevOptions(game);
   // Jugable sin internet e instalable en el móvil (solo en la versión publicada).
   if (import.meta.env.PROD && 'serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});

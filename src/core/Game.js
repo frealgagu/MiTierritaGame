@@ -18,12 +18,13 @@ export class Game {
     this.bus = new EventBus();
     this.accumulator = 0;
     this.incomeLog = [];
+    this.timeScale = 1; // opciones de desarrollador: acelera el tiempo de juego
     this.bus.on('sold', ({ coins }) => this.incomeLog.push({ t: this.state.playTime, coins }));
   }
 
-  // Avanza el tiempo real transcurrido en pasos fijos.
+  // Avanza el tiempo real transcurrido en pasos fijos (multiplicado por `timeScale`).
   update(dtSeconds) {
-    this.accumulator += Math.min(dtSeconds, 1);
+    this.accumulator += Math.min(dtSeconds, 1) * this.timeScale;
     while (this.accumulator >= TICK) {
       this.step(TICK);
       this.accumulator -= TICK;

@@ -17,6 +17,13 @@ test('las cerezas viajan a la bodega y el Willys las vende', () => {
   assert.ok(game.state.coins >= 5 && game.state.coins <= 30, `monedas: ${game.state.coins}`);
 });
 
+test('las opciones de desarrollador aceleran el tiempo de juego', () => {
+  const game = new Game();
+  game.timeScale = 10;
+  for (let i = 0; i < 60; i++) game.update(1 / 60);
+  assert.ok(Math.abs(game.state.playTime - 10) < 0.11, `tiempo jugado: ${game.state.playTime}`);
+});
+
 test('mejorar el cafetal cuesta monedas y sube el nivel', () => {
   const game = new Game();
   game.state.coins = 100;
