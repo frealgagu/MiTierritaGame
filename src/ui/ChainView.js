@@ -2,6 +2,7 @@ import { formatNumber, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { analyzeChain } from '../sim/analysis.js';
+import { hasBelt } from '../sim/rules.js';
 import { CHILDREN, PARENT, nextToUnlock } from '../sim/chain.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
@@ -74,7 +75,7 @@ export class ChainView {
           <span class="chain-text"><b>${def.name}</b> <small>Nv ${st.level}</small><br><span>${processing}</span></span>
         </button>
         <button class="chain-link ${branch} ${transportBottleneck ? 'hot' : ''}" data-open="${row.id}:transport">
-          <span>🐴 Nv ${st.transport.level}</span>
+          <span>${hasBelt(st.transport.level) ? '⚡' : '🐴'} Nv ${st.transport.level}</span>
           <span>${carries} · máx ${formatRate(row.transport)} ${icon}/s</span>
           ${row.next && row.diverted > 0.005 ? `<span class="divert">↪️ ${formatRate(row.diverted)} ${icon}/s se venden sin procesar</span>` : ''}
           ${row.lost > 0.005 ? `<span class="lost">⛔ ${formatRate(row.lost)} ${icon}/s no alcanzan a salir</span>` : ''}

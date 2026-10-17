@@ -7,14 +7,15 @@ import { Effects } from './Effects.js';
 import { FarmView, PlotView, WarehouseView } from './Stations.js';
 import { BuildingView } from './Buildings.js';
 import { ChivaView, JeepView, MuleView } from './Carriers.js';
+import { Belts } from './Belts.js';
 import { iso } from './iso.js';
 import { pointAt, pointAtDistance } from '../core/path.js';
 import { formatAmount, formatNumber } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
-import { dispatchCapacity } from '../sim/rules.js';
+import { BELT_LEVEL, dispatchCapacity, hasBelt } from '../sim/rules.js';
 import { ROAD_POS, zoneOf } from '../sim/chain.js';
-import { warehouseCap } from '../sim/transport.js';
+import { normalDest, warehouseCap } from '../sim/transport.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { quoteUnlock } from '../sim/upgrades.js';
 import { ROUTES } from '../data/routes.js';
@@ -53,7 +54,9 @@ export class Scene {
     app.stage.addChild(this.background.stars, this.background.view, this.world);
 
     this.terrain = new Terrain(this.zone);
-    this.tinted.addChild(this.terrain.ground, this.objects);
+    // Bandas eléctricas: sobre el suelo, debajo de edificios y mulas.
+    this.belts = new Belts(this.zone.muleRoad);
+    this.tinted.addChild(this.terrain.ground, this.belts, this.objects);
     this.world.addChild(this.tinted, this.lights, this.labels, this.effects.view);
     for (const d of this.terrain.decor) this.objects.addChild(d);
 
@@ -217,7 +220,8 @@ export class Scene {
       if (milestone) this.sound.milestone();
       else this.sound.levelUp();
       this.effects.ring(p.x, p.y + 30);
-      this.effects.floatText(p.x, p.y - 20, milestone ? `¡Hito nivel ${milestone}! ×2` : part === 'transport' ? `🐴 Arrieros nivel ${to}` : `Nivel ${to}`, {
+      const belt = part === 'transport' && milestone === BELT_LEVEL;
+      this.effects.floatText(p.x, p.y - 20, belt ? '⚡ ¡Banda eléctrica! ×2' : milestone ? `¡Hito nivel ${milestone}! ×2` : part === 'transport' ? `${hasBelt(to) ? '⚡ Banda' : '🐴 Arrieros'} nivel ${to}` : `Nivel ${to}`, {
         color: milestone ? 0xffe066 : 0xffffff,
         size: milestone ? 22 : 16,
         life: milestone ? 2.2 : 1.2,
@@ -322,8 +326,24 @@ export class Scene {
   syncMules(state) {
     const alive = new Set();
     const pos = ROAD_POS[this.zone.id];
+    // Estaciones con banda eléctrica: su tramo hasta el destino normal (y el de los desvíos en curso).
+    const intervals = [];
+    const crates = [];
+    for (const id of this.stationIds) {
+      const st = state.stations[id];
+      if (st && pos[id] !== undefined && hasBelt(st.transport.level)) intervals.push([pos[id], pos[normalDest(state, id)]]);
+    }
     for (const m of state.mules) {
       if (zoneOf(m.from) !== this.zone.id) continue;
+      if (hasBelt(state.stations[m.from].transport.level)) {
+        // Sobre la banda solo se ve lo que va; la «vuelta» no existe.
+        if (m.to === 'warehouse') intervals.push([pos[m.from], pos.warehouse]);
+        if (m.phase === 'go') {
+          const a = pos[m.from];
+          crates.push({ s: a + (pos[m.to] - a) * Math.min(m.t / m.duration, 1), productId: m.productId });
+        }
+        continue;
+      }
       alive.add(m.id);
       let view = this.mules.get(m.id);
       if (!view) {
@@ -346,6 +366,8 @@ export class Scene {
       view.destroy({ children: true });
       this.mules.delete(id);
     }
+    this.belts.setIntervals(intervals);
+    this.belts.update(crates, this.time);
   }
 
   syncJeep(state) {

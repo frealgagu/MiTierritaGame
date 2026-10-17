@@ -13,6 +13,8 @@ import {
   stationOutputRate,
   stationRate,
   muleCount,
+  BELT_LEVEL,
+  hasBelt,
   warehouseCapacity,
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
@@ -99,12 +101,15 @@ export class StationPanel {
 
   renderUpgradable(info) {
     this.info = info;
+    this.variant = info.variant?.(this.game.state);
+    const look = info.look?.(this.game.state) ?? info;
     this.el.innerHTML = `
-      ${this.head(info.icon, info.title, info.subtitle, '<span class="level-badge" data-ref="level"></span>')}
+      ${this.head(look.icon, look.title, look.subtitle, '<span class="level-badge" data-ref="level"></span>')}
       ${
         info.tabs
           ? `<div class="tabs">
               ${TABS.filter(([key]) => key !== 'route' || STATIONS_BY_ID[this.id]?.import)
+                .map(([key, label]) => [key, key === 'transport' && hasBelt(this.game.state.stations[this.id]?.transport.level ?? 0) ? '⚡ Banda' : label])
                 .map(([key, label]) => `<button class="tab ${this.tab === key ? 'active' : ''}" data-tab="${key}">${label}</button>`)
                 .join('')}
             </div>`
@@ -144,6 +149,7 @@ export class StationPanel {
 
   renderLocked(def) {
     this.info = null;
+    this.variant = undefined;
     const [outId] = Object.keys(def.out);
     const [inId] = Object.keys(def.in);
     const gain = PRODUCTS[outId].value * def.out[outId] - PRODUCTS[inId].value * def.in[inId];
@@ -182,7 +188,8 @@ export class StationPanel {
     const r = this.refs;
     // Si la estación se construyó por otra vía, rehacer el panel.
     const built = isBuilt(state, this.id);
-    if (built !== this.built) this.render();
+    // Si cambió algo que se ve en la cabecera (los arrieros pasaron a banda eléctrica), rehacer el panel.
+    if (built !== this.built || this.info?.variant?.(state) !== this.variant) this.render();
 
     if (!this.info) {
       const q = this.game.quoteUnlock(this.id);
@@ -211,7 +218,8 @@ export class StationPanel {
     const next = nextMilestone(level);
     if (next) {
       const prev = [...MILESTONES].reverse().find((m) => m <= level) ?? 1;
-      r.milestoneText.textContent = `Próximo hito: nivel ${next} (×2 ${info.milestoneWhat})`;
+      const what = typeof info.milestoneWhat === 'function' ? info.milestoneWhat(next) : info.milestoneWhat;
+      r.milestoneText.textContent = `Próximo hito: nivel ${next} (×2 ${what})`;
       r.milestoneBar.style.width = `${((level - prev) / (next - prev)) * 100}%`;
     } else {
       r.milestoneText.textContent = '¡Todos los hitos conseguidos!';
@@ -298,17 +306,21 @@ function transportInfo(id) {
   const def = STATIONS_BY_ID[id];
   const out = PRODUCTS[Object.keys(def.out)[0]];
   const produce = (s) => stationOutputRate(def, s.stations[id].level) * productionMult(s, id);
+  // Desde el nivel 50, las mulas se cambian por una banda eléctrica (lleva lo mismo).
+  const belt = (s) => hasBelt(s.stations[id].transport.level);
   return {
     icon: '🐴',
     title: `Arrieros · ${def.name}`,
     subtitle: 'A igual nivel que la estación, llevan todo lo que produce',
-    milestoneWhat: 'carga',
+    variant: belt,
+    look: (s) => (belt(s) ? { icon: '⚡', title: `Banda eléctrica · ${def.name}`, subtitle: 'Las mulas se cambiaron por una banda: lleva lo mismo y deja libre el camino' } : null),
+    milestoneWhat: (next) => (next === BELT_LEVEL ? 'carga y banda eléctrica' : 'carga'),
     upgradeId: `${id}:transport`,
     tabs: true,
     level: (s) => s.stations[id].transport.level,
     rows: [
-      { key: 'mules', label: 'Mulas', value: (s, l) => `${muleCount(l)} (${busyMules(s, id)} en camino)`, next: (l) => muleCount(l) },
-      { key: 'load', label: 'Carga por mula', value: (s, l) => `${formatAmount(teamLoad(s, id, l))} ${out.icon}`, next: (l, s) => formatAmount(teamLoad(s, id, l)) },
+      { key: 'mules', label: 'Envíos a la vez', value: (s, l) => `${muleCount(l)} ${hasBelt(l) ? 'cajas' : 'mulas'} (${busyMules(s, id)} en camino)`, next: (l) => muleCount(l) },
+      { key: 'load', label: 'Carga por envío', value: (s, l) => `${formatAmount(teamLoad(s, id, l))} ${out.icon}`, next: (l, s) => formatAmount(teamLoad(s, id, l)) },
       { key: 'trip', label: 'Viaje (ida y vuelta)', value: (s) => `${formatRate(2 * legTime(id, normalDest(s, id), muleSpeedMult(s)))} s hasta ${nameOf(normalDest(s, id))}` },
       {
         key: 'cap',
@@ -321,9 +333,11 @@ function transportInfo(id) {
     status: (s) => {
       const st = s.stations[id];
       const cap = teamCapacity(s, id);
-      if (st.status === 'blocked' && st.waiting === 'mules') return { text: '⛔ Las mulas no dan abasto y el patio se llenó: mejora a los arrieros.', bad: true };
-      if (cap < produce(s)) return { text: `⚠️ La estación produce ${formatRate(produce(s))} ${out.icon}/s y las mulas llevan ${formatRate(cap)}/s. Sube los arrieros al nivel de la estación (${st.level}).`, bad: true };
-      return { text: '✅ Los arrieros llevan todo lo que produce la estación.', bad: false };
+      const who = belt(s) ? 'la banda' : 'las mulas';
+      if (st.status === 'blocked' && st.waiting === 'mules') return { text: `⛔ ${belt(s) ? 'La banda no da' : 'Las mulas no dan'} abasto y el patio se llenó: mejora el transporte.`, bad: true };
+      if (cap < produce(s)) return { text: `⚠️ La estación produce ${formatRate(produce(s))} ${out.icon}/s y ${who} ${belt(s) ? 'lleva' : 'llevan'} ${formatRate(cap)}/s. Sube el transporte al nivel de la estación (${st.level}).`, bad: true };
+      if (!belt(s)) return { text: `✅ Los arrieros llevan todo lo que produce la estación. En el nivel ${BELT_LEVEL}, las mulas se cambian por una banda eléctrica.`, bad: false };
+      return { text: '✅ La banda lleva todo lo que produce la estación.', bad: false };
     },
   };
 }
@@ -337,7 +351,7 @@ function stationStatus(state, id) {
   const row = analysis.rows.find((r) => r.id === id);
   const parent = analysis.rows.find((r) => r.id === PARENT[id]);
   if (st.status === 'blocked') {
-    if (st.waiting === 'mules') return { text: '⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).', bad: true };
+    if (st.waiting === 'mules') return { text: hasBelt(st.transport.level) ? '⛔ Patio lleno: la banda no da abasto. Mejórala (pestaña ⚡).' : '⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).', bad: true };
     return { text: '⛔ Patio lleno: la bodega no tiene espacio. Mejora el Despacho.', bad: true };
   }
   // Falta el producto que llega de otra zona.

@@ -273,6 +273,8 @@ Cada estación tiene **dos ejes** de mejora.
 - Si todas las mulas están en camino, el producto se acumula en el **patio**. Cuando se llena, la estación se detiene (⛔).
 - **Vista «Ver cadena» (🔗)**: muestra por estación lo que recibe, procesa y produce, y por tramo lo que llevan los arrieros, lo que se desvía y lo que se pierde, con el cuello de botella en rojo.
 
+- **Banda eléctrica (v1.2.3):** desde el nivel 50 de transporte (un hito), las mulas de la estación se cambian por una banda eléctrica a un lado del camino. Lleva exactamente lo mismo (la simulación no cambia); en pantalla, lo que va en camino son cajas sobre la banda en vez de mulas con arriero, todo dibujado de una vez para que muchas estaciones avanzadas no pesen en la animación.
+
 ### 5.3 Despacho
 - Un **Willys** lleva `N` unidades de la Bodega al pueblo y vuelve. Se puede mejorar la capacidad, la velocidad y comprar más jeeps (máx. 5).
 - Es el último cuello de botella. Al principio sobra; con 7 estaciones a buen nivel se vuelve crítico.

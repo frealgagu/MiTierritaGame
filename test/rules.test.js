@@ -59,3 +59,10 @@ test('al nivel 100 cada estación produce una potencia de 2 por segundo', async 
     assert.ok(Math.abs(exp - Math.round(exp)) < 1e-9, `${def.id}: ${rate}/s al nivel 100`);
   }
 });
+
+test('las bandas eléctricas llegan en un hito de transporte', async () => {
+  const { BELT_LEVEL, MILESTONES, hasBelt } = await import('../src/sim/rules.js');
+  assert.ok(MILESTONES.includes(BELT_LEVEL));
+  assert.equal(hasBelt(BELT_LEVEL - 1), false);
+  assert.equal(hasBelt(BELT_LEVEL), true);
+});

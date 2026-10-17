@@ -66,6 +66,11 @@ export const MAX_MULES = 10;
 // la distancia: la carga de cada mula se calcula para el viaje de ida y vuelta a su destino normal.
 export const TRANSPORT_MARGIN = 1.25;
 
+// Desde este nivel de transporte (un hito), las mulas de la estación se cambian por una banda eléctrica.
+// Lleva exactamente lo mismo: solo cambia el dibujo (cajas sobre la banda en vez de mulas con arriero).
+export const BELT_LEVEL = 50;
+export const hasBelt = (level) => level >= BELT_LEVEL;
+
 export function muleCount(level) {
   return Math.min(MAX_MULES, 1 + Math.floor((level - 1) / 10));
 }

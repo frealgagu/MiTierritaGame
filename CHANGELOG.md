@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v1.2.3 — Bandas eléctricas
+- **Desde el nivel 50 de transporte** (un hito), las mulas de una estación se cambian por una **banda eléctrica**: el tramo del camino se cubre con una banda y lo que va en camino se ve como cajas del color del producto. Lleva exactamente lo mismo; solo cambia el dibujo.
+- Con muchas estaciones avanzadas ya no hay decenas de mulas con arriero en pantalla: las bandas y sus cajas se dibujan de una vez, lo que alivia la animación (sobre todo en el móvil).
+- El panel de transporte pasa a llamarse «⚡ Banda» y avisa del cambio antes de llegar al nivel 50.
+
 ## v1.2.2 — Producción en potencias de 2
 - **Fórmula de nivel ajustada**: cada nivel suma 15/99 (≈ 0,1515) en vez de 0,15, así el nivel 100 (el máximo) multiplica exactamente ×512. Con ciclos que son potencias de 2, al nivel 100 cada estación produce 256, 128, 64, 32 o 16 unidades por segundo (el doble con su investigación). Una prueba lo comprueba.
 - **Compostera**: 4 pulpas por compost en 16 s (antes 5 en 20 s); se gasta 1 compost por cada 8 cafés lavados.
