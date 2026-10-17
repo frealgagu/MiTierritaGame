@@ -1,356 +1,325 @@
-# Último Oasis — Documento de Diseño (GDD) v0.1
+# Cafetal — Documento de Diseño (GDD) v0.2
 
-> Juego de gestión y cadena de suministros, inspirado en el estilo de *Frozen City*.
-> Sin héroes, sin gacha, una sola zona jugable que se completa de verdad y se amplía con actualizaciones.
-> Tecnología: JavaScript (Vite + PixiJS), se ejecuta en el navegador.
+> Juego incremental de **cadena de suministros**: un recurso inicial ilimitado pero lento alimenta a una estación, esa estación alimenta a la siguiente, y todo se mejora para producir cada vez más.
+> De Frozen City solo se toman la cadena de producción visible y el estilo gráfico isométrico «de juguete», con personajes que llevan cargas.
+> No hay supervivencia, ni clima hostil, ni población que alimentar, ni héroes.
+> Una sola zona que se puede terminar y que se ampliará con actualizaciones. JavaScript (Vite + PixiJS).
 
 ---
 
-## 1. Elección de tema
+## 1. Tema
 
-En *Frozen City* el frío es el enemigo y el horno central lo es todo. Para no copiarlo pero mantener lo que funciona (un núcleo central, supervivientes, clima hostil, cadenas de producción visibles), se evaluaron cuatro temas:
+Se buscó un tema en el que una cadena larga de transformación sea **natural y fácil de entender**, en el que cada paso **aumente el valor** del producto y en el que el origen sea **ilimitado**.
 
-| # | Tema | Recurso vital | Amenaza | Diferenciación | Riesgo de alcance |
-|---|------|---------------|---------|----------------|-------------------|
-| **A** | **Último Oasis**: desierto tras el colapso | Agua | Olas de calor, tormentas de arena | Alta: paleta cálida, noche fresca, inverso a Frozen City | Bajo |
-| B | Faro Boreal: pueblo pesquero ártico | Pescado / aceite | Hielo marino | Baja: muy parecido a Frozen City | Bajo |
-| C | Colmena Roja: colonia en Marte | Oxígeno | Tormentas de polvo, radiación | Media | Medio (más sci‑fi, más arte) |
-| D | Raíces Hondas: ciudad subterránea de hongos | Luz | Oscuridad, plagas | Alta | Medio (iluminación compleja) |
+| Tema | Fuente ilimitada | Cadena | Notas |
+|------|------------------|--------|-------|
+| **Cafetal** (finca cafetera de montaña) | Cafeto (cerezas) | cereza → lavado → pergamino → verde → tostado → molido → bolsa | **Recomendado**: cadena real de 7 pasos, muy visual y con mucha identidad |
+| Panadería de pueblo | Trigal | trigo → harina → masa → pan → pastel | Más corta, ideal si se quiere algo muy simple |
+| Fábrica de chocolate | Cacaotal | cacao → fermentado → tostado → pasta → tableta → bombón | Muy parecida al café; buena como Zona 2 |
+| Herrería minera | Veta de mineral | mineral → lingote → barra → pieza → herramienta | Tono más industrial |
 
-**Recomendación: A, «Último Oasis».**
-- Es el «espejo» de Frozen City: la **Gran Cisterna** sustituye al horno, y el calor sustituye al frío. El jugador entiende las reglas al instante.
-- Las cadenas salen de forma natural (agua → dátiles → raciones; arena → adobe/vidrio → espejos solares).
-- Visualmente destaca: arena dorada, agua turquesa, atardeceres naranjas y noches azules con faroles cálidos.
-- Las zonas futuras son fáciles de imaginar (salinas, cañón, ruinas solares).
-
-El resto del documento usa el tema A. Si se elige otro, la estructura sirve igual: solo cambian nombres y paleta.
+**Se elige Cafetal** porque:
+- La cadena real del café tiene muchos pasos con nombre propio, cada uno con su edificio reconocible.
+- El paisaje cafetero (montañas verdes, niebla, casas de colores con balcones, palmas altas, mulas y jeeps Willys cargados) da un estilo gráfico propio y encantador.
+- Las expansiones salen solas: tostaduría en el pueblo, cafetería con bebidas, puerto de exportación, cacao…
 
 ---
 
 ## 2. Concepto
 
-> *Las ciudades se secaron. Un pequeño grupo de supervivientes encuentra un manantial bajo una cisterna antigua. Tu trabajo: convertir ese charco en un oasis capaz de resistir el Gran Siroco.*
+> *Heredas una ladera con unos pocos cafetos y una mula. Cosecha, procesa y despacha café cada vez mejor hasta llenar tu primer contenedor de exportación.*
 
-- **Género:** gestión / city‑builder ligero con cadena de suministros.
-- **Vista:** isométrica 2:1, mapa de una sola zona con cámara desplazable y zoom.
-- **Sesión típica:** de 5 a 15 minutos. Hay progreso sin conexión limitado (máx. 4 h).
-- **Duración de la Zona 1:** entre 3 y 5 horas para completarla. **Es lograble**: tiene un final claro.
-- **Sin:** héroes, gacha, PvP, energía/stamina ni monetización.
+- **Género:** incremental / idle de cadena de producción.
+- **Vista:** isométrica. La finca baja por la ladera: arriba el cafetal y abajo el pueblo donde se despacha. La cadena se lee de arriba abajo.
+- **Sesiones:** cortas (de 2 a 10 min) o dejándolo correr. Ganancias sin conexión con un límite.
+- **Zona 1:** de 3 a 5 horas hasta el objetivo final. **Tiene final**: no hay que esperar días.
+- **Sin:** héroes, gacha, energía, anuncios ni pagos.
 
 ### Pilares
-1. **La cadena se ve.** Cada recurso tiene un edificio y un porteador que lo mueve. Si algo falla, se nota en el mapa.
-2. **El clima presiona.** El calor sube a lo largo del día y llegan olas de calor y tormentas. Hay que prepararse.
-3. **Siempre hay un siguiente paso claro.** Una lista de misiones guía al jugador; nunca se queda sin saber qué hacer.
-4. **Pequeño y terminado mejor que grande y a medias.**
+1. **Cada producto alimenta al siguiente.** Siempre se ve qué estación está esperando y cuál se está atascando.
+2. **Mejorar siempre se nota.** Cada compra acelera algo de forma visible: más mulas, máquinas más rápidas, números más grandes.
+3. **El cuello de botella se mueve.** Si arreglas uno, aparece otro más abajo. Ese es el juego.
+4. **Pequeño y terminado.**
 
 ---
 
 ## 3. Bucle de juego
 
 ```
- ┌───────────────────────────────────────────────────────────┐
- │ Asignar trabajadores → Producir → Transportar → Consumir   │
- │        ▲                                          │       │
- │        │                                          ▼       │
- │  Llegan supervivientes ◄── Moral/Hogar ◄── Construir/Mejorar
- │                                                   │       │
- │                     Mejorar Gran Cisterna ◄───────┘       │
- │                     (desbloquea edificios y niveles)      │
- └───────────────────────────────────────────────────────────┘
+ Cafetal (ilimitado, lento)
+      │  cerezas
+      ▼
+ Estación 2 ─► Estación 3 ─► … ─► Bodega ─► Despacho (Willys) ─► 💰 Monedas
+      ▲                                                            │
+      └──────────── Mejorar nivel / arrieros / desbloquear ◄───────┘
 ```
 
-- **Micro (segundos):** tocar edificios para recoger producción, mover trabajadores y responder a eventos.
-- **Meso (minutos):** encontrar el cuello de botella de la cadena y resolverlo construyendo o mejorando.
-- **Macro (horas):** subir la Gran Cisterna de nivel y prepararse para el Gran Siroco.
+1. El **Cafetal** produce cerezas sin fin, pero despacio.
+2. Cada **estación** transforma lo que recibe en un producto de mayor valor.
+3. Los **arrieros** (mulas) llevan el producto de una estación a la siguiente.
+4. Todo lo que llega a la **Bodega** lo vende el **Despacho** y se convierte en monedas.
+5. Con las monedas se **mejora**, se **desbloquean** estaciones y se compran **investigaciones**.
+
+**Decisión clave:** ¿mejoro producción, transporte o venta? El jugador busca el cuello de botella; la UI se lo marca.
 
 ---
 
-## 4. Recursos
+## 4. La cadena (Zona 1)
 
-| Recurso | Icono | Nivel | Origen | Uso principal |
-|---------|-------|-------|--------|---------------|
-| Agua | 💧 | 0 | Pozo, Destilador solar | Consumo de la población, cultivos, adobe |
-| Madera de palma | 🪵 | 0 | Palmeral | Construcción, horno de vidrio |
-| Arena | ⏳ | 0 | Cantera de arena | Adobe, vidrio |
-| Dátiles | 🌴 | 1 | Huerto de dátiles | Cocina |
-| Raciones | 🍲 | 2 | Cocina comunal | Consumo de la población |
-| Adobe | 🧱 | 2 | Horno de adobe | Casas y mejoras |
-| Vidrio | 🔷 | 2 | Horno de vidrio | Espejos |
-| Espejo solar | ☀️ | 3 | Taller de espejos | Destilador solar, mejoras finales de la Cisterna |
-| Monedas de sal | 🪙 | — | Caravasar (comercio) | Acelerar obras y comprar a caravanas |
+| # | Estación | Entra | Sale | Ciclo (nv. 1) | Valor unidad | Desbloqueo | Coste base de mejora |
+|---|----------|-------|------|---------------|--------------|------------|----------------------|
+| 1 | **Cafetal** ♾️ | — | 1 🍒 cereza | 2,0 s | 1 | Inicial | 5 |
+| 2 | Beneficiadero (despulpar y lavar) | 2 🍒 | 1 💧 grano lavado | 3,0 s | 3 | 50 | 40 |
+| 3 | Marquesina de secado | 1 💧 | 1 🟫 pergamino | 5,0 s | 6 | 400 | 300 |
+| 4 | Trilladora | 1 🟫 | 1 🟢 café verde | 3,0 s | 10 | 2.500 | 2.000 |
+| 5 | Tostadora | 2 🟢 | 1 🟤 café tostado | 6,0 s | 30 | 15.000 | 12.000 |
+| 6 | Molino | 1 🟤 | 1 ☕ café molido | 3,0 s | 45 | 90.000 | 70.000 |
+| 7 | Empacadora | 4 ☕ | 1 🛍️ bolsa de café | 8,0 s | 250 | 500.000 | 400.000 |
+| — | **Bodega + Despacho** | cualquier producto | 💰 | viaje de 10 s | — | Inicial | 10 |
 
-### Cadena de suministros (Zona 1)
-
-```
-Pozo ───────────► 💧 Agua ─────────┬──────────────► Población (beber)
-                                   │
-                                   ├─► Huerto ─► 🌴 Dátiles ─┐
-                                   │                         ├─► Cocina ─► 🍲 Raciones ─► Población (comer)
-                                   └─────────────────────────┘
-Cantera ────────► ⏳ Arena ──┬─(+💧)─► Horno de adobe ─► 🧱 Adobe ─► Casas / Cisterna
-                            │
-Palmeral ───────► 🪵 Madera ─┴─(+⏳)─► Horno de vidrio ─► 🔷 Vidrio ─(+🪵)─► Taller ─► ☀️ Espejo
-                                                                                        │
-                                                         Destilador solar ◄─────────────┘
-                                                         (💧 extra sin trabajadores)
-```
+- **Al principio solo existen el Cafetal y el Despacho:** se venden cerezas a 1 💰. Desbloquear el Beneficiadero vuelve más rentable cada cereza, y así sucesivamente.
+- **Cada paso aumenta el valor** más de lo que consume (2 🍒 = 2 → 1 💧 = 3), así que procesar siempre conviene, **si la estación da abasto**. Si no, el sobrante también se vende en crudo.
+- **Desvío automático:** si una estación está llena o bloqueada, su entrada se desvía a la Bodega y se vende tal cual. La cadena nunca se atasca del todo; solo rinde menos. La UI lo muestra con una flecha naranja de desvío.
 
 ---
 
-## 5. Edificios (Zona 1)
+## 5. Mejoras
 
-Las tasas son **por minuto, a nivel 1 y con todos los puestos ocupados**. Cada nivel adicional suma un 25 % a la producción y un puesto de trabajo cada 2 niveles. Nivel máximo en la Zona 1: 5 (Cisterna: 8).
+Cada estación tiene **dos ejes** de mejora.
 
-| Edificio | Desbloqueo (Cisterna) | Coste | Puestos | Entrada/min | Salida/min | Notas |
-|----------|-----------------------|-------|---------|-------------|------------|-------|
-| **Gran Cisterna** | — | ver §7 | 0 | — | Almacena 💧 | Núcleo. Su nivel limita al resto |
-| Palmeral | 1 | Inicial | 2 | — | 4 🪵 | |
-| Pozo | 1 | 20 🪵 | 2 | — | 6 💧 | |
-| Tienda de lona | 1 | 15 🪵 | — | — | +4 camas | Vivienda básica |
-| Cantera de arena | 2 | 30 🪵 | 2 | — | 5 ⏳ | |
-| Huerto de dátiles | 2 | 30 🪵, 10 ⏳ | 3 | 2 💧 | 4 🌴 | |
-| Cocina comunal | 2 | 40 🪵, 20 ⏳ | 2 | 2 🌴, 1 💧 | 3 🍲 | |
-| Almacén | 3 | 50 🪵, 30 ⏳ | 1 (porteador) | — | +capacidad, +1 porteador | |
-| Horno de adobe | 3 | 60 🪵, 40 ⏳ | 2 | 3 ⏳, 2 💧 | 2 🧱 | |
-| Casa de adobe | 3 | 20 🧱, 10 🪵 | — | — | +8 camas, +moral | |
-| Toldo | 3 | 15 🪵 | — | — | −2 °C en un radio de 3 casillas | Defensa contra el calor |
-| Horno de vidrio | 4 | 40 🧱, 40 🪵 | 3 | 4 ⏳, 2 🪵 | 1 🔷 | |
-| Caravasar | 4 | 60 🧱, 30 🪵 | 1 | Excedentes | 🪙 | Llega una caravana cada 20 min |
-| Enfermería | 5 | 50 🧱, 10 🔷 | 2 | 1 💧 | Cura insolación | |
-| Taller de espejos | 6 | 60 🧱, 20 🔷 | 2 | 2 🔷, 1 🪵 | 1 ☀️ | |
-| Destilador solar | 6 | 5 ☀️, 30 🧱 | 0 | — | 8 💧 (de día) | Automatiza el agua |
-| Torre cortavientos | 7 | 80 🧱, 10 ☀️ | 0 | — | Protege de tormentas | Necesaria para el final |
+### 5.1 Nivel de producción (1–100)
+- **Velocidad:** `vel(L) = base × (1 + 0,15 × (L − 1)) × 2^hitos`.
+- **Hitos** en los niveles 10, 25, 50, 75 y 100: la velocidad se **duplica** y el edificio cambia de aspecto (ver §8).
+- **Coste:** `coste(L) = costeBase × 1,15^(L − 1)`.
+- Botones de compra ×1, ×10 y «máx».
 
-### Buffers y transporte (la «cadena» de verdad)
-- Cada edificio tiene un **buffer de entrada** y uno de **salida** (capacidad: 20 × nivel).
-- Si el buffer de salida está lleno, el edificio **se detiene** (icono ⛔ sobre el tejado).
-- Los **porteadores** recorren a pie la ruta *edificio → almacén → edificio* llevando 5 unidades por viaje.
-- **Capacidad logística** = porteadores × 5 / tiempo del viaje. Es el cuello de botella intermedio del juego y la razón de colocar bien los edificios: cuanto más cerca del almacén, más rápido va todo.
-- **Simplificación para el MVP (v0.2):** el transporte es instantáneo y los porteadores son solo decorativos. El transporte real llega en la v0.4.
+### 5.2 Arrieros (transporte hacia la siguiente estación)
+- Cada arriero es una mula que lleva `carga` unidades por viaje. El viaje dura según la distancia en el mapa.
+- **Capacidad del tramo** = arrieros × carga / tiempo del viaje.
+- **Mejoras:** +1 arriero (máx. 10), +carga (canasto → costal → doble costal) y +velocidad (herraduras).
+- Si los arrieros no dan abasto, el producto se acumula en el **buffer de salida** (visible como sacos apilados). Cuando se llena, la estación se detiene.
 
----
+### 5.3 Despacho
+- Un **Willys** lleva `N` unidades de la Bodega al pueblo y vuelve. Se puede mejorar la capacidad, la velocidad y comprar más jeeps (máx. 5).
+- Es el último cuello de botella. Al principio sobra; con 7 estaciones a buen nivel se vuelve crítico.
 
-## 6. Población y necesidades
+### 5.4 Investigaciones (compras únicas y globales)
 
-- **Supervivientes:** llegan a la puerta del oasis cada 90 s si hay camas libres y la moral es ≥ 40.
-- **Consumo por persona y minuto:** 0,5 💧 y 0,3 🍲. Durante una ola de calor el agua se duplica.
-- **Estados:** Trabajando · Descansando (de noche) · Sediento · Hambriento · Insolación (deja de trabajar; la Enfermería lo cura).
-- **Moral (0–100)**, el equivalente a la «esperanza» de Frozen City:
-  - Sube con: agua y raciones disponibles, casas de adobe, toldos y eventos superados.
-  - Baja con: escasez, gente sin cama, insolaciones.
-  - Por debajo de 20, los supervivientes empiezan a irse. **No hay game over**: si todos se van, regresan poco a poco. La partida es lograble y nunca se bloquea.
-- **Asignación:** botones +/− en cada edificio, más un botón de «autoasignar» que reparte según prioridades.
+| Investigación | Efecto | Coste aprox. |
+|---------------|--------|--------------|
+| Abono orgánico | Cafetal ×2 | 1.000 |
+| Variedad Castillo | Cafetal ×2 | 50.000 |
+| Secador mecánico | Marquesina ×3 | 30.000 |
+| Tueste de origen | +50 % de valor del tostado | 200.000 |
+| Sello de calidad | +50 % de valor de las bolsas | 2.000.000 |
+| Cable aéreo | Arrieros del tramo más largo ×2 de velocidad | 500.000 |
+| Capataz | Ganancias sin conexión: de 2 h a 6 h | 100.000 |
 
 ---
 
-## 7. Progresión: la Gran Cisterna
+## 6. Objetivos y final de la zona
 
-El nivel de la Cisterna limita el nivel máximo del resto de edificios (igual que el horno en Frozen City).
+Hay una lista de **objetivos** (3 visibles a la vez), cada uno con una recompensa en monedas. Sirven de guía:
 
-| Nivel | Coste | Desbloquea | Capacidad 💧 |
-|-------|-------|------------|-------------|
-| 1 | — | Palmeral, Pozo, Tienda | 200 |
-| 2 | 80 🪵 | Cantera, Huerto, Cocina | 400 |
-| 3 | 150 🪵, 80 ⏳ | Almacén, Horno de adobe, Casa, Toldo | 700 |
-| 4 | 120 🧱, 100 🪵 | Horno de vidrio, Caravasar | 1000 |
-| 5 | 200 🧱, 30 🔷 | Enfermería | 1400 |
-| 6 | 300 🧱, 60 🔷 | Taller de espejos, Destilador solar | 1900 |
-| 7 | 400 🧱, 20 ☀️ | Torre cortavientos | 2500 |
-| 8 | 500 🧱, 50 ☀️, 100 🪙 | **Desafío final: el Gran Siroco** | 3200 |
+1. Vende 50 cerezas.
+2. Sube el Cafetal a nivel 10 (primer hito).
+3. Desbloquea el Beneficiadero.
+4. Compra tu segundo arriero.
+5. Produce 100 granos de pergamino.
+6. …
+7. Desbloquea la Empacadora.
+8. **Final: llena el Contenedor de exportación con 1.000 bolsas.**
 
-**Final de la Zona 1:** sobrevivir al **Gran Siroco**, una tormenta de 5 minutos (tiempo real) en la que el calor es extremo, la producción exterior cae un 70 % y los caminos se cubren de arena. Para ganar hay que tener ≥ 3 torres cortavientos, ≥ 600 💧 almacenados y moral ≥ 50 al terminar. Si fallas, puedes reintentarlo. Al ganar se muestra la pantalla de «Zona completada» y se deja ver la Zona 2 en el horizonte.
+El contenedor es una barra grande en el puerto del pueblo. Al llenarse aparecen un barco, una animación final, la pantalla de «Zona completada» y el anuncio de la siguiente zona. Después se puede seguir jugando en modo libre.
 
----
-
-## 8. Clima y eventos
-
-- **Ciclo de día:** 1 día = 8 minutos reales (amanecer, día, atardecer, noche).
-  - El calor sube hasta el mediodía: más consumo de agua y más riesgo de insolación.
-  - De noche hace fresco, la producción baja un 30 % y la gente descansa. Es el momento más bonito visualmente.
-- **Eventos (aleatorios, con aviso de 60 s):**
-
-| Evento | Frecuencia | Efecto | Cómo prepararse |
-|--------|-----------|--------|-----------------|
-| Ola de calor | Cada 2–3 días | Agua ×2 durante 1 día | Toldos y reservas de agua |
-| Tormenta de arena | Desde Cisterna 4 | Porteadores ×0,5 de velocidad, arena acumulada en edificios (toca para limpiar) | Almacén cercano |
-| Caravana | Cada 20 min (con Caravasar) | Ofrece 3 intercambios | Tener excedentes |
-| Viajero perdido | Raro | +3 supervivientes si hay camas | Camas libres |
-| Pozo turbio | Raro | Pozo al 50 % durante 2 min | Destilador solar |
+**Balance objetivo:** unos 30 objetivos. El contenedor debería llenarse hacia las 3–5 horas de juego activo, o un poco más dejándolo correr. Se ajustará con un simulador (ver §10).
 
 ---
 
-## 9. Misiones (onboarding y guía)
+## 7. Ganancias sin conexión
 
-Lista lineal con 1–3 misiones activas, cada una con su recompensa. Ejemplos de las primeras:
-1. Asigna 2 trabajadores al Palmeral.
-2. Construye un Pozo.
-3. Construye 2 Tiendas de lona.
-4. Mejora la Gran Cisterna a nivel 2.
-5. Produce 20 raciones.
-6. Mantén la moral por encima de 60 durante 2 minutos.
-7. Sobrevive a tu primera ola de calor.
-…hasta llegar a «Derrota al Gran Siroco».
+Al volver se calcula el **flujo estable** de la cadena: el mínimo de capacidad entre producción, transporte y despacho a lo largo de la cadena. Ese flujo se multiplica por el tiempo fuera, con un máximo de 2 h (6 h con Capataz).
 
-Entre 30 y 40 misiones bastan para la Zona 1.
+Al tratarse de un cálculo analítico, no hace falta simular tick a tick y es instantáneo. Se muestra «Mientras no estabas, tu finca ganó X 💰».
 
 ---
 
-## 10. Dirección de arte (estilo Frozen City)
+## 8. Dirección de arte (estilo Frozen City, ambientación cafetera)
 
-Lo que define el aspecto de Frozen City y lo que vamos a replicar:
-1. **Isométrico limpio**, con edificios «de juguete» y volúmenes simples, contornos suaves y sombras proyectadas.
-2. **Un foco de luz cálido central.** Allí es el horno; aquí será la Cisterna, que brilla turquesa y con faroles naranjas al anochecer.
-3. **Mucha vida pequeña:** muñequitos caminando con cargas, humo, partículas y números flotando.
-4. **UI gruesa y amable:** paneles con bordes redondeados, iconos grandes con contorno y botones que «rebotan».
+### Lo que se toma de Frozen City
+- Isométrico limpio, con edificios «de juguete», volúmenes sencillos, contornos suaves y sombras proyectadas.
+- **Vida pequeña por todas partes:** personajes y animales que caminan llevando cargas visibles, máquinas que se mueven, humo y números flotando.
+- **Los edificios crecen con el nivel:** cada hito cambia el modelo (cobertizo → casa → fábrica).
+- UI gruesa y amable: paneles redondeados, iconos grandes y botones que rebotan.
+
+### Ambientación
+- Ladera verde en diagonal, con el cafetal arriba y el pueblo abajo. Un camino de tierra en zigzag une las estaciones.
+- Fondo: montañas en capas con niebla, palmas de cera altas y nubes que pasan.
+- Las estaciones son casas campesinas de colores: blanco con zócalo, puertas y balcones de madera pintados de rojo, azul, amarillo o verde, y tejas de barro.
+- **Arrieros:** mulas con costales y un campesino de sombrero aguadeño y poncho.
+- **Despacho:** un jeep Willys cargado hasta arriba bajando la carretera.
+- Día y noche **solo cosmético**: amanecer con niebla, día brillante y noche con faroles cálidos y ventanas iluminadas.
+
+### Evolución visual por hitos (ejemplo: Tostadora)
+| Nivel | Aspecto |
+|-------|---------|
+| 1–9 | Fogón de leña con paila |
+| 10–24 | Cobertizo con tostador de tambor manual |
+| 25–49 | Casa de bahareque con tostador a gas y chimenea |
+| 50–74 | Taller de ladrillo con dos tostadores |
+| 75–100 | Pequeña fábrica con silos y una banda que sale |
 
 ### Paleta
 
 | Uso | Hex |
 |-----|-----|
-| Arena (luz) | `#F2D29B` |
-| Arena (sombra) | `#C99A5B` |
-| Terracota / adobe | `#C8643B` |
-| Adobe sombra | `#8E4027` |
-| Agua turquesa | `#3FB8C4` |
-| Agua brillo | `#B6F0F2` |
-| Palmera | `#5E8C3A` |
-| Lona / tela | `#EFE6D2` |
-| Contorno | `#3A2418` |
-| Cielo de día | `#F7E3B5` |
-| Cielo de atardecer | `#F4A259` → `#C8553D` |
-| Noche (tinte) | `#2B2D5B` (multiply, 45 %) |
-| Farol / luz cálida | `#FFB347` (add/glow) |
+| Cafetal verde (luz) | `#7DBA4E` |
+| Cafetal verde (sombra) | `#4E7F33` |
+| Montaña lejana | `#8FB3A0` → `#C9DCCF` (niebla) |
+| Cereza roja | `#D7263D` |
+| Café tostado | `#6B3E26` |
+| Tierra del camino | `#C79A64` |
+| Pared encalada | `#F4EFE6` |
+| Teja | `#B5512E` |
+| Balcones | `#2E6FD1` · `#E8B90F` · `#D7263D` · `#2FA36B` |
+| Contorno | `#3A2418` (60 %) |
+| Cielo de día | `#BFE3F2` |
+| Atardecer | `#F6B26B` → `#E07A5F` |
+| Noche (tinte) | `#2B2D5B` (multiply, 40 %) |
+| Farol | `#FFC864` (glow) |
 
 ### Reglas visuales
-- **Casillas:** rombos de 64×32 px. Los edificios ocupan 2×2 o 3×3 casillas; la Cisterna, 4×4 en el centro.
-- **Sombreado de volúmenes:** cara superior = color base, cara izquierda = base −15 % de luz, cara derecha = base −30 %. Así cualquier caja procedural ya «parece Frozen City».
-- **Sombras:** elipse oscura semitransparente bajo cada edificio y personaje, que se alarga al atardecer.
-- **Contorno:** 2 px en `#3A2418` con 60 % de opacidad. No usar negro puro.
-- **Personajes:** chibi de 16×24 px, cabeza grande, turbante de color según su oficio y animación de caminar de 3 fotogramas; al llevar carga aparece un icono encima de la cabeza.
+- **Casillas:** rombos de 64×32 px. Las estaciones ocupan 3×3 casillas.
+- **Sombreado:** cara superior = base, izquierda = −15 % de luz, derecha = −30 %.
+- **Personajes:** de 16×24 px, cabeza grande y caminata de 3 fotogramas; mulas de 24×20 px con los costales de un color distinto según el producto.
 - **Efectos:**
-  - Calima por calor (filtro de desplazamiento senoidal) cuando la temperatura es alta.
-  - Partículas de polvo en tormentas, humo en los hornos y destellos en el agua.
-  - Número flotante «+6 💧» que sube y se desvanece al recoger.
-  - Halo (glow) en faroles y en la Cisterna por la noche.
-  - Edificio en obras: andamio y barra de progreso; al terminar, un pequeño rebote (escala 1 → 1,1 → 1).
+  - Número flotante «+250 💰» al vender.
+  - Monedas que saltan del Willys al llegar al pueblo.
+  - Humo en la tostadora, vapor en el beneficiadero y granos esparcidos en la marquesina.
+  - Destello y pequeño rebote al subir de nivel; confeti y cambio de modelo en cada hito.
+  - **Indicadores de estado sobre cada estación:** ⏸️ esperando entrada · ⛔ salida llena · ↪️ desviando a bodega.
 - **UI:**
-  - Barra superior con los recursos y su tasa (+/min) en verde o rojo.
-  - Arriba a la izquierda: temperatura, hora del día y moral.
-  - Panel lateral de misiones.
-  - Al tocar un edificio, panel inferior con nivel, trabajadores +/−, buffers y botón de mejorar.
-  - Fuente: **Fredoka** o **Baloo 2** (Google Fonts), redondeadas como en Frozen City.
+  - Barra superior: 💰 y 💰/s.
+  - Panel inferior de la estación seleccionada: nivel, velocidad, buffers, arrieros, botones de mejora ×1/×10/máx.
+  - Lateral: objetivos.
+  - Botón «Ver cadena»: un diagrama compacto con el flujo/s de cada tramo y el cuello de botella resaltado en rojo.
+  - Fuente: **Fredoka** o **Baloo 2**.
 
-### Producción del arte (sin artista)
-1. **v0.1–0.3:** todo procedural en código (cajas isométricas con tres caras, cilindros para la Cisterna y triángulos para las palmeras). Rápido y coherente.
-2. **v0.4+:** sustituir edificio a edificio por sprites PNG (dibujados, generados o de paquetes CC0 como *Kenney Isometric*), sin tocar la lógica, gracias a que cada edificio declara su `sprite` en datos.
+### Producción del arte sin artista
+1. **v0.1–0.3:** todo se dibuja por código (cajas isométricas, techos de dos aguas, arbustos redondos con puntos rojos para los cafetos). Rápido y coherente.
+2. **v0.4+:** sustituir por sprites PNG estación a estación. Cada estación declara su `sprite` por hito en los datos, así que la lógica no cambia.
 
 ---
 
-## 11. Arquitectura técnica
+## 9. Arquitectura técnica
 
-- **Stack:** JavaScript (ES modules) + **Vite** (servidor de desarrollo y build) + **PixiJS v8** (render WebGL, filtros de glow y desplazamiento, buen rendimiento con cientos de sprites).
-- **Sin backend:** el guardado va a `localStorage` como JSON versionado, con exportar/importar en texto.
-- **Separación estricta:** la simulación no sabe nada del render.
-  - La simulación avanza a **tick fijo** (10 ticks/s), es determinista y se puede probar sin navegador.
-  - El render interpola y lee el estado.
-- **Datos, no código:** edificios, recursos, recetas, eventos, misiones y zonas se definen en archivos `data/*.js`. Añadir una zona nueva = añadir datos.
-- **Progreso sin conexión:** al cargar se simula `min(tiempo_fuera, 4 h)` en pasos grandes (1 tick = 1 s, sin eventos aleatorios).
+- **Stack:** JavaScript (ES modules), Vite y PixiJS v8.
+- **Sin servidor:** se guarda en `localStorage` como JSON versionado, con exportar e importar en texto.
+- **La simulación y el dibujo van separados:**
+  - La simulación avanza a tick fijo (10/s), es pura y se puede probar con Node.
+  - El dibujo solo lee el estado.
+- **Todo el contenido son datos:** recursos, estaciones, mejoras, investigaciones, objetivos y zonas están en `src/data/`. Una zona nueva = un archivo nuevo.
+- **Números grandes:** con `Number` alcanza hasta unos 1e15 en la Zona 1. El formato es 1,2K · 3,4M · 5,6B. Si las zonas futuras lo exigen, se cambiará a `break_infinity.js`.
 
-### Estructura de carpetas propuesta
+### Carpetas
 
 ```
 /
 ├─ index.html
 ├─ package.json
 ├─ vite.config.js
-├─ docs/
-│  └─ GDD.md
+├─ docs/GDD.md
+├─ tools/
+│  └─ balance-sim.js        # simula N horas con una estrategia "codiciosa" e imprime tiempos de cada hito
 └─ src/
-   ├─ main.js                 # arranque: carga, crea Game, conecta render y UI
+   ├─ main.js
    ├─ core/
-   │  ├─ Game.js              # estado raíz + bucle de tick fijo
-   │  ├─ EventBus.js          # pub/sub entre sistemas y UI
-   │  ├─ SaveSystem.js        # guardar/cargar/migrar versiones
-   │  └─ rng.js               # aleatorio con semilla
-   ├─ sim/                    # lógica pura, sin DOM ni Pixi
-   │  ├─ economy.js           # recetas, buffers, producción
-   │  ├─ logistics.js         # porteadores y rutas
-   │  ├─ population.js        # llegada, consumo, moral, estados
-   │  ├─ weather.js           # día/noche, temperatura, eventos de clima
-   │  ├─ events.js            # caravanas, viajeros, etc.
-   │  └─ quests.js            # misiones y recompensas
+   │  ├─ Game.js            # estado + bucle de tick fijo
+   │  ├─ EventBus.js
+   │  ├─ SaveSystem.js
+   │  └─ format.js          # 1,2K / 3,4M
+   ├─ sim/                  # lógica pura (sin DOM ni Pixi)
+   │  ├─ stations.js        # ciclos, buffers, recetas, desvío
+   │  ├─ transport.js       # arrieros por tramo
+   │  ├─ dispatch.js        # bodega + Willys → monedas
+   │  ├─ upgrades.js        # costes, hitos, investigaciones
+   │  ├─ goals.js
+   │  └─ offline.js         # flujo estable × tiempo
    ├─ data/
-   │  ├─ resources.js
-   │  ├─ buildings.js
-   │  ├─ cistern.js           # niveles de la Cisterna
-   │  ├─ events.js
-   │  ├─ quests.js
-   │  └─ zones/
-   │     └─ zone1_oasis.js    # mapa, casillas bloqueadas y posiciones iniciales
+   │  ├─ products.js
+   │  ├─ stations.js
+   │  ├─ research.js
+   │  ├─ goals.js
+   │  └─ zones/zone1_finca.js   # posiciones de estaciones y camino
    ├─ render/
-   │  ├─ iso.js               # conversión mundo↔pantalla, orden de profundidad
-   │  ├─ Camera.js            # arrastre, zoom, límites
-   │  ├─ MapRenderer.js       # suelo, decoración
-   │  ├─ BuildingRenderer.js
-   │  ├─ WalkerRenderer.js    # personas y porteadores
-   │  ├─ Effects.js           # partículas, números flotantes, calima, glow
-   │  ├─ DayNight.js          # tinte y luces
-   │  └─ procedural/          # dibujo de edificios por código
+   │  ├─ iso.js
+   │  ├─ Camera.js
+   │  ├─ TerrainRenderer.js
+   │  ├─ StationRenderer.js
+   │  ├─ CarrierRenderer.js     # mulas y Willys siguiendo el camino
+   │  ├─ Effects.js             # números flotantes, humo, confeti
+   │  ├─ DayNight.js
+   │  └─ procedural/
    └─ ui/
-      ├─ HUD.js               # barra de recursos, clima, moral
-      ├─ BuildingPanel.js
-      ├─ BuildMenu.js
-      ├─ QuestPanel.js
+      ├─ HUD.js
+      ├─ StationPanel.js
+      ├─ ChainView.js           # diagrama del flujo y cuello de botella
+      ├─ GoalsPanel.js
       └─ styles.css
 ```
 
-### Ejemplo de definición en datos
+### Ejemplo de datos
 
 ```js
-// src/data/buildings.js
-export const BUILDINGS = {
-  date_orchard: {
-    name: 'Huerto de dátiles',
-    size: [2, 2],
-    unlockAt: 2,                       // nivel de Cisterna
-    cost: { wood: 30, sand: 10 },
-    workers: 3,
-    recipe: { in: { water: 2 }, out: { dates: 4 }, perMinute: true },
-    levelScaling: { output: 0.25, workersEvery: 2 },
-    sprite: 'procedural:orchard',      // más adelante: 'img/orchard.png'
+// src/data/stations.js
+export const STATIONS = [
+  {
+    id: 'farm', name: 'Cafetal', infinite: true,
+    out: { cherry: 1 }, cycle: 2.0,
+    unlockCost: 0, upgradeBase: 5,
+    sprites: ['farm_0', 'farm_10', 'farm_25', 'farm_50', 'farm_75'],
   },
-};
+  {
+    id: 'wetmill', name: 'Beneficiadero',
+    in: { cherry: 2 }, out: { washed: 1 }, cycle: 3.0,
+    unlockCost: 50, upgradeBase: 40,
+  },
+  // ...
+];
+
+export const MILESTONES = [10, 25, 50, 75, 100]; // ×2 de velocidad en cada uno
+export const COST_GROWTH = 1.15;
 ```
 
 ---
 
-## 12. Hoja de ruta
+## 10. Hoja de ruta
 
-| Versión | Objetivo | Entregable jugable |
-|---------|----------|--------------------|
-| **v0.1** Prototipo | Mapa isométrico, cámara, colocar edificios, Palmeral + Pozo produciendo, HUD de recursos | Se puede construir y ver números subir |
-| **v0.2** Cadena | Todos los edificios de nivel ≤ 4, recetas con buffers, trabajadores asignables, Cisterna 1–4 | La cadena completa funciona |
-| **v0.3** Supervivencia | Población, consumo, moral, día/noche, olas de calor | Hay tensión y decisiones |
-| **v0.4** Vida | Porteadores reales, caminantes, partículas, números flotantes, calima, glow nocturno | Ya «se siente» Frozen City |
-| **v0.5** Guía | Misiones, guardado, progreso sin conexión, sonido básico | Se puede jugar de principio a fin hasta Cisterna 6 |
-| **v1.0** Zona 1 completa | Cisterna 7–8, Torre cortavientos, Gran Siroco, pantalla final, balance | **Juego completo y lograble** |
-| v1.1 | Zona 2: **Salinas del Este** (sal → conservas, comercio por camellos entre zonas) | Expansión |
-| v1.2 | Zona 3: **Cañón de Cobre** (minería, herramientas, mejora de porteadores) | Expansión |
-| v1.3 | Zona 4: **Ruinas Solares** (tecnología antigua, energía) | Expansión |
+| Versión | Contenido | Resultado jugable |
+|---------|-----------|-------------------|
+| **v0.1** | Mapa isométrico, cámara, Cafetal + Despacho, mejora de nivel, HUD de monedas | Producir cerezas, venderlas y mejorar |
+| **v0.2** | Las 7 estaciones, recetas, buffers, desvío a bodega, desbloqueos | La cadena completa funciona |
+| **v0.3** | Arrieros reales por el camino, mejoras de transporte, Willys, indicadores de estado, vista «Ver cadena» | Los cuellos de botella son visibles |
+| **v0.4** | Hitos con cambio de modelo, efectos, día y noche cosmético, sonido básico | Se siente vivo, al estilo Frozen City |
+| **v0.5** | Objetivos, investigaciones, guardado, ganancias sin conexión, simulador de balance | Se juega de principio a fin |
+| **v1.0** | Contenedor de exportación, pantalla final y balance ajustado | **Zona 1 completa** |
+| v1.1 | **Zona 2: Tostaduría del pueblo.** Recibe café verde de la finca por caravana y produce varios tipos de tueste | Expansión |
+| v1.2 | **Zona 3: Cafetería.** Café + leche (nueva cadena: lechería) + azúcar (trapiche) → bebidas | Expansión con cadenas que se cruzan |
+| v1.3 | **Zona 4: Puerto.** Exportación con barcos y pedidos especiales | Expansión |
 
-**Expansiones:** cada zona nueva es un mapa aparte con su propio núcleo y cadena, que **se conecta con las anteriores mediante rutas de caravana** (exporta lo que produce e importa lo que necesita). Así la cadena de suministros crece entre zonas sin rehacer la primera.
-
----
-
-## 13. Fuera de alcance (a propósito)
-
-Héroes, combate, gacha, multijugador, alianzas, tienda con dinero real, energía/stamina, varias zonas en la v1.0 y servidor.
+**Cómo se conectan las zonas:** cada zona nueva tiene su propio recurso ilimitado y su cadena. Además puede **importar** productos de zonas anteriores mediante una ruta (Willys o caravana), que también se mejora. La cadena de suministros crece entre zonas sin rehacer la primera.
 
 ---
 
-## 14. Decisiones abiertas
+## 11. Fuera de alcance
 
-1. ¿Tema A (Oasis) o prefieres otro (B, C o D)?
-2. ¿Móvil primero (vertical, táctil) o escritorio primero? Se recomienda **escritorio primero con soporte táctil básico** por ser más rápido de probar.
-3. ¿Nombre definitivo? Alternativas: *Último Oasis*, *Cisterna*, *Arena y Agua*, *Siroco*.
-4. ¿Idioma de la interfaz? Solo español o español + inglés desde el inicio (preparar `i18n` desde la v0.1 es barato).
+Supervivencia, clima que afecte a la economía, población con necesidades, héroes, combate, gacha, energía, multijugador, tienda con dinero real, prestigio o reinicio (quizá más adelante, por zona) y servidor.
+
+---
+
+## 12. Decisiones abiertas
+
+1. ¿Cafetal o prefieres otra cadena (panadería, chocolate, herrería)?
+2. ¿Escritorio primero (recomendado) o móvil vertical?
+3. ¿Nombre? *Cafetal*, *Del Grano a la Taza*, *Finca*, *Arrieros*.
+4. ¿Interfaz solo en español o también en inglés?
