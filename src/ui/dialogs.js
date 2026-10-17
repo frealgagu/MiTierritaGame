@@ -3,11 +3,12 @@ import { ZONES_BY_ID, ZONE_LIST } from '../data/zones/index.js';
 import { ZONES as ALL_ZONES } from '../data/products.js';
 
 // Ventana de bienvenida con lo ganado mientras el juego estuvo cerrado.
-export function showWelcome({ seconds, coins, capped, cap }, onCollect) {
+export function showWelcome({ seconds, coins, capped, cap, scale = 1 }, onCollect) {
   const modal = document.getElementById('welcome');
+  const fast = scale > 1 ? ` (a ⏩ ×${scale})` : '';
   document.getElementById('welcome-text').textContent = capped
-    ? `Estuviste fuera más de ${formatDuration(cap)}. Tu finca trabajó ${formatDuration(seconds)} (el máximo) y ganó:`
-    : `Mientras no estabas (${formatDuration(seconds)}), tu finca siguió trabajando y ganó:`;
+    ? `Estuviste fuera más de ${formatDuration(cap / scale)}. Tu finca trabajó ${formatDuration(seconds)}${fast}, el máximo, y ganó:`
+    : `Mientras no estabas, tu finca siguió trabajando ${formatDuration(seconds)}${fast} y ganó:`;
   document.getElementById('welcome-coins').textContent = `💰 ${formatNumber(coins)}`;
   modal.hidden = false;
   const ok = document.getElementById('welcome-ok');

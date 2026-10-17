@@ -1,18 +1,25 @@
 import { toast } from './toast.js';
 
 // Opciones de desarrollador, ocultas en el menú: se muestran tocando 7 veces la versión.
-// Por ahora, solo acelerar el tiempo. El ajuste vive en este navegador, no en la partida, y la
-// aceleración siempre arranca apagada al abrir el juego (para no olvidarla puesta).
+// Por ahora, solo acelerar el tiempo. El ajuste vive en este navegador, no en la partida. Si se cierra
+// el juego acelerado, al volver sigue acelerado y el tiempo fuera cuenta a esa velocidad (el ⏩ de
+// arriba lo recuerda).
 const KEY = 'cafetal-dev';
 const TAPS = 7;
 const MAX_SPEED = 100;
 
 function load() {
   try {
-    return { visible: false, speed: 10, ...JSON.parse(localStorage.getItem(KEY)) };
+    return { visible: false, speed: 10, active: false, ...JSON.parse(localStorage.getItem(KEY)) };
   } catch {
-    return { visible: false, speed: 10 };
+    return { visible: false, speed: 10, active: false };
   }
+}
+
+// Velocidad con la que se cerró el juego (1 si no estaba acelerado).
+export function savedSpeed() {
+  const prefs = load();
+  return prefs.visible && prefs.active ? Math.min(MAX_SPEED, Math.max(1, prefs.speed)) : 1;
 }
 
 function store(prefs) {
@@ -42,6 +49,8 @@ export function bindDevOptions(game) {
   };
   const setScale = (s) => {
     game.timeScale = s;
+    prefs.active = s > 1;
+    store(prefs);
     paint();
   };
 

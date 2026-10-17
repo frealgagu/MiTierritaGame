@@ -338,6 +338,8 @@ Una lista de **29 objetivos en orden** (`src/data/goals.js`). Se ven 3 a la vez,
 
 ## 7. Ganancias sin conexión
 
+- Al volver se simulan de verdad hasta 2 h de juego; lo que pase de ahí se suma al ritmo de la última hora simulada (monedas, ventas, producción e importados). Con el tiempo acelerado de las opciones de desarrollador, el tiempo fuera y el tope cuentan a esa velocidad.
+
 Al volver se **simula** el tiempo que el juego estuvo cerrado en pasos de 1 s, con un máximo de 2 h (6 h con el Capataz). Seis horas se calculan en unos 0,2 s y el resultado coincide con jugar en vivo (hay una prueba que lo verifica). Se muestra una ventana de bienvenida con lo ganado y si se alcanzó el tope.
 
 ---

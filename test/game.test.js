@@ -95,3 +95,31 @@ test('una partida de la v0.2 se carga en la v0.3 con arrieros', async () => {
   run(game, 10);
   assert.ok(game.state.stations.wetmill.input > 0 || game.state.stats.produced.washed > 0);
 });
+
+test('mucho tiempo sin conexión (p. ej. acelerado) se extrapola sin perder ganancias', () => {
+  const setup = () => {
+    const g = new Game();
+    g.state.coins = 1e6;
+    for (const id of ['wetmill', 'dryer', 'huller']) g.unlock(id);
+    for (const st of Object.values(g.state.stations)) {
+      st.level = 20;
+      st.transport.level = 20;
+    }
+    g.state.zones.finca.dispatch.level = 20;
+    g.state.coins = 0;
+    return g;
+  };
+  // 6 h de juego: simuladas paso a paso frente a la vuelta rápida (2 h simuladas + 4 h extrapoladas).
+  const live = setup();
+  for (let t = 0; t < 6 * 3600; t += 1) live.step(1);
+  const offline = setup();
+  const t0 = performance.now();
+  const r = offline.catchUp(6 * 3600, 6 * 3600);
+  assert.equal(r.seconds, 6 * 3600);
+  const ratio = offline.state.coins / live.state.coins;
+  assert.ok(ratio > 0.95 && ratio < 1.05, `rápida / paso a paso = ${ratio.toFixed(3)}`);
+  assert.ok(Math.abs(offline.state.playTime - live.state.playTime) < 1e-6);
+  const sold = offline.state.stats.sold.green / live.state.stats.sold.green;
+  assert.ok(sold > 0.95 && sold < 1.05, `ventas para los objetivos: ${sold.toFixed(3)}`);
+  assert.ok(performance.now() - t0 < 5000);
+});

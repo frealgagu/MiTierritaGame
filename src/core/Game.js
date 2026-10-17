@@ -12,6 +12,10 @@ import { buyResearch, buyUpgrade, quoteResearch, quoteUnlock, quoteUpgrade, unlo
 import { claimGoal, unlockZone } from '../sim/goals.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
+const MAX_SIMULATED = 2 * 3600; // s de juego que se simulan de verdad al volver; el resto se extrapola
+
+// Lo que se extrapola del tiempo sin conexión.
+const snapshot = (s) => ({ coins: s.coins, totalEarned: s.totalEarned, sold: { ...s.stats.sold }, produced: { ...s.stats.produced }, imported: { ...s.stats.imported } });
 const INCOME_WINDOW = 60; // s para calcular 💰/s
 
 export class Game {
@@ -51,13 +55,33 @@ export class Game {
   }
 
   // Ganancias mientras el juego estuvo cerrado: se simula en pasos de 1 s, sin efectos visuales.
-  catchUp(seconds) {
-    const total = Math.min(Math.max(seconds, 0), offlineCapSeconds(this.state));
-    const before = this.state.coins;
+  //   seconds: segundos de juego (con el tiempo acelerado, ya multiplicados)   cap: tope en segundos de juego
+  // Se simulan de verdad hasta MAX_SIMULATED s; el resto se suma al ritmo de la segunda mitad de lo
+  // simulado (monedas, ventas, producción e importados), para que horas a ×100 no tarden minutos.
+  catchUp(seconds, cap = offlineCapSeconds(this.state)) {
+    const total = Math.min(Math.max(seconds, 0), cap);
+    const s = this.state;
+    const before = s.coins;
+    const simulated = Math.min(total, MAX_SIMULATED);
     this.bus.muted = true;
-    for (let t = 0; t < total; t += 1) this.step(1);
+    let mark = null;
+    for (let t = 0; t < simulated; t += 1) {
+      if (!mark && t >= simulated / 2) mark = { t, ...snapshot(s) };
+      this.step(1);
+    }
     this.bus.muted = false;
-    return { seconds: total, coins: this.state.coins - before };
+    const rest = total - simulated;
+    if (rest > 0 && mark) {
+      const k = rest / (simulated - mark.t);
+      const now = snapshot(s);
+      s.coins += (now.coins - mark.coins) * k;
+      s.totalEarned += (now.totalEarned - mark.totalEarned) * k;
+      for (const kind of ['sold', 'produced', 'imported']) {
+        for (const [id, n] of Object.entries(now[kind])) s.stats[kind][id] = n + (n - (mark[kind][id] ?? 0)) * k;
+      }
+      s.playTime += rest;
+    }
+    return { seconds: total, coins: s.coins - before };
   }
 
   incomePerSecond() {

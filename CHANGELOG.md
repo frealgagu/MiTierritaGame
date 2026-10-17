@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v1.3.2 — El tiempo acelerado también cuenta sin conexión
+- Si cierras el juego con el tiempo acelerado (opciones de desarrollador, ×10, ×100…), al volver **sigue acelerado** y el tiempo que estuviste fuera cuenta a esa velocidad, con el tope (2 h, o 6 h con el Capataz) también multiplicado. El mensaje de bienvenida lo dice: «…trabajando 5 h (a ⏩ ×10)».
+- La vuelta es rápida aunque sean cientos de horas de juego: se simulan de verdad las primeras 2 h y el resto se suma al ritmo de la última hora simulada (monedas, ventas, producción e importados, para que los objetivos también avancen). Comparado con simular 6 h paso a paso, la diferencia es menor al 5 % (hay una prueba).
+
 ## v1.3.1 — Sin rojo en lo que ya está al máximo
 - «La cadena» ya no marca en rojo un edificio, unos arrieros, una ruta o un despacho que estén en el nivel 100: no se pueden mejorar más. Si lo que frena la zona ya está al máximo, no se marca nada.
 - La mejora recomendada lo tiene en cuenta: si no queda nada que subir, dice «🏗️ Siguiente: construye…» o «🏁 Esta zona está al máximo».

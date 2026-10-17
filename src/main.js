@@ -16,7 +16,7 @@ import { STATIONS_BY_ID } from './data/stations.js';
 import { RESEARCH_BY_ID } from './data/research.js';
 import { offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
-import { bindDevOptions } from './ui/DevOptions.js';
+import { bindDevOptions, savedSpeed } from './ui/DevOptions.js';
 import { Sound } from './audio/Sound.js';
 
 const AUTOSAVE_MS = 10_000;
@@ -42,6 +42,8 @@ async function start() {
 
   const saved = loadGame();
   const game = new Game(saved ?? undefined);
+  // La velocidad de las opciones de desarrollador sigue puesta al volver, también para el tiempo fuera.
+  game.timeScale = savedSpeed();
   const offline = saved ? applyOffline(game, (Date.now() - saved.savedAt) / 1000) : null;
 
   const sound = new Sound();
@@ -177,11 +179,13 @@ async function start() {
 }
 
 // Simula el tiempo que el juego estuvo cerrado; devuelve el resumen si hubo ganancias.
+// Con el tiempo acelerado (opciones de desarrollador), el tiempo fuera y el tope cuentan a esa velocidad.
 function applyOffline(game, seconds) {
   if (seconds < MIN_OFFLINE_S) return null;
-  const cap = offlineCapSeconds(game.state);
-  const r = game.catchUp(seconds);
-  return r.coins > 0 ? { ...r, cap, capped: seconds > cap } : null;
+  const scale = game.timeScale;
+  const cap = offlineCapSeconds(game.state) * scale;
+  const r = game.catchUp(seconds * scale, cap);
+  return r.coins > 0 ? { ...r, cap, capped: seconds * scale > cap, scale } : null;
 }
 
 function bindMenu(game, sound) {
