@@ -1,7 +1,7 @@
 // Flujo teórico de la cadena para mostrar el cuello de botella (no afecta a la simulación).
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { RESEARCH } from '../data/research.js';
-import { dispatchRate, stationRate } from './rules.js';
+import { MAX_LEVEL, dispatchRate, stationRate } from './rules.js';
 import { chainOf, consumers, sourceOf, zoneOf } from './chain.js';
 import { routeActive, routeRate, routeStations, stationImportRate } from './routes.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
@@ -183,7 +183,17 @@ export function analyzeChain(state, zoneId = 'finca', { exports: withExports = t
     if (starved) bottleneck = `route:${starved.importLimited}`;
   }
   if (!bottleneck) bottleneck = toWarehouse > dispatch * (1 + LOSS) ? `dispatch:${zoneId}` : sourceOf(zoneId);
+  // Lo que ya está en el nivel 100 no se puede mejorar: no se señala (si todo está al máximo, nada).
+  if (upgradeLevel(state, bottleneck) >= MAX_LEVEL) bottleneck = null;
   return { rows, toWarehouse, dispatch, bottleneck, income, mainIncome, exported };
+}
+
+// Nivel de lo que se mejora con un id de mejora ('farm', 'farm:transport', 'dispatch:<zona>', 'route:<ruta>').
+function upgradeLevel(state, id) {
+  const [sid, part] = id.split(':');
+  if (sid === 'dispatch') return state.zones[part].dispatch.level;
+  if (sid === 'route') return state.routes[part].level;
+  return part === 'transport' ? state.stations[sid].transport.level : state.stations[sid].level;
 }
 
 // De las estaciones que reciben de una rama, la que más frena: si es por el importado, su ruta;
@@ -236,7 +246,7 @@ export function expectedCompostValue(state) {
 // Mejora recomendada: la que más 💰/s suma por moneda gastada al final de la cadena (sin contar lo que
 // se vende desviado), entre estaciones, arrieros y despacho.
 // Si ninguna mejora suelta suma lo suficiente (hay que subir varias a la vez), recomienda el
-// cuello de botella. Devuelve { id, cost, gain }. (`quote` es Game.quote, para no duplicar precios.)
+// cuello de botella. Devuelve { id, cost, gain }, o null si no queda nada que mejorar. (`quote` es Game.quote, para no duplicar precios.)
 const MIN_GAIN = 0.01; // ganancia mínima, como fracción del ingreso actual
 // Arrieros, rutas y la Compostera: suman poco nivel a nivel, se miden de 10 en 10.
 const isGradual = (id) => STATIONS_BY_ID[id]?.side || id.endsWith(':transport') || id.startsWith('route:');
@@ -311,5 +321,7 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
     }
   }
   if (pair) return { ...pair, cost: quote(pair.id, 1).cost };
+  // Sin cuello de botella que se pueda mejorar (todo al máximo): no hay recomendación.
+  if (!analysis.bottleneck) return null;
   return { id: analysis.bottleneck, cost: quote(analysis.bottleneck, 1).cost, gain: 0 };
 }

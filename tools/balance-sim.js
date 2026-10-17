@@ -143,7 +143,8 @@ for (let step = 0; step < hours * 36000 && currentZone(); step++) {
     const o = bestOption();
     if (!o) {
       // Ninguna compra suelta rinde (hay que subir varias a la vez): como una persona, sube el cuello de botella.
-      if (!game.buy(analyzeChain(s, zone).bottleneck, 1)) break;
+      const neck = analyzeChain(s, zone).bottleneck;
+      if (!neck || !game.buy(neck, 1)) break;
       continue;
     }
     if (o.kind === 'unlock') game.unlock(o.id);

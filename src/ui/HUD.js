@@ -30,7 +30,7 @@ export class HUD {
     this.income = document.getElementById('income');
     this.chip = document.getElementById('bottleneck');
     // Tras una compra, la recomendación se recalcula enseguida.
-    for (const type of ['levelUp', 'unlocked', 'research', 'zoneUnlocked']) game.bus.on(type, () => (this.rec = null));
+    for (const type of ['levelUp', 'unlocked', 'research', 'zoneUnlocked']) game.bus.on(type, () => (this.recDirty = true));
     // Tocar el aviso abre la mejora recomendada.
     this.chip.addEventListener('click', () => this.recommended && onOpen(this.recommended));
   }
@@ -47,14 +47,24 @@ export class HUD {
     const zone = this.getZone();
     // La recomendación mira varias zonas (rutas) y cuesta calcularla: como mucho una vez por segundo.
     const now = performance.now();
-    if (zone !== this.recZone || !this.rec || now - this.recAt > REC_INTERVAL_MS) {
+    if (zone !== this.recZone || this.recDirty || !(now - this.recAt <= REC_INTERVAL_MS)) {
       this.rec = recommendUpgrade(s, (id, mode) => this.game.quote(id, mode), zone);
       this.recZone = zone;
       this.recAt = now;
+      this.recDirty = false;
     }
     const rec = this.rec;
-    this.recommended = rec.id;
+    this.recommended = rec?.id ?? null;
     this.guide = this.guideTarget(s, rec, zone);
+    if (!rec) {
+      // No queda nada que subir: o falta construir algo, o la zona está al máximo.
+      const next = nextToUnlock(s, zone);
+      this.chip.hidden = false;
+      this.chip.textContent = next ? `🏗️ Siguiente: construye ${STATIONS_BY_ID[next].name}` : '🏁 Esta zona está al máximo';
+      if (next) this.recommended = next;
+      this.hintUnlock(s, zone);
+      return;
+    }
     this.chip.hidden = false;
     // Puede ser de la zona que la abastece por una ruta: se dice de cuál.
     const [sid] = rec.id.split(':');

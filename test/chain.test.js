@@ -91,3 +91,19 @@ test('lo desviado nunca llena la bodega: siempre queda sitio para el producto fi
   assert.ok(cherries <= cap * (1 - DIVERT_RESERVE) + 1, `cerezas en bodega: ${cherries} de ${cap}`);
   assert.ok((game.state.stats.sold.washed ?? 0) > 0, 'el café lavado sigue llegando y vendiéndose');
 });
+
+test('lo que ya está en el nivel 100 no se señala como cuello de botella', async () => {
+  const { recommendUpgrade } = await import('../src/sim/analysis.js');
+  const game = new Game();
+  game.state.coins = 1e15;
+  for (const id of CHAIN.slice(1)) game.unlock(id);
+  for (const st of Object.values(game.state.stations)) {
+    st.level = 100;
+    st.transport.level = 100;
+  }
+  game.state.zones.finca.dispatch.level = 100;
+  // Todo al máximo y equilibrado: el cuello sería el Cafetal, que ya no se puede subir.
+  assert.equal(analyzeChain(game.state).bottleneck, null);
+  game.state.coins = 0; // sin dinero para investigaciones
+  assert.equal(recommendUpgrade(game.state, (id, mode) => game.quote(id, mode)), null);
+});
