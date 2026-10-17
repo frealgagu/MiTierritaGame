@@ -19,7 +19,8 @@ export class HUD {
     this.coins.textContent = formatNumber(s.coins);
     this.income.textContent = `+${formatRate(this.game.incomePerSecond())}/s`;
     this.bottleneck = analyzeChain(s).bottleneck;
-    const name = this.bottleneck === 'dispatch' ? DISPATCH.name : STATIONS_BY_ID[this.bottleneck].name;
+    const [id, part] = this.bottleneck.split(':');
+    const name = id === 'dispatch' ? DISPATCH.name : part === 'transport' ? `Arrieros de ${STATIONS_BY_ID[id].name}` : STATIONS_BY_ID[id].name;
     this.chip.hidden = false;
     this.chip.textContent = `🔴 Cuello de botella: ${name}`;
     this.hintUnlock(s);

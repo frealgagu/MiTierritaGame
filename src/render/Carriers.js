@@ -9,6 +9,8 @@ export class MuleView extends Container {
   constructor(productId) {
     super();
     this.body = new Graphics();
+    this.sacks = new Graphics();
+    this.body.addChild(this.sacks);
     this.legs = new Graphics();
     this.man = new Graphics();
     this.addChild(this.legs, this.body, this.man);
@@ -25,11 +27,17 @@ export class MuleView extends Container {
     g.ellipse(16, -23, 5, 3.5).fill(PAL.mule).stroke(OUTLINE);
     g.moveTo(14, -26).lineTo(13, -31).moveTo(16, -26).lineTo(16.5, -31).stroke({ width: 2, color: shade(PAL.mule, 0.6) });
     g.moveTo(-11, -13).lineTo(-14, -6).stroke({ width: 2, color: 0x3a2418 });
-    // Costales a lado y lado.
-    g.ellipse(-3, -17, 6, 5).fill(PAL.sack).stroke(OUTLINE);
-    g.ellipse(4, -17, 6, 5).fill(PAL.sack).stroke(OUTLINE);
-    g.ellipse(-3, -21, 3, 1.5).fill(productColor);
-    g.ellipse(4, -21, 3, 1.5).fill(productColor);
+    g.rect(-6, -18, 12, 3).fill(0x8b5a2b); // enjalma
+    // Costales a lado y lado (se ocultan cuando la mula vuelve vacía).
+    const k = this.sacks;
+    k.ellipse(-3, -17, 6, 5).fill(PAL.sack).stroke(OUTLINE);
+    k.ellipse(4, -17, 6, 5).fill(PAL.sack).stroke(OUTLINE);
+    k.ellipse(-3, -21, 3, 1.5).fill(productColor);
+    k.ellipse(4, -21, 3, 1.5).fill(productColor);
+  }
+
+  setLoaded(loaded) {
+    this.sacks.visible = loaded;
   }
 
   drawMan() {

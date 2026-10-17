@@ -1,6 +1,6 @@
 import { createStationState } from './production.js';
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 
 export function createInitialState(now = Date.now()) {
   return {
@@ -15,7 +15,7 @@ export function createInitialState(now = Date.now()) {
     },
     dispatch: { level: 1 },
     warehouse: {}, // productId -> unidades en bodega
-    mules: [], // { id, productId, amount, from, to, s0, s1, t, duration }
+    mules: [], // { id, productId, amount, from, to, phase: 'go' | 'back', t, duration }
     jeep: { phase: 'idle', t: 0, waited: 0, load: {} },
     stats: { produced: {}, sold: {} },
     hints: [], // avisos ya mostrados

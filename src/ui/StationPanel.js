@@ -10,10 +10,13 @@ import {
   stationBufferCap,
   stationInputCap,
   stationOutputRate,
+  muleCount,
+  muleLoad,
+  transportCapacity,
   warehouseCapacity,
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
-import { inTransit } from '../sim/transport.js';
+import { busyMules, inTransit, legTime } from '../sim/transport.js';
 import { analyzeChain } from '../sim/analysis.js';
 import { CHAIN, nextStation } from '../sim/chain.js';
 
@@ -24,7 +27,7 @@ const MODES = [
 ];
 
 const recipe = (obj) => Object.entries(obj).map(([id, n]) => `${n} ${PRODUCTS[id].icon}`).join(' + ');
-const nameOf = (id) => (id === 'dispatch' ? DISPATCH.name : STATIONS_BY_ID[id].name);
+const nameOf = (id) => (id === 'dispatch' ? DISPATCH.name : id === 'warehouse' ? 'la bodega' : STATIONS_BY_ID[id].name);
 
 // Panel inferior con la información y las mejoras de la estación seleccionada.
 // Se construye al abrir y luego solo se actualizan los textos (para no perder clics).
@@ -39,8 +42,10 @@ export class StationPanel {
     this.built = null;
   }
 
-  open(id) {
+  // tab: 'station' | 'transport'
+  open(id, tab = 'station') {
     this.id = id;
+    this.tab = tab;
     this.el.hidden = false;
     this.render();
     this.update();
@@ -50,7 +55,7 @@ export class StationPanel {
     const id = this.id;
     this.built = id === 'dispatch' || Boolean(this.game.state.stations[id]);
     if (id === 'dispatch') this.renderUpgradable(dispatchInfo());
-    else if (this.built) this.renderUpgradable(stationInfo(id));
+    else if (this.built) this.renderUpgradable(this.tab === 'transport' ? transportInfo(id) : stationInfo(id));
     else this.renderLocked(STATIONS_BY_ID[id]);
   }
 
@@ -74,6 +79,14 @@ export class StationPanel {
     this.info = info;
     this.el.innerHTML = `
       ${this.head(info.icon, info.title, info.subtitle, '<span class="level-badge" data-ref="level"></span>')}
+      ${
+        info.tabs
+          ? `<div class="tabs">
+              <button class="tab ${this.tab === 'station' ? 'active' : ''}" data-tab="station">⚙️ Estación</button>
+              <button class="tab ${this.tab === 'transport' ? 'active' : ''}" data-tab="transport">🐴 Arrieros</button>
+            </div>`
+          : ''
+      }
       ${info.recipe ? `<div class="recipe small">${info.recipe}</div>` : ''}
       <div class="stats">
         ${info.rows.map((r) => `<div class="stat"><span>${r.label}</span><b><span data-ref="${r.key}"></span> <span class="next" data-ref="${r.key}Next"></span></b></div>`).join('')}
@@ -88,9 +101,16 @@ export class StationPanel {
     `;
     this.collectRefs();
     this.el.querySelector('[data-buy]').addEventListener('click', () => {
-      this.game.buy(this.id, this.mode);
+      this.game.buy(info.upgradeId, this.mode);
       this.update();
     });
+    for (const btn of this.el.querySelectorAll('[data-tab]')) {
+      btn.addEventListener('click', () => {
+        this.tab = btn.dataset.tab;
+        this.render();
+        this.update();
+      });
+    }
     for (const btn of this.el.querySelectorAll('[data-mode]')) {
       btn.addEventListener('click', () => {
         this.mode = btn.dataset.mode === 'max' ? 'max' : Number(btn.dataset.mode);
@@ -148,7 +168,7 @@ export class StationPanel {
 
     const info = this.info;
     const level = info.level(state);
-    const q = this.game.quote(this.id, this.mode);
+    const q = this.game.quote(info.upgradeId, this.mode);
     const after = level + Math.max(q.levels, 1);
 
     r.level.textContent = `Nv ${level}`;
@@ -204,9 +224,46 @@ function stationInfo(id) {
     subtitle: inId ? `Convierte ${PRODUCTS[inId].name.toLowerCase()} en ${out.name.toLowerCase()}` : 'Fuente ilimitada de cerezas de café',
     recipe: inId ? `${recipe(def.in)} <span>➜</span> ${recipe(def.out)}` : null,
     milestoneWhat: 'velocidad',
+    upgradeId: id,
+    tabs: true,
     level: (s) => s.stations[id].level,
     rows,
     status: (s) => stationStatus(s, id),
+  };
+}
+
+function transportInfo(id) {
+  const def = STATIONS_BY_ID[id];
+  const out = PRODUCTS[Object.keys(def.out)[0]];
+  const dest = (s) => nextStation(s, id) ?? 'warehouse';
+  const roundTrip = (s) => 2 * legTime(id, dest(s));
+  return {
+    icon: '🐴',
+    title: `Arrieros · ${def.name}`,
+    subtitle: 'Llevan el producto a la siguiente estación y vuelven',
+    milestoneWhat: 'carga',
+    upgradeId: `${id}:transport`,
+    tabs: true,
+    level: (s) => s.stations[id].transport.level,
+    rows: [
+      { key: 'mules', label: 'Mulas', value: (s, l) => `${muleCount(l)} (${busyMules(s, id)} en camino)`, next: (l) => muleCount(l) },
+      { key: 'load', label: 'Carga por mula', value: (s, l) => `${formatNumber(muleLoad(def, l))} ${out.icon}`, next: (l) => formatNumber(muleLoad(def, l)) },
+      { key: 'trip', label: 'Viaje (ida y vuelta)', value: (s) => `${formatRate(roundTrip(s))} s hasta ${nameOf(dest(s))}` },
+      {
+        key: 'cap',
+        label: 'Capacidad',
+        value: (s, l) => `${formatRate(transportCapacity(def, l, roundTrip(s)))} ${out.icon}/s`,
+        next: null,
+      },
+    ],
+    status: (s) => {
+      const st = s.stations[id];
+      const produce = stationOutputRate(def, st.level);
+      const cap = transportCapacity(def, st.transport.level, roundTrip(s));
+      if (st.status === 'blocked' && st.waiting === 'mules') return { text: '⛔ Las mulas no dan abasto y el patio se llenó: mejora a los arrieros.', bad: true };
+      if (cap < produce) return { text: `⚠️ La estación produce ${formatRate(produce)} ${out.icon}/s y las mulas llevan ${formatRate(cap)}/s.`, bad: true };
+      return { text: `✅ Los arrieros llevan todo lo que produce la estación (${formatRate(produce)} ${out.icon}/s).`, bad: false };
+    },
   };
 }
 
@@ -216,7 +273,10 @@ function stationStatus(state, id) {
   const analysis = analyzeChain(state);
   const row = analysis.rows.find((r) => r.id === id);
   const def = STATIONS_BY_ID[id];
-  if (st.status === 'blocked') return { text: '⛔ Patio lleno: la bodega no tiene espacio. Mejora el Despacho.', bad: true };
+  if (st.status === 'blocked') {
+    if (st.waiting === 'mules') return { text: '⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).', bad: true };
+    return { text: '⛔ Patio lleno: la bodega no tiene espacio. Mejora el Despacho.', bad: true };
+  }
   if (row && row.diverted > row.incoming * 0.02) {
     const inIcon = PRODUCTS[Object.keys(def.in)[0]].icon;
     return {
@@ -239,6 +299,7 @@ function dispatchInfo() {
     title: DISPATCH.name,
     subtitle: 'El Willys vende en el pueblo lo que llega a la bodega',
     milestoneWhat: 'carga',
+    upgradeId: 'dispatch',
     level: (s) => s.dispatch.level,
     rows: [
       { key: 'cap', label: 'Carga por viaje', value: (s, l) => `${formatNumber(dispatchCapacity(l))}`, next: (l) => formatNumber(dispatchCapacity(l)) },

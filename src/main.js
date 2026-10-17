@@ -5,6 +5,7 @@ import { formatDuration, formatNumber } from './core/format.js';
 import { Scene } from './render/Scene.js';
 import { HUD } from './ui/HUD.js';
 import { StationPanel } from './ui/StationPanel.js';
+import { ChainView } from './ui/ChainView.js';
 import { toast } from './ui/toast.js';
 
 const AUTOSAVE_MS = 10_000;
@@ -34,11 +35,14 @@ async function start() {
 
   const scene = new Scene(app, game);
   const panel = new StationPanel(game, () => scene.select(null));
+  // id puede ser 'farm', 'dispatch' o 'farm:transport' (abre la pestaña de arrieros).
   scene.onSelect = (id) => {
-    scene.select(id);
-    panel.open(id);
+    const [stationId, part] = id.split(':');
+    scene.select(stationId);
+    panel.open(stationId, part === 'transport' ? 'transport' : 'station');
   };
   const hud = new HUD(game, scene.onSelect);
+  const chain = new ChainView(game, scene.onSelect);
   window.addEventListener('resize', () => scene.resize(app.screen.width, app.screen.height));
 
   if (!saved) toast('Toca el 🌳 Cafetal y mejóralo cuando tengas monedas.', 6000);
@@ -53,6 +57,7 @@ async function start() {
       uiTimer = 0.2;
       hud.update();
       panel.update();
+      chain.update();
     }
   });
 

@@ -25,5 +25,5 @@ export const ZONE1 = {
   // Carretera del Willys: del patio de la bodega al borde del mapa (hacia el pueblo).
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
   exitSign: [21.5, 24.2],
-  muleSpeed: 3, // casillas por segundo
+  muleSpeed: 4, // casillas por segundo
 };

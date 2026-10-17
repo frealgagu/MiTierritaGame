@@ -249,10 +249,14 @@ Cada estación tiene **dos ejes** de mejora.
 - Botones de compra ×1, ×10 y «máx».
 
 ### 5.2 Arrieros (transporte hacia la siguiente estación)
-- Cada arriero es una mula que lleva `carga` unidades por viaje. El viaje dura según la distancia en el mapa.
-- **Capacidad del tramo** = arrieros × carga / tiempo del viaje.
-- **Mejoras:** +1 arriero (máx. 10), +carga (canasto → costal → doble costal) y +velocidad (herraduras).
-- Si los arrieros no dan abasto, el producto se acumula en el **buffer de salida** (visible como sacos apilados). Cuando se llena, la estación se detiene.
+- Cada estación tiene sus propias mulas. Una mula carga, va a la siguiente estación (o a la bodega si la siguiente no existe o tiene la entrada llena), entrega y **vuelve vacía**.
+- Los arrieros tienen su propio **nivel (1–100)**, que cuesta la mitad que el de la estación:
+  - **Mulas** = 1 + una más cada 10 niveles (máx. 10).
+  - **Carga por mula**: crece con el nivel y se duplica en los mismos hitos que la estación.
+- **Capacidad del tramo** = mulas × carga / tiempo de ida y vuelta. Está calibrada para que, a igual nivel, mueva un 25 % más de lo que produce la estación en un tramo de 6 s de ida y vuelta: los tramos cortos sobran, los largos (y sobre todo los desvíos a la bodega) se quedan cortos.
+- Si todas las mulas están en camino, el producto se acumula en el **patio** (sacos apilados). Cuando se llena, la estación se detiene (⛔).
+- Al empezar, con solo el Cafetal, la única mula tiene que llegar hasta la bodega: el primer cuello de botella son los arrieros, y así se enseña la mecánica.
+- **Vista «Ver cadena» (🔗)**: muestra por estación lo que recibe, procesa y produce, y por tramo lo que llevan los arrieros, lo que se desvía y lo que se pierde, con el cuello de botella en rojo.
 
 ### 5.3 Despacho
 - Un **Willys** lleva `N` unidades de la Bodega al pueblo y vuelve. Se puede mejorar la capacidad, la velocidad y comprar más jeeps (máx. 5).

@@ -2,12 +2,13 @@ import { STATIONS_BY_ID } from '../data/stations.js';
 import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
 
 export function createStationState() {
-  return { level: 1, input: 0, buffer: 0, progress: 0, sinceDeparture: 0, idle: 0, status: 'working' };
+  return { level: 1, input: 0, buffer: 0, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
 }
 
 // Avanza una estación: consume su entrada (si tiene receta) y deja el producto en su patio.
 //   status: 'working' | 'starved' (falta entrada) | 'blocked' (patio lleno)
 //   idle:   segundos seguidos sin entrada
+//   waiting: por qué no sale el producto del patio: 'mules' (arrieros ocupados) | 'space' (bodega llena) | null
 export function stepStation(state, id, dt, bus) {
   const def = STATIONS_BY_ID[id];
   const s = state.stations[id];
@@ -46,6 +47,6 @@ export function stepStation(state, id, dt, bus) {
 export function inputSpace(state, id) {
   const def = STATIONS_BY_ID[id];
   const s = state.stations[id];
-  const incoming = state.mules.reduce((n, m) => (m.to === id ? n + m.amount : n), 0);
+  const incoming = state.mules.reduce((n, m) => (m.to === id && m.phase === 'go' ? n + m.amount : n), 0);
   return stationInputCap(def, s.level) - s.input - incoming;
 }

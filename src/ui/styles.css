@@ -214,3 +214,54 @@ button { font: inherit; color: inherit; cursor: pointer; }
   #hud { gap: 8px; }
   .coins { min-width: 0; font-size: 1.1rem; }
 }
+
+.tabs { display: flex; gap: 6px; margin-top: 10px; }
+.tab {
+  flex: 1;
+  padding: 6px 0;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  background: var(--paper-2);
+  font-weight: 600;
+}
+.tab.active { background: var(--yellow); }
+
+/* Vista de la cadena */
+.chain-modal { width: min(480px, 100%); max-height: calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; }
+.chain-head { display: flex; align-items: center; justify-content: space-between; }
+.chain-head h2 { margin: 0; }
+.chain-help { margin: 4px 0 10px; font-size: 0.85rem; color: var(--muted); }
+.chain-body { overflow-y: auto; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding-right: 2px; }
+.chain-card {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  text-align: left;
+  padding: 8px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  background: var(--paper-2);
+  font-size: 0.85rem;
+}
+.chain-card b { font-size: 0.95rem; }
+.chain-card small { color: var(--muted); font-weight: 600; }
+.chain-card.hot { border-color: var(--red); background: #fde2e4; box-shadow: 0 0 0 2px #fde2e4; }
+.chain-card.locked { border-style: dashed; opacity: 0.8; }
+.chain-icon { font-size: 1.5rem; width: 34px; text-align: center; }
+.chain-text { min-width: 0; }
+.chain-link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 0 0 26px;
+  padding: 6px 10px 6px 16px;
+  border: none;
+  border-left: 3px dashed var(--wood);
+  background: none;
+  text-align: left;
+  font-size: 0.8rem;
+}
+.chain-link.hot { border-left-color: var(--red); color: #8f1d2c; }
+.chain-link .divert { color: #b45309; }
+.chain-link .lost { color: #8f1d2c; }
+.chain-total { margin: 10px 0 0; text-align: right; }

@@ -14,7 +14,7 @@ import { ZONE1 } from '../data/zones/zone1_finca.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { dispatchCapacity, warehouseCapacity } from '../sim/rules.js';
-import { CHAIN } from '../sim/chain.js';
+import { CHAIN, ROAD_POS } from '../sim/chain.js';
 import { quoteUnlock } from '../sim/upgrades.js';
 
 const DIVERT_ICON_TIME = 3; // s que se muestra ↪️ tras un desvío
@@ -141,9 +141,9 @@ export class Scene {
       }
     });
     bus.on('levelUp', ({ id, to, milestone }) => {
-      const p = this.stations[id].anchorPoint(30);
+      const p = this.stations[id.split(':')[0]].anchorPoint(30);
       this.effects.ring(p.x, p.y + 30);
-      this.effects.floatText(p.x, p.y - 20, milestone ? `¡Hito nivel ${milestone}! ×2` : `Nivel ${to}`, {
+      this.effects.floatText(p.x, p.y - 20, milestone ? `¡Hito nivel ${milestone}! ×2` : id.endsWith(':transport') ? `🐴 Arrieros nivel ${to}` : `Nivel ${to}`, {
         color: milestone ? 0xffe066 : 0xffffff,
         size: milestone ? 22 : 16,
         life: milestone ? 2.2 : 1.2,
@@ -205,8 +205,15 @@ export class Scene {
         this.mules.set(m.id, view);
         this.objects.addChild(view);
       }
-      const p = pointAtDistance(this.zone.muleRoad, m.s0 + (m.s1 - m.s0) * Math.min(m.t / m.duration, 1));
-      view.place(p.gx, p.gy, p.dx, p.dy, this.time);
+      // Ida: de la estación al destino con carga. Vuelta: vacía, en sentido contrario.
+      const a = ROAD_POS[m.from];
+      const b = ROAD_POS[m.to];
+      const f = Math.min(m.t / m.duration, 1);
+      const going = m.phase === 'go';
+      const p = pointAtDistance(this.zone.muleRoad, going ? a + (b - a) * f : b + (a - b) * f);
+      const dir = going === b > a ? 1 : -1;
+      view.setLoaded(going);
+      view.place(p.gx, p.gy, p.dx * dir, p.dy * dir, this.time);
     }
     for (const [id, view] of this.mules) {
       if (alive.has(id)) continue;

@@ -3,11 +3,17 @@ import { bulkUpgrade, MAX_LEVEL, MILESTONES } from './rules.js';
 import { CHAIN, nextToUnlock } from './chain.js';
 import { createStationState } from './production.js';
 
-// Lo que se puede mejorar: 'dispatch' o el id de una estación.
+// Los arrieros cuestan la mitad que la estación a la que sirven.
+const TRANSPORT_COST_FACTOR = 0.5;
+
+// Lo que se puede mejorar: 'dispatch', el id de una estación o 'id:transport' (sus arrieros).
 function target(state, id) {
   if (id === 'dispatch') return { base: DISPATCH.upgradeBase, growth: DISPATCH.growth, holder: state.dispatch };
-  const def = STATIONS_BY_ID[id];
-  return { base: def.upgradeBase, growth: def.growth, holder: state.stations[id] };
+  const [stationId, part] = id.split(':');
+  const def = STATIONS_BY_ID[stationId];
+  const st = state.stations[stationId];
+  if (part === 'transport') return { base: def.upgradeBase * TRANSPORT_COST_FACTOR, growth: def.growth, holder: st.transport };
+  return { base: def.upgradeBase, growth: def.growth, holder: st };
 }
 
 // mode: 1 | 10 | 'max'

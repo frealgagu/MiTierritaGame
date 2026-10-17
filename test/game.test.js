@@ -13,8 +13,8 @@ test('las cerezas viajan a la bodega y el Willys las vende', () => {
   run(game, 60);
   assert.ok(events.length > 0, 'debió haber ventas');
   assert.ok(game.state.coins > 0);
-  // ~0,5 cerezas/s durante 60 s; descontando el retraso del camino y del viaje.
-  assert.ok(game.state.coins >= 10 && game.state.coins <= 30, `monedas: ${game.state.coins}`);
+  // Al principio limitan los arrieros: una mula hasta la bodega, el viaje más largo del mapa.
+  assert.ok(game.state.coins >= 5 && game.state.coins <= 30, `monedas: ${game.state.coins}`);
 });
 
 test('mejorar el cafetal cuesta monedas y sube el nivel', () => {
@@ -70,4 +70,21 @@ test('una partida de la v0.1 se carga en la v0.2', async () => {
   assert.equal(game.state.mules[0].to, 'warehouse');
   run(game, 30);
   assert.ok(game.state.coins > 12);
+});
+
+test('una partida de la v0.2 se carga en la v0.3 con arrieros', async () => {
+  const { loadGame } = await import('../src/core/SaveSystem.js');
+  const v2 = {
+    version: 2, coins: 100, totalEarned: 300, playTime: 500, savedAt: Date.now(), nextId: 9,
+    stations: { farm: { level: 12, input: 0, buffer: 3, progress: 0, sinceDeparture: 1, idle: 0, status: 'working' }, wetmill: { level: 4, input: 5, buffer: 0, progress: 0, sinceDeparture: 0, idle: 0, status: 'working' } },
+    dispatch: { level: 3 }, warehouse: {},
+    mules: [{ id: 8, productId: 'cherry', amount: 5, from: 'farm', to: 'wetmill', s0: 0, s1: 2, t: 0.2, duration: 1.5 }],
+    jeep: { phase: 'idle', t: 0, waited: 0, load: {} }, stats: { produced: {}, sold: {} }, hints: ['wetmill'],
+  };
+  localStorage.setItem('cafetal.save', JSON.stringify(v2));
+  const game = new Game(loadGame());
+  assert.equal(game.state.stations.wetmill.transport.level, 1);
+  assert.equal(game.state.mules[0].phase, 'go');
+  run(game, 10);
+  assert.ok(game.state.stations.wetmill.input > 0 || game.state.stats.produced.washed > 0);
 });

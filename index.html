@@ -20,6 +20,7 @@
         <span id="coins">0</span>
         <span id="income" class="rate">+0/s</span>
       </div>
+      <button id="chain-btn" class="icon-btn" aria-label="Ver cadena" title="Ver cadena">🔗</button>
       <button id="menu-btn" class="icon-btn" aria-label="Menú">⚙️</button>
     </header>
     <div id="bottleneck" class="chip" hidden></div>
@@ -28,13 +29,24 @@
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Cafetal <small>v0.2</small></h2>
+        <h2>Cafetal <small>v0.3</small></h2>
         <p>Tu partida se guarda sola en este navegador.</p>
         <p id="menu-stats"></p>
         <div class="modal-actions">
           <button id="reset-btn" class="btn danger">Borrar partida</button>
           <button id="close-menu" class="btn">Seguir jugando</button>
         </div>
+      </div>
+    </div>
+
+    <div id="chain" class="modal" hidden>
+      <div class="modal-card chain-modal">
+        <div class="chain-head">
+          <h2>🔗 La cadena</h2>
+          <button id="chain-close" class="close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <p class="chain-help">Toca una estación o sus arrieros para mejorarlos. En rojo, lo que frena la cadena.</p>
+        <div id="chain-body" class="chain-body"></div>
       </div>
     </div>
 

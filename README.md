@@ -17,13 +17,14 @@ npm test         # pruebas de la simulación
 npm run build    # versión para publicar en dist/
 ```
 
-## Estado: v0.2
+## Estado: v0.3
 
 - Mapa isométrico de la Zona 1 (La Finca) con cámara: arrastrar para mover, rueda o pellizco para zoom.
 - **Cadena completa de la finca**: Cafetal ♾️ → Beneficiadero → Marquesina → Trilladora → Tostadora → Molino → Empacadora → Bodega.
   - Cada estación se construye en orden con monedas y tiene receta, entrada, patio y niveles 1–100 con hitos (×2).
   - Cada edificio tiene su propio dibujo y se anima mientras trabaja (agua, humo, rueda, banda).
-- **Mulas** que llevan el producto por el camino de una estación a la siguiente.
+- **Arrieros**: cada estación tiene sus mulas, que van, entregan y vuelven vacías. Se mejoran aparte (más mulas y más carga); si no dan abasto, el patio se llena.
+- **Vista «Ver cadena» (🔗)**: flujo de cada estación y cada tramo, con el cuello de botella en rojo; toca una fila para mejorarla.
 - **Desvío automático**: si una estación no da abasto, el sobrante va a la bodega y se vende sin procesar (↪️).
 - **Indicadores**: ⛔ patio lleno, ⏸️ sin entrada, ↪️ desviando; aviso del cuello de botella (tócalo para abrir esa estación).
 - **Despacho**: el Willys vende en el pueblo lo que llega a la bodega, lo más valioso primero.
