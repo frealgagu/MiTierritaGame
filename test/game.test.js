@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
+import { setCredit } from '../src/sim/upgrades.js';
 
 function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
@@ -22,6 +23,24 @@ test('las opciones de desarrollador aceleran el tiempo de juego', () => {
   game.timeScale = 10;
   for (let i = 0; i < 60; i++) game.update(1 / 60);
   assert.ok(Math.abs(game.state.playTime - 10) < 0.11, `tiempo jugado: ${game.state.playTime}`);
+});
+
+test('con saldo negativo permitido se compra sin monedas y el saldo queda en deuda', () => {
+  const game = new Game();
+  const s = game.state;
+  assert.equal(game.buy('farm', 1), false, 'sin el ajuste, no alcanza');
+  setCredit(true);
+  try {
+    assert.ok(game.unlock('wetmill'));
+    assert.ok(game.research('abono'), 'investiga sin monedas');
+    assert.ok(game.buy('farm', 'max'));
+    assert.equal(s.stations.farm.level, 100, '«máx» llega al tope');
+    assert.ok(s.coins < 0, `saldo: ${s.coins}`);
+  } finally {
+    setCredit(false);
+  }
+  // Sin el ajuste, la deuda se queda pero no se puede comprar más hasta pagarla.
+  assert.equal(game.buy('wetmill', 1), false);
 });
 
 test('mejorar el cafetal cuesta monedas y sube el nivel', () => {

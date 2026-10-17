@@ -39,6 +39,12 @@ Cinco zonas jugables, cada una se abre al completar la anterior: **La Finca** (c
 ### Instalar en el móvil
 Abre https://frealgagu.github.io/Game/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).
 
+## Origen y originalidad
+La idea parte del género de los juegos incrementales de **cadena de producción** (un recurso ilimitado pero lento que alimenta estaciones que se mejoran), del que *Frozen City* es un ejemplo; de ahí se tomaron solo ideas generales: la cadena visible y un aspecto isométrico «de juguete» con personajes que llevan cargas. El tema (café, panela, leche, cacao y maíz colombianos), las zonas, las recetas, los números, el código, los dibujos (hechos con código, sin imágenes de otros juegos) y los textos son propios. La música es de dominio público (CC0).
+
+## Licencia
+El código y los gráficos son [MIT](LICENSE). La música, «Apple Cider» de Zane Little, es CC0 (dominio público) y no está cubierta por la licencia MIT.
+
 ## Estructura
 
 ```

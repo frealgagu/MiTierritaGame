@@ -1,7 +1,8 @@
 import { toast } from './toast.js';
+import { setCredit } from '../sim/upgrades.js';
 
 // Opciones de desarrollador, ocultas en el menú: se muestran tocando 7 veces la versión.
-// Por ahora, solo acelerar el tiempo. El ajuste vive en este navegador, no en la partida. Si se cierra
+// Acelerar el tiempo y permitir saldo negativo. Los ajustes viven en este navegador, no en la partida. Si se cierra
 // el juego acelerado, al volver sigue acelerado y el tiempo fuera cuenta a esa velocidad (el ⏩ de
 // arriba lo recuerda).
 const KEY = 'cafetal-dev';
@@ -10,9 +11,9 @@ const MAX_SPEED = 100;
 
 function load() {
   try {
-    return { visible: false, speed: 10, active: false, ...JSON.parse(localStorage.getItem(KEY)) };
+    return { visible: false, speed: 10, active: false, credit: false, ...JSON.parse(localStorage.getItem(KEY)) };
   } catch {
-    return { visible: false, speed: 10, active: false };
+    return { visible: false, speed: 10, active: false, credit: false };
   }
 }
 
@@ -36,9 +37,18 @@ export function bindDevOptions(game) {
   const input = document.getElementById('dev-speed');
   const toggle = document.getElementById('dev-toggle');
   const chip = document.getElementById('speed-chip');
+  const credit = document.getElementById('dev-credit');
   input.max = MAX_SPEED;
   input.value = prefs.speed;
   box.hidden = !prefs.visible;
+  credit.checked = prefs.visible && prefs.credit;
+  setCredit(credit.checked);
+  credit.addEventListener('change', () => {
+    prefs.credit = credit.checked;
+    setCredit(prefs.credit);
+    store(prefs);
+    toast(prefs.credit ? '💸 Saldo negativo permitido: compra lo que quieras' : '💰 Solo se compra con lo que hay');
+  });
 
   const speed = () => Math.min(MAX_SPEED, Math.max(1, Math.round(Number(input.value) || 1)));
   const paint = () => {
@@ -80,6 +90,8 @@ export function bindDevOptions(game) {
   document.getElementById('dev-hide').addEventListener('click', () => {
     prefs.visible = false;
     box.hidden = true;
+    credit.checked = prefs.credit = false;
+    setCredit(false);
     store(prefs);
     setScale(1);
   });

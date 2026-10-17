@@ -99,7 +99,7 @@
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Cafetal <small id="menu-version">v1.4</small></h2>
+        <h2>Cafetal <small id="menu-version">v1.4.1</small></h2>
         <p>Tu partida se guarda sola en este navegador.</p>
         <p id="menu-stats"></p>
         <details class="save-box">
@@ -120,6 +120,10 @@
             <input id="dev-speed" type="number" min="1" max="100" step="1" inputmode="numeric" value="10" />
             <button id="dev-toggle" class="btn small"></button>
           </div>
+          <label class="dev-row dev-check">
+            <input id="dev-credit" type="checkbox" />
+            <span>Permitir saldo negativo: compra lo que quieras y lo que falte queda como deuda</span>
+          </label>
           <div class="modal-actions">
             <button id="dev-hide" class="btn small">Ocultar opciones de desarrollador</button>
           </div>

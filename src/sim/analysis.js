@@ -8,6 +8,7 @@ import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { exportsOf, teamCapacity } from './transport.js';
 import { COMPOST_VALUE, WASHED_PER_COMPOST, dispatchMult, productValue, speedMult } from './modifiers.js';
 import { PRODUCTS } from '../data/products.js';
+import { canPay } from './upgrades.js';
 
 const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
 const MAX_ROUTE_DEPTH = 4; // zonas encadenadas por rutas que se miran como mucho
@@ -306,7 +307,7 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
   // Una investigación solo se recomienda si ya alcanza el dinero y rinde más que el mejor nivel:
   // así la recomendación nunca deja al jugador ahorrando para algo caro.
   for (const r of RESEARCH) {
-    if (r.zone !== zoneId || state.research.includes(r.id) || r.cost > state.coins) continue;
+    if (r.zone !== zoneId || state.research.includes(r.id) || !canPay(state, r.cost)) continue;
     if (r.requires && !state.stations[r.requires]) continue;
     const gain = score({ ...state, research: [...state.research, r.id] }) - base;
     const option = { id: `research:${r.id}`, cost: r.cost, gain };

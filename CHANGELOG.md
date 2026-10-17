@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v1.4.1 — Saldo negativo para pruebas y licencia MIT
+- **Opciones de desarrollador**: nueva casilla «Permitir saldo negativo». Con ella todo se puede comprar (construir, investigar, subir niveles; «máx» sube hasta el nivel 100) y lo que falta queda como deuda: el saldo baja de cero, se ve en rojo y lo que se gana después la va pagando. Al quitarla, la deuda se queda y no se compra nada hasta volver a positivo. Al ocultar las opciones se apaga.
+- **Licencia MIT** para el código y los gráficos (archivo `LICENSE`). La música sigue siendo CC0. El README explica de dónde sale la idea y qué es propio.
+
 ## v1.4 — Zona 5: El Maizal, y música
 - **Nueva zona** que se abre al completar el Cacaotal: Maizal ♾️ → Desgranadora → Piladora → Molino de masa → Budare → **Puesto de arepas**, que hace bandejas de arepas de queso con el queso y la mantequilla de la Lechería. Mapa con milpa de espigas, girasoles y espantapájaros, y cinco edificios nuevos (pilones que suben y bajan, budare con arepas, puesto con parasol de colores).
 - **Rutas del queso y de la mantequilla**: salen de la bodega de la Lechería por la carretera de abajo. A igual nivel, el Puesto gasta justo lo que hacen la Quesera y la Batidora.

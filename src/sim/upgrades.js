@@ -10,6 +10,12 @@ import { routeActive } from './routes.js';
 // Los arrieros cuestan la mitad que la estación a la que sirven.
 const TRANSPORT_COST_FACTOR = 0.5;
 
+// Opciones de desarrollador: con saldo negativo permitido, todo se puede comprar y lo que falta queda
+// como deuda (el saldo baja de cero y lo que se gana después la va pagando).
+let credit = false;
+export const setCredit = (on) => (credit = Boolean(on));
+export const canPay = (state, cost) => credit || state.coins >= cost;
+
 // Lo que se puede mejorar: 'dispatch:<zona>', 'route:<ruta>', el id de una estación o 'id:transport' (sus arrieros).
 function target(state, id) {
   const [stationId, part] = id.split(':');
@@ -36,12 +42,12 @@ export function quoteUpgrade(state, id, mode) {
   if (id.startsWith('route:') && !routeActive(state, id.split(':')[1])) return { ...bulkUpgrade(base, growth, level, 1), affordable: false, maxed: false, locked: true };
   if (level >= MAX_LEVEL) return { levels: 0, cost: 0, affordable: false, maxed: true };
   if (mode === 'max') {
-    const q = bulkUpgrade(base, growth, level, Infinity, state.coins);
+    const q = bulkUpgrade(base, growth, level, Infinity, credit ? Infinity : state.coins);
     if (q.levels > 0) return { ...q, affordable: true, maxed: false };
     return { ...bulkUpgrade(base, growth, level, 1), affordable: false, maxed: false };
   }
   const q = bulkUpgrade(base, growth, level, mode);
-  return { ...q, affordable: q.levels > 0 && state.coins >= q.cost, maxed: false };
+  return { ...q, affordable: q.levels > 0 && canPay(state, q.cost), maxed: false };
 }
 
 export function buyUpgrade(state, id, mode, bus) {
@@ -71,7 +77,7 @@ export function quoteUnlock(state, id) {
     const previous = chain[chain.indexOf(id) - 1];
     return { ok: false, reason: 'order', previous, cost };
   }
-  if (state.coins < cost) return { ok: false, reason: 'coins', cost };
+  if (!canPay(state, cost)) return { ok: false, reason: 'coins', cost };
   return { ok: true, cost };
 }
 
@@ -90,7 +96,7 @@ export function quoteResearch(state, id) {
   if (state.research.includes(id)) return { ok: false, reason: 'owned', cost: r.cost };
   if (!zoneUnlocked(state, r.zone)) return { ok: false, reason: 'zone', cost: r.cost };
   if (r.requires && !state.stations[r.requires]) return { ok: false, reason: 'locked', cost: r.cost };
-  if (state.coins < r.cost) return { ok: false, reason: 'coins', cost: r.cost };
+  if (!canPay(state, r.cost)) return { ok: false, reason: 'coins', cost: r.cost };
   return { ok: true, cost: r.cost };
 }
 
