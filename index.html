@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Cafetal</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/ui/styles.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <header id="hud">
+      <div class="brand">☕ Cafetal</div>
+      <div class="coins">
+        <span class="coin-icon">💰</span>
+        <span id="coins">0</span>
+        <span id="income" class="rate">+0/s</span>
+      </div>
+      <button id="menu-btn" class="icon-btn" aria-label="Menú">⚙️</button>
+    </header>
+    <div id="bottleneck" class="chip" hidden></div>
+
+    <section id="panel" class="panel" hidden></section>
+
+    <div id="menu" class="modal" hidden>
+      <div class="modal-card">
+        <h2>Cafetal <small>v0.1</small></h2>
+        <p>Tu partida se guarda sola en este navegador.</p>
+        <p id="menu-stats"></p>
+        <div class="modal-actions">
+          <button id="reset-btn" class="btn danger">Borrar partida</button>
+          <button id="close-menu" class="btn">Seguir jugando</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" hidden></div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
