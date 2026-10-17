@@ -17,7 +17,7 @@ npm test         # pruebas de la simulación
 npm run build    # versión para publicar en dist/
 ```
 
-## Estado: v0.3
+## Estado: v0.4
 
 - Mapa isométrico de la Zona 1 (La Finca) con cámara: arrastrar para mover, rueda o pellizco para zoom.
 - **Cadena completa de la finca**: Cafetal ♾️ → Beneficiadero → Marquesina → Trilladora → Tostadora → Molino → Empacadora → Bodega.
@@ -28,6 +28,10 @@ npm run build    # versión para publicar en dist/
 - **Desvío automático**: si una estación no da abasto, el sobrante va a la bodega y se vende sin procesar (↪️).
 - **Indicadores**: ⛔ patio lleno, ⏸️ sin entrada, ↪️ desviando; aviso del cuello de botella (tócalo para abrir esa estación).
 - **Despacho**: el Willys vende en el pueblo lo que llega a la bodega, lo más valioso primero.
+- **Edificios que crecen con los hitos**: macetas (nv 10), segundo piso con balcón (nv 25), faroles (nv 50), patio empedrado (nv 75) y bandera de Colombia (nv 100).
+- **Día y noche decorativo** (un día = 8 min): amanecer, atardecer, noche con estrellas, ventanas y faroles encendidos y luciérnagas. No afecta a la producción.
+- **Vida y efectos**: bandadas de pájaros, monedas que saltan al vender, edificios que brotan al construirse y rebotan al mejorar.
+- **Sonido sintetizado** (sin archivos): monedas, mejoras, hitos, construcción, pájaros de día y grillos de noche. Se apaga en el menú ⚙️.
 - Guardado automático en el navegador (las partidas de la v0.1 se conservan) y ganancias sin conexión (máx. 2 h).
 
 ## Estructura

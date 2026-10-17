@@ -1,6 +1,5 @@
-import { Container, Graphics, Text } from 'pixi.js';
+import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import { FONT } from './palette.js';
-
 
 // Números flotantes, humo, cerezas que saltan y confeti.
 export class Effects {
@@ -57,6 +56,55 @@ export class Effects {
     this.add(g, 0.7, (o, k) => {
       const r = 10 + k.age * 120;
       o.clear().ellipse(0, 0, r, r * 0.5).stroke({ width: 4, color, alpha: 1 - k.age / k.life });
+    });
+  }
+
+  // Monedas que saltan (al vender en el pueblo).
+  coins(x, y, count = 8) {
+    for (let i = 0; i < count; i++) {
+      const g = new Graphics().circle(0, 0, 4).fill(0xffd700).stroke({ width: 1.5, color: 0xb8860b });
+      g.position.set(x, y);
+      const vx = (Math.random() - 0.5) * 90;
+      let vy = -90 - Math.random() * 70;
+      this.add(g, 0.9, (o, k) => {
+        vy += 300 * k.dt;
+        o.x += vx * k.dt;
+        o.y += vy * k.dt;
+        o.scale.x = Math.cos(k.age * 14);
+        o.alpha = 1 - (k.age / k.life) ** 2;
+      });
+    }
+  }
+
+  // Estrellitas al subir de nivel.
+  sparkle(x, y, count = 6) {
+    for (let i = 0; i < count; i++) {
+      const g = new Graphics().star(0, 0, 4, 5, 2).fill(0xfff3b0);
+      const a = (i / count) * Math.PI * 2;
+      g.position.set(x + Math.cos(a) * 12, y + Math.sin(a) * 6);
+      this.add(g, 0.8, (o, k) => {
+        o.x += Math.cos(a) * 40 * k.dt;
+        o.y += Math.sin(a) * 20 * k.dt - 20 * k.dt;
+        o.rotation += 4 * k.dt;
+        o.alpha = 1 - k.age / k.life;
+      });
+    }
+  }
+
+  // Luciérnaga: punto de luz que flota un rato (solo de noche).
+  firefly(x, y, texture) {
+    const s = new Sprite(texture);
+    s.anchor.set(0.5);
+    s.scale.set(0.22);
+    s.tint = 0xd8ff7a;
+    s.blendMode = 'add';
+    s.position.set(x, y);
+    const vx = (Math.random() - 0.5) * 12;
+    const phase = Math.random() * 6;
+    this.add(s, 5 + Math.random() * 4, (o, k) => {
+      o.x += vx * k.dt;
+      o.y += Math.sin(k.age * 2 + phase) * 6 * k.dt;
+      o.alpha = Math.min(1, k.age, k.life - k.age) * (0.5 + 0.5 * Math.sin(k.age * 5 + phase));
     });
   }
 

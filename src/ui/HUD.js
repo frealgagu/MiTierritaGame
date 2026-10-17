@@ -3,10 +3,13 @@ import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { analyzeChain } from '../sim/analysis.js';
 import { nextToUnlock } from '../sim/chain.js';
 import { toast } from './toast.js';
+import { clockLabel } from '../render/DayNight.js';
 
 export class HUD {
-  constructor(game, onOpen) {
+  constructor(game, onOpen, getHour) {
     this.game = game;
+    this.getHour = getHour;
+    this.clock = document.getElementById('clock');
     this.coins = document.getElementById('coins');
     this.income = document.getElementById('income');
     this.chip = document.getElementById('bottleneck');
@@ -18,6 +21,8 @@ export class HUD {
     const s = this.game.state;
     this.coins.textContent = formatNumber(s.coins);
     this.income.textContent = `+${formatRate(this.game.incomePerSecond())}/s`;
+    const hour = this.getHour();
+    if (hour !== undefined) this.clock.textContent = clockLabel(hour);
     this.bottleneck = analyzeChain(s).bottleneck;
     const [id, part] = this.bottleneck.split(':');
     const name = id === 'dispatch' ? DISPATCH.name : part === 'transport' ? `Arrieros de ${STATIONS_BY_ID[id].name}` : STATIONS_BY_ID[id].name;

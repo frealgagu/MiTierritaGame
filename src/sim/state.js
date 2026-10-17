@@ -19,6 +19,7 @@ export function createInitialState(now = Date.now()) {
     jeep: { phase: 'idle', t: 0, waited: 0, load: {} },
     stats: { produced: {}, sold: {} },
     hints: [], // avisos ya mostrados
+    settings: { sound: true },
   };
 }
 

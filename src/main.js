@@ -7,6 +7,7 @@ import { HUD } from './ui/HUD.js';
 import { StationPanel } from './ui/StationPanel.js';
 import { ChainView } from './ui/ChainView.js';
 import { toast } from './ui/toast.js';
+import { Sound } from './audio/Sound.js';
 
 const AUTOSAVE_MS = 10_000;
 const MIN_OFFLINE_S = 30;
@@ -33,7 +34,14 @@ async function start() {
   const game = new Game(saved ?? undefined);
   if (saved) applyOffline(game, (Date.now() - saved.savedAt) / 1000);
 
-  const scene = new Scene(app, game);
+  const sound = new Sound();
+  sound.setEnabled(game.state.settings.sound);
+  // Un clic suave en cada botón de la interfaz.
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('button')) sound.click();
+  });
+
+  const scene = new Scene(app, game, sound);
   const panel = new StationPanel(game, () => scene.select(null));
   // id puede ser 'farm', 'dispatch' o 'farm:transport' (abre la pestaña de arrieros).
   scene.onSelect = (id) => {
@@ -41,7 +49,7 @@ async function start() {
     scene.select(stationId);
     panel.open(stationId, part === 'transport' ? 'transport' : 'station');
   };
-  const hud = new HUD(game, scene.onSelect);
+  const hud = new HUD(game, scene.onSelect, () => scene.dayNight.hour);
   const chain = new ChainView(game, scene.onSelect);
   window.addEventListener('resize', () => scene.resize(app.screen.width, app.screen.height));
 
@@ -78,7 +86,7 @@ async function start() {
   });
   window.addEventListener('pagehide', persist);
 
-  bindMenu(game);
+  bindMenu(game, sound);
   if (import.meta.env.DEV) window.__cafetal = { game, scene };
 }
 
@@ -88,8 +96,16 @@ function applyOffline(game, seconds) {
   if (r.coins > 0) toast(`Mientras no estabas (${formatDuration(r.seconds)}), tu finca ganó 💰 ${formatNumber(r.coins)}`, 6000);
 }
 
-function bindMenu(game) {
+function bindMenu(game, sound) {
   const menu = document.getElementById('menu');
+  const soundBtn = document.getElementById('sound-btn');
+  const paintSound = () => (soundBtn.textContent = game.state.settings.sound ? '🔊 Sonido: sí' : '🔇 Sonido: no');
+  paintSound();
+  soundBtn.addEventListener('click', () => {
+    game.state.settings.sound = !game.state.settings.sound;
+    sound.setEnabled(game.state.settings.sound);
+    paintSound();
+  });
   document.getElementById('menu-btn').addEventListener('click', () => {
     const s = game.state;
     document.getElementById('menu-stats').textContent =

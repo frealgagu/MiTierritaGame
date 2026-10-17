@@ -319,14 +319,26 @@ Al tratarse de un cálculo analítico, no hace falta simular tick a tick y es in
 - **Despacho:** un jeep Willys cargado hasta arriba bajando la carretera.
 - Día y noche **solo cosmético**: amanecer con niebla, día brillante y noche con faroles cálidos y ventanas iluminadas.
 
-### Evolución visual por hitos (ejemplo: Tostadora)
-| Nivel | Aspecto |
-|-------|---------|
-| 1–9 | Fogón de leña con paila |
-| 10–24 | Cobertizo con tostador de tambor manual |
-| 25–49 | Casa de bahareque con tostador a gas y chimenea |
-| 50–74 | Taller de ladrillo con dos tostadores |
-| 75–100 | Pequeña fábrica con silos y una banda que sale |
+### Evolución visual por hitos (implementado en la v0.4)
+Cada estación conserva su dibujo propio y va ganando detalles con cada hito:
+
+| Hito | Nivel | Qué cambia |
+|------|-------|------------|
+| 1 | 10 | Macetas con flores y remates de otro color |
+| 2 | 25 | Segundo piso con balcón (la Marquesina gana una cama más, la rueda del Molino crece) |
+| 3 | 50 | Dos faroles que se encienden de noche |
+| 4 | 75 | Patio empedrado |
+| 5 | 100 | Bandera de Colombia ondeando en el tejado y remates dorados |
+
+La casa del Cafetal evoluciona aparte (de rancho de madera a casa de dos pisos con balcón).
+
+### Día y noche (v0.4)
+- Un día dura 8 minutos de juego; una partida nueva empieza a las 8:00.
+- El mundo se tiñe (amanecer rosado, atardecer naranja, noche azul) y el cielo cambia de degradado. Las estrellas, ventanas, faroles, el fuego de la Tostadora y las luciérnagas brillan de noche.
+- **Solo es decorativo**: no cambia la producción.
+
+### Sonido (v0.4)
+Sintetizado con Web Audio, sin archivos: clic de botones, monedas al vender, arpegio al subir de nivel y al cruzar un hito, martillazos al construir, pájaros de día y grillos de noche. Se apaga desde el menú y la preferencia se guarda con la partida.
 
 ### Paleta
 

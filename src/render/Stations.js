@@ -1,4 +1,4 @@
-import { Container, Graphics, Polygon, Text } from 'pixi.js';
+import { Container, Graphics, Polygon, Sprite, Text } from 'pixi.js';
 import { iso, isoPoly, depth, shade } from './iso.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
@@ -48,6 +48,25 @@ export class StationView extends Container {
     this.status = new Text({ text: '', style: { fontSize: 22 }, resolution: 3 });
     this.status.anchor.set(0.5);
     this.status.visible = false;
+    // Luces nocturnas (ventanas, faroles): la escena pone esta capa sobre el tinte de la noche.
+    this.lightLayer = new Container();
+    this.lights = [];
+    this.lightsDirty = true;
+  }
+
+  // Reconstruye los puntos de luz con una textura de halo suave.
+  buildLights(texture) {
+    this.lightsDirty = false;
+    this.lightLayer.removeChildren().forEach((c) => c.destroy());
+    for (const l of this.lights) {
+      const s = new Sprite(texture);
+      s.anchor.set(0.5);
+      s.position.set(l.x, l.y);
+      s.scale.set(l.r / 32);
+      s.tint = l.color ?? 0xffc864;
+      s.blendMode = 'add';
+      this.lightLayer.addChild(s);
+    }
   }
 
   // icon: '⛔' | '⏸️' | '↪️' | null
@@ -101,7 +120,8 @@ export class FarmView extends StationView {
     const { x, y, w, h } = this.zoneFarm;
     const rng = createRng(42);
     this.bushes = [];
-    drawHut(g, x, y, tier);
+    this.lights = drawHut(g, x, y, tier);
+    this.lightsDirty = true;
     // Cafetos en filas; con cada hito son más grandes y tienen más cerezas.
     const scale = 0.75 + tier * 0.1;
     for (let gx = x; gx < x + w; gx++) {
@@ -128,12 +148,16 @@ function drawHut(g, x, y, tier) {
   const ox = x + 0.3;
   const oy = y + 0.3;
   const p = iso(ox + 0.7, oy + 0.7);
+  const doorLight = (size) => {
+    const d = iso(ox + size * 0.55, oy + size, 10);
+    return { x: d.x, y: d.y, r: 22 };
+  };
   if (tier === 0) {
     shadow(g, p.x, p.y + 6, 34, 14);
     box(g, ox, oy, 1.4, 1.4, 20, 0xa47148);
     gableRoof(g, ox, oy, 1.4, 1.4, 20, 14, 0x9c8a5a, 0xa47148);
     door(g, ox, oy, 1.4, 1.4);
-    return;
+    return [doorLight(1.4)];
   }
   const wall = PAL.wall;
   const balcony = [PAL.balconyRed, PAL.balconyBlue, PAL.balconyYellow, PAL.balconyGreen, PAL.balconyRed][tier - 1];
@@ -158,6 +182,12 @@ function drawHut(g, x, y, tier) {
     // Secadero lateral.
     box(g, x + 0.2, y + 1.8, 1.6, 0.2, 2, 0xcfae7a);
   }
+  const lights = [doorLight(size)];
+  if (tier >= 2) {
+    const b = iso(ox + size / 2, oy + size, height - 2);
+    lights.push({ x: b.x, y: b.y, r: 26 });
+  }
+  return lights;
 }
 
 function door(g, ox, oy, w, d, color = PAL.woodDark) {
@@ -203,10 +233,19 @@ export class WarehouseView extends StationView {
     // Ventanas con balcón amarillo.
     for (const wx of [1.75, 2.15]) {
       g.poly(isoPoly([[ox + wx - 0.13, oy + D, 20], [ox + wx + 0.13, oy + D, 20], [ox + wx + 0.13, oy + D, 32], [ox + wx - 0.13, oy + D, 32]])).fill(PAL.balconyYellow).stroke(OUTLINE);
+      const c = iso(ox + wx, oy + D, 26);
+      this.lights.push({ x: c.x, y: c.y, r: 18 });
     }
     for (const wy of [0.7, 1.6]) {
       g.poly(isoPoly([[ox + W, oy + wy - 0.15, 18], [ox + W, oy + wy + 0.15, 18], [ox + W, oy + wy + 0.15, 32], [ox + W, oy + wy - 0.15, 32]])).fill(shade(PAL.balconyYellow, 0.8)).stroke(OUTLINE);
+      const c = iso(ox + W, oy + wy, 25);
+      this.lights.push({ x: c.x, y: c.y, r: 18 });
     }
+    // Farol en la puerta del patio.
+    const lamp = iso(ox + 0.4, oy + D + 0.15, 30);
+    g.rect(lamp.x - 1, lamp.y, 2, 30).fill(0x2b2b2b);
+    g.rect(lamp.x - 3.5, lamp.y - 7, 7, 7).fill(0xffd27a).stroke({ width: 1, color: 0x2b2b2b });
+    this.lights.push({ x: lamp.x, y: lamp.y - 3, r: 28 });
     // Letrero.
     const s = iso(ox + 1.2, oy + D, 38);
     g.roundRect(s.x - 22, s.y - 7, 44, 13, 3).fill(PAL.wood).stroke(OUTLINE);

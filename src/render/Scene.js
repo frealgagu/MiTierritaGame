@@ -1,4 +1,4 @@
-import { Container, Graphics, Text } from 'pixi.js';
+import { Container, Graphics, Text, Texture } from 'pixi.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { Background } from './Background.js';
 import { Camera } from './Camera.js';
@@ -16,18 +16,20 @@ import { PRODUCTS } from '../data/products.js';
 import { dispatchCapacity, warehouseCapacity } from '../sim/rules.js';
 import { CHAIN, ROAD_POS } from '../sim/chain.js';
 import { quoteUnlock } from '../sim/upgrades.js';
+import { DayNight } from './DayNight.js';
 
 const DIVERT_ICON_TIME = 3; // s que se muestra ↪️ tras un desvío
 const STARVED_ICON_TIME = 8; // s sin entrada antes de mostrar ⏸️
 
 // Altura (px) de la etiqueta sobre cada tipo de edificio.
-const LABEL_HEIGHT = { farm: 70, dispatch: 100, plot: 62, building: 82 };
+const LABEL_HEIGHT = { farm: 70, dispatch: 100, plot: 62, building: 96 };
 
 // Arma el mundo y lo mantiene sincronizado con el estado de la simulación.
 export class Scene {
-  constructor(app, game) {
+  constructor(app, game, sound) {
     this.app = app;
     this.game = game;
+    this.sound = sound;
     this.zone = ZONE1;
     this.time = 0;
     this.onSelect = () => {};
@@ -38,10 +40,15 @@ export class Scene {
     this.objects.sortableChildren = true;
     this.labels = new Container();
     this.effects = new Effects();
-    app.stage.addChild(this.background.view, this.world);
+    // El suelo y los objetos se tiñen según la hora; luces, etiquetas y efectos van encima sin teñir.
+    this.tinted = new Container();
+    this.lights = new Container();
+    this.lightTexture = createGlowTexture();
+    app.stage.addChild(this.background.stars, this.background.view, this.world);
 
     this.terrain = new Terrain(this.zone);
-    this.world.addChild(this.terrain.ground, this.objects, this.labels, this.effects.view);
+    this.tinted.addChild(this.terrain.ground, this.objects);
+    this.world.addChild(this.tinted, this.lights, this.labels, this.effects.view);
     for (const d of this.terrain.decor) this.objects.addChild(d);
 
     this.stations = {};
@@ -69,8 +76,10 @@ export class Scene {
     const r = iso(this.zone.warehouse.x + 4, this.zone.warehouse.y);
     this.camera.fit({ minX: l.x, maxX: r.x, minY: top.y, maxY: end.y });
 
+    this.dayNight = new DayNight(this);
     this.bindEvents();
     this.smokeTimer = 0;
+    this.ambientTimer = 0;
   }
 
   addStationView(id, view, labelHeight) {
@@ -84,6 +93,7 @@ export class Scene {
     view.status.position.set(a.x, a.y - 30);
     view.statusY = a.y - 30;
     this.labels.addChild(view.label, view.status);
+    this.lights.addChild(view.lightLayer);
   }
 
   // Parcela (si no está construida) o edificio de una estación de la cadena.
@@ -94,6 +104,7 @@ export class Scene {
       old.destroy({ children: true });
       old.label.destroy({ children: true });
       old.status.destroy();
+      old.lightLayer.destroy({ children: true });
       if (wasSelected) this.pendingSelect = id;
     }
     const plot = this.zone.plots.find((p) => p.stationId === id);
@@ -127,6 +138,8 @@ export class Scene {
     bus.on('sold', ({ coins }) => {
       const p = this.exitPoint;
       this.effects.floatText(p.x, p.y - 20, `+${formatNumber(coins)} 💰`, { color: 0xffe066, size: 20 });
+      this.effects.coins(p.x, p.y);
+      this.sound.coin();
     });
     bus.on('muleArrived', (m) => {
       if (m.to !== 'warehouse') return;
@@ -141,7 +154,12 @@ export class Scene {
       }
     });
     bus.on('levelUp', ({ id, to, milestone }) => {
-      const p = this.stations[id.split(':')[0]].anchorPoint(30);
+      const view = this.stations[id.split(':')[0]];
+      const p = view.anchorPoint(30);
+      view.bounce?.('bump');
+      this.effects.sparkle(p.x, p.y);
+      if (milestone) this.sound.milestone();
+      else this.sound.levelUp();
       this.effects.ring(p.x, p.y + 30);
       this.effects.floatText(p.x, p.y - 20, milestone ? `¡Hito nivel ${milestone}! ×2` : id.endsWith(':transport') ? `🐴 Arrieros nivel ${to}` : `Nivel ${to}`, {
         color: milestone ? 0xffe066 : 0xffffff,
@@ -152,6 +170,8 @@ export class Scene {
     });
     bus.on('unlocked', ({ id }) => {
       this.buildStation(id);
+      this.stations[id].bounce('pop');
+      this.sound.build();
       const p = this.stations[id].anchorPoint(40);
       this.effects.ring(p.x, p.y + 40, 0xffffff);
       this.effects.confetti(p.x, p.y, 60);
@@ -166,6 +186,7 @@ export class Scene {
   update(dt) {
     this.time += dt;
     const state = this.game.state;
+    this.dayNight.update(state.playTime);
     this.background.update(dt, this.camera);
     this.farm.sync(state);
     this.warehouse.sync(state, warehouseCapacity(state.dispatch.level));
@@ -176,6 +197,7 @@ export class Scene {
       view.setStatus(statusIcon(state, id));
     }
     for (const view of Object.values(this.stations)) {
+      if (view.lightsDirty) view.buildLights(this.lightTexture);
       view.update(dt, this.time);
       if (view.status.visible) view.status.y = view.statusY + Math.sin(this.time * 4) * 3;
     }
@@ -192,7 +214,29 @@ export class Scene {
         for (const p of view.smokePoints ?? []) this.effects.smoke(p.x, p.y);
       }
     }
+    this.updateAmbient(dt);
     this.effects.update(dt);
+  }
+
+  // Luciérnagas y sonidos de ambiente según la hora.
+  updateAmbient(dt) {
+    const night = this.dayNight.light;
+    this.ambientTimer -= dt;
+    if (this.ambientTimer > 0) return;
+    this.ambientTimer = 0.5;
+    if (night > 0.5) {
+      const n = this.zone.size;
+      for (let i = 0; i < 2; i++) {
+        const gx = Math.random() * n;
+        const gy = Math.random() * n;
+        if (this.terrain.tiles[Math.floor(gx)][Math.floor(gy)] !== 'grass') continue;
+        const p = iso(gx, gy, 8 + Math.random() * 20);
+        this.effects.firefly(p.x, p.y, this.lightTexture);
+      }
+      if (Math.random() < 0.15) this.sound.cricket();
+    } else if (Math.random() < 0.04) {
+      this.sound.chirp();
+    }
   }
 
   syncMules(state) {
@@ -255,6 +299,21 @@ export function statusIcon(state, id) {
   if (st.status === 'starved' && st.idle > STARVED_ICON_TIME) return '⏸️';
   if (st.lastDiverted !== undefined && state.playTime - st.lastDiverted < DIVERT_ICON_TIME) return '↪️';
   return null;
+}
+
+// Halo suave (degradado radial) para luces, faroles y luciérnagas.
+function createGlowTexture() {
+  const size = 64;
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  grad.addColorStop(0, 'rgba(255,255,255,0.9)');
+  grad.addColorStop(0.25, 'rgba(255,255,255,0.45)');
+  grad.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, size);
+  return Texture.from(canvas);
 }
 
 // Letrero de madera simple.
