@@ -4,6 +4,10 @@ Juego incremental de cadena de suministros con estilo visual inspirado en *Froze
 
 El diseño completo está en [`docs/GDD.md`](docs/GDD.md).
 
+## Jugar
+
+Versión publicada: **https://frealgagu.github.io/Game/** (se actualiza sola con cada push gracias a `.github/workflows/pages.yml`).
+
 ## Jugar en local
 
 ```bash
