@@ -177,13 +177,16 @@ test('ningún objetivo pide vender un producto intermedio (podría quedar imposi
   for (const g of GOALS) if (g.type === 'sold') assert.ok(finals.has(g.product), `${g.id} pide vender ${g.product}`);
 });
 
-test('cada estación de cada cadena tiene al menos una investigación que la acelera', async () => {
+test('cada estación de cada cadena tiene exactamente una investigación que la acelera', async () => {
   const { ZONE_LIST } = await import('../src/data/zones/index.js');
   const boosted = new Set(RESEARCH.filter((r) => r.effect.type === 'stationSpeed').map((r) => r.effect.target));
   for (const zone of ZONE_LIST) {
     for (const id of zone.chain) {
       // La Hornilla ya tiene el bagazo, pero también debe tener su investigación.
       assert.ok(boosted.has(id), `${zone.id}: ${id} no tiene investigación de velocidad`);
+      // Y solo una: con todas compradas, la cadena queda tan equilibrada como sin ninguna.
+      const speedUps = RESEARCH.filter((r) => r.effect.type === 'stationSpeed' && r.effect.target === id);
+      assert.equal(speedUps.length, 1, `${zone.id}: ${id} tiene ${speedUps.length} investigaciones de velocidad`);
     }
   }
 });

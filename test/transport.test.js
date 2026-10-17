@@ -33,7 +33,7 @@ test('a igual nivel, los arrieros llevan todo lo que produce su estación (en el
     (g) => ['wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer'].forEach((id) => g.unlock(id)),
     (g) => {
       ['wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer', 'composter'].forEach((id) => g.unlock(id));
-      g.state.research.push('abono', 'castillo', 'secador');
+      g.state.research.push('abono', 'despulpadora', 'secador');
     },
   ];
   for (const setup of cases) {
@@ -53,7 +53,7 @@ test('a igual nivel, los arrieros llevan todo lo que produce su estación (en el
 });
 
 test('a igual nivel, el patio del cafetal no se llena por falta de mulas (simulación real)', () => {
-  for (const research of [[], ['abono', 'castillo']]) {
+  for (const research of [[], ['abono', 'despulpadora']]) {
     const game = new Game();
     game.state.research.push(...research);
     game.state.stations.farm.level = 30;

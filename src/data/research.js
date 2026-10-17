@@ -2,7 +2,7 @@
 // aceleran una estación aparecen junto a la de la siguiente, para no descompensar la cadena.
 //   requires: estación que tiene que estar construida para que aparezca
 //   effect:   { type, target?, mult }
-//     stationSpeed (target = estación) · productValue (target = producto)
+//     stationSpeed (target = estación) · productValue (target = producto) · zoneValue (target = zona)
 //     muleSpeed · dispatchCapacity (target = zona) · offlineHours (mult = horas)
 //   zone: zona en la que aparece
 export const RESEARCH = [
@@ -15,8 +15,10 @@ export const RESEARCH = [
   { zone: 'finca', id: 'capataz', name: 'Capataz', icon: '🧑‍🌾', desc: 'La finca trabaja hasta 6 h mientras no juegas (antes 2 h).', cost: 10000, requires: 'roaster', effect: { type: 'offlineHours', mult: 6 } },
   { zone: 'finca', id: 'tueste', name: 'Tueste de origen', icon: '🔥', desc: 'El café tostado vale un 50 % más.', cost: 20000, requires: 'roaster', effect: { type: 'productValue', target: 'roasted', mult: 1.5 } },
   { zone: 'finca', id: 'tostador', name: 'Tostador de tambor grande', icon: '🔥', desc: 'La Tostadora tuesta el doble.', cost: 25000, requires: 'grinder', effect: { type: 'stationSpeed', target: 'roaster', mult: 2 } },
-  { zone: 'finca', id: 'castillo', name: 'Variedad Castillo', icon: '🌳', desc: 'El Cafetal vuelve a duplicar su producción.', cost: 50000, requires: 'grinder', effect: { type: 'stationSpeed', target: 'farm', mult: 2 } },
-  { zone: 'finca', id: 'beneficio_eco', name: 'Beneficio ecológico', icon: '💧', desc: 'El Beneficiadero vuelve a duplicar (para seguirle el paso a la Variedad Castillo).', cost: 50000, requires: 'grinder', effect: { type: 'stationSpeed', target: 'wetmill', mult: 2 } },
+  // La segunda mejora del Cafetal sube el precio de todo el café, no la velocidad: un segundo ×2 en el
+  // Cafetal (y en el Beneficiadero) dejaba al resto de la cadena, con un solo ×2, siempre atrás.
+  { zone: 'finca', id: 'castillo', name: 'Variedad Castillo', icon: '🌳', desc: 'Café de mejor calidad: todo lo que vende la Finca vale un 50 % más.', cost: 50000, requires: 'grinder', effect: { type: 'zoneValue', target: 'finca', mult: 1.5 } },
+  { zone: 'finca', id: 'beneficio_eco', name: 'Beneficio ecológico', icon: '💧', desc: 'La Compostera trabaja el doble de rápido: con menos niveles cubre el bono del compost.', cost: 20000, requires: 'composter', effect: { type: 'stationSpeed', target: 'composter', mult: 2 } },
   { zone: 'finca', id: 'molino_electrico', name: 'Molino eléctrico', icon: '⚙️', desc: 'El Molino muele el doble.', cost: 60000, requires: 'packer', effect: { type: 'stationSpeed', target: 'grinder', mult: 2 } },
   { zone: 'finca', id: 'empaque_auto', name: 'Empacadora automática', icon: '📦', desc: 'La Empacadora llena el doble de bolsas.', cost: 150000, requires: 'packer', effect: { type: 'stationSpeed', target: 'packer', mult: 2 } },
   { zone: 'finca', id: 'cable', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'packer', effect: { type: 'muleSpeed', mult: 2 } },

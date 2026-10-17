@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v1.2.1 — Variedad Castillo sin descompensar la cadena
+- **Variedad Castillo** ya no vuelve a duplicar el Cafetal: ahora **todo lo que vende la Finca vale un 50 % más**. Era un segundo ×2 para el Cafetal (y Beneficio ecológico, otro para el Beneficiadero), mientras el resto de la Finca solo tenía uno: con todo comprado, de la Marquesina en adelante la cadena quedaba siempre a la mitad.
+- **Beneficio ecológico** ahora acelera la **Compostera** ×2 (cuesta 20.000 y aparece con ella): con menos niveles cubre el bono del compost.
+- Regla nueva, con prueba: cada estación de cada cadena tiene **exactamente una** investigación de velocidad, así que con todas compradas la cadena queda tan equilibrada como sin ninguna.
+
 ## v1.2 — Zona 3: La Lechería
 - **Nueva zona** que se abre al completar el Trapiche: Potrero y establo ♾️ → Pasteurizadora → tres ramas: **Quesera**, **Descremadora → Batidora** y **Paila de arequipe**. Mapa propio con vacas, eucaliptos, cipreses y pacas de heno, y cinco edificios nuevos.
 - **Ramas**: la leche pasteurizada se reparte sola entre las estaciones que la usan (las mulas van a la de la entrada más vacía). A igual nivel, cada rama procesa un tercio; mientras falta alguna, la leche que sobra se vende.

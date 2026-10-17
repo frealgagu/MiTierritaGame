@@ -279,7 +279,7 @@ Cada estación tiene **dos ejes** de mejora.
 
 ### 5.4 Investigaciones (compras únicas, `src/data/research.js`)
 
-**Regla:** toda estación de cada cadena tiene al menos una investigación ×2, y las que aceleran una estación aparecen junto a la de la siguiente, para que comprar una no descompense la cadena (hay una prueba que lo exige).
+**Regla:** toda estación de cada cadena tiene **exactamente una** investigación ×2 (hay una prueba que lo exige), y las que aceleran una estación aparecen junto a la de la siguiente, para que comprar una no descompense la cadena. Con todas compradas, la cadena queda igual de equilibrada que sin ninguna. Las mejoras «de segunda vuelta» suben el precio, no la velocidad: un segundo ×2 en una sola estación dejaría a las demás siempre atrás.
 
 **La Finca**
 
@@ -294,8 +294,8 @@ Cada estación tiene **dos ejes** de mejora.
 | 🧑‍🌾 Capataz | Ganancias sin conexión: de 2 h a 6 h | 10.000 | Tostadora |
 | 🔥 Tueste de origen | Café tostado +50 % de valor | 20.000 | Tostadora |
 | 🔥 Tostador de tambor grande | Tostadora ×2 | 25.000 | Molino |
-| 🌳 Variedad Castillo | Cafetal ×2 | 50.000 | Molino |
-| 💧 Beneficio ecológico | Beneficiadero ×2 | 50.000 | Molino |
+| 💧 Beneficio ecológico | Compostera ×2 | 20.000 | Compostera |
+| 🌳 Variedad Castillo | Todo lo que vende la Finca +50 % | 50.000 | Molino |
 | ⚙️ Molino eléctrico | Molino ×2 | 60.000 | Empacadora |
 | 🚡 Cable aéreo | Mulas ×2 de velocidad | 120.000 | Empacadora |
 | 📦 Empacadora automática | Empacadora ×2 | 150.000 | Empacadora |
@@ -308,15 +308,6 @@ El aviso de arriba recomienda la mejora que más 💰/s suma **al final de la ca
 
 ### 5.6 Desvíos y bodega
 Lo que se desvía a la bodega solo puede ocupar hasta el 70 % de su capacidad: el 30 % restante queda siempre libre para el producto final de la cadena, para que el producto barato que sobra no atasque la Empacadora.
-
----------------|--------|--------------|
-| Abono orgánico | Cafetal ×2 | 1.000 |
-| Variedad Castillo | Cafetal ×2 | 50.000 |
-| Secador mecánico | Marquesina ×3 | 30.000 |
-| Tueste de origen | +50 % de valor del tostado | 200.000 |
-| Sello de calidad | +50 % de valor de las bolsas | 2.000.000 |
-| Cable aéreo | Arrieros del tramo más largo ×2 de velocidad | 500.000 |
-| Capataz | Ganancias sin conexión: de 2 h a 6 h | 100.000 |
 
 ---
 
