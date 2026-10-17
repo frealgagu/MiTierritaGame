@@ -4,7 +4,7 @@ import { muleCount, muleLoad, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
 import { ROAD_POS, chainOf, nextStation, zoneOf, zoneUnlocked } from './chain.js';
 import { inputSpace } from './production.js';
-import { COMPOST_BOOST, dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
+import { dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
 
 const MAX_IDLE = 6; // s: si hay algo en el patio y no sale una mula en este tiempo, sale con lo que haya
 const MIN_LEG = 1; // s por trayecto
@@ -31,7 +31,7 @@ export function inTransit(state, to = 'warehouse', zoneId = 'finca') {
 
 // Cuánto acelera la producción de una estación (para dimensionar la carga de sus mulas).
 export function productionMult(state, id) {
-  return speedMult(state, id) * (id === 'farm' && state.stations.composter ? COMPOST_BOOST : 1);
+  return speedMult(state, id);
 }
 
 // Destino normal de las mulas de una estación: la siguiente construida o la bodega.

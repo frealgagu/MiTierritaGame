@@ -1,7 +1,7 @@
 import { DISPATCH } from '../data/stations.js';
 import { dispatchCapacity } from './rules.js';
 import { sumValues } from './state.js';
-import { dispatchMult, productValue } from './modifiers.js';
+import { dispatchMult, productValue, saleValue } from './modifiers.js';
 
 // El Willys de cada zona espera en su bodega; sale lleno, o con carga parcial tras `maxWait` s.
 // Vende al llegar al pueblo (mitad del viaje) y vuelve.
@@ -30,7 +30,7 @@ export function stepJeep(state, zoneId, dt, bus) {
   if (j.phase === 'out') {
     let coins = 0;
     for (const [id, amount] of Object.entries(j.load)) {
-      coins += amount * productValue(state, id);
+      coins += amount * saleValue(state, id);
       state.stats.sold[id] = (state.stats.sold[id] ?? 0) + amount;
     }
     state.coins += coins;

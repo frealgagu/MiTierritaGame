@@ -107,25 +107,31 @@ test('las ganancias sin conexión se parecen a las de jugar en vivo', () => {
   assert.ok(ratio > 0.85 && ratio < 1.15, `sin conexión / en vivo = ${ratio.toFixed(2)}`);
 });
 
-test('la compostera convierte pulpa en compost que acelera el cafetal', () => {
+test('la compostera convierte pulpa en compost que sube el precio de la Finca sin acelerar nada', async () => {
+  const { productionMult } = await import('../src/sim/transport.js');
+  const { saleValue, productValue } = await import('../src/sim/modifiers.js');
   const game = new Game();
   game.state.coins = 1e6;
   assert.equal(game.quoteUnlock('composter').reason, 'order'); // pide el Beneficiadero
   game.unlock('wetmill');
   assert.ok(game.unlock('composter'));
   for (const id of ['farm', 'wetmill', 'composter']) game.state.stations[id].level = 15;
-  // Arrieros y despacho de sobra para que nada frene la cosecha y se vea solo el efecto del compost.
   game.state.stations.farm.transport.level = 60;
   game.state.stations.wetmill.transport.level = 60;
   game.state.zones.finca.dispatch.level = 60;
   run(game, 240);
   assert.ok((game.state.stats.produced.compost ?? 0) > 0, 'produjo compost');
-  // Con compost guardado, el Cafetal va a ×1,5.
+
+  // Con compost, la Finca vende un 30 % más caro; el Trapiche no cambia.
   game.state.stations.composter.buffer = 10;
+  assert.equal(saleValue(game.state, 'washed'), productValue(game.state, 'washed') * 1.3);
+  assert.equal(saleValue(game.state, 'cane'), productValue(game.state, 'cane'));
+  // Y no acelera el Cafetal: la cadena sigue igual de equilibrada.
+  assert.equal(productionMult(game.state, 'farm'), 1);
   const before = game.state.stats.produced.cherry;
   game.state.stations.farm.buffer = 0;
   run(game, 20);
-  const boosted = game.state.stats.produced.cherry - before;
+  const withCompost = game.state.stats.produced.cherry - before;
   game.state.stations.composter.buffer = 0;
   game.state.stations.composter.level = 1;
   game.state.stations.wetmill.byBuffer = 0;
@@ -133,8 +139,26 @@ test('la compostera convierte pulpa en compost que acelera el cafetal', () => {
   const before2 = game.state.stats.produced.cherry;
   game.state.stations.farm.buffer = 0;
   run(game, 20);
-  const plain = game.state.stats.produced.cherry - before2;
-  assert.ok(boosted > plain * 1.3, `con compost ${boosted}, sin compost ${plain}`);
+  const without = game.state.stats.produced.cherry - before2;
+  assert.ok(Math.abs(withCompost - without) <= without * 0.1, `con compost ${withCompost}, sin compost ${without}`);
+  assert.equal(saleValue(game.state, 'washed'), productValue(game.state, 'washed'));
+
+  // Subir el Cafetal no gasta el compost más rápido: se gasta según el café que lava el Beneficiadero.
+  const { expectedCompostValue } = await import('../src/sim/analysis.js');
+  game.state.stations.composter.level = 8;
+  const sustained = expectedCompostValue(game.state);
+  game.state.stations.farm.level = 60;
+  assert.equal(expectedCompostValue(game.state), sustained);
+  game.state.stations.composter.level = 15;
+  assert.ok(Math.abs(expectedCompostValue(game.state) - 1.3) < 1e-9, 'a nivel parecido al Beneficiadero cubre todo');
+
+  // Las ventas reales usan el bono.
+  const g2 = new Game();
+  g2.state.stations.composter = { ...g2.state.stations.farm, buffer: 1000 };
+  g2.state.zones.finca.warehouse = { cherry: 10 };
+  const coins = g2.state.coins;
+  run(g2, 60);
+  assert.ok(g2.state.coins - coins >= 10 * 1.3 - 1e-9, `vendió por ${g2.state.coins - coins}`);
 });
 
 test('la compostera no tiene arrieros ni cuenta para «todas las estaciones»', async () => {

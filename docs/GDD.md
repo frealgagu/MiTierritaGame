@@ -167,7 +167,7 @@ Los valores son orientativos y se ajustarán con el simulador de balance. ⇄ in
 | 5 | Tostadora | 2 verde | Café tostado | 30 |
 | 6 | Molino | 1 tostado | Café molido | 45 |
 | 7 | Empacadora | 4 molido | Bolsa de café | 250 |
-| 8 | Compostera *(rama opcional, v1.0)* | 5 pulpa (por canaleta, sin mulas) | Compost → Cafetal ×1,5 mientras haya (1 compost por 20 cerezas) | — |
+| 8 | Compostera *(rama opcional, v1.0)* | 5 pulpa (por canaleta, sin mulas) | Compost → todo lo que vende la Finca +30 % mientras haya (1 compost por cada 10 cafés lavados; no acelera ninguna estación, así que no descompensa la cadena) | — |
 
 #### Zona 2 · El Trapiche (caña y panela) — 5 estaciones, 6 productos — **v1.1** ✅
 Se abre al completar la Finca. Los productos valen ×5 respecto al primer borrador porque la zona arranca con la economía de la Finca (las monedas se comparten y la Finca sigue produciendo). Misma regla de balance: a igual nivel, cada estación procesa lo que le entrega la anterior.
@@ -296,7 +296,7 @@ Cada estación tiene **dos ejes** de mejora.
 **El Trapiche:** Trapiche con motor (Molienda ×2), Abono para la caña (Cañaduzal ×2), Hornilla de más pailas (×2), Chiva (despacho ×2), Gaveras de acero (×2), Pulverizadora eléctrica (×2), Panela orgánica (+50 % de valor).
 
 ### 5.5 Mejora recomendada
-El aviso de arriba recomienda la mejora que más 💰/s suma **al final de la cadena** (lo que sale de la última estación construida) por moneda gastada, entre estaciones, arrieros y despacho. Lo que se vende desviado no cuenta: si contara, la recomendación llevaría a subir arrieros para vender materia prima en lugar de completar la cadena. También recomienda una **investigación** si ya alcanza el dinero y rinde más que el mejor nivel (nunca deja al jugador ahorrando). Si ninguna mejora suelta rinde, recomienda el cuello de botella. La vista «La cadena» sigue marcando el cuello de botella en rojo.
+El aviso de arriba recomienda la mejora que más 💰/s suma **al final de la cadena** (lo que sale de la última estación construida) por moneda gastada, entre estaciones, arrieros y despacho. Lo que se vende desviado no cuenta: si contara, la recomendación llevaría a subir arrieros para vender materia prima en lugar de completar la cadena. También recomienda una **investigación** si ya alcanza el dinero y rinde más que el mejor nivel (nunca deja al jugador ahorrando). La Compostera se mide de 10 en 10 niveles (nivel a nivel cubre el bono muy poco a poco). Si ninguna mejora suelta rinde, recomienda el cuello de botella. La vista «La cadena» sigue marcando el cuello de botella en rojo.
 
 ### 5.6 Desvíos y bodega
 Lo que se desvía a la bodega solo puede ocupar hasta el 70 % de su capacidad: el 30 % restante queda siempre libre para el producto final de la cadena, para que el producto barato que sobra no atasque la Empacadora.

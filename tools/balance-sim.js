@@ -45,8 +45,10 @@ function bestOption() {
     opts.push({ kind, id, cost, gain: totalIncome(t) - base });
   };
   for (const id of ids) {
-    const q = game.quote(id, 1);
-    if (!q.maxed) consider('up', id, q.cost, (t) => bump(t, id));
+    // La Compostera se mide de 10 en 10, como en la mejora recomendada.
+    const step = STATIONS_BY_ID[id]?.side ? 10 : 1;
+    const q = game.quote(id, step);
+    if (!q.maxed && q.levels > 0) consider(step > 1 ? 'up10' : 'up', id, q.cost, (t) => { for (let k = 0; k < q.levels; k++) bump(t, id); });
   }
   if (style === 'bloque') {
     for (const z of openZones()) {
@@ -125,10 +127,15 @@ for (let step = 0; step < hours * 36000 && currentZone(); step++) {
   else if (unlockCost - s.coins < 300 * totalIncome(s)) continue;
   for (let k = 0; k < 30; k++) {
     const o = bestOption();
-    if (!o) break;
+    if (!o) {
+      // Ninguna compra suelta rinde (hay que subir varias a la vez): como una persona, sube el cuello de botella.
+      if (!game.buy(analyzeChain(s, zone).bottleneck, 1)) break;
+      continue;
+    }
     if (o.kind === 'unlock') game.unlock(o.id);
     else if (o.kind === 'research') game.research(o.id);
     else if (o.kind === 'all') o.id.forEach((id) => game.buy(id, 1));
+    else if (o.kind === 'up10') game.buy(o.id, 10);
     else game.buy(o.id, 1);
   }
 }

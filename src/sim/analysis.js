@@ -4,7 +4,8 @@ import { RESEARCH } from '../data/research.js';
 import { dispatchRate, stationRate } from './rules.js';
 import { chainOf, sourceOf, zoneOf } from './chain.js';
 import { teamCapacity } from './transport.js';
-import { COMPOST_BOOST, CHERRIES_PER_COMPOST, dispatchMult, productValue, speedMult } from './modifiers.js';
+import { COMPOST_VALUE, WASHED_PER_COMPOST, dispatchMult, productValue, speedMult } from './modifiers.js';
+import { PRODUCTS } from '../data/products.js';
 
 const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
 
@@ -22,11 +23,14 @@ export function analyzeChain(state, zoneId = 'finca') {
   const flows = []; // { units, value } que llegan a la bodega
   const byRate = {}; // subproducto que genera cada estación (por s), p. ej. bagazo de la Molienda
 
-  // Ciclos por segundo de una estación, con investigaciones, compost y combustible.
+  // Precio de venta esperado: en la Finca, con el bono del compost que la Compostera puede sostener.
+  const compost = zoneId === 'finca' ? expectedCompostValue(state) : 1;
+  const value = (pid) => productValue(state, pid) * (PRODUCTS[pid].zone === 'finca' ? compost : 1);
+
+  // Ciclos por segundo de una estación, con investigaciones y combustible.
   const cycleRate = (id) => {
     const def = STATIONS_BY_ID[id];
     let rate = stationRate(def, state.stations[id].level) * speedMult(state, id);
-    if (id === 'farm') rate *= expectedCompostBoost(state);
     if (def.fuel) {
       // El combustible acelera ×boost mientras alcance: si la estación de origen da menos, en proporción.
       const demand = rate * def.fuel.boost * def.fuel.perCycle;
@@ -76,7 +80,7 @@ export function analyzeChain(state, zoneId = 'finca') {
       row.lost = output - row.diverted;
     }
     toWarehouse += row.diverted;
-    flows.push({ units: row.diverted, value: productValue(state, outId) });
+    flows.push({ units: row.diverted, value: value(outId) });
     rows.push(row);
     incoming = row.toNext;
   });
@@ -85,7 +89,7 @@ export function analyzeChain(state, zoneId = 'finca') {
   // Ingreso de la cadena principal: solo lo que sale de la última estación (sin los desvíos, que son
   // un recurso de emergencia). Es lo que mide la mejora recomendada.
   const last = rows.at(-1);
-  const lastValue = last ? productValue(state, Object.keys(STATIONS_BY_ID[last.id].out)[0]) : 0;
+  const lastValue = last ? value(Object.keys(STATIONS_BY_ID[last.id].out)[0]) : 0;
   const mainIncome = last ? Math.min(last.diverted, dispatch) * lastValue : 0;
 
   // El Willys carga primero lo más valioso: si no da abasto, lo que se queda es lo barato.
@@ -110,17 +114,18 @@ export function analyzeChain(state, zoneId = 'finca') {
   return { rows, toWarehouse, dispatch, bottleneck, income, mainIncome };
 }
 
-// Aceleración del Cafetal que la Compostera puede sostener: 1 sin compost, 1,5 si alcanza para todo.
-export function expectedCompostBoost(state) {
+// Bono de venta que la Compostera puede sostener: 1 sin compost, 1,3 si alcanza para todo el café
+// que lava el Beneficiadero (si no alcanza, el bono está encendido solo parte del tiempo).
+export function expectedCompostValue(state) {
   const c = state.stations.composter;
   const w = state.stations.wetmill;
   if (!c || !w) return 1;
   const farmOut = stationRate(STATIONS_BY_ID.farm, state.stations.farm.level) * speedMult(state, 'farm');
-  const demand = (farmOut * COMPOST_BOOST) / CHERRIES_PER_COMPOST; // compost/s
-  const wetCycles = Math.min(stationRate(STATIONS_BY_ID.wetmill, w.level) * speedMult(state, 'wetmill'), (farmOut * COMPOST_BOOST) / 2);
-  const pulpPerCompost = STATIONS_BY_ID.composter.in.pulp;
-  const supply = Math.min(stationRate(STATIONS_BY_ID.composter, c.level) * speedMult(state, 'composter'), wetCycles / pulpPerCompost);
-  return 1 + (COMPOST_BOOST - 1) * Math.min(1, supply / demand);
+  const wetCycles = Math.min(stationRate(STATIONS_BY_ID.wetmill, w.level) * speedMult(state, 'wetmill'), farmOut / STATIONS_BY_ID.wetmill.in.cherry);
+  if (wetCycles <= 0) return 1;
+  const demand = (wetCycles * STATIONS_BY_ID.wetmill.out.washed) / WASHED_PER_COMPOST; // compost/s
+  const supply = Math.min(stationRate(STATIONS_BY_ID.composter, c.level) * speedMult(state, 'composter'), wetCycles / STATIONS_BY_ID.composter.in.pulp);
+  return 1 + (COMPOST_VALUE - 1) * Math.min(1, supply / demand);
 }
 
 // Mejora recomendada: la que más 💰/s suma por moneda gastada al final de la cadena (sin contar lo que
@@ -140,8 +145,11 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
     if (!STATIONS_BY_ID[id].side) ids.push(`${id}:transport`);
   }
   for (const id of ids) {
-    const q = quote(id, 1);
-    if (q.maxed) continue;
+    // La Compostera rinde poco nivel a nivel (cubre el bono poco a poco): se mide de 10 en 10.
+    const step = STATIONS_BY_ID[id]?.side ? 10 : 1;
+    const q = quote(id, step);
+    if (q.maxed || q.levels === 0) continue;
+    const levels = q.levels ?? 1;
     const trial = { ...state, stations: { ...state.stations } };
     if (id.startsWith('dispatch')) {
       const zone = state.zones[zoneId];
@@ -149,7 +157,7 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
     } else {
       const [sid, part] = id.split(':');
       const st = { ...state.stations[sid], transport: { ...state.stations[sid].transport } };
-      (part ? st.transport : st).level++;
+      (part ? st.transport : st).level += levels;
       trial.stations[sid] = st;
     }
     options.push({ id, cost: q.cost, gain: analyzeChain(trial, zoneId).mainIncome - base });

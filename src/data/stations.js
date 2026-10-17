@@ -20,7 +20,7 @@ export const STATIONS = [
   { id: 'grinder', zone: 'finca', name: 'Molino', icon: '🌀', in: { roasted: 1 }, out: { ground: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '0.2' },
   { id: 'packer', zone: 'finca', name: 'Empacadora', icon: '📦', in: { ground: 4 }, out: { coffee_bag: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '0.2' },
   // Rama secundaria: la pulpa del Beneficiadero pasa directo por una canaleta (sin mulas) y el
-  // compost acelera el Cafetal mientras haya (ver sim/modifiers.js).
+  // compost hace que todo lo que vende la Finca valga más mientras haya (ver sim/modifiers.js).
   { id: 'composter', zone: 'finca', name: 'Compostera', icon: '🪱', in: { pulp: 5 }, out: { compost: 1 }, cycle: 20, unlockCost: 1500, upgradeBase: 10, growth: 1.15, release: '1.0', side: true, requires: 'wetmill' },
 
   // Zona 2 · El Trapiche

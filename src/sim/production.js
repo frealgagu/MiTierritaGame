@@ -1,6 +1,6 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
-import { compostBoost, consumeCompost, speedMult } from './modifiers.js';
+import { consumeCompost, speedMult } from './modifiers.js';
 
 export function createStationState() {
   return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
@@ -32,8 +32,8 @@ export function stepStation(state, id, dt, bus) {
   }
   s.status = 'working';
   s.idle = 0;
-  // Compost en el Cafetal; combustible (bagazo) en la Hornilla.
-  const boost = (id === 'farm' ? compostBoost(state) : 1) * (def.fuel && s.fuel > 0 ? def.fuel.boost : 1);
+  // Combustible (bagazo) en la Hornilla.
+  const boost = def.fuel && s.fuel > 0 ? def.fuel.boost : 1;
   s.progress += dt * stationRate(def, s.level) * speedMult(state, id) * boost;
   const cycles = Math.min(Math.floor(s.progress), byInput, byOutput);
   if (cycles <= 0) return;
@@ -48,7 +48,7 @@ export function stepStation(state, id, dt, bus) {
     const [[, byAmt]] = Object.entries(def.by);
     s.byBuffer = Math.min(stationBufferCap(def, s.level), (s.byBuffer ?? 0) + cycles * byAmt);
   }
-  if (id === 'farm' && boost > 1) consumeCompost(state, cycles * outAmt);
+  if (id === 'wetmill') consumeCompost(state, cycles * outAmt);
   if (def.fuel && s.fuel > 0) s.fuel = Math.max(0, s.fuel - cycles * def.fuel.perCycle);
   bus.emit('produced', { stationId: id, productId: outId, amount: cycles * outAmt });
 }

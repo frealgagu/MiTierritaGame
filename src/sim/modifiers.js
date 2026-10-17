@@ -27,17 +27,26 @@ export function offlineCapSeconds(state) {
   return hours * 3600;
 }
 
-// Compost (Compostera): acelera el Cafetal mientras haya compost guardado.
-export const COMPOST_BOOST = 1.5;
-export const CHERRIES_PER_COMPOST = 20;
+// Compost (Compostera): mientras haya compost guardado, todo lo que vende la Finca vale más.
+// No acelera ninguna estación, así que no descompensa la cadena.
+// Se gasta 1 compost por cada 10 cafés lavados del Beneficiadero, que da la pulpa para 2: una
+// Compostera a la mitad del nivel del Beneficiadero ya alcanza, y subir el Cafetal no lo gasta más rápido.
+export const COMPOST_VALUE = 1.3;
+export const WASHED_PER_COMPOST = 10;
 
-export function compostBoost(state) {
-  return (state.stations.composter?.buffer ?? 0) > 0 ? COMPOST_BOOST : 1;
+export function compostValueBoost(state) {
+  return (state.stations.composter?.buffer ?? 0) > 0 ? COMPOST_VALUE : 1;
 }
 
-// El Cafetal gasta compost según lo que cosecha.
-export function consumeCompost(state, cherries) {
+// Precio al que se vende de verdad: con investigaciones y, en la Finca, con el bono del compost.
+export function saleValue(state, productId) {
+  const bonus = PRODUCTS[productId].zone === 'finca' ? compostValueBoost(state) : 1;
+  return productValue(state, productId) * bonus;
+}
+
+// El compost se gasta según el café que lava el Beneficiadero.
+export function consumeCompost(state, washed) {
   const c = state.stations.composter;
   if (!c || c.buffer <= 0) return;
-  c.buffer = Math.max(0, c.buffer - cherries / CHERRIES_PER_COMPOST);
+  c.buffer = Math.max(0, c.buffer - washed / WASHED_PER_COMPOST);
 }

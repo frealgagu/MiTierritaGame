@@ -15,8 +15,8 @@ import {
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
 import { busyMules, inTransit, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
-import { analyzeChain, expectedCompostBoost } from '../sim/analysis.js';
-import { COMPOST_BOOST, compostBoost, muleSpeedMult } from '../sim/modifiers.js';
+import { analyzeChain, expectedCompostValue } from '../sim/analysis.js';
+import { COMPOST_VALUE, compostValueBoost, muleSpeedMult, saleValue } from '../sim/modifiers.js';
 import { chainOf, nextStation, zoneOf } from '../sim/chain.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { dispatchMult } from '../sim/modifiers.js';
@@ -129,7 +129,7 @@ export class StationPanel {
     const gain = PRODUCTS[outId].value * def.out[outId] - PRODUCTS[inId].value * def.in[inId];
     const rows = def.side
       ? `<div class="stat"><span>Produce</span><b>${PRODUCTS[outId].name}</b></div>
-         <div class="stat"><span>Efecto</span><b class="next">Cafetal ×${formatRate(COMPOST_BOOST)} mientras haya compost</b></div>
+         <div class="stat"><span>Efecto</span><b class="next">Todo lo que vende la Finca +${pct(COMPOST_VALUE)} mientras haya compost</b></div>
          <div class="stat"><span>Transporte</span><b>Canaleta directa, sin mulas</b></div>`
       : `<div class="stat"><span>Produce</span><b>${PRODUCTS[outId].name}</b></div>
          <div class="stat"><span>Precio de venta</span><b>${PRODUCTS[outId].value} 💰 por unidad</b></div>
@@ -238,13 +238,17 @@ function stationInfo(id) {
   if (def.side) {
     rows.push(
       { key: 'buffer', label: 'Compost guardado', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l))} ${out.icon}` },
-      { key: 'effect', label: 'Cafetal ahora', value: (s) => (compostBoost(s) > 1 ? `×${formatRate(COMPOST_BOOST)} (hay compost)` : '×1 (sin compost)') },
-      { key: 'sustain', label: 'Puede sostener', value: (s) => `×${formatRate(expectedCompostBoost(s))} de ×${formatRate(COMPOST_BOOST)}` },
+      { key: 'effect', label: 'Ventas de la Finca ahora', value: (s) => (compostValueBoost(s) > 1 ? `+${pct(COMPOST_VALUE)} (hay compost)` : 'sin bono (no hay compost)') },
+      { key: 'sustain', label: 'Puede sostener', value: (s) => `+${pct(expectedCompostValue(s))} de +${pct(COMPOST_VALUE)}` },
     );
   } else {
     rows.push(
       { key: 'buffer', label: 'Patio (por enviar)', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l))} ${out.icon}` },
-      { key: 'value', label: 'Precio de venta', value: () => `${out.value} 💰 por ${out.name.toLowerCase()}` },
+      {
+        key: 'value',
+        label: 'Precio de venta',
+        value: (s) => `${formatAmount(saleValue(s, outId))} 💰 por ${out.name.toLowerCase()}${out.zone === 'finca' && compostValueBoost(s) > 1 ? ' 🪱' : ''}`,
+      },
     );
   }
   return {
@@ -326,16 +330,19 @@ function stationStatus(state, id) {
   return { text: `✅ Trabajando. Las mulas llevan el producto a ${dest}.`, bad: false };
 }
 
+// Bono como porcentaje: 1,3 → «30 %».
+const pct = (mult) => `${Math.round((mult - 1) * 100)} %`;
+
 function composterStatus(state, st) {
-  const boost = expectedCompostBoost(state);
-  if (st.status === 'blocked') return { text: '✅ Compost de sobra: el Cafetal va a toda marcha.', bad: false };
+  const bonus = expectedCompostValue(state);
+  if (st.status === 'blocked') return { text: `✅ Compost de sobra: todo lo que vende la Finca vale +${pct(COMPOST_VALUE)}.`, bad: false };
   if (st.status === 'starved' && st.idle > 3) {
     const w = state.stations.wetmill;
     if (w?.status === 'blocked') return { text: '⏸️ Sin pulpa: el Beneficiadero está detenido (patio lleno). Mejora sus arrieros o la estación siguiente.', bad: true };
     return { text: '⏸️ Esperando pulpa del Beneficiadero.', bad: false };
   }
-  if (boost < COMPOST_BOOST - 0.01) return { text: `⚠️ El Cafetal gasta más compost del que se produce (×${formatRate(boost)}). Mejora la Compostera.`, bad: true };
-  return { text: '✅ Produciendo compost: el Cafetal va a ×1,5.', bad: false };
+  if (bonus < COMPOST_VALUE - 0.005) return { text: `⚠️ El Beneficiadero gasta más compost del que se produce: el bono solo dura parte del tiempo (+${pct(bonus)} en promedio). Mejora la Compostera.`, bad: true };
+  return { text: `✅ Produciendo compost: todo lo que vende la Finca vale +${pct(COMPOST_VALUE)}.`, bad: false };
 }
 
 function dispatchInfo(zoneId) {
