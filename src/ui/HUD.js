@@ -5,10 +5,12 @@ import { nextToUnlock } from '../sim/chain.js';
 import { toast } from './toast.js';
 import { clockLabel } from '../render/DayNight.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
+import { RESEARCH_BY_ID } from '../data/research.js';
 
 // Nombre legible de lo que se mejora: 'farm', 'farm:transport' o 'dispatch:<zona>'.
 export function upgradeName(id) {
   const [sid, part] = id.split(':');
+  if (sid === 'research') return `🔬 ${RESEARCH_BY_ID[part].name}`;
   if (sid === 'dispatch') return DISPATCH.name;
   return part === 'transport' ? `Arrieros del ${STATIONS_BY_ID[sid].name}` : STATIONS_BY_ID[sid].name;
 }
@@ -50,7 +52,8 @@ export class HUD {
     for (const { stationId: id } of ZONES_BY_ID[zone].plots) {
       if (!s.stations[id] && this.game.quoteUnlock(id).ok) return id;
     }
-    if (rec && this.game.quote(rec.id, 1).affordable) return rec.id.split(':')[0];
+    if (!rec || rec.id.startsWith('research:')) return null; // la flecha solo señala edificios
+    if (this.game.quote(rec.id, 1).affordable) return rec.id.split(':')[0];
     return null;
   }
 

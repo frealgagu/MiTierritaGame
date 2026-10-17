@@ -269,24 +269,34 @@ Cada estación tiene **dos ejes** de mejora.
 - Un **Willys** lleva `N` unidades de la Bodega al pueblo y vuelve. Se puede mejorar la capacidad, la velocidad y comprar más jeeps (máx. 5).
 - Es el último cuello de botella. Al principio sobra; con 7 estaciones a buen nivel se vuelve crítico.
 
-### 5.4 Investigaciones (compras únicas y globales, v0.5)
+### 5.4 Investigaciones (compras únicas, `src/data/research.js`)
 
-Aparecen al construir la estación indicada (`src/data/research.js`):
+**Regla:** toda estación de cada cadena tiene al menos una investigación ×2, y las que aceleran una estación aparecen junto a la de la siguiente, para que comprar una no descompense la cadena (hay una prueba que lo exige).
+
+**La Finca**
 
 | Investigación | Efecto | Coste | Aparece con |
 |---------------|--------|-------|-------------|
 | 🌱 Abono orgánico | Cafetal ×2 | 300 | Beneficiadero |
+| ⚡ Despulpadora eléctrica | Beneficiadero ×2 | 400 | Beneficiadero |
 | 🐴 Herraduras | Mulas ×1,5 de velocidad | 900 | Marquesina |
 | 🚙 Remolque para el Willys | Despacho ×2 de carga | 2.500 | Trilladora |
 | ♨️ Secador mecánico | Marquesina ×2 | 6.000 | Trilladora |
+| 🌀 Trilladora de rodillos | Trilladora ×2 | 8.000 | Tostadora |
 | 🧑‍🌾 Capataz | Ganancias sin conexión: de 2 h a 6 h | 10.000 | Tostadora |
 | 🔥 Tueste de origen | Café tostado +50 % de valor | 20.000 | Tostadora |
+| 🔥 Tostador de tambor grande | Tostadora ×2 | 25.000 | Molino |
 | 🌳 Variedad Castillo | Cafetal ×2 | 50.000 | Molino |
+| 💧 Beneficio ecológico | Beneficiadero ×2 | 50.000 | Molino |
+| ⚙️ Molino eléctrico | Molino ×2 | 60.000 | Empacadora |
 | 🚡 Cable aéreo | Mulas ×2 de velocidad | 120.000 | Empacadora |
+| 📦 Empacadora automática | Empacadora ×2 | 150.000 | Empacadora |
 | 🏅 Sello de calidad | Bolsas +50 % de valor | 300.000 | Empacadora |
 
+**El Trapiche:** Trapiche con motor (Molienda ×2), Abono para la caña (Cañaduzal ×2), Hornilla de más pailas (×2), Chiva (despacho ×2), Gaveras de acero (×2), Pulverizadora eléctrica (×2), Panela orgánica (+50 % de valor).
+
 ### 5.5 Mejora recomendada
-El aviso de arriba recomienda la mejora que más 💰/s añade por moneda gastada (estaciones, arrieros y despacho). Si ninguna mejora suelta rinde (hay que subir varias juntas), recomienda el cuello de botella. La vista «La cadena» sigue marcando el cuello de botella en rojo.
+El aviso de arriba recomienda la mejora que más 💰/s suma **al final de la cadena** (lo que sale de la última estación construida) por moneda gastada, entre estaciones, arrieros y despacho. Lo que se vende desviado no cuenta: si contara, la recomendación llevaría a subir arrieros para vender materia prima en lugar de completar la cadena. También recomienda una **investigación** si ya alcanza el dinero y rinde más que el mejor nivel (nunca deja al jugador ahorrando). Si ninguna mejora suelta rinde, recomienda el cuello de botella. La vista «La cadena» sigue marcando el cuello de botella en rojo.
 
 ### 5.6 Desvíos y bodega
 Lo que se desvía a la bodega solo puede ocupar hasta el 70 % de su capacidad: el 30 % restante queda siempre libre para el producto final de la cadena, para que el producto barato que sobra no atasque la Empacadora.

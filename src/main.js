@@ -56,6 +56,10 @@ async function start() {
   // id puede ser 'farm', 'farm:transport' (pestaña de arrieros) o 'dispatch:<zona>'.
   const select = (id) => {
     const [stationId, part] = id.split(':');
+    if (stationId === 'research') {
+      research.open();
+      return;
+    }
     if (stationId === 'dispatch') {
       scene.select('dispatch');
       panel.open(id);

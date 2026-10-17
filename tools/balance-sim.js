@@ -111,7 +111,9 @@ for (let step = 0; step < hours * 36000 && currentZone(); step++) {
     if (!saving) {
       for (let k = 0; k < 30; k++) {
         const r = recommendUpgrade(s, (id, mode) => game.quote(id, mode), zone);
-        if (!r || !game.buy(r.id, 1)) break;
+        if (!r) break;
+        const bought = r.id.startsWith('research:') ? game.research(r.id.split(':')[1]) : game.buy(r.id, 1);
+        if (!bought) break;
       }
     }
     continue;

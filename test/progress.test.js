@@ -152,3 +152,33 @@ test('ningún objetivo pide vender un producto intermedio (podría quedar imposi
   const finals = new Set(['cherry', 'coffee_bag', 'cane', 'panela_powder']);
   for (const g of GOALS) if (g.type === 'sold') assert.ok(finals.has(g.product), `${g.id} pide vender ${g.product}`);
 });
+
+test('cada estación de cada cadena tiene al menos una investigación que la acelera', async () => {
+  const { ZONE_LIST } = await import('../src/data/zones/index.js');
+  const boosted = new Set(RESEARCH.filter((r) => r.effect.type === 'stationSpeed').map((r) => r.effect.target));
+  for (const zone of ZONE_LIST) {
+    for (const id of zone.chain) {
+      // La Hornilla ya tiene el bagazo, pero también debe tener su investigación.
+      assert.ok(boosted.has(id), `${zone.id}: ${id} no tiene investigación de velocidad`);
+    }
+  }
+});
+
+test('con el Abono comprado y dinero para la Despulpadora, la recomienda', async () => {
+  const { recommendUpgrade } = await import('../src/sim/analysis.js');
+  const game = new Game();
+  game.state.coins = 50;
+  game.unlock('wetmill');
+  game.state.research.push('abono');
+  for (const st of Object.values(game.state.stations)) {
+    st.level = 10;
+    st.transport.level = 10;
+  }
+  game.state.zones.finca.dispatch.level = 10;
+  game.state.coins = 500;
+  const rec = recommendUpgrade(game.state, (id, mode) => game.quote(id, mode), 'finca');
+  assert.equal(rec.id, 'research:despulpadora');
+  // Sin dinero para ella, recomienda subir el Beneficiadero (no deja al jugador ahorrando).
+  game.state.coins = 50;
+  assert.equal(recommendUpgrade(game.state, (id, mode) => game.quote(id, mode), 'finca').id, 'wetmill');
+});

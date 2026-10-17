@@ -1,5 +1,6 @@
 // Flujo teórico de la cadena para mostrar el cuello de botella (no afecta a la simulación).
 import { STATIONS_BY_ID } from '../data/stations.js';
+import { RESEARCH } from '../data/research.js';
 import { dispatchRate, stationRate } from './rules.js';
 import { chainOf, sourceOf, zoneOf } from './chain.js';
 import { teamCapacity } from './transport.js';
@@ -81,6 +82,12 @@ export function analyzeChain(state, zoneId = 'finca') {
   });
 
   const dispatch = dispatchRate(state.zones[zoneId].dispatch.level, dispatchMult(state, zoneId));
+  // Ingreso de la cadena principal: solo lo que sale de la última estación (sin los desvíos, que son
+  // un recurso de emergencia). Es lo que mide la mejora recomendada.
+  const last = rows.at(-1);
+  const lastValue = last ? productValue(state, Object.keys(STATIONS_BY_ID[last.id].out)[0]) : 0;
+  const mainIncome = last ? Math.min(last.diverted, dispatch) * lastValue : 0;
+
   // El Willys carga primero lo más valioso: si no da abasto, lo que se queda es lo barato.
   let room = dispatch;
   let income = 0;
@@ -100,7 +107,7 @@ export function analyzeChain(state, zoneId = 'finca') {
     break;
   }
   if (!bottleneck) bottleneck = toWarehouse > dispatch * (1 + LOSS) ? `dispatch:${zoneId}` : sourceOf(zoneId);
-  return { rows, toWarehouse, dispatch, bottleneck, income };
+  return { rows, toWarehouse, dispatch, bottleneck, income, mainIncome };
 }
 
 // Aceleración del Cafetal que la Compostera puede sostener: 1 sin compost, 1,5 si alcanza para todo.
@@ -116,21 +123,22 @@ export function expectedCompostBoost(state) {
   return 1 + (COMPOST_BOOST - 1) * Math.min(1, supply / demand);
 }
 
-// Mejora recomendada: la que más 💰/s suma por moneda gastada, entre estaciones, arrieros y despacho.
+// Mejora recomendada: la que más 💰/s suma por moneda gastada al final de la cadena (sin contar lo que
+// se vende desviado), entre estaciones, arrieros y despacho.
 // Si ninguna mejora suelta suma lo suficiente (hay que subir varias a la vez), recomienda el
 // cuello de botella. Devuelve { id, cost, gain }. (`quote` es Game.quote, para no duplicar precios.)
 const MIN_GAIN = 0.01; // ganancia mínima, como fracción del ingreso actual
 
 export function recommendUpgrade(state, quote, zoneId = 'finca') {
   const analysis = analyzeChain(state, zoneId);
-  const base = analysis.income;
+  const base = analysis.mainIncome;
+  const options = [];
   const ids = [`dispatch:${zoneId}`];
   for (const id of Object.keys(state.stations)) {
     if (zoneOf(id) !== zoneId) continue;
     ids.push(id);
     if (!STATIONS_BY_ID[id].side) ids.push(`${id}:transport`);
   }
-  let best = null;
   for (const id of ids) {
     const q = quote(id, 1);
     if (q.maxed) continue;
@@ -144,10 +152,19 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
       (part ? st.transport : st).level++;
       trial.stations[sid] = st;
     }
-    const gain = analyzeChain(trial, zoneId).income - base;
-    if (gain <= 1e-9) continue;
-    if (!best || gain / q.cost > best.gain / best.cost) best = { id, cost: q.cost, gain };
+    options.push({ id, cost: q.cost, gain: analyzeChain(trial, zoneId).mainIncome - base });
   }
-  if (best && best.gain >= base * MIN_GAIN) return best;
+  const roi = (o) => o.gain / o.cost;
+  let best = options.filter((o) => o.gain > 1e-9 && o.gain >= base * MIN_GAIN).sort((a, b) => roi(b) - roi(a))[0];
+  // Una investigación solo se recomienda si ya alcanza el dinero y rinde más que el mejor nivel:
+  // así la recomendación nunca deja al jugador ahorrando para algo caro.
+  for (const r of RESEARCH) {
+    if (r.zone !== zoneId || state.research.includes(r.id) || r.cost > state.coins) continue;
+    if (r.requires && !state.stations[r.requires]) continue;
+    const gain = analyzeChain({ ...state, research: [...state.research, r.id] }, zoneId).mainIncome - base;
+    const option = { id: `research:${r.id}`, cost: r.cost, gain };
+    if (gain > 1e-9 && (!best || roi(option) > roi(best))) best = option;
+  }
+  if (best) return best;
   return { id: analysis.bottleneck, cost: quote(analysis.bottleneck, 1).cost, gain: 0 };
 }
