@@ -70,10 +70,10 @@ async function start() {
       return;
     }
     if (stationId === 'route') {
-      const station = ROUTES_BY_ID[part].station;
-      if (scene.stations[station] && game.state.stations[station]) {
+      const station = ROUTES_BY_ID[part].stations.find((sid) => scene.stations[sid] && game.state.stations[sid]);
+      if (station) {
         scene.select(station);
-        panel.open(station, 'route');
+        panel.open(station, id);
       } else {
         scene.select(null);
         panel.open(id);

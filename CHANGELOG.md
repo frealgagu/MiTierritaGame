@@ -1,5 +1,19 @@
 # Registro de cambios
 
+## v1.3 — Zona 4: El Cacaotal
+- **Nueva zona** que se abre al completar la Lechería: Cacaotal ♾️ → Cajones de fermentación → Secadero → Tostador de cacao → Molino de cacao → **Mesa de chocolate** y **Chocolatería** (la pasta se reparte entre las dos). Mapa propio con cacaos cargados de mazorcas, guamos de sombra, plátano y heliconias, y seis edificios nuevos.
+- **Dos importaciones a la vez**: la Chocolatería necesita panela del Trapiche y leche de la Lechería; si falta cualquiera, se para y te dice cuál.
+- **Rutas nuevas**: la Ruta de la panela al Cacaotal abastece dos estaciones y reparte cada carga; la Ruta de la leche sale de la bodega de la Lechería. Las dos rutas de panela se reparten lo que produce el Trapiche. Para exportar leche, la Lechería tiene que producir más de la que usa.
+- La estación tiene una pestaña 🚌 por cada ruta que la abastece («🚌 Panela», «🚌 Leche»).
+- **Las rutas cuadran a igual nivel**, también al nivel 100: la Pasteurizadora reparte su leche en cuartos (Quesera, Descremadora, Paila y la Ruta de la leche) y la Paila, la Mesa y la Chocolatería piden entre las tres ¾ de la panela del Trapiche. Recetas ajustadas: Paila cada 32 s; Mesa y Chocolatería con 2 pastas cada 32 s (la Chocolatería, 4 leches), y sus precios al doble.
+- **Arreglo de las alertas ⛔ y ↪️ en cadenas sanas**: cuando la siguiente estación tenía poco sitio, las mulas salían con migajas, todas quedaban en camino y el patio se llenaba («la banda no da abasto») aunque el transporte alcanzara. Ahora esperan a que quepa la carga entera y solo con el patio casi lleno salen con media carga o desvían. Al nivel 100 en las cuatro zonas, la Pasteurizadora pasó de estar bloqueada un 30 % del tiempo a nunca (hay una prueba).
+- **Arreglo**: mientras la Chiva iba de viaje, el Willys vendía la panela que ella esperaba y al volver salía medio vacía (la Paila se quedaba parada). Ahora la bodega le guarda carga y media.
+- **La mejora recomendada prueba pares**: si ninguna mejora suelta rinde, prueba arrieros y rutas de dos en dos. Antes, la Chocolatería podía quedarse con la Ruta de la leche en nivel 4 y sus arrieros en nivel 1 para siempre, porque subir solo uno de los dos no servía de nada. Y si a una estación le faltan dos importados, se avisa del que más escasea.
+- Simulador de balance: el jugador atento mide el ingreso del final de cada cadena (como la mejora recomendada) y los dos bots deciden cada 5 s de juego; el casual ahorra para construir si le faltan menos de 10 minutos. Duración medida: La Finca 2 h 20 min / 2 h 35 min, El Trapiche 35 min, La Lechería 2 h 20 min, El Cacaotal 1 h 45 min / 1 h 55 min (atento / casual); unas 7 h 15 min en total.
+- La recomendación se recalcula como mucho una vez por segundo (y enseguida tras cada compra): con cuatro zonas y sus rutas, calcularla cinco veces por segundo se notaba en el móvil.
+- **Arreglo**: al calcular cuánto puede enviar una zona, ya no se olvida de lo que ella misma recibe por otra ruta (la Paila parecía no gastar leche y la Ruta de la leche se veía con más leche de la que había).
+- 18 objetivos y 9 investigaciones nuevas. Partida v7 (las de antes se cargan solas; si la Lechería estaba completa, se abre el Cacaotal).
+
 ## v1.2.3 — Bandas eléctricas
 - **Desde el nivel 50 de transporte** (un hito), las mulas de una estación se cambian por una **banda eléctrica**: el tramo del camino se cubre con una banda y lo que va en camino se ve como cajas del color del producto. Lleva exactamente lo mismo; solo cambia el dibujo.
 - Con muchas estaciones avanzadas ya no hay decenas de mulas con arriero en pantalla: las bandas y sus cajas se dibujan de una vez, lo que alivia la animación (sobre todo en el móvil).

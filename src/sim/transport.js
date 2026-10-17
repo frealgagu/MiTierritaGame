@@ -1,12 +1,19 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID, ZONE_LIST } from '../data/zones/index.js';
-import { muleCount, muleLoad, stationInputCap, warehouseCapacity } from './rules.js';
+import { muleCount, muleLoad, stationBufferCap, stationInputCap, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
-import { ROAD_POS, chainOf, consumers, zoneOf, zoneUnlocked } from './chain.js';
+import { CHILDREN, ROAD_POS, chainOf, consumers, zoneOf, zoneUnlocked } from './chain.js';
+import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
+import { ROUTE_STOCK, routeActive, routeCapacity } from './routes.js';
 import { inputSpace } from './production.js';
 import { dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
 
 const MAX_IDLE = 6; // s: si hay algo en el patio y no sale una mula en este tiempo, sale con lo que haya
+// Si la carga no cabe entera en la siguiente estación, las mulas esperan a que haya sitio; solo con el
+// patio casi lleno salen con carga parcial (si cabe al menos un cuarto) o desvían a la bodega. Antes
+// salían con migajas, todas quedaban en camino y el patio se llenaba aunque el transporte alcanzara.
+const PATIO_ALMOST_FULL = 0.8;
+const MIN_PARTIAL = 0.25;
 const MIN_LEG = 1; // s por trayecto
 // Los desvíos solo usan la bodega mientras quede más de esta fracción libre: así el producto
 // barato que sobra nunca deja sin sitio al producto final de la cadena.
@@ -38,9 +45,31 @@ export function productionMult(state, id) {
 // varias (una rama), la más lejana: así la carga alcanza para cualquiera de ellas.
 export function normalDest(state, id) {
   const targets = consumers(state, id);
-  if (!targets.length) return 'warehouse';
+  if (!targets.length || exportsOf(state, id).length) return 'warehouse';
   return targets.reduce((far, c) => (legTime(id, c) > legTime(id, far) ? c : far));
 }
+
+// Rutas que se llevan a otra zona un producto intermedio de esta estación (la leche pasteurizada): la
+// estación les guarda una parte, como a una rama más. Sus mulas lo dejan en la bodega, de donde sale la ruta.
+export function exportsOf(state, id) {
+  if (!CHILDREN[id]?.length) return [];
+  const out = Object.keys(STATIONS_BY_ID[id].out)[0];
+  return ROUTES.filter((r) => r.from === zoneOf(id) && r.product === out && routeActive(state, r.id));
+}
+
+// Lo que falta por dejar en la bodega para una ruta (carga y media, menos lo que ya hay o va en camino).
+export function exportSpace(state, routeId) {
+  const r = ROUTES_BY_ID[routeId];
+  const cap = ROUTE_STOCK * routeCapacity(state, routeId);
+  const stock = state.zones[r.from].warehouse[r.product] ?? 0;
+  const coming = state.mules.reduce((n, m) => (m.phase === 'go' && m.to === 'warehouse' && m.productId === r.product && zoneOf(m.from) === r.from ? n + m.amount : n), 0);
+  return { space: cap - stock - coming, cap };
+}
+
+// Destinos de las mulas de una estación: estaciones construidas y rutas ('export:<ruta>').
+const targetSpace = (state, t) => (t.startsWith('export:') ? exportSpace(state, t.slice(7)).space : inputSpace(state, t));
+const targetCap = (state, t) => (t.startsWith('export:') ? exportSpace(state, t.slice(7)).cap : stationInputCap(STATIONS_BY_ID[t], state.stations[t].level));
+const targetDest = (t) => (t.startsWith('export:') ? 'warehouse' : t);
 
 // Carga de cada mula del equipo de una estación (a su nivel de arrieros o al indicado).
 export function teamLoad(state, id, level = state.stations[id].transport.level) {
@@ -112,7 +141,7 @@ function dispatchFrom(state, id, dt, bus) {
   s.sinceDeparture += dt;
   s.waiting = null;
   const load = teamLoad(state, id);
-  const targets = consumers(state, id);
+  const targets = [...consumers(state, id), ...exportsOf(state, id).map((r) => `export:${r.id}`)];
 
   // Pueden salir varias mulas en el mismo instante si hay producto y mulas libres.
   while (s.buffer > 0) {
@@ -122,11 +151,19 @@ function dispatchFrom(state, id, dt, bus) {
     }
     if (s.buffer < load && s.sinceDeparture < MAX_IDLE) return;
     const amount = Math.min(s.buffer, load);
-    const next = pickConsumer(state, targets);
+    const next = pickConsumer(state, targets, amount);
     if (next) {
-      sendMule(state, id, next, Math.min(amount, inputSpace(state, next)), bus);
+      sendMule(state, id, targetDest(next), amount, bus);
       continue;
     }
+    const almostFull = s.buffer >= PATIO_ALMOST_FULL * stationBufferCap(def, s.level);
+    const partial = almostFull ? pickConsumer(state, targets, amount * MIN_PARTIAL) : null;
+    if (partial) {
+      sendMule(state, id, targetDest(partial), Math.min(amount, targetSpace(state, partial)), bus);
+      continue;
+    }
+    // Hay sitio, pero no para una carga entera: mejor esperar que salir con migajas.
+    if (!almostFull && targets.some((c) => targetSpace(state, c) > 0)) return;
     const zoneId = zoneOf(id);
     const reserve = targets.length ? DIVERT_RESERVE * warehouseCap(state, zoneId) : 0;
     const room = warehouseSpace(state, zoneId) - reserve;
@@ -134,21 +171,24 @@ function dispatchFrom(state, id, dt, bus) {
       s.waiting = 'space';
       return;
     }
-    sendMule(state, id, 'warehouse', Math.min(amount, room), bus);
-    if (targets.length) s.lastDiverted = state.playTime;
+    const diverted = Math.min(amount, room);
+    sendMule(state, id, 'warehouse', diverted, bus);
+    // El aviso ↪️ solo para desvíos de verdad (al menos media carga), no por un sobrante suelto ni cuando
+    // la bodega es también donde espera la ruta (lo que llega de más ahí se lo lleva la siguiente carga).
+    const exporting = targets.some((t) => t.startsWith('export:'));
+    if (targets.length && !exporting && diverted >= load * 0.5) s.lastDiverted = state.playTime;
   }
 }
 
-// Entre las estaciones que reciben el producto, la que tiene la entrada más vacía (contando lo que
-// ya va en camino). Así la que trabaja más rápido recibe más, sin que el jugador tenga que repartir.
-function pickConsumer(state, targets) {
+// Entre las estaciones que reciben el producto y tienen sitio para `amount`, la de la entrada más vacía
+// (contando lo que ya va en camino). Así la que trabaja más rápido recibe más, sin repartir a mano.
+function pickConsumer(state, targets, amount) {
   let best = null;
   let bestFill = Infinity;
   for (const c of targets) {
-    const space = inputSpace(state, c);
-    if (space <= 0) continue;
-    const cap = stationInputCap(STATIONS_BY_ID[c], state.stations[c].level);
-    const fill = 1 - space / cap;
+    const space = targetSpace(state, c);
+    if (space <= 0 || space < amount - 1e-9) continue;
+    const fill = 1 - space / targetCap(state, c);
     if (fill < bestFill) {
       best = c;
       bestFill = fill;

@@ -90,7 +90,13 @@ export class Terrain {
           const p = iso(gx + rng(), gy + rng());
           g.ellipse(p.x, p.y, 2.5, 1.2).fill({ color: 0x8a6a45, alpha: 0.5 });
         }
-        if (type === 'farm' && this.zone.theme === 'dairy') {
+        if (type === 'farm' && this.zone.theme === 'cacao') {
+          // Hojarasca bajo los cacaos.
+          for (let k = 0; k < 2; k++) {
+            const p = iso(gx + rng(), gy + rng());
+            g.ellipse(p.x, p.y, 3, 1.5).fill({ color: rng() < 0.5 ? 0x8a6a3a : 0x6e8f3a, alpha: 0.7 });
+          }
+        } else if (type === 'farm' && this.zone.theme === 'dairy') {
           // Potrero: pasto más alto y tupido, sin surcos.
           for (let k = 0; k < 3; k++) {
             const p = iso(gx + rng(), gy + rng());
@@ -124,7 +130,13 @@ export class Terrain {
         if (!this.isFree(gx, gy)) continue;
         const r = rng();
         let obj = null;
-        if (this.zone.theme === 'dairy') {
+        if (this.zone.theme === 'cacao') {
+          // Cacaotal: guamos de sombra, plátano, heliconias y algún cacao suelto.
+          if (r < 0.04) obj = guamo(rng);
+          else if (r < 0.08) obj = banana(rng);
+          else if (r < 0.11) obj = heliconia(rng);
+          else if (r < 0.13) obj = cacaoTree(rng);
+        } else if (this.zone.theme === 'dairy') {
           // Lechería: eucaliptos, cipreses, pacas de heno y piedras de la sabana.
           if (r < 0.04) obj = eucalyptus(rng);
           else if (r < 0.07) obj = cypress(rng);
@@ -158,7 +170,68 @@ export class Terrain {
 const FARM_SOIL = {
   cane: (v) => mix(0x9c7a4a, 0x7f6038, v * 0.35),
   dairy: (v) => mix(0x5e9a3c, 0x6fae44, v * 0.5),
+  cacao: (v) => mix(0x5e4630, 0x4a3726, v * 0.5),
 };
+
+// Guamo: árbol de sombra del cacaotal, tronco alto y copa ancha y aplanada.
+function guamo(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const s = 0.9 + rng() * 0.3;
+  shadow(g, 6, 2, 34 * s, 12 * s);
+  g.moveTo(-3, 0).lineTo(-2, -48 * s).lineTo(2, -48 * s).lineTo(3, 0).closePath().fill(0x7a5a3a);
+  g.moveTo(0, -36 * s).lineTo(-14 * s, -48 * s).moveTo(0, -40 * s).lineTo(12 * s, -52 * s).stroke({ width: 2, color: 0x7a5a3a });
+  for (const [dx, dy, r] of [[-16, -52, 14], [0, -58, 18], [16, -52, 14], [-6, -64, 12], [8, -64, 12]]) {
+    g.ellipse(dx * s, dy * s, r * s * 1.3, r * s * 0.65).fill(dy < -60 ? 0x5e9a3c : 0x3f7a2a);
+  }
+  c.addChild(g);
+  return c;
+}
+
+// Heliconia: hojas largas y flores rojas y amarillas en zigzag.
+function heliconia(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 0, 1, 10, 4);
+  for (const [dx, h] of [[-5, 22], [0, 28], [5, 20]]) {
+    g.moveTo(dx, 0).lineTo(dx, -h).stroke({ width: 1.5, color: 0x4e8a33 });
+    g.ellipse(dx + 4, -h, 6, 2.5).fill(0x5e9a3c);
+  }
+  const top = -26 - rng() * 4;
+  for (let k = 0; k < 4; k++) {
+    const y = top + k * 4;
+    const side = k % 2 ? 1 : -1;
+    g.poly([0, y, side * 7, y + 1.5, 0, y + 3]).fill(k % 2 ? 0xe8b90f : 0xd7263d);
+  }
+  c.addChild(g);
+  return c;
+}
+
+function cacaoTree(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  drawCacaoTree(g, 0, 0, 0.8 + rng() * 0.2, rng, 3);
+  c.addChild(g);
+  return c;
+}
+
+// Árbol de cacao: tronco corto, copa redonda y mazorcas que cuelgan del tronco. Lo usa el Cacaotal.
+export function drawCacaoTree(g, x, y, scale, rng, pods) {
+  const s = scale;
+  shadow(g, x + 2, y + 1, 12 * s, 5 * s);
+  g.moveTo(x - 2 * s, y).lineTo(x - 1.5 * s, y - 16 * s).lineTo(x + 1.5 * s, y - 16 * s).lineTo(x + 2 * s, y).closePath().fill(0x6b4a2e);
+  g.circle(x - 6 * s, y - 20 * s, 7 * s).fill(0x2f6b2a);
+  g.circle(x + 6 * s, y - 20 * s, 7 * s).fill(0x2f6b2a);
+  g.circle(x, y - 25 * s, 8 * s).fill(0x3f7a2a).stroke({ width: 1, color: 0x3a2418, alpha: 0.3 });
+  g.circle(x - 3 * s, y - 28 * s, 3 * s).fill({ color: 0x8cc65a, alpha: 0.6 });
+  // Mazorcas colgando del tronco y de las ramas bajas.
+  for (let i = 0; i < pods; i++) {
+    const px = x + (rng() - 0.5) * 8 * s;
+    const py = y - (5 + rng() * 10) * s;
+    const color = [0xe8b90f, 0xd98e04, 0xc0392b][Math.floor(rng() * 3)];
+    g.ellipse(px, py, 1.8 * Math.max(s, 0.9), 3 * Math.max(s, 0.9)).fill(color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+  }
+}
 
 // Eucalipto: tronco claro y alto con copa alargada verde azulada.
 function eucalyptus(rng) {

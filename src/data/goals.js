@@ -79,5 +79,27 @@ const LECHERIA = [
   { id: 'lfinal', type: 'sold', product: 'arequipe', amount: 3000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA];
+const CACAOTAL = [
+  { id: 'c01', type: 'sold', product: 'cacao_pod', amount: 50, reward: 75000 },
+  { id: 'c02', type: 'level', target: 'cacao_grove', level: 10, reward: 125000 },
+  { id: 'c03', type: 'unlock', station: 'fermenter', reward: 250000 },
+  { id: 'c04', type: 'level', target: 'cacao_grove:transport', level: 10, reward: 250000 },
+  { id: 'c05', type: 'unlock', station: 'cacao_dryer', reward: 500000 },
+  { id: 'c06', type: 'produced', product: 'cacao_dry', amount: 200, reward: 750000 },
+  { id: 'c07', type: 'research', research: 'injertos', reward: 1000000 },
+  { id: 'c08', type: 'unlock', station: 'cacao_roaster', reward: 1500000 },
+  { id: 'c09', type: 'level', target: 'dispatch:cacaotal', level: 10, reward: 1500000 },
+  { id: 'c10', type: 'unlock', station: 'cacao_mill', reward: 2500000 },
+  { id: 'c11', type: 'produced', product: 'cacao_paste', amount: 300, reward: 3750000 },
+  { id: 'c12', type: 'unlock', station: 'chocolate_table', reward: 6250000 },
+  { id: 'c13', type: 'sold', product: 'table_chocolate', amount: 200, reward: 7500000 },
+  { id: 'c14', type: 'unlock', station: 'chocolatier', reward: 12500000 },
+  { id: 'c15', type: 'imported', product: 'milk', amount: 500, reward: 15000000 },
+  { id: 'c16', type: 'allLevels', zone: 'cacaotal', level: 25, reward: 20000000 },
+  { id: 'c17', type: 'sold', product: 'milk_chocolate', amount: 1000, reward: 30000000 },
+  // Final de la Zona 4.
+  { id: 'cfinal', type: 'sold', product: 'milk_chocolate', amount: 3000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL];

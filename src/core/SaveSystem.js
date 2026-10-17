@@ -1,6 +1,7 @@
 import { createInitialState, SAVE_VERSION } from '../sim/state.js';
 import { createStationState } from '../sim/production.js';
 import { createRouteState } from '../sim/routes.js';
+import { STATIONS_BY_ID } from '../data/stations.js';
 
 const KEY = 'cafetal.save';
 
@@ -46,6 +47,13 @@ function migrate(data) {
   const stations = {};
   for (const [id, st] of Object.entries(data.stations ?? {})) stations[id] = { ...createStationState(), ...st };
   delete stations.farm?.blocked;
+  // v6 → v7: lo importado por ruta se guarda por producto (una estación puede recibir varios).
+  for (const [id, st] of Object.entries(stations)) {
+    if (typeof st.imported === 'number') {
+      const imp = STATIONS_BY_ID[id]?.imports?.[0];
+      st.imported = imp ? { [imp.product]: st.imported } : {};
+    }
+  }
   const mules = (data.mules ?? []).map(({ s0, s1, ...m }) => ({ from: 'farm', to: 'warehouse', phase: 'go', ...m }));
   // v4 → v5: despacho, bodega y Willys pasan a ser por zona; la Finca completa abre el Trapiche.
   const zones = {};
@@ -67,6 +75,11 @@ function migrate(data) {
   if (zones.trapiche.complete && !zones.lecheria.unlocked) {
     zones.lecheria.unlocked = true;
     stations.pasture ??= createStationState();
+  }
+  // v6 → v7: el Cacaotal; la Lechería completa lo abre.
+  if (zones.lecheria.complete && !zones.cacaotal.unlocked) {
+    zones.cacaotal.unlocked = true;
+    stations.cacao_grove ??= createStationState();
   }
   const routes = {};
   for (const id of Object.keys(base.routes)) routes[id] = { ...createRouteState(), ...data.routes?.[id] };

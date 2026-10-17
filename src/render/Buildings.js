@@ -782,6 +782,192 @@ const DRAW = {
     this.animate(0);
   },
 
+  // Cajones de fermentación: tres cajones de madera en escalera, tapados con hojas de plátano.
+  fermenter(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 2.1;
+    const H = 26 + ctx.up;
+    const boxes = [[0.2, 0.3, 14], [0.95, 0.75, 9], [1.7, 1.2, 4]];
+    for (const [bx, by, z] of boxes) {
+      box(g, x0 + bx, y0 + by, 0.7, 0.7, 10, 0x8b5a2b, { z });
+      // Hojas de plátano encima.
+      const c = iso(x0 + bx + 0.35, y0 + by + 0.35, z + 10);
+      g.ellipse(c.x - 3, c.y, 11, 4).fill(0x5e9a3c).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+      g.ellipse(c.x + 4, c.y - 1, 9, 3).fill(0x74b14a);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 12, 0x9aa3a8, 0xb08a5a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
+    // Baba de cacao que escurre y vapor tibio de la fermentación.
+    const steam = new Graphics();
+    this.anim.addChild(steam);
+    this.animate = (time) => {
+      steam.clear();
+      boxes.forEach(([bx, by, z], k) => {
+        const f = (time * 0.5 + k / 3) % 1;
+        const p = iso(x0 + bx + 0.35, y0 + by + 0.35, z + 12 + f * 14);
+        steam.circle(p.x, p.y, 2.5 + f * 3).fill({ color: 0xffffff, alpha: 0.45 * (1 - f) });
+      });
+    };
+  },
+
+  // Secadero: tarima de madera elevada con el cacao extendido y un techo corredizo sobre rieles.
+  cacao_dryer(g, x, y, ctx) {
+    const x0 = x + 0.25;
+    const y0 = y + 0.3;
+    const w = 2.5;
+    const d = 2.0;
+    // Patas y tarima.
+    for (const [px, py] of [[0.1, 0.1], [w - 0.1, 0.1], [0.1, d - 0.1], [w - 0.1, d - 0.1]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, 10, PAL.woodDark);
+    box(g, x0, y0, w, d, 3, PAL.wood, { z: 10 });
+    // Granos extendidos (más con cada hito).
+    const rng = (k) => ((Math.sin(k * 12.9898) * 43758.5453) % 1 + 1) % 1;
+    for (let k = 0; k < 40 + ctx.tier * 10; k++) {
+      const p = iso(x0 + 0.15 + rng(k) * (w - 0.3), y0 + 0.15 + rng(k + 99) * (d - 0.3), 13);
+      g.ellipse(p.x, p.y, 1.6, 1).fill(k % 3 ? PRODUCTS.cacao_dry.color : PRODUCTS.cacao_fermented.color);
+    }
+    // Rieles y techo corredizo (abierto de día, se mueve mientras trabaja).
+    const rail = iso(x0 + w, y0 + 0.1, 13);
+    const rail2 = iso(x0 + w + 0.6, y0 + 0.1, 13);
+    g.moveTo(rail.x, rail.y).lineTo(rail2.x, rail2.y).stroke({ width: 2, color: 0x555555 });
+    const roof = new Graphics();
+    this.anim.addChild(roof);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, 34 + ctx.up);
+    this.animate = (time) => {
+      const off = 0.6 + Math.sin(time * 0.6) * 0.5;
+      roof.clear();
+      const H = 26 + ctx.up;
+      for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(roof, x0 + off + px - 0.04, y0 + py - 0.04, 0.08, 0.08, H - 13, 0x9aa3a8, { z: 13 });
+      gableRoof(roof, x0 + off, y0, w, d, H, 8, 0x9aa3a8, 0xb08a5a);
+    };
+    this.animate(0);
+  },
+
+  // Tostador de cacao: tambor que gira sobre un fogón de ladrillo, con chimenea.
+  cacao_roaster(g, x, y, ctx) {
+    const brick = 0xb5653a;
+    const x0 = x + 0.4;
+    const y0 = y + 0.6;
+    box(g, x0, y0, 1.8, 1.2, 12, brick);
+    const mouth = iso(x0 + 0.4, y0 + 1.2, 4);
+    g.ellipse(mouth.x, mouth.y, 6, 4).fill(0x2b1a10).stroke(OUTLINE);
+    this.lights.push({ x: mouth.x, y: mouth.y, r: 24, color: 0xff7a1a });
+    // Soportes del tambor.
+    const c = iso(x0 + 0.9, y0 + 0.6, 24);
+    g.rect(c.x - 20, c.y - 2, 3, 14).fill(0x555555);
+    g.rect(c.x + 17, c.y - 2, 3, 14).fill(0x555555);
+    const drum = new Graphics();
+    this.anim.addChild(drum);
+    const chimneyH = 52 + ctx.up;
+    box(g, x0 + 1.5, y0 - 0.3, 0.3, 0.3, chimneyH, shade(brick, 0.9));
+    const top = iso(x0 + 1.65, y0 - 0.15, chimneyH);
+    this.smokePoints.push({ x: top.x, y: top.y - 4 });
+    this.roofTop = iso(x0 + 0.3, y0 - 0.2, 28);
+    // Costales de cacao seco esperando.
+    for (const [bx, by] of [[0.35, 2.55], [0.7, 2.7]]) {
+      const p = iso(x + bx, y + by);
+      g.ellipse(p.x, p.y - 5, 7, 5.5).fill(PAL.sack).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 9, 3.5, 1.8).fill(PRODUCTS.cacao_dry.color);
+    }
+    this.animate = (time) => {
+      drum.clear();
+      drum.roundRect(c.x - 17, c.y - 10, 34, 18, 8).fill(0x6b6f73).stroke(OUTLINE);
+      for (let k = 0; k < 4; k++) {
+        const xx = c.x - 14 + ((time * 20 + k * 8) % 30);
+        drum.moveTo(xx, c.y - 9).lineTo(xx, c.y + 7).stroke({ width: 1.5, color: 0x45494d });
+      }
+      drum.ellipse(mouth.x, mouth.y + 1, 4, 2.5).fill({ color: 0xff7a1a, alpha: 0.6 + Math.sin(time * 9) * 0.3 });
+    };
+    this.animate(0);
+  },
+
+  // Molino de cacao: casa con una piedra de moler que gira y escurre la pasta.
+  cacao_mill(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.7, 1.4, 26, ctx, { wall: 0xf1e3cf, roofH: 13 });
+    door(g, hx, hy, 1.4, 0.55, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.7, 0.7, 13, PAL.balconyYellow);
+    // Piedra de moler en el patio.
+    const c = iso(x + 2.3, y + 2.2);
+    g.ellipse(c.x, c.y - 4, 16, 8).fill(0x9a948a).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 6, 11, 5).fill(PRODUCTS.cacao_paste.color);
+    const stone = new Graphics();
+    this.anim.addChild(stone);
+    this.animate = (time) => {
+      stone.clear();
+      const a = time * 2;
+      const sx = c.x + Math.cos(a) * 7;
+      const sy = c.y - 8 + Math.sin(a) * 3;
+      stone.moveTo(c.x, c.y - 8).lineTo(sx, sy).stroke({ width: 2, color: PAL.woodDark });
+      stone.ellipse(sx, sy - 2, 5, 6).fill(0xb8b2a6).stroke(OUTLINE);
+    };
+    this.animate(0);
+  },
+
+  // Mesa de chocolate: ramada con una mesa larga y las pastillas de chocolate en sus moldes.
+  chocolate_table(g, x, y, ctx) {
+    const x0 = x + 0.25;
+    const y0 = y + 0.3;
+    const w = 2.5;
+    const d = 2.2;
+    const H = 26 + ctx.up;
+    const tables = ctx.tier >= 2 ? [0.3, 1.0, 1.6] : [0.45, 1.3];
+    for (const ty of tables) {
+      box(g, x0 + 0.2, y0 + ty, w - 0.4, 0.5, 9, PAL.wood);
+      for (let i = 0; i < 7; i++) {
+        const p = iso(x0 + 0.35 + i * 0.28, y0 + ty + 0.25, 9);
+        g.circle(p.x, p.y, 3).fill(PRODUCTS.table_chocolate.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+      }
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 13, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    const bulb = iso(x0 + w / 2, y0 + d / 2, H - 4);
+    this.lights.push({ x: bulb.x, y: bulb.y, r: 28 });
+    const steam = new Graphics();
+    this.anim.addChild(steam);
+    this.animate = (time) => {
+      steam.clear();
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.6 + i / 3) % 1;
+        const p = iso(x0 + 0.6 + i * 0.7, y0 + tables[0] + 0.25, 12 + f * 16);
+        steam.circle(p.x, p.y, 2.5 + f * 3.5).fill({ color: 0xffffff, alpha: 0.45 * (1 - f) });
+      }
+    };
+  },
+
+  // Chocolatería: tienda con toldo a rayas, vitrina y una pila de chocolatinas.
+  chocolatier(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.3, 1.5, 28, ctx, { wall: 0xfbe3e8, roofH: 14 });
+    door(g, hx, hy, 1.5, 1.8, 17, ctx.trim);
+    // Vitrina iluminada.
+    g.poly(isoPoly([[hx + 0.3, hy + 1.5, 6], [hx + 1.3, hy + 1.5, 6], [hx + 1.3, hy + 1.5, 18], [hx + 0.3, hy + 1.5, 18]])).fill(0xfff3d6).stroke(OUTLINE);
+    for (let i = 0; i < 4; i++) {
+      const p = iso(hx + 0.45 + i * 0.25, hy + 1.5, 10);
+      g.rect(p.x - 3, p.y - 3, 6, 4).fill(i % 2 ? PRODUCTS.milk_chocolate.color : 0xd7263d);
+    }
+    const win = iso(hx + 0.8, hy + 1.5, 12);
+    this.lights.push({ x: win.x, y: win.y, r: 26 });
+    // Toldo a rayas sobre la vitrina.
+    for (let i = 0; i < 6; i++) {
+      const a = hx + 0.2 + i * 0.2;
+      g.poly(isoPoly([[a, hy + 1.5, 21], [a + 0.2, hy + 1.5, 21], [a + 0.2, hy + 1.85, 16], [a, hy + 1.85, 16]])).fill(i % 2 ? 0xffffff : 0xd7263d).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
+    }
+    windowOnRight(this, g, hx, hy, 2.3, 0.75, 14, PAL.balconyYellow);
+    // Pila de cajas de chocolatinas.
+    const stack = [[2.4, 2.4, 0], [2.7, 2.4, 0], [2.55, 2.4, 9]];
+    for (const [bx, by, z] of stack.slice(0, 2 + Math.min(ctx.tier, 1))) {
+      const p = iso(x + bx, y + by, z);
+      g.roundRect(p.x - 7, p.y - 9, 14, 9, 2).fill(0x8b5a3c).stroke(OUTLINE);
+      g.rect(p.x - 5, p.y - 6, 10, 2).fill(0xe8b90f);
+    }
+  },
+
   // Empacadora: bodega amarilla con banda transportadora y bolsas.
   packer(g, x, y, ctx) {
     const hx = x + 0.25;

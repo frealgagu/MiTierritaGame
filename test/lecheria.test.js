@@ -39,16 +39,17 @@ test('la leche pasteurizada se reparte entre tres ramas', () => {
   assert.deepEqual(CHILDREN.separator, ['churn']);
 });
 
-test('a igual nivel, la Pasteurizadora reparte su leche: la Paila la mitad y las otras ramas un cuarto', () => {
+test('a igual nivel, la Pasteurizadora reparte su leche: un cuarto para cada rama y otro para el Cacaotal', () => {
   const game = withLecheria();
   buildLecheria(game);
   const a = analyzeChain(game.state, 'lecheria');
   const row = (id) => a.rows.find((r) => r.id === id);
   const milk = row('pasteurizer').output;
-  for (const [id, share] of [['cheesery', 1 / 4], ['separator', 1 / 4], ['arequipe_pot', 1 / 2]]) {
-    assert.ok(Math.abs(row(id).capacity - milk * share) < 1e-9, `${id} procesa ${row(id).capacity} de ${milk}`);
+  for (const id of ['cheesery', 'separator', 'arequipe_pot']) {
+    assert.ok(Math.abs(row(id).capacity - milk / 4) < 1e-9, `${id} procesa ${row(id).capacity} de ${milk}`);
   }
-  assert.ok(row('pasteurizer').diverted < 1e-9, 'no sobra leche');
+  // Sin el Cacaotal, el cuarto que sería para la ruta se vende como leche.
+  assert.ok(Math.abs(row('pasteurizer').diverted - milk / 4) < 1e-9, 'sobra un cuarto');
   // En la simulación, las mulas llevan leche a las tres.
   run(game, 300);
   for (const p of ['cheese', 'cream', 'arequipe']) assert.ok((game.state.stats.produced[p] ?? 0) > 0, `produjo ${p}`);
@@ -71,14 +72,14 @@ test('la Paila no trabaja sin la panela del Trapiche', () => {
   game.state.stations.pulverizer.level = 1;
   game.state.stations.molds.level = 1;
   game.state.stations.arequipe_pot.input = 100;
-  game.state.stations.arequipe_pot.imported = 0;
+  game.state.stations.arequipe_pot.imported = {};
   game.state.zones.trapiche.warehouse = {};
   game.state.stations.pulverizer.buffer = 0;
   game.state.stations.pulverizer.input = 0;
   game.state.stations.molds.buffer = 0;
   game.state.stations.molds.input = 0;
   game.step(0.1);
-  assert.equal(game.state.stations.arequipe_pot.missing, 'import');
+  assert.equal(game.state.stations.arequipe_pot.missing, 'panela_powder');
   assert.equal(game.state.stations.arequipe_pot.status, 'starved');
 });
 
@@ -106,7 +107,7 @@ test('el Willys del Trapiche no vende la panela que espera la Chiva', () => {
   buildLecheria(game);
   const s = game.state;
   // Poca panela: la Chiva espera a llenarse (hasta 10 s) y el Willys sale antes con lo demás.
-  s.stations.arequipe_pot.imported = 0;
+  s.stations.arequipe_pot.imported = {};
   s.zones.trapiche.warehouse = { panela_powder: 3, cane: 50 };
   const sold = s.stats.sold.panela_powder ?? 0;
   assert.ok(routeReserve(s, 'trapiche').panela_powder > 0, 'reserva para la Chiva');
@@ -123,7 +124,7 @@ test('la panela que se va por la ruta no se cuenta dos veces en los ingresos', (
   const flow = routeFlow(s, 'panela');
   assert.ok(flow > 0);
   const withRoute = analyzeChain(s, 'trapiche').income;
-  const without = analyzeChain(s, 'trapiche', { routes: false }).income;
+  const without = analyzeChain(s, 'trapiche', { exports: false }).income;
   assert.ok(Math.abs(without - withRoute - flow * 250) < 1e-6, `${without} - ${withRoute} ≠ ${flow * 250}`);
 });
 

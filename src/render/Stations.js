@@ -2,7 +2,7 @@ import { Container, Graphics, Polygon, Sprite, Text } from 'pixi.js';
 import { iso, isoPoly, depth, shade } from './iso.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCaneClump, drawCoffeeBush, drawCow } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawCow } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -134,10 +134,12 @@ export class FarmView extends StationView {
     for (let gx = x; gx < x + w; gx++) {
       for (let gy = y; gy < y + h; gy++) {
         if (gx < x + 2 && gy < y + 2) continue; // sitio de la casa
-        for (const ox of [0.28, 0.75]) {
+        // Los cacaos son más grandes: uno por casilla.
+        for (const ox of this.theme === 'cacao' ? [0.5] : [0.28, 0.75]) {
           const p = iso(gx + ox, gy + 0.5);
           this.bushes.push(p);
           if (this.theme === 'cane') drawCaneClump(g, p.x, p.y, scale, rng);
+          else if (this.theme === 'cacao') drawCacaoTree(g, p.x, p.y, scale, rng, 2 + tier);
           else drawCoffeeBush(g, p.x, p.y, scale, rng, 3 + tier * 2);
         }
       }

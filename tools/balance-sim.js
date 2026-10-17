@@ -1,7 +1,7 @@
 // Simula una partida con un jugador automático, zona por zona, y muestra cuándo se cumple cada
 // objetivo y cuánto tarda cada zona. Uso: npm run balance -- [horas] [bloque|casual] [--detalle]
 //   bloque: elige la compra más rentable y puede subir toda la cadena +1 de una vez (jugador atento)
-//   casual: hace caso a la «mejora recomendada», cumple objetivos y ahorra para construir si le queda cerca
+//   casual: hace caso a la «mejora recomendada», cumple objetivos y ahorra para construir si le faltan menos de 10 min
 import { Game } from '../src/core/Game.js';
 import { analyzeChain, recommendUpgrade } from '../src/sim/analysis.js';
 import { nextToUnlock, zoneOf } from '../src/sim/chain.js';
@@ -24,7 +24,9 @@ const mmss = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart
 const openZones = () => ZONE_LIST.filter((z) => s.zones[z.id].unlocked).map((z) => z.id);
 // La zona en juego: la primera abierta sin completar.
 const currentZone = () => openZones().find((z) => !s.zones[z].complete) ?? null;
-const totalIncome = (st) => openZones().reduce((n, z) => n + analyzeChain(st, z).income, 0);
+// Ingreso del final de cada cadena (sin los desvíos, como la mejora recomendada): si contara lo que
+// se vende desviado, el bot subiría las fuentes al máximo para vender materia prima.
+const totalIncome = (st) => openZones().reduce((n, z) => n + analyzeChain(st, z).mainIncome, 0);
 const bump = (t, id) => {
   const [sid, part] = id.split(':');
   if (sid === 'dispatch') return t.zones[part].dispatch.level++;
@@ -78,7 +80,10 @@ const zoneStart = { finca: 0 };
 const zoneEnd = {};
 game.bus.on('goalClaimed', ({ goal, zone }) => {
   events.push(`${mmss(s.playTime)}  ✅ ${goalText(goal)}  (+${formatNumber(goal.reward)} 💰)`);
-  if (goal.final) zoneEnd[zone] = s.playTime;
+  if (goal.final) {
+    zoneEnd[zone] = s.playTime;
+    console.error(`🏁 ${zone}: ${mmss(zoneEnd[zone] - zoneStart[zone])} en la zona (total ${mmss(s.playTime)})`);
+  }
 });
 game.bus.on('unlocked', ({ id }) => events.push(`${mmss(s.playTime)}  🏗️  construye ${id}`));
 game.bus.on('research', ({ id }) => events.push(`${mmss(s.playTime)}  🔬 investiga ${id}`));
@@ -93,7 +98,8 @@ for (let step = 0; step < hours * 36000 && currentZone(); step++) {
     const lv = Object.entries(s.stations).map(([k, v]) => `${k}:${v.level}/${v.transport.level}`).join(' ');
     events.push(`${mmss(s.playTime)}  📊 ${formatNumber(totalIncome(s))} 💰/s · ${lv} · 💰${formatNumber(s.coins)}`);
   }
-  if (step % 10) continue;
+  // Decide cada 5 s de juego (más rápido que una persona; con cuatro zonas, cada decisión cuesta).
+  if (step % 50) continue;
   const zone = currentZone();
   if (!zone) break;
   for (const g of activeGoals(s, zone)) if (goalProgress(s, g).done) game.claimGoal(g.id);
@@ -116,8 +122,8 @@ for (let step = 0; step < hours * 36000 && currentZone(); step++) {
   if (style === 'casual') {
     const next = nextToUnlock(s, zone);
     if (next && game.quoteUnlock(next).ok) game.unlock(next);
-    // Ahorra si la siguiente estación cuesta menos de 2 minutos de ingresos.
-    const saving = next && game.quoteUnlock(next).cost < 120 * Math.max(totalIncome(s), 0.5);
+    // Ahorra si la siguiente estación cuesta menos de 10 minutos de ingresos (como quien sigue los objetivos).
+    const saving = next && game.quoteUnlock(next).cost < 600 * Math.max(totalIncome(s), 0.5);
     if (!saving) {
       for (let k = 0; k < 30; k++) {
         const r = recommendUpgrade(s, (id, mode) => game.quote(id, mode), zone);

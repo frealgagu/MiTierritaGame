@@ -54,10 +54,10 @@ export function stationInputCap(def, level) {
   return Math.max(20, Math.ceil(stationRate(def, level) * need * 15));
 }
 
-// Lo que cabe del producto importado por una ruta: ~90 s de consumo (mínimo 10), porque la ruta
-// tarda más que las mulas. `mult` es lo que aceleran las investigaciones a la estación.
-export function stationImportCap(def, level, mult = 1) {
-  return Math.max(10, Math.ceil(stationRate(def, level) * mult * def.import.perCycle * 90));
+// Lo que cabe de un producto importado por una ruta (`imp`, de def.imports): ~90 s de consumo
+// (mínimo 10), porque la ruta tarda más que las mulas. `mult`: lo que aceleran las investigaciones.
+export function stationImportCap(def, level, mult = 1, imp = def.imports[0]) {
+  return Math.max(10, Math.ceil(stationRate(def, level) * mult * imp.perCycle * 90));
 }
 
 // Arrieros (GDD §5.2): una mula más cada 10 niveles de transporte (máx. 10).

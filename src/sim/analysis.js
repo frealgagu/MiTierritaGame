@@ -3,13 +3,14 @@ import { STATIONS_BY_ID } from '../data/stations.js';
 import { RESEARCH } from '../data/research.js';
 import { dispatchRate, stationRate } from './rules.js';
 import { chainOf, consumers, sourceOf, zoneOf } from './chain.js';
-import { routeActive, routeRate } from './routes.js';
+import { routeActive, routeRate, routeStations, stationImportRate } from './routes.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
-import { teamCapacity } from './transport.js';
+import { exportsOf, teamCapacity } from './transport.js';
 import { COMPOST_VALUE, WASHED_PER_COMPOST, dispatchMult, productValue, speedMult } from './modifiers.js';
 import { PRODUCTS } from '../data/products.js';
 
 const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
+const MAX_ROUTE_DEPTH = 4; // zonas encadenadas por rutas que se miran como mucho
 
 // Por estación (unidades/s):
 //   incoming   lo que le llega        capacity  lo que puede procesar (en unidades de entrada)
@@ -18,16 +19,20 @@ const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
 //   transport  capacidad de sus arrieros hacia la siguiente estación (o la bodega)
 //   children   estaciones construidas que reciben su producto (una rama si son varias)
 //   next       la primera de ellas (o null)     nextCapacity  lo que pueden procesar entre todas
-//   imported   para las estaciones con ruta: unidades/s del importado que les llegan
-//   importLimited  true si lo que frena a la estación es el producto importado
-// Con `routes: false` no cuenta las rutas entre zonas (lo usa routeFlow para no dar vueltas).
-export function analyzeChain(state, zoneId = 'finca', { routes = true } = {}) {
+//   exports    rutas a las que la estación guarda parte de su producto (la leche para el Cacaotal)
+//   imported   para las estaciones con ruta: unidades/s que les llegan de cada importado { producto: u/s }
+//   importLimited  la ruta cuyo producto frena a la estación (o null)
+// Con `exports: false` no descuenta lo que sale por rutas (routeFlow lo usa para saber cuánto hay para
+// enviar). `depth` corta la recursión entre zonas que se abastecen en cadena.
+export function analyzeChain(state, zoneId = 'finca', { exports: withExports = true, depth = 0 } = {}) {
+  const routes = depth < MAX_ROUTE_DEPTH;
   const ids = chainOf(zoneId).filter((id) => state.stations[id]);
   const rows = [];
   let toWarehouse = 0;
   const flows = []; // { product, units, value, leaf } que llegan a la bodega
   const byRate = {}; // subproducto que genera cada estación (por s), p. ej. bagazo de la Molienda
   const allocated = {}; // lo que cada estación recibe de su proveedor (por s)
+  const exported = {}; // producto intermedio guardado para rutas (por s), que va a la bodega sin venderse
 
   // Precio de venta esperado: en la Finca, con el bono del compost que la Compostera puede sostener.
   const compost = zoneId === 'finca' ? expectedCompostValue(state) : 1;
@@ -45,19 +50,26 @@ export function analyzeChain(state, zoneId = 'finca', { routes = true } = {}) {
     }
     return rate;
   };
-  // Unidades de su entrada principal que puede procesar por segundo (frenada por el importado si falta).
-  const importOf = (id) => (STATIONS_BY_ID[id].import && routes ? routeFlow(state, STATIONS_BY_ID[id].import.route) : 0);
+  // Unidades/s de un importado que le llegan a una estación (su parte de lo que mueve la ruta).
+  // Lo que mueve cada ruta se calcula una vez por análisis (mirar otra zona cuesta un análisis entero).
+  const routeFlows = new Map();
+  const flowOf = (routeId) => {
+    if (!routeFlows.has(routeId)) routeFlows.set(routeId, routeFlow(state, routeId, depth + 1));
+    return routeFlows.get(routeId);
+  };
+  const importOf = (id, imp) => (routes ? flowOf(imp.route) * routeShare(state, imp.route, id) : 0);
+  // Unidades de su entrada principal que puede procesar por segundo (frenada por los importados si faltan).
   const capacityOf = (id) => {
     const def = STATIONS_BY_ID[id];
     const need = Object.values(def.in)[0];
     let cycles = cycleRate(id);
-    if (def.import) cycles = Math.min(cycles, importOf(id) / def.import.perCycle);
+    for (const imp of def.imports ?? []) cycles = Math.min(cycles, importOf(id, imp) / imp.perCycle);
     return cycles * need;
   };
   // Lo que sale de esta zona por rutas (unidades/s por producto): no pasa por el Willys.
   const exports = {};
-  if (routes) {
-    for (const r of ROUTES) if (r.from === zoneId) exports[r.product] = (exports[r.product] ?? 0) + routeFlow(state, r.id);
+  if (withExports && routes) {
+    for (const r of ROUTES) if (r.from === zoneId) exports[r.product] = (exports[r.product] ?? 0) + flowOf(r.id);
   }
 
   for (const id of ids) {
@@ -81,19 +93,36 @@ export function analyzeChain(state, zoneId = 'finca', { routes = true } = {}) {
     if (def.by) byRate[id] = cycles * Object.values(def.by)[0];
 
     const children = consumers(state, id);
+    // Las rutas que se llevan un producto intermedio cuentan como una rama más (ver transport.exportsOf).
+    const exportsHere = routes ? exportsOf(state, id) : [];
     const transport = teamCapacity(state, id);
-    const row = { id, incoming, capacity, output, transport, children, next: children[0] ?? null, toNext: 0, diverted: 0, lost: 0 };
-    if (def.import) {
-      row.imported = importOf(id);
-      row.importLimited = row.imported < rate * def.import.perCycle * (1 - LOSS);
+    const row = { id, incoming, capacity, output, transport, children, exports: exportsHere.map((r) => r.id), next: children[0] ?? null, toNext: 0, diverted: 0, lost: 0 };
+    if (def.imports) {
+      row.imported = {};
+      row.importLimited = null;
+      // La que más frena es la que llega en menor proporción a lo que la estación necesita.
+      let tightest = 1 - LOSS;
+      for (const imp of def.imports) {
+        row.imported[imp.product] = importOf(id, imp);
+        const ratio = row.imported[imp.product] / (rate * imp.perCycle);
+        if (ratio < tightest) {
+          tightest = ratio;
+          row.importLimited = imp.route;
+        }
+      }
     }
 
     if (children.length) {
       const caps = children.map((c) => capacityOf(c));
-      const nextCapacity = caps.reduce((a, b) => a + b, 0);
+      const exportCaps = exportsHere.map((r) => Math.min(routeDemandRate(state, r.id), routeRate(state, r.id)));
+      const nextCapacity = [...caps, ...exportCaps].reduce((a, b) => a + b, 0);
       row.toNext = Math.min(output, transport, nextCapacity);
       // Cada una recibe en proporción a lo que procesa (las mulas van a la de la entrada más vacía).
       children.forEach((c, k) => (allocated[c] = nextCapacity > 0 ? (row.toNext * caps[k]) / nextCapacity : 0));
+      exportsHere.forEach((r, k) => {
+        const units = nextCapacity > 0 ? (row.toNext * exportCaps[k]) / nextCapacity : 0;
+        exported[r.product] = (exported[r.product] ?? 0) + units;
+      });
       const left = output - row.toNext;
       // Las mulas que sobran llevan el resto a la bodega (viaje más largo).
       const free = Math.max(0, 1 - row.toNext / transport);
@@ -106,6 +135,8 @@ export function analyzeChain(state, zoneId = 'finca', { routes = true } = {}) {
     }
     toWarehouse += row.diverted;
     let units = row.diverted;
+    // Lo que se lleva la ruta sale primero de lo que la estación le guardó; solo el resto, de los desvíos.
+    if (exports[outId] && exported[outId]) exports[outId] = Math.max(0, exports[outId] - exported[outId]);
     if (exports[outId]) {
       const out = Math.min(units, exports[outId]);
       units -= out;
@@ -149,10 +180,10 @@ export function analyzeChain(state, zoneId = 'finca', { routes = true } = {}) {
   if (!bottleneck) {
     // Una estación que espera el importado: la ruta no da abasto.
     const starved = rows.find((r) => r.importLimited && r.incoming > r.capacity * (1 + LOSS));
-    if (starved) bottleneck = `route:${STATIONS_BY_ID[starved.id].import.route}`;
+    if (starved) bottleneck = `route:${starved.importLimited}`;
   }
   if (!bottleneck) bottleneck = toWarehouse > dispatch * (1 + LOSS) ? `dispatch:${zoneId}` : sourceOf(zoneId);
-  return { rows, toWarehouse, dispatch, bottleneck, income, mainIncome };
+  return { rows, toWarehouse, dispatch, bottleneck, income, mainIncome, exported };
 }
 
 // De las estaciones que reciben de una rama, la que más frena: si es por el importado, su ruta;
@@ -160,22 +191,32 @@ export function analyzeChain(state, zoneId = 'finca', { routes = true } = {}) {
 function slowestConsumer(state, children, rows) {
   for (const c of children) {
     const row = rows.find((r) => r.id === c);
-    if (row?.importLimited && routeRate(state, STATIONS_BY_ID[c].import.route) < row.imported * (1 + LOSS) + 1e-9) return `route:${STATIONS_BY_ID[c].import.route}`;
+    const route = row?.importLimited;
+    if (route && routeRate(state, route) < routeFlow(state, route) * (1 + LOSS) + 1e-9) return `route:${route}`;
   }
   return children.reduce((low, c) => (state.stations[c].level < state.stations[low].level ? c : low));
 }
 
-// Unidades/s que mueve una ruta: lo que pide la estación de destino a toda marcha, sin pasar de lo
-// que lleva el vehículo ni de lo que llega a la bodega de origen.
-export function routeFlow(state, routeId) {
+// Lo que piden las estaciones de una ruta a toda marcha (u/s) y lo que pide cada una.
+const routeDemandRate = (state, routeId) =>
+  routeStations(state, routeId).reduce((n, id) => n + stationImportRate(state, ROUTES_BY_ID[routeId], id), 0);
+export function routeShare(state, routeId, id) {
+  const total = routeDemandRate(state, routeId);
+  return total > 0 ? stationImportRate(state, ROUTES_BY_ID[routeId], id) / total : 0;
+}
+
+// Unidades/s que mueve una ruta: lo que piden sus estaciones a toda marcha, sin pasar de lo que lleva
+// el vehículo ni de lo que llega a la bodega de origen. Si varias rutas sacan el mismo producto de la
+// misma zona (la panela del Trapiche va a la Lechería y al Cacaotal), se lo reparten según lo que pide cada una.
+export function routeFlow(state, routeId, depth = 0) {
   if (!routeActive(state, routeId)) return 0;
   const r = ROUTES_BY_ID[routeId];
-  const def = STATIONS_BY_ID[r.station];
-  const demand = stationRate(def, state.stations[r.station].level) * speedMult(state, r.station) * def.import.perCycle;
-  const supply = analyzeChain(state, r.from, { routes: false })
-    .rows.filter((row) => Object.keys(STATIONS_BY_ID[row.id].out)[0] === r.product)
-    .reduce((n, row) => n + row.diverted, 0);
-  return Math.min(demand, routeRate(state, routeId), supply);
+  const want = (id) => (routeActive(state, id) ? Math.min(routeDemandRate(state, id), routeRate(state, id)) : 0);
+  const own = want(routeId);
+  const siblings = ROUTES.filter((x) => x.from === r.from && x.product === r.product).reduce((n, x) => n + want(x.id), 0);
+  const source = analyzeChain(state, r.from, { exports: false, depth });
+  const supply = (source.exported[r.product] ?? 0) + source.rows.filter((row) => Object.keys(STATIONS_BY_ID[row.id].out)[0] === r.product).reduce((n, row) => n + row.diverted, 0);
+  return Math.min(own, siblings > 0 ? (supply * own) / siblings : 0);
 }
 
 // Bono de venta que la Compostera puede sostener: 1 sin compost, 1,3 si alcanza para todo el café
@@ -197,6 +238,8 @@ export function expectedCompostValue(state) {
 // Si ninguna mejora suelta suma lo suficiente (hay que subir varias a la vez), recomienda el
 // cuello de botella. Devuelve { id, cost, gain }. (`quote` es Game.quote, para no duplicar precios.)
 const MIN_GAIN = 0.01; // ganancia mínima, como fracción del ingreso actual
+// Arrieros, rutas y la Compostera: suman poco nivel a nivel, se miden de 10 en 10.
+const isGradual = (id) => STATIONS_BY_ID[id]?.side || id.endsWith(':transport') || id.startsWith('route:');
 
 export function recommendUpgrade(state, quote, zoneId = 'finca') {
   const analysis = analyzeChain(state, zoneId);
@@ -214,32 +257,35 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
     if (!STATIONS_BY_ID[id].side) ids.push(`${id}:transport`);
   }
   for (const r of ROUTES) if (r.to === zoneId && routeActive(state, r.id)) ids.push(`route:${r.id}`);
-  // Lo que suma comprar `count` niveles de `id` (o null si no se puede).
-  const trialGain = (id, count) => {
-    const q = quote(id, count);
-    if (q.maxed || q.locked || q.levels === 0) return null;
-    const levels = q.levels ?? 1;
-    const trial = { ...state, stations: { ...state.stations } };
-    if (id.startsWith('dispatch')) {
-      const zone = state.zones[zoneId];
-      trial.zones = { ...state.zones, [zoneId]: { ...zone, dispatch: { level: zone.dispatch.level + levels } } };
-    } else if (id.startsWith('route:')) {
-      const rid = id.split(':')[1];
-      trial.routes = { ...state.routes, [rid]: { ...state.routes[rid], level: state.routes[rid].level + levels } };
-    } else {
-      const [sid, part] = id.split(':');
-      const st = { ...state.stations[sid], transport: { ...state.stations[sid].transport } };
-      (part ? st.transport : st).level += levels;
-      trial.stations[sid] = st;
+  // Lo que suma comprar `count` niveles de cada uno de `list` a la vez (o null si alguno no se puede).
+  const trialGain = (list, count) => {
+    const trial = { ...state, stations: { ...state.stations }, zones: { ...state.zones }, routes: { ...state.routes } };
+    let cost = 0;
+    for (const id of list) {
+      const q = quote(id, count);
+      if (q.maxed || q.locked || q.levels === 0) return null;
+      cost += q.cost;
+      const levels = q.levels ?? 1;
+      if (id.startsWith('dispatch')) {
+        const zone = trial.zones[zoneId];
+        trial.zones[zoneId] = { ...zone, dispatch: { level: zone.dispatch.level + levels } };
+      } else if (id.startsWith('route:')) {
+        const rid = id.split(':')[1];
+        trial.routes[rid] = { ...trial.routes[rid], level: trial.routes[rid].level + levels };
+      } else {
+        const [sid, part] = id.split(':');
+        const st = { ...trial.stations[sid], transport: { ...trial.stations[sid].transport } };
+        (part ? st.transport : st).level += levels;
+        trial.stations[sid] = st;
+      }
     }
-    return { id, cost: q.cost, gain: score(trial) - base };
+    return { id: list[0], cost, gain: score(trial) - base };
   };
   for (const id of ids) {
     // Arrieros, rutas y la Compostera suman poco nivel a nivel (unos arrieros muy atrasados, el bono
     // del compost que se cubre poco a poco): si un nivel suelto no llega al mínimo, se miden de 10 en 10.
-    let option = STATIONS_BY_ID[id]?.side ? null : trialGain(id, 1);
-    const gradual = STATIONS_BY_ID[id]?.side || id.endsWith(':transport') || id.startsWith('route:');
-    if (gradual && (!option || option.gain < base * MIN_GAIN)) option = trialGain(id, 10) ?? option;
+    let option = STATIONS_BY_ID[id]?.side ? null : trialGain([id], 1);
+    if (isGradual(id) && (!option || option.gain < base * MIN_GAIN)) option = trialGain([id], 10) ?? option;
     if (option) options.push(option);
   }
   const roi = (o) => o.gain / o.cost;
@@ -254,5 +300,16 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
     if (gain > 1e-9 && (!best || roi(option) > roi(best))) best = option;
   }
   if (best) return best;
+  // Ninguna sola rinde: puede que dos se frenen entre sí (una ruta y los arrieros de la estación que
+  // abastece). Se prueban de dos en dos, de 10 en 10 niveles, y se recomienda la primera del mejor par.
+  const gradual = ids.filter(isGradual);
+  let pair = null;
+  for (let i = 0; i < gradual.length; i++) {
+    for (let j = i + 1; j < gradual.length; j++) {
+      const o = trialGain([gradual[i], gradual[j]], 10);
+      if (o && o.gain >= base * MIN_GAIN && (!pair || roi(o) > roi(pair))) pair = o;
+    }
+  }
+  if (pair) return { ...pair, cost: quote(pair.id, 1).cost };
   return { id: analysis.bottleneck, cost: quote(analysis.bottleneck, 1).cost, gain: 0 };
 }

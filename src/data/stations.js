@@ -31,24 +31,28 @@ export const STATIONS = [
   { id: 'molds', zone: 'trapiche', name: 'Gaveras', icon: '🧱', in: { melado: 2 }, out: { panela: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '1.1' },
   { id: 'pulverizer', zone: 'trapiche', name: 'Pulverizadora', icon: '🌀', in: { panela: 1 }, out: { panela_powder: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '1.1' },
 
-  // Zona 3 · La Lechería (v1.2). La leche pasteurizada se reparte entre tres ramas; a igual nivel, la
-  // Paila procesa la mitad y la Quesera y la Descremadora un cuarto cada una (ver sim/chain.js: consumers).
+  // Zona 3 · La Lechería (v1.2). La leche pasteurizada se reparte: a igual nivel, un cuarto para la
+  // Quesera, la Descremadora, la Paila y la Ruta de la leche al Cacaotal (ver sim/transport.js: exportsOf).
   { id: 'pasture', zone: 'lecheria', name: 'Potrero y establo', icon: '🐄', infinite: true, out: { raw_milk: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '1.2' },
   { id: 'pasteurizer', zone: 'lecheria', name: 'Pasteurizadora', icon: '🌡️', in: { raw_milk: 1 }, out: { milk: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '1.2' },
   { id: 'cheesery', zone: 'lecheria', name: 'Quesera', icon: '🧀', in: { milk: 4 }, out: { cheese: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '1.2' },
   { id: 'separator', zone: 'lecheria', name: 'Descremadora', icon: '🍦', in: { milk: 2 }, out: { cream: 1 }, cycle: 16, unlockCost: 1000000, upgradeBase: 600, growth: 1.15, release: '1.2' },
   { id: 'churn', zone: 'lecheria', name: 'Batidora', icon: '🧈', in: { cream: 2 }, out: { butter: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '1.2' },
   // La panela pulverizada llega del Trapiche por la ruta (ver data/routes.js): sin ella, la Paila espera.
-  { id: 'arequipe_pot', zone: 'lecheria', name: 'Paila de arequipe', icon: '🍮', in: { milk: 4 }, import: { product: 'panela_powder', perCycle: 1, route: 'panela' }, out: { arequipe: 1 }, cycle: 16, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '1.2' },
+  { id: 'arequipe_pot', zone: 'lecheria', name: 'Paila de arequipe', icon: '🍮', in: { milk: 4 }, imports: [{ product: 'panela_powder', perCycle: 1, route: 'panela' }], out: { arequipe: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '1.2' },
 
-  // Zona 4 · El Cacaotal
-  { id: 'cacao_grove', zone: 'cacaotal', name: 'Cacaotal', icon: '🌳', infinite: true, out: { cacao_pod: 1 }, cycle: 2, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.3' },
-  { id: 'fermenter', zone: 'cacaotal', name: 'Cajones de fermentación', icon: '📦', in: { cacao_pod: 1 }, out: { cacao_fermented: 1 }, cycle: 4, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.3' },
-  { id: 'cacao_dryer', zone: 'cacaotal', name: 'Secadero', icon: '☀️', in: { cacao_fermented: 1 }, out: { cacao_dry: 1 }, cycle: 5, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.3' },
-  { id: 'cacao_roaster', zone: 'cacaotal', name: 'Tostador de cacao', icon: '🔥', in: { cacao_dry: 1 }, out: { cacao_roasted: 1 }, cycle: 4, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.3' },
-  { id: 'cacao_mill', zone: 'cacaotal', name: 'Molino de cacao', icon: '🌀', in: { cacao_roasted: 2 }, out: { cacao_paste: 1 }, cycle: 5, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.3' },
-  { id: 'chocolate_table', zone: 'cacaotal', name: 'Mesa de chocolate', icon: '🍫', in: { cacao_paste: 1, panela_powder: 1 }, out: { table_chocolate: 1 }, cycle: 6, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.3' },
-  { id: 'chocolatier', zone: 'cacaotal', name: 'Chocolatería', icon: '🍫', in: { cacao_paste: 1, panela_powder: 1, milk: 2 }, out: { milk_chocolate: 1 }, cycle: 8, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.3' },
+  // Zona 4 · El Cacaotal (v1.3). La pasta de cacao se reparte entre la Mesa de chocolate y la
+  // Chocolatería (la mitad cada una a igual nivel). Las dos necesitan panela del Trapiche y la
+  // Chocolatería, además, leche pasteurizada de la Lechería (ver data/routes.js). A igual nivel en
+  // todas las zonas, la panela que piden la Paila, la Mesa y la Chocolatería es ¾ de lo que da el
+  // Trapiche, y la leche de la Chocolatería es el cuarto que la Pasteurizadora guarda para la ruta.
+  { id: 'cacao_grove', zone: 'cacaotal', name: 'Cacaotal', icon: '🌳', infinite: true, out: { cacao_pod: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '1.3' },
+  { id: 'fermenter', zone: 'cacaotal', name: 'Cajones de fermentación', icon: '📦', in: { cacao_pod: 2 }, out: { cacao_fermented: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '1.3' },
+  { id: 'cacao_dryer', zone: 'cacaotal', name: 'Secadero', icon: '☀️', in: { cacao_fermented: 1 }, out: { cacao_dry: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '1.3' },
+  { id: 'cacao_roaster', zone: 'cacaotal', name: 'Tostador de cacao', icon: '🔥', in: { cacao_dry: 1 }, out: { cacao_roasted: 1 }, cycle: 4, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '1.3' },
+  { id: 'cacao_mill', zone: 'cacaotal', name: 'Molino de cacao', icon: '🌀', in: { cacao_roasted: 2 }, out: { cacao_paste: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '1.3' },
+  { id: 'chocolate_table', zone: 'cacaotal', name: 'Mesa de chocolate', icon: '🍫', in: { cacao_paste: 2 }, imports: [{ product: 'panela_powder', perCycle: 1, route: 'panela_cacao' }], out: { table_chocolate: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '1.3' },
+  { id: 'chocolatier', zone: 'cacaotal', name: 'Chocolatería', icon: '🍬', in: { cacao_paste: 2 }, imports: [{ product: 'panela_powder', perCycle: 1, route: 'panela_cacao' }, { product: 'milk', perCycle: 4, route: 'leche' }], out: { milk_chocolate: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '1.3' },
 
   // Zona 5 · El Maizal
   { id: 'cornfield', zone: 'maizal', name: 'Maizal', icon: '🌽', infinite: true, out: { corn_cob: 1 }, cycle: 2, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.4' },

@@ -17,6 +17,8 @@ export function upgradeName(id) {
   return part === 'transport' ? `Arrieros del ${STATIONS_BY_ID[sid].name}` : STATIONS_BY_ID[sid].name;
 }
 
+const REC_INTERVAL_MS = 1000;
+
 export class HUD {
   // getZone: zona que se está viendo.
   constructor(game, onOpen, getHour, getZone) {
@@ -27,6 +29,8 @@ export class HUD {
     this.coins = document.getElementById('coins');
     this.income = document.getElementById('income');
     this.chip = document.getElementById('bottleneck');
+    // Tras una compra, la recomendación se recalcula enseguida.
+    for (const type of ['levelUp', 'unlocked', 'research', 'zoneUnlocked']) game.bus.on(type, () => (this.rec = null));
     // Tocar el aviso abre la mejora recomendada.
     this.chip.addEventListener('click', () => this.recommended && onOpen(this.recommended));
   }
@@ -41,7 +45,14 @@ export class HUD {
     const hour = this.getHour();
     if (hour !== undefined) this.clock.textContent = clockLabel(hour);
     const zone = this.getZone();
-    const rec = recommendUpgrade(s, (id, mode) => this.game.quote(id, mode), zone);
+    // La recomendación mira varias zonas (rutas) y cuesta calcularla: como mucho una vez por segundo.
+    const now = performance.now();
+    if (zone !== this.recZone || !this.rec || now - this.recAt > REC_INTERVAL_MS) {
+      this.rec = recommendUpgrade(s, (id, mode) => this.game.quote(id, mode), zone);
+      this.recZone = zone;
+      this.recAt = now;
+    }
+    const rec = this.rec;
     this.recommended = rec.id;
     this.guide = this.guideTarget(s, rec, zone);
     this.chip.hidden = false;
@@ -62,7 +73,8 @@ export class HUD {
     if (STATIONS_BY_ID[sid] && zoneOf(sid) !== zone) return null; // está en otra zona
     if (!this.game.quote(rec.id, 1).affordable) return null;
     // La ruta se mejora desde la estación que abastece.
-    return rec.id.startsWith('route:') ? ROUTES_BY_ID[rec.id.split(':')[1]].station : rec.id.split(':')[0];
+    if (!rec.id.startsWith('route:')) return rec.id.split(':')[0];
+    return ROUTES_BY_ID[rec.id.split(':')[1]].stations.find((id) => s.stations[id]) ?? null;
   }
 
   // Avisa una sola vez cuando alcanza para construir la siguiente estación.

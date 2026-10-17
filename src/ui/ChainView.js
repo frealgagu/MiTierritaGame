@@ -59,17 +59,21 @@ export class ChainView {
         ? `Produce <b>${formatRate(row.output)} ${icon}/s</b>`
         : `Recibe ${formatRate(row.incoming)}/s · procesa hasta ${formatRate(row.capacity)}/s → <b>${formatRate(row.output)} ${icon}/s</b>`;
       const branch = inBranch(row.id) ? 'branch' : '';
-      const carries = row.children.length > 1
-        ? `reparte <b>${formatRate(row.toNext)}</b> entre ${row.children.length}`
+      const route = row.exports?.length ? ` y la ${ROUTES_BY_ID[row.exports[0]].name}` : '';
+      const carries = row.children.length + (row.exports?.length ?? 0) > 1
+        ? `reparte <b>${formatRate(row.toNext)}</b> entre ${row.children.length} ${row.children.length > 1 ? 'estaciones' : 'estación'}${route}`
         : row.next ? `lleva <b>${formatRate(row.toNext)}</b>` : `lleva <b>${formatRate(row.diverted)}</b> a la bodega`;
-      const imp = def.import;
-      const route = imp ? ROUTES_BY_ID[imp.route] : null;
-      parts.push(`
-        ${route ? `<button class="chain-link ${branch} ${a.bottleneck === `route:${route.id}` ? 'hot' : ''}" data-open="route:${route.id}">
+      // Una línea por cada ruta que trae un producto de otra zona.
+      const routes = (def.imports ?? []).map((imp) => {
+        const route = ROUTES_BY_ID[imp.route];
+        return `<button class="chain-link ${branch} ${a.bottleneck === `route:${route.id}` ? 'hot' : ''}" data-open="route:${route.id}">
           <span>${route.icon} ${route.name} · Nv ${state.routes[route.id].level}</span>
-          <span>desde ${ZONES_BY_ID[route.from].name}: llegan <b>${formatRate(row.imported)}</b> ${PRODUCTS[imp.product].icon}/s</span>
-          ${row.importLimited ? `<span class="lost">⏸️ Falta ${PRODUCTS[imp.product].name.toLowerCase()} para trabajar a toda marcha</span>` : ''}
-        </button>` : ''}
+          <span>desde ${ZONES_BY_ID[route.from].name}: llegan <b>${formatRate(row.imported[imp.product])}</b> ${PRODUCTS[imp.product].icon}/s</span>
+          ${row.importLimited === route.id ? `<span class="lost">⏸️ Falta ${PRODUCTS[imp.product].name.toLowerCase()} para trabajar a toda marcha</span>` : ''}
+        </button>`;
+      });
+      parts.push(`
+        ${routes.join('')}
         <button class="chain-card ${branch} ${isBottleneck ? 'hot' : ''}" data-open="${row.id}">
           <span class="chain-icon">${def.icon}</span>
           <span class="chain-text"><b>${def.name}</b> <small>Nv ${st.level}</small><br><span>${processing}</span></span>

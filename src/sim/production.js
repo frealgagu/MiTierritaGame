@@ -3,14 +3,14 @@ import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
 import { consumeCompost, speedMult } from './modifiers.js';
 
 export function createStationState() {
-  return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, imported: 0, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
+  return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, imported: {}, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
 }
 
 // Avanza una estación: consume su entrada (si tiene receta) y deja el producto en su patio.
 //   status: 'working' | 'starved' (falta entrada) | 'blocked' (patio lleno)
 //   idle:   segundos seguidos sin entrada
 //   waiting: por qué no sale el producto del patio: 'mules' (arrieros ocupados) | 'space' (bodega llena) | null
-//   missing: 'import' si lo que falta es el producto que llega por una ruta entre zonas
+//   missing: producto que falta de los que llegan por una ruta entre zonas (o null)
 export function stepStation(state, id, dt, bus) {
   const def = STATIONS_BY_ID[id];
   const s = state.stations[id];
@@ -18,9 +18,13 @@ export function stepStation(state, id, dt, bus) {
   const need = def.in ? Object.values(def.in)[0] : 0;
   const space = stationBufferCap(def, s.level) - s.buffer;
   const byLocal = need ? Math.floor(s.input / need) : Infinity;
-  const byImport = def.import ? Math.floor((s.imported ?? 0) / def.import.perCycle + 1e-9) : Infinity;
-  const byInput = Math.min(byLocal, byImport);
-  s.missing = byImport < byLocal && byImport <= 0 ? 'import' : null;
+  let byInput = byLocal;
+  s.missing = null;
+  for (const imp of def.imports ?? []) {
+    const n = Math.floor((s.imported[imp.product] ?? 0) / imp.perCycle + 1e-9);
+    if (n < byInput) byInput = n;
+    if (n <= 0 && !s.missing) s.missing = imp.product;
+  }
   const byOutput = Math.floor(space / outAmt);
 
   if (byOutput <= 0) {
@@ -54,7 +58,7 @@ export function stepStation(state, id, dt, bus) {
   }
   if (id === 'wetmill') consumeCompost(state, cycles * outAmt);
   if (def.fuel && s.fuel > 0) s.fuel = Math.max(0, s.fuel - cycles * def.fuel.perCycle);
-  if (def.import) s.imported = Math.max(0, s.imported - cycles * def.import.perCycle);
+  for (const imp of def.imports ?? []) s.imported[imp.product] = Math.max(0, s.imported[imp.product] - cycles * imp.perCycle);
   bus.emit('produced', { stationId: id, productId: outId, amount: cycles * outAmt });
 }
 

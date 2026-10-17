@@ -74,7 +74,7 @@ export class Scene {
     this.drawExitSign();
     // Rutas que salen de esta zona o llegan a ella: carretera, letrero y la Chiva.
     this.routes = ROUTES.filter((r) => this.zone.routes?.[r.id]).map((r) => {
-      const view = new ChivaView();
+      const view = new ChivaView(r.product);
       const open = () => {
         if (!this.camera?.dragged) this.onSelect(`route:${r.id}`);
       };
@@ -192,8 +192,10 @@ export class Scene {
     });
     on('routeArrived', ({ route, load }) => {
       const r = ROUTES.find((x) => x.id === route);
-      if (r.to !== zone || !this.stations[r.station]) return;
-      const p = this.stations[r.station].anchorPoint(70);
+      if (r.to !== zone) return;
+      const station = r.stations.find((id) => this.stations[id] && this.game.state.stations[id]);
+      if (!station) return;
+      const p = this.stations[station].anchorPoint(70);
       this.effects.floatText(p.x, p.y, `🚌 +${formatAmount(load)} ${PRODUCTS[r.product].icon}`, { size: 16, color: 0xffe066 });
     });
     on('routeDeparted', ({ route, load }) => {

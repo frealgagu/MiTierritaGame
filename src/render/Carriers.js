@@ -142,8 +142,10 @@ export class JeepView extends Container {
 
 // Chiva: bus de escalera pintado de colores, para las rutas entre zonas. Lleva la carga en el techo.
 export class ChivaView extends Container {
-  constructor() {
+  // productId: lo que lleva (da color a la carga del techo).
+  constructor(productId) {
     super();
+    this.color = PRODUCTS[productId]?.color ?? PRODUCTS.panela_powder.color;
     this.alongY = this.drawChiva(false);
     this.alongX = this.drawChiva(true);
     this.addChild(this.alongY, this.alongX);
@@ -192,7 +194,7 @@ export class ChivaView extends Container {
       const z = 26 + Math.floor(i / 4) * 6;
       const p = alongX ? iso(x0 + f * w, y0 + d / 2, z) : iso(x0 + w / 2, y0 + f * d, z);
       g.roundRect(p.x - 6, p.y - 8, 12, 8, 2).fill(0xf4efe6).stroke(OUTLINE);
-      g.rect(p.x - 4, p.y - 6, 8, 3).fill(PRODUCTS.panela_powder.color);
+      g.rect(p.x - 4, p.y - 6, 8, 3).fill(this.color);
     }
   }
 

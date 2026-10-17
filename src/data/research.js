@@ -43,6 +43,17 @@ export const RESEARCH = [
   { zone: 'lecheria', id: 'doble_crema', name: 'Queso doble crema', icon: '🏅', desc: 'El queso vale un 50 % más.', cost: 15000000, requires: 'cheesery', effect: { type: 'productValue', target: 'cheese', mult: 1.5 } },
   { zone: 'lecheria', id: 'paila_cobre', name: 'Paila de cobre', icon: '🍮', desc: 'La Paila cocina el doble de arequipe (la Chiva de la ruta se ajusta sola).', cost: 25000000, requires: 'arequipe_pot', effect: { type: 'stationSpeed', target: 'arequipe_pot', mult: 2 } },
   { zone: 'lecheria', id: 'arequipe_export', name: 'Arequipe de exportación', icon: '🏅', desc: 'El arequipe vale un 50 % más.', cost: 50000000, requires: 'arequipe_pot', effect: { type: 'productValue', target: 'arequipe', mult: 1.5 } },
+
+  // Zona 4 · El Cacaotal
+  { zone: 'cacaotal', id: 'injertos', name: 'Injertos de clones finos', icon: '🌳', desc: 'El Cacaotal da el doble de mazorcas.', cost: 1000000, requires: 'fermenter', effect: { type: 'stationSpeed', target: 'cacao_grove', mult: 2 } },
+  { zone: 'cacaotal', id: 'cajones_escalera', name: 'Cajones en escalera', icon: '📦', desc: 'Los Cajones fermentan el doble (para seguirle el paso a los Injertos).', cost: 1200000, requires: 'fermenter', effect: { type: 'stationSpeed', target: 'fermenter', mult: 2 } },
+  { zone: 'cacaotal', id: 'marquesina_cacao', name: 'Secadero con techo corredizo', icon: '☀️', desc: 'El Secadero seca el doble de rápido.', cost: 3000000, requires: 'cacao_roaster', effect: { type: 'stationSpeed', target: 'cacao_dryer', mult: 2 } },
+  { zone: 'cacaotal', id: 'camion_cacao', name: 'Camión para el Cacaotal', icon: '🚚', desc: 'El despacho del Cacaotal lleva el doble por viaje.', cost: 5000000, requires: 'cacao_dryer', effect: { type: 'dispatchCapacity', target: 'cacaotal', mult: 2 } },
+  { zone: 'cacaotal', id: 'tostador_bombo', name: 'Tostador de bombo', icon: '🔥', desc: 'El Tostador de cacao tuesta el doble.', cost: 8000000, requires: 'cacao_mill', effect: { type: 'stationSpeed', target: 'cacao_roaster', mult: 2 } },
+  { zone: 'cacaotal', id: 'molino_bolas', name: 'Molino de bolas', icon: '🌀', desc: 'El Molino de cacao muele el doble.', cost: 20000000, requires: 'chocolate_table', effect: { type: 'stationSpeed', target: 'cacao_mill', mult: 2 } },
+  { zone: 'cacaotal', id: 'moldes_aluminio', name: 'Moldes de aluminio', icon: '🍫', desc: 'La Mesa de chocolate moldea el doble.', cost: 50000000, requires: 'chocolatier', effect: { type: 'stationSpeed', target: 'chocolate_table', mult: 2 } },
+  { zone: 'cacaotal', id: 'temperadora', name: 'Temperadora', icon: '🍬', desc: 'La Chocolatería hace el doble de chocolatinas (las rutas se ajustan solas).', cost: 80000000, requires: 'chocolatier', effect: { type: 'stationSpeed', target: 'chocolatier', mult: 2 } },
+  { zone: 'cacaotal', id: 'cacao_fino', name: 'Cacao fino de aroma', icon: '🏅', desc: 'Todo lo que vende el Cacaotal vale un 50 % más.', cost: 60000000, requires: 'chocolate_table', effect: { type: 'zoneValue', target: 'cacaotal', mult: 1.5 } },
 ];
 
 export const RESEARCH_BY_ID = Object.fromEntries(RESEARCH.map((r) => [r.id, r]));

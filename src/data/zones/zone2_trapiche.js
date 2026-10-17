@@ -22,8 +22,11 @@ export const ZONE2 = {
   exitSign: [21.5, 24.2],
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
-  // Carretera de la Ruta de la panela: sale de la bodega hacia la Lechería.
-  routes: { panela: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Lechería ➜' } },
+  // Carreteras de las rutas de la panela: salen de la bodega hacia la Lechería y el Cacaotal.
+  routes: {
+    panela: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Lechería ➜' },
+    panela_cacao: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'Al Cacaotal ➜' },
+  },
   unlockedBy: 'finca', // se abre al completar la Finca
   next: 'lecheria',
 };

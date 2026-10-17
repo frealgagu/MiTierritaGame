@@ -40,14 +40,14 @@ export const PRODUCTS = {
   cheese: { name: 'Queso campesino', zone: 'lecheria', value: 2400, icon: '🧀', color: 0xf3e3b0 },
   arequipe: { name: 'Arequipe', zone: 'lecheria', value: 4000, icon: '🍮', color: 0xa0522d },
 
-  // Zona 4 · El Cacaotal
-  cacao_pod: { name: 'Mazorca de cacao', zone: 'cacaotal', value: 8, icon: '🥭', color: 0xd98e04 },
-  cacao_fermented: { name: 'Cacao fermentado', zone: 'cacaotal', value: 20, icon: '🫘', color: 0xa86b3c },
-  cacao_dry: { name: 'Cacao seco', zone: 'cacaotal', value: 35, icon: '🫘', color: 0x8a5a33 },
-  cacao_roasted: { name: 'Cacao tostado', zone: 'cacaotal', value: 70, icon: '🫘', color: 0x5e3a1f },
-  cacao_paste: { name: 'Pasta de cacao', zone: 'cacaotal', value: 150, icon: '🟫', color: 0x4b2e1a },
-  table_chocolate: { name: 'Chocolate de mesa', zone: 'cacaotal', value: 400, icon: '🍫', color: 0x5a3220 },
-  milk_chocolate: { name: 'Chocolatina con leche', zone: 'cacaotal', value: 900, icon: '🍫', color: 0x8b5a3c },
+  // Zona 4 · El Cacaotal (×125 respecto al primer borrador)
+  cacao_pod: { name: 'Mazorca de cacao', zone: 'cacaotal', value: 1000, icon: '🥭', color: 0xd98e04 },
+  cacao_fermented: { name: 'Cacao fermentado', zone: 'cacaotal', value: 2500, icon: '🫘', color: 0xa86b3c },
+  cacao_dry: { name: 'Cacao seco', zone: 'cacaotal', value: 4400, icon: '🫘', color: 0x8a5a33 },
+  cacao_roasted: { name: 'Cacao tostado', zone: 'cacaotal', value: 8800, icon: '🫘', color: 0x5e3a1f },
+  cacao_paste: { name: 'Pasta de cacao', zone: 'cacaotal', value: 22000, icon: '🟫', color: 0x4b2e1a },
+  table_chocolate: { name: 'Chocolate de mesa', zone: 'cacaotal', value: 100000, icon: '🍫', color: 0x5a3220 },
+  milk_chocolate: { name: 'Chocolatina con leche', zone: 'cacaotal', value: 220000, icon: '🍬', color: 0x8b5a3c },
 
   // Zona 5 · El Maizal
   corn_cob: { name: 'Mazorca de maíz', zone: 'maizal', value: 6, icon: '🌽', color: 0xf2c94c },
