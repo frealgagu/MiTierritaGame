@@ -4,13 +4,17 @@ import { muleCount, muleLoad, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
 import { CHAIN, ROAD_POS, nextStation } from './chain.js';
 import { inputSpace } from './production.js';
+import { dispatchMult, muleSpeedMult } from './modifiers.js';
 
 const MAX_IDLE = 6; // s: si hay algo en el patio y no sale una mula en este tiempo, sale con lo que haya
 const MIN_LEG = 1; // s por trayecto
+// Los desvíos solo usan la bodega mientras quede más de esta fracción libre: así el producto
+// barato que sobra nunca deja sin sitio al producto final de la cadena.
+export const DIVERT_RESERVE = 0.3;
 
 // Segundos de un trayecto (solo ida) entre dos puntos de la cadena.
-export function legTime(from, to) {
-  return Math.max(MIN_LEG, Math.abs(ROAD_POS[to] - ROAD_POS[from]) / ZONE1.muleSpeed);
+export function legTime(from, to, speedMult = 1) {
+  return Math.max(MIN_LEG, Math.abs(ROAD_POS[to] - ROAD_POS[from]) / (ZONE1.muleSpeed * speedMult));
 }
 
 export function inTransit(state, to = 'warehouse') {
@@ -24,7 +28,7 @@ export function busyMules(state, id) {
 
 // Espacio libre en bodega contando lo que ya viene en camino.
 export function warehouseSpace(state) {
-  return warehouseCapacity(state.dispatch.level) - sumValues(state.warehouse) - inTransit(state);
+  return warehouseCapacity(state.dispatch.level, dispatchMult(state)) - sumValues(state.warehouse) - inTransit(state);
 }
 
 // Arrieros (v0.3): cada estación tiene sus mulas. Van a la siguiente estación (o a la bodega si
@@ -83,7 +87,8 @@ function dispatchFrom(state, id, dt, bus) {
         continue;
       }
     }
-    const room = warehouseSpace(state);
+    const reserve = next ? DIVERT_RESERVE * warehouseCapacity(state.dispatch.level, dispatchMult(state)) : 0;
+    const room = warehouseSpace(state) - reserve;
     if (room <= 0) {
       s.waiting = 'space';
       return;
@@ -98,7 +103,7 @@ function sendMule(state, from, to, amount, bus) {
   const productId = Object.keys(STATIONS_BY_ID[from].out)[0];
   s.buffer -= amount;
   s.sinceDeparture = 0;
-  const mule = { id: state.nextId++, productId, amount, from, to, phase: 'go', t: 0, duration: legTime(from, to) };
+  const mule = { id: state.nextId++, productId, amount, from, to, phase: 'go', t: 0, duration: legTime(from, to, muleSpeedMult(state)) };
   state.mules.push(mule);
   bus.emit('muleDeparted', mule);
 }

@@ -1,0 +1,35 @@
+// Objetivos de la Zona 1 (GDD §6): una lista en orden; se ven 3 a la vez y dan monedas al cobrarlos.
+//   sold / produced: { product, amount }   level: { target, level }   unlock: { station }
+//   research: { id }   researchCount: { count }   income: { perSecond }   allLevels: { level }
+export const GOALS = [
+  { id: 'g01', type: 'sold', product: 'cherry', amount: 20, reward: 15 },
+  { id: 'g02', type: 'level', target: 'farm', level: 5, reward: 20 },
+  { id: 'g03', type: 'level', target: 'farm:transport', level: 5, reward: 25 },
+  { id: 'g04', type: 'unlock', station: 'wetmill', reward: 30 },
+  { id: 'g05', type: 'research', id: 'abono', reward: 60 },
+  { id: 'g06', type: 'sold', product: 'washed', amount: 50, reward: 80 },
+  { id: 'g07', type: 'level', target: 'farm', level: 10, reward: 100 },
+  { id: 'g08', type: 'unlock', station: 'dryer', reward: 150 },
+  { id: 'g09', type: 'level', target: 'dispatch', level: 5, reward: 150 },
+  { id: 'g10', type: 'produced', product: 'parchment', amount: 200, reward: 300 },
+  { id: 'g11', type: 'unlock', station: 'huller', reward: 500 },
+  { id: 'g12', type: 'research', id: 'herraduras', reward: 500 },
+  { id: 'g13', type: 'income', perSecond: 5, reward: 600 },
+  { id: 'g14', type: 'level', target: 'dryer', level: 10, reward: 800 },
+  { id: 'g15', type: 'unlock', station: 'roaster', reward: 1500 },
+  { id: 'g16', type: 'sold', product: 'roasted', amount: 100, reward: 2000 },
+  { id: 'g17', type: 'researchCount', count: 3, reward: 2500 },
+  { id: 'g18', type: 'income', perSecond: 20, reward: 4000 },
+  { id: 'g19', type: 'allLevels', level: 10, reward: 5000 },
+  { id: 'g20', type: 'unlock', station: 'grinder', reward: 8000 },
+  { id: 'g21', type: 'sold', product: 'ground', amount: 500, reward: 12000 },
+  { id: 'g22', type: 'level', target: 'farm', level: 25, reward: 15000 },
+  { id: 'g23', type: 'income', perSecond: 100, reward: 20000 },
+  { id: 'g24', type: 'unlock', station: 'packer', reward: 40000 },
+  { id: 'g25', type: 'sold', product: 'coffee_bag', amount: 50, reward: 50000 },
+  { id: 'g26', type: 'research', id: 'sello', reward: 80000 },
+  { id: 'g27', type: 'allLevels', level: 25, reward: 100000 },
+  { id: 'g28', type: 'sold', product: 'coffee_bag', amount: 500, reward: 150000 },
+  // Final de la Zona 1.
+  { id: 'final', type: 'sold', product: 'coffee_bag', amount: 1000, reward: 0, final: true },
+];

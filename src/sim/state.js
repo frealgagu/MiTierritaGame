@@ -1,6 +1,6 @@
 import { createStationState } from './production.js';
 
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 
 export function createInitialState(now = Date.now()) {
   return {
@@ -20,6 +20,9 @@ export function createInitialState(now = Date.now()) {
     stats: { produced: {}, sold: {} },
     hints: [], // avisos ya mostrados
     settings: { sound: true },
+    research: [], // ids de investigaciones compradas
+    goals: { claimed: [] }, // objetivos cobrados
+    zoneComplete: false,
   };
 }
 

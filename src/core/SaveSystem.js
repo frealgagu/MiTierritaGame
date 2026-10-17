@@ -54,6 +54,24 @@ function migrate(data) {
     dispatch: { ...base.dispatch, ...data.dispatch },
     jeep: { ...base.jeep, ...data.jeep },
     stats: { ...base.stats, ...data.stats },
+    goals: { ...base.goals, ...data.goals },
     version: SAVE_VERSION,
   };
+}
+
+// Copia de seguridad en texto (para llevar la partida a otro dispositivo).
+export function exportSave(state) {
+  state.savedAt = Date.now();
+  return btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+}
+
+// Devuelve la partida o null si el texto no es válido.
+export function importSave(text) {
+  try {
+    const data = JSON.parse(decodeURIComponent(escape(atob(text.trim()))));
+    if (!data.stations?.farm || typeof data.coins !== 'number') return null;
+    return migrate(data);
+  } catch {
+    return null;
+  }
 }

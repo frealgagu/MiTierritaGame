@@ -47,6 +47,7 @@ export class StationPanel {
     this.id = id;
     this.tab = tab;
     this.el.hidden = false;
+    document.body.classList.add('panel-open');
     this.render();
     this.update();
   }
@@ -62,6 +63,7 @@ export class StationPanel {
   close() {
     this.id = null;
     this.el.hidden = true;
+    document.body.classList.remove('panel-open');
     this.onClose();
   }
 

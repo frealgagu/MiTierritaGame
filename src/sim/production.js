@@ -1,5 +1,6 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
+import { speedMult } from './modifiers.js';
 
 export function createStationState() {
   return { level: 1, input: 0, buffer: 0, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
@@ -31,7 +32,7 @@ export function stepStation(state, id, dt, bus) {
   }
   s.status = 'working';
   s.idle = 0;
-  s.progress += dt * stationRate(def, s.level);
+  s.progress += dt * stationRate(def, s.level) * speedMult(state, id);
   const cycles = Math.min(Math.floor(s.progress), byInput, byOutput);
   if (cycles <= 0) return;
   s.progress -= cycles;

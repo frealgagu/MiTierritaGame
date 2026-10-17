@@ -1,7 +1,7 @@
 import { DISPATCH } from '../data/stations.js';
-import { PRODUCTS } from '../data/products.js';
 import { dispatchCapacity } from './rules.js';
 import { sumValues } from './state.js';
+import { dispatchMult, productValue } from './modifiers.js';
 
 // El Willys espera en la bodega; sale lleno, o con carga parcial tras `maxWait` s.
 // Vende al llegar al pueblo (mitad del viaje) y vuelve.
@@ -11,10 +11,10 @@ export function stepJeep(state, dt, bus) {
 
   if (j.phase === 'idle') {
     const stock = sumValues(state.warehouse);
-    const cap = dispatchCapacity(state.dispatch.level);
+    const cap = dispatchCapacity(state.dispatch.level, dispatchMult(state));
     j.waited = stock > 0 ? j.waited + dt : 0;
     if (stock >= cap || (stock > 0 && j.waited >= DISPATCH.maxWait)) {
-      j.load = loadJeep(state.warehouse, cap);
+      j.load = loadJeep(state, cap);
       j.phase = 'out';
       j.t = 0;
       j.waited = 0;
@@ -29,7 +29,7 @@ export function stepJeep(state, dt, bus) {
   if (j.phase === 'out') {
     let coins = 0;
     for (const [id, amount] of Object.entries(j.load)) {
-      coins += amount * PRODUCTS[id].value;
+      coins += amount * productValue(state, id);
       state.stats.sold[id] = (state.stats.sold[id] ?? 0) + amount;
     }
     state.coins += coins;
@@ -44,10 +44,11 @@ export function stepJeep(state, dt, bus) {
 }
 
 // Carga primero lo más valioso.
-function loadJeep(warehouse, cap) {
+function loadJeep(state, cap) {
+  const warehouse = state.warehouse;
   const load = {};
   let room = cap;
-  const ids = Object.keys(warehouse).sort((a, b) => PRODUCTS[b].value - PRODUCTS[a].value);
+  const ids = Object.keys(warehouse).sort((a, b) => productValue(state, b) - productValue(state, a));
   for (const id of ids) {
     const take = Math.min(warehouse[id], room);
     if (take <= 0) continue;

@@ -65,3 +65,19 @@ test('la cadena completa produce bolsas de café', () => {
   run(game, 300);
   assert.ok((game.state.stats.sold.coffee_bag ?? 0) > 0, 'vendió bolsas');
 });
+
+test('lo desviado nunca llena la bodega: siempre queda sitio para el producto final', async () => {
+  const { warehouseCapacity } = await import('../src/sim/rules.js');
+  const { DIVERT_RESERVE } = await import('../src/sim/transport.js');
+  const game = new Game();
+  game.state.coins = 50;
+  game.unlock('wetmill');
+  game.state.stations.farm.level = 60; // muchísimas cerezas desviadas
+  game.state.stations.farm.transport.level = 60;
+  game.state.stations.wetmill.transport.level = 30;
+  run(game, 120);
+  const cap = warehouseCapacity(game.state.dispatch.level);
+  const cherries = game.state.warehouse.cherry ?? 0;
+  assert.ok(cherries <= cap * (1 - DIVERT_RESERVE) + 1, `cerezas en bodega: ${cherries} de ${cap}`);
+  assert.ok((game.state.stats.sold.washed ?? 0) > 0, 'el café lavado sigue llegando y vendiéndose');
+});

@@ -14,10 +14,11 @@ Versión publicada: **https://frealgagu.github.io/Game/** (se actualiza sola con
 npm install
 npm run dev      # abre http://localhost:5173
 npm test         # pruebas de la simulación
+npm run balance  # simula una partida entera (npm run balance -- 6 casual)
 npm run build    # versión para publicar en dist/
 ```
 
-## Estado: v0.4
+## Estado: v0.5
 
 - Mapa isométrico de la Zona 1 (La Finca) con cámara: arrastrar para mover, rueda o pellizco para zoom.
 - **Cadena completa de la finca**: Cafetal ♾️ → Beneficiadero → Marquesina → Trilladora → Tostadora → Molino → Empacadora → Bodega.
@@ -32,7 +33,10 @@ npm run build    # versión para publicar en dist/
 - **Día y noche decorativo** (un día = 8 min): amanecer, atardecer, noche con estrellas, ventanas y faroles encendidos y luciérnagas. No afecta a la producción.
 - **Vida y efectos**: bandadas de pájaros, monedas que saltan al vender, edificios que brotan al construirse y rebotan al mejorar.
 - **Sonido sintetizado** (sin archivos): monedas, mejoras, hitos, construcción, pájaros de día y grillos de noche. Se apaga en el menú ⚙️.
-- Guardado automático en el navegador (las partidas de la v0.1 se conservan) y ganancias sin conexión (máx. 2 h).
+- **Objetivos** (📋): 29 pasos en orden con recompensa, hasta el final de la zona: vender 1.000 bolsas («Primer gran pedido»).
+- **Investigaciones** (🔬): 9 mejoras únicas (Abono orgánico, Herraduras, Remolque, Capataz, Sello de calidad…).
+- **Mejora recomendada**: el aviso de arriba sugiere la compra más rentable; tócalo para abrirla.
+- Guardado automático en el navegador (las partidas anteriores se conservan), **copia de seguridad** exportable e importable desde ⚙️, y ganancias sin conexión (2 h, o 6 h con el Capataz) con ventana de bienvenida.
 
 ## Estructura
 

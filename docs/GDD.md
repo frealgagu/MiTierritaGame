@@ -262,10 +262,29 @@ Cada estación tiene **dos ejes** de mejora.
 - Un **Willys** lleva `N` unidades de la Bodega al pueblo y vuelve. Se puede mejorar la capacidad, la velocidad y comprar más jeeps (máx. 5).
 - Es el último cuello de botella. Al principio sobra; con 7 estaciones a buen nivel se vuelve crítico.
 
-### 5.4 Investigaciones (compras únicas y globales)
+### 5.4 Investigaciones (compras únicas y globales, v0.5)
 
-| Investigación | Efecto | Coste aprox. |
-|---------------|--------|--------------|
+Aparecen al construir la estación indicada (`src/data/research.js`):
+
+| Investigación | Efecto | Coste | Aparece con |
+|---------------|--------|-------|-------------|
+| 🌱 Abono orgánico | Cafetal ×2 | 300 | Beneficiadero |
+| 🐴 Herraduras | Mulas ×1,5 de velocidad | 900 | Marquesina |
+| 🚙 Remolque para el Willys | Despacho ×2 de carga | 2.500 | Trilladora |
+| ♨️ Secador mecánico | Marquesina ×2 | 6.000 | Trilladora |
+| 🧑‍🌾 Capataz | Ganancias sin conexión: de 2 h a 6 h | 10.000 | Tostadora |
+| 🔥 Tueste de origen | Café tostado +50 % de valor | 20.000 | Tostadora |
+| 🌳 Variedad Castillo | Cafetal ×2 | 50.000 | Molino |
+| 🚡 Cable aéreo | Mulas ×2 de velocidad | 120.000 | Empacadora |
+| 🏅 Sello de calidad | Bolsas +50 % de valor | 300.000 | Empacadora |
+
+### 5.5 Mejora recomendada
+El aviso de arriba recomienda la mejora que más 💰/s añade por moneda gastada (estaciones, arrieros y despacho). Si ninguna mejora suelta rinde (hay que subir varias juntas), recomienda el cuello de botella. La vista «La cadena» sigue marcando el cuello de botella en rojo.
+
+### 5.6 Desvíos y bodega
+Lo que se desvía a la bodega solo puede ocupar hasta el 70 % de su capacidad: el 30 % restante queda siempre libre para el producto final de la cadena, para que el producto barato que sobra no atasque la Empacadora.
+
+---------------|--------|--------------|
 | Abono orgánico | Cafetal ×2 | 1.000 |
 | Variedad Castillo | Cafetal ×2 | 50.000 |
 | Secador mecánico | Marquesina ×3 | 30.000 |
@@ -278,28 +297,20 @@ Cada estación tiene **dos ejes** de mejora.
 
 ## 6. Objetivos y final de la zona
 
-Hay una lista de **objetivos** (3 visibles a la vez), cada uno con una recompensa en monedas. Sirven de guía:
+Una lista de **29 objetivos en orden** (`src/data/goals.js`). Se ven 3 a la vez, el primero también en un marcador abajo a la izquierda, y al cumplirse se **cobran** (dan monedas). Tipos: vender o producir N de un producto, subir algo a un nivel, construir una estación, investigar, ganar N 💰/s y subir todas las estaciones a un nivel.
 
-1. Vende 50 cerezas.
-2. Sube el Cafetal a nivel 10 (primer hito).
-3. Desbloquea el Beneficiadero.
-4. Compra tu segundo arriero.
-5. Produce 100 granos de pergamino.
-6. …
-7. Desbloquea la Empacadora.
-8. **Final de la Zona 1: «Primer gran pedido»**, entregar 1.000 bolsas al pueblo.
+**Final de la Zona 1: «Primer gran pedido»**, vender 1.000 bolsas de café. Al cobrarlo aparece la pantalla de «Zona completada» con las estadísticas y el anuncio de la Zona 2; se puede seguir jugando en modo libre.
 
-Una barra grande en la plaza del pueblo muestra el avance. Al llenarse llega una chiva de celebración, aparece la pantalla de «Zona completada» y se anuncia la Zona 2. Después se puede seguir jugando en modo libre. (El **Contenedor de exportación** es el final de todo el juego, en la Zona 6; ver §4b.)
+**Balance medido** con `npm run balance` (jugador automático, ver `tools/balance-sim.js`):
 
-**Balance objetivo:** unos 30 objetivos. El contenedor debería llenarse hacia las 3–5 horas de juego activo, o un poco más dejándolo correr. Se ajustará con un simulador (ver §10).
-
----
+| Jugador | Empacadora | Zona completada |
+|---------|-----------|-----------------|
+| Atento: sube toda la cadena junta y elige la compra más rentable | ~57 min | **~1 h 22 min** |
+| Casual: sigue la mejora recomendada y los objetivos, ahorra para construir si le queda cerca | ~2 h 50 min | **~3 h 30 min** |
 
 ## 7. Ganancias sin conexión
 
-Al volver se calcula el **flujo estable** de la cadena: el mínimo de capacidad entre producción, transporte y despacho a lo largo de la cadena. Ese flujo se multiplica por el tiempo fuera, con un máximo de 2 h (6 h con Capataz).
-
-Al tratarse de un cálculo analítico, no hace falta simular tick a tick y es instantáneo. Se muestra «Mientras no estabas, tu finca ganó X 💰».
+Al volver se **simula** el tiempo que el juego estuvo cerrado en pasos de 1 s, con un máximo de 2 h (6 h con el Capataz). Seis horas se calculan en unos 0,2 s y el resultado coincide con jugar en vivo (hay una prueba que lo verifica). Se muestra una ventana de bienvenida con lo ganado y si se alcanzó el tope.
 
 ---
 

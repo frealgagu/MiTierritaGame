@@ -28,16 +28,17 @@ export function stationOutputRate(def, level) {
   return stationRate(def, level) * amount;
 }
 
-export function dispatchCapacity(level) {
-  return Math.round((DISPATCH.capacityBase + DISPATCH.capacityPerLevel * (level - 1)) * milestoneMultiplier(level));
+// mult: efecto de investigaciones (Remolque), ver sim/modifiers.js.
+export function dispatchCapacity(level, mult = 1) {
+  return Math.round((DISPATCH.capacityBase + DISPATCH.capacityPerLevel * (level - 1)) * milestoneMultiplier(level) * mult);
 }
 
-export function dispatchRate(level) {
-  return dispatchCapacity(level) / DISPATCH.tripTime;
+export function dispatchRate(level, mult = 1) {
+  return dispatchCapacity(level, mult) / DISPATCH.tripTime;
 }
 
-export function warehouseCapacity(level) {
-  return dispatchCapacity(level) * DISPATCH.warehouseTrips;
+export function warehouseCapacity(level, mult = 1) {
+  return dispatchCapacity(level, mult) * DISPATCH.warehouseTrips;
 }
 
 // Patio de la estación: guarda ~15 s de producción (mínimo 20).

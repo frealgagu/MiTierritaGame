@@ -1,11 +1,16 @@
 import { Application } from 'pixi.js';
 import { Game } from './core/Game.js';
-import { clearSave, loadGame, saveGame } from './core/SaveSystem.js';
+import { clearSave, exportSave, importSave, loadGame, saveGame } from './core/SaveSystem.js';
 import { formatDuration, formatNumber } from './core/format.js';
 import { Scene } from './render/Scene.js';
 import { HUD } from './ui/HUD.js';
 import { StationPanel } from './ui/StationPanel.js';
 import { ChainView } from './ui/ChainView.js';
+import { GoalsView } from './ui/GoalsView.js';
+import { ResearchView } from './ui/ResearchView.js';
+import { showVictory, showWelcome } from './ui/dialogs.js';
+import { RESEARCH_BY_ID } from './data/research.js';
+import { offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
 import { Sound } from './audio/Sound.js';
 
@@ -32,7 +37,7 @@ async function start() {
 
   const saved = loadGame();
   const game = new Game(saved ?? undefined);
-  if (saved) applyOffline(game, (Date.now() - saved.savedAt) / 1000);
+  const offline = saved ? applyOffline(game, (Date.now() - saved.savedAt) / 1000) : null;
 
   const sound = new Sound();
   sound.setEnabled(game.state.settings.sound);
@@ -51,9 +56,26 @@ async function start() {
   };
   const hud = new HUD(game, scene.onSelect, () => scene.dayNight.hour);
   const chain = new ChainView(game, scene.onSelect);
+  const goals = new GoalsView(game);
+  const research = new ResearchView(game);
+
+  game.bus.on('goalClaimed', ({ goal }) => {
+    if (goal.final) {
+      sound.milestone();
+      showVictory(game.state);
+    } else {
+      sound.coin();
+      toast(`🎯 ¡Objetivo cumplido! +${formatNumber(goal.reward)} 💰`, 3000);
+    }
+  });
+  game.bus.on('research', ({ id }) => {
+    sound.milestone();
+    toast(`🔬 ${RESEARCH_BY_ID[id].name}: ${RESEARCH_BY_ID[id].desc}`, 4000);
+  });
   window.addEventListener('resize', () => scene.resize(app.screen.width, app.screen.height));
 
   if (!saved) toast('Toca el 🌳 Cafetal y mejóralo cuando tengas monedas.', 6000);
+  if (offline) showWelcome(offline, () => sound.coin());
 
   let uiTimer = 0;
   app.ticker.add((ticker) => {
@@ -66,6 +88,8 @@ async function start() {
       hud.update();
       panel.update();
       chain.update();
+      goals.update();
+      research.update();
     }
   });
 
@@ -80,7 +104,8 @@ async function start() {
       hiddenAt = Date.now();
       persist();
     } else if (hiddenAt) {
-      applyOffline(game, (Date.now() - hiddenAt) / 1000);
+      const r = applyOffline(game, (Date.now() - hiddenAt) / 1000);
+      if (r) showWelcome(r, () => sound.coin());
       hiddenAt = null;
     }
   });
@@ -90,10 +115,12 @@ async function start() {
   if (import.meta.env.DEV) window.__cafetal = { game, scene };
 }
 
+// Simula el tiempo que el juego estuvo cerrado; devuelve el resumen si hubo ganancias.
 function applyOffline(game, seconds) {
-  if (seconds < MIN_OFFLINE_S) return;
+  if (seconds < MIN_OFFLINE_S) return null;
+  const cap = offlineCapSeconds(game.state);
   const r = game.catchUp(seconds);
-  if (r.coins > 0) toast(`Mientras no estabas (${formatDuration(r.seconds)}), tu finca ganó 💰 ${formatNumber(r.coins)}`, 6000);
+  return r.coins > 0 ? { ...r, cap, capped: seconds > cap } : null;
 }
 
 function bindMenu(game, sound) {
@@ -113,6 +140,30 @@ function bindMenu(game, sound) {
     menu.hidden = false;
   });
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));
+
+  // Copia de seguridad en texto.
+  const text = document.getElementById('save-text');
+  const msg = document.getElementById('save-msg');
+  document.getElementById('export-btn').addEventListener('click', async () => {
+    text.value = exportSave(game.state);
+    text.select();
+    try {
+      await navigator.clipboard.writeText(text.value);
+      msg.textContent = '✅ Copiado. Pégalo en otro dispositivo para seguir allí.';
+    } catch {
+      msg.textContent = 'Selecciona el texto y cópialo.';
+    }
+  });
+  document.getElementById('import-btn').addEventListener('click', () => {
+    const state = importSave(text.value);
+    if (!state) {
+      msg.textContent = '⛔ Ese texto no es una partida válida de Cafetal.';
+      return;
+    }
+    resetting = true;
+    saveGame(state);
+    location.reload();
+  });
   // Confirmación en dos toques (sin diálogos del navegador).
   const reset = document.getElementById('reset-btn');
   let armed = null;

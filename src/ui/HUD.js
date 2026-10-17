@@ -1,9 +1,16 @@
 import { formatNumber, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
-import { analyzeChain } from '../sim/analysis.js';
+import { recommendUpgrade } from '../sim/analysis.js';
 import { nextToUnlock } from '../sim/chain.js';
 import { toast } from './toast.js';
 import { clockLabel } from '../render/DayNight.js';
+
+// Nombre legible de lo que se mejora: 'farm', 'farm:transport' o 'dispatch'.
+export function upgradeName(id) {
+  const [sid, part] = id.split(':');
+  if (sid === 'dispatch') return DISPATCH.name;
+  return part === 'transport' ? `Arrieros del ${STATIONS_BY_ID[sid].name}` : STATIONS_BY_ID[sid].name;
+}
 
 export class HUD {
   constructor(game, onOpen, getHour) {
@@ -13,8 +20,8 @@ export class HUD {
     this.coins = document.getElementById('coins');
     this.income = document.getElementById('income');
     this.chip = document.getElementById('bottleneck');
-    // Tocar el aviso abre la estación que frena la cadena.
-    this.chip.addEventListener('click', () => this.bottleneck && onOpen(this.bottleneck));
+    // Tocar el aviso abre la mejora recomendada.
+    this.chip.addEventListener('click', () => this.recommended && onOpen(this.recommended));
   }
 
   update() {
@@ -23,11 +30,10 @@ export class HUD {
     this.income.textContent = `+${formatRate(this.game.incomePerSecond())}/s`;
     const hour = this.getHour();
     if (hour !== undefined) this.clock.textContent = clockLabel(hour);
-    this.bottleneck = analyzeChain(s).bottleneck;
-    const [id, part] = this.bottleneck.split(':');
-    const name = id === 'dispatch' ? DISPATCH.name : part === 'transport' ? `Arrieros de ${STATIONS_BY_ID[id].name}` : STATIONS_BY_ID[id].name;
+    const rec = recommendUpgrade(s, (id, mode) => this.game.quote(id, mode));
+    this.recommended = rec.id;
     this.chip.hidden = false;
-    this.chip.textContent = `🔴 Cuello de botella: ${name}`;
+    this.chip.textContent = `💡 Mejora recomendada: ${upgradeName(rec.id)}`;
     this.hintUnlock(s);
   }
 

@@ -4,11 +4,12 @@ import { stepStation } from '../sim/production.js';
 import { CHAIN } from '../sim/chain.js';
 import { stepMules } from '../sim/transport.js';
 import { stepJeep } from '../sim/dispatch.js';
-import { buyUpgrade, quoteUnlock, quoteUpgrade, unlockStation } from '../sim/upgrades.js';
+import { offlineCapSeconds } from '../sim/modifiers.js';
+import { buyResearch, buyUpgrade, quoteResearch, quoteUnlock, quoteUpgrade, unlockStation } from '../sim/upgrades.js';
+import { claimGoal } from '../sim/goals.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
 const INCOME_WINDOW = 60; // s para calcular 💰/s
-export const OFFLINE_CAP = 2 * 3600; // s
 
 export class Game {
   constructor(state = createInitialState()) {
@@ -37,7 +38,7 @@ export class Game {
 
   // Ganancias mientras el juego estuvo cerrado: se simula en pasos de 1 s, sin efectos visuales.
   catchUp(seconds) {
-    const total = Math.min(Math.max(seconds, 0), OFFLINE_CAP);
+    const total = Math.min(Math.max(seconds, 0), offlineCapSeconds(this.state));
     const before = this.state.coins;
     this.bus.muted = true;
     for (let t = 0; t < total; t += 1) this.step(1);
@@ -66,5 +67,17 @@ export class Game {
 
   unlock(id) {
     return unlockStation(this.state, id, this.bus);
+  }
+
+  quoteResearch(id) {
+    return quoteResearch(this.state, id);
+  }
+
+  research(id) {
+    return buyResearch(this.state, id, this.bus);
+  }
+
+  claimGoal(id) {
+    return claimGoal(this.state, id, this.bus);
   }
 }
