@@ -92,8 +92,18 @@ function bindMenu(game) {
     menu.hidden = false;
   });
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));
-  document.getElementById('reset-btn').addEventListener('click', () => {
-    if (!confirm('¿Seguro? Se perderá todo el progreso.')) return;
+  // Confirmación en dos toques (sin diálogos del navegador).
+  const reset = document.getElementById('reset-btn');
+  let armed = null;
+  reset.addEventListener('click', () => {
+    if (!armed) {
+      reset.textContent = 'Toca otra vez para borrar';
+      armed = setTimeout(() => {
+        armed = null;
+        reset.textContent = 'Borrar partida';
+      }, 3000);
+      return;
+    }
     resetting = true;
     clearSave();
     location.reload();

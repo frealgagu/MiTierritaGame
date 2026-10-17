@@ -36,7 +36,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* Barra superior */
 #hud {
   position: fixed;
-  top: 12px;
+  top: calc(12px + env(safe-area-inset-top, 0px));
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -73,7 +73,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 .chip {
   position: fixed;
-  top: 70px;
+  top: calc(70px + env(safe-area-inset-top, 0px));
   left: 50%;
   transform: translateX(-50%);
   padding: 4px 12px;
@@ -89,7 +89,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .panel {
   position: fixed;
   left: 50%;
-  bottom: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   transform: translateX(-50%);
   width: min(440px, calc(100vw - 32px));
   background: var(--paper);
@@ -192,7 +192,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 .toast {
   position: fixed;
-  top: 108px;
+  top: calc(108px + env(safe-area-inset-top, 0px));
   left: 50%;
   transform: translateX(-50%);
   background: var(--paper);
