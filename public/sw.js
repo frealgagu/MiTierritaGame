@@ -1,7 +1,7 @@
 // Service worker: permite abrir el juego sin internet.
 // - La página (index.html) se pide primero a la red, para recibir las versiones nuevas.
 // - El resto (JS, CSS, iconos) se sirve desde la caché y se guarda la primera vez que se pide.
-const CACHE = 'cafetal-v28';
+const CACHE = 'cafetal-v29';
 
 self.addEventListener('install', () => self.skipWaiting());
 
