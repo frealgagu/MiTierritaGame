@@ -124,3 +124,35 @@ test('Maestría ×4 con toda la zona al 75 y Supremacía ×8 con toda al 100', a
   assert.ok(game.research('supremacia_finca'));
   assert.equal(speedMult(s, 'farm'), 32);
 });
+
+test('sin límite de reinicios: a ×2⁴⁰ (más de un billón) el juego sigue funcionando', () => {
+  let state = new Game().state;
+  for (let k = 0; k < 40; k++) state = restartState(state);
+  assert.equal(state.legacy.resets, 40);
+  assert.equal(legacyMult(state), 2 ** 40);
+  assert.equal(state.legacy.history.length, 40);
+  const game = new Game(state);
+  run(game, 60);
+  assert.ok(Number.isFinite(game.state.coins) && game.state.coins > 0, `monedas: ${game.state.coins}`);
+  // Y con todo construido, sigue cuadrando (después de arrancar, ningún patio se llena).
+  const big = everything(60, 40);
+  run(big, 400);
+  const blocked = {};
+  for (let i = 0; i < 500; i++) {
+    big.step(0.1);
+    for (const [id, st] of Object.entries(big.state.stations)) if (st.status === 'blocked') blocked[id] = (blocked[id] ?? 0) + 1;
+  }
+  assert.ok(Number.isFinite(big.state.coins));
+  assert.deepEqual(blocked, {});
+});
+
+test('los números enormes se leen: sufijos hasta Dc y luego notación científica', async () => {
+  const { formatMult, formatNumber } = await import('../src/core/format.js');
+  assert.equal(formatNumber(2.5e6), '2,50M');
+  assert.equal(formatNumber(4.2e33), '4,20Dc');
+  assert.equal(formatNumber(4.2e40), '4,20e40');
+  assert.equal(formatMult(2048), '×2.048');
+  assert.equal(formatMult(2 ** 20), '×1.048.576');
+  assert.equal(formatMult(2 ** 100), '×1,27No');
+  assert.equal(formatMult(2 ** 200), '×1,61e60');
+});

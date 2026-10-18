@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v1.7.1 — Reinicios sin límite
+- Los reinicios del segundo final nunca tuvieron tope, pero los números grandes se veían mal. Ahora, más allá de Dc (10³³), las cifras pasan a notación científica (4,20e40) y el multiplicador se muestra exacto mientras se pueda leer (×2.048, ×1.048.576) y abreviado después (×1,10T, ×1,43e45). Nuevos sufijos: Sp, Oc, No y Dc.
+- **Opciones de desarrollador**: «Reinicios» es ahora un número libre (antes, una lista hasta ×1.024) que muestra el multiplicador y se aplica mientras se escribe. Llega hasta 900 reinicios: más allá, las monedas dejarían de caber en los números de JavaScript.
+- Pruebas: 40 reinicios seguidos (×2⁴⁰) y la cadena sigue cuadrando.
+
 ## v1.7 — Hitos más fuertes, Maestría y Supremacía
 - **Hitos nuevos**: nivel 10 ×2, 25 ×2, 50 ×4, 75 ×4 y 100 ×8 (antes ×2 cada uno). Al nivel 100 una estación produce 16 veces más que antes, y sigue siendo una potencia de 2 por segundo: 4.096, 2.048, 1.024, 512 o 256. El panel y el aviso del hito dicen cuánto multiplica cada uno.
 - **Maestría** (⭐, una por zona): con todos los edificios de la zona en el nivel 75 se puede investigar y toda la zona produce ×4 (su Willys lleva ×4 también). **Supremacía** (👑): con todos en el 100, ×8 más. En 🔬 se ve cuántos edificios van en el nivel pedido. Sirven para llegar al segundo final.

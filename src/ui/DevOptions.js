@@ -1,5 +1,6 @@
 import { toast } from './toast.js';
 import { setCredit } from '../sim/upgrades.js';
+import { formatMult } from '../core/format.js';
 
 // Opciones de desarrollador, ocultas en el menú: se muestran tocando 7 veces la versión.
 // Acelerar el tiempo, permitir saldo negativo y simular reinicios del segundo final (multiplicador de
@@ -9,7 +10,9 @@ import { setCredit } from '../sim/upgrades.js';
 const KEY = 'cafetal-dev';
 const TAPS = 7;
 const MAX_SPEED = 100;
-const MAX_RESETS = 10; // hasta ×1024
+// En el juego los reinicios no tienen límite. Aquí, el de los números de JavaScript: más allá de ×2⁹⁰⁰
+// las monedas acumuladas dejarían de caber (el mayor número que se puede guardar es ~1,8e308).
+const MAX_RESETS = 900;
 
 function load() {
   try {
@@ -77,15 +80,27 @@ export function bindDevOptions(game) {
   });
   input.addEventListener('change', () => (input.value = prefs.speed = speed()));
 
-  // Multiplicador de producción: como si ya se hubiera reiniciado n veces (×2ⁿ).
+  // Multiplicador de producción: como si ya se hubiera reiniciado n veces (×2ⁿ), sin límite.
   const legacy = document.getElementById('dev-legacy');
-  legacy.innerHTML = Array.from({ length: MAX_RESETS + 1 }, (_, n) => `<option value="${n}">×${2 ** n}${n ? ` (${n} ${n > 1 ? 'reinicios' : 'reinicio'})` : ' (sin reiniciar)'}</option>`).join('');
-  const syncLegacy = () => (legacy.value = String(Math.min(MAX_RESETS, game.state.legacy?.resets ?? 0)));
+  const legacyMultText = document.getElementById('dev-legacy-mult');
+  legacy.max = MAX_RESETS;
+  const resets = () => Math.min(MAX_RESETS, Math.max(0, Math.round(Number(legacy.value) || 0)));
+  const showMult = () => (legacyMultText.textContent = `= ${formatMult(2 ** resets())}`);
+  const syncLegacy = () => {
+    legacy.value = String(game.state.legacy?.resets ?? 0);
+    showMult();
+  };
   syncLegacy();
   document.getElementById('menu-btn').addEventListener('click', syncLegacy);
+  // Como la velocidad: se aplica mientras se escribe.
+  legacy.addEventListener('input', () => {
+    if (legacy.value === '') return;
+    game.state.legacy = { history: [], ...game.state.legacy, resets: resets() };
+    showMult();
+  });
   legacy.addEventListener('change', () => {
-    game.state.legacy = { history: [], ...game.state.legacy, resets: Number(legacy.value) };
-    toast(`🔁 Producción ×${2 ** Number(legacy.value)}`);
+    legacy.value = String(resets());
+    toast(`🔁 Producción ${formatMult(2 ** resets())}`);
   });
   chip.addEventListener('click', () => setScale(1));
 

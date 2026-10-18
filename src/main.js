@@ -1,7 +1,7 @@
 import { Application } from 'pixi.js';
 import { Game } from './core/Game.js';
 import { clearSave, exportSave, importSave, loadGame, saveGame } from './core/SaveSystem.js';
-import { formatDuration, formatNumber } from './core/format.js';
+import { formatDuration, formatMult, formatNumber } from './core/format.js';
 import { Scene } from './render/Scene.js';
 import { HUD } from './ui/HUD.js';
 import { StationPanel } from './ui/StationPanel.js';
@@ -235,7 +235,7 @@ function bindMenu(game, sound, music) {
       `Tiempo jugado: ${formatDuration(s.playTime)} · Ganado en total: 💰 ${formatNumber(s.totalEarned)} · Cerezas vendidas: ${formatNumber(s.stats.sold.cherry ?? 0)}`;
     const restartBtn = document.getElementById('restart-btn');
     restartBtn.hidden = !s.mastered;
-    restartBtn.textContent = `🔁 Volver a empezar ×${legacyMult(s) * 2}`;
+    restartBtn.textContent = `🔁 Volver a empezar ${formatMult(legacyMult(s) * 2)}`;
     menu.hidden = false;
   });
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));

@@ -370,7 +370,6 @@ body.panel-open .legacy-chip { display: none; }
 .dev-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
 .dev-row label { font-weight: 600; }
 .dev-check { font-weight: 600; cursor: pointer; }
-.dev-row select { font: inherit; font-weight: 700; border: 2px solid var(--ink); border-radius: 10px; padding: 4px 8px; background: var(--paper-2); color: var(--ink); }
 .dev-row input[type='checkbox'] { width: 20px; height: 20px; flex: none; accent-color: var(--ink); }
 #coins.debt { color: #c0392b; }
 .dev-row input { width: 72px; font: inherit; font-weight: 700; border: 2px solid var(--ink); border-radius: 10px; padding: 4px 8px; background: var(--paper-2); color: var(--ink); }

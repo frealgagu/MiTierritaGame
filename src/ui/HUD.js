@@ -1,4 +1,4 @@
-import { formatNumber, formatRate } from '../core/format.js';
+import { formatMult, formatNumber, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { recommendUpgrade } from '../sim/analysis.js';
 import { legacyMult } from '../sim/modifiers.js';
@@ -44,7 +44,7 @@ export class HUD {
     // Multiplicador de producción de esta partida (tras reiniciar en el segundo final).
     const mult = legacyMult(s);
     this.legacy.hidden = mult <= 1;
-    const legacyText = `🔁 Producción ×${mult}`;
+    const legacyText = `🔁 Producción ${formatMult(mult)}`;
     if (this.legacy.textContent !== legacyText) this.legacy.textContent = legacyText;
     // En rojo si hay deuda (saldo negativo de las opciones de desarrollador).
     this.coins.classList.toggle('debt', s.coins < 0);

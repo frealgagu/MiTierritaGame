@@ -1,4 +1,4 @@
-import { formatNumber } from '../core/format.js';
+import { formatMult, formatNumber } from '../core/format.js';
 import { GOALS_BY_ZONE } from '../data/goals.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { activeGoals, goalProgress, goalText } from '../sim/goals.js';
@@ -76,7 +76,7 @@ function masteryCard(state, compact) {
   const n = maxedCount(state);
   const total = ALL_STATIONS.length;
   const action = state.mastered
-    ? `<button class="btn claim" data-mastery>🔁 Volver a empezar ×${legacyMult(state) * 2}</button>`
+    ? `<button class="btn claim" data-mastery>🔁 Volver a empezar ${formatMult(legacyMult(state) * 2)}</button>`
     : `<span class="goal-reward">🏅 Segundo final</span>`;
   return `
     <div class="goal final ${state.mastered ? 'done' : ''} ${compact ? 'compact' : ''}">

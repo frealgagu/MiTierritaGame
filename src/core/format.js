@@ -1,11 +1,16 @@
-const SUFFIXES = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx'];
+const SUFFIXES = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc'];
 
-// 950 → "950", 12345 → "12,3K", 2.5e6 → "2,50M"
+// 950 → "950", 12345 → "12,3K", 2.5e6 → "2,50M". Más allá de los sufijos (con muchos reinicios del
+// segundo final los números no tienen techo), notación científica: 4.2e40 → "4,20e40".
 export function formatNumber(n) {
   if (!Number.isFinite(n)) return '∞';
   const sign = n < 0 ? '-' : '';
   n = Math.abs(n);
   if (n < 1000) return sign + Math.floor(n).toString();
+  if (n >= 1000 ** SUFFIXES.length) {
+    const [mantissa, exp] = n.toExponential(2).split('e+');
+    return `${sign}${mantissa.replace('.', ',')}e${exp}`;
+  }
   let i = 0;
   while (n >= 1000 && i < SUFFIXES.length - 1) {
     n /= 1000;
@@ -13,6 +18,12 @@ export function formatNumber(n) {
   }
   const digits = n < 10 ? 2 : n < 100 ? 1 : 0;
   return sign + n.toFixed(digits).replace('.', ',') + SUFFIXES[i];
+}
+
+// Multiplicador de producción: exacto con puntos de miles mientras sea legible (×2.048, ×1.048.576);
+// si no, abreviado como cualquier número.
+export function formatMult(m) {
+  return `×${m < 1e12 ? Math.round(m).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : formatNumber(m)}`;
 }
 
 // Tasas por segundo: muestra decimales cuando son pequeñas.
