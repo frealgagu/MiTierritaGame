@@ -65,5 +65,14 @@ src/
 ├─ sim/      simulación pura (se prueba con Node, sin navegador)
 ├─ data/     productos, estaciones (las 6 zonas), rutas entre zonas y mapas de las zonas jugables
 ├─ render/   dibujo isométrico procedural con PixiJS
-└─ ui/       barra superior, panel de estación, avisos
+├─ ui/       barra superior, panel de estación, avisos
+└─ assets/   fuente de íconos propios (cafetal-icons.woff2)
+tools/
+├─ icons/build_icons.py   genera la fuente de íconos (cereza de café, guarapo, panela, queso campesino…)
+└─ sprites.html           los vehículos del mapa en grande (npm run dev → /tools/sprites.html)
 ```
+
+Los productos que no tienen un emoji parecido usan íconos propios: una fuente de color (COLR) con
+letras de uso privado, para que sirvan en cualquier texto igual que un emoji. Para cambiarlos o
+agregar uno: `pip install fonttools brotli && python3 tools/icons/build_icons.py` (y el código en
+`src/data/icons.js`).

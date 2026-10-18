@@ -4,15 +4,15 @@ import { PAL, OUTLINE } from './palette.js';
 import { box, shadow } from './procedural/shapes.js';
 import { PRODUCTS } from '../data/products.js';
 
-// Mula con costales y arriero de sombrero aguadeño.
+// Mula de carga con enjalma y dos costales, y su arriero de ruana y sombrero aguadeño.
 export class MuleView extends Container {
   constructor(productId) {
     super();
     this.body = new Graphics();
     this.sacks = new Graphics();
-    this.body.addChild(this.sacks);
     this.legs = new Graphics();
     this.man = new Graphics();
+    this.body.addChild(this.sacks);
     this.addChild(this.legs, this.body, this.man);
     this.phase = Math.random() * 10;
     this.drawBody(PRODUCTS[productId]?.color ?? PAL.cherry);
@@ -21,19 +21,35 @@ export class MuleView extends Container {
 
   drawBody(productColor) {
     const g = this.body;
-    shadow(g, 0, 0, 14, 5);
-    g.ellipse(0, -12, 11, 6).fill(PAL.mule).stroke(OUTLINE);
-    g.moveTo(8, -14).lineTo(14, -22).stroke({ width: 5, color: PAL.mule });
-    g.ellipse(16, -23, 5, 3.5).fill(PAL.mule).stroke(OUTLINE);
-    g.moveTo(14, -26).lineTo(13, -31).moveTo(16, -26).lineTo(16.5, -31).stroke({ width: 2, color: shade(PAL.mule, 0.6) });
-    g.moveTo(-11, -13).lineTo(-14, -6).stroke({ width: 2, color: 0x3a2418 });
-    g.rect(-6, -18, 12, 3).fill(0x8b5a2b); // enjalma
-    // Costales a lado y lado (se ocultan cuando la mula vuelve vacía).
+    const c = PAL.mule;
+    const dark = shade(c, 0.65);
+    shadow(g, 0, 0, 15, 5);
+    // Cola, cuerpo, cuello con crin y cabeza larga, de hocico oscuro y orejas largas (de mula).
+    g.moveTo(-11, -16).quadraticCurveTo(-15, -12, -14, -6).stroke({ width: 2, color: dark });
+    g.ellipse(-14, -5.5, 1.5, 2.6).fill(0x3a2418);
+    g.roundRect(-12, -20, 22, 10, 5).fill(c).stroke(OUTLINE);
+    g.ellipse(-1, -11.5, 8, 1.6).fill(shade(c, 1.18));
+    g.poly([5, -18, 10, -19, 16, -27, 13, -30, 6, -22]).fill(c).stroke(OUTLINE);
+    g.poly([7, -20, 12, -28, 13.5, -30, 9, -22.5]).fill(0x3a2418);
+    g.poly([12, -31, 16.5, -31, 22, -25, 21, -21.5, 17.5, -21.5, 13, -27]).fill(c).stroke(OUTLINE);
+    g.ellipse(20.2, -22.6, 2.3, 1.9).fill(0x4a2f1c);
+    g.circle(16, -28, 0.9).fill(0x1a1a1a);
+    g.poly([12.5, -30.5, 10.8, -35.5, 14, -31]).fill(dark).stroke(OUTLINE);
+    g.poly([14.5, -31, 15.2, -36, 16.5, -30.5]).fill(c).stroke(OUTLINE);
+    // Jáquima (cabezal) de cuero.
+    g.moveTo(13.5, -27).lineTo(19, -24).stroke({ width: 1, color: 0x2b1d14 });
+    // Enjalma: manta de colores sobre el lomo.
+    g.roundRect(-8, -22, 13, 7, 2).fill(0xc8643b).stroke(OUTLINE);
+    g.rect(-8, -19.5, 13, 1.3).fill(0xe8b90f);
+    g.rect(-8, -17.2, 13, 1).fill(0x2e6fd1);
+    // Costales de fique a lado y lado, amarrados, con una franja del color del producto (se ocultan
+    // cuando la mula vuelve vacía).
     const k = this.sacks;
-    k.ellipse(-3, -17, 6, 5).fill(PAL.sack).stroke(OUTLINE);
-    k.ellipse(4, -17, 6, 5).fill(PAL.sack).stroke(OUTLINE);
-    k.ellipse(-3, -21, 3, 1.5).fill(productColor);
-    k.ellipse(4, -21, 3, 1.5).fill(productColor);
+    k.roundRect(-10, -27, 9, 11, 3.5).fill(shade(PAL.sack, 0.85)).stroke(OUTLINE);
+    k.roundRect(-1.5, -27.5, 9, 12, 3.5).fill(PAL.sack).stroke(OUTLINE);
+    k.rect(-9, -23.5, 7, 2.2).fill(productColor);
+    k.rect(-0.5, -24, 7, 2.4).fill(productColor);
+    k.moveTo(-10, -20).lineTo(7.5, -20).stroke({ width: 1, color: 0x6b4a2e });
   }
 
   setLoaded(loaded) {
@@ -42,15 +58,25 @@ export class MuleView extends Container {
 
   drawMan() {
     const g = this.man;
-    g.position.set(-4, 7);
+    g.position.set(-5, 7);
     shadow(g, 0, 0, 6, 2.5);
-    g.rect(-3, -9, 2.2, 9).fill(0x3d3d5c);
-    g.rect(0.8, -9, 2.2, 9).fill(0x3d3d5c);
-    g.poly([-6, -10, 6, -10, 0, -20]).fill(0xc8643b).stroke(OUTLINE); // poncho
-    g.circle(0, -22, 3.5).fill(0xc68642);
-    g.ellipse(0, -25, 7, 2).fill(0xf4efe6).stroke(OUTLINE); // ala del sombrero
-    g.roundRect(-3.5, -30, 7, 5, 2).fill(0xf4efe6).stroke(OUTLINE);
-    g.rect(-3.5, -27, 7, 1.5).fill(0x222222);
+    // Pantalón blanco y alpargatas.
+    g.rect(-3, -9, 2.4, 9).fill(0xf4efe6).stroke({ width: 0.8, color: PAL.outline, alpha: 0.5 });
+    g.rect(0.6, -9, 2.4, 9).fill(0xf4efe6).stroke({ width: 0.8, color: PAL.outline, alpha: 0.5 });
+    g.rect(-3.4, -1, 3, 1.4).fill(0x6b4a2e);
+    g.rect(0.4, -1, 3, 1.4).fill(0x6b4a2e);
+    // Vara de arriero en la mano.
+    g.moveTo(5, -12).lineTo(9, 0).stroke({ width: 1.2, color: 0x6b4a2e });
+    // Ruana a rayas y carriel (bolso de cuero) cruzado.
+    g.poly([-6.5, -9, 6.5, -9, 4, -19, -4, -19]).fill(0xb5512e).stroke(OUTLINE);
+    g.rect(-6, -12, 12, 1.2).fill(0xe8b90f);
+    g.moveTo(-3.5, -18).lineTo(4, -10).stroke({ width: 1, color: 0x5e3b1c });
+    g.roundRect(3, -11.5, 4, 3.5, 1).fill(0x8b5a2b).stroke(OUTLINE);
+    g.circle(0, -21.5, 3.4).fill(0xc68642);
+    // Sombrero aguadeño: ala ancha blanca, copa alta y cinta negra.
+    g.ellipse(0, -24, 7.5, 2.2).fill(0xf4efe6).stroke(OUTLINE);
+    g.roundRect(-3.5, -30, 7, 6, 2).fill(0xf4efe6).stroke(OUTLINE);
+    g.rect(-3.5, -26.6, 7, 1.6).fill(0x222222);
   }
 
   place(gx, gy, dx, dy, t) {
@@ -62,65 +88,44 @@ export class MuleView extends Container {
     const step = Math.sin((t + this.phase) * 12);
     this.body.y = Math.abs(step) * -1.2;
     this.man.y = 7 + Math.abs(Math.cos((t + this.phase) * 12)) * -1;
-    this.legs.clear();
-    for (const [lx, k] of [[-8, 1], [-5, -1], [6, -1], [9, 1]]) {
-      this.legs.moveTo(lx, -9).lineTo(lx + step * 2.5 * k, 0).stroke({ width: 2, color: 0x4a3020 });
+    // Patas con cascos, en pares cruzados al andar.
+    const g = this.legs.clear();
+    for (const [lx, k] of [[-9, 1], [-6, -1], [5, -1], [8, 1]]) {
+      const fx = lx + step * 2.5 * k;
+      g.moveTo(lx, -11).lineTo(fx, -0.8).stroke({ width: 2.4, color: shade(PAL.mule, 0.75) });
+      g.rect(fx - 1.4, -1.2, 2.8, 1.4).fill(0x2b1d14);
     }
   }
 }
 
-// Jeep Willys: dos versiones de la caja según el eje por el que circula.
+// Jeep Willys («yipao»): capó con parrilla y faros adelante, parabrisas bajo, el conductor de
+// sombrero, el platón abierto atrás con los bultos y la llanta de repuesto en la cola. Se dibuja
+// mirando hacia donde va: (u, v) son las coordenadas del jeep (u hacia adelante) y cada dirección
+// las pasa a la cuadrícula.
+const JEEP_DIRS = {
+  '+x': (u, v) => [u, v],
+  '-x': (u, v) => [-u, -v],
+  '+y': (u, v) => [-v, u],
+  '-y': (u, v) => [v, -u],
+};
+const JEEP_L = 0.48; // medio largo (casillas)
+const JEEP_W = 0.27; // medio ancho
+
 export class JeepView extends Container {
   constructor() {
     super();
-    this.alongY = new Container();
-    this.alongX = new Container();
-    this.bodyY = this.drawJeep(false);
-    this.bodyX = this.drawJeep(true);
-    this.cargoY = new Graphics();
-    this.cargoX = new Graphics();
-    this.alongY.addChild(this.bodyY, this.cargoY);
-    this.alongX.addChild(this.bodyX, this.cargoX);
-    this.addChild(this.alongY, this.alongX);
-    this.cargo = -1;
+    this.g = new Graphics();
+    this.addChild(this.g);
+    this.dir = '+x';
+    this.cargo = 0;
+    this.drawn = null;
   }
 
-  drawJeep(alongX) {
-    const g = new Graphics();
-    const [w, d] = alongX ? [1.0, 0.55] : [0.55, 1.0];
-    const x0 = -w / 2;
-    const y0 = -d / 2;
-    const s = iso(0, 0);
-    shadow(g, s.x, s.y + 2, 30, 13, 0.28);
-    // Ruedas.
-    const wheels = alongX
-      ? [[x0 + 0.2, y0 + d], [x0 + w - 0.2, y0 + d], [x0 + w, y0 + 0.15], [x0 + w, y0 + d - 0.15]]
-      : [[x0 + w, y0 + 0.2], [x0 + w, y0 + d - 0.2], [x0 + 0.15, y0 + d], [x0 + w - 0.15, y0 + d]];
-    for (const [wx, wy] of wheels) {
-      const p = iso(wx, wy, 4);
-      g.ellipse(p.x, p.y, 4.5, 4.5).fill(0x2b2b2b);
-      g.circle(p.x, p.y, 1.6).fill(0x999999);
-    }
-    box(g, x0, y0, w, d, 9, PAL.jeep, { z: 4 });
-    // Capó (más bajo) y parabrisas.
-    if (alongX) {
-      box(g, x0, y0 + 0.05, 0.08, d - 0.1, 12, 0x2b3b25, { z: 13 });
-    } else {
-      box(g, x0 + 0.05, y0 + d - 0.12, w - 0.1, 0.06, 12, 0x2b3b25, { z: 13 });
-    }
-    g.cargoBase = { x0, y0, w, d, alongX };
-    return g;
-  }
-
-  drawCargo(g, base, n) {
-    g.clear();
-    const { x0, y0, w, d, alongX } = base;
-    for (let i = 0; i < n; i++) {
-      const f = (i % 3) / 3 + 0.15;
-      const z = 13 + Math.floor(i / 3) * 6;
-      const p = alongX ? iso(x0 + 0.15 + f * (w * 0.6), y0 + d / 2, z) : iso(x0 + w / 2, y0 + 0.1 + f * (d * 0.6), z);
-      g.ellipse(p.x, p.y - 3, 7, 5).fill(PAL.sack).stroke(OUTLINE);
-    }
+  draw() {
+    const key = `${this.dir}:${this.cargo}`;
+    if (key === this.drawn) return;
+    this.drawn = key;
+    drawWillys(this.g.clear(), JEEP_DIRS[this.dir], this.cargo);
   }
 
   // load: 0..1 de llenado.
@@ -128,17 +133,109 @@ export class JeepView extends Container {
     const p = iso(gx, gy);
     this.position.set(p.x, p.y);
     this.zIndex = depth(gx, gy) + 0.2;
-    const alongX = Math.abs(dx) > Math.abs(dy);
-    this.alongX.visible = alongX;
-    this.alongY.visible = !alongX;
+    // Parado (cargando en la bodega) sigue mirando hacia donde iba.
+    if (dx || dy) this.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? '+x' : '-x') : dy > 0 ? '+y' : '-y';
     // Como mucho lleno: si la capacidad baja de golpe (menos reinicios en las opciones de desarrollador),
     // la carga en camino puede ser miles de millones de veces la nueva y no hay que dibujar tantos bultos.
-    const n = load <= 0 ? 0 : Math.max(1, Math.round(Math.min(1, load) * 6));
-    if (n !== this.cargo) {
-      this.cargo = n;
-      this.drawCargo(this.cargoX, this.bodyX.cargoBase, n);
-      this.drawCargo(this.cargoY, this.bodyY.cargoBase, n);
+    this.cargo = load <= 0 ? 0 : Math.max(1, Math.round(Math.min(1, load) * 6));
+    this.draw();
+  }
+}
+
+function drawWillys(g, toGrid, sacks) {
+  const L = JEEP_L;
+  const W = JEEP_W;
+  const at = (u, v, z) => {
+    const [x, y] = toGrid(u, v);
+    return iso(x, y, z);
+  };
+  const flat = (points) => points.flatMap(([u, v, z]) => {
+    const p = at(u, v, z);
+    return [p.x, p.y];
+  });
+  // Caja con la huella (u0..u1, v0..v1) del jeep, pasada a la cuadrícula.
+  const lbox = (u0, u1, v0, v1, z, h, color) => {
+    const corners = [toGrid(u0, v0), toGrid(u1, v1)];
+    const x = Math.min(corners[0][0], corners[1][0]);
+    const y = Math.min(corners[0][1], corners[1][1]);
+    box(g, x, y, Math.abs(corners[1][0] - corners[0][0]), Math.abs(corners[1][1] - corners[0][1]), h, color, { z });
+  };
+  // Qué se ve desde la cámara: las caras que miran a +x o +y.
+  const facing = (u, v) => {
+    const [x, y] = toGrid(u, v);
+    return x > 0 || y > 0;
+  };
+  const frontSeen = facing(1, 0);
+  const nearSide = facing(0, 1) ? 1 : -1;
+  const depthOf = (u, v) => {
+    const [x, y] = toGrid(u, v);
+    return x + y;
+  };
+  const o = at(0, 0, 0);
+  shadow(g, o.x, o.y + 2, 30, 13, 0.28);
+
+  const wheel = (u, v) => {
+    const p = at(u, v, 4.5);
+    g.circle(p.x, p.y, 4.8).fill(0x2b2b2b);
+    g.circle(p.x, p.y, 1.8).fill(0x9a9a9a);
+  };
+  const wheels = [[0.3, W], [-0.3, W], [0.3, -W], [-0.3, -W]];
+  for (const [u, v] of wheels) if (Math.sign(v) !== nearSide) wheel(u, v);
+
+  // Carrocería, capó un poco más alto y el platón abierto (el piso oscuro).
+  lbox(-L, L, -W, W, 4, 7, PAL.jeep);
+  lbox(0.17, L - 0.02, -W + 0.04, W - 0.04, 11, 2.5, shade(PAL.jeep, 1.12));
+  g.poly(flat([[-L + 0.05, -W + 0.05, 11], [0.13, -W + 0.05, 11], [0.13, W - 0.05, 11], [-L + 0.05, W - 0.05, 11]])).fill(0x2f4a24);
+
+  // Lo que va en el platón (bultos y conductor) y el parabrisas, de atrás hacia adelante.
+  const items = [];
+  const spots = [[-0.36, -0.1], [-0.36, 0.1], [-0.22, -0.1], [-0.22, 0.1], [-0.08, 0.1], [-0.36, 0]];
+  for (let i = 0; i < sacks; i++) {
+    const [u, v] = spots[i];
+    const z = i < 5 ? 13 : 18;
+    items.push([depthOf(u, v) + z * 0.001, () => {
+      const p = at(u, v, z);
+      g.ellipse(p.x, p.y - 2, 6.5, 4.8).fill(PAL.sack).stroke(OUTLINE);
+      g.rect(p.x - 4, p.y - 3, 8, 1.4).fill(shade(PAL.sack, 0.8));
+    }]);
+  }
+  items.push([depthOf(0.02, -0.11), () => {
+    const p = at(0.02, -0.11, 11);
+    g.poly([p.x - 3.5, p.y, p.x + 3.5, p.y, p.x + 2.5, p.y - 7, p.x - 2.5, p.y - 7]).fill(0xb5512e).stroke(OUTLINE);
+    g.circle(p.x, p.y - 9, 2.6).fill(0xc68642);
+    g.ellipse(p.x, p.y - 11, 5.5, 1.7).fill(0xf4efe6).stroke(OUTLINE);
+    g.roundRect(p.x - 2.6, p.y - 15, 5.2, 4.2, 1.5).fill(0xf4efe6).stroke(OUTLINE);
+    g.rect(p.x - 2.6, p.y - 12.4, 5.2, 1.1).fill(0x222222);
+  }]);
+  items.push([depthOf(0.16, 0), () => {
+    lbox(0.15, 0.18, -W + 0.02, W - 0.02, 11, 10, 0xbfe3f0);
+  }]);
+  items.sort((a, b) => a[0] - b[0]);
+  for (const [, draw] of items) draw();
+
+  for (const [u, v] of wheels) if (Math.sign(v) === nearSide) wheel(u, v);
+
+  if (frontSeen) {
+    // Parrilla de rejas verticales, faros redondos y parachoques.
+    g.poly(flat([[L, -0.12, 5], [L, 0.12, 5], [L, 0.12, 12.5], [L, -0.12, 12.5]])).fill(0x22301c);
+    for (let i = 1; i < 6; i++) {
+      const v = -0.12 + (0.24 * i) / 6;
+      const a = at(L, v, 5.5);
+      const b = at(L, v, 12);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 0.9, color: 0x8fa77a });
     }
+    for (const v of [-0.19, 0.19]) {
+      const p = at(L, v, 9.5);
+      g.circle(p.x, p.y, 2.3).fill(0xfff3c4).stroke(OUTLINE);
+    }
+    const b0 = at(L + 0.02, -W, 4.5);
+    const b1 = at(L + 0.02, W, 4.5);
+    g.moveTo(b0.x, b0.y).lineTo(b1.x, b1.y).stroke({ width: 2, color: 0x2b2b2b });
+  } else {
+    // Llanta de repuesto en la cola.
+    const p = at(-L - 0.01, 0, 8);
+    g.circle(p.x, p.y, 4.6).fill(0x2b2b2b);
+    g.circle(p.x, p.y, 1.9).fill(0x9a9a9a);
   }
 }
 

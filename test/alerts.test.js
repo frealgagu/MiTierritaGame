@@ -22,17 +22,17 @@ function fake() {
 
 test('un patio lleno un momento no es un aviso; si dura, sí', () => {
   const { st, run } = fake();
-  run('working', 30);
-  run('blocked', 10); // un tercio de la ventana: normal con las mulas por tandas
+  run('working', 10);
+  run('blocked', 3); // un tercio de la ventana: normal con las mulas por tandas
   assert.equal(alerts(st).blocked, false);
-  run('working', 30);
-  run('blocked', 16); // más de la mitad de los últimos 30 s
+  run('working', 10);
+  run('blocked', 7); // más de la mitad de los últimos 10 s
   assert.equal(alerts(st).blocked, true);
   // No parpadea: un respiro corto no lo quita.
-  run('working', 5);
+  run('working', 3);
   assert.equal(alerts(st).blocked, true);
   // Se quita cuando ya casi no pasa.
-  run('working', 25);
+  run('working', 9);
   assert.equal(alerts(st).blocked, false);
 });
 
@@ -44,7 +44,7 @@ test('esperar entre tanda y tanda no es un aviso; quedarse sin nada largo rato, 
     run('working', 1);
   }
   assert.equal(alerts(st).starved, false);
-  run('starved', 30);
+  run('starved', 15);
   assert.equal(alerts(st).starved, true);
 });
 
@@ -65,8 +65,6 @@ test('la Finca nivelada no avisa nada; con los arrieros atrás, avisa que no dan
     assert.equal(alerts(s.zones.finca).full, false);
   }
   s.stations.wetmill.transport.level = 1;
-  for (let t = 0; t < 5; t += 0.1) game.step(0.1);
-  assert.equal(alerts(s.stations.wetmill).blocked, false, 'todavía no: puede ser un momento');
   for (let t = 0; t < 60; t += 0.1) game.step(0.1);
   assert.equal(alerts(s.stations.wetmill).blocked, true);
   assert.equal(alerts(s.stations.wetmill).waiting, 'mules');

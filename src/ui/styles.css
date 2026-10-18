@@ -1,3 +1,12 @@
+/* Íconos propios del juego (src/data/icons.js): solo tiene letras de uso privado, así que va primero
+   en la lista de fuentes y el resto del texto sigue en Fredoka. */
+@font-face {
+  font-family: 'Cafetal Icons';
+  src: url('../assets/cafetal-icons.woff2') format('woff2');
+  unicode-range: U+E000-E0FF;
+  font-display: block;
+}
+
 :root {
   --ink: #3a2418;
   --paper: #fff8ec;
@@ -20,7 +29,7 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  font-family: 'Fredoka', 'Baloo 2', system-ui, sans-serif;
+  font-family: 'Cafetal Icons', 'Fredoka', 'Baloo 2', system-ui, sans-serif;
   color: var(--ink);
   background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 70%);
   user-select: none;

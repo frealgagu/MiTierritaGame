@@ -17,6 +17,7 @@ import { ZonesView } from './ui/ZonesView.js';
 import { ZONES_BY_ID } from './data/zones/index.js';
 import { ROUTES_BY_ID } from './data/routes.js';
 import { STATIONS_BY_ID } from './data/stations.js';
+import { ICON, ICON_FONT } from './data/icons.js';
 import { RESEARCH_BY_ID } from './data/research.js';
 import { legacyMult, offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
@@ -30,7 +31,8 @@ let resetting = false;
 
 async function start() {
   try {
-    await document.fonts.load('600 16px Fredoka');
+    // La fuente de los íconos propios también: el mapa los dibuja en textos de Pixi.
+    await Promise.all([document.fonts.load('600 16px Fredoka'), document.fonts.load(`16px "${ICON_FONT}"`, Object.values(ICON).join(''))]);
   } catch {
     // sin fuente web: se usa la del sistema
   }

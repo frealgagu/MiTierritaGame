@@ -3,9 +3,9 @@ import { warehouseSpace } from './transport.js';
 // Avisos que duran: con todo nivelado, el producto viaja por tandas y es normal que un patio se
 // llene un momento, que una estación espere la siguiente mula o que un viaje se desvíe a la
 // bodega. Eso no es un problema. Un aviso (el ícono del mapa y el texto del panel) sale solo si
-// el problema ocupa al menos la mitad de los últimos 30 s de juego, y se quita cuando baja de la
+// el problema ocupa al menos la mitad de los últimos 10 s de juego, y se quita cuando baja de la
 // quinta parte (para que no parpadee).
-export const ALERT_WINDOW = 30; // s de juego
+export const ALERT_WINDOW = 10; // s de juego
 const BUCKET = 1; // s por casilla de la ventana
 const ON = 0.5;
 const OFF = 0.2;

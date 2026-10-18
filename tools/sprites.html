@@ -1,0 +1,50 @@
+<!doctype html>
+<!-- Vista de los vehículos del mapa en grande (solo para desarrollar): npm run dev → /tools/sprites.html -->
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cafetal · vehículos</title>
+    <style>body { margin: 0; background: #7dba4e; }</style>
+  </head>
+  <body>
+    <script type="module">
+      import { Application, Container, Graphics } from 'pixi.js';
+      import { ChivaView, JeepView, MuleView } from '../src/render/Carriers.js';
+      import { iso } from '../src/render/iso.js';
+
+      const app = new Application();
+      await app.init({ width: 1200, height: 520, background: 0x7dba4e, antialias: true, resolution: 2, autoDensity: true });
+      document.body.appendChild(app.canvas);
+      const world = new Container();
+      world.scale.set(3);
+      app.stage.addChild(world);
+      // Cuatro direcciones (+x, −x, +y, −y), con la carga a medias, y una vacía.
+      const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+      const views = [];
+      dirs.forEach(([dx, dy], i) => {
+        const x = 40 + i * 95;
+        const road = new Graphics();
+        const a = iso(-0.6 * dx, -0.6 * dy), b = iso(0.6 * dx, 0.6 * dy);
+        road.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 10, color: 0xc79a64 });
+        for (const [y, make, load] of [[40, () => new JeepView(), 0.5], [100, () => new MuleView('cherry'), true], [150, () => new ChivaView('panela_powder'), 0.5]]) {
+          const c = new Container();
+          c.position.set(x, y);
+          const r = road.clone();
+          const v = make();
+          c.addChild(r, v);
+          world.addChild(c);
+          views.push({ v, dx, dy, load });
+        }
+      });
+      app.ticker.add((t) => {
+        for (const { v, dx, dy, load } of views) {
+          if (v instanceof MuleView) {
+            v.place(0, 0, dx, dy, performance.now() / 1000);
+            v.setLoaded(load);
+          } else v.place(0, 0, dx, dy, load);
+        }
+      });
+      window.ready = true;
+    </script>
+  </body>
+</html>

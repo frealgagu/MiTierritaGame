@@ -427,7 +427,7 @@ Sintetizado con Web Audio, sin archivos: clic de botones, monedas al vender, arp
   - Monedas que saltan del Willys al llegar al pueblo.
   - Humo en la tostadora, vapor en el beneficiadero y granos esparcidos en la marquesina.
   - Destello y pequeño rebote al subir de nivel; confeti y cambio de modelo en cada hito.
-  - **Indicadores de estado sobre cada estación:** ⏸️ esperando entrada · ⛔ salida llena · ↪️ desviando a bodega. Desde la v1.7.8 solo salen si el problema dura: ocupa al menos la mitad de los últimos 30 s de juego (esperar cuenta solo en rachas de 8 s o más sin entrada), y se quitan cuando baja de la quinta parte. Con todo nivelado, el producto viaja por tandas y los momentos sueltos de patio lleno o de espera son normales. El aviso del panel usa el mismo criterio. La Compostera llena no se marca (es compost de sobra).
+  - **Indicadores de estado sobre cada estación:** ⏸️ esperando entrada · ⛔ salida llena · ↪️ desviando a bodega. Desde la v1.7.8 solo salen si el problema dura: ocupa al menos la mitad de los últimos 10 s de juego (30 s en la v1.7.8) (esperar cuenta solo en rachas de 8 s o más sin entrada), y se quitan cuando baja de la quinta parte. Con todo nivelado, el producto viaja por tandas y los momentos sueltos de patio lleno o de espera son normales. El aviso del panel usa el mismo criterio. La Compostera llena no se marca (es compost de sobra).
 - **UI:**
   - Barra superior: 💰 y 💰/s.
   - Panel inferior de la estación seleccionada: nivel, velocidad, buffers, arrieros, botones de mejora ×1/×10/máx.

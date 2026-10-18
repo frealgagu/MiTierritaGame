@@ -2,6 +2,8 @@
 // Las zonas posteriores valen más (×5 en el Trapiche) porque arrancan con la economía de las anteriores.
 // `value` es el precio de venta base en monedas; 0 = no se vende (subproducto o final).
 // `color` se usa para los costales de las mulas y los iconos.
+// `icon`: un emoji o un ícono propio (ICON, de la fuente del juego) cuando no hay emoji parecido.
+import { ICON } from './icons.js';
 
 export const ZONES = [
   { id: 'finca', name: 'La Finca', release: '0.1' },
@@ -14,7 +16,7 @@ export const ZONES = [
 
 export const PRODUCTS = {
   // Zona 1 · La Finca
-  cherry: { name: 'Cereza de café', zone: 'finca', value: 1, icon: '🍒', color: 0xd7263d },
+  cherry: { name: 'Cereza de café', zone: 'finca', value: 1, icon: ICON.cherry, color: 0xd7263d },
   washed: { name: 'Café lavado', zone: 'finca', value: 3, icon: '💧', color: 0xe9d8a6 },
   pulp: { name: 'Pulpa', zone: 'finca', value: 0, icon: '🟥', color: 0x9b2335 },
   parchment: { name: 'Café pergamino', zone: 'finca', value: 6, icon: '🟫', color: 0xcfae7a },
@@ -26,18 +28,18 @@ export const PRODUCTS = {
 
   // Zona 2 · El Trapiche
   cane: { name: 'Caña', zone: 'trapiche', value: 10, icon: '🎋', color: 0x9cc65b },
-  guarapo: { name: 'Guarapo', zone: 'trapiche', value: 25, icon: '🥤', color: 0xd8e2a0 },
+  guarapo: { name: 'Guarapo', zone: 'trapiche', value: 25, icon: ICON.guarapo, color: 0xd8e2a0 },
   bagasse: { name: 'Bagazo', zone: 'trapiche', value: 0, icon: '🌾', color: 0xd9c38c },
   melado: { name: 'Melado', zone: 'trapiche', value: 60, icon: '🍯', color: 0xc98a2b },
-  panela: { name: 'Panela', zone: 'trapiche', value: 150, icon: '🟧', color: 0xb5651d },
-  panela_powder: { name: 'Panela pulverizada', zone: 'trapiche', value: 250, icon: '🧂', color: 0xd9a066 },
+  panela: { name: 'Panela', zone: 'trapiche', value: 150, icon: ICON.panela, color: 0xb5651d },
+  panela_powder: { name: 'Panela pulverizada', zone: 'trapiche', value: 250, icon: ICON.panelaPowder, color: 0xe8b23a },
 
   // Zona 3 · La Lechería (×25 respecto al primer borrador, igual que el Trapiche ×5)
   raw_milk: { name: 'Leche cruda', zone: 'lecheria', value: 125, icon: '🥛', color: 0xf4f1e8 },
-  milk: { name: 'Leche pasteurizada', zone: 'lecheria', value: 300, icon: '🍼', color: 0xffffff },
-  cream: { name: 'Crema de leche', zone: 'lecheria', value: 800, icon: '🍦', color: 0xfff3d6 },
+  milk: { name: 'Leche pasteurizada', zone: 'lecheria', value: 300, icon: ICON.milk, color: 0xffffff },
+  cream: { name: 'Crema de leche', zone: 'lecheria', value: 800, icon: ICON.cream, color: 0xfff3d6 },
   butter: { name: 'Mantequilla', zone: 'lecheria', value: 2000, icon: '🧈', color: 0xf6d860 },
-  cheese: { name: 'Queso campesino', zone: 'lecheria', value: 2400, icon: '🧀', color: 0xf3e3b0 },
+  cheese: { name: 'Queso campesino', zone: 'lecheria', value: 2400, icon: ICON.cheese, color: 0xf7f2e2 },
   arequipe: { name: 'Arequipe', zone: 'lecheria', value: 4000, icon: '🍮', color: 0xa0522d },
 
   // Zona 4 · El Cacaotal (×125 respecto al primer borrador)

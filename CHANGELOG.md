@@ -1,5 +1,17 @@
 # Registro de cambios
 
+## v1.7.9 — Íconos propios, mulas y Willys nuevos
+- **Íconos propios** para los productos que no tenían un emoji parecido, dibujados para el juego:
+  - Cereza de café: un racimo de granos ovalados rojos con su «ombligo» (y uno todavía verde) en la rama con hojas, en vez de la cereza común.
+  - Guarapo: vaso de jugo de caña verde amarillento con espuma, hielo, limón y un trozo de caña, en vez del vaso de agua.
+  - Panela: bloque de molde, café dorado, sobre hoja seca de plátano.
+  - Panela pulverizada: dorada y amarilla, en una totuma, en vez del salero (parecía azúcar).
+  - Lechería: queso campesino **blanco** sobre hoja de plátano (en vez del queso amarillo), botella de leche (en vez del tetero) y pote de crema de leche con cuchara (en vez del cono de helado). También para la Quesera, la Descremadora y sus investigaciones. La mantequilla sigue igual.
+  - Son una fuente de color hecha con `tools/icons/build_icons.py`, así que se ven en todos lados: paneles, objetivos, cadena y textos del mapa.
+- **Willys** redibujado: ahora mira hacia donde va (antes, en dos de las cuatro direcciones iba en reversa), con capó, parrilla y faros adelante, parabrisas bajo, el conductor de sombrero, el platón abierto con los bultos y la llanta de repuesto atrás. Ya no parece una volqueta.
+- **Mulas** redibujadas: cabeza larga de hocico oscuro y orejas de mula, crin, cola, cascos, enjalma de colores y costales de fique amarrados con la franja del color del producto. El arriero lleva pantalón blanco, alpargatas, ruana a rayas, carriel, vara y sombrero aguadeño.
+- Los avisos de las estaciones miran ahora los últimos **10 s** (antes 30): salen si el problema ocupa al menos la mitad de ese tiempo.
+
 ## v1.7.8 — Avisos solo si el problema dura
 - Los íconos sobre las estaciones (⛔ patio lleno, ↪️ desviando, ⏸️ esperando) salían apenas pasaba algo, aunque fuera un instante. Con todo nivelado el producto viaja por tandas, así que es normal que un patio se llene un momento, que una estación espere la siguiente mula o que un viaje se desvíe a la bodega, y parecía un problema sin serlo.
 - Ahora un aviso sale solo si el problema ocupa al menos la mitad de los últimos 30 s de juego, y se quita cuando baja de la quinta parte (así no parpadea). «Esperando» cuenta solo en las rachas de 8 s o más sin que llegue nada: la Hornilla con bagazo, más rápida que el Trapiche, ya no se marca siempre con ⏸️.
