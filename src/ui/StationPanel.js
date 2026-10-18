@@ -16,6 +16,7 @@ import {
   BELT_LEVEL,
   hasBelt,
   warehouseCapacity,
+  milestoneBoost,
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
 import { busyMules, dockStock, exportsOf, legTime, normalDest, productionMult, teamCapacity, teamLoad, warehouseSpace } from '../sim/transport.js';
@@ -24,7 +25,7 @@ import { COMPOST_VALUE, compostValueBoost, muleSpeedMult, saleValue } from '../s
 import { PARENT, consumers, zoneOf } from '../sim/chain.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive, routeCapacity, routeRate, routeStations, stationImportRate } from '../sim/routes.js';
-import { legacyMult, speedMult } from '../sim/modifiers.js';
+import { capMult, speedMult } from '../sim/modifiers.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { dispatchMult } from '../sim/modifiers.js';
 
@@ -222,7 +223,7 @@ export class StationPanel {
     if (next) {
       const prev = [...MILESTONES].reverse().find((m) => m <= level) ?? 1;
       const what = typeof info.milestoneWhat === 'function' ? info.milestoneWhat(next) : info.milestoneWhat;
-      r.milestoneText.textContent = `Próximo hito: nivel ${next} (×2 ${what})`;
+      r.milestoneText.textContent = `Próximo hito: nivel ${next} (×${milestoneBoost(next)} ${what})`;
       r.milestoneBar.style.width = `${((level - prev) / (next - prev)) * 100}%`;
     } else {
       r.milestoneText.textContent = '¡Todos los hitos conseguidos!';
@@ -256,7 +257,7 @@ function stationInfo(id) {
     },
   ];
   if (inId) {
-    rows.push({ key: 'input', label: 'Entrada', value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l, legacyMult(s)))} ${PRODUCTS[inId].icon}` });
+    rows.push({ key: 'input', label: 'Entrada', value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${PRODUCTS[inId].icon}` });
   }
   for (const imp of def.imports ?? []) {
     const product = PRODUCTS[imp.product];
@@ -272,18 +273,18 @@ function stationInfo(id) {
     rows.push({
       key: 'fuel',
       label: `${fuel.name} (combustible)`,
-      value: (s, l) => `${formatAmount(s.stations[id].fuel ?? 0)} / ${formatNumber(stationInputCap(def, l, legacyMult(s)))} ${fuel.icon} · ${(s.stations[id].fuel ?? 0) > 0 ? `×${def.fuel.boost} 🔥` : 'sin fuego extra'}`,
+      value: (s, l) => `${formatAmount(s.stations[id].fuel ?? 0)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${fuel.icon} · ${(s.stations[id].fuel ?? 0) > 0 ? `×${def.fuel.boost} 🔥` : 'sin fuego extra'}`,
     });
   }
   if (def.side) {
     rows.push(
-      { key: 'buffer', label: 'Compost guardado', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, legacyMult(s)))} ${out.icon}` },
+      { key: 'buffer', label: 'Compost guardado', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, capMult(s, id)))} ${out.icon}` },
       { key: 'effect', label: 'Ventas de la Finca ahora', value: (s) => (compostValueBoost(s) > 1 ? `+${pct(COMPOST_VALUE)} (hay compost)` : 'sin bono (no hay compost)') },
       { key: 'sustain', label: 'Puede sostener', value: (s) => `+${pct(expectedCompostValue(s))} de +${pct(COMPOST_VALUE)}` },
     );
   } else {
     rows.push(
-      { key: 'buffer', label: 'Patio (por enviar)', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, legacyMult(s)))} ${out.icon}` },
+      { key: 'buffer', label: 'Patio (por enviar)', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, capMult(s, id)))} ${out.icon}` },
       {
         key: 'value',
         label: 'Precio de venta',

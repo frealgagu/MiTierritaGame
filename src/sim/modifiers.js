@@ -1,6 +1,7 @@
 // Efectos de las investigaciones compradas. Todas las cuentas de la simulación pasan por aquí.
 import { RESEARCH_BY_ID } from '../data/research.js';
 import { PRODUCTS } from '../data/products.js';
+import { STATIONS_BY_ID } from '../data/stations.js';
 
 const BASE_OFFLINE_HOURS = 2;
 
@@ -33,9 +34,12 @@ function product(state, type, target) {
 // arrieros y las rutas se calculan con la velocidad de su estación, así que todo sigue cuadrando.
 export const legacyMult = (state) => 2 ** (state.legacy?.resets ?? 0);
 
-export const speedMult = (state, stationId) => product(state, 'stationSpeed', stationId) * legacyMult(state);
+export const speedMult = (state, stationId) => product(state, 'stationSpeed', stationId) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone) * legacyMult(state);
+// Patios y entradas: crecen con el reinicio y con la Maestría y la Supremacía de su zona.
+export const capMult = (state, stationId) => legacyMult(state) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone);
 export const muleSpeedMult = (state) => product(state, 'muleSpeed');
-export const dispatchMult = (state, zoneId = 'finca') => product(state, 'dispatchCapacity', zoneId) * legacyMult(state);
+// El Willys de una zona con Maestría o Supremacía también lleva ×4 o ×8 (si no, la bodega se llenaría).
+export const dispatchMult = (state, zoneId = 'finca') => product(state, 'dispatchCapacity', zoneId) * product(state, 'zoneSpeed', zoneId) * legacyMult(state);
 export const productValue = (state, productId) =>
   PRODUCTS[productId].value * product(state, 'productValue', productId) * product(state, 'zoneValue', PRODUCTS[productId].zone);
 

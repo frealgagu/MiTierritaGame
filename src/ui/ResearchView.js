@@ -1,6 +1,7 @@
 import { formatNumber } from '../core/format.js';
 import { RESEARCH } from '../data/research.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
+import { ZONES_BY_ID } from '../data/zones/index.js';
 
 // Investigaciones: compras únicas que mejoran toda la finca.
 export class ResearchView {
@@ -41,6 +42,7 @@ export class ResearchView {
       .map(([r, q]) => {
         let action;
         if (q.reason === 'owned') action = '<span class="owned">✅ Investigado</span>';
+        else if (q.reason === 'locked' && r.minLevel) action = `<span class="locked">🔒 Todo al nivel ${r.minLevel} (${atLevel(this.game.state, r)})</span>`;
         else if (q.reason === 'locked') action = `<span class="locked">🔒 Construye ${STATIONS_BY_ID[r.requires].name}</span>`;
         else action = `<button class="btn buy small" data-research="${r.id}" ${q.ok ? '' : 'disabled'}>💰 ${formatNumber(r.cost)}</button>`;
         return `
@@ -53,4 +55,11 @@ export class ResearchView {
       .join('');
     if (html !== this.html) this.body.innerHTML = this.html = html;
   }
+}
+
+// Cuántos edificios de la zona ya llegaron al nivel que pide la Maestría o la Supremacía: «5/7».
+function atLevel(state, r) {
+  const z = ZONES_BY_ID[r.zone];
+  const ids = [...z.chain, ...z.plots.map((p) => p.stationId)];
+  return `${ids.filter((id) => (state.stations[id]?.level ?? 0) >= r.minLevel).length}/${ids.length}`;
 }

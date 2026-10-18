@@ -8,7 +8,7 @@ import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { exportsOf, teamCapacity } from './transport.js';
 import { COMPOST_VALUE, WASHED_PER_COMPOST, dispatchMult, productValue, speedMult } from './modifiers.js';
 import { PRODUCTS } from '../data/products.js';
-import { canPay } from './upgrades.js';
+import { canPay, zoneAtLevel } from './upgrades.js';
 
 const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
 const MAX_ROUTE_DEPTH = 4; // zonas encadenadas por rutas que se miran como mucho
@@ -429,8 +429,11 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
   for (const r of RESEARCH) {
     if (r.zone !== zoneId || state.research.includes(r.id) || !canPay(state, r.cost)) continue;
     if (r.requires && !state.stations[r.requires]) continue;
-    // Cambia su zona y, si acelera una estación con importados, lo que piden sus rutas.
-    const touched = { zones: new Set([zoneId]), demand: new Set(ROUTES.filter((x) => x.stations.includes(r.effect.target)).map((x) => x.id)), all: !r.effect.target };
+    if (r.minLevel && !zoneAtLevel(state, r.zone, r.minLevel)) continue;
+    // Cambia su zona y, si acelera una estación con importados (o toda la zona: Maestría y Supremacía),
+    // lo que piden sus rutas.
+    const zoneWide = r.effect.type === 'zoneSpeed';
+    const touched = { zones: new Set([zoneId]), demand: new Set(ROUTES.filter((x) => x.stations.includes(r.effect.target) || (zoneWide && x.to === r.effect.target)).map((x) => x.id)), all: !r.effect.target };
     const gain = score({ ...state, research: [...state.research, r.id] }, touched) - base;
     const option = { id: `research:${r.id}`, cost: r.cost, gain };
     if (gain > 1e-9 && (!best || roi(option) > roi(best))) best = option;

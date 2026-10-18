@@ -171,7 +171,7 @@ Se abre al completar la Finca. Los productos valen ×5 respecto al primer borrad
 
 - **Bagazo**: la Molienda lo produce (1 por ciclo) y pasa directo a la Hornilla, que va pegada a ella. Mientras la Hornilla tenga bagazo, trabaja ×2 y gasta 1 por ciclo.
 - **Investigaciones**: Trapiche con motor (Molienda ×2), Abono para la caña (Cañaduzal ×2), Chiva para el Trapiche (despacho ×2), Gaveras de acero (×2), Panela orgánica (+50 % de valor).
-- **Final**: «Primer cargamento de panela», vender 5.000 panelas pulverizadas (15 objetivos).
+- **Final**: «Primer cargamento de panela», vender 6.000 panelas pulverizadas (15 objetivos; 5.000 hasta la v1.6).
 - **Duración medida** (`npm run balance`, v1.3): unos 35 min después de completar la Finca (la Finca, que sigue produciendo, lo acelera mucho).
 
 #### Zona 3 · La Lechería — 6 estaciones, 6 productos — **v1.2** ✅
@@ -189,7 +189,7 @@ Se abre al completar el Trapiche. Productos ×25 respecto al primer borrador (el
 - **Reparto**: las mulas de la Pasteurizadora llevan cada carga a la rama con la entrada más vacía (contando lo que va en camino); la que trabaja más rápido recibe más, sin que el jugador tenga que repartir a mano. La carga se calcula para el viaje a la más lejana.
 - **Primera ruta entre zonas — Ruta de la panela** (`src/data/routes.js`, `src/sim/routes.js`): una **Chiva** recoge panela pulverizada en la bodega del Trapiche y la lleva a la Paila (60 s ida y vuelta). Tiene su propio nivel (pestaña 🚌 de la Paila): a igual nivel que la Paila lleva todo lo que gasta (un 25 % más), contando sus investigaciones de velocidad. El Willys del Trapiche no vende la panela que espera la Chiva. Sin panela, la Paila espera; el resto de la Lechería sigue igual.
 - **Investigaciones**: Ordeño mecánico y Pasteurizadora de placas (×2, en pareja), Descremadora centrífuga, Batidora eléctrica, Cuajo de calidad, Paila de cobre (×2), Carrotanque (despacho ×2), Queso doble crema y Arequipe de exportación (+50 %).
-- **Final**: «Arequipe para todo el pueblo», vender 3.000 arequipes (17 objetivos).
+- **Final**: «Arequipe para todo el pueblo», vender 6.000 arequipes (17 objetivos; 3.000 hasta la v1.6).
 - **Duración medida** (`npm run balance`, v1.3): unas 2 h 20 min después de completar el Trapiche.
 
 #### Zona 4 · El Cacaotal (chocolate) — 7 estaciones, 7 productos — **v1.3** ✅
@@ -208,7 +208,7 @@ Se abre al completar la Lechería. Productos ×125 respecto al primer borrador. 
 - **Rutas**: la **Ruta de la panela al Cacaotal** abastece a la Mesa y a la Chocolatería (a igual nivel que ellas, lleva lo que gastan las dos y reparte cada carga según el sitio que le queda a cada una). La **Ruta de la leche** lleva leche pasteurizada de la bodega de la Lechería a la Chocolatería. Como el Trapiche ya manda panela a la Lechería, las dos rutas de panela se reparten lo que hay según lo que pide cada una.
 - **Las rutas cuadran a igual nivel en todas las zonas**, también al nivel 100 y con todas las investigaciones (hay una prueba): la panela que piden la Paila, la Mesa y la Chocolatería es ¾ de lo que da el Trapiche (el resto se vende), y la Pasteurizadora guarda un cuarto de su leche para la Ruta de la leche, como una rama más: sus mulas la dejan en la bodega, de donde sale la Chiva lechera. Antes de abrir el Cacaotal, ese cuarto se vende como leche.
 - **Investigaciones**: Injertos de clones finos y Cajones en escalera (×2, en pareja), Secadero con techo corredizo, Tostador de bombo, Molino de bolas, Moldes de aluminio, Temperadora (×2), Camión para el Cacaotal (despacho ×2) y Cacao fino de aroma (todo lo que vende el Cacaotal +50 %).
-- **Final**: «Chocolate para la feria», vender 3.000 chocolatinas con leche (18 objetivos).
+- **Final**: «Chocolate para la feria», vender 4.000 chocolatinas con leche (18 objetivos; 3.000 hasta la v1.6).
 - **Duración medida** (`npm run balance`, v1.3): 1 h 45 min (jugador atento) y 1 h 55 min (el que sigue la mejora recomendada) después de completar la Lechería. Juego completo hasta aquí: unas 7 h.
 
 #### Zona 5 · El Maizal (arepas) — 6 estaciones, 6 productos — **v1.4** ✅
@@ -225,7 +225,7 @@ Se abre al completar el Cacaotal. Productos ×1.000 respecto al primer borrador.
 
 - **Rutas**: la **Ruta del queso** y la **Ruta de la mantequilla** salen de la bodega de la Lechería (por la carretera de abajo) hacia el Puesto.
 - **Investigaciones**: Maíz híbrido y Desgranadora con motor (×2, en pareja), Piladora eléctrica, Molino de discos, Budare grande, Plancha doble (×2), Camión para el Maizal (despacho ×2) y Receta de la abuela (todo lo que vende el Maizal +50 %).
-- **Final**: «¡Arepas para toda la plaza!», vender 3.000 bandejas de arepas de queso (16 objetivos).
+- **Final**: «¡Arepas para toda la plaza!», vender 6.000 bandejas de arepas de queso (16 objetivos; 3.000 hasta la v1.6).
 - **Duración medida** (`npm run balance`, v1.4): 1 h 45 min (jugador atento) y 1 h 10 min (el que sigue la mejora recomendada) después de completar el Cacaotal. Juego completo hasta aquí: unas 8 h 30 min.
 
 #### Zona 6 · El Pueblo (ensamble final, sin fuente propia) — 6 estaciones, 6 productos — **v1.5** ✅
@@ -243,7 +243,7 @@ Se abre al completar el Maizal y es la última zona. Es la única **sin recurso 
 - **Árbol**: la Casa del café reparte su café de origen entre la Greca (→ Fonda) y el Taller (→ Empaque → Patio de contenedores).
 - **Cambios respecto al primer borrador**: el borrador tenía siete estaciones que importaban café molido, leche y crema, productos intermedios que ya se gastan del todo en sus zonas; con ellos ninguna zona cuadraba a igual nivel. Ahora el Pueblo solo usa productos finales libres, la cafetería se resume en la Greca y la Fonda, y el Muelle es un Patio de contenedores (el pueblo está en la montaña).
 - **Investigaciones**: Catadores expertos (Casa del café ×2), Greca de dos llaves, Más mesas en la Fonda, Tejedoras de fique, Cintas y moños, Grúa de contenedores (×2 cada una), Tractomula (despacho ×2) y Denominación de origen (todo lo que vende el Pueblo +50 %).
-- **Final del juego**: «¡El café de la vereda viaja por el mundo!», exportar 1.000 contenedores (17 objetivos).
+- **Final del juego**: «¡El café de la vereda viaja por el mundo!», exportar 7.000 contenedores (17 objetivos; 1.000 hasta la v1.6).
 - **Duración medida** (`npm run balance`, v1.5): 2 h (jugador atento) y 1 h 47 min (el que sigue la mejora recomendada) después de completar el Maizal. Juego completo: unas 11 h (atento) y 10 h 15 min (casual).
 
 ### Cómo viajan los productos entre zonas
@@ -267,7 +267,8 @@ Se abre al completar el Maizal y es la última zona. Es la única **sin recurso 
 Cada estación tiene **dos ejes** de mejora.
 
 ### 5.1 Nivel de producción (1–100)
-- **Velocidad:** `vel(L) = base × (1 + 15/99 × (L − 1)) × 2^hitos`. Con 15/99 (≈ 0,1515) el nivel 100 da exactamente ×512 (16 × 2⁵), y como todos los ciclos son potencias de 2 (2, 4, 8, 16 o 32 s), al nivel 100 cada estación produce una potencia de 2 por segundo: 256, 128, 64, 32 o 16 (hay una prueba que lo exige). El nivel máximo es 100.
+- **Velocidad:** `vel(L) = base × (1 + 15/99 × (L − 1)) × hitos`. Los hitos multiplican: nivel 10 ×2, 25 ×2, 50 ×4, 75 ×4 y 100 ×8 (×512 en total; hasta la v1.6 eran ×2 cada uno). Con 15/99 (≈ 0,1515) el nivel 100 da exactamente ×8.192 (16 × 512), y como todos los ciclos son potencias de 2 (2, 4, 8, 16, 32 o 128 s), al nivel 100 cada estación produce una potencia de 2 por segundo: 4.096, 2.048, 1.024, 512, 256 o 64 (hay una prueba que lo exige). El nivel máximo es 100.
+- **Maestría y Supremacía (v1.7):** con todos los edificios de una zona en el nivel 75 se puede investigar su Maestría (toda la zona, Willys incluido, produce ×4); con todos en el 100, su Supremacía (×8 más). Pensadas para el segundo final.
 - **Hitos** en los niveles 10, 25, 50, 75 y 100: la velocidad se **duplica** y el edificio cambia de aspecto (ver §8).
 - **Coste:** `coste(L) = costeBase × 1,15^(L − 1)`.
 - Botones de compra ×1, ×10 y «máx».
@@ -326,7 +327,7 @@ Lo que se desvía a la bodega solo puede ocupar hasta el 70 % de su capacidad: e
 
 Una lista de **29 objetivos en orden** (`src/data/goals.js`). Se ven 3 a la vez, el primero también en un marcador abajo a la izquierda, y al cumplirse se **cobran** (dan monedas). Tipos: vender o producir N de un producto, subir algo a un nivel, construir una estación, investigar, ganar N 💰/s y subir todas las estaciones a un nivel.
 
-**Final de la Zona 1: «Primer gran pedido»**, vender 1.000 bolsas de café. Al cobrarlo aparece la pantalla de «Zona completada» con las estadísticas y el anuncio de la Zona 2; se puede seguir jugando en modo libre.
+**Final de la Zona 1: «Primer gran pedido»**, vender 2.000 bolsas de café (1.000 hasta la v1.6). Al cobrarlo aparece la pantalla de «Zona completada» con las estadísticas y el anuncio de la Zona 2; se puede seguir jugando en modo libre.
 
 **Balance medido** con `npm run balance` (jugador automático, ver `tools/balance-sim.js`):
 

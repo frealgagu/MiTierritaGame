@@ -90,12 +90,19 @@ export function unlockStation(state, id, bus) {
   return true;
 }
 
+// Todos los edificios de la zona (construidos todos) en el nivel `level` o más.
+export function zoneAtLevel(state, zoneId, level) {
+  const z = ZONES_BY_ID[zoneId];
+  return [...z.chain, ...z.plots.map((p) => p.stationId)].every((id) => (state.stations[id]?.level ?? 0) >= level);
+}
+
 // Investigaciones: aparecen cuando su estación está construida y se compran una vez.
 export function quoteResearch(state, id) {
   const r = RESEARCH_BY_ID[id];
   if (state.research.includes(id)) return { ok: false, reason: 'owned', cost: r.cost };
   if (!zoneUnlocked(state, r.zone)) return { ok: false, reason: 'zone', cost: r.cost };
   if (r.requires && !state.stations[r.requires]) return { ok: false, reason: 'locked', cost: r.cost };
+  if (r.minLevel && !zoneAtLevel(state, r.zone, r.minLevel)) return { ok: false, reason: 'locked', cost: r.cost };
   if (!canPay(state, r.cost)) return { ok: false, reason: 'coins', cost: r.cost };
   return { ok: true, cost: r.cost };
 }

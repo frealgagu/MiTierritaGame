@@ -109,3 +109,18 @@ test('una partida de la v1.5 se carga sin multiplicador y sin el segundo final',
   assert.equal(legacyMult(s), 1);
   assert.equal(s.mastered, false);
 });
+
+test('Maestría ×4 con toda la zona al 75 y Supremacía ×8 con toda al 100', async () => {
+  const { speedMult } = await import('../src/sim/modifiers.js');
+  const game = everything(74);
+  const s = game.state;
+  assert.equal(game.quoteResearch('maestria_finca').reason, 'locked');
+  for (const id of ['farm', 'wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer', 'composter']) s.stations[id].level = 75;
+  assert.ok(game.research('maestria_finca'));
+  assert.equal(speedMult(s, 'packer'), 4);
+  assert.equal(speedMult(s, 'cane_mill'), 1, 'solo su zona');
+  assert.equal(game.quoteResearch('supremacia_finca').reason, 'locked');
+  for (const id of ['farm', 'wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer', 'composter']) s.stations[id].level = 100;
+  assert.ok(game.research('supremacia_finca'));
+  assert.equal(speedMult(s, 'farm'), 32);
+});

@@ -36,7 +36,7 @@ const FINCA = [
   { id: 'g27', type: 'allLevels', zone: 'finca', level: 25, reward: 100000 },
   { id: 'g28', type: 'sold', product: 'coffee_bag', amount: 500, reward: 150000 },
   // Final de la Zona 1.
-  { id: 'final', type: 'sold', product: 'coffee_bag', amount: 1000, reward: 0, final: true },
+  { id: 'final', type: 'sold', product: 'coffee_bag', amount: 2000, reward: 0, final: true },
 ];
 
 const TRAPICHE = [
@@ -55,7 +55,7 @@ const TRAPICHE = [
   { id: 't13', type: 'income', zone: 'trapiche', perSecond: 500, reward: 150000 },
   { id: 't14', type: 'sold', product: 'panela_powder', amount: 1000, reward: 300000 },
   // Final de la Zona 2.
-  { id: 'tfinal', type: 'sold', product: 'panela_powder', amount: 5000, reward: 0, final: true },
+  { id: 'tfinal', type: 'sold', product: 'panela_powder', amount: 6000, reward: 0, final: true },
 ];
 
 const LECHERIA = [
@@ -76,7 +76,7 @@ const LECHERIA = [
   { id: 'l15', type: 'allLevels', zone: 'lecheria', level: 25, reward: 3000000 },
   { id: 'l16', type: 'sold', product: 'arequipe', amount: 1000, reward: 5000000 },
   // Final de la Zona 3.
-  { id: 'lfinal', type: 'sold', product: 'arequipe', amount: 3000, reward: 0, final: true },
+  { id: 'lfinal', type: 'sold', product: 'arequipe', amount: 6000, reward: 0, final: true },
 ];
 
 const CACAOTAL = [
@@ -98,7 +98,7 @@ const CACAOTAL = [
   { id: 'c16', type: 'allLevels', zone: 'cacaotal', level: 25, reward: 20000000 },
   { id: 'c17', type: 'sold', product: 'milk_chocolate', amount: 1000, reward: 30000000 },
   // Final de la Zona 4.
-  { id: 'cfinal', type: 'sold', product: 'milk_chocolate', amount: 3000, reward: 0, final: true },
+  { id: 'cfinal', type: 'sold', product: 'milk_chocolate', amount: 4000, reward: 0, final: true },
 ];
 
 const MAIZAL = [
@@ -118,7 +118,7 @@ const MAIZAL = [
   { id: 'm14', type: 'allLevels', zone: 'maizal', level: 25, reward: 200000000 },
   { id: 'm15', type: 'sold', product: 'cheese_arepa', amount: 1000, reward: 300000000 },
   // Final de la Zona 5.
-  { id: 'mfinal', type: 'sold', product: 'cheese_arepa', amount: 3000, reward: 0, final: true },
+  { id: 'mfinal', type: 'sold', product: 'cheese_arepa', amount: 6000, reward: 0, final: true },
 ];
 
 const PUEBLO = [
@@ -139,7 +139,7 @@ const PUEBLO = [
   { id: 'p15', type: 'allLevels', zone: 'pueblo', level: 25, reward: 1500000000 },
   { id: 'p16', type: 'sold', product: 'container', amount: 100, reward: 2500000000 },
   // Final de la Zona 6 y del juego.
-  { id: 'pfinal', type: 'sold', product: 'container', amount: 1000, reward: 0, final: true },
+  { id: 'pfinal', type: 'sold', product: 'container', amount: 7000, reward: 0, final: true },
 ];
 
 export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO };

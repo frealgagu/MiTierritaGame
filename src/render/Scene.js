@@ -13,7 +13,7 @@ import { pointAt, pointAtDistance } from '../core/path.js';
 import { formatAmount, formatNumber } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
-import { BELT_LEVEL, dispatchCapacity, hasBelt } from '../sim/rules.js';
+import { BELT_LEVEL, dispatchCapacity, hasBelt, milestoneBoost } from '../sim/rules.js';
 import { ROAD_POS, zoneOf } from '../sim/chain.js';
 import { normalDest, warehouseCap } from '../sim/transport.js';
 import { dispatchMult } from '../sim/modifiers.js';
@@ -223,7 +223,7 @@ export class Scene {
       else this.sound.levelUp();
       this.effects.ring(p.x, p.y + 30);
       const belt = part === 'transport' && milestone === BELT_LEVEL;
-      this.effects.floatText(p.x, p.y - 20, belt ? '⚡ ¡Banda eléctrica! ×2' : milestone ? `¡Hito nivel ${milestone}! ×2` : part === 'transport' ? `${hasBelt(to) ? '⚡ Banda' : '🐴 Arrieros'} nivel ${to}` : `Nivel ${to}`, {
+      this.effects.floatText(p.x, p.y - 20, belt ? `⚡ ¡Banda eléctrica! ×${milestoneBoost(milestone)}` : milestone ? `¡Hito nivel ${milestone}! ×${milestoneBoost(milestone)}` : part === 'transport' ? `${hasBelt(to) ? '⚡ Banda' : '🐴 Arrieros'} nivel ${to}` : `Nivel ${to}`, {
         color: milestone ? 0xffe066 : 0xffffff,
         size: milestone ? 22 : 16,
         life: milestone ? 2.2 : 1.2,

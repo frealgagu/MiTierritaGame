@@ -74,6 +74,20 @@ export const RESEARCH = [
   { zone: 'pueblo', id: 'monos', name: 'Cintas y moños', icon: '🎀', desc: 'El Empaque de regalos arma el doble de canastas.', cost: 15000000000, requires: 'gift_wrap', effect: { type: 'stationSpeed', target: 'gift_wrap', mult: 2 } },
   { zone: 'pueblo', id: 'grua', name: 'Grúa de contenedores', icon: '🏗️', desc: 'El Patio de contenedores llena el doble.', cost: 40000000000, requires: 'export_dock', effect: { type: 'stationSpeed', target: 'export_dock', mult: 2 } },
   { zone: 'pueblo', id: 'denominacion', name: 'Denominación de origen', icon: '🏅', desc: 'Todo lo que vende el Pueblo vale un 50 % más.', cost: 25000000000, requires: 'gift_wrap', effect: { type: 'zoneValue', target: 'pueblo', mult: 1.5 } },
+  // Maestría (v1.7): con todos los edificios de una zona en el nivel 75, toda la zona produce ×4; y
+  // Supremacía, en el nivel 100, ×8 más. Ayudan a llegar al segundo final (todo al nivel 100).
+  { zone: 'finca', id: 'maestria_finca', name: 'Maestría: Finca', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'finca', mult: 4 } },
+  { zone: 'trapiche', id: 'maestria_trapiche', name: 'Maestría: Trapiche', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'trapiche', mult: 4 } },
+  { zone: 'lecheria', id: 'maestria_lecheria', name: 'Maestría: Lechería', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'lecheria', mult: 4 } },
+  { zone: 'cacaotal', id: 'maestria_cacaotal', name: 'Maestría: Cacaotal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cacaotal', mult: 4 } },
+  { zone: 'maizal', id: 'maestria_maizal', name: 'Maestría: Maizal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'maizal', mult: 4 } },
+  { zone: 'pueblo', id: 'maestria_pueblo', name: 'Maestría: Pueblo', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'pueblo', mult: 4 } },
+  { zone: 'finca', id: 'supremacia_finca', name: 'Supremacía: Finca', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'finca', mult: 8 } },
+  { zone: 'trapiche', id: 'supremacia_trapiche', name: 'Supremacía: Trapiche', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'trapiche', mult: 8 } },
+  { zone: 'lecheria', id: 'supremacia_lecheria', name: 'Supremacía: Lechería', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'lecheria', mult: 8 } },
+  { zone: 'cacaotal', id: 'supremacia_cacaotal', name: 'Supremacía: Cacaotal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cacaotal', mult: 8 } },
+  { zone: 'maizal', id: 'supremacia_maizal', name: 'Supremacía: Maizal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'maizal', mult: 8 } },
+  { zone: 'pueblo', id: 'supremacia_pueblo', name: 'Supremacía: Pueblo', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'pueblo', mult: 8 } },
 ];
 
 export const RESEARCH_BY_ID = Object.fromEntries(RESEARCH.map((r) => [r.id, r]));

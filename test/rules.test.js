@@ -5,11 +5,13 @@ import { STATIONS_BY_ID } from '../src/data/stations.js';
 import { PRODUCTS } from '../src/data/products.js';
 import { STATIONS } from '../src/data/stations.js';
 
-test('hitos duplican la velocidad', () => {
+test('hitos: nivel 10 ×2, 25 ×2, 50 ×4, 75 ×4 y 100 ×8', () => {
   assert.equal(milestoneMultiplier(9), 1);
   assert.equal(milestoneMultiplier(10), 2);
   assert.equal(milestoneMultiplier(25), 4);
-  assert.equal(milestoneMultiplier(100), 32);
+  assert.equal(milestoneMultiplier(50), 16);
+  assert.equal(milestoneMultiplier(75), 64);
+  assert.equal(milestoneMultiplier(100), 512);
   assert.equal(nextMilestone(10), 25);
   assert.equal(nextMilestone(100), null);
 });

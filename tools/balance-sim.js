@@ -102,7 +102,7 @@ function bestOption() {
       // Una investigación cambia su zona entera (y lo que piden las rutas si acelera una estación).
       touched.zones.add(r.zone);
       touched.all = !r.effect.target;
-      for (const x of ROUTES) if (x.stations.includes(r.effect.target)) touched.demand.add(x.id);
+      for (const x of ROUTES) if (x.stations.includes(r.effect.target) || (r.effect.type === 'zoneSpeed' && x.to === r.effect.target)) touched.demand.add(x.id);
     });
   }
   return opts.filter((o) => o.gain > 0).sort((a, b) => b.gain / b.cost - a.gain / a.cost)[0];

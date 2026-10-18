@@ -77,7 +77,7 @@ test('los objetivos se cobran en orden y dan su recompensa', () => {
 test('cobrar el último objetivo completa la zona', () => {
   const game = new Game();
   game.state.goals.claimed = GOALS.filter((g) => g.id.startsWith('g')).map((g) => g.id);
-  game.state.stats.sold.coffee_bag = 1000;
+  game.state.stats.sold.coffee_bag = GOALS.find((g) => g.id === 'final').amount;
   assert.ok(game.claimGoal('final'));
   assert.equal(game.state.zones.finca.complete, true);
   // …y abre el Trapiche con su Cañaduzal.
