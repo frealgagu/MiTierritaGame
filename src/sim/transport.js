@@ -57,6 +57,14 @@ export function exportsOf(state, id) {
   return ROUTES.filter((r) => r.from === zoneOf(id) && r.product === out && routeActive(state, r.id));
 }
 
+// Rutas que se llevarán el producto de esta estación pero aún no abren (la Ruta de la leche, antes
+// de abrir el Cacaotal): la parte que les toca se vende mientras tanto, y eso no es un problema.
+export function pendingRoutes(state, id) {
+  if (!CHILDREN[id]?.length) return [];
+  const out = Object.keys(STATIONS_BY_ID[id].out)[0];
+  return ROUTES.filter((r) => r.from === zoneOf(id) && r.product === out && !routeActive(state, r.id));
+}
+
 // ¿Las estaciones siguientes procesan menos de lo que esta produce? (Más las rutas que se llevan su
 // producto.) Entonces lo que sobra va a la bodega por el camino largo y, si los arrieros no alcanzan,
 // el patio se llena: la culpa es de las siguientes, no de las mulas. Devuelve las que van más lentas.
@@ -175,7 +183,7 @@ function dispatchFrom(state, id, dt, bus) {
     const amount = Math.min(s.buffer, load);
     const next = pickConsumer(state, targets, amount);
     if (next) {
-      sendMule(state, id, targetDest(next), amount, bus);
+      sendMule(state, id, targetDest(next), Math.min(amount, targetSpace(state, next)), bus);
       continue;
     }
     const almostFull = s.buffer >= PATIO_ALMOST_FULL * stationBufferCap(def, s.level, capMult(state, id));
@@ -196,20 +204,25 @@ function dispatchFrom(state, id, dt, bus) {
     const diverted = Math.min(amount, room);
     sendMule(state, id, 'warehouse', diverted, bus);
     // El aviso ↪️ solo para desvíos de verdad (al menos media carga), no por un sobrante suelto ni cuando
-    // la bodega es también donde espera la ruta (lo que llega de más ahí se lo lleva la siguiente carga).
-    const exporting = targets.some((t) => t.startsWith('export:'));
+    // la bodega es también donde espera la ruta (lo que llega de más ahí se lo lleva la siguiente carga),
+    // ni cuando es la parte de una ruta que aún no abre (se vende mientras tanto).
+    const exporting = targets.some((t) => t.startsWith('export:')) || pendingRoutes(state, id).length > 0;
     if (targets.length && !exporting && diverted >= load * 0.5) s.lastDiverted = state.playTime;
   }
 }
 
 // Entre las estaciones que reciben el producto y tienen sitio para `amount`, la de la entrada más vacía
 // (contando lo que ya va en camino). Así la que trabaja más rápido recibe más, sin repartir a mano.
+// A una estación cuya entrada no alcanza para una carga entera (una rama por debajo del nivel de la
+// anterior) le basta con tener media entrada libre: se le lleva lo que quepa. Si no, nunca recibiría
+// nada y se quedaría parada.
 function pickConsumer(state, targets, amount) {
   let best = null;
   let bestFill = Infinity;
   for (const c of targets) {
     const space = targetSpace(state, c);
-    if (space <= 0 || space < amount - 1e-9) continue;
+    const need = Math.min(amount, targetCap(state, c) * 0.5);
+    if (space <= 0 || space < need - 1e-9) continue;
     const fill = 1 - space / targetCap(state, c);
     if (fill < bestFill) {
       best = c;

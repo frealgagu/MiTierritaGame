@@ -60,3 +60,12 @@ export function nextToUnlock(state, zoneId = 'finca') {
 export function builtStations(state, zoneId) {
   return Object.keys(state.stations).filter((id) => zoneOf(id) === zoneId);
 }
+
+// Qué parte de lo que produce `parent` le toca a la estación `id` cuando están al mismo nivel y con
+// las mismas mejoras (la Quesera, ¼ de la leche de la Pasteurizadora). Sale de sus ritmos base.
+export function branchShare(parent, id) {
+  const p = STATIONS_BY_ID[parent];
+  const def = STATIONS_BY_ID[id];
+  const product = Object.keys(def.in)[0];
+  return (def.in[product] / def.cycle) / (p.out[product] / p.cycle);
+}

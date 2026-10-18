@@ -19,10 +19,10 @@ import {
   milestoneBoost,
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
-import { busyMules, dockStock, exportsOf, slowConsumers, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
+import { busyMules, dockStock, exportsOf, pendingRoutes, slowConsumers, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
 import { analyzeChain, expectedCompostValue, routeFlow } from '../sim/analysis.js';
 import { COMPOST_VALUE, compostValueBoost, muleSpeedMult, saleValue } from '../sim/modifiers.js';
-import { PARENT, consumers, zoneOf } from '../sim/chain.js';
+import { PARENT, branchShare, consumers, zoneOf } from '../sim/chain.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive, routeCapacity, routeRate, routeStations, stationImportRate } from '../sim/routes.js';
 import { capMult, speedMult } from '../sim/modifiers.js';
@@ -413,11 +413,13 @@ function stationStatus(state, id) {
       bad: true,
     };
   }
-  // Le llega más de lo que puede procesar.
-  if (row && parent && parent.diverted > 0.005 && row.incoming >= row.capacity * 0.98) {
+  // Le llega más de lo que puede procesar: procesa menos de lo que le toca de la anterior (en una rama,
+  // su parte; lo que la anterior guarda para una ruta que aún no abre se vende y no es culpa de esta).
+  const share = parent ? parent.output * branchShare(parent.id, id) : 0;
+  if (row && parent && parent.diverted > 0.005 && row.incoming >= row.capacity * 0.98 && row.capacity < share * 0.98) {
     const inIcon = PRODUCTS[Object.keys(def.in)[0]].icon;
     const text = parent.children.length > 1
-      ? `↪️ ${nameOf(parent.id)} reparte más ${inIcon} de los que procesan sus ramas (esta, ${formatRate(row.capacity)}/s). El resto se vende sin procesar: mejórala.`
+      ? `↪️ De ${nameOf(parent.id)} a esta rama le tocan ${formatRate(share)} ${inIcon}/s y procesa ${formatRate(row.capacity)}/s. El resto se vende sin procesar: mejórala.`
       : `↪️ La estación anterior produce ${formatRate(parent.output)} ${inIcon}/s y esta procesa ${formatRate(row.capacity)}/s. El resto se vende sin procesar: mejórala.`;
     return { text, bad: true };
   }
@@ -428,7 +430,10 @@ function stationStatus(state, id) {
   const routes = exportsOf(state, id);
   const where = [...(targets.length ? [listNames(targets)] : []), ...(routes.length || !targets.length ? ['la bodega'] : [])].join(' y a ');
   const why = routes.length > 1 ? ` (para ${routes.length} rutas)` : routes.length ? ` (para la ${routes[0].name})` : '';
-  return { text: `✅ Trabajando. Las mulas llevan el producto a ${where}${why}.`, bad: false };
+  // La parte de una ruta que aún no abre va a la bodega y se vende.
+  const pending = pendingRoutes(state, id);
+  const later = pending.length ? ` Su parte para la ${pending[0].name} se vende hasta que abra ${ZONES_BY_ID[pending[0].to].name}.` : '';
+  return { text: `✅ Trabajando. Las mulas llevan el producto a ${where}${why}.${later}`, bad: false };
 }
 
 // «bolsas de café y panela pulverizada»: los importados de una estación, en minúsculas.

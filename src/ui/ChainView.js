@@ -3,9 +3,10 @@ import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { analyzeChain } from '../sim/analysis.js';
 import { hasBelt } from '../sim/rules.js';
-import { CHILDREN, PARENT, nextToUnlock } from '../sim/chain.js';
+import { CHILDREN, PARENT, branchShare, nextToUnlock } from '../sim/chain.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
+import { pendingRoutes } from '../sim/transport.js';
 
 const outIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].out)[0]].icon;
 // Una estación está en una rama si algún antecesor reparte su producto entre varias.
@@ -81,7 +82,7 @@ export class ChainView {
         <button class="chain-link ${branch} ${transportBottleneck ? 'hot' : ''}" data-open="${row.id}:transport">
           <span>${hasBelt(st.transport.level) ? '⚡' : '🐴'} Nv ${st.transport.level}</span>
           <span>${carries} · máx ${formatRate(row.transport)} ${icon}/s</span>
-          ${row.next && row.diverted > 0.005 ? `<span class="divert">↪️ ${formatRate(row.diverted)} ${icon}/s se venden sin procesar</span>` : ''}
+          ${row.next && row.diverted > 0.005 ? divertNote(state, row, icon) : ''}
           ${row.lost > 0.005 ? `<span class="lost">⛔ ${formatRate(row.lost)} ${icon}/s no alcanzan a salir</span>` : ''}
         </button>`);
     }
@@ -105,4 +106,16 @@ export class ChainView {
     const html = parts.join('');
     if (html !== this.html) this.body.innerHTML = this.html = html;
   }
+}
+
+// Lo que se vende sin procesar. La parte de una ruta que aún no abre (lo que no les toca a las ramas)
+// no es un problema; lo que pase de ahí, sí.
+function divertNote(state, row, icon) {
+  const pending = pendingRoutes(state, row.id);
+  const reserved = pending.length ? row.output * Math.max(0, 1 - CHILDREN[row.id].reduce((n, c) => n + branchShare(row.id, c), 0)) : 0;
+  const extra = row.diverted - reserved;
+  const notes = [];
+  if (reserved > 0.005) notes.push(`<span>🚌 ${formatRate(Math.min(reserved, row.diverted))} ${icon}/s a la bodega: se venden hasta que abra la ${pending[0].name}</span>`);
+  if (extra > 0.005 + row.diverted * 0.02) notes.push(`<span class="divert">↪️ ${formatRate(extra)} ${icon}/s se venden sin procesar</span>`);
+  return notes.join('');
 }
