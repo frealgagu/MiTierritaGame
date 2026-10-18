@@ -186,20 +186,25 @@ async function start() {
   });
 
   let uiTimer = 0;
+  // Cada parte por separado: si una falla, las demás siguen (y el bucle no se detiene: un error en un
+  // cuadro detiene el ticker de Pixi para siempre).
+  const safely = (fn) => {
+    try {
+      fn();
+    } catch (err) {
+      console.error(err);
+    }
+  };
   app.ticker.add((ticker) => {
     const dt = ticker.deltaMS / 1000;
-    game.update(dt);
-    scene.update(dt);
+    safely(() => game.update(dt));
+    safely(() => scene.update(dt));
     uiTimer -= dt;
     if (uiTimer <= 0) {
       uiTimer = 0.2;
-      hud.update();
-      scene.setGuide(panel.id ? null : hud.guide);
-      panel.update();
-      chain.update();
-      goals.update();
-      research.update();
-      zones.update();
+      safely(() => hud.update());
+      safely(() => scene.setGuide(panel.id ? null : hud.guide));
+      for (const view of [panel, chain, goals, research, zones]) safely(() => view.update());
     }
   });
 

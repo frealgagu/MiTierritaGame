@@ -19,7 +19,7 @@ import { normalDest, slowConsumers, warehouseCap } from '../sim/transport.js';
 import { alerts } from '../sim/alerts.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { quoteUnlock } from '../sim/upgrades.js';
-import { ROUTES } from '../data/routes.js';
+import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive, routeCapacity } from '../sim/routes.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { DayNight } from './DayNight.js';
@@ -211,8 +211,11 @@ export class Scene {
       }
     });
     on('levelUp', ({ id, to, milestone }) => {
-      const [sid, part] = id.split(':');
-      if (sid === 'dispatch' ? part !== zone : zoneOf(sid) !== zone) return;
+      let [sid, part] = id.split(':');
+      // Una ruta se celebra en la estación de esta zona que abastece (si se está viendo esa zona).
+      const route = sid === 'route' ? ROUTES_BY_ID[part] : null;
+      if (route) sid = route.stations.find((s) => this.stations[s] && STATIONS_BY_ID[s].zone === zone) ?? null;
+      if (!sid || (sid === 'dispatch' ? part !== zone : !STATIONS_BY_ID[sid] || zoneOf(sid) !== zone)) return;
       const view = this.stations[sid];
       if (!view) return;
       const p = view.anchorPoint(30);
@@ -222,7 +225,8 @@ export class Scene {
       else this.sound.levelUp();
       this.effects.ring(p.x, p.y + 30);
       const belt = part === 'transport' && milestone === BELT_LEVEL;
-      this.effects.floatText(p.x, p.y - 20, belt ? `⚡ ¡Banda eléctrica! ×${milestoneBoost(milestone)}` : milestone ? `¡Hito nivel ${milestone}! ×${milestoneBoost(milestone)}` : part === 'transport' ? `${hasBelt(to) ? '⚡ Banda' : '🐴 Arrieros'} nivel ${to}` : `Nivel ${to}`, {
+      const what = route ? `🚌 ${route.tab} nivel ${to}` : part === 'transport' ? `${hasBelt(to) ? '⚡ Banda' : '🐴 Arrieros'} nivel ${to}` : `Nivel ${to}`;
+      this.effects.floatText(p.x, p.y - 20, belt ? `⚡ ¡Banda eléctrica! ×${milestoneBoost(milestone)}` : milestone ? `¡Hito nivel ${milestone}! ×${milestoneBoost(milestone)}` : what, {
         color: milestone ? 0xffe066 : 0xffffff,
         size: milestone ? 22 : 16,
         life: milestone ? 2.2 : 1.2,
