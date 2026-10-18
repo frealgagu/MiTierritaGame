@@ -46,6 +46,8 @@ npm run android:apk   # compila el juego, lo copia a android/ y genera android/a
 
 El APK de depuración se instala directamente en el teléfono (hay que permitir «instalar apps desconocidas»). Para Google Play hará falta una versión firmada (AAB) con una clave propia.
 
+**Cada push publica las dos cosas a la vez** (`.github/workflows/pages.yml`): la web en GitHub Pages y el APK en https://frealgagu.github.io/Game/cafetal.apk (el menú ⚙️ de la web lo enlaza). Los APK de prueba se firman con `android/app/cafetal-pruebas.keystore`, guardada en el repositorio a propósito: así cada versión se instala encima de la anterior sin perder la partida. La versión de la app sale de `package.json`.
+
 ### Instalar en el móvil
 Abre https://frealgagu.github.io/Game/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).
 

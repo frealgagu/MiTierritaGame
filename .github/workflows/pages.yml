@@ -1,5 +1,7 @@
-name: Publicar en GitHub Pages
+name: Publicar la web y la app de Android
 
+# En cada push: pruebas y web (GitHub Pages) por un lado, APK de Android por otro, y al final se
+# publican juntos: el APK queda en la misma página, en ./cafetal.apk (el menú del juego lo enlaza).
 on:
   push:
     branches: [main, claude/frozen-city-supply-chain-game-jpdsxh]
@@ -15,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  web:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,16 +28,53 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
+          name: web
           path: dist
 
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools platforms;android-36 build-tools;36.0.0 build-tools;35.0.0
+      - run: npm ci
+      # Compila el juego, lo copia a android/ y genera el APK (firmado con la clave de pruebas).
+      - run: npm run android:apk
+      - run: cp android/app/build/outputs/apk/debug/app-debug.apk cafetal.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: cafetal.apk
+
   deploy:
-    needs: build
+    needs: [web, android]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: web
+          path: site
+      - uses: actions/download-artifact@v4
+        with:
+          name: android
+          path: site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
       - id: deployment
         uses: actions/deploy-pages@v4

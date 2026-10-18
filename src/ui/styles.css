@@ -344,6 +344,7 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 
 .modal-card.center { text-align: center; display: grid; gap: 8px; justify-items: center; }
 .modal-card.center .btn { width: 100%; justify-content: center; }
+a.btn { text-decoration: none; color: inherit; display: inline-flex; align-items: center; }
 .big-number { font-size: 2rem; font-weight: 700; margin: 4px 0; }
 .victory { border-color: #b8860b; background: linear-gradient(180deg, #fff7d1, var(--paper)); }
 .victory-icon { font-size: 3.5rem; animation: pop 0.5s ease-out; }

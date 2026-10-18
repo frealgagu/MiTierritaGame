@@ -204,6 +204,8 @@ async function start() {
   bindDevOptions(game);
   // En la app de Android el juego ya va dentro del paquete: sin service worker, con el botón «atrás».
   if (isNativeApp()) bindNative({ closeTop, onHide, onShow });
+  // En la web publicada, el menú ofrece el APK (lo publica el mismo flujo de GitHub Actions).
+  else if (import.meta.env.PROD) document.getElementById('apk-link').hidden = false;
   // Jugable sin internet e instalable en el móvil (solo en la versión web publicada).
   else if (import.meta.env.PROD && 'serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
