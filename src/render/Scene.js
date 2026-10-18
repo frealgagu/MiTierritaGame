@@ -15,7 +15,7 @@ import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { BELT_LEVEL, dispatchCapacity, hasBelt, milestoneBoost } from '../sim/rules.js';
 import { ROAD_POS, zoneOf } from '../sim/chain.js';
-import { normalDest, warehouseCap } from '../sim/transport.js';
+import { normalDest, slowConsumers, warehouseCap } from '../sim/transport.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { quoteUnlock } from '../sim/upgrades.js';
 import { ROUTES } from '../data/routes.js';
@@ -436,7 +436,8 @@ export class Scene {
 export function statusIcon(state, id) {
   const st = state.stations[id];
   if (!st) return null;
-  if (st.status === 'blocked') return '⛔';
+  // Patio lleno porque las siguientes no dan abasto: está desviando, la que hay que subir es la siguiente.
+  if (st.status === 'blocked') return st.waiting === 'mules' && slowConsumers(state, id).length ? '↪️' : '⛔';
   if (st.status === 'starved' && st.idle > STARVED_ICON_TIME) return '⏸️';
   if (st.lastDiverted !== undefined && state.playTime - st.lastDiverted < DIVERT_ICON_TIME) return '↪️';
   return null;

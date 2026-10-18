@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v1.7.5 — El patio lleno culpa a quien es
+- **Arreglo**: con el Cafetal y sus arrieros en 25 y el Beneficiadero en 10, el Cafetal decía «⛔ Patio lleno: las mulas no dan abasto», pero el problema era el Beneficiadero, que procesa mucho menos: lo que sobra va a la bodega por el camino largo y no alcanza a salir todo. Ahora, si las estaciones siguientes van más lentas, el Cafetal muestra ↪️ (está desviando) y su panel dice que hay que subir la estación siguiente, que a su vez sigue mostrando cuánto le llega y cuánto procesa. Vale para cualquier estación de cualquier zona.
+
 ## v1.7.4 — Arreglos
 - **Arreglo**: al bajar los reinicios en las opciones de desarrollador (de 41 a 4, por ejemplo) el juego se colgaba: el Willys y la Chiva iban cargados con lo de ×2⁴¹ y se intentaban dibujar miles de millones de bultos. Ahora se dibujan como mucho llenos.
 - **Arreglo**: la leyenda «🔁 Producción ×…» quedaba encima de las ventanas (configuración, objetivos…). Ahora queda detrás, y es más pequeña y algo transparente.

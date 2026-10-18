@@ -19,7 +19,7 @@ import {
   milestoneBoost,
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
-import { busyMules, dockStock, exportsOf, legTime, normalDest, productionMult, teamCapacity, teamLoad, warehouseSpace } from '../sim/transport.js';
+import { busyMules, dockStock, exportsOf, slowConsumers, legTime, normalDest, productionMult, teamCapacity, teamLoad, warehouseSpace } from '../sim/transport.js';
 import { analyzeChain, expectedCompostValue, routeFlow } from '../sim/analysis.js';
 import { COMPOST_VALUE, compostValueBoost, muleSpeedMult, saleValue } from '../sim/modifiers.js';
 import { PARENT, consumers, zoneOf } from '../sim/chain.js';
@@ -359,6 +359,14 @@ function stationStatus(state, id) {
   const row = analysis.rows.find((r) => r.id === id);
   const parent = analysis.rows.find((r) => r.id === PARENT[id]);
   if (st.status === 'blocked') {
+    // Lo que sobra porque las siguientes no dan abasto: es a ellas a las que hay que subir.
+    const slow = st.waiting === 'mules' ? slowConsumers(state, id) : [];
+    if (slow.length) {
+      const text = slow.length > 1
+        ? `↪️ Las estaciones siguientes (${listNames(slow)}) no alcanzan a procesar todo lo que produce esta: lo que sobra va a la bodega y no alcanza a salir todo. Súbelas de nivel.`
+        : `↪️ La estación siguiente (${listNames(slow)}) no alcanza a procesar todo lo que produce esta: lo que sobra va a la bodega y no alcanza a salir todo. Súbela de nivel.`;
+      return { text, bad: true };
+    }
     if (st.waiting === 'mules') return { text: hasBelt(st.transport.level) ? '⛔ Patio lleno: la banda no da abasto. Mejórala (pestaña ⚡).' : '⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).', bad: true };
     return { text: '⛔ Patio lleno: la bodega no tiene espacio. Mejora el Despacho.', bad: true };
   }

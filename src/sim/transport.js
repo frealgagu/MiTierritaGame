@@ -1,10 +1,10 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID, ZONE_LIST } from '../data/zones/index.js';
-import { muleCount, muleLoad, stationBufferCap, stationInputCap, warehouseCapacity } from './rules.js';
+import { muleCount, muleLoad, stationBufferCap, stationInputCap, stationOutputRate, stationRate, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
 import { CHILDREN, ROAD_POS, chainOf, consumers, zoneOf, zoneUnlocked } from './chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
-import { ROUTE_STOCK, routeActive, routeCapacity, routeReserve } from './routes.js';
+import { ROUTE_STOCK, routeActive, routeCapacity, routeRate, routeReserve } from './routes.js';
 import { inputSpace } from './production.js';
 import { capMult, dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
 
@@ -55,6 +55,20 @@ export function exportsOf(state, id) {
   if (!CHILDREN[id]?.length) return [];
   const out = Object.keys(STATIONS_BY_ID[id].out)[0];
   return ROUTES.filter((r) => r.from === zoneOf(id) && r.product === out && routeActive(state, r.id));
+}
+
+// ¿Las estaciones siguientes procesan menos de lo que esta produce? (Más las rutas que se llevan su
+// producto.) Entonces lo que sobra va a la bodega por el camino largo y, si los arrieros no alcanzan,
+// el patio se llena: la culpa es de las siguientes, no de las mulas. Devuelve las que van más lentas.
+export function slowConsumers(state, id) {
+  const children = consumers(state, id);
+  if (!children.length) return [];
+  const def = STATIONS_BY_ID[id];
+  const output = stationOutputRate(def, state.stations[id].level) * speedMult(state, id);
+  const take = (c) => stationRate(STATIONS_BY_ID[c], state.stations[c].level) * speedMult(state, c) * Object.values(STATIONS_BY_ID[c].in)[0];
+  const capacity = children.reduce((n, c) => n + take(c), 0) + exportsOf(state, id).reduce((n, r) => n + routeRate(state, r.id), 0);
+  if (capacity >= output * 0.98) return [];
+  return children.filter((c) => state.stations[c].level === Math.min(...children.map((x) => state.stations[x].level)));
 }
 
 // Lo que falta por dejar en la bodega para una ruta (carga y media, menos lo que ya hay o va en camino).

@@ -97,3 +97,20 @@ test('si los arrieros no dan abasto, el patio se llena por falta de mulas', () =
   assert.equal(game.state.stations.farm.status, 'blocked');
   assert.equal(game.state.stations.farm.waiting, 'mules');
 });
+
+test('si el Beneficiadero va atrasado, el patio lleno del Cafetal es culpa suya, no de las mulas', async () => {
+  const { slowConsumers } = await import('../src/sim/transport.js');
+  const game = new Game();
+  const s = game.state;
+  s.coins = 1e9;
+  game.unlock('wetmill');
+  s.stations.farm.level = 25;
+  s.stations.farm.transport.level = 25;
+  s.stations.wetmill.level = 10;
+  for (let i = 0; i < 3000; i++) game.step(0.1);
+  assert.equal(s.stations.farm.status, 'blocked');
+  assert.deepEqual(slowConsumers(s, 'farm'), ['wetmill']);
+  // Con el Beneficiadero a la altura del Cafetal ya no es culpa de nadie más abajo.
+  s.stations.wetmill.level = 25;
+  assert.deepEqual(slowConsumers(s, 'farm'), []);
+});
