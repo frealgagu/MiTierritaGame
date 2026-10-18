@@ -389,6 +389,318 @@ def cheese_arepa():
     ]
 
 
+def curve(x0, y0, qx, qy, x1, y1, width=1.4):
+    """Línea curva fina (una curva cuadrática) como figura cerrada."""
+    dx, dy = x1 - x0, y1 - y0
+    length = math.hypot(dx, dy) or 1
+    nx, ny = -dy / length * width / 2, dx / length * width / 2
+    return (f'M {x0 + nx:.2f} {y0 + ny:.2f} Q {qx + nx:.2f} {qy + ny:.2f} {x1 + nx:.2f} {y1 + ny:.2f} '
+            f'L {x1 - nx:.2f} {y1 - ny:.2f} Q {qx - nx:.2f} {qy - ny:.2f} {x0 - nx:.2f} {y0 - ny:.2f} Z')
+
+
+def coffee_bean(cx, cy, rx, ry, rot, color, crease, shine, husk=None):
+    """Grano de café: óvalo con su surco curvo (y la cascarilla del pergamino, si se pide)."""
+    r = math.radians(rot)
+    ux, uy = math.cos(r), math.sin(r)
+    vx, vy = -math.sin(r), math.cos(r)
+    a = (cx - ux * rx * 0.72, cy - uy * rx * 0.72)
+    b = (cx + ux * rx * 0.72, cy + uy * rx * 0.72)
+    q = (cx + vx * ry * 0.45, cy + vy * ry * 0.45)
+    layers = [(OUTLINE, [grow(ellipse_pts(cx, cy, rx + (2 if husk else 0), ry + (2 if husk else 0), rot)[:-1], cx, cy, 1.6)])]
+    if husk:
+        layers.append((husk, [ellipse(cx, cy, rx + 2, ry + 2, rot)]))
+    layers += [
+        (color, [ellipse(cx, cy, rx, ry, rot)]),
+        (crease, [curve(a[0], a[1], q[0], q[1], b[0], b[1], 1.8)]),
+        (shine, [ellipse(cx - vx * ry * 0.45 - ux * rx * 0.2, cy - vy * ry * 0.45 - uy * rx * 0.2, rx * 0.32, ry * 0.16, rot)]),
+    ]
+    return layers
+
+
+PILE = [(30, 62, -20), (54, 56, 15), (42, 74, 5), (68, 70, -10), (52, 42, -35)]
+
+
+def bean_pile(color, crease, shine, husk=None, colors=None, rx=14, ry=10):
+    layers = []
+    for i, (cx, cy, rot) in enumerate(sorted(PILE, key=lambda b: b[1])):
+        layers += coffee_bean(cx, cy, rx, ry, rot, (colors or [color])[i % len(colors or [color])], crease, shine, husk)
+    return layers
+
+
+def washed():
+    """Café lavado: granos claros, mojados, recién salidos del agua."""
+    drops = []
+    for x, y, r in [(20, 26, 5), (80, 22, 6), (66, 12, 4)]:
+        drops.append(f'M {x} {y - r * 2.2} Q {x + r} {y - r * 0.4} {x + r} {y + r * 0.3} Q {x + r} {y + r * 1.3} {x} {y + r * 1.3} Q {x - r} {y + r * 1.3} {x - r} {y + r * 0.3} Q {x - r} {y - r * 0.4} {x} {y - r * 2.2} Z')
+    return [
+        ('#8fc8ee', [ellipse(50, 80, 46, 14)]),
+        ('#bfe2f7', [ellipse(46, 78, 30, 7)]),
+        *bean_pile('#e8d6a3', '#b39a5c', '#ffffff', colors=['#e8d6a3', '#dcc68e', '#efe0b4']),
+        ('#2e86d6', drops),
+        ('#d8eefb', [circle(18, 25, 1.6), circle(78, 21, 1.8)]),
+    ]
+
+
+def pulp():
+    """Pulpa: las cáscaras rojas que suelta la cereza al despulparla, abiertas y arrugadas."""
+    def peel(cx, cy, rx, ry, rot):
+        outer = ellipse_pts(cx, cy, rx, ry, rot, 200, 520, 40)
+        inner = ellipse_pts(cx + 3 * math.cos(math.radians(rot - 90)), cy + 3 * math.sin(math.radians(rot - 90)), rx * 0.78, ry * 0.55, rot, 520, 200, 40)
+        return pts(outer + inner), outer, inner
+
+    layers = []
+    for cx, cy, rot, color in [(32, 44, -25, '#9b2335'), (68, 42, 25, '#b52a3e'), (50, 66, 0, '#c43246'), (24, 72, 20, '#a12639'), (76, 72, -20, '#b52a3e')]:
+        shape, outer, inner = peel(cx, cy, 17, 13, rot)
+        layers.append((OUTLINE, [grow(outer + inner, cx, cy, 1.6)]))
+        layers.append(('#f0d9a8', [ellipse(cx, cy - 1, 13, 7, rot)]))
+        layers.append((color, [shape]))
+        layers.append(('#e58a96', [ellipse(cx - 7 * math.cos(math.radians(rot)), cy + 5, 3.5, 1.4, rot + 25)]))
+    return layers
+
+def parchment():
+    """Café pergamino: granos secos, todavía con su cascarilla de papel."""
+    return [
+        ('#c9a265', [poly(4, 74, 66, 60, 96, 76, 34, 94)]),
+        ('#a98446', [rib(14, 76, 74, 63, 1.2), rib(22, 82, 82, 68, 1.2), rib(30, 88, 90, 72, 1.2)]),
+        *bean_pile('#d6b97c', '#a3854a', '#fff6dc', husk='#f3e6c2', colors=['#d6b97c', '#cfb072', '#dcc28a']),
+    ]
+
+
+def green():
+    """Café verde: granos verde grisáceo, trillados y listos para tostar."""
+    return [
+        ('#d9c08c', ['M 6 92 Q 4 70 18 64 L 82 64 Q 96 70 94 92 Z']),
+        ('#c2a46c', [rib(10, 72, 90, 72, 1.2), rib(8, 82, 92, 82, 1.2)]),
+        *bean_pile('#9fb57a', '#5f7445', '#e6f0d2', colors=['#9fb57a', '#8ea56a', '#a9be86']),
+    ]
+
+
+def coffee_roasted():
+    """Café tostado: granos café oscuro, brillantes, con su surco."""
+    return bean_pile('#5a3420', '#1e0f06', '#b0805c', colors=['#5a3420', '#4a2a17', '#6b3e26'], rx=15, ry=11)
+
+
+def ground():
+    """Café molido: montoncito de café en polvo, con un grano al lado."""
+    return [
+        ('#c9a265', [ellipse(50, 84, 46, 10)]),
+        (OUTLINE, ['M 9 82 Q 22 36 48 26 Q 76 34 91 82 Z']),
+        ('#4a2a1a', ['M 12 81 Q 24 40 48 29 Q 74 37 88 81 Z']),
+        ('#2e190e', ['M 48 29 Q 74 37 88 81 L 62 81 Q 60 50 48 29 Z']),
+        ('#6b3e26', ['M 22 74 Q 30 50 44 38 Q 34 54 30 74 Z']),
+        ('#8a5a3a', [circle(36, 60, 1.3), circle(52, 50, 1.2), circle(60, 66, 1.4), circle(44, 72, 1.2), circle(70, 74, 1.1)]),
+        *coffee_bean(84, 26, 9, 6.5, -30, '#5a3420', '#1e0f06', '#b0805c'),
+    ]
+
+
+def coffee_bag():
+    """Bolsa de café: paquete de papel kraft doblado arriba, con la etiqueta del grano."""
+    return [
+        (OUTLINE, ['M 20.5 22 L 79.5 22 L 84.5 97.5 L 15.5 97.5 Z']),
+        ('#c8956a', ['M 23 24 L 77 24 L 82 95 L 18 95 Z']),
+        ('#ad7a52', ['M 66 24 L 77 24 L 82 95 L 70 95 Z']),
+        (OUTLINE, [rect(21.5, 6.5, 57, 19)]),
+        ('#d9a87c', [rect(24, 9, 52, 14)]),
+        ('#ad7a52', [rect(24, 14, 52, 2.4)]),
+        ('#fff3d6', [rect(28, 42, 44, 36)]),
+        ('#d7263d', [rect(28, 42, 44, 7)]),
+        *coffee_bean(50, 64, 11, 8, -25, '#5a3420', '#1e0f06', '#b0805c'),
+    ]
+
+
+def compost():
+    """Compost: montón de tierra negra con una lombriz y un brote."""
+    worm = curve(26, 66, 34, 54, 46, 62, 5)
+    return [
+        (OUTLINE, ['M 3 90 Q 14 52 50 44 Q 86 52 97 90 Z']),
+        ('#5b4636', ['M 6 88 Q 16 55 50 47 Q 84 55 94 88 Z']),
+        ('#46352a', ['M 50 47 Q 84 55 94 88 L 64 88 Q 62 62 50 47 Z']),
+        ('#7a6250', [circle(30, 74, 2.2), circle(44, 62, 1.8), circle(58, 76, 2), circle(70, 66, 1.6), circle(22, 84, 1.6), circle(80, 80, 1.8), circle(52, 84, 1.4)]),
+        ('#e8919b', [worm]),
+        ('#c86a75', [circle(45.5, 61.5, 2.4)]),
+        ('#4caf50', [leaf(62, 46, 76, 30, 6), leaf(62, 46, 52, 28, 5)]),
+        ('#2e7d32', [rib(62, 47, 62, 40, 1.6)]),
+    ]
+
+
+def bagasse():
+    """Bagazo: las fibras de la caña ya molida, en un manojo desordenado."""
+    strips = [(10, 80, 50, 58, 90, 74, '#e0cf94'), (14, 66, 46, 40, 86, 56, '#d4bf7e'), (20, 88, 56, 70, 92, 88, '#cdb878'), (12, 52, 44, 26, 80, 40, '#e6d7a2'), (24, 74, 60, 50, 94, 62, '#d9c587')]
+    layers = []
+    for x0, y0, qx, qy, x1, y1, color in strips:
+        layers.append((OUTLINE, [curve(x0, y0, qx, qy, x1, y1, 12)]))
+        layers.append((color, [curve(x0, y0, qx, qy, x1, y1, 9)]))
+        layers.append(('#a8915a', [curve(x0 + 2, y0, qx, qy, x1 - 2, y1, 1.2)]))
+    return layers
+
+
+def kernel(cx, cy, rot, color, tip, size=1.0):
+    """Grano de maíz: diente de arriba ancho y redondeado, angosto abajo, con el germen más claro."""
+    k = size
+    path = [(-7.5, -1)] + [(7.5 * math.cos(math.radians(a)), -1 - 8 * math.sin(math.radians(a))) for a in range(180, -1, -15)][::-1] + [(7.5, -1), (4, 8), (0, 9.5), (-4, 8)]
+    shape = rotate([(cx + x * k, cy + y * k) for x, y in path], rot, cx, cy)
+    germ = rotate([(cx + x * k, cy + y * k) for x, y in [(0, -6), (3, -1), (2, 5), (0, 6.5), (-2, 5), (-3, -1)]], rot, cx, cy)
+    return [
+        (OUTLINE, [grow(shape, cx, cy, 1.4)]),
+        (color, [pts(shape)]),
+        (tip, [pts(germ)]),
+    ]
+
+KERNELS = [(30, 40, -20), (50, 34, 5), (70, 40, 25), (22, 60, -35), (42, 56, -5), (62, 56, 15), (80, 62, 30), (32, 76, -15), (52, 76, 10), (70, 80, 20)]
+
+
+def corn_kernels():
+    """Maíz desgranado: granos amarillos sueltos."""
+    layers = []
+    for i, (cx, cy, rot) in enumerate(KERNELS):
+        layers += kernel(cx, cy, rot, ['#f2c230', '#e9b520', '#f5cc45'][i % 3], '#ffe48a')
+    return layers
+
+
+def corn_hulled():
+    """Maíz pilado: granos blancos, pelados, en el pilón de madera."""
+    layers = [
+        (OUTLINE, ['M 14 52 L 86 52 L 78 90 Q 50 98 22 90 Z']),
+        ('#8b5a2b', ['M 17 54 L 83 54 L 76 88 Q 50 95 24 88 Z']),
+        ('#6e4420', ['M 62 54 L 83 54 L 76 88 Q 68 91 60 92 Z']),
+        ('#a87442', [ellipse(50, 54, 34, 8)]),
+    ]
+    for i, (cx, cy, rot) in enumerate([(34, 46, -20), (50, 40, 5), (66, 46, 25), (42, 30, -10), (58, 30, 15), (50, 52, 0)]):
+        layers += kernel(cx, cy, rot, ['#f4ecd6', '#ece2c4', '#f8f2e2'][i % 3], '#ffffff', 0.95)
+    return layers
+
+
+def corn_dough():
+    """Masa de maíz: bola de masa amarilla clara sobre la tabla."""
+    return [
+        (OUTLINE, [rect(4.5, 72.5, 91, 21)]),
+        ('#b07a44', [rect(7, 75, 86, 16)]),
+        ('#8f5f33', [rib(10, 83, 90, 83, 1.2)]),
+        (OUTLINE, [ellipse(50, 52, 37, 30)]),
+        ('#f1dc9a', [ellipse(50, 52, 34.5, 27.5)]),
+        ('#e2c579', ['M 50 79 Q 78 78 84 56 Q 82 76 50 79 Z', 'M 30 60 Q 44 66 58 60 Q 44 70 30 60 Z']),
+        ('#fbefc6', [ellipse(36, 38, 12, 6, -20)]),
+        ('#d9b86a', [circle(60, 40, 1.4), circle(66, 52, 1.2), circle(44, 50, 1.2)]),
+    ]
+
+
+def cacao_pod():
+    """Mazorca de cacao: gruesa, alargada, con surcos, amarilla y rojiza, colgando del tallo."""
+    x0, y0, x1, y1 = 30, 14, 70, 94
+    w = 38
+    layers = [
+        ('#6d4c41', [rect(26, 0, 6, 18, -20)]),
+        (OUTLINE, [leaf(x0 - 2.5, y0 - 2.5, x1 + 2.5, y1 + 2.5, w + 3)]),
+        ('#e8961c', [leaf(x0, y0, x1, y1, w)]),
+        ('#c9502a', [leaf(x0, y0, 56, 52, 18)]),
+        ('#f5c04a', [leaf(x0 + 10, y0 + 22, x1 - 6, y1 - 14, 10)]),
+    ]
+    ridges = [curve(x0, y0, x0 - 18, 62, x1, y1, 2.2), curve(x0, y0, 32, 58, x1, y1, 2.2), curve(x0, y0, 52, 50, x1, y1, 2.2), curve(x0, y0, 72, 44, x1, y1, 2.2), curve(x0, y0, x1 + 18, 40, x1, y1, 2.2)]
+    layers.append(('#a8650c', ridges))
+    return layers
+
+def cacao_paste():
+    """Pasta de cacao: el cacao molido, espeso y brillante, en una totuma con su cuchara."""
+    return [
+        ('#8b5a2b', [rect(60, 2, 7, 46, 28)]),
+        (OUTLINE, ['M 6 46 L 94 46 Q 90 92 50 95 Q 10 92 6 46 Z']),
+        ('#b5651d', ['M 9 48 L 91 48 Q 87 89 50 92 Q 13 89 9 48 Z']),
+        ('#934f15', ['M 66 48 L 91 48 Q 87 84 66 90 Z']),
+        ('#4b2e1a', [ellipse(50, 47, 41, 11)]),
+        ('#6b4428', [ellipse(40, 44, 16, 4, -5)]),
+        ('#4b2e1a', ['M 18 52 Q 20 62 23 63 Q 26 61 25 52 Z', 'M 70 54 Q 72 66 75 66 Q 78 64 76 53 Z']),
+        ('#8b5a2b', [rect(56, 30, 8, 18, 28)]),
+    ]
+
+
+def cafe_origen():
+    """Café de origen: costal de fique amarrado, con granos tostados y una franja de Colombia."""
+    return [
+        (OUTLINE, ['M 18 28 Q 12 60 16 92 L 84 92 Q 88 60 82 28 Q 66 36 50 36 Q 34 36 18 28 Z']),
+        ('#d9c08c', ['M 20.5 30 Q 14.5 60 18.5 89.5 L 81.5 89.5 Q 85.5 60 79.5 30 Q 65 38 50 38 Q 35 38 20.5 30 Z']),
+        ('#c2a46c', [rib(24, 50, 76, 50, 1), rib(22, 66, 78, 66, 1), rib(22, 80, 78, 80, 1), rib(40, 38, 38, 88, 1), rib(60, 38, 62, 88, 1)]),
+        ('#f2c230', [rect(30, 56, 40, 6)]),
+        ('#2e4fa8', [rect(30, 62, 40, 3)]),
+        ('#d7263d', [rect(30, 65, 40, 3)]),
+        ('#8b5a2b', [ellipse(50, 28, 20, 5), rect(46, 14, 8, 14)]),
+        *coffee_bean(40, 22, 8, 5.5, -15, '#5a3420', '#1e0f06', '#b0805c'),
+        *coffee_bean(58, 20, 8, 5.5, 20, '#4a2a17', '#1e0f06', '#b0805c'),
+        *coffee_bean(50, 12, 7.5, 5, 0, '#6b3e26', '#1e0f06', '#b0805c'),
+    ]
+
+
+def raw_milk():
+    """Leche cruda: cantina de aluminio de las fincas, recién ordeñada."""
+    body = 'M 28 34 L 72 34 L 76 46 L 76 92 Q 76 96 72 96 L 28 96 Q 24 96 24 92 L 24 46 Z'
+    return [
+        (OUTLINE, ['M 25.5 31.5 L 74.5 31.5 L 78.5 45.5 L 78.5 92 Q 78.5 98.5 72 98.5 L 28 98.5 Q 21.5 98.5 21.5 92 L 21.5 45.5 Z']),
+        ('#c9d1d6', [body]),
+        ('#a9b3ba', ['M 62 34 L 72 34 L 76 46 L 76 92 Q 76 96 72 96 L 62 96 Z']),
+        ('#8f9aa2', [rect(24, 56, 52, 4), rect(24, 82, 52, 4)]),
+        ('#eef2f4', [rect(30, 46, 4, 44)]),
+        (OUTLINE, [rect(33.5, 13.5, 33, 22)]),
+        ('#b8c1c7', [rect(36, 16, 28, 18)]),
+        ('#d9dfe3', [ellipse(50, 16, 16, 4)]),
+        ('#8f9aa2', [rect(46, 6, 8, 8), curve(18, 50, 10, 58, 20, 66, 3), curve(82, 50, 90, 58, 80, 66, 3)]),
+        ('#ffffff', ['M 50 64 Q 58 73 58 77 Q 58 83 50 83 Q 42 83 42 77 Q 42 73 50 64 Z']),
+    ]
+
+
+def container():
+    """Contenedor de exportación: el contenedor de acero, con sus puertas, listo para el barco."""
+    front = [(8, 40), (58, 52), (58, 88), (8, 76)]
+    side = [(58, 52), (92, 36), (92, 72), (58, 88)]
+    top = [(8, 40), (42, 24), (92, 36), (58, 52)]
+    layers = [
+        (OUTLINE, [grow([(8, 40), (42, 24), (92, 36), (92, 72), (58, 88), (8, 76)], 50, 56, 2.4)]),
+        ('#d35400', [pts(front)]),
+        ('#a84300', [pts(side)]),
+        ('#e8732a', [pts(top)]),
+    ]
+    ribs = [rib(8 + 50 * t, 40 + 12 * t + 3, 8 + 50 * t, 76 + 12 * t - 3, 1.6) for t in [i / 8 for i in range(1, 8)]]
+    layers.append(('#b84800', ribs))
+    doors = [rib(66, 50, 66, 82, 1.8), rib(75, 46, 75, 78, 1.8), rib(84, 42, 84, 74, 1.8)]
+    layers.append(('#7f3300', doors))
+    layers.append(('#ffffff', [poly(16, 50, 34, 54.3, 34, 60, 16, 55.7)]))
+    return layers
+
+
+def breakfast():
+    """Desayuno campesino: arepa, huevo frito y una taza de chocolate."""
+    return [
+        (OUTLINE, [ellipse(46, 66, 44, 26)]),
+        ('#2e6fd1', [ellipse(46, 66, 42, 24)]),
+        ('#ffffff', [ellipse(46, 66, 37, 20)]),
+        *arepa_disc(34, 58, 18, 8, 5),
+        ('#b9792e', [circle(28, 56, 1.6), circle(38, 60, 1.4)]),
+        ('#fffdf6', ['M 50 68 Q 54 56 66 58 Q 78 56 78 66 Q 80 76 66 77 Q 52 80 50 68 Z']),
+        ('#f2a900', [circle(64, 67, 6)]),
+        ('#ffd54f', [circle(62, 65, 2.2)]),
+        (OUTLINE, ['M 70.5 16.5 L 97.5 16.5 L 95 44 Q 94 48.5 89 48.5 L 79 48.5 Q 74 48.5 73 44 Z']),
+        ('#ffffff', ['M 73 19 L 95 19 L 92.6 43.5 Q 92 46 89 46 L 79 46 Q 76 46 75.4 43.5 Z']),
+        ('#6b3e26', [ellipse(84, 20, 10.5, 3)]),
+        ('#ffffff', [curve(95, 24, 103, 30, 94, 38, 3)]),
+    ]
+
+
+def coffee_plant():
+    """Mata de café: arbusto verde oscuro, de hojas brillantes, con racimos de cerezas rojas."""
+    leaves = [
+        ('#2e7d32', [leaf(50, 30, 22, 12, 9), leaf(50, 30, 78, 12, 9), leaf(50, 46, 14, 36, 10), leaf(50, 46, 86, 36, 10), leaf(50, 62, 10, 58, 11), leaf(50, 62, 90, 58, 11)]),
+        ('#388e3c', [leaf(50, 8, 40, 24, 5), leaf(50, 8, 60, 24, 5), leaf(50, 40, 30, 26, 8), leaf(50, 40, 70, 26, 8), leaf(50, 56, 26, 48, 9), leaf(50, 56, 74, 48, 9)]),
+        ('#66bb6a', [rib(50, 30, 26, 14, 1), rib(50, 30, 74, 14, 1), rib(50, 46, 18, 37, 1), rib(50, 46, 82, 37, 1), rib(50, 62, 14, 58, 1), rib(50, 62, 86, 58, 1)]),
+    ]
+    berries = [circle(x, y, 3.2) for x, y in [(40, 34), (44, 37), (60, 34), (56, 37), (34, 52), (38, 55), (64, 52), (68, 55), (30, 66), (70, 66), (46, 50), (54, 50)]]
+    return [
+        ('#8a5a3c', [ellipse(50, 92, 30, 6)]),
+        ('#6d4c41', [rect(47, 30, 6, 62)]),
+        *leaves,
+        ('#7f1d1d', [circle(x + 0.8, y + 0.8, 3.2) for x, y in [(40, 34), (60, 34), (34, 52), (64, 52), (30, 66), (70, 66), (46, 50), (54, 50)]]),
+        ('#d32f2f', berries),
+        ('#ff8a80', [circle(x - 1, y - 1, 1) for x, y in [(40, 34), (60, 34), (34, 52), (64, 52), (46, 50), (54, 50)]]),
+    ]
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -403,6 +715,25 @@ ICONS = [
     (0xE00A, 'milk_chocolate', milk_chocolate),
     (0xE00B, 'cheese_arepa', cheese_arepa),
     (0xE00C, 'arepa', arepa),
+    (0xE00D, 'washed', washed),
+    (0xE00E, 'pulp', pulp),
+    (0xE00F, 'parchment', parchment),
+    (0xE010, 'green_coffee', green),
+    (0xE011, 'roasted_coffee', coffee_roasted),
+    (0xE012, 'ground_coffee', ground),
+    (0xE013, 'coffee_bag', coffee_bag),
+    (0xE014, 'compost', compost),
+    (0xE015, 'bagasse', bagasse),
+    (0xE016, 'corn_kernels', corn_kernels),
+    (0xE017, 'corn_hulled', corn_hulled),
+    (0xE018, 'corn_dough', corn_dough),
+    (0xE019, 'cacao_pod', cacao_pod),
+    (0xE01A, 'cacao_paste', cacao_paste),
+    (0xE01B, 'cafe_origen', cafe_origen),
+    (0xE01C, 'raw_milk', raw_milk),
+    (0xE01D, 'container', container),
+    (0xE01E, 'breakfast', breakfast),
+    (0xE01F, 'coffee_plant', coffee_plant),
 ]
 
 
