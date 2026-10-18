@@ -1,5 +1,6 @@
-// Segundo final (v1.6): todas las estaciones de todas las zonas en el nivel 100. Al lograrlo se puede
-// volver a empezar desde la Finca con la producción multiplicada (ver modifiers.js: legacyMult).
+// Segundo final (v1.6): todas las estaciones de todas las zonas en el nivel 100, con el primer final
+// ya logrado (el Pueblo completo, desde la v1.7.12). Al lograrlo se puede volver a empezar desde la
+// Finca con la producción multiplicada (ver modifiers.js: legacyMult).
 import { ZONE_LIST } from '../data/zones/index.js';
 import { MAX_LEVEL } from './rules.js';
 import { createInitialState } from './state.js';
@@ -11,9 +12,11 @@ export const ALL_STATIONS = [...new Set(ZONE_LIST.flatMap((z) => [...z.chain, ..
 // Cuántas estaciones ya están en el nivel 100 (para el progreso del segundo final).
 export const maxedCount = (state) => ALL_STATIONS.filter((id) => (state.stations[id]?.level ?? 0) >= MAX_LEVEL).length;
 
-// Marca el segundo final la primera vez que todo llega al nivel 100 (y avisa).
+// Marca el segundo final la primera vez que todo llega al nivel 100 con el Pueblo ya completo (y avisa).
+// Se mira al comprar y al cobrar un objetivo: se puede tener todo al 100 antes de exportar los
+// contenedores del primer final, y entonces llega al cobrarlo.
 export function checkMastery(state, bus) {
-  if (state.mastered || maxedCount(state) < ALL_STATIONS.length) return false;
+  if (state.mastered || !state.zones.pueblo?.complete || maxedCount(state) < ALL_STATIONS.length) return false;
   state.mastered = true;
   bus.emit('mastered', { playTime: state.playTime });
   return true;

@@ -55,6 +55,7 @@ test('con la producción ×8 la cadena sigue cuadrando: al nivel 100 ningún pat
 test('el segundo final llega al subir la última estación al nivel 100', () => {
   const game = everything(100);
   const s = game.state;
+  s.zones.pueblo.complete = true;
   assert.equal(ALL_STATIONS.length, 38);
   s.stations.export_dock.level = 99;
   assert.equal(maxedCount(s), 37);
@@ -67,6 +68,29 @@ test('el segundo final llega al subir la última estación al nivel 100', () => 
   assert.equal(s.mastered, true);
   // Solo una vez.
   game.buy('dispatch:pueblo', 1);
+  assert.equal(events.length, 1);
+});
+
+test('sin el primer final no hay segundo: llega al cobrar los contenedores del Pueblo', async () => {
+  const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
+  const game = everything(100);
+  const s = game.state;
+  const events = [];
+  game.bus.on('mastered', (e) => events.push(e));
+  // Todo al nivel 100, pero el Pueblo sin completar: no cuenta.
+  s.stations.export_dock.level = 99;
+  assert.ok(game.buy('export_dock', 1));
+  assert.equal(maxedCount(s), ALL_STATIONS.length);
+  assert.equal(s.mastered, false);
+  assert.equal(events.length, 0);
+  // Se cumplen y cobran los objetivos del Pueblo; el último (exportar los contenedores) es el primer final.
+  for (const g of GOALS_BY_ZONE.pueblo) s.goals.claimed.push(g.id);
+  s.goals.claimed.pop();
+  const final = GOALS_BY_ZONE.pueblo.at(-1);
+  s.stats.sold[final.product] = final.amount;
+  assert.ok(game.claimGoal(final.id));
+  assert.equal(s.zones.pueblo.complete, true);
+  assert.equal(s.mastered, true);
   assert.equal(events.length, 1);
 });
 

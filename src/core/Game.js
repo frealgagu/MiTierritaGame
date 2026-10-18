@@ -121,7 +121,9 @@ export class Game {
   }
 
   claimGoal(id) {
-    return claimGoal(this.state, id, this.bus);
+    const claimed = claimGoal(this.state, id, this.bus);
+    if (claimed) checkMastery(this.state, this.bus);
+    return claimed;
   }
 
   unlockZone(id) {

@@ -136,8 +136,20 @@ async function start() {
   };
   const mastery = () => showMastery(game.state, restart);
   game.bus.on('mastered', () => {
-    sound.milestone();
-    mastery();
+    // Si llega al cobrar el primer final (ya estaba todo al 100), primero la pantalla del Pueblo y,
+    // al cerrarla, la del segundo final.
+    const victory = document.getElementById('victory');
+    const show = () => {
+      sound.milestone();
+      mastery();
+    };
+    if (victory.hidden) return show();
+    const watch = new MutationObserver(() => {
+      if (!victory.hidden) return;
+      watch.disconnect();
+      show();
+    });
+    watch.observe(victory, { attributes: true, attributeFilter: ['hidden'] });
   });
   goals.onMastery = mastery;
   document.getElementById('restart-btn').addEventListener('click', () => {

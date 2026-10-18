@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v1.7.12 — El segundo final, después del primero
+- Para el segundo final (todas las estaciones al nivel 100) ahora también hace falta el primero: el Pueblo completo, con los 7.000 contenedores exportados y cobrados. Antes se podía llegar al segundo final teniendo todo al 100 sin haber terminado el Pueblo.
+- Si ya está todo al 100 cuando se cobra el final del Pueblo, primero sale su pantalla y, al cerrarla, la del segundo final.
+
 ## v1.7.11 — La Quesera no se queda atrás
 - **Arreglo**: una estación por debajo del nivel de la anterior no recibía nada si su entrada no alcanzaba para una carga entera de las mulas (por ejemplo, la Quesera en 45 con la Pasteurizadora en 50: las mulas llevan 270 de leche y a la Quesera le caben 58). Se quedaba parada con ⏸️ y la leche se vendía. Ahora se le lleva lo que quepa en cuanto tiene media entrada libre, y procesa todo lo que puede.
 - La Pasteurizadora reparte su leche en cuatro cuartos: uno para la Quesera, uno para la Descremadora, uno para la Paila y el último para la **Ruta de la leche** del Cacaotal. Mientras el Cacaotal no abre, ese cuarto se vende como leche, y el juego lo mostraba como un problema: ↪️ en la Pasteurizadora todo el tiempo y «reparte más de lo que procesan sus ramas… mejórala» en la Quesera y las otras ramas, aun con todo al mismo nivel. Ahora no:
