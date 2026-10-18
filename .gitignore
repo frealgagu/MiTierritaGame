@@ -1,2 +1,6 @@
 node_modules/
 dist/
+
+# Claves de firma: nunca en el repositorio (van en los secretos de GitHub).
+*.keystore
+*.jks

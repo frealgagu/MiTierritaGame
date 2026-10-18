@@ -2,7 +2,7 @@
 
 ## v1.7.3 — Web y APK en el mismo flujo
 - GitHub Actions publica en cada push la web y el APK a la vez: el APK queda en https://frealgagu.github.io/Game/cafetal.apk y el menú ⚙️ de la web tiene «📱 App de Android».
-- Todos los APK de prueba se firman con la misma clave (guardada en el repositorio, solo para pruebas): se instalan encima del anterior sin perder la partida. La versión de la app sale de `package.json`.
+- Todos los APK de prueba se firman con la misma clave, que GitHub Actions toma de los secretos del repositorio (no queda en el código): se instalan encima del anterior sin perder la partida. La versión de la app sale de `package.json`.
 
 ## v1.7.2 — App de Android
 - **App de Android** con Capacitor 8 (como Melvor Idle): el juego va dentro de la app (funciona sin internet), con ícono adaptable y pantalla de inicio. «Atrás» cierra la ventana o el panel abierto y, si no hay ninguno, pasa la app a segundo plano sin cerrarla. Al salir se guarda la partida y al volver se suma lo producido mientras tanto. `npm run android:apk` genera el APK.
