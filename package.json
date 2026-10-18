@@ -1,7 +1,7 @@
 {
   "name": "cafetal",
   "private": true,
-  "version": "1.7.1",
+  "version": "1.7.2",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -10,12 +10,18 @@
     "preview": "vite preview",
     "test": "node --test",
     "build:artifact": "vite build && node tools/artifact-page.mjs",
-    "balance": "node tools/balance-sim.js"
+    "balance": "node tools/balance-sim.js",
+    "android:sync": "vite build && cap sync android",
+    "android:apk": "npm run android:sync && cd android && ./gradlew assembleDebug"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.3",
     "pixi.js": "8.21.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.5.3",
     "vite": "7.3.6"
   }
 }

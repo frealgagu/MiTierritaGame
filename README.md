@@ -37,6 +37,15 @@ Las seis zonas del juego, cada una se abre al completar la anterior: **La Finca*
 - **Instalable en el móvil** (PWA) y jugable sin internet.
 - **Música**: «Apple Cider», de Zane Little (CC0, dominio público, vía OpenGameArt).
 
+### App de Android
+El mismo juego empaquetado con [Capacitor](https://capacitorjs.com) (como Melvor Idle): va dentro de la app, funciona sin internet y el botón «atrás» cierra ventanas o pasa la app a segundo plano. Para generar el APK hace falta Java 21 y el Android SDK (plataforma 36):
+
+```bash
+npm run android:apk   # compila el juego, lo copia a android/ y genera android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+El APK de depuración se instala directamente en el teléfono (hay que permitir «instalar apps desconocidas»). Para Google Play hará falta una versión firmada (AAB) con una clave propia.
+
 ### Instalar en el móvil
 Abre https://frealgagu.github.io/Game/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).
 

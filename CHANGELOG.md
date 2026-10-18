@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v1.7.2 — App de Android
+- **App de Android** con Capacitor 8 (como Melvor Idle): el juego va dentro de la app (funciona sin internet), con ícono adaptable y pantalla de inicio. «Atrás» cierra la ventana o el panel abierto y, si no hay ninguno, pasa la app a segundo plano sin cerrarla. Al salir se guarda la partida y al volver se suma lo producido mientras tanto. `npm run android:apk` genera el APK.
+
 ## v1.7.1 — Reinicios sin límite
 - Los reinicios del segundo final nunca tuvieron tope, pero los números grandes se veían mal. Ahora, más allá de Dc (10³³), las cifras pasan a notación científica (4,20e40) y el multiplicador se muestra exacto mientras se pueda leer (×2.048, ×1.048.576) y abreviado después (×1,10T, ×1,43e45). Nuevos sufijos: Sp, Oc, No y Dc.
 - **Opciones de desarrollador**: «Reinicios» es ahora un número libre (antes, una lista hasta ×1.024) que muestra el multiplicador y se aplica mientras se escribe. Llega hasta 900 reinicios: más allá, las monedas dejarían de caber en los números de JavaScript.

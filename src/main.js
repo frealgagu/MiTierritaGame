@@ -10,6 +10,7 @@ import { GoalsView } from './ui/GoalsView.js';
 import { ResearchView } from './ui/ResearchView.js';
 import { showVictory, showWelcome } from './ui/dialogs.js';
 import { showMastery } from './ui/mastery.js';
+import { bindNative, isNativeApp } from './native.js';
 import { checkMastery, restartState } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
 import { ZONES_BY_ID } from './data/zones/index.js';
@@ -145,12 +146,17 @@ async function start() {
     toast(`🔬 ${RESEARCH_BY_ID[id].name}: ${RESEARCH_BY_ID[id].desc}`, 4000);
   });
   window.addEventListener('resize', () => scene.resize(app.screen.width, app.screen.height));
-  // Esc cierra la ventana abierta o, si no hay ninguna, el panel de la estación.
-  window.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape') return;
+  // Esc (o «atrás» en Android) cierra la ventana abierta o, si no hay ninguna, el panel de la estación.
+  // Devuelve si cerró algo.
+  const closeTop = () => {
     const open = [...document.querySelectorAll('.modal')].filter((m) => !m.hidden);
     if (open.length) open.forEach((m) => (m.hidden = true));
     else if (panel.id) panel.close();
+    else return false;
+    return true;
+  };
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeTop();
   });
 
   if (!saved) toast('Toca el 🌳 Cafetal y mejóralo cuando tengas monedas.', 6000);
@@ -180,22 +186,26 @@ async function start() {
   };
   setInterval(persist, AUTOSAVE_MS);
   let hiddenAt = null;
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      hiddenAt = Date.now();
-      persist();
-    } else if (hiddenAt) {
-      const r = applyOffline(game, (Date.now() - hiddenAt) / 1000);
-      if (r) showWelcome(r, () => sound.coin());
-      hiddenAt = null;
-    }
-  });
+  const onHide = () => {
+    hiddenAt ??= Date.now();
+    persist();
+  };
+  // Al volver, lo producido mientras tanto (una sola vez, aunque avisen la página y la app).
+  const onShow = () => {
+    if (!hiddenAt) return;
+    const r = applyOffline(game, (Date.now() - hiddenAt) / 1000);
+    if (r) showWelcome(r, () => sound.coin());
+    hiddenAt = null;
+  };
+  document.addEventListener('visibilitychange', () => (document.hidden ? onHide() : onShow()));
   window.addEventListener('pagehide', persist);
 
   bindMenu(game, sound, music);
   bindDevOptions(game);
-  // Jugable sin internet e instalable en el móvil (solo en la versión publicada).
-  if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  // En la app de Android el juego ya va dentro del paquete: sin service worker, con el botón «atrás».
+  if (isNativeApp()) bindNative({ closeTop, onHide, onShow });
+  // Jugable sin internet e instalable en el móvil (solo en la versión web publicada).
+  else if (import.meta.env.PROD && 'serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 }
