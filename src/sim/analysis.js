@@ -241,7 +241,13 @@ export function routeFlow(state, routeId, depth = 0, memo = null) {
   const own = want(routeId);
   const siblings = ROUTES.filter((x) => x.from === r.from && x.product === r.product).reduce((n, x) => n + want(x.id), 0);
   const source = analyzeChain(state, r.from, { exports: false, depth, memo });
-  const supply = (source.exported[r.product] ?? 0) + source.rows.filter((row) => Object.keys(STATIONS_BY_ID[row.id].out)[0] === r.product).reduce((n, row) => n + row.diverted, 0);
+  let supply = (source.exported[r.product] ?? 0) + source.rows.filter((row) => Object.keys(STATIONS_BY_ID[row.id].out)[0] === r.product).reduce((n, row) => n + row.diverted, 0);
+  // Si a la bodega de allá le llega más de lo que el Willys vende y las rutas se llevan, se llena y la
+  // zona entera se frena, también lo que manda esta ruta (la leche que sobraba en la Lechería dejaba
+  // sin queso al Maizal). Se reduce en la misma proporción.
+  const inflow = source.toWarehouse + Object.values(source.exported).reduce((a, b) => a + b, 0);
+  const outflow = source.dispatch + ROUTES.filter((x) => x.from === r.from).reduce((n, x) => n + want(x.id), 0);
+  if (inflow > outflow) supply *= outflow / inflow;
   return Math.min(own, siblings > 0 ? (supply * own) / siblings : 0);
 }
 
@@ -331,6 +337,29 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
     const neck = analyzeChain(state, r.from, { memo: baseMemo }).bottleneck;
     if (neck && path.includes(neck.split(':')[0])) feeders.add(neck);
   }
+  // Lo que de verdad frena un importado, siguiendo la cadena de zonas (ver más abajo, «Nada suma»).
+  const chase = (r, hops) => {
+    if (routeRate(state, r.id) < routeDemandRate(state, r.id) * (1 - LOSS) && !quote(`route:${r.id}`, 1).maxed) return `route:${r.id}`;
+    const path = supplyPath(state, r);
+    if (hops < MAX_ROUTE_DEPTH) {
+      for (const row of analyzeChain(state, r.from, { memo: baseMemo }).rows) {
+        const deeper = path.includes(row.id) && ROUTES_BY_ID[row.importLimited] ? chase(ROUTES_BY_ID[row.importLimited], hops + 1) : null;
+        if (deeper) return deeper;
+      }
+    }
+    // Si allá la bodega no da abasto, lo que sobra la llena y lo que manda la ruta no alcanza a entrar:
+    // su despacho también cuenta.
+    const there = analyzeChain(state, r.from, { memo: baseMemo });
+    const jammed = there.toWarehouse > there.dispatch * (1 + LOSS) ? [`dispatch:${r.from}`] : [];
+    const choices = [...path.flatMap((id) => [id, `${id}:transport`]), ...jammed].filter((id) => !quote(id, 1).maxed);
+    return choices.length ? choices.reduce((low, x) => (upgradeLevel(state, x) < upgradeLevel(state, low) ? x : low)) : null;
+  };
+  // Ese faltante también se prueba como mejora: con la bodega de una zona llena (lo que sobra no
+  // alcanza a venderse), subir su despacho deja salir lo que manda por la ruta.
+  for (const r of incoming.filter(short)) {
+    const id = chase(r, 1);
+    if (id) feeders.add(id);
+  }
   // Cada estado de prueba se analiza con su propia memoria, compartida entre las zonas que suma. Si se
   // sabe qué cambió (`touched`), lo que no puede cambiar se copia del análisis del estado actual.
   const score = (st, touched = null) => {
@@ -363,9 +392,11 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
       cost += q.cost;
       const levels = q.levels ?? 1;
       if (id.startsWith('dispatch')) {
-        const zone = trial.zones[zoneId];
-        trial.zones[zoneId] = { ...zone, dispatch: { level: zone.dispatch.level + levels } };
-        touched.zones.add(zoneId);
+        // El despacho de esta zona o, si se persigue un faltante, el de una zona que la abastece.
+        const zid = id.split(':')[1];
+        const zone = trial.zones[zid];
+        trial.zones[zid] = { ...zone, dispatch: { level: zone.dispatch.level + levels } };
+        touched.zones.add(zid);
       } else if (id.startsWith('route:')) {
         const rid = id.split(':')[1];
         trial.routes[rid] = { ...trial.routes[rid], level: trial.routes[rid].level + levels };
@@ -442,18 +473,6 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
   // atrasado del camino que lleva a ese producto allá; y si allá también se espera un importado (las
   // arepas del Maizal esperan queso de la Lechería), se sigue hasta esa zona. Así se sube la cadena de
   // otra zona paso a paso aunque cada paso, solo, no se note todavía.
-  const chase = (r, hops) => {
-    if (routeRate(state, r.id) < routeDemandRate(state, r.id) * (1 - LOSS) && !quote(`route:${r.id}`, 1).maxed) return `route:${r.id}`;
-    const path = supplyPath(state, r);
-    if (hops < MAX_ROUTE_DEPTH) {
-      for (const row of analyzeChain(state, r.from, { memo: baseMemo }).rows) {
-        const deeper = path.includes(row.id) && ROUTES_BY_ID[row.importLimited] ? chase(ROUTES_BY_ID[row.importLimited], hops + 1) : null;
-        if (deeper) return deeper;
-      }
-    }
-    const choices = path.flatMap((id) => [id, `${id}:transport`]).filter((id) => !quote(id, 1).maxed);
-    return choices.length ? choices.reduce((low, x) => (upgradeLevel(state, x) < upgradeLevel(state, low) ? x : low)) : null;
-  };
   const neck = analysis.bottleneck;
   const neckRow = neck && analysis.rows.find((r) => r.id === neck.split(':')[0]);
   const waiting = neck?.startsWith('route:') ? ROUTES_BY_ID[neck.split(':')[1]] : ROUTES_BY_ID[neckRow?.importLimited];
