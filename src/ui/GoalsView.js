@@ -4,6 +4,7 @@ import { ZONES_BY_ID } from '../data/zones/index.js';
 import { activeGoals, goalProgress, goalText } from '../sim/goals.js';
 import { ALL_STATIONS, maxedCount } from '../sim/legacy.js';
 import { legacyMult } from '../sim/modifiers.js';
+import { fit } from './fit.js';
 
 // Objetivos: un marcador abajo a la izquierda con el objetivo actual y una lista con los tres visibles.
 export class GoalsView {
@@ -57,7 +58,15 @@ export class GoalsView {
     const master = !g && state.zones.pueblo?.complete ? masteryCard(state, true) : null;
     this.tracker.hidden = !g && !master;
     const trackerHtml = g ? goalCard(g, progress[i], true) : master;
-    if (trackerHtml && trackerHtml !== this.trackerHtml) this.tracker.innerHTML = this.trackerHtml = trackerHtml;
+    if (trackerHtml && trackerHtml !== this.trackerHtml) {
+      this.tracker.innerHTML = this.trackerHtml = trackerHtml;
+      this.trackerFit = false;
+    }
+    // El marcador tiene alto fijo: un texto largo se achica (cuando se ve; oculto no se puede medir).
+    if (!this.trackerFit && this.tracker.clientWidth) {
+      fit(this.tracker.querySelector('.goal-text'));
+      this.trackerFit = true;
+    }
 
     if (this.modal.hidden) return;
     const list = GOALS_BY_ZONE[zone];

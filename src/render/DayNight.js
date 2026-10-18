@@ -74,7 +74,7 @@ export function clockLabel(h) {
   const hh = Math.floor(h);
   const mm = Math.floor((h - hh) * 6) * 10;
   const icon = h >= 5.5 && h < 7.5 ? '🌅' : h >= 7.5 && h < 17.5 ? '☀️' : h >= 17.5 && h < 19.5 ? '🌇' : '🌙';
-  return `${icon} ${hh}:${String(mm).padStart(2, '0')}`;
+  return `${icon} ${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
 }
 
 const hex = (c) => `#${c.toString(16).padStart(6, '0')}`;

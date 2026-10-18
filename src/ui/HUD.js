@@ -8,6 +8,7 @@ import { clockLabel } from '../render/DayNight.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
+import { setFitted } from './fit.js';
 
 // Nombre legible de lo que se mejora: 'farm', 'farm:transport', 'dispatch:<zona>' o 'route:<ruta>'.
 export function upgradeName(id) {
@@ -72,7 +73,7 @@ export class HUD {
       // No queda nada que subir: o falta construir algo, o la zona está al máximo.
       const next = nextToUnlock(s, zone);
       this.chip.hidden = false;
-      this.chip.textContent = next ? `🏗️ Siguiente: construye ${STATIONS_BY_ID[next].name}` : '🏁 Esta zona está al máximo';
+      setFitted(this.chip, next ? `🏗️ Siguiente: construye ${STATIONS_BY_ID[next].name}` : '🏁 Esta zona está al máximo');
       if (next) this.recommended = next;
       this.hintUnlock(s, zone);
       return;
@@ -81,7 +82,7 @@ export class HUD {
     // Puede ser de la zona que la abastece por una ruta: se dice de cuál.
     const [sid] = rec.id.split(':');
     const elsewhere = STATIONS_BY_ID[sid] && zoneOf(sid) !== zone ? ` (${ZONES_BY_ID[zoneOf(sid)].icon} ${ZONES_BY_ID[zoneOf(sid)].name})` : '';
-    this.chip.textContent = `💡 Mejora recomendada: ${upgradeName(rec.id)}${elsewhere}`;
+    setFitted(this.chip, `💡 Mejora recomendada: ${upgradeName(rec.id)}${elsewhere}`);
     this.hintUnlock(s, zone);
   }
 

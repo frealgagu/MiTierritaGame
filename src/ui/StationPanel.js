@@ -28,6 +28,7 @@ import { routeActive, routeCapacity, routeRate, routeStations, stationImportRate
 import { capMult, speedMult } from '../sim/modifiers.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { dispatchMult } from '../sim/modifiers.js';
+import { fit, setFitted } from './fit.js';
 
 const MODES = [
   { key: 1, label: '×1' },
@@ -42,14 +43,23 @@ const listNames = (ids) => {
   const names = ids.map((id) => STATIONS_BY_ID[id].name);
   return names.length > 1 ? `${names.slice(0, -1).join(', ')} y ${names.at(-1)}` : names[0];
 };
+// Con cuatro pestañas, las de la estación y el transporte muestran solo el ícono.
+const tabButtons = (tabs, active) =>
+  tabs
+    .map(([key, icon, name]) => {
+      const short = tabs.length > 3 && !key.startsWith('route:') ? 'short' : '';
+      return `<button class="tab ${short} ${active === key ? 'active' : ''}" data-tab="${key}" title="${name}">${icon}<span class="tab-name"> ${name}</span></button>`;
+    })
+    .join('');
 const isBuilt = (state, id) => id.startsWith('dispatch') || id.startsWith('route:') || Boolean(state.stations[id]);
 // Pestañas de una estación: la estación, su transporte y una por cada ruta que la abastece.
+// [clave, ícono, nombre]
 function tabsOf(state, id) {
   const tabs = [
-    ['station', '⚙️ Estación'],
-    ['transport', hasBelt(state.stations[id]?.transport.level ?? 0) ? '⚡ Banda' : '🐴 Arrieros'],
+    ['station', '⚙️', 'Estación'],
+    ['transport', ...(hasBelt(state.stations[id]?.transport.level ?? 0) ? ['⚡', 'Banda'] : ['🐴', 'Arrieros'])],
   ];
-  for (const imp of STATIONS_BY_ID[id]?.imports ?? []) tabs.push([`route:${imp.route}`, `🚌 ${ROUTES_BY_ID[imp.route].tab}`]);
+  for (const imp of STATIONS_BY_ID[id]?.imports ?? []) tabs.push([`route:${imp.route}`, '🚌', ROUTES_BY_ID[imp.route].tab]);
   return tabs;
 }
 
@@ -64,6 +74,8 @@ export class StationPanel {
     this.mode = 1;
     this.refs = {};
     this.built = null;
+    // Al girar el teléfono cambia el ancho: los textos se vuelven a ajustar.
+    window.addEventListener('resize', () => this.id && this.fitAll());
   }
 
   // tab: 'station' | 'transport' | 'route:<ruta>' (estaciones que reciben un producto de otra zona)
@@ -80,9 +92,9 @@ export class StationPanel {
     const id = this.id;
     this.built = isBuilt(this.game.state, id);
     if (id.startsWith('dispatch')) this.renderUpgradable(dispatchInfo(id.split(':')[1] ?? 'finca'));
-    else if (id.startsWith('route:')) this.renderUpgradable(routeInfo(id.split(':')[1], false));
+    else if (id.startsWith('route:')) this.renderUpgradable(routeInfo(id.split(':')[1], null));
     else if (this.built && this.tab === 'transport') this.renderUpgradable(transportInfo(id));
-    else if (this.built && this.tab.startsWith('route:')) this.renderUpgradable(routeInfo(this.tab.split(':')[1], true));
+    else if (this.built && this.tab.startsWith('route:')) this.renderUpgradable(routeInfo(this.tab.split(':')[1], id));
     else if (this.built) this.renderUpgradable(stationInfo(id));
     else this.renderLocked(STATIONS_BY_ID[id]);
   }
@@ -94,43 +106,41 @@ export class StationPanel {
     this.onClose();
   }
 
-  head(icon, title, subtitle, badge = '') {
+  // El panel tiene un alto fijo (el de la vista más llena) y cada parte el suyo: lo que sobra queda
+  // debajo de los datos, y el aviso y los botones van siempre abajo. Así no cambia de tamaño al
+  // pasar de pestaña ni cuando cambian los textos.
+  frame({ icon, title, subtitle, tabs = '', recipe, rows, milestone = '', modes = '', button }) {
     return `
       <div class="panel-head">
         <div class="panel-icon">${icon}</div>
-        <div class="panel-title"><h3>${title}</h3><p>${subtitle}</p></div>
-        ${badge}
+        <div class="panel-title"><h3 data-fit>${title}</h3><p data-fit>${subtitle}</p></div>
         <button class="close-btn" data-close aria-label="Cerrar">✕</button>
-      </div>`;
+      </div>
+      ${tabs ? `<div class="tabs">${tabs}</div>` : ''}
+      <div class="recipe small" data-fit>${recipe}</div>
+      <div class="stats">${rows}</div>
+      <div class="status-line" data-ref="status"></div>
+      ${milestone ? `<div class="milestone">${milestone}</div>` : ''}
+      ${modes ? `<div class="modes">${modes}</div>` : ''}
+      ${button}`;
   }
 
   renderUpgradable(info) {
     this.info = info;
     this.variant = info.variant?.(this.game.state);
     const look = info.look?.(this.game.state) ?? info;
-    this.el.innerHTML = `
-      ${this.head(look.icon, look.title, look.subtitle, '<span class="level-badge" data-ref="level"></span>')}
-      ${
-        info.tabs
-          ? `<div class="tabs">
-              ${tabsOf(this.game.state, this.id)
-                .map(([key, label]) => `<button class="tab ${this.tab === key ? 'active' : ''}" data-tab="${key}">${label}</button>`)
-                .join('')}
-            </div>`
-          : ''
-      }
-      ${info.recipe ? `<div class="recipe small">${info.recipe}</div>` : ''}
-      <div class="stats">
-        ${info.rows.map((r) => `<div class="stat"><span>${r.label}</span><b><span data-ref="${r.key}"></span> <span class="next" data-ref="${r.key}Next"></span></b></div>`).join('')}
-        <div class="status-line" data-ref="status"></div>
-      </div>
-      <div class="milestone">
-        <span data-ref="milestoneText"></span>
-        <div class="bar"><div data-ref="milestoneBar"></div></div>
-      </div>
-      <div class="modes">${MODES.map((m) => `<button class="mode" data-mode="${m.key}">${m.label}</button>`).join('')}</div>
-      <button class="btn buy" data-buy><span data-ref="buyLabel"></span><span data-ref="buyCost"></span></button>
-    `;
+    this.el.innerHTML = this.frame({
+      icon: look.icon,
+      title: look.title,
+      subtitle: look.subtitle,
+      tabs: info.tabs ? tabButtons(tabsOf(this.game.state, this.id), this.tab) : '',
+      recipe: typeof info.recipe === 'function' ? info.recipe(this.game.state) : info.recipe,
+      rows: info.rows.map((r) => `<div class="stat"><span>${r.label}</span><b><span data-ref="${r.key}"></span> <span class="next" data-ref="${r.key}Next"></span></b></div>`).join(''),
+      milestone: `<div class="milestone-top"><span class="level-badge" data-ref="level"></span><span data-ref="milestoneText"></span></div>
+        <div class="bar"><div data-ref="milestoneBar"></div></div>`,
+      modes: MODES.map((m) => `<button class="mode" data-mode="${m.key}">${m.label}</button>`).join(''),
+      button: '<button class="btn buy" data-buy><span data-ref="buyLabel"></span><span data-ref="buyCost"></span></button>',
+    });
     this.collectRefs();
     this.el.querySelector('[data-buy]').addEventListener('click', () => {
       this.game.buy(info.upgradeId, this.mode);
@@ -159,20 +169,19 @@ export class StationPanel {
     const gain = PRODUCTS[outId].value * def.out[outId] - PRODUCTS[inId].value * def.in[inId];
     const rows = def.side
       ? `<div class="stat"><span>Produce</span><b>${PRODUCTS[outId].name}</b></div>
-         <div class="stat"><span>Efecto</span><b class="next">Todo lo que vende la Finca +${pct(COMPOST_VALUE)} mientras haya compost</b></div>
+         <div class="stat"><span>Efecto</span><b class="next">+${pct(COMPOST_VALUE)} a las ventas de la Finca</b></div>
          <div class="stat"><span>Transporte</span><b>Canaleta directa, sin mulas</b></div>`
       : `<div class="stat"><span>Produce</span><b>${PRODUCTS[outId].name}</b></div>
          <div class="stat"><span>Precio de venta</span><b>${PRODUCTS[outId].value} 💰 por unidad</b></div>
          <div class="stat"><span>Ganancia por proceso</span><b class="next">+${gain} 💰</b></div>`;
-    this.el.innerHTML = `
-      ${this.head(def.icon, def.name, def.side ? 'Rama opcional: aprovecha la pulpa del Beneficiadero' : 'Siguiente paso de la cadena')}
-      <div class="recipe">${recipe(def.in)} <span>➜</span> ${recipe(def.out)}</div>
-      <div class="stats">
-        ${rows}
-        <div class="status-line" data-ref="status"></div>
-      </div>
-      <button class="btn buy" data-unlock><span>Construir</span><span data-ref="unlockCost"></span></button>
-    `;
+    this.el.innerHTML = this.frame({
+      icon: def.icon,
+      title: def.name,
+      subtitle: def.side ? 'Rama opcional: aprovecha la pulpa del Beneficiadero' : 'Siguiente paso de la cadena',
+      recipe: `${recipe(def.in)} <span>➜</span> ${recipe(def.out)}`,
+      rows,
+      button: '<button class="btn buy" data-unlock><span>Construir</span><span data-ref="unlockCost"></span></button>',
+    });
     this.collectRefs();
     this.el.querySelector('[data-unlock]').addEventListener('click', () => {
       if (this.game.unlock(this.id)) this.render();
@@ -184,6 +193,17 @@ export class StationPanel {
     this.refs = {};
     for (const el of this.el.querySelectorAll('[data-ref]')) this.refs[el.dataset.ref] = el;
     this.el.querySelector('[data-close]').addEventListener('click', () => this.close());
+    this.fitAll();
+  }
+
+  fitAll() {
+    for (const el of this.el.querySelectorAll('[data-fit], .stat, .tab, .status-line, .milestone-top > span:last-child')) fit(el);
+  }
+
+  // Textos que cambian solos: se ajustan a su caja cuando cambian.
+  setStatus(status) {
+    setFitted(this.refs.status, status.text);
+    this.refs.status.classList.toggle('bad', status.bad);
   }
 
   update() {
@@ -199,9 +219,10 @@ export class StationPanel {
       const q = this.game.quoteUnlock(this.id);
       r.unlockCost.textContent = `💰 ${formatNumber(q.cost)}`;
       this.el.querySelector('[data-unlock]').disabled = !q.ok;
-      r.status.textContent =
-        q.reason === 'order' ? `🔒 Primero construye: ${nameOf(q.previous)}.` : q.ok ? '✅ ¡Listo para construir!' : `💰 Te faltan ${formatNumber(Math.ceil(q.cost - state.coins))} monedas.`;
-      r.status.classList.toggle('bad', q.reason === 'order');
+      this.setStatus({
+        text: q.reason === 'order' ? `🔒 Primero construye: ${nameOf(q.previous)}.` : q.ok ? '✅ ¡Listo para construir!' : `💰 Te faltan ${formatNumber(Math.ceil(q.cost - state.coins))} monedas.`,
+        bad: q.reason === 'order',
+      });
       return;
     }
 
@@ -212,21 +233,23 @@ export class StationPanel {
 
     r.level.textContent = `Nv ${level}`;
     for (const row of info.rows) {
-      r[row.key].textContent = row.value(state, level);
-      r[`${row.key}Next`].textContent = row.next && level < MAX_LEVEL ? `→ ${row.next(after, state)}` : '';
+      const value = row.value(state, level);
+      const next = row.next && level < MAX_LEVEL ? `→ ${row.next(after, state)}` : '';
+      if (r[row.key].textContent === value && r[`${row.key}Next`].textContent === next) continue;
+      r[row.key].textContent = value;
+      r[`${row.key}Next`].textContent = next;
+      fit(r[row.key].closest('.stat'));
     }
-    const status = info.status(state);
-    r.status.textContent = status.text;
-    r.status.classList.toggle('bad', status.bad);
+    this.setStatus(info.status(state));
 
     const next = nextMilestone(level);
     if (next) {
       const prev = [...MILESTONES].reverse().find((m) => m <= level) ?? 1;
       const what = typeof info.milestoneWhat === 'function' ? info.milestoneWhat(next) : info.milestoneWhat;
-      r.milestoneText.textContent = `Próximo hito: nivel ${next} (×${milestoneBoost(next)} ${what})`;
+      setFitted(r.milestoneText, `Hito del nivel ${next}: ×${milestoneBoost(next)} ${what}`);
       r.milestoneBar.style.width = `${((level - prev) / (next - prev)) * 100}%`;
     } else {
-      r.milestoneText.textContent = '¡Todos los hitos conseguidos!';
+      setFitted(r.milestoneText, '¡Todos los hitos conseguidos!');
       r.milestoneBar.style.width = '100%';
     }
 
@@ -264,7 +287,7 @@ function stationInfo(id) {
     const r = ROUTES_BY_ID[imp.route];
     rows.push({
       key: `import_${imp.product}`,
-      label: `${product.name} (de ${ZONES_BY_ID[r.from].name})`,
+      label: `🚌 ${product.name}`,
       value: (s, l) => `${formatAmount(s.stations[id].imported[imp.product] ?? 0)} / ${formatNumber(stationImportCap(def, l, speedMult(s, id), imp))} ${product.icon}`,
     });
   }
@@ -273,13 +296,13 @@ function stationInfo(id) {
     rows.push({
       key: 'fuel',
       label: `${fuel.name} (combustible)`,
-      value: (s, l) => `${formatAmount(s.stations[id].fuel ?? 0)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${fuel.icon} · ${(s.stations[id].fuel ?? 0) > 0 ? `×${def.fuel.boost} 🔥` : 'sin fuego extra'}`,
+      value: (s, l) => `${formatAmount(s.stations[id].fuel ?? 0)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${fuel.icon} · ${(s.stations[id].fuel ?? 0) > 0 ? `×${def.fuel.boost} 🔥` : 'sin 🔥'}`,
     });
   }
   if (def.side) {
     rows.push(
       { key: 'buffer', label: 'Compost guardado', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, capMult(s, id)))} ${out.icon}` },
-      { key: 'effect', label: 'Ventas de la Finca ahora', value: (s) => (compostValueBoost(s) > 1 ? `+${pct(COMPOST_VALUE)} (hay compost)` : 'sin bono (no hay compost)') },
+      { key: 'effect', label: 'Bono a las ventas', value: (s) => (compostValueBoost(s) > 1 ? `+${pct(COMPOST_VALUE)} (hay compost)` : 'sin bono (no hay compost)') },
       { key: 'sustain', label: 'Puede sostener', value: (s) => `+${pct(expectedCompostValue(s))} de +${pct(COMPOST_VALUE)}` },
     );
   } else {
@@ -288,7 +311,7 @@ function stationInfo(id) {
       {
         key: 'value',
         label: 'Precio de venta',
-        value: (s) => `${formatAmount(saleValue(s, outId))} 💰 por ${out.name.toLowerCase()}${out.zone === 'finca' && compostValueBoost(s) > 1 ? ' 🪱' : ''}`,
+        value: (s) => `${formatAmount(saleValue(s, outId))} 💰 por ${out.icon}${out.zone === 'finca' && compostValueBoost(s) > 1 ? ' 🪱' : ''}`,
       },
     );
   }
@@ -300,7 +323,7 @@ function stationInfo(id) {
       : def.imports
         ? `Convierte ${listProducts(def.imports)} de otras zonas en ${out.name.toLowerCase()}`
         : `Fuente ilimitada de ${out.name.toLowerCase()}`,
-    recipe: inId || def.imports ? `${[...(inId ? [recipe(def.in)] : []), ...(def.imports ?? []).map((imp) => `${imp.perCycle} ${PRODUCTS[imp.product].icon}🚌`)].join(' + ')} <span>➜</span> ${recipe(def.out)}` : null,
+    recipe: inId || def.imports ? `${[...(inId ? [recipe(def.in)] : []), ...(def.imports ?? []).map((imp) => `${imp.perCycle} ${PRODUCTS[imp.product].icon}🚌`)].join(' + ')} <span>➜</span> ${recipe(def.out)}` : `${def.icon} <span>➜</span> ${recipe(def.out)}`,
     milestoneWhat: 'velocidad',
     upgradeId: id,
     tabs: !def.side,
@@ -316,20 +339,23 @@ function transportInfo(id) {
   const produce = (s) => stationOutputRate(def, s.stations[id].level) * productionMult(s, id);
   // Desde el nivel 50, las mulas se cambian por una banda eléctrica (lleva lo mismo).
   const belt = (s) => hasBelt(s.stations[id].transport.level);
+  // La cabecera es la de la estación (no cambia al pasar de pestaña); el subtítulo dice qué se ve.
   return {
-    icon: '🐴',
-    title: `Arrieros · ${def.name}`,
-    subtitle: 'A igual nivel que la estación, llevan todo lo que produce',
+    icon: def.icon,
+    title: def.name,
+    subtitle: '🐴 Arrieros: al nivel de la estación, llevan todo lo que produce',
     variant: belt,
-    look: (s) => (belt(s) ? { icon: '⚡', title: `Banda eléctrica · ${def.name}`, subtitle: 'Las mulas se cambiaron por una banda: lleva lo mismo y deja libre el camino' } : null),
+    look: (s) => (belt(s) ? { icon: def.icon, title: def.name, subtitle: '⚡ Banda eléctrica: reemplaza a las mulas y deja libre el camino' } : null),
+    // Qué lleva y adónde: «🍒 ➜ 🐴 ➜ Beneficiadero».
+    recipe: (s) => `${out.icon} <span>➜</span> ${belt(s) ? '⚡' : '🐴'} <span>➜</span> ${nameOf(normalDest(s, id))}`,
     milestoneWhat: (next) => (next === BELT_LEVEL ? 'carga y banda eléctrica' : 'carga'),
     upgradeId: `${id}:transport`,
     tabs: true,
     level: (s) => s.stations[id].transport.level,
     rows: [
-      { key: 'mules', label: 'Envíos a la vez', value: (s, l) => `${muleCount(l)} ${hasBelt(l) ? 'cajas' : 'mulas'} (${busyMules(s, id)} en camino)`, next: (l) => muleCount(l) },
+      { key: 'mules', label: 'Envíos a la vez', value: (s, l) => `${muleCount(l)} (${busyMules(s, id)} en camino)`, next: (l) => muleCount(l) },
       { key: 'load', label: 'Carga por envío', value: (s, l) => `${formatAmount(teamLoad(s, id, l))} ${out.icon}`, next: (l, s) => formatAmount(teamLoad(s, id, l)) },
-      { key: 'trip', label: 'Viaje (ida y vuelta)', value: (s) => `${formatRate(2 * legTime(id, normalDest(s, id), muleSpeedMult(s)))} s hasta ${nameOf(normalDest(s, id))}` },
+      { key: 'trip', label: 'Ida y vuelta', value: (s) => `${formatRate(2 * legTime(id, normalDest(s, id), muleSpeedMult(s)))} s, hasta ${nameOf(normalDest(s, id))}` },
       {
         key: 'cap',
         label: 'Llevan',
@@ -363,8 +389,8 @@ function stationStatus(state, id) {
     const slow = st.waiting === 'mules' ? slowConsumers(state, id) : [];
     if (slow.length) {
       const text = slow.length > 1
-        ? `↪️ Las estaciones siguientes (${listNames(slow)}) no alcanzan a procesar todo lo que produce esta: lo que sobra va a la bodega y no alcanza a salir todo. Súbelas de nivel.`
-        : `↪️ La estación siguiente (${listNames(slow)}) no alcanza a procesar todo lo que produce esta: lo que sobra va a la bodega y no alcanza a salir todo. Súbela de nivel.`;
+        ? `↪️ Patio lleno: las siguientes, ${listNames(slow)}, no alcanzan a procesar todo lo que produce esta. Súbelas de nivel.`
+        : `↪️ Patio lleno: la estación siguiente (${listNames(slow)}) no alcanza a procesar todo lo que produce esta. Súbela de nivel.`;
       return { text, bad: true };
     }
     if (st.waiting === 'mules') return { text: hasBelt(st.transport.level) ? '⛔ Patio lleno: la banda no da abasto. Mejórala (pestaña ⚡).' : '⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).', bad: true };
@@ -395,8 +421,10 @@ function stationStatus(state, id) {
     return { text: `⏸️ Esperando producto de: ${nameOf(PARENT[id])}. Mejora las estaciones anteriores.`, bad: false };
   }
   const targets = consumers(state, id);
-  const routes = exportsOf(state, id).map((r) => ` y a la bodega para la ${r.name}`).join('');
-  return { text: `✅ Trabajando. Las mulas llevan el producto a ${targets.length ? listNames(targets) : 'la bodega'}${routes}.`, bad: false };
+  const routes = exportsOf(state, id);
+  const where = [...(targets.length ? [listNames(targets)] : []), ...(routes.length || !targets.length ? ['la bodega'] : [])].join(' y a ');
+  const why = routes.length > 1 ? ` (para ${routes.length} rutas)` : routes.length ? ` (para la ${routes[0].name})` : '';
+  return { text: `✅ Trabajando. Las mulas llevan el producto a ${where}${why}.`, bad: false };
 }
 
 // «bolsas de café y panela pulverizada»: los importados de una estación, en minúsculas.
@@ -417,8 +445,9 @@ function composterStatus(state, st) {
   return { text: `✅ Produciendo compost: todo lo que vende la Finca vale +${pct(COMPOST_VALUE)}.`, bad: false };
 }
 
-// Ruta entre zonas: la Chiva que trae el producto importado. `tabs`: si se ve como pestaña de la estación.
-function routeInfo(routeId, tabs) {
+// Ruta entre zonas: la Chiva que trae el producto importado. `station`: la estación de cuyo panel es
+// una pestaña (o null si se abre sola).
+function routeInfo(routeId, station) {
   const r = ROUTES_BY_ID[routeId];
   const imp = PRODUCTS[r.product];
   // Estaciones que abastece (las construidas) y lo que gastan entre todas.
@@ -426,19 +455,20 @@ function routeInfo(routeId, tabs) {
   const need = (s) => routeStations(s, routeId).reduce((n, id) => n + stationImportRate(s, r, id), 0);
   const top = (s) => Math.max(0, ...routeStations(s, routeId).map((id) => s.stations[id].level));
   return {
-    icon: r.icon,
-    title: r.name,
-    subtitle: `La ${r.vehicle} trae ${imp.name.toLowerCase()} de ${ZONES_BY_ID[r.from].name}. A igual nivel que las estaciones que abastece, lleva todo lo que gastan.`,
+    icon: station ? STATIONS_BY_ID[station].icon : r.icon,
+    title: station ? STATIONS_BY_ID[station].name : r.name,
+    subtitle: `${station ? '🚌 ' : ''}La ${r.vehicle} trae ${imp.name.toLowerCase()} de ${ZONES_BY_ID[r.from].name}`,
+    recipe: `${ZONES_BY_ID[r.from].icon} ${imp.icon} <span>➜</span> ${r.icon} <span>➜</span> ${station ? STATIONS_BY_ID[station].name : ZONES_BY_ID[r.to].name}`,
     milestoneWhat: 'carga',
     upgradeId: `route:${routeId}`,
-    tabs,
+    tabs: Boolean(station),
     level: (s) => s.routes[routeId].level,
     rows: [
       { key: 'cap', label: 'Carga por viaje', value: (s, l) => `${formatAmount(routeCapacity(s, routeId, l))} ${imp.icon}`, next: (l, s) => formatAmount(routeCapacity(s, routeId, l)) },
       { key: 'rate', label: 'Lleva', value: (s, l) => `${formatRate(routeRate(s, routeId, l))} ${imp.icon}/s`, next: (l, s) => formatRate(routeRate(s, routeId, l)) },
-      { key: 'need', label: 'Gastan', value: (s) => `${formatRate(need(s))} ${imp.icon}/s (${names(s)})` },
+      { key: 'need', label: 'Gastan', value: (s) => `${formatRate(need(s))} ${imp.icon}/s (${routeStations(s, routeId).length > 1 ? `${routeStations(s, routeId).length} estaciones` : names(s)})` },
       { key: 'stock', label: `Bodega de ${ZONES_BY_ID[r.from].name}`, value: (s) => `${formatAmount(s.zones[r.from].warehouse[r.product] ?? 0)} ${imp.icon}` },
-      { key: 'trip', label: 'Viaje (ida y vuelta)', value: () => `${r.tripTime} s` },
+      { key: 'trip', label: 'Ida y vuelta', value: () => `${r.tripTime} s` },
     ],
     status: (s) => {
       const route = s.routes[routeId];
@@ -457,8 +487,9 @@ function dispatchInfo(zoneId) {
   const mult = (s) => dispatchMult(s, zoneId);
   return {
     icon: DISPATCH.icon,
-    title: `${DISPATCH.name} · ${ZONES_BY_ID[zoneId].name}`,
-    subtitle: 'El Willys vende en el pueblo lo que llega a la bodega',
+    title: DISPATCH.name,
+    subtitle: `${ZONES_BY_ID[zoneId].name}: el Willys vende lo que llega a la bodega`,
+    recipe: `📦 Bodega <span>➜</span> ${DISPATCH.icon} <span>➜</span> 💰 Pueblo`,
     milestoneWhat: 'carga',
     upgradeId: `dispatch:${zoneId}`,
     level: (s) => z(s).dispatch.level,
@@ -473,7 +504,7 @@ function dispatchInfo(zoneId) {
           return `${formatNumber(sumValues(z(s).warehouse) - dock)} / ${formatNumber(warehouseCapacity(l, mult(s)))}${dock > 0.5 ? ` · andén de las rutas: ${formatNumber(dock)}` : ''}`;
         },
       },
-      { key: 'trip', label: 'Viaje (ida y vuelta)', value: () => `${DISPATCH.tripTime} s` },
+      { key: 'trip', label: 'Ida y vuelta', value: () => `${DISPATCH.tripTime} s` },
     ],
     status: (s) => {
       const full = warehouseSpace(s, zoneId) <= 0;

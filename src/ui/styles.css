@@ -59,11 +59,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
   border-radius: 999px;
   font-weight: 700;
   font-size: 1.25rem;
-  min-width: 140px;
 }
+/* Anchos fijos, para el número más largo («-8,88e40»): la barra no cambia de tamaño al crecer. */
+#coins { display: inline-block; width: 4.4em; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .coin-icon { font-size: 1.1rem; }
-.rate { font-size: 0.85rem; font-weight: 600; color: var(--green-dark); }
-.clock { font-weight: 600; font-size: 0.9rem; white-space: nowrap; font-variant-numeric: tabular-nums; min-width: 64px; }
+.rate { display: inline-block; width: 5.3em; font-size: 0.85rem; font-weight: 600; color: var(--green-dark); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.clock { font-weight: 600; font-size: 0.9rem; white-space: nowrap; font-variant-numeric: tabular-nums; width: 4.6em; }
 .icon-btn {
   width: 38px; height: 38px;
   border-radius: 50%;
@@ -84,6 +85,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: 0.85rem;
   font-weight: 500;
   white-space: nowrap;
+  overflow: hidden;
+  max-width: calc(100vw - 32px);
   cursor: pointer;
 }
 
@@ -100,7 +103,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
   box-shadow: var(--shadow);
   padding: 14px 16px 16px;
   animation: pop 0.18s ease-out;
+  /* Alto fijo: el de la estación más llena (pestañas, receta y seis filas de datos). */
+  height: 35.5rem;
+  max-height: calc(100vh - 96px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
 }
+.panel > * { flex: none; }
 @keyframes pop { from { transform: translateX(-50%) scale(0.92); opacity: 0; } }
 .panel-head { display: flex; align-items: center; gap: 10px; }
 .panel-icon {
@@ -111,9 +120,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
   border: 2px solid var(--ink);
   border-radius: 12px;
 }
-.panel-title { flex: 1; }
-.panel-title h3 { margin: 0; font-size: 1.2rem; }
-.panel-title p { margin: 0; font-size: 0.85rem; color: var(--muted); }
+.panel-title { flex: 1; min-width: 0; }
+.panel-title h3 { margin: 0; font-size: 1.2rem; line-height: 1.5rem; height: 1.5rem; white-space: nowrap; overflow: hidden; }
+/* Dos renglones siempre, aunque el subtítulo quepa en uno. */
+.panel-title p { margin: 0; font-size: 0.85rem; line-height: 1.1rem; height: 2.2rem; overflow: hidden; color: var(--muted); }
 .level-badge {
   font-weight: 700;
   background: var(--ink);
@@ -124,19 +134,24 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .close-btn { border: none; background: none; font-size: 1.3rem; padding: 4px; }
 
-.stats { margin: 12px 0 8px; display: grid; gap: 6px; }
-.stat { display: flex; justify-content: space-between; gap: 12px; font-size: 0.95rem; }
+/* Cada parte tiene su alto; los datos ocupan lo que queda (hasta seis filas, el máximo de una
+   estación) y el aviso tiene espacio para el más largo. */
+.panel > .stats { flex: 1 1 auto; min-height: 0; overflow: hidden; margin: 10px 0 8px; display: grid; grid-auto-rows: 1.3rem; align-content: start; gap: 5px; }
+.stat { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 0.95rem; white-space: nowrap; overflow: hidden; }
+.stat > * { flex: none; }
 .stat span:first-child { color: var(--muted); }
 .stat b { font-weight: 600; }
 .stat .next { color: var(--green-dark); font-weight: 600; }
-.status-line { font-size: 0.85rem; padding: 6px 10px; border-radius: 10px; background: var(--paper-2); }
+.status-line { font-size: 0.85rem; line-height: 1.1rem; height: calc(3 * 1.1rem + 12px); overflow: hidden; padding: 6px 10px; border-radius: 10px; background: var(--paper-2); }
 .status-line.bad { background: #fde2e4; color: #8f1d2c; }
 
-.milestone { margin: 8px 0 12px; font-size: 0.85rem; }
+.milestone { margin: 8px 0 12px; font-size: 0.85rem; height: calc(1.6rem + 18px); }
+.milestone-top { display: flex; align-items: center; gap: 8px; height: 1.6rem; }
+.milestone-top > span:last-child { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; }
 .bar { height: 10px; border-radius: 999px; background: var(--paper-2); border: 2px solid var(--ink); overflow: hidden; margin-top: 4px; }
 .bar > div { height: 100%; background: linear-gradient(90deg, #f6b26b, var(--yellow)); width: 0%; transition: width 0.2s; }
 
-.modes { display: flex; gap: 6px; margin-bottom: 8px; }
+.modes { display: flex; gap: 6px; margin-bottom: 8px; height: 32px; }
 .mode {
   flex: 1;
   padding: 4px 0;
@@ -182,7 +197,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: 1.1rem;
   font-weight: 600;
 }
-.recipe.small { margin: 10px 0 0; padding: 6px; font-size: 1rem; }
+.recipe.small { display: block; text-align: center; margin: 10px 0 0; padding: 0 6px; font-size: 1rem; line-height: 34px; height: 34px; white-space: nowrap; overflow: hidden; }
+.recipe.small:empty { background: none; }
 .soon { text-align: center; font-size: 0.9rem; color: var(--muted); margin: 0; }
 
 /* Modal y avisos */
@@ -213,13 +229,19 @@ button { font: inherit; color: inherit; cursor: pointer; }
 @media (max-width: 520px) {
   .brand { display: none; }
   #hud { gap: 8px; }
-  .coins { min-width: 0; font-size: 1.1rem; }
-  .clock { min-width: 0; font-size: 0.8rem; }
+  /* En el móvil, el ingreso va debajo de las monedas: así la barra cabe en 360 px. */
+  .coins { font-size: 1.1rem; display: grid; grid-template-columns: auto auto; align-items: center; column-gap: 6px; row-gap: 0; padding: 2px 12px; line-height: 1.1; }
+  .coin-icon { grid-row: span 2; }
+  .rate { font-size: 0.75rem; }
+  .clock { font-size: 0.8rem; width: 4.3em; }
 }
 
-.tabs { display: flex; gap: 6px; margin-top: 10px; }
+.tabs { display: flex; gap: 6px; margin-top: 10px; height: 36px; }
 .tab {
   flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
   padding: 6px 0;
   border: 2px solid var(--ink);
   border-radius: 12px;
@@ -227,9 +249,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-weight: 600;
 }
 .tab.active { background: var(--yellow); }
+.tab.short { flex: 0 0 44px; }
+.tab.short .tab-name { display: none; }
 
 /* Vista de la cadena */
-.chain-modal { width: min(480px, 100%); max-height: calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; }
+.chain-modal { width: min(480px, 100%); height: min(720px, calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))); display: flex; flex-direction: column; }
 .chain-head { display: flex; align-items: center; justify-content: space-between; }
 .chain-head h2 { margin: 0; }
 .chain-help { margin: 4px 0 10px; font-size: 0.85rem; color: var(--muted); }
@@ -320,7 +344,9 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .goal.done:not(.compact) { background: #e3f6e9; border-color: var(--green-dark); }
 .goal.final:not(.compact) { border-width: 3px; border-color: var(--yellow); background: #fff7d1; }
 .goal-text { font-weight: 600; font-size: 0.95rem; }
-.goal.compact .goal-text { font-size: 0.85rem; }
+.goal.compact .goal-text { font-size: 0.85rem; line-height: 1.1rem; height: 2.2rem; overflow: hidden; }
+.goal.compact .goal-foot { height: 34px; align-items: center; }
+.goal.compact .goal-row { height: 1.1rem; }
 .goal-row { display: flex; align-items: center; gap: 8px; }
 .goal-row .bar { flex: 1; margin: 0; }
 .goal-count { font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -330,7 +356,8 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .goal.compact .btn.claim { width: 100%; }
 .goals-count { margin: 0 0 4px; color: var(--muted); font-size: 0.85rem; }
 
-.list-modal { width: min(460px, 100%); max-height: calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; }
+/* Alto fijo: al cobrar un objetivo o comprar una investigación la ventana no se encoge ni mueve el ✕. */
+.list-modal { width: min(460px, 100%); height: min(640px, calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))); display: flex; flex-direction: column; }
 .list-body { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
 
 .research { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 2px solid var(--ink); border-radius: 14px; background: var(--paper-2); }

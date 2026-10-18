@@ -97,13 +97,14 @@ async function start() {
     panel.open(stationId, part === 'transport' ? 'transport' : 'station');
   };
   const showZone = (zoneId) => {
-    if (scene) scene.destroy();
+    // Primero el panel: al cerrarse quita la selección de la escena, que aún debe existir.
     if (panel.id) panel.close();
+    if (scene) scene.destroy();
     view.zone = zoneId;
     game.state.settings.zone = zoneId;
     scene = new Scene(app, game, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
-    if (import.meta.env.DEV) window.__cafetal = { game, scene };
+    if (import.meta.env.DEV) window.__cafetal = { game, scene, panel, select };
   };
   showZone(view.zone);
   const hud = new HUD(game, select, () => scene.dayNight.hour, getZone);
