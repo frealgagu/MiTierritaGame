@@ -10,6 +10,10 @@ export const ICON = {
   cheese: '', // queso campesino blanco sobre hoja de plátano
   milk: '', // botella de leche
   cream: '', // pote de crema de leche
+  cacaoDry: '', // cacao seco: granos color canela en la estera
+  cacaoRoasted: '', // cacao tostado: granos oscuros en el tiesto, con humo
+  milkChocolate: '', // chocolatina con leche, medio desenvuelta
+  cheeseArepa: '', // arepas de queso
 };
 
 export const ICON_FONT = 'Cafetal Icons';

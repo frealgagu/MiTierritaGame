@@ -54,7 +54,7 @@ export const RESEARCH = [
   { zone: 'cacaotal', id: 'tostador_bombo', name: 'Tostador de bombo', icon: '🔥', desc: 'El Tostador de cacao tuesta el doble.', cost: 8000000, requires: 'cacao_mill', effect: { type: 'stationSpeed', target: 'cacao_roaster', mult: 2 } },
   { zone: 'cacaotal', id: 'molino_bolas', name: 'Molino de bolas', icon: '🌀', desc: 'El Molino de cacao muele el doble.', cost: 20000000, requires: 'chocolate_table', effect: { type: 'stationSpeed', target: 'cacao_mill', mult: 2 } },
   { zone: 'cacaotal', id: 'moldes_aluminio', name: 'Moldes de aluminio', icon: '🍫', desc: 'La Mesa de chocolate moldea el doble.', cost: 50000000, requires: 'chocolatier', effect: { type: 'stationSpeed', target: 'chocolate_table', mult: 2 } },
-  { zone: 'cacaotal', id: 'temperadora', name: 'Temperadora', icon: '🍬', desc: 'La Chocolatería hace el doble de chocolatinas (las rutas se ajustan solas).', cost: 80000000, requires: 'chocolatier', effect: { type: 'stationSpeed', target: 'chocolatier', mult: 2 } },
+  { zone: 'cacaotal', id: 'temperadora', name: 'Temperadora', icon: ICON.milkChocolate, desc: 'La Chocolatería hace el doble de chocolatinas (las rutas se ajustan solas).', cost: 80000000, requires: 'chocolatier', effect: { type: 'stationSpeed', target: 'chocolatier', mult: 2 } },
   { zone: 'cacaotal', id: 'cacao_fino', name: 'Cacao fino de aroma', icon: '🏅', desc: 'Todo lo que vende el Cacaotal vale un 50 % más.', cost: 60000000, requires: 'chocolate_table', effect: { type: 'zoneValue', target: 'cacaotal', mult: 1.5 } },
 
   // Zona 5 · El Maizal
@@ -64,7 +64,7 @@ export const RESEARCH = [
   { zone: 'maizal', id: 'camion_maiz', name: 'Camión para el Maizal', icon: '🚚', desc: 'El despacho del Maizal lleva el doble por viaje.', cost: 60000000, requires: 'corn_huller', effect: { type: 'dispatchCapacity', target: 'maizal', mult: 2 } },
   { zone: 'maizal', id: 'molino_discos', name: 'Molino de discos', icon: '🌀', desc: 'El Molino de masa muele el doble.', cost: 120000000, requires: 'budare', effect: { type: 'stationSpeed', target: 'dough_mill', mult: 2 } },
   { zone: 'maizal', id: 'budare_grande', name: 'Budare grande', icon: '🔥', desc: 'El Budare asa el doble de arepas.', cost: 300000000, requires: 'arepa_stand', effect: { type: 'stationSpeed', target: 'budare', mult: 2 } },
-  { zone: 'maizal', id: 'plancha_doble', name: 'Plancha doble', icon: '🥪', desc: 'El Puesto de arepas atiende el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'arepa_stand', effect: { type: 'stationSpeed', target: 'arepa_stand', mult: 2 } },
+  { zone: 'maizal', id: 'plancha_doble', name: 'Plancha doble', icon: ICON.cheeseArepa, desc: 'El Puesto de arepas atiende el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'arepa_stand', effect: { type: 'stationSpeed', target: 'arepa_stand', mult: 2 } },
   { zone: 'maizal', id: 'receta_abuela', name: 'Receta de la abuela', icon: '🏅', desc: 'Todo lo que vende el Maizal vale un 50 % más.', cost: 400000000, requires: 'budare', effect: { type: 'zoneValue', target: 'maizal', mult: 1.5 } },
   // Zona 6 · El Pueblo: cada estación al doble (lo que gasta de más llega de las otras zonas, que también
   // tienen sus investigaciones), un camión para el despacho y la denominación de origen.

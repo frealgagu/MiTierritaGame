@@ -259,6 +259,102 @@ def cream():
     ]
 
 
+def rotate(points, angle, cx, cy):
+    r = math.radians(angle)
+    return [(cx + (x - cx) * math.cos(r) - (y - cy) * math.sin(r), cy + (x - cx) * math.sin(r) + (y - cy) * math.cos(r)) for x, y in points]
+
+
+def bean(cx, cy, rx, ry, rot, color, seam, shine):
+    """Grano de cacao: almendra con su raya al medio y un brillo."""
+    r = math.radians(rot)
+    dx, dy = rx * 0.75 * math.cos(r), rx * 0.75 * math.sin(r)
+    return [
+        (OUTLINE, [grow(ellipse_pts(cx, cy, rx, ry, rot)[:-1], cx, cy, 1.6)]),
+        (color, [ellipse(cx, cy, rx, ry, rot)]),
+        (seam, [rib(cx - dx, cy - dy, cx + dx, cy + dy, 1.4)]),
+        (shine, [ellipse(cx - rx * 0.35 * math.cos(r) + ry * 0.35 * math.sin(r), cy - rx * 0.35 * math.sin(r) - ry * 0.4 * math.cos(r), rx * 0.3, ry * 0.18, rot)]),
+    ]
+
+
+def cacao_dry():
+    """Cacao seco: granos color canela, claros, secándose en una estera de guadua."""
+    layers = [
+        ('#c9a265', [poly(4, 70, 70, 54, 96, 72, 30, 92)]),
+        ('#a98446', [rib(14, 72, 78, 57, 1.3), rib(21, 78, 85, 62, 1.3), rib(28, 84, 91, 67, 1.3), rib(9, 66, 72, 52, 1.0)]),
+    ]
+    for args in [(36, 52, 14, 9, -15, '#c08a5a'), (60, 46, 14, 9, 20, '#b07a4c'), (50, 64, 15, 9.5, 5, '#d09b68'), (24, 66, 12, 8, 30, '#b98353'), (72, 62, 13, 8.5, -25, '#c7935f')]:
+        cx, cy, rx, ry, rot, color = args
+        layers += bean(cx, cy, rx, ry, rot, color, '#8a5a34', '#f3d3a8')
+    return layers
+
+
+def cacao_roasted():
+    """Cacao tostado: granos casi negros, brillantes, en el tiesto, con humo."""
+    layers = [
+        ('#d9d4cc', ['M 30 30 Q 22 20 30 12 Q 36 6 32 0 Q 42 8 36 16 Q 30 22 36 30 Z', 'M 62 28 Q 56 18 64 10 Q 70 4 66 -2 Q 76 6 70 14 Q 64 20 70 28 Z']),
+        ('#3d3d3d', [ellipse(50, 74, 46, 16)]),
+        ('#6b6b6b', [ellipse(50, 70, 42, 12)]),
+    ]
+    for args in [(34, 62, 13, 8.5, -10, '#4a2817'), (58, 58, 13, 8.5, 25, '#3b1f10'), (48, 72, 14, 9, 5, '#55301b'), (70, 70, 12, 8, -20, '#43240f'), (26, 74, 11, 7.5, 15, '#4f2b16')]:
+        cx, cy, rx, ry, rot, color = args
+        layers += bean(cx, cy, rx, ry, rot, color, '#1e0f06', '#a87a5a')
+    return layers
+
+
+def milk_chocolate():
+    """Chocolatina con leche: barra de chocolate claro, medio desenvuelta, en papel azul con leche."""
+    cx, cy, a = 50, 50, -22
+    R = lambda pts_: pts(rotate(pts_, a, cx, cy))
+    bar = [(30, 6), (70, 6), (70, 60), (30, 60)]
+    layers = [
+        (OUTLINE, [R([(27.5, 3.5), (72.5, 3.5), (72.5, 96.5), (27.5, 96.5)])]),
+        ('#7a4424', [R(bar)]),
+    ]
+    squares_light, squares_dark = [], []
+    for row in range(3):
+        for col in range(2):
+            x0, y0 = 32.5 + col * 18.5, 8.5 + row * 17
+            squares_dark.append(R([(x0, y0), (x0 + 16.5, y0), (x0 + 16.5, y0 + 15), (x0, y0 + 15)]))
+            squares_light.append(R([(x0 + 2, y0 + 2), (x0 + 14.5, y0 + 2), (x0 + 14.5, y0 + 12), (x0 + 2, y0 + 12)]))
+    layers += [('#8f5530', squares_dark), ('#b07040', squares_light)]
+    foil = [(30, 56)] + [(30 + i * 5, 52 if i % 2 else 58) for i in range(1, 8)] + [(70, 56), (70, 64), (30, 64)]
+    layers += [
+        ('#c9ced3', [R(foil)]),
+        ('#2e6fd1', [R([(30, 62), (70, 62), (70, 94), (30, 94)])]),
+        ('#ffffff', [R([(33, 72), (40, 66), (46, 71), (53, 65), (60, 70), (67, 66), (67, 80), (60, 84), (52, 79), (44, 85), (37, 79), (33, 82)])]),
+        ('#8f5530', [R([(42, 86), (58, 86), (58, 89), (42, 89)])]),
+        ('#1f4f9c', [R([(30, 91), (70, 91), (70, 94), (30, 94)])]),
+    ]
+    return layers
+
+
+def cheese_arepa():
+    """Arepas de queso: dos arepas doradas, tostadas en el budare, la de adelante con queso derretido."""
+    def arepa(cx, cy, rx, ry, h):
+        side = ellipse_pts(cx, cy, rx, ry, 0, 0, 180, 48) + ellipse_pts(cx, cy + h, rx, ry, 0, 180, 0, 48)
+        out = ellipse_pts(cx, cy, rx, ry, 0, 180, 360, 48) + ellipse_pts(cx, cy + h, rx, ry, 0, 0, 180, 48)
+        return [
+            (OUTLINE, [grow(out, cx, cy + h / 2, 2.2)]),
+            ('#cf9a4c', [pts(side)]),
+            ('#ecc471', [ellipse(cx, cy, rx, ry)]),
+        ]
+
+    toast = [circle(x, y, r) for x, y, r in [(22, 58, 2.6), (30, 50, 1.8), (78, 66, 2.4), (70, 52, 2), (40, 70, 2.2), (60, 72, 1.8), (84, 58, 1.6), (18, 66, 1.6)]]
+    back_toast = [circle(x, y, r) for x, y, r in [(46, 22, 2.2), (62, 18, 1.8), (76, 26, 2), (34, 28, 1.6)]]
+    cheese = 'M 26 52 Q 40 43 58 45 Q 76 47 76 57 Q 75 67 58 67 Q 42 70 30 64 Q 20 58 26 52 Z'
+    drip = 'M 36 65 Q 36 77 40 79 Q 44 77 42 66 Z M 60 66 Q 61 75 64 76 Q 67 74 65 65 Z'
+    return [
+        *arepa(56, 24, 36, 14, 10),
+        ('#b9792e', back_toast),
+        *arepa(50, 58, 44, 18, 13),
+        ('#b9792e', toast),
+        ('#8f5a22', [rib(14, 62, 24, 70, 1.6), rib(80, 72, 90, 64, 1.6)]),
+        ('#d9cfb4', [cheese, drip]),
+        ('#fffaf0', ['M 29 53 Q 41 46 58 48 Q 73 50 73 57 Q 72 64 58 64 Q 43 67 32 62 Q 24 58 29 53 Z', 'M 37 64 Q 37 75 40 77 Q 42 75 41 65 Z']),
+        ('#ffffff', [ellipse(46, 52, 8, 2.2, -6)]),
+    ]
+
+
 # Código de cada ícono: igual que en src/data/icons.js.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -268,6 +364,10 @@ ICONS = [
     (0xE005, 'cheese', cheese),
     (0xE006, 'milk', milk),
     (0xE007, 'cream', cream),
+    (0xE008, 'cacao_dry', cacao_dry),
+    (0xE009, 'cacao_roasted', cacao_roasted),
+    (0xE00A, 'milk_chocolate', milk_chocolate),
+    (0xE00B, 'cheese_arepa', cheese_arepa),
 ]
 
 

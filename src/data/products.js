@@ -45,11 +45,11 @@ export const PRODUCTS = {
   // Zona 4 · El Cacaotal (×125 respecto al primer borrador)
   cacao_pod: { name: 'Mazorca de cacao', zone: 'cacaotal', value: 1000, icon: '🥭', color: 0xd98e04 },
   cacao_fermented: { name: 'Cacao fermentado', zone: 'cacaotal', value: 2500, icon: '🫘', color: 0xa86b3c },
-  cacao_dry: { name: 'Cacao seco', zone: 'cacaotal', value: 4400, icon: '🫘', color: 0x8a5a33 },
-  cacao_roasted: { name: 'Cacao tostado', zone: 'cacaotal', value: 8800, icon: '🫘', color: 0x5e3a1f },
+  cacao_dry: { name: 'Cacao seco', zone: 'cacaotal', value: 4400, icon: ICON.cacaoDry, color: 0x8a5a33 },
+  cacao_roasted: { name: 'Cacao tostado', zone: 'cacaotal', value: 8800, icon: ICON.cacaoRoasted, color: 0x5e3a1f },
   cacao_paste: { name: 'Pasta de cacao', zone: 'cacaotal', value: 22000, icon: '🟫', color: 0x4b2e1a },
   table_chocolate: { name: 'Chocolate de mesa', zone: 'cacaotal', value: 100000, icon: '🍫', color: 0x5a3220 },
-  milk_chocolate: { name: 'Chocolatina con leche', zone: 'cacaotal', value: 220000, icon: '🍬', color: 0x8b5a3c },
+  milk_chocolate: { name: 'Chocolatina con leche', zone: 'cacaotal', value: 220000, icon: ICON.milkChocolate, color: 0x8b5a3c },
 
   // Zona 5 · El Maizal (×1.000 respecto al primer borrador)
   corn_cob: { name: 'Mazorca de maíz', zone: 'maizal', value: 6000, icon: '🌽', color: 0xf2c94c },
@@ -57,7 +57,7 @@ export const PRODUCTS = {
   corn_hulled: { name: 'Maíz pilado', zone: 'maizal', value: 30000, icon: '⚪', color: 0xf7ecc8 },
   corn_dough: { name: 'Masa de maíz', zone: 'maizal', value: 70000, icon: '🥣', color: 0xf0e0a8 },
   arepa: { name: 'Arepa', zone: 'maizal', value: 120000, icon: '🫓', color: 0xe8c77a },
-  cheese_arepa: { name: 'Arepas de queso', zone: 'maizal', value: 1200000, icon: '🥪', color: 0xf0d58c },
+  cheese_arepa: { name: 'Arepas de queso', zone: 'maizal', value: 1200000, icon: ICON.cheeseArepa, color: 0xf0d58c },
 
   // Zona 6 · El Pueblo
   cafe_origen: { name: 'Café de origen', zone: 'pueblo', value: 150000, icon: '🫘', color: 0x6b3e26 },
