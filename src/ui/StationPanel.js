@@ -19,7 +19,7 @@ import {
   milestoneBoost,
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
-import { busyMules, dockStock, exportsOf, slowConsumers, legTime, normalDest, productionMult, teamCapacity, teamLoad, warehouseSpace } from '../sim/transport.js';
+import { busyMules, dockStock, exportsOf, slowConsumers, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
 import { analyzeChain, expectedCompostValue, routeFlow } from '../sim/analysis.js';
 import { COMPOST_VALUE, compostValueBoost, muleSpeedMult, saleValue } from '../sim/modifiers.js';
 import { PARENT, consumers, zoneOf } from '../sim/chain.js';
@@ -29,6 +29,7 @@ import { capMult, speedMult } from '../sim/modifiers.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { fit, setFitted } from './fit.js';
+import { alerts } from '../sim/alerts.js';
 
 const MODES = [
   { key: 1, label: '×1' },
@@ -368,7 +369,8 @@ function transportInfo(id) {
       const st = s.stations[id];
       const cap = teamCapacity(s, id);
       const who = belt(s) ? 'la banda' : 'las mulas';
-      if (st.status === 'blocked' && st.waiting === 'mules') return { text: `⛔ ${belt(s) ? 'La banda no da' : 'Las mulas no dan'} abasto y el patio se llenó: mejora el transporte.`, bad: true };
+      const a = alerts(st);
+      if (a.blocked && a.waiting === 'mules') return { text: `⛔ ${belt(s) ? 'La banda no da' : 'Las mulas no dan'} abasto y el patio se llenó: mejora el transporte.`, bad: true };
       if (cap < produce(s)) return { text: `⚠️ La estación produce ${formatRate(produce(s))} ${out.icon}/s y ${who} ${belt(s) ? 'lleva' : 'llevan'} ${formatRate(cap)}/s. Sube el transporte al nivel de la estación (${st.level}).`, bad: true };
       if (!belt(s)) return { text: `✅ Los arrieros llevan todo lo que produce la estación. En el nivel ${BELT_LEVEL}, las mulas se cambian por una banda eléctrica.`, bad: false };
       return { text: '✅ La banda lleva todo lo que produce la estación.', bad: false };
@@ -384,20 +386,22 @@ function stationStatus(state, id) {
   const analysis = analyzeChain(state, zoneOf(id));
   const row = analysis.rows.find((r) => r.id === id);
   const parent = analysis.rows.find((r) => r.id === PARENT[id]);
-  if (st.status === 'blocked') {
+  // Solo los problemas que duran (ver alerts.js), como el ícono del mapa.
+  const a = alerts(st);
+  if (a.blocked) {
     // Lo que sobra porque las siguientes no dan abasto: es a ellas a las que hay que subir.
-    const slow = st.waiting === 'mules' ? slowConsumers(state, id) : [];
+    const slow = a.waiting === 'mules' ? slowConsumers(state, id) : [];
     if (slow.length) {
       const text = slow.length > 1
         ? `↪️ Patio lleno: las siguientes, ${listNames(slow)}, no alcanzan a procesar todo lo que produce esta. Súbelas de nivel.`
         : `↪️ Patio lleno: la estación siguiente (${listNames(slow)}) no alcanza a procesar todo lo que produce esta. Súbela de nivel.`;
       return { text, bad: true };
     }
-    if (st.waiting === 'mules') return { text: hasBelt(st.transport.level) ? '⛔ Patio lleno: la banda no da abasto. Mejórala (pestaña ⚡).' : '⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).', bad: true };
+    if (a.waiting === 'mules') return { text: hasBelt(st.transport.level) ? '⛔ Patio lleno: la banda no da abasto. Mejórala (pestaña ⚡).' : '⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).', bad: true };
     return { text: '⛔ Patio lleno: la bodega no tiene espacio. Mejora el Despacho.', bad: true };
   }
   // Falta el producto que llega de otra zona.
-  const lacking = row?.importLimited ?? def.imports?.find((imp) => imp.product === st.missing)?.route;
+  const lacking = row?.importLimited ?? (a.starved ? def.imports?.find((imp) => imp.product === st.missing)?.route : null);
   if (lacking) {
     const r = ROUTES_BY_ID[lacking];
     const imp = PRODUCTS[r.product];
@@ -417,7 +421,7 @@ function stationStatus(state, id) {
       : `↪️ La estación anterior produce ${formatRate(parent.output)} ${inIcon}/s y esta procesa ${formatRate(row.capacity)}/s. El resto se vende sin procesar: mejórala.`;
     return { text, bad: true };
   }
-  if (st.status === 'starved' && st.idle > 3) {
+  if (a.starved) {
     return { text: `⏸️ Esperando producto de: ${nameOf(PARENT[id])}. Mejora las estaciones anteriores.`, bad: false };
   }
   const targets = consumers(state, id);
@@ -435,10 +439,11 @@ const pct = (mult) => `${Math.round((mult - 1) * 100)} %`;
 
 function composterStatus(state, st) {
   const bonus = expectedCompostValue(state);
-  if (st.status === 'blocked') return { text: `✅ Compost de sobra: todo lo que vende la Finca vale +${pct(COMPOST_VALUE)}.`, bad: false };
-  if (st.status === 'starved' && st.idle > 3) {
+  const a = alerts(st);
+  if (a.blocked) return { text: `✅ Compost de sobra: todo lo que vende la Finca vale +${pct(COMPOST_VALUE)}.`, bad: false };
+  if (a.starved) {
     const w = state.stations.wetmill;
-    if (w?.status === 'blocked') return { text: '⏸️ Sin pulpa: el Beneficiadero está detenido (patio lleno). Mejora sus arrieros o la estación siguiente.', bad: true };
+    if (alerts(w).blocked) return { text: '⏸️ Sin pulpa: el Beneficiadero está detenido (patio lleno). Mejora sus arrieros o la estación siguiente.', bad: true };
     return { text: '⏸️ Esperando pulpa del Beneficiadero.', bad: false };
   }
   if (bonus < COMPOST_VALUE - 0.005) return { text: `⚠️ El Beneficiadero gasta más compost del que se produce: el bono solo dura parte del tiempo (+${pct(bonus)} en promedio). Mejora la Compostera.`, bad: true };
@@ -507,7 +512,7 @@ function dispatchInfo(zoneId) {
       { key: 'trip', label: 'Ida y vuelta', value: () => `${DISPATCH.tripTime} s` },
     ],
     status: (s) => {
-      const full = warehouseSpace(s, zoneId) <= 0;
+      const full = alerts(z(s)).full;
       if (full) return { text: '⛔ Bodega llena: el Willys no da abasto.', bad: true };
       const phase = { idle: '🅿️ El Willys está cargando en la bodega.', out: '🚙 El Willys va camino al pueblo.', back: '↩️ El Willys vuelve a la bodega.' };
       return { text: phase[z(s).jeep.phase], bad: false };

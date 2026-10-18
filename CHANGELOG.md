@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v1.7.8 — Avisos solo si el problema dura
+- Los íconos sobre las estaciones (⛔ patio lleno, ↪️ desviando, ⏸️ esperando) salían apenas pasaba algo, aunque fuera un instante. Con todo nivelado el producto viaja por tandas, así que es normal que un patio se llene un momento, que una estación espere la siguiente mula o que un viaje se desvíe a la bodega, y parecía un problema sin serlo.
+- Ahora un aviso sale solo si el problema ocupa al menos la mitad de los últimos 30 s de juego, y se quita cuando baja de la quinta parte (así no parpadea). «Esperando» cuenta solo en las rachas de 8 s o más sin que llegue nada: la Hornilla con bagazo, más rápida que el Trapiche, ya no se marca siempre con ⏸️.
+- El aviso del panel de la estación usa el mismo criterio que el ícono, igual que «Bodega llena» en el Despacho.
+- La Compostera llena ya no se marca con ⛔: es compost de sobra (su panel ya lo decía con ✅).
+- Al abrir el juego, los avisos tardan unos 15 s en aparecer (se mide desde ese momento).
+
 ## v1.7.7 — Cómo se juega
 - Al abrir el juego aparece una pantalla con **la idea** (la cadena del café: estaciones, arrieros y el Willys), **cómo se juega** (mejorar, subir los arrieros, la mejora recomendada, la cadena 🔗, los hitos, objetivos e investigaciones, lo que se gana con el juego cerrado) y **el objetivo** (las seis zonas, las rutas entre ellas y el segundo final).
 - Sale cada vez que se abre el juego, salvo que se marque «No mostrar de nuevo» (se guarda con la partida y se conserva al volver a empezar). Se puede ver otra vez desde el menú ⚙️ con «❓ Cómo se juega», donde también se puede desmarcar la casilla.

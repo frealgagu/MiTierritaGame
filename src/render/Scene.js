@@ -16,6 +16,7 @@ import { PRODUCTS } from '../data/products.js';
 import { BELT_LEVEL, dispatchCapacity, hasBelt, milestoneBoost } from '../sim/rules.js';
 import { ROAD_POS, zoneOf } from '../sim/chain.js';
 import { normalDest, slowConsumers, warehouseCap } from '../sim/transport.js';
+import { alerts } from '../sim/alerts.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { quoteUnlock } from '../sim/upgrades.js';
 import { ROUTES } from '../data/routes.js';
@@ -23,8 +24,6 @@ import { routeActive, routeCapacity } from '../sim/routes.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { DayNight } from './DayNight.js';
 
-const DIVERT_ICON_TIME = 3; // s que se muestra ↪️ tras un desvío
-const STARVED_ICON_TIME = 8; // s sin entrada antes de mostrar ⏸️
 
 // Altura (px) de la etiqueta sobre cada tipo de edificio.
 const LABEL_HEIGHT = { farm: 70, dispatch: 100, plot: 62, building: 96 };
@@ -433,13 +432,17 @@ export class Scene {
 }
 
 // Icono sobre la estación: ⛔ patio lleno, ⏸️ esperando entrada, ↪️ desviando a la bodega.
+// Solo si el problema dura (ver alerts.js): los momentos sueltos con todo nivelado no se avisan.
 export function statusIcon(state, id) {
   const st = state.stations[id];
   if (!st) return null;
+  const a = alerts(st);
+  // La Compostera llena es compost de sobra (bueno): no se avisa.
+  if (STATIONS_BY_ID[id].side && a.blocked) return null;
   // Patio lleno porque las siguientes no dan abasto: está desviando, la que hay que subir es la siguiente.
-  if (st.status === 'blocked') return st.waiting === 'mules' && slowConsumers(state, id).length ? '↪️' : '⛔';
-  if (st.status === 'starved' && st.idle > STARVED_ICON_TIME) return '⏸️';
-  if (st.lastDiverted !== undefined && state.playTime - st.lastDiverted < DIVERT_ICON_TIME) return '↪️';
+  if (a.blocked) return a.waiting === 'mules' && slowConsumers(state, id).length ? '↪️' : '⛔';
+  if (a.starved) return '⏸️';
+  if (a.diverting) return '↪️';
   return null;
 }
 
