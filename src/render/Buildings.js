@@ -221,6 +221,27 @@ function house(view, g, hx, hy, w, d, wallH, ctx, { wall = PAL.wall, plinth = tr
   return H;
 }
 
+// Canasta de fique: cesta tejida con asa (de color si es de regalo).
+function basketShape(g, gx, gy, z, scale = 1, color = PRODUCTS.basket.color) {
+  const p = iso(gx, gy, z);
+  const w = 7 * scale;
+  g.poly([p.x - w, p.y - 7 * scale, p.x + w, p.y - 7 * scale, p.x + w * 0.75, p.y, p.x - w * 0.75, p.y]).fill(color).stroke(OUTLINE);
+  for (let k = 1; k < 3; k++) g.moveTo(p.x - w + k, p.y - (7 * scale * k) / 3).lineTo(p.x + w - k, p.y - (7 * scale * k) / 3).stroke({ width: 0.8, color: shade(color, 0.7) });
+  g.moveTo(p.x - w * 0.7, p.y - 7 * scale).quadraticCurveTo(p.x, p.y - 15 * scale, p.x + w * 0.7, p.y - 7 * scale).stroke({ width: 1.5, color: shade(color, 0.75) });
+}
+
+// Contenedor de exportación sobre la huella (gx, gy), de 1,1 × 0,6 casillas, a la altura z.
+function container(g, gx, gy, z, color, scale = 1) {
+  const w = 1.1 * scale;
+  const d = 0.6 * scale;
+  box(g, gx, gy, w, d, 10 * scale, color, { z });
+  for (let k = 1; k < 6; k++) {
+    const a = iso(gx + (w * k) / 6, gy + d, z + 1);
+    const b = iso(gx + (w * k) / 6, gy + d, z + 10 * scale - 1);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: shade(color, 0.65) });
+  }
+}
+
 function sack(g, gx, gy, z, color) {
   const p = iso(gx, gy, z);
   g.ellipse(p.x, p.y - 4, 7, 5.5).fill(PAL.sack).stroke(OUTLINE);
@@ -1133,6 +1154,163 @@ const DRAW = {
         steam.circle(p.x, p.y, 2 + f * 3).fill({ color: 0xffffff, alpha: 0.45 * (1 - f) });
       }
     };
+  },
+
+  // Greca de tintos: cafetería de esquina con la greca plateada en el mostrador y vapor.
+  greca(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    const H = house(this, g, hx, hy, 1.9, 1.3, 26, ctx, { wall: 0xf2a7a0 });
+    door(g, hx, hy, 1.3, 0.5, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.65, 10, 0xffffff);
+    // Mostrador al frente con la greca.
+    box(g, x + 0.9, y + 1.85, 1.3, 0.45, 12, PAL.wood);
+    const base = iso(x + 1.55, y + 2.07, 12);
+    g.roundRect(base.x - 7, base.y - 22, 14, 22, 4).fill(0xc7ccd1).stroke(OUTLINE);
+    g.ellipse(base.x, base.y - 22, 7, 3).fill(0xe3e6e9).stroke(OUTLINE);
+    g.circle(base.x, base.y - 28, 4).fill(0xd8b07a).stroke(OUTLINE);
+    g.rect(base.x + 6, base.y - 10, 6, 2).fill(0x555555);
+    // Tacitas de tinto.
+    for (let k = 0; k < 3; k++) {
+      const c = iso(x + 1.05 + k * 0.18, y + 2.05, 12);
+      g.roundRect(c.x - 2.5, c.y - 4, 5, 4, 1).fill(0xffffff).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+      g.ellipse(c.x, c.y - 4, 2.5, 1).fill(PRODUCTS.tinto.color);
+    }
+    // Banca para los clientes.
+    box(g, x + 0.3, y + 2.6, 0.8, 0.22, 6, PAL.wood);
+    this.roofTop = iso(hx + 0.95, hy + 0.65, H + 16);
+    const steam = new Graphics();
+    this.anim.addChild(steam);
+    this.animate = (time) => {
+      steam.clear();
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.5 + i / 3) % 1;
+        steam.circle(base.x + Math.sin((f + i) * 5) * 2, base.y - 32 - f * 18, 2 + f * 3).fill({ color: 0xffffff, alpha: 0.5 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Fonda: casa larga con corredor, mesas con mantel de cuadros y el fogón humeando.
+  fonda(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    const H = house(this, g, hx, hy, 2.4, 1.3, 26, ctx, { wall: 0xb8e0a8 });
+    door(g, hx, hy, 1.3, 1.2, 16, ctx.trim);
+    windowOnFront(this, g, hx, hy, 1.3, 0.5, 8, 0xffffff);
+    windowOnFront(this, g, hx, hy, 1.3, 1.9, 8, 0xffffff);
+    // Chimenea del fogón de leña.
+    box(g, hx + 2.0, hy + 0.2, 0.25, 0.25, H + 18, 0xb5653a);
+    const top = iso(hx + 2.12, hy + 0.32, H + 18);
+    this.smokePoints.push({ x: top.x, y: top.y - 4 });
+    // Mesas con mantel a cuadros y desayunos.
+    for (const [mx, my] of [[0.6, 2.35], [1.6, 2.35], [2.5, 2.0]].slice(0, 2 + Math.min(ctx.tier, 1))) {
+      const p = iso(x + mx, y + my, 8);
+      g.rect(p.x - 1, p.y, 2, 8).fill(PAL.woodDark);
+      g.ellipse(p.x, p.y, 10, 5).fill(0xffffff).stroke(OUTLINE);
+      for (let k = 0; k < 4; k++) g.rect(p.x - 7 + k * 3.5, p.y - 2 + (k % 2) * 1.5, 2.5, 1.5).fill(PAL.balconyRed);
+      g.ellipse(p.x - 3, p.y - 1, 3, 1.5).fill(PRODUCTS.cheese_arepa.color);
+      g.circle(p.x + 3, p.y - 2, 1.8).fill(PRODUCTS.tinto.color);
+    }
+    this.roofTop = iso(hx + 1.2, hy + 0.65, H + 16);
+  },
+
+  // Taller de canastas: cobertizo abierto con atados de fique, canastas apiladas y una tejedora.
+  basket_shop(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    // Postes y techo de teja sobre el cobertizo.
+    for (const [px, py] of [[0, 0], [2.1, 0], [0, 1.4], [2.1, 1.4]]) box(g, x0 + px, y0 + py, 0.12, 0.12, 24 + ctx.up, PAL.wood);
+    // Fique colgado secándose.
+    for (let k = 0; k < 5; k++) {
+      const p = iso(x0 + 0.3 + k * 0.4, y0 + 0.1, 22 + ctx.up);
+      g.moveTo(p.x, p.y).lineTo(p.x - 2, p.y + 14).lineTo(p.x + 2, p.y + 14).closePath().fill(0xe8d9a8).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
+    }
+    gableRoof(g, x0, y0, 2.22, 1.52, 24 + ctx.up, 12, PAL.roof, PAL.wood);
+    // Canastas apiladas (más con cada hito).
+    const spots = [[0.5, 0.9, 0], [0.95, 0.9, 0], [1.4, 0.9, 0], [0.72, 0.9, 9], [1.17, 0.9, 9], [0.95, 0.9, 18]];
+    for (const [bx, by, z] of spots.slice(0, 3 + Math.min(ctx.tier, 3))) basketShape(g, x0 + bx, y0 + by, z);
+    // Tejedora sentada.
+    const p = iso(x0 + 1.9, y0 + 0.9);
+    g.ellipse(p.x, p.y, 5, 2.5).fill({ color: 0x000000, alpha: 0.2 });
+    g.roundRect(p.x - 3, p.y - 10, 6, 8, 2).fill(PAL.balconyBlue);
+    g.circle(p.x, p.y - 12.5, 2.8).fill(0xc68e5e);
+    g.ellipse(p.x, p.y - 14.5, 3, 1.4).fill(0x2b1a10);
+    const weave = new Graphics();
+    this.anim.addChild(weave);
+    this.roofTop = iso(x0 + 1.1, y0 + 0.75, 36 + ctx.up);
+    this.animate = (time) => {
+      weave.clear();
+      const a = Math.sin(time * 6) * 3;
+      basketShape(weave, x0 + 1.75, y0 + 1.25, 4, 0.7);
+      weave.moveTo(p.x - 2, p.y - 7).lineTo(p.x - 6 + a, p.y - 3).stroke({ width: 1.5, color: 0xc68e5e });
+    };
+    this.animate(0);
+  },
+
+  // Empaque de regalos: tienda con vitrina, cajas de colores con moño y canastas de regalo.
+  gift_wrap(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    const H = house(this, g, hx, hy, 2.1, 1.4, 27, ctx, { wall: 0xf4efe6 });
+    // Vitrina en la fachada.
+    g.poly(isoPoly([[hx + 0.2, hy + 1.4, 6], [hx + 1.2, hy + 1.4, 6], [hx + 1.2, hy + 1.4, 18], [hx + 0.2, hy + 1.4, 18]])).fill(0xbfe3f5).stroke(OUTLINE);
+    door(g, hx, hy, 1.4, 1.65, 16, ctx.trim);
+    const v = iso(hx + 0.7, hy + 1.4, 12);
+    this.lights.push({ x: v.x, y: v.y, r: 26 });
+    // Toldo de rayas.
+    for (let i = 0; i < 6; i++) {
+      const a = hx + 0.1 + i * 0.32;
+      g.poly(isoPoly([[a, hy + 1.4, 22], [a + 0.32, hy + 1.4, 22], [a + 0.32, hy + 1.72, 17], [a, hy + 1.72, 17]])).fill(i % 2 ? 0xffffff : 0x8e44ad).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+    }
+    // Cajas de regalo con moño.
+    const boxes = [[0.4, 2.4, PAL.balconyRed], [0.85, 2.5, PAL.balconyBlue], [1.3, 2.45, PAL.balconyYellow], [0.62, 2.45, PAL.balconyGreen], [2.6, 1.0, 0x8e44ad]];
+    boxes.slice(0, 3 + Math.min(ctx.tier, 2)).forEach(([bx, by, color], k) => {
+      const z = k === 3 ? 9 : 0;
+      box(g, x + bx - 0.15, y + by - 0.15, 0.3, 0.3, 9, color, { z });
+      const top = iso(x + bx, y + by, z + 9);
+      g.moveTo(top.x - 9, top.y).lineTo(top.x + 9, top.y).stroke({ width: 1.5, color: 0xffffff });
+      g.circle(top.x - 2, top.y - 2, 2).fill(0xffffff);
+      g.circle(top.x + 2, top.y - 2, 2).fill(0xffffff);
+    });
+    basketShape(g, x + 2.4, y + 2.4, 0, 1, PRODUCTS.gift_basket.color);
+    this.roofTop = iso(hx + 1.05, hy + 0.7, H + 16);
+  },
+
+  // Patio de contenedores: contenedores apilados de colores y una grúa pórtico que va y viene.
+  export_dock(g, x, y, ctx) {
+    g.poly(isoPoly([[x + 0.1, y + 0.1], [x + 2.9, y + 0.1], [x + 2.9, y + 2.9], [x + 0.1, y + 2.9]])).fill({ color: 0x8f8f8f, alpha: 0.5 });
+    const colors = [0x2e6fd1, PAL.balconyRed, PAL.balconyGreen, 0xe67e22, 0x8e44ad, PAL.balconyYellow];
+    const stacks = [[0.3, 0.4], [0.3, 1.1], [1.6, 0.4]];
+    const levels = 1 + Math.min(ctx.tier, 3);
+    stacks.forEach(([sx, sy], i) => {
+      for (let k = 0; k < (i === 2 ? Math.max(1, levels - 1) : levels); k++) container(g, x + sx, y + sy, k * 11, colors[(i * 2 + k) % colors.length]);
+    });
+    // Rieles de la grúa.
+    for (const ry of [0.2, 2.6]) {
+      const a = iso(x + 0.1, y + ry);
+      const b = iso(x + 2.9, y + ry);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 2, color: 0x555555 });
+    }
+    const crane = new Graphics();
+    this.anim.addChild(crane);
+    const H = 52 + ctx.up;
+    this.roofTop = iso(x + 1.5, y + 1.4, H + 4);
+    this.lights.push({ x: this.roofTop.x, y: this.roofTop.y + 6, r: 30 });
+    this.animate = (time) => {
+      crane.clear();
+      const cx = x + 0.6 + (Math.sin(time * 0.6) * 0.5 + 0.5) * 1.8;
+      for (const ry of [0.2, 2.6]) box(crane, cx - 0.06, y + ry - 0.06, 0.12, 0.12, H, PAL.balconyYellow);
+      const a = iso(cx, y + 0.2, H);
+      const b = iso(cx, y + 2.6, H);
+      crane.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 4, color: 0xd9a400 });
+      const hookY = y + 1.4;
+      const top = iso(cx, hookY, H);
+      const drop = 14 + (Math.sin(time * 1.2) * 0.5 + 0.5) * 12;
+      crane.moveTo(top.x, top.y).lineTo(top.x, top.y + drop).stroke({ width: 1, color: 0x333333 });
+      container(crane, cx - 0.35, hookY - 0.15, H - drop - 10, 0x2e6fd1, 0.7);
+    };
+    this.animate(0);
   },
 
   // Empacadora: bodega amarilla con banda transportadora y bolsas.

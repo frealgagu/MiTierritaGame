@@ -26,6 +26,7 @@ export const ZONE2 = {
   routes: {
     panela: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Lechería ➜' },
     panela_cacao: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'Al Cacaotal ➜' },
+    panela_pueblo: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'Al Pueblo ➜' },
   },
   unlockedBy: 'finca', // se abre al completar la Finca
   next: 'lecheria',

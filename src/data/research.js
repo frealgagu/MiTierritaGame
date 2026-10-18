@@ -64,6 +64,16 @@ export const RESEARCH = [
   { zone: 'maizal', id: 'budare_grande', name: 'Budare grande', icon: '🔥', desc: 'El Budare asa el doble de arepas.', cost: 300000000, requires: 'arepa_stand', effect: { type: 'stationSpeed', target: 'budare', mult: 2 } },
   { zone: 'maizal', id: 'plancha_doble', name: 'Plancha doble', icon: '🥪', desc: 'El Puesto de arepas atiende el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'arepa_stand', effect: { type: 'stationSpeed', target: 'arepa_stand', mult: 2 } },
   { zone: 'maizal', id: 'receta_abuela', name: 'Receta de la abuela', icon: '🏅', desc: 'Todo lo que vende el Maizal vale un 50 % más.', cost: 400000000, requires: 'budare', effect: { type: 'zoneValue', target: 'maizal', mult: 1.5 } },
+  // Zona 6 · El Pueblo: cada estación al doble (lo que gasta de más llega de las otras zonas, que también
+  // tienen sus investigaciones), un camión para el despacho y la denominación de origen.
+  { zone: 'pueblo', id: 'catadores', name: 'Catadores expertos', icon: '👃', desc: 'La Casa del café selecciona el doble de café de origen (pide el doble de bolsas a la Finca).', cost: 1000000000, requires: 'greca', effect: { type: 'stationSpeed', target: 'coffee_house', mult: 2 } },
+  { zone: 'pueblo', id: 'greca_doble', name: 'Greca de dos llaves', icon: '☕', desc: 'La Greca prepara el doble de tintos.', cost: 1500000000, requires: 'greca', effect: { type: 'stationSpeed', target: 'greca', mult: 2 } },
+  { zone: 'pueblo', id: 'tractomula', name: 'Tractomula', icon: '🚛', desc: 'El despacho del Pueblo lleva el doble por viaje.', cost: 2500000000, requires: 'fonda', effect: { type: 'dispatchCapacity', target: 'pueblo', mult: 2 } },
+  { zone: 'pueblo', id: 'mas_mesas', name: 'Más mesas en la Fonda', icon: '🍽️', desc: 'La Fonda sirve el doble de desayunos.', cost: 4000000000, requires: 'fonda', effect: { type: 'stationSpeed', target: 'fonda', mult: 2 } },
+  { zone: 'pueblo', id: 'tejedoras', name: 'Tejedoras de fique', icon: '🧶', desc: 'El Taller teje el doble de canastas.', cost: 8000000000, requires: 'basket_shop', effect: { type: 'stationSpeed', target: 'basket_shop', mult: 2 } },
+  { zone: 'pueblo', id: 'monos', name: 'Cintas y moños', icon: '🎀', desc: 'El Empaque de regalos arma el doble de canastas.', cost: 15000000000, requires: 'gift_wrap', effect: { type: 'stationSpeed', target: 'gift_wrap', mult: 2 } },
+  { zone: 'pueblo', id: 'grua', name: 'Grúa de contenedores', icon: '🏗️', desc: 'El Patio de contenedores llena el doble.', cost: 40000000000, requires: 'export_dock', effect: { type: 'stationSpeed', target: 'export_dock', mult: 2 } },
+  { zone: 'pueblo', id: 'denominacion', name: 'Denominación de origen', icon: '🏅', desc: 'Todo lo que vende el Pueblo vale un 50 % más.', cost: 25000000000, requires: 'gift_wrap', effect: { type: 'zoneValue', target: 'pueblo', mult: 1.5 } },
 ];
 
 export const RESEARCH_BY_ID = Object.fromEntries(RESEARCH.map((r) => [r.id, r]));

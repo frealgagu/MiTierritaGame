@@ -123,8 +123,12 @@ export class FarmView extends StationView {
     const { x, y, w, h } = this.zoneFarm;
     const rng = createRng(42);
     this.bushes = [];
-    this.lights = drawHut(g, x, y, tier);
     this.lightsDirty = true;
+    if (this.theme === 'town') {
+      this.drawPlaza(g, tier, rng);
+      return;
+    }
+    this.lights = drawHut(g, x, y, tier);
     if (this.theme === 'dairy') {
       this.drawPasture(g, tier, rng);
       return;
@@ -192,11 +196,129 @@ export class FarmView extends StationView {
     }
   }
 
+  // Plaza del Pueblo: la Casa del café en la esquina, con mesas afuera, una fuente en el centro,
+  // guayacanes, bancas, faroles y gente. Con cada hito, más mesas y la casa más alta.
+  drawPlaza(g, tier, rng) {
+    const { x, y, w, h } = this.zoneFarm;
+    this.lights = drawCoffeeHouse(g, x, y, tier);
+    // Mesas con parasol delante de la casa: de ahí salta el café de origen.
+    const tables = [[0.6, 2.6], [1.5, 2.7], [2.6, 0.6], [2.7, 1.5], [2.5, 2.5], [0.6, 3.5], [3.5, 0.6]].slice(0, 3 + Math.min(tier, 4));
+    for (const [tx, ty] of tables) {
+      const p = iso(x + tx, y + ty);
+      shadow(g, p.x, p.y + 1, 12, 5);
+      g.rect(p.x - 1, p.y - 22, 2, 22).fill(0x555555);
+      g.ellipse(p.x, p.y - 9, 8, 4).fill(0xffffff).stroke(OUTLINE);
+      g.poly([p.x, p.y - 30, p.x - 15, p.y - 20, p.x + 15, p.y - 20]).fill(rng() < 0.5 ? PAL.balconyRed : PAL.balconyGreen).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+      g.circle(p.x - 3, p.y - 10, 1.8).fill(PRODUCTS.tinto.color);
+      this.bushes.push({ x: p.x, y: p.y + 4 });
+    }
+    // Fuente.
+    const c = iso(x + w * 0.62, y + h * 0.62);
+    g.ellipse(c.x, c.y, 34, 17).fill(0xb9b2a5).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 4, 30, 15).fill(0xd2cbbd).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 4, 25, 12).fill(0x6fa8dc);
+    g.rect(c.x - 3, c.y - 26, 6, 22).fill(0xd2cbbd).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 26, 11, 5).fill(0xb9b2a5).stroke(OUTLINE);
+    for (let k = 0; k < 6; k++) {
+      const a = (k / 6) * Math.PI * 2;
+      g.moveTo(c.x, c.y - 28).quadraticCurveTo(c.x + Math.cos(a) * 12, c.y - 36, c.x + Math.cos(a) * 18, c.y - 6 + Math.sin(a) * 8).stroke({ width: 1.5, color: 0xd6ecff, alpha: 0.8 });
+    }
+    // Guayacanes y bancas alrededor.
+    for (const [gx, gy, pink] of [[w - 0.7, 0.8, false], [0.8, h - 0.7, true], [w - 0.6, h - 0.6, false]]) {
+      const p = iso(x + gx, y + gy);
+      shadow(g, p.x + 4, p.y + 2, 22, 8);
+      g.moveTo(p.x - 2, p.y).lineTo(p.x - 1.5, p.y - 26).lineTo(p.x + 1.5, p.y - 26).lineTo(p.x + 2, p.y).closePath().fill(0x6b4a2e);
+      const colors = pink ? [0xe58fb5, 0xf2b5cf, 0xd46a9a] : [0xf4c430, 0xf9dc5c, 0xe0a91b];
+      for (const [dx, dy, r] of [[-11, -30, 12], [10, -31, 12], [0, -39, 14], [-4, -27, 9], [5, -43, 9]]) g.circle(p.x + dx, p.y + dy, r).fill(colors[Math.floor(rng() * 3)]);
+    }
+    for (const [bx, by] of [[w * 0.62 - 1.6, h * 0.62 + 0.9], [w * 0.62 + 0.9, h * 0.62 - 1.6]]) box(g, x + bx, y + by, 0.7, 0.2, 5, PAL.wood);
+    for (const [lx, ly] of [[w * 0.62 - 1.4, h * 0.62 - 1.4], [w - 0.3, h * 0.62], [w * 0.62, h - 0.3]]) {
+      const p = iso(x + lx, y + ly);
+      g.rect(p.x - 1.2, p.y - 30, 2.4, 30).fill(0x2b2b2b);
+      g.rect(p.x - 4, p.y - 38, 8, 8).fill(0xffd27a).stroke({ width: 1.5, color: 0x2b2b2b });
+      if (tier >= 1) this.lights.push({ x: p.x, y: p.y - 34, r: 26 });
+    }
+    // Gente paseando por la plaza (más con cada hito).
+    const shirts = [0xd7263d, 0x2e6fd1, 0xe8b90f, 0x2fa36b, 0xffffff, 0x8e44ad];
+    for (let i = 0; i < 4 + tier * 2; i++) {
+      const gx = x + 0.8 + rng() * (w - 1.6);
+      const gy = y + 0.8 + rng() * (h - 1.6);
+      if (gx < x + 3.2 && gy < y + 3.2) continue; // casa y mesas
+      if (Math.hypot(gx - (x + w * 0.62), gy - (y + h * 0.62)) < 1.3) continue; // fuente
+      const p = iso(gx, gy);
+      g.ellipse(p.x, p.y, 4, 2).fill({ color: 0x000000, alpha: 0.2 });
+      g.roundRect(p.x - 2.5, p.y - 11, 5, 8, 2).fill(shirts[Math.floor(rng() * shirts.length)]);
+      g.rect(p.x - 2, p.y - 3, 1.5, 3).fill(0x3a3a5a);
+      g.rect(p.x + 0.5, p.y - 3, 1.5, 3).fill(0x3a3a5a);
+      g.circle(p.x, p.y - 13.5, 2.6).fill(0xc68e5e);
+      if (rng() < 0.5) g.ellipse(p.x, p.y - 15.5, 4, 1.5).fill(0xf2e6c8); // sombrero
+    }
+  }
+
   // Un punto al azar sobre un cafeto (para las cerezas que saltan).
   randomBushTop(rng = Math.random) {
     const p = this.bushes[Math.floor(rng() * this.bushes.length)];
     return p ? { x: p.x, y: p.y - 14 } : this.anchorPoint(20);
   }
+}
+
+// Casa del café del Pueblo: casona de esquina con toldo y letrero; con los hitos, segundo piso con
+// balcón, remates de colores y, al final, un tercer piso. Devuelve las luces de la noche.
+function drawCoffeeHouse(g, x, y, tier) {
+  const ox = x + 0.2;
+  const oy = y + 0.2;
+  const w = 1.8;
+  const d = 1.8;
+  const trim = [PAL.balconyGreen, PAL.balconyBlue, PAL.balconyRed, PAL.balconyYellow, 0x8e44ad, 0xffd700][tier];
+  const height = 26 + (tier >= 2 ? 14 : 0) + (tier >= 5 ? 12 : 0);
+  const p = iso(ox + w / 2, oy + d / 2);
+  shadow(g, p.x + 6, p.y + 8, 52, 20);
+  box(g, ox, oy, w, d, 8, trim);
+  box(g, ox, oy, w, d, height - 8, 0xf6d860, { z: 8 });
+  gableRoof(g, ox, oy, w, d, height, 18, PAL.roof, 0xf6d860);
+  const lights = [];
+  // Puertas en las dos fachadas y un toldo de rayas sobre la delantera.
+  for (const at of [0.5, 1.3]) {
+    g.poly(isoPoly([[ox + at - 0.17, oy + d, 0], [ox + at + 0.17, oy + d, 0], [ox + at + 0.17, oy + d, 17], [ox + at - 0.17, oy + d, 17]])).fill(shade(trim, 0.7)).stroke(OUTLINE);
+    const l = iso(ox + at, oy + d, 9);
+    lights.push({ x: l.x, y: l.y, r: 20 });
+  }
+  g.poly(isoPoly([[ox + w, oy + 0.6, 0], [ox + w, oy + 0.95, 0], [ox + w, oy + 0.95, 17], [ox + w, oy + 0.6, 17]])).fill(shade(trim, 0.6)).stroke(OUTLINE);
+  for (let i = 0; i < 6; i++) {
+    const a = ox + 0.1 + (i * (w - 0.2)) / 6;
+    const b = a + (w - 0.2) / 6;
+    g.poly(isoPoly([[a, oy + d, 21], [b, oy + d, 21], [b, oy + d + 0.35, 15], [a, oy + d + 0.35, 15]])).fill(i % 2 ? 0xffffff : PAL.balconyRed).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+  }
+  // Letrero con una taza.
+  const s = iso(ox + w / 2, oy + d, 26);
+  g.roundRect(s.x - 15, s.y - 7, 30, 13, 3).fill(PAL.woodDark).stroke(OUTLINE);
+  g.roundRect(s.x - 5, s.y - 4, 8, 7, 2).fill(0xffffff);
+  g.circle(s.x + 4.5, s.y - 0.5, 2).stroke({ width: 1.2, color: 0xffffff });
+  if (tier >= 2) {
+    const z = 30;
+    const a = iso(ox + 0.15, oy + d + 0.1, z);
+    const b = iso(ox + w - 0.15, oy + d + 0.1, z);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 3, color: trim });
+    for (let i = 0; i <= 9; i++) {
+      const q = iso(ox + 0.15 + ((w - 0.3) * i) / 9, oy + d + 0.1, z);
+      g.moveTo(q.x, q.y).lineTo(q.x, q.y + 7).stroke({ width: 1.5, color: trim });
+    }
+    for (const at of [0.5, 1.3]) {
+      g.poly(isoPoly([[ox + at - 0.13, oy + d, z + 1], [ox + at + 0.13, oy + d, z + 1], [ox + at + 0.13, oy + d, z + 11], [ox + at - 0.13, oy + d, z + 11]])).fill(PAL.balconyYellow).stroke(OUTLINE);
+      const l = iso(ox + at, oy + d, z + 6);
+      lights.push({ x: l.x, y: l.y, r: 18 });
+    }
+  }
+  if (tier >= 1) {
+    // Macetas con flores colgadas de la fachada.
+    for (const at of [0.15, 0.9, 1.65]) {
+      const q = iso(ox + at, oy + d + 0.05, 20);
+      g.circle(q.x, q.y, 3.5).fill(0x4e8a33);
+      g.circle(q.x - 1.5, q.y - 1, 1.4).fill(0xe07a5f);
+      g.circle(q.x + 1.5, q.y - 1.5, 1.4).fill(0xffffff);
+    }
+  }
+  return lights;
 }
 
 // Casa del caficultor; crece con los hitos (GDD §8: evolución visual).

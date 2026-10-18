@@ -1,8 +1,8 @@
 import { Container, Graphics } from 'pixi.js';
 import { iso, isoPoly, mix, shade, depth } from './iso.js';
-import { PAL } from './palette.js';
+import { PAL, OUTLINE } from './palette.js';
 import { createRng } from '../core/rng.js';
-import { shadow } from './procedural/shapes.js';
+import { box, gableRoof, shadow } from './procedural/shapes.js';
 
 const CLIFF = 46; // px de alto del borde del mapa
 
@@ -90,7 +90,13 @@ export class Terrain {
           const p = iso(gx + rng(), gy + rng());
           g.ellipse(p.x, p.y, 2.5, 1.2).fill({ color: 0x8a6a45, alpha: 0.5 });
         }
-        if (type === 'farm' && this.zone.theme === 'cacao') {
+        if (type === 'farm' && this.zone.theme === 'town') {
+          // Plaza empedrada.
+          for (let k = 0; k < 4; k++) {
+            const p = iso(gx + 0.25 + (k % 2) * 0.5, gy + 0.25 + Math.floor(k / 2) * 0.5);
+            g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? 0xa39b8c : 0xd2cbbd, alpha: 0.8 });
+          }
+        } else if (type === 'farm' && this.zone.theme === 'cacao') {
           // Hojarasca bajo los cacaos.
           for (let k = 0; k < 2; k++) {
             const p = iso(gx + rng(), gy + rng());
@@ -130,7 +136,13 @@ export class Terrain {
         if (!this.isFree(gx, gy)) continue;
         const r = rng();
         let obj = null;
-        if (this.zone.theme === 'corn') {
+        if (this.zone.theme === 'town') {
+          // Pueblo: casitas de colores, guayacanes florecidos, faroles y alguna palma de cera.
+          if (r < 0.06) obj = townHouse(rng);
+          else if (r < 0.09) obj = guayacan(rng);
+          else if (r < 0.105) obj = streetLamp();
+          else if (r < 0.12) obj = palm(rng);
+        } else if (this.zone.theme === 'corn') {
           // Maizal: girasoles, matas de maíz sueltas, algún espantapájaros y piedras.
           if (r < 0.04) obj = sunflower(rng);
           else if (r < 0.08) obj = cornClump(rng);
@@ -178,7 +190,58 @@ const FARM_SOIL = {
   dairy: (v) => mix(0x5e9a3c, 0x6fae44, v * 0.5),
   cacao: (v) => mix(0x5e4630, 0x4a3726, v * 0.5),
   corn: (v) => mix(0xa47c48, 0x8a6a3a, v * 0.4),
+  town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
 };
+
+// Casita del pueblo: paredes de color, zócalo, tejas de barro, puerta y ventana.
+const HOUSE_WALLS = [0xf4efe6, 0xf6d860, 0x9ad0ec, 0xf2a7a0, 0xb8e0a8, 0xf4efe6];
+const HOUSE_TRIMS = [PAL.balconyRed, PAL.balconyBlue, PAL.balconyGreen, PAL.balconyYellow];
+function townHouse(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const wall = HOUSE_WALLS[Math.floor(rng() * HOUSE_WALLS.length)];
+  const trim = HOUSE_TRIMS[Math.floor(rng() * HOUSE_TRIMS.length)];
+  const w = 0.8 + rng() * 0.2;
+  const h = 20 + rng() * 8;
+  shadow(g, 6, 6, 30, 12);
+  box(g, -w / 2, -0.45, w, 0.9, 6, trim);
+  box(g, -w / 2, -0.45, w, 0.9, h - 6, wall, { z: 6 });
+  gableRoof(g, -w / 2, -0.45, w, 0.9, h, 10, PAL.roof, wall);
+  const d = isoPoly([[-0.12, 0.45, 0], [0.12, 0.45, 0], [0.12, 0.45, 12], [-0.12, 0.45, 12]]);
+  g.poly(d).fill(shade(trim, 0.75)).stroke(OUTLINE);
+  const win = isoPoly([[w / 2, -0.2, 9], [w / 2, 0.05, 9], [w / 2, 0.05, 16], [w / 2, -0.2, 16]]);
+  g.poly(win).fill(0x6fa8dc).stroke(OUTLINE);
+  c.addChild(g);
+  return c;
+}
+
+// Guayacán florecido: copa redonda amarilla o rosada.
+function guayacan(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const pink = rng() < 0.4;
+  const s = 0.85 + rng() * 0.3;
+  shadow(g, 4, 2, 22 * s, 8 * s);
+  g.moveTo(-2, 0).lineTo(-1.5, -24 * s).lineTo(1.5, -24 * s).lineTo(2, 0).closePath().fill(0x6b4a2e);
+  const colors = pink ? [0xe58fb5, 0xf2b5cf, 0xd46a9a] : [0xf4c430, 0xf9dc5c, 0xe0a91b];
+  for (const [dx, dy, r] of [[-10, -28, 11], [9, -29, 11], [0, -36, 13], [-4, -26, 9], [5, -40, 8]]) {
+    g.circle(dx * s, dy * s, r * s).fill(colors[Math.floor(rng() * 3)]);
+  }
+  c.addChild(g);
+  return c;
+}
+
+// Farol de la calle.
+function streetLamp() {
+  const c = new Container();
+  const g = new Graphics();
+  g.ellipse(0, 0, 4, 2).fill({ color: 0x000000, alpha: 0.25 });
+  g.rect(-1.2, -30, 2.4, 30).fill(0x2b2b2b);
+  g.rect(-4, -38, 8, 8).fill(0xffd27a).stroke({ width: 1.5, color: 0x2b2b2b });
+  g.poly([-5, -38, 5, -38, 0, -43]).fill(0x2b2b2b);
+  c.addChild(g);
+  return c;
+}
 
 // Girasol: tallo alto, hojas y flor amarilla mirando al frente.
 function sunflower(rng) {

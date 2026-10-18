@@ -294,8 +294,12 @@ function stationInfo(id) {
   return {
     icon: def.icon,
     title: def.name,
-    subtitle: inId ? `Convierte ${PRODUCTS[inId].name.toLowerCase()} en ${out.name.toLowerCase()}` : `Fuente ilimitada de ${out.name.toLowerCase()}`,
-    recipe: inId ? `${recipe(def.in)}${(def.imports ?? []).map((imp) => ` + ${imp.perCycle} ${PRODUCTS[imp.product].icon}🚌`).join('')} <span>➜</span> ${recipe(def.out)}` : null,
+    subtitle: inId
+      ? `Convierte ${PRODUCTS[inId].name.toLowerCase()} en ${out.name.toLowerCase()}`
+      : def.imports
+        ? `Convierte ${listProducts(def.imports)} de otras zonas en ${out.name.toLowerCase()}`
+        : `Fuente ilimitada de ${out.name.toLowerCase()}`,
+    recipe: inId || def.imports ? `${[...(inId ? [recipe(def.in)] : []), ...(def.imports ?? []).map((imp) => `${imp.perCycle} ${PRODUCTS[imp.product].icon}🚌`)].join(' + ')} <span>➜</span> ${recipe(def.out)}` : null,
     milestoneWhat: 'velocidad',
     upgradeId: id,
     tabs: !def.side,
@@ -385,6 +389,9 @@ function stationStatus(state, id) {
   const routes = exportsOf(state, id).map((r) => ` y a la bodega para la ${r.name}`).join('');
   return { text: `✅ Trabajando. Las mulas llevan el producto a ${targets.length ? listNames(targets) : 'la bodega'}${routes}.`, bad: false };
 }
+
+// «bolsas de café y panela pulverizada»: los importados de una estación, en minúsculas.
+const listProducts = (imports) => imports.map((imp) => PRODUCTS[imp.product].name.toLowerCase()).join(' y ');
 
 // Bono como porcentaje: 1,3 → «30 %».
 const pct = (mult) => `${Math.round((mult - 1) * 100)} %`;

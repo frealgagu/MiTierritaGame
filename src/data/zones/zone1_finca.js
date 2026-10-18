@@ -32,6 +32,10 @@ export const ZONE1 = {
   exitSign: [21.5, 24.2],
   muleSpeed: 4, // casillas por segundo
   dispatchCost: { base: 10, growth: 1.17 },
+  // Carretera de la Ruta del café: sale de la bodega hacia el Pueblo (v1.5).
+  routes: {
+    cafe: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Café al Pueblo ➜' },
+  },
   unlockedBy: null, // disponible desde el principio
   next: 'trapiche', // zona que se abre al completarla
 };

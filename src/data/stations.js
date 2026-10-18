@@ -1,6 +1,5 @@
-// Catálogo completo de estaciones (39), ver docs/GDD.md §4b.
+// Catálogo completo de estaciones (38), ver docs/GDD.md §4b.
 // `release`: versión del juego en la que se vuelve jugable.
-// Costes de las zonas 2–6 en `null`: se balancearán cuando llegue cada zona.
 //
 //   in:     productos consumidos por ciclo
 //   out:    productos generados por ciclo
@@ -63,14 +62,16 @@ export const STATIONS = [
   { id: 'budare', zone: 'maizal', name: 'Budare', icon: '🔥', in: { corn_dough: 1 }, out: { arepa: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '1.4' },
   { id: 'arepa_stand', zone: 'maizal', name: 'Puesto de arepas', icon: '🥪', in: { arepa: 4 }, imports: [{ product: 'cheese', perCycle: 1, route: 'queso' }, { product: 'butter', perCycle: 1, route: 'mantequilla' }], out: { cheese_arepa: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '1.4' },
 
-  // Zona 6 · El Pueblo (sin fuente propia)
-  { id: 'greca', zone: 'pueblo', name: 'Greca de tintos', icon: '☕', in: { ground: 1, panela_powder: 1 }, out: { tinto: 1 }, cycle: 4, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.5' },
-  { id: 'milk_coffee', zone: 'pueblo', name: 'Cafetera de leche', icon: '☕', in: { ground: 1, milk: 2 }, out: { cafe_con_leche: 1 }, cycle: 5, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.5' },
-  { id: 'espresso', zone: 'pueblo', name: 'Máquina espresso', icon: '☕', in: { ground: 1, milk: 1, cream: 1 }, out: { cappuccino: 1 }, cycle: 6, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.5' },
-  { id: 'chocolate_pot', zone: 'pueblo', name: 'Chocolatera', icon: '🍫', in: { table_chocolate: 1, milk: 2 }, out: { hot_chocolate: 1 }, cycle: 6, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.5' },
-  { id: 'fonda', zone: 'pueblo', name: 'Fonda', icon: '🍳', in: { cheese_arepa: 1, hot_chocolate: 1 }, out: { breakfast: 1 }, cycle: 8, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.5' },
-  { id: 'basket_shop', zone: 'pueblo', name: 'Taller de canastas', icon: '🧺', in: { coffee_bag: 1, panela: 2, arequipe: 1, milk_chocolate: 2 }, out: { gift_basket: 1 }, cycle: 10, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.5' },
-  { id: 'export_dock', zone: 'pueblo', name: 'Muelle de exportación', icon: '🚢', in: { gift_basket: 250, coffee_bag: 2000 }, out: { container: 1 }, cycle: 60, unlockCost: null, upgradeBase: null, growth: 1.15, release: '1.5' },
+  // Zona 6 · El Pueblo (v1.5). Sin fuente propia: todo llega por rutas. A igual nivel en todas las
+  // zonas, cada proveedora tiene un producto final que no se lleva nadie más (1 cada 32 s): las bolsas
+  // de café, el cuarto de panela que sobra, el arequipe, los dos chocolates y las arepas de queso. El
+  // Pueblo los gasta justo. La Casa del café reparte su café de origen entre la Greca y el Taller.
+  { id: 'coffee_house', zone: 'pueblo', name: 'Casa del café', icon: '🏛️', imports: [{ product: 'coffee_bag', perCycle: 1, route: 'cafe' }], out: { cafe_origen: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '1.5' },
+  { id: 'greca', zone: 'pueblo', name: 'Greca de tintos', icon: '☕', in: { cafe_origen: 1 }, imports: [{ product: 'panela_powder', perCycle: 1, route: 'panela_pueblo' }], out: { tinto: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '1.5' },
+  { id: 'fonda', zone: 'pueblo', name: 'Fonda', icon: '🍳', in: { tinto: 2 }, imports: [{ product: 'cheese_arepa', perCycle: 1, route: 'arepas' }], out: { breakfast: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '1.5' },
+  { id: 'basket_shop', zone: 'pueblo', name: 'Taller de canastas', icon: '🧺', in: { cafe_origen: 1 }, imports: [{ product: 'arequipe', perCycle: 1, route: 'arequipe' }], out: { basket: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '1.5' },
+  { id: 'gift_wrap', zone: 'pueblo', name: 'Empaque de regalos', icon: '🎁', in: { basket: 1 }, imports: [{ product: 'table_chocolate', perCycle: 1, route: 'chocolate_mesa' }, { product: 'milk_chocolate', perCycle: 1, route: 'chocolatinas' }], out: { gift_basket: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '1.5' },
+  { id: 'export_dock', zone: 'pueblo', name: 'Patio de contenedores', icon: '🚢', in: { gift_basket: 4 }, out: { container: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '1.5' },
 ];
 
 export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));

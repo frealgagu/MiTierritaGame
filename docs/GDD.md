@@ -94,13 +94,13 @@ Esto es el **techo del juego**: todo lo que existirá cuando estén las 6 zonas.
 | Concepto | Cantidad |
 |----------|----------|
 | Zonas | **6** |
-| Fuentes ilimitadas | **5** (cafetal, cañaduzal, potrero, cacaotal, maizal) |
-| Productos en total | **41** |
-| Estaciones (edificios de producción) | **39** |
+| Fuentes ilimitadas | **5** (cafetal, cañaduzal, potrero, cacaotal, maizal); el Pueblo no tiene |
+| Productos en total | **40** |
+| Estaciones (edificios de producción) | **38** |
 | Subproductos que potencian otras estaciones | 2 (pulpa → abono, bagazo) |
-| Productos que combinan varias zonas | 11 |
+| Productos que combinan varias zonas | 10 |
 | Producto final del juego | **Contenedor de exportación** |
-| Profundidad máxima (pasos desde una fuente hasta el final) | 9 |
+| Profundidad máxima (pasos desde una fuente hasta el final) | 10 (de la cereza al contenedor) |
 
 ### Vista general
 
@@ -128,29 +128,18 @@ flowchart LR
     M1[Mazorca de maíz] --> M2[Desgranado] --> M3[Pilado] --> M4[Masa] --> M5[Arepa] --> M6[Arepa de queso]
   end
   subgraph Z6[Zona 6 · El Pueblo]
-    P1[Tinto]
-    P2[Café con leche]
-    P3[Capuchino]
-    P4[Chocolate caliente]
-    P5[Desayuno campesino]
-    P6[Canasta de regalo]
-    P7((Contenedor de exportación))
+    P1[Café de origen] --> P2[Tinto] --> P3[Desayuno campesino]
+    P1 --> P4[Canasta de fique] --> P5[Canasta de regalo] --> P6((Contenedor de exportación))
   end
-  T5 --> L6 & K6 & K7 & P1
-  L2 --> K7 & P2 & P3 & P4
+  T5 --> L6 & K6 & K7 & P2
+  L2 --> K7
   L5 --> M6
   L4 --> M6
-  L3 --> P3
-  C6 --> P1 & P2 & P3
-  K6 --> P4
-  M6 --> P5
-  P4 --> P5
-  C7 --> P6
-  T4 --> P6
-  L6 --> P6
-  K7 --> P6
-  P6 --> P7
-  C7 --> P7
+  C7 --> P1
+  M6 --> P3
+  L6 --> P4
+  K6 --> P5
+  K7 --> P5
 ```
 
 ### Detalle por zona
@@ -239,18 +228,23 @@ Se abre al completar el Cacaotal. Productos ×1.000 respecto al primer borrador.
 - **Final**: «¡Arepas para toda la plaza!», vender 3.000 bandejas de arepas de queso (16 objetivos).
 - **Duración medida** (`npm run balance`, v1.4): 1 h 45 min (jugador atento) y 1 h 10 min (el que sigue la mejora recomendada) después de completar el Cacaotal. Juego completo hasta aquí: unas 8 h 30 min.
 
-#### Zona 6 · El Pueblo (ensamble final, sin fuente propia) — 7 estaciones, 7 productos — v1.5
-Es la única zona sin recurso ilimitado: **todo llega importado**. Es el «examen final» de la logística entre zonas.
+#### Zona 6 · El Pueblo (ensamble final, sin fuente propia) — 6 estaciones, 6 productos — **v1.5** ✅
+Se abre al completar el Maizal y es la última zona. Es la única **sin recurso ilimitado**: todo llega importado, y es el «examen final» de la logística entre zonas. Seis rutas, una desde cada zona: cada zona proveedora tiene **un producto final que no se lleva nadie más** (a igual nivel, 1 cada 32 s por nivel): las bolsas de café de la Finca, el cuarto de panela que sobraba en el Trapiche, el arequipe de la Lechería, los dos chocolates del Cacaotal y las arepas de queso del Maizal. A igual nivel en todas las zonas, el Pueblo los gasta justo (hay una prueba).
 
-| # | Estación | Entrada | Salida | Valor |
-|---|----------|---------|--------|-------|
-| 1 | Greca de tintos | 1 café molido ⇄ + 1 panela pulverizada ⇄ | Tinto | 300 |
-| 2 | Cafetera de leche | 1 molido ⇄ + 2 pasteurizada ⇄ | Café con leche | 500 |
-| 3 | Máquina espresso | 1 molido ⇄ + 1 pasteurizada ⇄ + 1 crema ⇄ | Capuchino | 1.200 |
-| 4 | Chocolatera | 1 chocolate de mesa ⇄ + 2 pasteurizada ⇄ | Chocolate caliente | 1.500 |
-| 5 | Fonda | 1 arepa de queso ⇄ + 1 chocolate caliente | Desayuno campesino | 5.000 |
-| 6 | Taller de canastas | 1 bolsa de café ⇄ + 2 panela ⇄ + 1 arequipe ⇄ + 2 chocolatinas ⇄ | Canasta de regalo | 20.000 |
-| 7 | Muelle de exportación | 250 canastas + 2.000 bolsas de café ⇄ | **Contenedor de exportación** | Final del juego |
+| # | Estación | Entrada | Salida | Ciclo (nv. 1) | Valor | Desbloqueo | Coste base |
+|---|----------|---------|--------|---------------|-------|------------|------------|
+| 1 | Casa del café (en la plaza) | 1 bolsa de café ⇄ | 2 café de origen | 32 s | 150.000 | Con la zona | 300.000 |
+| 2 | Greca de tintos | 1 café de origen + 1 panela pulverizada ⇄ | 2 tintos | 32 s | 400.000 | 300 M | 400.000 |
+| 3 | Fonda | 2 tintos + 1 arepa de queso ⇄ | Desayuno campesino | 32 s | 3.200.000 | 700 M | 600.000 |
+| 4 | Taller de canastas | 1 café de origen + 1 arequipe ⇄ | Canasta de fique | 32 s | 600.000 | 1.500 M | 800.000 |
+| 5 | Empaque de regalos | 1 canasta + 1 chocolate de mesa ⇄ + 1 chocolatina ⇄ | Canasta de regalo | 32 s | 2.000.000 | 1.200 M | 1.000.000 |
+| 6 | Patio de contenedores | 4 canastas de regalo | **Contenedor de exportación** | 128 s | 24.000.000 | 2.000 M | 1.500.000 |
+
+- **Árbol**: la Casa del café reparte su café de origen entre la Greca (→ Fonda) y el Taller (→ Empaque → Patio de contenedores).
+- **Cambios respecto al primer borrador**: el borrador tenía siete estaciones que importaban café molido, leche y crema, productos intermedios que ya se gastan del todo en sus zonas; con ellos ninguna zona cuadraba a igual nivel. Ahora el Pueblo solo usa productos finales libres, la cafetería se resume en la Greca y la Fonda, y el Muelle es un Patio de contenedores (el pueblo está en la montaña).
+- **Investigaciones**: Catadores expertos (Casa del café ×2), Greca de dos llaves, Más mesas en la Fonda, Tejedoras de fique, Cintas y moños, Grúa de contenedores (×2 cada una), Tractomula (despacho ×2) y Denominación de origen (todo lo que vende el Pueblo +50 %).
+- **Final del juego**: «¡El café de la vereda viaja por el mundo!», exportar 1.000 contenedores (17 objetivos).
+- **Duración medida** (`npm run balance`, v1.5): 2 h (jugador atento) y 1 h 47 min (el que sigue la mejora recomendada) después de completar el Maizal. Juego completo: unas 11 h (atento) y 10 h 15 min (casual).
 
 ### Cómo viajan los productos entre zonas
 - Cada zona tiene una **Bodega de salida**. Entre zonas hay **rutas** con su propio transporte mejorable (la primera, la Ruta de la panela de la v1.2, usa una **chiva**).
@@ -528,7 +522,7 @@ export const COST_GROWTH = 1.15;
 | v1.2 ✅ | **Zona 3: La Lechería**: ramificación de la leche; **primera ruta entre zonas** (panela del Trapiche para el arequipe) | Expansión |
 | v1.3 ✅ | **Zona 4: El Cacaotal**: chocolate de mesa y chocolatina; dos importaciones a la vez y rutas que abastecen varias estaciones | Expansión |
 | v1.4 ✅ | **Zona 5: El Maizal**: arepas y arepas de queso con queso y mantequilla de la Lechería | Expansión |
-| v1.5 | **Zona 6: El Pueblo**: cafetería, fonda y Contenedor de exportación (**final del juego**) | Expansión final |
+| v1.5 ✅ | **Zona 6: El Pueblo**: Casa del café, Greca, Fonda, canastas de regalo y Contenedor de exportación (**final del juego**) | Expansión final |
 
 **Cómo se conectan las zonas:** ver §4b.
 

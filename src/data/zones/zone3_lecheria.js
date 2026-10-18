@@ -34,6 +34,7 @@ export const ZONE3 = {
     leche: { road: [[24.5, 17.2], [24.5, 16.5], [25.9, 16.5]], sign: [25.3, 15.6], text: 'Al Cacaotal ➜' },
     queso: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Queso al Maizal ⬇' },
     mantequilla: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Mantequilla al Maizal ⬇' },
+    arequipe: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'Arequipe al Pueblo ➜' },
   },
   unlockedBy: 'trapiche',
   next: 'cacaotal',

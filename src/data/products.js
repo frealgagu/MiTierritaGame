@@ -58,11 +58,10 @@ export const PRODUCTS = {
   cheese_arepa: { name: 'Arepas de queso', zone: 'maizal', value: 1200000, icon: '🥪', color: 0xf0d58c },
 
   // Zona 6 · El Pueblo
-  tinto: { name: 'Tinto', zone: 'pueblo', value: 300, icon: '☕', color: 0x3b2314 },
-  cafe_con_leche: { name: 'Café con leche', zone: 'pueblo', value: 500, icon: '☕', color: 0xa67b5b },
-  cappuccino: { name: 'Capuchino', zone: 'pueblo', value: 1200, icon: '☕', color: 0xc8a27c },
-  hot_chocolate: { name: 'Chocolate caliente', zone: 'pueblo', value: 1500, icon: '🍫', color: 0x6b3e26 },
-  breakfast: { name: 'Desayuno campesino', zone: 'pueblo', value: 5000, icon: '🍳', color: 0xf2c94c },
-  gift_basket: { name: 'Canasta de regalo', zone: 'pueblo', value: 20000, icon: '🧺', color: 0xc8643b },
-  container: { name: 'Contenedor de exportación', zone: 'pueblo', value: 0, icon: '🚢', color: 0x2e6fd1 },
+  cafe_origen: { name: 'Café de origen', zone: 'pueblo', value: 150000, icon: '🫘', color: 0x6b3e26 },
+  tinto: { name: 'Tinto', zone: 'pueblo', value: 400000, icon: '☕', color: 0x3b2314 },
+  breakfast: { name: 'Desayuno campesino', zone: 'pueblo', value: 3200000, icon: '🍳', color: 0xf2c94c },
+  basket: { name: 'Canasta de fique', zone: 'pueblo', value: 600000, icon: '🧺', color: 0xc9a66b },
+  gift_basket: { name: 'Canasta de regalo', zone: 'pueblo', value: 2000000, icon: '🎁', color: 0xd7263d },
+  container: { name: 'Contenedor de exportación', zone: 'pueblo', value: 24000000, icon: '🚢', color: 0x2e6fd1 },
 };

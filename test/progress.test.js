@@ -173,7 +173,7 @@ test('la compostera no tiene arrieros ni cuenta para «todas las estaciones»', 
 
 test('ningún objetivo pide vender un producto intermedio (podría quedar imposible)', () => {
   // Las fuentes se venden sí o sí al empezar cada zona; los productos finales siempre llegan a la bodega.
-  const finals = new Set(['cherry', 'coffee_bag', 'cane', 'panela_powder', 'raw_milk', 'butter', 'cheese', 'arequipe', 'cacao_pod', 'table_chocolate', 'milk_chocolate', 'corn_cob', 'arepa', 'cheese_arepa']);
+  const finals = new Set(['cherry', 'coffee_bag', 'cane', 'panela_powder', 'raw_milk', 'butter', 'cheese', 'arequipe', 'cacao_pod', 'table_chocolate', 'milk_chocolate', 'corn_cob', 'arepa', 'cheese_arepa', 'breakfast', 'container']);
   for (const g of GOALS) if (g.type === 'sold') assert.ok(finals.has(g.product), `${g.id} pide vender ${g.product}`);
 });
 

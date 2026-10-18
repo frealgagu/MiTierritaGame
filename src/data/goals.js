@@ -121,5 +121,26 @@ const MAIZAL = [
   { id: 'mfinal', type: 'sold', product: 'cheese_arepa', amount: 3000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL];
+const PUEBLO = [
+  { id: 'p01', type: 'imported', product: 'coffee_bag', amount: 50, reward: 5000000 },
+  { id: 'p02', type: 'level', target: 'coffee_house', level: 10, reward: 10000000 },
+  { id: 'p03', type: 'unlock', station: 'greca', reward: 20000000 },
+  { id: 'p04', type: 'level', target: 'route:cafe', level: 10, reward: 40000000 },
+  { id: 'p05', type: 'produced', product: 'tinto', amount: 200, reward: 60000000 },
+  { id: 'p06', type: 'research', research: 'catadores', reward: 100000000 },
+  { id: 'p07', type: 'unlock', station: 'fonda', reward: 150000000 },
+  { id: 'p08', type: 'level', target: 'dispatch:pueblo', level: 10, reward: 200000000 },
+  { id: 'p09', type: 'sold', product: 'breakfast', amount: 300, reward: 300000000 },
+  { id: 'p10', type: 'unlock', station: 'basket_shop', reward: 300000000 },
+  { id: 'p11', type: 'imported', product: 'arequipe', amount: 300, reward: 400000000 },
+  { id: 'p12', type: 'unlock', station: 'gift_wrap', reward: 500000000 },
+  { id: 'p13', type: 'imported', product: 'milk_chocolate', amount: 300, reward: 800000000 },
+  { id: 'p14', type: 'unlock', station: 'export_dock', reward: 800000000 },
+  { id: 'p15', type: 'allLevels', zone: 'pueblo', level: 25, reward: 1500000000 },
+  { id: 'p16', type: 'sold', product: 'container', amount: 100, reward: 2500000000 },
+  // Final de la Zona 6 y del juego.
+  { id: 'pfinal', type: 'sold', product: 'container', amount: 1000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO];

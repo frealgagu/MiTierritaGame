@@ -86,6 +86,11 @@ function migrate(data) {
     zones.maizal.unlocked = true;
     stations.cornfield ??= createStationState();
   }
+  // v8 → v9: el Pueblo; el Maizal completo lo abre.
+  if (zones.maizal.complete && !zones.pueblo.unlocked) {
+    zones.pueblo.unlocked = true;
+    stations.coffee_house ??= createStationState();
+  }
   const routes = {};
   for (const id of Object.keys(base.routes)) routes[id] = { ...createRouteState(), ...data.routes?.[id] };
   // Hasta la v1.0.1 los objetivos de investigación se guardaban con el id de la investigación.

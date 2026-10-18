@@ -4,11 +4,26 @@ import { PRODUCTS } from '../data/products.js';
 
 const BASE_OFFLINE_HOURS = 2;
 
+// Producto de los efectos de un tipo (y objetivo). Se calcula una vez por lista de investigaciones:
+// la simulación lo pregunta miles de veces por segundo y la lista solo crece al comprar.
+const cache = new WeakMap(); // lista de investigaciones -> { n, mults: tipo -> objetivo -> producto }
 function product(state, type, target) {
-  let mult = 1;
-  for (const id of state.research ?? []) {
-    const e = RESEARCH_BY_ID[id]?.effect;
-    if (e && e.type === type && (target === undefined || e.target === target)) mult *= e.mult;
+  const list = state.research ?? [];
+  let entry = cache.get(list);
+  if (!entry || entry.n !== list.length) {
+    entry = { n: list.length, mults: new Map() };
+    cache.set(list, entry);
+  }
+  let byTarget = entry.mults.get(type);
+  if (!byTarget) entry.mults.set(type, (byTarget = new Map()));
+  let mult = byTarget.get(target);
+  if (mult === undefined) {
+    mult = 1;
+    for (const id of list) {
+      const e = RESEARCH_BY_ID[id]?.effect;
+      if (e && e.type === type && (target === undefined || e.target === target)) mult *= e.mult;
+    }
+    byTarget.set(target, mult);
   }
   return mult;
 }

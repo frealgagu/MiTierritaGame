@@ -29,6 +29,7 @@ export class HUD {
     this.coins = document.getElementById('coins');
     this.income = document.getElementById('income');
     this.chip = document.getElementById('bottleneck');
+    this.recCost = 0; // ms que tardó la última recomendación
     // Tras una compra, la recomendación se recalcula enseguida.
     for (const type of ['levelUp', 'unlocked', 'research', 'zoneUnlocked']) game.bus.on(type, () => (this.recDirty = true));
     // Tocar el aviso abre la mejora recomendada.
@@ -49,8 +50,10 @@ export class HUD {
     const zone = this.getZone();
     // La recomendación mira varias zonas (rutas) y cuesta calcularla: como mucho una vez por segundo.
     const now = performance.now();
-    if (zone !== this.recZone || this.recDirty || !(now - this.recAt <= REC_INTERVAL_MS)) {
+    // En un móvil lento, si calcularla tarda, se espera más (diez veces lo que tardó).
+    if (zone !== this.recZone || this.recDirty || !(now - this.recAt <= Math.max(REC_INTERVAL_MS, this.recCost * 10))) {
       this.rec = recommendUpgrade(s, (id, mode) => this.game.quote(id, mode), zone);
+      this.recCost = performance.now() - now;
       this.recZone = zone;
       this.recAt = now;
       this.recDirty = false;

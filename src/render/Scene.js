@@ -158,7 +158,7 @@ export class Scene {
   }
 
   drawExitSign() {
-    const view = new WoodSign('Al pueblo ➜');
+    const view = new WoodSign(this.zone.exitText ?? 'Al pueblo ➜');
     const [gx, gy] = this.zone.exitSign;
     const p = iso(gx, gy);
     view.position.set(p.x, p.y);
