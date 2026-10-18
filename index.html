@@ -113,7 +113,7 @@
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Cafetal <small id="menu-version">v1.7.6</small></h2>
+        <h2>Cafetal <small id="menu-version">v1.7.7</small></h2>
         <p id="save-where">Tu partida se guarda sola en este navegador.</p>
         <p id="menu-stats"></p>
         <details class="save-box">
@@ -148,6 +148,7 @@
           </div>
         </details>
         <div class="modal-actions">
+          <button id="intro-btn" class="btn">❓ Cómo se juega</button>
           <button id="sound-btn" class="btn"></button>
           <button id="music-btn" class="btn"></button>
           <a id="apk-link" class="btn" href="./cafetal.apk" download="Cafetal.apk" hidden>📱 App de Android</a>
@@ -167,6 +168,43 @@
         </div>
         <p class="chain-help">Toca una estación o sus arrieros para mejorarlos. En rojo, lo que frena la cadena.</p>
         <div id="chain-body" class="chain-body"></div>
+      </div>
+    </div>
+
+    <!-- Cómo se juega: al abrir el juego (salvo que se marque «No mostrar de nuevo») y desde el menú ⚙️. -->
+    <div id="intro" class="modal" hidden>
+      <div class="modal-card list-modal intro">
+        <div class="chain-head">
+          <h2>☕ Cafetal</h2>
+          <button id="intro-close" class="close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <p class="chain-help">Del grano de la montaña a un contenedor rumbo al puerto.</p>
+        <div class="list-body intro-body">
+          <section>
+            <h3>🌄 La idea</h3>
+            <p>Tienes una finca cafetera. Cada <b>estación</b> convierte un producto en otro: la cereza del Cafetal se lava en el Beneficiadero, se seca, se trilla, se tuesta, se muele y se empaca. Los <b>arrieros 🐴</b> llevan el producto de una estación a la siguiente y el <b>Willys 🚙</b> vende en el pueblo lo que llega a la bodega.</p>
+          </section>
+          <section>
+            <h3>🎮 Cómo se juega</h3>
+            <ul>
+              <li>Toca una estación para abrir su panel y <b>mejórala</b> con tus monedas (×1, ×10 o Máx).</li>
+              <li>Sube también a sus <b>arrieros</b> (pestaña 🐴): a igual nivel que la estación, llevan todo lo que produce.</li>
+              <li>La cadena va tan rápido como su estación más lenta. Arriba, <b>💡 Mejora recomendada</b> te dice qué subir, y <b>🔗</b> muestra toda la cadena y dónde se frena.</li>
+              <li>En los niveles 10, 25, 50, 75 y 100 hay <b>hitos</b> que multiplican la velocidad.</li>
+              <li><b>📋 Objetivos</b> dan monedas y <b>🔬 Investigaciones</b> son mejoras únicas.</li>
+              <li>Aunque cierres el juego, la finca sigue produciendo un tiempo y al volver te espera lo ganado.</li>
+            </ul>
+          </section>
+          <section>
+            <h3>🏁 El objetivo</h3>
+            <p>Cumple los objetivos de cada zona para abrir la siguiente: <b>la Finca, el Trapiche, la Lechería, el Cacaotal, el Maizal y el Pueblo</b>. Las zonas se abastecen entre sí con rutas de chivas 🚌: la panela del Trapiche endulza el arequipe y el chocolate, y en el Pueblo todo termina en canastas de regalo que se exportan.</p>
+            <p>Y hay un <b>segundo final 🏅</b>: lleva todas las estaciones al nivel 100 y vuelve a empezar con la producción al doble (×2, ×4, ×8…).</p>
+          </section>
+        </div>
+        <div class="intro-foot">
+          <label class="dev-check intro-check"><input id="intro-hide" type="checkbox" /> <span>No mostrar de nuevo</span></label>
+          <button id="intro-ok" class="btn buy">¡A jugar!</button>
+        </div>
       </div>
     </div>
 

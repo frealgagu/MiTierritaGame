@@ -375,6 +375,16 @@ a.btn { text-decoration: none; color: inherit; display: inline-flex; align-items
 .big-number { font-size: 2rem; font-weight: 700; margin: 4px 0; }
 .victory { border-color: #b8860b; background: linear-gradient(180deg, #fff7d1, var(--paper)); }
 .victory-icon { font-size: 3.5rem; animation: pop 0.5s ease-out; }
+/* Cómo se juega (pantalla de inicio). */
+.intro-body { gap: 4px; padding-right: 4px; }
+.intro-body h3 { margin: 6px 0 4px; font-size: 1.05rem; }
+.intro-body p, .intro-body li { margin: 0 0 6px; font-size: 0.92rem; line-height: 1.35; }
+.intro-body ul { margin: 0; padding-left: 20px; }
+.intro-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; padding-top: 10px; border-top: 2px dashed var(--paper-2); }
+.intro-check { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+.intro-check input { width: 20px; height: 20px; accent-color: var(--ink); }
+.intro-foot .btn.buy { width: auto; flex: none; white-space: nowrap; padding: 10px 22px; }
+
 /* Multiplicador de producción tras reiniciar (segundo final), abajo a la derecha. */
 .legacy-chip {
   position: fixed;

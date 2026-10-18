@@ -10,6 +10,7 @@ import { GoalsView } from './ui/GoalsView.js';
 import { ResearchView } from './ui/ResearchView.js';
 import { showVictory, showWelcome } from './ui/dialogs.js';
 import { showMastery } from './ui/mastery.js';
+import { introOnStart, showIntro } from './ui/intro.js';
 import { bindNative, isNativeApp } from './native.js';
 import { checkMastery, restartState } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
@@ -160,8 +161,15 @@ async function start() {
     if (e.key === 'Escape') closeTop();
   });
 
-  if (!saved) toast('Toca el 🌳 Cafetal y mejóralo cuando tengas monedas.', 6000);
+  const firstTip = () => !saved && toast('Toca el 🌳 Cafetal y mejóralo cuando tengas monedas.', 6000);
   if (offline) showWelcome(offline, () => sound.coin());
+  // Cómo se juega, encima de todo (la bienvenida queda debajo, para después).
+  if (introOnStart(game.state)) showIntro(game.state, firstTip);
+  else firstTip();
+  document.getElementById('intro-btn').addEventListener('click', () => {
+    document.getElementById('menu').hidden = true;
+    showIntro(game.state);
+  });
 
   let uiTimer = 0;
   app.ticker.add((ticker) => {
