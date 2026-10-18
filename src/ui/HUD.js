@@ -1,6 +1,7 @@
 import { formatNumber, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { recommendUpgrade } from '../sim/analysis.js';
+import { legacyMult } from '../sim/modifiers.js';
 import { nextToUnlock, zoneOf } from '../sim/chain.js';
 import { toast } from './toast.js';
 import { clockLabel } from '../render/DayNight.js';
@@ -30,6 +31,7 @@ export class HUD {
     this.income = document.getElementById('income');
     this.chip = document.getElementById('bottleneck');
     this.recCost = 0; // ms que tardó la última recomendación
+    this.legacy = document.getElementById('legacy-chip');
     // Tras una compra, la recomendación se recalcula enseguida.
     for (const type of ['levelUp', 'unlocked', 'research', 'zoneUnlocked']) game.bus.on(type, () => (this.recDirty = true));
     // Tocar el aviso abre la mejora recomendada.
@@ -39,6 +41,11 @@ export class HUD {
   update() {
     const s = this.game.state;
     this.coins.textContent = formatNumber(s.coins);
+    // Multiplicador de producción de esta partida (tras reiniciar en el segundo final).
+    const mult = legacyMult(s);
+    this.legacy.hidden = mult <= 1;
+    const legacyText = `🔁 Producción ×${mult}`;
+    if (this.legacy.textContent !== legacyText) this.legacy.textContent = legacyText;
     // En rojo si hay deuda (saldo negativo de las opciones de desarrollador).
     this.coins.classList.toggle('debt', s.coins < 0);
     // Las monedas también en la pestaña del navegador.

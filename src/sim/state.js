@@ -31,6 +31,8 @@ export function createInitialState(now = Date.now()) {
     settings: { sound: true, music: true },
     research: [], // ids de investigaciones compradas
     goals: { claimed: [] }, // objetivos cobrados
+    mastered: false, // segundo final: todas las estaciones en el nivel 100
+    legacy: { resets: 0, history: [] }, // reinicios con producción ×2 y partidas terminadas
   };
 }
 

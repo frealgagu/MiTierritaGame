@@ -24,7 +24,7 @@ import { COMPOST_VALUE, compostValueBoost, muleSpeedMult, saleValue } from '../s
 import { PARENT, consumers, zoneOf } from '../sim/chain.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive, routeCapacity, routeRate, routeStations, stationImportRate } from '../sim/routes.js';
-import { speedMult } from '../sim/modifiers.js';
+import { legacyMult, speedMult } from '../sim/modifiers.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { dispatchMult } from '../sim/modifiers.js';
 
@@ -256,7 +256,7 @@ function stationInfo(id) {
     },
   ];
   if (inId) {
-    rows.push({ key: 'input', label: 'Entrada', value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l))} ${PRODUCTS[inId].icon}` });
+    rows.push({ key: 'input', label: 'Entrada', value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l, legacyMult(s)))} ${PRODUCTS[inId].icon}` });
   }
   for (const imp of def.imports ?? []) {
     const product = PRODUCTS[imp.product];
@@ -272,18 +272,18 @@ function stationInfo(id) {
     rows.push({
       key: 'fuel',
       label: `${fuel.name} (combustible)`,
-      value: (s, l) => `${formatAmount(s.stations[id].fuel ?? 0)} / ${formatNumber(stationInputCap(def, l))} ${fuel.icon} · ${(s.stations[id].fuel ?? 0) > 0 ? `×${def.fuel.boost} 🔥` : 'sin fuego extra'}`,
+      value: (s, l) => `${formatAmount(s.stations[id].fuel ?? 0)} / ${formatNumber(stationInputCap(def, l, legacyMult(s)))} ${fuel.icon} · ${(s.stations[id].fuel ?? 0) > 0 ? `×${def.fuel.boost} 🔥` : 'sin fuego extra'}`,
     });
   }
   if (def.side) {
     rows.push(
-      { key: 'buffer', label: 'Compost guardado', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l))} ${out.icon}` },
+      { key: 'buffer', label: 'Compost guardado', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, legacyMult(s)))} ${out.icon}` },
       { key: 'effect', label: 'Ventas de la Finca ahora', value: (s) => (compostValueBoost(s) > 1 ? `+${pct(COMPOST_VALUE)} (hay compost)` : 'sin bono (no hay compost)') },
       { key: 'sustain', label: 'Puede sostener', value: (s) => `+${pct(expectedCompostValue(s))} de +${pct(COMPOST_VALUE)}` },
     );
   } else {
     rows.push(
-      { key: 'buffer', label: 'Patio (por enviar)', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l))} ${out.icon}` },
+      { key: 'buffer', label: 'Patio (por enviar)', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, legacyMult(s)))} ${out.icon}` },
       {
         key: 'value',
         label: 'Precio de venta',

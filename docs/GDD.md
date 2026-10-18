@@ -337,6 +337,20 @@ Una lista de **29 objetivos en orden** (`src/data/goals.js`). Se ven 3 a la vez,
 
 (Medido en la v1.0.1, después de que los arrieros pasaran a ir al ritmo de su estación.)
 
+### Segundo final: maestro cafetero (v1.6)
+Tras el Pueblo, el marcador de objetivos muestra el segundo final: **llevar las 38 estaciones de las seis zonas al nivel 100** (cuenta cuántas van). Al lograrlo aparece la pantalla «¡Maestro cafetero!» con las estadísticas de la partida y la opción de **volver a empezar** desde la Finca (monedas, niveles, investigaciones y objetivos desde cero) con **toda la producción al doble**: ×2 tras el primer reinicio, ×4 tras el segundo, ×8 tras el tercero… (también se puede hacer luego desde ⚙️). El multiplicador se ve abajo a la derecha. Duplica la velocidad de todas las estaciones y lo que lleva el Willys; los arrieros, las rutas, los patios y las entradas se calculan con eso, así que a igual nivel todo sigue cuadrando (hay una prueba a ×8 y otra a ×32). Se conservan los ajustes, los avisos vistos y el registro de partidas.
+
+Duración medida (`npm run balance`, v1.6; casual = sigue la mejora recomendada, atento = elige la compra más rentable; tras el Pueblo, los dos suben siempre lo más atrasado):
+
+| Producción | Primer final (Pueblo), casual / atento | Segundo final (todo al 100), desde el inicio |
+|-----------|----------------------------------------|----------------------------------------------|
+| ×1 (normal) | 10 h 16 min / 10 h 57 min | unas 143 h (casual) |
+| ×2 (1 reinicio) | 5 h 58 min / 4 h 32 min | 72 h / 74 h |
+| ×4 (2 reinicios) | 2 h 44 min / 2 h 41 min | 36 h / 36 h |
+| ×8 (3 reinicios) | 1 h 39 min / 1 h 28 min | 18 h / 19 h |
+
+El segundo final es largo a propósito de la fórmula: cada nivel cuesta ×1,15 y los últimos 25 niveles valen mucho más que el ingreso que suman.
+
 ## 7. Ganancias sin conexión
 
 - Al volver se simulan de verdad hasta 2 h de juego; lo que pase de ahí se suma al ritmo de la última hora simulada (monedas, ventas, producción e importados). Con el tiempo acelerado de las opciones de desarrollador, el tiempo fuera y el tope cuentan a esa velocidad.
@@ -523,6 +537,7 @@ export const COST_GROWTH = 1.15;
 | v1.3 ✅ | **Zona 4: El Cacaotal**: chocolate de mesa y chocolatina; dos importaciones a la vez y rutas que abastecen varias estaciones | Expansión |
 | v1.4 ✅ | **Zona 5: El Maizal**: arepas y arepas de queso con queso y mantequilla de la Lechería | Expansión |
 | v1.5 ✅ | **Zona 6: El Pueblo**: Casa del café, Greca, Fonda, canastas de regalo y Contenedor de exportación (**final del juego**) | Expansión final |
+| v1.6 ✅ | **Segundo final**: todo al nivel 100; volver a empezar con producción ×2, ×4, ×8… | Rejugable |
 
 **Cómo se conectan las zonas:** ver §4b.
 
@@ -530,7 +545,7 @@ export const COST_GROWTH = 1.15;
 
 ## 11. Fuera de alcance
 
-Supervivencia, clima que afecte a la economía, población con necesidades, héroes, combate, gacha, energía, multijugador, tienda con dinero real, prestigio o reinicio (quizá más adelante, por zona) y servidor.
+Supervivencia, clima que afecte a la economía, población con necesidades, héroes, combate, gacha, energía, multijugador, tienda con dinero real y servidor. (El reinicio con producción al doble llegó en la v1.6, tras el segundo final.)
 
 ---
 

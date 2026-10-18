@@ -6,7 +6,7 @@ import { CHILDREN, ROAD_POS, chainOf, consumers, zoneOf, zoneUnlocked } from './
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { ROUTE_STOCK, routeActive, routeCapacity, routeReserve } from './routes.js';
 import { inputSpace } from './production.js';
-import { dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
+import { dispatchMult, legacyMult, muleSpeedMult, speedMult } from './modifiers.js';
 
 const MAX_IDLE = 6; // s: si hay algo en el patio y no sale una mula en este tiempo, sale con lo que haya
 // Si la carga no cabe entera en la siguiente estación, las mulas esperan a que haya sitio; solo con el
@@ -68,7 +68,7 @@ export function exportSpace(state, routeId) {
 
 // Destinos de las mulas de una estación: estaciones construidas y rutas ('export:<ruta>').
 const targetSpace = (state, t) => (t.startsWith('export:') ? exportSpace(state, t.slice(7)).space : inputSpace(state, t));
-const targetCap = (state, t) => (t.startsWith('export:') ? exportSpace(state, t.slice(7)).cap : stationInputCap(STATIONS_BY_ID[t], state.stations[t].level));
+const targetCap = (state, t) => (t.startsWith('export:') ? exportSpace(state, t.slice(7)).cap : stationInputCap(STATIONS_BY_ID[t], state.stations[t].level, legacyMult(state)));
 const targetDest = (t) => (t.startsWith('export:') ? 'warehouse' : t);
 
 // Carga de cada mula del equipo de una estación (a su nivel de arrieros o al indicado).
@@ -164,7 +164,7 @@ function dispatchFrom(state, id, dt, bus) {
       sendMule(state, id, targetDest(next), amount, bus);
       continue;
     }
-    const almostFull = s.buffer >= PATIO_ALMOST_FULL * stationBufferCap(def, s.level);
+    const almostFull = s.buffer >= PATIO_ALMOST_FULL * stationBufferCap(def, s.level, legacyMult(state));
     const partial = almostFull ? pickConsumer(state, targets, amount * MIN_PARTIAL) : null;
     if (partial) {
       sendMule(state, id, targetDest(partial), Math.min(amount, targetSpace(state, partial)), bus);

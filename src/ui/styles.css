@@ -187,7 +187,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 /* Modal y avisos */
 .modal { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(58, 36, 24, 0.45); padding: 16px; }
-.modal[hidden], .panel[hidden], .toast[hidden], .chip[hidden] { display: none; }
+.modal[hidden], .panel[hidden], .toast[hidden], .chip[hidden], .btn[hidden] { display: none; }
 .modal-card { background: var(--paper); border: 3px solid var(--ink); border-radius: 20px; padding: 20px; width: min(380px, 100%); box-shadow: var(--shadow); }
 .modal-card h2 { margin: 0 0 8px; }
 .modal-card small { color: var(--muted); font-size: 0.9rem; }
@@ -347,11 +347,30 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .big-number { font-size: 2rem; font-weight: 700; margin: 4px 0; }
 .victory { border-color: #b8860b; background: linear-gradient(180deg, #fff7d1, var(--paper)); }
 .victory-icon { font-size: 3.5rem; animation: pop 0.5s ease-out; }
+/* Multiplicador de producción tras reiniciar (segundo final), abajo a la derecha. */
+.legacy-chip {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: #fff7d1;
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: var(--shadow);
+  pointer-events: none;
+}
+.legacy-chip[hidden] { display: none; }
+body.panel-open .legacy-chip { display: none; }
+/* En el móvil, el marcador de objetivos ocupa el ancho de abajo: la leyenda va encima. */
+@media (max-width: 520px) { .legacy-chip { bottom: calc(118px + env(safe-area-inset-bottom, 0px)); padding: 4px 10px; font-size: 0.9rem; } }
 
 .save-box { margin: 8px 0 12px; }
 .dev-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
 .dev-row label { font-weight: 600; }
 .dev-check { font-weight: 600; cursor: pointer; }
+.dev-row select { font: inherit; font-weight: 700; border: 2px solid var(--ink); border-radius: 10px; padding: 4px 8px; background: var(--paper-2); color: var(--ink); }
 .dev-row input[type='checkbox'] { width: 20px; height: 20px; flex: none; accent-color: var(--ink); }
 #coins.debt { color: #c0392b; }
 .dev-row input { width: 72px; font: inherit; font-weight: 700; border: 2px solid var(--ink); border-radius: 10px; padding: 4px 8px; background: var(--paper-2); color: var(--ink); }

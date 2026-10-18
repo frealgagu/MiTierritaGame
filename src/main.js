@@ -9,12 +9,14 @@ import { ChainView } from './ui/ChainView.js';
 import { GoalsView } from './ui/GoalsView.js';
 import { ResearchView } from './ui/ResearchView.js';
 import { showVictory, showWelcome } from './ui/dialogs.js';
+import { showMastery } from './ui/mastery.js';
+import { checkMastery, restartState } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
 import { ZONES_BY_ID } from './data/zones/index.js';
 import { ROUTES_BY_ID } from './data/routes.js';
 import { STATIONS_BY_ID } from './data/stations.js';
 import { RESEARCH_BY_ID } from './data/research.js';
-import { offlineCapSeconds } from './sim/modifiers.js';
+import { legacyMult, offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
 import { bindDevOptions, savedSpeed } from './ui/DevOptions.js';
 import { Sound } from './audio/Sound.js';
@@ -121,6 +123,23 @@ async function start() {
       toast(`🎯 ¡Objetivo cumplido! +${formatNumber(goal.reward)} 💰`, 3000);
     }
   });
+  // Segundo final: todas las estaciones en el nivel 100. Se puede volver a empezar con producción ×2.
+  const restart = () => {
+    resetting = true;
+    saveGame(restartState(game.state));
+    location.reload();
+  };
+  const mastery = () => showMastery(game.state, restart);
+  game.bus.on('mastered', () => {
+    sound.milestone();
+    mastery();
+  });
+  goals.onMastery = mastery;
+  document.getElementById('restart-btn').addEventListener('click', () => {
+    document.getElementById('menu').hidden = true;
+    mastery();
+  });
+  checkMastery(game.state, game.bus); // una partida que ya lo tenía todo al 100 antes de la v1.6
   game.bus.on('research', ({ id }) => {
     sound.milestone();
     toast(`🔬 ${RESEARCH_BY_ID[id].name}: ${RESEARCH_BY_ID[id].desc}`, 4000);
@@ -214,6 +233,9 @@ function bindMenu(game, sound, music) {
     const s = game.state;
     document.getElementById('menu-stats').textContent =
       `Tiempo jugado: ${formatDuration(s.playTime)} · Ganado en total: 💰 ${formatNumber(s.totalEarned)} · Cerezas vendidas: ${formatNumber(s.stats.sold.cherry ?? 0)}`;
+    const restartBtn = document.getElementById('restart-btn');
+    restartBtn.hidden = !s.mastered;
+    restartBtn.textContent = `🔁 Volver a empezar ×${legacyMult(s) * 2}`;
     menu.hidden = false;
   });
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));

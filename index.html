@@ -85,6 +85,20 @@
       </div>
     </div>
 
+    <div id="mastery" class="modal" hidden>
+      <div class="modal-card center victory">
+        <div class="victory-icon">🏅</div>
+        <h2>¡Maestro cafetero!</h2>
+        <p id="mastery-text"></p>
+        <p id="mastery-stats"></p>
+        <p class="soon" id="mastery-note"></p>
+        <button id="mastery-restart" class="btn buy"></button>
+        <button id="mastery-ok" class="btn">Seguir en esta partida</button>
+      </div>
+    </div>
+
+    <div id="legacy-chip" class="legacy-chip" title="Producción de esta partida" hidden></div>
+
     <div id="zones" class="modal" hidden>
       <div class="modal-card list-modal">
         <div class="chain-head">
@@ -99,7 +113,7 @@
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Cafetal <small id="menu-version">v1.5</small></h2>
+        <h2>Cafetal <small id="menu-version">v1.6</small></h2>
         <p>Tu partida se guarda sola en este navegador.</p>
         <p id="menu-stats"></p>
         <details class="save-box">
@@ -114,11 +128,15 @@
         </details>
         <details id="dev-box" class="save-box" hidden>
           <summary>🛠️ Opciones de desarrollador</summary>
-          <p class="chain-help">Acelera el tiempo del juego (producción, mulas, Willys y día/noche). Si cierras el juego acelerado, el tiempo que estés fuera también cuenta a esa velocidad.</p>
+          <p class="chain-help">Acelera el tiempo del juego (producción, mulas, Willys y día/noche). Si cierras el juego acelerado, el tiempo que estés fuera también cuenta a esa velocidad. «Producción» simula que ya volviste a empezar tras el segundo final (×2 por cada reinicio).</p>
           <div class="dev-row">
             <label for="dev-speed">Velocidad ×</label>
             <input id="dev-speed" type="number" min="1" max="100" step="1" inputmode="numeric" value="10" />
             <button id="dev-toggle" class="btn small"></button>
+          </div>
+          <div class="dev-row">
+            <label for="dev-legacy">Producción</label>
+            <select id="dev-legacy" title="Simula que ya se reinició el juego tras el segundo final"></select>
           </div>
           <label class="dev-row dev-check">
             <input id="dev-credit" type="checkbox" />
@@ -131,6 +149,7 @@
         <div class="modal-actions">
           <button id="sound-btn" class="btn"></button>
           <button id="music-btn" class="btn"></button>
+          <button id="restart-btn" class="btn buy" hidden></button>
           <button id="reset-btn" class="btn danger">Borrar partida</button>
           <button id="close-menu" class="btn">Seguir jugando</button>
         </div>

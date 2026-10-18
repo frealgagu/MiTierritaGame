@@ -10,6 +10,7 @@ import { ROUTES } from '../data/routes.js';
 import { offlineCapSeconds } from '../sim/modifiers.js';
 import { buyResearch, buyUpgrade, quoteResearch, quoteUnlock, quoteUpgrade, unlockStation } from '../sim/upgrades.js';
 import { claimGoal, unlockZone } from '../sim/goals.js';
+import { checkMastery } from '../sim/legacy.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
 const MAX_SIMULATED = 2 * 3600; // s de juego que se simulan de verdad al volver; el resto se extrapola
@@ -96,7 +97,9 @@ export class Game {
   }
 
   buy(id, mode) {
-    return buyUpgrade(this.state, id, mode, this.bus);
+    const bought = buyUpgrade(this.state, id, mode, this.bus);
+    if (bought) checkMastery(this.state, this.bus);
+    return bought;
   }
 
   quoteUnlock(id) {

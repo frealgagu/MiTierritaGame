@@ -2,12 +2,14 @@ import { toast } from './toast.js';
 import { setCredit } from '../sim/upgrades.js';
 
 // Opciones de desarrollador, ocultas en el menú: se muestran tocando 7 veces la versión.
-// Acelerar el tiempo y permitir saldo negativo. Los ajustes viven en este navegador, no en la partida. Si se cierra
+// Acelerar el tiempo, permitir saldo negativo y simular reinicios del segundo final (multiplicador de
+// producción en potencias de 2). Los dos primeros viven en este navegador; el multiplicador, en la partida. Si se cierra
 // el juego acelerado, al volver sigue acelerado y el tiempo fuera cuenta a esa velocidad (el ⏩ de
 // arriba lo recuerda).
 const KEY = 'cafetal-dev';
 const TAPS = 7;
 const MAX_SPEED = 100;
+const MAX_RESETS = 10; // hasta ×1024
 
 function load() {
   try {
@@ -65,11 +67,25 @@ export function bindDevOptions(game) {
   };
 
   toggle.addEventListener('click', () => setScale(game.timeScale > 1 ? 1 : speed()));
-  input.addEventListener('change', () => {
-    input.value = prefs.speed = speed();
+  // Mientras se escribe, el botón ya dice la velocidad nueva (y, si está acelerado, se aplica).
+  input.addEventListener('input', () => {
+    if (!input.value) return;
+    prefs.speed = speed();
     store(prefs);
-    if (game.timeScale > 1) setScale(prefs.speed);
+    if (game.timeScale > 1 && prefs.speed > 1) setScale(prefs.speed);
     else paint();
+  });
+  input.addEventListener('change', () => (input.value = prefs.speed = speed()));
+
+  // Multiplicador de producción: como si ya se hubiera reiniciado n veces (×2ⁿ).
+  const legacy = document.getElementById('dev-legacy');
+  legacy.innerHTML = Array.from({ length: MAX_RESETS + 1 }, (_, n) => `<option value="${n}">×${2 ** n}${n ? ` (${n} ${n > 1 ? 'reinicios' : 'reinicio'})` : ' (sin reiniciar)'}</option>`).join('');
+  const syncLegacy = () => (legacy.value = String(Math.min(MAX_RESETS, game.state.legacy?.resets ?? 0)));
+  syncLegacy();
+  document.getElementById('menu-btn').addEventListener('click', syncLegacy);
+  legacy.addEventListener('change', () => {
+    game.state.legacy = { history: [], ...game.state.legacy, resets: Number(legacy.value) };
+    toast(`🔁 Producción ×${2 ** Number(legacy.value)}`);
   });
   chip.addEventListener('click', () => setScale(1));
 

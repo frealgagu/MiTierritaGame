@@ -1,0 +1,111 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { Game } from '../src/core/Game.js';
+import { analyzeChain } from '../src/sim/analysis.js';
+import { chainOf } from '../src/sim/chain.js';
+import { ALL_STATIONS, maxedCount, restartState } from '../src/sim/legacy.js';
+import { legacyMult } from '../src/sim/modifiers.js';
+import { ZONE_LIST } from '../src/data/zones/index.js';
+
+function run(game, seconds) {
+  for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
+}
+
+// Las seis zonas abiertas, todo construido al mismo nivel.
+function everything(level, resets = 0) {
+  const game = new Game();
+  const s = game.state;
+  s.legacy.resets = resets;
+  s.coins = 1e30;
+  for (const z of ZONE_LIST.slice(1)) game.unlockZone(z.id);
+  for (const z of ZONE_LIST) for (const id of chainOf(z.id).slice(1)) game.unlock(id);
+  game.unlock('composter');
+  for (const st of Object.values(s.stations)) {
+    st.level = level;
+    st.transport.level = level;
+  }
+  for (const z of Object.values(s.zones)) z.dispatch.level = level;
+  for (const r of Object.values(s.routes)) r.level = level;
+  return game;
+}
+
+test('cada reinicio duplica la producción: ×1, ×2, ×4, ×8', () => {
+  const income = [0, 1, 2, 3].map((resets) => {
+    const s = everything(30, resets).state;
+    assert.equal(legacyMult(s), 2 ** resets);
+    return analyzeChain(s, 'finca').rows.find((r) => r.id === 'packer').output;
+  });
+  for (let k = 1; k < income.length; k++) assert.ok(Math.abs(income[k] / income[k - 1] - 2) < 1e-9, `${income[k]} / ${income[k - 1]}`);
+});
+
+test('con la producción ×8 la cadena sigue cuadrando: al nivel 100 ningún patio se llena', async () => {
+  const { RESEARCH } = await import('../src/data/research.js');
+  const game = everything(100, 3);
+  const s = game.state;
+  for (const r of RESEARCH) s.research.push(r.id);
+  run(game, 400);
+  const blocked = {};
+  for (let i = 0; i < 1000; i++) {
+    game.step(0.1);
+    for (const [id, st] of Object.entries(s.stations)) if (st.status === 'blocked') blocked[id] = (blocked[id] ?? 0) + 1;
+  }
+  assert.deepEqual(blocked, {});
+});
+
+test('el segundo final llega al subir la última estación al nivel 100', () => {
+  const game = everything(100);
+  const s = game.state;
+  assert.equal(ALL_STATIONS.length, 38);
+  s.stations.export_dock.level = 99;
+  assert.equal(maxedCount(s), 37);
+  const events = [];
+  game.bus.on('mastered', (e) => events.push(e));
+  assert.ok(game.buy('farm:transport', 1) || true); // otras compras no lo disparan
+  assert.equal(events.length, 0);
+  assert.ok(game.buy('export_dock', 1));
+  assert.equal(events.length, 1);
+  assert.equal(s.mastered, true);
+  // Solo una vez.
+  game.buy('dispatch:pueblo', 1);
+  assert.equal(events.length, 1);
+});
+
+test('volver a empezar: todo desde cero, con la producción al doble y los ajustes de antes', () => {
+  const game = everything(100, 1);
+  const s = game.state;
+  s.mastered = true;
+  s.playTime = 36000;
+  s.totalEarned = 1e20;
+  s.settings.music = false;
+  s.hints.push('wetmill');
+  const next = restartState(s);
+  assert.equal(next.legacy.resets, 2);
+  assert.equal(legacyMult(next), 4);
+  assert.deepEqual(next.legacy.history, [{ mult: 2, playTime: 36000, totalEarned: 1e20 }]);
+  assert.equal(next.coins, 0);
+  assert.equal(next.playTime, 0);
+  assert.equal(next.mastered, false);
+  assert.deepEqual(Object.keys(next.stations), ['farm']);
+  assert.equal(next.zones.trapiche.unlocked, false);
+  assert.deepEqual(next.research, []);
+  assert.equal(next.settings.music, false);
+  assert.equal(next.settings.zone, 'finca');
+  assert.ok(next.hints.includes('wetmill'));
+  // Y la Finca produce el doble... del doble.
+  const g = new Game(next);
+  run(g, 60);
+  assert.ok(g.state.coins > 0);
+});
+
+test('una partida de la v1.5 se carga sin multiplicador y sin el segundo final', async () => {
+  const { loadGame } = await import('../src/core/SaveSystem.js');
+  const old = new Game().state;
+  delete old.legacy;
+  delete old.mastered;
+  const store = { 'cafetal.save': JSON.stringify(old) };
+  globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
+  const s = loadGame();
+  delete globalThis.localStorage;
+  assert.equal(legacyMult(s), 1);
+  assert.equal(s.mastered, false);
+});

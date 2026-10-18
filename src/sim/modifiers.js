@@ -28,9 +28,14 @@ function product(state, type, target) {
   return mult;
 }
 
-export const speedMult = (state, stationId) => product(state, 'stationSpeed', stationId);
+// Segundo final (v1.6): cada vez que se reinicia el juego tras llevar todo al nivel 100, la producción
+// se duplica (×2, ×4, ×8…). Multiplica la velocidad de las estaciones y lo que lleva el Willys; los
+// arrieros y las rutas se calculan con la velocidad de su estación, así que todo sigue cuadrando.
+export const legacyMult = (state) => 2 ** (state.legacy?.resets ?? 0);
+
+export const speedMult = (state, stationId) => product(state, 'stationSpeed', stationId) * legacyMult(state);
 export const muleSpeedMult = (state) => product(state, 'muleSpeed');
-export const dispatchMult = (state, zoneId = 'finca') => product(state, 'dispatchCapacity', zoneId);
+export const dispatchMult = (state, zoneId = 'finca') => product(state, 'dispatchCapacity', zoneId) * legacyMult(state);
 export const productValue = (state, productId) =>
   PRODUCTS[productId].value * product(state, 'productValue', productId) * product(state, 'zoneValue', PRODUCTS[productId].zone);
 

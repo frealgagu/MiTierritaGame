@@ -1,6 +1,6 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
-import { consumeCompost, speedMult } from './modifiers.js';
+import { consumeCompost, legacyMult, speedMult } from './modifiers.js';
 
 export function createStationState() {
   return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, imported: {}, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
@@ -16,7 +16,7 @@ export function stepStation(state, id, dt, bus) {
   const s = state.stations[id];
   const [[outId, outAmt]] = Object.entries(def.out);
   const need = def.in ? Object.values(def.in)[0] : 0;
-  const space = stationBufferCap(def, s.level) - s.buffer;
+  const space = stationBufferCap(def, s.level, legacyMult(state)) - s.buffer;
   const byLocal = need ? Math.floor(s.input / need) : Infinity;
   let byInput = byLocal;
   s.missing = null;
@@ -54,7 +54,7 @@ export function stepStation(state, id, dt, bus) {
   if (def.by) {
     // Subproducto (pulpa): se guarda aparte; si no hay quien lo use, se desecha al llenarse.
     const [[, byAmt]] = Object.entries(def.by);
-    s.byBuffer = Math.min(stationBufferCap(def, s.level), (s.byBuffer ?? 0) + cycles * byAmt);
+    s.byBuffer = Math.min(stationBufferCap(def, s.level, legacyMult(state)), (s.byBuffer ?? 0) + cycles * byAmt);
   }
   if (id === 'wetmill') consumeCompost(state, cycles * outAmt);
   if (def.fuel && s.fuel > 0) s.fuel = Math.max(0, s.fuel - cycles * def.fuel.perCycle);
@@ -67,7 +67,7 @@ export function inputSpace(state, id) {
   const def = STATIONS_BY_ID[id];
   const s = state.stations[id];
   const incoming = state.mules.reduce((n, m) => (m.to === id && m.phase === 'go' ? n + m.amount : n), 0);
-  return stationInputCap(def, s.level) - s.input - incoming;
+  return stationInputCap(def, s.level, legacyMult(state)) - s.input - incoming;
 }
 
 // Combustible: el subproducto de una estación (bagazo de la Molienda) pasa directo a la que lo
@@ -77,7 +77,7 @@ export function stepFuel(state, id) {
   const s = state.stations[id];
   const src = state.stations[def.fuel.from];
   if (!s || !src?.byBuffer) return;
-  const room = stationInputCap(def, s.level) - (s.fuel ?? 0);
+  const room = stationInputCap(def, s.level, legacyMult(state)) - (s.fuel ?? 0);
   const move = Math.max(0, Math.min(room, src.byBuffer));
   s.fuel = (s.fuel ?? 0) + move;
   src.byBuffer -= move;
@@ -90,7 +90,7 @@ export function stepComposter(state, dt, bus) {
   if (!c) return;
   const w = state.stations.wetmill;
   if (w?.byBuffer > 0) {
-    const room = stationInputCap(STATIONS_BY_ID.composter, c.level) - c.input;
+    const room = stationInputCap(STATIONS_BY_ID.composter, c.level, legacyMult(state)) - c.input;
     const move = Math.max(0, Math.min(room, w.byBuffer));
     c.input += move;
     w.byBuffer -= move;

@@ -3,7 +3,9 @@
 //   bloque: elige la compra más rentable y puede subir toda la cadena +1 de una vez (jugador atento)
 //   casual: hace caso a la «mejora recomendada», cumple objetivos y ahorra para construir si le faltan menos de 10 min
 // Variables: BALANCE_PROGRESS=1 muestra el avance cada hora de juego; BALANCE_DUMP=minuto:archivo guarda la
-// partida en ese minuto (para estudiarla aparte); BALANCE_LOAD=archivo sigue una partida guardada así.
+// partida en ese minuto (para estudiarla aparte); BALANCE_LOAD=archivo sigue una partida guardada así;
+// BALANCE_RESETS=n empieza como tras n reinicios del segundo final (producción ×2ⁿ).
+// Tras el Pueblo, los dos bots siguen hasta el segundo final (todas las estaciones al nivel 100).
 import { Game } from '../src/core/Game.js';
 import { analyzeChain, recommendUpgrade, reusable } from '../src/sim/analysis.js';
 import { nextToUnlock, sourceOf, zoneOf } from '../src/sim/chain.js';
@@ -106,6 +108,26 @@ function bestOption() {
   return opts.filter((o) => o.gain > 0).sort((a, b) => b.gain / b.cost - a.gain / a.cost)[0];
 }
 
+// Tras completar las seis zonas, como un completista: compra las investigaciones que falten y sube
+// siempre lo más atrasado (estaciones, arrieros, rutas y despachos parejos: a igual nivel todo cuadra).
+function completionist() {
+  for (const r of RESEARCH) if (game.quoteResearch(r.id).ok) game.research(r.id);
+  const ids = [...openZones().map((z) => `dispatch:${z}`), ...ROUTES.filter((r) => routeActive(s, r.id)).map((r) => `route:${r.id}`)];
+  for (const id of Object.keys(s.stations)) ids.push(id, ...(STATIONS_BY_ID[id].side ? [] : [`${id}:transport`]));
+  const level = (id) => {
+    const [sid, part] = id.split(':');
+    if (sid === 'dispatch') return s.zones[part].dispatch.level;
+    if (sid === 'route') return s.routes[part].level;
+    return part ? s.stations[sid].transport.level : s.stations[sid].level;
+  };
+  for (let k = 0; k < 30; k++) {
+    const open = ids.filter((id) => !game.quote(id, 1).maxed);
+    if (!open.length) break;
+    const next = open.reduce((a, b) => (level(b) < level(a) || (level(b) === level(a) && game.quote(b, 1).cost < game.quote(a, 1).cost) ? b : a));
+    if (!game.buy(next, 1)) break;
+  }
+}
+
 const events = [];
 const zoneStart = { finca: 0, [currentZone()]: s.playTime };
 const zoneEnd = {};
@@ -118,12 +140,17 @@ game.bus.on('goalClaimed', ({ goal, zone }) => {
 });
 game.bus.on('unlocked', ({ id }) => events.push(`${mmss(s.playTime)}  🏗️  construye ${id}`));
 game.bus.on('research', ({ id }) => events.push(`${mmss(s.playTime)}  🔬 investiga ${id}`));
+if (process.env.BALANCE_RESETS) s.legacy.resets = Number(process.env.BALANCE_RESETS);
+game.bus.on('mastered', () => {
+  events.push(`${mmss(s.playTime)}  🏅 segundo final: todo al nivel 100`);
+  console.error(`🏅 segundo final: ${mmss(s.playTime - (zoneEnd.pueblo ?? s.playTime))} después del Pueblo (total ${mmss(s.playTime)})`);
+});
 game.bus.on('zoneUnlocked', ({ zone }) => {
   zoneStart[zone] = s.playTime;
   events.push(`${mmss(s.playTime)}  🗺️  se abre ${zone}`);
 });
 
-for (let step = 0; step < hours * 36000 && currentZone(); step++) {
+for (let step = 0; step < hours * 36000 && (currentZone() || !s.mastered); step++) {
   game.step(0.1);
   // Guarda la partida en ese minuto (BALANCE_DUMP=minuto:archivo) para estudiarla aparte.
   if (dumpAt && s.playTime >= dumpAt.minute * 60) {
@@ -139,7 +166,10 @@ for (let step = 0; step < hours * 36000 && currentZone(); step++) {
   // Decide cada 5 s de juego (más rápido que una persona; con cuatro zonas, cada decisión cuesta).
   if (step % 50) continue;
   const zone = currentZone();
-  if (!zone) break;
+  if (!zone) {
+    completionist();
+    continue;
+  }
   for (const g of activeGoals(s, zone)) if (goalProgress(s, g).done) game.claimGoal(g.id);
   // Como una persona: lo que piden los objetivos visibles, en cuanto puede.
   for (const g of activeGoals(s, zone)) {
@@ -195,6 +225,7 @@ for (let step = 0; step < hours * 36000 && currentZone(); step++) {
   }
 }
 
+if (s.mastered) console.log(`🏅 Segundo final a las ${mmss(s.playTime)}`);
 console.log(events.join('\n'));
 const zone = currentZone();
 if (zone) {
