@@ -56,7 +56,7 @@ export const PRODUCTS = {
   corn_kernels: { name: 'Maíz desgranado', zone: 'maizal', value: 12000, icon: '🌾', color: 0xf5d76e },
   corn_hulled: { name: 'Maíz pilado', zone: 'maizal', value: 30000, icon: '⚪', color: 0xf7ecc8 },
   corn_dough: { name: 'Masa de maíz', zone: 'maizal', value: 70000, icon: '🥣', color: 0xf0e0a8 },
-  arepa: { name: 'Arepa', zone: 'maizal', value: 120000, icon: '🫓', color: 0xe8c77a },
+  arepa: { name: 'Arepa', zone: 'maizal', value: 120000, icon: ICON.arepa, color: 0xe8c77a },
   cheese_arepa: { name: 'Arepas de queso', zone: 'maizal', value: 1200000, icon: ICON.cheeseArepa, color: 0xf0d58c },
 
   // Zona 6 · El Pueblo

@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v1.7.14 — Arepas
+- **Arepa** sola con ícono propio: una arepa grande, dorada y tostada en el budare, en vez del pan plano (🫓).
+- **Arepas de queso**: el queso blanco derretido ahora rebasa el borde de la arepa y chorrea por el canto.
+- `src/data/icons.js` lo genera ahora `tools/icons/build_icons.py` junto con la fuente.
+
 ## v1.7.13 — Más íconos propios
 - **Cacao seco**: granos color canela secándose en una estera, para distinguirlo del fermentado (🫘). El **cacao tostado** también tiene el suyo: granos oscuros en el tiesto, con humo. Así los tres pasos del cacao se ven distintos.
 - **Chocolatina con leche**: una barra de chocolate con leche, medio desenvuelta en su papel azul, en vez del dulce (🍬). También para la Chocolatería y la Temperadora.

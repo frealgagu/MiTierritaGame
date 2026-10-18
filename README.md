@@ -74,5 +74,5 @@ tools/
 
 Los productos que no tienen un emoji parecido usan íconos propios: una fuente de color (COLR) con
 letras de uso privado, para que sirvan en cualquier texto igual que un emoji. Para cambiarlos o
-agregar uno: `pip install fonttools brotli && python3 tools/icons/build_icons.py` (y el código en
+agregar uno: `pip install fonttools brotli && python3 tools/icons/build_icons.py` (genera la fuente y
 `src/data/icons.js`).

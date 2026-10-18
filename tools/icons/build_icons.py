@@ -4,10 +4,10 @@ que no tienen un emoji que se les parezca (la cereza de café, el guarapo, la pa
 Cada ícono es una lista de capas (color, trazos) dibujadas en un lienzo de 100 × 100 (y hacia abajo,
 como SVG). Se generan:
   src/assets/cafetal-icons.woff2   la fuente (la usan la interfaz y los textos del mapa)
+  src/data/icons.js                el código de cada ícono (ICON.cherry = U+E001...), para usarlos
   tools/icons/preview.svg          todos los íconos en grande, para revisarlos
 
 Uso:  pip install fonttools brotli && python3 tools/icons/build_icons.py
-Los códigos van en src/data/icons.js (U+E001...): si se agrega un ícono, agregarlo allá también.
 """
 
 import math
@@ -328,34 +328,68 @@ def milk_chocolate():
     return layers
 
 
-def cheese_arepa():
-    """Arepas de queso: dos arepas doradas, tostadas en el budare, la de adelante con queso derretido."""
-    def arepa(cx, cy, rx, ry, h):
-        side = ellipse_pts(cx, cy, rx, ry, 0, 0, 180, 48) + ellipse_pts(cx, cy + h, rx, ry, 0, 180, 0, 48)
-        out = ellipse_pts(cx, cy, rx, ry, 0, 180, 360, 48) + ellipse_pts(cx, cy + h, rx, ry, 0, 0, 180, 48)
-        return [
-            (OUTLINE, [grow(out, cx, cy + h / 2, 2.2)]),
-            ('#cf9a4c', [pts(side)]),
-            ('#ecc471', [ellipse(cx, cy, rx, ry)]),
-        ]
-
-    toast = [circle(x, y, r) for x, y, r in [(22, 58, 2.6), (30, 50, 1.8), (78, 66, 2.4), (70, 52, 2), (40, 70, 2.2), (60, 72, 1.8), (84, 58, 1.6), (18, 66, 1.6)]]
-    back_toast = [circle(x, y, r) for x, y, r in [(46, 22, 2.2), (62, 18, 1.8), (76, 26, 2), (34, 28, 1.6)]]
-    cheese = 'M 26 52 Q 40 43 58 45 Q 76 47 76 57 Q 75 67 58 67 Q 42 70 30 64 Q 20 58 26 52 Z'
-    drip = 'M 36 65 Q 36 77 40 79 Q 44 77 42 66 Z M 60 66 Q 61 75 64 76 Q 67 74 65 65 Z'
+def arepa_disc(cx, cy, rx, ry, h):
+    """Arepa: disco grueso de masa dorada (cara de arriba y canto), con su borde oscuro."""
+    side = ellipse_pts(cx, cy, rx, ry, 0, 0, 180, 48) + ellipse_pts(cx, cy + h, rx, ry, 0, 180, 0, 48)
+    out = ellipse_pts(cx, cy, rx, ry, 0, 180, 360, 48) + ellipse_pts(cx, cy + h, rx, ry, 0, 0, 180, 48)
     return [
-        *arepa(56, 24, 36, 14, 10),
-        ('#b9792e', back_toast),
-        *arepa(50, 58, 44, 18, 13),
-        ('#b9792e', toast),
-        ('#8f5a22', [rib(14, 62, 24, 70, 1.6), rib(80, 72, 90, 64, 1.6)]),
-        ('#d9cfb4', [cheese, drip]),
-        ('#fffaf0', ['M 29 53 Q 41 46 58 48 Q 73 50 73 57 Q 72 64 58 64 Q 43 67 32 62 Q 24 58 29 53 Z', 'M 37 64 Q 37 75 40 77 Q 42 75 41 65 Z']),
-        ('#ffffff', [ellipse(46, 52, 8, 2.2, -6)]),
+        (OUTLINE, [grow(out, cx, cy + h / 2, 2.2)]),
+        ('#cf9a4c', [pts(side)]),
+        ('#ecc471', [ellipse(cx, cy, rx, ry)]),
     ]
 
 
-# Código de cada ícono: igual que en src/data/icons.js.
+def toasted(spots, color='#b9792e'):
+    """Manchas tostadas del budare."""
+    return (color, [ellipse(x, y, r * 1.4, r, rot) for x, y, r, rot in spots])
+
+
+def arepa():
+    """Arepa sola: una arepa grande, dorada y tostada en el budare."""
+    return [
+        *arepa_disc(50, 46, 46, 22, 16),
+        toasted([(28, 40, 3.2, 10), (44, 32, 2.4, -15), (66, 36, 3, 20), (78, 48, 2.6, -10), (56, 54, 3.4, 5), (34, 56, 2.6, 25), (20, 50, 2, 0), (60, 42, 1.8, 0), (46, 46, 1.6, 0)]),
+        ('#d8a650', [ellipse(40, 40, 7, 2.5, -10), ellipse(64, 50, 6, 2, 12)]),
+        ('#f6dc98', [ellipse(36, 34, 10, 3, -8)]),
+        ('#8f5a22', [rib(10, 52, 20, 60, 1.6), rib(80, 62, 90, 54, 1.6), rib(44, 70, 56, 70, 1.4)]),
+    ]
+
+
+def cheese_arepa():
+    """Arepas de queso: dos arepas doradas, con el queso blanco derretido chorreando por el borde."""
+    cx, cy, rx, ry, h = 50, 58, 44, 18, 13
+
+    def rim_y(x):
+        return cy + ry * math.sqrt(max(0, 1 - ((x - cx) / rx) ** 2))
+
+    def melted(dx=0, dy=0):
+        shapes = [
+            ellipse(50 + dx, 63 + dy, 25, 10),  # el queso encima, hasta el borde de adelante
+            ellipse(34 + dx, 67 + dy, 11, 7),
+            ellipse(66 + dx, 67 + dy, 11, 7),
+        ]
+        # Lo que rebasa el borde: una franja sobre el canto...
+        lip = [(x, rim_y(x) - 3) for x in range(28, 73, 3)]
+        shapes.append(pts([(x + dx, y + dy) for x, y in lip] + [(x + dx, y + 7 + dy) for x, y in lip[::-1]]))
+        # ...y chorros redondeados de distinto largo.
+        for x, length in [(33, 7), (42, 12), (51, 5), (59, 10), (67, 4)]:
+            top = rim_y(x)
+            shapes.append(rect(x - 3 + dx, top + dy, 6, length))
+            shapes.append(circle(x + dx, top + length + dy, 3))
+        return shapes
+
+    return [
+        *arepa_disc(56, 24, 36, 14, 10),
+        toasted([(46, 22, 2.2, 0), (62, 18, 1.8, 0), (76, 26, 2, 10), (34, 28, 1.6, 0)]),
+        *arepa_disc(cx, cy, rx, ry, h),
+        toasted([(16, 58, 2.4, 0), (86, 60, 2.2, 0), (24, 50, 1.8, 0), (78, 50, 2, 0), (60, 46, 1.6, 0)]),
+        ('#b9ad8c', melted(1.2, 1.6)),
+        ('#fffaf0', melted()),
+        ('#ffffff', [ellipse(44, 59, 10, 2.6, -6), ellipse(62, 58, 5, 1.6, 8), rect(41, 76, 1.6, 7)]),
+    ]
+
+
+# Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -368,6 +402,7 @@ ICONS = [
     (0xE009, 'cacao_roasted', cacao_roasted),
     (0xE00A, 'milk_chocolate', milk_chocolate),
     (0xE00B, 'cheese_arepa', cheese_arepa),
+    (0xE00C, 'arepa', arepa),
 ]
 
 
@@ -451,6 +486,26 @@ def preview():
     (ROOT / 'tools/icons/preview.svg').write_text(svg)
 
 
+def icons_js():
+    """src/data/icons.js: el código de cada ícono, con la primera línea de su descripción."""
+    camel = lambda name: name.split('_')[0] + ''.join(w.title() for w in name.split('_')[1:])
+    rows = []
+    for code, name, make in ICONS:
+        doc = (make.__doc__ or '').strip().splitlines()[0].rstrip('.')
+        rows.append(f"  {camel(name)}: '\\u{code:04X}', // {doc}")
+    src = (
+        '// Generado por tools/icons/build_icons.py (no editar a mano).\n'
+        '// Íconos propios (fuente «Cafetal Icons», src/assets/cafetal-icons.woff2) para los productos que no\n'
+        '// tienen un emoji parecido. Son letras de uso privado, así que funcionan en cualquier texto (paneles,\n'
+        '// objetivos, textos del mapa) igual que un emoji, siempre que la fuente esté en la lista de fuentes\n'
+        '// (ver styles.css y FONT).\n'
+        'export const ICON = {\n' + '\n'.join(rows) + '\n};\n\n'
+        "export const ICON_FONT = 'Cafetal Icons';\n"
+    )
+    (ROOT / 'src/data/icons.js').write_text(src)
+
+
 if __name__ == '__main__':
     build()
+    icons_js()
     preview()
