@@ -20,18 +20,19 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-    // Clave de las versiones de prueba: llega por variables de entorno (en GitHub Actions, desde los
-    // secretos del repositorio; ver .github/workflows/pages.yml). Así todos los APK publicados tienen la
-    // misma firma y se instalan encima del anterior sin perder la partida. Sin esas variables (un
-    // equipo cualquiera) se usa la clave de depuración de ese equipo. Google Play usará otra.
-    def keystore = System.getenv('CAFETAL_KEYSTORE')
+    // Clave de las versiones de prueba: todos los APK tienen la misma firma y se instalan encima del
+    // anterior sin perder la partida. Llega por variables de entorno (en GitHub Actions, desde los
+    // secretos del repositorio; ver .github/workflows/pages.yml). Mientras no existan, se usa la de
+    // pruebas guardada en el repositorio (temporal: se cambiará por los secretos con Google Play).
+    def keystore = System.getenv('CAFETAL_KEYSTORE') ?: (file('cafetal-pruebas.keystore').exists() ? 'cafetal-pruebas.keystore' : null)
+    def fromEnv = System.getenv('CAFETAL_KEYSTORE') != null
     if (keystore) {
         signingConfigs {
             pruebas {
                 storeFile file(keystore)
-                storePassword System.getenv('CAFETAL_KEYSTORE_PASSWORD')
-                keyAlias System.getenv('CAFETAL_KEY_ALIAS')
-                keyPassword System.getenv('CAFETAL_KEY_PASSWORD')
+                storePassword fromEnv ? System.getenv('CAFETAL_KEYSTORE_PASSWORD') : 'android'
+                keyAlias fromEnv ? System.getenv('CAFETAL_KEY_ALIAS') : 'androiddebugkey'
+                keyPassword fromEnv ? System.getenv('CAFETAL_KEY_PASSWORD') : 'android'
             }
         }
     }

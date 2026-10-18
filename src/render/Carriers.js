@@ -131,7 +131,9 @@ export class JeepView extends Container {
     const alongX = Math.abs(dx) > Math.abs(dy);
     this.alongX.visible = alongX;
     this.alongY.visible = !alongX;
-    const n = load <= 0 ? 0 : Math.max(1, Math.round(load * 6));
+    // Como mucho lleno: si la capacidad baja de golpe (menos reinicios en las opciones de desarrollador),
+    // la carga en camino puede ser miles de millones de veces la nueva y no hay que dibujar tantos bultos.
+    const n = load <= 0 ? 0 : Math.max(1, Math.round(Math.min(1, load) * 6));
     if (n !== this.cargo) {
       this.cargo = n;
       this.drawCargo(this.cargoX, this.bodyX.cargoBase, n);
@@ -206,7 +208,7 @@ export class ChivaView extends Container {
     const alongX = Math.abs(dx) > Math.abs(dy);
     this.alongX.visible = alongX;
     this.alongY.visible = !alongX;
-    const n = load <= 0 ? 0 : Math.max(1, Math.round(load * 8));
+    const n = load <= 0 ? 0 : Math.max(1, Math.round(Math.min(1, load) * 8)); // como mucho lleno (ver el Willys)
     if (n !== this.cargo) {
       this.cargo = n;
       this.drawCargo(this.alongX, n);

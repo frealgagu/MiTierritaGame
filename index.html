@@ -42,6 +42,8 @@
       <button id="zones-btn" class="side-btn" aria-label="Zonas" title="Zonas" hidden>🗺️<span id="zones-badge" class="badge" hidden></span></button>
     </div>
     <div id="tracker" class="tracker" role="button" tabindex="0" hidden></div>
+    <!-- Antes de las ventanas: estas la tapan al abrirse. -->
+    <div id="legacy-chip" class="legacy-chip" title="Producción de esta partida" hidden></div>
 
     <div id="goals" class="modal" hidden>
       <div class="modal-card list-modal">
@@ -97,8 +99,6 @@
       </div>
     </div>
 
-    <div id="legacy-chip" class="legacy-chip" title="Producción de esta partida" hidden></div>
-
     <div id="zones" class="modal" hidden>
       <div class="modal-card list-modal">
         <div class="chain-head">
@@ -113,7 +113,7 @@
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Cafetal <small id="menu-version">v1.7.3</small></h2>
+        <h2>Cafetal <small id="menu-version">v1.7.4</small></h2>
         <p id="save-where">Tu partida se guarda sola en este navegador.</p>
         <p id="menu-stats"></p>
         <details class="save-box">

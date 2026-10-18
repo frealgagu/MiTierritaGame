@@ -50,31 +50,28 @@ jobs:
         with:
           packages: platform-tools platforms;android-36 build-tools;36.0.0 build-tools;35.0.0
       - run: npm ci
-      # La clave de pruebas sale de los secretos del repositorio (ANDROID_KEYSTORE_BASE64, …). Sin ella
-      # no se publica APK (uno firmado con otra clave no se podría instalar encima del anterior).
-      - id: key
-        env:
+      # Clave de pruebas: de los secretos del repositorio (ANDROID_KEYSTORE_BASE64, …) si existen; si no,
+      # la que está temporalmente en android/app (ver build.gradle).
+      - env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
-          if [ -z "$KEYSTORE_BASE64" ]; then
-            echo "::warning::Falta el secreto ANDROID_KEYSTORE_BASE64: esta vez no se publica el APK."
-            echo "ok=false" >> "$GITHUB_OUTPUT"
-          else
+          if [ -n "$KEYSTORE_BASE64" ]; then
             echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/cafetal.keystore"
-            echo "ok=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "CAFETAL_KEYSTORE=$RUNNER_TEMP/cafetal.keystore"
+              echo "CAFETAL_KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"
+              echo "CAFETAL_KEY_ALIAS=$KEY_ALIAS"
+              echo "CAFETAL_KEY_PASSWORD=$KEY_PASSWORD"
+            } >> "$GITHUB_ENV"
           fi
       # Compila el juego, lo copia a android/ y genera el APK firmado con la clave de pruebas.
-      - if: steps.key.outputs.ok == 'true'
-        env:
-          CAFETAL_KEYSTORE: ${{ runner.temp }}/cafetal.keystore
-          CAFETAL_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          CAFETAL_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          CAFETAL_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: |
+      - run: |
           npm run android:apk
           cp android/app/build/outputs/apk/debug/app-debug.apk cafetal.apk
-      - if: steps.key.outputs.ok == 'true'
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: android
           path: cafetal.apk
@@ -90,9 +87,7 @@ jobs:
         with:
           name: web
           path: site
-      # El APK, si se pudo firmar (ver el paso «key» de android).
       - uses: actions/download-artifact@v4
-        continue-on-error: true
         with:
           name: android
           path: site

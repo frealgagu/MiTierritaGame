@@ -353,19 +353,19 @@ a.btn { text-decoration: none; color: inherit; display: inline-flex; align-items
   position: fixed;
   right: max(16px, env(safe-area-inset-right, 0px));
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  border: 3px solid var(--ink);
+  border: 2px solid var(--ink);
   border-radius: 999px;
-  padding: 6px 12px;
-  background: #fff7d1;
+  padding: 3px 10px;
+  background: rgba(255, 247, 209, 0.85);
   color: var(--ink);
+  font-size: 0.85rem;
   font-weight: 700;
-  box-shadow: var(--shadow);
   pointer-events: none;
 }
 .legacy-chip[hidden] { display: none; }
 body.panel-open .legacy-chip { display: none; }
 /* En el móvil, el marcador de objetivos ocupa el ancho de abajo: la leyenda va encima. */
-@media (max-width: 520px) { .legacy-chip { bottom: calc(118px + env(safe-area-inset-bottom, 0px)); padding: 4px 10px; font-size: 0.9rem; } }
+@media (max-width: 520px) { .legacy-chip { bottom: calc(112px + env(safe-area-inset-bottom, 0px)); font-size: 0.8rem; } }
 
 .save-box { margin: 8px 0 12px; }
 .dev-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
