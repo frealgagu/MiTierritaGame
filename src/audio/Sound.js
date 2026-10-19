@@ -2,21 +2,21 @@
 
 // Lo que suena al abrir cada estación (v3.3.2): su oficio, en pocos tipos de sonido.
 const STATION_SOUNDS = {
-  field: ['farm', 'canefield', 'cacao_grove', 'cornfield', 'guava_grove', 'tobacco_field', 'fique_field', 'composter'],
+  field: ['farm', 'canefield', 'cacao_grove', 'cornfield', 'guava_grove', 'tobacco_field', 'fique_field', 'composter', 'anthill'],
   moo: ['pasture', 'cattle_ranch'],
-  water: ['wetmill', 'pasteurizer', 'cheesery', 'churn'],
+  water: ['wetmill', 'pasteurizer', 'cheesery', 'churn', 'brine_pot'],
   machine: ['huller', 'grinder', 'cane_mill', 'pulverizer', 'cacao_mill', 'sheller', 'corn_huller', 'dough_mill', 'guava_pulper', 'decorticator'],
   whir: ['separator', 'spinner'],
-  fire: ['roaster', 'cacao_roaster', 'grill'],
+  fire: ['roaster', 'cacao_roaster', 'grill', 'ant_toaster'],
   boil: ['furnace', 'arequipe_pot', 'guava_pot', 'greca'],
   wind: ['dryer', 'cacao_dryer', 'caney', 'airing_rack'],
   ferment: ['fermenter', 'tobacco_piles'],
   chop: ['butcher', 'bocadillo_cutter', 'stripper'],
-  loom: ['sack_loom', 'basket_shop', 'alpargata_shop', 'bijao_wrapper', 'fiambre_maker', 'cigar_roller'],
+  loom: ['sack_loom', 'basket_shop', 'alpargata_shop', 'bijao_wrapper', 'fiambre_maker', 'cigar_roller', 'ant_cleaner', 'cone_table'],
   thud: ['packer', 'molds', 'guava_molds', 'crate_packer', 'tercio_packer', 'gift_wrap'],
   horn: ['export_dock'],
   sizzle: ['budare', 'arepa_stand', 'fonda'],
-  clink: ['coffee_house', 'chocolate_table', 'chocolatier', 'lunch_table'],
+  clink: ['coffee_house', 'chocolate_table', 'chocolatier', 'lunch_table', 'souvenir_shop'],
   pour: ['salter'],
   engine: ['dispatch'],
 };

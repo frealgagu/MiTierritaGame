@@ -2,6 +2,7 @@ import { PEOPLE, WELCOME, WithArticle, withArticle } from '../data/lore.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { alerts } from '../sim/alerts.js';
 import { slowConsumers } from '../sim/transport.js';
+import { waitingHarvest } from '../sim/production.js';
 import { toast } from './toast.js';
 import { clockOf, isWorkTime, seasonOf } from '../sim/calendar.js';
 import { EVENTS } from '../data/events.js';
@@ -50,6 +51,11 @@ export class Chatter {
       this.season = season;
       this.lastAny = now;
       const mult = season.mult === 1 ? '' : ` (×${String(season.mult).replace('.', ',')})`;
+      // Con las Hormigas abiertas, la entrada de aguas la anuncia Doña Gloria (v3.4).
+      if (season.id === 'entrada' && state.zones.hormigas?.unlocked) {
+        say('hormigas', '🌦️ ¡Llegó la entrada de aguas y salieron las hormigas culonas! Es la cosecha de todo el año: suba el Hormiguero y sus arrieros.', 7000);
+        return;
+      }
       say(zone, `${season.icon} ¡Llegó ${withArticle(season.name.toLowerCase())}! ${capital(season.text)}${mult}.`, 7000);
       return;
     }
@@ -94,6 +100,7 @@ export class Chatter {
 
   message(state, id, kind, a) {
     const name = STATIONS_BY_ID[id].name;
+    if (kind === 'starved' && waitingHarvest(state, STATIONS_BY_ID[id].zone)) return 'Se acabó lo de la despensa: toca esperar a que salgan las hormigas en la entrada de aguas 🌦️.';
     if (kind === 'starved') return `${WithArticle(name)} está esperando producto: hay que mejorar las estaciones anteriores.`;
     if (kind === 'diverting') return `En ${withArticle(name)} se está vendiendo producto sin procesar: la siguiente no da abasto.`;
     if (a.waiting === 'space') return '¡Se llenó la bodega! Hay que mejorar el Despacho.';

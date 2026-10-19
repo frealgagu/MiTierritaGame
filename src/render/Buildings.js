@@ -2030,4 +2030,159 @@ const DRAW = {
     const bundle = iso(x + 2.5, y + 2.5);
     for (let k = 0; k < 4; k++) g.ellipse(bundle.x + (k - 1.5) * 2.5, bundle.y - 9, 3, 9).fill(k % 2 ? 0x8db33a : 0x6b8e23).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
   },
+
+  // --- Santander · Las Hormigas (v3.4) ---
+
+  // Mesa de limpieza: ramada con una mesa larga donde se les quitan las alas y las patas a las hormigas.
+  ant_cleaner(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.3;
+    const d = 1.8;
+    const H = 24 + ctx.up;
+    box(g, x0 + 0.25, y0 + 0.6, w - 0.5, 0.6, 8, PAL.wood);
+    const ants = [];
+    for (let i = 0; i < 9; i++) ants.push(iso(x0 + 0.4 + (i % 5) * 0.36, y0 + 0.75 + Math.floor(i / 5) * 0.25, 8));
+    for (const a of ants) g.ellipse(a.x, a.y, 2.2, 1.4).fill(PRODUCTS.ant_queen.color);
+    // Canastos: uno con las hormigas que llegan y otro con las limpias.
+    for (const [bx, by] of [[0.5, 2.5], [2.4, 2.5]]) {
+      const b = iso(x + bx, y + by);
+      g.poly([b.x - 7, b.y - 9, b.x + 7, b.y - 9, b.x + 5, b.y, b.x - 5, b.y]).fill(0xc8a26b).stroke(OUTLINE);
+      for (const dx of [-3, 0, 3]) g.ellipse(b.x + dx, b.y - 10, 1.8, 1.2).fill(PRODUCTS.ant_clean.color);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 12, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
+    const wings = new Graphics();
+    this.anim.addChild(wings);
+    this.animate = (time) => {
+      wings.clear();
+      if (!this.working) return;
+      // Las alas que se quitan, volando al piso.
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.7 + i / 4) % 1;
+        const a = ants[(i * 2) % ants.length];
+        wings.ellipse(a.x + f * 10 - 5, a.y + f * 16, 2.5, 1).fill({ color: 0xe3f2fd, alpha: 0.9 * (1 - f) });
+      }
+    };
+  },
+
+  // Ollas de salmuera: ollas de barro con agua de sal en un corredor techado.
+  brine_pot(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.2;
+    const d = 1.8;
+    const H = 24 + ctx.up;
+    const pots = ctx.tier >= 2 ? [[0.45, 0.5], [1.25, 0.5], [0.45, 1.25], [1.25, 1.25]] : [[0.55, 0.7], [1.35, 0.95]];
+    for (const [px, py] of pots) {
+      const c = iso(x0 + px + 0.25, y0 + py + 0.25, 8);
+      g.ellipse(c.x, c.y + 6, 13, 6).fill(0x94502c).stroke(OUTLINE);
+      g.rect(c.x - 13, c.y, 26, 6).fill(0xb5653a);
+      g.ellipse(c.x, c.y, 13, 6).fill(0xb5653a).stroke(OUTLINE);
+      g.ellipse(c.x, c.y, 10.5, 4.5).fill(0xcfe8f0);
+      g.ellipse(c.x - 3, c.y, 2, 1.2).fill(PRODUCTS.ant_clean.color);
+      g.ellipse(c.x + 3, c.y + 1, 2, 1.2).fill(PRODUCTS.ant_clean.color);
+    }
+    // Bulto de sal.
+    const salt = iso(x + 2.6, y + 2.5);
+    g.roundRect(salt.x - 6, salt.y - 11, 12, 11, 3).fill(0xf4f1e8).stroke(OUTLINE);
+    g.rect(salt.x - 6, salt.y - 7, 12, 2).fill(0x2e6fd1);
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 12, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
+  },
+
+  // Tiesto de barro: fogón de leña con los tiestos donde se tuestan las hormigas, revolviendo.
+  ant_toaster(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.3;
+    const d = 1.8;
+    const H = 26 + ctx.up;
+    box(g, x0 + 0.35, y0 + 0.45, 1.6, 0.8, 10, 0xb5653a);
+    const pans = [iso(x0 + 0.75, y0 + 0.85, 10), iso(x0 + 1.55, y0 + 0.85, 10)];
+    for (const c of pans) {
+      g.ellipse(c.x, c.y, 15, 7).fill(0x8a4a2a).stroke(OUTLINE);
+      g.ellipse(c.x, c.y, 11, 5).fill(PRODUCTS.toasted_ants.color);
+    }
+    const mouth = iso(x0 + 1.15, y0 + 1.25, 4);
+    g.ellipse(mouth.x, mouth.y, 6, 4).fill(0x2b1a10).stroke(OUTLINE);
+    this.lights.push({ x: mouth.x, y: mouth.y, r: 24, color: 0xff7a1a });
+    // Leña.
+    for (let i = 0; i < 3; i++) {
+      const p = iso(x + 2.3 + i * 0.1, y + 2.6, i * 2);
+      g.roundRect(p.x - 9, p.y - 4, 18, 4, 2).fill(0x8b5a2b).stroke(OUTLINE);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 13, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    const stir = new Graphics();
+    this.anim.addChild(stir);
+    this.animate = (time) => {
+      stir.clear();
+      const a = time * 3;
+      for (const [k, c] of pans.entries()) {
+        const ex = c.x + Math.cos(a + k * 2) * 7;
+        const ey = c.y + Math.sin(a + k * 2) * 3;
+        stir.moveTo(ex, ey).lineTo(ex + 6, ey - 18).stroke({ width: 2.4, color: PAL.wood });
+      }
+      stir.ellipse(mouth.x, mouth.y + 1, 4, 2.5).fill({ color: 0xff7a1a, alpha: this.working ? 0.6 + Math.sin(time * 9) * 0.3 : 0.2 });
+    };
+    this.animate(0);
+  },
+
+  // Mesa de cucuruchos: puesto con toldo donde se llenan los cucuruchos de papel.
+  cone_table(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xf6e7c8, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 13, PAL.balconyYellow);
+    box(g, x + 0.9, y + 2.15, 1.4, 0.45, 9, PAL.wood);
+    for (let i = 0; i < 6; i++) {
+      const p = iso(x + 1.0 + i * 0.22, y + 2.37, 9);
+      g.poly([p.x - 2.5, p.y - 9, p.x + 2.5, p.y - 9, p.x, p.y]).fill(0xf4efe6).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x, p.y - 9.5, 2.5, 1.2).fill(PRODUCTS.toasted_ants.color);
+    }
+    // Toldo de rayas.
+    for (let i = 0; i < 6; i++) {
+      const a = iso(x + 0.9 + i * 0.24, y + 2.1, 22);
+      const b = iso(x + 1.14 + i * 0.24, y + 2.1, 22);
+      g.poly([a.x, a.y, b.x, b.y, b.x, b.y + 6, a.x, a.y + 6]).fill(i % 2 ? 0xffffff : 0x2fa36b).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+    }
+  },
+
+  // Tienda de recuerdos: tienda de la plaza con costales, alpargatas colgadas y cucuruchos de hormigas.
+  souvenir_shop(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xf4efe6, roofH: 14 });
+    door(g, hx, hy, 1.6, 1.8, 18, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.4, 0.8, 14, PAL.balconyYellow);
+    // Costales de fique llenos frente a la tienda.
+    for (const [bx, by] of [[0.45, 2.35], [0.7, 2.6]]) {
+      const p = iso(x + bx, y + by);
+      g.roundRect(p.x - 6, p.y - 13, 12, 13, 3).fill(PRODUCTS.fique_sack.color).stroke(OUTLINE);
+      g.rect(p.x - 2, p.y - 16, 4, 4).fill(0x8b5a2b);
+    }
+    // Alpargatas colgadas en la puerta.
+    const a = iso(hx + 1.2, hy + 1.6, 22);
+    const b = iso(hx + 1.2 + 0.9, hy + 1.6, 22);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x3a2418 });
+    const colors = [PRODUCTS.alpargatas.color, 0xd7263d, 0x2fa36b, 0xe8b90f];
+    for (let k = 1; k < 5; k++) {
+      const px = a.x + ((b.x - a.x) * k) / 5;
+      const py = a.y + ((b.y - a.y) * k) / 5;
+      g.roundRect(px - 2.5, py + 2, 5, 8, 2).fill(colors[k - 1]).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      g.rect(px - 2.5, py + 8, 5, 2).fill(0xd9c08c);
+    }
+    // Mostrador con cucuruchos.
+    box(g, x + 1.4, y + 2.25, 1.1, 0.35, 8, PAL.wood);
+    for (let i = 0; i < 4; i++) {
+      const p = iso(x + 1.5 + i * 0.25, y + 2.42, 8);
+      g.poly([p.x - 2.5, p.y - 8, p.x + 2.5, p.y - 8, p.x, p.y]).fill(0xf4efe6).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x, p.y - 8.5, 2.5, 1.2).fill(PRODUCTS.toasted_ants.color);
+    }
+  },
 };

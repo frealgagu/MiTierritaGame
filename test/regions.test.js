@@ -55,6 +55,8 @@ test('cada región tiene su segundo final y su reinicio, sin tocar las demás', 
   s.zones.fiquera.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), false);
   s.zones.hato.complete = true;
+  assert.equal(checkMastery(s, { emit() {} }), false);
+  s.zones.hormigas.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), true);
   s.playTime = 9000;
   const next = restartState(s);
@@ -80,7 +82,7 @@ test('la partida se guarda y se carga con sus regiones', () => {
   const back = loadGame();
   assert.equal(back.regions.santander.coins, 1234);
   assert.equal(back.regions.santander.region, 'santander');
-  assert.deepEqual(Object.keys(back.regions.santander.zones), ['guayabera', 'tabacal', 'fiquera', 'hato']);
+  assert.deepEqual(Object.keys(back.regions.santander.zones), ['guayabera', 'tabacal', 'fiquera', 'hato', 'hormigas']);
   assert.ok(back.profile);
 });
 
@@ -176,4 +178,62 @@ test('el Hato se abre con la Fiquera completa y hace fiambres con el bocadillo y
   CALENDAR.on = on;
   for (const p of ['bocadillo_bijao', 'fique_fiber']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
   for (const p of ['almuerzo', 'fiambre']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+});
+
+test('el Hormiguero solo cosecha en la entrada de aguas (×4) y la despensa abastece la cadena el resto del año', async () => {
+  const { CALENDAR, DAY_LENGTH, SEASON_DAYS, START_HOUR } = await import('../src/sim/calendar.js');
+  const { stationBufferCap } = await import('../src/sim/rules.js');
+  const { STATIONS_BY_ID } = await import('../src/data/stations.js');
+  const game = new Game(createInitialState(0, 'santander'));
+  for (const z of ['tabacal', 'fiquera', 'hato', 'hormigas']) game.unlockZone(z);
+  const ant = game.state.stations.anthill;
+  const cap = stationBufferCap(STATIONS_BY_ID.anthill, 1);
+  assert.equal(ant.buffer, cap, 'abre con la despensa llena');
+  assert.ok(cap > 1000, 'la despensa guarda mucho más que un patio');
+  game.state.coins = 1e12;
+  game.unlock('ant_cleaner');
+  const on = CALENDAR.on;
+  CALENDAR.on = true;
+  // Mediodía del primer día (verano): fuera de temporada no se cosecha, pero los arrieros llevan lo guardado.
+  game.state.playTime = DAY_LENGTH * ((12 - START_HOUR) / 24);
+  for (let t = 0; t < 60; t += 0.1) game.step(0.1);
+  assert.equal(ant.status, 'season');
+  assert.equal(game.state.stats.produced.ant_queen ?? 0, 0, 'nada nuevo');
+  assert.ok(ant.buffer < cap, 'la despensa baja');
+  assert.ok((game.state.stats.produced.ant_clean ?? 0) > 0, 'la cadena sigue trabajando');
+  // Mediodía de la entrada de aguas: cosecha ×4.
+  game.state.playTime = DAY_LENGTH * (SEASON_DAYS + (12 - START_HOUR) / 24);
+  ant.buffer = 0;
+  for (let t = 0; t < 60; t += 0.1) game.step(0.1);
+  assert.equal(ant.status, 'working');
+  const made = game.state.stats.produced.ant_queen;
+  // 60 s a nivel 1 (0,5/s) en una temporada ×1, por 4.
+  assert.ok(made > 100 && made < 130, `cosechó ${made}`);
+  CALENDAR.on = on;
+});
+
+test('las Hormigas se abren con el Hato completo y venden recuerdos con los costales y las alpargatas de la Fiquera', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
+  const game = new Game(createInitialState(0, 'santander'));
+  for (const z of ['tabacal', 'fiquera', 'hato']) game.unlockZone(z);
+  const final = GOALS_BY_ZONE.hato.find((g) => g.final);
+  game.state.goals.claimed.push(...GOALS_BY_ZONE.hato.filter((g) => !g.final).map((g) => g.id));
+  game.state.stats.sold.fiambre = final.amount;
+  assert.ok(game.claimGoal(final.id));
+  assert.equal(game.state.zones.hormigas.unlocked, true);
+  game.state.coins = 1e15;
+  for (const z of ['guayabera', 'tabacal', 'fiquera', 'hato', 'hormigas']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+    game.state.zones[z].dispatch.level = 20;
+  }
+  for (const r of Object.values(game.state.routes)) r.level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 900; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  for (const p of ['fique_sack', 'alpargatas']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
+  assert.ok((game.state.stats.sold.recuerdo ?? 0) > 0, 'vende recuerdos');
 });

@@ -1,5 +1,5 @@
 import { createInitialState, SAVE_VERSION } from '../sim/state.js';
-import { createStationState } from '../sim/production.js';
+import { createSourceState, createStationState } from '../sim/production.js';
 import { createRouteState } from '../sim/routes.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
@@ -67,7 +67,7 @@ function migrate(data) {
       const next = ZONES_BY_ID[id].next;
       if (!z.complete || !next || zones[next].unlocked) continue;
       zones[next].unlocked = true;
-      stations[ZONES_BY_ID[next].farm.stationId] ??= createStationState();
+      stations[ZONES_BY_ID[next].farm.stationId] ??= createSourceState(ZONES_BY_ID[next].farm.stationId);
     }
     return finish(data, base, stations, zones, mules);
   }

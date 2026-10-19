@@ -29,6 +29,7 @@ const VICTORY = {
   tabacal: { title: '¡Tabaco torcido a mano!', text: 'Completaste <b>El Tabacal</b>, en Santander. Seis mil tabacos curados en el caney, fermentados en pilones y torcidos a mano.', stat: (s) => `Tabacos vendidos: ${formatNumber(s.stats.sold.cigar ?? 0)}` },
   fiquera: { title: '¡Tercios de tabaco listos para el viaje!', text: 'Completaste <b>La Fiquera</b>, en Santander. Seis mil tercios de tabaco del Tabacal, forrados en tela de fique.', stat: (s) => `Tercios vendidos: ${formatNumber(s.stats.sold.tobacco_bale ?? 0)}` },
   hato: { title: '¡Fiambre para todos los caminos!', text: 'Completaste <b>El Hato</b>, en Santander. Cuatro mil fiambres de carne oreada, con el bocadillo de la Guayabera y amarrados con la cabuya de la Fiquera.', stat: (s) => `Fiambres vendidos: ${formatNumber(s.stats.sold.fiambre ?? 0)}` },
+  hormigas: { title: '¡Hormigas culonas para todo el país!', text: 'Completaste <b>Las Hormigas</b>, en Santander. Seis mil recuerdos con hormigas tostadas, en costal de fique y con alpargatas de la Fiquera.', stat: (s) => `Recuerdos vendidos: ${formatNumber(s.stats.sold.recuerdo ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

@@ -33,6 +33,7 @@ import { fit, setFitted } from './fit.js';
 import { alerts } from '../sim/alerts.js';
 import { FACTS } from '../data/lore.js';
 import { resting } from '../sim/calendar.js';
+import { harvestFactor, waitingHarvest } from '../sim/production.js';
 
 const SUBTITLE_MS = 7000; // cada cuánto cambia el subtítulo (descripción y datos reales)
 
@@ -284,8 +285,8 @@ function stationInfo(id) {
     {
       key: 'rate',
       label: 'Producción',
-      value: (s, l) => `${formatRate(stationOutputRate(def, l) * productionMult(s, id))} ${out.icon}/s`,
-      next: (l, s) => formatRate(stationOutputRate(def, l) * productionMult(s, id)),
+      value: (s, l) => `${formatRate(stationOutputRate(def, l) * productionMult(s, id) * harvestFactor(s, def))} ${out.icon}/s`,
+      next: (l, s) => formatRate(stationOutputRate(def, l) * productionMult(s, id) * harvestFactor(s, def)),
     },
   ];
   if (inId) {
@@ -316,7 +317,7 @@ function stationInfo(id) {
     );
   } else {
     rows.push(
-      { key: 'buffer', label: 'Patio (por enviar)', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, capMult(s, id)))} ${out.icon}` },
+      { key: 'buffer', label: def.harvest ? 'Despensa (por enviar)' : 'Patio (por enviar)', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, capMult(s, id)))} ${out.icon}` },
       {
         key: 'value',
         label: 'Precio de venta',
@@ -396,6 +397,17 @@ function stationStatus(state, id) {
   const def = STATIONS_BY_ID[id];
   if (resting(state)) return { text: NIGHT, bad: false };
   if (def.side) return composterStatus(state, st);
+  // Cosecha de temporada (v3.4): fuera de ella no produce, y no es un problema.
+  if (!def.harvest && st.status === 'starved' && waitingHarvest(state, def.zone)) {
+    return { text: '🐜 Se acabó lo de la despensa del Hormiguero: la cadena sigue cuando salgan las hormigas, en la entrada de aguas 🌦️.', bad: false };
+  }
+  if (def.harvest && st.status === 'season') {
+    const left = st.buffer > 0 ? `los arrieros siguen llevando lo de la despensa (${formatNumber(st.buffer)} ${PRODUCTS[Object.keys(def.out)[0]].icon})` : 'la despensa está vacía: a esperar la próxima cosecha';
+    return { text: `🐜 Las hormigas solo salen en la entrada de aguas 🌦️: ${left}.`, bad: false };
+  }
+  if (def.harvest && st.status === 'working' && harvestFactor(state, def) > 1) {
+    return { text: `🐜 ¡Salieron las hormigas! En la entrada de aguas se cosecha ×${def.harvest.mult}: lo que no alcanza a salir se guarda en la despensa para el resto del año.`, bad: false };
+  }
   const analysis = analyzeChain(state, zoneOf(id));
   const row = analysis.rows.find((r) => r.id === id);
   const parent = analysis.rows.find((r) => r.id === PARENT[id]);

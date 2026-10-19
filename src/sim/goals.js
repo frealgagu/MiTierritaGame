@@ -1,6 +1,6 @@
 import { GOALS, GOALS_BY_ZONE } from '../data/goals.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
-import { createStationState } from './production.js';
+import { createSourceState } from './production.js';
 import { sourceOf } from './chain.js';
 import { STATIONS_BY_ID, DISPATCH } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
@@ -115,7 +115,7 @@ export function unlockZone(state, zoneId, bus) {
   if (!z || z.unlocked) return false;
   z.unlocked = true;
   const source = sourceOf(zoneId);
-  if (!state.stations[source]) state.stations[source] = createStationState();
+  if (!state.stations[source]) state.stations[source] = createSourceState(source);
   bus.emit('zoneUnlocked', { zone: zoneId });
   return true;
 }

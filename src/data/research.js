@@ -154,6 +154,19 @@ export const RESEARCH = [
   { zone: 'hato', id: 'oreada_origen', name: 'Carne oreada de origen', icon: '🏅', desc: 'Todo lo que vende el Hato vale un 50 % más.', cost: 60000000, requires: 'lunch_table', effect: { type: 'zoneValue', target: 'hato', mult: 1.5 } },
   { zone: 'hato', id: 'maestria_hato', name: 'Maestría: Hato', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'hato', mult: 4 } },
   { zone: 'hato', id: 'supremacia_hato', name: 'Supremacía: Hato', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'hato', mult: 8 } },
+
+  // Santander · Las Hormigas (v3.4): las mismas del Maizal.
+  { zone: 'hormigas', id: 'reinas_grandes', name: 'Hormigueros cuidados', icon: ICON.antQueen, desc: 'El Hormiguero da el doble de hormigas en cada cosecha.', cost: 15000000, requires: 'ant_cleaner', effect: { type: 'stationSpeed', target: 'anthill', mult: 2 } },
+  { zone: 'hormigas', id: 'manos_limpieza', name: 'Más manos en la limpieza', icon: ICON.antClean, desc: 'La Mesa de limpieza limpia el doble.', cost: 18000000, requires: 'ant_cleaner', effect: { type: 'stationSpeed', target: 'ant_cleaner', mult: 2 } },
+  { zone: 'hormigas', id: 'ollas_grandes', name: 'Ollas grandes', icon: ICON.antBrine, desc: 'Las Ollas de salmuera remojan el doble.', cost: 45000000, requires: 'ant_toaster', effect: { type: 'stationSpeed', target: 'brine_pot', mult: 2 } },
+  { zone: 'hormigas', id: 'camion_hormigas', name: 'Camioneta de las Hormigas', icon: '🚚', desc: 'El despacho de las Hormigas lleva el doble por viaje.', cost: 60000000, requires: 'brine_pot', effect: { type: 'dispatchCapacity', target: 'hormigas', mult: 2 } },
+  { zone: 'hormigas', id: 'cuidandera', name: 'Cuidandera del hormiguero', icon: '👵', desc: 'Mientras no juegas, Santander sigue produciendo 4 h más.', cost: 60000000, requires: 'ant_toaster', effect: { type: 'offlineHours', hours: 4 } },
+  { zone: 'hormigas', id: 'tiestos', name: 'Tiestos nuevos', icon: ICON.toastedAnts, desc: 'El Tiesto de barro tuesta el doble.', cost: 120000000, requires: 'cone_table', effect: { type: 'stationSpeed', target: 'ant_toaster', mult: 2 } },
+  { zone: 'hormigas', id: 'papel_cucuruchos', name: 'Resma de papel', icon: ICON.antCone, desc: 'La Mesa de cucuruchos arma el doble.', cost: 300000000, requires: 'souvenir_shop', effect: { type: 'stationSpeed', target: 'cone_table', mult: 2 } },
+  { zone: 'hormigas', id: 'tienda_grande', name: 'Tienda en la plaza', icon: ICON.recuerdo, desc: 'La Tienda de recuerdos vende el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'souvenir_shop', effect: { type: 'stationSpeed', target: 'souvenir_shop', mult: 2 } },
+  { zone: 'hormigas', id: 'hormiga_origen', name: 'Hormiga culona de origen', icon: '🏅', desc: 'Todo lo que vende la zona de las Hormigas vale un 50 % más.', cost: 400000000, requires: 'cone_table', effect: { type: 'zoneValue', target: 'hormigas', mult: 1.5 } },
+  { zone: 'hormigas', id: 'maestria_hormigas', name: 'Maestría: Hormigas', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'hormigas', mult: 4 } },
+  { zone: 'hormigas', id: 'supremacia_hormigas', name: 'Supremacía: Hormigas', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'hormigas', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

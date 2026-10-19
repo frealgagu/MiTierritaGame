@@ -237,5 +237,25 @@ const HATO = [
   { id: 'h_final', type: 'sold', product: 'fiambre', amount: 4000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO];
+// Santander · Las Hormigas (v3.4): la misma lista que el Maizal.
+const HORMIGAS = [
+  { id: 'a01', type: 'sold', product: 'ant_queen', amount: 50, reward: 1000000 },
+  { id: 'a02', type: 'level', target: 'anthill', level: 10, reward: 2000000 },
+  { id: 'a03', type: 'unlock', station: 'ant_cleaner', reward: 4000000 },
+  { id: 'a04', type: 'level', target: 'anthill:transport', level: 10, reward: 4000000 },
+  { id: 'a05', type: 'unlock', station: 'brine_pot', reward: 8000000 },
+  { id: 'a06', type: 'produced', product: 'ant_brine', amount: 200, reward: 12000000 },
+  { id: 'a08', type: 'unlock', station: 'ant_toaster', reward: 25000000 },
+  { id: 'a09', type: 'level', target: 'dispatch:hormigas', level: 10, reward: 25000000 },
+  { id: 'a10', type: 'unlock', station: 'cone_table', reward: 50000000 },
+  { id: 'a11', type: 'sold', product: 'ant_cone', amount: 300, reward: 80000000 },
+  { id: 'a12', type: 'unlock', station: 'souvenir_shop', reward: 120000000 },
+  { id: 'a13', type: 'imported', product: 'fique_sack', amount: 200, reward: 150000000 },
+  { id: 'a14', type: 'allLevels', zone: 'hormigas', level: 25, reward: 200000000 },
+  { id: 'a07', type: 'research', research: 'reinas_grandes', reward: 100000000 },
+  { id: 'a15', type: 'sold', product: 'recuerdo', amount: 1000, reward: 300000000 },
+  { id: 'a_final', type: 'sold', product: 'recuerdo', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS];

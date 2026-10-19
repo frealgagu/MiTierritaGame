@@ -8,6 +8,8 @@
 //   infinite: fuente ilimitada (no consume nada)
 //   side:     rama secundaria fuera de la cadena principal; requires = estación que la habilita
 //   fuel:     combustible opcional que llega directo de otra estación (subproducto) y la acelera
+//   harvest:  cosecha de temporada (v3.4, el Hormiguero): solo produce en `season`, `mult` veces más (lo
+//             de todo el año), y guarda en su patio (la despensa) `store` segundos de producción
 
 import { ICON } from './icons.js';
 
@@ -113,6 +115,17 @@ export const STATIONS = [
   { id: 'grill', zone: 'hato', name: 'Asadero', icon: '🔥', in: { carne_oreada: 2 }, out: { grilled_oreada: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '3.3' },
   { id: 'lunch_table', zone: 'hato', name: 'Mesa del almuerzo', icon: ICON.almuerzo, in: { grilled_oreada: 2 }, imports: [{ product: 'bocadillo_bijao', perCycle: 1, route: 'bocadillo' }], out: { almuerzo: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.3' },
   { id: 'fiambre_maker', zone: 'hato', name: 'Fiambrería', icon: ICON.fiambre, in: { grilled_oreada: 2 }, imports: [{ product: 'bocadillo_bijao', perCycle: 1, route: 'bocadillo' }, { product: 'fique_fiber', perCycle: 4, route: 'cabuya' }], out: { fiambre: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.3' },
+
+  // Santander · Las Hormigas (v3.4). La hormiga culona sale del hormiguero solo en la entrada de aguas:
+  // se cosecha entonces lo de todo el año (×4) y se guarda en la despensa, que los arrieros van llevando
+  // a la cadena el resto del año. Mismos números que el Maizal; la Tienda de recuerdos espera los
+  // costales y las alpargatas de la Fiquera.
+  { id: 'anthill', zone: 'hormigas', name: 'Hormiguero', icon: ICON.antQueen, infinite: true, out: { ant_queen: 1 }, harvest: { season: 'entrada', mult: 4, store: 3000 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.4' },
+  { id: 'ant_cleaner', zone: 'hormigas', name: 'Mesa de limpieza', icon: ICON.antClean, in: { ant_queen: 1 }, out: { ant_clean: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.4' },
+  { id: 'brine_pot', zone: 'hormigas', name: 'Ollas de salmuera', icon: ICON.antBrine, in: { ant_clean: 2 }, out: { ant_brine: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.4' },
+  { id: 'ant_toaster', zone: 'hormigas', name: 'Tiesto de barro', icon: ICON.toastedAnts, in: { ant_brine: 2 }, out: { toasted_ants: 1 }, cycle: 8, unlockCost: 200000000, upgradeBase: 60000, growth: 1.15, release: '3.4' },
+  { id: 'cone_table', zone: 'hormigas', name: 'Mesa de cucuruchos', icon: ICON.antCone, in: { toasted_ants: 1 }, out: { ant_cone: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.4' },
+  { id: 'souvenir_shop', zone: 'hormigas', name: 'Tienda de recuerdos', icon: ICON.recuerdo, in: { ant_cone: 4 }, imports: [{ product: 'fique_sack', perCycle: 1, route: 'costales' }, { product: 'alpargatas', perCycle: 1, route: 'alpargatas' }], out: { recuerdo: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.4' },
 ];
 
 export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));

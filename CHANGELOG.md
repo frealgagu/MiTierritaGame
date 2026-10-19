@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v3.4.0 — Santander: Las Hormigas
+- **Las Hormigas**, la quinta zona de Santander, se abre al completar el Hato: la **hormiga culona**. Hormiguero → Mesa de limpieza (sin alas ni patas) → Ollas de salmuera → Tiesto de barro → Mesa de cucuruchos → **Tienda de recuerdos**, que arma el recuerdo de Santander con los costales y las alpargatas de la Fiquera (dos rutas nuevas).
+- **Solo se cosechan en la entrada de aguas** 🌦️, como en la realidad: el Hormiguero produce entonces ×4 (lo de todo el año) y el resto del año no produce nada. Lo que no alcanza a salir se guarda en la **despensa**, y los arrieros la van llevando a la cadena todo el año: en promedio rinde lo mismo que las demás zonas.
+  - La zona abre con la despensa llena (la última cosecha), para no arrancar parada si se abre fuera de temporada.
+  - Doña Gloria, la hormiguera, anuncia cada entrada de aguas, y en el mapa las reinas salen volando de los hormigueros mientras dura la cosecha.
+  - Si la despensa se vacía antes de tiempo, la persona y los paneles dicen que hay que esperar la entrada de aguas, no subir niveles.
+- Mismos números, objetivos e investigaciones que el Maizal (Hormigueros cuidados, Ollas grandes, Tiestos nuevos, Cuidandera del hormiguero +4 h sin conexión, Hormiga culona de origen…), con su Maestría y su Supremacía.
+- Íconos propios para la hormiga culona, la limpia, la salmuera, las tostadas, el cucurucho y el recuerdo; las estaciones nuevas tienen su sonido.
+- El segundo final de Santander pasa a las Hormigas (falta Barichara). Una partida con el Hato completo abre las Hormigas al cargarse.
+
 ## v3.3.2 — Cada estación suena a su oficio; los comentarios se alcanzan a leer
 - **Al entrar a una estación suena lo que hace** (sintetizado, como el resto de los sonidos): hojas y pájaros en los cultivos, mugidos en el potrero y el hato, agua en el beneficiadero, motor en los molinos y desfibradoras, pailas y grecas que hierven, fuego que crepita en tostadoras y el asadero, viento en marquesinas, caney y tendedero, burbujas graves en la fermentación, cuchillo en la fama y la cortadora, clac-clac en telares y talleres, cajas que se apilan en las empacadoras, chisporroteo en budares y fondas, pocillos en las mesas, sal que cae en el saladero, la sirena del barco en el patio de contenedores y el Willys que arranca en la bodega.
 - **Los comentarios de las personas duran según lo largo del texto** (unos 75 ms por letra, más 3 s): los largos ya no se van antes de terminar de leerlos.

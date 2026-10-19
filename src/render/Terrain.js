@@ -161,6 +161,12 @@ export class Terrain {
           else if (r < 0.09) obj = guavaTree(rng);
           else if (r < 0.12) obj = rock(rng);
           else if (r < 0.135) obj = cactus(rng);
+        } else if (this.zone.theme === 'ants') {
+          // Hormigas: tierra seca de cañón, fique, cactus, piedras y algún hormiguero suelto.
+          if (r < 0.05) obj = fique(rng);
+          else if (r < 0.065) obj = anthill(rng);
+          else if (r < 0.1) obj = rock(rng);
+          else if (r < 0.125) obj = cactus(rng);
         } else if (this.zone.theme === 'ranch') {
           // Hato: samanes de sombra para el ganado, fique, piedras y cactus.
           if (r < 0.035) obj = saman(rng);
@@ -220,6 +226,7 @@ const FARM_SOIL = {
   guava: (v) => mix(0xb8754a, 0x9c5e3a, v * 0.4), // la tierra roja de Santander
   tobacco: (v) => mix(0xb07048, 0x94583a, v * 0.4),
   fique: (v) => mix(0xb8805a, 0x9c6a48, v * 0.4),
+  ants: (v) => mix(0xc0784a, 0xa86438, v * 0.4),
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
 };
 
@@ -435,6 +442,15 @@ function guavaTree(rng) {
 }
 
 // Fique: una roseta de hojas largas, gruesas y en punta, verde azulada.
+// Hormiguero de hormiga culona: un montículo de tierra roja con sus bocas (v3.4).
+export function drawAnthill(g, x, y, scale, rng) {
+  const s = scale * (0.9 + rng() * 0.25);
+  shadow(g, x + 2, y + 1, 13 * s, 4.5 * s);
+  g.moveTo(x - 13 * s, y).quadraticCurveTo(x - 6 * s, y - 13 * s, x, y - 14 * s).quadraticCurveTo(x + 6 * s, y - 13 * s, x + 13 * s, y).closePath().fill(0xa0522d).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.45 });
+  g.moveTo(x - 9 * s, y - 2 * s).quadraticCurveTo(x - 4 * s, y - 11 * s, x, y - 12 * s).stroke({ width: 1.5 * s, color: 0xc06a3a, alpha: 0.7 });
+  for (let i = 0; i < 3; i++) g.ellipse(x + (i - 1) * 4.5 * s, y - (4 + (i % 2) * 4) * s, 1.4 * s, 0.9 * s).fill(0x3a1d10);
+}
+
 export function drawFiquePlant(g, x, y, scale, rng) {
   shadow(g, x + 2, y + 1, 12 * scale, 4 * scale);
   const n = 9;
@@ -445,6 +461,14 @@ export function drawFiquePlant(g, x, y, scale, rng) {
     const ty = y + Math.sin(a) * len * 0.9;
     g.poly([x - 2 * scale, y, tx, ty, x + 2 * scale, y]).fill(i % 2 ? 0x6f9a7a : 0x5d8a6a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.35 });
   }
+}
+
+function anthill(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  drawAnthill(g, 0, 0, 0.8, rng);
+  c.addChild(g);
+  return c;
 }
 
 function fique(rng) {

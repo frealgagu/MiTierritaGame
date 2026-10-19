@@ -75,6 +75,13 @@ export const FACTS = {
   grill: ['La carne oreada se come asada, con yuca y pepitoria.'],
   lunch_table: ['Un buen almuerzo santandereano termina con un bocadillo de postre.'],
   fiambre_maker: ['El fiambre es el almuerzo envuelto en hojas para llevarlo al camino.', 'El fiambre se amarra con cabuya para que no se abra en el viaje.'],
+  // Santander · Las Hormigas
+  anthill: ['Las hormigas culonas salen a volar con las primeras lluvias del año.', 'Solo se cosechan las reinas, que salen del hormiguero a fundar otro.'],
+  ant_cleaner: ['Antes de cocinarlas, a las hormigas se les quitan las alas y las patas.'],
+  brine_pot: ['Antes de tostarlas, las hormigas se remojan en agua con sal.'],
+  ant_toaster: ['Las hormigas se tuestan en tiesto de barro, revolviendo sin parar.', 'Las hormigas culonas se comen en Santander desde antes de los españoles.'],
+  cone_table: ['En la calle se venden en cucuruchos de papel, como crispetas.'],
+  souvenir_shop: ['Quien pasa por Santander se lleva hormigas, bocadillo y alpargatas.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -89,6 +96,7 @@ export const PEOPLE = {
   tabacal: { icon: '🧓', name: 'Don Ramiro', role: 'el veguero' },
   fiquera: { icon: '👩‍🦳', name: 'Doña Carmen', role: 'la tejedora' },
   hato: { icon: '🤠', name: 'Don Efraín', role: 'el vaquero' },
+  hormigas: { icon: '👵', name: 'Doña Gloria', role: 'la hormiguera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -103,6 +111,7 @@ export const WELCOME = {
   tabacal: '¡Llegó al Tabacal! Aquí la hoja se cura en el caney y se tuerce a mano.',
   fiquera: '¡Bienvenido a la Fiquera! De estas pencas sale la cabuya de los costales y las alpargatas.',
   hato: '¡Llegó al Hato, compadre! Aquí se hace la carne oreada, al sol y al viento.',
+  hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

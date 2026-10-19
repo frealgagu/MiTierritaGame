@@ -61,6 +61,12 @@ export const ICON = {
   grilledOreada: '\uE037', // Carne oreada asada: la tira dorada por fuera, con las marcas de la parrilla, y una yuca
   almuerzo: '\uE038', // Almuerzo santandereano: plato con carne oreada, yuca, arepa y un bocadillo de postre
   fiambre: '\uE039', // Fiambre: el almuerzo envuelto en hojas de bijao y amarrado con cabuya, para el camino
+  antQueen: '\uE03A', // Hormiga culona: la reina, con su abdomen grande y las alas, recién salida del hormiguero
+  antClean: '\uE03B', // Hormiga limpia: sin alas ni patas, lista para la salmuera
+  antBrine: '\uE03C', // Hormigas en salmuera: una olla de barro con agua de sal y las hormigas flotando
+  toastedAnts: '\uE03D', // Hormigas tostadas: un montón de hormigas doradas y crocantes en un tiesto de barro
+  antCone: '\uE03E', // Cucurucho de hormigas: el cono de papel lleno de hormigas tostadas, como se venden en la calle
+  recuerdo: '\uE03F', // Recuerdo de Santander: un costalito de fique con hormigas y unas alpargatas amarradas
 };
 
 export const ICON_FONT = 'Cafetal Icons';

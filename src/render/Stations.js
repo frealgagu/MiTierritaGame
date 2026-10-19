@@ -3,7 +3,7 @@ import { iso, isoPoly, depth, shade } from './iso.js';
 import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawCornStalk, drawFiquePlant, drawGuavaTree, drawTobaccoPlant } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawCornStalk, drawFiquePlant, drawGuavaTree, drawTobaccoPlant } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -116,6 +116,24 @@ export class FarmView extends StationView {
     const tier = milestoneTier(farm.level);
     if (tier !== this.tier) this.draw(tier);
     this.label.set(`${this.def.icon} ${this.def.name} · Nv ${farm.level}`);
+    // Cosecha de temporada (v3.4): mientras se cosecha, las reinas vuelan sobre los hormigueros.
+    this.swarming = Boolean(this.def.harvest) && farm.status === 'working';
+  }
+
+  update(dt, t) {
+    super.update(dt, t);
+    if (!this.def.harvest) return;
+    if (!this.flyers) this.addChild((this.flyers = new Graphics()));
+    const g = this.flyers.clear();
+    if (!this.swarming || !this.bushes.length) return;
+    for (let i = 0; i < 18; i++) {
+      const home = this.bushes[(i * 7) % this.bushes.length];
+      const f = (t * 0.35 + i * 0.37) % 1;
+      const x = home.x + Math.sin(t * 2 + i) * 10 + (i % 2 ? 1 : -1) * f * 14;
+      const y = home.y - 10 - f * 40;
+      g.ellipse(x, y, 3, 1.9).fill({ color: 0x6b2e14, alpha: 1 - f * 0.7 });
+      g.ellipse(x - 1.5, y - 2.5, 3.4, 1.4).fill({ color: 0xe3f2fd, alpha: (1 - f) * 0.85 });
+    }
   }
 
   draw(tier) {
@@ -140,12 +158,13 @@ export class FarmView extends StationView {
       for (let gy = y; gy < y + h; gy++) {
         if (gx < x + 2 && gy < y + 2) continue; // sitio de la casa
         // Los cacaos son más grandes: uno por casilla.
-        for (const ox of this.theme === 'cacao' || this.theme === 'guava' ? [0.5] : [0.28, 0.75]) {
+        for (const ox of this.theme === 'cacao' || this.theme === 'guava' || this.theme === 'ants' ? [0.5] : [0.28, 0.75]) {
           const p = iso(gx + ox, gy + 0.5);
           this.bushes.push(p);
           if (this.theme === 'cane') drawCaneClump(g, p.x, p.y, scale, rng);
           else if (this.theme === 'cacao') drawCacaoTree(g, p.x, p.y, scale, rng, 2 + tier);
           else if (this.theme === 'guava') drawGuavaTree(g, p.x, p.y, scale, rng, 3 + tier);
+          else if (this.theme === 'ants') drawAnthill(g, p.x, p.y, scale * (0.9 + tier * 0.06), rng);
           else if (this.theme === 'fique') drawFiquePlant(g, p.x, p.y, scale * (0.85 + tier * 0.05), rng);
           else if (this.theme === 'tobacco') drawTobaccoPlant(g, p.x, p.y, scale, rng, Math.min(1 + tier, 5));
           else if (this.theme === 'corn') drawCornStalk(g, p.x, p.y, scale, rng, 1 + Math.min(tier, 2));

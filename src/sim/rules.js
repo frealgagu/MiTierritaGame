@@ -51,7 +51,8 @@ export function warehouseCapacity(level, mult = 1) {
 // Patio de la estación: guarda ~15 s de producción (mínimo 20). `mult`: el multiplicador de las
 // partidas reiniciadas (×2, ×4…), para que una carga de mula siga cabiendo con la producción al doble.
 export function stationBufferCap(def, level, mult = 1) {
-  return Math.max(20, Math.ceil(stationOutputRate(def, level) * mult * 15));
+  // La despensa de una cosecha de temporada (v3.4) guarda lo del resto del año.
+  return Math.max(20, Math.ceil(stationOutputRate(def, level) * mult * (def.harvest?.store ?? 15)));
 }
 
 // Lo que cabe en la entrada de una estación: ~15 s de consumo (mínimo 20). `mult`: igual que el patio.

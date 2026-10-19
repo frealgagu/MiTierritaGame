@@ -99,4 +99,12 @@ export const PRODUCTS = {
   grilled_oreada: { name: 'Carne oreada asada', zone: 'hato', value: 22000, icon: ICON.grilledOreada, color: 0x8d3b1f },
   almuerzo: { name: 'Almuerzo santandereano', zone: 'hato', value: 100000, icon: ICON.almuerzo, color: 0xf4f1e8 },
   fiambre: { name: 'Fiambre', zone: 'hato', value: 220000, icon: ICON.fiambre, color: 0x6b8e23 },
+
+  // Santander · Las Hormigas (v3.4): mismos valores que el Maizal.
+  ant_queen: { name: 'Hormiga culona', zone: 'hormigas', value: 6000, icon: ICON.antQueen, color: 0x8e3b1f },
+  ant_clean: { name: 'Hormiga limpia', zone: 'hormigas', value: 12000, icon: ICON.antClean, color: 0x9c4a2a },
+  ant_brine: { name: 'Hormigas en salmuera', zone: 'hormigas', value: 30000, icon: ICON.antBrine, color: 0xcfe8f0 },
+  toasted_ants: { name: 'Hormigas tostadas', zone: 'hormigas', value: 70000, icon: ICON.toastedAnts, color: 0x6b2e14 },
+  ant_cone: { name: 'Cucurucho de hormigas', zone: 'hormigas', value: 120000, icon: ICON.antCone, color: 0xf4efe6 },
+  recuerdo: { name: 'Recuerdo de Santander', zone: 'hormigas', value: 1200000, icon: ICON.recuerdo, color: 0xd9c08c },
 };

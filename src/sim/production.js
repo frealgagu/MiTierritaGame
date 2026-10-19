@@ -1,14 +1,41 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
+import { ZONES_BY_ID } from '../data/zones/index.js';
 import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
 import { capMult, consumeCompost, speedMult } from './modifiers.js';
-import { resting } from './calendar.js';
+import { CALENDAR, clockOf, resting, seasonOf } from './calendar.js';
 
 export function createStationState() {
   return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, imported: {}, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
 }
 
+// La fuente de una zona al abrirla. Una cosecha de temporada (el Hormiguero, v3.4) empieza con la despensa
+// llena (la última cosecha): así la zona arranca aunque se abra fuera de temporada.
+export function createSourceState(id) {
+  const s = createStationState();
+  const def = STATIONS_BY_ID[id];
+  if (def.harvest) s.buffer = stationBufferCap(def, s.level);
+  return s;
+}
+
+// ¿La zona espera la próxima cosecha? Su fuente es de temporada, está fuera de ella y la despensa se
+// vació: lo que falta en la cadena no se arregla subiendo niveles (v3.4).
+export function waitingHarvest(state, zoneId) {
+  const id = ZONES_BY_ID[zoneId]?.farm.stationId;
+  const s = state.stations[id];
+  return Boolean(STATIONS_BY_ID[id]?.harvest && s?.status === 'season' && s.buffer < 1);
+}
+
+// Cosecha de temporada (v3.4): fuera de su temporada no produce nada y en ella, `mult` veces más (lo de
+// todo el año). Los arrieros sí trabajan todo el año: van llevando lo guardado en la despensa. Sin
+// calendario (las pruebas de la cadena) o en el tablero de un evento, produce parejo.
+export function harvestFactor(state, def) {
+  if (!def.harvest || !CALENDAR.on || state.event) return 1;
+  return seasonOf(clockOf(state)).id === def.harvest.season ? def.harvest.mult : 0;
+}
+
 // Avanza una estación: consume su entrada (si tiene receta) y deja el producto en su patio.
 //   status: 'working' | 'starved' (falta entrada) | 'blocked' (patio lleno) | 'resting' (de noche)
+//           | 'season' (cosecha fuera de su temporada)
 //   idle:   segundos seguidos sin entrada
 //   waiting: por qué no sale el producto del patio: 'mules' (arrieros ocupados) | 'space' (bodega llena) | null
 //   missing: producto que falta de los que llegan por una ruta entre zonas (o null)
@@ -19,6 +46,13 @@ export function stepStation(state, id, dt, bus) {
   if (resting(state)) {
     s.status = 'resting';
     s.missing = null;
+    return;
+  }
+  const harvest = harvestFactor(state, def);
+  if (harvest === 0) {
+    s.status = 'season';
+    s.missing = null;
+    s.progress = 0;
     return;
   }
   const [[outId, outAmt]] = Object.entries(def.out);
@@ -49,7 +83,7 @@ export function stepStation(state, id, dt, bus) {
   s.idle = 0;
   // Combustible (bagazo) en la Hornilla.
   const boost = def.fuel && s.fuel > 0 ? def.fuel.boost : 1;
-  s.progress += dt * stationRate(def, s.level) * speedMult(state, id) * boost;
+  s.progress += dt * stationRate(def, s.level) * speedMult(state, id) * boost * harvest;
   const cycles = Math.min(Math.floor(s.progress), byInput, byOutput);
   if (cycles <= 0) return;
   s.progress -= cycles;

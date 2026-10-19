@@ -34,6 +34,9 @@ export const ZONE9 = {
     tabaco: { road: [[25.9, 14.5], [20.3, 14.5]], sign: [24.2, 13.3], text: '⬅ Del Tabacal' },
     // La Ruta de la cabuya sale de la bodega hacia el Hato (v3.3).
     cabuya: { road: [[24.5, 17.2], [24.5, 16.5], [25.9, 16.5]], sign: [25.3, 15.6], text: 'Cabuya al Hato ➜' },
+    // Los costales y las alpargatas salen hacia las Hormigas (v3.4).
+    costales: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Costales a las Hormigas ⬇' },
+    alpargatas: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Alpargatas ⬇' },
   },
   unlockedBy: 'tabacal',
   next: 'hato',

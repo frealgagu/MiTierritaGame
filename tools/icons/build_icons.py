@@ -1085,6 +1085,90 @@ def fiambre():
     ]
 
 
+# ---------- Santander · Las Hormigas (v3.4) ----------
+
+def ant(cx, cy, scale, body, wings=True, legs=True, rot=0):
+    """Hormiga culona (la reina): cabeza, tórax y el abdomen grande; con alas y patas, o limpia."""
+    r = scale
+    out = []
+    if wings:
+        out.append(('#e3f2fdc0', [ellipse(cx - 4 * r, cy - 10 * r, 16 * r, 6 * r, -25 + rot), ellipse(cx + 2 * r, cy - 12 * r, 16 * r, 6 * r, -45 + rot)]))
+    if legs:
+        out.append((OUTLINE, [rib(cx - 4 * r, cy, cx - 14 * r, cy + 10 * r, 1.6 * r), rib(cx, cy, cx - 4 * r, cy + 13 * r, 1.6 * r), rib(cx + 4 * r, cy, cx + 8 * r, cy + 12 * r, 1.6 * r)]))
+    out += [
+        (OUTLINE, [ellipse(cx + 14 * r, cy - 2 * r, 15 * r, 12 * r, rot), circle(cx - 6 * r, cy - 2 * r, 6.5 * r), circle(cx - 16 * r, cy - 4 * r, 6 * r)]),
+        (body, [ellipse(cx + 14 * r, cy - 2 * r, 13 * r, 10 * r, rot)]),
+        ('#5d2c14', [circle(cx - 6 * r, cy - 2 * r, 5 * r), circle(cx - 16 * r, cy - 4 * r, 4.6 * r)]),
+        ('#ffffff60', [ellipse(cx + 10 * r, cy - 7 * r, 6 * r, 3 * r, rot)]),
+        (OUTLINE, [rib(cx - 19 * r, cy - 7 * r, cx - 26 * r, cy - 14 * r, 1.4 * r), rib(cx - 17 * r, cy - 8 * r, cx - 20 * r, cy - 16 * r, 1.4 * r)]),
+    ]
+    return out
+
+
+def ant_queen():
+    """Hormiga culona: la reina, con su abdomen grande y las alas, recién salida del hormiguero."""
+    return [('#8a5a3c', [ellipse(50, 90, 34, 6)]), *ant(46, 58, 1.5, '#8e3b1f')]
+
+
+def ant_clean():
+    """Hormiga limpia: sin alas ni patas, lista para la salmuera."""
+    return [*ant(30, 44, 0.9, '#8e3b1f', wings=False, legs=False), *ant(60, 72, 0.9, '#8e3b1f', wings=False, legs=False), *ant(70, 30, 0.75, '#8e3b1f', wings=False, legs=False)]
+
+
+def ant_brine():
+    """Hormigas en salmuera: una olla de barro con agua de sal y las hormigas flotando."""
+    return [
+        (OUTLINE, [ellipse(50, 42, 42, 13)]),
+        ('#cfe8f0', [ellipse(50, 42, 39, 10.5)]),
+        ('#8e3b1f', [ellipse(36, 41, 6, 3.5), ellipse(56, 44, 6, 3.5), ellipse(66, 38, 5, 3)]),
+        ('#ffffff', [circle(44, 38, 1.5), circle(60, 40, 1.2), circle(30, 44, 1.2)]),
+        (OUTLINE, ['M 8 44 Q 10 92 50 94 Q 90 92 92 44 Q 70 58 50 58 Q 30 58 8 44 Z']),
+        ('#b5653a', ['M 11 48 Q 13 89 50 91 Q 87 89 89 48 Q 70 61 50 61 Q 30 61 11 48 Z']),
+        ('#94502c', ['M 62 60 Q 78 56 89 48 Q 87 89 50 91 Z']),
+    ]
+
+
+def toasted_ants():
+    """Hormigas tostadas: un montón de hormigas doradas y crocantes en un tiesto de barro."""
+    pile = []
+    for x, y, rot in [(28, 52, -10), (46, 48, 15), (64, 52, -20), (36, 40, 30), (56, 38, -5), (72, 42, 10), (46, 30, 0)]:
+        pile += [(OUTLINE, [ellipse(x, y, 8.5, 6, rot)]), ('#6b2e14', [ellipse(x, y, 7, 4.6, rot)]), ('#b5562f', [ellipse(x - 2, y - 1.5, 3, 1.6, rot)])]
+    return [
+        *pile,
+        (OUTLINE, ['M 6 56 L 94 56 Q 88 90 50 92 Q 12 90 6 56 Z']),
+        ('#a0522d', ['M 9.5 59 L 90.5 59 Q 85 87 50 89 Q 15 87 9.5 59 Z']),
+        ('#c06a3a', [rect(10, 59, 80, 4)]),
+    ]
+
+
+def ant_cone():
+    """Cucurucho de hormigas: el cono de papel lleno de hormigas tostadas, como se venden en la calle."""
+    top = []
+    for x, y in [(30, 26), (44, 22), (58, 24), (70, 28), (38, 16), (54, 14)]:
+        top += [(OUTLINE, [ellipse(x, y, 7, 5)]), ('#6b2e14', [ellipse(x, y, 5.6, 3.8)])]
+    return [
+        *top,
+        (OUTLINE, ['M 16 30 L 84 30 L 52 96 L 48 96 Z']),
+        ('#f4efe6', ['M 20.5 32.5 L 79.5 32.5 L 51 92 L 49 92 Z']),
+        ('#d9cbb0', ['M 50 32.5 L 79.5 32.5 L 51 92 Z']),
+        ('#d7263d', [rect(28, 44, 44, 5)]),
+    ]
+
+
+def recuerdo():
+    """Recuerdo de Santander: un costalito de fique con hormigas y unas alpargatas amarradas."""
+    return [
+        (OUTLINE, ['M 22 30 Q 14 62 20 94 L 80 94 Q 86 62 78 30 Q 64 38 50 38 Q 36 38 22 30 Z']),
+        ('#d9c08c', ['M 24.5 32 Q 16.5 62 22.5 91.5 L 77.5 91.5 Q 83.5 62 75.5 32 Q 63 40 50 40 Q 37 40 24.5 32 Z']),
+        ('#c2a46c', [rib(24, 54, 76, 54, 1), rib(22, 72, 78, 72, 1), rib(38, 40, 36, 90, 1), rib(62, 40, 64, 90, 1)]),
+        *ant(46, 66, 0.55, '#8e3b1f', wings=False),
+        ('#8b5a2b', [rect(42, 24, 16, 7)]),
+        (OUTLINE, [ellipse(50, 22, 22, 8, -8)]),
+        ('#2e4fa8', [ellipse(50, 22, 20, 6, -8)]),
+        ('#d9c08c', [ellipse(50, 24, 20, 3, -8)]),
+    ]
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -1144,6 +1228,12 @@ ICONS = [
     (0xE037, 'grilled_oreada', grilled_oreada),
     (0xE038, 'almuerzo', almuerzo),
     (0xE039, 'fiambre', fiambre),
+    (0xE03A, 'ant_queen', ant_queen),
+    (0xE03B, 'ant_clean', ant_clean),
+    (0xE03C, 'ant_brine', ant_brine),
+    (0xE03D, 'toasted_ants', toasted_ants),
+    (0xE03E, 'ant_cone', ant_cone),
+    (0xE03F, 'recuerdo', recuerdo),
 ]
 
 

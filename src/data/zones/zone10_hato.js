@@ -32,5 +32,5 @@ export const ZONE10 = {
     cabuya: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Cabuya de la Fiquera' },
   },
   unlockedBy: 'fiquera',
-  next: null, // (las siguientes de Santander llegan en las próximas versiones)
+  next: 'hormigas',
 };
