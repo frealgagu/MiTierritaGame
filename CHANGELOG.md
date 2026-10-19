@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v1.9.0 — Jornada y temporadas
+- **Jornada de trabajo de 6:00 a 18:00.** De noche las estaciones descansan del todo (lo que iba a medias sigue al amanecer) y los arrieros no salen; los que van de camino terminan el viaje. El Willys y las chivas siguen. No se compensa: el juego se hace más largo a propósito.
+- **Temporadas del país**, secas y de lluvias, que cambian la producción de **todas las estaciones a la vez** (arrieros y rutas se ajustan solos, así que la cadena sigue cuadrando):
+  - ☀️ **Verano** ×1,2 · 🌦️ **Entrada de aguas** ×1 · 🌧️ **Invierno** ×0,8 · 🌤️ **Veranillo** ×1.
+  - Cada temporada dura 4 días (un día son 8 minutos) y el año tiene 16 días. Una partida nueva empieza en verano.
+- **Calendario**: la temporada va debajo del reloj; tocar el reloj muestra la hora, la temporada, el día y el año y lo que rinde cada temporada. Ahí y en el panel del Cafetal está el dato curioso de la **mitaca**, la cosecha chica del Eje Cafetero.
+- **Lluvia** en el mapa: aguaceros de vez en cuando en la entrada de aguas y casi todo el tiempo en invierno.
+- La persona de la zona anuncia cada temporada nueva y, la primera vez, que de noche no se trabaja. De noche los paneles lo dicen y el mapa no muestra avisos.
+- **Sin conexión** cuenta las noches y las temporadas: lo simulado ya las tiene y lo que se suma más allá se reparte según cuánto se trabaja en cada tramo.
+
 ## v1.8.7 — Música propia
 - La música de fondo ahora es **propia**: «Bambuco de la finca», un bambuco en 3/4 compuesto para el juego (mi menor, y la segunda parte en sol mayor). No es un archivo: el juego la toca con cuerdas sintetizadas (Karplus-Strong):
   - **guitarra**: bajo en el primer tiempo y rasgueo en el segundo y el tercero;

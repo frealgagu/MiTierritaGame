@@ -3,7 +3,7 @@
 
 export const FACTS = {
   // La Finca
-  farm: ['En Colombia el café se cultiva entre 1.200 y 2.000 metros de altura.', 'Desde la flor, la cereza de café tarda unos 8 meses en madurar.', 'Un cafeto da su primera cosecha al segundo o tercer año.'],
+  farm: ['En Colombia el café se cultiva entre 1.200 y 2.000 metros de altura.', 'Desde la flor, la cereza de café tarda unos 8 meses en madurar.', 'Un cafeto da su primera cosecha al segundo o tercer año.', 'La mitaca es la cosecha chica del café, meses después de la grande.'],
   wetmill: ['El beneficio húmedo despulpa el grano el mismo día de la cosecha.', 'Después de despulpar, el café fermenta en tanques para soltar el mucílago.'],
   dryer: ['El café se seca hasta quedar con un 10 a 12 % de humedad.', 'La marquesina es un techo plástico que protege el café de la lluvia.'],
   huller: ['La trilladora quita el pergamino y deja el café verde o «excelso».', 'El café excelso se clasifica por el tamaño del grano, en mallas.'],

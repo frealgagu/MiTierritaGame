@@ -20,11 +20,13 @@ import { normalDest, slowConsumers, warehouseCap } from '../sim/transport.js';
 import { alerts } from '../sim/alerts.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { jeepResting } from '../sim/dispatch.js';
+import { isWorkTime } from '../sim/calendar.js';
 import { quoteUnlock } from '../sim/upgrades.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive, routeCapacity } from '../sim/routes.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { DayNight } from './DayNight.js';
+import { Weather } from './Weather.js';
 
 
 // Altura (px) de la etiqueta sobre cada tipo de edificio.
@@ -54,7 +56,8 @@ export class Scene {
     this.tinted = new Container();
     this.lights = new Container();
     this.lightTexture = createGlowTexture();
-    app.stage.addChild(this.background.stars, this.background.view, this.world);
+    this.weather = new Weather();
+    app.stage.addChild(this.background.stars, this.background.view, this.world, this.weather.view);
 
     this.terrain = new Terrain(this.zone);
     // Bandas eléctricas: sobre el suelo, debajo de edificios y mulas.
@@ -313,6 +316,7 @@ export class Scene {
     this.critters.update(dt, this.time, this.dayNight.light > 0.5, this.jeepPos);
     this.updateAmbient(dt);
     this.effects.update(dt);
+    this.weather.update(dt, state.playTime, this.app.screen.width, this.app.screen.height);
   }
 
   // Luciérnagas y sonidos de ambiente según la hora.
@@ -490,7 +494,7 @@ export class Scene {
 // Solo si el problema dura (ver alerts.js): los momentos sueltos con todo nivelado no se avisan.
 export function statusIcon(state, id) {
   const st = state.stations[id];
-  if (!st) return null;
+  if (!st || !isWorkTime(state.playTime)) return null; // de noche todo descansa: nada que avisar
   const a = alerts(st);
   // La Compostera llena es compost de sobra (bueno): no se avisa.
   if (STATIONS_BY_ID[id].side && a.blocked) return null;

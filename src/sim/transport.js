@@ -7,6 +7,7 @@ import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { ROUTE_STOCK, routeActive, routeCapacity, routeRate, routeReserve } from './routes.js';
 import { inputSpace } from './production.js';
 import { capMult, dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
+import { isWorkTime } from './calendar.js';
 
 const MAX_IDLE = 6; // s: si hay algo en el patio y no sale una mula en este tiempo, sale con lo que haya
 // Si la carga no cabe entera en la siguiente estación, las mulas esperan a que haya sitio; solo con el
@@ -150,6 +151,8 @@ export function stepMules(state, dt, bus) {
   }
   if (finished) state.mules = state.mules.filter((m) => !m.done);
 
+  // De noche no sale ninguna recua (las que van de camino terminan su viaje).
+  if (!isWorkTime(state.playTime)) return;
   for (const zone of ZONE_LIST) {
     if (!zoneUnlocked(state, zone.id)) continue;
     for (const id of chainOf(zone.id)) if (state.stations[id]) dispatchFrom(state, id, dt, bus);

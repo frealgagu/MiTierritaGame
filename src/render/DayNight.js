@@ -1,8 +1,9 @@
-// Día y noche decorativo (GDD §8): 1 día = 8 minutos de juego. No afecta a la economía.
+// Día y noche (GDD §8): 1 día = 8 minutos de juego. El horario de trabajo está en sim/calendar.js;
+// aquí solo se pinta.
 import { mix } from './iso.js';
+import { hourOf } from '../sim/calendar.js';
 
-export const DAY_LENGTH = 480; // s
-const START_HOUR = 8; // una partida nueva empieza por la mañana
+export { DAY_LENGTH, hourOf } from '../sim/calendar.js';
 
 const WHITE = 0xffffff;
 // Tinte del mundo a lo largo del día (hora → color que multiplica).
@@ -41,10 +42,6 @@ const SKY = [
   [20.3, [0x1b2350, 0x3b3570]],
   [24, [0x0e1433, 0x2b2d5b]],
 ];
-
-export function hourOf(playTime) {
-  return (START_HOUR + (playTime / DAY_LENGTH) * 24) % 24;
-}
 
 function sample(keys, h, lerp) {
   for (let i = 1; i < keys.length; i++) {

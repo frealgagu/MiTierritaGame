@@ -12,6 +12,7 @@ import { buyResearch, buyUpgrade, quoteResearch, quoteUnlock, quoteUpgrade, unlo
 import { claimGoal, unlockZone } from '../sim/goals.js';
 import { checkMastery } from '../sim/legacy.js';
 import { stepAlerts } from '../sim/alerts.js';
+import { workSeconds } from '../sim/calendar.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
 const MAX_SIMULATED = 2 * 3600; // s de juego que se simulan de verdad al volver; el resto se extrapola
@@ -57,10 +58,11 @@ export class Game {
     stepAlerts(this.state, dt);
   }
 
-  // Ganancias mientras el juego estuvo cerrado: se simula en pasos de 1 s, sin efectos visuales.
-  //   seconds: segundos de juego (con el tiempo acelerado, ya multiplicados)   cap: tope en segundos de juego
+  // Ganancias mientras el juego estuvo cerrado: se simula en pasos de 1 s, sin efectos visuales (y con
+  // las noches y las temporadas, como al jugar).   seconds: segundos de juego   cap: tope en segundos
   // Se simulan de verdad hasta MAX_SIMULATED s; el resto se suma al ritmo de la segunda mitad de lo
-  // simulado (monedas, ventas, producción e importados), para que horas a ×100 no tarden minutos.
+  // simulado (monedas, ventas, producción e importados), contando cuánto se trabaja en cada tramo: las
+  // noches no producen y cada temporada rinde lo suyo.
   catchUp(seconds, cap = offlineCapSeconds(this.state)) {
     const total = Math.min(Math.max(seconds, 0), cap);
     const s = this.state;
@@ -69,13 +71,14 @@ export class Game {
     this.bus.muted = true;
     let mark = null;
     for (let t = 0; t < simulated; t += 1) {
-      if (!mark && t >= simulated / 2) mark = { t, ...snapshot(s) };
+      if (!mark && t >= simulated / 2) mark = { t: s.playTime, ...snapshot(s) };
       this.step(1);
     }
     this.bus.muted = false;
     const rest = total - simulated;
     if (rest > 0 && mark) {
-      const k = rest / (simulated - mark.t);
+      const measured = workSeconds(mark.t, s.playTime);
+      const k = measured > 0 ? workSeconds(s.playTime, s.playTime + rest) / measured : 0;
       const now = snapshot(s);
       s.coins += (now.coins - mark.coins) * k;
       s.totalEarned += (now.totalEarned - mark.totalEarned) * k;

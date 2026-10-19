@@ -11,6 +11,7 @@ import { ResearchView } from './ui/ResearchView.js';
 import { showVictory, showWelcome } from './ui/dialogs.js';
 import { showMastery } from './ui/mastery.js';
 import { introOnStart, showIntro } from './ui/intro.js';
+import { showCalendar } from './ui/calendar.js';
 import { Chatter } from './ui/Chatter.js';
 import { bindNative, isNativeApp } from './native.js';
 import { checkMastery, restartState } from './sim/legacy.js';
@@ -180,6 +181,7 @@ async function start() {
   if (offline) showWelcome(offline, () => sound.coin());
   // Cómo se juega, encima de todo (la bienvenida queda debajo, para después).
   if (introOnStart(game.state)) showIntro(game.state);
+  document.getElementById('clock').addEventListener('click', () => showCalendar(game.state));
   document.getElementById('intro-btn').addEventListener('click', () => {
     document.getElementById('menu').hidden = true;
     showIntro(game.state);

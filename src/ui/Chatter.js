@@ -3,12 +3,16 @@ import { STATIONS_BY_ID } from '../data/stations.js';
 import { alerts } from '../sim/alerts.js';
 import { slowConsumers } from '../sim/transport.js';
 import { toast } from './toast.js';
+import { isWorkTime, seasonOf } from '../sim/calendar.js';
 
 // La persona de cada zona avisa lo importante (v1.8): la bienvenida la primera vez que se ve su zona
 // y los problemas que duran (los mismos de los íconos del mapa) en cuanto aparecen. Sin cansar: cada
 // estación avisa como mucho una vez cada 5 minutos, y entre un aviso y otro pasan al menos 45 s.
+// También anuncia cada temporada nueva y, la primera vez, que de noche no se trabaja (v1.9).
 const PER_STATION_MS = 5 * 60 * 1000;
 const BETWEEN_MS = 45 * 1000;
+
+const capital = (s) => s[0].toUpperCase() + s.slice(1);
 
 export const say = (zone, text, ms = 6000) => {
   const p = PEOPLE[zone];
@@ -22,6 +26,7 @@ export class Chatter {
     this.seen = new Map(); // estación → avisos que ya estaban puestos
     this.lastSaid = new Map(); // estación → cuándo avisó
     this.lastAny = -Infinity;
+    this.season = seasonOf(game.state.playTime);
   }
 
   update() {
@@ -38,6 +43,23 @@ export class Chatter {
       return;
     }
     const now = performance.now();
+    const season = seasonOf(state.playTime);
+    if (season !== this.season) {
+      this.season = season;
+      this.lastAny = now;
+      const mult = season.mult === 1 ? '' : ` (×${String(season.mult).replace('.', ',')})`;
+      say(zone, `${season.icon} ¡Llegó ${withArticle(season.name.toLowerCase())}! ${capital(season.text)}${mult}.`, 7000);
+      return;
+    }
+    // De noche no hay problemas que avisar: todo descansa.
+    if (!isWorkTime(state.playTime)) {
+      if (!state.hints.includes('night')) {
+        state.hints.push('night');
+        this.lastAny = now;
+        say(zone, 'De noche no se trabaja: las estaciones descansan hasta las 6 de la mañana. ¡Hasta mañana, patrón!', 7000);
+      }
+      return;
+    }
     for (const [id, st] of Object.entries(state.stations)) {
       const def = STATIONS_BY_ID[id];
       if (def.zone !== zone) continue;

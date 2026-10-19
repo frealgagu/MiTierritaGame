@@ -1,19 +1,26 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
 import { capMult, consumeCompost, speedMult } from './modifiers.js';
+import { isWorkTime } from './calendar.js';
 
 export function createStationState() {
   return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, imported: {}, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
 }
 
 // Avanza una estación: consume su entrada (si tiene receta) y deja el producto en su patio.
-//   status: 'working' | 'starved' (falta entrada) | 'blocked' (patio lleno)
+//   status: 'working' | 'starved' (falta entrada) | 'blocked' (patio lleno) | 'resting' (de noche)
 //   idle:   segundos seguidos sin entrada
 //   waiting: por qué no sale el producto del patio: 'mules' (arrieros ocupados) | 'space' (bodega llena) | null
 //   missing: producto que falta de los que llegan por una ruta entre zonas (o null)
 export function stepStation(state, id, dt, bus) {
   const def = STATIONS_BY_ID[id];
   const s = state.stations[id];
+  // De noche no se trabaja: lo que iba a medias sigue al amanecer.
+  if (!isWorkTime(state.playTime)) {
+    s.status = 'resting';
+    s.missing = null;
+    return;
+  }
   const [[outId, outAmt]] = Object.entries(def.out);
   const need = def.in ? Object.values(def.in)[0] : 0;
   const space = stationBufferCap(def, s.level, capMult(state, id)) - s.buffer;

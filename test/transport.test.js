@@ -4,6 +4,10 @@ import { Game } from '../src/core/Game.js';
 import { analyzeChain } from '../src/sim/analysis.js';
 import { muleCount } from '../src/sim/rules.js';
 import { busyMules } from '../src/sim/transport.js';
+import { CALENDAR } from '../src/sim/calendar.js';
+
+// Pruebas de la cadena: siempre de día y sin temporada (el calendario se prueba en calendar.test.js).
+CALENDAR.on = false;
 
 function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);

@@ -27,7 +27,7 @@
         <span id="coins">0</span>
         <span id="income" class="rate">+0/s</span>
       </div>
-      <span id="clock" class="clock"></span>
+      <button id="clock" class="clock" title="Calendario"><span id="clock-time"></span><span id="clock-season" class="clock-season"></span></button>
       <button id="speed-chip" class="speed-chip" title="Tiempo acelerado (toca para volver a ×1)" hidden></button>
       <button id="chain-btn" class="icon-btn" aria-label="Ver cadena" title="Ver cadena">🔗</button>
       <button id="menu-btn" class="icon-btn" aria-label="Menú">⚙️</button>
@@ -113,7 +113,7 @@
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Cafetal <small id="menu-version">v1.8.7</small></h2>
+        <h2>Cafetal <small id="menu-version">v1.9.0</small></h2>
         <p id="save-where">Tu partida se guarda sola en este navegador.</p>
         <p id="menu-stats"></p>
         <details class="save-box">
@@ -196,6 +196,7 @@
               <li>La cadena va tan rápido como su estación más lenta. Arriba, <b>💡 Mejora recomendada</b> te dice qué subir, y <b>🔗</b> muestra toda la cadena y dónde se frena.</li>
               <li>En los niveles 10, 25, 50, 75 y 100 hay <b>hitos</b> que multiplican la velocidad.</li>
               <li><b>📋 Objetivos</b> dan monedas y <b>🔬 Investigaciones</b> son mejoras únicas.</li>
+              <li>Se trabaja de <b>6:00 a 18:00</b>: de noche todo descansa. Las <b>temporadas</b> (☀️ verano, 🌦️ entrada de aguas, 🌧️ invierno, 🌤️ veranillo) suben o bajan la producción; toca el reloj para ver el calendario.</li>
               <li>Aunque cierres el juego, la finca sigue produciendo un tiempo y al volver te espera lo ganado.</li>
             </ul>
           </section>
@@ -209,6 +210,19 @@
           <label class="dev-check intro-check"><input id="intro-hide" type="checkbox" /> <span>No mostrar de nuevo</span></label>
           <button id="intro-ok" class="btn buy">¡A jugar!</button>
         </div>
+      </div>
+    </div>
+
+    <div id="calendar" class="modal" hidden>
+      <div class="modal-card calendar-card">
+        <div class="chain-head">
+          <h2>📅 Calendario</h2>
+          <button id="calendar-close" class="close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <p id="calendar-now" class="calendar-now"></p>
+        <p class="chain-help">Se trabaja de <b>6:00 a 18:00</b>: de noche las estaciones descansan y los arrieros no salen (el Willys y las chivas sí). Un día dura 8 minutos y el año tiene 16 días, en cuatro temporadas de 4 días que cambian la producción de todas las estaciones a la vez:</p>
+        <ul id="calendar-seasons" class="calendar-seasons"></ul>
+        <p class="chain-help calendar-fact">💡 En el Eje Cafetero hay dos cosechas al año: la grande y la <b>mitaca</b>, una cosecha más pequeña que llega unos seis meses después.</p>
       </div>
     </div>
 

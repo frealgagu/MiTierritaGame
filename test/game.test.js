@@ -2,6 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { setCredit } from '../src/sim/upgrades.js';
+import { CALENDAR } from '../src/sim/calendar.js';
+
+// Pruebas de la cadena: siempre de día y sin temporada (el calendario se prueba en calendar.test.js).
+CALENDAR.on = false;
 
 function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);

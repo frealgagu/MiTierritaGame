@@ -4,6 +4,7 @@ import { recommendUpgrade } from '../sim/analysis.js';
 import { legacyMult } from '../sim/modifiers.js';
 import { nextToUnlock, zoneOf } from '../sim/chain.js';
 import { clockLabel } from '../render/DayNight.js';
+import { seasonOf } from '../sim/calendar.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
@@ -22,13 +23,17 @@ export function upgradeName(id) {
 
 const REC_INTERVAL_MS = 1000;
 
+// Cambia el texto solo si cambió (sin tocar el DOM en cada cuadro).
+const setText = (el, text) => el.textContent !== text && (el.textContent = text);
+
 export class HUD {
   // getZone: zona que se está viendo.
   constructor(game, onOpen, getHour, getZone) {
     this.game = game;
     this.getZone = getZone;
     this.getHour = getHour;
-    this.clock = document.getElementById('clock');
+    this.clock = document.getElementById('clock-time');
+    this.season = document.getElementById('clock-season');
     this.coins = document.getElementById('coins');
     this.income = document.getElementById('income');
     this.chip = document.getElementById('bottleneck');
@@ -55,7 +60,9 @@ export class HUD {
     if (document.title !== title) document.title = title;
     this.income.textContent = `+${formatRate(this.game.incomePerSecond())}/s`;
     const hour = this.getHour();
-    if (hour !== undefined) this.clock.textContent = clockLabel(hour);
+    if (hour !== undefined) setText(this.clock, clockLabel(hour));
+    const season = seasonOf(s.playTime);
+    setText(this.season, `${season.icon} ${season.short}`);
     const zone = this.getZone();
     // La recomendación mira varias zonas (rutas) y cuesta calcularla: como mucho una vez por segundo.
     const now = performance.now();

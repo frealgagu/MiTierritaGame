@@ -5,6 +5,10 @@ import { analyzeChain, recommendUpgrade } from '../src/sim/analysis.js';
 import { chainOf } from '../src/sim/chain.js';
 import { stationRate } from '../src/sim/rules.js';
 import { STATIONS_BY_ID } from '../src/data/stations.js';
+import { CALENDAR } from '../src/sim/calendar.js';
+
+// Pruebas de la cadena: siempre de día y sin temporada (el calendario se prueba en calendar.test.js).
+CALENDAR.on = false;
 
 function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);

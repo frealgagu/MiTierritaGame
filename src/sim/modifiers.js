@@ -2,6 +2,7 @@
 import { RESEARCH_BY_ID } from '../data/research.js';
 import { PRODUCTS } from '../data/products.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
+import { seasonOf } from './calendar.js';
 
 const BASE_OFFLINE_HOURS = 2;
 
@@ -34,7 +35,10 @@ function product(state, type, target) {
 // arrieros y las rutas se calculan con la velocidad de su estación, así que todo sigue cuadrando.
 export const legacyMult = (state) => 2 ** (state.legacy?.resets ?? 0);
 
-export const speedMult = (state, stationId) => product(state, 'stationSpeed', stationId) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone) * legacyMult(state);
+// La temporada (v1.9) sube o baja todas las estaciones a la vez; arrieros y rutas se calculan con esta
+// velocidad, así que la cadena sigue cuadrando.
+export const speedMult = (state, stationId) =>
+  product(state, 'stationSpeed', stationId) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone) * legacyMult(state) * seasonOf(state.playTime ?? 0).mult;
 // Patios y entradas: crecen con el reinicio y con la Maestría y la Supremacía de su zona.
 export const capMult = (state, stationId) => legacyMult(state) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone);
 export const muleSpeedMult = (state) => product(state, 'muleSpeed');

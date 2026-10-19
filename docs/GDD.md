@@ -357,7 +357,7 @@ El segundo final es largo a propósito de la fórmula: cada nivel cuesta ×1,15 
 
 - Al volver se simulan de verdad hasta 2 h de juego; lo que pase de ahí se suma al ritmo de la última hora simulada (monedas, ventas, producción e importados). Siempre a velocidad normal: el tiempo acelerado de las opciones de desarrollador solo cuenta con el juego abierto (desde la v1.8.1).
 - **Tope**: 2 h, más una investigación por zona que suma horas (desde la v1.8.1): Capataz (Finca) +3 h, Trapichero de confianza +3 h, Ordeño programado +4 h, Vigilante del cacaotal +4 h, Vecina que cuida el budare +4 h y Administrador del Pueblo +4 h: **24 h** con las seis.
-- Con la jornada y las temporadas (v1.9), lo que se suma más allá de lo simulado se repartirá según las horas de trabajo y la temporada de cada tramo, para que dé lo mismo que jugar en vivo sin simular las 24 h.
+- Con la jornada y las temporadas (v1.9), lo simulado ya tiene sus noches y sus temporadas, y lo que se suma más allá se reparte según cuánto se trabaja en cada tramo (las noches no cuentan y cada temporada rinde lo suyo; `workSeconds` en `src/sim/calendar.js`): da lo mismo que jugar en vivo sin simular las 24 h.
 
 Se muestra una ventana de bienvenida con lo ganado y si se alcanzó el tope.
 
@@ -377,7 +377,7 @@ Se muestra una ventana de bienvenida con lo ganado y si se alcanzó el tope.
 - Las estaciones son casas campesinas de colores: blanco con zócalo, puertas y balcones de madera pintados de rojo, azul, amarillo o verde, y tejas de barro.
 - **Arrieros:** mulas con costales y un campesino de sombrero aguadeño y poncho.
 - **Despacho:** un jeep Willys cargado hasta arriba bajando la carretera.
-- Día y noche **solo cosmético**: amanecer con niebla, día brillante y noche con faroles cálidos y ventanas iluminadas.
+- Día y noche: amanecer con niebla, día brillante y noche con faroles cálidos y ventanas iluminadas. Desde la v1.9, de noche no se trabaja (§10.1).
 
 ### Evolución visual por hitos (implementado en la v0.4)
 Cada estación conserva su dibujo propio y va ganando detalles con cada hito:
@@ -395,7 +395,7 @@ La casa del Cafetal evoluciona aparte (de rancho de madera a casa de dos pisos c
 ### Día y noche (v0.4)
 - Un día dura 8 minutos de juego; una partida nueva empieza a las 8:00.
 - El mundo se tiñe (amanecer rosado, atardecer naranja, noche azul) y el cielo cambia de degradado. Las estrellas, ventanas, faroles, el fuego de la Tostadora y las luciérnagas brillan de noche.
-- **Solo es decorativo**: no cambia la producción.
+- Hasta la v1.8 era solo decorativo. Desde la **v1.9** se trabaja de 6:00 a 18:00 y hay temporadas (§10.1); el calendario está en `src/sim/calendar.js`.
 
 ### Sonido (v0.4)
 Sintetizado con Web Audio, sin archivos: clic de botones, monedas al vender, arpegio al subir de nivel y al cruzar un hito, martillazos al construir, pájaros de día y grillos de noche. Se apaga desde el menú y la preferencia se guarda con la partida.
@@ -544,16 +544,19 @@ export const COST_GROWTH = 1.15;
 | v1.6 ✅ | **Segundo final**: todo al nivel 100; volver a empezar con producción ×2, ×4, ×8… | Rejugable |
 | v1.7 ✅ | Hitos más fuertes (×2, ×2, ×4, ×4, ×8), **Maestría** ×4 y **Supremacía** ×8 por zona, objetivos finales más largos | Segundo final alcanzable |
 | v1.8 ✅ | **Ambiente**: datos reales en los paneles y una persona por zona que avisa lo importante; vida en el mapa (gallinas, perro, vacas, gente, palomas); sonidos por zona; la cadena como diagrama | Más personalidad |
-| v1.9 | **Jornada y temporadas** (§10.1) | Ritmo |
+| v1.9 ✅ | **Jornada y temporadas** (§10.1): de noche no se trabaja; verano, entrada de aguas, invierno y veranillo | Ritmo |
 | v2.0 | **Eventos e insignias** (§10.2): un evento por zona al año, con medallas; progresión general que no se pierde al reiniciar | Rejugable a largo plazo |
 | futuro | **Otras regiones** (§10.3): Santander, Costa Caribe, Llanos y Altiplano, cada una con su economía y su reinicio | Más país |
 
 **Cómo se conectan las zonas:** ver §4b.
 
-### 10.1 Jornada y temporadas (plan, v1.9)
+### 10.1 Jornada y temporadas (v1.9 ✅)
 - **Jornada**: las estaciones trabajan de día, **de 6:00 a 18:00** (un día de juego son 8 minutos) y de noche **se detienen del todo**. Los arrieros terminan su viaje; el Willys y las chivas siguen. **No se compensa**: el juego se hace más largo a propósito. Investigaciones por zona pueden alargar la jornada (bombillos, turno de noche). El tiempo sin conexión respeta el horario.
 - **Temporadas**: un año de **16 días** de juego, en **4 temporadas de 4 días**. Cada temporada sube o baja la producción de **todas las estaciones a la vez** (no por zonas), para no descompensar la cadena. Son las temporadas generales del país, secas y de lluvias: ☀️ **Verano** ×1,2 · 🌦️ **Entrada de aguas** ×1 · 🌧️ **Invierno** ×0,8 · 🌤️ **Veranillo** ×1. Se ve junto al reloj y en el mapa (lluvia, cielo gris, potreros secos en verano). La *mitaca* (la cosecha chica del Eje Cafetero) va solo como dato curioso en los paneles.
 - **Sin conexión**: se calcula sin el multiplicador de desarrollador, simulando rápido el tiempo que pasó para contar las horas de la noche y las temporadas.
+- **Cómo se ve**: junto al reloj va la temporada; tocar el reloj abre el **calendario** (hora, temporada, día y año, y lo que rinde cada temporada, con el dato de la mitaca). En la entrada de aguas caen aguaceros de vez en cuando y en invierno llueve casi todo el tiempo. La persona de la zona anuncia cada temporada nueva y, la primera vez, que de noche no se trabaja. De noche los paneles lo dicen («🌙 De noche no se trabaja…») y el mapa no muestra avisos.
+- Una partida nueva empieza el primer día del año, a las 8:00, en verano. El reinicio del segundo final vuelve al primer día.
+- Las pruebas de la cadena apagan el calendario (`CALENDAR.on = false`: siempre de día y sin temporada); `test/calendar.test.js` prueba el calendario.
 
 ### 10.2 Eventos e insignias (plan, v2.0)
 - **Tableros aparte**: cada evento usa las piezas de una zona en un tablero separado del mapa, con sus propias monedas y niveles. Tiene **su propio reloj, que se pausa al salir** (para mirar el mapa general) y que no avanza sin conexión.
