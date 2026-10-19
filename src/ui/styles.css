@@ -599,3 +599,31 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .event-result-medal { font-size: 4.5rem; line-height: 1.1; }
 .event-result h2 { margin: 4px 0 8px; }
 .event-result p { white-space: pre-line; line-height: 1.4; }
+
+/* Álbum y decoración (v2.2) */
+.events-renown-row { display: flex; align-items: center; gap: 8px; margin: 4px 0 10px; flex-wrap: wrap; }
+.events-renown-row .events-renown { flex: 1; margin: 0; }
+.events-renown-row .btn { width: auto; padding: 6px 10px; font-size: 0.85rem; }
+.album-pages { display: flex; gap: 6px; margin-bottom: 8px; }
+.album-pages button { flex: 1; padding: 6px 0; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); font-size: 1.2rem; position: relative; }
+.album-pages button.on { background: var(--yellow); }
+.album-pages button.full::after { content: '✓'; position: absolute; top: -6px; right: -4px; font-size: 0.7rem; background: var(--green); color: #fff; border-radius: 999px; padding: 0 4px; }
+.album-head { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 8px; }
+.album-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.sticker { border: 2px solid var(--ink); border-radius: 12px; padding: 8px; background: #fffaf0; text-align: center; display: flex; flex-direction: column; gap: 4px; min-height: 150px; }
+.sticker .big { font-size: 2.4rem; line-height: 1.1; }
+.sticker b { font-size: 0.92rem; }
+.sticker p { margin: 0; font-size: 0.78rem; line-height: 1.3; }
+.sticker.empty { border-style: dashed; background: var(--paper-2); }
+.sticker.empty .big { opacity: 0.25; filter: grayscale(1); }
+.sticker .btn { margin-top: auto; width: 100%; padding: 6px; font-size: 0.85rem; }
+.decor-cat { border: 2px solid var(--ink); border-radius: 12px; padding: 8px 10px; margin-bottom: 10px; }
+.decor-cat h3 { margin: 0 0 6px; font-size: 1rem; }
+.decor-opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.decor-opt { display: flex; align-items: center; gap: 5px; padding: 6px 6px; font-size: 0.8rem; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); font: inherit; font-size: 0.85rem; font-weight: 600; color: var(--ink); text-align: left; }
+.decor-opt.on { background: var(--yellow); }
+.decor-opt.cant { opacity: 0.5; }
+.decor-opt .sw { display: inline-flex; gap: 1px; flex: none; }
+.decor-opt .sw i { width: 9px; height: 16px; border: 1px solid var(--ink); }
+.decor-opt span:nth-child(2) { flex: 1; min-width: 0; line-height: 1.15; }
+.decor-opt span:last-child { white-space: nowrap; font-size: 0.78rem; }

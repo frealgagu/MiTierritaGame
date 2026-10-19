@@ -102,7 +102,7 @@ export const EVENTS = [
     supply: { panela_powder: 0, milk: 1 },
     stock: { panela_powder: 60 },
     actions: [
-      { id: 'derrumbe_mulas', icon: '🫏', name: 'Mulas por el monte', desc: 'Unas mulas pasan la panela por el monte: llega una cuarta parte de la que se necesita.', cost: 1000000, effect: { type: 'supply', product: 'panela_powder', fraction: 0.25 } },
+      { id: 'derrumbe_mulas', icon: '🐴', name: 'Mulas por el monte', desc: 'Unas mulas pasan la panela por el monte: llega una cuarta parte de la que se necesita.', cost: 1000000, effect: { type: 'supply', product: 'panela_powder', fraction: 0.25 } },
       { id: 'derrumbe_trocha', icon: '🛻', name: 'Trocha', desc: 'Un camino destapado por donde pasa un carro: llega el 60 % de la panela.', cost: 3000000, effect: { type: 'supply', product: 'panela_powder', fraction: 0.6 } },
       { id: 'derrumbe_via', icon: '🚧', name: 'Despejar la vía', desc: 'Con la vía libre, la panela vuelve a llegar toda.', cost: 8000000, effect: { type: 'supply', product: 'panela_powder', fraction: 1 } },
     ],

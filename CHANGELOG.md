@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v2.2.0 — Álbum de láminas y decoración
+- El **Renombre ⭐** ya se puede gastar (desde la ventana de 🏅 Eventos):
+  - **📖 Álbum de láminas**, como el de las chocolatinas pero sin sobres al azar: seis páginas (café, panela, leche, cacao, maíz y pueblo) con 36 láminas de lo que rodea a cada producto en Colombia: el arriero, la chapolera, el carriel, el yipao, la melcocha, la cuajada con melao, el molinillo, el chocolate santafereño, la mazamorra, la chiva, el tinto… Tú eliges cuál pegar (1 a 3 ⭐) y cada página llena da 3 ⭐ de premio.
+  - **🎨 Decoración**: color del Willys, enjalma de las mulas, pintura de la chiva y banderines frente a la bodega. Lo de siempre es gratis; lo demás se compra una vez y se puede cambiar cuando quieras. Se ve también en los tableros de los eventos.
+- Todo (el álbum y la decoración) se conserva al volver a empezar, como el Renombre y las medallas.
+
 ## v2.1.0 — Un evento en cada zona
 - Cinco eventos nuevos, uno por zona (cada uno se abre cuando ya construiste todas las estaciones de su zona, y su persona lo anuncia):
   - 🔥 **La gran molienda** (Trapiche): se acabó la leña y la Hornilla cocina al 40 %. Bagacera, hornilla reparada y fuelle.

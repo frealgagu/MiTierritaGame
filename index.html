@@ -126,7 +126,7 @@
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Cafetal <small id="menu-version">v2.1.0</small></h2>
+        <h2>Cafetal <small id="menu-version">v2.2.0</small></h2>
         <p id="save-where">Tu partida se guarda sola en este navegador.</p>
         <p id="menu-stats"></p>
         <details class="save-box">
@@ -247,8 +247,27 @@
           <button id="events-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>
         <p class="chain-help">Una vez al año cada zona tiene su evento: un tablero aparte, con sus propias monedas y niveles y un reloj que solo corre mientras juegas en él. Cuanto más rápido cumplas el objetivo, mejor la medalla: 🥇 da 4 ⭐ de Renombre, 🥈 2 y 🥉 1. El Renombre y las medallas no se pierden al volver a empezar.</p>
-        <p id="events-renown" class="events-renown"></p>
+        <div class="events-renown-row">
+          <span id="events-renown" class="events-renown"></span>
+          <button id="album-btn" class="btn">📖 Álbum</button>
+          <button id="decor-btn" class="btn">🎨 Decoración</button>
+        </div>
         <div id="events-body" class="list-body"></div>
+      </div>
+    </div>
+
+    <div id="renown" class="modal" hidden>
+      <div class="modal-card list-modal">
+        <div class="chain-head">
+          <h2 id="renown-title">⭐ Renombre</h2>
+          <button id="renown-close" class="close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="tabs chain-tabs">
+          <button class="tab" data-renown-tab="album">📖 Álbum</button>
+          <button class="tab" data-renown-tab="decor">🎨 Decoración</button>
+        </div>
+        <p id="renown-help" class="chain-help"></p>
+        <div id="renown-body" class="list-body"></div>
       </div>
     </div>
 

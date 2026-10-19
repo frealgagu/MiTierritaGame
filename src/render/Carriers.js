@@ -3,6 +3,7 @@ import { iso, depth, shade } from './iso.js';
 import { PAL, OUTLINE } from './palette.js';
 import { box, shadow } from './procedural/shapes.js';
 import { PRODUCTS } from '../data/products.js';
+import { LOOK } from './look.js';
 
 // Mula de carga con enjalma y dos costales, y su arriero de ruana y sombrero aguadeño.
 export class MuleView extends Container {
@@ -39,9 +40,10 @@ export class MuleView extends Container {
     // Jáquima (cabezal) de cuero.
     g.moveTo(13.5, -27).lineTo(19, -24).stroke({ width: 1, color: 0x2b1d14 });
     // Enjalma: manta de colores sobre el lomo.
-    g.roundRect(-8, -22, 13, 7, 2).fill(0xc8643b).stroke(OUTLINE);
-    g.rect(-8, -19.5, 13, 1.3).fill(0xe8b90f);
-    g.rect(-8, -17.2, 13, 1).fill(0x2e6fd1);
+    const [blanket, stripe1, stripe2] = LOOK.enjalma.colors;
+    g.roundRect(-8, -22, 13, 7, 2).fill(blanket).stroke(OUTLINE);
+    g.rect(-8, -19.5, 13, 1.3).fill(stripe1);
+    g.rect(-8, -17.2, 13, 1).fill(stripe2);
     // Costales de fique a lado y lado, amarrados, con una franja del color del producto (se ocultan
     // cuando la mula vuelve vacía).
     const k = this.sacks;
@@ -127,7 +129,7 @@ export class JeepView extends Container {
   }
 
   draw() {
-    const key = `${this.dir}:${this.cargo}:${this.resting}`;
+    const key = `${this.dir}:${this.cargo}:${this.resting}:${LOOK.willys.id}`;
     if (key === this.drawn) return;
     this.drawn = key;
     this.cup = drawWillys(this.g.clear(), JEEP_DIRS[this.dir], this.cargo, this.resting);
@@ -206,8 +208,9 @@ function drawWillys(g, toGrid, sacks, resting = false) {
   for (const [u, v] of wheels) if (Math.sign(v) !== nearSide) wheel(u, v);
 
   // Carrocería, capó un poco más alto y el platón abierto (el piso oscuro).
-  lbox(-L, L, -W, W, 4, 7, PAL.jeep);
-  lbox(0.17, L - 0.02, -W + 0.04, W - 0.04, 11, 2.5, shade(PAL.jeep, 1.12));
+  const paint = LOOK.willys.color;
+  lbox(-L, L, -W, W, 4, 7, paint);
+  lbox(0.17, L - 0.02, -W + 0.04, W - 0.04, 11, 2.5, shade(paint, 1.12));
   g.poly(flat([[-L + 0.05, -W + 0.05, 11], [0.13, -W + 0.05, 11], [0.13, W - 0.05, 11], [-L + 0.05, W - 0.05, 11]])).fill(0x2f4a24);
 
   // Lo que va en el platón (bultos y conductor) y el parabrisas, de atrás hacia adelante.
@@ -300,7 +303,8 @@ export class ChivaView extends Container {
       g.circle(p.x, p.y, 2).fill(0xd7263d);
     }
     // Carrocería por franjas: rojo, amarillo, azul, verde; techo blanco.
-    const bands = [[4, 5, 0xd7263d], [9, 6, 0xe8b90f], [15, 6, 0x2e6fd1], [21, 3, 0x2fa36b]];
+    const [c1, c2, c3, c4] = LOOK.chiva.colors;
+    const bands = [[4, 5, c1], [9, 6, c2], [15, 6, c3], [21, 3, c4]];
     for (const [z, h, color] of bands) box(g, x0, y0, w, d, h, color, { z });
     box(g, x0 - 0.04, y0 - 0.04, w + 0.08, d + 0.08, 2, 0xf4efe6, { z: 24 });
     // Ventanas: rombos de colores en la franja azul.

@@ -14,6 +14,8 @@ import { introOnStart, showIntro } from './ui/intro.js';
 import { showCalendar } from './ui/calendar.js';
 import { Chatter } from './ui/Chatter.js';
 import { EventsView } from './ui/EventsView.js';
+import { RenownView } from './ui/RenownView.js';
+import { setLook } from './render/look.js';
 import { EventBar, formatClock } from './ui/EventBar.js';
 import { finishEvent, startEvent } from './sim/events.js';
 import { MEDALS } from './data/events.js';
@@ -55,6 +57,8 @@ async function start() {
 
   const saved = loadGame();
   const game = new Game(saved ?? undefined);
+  // La decoración elegida, antes de dibujar nada.
+  setLook(game.state.profile);
   // La velocidad de las opciones de desarrollador sigue puesta al volver, también para el tiempo fuera.
   game.timeScale = savedSpeed();
   const offline = saved ? applyOffline(game, (Date.now() - saved.savedAt) / 1000) : null;
@@ -169,6 +173,21 @@ async function start() {
     showZone(view.zone);
   };
   const events = new EventsView(game, enterEvent);
+  // Al cambiar la decoración se vuelve a dibujar el mapa (el de la zona o el del tablero).
+  const renown = new RenownView(game, (profile) => {
+    setLook(profile);
+    if (!board) return showZone(view.zone);
+    if (panel.id) panel.close();
+    scene.destroy();
+    scene = new Scene(app, board.game, sound, ZONES_BY_ID[board.zone]);
+    scene.onSelect = select;
+  });
+  for (const [id, tab] of [['album-btn', 'album'], ['decor-btn', 'decor']]) {
+    document.getElementById(id).addEventListener('click', () => {
+      events.close();
+      renown.open(tab);
+    });
+  }
   const showEventResult = (r) => {
     const m = MEDALS[r.medal];
     document.getElementById('event-result-medal').textContent = m.icon;

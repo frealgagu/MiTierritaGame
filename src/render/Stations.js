@@ -1,5 +1,6 @@
 import { Container, Graphics, Polygon, Sprite, Text } from 'pixi.js';
 import { iso, isoPoly, depth, shade } from './iso.js';
+import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
 import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawCornStalk } from './Terrain.js';
@@ -411,6 +412,24 @@ export class WarehouseView extends StationView {
     g.rect(lamp.x - 1, lamp.y, 2, 30).fill(0x2b2b2b);
     g.rect(lamp.x - 3.5, lamp.y - 7, 7, 7).fill(0xffd27a).stroke({ width: 1, color: 0x2b2b2b });
     this.lights.push({ x: lamp.x, y: lamp.y - 3, r: 28 });
+    // Banderines (decoración comprada con Renombre, v2.2): del farol a un palo en la otra esquina.
+    const flags = LOOK.banderines.colors;
+    if (flags.length) {
+      const a = iso(ox + 0.4, oy + D + 0.15, 30);
+      const b = iso(ox + W + 0.1, oy + D + 0.15, 30);
+      const foot = iso(ox + W + 0.1, oy + D + 0.15, 0);
+      g.rect(foot.x - 1, b.y, 2, foot.y - b.y).fill(0x6b4a2e);
+      const sag = 9;
+      const at = (t) => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t + sag * 4 * t * (1 - t) });
+      g.moveTo(a.x, a.y).quadraticCurveTo((a.x + b.x) / 2, (a.y + b.y) / 2 + sag * 2, b.x, b.y).stroke({ width: 1, color: 0x3a2418 });
+      const n = 9;
+      for (let k = 1; k < n; k++) {
+        const p0 = at((k - 0.35) / n);
+        const p1 = at((k + 0.35) / n);
+        const mid = at(k / n);
+        g.poly([p0.x, p0.y, p1.x, p1.y, mid.x, mid.y + 7]).fill(flags[k % flags.length]).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      }
+    }
     // Letrero.
     const s = iso(ox + 1.2, oy + D, 38);
     g.roundRect(s.x - 22, s.y - 7, 44, 13, 3).fill(PAL.wood).stroke(OUTLINE);
