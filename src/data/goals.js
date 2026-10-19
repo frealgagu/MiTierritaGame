@@ -136,7 +136,7 @@ const PUEBLO = [
   { id: 'p13', type: 'imported', product: 'milk_chocolate', amount: 300, reward: 800000000 },
   { id: 'p14', type: 'unlock', station: 'export_dock', reward: 800000000 },
   { id: 'p15', type: 'allLevels', zone: 'pueblo', level: 25, reward: 1500000000 },
-  { id: 'p06', type: 'research', research: 'catadores', reward: 750000000 },
+  { id: 'p06', type: 'research', research: 'catadores', reward: 1500000000 },
   { id: 'p16', type: 'sold', product: 'container', amount: 100, reward: 2500000000 },
   // Final de la Zona 6 y del juego.
   { id: 'pfinal', type: 'sold', product: 'container', amount: 7000, reward: 0, final: true },

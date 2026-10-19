@@ -17,7 +17,7 @@ import { withArticle } from '../data/lore.js';
 // Nombre legible de lo que se mejora: 'farm', 'farm:transport', 'dispatch:<zona>' o 'route:<ruta>'.
 export function upgradeName(id) {
   const [sid, part] = id.split(':');
-  if (sid === 'research') return `🔬 ${RESEARCH_BY_ID[part].name}`;
+  if (sid === 'research') return `🔬 ${RESEARCH_BY_ID[part].name}`; // (de otra zona: lo dice HUD.update)
   if (sid === 'dispatch') return DISPATCH.name;
   if (sid === 'route') return `${ROUTES_BY_ID[part].icon} ${ROUTES_BY_ID[part].name}`;
   return part === 'transport' ? `Arrieros del ${STATIONS_BY_ID[sid].name}` : STATIONS_BY_ID[sid].name;
@@ -97,7 +97,8 @@ export class HUD {
     this.chip.hidden = false;
     // Puede ser de la zona que la abastece por una ruta: se dice de cuál.
     const [sid] = rec.id.split(':');
-    const elsewhere = STATIONS_BY_ID[sid] && zoneOf(sid) !== zone ? ` (${ZONES_BY_ID[zoneOf(sid)].icon} ${ZONES_BY_ID[zoneOf(sid)].name})` : '';
+    const otherZone = sid === 'research' ? RESEARCH_BY_ID[rec.id.split(':')[1]].zone : STATIONS_BY_ID[sid] ? zoneOf(sid) : zone;
+    const elsewhere = otherZone !== zone ? ` (${ZONES_BY_ID[otherZone].icon} ${ZONES_BY_ID[otherZone].name})` : '';
     setFitted(this.chip, `💡 Mejora recomendada: ${upgradeName(rec.id)}${elsewhere}`);
     this.hintUnlock(s, zone);
   }

@@ -31,14 +31,27 @@ export class ResearchView {
   }
 
   update() {
-    // Las de la zona que se está viendo.
-    const quotes = RESEARCH.filter((r) => r.zone === this.getZone()).map((r) => [r, this.game.quoteResearch(r.id)]);
-    const affordable = quotes.filter(([, q]) => q.ok).length;
+    // Todas las de la zona que se está viendo y, aparte, las que ya se pueden investigar en las demás
+    // (las ×2 se habilitan al nivel 25, muchas veces cuando ya se está en otra zona). El número del
+    // botón cuenta las que alcanza el dinero, de todas las zonas.
+    const zone = this.getZone();
+    const all = RESEARCH.map((r) => [r, this.game.quoteResearch(r.id)]);
+    const affordable = all.filter(([, q]) => q.ok).length;
     this.badge.hidden = affordable === 0;
     this.badge.textContent = affordable;
     if (this.modal.hidden) return;
 
-    const html = quotes
+    const here = all.filter(([r]) => r.zone === zone);
+    const elsewhere = all.filter(([r, q]) => r.zone !== zone && (q.ok || q.reason === 'coins'));
+    const html =
+      this.rows(here) +
+      (elsewhere.length ? `<h3 class="research-other">En otras zonas</h3>${this.rows(elsewhere, true)}` : '');
+    if (html !== this.html) this.body.innerHTML = this.html = html;
+  }
+
+  // withZone: con la zona en el nombre (las de otras zonas).
+  rows(quotes, withZone = false) {
+    return quotes
       .map(([r, q]) => {
         let action;
         if (q.reason === 'owned') action = '<span class="owned">✅ Investigado</span>';
@@ -49,12 +62,11 @@ export class ResearchView {
         return `
           <div class="research ${q.reason === 'owned' ? 'owned' : ''} ${q.reason === 'locked' ? 'locked' : ''}">
             <span class="research-icon">${r.icon}</span>
-            <span class="research-text"><b>${r.name}</b><br><small>${r.desc}</small></span>
+            <span class="research-text"><b>${r.name}</b>${withZone ? ` <small>· ${ZONES_BY_ID[r.zone].icon} ${ZONES_BY_ID[r.zone].name}</small>` : ''}<br><small>${r.desc}</small></span>
             ${action}
           </div>`;
       })
       .join('');
-    if (html !== this.html) this.body.innerHTML = this.html = html;
   }
 }
 

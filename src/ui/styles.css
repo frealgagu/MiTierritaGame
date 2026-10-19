@@ -660,3 +660,4 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .splash.indeterminate #splash-fill { width: 35% !important; animation: splash-slide 1.1s ease-in-out infinite; }
 @keyframes splash-slide { from { transform: translateX(-100%); } to { transform: translateX(290%); } }
 .splash-note { margin: 10px 0 0; font-size: 0.82rem; opacity: 0.75; min-height: 1em; }
+.research-other { margin: 12px 0 6px; font-size: 1rem; }

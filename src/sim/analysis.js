@@ -429,14 +429,16 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
   const roi = (o) => o.gain / o.cost;
   let best = options.filter((o) => o.gain > 1e-9 && o.gain >= minGain).sort((a, b) => roi(b) - roi(a))[0];
   // Una investigación solo se recomienda si ya alcanza el dinero y rinde más que el mejor nivel:
-  // así la recomendación nunca deja al jugador ahorrando para algo caro.
+  // así la recomendación nunca deja al jugador ahorrando para algo caro. También las ×2 de las zonas que
+  // abastecen a esta: se habilitan al nivel 25 y muchas llegan cuando ya se está en otra zona.
   for (const r of RESEARCH) {
-    if (r.zone !== zoneId || state.research.includes(r.id) || !canPay(state, r.cost)) continue;
+    const here = r.zone === zoneId || (r.stationLevel && zones.includes(r.zone));
+    if (!here || state.research.includes(r.id) || !canPay(state, r.cost)) continue;
     if (researchLocked(state, r)) continue;
     // Cambia su zona y, si acelera una estación con importados (o toda la zona: Maestría y Supremacía),
     // lo que piden sus rutas.
     const zoneWide = r.effect.type === 'zoneSpeed';
-    const touched = { zones: new Set([zoneId]), demand: new Set(ROUTES.filter((x) => x.stations.includes(r.effect.target) || (zoneWide && x.to === r.effect.target)).map((x) => x.id)), all: !r.effect.target };
+    const touched = { zones: new Set([r.zone]), demand: new Set(ROUTES.filter((x) => x.stations.includes(r.effect.target) || (zoneWide && x.to === r.effect.target)).map((x) => x.id)), all: !r.effect.target };
     const gain = score({ ...state, research: [...state.research, r.id] }, touched) - base;
     const option = { id: `research:${r.id}`, cost: r.cost, gain };
     if (gain > 1e-9 && (!best || roi(option) > roi(best))) best = option;

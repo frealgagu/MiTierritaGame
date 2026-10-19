@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v2.3.3 — Investigaciones de otras zonas a la vista
+- Como las ×2 ahora se habilitan al nivel 25, muchas llegan cuando ya estás en la zona siguiente y quedaban olvidadas (en la simulación, la Batidora de la Lechería nunca se compraba y faltaba mantequilla para las arepas de queso: el Maizal tardaba más del doble).
+  - La ventana de 🔬 investigaciones muestra, aparte, las que ya puedes investigar **en otras zonas**, y el número del botón las cuenta todas.
+  - La **mejora recomendada** también tiene en cuenta las ×2 de las zonas que abastecen a la que estás viendo, y dice de qué zona son.
+- El objetivo «Investiga: Catadores expertos» da 1.500 M (antes 750 M): ahora alcanza para pagarla.
+
 ## v2.3.2 — Investigaciones ×2 al nivel 25
 - Las investigaciones que **duplican una estación** (Abono orgánico, Despulpadora eléctrica, Secador mecánico, Trapiche con motor, Ordeño mecánico…) se habilitan cuando **esa misma estación y sus arrieros 🐴 llegan al nivel 25**. Antes aparecían al construir la estación siguiente. La Compostera, que no tiene arrieros, solo pide su nivel.
 - En la ventana de investigaciones, las que faltan dicen cuánto llevan: «🔒 Nv 25 y 🐴 25 · va en 18 y 🐴 12».
