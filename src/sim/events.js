@@ -10,6 +10,7 @@ import { canPay } from './upgrades.js';
 import { stationImportCap, stationRate } from './rules.js';
 import { effectsOf, speedMult } from './modifiers.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
+import { PARENT } from './chain.js';
 
 export const eventDef = (board) => EVENTS_BY_ID[board.event.id];
 // El objetivo del año: van en orden y vuelven a empezar.
@@ -69,6 +70,25 @@ export function eventItems(board) {
 export function eventProgress(board) {
   const items = eventItems(board);
   return items.reduce((n, i) => n + i.have, 0) / items.reduce((n, i) => n + i.need, 0);
+}
+
+// Lo que lleva al objetivo (v3.1.1): las estaciones que hacen los productos que todavía faltan y todas
+// las anteriores, con sus arrieros, y el despacho si hay que venderlos. La mejora recomendada del tablero
+// mira solo esto: buscar más monedas llevaba a subir lo que vale más y no lo que se pide (en el
+// derrumbe, la Chocolatería se quedaba con la pasta y la panela del chocolate de mesa).
+export function objectiveUpgrades(board) {
+  const def = eventDef(board);
+  const obj = boardObjective(board);
+  const missing = eventItems(board).filter((i) => i.have < i.need);
+  const ids = new Set();
+  for (const { product } of missing.length ? missing : eventItems(board)) {
+    let id = def.stations.find((s) => Object.keys(STATIONS_BY_ID[s].out)[0] === product);
+    while (id) {
+      ids.add(id);
+      id = PARENT[id];
+    }
+  }
+  return [...[...ids].flatMap((id) => [id, `${id}:transport`]), ...(obj.kind === 'sold' ? [`dispatch:${def.zone}`] : [])];
 }
 
 export function medalFor(obj, seconds) {

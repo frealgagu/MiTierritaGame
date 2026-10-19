@@ -106,10 +106,11 @@ test('el Renombre y las medallas no se pierden al reiniciar; el tablero en juego
 test('los seis tableros arrancan y avanzan hacia su objetivo', () => {
   for (const def of EVENTS) {
     const board = createEventState(def, 1);
+    assert.equal(board.coins, def.actions[0].cost, `${def.id}: empieza con lo de la primera compra`);
     const game = new Game(board);
     for (let t = 0; t < 180; t += 0.1) game.step(0.1);
     assert.ok(eventProgress(board) > 0 || Object.values(board.stats.produced).some((n) => n > 0), def.id);
-    assert.ok(board.coins > 0, `${def.id}: gana monedas`);
+    assert.ok(board.totalEarned > 0, `${def.id}: gana monedas`);
   }
 });
 

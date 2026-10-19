@@ -72,7 +72,8 @@ src/
 └─ assets/   fuente de íconos propios (cafetal-icons.woff2)
 tools/
 ├─ icons/build_icons.py   genera la fuente de íconos (cereza de café, guarapo, panela, queso campesino…)
-├─ event-sim.js           juega un evento con un bot y dice cuánto tarda (para las medallas)
+├─ event-bots.js          jugadores automáticos de los eventos
+├─ event-sim.js           juega cada objetivo de los eventos con esos bots y propone las medallas
 └─ sprites.html           los vehículos del mapa en grande (npm run dev → /tools/sprites.html)
 ```
 

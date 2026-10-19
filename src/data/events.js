@@ -3,6 +3,8 @@
 // juega). El objetivo cambia de un año al siguiente; según lo rápido que se cumpla se gana una medalla.
 //   announce: lo que dice la persona de la zona cuando el evento se abre (una vez al año)
 //   stations: estaciones que ya están construidas al empezar (en el nivel `level`)
+//   coins:    con cuánto se empieza (v3.1.1: lo que cuesta la primera compra del evento, para que desde el
+//             primer segundo haya algo que decidir: esa compra o subir estaciones)
 //   speed:    lo que el evento le hace a la velocidad de cada estación (la broca: el Cafetal al 40 %)
 //   supply:   lo que llega de afuera por cada importado, de 0 (nada) a 1 (todo lo que piden): en el
 //             tablero no hay otras zonas; stock: lo que ya tienen guardado las estaciones al empezar
@@ -10,8 +12,9 @@
 //             Efecto (effect, o varios en effects): los de las investigaciones o { type: 'supply', product, fraction }
 //   objectives: uno por año, en orden (y vuelve a empezar): kind ('sold' o 'produced'), items
 //             (producto → cantidad) y medals = [s para el oro, s para la plata]
-// Las medallas se calibran con tools/event-sim.js: el oro pide jugar un poco mejor que el jugador
-// automático atento (que no compra todo lo del evento); la plata, casi la mitad más.
+// Las medallas se calibran con tools/event-sim.js (v3.1.1): el oro es el tiempo del mejor jugador
+// automático que decide cada segundo, más un 9 % (difícil, pero posible para alguien atento); la plata,
+// 5 minutos más.
 export const MEDALS = {
   gold: { icon: '🥇', name: 'oro', renown: 4 },
   silver: { icon: '🥈', name: 'plata', renown: 2 },
@@ -29,7 +32,7 @@ export const EVENTS = [
     announce: '¡Llegó la broca al cafetal, patrón! Toque 🏅 Eventos para controlarla.',
     stations: ['farm', 'wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer'],
     level: 10,
-    coins: 0,
+    coins: 400,
     speed: { farm: 0.4 },
     actions: [
       { id: 'broca_trampas', icon: '🪤', name: 'Trampas', desc: 'Trampas con alcohol atrapan las brocas: el Cafetal pasa del 40 al 60 %.', cost: 400, effect: { type: 'stationSpeed', target: 'farm', mult: 1.5 } },
@@ -37,9 +40,9 @@ export const EVENTS = [
       { id: 'broca_rere', icon: '🧺', name: 'Re-re', desc: 'Recoger los granos caídos y los que quedan en la mata: la broca ya no tiene dónde esconderse. Del 80 al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'farm', mult: 1.25 } },
     ],
     objectives: [
-      { kind: 'sold', items: { coffee_bag: 100 }, medals: [660, 960] },
-      { kind: 'produced', items: { roasted: 500 }, medals: [720, 1020] },
-      { kind: 'produced', items: { green: 1000 }, medals: [660, 960] },
+      { kind: 'sold', items: { coffee_bag: 100 }, medals: [720, 1020] },
+      { kind: 'produced', items: { roasted: 500 }, medals: [735, 1035] },
+      { kind: 'produced', items: { green: 1000 }, medals: [630, 930] },
     ],
   },
   {
@@ -52,7 +55,7 @@ export const EVENTS = [
     announce: '¡Llegó la gran molienda y no hay leña! Toque 🏅 Eventos y ayúdeme con la hornilla.',
     stations: ['canefield', 'cane_mill', 'furnace', 'molds', 'pulverizer'],
     level: 10,
-    coins: 0,
+    coins: 2400,
     speed: { furnace: 0.4 },
     actions: [
       { id: 'molienda_bagacera', icon: '☀️', name: 'Bagacera', desc: 'Un techo para secar el bagazo al sol: la Hornilla pasa del 40 al 60 %.', cost: 2400, effect: { type: 'stationSpeed', target: 'furnace', mult: 1.5 } },
@@ -60,9 +63,9 @@ export const EVENTS = [
       { id: 'molienda_fuelle', icon: '🌬️', name: 'Fuelle', desc: 'Más aire para el fuego: la Hornilla vuelve al 100 %.', cost: 35000, effect: { type: 'stationSpeed', target: 'furnace', mult: 1.25 } },
     ],
     objectives: [
-      { kind: 'produced', items: { panela_powder: 500 }, medals: [660, 960] },
-      { kind: 'produced', items: { panela: 550 }, medals: [690, 990] },
-      { kind: 'produced', items: { melado: 1100 }, medals: [690, 990] },
+      { kind: 'produced', items: { panela_powder: 500 }, medals: [675, 975] },
+      { kind: 'produced', items: { panela: 550 }, medals: [720, 1020] },
+      { kind: 'produced', items: { melado: 1100 }, medals: [675, 975] },
     ],
   },
   {
@@ -75,7 +78,7 @@ export const EVENTS = [
     announce: '¡Llegaron los pedidos de la feria ganadera! Toque 🏅 Eventos y armemos el pedido.',
     stations: ['pasture', 'pasteurizer', 'cheesery', 'separator', 'churn', 'arequipe_pot'],
     level: 10,
-    coins: 0,
+    coins: 40000,
     supply: { panela_powder: 1 },
     actions: [
       { id: 'feria_moldes', icon: '🧀', name: 'Moldes nuevos', desc: 'La Quesera hace un 50 % más.', cost: 40000, effect: { type: 'stationSpeed', target: 'cheesery', mult: 1.5 } },
@@ -83,9 +86,9 @@ export const EVENTS = [
       { id: 'feria_paila', icon: '🍯', name: 'Paila de cobre', desc: 'La Paila hace un 50 % más de arequipe.', cost: 550000, effect: { type: 'stationSpeed', target: 'arequipe_pot', mult: 1.5 } },
     ],
     objectives: [
-      { kind: 'sold', items: { cheese: 150, butter: 75, arequipe: 50 }, medals: [630, 930] },
-      { kind: 'sold', items: { cheese: 60, butter: 120, arequipe: 40 }, medals: [630, 930] },
-      { kind: 'sold', items: { cheese: 90, butter: 90, arequipe: 120 }, medals: [660, 960] },
+      { kind: 'sold', items: { cheese: 150, butter: 75, arequipe: 50 }, medals: [570, 870] },
+      { kind: 'sold', items: { cheese: 60, butter: 120, arequipe: 40 }, medals: [615, 915] },
+      { kind: 'sold', items: { cheese: 90, butter: 90, arequipe: 120 }, medals: [615, 915] },
     ],
   },
   {
@@ -98,7 +101,7 @@ export const EVENTS = [
     announce: '¡Un derrumbe tapó la vía y no llega la panela! Toque 🏅 Eventos y busquemos cómo pasarla.',
     stations: ['cacao_grove', 'fermenter', 'cacao_dryer', 'cacao_roaster', 'cacao_mill', 'chocolate_table', 'chocolatier'],
     level: 10,
-    coins: 0,
+    coins: 1000000,
     supply: { panela_powder: 0, milk: 1 },
     stock: { panela_powder: 60 },
     actions: [
@@ -107,9 +110,9 @@ export const EVENTS = [
       { id: 'derrumbe_via', icon: '🚧', name: 'Despejar la vía', desc: 'Con la vía libre, la panela vuelve a llegar toda.', cost: 8000000, effect: { type: 'supply', product: 'panela_powder', fraction: 1 } },
     ],
     objectives: [
-      { kind: 'produced', items: { table_chocolate: 150 }, medals: [630, 930] },
-      { kind: 'produced', items: { milk_chocolate: 130 }, medals: [690, 990] },
-      { kind: 'produced', items: { table_chocolate: 100, milk_chocolate: 100 }, medals: [660, 960] },
+      { kind: 'produced', items: { table_chocolate: 150 }, medals: [495, 795] },
+      { kind: 'produced', items: { milk_chocolate: 130 }, medals: [540, 840] },
+      { kind: 'produced', items: { table_chocolate: 100, milk_chocolate: 100 }, medals: [615, 915] },
     ],
   },
   {
@@ -122,7 +125,7 @@ export const EVENTS = [
     announce: '¡Llegó la fiesta del maíz y se rajó el budare! Toque 🏅 Eventos, que hay mucha arepa por hacer.',
     stations: ['cornfield', 'sheller', 'corn_huller', 'dough_mill', 'budare', 'arepa_stand'],
     level: 10,
-    coins: 0,
+    coins: 2500000,
     supply: { cheese: 1, butter: 1 },
     speed: { budare: 0.4 },
     actions: [
@@ -132,8 +135,8 @@ export const EVENTS = [
     ],
     objectives: [
       { kind: 'sold', items: { cheese_arepa: 120 }, medals: [600, 900] },
-      { kind: 'produced', items: { arepa: 850 }, medals: [720, 1020] },
-      { kind: 'produced', items: { corn_dough: 850 }, medals: [690, 990] },
+      { kind: 'produced', items: { arepa: 850 }, medals: [765, 1065] },
+      { kind: 'produced', items: { corn_dough: 850 }, medals: [720, 1020] },
     ],
   },
   {
@@ -146,7 +149,7 @@ export const EVENTS = [
     announce: '¡El barco sale el viernes y la grúa está varada! Toque 🏅 Eventos y llenemos esos contenedores.',
     stations: ['coffee_house', 'greca', 'fonda', 'basket_shop', 'gift_wrap', 'export_dock'],
     level: 10,
-    coins: 0,
+    coins: 20000000,
     supply: { coffee_bag: 1, panela_powder: 1, cheese_arepa: 1, arequipe: 1, table_chocolate: 1, milk_chocolate: 1 },
     speed: { export_dock: 0.4 },
     actions: [
@@ -155,9 +158,9 @@ export const EVENTS = [
       { id: 'barco_turno', icon: '👷', name: 'Turno extra', desc: 'Los estibadores trabajan de corrido: el Patio vuelve al 100 %.', cost: 300000000, effect: { type: 'stationSpeed', target: 'export_dock', mult: 1.25 } },
     ],
     objectives: [
-      { kind: 'sold', items: { container: 24 }, medals: [630, 930] },
-      { kind: 'produced', items: { gift_basket: 120 }, medals: [660, 960] },
-      { kind: 'sold', items: { container: 6, breakfast: 180 }, medals: [810, 1110] },
+      { kind: 'sold', items: { container: 24 }, medals: [675, 975] },
+      { kind: 'produced', items: { gift_basket: 120 }, medals: [690, 990] },
+      { kind: 'sold', items: { container: 6, breakfast: 180 }, medals: [840, 1140] },
     ],
   },
 ];

@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.1.1 — Eventos: el oro, difícil pero posible
+- Los tableros de los eventos **empiezan con dinero**: lo que cuesta su primera compra (400 en La broca, 2.400 en La gran molienda… 20 M en El barco). Antes se empezaba en 0 y el primer minuto no había nada que hacer mientras el primer producto recorría la cadena.
+- En el tablero, la **mejora recomendada busca cumplir el objetivo**, no ganar más monedas: solo sugiere las estaciones que hacen lo que todavía falta (y las anteriores), sus arrieros y, si hay que vender, la bodega. En el Derrumbe sugería la Chocolatería, que se quedaba con la pasta y la panela del chocolate de mesa del objetivo.
+- **Medallas recalibradas.** Con las anteriores, ni jugando perfecto se llegaba al oro en 5 de los 18 objetivos. Ahora el oro es el tiempo del mejor jugador automático más un 9 % (de 8:15 a 14:00 según el objetivo) y la plata, 5 minutos más. Lo que más cuenta es la estrategia: ahorrar a tiempo para la siguiente compra del evento.
+- Una prueba nueva vigila que el oro de cada objetivo siga siendo alcanzable.
+
 ## v3.1.0 — Santander: El Tabacal
 - **El Tabacal**, la segunda zona de Santander, se abre al completar la Guayabera: Tabacal → Caney de curado → Despalilladora → Pilones de fermentación → Torcedores. La hoja verde cuelga en las varas del caney hasta quedar dorada, se le quita la vena, se fermenta en pilones (con su termómetro) y se tuerce a mano. Don Ramiro, el veguero, avisa lo importante.
   - Mismos números que el Trapiche, con sus objetivos y sus investigaciones (Caney grande, Abono para el tabaco, Chiva, Veguero de confianza, Tabaco negro de origen…).

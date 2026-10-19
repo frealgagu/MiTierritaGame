@@ -9,7 +9,7 @@ import { exportsOf, teamCapacity } from './transport.js';
 import { COMPOST_VALUE, WASHED_PER_COMPOST, dispatchMult, productValue, speedMult } from './modifiers.js';
 import { PRODUCTS } from '../data/products.js';
 import { canPay, researchLocked } from './upgrades.js';
-import { supplyFraction } from './events.js';
+import { objectiveUpgrades, supplyFraction } from './events.js';
 
 const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
 const MAX_ROUTE_DEPTH = 4; // zonas encadenadas por rutas que se miran como mucho
@@ -383,6 +383,11 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
   }
   ids.push(...feeders);
   for (const r of ROUTES) if (r.to === zoneId && routeActive(state, r.id)) ids.push(`route:${r.id}`);
+  // En un evento, solo lo que lleva al objetivo (ver objectiveUpgrades).
+  if (state.event) {
+    const allowed = new Set(objectiveUpgrades(state));
+    ids.splice(0, ids.length, ...ids.filter((id) => allowed.has(id)));
+  }
   // Lo que suma comprar a la vez `count` niveles de cada uno de `list` (o null si alguno no se puede).
   // Cada elemento es un id o un par [id, niveles], para subir unos más que otros.
   const trialGain = (list, count) => {
