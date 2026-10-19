@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v3.3.2 — Cada estación suena a su oficio; los comentarios se alcanzan a leer
+- **Al entrar a una estación suena lo que hace** (sintetizado, como el resto de los sonidos): hojas y pájaros en los cultivos, mugidos en el potrero y el hato, agua en el beneficiadero, motor en los molinos y desfibradoras, pailas y grecas que hierven, fuego que crepita en tostadoras y el asadero, viento en marquesinas, caney y tendedero, burbujas graves en la fermentación, cuchillo en la fama y la cortadora, clac-clac en telares y talleres, cajas que se apilan en las empacadoras, chisporroteo en budares y fondas, pocillos en las mesas, sal que cae en el saladero, la sirena del barco en el patio de contenedores y el Willys que arranca en la bodega.
+- **Los comentarios de las personas duran según lo largo del texto** (unos 75 ms por letra, más 3 s): los largos ya no se van antes de terminar de leerlos.
+  - Un aviso corto que llega encima (un objetivo cumplido, una zona nueva) ya no los borra: se muestra y luego vuelve el comentario con el tiempo que le quedaba.
+  - Si llega otro comentario, espera su turno.
+  - Tocar el aviso lo cierra.
+
 ## v3.3.1 — La mejora recomendada del evento se queda en el evento
 - Tocar la mejora recomendada (o «Ir al edificio» en la cadena) dentro de un evento llevaba a la partida principal cuando se había entrado al evento desde otra zona: se comparaba la zona de la estación con la del mapa de la partida, no con la del tablero. Ahora abre la estación del tablero, y en el tablero nunca se sale a otra zona.
 

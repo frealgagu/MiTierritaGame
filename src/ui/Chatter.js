@@ -18,7 +18,7 @@ const capital = (s) => s[0].toUpperCase() + s.slice(1);
 
 export const say = (zone, text, ms = 6000) => {
   const p = PEOPLE[zone];
-  toast(`${p.icon} ${p.name}: ${text}`, ms);
+  toast(`${p.icon} ${p.name}: ${text}`, ms, { speech: true });
 };
 
 export class Chatter {

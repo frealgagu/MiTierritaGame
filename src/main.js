@@ -120,6 +120,7 @@ async function start() {
     if (stationId === 'dispatch') {
       scene.select('dispatch');
       panel.open(id);
+      sound.station('dispatch');
       return;
     }
     if (stationId === 'route') {
@@ -127,6 +128,7 @@ async function start() {
       if (station) {
         scene.select(station);
         panel.open(station, id);
+        sound.station(station);
       } else {
         scene.select(null);
         panel.open(id);
@@ -143,6 +145,8 @@ async function start() {
     }
     scene.select(stationId);
     panel.open(stationId, part === 'transport' ? 'transport' : 'station');
+    // Al entrar a una estación suena su oficio (v3.3.2).
+    sound.station(stationId);
   };
   const showZone = (zoneId) => {
     // Primero el panel: al cerrarse quita la selección de la escena, que aún debe existir.
