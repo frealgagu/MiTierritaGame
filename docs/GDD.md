@@ -360,7 +360,9 @@ Con la **jornada y las temporadas (v1.9)**, sin compensar, en horas de juego con
 | Casual | 13 h 31 min → **27 h 07 min** | 27 h 36 min → **72 h 41 min** |
 | Atento | 14 h 50 min → **33 h 45 min** | 25 h 07 min → **51 h 37 min** |
 
-Por zona (casual / atento): Finca 5 h 06 / 4 h 35, Trapiche 1 h 22 / 1 h 19, Lechería 4 h 13 / 3 h 51, Cacaotal 7 h 14 / 4 h 41, Maizal 3 h 27 / 2 h 57 y Pueblo 5 h 47 / 16 h 22. En el Pueblo, el bot atento casi no investiga hasta el final y tarda mucho en exportar los 7.000 contenedores (es cosa del bot, no del juego). Con las ganancias sin conexión (hasta 24 h), el tiempo real es menor.
+Con las ×2 al nivel 25 de la estación y sus arrieros (**v2.3.3**): primer final 30 h 41 min (casual) y 25 h 31 min (atento); segundo final 58 h 26 min y 69 h 13 min. Por zona (casual / atento): Finca 4 h 50 / 4 h 50, Trapiche 1 h 21 / 1 h 18, Lechería 4 h 00 / 4 h 16, Cacaotal 6 h 56 / 4 h 23, Maizal 5 h 57 / 3 h 14, Pueblo 7 h 38 / 7 h 29. (Los bots varían bastante de una versión a otra en el Pueblo y en el segundo final: deciden distinto según lo que tengan.)
+
+En la v1.9, por zona (casual / atento): Finca 5 h 06 / 4 h 35, Trapiche 1 h 22 / 1 h 19, Lechería 4 h 13 / 3 h 51, Cacaotal 7 h 14 / 4 h 41, Maizal 3 h 27 / 2 h 57 y Pueblo 5 h 47 / 16 h 22. En el Pueblo, el bot atento casi no investiga hasta el final y tarda mucho en exportar los 7.000 contenedores (es cosa del bot, no del juego). Con las ganancias sin conexión (hasta 24 h), el tiempo real es menor.
 
 ## 7. Ganancias sin conexión
 
