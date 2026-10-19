@@ -9,6 +9,7 @@
 - **Lluvia** en el mapa: aguaceros de vez en cuando en la entrada de aguas y casi todo el tiempo en invierno.
 - La persona de la zona anuncia cada temporada nueva y, la primera vez, que de noche no se trabaja. De noche los paneles lo dicen y el mapa no muestra avisos.
 - **Sin conexión** cuenta las noches y las temporadas: lo simulado ya las tiene y lo que se suma más allá se reparte según cuánto se trabaja en cada tramo.
+- Balance medido (horas con el juego abierto): primer final 27 h 07 min (casual) y 33 h 45 min (atento), antes 13 h 31 min y 14 h 50 min; segundo final 72 h 41 min y 51 h 37 min, antes 27 h 36 min y 25 h 07 min.
 
 ## v1.8.7 — Música propia
 - La música de fondo ahora es **propia**: «Bambuco de la finca», un bambuco en 3/4 compuesto para el juego (mi menor, y la segunda parte en sol mayor). No es un archivo: el juego la toca con cuerdas sintetizadas (Karplus-Strong):

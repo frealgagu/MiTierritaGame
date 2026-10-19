@@ -353,6 +353,15 @@ Duración medida (`npm run balance`, v1.6; casual = sigue la mejora recomendada,
 
 El segundo final es largo a propósito de la fórmula: cada nivel cuesta ×1,15 y los últimos 25 niveles valen mucho más que el ingreso que suman.
 
+Con la **jornada y las temporadas (v1.9)**, sin compensar, en horas de juego con el juego abierto (a ×1, sin reinicios):
+
+| Jugador | Primer final, v1.8.5 → v1.9 | Segundo final, v1.8.5 → v1.9 |
+|---------|-----------------------------|------------------------------|
+| Casual | 13 h 31 min → **27 h 07 min** | 27 h 36 min → **72 h 41 min** |
+| Atento | 14 h 50 min → **33 h 45 min** | 25 h 07 min → **51 h 37 min** |
+
+Por zona (casual / atento): Finca 5 h 06 / 4 h 35, Trapiche 1 h 22 / 1 h 19, Lechería 4 h 13 / 3 h 51, Cacaotal 7 h 14 / 4 h 41, Maizal 3 h 27 / 2 h 57 y Pueblo 5 h 47 / 16 h 22. En el Pueblo, el bot atento casi no investiga hasta el final y tarda mucho en exportar los 7.000 contenedores (es cosa del bot, no del juego). Con las ganancias sin conexión (hasta 24 h), el tiempo real es menor.
+
 ## 7. Ganancias sin conexión
 
 - Al volver se simulan de verdad hasta 2 h de juego; lo que pase de ahí se suma al ritmo de la última hora simulada (monedas, ventas, producción e importados). Siempre a velocidad normal: el tiempo acelerado de las opciones de desarrollador solo cuenta con el juego abierto (desde la v1.8.1).
