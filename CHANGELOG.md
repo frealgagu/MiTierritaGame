@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v1.8.0 — Datos reales y la gente de cada zona
+- **Datos reales**: el subtítulo del panel de cada estación alterna, cada 7 segundos, entre lo que hace y uno o varios datos reales («En Colombia el café se cultiva entre 1.200 y 2.000 metros de altura», «El cacao fermenta de 5 a 7 días en cajones de madera»…). Hay al menos uno por cada una de las 38 estaciones.
+- **La gente de cada zona**: Don Jairo (el mayordomo de la Finca), Don Aurelio (el trapichero), Doña Marina (la ordeñadora), Don Eliécer (el cacaotero), Doña Rosa (la arepera) y Mateo (el exportador del Pueblo). Dan la bienvenida la primera vez que se ve su zona, avisan cuando ya alcanza para construir la siguiente estación y cuando aparece un problema que dura (las mulas no dan abasto, la siguiente estación no alcanza, la bodega se llenó, una estación esperando producto…). Sin cansar: cada estación avisa como mucho una vez cada 5 minutos y entre aviso y aviso pasan al menos 45 segundos; con una ventana abierta, esperan.
+- El plan de las próximas versiones (ambiente, jornada y temporadas, eventos e insignias) quedó en el documento de diseño.
+
 ## v1.7.16 — Un ícono para cada producto
 - Ningún producto comparte ícono y todos se parecen a lo que son. 19 íconos propios nuevos:
   - **Finca**: café lavado (granos claros mojados, antes 💧), pulpa (las cáscaras rojas abiertas, antes 🟥), café pergamino (con su cascarilla, antes 🟫 como la pasta de cacao), café verde (antes 🟢), café tostado (antes 🟤 como el compost), café molido (antes ☕ como el tinto), bolsa de café (paquete kraft con su etiqueta, antes 🛍️), compost (tierra con lombriz y un brote) y el Cafetal como una mata de café con cerezas.

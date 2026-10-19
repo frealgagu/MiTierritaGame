@@ -3,12 +3,13 @@ import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { recommendUpgrade } from '../sim/analysis.js';
 import { legacyMult } from '../sim/modifiers.js';
 import { nextToUnlock, zoneOf } from '../sim/chain.js';
-import { toast } from './toast.js';
 import { clockLabel } from '../render/DayNight.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { setFitted } from './fit.js';
+import { say } from './Chatter.js';
+import { withArticle } from '../data/lore.js';
 
 // Nombre legible de lo que se mejora: 'farm', 'farm:transport', 'dispatch:<zona>' o 'route:<ruta>'.
 export function upgradeName(id) {
@@ -107,6 +108,6 @@ export class HUD {
     const q = this.game.quoteUnlock(id);
     if (!q.ok) return;
     s.hints.push(id);
-    toast(`🏗️ ¡Ya puedes construir ${STATIONS_BY_ID[id].name}! Toca su parcela en el mapa.`, 6000);
+    say(zone, `¡Ya alcanza para construir ${withArticle(STATIONS_BY_ID[id].name)}! Toque su parcela en el mapa.`);
   }
 }

@@ -11,6 +11,7 @@ import { ResearchView } from './ui/ResearchView.js';
 import { showVictory, showWelcome } from './ui/dialogs.js';
 import { showMastery } from './ui/mastery.js';
 import { introOnStart, showIntro } from './ui/intro.js';
+import { Chatter } from './ui/Chatter.js';
 import { bindNative, isNativeApp } from './native.js';
 import { checkMastery, restartState } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
@@ -112,6 +113,7 @@ async function start() {
   showZone(view.zone);
   const hud = new HUD(game, select, () => scene.dayNight.hour, getZone);
   const chain = new ChainView(game, select, getZone);
+  const chatter = new Chatter(game, getZone);
   const goals = new GoalsView(game, getZone);
   const research = new ResearchView(game, getZone);
   const zones = new ZonesView(game, getZone, (z) => {
@@ -175,11 +177,9 @@ async function start() {
     if (e.key === 'Escape') closeTop();
   });
 
-  const firstTip = () => !saved && toast('Toca el 🌳 Cafetal y mejóralo cuando tengas monedas.', 6000);
   if (offline) showWelcome(offline, () => sound.coin());
   // Cómo se juega, encima de todo (la bienvenida queda debajo, para después).
-  if (introOnStart(game.state)) showIntro(game.state, firstTip);
-  else firstTip();
+  if (introOnStart(game.state)) showIntro(game.state);
   document.getElementById('intro-btn').addEventListener('click', () => {
     document.getElementById('menu').hidden = true;
     showIntro(game.state);
@@ -204,7 +204,7 @@ async function start() {
       uiTimer = 0.2;
       safely(() => hud.update());
       safely(() => scene.setGuide(panel.id ? null : hud.guide));
-      for (const view of [panel, chain, goals, research, zones]) safely(() => view.update());
+      for (const view of [panel, chain, goals, research, zones, chatter]) safely(() => view.update());
     }
   });
 

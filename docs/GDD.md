@@ -541,8 +541,22 @@ export const COST_GROWTH = 1.15;
 | v1.5 ✅ | **Zona 6: El Pueblo**: Casa del café, Greca, Fonda, canastas de regalo y Contenedor de exportación (**final del juego**) | Expansión final |
 | v1.6 ✅ | **Segundo final**: todo al nivel 100; volver a empezar con producción ×2, ×4, ×8… | Rejugable |
 | v1.7 ✅ | Hitos más fuertes (×2, ×2, ×4, ×4, ×8), **Maestría** ×4 y **Supremacía** ×8 por zona, objetivos finales más largos | Segundo final alcanzable |
+| v1.8 | **Ambiente**: datos reales en los paneles y una persona por zona que avisa lo importante (✅ v1.8.0); vida en el mapa (animales, gente, humo); sonidos por zona | Más personalidad |
+| v1.9 | **Jornada y temporadas** (§10.1) | Ritmo |
+| v2.0 | **Eventos e insignias** (§10.2): un evento por zona al año, con medallas; progresión general que no se pierde al reiniciar | Rejugable a largo plazo |
 
 **Cómo se conectan las zonas:** ver §4b.
+
+### 10.1 Jornada y temporadas (plan, v1.9)
+- **Jornada**: las estaciones trabajan de día (por ejemplo, de 6:00 a 18:00; un día de juego son 8 minutos) y de noche **se detienen del todo**. Los arrieros terminan su viaje; el Willys y las chivas siguen. **No se compensa**: el juego se hace más largo a propósito. Investigaciones por zona pueden alargar la jornada (bombillos, turno de noche). El tiempo sin conexión respeta el horario.
+- **Temporadas**: un año de **16 días** de juego, en **4 temporadas de 4 días**. Cada temporada sube o baja la producción de **todas las estaciones a la vez** (no por zonas), para no descompensar la cadena. Se ve junto al reloj y en el mapa (lluvia, cielo gris, potreros secos en verano).
+
+### 10.2 Eventos e insignias (plan, v2.0)
+- **Tableros aparte**: cada evento usa las piezas de una zona en un tablero separado del mapa, con sus propias monedas y niveles. Tiene **su propio reloj, que se pausa al salir** (para mirar el mapa general) y que no avanza sin conexión.
+- **Una vez al año por zona**: cada zona abre su evento una vez por año de juego; el objetivo cambia de un año al siguiente. Con el tiempo, **4 eventos por zona** (4 medallas por zona, 24 en total). Solo uno a la vez por zona: si pasa, hay que esperar al otro año.
+- **Medallas** según qué tan rápido se cumple: 🥉 bronce, 🥈 plata, 🥇 oro.
+- **Primeros eventos (uno por zona)**: Finca, *La broca* (una plaga que baja la cosecha; trampas, hongo Beauveria y re-re para controlarla); Trapiche, *La gran molienda* (sin leña: la hornilla solo arde con el bagazo que se produce); Lechería, *Feria ganadera* (pedidos con plazo de queso, crema y arequipe); Cacaotal, *Derrumbe en la vía* (la ruta de la panela cortada: aguantar con lo guardado y abrir una trocha); Maizal, *Fiesta del maíz* (tandas de arepas para la fiesta); Pueblo, *El barco sale el viernes* (contenedores llenos antes de que zarpe cada barco).
+- **Progresión general** (en diseño): lo que dan las medallas se acumula en un total que **no se pierde al reiniciar** y no se convierte en monedas de la partida.
 
 ---
 

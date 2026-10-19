@@ -30,6 +30,9 @@ import { ZONES_BY_ID } from '../data/zones/index.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { fit, setFitted } from './fit.js';
 import { alerts } from '../sim/alerts.js';
+import { FACTS } from '../data/lore.js';
+
+const SUBTITLE_MS = 7000; // cada cuánto cambia el subtítulo (descripción y datos reales)
 
 const MODES = [
   { key: 1, label: '×1' },
@@ -114,7 +117,7 @@ export class StationPanel {
     return `
       <div class="panel-head">
         <div class="panel-icon">${icon}</div>
-        <div class="panel-title"><h3 data-fit>${title}</h3><p data-fit>${subtitle}</p></div>
+        <div class="panel-title"><h3 data-fit>${title}</h3><p data-fit data-ref="subtitle">${subtitle}</p></div>
         <button class="close-btn" data-close aria-label="Cerrar">✕</button>
       </div>
       ${tabs ? `<div class="tabs">${tabs}</div>` : ''}
@@ -130,6 +133,8 @@ export class StationPanel {
     this.info = info;
     this.variant = info.variant?.(this.game.state);
     const look = info.look?.(this.game.state) ?? info;
+    // En la pestaña de la estación, el subtítulo va alternando con datos reales de lo que hace.
+    this.subtitles = look === info && info.facts?.length ? [look.subtitle, ...info.facts.map((f) => `💡 ${f}`)] : null;
     this.el.innerHTML = this.frame({
       icon: look.icon,
       title: look.title,
@@ -228,6 +233,7 @@ export class StationPanel {
     }
 
     const info = this.info;
+    if (this.subtitles) setFitted(this.refs.subtitle, this.subtitles[Math.floor(performance.now() / SUBTITLE_MS) % this.subtitles.length]);
     const level = info.level(state);
     const q = this.game.quote(info.upgradeId, this.mode);
     const after = level + Math.max(q.levels, 1);
@@ -325,6 +331,7 @@ function stationInfo(id) {
         ? `Convierte ${listProducts(def.imports)} de otras zonas en ${out.name.toLowerCase()}`
         : `Fuente ilimitada de ${out.name.toLowerCase()}`,
     recipe: inId || def.imports ? `${[...(inId ? [recipe(def.in)] : []), ...(def.imports ?? []).map((imp) => `${imp.perCycle} ${PRODUCTS[imp.product].icon}🚌`)].join(' + ')} <span>➜</span> ${recipe(def.out)}` : `${def.icon} <span>➜</span> ${recipe(def.out)}`,
+    facts: FACTS[id],
     milestoneWhat: 'velocidad',
     upgradeId: id,
     tabs: !def.side,
