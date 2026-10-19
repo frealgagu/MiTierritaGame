@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v3.0.1 — La cadena, en un solo diagrama
+- La ventana de la cadena (🔗) ya no tiene pestañas: queda **un solo diagrama** con scroll.
+  - Las estaciones se unen con **eslabones de cadena** que corren hacia abajo (en rojo donde se frena, en azul lo que llega de otras zonas).
+  - Sobre cada eslabón va **lo que pasa por segundo**, solo con el ícono y el número («🍒 12»). Lo que llega de otras zonas también («🧂 0,05»).
+  - Las tarjetas muestran solo el ícono, el nombre y el nivel.
+- **Al tocar una estación** ya no se va a ella: abajo aparece **su detalle** (lo que recibe y procesa, lo que llega de otras zonas, sus arrieros, lo que se desvía o se pierde y si es la que frena), con botones para **ir al edificio** o a **sus arrieros**. También la bodega y lo que llega por las rutas tienen su detalle.
+
 ## v3.0.0 — Santander: La Guayabera
 - **Regiones.** Al completar el Pueblo se abre **Santander**, una región nueva que empieza de cero con **su propia economía**: monedas, niveles, investigaciones, objetivos, segundo final y reinicio ×2. El Eje Cafetero sigue produciendo, y **todas las regiones producen a la vez** (también sin conexión).
   - Se comparten el Renombre ⭐, el álbum, la decoración, los logros y el **calendario del país** (la misma hora y la misma temporada en todas).

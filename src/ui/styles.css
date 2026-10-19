@@ -278,99 +278,41 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .chain-head { display: flex; align-items: center; justify-content: space-between; }
 .chain-head h2 { margin: 0; }
 .chain-help { margin: 4px 0 10px; font-size: 0.85rem; color: var(--muted); }
-.chain-body { overflow-y: auto; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding-right: 2px; }
-.chain-card {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  text-align: left;
-  padding: 8px 10px;
-  border: 2px solid var(--ink);
-  border-radius: 14px;
-  background: var(--paper-2);
-  font-size: 0.85rem;
-}
-.chain-card b { font-size: 0.95rem; }
-.chain-card small { color: var(--muted); font-weight: 600; }
-.chain-card.hot { border-color: var(--red); background: #fde2e4; box-shadow: 0 0 0 2px #fde2e4; }
-.chain-card.locked { border-style: dashed; opacity: 0.8; }
-.chain-icon { font-size: 1.5rem; width: 34px; text-align: center; }
-.chain-text { min-width: 0; }
-/* La cadena: estaciones unidas por eslabones, en línea recta. Cada rama en su bloque de color. */
-.chain-step { position: relative; display: flex; flex-direction: column; }
-.chain-link {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin: 0;
-  padding: 7px 10px 7px 46px;
-  border: none;
-  background: none;
-  text-align: left;
-  font-size: 0.8rem;
-  min-height: 34px;
-}
-/* Eslabones: un óvalo de frente y uno de canto, repetidos; centrados bajo el ícono de la tarjeta. */
-.chain-link::before, .chain-imports::before {
-  content: '';
-  position: absolute;
-  left: 23px;
-  top: 0;
-  bottom: 0;
-  width: 12px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='24'%3E%3Cellipse cx='6' cy='7' rx='4' ry='6.3' fill='none' stroke='%238b5a2b' stroke-width='2.3'/%3E%3Crect x='4.8' y='11' width='2.4' height='13' rx='1.2' fill='%238b5a2b'/%3E%3C/svg%3E") repeat-y center top / 12px 24px;
-}
-.chain-link.hot::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='24'%3E%3Cellipse cx='6' cy='7' rx='4' ry='6.3' fill='none' stroke='%23d7263d' stroke-width='2.3'/%3E%3Crect x='4.8' y='11' width='2.4' height='13' rx='1.2' fill='%23d7263d'/%3E%3C/svg%3E"); }
-.chain-link.hot { color: #8f1d2c; }
-.chain-link .divert { color: #b45309; }
-.chain-link .lost, .chain-import .lost { color: #8f1d2c; font-weight: 600; }
-/* Lo que llega de otra zona: una caja de la ruta, a la derecha de los eslabones, que entra a la estación. */
-.chain-imports { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 4px 0 8px 46px; }
-.chain-step.first .chain-imports::before { display: none; }
-.chain-import {
-  position: relative;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  text-align: left;
-  padding: 5px 8px;
-  border: 2px dashed #2e6fd1;
-  border-radius: 12px;
-  background: #e8f1fc;
-  font-size: 0.8rem;
-}
-.chain-import::after { content: '↙'; position: absolute; left: -16px; bottom: -6px; font-size: 1rem; color: #2e6fd1; font-weight: 700; }
-.chain-step.first .chain-import::after { content: '↓'; left: -18px; }
-.chain-import small { color: #355d9a; font-weight: 600; }
-.chain-import.hot { border-color: var(--red); background: #fde2e4; }
-.chain-import-icon { font-size: 1.35rem; }
-/* Ramas: cada una con su color a la izquierda y su nombre arriba. */
-.chain-fork { margin: 2px 0 4px; padding-left: 46px; font-size: 0.8rem; font-weight: 700; color: var(--wood); }
-.chain-branch { margin: 0 0 8px 6px; padding: 4px 0 2px 8px; border-left: 4px solid; border-radius: 4px; }
-.chain-branch.b0 { border-color: #e8b90f; }
-.chain-branch.b1 { border-color: #2e6fd1; }
-.chain-branch.b2 { border-color: #2fa36b; }
-.chain-branch.b3 { border-color: #c8643b; }
-.chain-branch-head { margin: 0 0 4px; font-size: 0.8rem; font-weight: 700; }
-.chain-branch.b0 .chain-branch-head { color: #9a7400; }
-.chain-branch.b1 .chain-branch-head { color: #1f4f9c; }
-.chain-branch.b2 .chain-branch-head { color: #1f7a4e; }
-.chain-branch.b3 .chain-branch-head { color: #8a3f22; }
-.chain-tabs { margin: 6px 0 2px; height: 34px; }
-/* Diagrama: tarjetas con posición fija y tubos en SVG. */
+.chain-body { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding-right: 2px; }
+
+/* Diagrama: tarjetas con posición fija y eslabones en SVG. */
 .dg-scroll { overflow-x: auto; touch-action: pan-x pan-y; padding-bottom: 6px; }
 .dg { position: relative; margin: 0 auto; }
 .dg-pipes { position: absolute; inset: 0; pointer-events: none; }
-.dg-pipe { fill: none; stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; }
-.dg-pipe.flow { stroke: #8b5a2b; stroke-dasharray: 2 8; animation: dg-flow 0.9s linear infinite; }
-.dg-pipe.import { stroke: #2e6fd1; stroke-dasharray: 2 8; animation: dg-flow 0.9s linear infinite; }
-.dg-pipe.hot { stroke: var(--red); stroke-dasharray: 2 8; animation: dg-flow 1.8s linear infinite; }
-.dg-pipe.locked { stroke: #b9ad9a; stroke-dasharray: 6 6; }
-@keyframes dg-flow { to { stroke-dashoffset: -10; } }
+/* Eslabones (v3.0.1): cada trazo es un eslabón (el borde y su hueco) y la cadena corre hacia abajo. */
+.dg-link, .dg-hole { fill: none; stroke-linejoin: round; stroke-dasharray: 9 4; stroke-linecap: round; animation: dg-flow 0.9s linear infinite; }
+.dg-link { stroke-width: 7; stroke: #8b5a2b; }
+.dg-hole { stroke-width: 2.6; stroke: var(--paper); }
+.dg-link.import { stroke: #2e6fd1; }
+.dg-link.hot { stroke: var(--red); }
+.dg-link.hot, .dg-hole.hot { animation-duration: 1.8s; }
+.dg-link.locked { stroke: #b9ad9a; }
+.dg-link.locked, .dg-hole.locked { animation: none; }
+/* Lo que pasa por cada eslabón: ícono y número, sobre la cadena. */
+.dg-flow { position: absolute; transform: translate(-50%, -50%); padding: 0 6px; height: 18px; line-height: 16px; border: 1.5px solid #8b5a2b; border-radius: 999px; background: #fffaf0; font-size: 0.68rem; font-weight: 700; white-space: nowrap; pointer-events: none; font-variant-numeric: tabular-nums; }
+.dg-flow.hot { border-color: var(--red); color: #8f1d2c; background: #fde2e4; }
+.dg-node.selected, .dg-tag.selected { outline: 3px solid #e8b90f; outline-offset: 1px; }
+.dg-node.hot-link { box-shadow: 0 3px 0 var(--red); }
+/* Detalle de lo que se tocó, abajo de la ventana. */
+.chain-detail { flex: none; max-height: 46%; overflow-y: auto; margin-top: 8px; padding: 8px 10px; border: 2px solid var(--ink); border-radius: 14px; background: #fffaf0; font-size: 0.86rem; line-height: 1.35; }
+.chain-detail[hidden] { display: none; }
+.chain-detail p { margin: 4px 0; }
+.chain-detail .lost { color: #8f1d2c; font-weight: 600; }
+.chain-detail .divert { color: #b45309; }
+.cd-head { display: flex; align-items: center; gap: 6px; font-size: 1rem; }
+.cd-head small { color: var(--muted); font-weight: 600; }
+.cd-icon { font-size: 1.4rem; }
+.cd-actions { display: flex; gap: 8px; margin-top: 8px; }
+.cd-actions .btn { flex: 1; padding: 8px 6px; font-size: 0.9rem; white-space: nowrap; }
+@keyframes dg-flow { to { stroke-dashoffset: -13; } }
 .dg-node {
   position: absolute;
-  height: 70px;
+  height: 62px;
   display: grid;
   grid-template-columns: 30px 1fr;
   grid-template-rows: auto auto;
@@ -412,8 +354,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .dg-tag span { overflow: hidden; text-overflow: ellipsis; }
 .dg-tag.hot { border-color: var(--red); background: #fde2e4; }
-.chain-end { margin-top: 6px; padding-top: 8px; border-top: 2px dashed var(--paper-2); }
-.chain-total { margin: 10px 0 0; text-align: right; }
 
 /* Botones laterales y marcador de objetivo */
 .side {
