@@ -330,6 +330,29 @@ export class Scene {
     } else if (Math.random() < 0.04) {
       this.sound.chirp();
     }
+    this.zoneSounds(night);
+  }
+
+  // Sonidos de cada zona (v1.8): animales, el trapiche y las campanas del Pueblo. Los que dependen de
+  // una estación suenan solo si está trabajando.
+  zoneSounds(night) {
+    const hour = this.dayNight.hour;
+    const crossed = (h) => this.lastHour !== undefined && this.lastHour < h && hour >= h;
+    const working = (id) => this.stations[id]?.working;
+    const theme = this.zone.theme;
+    const r = Math.random();
+    if (theme === 'town') {
+      // Campanas a las 6, a las 12 y a las 18.
+      for (const h of [6, 12, 18]) if (crossed(h)) this.sound.bells(h === 12 ? 4 : 3);
+    } else if (crossed(5.8)) this.sound.rooster(); // el gallo al amanecer
+    this.lastHour = hour;
+    if (night) return;
+    if (r < 0.006) this.sound.bark();
+    else if (theme !== 'town' && r < 0.02) this.sound.cluck();
+    else if (theme === 'dairy' && r < 0.045) this.sound.moo();
+    else if (theme === 'cane' && r < 0.05 && working('cane_mill')) this.sound.grind();
+    else if (theme === 'cane' && r < 0.07 && working('furnace')) this.sound.bubble();
+    else if (theme === 'cacao' && r < 0.035) this.sound.parrot();
   }
 
   syncMules(state) {

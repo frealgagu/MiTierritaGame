@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v1.8.5 — Sonidos de cada zona
+- Sonidos de ambiente sintetizados (sin archivos, como los demás), según la zona y la hora:
+  - En las fincas, el **gallo** canta al amanecer y las **gallinas** cacarean de vez en cuando.
+  - Un **perro** ladra de vez en cuando, en todas las zonas.
+  - En la Lechería, las **vacas** mugen.
+  - En el Trapiche, el **trapiche** retumba mientras muele y la **miel hierve** en las pailas de la Hornilla (solo si están trabajando).
+  - En el Cacaotal, **loros y guacamayas**.
+  - En el Pueblo, las **campanas** de la iglesia a las 6, a las 12 y a las 18.
+- Con esto queda completa la fase de ambiente (v1.8): datos reales, la gente de cada zona, vida en el mapa, la cadena como diagrama y los sonidos.
+
 ## v1.8.4 — Diagrama de la cadena
 - La ventana de la cadena (🔗) tiene dos pestañas: **🗺️ Diagrama** y **📋 Detalle** (la lista de antes, con todos los números). Se recuerda la última que se usó.
 - El **diagrama** es como el plano de producción de Frozen City: cada estación es una tarjeta (con su nivel y lo que produce), de arriba hacia abajo en el orden de la cadena, y las ramas van en columnas, una al lado de la otra. Tubos con el producto corriendo unen cada estación con la siguiente y todas terminan en la Bodega y Willys.

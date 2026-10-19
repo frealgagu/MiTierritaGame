@@ -543,7 +543,7 @@ export const COST_GROWTH = 1.15;
 | v1.5 ✅ | **Zona 6: El Pueblo**: Casa del café, Greca, Fonda, canastas de regalo y Contenedor de exportación (**final del juego**) | Expansión final |
 | v1.6 ✅ | **Segundo final**: todo al nivel 100; volver a empezar con producción ×2, ×4, ×8… | Rejugable |
 | v1.7 ✅ | Hitos más fuertes (×2, ×2, ×4, ×4, ×8), **Maestría** ×4 y **Supremacía** ×8 por zona, objetivos finales más largos | Segundo final alcanzable |
-| v1.8 | **Ambiente**: datos reales en los paneles y una persona por zona que avisa lo importante (✅ v1.8.0); vida en el mapa (animales, gente, humo); sonidos por zona | Más personalidad |
+| v1.8 ✅ | **Ambiente**: datos reales en los paneles y una persona por zona que avisa lo importante; vida en el mapa (gallinas, perro, vacas, gente, palomas); sonidos por zona; la cadena como diagrama | Más personalidad |
 | v1.9 | **Jornada y temporadas** (§10.1) | Ritmo |
 | v2.0 | **Eventos e insignias** (§10.2): un evento por zona al año, con medallas; progresión general que no se pierde al reiniciar | Rejugable a largo plazo |
 
