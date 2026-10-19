@@ -35,7 +35,7 @@ Las seis zonas del juego, cada una se abre al completar la anterior: **La Finca*
 - **Vida**: edificios que evolucionan con los hitos, día y noche, aves, luciérnagas, efectos y sonido sintetizado.
 - **Guardado** automático, ganancias sin conexión (2 h, hasta 24 h con una investigación por zona), copia de seguridad exportable.
 - **Instalable en el móvil** (PWA) y jugable sin internet.
-- **Música**: «Apple Cider», de Zane Little (CC0, dominio público, vía OpenGameArt).
+- **Música propia**: un bambuco en 3/4 compuesto para el juego y tocado por él mismo, sin archivos (tiple, guitarra y bandola sintetizados con Karplus-Strong). Más adelante, una pieza por región.
 
 ### App de Android
 El mismo juego empaquetado con [Capacitor](https://capacitorjs.com) (como Melvor Idle): va dentro de la app, funciona sin internet y el botón «atrás» cierra ventanas o pasa la app a segundo plano. Para generar el APK hace falta Java 21 y el Android SDK (plataforma 36):
@@ -52,10 +52,10 @@ El APK de depuración se instala directamente en el teléfono (hay que permitir 
 Abre https://frealgagu.github.io/Game/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).
 
 ## Origen y originalidad
-La idea parte del género de los juegos incrementales de **cadena de producción** (un recurso ilimitado pero lento que alimenta estaciones que se mejoran), del que *Frozen City* es un ejemplo; de ahí se tomaron solo ideas generales: la cadena visible y un aspecto isométrico «de juguete» con personajes que llevan cargas. El tema (café, panela, leche, cacao y maíz colombianos), las zonas, las recetas, los números, el código, los dibujos (hechos con código, sin imágenes de otros juegos) y los textos son propios. La música es de dominio público (CC0).
+La idea parte del género de los juegos incrementales de **cadena de producción** (un recurso ilimitado pero lento que alimenta estaciones que se mejoran), del que *Frozen City* es un ejemplo; de ahí se tomaron solo ideas generales: la cadena visible y un aspecto isométrico «de juguete» con personajes que llevan cargas. El tema (café, panela, leche, cacao y maíz colombianos), las zonas, las recetas, los números, el código, los dibujos (hechos con código, sin imágenes de otros juegos) y los textos son propios. La música también es propia.
 
 ## Licencia
-El código y los gráficos son [MIT](LICENSE). La música, «Apple Cider» de Zane Little, es CC0 (dominio público) y no está cubierta por la licencia MIT.
+El código, los gráficos y la música son [MIT](LICENSE).
 
 ## Estructura
 

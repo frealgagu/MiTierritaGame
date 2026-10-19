@@ -1,0 +1,71 @@
+// Música propia, una pieza por región (v1.8.7). Cada compás de 3/4 se cuenta en corcheas (0 a 5) y cada
+// nota de la melodía es [corchea donde empieza, cuántas corcheas dura, nota]. Las notas largas se tocan
+// en trémolo, como la bandola andina; el acompañamiento (bajo y rasgueo de guitarra y tiple) sale de
+// los acordes.
+
+// Eje Cafetero: un bambuco en mi menor que pasa a sol mayor. La melodía entra después del tiempo
+// fuerte y se amarra al compás siguiente, como canta el bambuco.
+const BAMBUCO = {
+  name: 'Bambuco de la finca',
+  bpm: 108,
+  chords: [
+    // A, en mi menor
+    'Em', 'Em', 'B7', 'B7', 'B7', 'B7', 'Em', 'Em',
+    'E7', 'E7', 'Am', 'Am', 'Em', 'B7', 'Em', 'Em',
+    // B, en sol mayor (y de vuelta a mi menor por el si siete)
+    'G', 'G', 'D7', 'D7', 'D7', 'D7', 'G', 'G',
+    'G7', 'G7', 'C', 'C', 'G', 'D7', 'G', 'B7',
+  ],
+  melody: [
+    [[1, 1, 'B4'], [2, 1, 'E5'], [3, 2, 'G5'], [5, 1, 'F#5']],
+    [[0, 2, 'E5'], [2, 1, 'B4'], [3, 1, 'G4'], [4, 2, 'B4']],
+    [[1, 1, 'A4'], [2, 1, 'B4'], [3, 2, 'D#5'], [5, 1, 'F#5']],
+    [[0, 3, 'F#5'], [3, 1, 'E5'], [4, 2, 'D#5']],
+    [[1, 1, 'F#4'], [2, 1, 'A4'], [3, 1, 'C5'], [4, 1, 'B4'], [5, 1, 'A4']],
+    [[0, 2, 'B4'], [2, 1, 'D#5'], [3, 1, 'F#5'], [4, 1, 'E5'], [5, 1, 'D#5']],
+    [[0, 3, 'E5'], [3, 1, 'G5'], [4, 1, 'F#5'], [5, 1, 'E5']],
+    [[0, 4, 'B4']],
+    [[1, 1, 'G#4'], [2, 1, 'B4'], [3, 2, 'D5'], [5, 1, 'E5']],
+    [[0, 2, 'D5'], [2, 1, 'B4'], [3, 1, 'G#4'], [4, 1, 'B4'], [5, 1, 'D5']],
+    [[0, 3, 'C5'], [3, 1, 'E5'], [4, 2, 'A5']],
+    [[0, 1, 'G5'], [1, 1, 'E5'], [2, 2, 'C5'], [4, 2, 'A4']],
+    [[1, 1, 'B4'], [2, 1, 'E5'], [3, 1, 'G5'], [4, 1, 'F#5'], [5, 1, 'E5']],
+    [[0, 2, 'D#5'], [2, 1, 'F#5'], [3, 1, 'A4'], [4, 1, 'B4'], [5, 1, 'D#5']],
+    [[0, 6, 'E5']],
+    [[4, 1, 'B4'], [5, 1, 'D5']],
+    [[0, 2, 'G5'], [2, 1, 'D5'], [3, 1, 'B4'], [4, 1, 'D5'], [5, 1, 'G5']],
+    [[0, 3, 'B5'], [3, 1, 'A5'], [4, 2, 'G5']],
+    [[0, 2, 'A5'], [2, 1, 'F#5'], [3, 1, 'D5'], [4, 1, 'F#5'], [5, 1, 'A5']],
+    [[0, 2, 'C5'], [2, 1, 'D5'], [3, 2, 'F#5'], [5, 1, 'E5']],
+    [[1, 1, 'D5'], [2, 1, 'F#5'], [3, 2, 'A5'], [5, 1, 'G5']],
+    [[0, 2, 'F#5'], [2, 1, 'E5'], [3, 1, 'D5'], [4, 1, 'C5'], [5, 1, 'A4']],
+    [[0, 3, 'B4'], [3, 1, 'D5'], [4, 2, 'G5']],
+    [[0, 4, 'G5'], [4, 1, 'F#5'], [5, 1, 'F5']],
+    [[1, 1, 'G4'], [2, 1, 'B4'], [3, 1, 'D5'], [4, 2, 'F5']],
+    [[0, 1, 'E5'], [1, 1, 'D5'], [2, 2, 'B4'], [4, 1, 'D5'], [5, 1, 'F5']],
+    [[0, 3, 'E5'], [3, 2, 'G5'], [5, 1, 'E5']],
+    [[0, 4, 'C5'], [4, 1, 'D5'], [5, 1, 'E5']],
+    [[0, 2, 'D5'], [2, 1, 'B4'], [3, 1, 'G4'], [4, 1, 'B4'], [5, 1, 'D5']],
+    [[0, 2, 'C5'], [2, 1, 'A4'], [3, 1, 'F#4'], [4, 1, 'A4'], [5, 1, 'C5']],
+    [[0, 3, 'B4'], [3, 3, 'G4']],
+    [[1, 1, 'F#4'], [2, 1, 'A4'], [3, 1, 'B4'], [4, 1, 'D#5'], [5, 1, 'F#5']],
+  ],
+};
+
+// Por región; las demás (guabina, cumbia, joropo, torbellino) llegan con sus regiones.
+export const SONGS = { cafetero: BAMBUCO };
+
+// Acordes: tónica y notas (en semitonos sobre la tónica).
+const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };
+const QUALITY = { '': [0, 4, 7], m: [0, 3, 7], 7: [0, 4, 7, 10], m7: [0, 3, 7, 10] };
+
+export function parseChord(name) {
+  const [, root, quality] = name.match(/^([A-G]#?)(.*)$/);
+  return { root: ROOTS[root], tones: QUALITY[quality].map((k) => (ROOTS[root] + k) % 12) };
+}
+
+// 'F#5' → 78 (MIDI).
+export function midi(note) {
+  const [, name, octave] = note.match(/^([A-G]#?)(-?\d)$/);
+  return ROOTS[name] + (Number(octave) + 1) * 12;
+}

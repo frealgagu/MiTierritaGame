@@ -108,7 +108,7 @@ async function start() {
     game.state.settings.zone = zoneId;
     scene = new Scene(app, game, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
-    if (import.meta.env.DEV) window.__cafetal = { game, scene, panel, select };
+    if (import.meta.env.DEV) window.__cafetal = { game, scene, panel, select, music };
   };
   showZone(view.zone);
   const hud = new HUD(game, select, () => scene.dayNight.hour, getZone);

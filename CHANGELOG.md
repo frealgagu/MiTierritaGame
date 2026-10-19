@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## v1.8.7 — Música propia
+- La música de fondo ahora es **propia**: «Bambuco de la finca», un bambuco en 3/4 compuesto para el juego (mi menor, y la segunda parte en sol mayor). No es un archivo: el juego la toca con cuerdas sintetizadas (Karplus-Strong):
+  - **guitarra**: bajo en el primer tiempo y rasgueo en el segundo y el tercero;
+  - **tiple**: golpes cortos y apagados en el contratiempo, con sus cuerdas de a tres (dos al unísono y una octava abajo);
+  - **bandola**: la melodía, en trémolo en las notas largas.
+- Suena con un poco de eco de sala, en bucle (53 s) y sin corte entre vuelta y vuelta.
+- Se quitó «Apple Cider» (CC0): el juego pesa 2,4 MB menos y todo (código, gráficos y música) queda bajo la licencia MIT.
+- Cada región tendrá su pieza (bambuco y pasillo aquí; guabina, cumbia, joropo y torbellino para las regiones futuras).
+
 ## v1.8.6 — El Willys se toma un tinto
 - Cuando todo lo que produce una zona se lo lleva la chiva a otra zona, el **Willys se queda parqueado** y el conductor **se toma un tinto** (con su vaporcito). El panel del despacho lo explica: «Todo lo que produce la Finca se lo lleva la chiva al Pueblo; el Willys solo sale con lo que sobra».
 - En el Pueblo, la **gente pasea por la plaza** y la grama de al lado, sin pisar las calles por donde pasan las mulas y los carros. Antes caminaba por las calles y la de la plaza estaba pintada (quieta); ahora toda camina, y hay más con cada hito de la Casa del café.

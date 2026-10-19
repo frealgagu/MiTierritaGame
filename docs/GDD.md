@@ -400,7 +400,7 @@ La casa del Cafetal evoluciona aparte (de rancho de madera a casa de dos pisos c
 ### Sonido (v0.4)
 Sintetizado con Web Audio, sin archivos: clic de botones, monedas al vender, arpegio al subir de nivel y al cruzar un hito, martillazos al construir, pájaros de día y grillos de noche. Se apaga desde el menú y la preferencia se guarda con la partida.
 
-**Música (v1.4):** «Apple Cider», de Zane Little (CC0, dominio público, de OpenGameArt), en `public/music/finca.mp3` (recodificada a 96 kbps, 2,4 MB). Suena en bucle al 30 % tras el primer toque, con fundido de entrada y salida, se pausa con la pestaña oculta y tiene su propio botón en el menú.
+**Música (v1.8.7, propia):** cada región tiene su pieza (`src/audio/songs.js`); el Eje Cafetero, un **bambuco** en 3/4 (mi menor y sol mayor, 32 compases, 108 negras por minuto). El juego la arma al empezar (`src/audio/compose.js`, unos 0,3 s, compás por compás para no trabarse) con cuerdas Karplus-Strong: bajo y rasgueo de guitarra en el primer, segundo y tercer tiempo, golpes apagados de tiple en el contratiempo y la melodía de bandola, con trémolo en las notas largas. Suena en bucle tras el primer toque, con eco de sala, fundido de entrada y salida, se pausa con la pestaña oculta y tiene su propio botón en el menú. Reemplaza a «Apple Cider» (CC0), que pesaba 2,4 MB.
 
 ### Paleta
 
