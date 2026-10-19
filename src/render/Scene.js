@@ -8,6 +8,7 @@ import { FarmView, PlotView, WarehouseView } from './Stations.js';
 import { BuildingView } from './Buildings.js';
 import { ChivaView, JeepView, MuleView } from './Carriers.js';
 import { Belts } from './Belts.js';
+import { Critters } from './Critters.js';
 import { iso } from './iso.js';
 import { pointAt, pointAtDistance } from '../core/path.js';
 import { formatAmount, formatNumber } from '../core/format.js';
@@ -69,6 +70,7 @@ export class Scene {
 
     this.jeep = new JeepView();
     this.objects.addChild(this.jeep);
+    this.critters = new Critters(this.zone, this.terrain, this.objects);
     this.mules = new Map();
     this.drawExitSign();
     // Rutas que salen de esta zona o llegan a ella: carretera, letrero y la Chiva.
@@ -303,6 +305,8 @@ export class Scene {
         for (const p of view.smokePoints ?? []) this.effects.smoke(p.x, p.y);
       }
     }
+    this.critters.setCows(this.farm.cowCount ?? 0);
+    this.critters.update(dt, this.time, this.dayNight.light > 0.5, this.jeepPos);
     this.updateAmbient(dt);
     this.effects.update(dt);
   }
@@ -393,6 +397,10 @@ export class Scene {
     const load = Object.values(j.load).reduce((a, b) => a + b, 0) / dispatchCapacity(zone.dispatch.level, dispatchMult(state, this.zone.id));
     const waiting = j.phase === 'idle' ? Math.min(1, j.waited / DISPATCH.maxWait) * 0.3 : 0;
     this.jeep.place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, j.phase === 'out' ? load : waiting);
+    // Para el perro que lo acompaña: dónde va y hacia dónde.
+    const len = Math.hypot(p.dx, p.dy) || 1;
+    const sign = reverse ? -1 : 1;
+    this.jeepPos = { gx: p.gx, gy: p.gy, dx: (sign * p.dx) / len, dy: (sign * p.dy) / len, moving: j.phase !== 'idle' };
   }
 
   // La Chiva solo se ve en el tramo de carretera de esta zona: al salir de la bodega de origen y al

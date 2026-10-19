@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v1.8.3 — Vida en el mapa
+- **Gallinas** que picotean junto a la casa de cada finca.
+- Un **perro** en el patio de la bodega que corre detrás del Willys cuando sale y luego vuelve.
+- En la Lechería, las **vacas** caminan y pastan por el potrero (antes estaban quietas); con cada hito hay más.
+- En el Pueblo, **gente** caminando por las calles (con o sin sombrero aguadeño) y **palomas** alrededor de la fuente.
+- De noche, las gallinas, las palomas y la gente se recogen; el perro y las vacas se quedan.
+
 ## v1.8.2 — La cadena, más clara
 - La vista de la cadena (🔗) ahora es un árbol:
   - Las estaciones se unen con **eslabones**, en línea recta (antes, una raya punteada que se corría de lado en las ramas).

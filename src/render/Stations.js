@@ -2,7 +2,7 @@ import { Container, Graphics, Polygon, Sprite, Text } from 'pixi.js';
 import { iso, isoPoly, depth, shade } from './iso.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawCornStalk, drawCow } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawCornStalk } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -172,10 +172,10 @@ export class FarmView extends StationView {
       if (cows.some(([cx, cy]) => Math.hypot(cx - gx, cy - gy) < 0.9)) continue;
       cows.push([gx, gy]);
     }
-    cows.sort((a, b) => a[0] + a[1] - (b[0] + b[1]));
+    // Las vacas se mueven por el potrero (ver Critters.js); aquí solo cuántas son y dónde salta la leche.
+    this.cowCount = cows.length;
     for (const [gx, gy] of cows) {
       const p = iso(gx, gy);
-      drawCow(g, p.x, p.y, 0.9 + tier * 0.05, rng, rng() < 0.5);
       this.bushes.push({ x: p.x, y: p.y - 4 });
     }
     // Cerca alrededor del potrero (delante de las vacas).
