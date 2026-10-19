@@ -107,4 +107,12 @@ export const PRODUCTS = {
   toasted_ants: { name: 'Hormigas tostadas', zone: 'hormigas', value: 70000, icon: ICON.toastedAnts, color: 0x6b2e14 },
   ant_cone: { name: 'Cucurucho de hormigas', zone: 'hormigas', value: 120000, icon: ICON.antCone, color: 0xf4efe6 },
   recuerdo: { name: 'Recuerdo de Santander', zone: 'hormigas', value: 1200000, icon: ICON.recuerdo, color: 0xd9c08c },
+
+  // Santander · Barichara (v3.5): mismos valores que el Pueblo.
+  dulces_tipicos: { name: 'Dulces típicos', zone: 'barichara', value: 150000, icon: ICON.dulcesTipicos, color: 0xd81b60 },
+  sobremesa: { name: 'Sobremesa', zone: 'barichara', value: 400000, icon: ICON.sobremesa, color: 0x3b2314 },
+  estadia: { name: 'Estadía en la posada', zone: 'barichara', value: 3200000, icon: ICON.estadia, color: 0xc9a227 },
+  caja_surtida: { name: 'Caja surtida', zone: 'barichara', value: 600000, icon: ICON.cajaSurtida, color: 0xe8dcc0 },
+  canasta_caminante: { name: 'Canasta del caminante', zone: 'barichara', value: 2000000, icon: ICON.canastaCaminante, color: 0xc8a26b },
+  excursion: { name: 'Excursión a Guane', zone: 'barichara', value: 24000000, icon: ICON.excursion, color: 0xa1672c },
 };

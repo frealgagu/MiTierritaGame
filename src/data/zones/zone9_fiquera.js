@@ -37,6 +37,8 @@ export const ZONE9 = {
     // Los costales y las alpargatas salen hacia las Hormigas (v3.4).
     costales: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Costales a las Hormigas ⬇' },
     alpargatas: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Alpargatas ⬇' },
+    // Los tercios de tabaco salen hacia Barichara (v3.5).
+    tercios: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'Tercios a Barichara ➜' },
   },
   unlockedBy: 'tabacal',
   next: 'hato',

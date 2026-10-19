@@ -1169,6 +1169,104 @@ def recuerdo():
     ]
 
 
+# ---------- Santander · Barichara (v3.5) ----------
+
+def dulces_tipicos():
+    """Dulces típicos: un plato de barro con bocadillos, cocadas y panelitas de leche."""
+    return [
+        (OUTLINE, [ellipse(50, 66, 46, 22)]),
+        ('#b5653a', [ellipse(50, 66, 43, 19.5)]),
+        ('#c97a4a', [ellipse(50, 62, 36, 14)]),
+        *bocadillo_box(22, 48, 18, 10, 7, '#d81b60', '#880e4f', '#6a0a3c'),
+        (OUTLINE, [circle(60, 56, 10)]),
+        ('#f4efe6', [circle(60, 56, 8.5)]),
+        ('#e3d9c6', [circle(57, 53, 1.6), circle(63, 58, 1.6), circle(58, 60, 1.4)]),
+        *bocadillo_box(44, 60, 14, 8, 6, '#f3dfb0', '#e0c48a', '#c9a96b'),
+        *bocadillo_box(64, 66, 14, 8, 6, '#f3dfb0', '#e0c48a', '#c9a96b'),
+    ]
+
+
+def sobremesa():
+    """Sobremesa: un pocillo de tinto, un bocadillo y un tabaco, en la mesa del parque."""
+    return [
+        ('#ffffff90', ['M 34 22 Q 28 12 36 4 Q 32 14 38 20 Z']),
+        (OUTLINE, ['M 18 30 L 52 30 L 48 62 Q 35 68 22 62 Z', ellipse(54, 44, 8, 9)]),
+        ('#f4efe6', ['M 20.5 32.5 L 49.5 32.5 L 45.8 60 Q 35 65 24.2 60 Z']),
+        ('#f4efe6', [ellipse(54, 44, 5, 6)]),
+        ('#3b2314', [ellipse(35, 32.5, 14.5, 3)]),
+        (OUTLINE, [ellipse(36, 66, 26, 6)]),
+        ('#f4efe6', [ellipse(36, 66, 24, 4.5)]),
+        *bocadillo_box(56, 70, 26, 12, 8, '#d81b60', '#880e4f', '#6a0a3c'),
+        (OUTLINE, [rect(8, 82, 62, 10, -8, 39, 87)]),
+        ('#7b4a22', [rect(10, 84, 58, 6, -8, 39, 87)]),
+        ('#d7263d', [rect(22, 84, 6, 6, -8, 39, 87)]),
+    ]
+
+
+def estadia():
+    """Estadía en la posada: la llave grande de la puerta, con su tablita de madera."""
+    return [
+        (OUTLINE, [circle(32, 32, 20)]),
+        ('#c9a227', [circle(32, 32, 17)]),
+        ('#fff8ec', [circle(32, 32, 8)]),
+        (OUTLINE, [rect(44, 28, 46, 9, 35, 44, 32)]),
+        ('#c9a227', [rect(46, 30, 42, 5, 35, 44, 32)]),
+        (OUTLINE, [rect(70, 52, 10, 14, 35, 75, 59)]),
+        ('#c9a227', [rect(72, 54, 6, 10, 35, 75, 59)]),
+        ('#8b5a2b', [rib(18, 50, 22, 70, 1.4)]),
+        (OUTLINE, [rect(8, 68, 30, 22)]),
+        ('#a1672c', [rect(10, 70, 26, 18)]),
+        ('#fff8ec', [rect(16, 76, 14, 2), rect(16, 81, 10, 2)]),
+    ]
+
+
+def caja_surtida():
+    """Caja surtida: caja forrada en papel de fique con bocadillos y hoja de tabaco."""
+    return [
+        *bocadillo_box(30, 22, 20, 10, 8, '#d81b60', '#880e4f', '#6a0a3c'),
+        (OUTLINE, [leaf(56, 38, 84, 10, 12)]),
+        ('#b7792c', [leaf(56, 38, 84, 10, 10)]),
+        (OUTLINE, [poly(8, 40, 92, 40, 86, 94, 14, 94)]),
+        ('#e8dcc0', [poly(11, 43, 89, 43, 83.5, 91, 16.5, 91)]),
+        ('#d6c6a0', [rib(14, 58, 86, 58, 1), rib(16, 74, 84, 74, 1), rib(36, 44, 34, 90, 0.8), rib(64, 44, 66, 90, 0.8)]),
+        ('#2fa36b', [rect(36, 58, 28, 16)]),
+        ('#fff8ec', [rect(40, 62, 20, 2.5), rect(40, 67, 14, 2.5)]),
+    ]
+
+
+def canasta_caminante():
+    """Canasta del caminante: canasto con el fiambre envuelto en bijao y el almuerzo para el camino."""
+    return [
+        (OUTLINE, ['M 22 46 Q 50 2 78 46 L 72 46 Q 50 12 28 46 Z']),
+        ('#8db33a', [ellipse(36, 44, 14, 10)]),
+        ('#d9c08c', [rect(34, 34, 4, 20)]),
+        ('#f4f1e8', [ellipse(64, 46, 14, 7)]),
+        ('#8d3b1f', [ellipse(62, 44, 7, 3.5)]),
+        (OUTLINE, [poly(8, 48, 92, 48, 82, 94, 18, 94)]),
+        ('#c8a26b', [poly(11.5, 51, 88.5, 51, 79.5, 91, 20.5, 91)]),
+        ('#a07c4a', [rib(14, 62, 86, 62, 2), rib(16, 74, 84, 74, 2), rib(19, 86, 81, 86, 2)]),
+        ('#d7263d', [rect(40, 48, 20, 6)]),
+    ]
+
+
+def excursion():
+    """Excursión a Guane: el letrero del Camino Real, con su sombrero y el bastón del caminante."""
+    stones = [ellipse(x, y, rx, 4) for x, y, rx in [(30, 90, 10), (52, 88, 9), (72, 92, 10), (44, 96, 8), (62, 96, 7)]]
+    return [
+        ('#d9b56a', stones),
+        (OUTLINE, [rect(46, 22, 8, 70)]),
+        ('#8b5a2b', [rect(48, 24, 4, 66)]),
+        (OUTLINE, [poly(16, 24, 78, 24, 92, 34, 78, 44, 16, 44)]),
+        ('#a1672c', [poly(19, 27, 77, 27, 88, 34, 77, 41, 19, 41)]),
+        ('#fff8ec', [rect(26, 32, 40, 3)]),
+        (OUTLINE, [ellipse(50, 16, 24, 6)]),
+        ('#e8d9a8', [ellipse(50, 16, 22, 4.5)]),
+        ('#e8d9a8', ['M 38 16 Q 40 2 50 2 Q 60 2 62 16 Z']),
+        ('#3a2418', [rect(38, 12, 24, 3)]),
+        ('#6b4a2e', [rib(82, 50, 70, 96, 2.4)]),
+    ]
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -1234,6 +1332,12 @@ ICONS = [
     (0xE03D, 'toasted_ants', toasted_ants),
     (0xE03E, 'ant_cone', ant_cone),
     (0xE03F, 'recuerdo', recuerdo),
+    (0xE040, 'dulces_tipicos', dulces_tipicos),
+    (0xE041, 'sobremesa', sobremesa),
+    (0xE042, 'estadia', estadia),
+    (0xE043, 'caja_surtida', caja_surtida),
+    (0xE044, 'canasta_caminante', canasta_caminante),
+    (0xE045, 'excursion', excursion),
 ]
 
 

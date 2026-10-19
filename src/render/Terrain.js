@@ -70,7 +70,7 @@ export class Terrain {
         const v = rng();
         let color;
         if (type === 'road') color = mix(PAL.road, 0xd8b07a, v * 0.4);
-        else if (type === 'farm') color = FARM_SOIL[this.zone.theme]?.(v) ?? mix(PAL.soil, 0x6e4529, v * 0.35);
+        else if (type === 'farm') color = (FARM_SOIL[this.zone.style] ?? FARM_SOIL[this.zone.theme])?.(v) ?? mix(PAL.soil, 0x6e4529, v * 0.35);
         else if (type === 'plot' || type === 'building') color = mix(PAL.plot, 0xc9a06c, v * 0.4);
         else color = mix(PAL.grass, (gx + gy) % 2 ? 0x8cc65a : 0x6fae44, 0.35 + v * 0.3);
         g.poly(isoPoly([[gx, gy], [gx + 1, gy], [gx + 1, gy + 1], [gx, gy + 1]])).fill(color);
@@ -95,7 +95,8 @@ export class Terrain {
           // Plaza empedrada.
           for (let k = 0; k < 4; k++) {
             const p = iso(gx + 0.25 + (k % 2) * 0.5, gy + 0.25 + Math.floor(k / 2) * 0.5);
-            g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? 0xa39b8c : 0xd2cbbd, alpha: 0.8 });
+            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara
+            g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
         } else if (type === 'farm' && this.zone.theme === 'cacao') {
           // Hojarasca bajo los cacaos.
@@ -139,7 +140,7 @@ export class Terrain {
         let obj = null;
         if (this.zone.theme === 'town') {
           // Pueblo: casitas de colores, guayacanes florecidos, faroles y alguna palma de cera.
-          if (r < 0.06) obj = townHouse(rng);
+          if (r < 0.06) obj = townHouse(rng, this.zone.style);
           else if (r < 0.09) obj = guayacan(rng);
           else if (r < 0.105) obj = streetLamp();
           else if (r < 0.12) obj = palm(rng);
@@ -228,15 +229,19 @@ const FARM_SOIL = {
   fique: (v) => mix(0xb8805a, 0x9c6a48, v * 0.4),
   ants: (v) => mix(0xc0784a, 0xa86438, v * 0.4),
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
+  barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6), // la plaza de piedra amarilla
 };
 
 // Casita del pueblo: paredes de color, zócalo, tejas de barro, puerta y ventana.
 const HOUSE_WALLS = [0xf4efe6, 0xf6d860, 0x9ad0ec, 0xf2a7a0, 0xb8e0a8, 0xf4efe6];
+// Barichara (v3.5): casi todas blancas, de tapia pisada.
+const BARICHARA_WALLS = [0xf7f4ee, 0xf7f4ee, 0xf7f4ee, 0xf1e6cf];
 const HOUSE_TRIMS = [PAL.balconyRed, PAL.balconyBlue, PAL.balconyGreen, PAL.balconyYellow];
-function townHouse(rng) {
+function townHouse(rng, style) {
   const c = new Container();
   const g = new Graphics();
-  const wall = HOUSE_WALLS[Math.floor(rng() * HOUSE_WALLS.length)];
+  const walls = style === 'barichara' ? BARICHARA_WALLS : HOUSE_WALLS;
+  const wall = walls[Math.floor(rng() * walls.length)];
   const trim = HOUSE_TRIMS[Math.floor(rng() * HOUSE_TRIMS.length)];
   const w = 0.8 + rng() * 0.2;
   const h = 20 + rng() * 8;

@@ -57,6 +57,8 @@ test('cada región tiene su segundo final y su reinicio, sin tocar las demás', 
   s.zones.hato.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), false);
   s.zones.hormigas.complete = true;
+  assert.equal(checkMastery(s, { emit() {} }), false);
+  s.zones.barichara.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), true);
   s.playTime = 9000;
   const next = restartState(s);
@@ -82,7 +84,7 @@ test('la partida se guarda y se carga con sus regiones', () => {
   const back = loadGame();
   assert.equal(back.regions.santander.coins, 1234);
   assert.equal(back.regions.santander.region, 'santander');
-  assert.deepEqual(Object.keys(back.regions.santander.zones), ['guayabera', 'tabacal', 'fiquera', 'hato', 'hormigas']);
+  assert.deepEqual(Object.keys(back.regions.santander.zones), ['guayabera', 'tabacal', 'fiquera', 'hato', 'hormigas', 'barichara']);
   assert.ok(back.profile);
 });
 
@@ -236,4 +238,44 @@ test('las Hormigas se abren con el Hato completo y venden recuerdos con los cost
   CALENDAR.on = on;
   for (const p of ['fique_sack', 'alpargatas']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
   assert.ok((game.state.stats.sold.recuerdo ?? 0) > 0, 'vende recuerdos');
+});
+
+test('una partida de Santander con la Asociación de tejedoras guardada como «tejedoras» se carga con su id nuevo', () => {
+  const mem = {};
+  globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  root.research.push('tejedoras'); // las Tejedoras de fique del Pueblo: se quedan
+  root.regions.santander.research.push('tejedoras');
+  saveGame(root);
+  const back = loadGame();
+  assert.ok(back.research.includes('tejedoras'));
+  assert.deepEqual(back.regions.santander.research, ['asociacion_tejedoras']);
+});
+
+test('Barichara se abre con las Hormigas completas y arma excursiones con lo de toda la región', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
+  const game = new Game(createInitialState(0, 'santander'));
+  for (const z of ['tabacal', 'fiquera', 'hato', 'hormigas']) game.unlockZone(z);
+  const final = GOALS_BY_ZONE.hormigas.find((g) => g.final);
+  game.state.goals.claimed.push(...GOALS_BY_ZONE.hormigas.filter((g) => !g.final).map((g) => g.id));
+  game.state.stats.sold.recuerdo = final.amount;
+  assert.ok(game.claimGoal(final.id));
+  assert.equal(game.state.zones.barichara.unlocked, true);
+  game.state.coins = 1e18;
+  for (const z of REGIONS[1].zones) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 30;
+    game.state.zones[z].dispatch.level = 30;
+  }
+  for (const r of Object.values(game.state.routes)) r.level = 30;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 1500; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  for (const p of ['bocadillo_crate', 'cigar', 'recuerdo', 'tobacco_bale', 'almuerzo', 'fiambre']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
+  assert.ok((game.state.stats.sold.excursion ?? 0) > 0, 'sale una excursión');
 });

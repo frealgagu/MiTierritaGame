@@ -2185,4 +2185,125 @@ const DRAW = {
       g.ellipse(p.x, p.y - 8.5, 2.5, 1.2).fill(PRODUCTS.toasted_ants.color);
     }
   },
+
+  // --- Santander · Barichara (v3.5): casas de tapia blanca, puertas verdes y piedra amarilla ---
+
+  // Café del parque: mesas con parasol delante de la casa; de los tabacos sale un hilito de humo.
+  park_cafe(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.0, 1.4, 28, ctx, { wall: 0xf7f4ee, roofH: 14 });
+    door(g, hx, hy, 1.4, 0.6, 16, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.0, 0.7, 14, PAL.balconyYellow);
+    const tables = [iso(x + 0.8, y + 2.3), iso(x + 1.9, y + 2.4)];
+    for (const p of tables) {
+      shadow(g, p.x, p.y + 1, 12, 5);
+      g.rect(p.x - 1, p.y - 20, 2, 20).fill(0x555555);
+      g.ellipse(p.x, p.y - 9, 8, 4).fill(0xffffff).stroke(OUTLINE);
+      g.poly([p.x, p.y - 28, p.x - 14, p.y - 19, p.x + 14, p.y - 19]).fill(0x2f7d4f).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+      g.circle(p.x - 3, p.y - 10, 1.8).fill(PRODUCTS.sobremesa.color);
+      g.rect(p.x + 1, p.y - 11, 4, 2).fill(PRODUCTS.bocadillo.color);
+    }
+    const smoke = new Graphics();
+    this.anim.addChild(smoke);
+    this.animate = (time) => {
+      smoke.clear();
+      if (!this.working) return;
+      for (const [k, p] of tables.entries()) {
+        const f = (time * 0.4 + k * 0.5) % 1;
+        smoke.circle(p.x + 4 + Math.sin(f * 7) * 2, p.y - 12 - f * 18, 1.4 + f * 2.5).fill({ color: 0xdddddd, alpha: 0.5 * (1 - f) });
+      }
+    };
+  },
+
+  // Posada: casona de dos pisos con balcón de madera y matas de flores, y el patio para los huéspedes.
+  posada(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.3, 1.6, 30, { ...ctx, up: Math.max(ctx.up, UPPER_FLOOR) }, { wall: 0xf7f4ee, roofH: 15 });
+    door(g, hx, hy, 1.6, 0.7, 17, 0x2f7d4f);
+    door(g, hx, hy, 1.6, 1.6, 17, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.3, 0.8, 14, PAL.balconyYellow);
+    // Bugambilias sobre la tapia.
+    for (const [bx, by] of [[0.25, 2.2], [0.25, 2.6], [2.6, 0.3]]) {
+      const p = iso(x + bx, y + by, 10);
+      for (const [dx, dy] of [[-3, 0], [3, -1], [0, -4]]) g.circle(p.x + dx, p.y + dy, 3.2).fill(0xd63384);
+      g.circle(p.x, p.y + 1, 2).fill(0x4e8a33);
+    }
+    const hammock = iso(x + 1.6, y + 2.5, 8);
+    g.moveTo(hammock.x - 12, hammock.y - 6).quadraticCurveTo(hammock.x, hammock.y + 4, hammock.x + 12, hammock.y - 6).stroke({ width: 3, color: 0xd7263d });
+  },
+
+  // Taller de cajas: casa donde se arman las cajas, con el papel de fique hecho a mano secándose al sol.
+  box_shop(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.0, 1.5, 28, ctx, { wall: 0xf7f4ee, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.6, 16, 0x2e6fd1);
+    windowOnRight(this, g, hx, hy, 2.0, 0.75, 14, PAL.balconyYellow);
+    // Tendedero con las hojas de papel de fique.
+    const a = iso(x + 0.5, y + 2.4, 20);
+    const b = iso(x + 2.6, y + 2.4, 20);
+    for (const p of [a, b]) g.rect(p.x - 1, p.y, 2, 20).fill(PAL.wood);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x3a2418 });
+    for (let k = 1; k < 6; k++) {
+      const px = a.x + ((b.x - a.x) * k) / 6;
+      const py = a.y + ((b.y - a.y) * k) / 6;
+      g.rect(px - 4, py, 8, 10).fill(k % 2 ? 0xf1e6cf : 0xe8dcc0).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
+    }
+    for (const [bx, by, z] of [[2.55, 2.75, 0], [2.85, 2.75, 0], [2.7, 2.75, 7]].slice(0, 2 + Math.min(ctx.tier, 1))) box(g, x + bx - 0.12, y + by - 0.1, 0.24, 0.2, 7, PRODUCTS.caja_surtida.color, { z });
+  },
+
+  // Canastas del caminante: casa con canastos apilados y el que se está llenando en la puerta.
+  hamper(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.0, 1.5, 28, ctx, { wall: 0xf1e6cf, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.6, 16, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.0, 0.75, 14, PAL.balconyYellow);
+    for (const [bx, by] of [[1.3, 2.35], [1.65, 2.5], [2.0, 2.35], [1.65, 2.2]].slice(0, 2 + Math.min(ctx.tier, 2))) {
+      const p = iso(x + bx, y + by);
+      g.poly([p.x - 8, p.y - 10, p.x + 8, p.y - 10, p.x + 6, p.y, p.x - 6, p.y]).fill(PRODUCTS.canasta_caminante.color).stroke(OUTLINE);
+      g.ellipse(p.x - 2, p.y - 11, 4, 2.5).fill(PRODUCTS.fiambre.color);
+      g.moveTo(p.x - 6, p.y - 10).quadraticCurveTo(p.x, p.y - 20, p.x + 6, p.y - 10).stroke({ width: 1.4, color: 0xa07c4a });
+    }
+  },
+
+  // Salida al Camino Real: el portón de piedra donde empieza el camino empedrado a Guane; salen caminantes.
+  camino_real(g, x, y, ctx) {
+    // El camino de piedra amarilla que baja hacia el borde de la parcela.
+    for (let k = 0; k < 9; k++) {
+      const p = iso(x + 0.6 + k * 0.28, y + 1.5 + Math.sin(k) * 0.15);
+      g.ellipse(p.x, p.y, 8, 4).fill(k % 2 ? 0xc9a96b : 0xe0c890).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.3 });
+    }
+    // Portón: dos pilares y un arco de piedra.
+    const H = 34 + ctx.up / 2;
+    for (const py of [1.05, 1.95]) box(g, x + 0.6, y + py, 0.3, 0.3, H, 0xd9b56a);
+    box(g, x + 0.6, y + 1.05, 0.3, 1.2, 8, 0xc9a96b, { z: H });
+    const top = iso(x + 0.75, y + 1.65, H + 8);
+    g.roundRect(top.x - 12, top.y - 10, 24, 10, 3).fill(0xa1672c).stroke(OUTLINE);
+    g.rect(top.x - 8, top.y - 6, 16, 2).fill(0xfff8ec);
+    // Letrero «Guane» y un banco para el que espera.
+    const sign = iso(x + 2.6, y + 0.6);
+    g.rect(sign.x - 1.2, sign.y - 22, 2.4, 22).fill(PAL.wood);
+    g.poly([sign.x - 12, sign.y - 22, sign.x + 8, sign.y - 22, sign.x + 13, sign.y - 18, sign.x + 8, sign.y - 14, sign.x - 12, sign.y - 14]).fill(0xa1672c).stroke(OUTLINE);
+    box(g, x + 1.4, y + 2.5, 0.8, 0.2, 5, PAL.wood);
+    const walkers = new Graphics();
+    this.anim.addChild(walkers);
+    this.animate = (time) => {
+      walkers.clear();
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.12 + i / 3) % 1;
+        const p = iso(x + 0.9 + f * 2.1, y + 1.5 + Math.sin(f * 9) * 0.1);
+        const step = Math.sin(time * 8 + i) * 1.2;
+        walkers.rect(p.x - 1.5 + step, p.y - 7, 1.4, 7).fill(0x3d3d5c);
+        walkers.rect(p.x + 0.2 - step, p.y - 7, 1.4, 7).fill(0x3d3d5c);
+        walkers.roundRect(p.x - 2.5, p.y - 14, 5, 7, 2).fill([0xd7263d, 0x2e6fd1, 0x2fa36b][i]);
+        walkers.circle(p.x, p.y - 16, 2.2).fill(0xe0ac7e);
+        walkers.ellipse(p.x, p.y - 17.5, 4, 1.2).fill(0xe8d9a8);
+        walkers.rect(p.x + 2.5, p.y - 14, 2.5, 5).fill(PRODUCTS.canasta_caminante.color);
+      }
+    };
+  },
 };

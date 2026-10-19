@@ -82,6 +82,13 @@ export const FACTS = {
   ant_toaster: ['Las hormigas se tuestan en tiesto de barro, revolviendo sin parar.', 'Las hormigas culonas se comen en Santander desde antes de los españoles.'],
   cone_table: ['En la calle se venden en cucuruchos de papel, como crispetas.'],
   souvenir_shop: ['Quien pasa por Santander se lleva hormigas, bocadillo y alpargatas.'],
+  // Santander · Barichara
+  dulceria: ['Barichara fue declarado Monumento Nacional en 1978.', 'Sus calles están empedradas con la piedra amarilla de la región.'],
+  park_cafe: ['La sobremesa en el parque: un tinto, un dulce y la charla.'],
+  posada: ['Las casas de Barichara son de tapia pisada, con tejas de barro.'],
+  box_shop: ['En Barichara se hace papel a mano con fibra de fique.'],
+  hamper: ['Los caminantes llevan fiambre para el camino, como los arrieros.'],
+  camino_real: ['El Camino Real a Guane lo empedró Geo von Lengerke en el siglo XIX.', 'De Barichara a Guane se baja a pie en unas dos horas, entre piedras.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -97,6 +104,7 @@ export const PEOPLE = {
   fiquera: { icon: '👩‍🦳', name: 'Doña Carmen', role: 'la tejedora' },
   hato: { icon: '🤠', name: 'Don Efraín', role: 'el vaquero' },
   hormigas: { icon: '👵', name: 'Doña Gloria', role: 'la hormiguera' },
+  barichara: { icon: '👩', name: 'Lucía', role: 'la guía' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -111,6 +119,7 @@ export const WELCOME = {
   tabacal: '¡Llegó al Tabacal! Aquí la hoja se cura en el caney y se tuerce a mano.',
   fiquera: '¡Bienvenido a la Fiquera! De estas pencas sale la cabuya de los costales y las alpargatas.',
   hato: '¡Llegó al Hato, compadre! Aquí se hace la carne oreada, al sol y al viento.',
+  barichara: '¡Bienvenido a Barichara! Aquí llega lo mejor de todo Santander, y de aquí salen las excursiones a Guane.',
   hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
 };
 

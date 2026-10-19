@@ -28,6 +28,8 @@ export const ZONE8 = {
   // Carretera de la Ruta del tabaco: sale de la bodega hacia la Fiquera.
   routes: {
     tabaco: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Fiquera ➜' },
+    // Los tabacos torcidos salen hacia Barichara (v3.5).
+    tabacos: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Barichara ➜' },
   },
   unlockedBy: 'guayabera', // se abre al completar la Guayabera
   next: 'fiquera',

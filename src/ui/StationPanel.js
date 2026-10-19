@@ -547,7 +547,9 @@ function dispatchInfo(zoneId) {
       if (jeepResting(s, zoneId)) {
         const routes = ROUTES.filter((r) => r.from === zoneId && routeActive(s, r.id));
         if (routes.length) {
-          const where = routes.every((r) => r.to === 'pueblo') ? 'al Pueblo' : 'a las otras zonas';
+          // «al Pueblo», «a Barichara» (si todas van a la misma) o «a las otras zonas».
+          const to = ZONES_BY_ID[routes[0].to].name;
+          const where = routes.every((r) => r.to === routes[0].to) ? (to.startsWith('El ') ? `al ${to.slice(3)}` : `a ${to}`) : 'a las otras zonas';
           const name = ZONES_BY_ID[zoneId].name.replace(/^(El|La) /, (a) => a.toLowerCase());
           return { text: `☕ Todo lo que produce ${name} se lo lleva la chiva ${where}; el Willys solo sale con lo que sobra.`, bad: false };
         }

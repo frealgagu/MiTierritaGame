@@ -126,6 +126,17 @@ export const STATIONS = [
   { id: 'ant_toaster', zone: 'hormigas', name: 'Tiesto de barro', icon: ICON.toastedAnts, in: { ant_brine: 2 }, out: { toasted_ants: 1 }, cycle: 8, unlockCost: 200000000, upgradeBase: 60000, growth: 1.15, release: '3.4' },
   { id: 'cone_table', zone: 'hormigas', name: 'Mesa de cucuruchos', icon: ICON.antCone, in: { toasted_ants: 1 }, out: { ant_cone: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.4' },
   { id: 'souvenir_shop', zone: 'hormigas', name: 'Tienda de recuerdos', icon: ICON.recuerdo, in: { ant_cone: 4 }, imports: [{ product: 'fique_sack', perCycle: 1, route: 'costales' }, { product: 'alpargatas', perCycle: 1, route: 'alpargatas' }], out: { recuerdo: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.4' },
+
+  // Santander · Barichara (v3.5), la última zona de la región: como el Pueblo, no tiene fuente propia.
+  // La Dulcería de la plaza hace dulces con el bocadillo de la Guayabera, y cada estación recibe lo suyo
+  // de una zona de Santander (las mismas, en el mismo orden y con los mismos números que el Pueblo).
+  // Todo termina en excursiones por el Camino Real a Guane.
+  { id: 'dulceria', zone: 'barichara', name: 'Dulcería de la plaza', icon: ICON.dulcesTipicos, imports: [{ product: 'bocadillo_crate', perCycle: 1, route: 'dulces' }], out: { dulces_tipicos: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.5' },
+  { id: 'park_cafe', zone: 'barichara', name: 'Café del parque', icon: ICON.sobremesa, in: { dulces_tipicos: 1 }, imports: [{ product: 'cigar', perCycle: 1, route: 'tabacos' }], out: { sobremesa: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.5' },
+  { id: 'posada', zone: 'barichara', name: 'Posada', icon: ICON.estadia, in: { sobremesa: 2 }, imports: [{ product: 'recuerdo', perCycle: 1, route: 'recuerdos' }], out: { estadia: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.5' },
+  { id: 'box_shop', zone: 'barichara', name: 'Taller de cajas', icon: ICON.cajaSurtida, in: { dulces_tipicos: 1 }, imports: [{ product: 'tobacco_bale', perCycle: 1, route: 'tercios' }], out: { caja_surtida: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '3.5' },
+  { id: 'hamper', zone: 'barichara', name: 'Canastas del caminante', icon: ICON.canastaCaminante, in: { caja_surtida: 1 }, imports: [{ product: 'almuerzo', perCycle: 1, route: 'almuerzos' }, { product: 'fiambre', perCycle: 1, route: 'fiambres' }], out: { canasta_caminante: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.5' },
+  { id: 'camino_real', zone: 'barichara', name: 'Salida al Camino Real', icon: ICON.excursion, in: { canasta_caminante: 4 }, out: { excursion: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.5' },
 ];
 
 export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));

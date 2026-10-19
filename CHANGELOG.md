@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v3.5.0 — Santander completo: Barichara
+- **Barichara**, la sexta y última zona de Santander, se abre al completar las Hormigas. Como el Pueblo, no tiene fuente propia: vive de lo que le llega de las otras cinco zonas por **seis rutas nuevas**, y todo termina en **excursiones por el Camino Real a Guane**.
+  - Dulcería de la plaza (dulces típicos con el bocadillo de la Guayabera) → Café del parque (la sobremesa, con un tabaco del Tabacal) → Posada (la estadía, con un recuerdo de las Hormigas).
+  - Taller de cajas (con los tercios de la Fiquera) → Canastas del caminante (con el almuerzo y el fiambre del Hato) → Salida al Camino Real.
+  - Mismos números, objetivos e investigaciones que el Pueblo, con su Maestría y su Supremacía. Cada producto que llega vale lo mismo que su par del Pueblo, así que el balance es el mismo.
+- Se ve como el Pueblo, pero **blanca, de tapia pisada, con la plaza de piedra amarilla**; caminantes con su canasta salen por el portón del Camino Real. Lucía, la guía, avisa lo importante.
+- El segundo final de Santander es ahora el de Barichara: completarla cierra la región.
+- Íconos propios para los dulces típicos, la sobremesa, la estadía, la caja surtida, la canasta del caminante y la excursión; las estaciones nuevas tienen su sonido.
+- **Arreglo:** la Asociación de tejedoras de la Fiquera (v3.2) tenía el mismo identificador que las Tejedoras de fique del Pueblo, y una tapaba a la otra: en el Eje Cafetero, comprar las Tejedoras de fique daba 4 h sin conexión en vez de duplicar el Taller de canastas. Ahora cada una tiene el suyo (las partidas guardadas se corrigen solas) y una prueba vigila que no se repitan.
+
 ## v3.4.0 — Santander: Las Hormigas
 - **Las Hormigas**, la quinta zona de Santander, se abre al completar el Hato: la **hormiga culona**. Hormiguero → Mesa de limpieza (sin alas ni patas) → Ollas de salmuera → Tiesto de barro → Mesa de cucuruchos → **Tienda de recuerdos**, que arma el recuerdo de Santander con los costales y las alpargatas de la Fiquera (dos rutas nuevas).
 - **Solo se cosechan en la entrada de aguas** 🌦️, como en la realidad: el Hormiguero produce entonces ×4 (lo de todo el año) y el resto del año no produce nada. Lo que no alcanza a salir se guarda en la **despensa**, y los arrieros la van llevando a la cadena todo el año: en promedio rinde lo mismo que las demás zonas.

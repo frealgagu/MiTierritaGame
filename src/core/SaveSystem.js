@@ -62,6 +62,9 @@ function migrate(data) {
   const zones = {};
   for (const [id, z] of Object.entries(base.zones)) zones[id] = { ...z, ...data.zones?.[id] };
   if (region !== 'cafetero') {
+    // v3.2–v3.4: la Asociación de tejedoras de la Fiquera se guardaba como 'tejedoras', el mismo id de
+    // las Tejedoras de fique del Pueblo (v3.5: ids únicos).
+    if (region === 'santander' && data.research?.includes('tejedoras')) data.research = data.research.map((id) => (id === 'tejedoras' ? 'asociacion_tejedoras' : id));
     // v3.1: una zona ya completa abre la siguiente de su región si esta llegó en una versión nueva.
     for (const [id, z] of Object.entries(zones)) {
       const next = ZONES_BY_ID[id].next;

@@ -132,7 +132,7 @@ export const RESEARCH = [
   { zone: 'fiquera', id: 'desfibradora_motor', name: 'Desfibradora de motor', icon: '⚙️', desc: 'La Desfibradora saca el doble de fibra.', cost: 400000, requires: 'decorticator', effect: { type: 'stationSpeed', target: 'decorticator', mult: 2 } },
   { zone: 'fiquera', id: 'hiladora_mecanica', name: 'Hiladora mecánica', icon: ICON.fiqueYarn, desc: 'La Hiladora hila el doble.', cost: 1200000, requires: 'spinner', effect: { type: 'stationSpeed', target: 'spinner', mult: 2 } },
   { zone: 'fiquera', id: 'camion_fiquera', name: 'Camión de estacas', icon: '🚛', desc: 'El despacho de la Fiquera lleva el doble por viaje.', cost: 1500000, requires: 'sack_loom', effect: { type: 'dispatchCapacity', target: 'fiquera', mult: 2 } },
-  { zone: 'fiquera', id: 'tejedoras', name: 'Asociación de tejedoras', icon: '🧶', desc: 'Mientras no juegas, Santander sigue produciendo 4 h más.', cost: 3000000, requires: 'spinner', effect: { type: 'offlineHours', hours: 4 } },
+  { zone: 'fiquera', id: 'asociacion_tejedoras', name: 'Asociación de tejedoras', icon: '🧶', desc: 'Mientras no juegas, Santander sigue produciendo 4 h más.', cost: 3000000, requires: 'spinner', effect: { type: 'offlineHours', hours: 4 } },
   { zone: 'fiquera', id: 'hormas', name: 'Hormas de alpargata', icon: ICON.alpargatas, desc: 'La Alpargatería hace el doble de pares.', cost: 3000000, requires: 'alpargata_shop', effect: { type: 'stationSpeed', target: 'alpargata_shop', mult: 2 } },
   { zone: 'fiquera', id: 'telar_mecanico', name: 'Telar mecánico', icon: ICON.fiqueSack, desc: 'El Telar de costales teje el doble.', cost: 8000000, requires: 'sack_loom', effect: { type: 'stationSpeed', target: 'sack_loom', mult: 2 } },
   { zone: 'fiquera', id: 'costal_cafetero', name: 'Costal cafetero', icon: '🏅', desc: 'El costal de fique vale un 50 % más.', cost: 15000000, requires: 'sack_loom', effect: { type: 'productValue', target: 'fique_sack', mult: 1.5 } },
@@ -167,6 +167,19 @@ export const RESEARCH = [
   { zone: 'hormigas', id: 'hormiga_origen', name: 'Hormiga culona de origen', icon: '🏅', desc: 'Todo lo que vende la zona de las Hormigas vale un 50 % más.', cost: 400000000, requires: 'cone_table', effect: { type: 'zoneValue', target: 'hormigas', mult: 1.5 } },
   { zone: 'hormigas', id: 'maestria_hormigas', name: 'Maestría: Hormigas', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'hormigas', mult: 4 } },
   { zone: 'hormigas', id: 'supremacia_hormigas', name: 'Supremacía: Hormigas', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'hormigas', mult: 8 } },
+
+  // Santander · Barichara (v3.5): las mismas del Pueblo.
+  { zone: 'barichara', id: 'reposteras', name: 'Reposteras de la plaza', icon: '👩‍🍳', desc: 'La Dulcería hace el doble de dulces (pide el doble de cajas a la Guayabera).', cost: 1000000000, requires: 'park_cafe', effect: { type: 'stationSpeed', target: 'dulceria', mult: 2 } },
+  { zone: 'barichara', id: 'cafetera_grande', name: 'Cafetera grande', icon: '☕', desc: 'El Café del parque sirve el doble de sobremesas.', cost: 1500000000, requires: 'park_cafe', effect: { type: 'stationSpeed', target: 'park_cafe', mult: 2 } },
+  { zone: 'barichara', id: 'bus_turismo', name: 'Bus de turismo', icon: '🚌', desc: 'El despacho de Barichara lleva el doble por viaje.', cost: 2500000000, requires: 'posada', effect: { type: 'dispatchCapacity', target: 'barichara', mult: 2 } },
+  { zone: 'barichara', id: 'administradora', name: 'Administradora de la posada', icon: '📋', desc: 'Mientras no juegas, Santander sigue produciendo 4 h más (24 h con las seis zonas).', cost: 2500000000, requires: 'posada', effect: { type: 'offlineHours', hours: 4 } },
+  { zone: 'barichara', id: 'mas_cuartos', name: 'Más cuartos en la posada', icon: '🛏️', desc: 'La Posada recibe el doble de huéspedes.', cost: 4000000000, requires: 'posada', effect: { type: 'stationSpeed', target: 'posada', mult: 2 } },
+  { zone: 'barichara', id: 'papel_fique', name: 'Papel de fique', icon: ICON.cajaSurtida, desc: 'El Taller de cajas arma el doble.', cost: 8000000000, requires: 'box_shop', effect: { type: 'stationSpeed', target: 'box_shop', mult: 2 } },
+  { zone: 'barichara', id: 'canastos_grandes', name: 'Canastos grandes', icon: ICON.canastaCaminante, desc: 'Las Canastas del caminante se arman el doble de rápido.', cost: 15000000000, requires: 'hamper', effect: { type: 'stationSpeed', target: 'hamper', mult: 2 } },
+  { zone: 'barichara', id: 'guias', name: 'Guías del Camino Real', icon: '🧭', desc: 'La Salida al Camino Real despacha el doble de excursiones.', cost: 40000000000, requires: 'camino_real', effect: { type: 'stationSpeed', target: 'camino_real', mult: 2 } },
+  { zone: 'barichara', id: 'monumento', name: 'Monumento Nacional', icon: '🏅', desc: 'Todo lo que vende Barichara vale un 50 % más.', cost: 25000000000, requires: 'hamper', effect: { type: 'zoneValue', target: 'barichara', mult: 1.5 } },
+  { zone: 'barichara', id: 'maestria_barichara', name: 'Maestría: Barichara', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'barichara', mult: 4 } },
+  { zone: 'barichara', id: 'supremacia_barichara', name: 'Supremacía: Barichara', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'barichara', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

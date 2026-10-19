@@ -39,9 +39,9 @@ test('el Willys lleva 10 a nivel 1', () => {
   assert.equal(dispatchCapacity(10), (10 + 45) * 2);
 });
 
-test('catálogo completo: 71 productos y 69 estaciones con recetas válidas', () => {
-  assert.equal(Object.keys(PRODUCTS).length, 71);
-  assert.equal(STATIONS.length, 69);
+test('catálogo completo: 77 productos y 75 estaciones con recetas válidas', () => {
+  assert.equal(Object.keys(PRODUCTS).length, 77);
+  assert.equal(STATIONS.length, 75);
   for (const s of STATIONS) {
     for (const id of Object.keys({ ...s.in, ...s.out, ...s.by, ...s.boost })) {
       assert.ok(PRODUCTS[id], `${s.id} usa un producto desconocido: ${id}`);
@@ -67,4 +67,21 @@ test('las bandas eléctricas llegan en un hito de transporte', async () => {
   assert.ok(MILESTONES.includes(BELT_LEVEL));
   assert.equal(hasBelt(BELT_LEVEL - 1), false);
   assert.equal(hasBelt(BELT_LEVEL), true);
+});
+
+test('cada investigación, compra de evento, objetivo, estación, producto y ruta tiene un id único', async () => {
+  const { RESEARCH } = await import('../src/data/research.js');
+  const { GOALS } = await import('../src/data/goals.js');
+  const { ROUTES } = await import('../src/data/routes.js');
+  const { EVENTS } = await import('../src/data/events.js');
+  const lists = {
+    'investigaciones y compras de evento': [...RESEARCH.map((r) => r.id), ...EVENTS.flatMap((e) => e.actions.map((a) => a.id))],
+    objetivos: GOALS.map((g) => g.id),
+    estaciones: STATIONS.map((s) => s.id),
+    rutas: ROUTES.map((r) => r.id),
+  };
+  for (const [name, ids] of Object.entries(lists)) {
+    const repeated = ids.filter((id, i) => ids.indexOf(id) !== i);
+    assert.deepEqual(repeated, [], `${name} repetidas`);
+  }
 });

@@ -10,7 +10,8 @@ import { ZONE8 } from './zone8_tabacal.js';
 import { ZONE9 } from './zone9_fiquera.js';
 import { ZONE10 } from './zone10_hato.js';
 import { ZONE11 } from './zone11_hormigas.js';
+import { ZONE12 } from './zone12_barichara.js';
 
 // Todas las regiones (cada zona dice la suya; sin `region`, es del Eje Cafetero).
-export const ZONE_LIST = [ZONE1, ZONE2, ZONE3, ZONE4, ZONE5, ZONE6, ZONE7, ZONE8, ZONE9, ZONE10, ZONE11];
+export const ZONE_LIST = [ZONE1, ZONE2, ZONE3, ZONE4, ZONE5, ZONE6, ZONE7, ZONE8, ZONE9, ZONE10, ZONE11, ZONE12];
 export const ZONES_BY_ID = Object.fromEntries(ZONE_LIST.map((z) => [z.id, z]));

@@ -257,5 +257,26 @@ const HORMIGAS = [
   { id: 'a_final', type: 'sold', product: 'recuerdo', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS];
+// Santander · Barichara (v3.5): la misma lista que el Pueblo. Su final es el de Santander.
+const BARICHARA = [
+  { id: 'b01', type: 'imported', product: 'bocadillo_crate', amount: 50, reward: 5000000 },
+  { id: 'b02', type: 'level', target: 'dulceria', level: 10, reward: 10000000 },
+  { id: 'b03', type: 'unlock', station: 'park_cafe', reward: 20000000 },
+  { id: 'b04', type: 'level', target: 'route:dulces', level: 10, reward: 40000000 },
+  { id: 'b05', type: 'produced', product: 'sobremesa', amount: 200, reward: 60000000 },
+  { id: 'b07', type: 'unlock', station: 'posada', reward: 150000000 },
+  { id: 'b08', type: 'level', target: 'dispatch:barichara', level: 10, reward: 200000000 },
+  { id: 'b09', type: 'sold', product: 'estadia', amount: 300, reward: 300000000 },
+  { id: 'b10', type: 'unlock', station: 'box_shop', reward: 300000000 },
+  { id: 'b11', type: 'imported', product: 'tobacco_bale', amount: 300, reward: 400000000 },
+  { id: 'b12', type: 'unlock', station: 'hamper', reward: 500000000 },
+  { id: 'b13', type: 'imported', product: 'fiambre', amount: 300, reward: 800000000 },
+  { id: 'b14', type: 'unlock', station: 'camino_real', reward: 800000000 },
+  { id: 'b15', type: 'allLevels', zone: 'barichara', level: 25, reward: 1500000000 },
+  { id: 'b06', type: 'research', research: 'reposteras', reward: 1500000000 },
+  { id: 'b16', type: 'sold', product: 'excursion', amount: 100, reward: 2500000000 },
+  { id: 'b_final', type: 'sold', product: 'excursion', amount: 7000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA];

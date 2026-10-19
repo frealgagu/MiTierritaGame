@@ -103,6 +103,7 @@ export class FarmView extends StationView {
     super(f.x, f.y, f.w, f.h);
     this.zoneFarm = f;
     this.theme = zone.theme;
+    this.zoneStyle = zone.style; // 'barichara': el Pueblo, pero blanco y de piedra (v3.5)
     this.def = def;
     this.art = new Graphics();
     this.addChild(this.art);
@@ -229,7 +230,7 @@ export class FarmView extends StationView {
   // guayacanes, bancas, faroles y gente. Con cada hito, más mesas y la casa más alta.
   drawPlaza(g, tier, rng) {
     const { x, y, w, h } = this.zoneFarm;
-    this.lights = drawCoffeeHouse(g, x, y, tier);
+    this.lights = drawCoffeeHouse(g, x, y, tier, PLAZA_HOUSE[this.zoneStyle ?? 'pueblo']);
     // Mesas con parasol delante de la casa: de ahí salta el café de origen.
     const tables = [[0.6, 2.6], [1.5, 2.7], [2.6, 0.6], [2.7, 1.5], [2.5, 2.5], [0.6, 3.5], [3.5, 0.6]].slice(0, 3 + Math.min(tier, 4));
     for (const [tx, ty] of tables) {
@@ -238,7 +239,7 @@ export class FarmView extends StationView {
       g.rect(p.x - 1, p.y - 22, 2, 22).fill(0x555555);
       g.ellipse(p.x, p.y - 9, 8, 4).fill(0xffffff).stroke(OUTLINE);
       g.poly([p.x, p.y - 30, p.x - 15, p.y - 20, p.x + 15, p.y - 20]).fill(rng() < 0.5 ? PAL.balconyRed : PAL.balconyGreen).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
-      g.circle(p.x - 3, p.y - 10, 1.8).fill(PRODUCTS.tinto.color);
+      g.circle(p.x - 3, p.y - 10, 1.8).fill(PRODUCTS[Object.keys(this.def.out)[0]].color);
       this.bushes.push({ x: p.x, y: p.y + 4 });
     }
     // Fuente.
@@ -280,18 +281,24 @@ export class FarmView extends StationView {
 
 // Casa del café del Pueblo: casona de esquina con toldo y letrero; con los hitos, segundo piso con
 // balcón, remates de colores y, al final, un tercer piso. Devuelve las luces de la noche.
-function drawCoffeeHouse(g, x, y, tier) {
+const PLAZA_HOUSE = {
+  pueblo: { wall: 0xf6d860, trims: [PAL.balconyGreen, PAL.balconyBlue, PAL.balconyRed, PAL.balconyYellow, 0x8e44ad, 0xffd700], awning: PAL.balconyRed, sign: 'cup' },
+  // Barichara (v3.5): tapia blanca, puertas y balcones verdes o azules, toldo verde.
+  barichara: { wall: 0xf7f4ee, trims: [0x2f7d4f, 0x2f7d4f, 0x2e6fd1, 0x2f7d4f, 0x8e44ad, 0xffd700], awning: 0x2f7d4f, sign: 'sweet' },
+};
+
+function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
   const ox = x + 0.2;
   const oy = y + 0.2;
   const w = 1.8;
   const d = 1.8;
-  const trim = [PAL.balconyGreen, PAL.balconyBlue, PAL.balconyRed, PAL.balconyYellow, 0x8e44ad, 0xffd700][tier];
+  const trim = look.trims[tier];
   const height = 26 + (tier >= 2 ? 14 : 0) + (tier >= 5 ? 12 : 0);
   const p = iso(ox + w / 2, oy + d / 2);
   shadow(g, p.x + 6, p.y + 8, 52, 20);
   box(g, ox, oy, w, d, 8, trim);
-  box(g, ox, oy, w, d, height - 8, 0xf6d860, { z: 8 });
-  gableRoof(g, ox, oy, w, d, height, 18, PAL.roof, 0xf6d860);
+  box(g, ox, oy, w, d, height - 8, look.wall, { z: 8 });
+  gableRoof(g, ox, oy, w, d, height, 18, PAL.roof, look.wall);
   const lights = [];
   // Puertas en las dos fachadas y un toldo de rayas sobre la delantera.
   for (const at of [0.5, 1.3]) {
@@ -303,13 +310,18 @@ function drawCoffeeHouse(g, x, y, tier) {
   for (let i = 0; i < 6; i++) {
     const a = ox + 0.1 + (i * (w - 0.2)) / 6;
     const b = a + (w - 0.2) / 6;
-    g.poly(isoPoly([[a, oy + d, 21], [b, oy + d, 21], [b, oy + d + 0.35, 15], [a, oy + d + 0.35, 15]])).fill(i % 2 ? 0xffffff : PAL.balconyRed).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+    g.poly(isoPoly([[a, oy + d, 21], [b, oy + d, 21], [b, oy + d + 0.35, 15], [a, oy + d + 0.35, 15]])).fill(i % 2 ? 0xffffff : look.awning).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
   }
-  // Letrero con una taza.
+  // Letrero con una taza (o con un bocadillo).
   const s = iso(ox + w / 2, oy + d, 26);
   g.roundRect(s.x - 15, s.y - 7, 30, 13, 3).fill(PAL.woodDark).stroke(OUTLINE);
-  g.roundRect(s.x - 5, s.y - 4, 8, 7, 2).fill(0xffffff);
-  g.circle(s.x + 4.5, s.y - 0.5, 2).stroke({ width: 1.2, color: 0xffffff });
+  if (look.sign === 'sweet') {
+    g.rect(s.x - 7, s.y - 3, 14, 6).fill(PRODUCTS.bocadillo.color);
+    g.rect(s.x - 7, s.y + 1, 14, 1.5).fill(0xfce4ec);
+  } else {
+    g.roundRect(s.x - 5, s.y - 4, 8, 7, 2).fill(0xffffff);
+    g.circle(s.x + 4.5, s.y - 0.5, 2).stroke({ width: 1.2, color: 0xffffff });
+  }
   if (tier >= 2) {
     const z = 30;
     const a = iso(ox + 0.15, oy + d + 0.1, z);

@@ -31,6 +31,8 @@ export const ZONE7 = {
   // Carretera de la Ruta del bocadillo: sale de la bodega hacia el Hato (v3.3).
   routes: {
     bocadillo: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Bocadillo al Hato ➜' },
+    // Las cajas de bocadillos salen hacia Barichara (v3.5).
+    dulces: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'A Barichara ➜' },
   },
   unlockedBy: null, // la primera de Santander: se abre con la región
   next: 'tabacal',

@@ -67,6 +67,12 @@ export const ICON = {
   toastedAnts: '\uE03D', // Hormigas tostadas: un montón de hormigas doradas y crocantes en un tiesto de barro
   antCone: '\uE03E', // Cucurucho de hormigas: el cono de papel lleno de hormigas tostadas, como se venden en la calle
   recuerdo: '\uE03F', // Recuerdo de Santander: un costalito de fique con hormigas y unas alpargatas amarradas
+  dulcesTipicos: '\uE040', // Dulces típicos: un plato de barro con bocadillos, cocadas y panelitas de leche
+  sobremesa: '\uE041', // Sobremesa: un pocillo de tinto, un bocadillo y un tabaco, en la mesa del parque
+  estadia: '\uE042', // Estadía en la posada: la llave grande de la puerta, con su tablita de madera
+  cajaSurtida: '\uE043', // Caja surtida: caja forrada en papel de fique con bocadillos y hoja de tabaco
+  canastaCaminante: '\uE044', // Canasta del caminante: canasto con el fiambre envuelto en bijao y el almuerzo para el camino
+  excursion: '\uE045', // Excursión a Guane: el letrero del Camino Real, con su sombrero y el bastón del caminante
 };
 
 export const ICON_FONT = 'Cafetal Icons';
