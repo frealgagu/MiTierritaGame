@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v3.3.1 — La mejora recomendada del evento se queda en el evento
+- Tocar la mejora recomendada (o «Ir al edificio» en la cadena) dentro de un evento llevaba a la partida principal cuando se había entrado al evento desde otra zona: se comparaba la zona de la estación con la del mapa de la partida, no con la del tablero. Ahora abre la estación del tablero, y en el tablero nunca se sale a otra zona.
+
 ## v3.3.0 — Santander: El Hato
 - **El Hato**, la cuarta zona de Santander, se abre al completar la Fiquera: la **carne oreada**. Hato ganadero → Fama (la carnicería) → Saladero → **Tendedero de oreo** (la carne cuelga al sol y se mece con el viento) → Asadero. La carne asada se reparte en dos ramas:
   - la **Mesa del almuerzo**, con el bocadillo de postre que llega de la Guayabera;

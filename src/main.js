@@ -134,7 +134,10 @@ async function start() {
       return;
     }
     // Una estación de otra zona (la recomendación puede señalar la que abastece una ruta): ir allá.
-    if (STATIONS_BY_ID[stationId] && STATIONS_BY_ID[stationId].zone !== view.zone) {
+    // Se compara con la zona que se está viendo: en un evento, la del tablero (antes se comparaba con
+    // la del mapa de la partida y, si el evento era de otra zona, se salía del tablero).
+    if (STATIONS_BY_ID[stationId] && STATIONS_BY_ID[stationId].zone !== getZone()) {
+      if (board) return; // en el tablero solo están sus estaciones
       showZone(STATIONS_BY_ID[stationId].zone);
       toast(`${ZONES_BY_ID[view.zone].icon} ${ZONES_BY_ID[view.zone].name}`, 2000);
     }
