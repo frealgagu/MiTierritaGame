@@ -1,5 +1,17 @@
 # Registro de cambios
 
+## v3.6.0 — Eventos de Santander
+- **Seis eventos nuevos**, uno por zona de Santander, cada uno con la mecánica del de su par del Eje Cafetero:
+  - 🪰 **La mosca de la fruta** (Guayabera): el Guayabal al 40 %; trampas con cebo, embolsar las guayabas y recoger la fruta caída.
+  - 💧 **Humedad en el caney** (Tabacal): con tanta lluvia la hoja no cura; ventilas, fogones de secado y techo nuevo.
+  - 🧺 **Feria artesanal** (Fiquera): costales, alpargatas y tercios a la vez.
+  - 🌊 **Creciente del río** (Hato): se cayó el puente y no llega el bocadillo; mulas por el vado, planchón y puente nuevo.
+  - 🎒 **Temporada de turistas** (Hormigas): se acabó el papel de los cucuruchos.
+  - 🥾 **Puente festivo** (Barichara): el pueblo lleno de caminantes y pocos guías para el Camino Real.
+- Las medallas y el Renombre que se ganan en Santander van al mismo perfil de siempre; la ventana de eventos los muestra por región.
+- Medallas calibradas como las demás (el oro, el mejor jugador automático más un 9 %); la prueba que vigila que el oro se pueda lograr cubre los doce eventos.
+- Los logros «De todas partes» y «De oro» tienen un nivel más: medalla y oro en 12 eventos distintos.
+
 ## v3.5.0 — Santander completo: Barichara
 - **Barichara**, la sexta y última zona de Santander, se abre al completar las Hormigas. Como el Pueblo, no tiene fuente propia: vive de lo que le llega de las otras cinco zonas por **seis rutas nuevas**, y todo termina en **excursiones por el Camino Real a Guane**.
   - Dulcería de la plaza (dulces típicos con el bocadillo de la Guayabera) → Café del parque (la sobremesa, con un tabaco del Tabacal) → Posada (la estadía, con un recuerdo de las Hormigas).

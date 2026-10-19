@@ -10,6 +10,7 @@ import { canPay } from './upgrades.js';
 import { stationImportCap, stationRate } from './rules.js';
 import { effectsOf, speedMult } from './modifiers.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
+import { REGION_OF_ZONE } from '../data/regions.js';
 import { PARENT } from './chain.js';
 
 export const eventDef = (board) => EVENTS_BY_ID[board.event.id];
@@ -32,7 +33,8 @@ export function eventStatus(state, zoneId) {
 }
 
 export function createEventState(def, year) {
-  const s = createInitialState();
+  // Con las zonas de la región del evento (v3.6: también los de Santander).
+  const s = createInitialState(undefined, REGION_OF_ZONE[def.zone]);
   delete s.events;
   delete s.profile;
   s.event = { id: def.id, zone: def.zone, year };
@@ -100,7 +102,9 @@ export function medalFor(obj, seconds) {
 const ORDER = ['bronze', 'silver', 'gold'];
 // Termina el evento si ya se cumplió el objetivo: medalla, Renombre y el tablero se cierra hasta el año
 // siguiente. Devuelve el resultado, o null si todavía no.
-export function finishEvent(state, zoneId) {
+//   state: la partida de la región del evento (guarda el tablero y el año en que se terminó)
+//   root:  la que guarda el perfil del jugador (medallas y Renombre): la del Eje Cafetero (v3.6)
+export function finishEvent(state, zoneId, root = state) {
   const board = state.events?.boards?.[zoneId];
   if (!board) return null;
   const obj = boardObjective(board);
@@ -108,7 +112,7 @@ export function finishEvent(state, zoneId) {
   const time = board.playTime;
   const medal = medalFor(obj, time);
   const def = eventDef(board);
-  const profile = (state.profile ??= { renown: 0, medals: {}, history: [] });
+  const profile = (root.profile ??= { renown: 0, medals: {}, history: [] });
   const renown = MEDALS[medal].renown;
   profile.renown += renown;
   const rec = (profile.medals[def.id] ??= { best: null, count: {} });

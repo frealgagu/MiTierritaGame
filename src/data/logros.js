@@ -1,5 +1,6 @@
 // Logros generales (v2.3, GDD §10.2): suman entre partidas (no se pierden al reiniciar) y ninguno es de
 // velocidad (con cada reinicio todo va más rápido). Cada uno tiene niveles; cada nivel da Renombre ⭐.
+// (v3.6: con los eventos de Santander, «De todas partes» y «De oro» suben hasta 12 eventos.)
 //   metric: qué se cuenta (ver sim/logros.js)   tiers: cuánto pide cada nivel   reward: ⭐ por nivel
 import { ICON } from './icons.js';
 import { RESEARCH } from './research.js';
@@ -16,8 +17,8 @@ export const LOGROS = [
   { id: 'pueblo', icon: '⛪', name: 'Primer gran pedido', text: 'Completa el Pueblo {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
   { id: 'maestro', icon: '🏅', name: 'Maestro cafetero', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
   { id: 'medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [6, 24, 60], reward: [1, 2, 4] },
-  { id: 'todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
-  { id: 'oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
+  { id: 'todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6, 12], reward: [2, 4, 8] },
+  { id: 'oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6, 12], reward: [1, 3, 6, 12] },
   { id: 'album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
   { id: 'ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, RESEARCH.length], reward: [1, 2, 4] },
 ];

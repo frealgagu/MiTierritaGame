@@ -22,7 +22,7 @@ import { EventBar, formatClock } from './ui/EventBar.js';
 import { finishEvent, startEvent } from './sim/events.js';
 import { MEDALS } from './data/events.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
-import { openRegions } from './sim/regions.js';
+import { openRegions, regionState } from './sim/regions.js';
 import { bindNative, isNativeApp } from './native.js';
 import { checkMastery, restartState } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
@@ -177,8 +177,10 @@ async function start() {
   // Eventos: entrar y salir del tablero. La partida sigue corriendo; el reloj del tablero solo cuando se
   // está en él. Mientras tanto, el HUD, el panel y la cadena muestran el tablero.
   const eventBar = new EventBar(() => exitEvent());
+  // El evento de una zona se guarda en la partida de su región (v3.6: Santander también tiene eventos).
+  const ownerOf = (zoneId) => gameOf(zoneId).state;
   const enterEvent = (zoneId) => {
-    const state = startEvent(game.state, zoneId);
+    const state = startEvent(ownerOf(zoneId), zoneId);
     if (!state) return;
     if (panel.id) panel.close();
     scene.destroy();
@@ -205,7 +207,7 @@ async function start() {
     leaveBoard();
     showZone(view.zone);
   };
-  const events = new EventsView(game, enterEvent);
+  const events = new EventsView(game, enterEvent, (zoneId) => regionState(game.state, REGION_OF_ZONE[zoneId]));
   // Al cambiar la decoración se vuelve a dibujar el mapa (el de la zona o el del tablero).
   const renown = new RenownView(game, (profile) => {
     setLook(profile);
@@ -339,7 +341,7 @@ async function start() {
       if (!board) return;
       board.game.timeScale = game.timeScale;
       board.game.update(dt);
-      const r = finishEvent(game.state, board.zone);
+      const r = finishEvent(ownerOf(board.zone), board.zone, game.state);
       if (r) {
         exitEvent();
         showEventResult(r);

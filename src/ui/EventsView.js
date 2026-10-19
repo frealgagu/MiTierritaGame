@@ -2,16 +2,19 @@
 // «Jugar» o «Seguir» lleva al tablero del evento (main.js).
 import { EVENTS, MEDALS } from '../data/events.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
+import { REGIONS, REGION_OF_ZONE } from '../data/regions.js';
 import { eventObjective, eventStatus } from '../sim/events.js';
 import { formatClock, objectiveText } from './EventBar.js';
 
 export const medalLine = (obj) => `🥇 hasta ${formatClock(obj.medals[0])} · 🥈 hasta ${formatClock(obj.medals[1])} · 🥉 después`;
 
 export class EventsView {
-  // onPlay(zona): entrar al tablero.
-  constructor(game, onPlay) {
+  // onPlay(zona): entrar al tablero. stateOf(zona): la partida de la región de esa zona (v3.6), o null si la
+  // región no se ha abierto. El perfil (medallas y Renombre) es el de la partida principal (game).
+  constructor(game, onPlay, stateOf = () => game.state) {
     this.game = game;
     this.onPlay = onPlay;
+    this.stateOf = stateOf;
     this.modal = document.getElementById('events');
     this.body = document.getElementById('events-body');
     this.btn = document.getElementById('events-btn');
@@ -40,8 +43,9 @@ export class EventsView {
     const s = this.game.state;
     const profile = s.profile ?? { renown: 0, medals: {} };
     document.getElementById('events-renown').textContent = `⭐ Renombre: ${profile.renown}`;
-    const cards = EVENTS.map((def) => {
-      const st = eventStatus(s, def.zone);
+    const card = (def) => {
+      const owner = this.stateOf(def.zone);
+      const st = owner && eventStatus(owner, def.zone);
       if (!st) return '';
       const zone = ZONES_BY_ID[def.zone];
       const best = profile.medals[def.id]?.best;
@@ -57,14 +61,18 @@ export class EventsView {
         ${st.kind === 'locked' ? '' : `<p class="event-year">Año ${st.year}: ${objectiveText(obj)}.<br>${medalLine(obj)}</p>`}
         ${foot}
       </div>`;
-    });
-    // Las zonas que todavía no se abren en la partida no se muestran.
-    this.body.innerHTML = `${cards.join('')}<p class="event-soon">Cada zona que abras trae su evento.</p>`;
+    };
+    // Por región (con su título, si ya hay más de una); las zonas que todavía no se abren no se muestran.
+    const groups = REGIONS.map((r) => ({ r, cards: EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === r.id).map(card).filter(Boolean) })).filter((g) => g.cards.length);
+    const html = groups.map((g) => (groups.length > 1 ? `<h3 class="research-other">${g.r.icon} ${g.r.name}</h3>` : '') + g.cards.join('')).join('');
+    this.body.innerHTML = `${html}<p class="event-soon">Cada zona que abras trae su evento.</p>`;
   }
 
   update() {
-    const s = this.game.state;
-    const statuses = EVENTS.map((def) => eventStatus(s, def.zone)).filter(Boolean);
+    const statuses = EVENTS.map((def) => {
+      const owner = this.stateOf(def.zone);
+      return owner && eventStatus(owner, def.zone);
+    }).filter(Boolean);
     // El botón aparece cuando hay algún evento abierto; el número, los que se pueden empezar.
     this.btn.hidden = !statuses.some((st) => st.kind !== 'locked');
     const ready = statuses.filter((st) => st.kind === 'available').length;

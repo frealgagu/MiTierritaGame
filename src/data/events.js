@@ -15,6 +15,8 @@
 // Las medallas se calibran con tools/event-sim.js (v3.1.1): el oro es el tiempo del mejor jugador
 // automático que decide cada segundo, más un 9 % (difícil, pero posible para alguien atento); la plata,
 // 5 minutos más.
+import { ICON } from './icons.js';
+
 export const MEDALS = {
   gold: { icon: '🥇', name: 'oro', renown: 4 },
   silver: { icon: '🥈', name: 'plata', renown: 2 },
@@ -161,6 +163,148 @@ export const EVENTS = [
       { kind: 'sold', items: { container: 24 }, medals: [675, 975] },
       { kind: 'produced', items: { gift_basket: 120 }, medals: [690, 990] },
       { kind: 'sold', items: { container: 6, breakfast: 180 }, medals: [840, 1140] },
+    ],
+  },
+  // ---------- Santander (v3.6): uno por zona, con la misma mecánica que el de su par del Eje Cafetero ----------
+  {
+    id: 'mosca',
+    zone: 'guayabera',
+    icon: '🪰',
+    name: 'La mosca de la fruta',
+    intro:
+      'La mosca de la fruta pica las guayabas y las daña por dentro: el Guayabal rinde al 40 %. Pon trampas, embolsa las guayabas y recoge la fruta caída para salvar la cosecha.',
+    announce: '¡Llegó la mosca de la fruta al guayabal, mijo! Toque 🏅 Eventos y salvemos las guayabas.',
+    stations: ['guava_grove', 'guava_pulper', 'guava_pot', 'guava_molds', 'bocadillo_cutter', 'bijao_wrapper', 'crate_packer'],
+    level: 10,
+    coins: 400,
+    speed: { guava_grove: 0.4 },
+    actions: [
+      { id: 'mosca_trampas', icon: '🪤', name: 'Trampas con cebo', desc: 'Botellas con cebo atrapan las moscas: el Guayabal pasa del 40 al 60 %.', cost: 400, effect: { type: 'stationSpeed', target: 'guava_grove', mult: 1.5 } },
+      { id: 'mosca_bolsas', icon: '🛍️', name: 'Embolsar las guayabas', desc: 'Cada guayaba en su bolsita, para que la mosca no la alcance: del 60 al 80 %.', cost: 2500, effect: { type: 'stationSpeed', target: 'guava_grove', mult: 4 / 3 } },
+      { id: 'mosca_recoger', icon: '🧺', name: 'Recoger la fruta caída', desc: 'Sin guayabas podridas en el suelo, la mosca no tiene dónde criar. Del 80 al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'guava_grove', mult: 1.25 } },
+    ],
+    objectives: [
+      { kind: 'sold', items: { bocadillo_crate: 100 }, medals: [720, 1020] },
+      { kind: 'produced', items: { bocadillo: 500 }, medals: [735, 1035] },
+      { kind: 'produced', items: { bocadillo_block: 1000 }, medals: [630, 930] },
+    ],
+  },
+  {
+    id: 'humedad',
+    zone: 'tabacal',
+    icon: '💧',
+    name: 'Humedad en el caney',
+    intro:
+      'Llovió una semana entera y el aire está tan húmedo que la hoja no cura: el Caney trabaja al 40 %. Abre ventilas, prende fogones de secado y cambia el techo para que la hoja no se pierda.',
+    announce: '¡Con tanta lluvia la hoja no cura en el caney! Toque 🏅 Eventos y ayúdeme a secarla.',
+    stations: ['tobacco_field', 'caney', 'stripper', 'tobacco_piles', 'cigar_roller'],
+    level: 10,
+    coins: 2400,
+    speed: { caney: 0.4 },
+    actions: [
+      { id: 'humedad_ventilas', icon: '🪟', name: 'Abrir ventilas', desc: 'Más aire entre las varas: el Caney pasa del 40 al 60 %.', cost: 2400, effect: { type: 'stationSpeed', target: 'caney', mult: 1.5 } },
+      { id: 'humedad_fogones', icon: '🔥', name: 'Fogones de secado', desc: 'Un calorcito bajo las varas seca el aire: del 60 al 80 %.', cost: 15000, effect: { type: 'stationSpeed', target: 'caney', mult: 4 / 3 } },
+      { id: 'humedad_techo', icon: '🏚️', name: 'Techo nuevo', desc: 'Sin goteras, el Caney vuelve al 100 %.', cost: 35000, effect: { type: 'stationSpeed', target: 'caney', mult: 1.25 } },
+    ],
+    objectives: [
+      { kind: 'produced', items: { cigar: 500 }, medals: [735, 1035] },
+      { kind: 'produced', items: { fermented_tobacco: 550 }, medals: [780, 1080] },
+      { kind: 'produced', items: { stripped_leaf: 1100 }, medals: [765, 1065] },
+    ],
+  },
+  {
+    id: 'artesanal',
+    zone: 'fiquera',
+    icon: '🧺',
+    name: 'Feria artesanal',
+    intro:
+      'En la feria artesanal piden costales, alpargatas y tercios de tabaco, todo a la vez. Reparte bien la fibra y mejora cada rama: el tabaco del Tabacal llega sin falta.',
+    announce: '¡Llegaron los pedidos de la feria artesanal! Toque 🏅 Eventos y armemos el pedido.',
+    stations: ['fique_field', 'decorticator', 'sack_loom', 'spinner', 'alpargata_shop', 'tercio_packer'],
+    level: 10,
+    coins: 40000,
+    supply: { fermented_tobacco: 1 },
+    actions: [
+      { id: 'artesanal_telares', icon: ICON.fiqueSack, name: 'Telares nuevos', desc: 'El Telar de costales teje un 50 % más.', cost: 40000, effect: { type: 'stationSpeed', target: 'sack_loom', mult: 1.5 } },
+      { id: 'artesanal_hormas', icon: ICON.alpargatas, name: 'Hormas y ruecas', desc: 'La Hiladora y la Alpargatería hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'alpargata_shop', mult: 1.5 }, { type: 'stationSpeed', target: 'spinner', mult: 1.5 }] },
+      { id: 'artesanal_prensa', icon: ICON.tobaccoBale, name: 'Prensa de tercios', desc: 'La Empacadora arma un 50 % más de tercios.', cost: 550000, effect: { type: 'stationSpeed', target: 'tercio_packer', mult: 1.5 } },
+    ],
+    objectives: [
+      { kind: 'sold', items: { fique_sack: 150, alpargatas: 75, tobacco_bale: 50 }, medals: [570, 870] },
+      { kind: 'sold', items: { fique_sack: 60, alpargatas: 120, tobacco_bale: 40 }, medals: [615, 915] },
+      { kind: 'sold', items: { fique_sack: 90, alpargatas: 90, tobacco_bale: 120 }, medals: [615, 915] },
+    ],
+  },
+  {
+    id: 'creciente',
+    zone: 'hato',
+    icon: '🌊',
+    name: 'Creciente del río',
+    intro:
+      'La creciente del río se llevó el puente: el bocadillo de la Guayabera no llega y solo queda el guardado. Pásalo en mulas por el vado, consigue un planchón y arma un puente nuevo.',
+    announce: '¡La creciente se llevó el puente y no llega el bocadillo, compadre! Toque 🏅 Eventos.',
+    stations: ['cattle_ranch', 'butcher', 'salter', 'airing_rack', 'grill', 'lunch_table', 'fiambre_maker'],
+    level: 10,
+    coins: 1000000,
+    supply: { bocadillo_bijao: 0, fique_fiber: 1 },
+    stock: { bocadillo_bijao: 60 },
+    actions: [
+      { id: 'creciente_vado', icon: '🐴', name: 'Mulas por el vado', desc: 'Unas mulas cruzan el río por donde está bajito: llega una cuarta parte del bocadillo.', cost: 1000000, effect: { type: 'supply', product: 'bocadillo_bijao', fraction: 0.25 } },
+      { id: 'creciente_planchon', icon: '🛶', name: 'Planchón', desc: 'Una balsa grande pasa el carro de lado a lado: llega el 60 % del bocadillo.', cost: 3000000, effect: { type: 'supply', product: 'bocadillo_bijao', fraction: 0.6 } },
+      { id: 'creciente_puente', icon: '🌉', name: 'Puente nuevo', desc: 'Con el puente arreglado, el bocadillo vuelve a llegar todo.', cost: 8000000, effect: { type: 'supply', product: 'bocadillo_bijao', fraction: 1 } },
+    ],
+    objectives: [
+      { kind: 'produced', items: { almuerzo: 150 }, medals: [495, 795] },
+      { kind: 'produced', items: { fiambre: 130 }, medals: [540, 840] },
+      { kind: 'produced', items: { almuerzo: 100, fiambre: 100 }, medals: [615, 915] },
+    ],
+  },
+  {
+    id: 'turistas',
+    zone: 'hormigas',
+    icon: '🎒',
+    name: 'Temporada de turistas',
+    intro:
+      'Llegaron los turistas y todos quieren hormigas, pero se acabó el papel: la Mesa de cucuruchos arma al 40 %. Consigue papel prestado, una resma y la ayuda de las vecinas.',
+    announce: '¡Llegaron los turistas y se acabó el papel de los cucuruchos! Toque 🏅 Eventos, mijo.',
+    stations: ['anthill', 'ant_cleaner', 'brine_pot', 'ant_toaster', 'cone_table', 'souvenir_shop'],
+    level: 10,
+    coins: 2500000,
+    supply: { fique_sack: 1, alpargatas: 1 },
+    speed: { cone_table: 0.4 },
+    actions: [
+      { id: 'turistas_papel', icon: '📰', name: 'Papel prestado', desc: 'La tienda de la esquina presta papel: del 40 al 60 %.', cost: 2500000, effect: { type: 'stationSpeed', target: 'cone_table', mult: 1.5 } },
+      { id: 'turistas_resma', icon: '📦', name: 'Una resma entera', desc: 'Papel de sobra: del 60 al 80 %.', cost: 15000000, effect: { type: 'stationSpeed', target: 'cone_table', mult: 4 / 3 } },
+      { id: 'turistas_vecinas', icon: '👵', name: 'Las vecinas ayudan', desc: 'Más manos doblando cucuruchos: la Mesa vuelve al 100 %.', cost: 35000000, effect: { type: 'stationSpeed', target: 'cone_table', mult: 1.25 } },
+    ],
+    objectives: [
+      { kind: 'sold', items: { recuerdo: 120 }, medals: [600, 900] },
+      { kind: 'produced', items: { ant_cone: 850 }, medals: [765, 1065] },
+      { kind: 'produced', items: { toasted_ants: 850 }, medals: [720, 1020] },
+    ],
+  },
+  {
+    id: 'puente_festivo',
+    zone: 'barichara',
+    icon: '🥾',
+    name: 'Puente festivo',
+    intro:
+      'Es puente festivo y Barichara se llenó de caminantes, pero hay pocos guías: la Salida al Camino Real despacha al 40 %. Trae guías de Guane, señaliza el camino y súmale guías del pueblo.',
+    announce: '¡Puente festivo y el pueblo lleno de caminantes! Toque 🏅 Eventos y organicemos las salidas.',
+    stations: ['dulceria', 'park_cafe', 'posada', 'box_shop', 'hamper', 'camino_real'],
+    level: 10,
+    coins: 20000000,
+    supply: { bocadillo_crate: 1, cigar: 1, recuerdo: 1, tobacco_bale: 1, almuerzo: 1, fiambre: 1 },
+    speed: { camino_real: 0.4 },
+    actions: [
+      { id: 'puente_guane', icon: '🧭', name: 'Guías de Guane', desc: 'Suben guías desde Guane: del 40 al 60 %.', cost: 20000000, effect: { type: 'stationSpeed', target: 'camino_real', mult: 1.5 } },
+      { id: 'puente_senales', icon: '🪧', name: 'Señalizar el camino', desc: 'Con letreros, los grupos salen más rápido: del 60 al 80 %.', cost: 130000000, effect: { type: 'stationSpeed', target: 'camino_real', mult: 4 / 3 } },
+      { id: 'puente_guias', icon: '🥾', name: 'Guías del pueblo', desc: 'Los muchachos del pueblo también guían: la Salida vuelve al 100 %.', cost: 300000000, effect: { type: 'stationSpeed', target: 'camino_real', mult: 1.25 } },
+    ],
+    objectives: [
+      { kind: 'sold', items: { excursion: 24 }, medals: [675, 975] },
+      { kind: 'produced', items: { canasta_caminante: 120 }, medals: [690, 990] },
+      { kind: 'sold', items: { excursion: 6, estadia: 180 }, medals: [840, 1140] },
     ],
   },
 ];
