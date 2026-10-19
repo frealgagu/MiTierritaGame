@@ -66,17 +66,48 @@ export class Game {
   // simulado (monedas, ventas, producción e importados), contando cuánto se trabaja en cada tramo: las
   // noches no producen y cada temporada rinde lo suyo.
   catchUp(seconds, cap = offlineCapSeconds(this.state)) {
+    const run = this.catchUpSteps(seconds, cap);
+    let r = run.next();
+    while (!r.done) r = run.next();
+    return r.value;
+  }
+
+  // Lo mismo, cediendo el turno cada tanto (para que la pantalla de carga se mueva y diga cuánto va).
+  //   onProgress(fracción de 0 a 1)
+  async catchUpAsync(seconds, cap = offlineCapSeconds(this.state), onProgress = () => {}) {
+    const run = this.catchUpSteps(seconds, cap);
+    let r = run.next();
+    let last = performance.now();
+    while (!r.done) {
+      // Unos 40 ms de cálculo entre cuadro y cuadro.
+      if (performance.now() - last > 40) {
+        onProgress(r.value);
+        await new Promise((ok) => setTimeout(ok, 0));
+        last = performance.now();
+      }
+      r = run.next();
+    }
+    onProgress(1);
+    return r.value;
+  }
+
+  // El cálculo, por partes: cada 60 pasos dice cuánto lleva (de 0 a 1); al final devuelve el resumen.
+  *catchUpSteps(seconds, cap) {
     const total = Math.min(Math.max(seconds, 0), cap);
     const s = this.state;
     const before = s.coins;
     const simulated = Math.min(total, MAX_SIMULATED);
     this.bus.muted = true;
     let mark = null;
-    for (let t = 0; t < simulated; t += 1) {
-      if (!mark && t >= simulated / 2) mark = { t: s.playTime, ...snapshot(s) };
-      this.step(1);
+    try {
+      for (let t = 0; t < simulated; t += 1) {
+        if (!mark && t >= simulated / 2) mark = { t: s.playTime, ...snapshot(s) };
+        this.step(1);
+        if (t % 60 === 59) yield t / simulated;
+      }
+    } finally {
+      this.bus.muted = false;
     }
-    this.bus.muted = false;
     const rest = total - simulated;
     if (rest > 0 && mark) {
       const measured = workSeconds(mark.t, s.playTime);

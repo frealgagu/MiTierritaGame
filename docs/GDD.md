@@ -368,7 +368,7 @@ Por zona (casual / atento): Finca 5 h 06 / 4 h 35, Trapiche 1 h 22 / 1 h 19, Lec
 - **Tope**: 2 h, más una investigación por zona que suma horas (desde la v1.8.1): Capataz (Finca) +3 h, Trapichero de confianza +3 h, Ordeño programado +4 h, Vigilante del cacaotal +4 h, Vecina que cuida el budare +4 h y Administrador del Pueblo +4 h: **24 h** con las seis.
 - Con la jornada y las temporadas (v1.9), lo simulado ya tiene sus noches y sus temporadas, y lo que se suma más allá se reparte según cuánto se trabaja en cada tramo (las noches no cuentan y cada temporada rinde lo suyo; `workSeconds` en `src/sim/calendar.js`): da lo mismo que jugar en vivo sin simular las 24 h.
 
-Se muestra una ventana de bienvenida con lo ganado y si se alcanzó el tope.
+Mientras se calcula se ve una pantalla de carga con una barra de avance y cuánto tiempo pasó (v2.3.1: el cálculo va por partes con `Game.catchUpAsync`). Se muestra una ventana de bienvenida con lo ganado y si se alcanzó el tope.
 
 ---
 

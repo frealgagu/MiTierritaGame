@@ -17,6 +17,7 @@ import { EventsView } from './ui/EventsView.js';
 import { RenownView } from './ui/RenownView.js';
 import { setLook } from './render/look.js';
 import { checkLogros } from './sim/logros.js';
+import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/splash.js';
 import { EventBar, formatClock } from './ui/EventBar.js';
 import { finishEvent, startEvent } from './sim/events.js';
 import { MEDALS } from './data/events.js';
@@ -39,6 +40,7 @@ const MIN_OFFLINE_S = 30;
 let resetting = false;
 
 async function start() {
+  splashWait('Preparando la finca…');
   try {
     // La fuente de los íconos propios también: el mapa los dibuja en textos de Pixi.
     await Promise.all([document.fonts.load('600 16px Fredoka'), document.fonts.load(`16px "${ICON_FONT}"`, Object.values(ICON).join(''))]);
@@ -62,7 +64,7 @@ async function start() {
   setLook(game.state.profile);
   // La velocidad de las opciones de desarrollador sigue puesta al volver, también para el tiempo fuera.
   game.timeScale = savedSpeed();
-  const offline = saved ? applyOffline(game, (Date.now() - saved.savedAt) / 1000) : null;
+  const offline = saved ? await applyOffline(game, (Date.now() - saved.savedAt) / 1000) : null;
 
   const sound = new Sound();
   sound.setEnabled(game.state.settings.sound);
@@ -257,6 +259,7 @@ async function start() {
     if (e.key === 'Escape') closeTop();
   });
 
+  hideSplash();
   if (offline) showWelcome(offline, () => sound.coin());
   // Cómo se juega, encima de todo (la bienvenida queda debajo, para después).
   if (introOnStart(game.state)) showIntro(game.state);
@@ -267,6 +270,7 @@ async function start() {
   });
 
   let uiTimer = 0;
+  let catching = false; // calculando lo de sin conexión al volver a la app
   // Cada parte por separado: si una falla, las demás siguen (y el bucle no se detiene: un error en un
   // cuadro detiene el ticker de Pixi para siempre).
   const safely = (fn) => {
@@ -277,6 +281,7 @@ async function start() {
     }
   };
   app.ticker.add((ticker) => {
+    if (catching) return;
     const dt = ticker.deltaMS / 1000;
     safely(() => game.update(dt));
     safely(() => {
@@ -320,12 +325,20 @@ async function start() {
     hiddenAt ??= Date.now();
     persist();
   };
-  // Al volver, lo producido mientras tanto (una sola vez, aunque avisen la página y la app).
-  const onShow = () => {
-    if (!hiddenAt) return;
-    const r = applyOffline(game, (Date.now() - hiddenAt) / 1000);
-    if (r) showWelcome(r, () => sound.coin());
+  // Al volver, lo producido mientras tanto (una sola vez, aunque avisen la página y la app). Mientras
+  // se calcula, el juego no avanza (catching) y se ve la pantalla de carga.
+  const onShow = async () => {
+    if (!hiddenAt || catching) return;
+    const away = (Date.now() - hiddenAt) / 1000;
     hiddenAt = null;
+    catching = true;
+    try {
+      const r = await applyOffline(game, away);
+      if (r) showWelcome(r, () => sound.coin());
+    } finally {
+      catching = false;
+      hideSplash();
+    }
   };
   document.addEventListener('visibilitychange', () => (document.hidden ? onHide() : onShow()));
   window.addEventListener('pagehide', persist);
@@ -345,10 +358,13 @@ async function start() {
 // Simula el tiempo que el juego estuvo cerrado; devuelve el resumen si hubo ganancias.
 // Siempre a velocidad normal: el tiempo acelerado de las opciones de desarrollador solo cuenta con el
 // juego abierto (multiplicar el tiempo fuera hacía que volver tardara mucho en calcularse).
-function applyOffline(game, seconds) {
+// Por partes, con la pantalla de carga y su barra (en un teléfono, 24 h pueden tardar varios segundos).
+async function applyOffline(game, seconds) {
   if (seconds < MIN_OFFLINE_S) return null;
   const cap = offlineCapSeconds(game.state);
-  const r = game.catchUp(seconds, cap);
+  splashOffline(seconds, cap);
+  const r = await game.catchUpAsync(seconds, cap, setSplashProgress);
+  splashWait('¡Listo! Preparando el mapa…');
   return r.coins > 0 ? { ...r, cap, capped: seconds > cap } : null;
 }
 

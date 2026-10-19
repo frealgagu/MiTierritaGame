@@ -79,3 +79,24 @@ test('sin conexión cuenta las noches y las temporadas al sumar lo que no simula
   const ratio = offline.state.coins / live.state.coins;
   assert.ok(ratio > 0.95 && ratio < 1.05, `rápida / paso a paso = ${ratio.toFixed(3)}`);
 });
+
+test('el cálculo sin conexión por partes da lo mismo que de una vez y avisa cuánto va', async () => {
+  const setup = () => {
+    const g = new Game();
+    g.state.coins = 1e6;
+    for (const id of ['wetmill', 'dryer']) g.unlock(id);
+    for (const st of Object.values(g.state.stations)) st.level = st.transport.level = 15;
+    g.state.coins = 0;
+    return g;
+  };
+  const once = setup();
+  const a = once.catchUp(3 * 3600, 3 * 3600);
+  const parts = setup();
+  const seen = [];
+  const b = await parts.catchUpAsync(3 * 3600, 3 * 3600, (f) => seen.push(f));
+  assert.equal(a.coins, b.coins);
+  assert.equal(once.state.playTime, parts.state.playTime);
+  assert.equal(seen.at(-1), 1);
+  assert.ok(seen.every((f, k) => k === 0 || f >= seen[k - 1]), 'la barra solo avanza');
+  assert.equal(parts.bus.muted, false);
+});

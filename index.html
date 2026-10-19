@@ -18,6 +18,17 @@
     <link rel="stylesheet" href="./src/ui/styles.css" />
   </head>
   <body>
+    <!-- Pantalla de carga: se ve apenas abre la página, mientras se prepara el mapa y se calcula lo que
+         se produjo sin conexión (main.js la quita). -->
+    <div id="splash" class="splash">
+      <div class="splash-card">
+        <div class="splash-logo">☕</div>
+        <h1>Cafetal</h1>
+        <p id="splash-text">Preparando la finca…</p>
+        <div class="bar splash-bar"><div id="splash-fill"></div></div>
+        <p id="splash-note" class="splash-note"></p>
+      </div>
+    </div>
     <div id="app"></div>
 
     <header id="hud">
@@ -126,7 +137,7 @@
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Cafetal <small id="menu-version">v2.3.0</small></h2>
+        <h2>Cafetal <small id="menu-version">v2.3.1</small></h2>
         <p id="save-where">Tu partida se guarda sola en este navegador.</p>
         <p id="menu-stats"></p>
         <details class="save-box">

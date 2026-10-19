@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v2.3.1 — Pantalla de carga
+- Al abrir el juego aparece de una vez una **pantalla de carga** («Preparando la finca…») en vez de la pantalla quieta.
+- Si estuviste fuera, dice cuánto tiempo pasó y muestra una **barra de avance** mientras calcula lo que se produjo sin conexión («Pasaron 10 h 0 min desde la última vez…»). Con una partida avanzada y 24 h fuera, en un teléfono puede tardar varios segundos: ya no parece que el juego se trabó.
+- Lo mismo al volver a la app después de un rato (mientras calcula, el juego espera).
+- El cálculo ahora va por partes (cede el turno cada 40 ms) y da exactamente lo mismo que antes.
+
 ## v2.3.0 — Logros
 - **🏆 Logros generales**: 15 logros, de uno a tres niveles, que **suman entre partidas** (lo de antes de volver a empezar sigue contando) y que nunca son de velocidad: vender bolsas de café, producir panela, queso, chocolate y arepas, exportar contenedores, ganar monedas, vivir años de juego, completar el Pueblo, llegar al segundo final, ganar medallas (y oros) en los eventos, llenar páginas del álbum e investigar.
 - Cada nivel da **Renombre ⭐** para el álbum y la decoración. Se ven en la ventana del Renombre, con su avance; al lograr uno sale el aviso.
