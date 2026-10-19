@@ -37,7 +37,7 @@ Las seis zonas del juego, cada una se abre al completar la anterior: **La Finca*
 - **Vida**: edificios que evolucionan con los hitos, día y noche, lluvia, aves, luciérnagas, efectos y sonido sintetizado.
 - **Guardado** automático, ganancias sin conexión (2 h, hasta 24 h con una investigación por zona), copia de seguridad exportable.
 - **Instalable en el móvil** (PWA) y jugable sin internet.
-- **Regiones**: al completar el Pueblo se abre **Santander** (por ahora, La Guayabera y su bocadillo veleño, El Tabacal y su tabaco torcido a mano, y La Fiquera con sus costales, alpargatas y tercios de tabaco), con su propia economía; todas las regiones producen a la vez.
+- **Regiones**: al completar el Pueblo se abre **Santander** (por ahora, La Guayabera y su bocadillo veleño, El Tabacal y su tabaco torcido a mano, La Fiquera con sus costales, alpargatas y tercios de tabaco, y El Hato con su carne oreada), con su propia economía; todas las regiones producen a la vez.
 - **Música propia**: un bambuco para el Eje Cafetero y una guabina para Santander, compuestos para el juego y tocados por él mismo, sin archivos (tiple, guitarra y bandola sintetizados con Karplus-Strong).
 
 ### App de Android

@@ -28,7 +28,10 @@ export const ZONE7 = {
   exitText: 'A Vélez ➜',
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
-  routes: {},
+  // Carretera de la Ruta del bocadillo: sale de la bodega hacia el Hato (v3.3).
+  routes: {
+    bocadillo: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Bocadillo al Hato ➜' },
+  },
   unlockedBy: null, // la primera de Santander: se abre con la región
   next: 'tabacal',
 };

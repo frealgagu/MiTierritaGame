@@ -140,6 +140,20 @@ export const RESEARCH = [
   { zone: 'fiquera', id: 'tercios_exportacion', name: 'Tercios de exportación', icon: '🏅', desc: 'El tercio de tabaco vale un 50 % más.', cost: 50000000, requires: 'tercio_packer', effect: { type: 'productValue', target: 'tobacco_bale', mult: 1.5 } },
   { zone: 'fiquera', id: 'maestria_fiquera', name: 'Maestría: Fiquera', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'fiquera', mult: 4 } },
   { zone: 'fiquera', id: 'supremacia_fiquera', name: 'Supremacía: Fiquera', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'fiquera', mult: 8 } },
+
+  // Santander · El Hato (v3.3): las mismas del Cacaotal.
+  { zone: 'hato', id: 'pasto_mejorado', name: 'Pasto mejorado', icon: '🌱', desc: 'El Hato da el doble de novillos.', cost: 1000000, requires: 'butcher', effect: { type: 'stationSpeed', target: 'cattle_ranch', mult: 2 } },
+  { zone: 'hato', id: 'sierra', name: 'Sierra eléctrica', icon: '🥩', desc: 'La Fama despresa el doble.', cost: 1200000, requires: 'butcher', effect: { type: 'stationSpeed', target: 'butcher', mult: 2 } },
+  { zone: 'hato', id: 'saladero_grande', name: 'Saladero grande', icon: ICON.saltedBeef, desc: 'El Saladero adoba el doble.', cost: 3000000, requires: 'airing_rack', effect: { type: 'stationSpeed', target: 'salter', mult: 2 } },
+  { zone: 'hato', id: 'camion_hato', name: 'Camión ganadero', icon: '🚚', desc: 'El despacho del Hato lleva el doble por viaje.', cost: 5000000, requires: 'salter', effect: { type: 'dispatchCapacity', target: 'hato', mult: 2 } },
+  { zone: 'hato', id: 'vaquero', name: 'Vaquero de confianza', icon: '🤠', desc: 'Mientras no juegas, Santander sigue produciendo 4 h más.', cost: 8000000, requires: 'airing_rack', effect: { type: 'offlineHours', hours: 4 } },
+  { zone: 'hato', id: 'tendedero_techado', name: 'Tendedero techado', icon: ICON.carneOreada, desc: 'El Tendedero orea el doble.', cost: 8000000, requires: 'grill', effect: { type: 'stationSpeed', target: 'airing_rack', mult: 2 } },
+  { zone: 'hato', id: 'parrilla_grande', name: 'Parrilla grande', icon: '🔥', desc: 'El Asadero asa el doble.', cost: 20000000, requires: 'lunch_table', effect: { type: 'stationSpeed', target: 'grill', mult: 2 } },
+  { zone: 'hato', id: 'fogon_lena', name: 'Fogón de leña', icon: ICON.almuerzo, desc: 'La Mesa del almuerzo sirve el doble.', cost: 50000000, requires: 'fiambre_maker', effect: { type: 'stationSpeed', target: 'lunch_table', mult: 2 } },
+  { zone: 'hato', id: 'hojas_bijao', name: 'Hojas de bijao de sobra', icon: ICON.fiambre, desc: 'La Fiambrería envuelve el doble de fiambres (las rutas se ajustan solas).', cost: 80000000, requires: 'fiambre_maker', effect: { type: 'stationSpeed', target: 'fiambre_maker', mult: 2 } },
+  { zone: 'hato', id: 'oreada_origen', name: 'Carne oreada de origen', icon: '🏅', desc: 'Todo lo que vende el Hato vale un 50 % más.', cost: 60000000, requires: 'lunch_table', effect: { type: 'zoneValue', target: 'hato', mult: 1.5 } },
+  { zone: 'hato', id: 'maestria_hato', name: 'Maestría: Hato', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'hato', mult: 4 } },
+  { zone: 'hato', id: 'supremacia_hato', name: 'Supremacía: Hato', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'hato', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

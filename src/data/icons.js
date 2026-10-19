@@ -56,6 +56,11 @@ export const ICON = {
   alpargatas: '\uE032', // Alpargatas: el par, con suela de fique trenzado y capellada de tela
   fiqueSack: '\uE033', // Costal de fique: tejido de cabuya, lleno y amarrado arriba
   tobaccoBale: '\uE034', // Tercio de tabaco: paca de hoja de tabaco forrada en tela de fique y amarrada con cabuya
+  saltedBeef: '\uE035', // Carne salada: tiras de carne roja adobadas, con granos de sal, en una batea de madera
+  carneOreada: '\uE036', // Carne oreada: tiras de carne secándose al sol, colgadas de una cuerda
+  grilledOreada: '\uE037', // Carne oreada asada: la tira dorada por fuera, con las marcas de la parrilla, y una yuca
+  almuerzo: '\uE038', // Almuerzo santandereano: plato con carne oreada, yuca, arepa y un bocadillo de postre
+  fiambre: '\uE039', // Fiambre: el almuerzo envuelto en hojas de bijao y amarrado con cabuya, para el camino
 };
 
 export const ICON_FONT = 'Cafetal Icons';

@@ -102,6 +102,17 @@ export const STATIONS = [
   { id: 'spinner', zone: 'fiquera', name: 'Hiladora', icon: ICON.fiqueYarn, in: { fique_fiber: 2 }, out: { fique_yarn: 1 }, cycle: 16, unlockCost: 1000000, upgradeBase: 600, growth: 1.15, release: '3.2' },
   { id: 'alpargata_shop', zone: 'fiquera', name: 'Alpargatería', icon: ICON.alpargatas, in: { fique_yarn: 2 }, out: { alpargatas: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.2' },
   { id: 'tercio_packer', zone: 'fiquera', name: 'Empacadora de tercios', icon: ICON.tobaccoBale, in: { fique_fiber: 4 }, imports: [{ product: 'fermented_tobacco', perCycle: 1, route: 'tabaco' }], out: { tobacco_bale: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.2' },
+
+  // Santander · El Hato (v3.3). La carne oreada: se corta, se adoba con sal, se orea al sol y se asa.
+  // Mismos números que el Cacaotal: la carne asada se reparte entre la Mesa del almuerzo y la
+  // Fiambrería, que esperan el bocadillo de la Guayabera y la cabuya de la Fiquera.
+  { id: 'cattle_ranch', zone: 'hato', name: 'Hato ganadero', icon: '🐂', infinite: true, out: { steer: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.3' },
+  { id: 'butcher', zone: 'hato', name: 'Fama', icon: '🥩', in: { steer: 2 }, out: { beef: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.3' },
+  { id: 'salter', zone: 'hato', name: 'Saladero', icon: ICON.saltedBeef, in: { beef: 1 }, out: { salted_beef: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.3' },
+  { id: 'airing_rack', zone: 'hato', name: 'Tendedero de oreo', icon: ICON.carneOreada, in: { salted_beef: 1 }, out: { carne_oreada: 1 }, cycle: 4, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '3.3' },
+  { id: 'grill', zone: 'hato', name: 'Asadero', icon: '🔥', in: { carne_oreada: 2 }, out: { grilled_oreada: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '3.3' },
+  { id: 'lunch_table', zone: 'hato', name: 'Mesa del almuerzo', icon: ICON.almuerzo, in: { grilled_oreada: 2 }, imports: [{ product: 'bocadillo_bijao', perCycle: 1, route: 'bocadillo' }], out: { almuerzo: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.3' },
+  { id: 'fiambre_maker', zone: 'hato', name: 'Fiambrería', icon: ICON.fiambre, in: { grilled_oreada: 2 }, imports: [{ product: 'bocadillo_bijao', perCycle: 1, route: 'bocadillo' }, { product: 'fique_fiber', perCycle: 4, route: 'cabuya' }], out: { fiambre: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.3' },
 ];
 
 export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));

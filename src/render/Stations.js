@@ -130,7 +130,7 @@ export class FarmView extends StationView {
       return;
     }
     this.lights = drawHut(g, x, y, tier);
-    if (this.theme === 'dairy') {
+    if (this.theme === 'dairy' || this.theme === 'ranch') {
       this.drawPasture(g, tier, rng);
       return;
     }
@@ -162,10 +162,16 @@ export class FarmView extends StationView {
     box(g, x + 2.2, y + 0.3, 1.2, 0.35, 6, 0x9aa3a8);
     const water = iso(x + 2.8, y + 0.47, 6);
     g.ellipse(water.x, water.y, 12, 3).fill(0x6fa8dc);
-    for (const [cx, cy] of [[0.4, 2.3], [0.75, 2.45], [1.1, 2.3]]) {
-      const p = iso(x + cx, y + cy);
-      g.roundRect(p.x - 4, p.y - 13, 8, 13, 2).fill(0xc7ccd1).stroke(OUTLINE);
-      g.ellipse(p.x, p.y - 13, 3, 1.4).fill(0x9aa3a8);
+    if (this.theme === 'ranch') {
+      // En el Hato, en vez de cantinas, el saladero del ganado: una canoa de madera con sal.
+      box(g, x + 0.3, y + 2.2, 1.0, 0.3, 5, PAL.wood);
+      g.poly(isoPoly([[x + 0.35, y + 2.25, 5], [x + 1.25, y + 2.25, 5], [x + 1.25, y + 2.45, 5], [x + 0.35, y + 2.45, 5]])).fill(0xf4f1e8);
+    } else {
+      for (const [cx, cy] of [[0.4, 2.3], [0.75, 2.45], [1.1, 2.3]]) {
+        const p = iso(x + cx, y + cy);
+        g.roundRect(p.x - 4, p.y - 13, 8, 13, 2).fill(0xc7ccd1).stroke(OUTLINE);
+        g.ellipse(p.x, p.y - 13, 3, 1.4).fill(0x9aa3a8);
+      }
     }
     const cows = [];
     const n = 5 + tier * 2;

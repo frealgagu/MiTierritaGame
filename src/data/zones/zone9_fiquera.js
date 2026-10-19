@@ -32,7 +32,9 @@ export const ZONE9 = {
   // Carretera por la que llega la Ruta del tabaco, hasta la Empacadora de tercios.
   routes: {
     tabaco: { road: [[25.9, 14.5], [20.3, 14.5]], sign: [24.2, 13.3], text: '⬅ Del Tabacal' },
+    // La Ruta de la cabuya sale de la bodega hacia el Hato (v3.3).
+    cabuya: { road: [[24.5, 17.2], [24.5, 16.5], [25.9, 16.5]], sign: [25.3, 15.6], text: 'Cabuya al Hato ➜' },
   },
   unlockedBy: 'tabacal',
-  next: null, // (las siguientes de Santander llegan en las próximas versiones)
+  next: 'hato',
 };

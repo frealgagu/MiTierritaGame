@@ -53,6 +53,8 @@ test('cada región tiene su segundo final y su reinicio, sin tocar las demás', 
   s.zones.tabacal.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), false);
   s.zones.fiquera.complete = true;
+  assert.equal(checkMastery(s, { emit() {} }), false);
+  s.zones.hato.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), true);
   s.playTime = 9000;
   const next = restartState(s);
@@ -78,7 +80,7 @@ test('la partida se guarda y se carga con sus regiones', () => {
   const back = loadGame();
   assert.equal(back.regions.santander.coins, 1234);
   assert.equal(back.regions.santander.region, 'santander');
-  assert.deepEqual(Object.keys(back.regions.santander.zones), ['guayabera', 'tabacal', 'fiquera']);
+  assert.deepEqual(Object.keys(back.regions.santander.zones), ['guayabera', 'tabacal', 'fiquera', 'hato']);
   assert.ok(back.profile);
 });
 
@@ -148,4 +150,30 @@ test('la Fiquera se abre con el Tabacal completo y arma tercios con el tabaco qu
   CALENDAR.on = on;
   assert.ok((game.state.stats.imported.fermented_tobacco ?? 0) > 0, 'llega tabaco del Tabacal');
   for (const p of ['fique_sack', 'alpargatas', 'tobacco_bale']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+});
+
+test('el Hato se abre con la Fiquera completa y hace fiambres con el bocadillo y la cabuya que llegan por las rutas', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
+  const game = new Game(createInitialState(0, 'santander'));
+  for (const z of ['tabacal', 'fiquera']) game.unlockZone(z);
+  const final = GOALS_BY_ZONE.fiquera.find((g) => g.final);
+  game.state.goals.claimed.push(...GOALS_BY_ZONE.fiquera.filter((g) => !g.final).map((g) => g.id));
+  game.state.stats.sold.tobacco_bale = final.amount;
+  assert.ok(game.claimGoal(final.id));
+  assert.equal(game.state.zones.hato.unlocked, true);
+  game.state.coins = 1e15;
+  for (const z of ['guayabera', 'tabacal', 'fiquera', 'hato']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+    game.state.zones[z].dispatch.level = 20;
+  }
+  for (const r of Object.values(game.state.routes)) r.level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 900; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  for (const p of ['bocadillo_bijao', 'fique_fiber']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
+  for (const p of ['almuerzo', 'fiambre']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
 });

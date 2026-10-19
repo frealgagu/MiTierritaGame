@@ -17,6 +17,12 @@ const THIN = { width: 0.8, color: 0x3a2418, alpha: 0.6 };
 const SKIN = [0xc68642, 0x8d5524, 0xe0ac69, 0xa86b3c];
 const SHIRTS = [0xd7263d, 0x2e6fd1, 0xe8b90f, 0x2fa36b, 0xf4efe6, 0xc8643b, 0x8e44ad];
 
+const RANCH_COATS = [
+  { body: 0xb5774a, legs: 0x9c6640, spots: 0x8a5a33, udder: false },
+  { body: 0x9c4a2a, legs: 0x7f3b22, spots: 0x6b2e1a, udder: false },
+  { body: 0xd8d2c6, legs: 0xc4bdb0, spots: 0xb0a898, udder: false },
+];
+
 class Critter extends Container {
   // walk(ax, ay, bx, by): si puede ir en línea recta de un punto al otro (sin walk, a cualquier lado).
   constructor(kind, area, rng, walk = null) {
@@ -135,7 +141,7 @@ class Critter extends Container {
     } else if (this.kind === 'cow') {
       // Pastando: baja un poco la cabeza de vez en cuando (todo el cuerpo se mece).
       const graze = this.moving ? Math.abs(walk) * 0.6 : Math.max(0, Math.sin(t * 0.8)) * 1.2;
-      drawCow(g, 0, graze, 0.95, createRng(this.cowSeed), f < 0);
+      drawCow(g, 0, graze, 0.95, createRng(this.cowSeed), f < 0, this.coat);
     }
   }
 }
@@ -206,7 +212,7 @@ export class Critters {
     }
     // Gallinas junto a la casa de la finca (afuera del cultivo).
     add('chicken', spots(near(grass, f.x, f.y, f.x + 2, f.y + 2, 2), this.rng), 4);
-    if (zone.theme === 'dairy') {
+    if (zone.theme === 'dairy' || zone.theme === 'ranch') {
       // Vacas en el potrero, lejos de la casa.
       const pasture = [];
       for (let i = 0; i < 80; i++) {
@@ -216,13 +222,21 @@ export class Critters {
         pasture.push([gx, gy]);
       }
       this.pasture = pasture;
+      // Novillos del Hato (v3.3): pardos, rojizos o grises, sin ubre.
+      this.coats = zone.theme === 'ranch' ? RANCH_COATS : null;
       this.cows = [];
     }
   }
 
   // Tantas vacas como dibuja el potrero para su nivel.
   setCows(count) {
-    if (this.pasture) this.resize(this.cows, count, () => new Critter('cow', this.pasture, this.rng));
+    if (this.pasture) {
+      this.resize(this.cows, count, () => {
+        const cow = new Critter('cow', this.pasture, this.rng);
+        if (this.coats) cow.coat = this.coats[Math.floor(this.rng() * this.coats.length)];
+        return cow;
+      });
+    }
   }
 
   // Tanta gente en la plaza como pide la Casa del café para su nivel.

@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v3.3.0 — Santander: El Hato
+- **El Hato**, la cuarta zona de Santander, se abre al completar la Fiquera: la **carne oreada**. Hato ganadero → Fama (la carnicería) → Saladero → **Tendedero de oreo** (la carne cuelga al sol y se mece con el viento) → Asadero. La carne asada se reparte en dos ramas:
+  - la **Mesa del almuerzo**, con el bocadillo de postre que llega de la Guayabera;
+  - la **Fiambrería**, que envuelve el almuerzo en hoja de bijao y lo amarra con la cabuya de la Fiquera.
+- Dos rutas nuevas: la **del bocadillo** (de la Guayabera, que ahora tiene carretera de salida) y la **de la cabuya** (de la Fiquera).
+- Mismos números, objetivos e investigaciones que el Cacaotal (Pasto mejorado, Sierra eléctrica, Tendedero techado, Parrilla grande, Vaquero de confianza +4 h sin conexión, Carne oreada de origen…), con su Maestría y su Supremacía. Don Efraín, el vaquero, avisa lo importante.
+- En el potrero pastan **novillos** pardos, rojizos y grises (sin ubre) junto al saladero del ganado; samanes de sombra alrededor.
+- Íconos propios para la carne adobada, la oreada, la asada, el almuerzo santandereano y el fiambre.
+- El segundo final de Santander pasa al Hato (su última zona por ahora). Una partida con la Fiquera completa abre el Hato al cargarse.
+
 ## v3.2.0 — Santander: La Fiquera
 - **La Fiquera**, la tercera zona de Santander, se abre al completar el Tabacal. Del Cultivo de fique salen las pencas; la **Desfibradora** las raspa y deja la fibra, que se seca en el tendal y se reparte en tres ramas:
   - el **Telar de costales**;

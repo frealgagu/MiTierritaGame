@@ -1010,6 +1010,81 @@ def tobacco_bale():
     ]
 
 
+# ---------- Santander · El Hato (v3.3) ----------
+
+def meat_strip(x0, y0, x1, y1, w, color, fat):
+    """Tira de carne delgada, con su borde de grasa."""
+    return [(OUTLINE, [leaf(x0, y0, x1, y1, w + 2)]), (color, [leaf(x0, y0, x1, y1, w)]), (fat, [rib(x0 + (x1 - x0) * 0.2, y0 + (y1 - y0) * 0.2, x1 - (x1 - x0) * 0.2, y1 - (y1 - y0) * 0.2, 1.4)])]
+
+
+def salted_beef():
+    """Carne salada: tiras de carne roja adobadas, con granos de sal, en una batea de madera."""
+    salt = [circle(x, y, 1.6) for x, y in [(30, 40), (44, 34), (58, 42), (70, 36), (38, 52), (62, 52), (50, 46)]]
+    return [
+        *meat_strip(16, 56, 84, 30, 16, '#c0392b', '#f5b7a8'),
+        *meat_strip(20, 62, 86, 44, 14, '#a93226', '#f5b7a8'),
+        ('#ffffff', salt),
+        (OUTLINE, ['M 6 58 L 94 58 L 86 90 L 14 90 Z']),
+        ('#a1672c', ['M 9.5 61 L 90.5 61 L 83.5 87 L 16.5 87 Z']),
+        ('#c68642', [rect(10, 61, 80, 4)]),
+    ]
+
+
+def carne_oreada():
+    """Carne oreada: tiras de carne secándose al sol, colgadas de una cuerda."""
+    out = [(OUTLINE, [rect(4, 12, 92, 5)]), ('#c9a96b', [rect(5, 13, 90, 3)])]
+    for x, h, color in [(16, 70, '#8e2c1f'), (36, 80, '#a3392a'), (56, 66, '#8e2c1f'), (76, 76, '#a3392a')]:
+        out += [
+            (OUTLINE, [f'M {x - 9} 14 Q {x - 11} {14 + h / 2} {x - 4} {14 + h} L {x + 4} {14 + h} Q {x + 11} {14 + h / 2} {x + 9} 14 Z']),
+            (color, [f'M {x - 7} 16 Q {x - 9} {14 + h / 2} {x - 3} {12 + h} L {x + 3} {12 + h} Q {x + 9} {14 + h / 2} {x + 7} 16 Z']),
+            ('#d98b6f', [rib(x - 2, 22, x + 1, 8 + h, 1.2)]),
+        ]
+    return out
+
+
+def grilled_oreada():
+    """Carne oreada asada: la tira dorada por fuera, con las marcas de la parrilla, y una yuca."""
+    marks = [rib(28 + i * 12, 30, 22 + i * 12, 64, 2.4) for i in range(4)]
+    return [
+        (OUTLINE, [ellipse(50, 50, 44, 26, -12)]),
+        ('#8d3b1f', [ellipse(50, 50, 41, 23, -12)]),
+        ('#b5562f', [ellipse(46, 46, 30, 14, -12)]),
+        ('#4a1c0c', marks),
+        (OUTLINE, [ellipse(74, 80, 20, 9, 15)]),
+        ('#f3e5c0', [ellipse(74, 80, 18, 7, 15)]),
+        ('#8a5a3c', [ellipse(90, 85, 3, 6, 15)]),
+    ]
+
+
+def almuerzo():
+    """Almuerzo santandereano: plato con carne oreada, yuca, arepa y un bocadillo de postre."""
+    return [
+        (OUTLINE, [ellipse(46, 58, 44, 30)]),
+        ('#f4f1e8', [ellipse(46, 58, 41, 27)]),
+        ('#e3dccb', [ellipse(46, 58, 33, 20)]),
+        (OUTLINE, [ellipse(34, 52, 18, 10, -10)]),
+        ('#8d3b1f', [ellipse(34, 52, 16, 8, -10)]),
+        ('#4a1c0c', [rib(24, 48, 36, 58, 1.6), rib(32, 46, 44, 56, 1.6)]),
+        (OUTLINE, [ellipse(58, 66, 14, 6, 20)]),
+        ('#f3e5c0', [ellipse(58, 66, 12, 4.5, 20)]),
+        (OUTLINE, [circle(60, 46, 9)]),
+        ('#e8c77a', [circle(60, 46, 7.5)]),
+        *bocadillo_box(76, 70, 16, 9, 6, '#d81b60', '#880e4f', '#6a0a3c'),
+    ]
+
+
+def fiambre():
+    """Fiambre: el almuerzo envuelto en hojas de bijao y amarrado con cabuya, para el camino."""
+    return [
+        (OUTLINE, ['M 10 60 Q 14 26 50 22 Q 86 26 90 60 Q 86 90 50 92 Q 14 90 10 60 Z']),
+        ('#6b8e23', ['M 13 60 Q 17 29 50 25 Q 83 29 87 60 Q 83 87 50 89 Q 17 87 13 60 Z']),
+        ('#8db33a', ['M 13 60 Q 17 29 50 25 Q 70 27 80 38 Q 50 42 13 60 Z']),
+        ('#4f6b1a', [rib(14, 60, 86, 60, 1), rib(30, 34, 30, 86, 0.8), rib(70, 34, 70, 86, 0.8)]),
+        ('#d9c08c', [rect(10, 54, 80, 5), rect(46, 22, 5, 70)]),
+        ('#c2a46c', ['M 48 22 Q 38 6 28 10 Q 40 12 48 22 Z', 'M 50 22 Q 62 6 72 10 Q 60 12 50 22 Z']),
+    ]
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -1064,6 +1139,11 @@ ICONS = [
     (0xE032, 'alpargatas', alpargatas),
     (0xE033, 'fique_sack', fique_sack),
     (0xE034, 'tobacco_bale', tobacco_bale),
+    (0xE035, 'salted_beef', salted_beef),
+    (0xE036, 'carne_oreada', carne_oreada),
+    (0xE037, 'grilled_oreada', grilled_oreada),
+    (0xE038, 'almuerzo', almuerzo),
+    (0xE039, 'fiambre', fiambre),
 ]
 
 

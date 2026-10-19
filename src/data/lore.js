@@ -67,6 +67,14 @@ export const FACTS = {
   spinner: ['Con la fibra torcida se hace la cabuya, un hilo grueso y resistente.'],
   alpargata_shop: ['La alpargata tiene suela de fique trenzado y capellada de tela.', 'Curití, en Santander, es famoso por sus artesanías de fique.'],
   tercio_packer: ['La hoja de tabaco se empaca en pacas forradas con tela de fique.'],
+  // Santander · El Hato
+  cattle_ranch: ['Un hato es una finca grande dedicada a criar ganado.'],
+  butcher: ['En Colombia, a la carnicería también se le dice «fama».'],
+  salter: ['La carne para orear se corta en tiras delgadas y se adoba con sal.'],
+  airing_rack: ['Orear es secar al aire: la carne se cuelga al sol y al viento.', 'La carne oreada es uno de los platos típicos de Santander.'],
+  grill: ['La carne oreada se come asada, con yuca y pepitoria.'],
+  lunch_table: ['Un buen almuerzo santandereano termina con un bocadillo de postre.'],
+  fiambre_maker: ['El fiambre es el almuerzo envuelto en hojas para llevarlo al camino.', 'El fiambre se amarra con cabuya para que no se abra en el viaje.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -80,6 +88,7 @@ export const PEOPLE = {
   guayabera: { icon: '👩‍🍳', name: 'Doña Inés', role: 'la bocadillera' },
   tabacal: { icon: '🧓', name: 'Don Ramiro', role: 'el veguero' },
   fiquera: { icon: '👩‍🦳', name: 'Doña Carmen', role: 'la tejedora' },
+  hato: { icon: '🤠', name: 'Don Efraín', role: 'el vaquero' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -93,6 +102,7 @@ export const WELCOME = {
   guayabera: '¡Bienvenido a Santander, mijo! Aquí la guayaba se vuelve bocadillo veleño.',
   tabacal: '¡Llegó al Tabacal! Aquí la hoja se cura en el caney y se tuerce a mano.',
   fiquera: '¡Bienvenido a la Fiquera! De estas pencas sale la cabuya de los costales y las alpargatas.',
+  hato: '¡Llegó al Hato, compadre! Aquí se hace la carne oreada, al sol y al viento.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

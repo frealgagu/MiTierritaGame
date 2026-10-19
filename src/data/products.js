@@ -90,4 +90,13 @@ export const PRODUCTS = {
   alpargatas: { name: 'Alpargatas', zone: 'fiquera', value: 2000, icon: ICON.alpargatas, color: 0x2e4fa8 },
   fique_sack: { name: 'Costal de fique', zone: 'fiquera', value: 2400, icon: ICON.fiqueSack, color: 0xc2a46c },
   tobacco_bale: { name: 'Tercio de tabaco', zone: 'fiquera', value: 4000, icon: ICON.tobaccoBale, color: 0xb0905a },
+
+  // Santander · El Hato (v3.3): mismos valores que el Cacaotal.
+  steer: { name: 'Novillo', zone: 'hato', value: 1000, icon: '🐂', color: 0xb5774a },
+  beef: { name: 'Carne de res', zone: 'hato', value: 2500, icon: '🥩', color: 0xc0392b },
+  salted_beef: { name: 'Carne adobada', zone: 'hato', value: 4400, icon: ICON.saltedBeef, color: 0xa93226 },
+  carne_oreada: { name: 'Carne oreada', zone: 'hato', value: 8800, icon: ICON.carneOreada, color: 0x8e2c1f },
+  grilled_oreada: { name: 'Carne oreada asada', zone: 'hato', value: 22000, icon: ICON.grilledOreada, color: 0x8d3b1f },
+  almuerzo: { name: 'Almuerzo santandereano', zone: 'hato', value: 100000, icon: ICON.almuerzo, color: 0xf4f1e8 },
+  fiambre: { name: 'Fiambre', zone: 'hato', value: 220000, icon: ICON.fiambre, color: 0x6b8e23 },
 };

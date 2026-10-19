@@ -199,6 +199,40 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.2',
   },
+  // Al Hato (v3.3): el bocadillo veleño de la Guayabera (el postre) y la fibra de la Fiquera (la cabuya
+  // con que se amarra el fiambre).
+  {
+    id: 'bocadillo',
+    name: 'Ruta del bocadillo',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'bocadillo_bijao',
+    from: 'guayabera',
+    to: 'hato',
+    stations: ['lunch_table', 'fiambre_maker'],
+    tab: 'Bocadillo',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 5000,
+    growth: 1.15,
+    release: '3.3',
+  },
+  {
+    id: 'cabuya',
+    name: 'Ruta de la cabuya',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'fique_fiber',
+    from: 'fiquera',
+    to: 'hato',
+    stations: ['fiambre_maker'],
+    tab: 'Cabuya',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 8000,
+    growth: 1.15,
+    release: '3.3',
+  },
 ];
 
 export const ROUTES_BY_ID = Object.fromEntries(ROUTES.map((r) => [r.id, r]));

@@ -215,5 +215,27 @@ const FIQUERA = [
   { id: 'q_final', type: 'sold', product: 'tobacco_bale', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA];
+// Santander · El Hato (v3.3): la misma lista que el Cacaotal.
+const HATO = [
+  { id: 'h01', type: 'sold', product: 'steer', amount: 50, reward: 75000 },
+  { id: 'h02', type: 'level', target: 'cattle_ranch', level: 10, reward: 125000 },
+  { id: 'h03', type: 'unlock', station: 'butcher', reward: 250000 },
+  { id: 'h04', type: 'level', target: 'cattle_ranch:transport', level: 10, reward: 250000 },
+  { id: 'h05', type: 'unlock', station: 'salter', reward: 500000 },
+  { id: 'h06', type: 'produced', product: 'salted_beef', amount: 200, reward: 750000 },
+  { id: 'h08', type: 'unlock', station: 'airing_rack', reward: 1500000 },
+  { id: 'h09', type: 'level', target: 'dispatch:hato', level: 10, reward: 1500000 },
+  { id: 'h10', type: 'unlock', station: 'grill', reward: 2500000 },
+  { id: 'h11', type: 'produced', product: 'grilled_oreada', amount: 300, reward: 3750000 },
+  { id: 'h12', type: 'unlock', station: 'lunch_table', reward: 6250000 },
+  { id: 'h13', type: 'sold', product: 'almuerzo', amount: 200, reward: 7500000 },
+  { id: 'h14', type: 'unlock', station: 'fiambre_maker', reward: 12500000 },
+  { id: 'h15', type: 'imported', product: 'fique_fiber', amount: 500, reward: 15000000 },
+  { id: 'h16', type: 'allLevels', zone: 'hato', level: 25, reward: 20000000 },
+  { id: 'h07', type: 'research', research: 'pasto_mejorado', reward: 10000000 },
+  { id: 'h17', type: 'sold', product: 'fiambre', amount: 1000, reward: 30000000 },
+  { id: 'h_final', type: 'sold', product: 'fiambre', amount: 4000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO];

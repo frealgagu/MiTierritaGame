@@ -103,7 +103,7 @@ export class Terrain {
             const p = iso(gx + rng(), gy + rng());
             g.ellipse(p.x, p.y, 3, 1.5).fill({ color: rng() < 0.5 ? 0x8a6a3a : 0x6e8f3a, alpha: 0.7 });
           }
-        } else if (type === 'farm' && this.zone.theme === 'dairy') {
+        } else if (type === 'farm' && (this.zone.theme === 'dairy' || this.zone.theme === 'ranch')) {
           // Potrero: pasto más alto y tupido, sin surcos.
           for (let k = 0; k < 3; k++) {
             const p = iso(gx + rng(), gy + rng());
@@ -161,6 +161,12 @@ export class Terrain {
           else if (r < 0.09) obj = guavaTree(rng);
           else if (r < 0.12) obj = rock(rng);
           else if (r < 0.135) obj = cactus(rng);
+        } else if (this.zone.theme === 'ranch') {
+          // Hato: samanes de sombra para el ganado, fique, piedras y cactus.
+          if (r < 0.035) obj = saman(rng);
+          else if (r < 0.07) obj = fique(rng);
+          else if (r < 0.1) obj = rock(rng);
+          else if (r < 0.115) obj = cactus(rng);
         } else if (this.zone.theme === 'corn') {
           // Maizal: girasoles, matas de maíz sueltas, algún espantapájaros y piedras.
           if (r < 0.04) obj = sunflower(rng);
@@ -208,6 +214,7 @@ export class Terrain {
 const FARM_SOIL = {
   cane: (v) => mix(0x9c7a4a, 0x7f6038, v * 0.35),
   dairy: (v) => mix(0x5e9a3c, 0x6fae44, v * 0.5),
+  ranch: (v) => mix(0x7fa04a, 0x93ad55, v * 0.5), // potrero de tierra caliente, más seco
   cacao: (v) => mix(0x5e4630, 0x4a3726, v * 0.5),
   corn: (v) => mix(0xa47c48, 0x8a6a3a, v * 0.4),
   guava: (v) => mix(0xb8754a, 0x9c5e3a, v * 0.4), // la tierra roja de Santander
@@ -522,19 +529,21 @@ function hayBale(rng) {
 }
 
 // Vaca holstein (blanca con manchas negras), de lado. La usa también el Potrero.
-export function drawCow(g, x, y, scale, rng, flip = false) {
+// coat (v3.3): pelaje { body, spots, udder }; sin él, la Holstein de la Lechería.
+const HOLSTEIN = { body: 0xfbf8f1, legs: 0xf4f1e8, spots: 0x2b2b2b, udder: true };
+export function drawCow(g, x, y, scale, rng, flip = false, coat = HOLSTEIN) {
   const f = flip ? -1 : 1;
   const s = scale;
   shadow(g, x, y + 1, 13 * s, 4 * s);
   // Patas.
-  for (const lx of [-7, -3, 4, 8]) g.rect(x + lx * s * f - 1, y - 7 * s, 2 * s, 7 * s).fill(0xf4f1e8).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  for (const lx of [-7, -3, 4, 8]) g.rect(x + lx * s * f - 1, y - 7 * s, 2 * s, 7 * s).fill(coat.legs).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
   // Cuerpo con manchas.
-  g.roundRect(x - 10 * s, y - 15 * s, 20 * s, 9 * s, 4 * s).fill(0xfbf8f1).stroke({ width: 1.2, color: 0x3a2418, alpha: 0.6 });
-  for (let i = 0; i < 3; i++) g.ellipse(x + (-5 + i * 5 + rng() * 2) * s * f, y - (10 + rng() * 3) * s, (2 + rng() * 2) * s, (1.5 + rng()) * s).fill(0x2b2b2b);
+  g.roundRect(x - 10 * s, y - 15 * s, 20 * s, 9 * s, 4 * s).fill(coat.body).stroke({ width: 1.2, color: 0x3a2418, alpha: 0.6 });
+  for (let i = 0; i < 3; i++) g.ellipse(x + (-5 + i * 5 + rng() * 2) * s * f, y - (10 + rng() * 3) * s, (2 + rng() * 2) * s, (1.5 + rng()) * s).fill(coat.spots);
   // Ubre rosada.
-  g.ellipse(x + 3 * s * f, y - 6 * s, 2.5 * s, 1.5 * s).fill(0xf2a7b5);
+  if (coat.udder) g.ellipse(x + 3 * s * f, y - 6 * s, 2.5 * s, 1.5 * s).fill(0xf2a7b5);
   // Cabeza.
-  g.roundRect(x + (f > 0 ? 9 : -15) * s, y - 18 * s, 6 * s, 7 * s, 2 * s).fill(0xfbf8f1).stroke({ width: 1.2, color: 0x3a2418, alpha: 0.6 });
+  g.roundRect(x + (f > 0 ? 9 : -15) * s, y - 18 * s, 6 * s, 7 * s, 2 * s).fill(coat.body).stroke({ width: 1.2, color: 0x3a2418, alpha: 0.6 });
   g.ellipse(x + 12 * s * f, y - 11.5 * s, 2.8 * s, 1.8 * s).fill(0xf2a7b5);
   g.circle(x + 11 * s * f, y - 16 * s, 0.9 * s).fill(0x2b2b2b);
   // Cachos.
