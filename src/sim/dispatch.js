@@ -4,6 +4,16 @@ import { sumValues } from './state.js';
 import { dispatchMult, productValue, saleValue } from './modifiers.js';
 import { routeReserve } from './routes.js';
 
+// Lo que el Willys puede vender: la bodega menos lo que espera una ruta hacia otra zona.
+export function sellableStock(state, zoneId, reserve = routeReserve(state, zoneId)) {
+  return sumValues(state.zones[zoneId].warehouse) - sumValues(reserve);
+}
+
+// Parqueado sin nada que vender (todo se lo lleva la Chiva): el conductor se toma un tinto.
+export function jeepResting(state, zoneId) {
+  return state.zones[zoneId].jeep.phase === 'idle' && sellableStock(state, zoneId) <= 1e-9;
+}
+
 // El Willys de cada zona espera en su bodega; sale lleno, o con carga parcial tras `maxWait` s.
 // Vende al llegar al pueblo (mitad del viaje) y vuelve.
 export function stepJeep(state, zoneId, dt, bus) {
@@ -14,7 +24,7 @@ export function stepJeep(state, zoneId, dt, bus) {
   if (j.phase === 'idle') {
     // Lo que espera una ruta hacia otra zona no se vende.
     const reserve = routeReserve(state, zoneId);
-    const stock = sumValues(zone.warehouse) - sumValues(reserve);
+    const stock = sellableStock(state, zoneId, reserve);
     const cap = dispatchCapacity(zone.dispatch.level, dispatchMult(state, zoneId));
     j.waited = stock > 0 ? j.waited + dt : 0;
     if (stock >= cap || (stock > 0 && j.waited >= DISPATCH.maxWait)) {

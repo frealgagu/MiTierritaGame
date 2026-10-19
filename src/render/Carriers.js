@@ -116,20 +116,38 @@ export class JeepView extends Container {
     super();
     this.g = new Graphics();
     this.addChild(this.g);
+    // El vapor del tinto, aparte: se mueve en cada cuadro.
+    this.steam = new Graphics();
+    this.addChild(this.steam);
     this.dir = '+x';
     this.cargo = 0;
+    this.resting = false;
+    this.cup = null;
     this.drawn = null;
   }
 
   draw() {
-    const key = `${this.dir}:${this.cargo}`;
+    const key = `${this.dir}:${this.cargo}:${this.resting}`;
     if (key === this.drawn) return;
     this.drawn = key;
-    drawWillys(this.g.clear(), JEEP_DIRS[this.dir], this.cargo);
+    this.cup = drawWillys(this.g.clear(), JEEP_DIRS[this.dir], this.cargo, this.resting);
   }
 
-  // load: 0..1 de llenado.
-  place(gx, gy, dx, dy, load) {
+  // Dos hilitos de vapor que suben de la taza y se desvanecen.
+  drawSteam(t) {
+    const g = this.steam.clear();
+    if (!this.cup) return;
+    for (let k = 0; k < 2; k++) {
+      const f = (t * 0.6 + k * 0.5) % 1;
+      const x = this.cup.x + (k ? 1 : -0.6);
+      const y = this.cup.y - 1 - f * 7;
+      const sway = Math.sin(t * 3 + k * 2) * 1.2;
+      g.moveTo(x, y).quadraticCurveTo(x + sway, y - 2, x - sway * 0.5, y - 4).stroke({ width: 1.4, color: 0xffffff, alpha: 0.9 * (1 - f) });
+    }
+  }
+
+  // load: 0..1 de llenado. resting: parqueado sin nada que vender (se toma un tinto). t: reloj.
+  place(gx, gy, dx, dy, load, resting = false, t = 0) {
     const p = iso(gx, gy);
     this.position.set(p.x, p.y);
     this.zIndex = depth(gx, gy) + 0.2;
@@ -138,11 +156,15 @@ export class JeepView extends Container {
     // Como mucho lleno: si la capacidad baja de golpe (menos reinicios en las opciones de desarrollador),
     // la carga en camino puede ser miles de millones de veces la nueva y no hay que dibujar tantos bultos.
     this.cargo = load <= 0 ? 0 : Math.max(1, Math.round(Math.min(1, load) * 6));
+    this.resting = resting;
     this.draw();
+    this.drawSteam(t);
   }
 }
 
-function drawWillys(g, toGrid, sacks) {
+// resting: el conductor tiene un pocillo de tinto en la mano. Devuelve dónde queda el pocillo (para
+// el vapor), o null.
+function drawWillys(g, toGrid, sacks, resting = false) {
   const L = JEEP_L;
   const W = JEEP_W;
   const at = (u, v, z) => {
@@ -173,6 +195,7 @@ function drawWillys(g, toGrid, sacks) {
   };
   const o = at(0, 0, 0);
   shadow(g, o.x, o.y + 2, 30, 13, 0.28);
+  let cup = null;
 
   const wheel = (u, v) => {
     const p = at(u, v, 4.5);
@@ -206,6 +229,14 @@ function drawWillys(g, toGrid, sacks) {
     g.ellipse(p.x, p.y - 11, 5.5, 1.7).fill(0xf4efe6).stroke(OUTLINE);
     g.roundRect(p.x - 2.6, p.y - 15, 5.2, 4.2, 1.5).fill(0xf4efe6).stroke(OUTLINE);
     g.rect(p.x - 2.6, p.y - 12.4, 5.2, 1.1).fill(0x222222);
+    if (resting) {
+      // El brazo sube el pocillo blanco hasta la barbilla.
+      g.moveTo(p.x + 2.4, p.y - 5.5).lineTo(p.x + 4.6, p.y - 4.5).lineTo(p.x + 4.2, p.y - 7.4).stroke({ width: 1.5, color: 0xc68642 });
+      g.roundRect(p.x + 2.6, p.y - 10.2, 3.2, 3, 0.8).fill(0xfaf6ee).stroke({ width: 0.7, color: 0x3a2418 });
+      g.circle(p.x + 6.1, p.y - 8.7, 0.9).stroke({ width: 0.7, color: 0x3a2418 });
+      g.ellipse(p.x + 4.2, p.y - 10.1, 1.4, 0.45).fill(0x4a2a14);
+      cup = { x: p.x + 4.2, y: p.y - 10.4 };
+    }
   }]);
   items.push([depthOf(0.16, 0), () => {
     lbox(0.15, 0.18, -W + 0.02, W - 0.02, 11, 10, 0xbfe3f0);
@@ -237,6 +268,7 @@ function drawWillys(g, toGrid, sacks) {
     g.circle(p.x, p.y, 4.6).fill(0x2b2b2b);
     g.circle(p.x, p.y, 1.9).fill(0x9a9a9a);
   }
+  return cup;
 }
 
 // Chiva: bus de escalera pintado de colores, para las rutas entre zonas. Lleva la carga en el techo.

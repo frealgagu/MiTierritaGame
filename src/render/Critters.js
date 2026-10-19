@@ -5,22 +5,26 @@ import { shadow } from './procedural/shapes.js';
 import { drawCow } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 
-// Vida en el mapa (v1.8): gallinas junto a la casa, un perro que acompaña al Willys, vacas que pastan
-// en el potrero y, en el Pueblo, gente por las calles y palomas alrededor de la fuente. Es solo
-// decoración: no tiene que ver con la economía. De noche, las gallinas, las palomas y la gente se
-// recogen.
-const SPEED = { chicken: 0.55, pigeon: 0.45, dog: 1.1, person: 0.5, cow: 0.12 };
+// Vida en el mapa (v1.8): gallinas junto a la casa, un perro que a veces persigue al Willys, vacas que
+// pastan en el potrero y, en el Pueblo, gente que pasea por la plaza y las aceras (sin pisar las calles,
+// por donde pasan las mulas y los carros) y palomas alrededor de la fuente. Es solo decoración: no tiene
+// que ver con la economía. De noche, las gallinas, las palomas y la gente se recogen.
+const SPEED = { chicken: 0.55, pigeon: 0.45, dog: 1.1, person: 0.6, cow: 0.12 };
+// Hasta dónde va de un tirón y cuánto se queda quieto al llegar (s).
+const REACH = { person: 4.5, cow: 3 };
+const PAUSE = { person: [0.4, 1.6], cow: [1, 9] };
 const THIN = { width: 0.8, color: 0x3a2418, alpha: 0.6 };
 const SKIN = [0xc68642, 0x8d5524, 0xe0ac69, 0xa86b3c];
 const SHIRTS = [0xd7263d, 0x2e6fd1, 0xe8b90f, 0x2fa36b, 0xf4efe6, 0xc8643b, 0x8e44ad];
 
 class Critter extends Container {
-  constructor(kind, area, rng, home = null) {
+  // walk(ax, ay, bx, by): si puede ir en línea recta de un punto al otro (sin walk, a cualquier lado).
+  constructor(kind, area, rng, walk = null) {
     super();
     this.kind = kind;
     this.area = area; // puntos [gx, gy] por donde anda
     this.rng = rng;
-    this.home = home;
+    this.walk = walk;
     this.g = new Graphics();
     this.addChild(this.g);
     const [gx, gy] = area[Math.floor(rng() * area.length)];
@@ -39,10 +43,16 @@ class Critter extends Container {
 
   // Siguiente lugar: uno cercano del área (para no cruzar el mapa de un tirón).
   pick() {
-    const near = this.area.filter(([x, y]) => Math.hypot(x - this.pos.gx, y - this.pos.gy) < 3);
+    const reach = REACH[this.kind] ?? 3;
+    const near = this.area.filter(([x, y]) => Math.hypot(x - this.pos.gx, y - this.pos.gy) < reach);
     const list = near.length > 1 ? near : this.area;
-    const [gx, gy] = list[Math.floor(this.rng() * list.length)];
-    this.target = { gx, gy };
+    for (let k = 0; k < 8; k++) {
+      const [gx, gy] = list[Math.floor(this.rng() * list.length)];
+      if (this.walk && !this.walk(this.pos.gx, this.pos.gy, gx, gy)) continue;
+      this.target = { gx, gy };
+      return;
+    }
+    this.wait = 0.5; // nada a la mano: lo intenta otra vez en un rato
   }
 
   // follow: punto que perseguir (el perro detrás del Willys), o null.
@@ -65,7 +75,8 @@ class Critter extends Container {
         this.pos = { ...this.target };
         this.target = null;
         this.moving = false;
-        if (!follow) this.wait = 1 + this.rng() * (this.kind === 'cow' ? 8 : 4);
+        const [w0, w1] = PAUSE[this.kind] ?? [1, 5];
+        if (!follow) this.wait = w0 + this.rng() * (w1 - w0);
       } else {
         this.pos.gx += (dx / d) * step;
         this.pos.gy += (dy / d) * step;
@@ -151,21 +162,37 @@ export class Critters {
     const near = (list, x0, y0, x1, y1, d) => list.filter(([x, y]) => x >= x0 - d && x <= x1 + d && y >= y0 - d && y <= y1 + d);
     const f = zone.farm;
     const w = zone.warehouse;
-    const add = (kind, area, count, home) => {
+    const add = (kind, area, count) => {
       if (area.length < 2) return;
       for (let i = 0; i < count; i++) {
-        const c = new Critter(kind, area, this.rng, home);
+        const c = new Critter(kind, area, this.rng);
         this.list.push(c);
         parent.addChild(c);
       }
     };
     // El perro, por el patio de la bodega (y detrás del Willys cuando sale).
     const yard = spots(near(grass, w.x, w.y, w.x + w.w, w.y + w.h, 2), this.rng);
-    add('dog', yard, 1, true);
+    add('dog', yard, 1);
     if (zone.theme === 'town') {
-      // Gente por las calles y palomas alrededor de la fuente de la plaza.
-      const streets = spots(all.filter(([x, y]) => tiles[x][y] === 'road'), this.rng, 1);
-      add('person', streets, 6);
+      // Gente por la plaza y las aceras de alrededor, sin cruzar calles, casas ni la fuente.
+      const walkable = townWalkable(zone, tiles, terrain.occupied);
+      this.walk = (ax, ay, bx, by) => {
+        const steps = Math.ceil(Math.hypot(bx - ax, by - ay) * 4);
+        for (let s = 0; s <= steps; s++) if (!walkable(ax + ((bx - ax) * s) / steps, ay + ((by - ay) * s) / steps)) return false;
+        return true;
+      };
+      this.sidewalks = [];
+      // La plaza y la grama a su izquierda (al sur quedarían tapados por la Fonda).
+      for (let gx = f.x - 2; gx < f.x + f.w; gx += 0.5) {
+        for (let gy = f.y; gy < f.y + f.h; gy += 0.5) {
+          const px = gx + 0.1 + this.rng() * 0.3;
+          const py = gy + 0.1 + this.rng() * 0.3;
+          if (walkable(px, py)) this.sidewalks.push([px, py]);
+        }
+      }
+      this.people = [];
+      // La plaza se dibuja entera de una vez (casa, mesas, fuente): la gente que anda por ella va encima.
+      this.plaza = { ...f, z: depth(f.x + f.w, f.y + f.h) };
       const cx = f.x + f.w * 0.62;
       const cy = f.y + f.h * 0.62;
       const ring = [];
@@ -195,33 +222,67 @@ export class Critters {
 
   // Tantas vacas como dibuja el potrero para su nivel.
   setCows(count) {
-    if (!this.pasture || this.cows.length === count) return;
-    while (this.cows.length < count) {
-      const c = new Critter('cow', this.pasture, this.rng);
-      this.cows.push(c);
+    if (this.pasture) this.resize(this.cows, count, () => new Critter('cow', this.pasture, this.rng));
+  }
+
+  // Tanta gente en la plaza como pide la Casa del café para su nivel.
+  setPeople(count) {
+    if (this.people && this.sidewalks.length > 1) this.resize(this.people, count, () => new Critter('person', this.sidewalks, this.rng, this.walk));
+  }
+
+  resize(group, count, make) {
+    while (group.length < count) {
+      const c = make();
+      group.push(c);
       this.list.push(c);
       this.parent.addChild(c);
     }
-    while (this.cows.length > count) {
-      const c = this.cows.pop();
+    while (group.length > count) {
+      const c = group.pop();
       this.list.splice(this.list.indexOf(c), 1);
       c.destroy();
     }
   }
 
-  // night: de noche las gallinas, las palomas y la gente se recogen. jeep: dónde va el Willys.
+  // night: de noche las gallinas, las palomas y la gente se recogen. jeep: dónde va el Willys (moving
+  // solo en las salidas en que el perro lo persigue).
   update(dt, t, night, jeep) {
     for (const c of this.list) {
       const asleep = night && (c.kind === 'chicken' || c.kind === 'pigeon' || c.kind === 'person');
       c.visible = !asleep;
       if (asleep) continue;
       let follow = null;
-      // El perro corre detrás del Willys mientras va cerca de la bodega.
+      // El perro corre detrás del Willys mientras va cerca de la bodega (en algunas salidas).
       if (c.kind === 'dog' && jeep?.moving) {
         const d = Math.hypot(jeep.gx - c.pos.gx, jeep.gy - c.pos.gy);
         if (d < 5 && d > 0.8) follow = { gx: jeep.gx - jeep.dx * 0.9, gy: jeep.gy - jeep.dy * 0.9 };
       }
       c.update(dt, t, follow);
+      const pz = this.plaza;
+      if (pz && c.kind === 'person' && c.pos.gx > pz.x && c.pos.gx < pz.x + pz.w && c.pos.gy > pz.y && c.pos.gy < pz.y + pz.h) c.zIndex = pz.z + 0.1;
     }
   }
+}
+
+// Dónde puede pararse la gente del Pueblo: la plaza (menos la esquina de la casa y las mesas, la fuente,
+// los guayacanes y los faroles) y la grama sin casitas ni árboles. Nunca las calles ni los edificios.
+function townWalkable(zone, tiles, occupied) {
+  const { x, y, w, h } = zone.farm;
+  const fountain = [w * 0.62, h * 0.62];
+  const posts = [[w - 0.7, 0.8], [0.8, h - 0.7], [w - 0.6, h - 0.6], [w * 0.62 - 1.4, h * 0.62 - 1.4], [w - 0.3, h * 0.62], [w * 0.62, h - 0.3]];
+  return (gx, gy) => {
+    const tx = Math.floor(gx);
+    const ty = Math.floor(gy);
+    const t = tiles[tx]?.[ty];
+    const lx = gx - x;
+    const ly = gy - y;
+    // Ni detrás de la casa del café (quedaría tapado por el tejado).
+    if (lx < 3.3 && ly < 3.3) return false;
+    if (t === 'grass') return !occupied.has(`${tx},${ty}`);
+    if (t !== 'farm') return false;
+    if (lx < 0.25 || ly < 0.25 || lx > w - 0.25 || ly > h - 0.25) return false;
+    if (lx + ly < 4.6) return false; // las mesas de la casa
+    if (Math.hypot(lx - fountain[0], ly - fountain[1]) < 1.5) return false;
+    return posts.every(([px, py]) => Math.hypot(lx - px, ly - py) > 0.6);
+  };
 }

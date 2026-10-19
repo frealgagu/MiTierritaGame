@@ -41,6 +41,7 @@ export class Terrain {
     this.tiles = buildTileMap(zone);
     this.ground = new Graphics();
     this.decor = []; // objetos altos que se ordenan por profundidad junto al resto
+    this.occupied = new Set(); // casillas con decoración (`gx,gy`): la gente no las atraviesa
     this.drawGround();
     this.buildDecor();
   }
@@ -173,6 +174,7 @@ export class Terrain {
           else if (r < 0.17) obj = rock(rng);
         }
         if (!obj) continue;
+        this.occupied.add(`${gx},${gy}`);
         const ox = 0.3 + rng() * 0.4;
         const oy = 0.3 + rng() * 0.4;
         const p = iso(gx + ox, gy + oy);

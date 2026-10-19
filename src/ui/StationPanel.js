@@ -23,7 +23,8 @@ import { busyMules, dockStock, exportsOf, pendingRoutes, slowConsumers, legTime,
 import { analyzeChain, expectedCompostValue, routeFlow } from '../sim/analysis.js';
 import { COMPOST_VALUE, compostValueBoost, muleSpeedMult, saleValue } from '../sim/modifiers.js';
 import { PARENT, branchShare, consumers, zoneOf } from '../sim/chain.js';
-import { ROUTES_BY_ID } from '../data/routes.js';
+import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
+import { jeepResting } from '../sim/dispatch.js';
 import { routeActive, routeCapacity, routeRate, routeStations, stationImportRate } from '../sim/routes.js';
 import { capMult, speedMult } from '../sim/modifiers.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
@@ -526,6 +527,14 @@ function dispatchInfo(zoneId) {
     status: (s) => {
       const full = alerts(z(s)).full;
       if (full) return { text: '⛔ Bodega llena: el Willys no da abasto.', bad: true };
+      if (jeepResting(s, zoneId)) {
+        const routes = ROUTES.filter((r) => r.from === zoneId && routeActive(s, r.id));
+        if (routes.length) {
+          const where = routes.every((r) => r.to === 'pueblo') ? 'al Pueblo' : 'a las otras zonas';
+          const name = ZONES_BY_ID[zoneId].name.replace(/^(El|La) /, (a) => a.toLowerCase());
+          return { text: `☕ Todo lo que produce ${name} se lo lleva la chiva ${where}; el Willys solo sale con lo que sobra.`, bad: false };
+        }
+      }
       const phase = { idle: '🅿️ El Willys está cargando en la bodega.', out: '🚙 El Willys va camino al pueblo.', back: '↩️ El Willys vuelve a la bodega.' };
       return { text: phase[z(s).jeep.phase], bad: false };
     },

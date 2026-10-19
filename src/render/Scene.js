@@ -19,6 +19,7 @@ import { ROAD_POS, zoneOf } from '../sim/chain.js';
 import { normalDest, slowConsumers, warehouseCap } from '../sim/transport.js';
 import { alerts } from '../sim/alerts.js';
 import { dispatchMult } from '../sim/modifiers.js';
+import { jeepResting } from '../sim/dispatch.js';
 import { quoteUnlock } from '../sim/upgrades.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive, routeCapacity } from '../sim/routes.js';
@@ -39,6 +40,8 @@ export class Scene {
     this.zone = zone;
     this.sourceId = zone.farm.stationId;
     this.time = 0;
+    this.restSince = null;
+    this.jeepPhase = 'idle';
     this.onSelect = () => {};
 
     this.background = new Background();
@@ -306,6 +309,7 @@ export class Scene {
       }
     }
     this.critters.setCows(this.farm.cowCount ?? 0);
+    this.critters.setPeople(this.farm.peopleCount ?? 0);
     this.critters.update(dt, this.time, this.dayNight.light > 0.5, this.jeepPos);
     this.updateAmbient(dt);
     this.effects.update(dt);
@@ -419,11 +423,27 @@ export class Scene {
     const p = pointAt(road, eased);
     const load = Object.values(j.load).reduce((a, b) => a + b, 0) / dispatchCapacity(zone.dispatch.level, dispatchMult(state, this.zone.id));
     const waiting = j.phase === 'idle' ? Math.min(1, j.waited / DISPATCH.maxWait) * 0.3 : 0;
-    this.jeep.place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, j.phase === 'out' ? load : waiting);
-    // Para el perro que lo acompaña: dónde va y hacia dónde.
+    // El tinto, solo si lleva un rato parqueado sin nada que vender (no entre viaje y viaje).
+    if (!jeepResting(state, this.zone.id)) this.restSince = null;
+    else this.restSince ??= this.time;
+    const resting = this.restSince !== null && this.time - this.restSince > 2;
+    this.jeep.place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, j.phase === 'out' ? load : waiting, resting, this.time);
+    // El perro lo persigue en una salida de cada 5 a 15, no en todas.
+    if (j.phase !== 'idle' && this.jeepPhase === 'idle') {
+      this.trips = (this.trips ?? 0) + 1;
+      this.chaseAt ??= 5 + Math.floor(Math.random() * 11);
+      this.chasing = this.trips >= this.chaseAt;
+      if (this.chasing) {
+        this.trips = 0;
+        this.chaseAt = 5 + Math.floor(Math.random() * 11);
+      }
+    }
+    if (j.phase === 'idle') this.chasing = false;
+    this.jeepPhase = j.phase;
+    // Para el perro: dónde va y hacia dónde.
     const len = Math.hypot(p.dx, p.dy) || 1;
     const sign = reverse ? -1 : 1;
-    this.jeepPos = { gx: p.gx, gy: p.gy, dx: (sign * p.dx) / len, dy: (sign * p.dy) / len, moving: j.phase !== 'idle' };
+    this.jeepPos = { gx: p.gx, gy: p.gy, dx: (sign * p.dx) / len, dy: (sign * p.dy) / len, moving: Boolean(this.chasing) };
   }
 
   // La Chiva solo se ve en el tramo de carretera de esta zona: al salir de la bodega de origen y al

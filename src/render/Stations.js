@@ -238,21 +238,8 @@ export class FarmView extends StationView {
       g.rect(p.x - 4, p.y - 38, 8, 8).fill(0xffd27a).stroke({ width: 1.5, color: 0x2b2b2b });
       if (tier >= 1) this.lights.push({ x: p.x, y: p.y - 34, r: 26 });
     }
-    // Gente paseando por la plaza (más con cada hito).
-    const shirts = [0xd7263d, 0x2e6fd1, 0xe8b90f, 0x2fa36b, 0xffffff, 0x8e44ad];
-    for (let i = 0; i < 4 + tier * 2; i++) {
-      const gx = x + 0.8 + rng() * (w - 1.6);
-      const gy = y + 0.8 + rng() * (h - 1.6);
-      if (gx < x + 3.2 && gy < y + 3.2) continue; // casa y mesas
-      if (Math.hypot(gx - (x + w * 0.62), gy - (y + h * 0.62)) < 1.3) continue; // fuente
-      const p = iso(gx, gy);
-      g.ellipse(p.x, p.y, 4, 2).fill({ color: 0x000000, alpha: 0.2 });
-      g.roundRect(p.x - 2.5, p.y - 11, 5, 8, 2).fill(shirts[Math.floor(rng() * shirts.length)]);
-      g.rect(p.x - 2, p.y - 3, 1.5, 3).fill(0x3a3a5a);
-      g.rect(p.x + 0.5, p.y - 3, 1.5, 3).fill(0x3a3a5a);
-      g.circle(p.x, p.y - 13.5, 2.6).fill(0xc68e5e);
-      if (rng() < 0.5) g.ellipse(p.x, p.y - 15.5, 4, 1.5).fill(0xf2e6c8); // sombrero
-    }
+    // La gente que pasea por la plaza la pone Critters (más con cada hito).
+    this.peopleCount = 4 + tier * 2;
   }
 
   // Un punto al azar sobre un cafeto (para las cerezas que saltan).

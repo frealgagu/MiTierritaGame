@@ -546,12 +546,14 @@ export const COST_GROWTH = 1.15;
 | v1.8 ✅ | **Ambiente**: datos reales en los paneles y una persona por zona que avisa lo importante; vida en el mapa (gallinas, perro, vacas, gente, palomas); sonidos por zona; la cadena como diagrama | Más personalidad |
 | v1.9 | **Jornada y temporadas** (§10.1) | Ritmo |
 | v2.0 | **Eventos e insignias** (§10.2): un evento por zona al año, con medallas; progresión general que no se pierde al reiniciar | Rejugable a largo plazo |
+| futuro | **Otras regiones** (§10.3): Santander, Costa Caribe, Llanos y Altiplano, cada una con su economía y su reinicio | Más país |
 
 **Cómo se conectan las zonas:** ver §4b.
 
 ### 10.1 Jornada y temporadas (plan, v1.9)
-- **Jornada**: las estaciones trabajan de día (por ejemplo, de 6:00 a 18:00; un día de juego son 8 minutos) y de noche **se detienen del todo**. Los arrieros terminan su viaje; el Willys y las chivas siguen. **No se compensa**: el juego se hace más largo a propósito. Investigaciones por zona pueden alargar la jornada (bombillos, turno de noche). El tiempo sin conexión respeta el horario.
-- **Temporadas**: un año de **16 días** de juego, en **4 temporadas de 4 días**. Cada temporada sube o baja la producción de **todas las estaciones a la vez** (no por zonas), para no descompensar la cadena. Se ve junto al reloj y en el mapa (lluvia, cielo gris, potreros secos en verano).
+- **Jornada**: las estaciones trabajan de día, **de 6:00 a 18:00** (un día de juego son 8 minutos) y de noche **se detienen del todo**. Los arrieros terminan su viaje; el Willys y las chivas siguen. **No se compensa**: el juego se hace más largo a propósito. Investigaciones por zona pueden alargar la jornada (bombillos, turno de noche). El tiempo sin conexión respeta el horario.
+- **Temporadas**: un año de **16 días** de juego, en **4 temporadas de 4 días**. Cada temporada sube o baja la producción de **todas las estaciones a la vez** (no por zonas), para no descompensar la cadena. Son las temporadas generales del país, secas y de lluvias: ☀️ **Verano** ×1,2 · 🌦️ **Entrada de aguas** ×1 · 🌧️ **Invierno** ×0,8 · 🌤️ **Veranillo** ×1. Se ve junto al reloj y en el mapa (lluvia, cielo gris, potreros secos en verano). La *mitaca* (la cosecha chica del Eje Cafetero) va solo como dato curioso en los paneles.
+- **Sin conexión**: se calcula sin el multiplicador de desarrollador, simulando rápido el tiempo que pasó para contar las horas de la noche y las temporadas.
 
 ### 10.2 Eventos e insignias (plan, v2.0)
 - **Tableros aparte**: cada evento usa las piezas de una zona en un tablero separado del mapa, con sus propias monedas y niveles. Tiene **su propio reloj, que se pausa al salir** (para mirar el mapa general) y que no avanza sin conexión.
@@ -561,11 +563,22 @@ export const COST_GROWTH = 1.15;
 - **Renombre ⭐**: las medallas dan Renombre (🥉 1, 🥈 2, 🥇 4), que se acumula en un total que **no se pierde al reiniciar** y nunca se convierte en monedas de la partida. Se gasta en **decoración** (colores de las casas y los balcones, pintura de la chiva y del Willys, ropa de los arrieros, adornos de la plaza) y en el **álbum de láminas** (como el de las chocolatinas: cada medalla y cada logro da una lámina; llenar una página da Renombre extra).
 - **Logros generales** que suman entre partidas (vender, exportar, ganar medallas en todas las zonas…), sin logros de velocidad: con cada reinicio todo va mucho más rápido.
 
+### 10.3 Otras regiones (plan a futuro, después de las fases anteriores)
+- Cada región es un **mapa nuevo con sus propias zonas, cadenas y productos**, con **su propia economía** (monedas, niveles e investigaciones) y **su propio reinicio** (el ×2 del segundo final vale solo para esa región).
+- Entre regiones solo se comparte lo general: **Renombre ⭐, álbum de láminas, decoración y logros**.
+- Por ahora las regiones **no se conectan** entre sí. Más adelante podría haber exportación entre regiones (llevar productos de una a otra), pero no hace falta.
+- Ideas de productos:
+  - **Santander**: bocadillo veleño (guayaba), tabaco, hormigas culonas, fique (costales y alpargatas).
+  - **Costa Caribe**: coco y cocadas, plátano y patacones, yuca y enyucado, queso costeño, caña flecha y sombrero vueltiao.
+  - **Llanos**: ganado y carne a la llanera, cuero, arroz, palma de aceite.
+  - **Altiplano**: papa, lana y ruanas, trucha, almojábanas.
+- **Música por región** (sintetizada en el juego, sin archivos): bambuco y pasillo para el Eje Cafetero; guabina para Santander; cumbia y porro para la Costa; joropo para los Llanos; torbellino para el Altiplano.
+
 ---
 
 ## 11. Fuera de alcance
 
-Supervivencia, clima que afecte a la economía, población con necesidades, héroes, combate, gacha, energía, multijugador, tienda con dinero real y servidor. (El reinicio con producción al doble llegó en la v1.6, tras el segundo final.)
+Supervivencia, clima que afecte a una sola zona (las temporadas de la v1.9 afectan a todas por igual), población con necesidades, héroes, combate, gacha, energía, multijugador, tienda con dinero real y servidor. (El reinicio con producción al doble llegó en la v1.6, tras el segundo final.)
 
 ---
 

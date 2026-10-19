@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v1.8.6 — El Willys se toma un tinto
+- Cuando todo lo que produce una zona se lo lleva la chiva a otra zona, el **Willys se queda parqueado** y el conductor **se toma un tinto** (con su vaporcito). El panel del despacho lo explica: «Todo lo que produce la Finca se lo lleva la chiva al Pueblo; el Willys solo sale con lo que sobra».
+- En el Pueblo, la **gente pasea por la plaza** y la grama de al lado, sin pisar las calles por donde pasan las mulas y los carros. Antes caminaba por las calles y la de la plaza estaba pintada (quieta); ahora toda camina, y hay más con cada hito de la Casa del café.
+- El **perro** ya no persigue al Willys en todas las salidas: solo en una de cada 5 a 15.
+- Plan a futuro en el GDD: **otras regiones** (Santander, Costa Caribe, Llanos, Altiplano), cada una con su economía y su reinicio.
+
 ## v1.8.5 — Sonidos de cada zona
 - Sonidos de ambiente sintetizados (sin archivos, como los demás), según la zona y la hora:
   - En las fincas, el **gallo** canta al amanecer y las **gallinas** cacarean de vez en cuando.
