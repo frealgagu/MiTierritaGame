@@ -292,7 +292,7 @@ Cada estación tiene **dos ejes** de mejora.
 
 ### 5.4 Investigaciones (compras únicas, `src/data/research.js`)
 
-**Regla:** toda estación de cada cadena tiene **exactamente una** investigación ×2 (hay una prueba que lo exige), y las que aceleran una estación aparecen junto a la de la siguiente, para que comprar una no descompense la cadena. Con todas compradas, la cadena queda igual de equilibrada que sin ninguna. Las mejoras «de segunda vuelta» suben el precio, no la velocidad: un segundo ×2 en una sola estación dejaría a las demás siempre atrás.
+**Regla:** toda estación de cada cadena tiene **exactamente una** investigación ×2 (hay una prueba que lo exige). Desde la **v2.3.2**, la ×2 de una estación se habilita cuando **esa estación y sus arrieros llegan al nivel 25** (la Compostera, que no tiene arrieros, solo con su nivel); antes aparecía al construir la siguiente estación, y la columna «Aparece con» de las tablas de abajo es de entonces para esas. Los objetivos que piden una ×2 (Abono orgánico, Trapiche con motor, Ordeño mecánico, Injertos, Maíz híbrido y Catadores) pasaron a ir justo después del de «todo al nivel 25» de su zona. Con todas compradas, la cadena queda igual de equilibrada que sin ninguna. Las mejoras «de segunda vuelta» suben el precio, no la velocidad: un segundo ×2 en una sola estación dejaría a las demás siempre atrás.
 
 **La Finca**
 

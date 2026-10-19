@@ -36,9 +36,10 @@ test('con saldo negativo permitido se compra sin monedas y el saldo queda en deu
   setCredit(true);
   try {
     assert.ok(game.unlock('wetmill'));
-    assert.ok(game.research('abono'), 'investiga sin monedas');
     assert.ok(game.buy('farm', 'max'));
     assert.equal(s.stations.farm.level, 100, '«máx» llega al tope');
+    assert.ok(game.buy('farm:transport', 'max'));
+    assert.ok(game.research('abono'), 'investiga sin monedas');
     assert.ok(s.coins < 0, `saldo: ${s.coins}`);
   } finally {
     setCredit(false);

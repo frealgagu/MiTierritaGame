@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v2.3.2 — Investigaciones ×2 al nivel 25
+- Las investigaciones que **duplican una estación** (Abono orgánico, Despulpadora eléctrica, Secador mecánico, Trapiche con motor, Ordeño mecánico…) se habilitan cuando **esa misma estación y sus arrieros 🐴 llegan al nivel 25**. Antes aparecían al construir la estación siguiente. La Compostera, que no tiene arrieros, solo pide su nivel.
+- En la ventana de investigaciones, las que faltan dicen cuánto llevan: «🔒 Nv 25 y 🐴 25 · va en 18 y 🐴 12».
+- Los objetivos que pedían una de esas investigaciones al comienzo de cada zona (Abono orgánico, Trapiche con motor, Ordeño mecánico, Injertos, Maíz híbrido y Catadores) pasaron a ir después del de «todo al nivel 25», con un premio acorde, para que no trancaran la lista.
+
 ## v2.3.1 — Pantalla de carga
 - Al abrir el juego aparece de una vez una **pantalla de carga** («Preparando la finca…») en vez de la pantalla quieta.
 - Si estuviste fuera, dice cuánto tiempo pasó y muestra una **barra de avance** mientras calcula lo que se produjo sin conexión («Pasaron 10 h 0 min desde la última vez…»). Con una partida avanzada y 24 h fuera, en un teléfono puede tardar varios segundos: ya no parece que el juego se trabó.

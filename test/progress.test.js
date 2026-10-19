@@ -19,8 +19,38 @@ function run(game, seconds) {
 test('una investigación pide su estación y se compra una sola vez', () => {
   const game = new Game();
   game.state.coins = 1e6;
-  assert.equal(game.quoteResearch('abono').reason, 'locked');
+  assert.equal(game.quoteResearch('herraduras').reason, 'locked');
   game.unlock('wetmill');
+  game.unlock('dryer');
+  assert.ok(game.research('herraduras'));
+  assert.equal(game.quoteResearch('herraduras').reason, 'owned');
+});
+
+test('las que duplican una estación piden esa estación y sus arrieros al nivel 25', () => {
+  const game = new Game();
+  game.state.coins = 1e12;
+  const farm = game.state.stations.farm;
+  farm.level = 25;
+  assert.equal(game.quoteResearch('abono').reason, 'locked', 'faltan los arrieros');
+  farm.transport.level = 25;
+  farm.level = 24;
+  assert.equal(game.quoteResearch('abono').reason, 'locked', 'falta la estación');
+  farm.level = 25;
+  assert.ok(game.research('abono'), 'ya no hace falta construir la siguiente');
+  // La Compostera no tiene arrieros: le basta su nivel.
+  game.unlock('wetmill');
+  game.unlock('composter');
+  game.state.stations.composter.level = 25;
+  assert.ok(game.quoteResearch('beneficio_eco').ok);
+  // Las demás siguen igual: la Herradura pide construir la Marquesina.
+  assert.equal(game.quoteResearch('herraduras').reason, 'locked');
+});
+
+test('una investigación se compra una sola vez', () => {
+  const game = new Game();
+  game.state.coins = 1e6;
+  game.state.stations.farm.level = 25;
+  game.state.stations.farm.transport.level = 25;
   assert.ok(game.research('abono'));
   assert.equal(game.quoteResearch('abono').reason, 'owned');
   assert.equal(game.research('abono'), false);
@@ -206,10 +236,10 @@ test('con el Abono comprado y dinero para la Despulpadora, la recomienda', async
   game.unlock('wetmill');
   game.state.research.push('abono');
   for (const st of Object.values(game.state.stations)) {
-    st.level = 10;
-    st.transport.level = 10;
+    st.level = 25;
+    st.transport.level = 25;
   }
-  game.state.zones.finca.dispatch.level = 10;
+  game.state.zones.finca.dispatch.level = 25;
   game.state.coins = 500;
   const rec = recommendUpgrade(game.state, (id, mode) => game.quote(id, mode), 'finca');
   assert.equal(rec.id, 'research:despulpadora');

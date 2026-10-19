@@ -96,6 +96,15 @@ export function zoneAtLevel(state, zoneId, level) {
   return [...z.chain, ...z.plots.map((p) => p.stationId)].every((id) => (state.stations[id]?.level ?? 0) >= level);
 }
 
+// Si todavía falta algo para poder investigarla: su estación construida, la estación y sus arrieros al
+// nivel que pide (las que duplican una estación) o toda la zona a un nivel (Maestría y Supremacía).
+export function researchLocked(state, r) {
+  const st = r.requires && state.stations[r.requires];
+  if (r.requires && !st) return true;
+  if (r.stationLevel && (st.level < r.stationLevel || (!STATIONS_BY_ID[r.requires].side && st.transport.level < r.stationLevel))) return true;
+  return Boolean(r.minLevel && !zoneAtLevel(state, r.zone, r.minLevel));
+}
+
 // Investigaciones: aparecen cuando su estación está construida y se compran una vez.
 export function quoteResearch(state, id) {
   const r = RESEARCH_BY_ID[id];
@@ -103,8 +112,7 @@ export function quoteResearch(state, id) {
   if (state.event) return { ok: false, reason: 'event', cost: r.cost };
   if (state.research.includes(id)) return { ok: false, reason: 'owned', cost: r.cost };
   if (!zoneUnlocked(state, r.zone)) return { ok: false, reason: 'zone', cost: r.cost };
-  if (r.requires && !state.stations[r.requires]) return { ok: false, reason: 'locked', cost: r.cost };
-  if (r.minLevel && !zoneAtLevel(state, r.zone, r.minLevel)) return { ok: false, reason: 'locked', cost: r.cost };
+  if (researchLocked(state, r)) return { ok: false, reason: 'locked', cost: r.cost };
   if (!canPay(state, r.cost)) return { ok: false, reason: 'coins', cost: r.cost };
   return { ok: true, cost: r.cost };
 }

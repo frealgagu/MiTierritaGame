@@ -8,7 +8,7 @@ import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { exportsOf, teamCapacity } from './transport.js';
 import { COMPOST_VALUE, WASHED_PER_COMPOST, dispatchMult, productValue, speedMult } from './modifiers.js';
 import { PRODUCTS } from '../data/products.js';
-import { canPay, zoneAtLevel } from './upgrades.js';
+import { canPay, researchLocked } from './upgrades.js';
 import { supplyFraction } from './events.js';
 
 const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
@@ -432,8 +432,7 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
   // así la recomendación nunca deja al jugador ahorrando para algo caro.
   for (const r of RESEARCH) {
     if (r.zone !== zoneId || state.research.includes(r.id) || !canPay(state, r.cost)) continue;
-    if (r.requires && !state.stations[r.requires]) continue;
-    if (r.minLevel && !zoneAtLevel(state, r.zone, r.minLevel)) continue;
+    if (researchLocked(state, r)) continue;
     // Cambia su zona y, si acelera una estación con importados (o toda la zona: Maestría y Supremacía),
     // lo que piden sus rutas.
     const zoneWide = r.effect.type === 'zoneSpeed';

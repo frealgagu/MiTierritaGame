@@ -488,7 +488,7 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .research-icon { font-size: 1.6rem; width: 36px; text-align: center; }
 .research-text { flex: 1; min-width: 0; font-size: 0.9rem; }
 .research-text small { color: var(--muted); }
-.research .owned, .research .locked { font-size: 0.8rem; font-weight: 600; text-align: right; }
+.research .owned, .research .locked { font-size: 0.8rem; font-weight: 600; text-align: right; flex: none; white-space: nowrap; }
 .btn.small { width: auto; padding: 6px 10px; font-size: 0.9rem; white-space: nowrap; }
 
 .modal-card.center { text-align: center; display: grid; gap: 8px; justify-items: center; }

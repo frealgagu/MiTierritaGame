@@ -1,6 +1,7 @@
 // Investigaciones (GDD §5.4): compras únicas. Cada estación tiene al menos una ×2, y las que
 // aceleran una estación aparecen junto a la de la siguiente, para no descompensar la cadena.
 //   requires: estación que tiene que estar construida para que aparezca
+//   stationLevel: nivel que piden esa estación y sus arrieros (las que la duplican, ver abajo)
 //   effect:   { type, target?, mult }
 //     stationSpeed (target = estación) · productValue (target = producto) · zoneValue (target = zona)
 //     muleSpeed · dispatchCapacity (target = zona) · offlineHours (hours = horas que suma)
@@ -96,5 +97,14 @@ export const RESEARCH = [
   { zone: 'maizal', id: 'supremacia_maizal', name: 'Supremacía: Maizal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'maizal', mult: 8 } },
   { zone: 'pueblo', id: 'supremacia_pueblo', name: 'Supremacía: Pueblo', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'pueblo', mult: 8 } },
 ];
+
+// Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al
+// nivel 25 (antes, al construir la siguiente). La Compostera no tiene arrieros: le basta su nivel.
+export const DOUBLE_LEVEL = 25;
+for (const r of RESEARCH) {
+  if (r.effect.type !== 'stationSpeed' || r.effect.mult !== 2) continue;
+  r.requires = r.effect.target;
+  r.stationLevel = DOUBLE_LEVEL;
+}
 
 export const RESEARCH_BY_ID = Object.fromEntries(RESEARCH.map((r) => [r.id, r]));

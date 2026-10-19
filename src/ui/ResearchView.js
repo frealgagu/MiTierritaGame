@@ -43,6 +43,7 @@ export class ResearchView {
         let action;
         if (q.reason === 'owned') action = '<span class="owned">✅ Investigado</span>';
         else if (q.reason === 'locked' && r.minLevel) action = `<span class="locked">🔒 Todo al nivel ${r.minLevel} (${atLevel(this.game.state, r)})</span>`;
+        else if (q.reason === 'locked' && r.stationLevel && this.game.state.stations[r.requires]) action = `<span class="locked">${stationLevelText(this.game.state, r)}</span>`;
         else if (q.reason === 'locked') action = `<span class="locked">🔒 Construye ${STATIONS_BY_ID[r.requires].name}</span>`;
         else action = `<button class="btn buy small" data-research="${r.id}" ${q.ok ? '' : 'disabled'}>💰 ${formatNumber(r.cost)}</button>`;
         return `
@@ -55,6 +56,15 @@ export class ResearchView {
       .join('');
     if (html !== this.html) this.body.innerHTML = this.html = html;
   }
+}
+
+// «🔒 Nv 25 y 🐴 25 · va en 12 y 🐴 8»: lo que le falta a una de las que duplican una estación (la
+// estación misma y sus arrieros; la Compostera no tiene arrieros).
+function stationLevelText(state, r) {
+  const st = state.stations[r.requires];
+  const n = r.stationLevel;
+  if (STATIONS_BY_ID[r.requires].side) return `🔒 Nv ${n}<br><small>va en ${st.level}</small>`;
+  return `🔒 Nv ${n} y 🐴 ${n}<br><small>va en ${st.level} y 🐴 ${st.transport.level}</small>`;
 }
 
 // Cuántos edificios de la zona ya llegaron al nivel que pide la Maestría o la Supremacía: «5/7».
