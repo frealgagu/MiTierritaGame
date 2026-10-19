@@ -43,6 +43,12 @@ export const ICON = {
   bocadillo: '\uE025', // Bocadillo: barrita rojo vino con su franja blanca de guayaba blanca (el combinado)
   bocadilloBijao: '\uE026', // Bocadillo veleño: envuelto en hoja de bijao seca, amarrado con un hilo de fique
   bocadilloCrate: '\uE027', // Caja de bocadillos veleños: cajita de madera abierta, con los bocadillos en bijao
+  tobaccoPlant: '\uE028', // Mata de tabaco: tallo alto con hojas grandes y anchas y sus flores rosadas arriba
+  tobaccoLeaf: '\uE029', // Hoja de tabaco: recién cortada, verde y ancha, con sus nervios
+  curedLeaf: '\uE02A', // Hoja curada: la hoja seca en el caney, dorada y arrugada
+  strippedLeaf: '\uE02B', // Hoja despalillada: las dos mitades de la hoja curada, ya sin la vena del centro
+  fermentedTobacco: '\uE02C', // Tabaco fermentado: un manojo de hojas oscuras, amarrado con su propia hoja
+  cigar: '\uE02D', // Tabaco torcido: el puro enrollado a mano, con su anillo y la punta encendida
 };
 
 export const ICON_FONT = 'Cafetal Icons';

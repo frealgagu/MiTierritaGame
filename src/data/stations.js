@@ -84,6 +84,14 @@ export const STATIONS = [
   { id: 'bocadillo_cutter', zone: 'guayabera', name: 'Cortadora', icon: '🔪', in: { bocadillo_block: 2 }, out: { bocadillo: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.0' },
   { id: 'bijao_wrapper', zone: 'guayabera', name: 'Envoltura en bijao', icon: '🍃', in: { bocadillo: 1 }, out: { bocadillo_bijao: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.0' },
   { id: 'crate_packer', zone: 'guayabera', name: 'Cajonera', icon: '📦', in: { bocadillo_bijao: 4 }, out: { bocadillo_crate: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.0' },
+
+  // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
+  // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
+  { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },
+  { id: 'caney', zone: 'tabacal', name: 'Caney de curado', icon: '🛖', in: { tobacco_leaf: 1 }, out: { cured_leaf: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.1' },
+  { id: 'stripper', zone: 'tabacal', name: 'Despalilladora', icon: '✂️', in: { cured_leaf: 2 }, out: { stripped_leaf: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.1' },
+  { id: 'tobacco_piles', zone: 'tabacal', name: 'Pilones de fermentación', icon: '♨️', in: { stripped_leaf: 2 }, out: { fermented_tobacco: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.1' },
+  { id: 'cigar_roller', zone: 'tabacal', name: 'Torcedores', icon: '🤲', in: { fermented_tobacco: 1 }, out: { cigar: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.1' },
 ];
 
 export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));

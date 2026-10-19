@@ -112,6 +112,20 @@ export const RESEARCH = [
   { zone: 'guayabera', id: 'cajonera_s', name: 'Cajonera automática', icon: '📦', desc: 'La Cajonera llena el doble de cajas.', cost: 150000, requires: 'crate_packer', effect: { type: 'stationSpeed', target: 'crate_packer', mult: 2 } },
   { zone: 'guayabera', id: 'cable_s', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'crate_packer', effect: { type: 'muleSpeed', mult: 2 } },
   { zone: 'guayabera', id: 'sello_s', name: 'Sello de calidad', icon: '🏅', desc: 'Las cajas de bocadillos valen un 50 % más.', cost: 300000, requires: 'crate_packer', effect: { type: 'productValue', target: 'bocadillo_crate', mult: 1.5 } },
+  { zone: 'guayabera', id: 'maestria_guayabera', name: 'Maestría: Guayabera', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'guayabera', mult: 4 } },
+  { zone: 'guayabera', id: 'supremacia_guayabera', name: 'Supremacía: Guayabera', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'guayabera', mult: 8 } },
+
+  // Santander · El Tabacal (v3.1): las mismas del Trapiche.
+  { zone: 'tabacal', id: 'caney_grande', name: 'Caney grande', icon: '🛖', desc: 'El Caney de curado cura el doble.', cost: 20000, requires: 'caney', effect: { type: 'stationSpeed', target: 'caney', mult: 2 } },
+  { zone: 'tabacal', id: 'abono_tabaco', name: 'Abono para el tabaco', icon: '🌱', desc: 'El Tabacal produce el doble.', cost: 50000, requires: 'stripper', effect: { type: 'stationSpeed', target: 'tobacco_field', mult: 2 } },
+  { zone: 'tabacal', id: 'mesas_despalillar', name: 'Mesas de despalillar', icon: '✂️', desc: 'La Despalilladora trabaja el doble.', cost: 40000, requires: 'stripper', effect: { type: 'stationSpeed', target: 'stripper', mult: 2 } },
+  { zone: 'tabacal', id: 'chiva_s', name: 'Chiva para el Tabacal', icon: '🚚', desc: 'El despacho del Tabacal lleva el doble por viaje.', cost: 80000, requires: 'stripper', effect: { type: 'dispatchCapacity', target: 'tabacal', mult: 2 } },
+  { zone: 'tabacal', id: 'veguero', name: 'Veguero de confianza', icon: '🧓', desc: 'Mientras no juegas, Santander sigue produciendo 3 h más.', cost: 300000, requires: 'tobacco_piles', effect: { type: 'offlineHours', hours: 3 } },
+  { zone: 'tabacal', id: 'pilones_altos', name: 'Pilones más altos', icon: '♨️', desc: 'Los Pilones de fermentación fermentan el doble.', cost: 300000, requires: 'tobacco_piles', effect: { type: 'stationSpeed', target: 'tobacco_piles', mult: 2 } },
+  { zone: 'tabacal', id: 'torcedoras', name: 'Escuela de torcedores', icon: '🤲', desc: 'Los Torcedores tuercen el doble.', cost: 600000, requires: 'cigar_roller', effect: { type: 'stationSpeed', target: 'cigar_roller', mult: 2 } },
+  { zone: 'tabacal', id: 'tabaco_negro', name: 'Tabaco negro de origen', icon: '🏅', desc: 'El tabaco torcido vale un 50 % más.', cost: 1500000, requires: 'cigar_roller', effect: { type: 'productValue', target: 'cigar', mult: 1.5 } },
+  { zone: 'tabacal', id: 'maestria_tabacal', name: 'Maestría: Tabacal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'tabacal', mult: 4 } },
+  { zone: 'tabacal', id: 'supremacia_tabacal', name: 'Supremacía: Tabacal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'tabacal', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

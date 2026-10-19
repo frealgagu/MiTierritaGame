@@ -75,4 +75,11 @@ export const PRODUCTS = {
   bocadillo: { name: 'Bocadillo', zone: 'guayabera', value: 30, icon: ICON.bocadillo, color: 0xd81b60 },
   bocadillo_bijao: { name: 'Bocadillo veleño', zone: 'guayabera', value: 45, icon: ICON.bocadilloBijao, color: 0x8d9f3c },
   bocadillo_crate: { name: 'Caja de bocadillos', zone: 'guayabera', value: 250, icon: ICON.bocadilloCrate, color: 0xd7a86e },
+
+  // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
+  tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
+  cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },
+  stripped_leaf: { name: 'Hoja despalillada', zone: 'tabacal', value: 60, icon: ICON.strippedLeaf, color: 0xb7792c },
+  fermented_tobacco: { name: 'Tabaco fermentado', zone: 'tabacal', value: 150, icon: ICON.fermentedTobacco, color: 0x5d3a1a },
+  cigar: { name: 'Tabaco torcido', zone: 'tabacal', value: 250, icon: ICON.cigar, color: 0x7b4a22 },
 };

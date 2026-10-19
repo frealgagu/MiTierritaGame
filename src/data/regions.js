@@ -11,9 +11,9 @@ export const REGIONS = [
     id: 'santander',
     name: 'Santander',
     icon: ICON.guava,
-    zones: ['guayabera'],
+    zones: ['guayabera', 'tabacal'],
     // Las que llegan en las próximas versiones (se muestran en el selector de zonas).
-    soon: ['🌿 El Tabacal', '🧵 La Fiquera', '🐂 El Hato', '🐜 Las Hormigas', '⛪ Barichara'],
+    soon: ['🧵 La Fiquera', '🐂 El Hato', '🐜 Las Hormigas', '⛪ Barichara'],
     music: 'santander',
     unlock: { region: 'cafetero', zone: 'pueblo' },
   },

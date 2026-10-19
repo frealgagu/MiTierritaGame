@@ -30,5 +30,5 @@ export const ZONE7 = {
   dispatchCost: { base: 10, growth: 1.17 },
   routes: {},
   unlockedBy: null, // la primera de Santander: se abre con la región
-  next: null, // (las siguientes de Santander llegan en las próximas versiones)
+  next: 'tabacal',
 };

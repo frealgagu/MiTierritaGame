@@ -54,6 +54,12 @@ export const FACTS = {
   bocadillo_cutter: ['El bocadillo combinado lleva una capa de guayaba blanca y una roja.'],
   bijao_wrapper: ['La hoja de bijao seca envuelve el bocadillo veleño y le da su aroma.'],
   crate_packer: ['El bocadillo veleño se vende en cajitas de madera liviana.'],
+  // Santander · El Tabacal
+  tobacco_field: ['Santander es la tierra del tabaco negro en Colombia.', 'La mata de tabaco pasa del metro de alto y da flores rosadas.'],
+  caney: ['El caney es un rancho alto y aireado donde la hoja se cuelga a secar.', 'Colgada en el caney, la hoja pasa del verde al dorado en semanas.'],
+  stripper: ['Despalillar es quitarle a la hoja curada la vena gruesa del centro.'],
+  tobacco_piles: ['Apiladas en pilones, las hojas se calientan solas al fermentar.', 'Al pilón hay que voltearlo para que no se queme por dentro.'],
+  cigar_roller: ['Torcer un tabaco a mano es un oficio que se aprende de los mayores.', 'El tabaco lleva por dentro la tripa y por fuera una hoja fina: la capa.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -65,6 +71,7 @@ export const PEOPLE = {
   maizal: { icon: '👵', name: 'Doña Rosa', role: 'la arepera' },
   pueblo: { icon: '🧑‍💼', name: 'Mateo', role: 'el exportador' },
   guayabera: { icon: '👩‍🍳', name: 'Doña Inés', role: 'la bocadillera' },
+  tabacal: { icon: '🧓', name: 'Don Ramiro', role: 'el veguero' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -76,6 +83,7 @@ export const WELCOME = {
   maizal: 'Sin arepa no hay desayuno. ¡Prenda ese budare!',
   pueblo: 'Todo lo de sus fincas termina aquí. ¡A exportar!',
   guayabera: '¡Bienvenido a Santander, mijo! Aquí la guayaba se vuelve bocadillo veleño.',
+  tabacal: '¡Llegó al Tabacal! Aquí la hoja se cura en el caney y se tuerce a mano.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

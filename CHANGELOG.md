@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## v3.1.0 — Santander: El Tabacal
+- **El Tabacal**, la segunda zona de Santander, se abre al completar la Guayabera: Tabacal → Caney de curado → Despalilladora → Pilones de fermentación → Torcedores. La hoja verde cuelga en las varas del caney hasta quedar dorada, se le quita la vena, se fermenta en pilones (con su termómetro) y se tuerce a mano. Don Ramiro, el veguero, avisa lo importante.
+  - Mismos números que el Trapiche, con sus objetivos y sus investigaciones (Caney grande, Abono para el tabaco, Chiva, Veguero de confianza, Tabaco negro de origen…).
+  - Íconos propios para la mata de tabaco, la hoja verde, la curada, la despalillada, el manojo fermentado y el tabaco torcido.
+- La Guayabera y el Tabacal tienen su **Maestría** (×4) y su **Supremacía** (×8), como las zonas del Eje Cafetero.
+- El segundo final de Santander pasa a ser el del Tabacal (su última zona por ahora).
+- Una partida con la Guayabera ya completa abre el Tabacal al cargarse.
+- La pantalla de fin dice «Ir al Tabacal» (antes «Ir a El…»).
+
 ## v3.0.1 — La cadena, en un solo diagrama
 - La ventana de la cadena (🔗) ya no tiene pestañas: queda **un solo diagrama** con scroll.
   - Las estaciones se unen con **eslabones de cadena** que corren hacia abajo (en rojo donde se frena, en azul lo que llega de otras zonas).

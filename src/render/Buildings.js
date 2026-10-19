@@ -1519,4 +1519,153 @@ const DRAW = {
       }
     };
   },
+
+  // --- Santander · El Tabacal (v3.1) ---
+
+  // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.
+  caney(g, x, y, ctx) {
+    const x0 = x + 0.25;
+    const y0 = y + 0.25;
+    const w = 2.5;
+    const d = 2.3;
+    const H = 40 + ctx.up;
+    for (const [px, py] of [[0, 0], [w, 0], [0, d]]) box(g, x0 + px - 0.06, y0 + py - 0.06, 0.12, 0.12, H, PAL.wood);
+    // Varas con las hojas colgadas, de atrás hacia adelante (las de adelante se mecen, ver animate).
+    const rows = [0.35, 0.95, 1.55];
+    const leafColors = [0xc8913b, 0xa8a040, 0x7cb342];
+    const hang = (gr, ty, i, sway) => {
+      const a = iso(x0 + 0.1, y0 + ty, H - 6);
+      const b = iso(x0 + w - 0.1, y0 + ty, H - 6);
+      gr.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 2, color: PAL.woodDark });
+      for (let k = 1; k < 9; k++) {
+        const px = a.x + ((b.x - a.x) * k) / 9;
+        const py = a.y + ((b.y - a.y) * k) / 9;
+        const dx = sway * Math.sin(k * 1.7);
+        gr.poly([px - 1.5, py, px + 1.5, py, px + 3 + dx, py + 11, px + dx, py + 17, px - 3 + dx, py + 11]).fill(leafColors[i]).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.45 });
+      }
+    };
+    rows.slice(0, 2).forEach((ty, i) => hang(g, ty, i, 0));
+    box(g, x0 + w - 0.06, y0 + d - 0.06, 0.12, 0.12, H, PAL.wood);
+    // Atados de hoja verde esperando en el piso.
+    for (const [bx, by] of [[0.5, 2.55], [0.85, 2.7]]) {
+      const p = iso(x0 + bx, y0 + by);
+      g.ellipse(p.x, p.y - 4, 9, 5).fill(PRODUCTS.tobacco_leaf.color).stroke(OUTLINE);
+      g.ellipse(p.x - 2, p.y - 6, 4, 2).fill({ color: 0xc5e1a5, alpha: 0.7 });
+    }
+    gableRoof(g, x0, y0, w, d, H, 18, 0xb89a5a, 0x8a6a3a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 18);
+    const front = new Graphics();
+    this.anim.addChild(front);
+    this.animate = (time) => {
+      front.clear();
+      hang(front, rows[2], 2, Math.sin(time * 1.3) * (this.working ? 1.6 : 0.5));
+    };
+    this.animate(0);
+  },
+
+  // Despalilladora: casa con una mesa en el corredor donde se le quita la vena a cada hoja curada.
+  stripper(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.0, 1.6, 28, ctx, { wall: 0xf4efe6, roofH: 14 });
+    door(g, hx, hy, 1.6, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.0, 0.8, 14, PAL.balconyYellow);
+    // Mesa con hojas curadas y, al lado, el montón de palillos (las venas).
+    box(g, x + 0.4, y + 2.1, 1.7, 0.5, 9, PAL.wood);
+    for (let i = 0; i < 4; i++) {
+      const p = iso(x + 0.6 + i * 0.4, y + 2.35, 9);
+      g.ellipse(p.x, p.y - 1, 7, 3).fill(i % 2 ? PRODUCTS.cured_leaf.color : PRODUCTS.stripped_leaf.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+    }
+    const pile = iso(x + 2.5, y + 2.4);
+    for (let i = 0; i < 9; i++) {
+      const ox = (i % 3) * 4 - 4;
+      const oy = -Math.floor(i / 3) * 2.5;
+      g.moveTo(pile.x + ox - 5, pile.y + oy).lineTo(pile.x + ox + 5, pile.y + oy - 3).stroke({ width: 1.6, color: 0xd9a26b });
+    }
+    const hands = new Graphics();
+    this.anim.addChild(hands);
+    this.animate = (time) => {
+      hands.clear();
+      // La vena sale de la hoja y vuela al montón.
+      const f = (time * 0.9) % 1;
+      const a = iso(x + 1.6, y + 2.35, 12);
+      const px = a.x + (pile.x - a.x) * f;
+      const py = a.y + (pile.y - 6 - a.y) * f - Math.sin(f * Math.PI) * 10;
+      hands.moveTo(px - 4, py + 1).lineTo(px + 4, py - 1).stroke({ width: 1.6, color: 0xd9a26b });
+    };
+    this.animate(0);
+  },
+
+  // Pilones de fermentación: bodega abierta con las hojas apiladas en montones que se calientan solos.
+  tobacco_piles(g, x, y, ctx) {
+    const x0 = x + 0.25;
+    const y0 = y + 0.3;
+    const w = 2.5;
+    const d = 2.2;
+    const H = 28 + ctx.up;
+    const piles = ctx.tier >= 2 ? [[0.25, 0.3], [1.35, 0.3], [0.25, 1.25], [1.35, 1.25]] : [[0.3, 0.4], [1.3, 1.1]];
+    for (const [px, py] of piles) {
+      box(g, x0 + px, y0 + py, 0.9, 0.75, 14, PRODUCTS.fermented_tobacco.color);
+      for (let k = 1; k < 4; k++) {
+        const a = iso(x0 + px, y0 + py + 0.75, k * 3.5);
+        const b = iso(x0 + px + 0.9, y0 + py + 0.75, k * 3.5);
+        g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x8a5a2b, alpha: 0.7 });
+      }
+      // Termómetro clavado en el pilón.
+      const t = iso(x0 + px + 0.45, y0 + py + 0.37, 14);
+      g.rect(t.x - 1, t.y - 9, 2, 9).fill(0xd0d4d8).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.circle(t.x, t.y - 1, 1.6).fill(0xd7263d);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 14, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 14);
+    const bulb = iso(x0 + w / 2, y0 + d / 2, H - 4);
+    this.lights.push({ x: bulb.x, y: bulb.y, r: 30 });
+    const heat = new Graphics();
+    this.anim.addChild(heat);
+    this.animate = (time) => {
+      heat.clear();
+      if (!this.working) return;
+      for (const [k, [px, py]] of piles.entries()) {
+        const f = (time * 0.5 + k * 0.3) % 1;
+        const p = iso(x0 + px + 0.45, y0 + py + 0.37, 14 + f * 10);
+        heat.moveTo(p.x - 3, p.y).quadraticCurveTo(p.x, p.y - 3, p.x + 3, p.y).stroke({ width: 1.2, color: 0xffffff, alpha: 0.6 * (1 - f) });
+      }
+    };
+  },
+
+  // Torcedores: casa del pueblo con la mesa de torcer en el corredor, tabacos en fila y cajas de cedro.
+  cigar_roller(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xf6e7c8, roofH: 14 });
+    door(g, hx, hy, 1.6, 1.8, 18, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.4, 0.8, 14, PAL.balconyYellow);
+    box(g, x + 0.4, y + 2.1, 1.5, 0.5, 9, PAL.wood);
+    for (let i = 0; i < 6; i++) {
+      const p = iso(x + 1.1 + i * 0.12, y + 2.35, 9);
+      g.roundRect(p.x - 1.5, p.y - 8, 3, 9, 1.5).fill(PRODUCTS.cigar.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      g.rect(p.x - 1.5, p.y - 6, 3, 1.2).fill(0xd7263d);
+    }
+    // Cajas de cedro apiladas, listas para la bodega.
+    const stack = [[2.3, 2.2, 0], [2.65, 2.2, 0], [2.48, 2.2, 6], [2.48, 2.55, 0]];
+    for (const [bx, by, z] of stack.slice(0, 2 + Math.min(ctx.tier, 2))) {
+      box(g, x + bx - 0.15, y + by - 0.12, 0.3, 0.24, 6, 0xa0522d, { z });
+    }
+    const roll = new Graphics();
+    this.anim.addChild(roll);
+    this.animate = (time) => {
+      roll.clear();
+      // El tabaco que se está torciendo rueda sobre la mesa; un hilito de humo sale del de muestra.
+      const k = Math.sin(time * 4) * 0.12;
+      const p = iso(x + 0.7 + k, y + 2.35, 9);
+      roll.roundRect(p.x - 6, p.y - 3, 12, 3.5, 1.7).fill(PRODUCTS.fermented_tobacco.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      for (let i = 0; i < 2; i++) {
+        const f = (time * 0.4 + i / 2) % 1;
+        const s = iso(x + 1.75, y + 2.35, 18 + f * 20);
+        roll.circle(s.x + Math.sin(f * 8) * 3, s.y, 1.5 + f * 3).fill({ color: 0xdddddd, alpha: 0.5 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
 };

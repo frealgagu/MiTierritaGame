@@ -3,7 +3,7 @@ import { iso, isoPoly, depth, shade } from './iso.js';
 import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawCornStalk, drawGuavaTree } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawCornStalk, drawGuavaTree, drawTobaccoPlant } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -146,6 +146,7 @@ export class FarmView extends StationView {
           if (this.theme === 'cane') drawCaneClump(g, p.x, p.y, scale, rng);
           else if (this.theme === 'cacao') drawCacaoTree(g, p.x, p.y, scale, rng, 2 + tier);
           else if (this.theme === 'guava') drawGuavaTree(g, p.x, p.y, scale, rng, 3 + tier);
+          else if (this.theme === 'tobacco') drawTobaccoPlant(g, p.x, p.y, scale, rng, Math.min(1 + tier, 5));
           else if (this.theme === 'corn') drawCornStalk(g, p.x, p.y, scale, rng, 1 + Math.min(tier, 2));
           else drawCoffeeBush(g, p.x, p.y, scale, rng, 3 + tier * 2);
         }

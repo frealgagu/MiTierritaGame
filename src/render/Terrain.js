@@ -149,6 +149,12 @@ export class Terrain {
           else if (r < 0.08) obj = guavaTree(rng);
           else if (r < 0.11) obj = rock(rng);
           else if (r < 0.125) obj = cactus(rng);
+        } else if (this.zone.theme === 'tobacco') {
+          // Tabacal: el mismo Santander seco, con matas de tabaco sueltas en vez de guayabos.
+          if (r < 0.05) obj = fique(rng);
+          else if (r < 0.08) obj = tobaccoPlant(rng);
+          else if (r < 0.11) obj = rock(rng);
+          else if (r < 0.13) obj = cactus(rng);
         } else if (this.zone.theme === 'corn') {
           // Maizal: girasoles, matas de maíz sueltas, algún espantapájaros y piedras.
           if (r < 0.04) obj = sunflower(rng);
@@ -199,6 +205,7 @@ const FARM_SOIL = {
   cacao: (v) => mix(0x5e4630, 0x4a3726, v * 0.5),
   corn: (v) => mix(0xa47c48, 0x8a6a3a, v * 0.4),
   guava: (v) => mix(0xb8754a, 0x9c5e3a, v * 0.4), // la tierra roja de Santander
+  tobacco: (v) => mix(0xb07048, 0x94583a, v * 0.4),
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
 };
 
@@ -371,6 +378,38 @@ export function drawGuavaTree(g, x, y, scale, rng, fruits) {
     const d = rng() * 7 * s;
     g.circle(x + Math.cos(a) * d, y - 20 * s + Math.sin(a) * d * 0.6, 1.9 * Math.max(s, 0.9)).fill(0xd4e157).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
   }
+}
+
+// Mata de tabaco: tallo derecho con hojas anchas en pisos y, arriba, el ramillete de flores rosadas.
+export function drawTobaccoPlant(g, x, y, scale, rng, flowers) {
+  const s = scale;
+  const h = (20 + rng() * 6) * s;
+  shadow(g, x + 2, y + 1, 11 * s, 4 * s);
+  g.moveTo(x, y).lineTo(x, y - h).stroke({ width: 1.6 * s, color: 0x7cb342 });
+  // Hojas anchas y caídas, más grandes abajo; se alternan a cada lado.
+  for (let k = 0; k < 3; k++) {
+    const ly = y - h * (0.2 + k * 0.27);
+    const len = (12 - k * 2.5) * s;
+    const color = k % 2 ? 0x689f38 : 0x558b2f;
+    for (const side of [-1, 1]) {
+      const tx = x + side * len;
+      const ty = ly + (4 - k) * s;
+      const mx = (x + tx) / 2;
+      const my = (ly + ty) / 2;
+      const wy = len * 0.6;
+      g.moveTo(x, ly).quadraticCurveTo(mx, my - wy, tx, ty).quadraticCurveTo(mx, my + wy * 0.6, x, ly).fill(color).stroke({ width: 0.5, color: 0x33691e, alpha: 0.6 });
+      g.moveTo(x, ly).lineTo(tx, ty).stroke({ width: 0.6, color: 0xaed581, alpha: 0.8 });
+    }
+  }
+  for (let i = 0; i < flowers; i++) g.circle(x + (i - (flowers - 1) / 2) * 2.2 * s, y - h - 1.5 * s - (i % 2) * 1.5 * s, 1.4 * Math.max(s, 0.9)).fill(0xf48fb1);
+}
+
+function tobaccoPlant(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  drawTobaccoPlant(g, 0, 0, 1 + rng() * 0.2, rng, 3);
+  c.addChild(g);
+  return c;
 }
 
 function guavaTree(rng) {

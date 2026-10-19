@@ -11,6 +11,7 @@ Uso:  pip install fonttools brotli && python3 tools/icons/build_icons.py
 """
 
 import math
+import re
 from pathlib import Path
 
 from fontTools.colorLib.builder import buildCOLR, buildCPAL
@@ -828,6 +829,107 @@ def bocadillo_crate():
     ]
 
 
+# ---------- Santander · El Tabacal (v3.1) ----------
+
+def tobacco_leaf_shape(x0, y0, x1, y1, width, color, dark, vein):
+    """Hoja ancha de tabaco con su nervio central y los laterales (por dentro del borde)."""
+    mx, my = (x0 + x1) / 2, (y0 + y1) / 2
+    dx, dy = x1 - x0, y1 - y0
+    length = math.hypot(dx, dy)
+    ux, uy = dx / length, dy / length
+    veins = []
+    for t in (0.25, 0.45, 0.65):
+        px, py = x0 + dx * t, y0 + dy * t
+        half = 2 * (t + 0.12) * (1 - t - 0.12) * width * 0.75  # ancho de la hoja un poco más arriba
+        for side in (1, -1):
+            veins.append(rib(px, py, px - uy * side * half + dx * 0.12, py + ux * side * half + dy * 0.12, 1))
+    return [
+        (OUTLINE, [leaf(x0, y0, x1, y1, width + 2)]),
+        (color, [leaf(x0, y0, x1, y1, width)]),
+        (dark, [f'M {x0} {y0} Q {mx + uy * width:.2f} {my - ux * width:.2f} {x1} {y1} Z']),
+        (vein, [rib(x0, y0, x1, y1, 1.8), *veins]),
+    ]
+
+
+def tobacco_plant():
+    """Mata de tabaco: tallo alto con hojas grandes y anchas y sus flores rosadas arriba."""
+    return [
+        ('#8a5a3c', [ellipse(50, 93, 26, 5)]),
+        ('#7cb342', [rect(47.5, 14, 5, 80)]),
+        *tobacco_leaf_shape(50, 84, 10, 68, 20, '#558b2f', '#33691e', '#9ccc65'),
+        *tobacco_leaf_shape(50, 84, 90, 68, 20, '#558b2f', '#33691e', '#9ccc65'),
+        *tobacco_leaf_shape(50, 62, 14, 40, 18, '#689f38', '#558b2f', '#aed581'),
+        *tobacco_leaf_shape(50, 62, 86, 40, 18, '#689f38', '#558b2f', '#aed581'),
+        *tobacco_leaf_shape(50, 40, 24, 20, 13, '#7cb342', '#689f38', '#c5e1a5'),
+        *tobacco_leaf_shape(50, 40, 76, 20, 13, '#7cb342', '#689f38', '#c5e1a5'),
+        ('#f48fb1', [poly(46, 14, 42, 4, 48, 8), poly(54, 14, 58, 4, 52, 8), poly(50, 14, 47, 2, 53, 2)]),
+        ('#ec407a', [circle(44, 5, 2.5), circle(56, 5, 2.5), circle(50, 3, 2.5)]),
+    ]
+
+
+def tobacco_leaf():
+    """Hoja de tabaco: recién cortada, verde y ancha, con sus nervios."""
+    return [*tobacco_leaf_shape(16, 86, 84, 14, 52, '#7cb342', '#558b2f', '#c5e1a5'), ('#6d8b3a', [rect(8, 86, 10, 6, -45)])]
+
+
+def cured_leaf():
+    """Hoja curada: la hoja seca en el caney, dorada y arrugada."""
+    return [
+        *tobacco_leaf_shape(16, 86, 84, 14, 48, '#c8913b', '#a0692a', '#e8c27a'),
+        ('#8d5524', [rib(34, 52, 42, 58, 1.4), rib(56, 30, 62, 40, 1.4), rib(48, 56, 56, 62, 1)]),
+        ('#6d4c2a', [rect(8, 86, 10, 6, -45)]),
+    ]
+
+
+def stripped_leaf():
+    """Hoja despalillada: las dos mitades de la hoja curada, ya sin la vena del centro."""
+    halves = [('M 8 46 L 92 10 Q 86 64 8 46 Z', '#c8913b', '#e8c27a', (26, 44, 74, 28)), ('M 8 92 L 92 56 Q 18 48 8 92 Z', '#b7792c', '#e0a85a', (26, 80, 70, 62))]
+    out = []
+    for d, color, vein, (vx0, vy0, vx1, vy1) in halves:
+        out += [(OUTLINE, [grow_path(d)]), (color, [d]), (vein, [rib(vx0, vy0, vx1, vy1, 1)])]
+    return out
+
+
+def grow_path(d):
+    """El mismo trazo (de tres puntos) un poco más grande, para el borde oscuro."""
+    nums = [float(n) for n in re.findall(r'-?[0-9.]+', d)]
+    cx, cy = sum(nums[0::2]) / (len(nums) / 2), sum(nums[1::2]) / (len(nums) / 2)
+    moved = []
+    for x, y in zip(nums[0::2], nums[1::2]):
+        k = math.hypot(x - cx, y - cy) or 1
+        moved += [x + (x - cx) / k * 2.5, y + (y - cy) / k * 2.5]
+    it = iter(moved)
+    return re.sub(r'-?[0-9.]+', lambda m: f'{next(it):.2f}', d)
+
+
+def fermented_tobacco():
+    """Tabaco fermentado: un manojo de hojas oscuras, amarrado con su propia hoja."""
+    tips = [(18, 90, '#5d3a1a'), (82, 90, '#5d3a1a'), (32, 94, '#7b4a22'), (68, 94, '#7b4a22'), (50, 96, '#6b4020')]
+    out = []
+    for x, y, color in tips:
+        out += [(OUTLINE, [leaf(50, 12, x, y, 18)]), (color, [leaf(50, 14, x, y, 16)]), ('#4a2c12', [rib(50, 22, x, y - 6, 1)])]
+    return out + [
+        (OUTLINE, [rect(38, 20, 24, 14)]),
+        ('#a0652a', [rect(40, 22, 20, 10)]),
+        ('#c8913b', [rib(40, 27, 60, 27, 1)]),
+    ]
+
+
+def cigar():
+    """Tabaco torcido: el puro enrollado a mano, con su anillo y la punta encendida."""
+    return [
+        ('#ffffff90', ['M 86 30 Q 80 20 88 12 Q 84 22 90 28 Z']),
+        (OUTLINE, [rect(6, 50, 82, 18, -25, 47, 59)]),
+        ('#7b4a22', [rect(8, 52, 78, 14, -25, 47, 59)]),
+        ('#9c6634', [rect(8, 52, 78, 5, -25, 47, 59)]),
+        ('#5d3a1a', [rib(22, 74, 26, 62, 1), rib(36, 68, 40, 56, 1), rib(52, 61, 56, 49, 1)]),
+        ('#d7263d', [rect(22, 52, 10, 14, -25, 47, 59)]),
+        ('#e8b90f', [rect(25, 52, 4, 14, -25, 47, 59)]),
+        ('#9e9e9e', [ellipse(84, 41, 4, 7, -25)]),
+        ('#ff7043', [ellipse(85.5, 40.5, 2, 4.5, -25)]),
+    ]
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -869,6 +971,12 @@ ICONS = [
     (0xE025, 'bocadillo', bocadillo),
     (0xE026, 'bocadillo_bijao', bocadillo_bijao),
     (0xE027, 'bocadillo_crate', bocadillo_crate),
+    (0xE028, 'tobacco_plant', tobacco_plant),
+    (0xE029, 'tobacco_leaf', tobacco_leaf),
+    (0xE02A, 'cured_leaf', cured_leaf),
+    (0xE02B, 'stripped_leaf', stripped_leaf),
+    (0xE02C, 'fermented_tobacco', fermented_tobacco),
+    (0xE02D, 'cigar', cigar),
 ]
 
 

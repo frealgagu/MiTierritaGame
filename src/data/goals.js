@@ -175,5 +175,24 @@ const GUAYABERA = [
   { id: 's_final', type: 'sold', product: 'bocadillo_crate', amount: 2000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA];
+// Santander · El Tabacal (v3.1): la misma lista que el Trapiche, con el tabaco.
+const TABACAL = [
+  { id: 'k01', type: 'sold', product: 'tobacco_leaf', amount: 50, reward: 500 },
+  { id: 'k02', type: 'level', target: 'tobacco_field', level: 10, reward: 1000 },
+  { id: 'k03', type: 'unlock', station: 'caney', reward: 2000 },
+  { id: 'k04', type: 'level', target: 'tobacco_field:transport', level: 10, reward: 2000 },
+  { id: 'k05', type: 'unlock', station: 'stripper', reward: 5000 },
+  { id: 'k06', type: 'produced', product: 'stripped_leaf', amount: 200, reward: 8000 },
+  { id: 'k08', type: 'unlock', station: 'tobacco_piles', reward: 20000 },
+  { id: 'k09', type: 'level', target: 'dispatch:tabacal', level: 10, reward: 20000 },
+  { id: 'k10', type: 'produced', product: 'fermented_tobacco', amount: 500, reward: 40000 },
+  { id: 'k11', type: 'unlock', station: 'cigar_roller', reward: 80000 },
+  { id: 'k12', type: 'allLevels', zone: 'tabacal', level: 25, reward: 100000 },
+  { id: 'k07', type: 'research', research: 'caney_grande', reward: 50000 },
+  { id: 'k13', type: 'income', zone: 'tabacal', perSecond: 500, reward: 150000 },
+  { id: 'k14', type: 'sold', product: 'cigar', amount: 1000, reward: 300000 },
+  { id: 'k_final', type: 'sold', product: 'cigar', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL];

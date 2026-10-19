@@ -49,6 +49,8 @@ test('cada región tiene su segundo final y su reinicio, sin tocar las demás', 
   for (const id of stationsOf(s)) s.stations[id] = { ...(s.stations[id] ?? {}), level: 100, transport: { level: 100 } };
   assert.equal(checkMastery(s, { emit() {} }), false, 'sin el primer final de la región');
   s.zones.guayabera.complete = true;
+  assert.equal(checkMastery(s, { emit() {} }), false, 'el final de la región es su última zona');
+  s.zones.tabacal.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), true);
   s.playTime = 9000;
   const next = restartState(s);
@@ -74,6 +76,47 @@ test('la partida se guarda y se carga con sus regiones', () => {
   const back = loadGame();
   assert.equal(back.regions.santander.coins, 1234);
   assert.equal(back.regions.santander.region, 'santander');
-  assert.deepEqual(Object.keys(back.regions.santander.zones), ['guayabera']);
+  assert.deepEqual(Object.keys(back.regions.santander.zones), ['guayabera', 'tabacal']);
   assert.ok(back.profile);
+});
+
+test('una partida con la Guayabera ya completa abre el Tabacal al cargarse (v3.1)', () => {
+  const mem = {};
+  globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  const s = root.regions.santander;
+  s.zones.guayabera.complete = true;
+  delete s.zones.tabacal; // como se guardaba en la v3.0
+  saveGame(root);
+  const back = loadGame().regions.santander;
+  assert.equal(back.zones.tabacal.unlocked, true);
+  assert.ok(back.stations.tobacco_field);
+});
+
+test('el Tabacal se abre al completar la Guayabera y su cadena tuerce tabacos sin cuellos de botella', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { analyzeChain } = await import('../src/sim/analysis.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
+  const game = new Game(createInitialState(0, 'santander'));
+  assert.equal(game.state.zones.tabacal.unlocked, false);
+  const final = GOALS_BY_ZONE.guayabera.find((g) => g.final);
+  game.state.goals.claimed.push(...GOALS_BY_ZONE.guayabera.filter((g) => !g.final).map((g) => g.id));
+  game.state.stats.sold.bocadillo_crate = final.amount;
+  assert.ok(game.claimGoal(final.id));
+  assert.equal(game.state.zones.tabacal.unlocked, true);
+  game.state.coins = 1e12;
+  for (const id of chainOf('tabacal').slice(1)) assert.ok(game.unlock(id), id);
+  for (const id of chainOf('tabacal')) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+  game.state.zones.tabacal.dispatch.level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 300; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  assert.ok((game.state.stats.sold.cigar ?? 0) > 0, 'vende tabaco torcido');
+  // A igual nivel la cadena cuadra: ninguna estación le quita el paso a la siguiente.
+  const { rows } = analyzeChain(game.state, 'tabacal');
+  for (const row of rows.filter((r) => r.children.length)) assert.ok(row.diverted < 1e-9, `${row.id} desvía ${row.diverted}/s`);
 });

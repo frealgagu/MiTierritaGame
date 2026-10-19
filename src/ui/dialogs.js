@@ -26,8 +26,12 @@ const VICTORY = {
   pueblo: { title: '¡El café de la vereda viaja por el mundo!', text: 'Completaste la <b>Zona 6 · El Pueblo</b> y el Eje Cafetero. Siete mil contenedores de canastas de regalo, con café, panela, arequipe y chocolate de todas tus zonas, salen hacia el puerto.', stat: (s) => `Contenedores exportados: ${formatNumber(s.stats.sold.container ?? 0)}` },
   cacaotal: { title: '¡Chocolate para la feria!', text: 'Completaste la <b>Zona 4 · El Cacaotal</b>. Cuatro mil chocolatinas hechas con tu cacao, la panela del Trapiche y la leche de la Lechería.', stat: (s) => `Chocolatinas vendidas: ${formatNumber(s.stats.sold.milk_chocolate ?? 0)}` },
   guayabera: { title: '¡Bocadillo veleño para todo el país!', text: 'Completaste <b>La Guayabera</b>, en Santander. Dos mil cajas de bocadillo envuelto en hoja de bijao.', stat: (s) => `Cajas de bocadillos vendidas: ${formatNumber(s.stats.sold.bocadillo_crate ?? 0)}` },
+  tabacal: { title: '¡Tabaco torcido a mano!', text: 'Completaste <b>El Tabacal</b>, en Santander. Seis mil tabacos curados en el caney, fermentados en pilones y torcidos a mano.', stat: (s) => `Tabacos vendidos: ${formatNumber(s.stats.sold.cigar ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
+
+// «al Tabacal», «a La Lechería»: el artículo «el» se contrae con la preposición.
+const toZone = (name) => (name.startsWith('El ') ? `al ${name.slice(3)}` : `a ${name}`);
 
 // onGo(zona): ir a la zona que se acaba de abrir. opened: regiones que se abrieron al completarla
 // (v3.0: el Pueblo abre Santander).
@@ -53,7 +57,7 @@ export function showVictory(state, zoneId, onGo, opened = []) {
   } else if (next) {
     soon.innerHTML = `Se abrió la <b>Zona ${zoneIndex(next)} · ${ZONES_BY_ID[next].name}</b> ${ZONES_BY_ID[next].icon}`;
     go.hidden = false;
-    go.textContent = `Ir a ${ZONES_BY_ID[next].name} ${ZONES_BY_ID[next].icon}`;
+    go.textContent = `Ir ${toZone(ZONES_BY_ID[next].name)} ${ZONES_BY_ID[next].icon}`;
     go.onclick = () => {
       modal.hidden = true;
       onGo(next);

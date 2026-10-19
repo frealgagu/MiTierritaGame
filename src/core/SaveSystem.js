@@ -2,6 +2,7 @@ import { createInitialState, SAVE_VERSION } from '../sim/state.js';
 import { createStationState } from '../sim/production.js';
 import { createRouteState } from '../sim/routes.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
+import { ZONES_BY_ID } from '../data/zones/index.js';
 
 const KEY = 'cafetal.save';
 
@@ -60,7 +61,16 @@ function migrate(data) {
   // v4 → v5: despacho, bodega y Willys pasan a ser por zona; la Finca completa abre el Trapiche.
   const zones = {};
   for (const [id, z] of Object.entries(base.zones)) zones[id] = { ...z, ...data.zones?.[id] };
-  if (region !== 'cafetero') return finish(data, base, stations, zones, mules);
+  if (region !== 'cafetero') {
+    // v3.1: una zona ya completa abre la siguiente de su región si esta llegó en una versión nueva.
+    for (const [id, z] of Object.entries(zones)) {
+      const next = ZONES_BY_ID[id].next;
+      if (!z.complete || !next || zones[next].unlocked) continue;
+      zones[next].unlocked = true;
+      stations[ZONES_BY_ID[next].farm.stationId] ??= createStationState();
+    }
+    return finish(data, base, stations, zones, mules);
+  }
   if (!data.zones) {
     zones.finca = {
       ...zones.finca,
