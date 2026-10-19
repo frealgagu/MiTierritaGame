@@ -27,6 +27,7 @@ const VICTORY = {
   cacaotal: { title: '¡Chocolate para la feria!', text: 'Completaste la <b>Zona 4 · El Cacaotal</b>. Cuatro mil chocolatinas hechas con tu cacao, la panela del Trapiche y la leche de la Lechería.', stat: (s) => `Chocolatinas vendidas: ${formatNumber(s.stats.sold.milk_chocolate ?? 0)}` },
   guayabera: { title: '¡Bocadillo veleño para todo el país!', text: 'Completaste <b>La Guayabera</b>, en Santander. Dos mil cajas de bocadillo envuelto en hoja de bijao.', stat: (s) => `Cajas de bocadillos vendidas: ${formatNumber(s.stats.sold.bocadillo_crate ?? 0)}` },
   tabacal: { title: '¡Tabaco torcido a mano!', text: 'Completaste <b>El Tabacal</b>, en Santander. Seis mil tabacos curados en el caney, fermentados en pilones y torcidos a mano.', stat: (s) => `Tabacos vendidos: ${formatNumber(s.stats.sold.cigar ?? 0)}` },
+  fiquera: { title: '¡Tercios de tabaco listos para el viaje!', text: 'Completaste <b>La Fiquera</b>, en Santander. Seis mil tercios de tabaco del Tabacal, forrados en tela de fique.', stat: (s) => `Tercios vendidos: ${formatNumber(s.stats.sold.tobacco_bale ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

@@ -60,6 +60,13 @@ export const FACTS = {
   stripper: ['Despalillar es quitarle a la hoja curada la vena gruesa del centro.'],
   tobacco_piles: ['Apiladas en pilones, las hojas se calientan solas al fermentar.', 'Al pilón hay que voltearlo para que no se queme por dentro.'],
   cigar_roller: ['Torcer un tabaco a mano es un oficio que se aprende de los mayores.', 'El tabaco lleva por dentro la tripa y por fuera una hoja fina: la capa.'],
+  // Santander · La Fiquera
+  fique_field: ['El fique es una planta de pencas largas de las que sale una fibra fuerte.', 'A la mata de fique se le cortan las pencas de abajo y sigue creciendo.'],
+  decorticator: ['La desfibradora raspa la penca y deja solo la fibra.', 'La fibra de fique se lava y se pone a secar al sol.'],
+  sack_loom: ['Por décadas, el café colombiano viajó en costales de fique.'],
+  spinner: ['Con la fibra torcida se hace la cabuya, un hilo grueso y resistente.'],
+  alpargata_shop: ['La alpargata tiene suela de fique trenzado y capellada de tela.', 'Curití, en Santander, es famoso por sus artesanías de fique.'],
+  tercio_packer: ['La hoja de tabaco se empaca en pacas forradas con tela de fique.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -72,6 +79,7 @@ export const PEOPLE = {
   pueblo: { icon: '🧑‍💼', name: 'Mateo', role: 'el exportador' },
   guayabera: { icon: '👩‍🍳', name: 'Doña Inés', role: 'la bocadillera' },
   tabacal: { icon: '🧓', name: 'Don Ramiro', role: 'el veguero' },
+  fiquera: { icon: '👩‍🦳', name: 'Doña Carmen', role: 'la tejedora' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -84,6 +92,7 @@ export const WELCOME = {
   pueblo: 'Todo lo de sus fincas termina aquí. ¡A exportar!',
   guayabera: '¡Bienvenido a Santander, mijo! Aquí la guayaba se vuelve bocadillo veleño.',
   tabacal: '¡Llegó al Tabacal! Aquí la hoja se cura en el caney y se tuerce a mano.',
+  fiquera: '¡Bienvenido a la Fiquera! De estas pencas sale la cabuya de los costales y las alpargatas.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

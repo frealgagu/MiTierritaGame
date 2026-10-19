@@ -182,6 +182,23 @@ export const ROUTES = [
     growth: 1.15,
     release: '1.5',
   },
+  // Santander (v3.2): el tabaco fermentado del Tabacal, para los tercios de la Fiquera.
+  {
+    id: 'tabaco',
+    name: 'Ruta del tabaco',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'fermented_tobacco',
+    from: 'tabacal',
+    to: 'fiquera',
+    stations: ['tercio_packer'],
+    tab: 'Tabaco',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 1000,
+    growth: 1.15,
+    release: '3.2',
+  },
 ];
 
 export const ROUTES_BY_ID = Object.fromEntries(ROUTES.map((r) => [r.id, r]));

@@ -155,6 +155,12 @@ export class Terrain {
           else if (r < 0.08) obj = tobaccoPlant(rng);
           else if (r < 0.11) obj = rock(rng);
           else if (r < 0.13) obj = cactus(rng);
+        } else if (this.zone.theme === 'fique') {
+          // Fiquera: más fique suelto, piedras, cactus y algún guayabo.
+          if (r < 0.07) obj = fique(rng);
+          else if (r < 0.09) obj = guavaTree(rng);
+          else if (r < 0.12) obj = rock(rng);
+          else if (r < 0.135) obj = cactus(rng);
         } else if (this.zone.theme === 'corn') {
           // Maizal: girasoles, matas de maíz sueltas, algún espantapájaros y piedras.
           if (r < 0.04) obj = sunflower(rng);
@@ -206,6 +212,7 @@ const FARM_SOIL = {
   corn: (v) => mix(0xa47c48, 0x8a6a3a, v * 0.4),
   guava: (v) => mix(0xb8754a, 0x9c5e3a, v * 0.4), // la tierra roja de Santander
   tobacco: (v) => mix(0xb07048, 0x94583a, v * 0.4),
+  fique: (v) => mix(0xb8805a, 0x9c6a48, v * 0.4),
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
 };
 
@@ -421,18 +428,22 @@ function guavaTree(rng) {
 }
 
 // Fique: una roseta de hojas largas, gruesas y en punta, verde azulada.
-function fique(rng) {
-  const c = new Container();
-  const g = new Graphics();
-  shadow(g, 2, 1, 12, 4);
+export function drawFiquePlant(g, x, y, scale, rng) {
+  shadow(g, x + 2, y + 1, 12 * scale, 4 * scale);
   const n = 9;
   for (let i = 0; i < n; i++) {
     const a = -Math.PI / 2 + ((i - (n - 1) / 2) / n) * 2.6;
-    const len = 14 + rng() * 6;
-    const tx = Math.cos(a) * len;
-    const ty = Math.sin(a) * len * 0.9;
-    g.poly([-2, 0, tx, ty, 2, 0]).fill(i % 2 ? 0x6f9a7a : 0x5d8a6a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.35 });
+    const len = (14 + rng() * 6) * scale;
+    const tx = x + Math.cos(a) * len;
+    const ty = y + Math.sin(a) * len * 0.9;
+    g.poly([x - 2 * scale, y, tx, ty, x + 2 * scale, y]).fill(i % 2 ? 0x6f9a7a : 0x5d8a6a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.35 });
   }
+}
+
+function fique(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  drawFiquePlant(g, 0, 0, 1, rng);
   c.addChild(g);
   return c;
 }

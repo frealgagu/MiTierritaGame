@@ -559,7 +559,8 @@ export const COST_GROWTH = 1.15;
 | v2.0 | **Eventos e insignias** (§10.2): un evento por zona al año, con medallas; progresión general que no se pierde al reiniciar | Rejugable a largo plazo |
 | v3.0 ✅ | **Regiones** (§10.3): Santander se abre al completar el Pueblo; su primera zona, **La Guayabera** (bocadillo veleño), y su música (guabina) | Más país |
 | v3.1 ✅ | **El Tabacal** (tabaco torcido a mano), la segunda zona de Santander | Santander crece |
-| v3.2–v3.5 | Las otras cuatro zonas de Santander: La Fiquera, El Hato, Las Hormigas (solo en la entrada de aguas) y Barichara | Santander completo |
+| v3.2 ✅ | **La Fiquera** (costales, alpargatas y tercios de tabaco), con la primera ruta de Santander: la del tabaco, desde el Tabacal | Santander crece |
+| v3.3–v3.5 | Las otras tres zonas de Santander: El Hato, Las Hormigas (solo en la entrada de aguas) y Barichara | Santander completo |
 | futuro | Costa Caribe, Llanos y Altiplano | Más país |
 
 **Cómo se conectan las zonas:** ver §4b.
@@ -603,7 +604,7 @@ export const COST_GROWTH = 1.15;
     - Los jugadores automáticos están en `tools/event-bots.js` (tres estilos —objetivo, recomendada y mixta—, cuatro formas de ahorrar para las compras del evento y cada cuántos segundos deciden). `tools/event-sim.js` busca el más rápido decidiendo cada segundo y propone el **oro: ese tiempo más un 9 %, redondeado a 15 s** (de 8:15 a 14:00 según el objetivo); la **plata, 5 min más**. Decidir cada 5 o 10 s en vez de cada segundo cuesta solo 5–20 s: lo que pesa es la estrategia (ahorrar a tiempo para la siguiente compra del evento).
     - `test/event-medals.test.js` comprueba que en cada objetivo alguien que decide cada 5 s con una de dos estrategias razonables logra el oro.
 
-### 10.3 Regiones (v3.0: Santander en camino; v3.1: El Tabacal)
+### 10.3 Regiones (v3.0: Santander en camino; v3.1: El Tabacal; v3.2: La Fiquera)
 - Cada región es un **mapa nuevo con sus propias zonas, cadenas y productos**, con **su propia economía** (monedas, niveles e investigaciones) y **su propio reinicio** (el ×2 del segundo final vale solo para esa región).
 - Entre regiones solo se comparte lo general: **Renombre ⭐, álbum de láminas, decoración y logros**.
 - Por ahora las regiones **no se conectan** entre sí. Más adelante podría haber exportación entre regiones (llevar productos de una a otra), pero no hace falta.
@@ -613,7 +614,7 @@ export const COST_GROWTH = 1.15;
   - **Todas las regiones producen a la vez** (también sin conexión: el cálculo se hace región por región, con la pantalla de carga).
   - El **calendario es el del país**: una región que se abre después empieza en la fecha de ese día, y un reinicio sigue la fecha (`clockOffset`, `clockOf` en `src/sim/calendar.js`).
 - **Cómo quedó (v3.0)** (`src/data/regions.js`, `src/sim/regions.js`): la partida del Eje Cafetero es la principal y guarda las demás en `regions`, cada una como una partida completa (con su `region`, sus zonas, rutas, monedas, investigaciones, objetivos, segundo final y reinicio ×2). Cada región tiene su `Game`; la interfaz muestra la de la zona que se está viendo. El selector de zonas 🗺️ las agrupa por región. El perfil (Renombre, medallas, álbum, decoración y logros) lo guarda solo la principal. Los eventos son, por ahora, los del Eje Cafetero.
-- **Santander** (v3.0 en adelante), con sus seis zonas: 🍈 **La Guayabera** (guayaba → pulpa → melado → bloque → bocadillo → envuelto en hoja de bijao → caja; misma estructura y mismos números que la Finca, porque la región empieza de cero), 🌿 **El Tabacal** (v3.1: hoja de tabaco → curada en el caney → despalillada → fermentada en pilones → torcida a mano; mismos números que el Trapiche, sin el combustible de la Hornilla: a igual nivel la cadena cuadra sin él; su persona es Don Ramiro, el veguero), 🧵 La Fiquera, 🐂 El Hato (carne oreada), 🐜 Las Hormigas (solo producen en la entrada de aguas) y ⛪ Barichara (el final). Su persona es Doña Inés, la bocadillera, y su música, la **Guabina del Chicamocha** (en si menor, 92 negras por minuto).
+- **Santander** (v3.0 en adelante), con sus seis zonas: 🍈 **La Guayabera** (guayaba → pulpa → melado → bloque → bocadillo → envuelto en hoja de bijao → caja; misma estructura y mismos números que la Finca, porque la región empieza de cero), 🌿 **El Tabacal** (v3.1: hoja de tabaco → curada en el caney → despalillada → fermentada en pilones → torcida a mano; mismos números que el Trapiche, sin el combustible de la Hornilla: a igual nivel la cadena cuadra sin él; su persona es Don Ramiro, el veguero), 🧵 **La Fiquera** (v3.2: penca → fibra en la desfibradora, que se reparte como la leche de la Lechería: costales en el telar, hilo y alpargatas, y los tercios de tabaco, que llevan el tabaco fermentado del Tabacal por la **Ruta del tabaco**; mismos números que la Lechería; su persona es Doña Carmen, la tejedora), 🐂 El Hato (carne oreada), 🐜 Las Hormigas (solo producen en la entrada de aguas) y ⛪ Barichara (el final). Su persona es Doña Inés, la bocadillera, y su música, la **Guabina del Chicamocha** (en si menor, 92 negras por minuto).
 - Ideas de productos:
   - **Santander**: bocadillo veleño (guayaba), tabaco, hormigas culonas, fique (costales y alpargatas).
   - **Costa Caribe**: coco y cocadas, plátano y patacones, yuca y enyucado, queso costeño, caña flecha y sombrero vueltiao.

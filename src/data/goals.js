@@ -194,5 +194,26 @@ const TABACAL = [
   { id: 'k_final', type: 'sold', product: 'cigar', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL];
+// Santander · La Fiquera (v3.2): la misma lista que la Lechería.
+const FIQUERA = [
+  { id: 'q01', type: 'sold', product: 'fique_leaf', amount: 50, reward: 10000 },
+  { id: 'q02', type: 'level', target: 'fique_field', level: 10, reward: 20000 },
+  { id: 'q03', type: 'unlock', station: 'decorticator', reward: 40000 },
+  { id: 'q04', type: 'level', target: 'fique_field:transport', level: 10, reward: 40000 },
+  { id: 'q05', type: 'unlock', station: 'sack_loom', reward: 80000 },
+  { id: 'q06', type: 'produced', product: 'fique_sack', amount: 100, reward: 120000 },
+  { id: 'q08', type: 'unlock', station: 'spinner', reward: 250000 },
+  { id: 'q09', type: 'level', target: 'dispatch:fiquera', level: 10, reward: 250000 },
+  { id: 'q10', type: 'unlock', station: 'alpargata_shop', reward: 500000 },
+  { id: 'q11', type: 'produced', product: 'alpargatas', amount: 200, reward: 800000 },
+  { id: 'q12', type: 'unlock', station: 'tercio_packer', reward: 1200000 },
+  { id: 'q13', type: 'imported', product: 'fermented_tobacco', amount: 200, reward: 1500000 },
+  { id: 'q14', type: 'level', target: 'route:tabaco', level: 25, reward: 2000000 },
+  { id: 'q15', type: 'allLevels', zone: 'fiquera', level: 25, reward: 3000000 },
+  { id: 'q07', type: 'research', research: 'abono_fique', reward: 1500000 },
+  { id: 'q16', type: 'sold', product: 'tobacco_bale', amount: 1000, reward: 5000000 },
+  { id: 'q_final', type: 'sold', product: 'tobacco_bale', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA];

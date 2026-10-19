@@ -82,4 +82,12 @@ export const PRODUCTS = {
   stripped_leaf: { name: 'Hoja despalillada', zone: 'tabacal', value: 60, icon: ICON.strippedLeaf, color: 0xb7792c },
   fermented_tobacco: { name: 'Tabaco fermentado', zone: 'tabacal', value: 150, icon: ICON.fermentedTobacco, color: 0x5d3a1a },
   cigar: { name: 'Tabaco torcido', zone: 'tabacal', value: 250, icon: ICON.cigar, color: 0x7b4a22 },
+
+  // Santander · La Fiquera (v3.2): mismos valores que la Lechería.
+  fique_leaf: { name: 'Penca de fique', zone: 'fiquera', value: 125, icon: ICON.fiqueLeaf, color: 0x6f9a7a },
+  fique_fiber: { name: 'Fibra de fique', zone: 'fiquera', value: 300, icon: ICON.fiqueFiber, color: 0xe8d9a8 },
+  fique_yarn: { name: 'Hilo de fique', zone: 'fiquera', value: 800, icon: ICON.fiqueYarn, color: 0xd9c08c },
+  alpargatas: { name: 'Alpargatas', zone: 'fiquera', value: 2000, icon: ICON.alpargatas, color: 0x2e4fa8 },
+  fique_sack: { name: 'Costal de fique', zone: 'fiquera', value: 2400, icon: ICON.fiqueSack, color: 0xc2a46c },
+  tobacco_bale: { name: 'Tercio de tabaco', zone: 'fiquera', value: 4000, icon: ICON.tobaccoBale, color: 0xb0905a },
 };

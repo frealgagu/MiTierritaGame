@@ -25,7 +25,10 @@ export const ZONE8 = {
   exitText: 'A Piedecuesta ➜',
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
-  routes: {},
+  // Carretera de la Ruta del tabaco: sale de la bodega hacia la Fiquera.
+  routes: {
+    tabaco: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Fiquera ➜' },
+  },
   unlockedBy: 'guayabera', // se abre al completar la Guayabera
-  next: null, // (las siguientes de Santander llegan en las próximas versiones)
+  next: 'fiquera',
 };

@@ -126,6 +126,20 @@ export const RESEARCH = [
   { zone: 'tabacal', id: 'tabaco_negro', name: 'Tabaco negro de origen', icon: '🏅', desc: 'El tabaco torcido vale un 50 % más.', cost: 1500000, requires: 'cigar_roller', effect: { type: 'productValue', target: 'cigar', mult: 1.5 } },
   { zone: 'tabacal', id: 'maestria_tabacal', name: 'Maestría: Tabacal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'tabacal', mult: 4 } },
   { zone: 'tabacal', id: 'supremacia_tabacal', name: 'Supremacía: Tabacal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'tabacal', mult: 8 } },
+
+  // Santander · La Fiquera (v3.2): las mismas de la Lechería.
+  { zone: 'fiquera', id: 'abono_fique', name: 'Abono para el fique', icon: '🌱', desc: 'El Cultivo de fique da el doble de pencas.', cost: 300000, requires: 'decorticator', effect: { type: 'stationSpeed', target: 'fique_field', mult: 2 } },
+  { zone: 'fiquera', id: 'desfibradora_motor', name: 'Desfibradora de motor', icon: '⚙️', desc: 'La Desfibradora saca el doble de fibra.', cost: 400000, requires: 'decorticator', effect: { type: 'stationSpeed', target: 'decorticator', mult: 2 } },
+  { zone: 'fiquera', id: 'hiladora_mecanica', name: 'Hiladora mecánica', icon: ICON.fiqueYarn, desc: 'La Hiladora hila el doble.', cost: 1200000, requires: 'spinner', effect: { type: 'stationSpeed', target: 'spinner', mult: 2 } },
+  { zone: 'fiquera', id: 'camion_fiquera', name: 'Camión de estacas', icon: '🚛', desc: 'El despacho de la Fiquera lleva el doble por viaje.', cost: 1500000, requires: 'sack_loom', effect: { type: 'dispatchCapacity', target: 'fiquera', mult: 2 } },
+  { zone: 'fiquera', id: 'tejedoras', name: 'Asociación de tejedoras', icon: '🧶', desc: 'Mientras no juegas, Santander sigue produciendo 4 h más.', cost: 3000000, requires: 'spinner', effect: { type: 'offlineHours', hours: 4 } },
+  { zone: 'fiquera', id: 'hormas', name: 'Hormas de alpargata', icon: ICON.alpargatas, desc: 'La Alpargatería hace el doble de pares.', cost: 3000000, requires: 'alpargata_shop', effect: { type: 'stationSpeed', target: 'alpargata_shop', mult: 2 } },
+  { zone: 'fiquera', id: 'telar_mecanico', name: 'Telar mecánico', icon: ICON.fiqueSack, desc: 'El Telar de costales teje el doble.', cost: 8000000, requires: 'sack_loom', effect: { type: 'stationSpeed', target: 'sack_loom', mult: 2 } },
+  { zone: 'fiquera', id: 'costal_cafetero', name: 'Costal cafetero', icon: '🏅', desc: 'El costal de fique vale un 50 % más.', cost: 15000000, requires: 'sack_loom', effect: { type: 'productValue', target: 'fique_sack', mult: 1.5 } },
+  { zone: 'fiquera', id: 'prensa_tercios', name: 'Prensa de tercios', icon: ICON.tobaccoBale, desc: 'La Empacadora arma el doble de tercios (la Chiva de la ruta se ajusta sola).', cost: 25000000, requires: 'tercio_packer', effect: { type: 'stationSpeed', target: 'tercio_packer', mult: 2 } },
+  { zone: 'fiquera', id: 'tercios_exportacion', name: 'Tercios de exportación', icon: '🏅', desc: 'El tercio de tabaco vale un 50 % más.', cost: 50000000, requires: 'tercio_packer', effect: { type: 'productValue', target: 'tobacco_bale', mult: 1.5 } },
+  { zone: 'fiquera', id: 'maestria_fiquera', name: 'Maestría: Fiquera', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'fiquera', mult: 4 } },
+  { zone: 'fiquera', id: 'supremacia_fiquera', name: 'Supremacía: Fiquera', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'fiquera', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

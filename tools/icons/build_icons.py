@@ -930,6 +930,86 @@ def cigar():
     ]
 
 
+# ---------- Santander · La Fiquera (v3.2) ----------
+
+def fique_plant():
+    """Mata de fique: roseta de pencas largas, gruesas y en punta, verde azulada."""
+    blades = []
+    for k, (x1, y1, w) in enumerate([(8, 40, 9), (92, 40, 9), (18, 18, 8), (82, 18, 8), (34, 6, 7), (66, 6, 7), (50, 2, 7), (4, 66, 8), (96, 66, 8)]):
+        blades.append((x1, y1, w, '#5d8a6a' if k % 2 else '#6f9a7a'))
+    out = [('#8a5a3c', [ellipse(50, 92, 30, 6)])]
+    for x1, y1, w, color in blades:
+        out += [(OUTLINE, [leaf(50, 88, x1, y1, w + 2)]), (color, [leaf(50, 88, x1, y1, w)])]
+    return out + [('#a5c4ad', [rib(50, 86, x1, y1 + 8, 1) for x1, y1, _, _ in blades[:6]])]
+
+
+def fique_leaf():
+    """Penca de fique: hojas largas y carnosas recién cortadas, con espinas en el borde."""
+    out = []
+    for x0, x1, color in [(20, 70, '#5d8a6a'), (34, 84, '#6f9a7a')]:
+        out += [(OUTLINE, [leaf(x0, 92, x1, 6, 18)]), (color, [leaf(x0, 92, x1, 6, 16)])]
+        out.append(('#3f6b4c', [circle(x0 + (x1 - x0) * t + 5, 92 - 86 * t, 1.2) for t in (0.25, 0.4, 0.55, 0.7)]))
+    return out + [('#a5c4ad', [rib(36, 90, 82, 10, 1)])]
+
+
+def fique_fiber():
+    """Fibra de fique: un manojo de fibra clara y brillante, amarrado en la mitad."""
+    strands = [rib(30 + i * 5, 6, 26 + i * 6, 94, 3) for i in range(9)]
+    return [
+        (OUTLINE, ['M 26 4 L 76 4 L 82 96 L 18 96 Z']),
+        ('#e8d9a8', ['M 28.5 6.5 L 73.5 6.5 L 79 93.5 L 21 93.5 Z']),
+        ('#cdb97e', strands),
+        (OUTLINE, [rect(22, 44, 56, 12)]),
+        ('#a0652a', [rect(24, 46, 52, 8)]),
+    ]
+
+
+def fique_yarn():
+    """Hilo de fique: un ovillo de cabuya, con la punta suelta."""
+    return [
+        (OUTLINE, [circle(48, 52, 38)]),
+        ('#d9c08c', [circle(48, 52, 35.5)]),
+        ('#b89a5a', [rib(18, 40, 78, 64, 2.4), rib(20, 64, 74, 30, 2.4), rib(30, 22, 64, 86, 2.4), rib(14, 52, 82, 50, 2.4)]),
+        ('#c9a96b', ['M 80 70 Q 92 80 96 94 L 92 95 Q 88 82 77 74 Z']),
+        ('#ffffff50', [ellipse(36, 36, 9, 6, -30)]),
+    ]
+
+
+def alpargatas():
+    """Alpargatas: el par, con suela de fique trenzado y capellada de tela."""
+    def shoe(dx, dy):
+        return [
+            (OUTLINE, [ellipse(40 + dx, 66 + dy, 34, 13, -10)]),
+            ('#d9c08c', [ellipse(40 + dx, 66 + dy, 32, 11, -10)]),
+            ('#b89a5a', [rib(12 + dx, 70 + dy, 68 + dx, 60 + dy, 1.2), rib(14 + dx, 66 + dy, 66 + dx, 56 + dy, 1.2)]),
+            (OUTLINE, [f'M {16 + dx} {62 + dy} Q {30 + dx} {34 + dy} {56 + dx} {44 + dy} L {60 + dx} {58 + dy} Z']),
+            ('#2e4fa8', [f'M {19 + dx} {60 + dy} Q {31 + dx} {37 + dy} {54 + dx} {46 + dy} L {57 + dx} {56 + dy} Z']),
+            ('#d7263d', [rib(24 + dx, 50 + dy, 52 + dx, 46 + dy, 2)]),
+        ]
+    return [*shoe(20, -24), *shoe(0, 10)]
+
+
+def fique_sack():
+    """Costal de fique: tejido de cabuya, lleno y amarrado arriba."""
+    return [
+        (OUTLINE, ['M 18 30 Q 10 62 16 94 L 84 94 Q 90 62 82 30 Q 66 38 50 38 Q 34 38 18 30 Z']),
+        ('#d9c08c', ['M 20.5 32 Q 12.5 62 18.5 91.5 L 81.5 91.5 Q 87.5 62 79.5 32 Q 65 40 50 40 Q 35 40 20.5 32 Z']),
+        ('#c2a46c', [rib(20, 52, 80, 52, 1), rib(18, 66, 82, 66, 1), rib(18, 80, 82, 80, 1), rib(34, 40, 30, 90, 1), rib(50, 40, 50, 91, 1), rib(66, 40, 70, 90, 1)]),
+        (OUTLINE, [ellipse(50, 28, 16, 6)]),
+        ('#c2a46c', ['M 38 28 Q 50 8 62 28 Z']),
+        ('#8b5a2b', [rect(42, 24, 16, 6)]),
+    ]
+
+
+def tobacco_bale():
+    """Tercio de tabaco: paca de hoja de tabaco forrada en tela de fique y amarrada con cabuya."""
+    return [
+        *bocadillo_box(10, 30, 62, 50, 18, '#d9c08c', '#c9a96b', '#b0905a'),
+        ('#7b4a22', [poly(14, 46, 22, 38, 30, 46, 22, 52), poly(56, 34, 64, 30, 70, 36, 62, 40)]),
+        ('#8b5a2b', [rect(10, 52, 62, 4), poly(72, 52, 90, 34, 90, 38, 72, 56), rect(38, 48, 4, 32), poly(38, 48, 56, 30, 60, 30, 42, 48)]),
+    ]
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -977,6 +1057,13 @@ ICONS = [
     (0xE02B, 'stripped_leaf', stripped_leaf),
     (0xE02C, 'fermented_tobacco', fermented_tobacco),
     (0xE02D, 'cigar', cigar),
+    (0xE02E, 'fique_plant', fique_plant),
+    (0xE02F, 'fique_leaf', fique_leaf),
+    (0xE030, 'fique_fiber', fique_fiber),
+    (0xE031, 'fique_yarn', fique_yarn),
+    (0xE032, 'alpargatas', alpargatas),
+    (0xE033, 'fique_sack', fique_sack),
+    (0xE034, 'tobacco_bale', tobacco_bale),
 ]
 
 

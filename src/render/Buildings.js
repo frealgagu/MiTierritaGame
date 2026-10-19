@@ -1668,4 +1668,188 @@ const DRAW = {
     };
     this.animate(0);
   },
+
+  // --- Santander · La Fiquera (v3.2) ---
+
+  // Desfibradora: ramada con la máquina que raspa las pencas, el montón de pencas y el tendal donde
+  // se seca la fibra al sol.
+  decorticator(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 1.5;
+    const d = 1.4;
+    const H = 24 + ctx.up;
+    // Pencas recién cortadas.
+    const pile = iso(x + 0.5, y + 2.0);
+    for (let i = 0; i < 7; i++) {
+      const dx = (i % 4) * 4 - 6;
+      const dy = -Math.floor(i / 4) * 3;
+      g.poly([pile.x + dx - 9, pile.y + dy, pile.x + dx + 9, pile.y + dy - 4, pile.x + dx + 9, pile.y + dy - 1, pile.x + dx - 9, pile.y + dy + 3]).fill(i % 2 ? 0x6f9a7a : 0x5d8a6a).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
+    }
+    // La máquina bajo la ramada.
+    box(g, x0 + 0.35, y0 + 0.4, 0.8, 0.6, 12, 0x6c757d);
+    const wheel = iso(x0 + 1.15, y0 + 0.7, 12);
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 12, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
+    // Tendal: dos varas con la fibra colgada, clara y brillante.
+    // (al frente: atrás y a la derecha lo taparían la Hiladora y la Alpargatería)
+    const lines = [[1.0, 2.3, 2.7, 2.3]];
+    for (const [ax, ay, bx, by] of lines) {
+      const a = iso(x + ax, y + ay, 22);
+      const b = iso(x + bx, y + by, 22);
+      g.rect(a.x - 1, a.y, 2, 22).fill(PAL.wood);
+      g.rect(b.x - 1, b.y, 2, 22).fill(PAL.wood);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.2, color: 0x3a2418 });
+      for (let k = 1; k < 9; k++) {
+        const px = a.x + ((b.x - a.x) * k) / 9;
+        const py = a.y + ((b.y - a.y) * k) / 9;
+        g.poly([px - 2.5, py, px + 2.5, py, px + 1.5, py + 13, px - 1.5, py + 13]).fill(k % 2 ? 0xe8d9a8 : 0xd9c08c).stroke({ width: 0.4, color: 0x3a2418, alpha: 0.4 });
+      }
+    }
+    const spin = new Graphics();
+    this.anim.addChild(spin);
+    this.animate = (time) => {
+      spin.clear();
+      spin.circle(wheel.x, wheel.y - 4, 7).fill(0x495057).stroke(OUTLINE);
+      const a = time * (this.working ? 8 : 0.5);
+      for (let k = 0; k < 3; k++) {
+        const b = a + (k * Math.PI * 2) / 3;
+        spin.moveTo(wheel.x, wheel.y - 4).lineTo(wheel.x + Math.cos(b) * 6, wheel.y - 4 + Math.sin(b) * 6).stroke({ width: 1.5, color: 0xadb5bd });
+      }
+      if (this.working) {
+        for (let i = 0; i < 3; i++) {
+          const f = (time * 1.5 + i / 3) % 1;
+          spin.circle(wheel.x - 10 - f * 8, wheel.y - 2 + f * 6, 1.4).fill({ color: 0x8fb996, alpha: 1 - f });
+        }
+      }
+    };
+    this.animate(0);
+  },
+
+  // Telar de costales: casa con el telar en el corredor (la tela de cabuya crece) y costales apilados.
+  sack_loom(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.2, 1.6, 28, ctx, { wall: 0xf4efe6, roofH: 14 });
+    door(g, hx, hy, 1.6, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.2, 0.8, 14, PAL.balconyYellow);
+    // Telar: marco de madera con la tela.
+    box(g, x + 0.9, y + 2.15, 1.2, 0.08, 18, PAL.woodDark);
+    g.poly(isoPoly([[x + 0.95, y + 2.2, 4], [x + 2.05, y + 2.2, 4], [x + 2.05, y + 2.2, 16], [x + 0.95, y + 2.2, 16]])).fill(0xd9c08c).stroke(OUTLINE);
+    for (let k = 1; k < 6; k++) {
+      const a = iso(x + 0.95 + k * 0.18, y + 2.2, 4);
+      g.moveTo(a.x, a.y).lineTo(a.x, a.y - 12).stroke({ width: 0.6, color: 0xb89a5a });
+    }
+    // Costales llenos, amarrados.
+    for (const [bx, by] of [[0.45, 2.4], [0.6, 2.7], [2.5, 2.45], [2.7, 2.7]].slice(0, 2 + Math.min(ctx.tier, 2))) {
+      const p = iso(x + bx, y + by);
+      g.roundRect(p.x - 6, p.y - 13, 12, 13, 3).fill(0xd9c08c).stroke(OUTLINE);
+      g.rect(p.x - 2, p.y - 16, 4, 4).fill(0x8b5a2b);
+    }
+    const shuttle = new Graphics();
+    this.anim.addChild(shuttle);
+    this.animate = (time) => {
+      shuttle.clear();
+      const f = this.working ? (Math.sin(time * 3) + 1) / 2 : 0.5;
+      const p = iso(x + 1 + f * 1, y + 2.2, 10);
+      shuttle.roundRect(p.x - 4, p.y - 2, 8, 3, 1.5).fill(PAL.wood).stroke({ width: 0.6, color: 0x3a2418 });
+    };
+    this.animate(0);
+  },
+
+  // Hiladora: casa con una rueda de hilar en el corredor; el hilo va a un ovillo de cabuya.
+  spinner(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xe9d8b4, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 13, PAL.balconyYellow);
+    const hub = iso(x + 1.3, y + 2.35, 14);
+    box(g, x + 0.9, y + 2.3, 0.9, 0.12, 6, PAL.woodDark);
+    const ball = iso(x + 2.45, y + 2.4, 4);
+    g.circle(ball.x, ball.y - 4, 6).fill(0xd9c08c).stroke(OUTLINE);
+    g.moveTo(ball.x - 5, ball.y - 6).lineTo(ball.x + 5, ball.y - 2).stroke({ width: 0.8, color: 0xb89a5a });
+    const wheel = new Graphics();
+    this.anim.addChild(wheel);
+    this.animate = (time) => {
+      wheel.clear();
+      wheel.circle(hub.x, hub.y - 4, 11).stroke({ width: 2, color: PAL.wood });
+      const a = time * (this.working ? 4 : 0.3);
+      for (let k = 0; k < 6; k++) {
+        const b = a + (k * Math.PI) / 3;
+        wheel.moveTo(hub.x, hub.y - 4).lineTo(hub.x + Math.cos(b) * 11, hub.y - 4 + Math.sin(b) * 11).stroke({ width: 0.8, color: PAL.woodDark });
+      }
+      wheel.moveTo(hub.x + 11, hub.y - 4).lineTo(ball.x - 5, ball.y - 5).stroke({ width: 0.8, color: 0xb89a5a });
+    };
+    this.animate(0);
+  },
+
+  // Alpargatería: taller con la mesa de coser y pares de alpargatas colgados a la venta.
+  alpargata_shop(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xf6e7c8, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 13, PAL.balconyYellow);
+    box(g, x + 0.9, y + 2.15, 1.4, 0.45, 9, PAL.wood);
+    for (let i = 0; i < 3; i++) {
+      const p = iso(x + 1.1 + i * 0.4, y + 2.37, 9);
+      g.ellipse(p.x, p.y - 1, 5, 2.2).fill(0xd9c08c).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x + 1, p.y - 2.5, 3, 1.6).fill(PRODUCTS.alpargatas.color);
+    }
+    // Pares colgados de una cuerda frente a la casa.
+    const a = iso(x + 2.5, y + 0.5, 22);
+    const b = iso(x + 2.5, y + 1.9, 22);
+    g.rect(a.x - 1, a.y, 2, 22).fill(PAL.wood);
+    g.rect(b.x - 1, b.y, 2, 22).fill(PAL.wood);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x3a2418 });
+    const colors = [PRODUCTS.alpargatas.color, 0xd7263d, 0x2fa36b, 0xf4efe6];
+    for (let k = 1; k < 5; k++) {
+      const px = a.x + ((b.x - a.x) * k) / 5;
+      const py = a.y + ((b.y - a.y) * k) / 5;
+      g.roundRect(px - 2.5, py + 2, 5, 9, 2).fill(colors[k - 1]).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      g.rect(px - 2.5, py + 9, 5, 2).fill(0xd9c08c);
+    }
+    const needle = new Graphics();
+    this.anim.addChild(needle);
+    this.animate = (time) => {
+      needle.clear();
+      if (!this.working) return;
+      const k = Math.abs(Math.sin(time * 5));
+      const p = iso(x + 1.5, y + 2.37, 12 + k * 6);
+      needle.moveTo(p.x, p.y).lineTo(p.x + 1, p.y - 6).stroke({ width: 1, color: 0xd0d4d8 });
+    };
+  },
+
+  // Empacadora de tercios: bodega con la prensa que arma las pacas y los tercios apilados.
+  tercio_packer(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.5, 30, ctx, { wall: 0xf6e7c8, roofH: 14 });
+    door(g, hx, hy, 1.5, 1.8, 18, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.4, 0.75, 14, 0xffffff);
+    // Prensa: dos postes y una viga.
+    for (const px of [0.45, 1.25]) box(g, x + px, y + 2.2, 0.08, 0.08, 24, PAL.woodDark);
+    box(g, x + 0.45, y + 2.2, 0.88, 0.08, 3, PAL.woodDark, { z: 24 });
+    box(g, x + 0.6, y + 2.15, 0.55, 0.3, 8, PRODUCTS.tobacco_bale.color);
+    const stack = [[2.3, 2.15, 0], [2.65, 2.15, 0], [2.48, 2.5, 0], [2.48, 2.3, 9], [2.3, 2.15, 9], [2.48, 2.3, 18]];
+    for (const [bx, by, z] of stack.slice(0, 3 + Math.min(ctx.tier, 3))) {
+      box(g, x + bx - 0.15, y + by - 0.12, 0.3, 0.24, 9, PRODUCTS.tobacco_bale.color, { z });
+      const p = iso(x + bx, y + by + 0.12, z + 4.5);
+      g.rect(p.x - 5, p.y - 1, 10, 2).fill(0x8b5a2b);
+    }
+    const plate = new Graphics();
+    this.anim.addChild(plate);
+    this.animate = (time) => {
+      plate.clear();
+      const k = this.working ? (Math.sin(time * 2) + 1) / 2 : 1;
+      const a = iso(x + 0.6, y + 2.3, 10 + k * 10);
+      const b = iso(x + 1.15, y + 2.3, 10 + k * 10);
+      plate.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 3, color: PAL.wood });
+      const m = iso(x + 0.88, y + 2.3, 24);
+      plate.moveTo(m.x, m.y).lineTo((a.x + b.x) / 2, (a.y + b.y) / 2).stroke({ width: 1.5, color: 0x6c757d });
+    };
+    this.animate(0);
+  },
 };

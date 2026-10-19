@@ -51,6 +51,8 @@ test('cada región tiene su segundo final y su reinicio, sin tocar las demás', 
   s.zones.guayabera.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), false, 'el final de la región es su última zona');
   s.zones.tabacal.complete = true;
+  assert.equal(checkMastery(s, { emit() {} }), false);
+  s.zones.fiquera.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), true);
   s.playTime = 9000;
   const next = restartState(s);
@@ -76,7 +78,7 @@ test('la partida se guarda y se carga con sus regiones', () => {
   const back = loadGame();
   assert.equal(back.regions.santander.coins, 1234);
   assert.equal(back.regions.santander.region, 'santander');
-  assert.deepEqual(Object.keys(back.regions.santander.zones), ['guayabera', 'tabacal']);
+  assert.deepEqual(Object.keys(back.regions.santander.zones), ['guayabera', 'tabacal', 'fiquera']);
   assert.ok(back.profile);
 });
 
@@ -119,4 +121,31 @@ test('el Tabacal se abre al completar la Guayabera y su cadena tuerce tabacos si
   // A igual nivel la cadena cuadra: ninguna estación le quita el paso a la siguiente.
   const { rows } = analyzeChain(game.state, 'tabacal');
   for (const row of rows.filter((r) => r.children.length)) assert.ok(row.diverted < 1e-9, `${row.id} desvía ${row.diverted}/s`);
+});
+
+test('la Fiquera se abre con el Tabacal completo y arma tercios con el tabaco que llega por la ruta', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
+  const game = new Game(createInitialState(0, 'santander'));
+  game.unlockZone('tabacal');
+  const final = GOALS_BY_ZONE.tabacal.find((g) => g.final);
+  game.state.goals.claimed.push(...GOALS_BY_ZONE.tabacal.filter((g) => !g.final).map((g) => g.id));
+  game.state.stats.sold.cigar = final.amount;
+  assert.ok(game.claimGoal(final.id));
+  assert.equal(game.state.zones.fiquera.unlocked, true);
+  assert.ok(game.state.routes.tabaco, 'la Ruta del tabaco es de Santander');
+  game.state.coins = 1e15;
+  for (const z of ['tabacal', 'fiquera']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+    game.state.zones[z].dispatch.level = 20;
+  }
+  game.state.routes.tabaco.level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 600; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  assert.ok((game.state.stats.imported.fermented_tobacco ?? 0) > 0, 'llega tabaco del Tabacal');
+  for (const p of ['fique_sack', 'alpargatas', 'tobacco_bale']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
 });

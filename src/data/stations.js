@@ -92,6 +92,16 @@ export const STATIONS = [
   { id: 'stripper', zone: 'tabacal', name: 'Despalilladora', icon: '✂️', in: { cured_leaf: 2 }, out: { stripped_leaf: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.1' },
   { id: 'tobacco_piles', zone: 'tabacal', name: 'Pilones de fermentación', icon: '♨️', in: { stripped_leaf: 2 }, out: { fermented_tobacco: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.1' },
   { id: 'cigar_roller', zone: 'tabacal', name: 'Torcedores', icon: '🤲', in: { fermented_tobacco: 1 }, out: { cigar: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.1' },
+
+  // Santander · La Fiquera (v3.2). De la penca sale la fibra, que se reparte como la leche de la
+  // Lechería (mismos números): costales, hilo para alpargatas y tela para los tercios del tabaco, que
+  // llega del Tabacal por la Ruta del tabaco.
+  { id: 'fique_field', zone: 'fiquera', name: 'Cultivo de fique', icon: ICON.fiquePlant, infinite: true, out: { fique_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.2' },
+  { id: 'decorticator', zone: 'fiquera', name: 'Desfibradora', icon: '⚙️', in: { fique_leaf: 1 }, out: { fique_fiber: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.2' },
+  { id: 'sack_loom', zone: 'fiquera', name: 'Telar de costales', icon: ICON.fiqueSack, in: { fique_fiber: 4 }, out: { fique_sack: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.2' },
+  { id: 'spinner', zone: 'fiquera', name: 'Hiladora', icon: ICON.fiqueYarn, in: { fique_fiber: 2 }, out: { fique_yarn: 1 }, cycle: 16, unlockCost: 1000000, upgradeBase: 600, growth: 1.15, release: '3.2' },
+  { id: 'alpargata_shop', zone: 'fiquera', name: 'Alpargatería', icon: ICON.alpargatas, in: { fique_yarn: 2 }, out: { alpargatas: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.2' },
+  { id: 'tercio_packer', zone: 'fiquera', name: 'Empacadora de tercios', icon: ICON.tobaccoBale, in: { fique_fiber: 4 }, imports: [{ product: 'fermented_tobacco', perCycle: 1, route: 'tabaco' }], out: { tobacco_bale: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.2' },
 ];
 
 export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));

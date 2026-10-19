@@ -49,6 +49,13 @@ export const ICON = {
   strippedLeaf: '\uE02B', // Hoja despalillada: las dos mitades de la hoja curada, ya sin la vena del centro
   fermentedTobacco: '\uE02C', // Tabaco fermentado: un manojo de hojas oscuras, amarrado con su propia hoja
   cigar: '\uE02D', // Tabaco torcido: el puro enrollado a mano, con su anillo y la punta encendida
+  fiquePlant: '\uE02E', // Mata de fique: roseta de pencas largas, gruesas y en punta, verde azulada
+  fiqueLeaf: '\uE02F', // Penca de fique: hojas largas y carnosas recién cortadas, con espinas en el borde
+  fiqueFiber: '\uE030', // Fibra de fique: un manojo de fibra clara y brillante, amarrado en la mitad
+  fiqueYarn: '\uE031', // Hilo de fique: un ovillo de cabuya, con la punta suelta
+  alpargatas: '\uE032', // Alpargatas: el par, con suela de fique trenzado y capellada de tela
+  fiqueSack: '\uE033', // Costal de fique: tejido de cabuya, lleno y amarrado arriba
+  tobaccoBale: '\uE034', // Tercio de tabaco: paca de hoja de tabaco forrada en tela de fique y amarrada con cabuya
 };
 
 export const ICON_FONT = 'Cafetal Icons';

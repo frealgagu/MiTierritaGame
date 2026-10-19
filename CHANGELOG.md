@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v3.2.0 — Santander: La Fiquera
+- **La Fiquera**, la tercera zona de Santander, se abre al completar el Tabacal. Del Cultivo de fique salen las pencas; la **Desfibradora** las raspa y deja la fibra, que se seca en el tendal y se reparte en tres ramas:
+  - el **Telar de costales**;
+  - la **Hiladora** y la **Alpargatería** (suela de fique, capellada de colores);
+  - la **Empacadora de tercios**, que forra en tela de fique el tabaco fermentado del Tabacal.
+- **Ruta del tabaco**, la primera de Santander: una chiva lleva el tabaco fermentado del Tabacal a la Empacadora de tercios. El Tabacal tiene ahora su carretera de salida.
+- Mismos números, objetivos e investigaciones que la Lechería (Abono para el fique, Desfibradora de motor, Hiladora mecánica, Camión de estacas, Asociación de tejedoras +4 h sin conexión, Costal cafetero, Tercios de exportación…), con su Maestría y su Supremacía. Doña Carmen, la tejedora, avisa lo importante.
+- Íconos propios para la mata de fique, la penca, la fibra, el ovillo de cabuya, las alpargatas, el costal y el tercio de tabaco.
+- El segundo final de Santander pasa a la Fiquera (su última zona por ahora). Una partida con el Tabacal completo abre la Fiquera al cargarse.
+
 ## v3.1.1 — Eventos: el oro, difícil pero posible
 - Los tableros de los eventos **empiezan con dinero**: lo que cuesta su primera compra (400 en La broca, 2.400 en La gran molienda… 20 M en El barco). Antes se empezaba en 0 y el primer minuto no había nada que hacer mientras el primer producto recorría la cadena.
 - En el tablero, la **mejora recomendada busca cumplir el objetivo**, no ganar más monedas: solo sugiere las estaciones que hacen lo que todavía falta (y las anteriores), sus arrieros y, si hay que vender, la bodega. En el Derrumbe sugería la Chocolatería, que se quedaba con la pasta y la panela del chocolate de mesa del objetivo.
