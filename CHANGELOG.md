@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.6.1 — La app avisa cuando hay una versión nueva
+- La **app de Android** revisa al abrirse (y al volver a ella, cada pocas horas) si hay una versión más nueva publicada. Si la hay, muestra sus novedades con dos botones: **Actualizar** (descarga el APK nuevo y Android pide instalarlo; la partida se conserva) o **Más tarde**.
+- En el menú de la app, **Buscar actualización** revisa en el momento.
+- La web no cambia: siempre carga la última versión publicada.
+
 ## v3.6.0 — Eventos de Santander
 - **Seis eventos nuevos**, uno por zona de Santander, cada uno con la mecánica del de su par del Eje Cafetero:
   - 🪰 **La mosca de la fruta** (Guayabera): el Guayabal al 40 %; trampas con cebo, embolsar las guayabas y recoger la fruta caída.

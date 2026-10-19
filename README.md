@@ -49,7 +49,7 @@ npm run android:apk   # compila el juego, lo copia a android/ y genera android/a
 
 El APK de depuración se instala directamente en el teléfono (hay que permitir «instalar apps desconocidas»). Para Google Play hará falta una versión firmada (AAB) con una clave propia.
 
-**Cada push publica las dos cosas a la vez** (`.github/workflows/pages.yml`): la web en GitHub Pages y el APK en https://frealgagu.github.io/Game/cafetal.apk (el menú ⚙️ de la web lo enlaza). Los APK de prueba se firman siempre con la misma clave, así que cada versión se instala encima de la anterior sin perder la partida. Si existen los secretos del repositorio (`ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`), se usa esa clave; mientras tanto, temporalmente, la de pruebas guardada en `android/app/cafetal-pruebas.keystore`. La versión de la app sale de `package.json`.
+**Cada push publica las dos cosas a la vez** (`.github/workflows/pages.yml`): la web en GitHub Pages y el APK en https://frealgagu.github.io/Game/cafetal.apk (el menú ⚙️ de la web lo enlaza). Los APK de prueba se firman siempre con la misma clave, así que cada versión se instala encima de la anterior sin perder la partida. Si existen los secretos del repositorio (`ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`), se usa esa clave; mientras tanto, temporalmente, la de pruebas guardada en `android/app/cafetal-pruebas.keystore`. La versión de la app sale de `package.json`. Con cada publicación también sale `version.json` (la versión y sus novedades, del CHANGELOG): la app lo consulta al abrirse y, si hay una más nueva, ofrece descargar el APK (`src/update.js`).
 
 ### Instalar en el móvil
 Abre https://frealgagu.github.io/Game/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).
@@ -73,6 +73,7 @@ src/
 tools/
 ├─ icons/build_icons.py   genera la fuente de íconos (cereza de café, guarapo, panela, queso campesino…)
 ├─ event-bots.js          jugadores automáticos de los eventos
+├─ release-notes.js       novedades del CHANGELOG para version.json (aviso de versión nueva en la app)
 ├─ event-sim.js           juega cada objetivo de los eventos con esos bots y propone las medallas
 └─ sprites.html           los vehículos del mapa en grande (npm run dev → /tools/sprites.html)
 ```
