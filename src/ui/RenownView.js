@@ -3,6 +3,9 @@ import { ALBUM, PAGE_BONUS } from '../data/album.js';
 import { DECOR } from '../data/decor.js';
 import { buySticker, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteSticker } from '../sim/renown.js';
 import { toast } from './toast.js';
+import { LOGROS } from '../data/logros.js';
+import { metric, tierOf } from '../sim/logros.js';
+import { formatNumber } from '../core/format.js';
 
 const hex = (c) => `#${c.toString(16).padStart(6, '0')}`;
 
@@ -65,6 +68,9 @@ export class RenownView {
     if (this.tab === 'album') {
       help.textContent = `Cada lámina cuesta Renombre y tú eliges cuál pegar. Al llenar una página ganas ${PAGE_BONUS} ⭐ de premio.`;
       this.body.innerHTML = this.albumHtml(profile);
+    } else if (this.tab === 'logros') {
+      help.textContent = 'Los logros suman entre partidas: lo de antes de volver a empezar también cuenta. Cada nivel da Renombre.';
+      this.body.innerHTML = this.logrosHtml();
     } else {
       help.textContent = 'Lo de siempre es gratis; lo demás se compra una vez con Renombre y se puede cambiar cuando quieras. Es solo para que se vea bonito.';
       this.body.innerHTML = this.decorHtml(profile);
@@ -83,6 +89,21 @@ export class RenownView {
       })
       .join('');
     return `<div class="album-pages">${pages}</div><div class="album-head"><span>${page.icon} ${page.name}</span><span>${have} / ${page.stickers.length}${have === page.stickers.length ? ' ✅' : ` · llena: +${PAGE_BONUS} ⭐`}</span></div><div class="album-grid">${cards}</div>`;
+  }
+
+  logrosHtml() {
+    const s = this.game.state;
+    const done = profileOf(s).logros ?? {};
+    return LOGROS.map((l) => {
+      const value = metric(s, l.metric);
+      const tier = Math.max(done[l.id] ?? 0, tierOf(l, value));
+      const stars = l.tiers.map((_, k) => (k < tier ? '★' : '☆')).join('');
+      const next = l.tiers[tier];
+      const n = (x) => formatNumber(Math.floor(x));
+      const line = next === undefined ? '✅ Completo' : `${l.text.replace('{n}', n(next))} · ${n(Math.min(value, next))} / ${n(next)} · +${l.reward[tier]} ⭐`;
+      const pct = next === undefined ? 100 : (100 * Math.min(value, next)) / next;
+      return `<div class="logro"><div class="logro-head"><b>${l.icon} ${l.name}</b><span class="logro-stars">${stars}</span></div><p>${line}</p><div class="bar"><div style="width:${pct}%"></div></div></div>`;
+    }).join('');
   }
 
   decorHtml(profile) {

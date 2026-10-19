@@ -567,7 +567,7 @@ export const COST_GROWTH = 1.15;
 - Una partida nueva empieza el primer día del año, a las 8:00, en verano. El reinicio del segundo final vuelve al primer día.
 - Las pruebas de la cadena apagan el calendario (`CALENDAR.on = false`: siempre de día y sin temporada); `test/calendar.test.js` prueba el calendario.
 
-### 10.2 Eventos e insignias (v2.0–v2.2 ✅ los seis eventos, el álbum y la decoración; los logros, en camino)
+### 10.2 Eventos e insignias (v2.0–v2.3 ✅)
 - **Tableros aparte**: cada evento usa las piezas de una zona en un tablero separado del mapa, con sus propias monedas y niveles. Tiene **su propio reloj, que se pausa al salir** (para mirar el mapa general) y que no avanza sin conexión.
 - **Una vez al año por zona**: cada zona abre su evento una vez por año de juego; el objetivo cambia de un año al siguiente. Con el tiempo, **4 eventos por zona** (4 medallas por zona, 24 en total). Solo uno a la vez por zona: si pasa, hay que esperar al otro año.
 - **Medallas** según qué tan rápido se cumple: 🥉 bronce, 🥈 plata, 🥇 oro.
@@ -590,6 +590,7 @@ export const COST_GROWTH = 1.15;
     - **Álbum de láminas**: seis páginas (el café, la panela, la leche, el cacao, el maíz y el pueblo) de seis láminas sobre lo que rodea a cada producto en Colombia (el arriero, la chapolera, el yipao, la melcocha, el kumis, el molinillo, la mazamorra, la chiva…). Cada lámina cuesta 1, 2 o 3 ⭐ y se pega la que uno elija; una página llena da 3 ⭐ de premio. Todo el álbum cuesta 72 ⭐ (54 descontando los premios).
     - **Decoración** (solo se ve; vale también en los tableros): color del Willys (3 ⭐ cada uno), enjalma de las mulas (2 ⭐), pintura de la chiva (4 ⭐) y banderines frente a la bodega (5 ⭐). Lo de siempre es gratis; lo comprado se puede cambiar cuando se quiera.
     - Se abre desde la ventana de eventos (📖 Álbum, 🎨 Decoración). Todo se guarda en `state.profile` y pasa a la partida nueva al reiniciar.
+  - **v2.3, logros generales** (`src/data/logros.js`, `src/sim/logros.js`): 15 logros de uno a tres niveles, todos de cantidad y ninguno de velocidad: bolsas de café vendidas, panela, queso, chocolate y arepas de queso producidos, contenedores exportados, monedas ganadas, años de juego, veces que se completó el Pueblo y que se llegó al segundo final, medallas, eventos con medalla y con oro, páginas del álbum e investigaciones en una partida. Cada nivel da Renombre (de 1 a 16 ⭐). Lo de las partidas anteriores se guarda al reiniciar en `profile.lifetime` y sigue contando. Se ven en la ventana del Renombre (🏆 Logros).
   - Medallas calibradas con `tools/event-sim.js`, que juega cada objetivo con tres jugadores automáticos (el que sube lo que lleva al objetivo, el que sigue la mejora recomendada y uno lento): el oro, el tiempo del más rápido (10–12 min); la plata, 5 min más.
 
 ### 10.3 Otras regiones (plan a futuro, después de las fases anteriores)

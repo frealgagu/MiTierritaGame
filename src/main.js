@@ -16,6 +16,7 @@ import { Chatter } from './ui/Chatter.js';
 import { EventsView } from './ui/EventsView.js';
 import { RenownView } from './ui/RenownView.js';
 import { setLook } from './render/look.js';
+import { checkLogros } from './sim/logros.js';
 import { EventBar, formatClock } from './ui/EventBar.js';
 import { finishEvent, startEvent } from './sim/events.js';
 import { MEDALS } from './data/events.js';
@@ -182,7 +183,7 @@ async function start() {
     scene = new Scene(app, board.game, sound, ZONES_BY_ID[board.zone]);
     scene.onSelect = select;
   });
-  for (const [id, tab] of [['album-btn', 'album'], ['decor-btn', 'decor']]) {
+  for (const [id, tab] of [['album-btn', 'album'], ['decor-btn', 'decor'], ['logros-btn', 'logros']]) {
     document.getElementById(id).addEventListener('click', () => {
       events.close();
       renown.open(tab);
@@ -294,6 +295,16 @@ async function start() {
       uiTimer = 0.2;
       safely(() => hud.update());
       safely(() => scene.setGuide(panel.id ? null : hud.guide));
+      // Logros (v2.3): se pagan al llegar a cada nivel.
+      safely(() => {
+        const won = checkLogros(game.state);
+        if (!won.length) return;
+        const stars = won.reduce((n, w) => n + w.reward, 0);
+        const [w] = won;
+        // Varios a la vez (una partida de antes de la v2.3), en un solo aviso.
+        toast(won.length > 1 ? `🏆 ${won.length} logros: +${stars} ⭐ de Renombre` : `🏆 ${w.logro.icon} ${w.logro.name} (nivel ${w.tier}): +${stars} ⭐ de Renombre`, 4000);
+        sound.milestone();
+      });
       // En el tablero de un evento, la persona de la zona no avisa lo de la partida.
       for (const view of [panel, chain, goals, research, zones, events, eventBar, ...(board ? [] : [chatter])]) safely(() => view.update());
     }

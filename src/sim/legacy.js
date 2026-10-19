@@ -5,6 +5,8 @@ import { ZONE_LIST } from '../data/zones/index.js';
 import { MAX_LEVEL } from './rules.js';
 import { createInitialState } from './state.js';
 import { legacyMult } from './modifiers.js';
+import { bankRun } from './logros.js';
+import { profileOf } from './renown.js';
 
 // Estaciones jugables: las cadenas de las seis zonas y sus ramas (la Compostera).
 export const ALL_STATIONS = [...new Set(ZONE_LIST.flatMap((z) => [...z.chain, ...z.plots.map((p) => p.stationId)]))];
@@ -32,5 +34,7 @@ export function restartState(state, now = Date.now()) {
   next.hints = [...(state.hints ?? [])];
   // Lo de los eventos que no se pierde (v2.0): Renombre, medallas y su registro.
   if (state.profile) next.profile = structuredClone(state.profile);
+  // Lo de esta partida pasa al acumulado de los logros (v2.3).
+  bankRun(state, profileOf(next));
   return next;
 }

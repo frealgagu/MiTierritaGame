@@ -627,3 +627,7 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .decor-opt .sw i { width: 9px; height: 16px; border: 1px solid var(--ink); }
 .decor-opt span:nth-child(2) { flex: 1; min-width: 0; line-height: 1.15; }
 .decor-opt span:last-child { white-space: nowrap; font-size: 0.78rem; }
+.logro { border: 2px solid var(--ink); border-radius: 12px; padding: 8px 10px; margin-bottom: 8px; }
+.logro-head { display: flex; justify-content: space-between; gap: 8px; }
+.logro-stars { color: #d4a017; letter-spacing: 2px; font-size: 1.05rem; }
+.logro p { margin: 4px 0 0; font-size: 0.85rem; }

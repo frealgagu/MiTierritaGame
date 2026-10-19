@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v2.3.0 — Logros
+- **🏆 Logros generales**: 15 logros, de uno a tres niveles, que **suman entre partidas** (lo de antes de volver a empezar sigue contando) y que nunca son de velocidad: vender bolsas de café, producir panela, queso, chocolate y arepas, exportar contenedores, ganar monedas, vivir años de juego, completar el Pueblo, llegar al segundo final, ganar medallas (y oros) en los eventos, llenar páginas del álbum e investigar.
+- Cada nivel da **Renombre ⭐** para el álbum y la decoración. Se ven en la ventana del Renombre, con su avance; al lograr uno sale el aviso.
+- Una partida de antes recibe de una vez los logros que ya tenía.
+- Con esto queda completa la fase 3 (eventos, medallas, Renombre, álbum, decoración y logros).
+
 ## v2.2.0 — Álbum de láminas y decoración
 - El **Renombre ⭐** ya se puede gastar (desde la ventana de 🏅 Eventos):
   - **📖 Álbum de láminas**, como el de las chocolatinas pero sin sobres al azar: seis páginas (café, panela, leche, cacao, maíz y pueblo) con 36 láminas de lo que rodea a cada producto en Colombia: el arriero, la chapolera, el carriel, el yipao, la melcocha, la cuajada con melao, el molinillo, el chocolate santafereño, la mazamorra, la chiva, el tinto… Tú eliges cuál pegar (1 a 3 ⭐) y cada página llena da 3 ⭐ de premio.
