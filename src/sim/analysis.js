@@ -9,6 +9,7 @@ import { exportsOf, teamCapacity } from './transport.js';
 import { COMPOST_VALUE, WASHED_PER_COMPOST, dispatchMult, productValue, speedMult } from './modifiers.js';
 import { PRODUCTS } from '../data/products.js';
 import { canPay, zoneAtLevel } from './upgrades.js';
+import { supplyFraction } from './events.js';
 
 const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
 const MAX_ROUTE_DEPTH = 4; // zonas encadenadas por rutas que se miran como mucho
@@ -69,7 +70,9 @@ function analyze(state, zoneId, withExports, depth, memo) {
     if (!routeFlows.has(key)) routeFlows.set(key, routeFlow(state, routeId, depth + 1, memo));
     return routeFlows.get(key);
   };
-  const importOf = (id, imp) => (routes ? flowOf(imp.route) * routeShare(state, imp.route, id) : 0);
+  // En el tablero de un evento no hay rutas: llega de afuera lo que diga el evento.
+  const importOf = (id, imp) =>
+    state.event ? supplyFraction(state, imp.product) * cycleRate(id) * imp.perCycle : routes ? flowOf(imp.route) * routeShare(state, imp.route, id) : 0;
   // Unidades de su entrada principal que puede procesar por segundo (frenada por los importados si faltan).
   const capacityOf = (id) => {
     const def = STATIONS_BY_ID[id];
@@ -119,7 +122,8 @@ function analyze(state, zoneId, withExports, depth, memo) {
       for (const imp of def.imports) {
         row.imported[imp.product] = importOf(id, imp);
         const ratio = row.imported[imp.product] / (rate * imp.perCycle);
-        if (ratio < tightest) {
+        // En el tablero de un evento no hay rutas que mejorar: lo que llega de afuera no se sube.
+        if (ratio < tightest && !state.event) {
           tightest = ratio;
           row.importLimited = imp.route;
         }

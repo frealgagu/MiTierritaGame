@@ -583,6 +583,7 @@ body.panel-open .event-bar { display: none; }
 .event-clock { font-weight: 700; font-variant-numeric: tabular-nums; }
 .event-exit { width: auto; padding: 4px 12px; }
 .event-goal { display: flex; justify-content: space-between; gap: 8px; font-size: 0.9rem; font-weight: 600; }
+#event-goal { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .event-goal span:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .event-medals { font-size: 0.82rem; opacity: 0.85; }
 .event-actions { display: flex; gap: 6px; }

@@ -1,13 +1,20 @@
 // Barra del tablero de un evento (v2.0): el objetivo, el reloj del evento, las medallas y las compras
 // del evento (cada una pide la anterior).
 import { formatNumber } from '../core/format.js';
-import { buyAction, boardObjective, eventDef, eventProgress, medalFor, quoteAction } from '../sim/events.js';
-import { goalText } from '../sim/goals.js';
+import { buyAction, boardObjective, eventDef, eventItems, eventProgress, medalFor, quoteAction } from '../sim/events.js';
 import { MEDALS } from '../data/events.js';
+import { PRODUCTS } from '../data/products.js';
 import { setFitted } from './fit.js';
 import { toast } from './toast.js';
 
 export const formatClock = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+// «Vende 120 🧀 queso, 60 🧈 mantequilla y 40 🍮 arequipe».
+export function objectiveText(obj) {
+  const parts = Object.entries(obj.items).map(([id, n]) => `${formatNumber(n)} ${PRODUCTS[id].icon} ${PRODUCTS[id].name.toLowerCase()}`);
+  const list = parts.length > 1 ? `${parts.slice(0, -1).join(', ')} y ${parts.at(-1)}` : parts[0];
+  return `${obj.kind === 'sold' ? 'Vende' : 'Produce'} ${list}`;
+}
 
 export class EventBar {
   constructor(onExit) {
@@ -43,13 +50,15 @@ export class EventBar {
     const board = this.game.state;
     const def = eventDef(board);
     const obj = boardObjective(board);
-    const done = Math.min(eventProgress(board), obj.amount);
+    const items = eventItems(board);
     setFitted(document.getElementById('event-title'), `${def.icon} ${def.name} · año ${board.event.year}`);
     const medal = MEDALS[medalFor(obj, board.playTime)];
     document.getElementById('event-clock').textContent = `${medal.icon} ⏱ ${formatClock(board.playTime)}`;
-    setFitted(document.getElementById('event-goal'), goalText({ type: obj.kind, amount: obj.amount, product: obj.product }));
-    document.getElementById('event-count').textContent = `${formatNumber(Math.floor(done))} / ${formatNumber(obj.amount)}`;
-    document.getElementById('event-fill').style.width = `${(100 * done) / obj.amount}%`;
+    setFitted(document.getElementById('event-goal'), objectiveText(obj), 0.6);
+    // Con un producto, «37 / 100»; con varios, cuánto lleva de cada uno.
+    const count = items.length === 1 ? `${formatNumber(Math.floor(items[0].have))} / ${formatNumber(items[0].need)}` : items.map((i) => `${PRODUCTS[i.product].icon} ${formatNumber(Math.floor(i.have))}`).join(' ');
+    document.getElementById('event-count').textContent = count;
+    document.getElementById('event-fill').style.width = `${100 * eventProgress(board)}%`;
     setFitted(document.getElementById('event-medals'), `🥇 hasta ${formatClock(obj.medals[0])} · 🥈 hasta ${formatClock(obj.medals[1])} · 🥉 después`);
     // Las compras: se redibujan solo si cambió algo (para no perder el toque a mitad de un clic).
     const states = def.actions.map((a) => {

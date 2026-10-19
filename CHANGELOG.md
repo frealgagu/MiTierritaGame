@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v2.1.0 — Un evento en cada zona
+- Cinco eventos nuevos, uno por zona (cada uno se abre cuando ya construiste todas las estaciones de su zona, y su persona lo anuncia):
+  - 🔥 **La gran molienda** (Trapiche): se acabó la leña y la Hornilla cocina al 40 %. Bagacera, hornilla reparada y fuelle.
+  - 🐮 **Feria ganadera** (Lechería): piden queso, mantequilla y arequipe a la vez. Moldes nuevos, batidora y paila de cobre aceleran cada rama.
+  - 🪨 **Derrumbe en la vía** (Cacaotal): no llega la panela, solo la guardada. Mulas por el monte, una trocha y despejar la vía.
+  - 🎉 **Fiesta del maíz** (Maizal): se rajó el budare grande. Budare prestado, leña seca y las vecinas que ayudan.
+  - 🚢 **El barco sale el viernes** (Pueblo): la grúa del puerto está varada. Repuestos, grúa arreglada y turno extra.
+- En los tableros, lo que la zona importa llega «de afuera» (no hay rutas que mejorar) y un objetivo puede pedir varios productos: la barra muestra cuánto llevas de cada uno.
+- Todos los objetivos calibrados para 10–12 min con un jugador atento (🥇) y 5 min más para 🥈.
+
 ## v2.0.0 — Eventos: La broca
 - **Eventos** 🏅 (botón nuevo a la izquierda): una vez al año cada zona tiene su evento, que se juega en un **tablero aparte** con las piezas de la zona, sus propias monedas y niveles y **su propio reloj**, que solo corre mientras juegas en él (la partida sigue mientras tanto). Se puede salir y volver; si se empezó, se puede terminar aunque pase el año.
 - Según lo rápido que se cumpla el objetivo, **medalla** 🥇 de oro, 🥈 de plata o 🥉 de bronce, que dan **Renombre ⭐** (4, 2 y 1). El Renombre y las medallas **no se pierden al volver a empezar**; pronto se gastarán en decoración y en el álbum de láminas.

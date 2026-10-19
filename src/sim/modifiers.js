@@ -7,6 +7,9 @@ import { EVENTS_BY_ID, EVENT_ACTIONS_BY_ID } from '../data/events.js';
 
 const BASE_OFFLINE_HOURS = 2;
 
+// Una compra puede tener un efecto (effect) o varios (effects: las de los eventos).
+export const effectsOf = (def) => def?.effects ?? (def?.effect ? [def.effect] : []);
+
 // Producto de los efectos de un tipo (y objetivo). Se calcula una vez por lista de investigaciones:
 // la simulación lo pregunta miles de veces por segundo y la lista solo crece al comprar.
 const cache = new WeakMap(); // lista de investigaciones -> { n, mults: tipo -> objetivo -> producto }
@@ -23,8 +26,9 @@ function product(state, type, target) {
   if (mult === undefined) {
     mult = 1;
     for (const id of list) {
-      const e = (RESEARCH_BY_ID[id] ?? EVENT_ACTIONS_BY_ID[id])?.effect;
-      if (e && e.type === type && (target === undefined || e.target === target)) mult *= e.mult;
+      for (const e of effectsOf(RESEARCH_BY_ID[id] ?? EVENT_ACTIONS_BY_ID[id])) {
+        if (e.type === type && (target === undefined || e.target === target)) mult *= e.mult;
+      }
     }
     byTarget.set(target, mult);
   }

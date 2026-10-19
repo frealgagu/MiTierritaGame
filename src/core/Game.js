@@ -13,6 +13,7 @@ import { claimGoal, unlockZone } from '../sim/goals.js';
 import { checkMastery } from '../sim/legacy.js';
 import { stepAlerts } from '../sim/alerts.js';
 import { workSeconds } from '../sim/calendar.js';
+import { stepSupply } from '../sim/events.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
 const MAX_SIMULATED = 2 * 3600; // s de juego que se simulan de verdad al volver; el resto se extrapola
@@ -55,6 +56,7 @@ export class Game {
     stepMules(this.state, dt, this.bus);
     for (const zone of ZONE_LIST) if (this.state.zones[zone.id]?.unlocked) stepJeep(this.state, zone.id, dt, this.bus);
     for (const route of ROUTES) stepRoute(this.state, route.id, dt, this.bus);
+    if (this.state.event) stepSupply(this.state, dt);
     stepAlerts(this.state, dt);
   }
 

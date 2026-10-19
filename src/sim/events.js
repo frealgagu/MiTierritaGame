@@ -7,6 +7,9 @@ import { createInitialState, createZoneState } from './state.js';
 import { createStationState } from './production.js';
 import { yearOf } from './calendar.js';
 import { canPay } from './upgrades.js';
+import { stationImportCap, stationRate } from './rules.js';
+import { effectsOf, speedMult } from './modifiers.js';
+import { STATIONS_BY_ID } from '../data/stations.js';
 
 export const eventDef = (board) => EVENTS_BY_ID[board.event.id];
 // El objetivo del año: van en orden y vuelven a empezar.
@@ -35,7 +38,12 @@ export function createEventState(def, year) {
   for (const z of Object.keys(s.zones)) s.zones[z] = createZoneState(z === def.zone);
   s.zones[def.zone].dispatch.level = def.level;
   s.stations = {};
-  for (const id of def.stations) s.stations[id] = { ...createStationState(), level: def.level, transport: { level: def.level } };
+  for (const id of def.stations) {
+    const st = { ...createStationState(), level: def.level, transport: { level: def.level } };
+    // Lo guardado de los importados (con el derrumbe, la panela que quedó antes de que se tapara la vía).
+    for (const imp of STATIONS_BY_ID[id].imports ?? []) if (def.stock?.[imp.product]) st.imported[imp.product] = def.stock[imp.product];
+    s.stations[id] = st;
+  }
   s.coins = def.coins;
   s.settings = { zone: def.zone };
   return s;
@@ -51,9 +59,16 @@ export function startEvent(state, zoneId) {
   return (state.events.boards[zoneId] = createEventState(st.def, st.year));
 }
 
-export function eventProgress(board) {
+// Cuánto lleva de cada producto del objetivo: [{ product, have, need }].
+export function eventItems(board) {
   const obj = boardObjective(board);
-  return board.stats[obj.kind][obj.product] ?? 0;
+  return Object.entries(obj.items).map(([product, need]) => ({ product, need, have: Math.min(need, board.stats[obj.kind][product] ?? 0) }));
+}
+
+// Qué tanto del objetivo está hecho (0 a 1).
+export function eventProgress(board) {
+  const items = eventItems(board);
+  return items.reduce((n, i) => n + i.have, 0) / items.reduce((n, i) => n + i.need, 0);
 }
 
 export function medalFor(obj, seconds) {
@@ -69,7 +84,7 @@ export function finishEvent(state, zoneId) {
   const board = state.events?.boards?.[zoneId];
   if (!board) return null;
   const obj = boardObjective(board);
-  if (eventProgress(board) < obj.amount) return null;
+  if (eventProgress(board) < 1) return null;
   const time = board.playTime;
   const medal = medalFor(obj, time);
   const def = eventDef(board);
@@ -87,12 +102,38 @@ export function finishEvent(state, zoneId) {
 
 // Lo que el evento le quita todavía a una estación (1 = nada): la broca con las compras que ya se hicieron.
 export function eventPenalty(board, stationId) {
-  let mult = eventDef(board).speed?.[stationId] ?? 1;
+  const base = eventDef(board).speed?.[stationId];
+  if (!base) return 1;
+  let mult = base;
   for (const id of board.research) {
-    const e = EVENT_ACTIONS_BY_ID[id]?.effect;
-    if (e?.type === 'stationSpeed' && e.target === stationId) mult *= e.mult;
+    for (const e of effectsOf(EVENT_ACTIONS_BY_ID[id])) if (e.type === 'stationSpeed' && e.target === stationId) mult *= e.mult;
   }
   return mult;
+}
+
+// Qué parte de lo que piden las estaciones llega de afuera por un importado (0 a 1).
+export function supplyFraction(board, product) {
+  let f = eventDef(board).supply?.[product] ?? 0;
+  for (const id of board.research) {
+    for (const e of effectsOf(EVENT_ACTIONS_BY_ID[id])) if (e.type === 'supply' && e.product === product) f = Math.max(f, e.fraction);
+  }
+  return f;
+}
+
+// Lo que llega de afuera (en el tablero no hay otras zonas ni rutas): a cada estación, su parte de lo
+// que gasta a toda marcha, un 25 % más, sin pasar de lo que le cabe.
+export function stepSupply(board, dt) {
+  for (const [id, st] of Object.entries(board.stations)) {
+    const def = STATIONS_BY_ID[id];
+    for (const imp of def.imports ?? []) {
+      const f = supplyFraction(board, imp.product);
+      if (f <= 0) continue;
+      const mult = speedMult(board, id);
+      const cap = stationImportCap(def, st.level, mult, imp);
+      const add = f * stationRate(def, st.level) * mult * imp.perCycle * 1.25 * dt;
+      st.imported[imp.product] = Math.min(cap, (st.imported[imp.product] ?? 0) + add);
+    }
+  }
 }
 
 // Compras del evento: una vez cada una, en orden.

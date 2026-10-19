@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { EVENTS, EVENT_ACTIONS_BY_ID, MEDALS } from '../src/data/events.js';
-import { boardObjective, buyAction, eventProgress, eventStatus, finishEvent, medalFor, quoteAction, startEvent } from '../src/sim/events.js';
+import { boardObjective, buyAction, createEventState, eventProgress, eventStatus, finishEvent, medalFor, quoteAction, startEvent, supplyFraction } from '../src/sim/events.js';
 import { speedMult } from '../src/sim/modifiers.js';
 import { restartState } from '../src/sim/legacy.js';
 import { DAY_LENGTH } from '../src/sim/calendar.js';
@@ -19,7 +19,7 @@ test('los eventos están bien armados', () => {
   for (const e of EVENTS) {
     for (const id of e.stations) assert.equal(STATIONS_BY_ID[id]?.zone, e.zone, `${e.id}: ${id}`);
     for (const o of e.objectives) {
-      assert.ok(PRODUCTS[o.product], `${e.id}: ${o.product}`);
+      for (const p of Object.keys(o.items)) assert.ok(PRODUCTS[p]?.zone === e.zone || e.zone === 'pueblo', `${e.id}: ${p}`);
       assert.ok(o.medals[0] < o.medals[1], `${e.id}: el oro pide menos tiempo que la plata`);
     }
   }
@@ -37,7 +37,7 @@ test('el evento de una zona se juega una vez por año y el objetivo cambia de un
   assert.equal(eventStatus(s, 'finca').kind, 'active');
   assert.equal(startEvent(s, 'finca'), board, 'seguir el que está en juego');
   const first = boardObjective(board);
-  board.stats[first.kind][first.product] = first.amount;
+  for (const [p, n] of Object.entries(first.items)) board.stats[first.kind][p] = n;
   board.playTime = 60;
   const r = finishEvent(s, 'finca');
   assert.equal(r.medal, 'gold');
@@ -101,4 +101,47 @@ test('el Renombre y las medallas no se pierden al reiniciar; el tablero en juego
   assert.equal(next.profile.renown, 7);
   assert.deepEqual(next.profile.medals.broca, { best: 'silver', count: { silver: 1 } });
   assert.deepEqual(next.events.boards, {});
+});
+
+test('los seis tableros arrancan y avanzan hacia su objetivo', () => {
+  for (const def of EVENTS) {
+    const board = createEventState(def, 1);
+    const game = new Game(board);
+    for (let t = 0; t < 180; t += 0.1) game.step(0.1);
+    assert.ok(eventProgress(board) > 0 || Object.values(board.stats.produced).some((n) => n > 0), def.id);
+    assert.ok(board.coins > 0, `${def.id}: gana monedas`);
+  }
+});
+
+test('derrumbe: sin vía la panela no llega (solo la guardada) y con las compras vuelve a llegar', () => {
+  const def = EVENTS.find((e) => e.id === 'derrumbe');
+  const board = createEventState(def, 1);
+  assert.equal(board.stations.chocolate_table.imported.panela_powder, def.stock.panela_powder);
+  assert.equal(supplyFraction(board, 'panela_powder'), 0);
+  assert.equal(supplyFraction(board, 'milk'), 1);
+  const game = new Game(board);
+  board.stations.chocolate_table.imported.panela_powder = 0;
+  for (let t = 0; t < 10; t += 0.1) game.step(0.1);
+  assert.equal(board.stations.chocolate_table.imported.panela_powder, 0);
+  board.coins = 1e12;
+  for (const a of def.actions) assert.ok(buyAction(board, a.id));
+  assert.equal(supplyFraction(board, 'panela_powder'), 1);
+  for (let t = 0; t < 10; t += 0.1) game.step(0.1);
+  assert.ok(board.stations.chocolate_table.imported.panela_powder > 0);
+});
+
+test('feria: el objetivo pide varios productos y cuenta cada uno hasta lo pedido', () => {
+  const def = EVENTS.find((e) => e.id === 'feria');
+  const main = new Game();
+  main.state.zones.lecheria.unlocked = true;
+  for (const id of def.stations) main.state.stations[id] = createStationState();
+  const board = startEvent(main.state, 'lecheria');
+  const obj = boardObjective(board);
+  const [a, b] = Object.keys(obj.items);
+  board.stats.sold[a] = obj.items[a] * 5; // de más no cuenta
+  assert.ok(Math.abs(eventProgress(board) - obj.items[a] / Object.values(obj.items).reduce((x, y) => x + y)) < 1e-9);
+  assert.equal(finishEvent(main.state, 'lecheria'), null);
+  for (const [p, n] of Object.entries(obj.items)) board.stats.sold[p] = n;
+  assert.ok(b);
+  assert.ok(finishEvent(main.state, 'lecheria'));
 });

@@ -567,7 +567,7 @@ export const COST_GROWTH = 1.15;
 - Una partida nueva empieza el primer día del año, a las 8:00, en verano. El reinicio del segundo final vuelve al primer día.
 - Las pruebas de la cadena apagan el calendario (`CALENDAR.on = false`: siempre de día y sin temporada); `test/calendar.test.js` prueba el calendario.
 
-### 10.2 Eventos e insignias (v2.0: el motor y La broca ✅; los demás eventos, el álbum, la decoración y los logros, en camino)
+### 10.2 Eventos e insignias (v2.0–v2.1 ✅ los seis eventos; el álbum, la decoración y los logros, en camino)
 - **Tableros aparte**: cada evento usa las piezas de una zona en un tablero separado del mapa, con sus propias monedas y niveles. Tiene **su propio reloj, que se pausa al salir** (para mirar el mapa general) y que no avanza sin conexión.
 - **Una vez al año por zona**: cada zona abre su evento una vez por año de juego; el objetivo cambia de un año al siguiente. Con el tiempo, **4 eventos por zona** (4 medallas por zona, 24 en total). Solo uno a la vez por zona: si pasa, hay que esperar al otro año.
 - **Medallas** según qué tan rápido se cumple: 🥉 bronce, 🥈 plata, 🥇 oro.
@@ -580,6 +580,13 @@ export const COST_GROWTH = 1.15;
   - Las estaciones empiezan en el nivel 10, con el Despacho también en 10 y 0 monedas. Las compras del evento son como investigaciones que solo valen en el tablero, en orden. Las investigaciones de la partida no valen en el tablero, ni los reinicios ×2.
   - **La broca** (Finca): el Cafetal arranca al 40 %; 🪤 Trampas (400) lo deja al 60 %, 🍄 Hongo Beauveria (2.500) al 80 % y 🧺 Re-re (6.000) al 100 %. La plaga se ve sobre el Cafetal mientras no esté controlada. Objetivos por año: vender 100 bolsas (🥇 11:00, 🥈 16:00), producir 500 de café tostado (🥇 12:00, 🥈 17:00) y producir 1.000 de café verde (🥇 11:00, 🥈 16:00); luego se repiten. Calibrado con `tools/event-sim.js`: el jugador automático atento tarda 11–12 min y el que mira cada 30 s, 12–13 min.
   - El Renombre, las medallas (la mejor de cada evento y cuántas de cada una) y el registro de eventos están en `state.profile`, que pasa a la partida nueva al reiniciar.
+  - **v2.1, los otros cinco** (en el tablero no hay otras zonas: lo que se importa llega «de afuera» según `supply`, de 0 a 1, y el objetivo puede pedir varios productos):
+    - 🔥 **La gran molienda** (Trapiche): sin leña, la Hornilla al 40 %; ☀️ bagacera, 🧱 hornilla reparada y 🌬️ fuelle. Panela pulverizada, panela, melado.
+    - 🐮 **Feria ganadera** (Lechería): pedidos de queso, mantequilla y arequipe a la vez (la panela llega sin falta); 🧀 moldes, 🧈 batidora (Descremadora y Mantequera) y 🍯 paila de cobre aceleran cada rama.
+    - 🪨 **Derrumbe en la vía** (Cacaotal): la panela no llega, solo 60 guardadas; 🫏 mulas por el monte (25 %), 🛻 trocha (60 %) y 🚧 despejar la vía (100 %). Chocolate de mesa, chocolatina o los dos.
+    - 🎉 **Fiesta del maíz** (Maizal): el budare grande se rajó (40 %); 🍳 budare prestado, 🪵 leña seca y 👵 las vecinas ayudan. Arepas de queso, arepas, masa.
+    - 🚢 **El barco sale el viernes** (Pueblo): todo lo importado llega; la grúa varada deja el Patio al 40 %; 🔧 repuestos, 🏗️ grúa arreglada y 👷 turno extra. Contenedores, canastas de regalo, contenedores con desayunos.
+  - Medallas calibradas con `tools/event-sim.js`, que juega cada objetivo con tres jugadores automáticos (el que sube lo que lleva al objetivo, el que sigue la mejora recomendada y uno lento): el oro, el tiempo del más rápido (10–12 min); la plata, 5 min más.
 
 ### 10.3 Otras regiones (plan a futuro, después de las fases anteriores)
 - Cada región es un **mapa nuevo con sus propias zonas, cadenas y productos**, con **su propia economía** (monedas, niveles e investigaciones) y **su propio reinicio** (el ×2 del segundo final vale solo para esa región).

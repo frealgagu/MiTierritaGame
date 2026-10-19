@@ -3,8 +3,7 @@
 import { EVENTS, MEDALS } from '../data/events.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { eventObjective, eventStatus } from '../sim/events.js';
-import { goalText } from '../sim/goals.js';
-import { formatClock } from './EventBar.js';
+import { formatClock, objectiveText } from './EventBar.js';
 
 export const medalLine = (obj) => `🥇 hasta ${formatClock(obj.medals[0])} · 🥈 hasta ${formatClock(obj.medals[1])} · 🥉 después`;
 
@@ -55,11 +54,12 @@ export class EventsView {
       return `<div class="event-card${st.kind === 'locked' ? ' locked' : ''}">
         <h3><span>${def.icon} ${def.name} · ${zone.icon} ${zone.name}</span><span>${best ? MEDALS[best].icon : ''}</span></h3>
         <p>${def.intro}</p>
-        ${st.kind === 'locked' ? '' : `<p class="event-year">Año ${st.year}: ${goalText({ type: obj.kind, amount: obj.amount, product: obj.product })}.<br>${medalLine(obj)}</p>`}
+        ${st.kind === 'locked' ? '' : `<p class="event-year">Año ${st.year}: ${objectiveText(obj)}.<br>${medalLine(obj)}</p>`}
         ${foot}
       </div>`;
     });
-    this.body.innerHTML = `${cards.join('')}<p class="event-soon">Pronto: un evento en cada zona.</p>`;
+    // Las zonas que todavía no se abren en la partida no se muestran.
+    this.body.innerHTML = `${cards.join('')}<p class="event-soon">Cada zona que abras trae su evento.</p>`;
   }
 
   update() {
