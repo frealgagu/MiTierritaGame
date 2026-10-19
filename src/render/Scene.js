@@ -20,7 +20,9 @@ import { normalDest, slowConsumers, warehouseCap } from '../sim/transport.js';
 import { alerts } from '../sim/alerts.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { jeepResting } from '../sim/dispatch.js';
-import { isWorkTime } from '../sim/calendar.js';
+import { resting } from '../sim/calendar.js';
+import { eventPenalty } from '../sim/events.js';
+import { EVENTS_BY_ID } from '../data/events.js';
 import { quoteUnlock } from '../sim/upgrades.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive, routeCapacity } from '../sim/routes.js';
@@ -34,6 +36,8 @@ const LABEL_HEIGHT = { farm: 70, dispatch: 100, plot: 62, building: 96 };
 
 // Arma el mundo de una zona y lo mantiene sincronizado con el estado de la simulación.
 // Al cambiar de zona se destruye (destroy) y se crea otra.
+const EVENT_DAYTIME = 40; // s de juego: las 10:00 del primer día
+
 export class Scene {
   constructor(app, game, sound, zone) {
     this.app = app;
@@ -278,7 +282,8 @@ export class Scene {
   update(dt) {
     this.time += dt;
     const state = this.game.state;
-    this.dayNight.update(state.playTime);
+    // En el tablero de un evento siempre es media mañana (su reloj es otro).
+    this.dayNight.update(state.event ? EVENT_DAYTIME : state.playTime);
     this.background.update(dt, this.camera);
     this.farm.sync(state);
     this.warehouse.sync(state.zones[this.zone.id], warehouseCap(state, this.zone.id));
@@ -316,7 +321,7 @@ export class Scene {
     this.critters.update(dt, this.time, this.dayNight.light > 0.5, this.jeepPos);
     this.updateAmbient(dt);
     this.effects.update(dt);
-    this.weather.update(dt, state.playTime, this.app.screen.width, this.app.screen.height);
+    this.weather.update(dt, state.event ? null : state.playTime, this.app.screen.width, this.app.screen.height);
   }
 
   // Luciérnagas y sonidos de ambiente según la hora.
@@ -494,7 +499,9 @@ export class Scene {
 // Solo si el problema dura (ver alerts.js): los momentos sueltos con todo nivelado no se avisan.
 export function statusIcon(state, id) {
   const st = state.stations[id];
-  if (!st || !isWorkTime(state.playTime)) return null; // de noche todo descansa: nada que avisar
+  if (!st || resting(state)) return null; // de noche todo descansa: nada que avisar
+  // En el tablero de un evento, la plaga sobre la estación mientras no esté controlada (v2.0).
+  if (state.event && eventPenalty(state, id) < 0.999) return EVENTS_BY_ID[state.event.id].icon;
   const a = alerts(st);
   // La Compostera llena es compost de sobra (bueno): no se avisa.
   if (STATIONS_BY_ID[id].side && a.blocked) return null;

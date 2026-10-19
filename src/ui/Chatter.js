@@ -4,6 +4,8 @@ import { alerts } from '../sim/alerts.js';
 import { slowConsumers } from '../sim/transport.js';
 import { toast } from './toast.js';
 import { isWorkTime, seasonOf } from '../sim/calendar.js';
+import { EVENTS } from '../data/events.js';
+import { eventStatus } from '../sim/events.js';
 
 // La persona de cada zona avisa lo importante (v1.8): la bienvenida la primera vez que se ve su zona
 // y los problemas que duran (los mismos de los íconos del mapa) en cuanto aparecen. Sin cansar: cada
@@ -49,6 +51,16 @@ export class Chatter {
       this.lastAny = now;
       const mult = season.mult === 1 ? '' : ` (×${String(season.mult).replace('.', ',')})`;
       say(zone, `${season.icon} ¡Llegó ${withArticle(season.name.toLowerCase())}! ${capital(season.text)}${mult}.`, 7000);
+      return;
+    }
+    // Un evento que se abre (una vez al año), dicho por la persona de su zona.
+    for (const def of EVENTS) {
+      const st = eventStatus(state, def.zone);
+      const hint = `event:${def.id}:${st?.year}`;
+      if (st?.kind !== 'available' || state.hints.includes(hint)) continue;
+      state.hints.push(hint);
+      this.lastAny = now;
+      say(def.zone, `${def.icon} ${def.announce}`, 7000);
       return;
     }
     // De noche no hay problemas que avisar: todo descansa.

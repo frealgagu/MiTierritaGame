@@ -5,6 +5,8 @@ import { legacyMult } from '../sim/modifiers.js';
 import { nextToUnlock, zoneOf } from '../sim/chain.js';
 import { clockLabel } from '../render/DayNight.js';
 import { seasonOf } from '../sim/calendar.js';
+import { EVENTS_BY_ID } from '../data/events.js';
+import { formatClock } from './EventBar.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
@@ -50,7 +52,7 @@ export class HUD {
     this.coins.textContent = formatNumber(s.coins);
     // Multiplicador de producción de esta partida (tras reiniciar en el segundo final).
     const mult = legacyMult(s);
-    this.legacy.hidden = mult <= 1;
+    this.legacy.hidden = mult <= 1 || Boolean(s.event);
     const legacyText = `🔁 Producción ${formatMult(mult)}`;
     if (this.legacy.textContent !== legacyText) this.legacy.textContent = legacyText;
     // En rojo si hay deuda (saldo negativo de las opciones de desarrollador).
@@ -60,9 +62,15 @@ export class HUD {
     if (document.title !== title) document.title = title;
     this.income.textContent = `+${formatRate(this.game.incomePerSecond())}/s`;
     const hour = this.getHour();
-    if (hour !== undefined) setText(this.clock, clockLabel(hour));
-    const season = seasonOf(s.playTime);
-    setText(this.season, `${season.icon} ${season.short}`);
+    if (s.event) {
+      // En el tablero de un evento, su propio reloj.
+      setText(this.clock, `⏱ ${formatClock(s.playTime)}`);
+      setText(this.season, `${EVENTS_BY_ID[s.event.id].icon} Evento`);
+    } else {
+      if (hour !== undefined) setText(this.clock, clockLabel(hour));
+      const season = seasonOf(s.playTime);
+      setText(this.season, `${season.icon} ${season.short}`);
+    }
     const zone = this.getZone();
     // La recomendación mira varias zonas (rutas) y cuesta calcularla: como mucho una vez por segundo.
     const now = performance.now();

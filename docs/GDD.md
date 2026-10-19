@@ -567,13 +567,19 @@ export const COST_GROWTH = 1.15;
 - Una partida nueva empieza el primer día del año, a las 8:00, en verano. El reinicio del segundo final vuelve al primer día.
 - Las pruebas de la cadena apagan el calendario (`CALENDAR.on = false`: siempre de día y sin temporada); `test/calendar.test.js` prueba el calendario.
 
-### 10.2 Eventos e insignias (plan, v2.0)
+### 10.2 Eventos e insignias (v2.0: el motor y La broca ✅; los demás eventos, el álbum, la decoración y los logros, en camino)
 - **Tableros aparte**: cada evento usa las piezas de una zona en un tablero separado del mapa, con sus propias monedas y niveles. Tiene **su propio reloj, que se pausa al salir** (para mirar el mapa general) y que no avanza sin conexión.
 - **Una vez al año por zona**: cada zona abre su evento una vez por año de juego; el objetivo cambia de un año al siguiente. Con el tiempo, **4 eventos por zona** (4 medallas por zona, 24 en total). Solo uno a la vez por zona: si pasa, hay que esperar al otro año.
 - **Medallas** según qué tan rápido se cumple: 🥉 bronce, 🥈 plata, 🥇 oro.
 - **Primeros eventos (uno por zona)**: Finca, *La broca* (una plaga que baja la cosecha; trampas, hongo Beauveria y re-re para controlarla); Trapiche, *La gran molienda* (sin leña: la hornilla solo arde con el bagazo que se produce); Lechería, *Feria ganadera* (pedidos con plazo de queso, crema y arequipe); Cacaotal, *Derrumbe en la vía* (la ruta de la panela cortada: aguantar con lo guardado y abrir una trocha); Maizal, *Fiesta del maíz* (tandas de arepas para la fiesta); Pueblo, *El barco sale el viernes* (contenedores llenos antes de que zarpe cada barco).
 - **Renombre ⭐**: las medallas dan Renombre (🥉 1, 🥈 2, 🥇 4), que se acumula en un total que **no se pierde al reiniciar** y nunca se convierte en monedas de la partida. Se gasta en **decoración** (colores de las casas y los balcones, pintura de la chiva y del Willys, ropa de los arrieros, adornos de la plaza) y en el **álbum de láminas** (como el de las chocolatinas: cada medalla y cada logro da una lámina; llenar una página da Renombre extra).
 - **Logros generales** que suman entre partidas (vender, exportar, ganar medallas en todas las zonas…), sin logros de velocidad: con cada reinicio todo va mucho más rápido.
+- **Cómo quedó en la v2.0** (`src/data/events.js`, `src/sim/events.js`):
+  - Cada tablero es una partida aparte (el mismo estado y la misma simulación, con solo la zona del evento) que se juega con su propio `Game`. Su reloj es su `playTime`: avanza solo mientras se está en el tablero. En el tablero siempre es de día y no hay temporada. Se guarda dentro de la partida (`state.events.boards`).
+  - Un evento se abre cuando en la partida están construidas todas las estaciones que usa (así ya se conocen las piezas) y la persona de la zona lo anuncia. Se juega una vez por año de juego; si se empieza, se puede seguir aunque pase el año.
+  - Las estaciones empiezan en el nivel 10, con el Despacho también en 10 y 0 monedas. Las compras del evento son como investigaciones que solo valen en el tablero, en orden. Las investigaciones de la partida no valen en el tablero, ni los reinicios ×2.
+  - **La broca** (Finca): el Cafetal arranca al 40 %; 🪤 Trampas (400) lo deja al 60 %, 🍄 Hongo Beauveria (2.500) al 80 % y 🧺 Re-re (6.000) al 100 %. La plaga se ve sobre el Cafetal mientras no esté controlada. Objetivos por año: vender 100 bolsas (🥇 11:00, 🥈 16:00), producir 500 de café tostado (🥇 12:00, 🥈 17:00) y producir 1.000 de café verde (🥇 11:00, 🥈 16:00); luego se repiten. Calibrado con `tools/event-sim.js`: el jugador automático atento tarda 11–12 min y el que mira cada 30 s, 12–13 min.
+  - El Renombre, las medallas (la mejor de cada evento y cuántas de cada una) y el registro de eventos están en `state.profile`, que pasa a la partida nueva al reiniciar.
 
 ### 10.3 Otras regiones (plan a futuro, después de las fases anteriores)
 - Cada región es un **mapa nuevo con sus propias zonas, cadenas y productos**, con **su propia economía** (monedas, niveles e investigaciones) y **su propio reinicio** (el ×2 del segundo final vale solo para esa región).

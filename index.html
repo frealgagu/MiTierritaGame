@@ -37,11 +37,24 @@
     <section id="panel" class="panel" hidden></section>
 
     <div id="side" class="side">
+      <button id="events-btn" class="side-btn" aria-label="Eventos" title="Eventos" hidden>🏅<span id="events-badge" class="badge" hidden></span></button>
       <button id="goals-btn" class="side-btn" aria-label="Objetivos" title="Objetivos">📋<span id="goals-badge" class="badge" hidden></span></button>
       <button id="research-btn" class="side-btn" aria-label="Investigaciones" title="Investigaciones">🔬<span id="research-badge" class="badge" hidden></span></button>
       <button id="zones-btn" class="side-btn" aria-label="Zonas" title="Zonas" hidden>🗺️<span id="zones-badge" class="badge" hidden></span></button>
     </div>
     <div id="tracker" class="tracker" role="button" tabindex="0" hidden></div>
+    <!-- Tablero de un evento: objetivo, reloj, medallas y compras del evento. -->
+    <div id="event-bar" class="event-bar" hidden>
+      <div class="event-top">
+        <span id="event-title" class="event-title"></span>
+        <span id="event-clock" class="event-clock"></span>
+        <button id="event-exit" class="btn event-exit">Salir</button>
+      </div>
+      <div class="event-goal"><span id="event-goal"></span><span id="event-count"></span></div>
+      <div class="bar"><div id="event-fill" class="bar-fill"></div></div>
+      <div id="event-medals" class="event-medals"></div>
+      <div id="event-actions" class="event-actions"></div>
+    </div>
     <!-- Antes de las ventanas: estas la tapan al abrirse. -->
     <div id="legacy-chip" class="legacy-chip" title="Producción de esta partida" hidden></div>
 
@@ -113,7 +126,7 @@
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Cafetal <small id="menu-version">v1.9.0</small></h2>
+        <h2>Cafetal <small id="menu-version">v2.0.0</small></h2>
         <p id="save-where">Tu partida se guarda sola en este navegador.</p>
         <p id="menu-stats"></p>
         <details class="save-box">
@@ -197,6 +210,7 @@
               <li>En los niveles 10, 25, 50, 75 y 100 hay <b>hitos</b> que multiplican la velocidad.</li>
               <li><b>📋 Objetivos</b> dan monedas y <b>🔬 Investigaciones</b> son mejoras únicas.</li>
               <li>Se trabaja de <b>6:00 a 18:00</b>: de noche todo descansa. Las <b>temporadas</b> (☀️ verano, 🌦️ entrada de aguas, 🌧️ invierno, 🌤️ veranillo) suben o bajan la producción; toca el reloj para ver el calendario.</li>
+              <li>Cuando ya conoces una zona, llega su <b>evento 🏅</b> una vez al año: un tablero aparte con su propio reloj. Cuanto más rápido, mejor la medalla, y las medallas dan <b>Renombre ⭐</b>, que no se pierde al volver a empezar.</li>
               <li>Aunque cierres el juego, la finca sigue produciendo un tiempo y al volver te espera lo ganado.</li>
             </ul>
           </section>
@@ -223,6 +237,27 @@
         <p class="chain-help">Se trabaja de <b>6:00 a 18:00</b>: de noche las estaciones descansan y los arrieros no salen (el Willys y las chivas sí). Un día dura 8 minutos y el año tiene 16 días, en cuatro temporadas de 4 días que cambian la producción de todas las estaciones a la vez:</p>
         <ul id="calendar-seasons" class="calendar-seasons"></ul>
         <p class="chain-help calendar-fact">💡 En el Eje Cafetero hay dos cosechas al año: la grande y la <b>mitaca</b>, una cosecha más pequeña que llega unos seis meses después.</p>
+      </div>
+    </div>
+
+    <div id="events" class="modal" hidden>
+      <div class="modal-card list-modal">
+        <div class="chain-head">
+          <h2>🏅 Eventos</h2>
+          <button id="events-close" class="close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <p class="chain-help">Una vez al año cada zona tiene su evento: un tablero aparte, con sus propias monedas y niveles y un reloj que solo corre mientras juegas en él. Cuanto más rápido cumplas el objetivo, mejor la medalla: 🥇 da 4 ⭐ de Renombre, 🥈 2 y 🥉 1. El Renombre y las medallas no se pierden al volver a empezar.</p>
+        <p id="events-renown" class="events-renown"></p>
+        <div id="events-body" class="list-body"></div>
+      </div>
+    </div>
+
+    <div id="event-result" class="modal" hidden>
+      <div class="modal-card event-result">
+        <div id="event-result-medal" class="event-result-medal"></div>
+        <h2 id="event-result-title"></h2>
+        <p id="event-result-text"></p>
+        <button id="event-result-ok" class="btn buy">Volver</button>
       </div>
     </div>
 

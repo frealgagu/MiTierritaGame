@@ -8,7 +8,9 @@ const RAIN = { entrada: { base: 0.6, from: 0.35 }, invierno: { base: 1, from: -0
 const MAX_DROPS = 160;
 
 // Qué tanto llueve ahora (0..1): aguaceros que van y vienen con el tiempo de juego.
+// playTime null: sin lluvia (el tablero de un evento).
 export function rainAt(playTime) {
+  if (playTime === null) return 0;
   const r = RAIN[seasonOf(playTime).id];
   if (!r) return 0;
   const wave = (Math.sin(playTime / 41) + Math.sin(playTime / 67 + 1.3)) / 2;

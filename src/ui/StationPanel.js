@@ -32,7 +32,7 @@ import { dispatchMult } from '../sim/modifiers.js';
 import { fit, setFitted } from './fit.js';
 import { alerts } from '../sim/alerts.js';
 import { FACTS } from '../data/lore.js';
-import { isWorkTime } from '../sim/calendar.js';
+import { resting } from '../sim/calendar.js';
 
 const SUBTITLE_MS = 7000; // cada cuánto cambia el subtítulo (descripción y datos reales)
 
@@ -378,7 +378,7 @@ function transportInfo(id) {
       const st = s.stations[id];
       const cap = teamCapacity(s, id);
       const who = belt(s) ? 'la banda' : 'las mulas';
-      if (!isWorkTime(s.playTime)) return { text: belt(s) ? '🌙 De noche la banda se apaga: sigue a las 6:00.' : '🌙 De noche los arrieros descansan; los que van de camino terminan el viaje.', bad: false };
+      if (resting(s)) return { text: belt(s) ? '🌙 De noche la banda se apaga: sigue a las 6:00.' : '🌙 De noche los arrieros descansan; los que van de camino terminan el viaje.', bad: false };
       const a = alerts(st);
       if (a.blocked && a.waiting === 'mules') return { text: `⛔ ${belt(s) ? 'La banda no da' : 'Las mulas no dan'} abasto y el patio se llenó: mejora el transporte.`, bad: true };
       if (cap < produce(s)) return { text: `⚠️ La estación produce ${formatRate(produce(s))} ${out.icon}/s y ${who} ${belt(s) ? 'lleva' : 'llevan'} ${formatRate(cap)}/s. Sube el transporte al nivel de la estación (${st.level}).`, bad: true };
@@ -394,7 +394,7 @@ const NIGHT = '🌙 De noche no se trabaja: la jornada sigue a las 6:00.';
 function stationStatus(state, id) {
   const st = state.stations[id];
   const def = STATIONS_BY_ID[id];
-  if (!isWorkTime(state.playTime)) return { text: NIGHT, bad: false };
+  if (resting(state)) return { text: NIGHT, bad: false };
   if (def.side) return composterStatus(state, st);
   const analysis = analyzeChain(state, zoneOf(id));
   const row = analysis.rows.find((r) => r.id === id);

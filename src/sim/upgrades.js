@@ -99,6 +99,8 @@ export function zoneAtLevel(state, zoneId, level) {
 // Investigaciones: aparecen cuando su estación está construida y se compran una vez.
 export function quoteResearch(state, id) {
   const r = RESEARCH_BY_ID[id];
+  // En el tablero de un evento solo valen las compras del evento (sim/events.js).
+  if (state.event) return { ok: false, reason: 'event', cost: r.cost };
   if (state.research.includes(id)) return { ok: false, reason: 'owned', cost: r.cost };
   if (!zoneUnlocked(state, r.zone)) return { ok: false, reason: 'zone', cost: r.cost };
   if (r.requires && !state.stations[r.requires]) return { ok: false, reason: 'locked', cost: r.cost };

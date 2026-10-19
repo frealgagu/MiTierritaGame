@@ -2,7 +2,8 @@
 import { RESEARCH_BY_ID } from '../data/research.js';
 import { PRODUCTS } from '../data/products.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
-import { seasonOf } from './calendar.js';
+import { seasonMult } from './calendar.js';
+import { EVENTS_BY_ID, EVENT_ACTIONS_BY_ID } from '../data/events.js';
 
 const BASE_OFFLINE_HOURS = 2;
 
@@ -22,7 +23,7 @@ function product(state, type, target) {
   if (mult === undefined) {
     mult = 1;
     for (const id of list) {
-      const e = RESEARCH_BY_ID[id]?.effect;
+      const e = (RESEARCH_BY_ID[id] ?? EVENT_ACTIONS_BY_ID[id])?.effect;
       if (e && e.type === type && (target === undefined || e.target === target)) mult *= e.mult;
     }
     byTarget.set(target, mult);
@@ -36,9 +37,11 @@ function product(state, type, target) {
 export const legacyMult = (state) => 2 ** (state.legacy?.resets ?? 0);
 
 // La temporada (v1.9) sube o baja todas las estaciones a la vez; arrieros y rutas se calculan con esta
-// velocidad, así que la cadena sigue cuadrando.
+// velocidad, así que la cadena sigue cuadrando. En el tablero de un evento (v2.0), lo que el evento le
+// hace a cada estación (la broca deja el Cafetal al 40 %).
+const eventSpeed = (state, stationId) => (state.event ? EVENTS_BY_ID[state.event.id].speed?.[stationId] ?? 1 : 1);
 export const speedMult = (state, stationId) =>
-  product(state, 'stationSpeed', stationId) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone) * legacyMult(state) * seasonOf(state.playTime ?? 0).mult;
+  product(state, 'stationSpeed', stationId) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone) * legacyMult(state) * seasonMult(state) * eventSpeed(state, stationId);
 // Patios y entradas: crecen con el reinicio y con la Maestría y la Supremacía de su zona.
 export const capMult = (state, stationId) => legacyMult(state) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone);
 export const muleSpeedMult = (state) => product(state, 'muleSpeed');

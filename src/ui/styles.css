@@ -550,3 +550,51 @@ body.panel-open .legacy-chip { display: none; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 button:focus-visible, .tracker:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+
+/* Eventos (v2.0) */
+.events-renown { margin: 4px 0 8px; font-weight: 700; font-size: 1.05rem; }
+.event-card { border: 2px solid var(--ink); border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; background: var(--paper); }
+.event-card h3 { margin: 0 0 4px; font-size: 1.1rem; display: flex; justify-content: space-between; gap: 8px; }
+.event-card p { margin: 0 0 6px; font-size: 0.9rem; line-height: 1.35; }
+.event-card .event-year { font-weight: 600; }
+.event-card .btn { width: 100%; }
+.event-card.locked { opacity: 0.65; }
+.event-soon { font-size: 0.9rem; opacity: 0.8; text-align: center; margin: 6px 0; }
+.event-bar {
+  position: fixed;
+  left: max(12px, env(safe-area-inset-left, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  max-width: 520px;
+  margin: 0 auto;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.event-bar[hidden] { display: none; }
+body.panel-open .event-bar { display: none; }
+.event-top { display: flex; align-items: center; gap: 8px; }
+.event-title { flex: 1; min-width: 0; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.event-clock { font-weight: 700; font-variant-numeric: tabular-nums; }
+.event-exit { width: auto; padding: 4px 12px; }
+.event-goal { display: flex; justify-content: space-between; gap: 8px; font-size: 0.9rem; font-weight: 600; }
+.event-goal span:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.event-medals { font-size: 0.82rem; opacity: 0.85; }
+.event-actions { display: flex; gap: 6px; }
+.event-action { flex: 1; min-width: 0; padding: 4px 6px; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); color: var(--ink); font: inherit; font-size: 0.78rem; font-weight: 600; line-height: 1.2; }
+.event-action.ready { background: var(--green); color: #fff; }
+.event-action.owned { opacity: 0.55; }
+.event-action.locked { opacity: 0.45; }
+.event-action b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* En el tablero no se ven los objetivos, las investigaciones ni las zonas de la partida. */
+body.event-mode #goals-btn, body.event-mode #research-btn, body.event-mode #zones-btn, body.event-mode #events-btn,
+body.event-mode .tracker, body.event-mode .legacy-chip { display: none !important; }
+.event-result { width: min(360px, 100%); text-align: center; }
+.event-result-medal { font-size: 4.5rem; line-height: 1.1; }
+.event-result h2 { margin: 4px 0 8px; }
+.event-result p { white-space: pre-line; line-height: 1.4; }

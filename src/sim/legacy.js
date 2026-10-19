@@ -23,12 +23,14 @@ export function checkMastery(state, bus) {
 }
 
 // Partida nueva con la producción al doble de la anterior. Se conservan los ajustes, los avisos ya
-// vistos y el registro de las partidas terminadas.
+// vistos, el registro de las partidas terminadas y el Renombre con las medallas.
 export function restartState(state, now = Date.now()) {
   const next = createInitialState(now);
   const history = [...(state.legacy?.history ?? []), { mult: legacyMult(state), playTime: state.playTime, totalEarned: state.totalEarned }];
   next.legacy = { resets: (state.legacy?.resets ?? 0) + 1, history };
   next.settings = { ...state.settings, zone: 'finca' };
   next.hints = [...(state.hints ?? [])];
+  // Lo de los eventos que no se pierde (v2.0): Renombre, medallas y su registro.
+  if (state.profile) next.profile = structuredClone(state.profile);
   return next;
 }

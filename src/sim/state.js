@@ -33,6 +33,10 @@ export function createInitialState(now = Date.now()) {
     goals: { claimed: [] }, // objetivos cobrados
     mastered: false, // segundo final: todas las estaciones en el nivel 100
     legacy: { resets: 0, history: [] }, // reinicios con producción ×2 y partidas terminadas
+    // Eventos (v2.0): el tablero de cada zona que está en juego y el último año en que se terminó.
+    events: { boards: {}, done: {} },
+    // Lo que no se pierde al reiniciar (v2.0): Renombre ⭐, medallas y eventos terminados.
+    profile: { renown: 0, medals: {}, history: [] },
   };
 }
 

@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v2.0.0 — Eventos: La broca
+- **Eventos** 🏅 (botón nuevo a la izquierda): una vez al año cada zona tiene su evento, que se juega en un **tablero aparte** con las piezas de la zona, sus propias monedas y niveles y **su propio reloj**, que solo corre mientras juegas en él (la partida sigue mientras tanto). Se puede salir y volver; si se empezó, se puede terminar aunque pase el año.
+- Según lo rápido que se cumpla el objetivo, **medalla** 🥇 de oro, 🥈 de plata o 🥉 de bronce, que dan **Renombre ⭐** (4, 2 y 1). El Renombre y las medallas **no se pierden al volver a empezar**; pronto se gastarán en decoración y en el álbum de láminas.
+- El primer evento: **🪲 La broca**, en la Finca. Un cucarroncito tiene el Cafetal produciendo al 40 %: contrólalo con 🪤 trampas, 🍄 el hongo Beauveria y 🧺 el re-re mientras sacas la cosecha. Cada año cambia el objetivo (bolsas de café, café tostado, café verde).
+- El evento se abre cuando ya construiste todas las estaciones de la zona, y Don Jairo avisa.
+- En el tablero, la barra de abajo muestra el objetivo, el reloj con la medalla que llevas, los tiempos de cada medalla y las compras del evento.
+
 ## v1.9.0 — Jornada y temporadas
 - **Jornada de trabajo de 6:00 a 18:00.** De noche las estaciones descansan del todo (lo que iba a medias sigue al amanecer) y los arrieros no salen; los que van de camino terminan el viaje. El Willys y las chivas siguen. No se compensa: el juego se hace más largo a propósito.
 - **Temporadas del país**, secas y de lluvias, que cambian la producción de **todas las estaciones a la vez** (arrieros y rutas se ajustan solos, así que la cadena sigue cuadrando):

@@ -13,6 +13,10 @@ import { showMastery } from './ui/mastery.js';
 import { introOnStart, showIntro } from './ui/intro.js';
 import { showCalendar } from './ui/calendar.js';
 import { Chatter } from './ui/Chatter.js';
+import { EventsView } from './ui/EventsView.js';
+import { EventBar, formatClock } from './ui/EventBar.js';
+import { finishEvent, startEvent } from './sim/events.js';
+import { MEDALS } from './data/events.js';
 import { bindNative, isNativeApp } from './native.js';
 import { checkMastery, restartState } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
@@ -66,13 +70,16 @@ async function start() {
 
   // Zona que se está viendo (las demás siguen produciendo). Se recuerda con la partida.
   const view = { zone: game.state.zones[game.state.settings.zone]?.unlocked ? game.state.settings.zone : 'finca' };
-  const getZone = () => view.zone;
+  // Tablero de un evento en juego (v2.0): { zone, game } con su propio Game, o null.
+  let board = null;
+  const getZone = () => board?.zone ?? view.zone;
   let scene = null;
   const panel = new StationPanel(game, () => scene?.select(null));
   // id puede ser 'farm', 'farm:transport' (pestaña de arrieros), 'dispatch:<zona>', 'route:<ruta>'
   // (pestaña 🚌 de la estación que abastece, o un panel suelto si se ve otra zona) o 'research:<id>'.
   const select = (id) => {
     const [stationId, part] = id.split(':');
+    if (stationId === 'research' && board) return; // en el tablero no hay investigaciones
     if (stationId === 'research') {
       research.open();
       return;
@@ -104,6 +111,8 @@ async function start() {
   const showZone = (zoneId) => {
     // Primero el panel: al cerrarse quita la selección de la escena, que aún debe existir.
     if (panel.id) panel.close();
+    // Ir a una zona de la partida sale del tablero del evento (que queda guardado tal cual).
+    if (board) leaveBoard();
     if (scene) scene.destroy();
     view.zone = zoneId;
     game.state.settings.zone = zoneId;
@@ -121,6 +130,56 @@ async function start() {
     showZone(z);
     toast(`${ZONES_BY_ID[z].icon} ${ZONES_BY_ID[z].name}`, 2000);
   });
+
+  // Eventos: entrar y salir del tablero. La partida sigue corriendo; el reloj del tablero solo cuando se
+  // está en él. Mientras tanto, el HUD, el panel y la cadena muestran el tablero.
+  const eventBar = new EventBar(() => exitEvent());
+  const useGame = (g) => {
+    hud.game = g;
+    panel.game = g;
+    chain.game = g;
+    hud.recDirty = true;
+  };
+  const enterEvent = (zoneId) => {
+    const state = startEvent(game.state, zoneId);
+    if (!state) return;
+    if (panel.id) panel.close();
+    scene.destroy();
+    const eg = new Game(state);
+    eg.timeScale = game.timeScale;
+    for (const type of ['levelUp', 'unlocked', 'research']) eg.bus.on(type, () => (hud.recDirty = true));
+    board = { zone: zoneId, game: eg };
+    scene = new Scene(app, eg, sound, ZONES_BY_ID[zoneId]);
+    scene.onSelect = select;
+    useGame(eg);
+    document.body.classList.add('event-mode');
+    eventBar.show(eg);
+    if (import.meta.env.DEV) window.__cafetal = { ...window.__cafetal, scene, board };
+  };
+  const leaveBoard = () => {
+    board = null;
+    useGame(game);
+    document.body.classList.remove('event-mode');
+    eventBar.show(null);
+  };
+  const exitEvent = () => {
+    if (!board) return;
+    if (panel.id) panel.close();
+    leaveBoard();
+    showZone(view.zone);
+  };
+  const events = new EventsView(game, enterEvent);
+  const showEventResult = (r) => {
+    const m = MEDALS[r.medal];
+    document.getElementById('event-result-medal').textContent = m.icon;
+    document.getElementById('event-result-title').textContent = `¡Medalla de ${m.name}!`;
+    document.getElementById('event-result-text').textContent =
+      `${r.def.icon} ${r.def.name}, año ${r.year}: lo lograste en ${formatClock(r.time)}.\n+${m.renown} ⭐ de Renombre (tienes ${game.state.profile.renown}).\nEl año que viene vuelve, con otro objetivo.`;
+    const modal = document.getElementById('event-result');
+    document.getElementById('event-result-ok').onclick = () => (modal.hidden = true);
+    modal.hidden = false;
+    sound.milestone();
+  };
 
   game.bus.on('goalClaimed', ({ goal, zone }) => {
     if (goal.final) {
@@ -200,13 +259,24 @@ async function start() {
   app.ticker.add((ticker) => {
     const dt = ticker.deltaMS / 1000;
     safely(() => game.update(dt));
+    safely(() => {
+      if (!board) return;
+      board.game.timeScale = game.timeScale;
+      board.game.update(dt);
+      const r = finishEvent(game.state, board.zone);
+      if (r) {
+        exitEvent();
+        showEventResult(r);
+      }
+    });
     safely(() => scene.update(dt));
     uiTimer -= dt;
     if (uiTimer <= 0) {
       uiTimer = 0.2;
       safely(() => hud.update());
       safely(() => scene.setGuide(panel.id ? null : hud.guide));
-      for (const view of [panel, chain, goals, research, zones, chatter]) safely(() => view.update());
+      // En el tablero de un evento, la persona de la zona no avisa lo de la partida.
+      for (const view of [panel, chain, goals, research, zones, events, eventBar, ...(board ? [] : [chatter])]) safely(() => view.update());
     }
   });
 
