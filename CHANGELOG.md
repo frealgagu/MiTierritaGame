@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v1.8.2 — La cadena, más clara
+- La vista de la cadena (🔗) ahora es un árbol:
+  - Las estaciones se unen con **eslabones**, en línea recta (antes, una raya punteada que se corría de lado en las ramas).
+  - Cuando una estación reparte entre varias, cada **rama** va en su propio bloque, de su color, con su nombre: «Rama A · Greca de tintos → Fonda», «Rama B · Taller de canastas → Empaque de regalos → Patio de contenedores». Antes las ramas iban una detrás de otra y parecía que la Fonda le pasaba su producto al Taller.
+  - Lo que llega de **otras zonas** va en una caja azul aparte, que entra a la estación: qué producto, desde qué zona, por qué ruta y cuánto llega («Panela pulverizada desde 🎋 El Trapiche · Ruta de la panela al Pueblo · llegan 0,67/s»).
+  - La siguiente estación por construir aparece en su lugar del árbol, en su rama.
+
 ## v1.8.1 — Horas sin conexión por zona
 - **Horas sin conexión**: cada zona tiene ahora su investigación que suma horas a las ganancias sin conexión, y se suman entre sí: Capataz (Finca) +3 h, Trapichero de confianza (Trapiche) +3 h, Ordeño programado (Lechería) +4 h, Vigilante del cacaotal +4 h, Vecina que cuida el budare (Maizal) +4 h y Administrador del Pueblo +4 h. Con la base de 2 h, **24 h** con las seis. (El Capataz daba 6 h; ahora da 5 h hasta comprar la del Trapiche.)
 - **Opciones de desarrollador**: el tiempo acelerado ya no multiplica el tiempo fuera; sin conexión cuenta a velocidad normal (multiplicarlo hacía que volver tardara mucho en calcularse).
