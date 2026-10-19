@@ -1,3 +1,4 @@
+import { ZONES_BY_ID } from '../src/data/zones/index.js';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
@@ -80,7 +81,8 @@ test('cada zona suma horas sin conexión: el capataz +3 h y, con las seis, 24 h'
   assert.equal(offlineCapSeconds(game.state), 2 * 3600);
   game.state.research.push('capataz');
   assert.equal(offlineCapSeconds(game.state), 5 * 3600);
-  const offline = RESEARCH.filter((r) => r.effect.type === 'offlineHours');
+  // Las del Eje Cafetero (cada región tiene las suyas, para su propia partida).
+  const offline = RESEARCH.filter((r) => r.effect.type === 'offlineHours' && ZONES_BY_ID[r.zone].region === undefined);
   assert.deepEqual(offline.map((r) => r.zone), ['finca', 'trapiche', 'lecheria', 'cacaotal', 'maizal', 'pueblo']);
   game.state.research = offline.map((r) => r.id);
   assert.equal(offlineCapSeconds(game.state), 24 * 3600);
@@ -211,7 +213,7 @@ test('la compostera no tiene arrieros ni cuenta para «todas las estaciones»', 
 
 test('ningún objetivo pide vender un producto intermedio (podría quedar imposible)', () => {
   // Las fuentes se venden sí o sí al empezar cada zona; los productos finales siempre llegan a la bodega.
-  const finals = new Set(['cherry', 'coffee_bag', 'cane', 'panela_powder', 'raw_milk', 'butter', 'cheese', 'arequipe', 'cacao_pod', 'table_chocolate', 'milk_chocolate', 'corn_cob', 'arepa', 'cheese_arepa', 'breakfast', 'container']);
+  const finals = new Set(['cherry', 'coffee_bag', 'cane', 'panela_powder', 'raw_milk', 'butter', 'cheese', 'arequipe', 'cacao_pod', 'table_chocolate', 'milk_chocolate', 'corn_cob', 'arepa', 'cheese_arepa', 'breakfast', 'container', 'guava', 'bocadillo_crate']);
   for (const g of GOALS) if (g.type === 'sold') assert.ok(finals.has(g.product), `${g.id} pide vender ${g.product}`);
 });
 

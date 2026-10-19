@@ -35,6 +35,14 @@ export const ICON = {
   container: '\uE01D', // Contenedor de exportación: el contenedor de acero, con sus puertas, listo para el barco
   breakfast: '\uE01E', // Desayuno campesino: arepa, huevo frito y una taza de chocolate
   coffeePlant: '\uE01F', // Mata de café: arbusto verde oscuro, de hojas brillantes, con racimos de cerezas rojas
+  guavaTree: '\uE020', // Guayabo: árbol de tronco liso y copa redonda, con guayabas amarillas
+  guava: '\uE021', // Guayaba: una entera, verde amarilla con su coronita, y media abierta, rosada por dentro
+  guavaPulp: '\uE022', // Pulpa de guayaba: totuma de madera llena de pulpa rosada espesa
+  guavaJelly: '\uE023', // Melado de guayaba: paila de cobre con la pulpa cocinándose, espesa y roja, con burbujas
+  bocadilloBlock: '\uE024', // Bloque de bocadillo: el dulce de guayaba recién desmoldado, rojo vino, sobre una tabla
+  bocadillo: '\uE025', // Bocadillo: barrita rojo vino con su franja blanca de guayaba blanca (el combinado)
+  bocadilloBijao: '\uE026', // Bocadillo veleño: envuelto en hoja de bijao seca, amarrado con un hilo de fique
+  bocadilloCrate: '\uE027', // Caja de bocadillos veleños: cajita de madera abierta, con los bocadillos en bijao
 };
 
 export const ICON_FONT = 'Cafetal Icons';

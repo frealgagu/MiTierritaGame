@@ -21,6 +21,8 @@ import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/s
 import { EventBar, formatClock } from './ui/EventBar.js';
 import { finishEvent, startEvent } from './sim/events.js';
 import { MEDALS } from './data/events.js';
+import { REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
+import { openRegions } from './sim/regions.js';
 import { bindNative, isNativeApp } from './native.js';
 import { checkMastery, restartState } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
@@ -60,11 +62,26 @@ async function start() {
 
   const saved = loadGame();
   const game = new Game(saved ?? undefined);
+  // Regiones (v3.0): la partida principal (el Eje Cafetero) guarda las demás, cada una con su Game, y
+  // todas producen a la vez.
+  const root = game.state;
+  openRegions(root); // una partida que ya tenía el Pueblo completo antes de la v3.0
+  const games = { cafetero: game };
+  for (const id of Object.keys(root.regions ?? {})) games[id] = new Game(root.regions[id]);
+  const gameOf = (zoneId) => games[REGION_OF_ZONE[zoneId]];
   // La decoración elegida, antes de dibujar nada.
-  setLook(game.state.profile);
+  setLook(root.profile);
   // La velocidad de las opciones de desarrollador sigue puesta al volver, también para el tiempo fuera.
   game.timeScale = savedSpeed();
-  const offline = saved ? await applyOffline(game, (Date.now() - saved.savedAt) / 1000) : null;
+  const away = saved ? (Date.now() - saved.savedAt) / 1000 : 0;
+  const offline = saved ? await applyOffline(game, away) : null;
+  // Las otras regiones también (cada una con sus monedas: se avisa aparte).
+  const regionOffline = [];
+  for (const [id, g] of Object.entries(games)) {
+    if (id === 'cafetero' || !saved) continue;
+    const r = await applyOffline(g, away, REGIONS_BY_ID[id]);
+    if (r) regionOffline.push([id, r]);
+  }
 
   const sound = new Sound();
   sound.setEnabled(game.state.settings.sound);
@@ -76,12 +93,21 @@ async function start() {
   });
 
   // Zona que se está viendo (las demás siguen produciendo). Se recuerda con la partida.
-  const view = { zone: game.state.zones[game.state.settings.zone]?.unlocked ? game.state.settings.zone : 'finca' };
+  const saw = root.settings.zone;
+  const view = { zone: gameOf(saw)?.state.zones[saw]?.unlocked ? saw : 'finca' };
+  // La partida de la región que se está viendo (la del Eje Cafetero o la de otra región).
+  let active = gameOf(view.zone);
   // Tablero de un evento en juego (v2.0): { zone, game } con su propio Game, o null.
   let board = null;
   const getZone = () => board?.zone ?? view.zone;
   let scene = null;
-  const panel = new StationPanel(game, () => scene?.select(null));
+  const panel = new StationPanel(active, () => scene?.select(null));
+  // Lo que muestra la interfaz: la región que se está viendo o el tablero de un evento.
+  let hud, chain, chatter, goals, research, zones;
+  const useGame = (g) => {
+    for (const v of [hud, panel, chain, chatter, goals, research]) if (v) v.game = g;
+    if (hud) hud.recDirty = true;
+  };
   // id puede ser 'farm', 'farm:transport' (pestaña de arrieros), 'dispatch:<zona>', 'route:<ruta>'
   // (pestaña 🚌 de la estación que abastece, o un panel suelto si se ve otra zona) o 'research:<id>'.
   const select = (id) => {
@@ -97,7 +123,7 @@ async function start() {
       return;
     }
     if (stationId === 'route') {
-      const station = ROUTES_BY_ID[part].stations.find((sid) => scene.stations[sid] && game.state.stations[sid]);
+      const station = ROUTES_BY_ID[part].stations.find((sid) => scene.stations[sid] && active.state.stations[sid]);
       if (station) {
         scene.select(station);
         panel.open(station, id);
@@ -122,18 +148,21 @@ async function start() {
     if (board) leaveBoard();
     if (scene) scene.destroy();
     view.zone = zoneId;
-    game.state.settings.zone = zoneId;
-    scene = new Scene(app, game, sound, ZONES_BY_ID[zoneId]);
+    root.settings.zone = zoneId;
+    active = gameOf(zoneId);
+    useGame(active);
+    music.setRegion(REGIONS_BY_ID[active.state.region ?? 'cafetero'].music);
+    scene = new Scene(app, active, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
-    if (import.meta.env.DEV) window.__cafetal = { game, scene, panel, select, music };
+    if (import.meta.env.DEV) window.__cafetal = { game: active, root: game, games, scene, panel, select, music };
   };
   showZone(view.zone);
-  const hud = new HUD(game, select, () => scene.dayNight.hour, getZone);
-  const chain = new ChainView(game, select, getZone);
-  const chatter = new Chatter(game, getZone);
-  const goals = new GoalsView(game, getZone);
-  const research = new ResearchView(game, getZone);
-  const zones = new ZonesView(game, getZone, (z) => {
+  hud = new HUD(active, select, () => scene.dayNight.hour, getZone);
+  chain = new ChainView(active, select, getZone);
+  chatter = new Chatter(active, getZone);
+  goals = new GoalsView(active, getZone);
+  research = new ResearchView(active, getZone);
+  zones = new ZonesView(game, games, getZone, (z) => {
     showZone(z);
     toast(`${ZONES_BY_ID[z].icon} ${ZONES_BY_ID[z].name}`, 2000);
   });
@@ -141,12 +170,6 @@ async function start() {
   // Eventos: entrar y salir del tablero. La partida sigue corriendo; el reloj del tablero solo cuando se
   // está en él. Mientras tanto, el HUD, el panel y la cadena muestran el tablero.
   const eventBar = new EventBar(() => exitEvent());
-  const useGame = (g) => {
-    hud.game = g;
-    panel.game = g;
-    chain.game = g;
-    hud.recDirty = true;
-  };
   const enterEvent = (zoneId) => {
     const state = startEvent(game.state, zoneId);
     if (!state) return;
@@ -165,7 +188,7 @@ async function start() {
   };
   const leaveBoard = () => {
     board = null;
-    useGame(game);
+    useGame(active);
     document.body.classList.remove('event-mode');
     eventBar.show(null);
   };
@@ -203,47 +226,63 @@ async function start() {
     sound.milestone();
   };
 
-  game.bus.on('goalClaimed', ({ goal, zone }) => {
-    if (goal.final) {
-      sound.milestone();
-      showVictory(game.state, zone, (next) => showZone(next));
-    } else {
-      sound.coin();
-      toast(`🎯 ¡Objetivo cumplido! +${formatNumber(goal.reward)} 💰`, 3000);
-    }
-  });
-  // Segundo final: todas las estaciones en el nivel 100. Se puede volver a empezar con producción ×2.
-  const restart = () => {
+  // Segundo final: todas las estaciones de la región en el nivel 100. Se puede volver a empezar la
+  // región con producción ×2 (las demás siguen como están).
+  const restart = (g) => {
     resetting = true;
-    saveGame(restartState(game.state));
+    if (g === game) saveGame(restartState(root));
+    else {
+      root.regions[g.state.region] = restartState(g.state);
+      saveGame(root);
+    }
     location.reload();
   };
-  const mastery = () => showMastery(game.state, restart);
-  game.bus.on('mastered', () => {
-    // Si llega al cobrar el primer final (ya estaba todo al 100), primero la pantalla del Pueblo y,
-    // al cerrarla, la del segundo final.
-    const victory = document.getElementById('victory');
-    const show = () => {
+  const mastery = (g = active) => showMastery(g.state, () => restart(g));
+  // Lo que avisa cada región: objetivos, finales e investigaciones.
+  const wire = (g) => {
+    g.bus.on('goalClaimed', ({ goal, zone }) => {
+      if (!goal.final) {
+        sound.coin();
+        toast(`🎯 ¡Objetivo cumplido! +${formatNumber(goal.reward)} 💰`, 3000);
+        return;
+      }
       sound.milestone();
-      mastery();
-    };
-    if (victory.hidden) return show();
-    const watch = new MutationObserver(() => {
-      if (!victory.hidden) return;
-      watch.disconnect();
-      show();
+      // El Pueblo abre Santander (v3.0): su partida empieza a producir de una vez.
+      const opened = openRegions(root);
+      for (const id of opened) {
+        games[id] = new Game(root.regions[id]);
+        games[id].timeScale = game.timeScale;
+        wire(games[id]);
+      }
+      showVictory(g.state, zone, (next) => showZone(next), opened);
     });
-    watch.observe(victory, { attributes: true, attributeFilter: ['hidden'] });
-  });
-  goals.onMastery = mastery;
+    g.bus.on('mastered', () => {
+      // Si llega al cobrar el primer final (ya estaba todo al 100), primero la pantalla del final de
+      // la zona y, al cerrarla, la del segundo final.
+      const victory = document.getElementById('victory');
+      const show = () => {
+        sound.milestone();
+        mastery(g);
+      };
+      if (victory.hidden) return show();
+      const watch = new MutationObserver(() => {
+        if (!victory.hidden) return;
+        watch.disconnect();
+        show();
+      });
+      watch.observe(victory, { attributes: true, attributeFilter: ['hidden'] });
+    });
+    g.bus.on('research', ({ id }) => {
+      sound.milestone();
+      toast(`🔬 ${RESEARCH_BY_ID[id].name}: ${RESEARCH_BY_ID[id].desc}`, 4000);
+    });
+    checkMastery(g.state, g.bus); // una partida que ya lo tenía todo al 100 antes de la v1.6
+  };
+  for (const g of Object.values(games)) wire(g);
+  goals.onMastery = () => mastery(active);
   document.getElementById('restart-btn').addEventListener('click', () => {
     document.getElementById('menu').hidden = true;
-    mastery();
-  });
-  checkMastery(game.state, game.bus); // una partida que ya lo tenía todo al 100 antes de la v1.6
-  game.bus.on('research', ({ id }) => {
-    sound.milestone();
-    toast(`🔬 ${RESEARCH_BY_ID[id].name}: ${RESEARCH_BY_ID[id].desc}`, 4000);
+    mastery(active);
   });
   window.addEventListener('resize', () => scene.resize(app.screen.width, app.screen.height));
   // Esc (o «atrás» en Android) cierra la ventana abierta o, si no hay ninguna, el panel de la estación.
@@ -261,6 +300,7 @@ async function start() {
 
   hideSplash();
   if (offline) showWelcome(offline, () => sound.coin());
+  for (const [id, r] of regionOffline) toast(`${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name} también siguió trabajando: +💰 ${formatNumber(r.coins)}`, 5000);
   // Cómo se juega, encima de todo (la bienvenida queda debajo, para después).
   if (introOnStart(game.state)) showIntro(game.state);
   document.getElementById('clock').addEventListener('click', () => showCalendar(game.state));
@@ -283,7 +323,11 @@ async function start() {
   app.ticker.add((ticker) => {
     if (catching) return;
     const dt = ticker.deltaMS / 1000;
-    safely(() => game.update(dt));
+    // Todas las regiones producen a la vez (a la velocidad de las opciones de desarrollador).
+    for (const g of Object.values(games)) {
+      g.timeScale = game.timeScale;
+      safely(() => g.update(dt));
+    }
     safely(() => {
       if (!board) return;
       board.game.timeScale = game.timeScale;
@@ -334,6 +378,11 @@ async function start() {
     catching = true;
     try {
       const r = await applyOffline(game, away);
+      for (const [id, g] of Object.entries(games)) {
+        if (id === 'cafetero') continue;
+        const rr = await applyOffline(g, away, REGIONS_BY_ID[id]);
+        if (rr) toast(`${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name} también siguió trabajando: +💰 ${formatNumber(rr.coins)}`, 5000);
+      }
       if (r) showWelcome(r, () => sound.coin());
     } finally {
       catching = false;
@@ -343,7 +392,7 @@ async function start() {
   document.addEventListener('visibilitychange', () => (document.hidden ? onHide() : onShow()));
   window.addEventListener('pagehide', persist);
 
-  bindMenu(game, sound, music);
+  bindMenu(game, sound, music, () => active);
   bindDevOptions(game);
   // En la app de Android el juego ya va dentro del paquete: sin service worker, con el botón «atrás».
   if (isNativeApp()) bindNative({ closeTop, onHide, onShow });
@@ -359,16 +408,17 @@ async function start() {
 // Siempre a velocidad normal: el tiempo acelerado de las opciones de desarrollador solo cuenta con el
 // juego abierto (multiplicar el tiempo fuera hacía que volver tardara mucho en calcularse).
 // Por partes, con la pantalla de carga y su barra (en un teléfono, 24 h pueden tardar varios segundos).
-async function applyOffline(game, seconds) {
+async function applyOffline(game, seconds, region = null) {
   if (seconds < MIN_OFFLINE_S) return null;
   const cap = offlineCapSeconds(game.state);
-  splashOffline(seconds, cap);
+  splashOffline(seconds, cap, region);
   const r = await game.catchUpAsync(seconds, cap, setSplashProgress);
   splashWait('¡Listo! Preparando el mapa…');
   return r.coins > 0 ? { ...r, cap, capped: seconds > cap } : null;
 }
 
-function bindMenu(game, sound, music) {
+// getActive: la partida de la región que se está viendo (su segundo final y su reinicio).
+function bindMenu(game, sound, music, getActive) {
   const menu = document.getElementById('menu');
   const soundBtn = document.getElementById('sound-btn');
   const paintSound = () => (soundBtn.textContent = game.state.settings.sound ? '🔊 Sonido: sí' : '🔇 Sonido: no');
@@ -392,8 +442,9 @@ function bindMenu(game, sound, music) {
     document.getElementById('menu-stats').textContent =
       `Tiempo jugado: ${formatDuration(s.playTime)} · Ganado en total: 💰 ${formatNumber(s.totalEarned)} · Cerezas vendidas: ${formatNumber(s.stats.sold.cherry ?? 0)}`;
     const restartBtn = document.getElementById('restart-btn');
-    restartBtn.hidden = !s.mastered;
-    restartBtn.textContent = `🔁 Volver a empezar ${formatMult(legacyMult(s) * 2)}`;
+    const here = getActive().state;
+    restartBtn.hidden = !here.mastered;
+    restartBtn.textContent = `🔁 Volver a empezar ${here.region === 'cafetero' ? '' : `${REGIONS_BY_ID[here.region].name} `}${formatMult(legacyMult(here) * 2)}`;
     menu.hidden = false;
   });
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));

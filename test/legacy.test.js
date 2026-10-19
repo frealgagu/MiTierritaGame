@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { analyzeChain } from '../src/sim/analysis.js';
 import { chainOf } from '../src/sim/chain.js';
-import { ALL_STATIONS, maxedCount, restartState } from '../src/sim/legacy.js';
+import { maxedCount, restartState, stationsOf } from '../src/sim/legacy.js';
 import { legacyMult } from '../src/sim/modifiers.js';
 import { ZONE_LIST } from '../src/data/zones/index.js';
 import { CALENDAR } from '../src/sim/calendar.js';
@@ -60,7 +60,7 @@ test('el segundo final llega al subir la última estación al nivel 100', () => 
   const game = everything(100);
   const s = game.state;
   s.zones.pueblo.complete = true;
-  assert.equal(ALL_STATIONS.length, 38);
+  assert.equal(stationsOf(s).length, 38, 'las del Eje Cafetero');
   s.stations.export_dock.level = 99;
   assert.equal(maxedCount(s), 37);
   const events = [];
@@ -84,7 +84,7 @@ test('sin el primer final no hay segundo: llega al cobrar los contenedores del P
   // Todo al nivel 100, pero el Pueblo sin completar: no cuenta.
   s.stations.export_dock.level = 99;
   assert.ok(game.buy('export_dock', 1));
-  assert.equal(maxedCount(s), ALL_STATIONS.length);
+  assert.equal(maxedCount(s), stationsOf(s).length);
   assert.equal(s.mastered, false);
   assert.equal(events.length, 0);
   // Se cumplen y cobran los objetivos del Pueblo; el último (exportar los contenedores) es el primer final.

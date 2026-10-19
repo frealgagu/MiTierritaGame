@@ -1340,4 +1340,183 @@ const DRAW = {
       }
     };
   },
+
+  // --- Santander · La Guayabera (v3.0) ---
+
+  // Despulpadora de guayaba: casa con la máquina en el patio, guayabas en la tolva y pulpa en la tina.
+  guava_pulper(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.8, 1.5, 28, ctx, { wall: 0xf6e7c8 });
+    door(g, hx, hy, 1.5, 0.9, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.8, 0.75, 14, PAL.balconyYellow);
+    // Tolva con guayabas.
+    const t = iso(x + 2.5, y + 0.8, 28);
+    box(g, x + 2.35, y + 0.65, 0.3, 0.3, 18, 0x6c757d);
+    g.poly([t.x - 14, t.y - 6, t.x + 14, t.y - 6, t.x + 5, t.y + 12, t.x - 5, t.y + 12]).fill(0x9aa3a8).stroke(OUTLINE);
+    g.ellipse(t.x, t.y - 6, 14, 5).fill(PRODUCTS.guava.color).stroke(OUTLINE);
+    for (const [dx, dy] of [[-6, -7], [0, -9], [6, -7], [-2, -5]]) g.circle(t.x + dx, t.y + dy, 2.6).fill(0xd4e157).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+    // Tinas de pulpa rosada.
+    for (const tx of [0.5, 1.4]) {
+      box(g, x + tx, y + 2.1, 0.7, 0.55, 9, 0xc7beb0);
+      g.poly(isoPoly([[x + tx + 0.06, y + 2.16, 9], [x + tx + 0.64, y + 2.16, 9], [x + tx + 0.64, y + 2.59, 9], [x + tx + 0.06, y + 2.59, 9]])).fill(PRODUCTS.guava_pulp.color);
+    }
+    const drip = new Graphics();
+    this.anim.addChild(drip);
+    this.animate = (time) => {
+      drip.clear();
+      const f = (time * 0.8) % 1;
+      const p = iso(x + 2.5, y + 0.8, 10 - f * 10);
+      drip.circle(p.x, p.y, 2).fill({ color: PRODUCTS.guava_pulp.color, alpha: 1 - f * 0.5 });
+    };
+  },
+
+  // Paila de bocadillo: ramada con el fogón y la paila de cobre; el bocadillo se revuelve sin parar.
+  guava_pot(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 2.1;
+    const H = 26 + ctx.up;
+    box(g, x0 + 0.5, y0 + 0.5, 1.3, 1.1, 10, 0xb5653a);
+    const c = iso(x0 + 1.15, y0 + 1.05, 10);
+    g.ellipse(c.x, c.y, 26, 13).fill(0xb87333).stroke(OUTLINE);
+    g.ellipse(c.x, c.y, 21, 10).fill(PRODUCTS.guava_jelly.color);
+    const mouth = iso(x0 + 0.8, y0 + 1.6, 4);
+    g.ellipse(mouth.x, mouth.y, 6, 4).fill(0x2b1a10).stroke(OUTLINE);
+    this.lights.push({ x: mouth.x, y: mouth.y, r: 24, color: 0xff7a1a });
+    for (let i = 0; i < 3; i++) {
+      const p = iso(x + 0.3 + i * 0.12, y + 2.65, i * 2);
+      g.roundRect(p.x - 10, p.y - 4, 20, 4, 2).fill(0x8b5a2b).stroke(OUTLINE);
+    }
+    // Canastos de guayaba madura junto al fogón.
+    for (const [bx, by] of [[2.3, 2.4], [2.65, 2.55]]) {
+      const p = iso(x + bx, y + by);
+      g.poly([p.x - 8, p.y - 10, p.x + 8, p.y - 10, p.x + 6, p.y, p.x - 6, p.y]).fill(0xc8a26b).stroke(OUTLINE);
+      for (const dx of [-4, 0, 4]) g.circle(p.x + dx, p.y - 11, 2.6).fill(PRODUCTS.guava.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 13, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    const stir = new Graphics();
+    this.anim.addChild(stir);
+    this.animate = (time) => {
+      stir.clear();
+      const a = time * 2.5;
+      const ex = c.x + Math.cos(a) * 12;
+      const ey = c.y + Math.sin(a) * 5;
+      stir.moveTo(ex, ey).lineTo(ex + 8, ey - 26).stroke({ width: 3, color: PAL.wood });
+      for (let i = 0; i < 2; i++) {
+        const f = (time * 1.2 + i * 0.5) % 1;
+        stir.circle(c.x - 8 + i * 14, c.y - f * 3, 2 * (1 - f)).fill({ color: 0xf06292, alpha: 1 - f });
+      }
+      stir.ellipse(mouth.x, mouth.y + 1, 4, 2.5).fill({ color: 0xff7a1a, alpha: 0.6 + Math.sin(time * 9) * 0.3 });
+    };
+    this.animate(0);
+  },
+
+  // Moldes de madera: mesas largas con los moldes llenos de bocadillo cuajando, bajo un techo.
+  guava_molds(g, x, y, ctx) {
+    const x0 = x + 0.25;
+    const y0 = y + 0.3;
+    const w = 2.5;
+    const d = 2.2;
+    const H = 26 + ctx.up;
+    const tables = ctx.tier >= 2 ? [0.25, 0.95, 1.6] : [0.4, 1.3];
+    for (const ty of tables) {
+      box(g, x0 + 0.2, y0 + ty, w - 0.4, 0.5, 9, PAL.wood);
+      for (let i = 0; i < 3; i++) {
+        box(g, x0 + 0.3 + i * 0.66, y0 + ty + 0.08, 0.56, 0.34, 3, PAL.woodDark, { z: 9 });
+        g.poly(isoPoly([[x0 + 0.34 + i * 0.66, y0 + ty + 0.12, 12], [x0 + 0.82 + i * 0.66, y0 + ty + 0.12, 12], [x0 + 0.82 + i * 0.66, y0 + ty + 0.38, 12], [x0 + 0.34 + i * 0.66, y0 + ty + 0.38, 12]])).fill(PRODUCTS.bocadillo_block.color);
+      }
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 14, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 14);
+    const bulb = iso(x0 + w / 2, y0 + d / 2, H - 4);
+    this.lights.push({ x: bulb.x, y: bulb.y, r: 30 });
+    const steam = new Graphics();
+    this.anim.addChild(steam);
+    this.animate = (time) => {
+      steam.clear();
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.6 + i / 3) % 1;
+        const p = iso(x0 + 0.6 + i * 0.66, y0 + tables[0] + 0.25, 14 + f * 18);
+        steam.circle(p.x, p.y, 3 + f * 4).fill({ color: 0xffffff, alpha: 0.5 * (1 - f) });
+      }
+    };
+  },
+
+  // Cortadora: casa con una mesa donde los bloques se cortan en barritas.
+  bocadillo_cutter(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.0, 1.6, 28, ctx, { wall: 0xf4efe6, roofH: 14 });
+    door(g, hx, hy, 1.6, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.0, 0.8, 14, PAL.balconyYellow);
+    // Mesa de corte en el patio, con el bloque y las barritas.
+    box(g, x + 0.4, y + 2.1, 1.9, 0.5, 9, PAL.wood);
+    box(g, x + 0.5, y + 2.18, 0.7, 0.34, 5, PRODUCTS.bocadillo_block.color, { z: 9 });
+    for (let i = 0; i < 5; i++) box(g, x + 1.35 + i * 0.17, y + 2.2, 0.11, 0.3, 4, PRODUCTS.bocadillo.color, { z: 9 });
+    const knife = new Graphics();
+    this.anim.addChild(knife);
+    this.animate = (time) => {
+      knife.clear();
+      const k = Math.abs(Math.sin(time * 3));
+      const p = iso(x + 1.25, y + 2.35, 14 + k * 10);
+      knife.rect(p.x - 1, p.y - 14, 2, 14).fill(0xd0d4d8).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.6 });
+      knife.rect(p.x - 2, p.y - 20, 4, 6).fill(PAL.woodDark);
+    };
+    this.animate(0);
+  },
+
+  // Envoltura en bijao: casa con mesa de envolver y atados de hojas de bijao secándose.
+  bijao_wrapper(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 1.9, 1.6, 28, ctx, { wall: 0xe9d8b4, roofH: 14 });
+    door(g, hx, hy, 1.6, 0.7, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.8, 14, PAL.balconyYellow);
+    // Cuerda con hojas de bijao colgadas.
+    const a = iso(x + 2.45, y + 0.4, 24);
+    const b = iso(x + 2.45, y + 1.9, 24);
+    g.rect(a.x - 1, a.y, 2, 24).fill(PAL.wood);
+    g.rect(b.x - 1, b.y, 2, 24).fill(PAL.wood);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x3a2418 });
+    for (let i = 1; i < 6; i++) {
+      const px = a.x + ((b.x - a.x) * i) / 6;
+      const py = a.y + ((b.y - a.y) * i) / 6;
+      g.ellipse(px, py + 8, 3, 8).fill(i % 2 ? 0x8d9f3c : 0xa5b84a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+    }
+    // Mesa con bocadillos envueltos.
+    box(g, x + 0.4, y + 2.15, 1.7, 0.45, 9, PAL.wood);
+    for (let i = 0; i < 6; i++) {
+      const p = iso(x + 0.55 + i * 0.26, y + 2.37, 9);
+      g.ellipse(p.x, p.y - 2, 4.5, 3).fill(PRODUCTS.bocadillo_bijao.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.rect(p.x - 0.7, p.y - 5, 1.4, 6).fill(0xe0c48a);
+    }
+  },
+
+  // Cajonera: bodega de cajitas de madera llenas de bocadillos, apiladas para despachar.
+  crate_packer(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xf6e7c8, roofH: 14 });
+    door(g, hx, hy, 1.6, 1.8, 18, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.4, 0.8, 14, 0xffffff);
+    box(g, x + 0.4, y + 2.15, 1.6, 0.35, 8, 0x555555);
+    const stack = [[2.3, 2.15, 0], [2.65, 2.15, 0], [2.48, 2.5, 0], [2.48, 2.3, 9], [2.3, 2.15, 9], [2.48, 2.3, 18]];
+    for (const [bx, by, z] of stack.slice(0, 4 + Math.min(ctx.tier, 2))) box(g, x + bx - 0.15, y + by - 0.12, 0.3, 0.24, 9, PRODUCTS.bocadillo_crate.color, { z });
+    const crates = new Graphics();
+    this.anim.addChild(crates);
+    this.animate = (time) => {
+      crates.clear();
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.3 + i / 3) % 1;
+        const p = iso(x + 0.45 + f * 1.5, y + 2.32, 8);
+        crates.rect(p.x - 5, p.y - 7, 10, 7).fill(PRODUCTS.bocadillo_crate.color).stroke(OUTLINE);
+        crates.rect(p.x - 5, p.y - 4, 10, 1.2).fill(0xb07d48);
+      }
+    };
+  },
 };

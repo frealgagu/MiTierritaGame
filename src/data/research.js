@@ -96,6 +96,22 @@ export const RESEARCH = [
   { zone: 'cacaotal', id: 'supremacia_cacaotal', name: 'Supremacía: Cacaotal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cacaotal', mult: 8 } },
   { zone: 'maizal', id: 'supremacia_maizal', name: 'Supremacía: Maizal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'maizal', mult: 8 } },
   { zone: 'pueblo', id: 'supremacia_pueblo', name: 'Supremacía: Pueblo', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'pueblo', mult: 8 } },
+
+  // Santander · La Guayabera (v3.0): las mismas de la Finca, con su propio sabor.
+  { zone: 'guayabera', id: 'injerto_guayabo', name: 'Guayabos injertados', icon: '🌳', desc: 'El Guayabal produce el doble.', cost: 300, requires: 'guava_pulper', effect: { type: 'stationSpeed', target: 'guava_grove', mult: 2 } },
+  { zone: 'guayabera', id: 'despulpadora_motor', name: 'Despulpadora con motor', icon: '⚡', desc: 'La Despulpadora de guayaba procesa el doble.', cost: 400, requires: 'guava_pulper', effect: { type: 'stationSpeed', target: 'guava_pulper', mult: 2 } },
+  { zone: 'guayabera', id: 'herraduras_s', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'guava_pot', effect: { type: 'muleSpeed', mult: 1.5 } },
+  { zone: 'guayabera', id: 'remolque_s', name: 'Remolque para el Willys', icon: '🚙', desc: 'El Willys lleva el doble por viaje.', cost: 2500, requires: 'guava_molds', effect: { type: 'dispatchCapacity', target: 'guayabera', mult: 2 } },
+  { zone: 'guayabera', id: 'paila_grande', name: 'Paila grande', icon: '🔥', desc: 'La Paila de bocadillo cocina el doble.', cost: 6000, requires: 'guava_molds', effect: { type: 'stationSpeed', target: 'guava_pot', mult: 2 } },
+  { zone: 'guayabera', id: 'moldes_dobles', name: 'Moldes dobles', icon: '🪵', desc: 'Los Moldes de madera cuajan el doble.', cost: 8000, requires: 'bocadillo_cutter', effect: { type: 'stationSpeed', target: 'guava_molds', mult: 2 } },
+  { zone: 'guayabera', id: 'mayordomo_s', name: 'Mayordomo', icon: '🧑‍🌾', desc: 'Mientras no juegas, Santander sigue produciendo 3 h más (sin investigaciones, 2 h).', cost: 10000, requires: 'bocadillo_cutter', effect: { type: 'offlineHours', hours: 3 } },
+  { zone: 'guayabera', id: 'guayaba_roja', name: 'Guayaba roja', icon: '🏅', desc: 'El bocadillo vale un 50 % más.', cost: 20000, requires: 'bocadillo_cutter', effect: { type: 'productValue', target: 'bocadillo', mult: 1.5 } },
+  { zone: 'guayabera', id: 'cortadora_hilo', name: 'Cortadora de hilo', icon: '🔪', desc: 'La Cortadora corta el doble.', cost: 25000, requires: 'bijao_wrapper', effect: { type: 'stationSpeed', target: 'bocadillo_cutter', mult: 2 } },
+  { zone: 'guayabera', id: 'veleno', name: 'Denominación Vélez', icon: '🌳', desc: 'Bocadillo de origen: todo lo que vende la Guayabera vale un 50 % más.', cost: 50000, requires: 'bijao_wrapper', effect: { type: 'zoneValue', target: 'guayabera', mult: 1.5 } },
+  { zone: 'guayabera', id: 'envolvedoras', name: 'Envolvedoras de Vélez', icon: '🍃', desc: 'La Envoltura en bijao envuelve el doble.', cost: 60000, requires: 'crate_packer', effect: { type: 'stationSpeed', target: 'bijao_wrapper', mult: 2 } },
+  { zone: 'guayabera', id: 'cajonera_s', name: 'Cajonera automática', icon: '📦', desc: 'La Cajonera llena el doble de cajas.', cost: 150000, requires: 'crate_packer', effect: { type: 'stationSpeed', target: 'crate_packer', mult: 2 } },
+  { zone: 'guayabera', id: 'cable_s', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'crate_packer', effect: { type: 'muleSpeed', mult: 2 } },
+  { zone: 'guayabera', id: 'sello_s', name: 'Sello de calidad', icon: '🏅', desc: 'Las cajas de bocadillos valen un 50 % más.', cost: 300000, requires: 'crate_packer', effect: { type: 'productValue', target: 'bocadillo_crate', mult: 1.5 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

@@ -1,12 +1,12 @@
 // Ventana del calendario (v1.9): toca el reloj. La hora, la temporada, el día y el año, el horario de
 // trabajo y lo que rinde cada temporada.
-import { SEASONS, SEASON_DAYS, hourOf, isWorkTime, seasonDay, seasonOf, yearOf } from '../sim/calendar.js';
+import { SEASONS, SEASON_DAYS, clockOf, hourOf, isWorkTime, seasonDay, seasonOf, yearOf } from '../sim/calendar.js';
 import { clockLabel } from '../render/DayNight.js';
 
 const pct = (m) => (m === 1 ? 'normal' : `${m > 1 ? '+' : '−'}${Math.round(Math.abs(m - 1) * 100)} %`);
 
 export function showCalendar(state) {
-  const t = state.playTime;
+  const t = clockOf(state);
   const season = seasonOf(t);
   document.getElementById('calendar-now').textContent =
     `${clockLabel(hourOf(t))} · ${isWorkTime(t) ? 'jornada de trabajo' : 'de noche, todo descansa'}\n${season.icon} ${season.name}, día ${seasonDay(t)} de ${SEASON_DAYS} · año ${yearOf(t)}`;

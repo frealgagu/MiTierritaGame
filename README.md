@@ -37,7 +37,8 @@ Las seis zonas del juego, cada una se abre al completar la anterior: **La Finca*
 - **Vida**: edificios que evolucionan con los hitos, día y noche, lluvia, aves, luciérnagas, efectos y sonido sintetizado.
 - **Guardado** automático, ganancias sin conexión (2 h, hasta 24 h con una investigación por zona), copia de seguridad exportable.
 - **Instalable en el móvil** (PWA) y jugable sin internet.
-- **Música propia**: un bambuco en 3/4 compuesto para el juego y tocado por él mismo, sin archivos (tiple, guitarra y bandola sintetizados con Karplus-Strong). Más adelante, una pieza por región.
+- **Regiones**: al completar el Pueblo se abre **Santander** (por ahora, La Guayabera y su bocadillo veleño), con su propia economía; todas las regiones producen a la vez.
+- **Música propia**: un bambuco para el Eje Cafetero y una guabina para Santander, compuestos para el juego y tocados por él mismo, sin archivos (tiple, guitarra y bandola sintetizados con Karplus-Strong).
 
 ### App de Android
 El mismo juego empaquetado con [Capacitor](https://capacitorjs.com) (como Melvor Idle): va dentro de la app, funciona sin internet y el botón «atrás» cierra ventanas o pasa la app a segundo plano. Para generar el APK hace falta Java 21 y el Android SDK (plataforma 36):

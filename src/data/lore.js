@@ -46,6 +46,14 @@ export const FACTS = {
   basket_shop: ['El fique es una planta de fibra fuerte para costales y canastos.'],
   gift_wrap: ['Las canastas de regalo juntan productos de varias regiones.'],
   export_dock: ['El café colombiano sale al mundo en contenedores desde los puertos.'],
+  // Santander · La Guayabera
+  guava_grove: ['Vélez y Barbosa, en Santander, son la tierra del bocadillo.', 'La guayaba tiene más vitamina C que la naranja.'],
+  guava_pulper: ['La despulpadora separa la pulpa de las semillas duras de la guayaba.'],
+  guava_pot: ['El bocadillo se cocina en paila, revolviendo, hasta que «hace punto».'],
+  guava_molds: ['El bocadillo cuaja en moldes de madera antes de cortarlo.'],
+  bocadillo_cutter: ['El bocadillo combinado lleva una capa de guayaba blanca y una roja.'],
+  bijao_wrapper: ['La hoja de bijao seca envuelve el bocadillo veleño y le da su aroma.'],
+  crate_packer: ['El bocadillo veleño se vende en cajitas de madera liviana.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -56,6 +64,7 @@ export const PEOPLE = {
   cacaotal: { icon: '👨‍🌾', name: 'Don Eliécer', role: 'el cacaotero' },
   maizal: { icon: '👵', name: 'Doña Rosa', role: 'la arepera' },
   pueblo: { icon: '🧑‍💼', name: 'Mateo', role: 'el exportador' },
+  guayabera: { icon: '👩‍🍳', name: 'Doña Inés', role: 'la bocadillera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -66,6 +75,7 @@ export const WELCOME = {
   cacaotal: 'Del cacao sale el chocolate más rico del país. ¡Manos a la obra!',
   maizal: 'Sin arepa no hay desayuno. ¡Prenda ese budare!',
   pueblo: 'Todo lo de sus fincas termina aquí. ¡A exportar!',
+  guayabera: '¡Bienvenido a Santander, mijo! Aquí la guayaba se vuelve bocadillo veleño.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

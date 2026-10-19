@@ -12,7 +12,7 @@ import { buyResearch, buyUpgrade, quoteResearch, quoteUnlock, quoteUpgrade, unlo
 import { claimGoal, unlockZone } from '../sim/goals.js';
 import { checkMastery } from '../sim/legacy.js';
 import { stepAlerts } from '../sim/alerts.js';
-import { workSeconds } from '../sim/calendar.js';
+import { clockOf, workSeconds } from '../sim/calendar.js';
 import { stepSupply } from '../sim/events.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
@@ -101,7 +101,7 @@ export class Game {
     let mark = null;
     try {
       for (let t = 0; t < simulated; t += 1) {
-        if (!mark && t >= simulated / 2) mark = { t: s.playTime, ...snapshot(s) };
+        if (!mark && t >= simulated / 2) mark = { t: clockOf(s), ...snapshot(s) };
         this.step(1);
         if (t % 60 === 59) yield t / simulated;
       }
@@ -110,13 +110,14 @@ export class Game {
     }
     const rest = total - simulated;
     if (rest > 0 && mark) {
-      const measured = workSeconds(mark.t, s.playTime);
-      const k = measured > 0 ? workSeconds(s.playTime, s.playTime + rest) / measured : 0;
-      const now = snapshot(s);
-      s.coins += (now.coins - mark.coins) * k;
-      s.totalEarned += (now.totalEarned - mark.totalEarned) * k;
+      const now = clockOf(s);
+      const measured = workSeconds(mark.t, now);
+      const k = measured > 0 ? workSeconds(now, now + rest) / measured : 0;
+      const after = snapshot(s);
+      s.coins += (after.coins - mark.coins) * k;
+      s.totalEarned += (after.totalEarned - mark.totalEarned) * k;
       for (const kind of ['sold', 'produced', 'imported']) {
-        for (const [id, n] of Object.entries(now[kind])) s.stats[kind][id] = n + (n - (mark[kind][id] ?? 0)) * k;
+        for (const [id, n] of Object.entries(after[kind])) s.stats[kind][id] = n + (n - (mark[kind][id] ?? 0)) * k;
       }
       s.playTime += rest;
     }

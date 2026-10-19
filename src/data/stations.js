@@ -74,6 +74,16 @@ export const STATIONS = [
   { id: 'basket_shop', zone: 'pueblo', name: 'Taller de canastas', icon: '🧺', in: { cafe_origen: 1 }, imports: [{ product: 'arequipe', perCycle: 1, route: 'arequipe' }], out: { basket: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '1.5' },
   { id: 'gift_wrap', zone: 'pueblo', name: 'Empaque de regalos', icon: '🎁', in: { basket: 1 }, imports: [{ product: 'table_chocolate', perCycle: 1, route: 'chocolate_mesa' }, { product: 'milk_chocolate', perCycle: 1, route: 'chocolatinas' }], out: { gift_basket: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '1.5' },
   { id: 'export_dock', zone: 'pueblo', name: 'Patio de contenedores', icon: ICON.container, in: { gift_basket: 4 }, out: { container: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '1.5' },
+
+  // Santander · La Guayabera (v3.0). La guayaba se vuelve bocadillo veleño: misma estructura y mismos
+  // números que la Finca (la región empieza de cero, con su propia economía).
+  { id: 'guava_grove', zone: 'guayabera', name: 'Guayabal', icon: ICON.guavaTree, infinite: true, out: { guava: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.0' },
+  { id: 'guava_pulper', zone: 'guayabera', name: 'Despulpadora de guayaba', icon: '⚙️', in: { guava: 2 }, out: { guava_pulp: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.0' },
+  { id: 'guava_pot', zone: 'guayabera', name: 'Paila de bocadillo', icon: '🔥', in: { guava_pulp: 1 }, out: { guava_jelly: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.0' },
+  { id: 'guava_molds', zone: 'guayabera', name: 'Moldes de madera', icon: '🪵', in: { guava_jelly: 1 }, out: { bocadillo_block: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.0' },
+  { id: 'bocadillo_cutter', zone: 'guayabera', name: 'Cortadora', icon: '🔪', in: { bocadillo_block: 2 }, out: { bocadillo: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.0' },
+  { id: 'bijao_wrapper', zone: 'guayabera', name: 'Envoltura en bijao', icon: '🍃', in: { bocadillo: 1 }, out: { bocadillo_bijao: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.0' },
+  { id: 'crate_packer', zone: 'guayabera', name: 'Cajonera', icon: '📦', in: { bocadillo_bijao: 4 }, out: { bocadillo_crate: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.0' },
 ];
 
 export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));

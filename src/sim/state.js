@@ -1,6 +1,8 @@
 import { createStationState } from './production.js';
 import { createRouteState } from './routes.js';
 import { ROUTES } from '../data/routes.js';
+import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
+import { sourceOf } from './chain.js';
 
 export const SAVE_VERSION = 9;
 
@@ -9,9 +11,13 @@ export function createZoneState(unlocked = false) {
   return { unlocked, complete: false, dispatch: { level: 1 }, warehouse: {}, jeep: { phase: 'idle', t: 0, waited: 0, load: {} } };
 }
 
-export function createInitialState(now = Date.now()) {
+// Partida nueva de una región (v3.0): sus zonas (la primera abierta, con su fuente) y sus rutas.
+export function createInitialState(now = Date.now(), regionId = 'cafetero') {
+  const region = REGIONS_BY_ID[regionId];
+  const first = region.zones[0];
   return {
     version: SAVE_VERSION,
+    region: regionId,
     coins: 0,
     totalEarned: 0,
     playTime: 0,
@@ -19,12 +25,12 @@ export function createInitialState(now = Date.now()) {
     nextId: 1,
     // Estaciones de todas las zonas (los ids son únicos); aparecen al construirlas.
     stations: {
-      farm: createStationState(),
+      [sourceOf(first)]: createStationState(),
     },
     // Por zona: desbloqueada, completada, despacho, bodega (productId -> unidades) y Willys.
-    zones: { finca: createZoneState(true), trapiche: createZoneState(false), lecheria: createZoneState(false), cacaotal: createZoneState(false), maizal: createZoneState(false), pueblo: createZoneState(false) },
-    // Rutas entre zonas: nivel y vehículo (ver sim/routes.js).
-    routes: Object.fromEntries(ROUTES.map((r) => [r.id, createRouteState()])),
+    zones: Object.fromEntries(region.zones.map((z) => [z, createZoneState(z === first)])),
+    // Rutas entre zonas de la región: nivel y vehículo (ver sim/routes.js).
+    routes: Object.fromEntries(ROUTES.filter((r) => REGION_OF_ZONE[r.from] === regionId).map((r) => [r.id, createRouteState()])),
     mules: [], // { id, productId, amount, from, to, phase: 'go' | 'back', t, duration }
     stats: { produced: {}, sold: {}, imported: {} },
     hints: [], // avisos ya mostrados
@@ -35,8 +41,9 @@ export function createInitialState(now = Date.now()) {
     legacy: { resets: 0, history: [] }, // reinicios con producción ×2 y partidas terminadas
     // Eventos (v2.0): el tablero de cada zona que está en juego y el último año en que se terminó.
     events: { boards: {}, done: {} },
-    // Lo que no se pierde al reiniciar (v2.0): Renombre ⭐, medallas y eventos terminados.
-    profile: { renown: 0, medals: {}, history: [] },
+    // Lo que no se pierde al reiniciar (v2.0): Renombre ⭐, medallas y eventos terminados. Es del
+    // jugador, no de la región: lo guarda solo la partida del Eje Cafetero.
+    ...(regionId === 'cafetero' && { profile: { renown: 0, medals: {}, history: [] } }),
   };
 }
 

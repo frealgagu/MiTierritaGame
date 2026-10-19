@@ -39,8 +39,11 @@ export function isWorkTime(playTime) {
 
 // Para una partida: de noche se descansa y cada temporada rinde lo suyo, salvo en el tablero de un
 // evento (v2.0), que tiene su propio reloj: ahí siempre es de día y no hay temporada.
-export const resting = (state) => !state.event && !isWorkTime(state.playTime ?? 0);
-export const seasonMult = (state) => (state.event ? 1 : seasonOf(state.playTime ?? 0).mult);
+// El reloj del país (v3.0): el tiempo de juego de la partida más lo que ya había pasado cuando empezó
+// (una región que se abre después, o la partida nueva tras un reinicio, siguen el mismo calendario).
+export const clockOf = (state) => (state.playTime ?? 0) + (state.clockOffset ?? 0);
+export const resting = (state) => !state.event && !isWorkTime(clockOf(state));
+export const seasonMult = (state) => (state.event ? 1 : seasonOf(clockOf(state)).mult);
 
 // Qué tanto se produce en este instante: 0 de noche; de día, lo de la temporada.
 export const workFactor = (playTime) => (isWorkTime(playTime) ? seasonOf(playTime).mult : 0);

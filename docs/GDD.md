@@ -557,7 +557,9 @@ export const COST_GROWTH = 1.15;
 | v1.8 ✅ | **Ambiente**: datos reales en los paneles y una persona por zona que avisa lo importante; vida en el mapa (gallinas, perro, vacas, gente, palomas); sonidos por zona; la cadena como diagrama | Más personalidad |
 | v1.9 ✅ | **Jornada y temporadas** (§10.1): de noche no se trabaja; verano, entrada de aguas, invierno y veranillo | Ritmo |
 | v2.0 | **Eventos e insignias** (§10.2): un evento por zona al año, con medallas; progresión general que no se pierde al reiniciar | Rejugable a largo plazo |
-| futuro | **Otras regiones** (§10.3): Santander, Costa Caribe, Llanos y Altiplano, cada una con su economía y su reinicio | Más país |
+| v3.0 ✅ | **Regiones** (§10.3): Santander se abre al completar el Pueblo; su primera zona, **La Guayabera** (bocadillo veleño), y su música (guabina) | Más país |
+| v3.1–v3.5 | Las otras cinco zonas de Santander: El Tabacal, La Fiquera, El Hato, Las Hormigas (solo en la entrada de aguas) y Barichara | Santander completo |
+| futuro | Costa Caribe, Llanos y Altiplano | Más país |
 
 **Cómo se conectan las zonas:** ver §4b.
 
@@ -595,10 +597,17 @@ export const COST_GROWTH = 1.15;
   - **v2.3, logros generales** (`src/data/logros.js`, `src/sim/logros.js`): 15 logros de uno a tres niveles, todos de cantidad y ninguno de velocidad: bolsas de café vendidas, panela, queso, chocolate y arepas de queso producidos, contenedores exportados, monedas ganadas, años de juego, veces que se completó el Pueblo y que se llegó al segundo final, medallas, eventos con medalla y con oro, páginas del álbum e investigaciones en una partida. Cada nivel da Renombre (de 1 a 16 ⭐). Lo de las partidas anteriores se guarda al reiniciar en `profile.lifetime` y sigue contando. Se ven en la ventana del Renombre (🏆 Logros).
   - Medallas calibradas con `tools/event-sim.js`, que juega cada objetivo con tres jugadores automáticos (el que sube lo que lleva al objetivo, el que sigue la mejora recomendada y uno lento): el oro, el tiempo del más rápido (10–12 min); la plata, 5 min más.
 
-### 10.3 Otras regiones (plan a futuro, después de las fases anteriores)
+### 10.3 Regiones (v3.0: Santander en camino)
 - Cada región es un **mapa nuevo con sus propias zonas, cadenas y productos**, con **su propia economía** (monedas, niveles e investigaciones) y **su propio reinicio** (el ×2 del segundo final vale solo para esa región).
 - Entre regiones solo se comparte lo general: **Renombre ⭐, álbum de láminas, decoración y logros**.
 - Por ahora las regiones **no se conectan** entre sí. Más adelante podría haber exportación entre regiones (llevar productos de una a otra), pero no hace falta.
+- **Decisiones (v3.0):**
+  - Cada región tiene **seis zonas**, como el Eje Cafetero.
+  - **Santander se abre al completar el Pueblo** (el primer final del Eje Cafetero).
+  - **Todas las regiones producen a la vez** (también sin conexión: el cálculo se hace región por región, con la pantalla de carga).
+  - El **calendario es el del país**: una región que se abre después empieza en la fecha de ese día, y un reinicio sigue la fecha (`clockOffset`, `clockOf` en `src/sim/calendar.js`).
+- **Cómo quedó (v3.0)** (`src/data/regions.js`, `src/sim/regions.js`): la partida del Eje Cafetero es la principal y guarda las demás en `regions`, cada una como una partida completa (con su `region`, sus zonas, rutas, monedas, investigaciones, objetivos, segundo final y reinicio ×2). Cada región tiene su `Game`; la interfaz muestra la de la zona que se está viendo. El selector de zonas 🗺️ las agrupa por región. El perfil (Renombre, medallas, álbum, decoración y logros) lo guarda solo la principal. Los eventos son, por ahora, los del Eje Cafetero.
+- **Santander** (v3.0 en adelante), con sus seis zonas: 🍈 **La Guayabera** (guayaba → pulpa → melado → bloque → bocadillo → envuelto en hoja de bijao → caja; misma estructura y mismos números que la Finca, porque la región empieza de cero), 🌿 El Tabacal, 🧵 La Fiquera, 🐂 El Hato (carne oreada), 🐜 Las Hormigas (solo producen en la entrada de aguas) y ⛪ Barichara (el final). Su persona es Doña Inés, la bocadillera, y su música, la **Guabina del Chicamocha** (en si menor, 92 negras por minuto).
 - Ideas de productos:
   - **Santander**: bocadillo veleño (guayaba), tabaco, hormigas culonas, fique (costales y alpargatas).
   - **Costa Caribe**: coco y cocadas, plátano y patacones, yuca y enyucado, queso costeño, caña flecha y sombrero vueltiao.

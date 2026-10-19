@@ -143,6 +143,12 @@ export class Terrain {
           else if (r < 0.09) obj = guayacan(rng);
           else if (r < 0.105) obj = streetLamp();
           else if (r < 0.12) obj = palm(rng);
+        } else if (this.zone.theme === 'guava') {
+          // Santander: matas de fique, guayabos sueltos, piedras y algún cactus del cañón.
+          if (r < 0.05) obj = fique(rng);
+          else if (r < 0.08) obj = guavaTree(rng);
+          else if (r < 0.11) obj = rock(rng);
+          else if (r < 0.125) obj = cactus(rng);
         } else if (this.zone.theme === 'corn') {
           // Maizal: girasoles, matas de maíz sueltas, algún espantapájaros y piedras.
           if (r < 0.04) obj = sunflower(rng);
@@ -192,6 +198,7 @@ const FARM_SOIL = {
   dairy: (v) => mix(0x5e9a3c, 0x6fae44, v * 0.5),
   cacao: (v) => mix(0x5e4630, 0x4a3726, v * 0.5),
   corn: (v) => mix(0xa47c48, 0x8a6a3a, v * 0.4),
+  guava: (v) => mix(0xb8754a, 0x9c5e3a, v * 0.4), // la tierra roja de Santander
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
 };
 
@@ -350,6 +357,62 @@ function cacaoTree(rng) {
 }
 
 // Árbol de cacao: tronco corto, copa redonda y mazorcas que cuelgan del tronco. Lo usa el Cacaotal.
+// Guayabo: tronco liso y claro, copa redonda y guayabas amarillas.
+export function drawGuavaTree(g, x, y, scale, rng, fruits) {
+  const s = scale;
+  shadow(g, x + 2, y + 1, 13 * s, 5 * s);
+  g.moveTo(x - 2 * s, y).lineTo(x - 1.2 * s, y - 14 * s).lineTo(x + 1.2 * s, y - 14 * s).lineTo(x + 2 * s, y).closePath().fill(0xa1887f);
+  g.circle(x - 6 * s, y - 18 * s, 7 * s).fill(0x3d7a2c);
+  g.circle(x + 6 * s, y - 18 * s, 7 * s).fill(0x3d7a2c);
+  g.circle(x, y - 23 * s, 8.5 * s).fill(0x4e8f34).stroke({ width: 1, color: 0x3a2418, alpha: 0.3 });
+  g.circle(x - 3 * s, y - 26 * s, 3 * s).fill({ color: 0x9ccc65, alpha: 0.6 });
+  for (let i = 0; i < fruits; i++) {
+    const a = rng() * Math.PI * 2;
+    const d = rng() * 7 * s;
+    g.circle(x + Math.cos(a) * d, y - 20 * s + Math.sin(a) * d * 0.6, 1.9 * Math.max(s, 0.9)).fill(0xd4e157).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+  }
+}
+
+function guavaTree(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  drawGuavaTree(g, 0, 0, 1.1 + rng() * 0.3, rng, 4);
+  c.addChild(g);
+  return c;
+}
+
+// Fique: una roseta de hojas largas, gruesas y en punta, verde azulada.
+function fique(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 2, 1, 12, 4);
+  const n = 9;
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + ((i - (n - 1) / 2) / n) * 2.6;
+    const len = 14 + rng() * 6;
+    const tx = Math.cos(a) * len;
+    const ty = Math.sin(a) * len * 0.9;
+    g.poly([-2, 0, tx, ty, 2, 0]).fill(i % 2 ? 0x6f9a7a : 0x5d8a6a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.35 });
+  }
+  c.addChild(g);
+  return c;
+}
+
+// Cactus del cañón del Chicamocha: un tallo con dos brazos.
+function cactus(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const h = 18 + rng() * 10;
+  shadow(g, 2, 1, 8, 3);
+  g.roundRect(-2.5, -h, 5, h, 2.5).fill(0x5a8f4e).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
+  g.roundRect(-8, -h * 0.65, 4, h * 0.35, 2).fill(0x5a8f4e).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
+  g.rect(-6, -h * 0.32, 4, 2).fill(0x5a8f4e);
+  g.roundRect(4, -h * 0.8, 4, h * 0.3, 2).fill(0x5a8f4e).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
+  g.rect(2, -h * 0.52, 4, 2).fill(0x5a8f4e);
+  c.addChild(g);
+  return c;
+}
+
 export function drawCacaoTree(g, x, y, scale, rng, pods) {
   const s = scale;
   shadow(g, x + 2, y + 1, 12 * s, 5 * s);

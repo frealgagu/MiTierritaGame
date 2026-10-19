@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## v3.0.0 — Santander: La Guayabera
+- **Regiones.** Al completar el Pueblo se abre **Santander**, una región nueva que empieza de cero con **su propia economía**: monedas, niveles, investigaciones, objetivos, segundo final y reinicio ×2. El Eje Cafetero sigue produciendo, y **todas las regiones producen a la vez** (también sin conexión).
+  - Se comparten el Renombre ⭐, el álbum, la decoración, los logros y el **calendario del país** (la misma hora y la misma temporada en todas).
+  - El selector de zonas 🗺️ las muestra por región, con las zonas de Santander que vienen en camino.
+  - Reiniciar una región en su segundo final no toca las demás.
+- **La Guayabera**, la primera zona de Santander: el **bocadillo veleño**. Guayabal → Despulpadora de guayaba → Paila de bocadillo → Moldes de madera → Cortadora → Envoltura en bijao → Cajonera. Tierra roja, matas de fique, guayabos y cactus del cañón; Doña Inés, la bocadillera, avisa lo importante. Íconos propios para la guayaba, la pulpa, el melado, el bocadillo y la caja.
+- **Música de Santander:** la «Guabina del Chicamocha», más lenta y nostálgica, compuesta para el juego como el bambuco. Cambia sola al pasar de una región a otra.
+- La pantalla de fin del Pueblo anuncia Santander y lleva allá.
+
 ## v2.3.3 — Investigaciones de otras zonas a la vista
 - Como las ×2 ahora se habilitan al nivel 25, muchas llegan cuando ya estás en la zona siguiente y quedaban olvidadas (en la simulación, la Batidora de la Lechería nunca se compraba y faltaba mantequilla para las arepas de queso: el Maizal tardaba más del doble).
   - La ventana de 🔬 investigaciones muestra, aparte, las que ya puedes investigar **en otras zonas**, y el número del botón las cuenta todas.

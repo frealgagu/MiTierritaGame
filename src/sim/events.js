@@ -5,7 +5,7 @@
 import { EVENTS_BY_ID, EVENT_ACTIONS_BY_ID, EVENT_OF_ZONE, MEDALS } from '../data/events.js';
 import { createInitialState, createZoneState } from './state.js';
 import { createStationState } from './production.js';
-import { yearOf } from './calendar.js';
+import { clockOf, yearOf } from './calendar.js';
 import { canPay } from './upgrades.js';
 import { stationImportCap, stationRate } from './rules.js';
 import { effectsOf, speedMult } from './modifiers.js';
@@ -22,7 +22,7 @@ export const boardObjective = (board) => eventObjective(eventDef(board), board.e
 export function eventStatus(state, zoneId) {
   const def = EVENT_OF_ZONE[zoneId];
   if (!def || !state.zones[zoneId]?.unlocked) return null;
-  const year = yearOf(state.playTime);
+  const year = yearOf(clockOf(state));
   const board = state.events?.boards?.[zoneId];
   if (!board && !def.stations.every((id) => state.stations[id])) return { kind: 'locked', def, year };
   if (board) return { kind: 'active', def, year: board.event.year, board };

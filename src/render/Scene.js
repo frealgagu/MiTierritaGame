@@ -20,7 +20,7 @@ import { normalDest, slowConsumers, warehouseCap } from '../sim/transport.js';
 import { alerts } from '../sim/alerts.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { jeepResting } from '../sim/dispatch.js';
-import { resting } from '../sim/calendar.js';
+import { clockOf, resting } from '../sim/calendar.js';
 import { eventPenalty } from '../sim/events.js';
 import { EVENTS_BY_ID } from '../data/events.js';
 import { quoteUnlock } from '../sim/upgrades.js';
@@ -283,7 +283,7 @@ export class Scene {
     this.time += dt;
     const state = this.game.state;
     // En el tablero de un evento siempre es media mañana (su reloj es otro).
-    this.dayNight.update(state.event ? EVENT_DAYTIME : state.playTime);
+    this.dayNight.update(state.event ? EVENT_DAYTIME : clockOf(state));
     this.background.update(dt, this.camera);
     this.farm.sync(state);
     this.warehouse.sync(state.zones[this.zone.id], warehouseCap(state, this.zone.id));
@@ -321,7 +321,7 @@ export class Scene {
     this.critters.update(dt, this.time, this.dayNight.light > 0.5, this.jeepPos);
     this.updateAmbient(dt);
     this.effects.update(dt);
-    this.weather.update(dt, state.event ? null : state.playTime, this.app.screen.width, this.app.screen.height);
+    this.weather.update(dt, state.event ? null : clockOf(state), this.app.screen.width, this.app.screen.height);
   }
 
   // Luciérnagas y sonidos de ambiente según la hora.

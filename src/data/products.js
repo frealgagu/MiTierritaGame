@@ -66,4 +66,13 @@ export const PRODUCTS = {
   basket: { name: 'Canasta de fique', zone: 'pueblo', value: 600000, icon: '🧺', color: 0xc9a66b },
   gift_basket: { name: 'Canasta de regalo', zone: 'pueblo', value: 2000000, icon: '🎁', color: 0xd7263d },
   container: { name: 'Contenedor de exportación', zone: 'pueblo', value: 24000000, icon: ICON.container, color: 0x2e6fd1 },
+
+  // Santander · La Guayabera (v3.0): mismos valores que la Finca.
+  guava: { name: 'Guayaba', zone: 'guayabera', value: 1, icon: ICON.guava, color: 0xcddc39 },
+  guava_pulp: { name: 'Pulpa de guayaba', zone: 'guayabera', value: 3, icon: ICON.guavaPulp, color: 0xf06292 },
+  guava_jelly: { name: 'Melado de guayaba', zone: 'guayabera', value: 6, icon: ICON.guavaJelly, color: 0xc2185b },
+  bocadillo_block: { name: 'Bloque de bocadillo', zone: 'guayabera', value: 10, icon: ICON.bocadilloBlock, color: 0x880e4f },
+  bocadillo: { name: 'Bocadillo', zone: 'guayabera', value: 30, icon: ICON.bocadillo, color: 0xd81b60 },
+  bocadillo_bijao: { name: 'Bocadillo veleño', zone: 'guayabera', value: 45, icon: ICON.bocadilloBijao, color: 0x8d9f3c },
+  bocadillo_crate: { name: 'Caja de bocadillos', zone: 'guayabera', value: 250, icon: ICON.bocadilloCrate, color: 0xd7a86e },
 };

@@ -89,6 +89,20 @@ export class Music {
     this.source.start();
   }
 
+  // Al pasar a otra región, su pieza: baja la que suena y sube la otra.
+  setRegion(region) {
+    if (region === this.region) return;
+    this.region = region;
+    if (!this.source) return;
+    const old = this.source;
+    this.source = null;
+    this.fadeTo(0);
+    setTimeout(() => {
+      old.stop();
+      if (this.enabled && this.started) this.play();
+    }, FADE_S * 1000);
+  }
+
   setEnabled(on) {
     this.enabled = on;
     if (!this.started) return;

@@ -42,7 +42,9 @@ export function clearSave() {
 function migrate(data) {
   if (typeof data !== 'object' || data === null) return null;
   if ((data.version ?? 0) > SAVE_VERSION) return null;
-  const base = createInitialState(data.savedAt);
+  // Cada región se guarda como una partida aparte dentro de la del Eje Cafetero (v3.0).
+  const region = data.region ?? 'cafetero';
+  const base = createInitialState(data.savedAt, region);
   // v1/v2 → v3: estaciones con entrada, estado y arrieros; mulas con origen, destino y fase.
   const stations = {};
   for (const [id, st] of Object.entries(data.stations ?? {})) stations[id] = { ...createStationState(), ...st };
@@ -58,6 +60,7 @@ function migrate(data) {
   // v4 → v5: despacho, bodega y Willys pasan a ser por zona; la Finca completa abre el Trapiche.
   const zones = {};
   for (const [id, z] of Object.entries(base.zones)) zones[id] = { ...z, ...data.zones?.[id] };
+  if (region !== 'cafetero') return finish(data, base, stations, zones, mules);
   if (!data.zones) {
     zones.finca = {
       ...zones.finca,
@@ -91,6 +94,11 @@ function migrate(data) {
     zones.pueblo.unlocked = true;
     stations.coffee_house ??= createStationState();
   }
+  return finish(data, base, stations, zones, mules);
+}
+
+// Lo común a todas las regiones: rutas, objetivos y el resto de los campos.
+function finish(data, base, stations, zones, mules) {
   const routes = {};
   for (const id of Object.keys(base.routes)) routes[id] = { ...createRouteState(), ...data.routes?.[id] };
   // Hasta la v1.0.1 los objetivos de investigación se guardaban con el id de la investigación.
@@ -106,6 +114,8 @@ function migrate(data) {
     mules,
     stats: { ...base.stats, ...data.stats },
     goals: { ...base.goals, ...data.goals, claimed },
+    // Las otras regiones, cada una con lo suyo.
+    ...(data.regions && { regions: Object.fromEntries(Object.entries(data.regions).map(([id, st]) => [id, migrate(st)])) }),
     version: SAVE_VERSION,
   };
 }

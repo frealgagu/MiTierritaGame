@@ -4,7 +4,7 @@ import { recommendUpgrade } from '../sim/analysis.js';
 import { legacyMult } from '../sim/modifiers.js';
 import { nextToUnlock, zoneOf } from '../sim/chain.js';
 import { clockLabel } from '../render/DayNight.js';
-import { seasonOf } from '../sim/calendar.js';
+import { clockOf, seasonOf } from '../sim/calendar.js';
 import { EVENTS_BY_ID } from '../data/events.js';
 import { formatClock } from './EventBar.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
@@ -68,7 +68,7 @@ export class HUD {
       setText(this.season, `${EVENTS_BY_ID[s.event.id].icon} Evento`);
     } else {
       if (hour !== undefined) setText(this.clock, clockLabel(hour));
-      const season = seasonOf(s.playTime);
+      const season = seasonOf(clockOf(s));
       setText(this.season, `${season.icon} ${season.short}`);
     }
     const zone = this.getZone();

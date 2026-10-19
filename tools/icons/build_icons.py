@@ -701,6 +701,133 @@ def coffee_plant():
     ]
 
 
+# ---------- Santander · La Guayabera (v3.0) ----------
+
+def guava_half(cx, cy, r):
+    """Media guayaba cortada: cáscara verde amarilla, pulpa rosada y semillas."""
+    seeds = [circle(cx + r * 0.42 * math.cos(math.radians(a)), cy + r * 0.42 * math.sin(math.radians(a)), r * 0.07) for a in range(0, 360, 40)]
+    return [
+        (OUTLINE, [circle(cx, cy, r + 2)]),
+        ('#c5d65a', [circle(cx, cy, r)]),
+        ('#f48fb1', [circle(cx, cy, r * 0.84)]),
+        ('#f8bbd0', [circle(cx, cy, r * 0.5)]),
+        ('#fff3e0', seeds),
+    ]
+
+
+def guava():
+    """Guayaba: una entera, verde amarilla con su coronita, y media abierta, rosada por dentro."""
+    return [
+        ('#2e7d32', [leaf(40, 22, 22, 4, 7)]),
+        (OUTLINE, [ellipse(38, 46, 30, 32)]),
+        ('#cddc39', [ellipse(38, 46, 28, 30)]),
+        ('#afb42b', [ellipse(46, 54, 16, 18)]),
+        ('#5d4037', [circle(38, 16.5, 3.5)]),
+        ('#ffffffa0', [ellipse(28, 34, 6, 9, -20)]),
+        *guava_half(66, 68, 26),
+    ]
+
+
+def guava_tree():
+    """Guayabo: árbol de tronco liso y copa redonda, con guayabas amarillas."""
+    fruits = [(34, 30), (60, 26), (70, 44), (42, 48), (26, 46), (56, 52)]
+    return [
+        ('#8a5a3c', [ellipse(50, 92, 28, 6)]),
+        ('#a1887f', [poly(46, 92, 54, 92, 53, 56, 60, 46, 56, 44, 50, 52, 44, 42, 40, 44, 47, 58)]),
+        (OUTLINE, [circle(50, 34, 34)]),
+        ('#388e3c', [circle(50, 34, 32)]),
+        ('#4caf50', [circle(40, 26, 16), circle(62, 30, 15), circle(52, 46, 16)]),
+        ('#827717', [circle(x + 0.8, y + 0.8, 5) for x, y in fruits]),
+        ('#d4e157', [circle(x, y, 5) for x, y in fruits]),
+        ('#ffffffa0', [circle(x - 1.5, y - 1.5, 1.4) for x, y in fruits]),
+    ]
+
+
+def guava_pulp():
+    """Pulpa de guayaba: totuma de madera llena de pulpa rosada espesa."""
+    return [
+        ('#f06292', ['M 16 50 Q 22 22 50 20 Q 78 22 84 50 Z']),
+        ('#f8bbd0', [ellipse(42, 34, 12, 6, -15)]),
+        ('#fff3e0', [circle(56, 40, 1.8), circle(34, 44, 1.6), circle(64, 30, 1.6), circle(48, 28, 1.5)]),
+        (OUTLINE, ['M 8 48 L 92 48 Q 90 92 50 94 Q 10 92 8 48 Z']),
+        ('#a1672c', ['M 11 51 L 89 51 Q 87 89 50 91 Q 13 89 11 51 Z']),
+        ('#8d5524', ['M 60 51 L 89 51 Q 87 89 50 91 Z']),
+        ('#c68642', [rect(11, 51, 78, 4)]),
+    ]
+
+
+def guava_jelly():
+    """Melado de guayaba: paila de cobre con la pulpa cocinándose, espesa y roja, con burbujas."""
+    return [
+        ('#ffffff90', ['M 36 18 Q 30 10 38 4 Q 34 12 40 18 Z', 'M 58 16 Q 52 8 60 2 Q 56 10 62 16 Z']),
+        (OUTLINE, [ellipse(50, 40, 44, 14)]),
+        ('#c2185b', [ellipse(50, 40, 41, 11.5)]),
+        ('#e91e63', [ellipse(44, 38, 22, 6)]),
+        ('#f8bbd0', [circle(36, 38, 2.5), circle(58, 42, 2), circle(66, 36, 1.6)]),
+        (OUTLINE, ['M 6 42 Q 10 92 50 94 Q 90 92 94 42 Q 70 56 50 56 Q 30 56 6 42 Z']),
+        ('#c47a3a', ['M 9 46 Q 13 89 50 91 Q 87 89 91 46 Q 70 59 50 59 Q 30 59 9 46 Z']),
+        ('#a3602a', ['M 62 58 Q 78 54 91 46 Q 87 89 50 91 Z']),
+        ('#e3a05b', [ellipse(24, 66, 4, 10, 20)]),
+        ('#5d4037', [rect(0, 44, 10, 6), rect(90, 44, 10, 6)]),
+    ]
+
+
+def bocadillo_box(x, y, w, h, d, top, front, side):
+    """Bloque de lados rectos en perspectiva: tapa, frente y costado."""
+    return [
+        (OUTLINE, [poly(x - 2, y + d - 2, x + d - 2, y - 2, x + w + d + 2, y - 2, x + w + d + 2, y + h - 2, x + w + 2, y + h + d + 2, x - 2, y + h + d + 2)]),
+        (top, [poly(x, y + d, x + d, y, x + w + d, y, x + w, y + d)]),
+        (front, [rect(x, y + d, w, h)]),
+        (side, [poly(x + w, y + d, x + w + d, y, x + w + d, y + h, x + w, y + h + d)]),
+    ]
+
+
+def bocadillo_block():
+    """Bloque de bocadillo: el dulce de guayaba recién desmoldado, rojo vino, sobre una tabla."""
+    return [
+        ('#c68642', [poly(2, 82, 70, 82, 98, 64, 30, 64)]),
+        ('#8d5524', [poly(2, 82, 70, 82, 70, 88, 2, 88), poly(70, 82, 98, 64, 98, 70, 70, 88)]),
+        *bocadillo_box(14, 34, 52, 30, 18, '#c2185b', '#880e4f', '#6a0a3c'),
+        ('#ffffff60', [poly(22, 50, 30, 42, 58, 42, 50, 50)]),
+    ]
+
+
+def bocadillo():
+    """Bocadillo: barrita rojo vino con su franja blanca de guayaba blanca (el combinado)."""
+    return [
+        *bocadillo_box(12, 34, 60, 32, 18, '#d81b60', '#880e4f', '#6a0a3c'),
+        ('#fce4ec', [rect(12, 56, 60, 6)]),
+        ('#f8bbd0', [poly(72, 56, 90, 38, 90, 44, 72, 62)]),
+        ('#ffffff70', [poly(22, 46, 32, 38, 66, 38, 56, 46)]),
+    ]
+
+
+def bocadillo_bijao():
+    """Bocadillo veleño: envuelto en hoja de bijao seca, amarrado con un hilo de fique."""
+    return [
+        (OUTLINE, ['M 6 58 Q 10 30 50 26 Q 90 30 94 58 Q 90 82 50 84 Q 10 82 6 58 Z']),
+        ('#8d9f3c', ['M 9 58 Q 13 33 50 29 Q 87 33 91 58 Q 87 79 50 81 Q 13 79 9 58 Z']),
+        ('#a5b84a', ['M 9 58 Q 13 33 50 29 Q 70 31 80 40 Q 50 44 9 58 Z']),
+        ('#6b7a2a', [rib(12, 58, 88, 58, 1.2), rib(18, 48, 82, 66, 0.8), rib(20, 68, 80, 48, 0.8)]),
+        ('#e0c48a', [rect(46, 26, 8, 58)]),
+        ('#c9a96b', [ellipse(50, 26, 8, 5), 'M 50 26 Q 40 12 30 14 Q 42 16 50 26 Z', 'M 50 26 Q 62 10 72 14 Q 60 16 50 26 Z']),
+    ]
+
+
+def bocadillo_crate():
+    """Caja de bocadillos veleños: cajita de madera abierta, con los bocadillos en bijao."""
+    wraps = [(26, 30), (44, 26), (62, 30), (35, 40), (55, 40)]
+    return [
+        *[layer for x, y in wraps for layer in [(OUTLINE, [ellipse(x, y, 11, 7)]), ('#8d9f3c', [ellipse(x, y, 9.5, 5.6)]), ('#e0c48a', [rect(x - 1.5, y - 5.6, 3, 11.2)])]],
+        (OUTLINE, [poly(6, 40, 94, 40, 88, 94, 12, 94)]),
+        ('#d7a86e', [poly(9, 43, 91, 43, 85.5, 91, 14.5, 91)]),
+        ('#b07d48', [rect(10, 58, 80, 3), rect(12, 75, 76, 3)]),
+        ('#fff3d6', [rect(30, 60, 40, 15)]),
+        ('#c2185b', [rect(30, 60, 40, 4)]),
+        ('#8d9f3c', [ellipse(50, 70, 6, 3)]),
+    ]
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -734,6 +861,14 @@ ICONS = [
     (0xE01D, 'container', container),
     (0xE01E, 'breakfast', breakfast),
     (0xE01F, 'coffee_plant', coffee_plant),
+    (0xE020, 'guava_tree', guava_tree),
+    (0xE021, 'guava', guava),
+    (0xE022, 'guava_pulp', guava_pulp),
+    (0xE023, 'guava_jelly', guava_jelly),
+    (0xE024, 'bocadillo_block', bocadillo_block),
+    (0xE025, 'bocadillo', bocadillo),
+    (0xE026, 'bocadillo_bijao', bocadillo_bijao),
+    (0xE027, 'bocadillo_crate', bocadillo_crate),
 ]
 
 

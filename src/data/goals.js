@@ -142,5 +142,38 @@ const PUEBLO = [
   { id: 'pfinal', type: 'sold', product: 'container', amount: 7000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO];
+// Santander · La Guayabera (v3.0): la misma lista que la Finca, con el bocadillo.
+const GUAYABERA = [
+  { id: 's01', type: 'sold', product: 'guava', amount: 20, reward: 15 },
+  { id: 's02', type: 'level', target: 'guava_grove', level: 5, reward: 20 },
+  { id: 's03', type: 'level', target: 'guava_grove:transport', level: 5, reward: 25 },
+  { id: 's04', type: 'unlock', station: 'guava_pulper', reward: 30 },
+  { id: 's06', type: 'produced', product: 'guava_pulp', amount: 50, reward: 80 },
+  { id: 's07', type: 'level', target: 'guava_grove', level: 10, reward: 100 },
+  { id: 's08', type: 'unlock', station: 'guava_pot', reward: 150 },
+  { id: 's09', type: 'level', target: 'dispatch:guayabera', level: 5, reward: 150 },
+  { id: 's10', type: 'produced', product: 'guava_jelly', amount: 200, reward: 300 },
+  { id: 's11', type: 'unlock', station: 'guava_molds', reward: 500 },
+  { id: 's12', type: 'research', research: 'herraduras_s', reward: 500 },
+  { id: 's13', type: 'income', zone: 'guayabera', perSecond: 5, reward: 600 },
+  { id: 's14', type: 'level', target: 'guava_pot', level: 10, reward: 800 },
+  { id: 's15', type: 'unlock', station: 'bocadillo_cutter', reward: 1500 },
+  { id: 's16', type: 'produced', product: 'bocadillo', amount: 100, reward: 2000 },
+  { id: 's17', type: 'researchCount', count: 3, reward: 2500 },
+  { id: 's18', type: 'income', zone: 'guayabera', perSecond: 20, reward: 4000 },
+  { id: 's19', type: 'allLevels', zone: 'guayabera', level: 10, reward: 5000 },
+  { id: 's20', type: 'unlock', station: 'bijao_wrapper', reward: 8000 },
+  { id: 's21', type: 'produced', product: 'bocadillo_bijao', amount: 500, reward: 12000 },
+  { id: 's22', type: 'level', target: 'guava_grove', level: 25, reward: 15000 },
+  { id: 's23', type: 'income', zone: 'guayabera', perSecond: 100, reward: 20000 },
+  { id: 's24', type: 'unlock', station: 'crate_packer', reward: 40000 },
+  { id: 's25', type: 'sold', product: 'bocadillo_crate', amount: 50, reward: 50000 },
+  { id: 's26', type: 'research', research: 'sello_s', reward: 80000 },
+  { id: 's27', type: 'allLevels', zone: 'guayabera', level: 25, reward: 100000 },
+  { id: 's05', type: 'research', research: 'injerto_guayabo', reward: 50000 },
+  { id: 's28', type: 'sold', product: 'bocadillo_crate', amount: 500, reward: 150000 },
+  { id: 's_final', type: 'sold', product: 'bocadillo_crate', amount: 2000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA];

@@ -2,7 +2,7 @@ import { formatMult, formatNumber } from '../core/format.js';
 import { GOALS_BY_ZONE } from '../data/goals.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { activeGoals, goalProgress, goalText } from '../sim/goals.js';
-import { ALL_STATIONS, maxedCount } from '../sim/legacy.js';
+import { maxedCount, stationsOf } from '../sim/legacy.js';
 import { legacyMult } from '../sim/modifiers.js';
 import { fit } from './fit.js';
 
@@ -83,7 +83,7 @@ export class GoalsView {
 // Segundo final: cuántas estaciones van en el nivel 100 y, al lograrlo, el botón para volver a empezar.
 function masteryCard(state, compact) {
   const n = maxedCount(state);
-  const total = ALL_STATIONS.length;
+  const total = stationsOf(state).length;
   const action = state.mastered
     ? `<button class="btn claim" data-mastery>🔁 Volver a empezar ${formatMult(legacyMult(state) * 2)}</button>`
     : `<span class="goal-reward">🏅 Segundo final</span>`;

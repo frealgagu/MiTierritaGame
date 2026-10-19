@@ -16,8 +16,10 @@ export function splashWait(text) {
 }
 
 // Con barra: el cálculo de lo que se produjo mientras no estabas.
-export function splashOffline(seconds, cap) {
-  splashWait(`Pasaron ${formatDuration(seconds)} desde la última vez. Calculando lo que se produjo mientras no estabas…`);
+// region: la región que se calcula (las que no son el Eje Cafetero lo dicen).
+export function splashOffline(seconds, cap, region = null) {
+  const where = region ? ` en ${region.icon} ${region.name}` : '';
+  splashWait(`Pasaron ${formatDuration(seconds)} desde la última vez. Calculando lo que se produjo${where} mientras no estabas…`);
   el().classList.remove('indeterminate');
   setSplashProgress(0);
   document.getElementById('splash-note').textContent = seconds > cap ? `Sin conexión se produce hasta ${formatDuration(cap)}.` : 'Las noches y las temporadas también cuentan.';

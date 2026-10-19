@@ -3,7 +3,7 @@ import { STATIONS_BY_ID } from '../data/stations.js';
 import { alerts } from '../sim/alerts.js';
 import { slowConsumers } from '../sim/transport.js';
 import { toast } from './toast.js';
-import { isWorkTime, seasonOf } from '../sim/calendar.js';
+import { clockOf, isWorkTime, seasonOf } from '../sim/calendar.js';
 import { EVENTS } from '../data/events.js';
 import { eventStatus } from '../sim/events.js';
 
@@ -28,7 +28,7 @@ export class Chatter {
     this.seen = new Map(); // estación → avisos que ya estaban puestos
     this.lastSaid = new Map(); // estación → cuándo avisó
     this.lastAny = -Infinity;
-    this.season = seasonOf(game.state.playTime);
+    this.season = seasonOf(clockOf(game.state));
   }
 
   update() {
@@ -45,7 +45,7 @@ export class Chatter {
       return;
     }
     const now = performance.now();
-    const season = seasonOf(state.playTime);
+    const season = seasonOf(clockOf(state));
     if (season !== this.season) {
       this.season = season;
       this.lastAny = now;
@@ -64,7 +64,7 @@ export class Chatter {
       return;
     }
     // De noche no hay problemas que avisar: todo descansa.
-    if (!isWorkTime(state.playTime)) {
+    if (!isWorkTime(clockOf(state))) {
       if (!state.hints.includes('night')) {
         state.hints.push('night');
         this.lastAny = now;
