@@ -41,11 +41,15 @@ test('el sello de calidad sube el precio de las bolsas', () => {
   assert.equal(game.state.coins, 2 * 250 * 1.5);
 });
 
-test('el capataz amplía las ganancias sin conexión a 6 h', () => {
+test('cada zona suma horas sin conexión: el capataz +3 h y, con las seis, 24 h', () => {
   const game = new Game();
   assert.equal(offlineCapSeconds(game.state), 2 * 3600);
   game.state.research.push('capataz');
-  assert.equal(offlineCapSeconds(game.state), 6 * 3600);
+  assert.equal(offlineCapSeconds(game.state), 5 * 3600);
+  const offline = RESEARCH.filter((r) => r.effect.type === 'offlineHours');
+  assert.deepEqual(offline.map((r) => r.zone), ['finca', 'trapiche', 'lecheria', 'cacaotal', 'maizal', 'pueblo']);
+  game.state.research = offline.map((r) => r.id);
+  assert.equal(offlineCapSeconds(game.state), 24 * 3600);
 });
 
 test('todas las investigaciones y objetivos apuntan a cosas que existen', () => {

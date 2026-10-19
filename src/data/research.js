@@ -3,7 +3,7 @@
 //   requires: estación que tiene que estar construida para que aparezca
 //   effect:   { type, target?, mult }
 //     stationSpeed (target = estación) · productValue (target = producto) · zoneValue (target = zona)
-//     muleSpeed · dispatchCapacity (target = zona) · offlineHours (mult = horas)
+//     muleSpeed · dispatchCapacity (target = zona) · offlineHours (hours = horas que suma)
 //   zone: zona en la que aparece
 import { ICON } from './icons.js';
 
@@ -14,7 +14,7 @@ export const RESEARCH = [
   { zone: 'finca', id: 'remolque', name: 'Remolque para el Willys', icon: '🚙', desc: 'El Willys lleva el doble por viaje.', cost: 2500, requires: 'huller', effect: { type: 'dispatchCapacity', target: 'finca', mult: 2 } },
   { zone: 'finca', id: 'secador', name: 'Secador mecánico', icon: '☀️', desc: 'La Marquesina seca el doble de rápido.', cost: 6000, requires: 'huller', effect: { type: 'stationSpeed', target: 'dryer', mult: 2 } },
   { zone: 'finca', id: 'trilla', name: 'Trilladora de rodillos', icon: '🌀', desc: 'La Trilladora procesa el doble.', cost: 8000, requires: 'roaster', effect: { type: 'stationSpeed', target: 'huller', mult: 2 } },
-  { zone: 'finca', id: 'capataz', name: 'Capataz', icon: '🧑‍🌾', desc: 'La finca trabaja hasta 6 h mientras no juegas (antes 2 h).', cost: 10000, requires: 'roaster', effect: { type: 'offlineHours', mult: 6 } },
+  { zone: 'finca', id: 'capataz', name: 'Capataz', icon: '🧑‍🌾', desc: 'Mientras no juegas, todo sigue produciendo 3 h más (sin investigaciones, 2 h).', cost: 10000, requires: 'roaster', effect: { type: 'offlineHours', hours: 3 } },
   { zone: 'finca', id: 'tueste', name: 'Tueste de origen', icon: '🏅', desc: 'El café tostado vale un 50 % más.', cost: 20000, requires: 'roaster', effect: { type: 'productValue', target: 'roasted', mult: 1.5 } },
   { zone: 'finca', id: 'tostador', name: 'Tostador de tambor grande', icon: '🔥', desc: 'La Tostadora tuesta el doble.', cost: 25000, requires: 'grinder', effect: { type: 'stationSpeed', target: 'roaster', mult: 2 } },
   // La segunda mejora del Cafetal sube el precio de todo el café, no la velocidad: un segundo ×2 en el
@@ -31,6 +31,7 @@ export const RESEARCH = [
   { zone: 'trapiche', id: 'abono_cana', name: 'Abono para la caña', icon: '🌱', desc: 'El Cañaduzal produce el doble.', cost: 50000, requires: 'furnace', effect: { type: 'stationSpeed', target: 'canefield', mult: 2 } },
   { zone: 'trapiche', id: 'pailas', name: 'Hornilla de más pailas', icon: '🍯', desc: 'La Hornilla cocina el doble (para seguirle el paso al Abono para la caña).', cost: 40000, requires: 'furnace', effect: { type: 'stationSpeed', target: 'furnace', mult: 2 } },
   { zone: 'trapiche', id: 'chiva', name: 'Chiva para el Trapiche', icon: '🚚', desc: 'El despacho del Trapiche lleva el doble por viaje.', cost: 80000, requires: 'furnace', effect: { type: 'dispatchCapacity', target: 'trapiche', mult: 2 } },
+  { zone: 'trapiche', id: 'trapichero', name: 'Trapichero de confianza', icon: '👴', desc: 'Mientras no juegas, todo sigue produciendo 3 h más.', cost: 300000, requires: 'molds', effect: { type: 'offlineHours', hours: 3 } },
   { zone: 'trapiche', id: 'gaveras_acero', name: 'Gaveras de acero', icon: '🧱', desc: 'Las Gaveras moldean el doble de rápido.', cost: 300000, requires: 'molds', effect: { type: 'stationSpeed', target: 'molds', mult: 2 } },
   { zone: 'trapiche', id: 'pulverizador', name: 'Pulverizadora eléctrica', icon: '🌀', desc: 'La Pulverizadora muele el doble.', cost: 600000, requires: 'pulverizer', effect: { type: 'stationSpeed', target: 'pulverizer', mult: 2 } },
   { zone: 'trapiche', id: 'panela_organica', name: 'Panela orgánica', icon: '🏅', desc: 'La panela pulverizada vale un 50 % más.', cost: 1500000, requires: 'pulverizer', effect: { type: 'productValue', target: 'panela_powder', mult: 1.5 } },
@@ -40,6 +41,7 @@ export const RESEARCH = [
   { zone: 'lecheria', id: 'placas', name: 'Pasteurizadora de placas', icon: '🌡️', desc: 'La Pasteurizadora procesa el doble (para seguirle el paso al Ordeño mecánico).', cost: 400000, requires: 'pasteurizer', effect: { type: 'stationSpeed', target: 'pasteurizer', mult: 2 } },
   { zone: 'lecheria', id: 'centrifuga', name: 'Descremadora centrífuga', icon: ICON.cream, desc: 'La Descremadora saca el doble de crema.', cost: 1200000, requires: 'separator', effect: { type: 'stationSpeed', target: 'separator', mult: 2 } },
   { zone: 'lecheria', id: 'carrotanque', name: 'Carrotanque', icon: '🚛', desc: 'El despacho de la Lechería lleva el doble por viaje.', cost: 1500000, requires: 'cheesery', effect: { type: 'dispatchCapacity', target: 'lecheria', mult: 2 } },
+  { zone: 'lecheria', id: 'ordeno_programado', name: 'Ordeño programado', icon: '⏰', desc: 'Mientras no juegas, todo sigue produciendo 4 h más.', cost: 3000000, requires: 'separator', effect: { type: 'offlineHours', hours: 4 } },
   { zone: 'lecheria', id: 'batidora', name: 'Batidora eléctrica', icon: '🧈', desc: 'La Batidora bate el doble de rápido.', cost: 3000000, requires: 'churn', effect: { type: 'stationSpeed', target: 'churn', mult: 2 } },
   { zone: 'lecheria', id: 'cuajo', name: 'Cuajo de calidad', icon: ICON.cheese, desc: 'La Quesera cuaja el doble de rápido.', cost: 8000000, requires: 'cheesery', effect: { type: 'stationSpeed', target: 'cheesery', mult: 2 } },
   { zone: 'lecheria', id: 'doble_crema', name: 'Queso doble crema', icon: '🏅', desc: 'El queso vale un 50 % más.', cost: 15000000, requires: 'cheesery', effect: { type: 'productValue', target: 'cheese', mult: 1.5 } },
@@ -51,6 +53,7 @@ export const RESEARCH = [
   { zone: 'cacaotal', id: 'cajones_escalera', name: 'Cajones en escalera', icon: '📦', desc: 'Los Cajones fermentan el doble (para seguirle el paso a los Injertos).', cost: 1200000, requires: 'fermenter', effect: { type: 'stationSpeed', target: 'fermenter', mult: 2 } },
   { zone: 'cacaotal', id: 'marquesina_cacao', name: 'Secadero con techo corredizo', icon: '☀️', desc: 'El Secadero seca el doble de rápido.', cost: 3000000, requires: 'cacao_roaster', effect: { type: 'stationSpeed', target: 'cacao_dryer', mult: 2 } },
   { zone: 'cacaotal', id: 'camion_cacao', name: 'Camión para el Cacaotal', icon: '🚚', desc: 'El despacho del Cacaotal lleva el doble por viaje.', cost: 5000000, requires: 'cacao_dryer', effect: { type: 'dispatchCapacity', target: 'cacaotal', mult: 2 } },
+  { zone: 'cacaotal', id: 'vigilante', name: 'Vigilante del cacaotal', icon: '🔦', desc: 'Mientras no juegas, todo sigue produciendo 4 h más.', cost: 8000000, requires: 'cacao_roaster', effect: { type: 'offlineHours', hours: 4 } },
   { zone: 'cacaotal', id: 'tostador_bombo', name: 'Tostador de bombo', icon: '🔥', desc: 'El Tostador de cacao tuesta el doble.', cost: 8000000, requires: 'cacao_mill', effect: { type: 'stationSpeed', target: 'cacao_roaster', mult: 2 } },
   { zone: 'cacaotal', id: 'molino_bolas', name: 'Molino de bolas', icon: '🌀', desc: 'El Molino de cacao muele el doble.', cost: 20000000, requires: 'chocolate_table', effect: { type: 'stationSpeed', target: 'cacao_mill', mult: 2 } },
   { zone: 'cacaotal', id: 'moldes_aluminio', name: 'Moldes de aluminio', icon: '🍫', desc: 'La Mesa de chocolate moldea el doble.', cost: 50000000, requires: 'chocolatier', effect: { type: 'stationSpeed', target: 'chocolate_table', mult: 2 } },
@@ -62,6 +65,7 @@ export const RESEARCH = [
   { zone: 'maizal', id: 'desgranadora_motor', name: 'Desgranadora con motor', icon: '⚙️', desc: 'La Desgranadora desgrana el doble (para seguirle el paso al Maíz híbrido).', cost: 18000000, requires: 'sheller', effect: { type: 'stationSpeed', target: 'sheller', mult: 2 } },
   { zone: 'maizal', id: 'piladora_electrica', name: 'Piladora eléctrica', icon: '🪵', desc: 'La Piladora pila el doble.', cost: 45000000, requires: 'dough_mill', effect: { type: 'stationSpeed', target: 'corn_huller', mult: 2 } },
   { zone: 'maizal', id: 'camion_maiz', name: 'Camión para el Maizal', icon: '🚚', desc: 'El despacho del Maizal lleva el doble por viaje.', cost: 60000000, requires: 'corn_huller', effect: { type: 'dispatchCapacity', target: 'maizal', mult: 2 } },
+  { zone: 'maizal', id: 'vecina', name: 'Vecina que cuida el budare', icon: '👵', desc: 'Mientras no juegas, todo sigue produciendo 4 h más.', cost: 60000000, requires: 'dough_mill', effect: { type: 'offlineHours', hours: 4 } },
   { zone: 'maizal', id: 'molino_discos', name: 'Molino de discos', icon: '🌀', desc: 'El Molino de masa muele el doble.', cost: 120000000, requires: 'budare', effect: { type: 'stationSpeed', target: 'dough_mill', mult: 2 } },
   { zone: 'maizal', id: 'budare_grande', name: 'Budare grande', icon: '🔥', desc: 'El Budare asa el doble de arepas.', cost: 300000000, requires: 'arepa_stand', effect: { type: 'stationSpeed', target: 'budare', mult: 2 } },
   { zone: 'maizal', id: 'plancha_doble', name: 'Plancha doble', icon: ICON.cheeseArepa, desc: 'El Puesto de arepas atiende el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'arepa_stand', effect: { type: 'stationSpeed', target: 'arepa_stand', mult: 2 } },
@@ -71,6 +75,7 @@ export const RESEARCH = [
   { zone: 'pueblo', id: 'catadores', name: 'Catadores expertos', icon: '👃', desc: 'La Casa del café selecciona el doble de café de origen (pide el doble de bolsas a la Finca).', cost: 1000000000, requires: 'greca', effect: { type: 'stationSpeed', target: 'coffee_house', mult: 2 } },
   { zone: 'pueblo', id: 'greca_doble', name: 'Greca de dos llaves', icon: '☕', desc: 'La Greca prepara el doble de tintos.', cost: 1500000000, requires: 'greca', effect: { type: 'stationSpeed', target: 'greca', mult: 2 } },
   { zone: 'pueblo', id: 'tractomula', name: 'Tractomula', icon: '🚛', desc: 'El despacho del Pueblo lleva el doble por viaje.', cost: 2500000000, requires: 'fonda', effect: { type: 'dispatchCapacity', target: 'pueblo', mult: 2 } },
+  { zone: 'pueblo', id: 'administrador', name: 'Administrador del Pueblo', icon: '📋', desc: 'Mientras no juegas, todo sigue produciendo 4 h más (24 h con las seis zonas).', cost: 2500000000, requires: 'fonda', effect: { type: 'offlineHours', hours: 4 } },
   { zone: 'pueblo', id: 'mas_mesas', name: 'Más mesas en la Fonda', icon: '🍽️', desc: 'La Fonda sirve el doble de desayunos.', cost: 4000000000, requires: 'fonda', effect: { type: 'stationSpeed', target: 'fonda', mult: 2 } },
   { zone: 'pueblo', id: 'tejedoras', name: 'Tejedoras de fique', icon: '🧶', desc: 'El Taller teje el doble de canastas.', cost: 8000000000, requires: 'basket_shop', effect: { type: 'stationSpeed', target: 'basket_shop', mult: 2 } },
   { zone: 'pueblo', id: 'monos', name: 'Cintas y moños', icon: '🎀', desc: 'El Empaque de regalos arma el doble de canastas.', cost: 15000000000, requires: 'gift_wrap', effect: { type: 'stationSpeed', target: 'gift_wrap', mult: 2 } },

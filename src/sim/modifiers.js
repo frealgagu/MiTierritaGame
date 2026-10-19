@@ -43,11 +43,13 @@ export const dispatchMult = (state, zoneId = 'finca') => product(state, 'dispatc
 export const productValue = (state, productId) =>
   PRODUCTS[productId].value * product(state, 'productValue', productId) * product(state, 'zoneValue', PRODUCTS[productId].zone);
 
+// Horas que la finca sigue produciendo sin conexión: 2 h, más las que suma cada investigación (una
+// por zona: 3 + 3 + 4 + 4 + 4 + 4, hasta 24 h).
 export function offlineCapSeconds(state) {
   let hours = BASE_OFFLINE_HOURS;
   for (const id of state.research ?? []) {
     const e = RESEARCH_BY_ID[id]?.effect;
-    if (e?.type === 'offlineHours') hours = Math.max(hours, e.mult);
+    if (e?.type === 'offlineHours') hours += e.hours;
   }
   return hours * 3600;
 }

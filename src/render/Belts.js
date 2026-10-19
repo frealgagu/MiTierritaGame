@@ -1,7 +1,7 @@
 import { Container, Graphics } from 'pixi.js';
 import { iso, shade } from './iso.js';
 import { OUTLINE } from './palette.js';
-import { pointAtDistance } from '../core/path.js';
+import { pathLength, pointAtDistance } from '../core/path.js';
 import { PRODUCTS } from '../data/products.js';
 
 const SIDE = 0.3; // casillas: la banda va a un lado del camino, las mulas que quedan por el otro
@@ -9,6 +9,7 @@ const STEP = 0.2; // casillas entre puntos al dibujar la banda
 const MARK_GAP = 0.5; // casillas entre las marcas que se mueven sobre la banda
 const MARK_SPEED = 1.2; // casillas por segundo de las marcas (solo decorativo)
 const MARK_STEP = 0.05; // casillas entre los puntos precalculados para las marcas
+const YARD_GAP = 0.6; // casillas antes del patio de la bodega donde termina la banda
 
 // Bandas eléctricas (v1.2.3): las estaciones con transporte de nivel 50 o más ya no dibujan mulas.
 // Los tramos del camino que usan se cubren con una banda y lo que va en camino se dibuja como cajas.
@@ -17,6 +18,10 @@ export class Belts extends Container {
   constructor(road) {
     super();
     this.road = road;
+    // El último tramo del camino (de la esquina a la puerta de la bodega) va por el patio, que es
+    // también la carretera del Willys: la banda termina antes, junto a la pared de la bodega, para
+    // que el jeep no pase por encima.
+    this.end = pathLength(road.slice(0, -1)) - YARD_GAP;
     this.base = new Graphics();
     this.marks = new Graphics();
     this.crates = new Graphics();
@@ -34,7 +39,10 @@ export class Belts extends Container {
 
   // intervals: tramos [desde, hasta] (distancias sobre el camino); se unen los que se tocan.
   setIntervals(intervals) {
-    const sorted = intervals.map(([a, b]) => [Math.min(a, b), Math.max(a, b)]).sort((x, y) => x[0] - y[0]);
+    const sorted = intervals
+      .map(([a, b]) => [Math.min(a, b), Math.min(Math.max(a, b), this.end)])
+      .filter(([a, b]) => b > a)
+      .sort((x, y) => x[0] - y[0]);
     const merged = [];
     for (const [a, b] of sorted) {
       const last = merged.at(-1);
@@ -93,7 +101,10 @@ export class Belts extends Container {
     m.fill({ color: 0xc7ccd1, alpha: 0.9 });
     const g = this.crates.clear();
     // De atrás hacia adelante, para que las de delante tapen a las de detrás.
-    const placed = crates.map((c) => ({ ...c, p: this.at(c.s, 3) })).sort((x, y) => x.p.y - y.p.y);
+    const placed = crates
+      .filter((c) => c.s <= this.end)
+      .map((c) => ({ ...c, p: this.at(c.s, 3) }))
+      .sort((x, y) => x.p.y - y.p.y);
     for (const { p, productId } of placed) {
       const color = PRODUCTS[productId]?.color ?? 0xd9c08c;
       // Caja de madera con la tapa del color del producto.

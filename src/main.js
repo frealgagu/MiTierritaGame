@@ -241,13 +241,13 @@ async function start() {
 }
 
 // Simula el tiempo que el juego estuvo cerrado; devuelve el resumen si hubo ganancias.
-// Con el tiempo acelerado (opciones de desarrollador), el tiempo fuera y el tope cuentan a esa velocidad.
+// Siempre a velocidad normal: el tiempo acelerado de las opciones de desarrollador solo cuenta con el
+// juego abierto (multiplicar el tiempo fuera hacía que volver tardara mucho en calcularse).
 function applyOffline(game, seconds) {
   if (seconds < MIN_OFFLINE_S) return null;
-  const scale = game.timeScale;
-  const cap = offlineCapSeconds(game.state) * scale;
-  const r = game.catchUp(seconds * scale, cap);
-  return r.coins > 0 ? { ...r, cap, capped: seconds * scale > cap, scale } : null;
+  const cap = offlineCapSeconds(game.state);
+  const r = game.catchUp(seconds, cap);
+  return r.coins > 0 ? { ...r, cap, capped: seconds > cap } : null;
 }
 
 function bindMenu(game, sound, music) {

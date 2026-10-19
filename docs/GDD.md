@@ -304,7 +304,7 @@ Cada estación tiene **dos ejes** de mejora.
 | 🚙 Remolque para el Willys | Despacho ×2 de carga | 2.500 | Trilladora |
 | ♨️ Secador mecánico | Marquesina ×2 | 6.000 | Trilladora |
 | 🌀 Trilladora de rodillos | Trilladora ×2 | 8.000 | Tostadora |
-| 🧑‍🌾 Capataz | Ganancias sin conexión: de 2 h a 6 h | 10.000 | Tostadora |
+| 🧑‍🌾 Capataz | Ganancias sin conexión: +3 h (las otras zonas tienen la suya: 24 h con las seis) | 10.000 | Tostadora |
 | 🔥 Tueste de origen | Café tostado +50 % de valor | 20.000 | Tostadora |
 | 🔥 Tostador de tambor grande | Tostadora ×2 | 25.000 | Molino |
 | 💧 Beneficio ecológico | Compostera ×2 | 20.000 | Compostera |
@@ -355,9 +355,11 @@ El segundo final es largo a propósito de la fórmula: cada nivel cuesta ×1,15 
 
 ## 7. Ganancias sin conexión
 
-- Al volver se simulan de verdad hasta 2 h de juego; lo que pase de ahí se suma al ritmo de la última hora simulada (monedas, ventas, producción e importados). Con el tiempo acelerado de las opciones de desarrollador, el tiempo fuera y el tope cuentan a esa velocidad.
+- Al volver se simulan de verdad hasta 2 h de juego; lo que pase de ahí se suma al ritmo de la última hora simulada (monedas, ventas, producción e importados). Siempre a velocidad normal: el tiempo acelerado de las opciones de desarrollador solo cuenta con el juego abierto (desde la v1.8.1).
+- **Tope**: 2 h, más una investigación por zona que suma horas (desde la v1.8.1): Capataz (Finca) +3 h, Trapichero de confianza +3 h, Ordeño programado +4 h, Vigilante del cacaotal +4 h, Vecina que cuida el budare +4 h y Administrador del Pueblo +4 h: **24 h** con las seis.
+- Con la jornada y las temporadas (v1.9), lo que se suma más allá de lo simulado se repartirá según las horas de trabajo y la temporada de cada tramo, para que dé lo mismo que jugar en vivo sin simular las 24 h.
 
-Al volver se **simula** el tiempo que el juego estuvo cerrado en pasos de 1 s, con un máximo de 2 h (6 h con el Capataz). Seis horas se calculan en unos 0,2 s y el resultado coincide con jugar en vivo (hay una prueba que lo verifica). Se muestra una ventana de bienvenida con lo ganado y si se alcanzó el tope.
+Se muestra una ventana de bienvenida con lo ganado y si se alcanzó el tope.
 
 ---
 
@@ -556,7 +558,8 @@ export const COST_GROWTH = 1.15;
 - **Una vez al año por zona**: cada zona abre su evento una vez por año de juego; el objetivo cambia de un año al siguiente. Con el tiempo, **4 eventos por zona** (4 medallas por zona, 24 en total). Solo uno a la vez por zona: si pasa, hay que esperar al otro año.
 - **Medallas** según qué tan rápido se cumple: 🥉 bronce, 🥈 plata, 🥇 oro.
 - **Primeros eventos (uno por zona)**: Finca, *La broca* (una plaga que baja la cosecha; trampas, hongo Beauveria y re-re para controlarla); Trapiche, *La gran molienda* (sin leña: la hornilla solo arde con el bagazo que se produce); Lechería, *Feria ganadera* (pedidos con plazo de queso, crema y arequipe); Cacaotal, *Derrumbe en la vía* (la ruta de la panela cortada: aguantar con lo guardado y abrir una trocha); Maizal, *Fiesta del maíz* (tandas de arepas para la fiesta); Pueblo, *El barco sale el viernes* (contenedores llenos antes de que zarpe cada barco).
-- **Progresión general** (en diseño): lo que dan las medallas se acumula en un total que **no se pierde al reiniciar** y no se convierte en monedas de la partida.
+- **Renombre ⭐**: las medallas dan Renombre (🥉 1, 🥈 2, 🥇 4), que se acumula en un total que **no se pierde al reiniciar** y nunca se convierte en monedas de la partida. Se gasta en **decoración** (colores de las casas y los balcones, pintura de la chiva y del Willys, ropa de los arrieros, adornos de la plaza) y en el **álbum de láminas** (como el de las chocolatinas: cada medalla y cada logro da una lámina; llenar una página da Renombre extra).
+- **Logros generales** que suman entre partidas (vender, exportar, ganar medallas en todas las zonas…), sin logros de velocidad: con cada reinicio todo va mucho más rápido.
 
 ---
 

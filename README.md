@@ -33,7 +33,7 @@ Las seis zonas del juego, cada una se abre al completar la anterior: **La Finca*
 - **Mejoras** de nivel 1–100 con hitos (nivel 10 ×2, 25 ×2, 50 ×4, 75 ×4, 100 ×8), **investigaciones** únicas, **objetivos** con recompensa y un final por zona (el del juego: 7.000 contenedores de exportación). **Maestría** (toda una zona al nivel 75: ×4) y **Supremacía** (toda al 100: ×8 más). **Segundo final**: tras el primero, todas las estaciones al nivel 100; entonces se puede volver a empezar con la producción ×2 (×4, ×8… en cada reinicio; se ve abajo a la derecha).
 - **Guía**: mejora recomendada, flecha en el mapa, vista «La cadena» con el cuello de botella en rojo.
 - **Vida**: edificios que evolucionan con los hitos, día y noche, aves, luciérnagas, efectos y sonido sintetizado.
-- **Guardado** automático, ganancias sin conexión (2 h, 6 h con el Capataz), copia de seguridad exportable.
+- **Guardado** automático, ganancias sin conexión (2 h, hasta 24 h con una investigación por zona), copia de seguridad exportable.
 - **Instalable en el móvil** (PWA) y jugable sin internet.
 - **Música**: «Apple Cider», de Zane Little (CC0, dominio público, vía OpenGameArt).
 
