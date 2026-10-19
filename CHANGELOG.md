@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v1.8.4 — Diagrama de la cadena
+- La ventana de la cadena (🔗) tiene dos pestañas: **🗺️ Diagrama** y **📋 Detalle** (la lista de antes, con todos los números). Se recuerda la última que se usó.
+- El **diagrama** es como el plano de producción de Frozen City: cada estación es una tarjeta (con su nivel y lo que produce), de arriba hacia abajo en el orden de la cadena, y las ramas van en columnas, una al lado de la otra. Tubos con el producto corriendo unen cada estación con la siguiente y todas terminan en la Bodega y Willys.
+  - Lo que llega de **otras zonas** son etiquetas azules encima de la estación que lo usa («🧂 🎋 Trapiche»), con su tubo azul.
+  - En **rojo**, lo que frena la cadena (la estación, sus arrieros o la ruta); en **gris con candado**, la siguiente por construir.
+  - Cada tarjeta ocupa el ancho de las ramas que tiene debajo, para que tres ramas quepan en el teléfono. Tocar una tarjeta o una etiqueta abre su panel.
+
 ## v1.8.3 — Vida en el mapa
 - **Gallinas** que picotean junto a la casa de cada finca.
 - Un **perro** en el patio de la bodega que corre detrás del Willys cuando sale y luego vuelve.

@@ -19,6 +19,15 @@ export class ChainView {
     this.body = document.getElementById('chain-body');
     document.getElementById('chain-btn').addEventListener('click', () => this.open());
     document.getElementById('chain-close').addEventListener('click', () => this.close());
+    // Dos vistas: el diagrama (de un vistazo, como un plano) y el detalle (la lista con los números).
+    this.help = document.getElementById('chain-help');
+    for (const btn of this.el.querySelectorAll('[data-chain-tab]')) {
+      btn.addEventListener('click', () => {
+        this.game.state.settings.chainTab = btn.dataset.chainTab;
+        this.html = null;
+        this.update();
+      });
+    }
     this.el.addEventListener('click', (e) => {
       if (e.target === this.el) this.close();
       const target = e.target.closest('[data-open]');
@@ -45,6 +54,16 @@ export class ChainView {
     const a = analyzeChain(state, zone);
     const rows = Object.fromEntries(a.rows.map((r) => [r.id, r]));
     const locked = nextToUnlock(state, zone);
+    const tab = state.settings.chainTab ?? 'diagram';
+    for (const btn of this.el.querySelectorAll('[data-chain-tab]')) btn.classList.toggle('active', btn.dataset.chainTab === tab);
+    this.help.textContent = tab === 'diagram'
+      ? 'De arriba hacia abajo, cómo pasa el producto de una estación a otra. En azul lo que llega de otras zonas; en rojo, lo que frena.'
+      : 'Toca una estación o sus arrieros para mejorarlos. En rojo, lo que frena la cadena.';
+    if (tab === 'diagram') {
+      const html = diagram(state, a, rows, locked, zone, this.body.clientWidth || 320);
+      if (html !== this.html) this.body.innerHTML = this.html = html;
+      return;
+    }
     // Árbol: cada estación con lo que le llega de otras zonas, sus arrieros y, debajo, la siguiente;
     // si reparte entre varias, cada rama va en su propio bloque, de su color y con su nombre.
     const html = `
@@ -137,4 +156,107 @@ function divertNote(state, row, icon) {
   if (reserved > 0.005) notes.push(`<span>🚌 ${formatRate(Math.min(reserved, row.diverted))} ${icon}/s a la bodega: se venden hasta que abra la ${pending[0].name}</span>`);
   if (extra > 0.005 + row.diverted * 0.02) notes.push(`<span class="divert">↪️ ${formatRate(extra)} ${icon}/s se venden sin procesar</span>`);
   return notes.join('');
+}
+
+// ---------- Diagrama (como el plano de producción de Frozen City) ----------
+// Cada estación es una tarjeta; las del mismo paso van en la misma fila y las ramas en columnas. Los
+// tubos bajan de una a la siguiente (con el producto corriendo, o en rojo donde se frena), lo que
+// llega de otras zonas entra como etiquetas azules encima de la estación, y todo termina en la bodega.
+const NODE_H = 70;
+const GAP = 38; // espacio vertical para los tubos
+const TAG_H = 26; // alto de cada etiqueta de importación
+const MIN_COL = 98;
+const NARROW = 118; // más angostas que esto, la tarjeta pone el ícono arriba y el nombre abajo
+
+function diagram(state, a, rows, locked, zone, width) {
+  const kidsOf = (id) => [...(rows[id]?.children ?? []), ...(locked && PARENT[locked] === id ? [locked] : [])];
+  // Columnas: cada hoja una, cada estación centrada sobre sus ramas.
+  const pos = {};
+  let leaf = 0;
+  const place = (id, depth) => {
+    const kids = kidsOf(id);
+    const first = leaf;
+    for (const k of kids) place(k, depth + 1);
+    const x = kids.length ? (pos[kids[0]].x + pos[kids.at(-1)].x) / 2 : leaf++;
+    // span: cuántas columnas tiene debajo (la tarjeta puede ser así de ancha).
+    pos[id] = { x, depth, span: Math.max(1, leaf - first) };
+  };
+  const root = a.rows[0].id;
+  place(root, 0);
+  const cols = Math.max(1, leaf);
+  const colW = Math.max(MIN_COL, Math.floor((width - 4) / cols));
+  const total = colW * cols;
+  const widthOf = (id) => Math.min(pos[id].span * colW - 12, 210);
+  const ids = Object.keys(pos);
+  const depthMax = Math.max(...ids.map((id) => pos[id].depth));
+  // Cada fila deja arriba el alto de las etiquetas de importación que tenga.
+  const tagsOf = (id) => STATIONS_BY_ID[id].imports ?? [];
+  const rowTop = [];
+  let y = 4;
+  for (let d = 0; d <= depthMax; d++) {
+    const band = Math.max(0, ...ids.filter((id) => pos[id].depth === d).map((id) => tagsOf(id).length)) * TAG_H;
+    y += (d ? GAP : 0) + band;
+    rowTop.push(y);
+    y += NODE_H;
+  }
+  const box = (id) => {
+    const cx = (pos[id].x + 0.5) * colW;
+    const w = widthOf(id);
+    return { cx, w, left: cx - w / 2, top: rowTop[pos[id].depth], bottom: rowTop[pos[id].depth] + NODE_H };
+  };
+  const bodega = { top: y + GAP + 6, w: Math.min(230, total - 16) };
+  bodega.left = (total - bodega.w) / 2;
+  const height = bodega.top + 58 + 6;
+
+  const pipes = [];
+  const pipe = (d, kind) => pipes.push(`<path d="${d}" class="dg-pipe ${kind}"/>`);
+  const nodes = [];
+  for (const id of ids) {
+    const b = box(id);
+    const def = STATIONS_BY_ID[id];
+    const row = rows[id];
+    const parent = PARENT[id];
+    // Tubo desde la anterior: baja, cruza y entra por la izquierda de la tarjeta (a la derecha van las etiquetas).
+    if (parent && pos[parent]) {
+      const p = box(parent);
+      const ex = tagsOf(id).length ? b.left + (b.w < NARROW ? 12 : 18) : b.cx;
+      const mid = p.bottom + GAP / 2;
+      const kind = !row ? 'locked' : a.bottleneck === `${parent}:transport` || a.bottleneck === id ? 'hot' : 'flow';
+      pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${ex} V ${b.top}`, kind);
+    }
+    // Etiquetas de lo que llega de otras zonas, apiladas encima de la estación, a la derecha.
+    tagsOf(id).forEach((imp, i) => {
+      const r = ROUTES_BY_ID[imp.route];
+      const from = ZONES_BY_ID[r.from];
+      const n = tagsOf(id).length;
+      const top = b.top - (n - i) * TAG_H;
+      const left = b.left + (b.w < NARROW ? 22 : 32);
+      const hot = a.bottleneck === `route:${r.id}` || row?.importLimited === r.id;
+      nodes.push(`<button class="dg-tag ${hot ? 'hot' : ''}" data-open="route:${r.id}" title="${PRODUCTS[imp.product].name} desde ${from.name}" style="left:${left}px;top:${top + 2}px;width:${b.w - (b.w < NARROW ? 22 : 32)}px">
+        ${PRODUCTS[imp.product].icon} <span>${b.w < NARROW ? `← ${from.icon}` : `${from.icon} ${from.name.replace(/^(La|El) /, '')}`}</span></button>`);
+      if (i === n - 1) pipe(`M ${left + 10} ${top + TAG_H - 2} V ${b.top}`, hot ? 'hot' : 'import');
+    });
+    if (!row) {
+      nodes.push(`<button class="dg-node locked ${b.w < NARROW ? 'narrow' : ''}" data-open="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">
+        <span class="dg-icon">${def.icon}</span><span class="dg-name">${def.name}</span><span class="dg-meta">🔒 ${formatNumber(def.unlockCost)} 💰</span></button>`);
+      continue;
+    }
+    const icon = outIcon(id);
+    nodes.push(`<button class="dg-node ${a.bottleneck === id ? 'hot' : ''} ${b.w < NARROW ? 'narrow' : ''}" data-open="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">
+      <span class="dg-icon">${def.icon}</span><span class="dg-name">${def.name}</span>
+      <span class="dg-meta">Nv ${state.stations[id].level} · ${formatRate(row.output)} ${icon}/s</span></button>`);
+    // Las que no siguen a otra estación terminan en la bodega.
+    if (!kidsOf(id).length) {
+      const busY = bodega.top - GAP / 2;
+      pipe(`M ${b.cx} ${b.bottom} V ${busY} H ${total / 2} V ${bodega.top}`, a.bottleneck === `${id}:transport` ? 'hot' : 'flow');
+    }
+  }
+  nodes.push(`<button class="dg-node dg-bodega ${a.bottleneck === `dispatch:${zone}` ? 'hot' : ''}" data-open="dispatch:${zone}" style="left:${bodega.left}px;top:${bodega.top}px;width:${bodega.w}px">
+    <span class="dg-icon">${DISPATCH.icon}</span><span class="dg-name">Bodega y Willys</span>
+    <span class="dg-meta">Nv ${state.zones[zone].dispatch.level} · ${formatRate(a.income)} 💰/s</span></button>`);
+  return `
+    <div class="dg-scroll"><div class="dg" style="width:${total}px;height:${height}px">
+      <svg class="dg-pipes" width="${total}" height="${height}" viewBox="0 0 ${total} ${height}">${pipes.join('')}</svg>
+      ${nodes.join('')}
+    </div></div>`;
 }
