@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v3.6.2 — La web funciona sin internet
+- La versión web **se puede abrir sin internet**: el service worker que lo permite nunca se activaba (quedaba en un «else if» detrás del enlace al APK, que siempre se cumplía antes). La web sigue cargando sola la última versión publicada cada vez que hay internet.
+
 ## v3.6.1 — La app avisa cuando hay una versión nueva
 - La **app de Android** revisa al abrirse (y al volver a ella, cada pocas horas) si hay una versión más nueva publicada. Si la hay, muestra sus novedades con dos botones: **Actualizar** (descarga el APK nuevo y Android pide instalarlo; la partida se conserva) o **Más tarde**.
 - En el menú de la app, **Buscar actualización** revisa en el momento.

@@ -413,11 +413,12 @@ async function start() {
     updateBtn.hidden = false;
     updateBtn.addEventListener('click', () => checkForUpdate({ manual: true, toast }));
   }
-  // En la web publicada, el menú ofrece el APK (lo publica el mismo flujo de GitHub Actions).
-  else if (import.meta.env.PROD) document.getElementById('apk-link').hidden = false;
-  // Jugable sin internet e instalable en el móvil (solo en la versión web publicada).
-  else if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  else if (import.meta.env.PROD) {
+    // En la web publicada, el menú ofrece el APK (lo publica el mismo flujo de GitHub Actions).
+    document.getElementById('apk-link').hidden = false;
+    // Jugable sin internet e instalable en el móvil. (Hasta la v3.6.1 nunca se registraba: estaba en un
+    // «else if» detrás del del APK, que siempre se cumplía antes.)
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 }
 
