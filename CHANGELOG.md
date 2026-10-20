@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v3.8.2 — La recomendación de los eventos sugiere sus compras
+- En el tablero de un evento, la **mejora recomendada** ya no sugiere investigaciones de la zona (como las Herraduras), que ahí no se pueden comprar.
+- Ahora recomienda las **compras del evento**: la siguiente en cuanto alcance el dinero y, con la medalla ya asegurada, la que falta aunque todavía no alcance. Al tocar la recomendación se señala su botón en la barra del evento y se dice qué hace.
+
 ## v3.8.1 — Logros y Santander siempre a mano
 - **Los logros, el álbum, la decoración y las horas se ven después de reiniciar.** El botón 🏅 Eventos (donde están) solo aparecía si había algún evento abierto, y al volver a empezar no lo había. Ahora aparece siempre que tengas Renombre, medallas o logros, o ya hayas reiniciado.
 - **Santander no se pierde.** Si ya terminaste el Eje Cafetero alguna vez, Santander queda abierto aunque reinicies, sin tener que completar de nuevo el Pueblo.

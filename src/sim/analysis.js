@@ -10,6 +10,7 @@ import { COMPOST_VALUE, WASHED_PER_COMPOST, dispatchMult, productValue, speedMul
 import { PRODUCTS } from '../data/products.js';
 import { canPay, researchLocked } from './upgrades.js';
 import { objectiveUpgrades, supplyFraction } from './events.js';
+import { EVENTS_BY_ID } from '../data/events.js';
 
 const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
 const MAX_ROUTE_DEPTH = 4; // zonas encadenadas por rutas que se miran como mucho
@@ -433,10 +434,18 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
   }
   const roi = (o) => o.gain / o.cost;
   let best = options.filter((o) => o.gain > 1e-9 && o.gain >= minGain).sort((a, b) => roi(b) - roi(a))[0];
+  // En el tablero de un evento (v3.8.2) no hay investigaciones (las de la zona no se pueden comprar
+  // ahí): se recomiendan sus compras, que hacen falta para terminarlo. La siguiente, en cuanto alcance el
+  // dinero (quita el freno del evento), y con la medalla ya asegurada aunque todavía no alcance: es lo
+  // único que falta.
+  if (state.event) {
+    const action = EVENTS_BY_ID[state.event.id].actions.find((a) => !state.research.includes(a.id));
+    if (action && (state.event.medal || canPay(state, action.cost))) return { id: `action:${action.id}`, cost: action.cost, gain: 0 };
+  }
   // Una investigación solo se recomienda si ya alcanza el dinero y rinde más que el mejor nivel:
   // así la recomendación nunca deja al jugador ahorrando para algo caro. También las ×2 de las zonas que
   // abastecen a esta: se habilitan al nivel 25 y muchas llegan cuando ya se está en otra zona.
-  for (const r of RESEARCH) {
+  for (const r of state.event ? [] : RESEARCH) {
     const here = r.zone === zoneId || (r.stationLevel && zones.includes(r.zone));
     if (!here || state.research.includes(r.id) || !canPay(state, r.cost)) continue;
     if (researchLocked(state, r)) continue;

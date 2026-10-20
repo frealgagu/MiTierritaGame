@@ -5,7 +5,7 @@ import { legacyMult } from '../sim/modifiers.js';
 import { nextToUnlock, zoneOf } from '../sim/chain.js';
 import { clockLabel } from '../render/DayNight.js';
 import { clockOf, seasonOf } from '../sim/calendar.js';
-import { EVENTS_BY_ID } from '../data/events.js';
+import { EVENTS_BY_ID, EVENT_ACTIONS_BY_ID } from '../data/events.js';
 import { formatClock } from './EventBar.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
@@ -18,6 +18,7 @@ import { withArticle } from '../data/lore.js';
 export function upgradeName(id) {
   const [sid, part] = id.split(':');
   if (sid === 'research') return `🔬 ${RESEARCH_BY_ID[part].name}`; // (de otra zona: lo dice HUD.update)
+  if (sid === 'action') return `${EVENT_ACTIONS_BY_ID[part].icon} ${EVENT_ACTIONS_BY_ID[part].name}`; // compra de un evento
   if (sid === 'dispatch') return DISPATCH.name;
   if (sid === 'route') return `${ROUTES_BY_ID[part].icon} ${ROUTES_BY_ID[part].name}`;
   return part === 'transport' ? `Arrieros del ${STATIONS_BY_ID[sid].name}` : STATIONS_BY_ID[sid].name;
@@ -108,7 +109,7 @@ export class HUD {
     for (const { stationId: id } of ZONES_BY_ID[zone].plots) {
       if (!s.stations[id] && this.game.quoteUnlock(id).ok) return id;
     }
-    if (!rec || rec.id.startsWith('research:')) return null; // la flecha solo señala edificios
+    if (!rec || rec.id.startsWith('research:') || rec.id.startsWith('action:')) return null; // la flecha solo señala edificios
     const sid = rec.id.split(':')[0];
     if (STATIONS_BY_ID[sid] && zoneOf(sid) !== zone) return null; // está en otra zona
     if (!this.game.quote(rec.id, 1).affordable) return null;

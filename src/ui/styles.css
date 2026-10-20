@@ -532,6 +532,8 @@ body.panel-open .event-bar { display: none; }
 .event-action.owned { opacity: 0.55; }
 .event-action.locked { opacity: 0.45; }
 .event-action b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.event-action.flash { animation: event-flash 0.5s ease-in-out 3; }
+@keyframes event-flash { 50% { transform: scale(1.08); box-shadow: 0 0 0 3px var(--gold, #f2c14e); } }
 /* En el tablero no se ven los objetivos, las investigaciones ni las zonas de la partida. */
 body.event-mode #goals-btn, body.event-mode #research-btn, body.event-mode #zones-btn, body.event-mode #events-btn,
 body.event-mode .tracker, body.event-mode .legacy-chip { display: none !important; }

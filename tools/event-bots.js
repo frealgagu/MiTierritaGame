@@ -35,7 +35,7 @@ export function play(def, year, { style = 'rec', save = 30, every = 1, limit = 2
       if (style === 'obj') id = cheapest();
       else {
         const r = recommendUpgrade(board, (x, mode) => game.quote(x, mode), def.zone);
-        id = r && !r.id.startsWith('research:') && game.quote(r.id, 1).affordable ? r.id : null;
+        id = r && !r.id.startsWith('research:') && !r.id.startsWith('action:') && game.quote(r.id, 1).affordable ? r.id : null;
         if (style === 'mix' && !id) id = cheapest();
       }
       if (!id || !game.buy(id, 1)) break;

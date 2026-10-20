@@ -235,3 +235,23 @@ test('con la región terminada, tras reiniciar salen los eventos de todas sus zo
   refillSlots(fresh);
   assert.equal(eventStatus(fresh, 'trapiche'), null);
 });
+
+test('en el tablero se recomiendan las compras del evento, no las investigaciones de la zona (v3.8.2)', async () => {
+  const { recommendUpgrade } = await import('../src/sim/analysis.js');
+  const def = EVENTS[0];
+  const game = new Game(createEventState(def, 1));
+  const b = game.state;
+  const quote = (id, mode) => game.quote(id, mode);
+  b.coins = def.actions[0].cost;
+  assert.equal(recommendUpgrade(b, quote, def.zone).id, `action:${def.actions[0].id}`);
+  // Con mucho dinero tampoco salen investigaciones de la zona (como las herraduras).
+  b.coins = 1e12;
+  for (const a of def.actions) b.research.push(a.id);
+  const rec = recommendUpgrade(b, quote, def.zone);
+  assert.ok(!rec?.id.startsWith('research:'), rec?.id);
+  // Con la medalla asegurada, la compra que falta aunque no alcance el dinero.
+  b.research = [def.actions[0].id];
+  b.coins = 0;
+  b.event.medal = 'gold';
+  assert.equal(recommendUpgrade(b, quote, def.zone).id, `action:${def.actions[1].id}`);
+});

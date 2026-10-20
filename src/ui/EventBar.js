@@ -2,7 +2,7 @@
 // del evento (cada una pide la anterior).
 import { formatNumber } from '../core/format.js';
 import { allActionsBought, boardRound, buyAction, boardObjective, eventDef, eventItems, eventProgress, medalFor, quoteAction } from '../sim/events.js';
-import { MEDALS } from '../data/events.js';
+import { EVENT_ACTIONS_BY_ID, MEDALS } from '../data/events.js';
 import { PRODUCTS } from '../data/products.js';
 import { setFitted } from './fit.js';
 import { toast } from './toast.js';
@@ -36,6 +36,17 @@ export class EventBar {
       else toast(`${a.icon} ${a.name} (faltan monedas): ${a.desc}`, 4500);
       this.paint();
     });
+  }
+
+  // Señala una compra (la mejora recomendada del tablero) y dice qué hace.
+  highlight(id) {
+    const a = EVENT_ACTIONS_BY_ID[id];
+    const btn = this.actions.querySelector(`[data-action="${id}"]`);
+    if (!a || !btn) return;
+    btn.classList.remove('flash');
+    void btn.offsetWidth; // para que la animación vuelva a empezar
+    btn.classList.add('flash');
+    toast(`${a.icon} ${a.name} (💰 ${formatNumber(a.cost)}): ${a.desc}`, 4500);
   }
 
   // game: el Game del tablero, o null para esconder la barra.

@@ -118,6 +118,11 @@ async function start() {
   const select = (id) => {
     const [stationId, part] = id.split(':');
     if (stationId === 'research' && board) return; // en el tablero no hay investigaciones
+    // Una compra del evento (v3.8.2): se señala su botón en la barra del evento.
+    if (stationId === 'action') {
+      if (board) eventBar.highlight(part);
+      return;
+    }
     if (stationId === 'research') {
       research.open();
       return;
