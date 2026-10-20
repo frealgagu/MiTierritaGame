@@ -20,6 +20,8 @@ import { checkLogros } from './sim/logros.js';
 import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/splash.js';
 import { EventBar, formatClock } from './ui/EventBar.js';
 import { finishEvent, startEvent } from './sim/events.js';
+import { CALENDAR } from './sim/calendar.js';
+import { workLevel } from './sim/renown.js';
 import { MEDALS } from './data/events.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
 import { openRegions, regionState } from './sim/regions.js';
@@ -72,6 +74,8 @@ async function start() {
   const gameOf = (zoneId) => games[REGION_OF_ZONE[zoneId]];
   // La decoración elegida, antes de dibujar nada.
   setLook(root.profile);
+  // La jornada que ha comprado el jugador (v3.8), antes de sumar el tiempo fuera.
+  CALENDAR.extra = workLevel(root.profile);
   // La velocidad de las opciones de desarrollador sigue puesta al volver, también para el tiempo fuera.
   game.timeScale = savedSpeed();
   const away = saved ? (Date.now() - saved.savedAt) / 1000 : 0;
@@ -333,6 +337,7 @@ async function start() {
   app.ticker.add((ticker) => {
     if (catching) return;
     const dt = ticker.deltaMS / 1000;
+    CALENDAR.extra = workLevel(game.state.profile);
     // Todas las regiones producen a la vez (a la velocidad de las opciones de desarrollador).
     for (const g of Object.values(games)) {
       g.timeScale = game.timeScale;

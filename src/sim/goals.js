@@ -132,6 +132,8 @@ export function claimGoal(state, id, bus) {
     state.zones[zoneId].complete = true;
     const next = ZONES_BY_ID[zoneId].next;
     if (next) unlockZone(state, next, bus);
+    // La última zona (v3.8): la región queda terminada para siempre (sus eventos salen en todas sus zonas).
+    else state.regionDone = true;
   }
   bus.emit('goalClaimed', { goal, zone: zoneId });
   return true;

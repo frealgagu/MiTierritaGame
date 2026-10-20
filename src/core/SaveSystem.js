@@ -6,6 +6,7 @@ import { ZONES_BY_ID } from '../data/zones/index.js';
 import { OFFLINE_BASE_HOURS, OFFLINE_COSTS, OFFLINE_STEP_HOURS } from '../sim/renown.js';
 import { DAY_LENGTH, YEAR_DAYS } from '../sim/calendar.js';
 import { EVENT_OF_ZONE } from '../data/events.js';
+import { REGIONS_BY_ID } from '../data/regions.js';
 
 const KEY = 'cafetal.save';
 
@@ -152,6 +153,9 @@ function migrateProfile(root) {
       ev.count[zone] ??= Math.max(1, history.filter((h) => h.event === EVENT_OF_ZONE[zone]?.id).length);
     }
     delete ev.done;
+    // v3.7 → v3.8: la región terminada alguna vez (su última zona completa, o ya reiniciada).
+    const last = REGIONS_BY_ID[st.region ?? 'cafetero'].zones.at(-1);
+    st.regionDone = Boolean(st.regionDone || st.zones?.[last]?.complete || st.legacy?.resets > 0);
   }
   return root;
 }

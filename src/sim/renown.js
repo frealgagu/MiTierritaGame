@@ -87,3 +87,23 @@ export function buyOffline(profile) {
   profile.offlineLevel = offlineLevel(profile) + 1;
   return true;
 }
+
+// La jornada (v3.8): bloques de 2 horas que se suman a la de 6 a 12 y de 14 a 20 (ver sim/calendar.js:
+// EXTRA_BLOCKS). Cada uno cuesta el doble del anterior. Es del jugador: vale en todas las regiones.
+export const WORK_COSTS = [2, 4, 8, 16, 32, 64]; // ⭐ de cada bloque
+export const workLevel = (profile) => profile?.workLevel ?? 0;
+
+export function quoteWork(profile) {
+  const cost = WORK_COSTS[workLevel(profile)];
+  if (cost === undefined) return { ok: false, reason: 'max' };
+  if (profile.renown < cost) return { ok: false, reason: 'renown', cost };
+  return { ok: true, cost };
+}
+
+export function buyWork(profile) {
+  const q = quoteWork(profile);
+  if (!q.ok) return false;
+  profile.renown -= q.cost;
+  profile.workLevel = workLevel(profile) + 1;
+  return true;
+}

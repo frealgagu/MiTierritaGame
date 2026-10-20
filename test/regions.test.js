@@ -23,13 +23,13 @@ test('cada región tiene sus zonas y su partida empieza en la primera, con su fu
 test('Santander se abre al completar el Pueblo, con el calendario del país', () => {
   const root = createInitialState(0);
   assert.deepEqual(openRegions(root), []);
-  root.playTime = 50000;
+  root.playTime = 50060; // a las 15:00 (en plena jornada)
   root.zones.pueblo.complete = true;
   assert.deepEqual(openRegions(root), ['santander']);
   assert.deepEqual(openRegions(root), [], 'solo una vez');
   const s = regionState(root, 'santander');
   assert.equal(s.region, 'santander');
-  assert.equal(clockOf(s), 50000);
+  assert.equal(clockOf(s), 50060);
   // Avanza a la par: las dos partidas siguen en la misma fecha.
   const a = new Game(root);
   const b = new Game(s);
@@ -197,14 +197,14 @@ test('el Hormiguero solo cosecha en la entrada de aguas (×4) y la despensa abas
   const on = CALENDAR.on;
   CALENDAR.on = true;
   // Mediodía del primer día (verano): fuera de temporada no se cosecha, pero los arrieros llevan lo guardado.
-  game.state.playTime = DAY_LENGTH * ((12 - START_HOUR) / 24);
+  game.state.playTime = DAY_LENGTH * ((14 - START_HOUR) / 24);
   for (let t = 0; t < 60; t += 0.1) game.step(0.1);
   assert.equal(ant.status, 'season');
   assert.equal(game.state.stats.produced.ant_queen ?? 0, 0, 'nada nuevo');
   assert.ok(ant.buffer < cap, 'la despensa baja');
   assert.ok((game.state.stats.produced.ant_clean ?? 0) > 0, 'la cadena sigue trabajando');
   // Mediodía de la entrada de aguas: cosecha ×4.
-  game.state.playTime = DAY_LENGTH * (SEASON_DAYS + (12 - START_HOUR) / 24);
+  game.state.playTime = DAY_LENGTH * (SEASON_DAYS + (14 - START_HOUR) / 24);
   ant.buffer = 0;
   for (let t = 0; t < 60; t += 0.1) game.step(0.1);
   assert.equal(ant.status, 'working');
@@ -314,4 +314,22 @@ test('al cargar una partida de la v3.6, los eventos ya jugados pasan al sistema 
   assert.equal(back.events.count.finca, 2, 'la broca ya se jugó dos veces: sigue el reto 3');
   assert.ok(back.events.last.finca >= 0);
   assert.equal(eventStatus(back, 'finca').round, 3);
+});
+
+test('una partida ya reiniciada o con la última zona completa carga con la región terminada (v3.8)', () => {
+  const mem = {};
+  globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  const old = restartState(root);
+  delete old.regionDone;
+  old.regions.santander.zones.barichara.complete = true;
+  delete old.regions.santander.regionDone;
+  saveGame(old);
+  const back = loadGame();
+  assert.equal(back.regionDone, true, 'ya se había reiniciado');
+  assert.equal(back.regions.santander.regionDone, true, 'Barichara completa');
+  saveGame(createInitialState(0));
+  assert.equal(loadGame().regionDone, false);
 });

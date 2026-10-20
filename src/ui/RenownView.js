@@ -1,7 +1,9 @@
 // Ventana del Renombre ⭐ (v2.2): el álbum de láminas (se pega la que uno elija) y la decoración.
 import { ALBUM, PAGE_BONUS } from '../data/album.js';
 import { DECOR } from '../data/decor.js';
-import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, buyOffline, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
+import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, WORK_COSTS, buyOffline, buyWork, quoteWork, workLevel, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
+import { CALENDAR, EXTRA_BLOCKS, workBlocks } from '../sim/calendar.js';
+import { workText } from './calendar.js';
 import { toast } from './toast.js';
 import { LOGROS } from '../data/logros.js';
 import { metric, tierOf } from '../sim/logros.js';
@@ -40,6 +42,11 @@ export class RenownView {
         toast(`⏰ Ahora todo sigue produciendo ${offlineHours(profileOf(this.game.state))} h mientras no juegas.`, 3500);
         this.render();
       }
+      if (e.target.closest('[data-work]') && buyWork(profileOf(this.game.state))) {
+        CALENDAR.extra = workLevel(profileOf(this.game.state));
+        toast(`🕐 Ahora se trabaja de ${workText()}.`, 3500);
+        this.render();
+      }
     });
   }
 
@@ -73,8 +80,8 @@ export class RenownView {
       help.textContent = `Cada lámina cuesta Renombre y tú eliges cuál pegar. Al llenar una página ganas ${PAGE_BONUS} ⭐ de premio.`;
       this.body.innerHTML = this.albumHtml(profile);
     } else if (this.tab === 'offline') {
-      help.textContent = 'Mientras no juegas, todas tus regiones siguen produciendo hasta este límite. Es tuyo: vale para todas las regiones y no se pierde al volver a empezar.';
-      this.body.innerHTML = this.offlineHtml(profile);
+      help.textContent = 'Las horas son tuyas: valen para todas las regiones y no se pierden al volver a empezar.';
+      this.body.innerHTML = this.workHtml(profile) + this.offlineHtml(profile);
     } else if (this.tab === 'logros') {
       help.textContent = 'Los logros suman entre partidas: lo de antes de volver a empezar también cuenta. Cada nivel da Renombre.';
       this.body.innerHTML = this.logrosHtml();
@@ -113,6 +120,21 @@ export class RenownView {
     }).join('');
   }
 
+  // La jornada (v3.8): de 12 h a 24 h, con bloques de 2 h que cuestan cada uno el doble del anterior.
+  workHtml(profile) {
+    const level = workLevel(profile);
+    const hours = 12 + 2 * level;
+    const steps = WORK_COSTS.map((_, k) => (k < level ? '★' : '☆')).join('');
+    const q = quoteWork(profile);
+    const [a, b] = EXTRA_BLOCKS[level] ?? [];
+    const next = q.reason === 'max'
+      ? '<p>✅ Al máximo: se trabaja las 24 horas.</p>'
+      : `<button class="btn buy" data-work ${q.ok ? '' : 'disabled'}>+2 h (de ${a}:00 a ${b % 24}:00) · ⭐ ${q.cost}</button>`;
+    return `<div class="logro"><div class="logro-head"><b>🕐 Jornada: ${hours} h</b><span class="logro-stars">${steps}</span></div>
+      <p>Se trabaja de ${workText(workBlocks(level))}. Fuera de la jornada las estaciones descansan.</p>
+      <div class="bar"><div style="width:${(100 * hours) / 24}%"></div></div>${next}</div>`;
+  }
+
   // Horas sin conexión (v3.7): de 2 h a 24 h, 2 h por nivel.
   offlineHtml(profile) {
     const level = offlineLevel(profile);
@@ -123,7 +145,7 @@ export class RenownView {
     const next = q.reason === 'max'
       ? '<p>✅ Al máximo: 24 h.</p>'
       : `<button class="btn buy" data-offline ${q.ok ? '' : 'disabled'}>+${OFFLINE_STEP_HOURS} h (hasta ${hours + OFFLINE_STEP_HOURS} h) · ⭐ ${q.cost}</button>`;
-    return `<div class="logro"><div class="logro-head"><b>⏰ ${hours} h</b><span class="logro-stars">${steps}</span></div>
+    return `<div class="logro"><div class="logro-head"><b>⏰ Sin conexión: ${hours} h</b><span class="logro-stars">${steps}</span></div>
       <p>Al volver, se suma lo que todas tus regiones produjeron hasta ${hours} h (máximo ${max} h).</p>
       <div class="bar"><div style="width:${(100 * hours) / max}%"></div></div>${next}</div>`;
   }

@@ -4,6 +4,10 @@ import { Game } from '../src/core/Game.js';
 import { analyzeChain } from '../src/sim/analysis.js';
 import { PARENT, ROAD_POS, chainOf } from '../src/sim/chain.js';
 import { ZONE_LIST } from '../src/data/zones/index.js';
+import { CALENDAR } from '../src/sim/calendar.js';
+
+// Siempre de día y sin temporada: se mira la cadena, no el reloj.
+CALENDAR.on = false;
 
 const CHAIN = chainOf('finca');
 

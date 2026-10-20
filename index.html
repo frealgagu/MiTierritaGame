@@ -218,7 +218,7 @@
               <li>La cadena va tan rápido como su estación más lenta. Arriba, <b>💡 Mejora recomendada</b> te dice qué subir, y <b>🔗</b> muestra toda la cadena y dónde se frena.</li>
               <li>En los niveles 10, 25, 50, 75 y 100 hay <b>hitos</b> que multiplican la velocidad.</li>
               <li><b>📋 Objetivos</b> dan monedas y <b>🔬 Investigaciones</b> son mejoras únicas.</li>
-              <li>Se trabaja de <b>6:00 a 18:00</b>: de noche todo descansa. Las <b>temporadas</b> (☀️ verano, 🌦️ entrada de aguas, 🌧️ invierno, 🌤️ veranillo) suben o bajan la producción; toca el reloj para ver el calendario.</li>
+              <li>Se trabaja de <b>6:00 a 12:00 y de 14:00 a 20:00</b>: al almuerzo y de noche todo descansa (con Renombre ⭐ se compran más horas). Las <b>temporadas</b> (☀️ verano, 🌦️ entrada de aguas, 🌧️ invierno, 🌤️ veranillo) suben o bajan la producción; toca el reloj para ver el calendario.</li>
               <li>Cuando ya conoces una zona, llega su <b>evento 🏅</b> una vez al año: un tablero aparte con su propio reloj. Cuanto más rápido, mejor la medalla, y las medallas dan <b>Renombre ⭐</b>, que no se pierde al volver a empezar.</li>
               <li>Aunque cierres el juego, la finca sigue produciendo un tiempo y al volver te espera lo ganado.</li>
             </ul>
@@ -243,7 +243,7 @@
           <button id="calendar-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>
         <p id="calendar-now" class="calendar-now"></p>
-        <p class="chain-help">Se trabaja de <b>6:00 a 18:00</b>: de noche las estaciones descansan y los arrieros no salen (el Willys y las chivas sí). Un día dura 8 minutos y el año tiene 16 días, en cuatro temporadas de 4 días que cambian la producción de todas las estaciones a la vez:</p>
+        <p class="chain-help">Se trabaja de <b id="calendar-work">6:00 a 12:00 y 14:00 a 20:00</b>: a la hora del almuerzo y de noche las estaciones descansan y los arrieros no salen (el Willys y las chivas sí). Con Renombre ⭐ se compran más horas de trabajo. Un día dura 8 minutos y el año tiene 16 días, en cuatro temporadas de 4 días que cambian la producción de todas las estaciones a la vez:</p>
         <ul id="calendar-seasons" class="calendar-seasons"></ul>
         <p class="chain-help calendar-fact">💡 En el Eje Cafetero hay dos cosechas al año: la grande y la <b>mitaca</b>, una cosecha más pequeña que llega unos seis meses después.</p>
       </div>
@@ -255,13 +255,13 @@
           <h2>🏅 Eventos</h2>
           <button id="events-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>
-        <p class="chain-help">Cada región tiene dos eventos a la vez: tableros aparte, con sus propias monedas y niveles y un reloj que solo corre mientras juegas en ellos. Cuanto más rápido cumplas el objetivo, mejor la medalla (🥇 da 4 ⭐ de Renombre, 🥈 2 y 🥉 1); para terminar el evento, además hay que comprar sus tres mejoras. Al terminarlo, ese cupo descansa 3 años del juego (unas 6 h 24 min) y luego sale el evento de otra zona. El Renombre y las medallas no se pierden al volver a empezar.</p>
+        <p class="chain-help">Cada región tiene dos eventos a la vez: tableros aparte, con sus propias monedas y niveles y un reloj que solo corre mientras juegas en ellos. Cuanto más rápido cumplas el objetivo, mejor la medalla (🥇 da 4 ⭐ de Renombre, 🥈 2 y 🥉 1); para terminar el evento, además hay que comprar sus tres mejoras. Al terminarlo, ese cupo descansa 3 años del juego (unas 6 h 24 min) y luego sale el evento de otra zona. Con la región ya terminada, salen los eventos de todas sus zonas aunque vuelvas a empezar. El Renombre y las medallas no se pierden al volver a empezar.</p>
         <div class="events-renown-row">
           <span id="events-renown" class="events-renown"></span>
           <button id="album-btn" class="btn">📖 Álbum</button>
           <button id="decor-btn" class="btn">🎨 Decoración</button>
           <button id="logros-btn" class="btn">🏆 Logros</button>
-          <button id="offline-btn" class="btn">⏰ Sin conexión</button>
+          <button id="offline-btn" class="btn">⏰ Horas</button>
         </div>
         <div id="events-body" class="list-body"></div>
       </div>

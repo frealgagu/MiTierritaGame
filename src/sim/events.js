@@ -42,7 +42,10 @@ export function eventsOf(state) {
 
 // El próximo reto de la zona (1, 2, 3…).
 export const nextRound = (state, zoneId) => (eventsOf(state).count[zoneId] ?? 0) + 1;
-const ready = (state, def) => Boolean(state.zones[def.zone]?.unlocked) && def.stations.every((id) => state.stations[id]);
+// Una zona tiene evento si está abierta; con la región ya terminada alguna vez (v3.8), todas sus zonas,
+// aunque tras reiniciar todavía no se hayan abierto: ya se jugaron.
+const open = (state, zoneId) => zoneId in state.zones && (state.regionDone || Boolean(state.zones[zoneId].unlocked));
+const ready = (state, def) => open(state, def.zone) && (state.regionDone || def.stations.every((id) => state.stations[id]));
 
 // Llena los cupos libres y libera los que ya cumplieron sus 3 años. Se llama en cada paso de la partida.
 export function refillSlots(state) {
@@ -60,7 +63,7 @@ export function refillSlots(state) {
     if (ev.slots[i]) continue;
     const taken = new Set([...ev.slots.map((x) => x?.zone), ...Object.keys(ev.boards)]);
     // Primero las nunca jugadas (en el orden de las zonas), luego la que lleva más tiempo sin jugarse.
-    const next = EVENTS.filter((def) => def.zone in state.zones && !taken.has(def.zone) && ready(state, def))
+    const next = EVENTS.filter((def) => !taken.has(def.zone) && ready(state, def))
       .map((def, k) => ({ def, k, last: ev.last[def.zone] ?? -Infinity }))
       .sort((a, b) => a.last - b.last || a.k - b.k)[0];
     if (!next) return;
@@ -80,7 +83,7 @@ export function nextSlotAt(state) {
 //   round: el reto que toca   board: el tablero, si está en juego
 export function eventStatus(state, zoneId) {
   const def = EVENT_OF_ZONE[zoneId];
-  if (!def || !state.zones[zoneId]?.unlocked) return null;
+  if (!def || !open(state, zoneId)) return null;
   const ev = eventsOf(state);
   const board = ev.boards[zoneId];
   if (board) return { kind: 'active', def, round: boardRound(board), board };

@@ -47,6 +47,8 @@ export function restartState(state, now = Date.now()) {
   next.hints = [...(state.hints ?? [])];
   // Las otras regiones (solo la partida del Eje Cafetero las guarda) siguen igual.
   if (state.regions) next.regions = state.regions;
+  // La región ya se terminó (v3.8): sus eventos siguen saliendo en todas sus zonas.
+  next.regionDone = Boolean(state.regionDone || state.zones[region.zones.at(-1)]?.complete);
   // Lo que no se pierde (v2.0): Renombre, medallas, álbum, decoración y logros; y lo de esta partida
   // pasa al acumulado de los logros (v2.3). Solo la partida del Eje Cafetero guarda el perfil.
   // Los eventos (v3.7): los cupos que esperan sus 3 años y lo ya jugado siguen; el tablero en juego se

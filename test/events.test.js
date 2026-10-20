@@ -205,3 +205,33 @@ test('feria: el objetivo pide varios productos y cuenta cada uno hasta lo pedido
   for (const a of def.actions) buyAction(board, a.id);
   assert.ok(finishEvent(main.state, 'lecheria').done);
 });
+
+test('con la región terminada, tras reiniciar salen los eventos de todas sus zonas (v3.8)', async () => {
+  const { refillSlots } = await import('../src/sim/events.js');
+  const { claimGoal } = await import('../src/sim/goals.js');
+  const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
+  const game = new Game();
+  const s = game.state;
+  // Cobrar el objetivo final del Pueblo deja la región terminada.
+  const final = GOALS_BY_ZONE.pueblo.at(-1);
+  assert.ok(final.final);
+  s.zones.pueblo.unlocked = true;
+  s.goals.claimed = GOALS_BY_ZONE.pueblo.slice(0, -1).map((g) => g.id);
+  s.stats[final.type][final.product] = final.amount;
+  assert.equal(s.regionDone, false);
+  assert.ok(claimGoal(s, final.id, game.bus));
+  assert.ok(s.regionDone && s.zones.pueblo.complete);
+  const next = restartState(s);
+  assert.ok(next.regionDone, 'se conserva al reiniciar');
+  assert.ok(restartState(next).regionDone, 'y en los siguientes reinicios');
+  assert.deepEqual(Object.keys(next.zones).filter((z) => next.zones[z].unlocked), ['finca']);
+  refillSlots(next);
+  assert.deepEqual(next.events.slots.map((x) => x?.zone), [EVENTS[0].zone, EVENTS[1].zone]);
+  assert.equal(eventStatus(next, EVENTS[1].zone).kind, 'available', 'aunque la zona no esté abierta');
+  assert.equal(eventStatus(next, 'pueblo').kind, 'waiting');
+  assert.ok(startEvent(next, EVENTS[1].zone), 'se puede jugar');
+  // Sin la región terminada, solo la zona abierta y con sus estaciones.
+  const fresh = new Game().state;
+  refillSlots(fresh);
+  assert.equal(eventStatus(fresh, 'trapiche'), null);
+});

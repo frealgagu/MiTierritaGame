@@ -1,11 +1,24 @@
-// Calendario del juego (v1.9): un día son 8 minutos; se trabaja de 6:00 a 18:00 y de noche las
-// estaciones paran del todo (los arrieros terminan su viaje; el Willys y las chivas siguen). El año
+// Calendario del juego (v1.9): un día son 8 minutos; fuera de la jornada las estaciones paran del todo
+// (los arrieros terminan su viaje; el Willys y las chivas siguen). El año
 // tiene 16 días en 4 temporadas de 4 días, las del país (secas y de lluvias), que suben o bajan la
 // producción de todas las estaciones a la vez.
 export const DAY_LENGTH = 480; // s de juego
 export const START_HOUR = 8; // una partida nueva empieza por la mañana
-export const WORK_START = 6;
-export const WORK_END = 18;
+// La jornada (v3.8): de 6 a 12 y de 14 a 20, con el almuerzo en medio. Con Renombre ⭐ se le suman
+// bloques de 2 horas, en este orden (cada uno cuesta el doble del anterior; ver sim/renown.js), hasta
+// trabajar las 24 horas. Es del jugador: vale en todas las regiones.
+export const BASE_WORK = [
+  [6, 12],
+  [14, 20],
+];
+export const EXTRA_BLOCKS = [
+  [20, 22],
+  [4, 6],
+  [22, 24],
+  [2, 4],
+  [12, 14],
+  [0, 2],
+];
 export const SEASON_DAYS = 4;
 export const SEASONS = [
   { id: 'verano', icon: '☀️', name: 'Verano', short: 'Verano', mult: 1.2, text: 'tiempo seco: todo rinde más' },
@@ -17,7 +30,8 @@ export const YEAR_DAYS = SEASON_DAYS * SEASONS.length;
 
 // Las pruebas de la cadena (que todo cuadre, que ningún patio se llene) apagan el calendario: siempre
 // de día y sin temporada. Las del calendario lo prenden.
-export const CALENDAR = { on: true };
+// `extra`: cuántos bloques de la jornada ha comprado el jugador (lo pone main.js desde el perfil).
+export const CALENDAR = { on: true, extra: 0 };
 const NO_SEASON = { id: 'none', icon: '', name: '', mult: 1, text: '' };
 
 // Horas transcurridas desde la medianoche del primer día.
@@ -31,10 +45,25 @@ export const seasonOf = (playTime) => (!CALENDAR.on ? NO_SEASON : SEASONS[Math.f
 // Día dentro de la temporada (1 a 4).
 export const seasonDay = (playTime) => (dayOf(playTime) % SEASON_DAYS) + 1;
 
+// Los bloques de la jornada con `extra` bloques comprados.
+export const workBlocks = (extra = CALENDAR.extra) => [...BASE_WORK, ...EXTRA_BLOCKS.slice(0, extra)];
+// Qué horas (de 0 a 23) son de trabajo, por cuántos bloques hay (los bloques empiezan en horas exactas).
+const HOURS = EXTRA_BLOCKS.map((_, n) => n)
+  .concat(EXTRA_BLOCKS.length)
+  .map((n) => Array.from({ length: 24 }, (_, h) => workBlocks(n).some(([a, b]) => h >= a && h < b)));
+const workHours = () => HOURS[Math.max(0, Math.min(EXTRA_BLOCKS.length, CALENDAR.extra | 0))];
+
 export function isWorkTime(playTime) {
   if (!CALENDAR.on) return true;
-  const h = hourOf(playTime);
-  return h >= WORK_START && h < WORK_END;
+  return workHours()[Math.floor(hourOf(playTime))];
+}
+
+// La hora (de 0 a 23) en que vuelve a empezar el trabajo (la de ahora si ya se está trabajando).
+export function nextWorkHour(playTime) {
+  const now = Math.floor(hourOf(playTime));
+  const hours = workHours();
+  for (let k = 0; k < 24; k++) if (hours[(now + k) % 24]) return (now + k) % 24;
+  return now;
 }
 
 // Para una partida: de noche se descansa y cada temporada rinde lo suyo, salvo en el tablero de un
@@ -58,10 +87,18 @@ export function workSeconds(from, to) {
   return total;
 }
 
-// Segundos de juego hasta que vuelve a empezar la jornada (0 si ya es de día).
+// Segundos de juego hasta que vuelve a empezar la jornada (0 si ya se está trabajando).
 export function untilWork(playTime) {
   if (isWorkTime(playTime)) return 0;
   const h = hourOf(playTime);
-  const hours = h >= WORK_END ? 24 - h + WORK_START : WORK_START - h;
+  const hours = (nextWorkHour(playTime) - h + 24) % 24;
   return (hours / 24) * DAY_LENGTH;
 }
+
+// Si la hora es la del almuerzo (de 12 a 14, mientras no se compre ese bloque), para los textos.
+export const isLunch = (playTime) => {
+  const h = hourOf(playTime);
+  return h >= 12 && h < 14 && !isWorkTime(playTime);
+};
+// «6:00», para los textos.
+export const hourLabel = (h) => `${h}:00`;

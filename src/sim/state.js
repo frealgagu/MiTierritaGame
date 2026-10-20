@@ -37,6 +37,7 @@ export function createInitialState(now = Date.now(), regionId = 'cafetero') {
     settings: { sound: true, music: true },
     research: [], // ids de investigaciones compradas
     goals: { claimed: [] }, // objetivos cobrados
+    regionDone: false, // la última zona de la región ya se completó alguna vez (v3.8: no se pierde al reiniciar)
     mastered: false, // segundo final: todas las estaciones en el nivel 100
     legacy: { resets: 0, history: [] }, // reinicios con producción ×2 y partidas terminadas
     // Eventos (v2.0): el tablero de cada zona que está en juego y el último año en que se terminó.
