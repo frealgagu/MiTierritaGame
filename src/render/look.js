@@ -4,6 +4,7 @@ import { chosenDecor } from '../sim/renown.js';
 
 export const LOOK = chosenDecor(null);
 
-export function setLook(profile) {
-  Object.assign(LOOK, chosenDecor(profile));
+// La de la región que se ve (v3.10: cada región tiene la suya).
+export function setLook(profile, region = 'cafetero') {
+  Object.assign(LOOK, chosenDecor(profile, region));
 }

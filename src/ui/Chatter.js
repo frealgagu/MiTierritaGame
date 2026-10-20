@@ -4,7 +4,7 @@ import { alerts } from '../sim/alerts.js';
 import { slowConsumers } from '../sim/transport.js';
 import { waitingHarvest } from '../sim/production.js';
 import { toast } from './toast.js';
-import { clockOf, hourLabel, isLunch, isWorkTime, nextWorkHour, seasonOf } from '../sim/calendar.js';
+import { clockOf, hourLabel, isLunch, isWorkTime, nextWorkHour, seasonOf, workOf } from '../sim/calendar.js';
 import { EVENTS } from '../data/events.js';
 import { eventStatus } from '../sim/events.js';
 
@@ -72,8 +72,9 @@ export class Chatter {
     // De noche no hay problemas que avisar: todo descansa.
     // (v3.8: también a la hora del almuerzo, de 12 a 14, mientras no se compre ese bloque).
     const t = clockOf(state);
-    if (!isWorkTime(t)) {
-      const lunch = isLunch(t);
+    const extra = workOf(state);
+    if (!isWorkTime(t, extra)) {
+      const lunch = isLunch(t, extra);
       const hint = lunch ? 'lunch' : 'night';
       if (!state.hints.includes(hint)) {
         state.hints.push(hint);
@@ -82,7 +83,7 @@ export class Chatter {
           zone,
           lunch
             ? '¡A almorzar! De 12 a 2 se para: la jornada sigue a las 14:00. Con Renombre ⭐ se puede trabajar también a esta hora.'
-            : `De noche no se trabaja: las estaciones descansan hasta las ${hourLabel(nextWorkHour(t))}. ¡Hasta mañana, patrón!`,
+            : `De noche no se trabaja: las estaciones descansan hasta las ${hourLabel(nextWorkHour(t, extra))}. ¡Hasta mañana, patrón!`,
           7000,
         );
       }

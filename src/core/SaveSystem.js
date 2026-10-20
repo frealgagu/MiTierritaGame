@@ -135,6 +135,12 @@ function migrateProfile(root) {
     }
     root.profile.offlineLevel = Math.min(OFFLINE_COSTS.length, Math.ceil((best - OFFLINE_BASE_HOURS) / OFFLINE_STEP_HOURS));
   }
+  // v3.9 → v3.10: la jornada pasa a ser de cada región. Nadie pierde horas: cada región arranca con los
+  // bloques que tenía el jugador. (La decoración por región la arregla profileOf.)
+  if (root.profile?.workLevel) {
+    for (const st of all) st.workLevel = Math.max(st.workLevel ?? 0, root.profile.workLevel);
+    delete root.profile.workLevel;
+  }
   // v3.6 → v3.7: los eventos ya no van por año sino por cupos. Lo ya jugado (`done`: zona → año) pasa a
   // `last` (el comienzo de ese año) y `count` (cuántas veces, del registro del perfil); los tableros en
   // juego ocupan los cupos.

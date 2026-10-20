@@ -12,7 +12,7 @@ import { buyResearch, buyUpgrade, quoteResearch, quoteUnlock, quoteUpgrade, unlo
 import { claimGoal, unlockZone } from '../sim/goals.js';
 import { checkMastery } from '../sim/legacy.js';
 import { stepAlerts } from '../sim/alerts.js';
-import { clockOf, workSeconds } from '../sim/calendar.js';
+import { clockOf, workOf, workSeconds } from '../sim/calendar.js';
 import { refillSlots, stepSupply } from '../sim/events.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
@@ -112,8 +112,8 @@ export class Game {
     const rest = total - simulated;
     if (rest > 0 && mark) {
       const now = clockOf(s);
-      const measured = workSeconds(mark.t, now);
-      const k = measured > 0 ? workSeconds(now, now + rest) / measured : 0;
+      const measured = workSeconds(mark.t, now, workOf(this.state));
+      const k = measured > 0 ? workSeconds(now, now + rest, workOf(this.state)) / measured : 0;
       const after = snapshot(s);
       s.coins += (after.coins - mark.coins) * k;
       s.totalEarned += (after.totalEarned - mark.totalEarned) * k;

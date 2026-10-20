@@ -32,7 +32,7 @@ import { dispatchMult } from '../sim/modifiers.js';
 import { fit, setFitted } from './fit.js';
 import { alerts } from '../sim/alerts.js';
 import { FACTS } from '../data/lore.js';
-import { clockOf, hourLabel, isLunch, nextWorkHour, resting } from '../sim/calendar.js';
+import { clockOf, hourLabel, isLunch, nextWorkHour, resting, workOf } from '../sim/calendar.js';
 import { harvestFactor, waitingHarvest } from '../sim/production.js';
 
 const SUBTITLE_MS = 7000; // cada cuánto cambia el subtítulo (descripción y datos reales)
@@ -379,7 +379,7 @@ function transportInfo(id) {
       const st = s.stations[id];
       const cap = teamCapacity(s, id);
       const who = belt(s) ? 'la banda' : 'las mulas';
-      if (resting(s)) return { text: belt(s) ? `${pause(s)} la banda se apaga: sigue a las ${hourLabel(nextWorkHour(clockOf(s)))}.` : `${pause(s)} los arrieros descansan; los que van de camino terminan el viaje.`, bad: false };
+      if (resting(s)) return { text: belt(s) ? `${pause(s)} la banda se apaga: sigue a las ${hourLabel(nextWorkHour(clockOf(s), workOf(s)))}.` : `${pause(s)} los arrieros descansan; los que van de camino terminan el viaje.`, bad: false };
       const a = alerts(st);
       if (a.blocked && a.waiting === 'mules') return { text: `⛔ ${belt(s) ? 'La banda no da' : 'Las mulas no dan'} abasto y el patio se llenó: mejora el transporte.`, bad: true };
       if (cap < produce(s)) return { text: `⚠️ La estación produce ${formatRate(produce(s))} ${out.icon}/s y ${who} ${belt(s) ? 'lleva' : 'llevan'} ${formatRate(cap)}/s. Sube el transporte al nivel de la estación (${st.level}).`, bad: true };
@@ -390,8 +390,8 @@ function transportInfo(id) {
 }
 
 // Fuera de la jornada (v3.8: también a la hora del almuerzo).
-const pause = (state) => (isLunch(clockOf(state)) ? '🍲 A la hora del almuerzo' : '🌙 De noche');
-const restText = (state) => `${pause(state)} no se trabaja: la jornada sigue a las ${hourLabel(nextWorkHour(clockOf(state)))}.`;
+const pause = (state) => (isLunch(clockOf(state), workOf(state)) ? '🍲 A la hora del almuerzo' : '🌙 De noche');
+const restText = (state) => `${pause(state)} no se trabaja: la jornada sigue a las ${hourLabel(nextWorkHour(clockOf(state), workOf(state)))}.`;
 
 // Explica en una línea qué le pasa a la estación y qué hacer.
 function stationStatus(state, id) {

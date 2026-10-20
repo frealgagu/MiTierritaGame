@@ -1,11 +1,13 @@
 // Álbum de láminas (v2.2, GDD §10.2): como el de las chocolatinas, pero sin sobres al azar: cada lámina
 // se compra con Renombre ⭐ y se pega la que uno quiera. Una página llena da Renombre de premio.
 // Seis páginas, una por zona, con seis láminas de lo que rodea a cada producto en Colombia.
+// Desde la v3.10 cada región tiene su álbum (`region` de cada página): el de Santander, con su bocadillo,
+// su tabaco, su fique, su hato, sus hormigas y Barichara. El Renombre con que se pagan es el mismo.
 import { ICON } from './icons.js';
 
 export const PAGE_BONUS = 3; // ⭐ al llenar una página
 
-export const ALBUM = [
+const CAFETERO = [
   {
     id: 'cafe',
     icon: '☕',
@@ -85,5 +87,90 @@ export const ALBUM = [
     ],
   },
 ];
+
+const SANTANDER = [
+  {
+    id: 'bocadillo',
+    icon: ICON.bocadilloBijao,
+    name: 'El bocadillo',
+    stickers: [
+      { id: 'guayaba', icon: ICON.guava, name: 'La guayaba', cost: 1, text: 'Crece en toda la hoya del río Suárez: con ella se hace el bocadillo.' },
+      { id: 'bijao', icon: ICON.bocadilloBijao, name: 'La hoja de bijao', cost: 1, text: 'Hoja ancha en la que se envuelve cada bocadillo veleño.' },
+      { id: 'paila_cobre', icon: ICON.guavaJelly, name: 'La paila de cobre', cost: 2, text: 'Ahí se cocina la pulpa con azúcar, revolviendo sin parar.' },
+      { id: 'lonja', icon: '🍬', name: 'El bocadillo de lonja', cost: 2, text: 'De dos colores: guayaba roja y guayaba blanca, una sobre otra.' },
+      { id: 'cajitas', icon: '📦', name: 'Las cajitas de madera', cost: 2, text: 'Cajitas de madera liviana en las que viaja el bocadillo por todo el país.' },
+      { id: 'velez', icon: '🎻', name: 'Vélez', cost: 3, text: 'La capital del bocadillo, tierra de torbellino, tiple y requinto.' },
+    ],
+  },
+  {
+    id: 'tabaco',
+    icon: ICON.tobaccoLeaf,
+    name: 'El tabaco',
+    stickers: [
+      { id: 'veguero', icon: ICON.tobaccoPlant, name: 'El veguero', cost: 1, text: 'Quien siembra y cuida el tabaco en la vega.' },
+      { id: 'caney', icon: '🛖', name: 'El caney', cost: 1, text: 'Rancho alto y ventilado donde se cuelga la hoja a curar.' },
+      { id: 'hoja_curada', icon: ICON.curedLeaf, name: 'La hoja curada', cost: 2, text: 'Colgada al aire pasa de verde a dorada y luego a marrón.' },
+      { id: 'torcedora', icon: ICON.cigar, name: 'La torcedora', cost: 2, text: 'Enrolla a mano cada tabaco, hoja por hoja.' },
+      { id: 'chicote', icon: '🚬', name: 'El chicote', cost: 2, text: 'El tabaco corto y fuerte de los abuelos del campo.' },
+      { id: 'tabaco_colonia', icon: '⛵', name: 'Tabaco para el mundo', cost: 3, text: 'Desde la Colonia, Santander es tierra de tabaco que se vendía hasta Europa.' },
+    ],
+  },
+  {
+    id: 'fique',
+    icon: ICON.fiquePlant,
+    name: 'El fique',
+    stickers: [
+      { id: 'mata_fique', icon: ICON.fiquePlant, name: 'La mata de fique', cost: 1, text: 'Hojas largas y espinosas de las que sale la fibra.' },
+      { id: 'desfibrado', icon: ICON.fiqueFiber, name: 'El desfibrado', cost: 1, text: 'Se raspan las hojas hasta dejar la fibra limpia, que se seca al sol.' },
+      { id: 'cabuya', icon: ICON.fiqueYarn, name: 'La cabuya', cost: 2, text: 'Cuerda de fique para amarrar cargas, enjalmas y hamacas.' },
+      { id: 'costal', icon: ICON.fiqueSack, name: 'El costal de fique', cost: 2, text: 'En costales de fique viajó por años el café de Colombia.' },
+      { id: 'alpargatas', icon: ICON.alpargatas, name: 'Las alpargatas', cost: 2, text: 'Calzado con suela de fique tejida, el de los caminantes.' },
+      { id: 'curiti', icon: '🧵', name: 'Curití', cost: 3, text: 'Pueblo de artesanos que tejen el fique en telares.' },
+    ],
+  },
+  {
+    id: 'hato',
+    icon: '🐄',
+    name: 'El hato',
+    stickers: [
+      { id: 'vaquero', icon: '🤠', name: 'El vaquero', cost: 1, text: 'Arrea el ganado a caballo por los potreros.' },
+      { id: 'carne_oreada', icon: ICON.carneOreada, name: 'La carne oreada', cost: 1, text: 'Carne salada que se pone al sol y al aire: típica de Santander.' },
+      { id: 'cabro', icon: '🐐', name: 'El cabro', cost: 2, text: 'Cabros y chivos que se crían en las tierras secas del cañón.' },
+      { id: 'pepitoria', icon: '🍚', name: 'La pepitoria', cost: 2, text: 'Arroz con las menudencias del cabro, plato de Santander.' },
+      { id: 'mute', icon: '🍲', name: 'El mute', cost: 2, text: 'Sopa espesa de maíz, carnes y verduras, para los domingos.' },
+      { id: 'chicamocha', icon: '🏞️', name: 'El cañón del Chicamocha', cost: 3, text: 'Uno de los cañones más hondos del mundo, entre montañas secas.' },
+    ],
+  },
+  {
+    id: 'hormigas',
+    icon: '🐜',
+    name: 'Las hormigas',
+    stickers: [
+      { id: 'culona', icon: ICON.antQueen, name: 'La hormiga culona', cost: 1, text: 'La reina de la arriera: se tuesta y se come con sal.' },
+      { id: 'salida', icon: '🌦️', name: 'La salida', cost: 1, text: 'Con las primeras lluvias salen a volar las reinas.' },
+      { id: 'recolectoras', icon: '👨‍👩‍👧', name: 'La recolección', cost: 2, text: 'Familias enteras salen al amanecer a recogerlas.' },
+      { id: 'tiesto', icon: ICON.toastedAnts, name: 'El tiesto', cost: 2, text: 'Vasija de barro en la que se tuestan las hormigas.' },
+      { id: 'cucurucho', icon: ICON.antCone, name: 'El cucurucho', cost: 2, text: 'Cono de papel en el que se venden a la orilla de la carretera.' },
+      { id: 'san_gil', icon: '🛶', name: 'San Gil', cost: 3, text: 'Tierra de hormigas, de ríos y de aventura.' },
+    ],
+  },
+  {
+    id: 'barichara',
+    icon: '⛪',
+    name: 'Barichara',
+    stickers: [
+      { id: 'piedra', icon: '🪨', name: 'La piedra amarilla', cost: 1, text: 'Con ella están hechas las calles, las casas y las iglesias.' },
+      { id: 'tapia', icon: '🧱', name: 'La tapia pisada', cost: 1, text: 'Muros de tierra apisonada, frescos en pleno calor.' },
+      { id: 'camino_real', icon: ICON.excursion, name: 'El Camino Real', cost: 2, text: 'Camino empedrado hace siglos entre Barichara y Guane.' },
+      { id: 'guane', icon: '🦕', name: 'Guane', cost: 2, text: 'El pueblito al final del Camino Real, con su museo de fósiles.' },
+      { id: 'guanes', icon: '🏺', name: 'Los guanes', cost: 2, text: 'El pueblo indígena de estas tierras: tejían algodón y hacían cerámica.' },
+      { id: 'mirador', icon: '🌅', name: 'El mirador', cost: 3, text: 'Desde el borde del pueblo se ve todo el valle del río Suárez.' },
+    ],
+  },
+];
+
+export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' }))];
+// Las páginas del álbum de una región.
+export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 
 export const STICKERS_BY_ID = Object.fromEntries(ALBUM.flatMap((page) => page.stickers.map((s) => [s.id, { ...s, page: page.id }])));

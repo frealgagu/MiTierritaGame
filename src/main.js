@@ -20,8 +20,6 @@ import { checkLogros } from './sim/logros.js';
 import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/splash.js';
 import { EventBar, formatClock } from './ui/EventBar.js';
 import { finishEvent, startEvent } from './sim/events.js';
-import { CALENDAR } from './sim/calendar.js';
-import { workLevel } from './sim/renown.js';
 import { MEDALS } from './data/events.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
 import { openRegions, regionState } from './sim/regions.js';
@@ -74,8 +72,6 @@ async function start() {
   const gameOf = (zoneId) => games[REGION_OF_ZONE[zoneId]];
   // La decoración elegida, antes de dibujar nada.
   setLook(root.profile);
-  // La jornada que ha comprado el jugador (v3.8), antes de sumar el tiempo fuera.
-  CALENDAR.extra = workLevel(root.profile);
   // La velocidad de las opciones de desarrollador sigue puesta al volver, también para el tiempo fuera.
   game.timeScale = savedSpeed();
   const away = saved ? (Date.now() - saved.savedAt) / 1000 : 0;
@@ -169,6 +165,8 @@ async function start() {
     active = gameOf(zoneId);
     useGame(active);
     music.setRegion(REGIONS_BY_ID[active.state.region ?? 'cafetero'].music);
+    // Cada región con su decoración (v3.10).
+    setLook(root.profile, REGION_OF_ZONE[zoneId]);
     scene = new Scene(app, active, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
     if (import.meta.env.DEV) window.__cafetal = { game: active, root: game, games, scene, panel, select, music };
@@ -198,6 +196,7 @@ async function start() {
     eg.timeScale = game.timeScale;
     for (const type of ['levelUp', 'unlocked', 'research']) eg.bus.on(type, () => (hud.recDirty = true));
     board = { zone: zoneId, game: eg };
+    setLook(root.profile, REGION_OF_ZONE[zoneId]);
     scene = new Scene(app, eg, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
     useGame(eg);
@@ -220,8 +219,8 @@ async function start() {
   const events = new EventsView(game, enterEvent, (zoneId) => regionState(game.state, REGION_OF_ZONE[zoneId]));
   // Al cambiar la decoración se vuelve a dibujar el mapa (el de la zona o el del tablero).
   const renown = new RenownView(game, (profile) => {
-    setLook(profile);
     if (!board) return showZone(view.zone);
+    setLook(profile, REGION_OF_ZONE[board.zone]);
     if (panel.id) panel.close();
     scene.destroy();
     scene = new Scene(app, board.game, sound, ZONES_BY_ID[board.zone]);
@@ -230,7 +229,8 @@ async function start() {
   for (const [id, tab] of [['album-btn', 'album'], ['decor-btn', 'decor'], ['logros-btn', 'logros'], ['offline-btn', 'offline']]) {
     document.getElementById(id).addEventListener('click', () => {
       events.close();
-      renown.open(tab);
+      // Con la región que se está jugando (v3.10: cada una tiene su álbum, decoración, logros y jornada).
+      renown.open(tab, REGION_OF_ZONE[board ? board.zone : view.zone]);
     });
   }
   const showEventResult = (r) => {
@@ -251,7 +251,7 @@ async function start() {
     resetting = true;
     if (g === game) saveGame(restartState(root));
     else {
-      root.regions[g.state.region] = restartState(g.state);
+      root.regions[g.state.region] = restartState(g.state, Date.now(), root.profile);
       saveGame(root);
     }
     location.reload();
@@ -324,7 +324,9 @@ async function start() {
   for (const [id, r] of regionOffline) toast(`${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name} también siguió trabajando: +💰 ${formatNumber(r.coins)}`, 5000);
   // Cómo se juega, encima de todo (la bienvenida queda debajo, para después).
   if (introOnStart(game.state)) showIntro(game.state);
-  document.getElementById('clock').addEventListener('click', () => showCalendar(game.state));
+  // En un evento, el reloj de su tablero (v3.9.1).
+  // La región que se ve (v3.10: cada una con su jornada) o, en un evento, el reloj de su tablero (v3.9.1).
+  document.getElementById('clock').addEventListener('click', () => showCalendar(board ? board.game.state : active.state));
   document.getElementById('intro-btn').addEventListener('click', () => {
     document.getElementById('menu').hidden = true;
     showIntro(game.state);
@@ -344,7 +346,6 @@ async function start() {
   app.ticker.add((ticker) => {
     if (catching) return;
     const dt = ticker.deltaMS / 1000;
-    CALENDAR.extra = workLevel(game.state.profile);
     // Todas las regiones producen a la vez (a la velocidad de las opciones de desarrollador).
     for (const g of Object.values(games)) {
       g.timeScale = game.timeScale;
@@ -374,7 +375,8 @@ async function start() {
       safely(() => scene.setGuide(panel.id ? null : hud.guide));
       // Logros (v2.3): se pagan al llegar a cada nivel.
       safely(() => {
-        const won = checkLogros(game.state);
+        // Los de cada región (v3.10), con el Renombre del jugador.
+        const won = Object.values(games).flatMap((g) => checkLogros(g.state, root.profile));
         if (!won.length) return;
         const stars = won.reduce((n, w) => n + w.reward, 0);
         const [w] = won;

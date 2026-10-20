@@ -239,13 +239,16 @@
     <div id="calendar" class="modal" hidden>
       <div class="modal-card calendar-card">
         <div class="chain-head">
-          <h2>📅 Calendario</h2>
+          <h2 id="calendar-title">📅 Calendario</h2>
           <button id="calendar-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>
         <p id="calendar-now" class="calendar-now"></p>
+        <p id="calendar-event" class="chain-help" hidden>El tablero tiene su propio reloj, que solo corre mientras juegas en él. Aquí se trabaja todo el tiempo: no hay noches, almuerzo ni temporadas.</p>
+        <div id="calendar-country">
         <p class="chain-help">Se trabaja de <b id="calendar-work">6:00 a 12:00 y 14:00 a 20:00</b>: a la hora del almuerzo y de noche las estaciones descansan y los arrieros no salen (el Willys y las chivas sí). Con Renombre ⭐ se compran más horas de trabajo. Un día dura 8 minutos y el año tiene 16 días, en cuatro temporadas de 4 días que cambian la producción de todas las estaciones a la vez:</p>
         <ul id="calendar-seasons" class="calendar-seasons"></ul>
         <p class="chain-help calendar-fact">💡 En el Eje Cafetero hay dos cosechas al año: la grande y la <b>mitaca</b>, una cosecha más pequeña que llega unos seis meses después.</p>
+        </div>
       </div>
     </div>
 
@@ -279,6 +282,7 @@
           <button class="tab" data-renown-tab="logros">🏆 Logros</button>
           <button class="tab" data-renown-tab="offline">⏰ Horas</button>
         </div>
+        <div id="renown-regions" class="renown-regions" hidden></div>
         <p id="renown-help" class="chain-help"></p>
         <div id="renown-body" class="list-body"></div>
       </div>

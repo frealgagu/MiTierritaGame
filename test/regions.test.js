@@ -384,3 +384,57 @@ test('el segundo Willys: con el álbum lleno se compra por región, vende el dob
     CALENDAR.on = on;
   }
 });
+
+test('álbum, decoración, logros y jornada son de cada región; el Renombre, del jugador (v3.10)', async () => {
+  const { profileOf, pickDecor, chosenDecor, quoteWillys2, buySticker } = await import('../src/sim/renown.js');
+  const { albumOf } = await import('../src/data/album.js');
+  const { checkLogros, metric } = await import('../src/sim/logros.js');
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  const san = root.regions.santander;
+  const p = profileOf(root);
+  p.renown = 1000;
+  // Decoración aparte.
+  assert.ok(pickDecor(p, 'willys', 'azul', 'santander'));
+  assert.equal(chosenDecor(p, 'santander').willys.id, 'azul');
+  assert.equal(chosenDecor(p, 'cafetero').willys.id, 'verde');
+  assert.ok(pickDecor(p, 'willys', 'azul', 'cafetero'), 'en el Eje Cafetero se compra aparte');
+  assert.equal(p.renown, 1000 - 3 - 3);
+  // El segundo Willys de Santander pide el álbum de Santander.
+  for (const pg of albumOf('cafetero')) for (const st of pg.stickers) buySticker(p, st.id);
+  assert.ok(quoteWillys2(p, root).ok);
+  assert.equal(quoteWillys2(p, san).reason, 'album');
+  for (const pg of albumOf('santander')) for (const st of pg.stickers) buySticker(p, st.id);
+  assert.ok(quoteWillys2(p, san).ok);
+  // Logros: cada región los suyos, con lo de su partida.
+  san.stats.sold.bocadillo_crate = 1000;
+  root.stats.sold.coffee_bag = 1000;
+  const won = checkLogros(san, p).map((w) => w.logro.id);
+  assert.ok(won.includes('s_bocadillo') && won.includes('s_album'), won.join());
+  assert.ok(!won.includes('bolsas'), 'los del Eje Cafetero no se revisan con Santander');
+  assert.equal(metric(san, 'pages', p), 6);
+  // Al reiniciar Santander, lo de su partida pasa a su acumulado.
+  const next = restartState(san, 0, p);
+  assert.equal(metric(next, 'sold:bocadillo_crate', p), 1000);
+  assert.equal(metric(root, 'sold:bocadillo_crate', p), 0);
+});
+
+test('una partida de la v3.9 pasa la decoración al Eje Cafetero y la jornada a cada región (v3.10)', () => {
+  const mem = {};
+  globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  root.profile.decor = { owned: ['willys:rojo'], chosen: { willys: 'rojo' } };
+  root.profile.workLevel = 2;
+  saveGame(root);
+  const back = loadGame();
+  assert.equal(back.workLevel, 2);
+  assert.equal(back.regions.santander.workLevel, 2);
+  assert.equal(back.profile.workLevel, undefined);
+  return import('../src/sim/renown.js').then(({ chosenDecor }) => {
+    assert.equal(chosenDecor(back.profile, 'cafetero').willys.id, 'rojo');
+    assert.equal(chosenDecor(back.profile, 'santander').willys.id, 'verde');
+  });
+});

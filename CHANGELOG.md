@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## v3.10.0 — Cada región con lo suyo
+- **Álbum de Santander.** Seis páginas nuevas (el bocadillo, el tabaco, el fique, el hato, las hormigas y Barichara) con 36 láminas: la hoja de bijao, Vélez, el caney, la torcedora, Curití, la pepitoria, el cañón del Chicamocha, el tiesto, San Gil, la tapia pisada, el Camino Real… El segundo Willys de cada región pide el álbum de esa región.
+- **Decoración por región.** Cada región se pinta aparte: el color de los Willys, la enjalma, la chiva y los banderines se compran y se eligen en cada una. Lo que ya tenías queda en el Eje Cafetero.
+- **Logros por región.** Santander tiene los suyos, con sus productos (cajas de bocadillo, tabacos, alpargatas, fiambres, recuerdos y excursiones a Guane), y en cada región las medallas, el álbum y las investigaciones cuentan solo las de esa región.
+- **Jornada por región.** Las horas de trabajo extra se compran aparte para cada región. Si ya habías comprado bloques, cada región arranca con ellos.
+- El Renombre ⭐ y las horas sin conexión siguen siendo tuyos, para todas las regiones. En la ventana del Renombre se elige arriba la región (empieza en la que estás jugando).
+- **Reloj del evento.** Al tocar el reloj dentro de un evento ya no salen la jornada ni las temporadas: el tablero tiene su propio reloj y trabaja todo el tiempo.
+
 ## v3.9.0 — El segundo Willys
 - **Con el álbum lleno, un segundo Willys.** En 🏅 Eventos › 📖 Álbum se compra para cada región (⭐ 20 el Eje Cafetero y ⭐ 20 Santander). Desde entonces cada zona de esa región tiene **dos Willys** que salen cada uno por su cuenta con la misma carga por viaje: **el despacho vende el doble**.
 - La **carretera se amplía a dos carriles** y cada Willys va por el suyo, así que no se chocan. El letrero de salida pasa al otro lado de la carretera.

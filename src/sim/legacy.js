@@ -37,7 +37,9 @@ export function checkMastery(state, bus) {
 // vistos, el registro de las partidas terminadas y el Renombre con las medallas.
 // Desde la v3.0 reinicia solo su región: las demás siguen como estaban, y el calendario del país sigue
 // corriendo (la partida nueva empieza en la fecha en que terminó la anterior).
-export function restartState(state, now = Date.now()) {
+// profile: el del jugador, para la partida de otra región (v3.10: lo de la partida que termina pasa al
+// acumulado de los logros de esa región).
+export function restartState(state, now = Date.now(), profile = null) {
   const region = regionOf(state);
   const next = createInitialState(now, region.id);
   const history = [...(state.legacy?.history ?? []), { mult: legacyMult(state), playTime: state.playTime, totalEarned: state.totalEarned }];
@@ -47,8 +49,9 @@ export function restartState(state, now = Date.now()) {
   next.hints = [...(state.hints ?? [])];
   // Las otras regiones (solo la partida del Eje Cafetero las guarda) siguen igual.
   if (state.regions) next.regions = state.regions;
-  // El segundo Willys de la región (v3.9) se queda.
+  // El segundo Willys de la región (v3.9) y su jornada (v3.10) se quedan.
   if (state.willys2) next.willys2 = true;
+  if (state.workLevel) next.workLevel = state.workLevel;
   // La región ya se terminó (v3.8): sus eventos siguen saliendo en todas sus zonas.
   next.regionDone = Boolean(state.regionDone || state.zones[region.zones.at(-1)]?.complete);
   // Lo que no se pierde (v2.0): Renombre, medallas, álbum, decoración y logros; y lo de esta partida
@@ -65,6 +68,9 @@ export function restartState(state, now = Date.now()) {
   if (state.profile) {
     next.profile = structuredClone(state.profile);
     bankRun(state, profileOf(next));
-  } else delete next.profile;
+  } else {
+    delete next.profile;
+    if (profile) bankRun(state, profile);
+  }
   return next;
 }

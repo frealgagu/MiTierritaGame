@@ -1,13 +1,15 @@
 // Ventana del Renombre ⭐ (v2.2): el álbum de láminas (se pega la que uno elija) y la decoración.
-import { ALBUM, PAGE_BONUS } from '../data/album.js';
+// Desde la v3.10 el álbum, la decoración, los logros y la jornada son de cada región: arriba se elige
+// cuál se ve (empieza en la que se está jugando). El Renombre y las horas sin conexión son del jugador.
+import { PAGE_BONUS, albumOf } from '../data/album.js';
 import { DECOR } from '../data/decor.js';
-import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, WORK_COSTS, albumDone, buyOffline, buyWillys2, buyWork, quoteWillys2, quoteWork, workLevel, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
-import { CALENDAR, EXTRA_BLOCKS, workBlocks } from '../sim/calendar.js';
+import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, WORK_COSTS, albumDone, decorOf, buyOffline, buyWillys2, buyWork, quoteWillys2, quoteWork, workLevel, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
+import { EXTRA_BLOCKS, workBlocks } from '../sim/calendar.js';
 import { workText } from './calendar.js';
 import { openRegionStates, regionState } from '../sim/regions.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
 import { toast } from './toast.js';
-import { LOGROS } from '../data/logros.js';
+import { logrosOf } from '../data/logros.js';
 import { metric, tierOf } from '../sim/logros.js';
 import { formatNumber } from '../core/format.js';
 
@@ -21,7 +23,9 @@ export class RenownView {
     this.modal = document.getElementById('renown');
     this.body = document.getElementById('renown-body');
     this.tab = 'album';
-    this.page = ALBUM[0].id;
+    this.region = 'cafetero';
+    this.page = albumOf(this.region)[0].id;
+    this.regions = document.getElementById('renown-regions');
     document.getElementById('renown-close').addEventListener('click', () => (this.modal.hidden = true));
     for (const btn of this.modal.querySelectorAll('[data-renown-tab]')) {
       btn.addEventListener('click', () => {
@@ -31,6 +35,11 @@ export class RenownView {
     }
     this.modal.addEventListener('click', (e) => {
       if (e.target === this.modal) return void (this.modal.hidden = true);
+      const reg = e.target.closest('[data-renown-region]');
+      if (reg) {
+        this.region = reg.dataset.renownRegion;
+        return this.render();
+      }
       const page = e.target.closest('[data-page]');
       if (page) {
         this.page = page.dataset.page;
@@ -46,16 +55,22 @@ export class RenownView {
       }
       const w2 = e.target.closest('[data-willys2]');
       if (w2) this.buyJeep(w2.dataset.willys2);
-      if (e.target.closest('[data-work]') && buyWork(profileOf(this.game.state))) {
-        CALENDAR.extra = workLevel(profileOf(this.game.state));
-        toast(`🕐 Ahora se trabaja de ${workText()}.`, 3500);
+      if (e.target.closest('[data-work]') && buyWork(profileOf(this.game.state), this.regionState())) {
+        toast(`🕐 En ${REGIONS_BY_ID[this.region].name} ahora se trabaja de ${workText(workBlocks(workLevel(this.regionState())))}.`, 3500);
         this.render();
       }
     });
   }
 
-  open(tab) {
+  // La partida de la región que se ve en la ventana.
+  regionState() {
+    return regionState(this.game.state, this.region) ?? this.game.state;
+  }
+
+  // region: la que se está jugando (con la que abre la ventana).
+  open(tab, region = this.region) {
     this.tab = tab;
+    if (regionState(this.game.state, region)) this.region = region;
     this.render();
     this.body.scrollTop = 0;
     this.modal.hidden = false;
@@ -77,26 +92,26 @@ export class RenownView {
     this.render();
   }
 
-  // Al final del álbum: el segundo Willys de cada región abierta.
+  // Arriba del álbum: el segundo Willys de la región, que se compra con su álbum lleno.
   willysHtml(profile) {
-    const full = albumDone(profile);
-    const total = ALBUM.reduce((n, pg) => n + pg.stickers.length, 0);
-    const buttons = openRegionStates(this.game.state)
-      .map(({ region, state }) => {
-        const q = quoteWillys2(profile, state);
-        if (q.reason === 'owned') return `<button class="btn" disabled>${region.icon} ${region.name} ✓</button>`;
-        return `<button class="btn ${q.ok ? 'buy' : ''}" data-willys2="${region.id}" ${q.ok ? '' : 'disabled'}>${region.icon} ${region.name} · ⭐ ${q.cost}</button>`;
-      })
-      .join('');
-    const text = full
+    const region = REGIONS_BY_ID[this.region];
+    const pages = albumOf(this.region);
+    const total = pages.reduce((n, pg) => n + pg.stickers.length, 0);
+    const have = pages.reduce((n, pg) => n + pg.stickers.filter((st) => profile.album.includes(st.id)).length, 0);
+    const q = quoteWillys2(profile, this.regionState());
+    const button =
+      q.reason === 'owned'
+        ? `<button class="btn" disabled>${region.icon} ${region.name} ✓</button>`
+        : `<button class="btn ${q.ok ? 'buy' : ''}" data-willys2="${region.id}" ${q.ok ? '' : 'disabled'}>${region.icon} ${region.name} · ⭐ ${q.cost}</button>`;
+    const text = albumDone(profile, this.region)
       ? 'Cada zona de la región tiene un segundo Willys, por su propio carril: el despacho vende el doble. Se pinta aparte en Decoración.'
-      : `Llena el álbum (${profile.album.length} / ${total} láminas) para comprar un segundo Willys en cada región: el despacho vende el doble.`;
-    return `<div class="logro willys2"><div class="logro-head"><b>🚙 Segundo Willys</b></div><p>${text}</p><div class="willys2-btns">${buttons}</div></div>`;
+      : `Llena este álbum (${have} / ${total} láminas) para comprar un segundo Willys en ${region.name}: el despacho vende el doble.`;
+    return `<div class="logro willys2"><div class="logro-head"><b>🚙 Segundo Willys</b></div><p>${text}</p><div class="willys2-btns">${button}</div></div>`;
   }
 
   decorate(cat, opt) {
     const profile = profileOf(this.game.state);
-    if (!pickDecor(profile, cat, opt)) return;
+    if (!pickDecor(profile, cat, opt, this.region)) return;
     this.onDecor(profile);
     this.render();
   }
@@ -105,25 +120,31 @@ export class RenownView {
     const profile = profileOf(this.game.state);
     document.getElementById('renown-title').textContent = `⭐ Renombre: ${profile.renown}`;
     for (const btn of this.modal.querySelectorAll('[data-renown-tab]')) btn.classList.toggle('active', btn.dataset.renownTab === this.tab);
+    // La región que se ve (con más de una abierta).
+    const open = openRegionStates(this.game.state);
+    this.regions.hidden = open.length < 2;
+    this.regions.innerHTML = open.map(({ region }) => `<button class="${region.id === this.region ? 'on' : ''}" data-renown-region="${region.id}">${region.icon} ${region.name}</button>`).join('');
     const help = document.getElementById('renown-help');
     if (this.tab === 'album') {
-      help.textContent = `Cada lámina cuesta Renombre y tú eliges cuál pegar. Al llenar una página ganas ${PAGE_BONUS} ⭐ de premio.`;
+      help.textContent = `Cada región tiene su álbum. Cada lámina cuesta Renombre y tú eliges cuál pegar; al llenar una página ganas ${PAGE_BONUS} ⭐.`;
       this.body.innerHTML = this.albumHtml(profile);
     } else if (this.tab === 'offline') {
-      help.textContent = 'Las horas son tuyas: valen para todas las regiones y no se pierden al volver a empezar.';
+      help.textContent = 'La jornada es de cada región; las horas sin conexión valen para todas. Nada de esto se pierde al volver a empezar.';
       this.body.innerHTML = this.workHtml(profile) + this.offlineHtml(profile);
     } else if (this.tab === 'logros') {
-      help.textContent = 'Los logros suman entre partidas: lo de antes de volver a empezar también cuenta. Cada nivel da Renombre.';
+      help.textContent = 'Cada región tiene sus logros. Suman entre partidas: lo de antes de volver a empezar también cuenta. Cada nivel da Renombre.';
       this.body.innerHTML = this.logrosHtml();
     } else {
-      help.textContent = 'Lo de siempre es gratis; lo demás se compra una vez con Renombre y se puede cambiar cuando quieras. Es solo para que se vea bonito.';
+      help.textContent = 'Cada región se decora aparte. Lo de siempre es gratis; lo demás se compra una vez con Renombre y se puede cambiar cuando quieras.';
       this.body.innerHTML = this.decorHtml(profile);
     }
   }
 
   albumHtml(profile) {
-    const pages = ALBUM.map((pg) => `<button data-page="${pg.id}" class="${pg.id === this.page ? 'on' : ''} ${pageDone(profile, pg.id) ? 'full' : ''}" title="${pg.name}">${pg.icon}</button>`).join('');
-    const page = ALBUM.find((pg) => pg.id === this.page);
+    const album = albumOf(this.region);
+    if (!album.some((pg) => pg.id === this.page)) this.page = album[0].id;
+    const pages = album.map((pg) => `<button data-page="${pg.id}" class="${pg.id === this.page ? 'on' : ''} ${pageDone(profile, pg.id) ? 'full' : ''}" title="${pg.name}">${pg.icon}</button>`).join('');
+    const page = album.find((pg) => pg.id === this.page);
     const have = page.stickers.filter((s) => profile.album.includes(s.id)).length;
     const cards = page.stickers
       .map((s) => {
@@ -136,10 +157,11 @@ export class RenownView {
   }
 
   logrosHtml() {
-    const s = this.game.state;
-    const done = profileOf(s).logros ?? {};
-    return LOGROS.map((l) => {
-      const value = metric(s, l.metric);
+    const profile = profileOf(this.game.state);
+    const s = this.regionState();
+    const done = profile.logros ?? {};
+    return logrosOf(this.region).map((l) => {
+      const value = metric(s, l.metric, profile);
       const tier = Math.max(done[l.id] ?? 0, tierOf(l, value));
       const stars = l.tiers.map((_, k) => (k < tier ? '★' : '☆')).join('');
       const next = l.tiers[tier];
@@ -152,15 +174,15 @@ export class RenownView {
 
   // La jornada (v3.8): de 12 h a 24 h, con bloques de 2 h que cuestan cada uno el doble del anterior.
   workHtml(profile) {
-    const level = workLevel(profile);
+    const level = workLevel(this.regionState());
     const hours = 12 + 2 * level;
     const steps = WORK_COSTS.map((_, k) => (k < level ? '★' : '☆')).join('');
-    const q = quoteWork(profile);
+    const q = quoteWork(profile, this.regionState());
     const [a, b] = EXTRA_BLOCKS[level] ?? [];
     const next = q.reason === 'max'
       ? '<p>✅ Al máximo: se trabaja las 24 horas.</p>'
       : `<button class="btn buy" data-work ${q.ok ? '' : 'disabled'}>+2 h (de ${a}:00 a ${b % 24}:00) · ⭐ ${q.cost}</button>`;
-    return `<div class="logro"><div class="logro-head"><b>🕐 Jornada: ${hours} h</b><span class="logro-stars">${steps}</span></div>
+    return `<div class="logro"><div class="logro-head"><b>🕐 Jornada en ${REGIONS_BY_ID[this.region].name}: ${hours} h</b><span class="logro-stars">${steps}</span></div>
       <p>Se trabaja de ${workText(workBlocks(level))}. Fuera de la jornada las estaciones descansan.</p>
       <div class="bar"><div style="width:${(100 * hours) / 24}%"></div></div>${next}</div>`;
   }
@@ -181,15 +203,15 @@ export class RenownView {
   }
 
   decorHtml(profile) {
-    const chosen = profile.decor.chosen;
-    // El color del segundo Willys, solo si alguna región ya lo tiene.
-    const has = { willys2: openRegionStates(this.game.state).some(({ state }) => state.willys2) };
+    const chosen = decorOf(profile, this.region).chosen;
+    // El color del segundo Willys, solo si la región ya lo tiene.
+    const has = { willys2: Boolean(this.regionState().willys2) };
     return DECOR.filter((cat) => !cat.requires || has[cat.requires]).map((cat) => {
       const opts = cat.options
         .map((o) => {
-          const owned = ownsDecor(profile, cat.id, o.id);
+          const owned = ownsDecor(profile, cat.id, o.id, this.region);
           const on = (chosen[cat.id] ?? cat.options[0].id) === o.id;
-          const can = owned || quoteDecor(profile, cat.id, o.id).ok;
+          const can = owned || quoteDecor(profile, cat.id, o.id, this.region).ok;
           const colors = o.colors ?? [o.color];
           const sw = colors.length ? `<span class="sw">${colors.map((c) => `<i style="background:${hex(c)}"></i>`).join('')}</span>` : '<span class="sw">—</span>';
           const tag = on ? '✓' : owned ? 'Usar' : `⭐ ${o.cost}`;

@@ -6,7 +6,8 @@ export const DAY_LENGTH = 480; // s de juego
 export const START_HOUR = 8; // una partida nueva empieza por la mañana
 // La jornada (v3.8): de 6 a 12 y de 14 a 20, con el almuerzo en medio. Con Renombre ⭐ se le suman
 // bloques de 2 horas, en este orden (cada uno cuesta el doble del anterior; ver sim/renown.js), hasta
-// trabajar las 24 horas. Es del jugador: vale en todas las regiones.
+// trabajar las 24 horas. Desde la v3.10 es de cada región (`workLevel` en su partida): las funciones de
+// abajo reciben cuántos bloques hay (`extra`); con la partida, `workOf`.
 export const BASE_WORK = [
   [6, 12],
   [14, 20],
@@ -30,8 +31,7 @@ export const YEAR_DAYS = SEASON_DAYS * SEASONS.length;
 
 // Las pruebas de la cadena (que todo cuadre, que ningún patio se llene) apagan el calendario: siempre
 // de día y sin temporada. Las del calendario lo prenden.
-// `extra`: cuántos bloques de la jornada ha comprado el jugador (lo pone main.js desde el perfil).
-export const CALENDAR = { on: true, extra: 0 };
+export const CALENDAR = { on: true };
 const NO_SEASON = { id: 'none', icon: '', name: '', mult: 1, text: '' };
 
 // Horas transcurridas desde la medianoche del primer día.
@@ -46,22 +46,24 @@ export const seasonOf = (playTime) => (!CALENDAR.on ? NO_SEASON : SEASONS[Math.f
 export const seasonDay = (playTime) => (dayOf(playTime) % SEASON_DAYS) + 1;
 
 // Los bloques de la jornada con `extra` bloques comprados.
-export const workBlocks = (extra = CALENDAR.extra) => [...BASE_WORK, ...EXTRA_BLOCKS.slice(0, extra)];
+export const workBlocks = (extra = 0) => [...BASE_WORK, ...EXTRA_BLOCKS.slice(0, extra)];
+// Cuántos bloques tiene la región de una partida (v3.10).
+export const workOf = (state) => state?.workLevel ?? 0;
 // Qué horas (de 0 a 23) son de trabajo, por cuántos bloques hay (los bloques empiezan en horas exactas).
 const HOURS = EXTRA_BLOCKS.map((_, n) => n)
   .concat(EXTRA_BLOCKS.length)
   .map((n) => Array.from({ length: 24 }, (_, h) => workBlocks(n).some(([a, b]) => h >= a && h < b)));
-const workHours = () => HOURS[Math.max(0, Math.min(EXTRA_BLOCKS.length, CALENDAR.extra | 0))];
+const workHours = (extra) => HOURS[Math.max(0, Math.min(EXTRA_BLOCKS.length, extra | 0))];
 
-export function isWorkTime(playTime) {
+export function isWorkTime(playTime, extra = 0) {
   if (!CALENDAR.on) return true;
-  return workHours()[Math.floor(hourOf(playTime))];
+  return workHours(extra)[Math.floor(hourOf(playTime))];
 }
 
 // La hora (de 0 a 23) en que vuelve a empezar el trabajo (la de ahora si ya se está trabajando).
-export function nextWorkHour(playTime) {
+export function nextWorkHour(playTime, extra = 0) {
   const now = Math.floor(hourOf(playTime));
-  const hours = workHours();
+  const hours = workHours(extra);
   for (let k = 0; k < 24; k++) if (hours[(now + k) % 24]) return (now + k) % 24;
   return now;
 }
@@ -71,34 +73,34 @@ export function nextWorkHour(playTime) {
 // El reloj del país (v3.0): el tiempo de juego de la partida más lo que ya había pasado cuando empezó
 // (una región que se abre después, o la partida nueva tras un reinicio, siguen el mismo calendario).
 export const clockOf = (state) => (state.playTime ?? 0) + (state.clockOffset ?? 0);
-export const resting = (state) => !state.event && !isWorkTime(clockOf(state));
+export const resting = (state) => !state.event && !isWorkTime(clockOf(state), workOf(state));
 export const seasonMult = (state) => (state.event ? 1 : seasonOf(clockOf(state)).mult);
 
 // Qué tanto se produce en este instante: 0 de noche; de día, lo de la temporada.
-export const workFactor = (playTime) => (isWorkTime(playTime) ? seasonOf(playTime).mult : 0);
+export const workFactor = (playTime, extra = 0) => (isWorkTime(playTime, extra) ? seasonOf(playTime).mult : 0);
 
 // Producción de un tramo (de `from` a `to`, en s de juego), en segundos «de día normal»: para sumar lo
 // que pasa sin conexión más allá de lo que se simula. Se cuenta en pasos de 5 s (las horas de la
 // jornada y los días caen justo en pasos de 5 s).
 const STEP = 5;
-export function workSeconds(from, to) {
+export function workSeconds(from, to, extra = 0) {
   let total = 0;
-  for (let t = from; t < to; t += STEP) total += workFactor(t + Math.min(STEP, to - t) / 2) * Math.min(STEP, to - t);
+  for (let t = from; t < to; t += STEP) total += workFactor(t + Math.min(STEP, to - t) / 2, extra) * Math.min(STEP, to - t);
   return total;
 }
 
 // Segundos de juego hasta que vuelve a empezar la jornada (0 si ya se está trabajando).
-export function untilWork(playTime) {
-  if (isWorkTime(playTime)) return 0;
+export function untilWork(playTime, extra = 0) {
+  if (isWorkTime(playTime, extra)) return 0;
   const h = hourOf(playTime);
-  const hours = (nextWorkHour(playTime) - h + 24) % 24;
+  const hours = (nextWorkHour(playTime, extra) - h + 24) % 24;
   return (hours / 24) * DAY_LENGTH;
 }
 
 // Si la hora es la del almuerzo (de 12 a 14, mientras no se compre ese bloque), para los textos.
-export const isLunch = (playTime) => {
+export const isLunch = (playTime, extra = 0) => {
   const h = hourOf(playTime);
-  return h >= 12 && h < 14 && !isWorkTime(playTime);
+  return h >= 12 && h < 14 && !isWorkTime(playTime, extra);
 };
 // «6:00», para los textos.
 export const hourLabel = (h) => `${h}:00`;

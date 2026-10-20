@@ -546,6 +546,9 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .events-renown-row { display: flex; align-items: center; gap: 8px; margin: 4px 0 10px; flex-wrap: wrap; }
 .events-renown-row .events-renown { flex: 1; margin: 0; }
 .events-renown-row .btn { width: auto; padding: 6px 10px; font-size: 0.85rem; }
+.renown-regions { display: flex; gap: 6px; margin: 6px 0 2px; }
+.renown-regions button { flex: 1; padding: 6px 4px; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); color: var(--ink); font: inherit; font-weight: 700; font-size: 0.85rem; }
+.renown-regions button.on { background: var(--yellow); }
 .album-pages { display: flex; gap: 6px; margin-bottom: 8px; }
 .album-pages button { flex: 1; padding: 6px 0; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); font-size: 1.2rem; position: relative; }
 .album-pages button.on { background: var(--yellow); }

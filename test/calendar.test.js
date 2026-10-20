@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
-import { CALENDAR, DAY_LENGTH, EXTRA_BLOCKS, SEASONS, dayOf, hourOf, isLunch, isWorkTime, nextWorkHour, seasonDay, seasonOf, untilWork, workSeconds, yearOf } from '../src/sim/calendar.js';
+import { DAY_LENGTH, EXTRA_BLOCKS, SEASONS, dayOf, hourOf, isLunch, isWorkTime, nextWorkHour, seasonDay, workBlocks, seasonOf, untilWork, workSeconds, yearOf } from '../src/sim/calendar.js';
 import { WORK_COSTS, buyWork, quoteWork, workLevel } from '../src/sim/renown.js';
 import { workText } from '../src/ui/calendar.js';
 import { speedMult } from '../src/sim/modifiers.js';
@@ -48,33 +48,30 @@ test('con Renombre la jornada crece de a 2 h, cada bloque al doble del anterior,
   assert.deepEqual(WORK_COSTS, [2, 4, 8, 16, 32, 64]);
   assert.equal(WORK_COSTS.length, EXTRA_BLOCKS.length);
   assert.deepEqual(EXTRA_BLOCKS, [[20, 22], [4, 6], [22, 24], [2, 4], [12, 14], [0, 2]]);
+  // Cada región tiene su jornada (v3.10); se paga con el Renombre del jugador.
   const profile = { renown: 3 };
-  assert.ok(buyWork(profile));
+  const region = {};
+  const other = {};
+  assert.ok(buyWork(profile, region));
   assert.equal(profile.renown, 1);
-  assert.deepEqual(quoteWork(profile), { ok: false, reason: 'renown', cost: 4 });
+  assert.equal(workLevel(other), 0, 'la otra región sigue igual');
+  assert.deepEqual(quoteWork(profile, region), { ok: false, reason: 'renown', cost: 4 });
   profile.renown = 1000;
-  while (buyWork(profile));
-  assert.equal(workLevel(profile), 6);
+  while (buyWork(profile, region));
+  assert.equal(workLevel(region), 6);
   assert.equal(profile.renown, 1000 - (4 + 8 + 16 + 32 + 64));
-  assert.equal(quoteWork(profile).reason, 'max');
+  assert.equal(quoteWork(profile, region).reason, 'max');
   const texts = [];
-  try {
-    for (let n = 0; n <= 6; n++) {
-      CALENDAR.extra = n;
-      texts.push(workText());
-      const hours = workSeconds(at(1, 0), at(2, 0)) / HOUR / seasonOf(at(1, 0)).mult;
-      assert.ok(Math.abs(hours - (12 + 2 * n)) < 1e-6, `${n} bloques: ${hours} h`);
-    }
-    CALENDAR.extra = 1;
-    assert.equal(isWorkTime(at(1, 21)), true);
-    assert.equal(nextWorkHour(at(1, 23)), 6);
-    CALENDAR.extra = 5;
-    assert.equal(isWorkTime(at(1, 13)), true, 'el almuerzo es el penúltimo');
-    assert.equal(isWorkTime(at(1, 1)), false);
-    assert.equal(nextWorkHour(at(1, 1)), 2);
-  } finally {
-    CALENDAR.extra = 0;
+  for (let n = 0; n <= 6; n++) {
+    texts.push(workText(workBlocks(n)));
+    const hours = workSeconds(at(1, 0), at(2, 0), n) / HOUR / seasonOf(at(1, 0)).mult;
+    assert.ok(Math.abs(hours - (12 + 2 * n)) < 1e-6, `${n} bloques: ${hours} h`);
   }
+  assert.equal(isWorkTime(at(1, 21), 1), true);
+  assert.equal(nextWorkHour(at(1, 23), 1), 6);
+  assert.equal(isWorkTime(at(1, 13), 5), true, 'el almuerzo es el penúltimo');
+  assert.equal(isWorkTime(at(1, 1), 5), false);
+  assert.equal(nextWorkHour(at(1, 1), 5), 2);
   assert.deepEqual(texts, [
     '6:00 a 12:00 y 14:00 a 20:00',
     '6:00 a 12:00 y 14:00 a 22:00',
@@ -106,13 +103,10 @@ test('con el bloque de 20 a 22 comprado se sigue trabajando después de las 20:0
   const game = new Game();
   const s = game.state;
   s.playTime = at(0, 20.5);
-  CALENDAR.extra = 1;
-  try {
-    game.step(0.1);
-    assert.notEqual(s.stations.farm.status, 'resting');
-  } finally {
-    CALENDAR.extra = 0;
-  }
+  s.workLevel = 1; // la jornada es de la región (v3.10)
+  game.step(0.1);
+  assert.notEqual(s.stations.farm.status, 'resting');
+  s.workLevel = 0;
   game.step(0.1);
   assert.equal(s.stations.farm.status, 'resting');
 });
