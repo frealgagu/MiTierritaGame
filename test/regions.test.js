@@ -333,3 +333,12 @@ test('una partida ya reiniciada o con la última zona completa carga con la regi
   saveGame(createInitialState(0));
   assert.equal(loadGame().regionDone, false);
 });
+
+test('con el Eje Cafetero ya terminado, Santander se abre aunque tras reiniciar el Pueblo no esté completo (v3.8.1)', () => {
+  const root = createInitialState(0);
+  root.regionDone = true;
+  assert.deepEqual(openRegions(root), ['santander']);
+  assert.ok(regionState(root, 'santander'));
+  // Sin terminarla nunca, no.
+  assert.deepEqual(openRegions(createInitialState(0)), []);
+});

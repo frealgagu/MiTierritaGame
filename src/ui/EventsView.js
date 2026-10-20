@@ -90,8 +90,12 @@ export class EventsView {
       const owner = this.stateOf(def.zone);
       return owner && eventStatus(owner, def.zone);
     }).filter(Boolean);
-    // El botón aparece cuando hay algún evento abierto; el número, los que se pueden empezar.
-    this.btn.hidden = !statuses.some((st) => st.kind !== 'locked');
+    // El botón aparece cuando hay algún evento abierto, o cuando ya se tiene algo del Renombre (v3.8.1:
+    // tras reiniciar seguían ahí el álbum, los logros y las horas aunque no hubiera evento); el número,
+    // los que se pueden empezar.
+    const p = this.game.state.profile ?? {};
+    const progress = p.renown > 0 || p.history?.length > 0 || Object.keys(p.logros ?? {}).length > 0 || (this.game.state.legacy?.resets ?? 0) > 0;
+    this.btn.hidden = !progress && !statuses.some((st) => st.kind !== 'locked');
     const ready = statuses.filter((st) => st.kind === 'available').length;
     this.badge.hidden = ready === 0;
     this.badge.textContent = ready;

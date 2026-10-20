@@ -23,7 +23,7 @@ import { finishEvent, startEvent } from './sim/events.js';
 import { CALENDAR } from './sim/calendar.js';
 import { workLevel } from './sim/renown.js';
 import { MEDALS } from './data/events.js';
-import { REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
+import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
 import { openRegions, regionState } from './sim/regions.js';
 import { bindNative, isNativeApp } from './native.js';
 import { checkForUpdate } from './update.js';
@@ -268,7 +268,9 @@ async function start() {
         games[id].timeScale = game.timeScale;
         wire(games[id]);
       }
-      showVictory(g.state, zone, (next) => showZone(next), opened);
+      // La región que sigue, si ya estaba abierta (al completar de nuevo la última zona tras reiniciar).
+      const after = !ZONES_BY_ID[zone].next && REGIONS.find((r) => r.unlock?.zone === zone && regionState(root, r.id));
+      showVictory(g.state, zone, (next) => showZone(next), opened, after?.id);
     });
     g.bus.on('mastered', () => {
       // Si llega al cobrar el primer final (ya estaba todo al 100), primero la pantalla del final de

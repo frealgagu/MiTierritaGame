@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.8.1 — Logros y Santander siempre a mano
+- **Los logros, el álbum, la decoración y las horas se ven después de reiniciar.** El botón 🏅 Eventos (donde están) solo aparecía si había algún evento abierto, y al volver a empezar no lo había. Ahora aparece siempre que tengas Renombre, medallas o logros, o ya hayas reiniciado.
+- **Santander no se pierde.** Si ya terminaste el Eje Cafetero alguna vez, Santander queda abierto aunque reinicies, sin tener que completar de nuevo el Pueblo.
+- Al completar de nuevo el Pueblo, la pantalla del final también ofrece **Ir a Santander**. Si eliges quedarte, te recuerda que puedes ir cuando quieras con el botón 🗺️ de zonas.
+
 ## v3.8.0 — Nueva jornada y eventos de la región terminada
 - **Nueva jornada: de 6:00 a 12:00 y de 14:00 a 20:00**, con la hora del almuerzo en medio (siguen siendo 12 h de trabajo al día, así que el ritmo del juego no cambia). Los paneles y la gente avisan cuando es la hora del almuerzo y a qué hora sigue el trabajo.
 - **Más horas de trabajo con Renombre ⭐.** En 🏅 Eventos › ⏰ Horas se compran bloques de 2 h, cada uno al doble del anterior: 20–22 (2 ⭐), 4–6 (4 ⭐), 22–24 (8 ⭐), 2–4 (16 ⭐), el almuerzo 12–14 (32 ⭐) y 0–2 (64 ⭐), hasta trabajar las 24 horas. Son tuyas: valen en todas las regiones y no se pierden al volver a empezar. Van aparte de las horas sin conexión.

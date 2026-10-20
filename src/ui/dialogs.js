@@ -1,6 +1,7 @@
 import { formatDuration, formatNumber } from '../core/format.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
+import { toast } from './toast.js';
 
 // Ventana de bienvenida con lo ganado mientras el juego estuvo cerrado.
 export function showWelcome({ seconds, coins, capped, cap, scale = 1 }, onCollect) {
@@ -38,10 +39,12 @@ const VICTORY = {
 const toZone = (name) => (name.startsWith('El ') ? `al ${name.slice(3)}` : `a ${name}`);
 
 // onGo(zona): ir a la zona que se acaba de abrir. opened: regiones que se abrieron al completarla
-// (v3.0: el Pueblo abre Santander).
-export function showVictory(state, zoneId, onGo, opened = []) {
+// (v3.0: el Pueblo abre Santander). open: la región que sigue, si ya estaba abierta (v3.8.1: al
+// completar de nuevo el Pueblo tras reiniciar, también se ofrece ir a Santander).
+export function showVictory(state, zoneId, onGo, opened = [], open = null) {
   const v = VICTORY[zoneId];
-  const region = opened[0] && REGIONS_BY_ID[opened[0]];
+  const fresh = Boolean(opened[0]);
+  const region = REGIONS_BY_ID[opened[0] ?? open];
   const next = ZONES_BY_ID[zoneId].next ?? (region ? region.zones[0] : null);
   document.getElementById('victory-title').textContent = v.title;
   document.getElementById('victory-text').innerHTML = v.text;
@@ -51,7 +54,9 @@ export function showVictory(state, zoneId, onGo, opened = []) {
   const stay = document.getElementById('victory-ok');
   const modal = document.getElementById('victory');
   if (region) {
-    soon.innerHTML = `¡Se abrió una región nueva: <b>${region.icon} ${region.name}</b>! Empieza de cero, con su propia economía, y tu Eje Cafetero sigue produciendo.`;
+    soon.innerHTML = fresh
+      ? `¡Se abrió una región nueva: <b>${region.icon} ${region.name}</b>! Empieza de cero, con su propia economía, y tu ${REGIONS_BY_ID[REGION_OF_ZONE[zoneId]].name} sigue produciendo.`
+      : `Tu región <b>${region.icon} ${region.name}</b> sigue abierta y produciendo.`;
     go.hidden = false;
     go.textContent = `Ir a ${region.name} ${region.icon}`;
     go.onclick = () => {
@@ -72,7 +77,11 @@ export function showVictory(state, zoneId, onGo, opened = []) {
   }
   stay.textContent = next ? 'Quedarme aquí' : 'Seguir jugando';
   modal.hidden = false;
-  stay.onclick = () => (modal.hidden = true);
+  stay.onclick = () => {
+    modal.hidden = true;
+    // Para que no se pierda el camino: se va a otra región (o zona) con el botón 🗺️.
+    if (region) toast(`🗺️ Puedes ir a ${region.name} ${region.icon} cuando quieras con el botón de zonas.`, 5000);
+  };
 }
 
 // Número de la zona dentro de su región.
