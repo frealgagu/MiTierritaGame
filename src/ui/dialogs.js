@@ -7,7 +7,7 @@ export function showWelcome({ seconds, coins, capped, cap, scale = 1 }, onCollec
   const modal = document.getElementById('welcome');
   const fast = scale > 1 ? ` (a ⏩ ×${scale})` : '';
   document.getElementById('welcome-text').textContent = capped
-    ? `Estuviste fuera más de ${formatDuration(cap / scale)}. Tu finca trabajó ${formatDuration(seconds)}${fast}, el máximo, y ganó:`
+    ? `Estuviste fuera más de ${formatDuration(cap / scale)}. Tu finca trabajó ${formatDuration(seconds)}${fast}, el máximo, y ganó (con Renombre ⭐ puedes subir ese máximo, en 🏅 Eventos › ⏰ Sin conexión):`
     : `Mientras no estabas, tu finca siguió trabajando ${formatDuration(seconds)}${fast} y ganó:`;
   document.getElementById('welcome-coins').textContent = `💰 ${formatNumber(coins)}`;
   modal.hidden = false;

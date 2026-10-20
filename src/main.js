@@ -80,7 +80,7 @@ async function start() {
   const regionOffline = [];
   for (const [id, g] of Object.entries(games)) {
     if (id === 'cafetero' || !saved) continue;
-    const r = await applyOffline(g, away, REGIONS_BY_ID[id]);
+    const r = await applyOffline(g, away, REGIONS_BY_ID[id], game.state.profile);
     if (r) regionOffline.push([id, r]);
   }
 
@@ -218,7 +218,7 @@ async function start() {
     scene = new Scene(app, board.game, sound, ZONES_BY_ID[board.zone]);
     scene.onSelect = select;
   });
-  for (const [id, tab] of [['album-btn', 'album'], ['decor-btn', 'decor'], ['logros-btn', 'logros']]) {
+  for (const [id, tab] of [['album-btn', 'album'], ['decor-btn', 'decor'], ['logros-btn', 'logros'], ['offline-btn', 'offline']]) {
     document.getElementById(id).addEventListener('click', () => {
       events.close();
       renown.open(tab);
@@ -229,7 +229,7 @@ async function start() {
     document.getElementById('event-result-medal').textContent = m.icon;
     document.getElementById('event-result-title').textContent = `¡Medalla de ${m.name}!`;
     document.getElementById('event-result-text').textContent =
-      `${r.def.icon} ${r.def.name}, año ${r.year}: lo lograste en ${formatClock(r.time)}.\n+${m.renown} ⭐ de Renombre (tienes ${game.state.profile.renown}).\nEl año que viene vuelve, con otro objetivo.`;
+      `${r.def.icon} ${r.def.name} ${r.round}: cumpliste el objetivo en ${formatClock(r.time)} y compraste las tres mejoras.\n+${m.renown} ⭐ de Renombre (tienes ${game.state.profile.renown}).\nEste cupo de eventos de la región queda libre en 3 años del juego (unas 6 h 24 min).`;
     const modal = document.getElementById('event-result');
     document.getElementById('event-result-ok').onclick = () => (modal.hidden = true);
     modal.hidden = false;
@@ -343,7 +343,13 @@ async function start() {
       board.game.timeScale = game.timeScale;
       board.game.update(dt);
       const r = finishEvent(ownerOf(board.zone), board.zone, game.state);
-      if (r) {
+      // v3.7: cumplir el objetivo asegura la medalla; el evento termina al tener las tres mejoras.
+      if (r?.secured) {
+        const m = MEDALS[r.medal];
+        toast(`${m.icon} ¡Medalla de ${m.name} asegurada! Para terminar el evento, compra las mejoras que faltan.`, 6000);
+        sound.milestone();
+      }
+      if (r?.done) {
         exitEvent();
         showEventResult(r);
       }
@@ -390,7 +396,7 @@ async function start() {
       const r = await applyOffline(game, away);
       for (const [id, g] of Object.entries(games)) {
         if (id === 'cafetero') continue;
-        const rr = await applyOffline(g, away, REGIONS_BY_ID[id]);
+        const rr = await applyOffline(g, away, REGIONS_BY_ID[id], game.state.profile);
         if (rr) toast(`${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name} también siguió trabajando: +💰 ${formatNumber(rr.coins)}`, 5000);
       }
       if (r) showWelcome(r, () => sound.coin());
@@ -426,9 +432,10 @@ async function start() {
 // Siempre a velocidad normal: el tiempo acelerado de las opciones de desarrollador solo cuenta con el
 // juego abierto (multiplicar el tiempo fuera hacía que volver tardara mucho en calcularse).
 // Por partes, con la pantalla de carga y su barra (en un teléfono, 24 h pueden tardar varios segundos).
-async function applyOffline(game, seconds, region = null) {
+// profile: el del jugador (v3.7: sus horas sin conexión valen para todas las regiones).
+async function applyOffline(game, seconds, region = null, profile = game.state.profile) {
   if (seconds < MIN_OFFLINE_S) return null;
-  const cap = offlineCapSeconds(game.state);
+  const cap = offlineCapSeconds(game.state, profile);
   splashOffline(seconds, cap, region);
   const r = await game.catchUpAsync(seconds, cap, setSplashProgress);
   splashWait('¡Listo! Preparando el mapa…');

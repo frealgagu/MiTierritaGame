@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v3.7.0 — Eventos por cupos y horas sin conexión del jugador
+- **Eventos más espaciados.** Cada región tiene **2 cupos** de eventos (el Eje Cafetero y Santander, cada uno los suyos).
+  - Al terminar un evento, su cupo queda **vacío 3 años del juego** (unas 6 h 24 min); los dos cupos van cada uno por su lado.
+  - Al llenarse un cupo sale primero una zona cuyo evento **nunca has jugado**; si no hay, la que lleva más tiempo sin jugarse.
+  - Los eventos que ya salieron **no se vencen**: esperan hasta que los juegues. Cada zona avanza su reto (1, 2, 3 y otra vez el 1) al terminarlo, así ninguno se pierde.
+  - La ventana de eventos muestra primero los que se pueden jugar, y de los demás cuánto falta para que se libere un cupo.
+- **Cómo se gana un evento.** Al cumplir el objetivo, la **medalla queda asegurada** con el tiempo de ese momento. Para terminar el evento hay que haber comprado además **sus tres mejoras**: el tablero sigue abierto y produciendo para pagarlas, y al comprar la última llegan la medalla y el Renombre.
+- **Las horas sin conexión son tuyas.** Valen igual para todas las regiones y no se pierden al volver a empezar ninguna (antes, reiniciar el Eje Cafetero lo dejaba en 2 h aunque Santander tuviera más, y el calendario se descuadraba entre regiones). Se empieza en 2 h y se suben de 2 en 2 hasta 24 h con Renombre ⭐ (de 2 a 12 ⭐ por nivel), en 🏅 Eventos › ⏰ Horas.
+  - Las 12 investigaciones que sumaban horas (Capataz, Trapichero, Mayordomo…) ya no existen: si las tenías, se te devuelven sus monedas y tu perfil arranca con las horas más altas que tenías en cualquier región.
+
 ## v3.6.2 — La web funciona sin internet
 - La versión web **se puede abrir sin internet**: el service worker que lo permite nunca se activaba (quedaba en un «else if» detrás del enlace al APK, que siempre se cumplía antes). La web sigue cargando sola la última versión publicada cada vez que hay internet.
 

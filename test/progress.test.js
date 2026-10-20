@@ -2,6 +2,7 @@ import { ZONES_BY_ID } from '../src/data/zones/index.js';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
+import { createInitialState } from '../src/sim/state.js';
 import { GOALS } from '../src/data/goals.js';
 import { RESEARCH } from '../src/data/research.js';
 import { activeGoals, goalProgress, goalText } from '../src/sim/goals.js';
@@ -76,16 +77,22 @@ test('el sello de calidad sube el precio de las bolsas', () => {
   assert.equal(game.state.coins, 2 * 250 * 1.5);
 });
 
-test('cada zona suma horas sin conexión: el capataz +3 h y, con las seis, 24 h', () => {
+test('las horas sin conexión son del jugador: 2 h y +2 h por nivel con Renombre, hasta 24 h (v3.7)', async () => {
+  const { buyOffline, offlineHours, OFFLINE_COSTS } = await import('../src/sim/renown.js');
   const game = new Game();
+  const profile = game.state.profile;
   assert.equal(offlineCapSeconds(game.state), 2 * 3600);
-  game.state.research.push('capataz');
-  assert.equal(offlineCapSeconds(game.state), 5 * 3600);
-  // Las del Eje Cafetero (cada región tiene las suyas, para su propia partida).
-  const offline = RESEARCH.filter((r) => r.effect.type === 'offlineHours' && ZONES_BY_ID[r.zone].region === undefined);
-  assert.deepEqual(offline.map((r) => r.zone), ['finca', 'trapiche', 'lecheria', 'cacaotal', 'maizal', 'pueblo']);
-  game.state.research = offline.map((r) => r.id);
-  assert.equal(offlineCapSeconds(game.state), 24 * 3600);
+  assert.equal(buyOffline(profile), false, 'sin Renombre no se compra');
+  profile.renown = 1000;
+  for (let k = 0; k < OFFLINE_COSTS.length; k++) assert.ok(buyOffline(profile));
+  assert.equal(buyOffline(profile), false, 'ya está al máximo');
+  assert.equal(offlineHours(profile), 24);
+  assert.equal(profile.renown, 1000 - OFFLINE_COSTS.reduce((a, b) => a + b, 0));
+  // Una región (sin perfil propio) usa el del jugador.
+  const santander = createInitialState(0, 'santander');
+  assert.equal(offlineCapSeconds(santander, profile), 24 * 3600);
+  // Ya no hay investigaciones que sumen horas.
+  assert.ok(!RESEARCH.some((r) => r.effect.type === 'offlineHours'));
 });
 
 test('todas las investigaciones y objetivos apuntan a cosas que existen', () => {

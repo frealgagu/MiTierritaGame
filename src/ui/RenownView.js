@@ -1,7 +1,7 @@
 // Ventana del Renombre ⭐ (v2.2): el álbum de láminas (se pega la que uno elija) y la decoración.
 import { ALBUM, PAGE_BONUS } from '../data/album.js';
 import { DECOR } from '../data/decor.js';
-import { buySticker, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteSticker } from '../sim/renown.js';
+import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, buyOffline, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
 import { toast } from './toast.js';
 import { LOGROS } from '../data/logros.js';
 import { metric, tierOf } from '../sim/logros.js';
@@ -36,6 +36,10 @@ export class RenownView {
       if (sticker) return this.stick(sticker.dataset.sticker);
       const opt = e.target.closest('[data-decor]');
       if (opt) this.decorate(...opt.dataset.decor.split(':'));
+      if (e.target.closest('[data-offline]') && buyOffline(profileOf(this.game.state))) {
+        toast(`⏰ Ahora todo sigue produciendo ${offlineHours(profileOf(this.game.state))} h mientras no juegas.`, 3500);
+        this.render();
+      }
     });
   }
 
@@ -68,6 +72,9 @@ export class RenownView {
     if (this.tab === 'album') {
       help.textContent = `Cada lámina cuesta Renombre y tú eliges cuál pegar. Al llenar una página ganas ${PAGE_BONUS} ⭐ de premio.`;
       this.body.innerHTML = this.albumHtml(profile);
+    } else if (this.tab === 'offline') {
+      help.textContent = 'Mientras no juegas, todas tus regiones siguen produciendo hasta este límite. Es tuyo: vale para todas las regiones y no se pierde al volver a empezar.';
+      this.body.innerHTML = this.offlineHtml(profile);
     } else if (this.tab === 'logros') {
       help.textContent = 'Los logros suman entre partidas: lo de antes de volver a empezar también cuenta. Cada nivel da Renombre.';
       this.body.innerHTML = this.logrosHtml();
@@ -104,6 +111,21 @@ export class RenownView {
       const pct = next === undefined ? 100 : (100 * Math.min(value, next)) / next;
       return `<div class="logro"><div class="logro-head"><b>${l.icon} ${l.name}</b><span class="logro-stars">${stars}</span></div><p>${line}</p><div class="bar"><div style="width:${pct}%"></div></div></div>`;
     }).join('');
+  }
+
+  // Horas sin conexión (v3.7): de 2 h a 24 h, 2 h por nivel.
+  offlineHtml(profile) {
+    const level = offlineLevel(profile);
+    const hours = offlineHours(profile);
+    const max = 2 + OFFLINE_STEP_HOURS * OFFLINE_COSTS.length;
+    const steps = OFFLINE_COSTS.map((_, k) => (k < level ? '★' : '☆')).join('');
+    const q = quoteOffline(profile);
+    const next = q.reason === 'max'
+      ? '<p>✅ Al máximo: 24 h.</p>'
+      : `<button class="btn buy" data-offline ${q.ok ? '' : 'disabled'}>+${OFFLINE_STEP_HOURS} h (hasta ${hours + OFFLINE_STEP_HOURS} h) · ⭐ ${q.cost}</button>`;
+    return `<div class="logro"><div class="logro-head"><b>⏰ ${hours} h</b><span class="logro-stars">${steps}</span></div>
+      <p>Al volver, se suma lo que todas tus regiones produjeron hasta ${hours} h (máximo ${max} h).</p>
+      <div class="bar"><div style="width:${(100 * hours) / max}%"></div></div>${next}</div>`;
   }
 
   decorHtml(profile) {

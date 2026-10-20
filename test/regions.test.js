@@ -251,7 +251,27 @@ test('una partida de Santander con la Asociación de tejedoras guardada como «t
   saveGame(root);
   const back = loadGame();
   assert.ok(back.research.includes('tejedoras'));
-  assert.deepEqual(back.regions.santander.research, ['asociacion_tejedoras']);
+  // (v3.7: la Asociación de tejedoras ya no existe: sus horas pasaron al perfil y se devolvieron sus monedas.)
+  assert.deepEqual(back.regions.santander.research, []);
+});
+
+test('al cargar una partida de la v3.6, las horas sin conexión pasan al perfil y se devuelven las monedas (v3.7)', () => {
+  const mem = {};
+  globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  delete root.profile.offlineLevel;
+  root.research.push('capataz', 'abono'); // 2 + 3 = 5 h
+  const s = root.regions.santander;
+  s.research.push('mayordomo_s', 'veguero', 'asociacion_tejedoras'); // 2 + 3 + 3 + 4 = 12 h
+  s.coins = 0;
+  saveGame(root);
+  const back = loadGame();
+  assert.equal(back.profile.offlineLevel, 5, 'arranca con las 12 h de Santander');
+  assert.deepEqual(back.research, ['abono']);
+  assert.deepEqual(back.regions.santander.research, []);
+  assert.equal(back.regions.santander.coins, 10000 + 300000 + 3000000);
 });
 
 test('Barichara se abre con las Hormigas completas y arma excursiones con lo de toda la región', async () => {
@@ -278,4 +298,20 @@ test('Barichara se abre con las Hormigas completas y arma excursiones con lo de 
   CALENDAR.on = on;
   for (const p of ['bocadillo_crate', 'cigar', 'recuerdo', 'tobacco_bale', 'almuerzo', 'fiambre']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
   assert.ok((game.state.stats.sold.excursion ?? 0) > 0, 'sale una excursión');
+});
+
+test('al cargar una partida de la v3.6, los eventos ya jugados pasan al sistema de cupos (v3.7)', async () => {
+  const { eventStatus } = await import('../src/sim/events.js');
+  const mem = {};
+  globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
+  const root = createInitialState(0);
+  root.events = { boards: {}, done: { finca: 2 } };
+  root.profile.history = [{ event: 'broca', year: 1, medal: 'gold', time: 600 }, { event: 'broca', year: 2, medal: 'silver', time: 900 }];
+  saveGame(root);
+  const back = loadGame();
+  assert.equal(back.events.done, undefined);
+  assert.deepEqual(back.events.slots, [null, null]);
+  assert.equal(back.events.count.finca, 2, 'la broca ya se jugó dos veces: sigue el reto 3');
+  assert.ok(back.events.last.finca >= 0);
+  assert.equal(eventStatus(back, 'finca').round, 3);
 });

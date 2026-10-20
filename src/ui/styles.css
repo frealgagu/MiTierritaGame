@@ -607,3 +607,6 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .update-notes h3 { margin: 10px 0 4px; font-size: 1rem; }
 .update-notes ul { margin: 0; padding-left: 20px; }
 .update-notes li { margin: 3px 0; font-size: 0.92rem; }
+
+/* Ventana del Renombre: cuatro pestañas (v3.7) en el ancho de un teléfono. */
+#renown .tab { font-size: 0.76rem; padding-left: 3px; padding-right: 3px; white-space: nowrap; }

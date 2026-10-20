@@ -1,7 +1,7 @@
 // Barra del tablero de un evento (v2.0): el objetivo, el reloj del evento, las medallas y las compras
 // del evento (cada una pide la anterior).
 import { formatNumber } from '../core/format.js';
-import { buyAction, boardObjective, eventDef, eventItems, eventProgress, medalFor, quoteAction } from '../sim/events.js';
+import { allActionsBought, boardRound, buyAction, boardObjective, eventDef, eventItems, eventProgress, medalFor, quoteAction } from '../sim/events.js';
 import { MEDALS } from '../data/events.js';
 import { PRODUCTS } from '../data/products.js';
 import { setFitted } from './fit.js';
@@ -51,10 +51,14 @@ export class EventBar {
     const def = eventDef(board);
     const obj = boardObjective(board);
     const items = eventItems(board);
-    setFitted(document.getElementById('event-title'), `${def.icon} ${def.name} · año ${board.event.year}`);
-    const medal = MEDALS[medalFor(obj, board.playTime)];
-    document.getElementById('event-clock').textContent = `${medal.icon} ⏱ ${formatClock(board.playTime)}`;
-    setFitted(document.getElementById('event-goal'), objectiveText(obj), 0.6);
+    setFitted(document.getElementById('event-title'), `${def.icon} ${def.name} ${boardRound(board)}`);
+    // Con el objetivo cumplido, la medalla queda fija con su tiempo (v3.7): falta comprar las mejoras.
+    const secured = board.event.medal;
+    const medal = MEDALS[secured ?? medalFor(obj, board.playTime)];
+    document.getElementById('event-clock').textContent = `${medal.icon} ⏱ ${formatClock(secured ? board.event.time : board.playTime)}`;
+    const missing = def.actions.filter((a) => !board.research.includes(a.id)).map((a) => a.name);
+    const goal = secured && !allActionsBought(board) ? `✅ ${medal.icon} asegurada. Para terminar, compra: ${missing.join(', ')}` : objectiveText(obj);
+    setFitted(document.getElementById('event-goal'), goal, 0.6);
     // Con un producto, «37 / 100»; con varios, cuánto lleva de cada uno.
     const count = items.length === 1 ? `${formatNumber(Math.floor(items[0].have))} / ${formatNumber(items[0].need)}` : items.map((i) => `${PRODUCTS[i.product].icon} ${formatNumber(Math.floor(i.have))}`).join(' ');
     document.getElementById('event-count').textContent = count;

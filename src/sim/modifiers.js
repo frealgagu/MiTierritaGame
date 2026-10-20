@@ -4,8 +4,7 @@ import { PRODUCTS } from '../data/products.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { seasonMult } from './calendar.js';
 import { EVENTS_BY_ID, EVENT_ACTIONS_BY_ID } from '../data/events.js';
-
-const BASE_OFFLINE_HOURS = 2;
+import { offlineHours } from './renown.js';
 
 // Una compra puede tener un efecto (effect) o varios (effects: las de los eventos).
 export const effectsOf = (def) => def?.effects ?? (def?.effect ? [def.effect] : []);
@@ -54,16 +53,9 @@ export const dispatchMult = (state, zoneId = 'finca') => product(state, 'dispatc
 export const productValue = (state, productId) =>
   PRODUCTS[productId].value * product(state, 'productValue', productId) * product(state, 'zoneValue', PRODUCTS[productId].zone);
 
-// Horas que la finca sigue produciendo sin conexión: 2 h, más las que suma cada investigación (una
-// por zona: 3 + 3 + 4 + 4 + 4 + 4, hasta 24 h).
-export function offlineCapSeconds(state) {
-  let hours = BASE_OFFLINE_HOURS;
-  for (const id of state.research ?? []) {
-    const e = RESEARCH_BY_ID[id]?.effect;
-    if (e?.type === 'offlineHours') hours += e.hours;
-  }
-  return hours * 3600;
-}
+// Lo que se produce sin conexión, en s (v3.7): las horas del perfil del jugador, iguales para todas las
+// regiones. Las regiones no guardan perfil: se les pasa el de la partida principal.
+export const offlineCapSeconds = (state, profile = state.profile) => offlineHours(profile) * 3600;
 
 // Compost (Compostera): mientras haya compost guardado, todo lo que vende la Finca vale más.
 // No acelera ninguna estación, así que no descompensa la cadena.

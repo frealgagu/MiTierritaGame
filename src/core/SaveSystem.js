@@ -3,6 +3,9 @@ import { createSourceState, createStationState } from '../sim/production.js';
 import { createRouteState } from '../sim/routes.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
+import { OFFLINE_BASE_HOURS, OFFLINE_COSTS, OFFLINE_STEP_HOURS } from '../sim/renown.js';
+import { DAY_LENGTH, YEAR_DAYS } from '../sim/calendar.js';
+import { EVENT_OF_ZONE } from '../data/events.js';
 
 const KEY = 'cafetal.save';
 
@@ -107,7 +110,50 @@ function migrate(data) {
     zones.pueblo.unlocked = true;
     stations.coffee_house ??= createStationState();
   }
-  return finish(data, base, stations, zones, mules);
+  return migrateProfile(finish(data, base, stations, zones, mules));
+}
+
+// Investigaciones que sumaban horas sin conexión (hasta la v3.6), con lo que costaban y sus horas.
+const OLD_OFFLINE_RESEARCH = {
+  capataz: [10000, 3], trapichero: [300000, 3], ordeno_programado: [3000000, 4], vigilante: [8000000, 4], vecina: [60000000, 4], administrador: [2500000000, 4],
+  mayordomo_s: [10000, 3], veguero: [300000, 3], asociacion_tejedoras: [3000000, 4], vaquero: [8000000, 4], cuidandera: [60000000, 4], administradora: [2500000000, 4],
+};
+
+// Lo del jugador que cambió de forma (sobre la partida principal ya migrada, con sus regiones).
+function migrateProfile(root) {
+  const all = [root, ...Object.values(root.regions ?? {})];
+  // v3.6 → v3.7: las horas sin conexión pasan al perfil. Nadie pierde horas: el perfil arranca con las
+  // de la región que más tenía, y se devuelven las monedas de esas investigaciones (ya no existen).
+  if (root.profile && root.profile.offlineLevel === undefined) {
+    let best = OFFLINE_BASE_HOURS;
+    for (const st of all) {
+      const hours = OFFLINE_BASE_HOURS + (st.research ?? []).reduce((n, id) => n + (OLD_OFFLINE_RESEARCH[id]?.[1] ?? 0), 0);
+      best = Math.max(best, hours);
+      for (const id of st.research ?? []) if (OLD_OFFLINE_RESEARCH[id]) st.coins += OLD_OFFLINE_RESEARCH[id][0];
+      st.research = (st.research ?? []).filter((id) => !OLD_OFFLINE_RESEARCH[id]);
+    }
+    root.profile.offlineLevel = Math.min(OFFLINE_COSTS.length, Math.ceil((best - OFFLINE_BASE_HOURS) / OFFLINE_STEP_HOURS));
+  }
+  // v3.6 → v3.7: los eventos ya no van por año sino por cupos. Lo ya jugado (`done`: zona → año) pasa a
+  // `last` (el comienzo de ese año) y `count` (cuántas veces, del registro del perfil); los tableros en
+  // juego ocupan los cupos.
+  const history = root.profile?.history ?? [];
+  for (const st of all) {
+    const ev = (st.events ??= {});
+    ev.boards ??= {};
+    if (!ev.slots) {
+      ev.slots = [null, null];
+      Object.keys(ev.boards).slice(0, 2).forEach((zone, i) => (ev.slots[i] = { zone }));
+    }
+    ev.last ??= {};
+    ev.count ??= {};
+    for (const [zone, year] of Object.entries(ev.done ?? {})) {
+      ev.last[zone] ??= (year - 1) * YEAR_DAYS * DAY_LENGTH;
+      ev.count[zone] ??= Math.max(1, history.filter((h) => h.event === EVENT_OF_ZONE[zone]?.id).length);
+    }
+    delete ev.done;
+  }
+  return root;
 }
 
 // Lo común a todas las regiones: rutas, objetivos y el resto de los campos.

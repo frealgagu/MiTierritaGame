@@ -62,7 +62,7 @@ export class Chatter {
     // Un evento que se abre (una vez al año), dicho por la persona de su zona.
     for (const def of EVENTS) {
       const st = eventStatus(state, def.zone);
-      const hint = `event:${def.id}:${st?.year}`;
+      const hint = `evento:${def.id}:${st?.round}`; // (v3.7: por reto; antes, `event:` por año)
       if (st?.kind !== 'available' || state.hints.includes(hint)) continue;
       state.hints.push(hint);
       this.lastAny = now;

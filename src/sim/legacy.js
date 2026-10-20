@@ -49,6 +49,15 @@ export function restartState(state, now = Date.now()) {
   if (state.regions) next.regions = state.regions;
   // Lo que no se pierde (v2.0): Renombre, medallas, álbum, decoración y logros; y lo de esta partida
   // pasa al acumulado de los logros (v2.3). Solo la partida del Eje Cafetero guarda el perfil.
+  // Los eventos (v3.7): los cupos que esperan sus 3 años y lo ya jugado siguen; el tablero en juego se
+  // pierde y su cupo vuelve a llenarse cuando haya una zona lista.
+  const ev = state.events ?? {};
+  next.events = {
+    boards: {},
+    slots: [0, 1].map((i) => (ev.slots?.[i]?.until !== undefined ? ev.slots[i] : null)),
+    last: { ...ev.last },
+    count: { ...ev.count },
+  };
   if (state.profile) {
     next.profile = structuredClone(state.profile);
     bankRun(state, profileOf(next));

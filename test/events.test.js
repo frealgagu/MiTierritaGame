@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { EVENTS, EVENT_ACTIONS_BY_ID, MEDALS } from '../src/data/events.js';
-import { boardObjective, buyAction, createEventState, eventProgress, eventStatus, finishEvent, medalFor, quoteAction, startEvent, supplyFraction } from '../src/sim/events.js';
+import { EVENT_COOLDOWN, boardObjective, buyAction, createEventState, eventDef, eventObjective, eventProgress, eventStatus, finishEvent, medalFor, quoteAction, startEvent, supplyFraction } from '../src/sim/events.js';
 import { speedMult } from '../src/sim/modifiers.js';
 import { restartState } from '../src/sim/legacy.js';
 import { DAY_LENGTH } from '../src/sim/calendar.js';
@@ -26,29 +26,85 @@ test('los eventos están bien armados', () => {
   assert.deepEqual(Object.values(MEDALS).map((m) => m.renown), [4, 2, 1]);
 });
 
-test('el evento de una zona se juega una vez por año y el objetivo cambia de un año al otro', () => {
+// Cumple el objetivo del tablero (y, si buy, compra las tres mejoras del evento).
+function complete(board, buy) {
+  const obj = boardObjective(board);
+  for (const [p, n] of Object.entries(obj.items)) board.stats[obj.kind][p] = n;
+  if (!buy) return;
+  board.coins = 1e15;
+  for (const a of eventDef(board).actions) buyAction(board, a.id);
+}
+
+test('cada región tiene dos cupos: los primeros eventos salen enseguida y el resto espera (v3.7)', () => {
   const game = new Game();
   const s = game.state;
   assert.equal(eventStatus(s, 'finca').kind, 'locked', 'hasta que estén construidas sus estaciones');
-  buildAll(s);
-  assert.equal(eventStatus(s, 'finca').kind, 'available');
   assert.equal(eventStatus(s, 'trapiche'), null, 'zona cerrada');
+  for (const z of ['trapiche', 'lecheria']) game.unlockZone(z);
+  for (const def of EVENTS.filter((d) => ['finca', 'trapiche', 'lecheria'].includes(d.zone))) for (const id of def.stations) s.stations[id] ??= createStationState();
+  game.step(0.1);
+  assert.equal(eventStatus(s, 'finca').kind, 'available');
+  assert.equal(eventStatus(s, 'trapiche').kind, 'available');
+  assert.equal(eventStatus(s, 'lecheria').kind, 'waiting', 'los dos cupos están ocupados');
+  assert.equal(startEvent(s, 'lecheria'), null);
+});
+
+test('al terminar un evento su cupo queda vacío 3 años; luego sale una zona que no se ha jugado (v3.7)', () => {
+  const game = new Game();
+  const s = game.state;
+  for (const z of ['trapiche', 'lecheria']) game.unlockZone(z);
+  for (const def of EVENTS.filter((d) => ['finca', 'trapiche', 'lecheria'].includes(d.zone))) for (const id of def.stations) s.stations[id] ??= createStationState();
   const board = startEvent(s, 'finca');
   assert.equal(eventStatus(s, 'finca').kind, 'active');
   assert.equal(startEvent(s, 'finca'), board, 'seguir el que está en juego');
   const first = boardObjective(board);
-  for (const [p, n] of Object.entries(first.items)) board.stats[first.kind][p] = n;
+  complete(board, true);
   board.playTime = 60;
   const r = finishEvent(s, 'finca');
+  assert.ok(r.done);
   assert.equal(r.medal, 'gold');
-  assert.equal(s.profile.renown, 4);
   assert.equal(s.profile.medals.broca.best, 'gold');
-  assert.equal(eventStatus(s, 'finca').kind, 'done');
-  assert.equal(startEvent(s, 'finca'), null);
-  s.playTime += YEAR;
-  const next = startEvent(s, 'finca');
-  assert.ok(next);
-  assert.notDeepEqual(boardObjective(next), first);
+  // Su cupo espera 3 años: ni la Finca ni la Lechería salen todavía.
+  game.step(0.1);
+  assert.equal(eventStatus(s, 'finca').kind, 'waiting');
+  assert.equal(eventStatus(s, 'lecheria').kind, 'waiting');
+  assert.ok(Math.abs(eventStatus(s, 'lecheria').nextAt - (s.playTime + EVENT_COOLDOWN)) < 1);
+  s.playTime += EVENT_COOLDOWN - 10;
+  game.step(0.1);
+  assert.equal(eventStatus(s, 'lecheria').kind, 'waiting', 'aún no pasan los 3 años');
+  s.playTime += 20;
+  game.step(0.1);
+  // Pasaron: sale la Lechería, que nunca se ha jugado, antes que la Finca.
+  assert.equal(eventStatus(s, 'lecheria').kind, 'available');
+  assert.equal(eventStatus(s, 'finca').kind, 'waiting');
+  assert.equal(eventStatus(s, 'trapiche').kind, 'available', 'el otro cupo siguió con lo suyo');
+  // El reto de la Finca avanzó: la próxima vez será el 2.
+  assert.equal(eventStatus(s, 'finca').round, 2);
+  assert.notDeepEqual(eventObjective(EVENTS[0], 2), first);
+});
+
+test('cumplir el objetivo asegura la medalla; el evento termina al tener las tres mejoras (v3.7)', () => {
+  const game = new Game();
+  const s = game.state;
+  buildAll(s);
+  const board = startEvent(s, 'finca');
+  complete(board, false);
+  board.playTime = 100;
+  const r = finishEvent(s, 'finca');
+  assert.ok(r.secured);
+  assert.equal(r.medal, 'gold');
+  assert.equal(s.profile.renown, 0, 'el Renombre llega al terminar');
+  // Pasa el tiempo comprando las mejoras: la medalla ya no cambia.
+  board.playTime = 5000;
+  assert.equal(finishEvent(s, 'finca'), null);
+  board.coins = 1e9;
+  for (const a of EVENTS[0].actions) buyAction(board, a.id);
+  const done = finishEvent(s, 'finca');
+  assert.ok(done.done);
+  assert.equal(done.medal, 'gold');
+  assert.equal(done.time, 100);
+  assert.equal(s.profile.renown, 4);
+  assert.equal(eventStatus(s, 'finca').kind, 'waiting');
 });
 
 test('la medalla depende del tiempo del tablero', () => {
@@ -144,5 +200,8 @@ test('feria: el objetivo pide varios productos y cuenta cada uno hasta lo pedido
   assert.equal(finishEvent(main.state, 'lecheria'), null);
   for (const [p, n] of Object.entries(obj.items)) board.stats.sold[p] = n;
   assert.ok(b);
-  assert.ok(finishEvent(main.state, 'lecheria'));
+  assert.ok(finishEvent(main.state, 'lecheria').secured);
+  board.coins = 1e15;
+  for (const a of def.actions) buyAction(board, a.id);
+  assert.ok(finishEvent(main.state, 'lecheria').done);
 });

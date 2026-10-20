@@ -40,7 +40,8 @@ export function createInitialState(now = Date.now(), regionId = 'cafetero') {
     mastered: false, // segundo final: todas las estaciones en el nivel 100
     legacy: { resets: 0, history: [] }, // reinicios con producción ×2 y partidas terminadas
     // Eventos (v2.0): el tablero de cada zona que está en juego y el último año en que se terminó.
-    events: { boards: {}, done: {} },
+    // v3.7: dos cupos por región, lo último jugado de cada zona y cuántas veces (ver sim/events.js).
+    events: { boards: {}, slots: [null, null], last: {}, count: {} },
     // Lo que no se pierde al reiniciar (v2.0): Renombre ⭐, medallas y eventos terminados. Es del
     // jugador, no de la región: lo guarda solo la partida del Eje Cafetero.
     ...(regionId === 'cafetero' && { profile: { renown: 0, medals: {}, history: [] } }),

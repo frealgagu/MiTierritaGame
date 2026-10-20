@@ -63,3 +63,27 @@ export function chosenDecor(profile) {
   }
   return out;
 }
+
+// Horas sin conexión (v3.7): son del jugador, no de una región. Valen igual para todas las regiones (así
+// el calendario del país avanza lo mismo en todas) y no se pierden al reiniciar. Se empieza con 2 h y
+// cada nivel, comprado con Renombre, suma 2 h más, hasta 24 h.
+export const OFFLINE_BASE_HOURS = 2;
+export const OFFLINE_STEP_HOURS = 2;
+export const OFFLINE_COSTS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // ⭐ de cada nivel
+export const offlineLevel = (profile) => profile?.offlineLevel ?? 0;
+export const offlineHours = (profile) => OFFLINE_BASE_HOURS + OFFLINE_STEP_HOURS * offlineLevel(profile);
+
+export function quoteOffline(profile) {
+  const cost = OFFLINE_COSTS[offlineLevel(profile)];
+  if (cost === undefined) return { ok: false, reason: 'max' };
+  if (profile.renown < cost) return { ok: false, reason: 'renown', cost };
+  return { ok: true, cost };
+}
+
+export function buyOffline(profile) {
+  const q = quoteOffline(profile);
+  if (!q.ok) return false;
+  profile.renown -= q.cost;
+  profile.offlineLevel = offlineLevel(profile) + 1;
+  return true;
+}
