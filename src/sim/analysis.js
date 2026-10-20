@@ -6,7 +6,7 @@ import { PARENT, chainOf, consumers, sourceOf, zoneOf } from './chain.js';
 import { routeActive, routeRate, routeStations, stationImportRate } from './routes.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { exportsOf, teamCapacity } from './transport.js';
-import { COMPOST_VALUE, WASHED_PER_COMPOST, dispatchMult, productValue, speedMult } from './modifiers.js';
+import { COMPOST_VALUE, WASHED_PER_COMPOST, dispatchMult, jeepCount, productValue, speedMult } from './modifiers.js';
 import { PRODUCTS } from '../data/products.js';
 import { canPay, researchLocked } from './upgrades.js';
 import { objectiveUpgrades, supplyFraction } from './events.js';
@@ -165,7 +165,7 @@ function analyze(state, zoneId, withExports, depth, memo) {
     rows.push(row);
   }
 
-  const dispatch = dispatchRate(state.zones[zoneId].dispatch.level, dispatchMult(state, zoneId));
+  const dispatch = dispatchRate(state.zones[zoneId].dispatch.level, dispatchMult(state, zoneId)) * jeepCount(state);
   // El Willys carga primero lo más valioso: si no da abasto, lo que se queda es lo barato.
   // Ingreso de la cadena principal: solo lo que sale del final de cada rama (sin los desvíos, que son
   // un recurso de emergencia). Es lo que mide la mejora recomendada.

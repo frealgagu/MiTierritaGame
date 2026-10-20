@@ -114,8 +114,10 @@ const JEEP_L = 0.48; // medio largo (casillas)
 const JEEP_W = 0.27; // medio ancho
 
 export class JeepView extends Container {
-  constructor() {
+  // index: 0 el de siempre, 1 el segundo Willys (v3.9, con su propio color).
+  constructor(index = 0) {
     super();
+    this.look = index ? 'willys2' : 'willys';
     this.g = new Graphics();
     this.addChild(this.g);
     // El vapor del tinto, aparte: se mueve en cada cuadro.
@@ -129,10 +131,11 @@ export class JeepView extends Container {
   }
 
   draw() {
-    const key = `${this.dir}:${this.cargo}:${this.resting}:${LOOK.willys.id}`;
+    const paint = LOOK[this.look].color;
+    const key = `${this.dir}:${this.cargo}:${this.resting}:${paint}`;
     if (key === this.drawn) return;
     this.drawn = key;
-    this.cup = drawWillys(this.g.clear(), JEEP_DIRS[this.dir], this.cargo, this.resting);
+    this.cup = drawWillys(this.g.clear(), JEEP_DIRS[this.dir], this.cargo, this.resting, paint);
   }
 
   // Dos hilitos de vapor que suben de la taza y se desvanecen.
@@ -166,7 +169,7 @@ export class JeepView extends Container {
 
 // resting: el conductor tiene un pocillo de tinto en la mano. Devuelve dónde queda el pocillo (para
 // el vapor), o null.
-function drawWillys(g, toGrid, sacks, resting = false) {
+function drawWillys(g, toGrid, sacks, resting = false, paint = LOOK.willys.color) {
   const L = JEEP_L;
   const W = JEEP_W;
   const at = (u, v, z) => {
@@ -208,7 +211,6 @@ function drawWillys(g, toGrid, sacks, resting = false) {
   for (const [u, v] of wheels) if (Math.sign(v) !== nearSide) wheel(u, v);
 
   // Carrocería, capó un poco más alto y el platón abierto (el piso oscuro).
-  const paint = LOOK.willys.color;
   lbox(-L, L, -W, W, 4, 7, paint);
   lbox(0.17, L - 0.02, -W + 0.04, W - 0.04, 11, 2.5, shade(paint, 1.12));
   g.poly(flat([[-L + 0.05, -W + 0.05, 11], [0.13, -W + 0.05, 11], [0.13, W - 0.05, 11], [-L + 0.05, W - 0.05, 11]])).fill(0x2f4a24);

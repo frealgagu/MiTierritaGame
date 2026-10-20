@@ -1,9 +1,11 @@
 // Ventana del Renombre ⭐ (v2.2): el álbum de láminas (se pega la que uno elija) y la decoración.
 import { ALBUM, PAGE_BONUS } from '../data/album.js';
 import { DECOR } from '../data/decor.js';
-import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, WORK_COSTS, buyOffline, buyWork, quoteWork, workLevel, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
+import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, WORK_COSTS, albumDone, buyOffline, buyWillys2, buyWork, quoteWillys2, quoteWork, workLevel, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
 import { CALENDAR, EXTRA_BLOCKS, workBlocks } from '../sim/calendar.js';
 import { workText } from './calendar.js';
+import { openRegionStates, regionState } from '../sim/regions.js';
+import { REGIONS_BY_ID } from '../data/regions.js';
 import { toast } from './toast.js';
 import { LOGROS } from '../data/logros.js';
 import { metric, tierOf } from '../sim/logros.js';
@@ -42,6 +44,8 @@ export class RenownView {
         toast(`⏰ Ahora todo sigue produciendo ${offlineHours(profileOf(this.game.state))} h mientras no juegas.`, 3500);
         this.render();
       }
+      const w2 = e.target.closest('[data-willys2]');
+      if (w2) this.buyJeep(w2.dataset.willys2);
       if (e.target.closest('[data-work]') && buyWork(profileOf(this.game.state))) {
         CALENDAR.extra = workLevel(profileOf(this.game.state));
         toast(`🕐 Ahora se trabaja de ${workText()}.`, 3500);
@@ -62,6 +66,32 @@ export class RenownView {
     if (!r) return;
     if (r.bonus) toast(`📖 ¡Página llena! +${r.bonus} ⭐ de Renombre`, 3500);
     this.render();
+  }
+
+  // El segundo Willys de una región (v3.9): la carretera se amplía, así que se vuelve a dibujar el mapa.
+  buyJeep(regionId) {
+    const profile = profileOf(this.game.state);
+    if (!buyWillys2(profile, regionState(this.game.state, regionId))) return;
+    toast(`🚙 ¡Segundo Willys para ${REGIONS_BY_ID[regionId].name}! Cada zona tiene ahora dos: el despacho vende el doble.`, 4500);
+    this.onDecor(profile);
+    this.render();
+  }
+
+  // Al final del álbum: el segundo Willys de cada región abierta.
+  willysHtml(profile) {
+    const full = albumDone(profile);
+    const total = ALBUM.reduce((n, pg) => n + pg.stickers.length, 0);
+    const buttons = openRegionStates(this.game.state)
+      .map(({ region, state }) => {
+        const q = quoteWillys2(profile, state);
+        if (q.reason === 'owned') return `<button class="btn" disabled>${region.icon} ${region.name} ✓</button>`;
+        return `<button class="btn ${q.ok ? 'buy' : ''}" data-willys2="${region.id}" ${q.ok ? '' : 'disabled'}>${region.icon} ${region.name} · ⭐ ${q.cost}</button>`;
+      })
+      .join('');
+    const text = full
+      ? 'Cada zona de la región tiene un segundo Willys, por su propio carril: el despacho vende el doble. Se pinta aparte en Decoración.'
+      : `Llena el álbum (${profile.album.length} / ${total} láminas) para comprar un segundo Willys en cada región: el despacho vende el doble.`;
+    return `<div class="logro willys2"><div class="logro-head"><b>🚙 Segundo Willys</b></div><p>${text}</p><div class="willys2-btns">${buttons}</div></div>`;
   }
 
   decorate(cat, opt) {
@@ -102,7 +132,7 @@ export class RenownView {
         return `<div class="sticker empty"><div class="big">${s.icon}</div><b>${s.name}</b><button class="btn ${q.ok ? 'buy' : ''}" data-sticker="${s.id}" ${q.ok ? '' : 'disabled'}>Pegar · ⭐ ${s.cost}</button></div>`;
       })
       .join('');
-    return `<div class="album-pages">${pages}</div><div class="album-head"><span>${page.icon} ${page.name}</span><span>${have} / ${page.stickers.length}${have === page.stickers.length ? ' ✅' : ` · llena: +${PAGE_BONUS} ⭐`}</span></div><div class="album-grid">${cards}</div>`;
+    return `${this.willysHtml(profile)}<div class="album-pages">${pages}</div><div class="album-head"><span>${page.icon} ${page.name}</span><span>${have} / ${page.stickers.length}${have === page.stickers.length ? ' ✅' : ` · llena: +${PAGE_BONUS} ⭐`}</span></div><div class="album-grid">${cards}</div>`;
   }
 
   logrosHtml() {
@@ -152,7 +182,9 @@ export class RenownView {
 
   decorHtml(profile) {
     const chosen = profile.decor.chosen;
-    return DECOR.map((cat) => {
+    // El color del segundo Willys, solo si alguna región ya lo tiene.
+    const has = { willys2: openRegionStates(this.game.state).some(({ state }) => state.willys2) };
+    return DECOR.filter((cat) => !cat.requires || has[cat.requires]).map((cat) => {
       const opts = cat.options
         .map((o) => {
           const owned = ownsDecor(profile, cat.id, o.id);

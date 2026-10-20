@@ -47,6 +47,8 @@ export function restartState(state, now = Date.now()) {
   next.hints = [...(state.hints ?? [])];
   // Las otras regiones (solo la partida del Eje Cafetero las guarda) siguen igual.
   if (state.regions) next.regions = state.regions;
+  // El segundo Willys de la región (v3.9) se queda.
+  if (state.willys2) next.willys2 = true;
   // La región ya se terminó (v3.8): sus eventos siguen saliendo en todas sus zonas.
   next.regionDone = Boolean(state.regionDone || state.zones[region.zones.at(-1)]?.complete);
   // Lo que no se pierde (v2.0): Renombre, medallas, álbum, decoración y logros; y lo de esta partida

@@ -29,6 +29,7 @@ export const ZONE1 = {
   yard: { x: 20, y: 19, w: 4, h: 1 },
   // Carretera del Willys: del patio de la bodega al borde del mapa (hacia el pueblo).
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
   exitSign: [21.5, 24.2],
   muleSpeed: 4, // casillas por segundo
   dispatchCost: { base: 10, growth: 1.17 },

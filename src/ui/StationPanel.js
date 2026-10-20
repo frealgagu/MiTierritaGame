@@ -21,7 +21,7 @@ import {
 import { sumValues } from '../sim/state.js';
 import { busyMules, dockStock, exportsOf, pendingRoutes, slowConsumers, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
 import { analyzeChain, expectedCompostValue, routeFlow } from '../sim/analysis.js';
-import { COMPOST_VALUE, compostValueBoost, muleSpeedMult, saleValue } from '../sim/modifiers.js';
+import { COMPOST_VALUE, compostValueBoost, jeepCount, muleSpeedMult, saleValue } from '../sim/modifiers.js';
 import { PARENT, branchShare, consumers, zoneOf } from '../sim/chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { jeepResting } from '../sim/dispatch.js';
@@ -532,7 +532,8 @@ function dispatchInfo(zoneId) {
     level: (s) => z(s).dispatch.level,
     rows: [
       { key: 'cap', label: 'Carga por viaje', value: (s, l) => `${formatNumber(dispatchCapacity(l, mult(s)))}`, next: (l, s) => formatNumber(dispatchCapacity(l, mult(s))) },
-      { key: 'rate', label: 'Ritmo de venta', value: (s, l) => `${formatRate(dispatchRate(l, mult(s)))} u/s`, next: (l, s) => formatRate(dispatchRate(l, mult(s))) },
+      // Con el segundo Willys (v3.9), cada uno lleva su carga: se vende el doble.
+      { key: 'rate', label: 'Ritmo de venta', value: (s, l) => `${formatRate(dispatchRate(l, mult(s)) * jeepCount(s))} u/s${jeepCount(s) > 1 ? ' · 🚙🚙' : ''}`, next: (l, s) => formatRate(dispatchRate(l, mult(s)) * jeepCount(s)) },
       {
         key: 'stock',
         label: 'Bodega',

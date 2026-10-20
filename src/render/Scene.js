@@ -18,8 +18,8 @@ import { BELT_LEVEL, dispatchCapacity, hasBelt, milestoneBoost } from '../sim/ru
 import { ROAD_POS, zoneOf } from '../sim/chain.js';
 import { normalDest, slowConsumers, warehouseCap } from '../sim/transport.js';
 import { alerts } from '../sim/alerts.js';
-import { dispatchMult } from '../sim/modifiers.js';
-import { jeepResting } from '../sim/dispatch.js';
+import { dispatchMult, jeepCount } from '../sim/modifiers.js';
+import { jeepsOf, sellableStock } from '../sim/dispatch.js';
 import { clockOf, resting } from '../sim/calendar.js';
 import { eventPenalty } from '../sim/events.js';
 import { EVENTS_BY_ID } from '../data/events.js';
@@ -46,7 +46,7 @@ export class Scene {
     this.zone = zone;
     this.sourceId = zone.farm.stationId;
     this.time = 0;
-    this.restSince = null;
+    this.restSince = [null, null];
     this.jeepPhase = 'idle';
     this.onSelect = () => {};
 
@@ -63,7 +63,9 @@ export class Scene {
     this.weather = new Weather();
     app.stage.addChild(this.background.stars, this.background.view, this.world, this.weather.view);
 
-    this.terrain = new Terrain(this.zone);
+    // Con el segundo Willys (v3.9), la carretera tiene dos carriles: cada Willys va por el suyo.
+    this.jeepCount = jeepCount(game.state);
+    this.terrain = new Terrain(this.zone, this.jeepCount);
     // Bandas eléctricas: sobre el suelo, debajo de edificios y mulas.
     this.belts = new Belts(this.zone.muleRoad);
     this.tinted.addChild(this.terrain.ground, this.belts, this.objects);
@@ -78,8 +80,8 @@ export class Scene {
     for (const plot of this.zone.plots) this.buildStation(plot.stationId);
     this.stationIds = [this.sourceId, ...this.zone.plots.map((p) => p.stationId)];
 
-    this.jeep = new JeepView();
-    this.objects.addChild(this.jeep);
+    this.jeeps = Array.from({ length: this.jeepCount }, (_, k) => new JeepView(k));
+    for (const jeep of this.jeeps) this.objects.addChild(jeep);
     this.critters = new Critters(this.zone, this.terrain, this.objects);
     this.mules = new Map();
     this.drawExitSign();
@@ -170,7 +172,9 @@ export class Scene {
 
   drawExitSign() {
     const view = new WoodSign(this.zone.exitText ?? 'Al pueblo ➜');
-    const [gx, gy] = this.zone.exitSign;
+    // Con dos carriles (v3.9) el letrero quedaría en el del segundo Willys: pasa al otro lado de la carretera.
+    const [sx, sy] = this.zone.exitSign;
+    const [gx, gy] = this.jeepCount > 1 ? [sx - 2.1, sy] : [sx, sy];
     const p = iso(gx, gy);
     view.position.set(p.x, p.y);
     view.zIndex = gx + gy;
@@ -417,42 +421,48 @@ export class Scene {
 
   syncJeep(state) {
     const zone = state.zones[this.zone.id];
-    const j = zone.jeep;
     const half = DISPATCH.tripTime / 2;
-    const road = this.zone.jeepRoad;
-    let t = 0;
-    let reverse = false;
-    if (j.phase === 'out') t = j.t / half;
-    else if (j.phase === 'back') {
-      t = 1 - j.t / half;
-      reverse = true;
-    }
-    // Suaviza arranque y frenado.
-    const eased = t * t * (3 - 2 * t);
-    const p = pointAt(road, eased);
-    const load = Object.values(j.load).reduce((a, b) => a + b, 0) / dispatchCapacity(zone.dispatch.level, dispatchMult(state, this.zone.id));
-    const waiting = j.phase === 'idle' ? Math.min(1, j.waited / DISPATCH.maxWait) * 0.3 : 0;
-    // El tinto, solo si lleva un rato parqueado sin nada que vender (no entre viaje y viaje).
-    if (!jeepResting(state, this.zone.id)) this.restSince = null;
-    else this.restSince ??= this.time;
-    const resting = this.restSince !== null && this.time - this.restSince > 2;
-    this.jeep.place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, j.phase === 'out' ? load : waiting, resting, this.time);
-    // El perro lo persigue en una salida de cada 5 a 15, no en todas.
-    if (j.phase !== 'idle' && this.jeepPhase === 'idle') {
-      this.trips = (this.trips ?? 0) + 1;
-      this.chaseAt ??= 5 + Math.floor(Math.random() * 11);
-      this.chasing = this.trips >= this.chaseAt;
-      if (this.chasing) {
-        this.trips = 0;
-        this.chaseAt = 5 + Math.floor(Math.random() * 11);
-      }
-    }
-    if (j.phase === 'idle') this.chasing = false;
-    this.jeepPhase = j.phase;
-    // Para el perro: dónde va y hacia dónde.
-    const len = Math.hypot(p.dx, p.dy) || 1;
-    const sign = reverse ? -1 : 1;
-    this.jeepPos = { gx: p.gx, gy: p.gy, dx: (sign * p.dx) / len, dy: (sign * p.dy) / len, moving: Boolean(this.chasing) };
+    const cap = dispatchCapacity(zone.dispatch.level, dispatchMult(state, this.zone.id));
+    const idleEmpty = sellableStock(state, this.zone.id) <= 1e-9;
+    jeepsOf(state, this.zone.id)
+      .slice(0, this.jeeps.length)
+      .forEach((j, k) => {
+        const road = k ? this.zone.jeepRoad2 : this.zone.jeepRoad;
+        let t = 0;
+        let reverse = false;
+        if (j.phase === 'out') t = j.t / half;
+        else if (j.phase === 'back') {
+          t = 1 - j.t / half;
+          reverse = true;
+        }
+        // Suaviza arranque y frenado.
+        const eased = t * t * (3 - 2 * t);
+        const p = pointAt(road, eased);
+        const load = Object.values(j.load).reduce((a, b) => a + b, 0) / cap;
+        const waiting = j.phase === 'idle' ? Math.min(1, j.waited / DISPATCH.maxWait) * 0.3 : 0;
+        // El tinto, solo si lleva un rato parqueado sin nada que vender (no entre viaje y viaje).
+        if (!(j.phase === 'idle' && idleEmpty)) this.restSince[k] = null;
+        else this.restSince[k] ??= this.time;
+        const resting = this.restSince[k] !== null && this.time - this.restSince[k] > 2;
+        this.jeeps[k].place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, j.phase === 'out' ? load : waiting, resting, this.time);
+        if (k) return;
+        // El perro persigue al primero en una salida de cada 5 a 15, no en todas.
+        if (j.phase !== 'idle' && this.jeepPhase === 'idle') {
+          this.trips = (this.trips ?? 0) + 1;
+          this.chaseAt ??= 5 + Math.floor(Math.random() * 11);
+          this.chasing = this.trips >= this.chaseAt;
+          if (this.chasing) {
+            this.trips = 0;
+            this.chaseAt = 5 + Math.floor(Math.random() * 11);
+          }
+        }
+        if (j.phase === 'idle') this.chasing = false;
+        this.jeepPhase = j.phase;
+        // Para el perro: dónde va y hacia dónde.
+        const len = Math.hypot(p.dx, p.dy) || 1;
+        const sign = reverse ? -1 : 1;
+        this.jeepPos = { gx: p.gx, gy: p.gy, dx: (sign * p.dx) / len, dy: (sign * p.dy) / len, moving: Boolean(this.chasing) };
+      });
   }
 
   // La Chiva solo se ve en el tramo de carretera de esta zona: al salir de la bodega de origen y al

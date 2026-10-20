@@ -107,3 +107,25 @@ export function buyWork(profile) {
   profile.workLevel = workLevel(profile) + 1;
   return true;
 }
+
+// El segundo Willys (v3.9): con el álbum lleno se compra con Renombre, por región. Cada zona de la región
+// tiene desde entonces dos Willys que venden por su cuenta (el despacho vende el doble). Es de la
+// región: se guarda en su partida (`willys2`) y no se pierde al reiniciarla.
+export const WILLYS2_COST = 20;
+export const albumDone = (profile) => ALBUM.every((pg) => pageDone(profile, pg.id));
+
+export function quoteWillys2(profile, region) {
+  if (!region) return { ok: false, reason: 'region', cost: WILLYS2_COST };
+  if (region.willys2) return { ok: false, reason: 'owned', cost: WILLYS2_COST };
+  if (!albumDone(profile)) return { ok: false, reason: 'album', cost: WILLYS2_COST };
+  if (profile.renown < WILLYS2_COST) return { ok: false, reason: 'renown', cost: WILLYS2_COST };
+  return { ok: true, cost: WILLYS2_COST };
+}
+
+export function buyWillys2(profile, region) {
+  const q = quoteWillys2(profile, region);
+  if (!q.ok) return false;
+  profile.renown -= q.cost;
+  region.willys2 = true;
+  return true;
+}

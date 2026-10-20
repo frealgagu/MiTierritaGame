@@ -6,8 +6,9 @@ import { box, gableRoof, shadow } from './procedural/shapes.js';
 
 const CLIFF = 46; // px de alto del borde del mapa
 
-// Tipo de cada casilla del mapa a partir de los datos de la zona.
-export function buildTileMap(zone) {
+// Tipo de cada casilla del mapa a partir de los datos de la zona. jeeps: cuántos Willys tiene (v3.9: con
+// dos, la carretera se amplía con el carril del segundo).
+export function buildTileMap(zone, jeeps = 1) {
   const n = zone.size;
   const tiles = Array.from({ length: n }, () => Array(n).fill('grass'));
   const fill = (x, y, w, h, type) => {
@@ -30,15 +31,16 @@ export function buildTileMap(zone) {
   fill(zone.warehouse.x, zone.warehouse.y, zone.warehouse.w, zone.warehouse.h, 'building');
   road(zone.muleRoad);
   road(zone.jeepRoad);
+  if (jeeps > 1) road(zone.jeepRoad2);
   for (const r of Object.values(zone.routes ?? {})) road(r.road);
   fill(zone.yard.x, zone.yard.y, zone.yard.w, zone.yard.h, 'road');
   return tiles;
 }
 
 export class Terrain {
-  constructor(zone) {
+  constructor(zone, jeeps = 1) {
     this.zone = zone;
-    this.tiles = buildTileMap(zone);
+    this.tiles = buildTileMap(zone, jeeps);
     this.ground = new Graphics();
     this.decor = []; // objetos altos que se ordenan por profundidad junto al resto
     this.occupied = new Set(); // casillas con decoración (`gx,gy`): la gente no las atraviesa
@@ -120,10 +122,10 @@ export class Terrain {
     }
   }
 
-  isFree(gx, gy, margin = 1) {
+  isFree(gx, gy, margin = 1, tiles = this.tiles) {
     for (let x = gx - margin; x <= gx + margin; x++) {
       for (let y = gy - margin; y <= gy + margin; y++) {
-        const t = this.tiles[x]?.[y];
+        const t = tiles[x]?.[y];
         if (t && t !== 'grass') return false;
       }
     }
@@ -133,9 +135,12 @@ export class Terrain {
   buildDecor() {
     const rng = createRng(this.zone.seed * 31 + 1);
     const n = this.zone.size;
+    // Se reparte sobre el mapa de un solo carril, para que con el segundo Willys (v3.9) todo quede donde
+    // estaba: solo se quita lo que cae junto al carril nuevo.
+    const base = buildTileMap(this.zone);
     for (let gx = 0; gx < n; gx++) {
       for (let gy = 0; gy < n; gy++) {
-        if (!this.isFree(gx, gy)) continue;
+        if (!this.isFree(gx, gy, 1, base)) continue;
         const r = rng();
         let obj = null;
         if (this.zone.theme === 'town') {
@@ -204,7 +209,7 @@ export class Terrain {
           else if (r < 0.15) obj = coffeeBush(rng);
           else if (r < 0.17) obj = rock(rng);
         }
-        if (!obj) continue;
+        if (!obj || !this.isFree(gx, gy)) continue;
         this.occupied.add(`${gx},${gy}`);
         const ox = 0.3 + rng() * 0.4;
         const oy = 0.3 + rng() * 0.4;

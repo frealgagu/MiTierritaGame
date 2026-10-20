@@ -13,6 +13,20 @@ export const DECOR = [
       { id: 'blanco', name: 'Blanco', cost: 3, color: 0xe9e4d8 },
     ],
   },
+  // El segundo Willys (v3.9): se pinta aparte. Sale rojo, para distinguirlo del primero.
+  {
+    id: 'willys2',
+    icon: '🚙',
+    name: 'Color del segundo Willys',
+    requires: 'willys2', // se ve al comprar el segundo Willys en alguna región
+    options: [
+      { id: 'rojo', name: 'Rojo', cost: 0, color: 0xc0392b },
+      { id: 'verde', name: 'Verde monte', cost: 3, color: 0x4f7a3a },
+      { id: 'azul', name: 'Azul cielo', cost: 3, color: 0x2e86c1 },
+      { id: 'amarillo', name: 'Amarillo', cost: 3, color: 0xe8b90f },
+      { id: 'blanco', name: 'Blanco', cost: 3, color: 0xe9e4d8 },
+    ],
+  },
   {
     id: 'enjalma',
     icon: '🐴',

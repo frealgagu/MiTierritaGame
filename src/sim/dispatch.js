@@ -1,7 +1,7 @@
 import { DISPATCH } from '../data/stations.js';
 import { dispatchCapacity } from './rules.js';
 import { sumValues } from './state.js';
-import { dispatchMult, productValue, saleValue } from './modifiers.js';
+import { dispatchMult, jeepCount, productValue, saleValue } from './modifiers.js';
 import { routeReserve } from './routes.js';
 
 // Lo que el Willys puede vender: la bodega menos lo que espera una ruta hacia otra zona.
@@ -14,11 +14,23 @@ export function jeepResting(state, zoneId) {
   return state.zones[zoneId].jeep.phase === 'idle' && sellableStock(state, zoneId) <= 1e-9;
 }
 
-// El Willys de cada zona espera en su bodega; sale lleno, o con carga parcial tras `maxWait` s.
-// Vende al llegar al pueblo (mitad del viaje) y vuelve.
-export function stepJeep(state, zoneId, dt, bus) {
+// Los Willys de una zona (v3.9: el segundo, si la región lo tiene; se crea al usarlo).
+export function jeepsOf(state, zoneId) {
   const zone = state.zones[zoneId];
-  const j = zone.jeep;
+  if (jeepCount(state) < 2) return [zone.jeep];
+  zone.jeep2 ??= { phase: 'idle', t: 0, waited: 0, load: {} };
+  return [zone.jeep, zone.jeep2];
+}
+
+// El Willys de cada zona espera en su bodega; sale lleno, o con carga parcial tras `maxWait` s.
+// Vende al llegar al pueblo (mitad del viaje) y vuelve. Con dos (v3.9), cada uno por su lado: el
+// primero que esté en la bodega carga primero.
+export function stepJeep(state, zoneId, dt, bus) {
+  jeepsOf(state, zoneId).forEach((j, k) => stepOne(state, zoneId, j, k, dt, bus));
+}
+
+function stepOne(state, zoneId, j, k, dt, bus) {
+  const zone = state.zones[zoneId];
   const half = DISPATCH.tripTime / 2;
 
   if (j.phase === 'idle') {
@@ -32,7 +44,7 @@ export function stepJeep(state, zoneId, dt, bus) {
       j.phase = 'out';
       j.t = 0;
       j.waited = 0;
-      bus.emit('jeepDeparted', { zone: zoneId, load: j.load });
+      bus.emit('jeepDeparted', { zone: zoneId, load: j.load, jeep: k });
     }
     return;
   }
@@ -48,7 +60,7 @@ export function stepJeep(state, zoneId, dt, bus) {
     }
     state.coins += coins;
     state.totalEarned += coins;
-    bus.emit('sold', { zone: zoneId, coins, load: j.load });
+    bus.emit('sold', { zone: zoneId, coins, load: j.load, jeep: k });
     j.load = {};
     j.phase = 'back';
   } else {

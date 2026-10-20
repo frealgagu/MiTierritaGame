@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.9.0 — El segundo Willys
+- **Con el álbum lleno, un segundo Willys.** En 🏅 Eventos › 📖 Álbum se compra para cada región (⭐ 20 el Eje Cafetero y ⭐ 20 Santander). Desde entonces cada zona de esa región tiene **dos Willys** que salen cada uno por su cuenta con la misma carga por viaje: **el despacho vende el doble**.
+- La **carretera se amplía a dos carriles** y cada Willys va por el suyo, así que no se chocan. El letrero de salida pasa al otro lado de la carretera.
+- El segundo Willys **se pinta aparte**: en 🎨 Decoración aparece «Color del segundo Willys» (sale rojo, para distinguirlo).
+- Es de la región: no se pierde al volver a empezarla. En los tableros de los eventos sigue habiendo un solo Willys.
+
 ## v3.8.2 — La recomendación de los eventos sugiere sus compras
 - En el tablero de un evento, la **mejora recomendada** ya no sugiere investigaciones de la zona (como las Herraduras), que ahí no se pueden comprar.
 - Ahora recomienda las **compras del evento**: la siguiente en cuanto alcance el dinero y, con la medalla ya asegurada, la que falta aunque todavía no alcance. Al tocar la recomendación se señala su botón en la barra del evento y se dice qué hace.

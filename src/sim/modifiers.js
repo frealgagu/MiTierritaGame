@@ -50,6 +50,9 @@ export const capMult = (state, stationId) => legacyMult(state) * product(state, 
 export const muleSpeedMult = (state) => product(state, 'muleSpeed');
 // El Willys de una zona con Maestría o Supremacía también lleva ×4 o ×8 (si no, la bodega se llenaría).
 export const dispatchMult = (state, zoneId = 'finca') => product(state, 'dispatchCapacity', zoneId) * product(state, 'zoneSpeed', zoneId) * legacyMult(state);
+// Cuántos Willys tiene cada zona (v3.9): el segundo, comprado con Renombre para la región, sale por su
+// cuenta y vende lo mismo por viaje. En los tableros de los eventos, uno solo.
+export const jeepCount = (state) => (state.willys2 && !state.event ? 2 : 1);
 export const productValue = (state, productId) =>
   PRODUCTS[productId].value * product(state, 'productValue', productId) * product(state, 'zoneValue', PRODUCTS[productId].zone);
 

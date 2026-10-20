@@ -342,3 +342,45 @@ test('con el Eje Cafetero ya terminado, Santander se abre aunque tras reiniciar 
   // Sin terminarla nunca, no.
   assert.deepEqual(openRegions(createInitialState(0)), []);
 });
+
+test('el segundo Willys: con el álbum lleno se compra por región, vende el doble y no se pierde al reiniciar (v3.9)', async () => {
+  const { buyWillys2, quoteWillys2, WILLYS2_COST, profileOf } = await import('../src/sim/renown.js');
+  const { ALBUM } = await import('../src/data/album.js');
+  const { analyzeChain } = await import('../src/sim/analysis.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const root = createInitialState(0);
+  const profile = profileOf(root);
+  profile.renown = 100;
+  assert.equal(quoteWillys2(profile, root).reason, 'album');
+  profile.album = ALBUM.flatMap((pg) => pg.stickers.map((s) => s.id));
+  assert.ok(buyWillys2(profile, root));
+  assert.equal(profile.renown, 100 - WILLYS2_COST);
+  assert.equal(quoteWillys2(profile, root).reason, 'owned');
+  assert.ok(restartState(root).willys2, 'se conserva al reiniciar la región');
+  // Otra región se compra aparte.
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  assert.ok(!root.regions.santander.willys2);
+  assert.ok(quoteWillys2(profile, root.regions.santander).ok);
+  // Vende el doble: con la bodega llena salen los dos Willys.
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  try {
+    const sell = (two) => {
+      const g = new Game(createInitialState(0));
+      g.state.willys2 = two;
+      g.state.zones.finca.warehouse = { cherry: 1e6 };
+      for (let t = 0; t < 120; t += 0.1) g.step(0.1);
+      return g.state.stats.sold.cherry;
+    };
+    const one = sell(false);
+    const two = sell(true);
+    assert.ok(Math.abs(two / one - 2) < 0.05, `${one} → ${two}`);
+    const s = createInitialState(0);
+    const before = analyzeChain(s, 'finca').dispatch;
+    s.willys2 = true;
+    assert.ok(Math.abs(analyzeChain(s, 'finca').dispatch / before - 2) < 1e-9);
+  } finally {
+    CALENDAR.on = on;
+  }
+});
