@@ -1,5 +1,5 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
-import { bulkUpgrade, MAX_LEVEL, MILESTONES } from './rules.js';
+import { bulkUpgrade, maxLevel, MILESTONES } from './rules.js';
 import { chainOf, nextToUnlock, zoneOf, zoneUnlocked } from './chain.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { createStationState } from './production.js';
@@ -38,15 +38,16 @@ function target(state, id) {
 export function quoteUpgrade(state, id, mode) {
   const { base, growth, holder } = target(state, id);
   const level = holder.level;
+  const max = maxLevel(state); // en un evento, 50 (v3.10.1)
   // Una ruta se mejora cuando existe la estación que abastece.
   if (id.startsWith('route:') && !routeActive(state, id.split(':')[1])) return { ...bulkUpgrade(base, growth, level, 1), affordable: false, maxed: false, locked: true };
-  if (level >= MAX_LEVEL) return { levels: 0, cost: 0, affordable: false, maxed: true };
+  if (level >= max) return { levels: 0, cost: 0, affordable: false, maxed: true };
   if (mode === 'max') {
-    const q = bulkUpgrade(base, growth, level, Infinity, credit ? Infinity : state.coins);
+    const q = bulkUpgrade(base, growth, level, Infinity, credit ? Infinity : state.coins, max);
     if (q.levels > 0) return { ...q, affordable: true, maxed: false };
     return { ...bulkUpgrade(base, growth, level, 1), affordable: false, maxed: false };
   }
-  const q = bulkUpgrade(base, growth, level, mode);
+  const q = bulkUpgrade(base, growth, level, mode, Infinity, max);
   return { ...q, affordable: q.levels > 0 && canPay(state, q.cost), maxed: false };
 }
 

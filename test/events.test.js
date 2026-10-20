@@ -255,3 +255,20 @@ test('en el tablero se recomiendan las compras del evento, no las investigacione
   b.event.medal = 'gold';
   assert.equal(recommendUpgrade(b, quote, def.zone).id, `action:${def.actions[1].id}`);
 });
+
+test('en el tablero de un evento el nivel máximo es 50 (v3.10.1)', () => {
+  const def = EVENTS[0];
+  const game = new Game(createEventState(def, 1));
+  const b = game.state;
+  b.coins = 1e30;
+  const id = def.stations[0];
+  assert.ok(game.buy(id, 'max'));
+  assert.equal(b.stations[id].level, 50);
+  assert.ok(game.quote(id, 1).maxed);
+  assert.ok(game.quote(`${id}:transport`, 'max').levels <= 50 - b.stations[id].transport.level);
+  // En la partida, hasta 100.
+  const g = new Game();
+  g.state.coins = 1e30;
+  assert.ok(g.buy('farm', 'max'));
+  assert.equal(g.state.stations.farm.level, 100);
+});

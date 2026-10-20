@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v3.10.1 — Nivel máximo 50 en los eventos
+- En los tableros de los eventos, las estaciones, los arrieros y el despacho llegan hasta el **nivel 50** (en la partida sigue siendo 100). El panel lo dice («Nivel máximo del evento (50)») y la mejora recomendada ya no sugiere subir más allá.
+
 ## v3.10.0 — Cada región con lo suyo
 - **Álbum de Santander.** Seis páginas nuevas (el bocadillo, el tabaco, el fique, el hato, las hormigas y Barichara) con 36 láminas: la hoja de bijao, Vélez, el caney, la torcedora, Curití, la pepitoria, el cañón del Chicamocha, el tiesto, San Gil, la tapia pisada, el Camino Real… El segundo Willys de cada región pide el álbum de esa región.
 - **Decoración por región.** Cada región se pinta aparte: el color de los Willys, la enjalma, la chiva y los banderines se compran y se eligen en cada una. Lo que ya tenías queda en el Eje Cafetero.

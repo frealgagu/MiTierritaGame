@@ -3,6 +3,9 @@ import { DISPATCH } from '../data/stations.js';
 
 export const MILESTONES = [10, 25, 50, 75, 100];
 export const MAX_LEVEL = 100;
+// En los tableros de los eventos (v3.10.1) se llega hasta el nivel 50.
+export const EVENT_MAX_LEVEL = 50;
+export const maxLevel = (state) => (state?.event ? EVENT_MAX_LEVEL : MAX_LEVEL);
 // 15/99 ≈ 0,1515 por nivel: así el nivel 100 da exactamente ×8.192 (16 por los niveles × 512 por los
 // hitos) y, con ciclos que son potencias de 2, cada estación produce al máximo una potencia de 2 por
 // segundo (4.096, 2.048, 1.024, 512 o 256).
@@ -96,11 +99,11 @@ export function upgradeCost(base, growth, level) {
 }
 
 // Cuántos niveles se compran y a qué coste.
-//   count: número de niveles deseados, o Infinity para «máx» (limitado por `coins`).
-export function bulkUpgrade(base, growth, level, count, coins = Infinity) {
+//   count: número de niveles deseados, o Infinity para «máx» (limitado por `coins`).   max: el tope
+export function bulkUpgrade(base, growth, level, count, coins = Infinity, max = MAX_LEVEL) {
   let levels = 0;
   let cost = 0;
-  while (levels < count && level + levels < MAX_LEVEL) {
+  while (levels < count && level + levels < max) {
     const next = upgradeCost(base, growth, level + levels);
     if (count === Infinity && cost + next > coins) break;
     cost += next;

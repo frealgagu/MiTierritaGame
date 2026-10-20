@@ -1,7 +1,7 @@
 // Flujo teórico de la cadena para mostrar el cuello de botella (no afecta a la simulación).
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { RESEARCH } from '../data/research.js';
-import { MAX_LEVEL, dispatchRate, stationRate } from './rules.js';
+import { dispatchRate, maxLevel, stationRate } from './rules.js';
 import { PARENT, chainOf, consumers, sourceOf, zoneOf } from './chain.js';
 import { routeActive, routeRate, routeStations, stationImportRate } from './routes.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
@@ -203,7 +203,7 @@ function analyze(state, zoneId, withExports, depth, memo) {
   }
   if (!bottleneck) bottleneck = toWarehouse > dispatch * (1 + LOSS) ? `dispatch:${zoneId}` : sourceOf(zoneId);
   // Lo que ya está en el nivel 100 no se puede mejorar: no se señala (si todo está al máximo, nada).
-  if (upgradeLevel(state, bottleneck) >= MAX_LEVEL) bottleneck = null;
+  if (upgradeLevel(state, bottleneck) >= maxLevel(state)) bottleneck = null;
   return { rows, toWarehouse, dispatch, bottleneck, income, mainIncome, exported };
 }
 

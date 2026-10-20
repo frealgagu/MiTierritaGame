@@ -2,7 +2,7 @@ import { formatAmount, formatNumber, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import {
-  MAX_LEVEL,
+  maxLevel,
   MILESTONES,
   dispatchCapacity,
   dispatchRate,
@@ -244,7 +244,7 @@ export class StationPanel {
     r.level.textContent = `Nv ${level}`;
     for (const row of info.rows) {
       const value = row.value(state, level);
-      const next = row.next && level < MAX_LEVEL ? `→ ${row.next(after, state)}` : '';
+      const next = row.next && level < maxLevel(state) ? `→ ${row.next(after, state)}` : '';
       if (r[row.key].textContent === value && r[`${row.key}Next`].textContent === next) continue;
       r[row.key].textContent = value;
       r[`${row.key}Next`].textContent = next;
@@ -252,14 +252,15 @@ export class StationPanel {
     }
     this.setStatus(info.status(state));
 
+    // En un evento no hay hitos más allá del nivel 50 (v3.10.1).
     const next = nextMilestone(level);
-    if (next) {
+    if (next && next <= maxLevel(state)) {
       const prev = [...MILESTONES].reverse().find((m) => m <= level) ?? 1;
       const what = typeof info.milestoneWhat === 'function' ? info.milestoneWhat(next) : info.milestoneWhat;
       setFitted(r.milestoneText, `Hito del nivel ${next}: ×${milestoneBoost(next)} ${what}`);
       r.milestoneBar.style.width = `${((level - prev) / (next - prev)) * 100}%`;
     } else {
-      setFitted(r.milestoneText, '¡Todos los hitos conseguidos!');
+      setFitted(r.milestoneText, state.event ? `¡Todos los hitos del evento! (hasta el nivel ${maxLevel(state)})` : '¡Todos los hitos conseguidos!');
       r.milestoneBar.style.width = '100%';
     }
 
@@ -267,7 +268,7 @@ export class StationPanel {
     const buy = this.el.querySelector('[data-buy]');
     buy.disabled = !q.affordable;
     if (q.maxed) {
-      r.buyLabel.textContent = 'Nivel máximo';
+      r.buyLabel.textContent = state.event ? `Nivel máximo del evento (${maxLevel(state)})` : 'Nivel máximo';
       r.buyCost.textContent = '';
     } else {
       r.buyLabel.textContent = `Mejorar +${Math.max(q.levels, 1)}`;
