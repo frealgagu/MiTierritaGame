@@ -33,7 +33,9 @@ export const ZONE15 = {
   // Carretera por la que llega la Ruta de la leche de coco, hasta la Cocina.
   routes: {
     coco: { road: [[25.9, 14.5], [20.3, 14.5]], sign: [24.2, 13.3], text: '⬅ Del Cocal' },
+    // La Ruta del pescado sale de la bodega hacia la Quesera (v3.18).
+    pescado: { road: [[24.5, 17.2], [24.5, 16.5], [25.9, 16.5]], sign: [25.3, 15.6], text: 'Pescado a la Quesera ➜' },
   },
   unlockedBy: 'cocal',
-  next: null,
+  next: 'quesera',
 };

@@ -133,7 +133,7 @@ export class Terrain {
             const d = rng() < 0.5 ? -1 : 1;
             g.moveTo(p.x - 7 * d, p.y - 2).quadraticCurveTo(p.x, p.y - 4, p.x + 7 * d, p.y + 1).stroke({ width: 1.6, color: 0xb08a4a, alpha: 0.7 });
           }
-        } else if (type === 'farm' && (this.zone.theme === 'dairy' || this.zone.theme === 'ranch')) {
+        } else if (type === 'farm' && (this.zone.theme === 'dairy' || this.zone.theme === 'ranch' || this.zone.theme === 'savanna')) {
           // Potrero: pasto más alto y tupido, sin surcos.
           for (let k = 0; k < 3; k++) {
             const p = iso(gx + rng(), gy + rng());
@@ -233,6 +233,12 @@ export class Terrain {
           else if (r < 0.06) obj = coconutPalm(rng);
           else if (r < 0.085) obj = egret(rng);
           else if (r < 0.11) obj = banana(rng);
+        } else if (this.zone.theme === 'savanna') {
+          // Sabana (v3.18): samanes de sombra, garzas bueyeras, palmas de coco y alguna ceiba.
+          if (r < 0.03) obj = saman(rng);
+          else if (r < 0.055) obj = egret(rng);
+          else if (r < 0.075) obj = coconutPalm(rng);
+          else if (r < 0.088) obj = ceiba(rng);
         } else if (this.zone.theme === 'cienaga') {
           // Ciénaga (v3.17): garzas, redes puestas a secar, ceibas, plátano y palmas de coco.
           if (r < 0.03) obj = egret(rng);
@@ -276,7 +282,8 @@ export class Terrain {
 const FARM_SOIL = {
   cane: (v) => mix(0x9c7a4a, 0x7f6038, v * 0.35),
   dairy: (v) => mix(0x5e9a3c, 0x6fae44, v * 0.5),
-  ranch: (v) => mix(0x7fa04a, 0x93ad55, v * 0.5), // potrero de tierra caliente, más seco
+  ranch: (v) => mix(0x7fa04a, 0x93ad55, v * 0.5),
+  savanna: (v) => mix(0x8fae4e, 0xa3b85a, v * 0.5), // la sabana de Córdoba y Sucre // potrero de tierra caliente, más seco
   cacao: (v) => mix(0x5e4630, 0x4a3726, v * 0.5),
   corn: (v) => mix(0xa47c48, 0x8a6a3a, v * 0.4),
   guava: (v) => mix(0xb8754a, 0x9c5e3a, v * 0.4), // la tierra roja de Santander
@@ -648,6 +655,8 @@ export function drawCow(g, x, y, scale, rng, flip = false, coat = HOLSTEIN) {
   // Cuerpo con manchas.
   g.roundRect(x - 10 * s, y - 15 * s, 20 * s, 9 * s, 4 * s).fill(coat.body).stroke({ width: 1.2, color: 0x3a2418, alpha: 0.6 });
   for (let i = 0; i < 3; i++) g.ellipse(x + (-5 + i * 5 + rng() * 2) * s * f, y - (10 + rng() * 3) * s, (2 + rng() * 2) * s, (1.5 + rng()) * s).fill(coat.spots);
+  // La giba del cebú (v3.18), sobre los hombros.
+  if (coat.hump) g.ellipse(x + 5 * s * f, y - 15 * s, 3.6 * s, 2.8 * s).fill(coat.body).stroke({ width: 1, color: 0x3a2418, alpha: 0.5 });
   // Ubre rosada.
   if (coat.udder) g.ellipse(x + 3 * s * f, y - 6 * s, 2.5 * s, 1.5 * s).fill(0xf2a7b5);
   // Cabeza.

@@ -216,6 +216,40 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.17',
   },
+  // A la Quesera (v3.18): el arroz del Arrozal (para el almuerzo y la bandeja) y el pescado limpio de la
+  // Ciénaga (para la bandeja).
+  {
+    id: 'arroz',
+    name: 'Ruta del arroz',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'rice_bag',
+    from: 'arrozal',
+    to: 'quesera',
+    stations: ['costeno_fonda', 'bandeja_kitchen'],
+    tab: 'Arroz',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 5000,
+    growth: 1.15,
+    release: '3.18',
+  },
+  {
+    id: 'pescado',
+    name: 'Ruta del pescado',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'clean_fish',
+    from: 'cienaga',
+    to: 'quesera',
+    stations: ['bandeja_kitchen'],
+    tab: 'Pescado',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 8000,
+    growth: 1.15,
+    release: '3.18',
+  },
   // Al Hato (v3.3): el bocadillo veleño de la Guayabera (el postre) y la fibra de la Fiquera (la cabuya
   // con que se amarra el fiambre).
   {

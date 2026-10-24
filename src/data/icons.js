@@ -94,6 +94,14 @@ export const ICON = {
   friedFish: '\uE058', // Pescado frito: mojarra dorada en un plato, con patacones y limón
   saltedFish: '\uE059', // Pescado salado: el pescado abierto y aplanado, colgado al sol, con granos de sal
   fishInCoconut: '\uE05A', // Pescado en coco: la cazuela de barro con el pescado en salsa de leche de coco, y medio coco al lado
+  cebu: '\uE05B', // Vaca cebú: blanca, con la giba sobre los hombros, orejas caídas y papada
+  ordenoMilk: '\uE05C', // Leche de ordeño: la cantina de aluminio con la leche espumosa, y un totumo al lado
+  cuajada: '\uE05D', // Cuajada: el queso fresco, blanco y blandito, sobre una hoja de bijao
+  saltedCurd: '\uE05E', // Cuajada salada: la cuajada molida con sal en una batea de madera, con el puño de sal
+  quesoCosteno: '\uE05F', // Queso costeño: el bloque blanco, duro y salado, con la marca del molde y un pedazo cortado
+  moteQueso: '\uE060', // Mote de queso: el plato hondo de sopa de ñame con trocitos de queso costeño y cebollín
+  almuerzoCosteno: '\uE061', // Almuerzo costeño: el plato con arroz blanco, el mote en su taza, patacones y queso costeño
+  bandejaCostena: '\uE062', // Bandeja costeña: la bandeja con pescado frito, arroz, patacones, queso costeño y limón
 };
 
 export const ICON_FONT = 'Cafetal Icons';

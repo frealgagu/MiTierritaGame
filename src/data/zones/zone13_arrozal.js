@@ -30,5 +30,9 @@ export const ZONE13 = {
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
   unlockedBy: null, // la primera de la Costa: se abre con la región
+  // Carretera de la Ruta del arroz (v3.18): sale de la bodega hacia la Quesera.
+  routes: {
+    arroz: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Arroz a la Quesera ➜' },
+  },
   next: 'cocal',
 };

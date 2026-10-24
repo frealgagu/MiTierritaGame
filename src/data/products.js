@@ -100,6 +100,15 @@ export const PRODUCTS = {
   salted_fish: { name: 'Pescado salado', zone: 'cienaga', value: 2400, icon: ICON.saltedFish, color: 0xd7c39b },
   fish_in_coconut: { name: 'Pescado en coco', zone: 'cienaga', value: 4000, icon: ICON.fishInCoconut, color: 0xb5562e },
 
+  // Costa · La Quesera (v3.18): los mismos valores que el Hato.
+  ordeno_milk: { name: 'Leche de ordeño', zone: 'quesera', value: 1000, icon: ICON.ordenoMilk, color: 0xfbfaf6 },
+  cuajada: { name: 'Cuajada', zone: 'quesera', value: 2500, icon: ICON.cuajada, color: 0xf4f1e8 },
+  salted_curd: { name: 'Cuajada salada', zone: 'quesera', value: 4400, icon: ICON.saltedCurd, color: 0xece6d6 },
+  queso_costeno: { name: 'Queso costeño', zone: 'quesera', value: 8800, icon: ICON.quesoCosteno, color: 0xf4efe1 },
+  mote_queso: { name: 'Mote de queso', zone: 'quesera', value: 22000, icon: ICON.moteQueso, color: 0xf2e3b3 },
+  almuerzo_costeno: { name: 'Almuerzo costeño', zone: 'quesera', value: 100000, icon: ICON.almuerzoCosteno, color: 0xd7263d },
+  bandeja_costena: { name: 'Bandeja costeña', zone: 'quesera', value: 220000, icon: ICON.bandejaCostena, color: 0xc68a4a },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

@@ -211,6 +211,19 @@ export const RESEARCH = [
   { zone: 'cienaga', id: 'sazon_cienaguero', name: 'Sazón cienaguero', icon: '🏅', desc: 'El pescado en coco vale un 50 % más.', cost: 50000000, requires: 'coconut_fish_kitchen', effect: { type: 'productValue', target: 'fish_in_coconut', mult: 1.5 } },
   { zone: 'cienaga', id: 'maestria_cienaga', name: 'Maestría: Ciénaga', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cienaga', mult: 4 } },
   { zone: 'cienaga', id: 'supremacia_cienaga', name: 'Supremacía: Ciénaga', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cienaga', mult: 8 } },
+
+  // Costa · La Quesera (v3.18): las mismas del Hato, con el queso.
+  { zone: 'quesera', id: 'pasto_sabana', name: 'Pasto de sabana', icon: '🌱', desc: 'El Corral de ordeño da el doble de leche.', cost: 1000000, requires: 'curdler', effect: { type: 'stationSpeed', target: 'milking_corral', mult: 2 } },
+  { zone: 'quesera', id: 'cuajo_casero', name: 'Cuajo casero', icon: ICON.cuajada, desc: 'La Cuajadera cuaja el doble.', cost: 1200000, requires: 'curdler', effect: { type: 'stationSpeed', target: 'curdler', mult: 2 } },
+  { zone: 'quesera', id: 'molino_manivela', name: 'Molino de manivela', icon: ICON.saltedCurd, desc: 'El Molino de cuajada muele el doble.', cost: 3000000, requires: 'cheese_press', effect: { type: 'stationSpeed', target: 'curd_mill', mult: 2 } },
+  { zone: 'quesera', id: 'camion_queso', name: 'Camión del queso', icon: '🚚', desc: 'El despacho de la Quesera lleva el doble por viaje.', cost: 5000000, requires: 'curd_mill', effect: { type: 'dispatchCapacity', target: 'quesera', mult: 2 } },
+  { zone: 'quesera', id: 'prensa_tornillo', name: 'Prensa de tornillo', icon: ICON.quesoCosteno, desc: 'La Prensa de queso prensa el doble.', cost: 8000000, requires: 'mote_pot', effect: { type: 'stationSpeed', target: 'cheese_press', mult: 2 } },
+  { zone: 'quesera', id: 'olla_grande', name: 'Olla grande', icon: ICON.moteQueso, desc: 'La Olla del mote cocina el doble.', cost: 20000000, requires: 'costeno_fonda', effect: { type: 'stationSpeed', target: 'mote_pot', mult: 2 } },
+  { zone: 'quesera', id: 'fonda_ampliada', name: 'Fonda ampliada', icon: ICON.almuerzoCosteno, desc: 'La Fonda costeña sirve el doble.', cost: 50000000, requires: 'bandeja_kitchen', effect: { type: 'stationSpeed', target: 'costeno_fonda', mult: 2 } },
+  { zone: 'quesera', id: 'bandejas_grandes', name: 'Bandejas grandes', icon: ICON.bandejaCostena, desc: 'La Cocina de la bandeja sirve el doble (las rutas se ajustan solas).', cost: 80000000, requires: 'bandeja_kitchen', effect: { type: 'stationSpeed', target: 'bandeja_kitchen', mult: 2 } },
+  { zone: 'quesera', id: 'queso_sabanero', name: 'Queso sabanero', icon: '🏅', desc: 'Todo lo que vende la Quesera vale un 50 % más.', cost: 60000000, requires: 'costeno_fonda', effect: { type: 'zoneValue', target: 'quesera', mult: 1.5 } },
+  { zone: 'quesera', id: 'maestria_quesera', name: 'Maestría: Quesera', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'quesera', mult: 4 } },
+  { zone: 'quesera', id: 'supremacia_quesera', name: 'Supremacía: Quesera', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'quesera', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

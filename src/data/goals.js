@@ -351,5 +351,27 @@ const CIENAGA = [
   { id: 'n_final', type: 'sold', product: 'fish_in_coconut', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA];
+// Costa · La Quesera (v3.18): la misma lista que el Hato.
+const QUESERA = [
+  { id: 'e01', type: 'sold', product: 'ordeno_milk', amount: 50, reward: 75000 },
+  { id: 'e02', type: 'level', target: 'milking_corral', level: 10, reward: 125000 },
+  { id: 'e03', type: 'unlock', station: 'curdler', reward: 250000 },
+  { id: 'e04', type: 'level', target: 'milking_corral:transport', level: 10, reward: 250000 },
+  { id: 'e05', type: 'unlock', station: 'curd_mill', reward: 500000 },
+  { id: 'e06', type: 'produced', product: 'salted_curd', amount: 200, reward: 750000 },
+  { id: 'e08', type: 'unlock', station: 'cheese_press', reward: 1500000 },
+  { id: 'e09', type: 'level', target: 'dispatch:quesera', level: 10, reward: 1500000 },
+  { id: 'e10', type: 'unlock', station: 'mote_pot', reward: 2500000 },
+  { id: 'e11', type: 'produced', product: 'mote_queso', amount: 300, reward: 3750000 },
+  { id: 'e12', type: 'unlock', station: 'costeno_fonda', reward: 6250000 },
+  { id: 'e13', type: 'sold', product: 'almuerzo_costeno', amount: 200, reward: 7500000 },
+  { id: 'e14', type: 'unlock', station: 'bandeja_kitchen', reward: 12500000 },
+  { id: 'e15', type: 'imported', product: 'clean_fish', amount: 500, reward: 15000000 },
+  { id: 'e16', type: 'allLevels', zone: 'quesera', level: 25, reward: 20000000 },
+  { id: 'e07', type: 'research', research: 'pasto_sabana', reward: 10000000 },
+  { id: 'e17', type: 'sold', product: 'bandeja_costena', amount: 1000, reward: 30000000 },
+  { id: 'e_final', type: 'sold', product: 'bandeja_costena', amount: 4000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA];

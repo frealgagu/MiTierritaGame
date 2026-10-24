@@ -150,7 +150,7 @@ export class FarmView extends StationView {
       return;
     }
     this.lights = drawHut(g, x, y, tier);
-    if (this.theme === 'dairy' || this.theme === 'ranch') {
+    if (this.theme === 'dairy' || this.theme === 'ranch' || this.theme === 'savanna') {
       this.drawPasture(g, tier, rng);
       return;
     }

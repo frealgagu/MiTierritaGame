@@ -97,6 +97,14 @@ export const FACTS = {
   rice_sorter: ['El arroz excelso tiene casi todos los granos enteros.'],
   rice_bagger: ['En la Costa no hay almuerzo sin arroz: de coco, de lisa…'],
   rice_stacker: ['Un bulto de arroz pesa 50 kilos y se carga al hombro.'],
+  // Costa · La Quesera (v3.18)
+  milking_corral: ['La vaca cebú tiene una giba en el lomo y aguanta bien el calor.', 'En la sabana se ordeña a mano, de madrugada, con el ternero al lado.'],
+  curdler: ['La leche se cuaja con cuajo: en unas horas queda la cuajada.'],
+  curd_mill: ['La cuajada se muele con bastante sal: por eso el costeño es salado.'],
+  cheese_press: ['El queso costeño se prensa en moldes de madera para sacarle el suero.'],
+  mote_pot: ['El mote de queso es una sopa de ñame con queso costeño.', 'El mote de queso es el plato de Córdoba y Sucre.'],
+  costeno_fonda: ['En la Costa no hay almuerzo sin arroz, y el mote se come con él.'],
+  bandeja_kitchen: ['Pescado frito, arroz, patacón, queso y limón: bandeja completa.'],
   // Costa · La Ciénaga (v3.17)
   fishing_canoes: ['En la Ciénaga Grande hay pueblos de casas sobre el agua: palafitos.', 'El pescador tira la atarraya, una red redonda que se abre en el aire.'],
   fish_cleaner: ['El bocachico es el pescado más comido en los ríos y ciénagas.'],
@@ -129,6 +137,7 @@ export const PEOPLE = {
   arrozal: { icon: '👨🏾‍🌾', name: 'Don Abelardo', role: 'el arrocero' },
   cocal: { icon: '👩🏾', name: 'Doña Eulalia', role: 'la cocadera' },
   cienaga: { icon: '🧔🏾', name: 'Don Aníbal', role: 'el pescador' },
+  quesera: { icon: '👩🏽', name: 'Doña Rosmira', role: 'la quesera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -147,6 +156,7 @@ export const WELCOME = {
   hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
   arrozal: '¡Ajá, bienvenido a la Costa, compa! Aquí el arroz crece con los pies en el agua.',
   cocal: '¡Ey, mi vida, bienvenido al Cocal! Aquí bajamos el coco de la palma y lo volvemos cocada.',
+  quesera: '¡Ajá, mi amor, bienvenido a la sabana! De esta leche sale el queso costeño, y del queso, el mote.',
   cienaga: '¡Qué hubo, primo! Bienvenido a la Ciénaga. Aquí se pesca en canoa, con atarraya, como los abuelos.',
 };
 

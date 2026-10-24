@@ -3,20 +3,20 @@
 // Lo que suena al abrir cada estación (v3.3.2): su oficio, en pocos tipos de sonido.
 const STATION_SOUNDS = {
   field: ['farm', 'canefield', 'cacao_grove', 'cornfield', 'guava_grove', 'tobacco_field', 'fique_field', 'rice_field', 'coconut_grove', 'fishing_canoes', 'composter', 'anthill', 'camino_real'],
-  moo: ['pasture', 'cattle_ranch'],
-  water: ['wetmill', 'pasteurizer', 'cheesery', 'churn', 'brine_pot', 'coconut_press', 'fish_cleaner'],
-  machine: ['huller', 'grinder', 'cane_mill', 'pulverizer', 'cacao_mill', 'sheller', 'corn_huller', 'dough_mill', 'guava_pulper', 'decorticator', 'rice_huller', 'rice_polisher', 'coconut_grater'],
+  moo: ['pasture', 'cattle_ranch', 'milking_corral'],
+  water: ['wetmill', 'pasteurizer', 'cheesery', 'churn', 'brine_pot', 'coconut_press', 'fish_cleaner', 'curdler'],
+  machine: ['huller', 'grinder', 'cane_mill', 'pulverizer', 'cacao_mill', 'sheller', 'corn_huller', 'dough_mill', 'guava_pulper', 'decorticator', 'rice_huller', 'rice_polisher', 'coconut_grater', 'curd_mill'],
   whir: ['separator', 'spinner', 'rice_sorter'],
   fire: ['roaster', 'cacao_roaster', 'grill', 'ant_toaster'],
-  boil: ['furnace', 'arequipe_pot', 'guava_pot', 'greca', 'cocada_kitchen', 'coconut_fish_kitchen'],
+  boil: ['furnace', 'arequipe_pot', 'guava_pot', 'greca', 'cocada_kitchen', 'coconut_fish_kitchen', 'mote_pot'],
   wind: ['dryer', 'cacao_dryer', 'caney', 'airing_rack', 'rice_dryer', 'fish_salter'],
   ferment: ['fermenter', 'tobacco_piles'],
   chop: ['butcher', 'bocadillo_cutter', 'stripper', 'coconut_peeler', 'fish_filleter'],
   loom: ['sack_loom', 'basket_shop', 'alpargata_shop', 'bijao_wrapper', 'fiambre_maker', 'cigar_roller', 'ant_cleaner', 'cone_table', 'hamper'],
-  thud: ['packer', 'molds', 'guava_molds', 'crate_packer', 'tercio_packer', 'gift_wrap', 'box_shop', 'rice_bagger', 'rice_stacker'],
+  thud: ['packer', 'molds', 'guava_molds', 'crate_packer', 'tercio_packer', 'gift_wrap', 'box_shop', 'cheese_press', 'rice_bagger', 'rice_stacker'],
   horn: ['export_dock'],
   sizzle: ['fish_fryer', 'budare', 'arepa_stand', 'fonda'],
-  clink: ['coffee_house', 'chocolate_table', 'chocolatier', 'lunch_table', 'souvenir_shop', 'dulceria', 'park_cafe', 'posada'],
+  clink: ['coffee_house', 'chocolate_table', 'chocolatier', 'lunch_table', 'souvenir_shop', 'dulceria', 'park_cafe', 'posada', 'costeno_fonda', 'bandeja_kitchen'],
   pour: ['salter'],
   engine: ['dispatch'],
 };
@@ -288,7 +288,7 @@ const STATION_PLAY = {
   },
   // Mugido (más grave el de los novillos del Hato).
   moo(id) {
-    const f = id === 'cattle_ranch' ? 105 : 140;
+    const f = id === 'cattle_ranch' || id === 'milking_corral' ? 105 : 140;
     this.voice(f, f * 0.78, 0, 1.1, { gain: 0.07, filter: 500, q: 0.8, vibrato: 5 });
   },
   // Agua que corre y gotea.

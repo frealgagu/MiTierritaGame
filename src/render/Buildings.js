@@ -2084,6 +2084,211 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Costa · La Quesera (v3.18) ---
+
+  // Cuajadera: casa blanca con la batea de madera donde la leche se vuelve cuajada; la quesera la revuelve.
+  // Al lado, las cantinas de la leche del ordeño.
+  curdler(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xfbf8f1, roofColor: 0xc9a35a, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.7, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, PAL.balconyBlue);
+    for (const [cx, cy] of [[2.4, 2.1], [2.7, 2.25], [2.45, 2.5]]) {
+      const p = iso(x + cx, y + cy);
+      g.roundRect(p.x - 4, p.y - 13, 8, 13, 2).fill(0xc7ccd1).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 13, 3, 1.4).fill(0x9aa3a8);
+    }
+    // La batea.
+    box(g, x + 0.45, y + 2.05, 1.4, 0.55, 7, PAL.wood);
+    const tub = iso(x + 1.15, y + 2.32, 7);
+    g.ellipse(tub.x, tub.y - 0.5, 15, 4.5).fill(0xfbfaf6);
+    const stir = new Graphics();
+    this.anim.addChild(stir);
+    this.animate = (time) => {
+      stir.clear();
+      // Grumos de cuajada que se forman y la pala que revuelve.
+      for (let i = 0; i < 5; i++) stir.circle(tub.x - 10 + i * 5, tub.y - 0.5 + Math.sin(i * 2) * 1.5, 1.8).fill(0xece6d6);
+      const a = this.working ? time * 2 : 0;
+      stir.moveTo(tub.x + Math.cos(a) * 8, tub.y + Math.sin(a) * 2).lineTo(tub.x + 6 + Math.cos(a) * 4, tub.y - 16).stroke({ width: 2, color: PAL.wood });
+    };
+    this.animate(0);
+  },
+
+  // Molino de cuajada: ramada con el molino de manivela atornillado a la mesa; la cuajada molida cae a la
+  // batea y al lado esperan los bultos de sal.
+  curd_mill(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 24 + ctx.up;
+    box(g, x0 + 0.5, y0 + 0.4, 1.4, 0.6, 9, PAL.wood);
+    const tray = iso(x0 + 1.4, y0 + 0.7, 9);
+    g.ellipse(tray.x, tray.y - 1, 8, 3).fill(PRODUCTS.salted_curd.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+    // Los bultos de sal, adelante.
+    for (const [bx, by] of [[1.9, 1.95], [2.25, 2.1], [2.05, 2.35]]) {
+      const p = iso(x0 + bx, y0 + by);
+      g.ellipse(p.x, p.y - 5, 7, 5.5).fill(0xf4f1e8).stroke(OUTLINE);
+      g.rect(p.x - 4, p.y - 6, 8, 2).fill(0x2e6fd1);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 13, 0xc9a35a, 0x9c7b3a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    const mill = new Graphics();
+    this.anim.addChild(mill);
+    this.animate = (time) => {
+      mill.clear();
+      const m = iso(x0 + 0.85, y0 + 0.7, 9);
+      mill.rect(m.x - 4, m.y - 12, 8, 10).fill(0x9aa3a8).stroke(OUTLINE);
+      mill.poly([m.x - 6, m.y - 16, m.x + 6, m.y - 16, m.x + 3, m.y - 12, m.x - 3, m.y - 12]).fill(0xb0bec5).stroke(OUTLINE);
+      mill.ellipse(m.x, m.y - 16, 6, 1.8).fill(PRODUCTS.cuajada.color);
+      const a = this.working ? time * 4 : 0.6;
+      const hx = m.x + 4;
+      const hy = m.y - 8;
+      mill.moveTo(hx, hy).lineTo(hx + Math.cos(a) * 7, hy + Math.sin(a) * 4).stroke({ width: 1.6, color: 0x555555 });
+      mill.circle(hx + Math.cos(a) * 7, hy + Math.sin(a) * 4, 1.4).fill(PAL.woodDark);
+      const p = iso(x0 + 1.2, y0 + 1.15);
+      worker(mill, p.x, p.y, 0x2fa36b);
+    };
+    this.animate(0);
+  },
+
+  // Prensa de queso: casa con la prensa de palanca en el patio: los moldes de madera apilados, la viga
+  // larga con piedras colgadas en la punta, y el suero que escurre.
+  cheese_press(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.2;
+    house(this, g, hx, hy, 1.9, 1.3, 26, ctx, { wall: 0xf6d860, roofColor: 0xc9a35a, roofH: 13 });
+    door(g, hx, hy, 1.3, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, PAL.balconyRed);
+    // Moldes apilados bajo la viga.
+    const mx = x + 0.7;
+    const my = y + 2.15;
+    box(g, mx - 0.1, my - 0.05, 0.75, 0.55, 3, 0x8d6e4a);
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) box(g, mx, my, 0.55, 0.42, 5, k % 2 ? 0xa1785a : 0x8d5a32, { z: 3 + k * 5 });
+    const top = 3 + (2 + Math.min(ctx.tier, 2)) * 5;
+    // El poste y la viga, con las piedras.
+    box(g, mx - 0.35, my + 0.15, 0.1, 0.1, top + 10, PAL.woodDark);
+    const a = iso(mx - 0.3, my + 0.2, top + 6);
+    const b = iso(mx + 1.6, my + 0.2, top - 2);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 3, color: PAL.wood });
+    g.moveTo(b.x, b.y).lineTo(b.x, b.y + 8).stroke({ width: 1, color: 0x5d4037 });
+    g.ellipse(b.x, b.y + 11, 6, 4.5).fill(0x9e9e9e).stroke(OUTLINE);
+    g.ellipse(b.x + 2, b.y + 16, 5, 4).fill(0x8a8a8a).stroke(OUTLINE);
+    // Los quesos ya prensados, en una tabla.
+    for (let i = 0; i < 3; i++) box(g, x + 2.3 + (i % 2) * 0.28, y + 1.85 + Math.floor(i / 2) * 0.35, 0.22, 0.22, 4, PRODUCTS.queso_costeno.color);
+    const whey = new Graphics();
+    this.anim.addChild(whey);
+    this.animate = (time) => {
+      whey.clear();
+      const p = iso(mx + 0.28, my + 0.5, 2);
+      whey.ellipse(p.x, p.y + 2, 6, 2).fill({ color: 0xe8f0d0, alpha: 0.8 });
+      if (!this.working) return;
+      for (let i = 0; i < 2; i++) {
+        const f = (time * 1.4 + i / 2) % 1;
+        whey.circle(p.x - 2 + i * 4, p.y - 4 + f * 6, 1).fill(0xe8f0d0);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Olla del mote: kiosco de palma con la olla grande en el fogón de tres piedras, el montón de ñame y el
+  // humo; la cocinera revuelve el mote.
+  mote_pot(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.2;
+    const d = 1.1;
+    const H = 24 + ctx.up;
+    // Fogón de tres piedras con la olla.
+    const pot = iso(x0 + 0.9, y0 + 1.75);
+    for (const [dx, dy] of [[-8, 1], [8, 1], [0, 4]]) g.ellipse(pot.x + dx, pot.y + dy, 4, 2.6).fill(0x8a8a8a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+    g.moveTo(pot.x - 11, pot.y - 2).lineTo(pot.x - 12, pot.y - 16).quadraticCurveTo(pot.x, pot.y - 20, pot.x + 12, pot.y - 16).lineTo(pot.x + 11, pot.y - 2).quadraticCurveTo(pot.x, pot.y + 2, pot.x - 11, pot.y - 2).closePath().fill(0x37474f).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 16, 12, 4).fill(PRODUCTS.mote_queso.color).stroke({ width: 0.8, color: 0x263238 });
+    // El ñame.
+    for (const [bx, by] of [[1.8, 1.55], [2.05, 1.7], [1.9, 1.85]]) {
+      const p = iso(x0 + bx, y0 + by);
+      g.ellipse(p.x, p.y - 3, 7, 3.4).fill(0x8d6e4a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 13, 0xc9a35a, 0x9c7b3a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    const cook = new Graphics();
+    this.anim.addChild(cook);
+    this.animate = (time) => {
+      cook.clear();
+      // El fuego.
+      if (this.working) for (let i = 0; i < 3; i++) cook.poly([pot.x - 6 + i * 6, pot.y + 1, pot.x - 3 + i * 6, pot.y - 5 - Math.abs(Math.sin(time * 9 + i)) * 4, pot.x + i * 6, pot.y + 1]).fill(i % 2 ? 0xffb300 : 0xf4511e);
+      for (let i = 0; i < 4; i++) cook.rect(pot.x - 9 + i * 5, pot.y - 17 + Math.sin(i * 1.7) * 1.5, 2.6, 1.8).fill(0xfbfaf6);
+      const a = this.working ? time * 2.2 : 0;
+      cook.moveTo(pot.x + Math.cos(a) * 7, pot.y - 16 + Math.sin(a) * 2).lineTo(pot.x + 14, pot.y - 32).stroke({ width: 2, color: PAL.wood });
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.5 + i / 3) % 1;
+        cook.circle(pot.x - 4 + i * 4, pot.y - 20 - f * 18, 2 + f * 3).fill({ color: 0xffffff, alpha: 0.45 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Fonda costeña: casa de colores con su letrero, mesas rojas en el corredor con platos de almuerzo y la
+  // mesera que va y viene.
+  costeno_fonda(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.2, 1.4, 28, ctx, { wall: 0x9ad0ec, roofColor: 0xc9a35a, roofH: 14 });
+    door(g, hx, hy, 1.4, 1.5, 18, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.2, 0.7, 14, PAL.balconyYellow);
+    const sign = iso(x + 1.4, y + 1.65, 30);
+    g.roundRect(sign.x - 14, sign.y - 6, 28, 9, 2).fill(0xd7263d).stroke(OUTLINE);
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 2); i++) {
+      const p = iso(x + 0.7 + (i % 2) * 1.3, y + 2.2 + Math.floor(i / 2) * 0.45);
+      g.rect(p.x - 1, p.y - 8, 2, 8).fill(0xb71c1c);
+      g.ellipse(p.x, p.y - 8, 9, 4.2).fill(0xd7263d).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+      g.ellipse(p.x - 2, p.y - 8.5, 3.6, 1.6).fill(0xffffff);
+      g.circle(p.x + 3, p.y - 9, 1.8).fill(PRODUCTS.mote_queso.color).stroke({ width: 0.5, color: 0xd7263d });
+    }
+    const waiter = new Graphics();
+    this.anim.addChild(waiter);
+    this.animate = (time) => {
+      waiter.clear();
+      const f = (time * 0.2) % 1;
+      const k = f < 0.5 ? f * 2 : 2 - f * 2;
+      const p = iso(x + 0.5 + k * 1.9, y + 1.95);
+      worker(waiter, p.x, p.y, 0xf07f1d);
+      waiter.ellipse(p.x + 4, p.y - 17, 4, 1.5).fill(0xffffff).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+    };
+    this.animate(0);
+  },
+
+  // Cocina de la bandeja: casa larga con el mostrador donde se arman las bandejas y la parrilla humeando.
+  bandeja_kitchen(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.5, 28, ctx, { wall: 0xb8e0a8, roofColor: 0xc9a35a, roofH: 15 });
+    door(g, hx, hy, 1.5, 1.8, 18, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.4, 0.75, 14, PAL.balconyRed);
+    box(g, x + 0.4, y + 2.05, 1.7, 0.5, 9, PAL.wood);
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 2); i++) {
+      const p = iso(x + 0.65 + i * 0.4, y + 2.3, 9);
+      g.poly([p.x - 6, p.y - 1, p.x, p.y - 4, p.x + 6, p.y - 1, p.x, p.y + 2]).fill(0xc68a4a).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x - 1.5, p.y - 1.2, 2.6, 1.1).fill(0xd4892a);
+      g.circle(p.x + 2.4, p.y - 1, 1.2).fill(0xffffff);
+    }
+    box(g, x + 2.3, y + 2.0, 0.5, 0.5, 8, 0x37474f);
+    this.smokePoints = [iso(x + 2.55, y + 2.25, 10)];
+    const grill = new Graphics();
+    this.anim.addChild(grill);
+    this.animate = (time) => {
+      grill.clear();
+      const p = iso(x + 2.55, y + 2.25, 8);
+      fishOn(grill, p.x - 2, p.y - 1, 4, PRODUCTS.fried_fish.color);
+      if (this.working) grill.ellipse(p.x + 3, p.y, 2, 1).fill({ color: 0xff7043, alpha: 0.5 + Math.sin(time * 8) * 0.3 });
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

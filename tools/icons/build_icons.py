@@ -1574,6 +1574,115 @@ def fish_in_coconut():
     return layers
 
 
+# ---------- Costa · La Quesera (v3.18) ----------
+
+def cebu():
+    """Vaca cebú: blanca, con la giba sobre los hombros, orejas caídas y papada."""
+    layers = [('#7fa04a', [ellipse(50, 92, 40, 6)])]
+    layers.append((OUTLINE, [rect(22, 62, 8, 30), rect(34, 64, 8, 28), rect(62, 64, 8, 28), rect(72, 62, 8, 30)]))
+    layers.append(('#d9d5cc', [rect(24, 64, 4, 26), rect(36, 66, 4, 24), rect(64, 66, 4, 24), rect(74, 64, 4, 26)]))
+    layers.append(('#5d4037', [rect(23, 88, 6, 4), rect(35, 88, 6, 4), rect(63, 88, 6, 4), rect(73, 88, 6, 4)]))
+    layers.append((OUTLINE, [ellipse(52, 56, 34, 16), ellipse(38, 41, 11, 9), 'M 84 56 Q 94 66 90 78 L 86 78 Q 88 66 80 60 Z']))
+    layers.append(('#eceae4', [ellipse(52, 56, 31.5, 13.5), ellipse(38, 41.5, 8.5, 7)]))
+    layers.append(('#d6d2c8', [ellipse(54, 64, 26, 5)]))
+    layers.append(('#f2a7b5', [ellipse(56, 70, 6, 3)]))
+    # La cabeza, con las orejas largas caídas y la papada.
+    layers.append((OUTLINE, ['M 10 36 Q 6 50 14 60 L 24 60 Q 28 48 24 36 Z', ellipse(8, 44, 4, 10, 20), ellipse(28, 44, 4, 10, -20)]))
+    layers.append(('#eceae4', ['M 12.5 38 Q 9 50 15.5 57.5 L 22.5 57.5 Q 25.5 48 22 38 Z']))
+    layers.append(('#d6d2c8', [ellipse(8, 44, 2.4, 8, 20), ellipse(28, 44, 2.4, 8, -20), 'M 22 58 Q 30 66 36 62 L 34 56 Z']))
+    layers.append(('#9e9a8a', [ellipse(18, 57, 5, 3.4)]))
+    layers.append(('#263238', [circle(14, 44, 1.6), circle(22, 44, 1.6), circle(16, 57, 0.9), circle(20, 57, 0.9)]))
+    layers.append(('#8d6e63', ['M 13 36 Q 10 28 14 26 L 15 30 Z', 'M 23 36 Q 26 28 22 26 L 21 30 Z']))
+    return layers
+
+
+def ordeno_milk():
+    """Leche de ordeño: la cantina de aluminio con la leche espumosa, y un totumo al lado."""
+    layers = [(OUTLINE, ['M 30 22 L 62 22 L 62 30 Q 74 38 74 50 L 74 92 L 18 92 L 18 50 Q 18 38 30 30 Z'])]
+    layers.append(('#b0bec5', ['M 32.5 24.5 L 59.5 24.5 L 59.5 31.5 Q 71.5 39 71.5 50 L 71.5 89.5 L 20.5 89.5 L 20.5 50 Q 20.5 39 32.5 31.5 Z']))
+    layers.append(('#cfd8dc', [rect(26, 44, 10, 42)]))
+    layers.append(('#90a4ae', [rib(20, 58, 72, 58, 2), rib(20, 78, 72, 78, 2)]))
+    layers.append((OUTLINE, [ellipse(46, 22, 18, 5)]))
+    layers.append(('#fbfaf6', [ellipse(46, 22, 16, 3.6), circle(40, 19, 3), circle(48, 18, 3.4), circle(54, 20, 2.6)]))
+    layers += [(OUTLINE, ['M 70 70 Q 84 96 98 70 Z']), ('#8d6e4a', ['M 73 72 Q 84 92 95 72 Z']), (OUTLINE, [ellipse(84, 70, 15, 4.5)]), ('#fbfaf6', [ellipse(84, 70, 13, 3)])]
+    return layers
+
+
+def cuajada():
+    """Cuajada: el queso fresco, blanco y blandito, sobre una hoja de bijao."""
+    layers = [('#2e7d32', [leaf(4, 80, 96, 70, 18)]), ('#66bb6a', [rib(8, 79, 92, 71, 1.2)])]
+    layers.append((OUTLINE, ['M 20 66 Q 18 40 50 38 Q 82 40 80 66 Q 50 80 20 66 Z']))
+    layers.append(('#fbfaf6', ['M 22.5 64.5 Q 21 42.5 50 40.5 Q 79 42.5 77.5 64.5 Q 50 77 22.5 64.5 Z']))
+    layers.append(('#ece6d6', [ellipse(50, 66, 26, 6)]))
+    layers.append(('#e0d8c4', [circle(36, 52, 2.4), circle(58, 48, 2), circle(64, 58, 2.6), circle(46, 60, 1.8)]))
+    layers.append(('#ffffffc0', [ellipse(38, 46, 8, 3, -15)]))
+    return layers
+
+
+def salted_curd():
+    """Cuajada salada: la cuajada molida con sal en una batea de madera, con el puño de sal."""
+    layers = [(OUTLINE, ['M 6 52 L 94 52 L 84 84 L 16 84 Z']), ('#a1785a', ['M 9.5 54.5 L 90.5 54.5 L 82 81.5 L 18 81.5 Z'])]
+    layers.append(('#7a5a3e', [rib(14, 68, 86, 68, 1.2)]))
+    layers.append((OUTLINE, [ellipse(50, 52, 44, 10)]))
+    layers.append(('#fbfaf6', [ellipse(50, 52, 41, 8), ellipse(44, 46, 22, 7), ellipse(60, 47, 14, 5)]))
+    layers.append(('#e0d8c4', [circle(30 + (k * 9) % 40, 46 + (k * 5) % 9, 1.6) for k in range(9)]))
+    layers.append(('#ffffff', [rect(cx, cy, 3, 3, 45) for cx, cy in [(70, 22), (78, 30), (64, 32), (74, 40), (82, 18)]]))
+    layers.append(('#90a4ae', [rect(cx, cy, 3, 3, 45) for cx, cy in [(68, 26), (80, 36)]]))
+    return layers
+
+
+def queso_costeno():
+    """Queso costeño: el bloque blanco, duro y salado, con la marca del molde y un pedazo cortado."""
+    layers = [(OUTLINE, [poly(10, 46, 50, 30, 90, 46, 90, 72, 50, 90, 10, 72)])]
+    layers.append(('#f4efe1', [poly(13, 47.5, 50, 33, 87, 47.5, 50, 63)]))
+    layers.append(('#e6dfc9', [poly(13, 47.5, 50, 63, 50, 87, 13, 70.5)]))
+    layers.append(('#d6cdb2', [poly(50, 63, 87, 47.5, 87, 70.5, 50, 87)]))
+    layers.append(('#cfc5a6', [rib(20 + k * 6, 54 + k * 2.6, 20 + k * 6, 66 + k * 2.6, 1) for k in range(5)]))
+    layers.append(('#ffffff', [rect(cx, cy, 2.6, 2.6, 45) for cx, cy in [(34, 42), (52, 38), (62, 46), (44, 50), (70, 44)]]))
+    layers += [(OUTLINE, [poly(70, 74, 92, 66, 96, 82, 74, 92)]), ('#f4efe1', [poly(72, 75.5, 90.5, 68.5, 94, 81, 75, 89.5)])]
+    return layers
+
+
+def mote_queso():
+    """Mote de queso: el plato hondo de sopa de ñame con trocitos de queso costeño y cebollín."""
+    layers = [(OUTLINE, ['M 6 46 Q 50 104 94 46 Z']), ('#f4efe6', ['M 10 48 Q 50 98 90 48 Z']), ('#d7263d', [rib(14, 58, 86, 58, 2)])]
+    layers.append((OUTLINE, [ellipse(50, 46, 44, 13)]))
+    layers.append(('#f2e3b3', [ellipse(50, 46, 41, 10.5)]))
+    layers.append(('#e8d48e', [ellipse(50, 48, 30, 6)]))
+    layers.append((OUTLINE, [rect(cx - 0.8, cy - 0.8, 8.6, 6.6, rot) for cx, cy, rot in [(28, 42, 10), (46, 38, -15), (60, 44, 20), (38, 48, -5)]]))
+    layers.append(('#fbfaf6', [rect(cx, cy, 7, 5, rot) for cx, cy, rot in [(28, 42, 10), (46, 38, -15), (60, 44, 20), (38, 48, -5)]]))
+    layers.append(('#d9b98a', [rect(cx, cy, 6, 5, rot) for cx, cy, rot in [(52, 48, 30), (68, 40, -20), (20, 46, 15)]]))
+    layers.append(('#7cb342', [circle(cx, cy, 1.6) for cx, cy in [(34, 38), (56, 36), (72, 46), (44, 52), (24, 50), (64, 52)]]))
+    layers.append(('#b0bec5', ['M 50 30 Q 46 20 50 10 L 53 10 Q 49 20 53 30 Z', 'M 36 32 Q 32 24 36 16 L 39 16 Q 35 24 39 32 Z']))
+    return layers
+
+
+def almuerzo_costeno():
+    """Almuerzo costeño: el plato con arroz blanco, el mote en su taza, patacones y queso costeño."""
+    layers = [(OUTLINE, [ellipse(46, 66, 44, 24)]), ('#ffffff', [ellipse(46, 66, 41, 21.5)]), ('#e0e0e0', [ellipse(46, 70, 32, 13)])]
+    layers += [(OUTLINE, [ellipse(32, 62, 18, 10)]), ('#ffffff', [ellipse(32, 60, 16, 8.5), circle(30, 54, 8)])]
+    layers.append(('#e9e4d8', [ellipse(cx, cy, 2.6, 1, rot) for cx, cy, rot in [(26, 58, 20), (34, 56, -10), (30, 62, 30), (38, 61, 0)]]))
+    for cx, cy in [(58, 74), (68, 68)]:
+        layers += [(OUTLINE, [circle(cx, cy, 8)]), ('#f2c14e', [circle(cx, cy, 6.5)]), ('#d9a33a', [circle(cx, cy, 3)])]
+    layers += [(OUTLINE, [poly(44, 76, 54, 72, 56, 80, 46, 84)]), ('#f4efe1', [poly(45.5, 76.5, 53, 73.5, 54.5, 79.5, 47, 82.5)])]
+    layers += [(OUTLINE, ['M 62 32 Q 64 56 80 56 Q 96 56 98 32 Z']), ('#d7263d', ['M 65 34 Q 67 53 80 53 Q 93 53 95 34 Z'])]
+    layers += [(OUTLINE, [ellipse(80, 32, 18, 5)]), ('#f2e3b3', [ellipse(80, 32, 16, 3.6)]), ('#fbfaf6', [rect(74, 29, 5, 3), rect(83, 30, 5, 3)])]
+    return layers
+
+
+def bandeja_costena():
+    """Bandeja costeña: la bandeja con pescado frito, arroz, patacones, queso costeño y limón."""
+    layers = [(OUTLINE, [rect(4, 42, 92, 50)]), ('#c68a4a', [rect(7, 45, 86, 44)]), ('#e0b07a', [rect(11, 49, 78, 36)])]
+    layers += fish_shape(38, 60, 44, 20, '#d4892a', '#f2b45a', -6)
+    layers += [(OUTLINE, [ellipse(72, 58, 14, 8)]), ('#ffffff', [ellipse(72, 57, 12.5, 6.5)])]
+    for cx, cy in [(24, 76), (38, 78)]:
+        layers += [(OUTLINE, [circle(cx, cy, 7)]), ('#f2c14e', [circle(cx, cy, 5.6)]), ('#d9a33a', [circle(cx, cy, 2.6)])]
+    layers += [(OUTLINE, [poly(56, 74, 70, 70, 72, 80, 58, 84)]), ('#f4efe1', [poly(57.5, 74.5, 69, 71.5, 70.5, 79.5, 59, 82.5)])]
+    layers += [(OUTLINE, [circle(82, 76, 6)]), ('#9ccc65', [circle(82, 76, 4.6)]), ('#dce775', [circle(82, 76, 2.4)])]
+    layers.append(('#b0bec5', ['M 40 40 Q 36 30 40 20 L 43 20 Q 39 30 43 40 Z', 'M 60 40 Q 56 30 60 20 L 63 20 Q 59 30 63 40 Z']))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -1666,6 +1775,14 @@ ICONS = [
     (0xE058, 'fried_fish', fried_fish),
     (0xE059, 'salted_fish', salted_fish),
     (0xE05A, 'fish_in_coconut', fish_in_coconut),
+    (0xE05B, 'cebu', cebu),
+    (0xE05C, 'ordeno_milk', ordeno_milk),
+    (0xE05D, 'cuajada', cuajada),
+    (0xE05E, 'salted_curd', salted_curd),
+    (0xE05F, 'queso_costeno', queso_costeno),
+    (0xE060, 'mote_queso', mote_queso),
+    (0xE061, 'almuerzo_costeno', almuerzo_costeno),
+    (0xE062, 'bandeja_costena', bandeja_costena),
 ]
 
 

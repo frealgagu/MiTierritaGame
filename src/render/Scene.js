@@ -399,7 +399,7 @@ export class Scene {
     if (night) return;
     if (r < 0.006) this.sound.bark();
     else if (theme !== 'town' && r < 0.02) this.sound.cluck();
-    else if ((theme === 'dairy' || theme === 'ranch') && r < 0.045) this.sound.moo();
+    else if ((theme === 'dairy' || theme === 'ranch' || theme === 'savanna') && r < 0.045) this.sound.moo();
     else if (theme === 'cane' && r < 0.05 && working('cane_mill')) this.sound.grind();
     else if (theme === 'cane' && r < 0.07 && working('furnace')) this.sound.bubble();
     else if (theme === 'cacao' && r < 0.035) this.sound.parrot();

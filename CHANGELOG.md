@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.18.0 — La Costa: La Quesera
+- **🧀 La Quesera**, la cuarta zona de la Costa, se abre al completar La Ciénaga: el Corral de ordeño → la Cuajadera → el Molino de cuajada → la Prensa de queso → la Olla del mote. El mote de queso se reparte entre la **Fonda costeña** (almuerzo costeño) y la **Cocina de la bandeja** (bandeja costeña).
+- **Dos rutas nuevas**: la **Ruta del arroz**, con las bolsas de arroz del Arrozal para la Fonda y la Cocina, y la **Ruta del pescado**, con el pescado limpio de la Ciénaga para la bandeja. Cada una con su chiva y su carretera.
+- Su persona es **Doña Rosmira, la quesera**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 8 íconos nuevos.
+- El mapa: potrero de sabana con **vacas cebú** (blancas o grises, con su giba) y alguna romosinuana rojiza, samanes, garzas bueyeras y palmas. En las estaciones: la batea donde se revuelve la cuajada, el molino de manivela, la prensa de palanca con sus piedras y el suero que escurre, la olla del mote en el fogón de tres piedras con el montón de ñame, la fonda con sus mesas rojas y la mesera, y la cocina de las bandejas.
+
 ## v3.17.0 — La Costa: La Ciénaga
 - **🛶 La Ciénaga**, la tercera zona de la Costa, se abre al completar El Cocal. Las Canoas de pesca sacan el bocachico; la Limpieza lo deja listo y el pescado limpio se reparte entre el **Saladero** (pescado salado), la **Fileteadora** y la **Fritanga** (pescado frito con patacón) y la **Cocina del pescado en coco**.
 - **Primera ruta de la Costa: la Ruta de la leche de coco**, del Cocal a la Cocina de la Ciénaga, con su chiva y su carretera en los dos mapas.
