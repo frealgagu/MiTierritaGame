@@ -569,7 +569,7 @@ export const COST_GROWTH = 1.15;
 | v3.16 ✅ | **El Cocal** (coco → leche de coco → cocadas), la segunda zona de la Costa | La Costa crece |
 | v3.17 ✅ | **La Ciénaga** (bocachico: pescado salado, frito con patacón y en coco), con la primera ruta de la Costa: la de la leche de coco, desde el Cocal | La Costa crece |
 | v3.18 ✅ | **La Quesera** (queso costeño y mote de queso: almuerzo costeño y bandeja costeña), con las rutas del arroz (Arrozal) y del pescado (Ciénaga) | La Costa crece |
-| próximas | La Costa: La Quesera, El Sombrero y Cartagena (final), con sus eventos, álbum y logros | La Costa crece |
+| próximas | La Costa: El Sombrero y Cartagena (final), con sus eventos, álbum y logros | La Costa crece |
 | después | **Boyacá**: papa, cebada y cerveza, lana y ruanas, quesos de Paipa, artesanías de Ráquira y Villa de Leyva (final) | Más país |
 
 **Cómo se conectan las zonas:** ver §4b.
