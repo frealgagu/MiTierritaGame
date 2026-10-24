@@ -224,6 +224,18 @@ export const RESEARCH = [
   { zone: 'quesera', id: 'queso_sabanero', name: 'Queso sabanero', icon: '🏅', desc: 'Todo lo que vende la Quesera vale un 50 % más.', cost: 60000000, requires: 'costeno_fonda', effect: { type: 'zoneValue', target: 'quesera', mult: 1.5 } },
   { zone: 'quesera', id: 'maestria_quesera', name: 'Maestría: Quesera', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'quesera', mult: 4 } },
   { zone: 'quesera', id: 'supremacia_quesera', name: 'Supremacía: Quesera', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'quesera', mult: 8 } },
+
+  // Costa · El Sombrero (v3.19): las mismas de las Hormigas, con la caña flecha.
+  { zone: 'sombrero', id: 'cana_abonada', name: 'Caña flecha abonada', icon: ICON.canaFlechaPlant, desc: 'El Cañaflechal da el doble de caña.', cost: 15000000, requires: 'fiber_scraper', effect: { type: 'stationSpeed', target: 'canaflechal', mult: 2 } },
+  { zone: 'sombrero', id: 'raspadoras', name: 'Más raspadoras', icon: ICON.canaFiber, desc: 'El Raspado de la caña raspa el doble.', cost: 18000000, requires: 'fiber_scraper', effect: { type: 'stationSpeed', target: 'fiber_scraper', mult: 2 } },
+  { zone: 'sombrero', id: 'bija', name: 'Bija y barro negro', icon: ICON.dyedFiber, desc: 'Los Tintes de barro tiñen el doble.', cost: 45000000, requires: 'braiders', effect: { type: 'stationSpeed', target: 'fiber_dyer', mult: 2 } },
+  { zone: 'sombrero', id: 'camion_sombrero', name: 'Camioneta del Sombrero', icon: '🚚', desc: 'El despacho del Sombrero lleva el doble por viaje.', cost: 60000000, requires: 'fiber_dyer', effect: { type: 'dispatchCapacity', target: 'sombrero', mult: 2 } },
+  { zone: 'sombrero', id: 'trenza_21', name: 'Trenza de 21 pares', icon: ICON.trenza, desc: 'Las Trenzadoras trenzan el doble.', cost: 120000000, requires: 'hat_sewer', effect: { type: 'stationSpeed', target: 'braiders', mult: 2 } },
+  { zone: 'sombrero', id: 'maquina_coser', name: 'Máquina de coser', icon: ICON.sombreroVueltiao, desc: 'La Costura del sombrero cose el doble.', cost: 300000000, requires: 'parador', effect: { type: 'stationSpeed', target: 'hat_sewer', mult: 2 } },
+  { zone: 'sombrero', id: 'parador_troncal', name: 'Parador en la troncal', icon: ICON.recuerdoCosta, desc: 'El Parador de Tuchín vende el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'parador', effect: { type: 'stationSpeed', target: 'parador', mult: 2 } },
+  { zone: 'sombrero', id: 'simbolo_nacional', name: 'Símbolo nacional', icon: '🏅', desc: 'Todo lo que vende el Sombrero vale un 50 % más.', cost: 400000000, requires: 'hat_sewer', effect: { type: 'zoneValue', target: 'sombrero', mult: 1.5 } },
+  { zone: 'sombrero', id: 'maestria_sombrero', name: 'Maestría: Sombrero', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'sombrero', mult: 4 } },
+  { zone: 'sombrero', id: 'supremacia_sombrero', name: 'Supremacía: Sombrero', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'sombrero', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

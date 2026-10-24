@@ -128,6 +128,17 @@ export const STATIONS = [
   { id: 'costeno_fonda', zone: 'quesera', name: 'Fonda costeña', icon: ICON.almuerzoCosteno, in: { mote_queso: 2 }, imports: [{ product: 'rice_bag', perCycle: 1, route: 'arroz' }], out: { almuerzo_costeno: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.18' },
   { id: 'bandeja_kitchen', zone: 'quesera', name: 'Cocina de la bandeja', icon: ICON.bandejaCostena, in: { mote_queso: 2 }, imports: [{ product: 'rice_bag', perCycle: 1, route: 'arroz' }, { product: 'clean_fish', perCycle: 4, route: 'pescado' }], out: { bandeja_costena: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.18' },
 
+  // Costa · El Sombrero (v3.19), en Tuchín y San Andrés de Sotavento, tierra zenú: la caña flecha se raspa,
+  // la fibra se tiñe de negro con barro y bija, se trenza y la trenza se cose en vueltas hasta el sombrero
+  // vueltiao. El Parador de Tuchín lo vende con el pescado salado y el frito de la Ciénaga. Mismos números
+  // que las Hormigas (sin su cosecha de temporada: la caña flecha se corta todo el año).
+  { id: 'canaflechal', zone: 'sombrero', name: 'Cañaflechal', icon: ICON.canaFlechaPlant, infinite: true, out: { cana_flecha: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.19' },
+  { id: 'fiber_scraper', zone: 'sombrero', name: 'Raspado de la caña', icon: ICON.canaFiber, in: { cana_flecha: 1 }, out: { cana_fiber: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.19' },
+  { id: 'fiber_dyer', zone: 'sombrero', name: 'Tintes de barro', icon: ICON.dyedFiber, in: { cana_fiber: 2 }, out: { dyed_fiber: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.19' },
+  { id: 'braiders', zone: 'sombrero', name: 'Trenzadoras', icon: ICON.trenza, in: { dyed_fiber: 2 }, out: { trenza: 1 }, cycle: 8, unlockCost: 200000000, upgradeBase: 60000, growth: 1.15, release: '3.19' },
+  { id: 'hat_sewer', zone: 'sombrero', name: 'Costura del sombrero', icon: ICON.sombreroVueltiao, in: { trenza: 1 }, out: { sombrero_vueltiao: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.19' },
+  { id: 'parador', zone: 'sombrero', name: 'Parador de Tuchín', icon: ICON.recuerdoCosta, in: { sombrero_vueltiao: 4 }, imports: [{ product: 'salted_fish', perCycle: 1, route: 'salado' }, { product: 'fried_fish', perCycle: 1, route: 'frito' }], out: { recuerdo_costa: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.19' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

@@ -109,6 +109,14 @@ export const PRODUCTS = {
   almuerzo_costeno: { name: 'Almuerzo costeño', zone: 'quesera', value: 100000, icon: ICON.almuerzoCosteno, color: 0xd7263d },
   bandeja_costena: { name: 'Bandeja costeña', zone: 'quesera', value: 220000, icon: ICON.bandejaCostena, color: 0xc68a4a },
 
+  // Costa · El Sombrero (v3.19): los mismos valores que las Hormigas.
+  cana_flecha: { name: 'Caña flecha', zone: 'sombrero', value: 6000, icon: ICON.canaFlecha, color: 0x6fae44 },
+  cana_fiber: { name: 'Fibra de caña flecha', zone: 'sombrero', value: 12000, icon: ICON.canaFiber, color: 0xefe3c2 },
+  dyed_fiber: { name: 'Fibra teñida', zone: 'sombrero', value: 30000, icon: ICON.dyedFiber, color: 0x2b2b2b },
+  trenza: { name: 'Trenza de caña flecha', zone: 'sombrero', value: 70000, icon: ICON.trenza, color: 0xd9c99a },
+  sombrero_vueltiao: { name: 'Sombrero vueltiao', zone: 'sombrero', value: 120000, icon: ICON.sombreroVueltiao, color: 0xefe3c2 },
+  recuerdo_costa: { name: 'Recuerdo de la Costa', zone: 'sombrero', value: 1200000, icon: ICON.recuerdoCosta, color: 0xd7c39b },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

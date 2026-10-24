@@ -36,6 +36,7 @@ const VICTORY = {
   cocal: { title: '¡Cocadas para toda la Costa!', text: 'Completaste <b>El Cocal</b>, en la Costa. Seis mil cocadas hechas con la leche de tus cocos, cocinadas en paila.', stat: (s) => `Cocadas vendidas: ${formatNumber(s.stats.sold.cocada ?? 0)}` },
   cienaga: { title: '¡Pescado en coco para toda la Costa!', text: 'Completaste <b>La Ciénaga</b>, en la Costa. Seis mil cazuelas de pescado en la leche de coco que llegó del Cocal.', stat: (s) => `Pescado en coco vendido: ${formatNumber(s.stats.sold.fish_in_coconut ?? 0)}` },
   quesera: { title: '¡Bandeja costeña para todos!', text: 'Completaste <b>La Quesera</b>, en la Costa. Cuatro mil bandejas con mote de queso, el arroz del Arrozal y el pescado de la Ciénaga.', stat: (s) => `Bandejas vendidas: ${formatNumber(s.stats.sold.bandeja_costena ?? 0)}` },
+  sombrero: { title: '¡Sombreros vueltiaos para todo el país!', text: 'Completaste <b>El Sombrero</b>, en la Costa. Seis mil recuerdos de la Costa: sombrero vueltiao, pescado salado para el viaje y pescado frito para el camino.', stat: (s) => `Recuerdos vendidos: ${formatNumber(s.stats.sold.recuerdo_costa ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

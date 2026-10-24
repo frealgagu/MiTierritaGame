@@ -3,7 +3,7 @@ import { iso, isoPoly, depth, shade } from './iso.js';
 import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawCanaFlecha, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -173,6 +173,7 @@ export class FarmView extends StationView {
           else if (this.theme === 'ants') drawAnthill(g, p.x, p.y, scale * (0.9 + tier * 0.06), rng);
           else if (this.theme === 'fique') drawFiquePlant(g, p.x, p.y, scale * (0.85 + tier * 0.05), rng);
           else if (this.theme === 'tobacco') drawTobaccoPlant(g, p.x, p.y, scale, rng, Math.min(1 + tier, 5));
+          else if (this.theme === 'canaflecha') drawCanaFlecha(g, p.x, p.y, scale * 0.8, rng, Math.min(tier, 2));
           else if (this.theme === 'coconut') drawCoconutPalm(g, p.x, p.y, 0.55 + tier * 0.06, rng, 2 + Math.min(tier * 2, 5), true);
           else if (this.theme === 'rice') drawRicePlant(g, p.x, p.y, scale, rng, Math.min(tier, 3));
           else if (this.theme === 'corn') drawCornStalk(g, p.x, p.y, scale, rng, 1 + Math.min(tier, 2));

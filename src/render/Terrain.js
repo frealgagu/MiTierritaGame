@@ -233,6 +233,13 @@ export class Terrain {
           else if (r < 0.06) obj = coconutPalm(rng);
           else if (r < 0.085) obj = egret(rng);
           else if (r < 0.11) obj = banana(rng);
+        } else if (this.zone.theme === 'canaflecha') {
+          // Tierra zenú (v3.19): matas de caña flecha, sombreros a la venta en una vara, samanes y palmas.
+          if (r < 0.05) obj = canaFlechaClump(rng);
+          else if (r < 0.062) obj = hatPole(rng);
+          else if (r < 0.085) obj = saman(rng);
+          else if (r < 0.1) obj = coconutPalm(rng);
+          else if (r < 0.115) obj = egret(rng);
         } else if (this.zone.theme === 'savanna') {
           // Sabana (v3.18): samanes de sombra, garzas bueyeras, palmas de coco y alguna ceiba.
           if (r < 0.03) obj = saman(rng);
@@ -293,7 +300,8 @@ const FARM_SOIL = {
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
-  cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6), // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
+  cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
+  canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // la tierra seca de la sabana zenú // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6), // la plaza de piedra amarilla
 };
 
@@ -816,6 +824,51 @@ function coconutPalm(rng) {
   const c = new Container();
   const g = new Graphics();
   drawCoconutPalm(g, 0, 0, 1, rng);
+  c.addChild(g);
+  return c;
+}
+
+// Mata de caña flecha (v3.19): hojas largas en abanico, con alguna espiga plumosa.
+export function drawCanaFlecha(g, x, y, scale, rng, plumes = 1) {
+  const s = scale;
+  shadow(g, x + 2, y + 1, 10 * s, 3.5 * s);
+  const n = 9;
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + ((i - (n - 1) / 2) / n) * 2.2;
+    const len = (20 + rng() * 8) * s;
+    const tx = x + Math.cos(a) * len;
+    const ty = y + Math.sin(a) * len;
+    g.moveTo(x, y).quadraticCurveTo(x + (tx - x) * 0.4, y - len * 0.75, tx, ty).stroke({ width: 1.8 * s, color: i % 2 ? 0x4e8f34 : 0x6fae44, cap: 'round' });
+  }
+  for (let i = 0; i < plumes; i++) {
+    const px = x + (i - (plumes - 1) / 2) * 4 * s;
+    const top = y - (30 + i * 3) * s;
+    g.moveTo(px, y).lineTo(px, top).stroke({ width: 1, color: 0xc8b07a });
+    g.ellipse(px, top - 3 * s, 1.8 * s, 4 * s).fill(0xefe3c2);
+  }
+}
+
+function canaFlechaClump(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  drawCanaFlecha(g, 0, 0, 0.9 + rng() * 0.3, rng, rng() < 0.5 ? 1 : 0);
+  c.addChild(g);
+  return c;
+}
+
+// Sombreros vueltiaos colgados de una vara, como los venden a la orilla de la carretera.
+function hatPole(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 0, 1, 10, 3);
+  g.rect(-1.2, -34, 2.4, 34).fill(PAL.woodDark);
+  g.moveTo(-10, -30).lineTo(10, -30).stroke({ width: 1.5, color: PAL.wood });
+  for (const [dx, dy] of [[-8, -24], [8, -24], [0, -14]].slice(0, 2 + Math.floor(rng() * 2))) {
+    g.ellipse(dx, dy, 7, 2.6).fill(0xefe3c2).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    g.ellipse(dx, dy, 5, 1.8).stroke({ width: 1, color: 0x2b2b2b });
+    g.moveTo(dx - 3.5, dy).quadraticCurveTo(dx, dy - 8, dx + 3.5, dy).closePath().fill(0xefe3c2).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    g.moveTo(dx - 3, dy - 2.5).lineTo(dx + 3, dy - 2.5).stroke({ width: 1, color: 0x2b2b2b });
+  }
   c.addChild(g);
   return c;
 }

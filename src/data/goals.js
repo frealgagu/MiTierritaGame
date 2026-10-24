@@ -373,5 +373,25 @@ const QUESERA = [
   { id: 'e_final', type: 'sold', product: 'bandeja_costena', amount: 4000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA];
+// Costa · El Sombrero (v3.19): la misma lista que las Hormigas.
+const SOMBRERO = [
+  { id: 'w01', type: 'sold', product: 'cana_flecha', amount: 50, reward: 1000000 },
+  { id: 'w02', type: 'level', target: 'canaflechal', level: 10, reward: 2000000 },
+  { id: 'w03', type: 'unlock', station: 'fiber_scraper', reward: 4000000 },
+  { id: 'w04', type: 'level', target: 'canaflechal:transport', level: 10, reward: 4000000 },
+  { id: 'w05', type: 'unlock', station: 'fiber_dyer', reward: 8000000 },
+  { id: 'w06', type: 'produced', product: 'dyed_fiber', amount: 200, reward: 12000000 },
+  { id: 'w08', type: 'unlock', station: 'braiders', reward: 25000000 },
+  { id: 'w09', type: 'level', target: 'dispatch:sombrero', level: 10, reward: 25000000 },
+  { id: 'w10', type: 'unlock', station: 'hat_sewer', reward: 50000000 },
+  { id: 'w11', type: 'sold', product: 'sombrero_vueltiao', amount: 300, reward: 80000000 },
+  { id: 'w12', type: 'unlock', station: 'parador', reward: 120000000 },
+  { id: 'w13', type: 'imported', product: 'salted_fish', amount: 200, reward: 150000000 },
+  { id: 'w14', type: 'allLevels', zone: 'sombrero', level: 25, reward: 200000000 },
+  { id: 'w07', type: 'research', research: 'cana_abonada', reward: 100000000 },
+  { id: 'w15', type: 'sold', product: 'recuerdo_costa', amount: 1000, reward: 300000000 },
+  { id: 'w_final', type: 'sold', product: 'recuerdo_costa', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO];

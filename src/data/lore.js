@@ -97,6 +97,13 @@ export const FACTS = {
   rice_sorter: ['El arroz excelso tiene casi todos los granos enteros.'],
   rice_bagger: ['En la Costa no hay almuerzo sin arroz: de coco, de lisa…'],
   rice_stacker: ['Un bulto de arroz pesa 50 kilos y se carga al hombro.'],
+  // Costa · El Sombrero (v3.19)
+  canaflechal: ['La caña flecha es una palma de hojas largas que crece en la sabana.', 'El sombrero vueltiao viene del pueblo zenú, de Córdoba y Sucre.'],
+  fiber_scraper: ['De cada hoja se raspa la fibra blanca con un cuchillo.'],
+  fiber_dyer: ['La fibra negra se tiñe con barro y hojas, y se pone a hervir.'],
+  braiders: ['Cuantas más pares tenga la trenza, más fino es el sombrero.', 'Las figuras de la trenza se llaman pintas y cada una tiene nombre.'],
+  hat_sewer: ['El sombrero se arma cosiendo la trenza en vueltas: de ahí, vueltiao.'],
+  parador: ['El sombrero vueltiao es símbolo cultural de Colombia desde 2004.', 'En Tuchín se venden sombreros a la orilla de la carretera.'],
   // Costa · La Quesera (v3.18)
   milking_corral: ['La vaca cebú tiene una giba en el lomo y aguanta bien el calor.', 'En la sabana se ordeña a mano, de madrugada, con el ternero al lado.'],
   curdler: ['La leche se cuaja con cuajo: en unas horas queda la cuajada.'],
@@ -138,6 +145,7 @@ export const PEOPLE = {
   cocal: { icon: '👩🏾', name: 'Doña Eulalia', role: 'la cocadera' },
   cienaga: { icon: '🧔🏾', name: 'Don Aníbal', role: 'el pescador' },
   quesera: { icon: '👩🏽', name: 'Doña Rosmira', role: 'la quesera' },
+  sombrero: { icon: '👴🏽', name: 'Don Eliécer', role: 'el artesano' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -156,6 +164,7 @@ export const WELCOME = {
   hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
   arrozal: '¡Ajá, bienvenido a la Costa, compa! Aquí el arroz crece con los pies en el agua.',
   cocal: '¡Ey, mi vida, bienvenido al Cocal! Aquí bajamos el coco de la palma y lo volvemos cocada.',
+  sombrero: '¡Bienvenido a Tuchín, compadre! Aquí la caña flecha se vuelve trenza, y la trenza, sombrero vueltiao.',
   quesera: '¡Ajá, mi amor, bienvenido a la sabana! De esta leche sale el queso costeño, y del queso, el mote.',
   cienaga: '¡Qué hubo, primo! Bienvenido a la Ciénaga. Aquí se pesca en canoa, con atarraya, como los abuelos.',
 };

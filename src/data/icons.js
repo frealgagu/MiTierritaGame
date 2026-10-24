@@ -102,6 +102,13 @@ export const ICON = {
   moteQueso: '\uE060', // Mote de queso: el plato hondo de sopa de ñame con trocitos de queso costeño y cebollín
   almuerzoCosteno: '\uE061', // Almuerzo costeño: el plato con arroz blanco, el mote en su taza, patacones y queso costeño
   bandejaCostena: '\uE062', // Bandeja costeña: la bandeja con pescado frito, arroz, patacones, queso costeño y limón
+  canaFlechaPlant: '\uE063', // Mata de caña flecha: hojas largas en abanico y la espiga plumosa arriba
+  canaFlecha: '\uE064', // Caña flecha cortada: el atado de hojas largas amarrado con una tira
+  canaFiber: '\uE065', // Fibra de caña flecha: las tiras blancas raspadas, enrolladas en un manojo
+  dyedFiber: '\uE066', // Fibra teñida: tiras negras (teñidas con barro y bija) y tiras blancas, colgadas a secar
+  trenza: '\uE067', // Trenza de caña flecha: el rollo de trenza con sus dibujos zenúes en blanco y negro
+  sombreroVueltiao: '\uE068', // Sombrero vueltiao: el ala ancha y la copa, con las vueltas de trenza en blanco y negro
+  recuerdoCosta: '\uE069', // Recuerdo de la Costa: el sombrero vueltiao con el pescado salado envuelto para el viaje
 };
 
 export const ICON_FONT = 'Cafetal Icons';

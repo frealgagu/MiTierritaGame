@@ -2289,6 +2289,198 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Costa · El Sombrero (v3.19) ---
+
+  // Raspado de la caña: ramada de palma donde se raspa cada hoja; el montón de hojas verdes y la fibra
+  // blanca colgada en una vara.
+  fiber_scraper(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 24 + ctx.up;
+    // Hojas verdes, adelante a la derecha.
+    const pile = iso(x0 + 2.0, y0 + 1.95);
+    for (let i = 0; i < 8; i++) g.moveTo(pile.x - 12 + i * 2, pile.y - (i % 3)).lineTo(pile.x + 6 + i * 2, pile.y - 6 - (i % 3)).stroke({ width: 2, color: i % 2 ? 0x4e8f34 : 0x6fae44 });
+    // La vara con la fibra blanca.
+    for (const lx of [0.3, 1.3]) box(g, x0 + lx, y0 + 2.0, 0.06, 0.06, 18, PAL.woodDark);
+    const a = iso(x0 + 0.33, y0 + 2.03, 17);
+    const b = iso(x0 + 1.33, y0 + 2.03, 17);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.2, color: PAL.wood });
+    for (let k = 1; k < 8; k++) {
+      const px = a.x + ((b.x - a.x) * k) / 8;
+      const py = a.y + ((b.y - a.y) * k) / 8;
+      g.moveTo(px, py).lineTo(px + 0.5, py + 12).stroke({ width: 1.2, color: 0xefe3c2 });
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 13, 0xc9a35a, 0x9c7b3a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      const p = iso(x0 + 1.2, y0 + 1.0);
+      worker(work, p.x, p.y, 0x8e44ad);
+      // La hoja en las manos y el cuchillo que la raspa.
+      work.moveTo(p.x - 10, p.y - 13).lineTo(p.x + 2, p.y - 15).stroke({ width: 2, color: 0x6fae44 });
+      const k = this.working ? (Math.sin(time * 6) + 1) / 2 : 0.5;
+      work.moveTo(p.x - 8 + k * 8, p.y - 18).lineTo(p.x - 7 + k * 8, p.y - 13).stroke({ width: 1.4, color: 0xb0bec5 });
+    };
+    this.animate(0);
+  },
+
+  // Tintes de barro: la olla negra hirviendo en el fogón y la fibra teñida colgada a secar en un tendal.
+  fiber_dyer(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.2;
+    house(this, g, hx, hy, 1.8, 1.0, 22, ctx, { wall: 0xf4efe6, roofColor: 0xc9a35a, roofH: 12 });
+    door(g, hx, hy, 1.0, 0.6, 15, ctx.trim);
+    const pot = iso(x + 2.45, y + 0.75);
+    for (const [dx, dy] of [[-7, 1], [7, 1], [0, 3.5]]) g.ellipse(pot.x + dx, pot.y + dy, 3.4, 2.2).fill(0x8a8a8a);
+    g.moveTo(pot.x - 9, pot.y - 2).lineTo(pot.x - 10, pot.y - 13).quadraticCurveTo(pot.x, pot.y - 16, pot.x + 10, pot.y - 13).lineTo(pot.x + 9, pot.y - 2).quadraticCurveTo(pot.x, pot.y + 1, pot.x - 9, pot.y - 2).closePath().fill(0x263238).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 13, 10, 3.4).fill(0x3e2723);
+    const lines = ctx.tier >= 2 ? [1.65, 2.2, 2.75] : [1.9, 2.6];
+    for (const ly of lines) for (const lx of [0.35, 2.6]) box(g, x + lx, y + ly, 0.06, 0.06, 18, PAL.woodDark);
+    this.smokePoints = [iso(x + 2.45, y + 0.75, 16)];
+    const hang = new Graphics();
+    this.anim.addChild(hang);
+    this.animate = (time) => {
+      hang.clear();
+      if (this.working) for (let i = 0; i < 3; i++) hang.circle(pot.x - 5 + i * 5, pot.y - 13 + Math.sin(time * 6 + i) * 0.8, 1).fill(0x5d4037);
+      for (const [r, ly] of lines.entries()) {
+        const a = iso(x + 0.38, y + ly, 17);
+        const b = iso(x + 2.63, y + ly, 17);
+        hang.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x5d4037 });
+        for (let k = 1; k < 10; k++) {
+          const px = a.x + ((b.x - a.x) * k) / 10;
+          const py = a.y + ((b.y - a.y) * k) / 10;
+          const sway = Math.sin(time * 1.5 + k + r) * (this.working ? 1 : 0.3);
+          hang.moveTo(px, py).lineTo(px + sway, py + 13).stroke({ width: 1.3, color: k % 2 ? 0x2b2b2b : 0xefe3c2 });
+        }
+      }
+    };
+    this.animate(0);
+  },
+
+  // Trenzadoras: casa con el corredor donde las trenzadoras, sentadas, sacan la trenza; los rollos de
+  // trenza se apilan en una mesa.
+  braiders(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.0, 1.5, 26, ctx, { wall: 0xf2a7a0, roofColor: 0xc9a35a, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.0, 0.8, 14, PAL.balconyGreen);
+    box(g, x + 2.2, y + 2.05, 0.6, 0.5, 8, PAL.wood);
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const p = iso(x + 2.35 + (i % 2) * 0.28, y + 2.2 + Math.floor(i / 2) * 0.15, 8 + Math.floor(i / 2) * 3);
+      g.circle(p.x, p.y - 3, 3.4).fill(0xefe3c2).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.circle(p.x, p.y - 3, 2).stroke({ width: 0.8, color: 0x2b2b2b });
+    }
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      for (const [k, [bx, shirt]] of [[0.7, 0xf6d860], [1.5, 0x2e6fd1]].entries()) {
+        const p = iso(x + bx, y + 2.2);
+        // Sentada en un taburete, con la trenza que le cae sobre las piernas.
+        work.rect(p.x - 4, p.y - 6, 8, 6).fill(PAL.wood);
+        work.roundRect(p.x - 3.2, p.y - 15, 6.4, 9.5, 2).fill(shirt);
+        work.circle(p.x, p.y - 17.5, 2.8).fill(0x8d5524);
+        work.moveTo(p.x - 1, p.y - 18).quadraticCurveTo(p.x - 4, p.y - 14, p.x - 3, p.y - 10).stroke({ width: 1.6, color: 0x2b2b2b });
+        const m = this.working ? Math.sin(time * 7 + k * 2) * 1.5 : 0;
+        work.moveTo(p.x + 3, p.y - 10 + m).lineTo(p.x + 9, p.y - 2).stroke({ width: 2.4, color: 0xefe3c2 });
+        work.moveTo(p.x + 4, p.y - 9 + m).lineTo(p.x + 9, p.y - 3).stroke({ width: 0.8, color: 0x2b2b2b });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Costura del sombrero: casa con la máquina de coser en el corredor; la trenza entra en vueltas y los
+  // sombreros terminados se apilan.
+  hat_sewer(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0x9ad0ec, roofColor: 0xc9a35a, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.7, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, PAL.balconyYellow);
+    box(g, x + 0.45, y + 2.1, 0.9, 0.5, 9, PAL.wood);
+    const m = iso(x + 0.9, y + 2.35, 9);
+    g.roundRect(m.x - 7, m.y - 8, 14, 6, 2).fill(0x263238).stroke(OUTLINE);
+    g.rect(m.x + 3, m.y - 8, 3, 7).fill(0x263238);
+    // Sombreros apilados.
+    const hats = 2 + Math.min(ctx.tier, 3);
+    for (let i = 0; i < hats; i++) {
+      const p = iso(x + 2.25 + (i % 2) * 0.35, y + 2.25, Math.floor(i / 2) * 4);
+      g.ellipse(p.x, p.y - 2, 9, 3.4).fill(0xefe3c2).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x, p.y - 2, 6.5, 2.4).stroke({ width: 1.2, color: 0x2b2b2b });
+      g.moveTo(p.x - 4.5, p.y - 2).quadraticCurveTo(p.x, p.y - 12, p.x + 4.5, p.y - 2).closePath().fill(0xefe3c2).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.moveTo(p.x - 3.8, p.y - 5).lineTo(p.x + 3.8, p.y - 5).stroke({ width: 1, color: 0x2b2b2b });
+    }
+    const sew = new Graphics();
+    this.anim.addChild(sew);
+    this.animate = (time) => {
+      sew.clear();
+      // El sombrero que se va cosiendo da vueltas bajo la aguja.
+      const a = this.working ? time * 2 : 0;
+      sew.ellipse(m.x - 2, m.y - 1, 7, 2.6).fill(0xefe3c2).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      sew.moveTo(m.x - 2 + Math.cos(a) * 5, m.y - 1 + Math.sin(a) * 1.8).lineTo(m.x - 2 + Math.cos(a + Math.PI) * 5, m.y - 1 + Math.sin(a + Math.PI) * 1.8).stroke({ width: 1, color: 0x2b2b2b });
+      const n = this.working ? Math.abs(Math.sin(time * 14)) * 2 : 0;
+      sew.moveTo(m.x + 4, m.y - 8).lineTo(m.x + 4, m.y - 4 + n).stroke({ width: 0.8, color: 0xb0bec5 });
+    };
+    this.animate(0);
+  },
+
+  // Parador de Tuchín: kiosco de palma a la orilla de la carretera, con los sombreros colgados a la venta,
+  // el pescado salado en una cuerda y la mesa del pescado frito para los viajeros.
+  parador(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 26 + ctx.up;
+    // Mesa del pescado frito.
+    box(g, x0 + 1.4, y0 + 0.4, 0.8, 0.6, 8, 0xd7263d);
+    for (const [px, py] of [[1.6, 0.6], [1.95, 0.75]]) {
+      const p = iso(x0 + px, y0 + py, 8);
+      g.ellipse(p.x, p.y, 4.6, 2.2).fill(0xffffff);
+      fishOn(g, p.x - 0.5, p.y - 0.5, 3, PRODUCTS.fried_fish.color);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 13, 0xc9a35a, 0x9c7b3a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    // Los sombreros colgados en el frente del kiosco (más con cada hito).
+    const front = (k, n, z) => iso(x0 + 0.2 + (k * (w - 0.4)) / (n - 1), y0 + d + 0.05, z);
+    const n = 3 + Math.min(ctx.tier, 3);
+    for (let k = 0; k < n; k++) {
+      const p = front(k, n, H - 8);
+      g.ellipse(p.x, p.y, 6.5, 2.4).fill(0xefe3c2).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x, p.y, 4.5, 1.6).stroke({ width: 1, color: 0x2b2b2b });
+      g.moveTo(p.x - 3.2, p.y).quadraticCurveTo(p.x, p.y - 7, p.x + 3.2, p.y).closePath().fill(0xefe3c2).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.moveTo(p.x - 2.6, p.y - 2.5).lineTo(p.x + 2.6, p.y - 2.5).stroke({ width: 1, color: 0x2b2b2b });
+    }
+    // El letrero.
+    const sign = iso(x0 + 0.5, y0 + 2.2);
+    g.rect(sign.x - 1, sign.y - 22, 2, 22).fill(PAL.woodDark);
+    g.roundRect(sign.x - 13, sign.y - 30, 26, 9, 2).fill(0xf6d860).stroke(OUTLINE);
+    const salt = new Graphics();
+    this.anim.addChild(salt);
+    this.animate = (time) => {
+      salt.clear();
+      // El pescado salado en la cuerda, entre el kiosco y el letrero.
+      const a = iso(x0 + 0.6, y0 + 2.2, 18);
+      const b = iso(x0 + 2.3, y0 + 2.2, 18);
+      salt.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x5d4037 });
+      for (let k = 1; k < 5; k++) {
+        const px = a.x + ((b.x - a.x) * k) / 5;
+        const py = a.y + ((b.y - a.y) * k) / 5;
+        const sway = Math.sin(time * 1.3 + k) * 0.8;
+        salt.poly([px - 2.6 + sway, py + 2, px + 2.6 + sway, py + 2, px + sway, py + 12]).fill(PRODUCTS.salted_fish.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+      }
+      box(salt, x0 + 2.3, y0 + 2.15, 0.06, 0.06, 20, PAL.woodDark);
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.19.0 — La Costa: El Sombrero
+- **👒 El Sombrero**, la quinta zona de la Costa (Tuchín, tierra zenú), se abre al completar La Quesera: el Cañaflechal → el Raspado de la caña → los Tintes de barro → las Trenzadoras → la Costura del sombrero → el **Parador de Tuchín**, que vende el Recuerdo de la Costa: sombreros vueltiaos con pescado salado para el viaje y pescado frito para el camino.
+- **Dos rutas nuevas desde la Ciénaga**: la **Ruta del pescado salado** y la **Ruta del pescado frito**, con su chiva y sus carreteras.
+- Su persona es **Don Eliécer, el artesano**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 7 íconos nuevos (de la mata de caña flecha al sombrero vueltiao).
+- El mapa: el cañaflechal con sus espigas plumosas (más con cada hito), sombreros colgados de varas a la orilla del camino, samanes, palmas y garzas. En las estaciones: la que raspa la hoja, la olla negra del tinte y las fibras blancas y negras al sol, las trenzadoras sentadas en el corredor, la máquina de coser con el sombrero dando vueltas y el kiosco del parador con los sombreros colgados y el pescado en la cuerda.
+
 ## v3.18.0 — La Costa: La Quesera
 - **🧀 La Quesera**, la cuarta zona de la Costa, se abre al completar La Ciénaga: el Corral de ordeño → la Cuajadera → el Molino de cuajada → la Prensa de queso → la Olla del mote. El mote de queso se reparte entre la **Fonda costeña** (almuerzo costeño) y la **Cocina de la bandeja** (bandeja costeña).
 - **Dos rutas nuevas**: la **Ruta del arroz**, con las bolsas de arroz del Arrozal para la Fonda y la Cocina, y la **Ruta del pescado**, con el pescado limpio de la Ciénaga para la bandeja. Cada una con su chiva y su carretera.

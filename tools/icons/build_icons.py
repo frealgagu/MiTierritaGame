@@ -1683,6 +1683,95 @@ def bandeja_costena():
     return layers
 
 
+# ---------- Costa · El Sombrero (v3.19) ----------
+
+def zenu_band(x, y, w, h, n=4):
+    """Franja de trenza con los dibujos zenúes: rombos negros sobre la fibra clara."""
+    layers = [(OUTLINE, [rect(x - 1.2, y - 1.2, w + 2.4, h + 2.4)]), ('#efe3c2', [rect(x, y, w, h)])]
+    step = w / n
+    layers.append(('#2b2b2b', [poly(x + step * (k + 0.5), y + 1, x + step * (k + 0.9), y + h / 2, x + step * (k + 0.5), y + h - 1, x + step * (k + 0.1), y + h / 2) for k in range(n)]))
+    layers.append(('#efe3c2', [poly(x + step * (k + 0.5), y + h * 0.3, x + step * (k + 0.68), y + h / 2, x + step * (k + 0.5), y + h * 0.7, x + step * (k + 0.32), y + h / 2) for k in range(n)]))
+    return layers
+
+
+def cana_flecha_plant():
+    """Mata de caña flecha: hojas largas en abanico y la espiga plumosa arriba."""
+    layers = [('#a3b85a', [ellipse(50, 92, 28, 6)])]
+    for x1, y1 in [(14, 40), (26, 24), (40, 14), (60, 14), (74, 24), (86, 40), (50, 30)]:
+        layers.append(('#4e8f34', [leaf(50, 92, x1, y1, 4.5)]))
+    layers.append(('#7cb342', [rib(50, 92, 26, 24, 1), rib(50, 92, 74, 24, 1)]))
+    layers.append(('#c8b07a', [rib(50, 92, 52, 12, 2)]))
+    layers.append(('#efe3c2', [leaf(52, 14, 40, 2, 4), leaf(52, 14, 62, 0, 4), leaf(52, 14, 52, -4, 3)]))
+    return layers
+
+
+def cana_flecha():
+    """Caña flecha cortada: el atado de hojas largas amarrado con una tira."""
+    layers = []
+    for k in range(6):
+        x0 = 20 + k * 4
+        layers.append(('#3a2418', [leaf(x0, 90, x0 + 40, 10 + k * 3, 6)]))
+        layers.append(('#6fae44' if k % 2 else '#4e8f34', [leaf(x0 + 1, 88, x0 + 39, 12 + k * 3, 4.6)]))
+    layers.append(('#8b5a2b', [rect(30, 58, 30, 6, -35)]))
+    return layers
+
+
+def cana_fiber():
+    """Fibra de caña flecha: las tiras blancas raspadas, enrolladas en un manojo."""
+    layers = [(OUTLINE, [ellipse(50, 60, 40, 26)]), ('#efe3c2', [ellipse(50, 60, 37, 23)])]
+    layers.append(('#d9c99a', [ellipse(50, 60, 37 - k * 7, 23 - k * 4.4) for k in range(1, 5)][::2]))
+    layers.append(('#efe3c2', [ellipse(50, 60, 37 - k * 7, 23 - k * 4.4) for k in range(1, 5)][1::2]))
+    layers.append(('#efe3c2', ['M 82 70 Q 92 84 80 96 L 76 94 Q 86 84 78 72 Z']))
+    layers.append(('#3a2418', [ellipse(50, 60, 3, 2)]))
+    return layers
+
+
+def dyed_fiber():
+    """Fibra teñida: tiras negras (teñidas con barro y bija) y tiras blancas, colgadas a secar."""
+    layers = [('#8b5a2b', [rib(8, 16, 92, 16, 3)])]
+    for k in range(7):
+        x = 16 + k * 11
+        col = '#2b2b2b' if k % 2 == 0 else '#efe3c2'
+        layers.append((OUTLINE, [f'M {x - 3} 16 L {x + 3} 16 Q {x + 6} 56 {x + 1} 92 L {x - 5} 92 Q {x} 56 {x - 3} 16 Z']))
+        layers.append((col, [f'M {x - 1.6} 18 L {x + 1.6} 18 Q {x + 4.4} 56 {x - 0.2} 90 L {x - 3.4} 90 Q {x + 1} 56 {x - 1.6} 18 Z']))
+    return layers
+
+
+def trenza():
+    """Trenza de caña flecha: el rollo de trenza con sus dibujos zenúes en blanco y negro."""
+    layers = [(OUTLINE, [circle(36, 56, 28)]), ('#efe3c2', [circle(36, 56, 25.5)])]
+    for r in (20, 14, 8):
+        layers.append(('#2b2b2b', [circle(36, 56, r)]))
+        layers.append(('#efe3c2', [circle(36, 56, r - 3)]))
+    layers += zenu_band(60, 60, 34, 12, 3)
+    return layers
+
+
+def sombrero_vueltiao():
+    """Sombrero vueltiao: el ala ancha y la copa, con las vueltas de trenza en blanco y negro."""
+    layers = [(OUTLINE, [ellipse(50, 66, 48, 18)]), ('#efe3c2', [ellipse(50, 66, 45.5, 15.5)])]
+    for k, col in enumerate(['#2b2b2b', '#efe3c2', '#2b2b2b', '#efe3c2']):
+        layers.append((col, [ellipse(50, 66, 42 - k * 6, 14 - k * 2)]))
+    layers.append((OUTLINE, ['M 26 64 Q 26 22 50 20 Q 74 22 74 64 Z']))
+    layers.append(('#efe3c2', ['M 28.5 63 Q 28.5 24.5 50 22.5 Q 71.5 24.5 71.5 63 Z']))
+    for k in range(4):
+        y = 30 + k * 9
+        layers.append(('#2b2b2b', [f'M {29 + (k < 1) * 2} {y} Q 50 {y + 3} {71 - (k < 1) * 2} {y} L {71} {y + 3.5} Q 50 {y + 6.5} 29 {y + 3.5} Z']))
+    layers.append(('#2b2b2b', [poly(36 + k * 7, 52, 39.5 + k * 7, 56, 36 + k * 7, 60, 32.5 + k * 7, 56) for k in range(5)]))
+    return layers
+
+
+def recuerdo_costa():
+    """Recuerdo de la Costa: el sombrero vueltiao con el pescado salado envuelto para el viaje."""
+    layers = [(OUTLINE, ['M 50 34 L 70 44 Q 74 66 60 84 L 50 94 L 40 84 Q 26 66 30 44 Z']), ('#d7c39b', ['M 50 37 L 67.5 45.5 Q 71 66 58 82 L 50 90 L 42 82 Q 29 66 32.5 45.5 Z'])]
+    layers.append(('#b08a5a', [rib(50, 40, 50, 88, 1.4)]))
+    layers.append(('#d7263d', [rect(32, 60, 36, 6)]))
+    layers += [(OUTLINE, [ellipse(52, 36, 44, 14)]), ('#efe3c2', [ellipse(52, 36, 41.5, 11.5)]), ('#2b2b2b', [ellipse(52, 36, 34, 9)]), ('#efe3c2', [ellipse(52, 36, 26, 7)])]
+    layers += [(OUTLINE, ['M 36 34 Q 36 8 52 6 Q 68 8 68 34 Z']), ('#efe3c2', ['M 38.5 33 Q 38.5 10.5 52 8.5 Q 65.5 10.5 65.5 33 Z'])]
+    layers.append(('#2b2b2b', ['M 39 18 Q 52 21 65 18 L 65.5 21.5 Q 52 24.5 38.5 21.5 Z', 'M 38.6 27 Q 52 30 65.4 27 L 65.5 30.5 Q 52 33.5 38.5 30.5 Z']))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -1783,6 +1872,13 @@ ICONS = [
     (0xE060, 'mote_queso', mote_queso),
     (0xE061, 'almuerzo_costeno', almuerzo_costeno),
     (0xE062, 'bandeja_costena', bandeja_costena),
+    (0xE063, 'cana_flecha_plant', cana_flecha_plant),
+    (0xE064, 'cana_flecha', cana_flecha),
+    (0xE065, 'cana_fiber', cana_fiber),
+    (0xE066, 'dyed_fiber', dyed_fiber),
+    (0xE067, 'trenza', trenza),
+    (0xE068, 'sombrero_vueltiao', sombrero_vueltiao),
+    (0xE069, 'recuerdo_costa', recuerdo_costa),
 ]
 
 
