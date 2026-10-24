@@ -117,6 +117,14 @@ export const PRODUCTS = {
   sombrero_vueltiao: { name: 'Sombrero vueltiao', zone: 'sombrero', value: 120000, icon: ICON.sombreroVueltiao, color: 0xefe3c2 },
   recuerdo_costa: { name: 'Recuerdo de la Costa', zone: 'sombrero', value: 1200000, icon: ICON.recuerdoCosta, color: 0xd7c39b },
 
+  // Costa · Cartagena (v3.20): los mismos valores que Barichara.
+  arroz_con_coco: { name: 'Arroz con coco', zone: 'cartagena', value: 150000, icon: ICON.arrozConCoco, color: 0xc8975a },
+  cena_muralla: { name: 'Cena en la muralla', zone: 'cartagena', value: 400000, icon: ICON.cenaMuralla, color: 0xd7263d },
+  noche_hotel: { name: 'Noche en la ciudad amurallada', zone: 'cartagena', value: 3200000, icon: ICON.nocheHotel, color: 0xf28c9a },
+  almuerzo_bahia: { name: 'Almuerzo en la bahía', zone: 'cartagena', value: 600000, icon: ICON.almuerzoBahia, color: 0x4fc3f7 },
+  lonchera_paseo: { name: 'Lonchera del paseo', zone: 'cartagena', value: 2000000, icon: ICON.loncheraPaseo, color: 0xfbfaf6 },
+  paseo_islas: { name: 'Paseo a las Islas del Rosario', zone: 'cartagena', value: 24000000, icon: ICON.paseoIslas, color: 0x26c6da },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

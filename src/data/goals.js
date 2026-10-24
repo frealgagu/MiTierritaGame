@@ -393,5 +393,26 @@ const SOMBRERO = [
   { id: 'w_final', type: 'sold', product: 'recuerdo_costa', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO];
+// Costa · Cartagena (v3.20): la misma lista que Barichara. Su final es el de la Costa.
+const CARTAGENA = [
+  { id: 'r01', type: 'imported', product: 'rice_sack', amount: 50, reward: 5000000 },
+  { id: 'r02', type: 'level', target: 'fogon_getsemani', level: 10, reward: 10000000 },
+  { id: 'r03', type: 'unlock', station: 'restaurante_muralla', reward: 20000000 },
+  { id: 'r04', type: 'level', target: 'route:bultos', level: 10, reward: 40000000 },
+  { id: 'r05', type: 'produced', product: 'cena_muralla', amount: 200, reward: 60000000 },
+  { id: 'r07', type: 'unlock', station: 'hotel_colonial', reward: 150000000 },
+  { id: 'r08', type: 'level', target: 'dispatch:cartagena', level: 10, reward: 200000000 },
+  { id: 'r09', type: 'sold', product: 'noche_hotel', amount: 300, reward: 300000000 },
+  { id: 'r10', type: 'unlock', station: 'cocina_bahia', reward: 300000000 },
+  { id: 'r11', type: 'imported', product: 'fish_in_coconut', amount: 300, reward: 400000000 },
+  { id: 'r12', type: 'unlock', station: 'loncheras', reward: 500000000 },
+  { id: 'r13', type: 'imported', product: 'bandeja_costena', amount: 300, reward: 800000000 },
+  { id: 'r14', type: 'unlock', station: 'muelle', reward: 800000000 },
+  { id: 'r15', type: 'allLevels', zone: 'cartagena', level: 25, reward: 1500000000 },
+  { id: 'r06', type: 'research', research: 'cocineras_getsemani', reward: 1500000000 },
+  { id: 'r16', type: 'sold', product: 'paseo_islas', amount: 100, reward: 2500000000 },
+  { id: 'r_final', type: 'sold', product: 'paseo_islas', amount: 7000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA];

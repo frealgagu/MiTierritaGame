@@ -1,5 +1,18 @@
 # Registro de cambios
 
+## v3.20.0 — La Costa: Cartagena
+- **🏰 Cartagena**, la última zona de la Costa, se abre al completar El Sombrero. Como Barichara, no tiene fuente propia: cada estación recibe el producto final de una zona costeña.
+  - El **Fogón de Getsemaní** hace arroz con coco con los bultos del Arrozal.
+  - El **Restaurante de la muralla** sirve la cena con las cocadas del Cocal de postre.
+  - El **Hotel colonial** vende la noche en la ciudad amurallada, con el recuerdo del Sombrero.
+  - La **Cocina de la bahía** sirve el almuerzo con el pescado en coco de la Ciénaga.
+  - Las **Loncheras del paseo** llevan además el almuerzo costeño y la bandeja de la Quesera.
+  - El **Muelle de las lanchas** despacha los **paseos a las Islas del Rosario**.
+- **Seis rutas nuevas** hacia Cartagena, una desde cada zona, con sus carreteras en los mapas.
+- Su persona es **Doña Dionisia, la palenquera**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 7 íconos nuevos (con la Torre del Reloj).
+- El mapa: casas coloniales de colores con balcones de madera y bugambilias, palmas de coco, la plaza de piedra coralina, un tramo de muralla con su garita y las mesas con velas encima, y el muelle con las lanchas que salen a las islas.
+- La Costa ya tiene sus seis zonas. Sus eventos, su álbum, sus logros y su segundo final llegan en la próxima versión.
+
 ## v3.19.0 — La Costa: El Sombrero
 - **👒 El Sombrero**, la quinta zona de la Costa (Tuchín, tierra zenú), se abre al completar La Quesera: el Cañaflechal → el Raspado de la caña → los Tintes de barro → las Trenzadoras → la Costura del sombrero → el **Parador de Tuchín**, que vende el Recuerdo de la Costa: sombreros vueltiaos con pescado salado para el viaje y pescado frito para el camino.
 - **Dos rutas nuevas desde la Ciénaga**: la **Ruta del pescado salado** y la **Ruta del pescado frito**, con su chiva y sus carreteras.

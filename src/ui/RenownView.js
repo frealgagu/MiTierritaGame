@@ -151,8 +151,8 @@ export class RenownView {
 
   albumHtml(profile) {
     const album = albumOf(this.region);
-    // Una región nueva (v3.15) trae su álbum cuando llegan todas sus zonas.
-    if (!album.length) return `<p class="event-soon">El álbum de ${REGIONS_BY_ID[this.region].name} llega con todas sus zonas.</p>`;
+    // Una región nueva (v3.15) trae su álbum después de sus zonas.
+    if (!album.length) return `<p class="event-soon">El álbum de ${REGIONS_BY_ID[this.region].name} llega pronto.</p>`;
     if (!album.some((pg) => pg.id === this.page)) this.page = album[0].id;
     const pages = album.map((pg) => `<button data-page="${pg.id}" class="${pg.id === this.page ? 'on' : ''} ${pageDone(profile, pg.id) ? 'full' : ''}" title="${pg.name}">${pg.icon}</button>`).join('');
     const page = album.find((pg) => pg.id === this.page);
@@ -171,7 +171,7 @@ export class RenownView {
     const profile = profileOf(this.game.state);
     const s = this.regionState();
     const done = profile.logros ?? {};
-    if (!logrosOf(this.region).length) return `<p class="event-soon">Los logros de ${REGIONS_BY_ID[this.region].name} llegan con todas sus zonas.</p>`;
+    if (!logrosOf(this.region).length) return `<p class="event-soon">Los logros de ${REGIONS_BY_ID[this.region].name} llegan pronto.</p>`;
     return logrosOf(this.region).map((l) => {
       const value = metric(s, l.metric, profile);
       const tier = Math.max(done[l.id] ?? 0, tierOf(l, value));

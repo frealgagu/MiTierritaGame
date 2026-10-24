@@ -38,6 +38,8 @@ export const ZONE15 = {
     // El pescado salado y el frito salen hacia el Sombrero (v3.19).
     salado: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Pescado salado al Sombrero ⬇' },
     frito: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Pescado frito ⬇' },
+    // El pescado en coco sale hacia Cartagena (v3.20).
+    cazuelas: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'Pescado en coco a Cartagena ➜' },
   },
   unlockedBy: 'cocal',
   next: 'quesera',

@@ -2481,6 +2481,163 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Costa · Cartagena (v3.20): casas coloniales de colores, murallas de piedra coralina y el mar ---
+
+  // Restaurante de la muralla: un tramo de la muralla con sus garitas y, encima, las mesas con mantel y
+  // velas para la cena (más mesas con cada hito).
+  restaurante_muralla(g, x, y, ctx) {
+    const x0 = x + 0.2;
+    const y0 = y + 0.5;
+    const w = 2.6;
+    const d = 1.4;
+    const H = 18;
+    box(g, x0, y0, w, d, H, 0xd9c9a8);
+    for (let k = 1; k < 4; k++) {
+      const a = iso(x0, y0 + d, (H * k) / 4);
+      const b = iso(x0 + w, y0 + d, (H * k) / 4);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0xbfae8a });
+    }
+    // Las almenas del borde de adelante.
+    for (let k = 0; k < 6; k++) box(g, x0 + 0.1 + k * 0.45, y0 + d - 0.15, 0.25, 0.15, 4, 0xcdbb94, { z: H });
+    // La garita de la esquina.
+    box(g, x0 + w - 0.45, y0 - 0.1, 0.45, 0.45, 12, 0xd9c9a8, { z: H });
+    const cap = iso(x0 + w - 0.22, y0 + 0.12, H + 12);
+    g.moveTo(cap.x - 9, cap.y).quadraticCurveTo(cap.x, cap.y - 14, cap.x + 9, cap.y).closePath().fill(0xcdbb94).stroke(OUTLINE);
+    // Escalera de subida.
+    for (let k = 0; k < 5; k++) box(g, x0 - 0.35, y0 + 0.2 + k * 0.22, 0.35, 0.22, H - k * 3.6, 0xcdbb94);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 10);
+    const tables = [[0.5, 0.5], [1.3, 0.7], [0.8, 1.05], [1.75, 1.1]].slice(0, 2 + Math.min(ctx.tier, 2));
+    this.flames = [];
+    for (const [tx, ty] of tables) {
+      const p = iso(x0 + tx, y0 + ty, H);
+      g.rect(p.x - 1, p.y - 7, 2, 7).fill(0x555555);
+      g.ellipse(p.x, p.y - 7, 8, 3.6).fill(0xfbfaf6).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+      g.moveTo(p.x - 8, p.y - 7).quadraticCurveTo(p.x, p.y - 2, p.x + 8, p.y - 7).stroke({ width: 1.6, color: 0xd7263d });
+      g.ellipse(p.x - 3, p.y - 7.5, 2.4, 1).fill(PRODUCTS.arroz_con_coco.color);
+      g.rect(p.x + 2, p.y - 11, 1.4, 4).fill(0xfbfaf6);
+      this.flames.push({ x: p.x + 2.7, y: p.y - 12 });
+      this.lights.push({ x: p.x + 2.7, y: p.y - 12, r: 14 });
+    }
+    const fire = new Graphics();
+    this.anim.addChild(fire);
+    this.animate = (time) => {
+      fire.clear();
+      for (const [k, f] of this.flames.entries()) fire.ellipse(f.x, f.y - Math.abs(Math.sin(time * 8 + k)) * 0.6, 1, 1.8).fill(0xffb300);
+    };
+    this.animate(0);
+  },
+
+  // Hotel colonial: casona de dos pisos, rosada, con el balcón de madera corrido y bugambilias que cuelgan.
+  hotel_colonial(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    const up = Math.max(ctx.up, UPPER_FLOOR);
+    house(this, g, hx, hy, 2.3, 1.6, 30, { ...ctx, up }, { wall: 0xf28c9a, roofH: 15 });
+    door(g, hx, hy, 1.6, 0.7, 17, 0x2f7d4f);
+    door(g, hx, hy, 1.6, 1.6, 17, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.3, 0.8, 14, 0x7a4a22);
+    // El balcón de madera del segundo piso, por todo el frente.
+    const z = 22 + up / 2;
+    g.poly(isoPoly([[hx, hy + 1.6, z], [hx + 2.3, hy + 1.6, z], [hx + 2.3, hy + 1.85, z], [hx, hy + 1.85, z]])).fill(0x5d3a1e).stroke(OUTLINE);
+    g.poly(isoPoly([[hx, hy + 1.85, z], [hx + 2.3, hy + 1.85, z], [hx + 2.3, hy + 1.85, z + 7], [hx, hy + 1.85, z + 7]])).fill({ color: 0x7a4a22, alpha: 0.35 }).stroke(OUTLINE);
+    for (let k = 0; k <= 10; k++) {
+      const a = iso(hx + (2.3 * k) / 10, hy + 1.85, z);
+      const b = iso(hx + (2.3 * k) / 10, hy + 1.85, z + 7);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.2, color: 0x5d3a1e });
+    }
+    // Bugambilias.
+    for (const [bx, dz] of [[0.2, 2], [0.45, -2], [1.9, 1], [2.15, -3]]) {
+      const p = iso(hx + bx, hy + 1.85, z + dz);
+      for (const [dx, dy] of [[-3, 0], [3, -1], [0, -3], [1, 3]]) g.circle(p.x + dx, p.y + dy, 2.8).fill(0xd63384);
+      g.circle(p.x, p.y + 1, 1.6).fill(0x4e8a33);
+    }
+  },
+
+  // Cocina de la bahía: casa azul frente al mar con la cazuela en el fogón y la mesa de los platos.
+  cocina_bahia(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.0, 1.5, 28, ctx, { wall: 0x6fc3e0, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.6, 16, 0x7a4a22);
+    windowOnRight(this, g, hx, hy, 2.0, 0.75, 14, 0x7a4a22);
+    box(g, x + 0.4, y + 2.1, 0.7, 0.55, 8, 0xa0522d);
+    const pot = iso(x + 0.75, y + 2.37, 8);
+    g.ellipse(pot.x, pot.y - 2, 8.5, 4).fill(0xb5562e).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 3, 6.5, 2.6).fill(0xf5ecd7);
+    box(g, x + 1.4, y + 2.1, 1.2, 0.55, 8, PAL.wood);
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 2); i++) {
+      const p = iso(x + 1.6 + (i % 2) * 0.45, y + 2.25 + Math.floor(i / 2) * 0.25, 8);
+      g.ellipse(p.x, p.y, 5, 2.4).fill(0xffffff).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+      g.ellipse(p.x - 1.5, p.y - 0.5, 2.2, 1.1).fill(PRODUCTS.arroz_con_coco.color);
+      fishOn(g, p.x + 1.8, p.y - 0.4, 2.2, 0xd4a35a);
+    }
+    this.smokePoints = [iso(x + 0.75, y + 2.37, 12)];
+  },
+
+  // Loncheras del paseo: casa amarilla con las neveras de icopor apiladas y la que se está llenando.
+  loncheras(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.0, 1.5, 28, ctx, { wall: 0xf6c244, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.6, 16, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.0, 0.75, 14, 0x7a4a22);
+    const cooler = (bx, by, z) => {
+      box(g, x + bx, y + by, 0.35, 0.25, 7, 0xfbfaf6, { z });
+      g.poly(isoPoly([[x + bx, y + by + 0.25, z + 2.5], [x + bx + 0.35, y + by + 0.25, z + 2.5], [x + bx + 0.35, y + by + 0.25, z + 4], [x + bx, y + by + 0.25, z + 4]])).fill(0x2e6fd1);
+    };
+    for (const [bx, by, z] of [[1.3, 2.3, 0], [1.75, 2.3, 0], [1.5, 2.3, 7], [2.2, 2.3, 0]].slice(0, 2 + Math.min(ctx.tier, 2))) cooler(bx, by, z);
+    const fill = new Graphics();
+    this.anim.addChild(fill);
+    this.animate = (time) => {
+      fill.clear();
+      // Los hielos y las gaseosas que caen en la nevera abierta.
+      const p = iso(x + 0.75, y + 2.4);
+      fill.rect(p.x - 7, p.y - 7, 14, 7).fill(0xfbfaf6).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+      fill.ellipse(p.x, p.y - 7, 7, 2.2).fill(0x81d4fa);
+      if (!this.working) return;
+      const f = (time * 0.8) % 1;
+      fill.rect(p.x - 1, p.y - 22 + f * 14, 2.4, 5).fill([0xd7263d, 0x2fa36b][Math.floor(time * 0.8) % 2]);
+    };
+    this.animate(0);
+  },
+
+  // Muelle de las lanchas: el agua de la bahía, el muelle de madera y las lanchas que salen con los turistas
+  // hacia las islas.
+  muelle(g, x, y, ctx) {
+    g.poly(isoPoly([[x + 0.1, y + 0.1], [x + 2.9, y + 0.1], [x + 2.9, y + 2.9], [x + 0.1, y + 2.9]])).fill(0x26a6c4);
+    g.poly(isoPoly([[x + 0.3, y + 0.3], [x + 2.7, y + 0.3], [x + 2.7, y + 2.7], [x + 0.3, y + 2.7]])).fill(0x3cc0d6);
+    for (let k = 0; k < 5; k++) box(g, x + 0.3, y + 1.0 + k * 0.28, 1.5, 0.24, 3, k % 2 ? PAL.wood : PAL.woodDark);
+    for (const [px, py] of [[0.3, 1.0], [1.75, 1.0], [0.3, 2.35], [1.75, 2.35]]) box(g, x + px, y + py, 0.07, 0.07, 6, PAL.woodDark);
+    const sign = iso(x + 0.5, y + 0.6);
+    g.rect(sign.x - 1, sign.y - 20, 2, 20).fill(PAL.woodDark);
+    g.roundRect(sign.x - 12, sign.y - 28, 24, 9, 2).fill(0x26c6da).stroke(OUTLINE);
+    const boats = new Graphics();
+    this.anim.addChild(boats);
+    const lancha = (b, px, py, people) => {
+      b.ellipse(px, py + 2, 14, 3.4).fill({ color: 0x1f8aa6, alpha: 0.6 });
+      b.moveTo(px - 13, py - 3).lineTo(px + 11, py - 3).lineTo(px + 14, py - 6).lineTo(px + 9, py + 1).lineTo(px - 11, py + 1).closePath().fill(0xffffff).stroke(OUTLINE);
+      b.rect(px - 11, py - 1.5, 20, 1.6).fill(0x2e6fd1);
+      b.rect(px - 4, py - 9, 8, 6).fill(0xd7263d).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+      for (let i = 0; i < people; i++) {
+        b.circle(px - 9 + i * 4, py - 6, 1.8).fill(0x8d5524);
+        b.rect(px - 10.5 + i * 4, py - 4.5, 3, 2).fill(0xf6d860);
+      }
+    };
+    this.animate = (time) => {
+      boats.clear();
+      // Una amarrada al muelle y otra que sale.
+      const bob = Math.sin(time * 1.6) * 0.8;
+      const a = iso(x + 2.2, y + 0.75);
+      lancha(boats, a.x, a.y + bob, 0);
+      if (!this.working) return;
+      const f = (time * 0.12) % 1;
+      const b = iso(x + 1.9 + f * 0.7, y + 1.9 - f * 1.6);
+      lancha(boats, b.x, b.y + Math.sin(time * 2) * 0.8, 3);
+      boats.moveTo(b.x - 14, b.y + 1).lineTo(b.x - 24, b.y + 3).stroke({ width: 1.2, color: 0xffffff, alpha: 0.7 });
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

@@ -109,6 +109,13 @@ export const ICON = {
   trenza: '\uE067', // Trenza de caña flecha: el rollo de trenza con sus dibujos zenúes en blanco y negro
   sombreroVueltiao: '\uE068', // Sombrero vueltiao: el ala ancha y la copa, con las vueltas de trenza en blanco y negro
   recuerdoCosta: '\uE069', // Recuerdo de la Costa: el sombrero vueltiao con el pescado salado envuelto para el viaje
+  torreReloj: '\uE06A', // Torre del Reloj de Cartagena: la puerta de la muralla con su torre amarilla y el reloj
+  arrozConCoco: '\uE06B', // Arroz con coco: el arroz dorado de panela y coco, en un plato con medio coco al lado
+  cenaMuralla: '\uE06C', // Cena en la muralla: la mesa con el plato, la vela y la copa, sobre las piedras de la muralla
+  nocheHotel: '\uE06D', // Noche en la ciudad amurallada: el balcón de madera de una casa colonial, con bugambilias y la luna
+  almuerzoBahia: '\uE06E', // Almuerzo en la bahía: el pescado en coco con arroz con coco y patacones, frente al mar
+  loncheraPaseo: '\uE06F', // Lonchera del paseo: la nevera de icopor con el almuerzo, el hielo y las gaseosas para la lancha
+  paseoIslas: '\uE070', // Paseo a las Islas del Rosario: la lancha sobre el mar turquesa, rumbo a la isla con su palma
 };
 
 export const ICON_FONT = 'Cafetal Icons';

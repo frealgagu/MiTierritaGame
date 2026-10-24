@@ -33,6 +33,8 @@ export const ZONE13 = {
   // Carretera de la Ruta del arroz (v3.18): sale de la bodega hacia la Quesera.
   routes: {
     arroz: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Arroz a la Quesera ➜' },
+    // Los bultos de arroz salen hacia Cartagena (v3.20).
+    bultos: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'A Cartagena ➜' },
   },
   next: 'cocal',
 };

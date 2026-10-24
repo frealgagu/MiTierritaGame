@@ -236,6 +236,18 @@ export const RESEARCH = [
   { zone: 'sombrero', id: 'simbolo_nacional', name: 'Símbolo nacional', icon: '🏅', desc: 'Todo lo que vende el Sombrero vale un 50 % más.', cost: 400000000, requires: 'hat_sewer', effect: { type: 'zoneValue', target: 'sombrero', mult: 1.5 } },
   { zone: 'sombrero', id: 'maestria_sombrero', name: 'Maestría: Sombrero', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'sombrero', mult: 4 } },
   { zone: 'sombrero', id: 'supremacia_sombrero', name: 'Supremacía: Sombrero', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'sombrero', mult: 8 } },
+
+  // Costa · Cartagena (v3.20): las mismas de Barichara.
+  { zone: 'cartagena', id: 'cocineras_getsemani', name: 'Cocineras de Getsemaní', icon: '👩‍🍳', desc: 'El Fogón de Getsemaní hace el doble de arroz con coco (pide el doble de bultos al Arrozal).', cost: 1000000000, requires: 'restaurante_muralla', effect: { type: 'stationSpeed', target: 'fogon_getsemani', mult: 2 } },
+  { zone: 'cartagena', id: 'mesas_muralla', name: 'Más mesas en la muralla', icon: ICON.cenaMuralla, desc: 'El Restaurante de la muralla sirve el doble de cenas.', cost: 1500000000, requires: 'restaurante_muralla', effect: { type: 'stationSpeed', target: 'restaurante_muralla', mult: 2 } },
+  { zone: 'cartagena', id: 'chiva_rumbera', name: 'Chiva rumbera', icon: '🚌', desc: 'El despacho de Cartagena lleva el doble por viaje.', cost: 2500000000, requires: 'hotel_colonial', effect: { type: 'dispatchCapacity', target: 'cartagena', mult: 2 } },
+  { zone: 'cartagena', id: 'casa_republicana', name: 'Casa republicana', icon: '🛏️', desc: 'El Hotel colonial recibe el doble de huéspedes.', cost: 4000000000, requires: 'hotel_colonial', effect: { type: 'stationSpeed', target: 'hotel_colonial', mult: 2 } },
+  { zone: 'cartagena', id: 'cocina_mar', name: 'Cocina frente al mar', icon: ICON.almuerzoBahia, desc: 'La Cocina de la bahía sirve el doble.', cost: 8000000000, requires: 'cocina_bahia', effect: { type: 'stationSpeed', target: 'cocina_bahia', mult: 2 } },
+  { zone: 'cartagena', id: 'neveras_icopor', name: 'Neveras de icopor', icon: ICON.loncheraPaseo, desc: 'Las Loncheras del paseo se arman el doble de rápido.', cost: 15000000000, requires: 'loncheras', effect: { type: 'stationSpeed', target: 'loncheras', mult: 2 } },
+  { zone: 'cartagena', id: 'lanchas_rapidas', name: 'Lanchas rápidas', icon: '🚤', desc: 'El Muelle de las lanchas despacha el doble de paseos.', cost: 40000000000, requires: 'muelle', effect: { type: 'stationSpeed', target: 'muelle', mult: 2 } },
+  { zone: 'cartagena', id: 'patrimonio', name: 'Patrimonio de la Humanidad', icon: '🏅', desc: 'Todo lo que vende Cartagena vale un 50 % más.', cost: 25000000000, requires: 'loncheras', effect: { type: 'zoneValue', target: 'cartagena', mult: 1.5 } },
+  { zone: 'cartagena', id: 'maestria_cartagena', name: 'Maestría: Cartagena', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cartagena', mult: 4 } },
+  { zone: 'cartagena', id: 'supremacia_cartagena', name: 'Supremacía: Cartagena', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cartagena', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

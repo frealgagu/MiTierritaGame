@@ -139,6 +139,15 @@ export const STATIONS = [
   { id: 'hat_sewer', zone: 'sombrero', name: 'Costura del sombrero', icon: ICON.sombreroVueltiao, in: { trenza: 1 }, out: { sombrero_vueltiao: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.19' },
   { id: 'parador', zone: 'sombrero', name: 'Parador de Tuchín', icon: ICON.recuerdoCosta, in: { sombrero_vueltiao: 4 }, imports: [{ product: 'salted_fish', perCycle: 1, route: 'salado' }, { product: 'fried_fish', perCycle: 1, route: 'frito' }], out: { recuerdo_costa: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.19' },
 
+  // Costa · Cartagena (v3.20), el final de la región: como Barichara, sin fuente propia. Cada estación recibe
+  // el producto final de una zona de la Costa; todo termina en el paseo en lancha a las Islas del Rosario.
+  { id: 'fogon_getsemani', zone: 'cartagena', name: 'Fogón de Getsemaní', icon: ICON.arrozConCoco, imports: [{ product: 'rice_sack', perCycle: 1, route: 'bultos' }], out: { arroz_con_coco: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.20' },
+  { id: 'restaurante_muralla', zone: 'cartagena', name: 'Restaurante de la muralla', icon: ICON.cenaMuralla, in: { arroz_con_coco: 1 }, imports: [{ product: 'cocada', perCycle: 1, route: 'cocadas' }], out: { cena_muralla: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.20' },
+  { id: 'hotel_colonial', zone: 'cartagena', name: 'Hotel colonial', icon: ICON.nocheHotel, in: { cena_muralla: 2 }, imports: [{ product: 'recuerdo_costa', perCycle: 1, route: 'recuerdos_costa' }], out: { noche_hotel: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.20' },
+  { id: 'cocina_bahia', zone: 'cartagena', name: 'Cocina de la bahía', icon: ICON.almuerzoBahia, in: { arroz_con_coco: 1 }, imports: [{ product: 'fish_in_coconut', perCycle: 1, route: 'cazuelas' }], out: { almuerzo_bahia: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '3.20' },
+  { id: 'loncheras', zone: 'cartagena', name: 'Loncheras del paseo', icon: ICON.loncheraPaseo, in: { almuerzo_bahia: 1 }, imports: [{ product: 'almuerzo_costeno', perCycle: 1, route: 'almuerzos_costenos' }, { product: 'bandeja_costena', perCycle: 1, route: 'bandejas' }], out: { lonchera_paseo: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.20' },
+  { id: 'muelle', zone: 'cartagena', name: 'Muelle de las lanchas', icon: ICON.paseoIslas, in: { lonchera_paseo: 4 }, out: { paseo_islas: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.20' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

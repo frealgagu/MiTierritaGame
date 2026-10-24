@@ -1772,6 +1772,108 @@ def recuerdo_costa():
     return layers
 
 
+# ---------- Costa · Cartagena (v3.20) ----------
+
+def torre_reloj():
+    """Torre del Reloj de Cartagena: la puerta de la muralla con su torre amarilla y el reloj."""
+    layers = [(OUTLINE, [rect(8, 54, 84, 40)]), ('#d9c9a8', [rect(10.5, 56.5, 79, 35)])]
+    layers.append(('#bfae8a', [rib(10, 66, 90, 66, 1), rib(10, 78, 90, 78, 1)]))
+    layers.append((OUTLINE, [rect(30, 22, 40, 72)]))
+    layers.append(('#f2c14e', [rect(32.5, 24.5, 35, 67)]))
+    layers.append((OUTLINE, ['M 40 94 L 40 72 Q 50 62 60 72 L 60 94 Z']))
+    layers.append(('#5d4037', ['M 42.5 94 L 42.5 73 Q 50 65.5 57.5 73 L 57.5 94 Z']))
+    layers += [(OUTLINE, [circle(50, 42, 9)]), ('#ffffff', [circle(50, 42, 7)]), ('#263238', [rib(50, 42, 50, 37, 1.2), rib(50, 42, 54, 43, 1.2)])]
+    layers.append((OUTLINE, [poly(26, 22, 50, 4, 74, 22)]))
+    layers.append(('#d7263d', [poly(30, 20, 50, 7.5, 70, 20)]))
+    layers.append(('#ffffff', [rect(30, 54, 40, 3)]))
+    return layers
+
+
+def arroz_con_coco():
+    """Arroz con coco: el arroz dorado de panela y coco, en un plato con medio coco al lado."""
+    layers = [(OUTLINE, ['M 6 52 Q 50 104 94 52 Z']), ('#ffffff', ['M 10 54 Q 50 98 90 54 Z']), ('#2e6fd1', [rib(16, 64, 84, 64, 2)])]
+    layers.append((OUTLINE, [ellipse(50, 50, 40, 15)]))
+    layers.append(('#c8975a', [ellipse(50, 48, 37, 12.5), circle(50, 38, 16)]))
+    layers.append(('#a8763a', [ellipse(cx, cy, 3.6, 1.4, rot) for cx, cy, rot in [(36, 46, 20), (50, 42, -10), (62, 48, 30), (44, 34, 10), (56, 32, -30), (50, 52, 0), (30, 50, -20), (68, 52, 15)]]))
+    layers.append(('#5d4037', [circle(42, 40, 1.4), circle(58, 44, 1.4), circle(48, 30, 1.3)]))
+    layers += [(OUTLINE, ['M 68 20 Q 82 40 96 20 Z']), ('#6d4c32', ['M 71 22 Q 82 37 93 22 Z']), (OUTLINE, [ellipse(82, 20, 15, 4.5)]), ('#fbfaf6', [ellipse(82, 20, 13, 3)])]
+    return layers
+
+
+def cena_muralla():
+    """Cena en la muralla: la mesa con el plato, la vela y la copa, sobre las piedras de la muralla."""
+    layers = [(OUTLINE, [rect(4, 70, 92, 26)]), ('#d9c9a8', [rect(6.5, 72.5, 87, 21)])]
+    layers.append(('#bfae8a', [rib(6, 83, 94, 83, 1), rib(30, 72, 30, 83, 1), rib(60, 72, 60, 83, 1), rib(45, 83, 45, 94, 1), rib(78, 83, 78, 94, 1)]))
+    layers.append((OUTLINE, [ellipse(50, 56, 44, 14)]))
+    layers.append(('#fbfaf6', [ellipse(50, 56, 41.5, 11.5)]))
+    layers.append(('#d7263d', ['M 8 56 Q 50 74 92 56 L 92 62 Q 50 80 8 62 Z']))
+    layers += [(OUTLINE, [ellipse(40, 54, 16, 6)]), ('#ffffff', [ellipse(40, 54, 14, 4.6)]), ('#c8975a', [ellipse(40, 53, 8, 2.6)]), ('#d4892a', [ellipse(46, 53, 5, 2)])]
+    layers += [(OUTLINE, [rect(68, 30, 6, 22)]), ('#fbfaf6', [rect(69.5, 31.5, 3, 20)]), ('#ffb300', ['M 71 16 Q 76 24 71 30 Q 66 24 71 16 Z']), ('#fff3c4', [ellipse(71, 25, 1.6, 3)])]
+    layers += [(OUTLINE, ['M 18 26 L 30 26 Q 30 40 24 40 Q 18 40 18 26 Z', rect(23, 40, 2, 12), rect(18, 51, 12, 2)]), ('#ad1457', ['M 19.5 30 L 28.5 30 Q 28.5 38.5 24 38.5 Q 19.5 38.5 19.5 30 Z'])]
+    return layers
+
+
+def noche_hotel():
+    """Noche en la ciudad amurallada: el balcón de madera de una casa colonial, con bugambilias y la luna."""
+    layers = [(OUTLINE, [rect(10, 14, 80, 82)]), ('#f28c9a', [rect(12.5, 16.5, 75, 77)])]
+    layers.append((OUTLINE, ['M 34 94 L 34 62 Q 50 50 66 62 L 66 94 Z']))
+    layers.append(('#2f7d4f', ['M 36.5 94 L 36.5 63 Q 50 53 63.5 63 L 63.5 94 Z']))
+    layers.append(('#1f5a38', [rib(50, 58, 50, 94, 1.4)]))
+    layers.append((OUTLINE, [rect(22, 22, 56, 22)]))
+    layers.append(('#2b4d6e', [rect(24.5, 24.5, 51, 17)]))
+    layers.append(('#ffe082', [rect(28, 27, 18, 12), rect(54, 27, 18, 12)]))
+    layers.append((OUTLINE, [rect(16, 42, 68, 6)]))
+    layers.append(('#7a4a22', [rect(18, 43.5, 64, 3)]))
+    layers.append(('#7a4a22', [rect(20 + k * 8, 34, 2.6, 9) for k in range(8)]))
+    layers.append(('#d63384', [circle(cx, cy, 4.6) for cx, cy in [(14, 22), (20, 16), (12, 32), (86, 20), (80, 14), (88, 30)]]))
+    layers.append(('#4e8a33', [circle(cx, cy, 2.2) for cx, cy in [(16, 26), (84, 24)]]))
+    layers += [(OUTLINE, [circle(78, 68, 9)]), ('#fff8e1', [circle(78, 68, 7.5)]), ('#f28c9a', [circle(82, 65, 6.5)])]
+    return layers
+
+
+def almuerzo_bahia():
+    """Almuerzo en la bahía: el pescado en coco con arroz con coco y patacones, frente al mar."""
+    layers = [('#4fc3f7', [rect(0, 18, 100, 20)]), ('#81d4fa', [rib(8, 26, 30, 26, 1.6), rib(54, 30, 80, 30, 1.6)])]
+    layers += [(OUTLINE, [ellipse(50, 66, 46, 22)]), ('#ffffff', [ellipse(50, 66, 43, 19.5)])]
+    layers += [(OUTLINE, [ellipse(34, 64, 16, 9)]), ('#c8975a', [ellipse(34, 62, 14, 7.5), circle(34, 57, 7)])]
+    layers += fish_shape(64, 64, 34, 15, '#d4a35a', '#f0d9a8', -6)
+    layers.append(('#f5ecd7', [ellipse(64, 72, 16, 3)]))
+    for cx, cy in [(44, 80), (56, 82)]:
+        layers += [(OUTLINE, [circle(cx, cy, 6)]), ('#f2c14e', [circle(cx, cy, 4.8)])]
+    return layers
+
+
+def lonchera_paseo():
+    """Lonchera del paseo: la nevera de icopor con el almuerzo, el hielo y las gaseosas para la lancha."""
+    layers = [(OUTLINE, [poly(10, 44, 70, 44, 86, 34, 26, 34)]), ('#ffffff', [poly(14, 42.5, 68.5, 42.5, 81, 35.5, 27, 35.5)])]
+    layers.append(('#4fc3f7', [poly(30, 38, 60, 38, 66, 36, 34, 36)]))
+    layers.append((OUTLINE, [rect(10, 44, 60, 46), poly(70, 44, 86, 34, 86, 80, 70, 90)]))
+    layers.append(('#fbfaf6', [rect(12.5, 46.5, 55, 41)]))
+    layers.append(('#e0e0e0', [poly(72.5, 45, 83.5, 38.5, 83.5, 79, 72.5, 86)]))
+    layers.append(('#2e6fd1', [rect(12.5, 60, 55, 8)]))
+    layers += [(OUTLINE, [rect(34, 6, 10, 30)]), ('#d7263d', [rect(36, 8, 6, 26)]), ('#ffffff', [rect(36, 18, 6, 4)])]
+    layers += [(OUTLINE, [rect(48, 12, 10, 24)]), ('#2fa36b', [rect(50, 14, 6, 20)])]
+    layers += [(OUTLINE, [ellipse(22, 34, 9, 5)]), ('#f2c14e', [ellipse(22, 33, 7.5, 3.5)])]
+    return layers
+
+
+def paseo_islas():
+    """Paseo a las Islas del Rosario: la lancha sobre el mar turquesa, rumbo a la isla con su palma."""
+    layers = [('#26c6da', [rect(0, 58, 100, 42)]), ('#80deea', [rib(6, 70, 30, 70, 1.6), rib(60, 88, 90, 88, 1.6), rib(40, 96, 60, 96, 1.4)])]
+    layers += [('#f5e6b8', [ellipse(74, 58, 22, 6)]), ('#8d6e4a', ['M 74 58 Q 72 40 80 26 L 82 27 Q 75 42 77 58 Z'])]
+    for x1, y1 in [(66, 22), (72, 16), (86, 18), (94, 26), (80, 32)]:
+        layers.append(('#2e7d32', [leaf(81, 26, x1, y1, 3.4)]))
+    layers.append((OUTLINE, ['M 4 70 L 60 70 L 54 84 Q 30 88 12 82 Z']))
+    layers.append(('#ffffff', ['M 7.5 72.5 L 56.5 72.5 L 52 81.5 Q 30 85 13.5 80 Z']))
+    layers.append(('#2e6fd1', ['M 9 76 L 55 76 L 54 78.5 L 10.5 78.5 Z']))
+    layers.append(('#d7263d', [rect(28, 60, 18, 10)]))
+    layers.append((OUTLINE, [rect(26, 58, 22, 3)]))
+    for cx in (18, 34, 44):
+        layers += [('#8d5524', [circle(cx, 64, 3.4)]), ('#f6d860', [rect(cx - 3, 67, 6, 4)])]
+    layers.append(('#ffd54f', [circle(18, 18, 9)]))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -1879,6 +1981,13 @@ ICONS = [
     (0xE067, 'trenza', trenza),
     (0xE068, 'sombrero_vueltiao', sombrero_vueltiao),
     (0xE069, 'recuerdo_costa', recuerdo_costa),
+    (0xE06A, 'torre_reloj', torre_reloj),
+    (0xE06B, 'arroz_con_coco', arroz_con_coco),
+    (0xE06C, 'cena_muralla', cena_muralla),
+    (0xE06D, 'noche_hotel', noche_hotel),
+    (0xE06E, 'almuerzo_bahia', almuerzo_bahia),
+    (0xE06F, 'lonchera_paseo', lonchera_paseo),
+    (0xE070, 'paseo_islas', paseo_islas),
 ]
 
 

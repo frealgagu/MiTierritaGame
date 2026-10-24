@@ -15,14 +15,13 @@ export const REGIONS = [
     music: 'santander',
     unlock: { region: 'cafetero', zone: 'pueblo' },
   },
-  // La Costa (v3.15): se abre al completar Barichara. Mientras lleguen sus seis zonas (wip), las que
-  // faltan se anuncian (soon) y la región todavía no tiene final.
+  // La Costa (v3.15): se abre al completar Barichara. Mientras esté en obra (wip) no tiene final: las zonas
+  // que faltan se anuncian (soon), y con todas ya (v3.20) le faltan sus eventos, álbum y logros.
   {
     id: 'costa',
     name: 'La Costa',
     icon: '🌴',
-    zones: ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero'],
-    soon: ['Cartagena'],
+    zones: ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero', 'cartagena'],
     wip: true,
     music: 'costa',
     unlock: { region: 'santander', zone: 'barichara' },

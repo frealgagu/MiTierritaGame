@@ -32,7 +32,9 @@ export const ZONE17 = {
   routes: {
     salado: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Pescado salado de la Ciénaga' },
     frito: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Pescado frito' },
+    // Los recuerdos salen hacia Cartagena (v3.20).
+    recuerdos_costa: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'A Cartagena ➜' },
   },
   unlockedBy: 'quesera',
-  next: null,
+  next: 'cartagena',
 };

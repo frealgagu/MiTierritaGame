@@ -30,6 +30,8 @@ export const ZONE14 = {
   // Carretera de la Ruta de la leche de coco (v3.17): sale de la bodega hacia la Ciénaga.
   routes: {
     coco: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Ciénaga ➜' },
+    // Las cocadas salen hacia Cartagena (v3.20).
+    cocadas: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Cartagena ➜' },
   },
   next: 'cienaga',
 };

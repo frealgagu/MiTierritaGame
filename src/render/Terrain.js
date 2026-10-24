@@ -100,7 +100,7 @@ export class Terrain {
           // Plaza empedrada.
           for (let k = 0; k < 4; k++) {
             const p = iso(gx + 0.25 + (k % 2) * 0.5, gy + 0.25 + Math.floor(k / 2) * 0.5);
-            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara
+            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
         } else if (type === 'farm' && this.zone.theme === 'cacao') {
@@ -175,10 +175,11 @@ export class Terrain {
           // (v3.12), más palmas de cera, las del valle de Cocora (los mismos números de rng: el resto del
           // mapa no se mueve).
           const salento = this.zone.style === 'salento';
+          const cartagena = this.zone.style === 'cartagena';
           if (r < 0.06) obj = townHouse(rng, this.zone.style);
-          else if (r < 0.09) obj = salento && r < 0.075 ? palm(rng) : guayacan(rng);
+          else if (r < 0.09) obj = salento && r < 0.075 ? palm(rng) : cartagena ? coconutPalm(rng) : guayacan(rng);
           else if (r < 0.105) obj = streetLamp();
-          else if (r < (salento ? 0.135 : 0.12)) obj = palm(rng);
+          else if (r < (salento || cartagena ? 0.135 : 0.12)) obj = cartagena ? coconutPalm(rng) : palm(rng);
         } else if (this.zone.theme === 'guava') {
           // Santander: matas de fique, guayabos sueltos, piedras y algún cactus del cañón.
           if (r < 0.05) obj = fique(rng);
@@ -302,7 +303,8 @@ const FARM_SOIL = {
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
   canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // la tierra seca de la sabana zenú // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
-  barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6), // la plaza de piedra amarilla
+  barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6),
+  cartagena: (v) => mix(0xe2d2ae, 0xcfbd94, v * 0.6), // la plaza de piedra coralina // la plaza de piedra amarilla
 };
 
 // Casita del pueblo: paredes de color, zócalo, tejas de barro, puerta y ventana.
@@ -314,12 +316,16 @@ const HOUSE_TRIMS = [PAL.balconyRed, PAL.balconyBlue, PAL.balconyGreen, PAL.balc
 // vivos (rojo, azul, verde, amarillo, naranja, morado).
 const SALENTO_WALLS = [0xfbf8f1, 0xfbf8f1, 0xf7f4ee];
 const SALENTO_TRIMS = [0xd7263d, 0x2e6fd1, 0x2fa36b, 0xf2b705, 0xf07f1d, 0x8e44ad];
+// Cartagena (v3.20): casas coloniales de colores fuertes, con balcones de madera y bugambilias.
+const CARTAGENA_WALLS = [0xf6c244, 0xf28c9a, 0x6fc3e0, 0xf4a261, 0xb8e0a8, 0xfbf8f1];
+const CARTAGENA_TRIMS = [0x7a4a22, 0x7a4a22, 0x2f7d4f, 0x5d3a1e];
 function townHouse(rng, style) {
   const c = new Container();
   const g = new Graphics();
-  const salento = style === 'salento';
-  const walls = style === 'barichara' ? BARICHARA_WALLS : salento ? SALENTO_WALLS : HOUSE_WALLS;
-  const trims = salento ? SALENTO_TRIMS : HOUSE_TRIMS;
+  const cartagena = style === 'cartagena';
+  const salento = style === 'salento' || cartagena; // las dos, de dos pisos con balcón
+  const walls = style === 'barichara' ? BARICHARA_WALLS : cartagena ? CARTAGENA_WALLS : salento ? SALENTO_WALLS : HOUSE_WALLS;
+  const trims = cartagena ? CARTAGENA_TRIMS : salento ? SALENTO_TRIMS : HOUSE_TRIMS;
   const wall = walls[Math.floor(rng() * walls.length)];
   const trim = trims[Math.floor(rng() * trims.length)];
   const w = 0.8 + rng() * 0.2;
@@ -346,6 +352,14 @@ function townHouse(rng, style) {
     }
     const win2 = isoPoly([[-0.18, 0.45, z + 2], [0.18, 0.45, z + 2], [0.18, 0.45, z + 9], [-0.18, 0.45, z + 9]]);
     g.poly(win2).fill(shade(trim, 0.85)).stroke(OUTLINE);
+  }
+  if (cartagena && rng() < 0.6) {
+    // Bugambilias que cuelgan del balcón.
+    for (const [dx, dy] of [[-0.35, 0], [-0.2, 3], [0.3, 1]]) {
+      const p = iso(dx * w, 0.62, h - 8 - dy);
+      g.circle(p.x, p.y, 3).fill(0xd63384);
+      g.circle(p.x + 2, p.y + 2, 1.6).fill(0x4e8a33);
+    }
   }
   c.addChild(g);
   return c;

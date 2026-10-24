@@ -457,16 +457,16 @@ test('La Costa se abre al completar Barichara y, mientras le falten zonas, no se
   s.zones.barichara.complete = true;
   assert.deepEqual(openRegions(root), ['costa']);
   const c = regionState(root, 'costa');
-  assert.deepEqual(Object.keys(c.zones), ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero']);
-  // Cada zona abre la siguiente (v3.16 a v3.19); completar la última zona que tiene por ahora no termina la
+  assert.deepEqual(Object.keys(c.zones), ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero', 'cartagena']);
+  // Cada zona abre la siguiente (v3.16 a v3.20); completar la última zona que tiene por ahora no termina la
   // región: no hay segundo final.
-  c.stats.sold = { rice_sack: 1e9, cocada: 1e9, fish_in_coconut: 1e9, bandeja_costena: 1e9, recuerdo_costa: 1e9 };
-  for (const zone of ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero']) {
+  c.stats.sold = { rice_sack: 1e9, cocada: 1e9, fish_in_coconut: 1e9, bandeja_costena: 1e9, recuerdo_costa: 1e9, paseo_islas: 1e9 };
+  for (const zone of ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero', 'cartagena']) {
     c.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
     claimGoal(c, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
     assert.equal(c.zones[zone].complete, true);
   }
-  assert.equal(c.zones.sombrero.unlocked, true);
+  assert.equal(c.zones.cartagena.unlocked, true);
   assert.ok(!c.regionDone);
   for (const id of stationsOf(c)) c.stations[id] = { ...(c.stations[id] ?? {}), level: 100, transport: { level: 100 } };
   c.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'costa').map((r) => r.id);
@@ -539,4 +539,28 @@ test('El Sombrero arma recuerdos de la Costa con el pescado salado y el frito de
   CALENDAR.on = on;
   for (const p of ['salted_fish', 'fried_fish']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
   assert.ok((game.state.stats.sold.recuerdo_costa ?? 0) > 0, 'vende recuerdos de la Costa');
+});
+
+test('Cartagena recibe lo de las cinco zonas de la Costa y despacha paseos a las islas (v3.20)', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const { ROUTES } = await import('../src/data/routes.js');
+  const game = new Game(createInitialState(0, 'costa'));
+  for (const z of ['cocal', 'cienaga', 'quesera', 'sombrero', 'cartagena']) game.unlockZone(z);
+  const toCartagena = ROUTES.filter((r) => r.to === 'cartagena').map((r) => r.id);
+  assert.deepEqual(new Set(ROUTES.filter((r) => r.to === 'cartagena').map((r) => r.from)), new Set(['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero']));
+  game.state.coins = 1e18;
+  for (const z of ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero', 'cartagena']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 30;
+    game.state.zones[z].dispatch.level = 30;
+  }
+  for (const r of Object.keys(game.state.routes)) game.state.routes[r].level = 30;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 1500; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  for (const r of toCartagena) assert.ok(game.state.routes[r], r);
+  for (const p of ['rice_sack', 'cocada', 'fish_in_coconut', 'almuerzo_costeno', 'bandeja_costena', 'recuerdo_costa']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
+  assert.ok((game.state.stats.produced.lonchera_paseo ?? 0) > 0, 'arma loncheras');
 });

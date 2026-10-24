@@ -97,6 +97,13 @@ export const FACTS = {
   rice_sorter: ['El arroz excelso tiene casi todos los granos enteros.'],
   rice_bagger: ['En la Costa no hay almuerzo sin arroz: de coco, de lisa…'],
   rice_stacker: ['Un bulto de arroz pesa 50 kilos y se carga al hombro.'],
+  // Costa · Cartagena (v3.20)
+  fogon_getsemani: ['Getsemaní era el barrio de los artesanos, junto a la ciudad amurallada.', 'El arroz con coco se hace con coco, panela y uvas pasas.'],
+  restaurante_muralla: ['Las murallas de Cartagena miden unos once kilómetros.', 'Desde la muralla se ve la puesta de sol sobre el mar.'],
+  hotel_colonial: ['Las casas coloniales tienen balcones de madera y patios con bugambilias.'],
+  cocina_bahia: ['Cartagena es Patrimonio de la Humanidad desde 1984.'],
+  loncheras: ['Las palenqueras venden frutas con su ponchera en la cabeza.'],
+  muelle: ['Las Islas del Rosario son un parque nacional de corales.', 'De la ciudad a las islas se llega en lancha en una hora.'],
   // Costa · El Sombrero (v3.19)
   canaflechal: ['La caña flecha es una palma de hojas largas que crece en la sabana.', 'El sombrero vueltiao viene del pueblo zenú, de Córdoba y Sucre.'],
   fiber_scraper: ['De cada hoja se raspa la fibra blanca con un cuchillo.'],
@@ -146,6 +153,7 @@ export const PEOPLE = {
   cienaga: { icon: '🧔🏾', name: 'Don Aníbal', role: 'el pescador' },
   quesera: { icon: '👩🏽', name: 'Doña Rosmira', role: 'la quesera' },
   sombrero: { icon: '👴🏽', name: 'Don Eliécer', role: 'el artesano' },
+  cartagena: { icon: '👩🏿', name: 'Doña Dionisia', role: 'la palenquera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -164,6 +172,7 @@ export const WELCOME = {
   hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
   arrozal: '¡Ajá, bienvenido a la Costa, compa! Aquí el arroz crece con los pies en el agua.',
   cocal: '¡Ey, mi vida, bienvenido al Cocal! Aquí bajamos el coco de la palma y lo volvemos cocada.',
+  cartagena: '¡Bienvenido a Cartagena, mi amor! Aquí llega lo mejor de toda la Costa, y de aquí salen las lanchas a las islas.',
   sombrero: '¡Bienvenido a Tuchín, compadre! Aquí la caña flecha se vuelve trenza, y la trenza, sombrero vueltiao.',
   quesera: '¡Ajá, mi amor, bienvenido a la sabana! De esta leche sale el queso costeño, y del queso, el mote.',
   cienaga: '¡Qué hubo, primo! Bienvenido a la Ciénaga. Aquí se pesca en canoa, con atarraya, como los abuelos.',
