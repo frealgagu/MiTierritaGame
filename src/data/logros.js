@@ -46,7 +46,26 @@ const SANTANDER = [
   { id: 's_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('santander')], reward: [1, 2, 4] },
 ];
 
-export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' }))];
+// Los de la Costa (v3.21).
+const COSTA = [
+  { id: 'c_arroz', icon: ICON.riceSack, name: 'Arrocero', text: 'Vende {n} bultos de arroz', metric: 'sold:rice_sack', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
+  { id: 'c_cocadas', icon: ICON.cocada, name: 'Cocadero', text: 'Haz {n} cocadas', metric: 'produced:cocada', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'c_pescado', icon: ICON.fishInCoconut, name: 'Pescador', text: 'Cocina {n} pescados en coco', metric: 'produced:fish_in_coconut', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'c_bandejas', icon: ICON.bandejaCostena, name: 'Bandeja completa', text: 'Sirve {n} bandejas costeñas', metric: 'produced:bandeja_costena', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'c_sombreros', icon: ICON.sombreroVueltiao, name: 'Sombrerero', text: 'Cose {n} sombreros vueltiaos', metric: 'produced:sombrero_vueltiao', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'c_islas', icon: ICON.paseoIslas, name: 'A las islas', text: 'Vende {n} paseos a las Islas del Rosario', metric: 'sold:paseo_islas', tiers: [1000, 100000, 10000000], reward: [2, 4, 8] },
+  { id: 'c_monedas', icon: '💰', name: 'Patrón costeño', text: 'Gana {n} monedas en total', metric: 'earned', tiers: [1e9, 1e15, 1e21], reward: [1, 2, 4] },
+  { id: 'c_anos', icon: '📅', name: 'Costeño de corazón', text: 'Vive {n} años de juego en la Costa', metric: 'years', tiers: [4, 16, 64], reward: [1, 2, 4] },
+  { id: 'c_cartagena', icon: ICON.torreReloj, name: 'Hasta Cartagena', text: 'Completa Cartagena {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
+  { id: 'c_maestro', icon: '🏅', name: 'Maestro costeño', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
+  { id: 'c_medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [6, 24, 60], reward: [1, 2, 4] },
+  { id: 'c_todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
+  { id: 'c_oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
+  { id: 'c_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
+  { id: 'c_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('costa')], reward: [1, 2, 4] },
+];
+
+export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' }))];
 export const logrosOf = (region) => LOGROS.filter((l) => l.region === region);
 
 export const LOGROS_BY_ID = Object.fromEntries(LOGROS.map((l) => [l.id, l]));

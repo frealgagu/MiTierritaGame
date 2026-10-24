@@ -79,6 +79,9 @@ function migrate(data) {
       zones[next].unlocked = true;
       stations[ZONES_BY_ID[next].farm.stationId] ??= createSourceState(ZONES_BY_ID[next].farm.stationId);
     }
+    // v3.21: una región que estaba en obra (la Costa) queda terminada si ya tenía su última zona completa.
+    const def = REGIONS_BY_ID[region];
+    if (def && !def.wip && zones[def.zones.at(-1)]?.complete) data.regionDone = true;
     return finish(data, base, stations, zones, mules);
   }
   if (!data.zones) {

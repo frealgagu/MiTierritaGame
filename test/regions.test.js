@@ -445,10 +445,11 @@ test('una partida de la v3.9 pasa la decoración al Eje Cafetero y la jornada a 
   });
 });
 
-test('La Costa se abre al completar Barichara y, mientras le falten zonas, no se termina (v3.15)', async () => {
+test('La Costa se abre al completar Barichara; con Cartagena completa queda terminada (v3.15, v3.21)', async () => {
   const { claimGoal } = await import('../src/sim/goals.js');
-  const { albumDone, profileOf } = await import('../src/sim/renown.js');
-  const { checkMedalBonus } = await import('../src/sim/events.js');
+  const { regionEvents } = await import('../src/sim/events.js');
+  const { albumOf } = await import('../src/data/album.js');
+  const { logrosOf } = await import('../src/data/logros.js');
   const root = createInitialState(0);
   root.zones.pueblo.complete = true;
   openRegions(root);
@@ -458,24 +459,35 @@ test('La Costa se abre al completar Barichara y, mientras le falten zonas, no se
   assert.deepEqual(openRegions(root), ['costa']);
   const c = regionState(root, 'costa');
   assert.deepEqual(Object.keys(c.zones), ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero', 'cartagena']);
-  // Cada zona abre la siguiente (v3.16 a v3.20); completar la última zona que tiene por ahora no termina la
-  // región: no hay segundo final.
+  // Cada zona abre la siguiente (v3.16 a v3.20) y Cartagena, la última, termina la región.
   c.stats.sold = { rice_sack: 1e9, cocada: 1e9, fish_in_coconut: 1e9, bandeja_costena: 1e9, recuerdo_costa: 1e9, paseo_islas: 1e9 };
   for (const zone of ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero', 'cartagena']) {
+    assert.ok(!c.regionDone, zone);
     c.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
     claimGoal(c, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
     assert.equal(c.zones[zone].complete, true);
   }
-  assert.equal(c.zones.cartagena.unlocked, true);
-  assert.ok(!c.regionDone);
-  for (const id of stationsOf(c)) c.stations[id] = { ...(c.stations[id] ?? {}), level: 100, transport: { level: 100 } };
-  c.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'costa').map((r) => r.id);
-  assert.equal(checkMastery(c, { emit() {} }), false);
-  // Sin álbum ni eventos todavía: ni álbum lleno ni premio de medallas.
-  const p = profileOf(root);
-  assert.equal(albumDone(p, 'costa'), false);
-  checkMedalBonus(p);
-  assert.ok(!p.medalBonus.costa);
+  assert.ok(c.regionDone);
+  // Con todo lo suyo (v3.21): seis eventos, seis páginas de álbum y sus logros.
+  assert.equal(regionEvents('costa').length, 6);
+  assert.equal(albumOf('costa').length, 6);
+  assert.ok(logrosOf('costa').length >= 10);
+  assert.ok(!REGIONS.find((r) => r.id === 'costa').wip);
+});
+
+test('una Costa guardada con Cartagena completa (cuando estaba en obra) queda terminada al cargarse (v3.21)', () => {
+  const mem = {};
+  globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  root.regions.santander.zones.barichara.complete = true;
+  openRegions(root);
+  const c = root.regions.costa;
+  for (const z of Object.keys(c.zones)) c.zones[z] = { ...c.zones[z], unlocked: true, complete: true };
+  c.regionDone = false;
+  saveGame(root);
+  assert.equal(loadGame().regions.costa.regionDone, true);
 });
 
 test('La Ciénaga cocina pescado en coco con la leche que llega del Cocal (v3.17)', async () => {

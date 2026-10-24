@@ -1,5 +1,17 @@
 # Registro de cambios
 
+## v3.21.0 — La Costa completa: eventos, álbum y logros
+- **Seis eventos nuevos**, uno por zona de la Costa, cada uno con su escena en el tablero que cambia con cada compra:
+  - 🐦 **Pájaros en el arrozal**: las bandadas sobre el agua; espantapájaros con sombrero vueltiao, cintas que brillan con el viento y los pajareros aplaudiendo por los camellones.
+  - 🔪 **Machetes sin filo** en el Cocal: el montón de cocos sin pelar se achica con la piedra de amolar (con sus chispas), los machetes nuevos y la peladora.
+  - ✝️ **Semana Santa** en la Ciénaga: todos piden pescado salado, frito y en coco; puestos con toldos morados, blancos y dorados.
+  - 🌧️ **Carretera inundada** en la Quesera: el agua corta la carretera y no llega el arroz; canoas, la chalupa y el terraplén nuevo.
+  - 👒 **Festival del sombrero** en Tuchín: la fila de visitantes, la máquina prestada, los repuestos y las costureras.
+  - 🛳️ **Llegó un crucero** a Cartagena: la fila de turistas en el muelle y los lancheros de Bocachica.
+- **Álbum de la Costa**: seis páginas (el arroz, el coco, la ciénaga, la sabana, el sombrero y Cartagena) con 36 láminas, de la garza blanca a las Islas del Rosario.
+- **Logros de la Costa**: arrocero, cocadero, pescador, bandeja completa, sombrerero, a las islas y los de siempre.
+- **La Costa queda terminada**: al completar Cartagena tiene su segundo final y su reinicio, sus eventos salen en todas sus zonas y da el premio de medallas. Si ya habías completado Cartagena, al abrir esta versión la región queda terminada.
+
 ## v3.20.0 — La Costa: Cartagena
 - **🏰 Cartagena**, la última zona de la Costa, se abre al completar El Sombrero. Como Barichara, no tiene fuente propia: cada estación recibe el producto final de una zona costeña.
   - El **Fogón de Getsemaní** hace arroz con coco con los bultos del Arrozal.

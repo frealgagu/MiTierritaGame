@@ -2,7 +2,8 @@
 // se compra con Renombre ⭐ y se pega la que uno quiera. Una página llena da Renombre de premio.
 // Seis páginas, una por zona, con seis láminas de lo que rodea a cada producto en Colombia.
 // Desde la v3.10 cada región tiene su álbum (`region` de cada página): el de Santander, con su bocadillo,
-// su tabaco, su fique, su hato, sus hormigas y Barichara. El Renombre con que se pagan es el mismo.
+// su tabaco, su fique, su hato, sus hormigas y Barichara (y desde la v3.21 el de la Costa). El Renombre
+// con que se pagan es el mismo.
 import { ICON } from './icons.js';
 
 export const PAGE_BONUS = 3; // ⭐ al llenar una página
@@ -169,7 +170,89 @@ const SANTANDER = [
   },
 ];
 
-export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' }))];
+// El de la Costa (v3.21): su arroz, su coco, su ciénaga, su queso, su sombrero y Cartagena.
+const COSTA = [
+  {
+    id: 'arroz',
+    icon: ICON.ricePlant,
+    name: 'El arroz',
+    stickers: [
+      { id: 'rio_sinu', icon: '🏞️', name: 'El río Sinú', cost: 1, text: 'Riega las vegas de Córdoba, donde se siembra el arroz.' },
+      { id: 'garza_blanca', icon: '🕊️', name: 'La garza blanca', cost: 1, text: 'Sigue al tractor por el arrozal buscando bichos para comer.' },
+      { id: 'pilon_arroz', icon: '🪵', name: 'El pilón', cost: 2, text: 'Antes el arroz se pilaba a mano, golpeándolo en un pilón de madera.' },
+      { id: 'arroz_lisa', icon: '🐟', name: 'El arroz de lisa', cost: 2, text: 'Arroz con pescado lisa ahumado: el plato de Barranquilla.' },
+      { id: 'mompox', icon: '⛪', name: 'Mompox', cost: 2, text: 'Pueblo colonial a orillas del Magdalena, rodeado de arrozales.' },
+      { id: 'magdalena', icon: '🚣', name: 'El río Magdalena', cost: 3, text: 'Por él bajaban los champanes cargados de arroz, de queso y de todo.' },
+    ],
+  },
+  {
+    id: 'coco',
+    icon: ICON.coconutPalm,
+    name: 'El coco',
+    stickers: [
+      { id: 'palma_coco', icon: ICON.coconutPalm, name: 'La palma de coco', cost: 1, text: 'Crece a la orilla del mar y da cocos todo el año.' },
+      { id: 'agua_coco', icon: ICON.coconut, name: 'El agua de coco', cost: 1, text: 'Se toma fría, del coco verde abierto a machete.' },
+      { id: 'cocada_lamina', icon: ICON.cocada, name: 'La cocada', cost: 2, text: 'Dulce de coco con panela: blanca, de piña, de guayaba o de arequipe.' },
+      { id: 'arroz_coco', icon: ICON.arrozConCoco, name: 'El arroz con coco', cost: 2, text: 'Con coco y panela: acompaña el pescado en todo almuerzo costeño.' },
+      { id: 'enyucado', icon: '🍠', name: 'El enyucado', cost: 2, text: 'Torta de yuca con coco, queso costeño y anís.' },
+      { id: 'tolu', icon: '🏖️', name: 'Tolú y Coveñas', cost: 3, text: 'Las playas del golfo de Morrosquillo, llenas de palmas de coco.' },
+    ],
+  },
+  {
+    id: 'cienaga',
+    icon: ICON.canoe,
+    name: 'La ciénaga',
+    stickers: [
+      { id: 'atarraya', icon: ICON.canoe, name: 'La atarraya', cost: 1, text: 'Red redonda que el pescador lanza desde la canoa y se abre en el aire.' },
+      { id: 'bocachico', icon: ICON.fish, name: 'El bocachico', cost: 1, text: 'El pescado de río y de ciénaga más comido de la Costa.' },
+      { id: 'palafitos', icon: '🛖', name: 'Los palafitos', cost: 2, text: 'Casas sobre pilotes en medio del agua, como las de Nueva Venecia.' },
+      { id: 'manglar', icon: '🌳', name: 'El manglar', cost: 2, text: 'Árboles con las raíces en el agua, donde se crían los peces.' },
+      { id: 'salado_sol', icon: ICON.saltedFish, name: 'El pescado salado', cost: 2, text: 'Abierto, salado y seco al sol para que aguante el viaje.' },
+      { id: 'cienaga_grande', icon: '🏞️', name: 'La Ciénaga Grande', cost: 3, text: 'La laguna más grande de Colombia, entre el mar y el río Magdalena.' },
+    ],
+  },
+  {
+    id: 'sabana',
+    icon: ICON.quesoCosteno,
+    name: 'La sabana',
+    stickers: [
+      { id: 'vaca_cebu', icon: ICON.cebu, name: 'La vaca cebú', cost: 1, text: 'Blanca y con giba: aguanta el calor de la sabana.' },
+      { id: 'ordeno_sabana', icon: ICON.ordenoMilk, name: 'El ordeño', cost: 1, text: 'De madrugada, a mano, con el ternero al lado de la vaca.' },
+      { id: 'suero_costeno', icon: '🥣', name: 'El suero costeño', cost: 2, text: 'Crema agria y salada que se come con yuca, bollo y arepa.' },
+      { id: 'bollo', icon: '🌽', name: 'El bollo limpio', cost: 2, text: 'Masa de maíz envuelta en hoja, el compañero del queso costeño.' },
+      { id: 'mote', icon: ICON.moteQueso, name: 'El mote de queso', cost: 2, text: 'Sopa de ñame con queso costeño, el plato de Córdoba y Sucre.' },
+      { id: 'porro', icon: '🎺', name: 'El porro', cost: 3, text: 'Música de banda de la sabana: trompetas, bombardino y redoblante.' },
+    ],
+  },
+  {
+    id: 'vueltiao',
+    icon: ICON.sombreroVueltiao,
+    name: 'El sombrero',
+    stickers: [
+      { id: 'cana_flecha', icon: ICON.canaFlechaPlant, name: 'La caña flecha', cost: 1, text: 'La palma de cuyas hojas sale la fibra del sombrero.' },
+      { id: 'trenzadora', icon: ICON.trenza, name: 'La trenzadora', cost: 1, text: 'Trenza la fibra blanca y la negra con los dedos, sin mirar.' },
+      { id: 'pintas', icon: '🔷', name: 'Las pintas', cost: 2, text: 'Las figuras de la trenza: cada una tiene su nombre y su historia.' },
+      { id: 'zenues', icon: '🏺', name: 'Los zenúes', cost: 2, text: 'El pueblo que hizo canales en las ciénagas y orfebrería de oro.' },
+      { id: 'vueltiao', icon: ICON.sombreroVueltiao, name: 'El vueltiao', cost: 2, text: 'Símbolo cultural de Colombia: la trenza cosida en vueltas.' },
+      { id: 'tuchin', icon: '🏘️', name: 'Tuchín', cost: 3, text: 'Pueblo zenú de Córdoba, la capital del sombrero vueltiao.' },
+    ],
+  },
+  {
+    id: 'cartagena',
+    icon: ICON.torreReloj,
+    name: 'Cartagena',
+    stickers: [
+      { id: 'murallas', icon: '🧱', name: 'Las murallas', cost: 1, text: 'Once kilómetros de piedra coralina para cuidar la ciudad de los piratas.' },
+      { id: 'torre_reloj', icon: ICON.torreReloj, name: 'La Torre del Reloj', cost: 1, text: 'La puerta principal de la ciudad amurallada.' },
+      { id: 'palenquera', icon: '👩🏿', name: 'La palenquera', cost: 2, text: 'Vende frutas en la ponchera, con su vestido de colores. Viene de San Basilio de Palenque.' },
+      { id: 'balcones_cartagena', icon: '🌺', name: 'Los balcones', cost: 2, text: 'Balcones de madera llenos de bugambilias en las casas coloniales.' },
+      { id: 'san_felipe', icon: '🏰', name: 'El castillo de San Felipe', cost: 2, text: 'La fortaleza más grande que construyeron los españoles en América.' },
+      { id: 'islas_rosario', icon: '🏝️', name: 'Las Islas del Rosario', cost: 3, text: 'Islas de arena blanca y corales, a una hora en lancha.' },
+    ],
+  },
+];
+
+export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' }))];
 // Las páginas del álbum de una región.
 export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 

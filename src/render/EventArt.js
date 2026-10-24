@@ -63,7 +63,7 @@ function importRoad(zone, product) {
   for (const [id, r] of Object.entries(zone.routes ?? {})) if (ROUTE_PRODUCT[id] === product) return r.road;
   return null;
 }
-const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao' };
+const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag' };
 
 export class EventArt {
   // scene: la escena del tablero (para el mapa y sus objetos).
@@ -181,6 +181,25 @@ const fly = (g, x, y, a) => {
   g.ellipse(x - 2, y - 3.2 - w * 0.3, 3.2, 1.6).fill({ color: 0xffffff, alpha: 0.75 });
   g.ellipse(x + 2, y - 3.2 + w * 0.3, 3.2, 1.6).fill({ color: 0xffffff, alpha: 0.75 });
 };
+
+
+// Pájaro que vuela (los del arrozal): cuerpo oscuro y alas que aletean.
+const bird = (g, x, y, a) => {
+  const w = Math.sin(a * 10) * 3.5;
+  g.moveTo(x - 6, y - 1 - w).quadraticCurveTo(x - 3, y - 3, x, y).quadraticCurveTo(x + 3, y - 3, x + 6, y - 1 - w).stroke({ width: 1.8, color: 0x2b1d14 });
+  g.ellipse(x, y, 2.2, 1.4).fill(0x3a2a1a);
+};
+
+// Espantapájaros con sombrero vueltiao y los brazos abiertos.
+function scarecrow(g, x, y) {
+  g.rect(x - 1.2, y - 26, 2.4, 26).fill(0x5e3b1c);
+  g.moveTo(x - 12, y - 20).lineTo(x + 12, y - 20).stroke({ width: 2, color: 0x5e3b1c });
+  g.roundRect(x - 5, y - 24, 10, 12, 2).fill(0xd7263d).stroke(THIN);
+  g.circle(x, y - 28, 3.6).fill(0xe8c66a).stroke(THIN);
+  g.ellipse(x, y - 31, 8, 2.4).fill(0xefe3c2).stroke(THIN);
+  g.ellipse(x, y - 31, 5.5, 1.6).stroke({ width: 1, color: 0x2b2b2b });
+  g.moveTo(x - 3.5, y - 31).quadraticCurveTo(x, y - 38, x + 3.5, y - 31).closePath().fill(0xefe3c2).stroke(THIN);
+}
 
 // Gente esperando en fila (de a uno, en diagonal), n personas desde (gx, gy).
 function queue(art, gx, gy, n, o = {}) {
@@ -523,6 +542,153 @@ const ART = {
   },
   artesanal(art, stage, zone) {
     fairScene(art, stage, [0xd9c08c, 0x2e4fa8, 0xb0905a]);
+  },
+
+  // --- La Costa (v3.21) ---
+
+  // Pájaros en el arrozal: las bandadas sobre el agua; espantapájaros con vueltiao, cintas plateadas que
+  // brillan con el viento y al final los pajareros aplaudiendo por los camellones.
+  pajaros(art, stage, zone) {
+    const a = areaOf(zone, zone.farm.stationId);
+    if (stage < 3) swarm(art, a, [24, 14, 7][stage], bird, true);
+    if (stage >= 1) {
+      for (const [gx, gy] of [[a.x + 0.4, a.y + a.h - 0.3], [a.x + a.w - 0.3, a.y + 0.4], [a.x + a.w - 0.3, a.y + a.h - 0.3]]) {
+        art.prop(gx, gy, (g, p) => scarecrow(g, p.x, p.y));
+      }
+    }
+    if (stage >= 2) {
+      art.anim(a.x + a.w, a.y + a.h, (g, t) => {
+        for (let r = 0; r < 3; r++) {
+          const y0 = a.y + 1.5 + r * 1.6;
+          const p0 = iso(a.x + 0.4, y0, 14);
+          const p1 = iso(a.x + a.w - 0.4, y0, 14);
+          g.moveTo(p0.x, p0.y).lineTo(p1.x, p1.y).stroke({ width: 0.8, color: 0x5e3b1c });
+          for (let k = 1; k < 9; k++) {
+            const x = p0.x + ((p1.x - p0.x) * k) / 9;
+            const y = p0.y + ((p1.y - p0.y) * k) / 9;
+            const wave = Math.sin(t * 6 + k + r) * 3;
+            g.poly([x, y, x + 5 + wave, y + 3, x + 1, y + 7]).fill(k % 2 ? 0xdfe6ea : 0xffffff);
+          }
+        }
+      }, 0.6);
+    }
+    if (stage >= 3) {
+      art.clear(a.x + 0.4, a.y + a.h + 0.6, 1.4);
+      art.anim(a.x + 0.4, a.y + a.h + 0.6, (g, t) => {
+        for (let k = 0; k < 2; k++) {
+          const p = iso(a.x + 0.4 + k * 1.4 + Math.sin(t * 0.6 + k) * 0.3, a.y + a.h + 0.6);
+          person(g, p.x, p.y, { shirt: k ? 0xf2b705 : 0x2e6fd1, hat: 0xefe3c2, s: 1.15, arm: Math.abs(Math.sin(t * 6 + k)) });
+        }
+      });
+    }
+  },
+
+  // Machetes sin filo: el montón de cocos sin pelar junto al Peladero (se achica con cada compra), la
+  // piedra de amolar echando chispas, los machetes nuevos colgados y la peladora.
+  machetes(art, stage, zone) {
+    const a = areaOf(zone, 'coconut_peeler');
+    const px = a.x + a.w + 0.5;
+    const py = a.y + 0.8;
+    art.clear(px, py, 1.6);
+    const n = [16, 10, 6, 2][stage];
+    art.prop(px, py, (g, p) => {
+      for (let i = 0; i < n; i++) {
+        const row = Math.floor(i / 5);
+        g.circle(p.x + ((i % 5) - 2) * 7 + row * 3, p.y - row * 5, 4.4).fill(0x7cb342).stroke(THIN);
+      }
+    });
+    if (stage >= 1) {
+      art.clear(px, py + 1.4, 1);
+      art.anim(px, py + 1.4, (g, t) => {
+        const p = iso(px, py + 1.4);
+        g.rect(p.x - 6, p.y - 8, 12, 8).fill(0x5e3b1c);
+        g.circle(p.x, p.y - 12, 6).fill(0x9a948a).stroke(OUTLINE);
+        g.moveTo(p.x - 6 + Math.sin(t * 9) * 2, p.y - 12).lineTo(p.x + 6, p.y - 14).stroke({ width: 1.6, color: 0xb0bec5 });
+        for (let k = 0; k < 3; k++) {
+          const f = (t * 2 + k / 3) % 1;
+          g.circle(p.x + 6 + f * 10, p.y - 14 - Math.sin(f * Math.PI) * 6, 0.9).fill(0xffd54f);
+        }
+        person(g, p.x - 12, p.y + 2, { shirt: 0x2fa36b, hat: 0xefe3c2, s: 1.1, arm: 0.4 });
+      });
+    }
+    if (stage >= 2) {
+      art.prop(px + 1.2, py + 0.2, (g, p) => {
+        for (const dx of [-8, 8]) g.rect(p.x + dx - 1, p.y - 20, 2, 20).fill(0x5e3b1c);
+        g.moveTo(p.x - 9, p.y - 18).lineTo(p.x + 9, p.y - 18).stroke({ width: 1.6, color: 0x8b5a2b });
+        for (let k = 0; k < 4; k++) g.poly([p.x - 6 + k * 4, p.y - 18, p.x - 4.5 + k * 4, p.y - 18, p.x - 4 + k * 4, p.y - 6, p.x - 6 + k * 4, p.y - 8]).fill(0xb0bec5).stroke(THIN);
+      });
+    }
+    if (stage >= 3) {
+      art.anim(px + 1.3, py + 1.5, (g, t) => {
+        const p = iso(px + 1.3, py + 1.5);
+        g.rect(p.x - 9, p.y - 14, 18, 14).fill(0x6c757d).stroke(OUTLINE);
+        g.circle(p.x, p.y - 18, 5).fill(0x9aa3a8).stroke(OUTLINE);
+        g.moveTo(p.x, p.y - 18).lineTo(p.x + Math.cos(t * 8) * 5, p.y - 18 + Math.sin(t * 8) * 5).stroke({ width: 1.4, color: 0x263238 });
+        g.ellipse(p.x + 12, p.y - 2, 4, 2).fill(0x9ccc65);
+      });
+    }
+  },
+
+  // Semana Santa: puestos de pescado con toldos morados, blancos y dorados, uno por compra, y la gente.
+  semana_santa(art, stage) {
+    fairScene(art, stage, [0x6a1b9a, 0xf4efe6, 0xc9a227]);
+  },
+
+  // Carretera inundada: el agua cruza la carretera del arroz; canoas, la chalupa y el terraplén nuevo.
+  inundacion(art, stage, zone) {
+    landslideScene(art, stage, zone, 'rice_bag', 'creciente');
+  },
+
+  // Festival del sombrero: la fila de visitantes frente a la Costura; la máquina prestada, la caja de
+  // repuestos y las costureras.
+  festival_sombrero(art, stage, zone) {
+    const a = areaOf(zone, 'hat_sewer');
+    queue(art, a.x + 0.2, a.y + a.h + 0.6, [7, 5, 3, 1][stage], { hats: true, packs: true });
+    const sx = a.x + a.w + 0.4;
+    const sy = a.y + 0.6;
+    art.clear(sx, sy, 1.4);
+    if (stage >= 1) {
+      art.prop(sx, sy, (g, p) => {
+        g.rect(p.x - 8, p.y - 8, 16, 8).fill(0x8b5a2b).stroke(THIN);
+        g.roundRect(p.x - 6, p.y - 15, 12, 6, 2).fill(0x263238).stroke(OUTLINE);
+        g.rect(p.x + 3, p.y - 15, 2.5, 7).fill(0x263238);
+      });
+    }
+    if (stage >= 2) {
+      art.prop(sx + 0.8, sy + 0.8, (g, p) => {
+        g.position.set(p.x, p.y);
+        box(g, -0.3, -0.3, 0.6, 0.6, 10, 0xc8a26a);
+      });
+    }
+    if (stage >= 3) {
+      art.anim(sx + 0.4, sy + 1.8, (g, t) => {
+        const p = iso(sx + 0.4, sy + 1.8);
+        person(g, p.x, p.y, { shirt: 0x8e44ad, skirt: 0x2fa36b, skin: SKIN[1], arm: Math.max(0, Math.sin(t * 5)) });
+        person(g, p.x + 13, p.y - 3, { shirt: 0xd7263d, skirt: 0xf2b705, skin: SKIN[3], arm: Math.max(0, Math.sin(t * 5 + 1.5)) });
+      });
+    }
+  },
+
+  // Llegó un crucero: la fila de turistas en el muelle; los lancheros de Bocachica con sus gorras, los
+  // letreros de turnos y más lancheros.
+  crucero(art, stage, zone) {
+    const a = areaOf(zone, 'muelle');
+    queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
+    const crew = stage >= 3 ? 4 : stage >= 1 ? 2 : 0;
+    if (crew) {
+      art.anim(a.x + a.w + 0.4, a.y + 1, (g, t) => {
+        for (let k = 0; k < crew; k++) {
+          const p = iso(a.x + a.w + 0.4 + (k % 2) * 0.7, a.y + 0.6 + Math.floor(k / 2) * 0.9);
+          person(g, p.x, p.y, { shirt: 0xf4efe6, skin: SKIN[1], hat: 0x2e6fd1, arm: Math.abs(Math.sin(t * 3 + k)) });
+        }
+      });
+    }
+    if (stage >= 2) {
+      for (const [gx, gy] of [[a.x + a.w + 1.6, a.y + 2.6], [a.x + a.w + 2.6, a.y + 3.6]]) {
+        art.clear(gx, gy, 0.8);
+        art.prop(gx, gy, (g, p) => post(g, p.x, p.y, 0x26c6da));
+      }
+    }
   },
 };
 
