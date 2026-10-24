@@ -45,7 +45,7 @@ export function createInitialState(now = Date.now(), regionId = 'cafetero') {
     events: { boards: {}, slots: [null, null], last: {}, count: {} },
     // Lo que no se pierde al reiniciar (v2.0): Renombre ⭐, medallas y eventos terminados. Es del
     // jugador, no de la región: lo guarda solo la partida del Eje Cafetero.
-    ...(regionId === 'cafetero' && { profile: { renown: 0, medals: {}, history: [] } }),
+    ...(regionId === 'cafetero' && { profile: { renown: 0, renownTotal: 0, medals: {}, history: [] } }),
   };
 }
 

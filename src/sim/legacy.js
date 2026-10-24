@@ -9,7 +9,7 @@ import { MAX_LEVEL } from './rules.js';
 import { createInitialState } from './state.js';
 import { legacyMult } from './modifiers.js';
 import { bankRun } from './logros.js';
-import { profileOf } from './renown.js';
+import { RESTART_RENOWN, gainRenown, profileOf } from './renown.js';
 
 const zoneStations = (z) => [...z.chain, ...z.plots.map((p) => p.stationId)];
 // Estaciones jugables de todas las regiones: las cadenas y sus ramas (la Compostera).
@@ -65,12 +65,17 @@ export function restartState(state, now = Date.now(), profile = null) {
     last: { ...ev.last },
     count: { ...ev.count },
   };
+  // Cada reinicio da Renombre (v3.11).
   if (state.profile) {
     next.profile = structuredClone(state.profile);
     bankRun(state, profileOf(next));
+    gainRenown(profileOf(next), RESTART_RENOWN);
   } else {
     delete next.profile;
-    if (profile) bankRun(state, profile);
+    if (profile) {
+      bankRun(state, profile);
+      gainRenown(profile, RESTART_RENOWN);
+    }
   }
   return next;
 }

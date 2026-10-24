@@ -146,7 +146,7 @@ test('las compras del evento van en orden, se pagan con las monedas del tablero 
   assert.equal(main.quoteResearch && new Game(board).quoteResearch('abono').reason, 'event');
 });
 
-test('el Renombre y las medallas no se pierden al reiniciar; el tablero en juego sí', () => {
+test('el Renombre y las medallas no se pierden al reiniciar (que suma 10 ⭐); el tablero en juego sí', () => {
   const main = new Game();
   const s = main.state;
   s.profile.renown = 7;
@@ -154,7 +154,7 @@ test('el Renombre y las medallas no se pierden al reiniciar; el tablero en juego
   buildAll(s);
   assert.ok(startEvent(s, 'finca'));
   const next = restartState(s);
-  assert.equal(next.profile.renown, 7);
+  assert.equal(next.profile.renown, 7 + 10);
   assert.deepEqual(next.profile.medals.broca, { best: 'silver', count: { silver: 1 } });
   assert.deepEqual(next.events.boards, {});
 });

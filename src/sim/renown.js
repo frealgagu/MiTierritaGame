@@ -13,6 +13,15 @@ export function profileOf(state) {
   return p;
 }
 
+// Renombre ganado (v3.11): se suma al saldo y al total ganado de por vida (`renownTotal`), que no baja al
+// gastar. Todo lo que da Renombre pasa por aquí.
+export function gainRenown(profile, n) {
+  profile.renown += n;
+  profile.renownTotal = (profile.renownTotal ?? 0) + n;
+}
+// Lo que da cada reinicio (segundo final) de cualquier región.
+export const RESTART_RENOWN = 10;
+
 export const pageDone = (profile, pageId) => ALBUM.find((pg) => pg.id === pageId).stickers.every((s) => profile.album.includes(s.id));
 
 export function quoteSticker(profile, id) {
@@ -30,7 +39,7 @@ export function buySticker(profile, id) {
   profile.album.push(id);
   const page = STICKERS_BY_ID[id].page;
   const bonus = pageDone(profile, page) ? PAGE_BONUS : 0;
-  profile.renown += bonus;
+  gainRenown(profile, bonus);
   return { page, bonus };
 }
 

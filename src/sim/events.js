@@ -19,6 +19,7 @@ import { effectsOf, speedMult } from './modifiers.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { REGION_OF_ZONE } from '../data/regions.js';
 import { PARENT } from './chain.js';
+import { gainRenown, profileOf } from './renown.js';
 
 export const EVENT_SLOTS = 2;
 export const EVENT_COOLDOWN = 3 * YEAR_DAYS * DAY_LENGTH; // 3 años del juego (6 h 24 min)
@@ -183,9 +184,9 @@ export function finishEvent(state, zoneId, root = state) {
   if (!allActionsBought(board)) return null;
   const { medal, time } = board.event;
   const round = boardRound(board);
-  const profile = (root.profile ??= { renown: 0, medals: {}, history: [] });
+  const profile = profileOf(root);
   const renown = MEDALS[medal].renown;
-  profile.renown += renown;
+  gainRenown(profile, renown);
   const rec = (profile.medals[def.id] ??= { best: null, count: {} });
   if (ORDER.indexOf(medal) > ORDER.indexOf(rec.best)) rec.best = medal;
   rec.count[medal] = (rec.count[medal] ?? 0) + 1;

@@ -7,7 +7,7 @@ import { albumOf } from '../data/album.js';
 import { EVENTS_BY_ID } from '../data/events.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { YEAR_DAYS, DAY_LENGTH } from './calendar.js';
-import { pageDone, profileOf } from './renown.js';
+import { gainRenown, pageDone, profileOf } from './renown.js';
 
 const YEAR = YEAR_DAYS * DAY_LENGTH;
 
@@ -79,7 +79,7 @@ export function checkLogros(state, profile = profileOf(state)) {
     const have = profile.logros[logro.id] ?? 0;
     const tier = tierOf(logro, metric(state, logro.metric, profile));
     for (let k = have; k < tier; k++) {
-      profile.renown += logro.reward[k];
+      gainRenown(profile, logro.reward[k]);
       won.push({ logro, tier: k + 1, reward: logro.reward[k] });
     }
     if (tier > have) profile.logros[logro.id] = tier;

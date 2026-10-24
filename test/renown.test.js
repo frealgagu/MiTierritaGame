@@ -47,3 +47,37 @@ test('la decoración: lo de siempre es gratis, lo demás se compra una vez y se 
   assert.equal(chosenDecor(next.profile).willys.id, 'rojo');
   assert.deepEqual(next.profile.album, p.album);
 });
+
+test('el Renombre ganado de por vida no baja al gastar, y cada reinicio da 10 ⭐ (v3.11)', async () => {
+  const { gainRenown, RESTART_RENOWN } = await import('../src/sim/renown.js');
+  const { restartState } = await import('../src/sim/legacy.js');
+  const { openRegions } = await import('../src/sim/regions.js');
+  const root = createInitialState(0);
+  const p = profileOf(root);
+  gainRenown(p, 5);
+  p.renown -= 3; // se gasta
+  assert.deepEqual([p.renown, p.renownTotal], [2, 5]);
+  const next = restartState(root);
+  assert.equal(RESTART_RENOWN, 10);
+  assert.deepEqual([next.profile.renown, next.profile.renownTotal], [12, 15]);
+  // El de otra región se suma al perfil del jugador.
+  next.zones.pueblo.complete = true;
+  openRegions(next);
+  restartState(next.regions.santander, 0, next.profile);
+  assert.deepEqual([next.profile.renown, next.profile.renownTotal], [22, 25]);
+});
+
+test('una partida de antes de la v3.11 reconstruye su Renombre ganado en total', async () => {
+  const { saveGame, loadGame } = await import('../src/core/SaveSystem.js');
+  const { ALBUM } = await import('../src/data/album.js');
+  const mem = {};
+  globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
+  const root = createInitialState(0);
+  delete root.profile.renownTotal;
+  root.profile.renown = 1;
+  root.profile.history = [{ event: 'broca', round: 1, medal: 'gold' }, { event: 'molienda', round: 1, medal: 'bronze' }];
+  root.profile.logros = { pueblo: 1, maestro: 2 }; // 2 + (4 + 8)
+  root.profile.album = ALBUM[0].stickers.map((s) => s.id); // una página: 3
+  saveGame(root);
+  assert.equal(loadGame().profile.renownTotal, 4 + 1 + 2 + 12 + 3);
+});

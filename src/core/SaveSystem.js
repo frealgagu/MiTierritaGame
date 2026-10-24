@@ -5,7 +5,9 @@ import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { OFFLINE_BASE_HOURS, OFFLINE_COSTS, OFFLINE_STEP_HOURS } from '../sim/renown.js';
 import { DAY_LENGTH, YEAR_DAYS } from '../sim/calendar.js';
-import { EVENT_OF_ZONE } from '../data/events.js';
+import { EVENT_OF_ZONE, MEDALS } from '../data/events.js';
+import { LOGROS_BY_ID } from '../data/logros.js';
+import { ALBUM, PAGE_BONUS } from '../data/album.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
 
 const KEY = 'cafetal.save';
@@ -134,6 +136,17 @@ function migrateProfile(root) {
       st.research = (st.research ?? []).filter((id) => !OLD_OFFLINE_RESEARCH[id]);
     }
     root.profile.offlineLevel = Math.min(OFFLINE_COSTS.length, Math.ceil((best - OFFLINE_BASE_HOURS) / OFFLINE_STEP_HOURS));
+  }
+  // v3.10 → v3.11: el total de Renombre ganado (aunque ya se haya gastado). Se reconstruye con lo que
+  // quedó registrado: las medallas de los eventos, los niveles de los logros y las páginas llenas del
+  // álbum (los reinicios de antes no daban Renombre).
+  if (root.profile && root.profile.renownTotal === undefined) {
+    const p = root.profile;
+    const medals = (p.history ?? []).reduce((n, h) => n + (MEDALS[h.medal]?.renown ?? 0), 0);
+    const logros = Object.entries(p.logros ?? {}).reduce((n, [id, tier]) => n + (LOGROS_BY_ID[id]?.reward.slice(0, tier).reduce((a, b) => a + b, 0) ?? 0), 0);
+    const pages = ALBUM.filter((pg) => pg.stickers.every((s) => (p.album ?? []).includes(s.id))).length * PAGE_BONUS;
+    // Nunca menos de lo que se tiene ahora.
+    p.renownTotal = Math.max(p.renown ?? 0, medals + logros + pages);
   }
   // v3.9 → v3.10: la jornada pasa a ser de cada región. Nadie pierde horas: cada región arranca con los
   // bloques que tenía el jugador. (La decoración por región la arregla profileOf.)

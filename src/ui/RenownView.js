@@ -119,6 +119,8 @@ export class RenownView {
   render() {
     const profile = profileOf(this.game.state);
     document.getElementById('renown-title').textContent = `⭐ Renombre: ${profile.renown}`;
+    // Lo ganado de por vida (v3.11), aunque ya se haya gastado.
+    document.getElementById('renown-total').textContent = `🏆 Ganado en total: ${formatNumber(profile.renownTotal ?? profile.renown)} ⭐`;
     for (const btn of this.modal.querySelectorAll('[data-renown-tab]')) btn.classList.toggle('active', btn.dataset.renownTab === this.tab);
     // La región que se ve (con más de una abierta).
     const open = openRegionStates(this.game.state);

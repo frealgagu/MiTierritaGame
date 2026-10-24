@@ -493,6 +493,7 @@ button:focus-visible, .tracker:focus-visible { outline: 3px solid var(--yellow);
 
 /* Eventos (v2.0) */
 .events-renown { margin: 4px 0 8px; font-weight: 700; font-size: 1.05rem; }
+.renown-total { margin: -4px 0 6px; font-weight: 700; color: var(--ink-soft, #7a5a44); }
 .event-card { border: 2px solid var(--ink); border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; background: var(--paper); }
 .event-card h3 { margin: 0 0 4px; font-size: 1.1rem; display: flex; justify-content: space-between; gap: 8px; }
 .event-card p { margin: 0 0 6px; font-size: 0.9rem; line-height: 1.35; }

@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v3.11.0 — Reinicios con Renombre y total ganado
+- **Cada reinicio da 10 ⭐ de Renombre**, el de cualquier región. La pantalla de volver a empezar lo dice.
+- **Renombre ganado en total.** Se guarda todo el Renombre que has ganado, aunque ya lo hayas gastado, y se muestra en la ventana del Renombre («🏆 Ganado en total») y en la de eventos. En las partidas de antes se calcula con las medallas, los logros y las páginas del álbum que ya tenías.
+
 ## v3.10.1 — Nivel máximo 50 en los eventos
 - En los tableros de los eventos, las estaciones, los arrieros y el despacho llegan hasta el **nivel 50** (en la partida sigue siendo 100). El panel lo dice («Nivel máximo del evento (50)») y la mejora recomendada ya no sugiere subir más allá.
 

@@ -1,4 +1,5 @@
 import { formatDuration, formatMult, formatNumber } from '../core/format.js';
+import { RESTART_RENOWN } from '../sim/renown.js';
 import { legacyMult } from '../sim/modifiers.js';
 import { stationsOf } from '../sim/legacy.js';
 import { regionOf } from '../data/regions.js';
@@ -14,10 +15,10 @@ export function showMastery(state, onRestart) {
   document.getElementById('mastery-stats').textContent =
     `Partida ${runs}${mult > 1 ? ` (producción ${formatMult(mult)})` : ''} · Tiempo jugado: ${formatDuration(state.playTime)} · Ganado en total: 💰 ${formatNumber(state.totalEarned)}`;
   document.getElementById('mastery-note').textContent =
-    `Puedes volver a empezar ${regionOf(state).name} desde ${ZONES_BY_ID[regionOf(state).zones[0]].name} (monedas, niveles, investigaciones y objetivos desde cero), pero con todo produciendo ${formatMult(mult * 2)}. Las otras regiones siguen como están. Se conservan los ajustes y el registro de tus partidas.`;
+    `Puedes volver a empezar ${regionOf(state).name} desde ${ZONES_BY_ID[regionOf(state).zones[0]].name} (monedas, niveles, investigaciones y objetivos desde cero), pero con todo produciendo ${formatMult(mult * 2)}. Las otras regiones siguen como están. Se conservan los ajustes y el registro de tus partidas. Volver a empezar te da ${RESTART_RENOWN} ⭐ de Renombre.`;
   const modal = document.getElementById('mastery');
   const restart = document.getElementById('mastery-restart');
-  restart.textContent = `🔁 Volver a empezar con producción ${formatMult(mult * 2)}`;
+  restart.textContent = `🔁 Volver a empezar con producción ${formatMult(mult * 2)} · +${RESTART_RENOWN} ⭐`;
   restart.onclick = onRestart;
   document.getElementById('mastery-ok').onclick = () => (modal.hidden = true);
   modal.hidden = false;
