@@ -5,6 +5,7 @@ import { Camera } from './Camera.js';
 import { Terrain, ZONE_SIGN } from './Terrain.js';
 import { KEEPER_SPOT, KeeperView } from './Keeper.js';
 import { Pets } from './Pets.js';
+import { EventArt } from './EventArt.js';
 import { LOOK } from './look.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { Effects } from './Effects.js';
@@ -89,6 +90,8 @@ export class Scene {
     for (const jeep of this.jeeps) this.objects.addChild(jeep);
     this.critters = new Critters(this.zone, this.terrain, this.objects);
     this.pets = new Pets(this.zone, this.terrain, this.objects); // gatos y loros de la región (v3.12)
+    // En el tablero de un evento, lo que pasa se ve (v3.14).
+    this.eventArt = game.state.event ? new EventArt(this, game.state) : null;
     this.mules = new Map();
     this.drawExitSign();
     this.drawZoneSign();
@@ -352,6 +355,7 @@ export class Scene {
     this.critters.update(dt, this.time, this.dayNight.light > 0.5, this.jeepPos);
     this.pets.setCounts(LOOK.pets?.cats ?? 0, LOOK.pets?.parrots ?? 0);
     this.pets.update(dt, this.time);
+    this.eventArt?.update(dt, this.time, state);
     this.updateAmbient(dt);
     this.effects.update(dt);
     this.weather.update(dt, state.event ? null : clockOf(state), this.app.screen.width, this.app.screen.height);

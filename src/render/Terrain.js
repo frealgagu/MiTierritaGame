@@ -222,6 +222,7 @@ export class Terrain {
         const p = iso(gx + ox, gy + oy);
         obj.position.set(p.x, p.y);
         obj.zIndex = depth(gx + ox, gy + oy);
+        obj.grid = [gx + ox, gy + oy]; // (v3.14: los eventos quitan lo que les estorba)
         this.decor.push(obj);
       }
     }
