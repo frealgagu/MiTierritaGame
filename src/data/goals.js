@@ -330,5 +330,26 @@ const COCAL = [
   { id: 'v_final', type: 'sold', product: 'cocada', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL];
+// Costa · La Ciénaga (v3.17): la misma lista que la Fiquera.
+const CIENAGA = [
+  { id: 'n01', type: 'sold', product: 'fish', amount: 50, reward: 10000 },
+  { id: 'n02', type: 'level', target: 'fishing_canoes', level: 10, reward: 20000 },
+  { id: 'n03', type: 'unlock', station: 'fish_cleaner', reward: 40000 },
+  { id: 'n04', type: 'level', target: 'fishing_canoes:transport', level: 10, reward: 40000 },
+  { id: 'n05', type: 'unlock', station: 'fish_salter', reward: 80000 },
+  { id: 'n06', type: 'produced', product: 'salted_fish', amount: 100, reward: 120000 },
+  { id: 'n08', type: 'unlock', station: 'fish_filleter', reward: 250000 },
+  { id: 'n09', type: 'level', target: 'dispatch:cienaga', level: 10, reward: 250000 },
+  { id: 'n10', type: 'unlock', station: 'fish_fryer', reward: 500000 },
+  { id: 'n11', type: 'produced', product: 'fried_fish', amount: 200, reward: 800000 },
+  { id: 'n12', type: 'unlock', station: 'coconut_fish_kitchen', reward: 1200000 },
+  { id: 'n13', type: 'imported', product: 'coconut_milk', amount: 200, reward: 1500000 },
+  { id: 'n14', type: 'level', target: 'route:coco', level: 25, reward: 2000000 },
+  { id: 'n15', type: 'allLevels', zone: 'cienaga', level: 25, reward: 3000000 },
+  { id: 'n07', type: 'research', research: 'chinchorro', reward: 1500000 },
+  { id: 'n16', type: 'sold', product: 'fish_in_coconut', amount: 1000, reward: 5000000 },
+  { id: 'n_final', type: 'sold', product: 'fish_in_coconut', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA];

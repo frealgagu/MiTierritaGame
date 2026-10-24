@@ -248,6 +248,22 @@ function sack(g, gx, gy, z, color) {
   g.ellipse(p.x, p.y - 8, 3.5, 1.8).fill(color);
 }
 
+// Un pescadito de perfil (en mesas, ponches y calderos de la Ciénaga, v3.17).
+function fishOn(g, x, y, len, color) {
+  g.ellipse(x, y, len, len * 0.42).fill(color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+  g.poly([x + len * 0.8, y, x + len * 1.4, y - len * 0.4, x + len * 1.4, y + len * 0.4]).fill(shade(color, 0.8)).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+  g.circle(x - len * 0.55, y - len * 0.08, 0.7).fill(0x263238);
+}
+
+// Una persona de pie, de frente (para las animaciones de las estaciones).
+function worker(g, x, y, shirt) {
+  g.rect(x - 2.2, y - 9, 1.8, 9).fill(0x3d3d5c);
+  g.rect(x + 0.4, y - 9, 1.8, 9).fill(0x3d3d5c);
+  g.roundRect(x - 3.2, y - 18, 6.4, 9.5, 2).fill(shirt);
+  g.circle(x, y - 20.5, 2.8).fill(0x6d4c32);
+  g.ellipse(x, y - 22.5, 5.5, 1.5).fill(0xf4e3b5);
+}
+
 const DRAW = {
   // Beneficiadero: casa con tolva y tanques de lavado.
   wetmill(g, x, y, ctx) {
@@ -1874,6 +1890,195 @@ const DRAW = {
         const f = (time * 0.6 + i / 3) % 1;
         if (!this.working) break;
         stir.circle(pan.x - 3 + i * 3, pan.y - 6 - f * 14, 1.5 + f * 2).fill({ color: 0xffffff, alpha: 0.45 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // --- Costa · La Ciénaga (v3.17) ---
+
+  // Limpieza de pescado: ramada de palma con la mesa donde se le quitan las escamas; adelante, la ponchera
+  // con los bocachicos recién llegados y un gallinazo esperando las tripas.
+  fish_cleaner(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 26 + ctx.up;
+    box(g, x0 + 0.4, y0 + 0.5, 1.6, 0.5, 9, PAL.wood);
+    for (let i = 0; i < 3; i++) {
+      const p = iso(x0 + 0.7 + i * 0.45, y0 + 0.75, 9);
+      fishOn(g, p.x, p.y - 1, 6, PRODUCTS.clean_fish.color);
+    }
+    // La ponchera con agua y bocachicos.
+    const tub = iso(x0 + 1.9, y0 + 2.0);
+    g.ellipse(tub.x, tub.y - 3, 13, 6).fill(0x2e6fd1).stroke(OUTLINE);
+    g.ellipse(tub.x, tub.y - 4.5, 11, 4.5).fill(0x6fa8dc);
+    for (const [dx, dy] of [[-4, -5], [3, -4], [0, -6]]) fishOn(g, tub.x + dx, tub.y + dy, 5, PRODUCTS.fish.color);
+    // El gallinazo.
+    const v = iso(x0 + 0.6, y0 + 2.2);
+    g.ellipse(v.x, v.y - 6, 4.5, 6).fill(0x263238).stroke({ width: 0.6, color: 0x000000, alpha: 0.5 });
+    g.circle(v.x - 2, v.y - 13, 2).fill(0x8d6e63);
+    g.moveTo(v.x - 3.5, v.y - 13).lineTo(v.x - 6, v.y - 12).stroke({ width: 1, color: 0xd7ccc8 });
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 14, 0xc9a35a, 0x9c7b3a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 14);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      const p = iso(x0 + 1.2, y0 + 1.05);
+      worker(work, p.x, p.y, 0xd7263d);
+      const k = this.working ? Math.sin(time * 10) * 3 : 0;
+      work.moveTo(p.x + 3, p.y - 14).lineTo(p.x + 9 + k, p.y - 12).stroke({ width: 1.6, color: 0xb0bec5 });
+      if (!this.working) return;
+      // Las escamas que saltan.
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 1.6 + i / 4) % 1;
+        work.circle(p.x + 10 + i * 2, p.y - 13 - Math.sin(f * Math.PI) * 8, 0.9).fill({ color: 0xeceff1, alpha: 1 - f });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Saladero: el patio con los tendales de pescado salado colgado al sol, el cajón de sal y un rancho atrás.
+  fish_salter(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.2;
+    house(this, g, hx, hy, 1.8, 1.0, 22, ctx, { wall: 0xb8e0a8, roofColor: 0xc9a35a, roofH: 12 });
+    door(g, hx, hy, 1.0, 0.6, 15, ctx.trim);
+    // El cajón de sal.
+    box(g, x + 2.25, y + 0.4, 0.6, 0.5, 7, PAL.wood);
+    g.poly(isoPoly([[x + 2.3, y + 0.45, 7], [x + 2.8, y + 0.45, 7], [x + 2.8, y + 0.85, 7], [x + 2.3, y + 0.85, 7]])).fill(0xffffff);
+    const lines = ctx.tier >= 2 ? [1.6, 2.2, 2.75] : [1.8, 2.55];
+    this.lines = lines;
+    for (const ly of lines) for (const lx of [0.35, 2.6]) box(g, x + lx, y + ly, 0.06, 0.06, 20, PAL.woodDark);
+    const hang = new Graphics();
+    this.anim.addChild(hang);
+    this.animate = (time) => {
+      hang.clear();
+      for (const [r, ly] of lines.entries()) {
+        const a = iso(x + 0.38, y + ly, 19);
+        const b = iso(x + 2.63, y + ly, 19);
+        hang.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x5d4037 });
+        for (let k = 1; k < 7; k++) {
+          const px = a.x + ((b.x - a.x) * k) / 7;
+          const py = a.y + ((b.y - a.y) * k) / 7;
+          const sway = Math.sin(time * 1.4 + k + r) * (this.working ? 1.2 : 0.4);
+          hang.poly([px - 3 + sway, py + 3, px + 3 + sway, py + 3, px + 1.5 + sway, py + 12, px + sway, py + 14, px - 1.5 + sway, py + 12]).fill(PRODUCTS.salted_fish.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+          hang.moveTo(px, py).lineTo(px + sway, py + 3).stroke({ width: 0.6, color: 0x5d4037 });
+        }
+      }
+    };
+    this.animate(0);
+  },
+
+  // Fileteadora: casa con la mesa de filetear en el corredor; el cuchillo saca los filetes uno a uno.
+  fish_filleter(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xf4efe6, roofColor: 0xc9a35a, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.7, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, PAL.balconyBlue);
+    box(g, x + 0.4, y + 2.1, 1.7, 0.5, 9, 0xd0d4d8);
+    for (let i = 0; i < 3; i++) {
+      const p = iso(x + 1.3 + i * 0.25, y + 2.35, 9);
+      g.ellipse(p.x, p.y - 1, 4.5, 2).fill(PRODUCTS.fish_fillet.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+    }
+    // Las espinas, en un balde, para el caldo.
+    const bucket = iso(x + 2.6, y + 2.4);
+    g.rect(bucket.x - 5, bucket.y - 8, 10, 8).fill(0xf6d860).stroke(OUTLINE);
+    g.ellipse(bucket.x, bucket.y - 8, 5, 1.6).fill(0xe0e0e0);
+    const cut = new Graphics();
+    this.anim.addChild(cut);
+    this.animate = (time) => {
+      cut.clear();
+      const p = iso(x + 0.75, y + 2.35, 9);
+      fishOn(cut, p.x, p.y - 1, 6, PRODUCTS.clean_fish.color);
+      const k = this.working ? (Math.sin(time * 4) + 1) / 2 : 0.5;
+      cut.moveTo(p.x - 6 + k * 10, p.y - 7).lineTo(p.x - 2 + k * 10, p.y - 1).stroke({ width: 1.6, color: 0xb0bec5 });
+    };
+    this.animate(0);
+  },
+
+  // Fritanga: kiosco de palma con el caldero de aceite en el fogón, el pescado dorándose y la mesa con los
+  // platos de pescado frito con patacón.
+  fish_fryer(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.2;
+    const d = 1.6;
+    const H = 24 + ctx.up;
+    // Fogón y caldero.
+    box(g, x0 + 0.3, y0 + 0.4, 0.7, 0.6, 7, 0xa0522d);
+    const pot = iso(x0 + 0.65, y0 + 0.7, 7);
+    g.ellipse(pot.x, pot.y - 3, 11, 5).fill(0x263238).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 4, 9, 3.6).fill(0xe0b84a);
+    // La mesa con platos.
+    box(g, x0 + 1.2, y0 + 0.5, 0.8, 0.9, 8, 0xd7263d);
+    for (const [px, py] of [[1.4, 0.75], [1.75, 0.75], [1.4, 1.15], [1.75, 1.15]].slice(0, 2 + Math.min(ctx.tier, 2))) {
+      const p = iso(x0 + px, y0 + py, 8);
+      g.ellipse(p.x, p.y, 5, 2.4).fill(0xffffff).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+      g.ellipse(p.x - 1, p.y - 0.8, 3, 1.4).fill(PRODUCTS.fried_fish.color);
+      g.circle(p.x + 3, p.y, 1.2).fill(0xf2c14e);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 13, 0xc9a35a, 0x9c7b3a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    const bulb = iso(x0 + w / 2, y0 + d / 2, H - 4);
+    this.lights.push({ x: bulb.x, y: bulb.y, r: 28 });
+    const fry = new Graphics();
+    this.anim.addChild(fry);
+    this.animate = (time) => {
+      fry.clear();
+      fishOn(fry, pot.x - 2, pot.y - 4, 5, PRODUCTS.fried_fish.color);
+      if (!this.working) return;
+      for (let i = 0; i < 4; i++) fry.circle(pot.x + Math.sin(time * 5 + i * 1.7) * 7, pot.y - 4 + Math.cos(time * 4 + i) * 1.5, 1).fill({ color: 0xfff3c4, alpha: 0.9 });
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.5 + i / 3) % 1;
+        fry.circle(pot.x - 3 + i * 3, pot.y - 8 - f * 16, 1.6 + f * 3).fill({ color: 0xffffff, alpha: 0.4 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Cocina del pescado en coco: casa grande con el fogón de leña y las cazuelas de barro humeando; junto a
+  // la puerta, las botellas de leche de coco que llegan del Cocal.
+  coconut_fish_kitchen(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xf2a7a0, roofColor: 0xc9a35a, roofH: 16 });
+    door(g, hx, hy, 1.6, 1.8, 18, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.4, 0.8, 14, PAL.balconyGreen);
+    box(g, x + 0.4, y + 2.1, 1.3, 0.55, 8, 0xa0522d);
+    const pots = [[0.7, 2.37], [1.3, 2.37]];
+    for (const [px, py] of pots) {
+      const p = iso(x + px, y + py, 8);
+      g.ellipse(p.x, p.y - 2, 8.5, 4).fill(0xb5562e).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 3, 6.5, 2.6).fill(0xf5ecd7);
+      g.ellipse(p.x - 1, p.y - 3.3, 3, 1).fill(0xd4a35a);
+    }
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const p = iso(x + 2.1 + (i % 3) * 0.2, y + 2.25 + Math.floor(i / 3) * 0.25);
+      g.roundRect(p.x - 2, p.y - 10, 4, 10, 1.5).fill(PRODUCTS.coconut_milk.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.rect(p.x - 2, p.y - 6.5, 4, 2.5).fill(0x7cb342);
+    }
+    // Medios cocos vacíos.
+    const shell = iso(x + 2.7, y + 2.6);
+    g.ellipse(shell.x, shell.y - 2, 4.5, 2.6).fill(0x6d4c32).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    g.ellipse(shell.x, shell.y - 3, 3.6, 1.4).fill(0xfbfaf6);
+    this.smokePoints = [iso(x + 1.0, y + 2.37, 12)];
+    const steam = new Graphics();
+    this.anim.addChild(steam);
+    this.animate = (time) => {
+      steam.clear();
+      if (!this.working) return;
+      for (const [k, [px, py]] of pots.entries()) {
+        for (let i = 0; i < 2; i++) {
+          const f = (time * 0.45 + i / 2 + k * 0.3) % 1;
+          const p = iso(x + px, y + py, 12 + f * 16);
+          steam.circle(p.x + Math.sin(f * 6 + k) * 3, p.y, 2 + f * 3).fill({ color: 0xffffff, alpha: 0.45 * (1 - f) });
+        }
       }
     };
     this.animate(0);

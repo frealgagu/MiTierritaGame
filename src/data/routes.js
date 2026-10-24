@@ -199,6 +199,23 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.2',
   },
+  // La Costa (v3.17): la leche de coco del Cocal, para el pescado en coco de la Ciénaga.
+  {
+    id: 'coco',
+    name: 'Ruta de la leche de coco',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'coconut_milk',
+    from: 'cocal',
+    to: 'cienaga',
+    stations: ['coconut_fish_kitchen'],
+    tab: 'Coco',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 1000,
+    growth: 1.15,
+    release: '3.17',
+  },
   // Al Hato (v3.3): el bocadillo veleño de la Guayabera (el postre) y la fibra de la Fiquera (la cabuya
   // con que se amarra el fiambre).
   {

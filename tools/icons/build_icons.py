@@ -1464,6 +1464,116 @@ def cocada():
     return layers
 
 
+# ---------- Costa · La Ciénaga (v3.17) ----------
+
+def fish_shape(cx, cy, length, height, body, belly, rot=0, eye=True):
+    """Un pescado de perfil mirando a la izquierda: cuerpo, cola, aleta y ojo."""
+    r = math.radians(rot)
+
+    def at(dx, dy):
+        return (cx + dx * math.cos(r) - dy * math.sin(r), cy + dx * math.sin(r) + dy * math.cos(r))
+
+    L, H = length / 2, height / 2
+    tail = [at(L * 0.8, 0), at(L * 1.25, -H * 0.95), at(L * 1.15, 0), at(L * 1.25, H * 0.95)]
+    fin = [at(-L * 0.1, -H * 0.85), at(L * 0.25, -H * 1.35), at(L * 0.4, -H * 0.7)]
+    layers = [
+        (OUTLINE, [pts([(x + (x - cx) * 0.06, y + (y - cy) * 0.1) for x, y in tail]), pts(fin), grow(ellipse_pts(cx, cy, L, H, rot)[:-1], cx, cy, 2.2)]),
+        (shade_hex(body, 0.8), [pts(tail), pts(fin)]),
+        (body, [ellipse(cx, cy, L, H, rot)]),
+        (belly, [ellipse(*at(-L * 0.1, H * 0.35), L * 0.75, H * 0.45, rot)]),
+    ]
+    if eye:
+        ex, ey = at(-L * 0.62, -H * 0.2)
+        layers += [('#ffffff', [circle(ex, ey, H * 0.22)]), ('#263238', [circle(ex - 0.5, ey, H * 0.12)])]
+        gx, gy = at(-L * 0.38, 0)
+        layers.append((shade_hex(body, 0.7), [rib(gx, gy - H * 0.5, gx + 2, gy + H * 0.4, 1.4)]))
+    return layers
+
+
+def canoe():
+    """Canoa de pesca: la canoa de madera en el agua, con el pescador y la atarraya abierta."""
+    layers = [('#4f8f96', [ellipse(50, 84, 46, 10)]), ('#7fbcc0', [ellipse(36, 82, 12, 2), ellipse(70, 88, 10, 1.6)])]
+    layers.append((OUTLINE, ['M 8 70 Q 50 92 92 70 L 86 80 Q 50 96 14 80 Z']))
+    layers.append(('#8d5a32', ['M 12 72 Q 50 90 88 72 L 84 78 Q 50 92 16 78 Z']))
+    layers.append(('#5d3a1e', [rib(14, 73, 86, 73, 1.6)]))
+    # El pescador, de pie, lanzando la red.
+    layers.append(('#37474f', [rib(42, 76, 42, 58, 4), rib(48, 76, 48, 58, 4)]))
+    layers.append((OUTLINE, [rect(38, 38, 14, 22)]))
+    layers.append(('#f4efe6', [rect(40, 40, 10, 18)]))
+    layers.append(('#8d5524', [circle(45, 32, 6)]))
+    layers.append((OUTLINE, [ellipse(45, 27, 12, 3.6)]))
+    layers.append(('#f4e3b5', [ellipse(45, 27, 10.5, 2.6), poly(39, 27, 41, 20, 49, 20, 51, 27)]))
+    layers.append(('#263238', [rib(40, 25, 50, 25, 1.4)]))
+    layers.append(('#8d5524', [rib(50, 44, 64, 30, 3)]))
+    # La atarraya: un cono de malla que se abre.
+    layers.append(('#eceff1c0', ['M 64 30 L 92 58 Q 78 66 62 60 Z']))
+    layers.append(('#90a4ae', [rib(64, 30, 92, 58, 1), rib(64, 30, 78, 63, 1), rib(64, 30, 62, 60, 1), rib(70, 40, 76, 44, 0.8), rib(68, 50, 84, 54, 0.8)]))
+    return layers
+
+
+def fish():
+    """Bocachico: el pescado plateado de la ciénaga, recién sacado del agua."""
+    layers = fish_shape(46, 52, 70, 34, '#90a4ae', '#e3e8ea')
+    layers.append(('#ffffff90', [ellipse(36, 44, 12, 2.4, -8)]))
+    layers.append(('#4fc3f7', [circle(84, 20, 3), circle(90, 30, 2.2), circle(78, 30, 1.8)]))
+    return layers
+
+
+def clean_fish():
+    """Pescado limpio: el pescado sin escamas ni tripas, sobre una hoja de plátano."""
+    layers = [('#2e7d32', [leaf(6, 78, 94, 64, 16)]), ('#66bb6a', [rib(10, 77, 90, 65, 1.2)])]
+    layers += fish_shape(48, 54, 66, 30, '#b0bec5', '#f5f5f5', -6)
+    layers.append(('#ef9a9a', [ellipse(46, 62, 14, 2.6, -6)]))
+    layers.append(('#ffffffb0', [ellipse(40, 46, 10, 2, -6)]))
+    return layers
+
+
+def fish_fillet():
+    """Filete de pescado: dos filetes blancos y rosados, sin espinas, en una tabla."""
+    layers = [(OUTLINE, [rect(6, 56, 88, 30, -6)]), ('#c68a4a', [rect(9, 59, 82, 24, -6)])]
+    for cx, cy, rot in [(34, 52, -10), (64, 60, 8)]:
+        layers.append((OUTLINE, [ellipse(cx, cy, 25, 11, rot)]))
+        layers.append(('#ffe0d6', [ellipse(cx, cy, 22.5, 8.8, rot)]))
+        layers.append(('#ffccbc', [ellipse(cx + 3, cy + 2, 16, 4, rot)]))
+        layers.append(('#ffffff', [rib(cx - 12, cy - 3, cx - 6, cy + 3, 1), rib(cx - 2, cy - 4, cx + 4, cy + 3, 1), rib(cx + 8, cy - 4, cx + 13, cy + 2, 1)]))
+    return layers
+
+
+def fried_fish():
+    """Pescado frito: mojarra dorada en un plato, con patacones y limón."""
+    layers = [(OUTLINE, [ellipse(50, 66, 46, 22)]), ('#ffffff', [ellipse(50, 66, 43, 19.5)]), ('#e0e0e0', [ellipse(50, 70, 34, 12)])]
+    layers += fish_shape(44, 58, 54, 28, '#d4892a', '#f2b45a', -8)
+    layers.append(('#8d4e12', [rib(30 + k * 8, 50, 34 + k * 8, 64, 1.4) for k in range(4)]))
+    for cx, cy in [(76, 70), (68, 78)]:
+        layers += [(OUTLINE, [circle(cx, cy, 8)]), ('#f2c14e', [circle(cx, cy, 6.5)]), ('#d9a33a', [circle(cx, cy, 3)])]
+    layers += [(OUTLINE, [circle(24, 76, 7)]), ('#9ccc65', [circle(24, 76, 5.5)]), ('#dce775', [circle(24, 76, 3)])]
+    return layers
+
+
+def salted_fish():
+    """Pescado salado: el pescado abierto y aplanado, colgado al sol, con granos de sal."""
+    layers = [('#8b5a2b', [rib(10, 12, 90, 12, 3)]), ('#5d4037', [rib(50, 12, 50, 22, 1.4)])]
+    layers.append((OUTLINE, ['M 50 20 L 72 34 Q 76 62 60 84 L 50 96 L 40 84 Q 24 62 28 34 Z']))
+    layers.append(('#d7c39b', ['M 50 23 L 69.5 35.5 Q 73 62 58 82 L 50 92 L 42 82 Q 27 62 30.5 35.5 Z']))
+    layers.append(('#e8d8b4', ['M 50 28 L 64 38 Q 66 60 54 76 L 50 80 L 46 76 Q 34 60 36 38 Z']))
+    layers.append(('#b08a5a', [rib(50, 26, 50, 82, 1.6)] + [rib(50, 36 + k * 9, 60 - k, 40 + k * 9, 1) for k in range(5)] + [rib(50, 36 + k * 9, 40 + k, 40 + k * 9, 1) for k in range(5)]))
+    layers.append(('#ffffff', [rect(cx, cy, 3, 3, 45) for cx, cy in [(38, 44), (58, 50), (44, 66), (56, 70), (62, 40), (36, 58), (50, 56)]]))
+    return layers
+
+
+def fish_in_coconut():
+    """Pescado en coco: la cazuela de barro con el pescado en salsa de leche de coco, y medio coco al lado."""
+    layers = [(OUTLINE, ['M 6 50 Q 8 92 46 92 Q 84 92 86 50 Z']), ('#b5562e', ['M 10 52 Q 12 88 46 88 Q 80 88 82 52 Z'])]
+    layers.append(('#8e3f1f', [rib(14, 66, 78, 66, 1.4)]))
+    layers.append((OUTLINE, [ellipse(46, 50, 42, 14)]))
+    layers.append(('#f5ecd7', [ellipse(46, 50, 38.5, 11)]))
+    layers += fish_shape(44, 46, 46, 16, '#d4a35a', '#f0d9a8', -4)
+    layers.append(('#7cb342', [circle(26, 54, 2.4), circle(60, 54, 2.2), circle(68, 48, 1.8)]))
+    layers.append(('#d32f2f', [circle(32, 56, 1.8), circle(54, 56, 1.8)]))
+    layers += [(OUTLINE, ['M 70 24 Q 84 42 98 24 Z']), ('#6d4c32', ['M 73 26 Q 84 39 95 26 Z']), (OUTLINE, [ellipse(84, 24, 15, 4.5)]), ('#fbfaf6', [ellipse(84, 24, 13, 3)])]
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -1549,6 +1659,13 @@ ICONS = [
     (0xE051, 'grated_coconut', grated_coconut),
     (0xE052, 'coconut_milk', coconut_milk),
     (0xE053, 'cocada', cocada),
+    (0xE054, 'canoe', canoe),
+    (0xE055, 'fish', fish),
+    (0xE056, 'clean_fish', clean_fish),
+    (0xE057, 'fish_fillet', fish_fillet),
+    (0xE058, 'fried_fish', fried_fish),
+    (0xE059, 'salted_fish', salted_fish),
+    (0xE05A, 'fish_in_coconut', fish_in_coconut),
 ]
 
 

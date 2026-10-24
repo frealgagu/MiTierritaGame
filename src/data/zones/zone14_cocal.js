@@ -27,5 +27,9 @@ export const ZONE14 = {
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
   unlockedBy: 'arrozal', // se abre al completar el Arrozal
-  next: null,
+  // Carretera de la Ruta de la leche de coco (v3.17): sale de la bodega hacia la Ciénaga.
+  routes: {
+    coco: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Ciénaga ➜' },
+  },
+  next: 'cienaga',
 };

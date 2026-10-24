@@ -117,6 +117,15 @@ export class Terrain {
           g.moveTo(a.x, a.y).lineTo(b.x, b.y).lineTo(c2.x, c2.y).stroke({ width: 2.2, color: 0x8a6a45, alpha: 0.55 });
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
           g.moveTo(p.x - 5, p.y).lineTo(p.x + 5, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.55 });
+        } else if (type === 'farm' && this.zone.theme === 'cienaga') {
+          // Ciénaga (v3.17): brillos del agua y taruyas (el buchón de flores moradas) flotando.
+          const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
+          g.moveTo(p.x - 6, p.y).lineTo(p.x + 6, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.5 });
+          if (rng() < 0.3) {
+            const q = iso(gx + rng(), gy + rng());
+            for (let k = 0; k < 4; k++) g.ellipse(q.x + Math.cos(k * 1.6) * 4, q.y + Math.sin(k * 1.6) * 2, 3.2, 1.8).fill(k % 2 ? 0x5e9a3c : 0x74b14a);
+            g.circle(q.x, q.y - 2.5, 1.6).fill(0xb39ddb);
+          }
         } else if (type === 'farm' && this.zone.theme === 'coconut') {
           // Cocal (v3.16): arena con hojas secas de palma caídas.
           if (rng() < 0.4) {
@@ -224,6 +233,13 @@ export class Terrain {
           else if (r < 0.06) obj = coconutPalm(rng);
           else if (r < 0.085) obj = egret(rng);
           else if (r < 0.11) obj = banana(rng);
+        } else if (this.zone.theme === 'cienaga') {
+          // Ciénaga (v3.17): garzas, redes puestas a secar, ceibas, plátano y palmas de coco.
+          if (r < 0.03) obj = egret(rng);
+          else if (r < 0.045) obj = netRack(rng);
+          else if (r < 0.058) obj = ceiba(rng);
+          else if (r < 0.08) obj = banana(rng);
+          else if (r < 0.1) obj = coconutPalm(rng);
         } else if (this.zone.theme === 'coconut') {
           // Cocal (v3.16): palmas de coco por todas partes, cocos caídos, plátano y alguna ceiba.
           if (r < 0.06) obj = coconutPalm(rng);
@@ -269,7 +285,8 @@ const FARM_SOIL = {
   ants: (v) => mix(0xc0784a, 0xa86438, v * 0.4),
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
-  coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5), // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
+  coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
+  cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6), // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6), // la plaza de piedra amarilla
 };
 
@@ -790,6 +807,20 @@ function coconutPalm(rng) {
   const c = new Container();
   const g = new Graphics();
   drawCoconutPalm(g, 0, 0, 1, rng);
+  c.addChild(g);
+  return c;
+}
+
+// Atarraya puesta a secar entre dos varas.
+function netRack(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const w = 16 + rng() * 6;
+  shadow(g, 0, 1, w, 4);
+  for (const x of [-w, w]) g.rect(x - 1, -26, 2, 26).fill(PAL.woodDark);
+  g.moveTo(-w, -24).lineTo(w, -24).stroke({ width: 1.5, color: PAL.wood });
+  g.moveTo(-w + 2, -24).quadraticCurveTo(0, -4, w - 2, -24).lineTo(w - 6, -24).quadraticCurveTo(0, -12, -w + 6, -24).closePath().fill({ color: 0xcfd8dc, alpha: 0.75 });
+  for (let k = -3; k <= 3; k++) g.moveTo(k * w * 0.25, -24).lineTo(k * w * 0.18, -9 - (3 - Math.abs(k)) * 1.5).stroke({ width: 0.6, color: 0x78909c });
   c.addChild(g);
   return c;
 }

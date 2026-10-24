@@ -92,6 +92,14 @@ export const PRODUCTS = {
   coconut_milk: { name: 'Leche de coco', zone: 'cocal', value: 150, icon: ICON.coconutMilk, color: 0xf4f1e8 },
   cocada: { name: 'Cocada', zone: 'cocal', value: 250, icon: ICON.cocada, color: 0xa0612d },
 
+  // Costa · La Ciénaga (v3.17): los mismos valores que la Fiquera.
+  fish: { name: 'Bocachico', zone: 'cienaga', value: 125, icon: ICON.fish, color: 0x90a4ae },
+  clean_fish: { name: 'Pescado limpio', zone: 'cienaga', value: 300, icon: ICON.cleanFish, color: 0xb0bec5 },
+  fish_fillet: { name: 'Filete de pescado', zone: 'cienaga', value: 800, icon: ICON.fishFillet, color: 0xffe0d6 },
+  fried_fish: { name: 'Pescado frito con patacón', zone: 'cienaga', value: 2000, icon: ICON.friedFish, color: 0xd4892a },
+  salted_fish: { name: 'Pescado salado', zone: 'cienaga', value: 2400, icon: ICON.saltedFish, color: 0xd7c39b },
+  fish_in_coconut: { name: 'Pescado en coco', zone: 'cienaga', value: 4000, icon: ICON.fishInCoconut, color: 0xb5562e },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

@@ -198,6 +198,19 @@ export const RESEARCH = [
   { zone: 'cocal', id: 'receta_palenquera', name: 'Receta palenquera', icon: '🏅', desc: 'Las cocadas valen un 50 % más.', cost: 1500000, requires: 'cocada_kitchen', effect: { type: 'productValue', target: 'cocada', mult: 1.5 } },
   { zone: 'cocal', id: 'maestria_cocal', name: 'Maestría: Cocal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cocal', mult: 4 } },
   { zone: 'cocal', id: 'supremacia_cocal', name: 'Supremacía: Cocal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cocal', mult: 8 } },
+
+  // Costa · La Ciénaga (v3.17): las mismas de la Fiquera, con el pescado.
+  { zone: 'cienaga', id: 'chinchorro', name: 'Chinchorro', icon: ICON.canoe, desc: 'Las Canoas de pesca sacan el doble de pescado.', cost: 300000, requires: 'fish_cleaner', effect: { type: 'stationSpeed', target: 'fishing_canoes', mult: 2 } },
+  { zone: 'cienaga', id: 'mesas_lavado', name: 'Mesas de lavado', icon: '🚿', desc: 'La Limpieza de pescado limpia el doble.', cost: 400000, requires: 'fish_cleaner', effect: { type: 'stationSpeed', target: 'fish_cleaner', mult: 2 } },
+  { zone: 'cienaga', id: 'cuchillos_filetear', name: 'Cuchillos de filetear', icon: '🔪', desc: 'La Fileteadora filetea el doble.', cost: 1200000, requires: 'fish_filleter', effect: { type: 'stationSpeed', target: 'fish_filleter', mult: 2 } },
+  { zone: 'cienaga', id: 'camion_hielo', name: 'Camión con hielo', icon: '🧊', desc: 'El despacho de la Ciénaga lleva el doble por viaje.', cost: 1500000, requires: 'fish_salter', effect: { type: 'dispatchCapacity', target: 'cienaga', mult: 2 } },
+  { zone: 'cienaga', id: 'caldero_grande', name: 'Caldero grande', icon: ICON.friedFish, desc: 'La Fritanga fríe el doble.', cost: 3000000, requires: 'fish_fryer', effect: { type: 'stationSpeed', target: 'fish_fryer', mult: 2 } },
+  { zone: 'cienaga', id: 'tendales', name: 'Tendales al sol', icon: '☀️', desc: 'El Saladero sala el doble.', cost: 8000000, requires: 'fish_salter', effect: { type: 'stationSpeed', target: 'fish_salter', mult: 2 } },
+  { zone: 'cienaga', id: 'sal_manaure', name: 'Sal de Manaure', icon: '🏅', desc: 'El pescado salado vale un 50 % más.', cost: 15000000, requires: 'fish_salter', effect: { type: 'productValue', target: 'salted_fish', mult: 1.5 } },
+  { zone: 'cienaga', id: 'cazuelas_barro', name: 'Cazuelas de barro', icon: ICON.fishInCoconut, desc: 'La Cocina hace el doble de pescado en coco (la Chiva de la ruta se ajusta sola).', cost: 25000000, requires: 'coconut_fish_kitchen', effect: { type: 'stationSpeed', target: 'coconut_fish_kitchen', mult: 2 } },
+  { zone: 'cienaga', id: 'sazon_cienaguero', name: 'Sazón cienaguero', icon: '🏅', desc: 'El pescado en coco vale un 50 % más.', cost: 50000000, requires: 'coconut_fish_kitchen', effect: { type: 'productValue', target: 'fish_in_coconut', mult: 1.5 } },
+  { zone: 'cienaga', id: 'maestria_cienaga', name: 'Maestría: Ciénaga', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cienaga', mult: 4 } },
+  { zone: 'cienaga', id: 'supremacia_cienaga', name: 'Supremacía: Ciénaga', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cienaga', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

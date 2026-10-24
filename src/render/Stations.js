@@ -123,6 +123,7 @@ export class FarmView extends StationView {
 
   update(dt, t) {
     super.update(dt, t);
+    if (this.theme === 'cienaga' && this.boats) this.drawBoats(t);
     if (!this.def.harvest) return;
     if (!this.flyers) this.addChild((this.flyers = new Graphics()));
     const g = this.flyers.clear();
@@ -153,6 +154,10 @@ export class FarmView extends StationView {
       this.drawPasture(g, tier, rng);
       return;
     }
+    if (this.theme === 'cienaga') {
+      this.drawLagoon(g, tier, rng);
+      return;
+    }
     // Cafetos (o caña) en filas; con cada hito son más grandes.
     const scale = 0.75 + tier * 0.1;
     for (let gx = x; gx < x + w; gx++) {
@@ -173,6 +178,69 @@ export class FarmView extends StationView {
           else if (this.theme === 'corn') drawCornStalk(g, p.x, p.y, scale, rng, 1 + Math.min(tier, 2));
           else drawCoffeeBush(g, p.x, p.y, scale, rng, 3 + tier * 2);
         }
+      }
+    }
+  }
+
+  // Ciénaga (v3.17): el agua, un muelle de tablas junto a la casa y las canoas de los pescadores (con cada
+  // hito, más canoas). Las canoas se mecen y los pescadores tiran la atarraya (ver drawBoats).
+  drawLagoon(g, tier, rng) {
+    const { x, y, w, h } = this.zoneFarm;
+    // Muelle de tablas.
+    for (let k = 0; k < 6; k++) box(g, x + 2.1 + k * 0.32, y + 0.9, 0.28, 0.6, 2, k % 2 ? PAL.wood : PAL.woodDark);
+    for (const [px, py] of [[2.1, 0.9], [3.95, 0.9], [2.1, 1.45], [3.95, 1.45]]) box(g, x + px, y + py, 0.06, 0.06, 3, PAL.woodDark);
+    // Una canoa amarrada al muelle.
+    this.boats = [{ gx: x + 3.4, gy: y + 1.85, flip: 1, phase: 0, moored: true }];
+    const n = 3 + Math.min(tier, 4);
+    for (let i = 0; i < 60 && this.boats.length < n + 1; i++) {
+      const gx = x + 0.8 + rng() * (w - 1.6);
+      const gy = y + 0.8 + rng() * (h - 1.6);
+      if (gx < x + 4.4 && gy < y + 2.6) continue; // la casa y el muelle
+      if (this.boats.some((b) => Math.hypot(b.gx - gx, b.gy - gy) < 1.3)) continue;
+      this.boats.push({ gx, gy, flip: rng() < 0.5 ? -1 : 1, phase: rng() * 6 });
+    }
+    for (const b of this.boats) {
+      const p = iso(b.gx, b.gy);
+      this.bushes.push({ x: p.x, y: p.y - 6 });
+    }
+  }
+
+  // Las canoas: se mecen en el agua; el pescador lanza la atarraya y la recoge.
+  drawBoats(t) {
+    if (!this.boatLayer) this.addChild((this.boatLayer = new Graphics()));
+    const g = this.boatLayer.clear();
+    for (const b of this.boats) {
+      const p = iso(b.gx, b.gy);
+      const bob = Math.sin(t * 1.5 + b.phase) * 1.2;
+      const f = b.flip;
+      const cx = p.x;
+      const cy = p.y + bob;
+      g.ellipse(cx, cy + 2, 18, 4).fill({ color: 0x3f7f88, alpha: 0.5 });
+      g.moveTo(cx - 16 * f, cy - 4).quadraticCurveTo(cx, cy + 5, cx + 16 * f, cy - 4).lineTo(cx + 13 * f, cy).quadraticCurveTo(cx, cy + 7, cx - 13 * f, cy).closePath().fill(0x8d5a32).stroke(OUTLINE);
+      g.moveTo(cx - 14 * f, cy - 3).quadraticCurveTo(cx, cy + 3, cx + 14 * f, cy - 3).stroke({ width: 1, color: 0x5d3a1e });
+      if (b.moored) continue;
+      // El pescador, de pie, con su sombrero.
+      const mx = cx - 4 * f;
+      g.rect(mx - 2, cy - 11, 1.6, 9).fill(0x37474f);
+      g.rect(mx + 0.6, cy - 11, 1.6, 9).fill(0x37474f);
+      g.roundRect(mx - 3, cy - 19, 6, 9, 2).fill(0xf4efe6);
+      g.circle(mx, cy - 21.5, 2.6).fill(0x8d5524);
+      g.ellipse(mx, cy - 23.5, 5, 1.4).fill(0xf4e3b5);
+      // La atarraya: se abre en el aire y cae al agua; luego la recoge.
+      const k = ((t * 0.35 + b.phase) % 1);
+      if (k < 0.5) {
+        const open = Math.sin(k * 2 * Math.PI) * 0.5 + 0.5;
+        const nx = mx + f * (8 + k * 30);
+        const ny = cy - 18 + k * 30;
+        const r = 4 + open * 10;
+        g.moveTo(mx + 2 * f, cy - 16).lineTo(nx, ny - r * 0.5).stroke({ width: 0.8, color: 0x90a4ae });
+        g.ellipse(nx, ny, r, r * 0.45).fill({ color: 0xeceff1, alpha: 0.55 }).stroke({ width: 0.8, color: 0x90a4ae });
+      } else {
+        const ring = (k - 0.5) * 2;
+        const nx = mx + f * 23;
+        const ny = cy - 3;
+        g.ellipse(nx, ny, 6 + ring * 10, (6 + ring * 10) * 0.4).stroke({ width: 1, color: 0xe8f6ff, alpha: 1 - ring });
+        g.moveTo(mx + 2 * f, cy - 14).lineTo(nx - 2 * f, ny).stroke({ width: 0.8, color: 0x90a4ae });
       }
     }
   }

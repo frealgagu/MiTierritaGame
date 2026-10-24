@@ -106,6 +106,16 @@ export const STATIONS = [
   { id: 'coconut_press', zone: 'cocal', name: 'Prensa de coco', icon: ICON.coconutMilk, in: { grated_coconut: 2 }, out: { coconut_milk: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.16' },
   { id: 'cocada_kitchen', zone: 'cocal', name: 'Paila de cocadas', icon: ICON.cocada, in: { coconut_milk: 1 }, out: { cocada: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.16' },
 
+  // Costa · La Ciénaga (v3.17), en la Ciénaga Grande: los pescadores sacan el bocachico en canoa; se limpia
+  // y se reparte entre el Saladero, la Fileteadora (que le pasa los filetes a la Fritanga) y la Cocina, que
+  // lo cocina en la leche de coco que llega del Cocal. Mismos números que la Fiquera.
+  { id: 'fishing_canoes', zone: 'cienaga', name: 'Canoas de pesca', icon: ICON.canoe, infinite: true, out: { fish: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.17' },
+  { id: 'fish_cleaner', zone: 'cienaga', name: 'Limpieza de pescado', icon: ICON.cleanFish, in: { fish: 1 }, out: { clean_fish: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.17' },
+  { id: 'fish_salter', zone: 'cienaga', name: 'Saladero', icon: ICON.saltedFish, in: { clean_fish: 4 }, out: { salted_fish: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.17' },
+  { id: 'fish_filleter', zone: 'cienaga', name: 'Fileteadora', icon: ICON.fishFillet, in: { clean_fish: 2 }, out: { fish_fillet: 1 }, cycle: 16, unlockCost: 1000000, upgradeBase: 600, growth: 1.15, release: '3.17' },
+  { id: 'fish_fryer', zone: 'cienaga', name: 'Fritanga', icon: ICON.friedFish, in: { fish_fillet: 2 }, out: { fried_fish: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.17' },
+  { id: 'coconut_fish_kitchen', zone: 'cienaga', name: 'Cocina del pescado en coco', icon: ICON.fishInCoconut, in: { clean_fish: 4 }, imports: [{ product: 'coconut_milk', perCycle: 1, route: 'coco' }], out: { fish_in_coconut: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.17' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

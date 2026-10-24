@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.17.0 — La Costa: La Ciénaga
+- **🛶 La Ciénaga**, la tercera zona de la Costa, se abre al completar El Cocal. Las Canoas de pesca sacan el bocachico; la Limpieza lo deja listo y el pescado limpio se reparte entre el **Saladero** (pescado salado), la **Fileteadora** y la **Fritanga** (pescado frito con patacón) y la **Cocina del pescado en coco**.
+- **Primera ruta de la Costa: la Ruta de la leche de coco**, del Cocal a la Cocina de la Ciénaga, con su chiva y su carretera en los dos mapas.
+- Su persona es **Don Aníbal, el pescador**, con sus datos curiosos, objetivos, 11 investigaciones y su victoria.
+- El mapa: el agua de la ciénaga con taruyas, un muelle de tablas y canoas que se mecen mientras los pescadores tiran la atarraya (más canoas con cada hito); garzas, redes puestas a secar, ceibas y palmas. En las estaciones: el gallinazo que espera las tripas, los tendales de pescado salado al sol, el caldero de la fritanga y las cazuelas de barro humeando.
+
 ## v3.16.0 — La Costa: El Cocal
 - **🌴 El Cocal**, la segunda zona de la Costa, se abre al completar El Arrozal: el Cocal → el Peladero de cocos → la Ralladora → la Prensa de coco → la Paila de cocadas; del coco verde a la cocada, pasando por el coco pelado, el rallado y la leche de coco, con íconos propios.
 - Su persona es **Doña Eulalia, la cocadera**, con sus datos curiosos, objetivos, 9 investigaciones y su victoria.

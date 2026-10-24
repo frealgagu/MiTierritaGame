@@ -97,6 +97,13 @@ export const FACTS = {
   rice_sorter: ['El arroz excelso tiene casi todos los granos enteros.'],
   rice_bagger: ['En la Costa no hay almuerzo sin arroz: de coco, de lisa…'],
   rice_stacker: ['Un bulto de arroz pesa 50 kilos y se carga al hombro.'],
+  // Costa · La Ciénaga (v3.17)
+  fishing_canoes: ['En la Ciénaga Grande hay pueblos de casas sobre el agua: palafitos.', 'El pescador tira la atarraya, una red redonda que se abre en el aire.'],
+  fish_cleaner: ['El bocachico es el pescado más comido en los ríos y ciénagas.'],
+  fish_salter: ['Salar el pescado y secarlo al sol era la forma de guardarlo.', 'El pescado salado llega a los pueblos para la Semana Santa.'],
+  fish_filleter: ['El bocachico tiene muchas espinas: hay que saberlo filetear.'],
+  fish_fryer: ['Pescado frito, patacón, arroz con coco y limón: el almuerzo costeño.'],
+  coconut_fish_kitchen: ['El pescado se cocina en leche de coco con ají, cebolla y tomate.'],
   // Costa · El Cocal (v3.16)
   coconut_grove: ['La palma de coco da cocos todo el año, en racimos.', 'Un coco verde tiene agua dulce por dentro: se toma frío.'],
   coconut_peeler: ['El coco se pela a machete: la cáscara verde sirve de fibra.'],
@@ -121,6 +128,7 @@ export const PEOPLE = {
   barichara: { icon: '👩', name: 'Lucía', role: 'la guía' },
   arrozal: { icon: '👨🏾‍🌾', name: 'Don Abelardo', role: 'el arrocero' },
   cocal: { icon: '👩🏾', name: 'Doña Eulalia', role: 'la cocadera' },
+  cienaga: { icon: '🧔🏾', name: 'Don Aníbal', role: 'el pescador' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -139,6 +147,7 @@ export const WELCOME = {
   hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
   arrozal: '¡Ajá, bienvenido a la Costa, compa! Aquí el arroz crece con los pies en el agua.',
   cocal: '¡Ey, mi vida, bienvenido al Cocal! Aquí bajamos el coco de la palma y lo volvemos cocada.',
+  cienaga: '¡Qué hubo, primo! Bienvenido a la Ciénaga. Aquí se pesca en canoa, con atarraya, como los abuelos.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

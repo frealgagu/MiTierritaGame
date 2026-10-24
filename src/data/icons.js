@@ -87,6 +87,13 @@ export const ICON = {
   gratedCoconut: '\uE051', // Coco rallado: una totuma llena de coco blanco rallado, con el rallador al lado
   coconutMilk: '\uE052', // Leche de coco: medio coco con la leche blanca, y una botella llena al lado
   cocada: '\uE053', // Cocadas: tres cocadas redondas, una blanca, una de panela y una de guayaba, sobre papel
+  canoe: '\uE054', // Canoa de pesca: la canoa de madera en el agua, con el pescador y la atarraya abierta
+  fish: '\uE055', // Bocachico: el pescado plateado de la ciénaga, recién sacado del agua
+  cleanFish: '\uE056', // Pescado limpio: el pescado sin escamas ni tripas, sobre una hoja de plátano
+  fishFillet: '\uE057', // Filete de pescado: dos filetes blancos y rosados, sin espinas, en una tabla
+  friedFish: '\uE058', // Pescado frito: mojarra dorada en un plato, con patacones y limón
+  saltedFish: '\uE059', // Pescado salado: el pescado abierto y aplanado, colgado al sol, con granos de sal
+  fishInCoconut: '\uE05A', // Pescado en coco: la cazuela de barro con el pescado en salsa de leche de coco, y medio coco al lado
 };
 
 export const ICON_FONT = 'Cafetal Icons';
