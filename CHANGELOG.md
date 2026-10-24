@@ -1,5 +1,19 @@
 # Registro de cambios
 
+## v3.14.0 — Los eventos se ven en el mapa
+- Cada evento tiene su escena en el tablero, y **cambia con cada compra**:
+  - 🪲 **La broca**: los cucarroncitos caminan por el cafetal; aparecen las trampas rojas, las nubecitas del hongo y al final los canastos del re-re, sin una broca.
+  - 🔥 **La gran molienda**: el bagazo mojado humea gris y el fuego es flojo; la bagacera, los ladrillos nuevos y el fuelle, con buen fuego.
+  - 🪨 **Derrumbe en la vía**: la tierra y las piedras tapan la carretera de la panela; las mulas pasan por el monte, luego un carro por la trocha y al final la vía queda despejada y pavimentada.
+  - 🎉 **Fiesta del maíz**: el budare rajado y la fila de gente con hambre, que se acorta con el budare prestado, la leña y las vecinas.
+  - 🚢 **El barco**: la grúa torcida con su aviso de peligro; los repuestos, la grúa subiendo contenedores y los estibadores del turno extra.
+  - 🪰 **La mosca de la fruta**: las moscas y la fruta caída; trampas amarillas, guayabas embolsadas y canastos.
+  - 💧 **Humedad en el caney**: llueve de una nube gris y hay neblina; el aire de las ventilas, los fogones de secado y el techo nuevo.
+  - 🌊 **Creciente del río**: el río cruza la carretera y se llevó el puente; mulas por el vado, el planchón y el puente nuevo.
+  - 🎒 **Turistas** y 🥾 **Puente festivo**: la fila de caminantes que se acorta con cada compra, con los guías y sus banderitas.
+  - 🧀 **Feria ganadera** y 🧺 **Feria artesanal**: banderines y un puesto de feria por cada compra.
+- En el derrumbe y la creciente la cámara se corre para que se vea la carretera.
+
 ## v3.13.0 — La gente de cada zona, tus medallas y mascotas
 - **La persona de cada zona está en el mapa** (Don Jairo, Doña Inés…), junto al letrero de la zona, y también en los tableros de los eventos. Al tocarla repite lo último que dijo, si todavía aplica; cada toque siguiente pasa a otro aviso que aplique: lo que ya se puede construir, el evento que se puede jugar, la noche o el almuerzo, los problemas de sus estaciones, la temporada o un dato curioso de su zona. En un evento cuenta qué lo frena y qué comprar.
 - **Tus medallas:** en 🏅 Eventos hay un listado con la mejor medalla de cada uno de los 12 eventos. Con todos los eventos de una región en **bronce o mejor** ganas **5 ⭐**; en **plata o mejor**, **10 ⭐**; todos en **oro**, **20 ⭐** (una vez cada uno).

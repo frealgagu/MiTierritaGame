@@ -197,9 +197,10 @@ function queue(art, gx, gy, n, o = {}) {
 function fire(art, gx, gy, strong) {
   art.anim(gx, gy, (g, t) => {
     const p = iso(gx, gy);
-    const h = (strong ? 12 : 6) + Math.sin(t * 9) * 2;
-    g.poly([p.x - 4, p.y, p.x, p.y - h, p.x + 4, p.y]).fill(strong ? 0xffb347 : 0xd9772b);
-    g.poly([p.x - 2, p.y, p.x, p.y - h * 0.6, p.x + 2, p.y]).fill(strong ? 0xfff0a0 : 0xf0a050);
+    const h = (strong ? 22 : 9) + Math.sin(t * 9) * 3;
+    const w = strong ? 8 : 5;
+    g.poly([p.x - w, p.y, p.x - w / 2, p.y - h * 0.6, p.x, p.y - h, p.x + w / 2, p.y - h * 0.5, p.x + w, p.y]).fill(strong ? 0xff8c1a : 0xb5652b);
+    g.poly([p.x - w / 2, p.y, p.x, p.y - h * 0.6, p.x + w / 2, p.y]).fill(strong ? 0xfff0a0 : 0xd98a50);
   });
 }
 
@@ -209,7 +210,7 @@ function smoke(art, gx, gy, gray) {
     const p = iso(gx, gy, 10);
     for (let k = 0; k < 4; k++) {
       const f = (t * 0.4 + k / 4) % 1;
-      g.circle(p.x + Math.sin(f * 6 + k) * 4, p.y - f * 40, (gray ? 6 : 4) + f * 6).fill({ color: gray ? 0x777777 : 0xdddddd, alpha: (gray ? 0.55 : 0.35) * (1 - f) });
+      g.circle(p.x + Math.sin(f * 6 + k) * 6, p.y - f * 60, (gray ? 10 : 5) + f * 10).fill({ color: gray ? 0x5f5f5f : 0xdddddd, alpha: (gray ? 0.7 : 0.35) * (1 - f) });
     }
   }, 0.9);
 }
@@ -301,9 +302,10 @@ const ART = {
     art.clear(a.x + 1, a.y + a.h + 0.6, 1.4);
     if (stage === 0) {
       art.prop(fx, fy + 1, (g, p) => {
-        g.ellipse(p.x, p.y, 16, 6).fill({ color: 0x5a7a9a, alpha: 0.45 });
-        g.ellipse(p.x, p.y - 4, 12, 6).fill(0x6b6a3a).stroke(OUTLINE);
-        g.ellipse(p.x - 3, p.y - 7, 6, 3).fill(0x7d7c48);
+        g.ellipse(p.x, p.y, 26, 9).fill({ color: 0x5a7a9a, alpha: 0.5 });
+        g.ellipse(p.x, p.y - 6, 20, 10).fill(0x6b6a3a).stroke(OUTLINE);
+        g.ellipse(p.x - 5, p.y - 11, 10, 5).fill(0x7d7c48);
+        for (const dx of [-12, 2, 14]) g.ellipse(p.x + dx, p.y + 3, 1.4, 2.6).fill(0x5a8ac0);
       });
     }
     fire(art, fx, fy, stage >= 3);
@@ -413,10 +415,14 @@ const ART = {
         for (let k = 0; k < n; k++) {
           const f = (t * 1.6 + k * 0.137) % 1;
           const q = iso(a.x - 0.5 + ((k * 0.61) % 1) * (a.w + 1), a.y - 0.5 + ((k * 0.37) % 1) * (a.h + 1), 70 - f * 70);
-          g.moveTo(q.x, q.y).lineTo(q.x - 1.5, q.y + 6).stroke({ width: 1.2, color: 0x7fb3e0, alpha: 0.75 });
+          g.moveTo(q.x, q.y).lineTo(q.x - 2, q.y + 9).stroke({ width: 1.6, color: 0x3f7fc0, alpha: 0.85 });
         }
         const m = iso(c.gx, c.gy, 18);
-        g.ellipse(m.x, m.y, 60, 20).fill({ color: 0xffffff, alpha: [0.35, 0.25, 0.12][stage] });
+        g.ellipse(m.x, m.y, 60, 20).fill({ color: 0xffffff, alpha: [0.45, 0.32, 0.15][stage] });
+        // La nube gris de la que llueve, encima del caney.
+        const cl = iso(c.gx, c.gy, 80);
+        const dark = [0x6b7380, 0x8a929e, 0xa9b0ba][stage];
+        for (const [dx, dy, r] of [[-26, 4, 16], [-8, -4, 20], [12, 0, 18], [28, 6, 13]]) g.circle(cl.x + dx + Math.sin(t * 0.3) * 3, cl.y + dy, r).fill(dark);
       }, 1);
     }
     if (stage >= 1 && stage < 3) {
