@@ -1,13 +1,16 @@
-// Mapa de la Zona 6: El Pueblo. Mismas convenciones que la Zona 1 (ver zone1_finca.js).
+// Mapa de la Zona 6: Salento (hasta la v3.11, «El Pueblo»; el id sigue siendo 'pueblo'). Mismas
+// convenciones que la Zona 1 (ver zone1_finca.js). Se parece a Salento (style): casas blancas con puertas y
+// balcones de colores, la Calle Real y palmas de cera del valle de Cocora.
 // No tiene fuente propia: en la plaza está la Casa del café, que recibe las bolsas de la Finca, y cada
 // estación espera junto a la carretera por la que le llega lo suyo de otra zona.
 export const ZONE6 = {
   id: 'pueblo',
-  name: 'El Pueblo',
+  name: 'Salento',
   icon: '⛪',
   size: 26,
   seed: 97,
   theme: 'town',
+  style: 'salento',
   chain: ['coffee_house', 'greca', 'fonda', 'basket_shop', 'gift_wrap', 'export_dock'],
   // La plaza, con la Casa del café en una esquina.
   farm: { stationId: 'coffee_house', x: 2, y: 2, w: 6, h: 6 },

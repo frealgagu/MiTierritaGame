@@ -19,6 +19,8 @@ import { effectsOf, speedMult } from './modifiers.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { REGION_OF_ZONE } from '../data/regions.js';
 import { PARENT } from './chain.js';
+import { PRODUCTS } from '../data/products.js';
+import { WithArticle, withArticle } from '../data/lore.js';
 import { gainRenown, profileOf } from './renown.js';
 
 export const EVENT_SLOTS = 2;
@@ -221,6 +223,28 @@ export function supplyFraction(board, product) {
   return f;
 }
 
+// Lo que frena el evento ahora (v3.12), estación por estación, con cuánto rinde (de 0 a 1): la velocidad
+// que le quita (la broca al Cafetal) y lo que no le llega de afuera (la panela con el derrumbe). Sube con
+// cada compra del evento. [{ station, pct, product? }]
+export function eventHandicaps(board) {
+  if (!board?.event) return [];
+  const def = eventDef(board);
+  const out = [];
+  for (const [station, base] of Object.entries(def.speed ?? {})) {
+    let f = base;
+    for (const id of board.research) {
+      for (const e of effectsOf(EVENT_ACTIONS_BY_ID[id])) if (e.type === 'stationSpeed' && e.target === station) f *= e.mult;
+    }
+    out.push({ station, pct: Math.min(1, f) });
+  }
+  for (const [product, base] of Object.entries(def.supply ?? {})) {
+    if (base >= 1) continue;
+    const pct = supplyFraction(board, product);
+    for (const station of def.stations) if (STATIONS_BY_ID[station].imports?.some((imp) => imp.product === product)) out.push({ station, pct, product });
+  }
+  return out;
+}
+
 // Lo que llega de afuera (en el tablero no hay otras zonas ni rutas): a cada estación, su parte de lo
 // que gasta a toda marcha, un 25 % más, sin pasar de lo que le cabe.
 export function stepSupply(board, dt) {
@@ -254,4 +278,19 @@ export function buyAction(board, id, bus) {
   board.research.push(id);
   bus?.emit('research', { id });
   return true;
+}
+
+// «🪲 El Cafetal produce al 40 % por culpa de la broca» / «⛰️ A la Mesa de chocolate le llega el 0 % de
+// la panela por culpa del derrumbe» (v3.12). short: «Cafetal al 40 %», para la barra del evento.
+export function handicapText(board, h, short = false) {
+  const def = eventDef(board);
+  const name = STATIONS_BY_ID[h.station].name;
+  const pct = `${Math.round(h.pct * 100)} %`;
+  if (short) return h.product ? `${PRODUCTS[h.product].icon} ${PRODUCTS[h.product].name.toLowerCase()} al ${pct}` : `${name} al ${pct}`;
+  const blame = def.blame ? ` por culpa ${def.blame.startsWith('el ') ? `del ${def.blame.slice(3)}` : `de ${def.blame}`}` : '';
+  if (h.product) {
+    const to = withArticle(name);
+    return `${def.icon} ${to.startsWith('el ') ? `Al ${to.slice(3)}` : `A ${to}`} le llega el ${pct} de ${PRODUCTS[h.product].name.toLowerCase()}${blame}.`;
+  }
+  return `${def.icon} ${WithArticle(name)} produce al ${pct}${blame}.`;
 }

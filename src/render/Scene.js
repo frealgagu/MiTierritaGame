@@ -1,8 +1,9 @@
-import { Container, Graphics, Text, Texture } from 'pixi.js';
+import { Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { Background } from './Background.js';
 import { Camera } from './Camera.js';
-import { Terrain } from './Terrain.js';
+import { Terrain, ZONE_SIGN } from './Terrain.js';
+import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { Effects } from './Effects.js';
 import { FarmView, PlotView, WarehouseView } from './Stations.js';
 import { BuildingView } from './Buildings.js';
@@ -60,6 +61,7 @@ export class Scene {
     this.tinted = new Container();
     this.lights = new Container();
     this.lightTexture = createGlowTexture();
+    this.carLights = new Map(); // faros de los Willys y las chivas (v3.12)
     this.weather = new Weather();
     app.stage.addChild(this.background.stars, this.background.view, this.world, this.weather.view);
 
@@ -85,6 +87,7 @@ export class Scene {
     this.critters = new Critters(this.zone, this.terrain, this.objects);
     this.mules = new Map();
     this.drawExitSign();
+    this.drawZoneSign();
     // Rutas que salen de esta zona o llegan a ella: carretera, letrero y la Chiva.
     this.routes = ROUTES.filter((r) => this.zone.routes?.[r.id]).map((r) => {
       const view = new ChivaView(r.product);
@@ -168,6 +171,17 @@ export class Scene {
       view.setSelected(true);
       this.pendingSelect = null;
     }
+  }
+
+  // El nombre de la zona (v3.12): un letrero grande junto a la carretera, con la región debajo.
+  drawZoneSign() {
+    const region = REGIONS_BY_ID[REGION_OF_ZONE[this.zone.id]];
+    const view = new ZoneSign(`${this.zone.icon} ${this.zone.name}`, `${region.icon} ${region.name}`);
+    const [gx, gy] = ZONE_SIGN;
+    const p = iso(gx, gy);
+    view.position.set(p.x, p.y);
+    view.zIndex = gx + gy;
+    this.objects.addChild(view);
   }
 
   drawExitSign() {
@@ -445,6 +459,7 @@ export class Scene {
         else this.restSince[k] ??= this.time;
         const resting = this.restSince[k] !== null && this.time - this.restSince[k] > 2;
         this.jeeps[k].place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, j.phase === 'out' ? load : waiting, resting, this.time);
+        this.vehicleLight(`jeep${k}`, p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, j.phase !== 'idle');
         if (k) return;
         // El perro persigue al primero en una salida de cada 5 a 15, no en todas.
         if (j.phase !== 'idle' && this.jeepPhase === 'idle') {
@@ -491,12 +506,45 @@ export class Scene {
         }
       }
       rv.view.visible = pos !== null;
-      if (pos === null) continue;
+      if (pos === null) {
+        this.vehicleLight(`chiva:${r.id}`, 0, 0, 0, 0, false);
+        continue;
+      }
       const eased = pos * pos * (3 - 2 * pos);
       const p = pointAt(rv.road, eased);
       const load = st.phase === 'go' ? st.load / routeCapacity(state, r.id) : 0;
       rv.view.place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, load);
+      this.vehicleLight(`chiva:${r.id}`, p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, true, 0.75);
     }
+  }
+
+  // Faros de un vehículo (v3.12): un halo cálido adelante, el que alumbra la carretera y una luz roja
+  // atrás. Van en la capa de las luces, que se ve más cuanto más de noche. on: si va andando.
+  vehicleLight(key, gx, gy, dx, dy, on, half = 0.5) {
+    let l = this.carLights.get(key);
+    if (!l) {
+      const make = (tint, r) => {
+        const s = new Sprite(this.lightTexture);
+        s.anchor.set(0.5);
+        s.tint = tint;
+        s.blendMode = 'add';
+        s.scale.set(r / 32);
+        this.lights.addChild(s);
+        return s;
+      };
+      l = { beam: make(0xffe9a8, 30), head: make(0xfff6d8, 14), tail: make(0xff3b30, 7) };
+      this.carLights.set(key, l);
+    }
+    for (const s of Object.values(l)) s.visible = on;
+    if (!on) return;
+    const n = Math.hypot(dx, dy) || 1;
+    const at = (k, z) => iso(gx + (dx / n) * k, gy + (dy / n) * k, z);
+    const head = at(half, 7);
+    const beam = at(half + 0.9, 0);
+    const tail = at(-half, 7);
+    l.head.position.set(head.x, head.y);
+    l.beam.position.set(beam.x, beam.y);
+    l.tail.position.set(tail.x, tail.y);
   }
 
   // Posición en pantalla (px) de una estación, para centrar la cámara.
@@ -538,6 +586,26 @@ function createGlowTexture() {
 }
 
 // Letrero de madera simple.
+// Letrero de la zona: dos postes y una tabla ancha con el nombre y, más pequeña, la región.
+class ZoneSign extends Container {
+  constructor(name, region) {
+    super();
+    const g = new Graphics();
+    const t = new Text({ text: name, style: { fontFamily: FONT, fontSize: 14, fontWeight: '700', fill: 0xfff3d6 }, resolution: 3 });
+    const r = new Text({ text: region, style: { fontFamily: FONT, fontSize: 9, fontWeight: '600', fill: 0xf3dcae }, resolution: 3 });
+    const w = Math.max(90, t.width + 20, r.width + 20);
+    g.ellipse(0, 1, w / 2, 5).fill({ color: 0x000000, alpha: 0.18 });
+    for (const x of [-w / 2 + 8, w / 2 - 8]) g.rect(x - 2, -34, 4, 34).fill(PAL.woodDark);
+    g.roundRect(-w / 2, -66, w, 34, 6).fill(PAL.wood).stroke(OUTLINE);
+    g.roundRect(-w / 2 + 3, -63, w - 6, 28, 4).stroke({ width: 1, color: PAL.woodDark, alpha: 0.6 });
+    t.anchor.set(0.5);
+    t.position.set(0, -54);
+    r.anchor.set(0.5);
+    r.position.set(0, -40);
+    this.addChild(g, t, r);
+  }
+}
+
 class WoodSign extends Container {
   constructor(text) {
     super();

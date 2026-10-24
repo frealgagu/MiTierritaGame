@@ -1,6 +1,7 @@
 import { toast } from './toast.js';
 import { setCredit } from '../sim/upgrades.js';
 import { formatMult } from '../core/format.js';
+import { REGIONS_BY_ID } from '../data/regions.js';
 
 // Opciones de desarrollador, ocultas en el menú: se muestran tocando 7 veces la versión.
 // Acelerar el tiempo, permitir saldo negativo y simular reinicios del segundo final (multiplicador de
@@ -36,7 +37,8 @@ function store(prefs) {
   }
 }
 
-export function bindDevOptions(game) {
+// getActive: el Game de la región que se ve (v3.12: los reinicios simulados son de esa región).
+export function bindDevOptions(game, getActive = () => game) {
   const prefs = load();
   const box = document.getElementById('dev-box');
   const input = document.getElementById('dev-speed');
@@ -86,8 +88,9 @@ export function bindDevOptions(game) {
   legacy.max = MAX_RESETS;
   const resets = () => Math.min(MAX_RESETS, Math.max(0, Math.round(Number(legacy.value) || 0)));
   const showMult = () => (legacyMultText.textContent = `= ${formatMult(2 ** resets())}`);
+  const region = () => getActive().state;
   const syncLegacy = () => {
-    legacy.value = String(game.state.legacy?.resets ?? 0);
+    legacy.value = String(region().legacy?.resets ?? 0);
     showMult();
   };
   syncLegacy();
@@ -95,12 +98,13 @@ export function bindDevOptions(game) {
   // Como la velocidad: se aplica mientras se escribe.
   legacy.addEventListener('input', () => {
     if (legacy.value === '') return;
-    game.state.legacy = { history: [], ...game.state.legacy, resets: resets() };
+    const s = region();
+    s.legacy = { history: [], ...s.legacy, resets: resets() };
     showMult();
   });
   legacy.addEventListener('change', () => {
     legacy.value = String(resets());
-    toast(`🔁 Producción ${formatMult(2 ** resets())}`);
+    toast(`🔁 ${REGIONS_BY_ID[region().region ?? 'cafetero'].name}: producción ${formatMult(2 ** resets())}`);
   });
   chip.addEventListener('click', () => setScale(1));
 

@@ -1,11 +1,17 @@
 // Segundo final (v1.6): todas las estaciones de todas las zonas de la región en el nivel 100, con el
 // primer final ya logrado (la última zona completa: el Pueblo en el Eje Cafetero, desde la v1.7.12).
+// Desde la v3.12 pide además los arrieros y las rutas entre zonas en el nivel 100, todos los objetivos
+// cobrados y todas las investigaciones compradas (ver masteryParts).
 // Al lograrlo se puede volver a empezar la región con la producción multiplicada (ver modifiers.js:
 // legacyMult). Desde la v3.0, cada región tiene el suyo.
 import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS_BY_ID, regionOf } from '../data/regions.js';
 import { clockOf } from './calendar.js';
 import { MAX_LEVEL } from './rules.js';
+import { STATIONS_BY_ID } from '../data/stations.js';
+import { GOALS_BY_ZONE } from '../data/goals.js';
+import { RESEARCH } from '../data/research.js';
+import { REGION_OF_ZONE } from '../data/regions.js';
 import { createInitialState } from './state.js';
 import { legacyMult } from './modifiers.js';
 import { bankRun } from './logros.js';
@@ -23,11 +29,29 @@ export const maxedCount = (state) => stationsOf(state).filter((id) => (state.sta
 // La última zona de la región (su primer final).
 export const finalZone = (state) => regionOf(state).zones.at(-1);
 
-// Marca el segundo final la primera vez que todo llega al nivel 100 con el Pueblo ya completo (y avisa).
-// Se mira al comprar y al cobrar un objetivo: se puede tener todo al 100 antes de exportar los
-// contenedores del primer final, y entonces llega al cobrarlo.
+// Lo que pide el segundo final (v3.12), con cuánto lleva de cada cosa: [{ id, icon, label, have, need }].
+export function masteryParts(state) {
+  const region = regionOf(state);
+  const at100 = (level) => (level ?? 0) >= MAX_LEVEL;
+  const stations = stationsOf(state);
+  const carried = stations.filter((id) => !STATIONS_BY_ID[id].side); // la Compostera no tiene arrieros
+  const routes = Object.keys(state.routes ?? {});
+  const goals = region.zones.flatMap((z) => GOALS_BY_ZONE[z] ?? []);
+  const research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === region.id);
+  return [
+    { id: 'stations', icon: '🏭', label: 'Estaciones en el nivel 100', have: stations.filter((id) => at100(state.stations[id]?.level)).length, need: stations.length },
+    { id: 'transport', icon: '🐴', label: 'Arrieros en el nivel 100', have: carried.filter((id) => at100(state.stations[id]?.transport?.level)).length, need: carried.length },
+    { id: 'routes', icon: '🚚', label: 'Rutas entre zonas en el nivel 100', have: routes.filter((id) => at100(state.routes[id]?.level)).length, need: routes.length },
+    { id: 'goals', icon: '🎯', label: 'Objetivos cobrados', have: goals.filter((g) => state.goals.claimed.includes(g.id)).length, need: goals.length },
+    { id: 'research', icon: '🔬', label: 'Investigaciones compradas', have: research.filter((r) => state.research.includes(r.id)).length, need: research.length },
+  ];
+}
+export const masteryReady = (state) => masteryParts(state).every((p) => p.have >= p.need);
+
+// Marca el segundo final la primera vez que se cumple todo con la última zona ya completa (y avisa).
+// Se mira al comprar una mejora o una investigación y al cobrar un objetivo.
 export function checkMastery(state, bus) {
-  if (state.mastered || !state.zones[finalZone(state)]?.complete || maxedCount(state) < stationsOf(state).length) return false;
+  if (state.mastered || !state.zones[finalZone(state)]?.complete || !masteryReady(state)) return false;
   state.mastered = true;
   bus.emit('mastered', { playTime: state.playTime });
   return true;
@@ -56,12 +80,12 @@ export function restartState(state, now = Date.now(), profile = null) {
   next.regionDone = Boolean(state.regionDone || state.zones[region.zones.at(-1)]?.complete);
   // Lo que no se pierde (v2.0): Renombre, medallas, álbum, decoración y logros; y lo de esta partida
   // pasa al acumulado de los logros (v2.3). Solo la partida del Eje Cafetero guarda el perfil.
-  // Los eventos (v3.7): los cupos que esperan sus 3 años y lo ya jugado siguen; el tablero en juego se
-  // pierde y su cupo vuelve a llenarse cuando haya una zona lista.
+  // Los eventos siguen tal cual (v3.12): los tableros en juego, los cupos (con su evento o esperando sus
+  // 3 años) y lo ya jugado. (Hasta la v3.11 el tablero en juego se perdía.)
   const ev = state.events ?? {};
   next.events = {
-    boards: {},
-    slots: [0, 1].map((i) => (ev.slots?.[i]?.until !== undefined ? ev.slots[i] : null)),
+    boards: structuredClone(ev.boards ?? {}),
+    slots: [0, 1].map((i) => ev.slots?.[i] ?? null),
     last: { ...ev.last },
     count: { ...ev.count },
   };

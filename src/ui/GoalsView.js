@@ -2,7 +2,7 @@ import { formatMult, formatNumber } from '../core/format.js';
 import { GOALS_BY_ZONE } from '../data/goals.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { activeGoals, goalProgress, goalText } from '../sim/goals.js';
-import { maxedCount, stationsOf } from '../sim/legacy.js';
+import { finalZone, masteryParts } from '../sim/legacy.js';
 import { legacyMult } from '../sim/modifiers.js';
 import { fit } from './fit.js';
 
@@ -55,7 +55,9 @@ export class GoalsView {
     // completas y sin objetivos aquí, el segundo final: todas las estaciones al nivel 100.
     const i = Math.max(0, progress.findIndex((p) => p.done));
     const g = goals[i];
-    const master = !g && state.zones.pueblo?.complete ? masteryCard(state, true) : null;
+    // (v3.12: con la última zona de la región, no solo el Pueblo: en Santander no salía.)
+    const finished = Boolean(state.zones[finalZone(state)]?.complete);
+    const master = !g && finished ? masteryCard(state, true) : null;
     this.tracker.hidden = !g && !master;
     const trackerHtml = g ? goalCard(g, progress[i], true) : master;
     if (trackerHtml && trackerHtml !== this.trackerHtml) {
@@ -75,25 +77,28 @@ export class GoalsView {
       <p class="goals-count">${ZONES_BY_ID[zone].icon} ${ZONES_BY_ID[zone].name} · objetivo ${Math.min(done + 1, list.length)} de ${list.length}</p>
       ${goals.map((goal, k) => goalCard(goal, progress[k], false)).join('')}
       ${goals.length === 0 ? `<p class="goals-count">¡Completaste todos los objetivos de ${ZONES_BY_ID[zone].name}!</p>` : ''}
-      ${goals.length === 0 && state.zones.pueblo?.complete ? masteryCard(state, false) : ''}`;
+      ${finished ? masteryCard(state, false) : ''}`;
     if (html !== this.html) this.body.innerHTML = this.html = html;
   }
 }
 
-// Segundo final: cuántas estaciones van en el nivel 100 y, al lograrlo, el botón para volver a empezar.
+// Segundo final: lo que pide (v3.12: estaciones, arrieros y rutas en el nivel 100, todos los objetivos
+// y todas las investigaciones), cuánto va de cada cosa y, al lograrlo, el botón para volver a empezar.
 function masteryCard(state, compact) {
-  const n = maxedCount(state);
-  const total = stationsOf(state).length;
+  const parts = masteryParts(state);
+  const have = parts.reduce((n, p) => n + Math.min(p.have, p.need), 0);
+  const need = parts.reduce((n, p) => n + p.need, 0);
   const action = state.mastered
     ? `<button class="btn claim" data-mastery>🔁 Volver a empezar ${formatMult(legacyMult(state) * 2)}</button>`
     : `<span class="goal-reward">🏅 Segundo final</span>`;
+  const rows = compact ? '' : `<ul class="mastery-parts">${parts.map((p) => `<li class="${p.have >= p.need ? 'ok' : ''}">${p.have >= p.need ? '✅' : p.icon} ${p.label}<span>${Math.min(p.have, p.need)} / ${p.need}</span></li>`).join('')}</ul>`;
   return `
     <div class="goal final ${state.mastered ? 'done' : ''} ${compact ? 'compact' : ''}">
-      <div class="goal-text">${state.mastered ? '✅' : '🏅'} Lleva todas las estaciones de las seis zonas al nivel 100</div>
+      <div class="goal-text">${state.mastered ? '✅' : '🏅'} Todo al nivel 100, con todos los objetivos y las investigaciones</div>
       <div class="goal-row">
-        <div class="bar"><div style="width:${Math.round((n / total) * 100)}%"></div></div>
-        <span class="goal-count">${n} / ${total}</span>
-      </div>
+        <div class="bar"><div style="width:${Math.round((have / need) * 100)}%"></div></div>
+        <span class="goal-count">${Math.round((have / need) * 100)} %</span>
+      </div>${rows}
       <div class="goal-foot">${action}</div>
     </div>`;
 }

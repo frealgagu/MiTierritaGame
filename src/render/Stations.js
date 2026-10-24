@@ -285,6 +285,8 @@ const PLAZA_HOUSE = {
   pueblo: { wall: 0xf6d860, trims: [PAL.balconyGreen, PAL.balconyBlue, PAL.balconyRed, PAL.balconyYellow, 0x8e44ad, 0xffd700], awning: PAL.balconyRed, sign: 'cup' },
   // Barichara (v3.5): tapia blanca, puertas y balcones verdes o azules, toldo verde.
   barichara: { wall: 0xf7f4ee, trims: [0x2f7d4f, 0x2f7d4f, 0x2e6fd1, 0x2f7d4f, 0x8e44ad, 0xffd700], awning: 0x2f7d4f, sign: 'sweet' },
+  // Salento (v3.12): casona blanca con remates de colores vivos, como las de la Calle Real.
+  salento: { wall: 0xfbf8f1, trims: [0xd7263d, 0x2e6fd1, 0x2fa36b, 0xf07f1d, 0x8e44ad, 0xf2b705], awning: 0xd7263d, sign: 'cup' },
 };
 
 function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {

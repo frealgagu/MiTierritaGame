@@ -5,6 +5,9 @@ import { createRng } from '../core/rng.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
 
 const CLIFF = 46; // px de alto del borde del mapa
+// El letrero con el nombre de la zona (v3.12), junto a la carretera; ahí no se pone decoración.
+export const ZONE_SIGN = [18.9, 21.7];
+const SIGN_CELLS = new Set(['18,20', '19,20', '18,21', '19,21', '18,22', '19,22']);
 
 // Tipo de cada casilla del mapa a partir de los datos de la zona. jeeps: cuántos Willys tiene (v3.9: con
 // dos, la carretera se amplía con el carril del segundo).
@@ -144,11 +147,14 @@ export class Terrain {
         const r = rng();
         let obj = null;
         if (this.zone.theme === 'town') {
-          // Pueblo: casitas de colores, guayacanes florecidos, faroles y alguna palma de cera.
+          // Pueblo: casitas de colores, guayacanes florecidos, faroles y alguna palma de cera. En Salento
+          // (v3.12), más palmas de cera, las del valle de Cocora (los mismos números de rng: el resto del
+          // mapa no se mueve).
+          const salento = this.zone.style === 'salento';
           if (r < 0.06) obj = townHouse(rng, this.zone.style);
-          else if (r < 0.09) obj = guayacan(rng);
+          else if (r < 0.09) obj = salento && r < 0.075 ? palm(rng) : guayacan(rng);
           else if (r < 0.105) obj = streetLamp();
-          else if (r < 0.12) obj = palm(rng);
+          else if (r < (salento ? 0.135 : 0.12)) obj = palm(rng);
         } else if (this.zone.theme === 'guava') {
           // Santander: matas de fique, guayabos sueltos, piedras y algún cactus del cañón.
           if (r < 0.05) obj = fique(rng);
@@ -209,7 +215,7 @@ export class Terrain {
           else if (r < 0.15) obj = coffeeBush(rng);
           else if (r < 0.17) obj = rock(rng);
         }
-        if (!obj || !this.isFree(gx, gy)) continue;
+        if (!obj || !this.isFree(gx, gy) || SIGN_CELLS.has(`${gx},${gy}`)) continue;
         this.occupied.add(`${gx},${gy}`);
         const ox = 0.3 + rng() * 0.4;
         const oy = 0.3 + rng() * 0.4;
@@ -242,14 +248,20 @@ const HOUSE_WALLS = [0xf4efe6, 0xf6d860, 0x9ad0ec, 0xf2a7a0, 0xb8e0a8, 0xf4efe6]
 // Barichara (v3.5): casi todas blancas, de tapia pisada.
 const BARICHARA_WALLS = [0xf7f4ee, 0xf7f4ee, 0xf7f4ee, 0xf1e6cf];
 const HOUSE_TRIMS = [PAL.balconyRed, PAL.balconyBlue, PAL.balconyGreen, PAL.balconyYellow];
+// Salento (v3.12): casas blancas de bahareque, de dos pisos, con puertas, ventanas y balcones de colores
+// vivos (rojo, azul, verde, amarillo, naranja, morado).
+const SALENTO_WALLS = [0xfbf8f1, 0xfbf8f1, 0xf7f4ee];
+const SALENTO_TRIMS = [0xd7263d, 0x2e6fd1, 0x2fa36b, 0xf2b705, 0xf07f1d, 0x8e44ad];
 function townHouse(rng, style) {
   const c = new Container();
   const g = new Graphics();
-  const walls = style === 'barichara' ? BARICHARA_WALLS : HOUSE_WALLS;
+  const salento = style === 'salento';
+  const walls = style === 'barichara' ? BARICHARA_WALLS : salento ? SALENTO_WALLS : HOUSE_WALLS;
+  const trims = salento ? SALENTO_TRIMS : HOUSE_TRIMS;
   const wall = walls[Math.floor(rng() * walls.length)];
-  const trim = HOUSE_TRIMS[Math.floor(rng() * HOUSE_TRIMS.length)];
+  const trim = trims[Math.floor(rng() * trims.length)];
   const w = 0.8 + rng() * 0.2;
-  const h = 20 + rng() * 8;
+  const h = (20 + rng() * 8) + (salento ? 8 : 0);
   shadow(g, 6, 6, 30, 12);
   box(g, -w / 2, -0.45, w, 0.9, 6, trim);
   box(g, -w / 2, -0.45, w, 0.9, h - 6, wall, { z: 6 });
@@ -257,7 +269,22 @@ function townHouse(rng, style) {
   const d = isoPoly([[-0.12, 0.45, 0], [0.12, 0.45, 0], [0.12, 0.45, 12], [-0.12, 0.45, 12]]);
   g.poly(d).fill(shade(trim, 0.75)).stroke(OUTLINE);
   const win = isoPoly([[w / 2, -0.2, 9], [w / 2, 0.05, 9], [w / 2, 0.05, 16], [w / 2, -0.2, 16]]);
-  g.poly(win).fill(0x6fa8dc).stroke(OUTLINE);
+  g.poly(win).fill(salento ? trim : 0x6fa8dc).stroke(OUTLINE);
+  if (salento) {
+    // El balcón de madera del segundo piso, de otro color, con sus barandas.
+    const rail = trims[(trims.indexOf(trim) + 1 + Math.floor(rng() * (trims.length - 1))) % trims.length];
+    const z = h - 12;
+    g.poly(isoPoly([[-w / 2, 0.45, z], [w / 2, 0.45, z], [w / 2, 0.62, z], [-w / 2, 0.62, z]])).fill(shade(rail, 0.8)).stroke(OUTLINE);
+    g.poly(isoPoly([[-w / 2, 0.62, z], [w / 2, 0.62, z], [w / 2, 0.62, z + 5], [-w / 2, 0.62, z + 5]])).fill(rail).stroke(OUTLINE);
+    for (let k = 1; k < 5; k++) {
+      const x = -w / 2 + (w * k) / 5;
+      const a = iso(x, 0.62, z);
+      const b = iso(x, 0.62, z + 5);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: shade(rail, 0.6) });
+    }
+    const win2 = isoPoly([[-0.18, 0.45, z + 2], [0.18, 0.45, z + 2], [0.18, 0.45, z + 9], [-0.18, 0.45, z + 9]]);
+    g.poly(win2).fill(shade(trim, 0.85)).stroke(OUTLINE);
+  }
   c.addChild(g);
   return c;
 }

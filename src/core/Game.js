@@ -155,7 +155,9 @@ export class Game {
   }
 
   research(id) {
-    return buyResearch(this.state, id, this.bus);
+    const bought = buyResearch(this.state, id, this.bus);
+    if (bought) checkMastery(this.state, this.bus); // (v3.12: el segundo final pide todas)
+    return bought;
   }
 
   claimGoal(id) {

@@ -1,13 +1,16 @@
 import { formatNumber } from '../core/format.js';
-import { RESEARCH } from '../data/research.js';
+import { RESEARCH, RESEARCH_BY_ID } from '../data/research.js';
+import { researchBlocker } from '../sim/upgrades.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 
 // Investigaciones: compras únicas que mejoran toda la finca.
 export class ResearchView {
-  constructor(game, getZone) {
+  // onGo(id): ir a una estación (v3.12: la que le falta a una investigación bloqueada).
+  constructor(game, getZone, onGo = () => {}) {
     this.game = game;
     this.getZone = getZone;
+    this.onGo = onGo;
     this.modal = document.getElementById('research');
     this.body = document.getElementById('research-body');
     this.badge = document.getElementById('research-badge');
@@ -16,7 +19,14 @@ export class ResearchView {
     this.modal.addEventListener('click', (e) => {
       if (e.target === this.modal) this.close();
       const btn = e.target.closest('[data-research]');
-      if (btn) this.game.research(btn.dataset.research);
+      if (btn) return void this.game.research(btn.dataset.research);
+      // Una bloqueada: a la estación que le falta.
+      const row = e.target.closest('[data-blocked]');
+      if (!row) return;
+      const target = researchBlocker(this.game.state, RESEARCH_BY_ID[row.dataset.blocked]);
+      if (!target) return;
+      this.close();
+      this.onGo(target);
     });
   }
 
@@ -60,7 +70,7 @@ export class ResearchView {
         else if (q.reason === 'locked') action = `<span class="locked">🔒 Construye ${STATIONS_BY_ID[r.requires].name}</span>`;
         else action = `<button class="btn buy small" data-research="${r.id}" ${q.ok ? '' : 'disabled'}>💰 ${formatNumber(r.cost)}</button>`;
         return `
-          <div class="research ${q.reason === 'owned' ? 'owned' : ''} ${q.reason === 'locked' ? 'locked' : ''}">
+          <div class="research ${q.reason === 'owned' ? 'owned' : ''} ${q.reason === 'locked' ? 'locked goto' : ''}" ${q.reason === 'locked' ? `data-blocked="${r.id}" title="Ir a lo que falta"` : ''}>
             <span class="research-icon">${r.icon}</span>
             <span class="research-text"><b>${r.name}</b>${withZone ? ` <small>· ${ZONES_BY_ID[r.zone].icon} ${ZONES_BY_ID[r.zone].name}</small>` : ''}<br><small>${r.desc}</small></span>
             ${action}

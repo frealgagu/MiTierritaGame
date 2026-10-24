@@ -1,7 +1,6 @@
 import { formatDuration, formatMult, formatNumber } from '../core/format.js';
 import { RESTART_RENOWN } from '../sim/renown.js';
 import { legacyMult } from '../sim/modifiers.js';
-import { stationsOf } from '../sim/legacy.js';
 import { regionOf } from '../data/regions.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 
@@ -11,7 +10,7 @@ export function showMastery(state, onRestart) {
   const mult = legacyMult(state);
   const runs = (state.legacy?.history?.length ?? 0) + 1;
   document.getElementById('mastery-text').innerHTML =
-    `Llevaste las <b>${stationsOf(state).length} estaciones</b> de ${regionOf(state).name} al <b>nivel 100</b>. Todo trabaja a toda marcha.`;
+    `Llevaste todas las estaciones de ${regionOf(state).name}, sus <b>arrieros</b> y sus <b>rutas</b> al <b>nivel 100</b>, con todos los objetivos y todas las investigaciones. Todo trabaja a toda marcha.`;
   document.getElementById('mastery-stats').textContent =
     `Partida ${runs}${mult > 1 ? ` (producción ${formatMult(mult)})` : ''} · Tiempo jugado: ${formatDuration(state.playTime)} · Ganado en total: 💰 ${formatNumber(state.totalEarned)}`;
   document.getElementById('mastery-note').textContent =

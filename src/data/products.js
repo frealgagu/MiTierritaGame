@@ -11,7 +11,7 @@ export const ZONES = [
   { id: 'lecheria', name: 'La Lechería', release: '1.2' },
   { id: 'cacaotal', name: 'El Cacaotal', release: '1.3' },
   { id: 'maizal', name: 'El Maizal', release: '1.4' },
-  { id: 'pueblo', name: 'El Pueblo', release: '1.5' },
+  { id: 'pueblo', name: 'Salento', release: '1.5' },
 ];
 
 export const PRODUCTS = {

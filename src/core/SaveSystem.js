@@ -9,6 +9,7 @@ import { EVENT_OF_ZONE, MEDALS } from '../data/events.js';
 import { LOGROS_BY_ID } from '../data/logros.js';
 import { ALBUM, PAGE_BONUS } from '../data/album.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
+import { masteryReady } from '../sim/legacy.js';
 
 const KEY = 'cafetal.save';
 
@@ -175,6 +176,9 @@ function migrateProfile(root) {
     // v3.7 → v3.8: la región terminada alguna vez (su última zona completa, o ya reiniciada).
     const last = REGIONS_BY_ID[st.region ?? 'cafetero'].zones.at(-1);
     st.regionDone = Boolean(st.regionDone || st.zones?.[last]?.complete || st.legacy?.resets > 0);
+    // v3.12: el segundo final pide más (arrieros, rutas, objetivos e investigaciones). Uno logrado con la
+    // regla de antes se quita si todavía falta algo; vuelve a llegar al completarlo.
+    if (st.mastered && !masteryReady(st)) st.mastered = false;
   }
   return root;
 }

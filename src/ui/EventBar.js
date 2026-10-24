@@ -1,7 +1,7 @@
 // Barra del tablero de un evento (v2.0): el objetivo, el reloj del evento, las medallas y las compras
 // del evento (cada una pide la anterior).
 import { formatNumber } from '../core/format.js';
-import { allActionsBought, boardRound, buyAction, boardObjective, eventDef, eventItems, eventProgress, medalFor, quoteAction } from '../sim/events.js';
+import { allActionsBought, boardRound, buyAction, boardObjective, eventDef, eventHandicaps, eventItems, eventProgress, handicapText, medalFor, quoteAction } from '../sim/events.js';
 import { EVENT_ACTIONS_BY_ID, MEDALS } from '../data/events.js';
 import { PRODUCTS } from '../data/products.js';
 import { setFitted } from './fit.js';
@@ -74,6 +74,11 @@ export class EventBar {
     const count = items.length === 1 ? `${formatNumber(Math.floor(items[0].have))} / ${formatNumber(items[0].need)}` : items.map((i) => `${PRODUCTS[i.product].icon} ${formatNumber(Math.floor(i.have))}`).join(' ');
     document.getElementById('event-count').textContent = count;
     document.getElementById('event-fill').style.width = `${100 * eventProgress(board)}%`;
+    // Lo que frena el evento (v3.12): «🪲 Cafetal al 40 % por la broca».
+    const hs = eventHandicaps(board).filter((h) => h.pct < 1);
+    const hEl = document.getElementById('event-handicap');
+    hEl.hidden = !hs.length;
+    if (hs.length) setFitted(hEl, `${def.icon} ${[...new Set(hs.map((h) => handicapText(board, h, true)))].join(' · ')}${def.blame ? ` por ${def.blame}` : ''}`);
     setFitted(document.getElementById('event-medals'), `🥇 hasta ${formatClock(obj.medals[0])} · 🥈 hasta ${formatClock(obj.medals[1])} · 🥉 después`);
     // Las compras: se redibujan solo si cambió algo (para no perder el toque a mitad de un clic).
     const states = def.actions.map((a) => {

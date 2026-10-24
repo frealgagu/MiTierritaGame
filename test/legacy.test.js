@@ -3,7 +3,10 @@ import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { analyzeChain } from '../src/sim/analysis.js';
 import { chainOf } from '../src/sim/chain.js';
-import { maxedCount, restartState, stationsOf } from '../src/sim/legacy.js';
+import { masteryParts, masteryReady, maxedCount, restartState, stationsOf } from '../src/sim/legacy.js';
+import { GOALS_BY_ZONE } from '../src/data/goals.js';
+import { RESEARCH } from '../src/data/research.js';
+import { REGION_OF_ZONE } from '../src/data/regions.js';
 import { legacyMult } from '../src/sim/modifiers.js';
 import { ZONE_LIST } from '../src/data/zones/index.js';
 import { CALENDAR } from '../src/sim/calendar.js';
@@ -33,6 +36,13 @@ function everything(level, resets = 0) {
   return game;
 }
 
+// Lo demás que pide el segundo final (v3.12): todos los objetivos y todas las investigaciones del Eje
+// Cafetero.
+function allClaimed(s) {
+  s.goals.claimed = Object.keys(s.zones).flatMap((z) => GOALS_BY_ZONE[z].map((g) => g.id));
+  s.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'cafetero').map((r) => r.id);
+}
+
 test('cada reinicio duplica la producción: ×1, ×2, ×4, ×8', () => {
   const income = [0, 1, 2, 3].map((resets) => {
     const s = everything(30, resets).state;
@@ -59,6 +69,7 @@ test('con la producción ×8 la cadena sigue cuadrando: al nivel 100 ningún pat
 test('el segundo final llega al subir la última estación al nivel 100', () => {
   const game = everything(100);
   const s = game.state;
+  allClaimed(s);
   s.zones.pueblo.complete = true;
   assert.equal(stationsOf(s).length, 38, 'las del Eje Cafetero');
   s.stations.export_dock.level = 99;
@@ -76,9 +87,9 @@ test('el segundo final llega al subir la última estación al nivel 100', () => 
 });
 
 test('sin el primer final no hay segundo: llega al cobrar los contenedores del Pueblo', async () => {
-  const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
   const game = everything(100);
   const s = game.state;
+  allClaimed(s);
   const events = [];
   game.bus.on('mastered', (e) => events.push(e));
   // Todo al nivel 100, pero el Pueblo sin completar: no cuenta.
@@ -87,9 +98,8 @@ test('sin el primer final no hay segundo: llega al cobrar los contenedores del P
   assert.equal(maxedCount(s), stationsOf(s).length);
   assert.equal(s.mastered, false);
   assert.equal(events.length, 0);
-  // Se cumplen y cobran los objetivos del Pueblo; el último (exportar los contenedores) es el primer final.
-  for (const g of GOALS_BY_ZONE.pueblo) s.goals.claimed.push(g.id);
-  s.goals.claimed.pop();
+  // Se cobra el último objetivo del Pueblo (exportar los contenedores), el primer final.
+  s.goals.claimed = s.goals.claimed.filter((id) => id !== GOALS_BY_ZONE.pueblo.at(-1).id);
   const final = GOALS_BY_ZONE.pueblo.at(-1);
   s.stats.sold[final.product] = final.amount;
   assert.ok(game.claimGoal(final.id));
@@ -183,4 +193,25 @@ test('los números enormes se leen: sufijos hasta Dc y luego notación científi
   assert.equal(formatMult(2 ** 20), '×1.048.576');
   assert.equal(formatMult(2 ** 100), '×1,27No');
   assert.equal(formatMult(2 ** 200), '×1,61e60');
+});
+
+test('el segundo final pide también arrieros, rutas, objetivos e investigaciones (v3.12)', () => {
+  const game = everything(100);
+  const s = game.state;
+  allClaimed(s);
+  s.zones.pueblo.complete = true;
+  assert.ok(masteryReady(s));
+  const missing = (fn) => {
+    const backup = structuredClone(s);
+    fn();
+    const ready = masteryReady(s);
+    Object.assign(s, backup);
+    return ready;
+  };
+  assert.equal(missing(() => (s.stations.farm.transport.level = 99)), false, 'los arrieros');
+  assert.equal(missing(() => (s.routes[Object.keys(s.routes)[0]].level = 99)), false, 'las rutas');
+  assert.equal(missing(() => s.goals.claimed.pop()), false, 'los objetivos');
+  assert.equal(missing(() => s.research.pop()), false, 'las investigaciones');
+  assert.ok(masteryReady(s));
+  assert.deepEqual(masteryParts(s).map((p) => p.id), ['stations', 'transport', 'routes', 'goals', 'research']);
 });

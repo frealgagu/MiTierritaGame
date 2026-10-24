@@ -104,7 +104,7 @@ export const ROUTES = [
   },
   {
     id: 'panela_pueblo',
-    name: 'Ruta de la panela al Pueblo',
+    name: 'Ruta de la panela a Salento',
     vehicle: 'Chiva',
     icon: '🚌',
     product: 'panela_powder',

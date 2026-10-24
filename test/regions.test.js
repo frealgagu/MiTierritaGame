@@ -6,7 +6,9 @@ import { openRegions, regionState } from '../src/sim/regions.js';
 import { restartState, stationsOf, checkMastery } from '../src/sim/legacy.js';
 import { clockOf } from '../src/sim/calendar.js';
 import { loadGame, saveGame } from '../src/core/SaveSystem.js';
-import { REGIONS } from '../src/data/regions.js';
+import { REGIONS, REGION_OF_ZONE } from '../src/data/regions.js';
+import { GOALS_BY_ZONE } from '../src/data/goals.js';
+import { RESEARCH } from '../src/data/research.js';
 import { ZONES_BY_ID } from '../src/data/zones/index.js';
 
 test('cada región tiene sus zonas y su partida empieza en la primera, con su fuente', () => {
@@ -47,6 +49,10 @@ test('cada región tiene su segundo final y su reinicio, sin tocar las demás', 
   openRegions(root);
   const s = regionState(root, 'santander');
   for (const id of stationsOf(s)) s.stations[id] = { ...(s.stations[id] ?? {}), level: 100, transport: { level: 100 } };
+  // (v3.12: también las rutas, los objetivos y las investigaciones de la región.)
+  for (const r of Object.values(s.routes)) r.level = 100;
+  s.goals.claimed = Object.keys(s.zones).flatMap((z) => GOALS_BY_ZONE[z].map((g) => g.id));
+  s.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'santander').map((r) => r.id);
   assert.equal(checkMastery(s, { emit() {} }), false, 'sin el primer final de la región');
   s.zones.guayabera.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), false, 'el final de la región es su última zona');

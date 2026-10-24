@@ -1,7 +1,7 @@
 import { formatNumber, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
-import { analyzeChain } from '../sim/analysis.js';
+import { analyzeChain, expectedCompostValue } from '../sim/analysis.js';
 import { hasBelt } from '../sim/rules.js';
 import { CHILDREN, PARENT, branchShare, nextToUnlock } from '../sim/chain.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
@@ -97,6 +97,13 @@ function detailOf(state, a, rows, sel, zone) {
   const id = kind;
   const def = STATIONS_BY_ID[id];
   const row = rows[id];
+  // Una rama aparte (v3.12: la Compostera), que no lleva nada a la bodega.
+  if (def.side && state.stations[id]) {
+    return `
+      <div class="cd-head"><span class="cd-icon">${def.icon}</span><b>${def.name}</b> <small>Nv ${state.stations[id].level}</small></div>
+      <p>${sideText(state, id)}</p>
+      <div class="cd-actions"><button class="btn buy" data-open="${id}">🏗️ Ir al edificio</button></div>`;
+  }
   if (!row) {
     return `
       <div class="cd-head"><span class="cd-icon">${def.icon}</span><b>${def.name}</b> <small>🔒 ${formatNumber(def.unlockCost)} 💰</small></div>
@@ -157,8 +164,23 @@ const TAG_H = 26; // alto de cada etiqueta de importación
 const MIN_COL = 98;
 const NARROW = 118; // más angostas que esto, la tarjeta pone el ícono arriba y el nombre abajo
 
+// Lo que hace una rama aparte: la Compostera vuelve abono la pulpa del Beneficiadero y todo lo que
+// vende la Finca vale más.
+const sideText = (state, id) => {
+  const def = STATIONS_BY_ID[id];
+  const from = STATIONS_BY_ID[def.requires];
+  const bonus = Math.round((expectedCompostValue(state) - 1) * 100);
+  return `Recibe ${Object.keys(def.in).map((p) => `${PRODUCTS[p].icon} ${PRODUCTS[p].name.toLowerCase()}`).join(', ')} de ${withArticle(from.name)} y la vuelve ${PRODUCTS[Object.keys(def.out)[0]].name.toLowerCase()}: todo lo que vende la zona vale <b>+${bonus} %</b>.`;
+};
+
 function diagram(state, a, rows, locked, zone, width, selected) {
-  const kidsOf = (id) => [...(rows[id]?.children ?? []), ...(locked && PARENT[locked] === id ? [locked] : [])];
+  // Las ramas aparte (v3.12: la Compostera) cuelgan de la estación que las habilita.
+  const sides = ZONES_BY_ID[zone].plots.map((p) => p.stationId).filter((id) => STATIONS_BY_ID[id].side);
+  const kidsOf = (id) => [
+    ...(rows[id]?.children ?? []),
+    ...(locked && PARENT[locked] === id ? [locked] : []),
+    ...(rows[id] ? sides.filter((s) => STATIONS_BY_ID[s].requires === id) : []),
+  ];
   // Columnas: cada hoja una, cada estación centrada sobre sus ramas.
   const pos = {};
   let leaf = 0;
@@ -209,7 +231,23 @@ function diagram(state, a, rows, locked, zone, width, selected) {
     const b = box(id);
     const def = STATIONS_BY_ID[id];
     const row = rows[id];
-    const parent = PARENT[id];
+    const parent = PARENT[id] ?? (def.side ? def.requires : undefined);
+    // Una rama aparte: tubo punteado desde la estación que la abastece y, sin seguir a la bodega, lo que
+    // suma al valor de lo que se vende.
+    if (def.side) {
+      const p = box(parent);
+      const built = Boolean(state.stations[id]);
+      const mid = p.bottom + GAP / 2;
+      pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${b.cx} V ${b.top}`, built ? 'import' : 'locked');
+      nodes.push(
+        built
+          ? `<button class="dg-node dg-side ${b.w < NARROW ? 'narrow' : ''} ${sel(id)}" data-pick="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">
+        <span class="dg-icon">${def.icon}</span><span class="dg-name">${def.name}</span><span class="dg-meta">Nv ${state.stations[id].level} · 💰 +${Math.round((expectedCompostValue(state) - 1) * 100)} %</span></button>`
+          : `<button class="dg-node locked ${b.w < NARROW ? 'narrow' : ''} ${sel(id)}" data-pick="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">
+        <span class="dg-icon">${def.icon}</span><span class="dg-name">${def.name}</span><span class="dg-meta">🔒 ${formatNumber(def.unlockCost)} 💰</span></button>`,
+      );
+      continue;
+    }
     // Tubo desde la anterior: baja, cruza y entra por la izquierda de la tarjeta (a la derecha van las etiquetas).
     if (parent && pos[parent]) {
       const p = box(parent);

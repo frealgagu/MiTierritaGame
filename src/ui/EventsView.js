@@ -44,7 +44,7 @@ export class EventsView {
   render() {
     const s = this.game.state;
     const profile = s.profile ?? { renown: 0, medals: {} };
-    document.getElementById('events-renown').textContent = `⭐ Renombre: ${profile.renown} · 🏆 ${profile.renownTotal ?? profile.renown} en total`;
+    document.getElementById('events-renown').textContent = `⭐ Renombre: ${profile.renown} · 🏆 Prestigio: ${profile.renownTotal ?? profile.renown}`;
     const card = (def) => {
       const owner = this.stateOf(def.zone);
       const st = owner && eventStatus(owner, def.zone);

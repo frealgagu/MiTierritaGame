@@ -106,6 +106,21 @@ export function researchLocked(state, r) {
   return Boolean(r.minLevel && !zoneAtLevel(state, r.zone, r.minLevel));
 }
 
+// Lo primero que le falta a una investigación bloqueada (v3.12), para ir allá: la estación por construir
+// o por subir ('id'), sus arrieros ('id:transport') o, en la Maestría y la Supremacía, la primera
+// estación de la zona que no llega al nivel. null si no le falta nada de eso.
+export function researchBlocker(state, r) {
+  const st = r.requires && state.stations[r.requires];
+  if (r.requires && !st) return r.requires;
+  if (r.stationLevel && st.level < r.stationLevel) return r.requires;
+  if (r.stationLevel && !STATIONS_BY_ID[r.requires].side && st.transport.level < r.stationLevel) return `${r.requires}:transport`;
+  if (r.minLevel) {
+    const z = ZONES_BY_ID[r.zone];
+    return [...z.chain, ...z.plots.map((p) => p.stationId)].find((id) => (state.stations[id]?.level ?? 0) < r.minLevel) ?? null;
+  }
+  return null;
+}
+
 // Investigaciones: aparecen cuando su estación está construida y se compran una vez.
 export function quoteResearch(state, id) {
   const r = RESEARCH_BY_ID[id];

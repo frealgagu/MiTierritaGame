@@ -176,7 +176,7 @@ async function start() {
   chain = new ChainView(active, select, getZone);
   chatter = new Chatter(active, getZone);
   goals = new GoalsView(active, getZone);
-  research = new ResearchView(active, getZone);
+  research = new ResearchView(active, getZone, (id) => select(id));
   zones = new ZonesView(game, games, getZone, (z) => {
     showZone(z);
     toast(`${ZONES_BY_ID[z].icon} ${ZONES_BY_ID[z].name}`, 2000);
@@ -423,7 +423,7 @@ async function start() {
   window.addEventListener('pagehide', persist);
 
   bindMenu(game, sound, music, () => active);
-  bindDevOptions(game);
+  bindDevOptions(game, () => active);
   // En la app de Android el juego ya va dentro del paquete: sin service worker, con el botón «atrás».
   if (isNativeApp()) {
     bindNative({ closeTop, onHide, onShow: () => (onShow(), checkForUpdate()) });

@@ -18,7 +18,7 @@ const CAFETERO = [
   { id: 'contenedores', icon: '🚢', name: 'Al puerto', text: 'Exporta {n} contenedores', metric: 'sold:container', tiers: [1000, 100000, 10000000], reward: [2, 4, 8] },
   { id: 'monedas', icon: '💰', name: 'Patrón', text: 'Gana {n} monedas en total', metric: 'earned', tiers: [1e9, 1e15, 1e21], reward: [1, 2, 4] },
   { id: 'anos', icon: '📅', name: 'Toda una vida', text: 'Vive {n} años de juego', metric: 'years', tiers: [4, 16, 64], reward: [1, 2, 4] },
-  { id: 'pueblo', icon: '⛪', name: 'Primer gran pedido', text: 'Completa el Pueblo {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
+  { id: 'pueblo', icon: '⛪', name: 'Primer gran pedido', text: 'Completa Salento {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
   { id: 'maestro', icon: '🏅', name: 'Maestro cafetero', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
   { id: 'medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [6, 24, 60], reward: [1, 2, 4] },
   { id: 'todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },

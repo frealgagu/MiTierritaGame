@@ -33,6 +33,7 @@ import { fit, setFitted } from './fit.js';
 import { alerts } from '../sim/alerts.js';
 import { FACTS } from '../data/lore.js';
 import { clockOf, hourLabel, isLunch, nextWorkHour, resting, workOf } from '../sim/calendar.js';
+import { eventDef, eventHandicaps, handicapText } from '../sim/events.js';
 import { harvestFactor, waitingHarvest } from '../sim/production.js';
 
 const SUBTITLE_MS = 7000; // cada cuánto cambia el subtítulo (descripción y datos reales)
@@ -399,6 +400,12 @@ function stationStatus(state, id) {
   const st = state.stations[id];
   const def = STATIONS_BY_ID[id];
   if (resting(state)) return { text: restText(state), bad: false };
+  // En un evento (v3.12), lo que lo frena y cuánto rinde, con la compra que sigue.
+  const h = eventHandicaps(state).find((x) => x.station === id && x.pct < 1);
+  if (h) {
+    const next = eventDef(state).actions.find((a) => !state.research.includes(a.id));
+    return { text: `${handicapText(state, h)}${next ? ` Compra ${next.icon} ${next.name} en la barra del evento.` : ''}`, bad: true };
+  }
   if (def.side) return composterStatus(state, st);
   // Cosecha de temporada (v3.4): fuera de ella no produce, y no es un problema.
   if (!def.harvest && st.status === 'starved' && waitingHarvest(state, def.zone)) {

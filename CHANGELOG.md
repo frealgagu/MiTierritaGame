@@ -1,5 +1,18 @@
 # Registro de cambios
 
+## v3.12.0 — Salento, luces en la carretera y un segundo final más completo
+- **El Pueblo ahora es Salento**, y se parece: casas blancas de dos pisos con puertas y balcones de colores vivos, más palmas de cera y la Casa del café con remates de colores.
+- **Cada zona muestra su nombre** en un letrero junto a la carretera, con la región debajo.
+- **Luces de noche:** los Willys y las chivas prenden los faros (y la luz roja de atrás) cuando van andando.
+- **Eventos:** el panel de la estación afectada dice cuánto rinde y por qué («🪲 El Cafetal produce al 40 % por culpa de la broca», «🪨 A la Mesa de chocolate le llega el 0 % de panela por culpa del derrumbe») y qué comprar; la barra del evento también lo muestra, y sube con cada compra.
+- **Volver a empezar no quita los eventos**: los tableros en juego y sus cupos siguen tal cual.
+- **Segundo final más completo:** además de todas las estaciones en el nivel 100, pide **sus arrieros** y **las rutas** que traen lo de otras zonas en el nivel 100, **todos los objetivos** cobrados y **todas las investigaciones** compradas. La tarjeta del segundo final muestra cuánto va de cada cosa. Si ya lo tenías con la regla de antes y te falta algo, vuelve a llegar al completarlo.
+- **Al terminar Santander** (o cualquier región) la tarjeta del segundo final y su botón para volver a empezar salen en los objetivos, como en el Eje Cafetero; antes solo salían con el Pueblo.
+- **La Compostera sale en la cadena** 🔗, como una rama aparte del Beneficiadero, con lo que suma al valor de lo que vende la Finca.
+- **Investigaciones bloqueadas:** al tocarlas te lleva a lo que les falta (la estación por construir o subir, o sus arrieros).
+- **Opciones de desarrollador:** los reinicios simulados son de la región que estás viendo, no solo del Eje Cafetero.
+- El total de Renombre ganado ahora se llama **Prestigio** 🏆.
+
 ## v3.11.0 — Reinicios con Renombre y total ganado
 - **Cada reinicio da 10 ⭐ de Renombre**, el de cualquier región. La pantalla de volver a empezar lo dice.
 - **Renombre ganado en total.** Se guarda todo el Renombre que has ganado, aunque ya lo hayas gastado, y se muestra en la ventana del Renombre («🏆 Ganado en total») y en la de eventos. En las partidas de antes se calcula con las medallas, los logros y las páginas del álbum que ya tenías.

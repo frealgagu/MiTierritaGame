@@ -5,6 +5,7 @@
 //   stations: estaciones que ya están construidas al empezar (en el nivel `level`)
 //   coins:    con cuánto se empieza (v3.1.1: lo que cuesta la primera compra del evento, para que desde el
 //             primer segundo haya algo que decidir: esa compra o subir estaciones)
+//   blame:    qué frena la producción, para decir «el Cafetal produce al 40 % por culpa de la broca»
 //   speed:    lo que el evento le hace a la velocidad de cada estación (la broca: el Cafetal al 40 %)
 //   supply:   lo que llega de afuera por cada importado, de 0 (nada) a 1 (todo lo que piden): en el
 //             tablero no hay otras zonas; stock: lo que ya tienen guardado las estaciones al empezar
@@ -26,6 +27,7 @@ export const MEDALS = {
 export const EVENTS = [
   {
     id: 'broca',
+    blame: 'la broca', // lo que frena (v3.12: «al 40 % por culpa de …»)
     zone: 'finca',
     icon: '🪲',
     name: 'La broca',
@@ -49,6 +51,7 @@ export const EVENTS = [
   },
   {
     id: 'molienda',
+    blame: 'el bagazo húmedo', // lo que frena (v3.12: «al 40 % por culpa de …»)
     zone: 'trapiche',
     icon: '🔥',
     name: 'La gran molienda',
@@ -95,6 +98,7 @@ export const EVENTS = [
   },
   {
     id: 'derrumbe',
+    blame: 'el derrumbe', // lo que frena (v3.12: «al 40 % por culpa de …»)
     zone: 'cacaotal',
     icon: '🪨',
     name: 'Derrumbe en la vía',
@@ -119,6 +123,7 @@ export const EVENTS = [
   },
   {
     id: 'fiesta',
+    blame: 'el budare rajado', // lo que frena (v3.12: «al 40 % por culpa de …»)
     zone: 'maizal',
     icon: '🎉',
     name: 'Fiesta del maíz',
@@ -143,6 +148,7 @@ export const EVENTS = [
   },
   {
     id: 'barco',
+    blame: 'la grúa varada', // lo que frena (v3.12: «al 40 % por culpa de …»)
     zone: 'pueblo',
     icon: '🚢',
     name: 'El barco sale el viernes',
@@ -168,6 +174,7 @@ export const EVENTS = [
   // ---------- Santander (v3.6): uno por zona, con la misma mecánica que el de su par del Eje Cafetero ----------
   {
     id: 'mosca',
+    blame: 'la mosca de la fruta', // lo que frena (v3.12: «al 40 % por culpa de …»)
     zone: 'guayabera',
     icon: '🪰',
     name: 'La mosca de la fruta',
@@ -191,6 +198,7 @@ export const EVENTS = [
   },
   {
     id: 'humedad',
+    blame: 'la humedad', // lo que frena (v3.12: «al 40 % por culpa de …»)
     zone: 'tabacal',
     icon: '💧',
     name: 'Humedad en el caney',
@@ -237,6 +245,7 @@ export const EVENTS = [
   },
   {
     id: 'creciente',
+    blame: 'la creciente del río', // lo que frena (v3.12: «al 40 % por culpa de …»)
     zone: 'hato',
     icon: '🌊',
     name: 'Creciente del río',
@@ -261,6 +270,7 @@ export const EVENTS = [
   },
   {
     id: 'turistas',
+    blame: 'la falta de papel', // lo que frena (v3.12: «al 40 % por culpa de …»)
     zone: 'hormigas',
     icon: '🎒',
     name: 'Temporada de turistas',
@@ -285,6 +295,7 @@ export const EVENTS = [
   },
   {
     id: 'puente_festivo',
+    blame: 'la falta de guías', // lo que frena (v3.12: «al 40 % por culpa de …»)
     zone: 'barichara',
     icon: '🥾',
     name: 'Puente festivo',
