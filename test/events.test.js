@@ -273,3 +273,19 @@ test('en el tablero de un evento el nivel máximo es 50 (v3.10.1)', () => {
   assert.ok(g.buy('farm', 'max'));
   assert.equal(g.state.stations.farm.level, 100);
 });
+
+test('premio por región: todos sus eventos en bronce, plata u oro dan 5, 10 y 20 ⭐, una vez (v3.12)', async () => {
+  const { checkMedalBonus, regionEvents } = await import('../src/sim/events.js');
+  const p = { renown: 0, medals: {} };
+  const set = (medal) => {
+    for (const e of regionEvents('cafetero')) p.medals[e.id] = { best: medal, count: {} };
+  };
+  assert.deepEqual(checkMedalBonus(p), []);
+  set('silver');
+  assert.deepEqual(checkMedalBonus(p).map((b) => [b.region, b.medal, b.renown]), [['cafetero', 'bronze', 5], ['cafetero', 'silver', 10]]);
+  assert.deepEqual(checkMedalBonus(p), [], 'una sola vez');
+  set('gold');
+  assert.equal(checkMedalBonus(p)[0].renown, 20);
+  assert.equal(p.renown, 35);
+  assert.equal(p.renownTotal, 35);
+});

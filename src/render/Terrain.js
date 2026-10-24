@@ -7,7 +7,7 @@ import { box, gableRoof, shadow } from './procedural/shapes.js';
 const CLIFF = 46; // px de alto del borde del mapa
 // El letrero con el nombre de la zona (v3.12), junto a la carretera; ahí no se pone decoración.
 export const ZONE_SIGN = [18.9, 21.7];
-const SIGN_CELLS = new Set(['18,20', '19,20', '18,21', '19,21', '18,22', '19,22']);
+const SIGN_CELLS = new Set(['18,20', '19,20', '18,21', '19,21', '18,22', '19,22', '17,21', '17,22', '16,22', '16,23', '17,23']); // y la persona de la zona
 
 // Tipo de cada casilla del mapa a partir de los datos de la zona. jeeps: cuántos Willys tiene (v3.9: con
 // dos, la carretera se amplía con el carril del segundo).

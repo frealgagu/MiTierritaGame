@@ -1,4 +1,7 @@
-import { PEOPLE, WELCOME, WithArticle, withArticle } from '../data/lore.js';
+import { FACTS, PEOPLE, WELCOME, WithArticle, withArticle } from '../data/lore.js';
+import { formatNumber } from '../core/format.js';
+import { nextToUnlock } from '../sim/chain.js';
+import { quoteUnlock } from '../sim/upgrades.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { alerts } from '../sim/alerts.js';
 import { slowConsumers } from '../sim/transport.js';
@@ -6,7 +9,7 @@ import { waitingHarvest } from '../sim/production.js';
 import { toast } from './toast.js';
 import { clockOf, hourLabel, isLunch, isWorkTime, nextWorkHour, seasonOf, workOf } from '../sim/calendar.js';
 import { EVENTS } from '../data/events.js';
-import { eventStatus } from '../sim/events.js';
+import { eventDef, eventHandicaps, eventStatus, handicapText } from '../sim/events.js';
 
 // La persona de cada zona avisa lo importante (v1.8): la bienvenida la primera vez que se ve su zona
 // y los problemas que duran (los mismos de los íconos del mapa) en cuanto aparecen. Sin cansar: cada
@@ -17,10 +20,32 @@ const BETWEEN_MS = 45 * 1000;
 
 const capital = (s) => s[0].toUpperCase() + s.slice(1);
 
+// Lo último que dijo cada persona (v3.12: al tocarla en el mapa lo repite, si aún aplica).
+const lastLine = new Map();
+let cursor = null; // { zone, i }: por dónde va al tocarla varias veces seguidas
+
 export const say = (zone, text, ms = 6000) => {
   const p = PEOPLE[zone];
+  lastLine.set(zone, text);
+  cursor = null;
   toast(`${p.icon} ${p.name}: ${text}`, ms, { speech: true });
 };
+
+// Hablar al tocar a la persona de la zona (v3.12): la primera vez repite lo último que dijo, si todavía
+// aplica; cada toque siguiente pasa al siguiente aviso que aplique (y vuelve a empezar).
+export function talk(zone, lines) {
+  const p = PEOPLE[zone];
+  if (!lines.length) return;
+  let i;
+  if (cursor?.zone === zone) i = (cursor.i + 1) % lines.length;
+  else {
+    const k = lines.indexOf(lastLine.get(zone));
+    i = k >= 0 ? k : 0;
+  }
+  cursor = { zone, i };
+  lastLine.set(zone, lines[i]);
+  toast(`${p.icon} ${p.name}: ${lines[i]}${lines.length > 1 ? ` (${i + 1}/${lines.length})` : ''}`, 7000, { speech: true, now: true });
+}
 
 export class Chatter {
   constructor(game, getZone) {
@@ -107,6 +132,56 @@ export class Chatter {
       this.lastAny = now;
       say(zone, this.message(state, id, on, a));
     }
+  }
+
+  // Lo que la persona de la zona tiene para decir ahora (v3.12), lo más urgente primero: en un evento,
+  // lo que lo frena y qué comprar; en la partida, el evento que se puede jugar, la noche o el almuerzo, los
+  // problemas de sus estaciones, la temporada y, para que nunca se quede callada, un dato de su zona.
+  lines(zone) {
+    const state = this.game.state;
+    const out = [];
+    if (state.event) {
+      const def = eventDef(state);
+      for (const h of eventHandicaps(state)) if (h.pct < 1) out.push(handicapText(state, h));
+      const next = def.actions.find((a) => !state.research.includes(a.id));
+      if (next) out.push(`${next.icon} Compre ${next.name} (💰 ${formatNumber(next.cost)}): ${next.desc}`);
+      if (state.event.medal) out.push(`✅ La medalla ya está asegurada. Faltan las compras del evento para terminarlo.`);
+      else out.push(`${def.icon} ${def.intro}`);
+      return out;
+    }
+    for (const def of EVENTS) {
+      if (def.zone === zone && eventStatus(state, def.zone)?.kind === 'available') out.push(`${def.icon} ${def.announce}`);
+    }
+    // Lo que ya se puede construir.
+    const build = nextToUnlock(state, zone);
+    if (build && quoteUnlock(state, build).ok) out.push(`¡Ya alcanza para construir ${withArticle(STATIONS_BY_ID[build].name)}! Toque su parcela en el mapa.`);
+    const t = clockOf(state);
+    const extra = workOf(state);
+    if (!isWorkTime(t, extra)) {
+      out.push(
+        isLunch(t, extra)
+          ? '¡A almorzar! De 12 a 2 se para: la jornada sigue a las 14:00. Con Renombre ⭐ se puede trabajar también a esta hora.'
+          : `De noche no se trabaja: las estaciones descansan hasta las ${hourLabel(nextWorkHour(t, extra))}. ¡Hasta mañana, patrón!`,
+      );
+    } else {
+      for (const [id, st] of Object.entries(state.stations)) {
+        const def = STATIONS_BY_ID[id];
+        if (def.zone !== zone) continue;
+        const a = alerts(st);
+        const on = a.blocked && !def.side ? 'blocked' : a.starved ? 'starved' : a.diverting ? 'diverting' : null;
+        if (on) out.push(this.message(state, id, on, a));
+      }
+    }
+    const season = seasonOf(t);
+    if (season.id !== 'none') out.push(`${season.icon} Estamos en ${season.name.toLowerCase()} (${season.text}).`);
+    const facts = Object.keys(state.stations).filter((id) => STATIONS_BY_ID[id].zone === zone).flatMap((id) => FACTS[id] ?? []);
+    if (facts.length) out.push(`💡 ¿Sabía que…? ${facts[Math.floor(Math.random() * facts.length)]}`);
+    return out;
+  }
+
+  // Tocaron a la persona de la zona en el mapa.
+  talk(zone) {
+    talk(zone, this.lines(zone));
   }
 
   message(state, id, kind, a) {

@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.13.0 — La gente de cada zona, tus medallas y mascotas
+- **La persona de cada zona está en el mapa** (Don Jairo, Doña Inés…), junto al letrero de la zona, y también en los tableros de los eventos. Al tocarla repite lo último que dijo, si todavía aplica; cada toque siguiente pasa a otro aviso que aplique: lo que ya se puede construir, el evento que se puede jugar, la noche o el almuerzo, los problemas de sus estaciones, la temporada o un dato curioso de su zona. En un evento cuenta qué lo frena y qué comprar.
+- **Tus medallas:** en 🏅 Eventos hay un listado con la mejor medalla de cada uno de los 12 eventos. Con todos los eventos de una región en **bronce o mejor** ganas **5 ⭐**; en **plata o mejor**, **10 ⭐**; todos en **oro**, **20 ⭐** (una vez cada uno).
+- **Mascotas:** en 🎨 Decorar se compran **gatos** (50 ⭐, hasta 10) y **loros** (40 ⭐, hasta 5) para cada región. Andan por el mapa: los gatos pasean y se echan a dormir, los loros vuelan de un lado a otro y, de vez en cuando, un gato sale detrás de un loro.
+
 ## v3.12.0 — Salento, luces en la carretera y un segundo final más completo
 - **El Pueblo ahora es Salento**, y se parece: casas blancas de dos pisos con puertas y balcones de colores vivos, más palmas de cera y la Casa del café con remates de colores.
 - **Cada zona muestra su nombre** en un letrero junto a la carretera, con la región debajo.

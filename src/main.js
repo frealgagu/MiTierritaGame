@@ -19,7 +19,7 @@ import { setLook } from './render/look.js';
 import { checkLogros } from './sim/logros.js';
 import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/splash.js';
 import { EventBar, formatClock } from './ui/EventBar.js';
-import { finishEvent, startEvent } from './sim/events.js';
+import { checkMedalBonus, finishEvent, startEvent } from './sim/events.js';
 import { MEDALS } from './data/events.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
 import { openRegions, regionState } from './sim/regions.js';
@@ -169,6 +169,7 @@ async function start() {
     setLook(root.profile, REGION_OF_ZONE[zoneId]);
     scene = new Scene(app, active, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
+    scene.onTalk = (z) => chatter?.talk(z);
     if (import.meta.env.DEV) window.__cafetal = { game: active, root: game, games, scene, panel, select, music };
   };
   showZone(view.zone);
@@ -199,6 +200,7 @@ async function start() {
     setLook(root.profile, REGION_OF_ZONE[zoneId]);
     scene = new Scene(app, eg, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
+    scene.onTalk = (z) => chatter?.talk(z);
     useGame(eg);
     document.body.classList.add('event-mode');
     eventBar.show(eg);
@@ -225,6 +227,7 @@ async function start() {
     scene.destroy();
     scene = new Scene(app, board.game, sound, ZONES_BY_ID[board.zone]);
     scene.onSelect = select;
+    scene.onTalk = (z) => chatter?.talk(z);
   });
   for (const [id, tab] of [['album-btn', 'album'], ['decor-btn', 'decor'], ['logros-btn', 'logros'], ['offline-btn', 'offline']]) {
     document.getElementById(id).addEventListener('click', () => {
@@ -377,6 +380,11 @@ async function start() {
       safely(() => {
         // Los de cada región (v3.10), con el Renombre del jugador.
         const won = Object.values(games).flatMap((g) => checkLogros(g.state, root.profile));
+        // Premio por las medallas de toda una región (v3.12).
+        for (const b of checkMedalBonus(root.profile)) {
+          toast(`🏅 ¡Todos los eventos de ${REGIONS_BY_ID[b.region].name} con ${MEDALS[b.medal].icon} ${MEDALS[b.medal].name} o mejor! +${b.renown} ⭐ de Renombre`, 5000);
+          sound.milestone();
+        }
         if (!won.length) return;
         const stars = won.reduce((n, w) => n + w.reward, 0);
         const [w] = won;

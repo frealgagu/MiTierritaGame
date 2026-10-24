@@ -3,7 +3,7 @@
 // cuál se ve (empieza en la que se está jugando). El Renombre y las horas sin conexión son del jugador.
 import { PAGE_BONUS, albumOf } from '../data/album.js';
 import { DECOR } from '../data/decor.js';
-import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, WORK_COSTS, albumDone, decorOf, buyOffline, buyWillys2, buyWork, quoteWillys2, quoteWork, workLevel, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
+import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, PETS, WORK_COSTS, albumDone, buyPet, decorOf, petsOf, quotePet, buyOffline, buyWillys2, buyWork, quoteWillys2, quoteWork, workLevel, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
 import { EXTRA_BLOCKS, workBlocks } from '../sim/calendar.js';
 import { workText } from './calendar.js';
 import { openRegionStates, regionState } from '../sim/regions.js';
@@ -51,6 +51,13 @@ export class RenownView {
       if (opt) this.decorate(...opt.dataset.decor.split(':'));
       if (e.target.closest('[data-offline]') && buyOffline(profileOf(this.game.state))) {
         toast(`⏰ Ahora todo sigue produciendo ${offlineHours(profileOf(this.game.state))} h mientras no juegas.`, 3500);
+        this.render();
+      }
+      const pet = e.target.closest('[data-pet]');
+      if (pet && buyPet(profileOf(this.game.state), this.region, pet.dataset.pet)) {
+        const def = PETS[pet.dataset.pet];
+        toast(`${def.icon} ¡Un ${def.name.toLowerCase()} nuevo en ${REGIONS_BY_ID[this.region].name}!`, 3000);
+        this.onDecor(profileOf(this.game.state));
         this.render();
       }
       const w2 = e.target.closest('[data-willys2]');
@@ -138,7 +145,7 @@ export class RenownView {
       this.body.innerHTML = this.logrosHtml();
     } else {
       help.textContent = 'Cada región se decora aparte. Lo de siempre es gratis; lo demás se compra una vez con Renombre y se puede cambiar cuando quieras.';
-      this.body.innerHTML = this.decorHtml(profile);
+      this.body.innerHTML = this.petsHtml(profile) + this.decorHtml(profile);
     }
   }
 
@@ -202,6 +209,19 @@ export class RenownView {
     return `<div class="logro"><div class="logro-head"><b>⏰ Sin conexión: ${hours} h</b><span class="logro-stars">${steps}</span></div>
       <p>Al volver, se suma lo que todas tus regiones produjeron hasta ${hours} h (máximo ${max} h).</p>
       <div class="bar"><div style="width:${(100 * hours) / max}%"></div></div>${next}</div>`;
+  }
+
+  // Las mascotas de la región (v3.12): cuántas hay y el botón para comprar otra.
+  petsHtml(profile) {
+    const have = petsOf(profile, this.region);
+    const rows = Object.entries(PETS)
+      .map(([kind, def]) => {
+        const q = quotePet(profile, this.region, kind);
+        const btn = q.reason === 'max' ? '<span class="owned">✅ Completo</span>' : `<button class="btn ${q.ok ? 'buy' : ''} small" data-pet="${kind}" ${q.ok ? '' : 'disabled'}>+1 · ⭐ ${def.cost}</button>`;
+        return `<div class="pet-row"><span>${def.icon} ${def.plural}: <b>${have[kind]} / ${def.max}</b></span>${btn}</div>`;
+      })
+      .join('');
+    return `<div class="decor-cat"><h3>🐾 Mascotas</h3><p class="chain-help">Andan por el mapa de ${REGIONS_BY_ID[this.region].name}; de vez en cuando un gato sale detrás de un loro.</p>${rows}</div>`;
   }
 
   decorHtml(profile) {

@@ -3,6 +3,9 @@ import { PAL, OUTLINE, FONT } from './palette.js';
 import { Background } from './Background.js';
 import { Camera } from './Camera.js';
 import { Terrain, ZONE_SIGN } from './Terrain.js';
+import { KEEPER_SPOT, KeeperView } from './Keeper.js';
+import { Pets } from './Pets.js';
+import { LOOK } from './look.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { Effects } from './Effects.js';
 import { FarmView, PlotView, WarehouseView } from './Stations.js';
@@ -27,7 +30,7 @@ import { EVENTS_BY_ID } from '../data/events.js';
 import { quoteUnlock } from '../sim/upgrades.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive, routeCapacity } from '../sim/routes.js';
-import { ZONES_BY_ID } from '../data/zones/index.js';
+import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
 import { DayNight } from './DayNight.js';
 import { Weather } from './Weather.js';
 
@@ -85,9 +88,18 @@ export class Scene {
     this.jeeps = Array.from({ length: this.jeepCount }, (_, k) => new JeepView(k));
     for (const jeep of this.jeeps) this.objects.addChild(jeep);
     this.critters = new Critters(this.zone, this.terrain, this.objects);
+    this.pets = new Pets(this.zone, this.terrain, this.objects); // gatos y loros de la región (v3.12)
     this.mules = new Map();
     this.drawExitSign();
     this.drawZoneSign();
+    // La persona de la zona, junto al letrero (v3.12): al tocarla habla (main.js: onTalk).
+    this.onTalk = () => {};
+    this.keeper = new KeeperView(this.zone.id, ZONE_LIST.findIndex((z) => z.id === this.zone.id));
+    this.keeper.place(...KEEPER_SPOT);
+    this.keeper.on('pointertap', () => {
+      if (!this.camera?.dragged) this.onTalk(this.zone.id);
+    });
+    this.objects.addChild(this.keeper);
     // Rutas que salen de esta zona o llegan a ella: carretera, letrero y la Chiva.
     this.routes = ROUTES.filter((r) => this.zone.routes?.[r.id]).map((r) => {
       const view = new ChivaView(r.product);
@@ -324,6 +336,7 @@ export class Scene {
     this.syncMules(state);
     this.syncJeep(state);
     this.syncRoutes(state);
+    this.keeper.update(this.time);
 
     this.smokeTimer -= dt;
     if (this.smokeTimer <= 0) {
@@ -337,6 +350,8 @@ export class Scene {
     this.critters.setCows(this.farm.cowCount ?? 0);
     this.critters.setPeople(this.farm.peopleCount ?? 0);
     this.critters.update(dt, this.time, this.dayNight.light > 0.5, this.jeepPos);
+    this.pets.setCounts(LOOK.pets?.cats ?? 0, LOOK.pets?.parrots ?? 0);
+    this.pets.update(dt, this.time);
     this.updateAmbient(dt);
     this.effects.update(dt);
     this.weather.update(dt, state.event ? null : clockOf(state), this.app.screen.width, this.app.screen.height);

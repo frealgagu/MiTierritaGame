@@ -163,6 +163,27 @@ export function medalFor(obj, seconds) {
 }
 
 const ORDER = ['bronze', 'silver', 'gold'];
+
+// Premio por región (v3.12): al tener al menos bronce en todos los eventos de una región, 5 ⭐; al menos
+// plata, 10 ⭐; oro en todos, 20 ⭐. Cada uno una sola vez (profile.medalBonus[región]).
+export const MEDAL_BONUS = { bronze: 5, silver: 10, gold: 20 };
+export const regionEvents = (regionId) => EVENTS.filter((e) => REGION_OF_ZONE[e.zone] === regionId);
+// Cuántos eventos de la región tienen al menos esa medalla.
+export const medalCount = (profile, regionId, medal) => regionEvents(regionId).filter((e) => ORDER.indexOf(profile?.medals?.[e.id]?.best) >= ORDER.indexOf(medal)).length;
+export function checkMedalBonus(profile) {
+  const won = [];
+  profile.medalBonus ??= {};
+  for (const regionId of new Set(Object.values(REGION_OF_ZONE))) {
+    const have = (profile.medalBonus[regionId] ??= []);
+    for (const medal of ORDER) {
+      if (have.includes(medal) || medalCount(profile, regionId, medal) < regionEvents(regionId).length) continue;
+      have.push(medal);
+      gainRenown(profile, MEDAL_BONUS[medal]);
+      won.push({ region: regionId, medal, renown: MEDAL_BONUS[medal] });
+    }
+  }
+  return won;
+}
 // ¿Ya compró las tres mejoras del evento?
 export const allActionsBought = (board) => eventDef(board).actions.every((a) => board.research.includes(a.id));
 

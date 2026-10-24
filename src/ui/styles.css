@@ -626,3 +626,14 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 
 /* Ventana del Renombre: cuatro pestañas (v3.7) en el ancho de un teléfono. */
 #renown .tab { font-size: 0.76rem; padding-left: 3px; padding-right: 3px; white-space: nowrap; }
+/* Tus medallas (v3.12) */
+.medals-box { margin-top: 10px; border: 2px solid var(--ink); border-radius: 12px; padding: 6px 10px; background: var(--paper-2); }
+.medals-box summary { font-weight: 700; cursor: pointer; }
+.medals-box h4 { margin: 8px 0 4px; }
+.medal-list { list-style: none; margin: 0; padding: 0; font-size: 0.85rem; }
+.medal-list li { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; border-bottom: 1px dashed #d8ccb5; }
+.medal-bonus { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.8rem; margin: 6px 0; }
+.medal-bonus span { padding: 2px 6px; border-radius: 8px; background: #fff; border: 1px solid #d8ccb5; }
+.medal-bonus span.got { background: #e6f4ea; }
+.pet-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 4px 0; }
+.pet-row .btn { width: auto; }

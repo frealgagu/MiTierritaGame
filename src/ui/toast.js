@@ -38,7 +38,12 @@ function next() {
   else element().hidden = true;
 }
 
-export function toast(text, ms = 3500, { speech = false } = {}) {
+// now (v3.12): se muestra ya, sin esperar turno (lo que dice una persona al tocarla en el mapa).
+export function toast(text, ms = 3500, { speech = false, now = false } = {}) {
+  if (speech && now) {
+    show({ text, ms: readingTime(text, ms), speech: true });
+    return;
+  }
   if (speech) {
     const item = { text, ms: readingTime(text, ms), speech: true };
     if (current?.speech || current?.resume) {

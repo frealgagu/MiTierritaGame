@@ -3,7 +3,7 @@
 import { EVENTS, MEDALS } from '../data/events.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS, REGION_OF_ZONE } from '../data/regions.js';
-import { eventObjective, eventStatus } from '../sim/events.js';
+import { MEDAL_BONUS, eventObjective, eventStatus, medalCount, regionEvents } from '../sim/events.js';
 import { clockOf } from '../sim/calendar.js';
 import { formatDuration } from '../core/format.js';
 import { formatClock, objectiveText } from './EventBar.js';
@@ -82,7 +82,7 @@ export class EventsView {
     };
     const groups = REGIONS.map((r) => ({ r, cards: EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === r.id).sort((a, b) => rank(a) - rank(b)).map(card).filter(Boolean) })).filter((g) => g.cards.length);
     const html = groups.map((g) => (groups.length > 1 ? `<h3 class="research-other">${g.r.icon} ${g.r.name}</h3>` : '') + g.cards.join('')).join('');
-    this.body.innerHTML = `${html}<p class="event-soon">Cada zona que abras trae su evento.</p>`;
+    this.body.innerHTML = `${html}<p class="event-soon">Cada zona que abras trae su evento.</p>${medalsHtml(profile)}`;
   }
 
   update() {
@@ -100,4 +100,27 @@ export class EventsView {
     this.badge.hidden = ready === 0;
     this.badge.textContent = ready;
   }
+}
+
+// Todas tus medallas (v3.12): la mejor de cada evento, por región, y el premio por tenerlas todas.
+function medalsHtml(profile) {
+  const regions = REGIONS.map((r) => {
+    const rows = regionEvents(r.id)
+      .map((def) => {
+        const best = profile.medals?.[def.id]?.best;
+        return `<li><span>${def.icon} ${def.name}</span><span>${best ? `${MEDALS[best].icon} ${MEDALS[best].name}` : '— sin medalla'}</span></li>`;
+      })
+      .join('');
+    const n = regionEvents(r.id).length;
+    const bonus = ['bronze', 'silver', 'gold']
+      .map((m) => {
+        const got = (profile.medalBonus?.[r.id] ?? []).includes(m);
+        return `<span class="${got ? 'got' : ''}">${MEDALS[m].icon} ${medalCount(profile, r.id, m)}/${n} → ${got ? '✅' : `+${MEDAL_BONUS[m]} ⭐`}</span>`;
+      })
+      .join('');
+    return `<h4>${r.icon} ${r.name}</h4><ul class="medal-list">${rows}</ul><p class="medal-bonus">${bonus}</p>`;
+  });
+  return `<details class="medals-box"><summary>🏅 Tus medallas</summary>
+    <p class="chain-help">La mejor medalla de cada evento. Con todos los de una región en bronce o mejor ganas ${MEDAL_BONUS.bronze} ⭐; en plata o mejor, ${MEDAL_BONUS.silver} ⭐; todos en oro, ${MEDAL_BONUS.gold} ⭐.</p>
+    ${regions.join('')}</details>`;
 }

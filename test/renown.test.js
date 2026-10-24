@@ -81,3 +81,15 @@ test('una partida de antes de la v3.11 reconstruye su Renombre ganado en total',
   saveGame(root);
   assert.equal(loadGame().profile.renownTotal, 4 + 1 + 2 + 12 + 3);
 });
+
+test('mascotas por región: gatos a 50 ⭐ (hasta 10) y loros a 40 ⭐ (hasta 5) (v3.12)', async () => {
+  const { buyPet, petsOf, quotePet } = await import('../src/sim/renown.js');
+  const p = { renown: 2000 };
+  for (let i = 0; i < 12; i++) buyPet(p, 'cafetero', 'cats');
+  for (let i = 0; i < 7; i++) buyPet(p, 'cafetero', 'parrots');
+  assert.deepEqual(petsOf(p, 'cafetero'), { cats: 10, parrots: 5 });
+  assert.equal(p.renown, 2000 - 10 * 50 - 5 * 40);
+  assert.equal(quotePet(p, 'cafetero', 'cats').reason, 'max');
+  assert.deepEqual(petsOf(p, 'santander'), { cats: 0, parrots: 0 }, 'cada región las suyas');
+  assert.ok(quotePet(p, 'santander', 'parrots').ok);
+});
