@@ -174,6 +174,7 @@ export function checkMedalBonus(profile) {
   const won = [];
   profile.medalBonus ??= {};
   for (const regionId of new Set(Object.values(REGION_OF_ZONE))) {
+    if (!regionEvents(regionId).length) continue; // (una región que todavía no tiene eventos)
     const have = (profile.medalBonus[regionId] ??= []);
     for (const medal of ORDER) {
       if (have.includes(medal) || medalCount(profile, regionId, medal) < regionEvents(regionId).length) continue;

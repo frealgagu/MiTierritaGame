@@ -10,12 +10,12 @@ test('las notas y los acordes se leen bien', () => {
   assert.deepEqual(parseChord('Em').tones, [4, 7, 11]);
 });
 
-test('cada pieza tiene una melodía por compás, dentro del 3/4', () => {
+test('cada pieza tiene una melodía por compás, dentro de su compás', () => {
   for (const [id, song] of Object.entries(SONGS)) {
     assert.equal(song.melody.length, song.chords.length, id);
     for (const [k, bar] of song.melody.entries()) {
       for (const [e, n, note] of bar) {
-        assert.ok(e >= 0 && e + n <= 6, `${id}, compás ${k + 1}: ${note} se sale del compás`);
+        assert.ok(e >= 0 && e + n <= (song.beats ?? 3) * 2, `${id}, compás ${k + 1}: ${note} se sale del compás`);
         assert.ok(midi(note) >= 60 && midi(note) <= 84, `${id}: ${note} fuera del registro`);
       }
     }
@@ -23,11 +23,11 @@ test('cada pieza tiene una melodía por compás, dentro del 3/4', () => {
   }
 });
 
-test('la pieza suena, no satura y dura lo que dicen sus compases', () => {
+for (const id of ['cafetero', 'costa']) test(`la pieza (${id}) suena, no satura y dura lo que dicen sus compases`, () => {
   const sr = 16000;
-  const song = SONGS.cafetero;
+  const song = SONGS[id];
   const buf = renderSong(song, sr);
-  assert.equal(buf.length, Math.round((60 / song.bpm) * 3 * sr) * song.chords.length);
+  assert.equal(buf.length, Math.round((60 / song.bpm) * (song.beats ?? 3) * sr) * song.chords.length);
   let peak = 0;
   let sum = 0;
   for (let i = 0; i < buf.length; i++) {

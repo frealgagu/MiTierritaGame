@@ -128,7 +128,7 @@ export function buyWork(profile, region) {
 // región: se guarda en su partida (`willys2`) y no se pierde al reiniciarla.
 export const WILLYS2_COST = 20;
 // El álbum de una región (v3.10: cada una tiene el suyo) completo.
-export const albumDone = (profile, region = 'cafetero') => albumOf(region).every((pg) => pageDone(profile, pg.id));
+export const albumDone = (profile, region = 'cafetero') => albumOf(region).length > 0 && albumOf(region).every((pg) => pageDone(profile, pg.id));
 
 export function quoteWillys2(profile, region) {
   if (!region) return { ok: false, reason: 'region', cost: WILLYS2_COST };

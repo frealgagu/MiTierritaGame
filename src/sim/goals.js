@@ -8,6 +8,7 @@ import { RESEARCH_BY_ID } from '../data/research.js';
 import { formatNumber } from '../core/format.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { analyzeChain } from './analysis.js';
+import { REGIONS_BY_ID } from '../data/regions.js';
 
 export const VISIBLE_GOALS = 3;
 
@@ -133,7 +134,8 @@ export function claimGoal(state, id, bus) {
     const next = ZONES_BY_ID[zoneId].next;
     if (next) unlockZone(state, next, bus);
     // La última zona (v3.8): la región queda terminada para siempre (sus eventos salen en todas sus zonas).
-    else state.regionDone = true;
+    // Una región a la que todavía le faltan zonas (wip, v3.15) no se termina.
+    else if (!REGIONS_BY_ID[state.region ?? 'cafetero'].wip) state.regionDone = true;
   }
   bus.emit('goalClaimed', { goal, zone: zoneId });
   return true;

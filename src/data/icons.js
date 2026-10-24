@@ -73,6 +73,14 @@ export const ICON = {
   cajaSurtida: '\uE043', // Caja surtida: caja forrada en papel de fique con bocadillos y hoja de tabaco
   canastaCaminante: '\uE044', // Canasta del caminante: canasto con el fiambre envuelto en bijao y el almuerzo para el camino
   excursion: '\uE045', // Excursión a Guane: el letrero del Camino Real, con su sombrero y el bastón del caminante
+  ricePlant: '\uE046', // Mata de arroz: macolla de hojas largas y espigas doradas que se doblan con el peso del grano
+  paddy: '\uE047', // Arroz en cáscara: un montoncito de granos dorados alargados, con su cascarilla y la punta oscura
+  dryPaddy: '\uE048', // Arroz seco: granos dorados extendidos sobre una lona al sol, con el rastrillo de madera
+  brownRice: '\uE049', // Arroz integral: granos color crema, sin cáscara, en una totuma
+  whiteRice: '\uE04A', // Arroz blanco: un plato hondo con arroz blanco recién hecho
+  premiumRice: '\uE04B', // Arroz excelso: granos largos y brillantes, con un sello dorado de calidad
+  riceBag: '\uE04C', // Bolsa de arroz: bolsa transparente de una libra, con el arroz blanco y la etiqueta roja
+  riceSack: '\uE04D', // Bulto de arroz: costal blanco de cincuenta kilos, cosido arriba, con letras azules
 };
 
 export const ICON_FONT = 'Cafetal Icons';

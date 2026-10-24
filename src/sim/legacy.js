@@ -51,7 +51,8 @@ export const masteryReady = (state) => masteryParts(state).every((p) => p.have >
 // Marca el segundo final la primera vez que se cumple todo con la última zona ya completa (y avisa).
 // Se mira al comprar una mejora o una investigación y al cobrar un objetivo.
 export function checkMastery(state, bus) {
-  if (state.mastered || !state.zones[finalZone(state)]?.complete || !masteryReady(state)) return false;
+  // (Una región a la que todavía le faltan zonas, wip, no tiene segundo final.)
+  if (state.mastered || regionOf(state).wip || !state.zones[finalZone(state)]?.complete || !masteryReady(state)) return false;
   state.mastered = true;
   bus.emit('mastered', { playTime: state.playTime });
   return true;

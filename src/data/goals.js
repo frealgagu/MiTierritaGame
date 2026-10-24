@@ -278,5 +278,38 @@ const BARICHARA = [
   { id: 'b_final', type: 'sold', product: 'excursion', amount: 7000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA];
+// Costa · El Arrozal (v3.15): la misma lista que la Finca y la Guayabera, con el arroz.
+const ARROZAL = [
+  { id: 'z01', type: 'sold', product: 'paddy', amount: 20, reward: 15 },
+  { id: 'z02', type: 'level', target: 'rice_field', level: 5, reward: 20 },
+  { id: 'z03', type: 'level', target: 'rice_field:transport', level: 5, reward: 25 },
+  { id: 'z04', type: 'unlock', station: 'rice_dryer', reward: 30 },
+  { id: 'z06', type: 'produced', product: 'dry_paddy', amount: 50, reward: 80 },
+  { id: 'z07', type: 'level', target: 'rice_field', level: 10, reward: 100 },
+  { id: 'z08', type: 'unlock', station: 'rice_huller', reward: 150 },
+  { id: 'z09', type: 'level', target: 'dispatch:arrozal', level: 5, reward: 150 },
+  { id: 'z10', type: 'produced', product: 'brown_rice', amount: 200, reward: 300 },
+  { id: 'z11', type: 'unlock', station: 'rice_polisher', reward: 500 },
+  { id: 'z12', type: 'research', research: 'herraduras_c', reward: 500 },
+  { id: 'z13', type: 'income', zone: 'arrozal', perSecond: 5, reward: 600 },
+  { id: 'z14', type: 'level', target: 'rice_huller', level: 10, reward: 800 },
+  { id: 'z15', type: 'unlock', station: 'rice_sorter', reward: 1500 },
+  { id: 'z16', type: 'produced', product: 'premium_rice', amount: 100, reward: 2000 },
+  { id: 'z17', type: 'researchCount', count: 3, reward: 2500 },
+  { id: 'z18', type: 'income', zone: 'arrozal', perSecond: 20, reward: 4000 },
+  { id: 'z19', type: 'allLevels', zone: 'arrozal', level: 10, reward: 5000 },
+  { id: 'z20', type: 'unlock', station: 'rice_bagger', reward: 8000 },
+  { id: 'z21', type: 'produced', product: 'rice_bag', amount: 500, reward: 12000 },
+  { id: 'z22', type: 'level', target: 'rice_field', level: 25, reward: 15000 },
+  { id: 'z23', type: 'income', zone: 'arrozal', perSecond: 100, reward: 20000 },
+  { id: 'z24', type: 'unlock', station: 'rice_stacker', reward: 40000 },
+  { id: 'z25', type: 'sold', product: 'rice_sack', amount: 50, reward: 50000 },
+  { id: 'z26', type: 'research', research: 'sello_c', reward: 80000 },
+  { id: 'z27', type: 'allLevels', zone: 'arrozal', level: 25, reward: 100000 },
+  { id: 'z05', type: 'research', research: 'semilla_certificada', reward: 50000 },
+  { id: 'z28', type: 'sold', product: 'rice_sack', amount: 500, reward: 150000 },
+  { id: 'z_final', type: 'sold', product: 'rice_sack', amount: 2000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL];

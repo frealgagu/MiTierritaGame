@@ -14,7 +14,7 @@ const above = (pc, from) => from + ((pc - from) % 12 + 12) % 12;
 
 export function createSong(song, sr) {
   const beat = 60 / song.bpm;
-  const bar = Math.round(beat * 3 * sr);
+  const bar = Math.round(beat * (song.beats ?? 3) * sr);
   const length = bar * song.chords.length;
   return { song, sr, beat, bar, length, left: new Float32Array(length), right: new Float32Array(length), rng: createRng(1907) };
 }
@@ -68,8 +68,94 @@ function strum(buf, at, notes, dur, opts, up = false) {
   list.forEach((m, k) => pluck(buf, at + k * 0.012, freqOf(m), dur, opts));
 }
 
+// Suma un sonido hecho muestra a muestra (fn(s desde el golpe) → valor) desde `at`, con paneo.
+function add(buf, at, dur, pan, fn) {
+  const { sr, length, left, right } = buf;
+  const start = Math.round(at * sr);
+  const len = Math.ceil(dur * sr);
+  const gl = Math.cos(((pan + 1) * Math.PI) / 4);
+  const gr = Math.sin(((pan + 1) * Math.PI) / 4);
+  for (let n = 0; n < len; n++) {
+    const v = fn(n / sr);
+    const k = (((start + n) % length) + length) % length;
+    left[k] += v * gl;
+    right[k] += v * gr;
+  }
+}
+
+// Tambor: un tono que cae de f0 a f1 y se apaga en `decay` s, con un poco de golpe de cuero (ruido).
+function drum(buf, at, f0, f1, decay, amp, pan, slap = 0.2) {
+  const { rng } = buf;
+  let phase = 0;
+  const sr = buf.sr;
+  add(buf, at, decay * 4, pan, (t) => {
+    phase += (2 * Math.PI * (f1 + (f0 - f1) * Math.exp(-t * 30))) / sr;
+    const env = Math.exp(-t / decay);
+    return amp * env * (Math.sin(phase) + slap * (rng() * 2 - 1) * Math.exp(-t * 60));
+  });
+}
+
+// Guacharaca: el raspado de la caña con el trinche, ruido agudo que vibra con las estrías.
+function scrape(buf, at, dur, amp, pan) {
+  const { rng } = buf;
+  let last = 0;
+  add(buf, at, dur, pan, (t) => {
+    const noise = rng() * 2 - 1;
+    const hi = noise - last; // quita los graves
+    last = noise;
+    const ridges = 0.55 + 0.45 * Math.sin(2 * Math.PI * 90 * t);
+    const env = Math.min(1, t / 0.008) * (1 - t / dur);
+    return amp * hi * ridges * env;
+  });
+}
+
+// Gaita (o millo): un tono soplado, con armónicos suaves, vibrato y algo de aire.
+function blow(buf, at, freq, dur, amp, pan) {
+  const { rng } = buf;
+  const sr = buf.sr;
+  let phase = 0;
+  add(buf, at, dur + 0.05, pan, (t) => {
+    const vib = 1 + 0.006 * Math.sin(2 * Math.PI * 5.5 * t) * Math.min(1, t / 0.25);
+    phase += (2 * Math.PI * freq * vib) / sr;
+    const env = Math.min(1, t / 0.035) * (t < dur ? 1 : Math.max(0, 1 - (t - dur) / 0.05));
+    const tone = Math.sin(phase) + 0.3 * Math.sin(2 * phase) + 0.12 * Math.sin(3 * phase);
+    return amp * env * (tone + 0.08 * (rng() * 2 - 1));
+  });
+}
+
+// Compás de cumbia (4/4, corcheas 0 a 7): bajo, golpes de guitarra en el contratiempo, gaita,
+// guacharaca, llamador, tambora y tambor alegre.
+function renderCumbia(buf, index) {
+  const { song, beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const jitter = () => (rng() - 0.5) * 0.01;
+  const { root, tones } = parseChord(song.chords[index]);
+  const at = (e) => t0 + e * eighth + jitter();
+
+  // Bajo: tónica, tónica, quinta y tónica, a saltos.
+  const low = above(root, 36);
+  const fifth = above((root + 7) % 12, 36);
+  for (const [e, m, n] of [[0, low, 1.6], [3, low, 0.9], [4, fifth, 1.6], [6, low, 0.9]]) {
+    pluck(buf, at(e), freqOf(m), eighth * n, { amp: 0.42, t60: 1.5, bright: 0.2, pan: -0.1, pos: 0.3 });
+  }
+  // Guitarra: golpes cortos en cada contratiempo.
+  const chord = tones.map((pc) => above(pc, 57)).sort((a, b) => a - b);
+  for (const e of [1, 3, 5, 7]) strum(buf, at(e), chord, eighth * 0.55, { amp: 0.08, t60: 0.6, bright: 0.6, pan: -0.35 }, e % 4 === 3);
+  // Guacharaca: largo en el tiempo, corto en el contratiempo («chu-ku, chu-ku»).
+  for (let e = 0; e < 8; e++) scrape(buf, at(e), eighth * (e % 2 ? 0.45 : 0.85), e % 2 ? 0.05 : 0.08, 0.45);
+  // Llamador en el dos y el cuatro; tambora en el uno y el tres.
+  for (const e of [2, 6]) drum(buf, at(e), 260, 190, 0.07, 0.22, 0.25, 0.35);
+  for (const e of [0, 4]) drum(buf, at(e), 120, 70, 0.14, 0.38, -0.2, 0.15);
+  // Tambor alegre: repica a su gusto.
+  for (const e of [1, 3, 5, 7]) if (rng() < 0.55) drum(buf, at(e) + (rng() < 0.3 ? eighth / 2 : 0), 330, 280, 0.05, 0.16 + rng() * 0.08, 0.3, 0.5);
+  // Gaita.
+  for (const [e, n, note] of song.melody[index] ?? []) blow(buf, at(e), freqOf(midi(note)), n * eighth * 0.92, 0.2, 0.05);
+}
+
 // Toca el compás `index`: bajo, guitarra, tiple y melodía.
 export function renderBar(buf, index) {
+  if (buf.song.style === 'cumbia') return renderCumbia(buf, index);
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
   const t0 = (index * buf.bar) / buf.sr;

@@ -1,4 +1,4 @@
-// Música propia, una pieza por región (v1.8.7). Cada compás de 3/4 se cuenta en corcheas (0 a 5) y cada
+// Música propia, una pieza por región (v1.8.7). Cada compás de 3/4 (salvo la cumbia, en 4/4) se cuenta en corcheas (0 a 5) y cada
 // nota de la melodía es [corchea donde empieza, cuántas corcheas dura, nota]. Las notas largas se tocan
 // en trémolo, como la bandola andina; el acompañamiento (bajo y rasgueo de guitarra y tiple) sale de
 // los acordes.
@@ -98,8 +98,57 @@ const GUABINA = {
   ],
 };
 
-// Por región; las demás (cumbia, joropo, torbellino) llegan con sus regiones.
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA };
+// La Costa: una cumbia en la menor que pasa a do mayor (v3.15). El compás es de 4/4 (corcheas 0 a 7) y
+// suena distinto: gaita en la melodía, guacharaca, llamador, tambora y tambor alegre (ver compose.js).
+const CUMBIA = {
+  name: 'Cumbia del arrozal',
+  bpm: 100,
+  beats: 4,
+  style: 'cumbia',
+  chords: [
+    'Am', 'Am', 'E7', 'E7', 'E7', 'E7', 'Am', 'Am',
+    'A7', 'A7', 'Dm', 'Dm', 'Am', 'E7', 'Am', 'Am',
+    'C', 'C', 'G7', 'G7', 'G7', 'G7', 'C', 'C',
+    'C7', 'C7', 'F', 'F', 'C', 'G7', 'C', 'E7',
+  ],
+  melody: [
+    [[0, 1, 'E5'], [1, 1, 'A5'], [2, 2, 'A5'], [4, 1, 'G5'], [5, 1, 'A5'], [6, 2, 'C6']],
+    [[0, 3, 'B5'], [3, 1, 'A5'], [4, 4, 'E5']],
+    [[0, 1, 'D5'], [1, 1, 'E5'], [2, 2, 'G#5'], [4, 1, 'B5'], [5, 1, 'G#5'], [6, 2, 'E5']],
+    [[0, 3, 'D5'], [3, 1, 'E5'], [4, 4, 'B4']],
+    [[0, 1, 'G#4'], [1, 1, 'B4'], [2, 2, 'D5'], [4, 1, 'E5'], [5, 1, 'D5'], [6, 2, 'B4']],
+    [[0, 2, 'D5'], [2, 2, 'B4'], [4, 1, 'G#4'], [5, 1, 'B4'], [6, 2, 'E5']],
+    [[0, 3, 'C5'], [3, 1, 'E5'], [4, 2, 'A5'], [6, 2, 'G5']],
+    [[0, 6, 'A5'], [6, 1, 'E5'], [7, 1, 'G5']],
+    [[0, 2, 'A5'], [2, 1, 'G5'], [3, 1, 'E5'], [4, 2, 'C#5'], [6, 2, 'E5']],
+    [[0, 3, 'G5'], [3, 1, 'E5'], [4, 4, 'C#5']],
+    [[0, 1, 'D5'], [1, 1, 'F5'], [2, 2, 'A5'], [4, 1, 'D5'], [5, 1, 'F5'], [6, 2, 'A5']],
+    [[0, 3, 'F5'], [3, 1, 'E5'], [4, 4, 'D5']],
+    [[0, 1, 'C5'], [1, 1, 'E5'], [2, 2, 'A5'], [4, 2, 'C6'], [6, 2, 'B5']],
+    [[0, 2, 'B5'], [2, 1, 'G#5'], [3, 1, 'E5'], [4, 2, 'D5'], [6, 2, 'B4']],
+    [[0, 8, 'A4']],
+    [[4, 1, 'E5'], [5, 1, 'F5'], [6, 2, 'G5']],
+    [[0, 2, 'C5'], [2, 1, 'E5'], [3, 1, 'G5'], [4, 2, 'C6'], [6, 2, 'G5']],
+    [[0, 3, 'A5'], [3, 1, 'G5'], [4, 4, 'E5']],
+    [[0, 1, 'D5'], [1, 1, 'F5'], [2, 2, 'B5'], [4, 1, 'A5'], [5, 1, 'G5'], [6, 2, 'F5']],
+    [[0, 3, 'D5'], [3, 1, 'F5'], [4, 4, 'G5']],
+    [[0, 1, 'B4'], [1, 1, 'D5'], [2, 2, 'G5'], [4, 2, 'F5'], [6, 2, 'D5']],
+    [[0, 2, 'F5'], [2, 2, 'D5'], [4, 1, 'B4'], [5, 1, 'D5'], [6, 2, 'F5']],
+    [[0, 3, 'E5'], [3, 1, 'G5'], [4, 2, 'C6'], [6, 2, 'B5']],
+    [[0, 6, 'C6'], [6, 1, 'G5'], [7, 1, 'A#5']],
+    [[0, 2, 'A#5'], [2, 1, 'G5'], [3, 1, 'E5'], [4, 2, 'C5'], [6, 2, 'E5']],
+    [[0, 3, 'G5'], [3, 1, 'A#5'], [4, 4, 'A5']],
+    [[0, 1, 'A5'], [1, 1, 'C6'], [2, 2, 'A5'], [4, 1, 'F5'], [5, 1, 'A5'], [6, 2, 'C6']],
+    [[0, 3, 'A5'], [3, 1, 'G5'], [4, 4, 'F5']],
+    [[0, 1, 'E5'], [1, 1, 'G5'], [2, 2, 'C6'], [4, 2, 'G5'], [6, 2, 'E5']],
+    [[0, 2, 'D5'], [2, 1, 'F5'], [3, 1, 'B5'], [4, 2, 'A5'], [6, 2, 'G5']],
+    [[0, 6, 'C5'], [6, 2, 'E5']],
+    [[0, 2, 'G#5'], [2, 2, 'B5'], [4, 2, 'D5'], [6, 2, 'E5']],
+  ],
+};
+
+// Por región; las demás (joropo, torbellino) llegan con sus regiones.
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA };
 
 // Acordes: tónica y notas (en semitonos sobre la tónica).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };

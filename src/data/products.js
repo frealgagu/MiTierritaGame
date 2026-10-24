@@ -76,6 +76,15 @@ export const PRODUCTS = {
   bocadillo_bijao: { name: 'Bocadillo veleño', zone: 'guayabera', value: 45, icon: ICON.bocadilloBijao, color: 0x8d9f3c },
   bocadillo_crate: { name: 'Caja de bocadillos', zone: 'guayabera', value: 250, icon: ICON.bocadilloCrate, color: 0xd7a86e },
 
+  // Costa · El Arrozal (v3.15): los mismos valores que la Finca y la Guayabera.
+  paddy: { name: 'Arroz en cáscara', zone: 'arrozal', value: 1, icon: ICON.paddy, color: 0xe0b23c },
+  dry_paddy: { name: 'Arroz seco', zone: 'arrozal', value: 3, icon: ICON.dryPaddy, color: 0xf2d36b },
+  brown_rice: { name: 'Arroz integral', zone: 'arrozal', value: 6, icon: ICON.brownRice, color: 0xd9b98a },
+  white_rice: { name: 'Arroz blanco', zone: 'arrozal', value: 10, icon: ICON.whiteRice, color: 0xf4f1e8 },
+  premium_rice: { name: 'Arroz excelso', zone: 'arrozal', value: 30, icon: ICON.premiumRice, color: 0xfffdf5 },
+  rice_bag: { name: 'Bolsa de arroz', zone: 'arrozal', value: 45, icon: ICON.riceBag, color: 0xd7263d },
+  rice_sack: { name: 'Bulto de arroz', zone: 'arrozal', value: 250, icon: ICON.riceSack, color: 0x2e6fd1 },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

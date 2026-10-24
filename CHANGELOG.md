@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## v3.15.0 — La Costa: El Arrozal
+- **Se abre La Costa** 🌴 al completar Barichara, con su propia economía (como Santander, empieza de cero y las demás regiones siguen produciendo).
+- Su primera zona, **🌾 El Arrozal** (Montería y Mompox): el Arrozal → la Secadora de arroz → la Descascaradora → la Pulidora → la Clasificadora → la Empacadora de arroz → la Bultera; del arroz en cáscara al bulto de arroz, con íconos propios para cada producto.
+- Su persona es **Don Abelardo, el arrocero**, con sus datos curiosos, objetivos, 15 investigaciones y su victoria.
+- El mapa: el arrozal inundado, con camellones y matas que espigan con cada hito; ceibas, palmas de coco, garzas blancas y plátano; cada edificio con su gente (el patio de secado con su rastrillo, la cascarilla que vuela, las zarandas, los bultos que se apilan).
+- **Música nueva: la Cumbia del arrozal**, con gaita, guacharaca, llamador, tambora, tambor alegre, bajo y guitarra.
+- En 🗺️ Zonas se ven las cinco zonas que vienen: El Cocal, La Ciénaga, La Quesera, El Sombrero y Cartagena. Hasta que lleguen, La Costa no tiene segundo final, eventos, álbum ni logros.
+
 ## v3.14.0 — Los eventos se ven en el mapa
 - Cada evento tiene su escena en el tablero, y **cambia con cada compra**:
   - 🪲 **La broca**: los cucarroncitos caminan por el cafetal; aparecen las trampas rojas, las nubecitas del hongo y al final los canastos del re-re, sin una broca.

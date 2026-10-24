@@ -32,6 +32,7 @@ const VICTORY = {
   hato: { title: '¡Fiambre para todos los caminos!', text: 'Completaste <b>El Hato</b>, en Santander. Cuatro mil fiambres de carne oreada, con el bocadillo de la Guayabera y amarrados con la cabuya de la Fiquera.', stat: (s) => `Fiambres vendidos: ${formatNumber(s.stats.sold.fiambre ?? 0)}` },
   hormigas: { title: '¡Hormigas culonas para todo el país!', text: 'Completaste <b>Las Hormigas</b>, en Santander. Seis mil recuerdos con hormigas tostadas, en costal de fique y con alpargatas de la Fiquera.', stat: (s) => `Recuerdos vendidos: ${formatNumber(s.stats.sold.recuerdo ?? 0)}` },
   barichara: { title: '¡Santander, de punta a punta!', text: 'Completaste <b>Barichara</b> y Santander. Siete mil excursiones por el Camino Real a Guane, con dulces, tabaco, recuerdos, tercios, almuerzos y fiambres de todas tus zonas santandereanas.', stat: (s) => `Excursiones: ${formatNumber(s.stats.sold.excursion ?? 0)}` },
+  arrozal: { title: '¡Arroz para toda la Costa!', text: 'Completaste <b>El Arrozal</b>, en la Costa. Dos mil bultos de arroz excelso de las vegas del Sinú.', stat: (s) => `Bultos de arroz vendidos: ${formatNumber(s.stats.sold.rice_sack ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

@@ -1520,6 +1520,205 @@ const DRAW = {
     };
   },
 
+  // --- Costa · El Arrozal (v3.15) ---
+
+  // Secadora de arroz: patio de cemento con el arroz extendido al sol, un rastrillo que lo voltea y la
+  // secadora de gas (un cilindro con su chimenea) bajo un techo de zinc.
+  rice_dryer(g, x, y, ctx) {
+    const px = x + 0.25;
+    const py = y + 0.9;
+    // El patio de cemento con el arroz dorado.
+    g.poly(isoPoly([[px, py], [px + 2.5, py], [px + 2.5, py + 1.85], [px, py + 1.85]])).fill(0xc9c4b8).stroke(OUTLINE);
+    g.poly(isoPoly([[px + 0.15, py + 0.15], [px + 2.35, py + 0.15], [px + 2.35, py + 1.7], [px + 0.15, py + 1.7]])).fill(PRODUCTS.dry_paddy.color);
+    for (let k = 0; k < 7; k++) {
+      const a = iso(px + 0.2, py + 0.25 + k * 0.21);
+      const b = iso(px + 2.3, py + 0.25 + k * 0.21);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: shade(PRODUCTS.dry_paddy.color, 0.8) });
+    }
+    // La secadora: cilindro sobre patas, con chimenea, bajo un techito de zinc.
+    const sx = x + 0.3;
+    const sy = y + 0.15;
+    box(g, sx, sy, 1.2, 0.6, 18, 0x9aa3a8);
+    for (let k = 0; k < 4; k++) box(g, sx + 0.1 + k * 0.28, sy + 0.05, 0.06, 0.5, 2, 0x6c757d, { z: 18 });
+    box(g, sx + 1.0, sy + 0.1, 0.16, 0.16, 34 + ctx.up, 0x555555);
+    for (const [ax, ay] of [[0, 0], [1.6, 0]]) box(g, x + 0.15 + ax, y + 0.05 + ay, 0.08, 0.08, 26 + ctx.up, PAL.wood);
+    g.poly(isoPoly([[x + 0.05, y - 0.05, 30 + ctx.up], [x + 1.85, y - 0.05, 30 + ctx.up], [x + 1.85, y + 0.85, 24 + ctx.up], [x + 0.05, y + 0.85, 24 + ctx.up]])).fill(0xb0b8bf).stroke(OUTLINE);
+    this.roofTop = iso(x + 0.95, y + 0.4, 30 + ctx.up);
+    this.smokePoints = [iso(sx + 1.08, sy + 0.18, 34 + ctx.up)];
+    const rake = new Graphics();
+    this.anim.addChild(rake);
+    this.animate = (time) => {
+      rake.clear();
+      const f = (Math.sin(time * 1.2) + 1) / 2;
+      const p = iso(px + 0.6 + f * 1.4, py + 1.1);
+      // El que voltea el arroz con el rastrillo.
+      rake.rect(p.x - 2.2, p.y - 9, 1.8, 9).fill(0x3d3d5c);
+      rake.rect(p.x + 0.4, p.y - 9, 1.8, 9).fill(0x3d3d5c);
+      rake.roundRect(p.x - 3.2, p.y - 18, 6.4, 9.5, 2).fill(0xf4efe6).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.6 });
+      rake.circle(p.x, p.y - 20.5, 2.8).fill(0x8d5524);
+      rake.ellipse(p.x, p.y - 22.5, 5.5, 1.5).fill(0xe9d8a6);
+      const swing = Math.sin(time * 5) * 4;
+      rake.moveTo(p.x + 3, p.y - 14).lineTo(p.x + 12 + swing, p.y + 2).stroke({ width: 1.6, color: PAL.wood });
+      rake.moveTo(p.x + 8 + swing, p.y + 2).lineTo(p.x + 16 + swing, p.y + 2).stroke({ width: 2, color: PAL.woodDark });
+    };
+    this.animate(0);
+  },
+
+  // Descascaradora: molino de techo de zinc, con la tolva arriba y la cascarilla que sale volando por un
+  // tubo hacia un montón.
+  rice_huller(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.0, 1.6, 30, ctx, { wall: 0xe8e2d0, roofColor: 0x9aa3a8, roofH: 12 });
+    door(g, hx, hy, 1.6, 0.6, 18, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.0, 0.8, 15, PAL.balconyBlue);
+    // La tolva con arroz en cáscara.
+    const t = iso(x + 2.55, y + 0.6, 30 + ctx.up);
+    box(g, x + 2.4, y + 0.45, 0.3, 0.3, 22 + ctx.up, 0x6c757d);
+    g.poly([t.x - 13, t.y - 6, t.x + 13, t.y - 6, t.x + 4, t.y + 10, t.x - 4, t.y + 10]).fill(0x9aa3a8).stroke(OUTLINE);
+    g.ellipse(t.x, t.y - 6, 13, 4.5).fill(PRODUCTS.paddy.color).stroke(OUTLINE);
+    // El montón de cascarilla.
+    const h = iso(x + 2.45, y + 2.4);
+    g.ellipse(h.x, h.y, 22, 9).fill(0xc9a45a).stroke(OUTLINE);
+    g.ellipse(h.x - 4, h.y - 5, 14, 6).fill(0xd8b46a);
+    const pipeA = iso(x + 2.3, y + 1.5, 20);
+    const pipeB = iso(x + 2.45, y + 2.3, 10);
+    g.moveTo(pipeA.x, pipeA.y).lineTo(pipeB.x, pipeB.y).stroke({ width: 5, color: 0x8a939a });
+    const husk = new Graphics();
+    this.anim.addChild(husk);
+    this.animate = (time) => {
+      husk.clear();
+      for (let i = 0; i < 6; i++) {
+        const f = (time * 0.9 + i / 6) % 1;
+        husk.circle(pipeB.x + Math.sin(i * 2 + time) * 6 * f, pipeB.y - 2 + f * 8 - Math.sin(f * Math.PI) * 8, 1.4).fill({ color: 0xd8b46a, alpha: 1 - f * 0.6 });
+      }
+    };
+  },
+
+  // Pulidora: casa con la máquina pulidora en el patio, que bota un polvillo blanco (el salvado).
+  rice_polisher(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 28, ctx, { wall: 0xf4efe6, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.7, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, PAL.balconyYellow);
+    // La pulidora: un cuerpo vertical con su motor.
+    box(g, x + 2.35, y + 0.6, 0.45, 0.45, 26, 0xd0d4d8);
+    box(g, x + 2.35, y + 1.15, 0.4, 0.3, 8, 0x2e6fd1);
+    // Costales de arroz blanco.
+    for (const [bx, by] of [[0.5, 2.3], [0.85, 2.45], [1.2, 2.3]]) {
+      const p = iso(x + bx, y + by);
+      g.ellipse(p.x, p.y - 5, 7, 5.5).fill(PRODUCTS.white_rice.color).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 9, 3.5, 1.6).fill(0xe9e4d8);
+    }
+    const dust = new Graphics();
+    this.anim.addChild(dust);
+    this.animate = (time) => {
+      dust.clear();
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.5 + i / 4) % 1;
+        const p = iso(x + 2.58, y + 0.83, 26 + f * 22);
+        dust.circle(p.x + Math.sin(time * 2 + i) * 5 * f, p.y, 3 + f * 6).fill({ color: 0xffffff, alpha: 0.55 * (1 - f) });
+      }
+    };
+  },
+
+  // Clasificadora: ramada abierta con la zaranda (bandejas que se sacuden) y los granos enteros cayendo
+  // a un costal; los partidos, aparte.
+  rice_sorter(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 2.1;
+    const H = 28 + ctx.up;
+    // Los costales del arroz clasificado.
+    for (const [bx, by, c] of [[0.5, 1.75, PRODUCTS.premium_rice.color], [0.85, 1.85, PRODUCTS.premium_rice.color], [2.0, 1.85, 0xe9e4d8]]) {
+      const p = iso(x0 + bx, y0 + by);
+      g.ellipse(p.x, p.y - 5, 7, 5.5).fill(c).stroke(OUTLINE);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 13, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    const bulb = iso(x0 + w / 2, y0 + d / 2, H - 4);
+    this.lights.push({ x: bulb.x, y: bulb.y, r: 28 });
+    const sieve = new Graphics();
+    this.anim.addChild(sieve);
+    this.animate = (time) => {
+      sieve.clear();
+      const shake = Math.sin(time * 14) * 0.04;
+      // Patas de la zaranda y sus tres bandejas, que se sacuden.
+      for (const lx of [0.5, 1.9]) box(sieve, x0 + lx, y0 + 0.8, 0.08, 0.08, 14, PAL.woodDark);
+      for (let k = 0; k < 3; k++) {
+        const z = 8 + k * 4;
+        box(sieve, x0 + 0.4 + shake, y0 + 0.6 + k * 0.05, 1.7, 0.6, 2, k === 2 ? PRODUCTS.white_rice.color : PAL.wood, { z });
+      }
+      for (let i = 0; i < 5; i++) {
+        const f = (time * 1.4 + i / 5) % 1;
+        const p = iso(x0 + 0.55 + (i % 2) * 0.3, y0 + 1.5, 10 - f * 10);
+        sieve.circle(p.x, p.y, 1.3).fill(0xffffff);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Empacadora de arroz: casa con la mesa donde se llenan y se sellan las bolsas de una libra.
+  rice_bagger(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 1.9, 1.6, 28, ctx, { wall: 0xfdf6e3, roofH: 14 });
+    door(g, hx, hy, 1.6, 0.7, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.8, 14, PAL.balconyRed);
+    box(g, x + 0.4, y + 2.15, 1.9, 0.35, 8, 0x555555);
+    const bags = new Graphics();
+    this.anim.addChild(bags);
+    this.animate = (time) => {
+      bags.clear();
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.35 + i / 4) % 1;
+        const p = iso(x + 0.45 + f * 1.7, y + 2.32, 8);
+        bags.roundRect(p.x - 3.5, p.y - 9, 7, 9, 1.5).fill(0xfbfaf6).stroke(OUTLINE);
+        bags.rect(p.x - 3.5, p.y - 6, 7, 3).fill(PRODUCTS.rice_bag.color);
+      }
+    };
+  },
+
+  // Bultera: bodega grande con los bultos de arroz arrumados en el patio (más arrumes con los hitos).
+  rice_stacker(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xe8e2d0, roofColor: 0x9aa3a8, roofH: 14 });
+    door(g, hx, hy, 1.6, 1.6, 20, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.4, 0.8, 15, 0xffffff);
+    const stack = (bx, by, rows) => {
+      for (let r = 0; r < rows; r++) {
+        for (let k = 0; k < rows - r; k++) {
+          const p = iso(x + bx + k * 0.3 + r * 0.15, y + by, r * 7);
+          g.roundRect(p.x - 8, p.y - 7, 16, 8, 3).fill(0xf4f1e8).stroke(OUTLINE);
+          g.rect(p.x - 6, p.y - 4.5, 12, 2.2).fill(PRODUCTS.rice_sack.color);
+        }
+      }
+    };
+    stack(0.35, 2.4, 3);
+    if (ctx.tier >= 2) stack(1.5, 2.45, 2);
+    const carrier = new Graphics();
+    this.anim.addChild(carrier);
+    this.animate = (time) => {
+      carrier.clear();
+      const f = (time * 0.25) % 1;
+      const back = f > 0.5;
+      const k = back ? 1 - (f - 0.5) * 2 : f * 2;
+      const p = iso(x + 1.4 + k * 1.1, y + 2.1);
+      carrier.rect(p.x - 2.2, p.y - 9, 1.8, 9).fill(0x3d3d5c);
+      carrier.rect(p.x + 0.4, p.y - 9, 1.8, 9).fill(0x3d3d5c);
+      carrier.roundRect(p.x - 3.2, p.y - 18, 6.4, 9.5, 2).fill(0xd7263d);
+      carrier.circle(p.x, p.y - 20.5, 2.8).fill(0x8d5524);
+      if (!back) {
+        carrier.roundRect(p.x - 8, p.y - 28, 16, 8, 3).fill(0xf4f1e8).stroke(OUTLINE);
+        carrier.rect(p.x - 6, p.y - 25.5, 12, 2).fill(PRODUCTS.rice_sack.color);
+      }
+    };
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

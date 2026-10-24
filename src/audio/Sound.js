@@ -2,18 +2,18 @@
 
 // Lo que suena al abrir cada estación (v3.3.2): su oficio, en pocos tipos de sonido.
 const STATION_SOUNDS = {
-  field: ['farm', 'canefield', 'cacao_grove', 'cornfield', 'guava_grove', 'tobacco_field', 'fique_field', 'composter', 'anthill', 'camino_real'],
+  field: ['farm', 'canefield', 'cacao_grove', 'cornfield', 'guava_grove', 'tobacco_field', 'fique_field', 'rice_field', 'composter', 'anthill', 'camino_real'],
   moo: ['pasture', 'cattle_ranch'],
   water: ['wetmill', 'pasteurizer', 'cheesery', 'churn', 'brine_pot'],
-  machine: ['huller', 'grinder', 'cane_mill', 'pulverizer', 'cacao_mill', 'sheller', 'corn_huller', 'dough_mill', 'guava_pulper', 'decorticator'],
-  whir: ['separator', 'spinner'],
+  machine: ['huller', 'grinder', 'cane_mill', 'pulverizer', 'cacao_mill', 'sheller', 'corn_huller', 'dough_mill', 'guava_pulper', 'decorticator', 'rice_huller', 'rice_polisher'],
+  whir: ['separator', 'spinner', 'rice_sorter'],
   fire: ['roaster', 'cacao_roaster', 'grill', 'ant_toaster'],
   boil: ['furnace', 'arequipe_pot', 'guava_pot', 'greca'],
-  wind: ['dryer', 'cacao_dryer', 'caney', 'airing_rack'],
+  wind: ['dryer', 'cacao_dryer', 'caney', 'airing_rack', 'rice_dryer'],
   ferment: ['fermenter', 'tobacco_piles'],
   chop: ['butcher', 'bocadillo_cutter', 'stripper'],
   loom: ['sack_loom', 'basket_shop', 'alpargata_shop', 'bijao_wrapper', 'fiambre_maker', 'cigar_roller', 'ant_cleaner', 'cone_table', 'hamper'],
-  thud: ['packer', 'molds', 'guava_molds', 'crate_packer', 'tercio_packer', 'gift_wrap', 'box_shop'],
+  thud: ['packer', 'molds', 'guava_molds', 'crate_packer', 'tercio_packer', 'gift_wrap', 'box_shop', 'rice_bagger', 'rice_stacker'],
   horn: ['export_dock'],
   sizzle: ['budare', 'arepa_stand', 'fonda'],
   clink: ['coffee_house', 'chocolate_table', 'chocolatier', 'lunch_table', 'souvenir_shop', 'dulceria', 'park_cafe', 'posada'],

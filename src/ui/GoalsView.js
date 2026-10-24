@@ -3,6 +3,7 @@ import { GOALS_BY_ZONE } from '../data/goals.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { activeGoals, goalProgress, goalText } from '../sim/goals.js';
 import { finalZone, masteryParts } from '../sim/legacy.js';
+import { regionOf } from '../data/regions.js';
 import { legacyMult } from '../sim/modifiers.js';
 import { fit } from './fit.js';
 
@@ -56,7 +57,7 @@ export class GoalsView {
     const i = Math.max(0, progress.findIndex((p) => p.done));
     const g = goals[i];
     // (v3.12: con la última zona de la región, no solo el Pueblo: en Santander no salía.)
-    const finished = Boolean(state.zones[finalZone(state)]?.complete);
+    const finished = Boolean(state.zones[finalZone(state)]?.complete) && !regionOf(state).wip;
     const master = !g && finished ? masteryCard(state, true) : null;
     this.tracker.hidden = !g && !master;
     const trackerHtml = g ? goalCard(g, progress[i], true) : master;

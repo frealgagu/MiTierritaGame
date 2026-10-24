@@ -1268,6 +1268,127 @@ def excursion():
 
 
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
+
+# ---------- Costa · El Arrozal (v3.15) ----------
+
+def rice_grain(cx, cy, rot, color, length=9, width=3.6):
+    """Un grano de arroz: elipse alargada con su borde oscuro."""
+    return [
+        (OUTLINE, [grow(ellipse_pts(cx, cy, length, width, rot)[:-1], cx, cy, 1.2)]),
+        (color, [ellipse(cx, cy, length, width, rot)]),
+    ]
+
+
+def grain_pile(color, tip, spots):
+    """Montoncito de granos (para el arroz en cáscara, el integral...)."""
+    layers = [(OUTLINE, [ellipse(50, 74, 40, 16)]), (shade_hex(color, 0.85), [ellipse(50, 74, 38, 14)])]
+    grains = [(30, 70, 20), (44, 64, -15), (58, 68, 30), (70, 74, -25), (38, 80, 10), (54, 80, -10), (50, 56, 5), (64, 58, -35), (36, 58, 40)]
+    for cx, cy, rot in grains:
+        layers += rice_grain(cx, cy, rot, color)
+    layers.append((tip, [circle(cx + 7 * math.cos(math.radians(rot)), cy + 7 * math.sin(math.radians(rot)), 1.5) for cx, cy, rot in grains]))
+    if spots:
+        layers.append(('#ffffff90', [ellipse(cx - 2, cy - 1.5, 3.5, 1.2, rot) for cx, cy, rot in grains]))
+    return layers
+
+
+def shade_hex(color, f):
+    c = color.lstrip('#')
+    r, g, b = (int(c[i:i + 2], 16) for i in (0, 2, 4))
+    return '#%02x%02x%02x' % tuple(min(255, round(v * f)) for v in (r, g, b))
+
+
+def rice_plant():
+    """Mata de arroz: macolla de hojas largas y espigas doradas que se doblan con el peso del grano."""
+    layers = [('#5d8f3a', [ellipse(50, 92, 26, 6)])]
+    blades = [(50, 92, 18, 20, 6), (50, 92, 34, 8, 6), (50, 92, 66, 10, 6), (50, 92, 82, 22, 6), (50, 92, 50, 4, 5)]
+    for x0, y0, x1, y1, w in blades:
+        layers.append(('#2e7d32', [leaf(x0, y0, x1, y1, w)]))
+    layers.append(('#66bb6a', [rib(50, 92, 34, 10), rib(50, 92, 66, 12)]))
+    # Las espigas: tallo curvo y granos dorados colgando.
+    for sx, ex, ey in [(44, 22, 40), (56, 80, 36), (50, 44, 20)]:
+        layers.append(('#c8a23a', [f'M {sx} 60 Q {(sx + ex) / 2} {ey - 14} {ex} {ey} L {ex + 1.6} {ey + 1.6} Q {(sx + ex) / 2 + 1.6} {ey - 12} {sx + 2} 60 Z']))
+        for k in range(5):
+            t = k / 5
+            gx = sx + (ex - sx) * (0.4 + t * 0.6)
+            gy = 60 + (ey - 60) * (0.4 + t * 0.6) + 4 * math.sin(t * math.pi)
+            layers += rice_grain(gx, gy, 70, '#e6b93a', 4.2, 2.2)
+    return layers
+
+
+def paddy():
+    """Arroz en cáscara: un montoncito de granos dorados alargados, con su cascarilla y la punta oscura."""
+    return grain_pile('#e0b23c', '#8a6a1a', False)
+
+
+def dry_paddy():
+    """Arroz seco: granos dorados extendidos sobre una lona al sol, con el rastrillo de madera."""
+    layers = [(OUTLINE, [poly(6, 70, 52, 52, 96, 70, 50, 90)]), ('#4f86c6', [poly(9, 70, 52, 54.5, 92.5, 70, 50, 87.5)])]
+    layers.append(('#e8c45a', [poly(16, 70, 52, 58, 86, 70, 50, 83)]))
+    for cx, cy, rot in [(30, 70, 20), (44, 66, -20), (60, 66, 15), (72, 71, -10), (50, 76, 5), (38, 76, -30), (62, 77, 30)]:
+        layers += rice_grain(cx, cy, rot, '#f2d36b', 4.5, 2)
+    layers.append(('#8b5a2b', [rib(30, 20, 62, 66, 3), rect(48, 60, 30, 6, 30)]))
+    layers.append(('#ffd54f', [circle(82, 18, 10)]))
+    return layers
+
+
+def brown_rice():
+    """Arroz integral: granos color crema, sin cáscara, en una totuma."""
+    layers = [(OUTLINE, ['M 8 52 Q 50 104 92 52 Z']), ('#8d6e4a', ['M 12 54 Q 50 98 88 54 Z']), ('#6d4c32', [rib(20, 66, 80, 66, 1.4)])]
+    for cx, cy, rot in [(30, 48, 20), (42, 42, -15), (56, 44, 30), (70, 48, -25), (38, 54, 10), (52, 54, -10), (64, 54, 15), (48, 36, 5)]:
+        layers += rice_grain(cx, cy, rot, '#d9b98a', 7, 3)
+    return layers
+
+
+def white_rice():
+    """Arroz blanco: un plato hondo con arroz blanco recién hecho."""
+    layers = [(OUTLINE, ['M 6 50 Q 50 104 94 50 Z']), ('#f4efe6', ['M 10 52 Q 50 98 90 52 Z']), ('#2e6fd1', [rib(16, 62, 84, 62, 2)])]
+    layers.append((OUTLINE, [ellipse(50, 48, 38, 18)]))
+    layers.append(('#ffffff', [ellipse(50, 46, 36, 16), circle(50, 34, 16)]))
+    layers.append(('#e9e4d8', [ellipse(cx, cy, 4, 1.6, rot) for cx, cy, rot in [(36, 44, 20), (50, 40, -10), (62, 46, 30), (44, 32, 10), (58, 30, -30), (50, 50, 0), (30, 50, -20), (68, 52, 15)]]))
+    layers.append(('#b0bec5', ['M 70 30 Q 74 18 70 8 L 73 8 Q 77 18 73 30 Z', 'M 30 30 Q 26 18 30 8 L 33 8 Q 29 18 33 30 Z']))
+    return layers
+
+
+def premium_rice():
+    """Arroz excelso: granos largos y brillantes, con un sello dorado de calidad."""
+    layers = []
+    for cx, cy, rot in [(28, 56, 60), (40, 50, 75), (52, 54, 65), (64, 50, 80), (34, 70, 70), (48, 70, 60), (60, 68, 75), (72, 64, 65)]:
+        layers += rice_grain(cx, cy, rot, '#ffffff', 12, 3.4)
+    layers.append(('#ffffffc0', [ellipse(cx - 1, cy - 3, 1.2, 5, rot) for cx, cy, rot in [(40, 50, 75), (64, 50, 80), (48, 70, 60)]]))
+    layers.append((OUTLINE, [circle(76, 24, 17)]))
+    layers.append(('#ffc107', [circle(76, 24, 15)]))
+    layers.append(('#ff8f00', [poly(76, 13, 79, 21, 87, 21, 81, 26, 83, 34, 76, 29, 69, 34, 71, 26, 65, 21, 73, 21)]))
+    return layers
+
+
+def rice_bag():
+    """Bolsa de arroz: bolsa transparente de una libra, con el arroz blanco y la etiqueta roja."""
+    return [
+        (OUTLINE, ['M 22 14 L 78 14 L 82 92 L 18 92 Z']),
+        ('#dfe8ef', ['M 24.5 16.5 L 75.5 16.5 L 79.3 89.5 L 20.7 89.5 Z']),
+        ('#fbfaf6', ['M 26 34 L 74 34 L 77.8 88 L 22.2 88 Z']),
+        ('#d7263d', [rect(24, 44, 52, 22)]),
+        ('#ffffff', [ellipse(50, 55, 16, 7)]),
+        ('#e0b23c', [ellipse(50, 55, 9, 3, 15)]),
+        ('#9fb2c0', [rect(22, 14, 56, 6)]),
+        ('#ffffff90', [rect(30, 72, 4, 14), rect(66, 22, 3, 10)]),
+    ]
+
+
+def rice_sack():
+    """Bulto de arroz: costal blanco de cincuenta kilos, cosido arriba, con letras azules."""
+    return [
+        (OUTLINE, ['M 16 26 Q 8 60 14 94 L 86 94 Q 92 60 84 26 Q 66 32 50 32 Q 34 32 16 26 Z']),
+        ('#f4f1e8', ['M 18.5 28.5 Q 10.5 60 16.5 91.5 L 83.5 91.5 Q 89.5 60 81.5 28.5 Q 65 34.5 50 34.5 Q 35 34.5 18.5 28.5 Z']),
+        ('#d9d4c4', [rib(18, 50, 82, 50, 0.8), rib(16, 72, 84, 72, 0.8)]),
+        ('#2e6fd1', [rect(28, 54, 44, 14)]),
+        ('#ffffff', [rect(32, 59, 36, 4)]),
+        ('#d7263d', [rect(28, 40, 44, 6)]),
+        ('#8b5a2b', [rib(18, 28, 82, 28, 2.4)]),
+        ('#5d4037', [rib(24, 24, 28, 32, 1.4), rib(36, 26, 40, 34, 1.4), rib(48, 27, 52, 35, 1.4), rib(60, 26, 64, 34, 1.4), rib(72, 24, 76, 32, 1.4)]),
+    ]
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -1338,6 +1459,14 @@ ICONS = [
     (0xE043, 'caja_surtida', caja_surtida),
     (0xE044, 'canasta_caminante', canasta_caminante),
     (0xE045, 'excursion', excursion),
+    (0xE046, 'rice_plant', rice_plant),
+    (0xE047, 'paddy', paddy),
+    (0xE048, 'dry_paddy', dry_paddy),
+    (0xE049, 'brown_rice', brown_rice),
+    (0xE04A, 'white_rice', white_rice),
+    (0xE04B, 'premium_rice', premium_rice),
+    (0xE04C, 'rice_bag', rice_bag),
+    (0xE04D, 'rice_sack', rice_sack),
 ]
 
 

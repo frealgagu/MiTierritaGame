@@ -15,6 +15,18 @@ export const REGIONS = [
     music: 'santander',
     unlock: { region: 'cafetero', zone: 'pueblo' },
   },
+  // La Costa (v3.15): se abre al completar Barichara. Mientras lleguen sus seis zonas (wip), las que
+  // faltan se anuncian (soon) y la región todavía no tiene final.
+  {
+    id: 'costa',
+    name: 'La Costa',
+    icon: '🌴',
+    zones: ['arrozal'],
+    soon: ['El Cocal', 'La Ciénaga', 'La Quesera', 'El Sombrero', 'Cartagena'],
+    wip: true,
+    music: 'costa',
+    unlock: { region: 'santander', zone: 'barichara' },
+  },
 ];
 
 export const REGIONS_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]));

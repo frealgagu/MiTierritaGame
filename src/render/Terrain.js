@@ -109,6 +109,14 @@ export class Terrain {
             const p = iso(gx + rng(), gy + rng());
             g.ellipse(p.x, p.y, 3, 1.5).fill({ color: rng() < 0.5 ? 0x8a6a3a : 0x6e8f3a, alpha: 0.7 });
           }
+        } else if (type === 'farm' && this.zone.theme === 'rice') {
+          // Arrozal inundado (v3.15): brillos del agua y el camellón (el borde de tierra) entre pozas.
+          const a = iso(gx, gy + 1);
+          const b = iso(gx + 1, gy + 1);
+          const c2 = iso(gx + 1, gy);
+          g.moveTo(a.x, a.y).lineTo(b.x, b.y).lineTo(c2.x, c2.y).stroke({ width: 2.2, color: 0x8a6a45, alpha: 0.55 });
+          const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
+          g.moveTo(p.x - 5, p.y).lineTo(p.x + 5, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.55 });
         } else if (type === 'farm' && (this.zone.theme === 'dairy' || this.zone.theme === 'ranch')) {
           // Potrero: pasto más alto y tupido, sin surcos.
           for (let k = 0; k < 3; k++) {
@@ -203,6 +211,12 @@ export class Terrain {
           else if (r < 0.07) obj = cypress(rng);
           else if (r < 0.09) obj = hayBale(rng);
           else if (r < 0.11) obj = rock(rng);
+        } else if (this.zone.theme === 'rice') {
+          // Arrozal (v3.15): ceibas grandes, palmas de coco, garzas blancas y plátano.
+          if (r < 0.025) obj = ceiba(rng);
+          else if (r < 0.06) obj = coconutPalm(rng);
+          else if (r < 0.085) obj = egret(rng);
+          else if (r < 0.11) obj = banana(rng);
         } else if (this.zone.theme === 'cane') {
           // Trapiche: guaduales, matas de caña sueltas y algún samán.
           if (r < 0.05) obj = guadua(rng);
@@ -241,6 +255,7 @@ const FARM_SOIL = {
   fique: (v) => mix(0xb8805a, 0x9c6a48, v * 0.4),
   ants: (v) => mix(0xc0784a, 0xa86438, v * 0.4),
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
+  rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5), // el agua del arrozal, verde azulada
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6), // la plaza de piedra amarilla
 };
 
@@ -692,6 +707,83 @@ function palm(rng) {
     const ey = cy + Math.sin(a) * 5 + 4;
     g.moveTo(cx, cy).quadraticCurveTo((cx + ex) / 2, cy - 8, ex, ey).stroke({ width: 4, color: i % 2 ? 0x4e7f33 : 0x5e9a3c, cap: 'round' });
   }
+  c.addChild(g);
+  return c;
+}
+
+// Mata de arroz (v3.15): un macollo de hojas delgadas que salen del agua; con más hitos, espigas doradas.
+export function drawRicePlant(g, x, y, scale, rng, ears) {
+  const s = scale;
+  g.ellipse(x, y, 7 * s, 2.2 * s).fill({ color: 0x3f6f5e, alpha: 0.45 });
+  const blades = 7;
+  for (let i = 0; i < blades; i++) {
+    const a = -Math.PI / 2 + ((i - (blades - 1) / 2) / blades) * 1.5;
+    const len = (13 + rng() * 5) * s;
+    const tx = x + Math.cos(a) * len;
+    const ty = y + Math.sin(a) * len;
+    g.moveTo(x + (i - 3) * 0.5 * s, y).quadraticCurveTo(x + (tx - x) * 0.3, y - len * 0.6, tx, ty).stroke({ width: 1.3 * s, color: i % 2 ? 0x7cb342 : 0x9ccc65, cap: 'round' });
+  }
+  // Espigas: se doblan con el peso del grano.
+  for (let i = 0; i < ears; i++) {
+    const ex = x + (i - (ears - 1) / 2) * 3.2 * s;
+    const ey = y - (14 + (i % 2) * 2) * s;
+    g.moveTo(ex, ey + 3 * s).quadraticCurveTo(ex + 1 * s, ey - 2 * s, ex + 4 * s, ey + 1 * s).stroke({ width: 1.8 * s, color: 0xe0b84a, cap: 'round' });
+  }
+}
+
+// Ceiba: tronco grueso con bambas (raíces de tabla) y una copa ancha y plana, la sombra de la Costa.
+function ceiba(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const s = 0.9 + rng() * 0.3;
+  shadow(g, 6, 2, 38 * s, 13 * s);
+  g.poly([-11 * s, 0, -4 * s, -10 * s, -3 * s, -40 * s, 3 * s, -40 * s, 4 * s, -10 * s, 11 * s, 0]).fill(0x9e9a8a).stroke({ width: 1, color: 0x3a2418, alpha: 0.35 });
+  g.moveTo(-6 * s, 0).lineTo(-2 * s, -12 * s).moveTo(6 * s, 0).lineTo(2 * s, -12 * s).stroke({ width: 1, color: 0x6f6b5e, alpha: 0.6 });
+  g.moveTo(0, -40 * s).lineTo(-18 * s, -48 * s).moveTo(0, -40 * s).lineTo(18 * s, -48 * s).stroke({ width: 2.5 * s, color: 0x8a8676 });
+  for (const [dx, dy, rx, ry, col] of [[-22, -50, 17, 7, 0x4e8a33], [22, -50, 17, 7, 0x4e8a33], [0, -54, 26, 9, 0x5e9a3c], [-8, -59, 14, 6, 0x6fae44], [10, -58, 13, 5, 0x6fae44]]) {
+    g.ellipse(dx * s, dy * s, rx * s, ry * s).fill(col);
+  }
+  c.addChild(g);
+  return c;
+}
+
+// Palma de coco: tronco curvo y anillado, hojas largas que cuelgan y un racimo de cocos.
+function coconutPalm(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const h = 55 + rng() * 25;
+  const lean = (rng() < 0.5 ? -1 : 1) * (8 + rng() * 10);
+  shadow(g, lean * 0.6, 2, 13, 5);
+  g.moveTo(-2.5, 0).quadraticCurveTo(lean * 0.2, -h * 0.5, lean - 1.5, -h).lineTo(lean + 1.5, -h).quadraticCurveTo(lean * 0.2 + 3, -h * 0.5, 2.5, 0).closePath().fill(0x9c7b56).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+  for (let i = 1; i < 9; i++) {
+    const t = i / 9;
+    const cx = lean * t * t;
+    g.moveTo(cx - 2, -h * t).lineTo(cx + 2, -h * t).stroke({ width: 1, color: 0x6e5236, alpha: 0.6 });
+  }
+  const cx = lean;
+  const cy = -h;
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2;
+    const ex = cx + Math.cos(a) * 20;
+    const ey = cy + Math.sin(a) * 7 + 10;
+    g.moveTo(cx, cy).quadraticCurveTo(cx + Math.cos(a) * 12, cy - 9, ex, ey).stroke({ width: 3.2, color: i % 2 ? 0x3f7a2a : 0x5e9a3c, cap: 'round' });
+  }
+  for (const [dx, dy] of [[-2, 3], [2, 3.5], [0, 5.5]]) g.circle(cx + dx, cy + dy, 2.4).fill(0x7a5a2e).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+  c.addChild(g);
+  return c;
+}
+
+// Garza blanca: patas largas, cuerpo blanco y el cuello en S, como las que andan por los arrozales.
+function egret(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const f = rng() < 0.5 ? -1 : 1;
+  shadow(g, 0, 1, 6, 2);
+  g.moveTo(-1.5 * f, 0).lineTo(-1 * f, -9).moveTo(1.5 * f, 0).lineTo(1 * f, -9).stroke({ width: 1, color: 0x3a3a3a });
+  g.ellipse(0, -12, 6, 3.6).fill(0xfbfbf6).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.35 });
+  g.moveTo(4 * f, -13).quadraticCurveTo(9 * f, -16, 5 * f, -19).quadraticCurveTo(2 * f, -22, 6 * f, -24).stroke({ width: 2, color: 0xfbfbf6, cap: 'round' });
+  g.circle(6.5 * f, -24.3, 1.8).fill(0xfbfbf6);
+  g.moveTo(8 * f, -24.5).lineTo(12 * f, -24).stroke({ width: 1.2, color: 0xf2b705 });
   c.addChild(g);
   return c;
 }

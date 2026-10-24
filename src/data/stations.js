@@ -87,6 +87,17 @@ export const STATIONS = [
   { id: 'bijao_wrapper', zone: 'guayabera', name: 'Envoltura en bijao', icon: '🍃', in: { bocadillo: 1 }, out: { bocadillo_bijao: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.0' },
   { id: 'crate_packer', zone: 'guayabera', name: 'Cajonera', icon: '📦', in: { bocadillo_bijao: 4 }, out: { bocadillo_crate: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.0' },
 
+  // Costa · El Arrozal (v3.15), en las vegas del Sinú y del Magdalena: el arroz en cáscara se seca, se
+  // descascara, se pule, se clasifica, se empaca y sale en bultos. Misma estructura y mismos números que
+  // la Finca y la Guayabera: la región empieza de cero.
+  { id: 'rice_field', zone: 'arrozal', name: 'Arrozal', icon: ICON.ricePlant, infinite: true, out: { paddy: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.15' },
+  { id: 'rice_dryer', zone: 'arrozal', name: 'Secadora de arroz', icon: '☀️', in: { paddy: 2 }, out: { dry_paddy: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.15' },
+  { id: 'rice_huller', zone: 'arrozal', name: 'Descascaradora', icon: '⚙️', in: { dry_paddy: 1 }, out: { brown_rice: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.15' },
+  { id: 'rice_polisher', zone: 'arrozal', name: 'Pulidora', icon: '✨', in: { brown_rice: 1 }, out: { white_rice: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.15' },
+  { id: 'rice_sorter', zone: 'arrozal', name: 'Clasificadora', icon: '🔍', in: { white_rice: 2 }, out: { premium_rice: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.15' },
+  { id: 'rice_bagger', zone: 'arrozal', name: 'Empacadora de arroz', icon: ICON.riceBag, in: { premium_rice: 1 }, out: { rice_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.15' },
+  { id: 'rice_stacker', zone: 'arrozal', name: 'Bultera', icon: ICON.riceSack, in: { rice_bag: 4 }, out: { rice_sack: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.15' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

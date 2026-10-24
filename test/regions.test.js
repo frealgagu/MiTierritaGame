@@ -444,3 +444,34 @@ test('una partida de la v3.9 pasa la decoración al Eje Cafetero y la jornada a 
     assert.equal(chosenDecor(back.profile, 'santander').willys.id, 'verde');
   });
 });
+
+test('La Costa se abre al completar Barichara y, mientras le falten zonas, no se termina (v3.15)', async () => {
+  const { claimGoal } = await import('../src/sim/goals.js');
+  const { albumDone, profileOf } = await import('../src/sim/renown.js');
+  const { checkMedalBonus } = await import('../src/sim/events.js');
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  const s = regionState(root, 'santander');
+  assert.deepEqual(openRegions(root), []);
+  s.zones.barichara.complete = true;
+  assert.deepEqual(openRegions(root), ['costa']);
+  const c = regionState(root, 'costa');
+  assert.deepEqual(Object.keys(c.zones), ['arrozal']);
+  // Completar el Arrozal (su única zona por ahora) no termina la región: no hay segundo final.
+  const final = GOALS_BY_ZONE.arrozal.find((g) => g.final);
+  c.goals.claimed = GOALS_BY_ZONE.arrozal.filter((g) => !g.final).map((g) => g.id);
+  c.stats.sold[final.product ?? final.target] = 1e9;
+  c.coins = 1e12;
+  claimGoal(c, final.id, { emit() {} });
+  assert.equal(c.zones.arrozal.complete, true);
+  assert.ok(!c.regionDone);
+  for (const id of stationsOf(c)) c.stations[id] = { ...(c.stations[id] ?? {}), level: 100, transport: { level: 100 } };
+  c.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'costa').map((r) => r.id);
+  assert.equal(checkMastery(c, { emit() {} }), false);
+  // Sin álbum ni eventos todavía: ni álbum lleno ni premio de medallas.
+  const p = profileOf(root);
+  assert.equal(albumDone(p, 'costa'), false);
+  checkMedalBonus(p);
+  assert.ok(!p.medalBonus.costa);
+});

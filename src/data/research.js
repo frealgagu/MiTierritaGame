@@ -170,6 +170,23 @@ export const RESEARCH = [
   { zone: 'barichara', id: 'monumento', name: 'Monumento Nacional', icon: '🏅', desc: 'Todo lo que vende Barichara vale un 50 % más.', cost: 25000000000, requires: 'hamper', effect: { type: 'zoneValue', target: 'barichara', mult: 1.5 } },
   { zone: 'barichara', id: 'maestria_barichara', name: 'Maestría: Barichara', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'barichara', mult: 4 } },
   { zone: 'barichara', id: 'supremacia_barichara', name: 'Supremacía: Barichara', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'barichara', mult: 8 } },
+
+  // Costa · El Arrozal (v3.15): las mismas de la Finca y la Guayabera, con el arroz.
+  { zone: 'arrozal', id: 'semilla_certificada', name: 'Semilla certificada', icon: '🌾', desc: 'El Arrozal produce el doble.', cost: 300, requires: 'rice_dryer', effect: { type: 'stationSpeed', target: 'rice_field', mult: 2 } },
+  { zone: 'arrozal', id: 'secadora_gas', name: 'Secadora a gas', icon: '🔥', desc: 'La Secadora de arroz seca el doble.', cost: 400, requires: 'rice_dryer', effect: { type: 'stationSpeed', target: 'rice_dryer', mult: 2 } },
+  { zone: 'arrozal', id: 'herraduras_c', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'rice_huller', effect: { type: 'muleSpeed', mult: 1.5 } },
+  { zone: 'arrozal', id: 'remolque_c', name: 'Remolque para el Willys', icon: '🚙', desc: 'El Willys lleva el doble por viaje.', cost: 2500, requires: 'rice_polisher', effect: { type: 'dispatchCapacity', target: 'arrozal', mult: 2 } },
+  { zone: 'arrozal', id: 'descascaradora_rodillos', name: 'Rodillos de caucho', icon: '⚙️', desc: 'La Descascaradora descascara el doble.', cost: 6000, requires: 'rice_polisher', effect: { type: 'stationSpeed', target: 'rice_huller', mult: 2 } },
+  { zone: 'arrozal', id: 'pulidora_agua', name: 'Pulidora con agua', icon: '💧', desc: 'La Pulidora pule el doble.', cost: 8000, requires: 'rice_sorter', effect: { type: 'stationSpeed', target: 'rice_polisher', mult: 2 } },
+  { zone: 'arrozal', id: 'grano_largo', name: 'Grano largo', icon: '🏅', desc: 'El arroz excelso vale un 50 % más.', cost: 20000, requires: 'rice_sorter', effect: { type: 'productValue', target: 'premium_rice', mult: 1.5 } },
+  { zone: 'arrozal', id: 'clasificadora_optica', name: 'Clasificadora óptica', icon: '🔍', desc: 'La Clasificadora clasifica el doble.', cost: 25000, requires: 'rice_bagger', effect: { type: 'stationSpeed', target: 'rice_sorter', mult: 2 } },
+  { zone: 'arrozal', id: 'arroz_sinu', name: 'Arroz del Sinú', icon: '🌴', desc: 'Arroz de origen: todo lo que vende el Arrozal vale un 50 % más.', cost: 50000, requires: 'rice_bagger', effect: { type: 'zoneValue', target: 'arrozal', mult: 1.5 } },
+  { zone: 'arrozal', id: 'selladora', name: 'Selladora automática', icon: '🛍️', desc: 'La Empacadora de arroz empaca el doble.', cost: 60000, requires: 'rice_stacker', effect: { type: 'stationSpeed', target: 'rice_bagger', mult: 2 } },
+  { zone: 'arrozal', id: 'bultera_auto', name: 'Bultera automática', icon: '📦', desc: 'La Bultera llena el doble de bultos.', cost: 150000, requires: 'rice_stacker', effect: { type: 'stationSpeed', target: 'rice_stacker', mult: 2 } },
+  { zone: 'arrozal', id: 'cable_c', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'rice_stacker', effect: { type: 'muleSpeed', mult: 2 } },
+  { zone: 'arrozal', id: 'sello_c', name: 'Sello de calidad', icon: '🏅', desc: 'Los bultos de arroz valen un 50 % más.', cost: 300000, requires: 'rice_stacker', effect: { type: 'productValue', target: 'rice_sack', mult: 1.5 } },
+  { zone: 'arrozal', id: 'maestria_arrozal', name: 'Maestría: Arrozal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'arrozal', mult: 4 } },
+  { zone: 'arrozal', id: 'supremacia_arrozal', name: 'Supremacía: Arrozal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'arrozal', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

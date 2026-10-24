@@ -89,6 +89,14 @@ export const FACTS = {
   box_shop: ['En Barichara se hace papel a mano con fibra de fique.'],
   hamper: ['Los caminantes llevan fiambre para el camino, como los arrieros.'],
   camino_real: ['El Camino Real a Guane lo empedró Geo von Lengerke en el siglo XIX.', 'De Barichara a Guane se baja a pie en unas dos horas, entre piedras.'],
+  // Costa · El Arrozal (v3.15)
+  rice_field: ['Córdoba y el Tolima son de los que más arroz siembran en Colombia.', 'El arroz crece en terrenos inundados, con los pies en el agua.', 'Las garzas siguen al tractor en el arrozal buscando comida.'],
+  rice_dryer: ['El arroz se cosecha húmedo: hay que secarlo para guardarlo.'],
+  rice_huller: ['La cascarilla del arroz sirve de abono y de combustible.'],
+  rice_polisher: ['Pulir el arroz le quita el salvado y lo deja blanco y brillante.'],
+  rice_sorter: ['El arroz excelso tiene casi todos los granos enteros.'],
+  rice_bagger: ['En la Costa no hay almuerzo sin arroz: de coco, de lisa…'],
+  rice_stacker: ['Un bulto de arroz pesa 50 kilos y se carga al hombro.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -105,6 +113,7 @@ export const PEOPLE = {
   hato: { icon: '🤠', name: 'Don Efraín', role: 'el vaquero' },
   hormigas: { icon: '👵', name: 'Doña Gloria', role: 'la hormiguera' },
   barichara: { icon: '👩', name: 'Lucía', role: 'la guía' },
+  arrozal: { icon: '👨🏾‍🌾', name: 'Don Abelardo', role: 'el arrocero' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -121,6 +130,7 @@ export const WELCOME = {
   hato: '¡Llegó al Hato, compadre! Aquí se hace la carne oreada, al sol y al viento.',
   barichara: '¡Bienvenido a Barichara! Aquí llega lo mejor de todo Santander, y de aquí salen las excursiones a Guane.',
   hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
+  arrozal: '¡Ajá, bienvenido a la Costa, compa! Aquí el arroz crece con los pies en el agua.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».
