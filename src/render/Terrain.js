@@ -117,6 +117,13 @@ export class Terrain {
           g.moveTo(a.x, a.y).lineTo(b.x, b.y).lineTo(c2.x, c2.y).stroke({ width: 2.2, color: 0x8a6a45, alpha: 0.55 });
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
           g.moveTo(p.x - 5, p.y).lineTo(p.x + 5, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.55 });
+        } else if (type === 'farm' && this.zone.theme === 'coconut') {
+          // Cocal (v3.16): arena con hojas secas de palma caídas.
+          if (rng() < 0.4) {
+            const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
+            const d = rng() < 0.5 ? -1 : 1;
+            g.moveTo(p.x - 7 * d, p.y - 2).quadraticCurveTo(p.x, p.y - 4, p.x + 7 * d, p.y + 1).stroke({ width: 1.6, color: 0xb08a4a, alpha: 0.7 });
+          }
         } else if (type === 'farm' && (this.zone.theme === 'dairy' || this.zone.theme === 'ranch')) {
           // Potrero: pasto más alto y tupido, sin surcos.
           for (let k = 0; k < 3; k++) {
@@ -217,6 +224,12 @@ export class Terrain {
           else if (r < 0.06) obj = coconutPalm(rng);
           else if (r < 0.085) obj = egret(rng);
           else if (r < 0.11) obj = banana(rng);
+        } else if (this.zone.theme === 'coconut') {
+          // Cocal (v3.16): palmas de coco por todas partes, cocos caídos, plátano y alguna ceiba.
+          if (r < 0.06) obj = coconutPalm(rng);
+          else if (r < 0.08) obj = coconutPile(rng);
+          else if (r < 0.1) obj = banana(rng);
+          else if (r < 0.112) obj = ceiba(rng);
         } else if (this.zone.theme === 'cane') {
           // Trapiche: guaduales, matas de caña sueltas y algún samán.
           if (r < 0.05) obj = guadua(rng);
@@ -255,7 +268,8 @@ const FARM_SOIL = {
   fique: (v) => mix(0xb8805a, 0x9c6a48, v * 0.4),
   ants: (v) => mix(0xc0784a, 0xa86438, v * 0.4),
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
-  rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5), // el agua del arrozal, verde azulada
+  rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
+  coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5), // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6), // la plaza de piedra amarilla
 };
 
@@ -747,28 +761,47 @@ function ceiba(rng) {
   return c;
 }
 
-// Palma de coco: tronco curvo y anillado, hojas largas que cuelgan y un racimo de cocos.
+// Palma de coco: tronco curvo y anillado, hojas largas que cuelgan y un racimo de cocos. La usa también
+// el Cocal (v3.16), más bajita, con más cocos verdes en cada hito.
+export function drawCoconutPalm(g, x, y, scale, rng, nuts = 3, green = false) {
+  const s = scale;
+  const h = (55 + rng() * 25) * s;
+  const lean = (rng() < 0.5 ? -1 : 1) * (8 + rng() * 10) * s;
+  shadow(g, x + lean * 0.6, y + 2, 13 * s, 5 * s);
+  g.moveTo(x - 2.5 * s, y).quadraticCurveTo(x + lean * 0.2, y - h * 0.5, x + lean - 1.5 * s, y - h).lineTo(x + lean + 1.5 * s, y - h).quadraticCurveTo(x + lean * 0.2 + 3 * s, y - h * 0.5, x + 2.5 * s, y).closePath().fill(0x9c7b56).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+  for (let i = 1; i < 9; i++) {
+    const t = i / 9;
+    const cx = x + lean * t * t;
+    g.moveTo(cx - 2 * s, y - h * t).lineTo(cx + 2 * s, y - h * t).stroke({ width: 1, color: 0x6e5236, alpha: 0.6 });
+  }
+  const cx = x + lean;
+  const cy = y - h;
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2;
+    const ex = cx + Math.cos(a) * 20 * s;
+    const ey = cy + (Math.sin(a) * 7 + 10) * s;
+    g.moveTo(cx, cy).quadraticCurveTo(cx + Math.cos(a) * 12 * s, cy - 9 * s, ex, ey).stroke({ width: 3.2 * Math.max(s, 0.8), color: i % 2 ? 0x3f7a2a : 0x5e9a3c, cap: 'round' });
+  }
+  const spots = [[-2, 3], [2, 3.5], [0, 5.5], [-4, 5], [4, 5.5], [-1.5, 7.5], [2, 8]];
+  for (const [dx, dy] of spots.slice(0, nuts)) g.circle(cx + dx * s * 1.2, cy + dy * s * 1.2, 2.4 * Math.max(s, 0.8)).fill(green ? 0x8bc34a : 0x7a5a2e).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+}
+
 function coconutPalm(rng) {
   const c = new Container();
   const g = new Graphics();
-  const h = 55 + rng() * 25;
-  const lean = (rng() < 0.5 ? -1 : 1) * (8 + rng() * 10);
-  shadow(g, lean * 0.6, 2, 13, 5);
-  g.moveTo(-2.5, 0).quadraticCurveTo(lean * 0.2, -h * 0.5, lean - 1.5, -h).lineTo(lean + 1.5, -h).quadraticCurveTo(lean * 0.2 + 3, -h * 0.5, 2.5, 0).closePath().fill(0x9c7b56).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
-  for (let i = 1; i < 9; i++) {
-    const t = i / 9;
-    const cx = lean * t * t;
-    g.moveTo(cx - 2, -h * t).lineTo(cx + 2, -h * t).stroke({ width: 1, color: 0x6e5236, alpha: 0.6 });
+  drawCoconutPalm(g, 0, 0, 1, rng);
+  c.addChild(g);
+  return c;
+}
+
+// Montoncito de cocos verdes recién bajados, al pie de las palmas.
+function coconutPile(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 0, 1, 10, 3.5);
+  for (const [dx, dy] of [[-4, 0], [4, 0.5], [0, -1.5], [-1, -6], [3.5, -5]].slice(0, 3 + Math.floor(rng() * 3))) {
+    g.circle(dx, dy - 3, 3.6).fill(rng() < 0.7 ? 0x7cb342 : 0x8d6e4a).stroke({ width: 0.7, color: 0x3a2418, alpha: 0.5 });
   }
-  const cx = lean;
-  const cy = -h;
-  for (let i = 0; i < 8; i++) {
-    const a = (i / 8) * Math.PI * 2;
-    const ex = cx + Math.cos(a) * 20;
-    const ey = cy + Math.sin(a) * 7 + 10;
-    g.moveTo(cx, cy).quadraticCurveTo(cx + Math.cos(a) * 12, cy - 9, ex, ey).stroke({ width: 3.2, color: i % 2 ? 0x3f7a2a : 0x5e9a3c, cap: 'round' });
-  }
-  for (const [dx, dy] of [[-2, 3], [2, 3.5], [0, 5.5]]) g.circle(cx + dx, cy + dy, 2.4).fill(0x7a5a2e).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
   c.addChild(g);
   return c;
 }

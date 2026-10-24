@@ -85,6 +85,13 @@ export const PRODUCTS = {
   rice_bag: { name: 'Bolsa de arroz', zone: 'arrozal', value: 45, icon: ICON.riceBag, color: 0xd7263d },
   rice_sack: { name: 'Bulto de arroz', zone: 'arrozal', value: 250, icon: ICON.riceSack, color: 0x2e6fd1 },
 
+  // Costa · El Cocal (v3.16): los mismos valores que el Tabacal.
+  coconut: { name: 'Coco', zone: 'cocal', value: 10, icon: ICON.coconut, color: 0x7cb342 },
+  peeled_coconut: { name: 'Coco pelado', zone: 'cocal', value: 25, icon: ICON.peeledCoconut, color: 0x8d6e4a },
+  grated_coconut: { name: 'Coco rallado', zone: 'cocal', value: 60, icon: ICON.gratedCoconut, color: 0xfbfaf6 },
+  coconut_milk: { name: 'Leche de coco', zone: 'cocal', value: 150, icon: ICON.coconutMilk, color: 0xf4f1e8 },
+  cocada: { name: 'Cocada', zone: 'cocal', value: 250, icon: ICON.cocada, color: 0xa0612d },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

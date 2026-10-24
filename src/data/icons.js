@@ -81,6 +81,12 @@ export const ICON = {
   premiumRice: '\uE04B', // Arroz excelso: granos largos y brillantes, con un sello dorado de calidad
   riceBag: '\uE04C', // Bolsa de arroz: bolsa transparente de una libra, con el arroz blanco y la etiqueta roja
   riceSack: '\uE04D', // Bulto de arroz: costal blanco de cincuenta kilos, cosido arriba, con letras azules
+  coconutPalm: '\uE04E', // Palma de coco: tronco curvo y anillado, hojas largas que cuelgan y el racimo de cocos
+  coconut: '\uE04F', // Coco: el coco verde recién bajado de la palma, entero, con su cáscara lisa
+  peeledCoconut: '\uE050', // Coco pelado: el coco café y peludo, sin la cáscara verde, con sus tres ojitos
+  gratedCoconut: '\uE051', // Coco rallado: una totuma llena de coco blanco rallado, con el rallador al lado
+  coconutMilk: '\uE052', // Leche de coco: medio coco con la leche blanca, y una botella llena al lado
+  cocada: '\uE053', // Cocadas: tres cocadas redondas, una blanca, una de panela y una de guayaba, sobre papel
 };
 
 export const ICON_FONT = 'Cafetal Icons';

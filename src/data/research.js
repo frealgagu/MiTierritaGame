@@ -187,6 +187,17 @@ export const RESEARCH = [
   { zone: 'arrozal', id: 'sello_c', name: 'Sello de calidad', icon: '🏅', desc: 'Los bultos de arroz valen un 50 % más.', cost: 300000, requires: 'rice_stacker', effect: { type: 'productValue', target: 'rice_sack', mult: 1.5 } },
   { zone: 'arrozal', id: 'maestria_arrozal', name: 'Maestría: Arrozal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'arrozal', mult: 4 } },
   { zone: 'arrozal', id: 'supremacia_arrozal', name: 'Supremacía: Arrozal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'arrozal', mult: 8 } },
+
+  // Costa · El Cocal (v3.16): las mismas del Tabacal, con el coco.
+  { zone: 'cocal', id: 'machetes_afilados', name: 'Machetes afilados', icon: '🔪', desc: 'El Peladero de cocos pela el doble.', cost: 20000, requires: 'coconut_peeler', effect: { type: 'stationSpeed', target: 'coconut_peeler', mult: 2 } },
+  { zone: 'cocal', id: 'palma_enana', name: 'Palma enana', icon: '🌴', desc: 'El Cocal produce el doble.', cost: 50000, requires: 'coconut_grater', effect: { type: 'stationSpeed', target: 'coconut_grove', mult: 2 } },
+  { zone: 'cocal', id: 'ralladora_electrica', name: 'Ralladora eléctrica', icon: '⚡', desc: 'La Ralladora ralla el doble.', cost: 40000, requires: 'coconut_grater', effect: { type: 'stationSpeed', target: 'coconut_grater', mult: 2 } },
+  { zone: 'cocal', id: 'chiva_c', name: 'Chiva para el Cocal', icon: '🚚', desc: 'El despacho del Cocal lleva el doble por viaje.', cost: 80000, requires: 'coconut_grater', effect: { type: 'dispatchCapacity', target: 'cocal', mult: 2 } },
+  { zone: 'cocal', id: 'prensa_hidraulica', name: 'Prensa hidráulica', icon: '🗜️', desc: 'La Prensa de coco exprime el doble.', cost: 300000, requires: 'coconut_press', effect: { type: 'stationSpeed', target: 'coconut_press', mult: 2 } },
+  { zone: 'cocal', id: 'pailas_cobre', name: 'Pailas de cobre', icon: '🍯', desc: 'La Paila de cocadas hace el doble.', cost: 600000, requires: 'cocada_kitchen', effect: { type: 'stationSpeed', target: 'cocada_kitchen', mult: 2 } },
+  { zone: 'cocal', id: 'receta_palenquera', name: 'Receta palenquera', icon: '🏅', desc: 'Las cocadas valen un 50 % más.', cost: 1500000, requires: 'cocada_kitchen', effect: { type: 'productValue', target: 'cocada', mult: 1.5 } },
+  { zone: 'cocal', id: 'maestria_cocal', name: 'Maestría: Cocal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cocal', mult: 4 } },
+  { zone: 'cocal', id: 'supremacia_cocal', name: 'Supremacía: Cocal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cocal', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

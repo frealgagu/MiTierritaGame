@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.16.0 — La Costa: El Cocal
+- **🌴 El Cocal**, la segunda zona de la Costa, se abre al completar El Arrozal: el Cocal → el Peladero de cocos → la Ralladora → la Prensa de coco → la Paila de cocadas; del coco verde a la cocada, pasando por el coco pelado, el rallado y la leche de coco, con íconos propios.
+- Su persona es **Doña Eulalia, la cocadera**, con sus datos curiosos, objetivos, 9 investigaciones y su victoria.
+- El mapa: arena del golfo de Morrosquillo, palmas de coco que dan más cocos con cada hito, cocos caídos, plátano y alguna ceiba; el que pela a machete bajo la ramada, la ralladora, la prensa que escurre la leche al balde y la paila de cobre humeando junto a las bandejas de cocadas.
+
 ## v3.15.0 — La Costa: El Arrozal
 - **Se abre La Costa** 🌴 al completar Barichara, con su propia economía (como Santander, empieza de cero y las demás regiones siguen produciendo).
 - Su primera zona, **🌾 El Arrozal** (Montería y Mompox): el Arrozal → la Secadora de arroz → la Descascaradora → la Pulidora → la Clasificadora → la Empacadora de arroz → la Bultera; del arroz en cáscara al bulto de arroz, con íconos propios para cada producto.

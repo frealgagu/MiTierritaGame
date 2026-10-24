@@ -97,6 +97,12 @@ export const FACTS = {
   rice_sorter: ['El arroz excelso tiene casi todos los granos enteros.'],
   rice_bagger: ['En la Costa no hay almuerzo sin arroz: de coco, de lisa…'],
   rice_stacker: ['Un bulto de arroz pesa 50 kilos y se carga al hombro.'],
+  // Costa · El Cocal (v3.16)
+  coconut_grove: ['La palma de coco da cocos todo el año, en racimos.', 'Un coco verde tiene agua dulce por dentro: se toma frío.'],
+  coconut_peeler: ['El coco se pela a machete: la cáscara verde sirve de fibra.'],
+  coconut_grater: ['El coco se ralla a mano, en un rallador de lata con huequitos.'],
+  coconut_press: ['La leche de coco sale de exprimir el coco rallado en un trapo.', 'El arroz con coco se hace con leche de coco y panela.'],
+  cocada_kitchen: ['Las palenqueras venden cocadas en las calles de Cartagena.', 'Hay cocadas blancas, de panela, de piña y de guayaba.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -114,6 +120,7 @@ export const PEOPLE = {
   hormigas: { icon: '👵', name: 'Doña Gloria', role: 'la hormiguera' },
   barichara: { icon: '👩', name: 'Lucía', role: 'la guía' },
   arrozal: { icon: '👨🏾‍🌾', name: 'Don Abelardo', role: 'el arrocero' },
+  cocal: { icon: '👩🏾', name: 'Doña Eulalia', role: 'la cocadera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -131,6 +138,7 @@ export const WELCOME = {
   barichara: '¡Bienvenido a Barichara! Aquí llega lo mejor de todo Santander, y de aquí salen las excursiones a Guane.',
   hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
   arrozal: '¡Ajá, bienvenido a la Costa, compa! Aquí el arroz crece con los pies en el agua.',
+  cocal: '¡Ey, mi vida, bienvenido al Cocal! Aquí bajamos el coco de la palma y lo volvemos cocada.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

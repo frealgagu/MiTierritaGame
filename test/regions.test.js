@@ -457,14 +457,16 @@ test('La Costa se abre al completar Barichara y, mientras le falten zonas, no se
   s.zones.barichara.complete = true;
   assert.deepEqual(openRegions(root), ['costa']);
   const c = regionState(root, 'costa');
-  assert.deepEqual(Object.keys(c.zones), ['arrozal']);
-  // Completar el Arrozal (su única zona por ahora) no termina la región: no hay segundo final.
-  const final = GOALS_BY_ZONE.arrozal.find((g) => g.final);
-  c.goals.claimed = GOALS_BY_ZONE.arrozal.filter((g) => !g.final).map((g) => g.id);
-  c.stats.sold[final.product ?? final.target] = 1e9;
-  c.coins = 1e12;
-  claimGoal(c, final.id, { emit() {} });
-  assert.equal(c.zones.arrozal.complete, true);
+  assert.deepEqual(Object.keys(c.zones), ['arrozal', 'cocal']);
+  // Completar el Arrozal abre el Cocal (v3.16); completar la última zona que tiene por ahora no termina la
+  // región: no hay segundo final.
+  c.stats.sold = { rice_sack: 1e9, cocada: 1e9 };
+  for (const zone of ['arrozal', 'cocal']) {
+    c.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
+    claimGoal(c, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
+    assert.equal(c.zones[zone].complete, true);
+  }
+  assert.equal(c.zones.cocal.unlocked, true);
   assert.ok(!c.regionDone);
   for (const id of stationsOf(c)) c.stations[id] = { ...(c.stations[id] ?? {}), level: 100, transport: { level: 100 } };
   c.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'costa').map((r) => r.id);

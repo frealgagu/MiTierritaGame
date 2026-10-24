@@ -311,5 +311,24 @@ const ARROZAL = [
   { id: 'z_final', type: 'sold', product: 'rice_sack', amount: 2000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL];
+// Costa · El Cocal (v3.16): la misma lista que el Tabacal.
+const COCAL = [
+  { id: 'v01', type: 'sold', product: 'coconut', amount: 50, reward: 500 },
+  { id: 'v02', type: 'level', target: 'coconut_grove', level: 10, reward: 1000 },
+  { id: 'v03', type: 'unlock', station: 'coconut_peeler', reward: 2000 },
+  { id: 'v04', type: 'level', target: 'coconut_grove:transport', level: 10, reward: 2000 },
+  { id: 'v05', type: 'unlock', station: 'coconut_grater', reward: 5000 },
+  { id: 'v06', type: 'produced', product: 'grated_coconut', amount: 200, reward: 8000 },
+  { id: 'v08', type: 'unlock', station: 'coconut_press', reward: 20000 },
+  { id: 'v09', type: 'level', target: 'dispatch:cocal', level: 10, reward: 20000 },
+  { id: 'v10', type: 'produced', product: 'coconut_milk', amount: 500, reward: 40000 },
+  { id: 'v11', type: 'unlock', station: 'cocada_kitchen', reward: 80000 },
+  { id: 'v12', type: 'allLevels', zone: 'cocal', level: 25, reward: 100000 },
+  { id: 'v07', type: 'research', research: 'machetes_afilados', reward: 50000 },
+  { id: 'v13', type: 'income', zone: 'cocal', perSecond: 500, reward: 150000 },
+  { id: 'v14', type: 'sold', product: 'cocada', amount: 1000, reward: 300000 },
+  { id: 'v_final', type: 'sold', product: 'cocada', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL];

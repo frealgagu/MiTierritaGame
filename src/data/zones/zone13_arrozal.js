@@ -30,5 +30,5 @@ export const ZONE13 = {
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
   unlockedBy: null, // la primera de la Costa: se abre con la región
-  next: null, // (las demás zonas de la Costa llegan en las próximas versiones)
+  next: 'cocal',
 };

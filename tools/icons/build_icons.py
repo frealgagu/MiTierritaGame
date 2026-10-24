@@ -1267,8 +1267,6 @@ def excursion():
     ]
 
 
-# Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
-
 # ---------- Costa · El Arrozal (v3.15) ----------
 
 def rice_grain(cx, cy, rot, color, length=9, width=3.6):
@@ -1389,6 +1387,84 @@ def rice_sack():
     ]
 
 
+# ---------- Costa · El Cocal (v3.16) ----------
+
+def outlined_circle(cx, cy, r, color, d=2.5):
+    return [(OUTLINE, [circle(cx, cy, r + d)]), (color, [circle(cx, cy, r)])]
+
+
+def coconut_palm():
+    """Palma de coco: tronco curvo y anillado, hojas largas que cuelgan y el racimo de cocos."""
+    layers = [('#5d8f3a', [ellipse(46, 94, 22, 5)])]
+    layers.append((OUTLINE, ['M 40 94 Q 46 60 60 30 L 68 32 Q 56 62 52 94 Z']))
+    layers.append(('#a1785a', ['M 42.5 92 Q 48.5 60 61.5 33 L 65.5 34 Q 54 62 49.5 92 Z']))
+    layers.append(('#7a5a3e', [rib(43, 84, 51, 84, 1.4), rib(45, 72, 53, 73, 1.4), rib(48, 60, 56, 61, 1.4), rib(52, 48, 60, 50, 1.4), rib(56, 38, 64, 40, 1.4)]))
+    fronds = [(62, 30, 14, 40, 7), (62, 30, 30, 14, 7), (62, 30, 60, 6, 6), (62, 30, 88, 14, 7), (62, 30, 96, 40, 7), (62, 30, 40, 30, 5)]
+    for x0, y0, x1, y1, w in fronds:
+        layers.append(('#2e7d32', [leaf(x0, y0, x1, y1, w)]))
+    layers.append(('#66bb6a', [rib(x0, y0, x1, y1, 1) for x0, y0, x1, y1, w in fronds]))
+    for cx, cy in [(56, 38), (66, 38), (61, 44)]:
+        layers += outlined_circle(cx, cy, 5, '#8bc34a', 1.5)
+    return layers
+
+
+def coconut():
+    """Coco: el coco verde recién bajado de la palma, entero, con su cáscara lisa."""
+    layers = [(OUTLINE, [ellipse(50, 56, 36, 38, -15)]), ('#7cb342', [ellipse(50, 56, 33.5, 35.5, -15)])]
+    layers.append(('#9ccc65', [ellipse(40, 44, 12, 18, -25)]))
+    layers.append(('#c5e1a5', [ellipse(36, 38, 4, 8, -25)]))
+    layers.append(('#5d4037', [poly(44, 18, 56, 18, 58, 26, 42, 26)]))
+    layers.append(('#558b2f', [rib(50, 26, 46, 90, 1.4)]))
+    return layers
+
+
+def peeled_coconut():
+    """Coco pelado: el coco café y peludo, sin la cáscara verde, con sus tres ojitos."""
+    layers = [(OUTLINE, [circle(50, 56, 36)]), ('#8d6e4a', [circle(50, 56, 33.5)])]
+    layers.append(('#6d4c32', [rib(26 + k * 6, 30 + (k % 3) * 4, 30 + k * 6, 84 - (k % 2) * 6, 1.3) for k in range(9)]))
+    layers.append(('#a1887f', [ellipse(40, 42, 10, 6, -30)]))
+    layers.append(('#3e2723', [circle(44, 32, 3.2), circle(56, 32, 3.2), circle(50, 41, 3.2)]))
+    return layers
+
+
+def grated_coconut():
+    """Coco rallado: una totuma llena de coco blanco rallado, con el rallador al lado."""
+    layers = [(OUTLINE, ['M 6 52 Q 48 104 90 52 Z']), ('#8d6e4a', ['M 10 54 Q 48 98 86 54 Z'])]
+    layers.append((OUTLINE, [ellipse(48, 50, 41, 14)]))
+    layers.append(('#fbfaf6', [ellipse(48, 48, 38, 12), ellipse(48, 42, 26, 10)]))
+    layers.append(('#d7ccc8', [rib(cx - 3, cy, cx + 3, cy + 1.5, 1.2) for cx, cy in [(30, 46), (42, 40), (54, 44), (64, 48), (38, 50), (50, 50), (60, 40), (46, 34)]]))
+    layers.append((OUTLINE, [rect(74, 8, 16, 40, 20)]))
+    layers.append(('#b0bec5', [rect(76, 10, 12, 36, 20)]))
+    layers.append(('#78909c', [circle(78 + (k % 2) * 5, 16 + k * 7, 1.4) for k in range(4)]))
+    return layers
+
+
+def coconut_milk():
+    """Leche de coco: medio coco con la leche blanca, y una botella llena al lado."""
+    layers = [(OUTLINE, ['M 6 50 Q 40 102 74 50 Z']), ('#6d4c32', ['M 10 52 Q 40 96 70 52 Z'])]
+    layers.append((OUTLINE, [ellipse(40, 50, 35, 11)]))
+    layers.append(('#fbfaf6', [ellipse(40, 50, 32, 9)]))
+    layers.append(('#ffffff', [ellipse(32, 48, 10, 3)]))
+    layers.append((OUTLINE, ['M 72 30 L 72 22 L 80 22 L 80 30 Q 92 38 90 50 L 90 92 L 62 92 L 62 50 Q 60 38 72 30 Z']))
+    layers.append(('#eceff1', ['M 74.5 32 L 74.5 24.5 L 77.5 24.5 L 77.5 32 Q 88 39 87.5 50 L 87.5 89.5 L 64.5 89.5 L 64.5 50 Q 64 39 74.5 32 Z']))
+    layers.append(('#fbfaf6', ['M 64.5 50 L 87.5 50 L 87.5 89.5 L 64.5 89.5 Z']))
+    layers.append(('#7cb342', [rect(64.5, 60, 23, 12)]))
+    layers.append(('#d32f2f', [rect(73, 18, 6, 6)]))
+    return layers
+
+
+def cocada():
+    """Cocadas: tres cocadas redondas, una blanca, una de panela y una de guayaba, sobre papel."""
+    layers = [(OUTLINE, [poly(8, 74, 50, 56, 94, 74, 52, 94)]), ('#f5ecd7', [poly(12, 74, 50, 58.5, 90, 74, 52, 91.5)])]
+    for cx, cy, col in [(30, 60, '#fbfaf6'), (70, 60, '#a0612d'), (50, 74, '#e57373')]:
+        layers.append((OUTLINE, [ellipse(cx, cy, 20, 13)]))
+        layers.append((shade_hex(col, 0.8), [ellipse(cx, cy + 2, 17.5, 10.5)]))
+        layers.append((col, [ellipse(cx, cy - 1, 17.5, 9.5)]))
+        layers.append((shade_hex(col, 0.75), [rib(cx - 9 + k * 4, cy - 4 + (k % 2) * 3, cx - 6 + k * 4, cy - 1 + (k % 2) * 3, 1.2) for k in range(5)]))
+    return layers
+
+
+# Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -1467,6 +1543,12 @@ ICONS = [
     (0xE04B, 'premium_rice', premium_rice),
     (0xE04C, 'rice_bag', rice_bag),
     (0xE04D, 'rice_sack', rice_sack),
+    (0xE04E, 'coconut_palm', coconut_palm),
+    (0xE04F, 'coconut', coconut),
+    (0xE050, 'peeled_coconut', peeled_coconut),
+    (0xE051, 'grated_coconut', grated_coconut),
+    (0xE052, 'coconut_milk', coconut_milk),
+    (0xE053, 'cocada', cocada),
 ]
 
 

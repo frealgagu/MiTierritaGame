@@ -98,6 +98,14 @@ export const STATIONS = [
   { id: 'rice_bagger', zone: 'arrozal', name: 'Empacadora de arroz', icon: ICON.riceBag, in: { premium_rice: 1 }, out: { rice_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.15' },
   { id: 'rice_stacker', zone: 'arrozal', name: 'Bultera', icon: ICON.riceSack, in: { rice_bag: 4 }, out: { rice_sack: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.15' },
 
+  // Costa · El Cocal (v3.16), en el golfo de Morrosquillo: el coco se pela, se ralla, se exprime y su
+  // leche se cocina en paila con panela hasta volverse cocada. Mismos números que el Tabacal.
+  { id: 'coconut_grove', zone: 'cocal', name: 'Cocal', icon: ICON.coconutPalm, infinite: true, out: { coconut: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.16' },
+  { id: 'coconut_peeler', zone: 'cocal', name: 'Peladero de cocos', icon: ICON.peeledCoconut, in: { coconut: 1 }, out: { peeled_coconut: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.16' },
+  { id: 'coconut_grater', zone: 'cocal', name: 'Ralladora', icon: ICON.gratedCoconut, in: { peeled_coconut: 2 }, out: { grated_coconut: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.16' },
+  { id: 'coconut_press', zone: 'cocal', name: 'Prensa de coco', icon: ICON.coconutMilk, in: { grated_coconut: 2 }, out: { coconut_milk: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.16' },
+  { id: 'cocada_kitchen', zone: 'cocal', name: 'Paila de cocadas', icon: ICON.cocada, in: { coconut_milk: 1 }, out: { cocada: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.16' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

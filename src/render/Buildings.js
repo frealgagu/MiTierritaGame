@@ -1719,6 +1719,166 @@ const DRAW = {
     };
   },
 
+  // --- Costa · El Cocal (v3.16) ---
+
+  // Peladero de cocos: ramada de palma con el montón de cocos verdes, las cáscaras a un lado y el que pela
+  // a machete.
+  coconut_peeler(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 26 + ctx.up;
+    // Montón de cocos verdes, adelante.
+    const pile = iso(x0 + 2.0, y0 + 1.95);
+    for (let i = 0; i < 9; i++) {
+      const row = Math.floor(i / 4);
+      g.circle(pile.x + ((i % 4) - 1.5) * 7 + row * 3, pile.y - row * 5, 4.5).fill(PRODUCTS.coconut.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+    }
+    // Cáscaras (la estopa) y un canasto de cocos pelados.
+    const husks = iso(x0 + 2.6, y0 + 0.9);
+    for (let i = 0; i < 6; i++) g.ellipse(husks.x + (i % 3) * 6 - 6, husks.y - Math.floor(i / 3) * 4, 5, 2.5).fill(i % 2 ? 0xb08a4a : 0x9ccc65).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.4 });
+    const basket = iso(x0 + 1.55, y0 + 2.3);
+    g.moveTo(basket.x - 9, basket.y - 8).lineTo(basket.x + 9, basket.y - 8).lineTo(basket.x + 7, basket.y).lineTo(basket.x - 7, basket.y).closePath().fill(0xc9a35a).stroke(OUTLINE);
+    for (const dx of [-5, 0, 5]) g.circle(basket.x + dx, basket.y - 9, 3.4).fill(PRODUCTS.peeled_coconut.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 14, 0xc9a35a, 0x9c7b3a);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 14);
+    const man = new Graphics();
+    this.anim.addChild(man);
+    this.animate = (time) => {
+      man.clear();
+      const p = iso(x0 + 1.3, y0 + 0.9);
+      man.rect(p.x - 2.2, p.y - 9, 1.8, 9).fill(0xf4efe6);
+      man.rect(p.x + 0.4, p.y - 9, 1.8, 9).fill(0xf4efe6);
+      man.roundRect(p.x - 3.2, p.y - 18, 6.4, 9.5, 2).fill(0x2e6fd1);
+      man.circle(p.x, p.y - 20.5, 2.8).fill(0x6d4c32);
+      man.ellipse(p.x, p.y - 22.5, 5.5, 1.5).fill(0xe9d8a6);
+      // El coco en la mano y el machete que sube y baja.
+      man.circle(p.x - 6, p.y - 13, 3.6).fill(PRODUCTS.coconut.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+      const a = this.working ? -0.6 + Math.abs(Math.sin(time * 4)) * 1.6 : 0.6;
+      const hx = p.x + 3;
+      const hy = p.y - 15;
+      man.moveTo(hx, hy).lineTo(hx + Math.cos(a) * 10, hy + Math.sin(a) * 10).stroke({ width: 1.8, color: 0xb0bec5 });
+    };
+    this.animate(0);
+  },
+
+  // Ralladora: casita de colores con la mesa donde se ralla el coco; el coco rallado se junta en una ponchera.
+  coconut_grater(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0x9ad0ec, roofColor: 0xc9a35a, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.7, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, PAL.balconyYellow);
+    box(g, x + 0.4, y + 2.1, 1.7, 0.5, 9, PAL.wood);
+    const bowl = iso(x + 1.6, y + 2.35, 9);
+    g.ellipse(bowl.x, bowl.y - 2, 9, 4).fill(0x2fa36b).stroke(OUTLINE);
+    g.ellipse(bowl.x, bowl.y - 3.5, 7, 2.5).fill(PRODUCTS.grated_coconut.color);
+    // Cocos pelados esperando.
+    for (const [bx, by] of [[2.45, 2.2], [2.7, 2.35], [2.55, 2.55]]) {
+      const p = iso(x + bx, y + by);
+      g.circle(p.x, p.y - 3.5, 3.6).fill(PRODUCTS.peeled_coconut.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    }
+    const grate = new Graphics();
+    this.anim.addChild(grate);
+    this.animate = (time) => {
+      grate.clear();
+      const k = this.working ? Math.sin(time * 9) * 0.12 : 0;
+      const r = iso(x + 0.8, y + 2.35, 9);
+      grate.rect(r.x - 3, r.y - 12, 6, 12).fill(0xb0bec5).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      const c = iso(x + 0.8 + k, y + 2.3, 15);
+      grate.circle(c.x, c.y, 3.6).fill(0xfbfaf6).stroke({ width: 0.6, color: 0x6d4c32 });
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 1.5 + i / 3) % 1;
+        grate.circle(r.x + (i - 1) * 2, r.y - 1 + f * 4, 0.9).fill(0xffffff);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Prensa de coco: casa con la prensa de tornillo en el corredor; la leche escurre del trapo a un balde.
+  coconut_press(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.0, 1.6, 28, ctx, { wall: 0xf2a7a0, roofColor: 0xc9a35a, roofH: 14 });
+    door(g, hx, hy, 1.6, 0.6, 16, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.0, 0.8, 14, PAL.balconyBlue);
+    // La prensa: dos postes, el travesaño y el tornillo.
+    const px = x + 0.7;
+    const py = y + 2.3;
+    for (const dx of [0, 0.7]) box(g, px + dx, py, 0.1, 0.1, 22, PAL.woodDark);
+    box(g, px - 0.05, py - 0.02, 0.85, 0.14, 3, PAL.wood, { z: 22 });
+    box(g, px + 0.12, py - 0.05, 0.5, 0.2, 4, PAL.wood, { z: 4 });
+    // Botellas de leche de coco.
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const p = iso(x + 1.9 + (i % 3) * 0.2, y + 2.25 + Math.floor(i / 3) * 0.25);
+      g.roundRect(p.x - 2, p.y - 10, 4, 10, 1.5).fill(PRODUCTS.coconut_milk.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.rect(p.x - 2, p.y - 6.5, 4, 2.5).fill(0x7cb342);
+    }
+    const press = new Graphics();
+    this.anim.addChild(press);
+    this.animate = (time) => {
+      press.clear();
+      const down = this.working ? (Math.sin(time * 1.5) + 1) * 2.5 : 0;
+      // El tornillo baja y aprieta el trapo con el coco rallado.
+      const top = iso(px + 0.4, py + 0.05, 22);
+      press.rect(top.x - 1.2, top.y - 6, 2.4, 10 + down).fill(0x6c757d);
+      press.moveTo(top.x - 6, top.y - 6).lineTo(top.x + 6, top.y - 6).stroke({ width: 2, color: PAL.woodDark });
+      const cloth = iso(px + 0.4, py + 0.05, 10);
+      press.ellipse(cloth.x, cloth.y - (4 - down * 0.3), 8, 3.5 - down * 0.25).fill(0xf4efe6).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+      const bucket = iso(px + 0.4, py + 0.05, 0);
+      press.rect(bucket.x - 5, bucket.y - 6, 10, 6).fill(0x2e6fd1).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      press.ellipse(bucket.x, bucket.y - 6, 5, 1.6).fill(0xfbfaf6);
+      if (!this.working) return;
+      for (let i = 0; i < 2; i++) {
+        const f = (time * 1.8 + i / 2) % 1;
+        press.circle(cloth.x + (i ? 2 : -2), cloth.y + f * 8, 1.1).fill(0xffffff);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Paila de cocadas: kiosco de palma con la paila de cobre sobre el fogón, la pala que revuelve y la mesa
+  // con las cocadas de colores (más bandejas con cada hito).
+  cocada_kitchen(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xf6d860, roofColor: 0xc9a35a, roofH: 16 });
+    door(g, hx, hy, 1.6, 1.8, 18, ctx.trim);
+    windowOnRight(this, g, hx, hy, 2.4, 0.8, 14, PAL.balconyGreen);
+    // Fogón de ladrillo con la paila.
+    box(g, x + 0.4, y + 2.1, 0.8, 0.6, 8, 0xa0522d);
+    const pan = iso(x + 0.8, y + 2.4, 8);
+    g.ellipse(pan.x, pan.y - 2, 13, 5.5).fill(0xb87333).stroke(OUTLINE);
+    g.ellipse(pan.x, pan.y - 3, 10.5, 4).fill(0xc68a4a);
+    // La mesa con las bandejas de cocadas.
+    box(g, x + 1.6, y + 2.15, 1.1, 0.5, 9, PAL.wood);
+    const colors = [0xfbfaf6, PRODUCTS.cocada.color, 0xe57373, 0xf6d860];
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 2); i++) {
+      const p = iso(x + 1.75 + (i % 2) * 0.5, y + 2.25 + Math.floor(i / 2) * 0.25, 9);
+      for (let k = 0; k < 3; k++) g.ellipse(p.x - 4 + k * 4, p.y - 1.5, 2.6, 1.6).fill(colors[i % colors.length]).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+    }
+    this.smokePoints = [iso(x + 0.8, y + 2.4, 14)];
+    const stir = new Graphics();
+    this.anim.addChild(stir);
+    this.animate = (time) => {
+      stir.clear();
+      const a = this.working ? time * 2.5 : 0;
+      // La melcocha de coco que hierve y la pala que da vueltas.
+      stir.ellipse(pan.x, pan.y - 3, 9, 3.5).fill(0xd9a066);
+      if (this.working) for (let i = 0; i < 3; i++) stir.circle(pan.x + Math.sin(time * 3 + i * 2) * 6, pan.y - 3 + Math.cos(time * 2 + i) * 1.5, 1.2).fill({ color: 0xffffff, alpha: 0.6 });
+      stir.moveTo(pan.x + Math.cos(a) * 6, pan.y - 3 + Math.sin(a) * 2).lineTo(pan.x + Math.cos(a) * 3 + 8, pan.y - 18).stroke({ width: 2, color: PAL.wood });
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.6 + i / 3) % 1;
+        if (!this.working) break;
+        stir.circle(pan.x - 3 + i * 3, pan.y - 6 - f * 14, 1.5 + f * 2).fill({ color: 0xffffff, alpha: 0.45 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.
