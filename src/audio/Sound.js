@@ -2,21 +2,21 @@
 
 // Lo que suena al abrir cada estación (v3.3.2): su oficio, en pocos tipos de sonido.
 const STATION_SOUNDS = {
-  field: ['farm', 'canefield', 'cacao_grove', 'cornfield', 'guava_grove', 'tobacco_field', 'fique_field', 'rice_field', 'coconut_grove', 'fishing_canoes', 'canaflechal', 'potato_field', 'barley_field', 'composter', 'anthill', 'camino_real'],
+  field: ['farm', 'canefield', 'cacao_grove', 'cornfield', 'guava_grove', 'tobacco_field', 'fique_field', 'rice_field', 'coconut_grove', 'fishing_canoes', 'canaflechal', 'potato_field', 'barley_field', 'clay_pit', 'composter', 'anthill', 'camino_real'],
   moo: ['pasture', 'cattle_ranch', 'milking_corral'],
   water: ['wetmill', 'pasteurizer', 'cheesery', 'churn', 'brine_pot', 'coconut_press', 'fish_cleaner', 'curdler', 'potato_washer'],
   machine: ['huller', 'grinder', 'cane_mill', 'pulverizer', 'cacao_mill', 'sheller', 'corn_huller', 'dough_mill', 'guava_pulper', 'decorticator', 'rice_huller', 'rice_polisher', 'coconut_grater', 'curd_mill', 'potato_peeler'],
-  whir: ['separator', 'spinner', 'rice_sorter', 'potato_grader'],
-  fire: ['roaster', 'cacao_roaster', 'grill', 'ant_toaster'],
+  whir: ['separator', 'spinner', 'rice_sorter', 'potato_grader', 'potter_wheel'],
+  fire: ['roaster', 'pottery_kiln', 'cacao_roaster', 'grill', 'ant_toaster'],
   boil: ['furnace', 'arequipe_pot', 'guava_pot', 'greca', 'cocada_kitchen', 'coconut_fish_kitchen', 'brew_kettle', 'mote_pot', 'fiber_dyer'],
   wind: ['dryer', 'cacao_dryer', 'caney', 'maltings', 'airing_rack', 'rice_dryer', 'fish_salter'],
   ferment: ['fermenter', 'tobacco_piles', 'fermenters'],
-  chop: ['butcher', 'bocadillo_cutter', 'stripper', 'coconut_peeler', 'fish_filleter', 'fiber_scraper'],
+  chop: ['butcher', 'clay_kneader', 'bocadillo_cutter', 'stripper', 'coconut_peeler', 'fish_filleter', 'fiber_scraper'],
   loom: ['sack_loom', 'basket_shop', 'alpargata_shop', 'bijao_wrapper', 'fiambre_maker', 'cigar_roller', 'ant_cleaner', 'cone_table', 'hamper', 'braiders', 'hat_sewer'],
-  thud: ['packer', 'molds', 'guava_molds', 'crate_packer', 'tercio_packer', 'gift_wrap', 'box_shop', 'cheese_press', 'criollas_bagger', 'criollas_boxer', 'bottler', 'rice_bagger', 'rice_stacker'],
+  thud: ['packer', 'molds', 'guava_molds', 'crate_packer', 'tercio_packer', 'gift_wrap', 'box_shop', 'cheese_press', 'criollas_bagger', 'criollas_boxer', 'bottler', 'pot_maker', 'rice_bagger', 'rice_stacker'],
   horn: ['export_dock', 'muelle'],
   sizzle: ['fish_fryer', 'criollas_fryer', 'fogon_getsemani', 'budare', 'arepa_stand', 'fonda'],
-  clink: ['coffee_house', 'chocolate_table', 'chocolatier', 'lunch_table', 'souvenir_shop', 'dulceria', 'park_cafe', 'posada', 'costeno_fonda', 'bandeja_kitchen', 'parador', 'restaurante_muralla', 'hotel_colonial', 'cocina_bahia', 'loncheras'],
+  clink: ['coffee_house', 'chocolate_table', 'chocolatier', 'lunch_table', 'souvenir_shop', 'dulceria', 'park_cafe', 'posada', 'costeno_fonda', 'bandeja_kitchen', 'parador', 'restaurante_muralla', 'jarras', 'hotel_colonial', 'cocina_bahia', 'loncheras'],
   pour: ['salter'],
   engine: ['dispatch'],
 };

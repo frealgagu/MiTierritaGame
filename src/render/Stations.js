@@ -3,7 +3,7 @@ import { iso, isoPoly, depth, shade } from './iso.js';
 import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawPotatoPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawPotatoPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -164,7 +164,7 @@ export class FarmView extends StationView {
       for (let gy = y; gy < y + h; gy++) {
         if (gx < x + 2 && gy < y + 2) continue; // sitio de la casa
         // Los cacaos son más grandes: uno por casilla.
-        for (const ox of this.theme === 'cacao' || this.theme === 'guava' || this.theme === 'ants' || this.theme === 'coconut' ? [0.5] : [0.28, 0.75]) {
+        for (const ox of this.theme === 'cacao' || this.theme === 'guava' || this.theme === 'ants' || this.theme === 'coconut' || this.theme === 'clay' ? [0.5] : [0.28, 0.75]) {
           const p = iso(gx + ox, gy + 0.5);
           this.bushes.push(p);
           if (this.theme === 'cane') drawCaneClump(g, p.x, p.y, scale, rng);
@@ -173,6 +173,7 @@ export class FarmView extends StationView {
           else if (this.theme === 'ants') drawAnthill(g, p.x, p.y, scale * (0.9 + tier * 0.06), rng);
           else if (this.theme === 'fique') drawFiquePlant(g, p.x, p.y, scale * (0.85 + tier * 0.05), rng);
           else if (this.theme === 'tobacco') drawTobaccoPlant(g, p.x, p.y, scale, rng, Math.min(1 + tier, 5));
+          else if (this.theme === 'clay') drawClayMound(g, p.x, p.y, scale * (0.9 + tier * 0.06), rng, (gx + gy) % 3 === 0);
           else if (this.theme === 'barley') drawBarley(g, p.x, p.y, scale, rng, tier);
           else if (this.theme === 'potato') drawPotatoPlant(g, p.x, p.y, scale, rng, Math.min(1 + tier, 4));
           else if (this.theme === 'canaflecha') drawCanaFlecha(g, p.x, p.y, scale * 0.8, rng, Math.min(tier, 2));

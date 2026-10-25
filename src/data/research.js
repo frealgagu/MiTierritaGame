@@ -276,6 +276,19 @@ export const RESEARCH = [
   { zone: 'cerveceria', id: 'receta_artesanal', name: 'Receta artesanal', icon: '🏅', desc: 'Las canastas de cerveza valen un 50 % más.', cost: 1500000, requires: 'bottler', effect: { type: 'productValue', target: 'beer_crate', mult: 1.5 } },
   { zone: 'cerveceria', id: 'maestria_cerveceria', name: 'Maestría: Cervecería', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cerveceria', mult: 4 } },
   { zone: 'cerveceria', id: 'supremacia_cerveceria', name: 'Supremacía: Cervecería', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cerveceria', mult: 8 } },
+
+  // Boyacá · Ráquira (v3.24): las mismas de la Fiquera y la Ciénaga, con el barro.
+  { zone: 'raquira', id: 'greda_fina', name: 'Greda fina', icon: ICON.greda, desc: 'La Mina de greda saca el doble.', cost: 300000, requires: 'clay_kneader', effect: { type: 'stationSpeed', target: 'clay_pit', mult: 2 } },
+  { zone: 'raquira', id: 'amasadora', name: 'Amasadora', icon: ICON.barro, desc: 'El Amasado del barro amasa el doble.', cost: 400000, requires: 'clay_kneader', effect: { type: 'stationSpeed', target: 'clay_kneader', mult: 2 } },
+  { zone: 'raquira', id: 'torno_pedal', name: 'Torno de pedal', icon: ICON.piezaTorneada, desc: 'El Torno tornea el doble.', cost: 1200000, requires: 'potter_wheel', effect: { type: 'stationSpeed', target: 'potter_wheel', mult: 2 } },
+  { zone: 'raquira', id: 'camion_raquira', name: 'Camión de las artesanías', icon: '🚛', desc: 'El despacho de Ráquira lleva el doble por viaje.', cost: 1500000, requires: 'pot_maker', effect: { type: 'dispatchCapacity', target: 'raquira', mult: 2 } },
+  { zone: 'raquira', id: 'horno_grande', name: 'Horno grande', icon: ICON.matera, desc: 'El Horno de leña hornea el doble.', cost: 3000000, requires: 'pottery_kiln', effect: { type: 'stationSpeed', target: 'pottery_kiln', mult: 2 } },
+  { zone: 'raquira', id: 'moldes_ollas', name: 'Moldes de ollas', icon: ICON.ollaBarro, desc: 'Las Ollas de barro salen el doble.', cost: 8000000, requires: 'pot_maker', effect: { type: 'stationSpeed', target: 'pot_maker', mult: 2 } },
+  { zone: 'raquira', id: 'loza_negra', name: 'Loza negra', icon: '🏅', desc: 'Las ollas de barro valen un 50 % más.', cost: 15000000, requires: 'pot_maker', effect: { type: 'productValue', target: 'olla_barro', mult: 1.5 } },
+  { zone: 'raquira', id: 'jarras_asa', name: 'Jarras con asa', icon: ICON.jarraCerveza, desc: 'Las Jarras salen el doble (la Chiva de la ruta se ajusta sola).', cost: 25000000, requires: 'jarras', effect: { type: 'stationSpeed', target: 'jarras', mult: 2 } },
+  { zone: 'raquira', id: 'capital_artesanal', name: 'Capital artesanal', icon: '🏅', desc: 'Las jarras con cerveza valen un 50 % más.', cost: 50000000, requires: 'jarras', effect: { type: 'productValue', target: 'jarra_cerveza', mult: 1.5 } },
+  { zone: 'raquira', id: 'maestria_raquira', name: 'Maestría: Ráquira', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'raquira', mult: 4 } },
+  { zone: 'raquira', id: 'supremacia_raquira', name: 'Supremacía: Ráquira', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'raquira', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

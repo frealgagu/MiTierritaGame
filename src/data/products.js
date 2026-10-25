@@ -141,6 +141,14 @@ export const PRODUCTS = {
   beer: { name: 'Cerveza', zone: 'cerveceria', value: 150, icon: ICON.beer, color: 0xe8a317 },
   beer_crate: { name: 'Canasta de cerveza', zone: 'cerveceria', value: 250, icon: ICON.beerCrate, color: 0xd7263d },
 
+  // Boyacá · Ráquira (v3.24): los mismos valores que la Fiquera y la Ciénaga.
+  greda: { name: 'Greda', zone: 'raquira', value: 125, icon: ICON.greda, color: 0xa8735a },
+  barro: { name: 'Barro amasado', zone: 'raquira', value: 300, icon: ICON.barro, color: 0xb5653a },
+  pieza_torneada: { name: 'Pieza torneada', zone: 'raquira', value: 800, icon: ICON.piezaTorneada, color: 0xc08a6a },
+  matera: { name: 'Matera pintada', zone: 'raquira', value: 2000, icon: ICON.matera, color: 0xd9772e },
+  olla_barro: { name: 'Olla de barro', zone: 'raquira', value: 2400, icon: ICON.ollaBarro, color: 0x4e342e },
+  jarra_cerveza: { name: 'Jarra de barro con cerveza', zone: 'raquira', value: 4000, icon: ICON.jarraCerveza, color: 0xb5653a },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

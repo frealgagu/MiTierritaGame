@@ -234,6 +234,12 @@ export class Terrain {
           else if (r < 0.06) obj = coconutPalm(rng);
           else if (r < 0.085) obj = egret(rng);
           else if (r < 0.11) obj = banana(rng);
+        } else if (this.zone.theme === 'clay') {
+          // Ráquira (v3.24): lomas secas con cactus y piedras, eucaliptos y ollas de barro puestas a la venta.
+          if (r < 0.03) obj = eucalyptus(rng);
+          else if (r < 0.055) obj = cactus(rng);
+          else if (r < 0.08) obj = rock(rng);
+          else if (r < 0.095) obj = potStand(rng);
         } else if (this.zone.theme === 'barley') {
           // Cebadales (v3.23): eucaliptos, cipreses, pacas de paja y piedras.
           if (r < 0.04) obj = eucalyptus(rng);
@@ -315,6 +321,7 @@ const FARM_SOIL = {
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
   potato: (v) => mix(0x4a3526, 0x3a291d, v * 0.5),
+  clay: (v) => mix(0xc0784a, 0xa8653c, v * 0.45), // la greda roja de Ráquira
   barley: (v) => mix(0x8a6a3a, 0x7a5c30, v * 0.5), // la tierra negra del altiplano
   canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // la tierra seca de la sabana zenú // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6),
@@ -852,6 +859,35 @@ function coconutPalm(rng) {
   const c = new Container();
   const g = new Graphics();
   drawCoconutPalm(g, 0, 0, 1, rng);
+  c.addChild(g);
+  return c;
+}
+
+// Montón de greda (v3.24): la arcilla roja recién sacada, con su pala clavada (más alto con cada hito).
+export function drawClayMound(g, x, y, scale, rng, shovel = false) {
+  const s = scale * (0.9 + rng() * 0.2);
+  shadow(g, x + 2, y + 1, 14 * s, 5 * s);
+  g.moveTo(x - 14 * s, y).quadraticCurveTo(x - 6 * s, y - 14 * s, x, y - 15 * s).quadraticCurveTo(x + 7 * s, y - 13 * s, x + 14 * s, y).closePath().fill(0xa8735a).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.45 });
+  g.moveTo(x - 8 * s, y - 4 * s).quadraticCurveTo(x - 3 * s, y - 11 * s, x + 2 * s, y - 12 * s).stroke({ width: 1.6 * s, color: 0xc08a6a, alpha: 0.8 });
+  if (shovel) {
+    g.moveTo(x + 4 * s, y - 10 * s).lineTo(x + 9 * s, y - 26 * s).stroke({ width: 1.4, color: 0x8b5a2b });
+    g.poly([x + 2 * s, y - 12 * s, x + 6 * s, y - 10 * s, x + 5 * s, y - 5 * s, x + 1 * s, y - 7 * s]).fill(0x9aa3a8);
+  }
+}
+
+// Ollas de barro puestas a la venta en una tabla, a la orilla del camino (v3.24).
+function potStand(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 0, 1, 14, 4);
+  g.rect(-13, -6, 26, 3).fill(0x8b5a2b);
+  for (const [dx, dy] of [[-12, -4], [12, -4]]) g.rect(dx - 1, dy, 2, 6).fill(0x5e3b1c);
+  const colors = [0x4e342e, 0xd9772e, 0xb5653a];
+  for (let k = 0; k < 3; k++) {
+    const cx = -8 + k * 8;
+    g.ellipse(cx, -11, 4.5, 5).fill(colors[(k + Math.floor(rng() * 3)) % 3]).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    g.ellipse(cx, -15.5, 2.6, 1).fill(0x3e2723);
+  }
   c.addChild(g);
   return c;
 }

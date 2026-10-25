@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.24.0 — Boyacá: Ráquira
+- **🏺 Ráquira**, la tercera zona de Boyacá, se abre al completar La Cervecería. La Mina de greda saca la arcilla y el Amasado del barro la deja lista; el barro se reparte entre las **Ollas de barro**, el **Torno** (que le pasa las piezas al **Horno de leña**, de donde salen las materas pintadas) y las **Jarras**, que se llenan con cerveza.
+- **Primera ruta de Boyacá: la Ruta de la cerveza**, de la Cervecería a las Jarras de Ráquira, con su chiva y su carretera en los dos mapas.
+- Su persona es **Doña Lucila, la alfarera**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 7 íconos nuevos (con el caballito de Ráquira).
+- El mapa: la mina de greda con sus montones de barro rojo y las palas clavadas, lomas secas con cactus y piedras, eucaliptos y ollas puestas a la venta. En las estaciones: alguien pisando el barro en la poza, las ollas negras secándose en fila, el alfarero en el torno con la pieza que sube, el horno de cúpula con su boca encendida y el barril de cerveza junto a las jarras.
+
 ## v3.23.0 — Boyacá: La Cervecería
 - **🍺 La Cervecería**, la segunda zona de Boyacá, se abre al completar El Papal: el Cebadal → la Maltería → la Paila de cocción → los Tanques de fermentación → la Embotelladora; de la cebada a la canasta de cerveza, pasando por la malta, el mosto y la cerveza, con íconos propios.
 - Su persona es **Don Hernando, el cervecero**, con sus datos curiosos, objetivos, 9 investigaciones y su victoria.

@@ -2054,6 +2054,89 @@ def beer_crate():
     return layers
 
 
+# ---------- Boyacá · Ráquira (v3.24) ----------
+
+def caballito():
+    """Caballito de Ráquira: el caballito de barro pintado de colores, con sus ollitas a lado y lado."""
+    layers = [('#c8a26a', [ellipse(50, 92, 34, 5)])]
+    layers.append((OUTLINE, [rect(28, 60, 8, 30), rect(64, 60, 8, 30), ellipse(50, 56, 28, 14), 'M 70 52 L 84 24 L 94 30 L 80 58 Z']))
+    layers.append(('#d9772e', [rect(30, 62, 4, 27), rect(66, 62, 4, 27), ellipse(50, 56, 25.5, 11.5), 'M 72 52 L 85 27 L 91 31 L 79 56 Z']))
+    layers.append(('#2e6fd1', [rib(28, 52, 72, 52, 3)]))
+    layers.append(('#f2b705', [circle(36 + k * 9, 60, 2.2) for k in range(4)]))
+    layers.append(('#d7263d', [poly(84, 24, 92, 18, 94, 26)]))
+    layers.append(('#263238', [circle(88, 28, 1.4)]))
+    for cx in (34, 62):
+        layers += [(OUTLINE, ['M %d 40 Q %d 30 %d 40 L %d 48 Q %d 52 %d 48 Z' % (cx - 7, cx, cx + 7, cx + 6, cx, cx - 6)]), ('#b5562e', ['M %d 41 Q %d 33 %d 41 L %d 47 Q %d 50 %d 47 Z' % (cx - 5, cx, cx + 5, cx + 4.5, cx, cx - 4.5)])]
+    return layers
+
+
+def greda():
+    """Greda: el montón de arcilla cruda recién sacada de la mina, con la pala."""
+    layers = [(OUTLINE, ['M 8 88 Q 20 46 50 40 Q 80 46 92 88 Z']), ('#a8735a', ['M 11.5 85.5 Q 22.5 49 50 43 Q 77.5 49 88.5 85.5 Z'])]
+    layers.append(('#c08a6a', ['M 30 60 Q 44 48 58 52 Q 46 56 34 66 Z']))
+    layers.append(('#8a5a46', [circle(40, 74, 3), circle(64, 70, 2.4), circle(54, 80, 2)]))
+    layers.append(('#8b5a2b', [rib(70, 14, 58, 56, 3)]))
+    layers += [(OUTLINE, [poly(52, 52, 64, 56, 60, 72, 48, 68)]), ('#9aa3a8', [poly(53.5, 54, 62, 57, 59, 69.5, 50, 66.5)])]
+    return layers
+
+
+def barro():
+    """Barro amasado: la bola de barro suave sobre la mesa, con la marca de las manos."""
+    layers = [(OUTLINE, [poly(6, 76, 50, 60, 94, 76, 50, 92)]), ('#c68a4a', [poly(10, 76, 50, 62.5, 90, 76, 50, 89.5)])]
+    layers.append((OUTLINE, [ellipse(50, 56, 30, 24)]))
+    layers.append(('#b5653a', [ellipse(50, 56, 27.5, 21.5)]))
+    layers.append(('#cf7d4f', [ellipse(42, 48, 10, 6, -20)]))
+    layers.append(('#94502c', ['M 40 60 Q 50 54 60 60', rib(42, 62, 58, 62, 1.6), rib(44, 66, 56, 66, 1.2)]))
+    return layers
+
+
+def olla_barro():
+    """Olla de barro: la olla negra de Ráquira, panzona, con sus orejas y el borde ancho."""
+    layers = [(OUTLINE, ['M 22 36 Q 6 60 22 86 Q 50 98 78 86 Q 94 60 78 36 Z', ellipse(50, 34, 30, 9), ellipse(14, 52, 7, 4), ellipse(86, 52, 7, 4)])]
+    layers.append(('#4e342e', ['M 24.5 38.5 Q 9.5 60 24.5 83.5 Q 50 94.5 75.5 83.5 Q 90.5 60 75.5 38.5 Z', ellipse(14, 52, 4.5, 2)]))
+    layers.append(('#4e342e', [ellipse(86, 52, 4.5, 2)]))
+    layers.append(('#6d4c41', [ellipse(36, 54, 6, 14, -15)]))
+    layers.append(('#3e2723', [ellipse(50, 34, 27, 6.5)]))
+    layers.append(('#d9772e', [rib(18, 64, 82, 64, 2)]))
+    return layers
+
+
+def pieza_torneada():
+    """Pieza torneada: la vasija cruda, sin hornear, girando en el torno del alfarero."""
+    layers = [(OUTLINE, [ellipse(50, 86, 40, 9)]), ('#8b5a2b', [ellipse(50, 86, 37, 7)]), ('#6d4c32', [rect(46, 86, 8, 10)])]
+    layers.append((OUTLINE, ['M 34 80 Q 26 60 36 46 Q 40 40 38 30 L 62 30 Q 60 40 64 46 Q 74 60 66 80 Z']))
+    layers.append(('#c08a6a', ['M 36.5 78 Q 29 60 38.5 47 Q 42.5 41 41 32.5 L 59 32.5 Q 57.5 41 61.5 47 Q 71 60 63.5 78 Z']))
+    layers.append(('#a8735a', [rib(32, 60, 68, 60, 1), rib(36, 70, 64, 70, 1)]))
+    layers.append(('#8a5a46', [ellipse(50, 31, 10, 2.4)]))
+    layers.append(('#b0bec5', ['M 16 70 Q 10 60 16 50', 'M 84 70 Q 90 60 84 50']))
+    return layers
+
+
+def matera():
+    """Matera pintada: la matera de barro horneado con flores pintadas y una mata sembrada."""
+    layers = [(OUTLINE, ['M 22 48 L 78 48 L 70 92 L 30 92 Z']), ('#d9772e', ['M 25 50.5 L 75 50.5 L 67.8 89.5 L 32.2 89.5 Z'])]
+    layers.append((OUTLINE, [rect(18, 42, 64, 10)]))
+    layers.append(('#e8915a', [rect(20.5, 44.5, 59, 5)]))
+    layers.append(('#ffffff', [circle(cx, 68, 4) for cx in (38, 50, 62)]))
+    layers.append(('#2e6fd1', [circle(cx, 68, 1.8) for cx in (38, 50, 62)]))
+    layers.append(('#2fa36b', [leaf(44, 72, 40, 80, 2), leaf(56, 72, 60, 80, 2)]))
+    for x1, y1 in [(30, 14), (44, 8), (58, 10), (72, 18), (50, 22)]:
+        layers.append(('#2e7d32', [leaf(50, 44, x1, y1, 5)]))
+    layers.append(('#d7263d', [circle(44, 10, 4), circle(70, 18, 3.4)]))
+    return layers
+
+
+def jarra_cerveza():
+    """Jarra de barro con cerveza: la jarra de Ráquira, con su asa, llena y con espuma."""
+    layers = [(OUTLINE, ['M 22 30 Q 18 60 24 92 L 66 92 Q 72 60 68 30 Z', 'M 66 42 Q 90 42 90 60 Q 90 78 66 78 L 66 70 Q 82 70 82 60 Q 82 50 66 50 Z'])]
+    layers.append(('#b5653a', ['M 24.5 33 Q 20.5 60 26.5 89.5 L 63.5 89.5 Q 69.5 60 65.5 33 Z']))
+    layers.append(('#cf7d4f', [rect(30, 38, 6, 46)]))
+    layers.append(('#f2b705', [rib(24, 56, 66, 56, 2.4)]))
+    layers.append(('#2e6fd1', [circle(cx, 70, 2.4) for cx in (34, 45, 56)]))
+    layers.append(('#ffffff', [circle(cx, cy, r) for cx, cy, r in [(26, 28, 7), (36, 23, 8), (48, 24, 8), (60, 27, 7)]]))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -2182,6 +2265,13 @@ ICONS = [
     (0xE07C, 'wort', wort),
     (0xE07D, 'beer', beer),
     (0xE07E, 'beer_crate', beer_crate),
+    (0xE07F, 'caballito', caballito),
+    (0xE080, 'greda', greda),
+    (0xE081, 'barro', barro),
+    (0xE082, 'olla_barro', olla_barro),
+    (0xE083, 'pieza_torneada', pieza_torneada),
+    (0xE084, 'matera', matera),
+    (0xE085, 'jarra_cerveza', jarra_cerveza),
 ]
 
 

@@ -2935,6 +2935,153 @@ const DRAW = {
     };
   },
 
+  // --- Boyacá · Ráquira (v3.24): casas de colores vivos, con ollas y caballitos en las puertas ---
+
+  // Amasado del barro: ramada de teja donde alguien pisa el barro en la poza; el barro listo en bolas.
+  clay_kneader(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 24 + ctx.up;
+    // Las bolas de barro, adelante a la derecha.
+    for (const [bx, by] of [[1.9, 1.9], [2.2, 2.05], [2.05, 2.25], [1.75, 2.2]]) {
+      const p = iso(x0 + bx, y0 + by);
+      g.ellipse(p.x, p.y - 3, 5, 4).fill(PRODUCTS.barro.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 13, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    const pool = iso(x0 + 1.1, y0 + 0.8);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      work.ellipse(pool.x, pool.y, 18, 7).fill(0x8a5a46).stroke(OUTLINE);
+      work.ellipse(pool.x, pool.y - 1, 15, 5.5).fill(PRODUCTS.barro.color);
+      // La persona pisando: sube un pie y luego el otro.
+      const step = this.working ? Math.sin(time * 6) * 2 : 0;
+      work.rect(pool.x - 2.2, pool.y - 9 - Math.max(0, step), 1.8, 9).fill(0x8d5524);
+      work.rect(pool.x + 0.4, pool.y - 9 - Math.max(0, -step), 1.8, 9).fill(0x8d5524);
+      work.roundRect(pool.x - 3.2, pool.y - 18, 6.4, 9.5, 2).fill(0xf28c9a);
+      work.circle(pool.x, pool.y - 20.5, 2.8).fill(0x8d5524);
+      work.ellipse(pool.x, pool.y - 22.5, 5.5, 1.5).fill(0x3e2723);
+    };
+    this.animate(0);
+  },
+
+  // Ollas de barro: casa amarilla con las ollas negras secándose en fila sobre una tabla (más con los hitos).
+  pot_maker(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.2;
+    house(this, g, hx, hy, 1.8, 1.0, 22, ctx, { wall: 0xf6c244, roofH: 12 });
+    door(g, hx, hy, 1.0, 0.6, 15, 0x2e6fd1);
+    const rows = ctx.tier >= 2 ? [1.65, 2.2, 2.75] : [1.9, 2.6];
+    for (const ry of rows) {
+      box(g, x + 0.35, y + ry, 2.3, 0.25, 4, PAL.wood);
+      for (let k = 0; k < 5; k++) {
+        const p = iso(x + 0.55 + k * 0.45, y + ry + 0.12, 4);
+        g.ellipse(p.x, p.y - 5, 5, 5.5).fill(PRODUCTS.olla_barro.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+        g.ellipse(p.x, p.y - 10, 3, 1.1).fill(0x3e2723);
+        g.moveTo(p.x - 4.5, p.y - 5).lineTo(p.x + 4.5, p.y - 5).stroke({ width: 0.8, color: 0xd9772e });
+      }
+    }
+  },
+
+  // Torno: casa azul con el alfarero en el torno; la pieza sube mientras la rueda gira.
+  potter_wheel(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0x9ad0ec, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.7, 16, 0xd7263d);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, 0xd7263d);
+    // Piezas crudas secándose.
+    for (const [bx, by] of [[2.3, 2.1], [2.6, 2.25], [2.4, 2.5]]) {
+      const p = iso(x + bx, y + by);
+      g.poly([p.x - 3, p.y, p.x - 4, p.y - 7, p.x - 2, p.y - 11, p.x + 2, p.y - 11, p.x + 4, p.y - 7, p.x + 3, p.y]).fill(PRODUCTS.pieza_torneada.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+    }
+    const wheel = iso(x + 1.0, y + 2.3);
+    const spin = new Graphics();
+    this.anim.addChild(spin);
+    this.animate = (time) => {
+      spin.clear();
+      spin.ellipse(wheel.x, wheel.y - 6, 10, 3.5).fill(0x8b5a2b).stroke(OUTLINE);
+      spin.rect(wheel.x - 1.5, wheel.y - 6, 3, 6).fill(0x5e3b1c);
+      const grow = this.working ? (time * 0.4) % 1 : 0.6;
+      const h = 4 + grow * 9;
+      spin.poly([wheel.x - 4, wheel.y - 7, wheel.x - 5, wheel.y - 7 - h * 0.6, wheel.x - 2.5, wheel.y - 7 - h, wheel.x + 2.5, wheel.y - 7 - h, wheel.x + 5, wheel.y - 7 - h * 0.6, wheel.x + 4, wheel.y - 7]).fill(PRODUCTS.pieza_torneada.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      const a = this.working ? time * 10 : 0;
+      spin.moveTo(wheel.x + Math.cos(a) * 9, wheel.y - 6 + Math.sin(a) * 3).lineTo(wheel.x + Math.cos(a) * 6, wheel.y - 6 + Math.sin(a) * 2).stroke({ width: 1, color: 0x3e2723 });
+      // El alfarero, sentado detrás.
+      spin.roundRect(wheel.x + 8, wheel.y - 18, 6.4, 9, 2).fill(0x2fa36b);
+      spin.circle(wheel.x + 11.2, wheel.y - 21, 2.8).fill(0x8d5524);
+      spin.moveTo(wheel.x + 8, wheel.y - 14).lineTo(wheel.x + 3, wheel.y - 11 - grow * 4).stroke({ width: 1.4, color: 0x8d5524 });
+    };
+    this.animate(0);
+  },
+
+  // Horno de leña: el horno de ladrillo en forma de cúpula con la boca encendida y el humo; al lado, las
+  // materas ya pintadas.
+  pottery_kiln(g, x, y, ctx) {
+    const k = iso(x + 1.1, y + 1.2);
+    shadow(g, k.x + 4, k.y + 2, 30, 11);
+    g.moveTo(k.x - 26, k.y).quadraticCurveTo(k.x - 26, k.y - 40, k.x, k.y - 42).quadraticCurveTo(k.x + 26, k.y - 40, k.x + 26, k.y).quadraticCurveTo(k.x, k.y + 8, k.x - 26, k.y).closePath().fill(0xb5562e).stroke(OUTLINE);
+    for (let r = 1; r < 5; r++) g.moveTo(k.x - 26 + r * 2, k.y - r * 8).quadraticCurveTo(k.x, k.y - r * 8 + 6, k.x + 26 - r * 2, k.y - r * 8).stroke({ width: 0.8, color: 0x8a3b1f, alpha: 0.7 });
+    box(g, x + 1.0, y + 0.95, 0.25, 0.25, 50 + ctx.up, 0x8a3b1f);
+    g.moveTo(k.x - 8, k.y + 2).lineTo(k.x - 8, k.y - 12).quadraticCurveTo(k.x, k.y - 20, k.x + 8, k.y - 12).lineTo(k.x + 8, k.y + 2).closePath().fill(0x2b1d14);
+    this.smokePoints = [iso(x + 1.12, y + 1.07, 50 + ctx.up)];
+    // Materas pintadas.
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const p = iso(x + 2.3 + (i % 2) * 0.35, y + 1.9 + Math.floor(i / 2) * 0.35);
+      g.poly([p.x - 5, p.y - 9, p.x + 5, p.y - 9, p.x + 3.5, p.y, p.x - 3.5, p.y]).fill(PRODUCTS.matera.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.circle(p.x, p.y - 5, 1.5).fill(0xffffff);
+    }
+    const flame = new Graphics();
+    this.anim.addChild(flame);
+    this.animate = (time) => {
+      flame.clear();
+      if (!this.working) return;
+      const h = 9 + Math.sin(time * 9) * 3;
+      flame.poly([k.x - 6, k.y + 1, k.x - 3, k.y - h * 0.6, k.x, k.y - h, k.x + 3, k.y - h * 0.5, k.x + 6, k.y + 1]).fill(0xff8c1a);
+      flame.poly([k.x - 3, k.y + 1, k.x, k.y - h * 0.6, k.x + 3, k.y + 1]).fill(0xfff0a0);
+    };
+    this.animate(0);
+  },
+
+  // Jarras: casa rosada con la mesa de las jarras de barro y el barril de la cerveza que llega de la
+  // Cervecería; la jarra que se llena echa espuma.
+  jarras(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xf28c9a, roofH: 16 });
+    door(g, hx, hy, 1.6, 1.8, 18, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.4, 0.8, 14, 0x2f7d4f);
+    box(g, x + 1.3, y + 2.1, 1.3, 0.5, 8, PAL.wood);
+    for (let i = 0; i < 3 + Math.min(ctx.tier, 3); i++) {
+      const p = iso(x + 1.45 + (i % 3) * 0.38, y + 2.25 + Math.floor(i / 3) * 0.22, 8);
+      g.roundRect(p.x - 2.6, p.y - 7, 5.2, 7, 1.2).fill(PRODUCTS.jarra_cerveza.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x, p.y - 7.5, 2.6, 1.2).fill(0xffffff);
+    }
+    // El barril.
+    const b = iso(x + 0.75, y + 2.35);
+    g.ellipse(b.x, b.y - 1, 8, 3).fill(0x6d4c32);
+    g.rect(b.x - 8, b.y - 16, 16, 15).fill(0x8b5a2b).stroke(OUTLINE);
+    g.ellipse(b.x, b.y - 16, 8, 3).fill(0xa0703a).stroke(OUTLINE);
+    for (const dy of [-12, -5]) g.moveTo(b.x - 8, b.y + dy).lineTo(b.x + 8, b.y + dy).stroke({ width: 1.2, color: 0x555555 });
+    const foam = new Graphics();
+    this.anim.addChild(foam);
+    this.animate = (time) => {
+      foam.clear();
+      const p = iso(x + 1.1, y + 2.4);
+      foam.roundRect(p.x - 3, p.y - 8, 6, 8, 1.2).fill(PRODUCTS.jarra_cerveza.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      if (!this.working) return;
+      const f = (time * 0.7) % 1;
+      foam.circle(p.x, p.y - 9 - f * 3, 2 + f * 1.5).fill({ color: 0xffffff, alpha: 1 - f * 0.5 });
+      foam.moveTo(b.x + 8, b.y - 9).lineTo(p.x - 1, p.y - 9).stroke({ width: 1.2, color: 0xe8a317, alpha: 0.8 });
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

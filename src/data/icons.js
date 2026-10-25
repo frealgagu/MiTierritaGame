@@ -130,6 +130,13 @@ export const ICON = {
   wort: '\uE07C', // Mosto: la paila de cobre con el mosto dulce hirviendo y su vapor
   beer: '\uE07D', // Cerveza: la jarra llena con su espuma blanca, y la botella al lado
   beerCrate: '\uE07E', // Canasta de cerveza: la canasta plástica roja con las botellas asomadas
+  caballito: '\uE07F', // Caballito de Ráquira: el caballito de barro pintado de colores, con sus ollitas a lado y lado
+  greda: '\uE080', // Greda: el montón de arcilla cruda recién sacada de la mina, con la pala
+  barro: '\uE081', // Barro amasado: la bola de barro suave sobre la mesa, con la marca de las manos
+  ollaBarro: '\uE082', // Olla de barro: la olla negra de Ráquira, panzona, con sus orejas y el borde ancho
+  piezaTorneada: '\uE083', // Pieza torneada: la vasija cruda, sin hornear, girando en el torno del alfarero
+  matera: '\uE084', // Matera pintada: la matera de barro horneado con flores pintadas y una mata sembrada
+  jarraCerveza: '\uE085', // Jarra de barro con cerveza: la jarra de Ráquira, con su asa, llena y con espuma
 };
 
 export const ICON_FONT = 'Cafetal Icons';

@@ -590,15 +590,15 @@ test('Boyacá se abre al completar Cartagena y, mientras le falten zonas, no se 
   root.regions.costa.zones.cartagena.complete = true;
   assert.deepEqual(openRegions(root), ['boyaca']);
   const b = regionState(root, 'boyaca');
-  assert.deepEqual(Object.keys(b.zones), ['papal', 'cerveceria']);
-  // Cada zona abre la siguiente (v3.23); la última que tiene por ahora no termina la región.
-  b.stats.sold = { criollas_box: 1e9, beer_crate: 1e9 };
-  for (const zone of ['papal', 'cerveceria']) {
+  assert.deepEqual(Object.keys(b.zones), ['papal', 'cerveceria', 'raquira']);
+  // Cada zona abre la siguiente (v3.23, v3.24); la última que tiene por ahora no termina la región.
+  b.stats.sold = { criollas_box: 1e9, beer_crate: 1e9, jarra_cerveza: 1e9 };
+  for (const zone of ['papal', 'cerveceria', 'raquira']) {
     b.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
     claimGoal(b, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
     assert.equal(b.zones[zone].complete, true);
   }
-  assert.equal(b.zones.cerveceria.unlocked, true);
+  assert.equal(b.zones.raquira.unlocked, true);
   assert.ok(!b.regionDone);
   for (const id of stationsOf(b)) b.stations[id] = { ...(b.stations[id] ?? {}), level: 100, transport: { level: 100 } };
   b.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'boyaca').map((r) => r.id);
@@ -607,4 +607,25 @@ test('Boyacá se abre al completar Cartagena y, mientras le falten zonas, no se 
   assert.equal(albumDone(p, 'boyaca'), false);
   checkMedalBonus(p);
   assert.ok(!p.medalBonus.boyaca);
+});
+
+test('Ráquira llena jarras de barro con la cerveza que llega de la Cervecería (v3.24)', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const game = new Game(createInitialState(0, 'boyaca'));
+  for (const z of ['cerveceria', 'raquira']) game.unlockZone(z);
+  assert.ok(game.state.routes.cerveza, 'la Ruta de la cerveza es de Boyacá');
+  game.state.coins = 1e15;
+  for (const z of ['cerveceria', 'raquira']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+    game.state.zones[z].dispatch.level = 20;
+  }
+  game.state.routes.cerveza.level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 600; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  assert.ok((game.state.stats.imported.beer ?? 0) > 0, 'llega cerveza de la Cervecería');
+  for (const p of ['olla_barro', 'matera', 'jarra_cerveza']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
 });

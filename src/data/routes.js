@@ -380,6 +380,23 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.20',
   },
+  // Boyacá (v3.24): la cerveza de la Cervecería, para las jarras de Ráquira.
+  {
+    id: 'cerveza',
+    name: 'Ruta de la cerveza',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'beer',
+    from: 'cerveceria',
+    to: 'raquira',
+    stations: ['jarras'],
+    tab: 'Cerveza',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 1000,
+    growth: 1.15,
+    release: '3.24',
+  },
   // Al Hato (v3.3): el bocadillo veleño de la Guayabera (el postre) y la fibra de la Fiquera (la cabuya
   // con que se amarra el fiambre).
   {

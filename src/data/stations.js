@@ -168,6 +168,16 @@ export const STATIONS = [
   { id: 'fermenters', zone: 'cerveceria', name: 'Tanques de fermentación', icon: ICON.beer, in: { wort: 2 }, out: { beer: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.23' },
   { id: 'bottler', zone: 'cerveceria', name: 'Embotelladora', icon: ICON.beerCrate, in: { beer: 1 }, out: { beer_crate: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.23' },
 
+  // Boyacá · Ráquira (v3.24), el pueblo de los alfareros: la greda se amasa y el barro se reparte entre las
+  // Ollas de barro, el Torno (que le pasa las piezas al Horno de leña, donde salen las materas pintadas) y las
+  // Jarras, que se llenan con la cerveza que llega de la Cervecería. Mismos números que la Fiquera y la Ciénaga.
+  { id: 'clay_pit', zone: 'raquira', name: 'Mina de greda', icon: ICON.greda, infinite: true, out: { greda: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.24' },
+  { id: 'clay_kneader', zone: 'raquira', name: 'Amasado del barro', icon: ICON.barro, in: { greda: 1 }, out: { barro: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.24' },
+  { id: 'pot_maker', zone: 'raquira', name: 'Ollas de barro', icon: ICON.ollaBarro, in: { barro: 4 }, out: { olla_barro: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.24' },
+  { id: 'potter_wheel', zone: 'raquira', name: 'Torno', icon: ICON.piezaTorneada, in: { barro: 2 }, out: { pieza_torneada: 1 }, cycle: 16, unlockCost: 1000000, upgradeBase: 600, growth: 1.15, release: '3.24' },
+  { id: 'pottery_kiln', zone: 'raquira', name: 'Horno de leña', icon: ICON.matera, in: { pieza_torneada: 2 }, out: { matera: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.24' },
+  { id: 'jarras', zone: 'raquira', name: 'Jarras', icon: ICON.jarraCerveza, in: { barro: 4 }, imports: [{ product: 'beer', perCycle: 1, route: 'cerveza' }], out: { jarra_cerveza: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.24' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

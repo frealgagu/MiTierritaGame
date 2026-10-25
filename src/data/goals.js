@@ -466,5 +466,26 @@ const CERVECERIA = [
   { id: 'f_final', type: 'sold', product: 'beer_crate', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA, ...PAPAL, ...CERVECERIA];
+// Boyacá · Ráquira (v3.24): la misma lista que la Fiquera y la Ciénaga.
+const RAQUIRA = [
+  { id: 'i01', type: 'sold', product: 'greda', amount: 50, reward: 10000 },
+  { id: 'i02', type: 'level', target: 'clay_pit', level: 10, reward: 20000 },
+  { id: 'i03', type: 'unlock', station: 'clay_kneader', reward: 40000 },
+  { id: 'i04', type: 'level', target: 'clay_pit:transport', level: 10, reward: 40000 },
+  { id: 'i05', type: 'unlock', station: 'pot_maker', reward: 80000 },
+  { id: 'i06', type: 'produced', product: 'olla_barro', amount: 100, reward: 120000 },
+  { id: 'i08', type: 'unlock', station: 'potter_wheel', reward: 250000 },
+  { id: 'i09', type: 'level', target: 'dispatch:raquira', level: 10, reward: 250000 },
+  { id: 'i10', type: 'unlock', station: 'pottery_kiln', reward: 500000 },
+  { id: 'i11', type: 'produced', product: 'matera', amount: 200, reward: 800000 },
+  { id: 'i12', type: 'unlock', station: 'jarras', reward: 1200000 },
+  { id: 'i13', type: 'imported', product: 'beer', amount: 200, reward: 1500000 },
+  { id: 'i14', type: 'level', target: 'route:cerveza', level: 25, reward: 2000000 },
+  { id: 'i15', type: 'allLevels', zone: 'raquira', level: 25, reward: 3000000 },
+  { id: 'i07', type: 'research', research: 'greda_fina', reward: 1500000 },
+  { id: 'i16', type: 'sold', product: 'jarra_cerveza', amount: 1000, reward: 5000000 },
+  { id: 'i_final', type: 'sold', product: 'jarra_cerveza', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA, ...PAPAL, ...CERVECERIA, ...RAQUIRA];

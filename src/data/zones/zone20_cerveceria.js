@@ -27,5 +27,9 @@ export const ZONE20 = {
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
   unlockedBy: 'papal', // se abre al completar el Papal
-  next: null,
+  // Carretera de la Ruta de la cerveza (v3.24): sale de la bodega hacia Ráquira.
+  routes: {
+    cerveza: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A Ráquira ➜' },
+  },
+  next: 'raquira',
 };
