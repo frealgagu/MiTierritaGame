@@ -1,5 +1,17 @@
 # Registro de cambios
 
+## v3.28.0 — Boyacá completa: eventos, álbum y logros
+- **Seis eventos nuevos**, uno por zona de Boyacá, cada uno con su escena en el tablero que cambia con cada compra:
+  - 🍂 **La gota en el papal**: las matas se manchan; la fumigadora con caldo bordelés, los surcos aporcados y la semilla resistente.
+  - 🔥 **Horno de malta dañado** en la Cervecería: los bultos de cebada se acumulan hasta que llegan los ladrillos nuevos, el ventilador y el quemador a gas.
+  - 🏺 **Mercado de artesanías** en Ráquira: todos piden ollas, materas y jarras; puestos con toldos de colores.
+  - 🚧 **Carretera en obras** en Paipa: el derrumbe corta la vía y no llegan las papitas; mulas por la trocha, paso a un carril y la vía nueva.
+  - ❄️ **Las heladas de diciembre** en Las Ruanas: la fila de los que buscan ruana, el telar prestado, las lanzaderas y las tejedoras.
+  - 🪁 **Festival de las cometas** en Villa de Leyva: la fila de visitantes, las cometas en el cielo y los guías.
+- **Álbum de Boyacá**: seis páginas (la papa, la cerveza, el barro, los quesos, la lana y Villa de Leyva) con 36 láminas.
+- **Logros de Boyacá**: papicultor, cervecero, alfarero, amasijos, tejedor, al Fósil y los de siempre.
+- **Boyacá queda terminada**: al completar Villa de Leyva tiene su segundo final y su reinicio, sus eventos salen en todas sus zonas y da el premio de medallas. Si ya habías completado Villa de Leyva, al abrir esta versión la región queda terminada.
+
 ## v3.27.0 — Boyacá: Villa de Leyva
 - **🏛️ Villa de Leyva**, la última zona de Boyacá, se abre al completar Las Ruanas. Como Barichara y Cartagena, no tiene fuente propia: cada estación recibe el producto final de una zona boyacense.
   - La **Tienda de la esquina** sirve las onces con las cajas de papitas del Papal.

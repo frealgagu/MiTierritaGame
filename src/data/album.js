@@ -252,7 +252,89 @@ const COSTA = [
   },
 ];
 
-export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' }))];
+// El de Boyacá (v3.28): su papa, su cerveza, su barro, sus quesos, su lana y Villa de Leyva.
+const BOYACA = [
+  {
+    id: 'papa',
+    icon: ICON.potatoPlant,
+    name: 'La papa',
+    stickers: [
+      { id: 'papa_criolla', icon: ICON.criollas, name: 'La papa criolla', cost: 1, text: 'Amarilla, chiquita y de cáscara delgada: se come frita o en el ajiaco.' },
+      { id: 'papicultor', icon: '👨🏻‍🌾', name: 'El papicultor', cost: 1, text: 'Siembra, aporca y saca la papa a mano, con azadón.' },
+      { id: 'cocido', icon: '🍲', name: 'El cocido boyacense', cost: 2, text: 'Papas, mazorca, habas, cubios, chuguas y carnes, todo cocinado junto.' },
+      { id: 'cubios', icon: '🥔', name: 'Cubios y chuguas', cost: 2, text: 'Tubérculos del altiplano que se siembran desde los tiempos de los muiscas.' },
+      { id: 'neblina', icon: '🌫️', name: 'La neblina', cost: 2, text: 'En la madrugada fría el páramo amanece cubierto de niebla.' },
+      { id: 'muiscas', icon: '☀️', name: 'Los muiscas', cost: 3, text: 'El pueblo indígena del altiplano: cultivaban papa y adoraban al sol.' },
+    ],
+  },
+  {
+    id: 'cerveza',
+    icon: ICON.beer,
+    name: 'La cerveza',
+    stickers: [
+      { id: 'cebada', icon: ICON.barleyPlant, name: 'La cebada', cost: 1, text: 'Crece en el altiplano frío, junto al trigo, y se cosecha dorada.' },
+      { id: 'malta', icon: ICON.malt, name: 'La malta', cost: 1, text: 'El grano germinado y tostado que le da color y sabor a la cerveza.' },
+      { id: 'chicha', icon: '🫙', name: 'La chicha', cost: 2, text: 'Bebida de maíz fermentado, la de los muiscas y las fiestas de pueblo.' },
+      { id: 'guarapo_b', icon: '🥤', name: 'El guarapo', cost: 2, text: 'Jugo de caña o de panela fermentado, para el trabajo del campo.' },
+      { id: 'tejo', icon: '🎯', name: 'El tejo', cost: 2, text: 'El deporte nacional: se lanza el tejo a la mecha y ¡totea!' },
+      { id: 'tibasosa', icon: '🍈', name: 'Tibasosa', cost: 3, text: 'Pueblo de la feijoa, de casas blancas, en el valle de Sogamoso.' },
+    ],
+  },
+  {
+    id: 'barro',
+    icon: ICON.caballito,
+    name: 'El barro',
+    stickers: [
+      { id: 'alfarera', icon: '👩🏽', name: 'La alfarera', cost: 1, text: 'Amasa, tornea y hornea el barro como le enseñaron sus abuelas.' },
+      { id: 'caballito', icon: ICON.caballito, name: 'El caballito de Ráquira', cost: 1, text: 'Caballito de barro con ollitas a lado y lado, pintado de colores.' },
+      { id: 'olla_negra', icon: ICON.ollaBarro, name: 'La olla negra', cost: 2, text: 'Para cocinar a fuego lento: dicen que la comida sabe mejor.' },
+      { id: 'alcancia', icon: '🐷', name: 'La alcancía', cost: 2, text: 'Marranito de barro para guardar monedas; se rompe para sacarlas.' },
+      { id: 'candelaria', icon: '⛪', name: 'La Candelaria', cost: 2, text: 'El desierto y el monasterio de La Candelaria, junto a Ráquira.' },
+      { id: 'raquira_pueblo', icon: '🏘️', name: 'Ráquira', cost: 3, text: 'El pueblo de las ollas, con sus casas pintadas de colores vivos.' },
+    ],
+  },
+  {
+    id: 'quesos',
+    icon: ICON.quesoPaipa,
+    name: 'Los quesos',
+    stickers: [
+      { id: 'queso_paipa_l', icon: ICON.quesoPaipa, name: 'El queso Paipa', cost: 1, text: 'Madurado semanas en la cava: tiene denominación de origen.' },
+      { id: 'almojabana_l', icon: ICON.almojabana, name: 'La almojábana', cost: 1, text: 'Pan redondo de cuajada, queso y maíz, para el desayuno.' },
+      { id: 'kumis_paipa', icon: '🥛', name: 'El kumis', cost: 2, text: 'Leche fermentada, espesa y dulce, con un pedazo de almojábana.' },
+      { id: 'piquete_l', icon: ICON.piquete, name: 'El piquete', cost: 2, text: 'Papa criolla, mazorca, carnes y ají, para comer con la mano.' },
+      { id: 'termales', icon: '♨️', name: 'Los termales', cost: 2, text: 'Las aguas calientes de Paipa, que salen de la tierra con vapor.' },
+      { id: 'pantano_vargas', icon: '🗿', name: 'El Pantano de Vargas', cost: 3, text: 'Donde los catorce lanceros ganaron la batalla de 1819.' },
+    ],
+  },
+  {
+    id: 'lana',
+    icon: ICON.ruana,
+    name: 'La lana',
+    stickers: [
+      { id: 'oveja', icon: ICON.sheep, name: 'La oveja', cost: 1, text: 'Su lana gruesa aguanta el frío del páramo.' },
+      { id: 'rueca', icon: ICON.woolYarn, name: 'La rueca', cost: 1, text: 'La rueda con la que se tuerce la lana cardada hasta volverla hilo.' },
+      { id: 'telar_l', icon: '🧶', name: 'El telar', cost: 2, text: 'Telar de madera donde la ruana crece franja por franja.' },
+      { id: 'ruana_l', icon: ICON.ruana, name: 'La ruana', cost: 2, text: 'Manta de lana con un hueco para la cabeza: el abrigo de Boyacá.' },
+      { id: 'frailejon', icon: '🌼', name: 'El frailejón', cost: 2, text: 'La planta peluda del páramo, que guarda el agua de la niebla.' },
+      { id: 'nobsa', icon: '🏘️', name: 'Nobsa', cost: 3, text: 'El pueblo de las ruanas, cerca de Sogamoso.' },
+    ],
+  },
+  {
+    id: 'villa_leyva',
+    icon: ICON.iglesiaVilla,
+    name: 'Villa de Leyva',
+    stickers: [
+      { id: 'plaza_mayor', icon: '🪨', name: 'La plaza empedrada', cost: 1, text: 'Una de las plazas más grandes de Colombia, toda de piedra.' },
+      { id: 'casonas', icon: ICON.nocheVilla, name: 'Las casonas', cost: 1, text: 'Casas coloniales blancas, con balcones y puertas verdes.' },
+      { id: 'kronosaurio', icon: ICON.excursionFosil, name: 'El kronosaurio', cost: 2, text: 'El fósil de un reptil marino de cuando todo esto era mar.' },
+      { id: 'cometas', icon: '🪁', name: 'Las cometas', cost: 2, text: 'En agosto, con los vientos, el cielo de la villa se llena de cometas.' },
+      { id: 'pozos_azules', icon: '💧', name: 'Los Pozos Azules', cost: 2, text: 'Lagunitas de agua azul en medio del desierto, cerca del pueblo.' },
+      { id: 'casa_terracota', icon: '🏺', name: 'La casa de barro', cost: 3, text: 'Una casa entera hecha de barro cocido, como una gran vasija.' },
+    ],
+  },
+];
+
+export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' }))];
 // Las páginas del álbum de una región.
 export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 

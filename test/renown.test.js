@@ -7,11 +7,11 @@ import { createInitialState } from '../src/sim/state.js';
 import { restartState } from '../src/sim/legacy.js';
 
 test('cada región tiene su álbum de seis páginas de seis láminas, con ids únicos y textos cortos (v3.10)', () => {
-  assert.equal(ALBUM.length, 18);
-  for (const region of ['cafetero', 'santander', 'costa']) assert.equal(ALBUM.filter((pg) => pg.region === region).length, 6, region);
-  assert.equal(new Set(ALBUM.map((pg) => pg.id)).size, 18);
+  assert.equal(ALBUM.length, 24);
+  for (const region of ['cafetero', 'santander', 'costa', 'boyaca']) assert.equal(ALBUM.filter((pg) => pg.region === region).length, 6, region);
+  assert.equal(new Set(ALBUM.map((pg) => pg.id)).size, 24);
   for (const page of ALBUM) assert.equal(page.stickers.length, 6, page.id);
-  assert.equal(Object.keys(STICKERS_BY_ID).length, 108);
+  assert.equal(Object.keys(STICKERS_BY_ID).length, 144);
   for (const s of Object.values(STICKERS_BY_ID)) assert.ok(s.text.length <= 90, `${s.id}: ${s.text.length}`);
 });
 

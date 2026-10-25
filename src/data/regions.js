@@ -26,13 +26,13 @@ export const REGIONS = [
     music: 'costa',
     unlock: { region: 'santander', zone: 'barichara' },
   },
-  // Boyacá (v3.22): se abre al completar Cartagena. Llega zona por zona, como la Costa.
+  // Boyacá (v3.22): se abre al completar Cartagena. Llegó zona por zona, como la Costa (v3.22 a v3.27), y
+  // desde la v3.28 tiene sus eventos, su álbum y sus logros.
   {
     id: 'boyaca',
     name: 'Boyacá',
     icon: '⛰️',
     zones: ['papal', 'cerveceria', 'raquira', 'paipa', 'ruanas', 'villa_leyva'],
-    wip: true,
     music: 'boyaca',
     unlock: { region: 'costa', zone: 'cartagena' },
   },

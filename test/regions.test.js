@@ -577,10 +577,11 @@ test('Cartagena recibe lo de las cinco zonas de la Costa y despacha paseos a las
   assert.ok((game.state.stats.produced.lonchera_paseo ?? 0) > 0, 'arma loncheras');
 });
 
-test('Boyacá se abre al completar Cartagena y, mientras le falten zonas, no se termina (v3.22)', async () => {
+test('Boyacá se abre al completar Cartagena; con Villa de Leyva completa queda terminada (v3.22, v3.28)', async () => {
   const { claimGoal } = await import('../src/sim/goals.js');
-  const { albumDone, profileOf } = await import('../src/sim/renown.js');
-  const { checkMedalBonus } = await import('../src/sim/events.js');
+  const { regionEvents } = await import('../src/sim/events.js');
+  const { albumOf } = await import('../src/data/album.js');
+  const { logrosOf } = await import('../src/data/logros.js');
   const root = createInitialState(0);
   root.zones.pueblo.complete = true;
   openRegions(root);
@@ -591,22 +592,20 @@ test('Boyacá se abre al completar Cartagena y, mientras le falten zonas, no se 
   assert.deepEqual(openRegions(root), ['boyaca']);
   const b = regionState(root, 'boyaca');
   assert.deepEqual(Object.keys(b.zones), ['papal', 'cerveceria', 'raquira', 'paipa', 'ruanas', 'villa_leyva']);
-  // Cada zona abre la siguiente (v3.23 a v3.27); mientras la región esté en obra no se termina.
+  // Cada zona abre la siguiente (v3.23 a v3.27) y Villa de Leyva, la última, termina la región.
   b.stats.sold = { criollas_box: 1e9, beer_crate: 1e9, jarra_cerveza: 1e9, canasta_amasijos: 1e9, recuerdo_boyaca: 1e9, excursion_fosil: 1e9 };
   for (const zone of ['papal', 'cerveceria', 'raquira', 'paipa', 'ruanas', 'villa_leyva']) {
+    assert.ok(!b.regionDone, zone);
     b.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
     claimGoal(b, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
     assert.equal(b.zones[zone].complete, true);
   }
-  assert.equal(b.zones.villa_leyva.unlocked, true);
-  assert.ok(!b.regionDone);
-  for (const id of stationsOf(b)) b.stations[id] = { ...(b.stations[id] ?? {}), level: 100, transport: { level: 100 } };
-  b.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'boyaca').map((r) => r.id);
-  assert.equal(checkMastery(b, { emit() {} }), false);
-  const p = profileOf(root);
-  assert.equal(albumDone(p, 'boyaca'), false);
-  checkMedalBonus(p);
-  assert.ok(!p.medalBonus.boyaca);
+  assert.ok(b.regionDone);
+  // Con todo lo suyo (v3.28): seis eventos, seis páginas de álbum y sus logros.
+  assert.equal(regionEvents('boyaca').length, 6);
+  assert.equal(albumOf('boyaca').length, 6);
+  assert.ok(logrosOf('boyaca').length >= 10);
+  assert.ok(!REGIONS.find((r) => r.id === 'boyaca').wip);
 });
 
 test('Ráquira llena jarras de barro con la cerveza que llega de la Cervecería (v3.24)', async () => {

@@ -63,7 +63,7 @@ function importRoad(zone, product) {
   for (const [id, r] of Object.entries(zone.routes ?? {})) if (ROUTE_PRODUCT[id] === product) return r.road;
   return null;
 }
-const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag' };
+const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag', papitas: 'criollas_bag' };
 
 export class EventArt {
   // scene: la escena del tablero (para el mapa y sus objetos).
@@ -199,6 +199,25 @@ function scarecrow(g, x, y) {
   g.ellipse(x, y - 31, 8, 2.4).fill(0xefe3c2).stroke(THIN);
   g.ellipse(x, y - 31, 5.5, 1.6).stroke({ width: 1, color: 0x2b2b2b });
   g.moveTo(x - 3.5, y - 31).quadraticCurveTo(x, y - 38, x + 3.5, y - 31).closePath().fill(0xefe3c2).stroke(THIN);
+}
+
+
+// Mancha de la gota en una hoja de papa: hoja verde con la mancha café que crece.
+const blight = (g, x, y, a) => {
+  g.ellipse(x, y, 5, 3).fill(0x4e8f34).stroke({ width: 0.6, color: 0x2a4a1a });
+  g.circle(x + 1, y, 1.8 + Math.sin(a) * 0.4).fill(0x5d4037);
+  g.circle(x - 2, y - 0.5, 1).fill(0x3e2723);
+};
+
+// Una cometa de colores que se mece con el viento, con su cola.
+function kite(g, x, y, t, k) {
+  const sway = Math.sin(t * 1.3 + k) * 6;
+  const cx = x + sway;
+  const cy = y + Math.cos(t * 1.1 + k) * 3;
+  const cols = [0xd7263d, 0xf2b705, 0x2e6fd1, 0x2fa36b, 0x8e44ad];
+  g.poly([cx, cy - 9, cx + 7, cy, cx, cy + 10, cx - 7, cy]).fill(cols[k % cols.length]).stroke(THIN);
+  g.moveTo(cx, cy - 9).lineTo(cx, cy + 10).moveTo(cx - 7, cy).lineTo(cx + 7, cy).stroke({ width: 0.6, color: 0x5e3b1c });
+  g.moveTo(cx, cy + 10).quadraticCurveTo(cx + 6, cy + 18, cx - 2 + Math.sin(t * 3 + k) * 4, cy + 26).stroke({ width: 1, color: cols[(k + 2) % cols.length] });
 }
 
 // Gente esperando en fila (de a uno, en diagonal), n personas desde (gx, gy).
@@ -671,6 +690,161 @@ const ART = {
 
   // Llegó un crucero: la fila de turistas en el muelle; los lancheros de Bocachica con sus gorras, los
   // letreros de turnos y más lancheros.
+  // --- Boyacá (v3.28) ---
+
+  // La gota en el papal: las hojas manchadas por todo el cultivo; el que fumiga con la bomba de espalda, las
+  // matas aporcadas y al final los canastos de papa sana.
+  gota(art, stage, zone) {
+    const a = areaOf(zone, zone.farm.stationId);
+    if (stage < 3) swarm(art, a, [26, 15, 7][stage], blight);
+    if (stage >= 1) {
+      art.anim(a.x + a.w, a.y + a.h, (g, t) => {
+        const f = (Math.sin(t * 0.4) + 1) / 2;
+        const p = iso(a.x + 1 + f * (a.w - 2), a.y + a.h - 0.8);
+        person(g, p.x, p.y, { shirt: 0x2fa36b, hat: true, pack: 0x2e6fd1, arm: 0.6 });
+        for (let k = 0; k < 4; k++) {
+          const q = (t * 2 + k / 4) % 1;
+          g.circle(p.x + 10 + q * 10, p.y - 10 + q * 6, 2 + q * 3).fill({ color: 0x81d4fa, alpha: 0.5 * (1 - q) });
+        }
+      }, 0.6);
+    }
+    if (stage >= 2) {
+      art.prop(a.x + a.w, a.y + a.h, (g) => {
+        for (let r = 0; r < a.h - 1; r++) {
+          const p0 = iso(a.x + 0.4, a.y + 0.9 + r);
+          const p1 = iso(a.x + a.w - 0.4, a.y + 0.9 + r);
+          g.moveTo(p0.x, p0.y).lineTo(p1.x, p1.y).stroke({ width: 4, color: 0x3a291d, alpha: 0.6 });
+        }
+      }, -5);
+    }
+    if (stage >= 3) {
+      art.clear(a.x + 0.4, a.y + a.h + 0.6, 1.4);
+      art.prop(a.x - 0.5, a.y + a.h - 1.2, (g, p) => basket(g, p.x, p.y, 0xc9a066));
+      art.prop(a.x + 0.4, a.y + a.h + 0.6, (g, p) => {
+        basket(g, p.x, p.y, 0xd4a960);
+        person(g, p.x + 16, p.y + 3, { shirt: 0x6d4c41, hat: true, arm: 1 });
+      });
+    }
+  },
+
+  // Horno de malta dañado: los costales de cebada germinada que se amontonan junto a la Maltería (menos con
+  // cada compra), los ladrillos nuevos, el ventilador que gira y el quemador encendido.
+  horno_malta(art, stage, zone) {
+    const a = areaOf(zone, 'maltings');
+    const px = a.x + a.w + 0.5;
+    const py = a.y + 0.8;
+    art.clear(px, py, 1.6);
+    const n = [12, 8, 5, 2][stage];
+    art.prop(px, py, (g, p) => {
+      for (let i = 0; i < n; i++) {
+        const row = Math.floor(i / 4);
+        const x = p.x + ((i % 4) - 1.5) * 9 + row * 4;
+        const y = p.y - row * 6;
+        g.ellipse(x, y - 4, 6, 5).fill(0xe8d9a8).stroke(THIN);
+        g.ellipse(x, y - 8, 3, 1.3).fill(0xa0612d);
+      }
+    });
+    if (stage >= 1) {
+      art.clear(px, py + 1.4, 1);
+      art.prop(px, py + 1.4, (g, p) => {
+        for (let r = 0; r < 3; r++) for (let c = 0; c < 4 - r; c++) g.rect(p.x - 12 + c * 6 + r * 3, p.y - 4 - r * 4, 5.5, 3.5).fill(0xc65a3a).stroke({ width: 0.6, color: 0x7a3020 });
+      });
+    }
+    if (stage >= 2) {
+      art.anim(px + 1.2, py + 0.2, (g, t) => {
+        const p = iso(px + 1.2, py + 0.2);
+        g.rect(p.x - 1, p.y - 16, 2, 16).fill(0x555555);
+        g.circle(p.x, p.y - 20, 7).stroke({ width: 1.2, color: 0x607d8b });
+        for (let k = 0; k < 3; k++) {
+          const b = t * 9 + (k * Math.PI * 2) / 3;
+          g.moveTo(p.x, p.y - 20).lineTo(p.x + Math.cos(b) * 6, p.y - 20 + Math.sin(b) * 6).stroke({ width: 2.4, color: 0x9aa3a8 });
+        }
+      });
+    }
+    if (stage >= 3) fire(art, px + 1.3, py + 1.5, true);
+  },
+
+  // Mercado de artesanías: puestos con toldos de tierra, ocre y verde, uno por compra, y la gente.
+  mercado_artesanias(art, stage) {
+    fairScene(art, stage, [0xb5653a, 0xd9a330, 0x2f7d4f]);
+  },
+
+  // Carretera en obras: la vía de las papitas cerrada con conos; mulas por la trocha, el carro por un carril
+  // y al final la vía nueva pavimentada.
+  obras(art, stage, zone) {
+    landslideScene(art, stage, zone, 'criollas_bag', 'derrumbe');
+  },
+
+  // Las heladas de diciembre: la fila de gente con frío frente al Telar; el telar prestado, la caja de las
+  // lanzaderas y las tejedoras; escarcha blanca en el pasto.
+  heladas(art, stage, zone) {
+    const a = areaOf(zone, 'ruana_loom');
+    queue(art, a.x + 0.2, a.y + a.h + 0.6, [7, 5, 3, 1][stage], { hats: true, packs: true });
+    if (stage < 3) {
+      art.prop(a.x + a.w, a.y + a.h, (g) => {
+        for (let k = 0; k < 24; k++) {
+          const q = iso(a.x - 1 + ((k * 1.37) % (a.w + 3)), a.y - 1 + ((k * 2.11) % (a.h + 3)));
+          g.ellipse(q.x, q.y, 6, 2.4).fill({ color: 0xffffff, alpha: [0.75, 0.55, 0.35][stage] });
+        }
+      }, -5);
+    }
+    const sx = a.x + a.w + 0.4;
+    const sy = a.y + 0.6;
+    art.clear(sx, sy, 1.4);
+    if (stage >= 1) {
+      art.prop(sx, sy, (g, p) => {
+        for (const dx of [-8, 8]) g.rect(p.x + dx - 1, p.y - 18, 2, 18).fill(0x5e3b1c);
+        g.moveTo(p.x - 8, p.y - 17).lineTo(p.x + 8, p.y - 17).stroke({ width: 2, color: 0x8b5a2b });
+        g.rect(p.x - 7, p.y - 15, 14, 9).fill(0x6d4c41);
+        g.moveTo(p.x - 7, p.y - 11).lineTo(p.x + 7, p.y - 11).stroke({ width: 1, color: 0xece4cf });
+      });
+    }
+    if (stage >= 2) {
+      art.prop(sx + 0.8, sy + 0.8, (g, p) => {
+        g.position.set(p.x, p.y);
+        box(g, -0.3, -0.3, 0.6, 0.6, 10, 0xc8a26a);
+      });
+    }
+    if (stage >= 3) {
+      art.anim(sx + 0.4, sy + 1.8, (g, t) => {
+        const p = iso(sx + 0.4, sy + 1.8);
+        person(g, p.x, p.y, { shirt: 0x6d4c41, skirt: 0x37474f, skin: SKIN[2], arm: Math.max(0, Math.sin(t * 5)) });
+        person(g, p.x + 13, p.y - 3, { shirt: 0x8d6e63, skirt: 0x2e4fa8, skin: SKIN[0], arm: Math.max(0, Math.sin(t * 5 + 1.5)) });
+      });
+    }
+  },
+
+  // Festival de las cometas: la fila de visitantes en la Salida al Fósil, cometas de colores en el cielo,
+  // los guías de Sáchica con sus banderitas, los letreros y los jóvenes del pueblo.
+  cometas(art, stage, zone) {
+    const a = areaOf(zone, 'salida_fosil');
+    queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
+    art.anim(a.x + 1, a.y - 2, (g, t) => {
+      for (let k = 0; k < 6; k++) {
+        const base = iso(a.x - 3 + k * 1.6, a.y - 1 + (k % 2) * 1.5, 80 + (k % 3) * 18);
+        kite(g, base.x, base.y, t, k);
+      }
+    }, 2);
+    const guides = stage >= 3 ? 4 : stage >= 1 ? 2 : 0;
+    if (guides) {
+      art.anim(a.x + a.w + 0.4, a.y + 1, (g, t) => {
+        for (let k = 0; k < guides; k++) {
+          const p = iso(a.x + a.w + 0.4 + (k % 2) * 0.7, a.y + 0.6 + Math.floor(k / 2) * 0.9);
+          person(g, p.x, p.y, { shirt: 0x6d4c41, hat: 0x3e2723, arm: 1 });
+          const wave = Math.sin(t * 4 + k) * 2;
+          g.moveTo(p.x + 5.5, p.y - 16).lineTo(p.x + 5.5, p.y - 30).stroke({ width: 1, color: 0x5e3b1c });
+          g.poly([p.x + 5.5, p.y - 30, p.x + 14, p.y - 27 + wave, p.x + 5.5, p.y - 24]).fill(0x2f7d4f).stroke(THIN);
+        }
+      });
+    }
+    if (stage >= 2) {
+      for (const [gx, gy] of [[a.x + a.w + 1.6, a.y + 2.6], [a.x + a.w + 2.6, a.y + 3.6]]) {
+        art.clear(gx, gy, 0.8);
+        art.prop(gx, gy, (g, p) => post(g, p.x, p.y, 0x8b5a2b));
+      }
+    }
+  },
+
   crucero(art, stage, zone) {
     const a = areaOf(zone, 'muelle');
     queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
