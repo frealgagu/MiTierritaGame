@@ -38,6 +38,8 @@ export const ZONE21 = {
     // Las ollas y las materas salen hacia Las Ruanas (v3.26).
     ollas: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Ollas a Las Ruanas ⬇' },
     materas: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Materas ⬇' },
+    // Las jarras con cerveza salen hacia Villa de Leyva (v3.27).
+    jarras_cerveza: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'Jarras a Villa de Leyva ➜' },
   },
   unlockedBy: 'cerveceria',
   next: 'paipa',

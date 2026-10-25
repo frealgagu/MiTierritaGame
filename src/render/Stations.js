@@ -369,6 +369,8 @@ const PLAZA_HOUSE = {
   // Salento (v3.12): casona blanca con remates de colores vivos, como las de la Calle Real.
   // Cartagena (v3.20): casona amarilla con balcones de madera y toldo verde.
   cartagena: { wall: 0xf6c244, trims: [0x7a4a22, 0x7a4a22, 0x2f7d4f, 0x7a4a22, 0xd63384, 0xffd700], awning: 0x2f7d4f, sign: 'cup' },
+  // Villa de Leyva (v3.27): casona blanca con balcones verdes.
+  villa: { wall: 0xfbf8f1, trims: [0x2f7d4f, 0x2f7d4f, 0x1f5a38, 0x2f7d4f, 0x8e44ad, 0xffd700], awning: 0x2f7d4f, sign: 'cup' },
   salento: { wall: 0xfbf8f1, trims: [0xd7263d, 0x2e6fd1, 0x2fa36b, 0xf07f1d, 0x8e44ad, 0xf2b705], awning: 0xd7263d, sign: 'cup' },
 };
 

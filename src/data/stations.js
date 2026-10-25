@@ -200,6 +200,15 @@ export const STATIONS = [
   { id: 'ruana_loom', zone: 'ruanas', name: 'Telar de ruanas', icon: ICON.ruana, in: { wool_yarn: 1 }, out: { ruana: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.26' },
   { id: 'tienda_nobsa', zone: 'ruanas', name: 'Tienda de Nobsa', icon: ICON.recuerdoBoyaca, in: { ruana: 4 }, imports: [{ product: 'olla_barro', perCycle: 1, route: 'ollas' }, { product: 'matera', perCycle: 1, route: 'materas' }], out: { recuerdo_boyaca: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.26' },
 
+  // Boyacá · Villa de Leyva (v3.27), el final de la región: como Barichara y Cartagena, sin fuente propia.
+  // Cada estación recibe el producto final de una zona de Boyacá; todo termina en la excursión al Fósil.
+  { id: 'tienda_esquina', zone: 'villa_leyva', name: 'Tienda de la esquina', icon: ICON.onces, imports: [{ product: 'criollas_box', perCycle: 1, route: 'cajas_papitas' }], out: { onces: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.27' },
+  { id: 'terraza_plaza', zone: 'villa_leyva', name: 'Terraza de la plaza', icon: ICON.tardePlaza, in: { onces: 1 }, imports: [{ product: 'beer_crate', perCycle: 1, route: 'canastas_cerveza' }], out: { tarde_plaza: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.27' },
+  { id: 'hospedaje_colonial', zone: 'villa_leyva', name: 'Hospedaje colonial', icon: ICON.nocheVilla, in: { tarde_plaza: 2 }, imports: [{ product: 'recuerdo_boyaca', perCycle: 1, route: 'recuerdos_boyaca' }], out: { noche_villa: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.27' },
+  { id: 'mercado_sabado', zone: 'villa_leyva', name: 'Mercado del sábado', icon: ICON.canastaMercado, in: { onces: 1 }, imports: [{ product: 'jarra_cerveza', perCycle: 1, route: 'jarras_cerveza' }], out: { canasta_mercado: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '3.27' },
+  { id: 'canastos_paseo', zone: 'villa_leyva', name: 'Canastos del paseo', icon: ICON.fiambrePaseo, in: { canasta_mercado: 1 }, imports: [{ product: 'piquete', perCycle: 1, route: 'piquetes' }, { product: 'canasta_amasijos', perCycle: 1, route: 'amasijos' }], out: { fiambre_paseo: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.27' },
+  { id: 'salida_fosil', zone: 'villa_leyva', name: 'Salida al Fósil', icon: ICON.excursionFosil, in: { fiambre_paseo: 4 }, out: { excursion_fosil: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.27' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

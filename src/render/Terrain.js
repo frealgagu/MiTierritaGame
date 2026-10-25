@@ -100,7 +100,7 @@ export class Terrain {
           // Plaza empedrada.
           for (let k = 0; k < 4; k++) {
             const p = iso(gx + 0.25 + (k % 2) * 0.5, gy + 0.25 + Math.floor(k / 2) * 0.5);
-            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
+            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
         } else if (type === 'farm' && this.zone.theme === 'cacao') {
@@ -176,10 +176,11 @@ export class Terrain {
           // mapa no se mueve).
           const salento = this.zone.style === 'salento';
           const cartagena = this.zone.style === 'cartagena';
+          const villa = this.zone.style === 'villa';
           if (r < 0.06) obj = townHouse(rng, this.zone.style);
-          else if (r < 0.09) obj = salento && r < 0.075 ? palm(rng) : cartagena ? coconutPalm(rng) : guayacan(rng);
+          else if (r < 0.09) obj = salento && r < 0.075 ? palm(rng) : cartagena ? coconutPalm(rng) : villa ? cypress(rng) : guayacan(rng);
           else if (r < 0.105) obj = streetLamp();
-          else if (r < (salento || cartagena ? 0.135 : 0.12)) obj = cartagena ? coconutPalm(rng) : palm(rng);
+          else if (r < (salento || cartagena || villa ? 0.135 : 0.12)) obj = cartagena ? coconutPalm(rng) : villa ? eucalyptus(rng) : palm(rng);
         } else if (this.zone.theme === 'guava') {
           // Santander: matas de fique, guayabos sueltos, piedras y algún cactus del cañón.
           if (r < 0.05) obj = fique(rng);
@@ -333,7 +334,8 @@ const FARM_SOIL = {
   barley: (v) => mix(0x8a6a3a, 0x7a5c30, v * 0.5), // la tierra negra del altiplano
   canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // la tierra seca de la sabana zenú // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6),
-  cartagena: (v) => mix(0xe2d2ae, 0xcfbd94, v * 0.6), // la plaza de piedra coralina // la plaza de piedra amarilla
+  cartagena: (v) => mix(0xe2d2ae, 0xcfbd94, v * 0.6),
+  villa: (v) => mix(0xb9b2a5, 0xa39b8c, v * 0.6), // la plaza empedrada de Villa de Leyva // la plaza de piedra coralina // la plaza de piedra amarilla
 };
 
 // Casita del pueblo: paredes de color, zócalo, tejas de barro, puerta y ventana.
@@ -348,13 +350,17 @@ const SALENTO_TRIMS = [0xd7263d, 0x2e6fd1, 0x2fa36b, 0xf2b705, 0xf07f1d, 0x8e44a
 // Cartagena (v3.20): casas coloniales de colores fuertes, con balcones de madera y bugambilias.
 const CARTAGENA_WALLS = [0xf6c244, 0xf28c9a, 0x6fc3e0, 0xf4a261, 0xb8e0a8, 0xfbf8f1];
 const CARTAGENA_TRIMS = [0x7a4a22, 0x7a4a22, 0x2f7d4f, 0x5d3a1e];
+// Villa de Leyva (v3.27): casonas blancas de dos pisos con balcones y puertas verdes.
+const VILLA_WALLS = [0xfbf8f1, 0xfbf8f1, 0xf7f4ee];
+const VILLA_TRIMS = [0x2f7d4f, 0x2f7d4f, 0x1f5a38, 0x5d3a1e];
 function townHouse(rng, style) {
   const c = new Container();
   const g = new Graphics();
   const cartagena = style === 'cartagena';
-  const salento = style === 'salento' || cartagena; // las dos, de dos pisos con balcón
-  const walls = style === 'barichara' ? BARICHARA_WALLS : cartagena ? CARTAGENA_WALLS : salento ? SALENTO_WALLS : HOUSE_WALLS;
-  const trims = cartagena ? CARTAGENA_TRIMS : salento ? SALENTO_TRIMS : HOUSE_TRIMS;
+  const villa = style === 'villa';
+  const salento = style === 'salento' || cartagena || villa; // de dos pisos con balcón
+  const walls = style === 'barichara' ? BARICHARA_WALLS : cartagena ? CARTAGENA_WALLS : villa ? VILLA_WALLS : salento ? SALENTO_WALLS : HOUSE_WALLS;
+  const trims = cartagena ? CARTAGENA_TRIMS : villa ? VILLA_TRIMS : salento ? SALENTO_TRIMS : HOUSE_TRIMS;
   const wall = walls[Math.floor(rng() * walls.length)];
   const trim = trims[Math.floor(rng() * trims.length)];
   const w = 0.8 + rng() * 0.2;

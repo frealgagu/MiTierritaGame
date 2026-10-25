@@ -1,5 +1,18 @@
 # Registro de cambios
 
+## v3.27.0 — Boyacá: Villa de Leyva
+- **🏛️ Villa de Leyva**, la última zona de Boyacá, se abre al completar Las Ruanas. Como Barichara y Cartagena, no tiene fuente propia: cada estación recibe el producto final de una zona boyacense.
+  - La **Tienda de la esquina** sirve las onces con las cajas de papitas del Papal.
+  - La **Terraza de la plaza**, la tarde con las canastas de cerveza.
+  - El **Hospedaje colonial**, la noche en Villa de Leyva con el recuerdo de Las Ruanas.
+  - El **Mercado del sábado**, la canasta con las jarras de Ráquira.
+  - Los **Canastos del paseo** llevan además el piquete y los amasijos de Paipa.
+  - La **Salida al Fósil** despacha las **excursiones al Fósil**.
+- **Seis rutas nuevas** hacia Villa de Leyva, con sus carreteras en los mapas.
+- Su persona es **Doña Mercedes, la guía**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 7 íconos nuevos (con la iglesia de la plaza y el kronosaurio).
+- El mapa: casonas blancas de dos pisos con balcones verdes, la plaza empedrada, cipreses y eucaliptos; la terraza con sus parasoles, el hospedaje con geranios en el balcón, el mercado con toldos de colores y la roca del Fósil al comienzo del camino.
+- Boyacá ya tiene sus seis zonas. Sus eventos, su álbum, sus logros y su segundo final llegan en la próxima versión.
+
 ## v3.26.0 — Boyacá: Las Ruanas
 - **🧶 Las Ruanas**, la quinta zona de Boyacá, se abre al completar Paipa: el Rebaño de ovejas → el Lavado de lana → el Cardado → el Hilado en rueca → el Telar de ruanas → la **Tienda de Nobsa**, que vende el Recuerdo de Boyacá: ruanas con ollas y materas de Ráquira.
 - **Dos rutas nuevas desde Ráquira**: la **Ruta de las ollas** y la **Ruta de las materas**, con su chiva y sus carreteras.

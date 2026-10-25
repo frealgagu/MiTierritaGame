@@ -30,6 +30,8 @@ export const ZONE20 = {
   // Carretera de la Ruta de la cerveza (v3.24): sale de la bodega hacia Ráquira.
   routes: {
     cerveza: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A Ráquira ➜' },
+    // Las canastas de cerveza salen hacia Villa de Leyva (v3.27).
+    canastas_cerveza: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Villa de Leyva ➜' },
   },
   next: 'raquira',
 };

@@ -149,6 +149,13 @@ export const ICON = {
   woolYarn: '\uE08F', // Hilo de lana: las madejas de lana hilada, una natural y una teñida
   ruana: '\uE090', // Ruana: la ruana de lana con sus franjas, doblada como para la venta
   recuerdoBoyaca: '\uE091', // Recuerdo de Boyacá: la ruana doblada con una olla y una matera de Ráquira encima
+  iglesiaVilla: '\uE092', // Villa de Leyva: la iglesia blanca de la plaza, con su torre y la plaza empedrada
+  onces: '\uE093', // Onces: el chocolate en pocillo, el pan y el queso para la tarde
+  tardePlaza: '\uE094', // Tarde en la plaza: la mesa con las cervezas frías, las papitas y el parasol
+  nocheVilla: '\uE095', // Noche en Villa de Leyva: la casona blanca de balcones verdes y la luna sobre el tejado
+  canastaMercado: '\uE096', // Canasta del mercado: el canasto del sábado con frutas, mazorca y una jarra de barro
+  fiambrePaseo: '\uE097', // Fiambre del paseo: el atado envuelto en hoja de plátano sobre el mantel de cuadros
+  excursionFosil: '\uE098', // Excursión al Fósil: el esqueleto del kronosaurio sobre la piedra y la amonita
 };
 
 export const ICON_FONT = 'Cafetal Icons';

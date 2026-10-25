@@ -15,8 +15,8 @@ const STATION_SOUNDS = {
   loom: ['sack_loom', 'basket_shop', 'alpargata_shop', 'bijao_wrapper', 'fiambre_maker', 'cigar_roller', 'ant_cleaner', 'cone_table', 'hamper', 'braiders', 'hat_sewer', 'carder', 'ruana_loom'],
   thud: ['packer', 'molds', 'guava_molds', 'crate_packer', 'tercio_packer', 'gift_wrap', 'box_shop', 'cheese_press', 'criollas_bagger', 'criollas_boxer', 'bottler', 'pot_maker', 'cheese_molds', 'cheese_cave', 'rice_bagger', 'rice_stacker'],
   horn: ['export_dock', 'muelle'],
-  sizzle: ['fish_fryer', 'criollas_fryer', 'fogon_getsemani', 'budare', 'arepa_stand', 'fonda'],
-  clink: ['coffee_house', 'chocolate_table', 'chocolatier', 'lunch_table', 'souvenir_shop', 'dulceria', 'park_cafe', 'posada', 'costeno_fonda', 'bandeja_kitchen', 'parador', 'restaurante_muralla', 'jarras', 'piquete_table', 'tienda_nobsa', 'hotel_colonial', 'cocina_bahia', 'loncheras'],
+  sizzle: ['fish_fryer', 'criollas_fryer', 'tienda_esquina', 'fogon_getsemani', 'budare', 'arepa_stand', 'fonda'],
+  clink: ['coffee_house', 'chocolate_table', 'chocolatier', 'lunch_table', 'souvenir_shop', 'dulceria', 'park_cafe', 'posada', 'costeno_fonda', 'bandeja_kitchen', 'parador', 'restaurante_muralla', 'jarras', 'piquete_table', 'tienda_nobsa', 'terraza_plaza', 'hospedaje_colonial', 'mercado_sabado', 'canastos_paseo', 'salida_fosil', 'hotel_colonial', 'cocina_bahia', 'loncheras'],
   pour: ['salter'],
   engine: ['dispatch'],
 };

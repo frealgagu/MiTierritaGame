@@ -3399,6 +3399,130 @@ const DRAW = {
     g.roundRect(sign.x - 13, sign.y - 30, 26, 9, 2).fill(0x6d4c41).stroke(OUTLINE);
   },
 
+  // --- Boyacá · Villa de Leyva (v3.27): casonas blancas de balcones verdes y calles empedradas ---
+
+  // Terraza de la plaza: casona blanca con parasoles rojos afuera; en las mesas, cervezas y papitas.
+  terraza_plaza(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.0, 1.4, 28, ctx, { wall: 0xfbf8f1, roofH: 14 });
+    door(g, hx, hy, 1.4, 0.6, 16, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.0, 0.7, 14, 0x2f7d4f);
+    const tables = [iso(x + 0.8, y + 2.3), iso(x + 1.9, y + 2.4)];
+    for (const p of tables) {
+      shadow(g, p.x, p.y + 1, 12, 5);
+      g.rect(p.x - 1, p.y - 20, 2, 20).fill(0x555555);
+      g.ellipse(p.x, p.y - 9, 8, 4).fill(0xffffff).stroke(OUTLINE);
+      g.poly([p.x, p.y - 28, p.x - 14, p.y - 19, p.x + 14, p.y - 19]).fill(0xd7263d).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+      g.rect(p.x - 4, p.y - 15, 2, 5).fill(0x6d4c1f);
+      g.rect(p.x - 1, p.y - 15, 2, 5).fill(0x6d4c1f);
+      g.ellipse(p.x + 3, p.y - 10, 2.6, 1.2).fill(PRODUCTS.criollas.color);
+    }
+  },
+
+  // Hospedaje colonial: casona blanca de dos pisos, con el balcón corrido de madera verde y geranios.
+  hospedaje_colonial(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    const up = Math.max(ctx.up, UPPER_FLOOR);
+    house(this, g, hx, hy, 2.3, 1.6, 30, { ...ctx, up }, { wall: 0xfbf8f1, roofH: 15 });
+    door(g, hx, hy, 1.6, 0.7, 17, 0x2f7d4f);
+    door(g, hx, hy, 1.6, 1.6, 17, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.3, 0.8, 14, 0x2f7d4f);
+    const z = 22 + up / 2;
+    g.poly(isoPoly([[hx, hy + 1.6, z], [hx + 2.3, hy + 1.6, z], [hx + 2.3, hy + 1.85, z], [hx, hy + 1.85, z]])).fill(0x1f5a38).stroke(OUTLINE);
+    for (let k = 0; k <= 10; k++) {
+      const a = iso(hx + (2.3 * k) / 10, hy + 1.85, z);
+      const b = iso(hx + (2.3 * k) / 10, hy + 1.85, z + 7);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.2, color: 0x2f7d4f });
+    }
+    const top0 = iso(hx, hy + 1.85, z + 7);
+    const top1 = iso(hx + 2.3, hy + 1.85, z + 7);
+    g.moveTo(top0.x, top0.y).lineTo(top1.x, top1.y).stroke({ width: 1.6, color: 0x2f7d4f });
+    // Geranios en materas.
+    for (const bx of [0.3, 0.9, 1.5, 2.1]) {
+      const p = iso(hx + bx, hy + 1.85, z + 8);
+      g.rect(p.x - 2.5, p.y - 3, 5, 3).fill(PRODUCTS.matera.color);
+      for (const [dx, dy] of [[-2, -4], [1.5, -5], [0, -6.5]]) g.circle(p.x + dx, p.y + dy, 1.8).fill(0xd7263d);
+    }
+  },
+
+  // Mercado del sábado: toldos de lona con frutas, verduras, ollas y jarras; la gente comprando.
+  mercado_sabado(g, x, y, ctx) {
+    const stalls = [[0.5, 0.6, 0xd7263d], [1.7, 0.6, 0x2e6fd1], [0.5, 1.7, 0xf2b705], [1.7, 1.7, 0x2fa36b]].slice(0, 2 + Math.min(ctx.tier, 2));
+    for (const [sx, sy, col] of stalls) {
+      box(g, x + sx, y + sy, 0.9, 0.5, 8, PAL.wood);
+      for (let k = 0; k < 4; k++) {
+        const p = iso(x + sx + 0.15 + k * 0.2, y + sy + 0.25, 8);
+        g.circle(p.x, p.y - 2, 2.2).fill([0xf2b705, 0xd7263d, 0x7cb342, PRODUCTS.jarra_cerveza.color][k]);
+      }
+      for (const [px, py] of [[0, 0], [0.9, 0], [0, 0.5], [0.9, 0.5]]) box(g, x + sx + px - 0.03, y + sy + py - 0.03, 0.06, 0.06, 20, PAL.woodDark);
+      g.poly(isoPoly([[x + sx - 0.1, y + sy - 0.1, 20], [x + sx + 1.0, y + sy - 0.1, 20], [x + sx + 1.0, y + sy + 0.6, 17], [x + sx - 0.1, y + sy + 0.6, 17]])).fill(col).stroke(OUTLINE);
+    }
+    this.roofTop = iso(x + 1.5, y + 1.3, 22);
+    const people = new Graphics();
+    this.anim.addChild(people);
+    this.animate = (time) => {
+      people.clear();
+      for (let i = 0; i < 2; i++) {
+        const f = (time * 0.08 + i * 0.5) % 1;
+        const p = iso(x + 0.3 + f * 2.4, y + 1.35);
+        worker(people, p.x, p.y, i ? 0x8e44ad : 0xd7263d);
+        people.poly([p.x - 5, p.y - 17, p.x + 5, p.y - 17, p.x + 6, p.y - 11, p.x - 6, p.y - 11]).fill(i ? 0x6d4c41 : 0x37474f);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Canastos del paseo: casa con los canastos y fiambres envueltos en hoja, listos para el paseo.
+  canastos_paseo(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.0, 1.5, 28, ctx, { wall: 0xfbf8f1, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.6, 16, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.0, 0.75, 14, 0x2f7d4f);
+    for (const [bx, by] of [[1.3, 2.35], [1.65, 2.5], [2.0, 2.35], [1.65, 2.2]].slice(0, 2 + Math.min(ctx.tier, 2))) {
+      const p = iso(x + bx, y + by);
+      g.poly([p.x - 8, p.y - 10, p.x + 8, p.y - 10, p.x + 6, p.y, p.x - 6, p.y]).fill(0xb08850).stroke(OUTLINE);
+      g.ellipse(p.x - 2, p.y - 11, 4, 2.5).fill(PRODUCTS.fiambre_paseo.color);
+      g.moveTo(p.x - 6, p.y - 10).quadraticCurveTo(p.x, p.y - 20, p.x + 6, p.y - 10).stroke({ width: 1.4, color: 0xa07c4a });
+    }
+  },
+
+  // Salida al Fósil: el camino de piedra hacia el campo, con el letrero y la roca con el kronosaurio; salen
+  // caminantes en ruana.
+  salida_fosil(g, x, y, ctx) {
+    for (let k = 0; k < 9; k++) {
+      const p = iso(x + 0.6 + k * 0.28, y + 1.5 + Math.sin(k) * 0.15);
+      g.ellipse(p.x, p.y, 8, 4).fill(k % 2 ? 0x9a948a : 0xb9b2a5).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.3 });
+    }
+    // La roca con el fósil.
+    const r = iso(x + 1.2, y + 0.6);
+    g.poly([r.x - 22, r.y + 2, r.x - 16, r.y - 10, r.x + 14, r.y - 12, r.x + 24, r.y, r.x + 12, r.y + 8, r.x - 14, r.y + 8]).fill(0xc9b48a).stroke(OUTLINE);
+    g.moveTo(r.x - 16, r.y - 1).lineTo(r.x + 16, r.y - 3).stroke({ width: 2, color: 0xfbf8f1 });
+    for (let k = 0; k < 8; k++) g.moveTo(r.x - 12 + k * 3.5, r.y - 2).lineTo(r.x - 11 + k * 3.5, r.y + 3).stroke({ width: 1, color: 0xfbf8f1 });
+    g.ellipse(r.x - 18, r.y - 1.5, 4, 2.4).fill(0xfbf8f1);
+    const sign = iso(x + 2.6, y + 0.6);
+    g.rect(sign.x - 1.2, sign.y - 22, 2.4, 22).fill(PAL.wood);
+    g.poly([sign.x - 12, sign.y - 22, sign.x + 8, sign.y - 22, sign.x + 13, sign.y - 18, sign.x + 8, sign.y - 14, sign.x - 12, sign.y - 14]).fill(0x8b5a2b).stroke(OUTLINE);
+    const walkers = new Graphics();
+    this.anim.addChild(walkers);
+    this.animate = (time) => {
+      walkers.clear();
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.12 + i / 3) % 1;
+        const p = iso(x + 0.9 + f * 2.1, y + 1.5 + Math.sin(f * 9) * 0.1);
+        const step = Math.sin(time * 8 + i) * 1.2;
+        walkers.rect(p.x - 1.5 + step, p.y - 7, 1.4, 7).fill(0x3d3d5c);
+        walkers.rect(p.x + 0.2 - step, p.y - 7, 1.4, 7).fill(0x3d3d5c);
+        walkers.poly([p.x - 4, p.y - 14, p.x + 4, p.y - 14, p.x + 5, p.y - 7, p.x - 5, p.y - 7]).fill([0x6d4c41, 0x37474f, 0x8d6e63][i]);
+        walkers.circle(p.x, p.y - 16, 2.2).fill(0xe0ac7e);
+        walkers.ellipse(p.x, p.y - 17.5, 4, 1.2).fill(0x3e2723);
+      }
+    };
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

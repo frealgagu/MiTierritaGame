@@ -529,5 +529,26 @@ const RUANAS = [
   { id: 'o_final', type: 'sold', product: 'recuerdo_boyaca', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA, ...PAPAL, ...CERVECERIA, ...RAQUIRA, ...PAIPA, ...RUANAS];
+// Boyacá · Villa de Leyva (v3.27): la misma lista que Barichara y Cartagena. Su final es el de Boyacá.
+const VILLA_LEYVA = [
+  { id: 'u01', type: 'imported', product: 'criollas_box', amount: 50, reward: 5000000 },
+  { id: 'u02', type: 'level', target: 'tienda_esquina', level: 10, reward: 10000000 },
+  { id: 'u03', type: 'unlock', station: 'terraza_plaza', reward: 20000000 },
+  { id: 'u04', type: 'level', target: 'route:cajas_papitas', level: 10, reward: 40000000 },
+  { id: 'u05', type: 'produced', product: 'tarde_plaza', amount: 200, reward: 60000000 },
+  { id: 'u07', type: 'unlock', station: 'hospedaje_colonial', reward: 150000000 },
+  { id: 'u08', type: 'level', target: 'dispatch:villa_leyva', level: 10, reward: 200000000 },
+  { id: 'u09', type: 'sold', product: 'noche_villa', amount: 300, reward: 300000000 },
+  { id: 'u10', type: 'unlock', station: 'mercado_sabado', reward: 300000000 },
+  { id: 'u11', type: 'imported', product: 'jarra_cerveza', amount: 300, reward: 400000000 },
+  { id: 'u12', type: 'unlock', station: 'canastos_paseo', reward: 500000000 },
+  { id: 'u13', type: 'imported', product: 'canasta_amasijos', amount: 300, reward: 800000000 },
+  { id: 'u14', type: 'unlock', station: 'salida_fosil', reward: 800000000 },
+  { id: 'u15', type: 'allLevels', zone: 'villa_leyva', level: 25, reward: 1500000000 },
+  { id: 'u06', type: 'research', research: 'tenderos', reward: 1500000000 },
+  { id: 'u16', type: 'sold', product: 'excursion_fosil', amount: 100, reward: 2500000000 },
+  { id: 'u_final', type: 'sold', product: 'excursion_fosil', amount: 7000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA, ...PAPAL, ...CERVECERIA, ...RAQUIRA, ...PAIPA, ...RUANAS, ...VILLA_LEYVA];

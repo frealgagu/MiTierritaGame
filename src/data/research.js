@@ -314,6 +314,18 @@ export const RESEARCH = [
   { zone: 'ruanas', id: 'ruana_nobsa', name: 'Ruana de Nobsa', icon: '🏅', desc: 'Todo lo que vende Las Ruanas vale un 50 % más.', cost: 400000000, requires: 'ruana_loom', effect: { type: 'zoneValue', target: 'ruanas', mult: 1.5 } },
   { zone: 'ruanas', id: 'maestria_ruanas', name: 'Maestría: Ruanas', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'ruanas', mult: 4 } },
   { zone: 'ruanas', id: 'supremacia_ruanas', name: 'Supremacía: Ruanas', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'ruanas', mult: 8 } },
+
+  // Boyacá · Villa de Leyva (v3.27): las mismas de Barichara y Cartagena.
+  { zone: 'villa_leyva', id: 'tenderos', name: 'Tenderos de la esquina', icon: ICON.onces, desc: 'La Tienda de la esquina sirve el doble de onces (pide el doble de cajas al Papal).', cost: 1000000000, requires: 'terraza_plaza', effect: { type: 'stationSpeed', target: 'tienda_esquina', mult: 2 } },
+  { zone: 'villa_leyva', id: 'mas_parasoles', name: 'Más parasoles', icon: ICON.tardePlaza, desc: 'La Terraza de la plaza atiende el doble.', cost: 1500000000, requires: 'terraza_plaza', effect: { type: 'stationSpeed', target: 'terraza_plaza', mult: 2 } },
+  { zone: 'villa_leyva', id: 'bus_villa', name: 'Bus de turismo', icon: '🚌', desc: 'El despacho de Villa de Leyva lleva el doble por viaje.', cost: 2500000000, requires: 'hospedaje_colonial', effect: { type: 'dispatchCapacity', target: 'villa_leyva', mult: 2 } },
+  { zone: 'villa_leyva', id: 'casona_patio', name: 'Casona con patio', icon: '🛏️', desc: 'El Hospedaje colonial recibe el doble de huéspedes.', cost: 4000000000, requires: 'hospedaje_colonial', effect: { type: 'stationSpeed', target: 'hospedaje_colonial', mult: 2 } },
+  { zone: 'villa_leyva', id: 'toldos_mercado', name: 'Toldos del mercado', icon: ICON.canastaMercado, desc: 'El Mercado del sábado arma el doble de canastas.', cost: 8000000000, requires: 'mercado_sabado', effect: { type: 'stationSpeed', target: 'mercado_sabado', mult: 2 } },
+  { zone: 'villa_leyva', id: 'canastos_grandes_villa', name: 'Canastos grandes', icon: ICON.fiambrePaseo, desc: 'Los Canastos del paseo se arman el doble de rápido.', cost: 15000000000, requires: 'canastos_paseo', effect: { type: 'stationSpeed', target: 'canastos_paseo', mult: 2 } },
+  { zone: 'villa_leyva', id: 'guias_fosil', name: 'Guías del Fósil', icon: '🧭', desc: 'La Salida al Fósil despacha el doble de excursiones.', cost: 40000000000, requires: 'salida_fosil', effect: { type: 'stationSpeed', target: 'salida_fosil', mult: 2 } },
+  { zone: 'villa_leyva', id: 'pueblo_patrimonio', name: 'Pueblo patrimonio', icon: '🏅', desc: 'Todo lo que vende Villa de Leyva vale un 50 % más.', cost: 25000000000, requires: 'canastos_paseo', effect: { type: 'zoneValue', target: 'villa_leyva', mult: 1.5 } },
+  { zone: 'villa_leyva', id: 'maestria_villa', name: 'Maestría: Villa de Leyva', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'villa_leyva', mult: 4 } },
+  { zone: 'villa_leyva', id: 'supremacia_villa', name: 'Supremacía: Villa de Leyva', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'villa_leyva', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

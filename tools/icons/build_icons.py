@@ -2273,6 +2273,89 @@ def recuerdo_boyaca():
     return layers
 
 
+# ---------- Boyacá · Villa de Leyva (v3.27) ----------
+
+def iglesia_villa():
+    """Villa de Leyva: la iglesia blanca de la plaza, con su torre y la plaza empedrada."""
+    layers = [(OUTLINE, [poly(4, 84, 50, 70, 96, 84, 50, 98)]), ('#b9b2a5', [poly(8, 84, 50, 72.5, 92, 84, 50, 95.5)])]
+    layers.append(('#a39b8c', [circle(cx, cy, 2) for cx, cy in [(30, 84), (44, 80), (58, 86), (70, 82), (50, 90), (38, 88)]]))
+    layers.append((OUTLINE, [rect(22, 40, 44, 42), rect(62, 18, 18, 64), poly(18, 42, 44, 22, 70, 42)]))
+    layers.append(('#fbf8f1', [rect(24.5, 42.5, 39, 37), rect(64.5, 20.5, 13, 59)]))
+    layers.append(('#d9cfbd', [poly(21.5, 41, 44, 25, 66.5, 41)]))
+    layers.append(('#2f7d4f', ['M 36 80 L 36 64 Q 44 56 52 64 L 52 80 Z']))
+    layers.append(('#5d4037', [rect(68, 28, 6, 10)]))
+    layers.append((OUTLINE, [poly(60, 18, 71, 6, 82, 18)]))
+    layers.append(('#b5562e', [poly(63, 17, 71, 9, 79, 17)]))
+    layers.append(('#5d4037', [rib(71, 0, 71, 8, 1.4), rib(68, 3, 74, 3, 1.4)]))
+    return layers
+
+
+def onces():
+    """Onces: el chocolate en pocillo, el pan y el queso para la tarde."""
+    layers = [(OUTLINE, [ellipse(50, 80, 44, 12)]), ('#ffffff', [ellipse(50, 80, 41, 9.5)])]
+    layers.append((OUTLINE, ['M 22 42 L 54 42 L 50 78 Q 38 82 26 78 Z', 'M 54 50 Q 66 50 64 60 Q 62 70 52 68 L 52 64 Q 58 64 59 60 Q 60 55 54 55 Z']))
+    layers.append(('#d7263d', ['M 24.5 44.5 L 51.5 44.5 L 48 76 Q 38 79 28 76 Z']))
+    layers.append(('#5d3a1e', [ellipse(38, 44, 13.5, 3)]))
+    layers.append(('#b0bec5', ['M 32 36 Q 28 26 32 16 L 35 16 Q 31 26 35 36 Z', 'M 42 36 Q 38 26 42 16 L 45 16 Q 41 26 45 36 Z']))
+    layers += [(OUTLINE, [ellipse(76, 66, 16, 10)]), ('#e8a53a', [ellipse(76, 66, 14, 8)]), ('#f6c66a', [ellipse(72, 63, 6, 3)])]
+    layers += [(OUTLINE, [poly(58, 80, 72, 74, 76, 82, 62, 88)]), ('#fff3c4', [poly(59.5, 80.5, 71, 75.5, 74, 81.5, 62.5, 86)])]
+    return layers
+
+
+def tarde_plaza():
+    """Tarde en la plaza: la mesa con las cervezas frías, las papitas y el parasol."""
+    layers = [('#5d4037', [rib(50, 28, 50, 94, 3)])]
+    layers += [(OUTLINE, [poly(8, 30, 50, 8, 92, 30)]), ('#d7263d', [poly(12, 29, 50, 11, 88, 29)]), ('#ffffff', [poly(36, 22, 50, 11, 64, 22)])]
+    layers += [(OUTLINE, [ellipse(50, 70, 40, 12)]), ('#f4efe6', [ellipse(50, 70, 37, 9.5)])]
+    for cx in (28, 40):
+        layers += [(OUTLINE, [rect(cx - 4, 46, 8, 22)]), ('#6d4c1f', [rect(cx - 2.5, 47.5, 5, 19)]), ('#f2b705', [rect(cx - 2.5, 56, 5, 5)])]
+    layers += [(OUTLINE, ['M 56 62 Q 66 52 76 62 Z']), ('#f2b705', ['M 58 61 Q 66 54 74 61 Z'])]
+    return layers
+
+
+def noche_villa():
+    """Noche en Villa de Leyva: la casona blanca de balcones verdes y la luna sobre el tejado."""
+    layers = [(OUTLINE, [rect(8, 34, 84, 62), poly(4, 36, 50, 16, 96, 36)]), ('#b5562e', [poly(8, 34.5, 50, 19, 92, 34.5)]), ('#fbf8f1', [rect(10.5, 36.5, 79, 57)])]
+    layers.append(('#2f7d4f', [rect(18, 44, 16, 14), rect(66, 44, 16, 14), 'M 42 94 L 42 70 Q 50 62 58 70 L 58 94 Z']))
+    layers.append(('#ffe082', [rect(20, 46, 12, 10), rect(68, 46, 12, 10)]))
+    layers.append(('#1f5a38', [rect(14, 58, 24, 3), rect(62, 58, 24, 3)]))
+    layers.append(('#1f5a38', [rect(15 + k * 4.4, 52, 1.6, 6) for k in range(6)] + [rect(63 + k * 4.4, 52, 1.6, 6) for k in range(6)]))
+    layers += [(OUTLINE, [circle(80, 12, 9)]), ('#fff8e1', [circle(80, 12, 7.5)]), ('#fdf6e3', [circle(84, 9, 6)])]
+    return layers
+
+
+def canasta_mercado():
+    """Canasta del mercado: el canasto del sábado con frutas, mazorca y una jarra de barro."""
+    layers = [(OUTLINE, ['M 10 50 L 90 50 L 80 92 L 20 92 Z', 'M 22 50 Q 50 12 78 50 L 72 50 Q 50 22 28 50 Z']), ('#b08850', ['M 13.5 52.5 L 86.5 52.5 L 78 89.5 L 22 89.5 Z', 'M 24 50 Q 50 16 76 50 L 74 50 Q 50 20 26 50 Z'])]
+    layers.append(('#7a5a30', [rib(18 + k * 10, 54, 24 + k * 8, 88, 1) for k in range(7)]))
+    layers += [(OUTLINE, [circle(30, 46, 8)]), ('#f2b705', [circle(30, 46, 6.6)])]
+    layers += [(OUTLINE, [ellipse(46, 44, 12, 5, -20)]), ('#f6d860', [ellipse(46, 44, 10.5, 3.6, -20)])]
+    layers += [(OUTLINE, ['M 60 26 Q 58 40 62 50 L 78 50 Q 82 40 80 26 Z']), ('#b5653a', ['M 62.5 28.5 Q 61 40 64 47.5 L 76 47.5 Q 79 40 77.5 28.5 Z']), ('#ffffff', [ellipse(70, 27, 9, 3)])]
+    return layers
+
+
+def fiambre_paseo():
+    """Fiambre del paseo: el atado envuelto en hoja de plátano sobre el mantel de cuadros."""
+    layers = [(OUTLINE, [poly(4, 74, 50, 56, 96, 74, 50, 94)]), ('#d7263d', [poly(8, 74, 50, 58.5, 92, 74, 50, 91.5)])]
+    layers.append(('#ffffff', [poly(29, 66.5, 39.5, 62.5, 50, 66.5, 39.5, 70.5), poly(50, 74, 60.5, 70, 71, 74, 60.5, 78), poly(29, 82, 39.5, 78, 50, 82, 39.5, 86)]))
+    layers += [(OUTLINE, [ellipse(50, 58, 28, 16)]), ('#2e7d32', [ellipse(50, 58, 25.5, 13.5)]), ('#66bb6a', [rib(26, 58, 74, 58, 1.4)])]
+    layers.append(('#8b5a2b', [rib(50, 42, 50, 74, 2.2), rib(26, 52, 74, 64, 2.2)]))
+    layers += [(OUTLINE, [rect(74, 32, 10, 26)]), ('#6d4c1f', [rect(75.5, 33.5, 7, 23)]), ('#f2b705', [rect(75.5, 42, 7, 6)])]
+    return layers
+
+
+def excursion_fosil():
+    """Excursión al Fósil: el esqueleto del kronosaurio sobre la piedra y la amonita."""
+    layers = [(OUTLINE, [poly(4, 70, 30, 54, 76, 56, 96, 72, 70, 92, 20, 90)]), ('#c9b48a', [poly(8, 70, 31, 57, 75, 58.5, 92, 72, 69, 89.5, 21, 87.5)])]
+    layers.append(('#8a7a5a', ['M 18 74 Q 34 64 54 70 Q 70 74 84 70', 'M 54 70 L 62 64 L 66 70 Z']))
+    layers.append(('#fbf8f1', [rib(18, 74, 84, 70, 2.4)] + [rib(26 + k * 6, 72 - k * 0.2, 28 + k * 6, 80 - k * 0.2, 1.2) for k in range(9)] + [ellipse(16, 74, 7, 4, -10)]))
+    layers.append(('#263238', [circle(14, 73, 1.2)]))
+    layers += [(OUTLINE, [circle(76, 28, 16)]), ('#d9a330', [circle(76, 28, 14)])]
+    layers.append(('#a87a20', ['M 76 28 m -11 0 a 11 11 0 1 1 22 0', 'M 76 28 m -6 0 a 6 6 0 1 1 12 0']))
+    layers.append(('#a87a20', [rib(76, 28, 76 + 13 * math.cos(a), 28 + 13 * math.sin(a), 1) for a in [k * 0.7 for k in range(9)]]))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -2420,6 +2503,13 @@ ICONS = [
     (0xE08F, 'wool_yarn', wool_yarn),
     (0xE090, 'ruana', ruana),
     (0xE091, 'recuerdo_boyaca', recuerdo_boyaca),
+    (0xE092, 'iglesia_villa', iglesia_villa),
+    (0xE093, 'onces', onces),
+    (0xE094, 'tarde_plaza', tarde_plaza),
+    (0xE095, 'noche_villa', noche_villa),
+    (0xE096, 'canasta_mercado', canasta_mercado),
+    (0xE097, 'fiambre_paseo', fiambre_paseo),
+    (0xE098, 'excursion_fosil', excursion_fosil),
 ]
 
 

@@ -166,6 +166,14 @@ export const PRODUCTS = {
   ruana: { name: 'Ruana', zone: 'ruanas', value: 120000, icon: ICON.ruana, color: 0x6d4c41 },
   recuerdo_boyaca: { name: 'Recuerdo de Boyacá', zone: 'ruanas', value: 1200000, icon: ICON.recuerdoBoyaca, color: 0xd9772e },
 
+  // Boyacá · Villa de Leyva (v3.27): los mismos valores que Barichara y Cartagena.
+  onces: { name: 'Onces', zone: 'villa_leyva', value: 150000, icon: ICON.onces, color: 0xd7263d },
+  tarde_plaza: { name: 'Tarde en la plaza', zone: 'villa_leyva', value: 400000, icon: ICON.tardePlaza, color: 0xf2b705 },
+  noche_villa: { name: 'Noche en Villa de Leyva', zone: 'villa_leyva', value: 3200000, icon: ICON.nocheVilla, color: 0x2f7d4f },
+  canasta_mercado: { name: 'Canasta del mercado', zone: 'villa_leyva', value: 600000, icon: ICON.canastaMercado, color: 0xb08850 },
+  fiambre_paseo: { name: 'Fiambre del paseo', zone: 'villa_leyva', value: 2000000, icon: ICON.fiambrePaseo, color: 0x2e7d32 },
+  excursion_fosil: { name: 'Excursión al Fósil', zone: 'villa_leyva', value: 24000000, icon: ICON.excursionFosil, color: 0xc9b48a },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

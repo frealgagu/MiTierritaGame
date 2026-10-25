@@ -97,6 +97,13 @@ export const FACTS = {
   rice_sorter: ['El arroz excelso tiene casi todos los granos enteros.'],
   rice_bagger: ['En la Costa no hay almuerzo sin arroz: de coco, de lisa…'],
   rice_stacker: ['Un bulto de arroz pesa 50 kilos y se carga al hombro.'],
+  // Boyacá · Villa de Leyva (v3.27)
+  tienda_esquina: ['A media tarde en Boyacá se toman las onces: chocolate, pan y queso.'],
+  terraza_plaza: ['La plaza de Villa de Leyva es de las más grandes del país, empedrada.'],
+  hospedaje_colonial: ['Villa de Leyva se fundó en 1572 y conserva sus casas coloniales.'],
+  mercado_sabado: ['Los sábados se arma el mercado campesino con lo de las veredas.'],
+  canastos_paseo: ['El paseo de olla: almuerzo empacado para comer en el campo.'],
+  salida_fosil: ['Cerca del pueblo está el fósil de un kronosaurio, un reptil marino.', 'Hace millones de años, Villa de Leyva estaba bajo el mar.'],
   // Boyacá · Las Ruanas (v3.26)
   sheep_pasture: ['Las ovejas aguantan el frío del páramo gracias a su lana.', 'A las ovejas se les trasquila la lana una o dos veces al año.'],
   wool_washer: ['La lana se lava en agua de quebrada para quitarle la grasa y la tierra.'],
@@ -195,6 +202,7 @@ export const PEOPLE = {
   raquira: { icon: '👩🏽', name: 'Doña Lucila', role: 'la alfarera' },
   paipa: { icon: '👵🏻', name: 'Doña Gertrudis', role: 'la quesera' },
   ruanas: { icon: '👴🏻', name: 'Don Clímaco', role: 'el tejedor' },
+  villa_leyva: { icon: '👩🏻', name: 'Doña Mercedes', role: 'la guía' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -213,6 +221,7 @@ export const WELCOME = {
   hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
   arrozal: '¡Ajá, bienvenido a la Costa, compa! Aquí el arroz crece con los pies en el agua.',
   cocal: '¡Ey, mi vida, bienvenido al Cocal! Aquí bajamos el coco de la palma y lo volvemos cocada.',
+  villa_leyva: '¡Bienvenido a Villa de Leyva, sumercé! Aquí llega lo mejor de todo Boyacá, y de aquí salen las excursiones al Fósil.',
   ruanas: '¡Bien pueda, sumercé! Aquí la lana de las ovejas se vuelve ruana, para el frío del altiplano.',
   paipa: '¡Siga, sumercé, bienvenido a Paipa! Aquí el queso madura despacito y las almojábanas salen calienticas.',
   raquira: '¡Bienvenido a Ráquira, sumercé! Aquí el barro se vuelve ollas, materas, caballitos y jarras.',

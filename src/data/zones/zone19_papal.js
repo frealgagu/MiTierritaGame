@@ -33,6 +33,8 @@ export const ZONE19 = {
   // Carretera de la Ruta de las papitas (v3.25): sale de la bodega hacia Paipa.
   routes: {
     papitas: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Papitas a Paipa ➜' },
+    // Las cajas de papitas salen hacia Villa de Leyva (v3.27).
+    cajas_papitas: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'A Villa de Leyva ➜' },
   },
   next: 'cerveceria',
 };

@@ -32,7 +32,9 @@ export const ZONE23 = {
   routes: {
     ollas: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Ollas de Ráquira' },
     materas: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Materas' },
+    // Los recuerdos salen hacia Villa de Leyva (v3.27).
+    recuerdos_boyaca: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'A Villa de Leyva ➜' },
   },
   unlockedBy: 'paipa',
-  next: null,
+  next: 'villa_leyva',
 };
