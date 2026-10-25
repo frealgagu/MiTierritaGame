@@ -1,5 +1,16 @@
 # Registro de cambios
 
+## v3.29.0 — La plaza de Vélez
+- **⛪ La Guayabera tiene en la mitad la plaza de Vélez**, con su iglesia blanca de una torre:
+  - la fachada con el portón de arco, la ventana redonda y la cruz;
+  - la torre con su campanario y la campana;
+  - el atrio de piedra con palomas;
+  - la pila, guayabos, bancas, faroles y las casas blancas del marco de la plaza.
+- **Las mulas le dan la vuelta**: el camino rodea la plaza y los Moldes, la Cortadora y la Envoltura quedaron alrededor de ella. **Los tiempos de los viajes no cambian**: cada estación quedó a la misma distancia del guayabal que antes, y una prueba nueva lo comprueba.
+- Por la plaza pasea la gente; de noche se alumbran el portón, las ventanas y los faroles.
+- **Campanas** a las 6, a las 12 y a las 18, como en el Pueblo.
+- **Mascotas más baratas**: los gatos cuestan 10 ⭐ (antes 50) y los loros 8 ⭐ (antes 40).
+
 ## v3.28.0 — Boyacá completa: eventos, álbum y logros
 - **Seis eventos nuevos**, uno por zona de Boyacá, cada uno con su escena en el tablero que cambia con cada compra:
   - 🍂 **La gota en el papal**: las matas se manchan; la fumigadora con caldo bordelés, los surcos aporcados y la semilla resistente.

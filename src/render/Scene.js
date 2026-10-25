@@ -77,6 +77,16 @@ export class Scene {
     this.tinted.addChild(this.terrain.ground, this.belts, this.objects);
     this.world.addChild(this.tinted, this.lights, this.labels, this.effects.view);
     for (const d of this.terrain.decor) this.objects.addChild(d);
+    // Luces de noche de la decoración (v3.29: el portón y las ventanas de la iglesia, los faroles).
+    for (const l of this.terrain.glows) {
+      const s = new Sprite(this.lightTexture);
+      s.anchor.set(0.5);
+      s.position.set(l.x, l.y);
+      s.scale.set(l.r / 32);
+      s.tint = l.color ?? 0xffc864;
+      s.blendMode = 'add';
+      this.lights.addChild(s);
+    }
 
     this.stations = {};
     this.farm = new FarmView(this.zone, STATIONS_BY_ID[this.sourceId]);
@@ -391,10 +401,11 @@ export class Scene {
     const working = (id) => this.stations[id]?.working;
     const theme = this.zone.theme;
     const r = Math.random();
-    if (theme === 'town') {
-      // Campanas a las 6, a las 12 y a las 18.
+    if (theme === 'town' || this.zone.plaza) {
+      // Campanas a las 6, a las 12 y a las 18 (en el Pueblo y, desde la v3.29, en la iglesia de Vélez).
       for (const h of [6, 12, 18]) if (crossed(h)) this.sound.bells(h === 12 ? 4 : 3);
-    } else if (crossed(5.8)) this.sound.rooster(); // el gallo al amanecer
+    }
+    if (theme !== 'town' && crossed(5.8)) this.sound.rooster(); // el gallo al amanecer
     this.lastHour = hour;
     if (night) return;
     if (r < 0.006) this.sound.bark();

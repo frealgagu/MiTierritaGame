@@ -37,6 +37,13 @@ export function buildTileMap(zone, jeeps = 1) {
   if (jeeps > 1) road(zone.jeepRoad2);
   for (const r of Object.values(zone.routes ?? {})) road(r.road);
   fill(zone.yard.x, zone.yard.y, zone.yard.w, zone.yard.h, 'road');
+  if (zone.plaza) {
+    // La plaza de Vélez (v3.29): piedra, sus calles y las casas del marco, donde no va decoración.
+    const pz = zone.plaza;
+    fill(pz.x, pz.y, pz.w, pz.h, 'plaza');
+    road(pz.street);
+    for (const [hx, hy] of pz.houses) fill(Math.floor(hx), Math.floor(hy), 1, 1, 'building');
+  }
   return tiles;
 }
 
@@ -47,8 +54,40 @@ export class Terrain {
     this.ground = new Graphics();
     this.decor = []; // objetos altos que se ordenan por profundidad junto al resto
     this.occupied = new Set(); // casillas con decoración (`gx,gy`): la gente no las atraviesa
+    this.glows = []; // luces de noche de lo que no es una estación: { x, y, r, color } (v3.29)
     this.drawGround();
+    if (zone.plaza) drawAtrium(this.ground, zone.plaza);
+    if (zone.plaza) this.buildPlaza();
     this.buildDecor();
+  }
+
+  // La plaza de Vélez (v3.29): la iglesia de una torre con su atrio, la pila, árboles, bancas y faroles,
+  // y las casas blancas del marco de la plaza.
+  buildPlaza() {
+    const pz = this.zone.plaza;
+    const rng = createRng(this.zone.seed * 13 + 5);
+    const put = (obj, gx, gy, z = depth(gx, gy)) => {
+      obj.zIndex = z;
+      obj.grid = [gx, gy];
+      this.decor.push(obj);
+      this.occupied.add(`${Math.floor(gx)},${Math.floor(gy)}`);
+    };
+    const T = CHURCH.tower;
+    put(velezChurch(pz, this.glows), pz.x + 2, pz.y + 1.5, depth(pz.x + T.x + T.w + 0.1, pz.y + T.y + T.d + 0.1));
+    const at = (obj, gx, gy) => {
+      const p = iso(gx, gy);
+      obj.position.set(p.x, p.y);
+      put(obj, gx, gy);
+    };
+    at(fountain(), pz.x + 2.85, pz.y + 3.45);
+    for (const [gx, gy] of [[pz.x + 0.4, pz.y + 3.55], [pz.x + 3.7, pz.y + 0.35], [pz.x + 0.3, pz.y + 0.3]]) at(guavaTree(rng), gx, gy);
+    for (const [gx, gy] of [[pz.x + 3.8, pz.y + 2.6], [pz.x + 0.2, pz.y + 2.9], [pz.x + 1.9, pz.y + 3.85]]) {
+      at(streetLamp(), gx, gy);
+      const p = iso(gx, gy, 34);
+      this.glows.push({ x: p.x, y: p.y, r: 16 });
+    }
+    for (const [gx, gy] of [[pz.x + 1.0, pz.y + 3.7], [pz.x + 3.75, pz.y + 1.5]]) at(bench(), gx, gy);
+    for (const [gx, gy] of pz.houses) at(townHouse(rng, 'barichara'), gx, gy);
   }
 
   drawGround() {
@@ -76,6 +115,7 @@ export class Terrain {
         let color;
         if (type === 'road') color = mix(PAL.road, 0xd8b07a, v * 0.4);
         else if (type === 'farm') color = (FARM_SOIL[this.zone.style] ?? FARM_SOIL[this.zone.theme])?.(v) ?? mix(PAL.soil, 0x6e4529, v * 0.35);
+        else if (type === 'plaza') color = mix(0xd9c9a8, 0xc4b08a, v * 0.5);
         else if (type === 'plot' || type === 'building') color = mix(PAL.plot, 0xc9a06c, v * 0.4);
         else color = mix(PAL.grass, (gx + gy) % 2 ? 0x8cc65a : 0x6fae44, 0.35 + v * 0.3);
         g.poly(isoPoly([[gx, gy], [gx + 1, gy], [gx + 1, gy + 1], [gx, gy + 1]])).fill(color);
@@ -96,7 +136,13 @@ export class Terrain {
           const p = iso(gx + rng(), gy + rng());
           g.ellipse(p.x, p.y, 2.5, 1.2).fill({ color: 0x8a6a45, alpha: 0.5 });
         }
-        if (type === 'farm' && this.zone.theme === 'town') {
+        if (type === 'plaza') {
+          // Piedra de la plaza de Vélez, como la de Barichara pero más gris.
+          for (let k = 0; k < 4; k++) {
+            const p = iso(gx + 0.25 + (k % 2) * 0.5, gy + 0.25 + Math.floor(k / 2) * 0.5);
+            g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? 0xb9a57e : 0xe3d6b8, alpha: 0.8 });
+          }
+        } else if (type === 'farm' && this.zone.theme === 'town') {
           // Plaza empedrada.
           for (let k = 0; k < 4; k++) {
             const p = iso(gx + 0.25 + (k % 2) * 0.5, gy + 0.25 + Math.floor(k / 2) * 0.5);
@@ -310,6 +356,148 @@ export class Terrain {
       }
     }
   }
+}
+
+// ---------- La plaza de Vélez (v3.29) ----------
+// Medidas dentro de la plaza (en casillas, desde su esquina). La nave va a lo largo de gy, con la fachada
+// mirando a la pila (hacia +gy, de frente a quien mira el mapa) y la torre a su derecha, sin taparla.
+export const CHURCH = {
+  nave: { x: 0.7, y: 0.3, w: 1.7, d: 2.15, h: 40, roof: 20 },
+  tower: { x: 2.35, y: 1.6, w: 0.95, d: 0.85, h: 104 },
+  atrium: { x: 0.3, y: 0.2, w: 3.3, d: 2.75, h: 3 },
+};
+const CHURCH_WALL = 0xf7f4ee;
+const CHURCH_STONE = 0xcdbb94;
+
+// El atrio de piedra, un escalón sobre la plaza, con su grada frente al portón. Va en el suelo: así la
+// gente y las mulas siempre se dibujan encima.
+export function drawAtrium(g, pz) {
+  const { atrium: at, nave } = CHURCH;
+  box(g, pz.x + at.x, pz.y + at.y, at.w, at.d, at.h, CHURCH_STONE);
+  box(g, pz.x + nave.x + nave.w / 2 - 0.4, pz.y + at.y + at.d, 0.8, 0.3, 1.5, shade(CHURCH_STONE, 0.95));
+}
+
+// Un hueco con arco en una pared que mira a +gx (plano gx = at) o a +gy (plano gy = at), de a a b.
+function archOn(g, face, at, a, b, z0, z1, color) {
+  const mid = (a + b) / 2;
+  const r = (b - a) / 2;
+  const P = (u, z) => (face === 'x' ? [at, u, z] : [u, at, z]);
+  const pts = [P(a, z0), P(b, z0), P(b, z1)];
+  for (let k = 1; k < 8; k++) {
+    const t = (k / 8) * Math.PI;
+    pts.push(P(mid + Math.cos(t) * r, z1 + Math.sin(t) * r * 26));
+  }
+  pts.push(P(a, z1));
+  g.poly(isoPoly(pts)).fill(color).stroke(OUTLINE);
+}
+
+// Tejado a dos aguas con la cumbrera paralela a gy: el hastial (la fachada) queda en la cara +gy.
+function gableRoofY(g, x, y, w, d, wallH, roofH, color, wallColor, overhang = 0.12) {
+  const x0 = x - overhang, x1 = x + w + overhang;
+  const y0 = y - overhang, y1 = y + d + overhang;
+  const xm = x + w / 2;
+  const top = wallH + roofH;
+  g.poly(isoPoly([[x0, y0, wallH], [x0, y1, wallH], [xm, y1, top], [xm, y0, top]])).fill(shade(color, 1.1)).stroke(OUTLINE);
+  g.poly(isoPoly([[x, y + d, wallH], [x + w, y + d, wallH], [xm, y + d, top]])).fill(shade(wallColor, 0.9)).stroke(OUTLINE);
+  g.poly(isoPoly([[x1, y0, wallH], [x1, y1, wallH], [xm, y1, top], [xm, y0, top]])).fill(shade(color, 0.8)).stroke(OUTLINE);
+  for (let i = 1; i < 4; i++) {
+    const t = i / 4;
+    const xx = x1 + (xm - x1) * t;
+    const hh = wallH + roofH * t;
+    const [ax, ay, bx, by] = isoPoly([[xx, y0, hh], [xx, y1, hh]]);
+    g.moveTo(ax, ay).lineTo(bx, by).stroke({ width: 1, color: shade(color, 0.6), alpha: 0.5 });
+  }
+}
+
+function cross(g, x, y, h = 11) {
+  g.rect(x - 0.8, y - h, 1.6, h).fill(0x3a2418);
+  g.rect(x - 3, y - h * 0.72, 6, 1.6).fill(0x3a2418);
+}
+
+// La iglesia de una torre: nave blanca con zócalo, tejado de barro, portón con arco, ventana redonda y
+// cruz en la fachada; la torre con su campanario (campana y arcos), la cúpula de teja y la cruz.
+function velezChurch(pz, glows) {
+  const c = new Container();
+  const g = new Graphics();
+  const { nave: N, tower: T, atrium: A } = CHURCH;
+  const nx = pz.x + N.x;
+  const ny = pz.y + N.y;
+  const z = A.h;
+  const top = z + N.h;
+  box(g, nx, ny, N.w, N.d, 5, 0xd8c7a3, { z });
+  box(g, nx, ny, N.w, N.d, N.h - 5, CHURCH_WALL, { z: z + 5 });
+  gableRoofY(g, nx, ny, N.w, N.d, top, N.roof, PAL.roof, CHURCH_WALL);
+  // El costado: ventanas altas y contrafuertes.
+  for (const wy of [0.35, 1.1]) archOn(g, 'x', nx + N.w, ny + wy, ny + wy + 0.28, z + 16, z + 25, 0x6f8fb0);
+  for (const by of [0.15, 0.85, 1.55]) box(g, nx + N.w, ny + by, 0.12, 0.15, 24, shade(CHURCH_WALL, 0.97), { z });
+  // La fachada: pilastras, portón con arco, la ventana redonda y la cruz en lo alto.
+  const fy = ny + N.d;
+  const fm = nx + N.w / 2;
+  for (const px of [0.12, N.w - 0.26]) box(g, nx + px, fy, 0.14, 0.08, N.h - 2, shade(CHURCH_WALL, 1.02), { z });
+  archOn(g, 'y', fy, fm - 0.34, fm + 0.34, z, z + 19, shade(CHURCH_STONE, 0.95));
+  archOn(g, 'y', fy, fm - 0.25, fm + 0.25, z, z + 17, 0x6b3f22);
+  const d0 = iso(fm, fy, z);
+  const d1 = iso(fm, fy, z + 23);
+  g.moveTo(d0.x, d0.y).lineTo(d1.x, d1.y).stroke({ width: 1, color: 0x3a2418 });
+  const rose = iso(fm, fy, top + 5);
+  g.circle(rose.x, rose.y, 4).fill(0x6f8fb0).stroke(OUTLINE);
+  const apex = iso(fm, fy, top + N.roof);
+  cross(g, apex.x, apex.y);
+  // La torre.
+  const tx = pz.x + T.x;
+  const ty = pz.y + T.y;
+  const tz = z + T.h;
+  box(g, tx, ty, T.w, T.d, 5, 0xd8c7a3, { z });
+  box(g, tx, ty, T.w, T.d, T.h - 5, CHURCH_WALL, { z: z + 5 });
+  for (const zz of [z + 40, tz - 22]) box(g, tx - 0.05, ty - 0.05, T.w + 0.1, T.d + 0.1, 3, shade(CHURCH_STONE, 1.05), { z: zz });
+  box(g, tx - 0.08, ty - 0.08, T.w + 0.16, T.d + 0.16, 3, shade(CHURCH_STONE, 1.05), { z: tz });
+  archOn(g, 'y', ty + T.d, tx + 0.22, tx + T.w - 0.22, tz - 17, tz - 9, 0x2b1d14);
+  archOn(g, 'x', tx + T.w, ty + 0.2, ty + T.d - 0.2, tz - 17, tz - 9, 0x2b1d14);
+  const bell = iso(tx + T.w / 2, ty + T.d, tz - 12);
+  g.poly([bell.x - 3.6, bell.y + 3.5, bell.x + 3.6, bell.y + 3.5, bell.x + 2.2, bell.y - 3.5, bell.x - 2.2, bell.y - 3.5]).fill(0xc9a13b).stroke({ width: 1, color: 0x3a2418, alpha: 0.7 });
+  archOn(g, 'y', ty + T.d, tx + 0.3, tx + T.w - 0.3, z + 22, z + 30, 0x6f8fb0);
+  const capH = 20;
+  const peak = [tx + T.w / 2, ty + T.d / 2, tz + 3 + capH];
+  g.poly(isoPoly([[tx - 0.08, ty + T.d + 0.08, tz + 3], [tx + T.w + 0.08, ty + T.d + 0.08, tz + 3], peak])).fill(shade(PAL.roof, 0.88)).stroke(OUTLINE);
+  g.poly(isoPoly([[tx + T.w + 0.08, ty - 0.08, tz + 3], [tx + T.w + 0.08, ty + T.d + 0.08, tz + 3], peak])).fill(shade(PAL.roof, 0.72)).stroke(OUTLINE);
+  const tip = iso(...peak);
+  cross(g, tip.x, tip.y, 12);
+  c.addChild(g);
+  // De noche se alumbran el portón, la ventana redonda y la del costado que no tapa la torre.
+  const door = iso(fm, fy, z + 9);
+  const win = iso(nx + N.w, ny + 0.49, z + 21);
+  glows.push({ x: door.x, y: door.y, r: 20 }, { x: rose.x, y: rose.y, r: 10 }, { x: win.x, y: win.y, r: 9 });
+  return c;
+}
+
+// La pila de la plaza, con su chorro.
+function fountain() {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 0, 2, 20, 8);
+  g.ellipse(0, -4, 19, 8).fill(shade(CHURCH_STONE, 0.85)).stroke(OUTLINE);
+  g.ellipse(0, -6, 19, 8).fill(CHURCH_STONE).stroke(OUTLINE);
+  g.ellipse(0, -6, 15, 6).fill(0x7fb3d5);
+  g.rect(-2.5, -20, 5, 14).fill(CHURCH_STONE).stroke(OUTLINE);
+  g.ellipse(0, -20, 6, 2.6).fill(shade(CHURCH_STONE, 1.05)).stroke(OUTLINE);
+  g.moveTo(0, -21).quadraticCurveTo(-5, -28, -9, -8).moveTo(0, -21).quadraticCurveTo(5, -28, 9, -8).stroke({ width: 1.4, color: 0xd6ecf7 });
+  c.addChild(g);
+  return c;
+}
+
+// Banca de madera de la plaza.
+function bench() {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 0, 1, 11, 4);
+  g.poly(isoPoly([[-0.3, -0.08, 6], [0.3, -0.08, 6], [0.3, 0.08, 6], [-0.3, 0.08, 6]])).fill(0x9a6a3a).stroke(OUTLINE);
+  g.poly(isoPoly([[-0.3, -0.08, 6], [0.3, -0.08, 6], [0.3, -0.08, 12], [-0.3, -0.08, 12]])).fill(0x8b5a2b).stroke(OUTLINE);
+  for (const x of [-0.26, 0.26]) {
+    const a = iso(x, 0.06, 0);
+    g.rect(a.x - 1, a.y - 6, 2, 6).fill(0x3a2418);
+  }
+  c.addChild(g);
+  return c;
 }
 
 // Color de la tierra de la fuente ilimitada según el tema de la zona.

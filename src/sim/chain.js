@@ -16,7 +16,8 @@ export const ROAD_POS = Object.fromEntries(
       if (id === zone.farm.stationId) pos[id] = 0;
       else {
         const plot = zone.plots.find((p) => p.stationId === id);
-        pos[id] = projectOnPath(zone.muleRoad, plot.x + 1.5, plot.y + 1.5);
+        // La puerta: el punto del camino que da a la estación (v3.29), o el más cercano a su centro.
+        pos[id] = projectOnPath(zone.muleRoad, ...(plot.door ?? [plot.x + 1.5, plot.y + 1.5]));
       }
     }
     return [zone.id, pos];

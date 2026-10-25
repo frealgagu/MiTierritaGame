@@ -226,6 +226,30 @@ export class Critters {
       add('pigeon', ring, 5);
       return;
     }
+    if (zone.plaza) {
+      // La plaza de Vélez (v3.29): gente que pasea por delante de la iglesia y palomas en el atrio.
+      const pz = zone.plaza;
+      const free = (x, y) => x > pz.x + 0.15 && x < pz.x + pz.w - 0.15 && y > pz.y + 3.15 && y < pz.y + pz.h - 0.1
+        && Math.hypot(x - (pz.x + 2.85), y - (pz.y + 3.45)) > 0.6;
+      const walk = (ax, ay, bx, by) => {
+        for (let s = 0; s <= 8; s++) if (!free(ax + ((bx - ax) * s) / 8, ay + ((by - ay) * s) / 8)) return false;
+        return true;
+      };
+      const strip = [];
+      for (let i = 0; i < 60; i++) {
+        const x = pz.x + 0.2 + this.rng() * (pz.w - 0.4);
+        const y = pz.y + 3.2 + this.rng() * (pz.h - 3.3);
+        if (free(x, y)) strip.push([x, y]);
+      }
+      if (strip.length > 1) for (let i = 0; i < 4; i++) {
+        const c = new Critter('person', strip, this.rng, walk);
+        this.list.push(c);
+        parent.addChild(c);
+      }
+      const atrium = [];
+      for (let i = 0; i < 12; i++) atrium.push([pz.x + 0.9 + this.rng() * 1.3, pz.y + 2.65 + this.rng() * 0.25]);
+      add('pigeon', atrium, 4);
+    }
     // Gallinas junto a la casa de la finca (afuera del cultivo).
     add('chicken', spots(near(grass, f.x, f.y, f.x + 2, f.y + 2, 2), this.rng), 4);
     if (zone.theme === 'dairy' || zone.theme === 'ranch' || zone.theme === 'savanna' || zone.theme === 'sheep') {

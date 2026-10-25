@@ -149,8 +149,8 @@ export function buyWillys2(profile, region) {
 // Mascotas (v3.12): gatos y loros que andan por el mapa de cada región, solo de adorno. Se compran con
 // Renombre en cada región, hasta un máximo. Los gatos, de vez en cuando, persiguen a los loros.
 export const PETS = {
-  cats: { icon: '🐈', name: 'Gato', plural: 'Gatos', cost: 50, max: 10 },
-  parrots: { icon: '🦜', name: 'Loro', plural: 'Loros', cost: 40, max: 5 },
+  cats: { icon: '🐈', name: 'Gato', plural: 'Gatos', cost: 10, max: 10 },
+  parrots: { icon: '🦜', name: 'Loro', plural: 'Loros', cost: 8, max: 5 },
 };
 export const petsOf = (profile, region = 'cafetero') => {
   const all = (profile.pets ??= {});

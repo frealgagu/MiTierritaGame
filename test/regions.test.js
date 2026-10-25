@@ -692,3 +692,13 @@ test('Villa de Leyva recibe lo de las cinco zonas de Boyacá y despacha excursio
   for (const p of ['criollas_box', 'beer_crate', 'jarra_cerveza', 'piquete', 'canasta_amasijos', 'recuerdo_boyaca']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
   assert.ok((game.state.stats.produced.fiambre_paseo ?? 0) > 0, 'arma fiambres del paseo');
 });
+
+test('La Guayabera con la plaza de Vélez: los viajes de las mulas duran lo mismo que en la Finca (v3.29)', async () => {
+  const { legTime } = await import('../src/sim/transport.js');
+  const g = ZONES_BY_ID.guayabera.chain;
+  const f = ZONES_BY_ID.finca.chain;
+  for (let i = 0; i < g.length; i++) {
+    const next = (c) => c[i + 1] ?? 'warehouse';
+    assert.equal(legTime(g[i], next(g)), legTime(f[i], next(f)), `${g[i]} → ${next(g)}`);
+  }
+});
