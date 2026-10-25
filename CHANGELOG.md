@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.25.0 — Boyacá: Paipa
+- **🧀 Paipa**, la cuarta zona de Boyacá, se abre al completar Ráquira: el Hato lechero → la Cuajadera → los Moldes de queso → la Cava de maduración (el queso Paipa) → el Horno de almojábanas. Las almojábanas se reparten entre la **Mesa del piquete** (piquete boyacense) y el **Horno de barro** (canasta de amasijos).
+- **Dos rutas nuevas**: la **Ruta de las papitas**, con las bolsas de papitas criollas del Papal para el piquete y la canasta, y la **Ruta del barro**, con el barro de Ráquira para el horno de barro. Cada una con su chiva y su carretera.
+- Su persona es **Doña Gertrudis, la quesera**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 5 íconos nuevos.
+- El mapa: el hato lechero con vacas holstein, eucaliptos, cipreses, pacas de heno y frailejones. En las estaciones: la tina de cuajar, los aros de madera soltando el suero, la cava con las ruedas de queso que se doran, el horno de almojábanas con su boca encendida, las mesas largas del piquete con la gente comiendo en ruana y el horno de barro en el patio.
+
 ## v3.24.0 — Boyacá: Ráquira
 - **🏺 Ráquira**, la tercera zona de Boyacá, se abre al completar La Cervecería. La Mina de greda saca la arcilla y el Amasado del barro la deja lista; el barro se reparte entre las **Ollas de barro**, el **Torno** (que le pasa las piezas al **Horno de leña**, de donde salen las materas pintadas) y las **Jarras**, que se llenan con cerveza.
 - **Primera ruta de Boyacá: la Ruta de la cerveza**, de la Cervecería a las Jarras de Ráquira, con su chiva y su carretera en los dos mapas.

@@ -178,6 +178,18 @@ export const STATIONS = [
   { id: 'pottery_kiln', zone: 'raquira', name: 'Horno de leña', icon: ICON.matera, in: { pieza_torneada: 2 }, out: { matera: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.24' },
   { id: 'jarras', zone: 'raquira', name: 'Jarras', icon: ICON.jarraCerveza, in: { barro: 4 }, imports: [{ product: 'beer', perCycle: 1, route: 'cerveza' }], out: { jarra_cerveza: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.24' },
 
+  // Boyacá · Paipa (v3.25), tierra de quesos y de amasijos: la leche se cuaja, la cuajada se prensa en moldes y
+  // madura en la cava (el queso Paipa), y con el queso se hacen almojábanas. Las almojábanas se reparten entre
+  // la Mesa del piquete, que las sirve con las papitas del Papal, y el Horno de barro, que hace la canasta de
+  // amasijos y se mantiene con el barro de Ráquira. Mismos números que el Hato y la Quesera.
+  { id: 'paipa_herd', zone: 'paipa', name: 'Hato lechero', icon: ICON.rawMilk, infinite: true, out: { paipa_milk: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.25' },
+  { id: 'paipa_curdler', zone: 'paipa', name: 'Cuajadera de Paipa', icon: ICON.cuajada, in: { paipa_milk: 2 }, out: { paipa_curd: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.25' },
+  { id: 'cheese_molds', zone: 'paipa', name: 'Moldes de queso', icon: ICON.moldedCheese, in: { paipa_curd: 1 }, out: { molded_cheese: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.25' },
+  { id: 'cheese_cave', zone: 'paipa', name: 'Cava de maduración', icon: ICON.quesoPaipa, in: { molded_cheese: 1 }, out: { queso_paipa: 1 }, cycle: 4, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '3.25' },
+  { id: 'almojabana_oven', zone: 'paipa', name: 'Horno de almojábanas', icon: ICON.almojabana, in: { queso_paipa: 2 }, out: { almojabana: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '3.25' },
+  { id: 'piquete_table', zone: 'paipa', name: 'Mesa del piquete', icon: ICON.piquete, in: { almojabana: 2 }, imports: [{ product: 'criollas_bag', perCycle: 1, route: 'papitas' }], out: { piquete: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.25' },
+  { id: 'clay_oven', zone: 'paipa', name: 'Horno de barro', icon: ICON.amasijos, in: { almojabana: 2 }, imports: [{ product: 'criollas_bag', perCycle: 1, route: 'papitas' }, { product: 'barro', perCycle: 4, route: 'barro' }], out: { canasta_amasijos: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.25' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

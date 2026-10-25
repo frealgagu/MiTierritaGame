@@ -3082,6 +3082,168 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Boyacá · Paipa (v3.25) ---
+
+  // Cuajadera de Paipa: casa blanca con zócalo verde y la tina de cuajar en el corredor, con las cantinas.
+  paipa_curdler(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xf7f4ee, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.7, 16, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, 0x2f7d4f);
+    for (const [cx, cy] of [[2.4, 2.1], [2.7, 2.25], [2.45, 2.5]]) {
+      const p = iso(x + cx, y + cy);
+      g.roundRect(p.x - 4, p.y - 13, 8, 13, 2).fill(0xc7ccd1).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 13, 3, 1.4).fill(0x9aa3a8);
+    }
+    box(g, x + 0.45, y + 2.05, 1.4, 0.55, 7, 0x9aa3a8);
+    const tub = iso(x + 1.15, y + 2.32, 7);
+    g.ellipse(tub.x, tub.y - 0.5, 15, 4.5).fill(0xfbfaf6);
+    const stir = new Graphics();
+    this.anim.addChild(stir);
+    this.animate = (time) => {
+      stir.clear();
+      for (let i = 0; i < 5; i++) stir.circle(tub.x - 10 + i * 5, tub.y - 0.5 + Math.sin(i * 2) * 1.5, 1.8).fill(0xece6d6);
+      const a = this.working ? time * 2 : 0;
+      stir.moveTo(tub.x + Math.cos(a) * 8, tub.y + Math.sin(a) * 2).lineTo(tub.x + 6 + Math.cos(a) * 4, tub.y - 16).stroke({ width: 2, color: PAL.wood });
+    };
+    this.animate(0);
+  },
+
+  // Moldes de queso: ramada con la mesa de los aros de madera y las tablas que prensan, y el suero.
+  cheese_molds(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 24 + ctx.up;
+    box(g, x0 + 0.4, y0 + 0.4, 1.6, 0.6, 9, PAL.wood);
+    for (let i = 0; i < 4; i++) {
+      const p = iso(x0 + 0.65 + i * 0.38, y0 + 0.7, 9);
+      g.ellipse(p.x, p.y - 3, 5, 2.4).fill(0xa0703a).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x, p.y - 4.5, 4, 1.8).fill(0xfbfaf6);
+      g.rect(p.x - 1, p.y - 12, 2, 7).fill(0x9aa3a8);
+    }
+    for (const [bx, by] of [[1.9, 1.95], [2.2, 2.1], [2.0, 2.3]]) {
+      const p = iso(x0 + bx, y0 + by);
+      g.ellipse(p.x, p.y - 3, 5, 2.4).fill(0xfbfaf6).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+      g.rect(p.x - 5, p.y - 3, 10, 3).fill(0xf4efe1);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 13, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    const drip = new Graphics();
+    this.anim.addChild(drip);
+    this.animate = (time) => {
+      drip.clear();
+      if (!this.working) return;
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 1.2 + i / 4) % 1;
+        const p = iso(x0 + 0.65 + i * 0.38, y0 + 0.95, 9);
+        drip.circle(p.x, p.y + f * 8, 0.9).fill(0xe8f0d0);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Cava de maduración: casa de piedra con las ruedas de queso en repisas, que se doran con los hitos.
+  cheese_cave(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.2;
+    house(this, g, hx, hy, 1.9, 1.3, 26, ctx, { wall: 0xb9b2a5, roofH: 13 });
+    door(g, hx, hy, 1.3, 0.6, 16, 0x5e3b1c);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, 0x5e3b1c);
+    for (let r = 0; r < 3; r++) {
+      box(g, x + 0.4, y + 2.0, 2.2, 0.35, 2, PAL.wood, { z: r * 7 });
+      for (let k = 0; k < 4; k++) {
+        const p = iso(x + 0.6 + k * 0.5, y + 2.17, r * 7 + 2);
+        const ripe = (k + r + ctx.tier) % 3;
+        g.ellipse(p.x, p.y - 2.5, 5, 3).fill([0xfbfaf6, 0xf6d860, 0xd9a330][ripe]).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      }
+    }
+    for (const lx of [0.4, 2.6]) box(g, x + lx, y + 2.0, 0.06, 0.35, 21, PAL.woodDark);
+  },
+
+  // Horno de almojábanas: casa amarilla con el horno de ladrillo en el corredor y las latas de almojábanas.
+  almojabana_oven(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xf6d860, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.7, 16, 0x2e6fd1);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, 0x2e6fd1);
+    box(g, x + 0.4, y + 2.0, 0.9, 0.6, 14, 0xb5562e);
+    const mouth = iso(x + 0.85, y + 2.6, 7);
+    g.roundRect(mouth.x - 6, mouth.y - 6, 12, 8, 3).fill(0x2b1d14);
+    box(g, x + 1.7, y + 2.1, 0.9, 0.45, 8, PAL.wood);
+    for (let i = 0; i < 4; i++) {
+      const p = iso(x + 1.85 + (i % 2) * 0.4, y + 2.22 + Math.floor(i / 2) * 0.2, 8);
+      g.circle(p.x, p.y - 2, 2.6).fill(PRODUCTS.almojabana.color).stroke({ width: 0.4, color: 0x8a5a0a });
+    }
+    this.smokePoints = [iso(x + 0.85, y + 2.3, 16)];
+    const glow = new Graphics();
+    this.anim.addChild(glow);
+    this.animate = (time) => {
+      glow.clear();
+      if (this.working) glow.roundRect(mouth.x - 5, mouth.y - 5, 10, 6, 3).fill({ color: 0xff8c1a, alpha: 0.6 + Math.sin(time * 7) * 0.25 });
+    };
+    this.animate(0);
+  },
+
+  // Mesa del piquete: casa con las mesas largas afuera y las bandejas del piquete; la gente come.
+  piquete_table(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.2, 1.4, 28, ctx, { wall: 0xf7f4ee, roofH: 14 });
+    door(g, hx, hy, 1.4, 1.5, 18, 0xd7263d);
+    windowOnRight(this, g, hx, hy, 2.2, 0.7, 14, 0xd7263d);
+    box(g, x + 0.4, y + 2.15, 2.2, 0.5, 8, PAL.wood);
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const p = iso(x + 0.6 + i * 0.45, y + 2.4, 8);
+      g.ellipse(p.x, p.y, 5, 2.4).fill(0xc68a4a).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      for (const dx of [-2, 0, 2]) g.circle(p.x + dx, p.y - 0.6, 1.1).fill(0xf2b705);
+    }
+    const eaters = new Graphics();
+    this.anim.addChild(eaters);
+    this.animate = (time) => {
+      eaters.clear();
+      for (const [k, bx] of [0.8, 1.9].entries()) {
+        const p = iso(x + bx, y + 2.85);
+        worker(eaters, p.x, p.y, k ? 0x8e44ad : 0x2e6fd1);
+        eaters.poly([p.x - 5, p.y - 17, p.x + 5, p.y - 17, p.x + 6, p.y - 11, p.x - 6, p.y - 11]).fill(k ? 0x8d6e63 : 0x6d4c41);
+        const m = this.working ? Math.max(0, Math.sin(time * 3 + k * 2)) : 0;
+        eaters.moveTo(p.x + 3, p.y - 14).lineTo(p.x + 3 - m * 2, p.y - 18 - m * 2).stroke({ width: 1.4, color: 0x8d5524 });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Horno de barro: el horno de cúpula de barro en el patio, con la boca encendida, la mesa de amasar y las
+  // canastas de amasijos.
+  clay_oven(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.2, 28, ctx, { wall: 0xf28c9a, roofH: 14 });
+    door(g, hx, hy, 1.2, 1.8, 18, 0x2f7d4f);
+    const k = iso(x + 0.9, y + 2.25);
+    g.moveTo(k.x - 18, k.y).quadraticCurveTo(k.x - 18, k.y - 26, k.x, k.y - 27).quadraticCurveTo(k.x + 18, k.y - 26, k.x + 18, k.y).quadraticCurveTo(k.x, k.y + 6, k.x - 18, k.y).closePath().fill(0xb5653a).stroke(OUTLINE);
+    g.moveTo(k.x - 6, k.y + 2).lineTo(k.x - 6, k.y - 8).quadraticCurveTo(k.x, k.y - 13, k.x + 6, k.y - 8).lineTo(k.x + 6, k.y + 2).closePath().fill(0x2b1d14);
+    for (const [bx, by] of [[2.0, 2.2], [2.45, 2.35]].slice(0, 1 + Math.min(ctx.tier, 1))) {
+      const p = iso(x + bx, y + by);
+      g.poly([p.x - 8, p.y - 9, p.x + 8, p.y - 9, p.x + 6, p.y, p.x - 6, p.y]).fill(0xb08850).stroke(OUTLINE);
+      for (const dx of [-4, 0, 4]) g.circle(p.x + dx, p.y - 10, 2.4).fill(PRODUCTS.almojabana.color);
+    }
+    this.smokePoints = [iso(x + 0.9, y + 2.0, 28)];
+    const flame = new Graphics();
+    this.anim.addChild(flame);
+    this.animate = (time) => {
+      flame.clear();
+      if (!this.working) return;
+      const h = 7 + Math.sin(time * 9) * 2;
+      flame.poly([k.x - 5, k.y + 1, k.x - 2, k.y - h * 0.6, k.x, k.y - h, k.x + 2, k.y - h * 0.5, k.x + 5, k.y + 1]).fill(0xff8c1a);
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

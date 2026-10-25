@@ -227,7 +227,8 @@ export class Terrain {
           if (r < 0.04) obj = eucalyptus(rng);
           else if (r < 0.07) obj = cypress(rng);
           else if (r < 0.09) obj = hayBale(rng);
-          else if (r < 0.11) obj = rock(rng);
+          // En Paipa (v3.25), frailejones del páramo donde la Lechería tiene piedras.
+          else if (r < 0.11) obj = this.zone.style === 'paipa' && r < 0.1 ? frailejon(rng) : rock(rng);
         } else if (this.zone.theme === 'rice') {
           // Arrozal (v3.15): ceibas grandes, palmas de coco, garzas blancas y plátano.
           if (r < 0.025) obj = ceiba(rng);

@@ -487,5 +487,27 @@ const RAQUIRA = [
   { id: 'i_final', type: 'sold', product: 'jarra_cerveza', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA, ...PAPAL, ...CERVECERIA, ...RAQUIRA];
+// Boyacá · Paipa (v3.25): la misma lista que el Hato y la Quesera.
+const PAIPA = [
+  { id: 'j01', type: 'sold', product: 'paipa_milk', amount: 50, reward: 75000 },
+  { id: 'j02', type: 'level', target: 'paipa_herd', level: 10, reward: 125000 },
+  { id: 'j03', type: 'unlock', station: 'paipa_curdler', reward: 250000 },
+  { id: 'j04', type: 'level', target: 'paipa_herd:transport', level: 10, reward: 250000 },
+  { id: 'j05', type: 'unlock', station: 'cheese_molds', reward: 500000 },
+  { id: 'j06', type: 'produced', product: 'molded_cheese', amount: 200, reward: 750000 },
+  { id: 'j08', type: 'unlock', station: 'cheese_cave', reward: 1500000 },
+  { id: 'j09', type: 'level', target: 'dispatch:paipa', level: 10, reward: 1500000 },
+  { id: 'j10', type: 'unlock', station: 'almojabana_oven', reward: 2500000 },
+  { id: 'j11', type: 'produced', product: 'almojabana', amount: 300, reward: 3750000 },
+  { id: 'j12', type: 'unlock', station: 'piquete_table', reward: 6250000 },
+  { id: 'j13', type: 'sold', product: 'piquete', amount: 200, reward: 7500000 },
+  { id: 'j14', type: 'unlock', station: 'clay_oven', reward: 12500000 },
+  { id: 'j15', type: 'imported', product: 'barro', amount: 500, reward: 15000000 },
+  { id: 'j16', type: 'allLevels', zone: 'paipa', level: 25, reward: 20000000 },
+  { id: 'j07', type: 'research', research: 'pasto_kikuyo', reward: 10000000 },
+  { id: 'j17', type: 'sold', product: 'canasta_amasijos', amount: 1000, reward: 30000000 },
+  { id: 'j_final', type: 'sold', product: 'canasta_amasijos', amount: 4000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA, ...PAPAL, ...CERVECERIA, ...RAQUIRA, ...PAIPA];

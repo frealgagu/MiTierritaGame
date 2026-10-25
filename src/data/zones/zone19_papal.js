@@ -30,5 +30,9 @@ export const ZONE19 = {
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
   unlockedBy: null, // la primera de Boyacá: se abre con la región
+  // Carretera de la Ruta de las papitas (v3.25): sale de la bodega hacia Paipa.
+  routes: {
+    papitas: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Papitas a Paipa ➜' },
+  },
   next: 'cerveceria',
 };

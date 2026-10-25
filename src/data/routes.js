@@ -397,6 +397,40 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.24',
   },
+  // A Paipa (v3.25): las papitas del Papal (para el piquete y la canasta) y el barro de Ráquira (para el
+  // Horno de barro).
+  {
+    id: 'papitas',
+    name: 'Ruta de las papitas',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'criollas_bag',
+    from: 'papal',
+    to: 'paipa',
+    stations: ['piquete_table', 'clay_oven'],
+    tab: 'Papitas',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 5000,
+    growth: 1.15,
+    release: '3.25',
+  },
+  {
+    id: 'barro',
+    name: 'Ruta del barro',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'barro',
+    from: 'raquira',
+    to: 'paipa',
+    stations: ['clay_oven'],
+    tab: 'Barro',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 8000,
+    growth: 1.15,
+    release: '3.25',
+  },
   // Al Hato (v3.3): el bocadillo veleño de la Guayabera (el postre) y la fibra de la Fiquera (la cabuya
   // con que se amarra el fiambre).
   {

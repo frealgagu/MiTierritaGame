@@ -137,6 +137,11 @@ export const ICON = {
   piezaTorneada: '\uE083', // Pieza torneada: la vasija cruda, sin hornear, girando en el torno del alfarero
   matera: '\uE084', // Matera pintada: la matera de barro horneado con flores pintadas y una mata sembrada
   jarraCerveza: '\uE085', // Jarra de barro con cerveza: la jarra de Ráquira, con su asa, llena y con espuma
+  moldedCheese: '\uE086', // Queso en molde: el queso fresco apretado en su aro de madera, soltando el suero
+  quesoPaipa: '\uE087', // Queso Paipa: la rueda madurada, de corteza dorada, con su tajada cortada
+  almojabana: '\uE088', // Almojábanas: los panecitos redondos y dorados de queso y cuajada, en un canasto
+  piquete: '\uE089', // Piquete boyacense: la bandeja con papitas criollas, mazorca, queso y ají en el centro
+  amasijos: '\uE08A', // Canasta de amasijos: almojábanas, garullas y mantecadas recién salidas del horno de barro
 };
 
 export const ICON_FONT = 'Cafetal Icons';

@@ -33,7 +33,9 @@ export const ZONE21 = {
   // Carretera por la que llega la Ruta de la cerveza, hasta las Jarras.
   routes: {
     cerveza: { road: [[25.9, 14.5], [20.3, 14.5]], sign: [24.2, 13.3], text: '⬅ De la Cervecería' },
+    // La Ruta del barro sale de la bodega hacia Paipa (v3.25).
+    barro: { road: [[24.5, 17.2], [24.5, 16.5], [25.9, 16.5]], sign: [25.3, 15.6], text: 'Barro a Paipa ➜' },
   },
   unlockedBy: 'cerveceria',
-  next: null,
+  next: 'paipa',
 };

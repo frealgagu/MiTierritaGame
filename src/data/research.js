@@ -289,6 +289,19 @@ export const RESEARCH = [
   { zone: 'raquira', id: 'capital_artesanal', name: 'Capital artesanal', icon: '🏅', desc: 'Las jarras con cerveza valen un 50 % más.', cost: 50000000, requires: 'jarras', effect: { type: 'productValue', target: 'jarra_cerveza', mult: 1.5 } },
   { zone: 'raquira', id: 'maestria_raquira', name: 'Maestría: Ráquira', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'raquira', mult: 4 } },
   { zone: 'raquira', id: 'supremacia_raquira', name: 'Supremacía: Ráquira', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'raquira', mult: 8 } },
+
+  // Boyacá · Paipa (v3.25): las mismas del Hato y la Quesera, con el queso.
+  { zone: 'paipa', id: 'pasto_kikuyo', name: 'Pasto kikuyo', icon: '🌱', desc: 'El Hato lechero da el doble de leche.', cost: 1000000, requires: 'paipa_curdler', effect: { type: 'stationSpeed', target: 'paipa_herd', mult: 2 } },
+  { zone: 'paipa', id: 'tinas_cuajar', name: 'Tinas de cuajar', icon: ICON.cuajada, desc: 'La Cuajadera de Paipa cuaja el doble.', cost: 1200000, requires: 'paipa_curdler', effect: { type: 'stationSpeed', target: 'paipa_curdler', mult: 2 } },
+  { zone: 'paipa', id: 'aros_madera', name: 'Aros de madera', icon: ICON.moldedCheese, desc: 'Los Moldes de queso moldean el doble.', cost: 3000000, requires: 'cheese_cave', effect: { type: 'stationSpeed', target: 'cheese_molds', mult: 2 } },
+  { zone: 'paipa', id: 'camion_paipa', name: 'Camión de Paipa', icon: '🚚', desc: 'El despacho de Paipa lleva el doble por viaje.', cost: 5000000, requires: 'cheese_molds', effect: { type: 'dispatchCapacity', target: 'paipa', mult: 2 } },
+  { zone: 'paipa', id: 'cava_fria', name: 'Cava fría', icon: ICON.quesoPaipa, desc: 'La Cava de maduración madura el doble.', cost: 8000000, requires: 'almojabana_oven', effect: { type: 'stationSpeed', target: 'cheese_cave', mult: 2 } },
+  { zone: 'paipa', id: 'horno_doble', name: 'Horno doble', icon: ICON.almojabana, desc: 'El Horno de almojábanas hornea el doble.', cost: 20000000, requires: 'piquete_table', effect: { type: 'stationSpeed', target: 'almojabana_oven', mult: 2 } },
+  { zone: 'paipa', id: 'mesa_larga', name: 'Mesa larga', icon: ICON.piquete, desc: 'La Mesa del piquete sirve el doble.', cost: 50000000, requires: 'clay_oven', effect: { type: 'stationSpeed', target: 'piquete_table', mult: 2 } },
+  { zone: 'paipa', id: 'horno_barro_grande', name: 'Horno de barro grande', icon: ICON.amasijos, desc: 'El Horno de barro hace el doble (las rutas se ajustan solas).', cost: 80000000, requires: 'clay_oven', effect: { type: 'stationSpeed', target: 'clay_oven', mult: 2 } },
+  { zone: 'paipa', id: 'denominacion_paipa', name: 'Denominación de origen', icon: '🏅', desc: 'Todo lo que vende Paipa vale un 50 % más.', cost: 60000000, requires: 'piquete_table', effect: { type: 'zoneValue', target: 'paipa', mult: 1.5 } },
+  { zone: 'paipa', id: 'maestria_paipa', name: 'Maestría: Paipa', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'paipa', mult: 4 } },
+  { zone: 'paipa', id: 'supremacia_paipa', name: 'Supremacía: Paipa', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'paipa', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

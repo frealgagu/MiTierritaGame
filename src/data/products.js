@@ -149,6 +149,15 @@ export const PRODUCTS = {
   olla_barro: { name: 'Olla de barro', zone: 'raquira', value: 2400, icon: ICON.ollaBarro, color: 0x4e342e },
   jarra_cerveza: { name: 'Jarra de barro con cerveza', zone: 'raquira', value: 4000, icon: ICON.jarraCerveza, color: 0xb5653a },
 
+  // Boyacá · Paipa (v3.25): los mismos valores que el Hato y la Quesera.
+  paipa_milk: { name: 'Leche fresca', zone: 'paipa', value: 1000, icon: ICON.rawMilk, color: 0xfbfaf6 },
+  paipa_curd: { name: 'Cuajada de Paipa', zone: 'paipa', value: 2500, icon: ICON.cuajada, color: 0xf4f1e8 },
+  molded_cheese: { name: 'Queso en molde', zone: 'paipa', value: 4400, icon: ICON.moldedCheese, color: 0xfbfaf6 },
+  queso_paipa: { name: 'Queso Paipa', zone: 'paipa', value: 8800, icon: ICON.quesoPaipa, color: 0xf2c14e },
+  almojabana: { name: 'Almojábanas', zone: 'paipa', value: 22000, icon: ICON.almojabana, color: 0xe8a53a },
+  piquete: { name: 'Piquete boyacense', zone: 'paipa', value: 100000, icon: ICON.piquete, color: 0xc68a4a },
+  canasta_amasijos: { name: 'Canasta de amasijos', zone: 'paipa', value: 220000, icon: ICON.amasijos, color: 0xb08850 },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

@@ -2137,6 +2137,63 @@ def jarra_cerveza():
     return layers
 
 
+# ---------- Boyacá · Paipa (v3.25) ----------
+
+def molded_cheese():
+    """Queso en molde: el queso fresco apretado en su aro de madera, soltando el suero."""
+    layers = [(OUTLINE, [ellipse(50, 74, 40, 14)]), ('#c8a26a', [ellipse(50, 74, 37, 11.5)])]
+    layers.append((OUTLINE, ['M 18 48 L 18 70 Q 50 84 82 70 L 82 48 Z']))
+    layers.append(('#a0703a', ['M 20.5 50 L 20.5 69 Q 50 81.5 79.5 69 L 79.5 50 Z']))
+    layers.append(('#7a5a30', [rib(20, 60, 80, 60, 1.2)]))
+    layers.append((OUTLINE, [ellipse(50, 48, 32, 10)]))
+    layers.append(('#fbfaf6', [ellipse(50, 48, 29.5, 7.5)]))
+    layers.append(('#b0bec5', [rect(46, 22, 8, 22)]))
+    layers.append(('#e8f0d0', ['M 84 72 Q 88 80 84 84 Q 80 80 84 72 Z']))
+    return layers
+
+
+def queso_paipa():
+    """Queso Paipa: la rueda madurada, de corteza dorada, con su tajada cortada."""
+    layers = [(OUTLINE, ['M 8 46 L 8 72 Q 50 92 92 72 L 92 46 Z', ellipse(50, 46, 42, 14)])]
+    layers.append(('#d9a330', ['M 10.5 48 L 10.5 70 Q 50 89 89.5 70 L 89.5 48 Z']))
+    layers.append(('#f2c14e', [ellipse(50, 46, 39.5, 11.5)]))
+    layers.append(('#fff3c4', ['M 50 46 L 89.5 46 L 89.5 70 L 50 82 Z']))
+    layers.append(('#f2c14e', ['M 50 46 L 89.5 46 L 70 56 Z']))
+    layers.append(('#d9a330', [circle(64, 66, 2), circle(76, 60, 1.6), circle(58, 74, 1.4)]))
+    return layers
+
+
+def almojabana():
+    """Almojábanas: los panecitos redondos y dorados de queso y cuajada, en un canasto."""
+    layers = [(OUTLINE, ['M 8 58 L 92 58 L 82 92 L 18 92 Z']), ('#b08850', ['M 11.5 60.5 L 88.5 60.5 L 80 89.5 L 20 89.5 Z'])]
+    layers.append(('#7a5a30', [rib(16 + k * 10, 62, 22 + k * 8, 88, 1) for k in range(7)]))
+    for cx, cy in [(28, 52), (50, 46), (72, 52), (38, 60), (62, 60)]:
+        layers += [(OUTLINE, [circle(cx, cy, 13)]), ('#e8a53a', [circle(cx, cy, 11.5)]), ('#f6c66a', [circle(cx - 3, cy - 4, 5)])]
+    return layers
+
+
+def piquete():
+    """Piquete boyacense: la bandeja con papitas criollas, mazorca, queso y ají en el centro."""
+    layers = [(OUTLINE, [ellipse(50, 66, 46, 24)]), ('#c68a4a', [ellipse(50, 66, 43, 21.5)])]
+    for cx, cy in [(26, 62), (34, 72), (42, 64), (30, 54)]:
+        layers += [(OUTLINE, [circle(cx, cy, 6)]), ('#f2b705', [circle(cx, cy, 4.8)])]
+    layers += [(OUTLINE, [ellipse(64, 54, 16, 6, -20)]), ('#f6d860', [ellipse(64, 54, 14, 4.6, -20)])]
+    layers.append(('#e0b84a', [circle(58 + k * 3, 56 - k * 1.1, 1.2) for k in range(5)]))
+    layers += [(OUTLINE, [poly(56, 72, 70, 66, 74, 76, 60, 82)]), ('#fff3c4', [poly(57.5, 72.5, 69, 67.5, 72, 75.5, 61, 80)])]
+    layers += [(OUTLINE, [circle(76, 76, 7)]), ('#ffffff', [circle(76, 76, 5.6)]), ('#4caf50', [circle(76, 76, 3.6)]), ('#d7263d', [circle(77, 75, 1.2)])]
+    return layers
+
+
+def amasijos():
+    """Canasta de amasijos: almojábanas, garullas y mantecadas recién salidas del horno de barro."""
+    layers = [(OUTLINE, ['M 8 50 L 92 50 L 82 92 L 18 92 Z', 'M 20 50 Q 50 8 80 50 L 74 50 Q 50 18 26 50 Z']), ('#b08850', ['M 11.5 52.5 L 88.5 52.5 L 80 89.5 L 20 89.5 Z', 'M 22 50 Q 50 12 78 50 L 76 50 Q 50 16 24 50 Z'])]
+    layers.append(('#d7263d', [rect(12, 62, 76, 6)]))
+    for cx, cy, col in [(28, 46, '#e8a53a'), (50, 42, '#f6d860'), (72, 46, '#d9772e')]:
+        layers += [(OUTLINE, [circle(cx, cy, 10)]), (col, [circle(cx, cy, 8.5)])]
+    layers.append(('#fff3c4', [circle(26, 43, 3), circle(48, 39, 3), circle(70, 43, 3)]))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -2272,6 +2329,11 @@ ICONS = [
     (0xE083, 'pieza_torneada', pieza_torneada),
     (0xE084, 'matera', matera),
     (0xE085, 'jarra_cerveza', jarra_cerveza),
+    (0xE086, 'molded_cheese', molded_cheese),
+    (0xE087, 'queso_paipa', queso_paipa),
+    (0xE088, 'almojabana', almojabana),
+    (0xE089, 'piquete', piquete),
+    (0xE08A, 'amasijos', amasijos),
 ]
 
 

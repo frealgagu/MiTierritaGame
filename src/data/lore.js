@@ -97,6 +97,14 @@ export const FACTS = {
   rice_sorter: ['El arroz excelso tiene casi todos los granos enteros.'],
   rice_bagger: ['En la Costa no hay almuerzo sin arroz: de coco, de lisa…'],
   rice_stacker: ['Un bulto de arroz pesa 50 kilos y se carga al hombro.'],
+  // Boyacá · Paipa (v3.25)
+  paipa_herd: ['En las lecherías de Boyacá se ordeña al amanecer, entre la neblina.'],
+  paipa_curdler: ['La cuajada fresca se come con melao de panela: es un postre boyacense.'],
+  cheese_molds: ['El queso se aprieta en aros de madera para que suelte el suero.'],
+  cheese_cave: ['El queso Paipa madura semanas y tiene denominación de origen.', 'Su corteza amarilla y su sabor fuerte lo hacen distinto.'],
+  almojabana_oven: ['La almojábana se hace con cuajada, queso y harina de maíz.', 'Almojábanas, garullas y mantecadas: los amasijos de Boyacá.'],
+  piquete_table: ['El piquete lleva papa criolla, mazorca, carnes, queso y ají.'],
+  clay_oven: ['Los amasijos se hornean en hornos de barro calentados con leña.', 'Paipa también es famosa por sus aguas termales.'],
   // Boyacá · Ráquira (v3.24)
   clay_pit: ['Ráquira, en lengua muisca, quiere decir ciudad de las ollas.', 'La greda se saca de las lomas secas que rodean el pueblo.'],
   clay_kneader: ['El barro se amasa con pies y manos hasta que no quede ni una piedra.'],
@@ -178,6 +186,7 @@ export const PEOPLE = {
   papal: { icon: '👨🏻‍🌾', name: 'Don Aurelio', role: 'el papicultor' },
   cerveceria: { icon: '🧔🏻', name: 'Don Hernando', role: 'el cervecero' },
   raquira: { icon: '👩🏽', name: 'Doña Lucila', role: 'la alfarera' },
+  paipa: { icon: '👵🏻', name: 'Doña Gertrudis', role: 'la quesera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -196,6 +205,7 @@ export const WELCOME = {
   hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
   arrozal: '¡Ajá, bienvenido a la Costa, compa! Aquí el arroz crece con los pies en el agua.',
   cocal: '¡Ey, mi vida, bienvenido al Cocal! Aquí bajamos el coco de la palma y lo volvemos cocada.',
+  paipa: '¡Siga, sumercé, bienvenido a Paipa! Aquí el queso madura despacito y las almojábanas salen calienticas.',
   raquira: '¡Bienvenido a Ráquira, sumercé! Aquí el barro se vuelve ollas, materas, caballitos y jarras.',
   cerveceria: '¡Qué más, sumercé! Aquí la cebada del altiplano se vuelve malta, y la malta, cerveza.',
   papal: '¡Sumercé, bienvenido a Boyacá! Aquí la papa se da en la tierra fría, entre la neblina y los eucaliptos.',
