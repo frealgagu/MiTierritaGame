@@ -158,6 +158,14 @@ export const PRODUCTS = {
   piquete: { name: 'Piquete boyacense', zone: 'paipa', value: 100000, icon: ICON.piquete, color: 0xc68a4a },
   canasta_amasijos: { name: 'Canasta de amasijos', zone: 'paipa', value: 220000, icon: ICON.amasijos, color: 0xb08850 },
 
+  // Boyacá · Las Ruanas (v3.26): los mismos valores que las Hormigas y el Sombrero.
+  wool: { name: 'Lana', zone: 'ruanas', value: 6000, icon: ICON.wool, color: 0xece4cf },
+  clean_wool: { name: 'Lana lavada', zone: 'ruanas', value: 12000, icon: ICON.cleanWool, color: 0xffffff },
+  carded_wool: { name: 'Lana cardada', zone: 'ruanas', value: 30000, icon: ICON.cardedWool, color: 0xfbfaf6 },
+  wool_yarn: { name: 'Hilo de lana', zone: 'ruanas', value: 70000, icon: ICON.woolYarn, color: 0x8e44ad },
+  ruana: { name: 'Ruana', zone: 'ruanas', value: 120000, icon: ICON.ruana, color: 0x6d4c41 },
+  recuerdo_boyaca: { name: 'Recuerdo de Boyacá', zone: 'ruanas', value: 1200000, icon: ICON.recuerdoBoyaca, color: 0xd9772e },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

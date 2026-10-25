@@ -97,6 +97,13 @@ export const FACTS = {
   rice_sorter: ['El arroz excelso tiene casi todos los granos enteros.'],
   rice_bagger: ['En la Costa no hay almuerzo sin arroz: de coco, de lisa…'],
   rice_stacker: ['Un bulto de arroz pesa 50 kilos y se carga al hombro.'],
+  // Boyacá · Las Ruanas (v3.26)
+  sheep_pasture: ['Las ovejas aguantan el frío del páramo gracias a su lana.', 'A las ovejas se les trasquila la lana una o dos veces al año.'],
+  wool_washer: ['La lana se lava en agua de quebrada para quitarle la grasa y la tierra.'],
+  carder: ['Cardar es peinar la lana con púas hasta dejarla suave como una nube.'],
+  spinning_wheel: ['En la rueca, la lana cardada se tuerce hasta volverse hilo.'],
+  ruana_loom: ['La ruana es una manta de lana con un hueco para la cabeza.', 'La ruana boyacense abriga en las madrugadas frías del altiplano.'],
+  tienda_nobsa: ['Nobsa es famosa en todo el país por sus ruanas de lana.'],
   // Boyacá · Paipa (v3.25)
   paipa_herd: ['En las lecherías de Boyacá se ordeña al amanecer, entre la neblina.'],
   paipa_curdler: ['La cuajada fresca se come con melao de panela: es un postre boyacense.'],
@@ -187,6 +194,7 @@ export const PEOPLE = {
   cerveceria: { icon: '🧔🏻', name: 'Don Hernando', role: 'el cervecero' },
   raquira: { icon: '👩🏽', name: 'Doña Lucila', role: 'la alfarera' },
   paipa: { icon: '👵🏻', name: 'Doña Gertrudis', role: 'la quesera' },
+  ruanas: { icon: '👴🏻', name: 'Don Clímaco', role: 'el tejedor' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -205,6 +213,7 @@ export const WELCOME = {
   hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
   arrozal: '¡Ajá, bienvenido a la Costa, compa! Aquí el arroz crece con los pies en el agua.',
   cocal: '¡Ey, mi vida, bienvenido al Cocal! Aquí bajamos el coco de la palma y lo volvemos cocada.',
+  ruanas: '¡Bien pueda, sumercé! Aquí la lana de las ovejas se vuelve ruana, para el frío del altiplano.',
   paipa: '¡Siga, sumercé, bienvenido a Paipa! Aquí el queso madura despacito y las almojábanas salen calienticas.',
   raquira: '¡Bienvenido a Ráquira, sumercé! Aquí el barro se vuelve ollas, materas, caballitos y jarras.',
   cerveceria: '¡Qué más, sumercé! Aquí la cebada del altiplano se vuelve malta, y la malta, cerveza.',

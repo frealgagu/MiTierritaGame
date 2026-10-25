@@ -190,6 +190,16 @@ export const STATIONS = [
   { id: 'piquete_table', zone: 'paipa', name: 'Mesa del piquete', icon: ICON.piquete, in: { almojabana: 2 }, imports: [{ product: 'criollas_bag', perCycle: 1, route: 'papitas' }], out: { piquete: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.25' },
   { id: 'clay_oven', zone: 'paipa', name: 'Horno de barro', icon: ICON.amasijos, in: { almojabana: 2 }, imports: [{ product: 'criollas_bag', perCycle: 1, route: 'papitas' }, { product: 'barro', perCycle: 4, route: 'barro' }], out: { canasta_amasijos: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.25' },
 
+  // Boyacá · Las Ruanas (v3.26), en Nobsa, la tierra de las ruanas: la lana se trasquila, se lava, se carda,
+  // se hila en la rueca y se teje en el telar. La Tienda de Nobsa vende el recuerdo de Boyacá: ruanas con las
+  // ollas y las materas de Ráquira. Mismos números que las Hormigas y el Sombrero.
+  { id: 'sheep_pasture', zone: 'ruanas', name: 'Rebaño de ovejas', icon: ICON.sheep, infinite: true, out: { wool: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.26' },
+  { id: 'wool_washer', zone: 'ruanas', name: 'Lavado de lana', icon: ICON.cleanWool, in: { wool: 1 }, out: { clean_wool: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.26' },
+  { id: 'carder', zone: 'ruanas', name: 'Cardado', icon: ICON.cardedWool, in: { clean_wool: 2 }, out: { carded_wool: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.26' },
+  { id: 'spinning_wheel', zone: 'ruanas', name: 'Hilado en rueca', icon: ICON.woolYarn, in: { carded_wool: 2 }, out: { wool_yarn: 1 }, cycle: 8, unlockCost: 200000000, upgradeBase: 60000, growth: 1.15, release: '3.26' },
+  { id: 'ruana_loom', zone: 'ruanas', name: 'Telar de ruanas', icon: ICON.ruana, in: { wool_yarn: 1 }, out: { ruana: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.26' },
+  { id: 'tienda_nobsa', zone: 'ruanas', name: 'Tienda de Nobsa', icon: ICON.recuerdoBoyaca, in: { ruana: 4 }, imports: [{ product: 'olla_barro', perCycle: 1, route: 'ollas' }, { product: 'matera', perCycle: 1, route: 'materas' }], out: { recuerdo_boyaca: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.26' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

@@ -590,15 +590,15 @@ test('Boyacá se abre al completar Cartagena y, mientras le falten zonas, no se 
   root.regions.costa.zones.cartagena.complete = true;
   assert.deepEqual(openRegions(root), ['boyaca']);
   const b = regionState(root, 'boyaca');
-  assert.deepEqual(Object.keys(b.zones), ['papal', 'cerveceria', 'raquira', 'paipa']);
-  // Cada zona abre la siguiente (v3.23 a v3.25); la última que tiene por ahora no termina la región.
-  b.stats.sold = { criollas_box: 1e9, beer_crate: 1e9, jarra_cerveza: 1e9, canasta_amasijos: 1e9 };
-  for (const zone of ['papal', 'cerveceria', 'raquira', 'paipa']) {
+  assert.deepEqual(Object.keys(b.zones), ['papal', 'cerveceria', 'raquira', 'paipa', 'ruanas']);
+  // Cada zona abre la siguiente (v3.23 a v3.26); la última que tiene por ahora no termina la región.
+  b.stats.sold = { criollas_box: 1e9, beer_crate: 1e9, jarra_cerveza: 1e9, canasta_amasijos: 1e9, recuerdo_boyaca: 1e9 };
+  for (const zone of ['papal', 'cerveceria', 'raquira', 'paipa', 'ruanas']) {
     b.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
     claimGoal(b, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
     assert.equal(b.zones[zone].complete, true);
   }
-  assert.equal(b.zones.paipa.unlocked, true);
+  assert.equal(b.zones.ruanas.unlocked, true);
   assert.ok(!b.regionDone);
   for (const id of stationsOf(b)) b.stations[id] = { ...(b.stations[id] ?? {}), level: 100, transport: { level: 100 } };
   b.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'boyaca').map((r) => r.id);
@@ -649,4 +649,25 @@ test('Paipa sirve piquetes y canastas de amasijos con las papitas del Papal y el
   CALENDAR.on = on;
   for (const p of ['criollas_bag', 'barro']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
   for (const p of ['piquete', 'canasta_amasijos']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+});
+
+test('Las Ruanas arma recuerdos de Boyacá con las ollas y las materas de Ráquira (v3.26)', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const game = new Game(createInitialState(0, 'boyaca'));
+  for (const z of ['cerveceria', 'raquira', 'paipa', 'ruanas']) game.unlockZone(z);
+  for (const r of ['ollas', 'materas']) assert.ok(game.state.routes[r], `la ruta ${r} es de Boyacá`);
+  game.state.coins = 1e15;
+  for (const z of ['raquira', 'ruanas']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+    game.state.zones[z].dispatch.level = 20;
+  }
+  for (const r of ['ollas', 'materas']) game.state.routes[r].level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 900; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  for (const p of ['olla_barro', 'matera']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
+  assert.ok((game.state.stats.sold.recuerdo_boyaca ?? 0) > 0, 'vende recuerdos de Boyacá');
 });

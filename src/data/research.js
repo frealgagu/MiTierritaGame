@@ -302,6 +302,18 @@ export const RESEARCH = [
   { zone: 'paipa', id: 'denominacion_paipa', name: 'Denominación de origen', icon: '🏅', desc: 'Todo lo que vende Paipa vale un 50 % más.', cost: 60000000, requires: 'piquete_table', effect: { type: 'zoneValue', target: 'paipa', mult: 1.5 } },
   { zone: 'paipa', id: 'maestria_paipa', name: 'Maestría: Paipa', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'paipa', mult: 4 } },
   { zone: 'paipa', id: 'supremacia_paipa', name: 'Supremacía: Paipa', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'paipa', mult: 8 } },
+
+  // Boyacá · Las Ruanas (v3.26): las mismas de las Hormigas y el Sombrero, con la lana.
+  { zone: 'ruanas', id: 'ovejas_merino', name: 'Ovejas merino', icon: ICON.sheep, desc: 'El Rebaño de ovejas da el doble de lana.', cost: 15000000, requires: 'wool_washer', effect: { type: 'stationSpeed', target: 'sheep_pasture', mult: 2 } },
+  { zone: 'ruanas', id: 'lavadero_lana', name: 'Lavadero de quebrada', icon: ICON.cleanWool, desc: 'El Lavado de lana lava el doble.', cost: 18000000, requires: 'wool_washer', effect: { type: 'stationSpeed', target: 'wool_washer', mult: 2 } },
+  { zone: 'ruanas', id: 'cardas_nuevas', name: 'Cardas nuevas', icon: ICON.cardedWool, desc: 'El Cardado carda el doble.', cost: 45000000, requires: 'spinning_wheel', effect: { type: 'stationSpeed', target: 'carder', mult: 2 } },
+  { zone: 'ruanas', id: 'camion_ruanas', name: 'Camioneta de Nobsa', icon: '🚚', desc: 'El despacho de Las Ruanas lleva el doble por viaje.', cost: 60000000, requires: 'carder', effect: { type: 'dispatchCapacity', target: 'ruanas', mult: 2 } },
+  { zone: 'ruanas', id: 'ruecas', name: 'Más ruecas', icon: ICON.woolYarn, desc: 'El Hilado en rueca hila el doble.', cost: 120000000, requires: 'ruana_loom', effect: { type: 'stationSpeed', target: 'spinning_wheel', mult: 2 } },
+  { zone: 'ruanas', id: 'telar_pedal', name: 'Telar de pedal', icon: ICON.ruana, desc: 'El Telar de ruanas teje el doble.', cost: 300000000, requires: 'tienda_nobsa', effect: { type: 'stationSpeed', target: 'ruana_loom', mult: 2 } },
+  { zone: 'ruanas', id: 'tienda_plaza_nobsa', name: 'Tienda en la plaza', icon: ICON.recuerdoBoyaca, desc: 'La Tienda de Nobsa vende el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'tienda_nobsa', effect: { type: 'stationSpeed', target: 'tienda_nobsa', mult: 2 } },
+  { zone: 'ruanas', id: 'ruana_nobsa', name: 'Ruana de Nobsa', icon: '🏅', desc: 'Todo lo que vende Las Ruanas vale un 50 % más.', cost: 400000000, requires: 'ruana_loom', effect: { type: 'zoneValue', target: 'ruanas', mult: 1.5 } },
+  { zone: 'ruanas', id: 'maestria_ruanas', name: 'Maestría: Ruanas', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'ruanas', mult: 4 } },
+  { zone: 'ruanas', id: 'supremacia_ruanas', name: 'Supremacía: Ruanas', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'ruanas', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

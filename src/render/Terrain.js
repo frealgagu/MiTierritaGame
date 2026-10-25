@@ -133,7 +133,7 @@ export class Terrain {
             const d = rng() < 0.5 ? -1 : 1;
             g.moveTo(p.x - 7 * d, p.y - 2).quadraticCurveTo(p.x, p.y - 4, p.x + 7 * d, p.y + 1).stroke({ width: 1.6, color: 0xb08a4a, alpha: 0.7 });
           }
-        } else if (type === 'farm' && (this.zone.theme === 'dairy' || this.zone.theme === 'ranch' || this.zone.theme === 'savanna')) {
+        } else if (type === 'farm' && (this.zone.theme === 'dairy' || this.zone.theme === 'ranch' || this.zone.theme === 'savanna' || this.zone.theme === 'sheep')) {
           // Potrero: pasto más alto y tupido, sin surcos.
           for (let k = 0; k < 3; k++) {
             const p = iso(gx + rng(), gy + rng());
@@ -235,6 +235,12 @@ export class Terrain {
           else if (r < 0.06) obj = coconutPalm(rng);
           else if (r < 0.085) obj = egret(rng);
           else if (r < 0.11) obj = banana(rng);
+        } else if (this.zone.theme === 'sheep') {
+          // Las Ruanas (v3.26): el páramo, con frailejones, piedras, eucaliptos y algún ciprés.
+          if (r < 0.04) obj = frailejon(rng);
+          else if (r < 0.065) obj = eucalyptus(rng);
+          else if (r < 0.09) obj = rock(rng);
+          else if (r < 0.1) obj = cypress(rng);
         } else if (this.zone.theme === 'clay') {
           // Ráquira (v3.24): lomas secas con cactus y piedras, eucaliptos y ollas de barro puestas a la venta.
           if (r < 0.03) obj = eucalyptus(rng);
@@ -322,6 +328,7 @@ const FARM_SOIL = {
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
   potato: (v) => mix(0x4a3526, 0x3a291d, v * 0.5),
+  sheep: (v) => mix(0x8fa86a, 0x7f9a5c, v * 0.5), // el pasto del páramo
   clay: (v) => mix(0xc0784a, 0xa8653c, v * 0.45), // la greda roja de Ráquira
   barley: (v) => mix(0x8a6a3a, 0x7a5c30, v * 0.5), // la tierra negra del altiplano
   canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // la tierra seca de la sabana zenú // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
@@ -691,6 +698,7 @@ function hayBale(rng) {
 // coat (v3.3): pelaje { body, spots, udder }; sin él, la Holstein de la Lechería.
 const HOLSTEIN = { body: 0xfbf8f1, legs: 0xf4f1e8, spots: 0x2b2b2b, udder: true };
 export function drawCow(g, x, y, scale, rng, flip = false, coat = HOLSTEIN) {
+  if (coat.sheep) return drawSheep(g, x, y, scale * 0.85, rng, flip, coat);
   const f = flip ? -1 : 1;
   const s = scale;
   shadow(g, x, y + 1, 13 * s, 4 * s);
@@ -711,6 +719,19 @@ export function drawCow(g, x, y, scale, rng, flip = false, coat = HOLSTEIN) {
   g.moveTo(x + 10 * s * f, y - 18 * s).lineTo(x + 9 * s * f, y - 21 * s).moveTo(x + 13 * s * f, y - 18 * s).lineTo(x + 14 * s * f, y - 21 * s).stroke({ width: 1.2, color: 0xe8dcc0 });
   // Cola.
   g.moveTo(x - 10 * s * f, y - 14 * s).quadraticCurveTo(x - 13 * s * f, y - 10 * s, x - 12 * s * f, y - 6 * s).stroke({ width: 1, color: 0x3a2418 });
+}
+
+// Oveja (v3.26): cuerpo de lana en bolitas, cara y patas oscuras. La usan las Ruanas en vez de vacas.
+function drawSheep(g, x, y, s, rng, flip, coat) {
+  const f = flip ? -1 : 1;
+  shadow(g, x, y + 1, 11 * s, 3.5 * s);
+  for (const lx of [-6, -2, 3, 7]) g.rect(x + lx * s * f - 0.9, y - 6 * s, 1.8 * s, 6 * s).fill(0x263238);
+  g.ellipse(x, y - 10 * s, 10 * s, 6 * s).fill(coat.body).stroke({ width: 1, color: 0x3a2418, alpha: 0.5 });
+  for (const [dx, dy] of [[-6, -13], [-1, -15], [4, -14], [7, -10], [-8, -9], [2, -9]]) g.circle(x + dx * s * f, y + dy * s, 3.2 * s).fill(coat.body);
+  for (const [dx, dy] of [[-3, -12], [3, -11]]) g.circle(x + dx * s * f, y + dy * s, 1.2 * s).fill(coat.spots);
+  g.ellipse(x + 11 * s * f, y - 12 * s, 3.2 * s, 4 * s).fill(coat.face).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  g.ellipse(x + 9.5 * s * f, y - 15 * s, 2.2 * s, 1 * s).fill(coat.face);
+  g.circle(x + 12 * s * f, y - 13 * s, 0.7 * s).fill(0xffffff);
 }
 
 // Guadual: varias cañas de guadua altas y algo inclinadas, con hojitas en lo alto.

@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.26.0 — Boyacá: Las Ruanas
+- **🧶 Las Ruanas**, la quinta zona de Boyacá, se abre al completar Paipa: el Rebaño de ovejas → el Lavado de lana → el Cardado → el Hilado en rueca → el Telar de ruanas → la **Tienda de Nobsa**, que vende el Recuerdo de Boyacá: ruanas con ollas y materas de Ráquira.
+- **Dos rutas nuevas desde Ráquira**: la **Ruta de las ollas** y la **Ruta de las materas**, con su chiva y sus carreteras.
+- Su persona es **Don Clímaco, el tejedor**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 7 íconos nuevos (de la oveja a la ruana).
+- El mapa: el páramo con un rebaño de **ovejas** (blancas, alguna café y alguna negra) que pastan y caminan por el potrero, bultos de lana, frailejones, eucaliptos y piedras. En las estaciones: la pila de piedra donde se lava la lana tendida en la cerca, la que carda sentada en el banco, la rueca girando con sus madejas de colores, el telar con la ruana que crece franja por franja y la tienda con las ruanas colgadas.
+
 ## v3.25.0 — Boyacá: Paipa
 - **🧀 Paipa**, la cuarta zona de Boyacá, se abre al completar Ráquira: el Hato lechero → la Cuajadera → los Moldes de queso → la Cava de maduración (el queso Paipa) → el Horno de almojábanas. Las almojábanas se reparten entre la **Mesa del piquete** (piquete boyacense) y el **Horno de barro** (canasta de amasijos).
 - **Dos rutas nuevas**: la **Ruta de las papitas**, con las bolsas de papitas criollas del Papal para el piquete y la canasta, y la **Ruta del barro**, con el barro de Ráquira para el horno de barro. Cada una con su chiva y su carretera.

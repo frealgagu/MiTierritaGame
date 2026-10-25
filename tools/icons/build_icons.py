@@ -2194,6 +2194,85 @@ def amasijos():
     return layers
 
 
+# ---------- Boyacá · Las Ruanas (v3.26) ----------
+
+def fleece(cx, cy, rx, ry, color):
+    """Un vellón: muchas bolitas de lana juntas, con su borde."""
+    pts = [(cx + rx * math.cos(a) * 0.75, cy + ry * math.sin(a) * 0.7) for a in [k * math.pi / 5 for k in range(10)]]
+    layers = [(OUTLINE, [circle(x, y, ry * 0.55 + 2) for x, y in pts] + [ellipse(cx, cy, rx * 0.8 + 2, ry * 0.8 + 2)])]
+    layers.append((color, [circle(x, y, ry * 0.55) for x, y in pts] + [ellipse(cx, cy, rx * 0.8, ry * 0.8)]))
+    layers.append((shade_hex(color, 0.88), [circle(cx + dx, cy + dy, 2.4) for dx, dy in [(-10, -4), (4, -8), (12, 2), (-4, 6), (8, 8)]]))
+    return layers
+
+
+def sheep():
+    """Oveja: el cuerpo de lana blanca, la cara y las patas negras."""
+    layers = [('#7fa04a', [ellipse(50, 90, 36, 6)])]
+    layers.append(('#263238', [rect(30, 66, 6, 22), rect(42, 68, 6, 20), rect(58, 68, 6, 20), rect(70, 66, 6, 22)]))
+    layers += fleece(54, 56, 34, 22, '#f4f1e8')
+    layers.append((OUTLINE, [ellipse(20, 50, 11, 13, -20)]))
+    layers.append(('#263238', [ellipse(20, 50, 9, 11, -20), ellipse(12, 42, 5, 2.5, -40), ellipse(28, 40, 5, 2.5, 30)]))
+    layers.append(('#ffffff', [circle(16, 48, 1.8), circle(24, 47, 1.8)]))
+    layers += fleece(22, 37, 9, 5, '#f4f1e8')
+    return layers
+
+
+def wool():
+    """Lana: el vellón recién trasquilado, con las tijeras al lado."""
+    layers = fleece(46, 58, 40, 26, '#ece4cf')
+    layers.append(('#9aa3a8', ['M 74 18 L 92 36 L 89 39 L 71 21 Z', 'M 92 18 L 74 36 L 71 33 L 89 15 Z']))
+    layers.append(('#d7263d', [circle(70, 38, 4), circle(92, 38, 4)]))
+    return layers
+
+
+def clean_wool():
+    """Lana lavada: la lana blanquita secándose sobre una cerca, con gotas."""
+    layers = [('#8b5a2b', [rib(8, 70, 92, 70, 3), rib(14, 70, 14, 94, 3), rib(86, 70, 86, 94, 3)])]
+    layers += fleece(32, 58, 22, 16, '#ffffff') + fleece(66, 56, 22, 16, '#ffffff')
+    layers.append(('#4fc3f7', ['M 30 80 Q 34 87 30 90 Q 26 87 30 80 Z', 'M 66 80 Q 70 87 66 90 Q 62 87 66 80 Z']))
+    return layers
+
+
+def carded_wool():
+    """Lana cardada: la lana peinada en copos suaves, con las cardas de púas."""
+    layers = [(OUTLINE, [rect(8, 22, 34, 26, -10), rect(58, 22, 34, 26, 10)]), ('#a0703a', [rect(10.5, 24.5, 29, 21, -10), rect(60.5, 24.5, 29, 21, 10)])]
+    layers.append(('#9aa3a8', [rib(14 + k * 4, 30 - k * 0.6, 14 + k * 4, 40 - k * 0.6, 0.8) for k in range(6)] + [rib(64 + k * 4, 28 + k * 0.6, 64 + k * 4, 38 + k * 0.6, 0.8) for k in range(6)]))
+    layers += fleece(50, 72, 38, 14, '#fbfaf6')
+    return layers
+
+
+def wool_yarn():
+    """Hilo de lana: las madejas de lana hilada, una natural y una teñida."""
+    layers = []
+    for cx, cy, col in [(34, 58, '#ece4cf'), (66, 62, '#8e44ad')]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 22, 26)]), (col, [ellipse(cx, cy, 19.5, 23.5)])]
+        layers.append((shade_hex(col, 0.8), [rib(cx - 16 + k * 6, cy - 18 + (k % 2) * 4, cx - 12 + k * 6, cy + 18 - (k % 2) * 4, 1.2) for k in range(5)]))
+    layers.append(('#5e3b1c', [rib(20, 24, 80, 24, 2.4)]))
+    return layers
+
+
+def ruana():
+    """Ruana: la ruana de lana con sus franjas, doblada como para la venta."""
+    layers = [(OUTLINE, ['M 10 30 L 90 30 L 96 84 L 4 84 Z']), ('#6d4c41', ['M 12.5 32.5 L 87.5 32.5 L 93 81.5 L 7 81.5 Z'])]
+    layers.append(('#ece4cf', ['M 9 46 L 91 46 L 91.5 52 L 8.5 52 Z', 'M 7.5 64 L 92.5 64 L 93 70 L 7 70 Z']))
+    layers.append(('#d7263d', ['M 8.6 55 L 91.4 55 L 91.7 58 L 8.3 58 Z']))
+    layers.append((OUTLINE, ['M 40 32 L 50 52 L 60 32 Z']))
+    layers.append(('#4e342e', ['M 43 32.5 L 50 47 L 57 32.5 Z']))
+    layers.append(('#ece4cf', [rib(6 + k * 8, 84, 5 + k * 8, 94, 1.4) for k in range(12)]))
+    return layers
+
+
+def recuerdo_boyaca():
+    """Recuerdo de Boyacá: la ruana doblada con una olla y una matera de Ráquira encima."""
+    layers = [(OUTLINE, [rect(6, 58, 88, 34)]), ('#6d4c41', [rect(8.5, 60.5, 83, 29)])]
+    layers.append(('#ece4cf', [rect(8.5, 68, 83, 4), rect(8.5, 80, 83, 4)]))
+    layers.append(('#d7263d', [rect(8.5, 74, 83, 3)]))
+    layers += [(OUTLINE, ['M 22 32 Q 10 46 22 60 L 46 60 Q 58 46 46 32 Z', ellipse(34, 32, 14, 4)]), ('#4e342e', ['M 24 34 Q 13 46 24 57.5 L 44 57.5 Q 55 46 44 34 Z']), ('#3e2723', [ellipse(34, 32, 11.5, 2.6)])]
+    layers += [(OUTLINE, ['M 60 30 L 88 30 L 84 60 L 64 60 Z']), ('#d9772e', ['M 62.5 32.5 L 85.5 32.5 L 82 57.5 L 66 57.5 Z']), ('#ffffff', [circle(70, 44, 2.4), circle(78, 44, 2.4)])]
+    layers.append(('#2e7d32', [leaf(74, 30, 66, 12, 4), leaf(74, 30, 82, 12, 4), leaf(74, 30, 74, 8, 3)]))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -2334,6 +2413,13 @@ ICONS = [
     (0xE088, 'almojabana', almojabana),
     (0xE089, 'piquete', piquete),
     (0xE08A, 'amasijos', amasijos),
+    (0xE08B, 'sheep', sheep),
+    (0xE08C, 'wool', wool),
+    (0xE08D, 'clean_wool', clean_wool),
+    (0xE08E, 'carded_wool', carded_wool),
+    (0xE08F, 'wool_yarn', wool_yarn),
+    (0xE090, 'ruana', ruana),
+    (0xE091, 'recuerdo_boyaca', recuerdo_boyaca),
 ]
 
 

@@ -142,6 +142,13 @@ export const ICON = {
   almojabana: '\uE088', // Almojábanas: los panecitos redondos y dorados de queso y cuajada, en un canasto
   piquete: '\uE089', // Piquete boyacense: la bandeja con papitas criollas, mazorca, queso y ají en el centro
   amasijos: '\uE08A', // Canasta de amasijos: almojábanas, garullas y mantecadas recién salidas del horno de barro
+  sheep: '\uE08B', // Oveja: el cuerpo de lana blanca, la cara y las patas negras
+  wool: '\uE08C', // Lana: el vellón recién trasquilado, con las tijeras al lado
+  cleanWool: '\uE08D', // Lana lavada: la lana blanquita secándose sobre una cerca, con gotas
+  cardedWool: '\uE08E', // Lana cardada: la lana peinada en copos suaves, con las cardas de púas
+  woolYarn: '\uE08F', // Hilo de lana: las madejas de lana hilada, una natural y una teñida
+  ruana: '\uE090', // Ruana: la ruana de lana con sus franjas, doblada como para la venta
+  recuerdoBoyaca: '\uE091', // Recuerdo de Boyacá: la ruana doblada con una olla y una matera de Ráquira encima
 };
 
 export const ICON_FONT = 'Cafetal Icons';

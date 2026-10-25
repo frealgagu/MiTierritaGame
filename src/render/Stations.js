@@ -150,7 +150,7 @@ export class FarmView extends StationView {
       return;
     }
     this.lights = drawHut(g, x, y, tier);
-    if (this.theme === 'dairy' || this.theme === 'ranch' || this.theme === 'savanna') {
+    if (this.theme === 'dairy' || this.theme === 'ranch' || this.theme === 'savanna' || this.theme === 'sheep') {
       this.drawPasture(g, tier, rng);
       return;
     }
@@ -256,7 +256,14 @@ export class FarmView extends StationView {
     box(g, x + 2.2, y + 0.3, 1.2, 0.35, 6, 0x9aa3a8);
     const water = iso(x + 2.8, y + 0.47, 6);
     g.ellipse(water.x, water.y, 12, 3).fill(0x6fa8dc);
-    if (this.theme === 'ranch') {
+    if (this.theme === 'sheep') {
+      // En las Ruanas (v3.26), en vez de cantinas, los bultos de lana trasquilada.
+      for (const [cx, cy] of [[0.45, 2.3], [0.85, 2.45], [1.2, 2.3]]) {
+        const p = iso(x + cx, y + cy);
+        g.ellipse(p.x, p.y - 5, 7, 5.5).fill(0xece4cf).stroke(OUTLINE);
+        for (const [dx, dy] of [[-3, -7], [2, -8], [0, -4]]) g.circle(p.x + dx, p.y + dy, 2).fill(0xfbfaf6);
+      }
+    } else if (this.theme === 'ranch') {
       // En el Hato, en vez de cantinas, el saladero del ganado: una canoa de madera con sal.
       box(g, x + 0.3, y + 2.2, 1.0, 0.3, 5, PAL.wood);
       g.poly(isoPoly([[x + 0.35, y + 2.25, 5], [x + 1.25, y + 2.25, 5], [x + 1.25, y + 2.45, 5], [x + 0.35, y + 2.45, 5]])).fill(0xf4f1e8);
