@@ -38,6 +38,7 @@ const VICTORY = {
   quesera: { title: '¡Bandeja costeña para todos!', text: 'Completaste <b>La Quesera</b>, en la Costa. Cuatro mil bandejas con mote de queso, el arroz del Arrozal y el pescado de la Ciénaga.', stat: (s) => `Bandejas vendidas: ${formatNumber(s.stats.sold.bandeja_costena ?? 0)}` },
   sombrero: { title: '¡Sombreros vueltiaos para todo el país!', text: 'Completaste <b>El Sombrero</b>, en la Costa. Seis mil recuerdos de la Costa: sombrero vueltiao, pescado salado para el viaje y pescado frito para el camino.', stat: (s) => `Recuerdos vendidos: ${formatNumber(s.stats.sold.recuerdo_costa ?? 0)}` },
   cartagena: { title: '¡La Costa, de punta a punta!', text: 'Completaste <b>Cartagena</b> y la Costa. Siete mil paseos a las Islas del Rosario, con el arroz, las cocadas, el pescado, el queso y los sombreros de todas tus zonas costeñas.', stat: (s) => `Paseos a las islas: ${formatNumber(s.stats.sold.paseo_islas ?? 0)}` },
+  papal: { title: '¡Papitas para todo el altiplano!', text: 'Completaste <b>El Papal</b>, en Boyacá. Dos mil cajas de papitas criollas, de la tierra fría a la bolsa.', stat: (s) => `Cajas de papitas vendidas: ${formatNumber(s.stats.sold.criollas_box ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

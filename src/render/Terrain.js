@@ -234,6 +234,12 @@ export class Terrain {
           else if (r < 0.06) obj = coconutPalm(rng);
           else if (r < 0.085) obj = egret(rng);
           else if (r < 0.11) obj = banana(rng);
+        } else if (this.zone.theme === 'potato') {
+          // Altiplano (v3.22): eucaliptos, frailejones del páramo, piedras y algún ciprés.
+          if (r < 0.04) obj = eucalyptus(rng);
+          else if (r < 0.07) obj = frailejon(rng);
+          else if (r < 0.1) obj = rock(rng);
+          else if (r < 0.115) obj = cypress(rng);
         } else if (this.zone.theme === 'canaflecha') {
           // Tierra zenú (v3.19): matas de caña flecha, sombreros a la venta en una vara, samanes y palmas.
           if (r < 0.05) obj = canaFlechaClump(rng);
@@ -302,6 +308,7 @@ const FARM_SOIL = {
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
+  potato: (v) => mix(0x4a3526, 0x3a291d, v * 0.5), // la tierra negra del altiplano
   canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // la tierra seca de la sabana zenú // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6),
   cartagena: (v) => mix(0xe2d2ae, 0xcfbd94, v * 0.6), // la plaza de piedra coralina // la plaza de piedra amarilla
@@ -838,6 +845,38 @@ function coconutPalm(rng) {
   const c = new Container();
   const g = new Graphics();
   drawCoconutPalm(g, 0, 0, 1, rng);
+  c.addChild(g);
+  return c;
+}
+
+// Mata de papa (v3.22): ramillete de hojas verdes con flores blancas y moradas (más con cada hito).
+export function drawPotatoPlant(g, x, y, scale, rng, flowers = 1) {
+  const s = scale;
+  shadow(g, x + 2, y + 1, 9 * s, 3.5 * s);
+  g.ellipse(x, y, 8 * s, 3 * s).fill(0x3a291d);
+  for (const [dx, dy, r] of [[-5, -6, 5], [5, -6, 5], [0, -10, 5.5], [-2, -4, 4.5], [3, -12, 4]]) g.circle(x + dx * s, y + dy * s, r * s).fill(dy < -8 ? 0x4e8f34 : 0x3f7a2a).stroke({ width: 0.6, color: 0x2a4a1a, alpha: 0.4 });
+  for (let i = 0; i < flowers; i++) {
+    const fx = x + (i - (flowers - 1) / 2) * 4 * s;
+    g.circle(fx, y - (14 + (i % 2) * 2) * s, 1.8 * Math.max(s, 0.8)).fill(i % 2 ? 0xb39ddb : 0xffffff);
+    g.circle(fx, y - (14 + (i % 2) * 2) * s, 0.7 * Math.max(s, 0.8)).fill(0xfdd835);
+  }
+}
+
+// Frailejón (v3.22): tronco grueso y peludo con la roseta de hojas plateadas, la planta del páramo.
+function frailejon(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const s = 0.8 + rng() * 0.4;
+  const h = (14 + rng() * 14) * s;
+  shadow(g, 2, 1, 9 * s, 3 * s);
+  g.roundRect(-3 * s, -h, 6 * s, h, 2).fill(0x8d7a5a).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  for (let k = 0; k < 4; k++) g.moveTo(-3 * s, -h * (0.2 + k * 0.2)).lineTo(3 * s, -h * (0.25 + k * 0.2)).stroke({ width: 1, color: 0x6e5d42 });
+  for (let i = 0; i < 9; i++) {
+    const a = -Math.PI / 2 + ((i - 4) / 9) * 2.8;
+    const len = 10 * s;
+    g.moveTo(0, -h).quadraticCurveTo(Math.cos(a) * len * 0.5, -h + Math.sin(a) * len * 0.8 - 3, Math.cos(a) * len, -h + Math.sin(a) * len * 0.6).stroke({ width: 3 * s, color: i % 2 ? 0xb8c4a8 : 0xa3b58f, cap: 'round' });
+  }
+  if (rng() < 0.5) g.circle(0, -h - 9 * s, 2 * s).fill(0xf2d22e);
   c.addChild(g);
   return c;
 }

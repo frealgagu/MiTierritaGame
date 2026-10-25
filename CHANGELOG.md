@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## v3.22.0 — Boyacá: El Papal
+- **Se abre Boyacá** ⛰️ al completar Cartagena, con su propia economía (empieza de cero y las demás regiones siguen produciendo).
+- Su primera zona, **🥔 El Papal**: el Papal → el Lavadero de papa → la Seleccionadora → la Peladora → la Freidora → la Empacadora de papitas → la Cajonera; de la papa a la caja de papitas criollas fritas, con íconos propios para cada producto.
+- Su persona es **Don Aurelio, el papicultor** («¡Sumercé, bienvenido a Boyacá!»), con sus datos curiosos, objetivos, 15 investigaciones y su victoria.
+- El mapa: la tierra negra del altiplano con matas de papa que echan flores blancas y moradas con cada hito; eucaliptos, cipreses, piedras y frailejones del páramo. En las estaciones: el tanque del lavadero con la banda que saca la papa, la mesa de escoger con la papa gruesa, la pareja y la menuda, el tambor de la peladora, la freidora dorando las papitas, las bolsas amarillas y las cajas arrumadas.
+- **Música nueva: el Torbellino del altiplano**, con tiple, requinto, guitarra, bajo y chucho.
+- En 🗺️ Zonas se ven las cinco que vienen: La Cervecería, Las Ruanas, Paipa, Ráquira y Villa de Leyva.
+
 ## v3.21.0 — La Costa completa: eventos, álbum y logros
 - **Seis eventos nuevos**, uno por zona de la Costa, cada uno con su escena en el tablero que cambia con cada compra:
   - 🐦 **Pájaros en el arrozal**: las bandadas sobre el agua; espantapájaros con sombrero vueltiao, cintas que brillan con el viento y los pajareros aplaudiendo por los camellones.

@@ -576,3 +576,32 @@ test('Cartagena recibe lo de las cinco zonas de la Costa y despacha paseos a las
   for (const p of ['rice_sack', 'cocada', 'fish_in_coconut', 'almuerzo_costeno', 'bandeja_costena', 'recuerdo_costa']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
   assert.ok((game.state.stats.produced.lonchera_paseo ?? 0) > 0, 'arma loncheras');
 });
+
+test('Boyacá se abre al completar Cartagena y, mientras le falten zonas, no se termina (v3.22)', async () => {
+  const { claimGoal } = await import('../src/sim/goals.js');
+  const { albumDone, profileOf } = await import('../src/sim/renown.js');
+  const { checkMedalBonus } = await import('../src/sim/events.js');
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  root.regions.santander.zones.barichara.complete = true;
+  openRegions(root);
+  assert.deepEqual(openRegions(root), []);
+  root.regions.costa.zones.cartagena.complete = true;
+  assert.deepEqual(openRegions(root), ['boyaca']);
+  const b = regionState(root, 'boyaca');
+  assert.deepEqual(Object.keys(b.zones), ['papal']);
+  const final = GOALS_BY_ZONE.papal.find((g) => g.final);
+  b.goals.claimed = GOALS_BY_ZONE.papal.filter((g) => !g.final).map((g) => g.id);
+  b.stats.sold.criollas_box = 1e9;
+  claimGoal(b, final.id, { emit() {} });
+  assert.equal(b.zones.papal.complete, true);
+  assert.ok(!b.regionDone);
+  for (const id of stationsOf(b)) b.stations[id] = { ...(b.stations[id] ?? {}), level: 100, transport: { level: 100 } };
+  b.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'boyaca').map((r) => r.id);
+  assert.equal(checkMastery(b, { emit() {} }), false);
+  const p = profileOf(root);
+  assert.equal(albumDone(p, 'boyaca'), false);
+  checkMedalBonus(p);
+  assert.ok(!p.medalBonus.boyaca);
+});

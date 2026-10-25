@@ -153,9 +153,36 @@ function renderCumbia(buf, index) {
   for (const [e, n, note] of song.melody[index] ?? []) blow(buf, at(e), freqOf(midi(note)), n * eighth * 0.92, 0.2, 0.05);
 }
 
+// Compás de torbellino (3/4, corcheas 0 a 5): bajo, guitarra en el dos y el tres, el tiple rasgueando cada
+// corchea, el requinto punteando la melodía y el chucho marcando el pulso.
+function renderTorbellino(buf, index) {
+  const { song, beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const jitter = () => (rng() - 0.5) * 0.01;
+  const { root, tones } = parseChord(song.chords[index]);
+  const at = (e) => t0 + e * eighth + jitter();
+
+  pluck(buf, at(0), freqOf(above(root, 40)), beat * 1.6, { amp: 0.45, t60: 2, bright: 0.25, pan: -0.15, pos: 0.3 });
+  pluck(buf, at(4), freqOf(above((root + 7) % 12, 40)), beat * 0.9, { amp: 0.3, t60: 1.6, bright: 0.25, pan: -0.15, pos: 0.3 });
+  const guitar = tones.map((pc) => above(pc, 55)).sort((a, b) => a - b);
+  for (const e of [2, 4]) strum(buf, at(e), guitar, beat * 0.7, { amp: 0.13, t60: 1, bright: 0.45, pan: -0.35 });
+  // El tiple: tres cuerdas por orden, rasgueo de abajo arriba y de arriba abajo en cada corchea.
+  const tiple = tones.slice(0, 4).map((pc) => above(pc, 64)).sort((a, b) => a - b);
+  const courses = tiple.flatMap((m, k) => (k < 3 ? [m - 12, m, m + 0.04] : [m, m + 0.04]));
+  for (let e = 0; e < 6; e++) strum(buf, at(e), courses, eighth * 0.7, { amp: e % 2 ? 0.045 : 0.065, t60: 0.7, bright: 0.8, pan: 0.35, pos: 0.12 }, e % 2 === 1);
+  // El chucho (maraca de guadua): largo en el tiempo, corto en el contratiempo.
+  for (let e = 0; e < 6; e++) scrape(buf, at(e), eighth * (e % 2 ? 0.35 : 0.7), e % 2 ? 0.035 : 0.06, 0.5);
+  // El requinto: notas punteadas, brillantes.
+  for (const [e, n, note] of song.melody[index] ?? []) {
+    pluck(buf, at(e), freqOf(midi(note)), n * eighth * 0.92, { amp: 0.3, t60: 0.9, bright: 0.85, pan: 0.1, pos: 0.13 });
+  }
+}
+
 // Toca el compás `index`: bajo, guitarra, tiple y melodía.
 export function renderBar(buf, index) {
   if (buf.song.style === 'cumbia') return renderCumbia(buf, index);
+  if (buf.song.style === 'torbellino') return renderTorbellino(buf, index);
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
   const t0 = (index * buf.bar) / buf.sr;

@@ -148,6 +148,17 @@ export const STATIONS = [
   { id: 'loncheras', zone: 'cartagena', name: 'Loncheras del paseo', icon: ICON.loncheraPaseo, in: { almuerzo_bahia: 1 }, imports: [{ product: 'almuerzo_costeno', perCycle: 1, route: 'almuerzos_costenos' }, { product: 'bandeja_costena', perCycle: 1, route: 'bandejas' }], out: { lonchera_paseo: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.20' },
   { id: 'muelle', zone: 'cartagena', name: 'Muelle de las lanchas', icon: ICON.paseoIslas, in: { lonchera_paseo: 4 }, out: { paseo_islas: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.20' },
 
+  // Boyacá · El Papal (v3.22), en la tierra fría del altiplano: la papa se lava, se selecciona, se pela, se
+  // fríe (las papitas criollas), se empaca en bolsas y las bolsas en cajas. Mismos números que la Finca, la
+  // Guayabera y el Arrozal: la región empieza de cero.
+  { id: 'potato_field', zone: 'papal', name: 'Papal', icon: ICON.potatoPlant, infinite: true, out: { potato: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.22' },
+  { id: 'potato_washer', zone: 'papal', name: 'Lavadero de papa', icon: ICON.washedPotato, in: { potato: 2 }, out: { washed_potato: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.22' },
+  { id: 'potato_grader', zone: 'papal', name: 'Seleccionadora', icon: ICON.gradedPotato, in: { washed_potato: 1 }, out: { graded_potato: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.22' },
+  { id: 'potato_peeler', zone: 'papal', name: 'Peladora de papa', icon: ICON.peeledPotato, in: { graded_potato: 1 }, out: { peeled_potato: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.22' },
+  { id: 'criollas_fryer', zone: 'papal', name: 'Freidora', icon: ICON.criollas, in: { peeled_potato: 2 }, out: { criollas: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.22' },
+  { id: 'criollas_bagger', zone: 'papal', name: 'Empacadora de papitas', icon: ICON.criollasBag, in: { criollas: 1 }, out: { criollas_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.22' },
+  { id: 'criollas_boxer', zone: 'papal', name: 'Cajonera', icon: ICON.criollasBox, in: { criollas_bag: 4 }, out: { criollas_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.22' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

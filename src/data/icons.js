@@ -116,6 +116,14 @@ export const ICON = {
   almuerzoBahia: '\uE06E', // Almuerzo en la bahía: el pescado en coco con arroz con coco y patacones, frente al mar
   loncheraPaseo: '\uE06F', // Lonchera del paseo: la nevera de icopor con el almuerzo, el hielo y las gaseosas para la lancha
   paseoIslas: '\uE070', // Paseo a las Islas del Rosario: la lancha sobre el mar turquesa, rumbo a la isla con su palma
+  potatoPlant: '\uE071', // Mata de papa: hojas verdes en ramillete con flores blancas y moradas, y una papa asomada
+  potato: '\uE072', // Papa: dos papas recién sacadas de la tierra, con tierrita pegada
+  washedPotato: '\uE073', // Papa lavada: papas limpias y brillantes en una canasta, con gotas de agua
+  gradedPotato: '\uE074', // Papa de primera: papas grandes y parejas con la cinta azul de primera calidad
+  peeledPotato: '\uE075', // Papa pelada: papas amarillas sin cáscara en una olla con agua, y las cáscaras al lado
+  criollas: '\uE076', // Papitas criollas fritas: las papitas amarillas y doradas, redonditas, en una totuma
+  criollasBag: '\uE077', // Bolsa de papitas: la bolsa de paquete, amarilla y verde, con la papita dibujada
+  criollasBox: '\uE078', // Caja de papitas: la caja de cartón con las bolsas asomándose
 };
 
 export const ICON_FONT = 'Cafetal Icons';

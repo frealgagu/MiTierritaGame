@@ -248,6 +248,23 @@ export const RESEARCH = [
   { zone: 'cartagena', id: 'patrimonio', name: 'Patrimonio de la Humanidad', icon: '🏅', desc: 'Todo lo que vende Cartagena vale un 50 % más.', cost: 25000000000, requires: 'loncheras', effect: { type: 'zoneValue', target: 'cartagena', mult: 1.5 } },
   { zone: 'cartagena', id: 'maestria_cartagena', name: 'Maestría: Cartagena', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cartagena', mult: 4 } },
   { zone: 'cartagena', id: 'supremacia_cartagena', name: 'Supremacía: Cartagena', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cartagena', mult: 8 } },
+
+  // Boyacá · El Papal (v3.22): las mismas del Arrozal, con la papa.
+  { zone: 'papal', id: 'semilla_papa', name: 'Semilla de papa certificada', icon: ICON.potatoPlant, desc: 'El Papal produce el doble.', cost: 300, requires: 'potato_washer', effect: { type: 'stationSpeed', target: 'potato_field', mult: 2 } },
+  { zone: 'papal', id: 'lavadora_tambor', name: 'Lavadora de tambor', icon: '💧', desc: 'El Lavadero lava el doble.', cost: 400, requires: 'potato_washer', effect: { type: 'stationSpeed', target: 'potato_washer', mult: 2 } },
+  { zone: 'papal', id: 'herraduras_b', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'potato_grader', effect: { type: 'muleSpeed', mult: 1.5 } },
+  { zone: 'papal', id: 'remolque_b', name: 'Remolque para el Willys', icon: '🚙', desc: 'El Willys lleva el doble por viaje.', cost: 2500, requires: 'potato_peeler', effect: { type: 'dispatchCapacity', target: 'papal', mult: 2 } },
+  { zone: 'papal', id: 'zaranda_papa', name: 'Zaranda de papa', icon: ICON.gradedPotato, desc: 'La Seleccionadora selecciona el doble.', cost: 6000, requires: 'potato_peeler', effect: { type: 'stationSpeed', target: 'potato_grader', mult: 2 } },
+  { zone: 'papal', id: 'peladora_abrasiva', name: 'Peladora abrasiva', icon: '⚙️', desc: 'La Peladora pela el doble.', cost: 8000, requires: 'criollas_fryer', effect: { type: 'stationSpeed', target: 'potato_peeler', mult: 2 } },
+  { zone: 'papal', id: 'aceite_limpio', name: 'Aceite limpio', icon: '🏅', desc: 'Las papitas criollas valen un 50 % más.', cost: 20000, requires: 'criollas_fryer', effect: { type: 'productValue', target: 'criollas', mult: 1.5 } },
+  { zone: 'papal', id: 'freidora_continua', name: 'Freidora continua', icon: ICON.criollas, desc: 'La Freidora fríe el doble.', cost: 25000, requires: 'criollas_bagger', effect: { type: 'stationSpeed', target: 'criollas_fryer', mult: 2 } },
+  { zone: 'papal', id: 'papa_boyacense', name: 'Papa boyacense', icon: '⛰️', desc: 'Papa de origen: todo lo que vende el Papal vale un 50 % más.', cost: 50000, requires: 'criollas_bagger', effect: { type: 'zoneValue', target: 'papal', mult: 1.5 } },
+  { zone: 'papal', id: 'selladora_b', name: 'Selladora automática', icon: '🛍️', desc: 'La Empacadora de papitas empaca el doble.', cost: 60000, requires: 'criollas_boxer', effect: { type: 'stationSpeed', target: 'criollas_bagger', mult: 2 } },
+  { zone: 'papal', id: 'cajonera_auto', name: 'Cajonera automática', icon: '📦', desc: 'La Cajonera llena el doble de cajas.', cost: 150000, requires: 'criollas_boxer', effect: { type: 'stationSpeed', target: 'criollas_boxer', mult: 2 } },
+  { zone: 'papal', id: 'cable_b', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'criollas_boxer', effect: { type: 'muleSpeed', mult: 2 } },
+  { zone: 'papal', id: 'sello_b', name: 'Sello de calidad', icon: '🏅', desc: 'Las cajas de papitas valen un 50 % más.', cost: 300000, requires: 'criollas_boxer', effect: { type: 'productValue', target: 'criollas_box', mult: 1.5 } },
+  { zone: 'papal', id: 'maestria_papal', name: 'Maestría: Papal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'papal', mult: 4 } },
+  { zone: 'papal', id: 'supremacia_papal', name: 'Supremacía: Papal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'papal', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

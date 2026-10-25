@@ -125,6 +125,15 @@ export const PRODUCTS = {
   lonchera_paseo: { name: 'Lonchera del paseo', zone: 'cartagena', value: 2000000, icon: ICON.loncheraPaseo, color: 0xfbfaf6 },
   paseo_islas: { name: 'Paseo a las Islas del Rosario', zone: 'cartagena', value: 24000000, icon: ICON.paseoIslas, color: 0x26c6da },
 
+  // Boyacá · El Papal (v3.22): los mismos valores que el Arrozal.
+  potato: { name: 'Papa', zone: 'papal', value: 1, icon: ICON.potato, color: 0xb98a52 },
+  washed_potato: { name: 'Papa lavada', zone: 'papal', value: 3, icon: ICON.washedPotato, color: 0xe0bb7a },
+  graded_potato: { name: 'Papa de primera', zone: 'papal', value: 6, icon: ICON.gradedPotato, color: 0xd4a960 },
+  peeled_potato: { name: 'Papa pelada', zone: 'papal', value: 10, icon: ICON.peeledPotato, color: 0xf6d860 },
+  criollas: { name: 'Papitas criollas fritas', zone: 'papal', value: 30, icon: ICON.criollas, color: 0xf2b705 },
+  criollas_bag: { name: 'Bolsa de papitas', zone: 'papal', value: 45, icon: ICON.criollasBag, color: 0x2fa36b },
+  criollas_box: { name: 'Caja de papitas', zone: 'papal', value: 250, icon: ICON.criollasBox, color: 0xc8a26a },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

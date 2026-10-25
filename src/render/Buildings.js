@@ -2638,6 +2638,188 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Boyacá · El Papal (v3.22): casas blancas de tapia con zócalo verde y teja de barro ---
+
+  // Lavadero de papa: el tanque de agua donde se lava la papa, la banda que la saca y los bultos de tierra.
+  potato_washer(g, x, y, ctx) {
+    const tx = x + 0.3;
+    const ty = y + 0.4;
+    box(g, tx, ty, 1.5, 1.1, 10, 0x9aa3a8);
+    g.poly(isoPoly([[tx + 0.1, ty + 0.1, 10], [tx + 1.4, ty + 0.1, 10], [tx + 1.4, ty + 1.0, 10], [tx + 0.1, ty + 1.0, 10]])).fill(0x6fa8dc);
+    // La banda inclinada que saca la papa lavada.
+    const a = iso(tx + 1.5, ty + 0.55, 8);
+    const b = iso(tx + 2.6, ty + 0.55, 18);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 7, color: 0x37474f });
+    box(g, tx + 2.4, ty + 0.3, 0.1, 0.1, 18, PAL.woodDark);
+    // Bultos de papa con tierra esperando.
+    for (const [bx, by] of [[0.5, 2.3], [0.85, 2.45], [1.2, 2.3]]) {
+      const p = iso(x + bx, y + by);
+      g.ellipse(p.x, p.y - 5, 7, 5.5).fill(0xc8a26a).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 9, 3.5, 1.6).fill(PRODUCTS.potato.color);
+    }
+    const water = new Graphics();
+    this.anim.addChild(water);
+    this.animate = (time) => {
+      water.clear();
+      // Papas que suben por la banda y gotas que salpican.
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.5 + i / 4) % 1;
+        water.circle(a.x + (b.x - a.x) * f, a.y + (b.y - a.y) * f - 4, 2.6).fill(PRODUCTS.washed_potato.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+      }
+      if (!this.working) return;
+      const c = iso(tx + 0.75, ty + 0.55, 10);
+      for (let i = 0; i < 5; i++) {
+        const f = (time * 1.6 + i / 5) % 1;
+        water.circle(c.x + Math.cos(i * 1.3) * 10 * f, c.y - Math.sin(f * Math.PI) * 8, 1.2).fill({ color: 0xe8f6ff, alpha: 1 - f });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Seleccionadora: ramada con la mesa de escoger; la papa gruesa, la pareja y la menuda en tres bultos.
+  potato_grader(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 24 + ctx.up;
+    box(g, x0 + 0.4, y0 + 0.4, 1.6, 0.6, 9, PAL.wood);
+    for (const [k, [bx, by]] of [[1.0, 1.95], [1.5, 2.1], [2.0, 1.95]].entries()) {
+      const p = iso(x0 + bx, y0 + by);
+      g.ellipse(p.x, p.y - 5, 6 + k, 5 + k * 0.5).fill(0xc8a26a).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 9 - k * 0.5, 3, 1.4).fill(PRODUCTS.graded_potato.color);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 13, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      for (let i = 0; i < 5; i++) {
+        const p = iso(x0 + 0.6 + i * 0.3, y0 + 0.7, 9);
+        work.ellipse(p.x, p.y - 1.5, 2.6, 1.8).fill(PRODUCTS.washed_potato.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+      }
+      const p = iso(x0 + 1.2, y0 + 1.15);
+      worker(work, p.x, p.y, 0x8e44ad);
+      // La ruana sobre los hombros.
+      work.poly([p.x - 5, p.y - 17, p.x + 5, p.y - 17, p.x + 6, p.y - 11, p.x - 6, p.y - 11]).fill(0x8d6e63);
+      if (!this.working) return;
+      const f = (time * 1.2) % 1;
+      work.circle(p.x + 4 + f * 8, p.y - 14 + f * 10, 2).fill(PRODUCTS.graded_potato.color);
+    };
+    this.animate(0);
+  },
+
+  // Peladora de papa: casa blanca con zócalo verde; en el corredor, el tambor de la peladora que gira y
+  // bota las cáscaras.
+  potato_peeler(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xf7f4ee, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.7, 16, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, 0x2f7d4f);
+    box(g, x + 2.25, y + 2.0, 0.5, 0.5, 6, 0x9aa3a8);
+    const drum = iso(x + 2.5, y + 2.25, 14);
+    const peel = iso(x + 1.6, y + 2.5);
+    g.ellipse(peel.x, peel.y - 2, 9, 3.5).fill(0x8a6a3a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+    const spin = new Graphics();
+    this.anim.addChild(spin);
+    this.animate = (time) => {
+      spin.clear();
+      spin.ellipse(drum.x, drum.y, 9, 8).fill(0xb0bec5).stroke(OUTLINE);
+      const a = this.working ? time * 6 : 0;
+      for (let k = 0; k < 3; k++) {
+        const b = a + (k * Math.PI * 2) / 3;
+        spin.moveTo(drum.x, drum.y).lineTo(drum.x + Math.cos(b) * 7, drum.y + Math.sin(b) * 6).stroke({ width: 1.2, color: 0x607d8b });
+      }
+      if (!this.working) return;
+      const f = (time * 1.3) % 1;
+      spin.ellipse(drum.x - 8 - f * 10, drum.y + 2 + f * 8, 2, 1).fill(0x8a6a3a);
+    };
+    this.animate(0);
+  },
+
+  // Freidora: casa con la freidora grande en el corredor; las papitas criollas se doran en el aceite.
+  criollas_fryer(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 2.1;
+    const H = 26 + ctx.up;
+    box(g, x0 + 0.4, y0 + 0.5, 1.2, 0.8, 12, 0x9aa3a8);
+    const vat = iso(x0 + 1.0, y0 + 0.9, 12);
+    g.ellipse(vat.x, vat.y, 14, 6).fill(0xd9a30a).stroke(OUTLINE);
+    // Canastos con las papitas listas.
+    for (const [bx, by] of [[1.9, 1.7], [0.6, 1.8]]) {
+      const p = iso(x0 + bx, y0 + by);
+      g.poly([p.x - 7, p.y - 8, p.x + 7, p.y - 8, p.x + 5, p.y, p.x - 5, p.y]).fill(0xb08850).stroke(OUTLINE);
+      for (const dx of [-4, 0, 4]) g.circle(p.x + dx, p.y - 9, 2.2).fill(PRODUCTS.criollas.color);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
+    gableRoof(g, x0, y0, w, d, H, 13, PAL.roof, PAL.wall);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
+    this.smokePoints = [iso(x0 + 1.0, y0 + 0.9, 18)];
+    const fry = new Graphics();
+    this.anim.addChild(fry);
+    this.animate = (time) => {
+      fry.clear();
+      for (let i = 0; i < 6; i++) {
+        const bob = this.working ? Math.sin(time * 5 + i) * 1.2 : 0;
+        fry.circle(vat.x - 9 + i * 3.6, vat.y - 1 + Math.sin(i * 2) * 1.6 + bob, 2.2).fill(PRODUCTS.criollas.color).stroke({ width: 0.4, color: 0x8a5a0a });
+      }
+      if (!this.working) return;
+      for (let i = 0; i < 4; i++) fry.circle(vat.x + Math.sin(time * 6 + i * 1.7) * 10, vat.y + Math.cos(time * 5 + i) * 2.5, 0.9).fill({ color: 0xfff3c4, alpha: 0.9 });
+    };
+    this.animate(0);
+  },
+
+  // Empacadora de papitas: casa con la mesa donde las bolsas amarillas se llenan y se sellan.
+  criollas_bagger(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 1.9, 1.6, 28, ctx, { wall: 0xf7f4ee, roofH: 14 });
+    door(g, hx, hy, 1.6, 0.7, 16, 0x2e6fd1);
+    windowOnRight(this, g, hx, hy, 1.9, 0.8, 14, 0x2e6fd1);
+    box(g, x + 0.4, y + 2.15, 1.9, 0.35, 8, 0x555555);
+    const bags = new Graphics();
+    this.anim.addChild(bags);
+    this.animate = (time) => {
+      bags.clear();
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.35 + i / 4) % 1;
+        const p = iso(x + 0.45 + f * 1.7, y + 2.32, 8);
+        bags.roundRect(p.x - 3.5, p.y - 9, 7, 9, 1.5).fill(PRODUCTS.criollas.color).stroke(OUTLINE);
+        bags.rect(p.x - 3.5, p.y - 6, 7, 2.4).fill(PRODUCTS.criollas_bag.color);
+      }
+    };
+  },
+
+  // Cajonera: bodega con las cajas de papitas arrumadas en el patio (más arrumes con los hitos).
+  criollas_boxer(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xe8e2d0, roofColor: 0x9aa3a8, roofH: 14 });
+    door(g, hx, hy, 1.6, 1.6, 20, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.4, 0.8, 15, 0xffffff);
+    const stack = (bx, by, rows) => {
+      for (let r = 0; r < rows; r++) for (let k = 0; k < rows - r; k++) box(g, x + bx + k * 0.3 + r * 0.15, y + by, 0.26, 0.26, 7, PRODUCTS.criollas_box.color, { z: r * 7 });
+    };
+    stack(0.35, 2.3, 3);
+    if (ctx.tier >= 2) stack(1.5, 2.35, 2);
+    const carrier = new Graphics();
+    this.anim.addChild(carrier);
+    this.animate = (time) => {
+      carrier.clear();
+      const f = (time * 0.25) % 1;
+      const back = f > 0.5;
+      const k = back ? 1 - (f - 0.5) * 2 : f * 2;
+      const p = iso(x + 1.4 + k * 1.1, y + 2.1);
+      worker(carrier, p.x, p.y, 0xd7263d);
+      if (!back) carrier.rect(p.x - 6, p.y - 30, 12, 9).fill(PRODUCTS.criollas_box.color).stroke(OUTLINE);
+    };
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

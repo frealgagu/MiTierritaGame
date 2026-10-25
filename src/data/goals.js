@@ -414,5 +414,38 @@ const CARTAGENA = [
   { id: 'r_final', type: 'sold', product: 'paseo_islas', amount: 7000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA];
+// Boyacá · El Papal (v3.22): la misma lista que el Arrozal, con la papa.
+const PAPAL = [
+  { id: 'd01', type: 'sold', product: 'potato', amount: 20, reward: 15 },
+  { id: 'd02', type: 'level', target: 'potato_field', level: 5, reward: 20 },
+  { id: 'd03', type: 'level', target: 'potato_field:transport', level: 5, reward: 25 },
+  { id: 'd04', type: 'unlock', station: 'potato_washer', reward: 30 },
+  { id: 'd06', type: 'produced', product: 'washed_potato', amount: 50, reward: 80 },
+  { id: 'd07', type: 'level', target: 'potato_field', level: 10, reward: 100 },
+  { id: 'd08', type: 'unlock', station: 'potato_grader', reward: 150 },
+  { id: 'd09', type: 'level', target: 'dispatch:papal', level: 5, reward: 150 },
+  { id: 'd10', type: 'produced', product: 'graded_potato', amount: 200, reward: 300 },
+  { id: 'd11', type: 'unlock', station: 'potato_peeler', reward: 500 },
+  { id: 'd12', type: 'research', research: 'herraduras_b', reward: 500 },
+  { id: 'd13', type: 'income', zone: 'papal', perSecond: 5, reward: 600 },
+  { id: 'd14', type: 'level', target: 'potato_grader', level: 10, reward: 800 },
+  { id: 'd15', type: 'unlock', station: 'criollas_fryer', reward: 1500 },
+  { id: 'd16', type: 'produced', product: 'criollas', amount: 100, reward: 2000 },
+  { id: 'd17', type: 'researchCount', count: 3, reward: 2500 },
+  { id: 'd18', type: 'income', zone: 'papal', perSecond: 20, reward: 4000 },
+  { id: 'd19', type: 'allLevels', zone: 'papal', level: 10, reward: 5000 },
+  { id: 'd20', type: 'unlock', station: 'criollas_bagger', reward: 8000 },
+  { id: 'd21', type: 'produced', product: 'criollas_bag', amount: 500, reward: 12000 },
+  { id: 'd22', type: 'level', target: 'potato_field', level: 25, reward: 15000 },
+  { id: 'd23', type: 'income', zone: 'papal', perSecond: 100, reward: 20000 },
+  { id: 'd24', type: 'unlock', station: 'criollas_boxer', reward: 40000 },
+  { id: 'd25', type: 'sold', product: 'criollas_box', amount: 50, reward: 50000 },
+  { id: 'd26', type: 'research', research: 'sello_b', reward: 80000 },
+  { id: 'd27', type: 'allLevels', zone: 'papal', level: 25, reward: 100000 },
+  { id: 'd05', type: 'research', research: 'semilla_papa', reward: 50000 },
+  { id: 'd28', type: 'sold', product: 'criollas_box', amount: 500, reward: 150000 },
+  { id: 'd_final', type: 'sold', product: 'criollas_box', amount: 2000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA, ...PAPAL];

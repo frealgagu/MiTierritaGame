@@ -1874,6 +1874,101 @@ def paseo_islas():
     return layers
 
 
+# ---------- Boyacá · El Papal (v3.22) ----------
+
+def potato_shape(cx, cy, rx, ry, rot, color, eyes=True):
+    """Una papa: óvalo irregular con su borde oscuro y los ojitos."""
+    layers = [(OUTLINE, [grow(ellipse_pts(cx, cy, rx, ry, rot)[:-1], cx, cy, 2)]), (color, [ellipse(cx, cy, rx, ry, rot)])]
+    layers.append((shade_hex(color, 1.15), [ellipse(cx - rx * 0.3, cy - ry * 0.35, rx * 0.35, ry * 0.25, rot)]))
+    if eyes:
+        r = math.radians(rot)
+        layers.append((shade_hex(color, 0.7), [circle(cx + dx * math.cos(r) - dy * math.sin(r), cy + dx * math.sin(r) + dy * math.cos(r), 1.3) for dx, dy in [(-rx * 0.4, ry * 0.2), (rx * 0.3, -ry * 0.3), (rx * 0.5, ry * 0.35)]]))
+    return layers
+
+
+def potato_plant():
+    """Mata de papa: hojas verdes en ramillete con flores blancas y moradas, y una papa asomada."""
+    layers = [('#5d4037', [ellipse(50, 90, 34, 7)])]
+    layers += potato_shape(30, 88, 9, 6, -10, '#c9a066')
+    for x1, y1, w in [(18, 52, 9), (34, 36, 9), (50, 30, 9), (66, 36, 9), (82, 52, 9), (50, 50, 8), (28, 66, 8), (72, 66, 8)]:
+        layers.append(('#2e7d32', [leaf(50, 86, x1, y1, w)]))
+    layers.append(('#66bb6a', [rib(50, 86, 34, 38, 1), rib(50, 86, 66, 38, 1), rib(50, 86, 50, 32, 1)]))
+    for cx, cy, col in [(40, 26, '#ffffff'), (56, 22, '#b39ddb'), (70, 30, '#ffffff')]:
+        layers.append((OUTLINE, [circle(cx, cy, 6)]))
+        layers.append((col, [poly(*[v for k in range(5) for v in (cx + 5 * math.cos(k * 1.2566 - 1.57), cy + 5 * math.sin(k * 1.2566 - 1.57))])]))
+        layers.append(('#fdd835', [circle(cx, cy, 1.8)]))
+    return layers
+
+
+def potato():
+    """Papa: dos papas recién sacadas de la tierra, con tierrita pegada."""
+    layers = potato_shape(40, 60, 24, 17, -15, '#b98a52') + potato_shape(66, 70, 20, 14, 20, '#c9a066')
+    layers.append(('#6d4c32', [circle(30, 70, 2), circle(52, 56, 1.6), circle(74, 78, 1.8), circle(44, 48, 1.4)]))
+    return layers
+
+
+def washed_potato():
+    """Papa lavada: papas limpias y brillantes en una canasta, con gotas de agua."""
+    layers = [(OUTLINE, ['M 10 56 L 90 56 L 80 92 L 20 92 Z']), ('#b08850', ['M 13.5 58.5 L 86.5 58.5 L 78 89.5 L 22 89.5 Z'])]
+    layers.append(('#7a5a30', [rib(16 + k * 10, 60, 22 + k * 8, 88, 1) for k in range(7)]))
+    for cx, cy, rot in [(30, 52, -10), (50, 46, 10), (70, 52, -20), (40, 58, 0), (62, 58, 15)]:
+        layers += potato_shape(cx, cy, 11, 8, rot, '#e0bb7a')
+    layers.append(('#4fc3f7', ['M 80 16 Q 86 26 80 30 Q 74 26 80 16 Z', 'M 20 20 Q 24 27 20 30 Q 16 27 20 20 Z']))
+    return layers
+
+
+def graded_potato():
+    """Papa de primera: papas grandes y parejas con la cinta azul de primera calidad."""
+    layers = []
+    for cx, cy, rot in [(30, 66, -10), (52, 70, 5), (74, 64, -15), (42, 50, 10), (64, 48, -5)]:
+        layers += potato_shape(cx, cy, 14, 10, rot, '#d4a960')
+    layers += [(OUTLINE, [circle(78, 22, 14)]), ('#2e6fd1', [circle(78, 22, 12)]), ('#ffffff', [circle(78, 22, 6)]), ('#2e6fd1', [poly(70, 32, 66, 44, 72, 40, 76, 46, 78, 34), poly(86, 32, 90, 44, 84, 40, 80, 46, 78, 34)])]
+    return layers
+
+
+def peeled_potato():
+    """Papa pelada: papas amarillas sin cáscara en una olla con agua, y las cáscaras al lado."""
+    layers = [(OUTLINE, ['M 12 46 L 88 46 L 82 88 Q 50 96 18 88 Z']), ('#9aa3a8', ['M 15.5 48.5 L 84.5 48.5 L 79.5 85.5 Q 50 93 20.5 85.5 Z'])]
+    layers.append((OUTLINE, [ellipse(50, 46, 40, 10)]))
+    layers.append(('#81d4fa', [ellipse(50, 46, 37, 7.5)]))
+    for cx, cy, rot in [(34, 42, -10), (52, 38, 10), (68, 43, -20)]:
+        layers += potato_shape(cx, cy, 11, 7, rot, '#f6d860', eyes=False)
+    layers.append(('#b98a52', ['M 76 14 Q 90 10 94 22 Q 86 18 80 22 Z', 'M 70 24 Q 82 26 84 36 Q 78 30 72 32 Z']))
+    return layers
+
+
+def criollas():
+    """Papitas criollas fritas: las papitas amarillas y doradas, redonditas, en una totuma."""
+    layers = [(OUTLINE, ['M 8 52 Q 50 104 92 52 Z']), ('#8d6e4a', ['M 12 54 Q 50 98 88 54 Z'])]
+    for cx, cy in [(26, 50), (40, 44), (56, 42), (72, 48), (34, 56), (50, 54), (66, 56), (48, 32), (62, 34)]:
+        layers += [(OUTLINE, [circle(cx, cy, 8)]), ('#f2b705', [circle(cx, cy, 6.6)]), ('#ffd54f', [circle(cx - 2, cy - 2, 2.4)]), ('#c98a0a', [circle(cx + 2.5, cy + 2.5, 1.4)])]
+    layers.append(('#ffffff', [rect(cx, cy, 2, 2, 45) for cx, cy in [(44, 50), (58, 46), (30, 48), (68, 52)]]))
+    return layers
+
+
+def criollas_bag():
+    """Bolsa de papitas: la bolsa de paquete, amarilla y verde, con la papita dibujada."""
+    return [
+        (OUTLINE, ['M 22 12 L 78 12 L 74 24 Q 82 56 74 88 L 78 94 L 22 94 L 26 88 Q 18 56 26 24 Z']),
+        ('#f2b705', ['M 25 14.5 L 75 14.5 L 71.5 24.5 Q 79 56 71.5 87.5 L 74.5 91.5 L 25.5 91.5 L 28.5 87.5 Q 21 56 28.5 24.5 Z']),
+        ('#2fa36b', [rect(24, 30, 52, 14)]),
+        ('#ffffff', [rect(32, 35, 36, 4)]),
+        ('#d9a30a', [rib(26, 20, 74, 20, 1.4), rib(26, 86, 74, 86, 1.4)]),
+    ] + [(OUTLINE, [circle(50, 64, 12)]), ('#ffd54f', [circle(50, 64, 10.5)]), ('#c98a0a', [circle(54, 68, 2), circle(46, 60, 1.6)])]
+
+
+def criollas_box():
+    """Caja de papitas: la caja de cartón con las bolsas asomándose."""
+    layers = [(OUTLINE, [poly(8, 40, 50, 26, 92, 40, 92, 82, 50, 96, 8, 82)])]
+    layers.append(('#c8a26a', [poly(11, 42, 50, 55, 50, 92.5, 11, 80)]))
+    layers.append(('#b08850', [poly(50, 55, 89, 42, 89, 80, 50, 92.5)]))
+    for cx in (30, 50, 70):
+        layers += [(OUTLINE, [rect(cx - 8, 16 + abs(cx - 50) * 0.3, 16, 30)]), ('#f2b705', [rect(cx - 6.5, 17.5 + abs(cx - 50) * 0.3, 13, 27)]), ('#2fa36b', [rect(cx - 6.5, 24 + abs(cx - 50) * 0.3, 13, 6)])]
+    layers.append(('#d9b98a', [poly(11, 42, 50, 29, 89, 42, 50, 55)]))
+    layers.append(('#2e6fd1', [rect(56, 62, 24, 8, -16)]))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -1988,6 +2083,14 @@ ICONS = [
     (0xE06E, 'almuerzo_bahia', almuerzo_bahia),
     (0xE06F, 'lonchera_paseo', lonchera_paseo),
     (0xE070, 'paseo_islas', paseo_islas),
+    (0xE071, 'potato_plant', potato_plant),
+    (0xE072, 'potato', potato),
+    (0xE073, 'washed_potato', washed_potato),
+    (0xE074, 'graded_potato', graded_potato),
+    (0xE075, 'peeled_potato', peeled_potato),
+    (0xE076, 'criollas', criollas),
+    (0xE077, 'criollas_bag', criollas_bag),
+    (0xE078, 'criollas_box', criollas_box),
 ]
 
 
