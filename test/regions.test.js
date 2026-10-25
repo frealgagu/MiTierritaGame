@@ -590,12 +590,15 @@ test('Boyacá se abre al completar Cartagena y, mientras le falten zonas, no se 
   root.regions.costa.zones.cartagena.complete = true;
   assert.deepEqual(openRegions(root), ['boyaca']);
   const b = regionState(root, 'boyaca');
-  assert.deepEqual(Object.keys(b.zones), ['papal']);
-  const final = GOALS_BY_ZONE.papal.find((g) => g.final);
-  b.goals.claimed = GOALS_BY_ZONE.papal.filter((g) => !g.final).map((g) => g.id);
-  b.stats.sold.criollas_box = 1e9;
-  claimGoal(b, final.id, { emit() {} });
-  assert.equal(b.zones.papal.complete, true);
+  assert.deepEqual(Object.keys(b.zones), ['papal', 'cerveceria']);
+  // Cada zona abre la siguiente (v3.23); la última que tiene por ahora no termina la región.
+  b.stats.sold = { criollas_box: 1e9, beer_crate: 1e9 };
+  for (const zone of ['papal', 'cerveceria']) {
+    b.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
+    claimGoal(b, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
+    assert.equal(b.zones[zone].complete, true);
+  }
+  assert.equal(b.zones.cerveceria.unlocked, true);
   assert.ok(!b.regionDone);
   for (const id of stationsOf(b)) b.stations[id] = { ...(b.stations[id] ?? {}), level: 100, transport: { level: 100 } };
   b.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'boyaca').map((r) => r.id);

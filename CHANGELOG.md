@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.23.0 — Boyacá: La Cervecería
+- **🍺 La Cervecería**, la segunda zona de Boyacá, se abre al completar El Papal: el Cebadal → la Maltería → la Paila de cocción → los Tanques de fermentación → la Embotelladora; de la cebada a la canasta de cerveza, pasando por la malta, el mosto y la cerveza, con íconos propios.
+- Su persona es **Don Hernando, el cervecero**, con sus datos curiosos, objetivos, 9 investigaciones y su victoria.
+- El mapa: el cebadal, que se va dorando con cada hito, pacas de paja, eucaliptos y cipreses. En las estaciones: el piso de la maltería con la cebada que alguien voltea y el horno con su chimenea, la paila de cobre echando vapor, los tanques de acero con sus burbujas y la banda de botellas junto a las canastas rojas.
+- Las zonas que vienen cambian de orden para que las rutas encajen: Ráquira (que hará jarras de barro para la cerveza), Paipa, Las Ruanas y Villa de Leyva.
+
 ## v3.22.0 — Boyacá: El Papal
 - **Se abre Boyacá** ⛰️ al completar Cartagena, con su propia economía (empieza de cero y las demás regiones siguen produciendo).
 - Su primera zona, **🥔 El Papal**: el Papal → el Lavadero de papa → la Seleccionadora → la Peladora → la Freidora → la Empacadora de papitas → la Cajonera; de la papa a la caja de papitas criollas fritas, con íconos propios para cada producto.

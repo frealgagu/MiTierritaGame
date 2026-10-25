@@ -124,6 +124,12 @@ export const ICON = {
   criollas: '\uE076', // Papitas criollas fritas: las papitas amarillas y doradas, redonditas, en una totuma
   criollasBag: '\uE077', // Bolsa de papitas: la bolsa de paquete, amarilla y verde, con la papita dibujada
   criollasBox: '\uE078', // Caja de papitas: la caja de cartón con las bolsas asomándose
+  barleyPlant: '\uE079', // Mata de cebada: macolla de tallos con espigas doradas y barbas largas
+  barley: '\uE07A', // Cebada: el atado de espigas doradas recién cortadas
+  malt: '\uE07B', // Malta: los granos de cebada germinados y tostados en un costal abierto
+  wort: '\uE07C', // Mosto: la paila de cobre con el mosto dulce hirviendo y su vapor
+  beer: '\uE07D', // Cerveza: la jarra llena con su espuma blanca, y la botella al lado
+  beerCrate: '\uE07E', // Canasta de cerveza: la canasta plástica roja con las botellas asomadas
 };
 
 export const ICON_FONT = 'Cafetal Icons';

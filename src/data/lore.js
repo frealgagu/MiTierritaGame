@@ -97,6 +97,12 @@ export const FACTS = {
   rice_sorter: ['El arroz excelso tiene casi todos los granos enteros.'],
   rice_bagger: ['En la Costa no hay almuerzo sin arroz: de coco, de lisa…'],
   rice_stacker: ['Un bulto de arroz pesa 50 kilos y se carga al hombro.'],
+  // Boyacá · La Cervecería (v3.23)
+  barley_field: ['La cebada se da en el altiplano frío de Boyacá, junto al trigo.', 'De la cebada sale la malta, y de la malta, la cerveza.'],
+  maltings: ['Maltear es dejar germinar el grano y luego secarlo con calor.'],
+  brew_kettle: ['La malta molida se cocina en agua caliente: así sale el mosto dulce.'],
+  fermenters: ['La levadura se come el azúcar del mosto y lo vuelve cerveza.', 'En Boyacá también se toma chicha, hecha con maíz fermentado.'],
+  bottler: ['La cerveza se reparte en canastas de botellas retornables.'],
   // Boyacá · El Papal (v3.22)
   potato_field: ['Boyacá es uno de los departamentos que más papa siembra en Colombia.', 'La papa se da en tierra fría, entre los 2.500 y los 3.500 metros.', 'Hay papa pastusa, sabanera, tocarreña y la criolla, amarilla y chiquita.'],
   potato_washer: ['La papa se lava para quitarle la tierra negra del páramo.'],
@@ -163,6 +169,7 @@ export const PEOPLE = {
   sombrero: { icon: '👴🏽', name: 'Don Eliécer', role: 'el artesano' },
   cartagena: { icon: '👩🏿', name: 'Doña Dionisia', role: 'la palenquera' },
   papal: { icon: '👨🏻‍🌾', name: 'Don Aurelio', role: 'el papicultor' },
+  cerveceria: { icon: '🧔🏻', name: 'Don Hernando', role: 'el cervecero' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -181,6 +188,7 @@ export const WELCOME = {
   hormigas: '¡Bienvenido, mijo! Las hormigas solo salen en la entrada de aguas, pero tenemos la despensa llena de la última cosecha.',
   arrozal: '¡Ajá, bienvenido a la Costa, compa! Aquí el arroz crece con los pies en el agua.',
   cocal: '¡Ey, mi vida, bienvenido al Cocal! Aquí bajamos el coco de la palma y lo volvemos cocada.',
+  cerveceria: '¡Qué más, sumercé! Aquí la cebada del altiplano se vuelve malta, y la malta, cerveza.',
   papal: '¡Sumercé, bienvenido a Boyacá! Aquí la papa se da en la tierra fría, entre la neblina y los eucaliptos.',
   cartagena: '¡Bienvenido a Cartagena, mi amor! Aquí llega lo mejor de toda la Costa, y de aquí salen las lanchas a las islas.',
   sombrero: '¡Bienvenido a Tuchín, compadre! Aquí la caña flecha se vuelve trenza, y la trenza, sombrero vueltiao.',

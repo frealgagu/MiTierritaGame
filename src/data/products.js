@@ -134,6 +134,13 @@ export const PRODUCTS = {
   criollas_bag: { name: 'Bolsa de papitas', zone: 'papal', value: 45, icon: ICON.criollasBag, color: 0x2fa36b },
   criollas_box: { name: 'Caja de papitas', zone: 'papal', value: 250, icon: ICON.criollasBox, color: 0xc8a26a },
 
+  // Boyacá · La Cervecería (v3.23): los mismos valores que el Tabacal y el Cocal.
+  barley: { name: 'Cebada', zone: 'cerveceria', value: 10, icon: ICON.barley, color: 0xe6b93a },
+  malt: { name: 'Malta', zone: 'cerveceria', value: 25, icon: ICON.malt, color: 0xa0612d },
+  wort: { name: 'Mosto', zone: 'cerveceria', value: 60, icon: ICON.wort, color: 0xc46a2a },
+  beer: { name: 'Cerveza', zone: 'cerveceria', value: 150, icon: ICON.beer, color: 0xe8a317 },
+  beer_crate: { name: 'Canasta de cerveza', zone: 'cerveceria', value: 250, icon: ICON.beerCrate, color: 0xd7263d },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

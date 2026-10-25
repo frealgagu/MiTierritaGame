@@ -265,6 +265,17 @@ export const RESEARCH = [
   { zone: 'papal', id: 'sello_b', name: 'Sello de calidad', icon: '🏅', desc: 'Las cajas de papitas valen un 50 % más.', cost: 300000, requires: 'criollas_boxer', effect: { type: 'productValue', target: 'criollas_box', mult: 1.5 } },
   { zone: 'papal', id: 'maestria_papal', name: 'Maestría: Papal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'papal', mult: 4 } },
   { zone: 'papal', id: 'supremacia_papal', name: 'Supremacía: Papal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'papal', mult: 8 } },
+
+  // Boyacá · La Cervecería (v3.23): las mismas del Tabacal y el Cocal, con la cerveza.
+  { zone: 'cerveceria', id: 'malteria_neumatica', name: 'Maltería neumática', icon: ICON.malt, desc: 'La Maltería maltea el doble.', cost: 20000, requires: 'maltings', effect: { type: 'stationSpeed', target: 'maltings', mult: 2 } },
+  { zone: 'cerveceria', id: 'cebada_cervecera', name: 'Cebada cervecera', icon: ICON.barleyPlant, desc: 'El Cebadal produce el doble.', cost: 50000, requires: 'brew_kettle', effect: { type: 'stationSpeed', target: 'barley_field', mult: 2 } },
+  { zone: 'cerveceria', id: 'paila_cervecera', name: 'Paila de cobre grande', icon: ICON.wort, desc: 'La Paila de cocción cocina el doble.', cost: 40000, requires: 'brew_kettle', effect: { type: 'stationSpeed', target: 'brew_kettle', mult: 2 } },
+  { zone: 'cerveceria', id: 'camion_cerveza', name: 'Camión cervecero', icon: '🚚', desc: 'El despacho de la Cervecería lleva el doble por viaje.', cost: 80000, requires: 'brew_kettle', effect: { type: 'dispatchCapacity', target: 'cerveceria', mult: 2 } },
+  { zone: 'cerveceria', id: 'tanques_acero', name: 'Tanques de acero', icon: ICON.beer, desc: 'Los Tanques de fermentación fermentan el doble.', cost: 300000, requires: 'fermenters', effect: { type: 'stationSpeed', target: 'fermenters', mult: 2 } },
+  { zone: 'cerveceria', id: 'llenadora', name: 'Llenadora de botellas', icon: ICON.beerCrate, desc: 'La Embotelladora embotella el doble.', cost: 600000, requires: 'bottler', effect: { type: 'stationSpeed', target: 'bottler', mult: 2 } },
+  { zone: 'cerveceria', id: 'receta_artesanal', name: 'Receta artesanal', icon: '🏅', desc: 'Las canastas de cerveza valen un 50 % más.', cost: 1500000, requires: 'bottler', effect: { type: 'productValue', target: 'beer_crate', mult: 1.5 } },
+  { zone: 'cerveceria', id: 'maestria_cerveceria', name: 'Maestría: Cervecería', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cerveceria', mult: 4 } },
+  { zone: 'cerveceria', id: 'supremacia_cerveceria', name: 'Supremacía: Cervecería', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cerveceria', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

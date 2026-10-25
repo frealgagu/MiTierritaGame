@@ -1969,6 +1969,91 @@ def criollas_box():
     return layers
 
 
+# ---------- Boyacá · La Cervecería (v3.23) ----------
+
+def barley_spike(cx, cy, length, rot, color):
+    """Espiga de cebada: tallo, granos en dos hileras y las barbas largas."""
+    r = math.radians(rot)
+    ux, uy = math.sin(r), -math.cos(r)
+    layers = []
+    awns = []
+    grains = []
+    for k in range(6):
+        t = 0.35 + k * 0.11
+        gx, gy = cx + ux * length * t, cy + uy * length * t
+        for side in (-1, 1):
+            px, py = gx + side * uy * 3.2, gy - side * ux * 3.2
+            grains.append(ellipse(px, py, 2.4, 4, rot + side * 20))
+            awns.append(rib(px, py, px + ux * 14 + side * uy * 4, py + uy * 14 - side * ux * 4, 0.8))
+    layers.append(('#c8a23a', [rib(cx, cy, cx + ux * length, cy + uy * length, 1.6)] + awns))
+    layers.append((color, grains))
+    return layers
+
+
+def barley_plant():
+    """Mata de cebada: macolla de tallos con espigas doradas y barbas largas."""
+    layers = [('#5d4037', [ellipse(50, 92, 28, 6)])]
+    layers.append(('#7cb342', [leaf(50, 92, 22, 60, 4), leaf(50, 92, 78, 60, 4)]))
+    for cx, rot in [(42, -18), (50, 0), (58, 18)]:
+        layers += barley_spike(cx, 92, 70, rot, '#e6b93a')
+    return layers
+
+
+def barley():
+    """Cebada: el atado de espigas doradas recién cortadas."""
+    layers = []
+    for cx, rot in [(30, -25), (42, -10), (54, 5), (66, 20)]:
+        layers += barley_spike(cx + 6, 94, 72, rot, '#e6b93a')
+    layers.append(('#8b5a2b', [rect(32, 66, 34, 6, 0)]))
+    return layers
+
+
+def malt():
+    """Malta: los granos de cebada germinados y tostados en un costal abierto."""
+    layers = [(OUTLINE, ['M 14 40 Q 10 70 18 92 L 82 92 Q 90 70 86 40 Z']), ('#e8d9a8', ['M 17 42.5 Q 13 70 20.5 89.5 L 79.5 89.5 Q 87 70 83 42.5 Z'])]
+    layers.append((OUTLINE, [ellipse(50, 42, 38, 12)]))
+    layers.append(('#a0612d', [ellipse(50, 42, 35, 9.5)]))
+    for cx, cy, rot in [(30, 40, 20), (42, 36, -15), (56, 38, 30), (68, 42, -25), (38, 46, 10), (52, 46, -10), (62, 34, 15), (46, 30, 5)]:
+        layers += rice_grain(cx, cy, rot, '#c8853a', 6, 3)
+    layers.append(('#5d4037', [rib(30, 60, 70, 60, 1.2), rib(34, 74, 66, 74, 1.2)]))
+    return layers
+
+
+def wort():
+    """Mosto: la paila de cobre con el mosto dulce hirviendo y su vapor."""
+    layers = [(OUTLINE, ['M 10 44 L 90 44 L 84 86 Q 50 96 16 86 Z']), ('#c46a2a', ['M 13.5 46.5 L 86.5 46.5 L 81 83.5 Q 50 93 19 83.5 Z'])]
+    layers.append(('#e08a4a', [rect(20, 50, 8, 30)]))
+    layers.append((OUTLINE, [ellipse(50, 44, 40, 10)]))
+    layers.append(('#a8641a', [ellipse(50, 44, 37, 7.5)]))
+    layers.append(('#d4892a', [circle(38, 43, 3), circle(56, 45, 2.4), circle(64, 42, 2)]))
+    layers.append(('#b0bec5', ['M 34 34 Q 30 22 34 10 L 37 10 Q 33 22 37 34 Z', 'M 54 34 Q 50 22 54 10 L 57 10 Q 53 22 57 34 Z', 'M 72 34 Q 68 24 72 14 L 75 14 Q 71 24 75 34 Z']))
+    return layers
+
+
+def beer():
+    """Cerveza: la jarra llena con su espuma blanca, y la botella al lado."""
+    layers = [(OUTLINE, ['M 18 30 L 62 30 L 60 92 L 20 92 Z', 'M 60 44 Q 80 44 80 60 Q 80 76 60 76 L 60 68 Q 72 68 72 60 Q 72 52 60 52 Z'])]
+    layers.append(('#e8a317', ['M 20.5 34 L 59.5 34 L 57.6 89.5 L 22.4 89.5 Z']))
+    layers.append(('#f6c244', [rect(26, 38, 6, 46)]))
+    layers.append(('#ffffff', [circle(cx, cy, r) for cx, cy, r in [(24, 28, 7), (34, 24, 8), (46, 25, 8), (56, 28, 7)]]))
+    layers.append(('#fff3c4', [circle(38, 60, 1.4), circle(46, 72, 1.2), circle(30, 78, 1.4)]))
+    layers += [(OUTLINE, ['M 80 30 L 80 20 L 86 20 L 86 30 Q 94 36 94 48 L 94 92 L 72 92 L 72 48 Q 72 36 80 30 Z']), ('#6d4c1f', ['M 82.5 32 L 82.5 22.5 L 83.5 22.5 L 83.5 32 Q 91.5 38 91.5 48 L 91.5 89.5 L 74.5 89.5 L 74.5 48 Q 74.5 38 82.5 32 Z']), ('#f2b705', [rect(74.5, 60, 17, 12)])]
+    return layers
+
+
+def beer_crate():
+    """Canasta de cerveza: la canasta plástica roja con las botellas asomadas."""
+    layers = []
+    for k in range(5):
+        x = 18 + k * 14
+        layers += [(OUTLINE, [rect(x - 4, 16, 8, 40)]), ('#6d4c1f', [rect(x - 2.5, 18, 5, 37)]), ('#f2b705', [rect(x - 2.5, 30, 5, 8)])]
+    layers.append((OUTLINE, [rect(6, 44, 88, 50)]))
+    layers.append(('#d7263d', [rect(9, 47, 82, 44)]))
+    layers.append(('#a61d2f', [rect(16 + k * 14, 56, 8, 26) for k in range(5)]))
+    layers.append(('#ffffff', [rect(36, 84, 28, 4)]))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -2091,6 +2176,12 @@ ICONS = [
     (0xE076, 'criollas', criollas),
     (0xE077, 'criollas_bag', criollas_bag),
     (0xE078, 'criollas_box', criollas_box),
+    (0xE079, 'barley_plant', barley_plant),
+    (0xE07A, 'barley', barley),
+    (0xE07B, 'malt', malt),
+    (0xE07C, 'wort', wort),
+    (0xE07D, 'beer', beer),
+    (0xE07E, 'beer_crate', beer_crate),
 ]
 
 

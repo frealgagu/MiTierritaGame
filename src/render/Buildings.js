@@ -2820,6 +2820,121 @@ const DRAW = {
     };
   },
 
+  // --- Boyacá · La Cervecería (v3.23) ---
+
+  // Maltería: el piso de germinación con la cebada extendida que alguien voltea, y el horno de secado con
+  // su chimenea.
+  maltings(g, x, y, ctx) {
+    const px = x + 0.25;
+    const py = y + 1.1;
+    g.poly(isoPoly([[px, py], [px + 2.5, py], [px + 2.5, py + 1.65], [px, py + 1.65]])).fill(0xc9c4b8).stroke(OUTLINE);
+    g.poly(isoPoly([[px + 0.15, py + 0.15], [px + 2.35, py + 0.15], [px + 2.35, py + 1.5], [px + 0.15, py + 1.5]])).fill(0xd9b56a);
+    for (let k = 0; k < 6; k++) {
+      const a = iso(px + 0.2, py + 0.25 + k * 0.21);
+      const b = iso(px + 2.3, py + 0.25 + k * 0.21);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0xb08a4a });
+    }
+    // El horno: una casita de ladrillo con chimenea.
+    box(g, x + 0.3, y + 0.15, 1.3, 0.8, 18, 0xb5562e);
+    gableRoof(g, x + 0.3, y + 0.15, 1.3, 0.8, 18, 8, PAL.roof, 0xb5562e);
+    box(g, x + 1.3, y + 0.3, 0.2, 0.2, 32 + ctx.up, 0x8a3b1f);
+    this.roofTop = iso(x + 0.95, y + 0.55, 26);
+    this.smokePoints = [iso(x + 1.4, y + 0.4, 32 + ctx.up)];
+    const rake = new Graphics();
+    this.anim.addChild(rake);
+    this.animate = (time) => {
+      rake.clear();
+      const f = (Math.sin(time * 1.1) + 1) / 2;
+      const p = iso(px + 0.6 + f * 1.4, py + 0.95);
+      worker(rake, p.x, p.y, 0x2e6fd1);
+      const swing = Math.sin(time * 5) * 4;
+      rake.moveTo(p.x + 3, p.y - 14).lineTo(p.x + 12 + swing, p.y + 2).stroke({ width: 1.6, color: PAL.wood });
+      rake.moveTo(p.x + 8 + swing, p.y + 2).lineTo(p.x + 16 + swing, p.y + 2).stroke({ width: 2, color: PAL.woodDark });
+    };
+    this.animate(0);
+  },
+
+  // Paila de cocción: casa con la olla grande de cobre en el corredor, echando vapor, y los costales de malta.
+  brew_kettle(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xf7f4ee, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.7, 16, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, 0x2f7d4f);
+    const k = iso(x + 1.0, y + 2.35);
+    g.moveTo(k.x - 13, k.y - 2).lineTo(k.x - 14, k.y - 18).quadraticCurveTo(k.x, k.y - 22, k.x + 14, k.y - 18).lineTo(k.x + 13, k.y - 2).quadraticCurveTo(k.x, k.y + 3, k.x - 13, k.y - 2).closePath().fill(0xc46a2a).stroke(OUTLINE);
+    g.ellipse(k.x, k.y - 18, 14, 4.5).fill(PRODUCTS.wort.color).stroke({ width: 0.8, color: 0x8a4a1a });
+    g.rect(k.x - 9, k.y - 14, 3, 10).fill(0xe08a4a);
+    for (const [bx, by] of [[2.3, 2.1], [2.6, 2.3], [2.35, 2.5]]) {
+      const p = iso(x + bx, y + by);
+      g.ellipse(p.x, p.y - 5, 6.5, 5).fill(0xe8d9a8).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 9, 3, 1.3).fill(PRODUCTS.malt.color);
+    }
+    const steam = new Graphics();
+    this.anim.addChild(steam);
+    this.animate = (time) => {
+      steam.clear();
+      if (!this.working) return;
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.45 + i / 4) % 1;
+        steam.circle(k.x - 6 + i * 4 + Math.sin(f * 6) * 3, k.y - 22 - f * 22, 2.5 + f * 4).fill({ color: 0xffffff, alpha: 0.5 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Tanques de fermentación: los tanques de acero en fila, con sus escaleras y las burbujas del termómetro.
+  fermenters(g, x, y, ctx) {
+    const tanks = ctx.tier >= 2 ? [[0.5, 0.6], [1.3, 0.6], [2.1, 0.6], [0.9, 1.6], [1.7, 1.6]] : [[0.6, 0.7], [1.6, 0.7], [1.1, 1.7]];
+    this.tanks = [];
+    for (const [tx, ty] of tanks) {
+      const base = iso(x + tx, y + ty);
+      const h = 34 + ctx.up / 2;
+      shadow(g, base.x + 3, base.y + 1, 13, 5);
+      g.rect(base.x - 10, base.y - h, 20, h).fill(0xc7ccd1).stroke(OUTLINE);
+      g.rect(base.x - 7, base.y - h, 4, h).fill(0xe3e7ea);
+      g.ellipse(base.x, base.y - h, 10, 4).fill(0xdfe3e6).stroke(OUTLINE);
+      g.poly([base.x - 10, base.y, base.x + 10, base.y, base.x + 4, base.y + 6, base.x - 4, base.y + 6]).fill(0x9aa3a8).stroke(OUTLINE);
+      g.rect(base.x + 3, base.y - h * 0.6, 4, 8).fill(0xffffff).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+      this.tanks.push({ x: base.x, y: base.y - h });
+    }
+    this.roofTop = iso(x + 1.4, y + 1.2, 40);
+    const bub = new Graphics();
+    this.anim.addChild(bub);
+    this.animate = (time) => {
+      bub.clear();
+      if (!this.working) return;
+      for (const [k, t] of this.tanks.entries()) {
+        const f = (time * 0.6 + k * 0.3) % 1;
+        bub.circle(t.x + 2, t.y - 2 - f * 8, 1.2).fill({ color: 0xffffff, alpha: 1 - f });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Embotelladora: casa con la banda de botellas que se llenan y, al lado, las canastas rojas apiladas.
+  bottler(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xf7f4ee, roofH: 14 });
+    door(g, hx, hy, 1.6, 1.8, 18, 0x2e6fd1);
+    windowOnRight(this, g, hx, hy, 2.4, 0.8, 14, 0x2e6fd1);
+    box(g, x + 0.4, y + 2.15, 1.5, 0.35, 8, 0x555555);
+    const stack = [[2.3, 2.2, 0], [2.65, 2.2, 0], [2.48, 2.2, 6], [2.48, 2.55, 0], [2.3, 2.55, 0]];
+    for (const [bx, by, z] of stack.slice(0, 2 + Math.min(ctx.tier, 3))) box(g, x + bx - 0.15, y + by - 0.12, 0.3, 0.24, 6, PRODUCTS.beer_crate.color, { z });
+    const belt = new Graphics();
+    this.anim.addChild(belt);
+    this.animate = (time) => {
+      belt.clear();
+      for (let i = 0; i < 6; i++) {
+        const f = (time * 0.3 + i / 6) % 1;
+        const p = iso(x + 0.45 + f * 1.4, y + 2.32, 8);
+        belt.roundRect(p.x - 1.6, p.y - 9, 3.2, 9, 1).fill(0x6d4c1f).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+        belt.rect(p.x - 1.6, p.y - 5, 3.2, 2).fill(0xf2b705);
+      }
+    };
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

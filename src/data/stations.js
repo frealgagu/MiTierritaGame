@@ -159,6 +159,15 @@ export const STATIONS = [
   { id: 'criollas_bagger', zone: 'papal', name: 'Empacadora de papitas', icon: ICON.criollasBag, in: { criollas: 1 }, out: { criollas_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.22' },
   { id: 'criollas_boxer', zone: 'papal', name: 'Cajonera', icon: ICON.criollasBox, in: { criollas_bag: 4 }, out: { criollas_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.22' },
 
+  // Boyacá · La Cervecería (v3.23), en el altiplano de Tibasosa y Duitama: la cebada se maltea, la malta se
+  // muele y se cocina en la paila (el mosto), el mosto fermenta en los tanques y la cerveza se embotella.
+  // Mismos números que el Tabacal y el Cocal.
+  { id: 'barley_field', zone: 'cerveceria', name: 'Cebadal', icon: ICON.barleyPlant, infinite: true, out: { barley: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.23' },
+  { id: 'maltings', zone: 'cerveceria', name: 'Maltería', icon: ICON.malt, in: { barley: 1 }, out: { malt: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.23' },
+  { id: 'brew_kettle', zone: 'cerveceria', name: 'Paila de cocción', icon: ICON.wort, in: { malt: 2 }, out: { wort: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.23' },
+  { id: 'fermenters', zone: 'cerveceria', name: 'Tanques de fermentación', icon: ICON.beer, in: { wort: 2 }, out: { beer: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.23' },
+  { id: 'bottler', zone: 'cerveceria', name: 'Embotelladora', icon: ICON.beerCrate, in: { beer: 1 }, out: { beer_crate: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.23' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

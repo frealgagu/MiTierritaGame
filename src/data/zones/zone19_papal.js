@@ -30,5 +30,5 @@ export const ZONE19 = {
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
   unlockedBy: null, // la primera de Boyacá: se abre con la región
-  next: null,
+  next: 'cerveceria',
 };

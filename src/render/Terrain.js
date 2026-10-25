@@ -234,6 +234,12 @@ export class Terrain {
           else if (r < 0.06) obj = coconutPalm(rng);
           else if (r < 0.085) obj = egret(rng);
           else if (r < 0.11) obj = banana(rng);
+        } else if (this.zone.theme === 'barley') {
+          // Cebadales (v3.23): eucaliptos, cipreses, pacas de paja y piedras.
+          if (r < 0.04) obj = eucalyptus(rng);
+          else if (r < 0.065) obj = cypress(rng);
+          else if (r < 0.085) obj = hayBale(rng);
+          else if (r < 0.105) obj = rock(rng);
         } else if (this.zone.theme === 'potato') {
           // Altiplano (v3.22): eucaliptos, frailejones del páramo, piedras y algún ciprés.
           if (r < 0.04) obj = eucalyptus(rng);
@@ -308,7 +314,8 @@ const FARM_SOIL = {
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
-  potato: (v) => mix(0x4a3526, 0x3a291d, v * 0.5), // la tierra negra del altiplano
+  potato: (v) => mix(0x4a3526, 0x3a291d, v * 0.5),
+  barley: (v) => mix(0x8a6a3a, 0x7a5c30, v * 0.5), // la tierra negra del altiplano
   canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // la tierra seca de la sabana zenú // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6),
   cartagena: (v) => mix(0xe2d2ae, 0xcfbd94, v * 0.6), // la plaza de piedra coralina // la plaza de piedra amarilla
@@ -847,6 +854,21 @@ function coconutPalm(rng) {
   drawCoconutPalm(g, 0, 0, 1, rng);
   c.addChild(g);
   return c;
+}
+
+// Mata de cebada (v3.23): tallos delgados con las espigas doradas y sus barbas (más doradas con los hitos).
+export function drawBarley(g, x, y, scale, rng, ripe = 0) {
+  const s = scale;
+  shadow(g, x + 2, y + 1, 8 * s, 3 * s);
+  const color = [0x9ccc65, 0xc8c25a, 0xe0b84a, 0xe6b93a][Math.min(ripe, 3)];
+  for (let i = 0; i < 6; i++) {
+    const sx = x + (i - 2.5) * 2 * s;
+    const h = (20 + rng() * 6) * s;
+    const lean = (i - 2.5) * 0.8 * s;
+    g.moveTo(sx, y).quadraticCurveTo(sx + lean * 0.5, y - h * 0.6, sx + lean, y - h).stroke({ width: 1.1 * s, color: 0x9a9a4a });
+    g.ellipse(sx + lean, y - h - 3 * s, 1.4 * s, 3.6 * s).fill(color);
+    g.moveTo(sx + lean, y - h - 6 * s).lineTo(sx + lean + 1.5 * s, y - h - 11 * s).stroke({ width: 0.6, color: 0xd9c08c });
+  }
 }
 
 // Mata de papa (v3.22): ramillete de hojas verdes con flores blancas y moradas (más con cada hito).

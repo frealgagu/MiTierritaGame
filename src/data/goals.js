@@ -447,5 +447,24 @@ const PAPAL = [
   { id: 'd_final', type: 'sold', product: 'criollas_box', amount: 2000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA, ...PAPAL];
+// Boyacá · La Cervecería (v3.23): la misma lista que el Tabacal y el Cocal.
+const CERVECERIA = [
+  { id: 'f01', type: 'sold', product: 'barley', amount: 50, reward: 500 },
+  { id: 'f02', type: 'level', target: 'barley_field', level: 10, reward: 1000 },
+  { id: 'f03', type: 'unlock', station: 'maltings', reward: 2000 },
+  { id: 'f04', type: 'level', target: 'barley_field:transport', level: 10, reward: 2000 },
+  { id: 'f05', type: 'unlock', station: 'brew_kettle', reward: 5000 },
+  { id: 'f06', type: 'produced', product: 'wort', amount: 200, reward: 8000 },
+  { id: 'f08', type: 'unlock', station: 'fermenters', reward: 20000 },
+  { id: 'f09', type: 'level', target: 'dispatch:cerveceria', level: 10, reward: 20000 },
+  { id: 'f10', type: 'produced', product: 'beer', amount: 500, reward: 40000 },
+  { id: 'f11', type: 'unlock', station: 'bottler', reward: 80000 },
+  { id: 'f12', type: 'allLevels', zone: 'cerveceria', level: 25, reward: 100000 },
+  { id: 'f07', type: 'research', research: 'malteria_neumatica', reward: 50000 },
+  { id: 'f13', type: 'income', zone: 'cerveceria', perSecond: 500, reward: 150000 },
+  { id: 'f14', type: 'sold', product: 'beer_crate', amount: 1000, reward: 300000 },
+  { id: 'f_final', type: 'sold', product: 'beer_crate', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA };
+export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA, ...PAPAL, ...CERVECERIA];
