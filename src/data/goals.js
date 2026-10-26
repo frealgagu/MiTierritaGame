@@ -602,5 +602,26 @@ const FRUTAL = [
   { id: 'lf_final', type: 'sold', product: 'juice_box', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL };
+// Los Llanos · La Cachamera (v3.33): la misma lista que la Fiquera, la Ciénaga y Ráquira.
+const CACHAMERA = [
+  { id: 'lc01', type: 'sold', product: 'cachama', amount: 50, reward: 10000 },
+  { id: 'lc02', type: 'level', target: 'fish_ponds', level: 10, reward: 20000 },
+  { id: 'lc03', type: 'unlock', station: 'cachama_cleaner', reward: 40000 },
+  { id: 'lc04', type: 'level', target: 'fish_ponds:transport', level: 10, reward: 40000 },
+  { id: 'lc05', type: 'unlock', station: 'pisillo_kitchen', reward: 80000 },
+  { id: 'lc06', type: 'produced', product: 'pisillo', amount: 100, reward: 120000 },
+  { id: 'lc08', type: 'unlock', station: 'cachama_filleter', reward: 250000 },
+  { id: 'lc09', type: 'level', target: 'dispatch:cachamera', level: 10, reward: 250000 },
+  { id: 'lc10', type: 'unlock', station: 'cachama_smoker', reward: 500000 },
+  { id: 'lc11', type: 'produced', product: 'smoked_cachama', amount: 200, reward: 800000 },
+  { id: 'lc12', type: 'unlock', station: 'cachama_kitchen', reward: 1200000 },
+  { id: 'lc13', type: 'imported', product: 'passion_juice', amount: 200, reward: 1500000 },
+  { id: 'lc14', type: 'level', target: 'route:jugo', level: 25, reward: 2000000 },
+  { id: 'lc15', type: 'allLevels', zone: 'cachamera', level: 25, reward: 3000000 },
+  { id: 'lc07', type: 'research', research: 'alevinos', reward: 1500000 },
+  { id: 'lc16', type: 'sold', product: 'cachama_maracuya', amount: 1000, reward: 5000000 },
+  { id: 'lc_final', type: 'sold', product: 'cachama_maracuya', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

@@ -3833,6 +3833,145 @@ const DRAW = {
     };
   },
 
+  // --- Los Llanos · La Cachamera (v3.33) ---
+
+  // Limpieza de cachama: la ramada con la mesa de lavar, la manguera y las cachamas que se escaman.
+  cachama_cleaner(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 24 + ctx.up;
+    box(g, x0 + 0.3, y0 + 0.4, 1.8, 0.6, 9, 0xb0bec5);
+    for (let k = 0; k < 4; k++) {
+      const p = iso(x0 + 0.55 + k * 0.42, y0 + 0.7, 9);
+      fishOn(g, p.x, p.y - 2, 5, PRODUCTS.clean_cachama.color);
+    }
+    for (const [bx, by] of [[0.5, 2.3], [2.3, 2.25]]) {
+      const p = iso(x + bx, y + by);
+      g.ellipse(p.x, p.y - 4, 9, 4).fill(0x1e88e5).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 6, 7, 2.5).fill(0x90caf9);
+      fishOn(g, p.x - 2, p.y - 7, 4, PRODUCTS.cachama.color);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 11, 0x9aa3a8, 0xd9dde0);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 11);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      const p = iso(x0 + 1.2, y0 + 1.2);
+      worker(work, p.x, p.y, 0x1e88e5);
+      work.rect(p.x - 4, p.y - 15, 8, 6).fill(0xffffff);
+      if (!this.working) return;
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 2 + i / 4) % 1;
+        work.circle(p.x + 6 + f * 6, p.y - 12 + f * 4, 0.9).fill({ color: 0xe0f7fa, alpha: 1 - f });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Pisillera: la casa con el fogón y el caldero donde la cachama se desmecha y se sofríe.
+  pisillo_kitchen(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xf7f4ee, roofColor: 0x9aa3a8, roofH: 13 });
+    door(g, hx, hy, 1.5, 0.7, 16, 0x1e88e5);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 13, 0xfff8e1);
+    box(g, x + 1.95, y + 2.0, 0.7, 0.5, 8, 0x9e9e9e);
+    const pot = iso(x + 2.3, y + 2.25, 8);
+    g.ellipse(pot.x, pot.y, 9, 4).fill(0x37474f).stroke(OUTLINE);
+    this.smokePoints = [iso(x + 2.3, y + 2.25, 14)];
+    const stir = new Graphics();
+    this.anim.addChild(stir);
+    this.animate = (time) => {
+      stir.clear();
+      stir.ellipse(pot.x, pot.y, 7, 2.6).fill(PRODUCTS.pisillo.color);
+      const a = this.working ? time * 3 : 0;
+      stir.moveTo(pot.x + Math.cos(a) * 4, pot.y + Math.sin(a) * 1.5).lineTo(pot.x + Math.cos(a) * 6 + 4, pot.y - 12).stroke({ width: 1.6, color: 0x8d6e4a });
+      if (!this.working) return;
+      stir.ellipse(pot.x, pot.y + 5, 6, 2).fill({ color: 0xff7043, alpha: 0.5 + Math.sin(time * 9) * 0.3 });
+    };
+    this.animate(0);
+  },
+
+  // Fileteadora de cachama: la ramada con la mesa larga donde se sacan los filetes.
+  cachama_filleter(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.3;
+    const d = 1.4;
+    const H = 24 + ctx.up;
+    box(g, x0 + 0.3, y0 + 0.4, 1.7, 0.6, 9, PAL.wood);
+    for (let k = 0; k < 3; k++) {
+      const p = iso(x0 + 0.6 + k * 0.5, y0 + 0.7, 9);
+      g.ellipse(p.x, p.y - 2, 5, 2.2).fill(PRODUCTS.cachama_fillet.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 11, 0x9aa3a8, 0xd9dde0);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 11);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      const p = iso(x0 + 1.0, y0 + 1.2);
+      worker(work, p.x, p.y, 0xf4c430);
+      const a = this.working ? Math.sin(time * 8) * 3 : 0;
+      work.moveTo(p.x + 3, p.y - 13).lineTo(p.x + 9, p.y - 15 + a).stroke({ width: 1.6, color: 0xcfd8dc });
+    };
+    this.animate(0);
+  },
+
+  // Ahumadero: la casita de bahareque con las cachamas colgadas y el humo que sale por el techo.
+  cachama_smoker(g, x, y, ctx) {
+    const hx = x + 0.4;
+    const hy = y + 0.4;
+    house(this, g, hx, hy, 1.6, 1.3, 22, ctx, { wall: 0xc9a77a, plinth: false, roofColor: 0x8d6e4a, roofH: 12 });
+    door(g, hx, hy, 1.3, 0.6, 14, 0x5d4037);
+    // La vara con cachamas al aire, al lado.
+    const a = iso(x + 2.3, y + 0.6, 18);
+    const b = iso(x + 2.3, y + 2.2, 18);
+    for (const p of [a, b]) g.rect(p.x - 1, p.y, 2, 18).fill(PAL.woodDark);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 2, color: PAL.woodDark });
+    for (let k = 1; k < 4; k++) {
+      const p = { x: a.x + (b.x - a.x) * k / 4, y: a.y + (b.y - a.y) * k / 4 };
+      g.ellipse(p.x, p.y + 7, 2.6, 6).fill(PRODUCTS.smoked_cachama.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+    }
+    this.smokePoints = [iso(hx + 0.8, hy + 0.65, 34 + ctx.up), iso(hx + 0.4, hy + 0.65, 34 + ctx.up)];
+  },
+
+  // Cocina de la cachama: la cocina con el asador de leña, las cachamas en la parrilla y la olla de la salsa de
+  // maracuyá; el jugo llega del Frutal en garrafas.
+  cachama_kitchen(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.0, 1.5, 28, ctx, { wall: 0xf7f4ee, roofColor: 0x9aa3a8, roofH: 13 });
+    door(g, hx, hy, 1.5, 0.7, 18, 0xf4c430);
+    windowOnRight(this, g, hx, hy, 2.0, 0.75, 14, 0xfff8e1);
+    box(g, x + 0.5, y + 2.05, 1.2, 0.45, 7, 0x6d4c32);
+    for (let k = 0; k < 3; k++) {
+      const p = iso(x + 0.7 + k * 0.38, y + 2.27, 7);
+      fishOn(g, p.x, p.y - 2, 4.5, PRODUCTS.smoked_cachama.color);
+    }
+    const pot = iso(x + 2.4, y + 2.3, 6);
+    box(g, x + 2.15, y + 2.1, 0.5, 0.4, 6, 0x9e9e9e);
+    g.ellipse(pot.x, pot.y - 2, 7, 3).fill(PRODUCTS.cachama_maracuya.color).stroke(OUTLINE);
+    for (const [bx, by] of [[2.65, 1.35], [2.65, 1.7]]) {
+      const p = iso(x + bx, y + by);
+      g.roundRect(p.x - 3.5, p.y - 11, 7, 11, 2).fill(PRODUCTS.passion_juice.color).stroke(OUTLINE);
+    }
+    this.smokePoints = [iso(x + 1.1, y + 2.27, 12)];
+    const fire = new Graphics();
+    this.anim.addChild(fire);
+    this.animate = (time) => {
+      fire.clear();
+      if (!this.working) return;
+      for (let i = 0; i < 4; i++) fire.circle(iso(x + 0.7 + i * 0.3, y + 2.27, 3).x, iso(x + 0.7 + i * 0.3, y + 2.27, 3).y, 1.6 + Math.sin(time * 9 + i)).fill({ color: 0xff7043, alpha: 0.8 });
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

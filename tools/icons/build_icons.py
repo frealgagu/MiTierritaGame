@@ -2523,6 +2523,68 @@ def juice_box():
     return layers
 
 
+# ---------- Los Llanos · La Cachamera (v3.33) ----------
+
+def cachama():
+    """Cachama: el pez redondo y alto de los ríos del Llano, gris oscuro con la barriga anaranjada."""
+    layers = fish_shape(46, 54, 66, 48, '#455a64', '#ff8a50')
+    layers.append(('#ffffff60', [ellipse(36, 42, 12, 3, -10)]))
+    layers.append(('#4fc3f7', [circle(86, 20, 3), circle(92, 30, 2.2), circle(80, 30, 1.8)]))
+    return layers
+
+
+def clean_cachama():
+    """Cachama limpia: la cachama sin escamas, sobre una hoja de plátano, con su tajo de limón."""
+    layers = [('#2e7d32', [leaf(6, 80, 94, 66, 16)]), ('#66bb6a', [rib(10, 79, 90, 67, 1.2)])]
+    layers += fish_shape(46, 54, 64, 44, '#90a4ae', '#ffccbc', -6)
+    layers.append(('#ffffffb0', [ellipse(38, 44, 10, 2, -6)]))
+    layers += [(OUTLINE, [circle(82, 30, 8)]), ('#9ccc65', [circle(82, 30, 6.5)]), ('#dce775', [circle(82, 30, 3.5)])]
+    return layers
+
+
+def cachama_fillet():
+    """Filete de cachama: dos filetes rosados en la tabla, con el cuchillo."""
+    layers = [(OUTLINE, [rect(6, 56, 88, 30, -6)]), ('#c68a4a', [rect(9, 59, 82, 24, -6)])]
+    for cx, cy, rot in [(32, 54, -10), (62, 62, 8)]:
+        layers.append((OUTLINE, [ellipse(cx, cy, 22, 12, rot)]))
+        layers.append(('#ffd0bd', [ellipse(cx, cy, 19.5, 9.8, rot)]))
+        layers.append(('#ffab91', [ellipse(cx + 3, cy + 2, 13, 4, rot)]))
+    layers += [(OUTLINE, [rect(60, 14, 34, 8, 25)]), ('#cfd8dc', [rect(62, 16, 22, 4.5, 25)]), ('#5d4037', [rect(80, 26, 12, 6, 25)])]
+    return layers
+
+
+def smoked_cachama():
+    """Cachama ahumada: las cachamas doradas colgadas en la vara, con el humo que sube."""
+    layers = [('#5d4037', [rect(8, 18, 84, 6)])]
+    for cx in (28, 50, 72):
+        layers.append(('#8d6e4a', [rib(cx, 22, cx, 32, 1.4)]))
+        layers += fish_shape(cx, 58, 46, 22, '#8d5524', '#c68a4a', 90, eye=False)
+    layers.append(('#b0bec5a0', ['M 18 92 Q 12 80 20 70 Q 14 80 24 92 Z', 'M 84 92 Q 78 80 86 70 Q 80 80 90 92 Z']))
+    return layers
+
+
+def pisillo():
+    """Pisillo de cachama: el pescado desmechado y sofrito en un plato hondo, con un plátano al lado."""
+    layers = [(OUTLINE, [ellipse(50, 62, 44, 24)]), ('#ffffff', [ellipse(50, 62, 41, 21.5)]), ('#e0e0e0', [ellipse(50, 66, 32, 13)])]
+    layers.append(('#c6893f', [ellipse(46, 58, 28, 12)]))
+    layers.append(('#8d5524', [rib(30 + k * 6, 54 + (k % 2) * 4, 36 + k * 6, 58 - (k % 2) * 3, 1.6) for k in range(6)]))
+    layers.append(('#e53935', [circle(40, 56, 2), circle(56, 60, 2), circle(48, 52, 1.6)]))
+    layers.append(('#43a047', [circle(34, 60, 1.6), circle(60, 55, 1.6)]))
+    layers += [(OUTLINE, ['M 70 26 Q 92 30 94 52 L 88 52 Q 84 36 68 32 Z']), ('#fbc02d', ['M 71 28.5 Q 89.5 32 91.5 49.5 L 89.5 49.5 Q 85.5 34.5 69.5 30 Z'])]
+    return layers
+
+
+def cachama_maracuya():
+    """Cachama al maracuyá: la cachama asada en el plato, bañada en salsa amarilla de maracuyá."""
+    layers = [(OUTLINE, [ellipse(50, 66, 46, 24)]), ('#ffffff', [ellipse(50, 66, 43, 21.5)])]
+    layers.append(('#f4c430', [ellipse(46, 68, 34, 13)]))
+    layers += fish_shape(44, 60, 56, 34, '#8d5524', '#d9893a', -6)
+    layers.append(('#5d3a1a', [rib(30 + k * 8, 50, 34 + k * 8, 66, 1.4) for k in range(4)]))
+    layers.append(('#f9a825', [ellipse(40, 58, 10, 3, -6)]))
+    layers += [(OUTLINE, [circle(82, 30, 11)]), ('#f4c430', [circle(82, 30, 9.5)]), ('#f9a825', [circle(82, 30, 7)]), ('#263238', [circle(80, 28, 1.2), circle(84, 32, 1.2), circle(82, 26, 1.1)])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -2689,6 +2751,12 @@ ICONS = [
     (0xE0A3, 'past_pulp', past_pulp),
     (0xE0A4, 'passion_juice', passion_juice),
     (0xE0A5, 'juice_box', juice_box),
+    (0xE0A6, 'cachama', cachama),
+    (0xE0A7, 'clean_cachama', clean_cachama),
+    (0xE0A8, 'cachama_fillet', cachama_fillet),
+    (0xE0A9, 'smoked_cachama', smoked_cachama),
+    (0xE0AA, 'pisillo', pisillo),
+    (0xE0AB, 'cachama_maracuya', cachama_maracuya),
 ]
 
 

@@ -189,6 +189,13 @@ export const FACTS = {
   pulp_pasteurizer: ['La pulpa se calienta un ratico para que dure más sin dañarse.'],
   juice_mixer: ['El jugo de maracuyá se hace en agua o en leche, con azúcar.'],
   juice_packer: ['En el Meta se dan mango, maracuyá, piña, cítricos y patilla.'],
+  // Los Llanos · La Cachamera (v3.33)
+  fish_ponds: ['La cachama es un pez de los ríos del Llano que se cría en estanques.', 'La cachama come frutas y semillas que caen al agua.'],
+  cachama_cleaner: ['La cachama se escama y se lava con agua limpia.'],
+  pisillo_kitchen: ['El pisillo es carne o pescado desmechado y sofrito.'],
+  cachama_filleter: ['La cachama se puede asar entera o en filetes.'],
+  cachama_smoker: ['El pescado ahumado dura más: se lleva de viaje.'],
+  cachama_kitchen: ['La cachama asada se sirve con yuca, plátano y ensalada.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -219,6 +226,7 @@ export const PEOPLE = {
   villa_leyva: { icon: '👩🏻', name: 'Doña Mercedes', role: 'la guía' },
   palma: { icon: '👨🏽‍🌾', name: 'Don Eusebio', role: 'el palmicultor' },
   frutal: { icon: '👩🏽‍🌾', name: 'Doña Edilma', role: 'la frutera' },
+  cachamera: { icon: '🧔🏾', name: 'Don Arcadio', role: 'el piscicultor' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -249,6 +257,7 @@ export const WELCOME = {
   cienaga: '¡Qué hubo, primo! Bienvenido a la Ciénaga. Aquí se pesca en canoa, con atarraya, como los abuelos.',
   palma: '¡Buenas, compadre, bienvenido al Llano! Aquí la palma da racimos todo el año, y de ellos sale el aceite.',
   frutal: '¡Bienvenido al Frutal, compadre! Aquí el maracuyá se cuelga de las enramadas y se vuelve jugo.',
+  cachamera: '¡Epa, compadre, bienvenido a la Cachamera! Aquí las cachamas se crían en estanques, al sol del Llano.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

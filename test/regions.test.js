@@ -742,3 +742,24 @@ test('Los Llanos se abren al completar Villa de Leyva; mientras estén en obra n
   assert.equal(l.zones.palma.complete, true);
   assert.ok(!l.regionDone, 'en obra: todavía no tiene final');
 });
+
+test('La Cachamera sirve la cachama al maracuyá con el jugo que llega del Frutal (v3.33)', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const game = new Game(createInitialState(0, 'llanos'));
+  for (const z of ['frutal', 'cachamera']) game.unlockZone(z);
+  assert.ok(game.state.routes.jugo, 'la Ruta del jugo es de los Llanos');
+  game.state.coins = 1e15;
+  for (const z of ['frutal', 'cachamera']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+    game.state.zones[z].dispatch.level = 20;
+  }
+  game.state.routes.jugo.level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 600; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  assert.ok((game.state.stats.imported.passion_juice ?? 0) > 0, 'llega jugo del Frutal');
+  for (const p of ['pisillo', 'smoked_cachama', 'cachama_maracuya']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+});

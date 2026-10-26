@@ -3,7 +3,7 @@ import { iso, isoPoly, depth, shade } from './iso.js';
 import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPassionVine, drawPotatoPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPassionVine, drawPondTile, drawPotatoPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -163,6 +163,10 @@ export class FarmView extends StationView {
     for (let gx = x; gx < x + w; gx++) {
       for (let gy = y; gy < y + h; gy++) {
         if (gx < x + 2 && gy < y + 2) continue; // sitio de la casa
+        if (this.theme === 'ponds') {
+          drawPondTile(g, gx, gy, x, y, rng, tier);
+          continue;
+        }
         // Los cacaos son más grandes: uno por casilla.
         for (const ox of this.theme === 'cacao' || this.theme === 'guava' || this.theme === 'ants' || this.theme === 'coconut' || this.theme === 'clay' || this.theme === 'palm' || this.theme === 'fruit' ? [0.5] : [0.28, 0.75]) {
           const p = iso(gx + ox, gy + 0.5);

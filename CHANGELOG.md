@@ -1,5 +1,20 @@
 # Registro de cambios
 
+## v3.33.0 — Los Llanos: La Cachamera
+- **🐟 La Cachamera**, la tercera zona de los Llanos, se abre al completar El Frutal. Los Estanques crían la cachama y la Limpieza la deja lista. La cachama limpia se reparte entre:
+  - la **Pisillera**, que hace el pisillo de cachama;
+  - la **Fileteadora**, que le pasa los filetes al **Ahumadero**, de donde sale la cachama ahumada;
+  - la **Cocina de la cachama**, que la sirve al maracuyá.
+- Tiene los mismos números que Ráquira.
+- **Primera ruta de los Llanos: la Ruta del jugo**, del Frutal a la Cocina de la cachama, con su chiva y su carretera en los dos mapas.
+- Su persona es **Don Arcadio, el piscicultor**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 6 íconos nuevos.
+- **El mapa:** los estanques de agua verdosa, con sus bordos de tierra y las cachamas que asoman a comer; garzas, morichales, palos de mango y comejeneras. En las estaciones:
+  - la mesa de lavar con las poncheras de cachama;
+  - el caldero del pisillo;
+  - la mesa larga de filetear;
+  - el ahumadero de bahareque con las cachamas colgadas;
+  - la cocina con el asador de leña, la olla de la salsa y las garrafas de jugo.
+
 ## v3.32.0 — Los Llanos: El Frutal
 - **🥭 El Frutal**, la segunda zona de los Llanos, se abre al completar La Palma: el Maracuyal → la Despulpadora de maracuyá → la Pasteurizadora de pulpa → la Mezcladora de jugos → la Envasadora de jugos. Va del maracuyá a la caja de jugos, pasando por la pulpa y el jugo. Tiene los mismos números que la Cervecería.
 - El jugo de maracuyá es el que después viajará a la Cachamera, y las cajas de jugos, a Villavicencio.

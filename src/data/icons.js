@@ -169,6 +169,12 @@ export const ICON = {
   pastPulp: '\uE0A3', // Pulpa pasteurizada: la bolsa sellada de pulpa, fría, con su etiqueta
   passionJuice: '\uE0A4', // Jugo de maracuyá: el vaso de jugo amarillo con hielo y una tajada de maracuyá
   juiceBox: '\uE0A5', // Caja de jugos: la caja de cartón con las cajitas de jugo verdes y amarillas asomadas
+  cachama: '\uE0A6', // Cachama: el pez redondo y alto de los ríos del Llano, gris oscuro con la barriga anaranjada
+  cleanCachama: '\uE0A7', // Cachama limpia: la cachama sin escamas, sobre una hoja de plátano, con su tajo de limón
+  cachamaFillet: '\uE0A8', // Filete de cachama: dos filetes rosados en la tabla, con el cuchillo
+  smokedCachama: '\uE0A9', // Cachama ahumada: las cachamas doradas colgadas en la vara, con el humo que sube
+  pisillo: '\uE0AA', // Pisillo de cachama: el pescado desmechado y sofrito en un plato hondo, con un plátano al lado
+  cachamaMaracuya: '\uE0AB', // Cachama al maracuyá: la cachama asada en el plato, bañada en salsa amarilla de maracuyá
 };
 
 export const ICON_FONT = 'Cafetal Icons';

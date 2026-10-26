@@ -354,6 +354,19 @@ export const RESEARCH = [
   { zone: 'frutal', id: 'jugo_natural', name: 'Jugo natural', icon: '🏅', desc: 'Las cajas de jugos valen un 50 % más.', cost: 1500000, requires: 'juice_packer', effect: { type: 'productValue', target: 'juice_box', mult: 1.5 } },
   { zone: 'frutal', id: 'maestria_frutal', name: 'Maestría: Frutal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'frutal', mult: 4 } },
   { zone: 'frutal', id: 'supremacia_frutal', name: 'Supremacía: Frutal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'frutal', mult: 8 } },
+
+  // Los Llanos · La Cachamera (v3.33): las mismas de Ráquira, con la cachama.
+  { zone: 'cachamera', id: 'alevinos', name: 'Alevinos de cachama', icon: ICON.cachama, desc: 'Los Estanques dan el doble.', cost: 300000, requires: 'cachama_cleaner', effect: { type: 'stationSpeed', target: 'fish_ponds', mult: 2 } },
+  { zone: 'cachamera', id: 'mesa_limpieza', name: 'Mesa de limpieza', icon: ICON.cleanCachama, desc: 'La Limpieza de cachama limpia el doble.', cost: 400000, requires: 'cachama_cleaner', effect: { type: 'stationSpeed', target: 'cachama_cleaner', mult: 2 } },
+  { zone: 'cachamera', id: 'cuchillos_fileteros', name: 'Cuchillos fileteros', icon: ICON.cachamaFillet, desc: 'La Fileteadora de cachama filetea el doble.', cost: 1200000, requires: 'cachama_filleter', effect: { type: 'stationSpeed', target: 'cachama_filleter', mult: 2 } },
+  { zone: 'cachamera', id: 'camion_pescado', name: 'Camión del pescado', icon: '🚛', desc: 'El despacho de la Cachamera lleva el doble por viaje.', cost: 1500000, requires: 'pisillo_kitchen', effect: { type: 'dispatchCapacity', target: 'cachamera', mult: 2 } },
+  { zone: 'cachamera', id: 'ahumadero_grande', name: 'Ahumadero grande', icon: ICON.smokedCachama, desc: 'El Ahumadero ahuma el doble.', cost: 3000000, requires: 'cachama_smoker', effect: { type: 'stationSpeed', target: 'cachama_smoker', mult: 2 } },
+  { zone: 'cachamera', id: 'pilon_pisillo', name: 'Pilón del pisillo', icon: ICON.pisillo, desc: 'La Pisillera hace el doble.', cost: 8000000, requires: 'pisillo_kitchen', effect: { type: 'stationSpeed', target: 'pisillo_kitchen', mult: 2 } },
+  { zone: 'cachamera', id: 'pisillo_llanero', name: 'Pisillo llanero', icon: '🏅', desc: 'El pisillo de cachama vale un 50 % más.', cost: 15000000, requires: 'pisillo_kitchen', effect: { type: 'productValue', target: 'pisillo', mult: 1.5 } },
+  { zone: 'cachamera', id: 'fogon_lena_llanero', name: 'Fogón de leña', icon: ICON.cachamaMaracuya, desc: 'La Cocina de la cachama sirve el doble (la Chiva de la ruta se ajusta sola).', cost: 25000000, requires: 'cachama_kitchen', effect: { type: 'stationSpeed', target: 'cachama_kitchen', mult: 2 } },
+  { zone: 'cachamera', id: 'sazon_llanera', name: 'Sazón llanera', icon: '🏅', desc: 'La cachama al maracuyá vale un 50 % más.', cost: 50000000, requires: 'cachama_kitchen', effect: { type: 'productValue', target: 'cachama_maracuya', mult: 1.5 } },
+  { zone: 'cachamera', id: 'maestria_cachamera', name: 'Maestría: Cachamera', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cachamera', mult: 4 } },
+  { zone: 'cachamera', id: 'supremacia_cachamera', name: 'Supremacía: Cachamera', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cachamera', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

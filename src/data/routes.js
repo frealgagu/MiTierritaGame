@@ -725,6 +725,23 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.5',
   },
+  // Los Llanos (v3.33): el jugo de maracuyá del Frutal, para la Cocina de la cachama.
+  {
+    id: 'jugo',
+    name: 'Ruta del jugo',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'passion_juice',
+    from: 'frutal',
+    to: 'cachamera',
+    stations: ['cachama_kitchen'],
+    tab: 'Jugo',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 1000,
+    growth: 1.15,
+    release: '3.33',
+  },
 ];
 
 export const ROUTES_BY_ID = Object.fromEntries(ROUTES.map((r) => [r.id, r]));

@@ -190,6 +190,14 @@ export const PRODUCTS = {
   passion_juice: { name: 'Jugo de maracuyá', zone: 'frutal', value: 150, icon: ICON.passionJuice, color: 0xffd54f },
   juice_box: { name: 'Caja de jugos', zone: 'frutal', value: 250, icon: ICON.juiceBox, color: 0x43a047 },
 
+  // Los Llanos · La Cachamera (v3.33): mismos valores que Ráquira.
+  cachama: { name: 'Cachama', zone: 'cachamera', value: 125, icon: ICON.cachama, color: 0x546e7a },
+  clean_cachama: { name: 'Cachama limpia', zone: 'cachamera', value: 300, icon: ICON.cleanCachama, color: 0xb0bec5 },
+  cachama_fillet: { name: 'Filete de cachama', zone: 'cachamera', value: 800, icon: ICON.cachamaFillet, color: 0xffccbc },
+  smoked_cachama: { name: 'Cachama ahumada', zone: 'cachamera', value: 2000, icon: ICON.smokedCachama, color: 0x8d5524 },
+  pisillo: { name: 'Pisillo de cachama', zone: 'cachamera', value: 2400, icon: ICON.pisillo, color: 0xc6893f },
+  cachama_maracuya: { name: 'Cachama al maracuyá', zone: 'cachamera', value: 4000, icon: ICON.cachamaMaracuya, color: 0xf4c430 },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

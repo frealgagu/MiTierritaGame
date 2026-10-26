@@ -27,6 +27,10 @@ export const ZONE26 = {
   exitText: 'A Granada ➜',
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
-  unlockedBy: 'palma', // se abre al completar La Palma
+  unlockedBy: 'palma',
+  // Carretera de la Ruta del jugo (v3.33): sale de la bodega hacia la Cachamera.
+  routes: {
+    jugo: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Cachamera ➜' },
+  }, // se abre al completar La Palma
   next: 'cachamera',
 };

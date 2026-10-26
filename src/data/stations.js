@@ -229,6 +229,16 @@ export const STATIONS = [
   { id: 'juice_mixer', zone: 'frutal', name: 'Mezcladora de jugos', icon: ICON.passionJuice, in: { past_pulp: 2 }, out: { passion_juice: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.32' },
   { id: 'juice_packer', zone: 'frutal', name: 'Envasadora de jugos', icon: ICON.juiceBox, in: { passion_juice: 1 }, out: { juice_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.32' },
 
+  // Los Llanos · La Cachamera (v3.33): la cachama se cría en estanques, se limpia y se reparte entre la Pisillera
+  // (el pisillo, desmechado y sofrito), la Fileteadora (que le pasa los filetes al Ahumadero) y la Cocina de la
+  // cachama, que la sirve con salsa de maracuyá con el jugo del Frutal. Mismos números que la Fiquera, la Ciénaga y Ráquira.
+  { id: 'fish_ponds', zone: 'cachamera', name: 'Estanques', icon: ICON.cachama, infinite: true, out: { cachama: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.33' },
+  { id: 'cachama_cleaner', zone: 'cachamera', name: 'Limpieza de cachama', icon: ICON.cleanCachama, in: { cachama: 1 }, out: { clean_cachama: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.33' },
+  { id: 'pisillo_kitchen', zone: 'cachamera', name: 'Pisillera', icon: ICON.pisillo, in: { clean_cachama: 4 }, out: { pisillo: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.33' },
+  { id: 'cachama_filleter', zone: 'cachamera', name: 'Fileteadora de cachama', icon: ICON.cachamaFillet, in: { clean_cachama: 2 }, out: { cachama_fillet: 1 }, cycle: 16, unlockCost: 1000000, upgradeBase: 600, growth: 1.15, release: '3.33' },
+  { id: 'cachama_smoker', zone: 'cachamera', name: 'Ahumadero', icon: ICON.smokedCachama, in: { cachama_fillet: 2 }, out: { smoked_cachama: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.33' },
+  { id: 'cachama_kitchen', zone: 'cachamera', name: 'Cocina de la cachama', icon: ICON.cachamaMaracuya, in: { clean_cachama: 4 }, imports: [{ product: 'passion_juice', perCycle: 1, route: 'jugo' }], out: { cachama_maracuya: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.33' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },
