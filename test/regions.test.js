@@ -841,8 +841,11 @@ test('Villavicencio recibe lo de las cinco zonas de los Llanos y arma los morral
   assert.ok((game.state.stats.produced.fiambre_viaje ?? 0) > 0, 'arma morrales del viaje');
 });
 
-test('La Costa Pacífica se abre al completar Villavicencio; mientras esté en obra no se termina (v3.38)', async () => {
+test('La Costa Pacífica se abre al completar Villavicencio; con Buenaventura completa queda terminada (v3.38, v3.44)', async () => {
   const { claimGoal } = await import('../src/sim/goals.js');
+  const { regionEvents } = await import('../src/sim/events.js');
+  const { albumOf } = await import('../src/data/album.js');
+  const { logrosOf } = await import('../src/data/logros.js');
   const root = createInitialState(0);
   root.zones.pueblo.complete = true;
   openRegions(root);
@@ -856,13 +859,22 @@ test('La Costa Pacífica se abre al completar Villavicencio; mientras esté en o
   root.regions.llanos.zones.villavicencio.complete = true;
   assert.deepEqual(openRegions(root), ['choco']);
   const c = regionState(root, 'choco');
-  assert.ok(c.zones.platanal.unlocked);
-  c.stats.sold = { patacon_box: 1e9 };
-  c.goals.claimed.push(...GOALS_BY_ZONE.platanal.filter((g) => !g.final).map((g) => g.id));
-  claimGoal(c, GOALS_BY_ZONE.platanal.find((g) => g.final).id, { emit() {} });
-  assert.equal(c.zones.platanal.complete, true);
-  assert.ok(c.zones.azotea.unlocked, 'El Platanal abre La Azotea (v3.39)');
-  assert.ok(!c.regionDone, 'en obra: todavía no tiene final');
+  const zones = ['platanal', 'azotea', 'bahia', 'manglar', 'werregue', 'buenaventura'];
+  assert.deepEqual(Object.keys(c.zones), zones);
+  // Cada zona abre la siguiente (v3.39 a v3.43) y Buenaventura, la última, termina la región.
+  c.stats.sold = { patacon_box: 1e9, alino_box: 1e9, tapao: 1e9, cazuela_mariscos: 1e9, recuerdo_pacifico: 1e9, excursion_ballenas: 1e9 };
+  for (const zone of zones) {
+    assert.ok(!c.regionDone, zone);
+    c.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
+    claimGoal(c, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
+    assert.equal(c.zones[zone].complete, true);
+  }
+  assert.ok(c.regionDone);
+  // Con todo lo suyo (v3.44): seis eventos, seis páginas de álbum y sus logros.
+  assert.equal(regionEvents('choco').length, 6);
+  assert.equal(albumOf('choco').length, 6);
+  assert.ok(logrosOf('choco').length >= 10);
+  assert.ok(!REGIONS.find((r) => r.id === 'choco').wip);
 });
 
 test('La Bahía sirve el tapao de pescado con el aliño que llega de la Azotea (v3.40)', async () => {

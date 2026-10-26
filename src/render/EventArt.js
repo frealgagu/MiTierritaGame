@@ -63,7 +63,7 @@ function importRoad(zone, product) {
   for (const [id, r] of Object.entries(zone.routes ?? {})) if (ROUTE_PRODUCT[id] === product) return r.road;
   return null;
 }
-const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag', papitas: 'criollas_bag', aceite: 'oil_bottle' };
+const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag', papitas: 'criollas_bag', aceite: 'oil_bottle', patacones: 'patacon_bag' };
 
 export class EventArt {
   // scene: la escena del tablero (para el mapa y sus objetos).
@@ -999,6 +999,168 @@ const ART = {
       for (const [gx, gy] of [[a.x + a.w + 1.6, a.y + 2.6], [a.x + a.w + 2.6, a.y + 3.6]]) {
         art.clear(gx, gy, 0.8);
         art.prop(gx, gy, (g, p) => post(g, p.x, p.y, 0x8b5a2b));
+      }
+    }
+  },
+
+  // --- La Costa Pacífica (v3.44) ---
+
+  // Sigatoka negra: las matas con las hojas manchadas (menos con cada compra); el que corta las hojas
+  // enfermas con el machete, las zanjas de drenaje y, al final, los colinos de plátano resistente.
+  sigatoka(art, stage, zone) {
+    const a = areaOf(zone, zone.farm.stationId);
+    if (stage < 3) swarm(art, a, [26, 15, 7][stage], blight);
+    if (stage >= 1) {
+      art.anim(a.x + a.w, a.y + a.h, (g, t) => {
+        const f = (Math.sin(t * 0.4) + 1) / 2;
+        const p = iso(a.x + 1 + f * (a.w - 2), a.y + a.h - 0.8);
+        person(g, p.x, p.y, { shirt: 0x4fb3bf, skin: SKIN[1], hat: true, arm: Math.abs(Math.sin(t * 4)) });
+        g.moveTo(p.x + 5, p.y - 15).lineTo(p.x + 11, p.y - 20 + Math.sin(t * 4) * 3).stroke({ width: 1.6, color: 0xb0bec5 });
+      }, 0.6);
+    }
+    if (stage >= 2) {
+      art.prop(a.x + a.w, a.y + a.h, (g) => {
+        for (let r = 1; r < a.h; r += 2) {
+          const p0 = iso(a.x + 0.3, a.y + r);
+          const p1 = iso(a.x + a.w - 0.3, a.y + r);
+          g.moveTo(p0.x, p0.y).lineTo(p1.x, p1.y).stroke({ width: 3, color: 0x4f8f9a, alpha: 0.7 });
+        }
+      }, -5);
+    }
+    if (stage >= 3) {
+      art.clear(a.x + 0.4, a.y + a.h + 0.6, 1.4);
+      art.prop(a.x + 0.4, a.y + a.h + 0.6, (g, p) => {
+        for (const dx of [-12, 0, 12]) {
+          g.moveTo(p.x + dx, p.y).lineTo(p.x + dx, p.y - 9).stroke({ width: 2, color: 0x8a9a4b });
+          for (const s of [-1, 1]) g.ellipse(p.x + dx + s * 5, p.y - 11, 6, 2.4).fill(s < 0 ? 0x5e9a3c : 0x74b14a);
+        }
+        person(g, p.x + 22, p.y + 3, { shirt: 0xf2c14e, skin: SKIN[1], hat: true, arm: 1 });
+      });
+    }
+  },
+
+  // Se enlodó el agua: los baldes de agua revuelta junto al Lavadero (menos con cada compra), los tanques de
+  // agua lluvia, la bomba que zumba y el filtro.
+  agua_sucia(art, stage, zone) {
+    const a = areaOf(zone, 'herb_washer');
+    const px = a.x + a.w + 0.5;
+    const py = a.y + 0.8;
+    art.clear(px, py, 1.6);
+    const n = [12, 8, 5, 2][stage];
+    art.prop(px, py, (g, p) => {
+      for (let i = 0; i < n; i++) {
+        const row = Math.floor(i / 4);
+        const x = p.x + ((i % 4) - 1.5) * 10 + row * 4;
+        const y = p.y - row * 7;
+        g.poly([x - 4, y - 8, x + 4, y - 8, x + 3, y, x - 3, y]).fill(0x8d6e4a).stroke(THIN);
+        g.ellipse(x, y - 8, 4, 1.4).fill(0x7a5a2e);
+      }
+    });
+    if (stage >= 1) {
+      art.clear(px, py + 1.4, 1);
+      art.prop(px, py + 1.4, (g, p) => {
+        for (let k = 0; k < 2; k++) {
+          g.rect(p.x - 12 + k * 13, p.y - 14, 10, 14).fill(0x1e88e5).stroke(OUTLINE);
+          g.ellipse(p.x - 7 + k * 13, p.y - 14, 5, 1.8).fill(0x4fa3c7).stroke(THIN);
+        }
+      });
+    }
+    if (stage >= 2) {
+      art.anim(px + 1.2, py + 0.2, (g, t) => {
+        const p = iso(px + 1.2, py + 0.2);
+        g.rect(p.x - 7, p.y - 12, 14, 12).fill(0x607d8b).stroke(OUTLINE);
+        g.circle(p.x, p.y - 6, 4).fill(0x37474f);
+        const b = t * 12;
+        g.moveTo(p.x, p.y - 6).lineTo(p.x + Math.cos(b) * 3.5, p.y - 6 + Math.sin(b) * 3.5).stroke({ width: 1.4, color: 0xcfd8dc });
+      });
+    }
+    if (stage >= 3) {
+      art.prop(px + 1.3, py + 1.5, (g, p) => {
+        g.rect(p.x - 5, p.y - 16, 10, 16).fill(0xeceff1).stroke(OUTLINE);
+        g.rect(p.x - 5, p.y - 8, 10, 3).fill(0x4fa3c7);
+      });
+    }
+  },
+
+  // Semana Santa en la Bahía: puestos con toldos turquesa, amarillo y rosado, uno por compra, y la gente.
+  semana_santa_pacifico(art, stage) {
+    fairScene(art, stage, [0x4fb3bf, 0xf2c14e, 0xe5737f]);
+  },
+
+  // Se varó la lancha: el estero cruza la carretera de los patacones; potrillos, la lancha de alquiler y al
+  // final la pleamar.
+  lancha_varada(art, stage, zone) {
+    landslideScene(art, stage, zone, 'patacon_bag', 'creciente');
+  },
+
+  // Feria de artesanías: la fila de compradores frente a las Tejedoras; las muchachas que aprenden, los
+  // manojos de fibra que llegan y las abuelas tejedoras.
+  feria_artesanias(art, stage, zone) {
+    const a = areaOf(zone, 'werregue_weaver');
+    queue(art, a.x + 0.2, a.y + a.h + 0.6, [7, 5, 3, 1][stage], { packs: true });
+    const sx = a.x + a.w + 0.4;
+    const sy = a.y + 0.6;
+    art.clear(sx, sy, 1.4);
+    if (stage >= 1) {
+      art.anim(sx, sy, (g, t) => {
+        const p = iso(sx, sy);
+        person(g, p.x, p.y, { shirt: 0xe5737f, skin: SKIN[1], skirt: 0x2b2018, arm: Math.abs(Math.sin(t * 3)) });
+        person(g, p.x + 12, p.y - 2, { shirt: 0xf2c14e, skin: SKIN[0], skirt: 0xb23a2a, arm: Math.abs(Math.sin(t * 3 + 1)) });
+      });
+    }
+    if (stage >= 2) {
+      art.prop(sx + 0.8, sy + 0.8, (g, p) => {
+        for (let k = 0; k < 3; k++) {
+          const x = p.x - 10 + k * 10;
+          for (let i = -1; i <= 1; i++) g.moveTo(x, p.y - 12).lineTo(x + i * 2, p.y).stroke({ width: 1.2, color: [0xe0cf9a, 0x2b2018, 0xb23a2a][k] });
+        }
+      });
+    }
+    if (stage >= 3) {
+      art.anim(sx + 0.4, sy + 1.8, (g, t) => {
+        const p = iso(sx + 0.4, sy + 1.8);
+        person(g, p.x, p.y, { shirt: 0x6cbf6c, skin: SKIN[1], skirt: 0x2b2018, arm: Math.max(0, Math.sin(t * 3)) });
+        person(g, p.x + 13, p.y - 3, { shirt: 0x5c8dd6, skin: SKIN[3], skirt: 0xb23a2a, arm: Math.max(0, Math.sin(t * 3 + 1.5)) });
+      });
+    }
+  },
+
+  // Festival Folclórico del Pacífico: la fila de visitantes en el muelle, las parejas bailando currulao con
+  // pañuelos, los guías con banderitas, las lanchas que pasan y los letreros.
+  festival_pacifico(art, stage, zone) {
+    const a = areaOf(zone, 'salida_ballenas');
+    queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
+    art.anim(a.x - 3, a.y - 1, (g, t) => {
+      for (let k = 0; k < 3; k++) {
+        const p = iso(a.x - 4 + k * 1.2, a.y - 0.5 + (k % 2) * 0.8);
+        const step = Math.abs(Math.sin(t * 5 + k)) * 2;
+        person(g, p.x, p.y - step, { shirt: 0xffffff, skin: SKIN[1], hat: true, arm: Math.abs(Math.sin(t * 5 + k)) });
+        person(g, p.x + 10, p.y - Math.abs(Math.sin(t * 5 + k + 1.5)) * 2, { shirt: 0xffffff, skin: SKIN[1], skirt: [0xffffff, 0xf2c14e, 0xe5737f][k], arm: 1 });
+        g.poly([p.x + 15, p.y - 18, p.x + 21, p.y - 22 + Math.sin(t * 6 + k) * 2, p.x + 17, p.y - 14]).fill(0xffffff).stroke(THIN);
+      }
+    }, 1);
+    const guides = stage >= 3 ? 4 : stage >= 1 ? 2 : 0;
+    if (guides) {
+      art.anim(a.x + a.w + 0.4, a.y + 1, (g, t) => {
+        for (let k = 0; k < guides; k++) {
+          const p = iso(a.x + a.w + 0.4 + (k % 2) * 0.7, a.y + 0.6 + Math.floor(k / 2) * 0.9);
+          person(g, p.x, p.y, { shirt: 0xff6f00, skin: SKIN[1], hat: 0x3e2723, arm: 1 });
+          const wave = Math.sin(t * 4 + k) * 2;
+          g.moveTo(p.x + 5.5, p.y - 16).lineTo(p.x + 5.5, p.y - 30).stroke({ width: 1, color: 0x5e3b1c });
+          g.poly([p.x + 5.5, p.y - 30, p.x + 14, p.y - 27 + wave, p.x + 5.5, p.y - 24]).fill(0x1e88e5).stroke(THIN);
+        }
+      });
+    }
+    if (stage >= 2) {
+      art.anim(a.x, a.y - 4, (g, t) => {
+        const f = (t * 0.06) % 1;
+        const p = iso(a.x - 2 + f * 8, a.y - 2 + f * 2);
+        g.moveTo(p.x - 14, p.y - 4).quadraticCurveTo(p.x, p.y + 4, p.x + 14, p.y - 4).lineTo(p.x + 11, p.y).quadraticCurveTo(p.x, p.y + 5, p.x - 11, p.y).closePath().fill(0xf7f4ee).stroke(OUTLINE);
+        for (let i = 0; i < 4; i++) g.circle(p.x - 8 + i * 5, p.y - 7, 2).fill(0xff6f00);
+      }, 3);
+      for (const [gx, gy] of [[a.x + a.w + 1.6, a.y + 2.6], [a.x + a.w + 2.6, a.y + 3.6]]) {
+        art.clear(gx, gy, 0.8);
+        art.prop(gx, gy, (g, p) => post(g, p.x, p.y, 0x2e6fd1));
       }
     }
   },

@@ -103,7 +103,26 @@ const LLANOS = [
   { id: 'll_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('llanos')], reward: [1, 2, 4] },
 ];
 
-export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' }))];
+// Los de la Costa Pacífica (v3.44).
+const PACIFICO = [
+  { id: 'pa_patacones', icon: ICON.pataconBox, name: 'Platanero', text: 'Vende {n} cajas de patacones', metric: 'sold:patacon_box', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
+  { id: 'pa_alino', icon: ICON.alino, name: 'Cocinera de azotea', text: 'Prepara {n} frascos de aliño', metric: 'produced:alino', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'pa_tapao', icon: ICON.tapao, name: 'Pescador', text: 'Sirve {n} tapaos de pescado', metric: 'produced:tapao', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'pa_cazuela', icon: ICON.cazuela, name: 'Piangüera', text: 'Sirve {n} cazuelas de mariscos', metric: 'produced:cazuela_mariscos', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'pa_werregue', icon: ICON.werregueJar, name: 'Tejedora', text: 'Teje {n} jarrones de werregue', metric: 'produced:werregue_jar', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'pa_ballenas', icon: ICON.ballenas, name: 'A ver las ballenas', text: 'Vende {n} salidas a ver las ballenas', metric: 'sold:excursion_ballenas', tiers: [1000, 100000, 10000000], reward: [2, 4, 8] },
+  { id: 'pa_monedas', icon: '💰', name: 'Patrón del Pacífico', text: 'Gana {n} monedas en total', metric: 'earned', tiers: [1e9, 1e15, 1e21], reward: [1, 2, 4] },
+  { id: 'pa_anos', icon: '📅', name: 'Del Pacífico', text: 'Vive {n} años de juego en la Costa Pacífica', metric: 'years', tiers: [4, 16, 64], reward: [1, 2, 4] },
+  { id: 'pa_buenaventura', icon: ICON.ballenas, name: 'Hasta Buenaventura', text: 'Completa Buenaventura {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
+  { id: 'pa_maestro', icon: '🏅', name: 'Maestro del Pacífico', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
+  { id: 'pa_medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [6, 24, 60], reward: [1, 2, 4] },
+  { id: 'pa_todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
+  { id: 'pa_oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
+  { id: 'pa_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
+  { id: 'pa_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('choco')], reward: [1, 2, 4] },
+];
+
+export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'choco' }))];
 export const logrosOf = (region) => LOGROS.filter((l) => l.region === region);
 
 export const LOGROS_BY_ID = Object.fromEntries(LOGROS.map((l) => [l.id, l]));

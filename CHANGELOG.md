@@ -1,5 +1,17 @@
 # Registro de cambios
 
+## v3.44.0 — La Costa Pacífica completa: eventos, álbum y logros
+- **Seis eventos nuevos**, uno por zona de la Costa Pacífica, cada uno con su escena en el tablero que cambia con cada compra:
+  - 🍂 **Sigatoka negra** en el Platanal: las matas manchadas, el que corta las hojas enfermas, las zanjas y los colinos de plátano resistente.
+  - 🌊 **Se enlodó el agua** en la Azotea: los baldes de agua revuelta se amontonan hasta que llegan los tanques de agua lluvia, la bomba y el filtro.
+  - 🎣 **Semana Santa en la Bahía**: todos piden pescado seco, pargo ahumado y tapao; puestos con toldos turquesa, amarillo y rosado.
+  - 🚤 **Se varó la lancha** en el Manglar: con la marea más baja del año no llegan los patacones; potrillos, la lancha de alquiler y la pleamar.
+  - 🏺 **Feria de artesanías** en el Werregue: la fila de compradores que quieren jarrones; las muchachas que aprenden, la fibra de otras comunidades y las abuelas tejedoras.
+  - 🥁 **Festival Folclórico del Pacífico** en Buenaventura: la ciudad llena de visitantes que quieren ver las ballenas, parejas bailando currulao con pañuelos, guías y lanchas.
+- **Álbum de la Costa Pacífica:** seis páginas (la selva, la cocina, el mar, la música, las manos y Buenaventura) con 36 láminas, de la rana dorada a la ballena jorobada.
+- **Logros de la Costa Pacífica:** platanero, cocinera de azotea, pescador, piangüera, tejedora, a ver las ballenas y los de siempre.
+- **La Costa Pacífica queda terminada:** al completar Buenaventura tiene su segundo final y su reinicio, sus eventos salen en todas sus zonas y dan el premio de medallas. Si ya habías completado Buenaventura, al abrir esta versión la región queda terminada.
+
 ## v3.43.0 — Costa Pacífica: Buenaventura
 - **🐋 Buenaventura**, el puerto y última zona de la Costa Pacífica, se abre al completar El Werregue. Como Barichara, Cartagena, Villa de Leyva y Villavicencio, no tiene fuente propia: cada estación recibe el producto final de una zona del Pacífico.
   - La **Fritanga del puerto** fríe marranitas con las cajas de patacones del Platanal.

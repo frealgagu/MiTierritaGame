@@ -416,7 +416,89 @@ const LLANOS = [
   },
 ];
 
-export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' }))];
+// La Costa Pacífica (v3.44).
+const PACIFICO = [
+  {
+    id: 'selva_pacifico',
+    icon: ICON.plantainPlant,
+    name: 'La selva',
+    stickers: [
+      { id: 'platano_album', icon: ICON.plantainPlant, name: 'El plátano', cost: 1, text: 'Verde para el patacón y el tapao; maduro, para la tajada.' },
+      { id: 'chontaduro', icon: '🌴', name: 'El chontaduro', cost: 1, text: 'El fruto rojo de una palma espinosa: se come cocido, con sal y miel.' },
+      { id: 'borojo', icon: '🟤', name: 'El borojó', cost: 2, text: 'Fruta parda y ácida del Chocó: se toma en jugo, dulce o en sorbete.' },
+      { id: 'rana_dorada', icon: '🐸', name: 'La rana dorada', cost: 2, text: 'Pequeña y amarilla, vive solo en las selvas del Pacífico colombiano.' },
+      { id: 'lluvia_choco', icon: '🌧️', name: 'La lluvia', cost: 2, text: 'En Lloró, Chocó, llueve casi todo el año: de lo más lluvioso del mundo.' },
+      { id: 'heliconia_pacifico', icon: '🌺', name: 'La heliconia', cost: 3, text: 'Flor roja y amarilla de la selva húmeda, que visitan los colibríes.' },
+    ],
+  },
+  {
+    id: 'cocina_pacifico',
+    icon: ICON.alino,
+    name: 'La cocina',
+    stickers: [
+      { id: 'azotea_album', icon: ICON.azotea, name: 'La azotea', cost: 1, text: 'La huerta alzada en pilotes, donde la abuela siembra sus hierbas.' },
+      { id: 'chillangua', icon: ICON.herbs, name: 'La chillangua', cost: 1, text: 'El cilantro cimarrón: de hoja larga y olor fuerte, va en todo.' },
+      { id: 'tapao_album', icon: ICON.tapao, name: 'El tapao', cost: 2, text: 'Pescado con plátano verde y hierbas, cocinado en olla tapada.' },
+      { id: 'encocado_album', icon: ICON.encocado, name: 'El encocado', cost: 2, text: 'Piangua, jaiba o pescado cocinados en leche de coco.' },
+      { id: 'arroz_clavado', icon: '🍚', name: 'El arroz clavado', cost: 2, text: 'Arroz con queso costeño y longaniza, como lo hacen en el Chocó.' },
+      { id: 'viche', icon: '🍶', name: 'El viche', cost: 3, text: 'La bebida de caña de los abuelos, patrimonio del Pacífico.' },
+    ],
+  },
+  {
+    id: 'mar_pacifico',
+    icon: ICON.pargo,
+    name: 'El mar',
+    stickers: [
+      { id: 'pargo_album', icon: ICON.pargo, name: 'El pargo rojo', cost: 1, text: 'El pez de las rocas del Pacífico, que se pesca con anzuelo.' },
+      { id: 'potrillo', icon: '🛶', name: 'El potrillo', cost: 1, text: 'La canoa pequeña de un solo tronco, para los esteros y los ríos.' },
+      { id: 'piangua_album', icon: ICON.piangua, name: 'La piangua', cost: 2, text: 'La concha negra del manglar que sacan a mano las piangüeras.' },
+      { id: 'mangle', icon: ICON.mangrove, name: 'El manglar', cost: 2, text: 'Los mangles de raíces zancudas, donde nacen peces, jaibas y conchas.' },
+      { id: 'tortuga', icon: '🐢', name: 'La tortuga', cost: 2, text: 'Las tortugas marinas llegan de noche a poner sus huevos en la playa.' },
+      { id: 'ballena', icon: ICON.ballenas, name: 'La ballena jorobada', cost: 3, text: 'De julio a octubre llega a las aguas tibias del Pacífico a tener su cría.' },
+    ],
+  },
+  {
+    id: 'musica_pacifico',
+    icon: '🥁',
+    name: 'La música',
+    stickers: [
+      { id: 'marimba', icon: '🎹', name: 'La marimba de chonta', cost: 1, text: 'El piano de la selva, de tablas de palma; suena en el currulao.' },
+      { id: 'cununo', icon: '🥁', name: 'El cununo', cost: 1, text: 'Tambor de un solo parche que se toca con las manos.' },
+      { id: 'guasa', icon: '🎋', name: 'El guasá', cost: 2, text: 'Tubo de guadua con semillas adentro, que sacuden las cantadoras.' },
+      { id: 'currulao', icon: '💃', name: 'El currulao', cost: 2, text: 'Baile de marimba y tambores: patrimonio de la humanidad.' },
+      { id: 'chirimia', icon: '🎺', name: 'La chirimía', cost: 2, text: 'Clarinete, bombardino, redoblante, tambora y platillos: la banda del Chocó.' },
+      { id: 'san_pacho', icon: '🎉', name: 'San Pacho', cost: 3, text: 'Las fiestas de San Francisco de Asís en Quibdó, con desfiles y chirimía.' },
+    ],
+  },
+  {
+    id: 'manos_pacifico',
+    icon: ICON.werregueJar,
+    name: 'Las manos',
+    stickers: [
+      { id: 'werregue_album', icon: ICON.werregueJar, name: 'El werregue', cost: 1, text: 'Los jarrones tejidos por los wounaan con la fibra de una palma.' },
+      { id: 'tambo', icon: '🛖', name: 'El tambo', cost: 1, text: 'La casa redonda sobre pilotes, abierta y con techo de palma.' },
+      { id: 'catanga', icon: '🧺', name: 'La catanga', cost: 2, text: 'El canasto que la piangüera lleva a la espalda.' },
+      { id: 'canalete', icon: '🛶', name: 'El canalete', cost: 2, text: 'El remo tallado en madera, con la pala en forma de hoja.' },
+      { id: 'casa_pilotes', icon: '🏠', name: 'La casa en pilotes', cost: 2, text: 'Las casas de tabla se alzan del suelo para que no las alcance el agua.' },
+      { id: 'jagua_achiote', icon: '🎨', name: 'La jagua y el achiote', cost: 3, text: 'Los tintes de la selva: el negro de la jagua y el rojo del achiote.' },
+    ],
+  },
+  {
+    id: 'buenaventura',
+    icon: ICON.ballenas,
+    name: 'Buenaventura',
+    stickers: [
+      { id: 'puerto', icon: '🚢', name: 'El puerto', cost: 1, text: 'Por Buenaventura entra y sale buena parte de lo que comercia Colombia.' },
+      { id: 'malecon', icon: '🌅', name: 'El malecón', cost: 1, text: 'Donde se camina al atardecer, con ceviche y la brisa del mar.' },
+      { id: 'marranitas_album', icon: ICON.marranitas, name: 'Las marranitas', cost: 2, text: 'Bolitas de plátano verde rellenas de chicharrón.' },
+      { id: 'juanchaco', icon: '🏖️', name: 'Juanchaco y Ladrilleros', cost: 2, text: 'Las playas a donde se llega en lancha desde Buenaventura.' },
+      { id: 'festival_folclorico', icon: '🥁', name: 'El Festival Folclórico', cost: 2, text: 'La fiesta del puerto, con marimba, currulao y reinado.' },
+      { id: 'ballena_salto', icon: ICON.ballenas, name: 'El salto de la ballena', cost: 3, text: 'La ballena saca todo el cuerpo del agua y cae con un estruendo.' },
+    ],
+  },
+];
+
+export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'choco' }))];
 // Las páginas del álbum de una región.
 export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 
