@@ -148,7 +148,7 @@ export class Chatter {
       for (const h of eventHandicaps(state)) if (h.pct < 1) out.push(handicapText(state, h));
       const next = def.actions.find((a) => !state.research.includes(a.id));
       if (next) out.push(`${next.icon} Compre ${next.name} (💰 ${formatNumber(next.cost)}): ${next.desc}`);
-      if (state.event.done) out.push(`🏁 ¡Ganamos el evento! Mire todo lo que quiera; para salir, toque 🏁 Terminar.`);
+      if (state.event.done) out.push(`🏁 ¡Ganamos el evento! Mire todo lo que quiera; para cerrarlo, toque 🏁 Terminar evento.`);
       else if (state.event.medal) out.push(`✅ La medalla ya está asegurada. Faltan las compras del evento para terminarlo.`);
       else out.push(`${def.icon} ${def.intro}`);
       return out;

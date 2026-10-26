@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v3.30.1 — Pausar un evento ganado
+- Con el evento ganado, **⏸️ Pausar** sigue funcionando: vuelves al mapa y el evento ganado te espera en la lista hasta que toques **🏁 Terminar evento**. Solo **🔄 Reiniciar** queda deshabilitado.
+
 ## v3.30.0 — Menos eventos
 - **Dos eventos a la vez en todo el juego** (antes, dos por región), **nunca de la misma región**. Al terminar uno, su cupo descansa **2 años del juego** (unas 4 h 16 min; antes 3 años).
 - **Nuevos botones dentro del evento**:

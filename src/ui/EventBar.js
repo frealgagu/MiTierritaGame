@@ -73,10 +73,9 @@ export class EventBar {
     const secured = board.event.medal;
     const medal = MEDALS[secured ?? medalFor(obj, board.playTime)];
     document.getElementById('event-clock').textContent = `${medal.icon} ⏱ ${formatClock(secured ? board.event.time : board.playTime)}`;
-    // Ganado (v3.30): se sigue mirando; solo se sale con «Terminar».
+    // Ganado (v3.30): se sigue mirando (y se puede pausar); ya no se reinicia. Se cierra con «Terminar».
     const done = Boolean(board.event.done);
-    this.pauseBtn.hidden = done;
-    this.restartBtn.hidden = done;
+    this.restartBtn.disabled = done;
     this.endBtn.textContent = done ? '🏁 Terminar evento' : '🏁 Terminar';
     const missing = def.actions.filter((a) => !board.research.includes(a.id)).map((a) => a.name);
     const goal = done

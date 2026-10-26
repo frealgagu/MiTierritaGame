@@ -281,7 +281,7 @@ async function start() {
     document.getElementById('event-result-text').textContent =
       `${r.def.icon} ${r.def.name} ${r.round}: cumpliste el objetivo en ${formatClock(r.time)} y compraste las tres mejoras.\n+${m.renown} ⭐ de Renombre (tienes ${game.state.profile.renown}).\nEste cupo de eventos queda libre en 2 años del juego (unas ${formatDuration(EVENT_COOLDOWN)}).`;
     const modal = document.getElementById('event-result');
-    // Terminar, o quedarse mirando el tablero (v3.30): de ahí solo se sale con «Terminar».
+    // Terminar, o quedarse mirando el tablero (v3.30): se puede pausar, pero se cierra con «Terminar».
     document.getElementById('event-result-ok').onclick = () => {
       modal.hidden = true;
       endBoard();
