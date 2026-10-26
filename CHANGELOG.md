@@ -1,5 +1,16 @@
 # Registro de cambios
 
+## v3.30.0 — Menos eventos
+- **Dos eventos a la vez en todo el juego** (antes, dos por región), **nunca de la misma región**. Al terminar uno, su cupo descansa **2 años del juego** (unas 4 h 16 min; antes 3 años).
+- **Nuevos botones dentro del evento**:
+  - **⏸️ Pausar** (antes «Salir»): vuelves al mapa y el evento te espera.
+  - **🔄 Reiniciar**: el mismo reto desde cero (monedas, niveles, compras, reloj y la medalla asegurada).
+  - **🏁 Terminar**: lo cierras aunque no lo hayas ganado; no da medalla, su cupo descansa 2 años y la próxima vez sale el mismo reto.
+  - Reiniciar y terminar piden confirmación.
+- **Al ganar un evento** se dan la medalla y el Renombre, y puedes **👀 seguir mirando** el tablero. Desde ahí solo se sale con **🏁 Terminar evento**, y si cierras la app, el evento ganado sigue en la lista de eventos hasta que lo termines.
+- Los premios por tener todas las medallas de una región no cambian.
+- **Al actualizar:** los eventos que tenías empezados se quedan; los disponibles sin empezar y las esperas de cada región se borran, y los cupos se vuelven a llenar con las reglas nuevas.
+
 ## v3.29.0 — La plaza de Vélez
 - **⛪ La Guayabera tiene en la mitad la plaza de Vélez**, con su iglesia blanca de una torre:
   - la fachada con el portón de arco, la ventana redonda y la cruz;

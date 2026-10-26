@@ -529,7 +529,9 @@ body.panel-open .event-bar { display: none; }
 .event-top { display: flex; align-items: center; gap: 8px; }
 .event-title { flex: 1; min-width: 0; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .event-clock { font-weight: 700; font-variant-numeric: tabular-nums; }
-.event-exit { width: auto; padding: 4px 12px; }
+.event-buttons { display: flex; gap: 6px; margin-top: 6px; }
+.event-buttons .btn { flex: 1; justify-content: center; padding: 5px 4px; font-size: 0.85rem; white-space: nowrap; }
+.event-result .btn + .btn { margin-top: 8px; }
 .event-goal { display: flex; justify-content: space-between; gap: 8px; font-size: 0.9rem; font-weight: 600; }
 #event-goal { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .event-goal span:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; }

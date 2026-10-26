@@ -11,12 +11,11 @@ import { formatClock, objectiveText } from './EventBar.js';
 export const medalLine = (obj) => `🥇 hasta ${formatClock(obj.medals[0])} · 🥈 hasta ${formatClock(obj.medals[1])} · 🥉 después`;
 
 export class EventsView {
-  // onPlay(zona): entrar al tablero. stateOf(zona): la partida de la región de esa zona (v3.6), o null si la
-  // región no se ha abierto. El perfil (medallas y Renombre) es el de la partida principal (game).
-  constructor(game, onPlay, stateOf = () => game.state) {
+  // onPlay(zona): entrar al tablero. La partida principal (game) guarda el perfil (medallas y Renombre) y
+  // los cupos de los eventos (v3.30).
+  constructor(game, onPlay) {
     this.game = game;
     this.onPlay = onPlay;
-    this.stateOf = stateOf;
     this.modal = document.getElementById('events');
     this.body = document.getElementById('events-body');
     this.btn = document.getElementById('events-btn');
@@ -46,8 +45,7 @@ export class EventsView {
     const profile = s.profile ?? { renown: 0, medals: {} };
     document.getElementById('events-renown').textContent = `⭐ Renombre: ${profile.renown} · 🏆 Prestigio: ${profile.renownTotal ?? profile.renown}`;
     const card = (def) => {
-      const owner = this.stateOf(def.zone);
-      const st = owner && eventStatus(owner, def.zone);
+      const st = eventStatus(s, def.zone);
       if (!st) return '';
       const zone = ZONES_BY_ID[def.zone];
       const best = profile.medals[def.id]?.best;
@@ -56,11 +54,14 @@ export class EventsView {
       // Los que esperan (sin cupo o sin todas sus estaciones), en una línea (v3.7).
       if (st.kind === 'locked') return `<div class="event-card locked">${title}<p>🔒 Sale cuando construyas todas las estaciones de ${zone.name}.</p></div>`;
       if (st.kind === 'waiting') {
-        const when = st.nextAt === null ? 'cuando termines uno de los dos eventos de la región y pasen 3 años' : `en ${formatDuration(st.nextAt - clockOf(owner))} se libera un cupo de la región`;
+        const when = st.nextAt === null ? 'cuando termines uno de los dos eventos y pasen 2 años' : `en ${formatDuration(st.nextAt - clockOf(s))} se libera un cupo (los dos eventos nunca son de la misma región)`;
         return `<div class="event-card locked">${title}<p>⏳ Espera turno: ${when}.</p></div>`;
       }
       let foot;
-      if (st.kind === 'active') {
+      if (st.kind === 'won') {
+        const m = MEDALS[st.board.event.medal];
+        foot = `<p>🏁 ¡Ganado con ${m.icon} ${m.name}! Entra a verlo y toca 🏁 Terminar evento para cerrarlo.</p><button class="btn buy" data-play="${def.zone}">Ver y terminar</button>`;
+      } else if (st.kind === 'active') {
         const secured = st.board.event.medal;
         foot = secured
           ? `<p>✅ ${MEDALS[secured].icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.</p><button class="btn buy" data-play="${def.zone}">Seguir</button>`
@@ -76,9 +77,8 @@ export class EventsView {
     // Por región (con su título, si ya hay más de una); las zonas que todavía no se abren no se muestran.
     // Primero los que se pueden jugar; luego los que esperan.
     const rank = (def) => {
-      const owner = this.stateOf(def.zone);
-      const kind = owner && eventStatus(owner, def.zone)?.kind;
-      return kind === 'active' || kind === 'available' ? 0 : 1;
+      const kind = eventStatus(s, def.zone)?.kind;
+      return kind === 'active' || kind === 'won' || kind === 'available' ? 0 : 1;
     };
     const groups = REGIONS.map((r) => ({ r, cards: EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === r.id).sort((a, b) => rank(a) - rank(b)).map(card).filter(Boolean) })).filter((g) => g.cards.length);
     const html = groups.map((g) => (groups.length > 1 ? `<h3 class="research-other">${g.r.icon} ${g.r.name}</h3>` : '') + g.cards.join('')).join('');
@@ -86,17 +86,14 @@ export class EventsView {
   }
 
   update() {
-    const statuses = EVENTS.map((def) => {
-      const owner = this.stateOf(def.zone);
-      return owner && eventStatus(owner, def.zone);
-    }).filter(Boolean);
+    const statuses = EVENTS.map((def) => eventStatus(this.game.state, def.zone)).filter(Boolean);
     // El botón aparece cuando hay algún evento abierto, o cuando ya se tiene algo del Renombre (v3.8.1:
     // tras reiniciar seguían ahí el álbum, los logros y las horas aunque no hubiera evento); el número,
     // los que se pueden empezar.
     const p = this.game.state.profile ?? {};
     const progress = p.renown > 0 || p.history?.length > 0 || Object.keys(p.logros ?? {}).length > 0 || (this.game.state.legacy?.resets ?? 0) > 0;
     this.btn.hidden = !progress && !statuses.some((st) => st.kind !== 'locked');
-    const ready = statuses.filter((st) => st.kind === 'available').length;
+    const ready = statuses.filter((st) => st.kind === 'available' || st.kind === 'won').length;
     this.badge.hidden = ready === 0;
     this.badge.textContent = ready;
   }

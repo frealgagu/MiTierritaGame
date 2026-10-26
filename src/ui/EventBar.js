@@ -17,11 +17,17 @@ export function objectiveText(obj) {
 }
 
 export class EventBar {
-  constructor(onExit) {
+  // onPause: volver al mapa con el evento en pausa. onRestart / onEnd: reiniciarlo o terminarlo (v3.30).
+  constructor(onPause, onRestart, onEnd) {
     this.el = document.getElementById('event-bar');
     this.actions = document.getElementById('event-actions');
     this.game = null;
-    document.getElementById('event-exit').addEventListener('click', () => onExit());
+    this.pauseBtn = document.getElementById('event-exit');
+    this.restartBtn = document.getElementById('event-restart');
+    this.endBtn = document.getElementById('event-end');
+    this.pauseBtn.addEventListener('click', () => onPause());
+    this.restartBtn.addEventListener('click', () => onRestart());
+    this.endBtn.addEventListener('click', () => onEnd());
     this.actions.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-action]');
       if (!btn || !this.game) return;
@@ -67,8 +73,15 @@ export class EventBar {
     const secured = board.event.medal;
     const medal = MEDALS[secured ?? medalFor(obj, board.playTime)];
     document.getElementById('event-clock').textContent = `${medal.icon} ⏱ ${formatClock(secured ? board.event.time : board.playTime)}`;
+    // Ganado (v3.30): se sigue mirando; solo se sale con «Terminar».
+    const done = Boolean(board.event.done);
+    this.pauseBtn.hidden = done;
+    this.restartBtn.hidden = done;
+    this.endBtn.textContent = done ? '🏁 Terminar evento' : '🏁 Terminar';
     const missing = def.actions.filter((a) => !board.research.includes(a.id)).map((a) => a.name);
-    const goal = secured && !allActionsBought(board) ? `✅ ${medal.icon} asegurada. Para terminar, compra: ${missing.join(', ')}` : objectiveText(obj);
+    const goal = done
+      ? `🏁 ¡Ganado con ${medal.icon} ${medal.name}!`
+      : secured && !allActionsBought(board) ? `✅ ${medal.icon} asegurada. Para terminar, compra: ${missing.join(', ')}` : objectiveText(obj);
     setFitted(document.getElementById('event-goal'), goal, 0.6);
     // Con un producto, «37 / 100»; con varios, cuánto lleva de cada uno.
     const count = items.length === 1 ? `${formatNumber(Math.floor(items[0].have))} / ${formatNumber(items[0].need)}` : items.map((i) => `${PRODUCTS[i.product].icon} ${formatNumber(Math.floor(i.have))}`).join(' ');

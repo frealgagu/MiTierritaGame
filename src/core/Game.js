@@ -57,7 +57,7 @@ export class Game {
     for (const zone of ZONE_LIST) if (this.state.zones[zone.id]?.unlocked) stepJeep(this.state, zone.id, dt, this.bus);
     for (const route of ROUTES) stepRoute(this.state, route.id, dt, this.bus);
     if (this.state.event) stepSupply(this.state, dt);
-    else refillSlots(this.state); // los cupos de eventos de la región (v3.7)
+    else if ((this.state.region ?? 'cafetero') === 'cafetero') refillSlots(this.state); // los cupos de eventos (v3.30: de todo el juego)
     stepAlerts(this.state, dt);
   }
 

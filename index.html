@@ -59,7 +59,11 @@
       <div class="event-top">
         <span id="event-title" class="event-title"></span>
         <span id="event-clock" class="event-clock"></span>
-        <button id="event-exit" class="btn event-exit">Salir</button>
+      </div>
+      <div class="event-buttons">
+        <button id="event-exit" class="btn">⏸️ Pausar</button>
+        <button id="event-restart" class="btn">🔄 Reiniciar</button>
+        <button id="event-end" class="btn">🏁 Terminar</button>
       </div>
       <div class="event-goal"><span id="event-goal"></span><span id="event-count"></span></div>
       <div class="bar"><div id="event-fill" class="bar-fill"></div></div>
@@ -259,7 +263,7 @@
           <h2>🏅 Eventos</h2>
           <button id="events-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>
-        <p class="chain-help">Cada región tiene dos eventos a la vez: tableros aparte, con sus propias monedas y niveles y un reloj que solo corre mientras juegas en ellos. Cuanto más rápido cumplas el objetivo, mejor la medalla (🥇 da 4 ⭐ de Renombre, 🥈 2 y 🥉 1); para terminar el evento, además hay que comprar sus tres mejoras. Al terminarlo, ese cupo descansa 3 años del juego (unas 6 h 24 min) y luego sale el evento de otra zona. Con la región ya terminada, salen los eventos de todas sus zonas aunque vuelvas a empezar. El Renombre y las medallas no se pierden al volver a empezar.</p>
+        <p class="chain-help">Hay dos eventos a la vez en todo el juego, nunca de la misma región: tableros aparte, con sus propias monedas y niveles y un reloj que solo corre mientras juegas en ellos (⏸️ Pausar te devuelve al mapa). Cuanto más rápido cumplas el objetivo, mejor la medalla (🥇 da 4 ⭐ de Renombre, 🥈 2 y 🥉 1); para ganar el evento, además hay que comprar sus tres mejoras. Ganado, puedes quedarte mirándolo hasta tocar 🏁 Terminar. Con 🔄 lo vuelves a empezar, y con 🏁 lo terminas aunque no lo hayas ganado (sin medalla). Al terminarlo, ese cupo descansa 2 años del juego (unas 4 h 16 min) y luego sale el evento de otra zona. Con la región ya terminada, salen los eventos de todas sus zonas aunque vuelvas a empezar. El Renombre y las medallas no se pierden al volver a empezar.</p>
         <div class="events-renown-row">
           <span id="events-renown" class="events-renown"></span>
           <button id="album-btn" class="btn">📖 Álbum</button>
@@ -295,7 +299,19 @@
         <div id="event-result-medal" class="event-result-medal"></div>
         <h2 id="event-result-title"></h2>
         <p id="event-result-text"></p>
-        <button id="event-result-ok" class="btn buy">Volver</button>
+        <button id="event-result-ok" class="btn buy">🏁 Terminar evento</button>
+        <button id="event-result-watch" class="btn">👀 Seguir mirando</button>
+      </div>
+    </div>
+
+    <!-- Confirmar reiniciar o terminar un evento (v3.30). -->
+    <div id="event-confirm" class="modal" hidden>
+      <div class="modal-card center event-result">
+        <div id="event-confirm-icon" class="event-result-medal"></div>
+        <h2 id="event-confirm-title"></h2>
+        <p id="event-confirm-text"></p>
+        <button id="event-confirm-yes" class="btn buy"></button>
+        <button id="event-confirm-no" class="btn">Volver al evento</button>
       </div>
     </div>
 

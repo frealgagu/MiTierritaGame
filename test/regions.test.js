@@ -702,3 +702,22 @@ test('La Guayabera con la plaza de Vélez: los viajes de las mulas duran lo mism
     assert.equal(legTime(g[i], next(g)), legTime(f[i], next(f)), `${g[i]} → ${next(g)}`);
   }
 });
+
+test('al cargar una partida de la v3.29, los cupos pasan a ser dos para todo el juego (v3.30)', () => {
+  const mem = {};
+  globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  delete root.events.global;
+  root.events.slots = [{ zone: 'finca' }, { until: 5000 }];
+  const san = root.regions.santander;
+  san.events.slots = [{ zone: 'guayabera' }, { zone: 'tabacal' }];
+  san.events.boards.guayabera = { event: { id: 'mosca', zone: 'guayabera', round: 1 } };
+  saveGame(root);
+  const back = loadGame();
+  assert.ok(back.events.global);
+  assert.deepEqual(back.events.slots, [{ zone: 'guayabera' }, null], 'solo queda el que se está jugando');
+  assert.equal(back.regions.santander.events.slots, undefined);
+  assert.ok(back.regions.santander.events.boards.guayabera);
+});

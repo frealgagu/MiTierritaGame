@@ -3,12 +3,15 @@
 // playTime), que avanza solo mientras se está en el tablero. Se guarda dentro de la partida, en
 // state.events.boards[zona]. En los tableros siempre es de día y no hay temporada.
 //
-// Cuándo hay evento (v3.7): cada región tiene 2 cupos. Un cupo libre se llena con el evento de una zona
-// lista (con todas sus estaciones construidas): primero las que nunca se han jugado, luego la que lleva
-// más tiempo sin jugarse. El evento espera ahí hasta que se juegue (no se vence). Al terminarlo, ese cupo
-// queda vacío 3 años del juego; los dos cupos van cada uno por su lado. El reto de cada zona avanza al
-// terminarlo (1, 2, 3 y vuelve al 1).
-//   state.events = { boards: { zona: tablero }, slots: [ { zone } | { until } | null ], last: { zona: reloj }, count: { zona: veces } }
+// Cuándo hay evento (v3.30): 2 cupos para todo el juego (hasta la v3.29, 2 por región), que guarda la
+// partida principal. Un cupo libre se llena con el evento de una zona lista (con todas sus estaciones
+// construidas) de una región que no tenga ya el otro: primero las que nunca se han jugado, luego la que
+// lleva más tiempo sin jugarse. El evento espera ahí hasta que se juegue (no se vence). Al ganarlo o al
+// terminarlo sin ganar, ese cupo queda vacío 2 años del juego; los dos cupos van cada uno por su lado.
+// El reto de cada zona avanza al ganarlo (1, 2, 3 y vuelve al 1).
+// Tras ganarlo, el tablero sigue abierto para mirarlo (`event.done`) hasta que se toque «Terminar».
+//   principal: state.events = { boards, slots: [ { zone } | { until } | null ], last, count, global }
+//   cada región: state.events = { boards: { zona: tablero }, last: { zona: reloj }, count: { zona: veces } }
 import { EVENTS, EVENTS_BY_ID, EVENT_ACTIONS_BY_ID, EVENT_OF_ZONE, MEDALS } from '../data/events.js';
 import { createInitialState, createZoneState } from './state.js';
 import { createStationState } from './production.js';
@@ -24,7 +27,7 @@ import { WithArticle, withArticle } from '../data/lore.js';
 import { gainRenown, profileOf } from './renown.js';
 
 export const EVENT_SLOTS = 2;
-export const EVENT_COOLDOWN = 3 * YEAR_DAYS * DAY_LENGTH; // 3 años del juego (6 h 24 min)
+export const EVENT_COOLDOWN = 2 * YEAR_DAYS * DAY_LENGTH; // 2 años del juego (4 h 16 min; hasta la v3.29, 3)
 
 export const eventDef = (board) => EVENTS_BY_ID[board.event.id];
 // El reto n.º `round` de un evento: van en orden y vuelven a empezar.
@@ -50,49 +53,64 @@ export const nextRound = (state, zoneId) => (eventsOf(state).count[zoneId] ?? 0)
 const open = (state, zoneId) => zoneId in state.zones && (state.regionDone || Boolean(state.zones[zoneId].unlocked));
 const ready = (state, def) => open(state, def.zone) && (state.regionDone || def.stations.every((id) => state.stations[id]));
 
-// Llena los cupos libres y libera los que ya cumplieron sus 3 años. Se llama en cada paso de la partida.
-export function refillSlots(state) {
-  if (state.event) return;
-  const ev = eventsOf(state);
-  const now = clockOf(state);
-  let free = false;
-  for (let i = 0; i < ev.slots.length; i++) {
-    const slot = ev.slots[i];
-    if (slot?.until !== undefined && now >= slot.until) ev.slots[i] = null;
-    if (!ev.slots[i]) free = true;
-  }
-  if (!free) return;
-  for (let i = 0; i < ev.slots.length; i++) {
-    if (ev.slots[i]) continue;
-    const taken = new Set([...ev.slots.map((x) => x?.zone), ...Object.keys(ev.boards)]);
+// La partida de la región de una zona, a partir de la principal (root). Con la partida de una región en
+// vez de la principal, solo sus propias zonas.
+export function ownerOf(root, zoneId) {
+  const region = REGION_OF_ZONE[zoneId];
+  if ((root.region ?? 'cafetero') === region) return root;
+  return region === 'cafetero' ? null : root.regions?.[region] ?? null;
+}
+const statesOf = (root) => [root, ...Object.values(root.regions ?? {})];
+
+// Llena los cupos libres y libera los que ya cumplieron sus 2 años. Lo llama la partida principal en cada
+// paso (core/Game.js).
+export function refillSlots(root) {
+  if (root.event) return;
+  const slots = eventsOf(root).slots;
+  const now = clockOf(root);
+  for (let i = 0; i < slots.length; i++) if (slots[i]?.until !== undefined && now >= slots[i].until) slots[i] = null;
+  if (!slots.includes(null)) return;
+  const boards = statesOf(root).flatMap((st) => Object.entries(eventsOf(st).boards));
+  const playing = boards.filter(([, b]) => !b.event.done).map(([zone]) => zone);
+  for (let i = 0; i < slots.length; i++) {
+    if (slots[i]) continue;
+    const held = slots.filter((x) => x?.zone).map((x) => x.zone);
+    // Los tableros en juego sin cupo (de antes de la v3.30) también cuentan: nunca más de 2 a la vez.
+    const loose = playing.filter((zone) => !held.includes(zone));
+    if (held.length + loose.length >= slots.length) return;
+    const busy = new Set([...held, ...boards.map(([zone]) => zone)]);
+    const regions = new Set([...held, ...loose].map((zone) => REGION_OF_ZONE[zone]));
     // Primero las nunca jugadas (en el orden de las zonas), luego la que lleva más tiempo sin jugarse.
-    const next = EVENTS.filter((def) => !taken.has(def.zone) && ready(state, def))
-      .map((def, k) => ({ def, k, last: ev.last[def.zone] ?? -Infinity }))
-      .sort((a, b) => a.last - b.last || a.k - b.k)[0];
+    const next = EVENTS.filter((def) => !busy.has(def.zone) && !regions.has(REGION_OF_ZONE[def.zone]))
+      .map((def) => ({ def, owner: ownerOf(root, def.zone) }))
+      .filter(({ def, owner }) => owner && ready(owner, def))
+      .map(({ def, owner }, k) => ({ def, k, last: eventsOf(owner).last[def.zone] ?? -Infinity }))
+      .sort((x, y) => x.last - y.last || x.k - y.k)[0];
     if (!next) return;
-    ev.slots[i] = { zone: next.def.zone };
+    slots[i] = { zone: next.def.zone };
   }
 }
 
-// Cuándo se libera el próximo cupo que está esperando sus 3 años (reloj del país), o null.
-export function nextSlotAt(state) {
-  const waits = eventsOf(state).slots.filter((x) => x?.until !== undefined).map((x) => x.until);
+// Cuándo se libera el próximo cupo que está esperando sus 2 años (reloj del país), o null.
+export function nextSlotAt(root) {
+  const waits = eventsOf(root).slots.filter((x) => x?.until !== undefined).map((x) => x.until);
   return waits.length ? Math.min(...waits) : null;
 }
 
 // Qué pasa con el evento de una zona: null (sin evento o zona cerrada), 'locked' (se abre cuando estén
-// construidas todas las estaciones que usa: así ya se conocen las piezas), 'active' (en juego),
-// 'available' (tiene cupo: se puede jugar) o 'waiting' (espera a que se libere un cupo de la región).
-//   round: el reto que toca   board: el tablero, si está en juego
-export function eventStatus(state, zoneId) {
+// construidas todas las estaciones que usa: así ya se conocen las piezas), 'active' (en juego), 'won'
+// (ganado, abierto para mirarlo hasta que se termine), 'available' (tiene cupo: se puede jugar) o
+// 'waiting' (espera a que se libere un cupo).
+//   root: la partida principal   round: el reto que toca   board: el tablero, si está abierto
+export function eventStatus(root, zoneId) {
   const def = EVENT_OF_ZONE[zoneId];
-  if (!def || !open(state, zoneId)) return null;
-  const ev = eventsOf(state);
-  const board = ev.boards[zoneId];
-  if (board) return { kind: 'active', def, round: boardRound(board), board };
+  const state = def && ownerOf(root, zoneId);
+  if (!state || !open(state, zoneId)) return null;
+  const board = eventsOf(state).boards[zoneId];
+  if (board) return { kind: board.event.done ? 'won' : 'active', def, round: boardRound(board), board };
   if (!ready(state, def)) return { kind: 'locked', def, round: nextRound(state, zoneId) };
-  if (ev.slots.some((x) => x?.zone === zoneId)) return { kind: 'available', def, round: nextRound(state, zoneId) };
-  return { kind: 'waiting', def, round: nextRound(state, zoneId), nextAt: nextSlotAt(state) };
+  if (eventsOf(root).slots.some((x) => x?.zone === zoneId)) return { kind: 'available', def, round: nextRound(state, zoneId) };
+  return { kind: 'waiting', def, round: nextRound(state, zoneId), nextAt: nextSlotAt(root) };
 }
 
 export function createEventState(def, round) {
@@ -116,13 +134,43 @@ export function createEventState(def, round) {
 }
 
 // Empieza el evento de la zona (si tiene cupo) y devuelve su tablero.
-export function startEvent(state, zoneId) {
-  refillSlots(state);
-  const st = eventStatus(state, zoneId);
+export function startEvent(root, zoneId) {
+  refillSlots(root);
+  const st = eventStatus(root, zoneId);
   if (!st) return null;
-  if (st.kind === 'active') return st.board;
+  if (st.kind === 'active' || st.kind === 'won') return st.board;
   if (st.kind !== 'available') return null;
-  return (eventsOf(state).boards[zoneId] = createEventState(st.def, st.round));
+  return (eventsOf(ownerOf(root, zoneId)).boards[zoneId] = createEventState(st.def, st.round));
+}
+
+// El cupo del evento de la zona queda vacío 2 años (el de un tablero sin cupo no ocupa ninguno).
+function coolDown(root, zoneId) {
+  const slots = eventsOf(root).slots;
+  const k = slots.findIndex((x) => x?.zone === zoneId);
+  if (k >= 0) slots[k] = { until: clockOf(root) + EVENT_COOLDOWN };
+}
+
+// 🔄 Reiniciar (v3.30): el mismo reto desde cero (monedas, niveles, compras, reloj y la medalla asegurada).
+export function restartEvent(root, zoneId) {
+  const ev = eventsOf(ownerOf(root, zoneId) ?? root);
+  const board = ev.boards[zoneId];
+  if (!board || board.event.done) return null;
+  return (ev.boards[zoneId] = createEventState(eventDef(board), boardRound(board)));
+}
+
+// 🏁 Terminar (v3.30). Sin ganarlo: se cierra sin medalla, su cupo queda vacío 2 años y el reto no avanza
+// (la próxima vez sale el mismo). Ganado: solo se cierra (la medalla y el cupo ya se dieron al ganarlo).
+export function endEvent(root, zoneId) {
+  const owner = ownerOf(root, zoneId) ?? root;
+  const ev = eventsOf(owner);
+  const board = ev.boards[zoneId];
+  if (!board) return false;
+  if (!board.event.done) {
+    ev.last[zoneId] = clockOf(owner);
+    coolDown(root, zoneId);
+  }
+  delete ev.boards[zoneId];
+  return true;
 }
 
 // Cuánto lleva de cada producto del objetivo: [{ product, have, need }].
@@ -190,14 +238,16 @@ export const allActionsBought = (board) => eventDef(board).actions.every((a) => 
 
 // El evento se gana en dos pasos (v3.7):
 //  1. Al cumplir el objetivo, la medalla queda asegurada con el tiempo de ese momento.
-//  2. Termina cuando además están compradas las tres mejoras del evento: entonces se dan la medalla y el
-//     Renombre, el tablero se cierra y su cupo queda vacío 3 años.
+//  2. Se gana cuando además están compradas las tres mejoras del evento: entonces se dan la medalla y el
+//     Renombre y su cupo queda vacío 2 años. El tablero sigue abierto para mirarlo (v3.30) hasta que se
+//     termine (endEvent).
 // Devuelve null (nada nuevo), { secured } (se acaba de asegurar la medalla; faltan mejoras) o { done }.
-//   state: la partida de la región del evento   root: la que guarda el perfil (la del Eje Cafetero)
-export function finishEvent(state, zoneId, root = state) {
+//   root: la partida principal, que guarda el perfil y los cupos
+export function finishEvent(root, zoneId) {
+  const state = ownerOf(root, zoneId) ?? root;
   const ev = eventsOf(state);
   const board = ev.boards[zoneId];
-  if (!board) return null;
+  if (!board || board.event.done) return null;
   const def = eventDef(board);
   if (!board.event.medal) {
     if (eventProgress(board) < 1) return null;
@@ -215,13 +265,10 @@ export function finishEvent(state, zoneId, root = state) {
   if (ORDER.indexOf(medal) > ORDER.indexOf(rec.best)) rec.best = medal;
   rec.count[medal] = (rec.count[medal] ?? 0) + 1;
   profile.history.push({ event: def.id, round, medal, time });
-  const now = clockOf(state);
-  ev.last[zoneId] = now;
+  ev.last[zoneId] = clockOf(state);
   ev.count[zoneId] = round;
-  // Su cupo queda vacío 3 años (el de un tablero de antes de la v3.7 sin cupo no ocupa ninguno).
-  const k = ev.slots.findIndex((x) => x?.zone === zoneId);
-  if (k >= 0) ev.slots[k] = { until: now + EVENT_COOLDOWN };
-  delete ev.boards[zoneId];
+  coolDown(root, zoneId);
+  board.event.done = true;
   return { done: true, def, medal, time, renown, round };
 }
 

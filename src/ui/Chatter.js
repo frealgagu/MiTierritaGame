@@ -48,9 +48,11 @@ export function talk(zone, lines) {
 }
 
 export class Chatter {
-  constructor(game, getZone) {
+  // root: la partida principal, con los cupos de los eventos (v3.30).
+  constructor(game, getZone, root = () => game.state) {
     this.game = game;
     this.getZone = getZone;
+    this.root = root;
     this.seen = new Map(); // estación → avisos que ya estaban puestos
     this.lastSaid = new Map(); // estación → cuándo avisó
     this.lastAny = -Infinity;
@@ -86,7 +88,8 @@ export class Chatter {
     }
     // Un evento que se abre (una vez al año), dicho por la persona de su zona.
     for (const def of EVENTS) {
-      const st = eventStatus(state, def.zone);
+      if (!(def.zone in state.zones)) continue; // (los de las otras regiones los dice su gente)
+      const st = eventStatus(this.root(), def.zone);
       const hint = `evento:${def.id}:${st?.round}`; // (v3.7: por reto; antes, `event:` por año)
       if (st?.kind !== 'available' || state.hints.includes(hint)) continue;
       state.hints.push(hint);
@@ -145,12 +148,13 @@ export class Chatter {
       for (const h of eventHandicaps(state)) if (h.pct < 1) out.push(handicapText(state, h));
       const next = def.actions.find((a) => !state.research.includes(a.id));
       if (next) out.push(`${next.icon} Compre ${next.name} (💰 ${formatNumber(next.cost)}): ${next.desc}`);
-      if (state.event.medal) out.push(`✅ La medalla ya está asegurada. Faltan las compras del evento para terminarlo.`);
+      if (state.event.done) out.push(`🏁 ¡Ganamos el evento! Mire todo lo que quiera; para salir, toque 🏁 Terminar.`);
+      else if (state.event.medal) out.push(`✅ La medalla ya está asegurada. Faltan las compras del evento para terminarlo.`);
       else out.push(`${def.icon} ${def.intro}`);
       return out;
     }
     for (const def of EVENTS) {
-      if (def.zone === zone && eventStatus(state, def.zone)?.kind === 'available') out.push(`${def.icon} ${def.announce}`);
+      if (def.zone === zone && eventStatus(this.root(), def.zone)?.kind === 'available') out.push(`${def.icon} ${def.announce}`);
     }
     // Lo que ya se puede construir.
     const build = nextToUnlock(state, zone);

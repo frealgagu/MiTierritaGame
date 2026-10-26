@@ -19,7 +19,7 @@ import { setLook } from './render/look.js';
 import { checkLogros } from './sim/logros.js';
 import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/splash.js';
 import { EventBar, formatClock } from './ui/EventBar.js';
-import { checkMedalBonus, finishEvent, startEvent } from './sim/events.js';
+import { EVENT_COOLDOWN, checkMedalBonus, endEvent, finishEvent, restartEvent, startEvent } from './sim/events.js';
 import { MEDALS } from './data/events.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
 import { openRegions, regionState } from './sim/regions.js';
@@ -175,7 +175,7 @@ async function start() {
   showZone(view.zone);
   hud = new HUD(active, select, () => scene.dayNight.hour, getZone);
   chain = new ChainView(active, select, getZone);
-  chatter = new Chatter(active, getZone);
+  chatter = new Chatter(active, getZone, () => game.state);
   goals = new GoalsView(active, getZone);
   research = new ResearchView(active, getZone, (id) => select(id));
   zones = new ZonesView(game, games, getZone, (z) => {
@@ -185,11 +185,49 @@ async function start() {
 
   // Eventos: entrar y salir del tablero. La partida sigue corriendo; el reloj del tablero solo cuando se
   // está en él. Mientras tanto, el HUD, el panel y la cadena muestran el tablero.
-  const eventBar = new EventBar(() => exitEvent());
-  // El evento de una zona se guarda en la partida de su región (v3.6: Santander también tiene eventos).
-  const ownerOf = (zoneId) => gameOf(zoneId).state;
+  // Pausar vuelve al mapa; reiniciar y terminar piden confirmación, salvo terminar uno ya ganado (v3.30).
+  const confirmEvent = (icon, title, text, yes, onYes) => {
+    const modal = document.getElementById('event-confirm');
+    document.getElementById('event-confirm-icon').textContent = icon;
+    document.getElementById('event-confirm-title').textContent = title;
+    document.getElementById('event-confirm-text').textContent = text;
+    const ok = document.getElementById('event-confirm-yes');
+    ok.textContent = yes;
+    ok.onclick = () => {
+      modal.hidden = true;
+      onYes();
+    };
+    document.getElementById('event-confirm-no').onclick = () => (modal.hidden = true);
+    modal.hidden = false;
+  };
+  const restartBoard = () => {
+    if (!board || board.game.state.event.done) return;
+    confirmEvent('🔄', '¿Reiniciar el evento?', 'Vuelve a empezar este mismo reto desde cero: monedas, niveles, compras y reloj. Si ya tenías la medalla asegurada, también se borra.', '🔄 Reiniciar', () => {
+      const zone = board.zone;
+      restartEvent(game.state, zone);
+      leaveBoard();
+      enterEvent(zone);
+      toast('🔄 El evento empezó de nuevo.', 2500);
+    });
+  };
+  const endBoard = () => {
+    if (!board) return;
+    const zone = board.zone;
+    const close = () => {
+      endEvent(game.state, zone);
+      exitEvent();
+    };
+    if (board.game.state.event.done) return close();
+    confirmEvent('🏁', '¿Terminar el evento?', `Se cierra sin medalla ni Renombre. Su cupo queda libre en 2 años del juego (unas ${formatDuration(EVENT_COOLDOWN)}) y la próxima vez sale el mismo reto.`, '🏁 Terminar sin ganar', () => {
+      close();
+      toast('🏁 Evento terminado sin medalla.', 3000);
+    });
+  };
+  const eventBar = new EventBar(() => exitEvent(), restartBoard, endBoard);
+  // El evento de una zona se guarda en la partida de su región (v3.6: Santander también tiene eventos);
+  // los cupos, en la principal (v3.30).
   const enterEvent = (zoneId) => {
-    const state = startEvent(ownerOf(zoneId), zoneId);
+    const state = startEvent(game.state, zoneId);
     if (!state) return;
     if (panel.id) panel.close();
     scene.destroy();
@@ -218,7 +256,7 @@ async function start() {
     leaveBoard();
     showZone(view.zone);
   };
-  const events = new EventsView(game, enterEvent, (zoneId) => regionState(game.state, REGION_OF_ZONE[zoneId]));
+  const events = new EventsView(game, enterEvent);
   // Al cambiar la decoración se vuelve a dibujar el mapa (el de la zona o el del tablero).
   const renown = new RenownView(game, (profile) => {
     if (!board) return showZone(view.zone);
@@ -241,9 +279,14 @@ async function start() {
     document.getElementById('event-result-medal').textContent = m.icon;
     document.getElementById('event-result-title').textContent = `¡Medalla de ${m.name}!`;
     document.getElementById('event-result-text').textContent =
-      `${r.def.icon} ${r.def.name} ${r.round}: cumpliste el objetivo en ${formatClock(r.time)} y compraste las tres mejoras.\n+${m.renown} ⭐ de Renombre (tienes ${game.state.profile.renown}).\nEste cupo de eventos de la región queda libre en 3 años del juego (unas 6 h 24 min).`;
+      `${r.def.icon} ${r.def.name} ${r.round}: cumpliste el objetivo en ${formatClock(r.time)} y compraste las tres mejoras.\n+${m.renown} ⭐ de Renombre (tienes ${game.state.profile.renown}).\nEste cupo de eventos queda libre en 2 años del juego (unas ${formatDuration(EVENT_COOLDOWN)}).`;
     const modal = document.getElementById('event-result');
-    document.getElementById('event-result-ok').onclick = () => (modal.hidden = true);
+    // Terminar, o quedarse mirando el tablero (v3.30): de ahí solo se sale con «Terminar».
+    document.getElementById('event-result-ok').onclick = () => {
+      modal.hidden = true;
+      endBoard();
+    };
+    document.getElementById('event-result-watch').onclick = () => (modal.hidden = true);
     modal.hidden = false;
     sound.milestone();
   };
@@ -358,7 +401,7 @@ async function start() {
       if (!board) return;
       board.game.timeScale = game.timeScale;
       board.game.update(dt);
-      const r = finishEvent(ownerOf(board.zone), board.zone, game.state);
+      const r = finishEvent(game.state, board.zone);
       // v3.7: cumplir el objetivo asegura la medalla; el evento termina al tener las tres mejoras.
       if (r?.secured) {
         const m = MEDALS[r.medal];
@@ -366,7 +409,7 @@ async function start() {
         sound.milestone();
       }
       if (r?.done) {
-        exitEvent();
+        eventBar.paint();
         showEventResult(r);
       }
     });

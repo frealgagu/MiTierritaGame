@@ -183,6 +183,16 @@ function migrateProfile(root) {
     // regla de antes se quita si todavía falta algo; vuelve a llegar al completarlo.
     if (st.mastered && !masteryReady(st)) st.mastered = false;
   }
+  // v3.29 → v3.30: dos cupos de eventos para todo el juego, en la partida principal (antes, dos por
+  // región). Los tableros en juego se quedan (los dos primeros ocupan los cupos; los demás no llenan cupo
+  // hasta que se terminen); los disponibles sin empezar y las esperas de cada región se borran.
+  if (!root.events.global) {
+    root.events.global = true;
+    const playing = all.flatMap((st) => Object.keys(st.events.boards));
+    root.events.slots = [null, null];
+    playing.slice(0, 2).forEach((zone, i) => (root.events.slots[i] = { zone }));
+  }
+  for (const st of all) if (st !== root) delete st.events.slots;
   return root;
 }
 

@@ -82,13 +82,14 @@ export function restartState(state, now = Date.now(), profile = null) {
   // Lo que no se pierde (v2.0): Renombre, medallas, álbum, decoración y logros; y lo de esta partida
   // pasa al acumulado de los logros (v2.3). Solo la partida del Eje Cafetero guarda el perfil.
   // Los eventos siguen tal cual (v3.12): los tableros en juego, los cupos (con su evento o esperando sus
-  // 3 años) y lo ya jugado. (Hasta la v3.11 el tablero en juego se perdía.)
+  // 2 años) y lo ya jugado. (Hasta la v3.11 el tablero en juego se perdía.)
   const ev = state.events ?? {};
   next.events = {
     boards: structuredClone(ev.boards ?? {}),
     slots: [0, 1].map((i) => ev.slots?.[i] ?? null),
     last: { ...ev.last },
     count: { ...ev.count },
+    ...(ev.global ? { global: true } : {}),
   };
   // Cada reinicio da Renombre (v3.11).
   if (state.profile) {
