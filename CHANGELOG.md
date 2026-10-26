@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## v3.45.0 — Cartagena amurallada y frente al mar
+- **🏰 Cartagena** se ve ahora como la ciudad amurallada:
+  - el **mar Caribe** por los dos bordes de atrás del mapa, con olas, espuma, playa, veleros y lanchas;
+  - la **muralla** de piedra coralina a lo largo de la playa, con sus almenas y sus **garitas**;
+  - la muralla que cierra el **centro histórico** por tierra, con puertas donde pasan los caminos y la **Torre del Reloj** (amarilla, con sus arcos, el reloj que se ilumina de noche y la cúpula);
+  - adentro, las casas coloniales de colores pegadas unas a otras.
+- Es solo dibujo: las estaciones, los caminos y los tiempos de viaje no cambian.
+
 ## v3.44.0 — La Costa Pacífica completa: eventos, álbum y logros
 - **Seis eventos nuevos**, uno por zona de la Costa Pacífica, cada uno con su escena en el tablero que cambia con cada compra:
   - 🍂 **Sigatoka negra** en el Platanal: las matas manchadas, el que corta las hojas enfermas, las zanjas y los colinos de plátano resistente.

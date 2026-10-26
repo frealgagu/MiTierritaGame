@@ -58,6 +58,7 @@ export class Terrain {
     this.drawGround();
     if (zone.plaza) drawAtrium(this.ground, zone.plaza);
     if (zone.plaza) this.buildPlaza();
+    if (zone.walls) this.buildWalls();
     this.buildDecor();
   }
 
@@ -95,6 +96,7 @@ export class Terrain {
     const n = this.zone.size;
     const rng = createRng(this.zone.seed);
 
+    if (this.zone.walls?.sea) this.drawSea(g, n, rng);
     // Bordes del «diorama».
     g.poly(isoPoly([[0, n, 0], [n, n, 0], [n, n, -CLIFF], [0, n, -CLIFF]])).fill(PAL.cliffTop);
     g.poly(isoPoly([[n, 0, 0], [n, n, 0], [n, n, -CLIFF], [n, 0, -CLIFF]])).fill(PAL.cliffSide);
@@ -117,6 +119,7 @@ export class Terrain {
         else if (type === 'farm') color = (FARM_SOIL[this.zone.style] ?? FARM_SOIL[this.zone.theme])?.(v) ?? mix(PAL.soil, 0x6e4529, v * 0.35);
         else if (type === 'plaza') color = mix(0xd9c9a8, 0xc4b08a, v * 0.5);
         else if (type === 'plot' || type === 'building') color = mix(PAL.plot, 0xc9a06c, v * 0.4);
+        else if (this.zone.walls?.sea && (gx === 0 || gy === 0)) color = mix(0xe9d8a6, 0xdcc78e, v * 0.6); // la playa, por fuera de la muralla
         else color = mix(PAL.grass, (gx + gy) % 2 ? 0x8cc65a : 0x6fae44, 0.35 + v * 0.3);
         g.poly(isoPoly([[gx, gy], [gx + 1, gy], [gx + 1, gy + 1], [gx, gy + 1]])).fill(color);
 
@@ -207,6 +210,80 @@ export class Terrain {
     }
   }
 
+  // El mar (v3.45): una franja de agua detrás de los bordes de atrás del mapa, con olas, la espuma en la orilla
+  // y el corte del agua en los extremos, como el borde del «diorama».
+  drawSea(g, n, rng) {
+    const S = 8;
+    g.poly(isoPoly([[-S, -S], [n, -S], [n, 0], [0, 0], [0, n], [-S, n]])).fill(0x2f86a8);
+    g.poly(isoPoly([[-S, -S], [n, -S], [n, -S + 2.5], [-S + 2.5, -S + 2.5], [-S + 2.5, n], [-S, n]])).fill({ color: 0x1f6f94, alpha: 0.6 });
+    g.poly(isoPoly([[n, -S, 0], [n, 0, 0], [n, 0, -CLIFF], [n, -S, -CLIFF]])).fill(0x1f5f80);
+    g.poly(isoPoly([[-S, n, 0], [0, n, 0], [0, n, -CLIFF], [-S, n, -CLIFF]])).fill(0x2a6f92);
+    for (let k = 0; k < 70; k++) {
+      const side = rng() < 0.5;
+      const along = rng() * n;
+      const out = -0.4 - rng() * (S - 1);
+      const p = side ? iso(along, out) : iso(out, along);
+      g.moveTo(p.x - 7, p.y).quadraticCurveTo(p.x, p.y - 2.5, p.x + 7, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.5 });
+    }
+    // La espuma de la orilla.
+    for (let t = 0; t < n; t += 0.5) {
+      const a = iso(t, -0.12);
+      const b = iso(-0.12, t);
+      g.ellipse(a.x, a.y, 7, 1.6).fill({ color: 0xffffff, alpha: 0.55 });
+      g.ellipse(b.x, b.y, 7, 1.6).fill({ color: 0xffffff, alpha: 0.55 });
+    }
+  }
+
+  // La ciudad amurallada (v3.45): la muralla de piedra coralina por tramos de una casilla (para que se ordene
+  // con lo demás), con su paseo y sus almenas, las puertas donde pasan los caminos, las garitas y la Torre
+  // del Reloj; en el mar, unos veleros y lanchas.
+  buildWalls() {
+    const W = this.zone.walls;
+    this.wallCells = new Set();
+    const put = (obj, gx, gy) => {
+      obj.zIndex = depth(gx, gy);
+      obj.grid = [gx, gy];
+      this.decor.push(obj);
+    };
+    const gateAt = (x, y) => W.gates.find((gt) => Math.hypot(gt.at[0] - x, gt.at[1] - y) < 0.55);
+    for (const line of W.lines) {
+      for (let i = 1; i < line.length; i++) {
+        const [ax, ay] = line[i - 1];
+        const [bx, by] = line[i];
+        const len = Math.hypot(bx - ax, by - ay);
+        const steps = Math.ceil(len / 0.5);
+        for (let s = 0; s < steps; s++) {
+          const f0 = s / steps;
+          const f1 = (s + 1) / steps;
+          const x0 = ax + (bx - ax) * f0;
+          const y0 = ay + (by - ay) * f0;
+          const x1 = ax + (bx - ax) * f1;
+          const y1 = ay + (by - ay) * f1;
+          const mx = (x0 + x1) / 2;
+          const my = (y0 + y1) / 2;
+          this.wallCells.add(`${Math.floor(mx)},${Math.floor(my)}`);
+          this.occupied.add(`${Math.floor(mx)},${Math.floor(my)}`);
+          if (gateAt(mx, my)) continue;
+          put(wallChunk(x0, y0, x1, y1), mx, my);
+        }
+      }
+    }
+    for (const gt of W.gates) {
+      const [gx, gy] = gt.at;
+      const alongX = W.lines.some((l) => l.some(([, y], k) => k > 0 && Math.abs(y - gy) < 0.01 && Math.abs(l[k - 1][1] - gy) < 0.01));
+      put(gt.clock ? clockTower(gx, gy, alongX, this.glows) : wallGate(gx, gy, alongX), gx + 0.3, gy + 0.3);
+    }
+    for (const [gx, gy] of W.garitas) put(garita(gx, gy), gx + 0.2, gy + 0.2);
+    const n = this.zone.size;
+    for (const [gx, gy, kind] of [[-2.5, 6, 'sail'], [9, -3, 'sail'], [-4.5, 17, 'boat'], [18, -2.2, 'boat'], [-1.8, 21, 'sail']]) {
+      if (gx >= n || gy >= n) continue;
+      const obj = kind === 'sail' ? sailboat() : motorBoat();
+      const p = iso(gx, gy);
+      obj.position.set(p.x, p.y);
+      put(obj, gx, gy);
+    }
+  }
+
   isFree(gx, gy, margin = 1, tiles = this.tiles) {
     for (let x = gx - margin; x <= gx + margin; x++) {
       for (let y = gy - margin; y <= gy + margin; y++) {
@@ -225,7 +302,9 @@ export class Terrain {
     const base = buildTileMap(this.zone);
     for (let gx = 0; gx < n; gx++) {
       for (let gy = 0; gy < n; gy++) {
-        if (!this.isFree(gx, gy, 1, base)) continue;
+        // Dentro de la muralla de Cartagena (v3.45) las casas van pegadas, como en el centro histórico.
+        const walled = this.zone.walls && gx > 0 && gy > 0 && gx < 12 && gy < 11;
+        if (!this.isFree(gx, gy, walled ? 0 : 1, base)) continue;
         const r = rng();
         let obj = null;
         if (this.zone.theme === 'town') {
@@ -237,7 +316,7 @@ export class Terrain {
           const villa = this.zone.style === 'villa';
           const villavo = this.zone.style === 'villavo'; // Villavicencio (v3.36): moriches y mangos
           const puerto = this.zone.style === 'buenaventura'; // Buenaventura (v3.43): palmas de coco y almendros
-          if (r < 0.06) obj = townHouse(rng, this.zone.style);
+          if (r < 0.06 || (walled && r < 0.4)) obj = townHouse(rng, this.zone.style);
           else if (villavo && r < 0.135) obj = r < 0.085 ? mangoTree(rng) : r < 0.1 ? streetLamp() : morichePalm(rng);
           else if (puerto && r < 0.135) obj = r < 0.09 ? coconutPalm(rng) : r < 0.105 ? streetLamp() : mangoTree(rng);
           else if (r < 0.09) obj = salento && r < 0.075 ? palm(rng) : cartagena ? coconutPalm(rng) : villa ? cypress(rng) : guayacan(rng);
@@ -417,7 +496,7 @@ export class Terrain {
           else if (r < 0.15) obj = coffeeBush(rng);
           else if (r < 0.17) obj = rock(rng);
         }
-        if (!obj || !this.isFree(gx, gy) || SIGN_CELLS.has(`${gx},${gy}`)) continue;
+        if (!obj || !this.isFree(gx, gy, walled ? 0 : 1) || SIGN_CELLS.has(`${gx},${gy}`) || this.wallCells?.has(`${gx},${gy}`)) continue;
         this.occupied.add(`${gx},${gy}`);
         const ox = 0.3 + rng() * 0.4;
         const oy = 0.3 + rng() * 0.4;
@@ -554,6 +633,136 @@ function fountain() {
   g.rect(-2.5, -20, 5, 14).fill(CHURCH_STONE).stroke(OUTLINE);
   g.ellipse(0, -20, 6, 2.6).fill(shade(CHURCH_STONE, 1.05)).stroke(OUTLINE);
   g.moveTo(0, -21).quadraticCurveTo(-5, -28, -9, -8).moveTo(0, -21).quadraticCurveTo(5, -28, 9, -8).stroke({ width: 1.4, color: 0xd6ecf7 });
+  c.addChild(g);
+  return c;
+}
+
+// ---------- La ciudad amurallada de Cartagena (v3.45) ----------
+const WALL_STONE = 0xcdb88e; // piedra coralina
+const WALL_H = 16;
+const WALL_T = 0.34; // grueso de la muralla, en casillas
+
+// Un tramo de muralla de (x0, y0) a (x1, y1), recto en gx o en gy: el muro con su zócalo más oscuro, el paseo
+// de arriba y las almenas por el lado del mar.
+function wallChunk(x0, y0, x1, y1) {
+  const c = new Container();
+  const g = new Graphics();
+  const alongX = Math.abs(y1 - y0) < 1e-6;
+  const x = alongX ? Math.min(x0, x1) : x0 - WALL_T / 2;
+  const y = alongX ? y0 - WALL_T / 2 : Math.min(y0, y1);
+  const w = alongX ? Math.abs(x1 - x0) : WALL_T;
+  const d = alongX ? WALL_T : Math.abs(y1 - y0);
+  box(g, x, y, w, d, 4, shade(WALL_STONE, 0.8));
+  box(g, x, y, w, d, WALL_H - 4, WALL_STONE, { z: 4 });
+  // Hiladas de piedra en la cara que se ve.
+  for (const z of [8, 12]) {
+    const a = alongX ? iso(x, y + d, z) : iso(x + w, y, z);
+    const b = alongX ? iso(x + w, y + d, z) : iso(x + w, y + d, z);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 0.8, color: shade(WALL_STONE, 0.65), alpha: 0.6 });
+  }
+  // Almenas por el lado de afuera (el del mar, hacia gx o gy menor).
+  const k = Math.max(1, Math.round((alongX ? w : d) / 0.25));
+  for (let i = 0; i < k; i += 2) {
+    const f = i / k;
+    if (alongX) box(g, x + w * f, y, w / k, 0.08, 4, shade(WALL_STONE, 1.05), { z: WALL_H });
+    else box(g, x, y + d * f, 0.08, d / k, 4, shade(WALL_STONE, 1.05), { z: WALL_H });
+  }
+  c.addChild(g);
+  return c;
+}
+
+// Una puerta en la muralla: los dos estribos más altos y el arco por donde pasa el camino.
+function wallGate(gx, gy, alongX) {
+  const c = new Container();
+  const g = new Graphics();
+  const half = 0.5;
+  const t = WALL_T + 0.08;
+  for (const s of [-1, 1]) {
+    const px = alongX ? gx + s * half - (s > 0 ? 0 : 0.2) : gx - t / 2;
+    const py = alongX ? gy - t / 2 : gy + s * half - (s > 0 ? 0 : 0.2);
+    box(g, px, py, alongX ? 0.2 : t, alongX ? t : 0.2, WALL_H + 6, shade(WALL_STONE, 1.02));
+  }
+  const ax = alongX ? gx - half : gx - t / 2;
+  const ay = alongX ? gy - t / 2 : gy - half;
+  box(g, ax, ay, alongX ? 1.2 : t, alongX ? t : 1.2, 6, WALL_STONE, { z: WALL_H });
+  const p0 = alongX ? iso(gx - 0.35, gy + t / 2, 0) : iso(gx + t / 2, gy - 0.35, 0);
+  const p1 = alongX ? iso(gx + 0.35, gy + t / 2, 0) : iso(gx + t / 2, gy + 0.35, 0);
+  const mid = { x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2 };
+  g.moveTo(p0.x, p0.y).lineTo(p0.x, p0.y - 10).quadraticCurveTo(mid.x, mid.y - 22, p1.x, p1.y - 10).lineTo(p1.x, p1.y).closePath().fill(0x4a3a2a);
+  c.addChild(g);
+  return c;
+}
+
+// La Torre del Reloj: la puerta principal, amarilla, con sus tres arcos, el reloj y la cúpula con la veleta.
+// glows: las luces de noche (el reloj se ilumina).
+function clockTower(gx, gy, alongX, glows) {
+  const c = new Container();
+  const g = new Graphics();
+  const w = alongX ? 1.4 : 0.7;
+  const d = alongX ? 0.7 : 1.4;
+  const x = gx - w / 2;
+  const y = gy - d / 2;
+  const H = 46;
+  const color = 0xf2c94c;
+  box(g, x - 0.1, y - 0.1, w + 0.2, d + 0.2, 26, shade(color, 0.95));
+  box(g, x, y, w, d, H - 26, color, { z: 26 });
+  box(g, x + w * 0.2, y + d * 0.2, w * 0.6, d * 0.6, 12, shade(color, 1.05), { z: H });
+  // Los arcos (en la cara que mira al frente).
+  for (const f of alongX ? [0.2, 0.5, 0.8] : [0.5]) {
+    const p = alongX ? iso(x + w * f, y + d + 0.1, 0) : iso(x + w + 0.1, y + d * f, 0);
+    g.moveTo(p.x - 5, p.y).lineTo(p.x - 5, p.y - 12).quadraticCurveTo(p.x, p.y - 20, p.x + 5, p.y - 12).lineTo(p.x + 5, p.y).closePath().fill(0x4a3a2a);
+  }
+  // El reloj.
+  const ck = alongX ? iso(gx, y + d, 37) : iso(x + w, gy, 37);
+  g.circle(ck.x, ck.y, 6).fill(0xffffff).stroke(OUTLINE);
+  g.moveTo(ck.x, ck.y).lineTo(ck.x, ck.y - 4).moveTo(ck.x, ck.y).lineTo(ck.x + 3, ck.y + 1).stroke({ width: 1, color: 0x263238 });
+  glows.push({ x: ck.x, y: ck.y, r: 14, color: 0xfff3c4 });
+  // La cúpula y la veleta.
+  const top = iso(gx, gy, H + 12);
+  g.moveTo(top.x - 9, top.y).quadraticCurveTo(top.x, top.y - 16, top.x + 9, top.y).closePath().fill(0xe0e0e0).stroke(OUTLINE);
+  g.moveTo(top.x, top.y - 12).lineTo(top.x, top.y - 22).stroke({ width: 1.2, color: 0x37474f });
+  g.poly([top.x, top.y - 22, top.x + 6, top.y - 20, top.x, top.y - 18]).fill(0x37474f);
+  c.addChild(g);
+  return c;
+}
+
+// Garita: la casilla de vigía redonda sobre la muralla, con su cúpula y la ranura para mirar el mar.
+function garita(gx, gy) {
+  const c = new Container();
+  const g = new Graphics();
+  const p = iso(gx, gy, WALL_H);
+  g.rect(p.x - 5, p.y - 14, 10, 14).fill(shade(WALL_STONE, 1.05)).stroke(OUTLINE);
+  g.ellipse(p.x, p.y, 5, 2).fill(shade(WALL_STONE, 0.9)).stroke(OUTLINE);
+  g.moveTo(p.x - 6, p.y - 14).quadraticCurveTo(p.x, p.y - 26, p.x + 6, p.y - 14).closePath().fill(shade(WALL_STONE, 1.12)).stroke(OUTLINE);
+  g.circle(p.x, p.y - 23, 1.4).fill(shade(WALL_STONE, 0.8));
+  g.rect(p.x - 1, p.y - 10, 2, 4).fill(0x3a2a1a);
+  c.addChild(g);
+  return c;
+}
+
+// Velero en la bahía, con la vela blanca.
+function sailboat() {
+  const c = new Container();
+  const g = new Graphics();
+  g.ellipse(0, 3, 16, 3.5).fill({ color: 0x1f5f80, alpha: 0.5 });
+  g.moveTo(-14, -2).quadraticCurveTo(0, 6, 14, -2).lineTo(10, 2).quadraticCurveTo(0, 6, -10, 2).closePath().fill(0xf7f4ee).stroke(OUTLINE);
+  g.moveTo(0, 0).lineTo(0, -30).stroke({ width: 1.4, color: 0x5d4037 });
+  g.poly([1, -29, 1, -4, 14, -6]).fill(0xffffff).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  g.poly([-1, -26, -1, -6, -10, -7]).fill(0xf2c94c).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  c.addChild(g);
+  return c;
+}
+
+// Lancha de pasajeros, con su toldo azul.
+function motorBoat() {
+  const c = new Container();
+  const g = new Graphics();
+  g.ellipse(0, 3, 15, 3).fill({ color: 0x1f5f80, alpha: 0.5 });
+  g.moveTo(-13, -2).quadraticCurveTo(0, 5, 13, -2).lineTo(10, 1).quadraticCurveTo(0, 5, -10, 1).closePath().fill(0xffffff).stroke(OUTLINE);
+  for (const x of [-7, 7]) g.rect(x - 0.6, -10, 1.2, 8).fill(0x90a4ae);
+  g.rect(-9, -12, 18, 3).fill(0x1e88e5).stroke({ width: 0.6, color: 0x3a2418 });
+  for (let i = 0; i < 3; i++) g.circle(-5 + i * 5, -4, 1.8).fill(0xff6f00);
+  g.moveTo(13, -1).lineTo(20, 1).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.7 });
   c.addChild(g);
   return c;
 }

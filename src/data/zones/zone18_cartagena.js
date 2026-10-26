@@ -39,6 +39,23 @@ export const ZONE18 = {
     recuerdos_costa: { road: [[6.5, 25.9], [6.5, 11.2]], sign: [5.3, 23.6], text: 'Sombreros de Tuchín ⬆' },
     cazuelas: { road: [[12.5, 25.9], [12.5, 15.2]], sign: [11.3, 23.6], text: 'Pescado en coco ⬆' },
   },
+  // La ciudad amurallada (v3.45): el mar Caribe detrás del mapa, la playa, la muralla que lo bordea y la que
+  // cierra el centro histórico por tierra, con sus garitas y sus puertas por donde pasan los caminos; la del
+  // camino de los sombreros es la Torre del Reloj. Solo es dibujo: las estaciones y los caminos no se mueven.
+  walls: {
+    sea: true,
+    lines: [
+      [[0.35, 24.6], [0.35, 0.35], [22.6, 0.35]],
+      [[0.35, 11.85], [11.7, 11.85]],
+      [[12.55, 10.7], [12.55, 0.35]],
+    ],
+    gates: [
+      { at: [6.5, 11.85], clock: true },
+      { at: [12.55, 1.5] },
+      { at: [12.55, 4.5] },
+    ],
+    garitas: [[0.35, 0.35], [0.35, 6.2], [0.35, 18], [7.5, 0.35], [15, 0.35], [22.6, 0.35], [0.35, 24.6], [0.35, 11.85], [11.7, 11.85], [12.55, 10.7], [12.55, 0.35]],
+  },
   unlockedBy: 'sombrero',
   next: null, // la última de la Costa
 };
