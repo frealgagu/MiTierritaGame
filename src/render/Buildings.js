@@ -264,6 +264,40 @@ function worker(g, x, y, shirt) {
   g.ellipse(x, y - 22.5, 5.5, 1.5).fill(0xf4e3b5);
 }
 
+// Casa de tablas sobre pilotes, como las del Chocó (v3.38): los pilotes, el piso alzado, las paredes de color, la
+// escalera al frente y el techo de zinc. Devuelve la altura del piso (z donde empiezan las paredes).
+function stiltHouse(view, g, hx, hy, w, d, wallH, ctx, { wall = 0x4fb3bf, trim = 0xf7f4ee, roofColor = 0x9aa3a8, roofH = 12, lift = 10 } = {}) {
+  for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d], [w / 2, d]]) box(g, hx + px - 0.05, hy + py - 0.05, 0.1, 0.1, lift, 0x6b4a2e);
+  box(g, hx - 0.05, hy - 0.05, w + 0.1, d + 0.1, 2, 0x8d6e4a, { z: lift });
+  const z = lift + 2;
+  const H = wallH + ctx.up;
+  box(g, hx, hy, w, d, H, wall, { z });
+  for (let k = 1; k < 4; k++) {
+    const a = iso(hx, hy + d, z + (H * k) / 4);
+    const b = iso(hx + w, hy + d, z + (H * k) / 4);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 0.8, color: shade(wall, 0.7), alpha: 0.6 });
+  }
+  // Escalera de tablas hasta el piso.
+  const s0 = iso(hx + w * 0.3, hy + d + 0.55, 0);
+  const s1 = iso(hx + w * 0.3, hy + d + 0.05, lift + 2);
+  g.moveTo(s0.x - 3, s0.y).lineTo(s1.x - 3, s1.y).moveTo(s0.x + 3, s0.y).lineTo(s1.x + 3, s1.y).stroke({ width: 1.2, color: 0x6b4a2e });
+  for (let k = 1; k < 4; k++) g.moveTo(s0.x - 3 + (s1.x - s0.x) * k / 4, s0.y + (s1.y - s0.y) * k / 4).lineTo(s0.x + 3 + (s1.x - s0.x) * k / 4, s0.y + (s1.y - s0.y) * k / 4).stroke({ width: 1, color: 0x8d6e4a });
+  g.poly(isoPoly([[hx + w * 0.3 - 0.15, hy + d, z], [hx + w * 0.3 + 0.15, hy + d, z], [hx + w * 0.3 + 0.15, hy + d, z + 16], [hx + w * 0.3 - 0.15, hy + d, z + 16]])).fill(shade(trim, 0.75)).stroke(OUTLINE);
+  g.poly(isoPoly([[hx + w, hy + d * 0.5 - 0.15, z + 6], [hx + w, hy + d * 0.5 + 0.15, z + 6], [hx + w, hy + d * 0.5 + 0.15, z + 15], [hx + w, hy + d * 0.5 - 0.15, z + 15]])).fill(0xffe0b2).stroke(OUTLINE);
+  const c = iso(hx + w, hy + d * 0.5, z + 10);
+  view.lights.push({ x: c.x, y: c.y, r: 18 });
+  gableRoof(g, hx, hy, w, d, z + H, roofH, roofColor, wall);
+  view.roofTop = iso(hx + w / 2, hy + d / 2, z + H + roofH);
+  return z;
+}
+
+// Ramada: cuatro horcones y el techo de zinc a dos aguas, abierta por los lados.
+function ramada(view, g, x0, y0, w, d, H, roofColor = 0x9aa3a8) {
+  for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, 0x6b4a2e);
+  gableRoof(g, x0, y0, w, d, H, 10, roofColor, 0x8d6e4a);
+  view.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 10);
+}
+
 const DRAW = {
   // Beneficiadero: casa con tolva y tanques de lavado.
   wetmill(g, x, y, ctx) {
@@ -4427,6 +4461,214 @@ const DRAW = {
         walkers.circle(p.x, p.y - 16, 2.2).fill(0xe0ac7e);
         walkers.ellipse(p.x, p.y - 17.5, 4.5, 1.2).fill(0x3e2a1a);
       }
+    };
+  },
+
+  // --- Chocó · El Platanal (v3.38): casas de tabla sobre pilotes, pintadas de colores, con techo de zinc ---
+
+  // Desmanadora: la ramada donde cuelgan los racimos del cable; el platanero corta las manos con el machete y
+  // caen a la tina de agua.
+  plantain_dehander(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.35;
+    const w = 2.3;
+    const d = 1.5;
+    const H = 30 + ctx.up;
+    // El cable de donde cuelgan los racimos.
+    const c0 = iso(x0 - 0.2, y0 + d / 2, H - 4);
+    const c1 = iso(x0 + w + 0.2, y0 + d / 2, H - 4);
+    // La tina con agua y las manos de plátano.
+    box(g, x0 + 1.2, y0 + 0.9, 1.0, 0.55, 7, 0x8d6e4a);
+    const tub = iso(x0 + 1.7, y0 + 1.17, 7);
+    g.ellipse(tub.x, tub.y, 13, 4).fill(0x4fa3c7);
+    for (let k = 0; k < 3; k++) g.ellipse(tub.x - 6 + k * 6, tub.y - 1, 3.5, 1.8).fill(PRODUCTS.plantain_hand.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+    // Racimos que esperan en el suelo.
+    for (const [bx, by] of [[0.45, 2.35], [0.9, 2.5]]) {
+      const p = iso(x + bx, y + by);
+      g.ellipse(p.x, p.y - 5, 5, 7).fill(PRODUCTS.plantain_bunch.color).stroke(OUTLINE);
+      for (let k = 0; k < 3; k++) g.moveTo(p.x - 4, p.y - 9 + k * 4).lineTo(p.x + 4, p.y - 9 + k * 4).stroke({ width: 0.8, color: 0x3f7a2a });
+    }
+    ramada(this, g, x0, y0, w, d, H);
+    g.moveTo(c0.x, c0.y).lineTo(c1.x, c1.y).stroke({ width: 1.2, color: 0x37474f });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const hook = iso(x0 + 0.8, y0 + d / 2, H - 4);
+      const sway = this.working ? Math.sin(time * 2) * 1.5 : 0;
+      anim.moveTo(hook.x, hook.y).lineTo(hook.x + sway, hook.y + 6).stroke({ width: 1, color: 0x37474f });
+      anim.ellipse(hook.x + sway, hook.y + 15, 6, 10).fill(PRODUCTS.plantain_bunch.color).stroke(OUTLINE);
+      for (let k = 0; k < 3; k++) anim.moveTo(hook.x + sway - 5, hook.y + 10 + k * 5).lineTo(hook.x + sway + 5, hook.y + 10 + k * 5).stroke({ width: 0.8, color: 0x3f7a2a });
+      anim.ellipse(hook.x + sway, hook.y + 27, 2.4, 3.4).fill(0x7b1f4b);
+      const wp = iso(x0 + 1.3, y0 + 0.55);
+      worker(anim, wp.x, wp.y, 0xf2c14e);
+      const swing = this.working ? Math.sin(time * 6) : 0;
+      anim.moveTo(wp.x - 3, wp.y - 15).lineTo(wp.x - 8 - swing * 3, wp.y - 20 + swing * 4).stroke({ width: 1.6, color: 0xb0bec5 });
+      if (!this.working) return;
+      const f = (time * 1.2) % 1;
+      anim.ellipse(hook.x + (tub.x - hook.x) * f, hook.y + 18 + (tub.y - hook.y - 18) * f - Math.sin(f * Math.PI) * 6, 3.4, 1.8).fill(PRODUCTS.plantain_hand.color);
+    };
+    this.animate(0);
+  },
+
+  // Tanque de lavado: los tanques largos de cemento, bajo el zinc, donde las manos de plátano flotan y se les
+  // va la leche; al final, la canastilla donde salen lavadas.
+  plantain_washer(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const tanks = ctx.tier >= 2 ? [0.25, 1.0, 1.75] : [0.45, 1.3];
+    this.tanks = [];
+    for (const ty of tanks) {
+      box(g, x0, y0 + ty, 2.4, 0.6, 9, 0xb0b0a8);
+      const a = iso(x0 + 0.08, y0 + ty + 0.08, 9);
+      const b = iso(x0 + 2.32, y0 + ty + 0.08, 9);
+      const c = iso(x0 + 2.32, y0 + ty + 0.52, 9);
+      const e = iso(x0 + 0.08, y0 + ty + 0.52, 9);
+      g.poly([a.x, a.y, b.x, b.y, c.x, c.y, e.x, e.y]).fill(0x4fa3c7);
+      this.tanks.push(ty);
+    }
+    for (const [px, py] of [[0, -0.1], [2.4, -0.1], [0, 2.1], [2.4, 2.1]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, 30 + ctx.up, 0x6b4a2e);
+    const crate = iso(x + 2.85, y + 2.55);
+    g.poly([crate.x - 8, crate.y - 8, crate.x + 8, crate.y - 8, crate.x + 7, crate.y, crate.x - 7, crate.y]).fill(0x2e7d32).stroke(OUTLINE);
+    for (let k = 0; k < 3; k++) g.ellipse(crate.x - 5 + k * 5, crate.y - 9, 3, 1.6).fill(PRODUCTS.washed_plantain.color);
+    gableRoof(g, x0, y0 - 0.1, 2.4, 2.2, 30 + ctx.up, 10, 0x9aa3a8, 0x8d6e4a);
+    this.roofTop = iso(x0 + 1.2, y0 + 1, 40 + ctx.up);
+    const water = new Graphics();
+    this.anim.addChild(water);
+    this.animate = (time) => {
+      water.clear();
+      for (const [k, ty] of this.tanks.entries()) {
+        for (let i = 0; i < 4; i++) {
+          const f = this.working ? (time * 0.12 + i / 4 + k * 0.3) % 1 : i / 4 + 0.1;
+          const p = iso(x0 + 0.25 + f * 1.9, y0 + ty + 0.3, 9);
+          const bob = this.working ? Math.sin(time * 3 + i) * 0.8 : 0;
+          water.ellipse(p.x, p.y - 1 + bob, 4, 2).fill(PRODUCTS.washed_plantain.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+        }
+        if (this.working) {
+          const q = iso(x0 + 0.3 + ((time * 0.5 + k * 0.4) % 1) * 1.8, y0 + ty + 0.15, 9);
+          water.moveTo(q.x - 3, q.y).lineTo(q.x + 3, q.y).stroke({ width: 1, color: 0xe8f6ff, alpha: 0.8 });
+        }
+      }
+    };
+    this.animate(0);
+  },
+
+  // Peladora: la casa de tablas sobre pilotes (azul turquesa); al lado, la mesa donde pelan el plátano a
+  // cuchillo, el montón de cáscaras verdes y el balde de plátano pelado.
+  plantain_peeler(g, x, y, ctx) {
+    const hx = x + 0.2;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 1.7, 1.4, 22, ctx, { wall: 0x4fb3bf });
+    box(g, x + 2.2, y + 0.55, 0.45, 1.2, 9, 0x8d6e4a);
+    const peel = iso(x + 2.55, y + 2.25);
+    for (let k = 0; k < 5; k++) g.ellipse(peel.x - 6 + (k % 3) * 5, peel.y - 2 - Math.floor(k / 3) * 3, 4, 1.6).fill(k % 2 ? 0x558b2f : 0x689f38).stroke({ width: 0.4, color: 0x3a2418, alpha: 0.5 });
+    const pail = iso(x + 1.9, y + 2.3);
+    g.poly([pail.x - 6, pail.y - 9, pail.x + 6, pail.y - 9, pail.x + 5, pail.y, pail.x - 5, pail.y]).fill(0x1e88e5).stroke(OUTLINE);
+    for (let k = 0; k < 3; k++) g.ellipse(pail.x - 3 + k * 3, pail.y - 10, 2.6, 1.2).fill(PRODUCTS.peeled_plantain.color);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const t = iso(x + 2.42, y + 1.15, 9);
+      anim.ellipse(t.x, t.y - 1, 7, 2.2).fill(this.working && (time * 0.8) % 1 > 0.5 ? PRODUCTS.peeled_plantain.color : PRODUCTS.washed_plantain.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+      const wp = iso(x + 2.9, y + 1.15);
+      worker(anim, wp.x, wp.y, 0xe5737f);
+      if (!this.working) return;
+      const f = (time * 2.4) % 1;
+      anim.moveTo(t.x - 6 + f * 12, t.y - 4).lineTo(t.x - 2 + f * 12, t.y - 7).stroke({ width: 1.4, color: 0xcfd8dc });
+      const fl = (time * 0.8) % 1;
+      anim.ellipse(t.x + (peel.x - t.x) * fl, t.y - 3 + fl * (peel.y - t.y) - Math.sin(fl * Math.PI) * 8, 3, 1.2).fill(0x558b2f);
+    };
+    this.animate(0);
+  },
+
+  // Fritanga de patacones: la cocina abierta con el fogón de leña y la paila de aceite; la tabla donde se aplasta
+  // el plátano y la batea con los patacones dorados.
+  patacon_fryer(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.3;
+    // Fogón de barro con la paila.
+    box(g, x0 + 0.3, y0 + 0.6, 1.2, 0.8, 10, 0xa1887f);
+    const pan = iso(x0 + 0.9, y0 + 1.0, 10);
+    g.ellipse(pan.x, pan.y, 15, 6).fill(0x37474f).stroke(OUTLINE);
+    g.ellipse(pan.x, pan.y, 12, 4.5).fill(0xc98a24);
+    const fire = iso(x0 + 0.9, y0 + 1.42, 3);
+    g.ellipse(fire.x, fire.y, 5, 2.5).fill(0x212121);
+    // La tabla de aplastar y la batea de patacones.
+    box(g, x0 + 1.75, y0 + 0.75, 0.75, 0.6, 9, 0x8d6e4a);
+    const tray = iso(x0 + 2.12, y0 + 1.05, 9);
+    g.ellipse(tray.x, tray.y, 10, 4).fill(0x6d4c41);
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 3); k++) g.ellipse(tray.x - 6 + (k % 3) * 6, tray.y - 1 - Math.floor(k / 3) * 2, 3.2, 1.6).fill(PRODUCTS.patacon.color).stroke({ width: 0.4, color: 0x3a2418, alpha: 0.5 });
+    // Leña.
+    for (let k = 0; k < 3; k++) box(g, x + 0.3 + k * 0.08, y + 2.6 - k * 0.05, 0.9, 0.1, 3, 0x6b4a2e, { z: k * 3 });
+    ramada(this, g, x0, y0 + 0.1, 2.6, 1.6, 28 + ctx.up);
+    this.smokePoints = [iso(x0 + 0.9, y0 + 1.0, 40 + ctx.up)];
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      anim.poly([fire.x - 4, fire.y, fire.x, fire.y - 5 - (this.working ? Math.sin(time * 9) * 1.5 : 0), fire.x + 4, fire.y]).fill(this.working ? 0xff7043 : 0x5d4037);
+      if (this.working) for (let i = 0; i < 4; i++) {
+        const a = time * 2 + i * 1.7;
+        anim.circle(pan.x + Math.cos(a) * 8, pan.y + Math.sin(a * 1.3) * 3, 1 + ((time * 3 + i) % 1)).fill({ color: 0xfff3c4, alpha: 0.8 });
+      }
+      for (let k = 0; k < 3; k++) anim.ellipse(pan.x - 6 + k * 6, pan.y - (this.working ? Math.abs(Math.sin(time * 2 + k)) : 0), 3, 1.5).fill(PRODUCTS.patacon.color);
+      const wp = iso(x0 + 1.65, y0 + 1.65);
+      worker(anim, wp.x, wp.y, 0x6cbf6c);
+      const press = this.working ? Math.max(0, Math.sin(time * 4)) * 3 : 0;
+      anim.rect(tray.x - 14, tray.y - 9 + press, 9, 2.5).fill(0xbc8a5f).stroke({ width: 0.5, color: 0x3a2418 });
+    };
+    this.animate(0);
+  },
+
+  // Empacadora: la casa de tablas sobre pilotes (amarilla); abajo, la banda donde los patacones caen en las
+  // bolsas y las bolsas se sellan.
+  patacon_bagger(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 2.0, 1.4, 22, ctx, { wall: 0xf2c14e, trim: 0x2e7d32 });
+    box(g, x + 0.4, y + 2.15, 2.0, 0.35, 8, 0x555555);
+    const hopper = iso(x + 0.9, y + 2.32, 20);
+    g.poly([hopper.x - 7, hopper.y - 8, hopper.x + 7, hopper.y - 8, hopper.x + 3, hopper.y, hopper.x - 3, hopper.y]).fill(0x8a8f94).stroke(OUTLINE);
+    g.ellipse(hopper.x, hopper.y - 8, 7, 2).fill(PRODUCTS.patacon.color);
+    const belt = new Graphics();
+    this.anim.addChild(belt);
+    this.animate = (time) => {
+      belt.clear();
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.35 + i / 4) % 1;
+        const p = iso(x + 0.45 + f * 1.8, y + 2.32, 8);
+        const full = f > 0.3;
+        belt.roundRect(p.x - 4, p.y - 11, 8, 11, 1.5).fill(full ? PRODUCTS.patacon_bag.color : 0xfff3c4).stroke(OUTLINE);
+        if (full) belt.rect(p.x - 4, p.y - 11, 8, 2).fill(f > 0.5 ? 0xd99a1e : PRODUCTS.patacon_bag.color);
+      }
+      if (!this.working) return;
+      const f = (time * 2) % 1;
+      belt.ellipse(hopper.x, hopper.y + 2 + f * 5, 2, 1).fill(PRODUCTS.patacon.color);
+    };
+  },
+
+  // Cajonera de patacones: la bodega grande sobre pilotes (verde), con las cajas arrumadas y el cargador que las
+  // lleva al patio.
+  patacon_boxer(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 2.4, 1.5, 24, ctx, { wall: 0x6cbf6c, trim: 0xf7f4ee, roofColor: 0x9a7b5a, roofH: 14 });
+    const stack = (bx, by, rows) => {
+      for (let r = 0; r < rows; r++) for (let k = 0; k < rows - r; k++) box(g, x + bx + k * 0.3 + r * 0.15, y + by, 0.26, 0.26, 7, PRODUCTS.patacon_box.color, { z: r * 7 });
+    };
+    stack(1.3, 2.35, 3);
+    if (ctx.tier >= 2) stack(2.2, 2.6, 2);
+    const carrier = new Graphics();
+    this.anim.addChild(carrier);
+    this.animate = (time) => {
+      carrier.clear();
+      const f = (time * 0.25) % 1;
+      const back = f > 0.5;
+      const k = back ? 1 - (f - 0.5) * 2 : f * 2;
+      const p = iso(x + 0.5 + k * 0.9, y + 2.2 + k * 0.5);
+      worker(carrier, p.x, p.y, 0x1e88e5);
+      if (!back) carrier.rect(p.x - 6, p.y - 30, 12, 9).fill(PRODUCTS.patacon_box.color).stroke(OUTLINE);
     };
   },
 

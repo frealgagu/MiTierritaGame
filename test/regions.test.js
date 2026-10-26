@@ -840,3 +840,26 @@ test('Villavicencio recibe lo de las cinco zonas de los Llanos y arma los morral
   for (const p of ['oil_box', 'juice_box', 'cachama_maracuya', 'almuerzo_llanero', 'parranda_llanera', 'recuerdo_llano']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
   assert.ok((game.state.stats.produced.fiambre_viaje ?? 0) > 0, 'arma morrales del viaje');
 });
+
+test('El Chocó se abre al completar Villavicencio; mientras esté en obra no se termina (v3.38)', async () => {
+  const { claimGoal } = await import('../src/sim/goals.js');
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  root.regions.santander.zones.barichara.complete = true;
+  openRegions(root);
+  root.regions.costa.zones.cartagena.complete = true;
+  openRegions(root);
+  root.regions.boyaca.zones.villa_leyva.complete = true;
+  openRegions(root);
+  assert.deepEqual(openRegions(root), []);
+  root.regions.llanos.zones.villavicencio.complete = true;
+  assert.deepEqual(openRegions(root), ['choco']);
+  const c = regionState(root, 'choco');
+  assert.ok(c.zones.platanal.unlocked);
+  c.stats.sold = { patacon_box: 1e9 };
+  c.goals.claimed.push(...GOALS_BY_ZONE.platanal.filter((g) => !g.final).map((g) => g.id));
+  claimGoal(c, GOALS_BY_ZONE.platanal.find((g) => g.final).id, { emit() {} });
+  assert.equal(c.zones.platanal.complete, true);
+  assert.ok(!c.regionDone, 'en obra: todavía no tiene final');
+});

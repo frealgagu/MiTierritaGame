@@ -212,11 +212,99 @@ function renderJoropo(buf, index) {
   }
 }
 
+// Clarinete (v3.38): caña, con los armónicos impares más fuertes, un ataque corto y un vibrato leve.
+function reed(buf, at, freq, dur, amp, pan) {
+  const { rng } = buf;
+  const sr = buf.sr;
+  let phase = 0;
+  add(buf, at, dur + 0.04, pan, (t) => {
+    const vib = 1 + 0.004 * Math.sin(2 * Math.PI * 5 * t) * Math.min(1, t / 0.2);
+    phase += (2 * Math.PI * freq * vib) / sr;
+    const env = Math.min(1, t / 0.02) * (t < dur ? 1 - 0.15 * Math.min(1, t / 0.4) : Math.max(0, 1 - (t - dur) / 0.04));
+    const tone = Math.sin(phase) + 0.42 * Math.sin(3 * phase) + 0.2 * Math.sin(5 * phase) + 0.08 * Math.sin(7 * phase) + 0.05 * Math.sin(2 * phase);
+    return amp * env * (tone + 0.03 * (rng() * 2 - 1));
+  });
+}
+
+// Bombardino (v3.38): metal grave y redondo, con los armónicos pares, que se infla al entrar.
+function brass(buf, at, freq, dur, amp, pan) {
+  const sr = buf.sr;
+  let phase = 0;
+  add(buf, at, dur + 0.05, pan, (t) => {
+    phase += (2 * Math.PI * freq) / sr;
+    const env = Math.min(1, t / 0.03) * (t < dur ? 1 : Math.max(0, 1 - (t - dur) / 0.05));
+    const bright = 0.35 + 0.3 * Math.exp(-t * 8);
+    return amp * env * (Math.sin(phase) + bright * Math.sin(2 * phase) + bright * 0.5 * Math.sin(3 * phase) + 0.1 * Math.sin(4 * phase));
+  });
+}
+
+// Redoblante: el golpe del parche con el ruido de los bordones.
+function snare(buf, at, amp, pan) {
+  const { rng } = buf;
+  const sr = buf.sr;
+  let phase = 0;
+  let last = 0;
+  add(buf, at, 0.16, pan, (t) => {
+    phase += (2 * Math.PI * 190) / sr;
+    const noise = rng() * 2 - 1;
+    const hi = noise - last * 0.6;
+    last = noise;
+    return amp * (0.5 * Math.sin(phase) * Math.exp(-t * 40) + hi * Math.exp(-t * 22));
+  });
+}
+
+// Platillos: el choque de los dos, ruido muy agudo que se apaga despacio.
+function cymbal(buf, at, amp, pan, decay = 0.25) {
+  const { rng } = buf;
+  let a = 0;
+  let b = 0;
+  add(buf, at, decay * 3, pan, (t) => {
+    const noise = rng() * 2 - 1;
+    const hi = noise - 2 * a + b; // segunda diferencia: solo lo agudo
+    b = a;
+    a = noise;
+    return amp * 0.35 * hi * Math.exp(-t / decay) * (1 + 0.3 * Math.sin(2 * Math.PI * 6100 * t));
+  });
+}
+
+// Compás de chirimía (v3.38; 4/4, corcheas 0 a 7): el porro chocoano. El bombardino salta con el bajo y
+// camina al acorde siguiente, la tambora en el uno y el tres, el redoblante repicando en el contratiempo,
+// los platillos en el dos y el cuatro, y dos clarinetes: la melodía y, en las notas largas, una tercera abajo.
+function renderChirimia(buf, index) {
+  const { song, beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const jitter = () => (rng() - 0.5) * 0.008;
+  const { root, tones } = parseChord(song.chords[index]);
+  const next = parseChord(song.chords[(index + 1) % song.chords.length]).root;
+  const at = (e) => t0 + e * eighth + jitter();
+
+  const low = above(root, 41);
+  const fifth = above((root + 7) % 12, 41);
+  const third = above(tones[1], 41);
+  const lead = above(next, 41) + (rng() < 0.5 ? -1 : 2);
+  for (const [e, m, n] of [[0, low, 1.6], [3, fifth, 0.9], [4, low, 1.4], [6, third, 0.9], [7, lead, 0.8]]) brass(buf, at(e), freqOf(m), eighth * n, 0.14, -0.2);
+  for (const e of [0, 4]) drum(buf, at(e), 110, 55, 0.16, 0.26, -0.1, 0.2);
+  if (rng() < 0.4) drum(buf, at(3), 110, 55, 0.12, 0.15, -0.1, 0.2);
+  for (const e of [1, 3, 5, 7]) snare(buf, at(e), 0.13, 0.3);
+  for (let e = 0; e < 8; e++) if (e % 2 === 0 && rng() < 0.35) snare(buf, at(e) + eighth / 2, 0.07, 0.3);
+  for (const e of [2, 6]) cymbal(buf, at(e), 0.12, 0.45);
+  for (const [e, n, note] of song.melody[index] ?? []) {
+    const m = midi(note);
+    reed(buf, at(e), freqOf(m), n * eighth * 0.9, 0.2, 0.1);
+    if (n >= 2) {
+      const below = tones.map((pc) => m - (((m - pc) % 12) + 12) % 12).filter((x) => m - x >= 3 && m - x <= 5);
+      if (below.length) reed(buf, at(e) + 0.006, freqOf(below[0]), n * eighth * 0.9, 0.09, -0.1);
+    }
+  }
+}
+
 // Toca el compás `index`: bajo, guitarra, tiple y melodía.
 export function renderBar(buf, index) {
   if (buf.song.style === 'cumbia') return renderCumbia(buf, index);
   if (buf.song.style === 'torbellino') return renderTorbellino(buf, index);
   if (buf.song.style === 'joropo') return renderJoropo(buf, index);
+  if (buf.song.style === 'chirimia') return renderChirimia(buf, index);
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
   const t0 = (index * buf.bar) / buf.sr;

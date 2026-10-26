@@ -1,5 +1,18 @@
 # Registro de cambios
 
+## v3.38.0 — El Chocó: El Platanal
+- **🐋 El Chocó**, la sexta región, se abre al completar Villavicencio. Tiene su propia economía, como las demás, y llegará zona por zona.
+- **🍌 El Platanal**, su primera zona: el Platanal → la Desmanadora → el Tanque de lavado → la Peladora → la Fritanga de patacones → la Empacadora → la Cajonera de patacones. Va del racimo de plátano a la caja de patacones, pasando por la mano, el plátano lavado y pelado, el patacón y la bolsa. Tiene los mismos números que la Palma, porque la región empieza de cero.
+- Su persona es **Don Nicomedes, el platanero**, con sus datos curiosos, objetivos, 15 investigaciones, su victoria y 8 íconos nuevos (de la mata de plátano a la caja de patacones).
+- **El mapa:** la tierra negra y mojada del platanal, con matas que echan racimo y bellota morada con cada hito; alrededor, palmas de chontaduro, borojós, heliconias y plátano suelto. Las casas son de tabla, sobre pilotes, pintadas de colores y con techo de zinc:
+  - la ramada donde cuelgan los racimos y el platanero corta las manos a machete;
+  - los tanques de lavado, con las manos que flotan;
+  - la peladora turquesa, con la mesa y las cáscaras;
+  - la fritanga con la paila de aceite en el fogón de leña y la tabla de aplastar;
+  - la empacadora amarilla, con la banda de bolsas, y la bodega verde con las cajas.
+- **Música:** la **Chirimía de San Pacho**, un porro chocoano con dos clarinetes, el bombardino, la tambora, el redoblante y los platillos.
+- Después vendrán La Azotea, La Bahía, El Manglar, El Werregue y Quibdó.
+
 ## v3.37.0 — Los Llanos completos: eventos, álbum y logros
 - **Seis eventos nuevos**, uno por zona de los Llanos, cada uno con su escena en el tablero que cambia con cada compra:
   - 🦠 **Pudrición del cogollo** en la Palma: las palmas manchadas, el que corta lo podrido, las zanjas de drenaje y las palmitas híbridas recién sembradas.

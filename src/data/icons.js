@@ -192,6 +192,14 @@ export const ICON = {
   almuerzoPlaza: '\uE0BA', // Almuerzo de la plaza: la cachama al maracuyá con la empanada y el jugo, en la mesa del mercado
   fiambreViaje: '\uE0BB', // Morral del viaje: el morral de cuero con el sombrero llanero y el termo, listo para Caño Cristales
   canoCristales: '\uE0BC', // Caño Cristales: el río de los cinco colores, rojo, amarillo, verde y azul, entre las piedras
+  plantainPlant: '\uE0BD', // Mata de plátano: el tallo con sus hojas grandes y rasgadas, el racimo verde y la bellota morada
+  plantainBunch: '\uE0BE', // Racimo de plátano: el racimo verde con sus manos, colgado del vástago, y la bellota morada
+  plantainHand: '\uE0BF', // Mano de plátano: los dedos verdes unidos por la corona, como salen del racimo
+  washedPlantain: '\uE0C0', // Plátano lavado: la mano de plátano en el agua del tanque, con las burbujas
+  peeledPlantain: '\uE0C1', // Plátano pelado: el plátano verde sin cáscara, de color crema, con la cáscara al lado y el cuchillo
+  patacon: '\uE0C2', // Patacones: tres patacones dorados, recién fritos y aplastados, en el plato con sal
+  pataconBag: '\uE0C3', // Bolsa de patacones: la bolsa amarilla, cerrada arriba, con los patacones por la ventana y el plátano
+  pataconBox: '\uE0C4', // Caja de patacones: la caja de cartón con las bolsas amarillas asomadas
 };
 
 export const ICON_FONT = 'Cafetal Icons';

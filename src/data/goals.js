@@ -686,5 +686,38 @@ const VILLAVICENCIO = [
   { id: 'lv_final', type: 'sold', product: 'excursion_cano', amount: 7000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO };
+// Chocó · El Platanal (v3.38): la misma lista que la Palma.
+const PLATANAL = [
+  { id: 'cp01', type: 'sold', product: 'plantain_bunch', amount: 20, reward: 15 },
+  { id: 'cp02', type: 'level', target: 'plantain_grove', level: 5, reward: 20 },
+  { id: 'cp03', type: 'level', target: 'plantain_grove:transport', level: 5, reward: 25 },
+  { id: 'cp04', type: 'unlock', station: 'plantain_dehander', reward: 30 },
+  { id: 'cp06', type: 'produced', product: 'plantain_hand', amount: 50, reward: 80 },
+  { id: 'cp07', type: 'level', target: 'plantain_grove', level: 10, reward: 100 },
+  { id: 'cp08', type: 'unlock', station: 'plantain_washer', reward: 150 },
+  { id: 'cp09', type: 'level', target: 'dispatch:platanal', level: 5, reward: 150 },
+  { id: 'cp10', type: 'produced', product: 'washed_plantain', amount: 200, reward: 300 },
+  { id: 'cp11', type: 'unlock', station: 'plantain_peeler', reward: 500 },
+  { id: 'cp12', type: 'research', research: 'herraduras_ch', reward: 500 },
+  { id: 'cp13', type: 'income', zone: 'platanal', perSecond: 5, reward: 600 },
+  { id: 'cp14', type: 'level', target: 'plantain_washer', level: 10, reward: 800 },
+  { id: 'cp15', type: 'unlock', station: 'patacon_fryer', reward: 1500 },
+  { id: 'cp16', type: 'produced', product: 'patacon', amount: 100, reward: 2000 },
+  { id: 'cp17', type: 'researchCount', count: 3, reward: 2500 },
+  { id: 'cp18', type: 'income', zone: 'platanal', perSecond: 20, reward: 4000 },
+  { id: 'cp19', type: 'allLevels', zone: 'platanal', level: 10, reward: 5000 },
+  { id: 'cp20', type: 'unlock', station: 'patacon_bagger', reward: 8000 },
+  { id: 'cp21', type: 'produced', product: 'patacon_bag', amount: 500, reward: 12000 },
+  { id: 'cp22', type: 'level', target: 'plantain_grove', level: 25, reward: 15000 },
+  { id: 'cp23', type: 'income', zone: 'platanal', perSecond: 100, reward: 20000 },
+  { id: 'cp24', type: 'unlock', station: 'patacon_boxer', reward: 40000 },
+  { id: 'cp25', type: 'sold', product: 'patacon_box', amount: 50, reward: 50000 },
+  { id: 'cp26', type: 'research', research: 'sello_ch', reward: 80000 },
+  { id: 'cp27', type: 'allLevels', zone: 'platanal', level: 25, reward: 100000 },
+  { id: 'cp05', type: 'research', research: 'platano_harton', reward: 50000 },
+  { id: 'cp28', type: 'sold', product: 'patacon_box', amount: 500, reward: 150000 },
+  { id: 'cp_final', type: 'sold', product: 'patacon_box', amount: 2000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

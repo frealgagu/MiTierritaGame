@@ -2356,7 +2356,6 @@ def excursion_fosil():
     return layers
 
 
-# Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 # ---------- Los Llanos · La Palma (v3.31) ----------
 
 def palm_fruit_shape(cx, cy, r, rot, color):
@@ -2766,6 +2765,155 @@ def cano_cristales():
     return layers
 
 
+# ---------- Chocó · El Platanal (v3.38) ----------
+
+def finger(x0, y0, x1, y1, bend, w, color, outline=True, tip=True):
+    """Dedo de plátano: grueso y curvo, de la base (x0, y0) a la punta (x1, y1), curvado `bend`, de grueso `w`."""
+    dx, dy = x1 - x0, y1 - y0
+    length = math.hypot(dx, dy)
+    nx, ny = -dy / length, dx / length
+    qx, qy = (x0 + x1) / 2 + nx * bend * 2, (y0 + y1) / 2 + ny * bend * 2
+
+    def at(t):
+        cx = (1 - t) ** 2 * x0 + 2 * (1 - t) * t * qx + t * t * x1
+        cy = (1 - t) ** 2 * y0 + 2 * (1 - t) * t * qy + t * t * y1
+        tx = 2 * (1 - t) * (qx - x0) + 2 * t * (x1 - qx)
+        ty = 2 * (1 - t) * (qy - y0) + 2 * t * (y1 - qy)
+        k = math.hypot(tx, ty) or 1
+        return cx, cy, -ty / k, tx / k
+
+    def shape(extra):
+        left, right = [], []
+        for i in range(17):
+            t = i / 16
+            cx, cy, ux, uy = at(t)
+            half = (w / 2) * (0.45 + 0.55 * math.sin(math.pi * min(1, t * 1.25))) + extra
+            left.append((cx + ux * half, cy + uy * half))
+            right.append((cx - ux * half, cy - uy * half))
+        return pts(left + right[::-1])
+    layers = [(OUTLINE, [shape(1.6)])] if outline else []
+    layers.append((color, [shape(0)]))
+    if tip:
+        cx, cy, _, _ = at(1)
+        layers.append(('#4e342e', [circle(cx, cy, max(1.2, w * 0.16))]))
+    return layers
+
+
+def plantain_plant():
+    """Mata de plátano: el tallo con sus hojas grandes y rasgadas, el racimo verde y la bellota morada."""
+    layers = [('#5d8f3a', [ellipse(50, 94, 24, 5)])]
+    layers.append((OUTLINE, ['M 41 94 L 44 38 L 56 38 L 59 94 Z']))
+    layers.append(('#8a9a4b', ['M 43.6 91.5 L 46.4 40.5 L 53.6 40.5 L 56.4 91.5 Z']))
+    layers.append(('#6b7a34', [rect(47, 46, 1.6, 44), rect(51.5, 50, 1.4, 38)]))
+    fronds = [(50, 38, 6, 26, 10), (50, 38, 94, 22, 10), (50, 36, 26, 4, 9), (50, 36, 72, 4, 9), (50, 40, 12, 52, 7)]
+    for x0, y0, x1, y1, w in fronds:
+        layers.append((OUTLINE, [leaf(x0, y0, x1, y1, w + 1.5)]))
+        layers.append(('#43a047' if x1 < 50 else '#66bb6a', [leaf(x0, y0, x1, y1, w)]))
+    layers.append(('#2e7d32', [rib(x0, y0, x1, y1, 1.1) for x0, y0, x1, y1, w in fronds]))
+    # El racimo, colgado del vástago que sale de la corona.
+    layers.append((OUTLINE, ['M 54 40 Q 70 42 70 56 L 67 56 Q 67 45 54 43 Z']))
+    for k, cy in enumerate((56, 64, 72)):
+        for dx in (-8, -3, 2, 7):
+            layers += finger(68 + dx * 0.6, cy + 2, 68 + dx * 1.2, cy - 8, 1.5, 4.6, '#7cb342' if (k + dx) % 2 else '#8bc34a', tip=False)
+    layers += [(OUTLINE, [ellipse(69, 84, 5.5, 8)]), ('#7b1f4b', [ellipse(69, 84, 3.8, 6.3)]), ('#a8456f', [ellipse(67.6, 82, 1.2, 3)])]
+    return layers
+
+
+def plantain_bunch():
+    """Racimo de plátano: el racimo verde con sus manos, colgado del vástago, y la bellota morada."""
+    layers = [(OUTLINE, [rect(46, 2, 8, 88)]), ('#8a9a4b', [rect(48.4, 4, 3.2, 84)])]
+    for k, cy in enumerate((22, 40, 58, 74)):
+        spread = 26 - k * 3
+        for i in range(5):
+            f = i / 4
+            bx = 50 + (f - 0.5) * spread * 0.6
+            tx = 50 + (f - 0.5) * spread * 2
+            layers += finger(bx, cy + 6, tx, cy - 8, 2 if tx > 50 else -2, 7, '#7cb342' if (i + k) % 2 else '#9ccc65')
+    layers += [(OUTLINE, [ellipse(50, 90, 6.5, 8.5)]), ('#7b1f4b', [ellipse(50, 90, 4.8, 6.8)]), ('#a8456f', [ellipse(48.4, 88, 1.3, 3)])]
+    return layers
+
+
+def hand_of(cx, cy, colors, n=5, scale=1.0):
+    """La mano de plátano: los dedos que salen de la corona, abiertos en abanico."""
+    layers = []
+    for i in range(n):
+        a = math.radians(-55 + i * 75 / (n - 1))
+        tx = cx + math.cos(a) * 44 * scale
+        ty = cy + math.sin(a) * 30 * scale - 10 * scale
+        layers += finger(cx + 4 * scale, cy, tx, ty, -4 * scale, 11 * scale, colors[i % len(colors)])
+    layers += [(OUTLINE, [rect(cx - 8 * scale, cy - 6 * scale, 12 * scale, 12 * scale)]), ('#6b7a34', [rect(cx - 6 * scale, cy - 4 * scale, 8 * scale, 8 * scale)])]
+    return layers
+
+
+def plantain_hand():
+    """Mano de plátano: los dedos verdes unidos por la corona, como salen del racimo."""
+    return hand_of(10, 70, ['#7cb342', '#8bc34a', '#689f38'], 5, 1.6)
+
+
+def washed_plantain():
+    """Plátano lavado: la mano de plátano en el agua del tanque, con las burbujas."""
+    layers = [(OUTLINE, [rect(4, 52, 92, 42)]), ('#4fa3c7', [rect(7, 55, 86, 36)])]
+    layers += hand_of(16, 56, ['#9ccc65', '#8bc34a', '#aed581'], 5, 1.15)
+    layers.append(('#81c9e6', [rect(7, 66, 86, 25)]))
+    layers.append(('#e8f6ff', [circle(30, 78, 2.6), circle(46, 84, 2), circle(64, 76, 3), circle(80, 84, 2.2), circle(22, 86, 1.8)]))
+    layers.append(('#e8f6ff', ['M 10 70 Q 20 66 30 70 Q 40 74 50 70 Q 60 66 70 70 Q 80 74 90 70 L 90 72 Q 80 76 70 72 Q 60 68 50 72 Q 40 76 30 72 Q 20 68 10 72 Z']))
+    return layers
+
+
+def peeled_plantain():
+    """Plátano pelado: el plátano verde sin cáscara, de color crema, con la cáscara al lado y el cuchillo."""
+    layers = finger(10, 70, 90, 56, -8, 18, '#eee0a6', tip=False)
+    layers.append(('#d9c27a', ['M 18 72 Q 50 76 84 60 L 84 62 Q 50 79 18 74 Z']))
+    for x0, y0, x1, y1, b in [(14, 92, 46, 88, 4), (52, 94, 84, 86, 4)]:
+        layers += finger(x0, y0, x1, y1, b, 6, '#558b2f', tip=False)
+    layers += [(OUTLINE, [rect(58, 14, 34, 7, -28)]), ('#cfd8dc', [rect(59.5, 15.5, 31, 4, -28)]),
+               (OUTLINE, [rect(44, 30, 18, 9, -28)]), ('#6d4c41', [rect(45.5, 31.5, 15, 6, -28)])]
+    return layers
+
+
+def patacon_disc(cx, cy, r):
+    """Un patacón: el plátano frito y aplastado, dorado, con el borde rizado y más tostado."""
+    ring = [(cx + (r + 2.2 + (1.4 if i % 2 else 0)) * math.cos(math.radians(i * 20)), cy + (r * 0.62 + 2 + (1 if i % 2 else 0)) * math.sin(math.radians(i * 20))) for i in range(18)]
+    edge = [(cx + (r + (1.2 if i % 2 else 0)) * math.cos(math.radians(i * 20)), cy + (r * 0.62 + (0.8 if i % 2 else 0)) * math.sin(math.radians(i * 20))) for i in range(18)]
+    return [(OUTLINE, [pts(ring)]), ('#c98a24', [pts(edge)]), ('#f0b84a', [ellipse(cx, cy - 1, r * 0.72, r * 0.42)]),
+            ('#d99a2e', [ellipse(cx - r * 0.3, cy - 2, r * 0.18, r * 0.1), ellipse(cx + r * 0.25, cy + 1, r * 0.2, r * 0.1)]),
+            ('#ffffff', [circle(cx - r * 0.15, cy - 3, 0.9), circle(cx + r * 0.3, cy - 2, 0.8), circle(cx, cy + 1, 0.8)])]
+
+
+def patacon():
+    """Patacones: tres patacones dorados, recién fritos y aplastados, en el plato con sal."""
+    layers = [(OUTLINE, [ellipse(50, 66, 46, 24)]), ('#f5f5f0', [ellipse(50, 66, 43.5, 21.5)]), ('#dcdcd2', [ellipse(50, 69, 34, 14)])]
+    layers += patacon_disc(34, 58, 16) + patacon_disc(64, 56, 16) + patacon_disc(50, 72, 17)
+    return layers
+
+
+def patacon_bag():
+    """Bolsa de patacones: la bolsa amarilla, cerrada arriba, con los patacones por la ventana y el plátano."""
+    layers = [(OUTLINE, ['M 22 14 L 78 14 L 76 22 Q 84 54 80 92 L 20 92 Q 16 54 24 22 Z'])]
+    layers.append(('#f4c430', ['M 24.6 16.5 L 75.4 16.5 L 73.6 22.5 Q 81.4 54 77.6 89.5 L 22.4 89.5 Q 18.6 54 26.4 22.5 Z']))
+    layers.append(('#d99a1e', [rect(24, 16.5, 52, 6)]))
+    layers += [(OUTLINE, [ellipse(50, 60, 20, 16)]), ('#fff3c4', [ellipse(50, 60, 18, 14)])]
+    layers += patacon_disc(44, 58, 8) + patacon_disc(56, 63, 8)
+    layers += finger(30, 38, 70, 34, -4, 9, '#7cb342')
+    layers.append(('#ffffff', [rect(28, 78, 44, 6)]))
+    return layers
+
+
+def patacon_box():
+    """Caja de patacones: la caja de cartón con las bolsas amarillas asomadas."""
+    layers = [(OUTLINE, [poly(8, 40, 50, 26, 92, 40, 92, 82, 50, 96, 8, 82)])]
+    layers.append(('#c8a26a', [poly(11, 42, 50, 55, 50, 92.5, 11, 80)]))
+    layers.append(('#b08850', [poly(50, 55, 89, 42, 89, 80, 50, 92.5)]))
+    for cx in (30, 50, 70):
+        top = 12 + abs(cx - 50) * 0.3
+        layers += [(OUTLINE, [rect(cx - 9, top, 18, 34)]), ('#f4c430', [rect(cx - 7.5, top + 1.5, 15, 31)]), ('#d99a1e', [rect(cx - 7.5, top + 1.5, 15, 4)]),
+                   ('#e0a030', [ellipse(cx, top + 16, 5, 3)])]
+    layers.append(('#d9b98a', [poly(11, 42, 50, 29, 89, 42, 50, 55)]))
+    layers += finger(58, 78, 82, 68, -2, 6, '#7cb342')
+    return layers
+
+
+# Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -2955,6 +3103,14 @@ ICONS = [
     (0xE0BA, 'almuerzo_plaza', almuerzo_plaza),
     (0xE0BB, 'fiambre_viaje', fiambre_viaje),
     (0xE0BC, 'cano_cristales', cano_cristales),
+    (0xE0BD, 'plantain_plant', plantain_plant),
+    (0xE0BE, 'plantain_bunch', plantain_bunch),
+    (0xE0BF, 'plantain_hand', plantain_hand),
+    (0xE0C0, 'washed_plantain', washed_plantain),
+    (0xE0C1, 'peeled_plantain', peeled_plantain),
+    (0xE0C2, 'patacon', patacon),
+    (0xE0C3, 'patacon_bag', patacon_bag),
+    (0xE0C4, 'patacon_box', patacon_box),
 ]
 
 

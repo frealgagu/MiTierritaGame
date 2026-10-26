@@ -218,6 +218,14 @@ export const FACTS = {
   plaza_mercado: ['En la plaza venden cachama, mamona, frutas y pan de arroz.'],
   morrales_viaje: ['Para el viaje al Llano adentro se lleva sombrero, agua y fiambre.'],
   salida_cano: ['Caño Cristales, en La Macarena, se pinta de rojo, amarillo y verde.', 'Al río de los cinco colores lo pintan unas plantas que viven en el agua.'],
+  // Chocó · El Platanal (v3.38)
+  plantain_grove: ['El Chocó es de las tierras más lluviosas del mundo: llueve casi a diario.', 'Cada mata de plátano da un solo racimo; luego el hijo toma su lugar.'],
+  plantain_dehander: ['Cada racimo trae varias manos, y cada mano, varios dedos de plátano.'],
+  plantain_washer: ['El plátano se lava para quitarle la leche, que mancha la cáscara.'],
+  plantain_peeler: ['El plátano verde se pela a cuchillo: la cáscara no sale con la mano.'],
+  patacon_fryer: ['El patacón se fríe, se aplasta con la tabla y se vuelve a freír.'],
+  patacon_bagger: ['En el Pacífico el patacón acompaña el pescado, el sancocho y el tapao.'],
+  patacon_boxer: ['Por el río Atrato llegan a Quibdó las lanchas cargadas de plátano.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -252,6 +260,7 @@ export const PEOPLE = {
   hato_llanero: { icon: '🤠', name: 'Don Florentino', role: 'el vaquero' },
   talabarteria: { icon: '👴🏽', name: 'Don Ramón', role: 'el talabartero' },
   villavicencio: { icon: '👩🏽', name: 'Doña Graciela', role: 'la guía' },
+  platanal: { icon: '👨🏿‍🌾', name: 'Don Nicomedes', role: 'el platanero' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -286,6 +295,7 @@ export const WELCOME = {
   hato_llanero: '¡Epa, catire, bienvenido al Hato! Aquí la ternera se asa en vara, como manda el Llano.',
   talabarteria: '¡Siga, compadre! Aquí el cuero se curte, se corta y se cose, hasta volverse silla de montar.',
   villavicencio: '¡Bienvenido a Villavicencio, la Puerta del Llano! Aquí llega lo mejor de los Llanos, y de aquí salen las excursiones a Caño Cristales.',
+  platanal: '¡Bienvenido al Chocó, mano! Aquí llueve todos los días, y por eso el plátano se da tan bonito.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

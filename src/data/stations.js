@@ -271,6 +271,17 @@ export const STATIONS = [
   { id: 'morrales_viaje', zone: 'villavicencio', name: 'Morrales del viaje', icon: ICON.fiambreViaje, in: { almuerzo_plaza: 1 }, imports: [{ product: 'almuerzo_llanero', perCycle: 1, route: 'almuerzos_llaneros' }, { product: 'parranda_llanera', perCycle: 1, route: 'parrandas' }], out: { fiambre_viaje: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.36' },
   { id: 'salida_cano', zone: 'villavicencio', name: 'Salida a Caño Cristales', icon: ICON.canoCristales, in: { fiambre_viaje: 4 }, out: { excursion_cano: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.36' },
 
+  // Chocó · El Platanal (v3.38), en las vegas del Atrato: los racimos de plátano se desmanan, las manos se
+  // lavan en el tanque, se pelan, se fríen en patacones y los patacones se empacan en bolsas y las bolsas en
+  // cajas. Mismos números que la Finca, la Guayabera, el Arrozal, el Papal y la Palma: la región empieza de cero.
+  { id: 'plantain_grove', zone: 'platanal', name: 'Platanal', icon: ICON.plantainPlant, infinite: true, out: { plantain_bunch: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.38' },
+  { id: 'plantain_dehander', zone: 'platanal', name: 'Desmanadora', icon: ICON.plantainHand, in: { plantain_bunch: 2 }, out: { plantain_hand: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.38' },
+  { id: 'plantain_washer', zone: 'platanal', name: 'Tanque de lavado', icon: ICON.washedPlantain, in: { plantain_hand: 1 }, out: { washed_plantain: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.38' },
+  { id: 'plantain_peeler', zone: 'platanal', name: 'Peladora', icon: ICON.peeledPlantain, in: { washed_plantain: 1 }, out: { peeled_plantain: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.38' },
+  { id: 'patacon_fryer', zone: 'platanal', name: 'Fritanga de patacones', icon: ICON.patacon, in: { peeled_plantain: 2 }, out: { patacon: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.38' },
+  { id: 'patacon_bagger', zone: 'platanal', name: 'Empacadora', icon: ICON.pataconBag, in: { patacon: 1 }, out: { patacon_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.38' },
+  { id: 'patacon_boxer', zone: 'platanal', name: 'Cajonera de patacones', icon: ICON.pataconBox, in: { patacon_bag: 4 }, out: { patacon_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.38' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

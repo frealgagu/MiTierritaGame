@@ -149,8 +149,8 @@ export class Terrain {
             const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
-        } else if (type === 'farm' && this.zone.theme === 'cacao') {
-          // Hojarasca bajo los cacaos.
+        } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain')) {
+          // Hojarasca bajo los cacaos (y bajo el platanal del Chocó, v3.38).
           for (let k = 0; k < 2; k++) {
             const p = iso(gx + rng(), gy + rng());
             g.ellipse(p.x, p.y, 3, 1.5).fill({ color: rng() < 0.5 ? 0x8a6a3a : 0x6e8f3a, alpha: 0.7 });
@@ -326,6 +326,12 @@ export class Terrain {
           else if (r < 0.055) obj = morichePalm(rng);
           else if (r < 0.075) obj = termiteMound(rng);
           else if (r < 0.09) obj = egret(rng);
+        } else if (this.zone.theme === 'plantain') {
+          // El Chocó (v3.38): la selva húmeda, con palmas de chontaduro, borojós, heliconias y plátano suelto.
+          if (r < 0.03) obj = chontaduroPalm(rng);
+          else if (r < 0.055) obj = borojoTree(rng);
+          else if (r < 0.085) obj = heliconia(rng);
+          else if (r < 0.11) obj = banana(rng);
         } else if (this.zone.theme === 'palm') {
           // Los Llanos (v3.31): morichales, comejeneras, garzas y alguna palma de aceite suelta.
           if (r < 0.03) obj = morichePalm(rng);
@@ -548,9 +554,10 @@ const FARM_SOIL = {
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
   palm: (v) => mix(0x6a9a3e, 0x7aa848, v * 0.5), // el palmar sobre pasto (v3.31)
   fruit: (v) => mix(0x8a6a44, 0x7a5c3a, v * 0.4), // la tierra de las enramadas (v3.32)
-  ponds: (v) => mix(0x4f8f9a, 0x5a9aa0, v * 0.6),
+  ponds: (v) => mix(0x4f8f9a, 0x5a9aa0, v * 0.6), // el agua verdosa de los estanques (v3.33)
   llanos: (v) => mix(0x9ab44e, 0xa8bc58, v * 0.5), // la sabana del Hato llanero (v3.34)
-  hides: (v) => mix(0xb89a6a, 0xa8885a, v * 0.4), // el patio de tierra del saladero (v3.35) // el agua verdosa de los estanques (v3.33)
+  hides: (v) => mix(0xb89a6a, 0xa8885a, v * 0.4), // el patio de tierra del saladero (v3.35)
+  plantain: (v) => mix(0x5a4a30, 0x4a3d28, v * 0.5), // la tierra negra y mojada del platanal (v3.38)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
@@ -1112,6 +1119,70 @@ export function drawCoconutPalm(g, x, y, scale, rng, nuts = 3, green = false) {
   }
   const spots = [[-2, 3], [2, 3.5], [0, 5.5], [-4, 5], [4, 5.5], [-1.5, 7.5], [2, 8]];
   for (const [dx, dy] of spots.slice(0, nuts)) g.circle(cx + dx * s * 1.2, cy + dy * s * 1.2, 2.4 * Math.max(s, 0.8)).fill(green ? 0x8bc34a : 0x7a5a2e).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+}
+
+// Mata de plátano (v3.38): el tallo verde amarillento, las hojas grandes (alguna rasgada por el viento) y,
+// con cada hito, el racimo que cuelga con su bellota morada.
+export function drawPlantainPlant(g, x, y, scale, rng, bunch = 1) {
+  const s = scale * (0.9 + rng() * 0.2);
+  const h = (24 + rng() * 6) * s;
+  shadow(g, x + 3, y + 2, 15 * s, 6 * s);
+  g.moveTo(x - 3 * s, y).lineTo(x - 2.2 * s, y - h).lineTo(x + 2.2 * s, y - h).lineTo(x + 3 * s, y).closePath().fill(0x8a9a4b).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
+  g.moveTo(x - 0.8 * s, y - 2).lineTo(x - 0.6 * s, y - h + 3).stroke({ width: 0.8, color: 0x6b7a34 });
+  const top = y - h;
+  for (let i = 0; i < 6; i++) {
+    const a = -Math.PI / 2 + (i - 2.5) * 0.55 + (rng() - 0.5) * 0.2;
+    const len = (16 + rng() * 5) * s;
+    const ex = x + Math.cos(a) * len * 1.2;
+    const ey = top + Math.sin(a) * len * 0.7 + 6 * s;
+    const col = i % 2 ? 0x4e9a3a : 0x6cb04a;
+    g.moveTo(x, top).quadraticCurveTo((x + ex) / 2 + (ex > x ? -2 : 2) * s, Math.min(top, ey) - 7 * s, ex, ey).quadraticCurveTo((x + ex) / 2, (top + ey) / 2 + 3 * s, x, top + 1).fill(col).stroke({ width: 0.7, color: 0x2e5e22, alpha: 0.6 });
+    if (i % 3 === 1) g.moveTo((x + ex) / 2, (top + ey) / 2 - 3 * s).lineTo((x + ex) / 2 + 2 * s, (top + ey) / 2 + 1 * s).stroke({ width: 1, color: 0x3a2418, alpha: 0.35 });
+  }
+  if (bunch <= 0) return;
+  const bx = x + 4 * s;
+  g.moveTo(x + 1 * s, top + 2 * s).quadraticCurveTo(bx + 3 * s, top + 2 * s, bx + 2 * s, top + 8 * s).stroke({ width: 1.4, color: 0x6b7a34 });
+  for (let k = 0; k < 1 + Math.min(bunch, 3); k++) {
+    const yy = top + (8 + k * 3) * s;
+    for (const dx of [-2.2, 0, 2.2]) g.ellipse(bx + 2 * s + dx * s, yy, 1.4 * s, 2.2 * s).fill(k % 2 ? 0x7cb342 : 0x8bc34a);
+  }
+  g.ellipse(bx + 2 * s, top + (11 + Math.min(bunch, 3) * 3) * s, 1.8 * s, 2.6 * s).fill(0x7b1f4b);
+}
+
+// Palma de chontaduro (v3.38): el tronco delgado con sus anillos de espinas, las hojas de plumas y los racimos
+// de chontaduro rojo y anaranjado.
+function chontaduroPalm(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const s = 0.85 + rng() * 0.3;
+  const h = (46 + rng() * 14) * s;
+  shadow(g, 3, 2, 12 * s, 4 * s);
+  g.rect(-1.8 * s, -h, 3.6 * s, h).fill(0x6d5a44).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
+  for (let yy = -4; yy > -h + 4; yy -= 5 * s) g.moveTo(-2.6 * s, yy).lineTo(2.6 * s, yy).stroke({ width: 1, color: 0x2e2418, alpha: 0.7 });
+  for (let i = 0; i < 8; i++) {
+    const a = -Math.PI + (i / 7) * Math.PI;
+    const ex = Math.cos(a) * 20 * s;
+    const ey = -h + Math.sin(a) * 9 * s + 7 * s;
+    g.moveTo(0, -h).quadraticCurveTo(ex * 0.5, -h - 9 * s, ex, ey).stroke({ width: 2.4, color: i % 2 ? 0x2e6b22 : 0x4a8a30, cap: 'round' });
+  }
+  for (const dx of [-3, 3]) {
+    for (let k = 0; k < 5; k++) g.circle(dx * s + (k % 2 ? 1.4 : -1.4) * s, -h + (4 + k * 1.8) * s, 1.6 * s).fill(k % 2 ? 0xe65100 : 0xc62828);
+  }
+  c.addChild(g);
+  return c;
+}
+
+// Borojó (v3.38): arbolito de hojas grandes y redondas con los borojós, pardos y redondos, pegados a las ramas.
+function borojoTree(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const s = 0.85 + rng() * 0.3;
+  shadow(g, 3, 2, 16 * s, 6 * s);
+  g.moveTo(-2 * s, 0).lineTo(-1.5 * s, -14 * s).lineTo(1.5 * s, -14 * s).lineTo(2 * s, 0).closePath().fill(0x6b4a2e);
+  for (const [dx, dy, r] of [[-8, -20, 9], [8, -21, 9], [0, -28, 10], [-3, -16, 7], [5, -15, 7]]) g.circle(dx * s, dy * s, r * s).fill(dy < -24 ? 0x3f7a2a : 0x2e6b22).stroke({ width: 0.6, color: 0x1a3a12, alpha: 0.4 });
+  for (let k = 0; k < 4; k++) g.circle((rng() - 0.5) * 18 * s, (-12 - rng() * 14) * s, 2.6 * s).fill(0x6d4c2a).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+  c.addChild(g);
+  return c;
 }
 
 // Palma de aceite (v3.31): tronco grueso y corto con las bases de las hojas, la corona de hojas largas

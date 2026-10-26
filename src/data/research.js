@@ -404,6 +404,23 @@ export const RESEARCH = [
   { zone: 'villavicencio', id: 'puerta_llano', name: 'Puerta del Llano', icon: '🏅', desc: 'Todo lo que vende Villavicencio vale un 50 % más.', cost: 25000000000, requires: 'morrales_viaje', effect: { type: 'zoneValue', target: 'villavicencio', mult: 1.5 } },
   { zone: 'villavicencio', id: 'maestria_villavicencio', name: 'Maestría: Villavicencio', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'villavicencio', mult: 4 } },
   { zone: 'villavicencio', id: 'supremacia_villavicencio', name: 'Supremacía: Villavicencio', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'villavicencio', mult: 8 } },
+
+  // Chocó · El Platanal (v3.38): las mismas de la Palma, con el plátano.
+  { zone: 'platanal', id: 'platano_harton', name: 'Plátano hartón', icon: ICON.plantainPlant, desc: 'El Platanal produce el doble.', cost: 300, requires: 'plantain_dehander', effect: { type: 'stationSpeed', target: 'plantain_grove', mult: 2 } },
+  { zone: 'platanal', id: 'machete_curvo', name: 'Machete curvo', icon: '🔪', desc: 'La Desmanadora desmana el doble.', cost: 400, requires: 'plantain_dehander', effect: { type: 'stationSpeed', target: 'plantain_dehander', mult: 2 } },
+  { zone: 'platanal', id: 'herraduras_ch', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'plantain_washer', effect: { type: 'muleSpeed', mult: 1.5 } },
+  { zone: 'platanal', id: 'remolque_ch', name: 'Remolque para el Willys', icon: '🚙', desc: 'El Willys lleva el doble por viaje.', cost: 2500, requires: 'plantain_peeler', effect: { type: 'dispatchCapacity', target: 'platanal', mult: 2 } },
+  { zone: 'platanal', id: 'tanque_doble', name: 'Tanque doble', icon: ICON.washedPlantain, desc: 'El Tanque de lavado lava el doble.', cost: 6000, requires: 'plantain_peeler', effect: { type: 'stationSpeed', target: 'plantain_washer', mult: 2 } },
+  { zone: 'platanal', id: 'cuchillos_peladores', name: 'Cuchillos peladores', icon: '⚙️', desc: 'La Peladora pela el doble.', cost: 8000, requires: 'patacon_fryer', effect: { type: 'stationSpeed', target: 'plantain_peeler', mult: 2 } },
+  { zone: 'platanal', id: 'patacon_crocante', name: 'Patacón crocante', icon: '🏅', desc: 'El patacón vale un 50 % más.', cost: 20000, requires: 'patacon_fryer', effect: { type: 'productValue', target: 'patacon', mult: 1.5 } },
+  { zone: 'platanal', id: 'paila_patacon', name: 'Paila grande', icon: ICON.patacon, desc: 'La Fritanga fríe el doble.', cost: 25000, requires: 'patacon_bagger', effect: { type: 'stationSpeed', target: 'patacon_fryer', mult: 2 } },
+  { zone: 'platanal', id: 'platano_chocoano', name: 'Plátano chocoano', icon: '🐋', desc: 'Plátano de origen: todo lo que vende el Platanal vale un 50 % más.', cost: 50000, requires: 'patacon_bagger', effect: { type: 'zoneValue', target: 'platanal', mult: 1.5 } },
+  { zone: 'platanal', id: 'empacadora_auto', name: 'Empacadora automática', icon: ICON.pataconBag, desc: 'La Empacadora empaca el doble.', cost: 60000, requires: 'patacon_boxer', effect: { type: 'stationSpeed', target: 'patacon_bagger', mult: 2 } },
+  { zone: 'platanal', id: 'cajonera_patacon', name: 'Cajonera automática', icon: '📦', desc: 'La Cajonera de patacones llena el doble de cajas.', cost: 150000, requires: 'patacon_boxer', effect: { type: 'stationSpeed', target: 'patacon_boxer', mult: 2 } },
+  { zone: 'platanal', id: 'cable_ch', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'patacon_boxer', effect: { type: 'muleSpeed', mult: 2 } },
+  { zone: 'platanal', id: 'sello_ch', name: 'Sello de calidad', icon: '🏅', desc: 'Las cajas de patacones valen un 50 % más.', cost: 300000, requires: 'patacon_boxer', effect: { type: 'productValue', target: 'patacon_box', mult: 1.5 } },
+  { zone: 'platanal', id: 'maestria_platanal', name: 'Maestría: Platanal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'platanal', mult: 4 } },
+  { zone: 'platanal', id: 'supremacia_platanal', name: 'Supremacía: Platanal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'platanal', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

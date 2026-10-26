@@ -50,6 +50,7 @@ const VICTORY = {
   hato_llanero: { title: '¡Carne a la llanera para todos!', text: 'Completaste <b>El Hato llanero</b>, en los Llanos. Cuatro mil asados de parranda, con el aceite de la Palma y la cachama de la Cachamera.', stat: (s) => `Asados vendidos: ${formatNumber(s.stats.sold.parranda_llanera ?? 0)}` },
   talabarteria: { title: '¡Sillas para todo el Llano!', text: 'Completaste <b>La Talabartería</b>, en los Llanos. Seis mil recuerdos del Llano: sillas de montar con pisillo y cachama ahumada para el camino.', stat: (s) => `Recuerdos vendidos: ${formatNumber(s.stats.sold.recuerdo_llano ?? 0)}` },
   villavicencio: { title: '¡Los Llanos, de punta a punta!', text: 'Completaste <b>Villavicencio</b> y los Llanos. Siete mil excursiones a Caño Cristales, con el aceite, los jugos, la cachama, la carne y las sillas de todas tus zonas llaneras.', stat: (s) => `Excursiones a Caño Cristales: ${formatNumber(s.stats.sold.excursion_cano ?? 0)}` },
+  platanal: { title: '¡Patacones para todo el Pacífico!', text: 'Completaste <b>El Platanal</b>, en el Chocó. Dos mil cajas de patacones, del racimo a la bolsa.', stat: (s) => `Cajas de patacones vendidas: ${formatNumber(s.stats.sold.patacon_box ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

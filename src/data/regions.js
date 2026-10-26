@@ -46,6 +46,18 @@ export const REGIONS = [
     music: 'llanos',
     unlock: { region: 'boyaca', zone: 'villa_leyva' },
   },
+  // El Chocó (v3.38): se abre al completar Villavicencio. Llega zona por zona, como los Llanos; mientras esté
+  // en obra (`wip`) no tiene final, y las zonas que faltan se anuncian (`soon`).
+  {
+    id: 'choco',
+    name: 'Chocó',
+    icon: '🐋',
+    zones: ['platanal'],
+    soon: ['La Azotea', 'La Bahía', 'El Manglar', 'El Werregue', 'Quibdó'],
+    wip: true,
+    music: 'choco',
+    unlock: { region: 'llanos', zone: 'villavicencio' },
+  },
 ];
 
 export const REGIONS_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]));
