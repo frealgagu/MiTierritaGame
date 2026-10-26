@@ -5,7 +5,7 @@ import { ICON } from '../icons.js';
 
 export const ZONE34 = {
   id: 'manglar',
-  region: 'choco',
+  region: 'pacifico',
   name: 'El Manglar',
   icon: ICON.piangua,
   theme: 'mangrove',

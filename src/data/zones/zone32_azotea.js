@@ -4,7 +4,7 @@ import { ICON } from '../icons.js';
 
 export const ZONE32 = {
   id: 'azotea',
-  region: 'choco',
+  region: 'pacifico',
   name: 'La Azotea',
   icon: ICON.azotea,
   theme: 'azotea',

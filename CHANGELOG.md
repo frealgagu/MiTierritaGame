@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v3.46.0 — El id de la Costa Pacífica
+- Por dentro, la Costa Pacífica se llama ahora `pacifico` (salió como `choco`). No cambia nada en el juego.
+
 ## v3.45.0 — Cartagena amurallada y frente al mar
 - **🏰 Cartagena** se ve ahora como la ciudad amurallada:
   - el **mar Caribe** por los dos bordes de atrás del mapa, con olas, espuma, playa, veleros y lanchas;

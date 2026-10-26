@@ -6,7 +6,7 @@ import { ICON } from '../icons.js';
 
 export const ZONE36 = {
   id: 'buenaventura',
-  region: 'choco',
+  region: 'pacifico',
   name: 'Buenaventura',
   icon: ICON.ballenas,
   size: 26,

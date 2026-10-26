@@ -4,7 +4,7 @@ import { ICON } from '../icons.js';
 
 export const ZONE33 = {
   id: 'bahia',
-  region: 'choco',
+  region: 'pacifico',
   name: 'La Bahía',
   icon: ICON.pargo,
   theme: 'bay',

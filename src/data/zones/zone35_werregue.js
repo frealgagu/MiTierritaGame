@@ -5,7 +5,7 @@ import { ICON } from '../icons.js';
 
 export const ZONE35 = {
   id: 'werregue',
-  region: 'choco',
+  region: 'pacifico',
   name: 'El Werregue',
   icon: ICON.werregueJar,
   theme: 'werregue',

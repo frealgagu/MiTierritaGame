@@ -857,8 +857,8 @@ test('La Costa Pacífica se abre al completar Villavicencio; con Buenaventura co
   openRegions(root);
   assert.deepEqual(openRegions(root), []);
   root.regions.llanos.zones.villavicencio.complete = true;
-  assert.deepEqual(openRegions(root), ['choco']);
-  const c = regionState(root, 'choco');
+  assert.deepEqual(openRegions(root), ['pacifico']);
+  const c = regionState(root, 'pacifico');
   const zones = ['platanal', 'azotea', 'bahia', 'manglar', 'werregue', 'buenaventura'];
   assert.deepEqual(Object.keys(c.zones), zones);
   // Cada zona abre la siguiente (v3.39 a v3.43) y Buenaventura, la última, termina la región.
@@ -871,16 +871,16 @@ test('La Costa Pacífica se abre al completar Villavicencio; con Buenaventura co
   }
   assert.ok(c.regionDone);
   // Con todo lo suyo (v3.44): seis eventos, seis páginas de álbum y sus logros.
-  assert.equal(regionEvents('choco').length, 6);
-  assert.equal(albumOf('choco').length, 6);
-  assert.ok(logrosOf('choco').length >= 10);
-  assert.ok(!REGIONS.find((r) => r.id === 'choco').wip);
+  assert.equal(regionEvents('pacifico').length, 6);
+  assert.equal(albumOf('pacifico').length, 6);
+  assert.ok(logrosOf('pacifico').length >= 10);
+  assert.ok(!REGIONS.find((r) => r.id === 'pacifico').wip);
 });
 
 test('La Bahía sirve el tapao de pescado con el aliño que llega de la Azotea (v3.40)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
-  const game = new Game(createInitialState(0, 'choco'));
+  const game = new Game(createInitialState(0, 'pacifico'));
   for (const z of ['azotea', 'bahia']) game.unlockZone(z);
   assert.ok(game.state.routes.alino, 'la Ruta del aliño es de la Costa Pacífica');
   game.state.coins = 1e15;
@@ -901,7 +901,7 @@ test('La Bahía sirve el tapao de pescado con el aliño que llega de la Azotea (
 test('El Manglar sirve el arroz con piangua y la cazuela con los patacones del Platanal y el pargo de la Bahía (v3.41)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
-  const game = new Game(createInitialState(0, 'choco'));
+  const game = new Game(createInitialState(0, 'pacifico'));
   for (const z of ['azotea', 'bahia', 'manglar']) game.unlockZone(z);
   for (const r of ['patacones', 'pargos']) assert.ok(game.state.routes[r], `la ruta ${r} es de la Costa Pacífica`);
   game.state.coins = 1e15;
@@ -923,7 +923,7 @@ test('El Manglar sirve el arroz con piangua y la cazuela con los patacones del P
 test('El Werregue vende el Recuerdo del Pacífico con el pescado seco y el pargo ahumado de la Bahía (v3.42)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
-  const game = new Game(createInitialState(0, 'choco'));
+  const game = new Game(createInitialState(0, 'pacifico'));
   for (const z of ['azotea', 'bahia', 'manglar', 'werregue']) game.unlockZone(z);
   for (const r of ['secos', 'pargos_ahumados']) assert.ok(game.state.routes[r], `la ruta ${r} es de la Costa Pacífica`);
   game.state.coins = 1e15;
@@ -945,7 +945,7 @@ test('Buenaventura recibe lo de las cinco zonas de la Costa Pacífica y arma las
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const { ROUTES } = await import('../src/data/routes.js');
-  const game = new Game(createInitialState(0, 'choco'));
+  const game = new Game(createInitialState(0, 'pacifico'));
   for (const z of ['azotea', 'bahia', 'manglar', 'werregue', 'buenaventura']) game.unlockZone(z);
   assert.deepEqual(new Set(ROUTES.filter((r) => r.to === 'buenaventura').map((r) => r.from)), new Set(['platanal', 'azotea', 'bahia', 'manglar', 'werregue']));
   game.state.coins = 1e18;

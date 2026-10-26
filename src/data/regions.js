@@ -47,14 +47,14 @@ export const REGIONS = [
     unlock: { region: 'boyaca', zone: 'villa_leyva' },
   },
   // La Costa Pacífica (v3.38): se abre al completar Villavicencio. Llegó zona por zona, como los Llanos (v3.38 a
-  // v3.43), y desde la v3.44 tiene sus eventos, su álbum y sus logros. Su id es 'choco' porque salió con ese
-  // nombre en la v3.38 (así no cambian las partidas guardadas).
+  // v3.43), y desde la v3.44 tiene sus eventos, su álbum y sus logros. Salió como «el Chocó» (id 'choco') y
+  // desde la v3.46 su id es 'pacifico'.
   {
-    id: 'choco',
+    id: 'pacifico',
     name: 'Costa Pacífica',
     icon: '🐋',
     zones: ['platanal', 'azotea', 'bahia', 'manglar', 'werregue', 'buenaventura'],
-    music: 'choco',
+    music: 'pacifico',
     unlock: { region: 'llanos', zone: 'villavicencio' },
   },
 ];

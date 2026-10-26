@@ -4,7 +4,7 @@ import { ICON } from '../icons.js';
 
 export const ZONE31 = {
   id: 'platanal',
-  region: 'choco',
+  region: 'pacifico',
   name: 'El Platanal',
   icon: ICON.plantainPlant,
   theme: 'plantain',

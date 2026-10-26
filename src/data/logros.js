@@ -119,10 +119,10 @@ const PACIFICO = [
   { id: 'pa_todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
   { id: 'pa_oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
   { id: 'pa_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
-  { id: 'pa_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('choco')], reward: [1, 2, 4] },
+  { id: 'pa_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('pacifico')], reward: [1, 2, 4] },
 ];
 
-export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'choco' }))];
+export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'pacifico' }))];
 export const logrosOf = (region) => LOGROS.filter((l) => l.region === region);
 
 export const LOGROS_BY_ID = Object.fromEntries(LOGROS.map((l) => [l.id, l]));

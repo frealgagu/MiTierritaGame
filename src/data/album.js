@@ -498,7 +498,7 @@ const PACIFICO = [
   },
 ];
 
-export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'choco' }))];
+export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' }))];
 // Las páginas del álbum de una región.
 export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 
