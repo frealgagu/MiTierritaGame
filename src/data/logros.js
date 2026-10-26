@@ -84,7 +84,26 @@ const BOYACA = [
   { id: 'b_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('boyaca')], reward: [1, 2, 4] },
 ];
 
-export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' }))];
+// Los de los Llanos (v3.37).
+const LLANOS = [
+  { id: 'll_aceite', icon: ICON.oilBox, name: 'Palmicultor', text: 'Vende {n} cajas de aceite', metric: 'sold:oil_box', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
+  { id: 'll_jugo', icon: ICON.passionJuice, name: 'Frutero', text: 'Mezcla {n} jugos de maracuyá', metric: 'produced:passion_juice', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'll_cachama', icon: ICON.cachamaMaracuya, name: 'Piscicultor', text: 'Sirve {n} cachamas al maracuyá', metric: 'produced:cachama_maracuya', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'll_parranda', icon: ICON.parranda, name: 'Parrandero', text: 'Asa {n} asados de parranda', metric: 'produced:parranda_llanera', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'll_sillas', icon: ICON.saddle, name: 'Talabartero', text: 'Haz {n} sillas de montar', metric: 'produced:silla_montar', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'll_cano', icon: ICON.canoCristales, name: 'A Caño Cristales', text: 'Vende {n} excursiones a Caño Cristales', metric: 'sold:excursion_cano', tiers: [1000, 100000, 10000000], reward: [2, 4, 8] },
+  { id: 'll_monedas', icon: '💰', name: 'Patrón llanero', text: 'Gana {n} monedas en total', metric: 'earned', tiers: [1e9, 1e15, 1e21], reward: [1, 2, 4] },
+  { id: 'll_anos', icon: '📅', name: 'Llanero de corazón', text: 'Vive {n} años de juego en los Llanos', metric: 'years', tiers: [4, 16, 64], reward: [1, 2, 4] },
+  { id: 'll_villavo', icon: ICON.canoCristales, name: 'Hasta Villavicencio', text: 'Completa Villavicencio {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
+  { id: 'll_maestro', icon: '🏅', name: 'Maestro llanero', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
+  { id: 'll_medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [6, 24, 60], reward: [1, 2, 4] },
+  { id: 'll_todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
+  { id: 'll_oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
+  { id: 'll_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
+  { id: 'll_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('llanos')], reward: [1, 2, 4] },
+];
+
+export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' }))];
 export const logrosOf = (region) => LOGROS.filter((l) => l.region === region);
 
 export const LOGROS_BY_ID = Object.fromEntries(LOGROS.map((l) => [l.id, l]));

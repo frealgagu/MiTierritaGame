@@ -334,7 +334,89 @@ const BOYACA = [
   },
 ];
 
-export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' }))];
+// Los Llanos (v3.37).
+const LLANOS = [
+  {
+    id: 'palma',
+    icon: ICON.oilPalm,
+    name: 'La palma',
+    stickers: [
+      { id: 'palma_aceite', icon: ICON.oilPalm, name: 'La palma de aceite', cost: 1, text: 'Vino de África y da racimos rojos todo el año en las sabanas del Meta.' },
+      { id: 'moriche', icon: '🌴', name: 'La palma de moriche', cost: 1, text: 'Crece en los morichales, donde nace el agua del Llano.' },
+      { id: 'aceite_rojo', icon: ICON.palmOil, name: 'El aceite rojo', cost: 2, text: 'Del fruto sale el aceite rojo; de la semilla, el de palmiste.' },
+      { id: 'comejenera', icon: '🐜', name: 'La comejenera', cost: 2, text: 'Montículo de tierra roja que levantan los comejenes en la sabana.' },
+      { id: 'corocora', icon: '🐦', name: 'La corocora', cost: 2, text: 'El ave roja de los esteros: vuela en bandadas al atardecer.' },
+      { id: 'atardecer_llanero', icon: '🌅', name: 'El atardecer llanero', cost: 3, text: 'El sol se pone rojo sobre la sabana que no tiene fin.' },
+    ],
+  },
+  {
+    id: 'frutas_llano',
+    icon: ICON.passionFruit,
+    name: 'Las frutas',
+    stickers: [
+      { id: 'maracuya', icon: ICON.passionFruit, name: 'El maracuyá', cost: 1, text: 'Ácido y perfumado: se toma en jugo, en postre o en salsa.' },
+      { id: 'mango_llanero', icon: '🥭', name: 'El mango', cost: 1, text: 'Los palos de mango dan sombra y fruta en todas las fincas del Llano.' },
+      { id: 'pina_llanera', icon: '🍍', name: 'La piña', cost: 2, text: 'En el Meta se siembra piña dulce para todo el país.' },
+      { id: 'araza', icon: '🍋', name: 'El arazá', cost: 2, text: 'Fruta amarilla y ácida de la Orinoquía, para jugos y helados.' },
+      { id: 'pan_arroz', icon: '🍞', name: 'El pan de arroz', cost: 2, text: 'Pan de harina de arroz y queso, el desayuno llanero.' },
+      { id: 'masato', icon: '🥛', name: 'El masato', cost: 3, text: 'Bebida de arroz fermentado, dulce y espesa, que se toma fría.' },
+    ],
+  },
+  {
+    id: 'rios_llano',
+    icon: ICON.cachama,
+    name: 'Los ríos',
+    stickers: [
+      { id: 'cachama_rio', icon: ICON.cachama, name: 'La cachama', cost: 1, text: 'Pez redondo de los ríos llaneros que también se cría en estanques.' },
+      { id: 'rio_meta', icon: '🌊', name: 'El río Meta', cost: 1, text: 'Cruza los Llanos hasta el Orinoco; por él bajan los planchones.' },
+      { id: 'chiguiro', icon: '🐹', name: 'El chigüiro', cost: 2, text: 'El roedor más grande del mundo: vive en grupos junto al agua.' },
+      { id: 'babilla', icon: '🐊', name: 'La babilla', cost: 2, text: 'Pequeño caimán de los esteros que se asolea en las orillas.' },
+      { id: 'tonina', icon: '🐬', name: 'La tonina', cost: 2, text: 'El delfín rosado de los ríos de la Orinoquía.' },
+      { id: 'anaconda', icon: '🐍', name: 'La anaconda', cost: 3, text: 'La gran serpiente de los esteros, que nada sin hacer ruido.' },
+    ],
+  },
+  {
+    id: 'hato_llano',
+    icon: ICON.mamona,
+    name: 'El hato',
+    stickers: [
+      { id: 'vaquero_llanero', icon: '🤠', name: 'El vaquero llanero', cost: 1, text: 'Arrea el ganado a caballo por la sabana, cantando.' },
+      { id: 'mamona_vara', icon: ICON.mamona, name: 'La mamona', cost: 1, text: 'Ternera asada en varas junto al fuego: la carne a la llanera.' },
+      { id: 'cebu_llanero', icon: ICON.cebu, name: 'El cebú', cost: 2, text: 'Ganado blanco con giba, que aguanta el sol del Llano.' },
+      { id: 'sanmartinero', icon: '🐂', name: 'El sanmartinero', cost: 2, text: 'Ganado criollo rojizo de San Martín, criado en el Llano por siglos.' },
+      { id: 'cabrestero', icon: '🎶', name: 'El cabrestero', cost: 2, text: 'El que va adelante del ganado, cantando para guiarlo.' },
+      { id: 'hallaca', icon: '🫔', name: 'La hallaca', cost: 3, text: 'Masa de maíz rellena de carne, envuelta en hoja de plátano.' },
+    ],
+  },
+  {
+    id: 'caballo_llano',
+    icon: ICON.saddle,
+    name: 'El caballo',
+    stickers: [
+      { id: 'caballo_criollo', icon: '🐎', name: 'El caballo criollo', cost: 1, text: 'Pequeño y fuerte, el compañero del llanero en la sabana.' },
+      { id: 'silla_llanera', icon: ICON.saddle, name: 'La silla llanera', cost: 1, text: 'De cuero, con la cabeza alta para enlazar el ganado.' },
+      { id: 'cotizas', icon: '👡', name: 'Las cotizas', cost: 2, text: 'Las alpargatas del llanero, de cuero y suela.' },
+      { id: 'sombrero_llanero', icon: '👒', name: 'El sombrero llanero', cost: 2, text: 'De ala ancha, para el sol; el de pelo de guama es el más fino.' },
+      { id: 'coleo', icon: '🐂', name: 'El coleo', cost: 2, text: 'El jinete tumba al toro halándolo por la cola, a todo galope.' },
+      { id: 'zamarro', icon: ICON.leather, name: 'El zamarro', cost: 3, text: 'El delantal de cuero que protege al vaquero al enlazar.' },
+    ],
+  },
+  {
+    id: 'villavicencio',
+    icon: ICON.canoCristales,
+    name: 'Villavicencio',
+    stickers: [
+      { id: 'puerta_llano', icon: '🚪', name: 'La Puerta del Llano', cost: 1, text: 'Así le dicen a Villavicencio: de ahí para allá empieza la sabana.' },
+      { id: 'joropo', icon: '💃', name: 'El joropo', cost: 1, text: 'Se baila zapateando, al son del arpa, el cuatro y las maracas.' },
+      { id: 'arpa_llanera', icon: '🎵', name: 'El arpa llanera', cost: 2, text: 'Lleva la melodía del joropo con sus muchas cuerdas.' },
+      { id: 'cuatro', icon: '🎸', name: 'El cuatro', cost: 2, text: 'Guitarrita de cuatro cuerdas que rasguea el ritmo.' },
+      { id: 'cano_cristales', icon: ICON.canoCristales, name: 'Caño Cristales', cost: 2, text: 'El río de los cinco colores, en la sierra de La Macarena.' },
+      { id: 'macarena', icon: '⛰️', name: 'La Macarena', cost: 3, text: 'Sierra muy antigua, entre los Andes, el Llano y la selva.' },
+    ],
+  },
+];
+
+export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' }))];
 // Las páginas del álbum de una región.
 export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 

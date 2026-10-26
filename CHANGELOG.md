@@ -1,5 +1,17 @@
 # Registro de cambios
 
+## v3.37.0 — Los Llanos completos: eventos, álbum y logros
+- **Seis eventos nuevos**, uno por zona de los Llanos, cada uno con su escena en el tablero que cambia con cada compra:
+  - 🦠 **Pudrición del cogollo** en la Palma: las palmas manchadas, el que corta lo podrido, las zanjas de drenaje y las palmitas híbridas recién sembradas.
+  - ⚙️ **Despulpadora varada** en el Frutal: las canastas de maracuyá se amontonan hasta que llegan las aspas, el motor y el tamiz.
+  - 🐟 **Feria del pescado** en la Cachamera: todos piden pisillo, cachama ahumada y cachama al maracuyá; puestos con toldos verde, amarillo y azul.
+  - 🌉 **Se cayó el puente** en el Hato llanero: el río se llevó el puente y no llega el aceite; canoas, el planchón y el puente nuevo.
+  - 🐂 **Torneo de coleo** en la Talabartería: la fila de coleadores que quieren silla nueva; los aprendices, las hormas y los maestros.
+  - 💃 **Torneo del joropo** en Villavicencio: la ciudad llena de visitantes para Caño Cristales, parejas bailando joropo, guías y avionetas.
+- **Álbum de los Llanos:** seis páginas (la palma, las frutas, los ríos, el hato, el caballo y Villavicencio) con 36 láminas, de la corocora a Caño Cristales.
+- **Logros de los Llanos:** palmicultor, frutero, piscicultor, parrandero, talabartero, a Caño Cristales y los de siempre.
+- **Los Llanos quedan terminados:** al completar Villavicencio tienen su segundo final y su reinicio, sus eventos salen en todas sus zonas y dan el premio de medallas. Si ya habías completado Villavicencio, al abrir esta versión la región queda terminada.
+
 ## v3.36.0 — Los Llanos: Villavicencio
 - **🏞️ Villavicencio**, la Puerta del Llano y última zona de los Llanos, se abre al completar La Talabartería. Como Barichara, Cartagena y Villa de Leyva, no tiene fuente propia: cada estación recibe el producto final de una zona llanera.
   - La **Empanadería** fríe empanadas con las cajas de aceite de la Palma.

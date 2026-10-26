@@ -36,15 +36,13 @@ export const REGIONS = [
     music: 'boyaca',
     unlock: { region: 'costa', zone: 'cartagena' },
   },
-  // Los Llanos (v3.31): se abren al completar Villa de Leyva. Llegan zona por zona, como la Costa y Boyacá;
-  // mientras estén en obra (`wip`) no tienen final, y las zonas que faltan se anuncian (`soon`).
+  // Los Llanos (v3.31): se abren al completar Villa de Leyva. Llegaron zona por zona, como la Costa y Boyacá
+  // (v3.31 a v3.36), y desde la v3.37 tienen sus eventos, su álbum y sus logros.
   {
     id: 'llanos',
     name: 'Los Llanos',
     icon: '🐎',
     zones: ['palma', 'frutal', 'cachamera', 'hato_llanero', 'talabarteria', 'villavicencio'],
-    soon: [],
-    wip: true,
     music: 'llanos',
     unlock: { region: 'boyaca', zone: 'villa_leyva' },
   },

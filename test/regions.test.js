@@ -722,8 +722,11 @@ test('al cargar una partida de la v3.29, los cupos pasan a ser dos para todo el 
   assert.ok(back.regions.santander.events.boards.guayabera);
 });
 
-test('Los Llanos se abren al completar Villa de Leyva; mientras estén en obra no se terminan (v3.31)', async () => {
+test('Los Llanos se abren al completar Villa de Leyva; con Villavicencio completo quedan terminados (v3.31, v3.37)', async () => {
   const { claimGoal } = await import('../src/sim/goals.js');
+  const { regionEvents } = await import('../src/sim/events.js');
+  const { albumOf } = await import('../src/data/album.js');
+  const { logrosOf } = await import('../src/data/logros.js');
   const root = createInitialState(0);
   root.zones.pueblo.complete = true;
   openRegions(root);
@@ -735,12 +738,22 @@ test('Los Llanos se abren al completar Villa de Leyva; mientras estén en obra n
   root.regions.boyaca.zones.villa_leyva.complete = true;
   assert.deepEqual(openRegions(root), ['llanos']);
   const l = regionState(root, 'llanos');
-  assert.ok(l.zones.palma.unlocked);
-  l.stats.sold = { oil_box: 1e9 };
-  l.goals.claimed.push(...GOALS_BY_ZONE.palma.filter((g) => !g.final).map((g) => g.id));
-  claimGoal(l, GOALS_BY_ZONE.palma.find((g) => g.final).id, { emit() {} });
-  assert.equal(l.zones.palma.complete, true);
-  assert.ok(!l.regionDone, 'en obra: todavía no tiene final');
+  const zones = ['palma', 'frutal', 'cachamera', 'hato_llanero', 'talabarteria', 'villavicencio'];
+  assert.deepEqual(Object.keys(l.zones), zones);
+  // Cada zona abre la siguiente (v3.32 a v3.36) y Villavicencio, la última, termina la región.
+  l.stats.sold = { oil_box: 1e9, juice_box: 1e9, cachama_maracuya: 1e9, parranda_llanera: 1e9, recuerdo_llano: 1e9, excursion_cano: 1e9 };
+  for (const zone of zones) {
+    assert.ok(!l.regionDone, zone);
+    l.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
+    claimGoal(l, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
+    assert.equal(l.zones[zone].complete, true);
+  }
+  assert.ok(l.regionDone);
+  // Con todo lo suyo (v3.37): seis eventos, seis páginas de álbum y sus logros.
+  assert.equal(regionEvents('llanos').length, 6);
+  assert.equal(albumOf('llanos').length, 6);
+  assert.ok(logrosOf('llanos').length >= 10);
+  assert.ok(!REGIONS.find((r) => r.id === 'llanos').wip);
 });
 
 test('La Cachamera sirve la cachama al maracuyá con el jugo que llega del Frutal (v3.33)', async () => {
