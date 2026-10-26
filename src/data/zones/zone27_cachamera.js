@@ -38,6 +38,8 @@ export const ZONE27 = {
     // El pisillo y la cachama ahumada salen hacia La Talabartería (v3.35).
     pisillos: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Pisillo a la Talabartería ⬇' },
     ahumadas: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Cachama ahumada ⬇' },
+    // La cachama al maracuyá sale hacia Villavicencio (v3.36).
+    platos_cachama: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'Platos a Villavicencio ➜' },
   },
   unlockedBy: 'frutal',
   next: 'hato_llanero',

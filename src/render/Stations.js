@@ -378,6 +378,8 @@ const PLAZA_HOUSE = {
   cartagena: { wall: 0xf6c244, trims: [0x7a4a22, 0x7a4a22, 0x2f7d4f, 0x7a4a22, 0xd63384, 0xffd700], awning: 0x2f7d4f, sign: 'cup' },
   // Villa de Leyva (v3.27): casona blanca con balcones verdes.
   villa: { wall: 0xfbf8f1, trims: [0x2f7d4f, 0x2f7d4f, 0x1f5a38, 0x2f7d4f, 0x8e44ad, 0xffd700], awning: 0x2f7d4f, sign: 'cup' },
+  // Villavicencio (v3.36): casona amarilla con remates de colores y toldo verde.
+  villavo: { wall: 0xf6d860, trims: [0x2e6fd1, 0xd7263d, 0x2f7d4f, 0x2e6fd1, 0x8e44ad, 0xffd700], awning: 0x2f7d4f, sign: 'cup' },
   salento: { wall: 0xfbf8f1, trims: [0xd7263d, 0x2e6fd1, 0x2fa36b, 0xf07f1d, 0x8e44ad, 0xf2b705], awning: 0xd7263d, sign: 'cup' },
 };
 

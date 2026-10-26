@@ -1,5 +1,18 @@
 # Registro de cambios
 
+## v3.36.0 — Los Llanos: Villavicencio
+- **🏞️ Villavicencio**, la Puerta del Llano y última zona de los Llanos, se abre al completar La Talabartería. Como Barichara, Cartagena y Villa de Leyva, no tiene fuente propia: cada estación recibe el producto final de una zona llanera.
+  - La **Empanadería** fríe empanadas con las cajas de aceite de la Palma.
+  - El **Kiosco del parque** sirve la tarde con las cajas de jugos del Frutal.
+  - El **Hotel campestre** da la noche en Villavicencio con el Recuerdo del Llano.
+  - La **Plaza de mercado** sirve el almuerzo con la cachama al maracuyá.
+  - Los **Morrales del viaje** llevan el almuerzo llanero y el asado de la parranda del Hato.
+  - La **Salida a Caño Cristales** despacha las excursiones al río de los cinco colores.
+- **Seis rutas nuevas** hacia Villavicencio, con sus carreteras en los mapas.
+- Su persona es **Doña Graciela, la guía**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (con Caño Cristales).
+- **El mapa:** casas de colores con techos de teja, guayacanes florecidos, palmas de moriche, mangos y faroles; el kiosco redondo de palma, el hotel con piscina, la plaza de mercado con los puestos de fruta y pescado, y el caño de colores al comienzo del camino.
+- Los Llanos ya tienen sus seis zonas. Sus eventos, su álbum, sus logros y su segundo final llegan en la próxima versión.
+
 ## v3.35.0 — Los Llanos: La Talabartería
 - **🐎 La Talabartería**, la quinta zona de los Llanos, se abre al completar El Hato llanero: el Saladero de cueros → la Curtiembre → la Cortadora de cuero → el Repujado → el Taller de sillas → la **Tienda llanera**. La tienda vende el **Recuerdo del Llano**: sillas de montar con el pisillo y la cachama ahumada de la Cachamera para el camino. Tiene los mismos números que Las Ruanas.
 - **Dos rutas nuevas desde la Cachamera:** la **Ruta del pisillo** y la **Ruta de la cachama ahumada**, con su chiva y sus carreteras.

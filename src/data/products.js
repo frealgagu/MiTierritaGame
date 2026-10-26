@@ -215,6 +215,14 @@ export const PRODUCTS = {
   silla_montar: { name: 'Silla de montar', zone: 'talabarteria', value: 120000, icon: ICON.saddle, color: 0x6d3b1f },
   recuerdo_llano: { name: 'Recuerdo del Llano', zone: 'talabarteria', value: 1200000, icon: ICON.recuerdoLlano, color: 0xd9772e },
 
+  // Los Llanos · Villavicencio (v3.36): mismos valores que Villa de Leyva.
+  empanadas: { name: 'Empanadas', zone: 'villavicencio', value: 150000, icon: ICON.empanadas, color: 0xf2b705 },
+  tarde_parque: { name: 'Tarde en el parque', zone: 'villavicencio', value: 400000, icon: ICON.tardeParque, color: 0x43a047 },
+  noche_villavo: { name: 'Noche en Villavicencio', zone: 'villavicencio', value: 3200000, icon: ICON.nocheVillavo, color: 0x1e88e5 },
+  almuerzo_plaza: { name: 'Almuerzo de la plaza', zone: 'villavicencio', value: 600000, icon: ICON.almuerzoPlaza, color: 0xf4c430 },
+  fiambre_viaje: { name: 'Morral del viaje', zone: 'villavicencio', value: 2000000, icon: ICON.fiambreViaje, color: 0x8d5524 },
+  excursion_cano: { name: 'Excursión a Caño Cristales', zone: 'villavicencio', value: 24000000, icon: ICON.canoCristales, color: 0xd7263d },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

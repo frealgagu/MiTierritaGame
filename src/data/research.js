@@ -392,6 +392,18 @@ export const RESEARCH = [
   { zone: 'talabarteria', id: 'silla_coleadora', name: 'Silla coleadora', icon: '🏅', desc: 'Todo lo que vende la Talabartería vale un 50 % más.', cost: 400000000, requires: 'saddler', effect: { type: 'zoneValue', target: 'talabarteria', mult: 1.5 } },
   { zone: 'talabarteria', id: 'maestria_talabarteria', name: 'Maestría: Talabartería', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'talabarteria', mult: 4 } },
   { zone: 'talabarteria', id: 'supremacia_talabarteria', name: 'Supremacía: Talabartería', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'talabarteria', mult: 8 } },
+
+  // Los Llanos · Villavicencio (v3.36): las mismas de Villa de Leyva.
+  { zone: 'villavicencio', id: 'empanaderas', name: 'Empanaderas', icon: ICON.empanadas, desc: 'La Empanadería fríe el doble de empanadas (pide el doble de cajas a la Palma).', cost: 1000000000, requires: 'kiosco_parque', effect: { type: 'stationSpeed', target: 'empanaderia', mult: 2 } },
+  { zone: 'villavicencio', id: 'mas_bancas', name: 'Más bancas', icon: ICON.tardeParque, desc: 'El Kiosco del parque atiende el doble.', cost: 1500000000, requires: 'kiosco_parque', effect: { type: 'stationSpeed', target: 'kiosco_parque', mult: 2 } },
+  { zone: 'villavicencio', id: 'bus_villavo', name: 'Bus de turismo', icon: '🚌', desc: 'El despacho de Villavicencio lleva el doble por viaje.', cost: 2500000000, requires: 'hotel_campestre', effect: { type: 'dispatchCapacity', target: 'villavicencio', mult: 2 } },
+  { zone: 'villavicencio', id: 'hotel_piscina', name: 'Hotel con piscina', icon: '🏊', desc: 'El Hotel campestre recibe el doble de huéspedes.', cost: 4000000000, requires: 'hotel_campestre', effect: { type: 'stationSpeed', target: 'hotel_campestre', mult: 2 } },
+  { zone: 'villavicencio', id: 'puestos_plaza', name: 'Puestos de la plaza', icon: ICON.almuerzoPlaza, desc: 'La Plaza de mercado sirve el doble.', cost: 8000000000, requires: 'plaza_mercado', effect: { type: 'stationSpeed', target: 'plaza_mercado', mult: 2 } },
+  { zone: 'villavicencio', id: 'morrales_grandes', name: 'Morrales grandes', icon: ICON.fiambreViaje, desc: 'Los Morrales del viaje se arman el doble de rápido.', cost: 15000000000, requires: 'morrales_viaje', effect: { type: 'stationSpeed', target: 'morrales_viaje', mult: 2 } },
+  { zone: 'villavicencio', id: 'guias_cano', name: 'Guías de Caño Cristales', icon: '🧭', desc: 'La Salida a Caño Cristales despacha el doble de excursiones.', cost: 40000000000, requires: 'salida_cano', effect: { type: 'stationSpeed', target: 'salida_cano', mult: 2 } },
+  { zone: 'villavicencio', id: 'puerta_llano', name: 'Puerta del Llano', icon: '🏅', desc: 'Todo lo que vende Villavicencio vale un 50 % más.', cost: 25000000000, requires: 'morrales_viaje', effect: { type: 'zoneValue', target: 'villavicencio', mult: 1.5 } },
+  { zone: 'villavicencio', id: 'maestria_villavicencio', name: 'Maestría: Villavicencio', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'villavicencio', mult: 4 } },
+  { zone: 'villavicencio', id: 'supremacia_villavicencio', name: 'Supremacía: Villavicencio', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'villavicencio', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

@@ -2707,6 +2707,65 @@ def recuerdo_llano():
     return layers
 
 
+# ---------- Los Llanos · Villavicencio (v3.36) ----------
+
+def empanadas():
+    """Empanadas: tres empanadas doradas, recién fritas, en la canasta con el ají."""
+    layers = [(OUTLINE, ['M 8 62 L 92 62 L 82 92 L 18 92 Z']), ('#b08850', ['M 11.5 64.5 L 88.5 64.5 L 80 89.5 L 20 89.5 Z'])]
+    for cx, cy, rot in [(30, 52, -12), (54, 46, 6), (72, 56, 18)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 20, 12, rot)]), ('#f2b705', [ellipse(cx, cy, 17.5, 9.5, rot)]), ('#d98e04', [rib(cx - 14, cy + 4, cx + 14, cy + 4, 1.6)])]
+    layers += [(OUTLINE, [circle(84, 22, 10)]), ('#ffffff', [circle(84, 22, 8.5)]), ('#43a047', [circle(84, 22, 6)]), ('#e53935', [circle(82, 20, 1.6), circle(87, 24, 1.4)])]
+    return layers
+
+
+def tarde_parque():
+    """Tarde en el parque: el kiosco con su techo de palma, el jugo y la empanada en la mesa."""
+    layers = [(OUTLINE, ['M 10 40 L 50 12 L 90 40 Z']), ('#c9a35a', ['M 16 38 L 50 15.5 L 84 38 Z'])]
+    layers.append(('#a1785a', [rib(30 + k * 8, 26 + abs(k - 2.5) * 2, 30 + k * 8, 38, 1) for k in range(6)]))
+    layers += [('#6d4c32', [rect(20, 40, 4, 48), rect(76, 40, 4, 48)]), (OUTLINE, [rect(26, 62, 48, 7)]), ('#8d6e4a', [rect(28, 64, 44, 3)])]
+    layers += [(OUTLINE, ['M 34 46 L 46 46 L 44 62 L 36 62 Z']), ('#ffd54f', ['M 35.5 48 L 44.5 48 L 43 60.5 L 37 60.5 Z'])]
+    layers += [(OUTLINE, [ellipse(60, 58, 10, 5)]), ('#f2b705', [ellipse(60, 58, 8.5, 3.6)])]
+    return layers
+
+
+def noche_villavo():
+    """Noche en Villavicencio: el hotel campestre con la piscina iluminada y la luna sobre las palmas."""
+    layers = [(OUTLINE, [rect(8, 54, 84, 38)]), ('#fbf8f1', [rect(11, 57, 78, 32)]), (OUTLINE, ['M 4 56 L 50 34 L 96 56 Z']), ('#b5512e', ['M 10 54 L 50 37 L 90 54 Z'])]
+    layers.append(('#ffd54f', [rect(20, 64, 10, 10), rect(70, 64, 10, 10)]))
+    layers += [(OUTLINE, [rect(36, 76, 28, 14)]), ('#29b6f6', [rect(38, 78, 24, 10)]), ('#e1f5fe', [rib(41, 82, 59, 82, 1)])]
+    layers += [('#fff59d', [circle(80, 16, 9)]), ('#1e3a5f', [circle(84, 13, 7)])]
+    layers += [('#2e7d32', [leaf(16, 30, 4, 24, 4), leaf(16, 30, 28, 22, 4), leaf(16, 30, 16, 14, 4)]), ('#8d6e4a', [rect(15, 30, 2.4, 24)])]
+    return layers
+
+
+def almuerzo_plaza():
+    """Almuerzo de la plaza: la cachama al maracuyá con la empanada y el jugo, en la mesa del mercado."""
+    layers = [(OUTLINE, [ellipse(46, 64, 40, 22)]), ('#ffffff', [ellipse(46, 64, 37.5, 19.5)]), ('#f4c430', [ellipse(42, 66, 26, 10)])]
+    layers += fish_shape(40, 60, 42, 26, '#8d5524', '#d9893a', -6)
+    layers += [(OUTLINE, [ellipse(72, 74, 12, 7, 10)]), ('#f2b705', [ellipse(72, 74, 10, 5, 10)])]
+    layers += [(OUTLINE, ['M 74 18 L 94 18 L 90 52 L 78 52 Z']), ('#ffd54f', ['M 76.5 26 L 91.5 26 L 88 49.5 L 80 49.5 Z'])]
+    return layers
+
+
+def fiambre_viaje():
+    """Morral del viaje: el morral de cuero con el sombrero llanero y el termo, listo para Caño Cristales."""
+    layers = [(OUTLINE, ['M 18 40 Q 18 30 30 30 L 70 30 Q 82 30 82 40 L 84 90 L 16 90 Z']), ('#8d5524', ['M 20.5 41 Q 20.5 32.5 30 32.5 L 70 32.5 Q 79.5 32.5 79.5 41 L 81.5 87.5 L 18.5 87.5 Z'])]
+    layers += [(OUTLINE, ['M 18 42 L 82 42 L 78 62 L 22 62 Z']), ('#6d3b1f', ['M 20.5 44.5 L 79.5 44.5 L 76 59.5 L 24 59.5 Z']), ('#b0bec5', [rect(46, 56, 8, 8)])]
+    layers += [(OUTLINE, [ellipse(50, 20, 34, 8)]), ('#3e2a1a', [ellipse(50, 20, 31, 6)]), (OUTLINE, ['M 36 18 Q 36 4 50 4 Q 64 4 64 18 Z']), ('#5d4037', ['M 38.5 17 Q 38.5 6.5 50 6.5 Q 61.5 6.5 61.5 17 Z'])]
+    layers += [(OUTLINE, [rect(84, 44, 12, 38)]), ('#e53935', [rect(86, 46, 8, 34)])]
+    return layers
+
+
+def cano_cristales():
+    """Caño Cristales: el río de los cinco colores, rojo, amarillo, verde y azul, entre las piedras."""
+    layers = [(OUTLINE, ['M 4 30 Q 30 20 50 34 Q 70 48 96 40 L 96 78 Q 70 86 50 72 Q 30 58 4 70 Z'])]
+    layers.append(('#4fc3f7', ['M 6 32.5 Q 30 23 50 37 Q 70 51 94 43 L 94 75.5 Q 70 83 50 69 Q 30 55 6 67.5 Z']))
+    for cx, cy, rx, ry, col in [(18, 48, 10, 6, '#d7263d'), (40, 46, 9, 5, '#f4c430'), (60, 58, 10, 6, '#d7263d'), (80, 58, 9, 6, '#2e7d32'), (30, 60, 7, 4, '#2e7d32'), (72, 46, 6, 4, '#f4c430')]:
+        layers.append((col, [ellipse(cx, cy, rx, ry, 10)]))
+    layers += [('#8d8a80', [ellipse(14, 84, 12, 6), ellipse(86, 26, 10, 5), ellipse(50, 90, 8, 4)]), ('#ffffff', [rib(22, 40, 32, 38, 1.2), rib(54, 64, 66, 66, 1.2)])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -2890,6 +2949,12 @@ ICONS = [
     (0xE0B4, 'tooled_leather', tooled_leather),
     (0xE0B5, 'saddle', saddle),
     (0xE0B6, 'recuerdo_llano', recuerdo_llano),
+    (0xE0B7, 'empanadas', empanadas),
+    (0xE0B8, 'tarde_parque', tarde_parque),
+    (0xE0B9, 'noche_villavo', noche_villavo),
+    (0xE0BA, 'almuerzo_plaza', almuerzo_plaza),
+    (0xE0BB, 'fiambre_viaje', fiambre_viaje),
+    (0xE0BC, 'cano_cristales', cano_cristales),
 ]
 
 

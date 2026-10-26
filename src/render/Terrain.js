@@ -146,7 +146,7 @@ export class Terrain {
           // Plaza empedrada.
           for (let k = 0; k < 4; k++) {
             const p = iso(gx + 0.25 + (k % 2) * 0.5, gy + 0.25 + Math.floor(k / 2) * 0.5);
-            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
+            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
         } else if (type === 'farm' && this.zone.theme === 'cacao') {
@@ -223,7 +223,9 @@ export class Terrain {
           const salento = this.zone.style === 'salento';
           const cartagena = this.zone.style === 'cartagena';
           const villa = this.zone.style === 'villa';
+          const villavo = this.zone.style === 'villavo'; // Villavicencio (v3.36): moriches y mangos
           if (r < 0.06) obj = townHouse(rng, this.zone.style);
+          else if (villavo && r < 0.135) obj = r < 0.085 ? mangoTree(rng) : r < 0.1 ? streetLamp() : morichePalm(rng);
           else if (r < 0.09) obj = salento && r < 0.075 ? palm(rng) : cartagena ? coconutPalm(rng) : villa ? cypress(rng) : guayacan(rng);
           else if (r < 0.105) obj = streetLamp();
           else if (r < (salento || cartagena || villa ? 0.135 : 0.12)) obj = cartagena ? coconutPalm(rng) : villa ? eucalyptus(rng) : palm(rng);
@@ -559,6 +561,7 @@ const FARM_SOIL = {
   canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // la tierra seca de la sabana zenú // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6),
   cartagena: (v) => mix(0xe2d2ae, 0xcfbd94, v * 0.6),
+  villavo: (v) => mix(0xd9c4a0, 0xc9b088, v * 0.6), // el parque de Villavicencio (v3.36)
   villa: (v) => mix(0xb9b2a5, 0xa39b8c, v * 0.6), // la plaza empedrada de Villa de Leyva // la plaza de piedra coralina // la plaza de piedra amarilla
 };
 
@@ -577,14 +580,18 @@ const CARTAGENA_TRIMS = [0x7a4a22, 0x7a4a22, 0x2f7d4f, 0x5d3a1e];
 // Villa de Leyva (v3.27): casonas blancas de dos pisos con balcones y puertas verdes.
 const VILLA_WALLS = [0xfbf8f1, 0xfbf8f1, 0xf7f4ee];
 const VILLA_TRIMS = [0x2f7d4f, 0x2f7d4f, 0x1f5a38, 0x5d3a1e];
+// Villavicencio (v3.36): casas de colores vivos, de un piso, con remates de otro color.
+const VILLAVO_WALLS = [0xf6d860, 0xf28c9a, 0x6fc3e0, 0xb8e0a8, 0xf4a261, 0xfbf8f1];
+const VILLAVO_TRIMS = [0x2e6fd1, 0xd7263d, 0x2f7d4f, 0x8e44ad];
 function townHouse(rng, style) {
   const c = new Container();
   const g = new Graphics();
   const cartagena = style === 'cartagena';
   const villa = style === 'villa';
   const salento = style === 'salento' || cartagena || villa; // de dos pisos con balcón
-  const walls = style === 'barichara' ? BARICHARA_WALLS : cartagena ? CARTAGENA_WALLS : villa ? VILLA_WALLS : salento ? SALENTO_WALLS : HOUSE_WALLS;
-  const trims = cartagena ? CARTAGENA_TRIMS : villa ? VILLA_TRIMS : salento ? SALENTO_TRIMS : HOUSE_TRIMS;
+  const villavo = style === 'villavo';
+  const walls = style === 'barichara' ? BARICHARA_WALLS : cartagena ? CARTAGENA_WALLS : villa ? VILLA_WALLS : villavo ? VILLAVO_WALLS : salento ? SALENTO_WALLS : HOUSE_WALLS;
+  const trims = cartagena ? CARTAGENA_TRIMS : villa ? VILLA_TRIMS : villavo ? VILLAVO_TRIMS : salento ? SALENTO_TRIMS : HOUSE_TRIMS;
   const wall = walls[Math.floor(rng() * walls.length)];
   const trim = trims[Math.floor(rng() * trims.length)];
   const w = 0.8 + rng() * 0.2;

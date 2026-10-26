@@ -4290,6 +4290,146 @@ const DRAW = {
     g.moveTo(p3.x - 8, p3.y - 11).quadraticCurveTo(p3.x - 2, p3.y - 16, p3.x + 2, p3.y - 13).quadraticCurveTo(p3.x + 6, p3.y - 22, p3.x + 8, p3.y - 18).lineTo(p3.x + 8, p3.y - 8).lineTo(p3.x - 8, p3.y - 8).closePath().fill(PRODUCTS.silla_montar.color).stroke(OUTLINE);
   },
 
+  // --- Los Llanos · Villavicencio (v3.36): casas de colores, kioscos de palma y el camino a Caño Cristales ---
+
+  // Kiosco del parque: el kiosco redondo con techo de palma; en las mesas, jugos y empanadas.
+  kiosco_parque(g, x, y, ctx) {
+    const c = iso(x + 1.3, y + 1.1);
+    shadow(g, c.x + 4, c.y + 3, 34, 14);
+    g.ellipse(c.x, c.y, 30, 13).fill(0xd9c4a0).stroke({ width: 1, color: 0x3a2418, alpha: 0.3 });
+    for (let k = 0; k < 6; k++) {
+      const a = (k / 6) * Math.PI * 2;
+      g.rect(c.x + Math.cos(a) * 22 - 1, c.y + Math.sin(a) * 9 - 26, 2, 26).fill(0x6d4c32);
+    }
+    g.poly([c.x - 34, c.y - 24, c.x, c.y - 48, c.x + 34, c.y - 24, c.x, c.y - 12]).fill(0xc9a35a).stroke(OUTLINE);
+    g.poly([c.x - 34, c.y - 24, c.x, c.y - 12, c.x + 34, c.y - 24, c.x, c.y - 16]).fill(0xa8873e);
+    for (const [dx, dy] of [[-10, 2], [10, 4]]) {
+      g.ellipse(c.x + dx, c.y + dy - 8, 7, 3.4).fill(0xffffff).stroke(OUTLINE);
+      g.rect(c.x + dx - 3, c.y + dy - 13, 2.4, 5).fill(PRODUCTS.passion_juice.color);
+      g.ellipse(c.x + dx + 3, c.y + dy - 9, 2.4, 1.2).fill(PRODUCTS.empanadas.color);
+    }
+    this.roofTop = iso(x + 1.3, y + 1.1, 50);
+    this.lights.push({ x: c.x, y: c.y - 20, r: 26 });
+  },
+
+  // Hotel campestre: la casa larga de un piso, techo de teja, la piscina y las palmas.
+  hotel_campestre(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    house(this, g, hx, hy, 2.5, 1.2, 26, ctx, { wall: 0xfbf8f1, roofH: 13 });
+    door(g, hx, hy, 1.2, 1.25, 16, 0x2e6fd1);
+    windowOnRight(this, g, hx, hy, 2.5, 0.6, 13, 0x2e6fd1);
+    windowOnFront(this, g, hx, hy, 1.2, 0.5, 9, 0xfff3c4);
+    windowOnFront(this, g, hx, hy, 1.2, 2.0, 9, 0xfff3c4);
+    g.poly(isoPoly([[x + 0.6, y + 1.8], [x + 2.2, y + 1.8], [x + 2.2, y + 2.7], [x + 0.6, y + 2.7]])).fill(0xe0e0e0).stroke(OUTLINE);
+    g.poly(isoPoly([[x + 0.7, y + 1.9], [x + 2.1, y + 1.9], [x + 2.1, y + 2.6], [x + 0.7, y + 2.6]])).fill(0x29b6f6);
+    this.lights.push({ ...iso(x + 1.4, y + 2.25), r: 20, color: 0x81d4fa });
+    const water = new Graphics();
+    this.anim.addChild(water);
+    this.animate = (time) => {
+      water.clear();
+      for (let i = 0; i < 3; i++) {
+        const p = iso(x + 0.9 + i * 0.45, y + 2.0 + ((time * 0.2 + i * 0.3) % 0.55));
+        water.moveTo(p.x - 5, p.y).lineTo(p.x + 5, p.y).stroke({ width: 1, color: 0xe1f5fe, alpha: 0.8 });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Plaza de mercado: la nave abierta con techo de zinc, los puestos de frutas y de pescado, y la gente.
+  plaza_mercado(g, x, y, ctx) {
+    const x0 = x + 0.25;
+    const y0 = y + 0.25;
+    const w = 2.5;
+    const d = 2.0;
+    const H = 24 + ctx.up;
+    const stalls = [[0.3, 0.3, 'fruit'], [1.4, 0.3, 'fish'], [0.3, 1.2, 'fish'], [1.4, 1.2, 'fruit']].slice(0, 2 + Math.min(ctx.tier, 2));
+    for (const [sx, sy, kind] of stalls) {
+      box(g, x0 + sx, y0 + sy, 0.9, 0.45, 8, PAL.wood);
+      for (let k = 0; k < 4; k++) {
+        const p = iso(x0 + sx + 0.15 + k * 0.2, y0 + sy + 0.22, 8);
+        if (kind === 'fish') fishOn(g, p.x, p.y - 2, 3.5, PRODUCTS.cachama.color);
+        else g.circle(p.x, p.y - 2, 2.2).fill([0xf4c430, 0xe65100, 0x7cb342, 0xf4b400][k]);
+      }
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, 0x8a8f94);
+    gableRoof(g, x0, y0, w, d, H, 12, 0x9aa3a8, 0xd9dde0);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
+    const people = new Graphics();
+    this.anim.addChild(people);
+    this.animate = (time) => {
+      people.clear();
+      for (let i = 0; i < 2; i++) {
+        const f = (time * 0.08 + i * 0.5) % 1;
+        const p = iso(x0 + 0.2 + f * 2.3, y0 + 0.95);
+        worker(people, p.x, p.y, i ? 0xf4c430 : 0x2e6fd1);
+        people.ellipse(p.x, p.y - 22.5, 7, 1.8).fill(0x3e2a1a);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Morrales del viaje: la casa de colores con los morrales, los sombreros y los termos listos en el corredor.
+  morrales_viaje(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.0, 1.5, 27, ctx, { wall: 0xf28c9a, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.6, 16, 0x2e6fd1);
+    windowOnRight(this, g, hx, hy, 2.0, 0.75, 14, 0x2e6fd1);
+    for (const [bx, by] of [[1.3, 2.35], [1.65, 2.5], [2.0, 2.35], [1.65, 2.2]].slice(0, 2 + Math.min(ctx.tier, 2))) {
+      const p = iso(x + bx, y + by);
+      g.roundRect(p.x - 6, p.y - 12, 12, 12, 3).fill(PRODUCTS.fiambre_viaje.color).stroke(OUTLINE);
+      g.rect(p.x - 6, p.y - 9, 12, 3).fill(0x6d3b1f);
+      g.ellipse(p.x, p.y - 13, 8, 2).fill(0x3e2a1a);
+      g.roundRect(p.x - 3, p.y - 17, 6, 4, 2).fill(0x5d4037);
+    }
+  },
+
+  // Salida a Caño Cristales: el caño de colores (rojo, amarillo y verde) entre las piedras, el letrero y los
+  // viajeros que salen con morral y sombrero.
+  salida_cano(g, x, y, ctx) {
+    const pts = [[0.3, 0.5], [0.9, 0.9], [1.5, 0.7], [2.1, 1.1], [2.7, 0.9]];
+    for (let i = 1; i < pts.length; i++) {
+      const a = iso(x + pts[i - 1][0], y + pts[i - 1][1]);
+      const b = iso(x + pts[i][0], y + pts[i][1]);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 16, color: 0x4fc3f7, cap: 'round' });
+    }
+    for (const [k, [px, py]] of pts.entries()) {
+      const p = iso(x + px, y + py);
+      g.ellipse(p.x - 3, p.y, 5, 2.4).fill([0xd7263d, 0xf4c430, 0x2e7d32, 0xd7263d, 0xf4c430][k]);
+      g.ellipse(p.x + 4, p.y + 1, 3, 1.6).fill([0x2e7d32, 0xd7263d, 0xf4c430, 0x2e7d32, 0xd7263d][k]);
+    }
+    for (const [px, py] of [[0.5, 1.3], [2.3, 0.4], [1.2, 0.2]]) {
+      const p = iso(x + px, y + py);
+      g.ellipse(p.x, p.y - 2, 7, 4).fill(0x8d8a80).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.4 });
+    }
+    for (let k = 0; k < 7; k++) {
+      const p = iso(x + 0.6 + k * 0.32, y + 1.9);
+      g.ellipse(p.x, p.y, 7, 3.5).fill(k % 2 ? 0xc9a77a : 0xd9c4a0).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.3 });
+    }
+    const sign = iso(x + 2.7, y + 1.7);
+    g.rect(sign.x - 1.2, sign.y - 22, 2.4, 22).fill(PAL.wood);
+    g.poly([sign.x - 12, sign.y - 22, sign.x + 8, sign.y - 22, sign.x + 13, sign.y - 18, sign.x + 8, sign.y - 14, sign.x - 12, sign.y - 14]).fill(0x8b5a2b).stroke(OUTLINE);
+    this.roofTop = iso(x + 1.5, y + 1.2, 24);
+    const walkers = new Graphics();
+    this.anim.addChild(walkers);
+    this.animate = (time) => {
+      walkers.clear();
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.12 + i / 3) % 1;
+        const p = iso(x + 0.6 + f * 2.1, y + 1.9);
+        const step = Math.sin(time * 8 + i) * 1.2;
+        walkers.rect(p.x - 1.5 + step, p.y - 7, 1.4, 7).fill(0x3d3d5c);
+        walkers.rect(p.x + 0.2 - step, p.y - 7, 1.4, 7).fill(0x3d3d5c);
+        walkers.roundRect(p.x - 3, p.y - 14, 6, 7, 2).fill([0xd7263d, 0x2e6fd1, 0xf4c430][i]);
+        walkers.roundRect(p.x + 2, p.y - 13, 3, 5, 1).fill(PRODUCTS.fiambre_viaje.color);
+        walkers.circle(p.x, p.y - 16, 2.2).fill(0xe0ac7e);
+        walkers.ellipse(p.x, p.y - 17.5, 4.5, 1.2).fill(0x3e2a1a);
+      }
+    };
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

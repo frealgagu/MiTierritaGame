@@ -186,6 +186,12 @@ export const ICON = {
   tooledLeather: '\uE0B4', // Cuero repujado: la pieza con la flor labrada a golpe de buril, y el buril
   saddle: '\uE0B5', // Silla de montar llanera: la silla de cuero con su cabeza alta, el estribo y la cincha
   recuerdoLlano: '\uE0B6', // Recuerdo del Llano: la silla de montar con el sombrero llanero, el pisillo y la cachama ahumada
+  empanadas: '\uE0B7', // Empanadas: tres empanadas doradas, recién fritas, en la canasta con el ají
+  tardeParque: '\uE0B8', // Tarde en el parque: el kiosco con su techo de palma, el jugo y la empanada en la mesa
+  nocheVillavo: '\uE0B9', // Noche en Villavicencio: el hotel campestre con la piscina iluminada y la luna sobre las palmas
+  almuerzoPlaza: '\uE0BA', // Almuerzo de la plaza: la cachama al maracuyá con la empanada y el jugo, en la mesa del mercado
+  fiambreViaje: '\uE0BB', // Morral del viaje: el morral de cuero con el sombrero llanero y el termo, listo para Caño Cristales
+  canoCristales: '\uE0BC', // Caño Cristales: el río de los cinco colores, rojo, amarillo, verde y azul, entre las piedras
 };
 
 export const ICON_FONT = 'Cafetal Icons';

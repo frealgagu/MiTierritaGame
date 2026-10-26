@@ -261,6 +261,16 @@ export const STATIONS = [
   { id: 'saddler', zone: 'talabarteria', name: 'Taller de sillas', icon: ICON.saddle, in: { tooled_leather: 1 }, out: { silla_montar: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.35' },
   { id: 'tienda_llanera', zone: 'talabarteria', name: 'Tienda llanera', icon: ICON.recuerdoLlano, in: { silla_montar: 4 }, imports: [{ product: 'pisillo', perCycle: 1, route: 'pisillos' }, { product: 'smoked_cachama', perCycle: 1, route: 'ahumadas' }], out: { recuerdo_llano: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.35' },
 
+  // Los Llanos · Villavicencio (v3.36), la Puerta del Llano y el final de la región: como Barichara, Cartagena y
+  // Villa de Leyva, sin fuente propia. Cada estación recibe el producto final de una zona llanera; todo termina en
+  // la excursión a Caño Cristales.
+  { id: 'empanaderia', zone: 'villavicencio', name: 'Empanadería', icon: ICON.empanadas, imports: [{ product: 'oil_box', perCycle: 1, route: 'cajas_aceite' }], out: { empanadas: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.36' },
+  { id: 'kiosco_parque', zone: 'villavicencio', name: 'Kiosco del parque', icon: ICON.tardeParque, in: { empanadas: 1 }, imports: [{ product: 'juice_box', perCycle: 1, route: 'cajas_jugos' }], out: { tarde_parque: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.36' },
+  { id: 'hotel_campestre', zone: 'villavicencio', name: 'Hotel campestre', icon: ICON.nocheVillavo, in: { tarde_parque: 2 }, imports: [{ product: 'recuerdo_llano', perCycle: 1, route: 'recuerdos_llano' }], out: { noche_villavo: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.36' },
+  { id: 'plaza_mercado', zone: 'villavicencio', name: 'Plaza de mercado', icon: ICON.almuerzoPlaza, in: { empanadas: 1 }, imports: [{ product: 'cachama_maracuya', perCycle: 1, route: 'platos_cachama' }], out: { almuerzo_plaza: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '3.36' },
+  { id: 'morrales_viaje', zone: 'villavicencio', name: 'Morrales del viaje', icon: ICON.fiambreViaje, in: { almuerzo_plaza: 1 }, imports: [{ product: 'almuerzo_llanero', perCycle: 1, route: 'almuerzos_llaneros' }, { product: 'parranda_llanera', perCycle: 1, route: 'parrandas' }], out: { fiambre_viaje: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.36' },
+  { id: 'salida_cano', zone: 'villavicencio', name: 'Salida a Caño Cristales', icon: ICON.canoCristales, in: { fiambre_viaje: 4 }, out: { excursion_cano: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.36' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

@@ -32,6 +32,8 @@ export const ZONE25 = {
   // Carretera de la Ruta del aceite (v3.34): sale de la bodega hacia el Hato llanero.
   routes: {
     aceite: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Aceite al Hato ➜' },
+    // Las cajas de aceite salen hacia Villavicencio (v3.36).
+    cajas_aceite: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'A Villavicencio ➜' },
   },
   unlockedBy: null, // la primera de los Llanos: se abre con la región
   next: 'frutal',

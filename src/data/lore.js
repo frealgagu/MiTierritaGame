@@ -211,6 +211,13 @@ export const FACTS = {
   leather_tooler: ['El cuero repujado lleva flores y figuras hechas a golpe de buril.'],
   saddler: ['La silla llanera tiene la cabeza alta, para enlazar el ganado.', 'El zamarro es el delantal de cuero del vaquero llanero.'],
   tienda_llanera: ['Las cotizas son las alpargatas del llanero, de cuero y suela.'],
+  // Los Llanos · Villavicencio (v3.36)
+  empanaderia: ['A Villavicencio le dicen la Puerta del Llano.'],
+  kiosco_parque: ['En Villavicencio hace calor todo el año, y llueve mucho en invierno.'],
+  hotel_campestre: ['En Villavicencio se baila el Torneo Internacional del Joropo.'],
+  plaza_mercado: ['En la plaza venden cachama, mamona, frutas y pan de arroz.'],
+  morrales_viaje: ['Para el viaje al Llano adentro se lleva sombrero, agua y fiambre.'],
+  salida_cano: ['Caño Cristales, en La Macarena, se pinta de rojo, amarillo y verde.', 'Al río de los cinco colores lo pintan unas plantas que viven en el agua.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -244,6 +251,7 @@ export const PEOPLE = {
   cachamera: { icon: '🧔🏾', name: 'Don Arcadio', role: 'el piscicultor' },
   hato_llanero: { icon: '🤠', name: 'Don Florentino', role: 'el vaquero' },
   talabarteria: { icon: '👴🏽', name: 'Don Ramón', role: 'el talabartero' },
+  villavicencio: { icon: '👩🏽', name: 'Doña Graciela', role: 'la guía' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -277,6 +285,7 @@ export const WELCOME = {
   cachamera: '¡Epa, compadre, bienvenido a la Cachamera! Aquí las cachamas se crían en estanques, al sol del Llano.',
   hato_llanero: '¡Epa, catire, bienvenido al Hato! Aquí la ternera se asa en vara, como manda el Llano.',
   talabarteria: '¡Siga, compadre! Aquí el cuero se curte, se corta y se cose, hasta volverse silla de montar.',
+  villavicencio: '¡Bienvenido a Villavicencio, la Puerta del Llano! Aquí llega lo mejor de los Llanos, y de aquí salen las excursiones a Caño Cristales.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

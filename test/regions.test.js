@@ -805,3 +805,25 @@ test('La Talabartería vende el Recuerdo del Llano con el pisillo y la cachama a
   for (const p of ['pisillo', 'smoked_cachama']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
   assert.ok((game.state.stats.sold.recuerdo_llano ?? 0) > 0, 'vende recuerdos del Llano');
 });
+
+test('Villavicencio recibe lo de las cinco zonas de los Llanos y arma los morrales del viaje (v3.36)', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const { ROUTES } = await import('../src/data/routes.js');
+  const game = new Game(createInitialState(0, 'llanos'));
+  for (const z of ['frutal', 'cachamera', 'hato_llanero', 'talabarteria', 'villavicencio']) game.unlockZone(z);
+  assert.deepEqual(new Set(ROUTES.filter((r) => r.to === 'villavicencio').map((r) => r.from)), new Set(['palma', 'frutal', 'cachamera', 'hato_llanero', 'talabarteria']));
+  game.state.coins = 1e18;
+  for (const z of ['palma', 'frutal', 'cachamera', 'hato_llanero', 'talabarteria', 'villavicencio']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 30;
+    game.state.zones[z].dispatch.level = 30;
+  }
+  for (const r of Object.keys(game.state.routes)) game.state.routes[r].level = 30;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 1500; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  for (const p of ['oil_box', 'juice_box', 'cachama_maracuya', 'almuerzo_llanero', 'parranda_llanera', 'recuerdo_llano']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
+  assert.ok((game.state.stats.produced.fiambre_viaje ?? 0) > 0, 'arma morrales del viaje');
+});

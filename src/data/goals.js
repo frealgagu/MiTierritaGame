@@ -665,5 +665,26 @@ const TALABARTERIA = [
   { id: 'lt_final', type: 'sold', product: 'recuerdo_llano', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA };
+// Los Llanos · Villavicencio (v3.36): la misma lista que Barichara, Cartagena y Villa de Leyva. Su final es el de los Llanos.
+const VILLAVICENCIO = [
+  { id: 'lv01', type: 'imported', product: 'oil_box', amount: 50, reward: 5000000 },
+  { id: 'lv02', type: 'level', target: 'empanaderia', level: 10, reward: 10000000 },
+  { id: 'lv03', type: 'unlock', station: 'kiosco_parque', reward: 20000000 },
+  { id: 'lv04', type: 'level', target: 'route:cajas_aceite', level: 10, reward: 40000000 },
+  { id: 'lv05', type: 'produced', product: 'tarde_parque', amount: 200, reward: 60000000 },
+  { id: 'lv07', type: 'unlock', station: 'hotel_campestre', reward: 150000000 },
+  { id: 'lv08', type: 'level', target: 'dispatch:villavicencio', level: 10, reward: 200000000 },
+  { id: 'lv09', type: 'sold', product: 'noche_villavo', amount: 300, reward: 300000000 },
+  { id: 'lv10', type: 'unlock', station: 'plaza_mercado', reward: 300000000 },
+  { id: 'lv11', type: 'imported', product: 'cachama_maracuya', amount: 300, reward: 400000000 },
+  { id: 'lv12', type: 'unlock', station: 'morrales_viaje', reward: 500000000 },
+  { id: 'lv13', type: 'imported', product: 'parranda_llanera', amount: 300, reward: 800000000 },
+  { id: 'lv14', type: 'unlock', station: 'salida_cano', reward: 800000000 },
+  { id: 'lv15', type: 'allLevels', zone: 'villavicencio', level: 25, reward: 1500000000 },
+  { id: 'lv06', type: 'research', research: 'empanaderas', reward: 1500000000 },
+  { id: 'lv16', type: 'sold', product: 'excursion_cano', amount: 100, reward: 2500000000 },
+  { id: 'lv_final', type: 'sold', product: 'excursion_cano', amount: 7000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas
