@@ -291,6 +291,16 @@ export const STATIONS = [
   { id: 'refrito_pot', zone: 'azotea', name: 'Olla del refrito', icon: ICON.alino, in: { pounded_herbs: 2 }, out: { alino: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.39' },
   { id: 'alino_packer', zone: 'azotea', name: 'Envasadora de aliño', icon: ICON.alinoBox, in: { alino: 1 }, out: { alino_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.39' },
 
+  // Costa Pacífica · La Bahía (v3.40): el pargo rojo se pesca en lancha, se limpia en la playa y se reparte entre el
+  // Secadero (el pescado seco, salado y tendido al sol), la Fileteadora (que le pasa los filetes al Ahumadero) y la
+  // Cocina del tapao, que lo cocina con plátano y el aliño de la Azotea. Mismos números que la Fiquera, la Ciénaga, Ráquira y la Cachamera.
+  { id: 'pargo_boats', zone: 'bahia', name: 'Lanchas de pesca', icon: ICON.pargo, infinite: true, out: { pargo: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.40' },
+  { id: 'pargo_cleaner', zone: 'bahia', name: 'Limpieza de pargo', icon: ICON.cleanPargo, in: { pargo: 1 }, out: { clean_pargo: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.40' },
+  { id: 'fish_drier', zone: 'bahia', name: 'Secadero', icon: ICON.driedFish, in: { clean_pargo: 4 }, out: { dried_fish: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.40' },
+  { id: 'pargo_filleter', zone: 'bahia', name: 'Fileteadora de pargo', icon: ICON.pargoFillet, in: { clean_pargo: 2 }, out: { pargo_fillet: 1 }, cycle: 16, unlockCost: 1000000, upgradeBase: 600, growth: 1.15, release: '3.40' },
+  { id: 'pargo_smoker', zone: 'bahia', name: 'Ahumadero de pargo', icon: ICON.smokedPargo, in: { pargo_fillet: 2 }, out: { smoked_pargo: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.40' },
+  { id: 'tapao_kitchen', zone: 'bahia', name: 'Cocina del tapao', icon: ICON.tapao, in: { clean_pargo: 4 }, imports: [{ product: 'alino', perCycle: 1, route: 'alino' }], out: { tapao: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.40' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

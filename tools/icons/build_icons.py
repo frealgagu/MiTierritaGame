@@ -3005,6 +3005,75 @@ def alino_box():
     return layers
 
 
+# ---------- Costa Pacífica · La Bahía (v3.40) ----------
+
+def pargo():
+    """Pargo rojo: el pez del mar Pacífico, rojo encendido con la barriga rosada, recién sacado."""
+    layers = fish_shape(46, 54, 74, 38, '#e53935', '#ffab91')
+    layers.append(('#ffffff60', [ellipse(36, 44, 14, 3, -8)]))
+    layers.append(('#b71c1c', [rib(30 + k * 9, 40, 34 + k * 9, 46, 1.2) for k in range(4)]))
+    layers.append(('#4fc3f7', [circle(88, 22, 3), circle(93, 32, 2.2), circle(82, 32, 1.8)]))
+    return layers
+
+
+def clean_pargo():
+    """Pargo limpio: el pargo sin escamas ni tripas, sobre una hoja de plátano, con su tajo de limón."""
+    layers = [('#2e7d32', [leaf(6, 80, 94, 66, 16)]), ('#66bb6a', [rib(10, 79, 90, 67, 1.2)])]
+    layers += fish_shape(46, 54, 68, 34, '#ef9a9a', '#ffe0d6', -6)
+    layers.append(('#ffffffb0', [ellipse(38, 46, 11, 2, -6)]))
+    layers += [(OUTLINE, [circle(82, 28, 8)]), ('#9ccc65', [circle(82, 28, 6.5)]), ('#dce775', [circle(82, 28, 3.5)])]
+    return layers
+
+
+def pargo_fillet():
+    """Filete de pargo: los filetes blancos, con su piel roja, en la tabla y con el cuchillo."""
+    layers = [(OUTLINE, [rect(6, 56, 88, 30, -6)]), ('#c68a4a', [rect(9, 59, 82, 24, -6)])]
+    for cx, cy, rot in [(32, 54, -10), (62, 62, 8)]:
+        layers.append((OUTLINE, [ellipse(cx, cy, 22, 12, rot)]))
+        layers.append(('#e53935', [ellipse(cx, cy, 19.5, 9.8, rot)]))
+        layers.append(('#fff3ee', [ellipse(cx - 1, cy - 1.5, 18, 7.5, rot)]))
+        layers.append(('#ffd0c4', [ellipse(cx + 2, cy, 11, 2.5, rot)]))
+    layers += [(OUTLINE, [rect(60, 14, 34, 8, 25)]), ('#cfd8dc', [rect(62, 16, 22, 4.5, 25)]), ('#5d4037', [rect(80, 26, 12, 6, 25)])]
+    return layers
+
+
+def smoked_pargo():
+    """Pargo ahumado: los pargos dorados abiertos sobre la parrilla del ahumadero, con el humo que sube."""
+    layers = [(OUTLINE, [rect(6, 70, 88, 8)]), ('#5d4037', [rect(8, 71.5, 84, 5)])]
+    layers.append(('#37474f', [rib(10 + k * 10, 70, 10 + k * 10, 78, 1.2) for k in range(9)]))
+    for cx, rot in [(30, -8), (68, 6)]:
+        layers += fish_shape(cx, 58, 46, 24, '#a0522d', '#d9893a', rot, eye=False)
+    layers.append(('#b0bec5a0', ['M 22 40 Q 16 28 24 16 Q 18 28 28 40 Z', 'M 52 38 Q 46 24 54 10 Q 48 24 58 38 Z', 'M 78 40 Q 72 28 80 16 Q 74 28 84 40 Z']))
+    layers += [('#ff7043', [ellipse(50, 88, 30, 5)]), ('#ffcc80', [ellipse(50, 88, 16, 2.5)])]
+    return layers
+
+
+def dried_fish():
+    """Pescado seco: el pescado abierto y salado, colgado al sol en la cuerda, con la sal que brilla."""
+    layers = [('#8d6e4a', [rect(4, 14, 92, 4)])]
+    for cx in (28, 70):
+        layers.append(('#5d4037', [rib(cx, 16, cx, 26, 1.4)]))
+        layers.append((OUTLINE, ['M %d 24 Q %d 40 %d 70 L %d 90 L %d 70 Q %d 40 %d 24 Z' % (cx - 4, cx - 22, cx - 8, cx, cx + 8, cx + 22, cx + 4)]))
+        layers.append(('#d7c49e', ['M %d 27 Q %d 42 %d 68 L %d 85 L %d 68 Q %d 42 %d 27 Z' % (cx - 3, cx - 18.5, cx - 6.5, cx, cx + 6.5, cx + 18.5, cx + 3)]))
+        layers.append(('#b89a6a', [rib(cx, 30, cx, 80, 1.4)] + [rib(cx - 10 + k * 0, 38 + k * 9, cx + 10, 38 + k * 9, 0.8) for k in range(4)]))
+        layers.append(('#ffffff', [circle(cx - 6, 40, 1.2), circle(cx + 5, 52, 1.2), circle(cx - 4, 62, 1), circle(cx + 7, 34, 1)]))
+    layers.append(('#fbc02d', [circle(90, 8, 5)]))
+    return layers
+
+
+def tapao():
+    """Tapao de pescado: la olla destapada con el pescado, el plátano verde y el caldo, y la hoja que la tapaba."""
+    layers = [(OUTLINE, ['M 10 48 L 90 48 L 84 86 Q 50 96 16 86 Z']), ('#546e7a', ['M 13 50.5 L 87 50.5 L 81.6 84 Q 50 93 18.4 84 Z'])]
+    layers += [(OUTLINE, [ellipse(50, 48, 42, 11)]), ('#c98a24', [ellipse(50, 48, 39.5, 9)])]
+    layers += fish_shape(44, 44, 40, 16, '#e57373', '#ffccbc', -4)
+    for x0, y0, x1, y1 in [(62, 48, 80, 42), (22, 50, 34, 44)]:
+        layers += [(OUTLINE, [ellipse((x0 + x1) / 2, (y0 + y1) / 2, 10, 4.5, -18)]), ('#c5e1a5', [ellipse((x0 + x1) / 2, (y0 + y1) / 2, 8, 3, -18)])]
+    layers += [('#43a047', [circle(30, 46, 1.6), circle(58, 50, 1.6), circle(70, 52, 1.4)])]
+    layers += [(OUTLINE, [leaf(54, 30, 96, 6, 12)]), ('#2e7d32', [leaf(54, 30, 96, 6, 10)]), ('#66bb6a', [rib(56, 29, 94, 7, 1)])]
+    layers.append(('#eceff1a0', ['M 30 34 Q 24 24 32 14 Q 26 24 36 34 Z', 'M 46 32 Q 40 22 48 12 Q 42 22 52 32 Z']))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -3209,6 +3278,12 @@ ICONS = [
     (0xE0C8, 'pounded_herbs', pounded_herbs),
     (0xE0C9, 'alino', alino),
     (0xE0CA, 'alino_box', alino_box),
+    (0xE0CB, 'pargo', pargo),
+    (0xE0CC, 'clean_pargo', clean_pargo),
+    (0xE0CD, 'pargo_fillet', pargo_fillet),
+    (0xE0CE, 'smoked_pargo', smoked_pargo),
+    (0xE0CF, 'dried_fish', dried_fish),
+    (0xE0D0, 'tapao', tapao),
 ]
 
 

@@ -163,6 +163,11 @@ export class Terrain {
           g.moveTo(a.x, a.y).lineTo(b.x, b.y).lineTo(c2.x, c2.y).stroke({ width: 2.2, color: 0x8a6a45, alpha: 0.55 });
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
           g.moveTo(p.x - 5, p.y).lineTo(p.x + 5, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.55 });
+        } else if (type === 'farm' && this.zone.theme === 'bay') {
+          // La Bahía (v3.40): el mar, con olas que brillan y alguna espuma.
+          const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
+          g.moveTo(p.x - 7, p.y).quadraticCurveTo(p.x, p.y - 3, p.x + 7, p.y).stroke({ width: 1.3, color: 0xe8f6ff, alpha: 0.55 });
+          if (rng() < 0.15) g.ellipse(p.x + 3, p.y + 4, 4, 1.2).fill({ color: 0xffffff, alpha: 0.5 });
         } else if (type === 'farm' && this.zone.theme === 'cienaga') {
           // Ciénaga (v3.17): brillos del agua y taruyas (el buchón de flores moradas) flotando.
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
@@ -358,6 +363,13 @@ export class Terrain {
           else if (r < 0.055) obj = egret(rng);
           else if (r < 0.075) obj = coconutPalm(rng);
           else if (r < 0.088) obj = ceiba(rng);
+        } else if (this.zone.theme === 'bay') {
+          // La Bahía (v3.40): palmas de coco, piedras de la playa, redes al sol, heliconias y chontaduros.
+          if (r < 0.04) obj = coconutPalm(rng);
+          else if (r < 0.06) obj = rock(rng);
+          else if (r < 0.075) obj = netRack(rng);
+          else if (r < 0.095) obj = heliconia(rng);
+          else if (r < 0.11) obj = chontaduroPalm(rng);
         } else if (this.zone.theme === 'cienaga') {
           // Ciénaga (v3.17): garzas, redes puestas a secar, ceibas, plátano y palmas de coco.
           if (r < 0.03) obj = egret(rng);
@@ -559,6 +571,7 @@ const FARM_SOIL = {
   hides: (v) => mix(0xb89a6a, 0xa8885a, v * 0.4), // el patio de tierra del saladero (v3.35)
   plantain: (v) => mix(0x5a4a30, 0x4a3d28, v * 0.5), // la tierra negra y mojada del platanal (v3.38)
   azotea: (v) => mix(0x6a5a3a, 0x5a4a30, v * 0.5), // el patio de las azoteas (v3.39)
+  bay: (v) => mix(0x2f86a8, 0x3a94b4, v * 0.6), // el mar de la Bahía (v3.40)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),

@@ -864,3 +864,24 @@ test('La Costa Pacífica se abre al completar Villavicencio; mientras esté en o
   assert.ok(c.zones.azotea.unlocked, 'El Platanal abre La Azotea (v3.39)');
   assert.ok(!c.regionDone, 'en obra: todavía no tiene final');
 });
+
+test('La Bahía sirve el tapao de pescado con el aliño que llega de la Azotea (v3.40)', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const game = new Game(createInitialState(0, 'choco'));
+  for (const z of ['azotea', 'bahia']) game.unlockZone(z);
+  assert.ok(game.state.routes.alino, 'la Ruta del aliño es de la Costa Pacífica');
+  game.state.coins = 1e15;
+  for (const z of ['azotea', 'bahia']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+    game.state.zones[z].dispatch.level = 20;
+  }
+  game.state.routes.alino.level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 600; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  assert.ok((game.state.stats.imported.alino ?? 0) > 0, 'llega aliño de la Azotea');
+  for (const p of ['dried_fish', 'smoked_pargo', 'tapao']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+});

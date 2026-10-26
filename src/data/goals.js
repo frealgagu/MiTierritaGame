@@ -738,5 +738,26 @@ const AZOTEA = [
   { id: 'ca_final', type: 'sold', product: 'alino_box', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA };
+// Costa Pacífica · La Bahía (v3.40): la misma lista que la Cachamera.
+const BAHIA = [
+  { id: 'cb01', type: 'sold', product: 'pargo', amount: 50, reward: 10000 },
+  { id: 'cb02', type: 'level', target: 'pargo_boats', level: 10, reward: 20000 },
+  { id: 'cb03', type: 'unlock', station: 'pargo_cleaner', reward: 40000 },
+  { id: 'cb04', type: 'level', target: 'pargo_boats:transport', level: 10, reward: 40000 },
+  { id: 'cb05', type: 'unlock', station: 'fish_drier', reward: 80000 },
+  { id: 'cb06', type: 'produced', product: 'dried_fish', amount: 100, reward: 120000 },
+  { id: 'cb08', type: 'unlock', station: 'pargo_filleter', reward: 250000 },
+  { id: 'cb09', type: 'level', target: 'dispatch:bahia', level: 10, reward: 250000 },
+  { id: 'cb10', type: 'unlock', station: 'pargo_smoker', reward: 500000 },
+  { id: 'cb11', type: 'produced', product: 'smoked_pargo', amount: 200, reward: 800000 },
+  { id: 'cb12', type: 'unlock', station: 'tapao_kitchen', reward: 1200000 },
+  { id: 'cb13', type: 'imported', product: 'alino', amount: 200, reward: 1500000 },
+  { id: 'cb14', type: 'level', target: 'route:alino', level: 25, reward: 2000000 },
+  { id: 'cb15', type: 'allLevels', zone: 'bahia', level: 25, reward: 3000000 },
+  { id: 'cb07', type: 'research', research: 'motor_fuera_borda', reward: 1500000 },
+  { id: 'cb16', type: 'sold', product: 'tapao', amount: 1000, reward: 5000000 },
+  { id: 'cb_final', type: 'sold', product: 'tapao', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

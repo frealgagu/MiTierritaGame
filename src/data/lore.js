@@ -232,6 +232,13 @@ export const FACTS = {
   herb_pestle: ['En el pilón se machacan las hierbas con ajo, cebolla y sal.'],
   refrito_pot: ['El refrito con hierbas de azotea es la base de la cocina del Pacífico.'],
   alino_packer: ['Poleo, albahaca negra, oreganón y chillangua: las hierbas de la abuela.'],
+  // Costa Pacífica · La Bahía (v3.40)
+  pargo_boats: ['En Bahía Solano y Nuquí se pesca con anzuelo, en lanchas pequeñas.', 'El pargo rojo vive entre las rocas del mar Pacífico.'],
+  pargo_cleaner: ['El pescado se limpia en la playa, con agua de mar.'],
+  fish_drier: ['El pescado seco se sala y se tiende al sol: dura semanas sin hielo.'],
+  pargo_filleter: ['Del pargo se aprovecha todo: la cabeza va para el sancocho.'],
+  pargo_smoker: ['El pescado ahumado en el fogón alto se guarda para el invierno.'],
+  tapao_kitchen: ['El tapao es pescado con plátano verde, cocinado en olla tapada.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -268,6 +275,7 @@ export const PEOPLE = {
   villavicencio: { icon: '👩🏽', name: 'Doña Graciela', role: 'la guía' },
   platanal: { icon: '👨🏿‍🌾', name: 'Don Nicomedes', role: 'el platanero' },
   azotea: { icon: '👩🏿‍🍳', name: 'Doña Rosalba', role: 'la cocinera' },
+  bahia: { icon: '🧔🏿', name: 'Don Cupertino', role: 'el pescador' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -304,6 +312,7 @@ export const WELCOME = {
   villavicencio: '¡Bienvenido a Villavicencio, la Puerta del Llano! Aquí llega lo mejor de los Llanos, y de aquí salen las excursiones a Caño Cristales.',
   platanal: '¡Bienvenido al Pacífico, mano! Aquí llueve todos los días, y por eso el plátano se da tan bonito.',
   azotea: '¡Bienvenido a la Azotea, mijo! En las canoas alzadas sembramos las hierbas que le dan sabor a todo.',
+  bahia: '¡Bienvenido a la Bahía, primo! Aquí salimos en lancha por el pargo, y en la playa lo dejamos listo.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

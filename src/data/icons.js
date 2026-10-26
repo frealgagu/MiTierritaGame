@@ -206,6 +206,12 @@ export const ICON = {
   poundedHerbs: '\uE0C8', // Hierbas machacadas: el pilón de madera con la pasta verde y la mano del pilón
   alino: '\uE0C9', // Aliño de azotea: el frasco de aliño, con la chillangua y el ajo al lado
   alinoBox: '\uE0CA', // Caja de aliño: la caja de cartón con los frascos de tapa roja asomados
+  pargo: '\uE0CB', // Pargo rojo: el pez del mar Pacífico, rojo encendido con la barriga rosada, recién sacado
+  cleanPargo: '\uE0CC', // Pargo limpio: el pargo sin escamas ni tripas, sobre una hoja de plátano, con su tajo de limón
+  pargoFillet: '\uE0CD', // Filete de pargo: los filetes blancos, con su piel roja, en la tabla y con el cuchillo
+  smokedPargo: '\uE0CE', // Pargo ahumado: los pargos dorados abiertos sobre la parrilla del ahumadero, con el humo que sube
+  driedFish: '\uE0CF', // Pescado seco: el pescado abierto y salado, colgado al sol en la cuerda, con la sal que brilla
+  tapao: '\uE0D0', // Tapao de pescado: la olla destapada con el pescado, el plátano verde y el caldo, y la hoja que la tapaba
 };
 
 export const ICON_FONT = 'Cafetal Icons';

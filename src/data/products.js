@@ -239,6 +239,14 @@ export const PRODUCTS = {
   alino: { name: 'Aliño de azotea', zone: 'azotea', value: 150, icon: ICON.alino, color: 0x7a8a2e },
   alino_box: { name: 'Caja de aliño', zone: 'azotea', value: 250, icon: ICON.alinoBox, color: 0xc8a26a },
 
+  // Costa Pacífica · La Bahía (v3.40): mismos valores que la Cachamera.
+  pargo: { name: 'Pargo rojo', zone: 'bahia', value: 125, icon: ICON.pargo, color: 0xe53935 },
+  clean_pargo: { name: 'Pargo limpio', zone: 'bahia', value: 300, icon: ICON.cleanPargo, color: 0xef9a9a },
+  pargo_fillet: { name: 'Filete de pargo', zone: 'bahia', value: 800, icon: ICON.pargoFillet, color: 0xffe0d6 },
+  smoked_pargo: { name: 'Pargo ahumado', zone: 'bahia', value: 2000, icon: ICON.smokedPargo, color: 0x8d5524 },
+  dried_fish: { name: 'Pescado seco', zone: 'bahia', value: 2400, icon: ICON.driedFish, color: 0xd7c49e },
+  tapao: { name: 'Tapao de pescado', zone: 'bahia', value: 4000, icon: ICON.tapao, color: 0xc98a24 },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

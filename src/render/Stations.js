@@ -123,7 +123,7 @@ export class FarmView extends StationView {
 
   update(dt, t) {
     super.update(dt, t);
-    if (this.theme === 'cienaga' && this.boats) this.drawBoats(t);
+    if ((this.theme === 'cienaga' || this.theme === 'bay') && this.boats) this.drawBoats(t);
     if (!this.def.harvest) return;
     if (!this.flyers) this.addChild((this.flyers = new Graphics()));
     const g = this.flyers.clear();
@@ -154,7 +154,8 @@ export class FarmView extends StationView {
       this.drawPasture(g, tier, rng);
       return;
     }
-    if (this.theme === 'cienaga') {
+    // La Bahía (v3.40): el mar, con las mismas canoas de pescadores de la Ciénaga.
+    if (this.theme === 'cienaga' || this.theme === 'bay') {
       this.drawLagoon(g, tier, rng);
       return;
     }

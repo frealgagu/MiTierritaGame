@@ -4796,6 +4796,161 @@ const DRAW = {
     };
   },
 
+  // --- Costa Pacífica · La Bahía (v3.40): la playa de los pescadores ---
+
+  // Limpieza de pargo: la ramada en la playa con la mesa de tablas; el pescador escama el pargo, los
+  // baldes con agua de mar y los alcatraces que esperan su parte.
+  pargo_cleaner(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    box(g, x0 + 0.3, y0 + 0.6, 1.8, 0.6, 9, 0x8d6e4a);
+    const top = iso(x0 + 1.2, y0 + 0.9, 9);
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) fishOn(g, top.x - 14 + k * 9, top.y - 1 - (k % 2), 4, PRODUCTS.clean_pargo.color);
+    for (const [bx, by] of [[0.45, 2.45], [0.95, 2.6]]) {
+      const b = iso(x + bx, y + by);
+      g.poly([b.x - 6, b.y - 10, b.x + 6, b.y - 10, b.x + 5, b.y, b.x - 5, b.y]).fill(0x1e88e5).stroke(OUTLINE);
+      g.ellipse(b.x, b.y - 10, 6, 2).fill(0x4fa3c7);
+    }
+    ramada(this, g, x0, y0, 2.3, 1.5, 28 + ctx.up, 0x9a7b5a);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x0 + 1.2, y0 + 1.55);
+      worker(anim, wp.x, wp.y, 0xf2c14e);
+      fishOn(anim, top.x + 10, top.y - 2, 5, PRODUCTS.pargo.color);
+      const bird = iso(x + 2.7, y + 2.3);
+      const hop = this.working ? Math.abs(Math.sin(time * 2)) * 2 : 0;
+      anim.ellipse(bird.x, bird.y - 7 - hop, 5, 3.4).fill(0x8d8478).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      anim.poly([bird.x - 4, bird.y - 9 - hop, bird.x - 13, bird.y - 6 - hop, bird.x - 4, bird.y - 7 - hop]).fill(0xd7a35a);
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 2 + i / 3) % 1;
+        anim.circle(top.x + 10 + f * 8, top.y - 4 - Math.sin(f * Math.PI) * 6, 0.9).fill(0xe8f6ff);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Secadero: los tendales al sol, con los pescados abiertos y salados colgando de las cuerdas, y los costales
+  // de sal.
+  fish_drier(g, x, y, ctx) {
+    const rows = ctx.tier >= 2 ? [0.5, 1.3, 2.1] : [0.7, 1.7];
+    this.lines = [];
+    for (const ry of rows) {
+      const a = iso(x + 0.4, y + ry, 0);
+      const b = iso(x + 2.6, y + ry, 0);
+      for (const p of [a, b]) g.rect(p.x - 1.2, p.y - 24, 2.4, 24).fill(0x6b4a2e);
+      g.moveTo(a.x, a.y - 22).lineTo(b.x, b.y - 22).stroke({ width: 1, color: 0x8d6e4a });
+      this.lines.push([a, b]);
+    }
+    for (const [sx, sy] of [[2.7, 2.6], [2.35, 2.75]]) sack(g, x + sx, y + sy, 0, 0xffffff);
+    this.roofTop = iso(x + 1.5, y + 1.3, 30);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, [a, b]] of this.lines.entries()) {
+        for (let i = 0; i < 5; i++) {
+          const f = (i + 0.5) / 5;
+          const sway = this.working ? Math.sin(time * 1.5 + i + k) * 1.2 : 0;
+          const px = a.x + (b.x - a.x) * f + sway;
+          const py = a.y + (b.y - a.y) * f - 21;
+          anim.poly([px - 3, py + 1, px + 3, py + 1, px + 2, py + 10, px, py + 13, px - 2, py + 10]).fill(PRODUCTS.dried_fish.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+        }
+      }
+    };
+    this.animate(0);
+  },
+
+  // Fileteadora de pargo: la casa de tablas sobre pilotes (blanca y azul), con la mesa del corredor donde se
+  // sacan los filetes; los filetes pasan al Ahumadero de al lado.
+  pargo_filleter(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 1.7, 1.3, 20, ctx, { wall: 0xf7f4ee, trim: 0x1e88e5 });
+    box(g, x + 2.2, y + 0.5, 0.45, 1.2, 9, 0x8d6e4a);
+    const t = iso(x + 2.42, y + 1.1, 9);
+    for (let k = 0; k < 2; k++) g.ellipse(t.x - 4 + k * 7, t.y - 1 + k * 3, 4, 2).fill(PRODUCTS.pargo_fillet.color).stroke({ width: 0.5, color: 0xe53935 });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      fishOn(anim, t.x - 2, t.y - 5, 5, PRODUCTS.clean_pargo.color);
+      const wp = iso(x + 2.95, y + 1.1);
+      worker(anim, wp.x, wp.y, 0x1e88e5);
+      if (!this.working) return;
+      const f = (time * 2.2) % 1;
+      anim.moveTo(t.x - 7 + f * 10, t.y - 8).lineTo(t.x - 3 + f * 10, t.y - 12).stroke({ width: 1.4, color: 0xcfd8dc });
+    };
+    this.animate(0);
+  },
+
+  // Ahumadero de pargo: el fogón alto de barro con la parrilla de varas, los pargos abiertos encima y el humo
+  // de leña; al lado, la leña.
+  pargo_smoker(g, x, y, ctx) {
+    const x0 = x + 0.5;
+    const y0 = y + 0.5;
+    const n = ctx.tier >= 2 ? 2 : 1;
+    this.grills = [];
+    for (let k = 0; k < n; k++) {
+      const gx = x0 + k * 1.1;
+      box(g, gx, y0, 0.9, 0.9, 12, 0xa1887f);
+      for (const [px, py] of [[0, 0], [0.9, 0], [0, 0.9], [0.9, 0.9]]) box(g, gx + px - 0.04, y0 + py - 0.04, 0.08, 0.08, 26, 0x6b4a2e, { z: 12 });
+      const grill = iso(gx + 0.45, y0 + 0.45, 22);
+      for (let i = -2; i <= 2; i++) g.moveTo(grill.x - 14, grill.y + i * 2.4).lineTo(grill.x + 14, grill.y + i * 2.4).stroke({ width: 0.8, color: 0x4e342e });
+      this.grills.push(grill);
+      const fire = iso(gx + 0.45, y0 + 0.9, 3);
+      g.ellipse(fire.x, fire.y, 6, 2.5).fill(0x212121);
+    }
+    for (let k = 0; k < 3; k++) box(g, x + 0.4 + k * 0.08, y + 2.55 - k * 0.05, 0.9, 0.1, 3, 0x6b4a2e, { z: k * 3 });
+    this.smokePoints = this.grills.map((p) => ({ x: p.x, y: p.y - 10 }));
+    this.roofTop = iso(x0 + 0.45, y0 + 0.45, 40);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, p] of this.grills.entries()) {
+        for (let i = 0; i < 2; i++) fishOn(anim, p.x - 6 + i * 11, p.y - 1 + (i % 2) * 2, 4.5, PRODUCTS.smoked_pargo.color);
+        const fire = iso(x0 + k * 1.1 + 0.45, y0 + 0.9, 3);
+        anim.poly([fire.x - 4, fire.y, fire.x, fire.y - 6 - (this.working ? Math.sin(time * 9 + k) * 1.5 : 0), fire.x + 4, fire.y]).fill(this.working ? 0xff7043 : 0x5d4037);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Cocina del tapao: la cocina de tablas sobre pilotes (naranja), con el fogón en el corredor y la olla del
+  // tapao tapada con hojas de plátano; el aliño llega de la Azotea.
+  tapao_kitchen(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    stiltHouse(this, g, hx, hy, 2.0, 1.3, 22, ctx, { wall: 0xf08a3c, trim: 0x2e7d32 });
+    box(g, x + 1.6, y + 2.0, 1.0, 0.7, 10, 0xa1887f);
+    const pot = iso(x + 2.1, y + 2.35, 10);
+    g.moveTo(pot.x - 10, pot.y - 12).lineTo(pot.x - 9, pot.y).quadraticCurveTo(pot.x, pot.y + 4, pot.x + 9, pot.y).lineTo(pot.x + 10, pot.y - 12).closePath().fill(0x546e7a).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 13, 12, 4).fill(0x2e7d32).stroke(OUTLINE);
+    g.moveTo(pot.x - 10, pot.y - 13).lineTo(pot.x + 10, pot.y - 13).stroke({ width: 0.8, color: 0x66bb6a });
+    // Racimo de plátano verde y los frascos de aliño en la mesa.
+    box(g, x + 0.45, y + 2.2, 0.9, 0.45, 8, 0x8d6e4a);
+    const t = iso(x + 0.9, y + 2.42, 8);
+    g.ellipse(t.x - 5, t.y - 3, 5, 3).fill(PRODUCTS.washed_plantain?.color ?? 0x9ccc65).stroke({ width: 0.5, color: 0x3a2418 });
+    for (let k = 0; k < 2; k++) g.rect(t.x + 2 + k * 4, t.y - 8, 3, 6).fill(PRODUCTS.alino.color).stroke({ width: 0.5, color: 0x3a2418 });
+    this.smokePoints = [{ x: pot.x, y: pot.y - 20 }];
+    const fire = iso(x + 2.1, y + 2.72, 3);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      anim.poly([fire.x - 4, fire.y, fire.x, fire.y - 5 - (this.working ? Math.sin(time * 9) * 1.5 : 0), fire.x + 4, fire.y]).fill(this.working ? 0xff7043 : 0x5d4037);
+      const wp = iso(x + 1.45, y + 2.95);
+      worker(anim, wp.x, wp.y, 0xf7f4ee);
+      if (!this.working) return;
+      const lift = Math.max(0, Math.sin(time * 1.2)) * 4;
+      anim.ellipse(pot.x + 2, pot.y - 15 - lift, 11, 3.5).fill({ color: 0x43a047, alpha: lift > 1 ? 0.9 : 0 });
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

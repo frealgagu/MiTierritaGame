@@ -906,6 +906,23 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.36',
   },
+  // Costa Pacífica (v3.40): el aliño de la Azotea, para la Cocina del tapao de la Bahía.
+  {
+    id: 'alino',
+    name: 'Ruta del aliño',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'alino',
+    from: 'azotea',
+    to: 'bahia',
+    stations: ['tapao_kitchen'],
+    tab: 'Aliño',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 1000,
+    growth: 1.15,
+    release: '3.40',
+  },
 ];
 
 export const ROUTES_BY_ID = Object.fromEntries(ROUTES.map((r) => [r.id, r]));

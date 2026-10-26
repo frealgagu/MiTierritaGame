@@ -432,6 +432,19 @@ export const RESEARCH = [
   { zone: 'azotea', id: 'alino_casero', name: 'Aliño casero', icon: '🏅', desc: 'Las cajas de aliño valen un 50 % más.', cost: 1500000, requires: 'alino_packer', effect: { type: 'productValue', target: 'alino_box', mult: 1.5 } },
   { zone: 'azotea', id: 'maestria_azotea', name: 'Maestría: Azotea', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'azotea', mult: 4 } },
   { zone: 'azotea', id: 'supremacia_azotea', name: 'Supremacía: Azotea', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'azotea', mult: 8 } },
+
+  // Costa Pacífica · La Bahía (v3.40): las mismas de la Cachamera, con el pargo.
+  { zone: 'bahia', id: 'motor_fuera_borda', name: 'Motor fuera de borda', icon: ICON.pargo, desc: 'Las Lanchas de pesca pescan el doble.', cost: 300000, requires: 'pargo_cleaner', effect: { type: 'stationSpeed', target: 'pargo_boats', mult: 2 } },
+  { zone: 'bahia', id: 'mesa_pargo', name: 'Mesa de limpieza', icon: ICON.cleanPargo, desc: 'La Limpieza de pargo limpia el doble.', cost: 400000, requires: 'pargo_cleaner', effect: { type: 'stationSpeed', target: 'pargo_cleaner', mult: 2 } },
+  { zone: 'bahia', id: 'cuchillo_pargo', name: 'Cuchillo de filetear', icon: ICON.pargoFillet, desc: 'La Fileteadora de pargo filetea el doble.', cost: 1200000, requires: 'pargo_filleter', effect: { type: 'stationSpeed', target: 'pargo_filleter', mult: 2 } },
+  { zone: 'bahia', id: 'lancha_hielo', name: 'Lancha con hielo', icon: '🚤', desc: 'El despacho de la Bahía lleva el doble por viaje.', cost: 1500000, requires: 'fish_drier', effect: { type: 'dispatchCapacity', target: 'bahia', mult: 2 } },
+  { zone: 'bahia', id: 'ahumadero_alto', name: 'Ahumadero alto', icon: ICON.smokedPargo, desc: 'El Ahumadero de pargo ahuma el doble.', cost: 3000000, requires: 'pargo_smoker', effect: { type: 'stationSpeed', target: 'pargo_smoker', mult: 2 } },
+  { zone: 'bahia', id: 'tendales_sal', name: 'Tendales de sal', icon: ICON.driedFish, desc: 'El Secadero seca el doble.', cost: 8000000, requires: 'fish_drier', effect: { type: 'stationSpeed', target: 'fish_drier', mult: 2 } },
+  { zone: 'bahia', id: 'pescado_seco_fino', name: 'Pescado seco del Pacífico', icon: '🏅', desc: 'El pescado seco vale un 50 % más.', cost: 15000000, requires: 'fish_drier', effect: { type: 'productValue', target: 'dried_fish', mult: 1.5 } },
+  { zone: 'bahia', id: 'fogon_tapao', name: 'Fogón de leña', icon: ICON.tapao, desc: 'La Cocina del tapao sirve el doble (la Chiva de la ruta se ajusta sola).', cost: 25000000, requires: 'tapao_kitchen', effect: { type: 'stationSpeed', target: 'tapao_kitchen', mult: 2 } },
+  { zone: 'bahia', id: 'sazon_pacifico', name: 'Sazón del Pacífico', icon: '🏅', desc: 'El tapao de pescado vale un 50 % más.', cost: 50000000, requires: 'tapao_kitchen', effect: { type: 'productValue', target: 'tapao', mult: 1.5 } },
+  { zone: 'bahia', id: 'maestria_bahia', name: 'Maestría: Bahía', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'bahia', mult: 4 } },
+  { zone: 'bahia', id: 'supremacia_bahia', name: 'Supremacía: Bahía', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'bahia', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

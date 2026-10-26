@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## v3.40.0 — Costa Pacífica: La Bahía
+- **🐟 La Bahía**, la tercera zona de la Costa Pacífica, se abre al completar La Azotea: las Lanchas de pesca → la Limpieza de pargo, que reparte el pargo limpio entre:
+  - el **Secadero**, donde el pescado se sala y se tiende al sol (el pescado seco);
+  - la **Fileteadora de pargo**, que le pasa los filetes al **Ahumadero**;
+  - la **Cocina del tapao**, que cocina el pescado con plátano verde y el aliño de la Azotea.
+- **La Ruta del aliño**, la primera de la Costa Pacífica: lleva el aliño de la Azotea a la Cocina del tapao, con su chiva y su carretera.
+- Tiene los mismos números que la Cachamera. Su persona es **Don Cupertino, el pescador**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 6 íconos nuevos (del pargo rojo al tapao).
+- **El mapa:** el mar con las canoas de los pescadores y el muelle; palmas de coco, piedras de playa, redes al sol, heliconias y chontaduros. En las estaciones, la ramada de la limpieza con los alcatraces que esperan, los tendales con el pescado seco, la casa blanca de la fileteadora, los fogones altos del ahumadero y la cocina naranja del tapao.
+
 ## v3.39.0 — Costa Pacífica: La Azotea
 - **🐋 La región se llama ahora Costa Pacífica** (salió como «el Chocó»): va del Chocó a Nariño, y su última zona será **Buenaventura**, en vez de Quibdó. Tu partida sigue igual.
 - **🌿 La Azotea**, su segunda zona, se abre al completar El Platanal: las Azoteas → el Lavadero de hierbas → el Pilón → la Olla del refrito → la Envasadora de aliño. Las hierbas de azotea (chillangua, poleo, albahaca y oreganón) se lavan, se machacan con ajo y cebolla, se sofríen y el aliño se envasa en frascos. Tiene los mismos números que el Frutal; el aliño es el que después viajará a la Bahía, y las cajas, a Buenaventura.
