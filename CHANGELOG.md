@@ -1,5 +1,16 @@
 # Registro de cambios
 
+## v3.35.0 — Los Llanos: La Talabartería
+- **🐎 La Talabartería**, la quinta zona de los Llanos, se abre al completar El Hato llanero: el Saladero de cueros → la Curtiembre → la Cortadora de cuero → el Repujado → el Taller de sillas → la **Tienda llanera**. La tienda vende el **Recuerdo del Llano**: sillas de montar con el pisillo y la cachama ahumada de la Cachamera para el camino. Tiene los mismos números que Las Ruanas.
+- **Dos rutas nuevas desde la Cachamera:** la **Ruta del pisillo** y la **Ruta de la cachama ahumada**, con su chiva y sus carreteras.
+- Su persona es **Don Ramón, el talabartero**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (del cuero crudo a la silla de montar).
+- **El mapa:** los cueros templados en sus marcos de palo, secándose con sal; caballos criollos (alazanes, bayos y tordillos), samanes, morichales y comejeneras. En las estaciones:
+  - las pozas de curtido con los cueros escurriendo;
+  - la mesa de cortar;
+  - el artesano golpeando el buril;
+  - las sillas de montar en sus burros de madera;
+  - la tienda con sombreros, cotizas y una silla en la puerta.
+
 ## v3.34.0 — Los Llanos: El Hato llanero
 - **🤠 El Hato llanero**, la cuarta zona de los Llanos, se abre al completar La Cachamera: la Sabana del hato → el Desposte → el Adobadero → el Asador de vara (la mamona) → la Trinchadora (la carne a la llanera). Tiene los mismos números que Paipa.
 - La carne a la llanera se reparte entre:

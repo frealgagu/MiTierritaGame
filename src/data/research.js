@@ -380,6 +380,18 @@ export const RESEARCH = [
   { zone: 'hato_llanero', id: 'carne_del_llano', name: 'Carne del Llano', icon: '🏅', desc: 'Todo lo que vende el Hato llanero vale un 50 % más.', cost: 60000000, requires: 'lunch_llanero', effect: { type: 'zoneValue', target: 'hato_llanero', mult: 1.5 } },
   { zone: 'hato_llanero', id: 'maestria_hato_llanero', name: 'Maestría: Hato llanero', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'hato_llanero', mult: 4 } },
   { zone: 'hato_llanero', id: 'supremacia_hato_llanero', name: 'Supremacía: Hato llanero', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'hato_llanero', mult: 8 } },
+
+  // Los Llanos · La Talabartería (v3.35): las mismas de Las Ruanas, con el cuero.
+  { zone: 'talabarteria', id: 'cueros_hato', name: 'Cueros del hato', icon: ICON.rawHide, desc: 'El Saladero de cueros da el doble.', cost: 15000000, requires: 'tannery', effect: { type: 'stationSpeed', target: 'hide_yard', mult: 2 } },
+  { zone: 'talabarteria', id: 'curtido_vegetal', name: 'Curtido vegetal', icon: ICON.leather, desc: 'La Curtiembre curte el doble.', cost: 18000000, requires: 'tannery', effect: { type: 'stationSpeed', target: 'tannery', mult: 2 } },
+  { zone: 'talabarteria', id: 'moldes_corte', name: 'Moldes de corte', icon: ICON.leatherPieces, desc: 'La Cortadora de cuero corta el doble.', cost: 45000000, requires: 'leather_tooler', effect: { type: 'stationSpeed', target: 'leather_cutter', mult: 2 } },
+  { zone: 'talabarteria', id: 'camioneta_talabarteria', name: 'Camioneta de la talabartería', icon: '🚚', desc: 'El despacho de la Talabartería lleva el doble por viaje.', cost: 60000000, requires: 'leather_cutter', effect: { type: 'dispatchCapacity', target: 'talabarteria', mult: 2 } },
+  { zone: 'talabarteria', id: 'buriles', name: 'Buriles nuevos', icon: ICON.tooledLeather, desc: 'El Repujado repuja el doble.', cost: 120000000, requires: 'saddler', effect: { type: 'stationSpeed', target: 'leather_tooler', mult: 2 } },
+  { zone: 'talabarteria', id: 'hormas_silla', name: 'Hormas de silla', icon: ICON.saddle, desc: 'El Taller de sillas hace el doble.', cost: 300000000, requires: 'tienda_llanera', effect: { type: 'stationSpeed', target: 'saddler', mult: 2 } },
+  { zone: 'talabarteria', id: 'tienda_carretera', name: 'Tienda en la carretera', icon: ICON.recuerdoLlano, desc: 'La Tienda llanera vende el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'tienda_llanera', effect: { type: 'stationSpeed', target: 'tienda_llanera', mult: 2 } },
+  { zone: 'talabarteria', id: 'silla_coleadora', name: 'Silla coleadora', icon: '🏅', desc: 'Todo lo que vende la Talabartería vale un 50 % más.', cost: 400000000, requires: 'saddler', effect: { type: 'zoneValue', target: 'talabarteria', mult: 1.5 } },
+  { zone: 'talabarteria', id: 'maestria_talabarteria', name: 'Maestría: Talabartería', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'talabarteria', mult: 4 } },
+  { zone: 'talabarteria', id: 'supremacia_talabarteria', name: 'Supremacía: Talabartería', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'talabarteria', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

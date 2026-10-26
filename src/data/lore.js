@@ -204,6 +204,13 @@ export const FACTS = {
   carving_table: ['Cada corte de la mamona tiene nombre: tembladores, raya, osobuco.'],
   lunch_llanero: ['La carne a la llanera se sirve con yuca, papa y plátano.'],
   parranda_grill: ['En una parranda llanera se baila joropo hasta el amanecer.'],
+  // Los Llanos · La Talabartería (v3.35)
+  hide_yard: ['El cuero de res se sala para que no se dañe antes de curtirlo.'],
+  tannery: ['Curtir es volver el cuero crudo un cuero blando que no se pudre.'],
+  leather_cutter: ['De un cuero salen las piezas de una silla, de unas cotizas o un zamarro.'],
+  leather_tooler: ['El cuero repujado lleva flores y figuras hechas a golpe de buril.'],
+  saddler: ['La silla llanera tiene la cabeza alta, para enlazar el ganado.', 'El zamarro es el delantal de cuero del vaquero llanero.'],
+  tienda_llanera: ['Las cotizas son las alpargatas del llanero, de cuero y suela.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -236,6 +243,7 @@ export const PEOPLE = {
   frutal: { icon: '👩🏽‍🌾', name: 'Doña Edilma', role: 'la frutera' },
   cachamera: { icon: '🧔🏾', name: 'Don Arcadio', role: 'el piscicultor' },
   hato_llanero: { icon: '🤠', name: 'Don Florentino', role: 'el vaquero' },
+  talabarteria: { icon: '👴🏽', name: 'Don Ramón', role: 'el talabartero' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -268,6 +276,7 @@ export const WELCOME = {
   frutal: '¡Bienvenido al Frutal, compadre! Aquí el maracuyá se cuelga de las enramadas y se vuelve jugo.',
   cachamera: '¡Epa, compadre, bienvenido a la Cachamera! Aquí las cachamas se crían en estanques, al sol del Llano.',
   hato_llanero: '¡Epa, catire, bienvenido al Hato! Aquí la ternera se asa en vara, como manda el Llano.',
+  talabarteria: '¡Siga, compadre! Aquí el cuero se curte, se corta y se cose, hasta volverse silla de montar.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

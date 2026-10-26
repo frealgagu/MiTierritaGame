@@ -4167,6 +4167,129 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Los Llanos · La Talabartería (v3.35) ---
+
+  // Curtiembre: las pozas de curtido con el agua de tanino y los cueros que se escurren colgados.
+  tannery(g, x, y, ctx) {
+    for (const [px, py] of [[0.4, 0.4], [1.5, 0.4], [0.4, 1.4]]) {
+      box(g, x + px, y + py, 0.9, 0.8, 5, 0x9e9e9e);
+      g.poly(isoPoly([[x + px + 0.08, y + py + 0.08, 5], [x + px + 0.82, y + py + 0.08, 5], [x + px + 0.82, y + py + 0.72, 5], [x + px + 0.08, y + py + 0.72, 5]])).fill(0x6d4c1f);
+    }
+    const a = iso(x + 2.6, y + 1.2, 22);
+    const b = iso(x + 2.6, y + 2.6, 22);
+    for (const p of [a, b]) g.rect(p.x - 1, p.y, 2, 22).fill(PAL.woodDark);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 2, color: PAL.woodDark });
+    for (let k = 1; k < 4; k++) {
+      const p = { x: a.x + (b.x - a.x) * k / 4, y: a.y + (b.y - a.y) * k / 4 };
+      g.poly([p.x - 4, p.y, p.x + 4, p.y, p.x + 5, p.y + 14, p.x - 5, p.y + 14]).fill(PRODUCTS.tanned_leather.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    }
+    this.roofTop = iso(x + 1.4, y + 1.2, 30);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      const p = iso(x + 1.5, y + 1.9);
+      worker(work, p.x, p.y, 0x8d5524);
+      const a2 = this.working ? Math.sin(time * 3) * 4 : 0;
+      work.moveTo(p.x - 3, p.y - 14).lineTo(p.x - 12 + a2, p.y - 4).stroke({ width: 1.6, color: 0x8d6e4a });
+      if (!this.working) return;
+      const q = iso(x + 0.85, y + 0.8, 5);
+      for (let i = 0; i < 3; i++) work.circle(q.x - 6 + i * 6 + Math.sin(time * 4 + i) * 2, q.y + Math.cos(time * 3 + i), 1).fill({ color: 0xd9b98a, alpha: 0.8 });
+    };
+    this.animate(0);
+  },
+
+  // Cortadora de cuero: la ramada con la mesa grande, el cuero extendido y las piezas que salen del molde.
+  leather_cutter(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 23 + ctx.up;
+    box(g, x0 + 0.3, y0 + 0.35, 1.8, 0.75, 8, PAL.wood);
+    g.poly(isoPoly([[x0 + 0.45, y0 + 0.45, 8], [x0 + 1.4, y0 + 0.45, 8], [x0 + 1.4, y0 + 1.0, 8], [x0 + 0.45, y0 + 1.0, 8]])).fill(PRODUCTS.tanned_leather.color);
+    for (let k = 0; k < 3; k++) box(g, x0 + 1.5 + (k % 2) * 0.25, y0 + 0.45 + k * 0.18, 0.22, 0.14, 1.5, PRODUCTS.leather_pieces.color, { z: 8 });
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 11, 0x9aa3a8, 0xd9dde0);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 11);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      const p = iso(x0 + 0.9, y0 + 1.4);
+      worker(work, p.x, p.y, 0x2e6fd1);
+      const a = this.working ? Math.abs(Math.sin(time * 5)) * 3 : 0;
+      work.moveTo(p.x + 3, p.y - 13).lineTo(p.x + 8, p.y - 16 + a).stroke({ width: 1.6, color: 0xcfd8dc });
+    };
+    this.animate(0);
+  },
+
+  // Repujado: la casa del artesano; en el corredor, el banco donde golpea el buril sobre el cuero.
+  leather_tooler(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.8, 1.4, 25, ctx, { wall: 0xf7f4ee, roofColor: 0x9aa3a8, roofH: 12 });
+    door(g, hx, hy, 1.4, 0.7, 15, 0x6d3b1f);
+    windowOnRight(this, g, hx, hy, 1.8, 0.7, 13, 0xfff8e1);
+    box(g, x + 2.2, y + 1.9, 0.6, 0.4, 7, PAL.wood);
+    const p = iso(x + 2.5, y + 2.1, 7);
+    g.rect(p.x - 4, p.y - 2, 8, 3).fill(PRODUCTS.tooled_leather.color);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      const q = iso(x + 2.5, y + 2.55);
+      worker(work, q.x, q.y, 0xf4c430);
+      const up = this.working ? Math.abs(Math.sin(time * 9)) * 4 : 0;
+      work.rect(q.x + 3, q.y - 22 - up, 2, 7).fill(0x8a8f94);
+    };
+    this.animate(0);
+  },
+
+  // Taller de sillas: la casa del talabartero con las sillas de montar en el burro de madera, afuera.
+  saddler(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 27, ctx, { wall: 0xe8d9b8, roofColor: PAL.roof, roofH: 14 });
+    door(g, hx, hy, 1.5, 0.7, 17, 0x6d3b1f);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, 0xfff8e1);
+    for (const [bx, by] of [[2.4, 1.0], [2.4, 1.7], [2.4, 2.4]].slice(0, 2 + Math.min(ctx.tier, 1))) {
+      const p = iso(x + bx, y + by);
+      g.rect(p.x - 6, p.y - 10, 2, 10).fill(PAL.woodDark);
+      g.rect(p.x + 4, p.y - 10, 2, 10).fill(PAL.woodDark);
+      g.moveTo(p.x - 8, p.y - 11).quadraticCurveTo(p.x - 2, p.y - 16, p.x + 2, p.y - 13).quadraticCurveTo(p.x + 6, p.y - 22, p.x + 8, p.y - 18).lineTo(p.x + 8, p.y - 10).lineTo(p.x - 8, p.y - 10).closePath().fill(PRODUCTS.silla_montar.color).stroke(OUTLINE);
+      g.moveTo(p.x, p.y - 10).lineTo(p.x, p.y - 4).stroke({ width: 1, color: 0x3a2418 });
+      g.rect(p.x - 2, p.y - 4, 4, 2).fill(0xb0bec5);
+    }
+  },
+
+  // Tienda llanera: la tienda de la carretera con las sillas, los sombreros y las cotizas colgadas, el pisillo
+  // y la cachama ahumada en el mostrador.
+  tienda_llanera(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.3, 1.5, 28, ctx, { wall: 0xf7f4ee, roofColor: PAL.roof, roofH: 14 });
+    door(g, hx, hy, 1.5, 1.6, 18, 0xd7263d);
+    windowOnRight(this, g, hx, hy, 2.3, 0.75, 14, 0xfff8e1);
+    // Alero con lo que se vende colgado.
+    for (let k = 0; k < 4; k++) {
+      const p = iso(hx + 0.3 + k * 0.5, hy + 1.5, 20);
+      if (k % 2) {
+        g.ellipse(p.x, p.y + 4, 6, 1.8).fill(0x3e2a1a);
+        g.roundRect(p.x - 3, p.y - 1, 6, 5, 2).fill(0x5d4037);
+      } else {
+        g.rect(p.x - 2, p.y, 4, 8).fill(PRODUCTS.leather_pieces.color);
+      }
+    }
+    box(g, x + 0.5, y + 2.1, 1.2, 0.4, 8, PAL.wood);
+    const p1 = iso(x + 0.8, y + 2.3, 8);
+    g.ellipse(p1.x, p1.y - 1, 4, 1.6).fill(PRODUCTS.pisillo.color);
+    const p2 = iso(x + 1.35, y + 2.3, 8);
+    fishOn(g, p2.x, p2.y - 2, 4, PRODUCTS.smoked_cachama.color);
+    const p3 = iso(x + 2.6, y + 2.3);
+    g.moveTo(p3.x - 8, p3.y - 11).quadraticCurveTo(p3.x - 2, p3.y - 16, p3.x + 2, p3.y - 13).quadraticCurveTo(p3.x + 6, p3.y - 22, p3.x + 8, p3.y - 18).lineTo(p3.x + 8, p3.y - 8).lineTo(p3.x - 8, p3.y - 8).closePath().fill(PRODUCTS.silla_montar.color).stroke(OUTLINE);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

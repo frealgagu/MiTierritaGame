@@ -251,6 +251,12 @@ export class Terrain {
           else if (r < 0.065) obj = anthill(rng);
           else if (r < 0.1) obj = rock(rng);
           else if (r < 0.125) obj = cactus(rng);
+        } else if (this.zone.theme === 'hides') {
+          // La Talabartería (v3.35): caballos criollos, samanes, morichales y comejeneras.
+          if (r < 0.02) obj = horse(rng);
+          else if (r < 0.045) obj = saman(rng);
+          else if (r < 0.07) obj = morichePalm(rng);
+          else if (r < 0.09) obj = termiteMound(rng);
         } else if (this.zone.style === 'llanos') {
           // El Hato llanero (v3.34): la sabana con samanes, morichales, comejeneras y garzas.
           if (r < 0.03) obj = saman(rng);
@@ -541,7 +547,8 @@ const FARM_SOIL = {
   palm: (v) => mix(0x6a9a3e, 0x7aa848, v * 0.5), // el palmar sobre pasto (v3.31)
   fruit: (v) => mix(0x8a6a44, 0x7a5c3a, v * 0.4), // la tierra de las enramadas (v3.32)
   ponds: (v) => mix(0x4f8f9a, 0x5a9aa0, v * 0.6),
-  llanos: (v) => mix(0x9ab44e, 0xa8bc58, v * 0.5), // la sabana del Hato llanero (v3.34) // el agua verdosa de los estanques (v3.33)
+  llanos: (v) => mix(0x9ab44e, 0xa8bc58, v * 0.5), // la sabana del Hato llanero (v3.34)
+  hides: (v) => mix(0xb89a6a, 0xa8885a, v * 0.4), // el patio de tierra del saladero (v3.35) // el agua verdosa de los estanques (v3.33)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
@@ -1226,6 +1233,40 @@ export function drawPondTile(g, gx, gy, x0, y0, rng, tier) {
     g.moveTo(q.x - 5, q.y).quadraticCurveTo(q.x, q.y - 5, q.x + 5, q.y).closePath().fill(0x37474f);
     g.poly([q.x - 1, q.y - 3, q.x + 2, q.y - 7, q.x + 3, q.y - 2]).fill(0x263238);
   }
+}
+
+// Cuero templado en su marco (v3.35): cuatro palos, el cuero de res amarrado con cabuya, secándose con sal.
+export function drawHideFrame(g, x, y, scale, rng, salted = true) {
+  const s = scale * (0.9 + rng() * 0.15);
+  shadow(g, x + 2, y + 2, 14 * s, 5 * s);
+  const w = 12 * s;
+  const h = 18 * s;
+  for (const dx of [-w, w]) g.rect(x + dx - 1, y - h - 4 * s, 2, h + 4 * s).fill(0x6b4a2e);
+  g.moveTo(x - w, y - h).lineTo(x + w, y - h).stroke({ width: 1.6, color: 0x6b4a2e });
+  g.moveTo(x - w, y - 2 * s).lineTo(x + w, y - 2 * s).stroke({ width: 1.6, color: 0x6b4a2e });
+  const c = { x, y: y - h / 2 - 1 };
+  g.poly([c.x - 9 * s, c.y - 6 * s, c.x - 4 * s, c.y - 8 * s, c.x, c.y - 9 * s, c.x + 4 * s, c.y - 8 * s, c.x + 9 * s, c.y - 6 * s, c.x + 8 * s, c.y + 6 * s, c.x + 3 * s, c.y + 8 * s, c.x - 3 * s, c.y + 8 * s, c.x - 8 * s, c.y + 6 * s])
+    .fill(rng() < 0.5 ? 0xc9a37a : 0xb88a5a).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  if (salted) for (let k = 0; k < 4; k++) g.circle(c.x - 4 * s + rng() * 8 * s, c.y - 3 * s + rng() * 6 * s, 0.8).fill(0xffffff);
+}
+
+// Caballo criollo (v3.35): de lado, pastando o parado, alazán, bayo o tordillo.
+function horse(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const coat = [0x8d4a24, 0xc49a5a, 0xb8b4ac, 0x5d3a1a][Math.floor(rng() * 4)];
+  const f = rng() < 0.5 ? 1 : -1;
+  const s = 0.9 + rng() * 0.2;
+  shadow(g, 0, 1, 13 * s, 4 * s);
+  for (const lx of [-8, -4, 5, 9]) g.rect(lx * s * f - 1, -10 * s, 2 * s, 10 * s).fill(shade(coat, 0.85));
+  g.roundRect(-11 * s, -18 * s, 22 * s, 9 * s, 4 * s).fill(coat).stroke({ width: 1, color: 0x3a2418, alpha: 0.5 });
+  const graze = rng() < 0.5;
+  const nx = 10 * s * f;
+  if (graze) g.poly([nx - 2 * s * f, -16 * s, nx + 6 * s * f, -6 * s, nx + 9 * s * f, -4 * s, nx + 4 * s * f, -12 * s]).fill(coat).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  else g.poly([nx - 2 * s * f, -16 * s, nx + 4 * s * f, -27 * s, nx + 10 * s * f, -25 * s, nx + 3 * s * f, -14 * s]).fill(coat).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  g.moveTo(-11 * s * f, -17 * s).quadraticCurveTo(-15 * s * f, -12 * s, -13 * s * f, -6 * s).stroke({ width: 2 * s, color: 0x3a2418 });
+  c.addChild(g);
+  return c;
 }
 
 function coconutPalm(rng) {

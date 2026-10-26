@@ -784,3 +784,24 @@ test('El Hato llanero sirve el almuerzo y la parranda con el aceite de la Palma 
   for (const p of ['oil_bottle', 'clean_cachama']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
   for (const p of ['almuerzo_llanero', 'parranda_llanera']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
 });
+
+test('La Talabartería vende el Recuerdo del Llano con el pisillo y la cachama ahumada de la Cachamera (v3.35)', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const game = new Game(createInitialState(0, 'llanos'));
+  for (const z of ['frutal', 'cachamera', 'hato_llanero', 'talabarteria']) game.unlockZone(z);
+  for (const r of ['pisillos', 'ahumadas']) assert.ok(game.state.routes[r], `la ruta ${r} es de los Llanos`);
+  game.state.coins = 1e15;
+  for (const z of ['cachamera', 'talabarteria']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+    game.state.zones[z].dispatch.level = 20;
+  }
+  for (const r of ['pisillos', 'ahumadas']) game.state.routes[r].level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 900; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  for (const p of ['pisillo', 'smoked_cachama']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
+  assert.ok((game.state.stats.sold.recuerdo_llano ?? 0) > 0, 'vende recuerdos del Llano');
+});

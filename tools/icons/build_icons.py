@@ -2638,6 +2638,75 @@ def parranda():
     return layers
 
 
+# ---------- Los Llanos · La Talabartería (v3.35) ----------
+
+def hide_shape(cx, cy, s, color, edge):
+    """Un cuero de res extendido: la silueta con sus cuatro patas y el cuello."""
+    pts_ = [(-30, -14), (-38, -26), (-24, -20), (-10, -24), (0, -30), (10, -24), (24, -20), (38, -26), (30, -14), (34, 6), (40, 22), (24, 16), (10, 24), (0, 30), (-10, 24), (-24, 16), (-40, 22), (-34, 6)]
+    outline = pts([(cx + x * s, cy + y * s) for x, y in pts_])
+    inner = pts([(cx + x * s * 0.92, cy + y * s * 0.92) for x, y in pts_])
+    return [(OUTLINE, [outline]), (color, [inner]), (edge, [ellipse(cx, cy, 18 * s, 12 * s)])]
+
+
+def raw_hide():
+    """Cuero crudo: el cuero de res templado en el marco de palos, secándose al sol con sal."""
+    layers = [('#5d4037', [rect(8, 14, 6, 80), rect(86, 14, 6, 80), rect(8, 14, 84, 5), rect(8, 84, 84, 5)])]
+    layers += hide_shape(50, 52, 1.0, '#c9a37a', '#d9b98a')
+    layers.append(('#8d6e4a', [rib(14, 20, 22, 30, 1), rib(86, 20, 78, 30, 1), rib(14, 84, 22, 74, 1), rib(86, 84, 78, 74, 1)]))
+    layers.append(('#ffffff', [circle(40 + k * 5, 50 + (k % 3) * 3, 1.2) for k in range(5)]))
+    return layers
+
+
+def leather():
+    """Cuero curtido: el cuero café, blando y doblado en rollo, con el borde ondulado."""
+    layers = [(OUTLINE, ['M 10 40 Q 50 26 90 40 L 90 76 Q 50 90 10 76 Z']), ('#8d5524', ['M 13 42 Q 50 29 87 42 L 87 74 Q 50 87 13 74 Z'])]
+    layers += [(OUTLINE, [ellipse(18, 58, 12, 20)]), ('#6d3b1f', [ellipse(18, 58, 9.5, 17.5)]), ('#a0622d', [ellipse(18, 58, 5, 12)])]
+    layers.append(('#a0622d', ['M 30 46 Q 60 38 84 46 L 84 50 Q 60 42 30 50 Z']))
+    return layers
+
+
+def leather_pieces():
+    """Piezas de cuero: las piezas recortadas con su molde y la cuchilla de talabartero."""
+    layers = []
+    for x0, y0, rot, col in [(10, 30, -10, '#a0522d'), (44, 40, 8, '#8d5524'), (24, 62, 4, '#b5683a')]:
+        layers += [(OUTLINE, [rect(x0, y0, 42, 22, rot)]), (col, [rect(x0 + 2.5, y0 + 2.5, 37, 17, rot)])]
+        layers.append(('#5d3a1a', [rect(x0 + 6, y0 + 10, 30, 1.4, rot)]))
+    layers += [(OUTLINE, ['M 70 14 Q 92 16 90 34 L 74 30 Z']), ('#cfd8dc', ['M 72.5 16.5 Q 89 18.5 87.5 31 L 75.5 28 Z']), ('#5d4037', [rect(62, 26, 14, 6, 25)])]
+    return layers
+
+
+def tooled_leather():
+    """Cuero repujado: la pieza con la flor labrada a golpe de buril, y el buril."""
+    layers = [(OUTLINE, [rect(10, 24, 70, 62, -6)]), ('#7b4a22', [rect(13, 27, 64, 56, -6)])]
+    layers.append(('#a0622d', [rect(18, 32, 54, 46, -6)]))
+    for k in range(6):
+        a = math.radians(k * 60)
+        layers.append(('#5d3a1a', [leaf(45, 55, 45 + 14 * math.cos(a), 55 + 14 * math.sin(a), 4)]))
+    layers += [('#3e2412', [circle(45, 55, 4)]), ('#5d3a1a', [rib(22, 38, 30, 38, 1.4), rib(60, 72, 68, 72, 1.4)])]
+    layers += [(OUTLINE, [rect(74, 8, 9, 46, 20)]), ('#b0bec5', [rect(76, 10, 5, 42, 20)])]
+    return layers
+
+
+def saddle():
+    """Silla de montar llanera: la silla de cuero con su cabeza alta, el estribo y la cincha."""
+    layers = [(OUTLINE, ['M 12 52 Q 20 38 34 40 Q 46 44 58 40 Q 66 26 72 20 Q 78 18 80 24 Q 76 34 78 44 Q 86 50 88 60 L 84 66 Q 50 74 16 66 Z'])]
+    layers.append(('#6d3b1f', ['M 15 53 Q 22 41 34 43 Q 46 47 59 42.5 Q 67 29.5 72.5 23 Q 76.5 21.5 77.5 24.5 Q 73.5 34.5 75.5 45.5 Q 83 51 85 59.5 L 82.5 63.5 Q 50 71 17.5 63.5 Z']))
+    layers.append(('#8d5524', ['M 22 52 Q 46 58 72 50 L 72 56 Q 46 64 22 58 Z']))
+    layers.append(('#a0622d', [circle(28 + k * 9, 55 + (k % 2), 1.6) for k in range(5)]))
+    layers += [('#5d4037', [rect(44, 66, 4, 18), rect(30, 64, 3, 22, 10)])]
+    layers += [(OUTLINE, [rect(36, 82, 20, 9)]), ('#b0bec5', [rect(38, 84, 16, 5)])]
+    return layers
+
+
+def recuerdo_llano():
+    """Recuerdo del Llano: la silla de montar con el sombrero llanero, el pisillo y la cachama ahumada."""
+    layers = [(OUTLINE, ['M 8 70 Q 16 56 30 58 Q 44 62 56 56 Q 62 44 68 40 Q 74 40 74 46 Q 72 54 74 62 L 70 76 Q 40 84 10 78 Z']), ('#6d3b1f', ['M 11 71 Q 18 59 30 61 Q 44 65 57 58.5 Q 63 47 68 43 Q 71 43 71 46 Q 69 54 71.5 62 L 68 73.5 Q 40 81 12.5 75.5 Z'])]
+    layers += [(OUTLINE, [ellipse(34, 36, 26, 7)]), ('#3e2a1a', [ellipse(34, 36, 23.5, 5)]), (OUTLINE, ['M 22 34 Q 22 18 34 16 Q 46 18 46 34 Z']), ('#5d4037', ['M 24.5 33 Q 24.5 20.5 34 18.5 Q 43.5 20.5 43.5 33 Z']), ('#f4c430', [rect(24.5, 28, 19, 3)])]
+    layers += fish_shape(84, 30, 22, 12, '#8d5524', '#c68a4a', 90, eye=False)
+    layers += [(OUTLINE, [ellipse(84, 78, 12, 7)]), ('#ffffff', [ellipse(84, 78, 10, 5)]), ('#c6893f', [ellipse(84, 77, 7, 3)])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -2815,6 +2884,12 @@ ICONS = [
     (0xE0AE, 'carne_llanera', carne_llanera),
     (0xE0AF, 'almuerzo_llanero', almuerzo_llanero),
     (0xE0B0, 'parranda', parranda),
+    (0xE0B1, 'raw_hide', raw_hide),
+    (0xE0B2, 'leather', leather),
+    (0xE0B3, 'leather_pieces', leather_pieces),
+    (0xE0B4, 'tooled_leather', tooled_leather),
+    (0xE0B5, 'saddle', saddle),
+    (0xE0B6, 'recuerdo_llano', recuerdo_llano),
 ]
 
 

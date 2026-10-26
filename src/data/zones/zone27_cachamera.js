@@ -35,6 +35,9 @@ export const ZONE27 = {
     jugo: { road: [[25.9, 14.5], [20.3, 14.5]], sign: [24.2, 13.3], text: '⬅ Del Frutal' },
     // La Ruta de la cachama sale de la bodega hacia el Hato llanero (v3.34).
     cachamas: { road: [[24.5, 17.2], [24.5, 16.5], [25.9, 16.5]], sign: [25.3, 15.6], text: 'Cachama al Hato ➜' },
+    // El pisillo y la cachama ahumada salen hacia La Talabartería (v3.35).
+    pisillos: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Pisillo a la Talabartería ⬇' },
+    ahumadas: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Cachama ahumada ⬇' },
   },
   unlockedBy: 'frutal',
   next: 'hato_llanero',

@@ -645,5 +645,25 @@ const HATO_LLANERO = [
   { id: 'lh_final', type: 'sold', product: 'parranda_llanera', amount: 4000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO };
+// Los Llanos · La Talabartería (v3.35): la misma lista que las Hormigas, el Sombrero y Las Ruanas.
+const TALABARTERIA = [
+  { id: 'lt01', type: 'sold', product: 'raw_hide', amount: 50, reward: 1000000 },
+  { id: 'lt02', type: 'level', target: 'hide_yard', level: 10, reward: 2000000 },
+  { id: 'lt03', type: 'unlock', station: 'tannery', reward: 4000000 },
+  { id: 'lt04', type: 'level', target: 'hide_yard:transport', level: 10, reward: 4000000 },
+  { id: 'lt05', type: 'unlock', station: 'leather_cutter', reward: 8000000 },
+  { id: 'lt06', type: 'produced', product: 'leather_pieces', amount: 200, reward: 12000000 },
+  { id: 'lt08', type: 'unlock', station: 'leather_tooler', reward: 25000000 },
+  { id: 'lt09', type: 'level', target: 'dispatch:talabarteria', level: 10, reward: 25000000 },
+  { id: 'lt10', type: 'unlock', station: 'saddler', reward: 50000000 },
+  { id: 'lt11', type: 'sold', product: 'silla_montar', amount: 300, reward: 80000000 },
+  { id: 'lt12', type: 'unlock', station: 'tienda_llanera', reward: 120000000 },
+  { id: 'lt13', type: 'imported', product: 'pisillo', amount: 200, reward: 150000000 },
+  { id: 'lt14', type: 'allLevels', zone: 'talabarteria', level: 25, reward: 200000000 },
+  { id: 'lt07', type: 'research', research: 'cueros_hato', reward: 100000000 },
+  { id: 'lt15', type: 'sold', product: 'recuerdo_llano', amount: 1000, reward: 300000000 },
+  { id: 'lt_final', type: 'sold', product: 'recuerdo_llano', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

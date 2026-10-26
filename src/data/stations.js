@@ -251,6 +251,16 @@ export const STATIONS = [
   { id: 'lunch_llanero', zone: 'hato_llanero', name: 'Mesa del almuerzo llanero', icon: ICON.almuerzoLlanero, in: { carne_llanera: 2 }, imports: [{ product: 'oil_bottle', perCycle: 1, route: 'aceite' }], out: { almuerzo_llanero: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.34' },
   { id: 'parranda_grill', zone: 'hato_llanero', name: 'Asadero de la parranda', icon: ICON.parranda, in: { carne_llanera: 2 }, imports: [{ product: 'oil_bottle', perCycle: 1, route: 'aceite' }, { product: 'clean_cachama', perCycle: 4, route: 'cachamas' }], out: { parranda_llanera: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.34' },
 
+  // Los Llanos · La Talabartería (v3.35): el cuero crudo se curte, se corta, se repuja y se vuelve silla de montar.
+  // La Tienda llanera vende el Recuerdo del Llano: sillas con el pisillo y la cachama ahumada de la Cachamera para
+  // el camino. Mismos números que las Hormigas, el Sombrero y Las Ruanas.
+  { id: 'hide_yard', zone: 'talabarteria', name: 'Saladero de cueros', icon: ICON.rawHide, infinite: true, out: { raw_hide: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.35' },
+  { id: 'tannery', zone: 'talabarteria', name: 'Curtiembre', icon: ICON.leather, in: { raw_hide: 1 }, out: { tanned_leather: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.35' },
+  { id: 'leather_cutter', zone: 'talabarteria', name: 'Cortadora de cuero', icon: ICON.leatherPieces, in: { tanned_leather: 2 }, out: { leather_pieces: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.35' },
+  { id: 'leather_tooler', zone: 'talabarteria', name: 'Repujado', icon: ICON.tooledLeather, in: { leather_pieces: 2 }, out: { tooled_leather: 1 }, cycle: 8, unlockCost: 200000000, upgradeBase: 60000, growth: 1.15, release: '3.35' },
+  { id: 'saddler', zone: 'talabarteria', name: 'Taller de sillas', icon: ICON.saddle, in: { tooled_leather: 1 }, out: { silla_montar: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.35' },
+  { id: 'tienda_llanera', zone: 'talabarteria', name: 'Tienda llanera', icon: ICON.recuerdoLlano, in: { silla_montar: 4 }, imports: [{ product: 'pisillo', perCycle: 1, route: 'pisillos' }, { product: 'smoked_cachama', perCycle: 1, route: 'ahumadas' }], out: { recuerdo_llano: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.35' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

@@ -207,6 +207,14 @@ export const PRODUCTS = {
   almuerzo_llanero: { name: 'Almuerzo llanero', zone: 'hato_llanero', value: 100000, icon: ICON.almuerzoLlanero, color: 0xf4f1e8 },
   parranda_llanera: { name: 'Asado de la parranda', zone: 'hato_llanero', value: 220000, icon: ICON.parranda, color: 0xd9772e },
 
+  // Los Llanos · La Talabartería (v3.35): mismos valores que Las Ruanas.
+  raw_hide: { name: 'Cuero crudo', zone: 'talabarteria', value: 6000, icon: ICON.rawHide, color: 0xc9a37a },
+  tanned_leather: { name: 'Cuero curtido', zone: 'talabarteria', value: 12000, icon: ICON.leather, color: 0x8d5524 },
+  leather_pieces: { name: 'Piezas de cuero', zone: 'talabarteria', value: 30000, icon: ICON.leatherPieces, color: 0xa0522d },
+  tooled_leather: { name: 'Cuero repujado', zone: 'talabarteria', value: 70000, icon: ICON.tooledLeather, color: 0x7b4a22 },
+  silla_montar: { name: 'Silla de montar', zone: 'talabarteria', value: 120000, icon: ICON.saddle, color: 0x6d3b1f },
+  recuerdo_llano: { name: 'Recuerdo del Llano', zone: 'talabarteria', value: 1200000, icon: ICON.recuerdoLlano, color: 0xd9772e },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

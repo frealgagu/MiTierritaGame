@@ -27,7 +27,8 @@ import { ZONE25 } from './zone25_palma.js';
 import { ZONE26 } from './zone26_frutal.js';
 import { ZONE27 } from './zone27_cachamera.js';
 import { ZONE28 } from './zone28_hato_llanero.js';
+import { ZONE29 } from './zone29_talabarteria.js';
 
 // Todas las regiones (cada zona dice la suya; sin `region`, es del Eje Cafetero).
-export const ZONE_LIST = [ZONE1, ZONE2, ZONE3, ZONE4, ZONE5, ZONE6, ZONE7, ZONE8, ZONE9, ZONE10, ZONE11, ZONE12, ZONE13, ZONE14, ZONE15, ZONE16, ZONE17, ZONE18, ZONE19, ZONE20, ZONE21, ZONE22, ZONE23, ZONE24, ZONE25, ZONE26, ZONE27, ZONE28];
+export const ZONE_LIST = [ZONE1, ZONE2, ZONE3, ZONE4, ZONE5, ZONE6, ZONE7, ZONE8, ZONE9, ZONE10, ZONE11, ZONE12, ZONE13, ZONE14, ZONE15, ZONE16, ZONE17, ZONE18, ZONE19, ZONE20, ZONE21, ZONE22, ZONE23, ZONE24, ZONE25, ZONE26, ZONE27, ZONE28, ZONE29];
 export const ZONES_BY_ID = Object.fromEntries(ZONE_LIST.map((z) => [z.id, z]));

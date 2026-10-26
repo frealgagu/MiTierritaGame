@@ -180,6 +180,12 @@ export const ICON = {
   carneLlanera: '\uE0AE', // Carne a la llanera: la tabla con la carne asada trinchada, el cuchillo y el ají
   almuerzoLlanero: '\uE0AF', // Almuerzo llanero: el plato con la carne a la llanera, la yuca frita, el plátano y la papa
   parranda: '\uE0B0', // Asado de la parranda: el arpa llanera junto al asado, con la carne y la cachama en las varas
+  rawHide: '\uE0B1', // Cuero crudo: el cuero de res templado en el marco de palos, secándose al sol con sal
+  leather: '\uE0B2', // Cuero curtido: el cuero café, blando y doblado en rollo, con el borde ondulado
+  leatherPieces: '\uE0B3', // Piezas de cuero: las piezas recortadas con su molde y la cuchilla de talabartero
+  tooledLeather: '\uE0B4', // Cuero repujado: la pieza con la flor labrada a golpe de buril, y el buril
+  saddle: '\uE0B5', // Silla de montar llanera: la silla de cuero con su cabeza alta, el estribo y la cincha
+  recuerdoLlano: '\uE0B6', // Recuerdo del Llano: la silla de montar con el sombrero llanero, el pisillo y la cachama ahumada
 };
 
 export const ICON_FONT = 'Cafetal Icons';
