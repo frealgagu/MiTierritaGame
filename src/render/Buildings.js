@@ -298,6 +298,30 @@ function ramada(view, g, x0, y0, w, d, H, roofColor = 0x9aa3a8) {
   view.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 10);
 }
 
+// Tambo wounaan (v3.42): la casa redonda sobre pilotes, abierta, con el techo cónico de palma. (gx, gy): el
+// centro, en casillas; r: el radio en casillas. Devuelve el centro del piso, en píxeles.
+function tamboHouse(view, g, gx, gy, r, ctx, lift = 12) {
+  const c = iso(gx, gy, 0);
+  const rx = r * 32;
+  const ry = r * 16;
+  for (let k = 0; k < 6; k++) {
+    const a = (k / 6) * Math.PI * 2 + 0.3;
+    g.rect(c.x + Math.cos(a) * rx * 0.85 - 1.2, c.y + Math.sin(a) * ry * 0.85 - lift, 2.4, lift).fill(0x5d4037);
+  }
+  g.ellipse(c.x, c.y - lift, rx, ry).fill(0x8d6e4a).stroke(OUTLINE);
+  g.ellipse(c.x, c.y - lift - 1.5, rx * 0.92, ry * 0.92).fill(0xa1887f);
+  const H = 22 + ctx.up;
+  for (const a of [Math.PI * 0.15, Math.PI * 0.85]) g.rect(c.x + Math.cos(a) * rx * 0.85 - 1.2, c.y + Math.sin(a) * ry * 0.85 - lift - H, 2.4, H).fill(0x5d4037);
+  const floor = { x: c.x, y: c.y - lift - 2 };
+  view.tamboRoof = () => {
+    const top = c.y - lift - H;
+    g.moveTo(c.x - rx * 1.15, top).lineTo(c.x, top - 30).lineTo(c.x + rx * 1.15, top).quadraticCurveTo(c.x, top + ry * 0.7, c.x - rx * 1.15, top).fill(0xc9a96b).stroke(OUTLINE);
+    for (let k = 1; k < 4; k++) g.moveTo(c.x - rx * 1.15 * (1 - k / 4), top - 30 * k / 4).lineTo(c.x + rx * 1.15 * (1 - k / 4), top - 30 * k / 4).stroke({ width: 0.8, color: 0xa1854f });
+    view.roofTop = { x: c.x, y: top - 30 };
+  };
+  return floor;
+}
+
 const DRAW = {
   // Beneficiadero: casa con tolva y tanques de lavado.
   wetmill(g, x, y, ctx) {
@@ -5133,6 +5157,159 @@ const DRAW = {
       }
       const wp = iso(x + 1.45, y + 2.95);
       worker(anim, wp.x, wp.y, 0xf7f4ee);
+    };
+    this.animate(0);
+  },
+
+  // --- Costa Pacífica · El Werregue (v3.42): los tambos wounaan del río San Juan ---
+
+  // Desfibradora de werregue: la ramada donde se abren los cogollos y se sacan las tiras; los manojos de fibra
+  // cuelgan de la vara.
+  werregue_stripper(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    const pile = iso(x + 0.55, y + 2.45);
+    for (let k = 0; k < 4; k++) g.moveTo(pile.x - 8 + k * 3, pile.y).lineTo(pile.x - 2 + k * 4, pile.y - 14).stroke({ width: 2.4, color: PRODUCTS.werregue_leaf.color, cap: 'round' });
+    box(g, x0 + 0.5, y0 + 0.7, 1.4, 0.5, 6, 0x8d6e4a);
+    ramada(this, g, x0, y0, 2.3, 1.5, 28 + ctx.up, 0xc9a96b);
+    const bar0 = iso(x0 + 0.1, y0 + 1.5, 22 + ctx.up);
+    const bar1 = iso(x0 + 2.2, y0 + 1.5, 22 + ctx.up);
+    g.moveTo(bar0.x, bar0.y).lineTo(bar1.x, bar1.y).stroke({ width: 1.6, color: 0x6b4a2e });
+    const n = 3 + Math.min(ctx.tier, 3);
+    for (let k = 0; k < n; k++) {
+      const f = (k + 0.5) / n;
+      const px = bar0.x + (bar1.x - bar0.x) * f;
+      const py = bar0.y + (bar1.y - bar0.y) * f;
+      for (let i = -1; i <= 1; i++) g.moveTo(px, py).lineTo(px + i * 1.5, py + 14).stroke({ width: 1, color: PRODUCTS.werregue_fiber.color });
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, side] of [[0, -1], [1, 1]]) {
+        const wp = iso(x0 + 0.7 + k * 0.9, y0 + 1.4);
+        worker(anim, wp.x, wp.y, side < 0 ? 0xe5737f : 0x4fb3bf);
+        const pull = this.working ? (Math.sin(time * 3 + k * 2) + 1) * 3 : 2;
+        anim.moveTo(wp.x - 2, wp.y - 14).lineTo(wp.x + 6 * side + pull * side, wp.y - 16).stroke({ width: 1.2, color: PRODUCTS.werregue_fiber.color });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Tintorería: el fogón con las dos ollas (la negra de jagua y la roja de achiote) y las madejas de fibra
+  // teñida colgadas a secar.
+  werregue_dyer(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.4;
+    box(g, x0 + 0.3, y0 + 0.4, 1.6, 0.8, 8, 0xa1887f);
+    this.pots = [];
+    for (const [f, col] of [[0.3, 0x2b2018], [0.7, 0xb23a2a]]) {
+      const q = iso(x0 + 0.3 + 1.6 * f, y0 + 0.8, 8);
+      g.moveTo(q.x - 8, q.y - 10).lineTo(q.x - 7, q.y).quadraticCurveTo(q.x, q.y + 3, q.x + 7, q.y).lineTo(q.x + 8, q.y - 10).closePath().fill(0x37474f).stroke(OUTLINE);
+      g.ellipse(q.x, q.y - 10, 8, 3).fill(col).stroke(OUTLINE);
+      this.pots.push(q);
+    }
+    // Las cuerdas con las madejas.
+    const a = iso(x + 0.3, y + 2.4, 0);
+    const b = iso(x + 2.7, y + 2.4, 0);
+    for (const p of [a, b]) g.rect(p.x - 1.2, p.y - 24, 2.4, 24).fill(0x6b4a2e);
+    g.moveTo(a.x, a.y - 22).lineTo(b.x, b.y - 22).stroke({ width: 1, color: 0x8d6e4a });
+    const cols = [0x2b2018, 0xb23a2a, 0x2b2018, PRODUCTS.werregue_fiber.color, 0xb23a2a, 0x2b2018];
+    for (let k = 0; k < 4 + Math.min(ctx.tier, 2); k++) {
+      const f = (k + 0.5) / (4 + Math.min(ctx.tier, 2));
+      const px = a.x + (b.x - a.x) * f;
+      const py = a.y + (b.y - a.y) * f - 21;
+      g.poly([px - 2.5, py, px + 2.5, py, px + 1.8, py + 13, px - 1.8, py + 13]).fill(cols[k]).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+    }
+    this.smokePoints = this.pots.map((q) => ({ x: q.x, y: q.y - 14 }));
+    this.roofTop = iso(x0 + 1.1, y0 + 0.8, 30);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x0 + 1.1, y0 + 1.55);
+      worker(anim, wp.x, wp.y, 0xf2c14e);
+      const stir = this.working ? time * 2.5 : 0;
+      const q = this.pots[Math.floor(time / 3) % 2];
+      anim.moveTo(q.x + Math.cos(stir) * 4, q.y - 10).lineTo(q.x - 6, q.y - 24).stroke({ width: 1.6, color: 0xbc8a5f });
+    };
+    this.animate(0);
+  },
+
+  // Torcedora: el tambo pequeño donde la tejedora tuerce la fibra sobre el muslo; los rollos de hebra se apilan.
+  werregue_twister(g, x, y, ctx) {
+    const floor = tamboHouse(this, g, x + 1.4, y + 1.2, 1.0, ctx);
+    const rolls = 2 + Math.min(ctx.tier, 3);
+    for (let k = 0; k < rolls; k++) g.circle(floor.x + 10 + (k % 3) * 6, floor.y + 2 - Math.floor(k / 3) * 5, 3).fill([0x2b2018, 0xb23a2a, PRODUCTS.werregue_fiber.color][k % 3]).stroke({ width: 0.5, color: 0x3a2418 });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.tamboRoof();
+    this.animate = (time) => {
+      anim.clear();
+      const p = { x: floor.x - 6, y: floor.y };
+      anim.roundRect(p.x - 3.2, p.y - 12, 6.4, 8, 2).fill(0xe5737f);
+      anim.rect(p.x - 1, p.y - 4, 9, 2.4).fill(0x3d3d5c);
+      anim.circle(p.x, p.y - 14.5, 2.8).fill(0x6d4c32);
+      anim.rect(p.x - 2.8, p.y - 16, 5.6, 1.6).fill(0x2b2018);
+      const roll = this.working ? Math.sin(time * 4) * 3 : 0;
+      anim.moveTo(p.x + 3 + roll, p.y - 6).lineTo(p.x + 9, p.y - 5).stroke({ width: 1.4, color: PRODUCTS.werregue_thread.color });
+    };
+    this.animate(0);
+  },
+
+  // Tejedoras: el tambo grande donde las tejedoras wounaan tejen los jarrones; los jarrones terminados
+  // esperan en el piso.
+  werregue_weaver(g, x, y, ctx) {
+    const floor = tamboHouse(this, g, x + 1.5, y + 1.3, 1.25, ctx);
+    const jars = 2 + Math.min(ctx.tier, 3);
+    const jar = (jx, jy, sc) => {
+      g.moveTo(jx - 2 * sc, jy - 11 * sc).lineTo(jx + 2 * sc, jy - 11 * sc).quadraticCurveTo(jx + 7 * sc, jy - 7 * sc, jx + 6 * sc, jy - 3 * sc).quadraticCurveTo(jx + 4 * sc, jy, jx, jy).quadraticCurveTo(jx - 4 * sc, jy, jx - 6 * sc, jy - 3 * sc).quadraticCurveTo(jx - 7 * sc, jy - 7 * sc, jx - 2 * sc, jy - 11 * sc).fill(PRODUCTS.werregue_jar.color).stroke({ width: 0.6, color: 0x3a2418 });
+      g.moveTo(jx - 5.5 * sc, jy - 5 * sc).lineTo(jx + 5.5 * sc, jy - 5 * sc).stroke({ width: 1, color: 0x2b2018 });
+      g.moveTo(jx - 5 * sc, jy - 3 * sc).lineTo(jx + 5 * sc, jy - 3 * sc).stroke({ width: 0.8, color: 0xb23a2a });
+    };
+    for (let k = 0; k < jars; k++) jar(floor.x - 16 + k * 8, floor.y + 6 + (k % 2) * 3, 1);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.tamboRoof();
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, dx] of [[0, -8], [1, 10]]) {
+        const p = { x: floor.x + dx, y: floor.y - 2 };
+        anim.roundRect(p.x - 3.2, p.y - 12, 6.4, 8, 2).fill(k ? 0x4fb3bf : 0xf2c14e);
+        anim.circle(p.x, p.y - 14.5, 2.8).fill(0x6d4c32);
+        anim.rect(p.x - 2.8, p.y - 16, 5.6, 1.6).fill(0x2b2018);
+        const w = this.working ? Math.sin(time * 3 + k * 2) * 1.5 : 0;
+        anim.ellipse(p.x + 5 * (k ? -1 : 1), p.y - 4 + w * 0.3, 4, 3).fill(PRODUCTS.werregue_jar.color).stroke({ width: 0.5, color: 0x3a2418 });
+        anim.moveTo(p.x + 2 * (k ? -1 : 1), p.y - 8).lineTo(p.x + 5 * (k ? -1 : 1) + w, p.y - 6).stroke({ width: 1, color: 0x2b2018 });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Tienda de artesanías: la casa de tablas sobre pilotes (turquesa) con los jarrones en los estantes del
+  // corredor, el letrero y los visitantes que compran.
+  tienda_pacifico(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 2.1, 1.3, 22, ctx, { wall: 0x4fb3bf, trim: 0xf2c14e });
+    box(g, x + 0.5, y + 2.0, 1.9, 0.4, 12, 0x8d6e4a);
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 2); k++) {
+      const q = iso(x + 0.7 + k * 0.38, y + 2.2, 12);
+      g.moveTo(q.x - 1.5, q.y - 9).lineTo(q.x + 1.5, q.y - 9).quadraticCurveTo(q.x + 5, q.y - 6, q.x + 4, q.y - 2).quadraticCurveTo(q.x, q.y + 1, q.x - 4, q.y - 2).quadraticCurveTo(q.x - 5, q.y - 6, q.x - 1.5, q.y - 9).fill(PRODUCTS.werregue_jar.color).stroke({ width: 0.5, color: 0x3a2418 });
+      g.moveTo(q.x - 4, q.y - 4.5).lineTo(q.x + 4, q.y - 4.5).stroke({ width: 1, color: 0x2b2018 });
+    }
+    const sign = iso(x + 1.4, y + 1.5, 44 + ctx.up);
+    g.rect(sign.x - 16, sign.y - 6, 32, 9).fill(0xf7f4ee).stroke(OUTLINE);
+    g.rect(sign.x - 13, sign.y - 3, 26, 2).fill(0xb23a2a);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const f = this.working ? (Math.sin(time * 0.5) + 1) / 2 : 0.3;
+      for (const [k, sh] of [[0, 0xe5737f], [1, 0x6cbf6c]]) {
+        const p = iso(x + 0.8 + f * 1.4 + k * 0.5, y + 2.85 + k * 0.1);
+        worker(anim, p.x, p.y, sh);
+      }
     };
     this.animate(0);
   },

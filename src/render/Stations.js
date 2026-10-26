@@ -3,7 +3,7 @@ import { iso, isoPoly, depth, shade } from './iso.js';
 import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPlantainPlant, drawAzoteaBed, drawMangroveTree, drawPassionVine, drawPondTile, drawHideFrame, drawPotatoPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPlantainPlant, drawAzoteaBed, drawMangroveTree, drawWerreguePalm, drawPassionVine, drawPondTile, drawHideFrame, drawPotatoPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -174,7 +174,7 @@ export class FarmView extends StationView {
           continue;
         }
         // Los cacaos son más grandes: uno por casilla.
-        for (const ox of this.theme === 'cacao' || this.theme === 'guava' || this.theme === 'ants' || this.theme === 'coconut' || this.theme === 'clay' || this.theme === 'palm' || this.theme === 'plantain' || this.theme === 'azotea' || this.theme === 'fruit' || this.theme === 'hides' ? [0.5] : [0.28, 0.75]) {
+        for (const ox of this.theme === 'cacao' || this.theme === 'guava' || this.theme === 'ants' || this.theme === 'coconut' || this.theme === 'clay' || this.theme === 'palm' || this.theme === 'plantain' || this.theme === 'azotea' || this.theme === 'werregue' || this.theme === 'fruit' || this.theme === 'hides' ? [0.5] : [0.28, 0.75]) {
           const p = iso(gx + ox, gy + 0.5);
           this.bushes.push(p);
           if (this.theme === 'cane') drawCaneClump(g, p.x, p.y, scale, rng);
@@ -187,6 +187,7 @@ export class FarmView extends StationView {
           else if (this.theme === 'barley') drawBarley(g, p.x, p.y, scale, rng, tier);
           else if (this.theme === 'hides') drawHideFrame(g, p.x, p.y, 0.8 + tier * 0.04, rng, (gx + gy) % 2 === 0);
           else if (this.theme === 'fruit') drawPassionVine(g, p.x, p.y, 0.75 + tier * 0.05, rng, 2 + Math.min(tier, 3));
+          else if (this.theme === 'werregue') drawWerreguePalm(g, p.x, p.y, 0.8 + tier * 0.05, rng, tier);
           else if (this.theme === 'azotea') drawAzoteaBed(g, p.x, p.y, 0.8 + tier * 0.04, rng, tier);
           else if (this.theme === 'plantain') drawPlantainPlant(g, p.x, p.y, 0.75 + tier * 0.06, rng, Math.min(tier, 3));
           else if (this.theme === 'palm') drawOilPalm(g, p.x, p.y, 0.6 + tier * 0.06, rng, 1 + Math.min(tier, 4));

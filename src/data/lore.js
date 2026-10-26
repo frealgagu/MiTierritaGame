@@ -247,6 +247,13 @@ export const FACTS = {
   encocado_pot: ['El encocado se cocina en leche de coco, con aliño de azotea.'],
   piangua_lunch: ['El arroz con piangua se sirve con patacón y una tajada de limón.'],
   cazuela_kitchen: ['La cazuela lleva piangua, pescado, leche de coco y patacón.'],
+  // Costa Pacífica · El Werregue (v3.42)
+  werregue_palms: ['El werregue es una palma espinosa de la selva del Pacífico.', 'Los wounaan tejen el werregue desde hace siglos, en el río San Juan.'],
+  werregue_stripper: ['Del cogollo tierno se sacan las tiras de fibra, finas como hilo.'],
+  werregue_dyer: ['La fibra se tiñe de negro con jagua y de rojo con achiote.'],
+  werregue_twister: ['La fibra se tuerce sobre el muslo hasta volverse una hebra fuerte.'],
+  werregue_weaver: ['Un jarrón de werregue puede tardar meses en tejerse.', 'El tejido es tan apretado que algunos jarrones aguantan agua.'],
+  tienda_pacifico: ['Cada jarrón lleva dibujos de animales, ríos y caminos de la selva.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -285,6 +292,7 @@ export const PEOPLE = {
   azotea: { icon: '👩🏿‍🍳', name: 'Doña Rosalba', role: 'la cocinera' },
   bahia: { icon: '🧔🏿', name: 'Don Cupertino', role: 'el pescador' },
   manglar: { icon: '👩🏿', name: 'Doña Ligia', role: 'la piangüera' },
+  werregue: { icon: '👩🏾', name: 'Doña Aminta', role: 'la tejedora wounaan' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -323,6 +331,7 @@ export const WELCOME = {
   azotea: '¡Bienvenido a la Azotea, mijo! En las canoas alzadas sembramos las hierbas que le dan sabor a todo.',
   bahia: '¡Bienvenido a la Bahía, primo! Aquí salimos en lancha por el pargo, y en la playa lo dejamos listo.',
   manglar: '¡Bienvenido al Manglar, mijo! Cuando baja la marea, las piangüeras salimos a sacar la concha del barro.',
+  werregue: '¡Bienvenido, hermano! Aquí tejemos el werregue como nos enseñaron las abuelas wounaan.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

@@ -3173,6 +3173,89 @@ def cazuela():
     return layers
 
 
+# ---------- Costa Pacífica · El Werregue (v3.42) ----------
+
+def werregue_pattern(cx, cy, w, h, light='#d9a85a', dark='#2b2018', red='#b23a2a'):
+    """El tejido del werregue: bandas de fibra clara con grecas negras en zigzag y una franja roja."""
+    layers = [(light, [rect(cx - w / 2, cy - h / 2, w, h)])]
+    zz = []
+    n = 6
+    for i in range(n):
+        x0 = cx - w / 2 + w * i / n
+        zz.append(poly(x0, cy - h * 0.1, x0 + w / n / 2, cy - h * 0.35, x0 + w / n, cy - h * 0.1, x0 + w / n, cy + 0.02 * h, x0 + w / n / 2, cy - h * 0.22, x0, cy + 0.02 * h))
+    layers.append((dark, zz))
+    layers.append((red, [rect(cx - w / 2, cy + h * 0.18, w, h * 0.12)]))
+    layers.append((dark, [rect(cx - w / 2, cy + h * 0.36, w, h * 0.06)]))
+    return layers
+
+
+def werregue_palm():
+    """Palmar de werregue: la palma espinosa de la selva, con el cogollo tierno que se corta para la fibra."""
+    layers = [('#5d8f3a', [ellipse(50, 94, 26, 5)])]
+    layers += [(OUTLINE, [rect(45, 44, 10, 50)]), ('#5d4a36', [rect(47, 46, 6, 47)])]
+    layers.append(('#2b2018', [rib(46 + (k % 2) * 8, 50 + k * 5, 42 + (k % 2) * 16, 48 + k * 5, 1) for k in range(8)]))
+    fronds = [(50, 44, 6, 40, 7), (50, 44, 94, 40, 7), (50, 42, 14, 14, 7), (50, 42, 86, 14, 7), (50, 40, 36, 4, 6), (50, 40, 64, 4, 6)]
+    for x0, y0, x1, y1, w in fronds:
+        layers += [(OUTLINE, [leaf(x0, y0, x1, y1, w + 1.5)]), ('#2e7d32' if x1 < 50 else '#43a047', [leaf(x0, y0, x1, y1, w)])]
+    layers.append(('#1b5e20', [rib(x0, y0, x1, y1, 1) for x0, y0, x1, y1, w in fronds]))
+    layers += [(OUTLINE, [leaf(50, 44, 50, 6, 5.5)]), ('#c5e1a5', [leaf(50, 44, 50, 6, 4)])]
+    return layers
+
+
+def werregue_fiber():
+    """Fibra de werregue: el manojo de tiras finas y claras, recién sacadas del cogollo."""
+    layers = []
+    for k in range(9):
+        x0 = 30 + k * 4.5
+        layers += [(OUTLINE, ['M %.1f 10 Q %.1f 50 %.1f 92 L %.1f 92 Q %.1f 50 %.1f 10 Z' % (x0, x0 - 8 + k, x0 - 10 + k * 2, x0 - 7 + k * 2, x0 - 5 + k, x0 + 3)])]
+        layers += [('#e0cf9a' if k % 2 else '#efe2b8', ['M %.1f 12 Q %.1f 50 %.1f 90 L %.1f 90 Q %.1f 50 %.1f 12 Z' % (x0 + 0.6, x0 - 7.4 + k, x0 - 9.4 + k * 2, x0 - 7.6 + k * 2, x0 - 5.6 + k, x0 + 2.4)])]
+    layers += [(OUTLINE, [rect(26, 40, 46, 8)]), ('#8d6e4a', [rect(28, 41.5, 42, 5)])]
+    return layers
+
+
+def dyed_werregue():
+    """Fibra teñida: las madejas negras (de jagua) y rojas (de achiote) colgadas a secar, con la jagua y el achiote."""
+    layers = [('#8d6e4a', [rect(6, 12, 88, 5)])]
+    for cx, col in [(22, '#2b2018'), (40, '#b23a2a'), (58, '#2b2018'), (76, '#e0cf9a')]:
+        layers += [(OUTLINE, ['M %d 14 Q %d 50 %d 76 L %d 76 Q %d 50 %d 14 Z' % (cx - 5, cx - 9, cx - 5, cx + 5, cx + 9, cx + 5)]), (col, ['M %d 17 Q %d 50 %.1f 73.5 L %.1f 73.5 Q %d 50 %d 17 Z' % (cx - 3, cx - 6.5, cx - 3.5, cx + 3.5, cx + 6.5, cx + 3)])]
+    layers += [(OUTLINE, [circle(20, 88, 8)]), ('#5d6b1f', [circle(20, 88, 6.5)]), (OUTLINE, [circle(80, 88, 8)]), ('#c62828', [circle(80, 88, 6.5)]), ('#ffcdd2', [circle(78, 86, 1.6)])]
+    return layers
+
+
+def werregue_thread():
+    """Hebra de werregue: los rollos de hebra torcida, negra, roja y clara, listos para tejer."""
+    layers = []
+    for cx, cy, col in [(30, 64, '#2b2018'), (66, 64, '#b23a2a'), (48, 36, '#e0cf9a')]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 20, 16)]), (col, [ellipse(cx, cy, 17.5, 13.5)])]
+        layers.append((shade_hex(col, 1.4) if col != '#2b2018' else '#5d4a36', [rib(cx - 14, cy - 6 + k * 4, cx + 14, cy - 8 + k * 4, 1) for k in range(4)]))
+    layers += [(OUTLINE, [rib(80, 70, 94, 92, 4)]), ('#b23a2a', [rib(80, 70, 94, 92, 2)])]
+    return layers
+
+
+def werregue_jar():
+    """Jarrón de werregue: el jarrón tejido, de boca angosta, con sus grecas negras y rojas."""
+    body = 'M 38 10 L 62 10 L 60 22 Q 90 34 88 62 Q 86 92 50 94 Q 14 92 12 62 Q 10 34 40 22 Z'
+    layers = [(OUTLINE, [body]), ('#d9a85a', ['M 40.5 12.5 L 59.5 12.5 L 57.8 23.8 Q 87.5 35 85.5 62 Q 83.6 89.5 50 91.5 Q 16.4 89.5 14.5 62 Q 12.5 35 42.2 23.8 Z'])]
+    layers += werregue_pattern(50, 46, 66, 14)
+    layers += werregue_pattern(50, 70, 70, 14, red='#2b2018', dark='#b23a2a')
+    layers.append(('#2b2018', [rect(40.5, 12.5, 19, 3)]))
+    layers.append(('#b8874a', [rib(18 + k * 0, 34 + k * 8, 82, 34 + k * 8, 0.6) for k in range(1)]))
+    return layers
+
+
+def recuerdo_pacifico():
+    """Recuerdo del Pacífico: el jarrón de werregue con el pescado seco y el pargo ahumado, envueltos para el viaje."""
+    layers = []
+    body = 'M 30 18 L 48 18 L 47 26 Q 66 34 66 56 Q 64 82 39 84 Q 14 82 12 56 Q 12 34 31 26 Z'
+    layers += [(OUTLINE, [body]), ('#d9a85a', ['M 32.5 20.5 L 45.5 20.5 L 44.6 27.8 Q 63.5 35.5 63.5 56 Q 61.7 79.5 39 81.5 Q 16.3 79.5 14.5 56 Q 14.5 35.5 33.4 27.8 Z'])]
+    layers += werregue_pattern(39, 48, 46, 12)
+    layers += werregue_pattern(39, 66, 48, 10, red='#2b2018', dark='#b23a2a')
+    layers += [(OUTLINE, [leaf(58, 92, 96, 70, 12)]), ('#2e7d32', [leaf(58, 92, 96, 70, 10)])]
+    layers += fish_shape(80, 66, 30, 12, '#a0522d', '#d9893a', -30, eye=False)
+    layers += [(OUTLINE, ['M 76 20 Q 66 34 72 52 L 84 52 Q 90 34 80 20 Z']), ('#d7c49e', ['M 76.5 23 Q 68.5 35 73.8 49.5 L 82.2 49.5 Q 87.5 35 79.5 23 Z']), ('#ffffff', [circle(76, 34, 1), circle(80, 42, 1)])]
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -3390,6 +3473,12 @@ ICONS = [
     (0xE0D5, 'encocado', encocado),
     (0xE0D6, 'arroz_piangua', arroz_piangua),
     (0xE0D7, 'cazuela', cazuela),
+    (0xE0D8, 'werregue_palm', werregue_palm),
+    (0xE0D9, 'werregue_fiber', werregue_fiber),
+    (0xE0DA, 'dyed_werregue', dyed_werregue),
+    (0xE0DB, 'werregue_thread', werregue_thread),
+    (0xE0DC, 'werregue_jar', werregue_jar),
+    (0xE0DD, 'recuerdo_pacifico', recuerdo_pacifico),
 ]
 
 

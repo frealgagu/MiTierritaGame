@@ -149,7 +149,7 @@ export class Terrain {
             const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
-        } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea')) {
+        } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea' || this.zone.theme === 'werregue')) {
           // Hojarasca bajo los cacaos (y bajo el platanal del Pacífico, v3.38).
           for (let k = 0; k < 2; k++) {
             const p = iso(gx + rng(), gy + rng());
@@ -370,6 +370,13 @@ export class Terrain {
           else if (r < 0.055) obj = egret(rng);
           else if (r < 0.075) obj = coconutPalm(rng);
           else if (r < 0.088) obj = ceiba(rng);
+        } else if (this.zone.theme === 'werregue') {
+          // El Werregue (v3.42): la selva del río San Juan, con algún tambo wounaan, chontaduros, heliconias y borojós.
+          if (r < 0.012) obj = tambo(rng);
+          else if (r < 0.04) obj = chontaduroPalm(rng);
+          else if (r < 0.065) obj = heliconia(rng);
+          else if (r < 0.085) obj = borojoTree(rng);
+          else if (r < 0.1) obj = banana(rng);
         } else if (this.zone.theme === 'mangrove') {
           // El Manglar (v3.41): mangles sueltos, garzas, heliconias y palmas de coco.
           if (r < 0.04) obj = mangroveTree(rng);
@@ -586,6 +593,7 @@ const FARM_SOIL = {
   azotea: (v) => mix(0x6a5a3a, 0x5a4a30, v * 0.5), // el patio de las azoteas (v3.39)
   bay: (v) => mix(0x2f86a8, 0x3a94b4, v * 0.6), // el mar de la Bahía (v3.40)
   mangrove: (v) => mix(0x5d5040, 0x6a5c48, v * 0.5), // el barro del manglar (v3.41)
+  werregue: (v) => mix(0x4f5a30, 0x5a6638, v * 0.5), // el suelo del palmar de werregue (v3.42)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
@@ -1215,6 +1223,41 @@ function mangroveTree(rng) {
   const c = new Container();
   const g = new Graphics();
   drawMangroveTree(g, 0, 0, 0.9, rng);
+  c.addChild(g);
+  return c;
+}
+
+// Palma de werregue (v3.42): el tronco erizado de espinas negras y la corona de hojas; con cada hito, el
+// cogollo tierno, claro, que se corta para sacar la fibra.
+export function drawWerreguePalm(g, x, y, scale, rng, tier = 0) {
+  const s = scale * (0.9 + rng() * 0.2);
+  const h = (22 + rng() * 6) * s;
+  shadow(g, x + 3, y + 2, 14 * s, 5 * s);
+  g.rect(x - 2.2 * s, y - h, 4.4 * s, h).fill(0x5d4a36).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  for (let yy = y - 3; yy > y - h + 2; yy -= 3.5 * s) {
+    g.moveTo(x - 2.2 * s, yy).lineTo(x - 4.5 * s, yy - 1.5 * s).stroke({ width: 0.8, color: 0x1a1410 });
+    g.moveTo(x + 2.2 * s, yy - 1.5 * s).lineTo(x + 4.5 * s, yy - 3 * s).stroke({ width: 0.8, color: 0x1a1410 });
+  }
+  const top = y - h;
+  for (let i = 0; i < 8; i++) {
+    const a = -Math.PI + (i / 7) * Math.PI;
+    g.moveTo(x, top).quadraticCurveTo(x + Math.cos(a) * 9 * s, top - 10 * s, x + Math.cos(a) * 18 * s, top + Math.sin(a) * 6 * s + 6 * s).stroke({ width: 2.6, color: i % 2 ? 0x2e6b22 : 0x43a047, cap: 'round' });
+  }
+  if (tier >= 1) g.moveTo(x, top).lineTo(x + 1, top - (8 + Math.min(tier, 3) * 2) * s).stroke({ width: 2.4, color: 0xc5e1a5, cap: 'round' });
+}
+
+// Tambo wounaan (v3.42): la casa redonda sobre pilotes, abierta, con el techo cónico de palma.
+function tambo(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const s = 0.9 + rng() * 0.2;
+  shadow(g, 2, 2, 22 * s, 8 * s);
+  for (const dx of [-14, -6, 6, 14]) g.rect(dx * s - 1, -12 * s, 2, 12 * s).fill(0x5d4037);
+  g.ellipse(0, -12 * s, 18 * s, 6 * s).fill(0x8d6e4a).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.6 });
+  for (const dx of [-14, 14]) g.rect(dx * s - 1, -26 * s, 2, 14 * s).fill(0x5d4037);
+  g.moveTo(-22 * s, -24 * s).lineTo(0, -44 * s).lineTo(22 * s, -24 * s).quadraticCurveTo(0, -18 * s, -22 * s, -24 * s).fill(0xc9a96b).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.6 });
+  for (let k = 1; k < 4; k++) g.moveTo(-22 * s * (1 - k / 4), (-24 - 20 * k / 4) * s).lineTo(22 * s * (1 - k / 4), (-24 - 20 * k / 4) * s).stroke({ width: 0.8, color: 0xa1854f });
+  g.moveTo(-8 * s, -12 * s).lineTo(-12 * s, 0).moveTo(-6 * s, -12 * s).lineTo(-10 * s, 0).stroke({ width: 1, color: 0x6d4c41 });
   c.addChild(g);
   return c;
 }

@@ -781,5 +781,25 @@ const MANGLAR = [
   { id: 'cm_final', type: 'sold', product: 'cazuela_mariscos', amount: 4000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR };
+// Costa Pacífica · El Werregue (v3.42): la misma lista que la Talabartería.
+const WERREGUE = [
+  { id: 'cw01', type: 'sold', product: 'werregue_leaf', amount: 50, reward: 1000000 },
+  { id: 'cw02', type: 'level', target: 'werregue_palms', level: 10, reward: 2000000 },
+  { id: 'cw03', type: 'unlock', station: 'werregue_stripper', reward: 4000000 },
+  { id: 'cw04', type: 'level', target: 'werregue_palms:transport', level: 10, reward: 4000000 },
+  { id: 'cw05', type: 'unlock', station: 'werregue_dyer', reward: 8000000 },
+  { id: 'cw06', type: 'produced', product: 'dyed_werregue', amount: 200, reward: 12000000 },
+  { id: 'cw08', type: 'unlock', station: 'werregue_twister', reward: 25000000 },
+  { id: 'cw09', type: 'level', target: 'dispatch:werregue', level: 10, reward: 25000000 },
+  { id: 'cw10', type: 'unlock', station: 'werregue_weaver', reward: 50000000 },
+  { id: 'cw11', type: 'sold', product: 'werregue_jar', amount: 300, reward: 80000000 },
+  { id: 'cw12', type: 'unlock', station: 'tienda_pacifico', reward: 120000000 },
+  { id: 'cw13', type: 'imported', product: 'dried_fish', amount: 200, reward: 150000000 },
+  { id: 'cw14', type: 'allLevels', zone: 'werregue', level: 25, reward: 200000000 },
+  { id: 'cw07', type: 'research', research: 'palmar_sembrado', reward: 100000000 },
+  { id: 'cw15', type: 'sold', product: 'recuerdo_pacifico', amount: 1000, reward: 300000000 },
+  { id: 'cw_final', type: 'sold', product: 'recuerdo_pacifico', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

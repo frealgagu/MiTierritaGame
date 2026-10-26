@@ -256,6 +256,14 @@ export const PRODUCTS = {
   arroz_piangua: { name: 'Arroz con piangua', zone: 'manglar', value: 100000, icon: ICON.arrozPiangua, color: 0xf4f1e8 },
   cazuela_mariscos: { name: 'Cazuela de mariscos', zone: 'manglar', value: 220000, icon: ICON.cazuela, color: 0xd9772e },
 
+  // Costa Pacífica · El Werregue (v3.42): mismos valores que la Talabartería.
+  werregue_leaf: { name: 'Cogollo de werregue', zone: 'werregue', value: 6000, icon: ICON.werreguePalm, color: 0x7cb342 },
+  werregue_fiber: { name: 'Fibra de werregue', zone: 'werregue', value: 12000, icon: ICON.werregueFiber, color: 0xe0cf9a },
+  dyed_werregue: { name: 'Fibra teñida', zone: 'werregue', value: 30000, icon: ICON.dyedWerregue, color: 0x3a2a20 },
+  werregue_thread: { name: 'Hebra de werregue', zone: 'werregue', value: 70000, icon: ICON.werregueThread, color: 0xc0392b },
+  werregue_jar: { name: 'Jarrón de werregue', zone: 'werregue', value: 120000, icon: ICON.werregueJar, color: 0xd9a85a },
+  recuerdo_pacifico: { name: 'Recuerdo del Pacífico', zone: 'werregue', value: 1200000, icon: ICON.recuerdoPacifico, color: 0x8d3b1f },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

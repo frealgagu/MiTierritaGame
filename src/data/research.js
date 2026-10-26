@@ -458,6 +458,18 @@ export const RESEARCH = [
   { zone: 'manglar', id: 'sabor_manglar', name: 'Sabor del manglar', icon: '🏅', desc: 'Todo lo que vende el Manglar vale un 50 % más.', cost: 60000000, requires: 'piangua_lunch', effect: { type: 'zoneValue', target: 'manglar', mult: 1.5 } },
   { zone: 'manglar', id: 'maestria_manglar', name: 'Maestría: Manglar', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'manglar', mult: 4 } },
   { zone: 'manglar', id: 'supremacia_manglar', name: 'Supremacía: Manglar', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'manglar', mult: 8 } },
+
+  // Costa Pacífica · El Werregue (v3.42): las mismas de la Talabartería, con el werregue.
+  { zone: 'werregue', id: 'palmar_sembrado', name: 'Palmar sembrado', icon: ICON.werreguePalm, desc: 'El Palmar de werregue da el doble.', cost: 15000000, requires: 'werregue_stripper', effect: { type: 'stationSpeed', target: 'werregue_palms', mult: 2 } },
+  { zone: 'werregue', id: 'desfibrado_fino', name: 'Desfibrado fino', icon: ICON.werregueFiber, desc: 'La Desfibradora de werregue desfibra el doble.', cost: 18000000, requires: 'werregue_stripper', effect: { type: 'stationSpeed', target: 'werregue_stripper', mult: 2 } },
+  { zone: 'werregue', id: 'tintes_jagua', name: 'Tintes de jagua y achiote', icon: ICON.dyedWerregue, desc: 'La Tintorería tiñe el doble.', cost: 45000000, requires: 'werregue_twister', effect: { type: 'stationSpeed', target: 'werregue_dyer', mult: 2 } },
+  { zone: 'werregue', id: 'lancha_artesanias', name: 'Lancha de las artesanías', icon: '🚤', desc: 'El despacho del Werregue lleva el doble por viaje.', cost: 60000000, requires: 'werregue_dyer', effect: { type: 'dispatchCapacity', target: 'werregue', mult: 2 } },
+  { zone: 'werregue', id: 'torcido_muslo', name: 'Torcido a mano', icon: ICON.werregueThread, desc: 'La Torcedora tuerce el doble.', cost: 120000000, requires: 'werregue_weaver', effect: { type: 'stationSpeed', target: 'werregue_twister', mult: 2 } },
+  { zone: 'werregue', id: 'escuela_tejedoras', name: 'Escuela de tejedoras', icon: ICON.werregueJar, desc: 'Las Tejedoras tejen el doble.', cost: 300000000, requires: 'tienda_pacifico', effect: { type: 'stationSpeed', target: 'werregue_weaver', mult: 2 } },
+  { zone: 'werregue', id: 'tienda_muelle', name: 'Tienda del muelle', icon: ICON.recuerdoPacifico, desc: 'La Tienda de artesanías vende el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'tienda_pacifico', effect: { type: 'stationSpeed', target: 'tienda_pacifico', mult: 2 } },
+  { zone: 'werregue', id: 'arte_wounaan', name: 'Arte wounaan', icon: '🏅', desc: 'Todo lo que vende el Werregue vale un 50 % más.', cost: 400000000, requires: 'werregue_weaver', effect: { type: 'zoneValue', target: 'werregue', mult: 1.5 } },
+  { zone: 'werregue', id: 'maestria_werregue', name: 'Maestría: Werregue', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'werregue', mult: 4 } },
+  { zone: 'werregue', id: 'supremacia_werregue', name: 'Supremacía: Werregue', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'werregue', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

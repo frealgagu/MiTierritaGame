@@ -219,6 +219,12 @@ export const ICON = {
   encocado: '\uE0D5', // Piangua encocada: la cazuela con la salsa blanca de leche de coco, la carne de piangua y el aliño verde
   arrozPiangua: '\uE0D6', // Arroz con piangua: el plato con el arroz amarillo y la piangua, los patacones y la tajada de limón
   cazuela: '\uE0D7', // Cazuela de mariscos: la cazuela de barro hirviendo, con la piangua, el pargo y el patacón al lado
+  werreguePalm: '\uE0D8', // Palmar de werregue: la palma espinosa de la selva, con el cogollo tierno que se corta para la fibra
+  werregueFiber: '\uE0D9', // Fibra de werregue: el manojo de tiras finas y claras, recién sacadas del cogollo
+  dyedWerregue: '\uE0DA', // Fibra teñida: las madejas negras (de jagua) y rojas (de achiote) colgadas a secar, con la jagua y el achiote
+  werregueThread: '\uE0DB', // Hebra de werregue: los rollos de hebra torcida, negra, roja y clara, listos para tejer
+  werregueJar: '\uE0DC', // Jarrón de werregue: el jarrón tejido, de boca angosta, con sus grecas negras y rojas
+  recuerdoPacifico: '\uE0DD', // Recuerdo del Pacífico: el jarrón de werregue con el pescado seco y el pargo ahumado, envueltos para el viaje
 };
 
 export const ICON_FONT = 'Cafetal Icons';

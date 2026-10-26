@@ -313,6 +313,17 @@ export const STATIONS = [
   { id: 'piangua_lunch', zone: 'manglar', name: 'Mesa del arroz con piangua', icon: ICON.arrozPiangua, in: { encocado: 2 }, imports: [{ product: 'patacon_bag', perCycle: 1, route: 'patacones' }], out: { arroz_piangua: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.41' },
   { id: 'cazuela_kitchen', zone: 'manglar', name: 'Cocina de la cazuela', icon: ICON.cazuela, in: { encocado: 2 }, imports: [{ product: 'patacon_bag', perCycle: 1, route: 'patacones' }, { product: 'clean_pargo', perCycle: 4, route: 'pargos' }], out: { cazuela_mariscos: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.41' },
 
+  // Costa Pacífica · El Werregue (v3.42): el cogollo de la palma de werregue se desfibra, la fibra se tiñe con jagua
+  // y achiote, se tuerce en hebra y las tejedoras wounaan la vuelven jarrón. La Tienda de artesanías vende el Recuerdo
+  // del Pacífico: jarrones con el pescado seco y el pargo ahumado de la Bahía para el camino. Mismos números que las
+  // Hormigas, el Sombrero, Las Ruanas y la Talabartería.
+  { id: 'werregue_palms', zone: 'werregue', name: 'Palmar de werregue', icon: ICON.werreguePalm, infinite: true, out: { werregue_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.42' },
+  { id: 'werregue_stripper', zone: 'werregue', name: 'Desfibradora de werregue', icon: ICON.werregueFiber, in: { werregue_leaf: 1 }, out: { werregue_fiber: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.42' },
+  { id: 'werregue_dyer', zone: 'werregue', name: 'Tintorería', icon: ICON.dyedWerregue, in: { werregue_fiber: 2 }, out: { dyed_werregue: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.42' },
+  { id: 'werregue_twister', zone: 'werregue', name: 'Torcedora', icon: ICON.werregueThread, in: { dyed_werregue: 2 }, out: { werregue_thread: 1 }, cycle: 8, unlockCost: 200000000, upgradeBase: 60000, growth: 1.15, release: '3.42' },
+  { id: 'werregue_weaver', zone: 'werregue', name: 'Tejedoras', icon: ICON.werregueJar, in: { werregue_thread: 1 }, out: { werregue_jar: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.42' },
+  { id: 'tienda_pacifico', zone: 'werregue', name: 'Tienda de artesanías', icon: ICON.recuerdoPacifico, in: { werregue_jar: 4 }, imports: [{ product: 'dried_fish', perCycle: 1, route: 'secos' }, { product: 'smoked_pargo', perCycle: 1, route: 'pargos_ahumados' }], out: { recuerdo_pacifico: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.42' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

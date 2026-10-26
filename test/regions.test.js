@@ -907,3 +907,25 @@ test('El Manglar sirve el arroz con piangua y la cazuela con los patacones del P
   for (const p of ['arroz_piangua', 'cazuela_mariscos']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
 });
 
+
+test('El Werregue vende el Recuerdo del Pacífico con el pescado seco y el pargo ahumado de la Bahía (v3.42)', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const game = new Game(createInitialState(0, 'choco'));
+  for (const z of ['azotea', 'bahia', 'manglar', 'werregue']) game.unlockZone(z);
+  for (const r of ['secos', 'pargos_ahumados']) assert.ok(game.state.routes[r], `la ruta ${r} es de la Costa Pacífica`);
+  game.state.coins = 1e15;
+  for (const z of ['bahia', 'werregue']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+    game.state.zones[z].dispatch.level = 20;
+  }
+  for (const r of ['secos', 'pargos_ahumados']) game.state.routes[r].level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 900; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  for (const p of ['dried_fish', 'smoked_pargo']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
+  assert.ok((game.state.stats.sold.recuerdo_pacifico ?? 0) > 0, 'vende recuerdos del Pacífico');
+});
+

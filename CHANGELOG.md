@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v3.42.0 — Costa Pacífica: El Werregue
+- **🏺 El Werregue**, la quinta zona de la Costa Pacífica, se abre al completar El Manglar: el Palmar de werregue → la Desfibradora → la Tintorería (negro de jagua y rojo de achiote) → la Torcedora → las Tejedoras → la Tienda de artesanías. La tienda vende el **Recuerdo del Pacífico**: jarrones de werregue con el pescado seco y el pargo ahumado de la Bahía para el camino. Tiene los mismos números que la Talabartería.
+- **Dos rutas nuevas desde la Bahía:** la Ruta del pescado seco y la Ruta del pargo ahumado, con su chiva y sus carreteras.
+- Su persona es **Doña Aminta, la tejedora wounaan**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (de la palma de werregue al Recuerdo del Pacífico).
+- **El mapa:** el palmar de werregue, de troncos espinosos, que echa el cogollo tierno con cada hito; la selva del río San Juan con chontaduros, heliconias, borojós y algún **tambo wounaan** (la casa redonda sobre pilotes con techo de palma). En las estaciones:
+  - la ramada donde se sacan las tiras, con los manojos de fibra colgados;
+  - las ollas de jagua y de achiote, con las madejas negras, rojas y claras secándose;
+  - el tambo de la torcedora, con los rollos de hebra, y el tambo grande de las tejedoras, con los jarrones;
+  - la tienda turquesa con los jarrones en el corredor y los visitantes.
+
 ## v3.41.0 — Costa Pacífica: El Manglar
 - **🐚 El Manglar**, la cuarta zona de la Costa Pacífica, se abre al completar La Bahía: el Manglar → el Lavadero de piangua → la Olla de la piangua → la Desconchadora → la Olla del encocado. La piangua encocada (en leche de coco) se reparte entre:
   - la **Mesa del arroz con piangua**, que la sirve con los patacones del Platanal;
