@@ -183,6 +183,12 @@ export const FACTS = {
   oil_clarifier: ['El aceite se clarifica: se le quitan el agua y la arenilla.'],
   oil_bottler: ['Colombia es el país de América que más aceite de palma produce.'],
   oil_boxer: ['Con aceite se fríen la yuca y el plátano del almuerzo llanero.'],
+  // Los Llanos · El Frutal (v3.32)
+  passion_vines: ['El maracuyá crece en enramadas, como una enredadera.', 'La flor del maracuyá es morada y blanca, con muchos hilitos.'],
+  passion_pulper: ['El maracuyá tiene la pulpa amarilla, ácida y llena de semillas.'],
+  pulp_pasteurizer: ['La pulpa se calienta un ratico para que dure más sin dañarse.'],
+  juice_mixer: ['El jugo de maracuyá se hace en agua o en leche, con azúcar.'],
+  juice_packer: ['En el Meta se dan mango, maracuyá, piña, cítricos y patilla.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -212,6 +218,7 @@ export const PEOPLE = {
   ruanas: { icon: '👴🏻', name: 'Don Clímaco', role: 'el tejedor' },
   villa_leyva: { icon: '👩🏻', name: 'Doña Mercedes', role: 'la guía' },
   palma: { icon: '👨🏽‍🌾', name: 'Don Eusebio', role: 'el palmicultor' },
+  frutal: { icon: '👩🏽‍🌾', name: 'Doña Edilma', role: 'la frutera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -241,6 +248,7 @@ export const WELCOME = {
   quesera: '¡Ajá, mi amor, bienvenido a la sabana! De esta leche sale el queso costeño, y del queso, el mote.',
   cienaga: '¡Qué hubo, primo! Bienvenido a la Ciénaga. Aquí se pesca en canoa, con atarraya, como los abuelos.',
   palma: '¡Buenas, compadre, bienvenido al Llano! Aquí la palma da racimos todo el año, y de ellos sale el aceite.',
+  frutal: '¡Bienvenido al Frutal, compadre! Aquí el maracuyá se cuelga de las enramadas y se vuelve jugo.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

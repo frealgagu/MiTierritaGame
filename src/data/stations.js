@@ -220,6 +220,15 @@ export const STATIONS = [
   { id: 'oil_bottler', zone: 'palma', name: 'Envasadora', icon: ICON.oilBottle, in: { palm_oil: 1 }, out: { oil_bottle: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.31' },
   { id: 'oil_boxer', zone: 'palma', name: 'Cajonera de aceite', icon: ICON.oilBox, in: { oil_bottle: 4 }, out: { oil_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.31' },
 
+  // Los Llanos · El Frutal (v3.32), en las vegas del Meta: el maracuyá se despulpa, la pulpa se pasteuriza, se
+  // vuelve jugo en la mezcladora y el jugo se envasa en cajitas. Mismos números que el Tabacal, el Cocal y la
+  // Cervecería; el jugo es el que después viajará a la Cachamera, y las cajas, a Villavicencio.
+  { id: 'passion_vines', zone: 'frutal', name: 'Maracuyal', icon: ICON.passionVine, infinite: true, out: { passion_fruit: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.32' },
+  { id: 'passion_pulper', zone: 'frutal', name: 'Despulpadora de maracuyá', icon: ICON.passionPulp, in: { passion_fruit: 1 }, out: { passion_pulp: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.32' },
+  { id: 'pulp_pasteurizer', zone: 'frutal', name: 'Pasteurizadora de pulpa', icon: ICON.pastPulp, in: { passion_pulp: 2 }, out: { past_pulp: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.32' },
+  { id: 'juice_mixer', zone: 'frutal', name: 'Mezcladora de jugos', icon: ICON.passionJuice, in: { past_pulp: 2 }, out: { passion_juice: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.32' },
+  { id: 'juice_packer', zone: 'frutal', name: 'Envasadora de jugos', icon: ICON.juiceBox, in: { passion_juice: 1 }, out: { juice_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.32' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

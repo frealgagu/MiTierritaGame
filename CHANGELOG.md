@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v3.32.0 — Los Llanos: El Frutal
+- **🥭 El Frutal**, la segunda zona de los Llanos, se abre al completar La Palma: el Maracuyal → la Despulpadora de maracuyá → la Pasteurizadora de pulpa → la Mezcladora de jugos → la Envasadora de jugos. Va del maracuyá a la caja de jugos, pasando por la pulpa y el jugo. Tiene los mismos números que la Cervecería.
+- El jugo de maracuyá es el que después viajará a la Cachamera, y las cajas de jugos, a Villavicencio.
+- Su persona es **Doña Edilma, la frutera**, con sus datos curiosos, objetivos, 9 investigaciones, su victoria y 6 íconos nuevos (de la enramada a la caja de jugos).
+- **El mapa:** las enramadas de alambre con la enredadera y los maracuyás colgando (más con cada hito), palos de mango cargados, morichales, comejeneras y garzas. En las estaciones:
+  - la máquina que parte el maracuyá, con las canastas al lado;
+  - la marmita de la pulpa, que hierve y echa vapor;
+  - los tanques donde gira el jugo amarillo;
+  - la banda de cajitas verdes.
+
 ## v3.31.0 — Los Llanos: La Palma
 - **🐎 Los Llanos**, la quinta región, se abren al completar Villa de Leyva. Tienen su propia economía, como las demás, y llegarán zona por zona.
 - **🌴 La Palma**, su primera zona: el Palmar → la Desgranadora → el Esterilizador → la Prensa de aceite → el Clarificador → la Envasadora → la Cajonera de aceite. Va del racimo de palma a la caja de aceite, pasando por el fruto, el aceite crudo y la botella. Tiene los mismos números que el Papal, porque la región empieza de cero.

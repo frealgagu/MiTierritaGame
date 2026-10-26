@@ -3716,6 +3716,123 @@ const DRAW = {
     };
   },
 
+  // --- Los Llanos · El Frutal (v3.32): casas de bahareque blanco con techo de zinc ---
+
+  // Despulpadora de maracuyá: la ramada con la máquina que parte la fruta y bota las cáscaras; las canastas de
+  // maracuyá esperan al lado.
+  passion_pulper(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 24 + ctx.up;
+    for (const [bx, by] of [[0.5, 2.2], [0.9, 2.4], [2.3, 2.2]]) {
+      const p = iso(x + bx, y + by);
+      g.poly([p.x - 7, p.y - 8, p.x + 7, p.y - 8, p.x + 5, p.y, p.x - 5, p.y]).fill(0xb08850).stroke(OUTLINE);
+      for (const dx of [-4, 0, 4]) g.circle(p.x + dx, p.y - 9, 2.4).fill(PRODUCTS.passion_fruit.color).stroke({ width: 0.4, color: 0x3a2418, alpha: 0.5 });
+    }
+    box(g, x0 + 0.7, y0 + 0.4, 0.9, 0.6, 12, 0xb0bec5);
+    const peel = iso(x0 + 1.9, y0 + 1.1);
+    g.ellipse(peel.x, peel.y - 2, 8, 3).fill(0x9e8a3a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 11, 0x9aa3a8, 0xd9dde0);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 11);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      const top = iso(x0 + 1.15, y0 + 0.7, 12);
+      work.ellipse(top.x, top.y, 8, 3.5).fill(0x90a4ae).stroke(OUTLINE);
+      const a = this.working ? time * 7 : 0;
+      for (let k = 0; k < 3; k++) work.moveTo(top.x, top.y).lineTo(top.x + Math.cos(a + k * 2.1) * 7, top.y + Math.sin(a + k * 2.1) * 3).stroke({ width: 1.2, color: 0x546e7a });
+      if (!this.working) return;
+      const f = (time * 1.5) % 1;
+      work.circle(top.x - 18 + f * 18, top.y - 6 - Math.sin(f * Math.PI) * 6, 2.2).fill(PRODUCTS.passion_fruit.color);
+      work.circle(top.x + 4 + f * 10, top.y + 6 + f * 6, 1.4).fill(PRODUCTS.passion_pulp.color);
+    };
+    this.animate(0);
+  },
+
+  // Pasteurizadora de pulpa: la casa con la marmita de acero donde la pulpa se calienta, echando vapor.
+  pulp_pasteurizer(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.8, 1.5, 26, ctx, { wall: 0xf7f4ee, roofColor: 0x9aa3a8, roofH: 12 });
+    door(g, hx, hy, 1.5, 0.7, 16, 0x43a047);
+    windowOnRight(this, g, hx, hy, 1.8, 0.75, 13, 0xfff8e1);
+    const k = iso(x + 2.45, y + 1.4);
+    g.rect(k.x - 11, k.y - 16, 22, 16).fill(0xc7ccd1).stroke(OUTLINE);
+    g.ellipse(k.x, k.y - 16, 11, 4.5).fill(PRODUCTS.past_pulp.color).stroke(OUTLINE);
+    g.rect(k.x - 3, k.y - 5, 6, 5).fill(0x37474f);
+    // Las bolsas de pulpa en la nevera de icopor.
+    box(g, x + 2.0, y + 2.3, 0.6, 0.4, 7, 0xffffff);
+    this.smokePoints = [iso(x + 2.45, y + 1.4, 20)];
+    const fire = new Graphics();
+    this.anim.addChild(fire);
+    this.animate = (time) => {
+      fire.clear();
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) fire.circle(k.x - 6 + i * 6 + Math.sin(time * 5 + i) * 1.2, k.y - 17 + Math.cos(time * 4 + i) * 1, 1.4).fill(0xfff3c4);
+      fire.ellipse(k.x, k.y - 2, 5, 2).fill({ color: 0xff7043, alpha: 0.6 + Math.sin(time * 10) * 0.3 });
+    };
+    this.animate(0);
+  },
+
+  // Mezcladora de jugos: los tanques de acero con el jugo amarillo que gira, y las jarras listas en la mesa.
+  juice_mixer(g, x, y, ctx) {
+    const tanks = ctx.tier >= 2 ? [[0.6, 0.6], [1.5, 0.6], [2.4, 0.6], [1.0, 1.6], [1.9, 1.6]] : [[0.7, 0.7], [1.7, 0.7], [1.2, 1.7]];
+    this.tanks = [];
+    for (const [tx, ty] of tanks) {
+      const base = iso(x + tx, y + ty);
+      const h = 26 + ctx.up / 2;
+      shadow(g, base.x + 3, base.y + 1, 12, 5);
+      g.rect(base.x - 9, base.y - h, 18, h).fill(0xc7ccd1).stroke(OUTLINE);
+      g.rect(base.x - 6, base.y - h, 3, h).fill(0xe3e7ea);
+      g.ellipse(base.x, base.y - h, 9, 3.6).fill(PRODUCTS.passion_juice.color).stroke(OUTLINE);
+      this.tanks.push({ x: base.x, y: base.y - h });
+    }
+    box(g, x + 1.9, y + 2.4, 0.9, 0.35, 8, PAL.wood);
+    for (let k = 0; k < 3; k++) {
+      const p = iso(x + 2.05 + k * 0.28, y + 2.55, 8);
+      g.rect(p.x - 2, p.y - 7, 4, 7).fill(PRODUCTS.passion_juice.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    }
+    this.roofTop = iso(x + 1.5, y + 1.2, 34);
+    const swirl = new Graphics();
+    this.anim.addChild(swirl);
+    this.animate = (time) => {
+      swirl.clear();
+      for (const [k, t] of this.tanks.entries()) {
+        const a = this.working ? time * 3 + k : k;
+        swirl.moveTo(t.x, t.y).lineTo(t.x + Math.cos(a) * 7, t.y + Math.sin(a) * 2.8).stroke({ width: 1.4, color: 0x8a6d1a });
+        swirl.ellipse(t.x + Math.cos(a + 1.5) * 4, t.y + Math.sin(a + 1.5) * 1.6, 1.6, 0.8).fill(0xfff8e1);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Envasadora de jugos: la nave con la banda de cajitas verdes y, al lado, las cajas arrumadas.
+  juice_packer(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xf7f4ee, roofColor: 0x9aa3a8, roofH: 14 });
+    door(g, hx, hy, 1.6, 1.8, 18, 0x43a047);
+    windowOnRight(this, g, hx, hy, 2.4, 0.8, 14, 0xfff8e1);
+    box(g, x + 0.4, y + 2.15, 1.5, 0.35, 8, 0x555555);
+    const stack = [[2.3, 2.2, 0], [2.65, 2.2, 0], [2.48, 2.2, 6], [2.48, 2.55, 0], [2.3, 2.55, 0]];
+    for (const [bx, by, z] of stack.slice(0, 2 + Math.min(ctx.tier, 3))) box(g, x + bx - 0.15, y + by - 0.12, 0.3, 0.24, 6, PRODUCTS.juice_box.color, { z });
+    const belt = new Graphics();
+    this.anim.addChild(belt);
+    this.animate = (time) => {
+      belt.clear();
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.35 + i / 4) % 1;
+        const p = iso(x + 0.45 + f * 1.4, y + 2.32, 8);
+        belt.rect(p.x - 2.5, p.y - 8, 5, 8).fill(PRODUCTS.juice_box.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.7 });
+        belt.circle(p.x, p.y - 4, 1.4).fill(PRODUCTS.passion_fruit.color);
+      }
+    };
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

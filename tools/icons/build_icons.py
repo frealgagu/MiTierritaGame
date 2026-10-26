@@ -2448,6 +2448,81 @@ def oil_box():
     return layers
 
 
+# ---------- Los Llanos · El Frutal (v3.32) ----------
+
+def passion_fruit_shape(cx, cy, r, color='#f4c430'):
+    """Maracuyá: la fruta redonda, amarilla y con pintas, con su tallito."""
+    return [(OUTLINE, [circle(cx, cy, r + 1.8)]), (color, [circle(cx, cy, r)]), ('#fff59d', [ellipse(cx - r * 0.35, cy - r * 0.35, r * 0.3, r * 0.22, -30)]),
+            ('#d4a017', [circle(cx + r * 0.3, cy + r * 0.2, 0.9), circle(cx - r * 0.2, cy + r * 0.45, 0.8), circle(cx + r * 0.5, cy - r * 0.3, 0.8)]),
+            ('#5d4037', [rect(cx - 1.2, cy - r - 6, 2.4, 6)])]
+
+
+def passion_vine():
+    """Maracuyal: la enramada de alambre con la enredadera, sus flores moradas y los maracuyás colgando."""
+    layers = [('#5d4037', [rect(14, 30, 5, 64), rect(81, 30, 5, 64)]), ('#8a8f94', [rib(16, 32, 84, 32, 1.6)])]
+    for x0, y0, x1, y1 in [(16, 32, 30, 50), (34, 32, 26, 54), (50, 32, 58, 52), (66, 32, 74, 50), (84, 32, 70, 54), (40, 30, 46, 14), (62, 30, 56, 16), (24, 30, 18, 16), (78, 30, 84, 14)]:
+        layers.append(('#2e7d32', [leaf(x0, y0, x1, y1, 7)]))
+    for cx, cy in [(30, 22), (70, 22)]:
+        layers.append(('#ffffff', [circle(cx, cy, 6)]))
+        layers.append(('#7e57c2', [circle(cx, cy, 3.6)]))
+        layers.append(('#fdd835', [circle(cx, cy, 1.4)]))
+    for cx, cy in [(28, 66), (50, 70), (72, 64)]:
+        layers.append(('#2e7d32', [rib(cx, 32, cx, cy - 10, 1)]))
+        layers += passion_fruit_shape(cx, cy, 9)
+    return layers
+
+
+def passion_fruit():
+    """Maracuyá: uno entero y otro partido por la mitad, con la pulpa amarilla y las semillas negras."""
+    layers = passion_fruit_shape(34, 52, 22)
+    layers += [(OUTLINE, [circle(70, 64, 22)]), ('#f4c430', [circle(70, 64, 20)]), ('#fff8e1', [circle(70, 64, 16.5)]), ('#f9a825', [circle(70, 64, 14)])]
+    layers.append(('#263238', [circle(70 + 8 * math.cos(k * 0.9), 64 + 8 * math.sin(k * 0.9), 1.6) for k in range(7)] + [circle(70, 64, 1.6), circle(66, 60, 1.4), circle(74, 68, 1.4)]))
+    return layers
+
+
+def passion_pulp():
+    """Pulpa de maracuyá: la olleta con la pulpa amarilla y sus semillas, recién despulpada."""
+    layers = [(OUTLINE, ['M 12 44 L 88 44 Q 86 92 50 92 Q 14 92 12 44 Z']), ('#b0bec5', ['M 15 47 L 85 47 Q 83 89 50 89 Q 17 89 15 47 Z'])]
+    layers += [(OUTLINE, [ellipse(50, 44, 39, 10)]), ('#f9a825', [ellipse(50, 44, 36, 8)])]
+    layers.append(('#263238', [circle(38, 43, 1.6), circle(50, 46, 1.6), circle(62, 42, 1.6), circle(44, 40, 1.4), circle(58, 47, 1.4), circle(30, 46, 1.3), circle(70, 45, 1.3)]))
+    layers += passion_fruit_shape(78, 24, 9)
+    return layers
+
+
+def past_pulp():
+    """Pulpa pasteurizada: la bolsa sellada de pulpa, fría, con su etiqueta."""
+    layers = [(OUTLINE, ['M 22 12 L 78 12 L 82 88 Q 50 96 18 88 Z']), ('#ffb300', ['M 25 15 L 75 15 L 79 85.5 Q 50 92.5 21 85.5 Z'])]
+    layers.append(('#ffe082', [rect(28, 18, 8, 60)]))
+    layers.append(('#e0e0e0', [rect(22, 12, 56, 8)]))
+    layers += [('#ffffff', [rect(36, 40, 30, 22)]), ('#43a047', [leaf(51, 58, 44, 46, 3), leaf(51, 58, 58, 46, 3)]), ('#f4c430', [circle(51, 52, 3.5)])]
+    layers.append(('#4fc3f7', ['M 80 22 L 84 30 L 80 38 L 76 30 Z', 'M 88 34 L 91 40 L 88 46 L 85 40 Z']))
+    return layers
+
+
+def passion_juice():
+    """Jugo de maracuyá: el vaso de jugo amarillo con hielo y una tajada de maracuyá."""
+    layers = [(OUTLINE, ['M 22 20 L 78 20 L 70 94 L 30 94 Z']), ('#e3f2fd', ['M 25 23 L 75 23 L 67.5 91.5 L 32.5 91.5 Z'])]
+    layers.append(('#ffd54f', ['M 26.5 34 L 73.5 34 L 67.5 91.5 L 32.5 91.5 Z']))
+    layers.append(('#ffffff', [rect(34, 40, 12, 10, 15), rect(52, 44, 11, 9, -10)]))
+    layers.append(('#fff8e1', [rect(32, 38, 4, 48)]))
+    layers += [(OUTLINE, [circle(76, 22, 13)]), ('#f4c430', [circle(76, 22, 11.5)]), ('#f9a825', [circle(76, 22, 8.5)]), ('#263238', [circle(73, 20, 1.3), circle(79, 24, 1.3), circle(76, 18, 1.2)])]
+    layers.append(('#e53935', [rib(56, 6, 50, 60, 2.4)]))
+    return layers
+
+
+def juice_box():
+    """Caja de jugos: la caja de cartón con las cajitas de jugo verdes y amarillas asomadas."""
+    layers = [(OUTLINE, [poly(8, 40, 50, 26, 92, 40, 92, 82, 50, 96, 8, 82)])]
+    layers.append(('#c8a26a', [poly(11, 42, 50, 55, 50, 92.5, 11, 80)]))
+    layers.append(('#b08850', [poly(50, 55, 89, 42, 89, 80, 50, 92.5)]))
+    for cx in (30, 50, 70):
+        top = 16 + abs(cx - 50) * 0.3
+        layers += [(OUTLINE, [rect(cx - 8, top, 16, 28)]), ('#43a047', [rect(cx - 6.5, top + 1.5, 13, 25)]), ('#f4c430', [circle(cx, top + 14, 4)]), ('#ffffff', [rect(cx + 2, top - 6, 2, 8)])]
+    layers.append(('#d9b98a', [poly(11, 42, 50, 29, 89, 42, 50, 55)]))
+    layers += passion_fruit_shape(66, 72, 5)
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -2608,6 +2683,12 @@ ICONS = [
     (0xE09D, 'palm_oil', palm_oil),
     (0xE09E, 'oil_bottle', oil_bottle),
     (0xE09F, 'oil_box', oil_box),
+    (0xE0A0, 'passion_vine', passion_vine),
+    (0xE0A1, 'passion_fruit', passion_fruit),
+    (0xE0A2, 'passion_pulp', passion_pulp),
+    (0xE0A3, 'past_pulp', past_pulp),
+    (0xE0A4, 'passion_juice', passion_juice),
+    (0xE0A5, 'juice_box', juice_box),
 ]
 
 

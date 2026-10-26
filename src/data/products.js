@@ -183,6 +183,13 @@ export const PRODUCTS = {
   oil_bottle: { name: 'Botella de aceite', zone: 'palma', value: 45, icon: ICON.oilBottle, color: 0xf9a825 },
   oil_box: { name: 'Caja de aceite', zone: 'palma', value: 250, icon: ICON.oilBox, color: 0xc8a26a },
 
+  // Los Llanos · El Frutal (v3.32): mismos valores que la Cervecería.
+  passion_fruit: { name: 'Maracuyá', zone: 'frutal', value: 10, icon: ICON.passionFruit, color: 0xf4c430 },
+  passion_pulp: { name: 'Pulpa de maracuyá', zone: 'frutal', value: 25, icon: ICON.passionPulp, color: 0xf9a825 },
+  past_pulp: { name: 'Pulpa pasteurizada', zone: 'frutal', value: 60, icon: ICON.pastPulp, color: 0xffb300 },
+  passion_juice: { name: 'Jugo de maracuyá', zone: 'frutal', value: 150, icon: ICON.passionJuice, color: 0xffd54f },
+  juice_box: { name: 'Caja de jugos', zone: 'frutal', value: 250, icon: ICON.juiceBox, color: 0x43a047 },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

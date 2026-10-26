@@ -343,6 +343,17 @@ export const RESEARCH = [
   { zone: 'palma', id: 'sello_ll', name: 'Sello de calidad', icon: '🏅', desc: 'Las cajas de aceite valen un 50 % más.', cost: 300000, requires: 'oil_boxer', effect: { type: 'productValue', target: 'oil_box', mult: 1.5 } },
   { zone: 'palma', id: 'maestria_palma', name: 'Maestría: Palma', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'palma', mult: 4 } },
   { zone: 'palma', id: 'supremacia_palma', name: 'Supremacía: Palma', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'palma', mult: 8 } },
+
+  // Los Llanos · El Frutal (v3.32): las mismas de la Cervecería, con el maracuyá.
+  { zone: 'frutal', id: 'despulpadora_aspas', name: 'Despulpadora de aspas', icon: ICON.passionPulp, desc: 'La Despulpadora de maracuyá despulpa el doble.', cost: 20000, requires: 'passion_pulper', effect: { type: 'stationSpeed', target: 'passion_pulper', mult: 2 } },
+  { zone: 'frutal', id: 'maracuya_amarillo', name: 'Maracuyá amarillo', icon: ICON.passionVine, desc: 'El Maracuyal produce el doble.', cost: 50000, requires: 'pulp_pasteurizer', effect: { type: 'stationSpeed', target: 'passion_vines', mult: 2 } },
+  { zone: 'frutal', id: 'pasteurizadora_placas', name: 'Pasteurizadora de placas', icon: ICON.pastPulp, desc: 'La Pasteurizadora de pulpa pasteuriza el doble.', cost: 40000, requires: 'pulp_pasteurizer', effect: { type: 'stationSpeed', target: 'pulp_pasteurizer', mult: 2 } },
+  { zone: 'frutal', id: 'camion_fruta', name: 'Camión de la fruta', icon: '🚚', desc: 'El despacho del Frutal lleva el doble por viaje.', cost: 80000, requires: 'pulp_pasteurizer', effect: { type: 'dispatchCapacity', target: 'frutal', mult: 2 } },
+  { zone: 'frutal', id: 'mezcladora_grande', name: 'Mezcladora grande', icon: ICON.passionJuice, desc: 'La Mezcladora de jugos mezcla el doble.', cost: 300000, requires: 'juice_mixer', effect: { type: 'stationSpeed', target: 'juice_mixer', mult: 2 } },
+  { zone: 'frutal', id: 'llenadora_cajitas', name: 'Llenadora de cajitas', icon: ICON.juiceBox, desc: 'La Envasadora de jugos envasa el doble.', cost: 600000, requires: 'juice_packer', effect: { type: 'stationSpeed', target: 'juice_packer', mult: 2 } },
+  { zone: 'frutal', id: 'jugo_natural', name: 'Jugo natural', icon: '🏅', desc: 'Las cajas de jugos valen un 50 % más.', cost: 1500000, requires: 'juice_packer', effect: { type: 'productValue', target: 'juice_box', mult: 1.5 } },
+  { zone: 'frutal', id: 'maestria_frutal', name: 'Maestría: Frutal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'frutal', mult: 4 } },
+  { zone: 'frutal', id: 'supremacia_frutal', name: 'Supremacía: Frutal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'frutal', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

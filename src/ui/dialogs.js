@@ -45,6 +45,7 @@ const VICTORY = {
   ruanas: { title: '¡Ruanas para todo el frío!', text: 'Completaste <b>Las Ruanas</b>, en Boyacá. Seis mil recuerdos de Boyacá: ruanas de Nobsa con ollas y materas de Ráquira.', stat: (s) => `Recuerdos vendidos: ${formatNumber(s.stats.sold.recuerdo_boyaca ?? 0)}` },
   villa_leyva: { title: '¡Boyacá, de punta a punta!', text: 'Completaste <b>Villa de Leyva</b> y Boyacá. Siete mil excursiones al Fósil, con las papitas, la cerveza, el barro, los quesos y las ruanas de todas tus zonas boyacenses.', stat: (s) => `Excursiones al Fósil: ${formatNumber(s.stats.sold.excursion_fosil ?? 0)}` },
   palma: { title: '¡Aceite para todo el Llano!', text: 'Completaste <b>La Palma</b>, en los Llanos. Dos mil cajas de aceite de palma, del racimo a la botella.', stat: (s) => `Cajas de aceite vendidas: ${formatNumber(s.stats.sold.oil_box ?? 0)}` },
+  frutal: { title: '¡Jugos para todo el Llano!', text: 'Completaste <b>El Frutal</b>, en los Llanos. Seis mil cajas de jugo de maracuyá, de la enramada a la cajita.', stat: (s) => `Cajas de jugos vendidas: ${formatNumber(s.stats.sold.juice_box ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

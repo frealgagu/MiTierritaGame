@@ -583,5 +583,24 @@ const PALMA = [
   { id: 'lp_final', type: 'sold', product: 'oil_box', amount: 2000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA };
+// Los Llanos · El Frutal (v3.32): la misma lista que el Tabacal, el Cocal y la Cervecería.
+const FRUTAL = [
+  { id: 'lf01', type: 'sold', product: 'passion_fruit', amount: 50, reward: 500 },
+  { id: 'lf02', type: 'level', target: 'passion_vines', level: 10, reward: 1000 },
+  { id: 'lf03', type: 'unlock', station: 'passion_pulper', reward: 2000 },
+  { id: 'lf04', type: 'level', target: 'passion_vines:transport', level: 10, reward: 2000 },
+  { id: 'lf05', type: 'unlock', station: 'pulp_pasteurizer', reward: 5000 },
+  { id: 'lf06', type: 'produced', product: 'past_pulp', amount: 200, reward: 8000 },
+  { id: 'lf08', type: 'unlock', station: 'juice_mixer', reward: 20000 },
+  { id: 'lf09', type: 'level', target: 'dispatch:frutal', level: 10, reward: 20000 },
+  { id: 'lf10', type: 'produced', product: 'passion_juice', amount: 500, reward: 40000 },
+  { id: 'lf11', type: 'unlock', station: 'juice_packer', reward: 80000 },
+  { id: 'lf12', type: 'allLevels', zone: 'frutal', level: 25, reward: 100000 },
+  { id: 'lf07', type: 'research', research: 'despulpadora_aspas', reward: 50000 },
+  { id: 'lf13', type: 'income', zone: 'frutal', perSecond: 500, reward: 150000 },
+  { id: 'lf14', type: 'sold', product: 'juice_box', amount: 1000, reward: 300000 },
+  { id: 'lf_final', type: 'sold', product: 'juice_box', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

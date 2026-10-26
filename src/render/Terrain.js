@@ -300,6 +300,12 @@ export class Terrain {
           else if (r < 0.065) obj = cypress(rng);
           else if (r < 0.085) obj = hayBale(rng);
           else if (r < 0.105) obj = rock(rng);
+        } else if (this.zone.theme === 'fruit') {
+          // El Frutal (v3.32): palos de mango, morichales, comejeneras y garzas.
+          if (r < 0.035) obj = mangoTree(rng);
+          else if (r < 0.055) obj = morichePalm(rng);
+          else if (r < 0.075) obj = termiteMound(rng);
+          else if (r < 0.09) obj = egret(rng);
         } else if (this.zone.theme === 'palm') {
           // Los Llanos (v3.31): morichales, comejeneras, garzas y alguna palma de aceite suelta.
           if (r < 0.03) obj = morichePalm(rng);
@@ -521,6 +527,7 @@ const FARM_SOIL = {
   ants: (v) => mix(0xc0784a, 0xa86438, v * 0.4),
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
   palm: (v) => mix(0x6a9a3e, 0x7aa848, v * 0.5), // el palmar sobre pasto (v3.31)
+  fruit: (v) => mix(0x8a6a44, 0x7a5c3a, v * 0.4), // la tierra de las enramadas (v3.32)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
@@ -1142,6 +1149,44 @@ function termiteMound(rng) {
   shadow(g, 2, 1, 9 * s, 3.5 * s);
   g.moveTo(-8 * s, 0).quadraticCurveTo(-6 * s, -14 * s, -1 * s, -22 * s).quadraticCurveTo(3 * s, -14 * s, 3 * s, -10 * s).quadraticCurveTo(7 * s, -9 * s, 8 * s, 0).closePath().fill(0xb5653a).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
   g.moveTo(-4 * s, -6 * s).quadraticCurveTo(-3 * s, -12 * s, -1 * s, -18 * s).stroke({ width: 1.2 * s, color: 0xd08a5a, alpha: 0.8 });
+  c.addChild(g);
+  return c;
+}
+
+// Enramada de maracuyá (v3.32): dos postes con el alambre, la enredadera encima y los maracuyás amarillos
+// que cuelgan (más con cada hito).
+export function drawPassionVine(g, x, y, scale, rng, fruits = 2) {
+  const s = scale;
+  const a = { x: x - 12 * s, y: y - 4 * s };
+  const b = { x: x + 12 * s, y: y + 4 * s };
+  shadow(g, x + 2, y + 2, 16 * s, 6 * s);
+  for (const p of [a, b]) g.rect(p.x - 1, p.y - 22 * s, 2, 22 * s).fill(0x6b4a2e);
+  g.moveTo(a.x, a.y - 21 * s).lineTo(b.x, b.y - 21 * s).stroke({ width: 1, color: 0x8a8f94 });
+  for (let k = 0; k < 7; k++) {
+    const f = k / 6;
+    const lx = a.x + (b.x - a.x) * f + (rng() - 0.5) * 3;
+    const ly = a.y + (b.y - a.y) * f - 21 * s;
+    g.ellipse(lx, ly - 1, 4.5 * s, 3 * s).fill(k % 2 ? 0x3f7a2a : 0x5e9a3c);
+    if (k % 2 === 0) g.moveTo(lx, ly).lineTo(lx + (rng() - 0.5) * 3, ly + 7 * s).stroke({ width: 1, color: 0x3f7a2a });
+  }
+  for (let i = 0; i < fruits; i++) {
+    const f = (i + 0.5) / fruits;
+    const fx = a.x + (b.x - a.x) * f;
+    const fy = a.y + (b.y - a.y) * f - 13 * s;
+    g.circle(fx, fy, 2.4 * Math.max(s, 0.8)).fill(0xf4c430).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+  }
+  if (fruits > 2) g.circle(x, y - 24 * s, 1.6).fill(0x7e57c2);
+}
+
+// Palo de mango (v3.32): copa grande y redonda, de un verde oscuro, con mangos amarillos y rojizos.
+function mangoTree(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const s = 0.85 + rng() * 0.35;
+  shadow(g, 3, 2, 22 * s, 8 * s);
+  g.moveTo(-3 * s, 0).lineTo(-2 * s, -18 * s).lineTo(2 * s, -18 * s).lineTo(3 * s, 0).closePath().fill(0x6b4a2e);
+  for (const [dx, dy, r] of [[-11, -26, 12], [10, -27, 12], [0, -36, 14], [-5, -22, 10], [6, -21, 10]]) g.circle(dx * s, dy * s, r * s).fill(dy < -30 ? 0x2e6b22 : 0x245a1c).stroke({ width: 0.6, color: 0x1a3a12, alpha: 0.4 });
+  for (let k = 0; k < 6; k++) g.ellipse((rng() - 0.5) * 26 * s, (-18 - rng() * 18) * s, 1.8 * s, 2.4 * s).fill(rng() < 0.5 ? 0xf4b400 : 0xe65100);
   c.addChild(g);
   return c;
 }

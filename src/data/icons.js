@@ -163,6 +163,12 @@ export const ICON = {
   palmOil: '\uE09D', // Aceite de palma: el tanque con el aceite rojo anaranjado y la gota que cae
   oilBottle: '\uE09E', // Botella de aceite: la botella plástica con el aceite dorado, la tapa roja y la etiqueta con la palma
   oilBox: '\uE09F', // Caja de aceite: la caja de cartón con las tapas rojas de las botellas asomadas
+  passionVine: '\uE0A0', // Maracuyal: la enramada de alambre con la enredadera, sus flores moradas y los maracuyás colgando
+  passionFruit: '\uE0A1', // Maracuyá: uno entero y otro partido por la mitad, con la pulpa amarilla y las semillas negras
+  passionPulp: '\uE0A2', // Pulpa de maracuyá: la olleta con la pulpa amarilla y sus semillas, recién despulpada
+  pastPulp: '\uE0A3', // Pulpa pasteurizada: la bolsa sellada de pulpa, fría, con su etiqueta
+  passionJuice: '\uE0A4', // Jugo de maracuyá: el vaso de jugo amarillo con hielo y una tajada de maracuyá
+  juiceBox: '\uE0A5', // Caja de jugos: la caja de cartón con las cajitas de jugo verdes y amarillas asomadas
 };
 
 export const ICON_FONT = 'Cafetal Icons';
