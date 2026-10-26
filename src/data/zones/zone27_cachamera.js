@@ -33,6 +33,8 @@ export const ZONE27 = {
   // Carretera por la que llega la Ruta del jugo, hasta la Cocina de la cachama.
   routes: {
     jugo: { road: [[25.9, 14.5], [20.3, 14.5]], sign: [24.2, 13.3], text: '⬅ Del Frutal' },
+    // La Ruta de la cachama sale de la bodega hacia el Hato llanero (v3.34).
+    cachamas: { road: [[24.5, 17.2], [24.5, 16.5], [25.9, 16.5]], sign: [25.3, 15.6], text: 'Cachama al Hato ➜' },
   },
   unlockedBy: 'frutal',
   next: 'hato_llanero',

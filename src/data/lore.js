@@ -196,6 +196,14 @@ export const FACTS = {
   cachama_filleter: ['La cachama se puede asar entera o en filetes.'],
   cachama_smoker: ['El pescado ahumado dura más: se lleva de viaje.'],
   cachama_kitchen: ['La cachama asada se sirve con yuca, plátano y ensalada.'],
+  // Los Llanos · El Hato llanero (v3.34)
+  llanero_herd: ['En los Llanos el ganado anda por sabanas grandísimas.', 'El vaquero llanero arrea el ganado a caballo, cantando.'],
+  llanero_butcher: ['Para la carne a la llanera se despresa la ternera entera.'],
+  adobadero: ['La mamona se adoba con sal gruesa, y casi nada más.'],
+  vara_grill: ['La mamona se asa en varas clavadas junto al fuego, por horas.'],
+  carving_table: ['Cada corte de la mamona tiene nombre: tembladores, raya, osobuco.'],
+  lunch_llanero: ['La carne a la llanera se sirve con yuca, papa y plátano.'],
+  parranda_grill: ['En una parranda llanera se baila joropo hasta el amanecer.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -227,6 +235,7 @@ export const PEOPLE = {
   palma: { icon: '👨🏽‍🌾', name: 'Don Eusebio', role: 'el palmicultor' },
   frutal: { icon: '👩🏽‍🌾', name: 'Doña Edilma', role: 'la frutera' },
   cachamera: { icon: '🧔🏾', name: 'Don Arcadio', role: 'el piscicultor' },
+  hato_llanero: { icon: '🤠', name: 'Don Florentino', role: 'el vaquero' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -258,6 +267,7 @@ export const WELCOME = {
   palma: '¡Buenas, compadre, bienvenido al Llano! Aquí la palma da racimos todo el año, y de ellos sale el aceite.',
   frutal: '¡Bienvenido al Frutal, compadre! Aquí el maracuyá se cuelga de las enramadas y se vuelve jugo.',
   cachamera: '¡Epa, compadre, bienvenido a la Cachamera! Aquí las cachamas se crían en estanques, al sol del Llano.',
+  hato_llanero: '¡Epa, catire, bienvenido al Hato! Aquí la ternera se asa en vara, como manda el Llano.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

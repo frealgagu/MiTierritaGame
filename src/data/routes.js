@@ -742,6 +742,40 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.33',
   },
+  // Al Hato llanero (v3.34): el aceite de la Palma (para la yuca frita del almuerzo y de la parranda) y la
+  // cachama limpia de la Cachamera (para el Asadero de la parranda).
+  {
+    id: 'aceite',
+    name: 'Ruta del aceite',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'oil_bottle',
+    from: 'palma',
+    to: 'hato_llanero',
+    stations: ['lunch_llanero', 'parranda_grill'],
+    tab: 'Aceite',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 5000,
+    growth: 1.15,
+    release: '3.34',
+  },
+  {
+    id: 'cachamas',
+    name: 'Ruta de la cachama',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'clean_cachama',
+    from: 'cachamera',
+    to: 'hato_llanero',
+    stations: ['parranda_grill'],
+    tab: 'Cachama',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 8000,
+    growth: 1.15,
+    release: '3.34',
+  },
 ];
 
 export const ROUTES_BY_ID = Object.fromEntries(ROUTES.map((r) => [r.id, r]));

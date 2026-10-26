@@ -175,6 +175,11 @@ export const ICON = {
   smokedCachama: '\uE0A9', // Cachama ahumada: las cachamas doradas colgadas en la vara, con el humo que sube
   pisillo: '\uE0AA', // Pisillo de cachama: el pescado desmechado y sofrito en un plato hondo, con un plátano al lado
   cachamaMaracuya: '\uE0AB', // Cachama al maracuyá: la cachama asada en el plato, bañada en salsa amarilla de maracuyá
+  adobada: '\uE0AC', // Ternera adobada: la carne roja espolvoreada de sal gruesa, en la batea de madera
+  mamona: '\uE0AD', // Mamona a la vara: los trozos de ternera ensartados en las varas, clavadas junto a la candela
+  carneLlanera: '\uE0AE', // Carne a la llanera: la tabla con la carne asada trinchada, el cuchillo y el ají
+  almuerzoLlanero: '\uE0AF', // Almuerzo llanero: el plato con la carne a la llanera, la yuca frita, el plátano y la papa
+  parranda: '\uE0B0', // Asado de la parranda: el arpa llanera junto al asado, con la carne y la cachama en las varas
 };
 
 export const ICON_FONT = 'Cafetal Icons';

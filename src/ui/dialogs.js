@@ -47,6 +47,7 @@ const VICTORY = {
   palma: { title: '¡Aceite para todo el Llano!', text: 'Completaste <b>La Palma</b>, en los Llanos. Dos mil cajas de aceite de palma, del racimo a la botella.', stat: (s) => `Cajas de aceite vendidas: ${formatNumber(s.stats.sold.oil_box ?? 0)}` },
   frutal: { title: '¡Jugos para todo el Llano!', text: 'Completaste <b>El Frutal</b>, en los Llanos. Seis mil cajas de jugo de maracuyá, de la enramada a la cajita.', stat: (s) => `Cajas de jugos vendidas: ${formatNumber(s.stats.sold.juice_box ?? 0)}` },
   cachamera: { title: '¡Cachama para todo el Llano!', text: 'Completaste <b>La Cachamera</b>, en los Llanos. Seis mil cachamas al maracuyá, con el jugo que llegó del Frutal.', stat: (s) => `Platos vendidos: ${formatNumber(s.stats.sold.cachama_maracuya ?? 0)}` },
+  hato_llanero: { title: '¡Carne a la llanera para todos!', text: 'Completaste <b>El Hato llanero</b>, en los Llanos. Cuatro mil asados de parranda, con el aceite de la Palma y la cachama de la Cachamera.', stat: (s) => `Asados vendidos: ${formatNumber(s.stats.sold.parranda_llanera ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

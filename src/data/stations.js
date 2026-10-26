@@ -239,6 +239,18 @@ export const STATIONS = [
   { id: 'cachama_smoker', zone: 'cachamera', name: 'Ahumadero', icon: ICON.smokedCachama, in: { cachama_fillet: 2 }, out: { smoked_cachama: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.33' },
   { id: 'cachama_kitchen', zone: 'cachamera', name: 'Cocina de la cachama', icon: ICON.cachamaMaracuya, in: { clean_cachama: 4 }, imports: [{ product: 'passion_juice', perCycle: 1, route: 'jugo' }], out: { cachama_maracuya: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.33' },
 
+  // Los Llanos · El Hato llanero (v3.34): la ternera se despresa, se adoba con sal, se asa en vara (la mamona) y se
+  // trincha: la carne a la llanera. Se reparte entre la Mesa del almuerzo llanero, que la sirve con yuca frita en
+  // el aceite de la Palma, y el Asadero de la parranda, que además asa la cachama de la Cachamera. Mismos números
+  // que el Hato, la Quesera y Paipa.
+  { id: 'llanero_herd', zone: 'hato_llanero', name: 'Sabana del hato', icon: ICON.cebu, infinite: true, out: { llanero_steer: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.34' },
+  { id: 'llanero_butcher', zone: 'hato_llanero', name: 'Desposte', icon: '🥩', in: { llanero_steer: 2 }, out: { ternera: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.34' },
+  { id: 'adobadero', zone: 'hato_llanero', name: 'Adobadero', icon: ICON.adobada, in: { ternera: 1 }, out: { ternera_adobada: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.34' },
+  { id: 'vara_grill', zone: 'hato_llanero', name: 'Asador de vara', icon: ICON.mamona, in: { ternera_adobada: 1 }, out: { mamona: 1 }, cycle: 4, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '3.34' },
+  { id: 'carving_table', zone: 'hato_llanero', name: 'Trinchadora', icon: ICON.carneLlanera, in: { mamona: 2 }, out: { carne_llanera: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '3.34' },
+  { id: 'lunch_llanero', zone: 'hato_llanero', name: 'Mesa del almuerzo llanero', icon: ICON.almuerzoLlanero, in: { carne_llanera: 2 }, imports: [{ product: 'oil_bottle', perCycle: 1, route: 'aceite' }], out: { almuerzo_llanero: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.34' },
+  { id: 'parranda_grill', zone: 'hato_llanero', name: 'Asadero de la parranda', icon: ICON.parranda, in: { carne_llanera: 2 }, imports: [{ product: 'oil_bottle', perCycle: 1, route: 'aceite' }, { product: 'clean_cachama', perCycle: 4, route: 'cachamas' }], out: { parranda_llanera: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.34' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

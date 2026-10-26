@@ -198,6 +198,15 @@ export const PRODUCTS = {
   pisillo: { name: 'Pisillo de cachama', zone: 'cachamera', value: 2400, icon: ICON.pisillo, color: 0xc6893f },
   cachama_maracuya: { name: 'Cachama al maracuyá', zone: 'cachamera', value: 4000, icon: ICON.cachamaMaracuya, color: 0xf4c430 },
 
+  // Los Llanos · El Hato llanero (v3.34): mismos valores que Paipa.
+  llanero_steer: { name: 'Novillo llanero', zone: 'hato_llanero', value: 1000, icon: ICON.cebu, color: 0xeceae4 },
+  ternera: { name: 'Ternera', zone: 'hato_llanero', value: 2500, icon: '🥩', color: 0xc0392b },
+  ternera_adobada: { name: 'Ternera adobada', zone: 'hato_llanero', value: 4400, icon: ICON.adobada, color: 0xa93226 },
+  mamona: { name: 'Mamona a la vara', zone: 'hato_llanero', value: 8800, icon: ICON.mamona, color: 0x8e3b1f },
+  carne_llanera: { name: 'Carne a la llanera', zone: 'hato_llanero', value: 22000, icon: ICON.carneLlanera, color: 0x8d3b1f },
+  almuerzo_llanero: { name: 'Almuerzo llanero', zone: 'hato_llanero', value: 100000, icon: ICON.almuerzoLlanero, color: 0xf4f1e8 },
+  parranda_llanera: { name: 'Asado de la parranda', zone: 'hato_llanero', value: 220000, icon: ICON.parranda, color: 0xd9772e },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

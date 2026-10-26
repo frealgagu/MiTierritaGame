@@ -251,6 +251,12 @@ export class Terrain {
           else if (r < 0.065) obj = anthill(rng);
           else if (r < 0.1) obj = rock(rng);
           else if (r < 0.125) obj = cactus(rng);
+        } else if (this.zone.style === 'llanos') {
+          // El Hato llanero (v3.34): la sabana con samanes, morichales, comejeneras y garzas.
+          if (r < 0.03) obj = saman(rng);
+          else if (r < 0.055) obj = morichePalm(rng);
+          else if (r < 0.08) obj = termiteMound(rng);
+          else if (r < 0.1) obj = egret(rng);
         } else if (this.zone.theme === 'ranch') {
           // Hato: samanes de sombra para el ganado, fique, piedras y cactus.
           if (r < 0.035) obj = saman(rng);
@@ -534,7 +540,8 @@ const FARM_SOIL = {
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
   palm: (v) => mix(0x6a9a3e, 0x7aa848, v * 0.5), // el palmar sobre pasto (v3.31)
   fruit: (v) => mix(0x8a6a44, 0x7a5c3a, v * 0.4), // la tierra de las enramadas (v3.32)
-  ponds: (v) => mix(0x4f8f9a, 0x5a9aa0, v * 0.6), // el agua verdosa de los estanques (v3.33)
+  ponds: (v) => mix(0x4f8f9a, 0x5a9aa0, v * 0.6),
+  llanos: (v) => mix(0x9ab44e, 0xa8bc58, v * 0.5), // la sabana del Hato llanero (v3.34) // el agua verdosa de los estanques (v3.33)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),

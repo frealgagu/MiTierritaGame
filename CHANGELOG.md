@@ -1,5 +1,19 @@
 # Registro de cambios
 
+## v3.34.0 — Los Llanos: El Hato llanero
+- **🤠 El Hato llanero**, la cuarta zona de los Llanos, se abre al completar La Cachamera: la Sabana del hato → el Desposte → el Adobadero → el Asador de vara (la mamona) → la Trinchadora (la carne a la llanera). Tiene los mismos números que Paipa.
+- La carne a la llanera se reparte entre:
+  - la **Mesa del almuerzo llanero**, que la sirve con la yuca frita en el aceite de la Palma;
+  - el **Asadero de la parranda**, que además asa la cachama de la Cachamera.
+- **Dos rutas nuevas:** la **Ruta del aceite**, desde la Palma, y la **Ruta de la cachama**, desde la Cachamera, cada una con su chiva y su carretera.
+- Su persona es **Don Florentino, el vaquero**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 5 íconos nuevos.
+- **El mapa:** la sabana con ganado cebú (blanco o gris, con su giba) y alguno sanmartinero, rojizo; samanes, morichales, comejeneras y garzas. En las estaciones:
+  - la ramada con las presas colgadas;
+  - las bateas con la carne en sal gruesa;
+  - la candela con la mamona en las varas;
+  - los caneyes con techo de palma;
+  - la parranda con el arpista y una pareja bailando joropo.
+
 ## v3.33.0 — Los Llanos: La Cachamera
 - **🐟 La Cachamera**, la tercera zona de los Llanos, se abre al completar El Frutal. Los Estanques crían la cachama y la Limpieza la deja lista. La cachama limpia se reparte entre:
   - la **Pisillera**, que hace el pisillo de cachama;

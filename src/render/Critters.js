@@ -23,6 +23,14 @@ const RANCH_COATS = [
   { body: 0xd8d2c6, legs: 0xc4bdb0, spots: 0xb0a898, udder: false },
 ];
 
+// Ganado del Hato llanero (v3.34): cebú blanco o gris, con giba, y alguno sanmartinero, rojizo; novillos sin ubre.
+const LLANO_COATS = [
+  { body: 0xeceae4, legs: 0xdedad2, spots: 0xd6d2c8, udder: false, hump: true },
+  { body: 0xeceae4, legs: 0xdedad2, spots: 0xd6d2c8, udder: false, hump: true },
+  { body: 0xb8b4ac, legs: 0xa8a49c, spots: 0x9a958c, udder: false, hump: true },
+  { body: 0xa0522d, legs: 0x8a4526, spots: 0x8a4526, udder: false, hump: false },
+];
+
 const CEBU_COATS = [
   { body: 0xeceae4, legs: 0xdedad2, spots: 0xd6d2c8, udder: true, hump: true },
   { body: 0xeceae4, legs: 0xdedad2, spots: 0xd6d2c8, udder: true, hump: true },
@@ -264,7 +272,7 @@ export class Critters {
       this.pasture = pasture;
       // Novillos del Hato (v3.3): pardos, rojizos o grises, sin ubre.
       // Vacas cebú de la Quesera (v3.18): blancas o grises, con giba y ubre; alguna romosinuana, rojiza.
-      this.coats = zone.theme === 'ranch' ? RANCH_COATS : zone.theme === 'savanna' ? CEBU_COATS : zone.theme === 'sheep' ? SHEEP_COATS : null;
+      this.coats = zone.style === 'llanos' ? LLANO_COATS : zone.theme === 'ranch' ? RANCH_COATS : zone.theme === 'savanna' ? CEBU_COATS : zone.theme === 'sheep' ? SHEEP_COATS : null;
       this.cows = [];
     }
   }

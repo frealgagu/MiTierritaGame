@@ -29,6 +29,10 @@ export const ZONE25 = {
   exitText: 'A Puerto López ➜',
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
+  // Carretera de la Ruta del aceite (v3.34): sale de la bodega hacia el Hato llanero.
+  routes: {
+    aceite: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Aceite al Hato ➜' },
+  },
   unlockedBy: null, // la primera de los Llanos: se abre con la región
   next: 'frutal',
 };

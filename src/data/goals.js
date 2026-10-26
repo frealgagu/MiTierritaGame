@@ -623,5 +623,27 @@ const CACHAMERA = [
   { id: 'lc_final', type: 'sold', product: 'cachama_maracuya', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA };
+// Los Llanos · El Hato llanero (v3.34): la misma lista que el Hato, la Quesera y Paipa.
+const HATO_LLANERO = [
+  { id: 'lh01', type: 'sold', product: 'llanero_steer', amount: 50, reward: 75000 },
+  { id: 'lh02', type: 'level', target: 'llanero_herd', level: 10, reward: 125000 },
+  { id: 'lh03', type: 'unlock', station: 'llanero_butcher', reward: 250000 },
+  { id: 'lh04', type: 'level', target: 'llanero_herd:transport', level: 10, reward: 250000 },
+  { id: 'lh05', type: 'unlock', station: 'adobadero', reward: 500000 },
+  { id: 'lh06', type: 'produced', product: 'ternera_adobada', amount: 200, reward: 750000 },
+  { id: 'lh08', type: 'unlock', station: 'vara_grill', reward: 1500000 },
+  { id: 'lh09', type: 'level', target: 'dispatch:hato_llanero', level: 10, reward: 1500000 },
+  { id: 'lh10', type: 'unlock', station: 'carving_table', reward: 2500000 },
+  { id: 'lh11', type: 'produced', product: 'carne_llanera', amount: 300, reward: 3750000 },
+  { id: 'lh12', type: 'unlock', station: 'lunch_llanero', reward: 6250000 },
+  { id: 'lh13', type: 'sold', product: 'almuerzo_llanero', amount: 200, reward: 7500000 },
+  { id: 'lh14', type: 'unlock', station: 'parranda_grill', reward: 12500000 },
+  { id: 'lh15', type: 'imported', product: 'clean_cachama', amount: 500, reward: 15000000 },
+  { id: 'lh16', type: 'allLevels', zone: 'hato_llanero', level: 25, reward: 20000000 },
+  { id: 'lh07', type: 'research', research: 'pasto_braquiaria', reward: 10000000 },
+  { id: 'lh17', type: 'sold', product: 'parranda_llanera', amount: 1000, reward: 30000000 },
+  { id: 'lh_final', type: 'sold', product: 'parranda_llanera', amount: 4000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

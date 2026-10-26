@@ -3972,6 +3972,201 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Los Llanos · El Hato llanero (v3.34): caneyes con techo de palma y casas de zinc ---
+
+  // Desposte: la casa blanca de techo de zinc y, al lado, la ramada con las presas de ternera colgadas.
+  llanero_butcher(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.7, 1.4, 26, ctx, { wall: 0xf7f4ee, roofColor: 0x9aa3a8, roofH: 12 });
+    door(g, hx, hy, 1.4, 0.7, 16, 0x8e3b1f);
+    windowOnRight(this, g, hx, hy, 1.7, 0.7, 13, 0xffffff);
+    const a = iso(x + 2.3, y + 0.5, 22);
+    const b = iso(x + 2.3, y + 2.4, 22);
+    for (const p of [a, b]) g.rect(p.x - 1, p.y, 2, 22).fill(PAL.woodDark);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 2, color: PAL.woodDark });
+    for (let k = 1; k < 4 + Math.min(ctx.tier, 2); k++) {
+      const f = k / (5 + Math.min(ctx.tier, 2));
+      const p = { x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f };
+      g.moveTo(p.x, p.y).lineTo(p.x, p.y + 3).stroke({ width: 1, color: 0x9aa3a8 });
+      g.ellipse(p.x, p.y + 9, 3.4, 6.5).fill(PRODUCTS.ternera.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x - 1, p.y + 7, 1.2, 3).fill(0xf8bbd0);
+    }
+  },
+
+  // Adobadero: la ramada con las bateas de madera donde la carne se cubre de sal gruesa, y los bultos de sal.
+  adobadero(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.4;
+    const H = 23 + ctx.up;
+    for (const by of [0.35, 0.85]) {
+      box(g, x0 + 0.3, y0 + by, 1.7, 0.35, 6, PAL.wood);
+      for (let k = 0; k < 4; k++) {
+        const p = iso(x0 + 0.5 + k * 0.42, y0 + by + 0.17, 6);
+        g.ellipse(p.x, p.y - 1, 4, 1.8).fill(PRODUCTS.ternera_adobada.color);
+        g.circle(p.x - 1, p.y - 2, 0.7).fill(0xffffff);
+        g.circle(p.x + 1.5, p.y - 1, 0.7).fill(0xffffff);
+      }
+    }
+    for (const [bx, by] of [[0.5, 2.3], [0.85, 2.45]]) {
+      const p = iso(x + bx, y + by);
+      g.ellipse(p.x, p.y - 4, 7, 5).fill(0xf4f1e8).stroke(OUTLINE);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, w, d, H, 11, 0x9aa3a8, 0xd9dde0);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 11);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      const p = iso(x0 + 1.2, y0 + 1.35);
+      worker(work, p.x, p.y, 0xeceae4);
+      if (!this.working) return;
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 1.5 + i / 4) % 1;
+        work.circle(p.x + 5 + i * 2, p.y - 16 + f * 8, 0.8).fill({ color: 0xffffff, alpha: 1 - f });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Asador de vara: la candela en el suelo y las varas clavadas alrededor con la mamona; el asador la cuida.
+  vara_grill(g, x, y, ctx) {
+    const c = iso(x + 1.5, y + 1.5);
+    g.ellipse(c.x, c.y, 26, 12).fill(0x5d4632).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+    g.ellipse(c.x, c.y, 16, 7).fill(0x3a2a1e);
+    // Bancos de troncos.
+    for (const [bx, by] of [[0.5, 2.5], [2.6, 0.6]]) box(g, x + bx, y + by, 0.6, 0.18, 4, PAL.woodDark);
+    this.stakes = [];
+    const n = 5 + Math.min(ctx.tier, 3);
+    for (let k = 0; k < n; k++) {
+      const a = (k / n) * Math.PI * 2;
+      const p = { x: c.x + Math.cos(a) * 22, y: c.y + Math.sin(a) * 10 };
+      this.stakes.push(p);
+      g.moveTo(p.x, p.y).lineTo(p.x - Math.cos(a) * 6, p.y - 30).stroke({ width: 2, color: 0x6d4c32 });
+      g.ellipse(p.x - Math.cos(a) * 4, p.y - 20, 4.5, 6).fill(PRODUCTS.mamona.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    }
+    this.roofTop = iso(x + 1.5, y + 1.5, 36);
+    this.smokePoints = [iso(x + 1.5, y + 1.5, 10)];
+    const fire = new Graphics();
+    this.anim.addChild(fire);
+    this.animate = (time) => {
+      fire.clear();
+      const h = this.working ? 10 + Math.sin(time * 9) * 3 : 4;
+      fire.poly([c.x - 10, c.y, c.x - 4, c.y - h, c.x, c.y - 3, c.x + 4, c.y - h * 1.2, c.x + 10, c.y]).fill(0xff7043);
+      fire.poly([c.x - 5, c.y, c.x, c.y - h * 0.7, c.x + 5, c.y]).fill(0xffd54f);
+      const p = iso(x + 2.4, y + 2.3);
+      worker(fire, p.x, p.y, 0xd7263d);
+      fire.ellipse(p.x, p.y - 22.5, 7, 1.8).fill(0x3a2a1e);
+    };
+    this.animate(0);
+  },
+
+  // Trinchadora: el caney con techo de palma, la mesa grande y el que trincha la carne a la llanera.
+  carving_table(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.3;
+    const d = 1.6;
+    const H = 22 + ctx.up;
+    box(g, x0 + 0.4, y0 + 0.5, 1.4, 0.6, 8, PAL.wood);
+    for (let k = 0; k < 4; k++) {
+      const p = iso(x0 + 0.6 + k * 0.3, y0 + 0.8, 8);
+      g.rect(p.x - 2, p.y - 4, 4, 4).fill(PRODUCTS.carne_llanera.color);
+    }
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, 0x8d6e4a);
+    gableRoof(g, x0, y0, w, d, H, 16, 0xc9a35a, 0xd9c08c);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 16);
+    const work = new Graphics();
+    this.anim.addChild(work);
+    this.animate = (time) => {
+      work.clear();
+      const p = iso(x0 + 1.1, y0 + 1.4);
+      worker(work, p.x, p.y, 0xf4c430);
+      work.ellipse(p.x, p.y - 22.5, 7, 1.8).fill(0x3a2a1e);
+      const a = this.working ? Math.abs(Math.sin(time * 6)) * 4 : 0;
+      work.moveTo(p.x + 3, p.y - 13).lineTo(p.x + 8, p.y - 16 + a).stroke({ width: 1.6, color: 0xcfd8dc });
+    };
+    this.animate(0);
+  },
+
+  // Mesa del almuerzo llanero: el caney grande con la mesa larga y la gente almorzando; la olla de la yuca
+  // frita en el aceite de la Palma.
+  lunch_llanero(g, x, y, ctx) {
+    const x0 = x + 0.25;
+    const y0 = y + 0.3;
+    const w = 2.5;
+    const d = 1.6;
+    const H = 22 + ctx.up;
+    box(g, x0 + 0.3, y0 + 0.55, 1.9, 0.5, 8, PAL.wood);
+    for (let k = 0; k < 4; k++) {
+      const p = iso(x0 + 0.5 + k * 0.45, y0 + 0.8, 8);
+      g.ellipse(p.x, p.y - 1, 3.4, 1.6).fill(0xffffff).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
+      g.ellipse(p.x - 0.5, p.y - 1.4, 1.8, 0.9).fill(PRODUCTS.carne_llanera.color);
+    }
+    const pot = iso(x + 2.7, y + 2.4, 4);
+    box(g, x + 2.45, y + 2.2, 0.5, 0.4, 4, 0x9e9e9e);
+    g.ellipse(pot.x, pot.y - 2, 6, 2.6).fill(PRODUCTS.palm_oil.color).stroke(OUTLINE);
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, 0x8d6e4a);
+    gableRoof(g, x0, y0, w, d, H, 16, 0xc9a35a, 0xd9c08c);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 16);
+    const people = new Graphics();
+    this.anim.addChild(people);
+    this.animate = (time) => {
+      people.clear();
+      const shirts = [0xd7263d, 0x2e6fd1, 0xf4c430];
+      for (let k = 0; k < Math.min(2 + ctx.tier, 3); k++) {
+        const p = iso(x0 + 0.6 + k * 0.6, y0 + 1.35);
+        const bob = this.working ? Math.max(0, Math.sin(time * 3 + k * 2)) * 1.5 : 0;
+        worker(people, p.x, p.y + bob, shirts[k]);
+        people.ellipse(p.x, p.y - 22.5 + bob, 7, 1.8).fill(0x3a2a1e);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Asadero de la parranda: el asado grande con la carne y la cachama en las varas; el arpista toca y una pareja
+  // baila joropo zapateando.
+  parranda_grill(g, x, y, ctx) {
+    const c = iso(x + 1.1, y + 1.2);
+    g.ellipse(c.x, c.y, 18, 8).fill(0x3a2a1e);
+    for (let k = 0; k < 6; k++) {
+      const a = (k / 6) * Math.PI * 2;
+      const p = { x: c.x + Math.cos(a) * 16, y: c.y + Math.sin(a) * 7 };
+      g.moveTo(p.x, p.y).lineTo(p.x - Math.cos(a) * 4, p.y - 26).stroke({ width: 2, color: 0x6d4c32 });
+      if (k % 2) g.ellipse(p.x - Math.cos(a) * 3, p.y - 18, 4, 5).fill(PRODUCTS.mamona.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      else fishOn(g, p.x - Math.cos(a) * 3, p.y - 18, 4, PRODUCTS.smoked_cachama.color);
+    }
+    // El arpa.
+    const h = iso(x + 2.5, y + 0.7);
+    g.moveTo(h.x - 6, h.y).lineTo(h.x - 6, h.y - 30).quadraticCurveTo(h.x + 2, h.y - 34, h.x + 8, h.y - 22).lineTo(h.x + 7, h.y).closePath().fill(0xa1785a).stroke(OUTLINE);
+    for (let k = 0; k < 5; k++) g.moveTo(h.x - 4 + k * 2.4, h.y - 28 + k * 1.2).lineTo(h.x - 4 + k * 2.4, h.y - 2).stroke({ width: 0.6, color: 0xfff8e1 });
+    this.roofTop = iso(x + 1.5, y + 1.5, 34);
+    this.smokePoints = [iso(x + 1.1, y + 1.2, 8)];
+    const fiesta = new Graphics();
+    this.anim.addChild(fiesta);
+    this.animate = (time) => {
+      fiesta.clear();
+      const fh = this.working ? 8 + Math.sin(time * 9) * 2.5 : 3;
+      fiesta.poly([c.x - 8, c.y, c.x - 3, c.y - fh, c.x, c.y - 2, c.x + 3, c.y - fh * 1.2, c.x + 8, c.y]).fill(0xff7043);
+      const harpist = iso(x + 2.85, y + 0.9);
+      worker(fiesta, harpist.x, harpist.y, 0xffffff);
+      fiesta.ellipse(harpist.x, harpist.y - 22.5, 7, 1.8).fill(0x3a2a1e);
+      // La pareja del joropo: zapatean y giran.
+      for (const [k, [bx, by, shirt]] of [[1.9, 2.5, 0xd7263d], [2.4, 2.6, 0xf4c430]].entries()) {
+        const p = iso(x + bx, y + by);
+        const step = this.working ? Math.abs(Math.sin(time * 8 + k * Math.PI)) * 3 : 0;
+        const sway = this.working ? Math.sin(time * 2 + k) * 2 : 0;
+        worker(fiesta, p.x + sway, p.y - step, shirt);
+        if (k === 1) fiesta.poly([p.x + sway - 5, p.y - step - 9, p.x + sway + 5, p.y - step - 9, p.x + sway + 8, p.y - step, p.x + sway - 8, p.y - step]).fill(0xf06292);
+        else fiesta.ellipse(p.x + sway, p.y - step - 22.5, 7, 1.8).fill(0x3a2a1e);
+      }
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

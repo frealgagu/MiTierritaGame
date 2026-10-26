@@ -2585,6 +2585,59 @@ def cachama_maracuya():
     return layers
 
 
+# ---------- Los Llanos · El Hato llanero (v3.34) ----------
+
+def adobada():
+    """Ternera adobada: la carne roja espolvoreada de sal gruesa, en la batea de madera."""
+    layers = [(OUTLINE, [ellipse(50, 70, 44, 18)]), ('#a1785a', [ellipse(50, 70, 41, 15.5)])]
+    for cx, cy, rot in [(36, 58, -12), (62, 62, 10)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 20, 12, rot)]), ('#a93226', [ellipse(cx, cy, 17.5, 9.5, rot)]), ('#f8bbd0', [ellipse(cx + 4, cy - 2, 7, 2.5, rot)])]
+    layers.append(('#ffffff', [circle(30 + k * 7, 55 + (k % 3) * 3, 1.3) for k in range(7)] + [circle(56 + k * 6, 60 + (k % 2) * 4, 1.3) for k in range(4)]))
+    return layers
+
+
+def mamona():
+    """Mamona a la vara: los trozos de ternera ensartados en las varas, clavadas junto a la candela."""
+    layers = [('#5d4037', [rect(26, 14, 4, 80, -12), rect(56, 12, 4, 82, 8)])]
+    for cx, cy, rot in [(30, 32, -12), (34, 56, -12), (58, 30, 8), (56, 54, 8)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 13, 9, rot)]), ('#8e3b1f', [ellipse(cx, cy, 10.5, 6.8, rot)]), ('#c0602a', [ellipse(cx - 2, cy - 2, 5, 2.4, rot)])]
+    layers += [(OUTLINE, ['M 62 94 Q 66 74 76 66 Q 74 78 82 82 Q 84 70 90 64 Q 94 82 88 94 Z']), ('#ff7043', ['M 65 92 Q 68 77 75.5 70 Q 74.5 80.5 83 85 Q 85 75 89 69.5 Q 91.5 83 86.5 92 Z']), ('#ffd54f', ['M 72 92 Q 74 84 78 80 Q 78 86 84 88 L 84 92 Z'])]
+    return layers
+
+
+def carne_llanera():
+    """Carne a la llanera: la tabla con la carne asada trinchada, el cuchillo y el ají."""
+    layers = [(OUTLINE, [rect(6, 58, 88, 28, -6)]), ('#c68a4a', [rect(9, 61, 82, 22, -6)])]
+    for k in range(4):
+        cx = 22 + k * 15
+        layers += [(OUTLINE, [rect(cx - 6, 48 - k, 12, 18, -6)]), ('#8d3b1f', [rect(cx - 4, 50 - k, 8, 14, -6)]), ('#d9893a', [rect(cx - 4, 50 - k, 8, 3, -6)])]
+    layers += [(OUTLINE, [rect(58, 18, 36, 8, 25)]), ('#cfd8dc', [rect(60, 20, 22, 4.5, 25)]), ('#5d4037', [rect(80, 30, 12, 6, 25)])]
+    layers += [(OUTLINE, [ellipse(16, 34, 10, 7)]), ('#ffffff', [ellipse(16, 34, 8, 5)]), ('#43a047', [ellipse(16, 33, 6, 3)]), ('#e53935', [circle(14, 32, 1.4), circle(19, 34, 1.2)])]
+    return layers
+
+
+def almuerzo_llanero():
+    """Almuerzo llanero: el plato con la carne a la llanera, la yuca frita, el plátano y la papa."""
+    layers = [(OUTLINE, [ellipse(50, 64, 46, 24)]), ('#ffffff', [ellipse(50, 64, 43, 21.5)])]
+    layers += [(OUTLINE, [ellipse(40, 58, 18, 11)]), ('#8d3b1f', [ellipse(40, 58, 15.5, 8.5)]), ('#d9893a', [ellipse(36, 55, 6, 2, -10)])]
+    for k in range(3):
+        layers += [(OUTLINE, [rect(60 + k * 6, 50, 6, 20, 12)]), ('#f6d860', [rect(61 + k * 6, 51.5, 4, 17, 12)])]
+    layers += [(OUTLINE, ['M 26 72 Q 40 84 58 76 L 56 72 Q 42 78 30 68 Z']), ('#f9a825', ['M 28 71.5 Q 40 81.5 55.5 74.5 L 55 73 Q 42 79.5 30 70 Z'])]
+    layers += [(OUTLINE, [circle(70, 76, 6)]), ('#e0bb7a', [circle(70, 76, 4.6)])]
+    return layers
+
+
+def parranda():
+    """Asado de la parranda: el arpa llanera junto al asado, con la carne y la cachama en las varas."""
+    layers = [(OUTLINE, ['M 14 92 L 14 16 Q 34 8 52 30 L 50 92 Z']), ('#a1785a', ['M 17 89.5 L 17 18 Q 33 12 49 31.5 L 47.5 89.5 Z']), ('#5d4037', [rect(14, 86, 40, 6)])]
+    layers.append(('#fff8e1', [rib(19 + k * 4, 22 + k * 1.5, 19 + k * 4, 86, 0.8) for k in range(7)]))
+    layers += [('#5d4037', [rect(62, 18, 4, 76, 6), rect(82, 20, 4, 74, -6)])]
+    layers += [(OUTLINE, [ellipse(64, 40, 10, 7, 6)]), ('#8e3b1f', [ellipse(64, 40, 7.5, 4.8, 6)])]
+    layers += fish_shape(84, 46, 22, 14, '#8d5524', '#d9893a', 84, eye=False)
+    layers += [(OUTLINE, ['M 64 94 Q 68 80 76 74 Q 76 84 82 86 Q 84 78 90 72 Q 92 86 88 94 Z']), ('#ff7043', ['M 67 92 Q 70 82 75.5 77.5 Q 75.5 86 83 88.5 Q 85 81 89 76.5 Q 90 87 86.5 92 Z'])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -2757,6 +2810,11 @@ ICONS = [
     (0xE0A9, 'smoked_cachama', smoked_cachama),
     (0xE0AA, 'pisillo', pisillo),
     (0xE0AB, 'cachama_maracuya', cachama_maracuya),
+    (0xE0AC, 'adobada', adobada),
+    (0xE0AD, 'mamona', mamona),
+    (0xE0AE, 'carne_llanera', carne_llanera),
+    (0xE0AF, 'almuerzo_llanero', almuerzo_llanero),
+    (0xE0B0, 'parranda', parranda),
 ]
 
 

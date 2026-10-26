@@ -367,6 +367,19 @@ export const RESEARCH = [
   { zone: 'cachamera', id: 'sazon_llanera', name: 'Sazón llanera', icon: '🏅', desc: 'La cachama al maracuyá vale un 50 % más.', cost: 50000000, requires: 'cachama_kitchen', effect: { type: 'productValue', target: 'cachama_maracuya', mult: 1.5 } },
   { zone: 'cachamera', id: 'maestria_cachamera', name: 'Maestría: Cachamera', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cachamera', mult: 4 } },
   { zone: 'cachamera', id: 'supremacia_cachamera', name: 'Supremacía: Cachamera', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cachamera', mult: 8 } },
+
+  // Los Llanos · El Hato llanero (v3.34): las mismas de Paipa, con la ternera.
+  { zone: 'hato_llanero', id: 'pasto_braquiaria', name: 'Pasto braquiaria', icon: '🌱', desc: 'La Sabana del hato da el doble de novillos.', cost: 1000000, requires: 'llanero_butcher', effect: { type: 'stationSpeed', target: 'llanero_herd', mult: 2 } },
+  { zone: 'hato_llanero', id: 'desposte_tecnico', name: 'Desposte técnico', icon: '🥩', desc: 'El Desposte despresa el doble.', cost: 1200000, requires: 'llanero_butcher', effect: { type: 'stationSpeed', target: 'llanero_butcher', mult: 2 } },
+  { zone: 'hato_llanero', id: 'adobo_casa', name: 'Adobo de la casa', icon: ICON.adobada, desc: 'El Adobadero adoba el doble.', cost: 3000000, requires: 'vara_grill', effect: { type: 'stationSpeed', target: 'adobadero', mult: 2 } },
+  { zone: 'hato_llanero', id: 'camion_ganadero', name: 'Camión ganadero', icon: '🚚', desc: 'El despacho del Hato llanero lleva el doble por viaje.', cost: 5000000, requires: 'adobadero', effect: { type: 'dispatchCapacity', target: 'hato_llanero', mult: 2 } },
+  { zone: 'hato_llanero', id: 'asador_grande', name: 'Asador grande', icon: ICON.mamona, desc: 'El Asador de vara asa el doble.', cost: 8000000, requires: 'carving_table', effect: { type: 'stationSpeed', target: 'vara_grill', mult: 2 } },
+  { zone: 'hato_llanero', id: 'cuchillo_llanero', name: 'Cuchillo llanero', icon: ICON.carneLlanera, desc: 'La Trinchadora trincha el doble.', cost: 20000000, requires: 'lunch_llanero', effect: { type: 'stationSpeed', target: 'carving_table', mult: 2 } },
+  { zone: 'hato_llanero', id: 'mesa_caney', name: 'Mesa del caney', icon: ICON.almuerzoLlanero, desc: 'La Mesa del almuerzo llanero sirve el doble.', cost: 50000000, requires: 'parranda_grill', effect: { type: 'stationSpeed', target: 'lunch_llanero', mult: 2 } },
+  { zone: 'hato_llanero', id: 'parrilla_parranda', name: 'Parrilla de la parranda', icon: ICON.parranda, desc: 'El Asadero de la parranda asa el doble (las rutas se ajustan solas).', cost: 80000000, requires: 'parranda_grill', effect: { type: 'stationSpeed', target: 'parranda_grill', mult: 2 } },
+  { zone: 'hato_llanero', id: 'carne_del_llano', name: 'Carne del Llano', icon: '🏅', desc: 'Todo lo que vende el Hato llanero vale un 50 % más.', cost: 60000000, requires: 'lunch_llanero', effect: { type: 'zoneValue', target: 'hato_llanero', mult: 1.5 } },
+  { zone: 'hato_llanero', id: 'maestria_hato_llanero', name: 'Maestría: Hato llanero', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'hato_llanero', mult: 4 } },
+  { zone: 'hato_llanero', id: 'supremacia_hato_llanero', name: 'Supremacía: Hato llanero', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'hato_llanero', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al
