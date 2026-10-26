@@ -1,4 +1,4 @@
-// Mapa del Chocó · Zona 1: El Platanal (v3.38). Mismo trazado que la Finca (zone1_finca.js), el
+// Mapa de la Costa Pacífica · Zona 1: El Platanal (v3.38). Mismo trazado que la Finca (zone1_finca.js), el
 // Arrozal, el Papal y la Palma: la región empieza de cero y su primera zona se juega igual que la primera del Eje Cafetero.
 import { ICON } from '../icons.js';
 
@@ -29,6 +29,6 @@ export const ZONE31 = {
   exitText: 'A Quibdó ➜',
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
-  unlockedBy: null, // la primera del Chocó: se abre con la región
+  unlockedBy: null, // la primera de la Costa Pacífica: se abre con la región
   next: 'azotea',
 };

@@ -686,7 +686,7 @@ const VILLAVICENCIO = [
   { id: 'lv_final', type: 'sold', product: 'excursion_cano', amount: 7000, reward: 0, final: true },
 ];
 
-// Chocó · El Platanal (v3.38): la misma lista que la Palma.
+// Costa Pacífica · El Platanal (v3.38): la misma lista que la Palma.
 const PLATANAL = [
   { id: 'cp01', type: 'sold', product: 'plantain_bunch', amount: 20, reward: 15 },
   { id: 'cp02', type: 'level', target: 'plantain_grove', level: 5, reward: 20 },
@@ -719,5 +719,24 @@ const PLATANAL = [
   { id: 'cp_final', type: 'sold', product: 'patacon_box', amount: 2000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL };
+// Costa Pacífica · La Azotea (v3.39): la misma lista que el Frutal.
+const AZOTEA = [
+  { id: 'ca01', type: 'sold', product: 'herbs', amount: 50, reward: 500 },
+  { id: 'ca02', type: 'level', target: 'azotea_beds', level: 10, reward: 1000 },
+  { id: 'ca03', type: 'unlock', station: 'herb_washer', reward: 2000 },
+  { id: 'ca04', type: 'level', target: 'azotea_beds:transport', level: 10, reward: 2000 },
+  { id: 'ca05', type: 'unlock', station: 'herb_pestle', reward: 5000 },
+  { id: 'ca06', type: 'produced', product: 'pounded_herbs', amount: 200, reward: 8000 },
+  { id: 'ca08', type: 'unlock', station: 'refrito_pot', reward: 20000 },
+  { id: 'ca09', type: 'level', target: 'dispatch:azotea', level: 10, reward: 20000 },
+  { id: 'ca10', type: 'produced', product: 'alino', amount: 500, reward: 40000 },
+  { id: 'ca11', type: 'unlock', station: 'alino_packer', reward: 80000 },
+  { id: 'ca12', type: 'allLevels', zone: 'azotea', level: 25, reward: 100000 },
+  { id: 'ca07', type: 'research', research: 'lavadero_doble', reward: 50000 },
+  { id: 'ca13', type: 'income', zone: 'azotea', perSecond: 500, reward: 150000 },
+  { id: 'ca14', type: 'sold', product: 'alino_box', amount: 1000, reward: 300000 },
+  { id: 'ca_final', type: 'sold', product: 'alino_box', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

@@ -243,7 +243,7 @@ const JOROPO = {
   ],
 };
 
-// El Chocó (v3.38): una chirimía, el porro chocoano de las fiestas de San Pacho en Quibdó, en fa mayor que
+// La Costa Pacífica (v3.38): una chirimía, el porro chocoano de las fiestas de San Pacho en Quibdó, en fa mayor que
 // pasa a re menor. El clarinete lleva la melodía, el bombardino el bajo, y la tambora, el redoblante y los
 // platillos el ritmo (4/4, corcheas 0 a 7).
 const CHIRIMIA = {

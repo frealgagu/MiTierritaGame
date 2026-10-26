@@ -841,7 +841,7 @@ test('Villavicencio recibe lo de las cinco zonas de los Llanos y arma los morral
   assert.ok((game.state.stats.produced.fiambre_viaje ?? 0) > 0, 'arma morrales del viaje');
 });
 
-test('El Chocó se abre al completar Villavicencio; mientras esté en obra no se termina (v3.38)', async () => {
+test('La Costa Pacífica se abre al completar Villavicencio; mientras esté en obra no se termina (v3.38)', async () => {
   const { claimGoal } = await import('../src/sim/goals.js');
   const root = createInitialState(0);
   root.zones.pueblo.complete = true;
@@ -861,5 +861,6 @@ test('El Chocó se abre al completar Villavicencio; mientras esté en obra no se
   c.goals.claimed.push(...GOALS_BY_ZONE.platanal.filter((g) => !g.final).map((g) => g.id));
   claimGoal(c, GOALS_BY_ZONE.platanal.find((g) => g.final).id, { emit() {} });
   assert.equal(c.zones.platanal.complete, true);
+  assert.ok(c.zones.azotea.unlocked, 'El Platanal abre La Azotea (v3.39)');
   assert.ok(!c.regionDone, 'en obra: todavía no tiene final');
 });

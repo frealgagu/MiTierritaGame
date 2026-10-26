@@ -271,7 +271,7 @@ export const STATIONS = [
   { id: 'morrales_viaje', zone: 'villavicencio', name: 'Morrales del viaje', icon: ICON.fiambreViaje, in: { almuerzo_plaza: 1 }, imports: [{ product: 'almuerzo_llanero', perCycle: 1, route: 'almuerzos_llaneros' }, { product: 'parranda_llanera', perCycle: 1, route: 'parrandas' }], out: { fiambre_viaje: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.36' },
   { id: 'salida_cano', zone: 'villavicencio', name: 'Salida a Caño Cristales', icon: ICON.canoCristales, in: { fiambre_viaje: 4 }, out: { excursion_cano: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.36' },
 
-  // Chocó · El Platanal (v3.38), en las vegas del Atrato: los racimos de plátano se desmanan, las manos se
+  // Costa Pacífica · El Platanal (v3.38), en las vegas del Atrato: los racimos de plátano se desmanan, las manos se
   // lavan en el tanque, se pelan, se fríen en patacones y los patacones se empacan en bolsas y las bolsas en
   // cajas. Mismos números que la Finca, la Guayabera, el Arrozal, el Papal y la Palma: la región empieza de cero.
   { id: 'plantain_grove', zone: 'platanal', name: 'Platanal', icon: ICON.plantainPlant, infinite: true, out: { plantain_bunch: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.38' },
@@ -281,6 +281,15 @@ export const STATIONS = [
   { id: 'patacon_fryer', zone: 'platanal', name: 'Fritanga de patacones', icon: ICON.patacon, in: { peeled_plantain: 2 }, out: { patacon: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.38' },
   { id: 'patacon_bagger', zone: 'platanal', name: 'Empacadora', icon: ICON.pataconBag, in: { patacon: 1 }, out: { patacon_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.38' },
   { id: 'patacon_boxer', zone: 'platanal', name: 'Cajonera de patacones', icon: ICON.pataconBox, in: { patacon_bag: 4 }, out: { patacon_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.38' },
+
+  // Costa Pacífica · La Azotea (v3.39): las hierbas de las azoteas (huertas alzadas sobre pilotes) se lavan, se machacan
+  // en el pilón con ajo y cebolla, se sofríen en el refrito y el aliño se envasa en frascos. Mismos números que el
+  // Tabacal, el Cocal, la Cervecería y el Frutal; el aliño es el que después viajará a la Bahía, y las cajas, a Quibdó.
+  { id: 'azotea_beds', zone: 'azotea', name: 'Azoteas', icon: ICON.azotea, infinite: true, out: { herbs: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.39' },
+  { id: 'herb_washer', zone: 'azotea', name: 'Lavadero de hierbas', icon: ICON.washedHerbs, in: { herbs: 1 }, out: { washed_herbs: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.39' },
+  { id: 'herb_pestle', zone: 'azotea', name: 'Pilón', icon: ICON.poundedHerbs, in: { washed_herbs: 2 }, out: { pounded_herbs: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.39' },
+  { id: 'refrito_pot', zone: 'azotea', name: 'Olla del refrito', icon: ICON.alino, in: { pounded_herbs: 2 }, out: { alino: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.39' },
+  { id: 'alino_packer', zone: 'azotea', name: 'Envasadora de aliño', icon: ICON.alinoBox, in: { alino: 1 }, out: { alino_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.39' },
 
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).

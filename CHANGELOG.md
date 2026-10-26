@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v3.39.0 — Costa Pacífica: La Azotea
+- **🐋 La región se llama ahora Costa Pacífica** (salió como «el Chocó»): va del Chocó a Nariño, y su última zona será **Buenaventura**, en vez de Quibdó. Tu partida sigue igual.
+- **🌿 La Azotea**, su segunda zona, se abre al completar El Platanal: las Azoteas → el Lavadero de hierbas → el Pilón → la Olla del refrito → la Envasadora de aliño. Las hierbas de azotea (chillangua, poleo, albahaca y oreganón) se lavan, se machacan con ajo y cebolla, se sofríen y el aliño se envasa en frascos. Tiene los mismos números que el Frutal; el aliño es el que después viajará a la Bahía, y las cajas, a Buenaventura.
+- Su persona es **Doña Rosalba, la cocinera**, con sus datos curiosos, objetivos, 9 investigaciones, su victoria y 6 íconos nuevos (de la azotea a la caja de aliño).
+- **El mapa:** las azoteas, canoas viejas alzadas en pilotes y llenas de hierbas, que florecen con cada hito; en las estaciones:
+  - la ramada con la batea donde se lavan los manojos;
+  - la casa rosada con los pilones y las cocineras que machacan por turnos;
+  - la cocina azul con el fogón de leña y la olla del refrito;
+  - la casa verde con la mesa donde se llenan y se tapan los frascos.
+
 ## v3.38.0 — El Chocó: El Platanal
 - **🐋 El Chocó**, la sexta región, se abre al completar Villavicencio. Tiene su propia economía, como las demás, y llegará zona por zona.
 - **🍌 El Platanal**, su primera zona: el Platanal → la Desmanadora → el Tanque de lavado → la Peladora → la Fritanga de patacones → la Empacadora → la Cajonera de patacones. Va del racimo de plátano a la caja de patacones, pasando por la mano, el plátano lavado y pelado, el patacón y la bolsa. Tiene los mismos números que la Palma, porque la región empieza de cero.

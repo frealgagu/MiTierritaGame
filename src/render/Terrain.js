@@ -149,8 +149,8 @@ export class Terrain {
             const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
-        } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain')) {
-          // Hojarasca bajo los cacaos (y bajo el platanal del Chocó, v3.38).
+        } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea')) {
+          // Hojarasca bajo los cacaos (y bajo el platanal del Pacífico, v3.38).
           for (let k = 0; k < 2; k++) {
             const p = iso(gx + rng(), gy + rng());
             g.ellipse(p.x, p.y, 3, 1.5).fill({ color: rng() < 0.5 ? 0x8a6a3a : 0x6e8f3a, alpha: 0.7 });
@@ -326,8 +326,8 @@ export class Terrain {
           else if (r < 0.055) obj = morichePalm(rng);
           else if (r < 0.075) obj = termiteMound(rng);
           else if (r < 0.09) obj = egret(rng);
-        } else if (this.zone.theme === 'plantain') {
-          // El Chocó (v3.38): la selva húmeda, con palmas de chontaduro, borojós, heliconias y plátano suelto.
+        } else if (this.zone.theme === 'plantain' || this.zone.theme === 'azotea') {
+          // La Costa Pacífica (v3.38): la selva húmeda, con palmas de chontaduro, borojós, heliconias y plátano suelto.
           if (r < 0.03) obj = chontaduroPalm(rng);
           else if (r < 0.055) obj = borojoTree(rng);
           else if (r < 0.085) obj = heliconia(rng);
@@ -558,6 +558,7 @@ const FARM_SOIL = {
   llanos: (v) => mix(0x9ab44e, 0xa8bc58, v * 0.5), // la sabana del Hato llanero (v3.34)
   hides: (v) => mix(0xb89a6a, 0xa8885a, v * 0.4), // el patio de tierra del saladero (v3.35)
   plantain: (v) => mix(0x5a4a30, 0x4a3d28, v * 0.5), // la tierra negra y mojada del platanal (v3.38)
+  azotea: (v) => mix(0x6a5a3a, 0x5a4a30, v * 0.5), // el patio de las azoteas (v3.39)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
@@ -1147,6 +1148,31 @@ export function drawPlantainPlant(g, x, y, scale, rng, bunch = 1) {
     for (const dx of [-2.2, 0, 2.2]) g.ellipse(bx + 2 * s + dx * s, yy, 1.4 * s, 2.2 * s).fill(k % 2 ? 0x7cb342 : 0x8bc34a);
   }
   g.ellipse(bx + 2 * s, top + (11 + Math.min(bunch, 3) * 3) * s, 1.8 * s, 2.6 * s).fill(0x7b1f4b);
+}
+
+// Azotea (v3.39): la canoa vieja alzada en cuatro pilotes, llena de tierra, con las hierbas de cocina; con
+// cada hito, más matas y las flores moradas de la albahaca.
+export function drawAzoteaBed(g, x, y, scale, rng, tier = 0) {
+  const s = scale;
+  const lift = 12 * s;
+  shadow(g, x + 2, y + 2, 18 * s, 6 * s);
+  const a = { x: x - 14 * s, y: y - 5 * s };
+  const b = { x: x + 14 * s, y: y + 5 * s };
+  for (const p of [a, b, { x: a.x + 8 * s, y: a.y + 7 * s }, { x: b.x - 8 * s, y: b.y - 7 * s }]) g.rect(p.x - 1, p.y - lift, 2, lift).fill(0x5d4037);
+  const top = -lift;
+  g.moveTo(a.x - 2 * s, a.y + top - 2 * s).lineTo(b.x + 2 * s, b.y + top - 2 * s).quadraticCurveTo(b.x - 2 * s, b.y + top + 5 * s, b.x - 8 * s, b.y + top + 3 * s)
+    .lineTo(a.x + 6 * s, a.y + top + 5 * s).quadraticCurveTo(a.x - 1 * s, a.y + top + 3 * s, a.x - 2 * s, a.y + top - 2 * s).fill(0x8d6e4a).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.6 });
+  g.moveTo(a.x, a.y + top - 2 * s).lineTo(b.x, b.y + top - 2 * s).stroke({ width: 2.4 * s, color: 0x4e342e });
+  const n = 4 + Math.min(tier, 3);
+  for (let i = 0; i < n; i++) {
+    const f = (i + 0.5) / n;
+    const hx = a.x + (b.x - a.x) * f + (rng() - 0.5) * 2;
+    const hy = a.y + (b.y - a.y) * f + top - 2 * s;
+    const h = (6 + rng() * 4) * s;
+    const col = [0x43a047, 0x66bb6a, 0x2e7d32, 0x7cb342][i % 4];
+    for (const dx of [-2, 0, 2]) g.moveTo(hx, hy).lineTo(hx + dx * s, hy - h).stroke({ width: 1.6 * s, color: col, cap: 'round' });
+    if (tier >= 2 && i % 2 === 0) g.circle(hx, hy - h - 1, 1.2 * s).fill(0x7e57c2);
+  }
 }
 
 // Palma de chontaduro (v3.38): el tronco delgado con sus anillos de espinas, las hojas de plumas y los racimos

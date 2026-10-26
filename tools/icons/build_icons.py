@@ -2765,7 +2765,7 @@ def cano_cristales():
     return layers
 
 
-# ---------- Chocó · El Platanal (v3.38) ----------
+# ---------- Costa Pacífica · El Platanal (v3.38) ----------
 
 def finger(x0, y0, x1, y1, bend, w, color, outline=True, tip=True):
     """Dedo de plátano: grueso y curvo, de la base (x0, y0) a la punta (x1, y1), curvado `bend`, de grueso `w`."""
@@ -2910,6 +2910,98 @@ def patacon_box():
                    ('#e0a030', [ellipse(cx, top + 16, 5, 3)])]
     layers.append(('#d9b98a', [poly(11, 42, 50, 29, 89, 42, 50, 55)]))
     layers += finger(58, 78, 82, 68, -2, 6, '#7cb342')
+    return layers
+
+
+# ---------- Costa Pacífica · La Azotea (v3.39) ----------
+
+def herb_sprig(cx, cy, h, color, lean=0):
+    """Una mata de hierba: el tallo y sus hojas en punta, a lado y lado."""
+    layers = [(OUTLINE, [rib(cx, cy, cx + lean, cy - h, 3.2)]), ('#2e7d32', [rib(cx, cy, cx + lean, cy - h, 1.6)])]
+    for k in range(3):
+        f = 0.35 + k * 0.25
+        bx, by = cx + lean * f, cy - h * f
+        for side in (-1, 1):
+            layers.append((OUTLINE, [leaf(bx, by, bx + side * h * 0.38, by - h * 0.18, 4.6)]))
+            layers.append((color, [leaf(bx, by, bx + side * h * 0.38, by - h * 0.18, 3.4)]))
+    layers += [(OUTLINE, [leaf(cx + lean, cy - h, cx + lean, cy - h - h * 0.3, 4.4)]), (color, [leaf(cx + lean, cy - h, cx + lean, cy - h - h * 0.3, 3.2)])]
+    return layers
+
+
+def azotea():
+    """Azotea: la canoa vieja alzada en pilotes, llena de tierra y de hierbas de cocina."""
+    layers = [('#5d8f3a', [ellipse(50, 94, 40, 5)])]
+    for x in (22, 40, 60, 78):
+        layers += [(OUTLINE, [rect(x - 3.5, 58, 7, 36)]), ('#6d4c41', [rect(x - 1.8, 59.5, 3.6, 33)])]
+    layers += [(OUTLINE, ['M 6 44 L 94 44 Q 90 66 70 68 L 30 68 Q 10 66 6 44 Z']), ('#8d6e4a', ['M 9.5 46.5 L 90.5 46.5 Q 87 63.5 69 65.5 L 31 65.5 Q 13 63.5 9.5 46.5 Z'])]
+    layers.append(('#4e342e', [rect(10, 44, 80, 5)]))
+    for cx, h, col, lean in [(18, 26, '#43a047', -4), (32, 34, '#66bb6a', 2), (48, 30, '#2e7d32', -2), (62, 36, '#7cb342', 4), (78, 28, '#558b2f', 3)]:
+        layers += herb_sprig(cx, 46, h, col, lean)
+    layers += [('#7e57c2', [circle(48, 13, 2.4), circle(51, 10, 2), circle(45, 10, 2)])]
+    return layers
+
+
+def herbs():
+    """Hierbas de azotea: el manojo de chillangua, poleo y albahaca, amarrado con una cabuya."""
+    layers = []
+    for x1, y1, col in [(22, 18, '#43a047'), (38, 10, '#66bb6a'), (54, 8, '#2e7d32'), (70, 14, '#7cb342'), (82, 26, '#558b2f')]:
+        layers += [(OUTLINE, [leaf(50, 80, x1, y1, 11)]), (col, [leaf(50, 80, x1, y1, 9)]), ('#1b5e20', [rib(50, 80, x1, y1, 1)])]
+    layers += [(OUTLINE, [rect(42, 70, 16, 24, 0)]), ('#689f38', [rect(44.5, 72, 11, 21)])]
+    layers += [(OUTLINE, [rect(38, 72, 24, 8)]), ('#c8a26a', [rect(40, 73.5, 20, 5)])]
+    layers += [('#7e57c2', [circle(54, 14, 2.6), circle(57, 11, 2.2), circle(51, 11, 2.2)])]
+    return layers
+
+
+def washed_herbs():
+    """Hierbas lavadas: el manojo dentro de la ponchera con agua, todavía goteando."""
+    layers = [(OUTLINE, ['M 6 54 L 94 54 Q 90 92 50 92 Q 10 92 6 54 Z']), ('#e57373', ['M 9.5 56.5 L 90.5 56.5 Q 87 89.5 50 89.5 Q 13 89.5 9.5 56.5 Z'])]
+    for x1, y1, col in [(24, 20, '#66bb6a'), (42, 12, '#81c784'), (60, 12, '#4caf50'), (76, 22, '#9ccc65')]:
+        layers += [(OUTLINE, [leaf(50, 66, x1, y1, 10)]), (col, [leaf(50, 66, x1, y1, 8)]), ('#2e7d32', [rib(50, 66, x1, y1, 1)])]
+    layers += [(OUTLINE, [ellipse(50, 56, 43, 8)]), ('#4fa3c7', [ellipse(50, 56, 40.5, 6)]), ('#e8f6ff', [ellipse(36, 55, 8, 1.6), ellipse(64, 57, 6, 1.4)])]
+    layers += [('#4fa3c7', ['M 30 30 Q 33 36 30 38 Q 27 36 30 30 Z', 'M 70 34 Q 73 40 70 42 Q 67 40 70 34 Z'])]
+    return layers
+
+
+def pounded_herbs():
+    """Hierbas machacadas: el pilón de madera con la pasta verde y la mano del pilón."""
+    layers = [(OUTLINE, ['M 18 40 L 82 40 L 74 84 L 66 92 L 34 92 L 26 84 Z']), ('#8d6e4a', ['M 21 42.5 L 79 42.5 L 71.6 82.8 L 64.8 89.5 L 35.2 89.5 L 28.4 82.8 Z'])]
+    layers.append(('#6d4c41', [rect(24, 60, 52, 4), rect(26, 72, 48, 4)]))
+    layers += [(OUTLINE, [ellipse(50, 41, 32, 8)]), ('#4e342e', [ellipse(50, 41, 29.5, 6)]), ('#558b2f', [ellipse(50, 42, 24, 4.5)]), ('#7cb342', [circle(42, 41, 2), circle(56, 42, 1.8), circle(48, 43, 1.6)])]
+    layers += [(OUTLINE, [rect(58, 2, 12, 44, 18)]), ('#bc8a5f', [rect(60.5, 4.5, 7, 39, 18)])]
+    layers += [('#ffffff', [circle(36, 44, 1.2), circle(60, 40, 1.2)])]
+    return layers
+
+
+def alino_jar(cx, cy, s=1.0):
+    """Frasco de aliño: vidrio con el aliño verde oscuro, la tapa roja y la etiqueta con la hoja."""
+    w, h = 22 * s, 34 * s
+    layers = [(OUTLINE, [rect(cx - w / 2 - 2, cy - h / 2 - 2, w + 4, h + 4)]), ('#e8f6ff', [rect(cx - w / 2, cy - h / 2, w, h)])]
+    layers.append(('#7a8a2e', [rect(cx - w / 2, cy - h / 2 + 6 * s, w, h - 6 * s)]))
+    layers.append(('#5d6b1f', [circle(cx - w * 0.2, cy + h * 0.1, 1.6 * s), circle(cx + w * 0.25, cy + h * 0.3, 1.4 * s), circle(cx, cy - h * 0.1, 1.2 * s)]))
+    layers += [(OUTLINE, [rect(cx - w / 2 - 1, cy - h / 2 - 9 * s, w + 2, 9 * s)]), ('#d7263d', [rect(cx - w / 2 + 1, cy - h / 2 - 7 * s, w - 2, 5 * s)])]
+    layers.append(('#fff8e1', [rect(cx - w / 2, cy - 2 * s, w, 12 * s)]))
+    layers.append(('#2e7d32', [leaf(cx - 6 * s, cy + 8 * s, cx + 6 * s, cy, 2.4 * s)]))
+    return layers
+
+
+def alino():
+    """Aliño de azotea: el frasco de aliño, con la chillangua y el ajo al lado."""
+    layers = alino_jar(46, 54, 1.6)
+    layers += [(OUTLINE, [leaf(70, 92, 94, 60, 7)]), ('#43a047', [leaf(70, 92, 94, 60, 5.5)])]
+    layers += [(OUTLINE, [ellipse(16, 84, 10, 9)]), ('#f5f0e1', [ellipse(16, 84, 8, 7)]), ('#d7ccc8', [rib(16, 77, 16, 91, 1)])]
+    return layers
+
+
+def alino_box():
+    """Caja de aliño: la caja de cartón con los frascos de tapa roja asomados."""
+    layers = [(OUTLINE, [poly(8, 40, 50, 26, 92, 40, 92, 82, 50, 96, 8, 82)])]
+    layers.append(('#c8a26a', [poly(11, 42, 50, 55, 50, 92.5, 11, 80)]))
+    layers.append(('#b08850', [poly(50, 55, 89, 42, 89, 80, 50, 92.5)]))
+    for cx in (30, 50, 70):
+        top = 28 + abs(cx - 50) * 0.3
+        layers += alino_jar(cx, top, 0.6)
+    layers.append(('#d9b98a', [poly(11, 42, 50, 29, 89, 42, 50, 55)]))
+    layers += [(OUTLINE, [leaf(60, 78, 80, 66, 4.5)]), ('#43a047', [leaf(60, 78, 80, 66, 3.2)])]
     return layers
 
 
@@ -3111,6 +3203,12 @@ ICONS = [
     (0xE0C2, 'patacon', patacon),
     (0xE0C3, 'patacon_bag', patacon_bag),
     (0xE0C4, 'patacon_box', patacon_box),
+    (0xE0C5, 'azotea', azotea),
+    (0xE0C6, 'herbs', herbs),
+    (0xE0C7, 'washed_herbs', washed_herbs),
+    (0xE0C8, 'pounded_herbs', pounded_herbs),
+    (0xE0C9, 'alino', alino),
+    (0xE0CA, 'alino_box', alino_box),
 ]
 
 

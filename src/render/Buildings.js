@@ -264,7 +264,7 @@ function worker(g, x, y, shirt) {
   g.ellipse(x, y - 22.5, 5.5, 1.5).fill(0xf4e3b5);
 }
 
-// Casa de tablas sobre pilotes, como las del Chocó (v3.38): los pilotes, el piso alzado, las paredes de color, la
+// Casa de tablas sobre pilotes, como las del Pacífico (v3.38): los pilotes, el piso alzado, las paredes de color, la
 // escalera al frente y el techo de zinc. Devuelve la altura del piso (z donde empiezan las paredes).
 function stiltHouse(view, g, hx, hy, w, d, wallH, ctx, { wall = 0x4fb3bf, trim = 0xf7f4ee, roofColor = 0x9aa3a8, roofH = 12, lift = 10 } = {}) {
   for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d], [w / 2, d]]) box(g, hx + px - 0.05, hy + py - 0.05, 0.1, 0.1, lift, 0x6b4a2e);
@@ -4464,7 +4464,7 @@ const DRAW = {
     };
   },
 
-  // --- Chocó · El Platanal (v3.38): casas de tabla sobre pilotes, pintadas de colores, con techo de zinc ---
+  // --- Costa Pacífica · El Platanal (v3.38): casas de tabla sobre pilotes, pintadas de colores, con techo de zinc ---
 
   // Desmanadora: la ramada donde cuelgan los racimos del cable; el platanero corta las manos con el machete y
   // caen a la tina de agua.
@@ -4669,6 +4669,130 @@ const DRAW = {
       const p = iso(x + 0.5 + k * 0.9, y + 2.2 + k * 0.5);
       worker(carrier, p.x, p.y, 0x1e88e5);
       if (!back) carrier.rect(p.x - 6, p.y - 30, 12, 9).fill(PRODUCTS.patacon_box.color).stroke(OUTLINE);
+    };
+  },
+
+  // --- Costa Pacífica · La Azotea (v3.39): la cocina del Pacífico, en casas de tabla sobre pilotes ---
+
+  // Lavadero de hierbas: la ramada con la batea de madera llena de agua; la cocinera lava los manojos y los
+  // pone a escurrir en la canasta.
+  herb_washer(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    box(g, x0 + 0.4, y0 + 0.6, 1.6, 0.7, 9, 0x8d6e4a);
+    const tub = iso(x0 + 1.2, y0 + 0.95, 9);
+    g.ellipse(tub.x, tub.y, 18, 6).fill(0x6d4c41).stroke(OUTLINE);
+    g.ellipse(tub.x, tub.y, 15, 4.5).fill(0x4fa3c7);
+    const basket = iso(x + 2.6, y + 2.3);
+    g.poly([basket.x - 9, basket.y - 9, basket.x + 9, basket.y - 9, basket.x + 7, basket.y, basket.x - 7, basket.y]).fill(0xc8a26a).stroke(OUTLINE);
+    for (let k = 0; k < 4; k++) g.moveTo(basket.x - 6 + k * 4, basket.y - 9).lineTo(basket.x - 7 + k * 4, basket.y - 15).stroke({ width: 2, color: PRODUCTS.washed_herbs.color, cap: 'round' });
+    const drum = iso(x + 0.55, y + 2.4);
+    g.rect(drum.x - 6, drum.y - 14, 12, 14).fill(0x1e88e5).stroke(OUTLINE);
+    g.ellipse(drum.x, drum.y - 14, 6, 2).fill(0x4fa3c7).stroke(OUTLINE);
+    ramada(this, g, x0, y0, 2.3, 1.6, 28 + ctx.up);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (let k = 0; k < 3; k++) {
+        const bob = this.working ? Math.sin(time * 3 + k * 2) * 1.2 : 0;
+        anim.moveTo(tub.x - 8 + k * 7, tub.y + bob).lineTo(tub.x - 9 + k * 7, tub.y - 6 + bob).stroke({ width: 2.2, color: PRODUCTS.herbs.color, cap: 'round' });
+      }
+      const wp = iso(x0 + 1.2, y0 + 1.75);
+      worker(anim, wp.x, wp.y, 0xe5737f);
+      if (!this.working) return;
+      const f = (time * 1.5) % 1;
+      anim.circle(tub.x + 10, tub.y - 4 + f * 8, 1.1).fill(0xe8f6ff);
+      anim.moveTo(tub.x - 12 + Math.sin(time * 5) * 3, tub.y - 1).lineTo(tub.x - 6 + Math.sin(time * 5) * 3, tub.y - 1).stroke({ width: 1, color: 0xe8f6ff });
+    };
+    this.animate(0);
+  },
+
+  // Pilón: el pilón de madera bajo el alero de la casa (rosada), con dos cocineras que machacan por turnos con
+  // la mano de pilón; al lado, el ajo y la cebolla.
+  herb_pestle(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 1.6, 1.2, 20, ctx, { wall: 0xe5737f, trim: 0xf7f4ee, lift: 8 });
+    const pil = iso(x + 2.3, y + 1.9);
+    const pils = ctx.tier >= 2 ? [pil, iso(x + 1.4, y + 2.55)] : [pil];
+    for (const p of pils) {
+      g.poly([p.x - 9, p.y - 16, p.x + 9, p.y - 16, p.x + 6, p.y, p.x - 6, p.y]).fill(0x8d6e4a).stroke(OUTLINE);
+      g.moveTo(p.x - 8, p.y - 10).lineTo(p.x + 8, p.y - 10).stroke({ width: 1, color: 0x6d4c41 });
+      g.ellipse(p.x, p.y - 16, 9, 3).fill(0x4e342e).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 16, 6.5, 2).fill(PRODUCTS.pounded_herbs.color);
+    }
+    const garlic = iso(x + 0.5, y + 2.6);
+    for (let k = 0; k < 3; k++) g.circle(garlic.x - 4 + k * 4, garlic.y - 3, 2.6).fill(k === 1 ? 0xb06ab3 : 0xf5f0e1).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, p] of pils.entries()) {
+        for (const side of [-1, 1]) {
+          const phase = side < 0 ? 0 : Math.PI;
+          const up = this.working ? (Math.sin(time * 5 + phase + k) + 1) * 6 : 6;
+          const wx = p.x + side * 14;
+          worker(anim, wx, p.y + 2, side < 0 ? 0xf2c14e : 0x6cbf6c);
+          anim.moveTo(p.x + side * 2, p.y - 20 - up).lineTo(p.x + side * 3, p.y - 42 - up).stroke({ width: 3, color: 0xbc8a5f, cap: 'round' });
+        }
+      }
+    };
+    this.animate(0);
+  },
+
+  // Olla del refrito: la cocina de tablas sobre pilotes (azul), con su fogón de leña en el corredor; la olla
+  // grande sofríe el aliño y el humo sale por el techo.
+  refrito_pot(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    stiltHouse(this, g, hx, hy, 1.9, 1.3, 22, ctx, { wall: 0x5c8dd6, trim: 0xf2c14e });
+    box(g, x + 1.6, y + 2.0, 1.0, 0.7, 10, 0xa1887f);
+    const pot = iso(x + 2.1, y + 2.35, 10);
+    g.moveTo(pot.x - 10, pot.y - 12).lineTo(pot.x - 9, pot.y).quadraticCurveTo(pot.x, pot.y + 4, pot.x + 9, pot.y).lineTo(pot.x + 10, pot.y - 12).closePath().fill(0x37474f).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 12, 10, 3.5).fill(PRODUCTS.alino.color).stroke(OUTLINE);
+    for (let k = 0; k < 3; k++) box(g, x + 0.4 + k * 0.08, y + 2.55 - k * 0.05, 0.8, 0.1, 3, 0x6b4a2e, { z: k * 3 });
+    this.smokePoints = [{ x: pot.x, y: pot.y - 20 }];
+    const fire = iso(x + 2.1, y + 2.72, 3);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      anim.poly([fire.x - 4, fire.y, fire.x, fire.y - 5 - (this.working ? Math.sin(time * 9) * 1.5 : 0), fire.x + 4, fire.y]).fill(this.working ? 0xff7043 : 0x5d4037);
+      const wp = iso(x + 1.45, y + 2.85);
+      worker(anim, wp.x, wp.y, 0xf7f4ee);
+      const stir = this.working ? time * 3 : 0;
+      anim.moveTo(pot.x + Math.cos(stir) * 5, pot.y - 12 + Math.sin(stir) * 1.5).lineTo(pot.x - 8, pot.y - 28).stroke({ width: 1.8, color: 0xbc8a5f });
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) anim.circle(pot.x - 5 + i * 5, pot.y - 13 - ((time * 2 + i * 0.3) % 1) * 3, 1).fill({ color: 0xc5e1a5, alpha: 0.8 });
+    };
+    this.animate(0);
+  },
+
+  // Envasadora de aliño: la casa grande sobre pilotes (verde y amarilla); abajo, la mesa donde el aliño cae en
+  // los frascos, se tapan y se guardan en las cajas.
+  alino_packer(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 2.1, 1.4, 22, ctx, { wall: 0x6cbf6c, trim: 0xf2c14e });
+    box(g, x + 0.4, y + 2.15, 2.0, 0.35, 8, 0x8d6e4a);
+    const tap = iso(x + 0.9, y + 2.32, 22);
+    g.rect(tap.x - 5, tap.y - 10, 10, 10).fill(PRODUCTS.alino.color).stroke(OUTLINE);
+    for (let k = 0; k < 1 + Math.min(ctx.tier, 2); k++) box(g, x + 2.5, y + 0.6 + k * 0.4, 0.32, 0.32, 8, PRODUCTS.alino_box.color);
+    const belt = new Graphics();
+    this.anim.addChild(belt);
+    this.animate = (time) => {
+      belt.clear();
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.3 + i / 4) % 1;
+        const p = iso(x + 0.45 + f * 1.8, y + 2.32, 8);
+        const full = f > 0.3;
+        belt.rect(p.x - 2.5, p.y - 9, 5, 9).fill(full ? PRODUCTS.alino.color : 0xe8f6ff).stroke(OUTLINE);
+        belt.rect(p.x - 2.5, p.y - 11, 5, 2.2).fill(f > 0.55 ? 0xd7263d : 0xe8f6ff);
+      }
+      if (!this.working) return;
+      const f = (time * 2) % 1;
+      belt.moveTo(tap.x, tap.y + 1).lineTo(tap.x, tap.y + 4 + f * 3).stroke({ width: 1.4, color: PRODUCTS.alino.color });
     };
   },
 

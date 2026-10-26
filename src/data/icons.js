@@ -200,6 +200,12 @@ export const ICON = {
   patacon: '\uE0C2', // Patacones: tres patacones dorados, recién fritos y aplastados, en el plato con sal
   pataconBag: '\uE0C3', // Bolsa de patacones: la bolsa amarilla, cerrada arriba, con los patacones por la ventana y el plátano
   pataconBox: '\uE0C4', // Caja de patacones: la caja de cartón con las bolsas amarillas asomadas
+  azotea: '\uE0C5', // Azotea: la canoa vieja alzada en pilotes, llena de tierra y de hierbas de cocina
+  herbs: '\uE0C6', // Hierbas de azotea: el manojo de chillangua, poleo y albahaca, amarrado con una cabuya
+  washedHerbs: '\uE0C7', // Hierbas lavadas: el manojo dentro de la ponchera con agua, todavía goteando
+  poundedHerbs: '\uE0C8', // Hierbas machacadas: el pilón de madera con la pasta verde y la mano del pilón
+  alino: '\uE0C9', // Aliño de azotea: el frasco de aliño, con la chillangua y el ajo al lado
+  alinoBox: '\uE0CA', // Caja de aliño: la caja de cartón con los frascos de tapa roja asomados
 };
 
 export const ICON_FONT = 'Cafetal Icons';

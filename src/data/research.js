@@ -405,7 +405,7 @@ export const RESEARCH = [
   { zone: 'villavicencio', id: 'maestria_villavicencio', name: 'Maestría: Villavicencio', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'villavicencio', mult: 4 } },
   { zone: 'villavicencio', id: 'supremacia_villavicencio', name: 'Supremacía: Villavicencio', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'villavicencio', mult: 8 } },
 
-  // Chocó · El Platanal (v3.38): las mismas de la Palma, con el plátano.
+  // Costa Pacífica · El Platanal (v3.38): las mismas de la Palma, con el plátano.
   { zone: 'platanal', id: 'platano_harton', name: 'Plátano hartón', icon: ICON.plantainPlant, desc: 'El Platanal produce el doble.', cost: 300, requires: 'plantain_dehander', effect: { type: 'stationSpeed', target: 'plantain_grove', mult: 2 } },
   { zone: 'platanal', id: 'machete_curvo', name: 'Machete curvo', icon: '🔪', desc: 'La Desmanadora desmana el doble.', cost: 400, requires: 'plantain_dehander', effect: { type: 'stationSpeed', target: 'plantain_dehander', mult: 2 } },
   { zone: 'platanal', id: 'herraduras_ch', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'plantain_washer', effect: { type: 'muleSpeed', mult: 1.5 } },
@@ -421,6 +421,17 @@ export const RESEARCH = [
   { zone: 'platanal', id: 'sello_ch', name: 'Sello de calidad', icon: '🏅', desc: 'Las cajas de patacones valen un 50 % más.', cost: 300000, requires: 'patacon_boxer', effect: { type: 'productValue', target: 'patacon_box', mult: 1.5 } },
   { zone: 'platanal', id: 'maestria_platanal', name: 'Maestría: Platanal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'platanal', mult: 4 } },
   { zone: 'platanal', id: 'supremacia_platanal', name: 'Supremacía: Platanal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'platanal', mult: 8 } },
+
+  // Costa Pacífica · La Azotea (v3.39): las mismas del Frutal, con las hierbas de azotea.
+  { zone: 'azotea', id: 'lavadero_doble', name: 'Lavadero doble', icon: ICON.washedHerbs, desc: 'El Lavadero de hierbas lava el doble.', cost: 20000, requires: 'herb_washer', effect: { type: 'stationSpeed', target: 'herb_washer', mult: 2 } },
+  { zone: 'azotea', id: 'chillangua', name: 'Semilla de chillangua', icon: ICON.azotea, desc: 'Las Azoteas producen el doble.', cost: 50000, requires: 'herb_pestle', effect: { type: 'stationSpeed', target: 'azotea_beds', mult: 2 } },
+  { zone: 'azotea', id: 'pilon_grande', name: 'Pilón grande', icon: ICON.poundedHerbs, desc: 'El Pilón machaca el doble.', cost: 40000, requires: 'herb_pestle', effect: { type: 'stationSpeed', target: 'herb_pestle', mult: 2 } },
+  { zone: 'azotea', id: 'lancha_azotea', name: 'Lancha de carga', icon: '🚤', desc: 'El despacho de la Azotea lleva el doble por viaje.', cost: 80000, requires: 'herb_pestle', effect: { type: 'dispatchCapacity', target: 'azotea', mult: 2 } },
+  { zone: 'azotea', id: 'olla_refrito', name: 'Olla grande', icon: ICON.alino, desc: 'La Olla del refrito sofríe el doble.', cost: 300000, requires: 'refrito_pot', effect: { type: 'stationSpeed', target: 'refrito_pot', mult: 2 } },
+  { zone: 'azotea', id: 'llenadora_frascos', name: 'Llenadora de frascos', icon: ICON.alinoBox, desc: 'La Envasadora de aliño envasa el doble.', cost: 600000, requires: 'alino_packer', effect: { type: 'stationSpeed', target: 'alino_packer', mult: 2 } },
+  { zone: 'azotea', id: 'alino_casero', name: 'Aliño casero', icon: '🏅', desc: 'Las cajas de aliño valen un 50 % más.', cost: 1500000, requires: 'alino_packer', effect: { type: 'productValue', target: 'alino_box', mult: 1.5 } },
+  { zone: 'azotea', id: 'maestria_azotea', name: 'Maestría: Azotea', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'azotea', mult: 4 } },
+  { zone: 'azotea', id: 'supremacia_azotea', name: 'Supremacía: Azotea', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'azotea', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

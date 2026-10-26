@@ -223,7 +223,7 @@ export const PRODUCTS = {
   fiambre_viaje: { name: 'Morral del viaje', zone: 'villavicencio', value: 2000000, icon: ICON.fiambreViaje, color: 0x8d5524 },
   excursion_cano: { name: 'Excursión a Caño Cristales', zone: 'villavicencio', value: 24000000, icon: ICON.canoCristales, color: 0xd7263d },
 
-  // Chocó · El Platanal (v3.38): mismos valores que la Palma.
+  // Costa Pacífica · El Platanal (v3.38): mismos valores que la Palma.
   plantain_bunch: { name: 'Racimo de plátano', zone: 'platanal', value: 1, icon: ICON.plantainBunch, color: 0x5e9a3c },
   plantain_hand: { name: 'Mano de plátano', zone: 'platanal', value: 3, icon: ICON.plantainHand, color: 0x7cb342 },
   washed_plantain: { name: 'Plátano lavado', zone: 'platanal', value: 6, icon: ICON.washedPlantain, color: 0x9ccc65 },
@@ -231,6 +231,13 @@ export const PRODUCTS = {
   patacon: { name: 'Patacón', zone: 'platanal', value: 30, icon: ICON.patacon, color: 0xe0a030 },
   patacon_bag: { name: 'Bolsa de patacones', zone: 'platanal', value: 45, icon: ICON.pataconBag, color: 0xf4c430 },
   patacon_box: { name: 'Caja de patacones', zone: 'platanal', value: 250, icon: ICON.pataconBox, color: 0xc8a26a },
+
+  // Costa Pacífica · La Azotea (v3.39): mismos valores que el Frutal.
+  herbs: { name: 'Hierbas de azotea', zone: 'azotea', value: 10, icon: ICON.herbs, color: 0x4caf50 },
+  washed_herbs: { name: 'Hierbas lavadas', zone: 'azotea', value: 25, icon: ICON.washedHerbs, color: 0x66bb6a },
+  pounded_herbs: { name: 'Hierbas machacadas', zone: 'azotea', value: 60, icon: ICON.poundedHerbs, color: 0x558b2f },
+  alino: { name: 'Aliño de azotea', zone: 'azotea', value: 150, icon: ICON.alino, color: 0x7a8a2e },
+  alino_box: { name: 'Caja de aliño', zone: 'azotea', value: 250, icon: ICON.alinoBox, color: 0xc8a26a },
 
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },

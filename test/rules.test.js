@@ -39,9 +39,9 @@ test('el Willys lleva 10 a nivel 1', () => {
   assert.equal(dispatchCapacity(10), (10 + 45) * 2);
 });
 
-test('catálogo completo: 195 productos y 193 estaciones con recetas válidas', () => {
-  assert.equal(Object.keys(PRODUCTS).length, 195);
-  assert.equal(STATIONS.length, 193);
+test('catálogo completo: 200 productos y 198 estaciones con recetas válidas', () => {
+  assert.equal(Object.keys(PRODUCTS).length, 200);
+  assert.equal(STATIONS.length, 198);
   for (const s of STATIONS) {
     for (const id of Object.keys({ ...s.in, ...s.out, ...s.by, ...s.boost })) {
       assert.ok(PRODUCTS[id], `${s.id} usa un producto desconocido: ${id}`);
