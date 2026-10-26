@@ -212,6 +212,13 @@ export const ICON = {
   smokedPargo: '\uE0CE', // Pargo ahumado: los pargos dorados abiertos sobre la parrilla del ahumadero, con el humo que sube
   driedFish: '\uE0CF', // Pescado seco: el pescado abierto y salado, colgado al sol en la cuerda, con la sal que brilla
   tapao: '\uE0D0', // Tapao de pescado: la olla destapada con el pescado, el plátano verde y el caldo, y la hoja que la tapaba
+  mangrove: '\uE0D1', // Manglar: el mangle con sus raíces zancudas en el agua y las pianguas en el barro
+  piangua: '\uE0D2', // Piangua: las conchas negras del manglar, todavía con barro, en la batea de madera
+  cookedPiangua: '\uE0D3', // Piangua cocida: la olla con las conchas abiertas por el hervor y el vapor que sube
+  pianguaMeat: '\uE0D4', // Carne de piangua: la carne rojiza, ya desconchada, en el plato hondo; al lado, las conchas vacías
+  encocado: '\uE0D5', // Piangua encocada: la cazuela con la salsa blanca de leche de coco, la carne de piangua y el aliño verde
+  arrozPiangua: '\uE0D6', // Arroz con piangua: el plato con el arroz amarillo y la piangua, los patacones y la tajada de limón
+  cazuela: '\uE0D7', // Cazuela de mariscos: la cazuela de barro hirviendo, con la piangua, el pargo y el patacón al lado
 };
 
 export const ICON_FONT = 'Cafetal Icons';

@@ -239,6 +239,14 @@ export const FACTS = {
   pargo_filleter: ['Del pargo se aprovecha todo: la cabeza va para el sancocho.'],
   pargo_smoker: ['El pescado ahumado en el fogón alto se guarda para el invierno.'],
   tapao_kitchen: ['El tapao es pescado con plátano verde, cocinado en olla tapada.'],
+  // Costa Pacífica · El Manglar (v3.41)
+  mangrove_flats: ['La piangua es una concha negra que vive en el barro del manglar.', 'Las piangüeras salen con la marea baja a sacarla del barro, a mano.'],
+  piangua_washer: ['La piangua se lava bien para quitarle el barro antes de cocinarla.'],
+  piangua_cooker: ['Al hervirla, la piangua se abre sola y suelta su carne.'],
+  piangua_sheller: ['Para una libra de carne se necesitan muchísimas pianguas.'],
+  encocado_pot: ['El encocado se cocina en leche de coco, con aliño de azotea.'],
+  piangua_lunch: ['El arroz con piangua se sirve con patacón y una tajada de limón.'],
+  cazuela_kitchen: ['La cazuela lleva piangua, pescado, leche de coco y patacón.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -276,6 +284,7 @@ export const PEOPLE = {
   platanal: { icon: '👨🏿‍🌾', name: 'Don Nicomedes', role: 'el platanero' },
   azotea: { icon: '👩🏿‍🍳', name: 'Doña Rosalba', role: 'la cocinera' },
   bahia: { icon: '🧔🏿', name: 'Don Cupertino', role: 'el pescador' },
+  manglar: { icon: '👩🏿', name: 'Doña Ligia', role: 'la piangüera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -313,6 +322,7 @@ export const WELCOME = {
   platanal: '¡Bienvenido al Pacífico, mano! Aquí llueve todos los días, y por eso el plátano se da tan bonito.',
   azotea: '¡Bienvenido a la Azotea, mijo! En las canoas alzadas sembramos las hierbas que le dan sabor a todo.',
   bahia: '¡Bienvenido a la Bahía, primo! Aquí salimos en lancha por el pargo, y en la playa lo dejamos listo.',
+  manglar: '¡Bienvenido al Manglar, mijo! Cuando baja la marea, las piangüeras salimos a sacar la concha del barro.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

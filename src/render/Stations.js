@@ -3,7 +3,7 @@ import { iso, isoPoly, depth, shade } from './iso.js';
 import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPlantainPlant, drawAzoteaBed, drawPassionVine, drawPondTile, drawHideFrame, drawPotatoPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPlantainPlant, drawAzoteaBed, drawMangroveTree, drawPassionVine, drawPondTile, drawHideFrame, drawPotatoPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -124,6 +124,7 @@ export class FarmView extends StationView {
   update(dt, t) {
     super.update(dt, t);
     if ((this.theme === 'cienaga' || this.theme === 'bay') && this.boats) this.drawBoats(t);
+    if (this.theme === 'mangrove' && this.pickers) this.drawPickers(t);
     if (!this.def.harvest) return;
     if (!this.flyers) this.addChild((this.flyers = new Graphics()));
     const g = this.flyers.clear();
@@ -152,6 +153,10 @@ export class FarmView extends StationView {
     this.lights = drawHut(g, x, y, tier);
     if (this.theme === 'dairy' || this.theme === 'ranch' || this.theme === 'savanna' || this.theme === 'sheep') {
       this.drawPasture(g, tier, rng);
+      return;
+    }
+    if (this.theme === 'mangrove') {
+      this.drawMangrove(g, tier, rng);
       return;
     }
     // La Bahía (v3.40): el mar, con las mismas canoas de pescadores de la Ciénaga.
@@ -256,6 +261,59 @@ export class FarmView extends StationView {
         g.ellipse(nx, ny, 6 + ring * 10, (6 + ring * 10) * 0.4).stroke({ width: 1, color: 0xe8f6ff, alpha: 1 - ring });
         g.moveTo(mx + 2 * f, cy - 14).lineTo(nx - 2 * f, ny).stroke({ width: 0.8, color: 0x90a4ae });
       }
+    }
+  }
+
+  // El Manglar (v3.41): los mangles al fondo y las orillas, el barro de la marea baja y las piangüeras que
+  // sacan la concha con la mano y la echan al canasto (con cada hito, más piangüeras; ver drawPickers).
+  drawMangrove(g, tier, rng) {
+    const { x, y, w, h } = this.zoneFarm;
+    for (let gx = x; gx < x + w; gx++) {
+      for (let gy = y; gy < y + h; gy++) {
+        if (gx < x + 2 && gy < y + 2) continue; // la casa
+        const edge = gx === x || gy === y; // los bordes del fondo, para no tapar a las piangüeras
+        if (edge ? rng() < 0.7 : rng() < 0.12) {
+          const p = iso(gx + 0.5, gy + 0.5);
+          this.bushes.push(p);
+          drawMangroveTree(g, p.x, p.y, 0.85, rng);
+        } else if (rng() < 0.4) {
+          const p = iso(gx + rng(), gy + rng());
+          g.ellipse(p.x, p.y, 2.4, 1.8).fill(0x2b2622);
+        }
+      }
+    }
+    this.pickers = [];
+    const n = 3 + Math.min(tier, 4);
+    for (let i = 0; i < 60 && this.pickers.length < n; i++) {
+      const gx = x + 0.8 + rng() * (w - 2.2);
+      const gy = y + 1.2 + rng() * (h - 2.2);
+      if (gx < x + 2.4 && gy < y + 2.4) continue;
+      if (this.pickers.some((b) => Math.hypot(b.gx - gx, b.gy - gy) < 1.1)) continue;
+      this.pickers.push({ gx, gy, flip: rng() < 0.5 ? -1 : 1, phase: rng() * 6, shirt: [0xe5737f, 0xf2c14e, 0x4fb3bf, 0x6cbf6c][i % 4] });
+    }
+  }
+
+  // Las piangüeras: agachadas en el barro, con el canasto a la espalda; meten la mano y echan la concha.
+  drawPickers(t) {
+    if (!this.pickerLayer) this.addChild((this.pickerLayer = new Graphics()));
+    const g = this.pickerLayer.clear();
+    for (const b of this.pickers) {
+      const p = iso(b.gx, b.gy);
+      const f = b.flip;
+      const k = (t * 0.5 + b.phase) % 1;
+      const bend = k < 0.6 ? 1 : 0.4;
+      g.ellipse(p.x, p.y + 1, 7, 2.5).fill({ color: 0x3a3028, alpha: 0.35 });
+      g.rect(p.x - 2, p.y - 8, 1.6, 8).fill(0x3d3d5c);
+      g.rect(p.x + 0.6, p.y - 8, 1.6, 8).fill(0x3d3d5c);
+      const hx = p.x + 6 * f * bend;
+      const hy = p.y - 14 + 4 * bend;
+      g.moveTo(p.x, p.y - 8).lineTo(hx, hy).stroke({ width: 5, color: b.shirt, cap: 'round' });
+      g.circle(hx + 2 * f, hy - 1, 2.6).fill(0x4e342e);
+      g.ellipse(hx + 2 * f, hy - 3, 2.8, 1.4).fill(0xf7f4ee);
+      // El canasto (la catanga) a la espalda.
+      g.poly([p.x - 6 * f, p.y - 16, p.x - 1 * f, p.y - 16, p.x - 2 * f, p.y - 9, p.x - 5 * f, p.y - 9]).fill(0xc8a26a).stroke({ width: 0.6, color: 0x3a2418 });
+      if (k < 0.6) g.moveTo(hx, hy + 1).lineTo(hx + 3 * f, p.y - 1).stroke({ width: 1.2, color: 0x4e342e });
+      else g.circle(p.x - 3.5 * f, p.y - 17 - (k - 0.6) * 8, 1.3).fill(0x2b2622);
     }
   }
 

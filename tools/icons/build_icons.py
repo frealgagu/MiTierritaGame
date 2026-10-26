@@ -3074,6 +3074,105 @@ def tapao():
     return layers
 
 
+# ---------- Costa Pacífica · El Manglar (v3.41) ----------
+
+def piangua_shell(cx, cy, r, rot=0, open_=False):
+    """Una piangua: la concha negra, rayada, con su borde; abierta muestra la carne rojiza."""
+    layers = [(OUTLINE, [ellipse(cx, cy, r + 1.8, r * 0.82 + 1.8, rot)]), ('#2b2622', [ellipse(cx, cy, r, r * 0.82, rot)])]
+    a = math.radians(rot)
+    for k in (-0.5, 0, 0.5):
+        x0, y0 = cx + math.cos(a + math.pi / 2) * r * 0.75 + math.cos(a) * k * r, cy + math.sin(a + math.pi / 2) * r * 0.62 + math.sin(a) * k * r
+        layers.append(('#4e443a', [rib(cx + math.cos(a) * k * r * 0.4, cy - r * 0.55, x0, y0, 1.1)]))
+    if open_:
+        layers += [('#f5e6d3', [ellipse(cx, cy - r * 0.15, r * 0.7, r * 0.45, rot)]), ('#b5654a', [ellipse(cx, cy - r * 0.15, r * 0.5, r * 0.3, rot)])]
+    layers.append(('#ffffff40', [ellipse(cx - r * 0.35, cy - r * 0.35, r * 0.3, r * 0.12, rot - 20)]))
+    return layers
+
+
+def mangrove_tree(cx, cy, s=1.0):
+    """El mangle: la copa verde oscura sobre las raíces zancudas que salen del agua."""
+    layers = []
+    for dx in (-18, -9, 0, 9, 18):
+        layers += [(OUTLINE, ['M %.1f %.1f Q %.1f %.1f %.1f %.1f' % (cx, cy - 20 * s, cx + dx * 0.4 * s, cy - 10 * s, cx + dx * s, cy) + ' L %.1f %.1f Q %.1f %.1f %.1f %.1f Z' % (cx + dx * s + 2.4 * s, cy, cx + dx * 0.4 * s + 2 * s, cy - 10 * s, cx + 2 * s, cy - 20 * s)])]
+        layers += [('#6d4c41', ['M %.1f %.1f Q %.1f %.1f %.1f %.1f' % (cx + 0.6 * s, cy - 20 * s, cx + dx * 0.4 * s + 0.6 * s, cy - 10 * s, cx + dx * s + 0.6 * s, cy) + ' L %.1f %.1f Q %.1f %.1f %.1f %.1f Z' % (cx + dx * s + 1.8 * s, cy, cx + dx * 0.4 * s + 1.4 * s, cy - 10 * s, cx + 1.4 * s, cy - 20 * s)])]
+    layers += [(OUTLINE, [rect(cx - 3 * s, cy - 40 * s, 6 * s, 22 * s)]), ('#6d4c41', [rect(cx - 1.5 * s, cy - 39 * s, 3 * s, 20 * s)])]
+    for dx, dy, r in [(-14, -46, 13), (12, -48, 13), (0, -58, 15), (-4, -42, 10), (8, -40, 10)]:
+        layers += [(OUTLINE, [circle(cx + dx * s, cy + dy * s, r * s + 1.8)])]
+    for dx, dy, r in [(-14, -46, 13), (12, -48, 13), (0, -58, 15), (-4, -42, 10), (8, -40, 10)]:
+        layers += [('#2e6b22' if dy < -50 else '#245a1c', [circle(cx + dx * s, cy + dy * s, r * s)])]
+    return layers
+
+
+def mangrove():
+    """Manglar: el mangle con sus raíces zancudas en el agua y las pianguas en el barro."""
+    layers = [('#5d4a36', [ellipse(50, 88, 46, 9)]), ('#4fa3c7a0', [ellipse(64, 86, 30, 6)])]
+    layers += mangrove_tree(46, 86, 1.25)
+    layers += piangua_shell(20, 88, 6, -10) + piangua_shell(80, 90, 6, 15)
+    return layers
+
+
+def piangua():
+    """Piangua: las conchas negras del manglar, todavía con barro, en la batea de madera."""
+    layers = [(OUTLINE, [ellipse(50, 70, 46, 18)]), ('#8d6e4a', [ellipse(50, 70, 43.5, 15.5)]), ('#6d4c41', [ellipse(50, 66, 36, 9)])]
+    for cx, cy, rot in [(30, 56, -20), (50, 50, 10), (70, 56, 25), (40, 66, -5), (62, 66, 15), (50, 36, -10)]:
+        layers += piangua_shell(cx, cy, 11, rot)
+    layers.append(('#5d4a36', [ellipse(36, 70, 4, 1.4), ellipse(64, 48, 3, 1.2)]))
+    return layers
+
+
+def cooked_piangua():
+    """Piangua cocida: la olla con las conchas abiertas por el hervor y el vapor que sube."""
+    layers = [(OUTLINE, ['M 10 46 L 90 46 L 84 88 Q 50 96 16 88 Z']), ('#546e7a', ['M 13 48.5 L 87 48.5 L 81.6 86 Q 50 93 18.4 86 Z'])]
+    layers += [(OUTLINE, [ellipse(50, 46, 42, 11)]), ('#cfd8dc', [ellipse(50, 46, 39.5, 9)])]
+    for cx, cy, rot in [(30, 44, -15), (50, 40, 5), (70, 44, 20), (40, 50, 0), (60, 50, 10)]:
+        layers += piangua_shell(cx, cy, 8.5, rot, open_=True)
+    layers.append(('#eceff1a0', ['M 30 30 Q 24 20 32 8 Q 26 20 36 30 Z', 'M 52 28 Q 46 18 54 6 Q 48 18 58 28 Z', 'M 72 30 Q 66 20 74 8 Q 68 20 78 30 Z']))
+    return layers
+
+
+def piangua_meat():
+    """Carne de piangua: la carne rojiza, ya desconchada, en el plato hondo; al lado, las conchas vacías."""
+    layers = [(OUTLINE, [ellipse(46, 62, 40, 22)]), ('#ffffff', [ellipse(46, 62, 37.5, 19.5)]), ('#e0e0e0', [ellipse(46, 66, 28, 11)])]
+    for cx, cy in [(34, 56), (44, 52), (54, 56), (40, 62), (52, 63), (60, 58), (46, 58)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 6, 4.2)]), ('#b5654a', [ellipse(cx, cy, 4.6, 3)]), ('#d98a6a', [ellipse(cx - 1, cy - 1, 2, 1.2)])]
+    layers += piangua_shell(84, 30, 9, 20) + piangua_shell(80, 84, 8, -15)
+    return layers
+
+
+def encocado():
+    """Piangua encocada: la cazuela con la salsa blanca de leche de coco, la carne de piangua y el aliño verde."""
+    layers = [(OUTLINE, [ellipse(46, 62, 42, 22)]), ('#a1522f', [ellipse(46, 62, 39.5, 19.5)]), ('#e8d9b5', [ellipse(46, 58, 32, 13)])]
+    for cx, cy in [(34, 56), (46, 52), (58, 56), (40, 62), (54, 62)]:
+        layers += [('#b5654a', [ellipse(cx, cy, 4.4, 3)])]
+    layers += [('#43a047', [circle(30, 60, 1.6), circle(50, 58, 1.6), circle(62, 54, 1.4), circle(42, 55, 1.3)])]
+    layers += [(OUTLINE, [circle(84, 28, 13)]), ('#6d4c41', [circle(84, 28, 11)]), ('#fff8e1', [circle(84, 28, 8)]), ('#8d6e4a', [circle(84, 28, 3)])]
+    return layers
+
+
+def arroz_piangua():
+    """Arroz con piangua: el plato con el arroz amarillo y la piangua, los patacones y la tajada de limón."""
+    layers = [(OUTLINE, [ellipse(50, 62, 46, 26)]), ('#ffffff', [ellipse(50, 62, 43.5, 23.5)])]
+    layers += [(OUTLINE, [ellipse(38, 58, 24, 14)]), ('#f6d77a', [ellipse(38, 58, 22, 12)])]
+    for cx, cy in [(30, 54), (40, 52), (46, 60), (32, 62), (38, 57)]:
+        layers.append(('#b5654a', [ellipse(cx, cy, 2.8, 2)]))
+    layers += [('#43a047', [circle(28, 58, 1.2), circle(44, 55, 1.2)])]
+    layers += patacon_disc(68, 54, 9) + patacon_disc(70, 70, 9)
+    layers += [(OUTLINE, [ellipse(30, 78, 9, 5)]), ('#9ccc65', [ellipse(30, 78, 7.5, 3.8)]), ('#dce775', [ellipse(30, 78, 4, 1.8)])]
+    return layers
+
+
+def cazuela():
+    """Cazuela de mariscos: la cazuela de barro hirviendo, con la piangua, el pargo y el patacón al lado."""
+    layers = [(OUTLINE, ['M 8 46 L 92 46 L 86 80 Q 50 92 14 80 Z']), ('#a1522f', ['M 11 48.5 L 89 48.5 L 83.5 78 Q 50 89 16.5 78 Z'])]
+    layers += [(OUTLINE, [rect(2, 50, 10, 8), rect(88, 50, 10, 8)]), ('#a1522f', [rect(3.5, 51.5, 7, 5), rect(89.5, 51.5, 7, 5)])]
+    layers += [(OUTLINE, [ellipse(50, 46, 42, 11)]), ('#f0c27a', [ellipse(50, 46, 39.5, 9)])]
+    layers += piangua_shell(32, 44, 7, -10, open_=True) + piangua_shell(66, 46, 7, 15, open_=True)
+    layers += [(OUTLINE, [ellipse(50, 44, 10, 5)]), ('#ffe0d6', [ellipse(50, 44, 8.5, 3.8)]), ('#e53935', [ellipse(54, 43, 3, 2)])]
+    layers += [('#43a047', [circle(40, 48, 1.4), circle(58, 49, 1.4), circle(46, 40, 1.2)])]
+    layers.append(('#eceff1a0', ['M 36 30 Q 30 20 38 8 Q 32 20 42 30 Z', 'M 60 30 Q 54 20 62 8 Q 56 20 66 30 Z']))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -3284,6 +3383,13 @@ ICONS = [
     (0xE0CE, 'smoked_pargo', smoked_pargo),
     (0xE0CF, 'dried_fish', dried_fish),
     (0xE0D0, 'tapao', tapao),
+    (0xE0D1, 'mangrove', mangrove),
+    (0xE0D2, 'piangua', piangua),
+    (0xE0D3, 'cooked_piangua', cooked_piangua),
+    (0xE0D4, 'piangua_meat', piangua_meat),
+    (0xE0D5, 'encocado', encocado),
+    (0xE0D6, 'arroz_piangua', arroz_piangua),
+    (0xE0D7, 'cazuela', cazuela),
 ]
 
 

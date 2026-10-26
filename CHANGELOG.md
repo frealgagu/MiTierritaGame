@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## v3.41.0 — Costa Pacífica: El Manglar
+- **🐚 El Manglar**, la cuarta zona de la Costa Pacífica, se abre al completar La Bahía: el Manglar → el Lavadero de piangua → la Olla de la piangua → la Desconchadora → la Olla del encocado. La piangua encocada (en leche de coco) se reparte entre:
+  - la **Mesa del arroz con piangua**, que la sirve con los patacones del Platanal;
+  - la **Cocina de la cazuela**, que hace la cazuela de mariscos con los patacones y el pargo de la Bahía.
+- **Dos rutas nuevas:** la Ruta de los patacones, desde el Platanal, y la Ruta del pargo, desde la Bahía, cada una con su chiva y su carretera.
+- Tiene los mismos números que el Hato llanero. Su persona es **Doña Ligia, la piangüera**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 7 íconos nuevos (del mangle a la cazuela).
+- **El mapa:** el barro del manglar en marea baja, con sus charcos, los mangles de raíces zancudas y las **piangüeras** que sacan la concha con la mano y la echan a la catanga (más piangüeras con cada hito); garzas, heliconias y palmas de coco. En las estaciones, el potrillo donde se lavan las catangas, la olla grande en el fogón, la casa amarilla con el montón de conchas vacías, la cocina rosada con los cocos, el restaurante azul con sus mesas y la cocina verde con las cazuelas de barro.
+
 ## v3.40.0 — Costa Pacífica: La Bahía
 - **🐟 La Bahía**, la tercera zona de la Costa Pacífica, se abre al completar La Azotea: las Lanchas de pesca → la Limpieza de pargo, que reparte el pargo limpio entre:
   - el **Secadero**, donde el pescado se sala y se tiende al sol (el pescado seco);

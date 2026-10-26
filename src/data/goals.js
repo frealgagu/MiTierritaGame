@@ -759,5 +759,27 @@ const BAHIA = [
   { id: 'cb_final', type: 'sold', product: 'tapao', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA };
+// Costa Pacífica · El Manglar (v3.41): la misma lista que el Hato llanero.
+const MANGLAR = [
+  { id: 'cm01', type: 'sold', product: 'piangua', amount: 50, reward: 75000 },
+  { id: 'cm02', type: 'level', target: 'mangrove_flats', level: 10, reward: 125000 },
+  { id: 'cm03', type: 'unlock', station: 'piangua_washer', reward: 250000 },
+  { id: 'cm04', type: 'level', target: 'mangrove_flats:transport', level: 10, reward: 250000 },
+  { id: 'cm05', type: 'unlock', station: 'piangua_cooker', reward: 500000 },
+  { id: 'cm06', type: 'produced', product: 'cooked_piangua', amount: 200, reward: 750000 },
+  { id: 'cm08', type: 'unlock', station: 'piangua_sheller', reward: 1500000 },
+  { id: 'cm09', type: 'level', target: 'dispatch:manglar', level: 10, reward: 1500000 },
+  { id: 'cm10', type: 'unlock', station: 'encocado_pot', reward: 2500000 },
+  { id: 'cm11', type: 'produced', product: 'encocado', amount: 300, reward: 3750000 },
+  { id: 'cm12', type: 'unlock', station: 'piangua_lunch', reward: 6250000 },
+  { id: 'cm13', type: 'sold', product: 'arroz_piangua', amount: 200, reward: 7500000 },
+  { id: 'cm14', type: 'unlock', station: 'cazuela_kitchen', reward: 12500000 },
+  { id: 'cm15', type: 'imported', product: 'clean_pargo', amount: 500, reward: 15000000 },
+  { id: 'cm16', type: 'allLevels', zone: 'manglar', level: 25, reward: 20000000 },
+  { id: 'cm07', type: 'research', research: 'asociacion_pianguera', reward: 10000000 },
+  { id: 'cm17', type: 'sold', product: 'cazuela_mariscos', amount: 1000, reward: 30000000 },
+  { id: 'cm_final', type: 'sold', product: 'cazuela_mariscos', amount: 4000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

@@ -445,6 +445,19 @@ export const RESEARCH = [
   { zone: 'bahia', id: 'sazon_pacifico', name: 'Sazón del Pacífico', icon: '🏅', desc: 'El tapao de pescado vale un 50 % más.', cost: 50000000, requires: 'tapao_kitchen', effect: { type: 'productValue', target: 'tapao', mult: 1.5 } },
   { zone: 'bahia', id: 'maestria_bahia', name: 'Maestría: Bahía', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'bahia', mult: 4 } },
   { zone: 'bahia', id: 'supremacia_bahia', name: 'Supremacía: Bahía', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'bahia', mult: 8 } },
+
+  // Costa Pacífica · El Manglar (v3.41): las mismas del Hato llanero, con la piangua.
+  { zone: 'manglar', id: 'asociacion_pianguera', name: 'Asociación de piangüeras', icon: '🤝', desc: 'El Manglar da el doble de pianguas.', cost: 1000000, requires: 'piangua_washer', effect: { type: 'stationSpeed', target: 'mangrove_flats', mult: 2 } },
+  { zone: 'manglar', id: 'canastos_lavar', name: 'Canastos de lavar', icon: ICON.piangua, desc: 'El Lavadero de piangua lava el doble.', cost: 1200000, requires: 'piangua_washer', effect: { type: 'stationSpeed', target: 'piangua_washer', mult: 2 } },
+  { zone: 'manglar', id: 'olla_piangua', name: 'Olla grande', icon: ICON.cookedPiangua, desc: 'La Olla de la piangua cocina el doble.', cost: 3000000, requires: 'piangua_sheller', effect: { type: 'stationSpeed', target: 'piangua_cooker', mult: 2 } },
+  { zone: 'manglar', id: 'lancha_manglar', name: 'Lancha del manglar', icon: '🚤', desc: 'El despacho del Manglar lleva el doble por viaje.', cost: 5000000, requires: 'piangua_cooker', effect: { type: 'dispatchCapacity', target: 'manglar', mult: 2 } },
+  { zone: 'manglar', id: 'cuchara_desconchar', name: 'Cuchara de desconchar', icon: ICON.pianguaMeat, desc: 'La Desconchadora desconcha el doble.', cost: 8000000, requires: 'encocado_pot', effect: { type: 'stationSpeed', target: 'piangua_sheller', mult: 2 } },
+  { zone: 'manglar', id: 'leche_coco_fresca', name: 'Leche de coco fresca', icon: ICON.encocado, desc: 'La Olla del encocado cocina el doble.', cost: 20000000, requires: 'piangua_lunch', effect: { type: 'stationSpeed', target: 'encocado_pot', mult: 2 } },
+  { zone: 'manglar', id: 'mesa_corredor', name: 'Mesa del corredor', icon: ICON.arrozPiangua, desc: 'La Mesa del arroz con piangua sirve el doble.', cost: 50000000, requires: 'cazuela_kitchen', effect: { type: 'stationSpeed', target: 'piangua_lunch', mult: 2 } },
+  { zone: 'manglar', id: 'cazuela_barro', name: 'Cazuela de barro', icon: ICON.cazuela, desc: 'La Cocina de la cazuela sirve el doble (las rutas se ajustan solas).', cost: 80000000, requires: 'cazuela_kitchen', effect: { type: 'stationSpeed', target: 'cazuela_kitchen', mult: 2 } },
+  { zone: 'manglar', id: 'sabor_manglar', name: 'Sabor del manglar', icon: '🏅', desc: 'Todo lo que vende el Manglar vale un 50 % más.', cost: 60000000, requires: 'piangua_lunch', effect: { type: 'zoneValue', target: 'manglar', mult: 1.5 } },
+  { zone: 'manglar', id: 'maestria_manglar', name: 'Maestría: Manglar', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'manglar', mult: 4 } },
+  { zone: 'manglar', id: 'supremacia_manglar', name: 'Supremacía: Manglar', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'manglar', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

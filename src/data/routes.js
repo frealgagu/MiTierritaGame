@@ -923,6 +923,40 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.40',
   },
+  // Al Manglar (v3.41): los patacones del Platanal (para el arroz con piangua y la cazuela) y el pargo limpio de
+  // la Bahía (para la Cocina de la cazuela).
+  {
+    id: 'patacones',
+    name: 'Ruta de los patacones',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'patacon_bag',
+    from: 'platanal',
+    to: 'manglar',
+    stations: ['piangua_lunch', 'cazuela_kitchen'],
+    tab: 'Patacones',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 5000,
+    growth: 1.15,
+    release: '3.41',
+  },
+  {
+    id: 'pargos',
+    name: 'Ruta del pargo',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'clean_pargo',
+    from: 'bahia',
+    to: 'manglar',
+    stations: ['cazuela_kitchen'],
+    tab: 'Pargo',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 8000,
+    growth: 1.15,
+    release: '3.41',
+  },
 ];
 
 export const ROUTES_BY_ID = Object.fromEntries(ROUTES.map((r) => [r.id, r]));

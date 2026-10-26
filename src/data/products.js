@@ -247,6 +247,15 @@ export const PRODUCTS = {
   dried_fish: { name: 'Pescado seco', zone: 'bahia', value: 2400, icon: ICON.driedFish, color: 0xd7c49e },
   tapao: { name: 'Tapao de pescado', zone: 'bahia', value: 4000, icon: ICON.tapao, color: 0xc98a24 },
 
+  // Costa Pacífica · El Manglar (v3.41): mismos valores que el Hato llanero.
+  piangua: { name: 'Piangua', zone: 'manglar', value: 1000, icon: ICON.piangua, color: 0x37302a },
+  washed_piangua: { name: 'Piangua lavada', zone: 'manglar', value: 2500, icon: ICON.piangua, color: 0x4e443a },
+  cooked_piangua: { name: 'Piangua cocida', zone: 'manglar', value: 4400, icon: ICON.cookedPiangua, color: 0x6d5a48 },
+  piangua_meat: { name: 'Carne de piangua', zone: 'manglar', value: 8800, icon: ICON.pianguaMeat, color: 0xb5654a },
+  encocado: { name: 'Piangua encocada', zone: 'manglar', value: 22000, icon: ICON.encocado, color: 0xe8d9b5 },
+  arroz_piangua: { name: 'Arroz con piangua', zone: 'manglar', value: 100000, icon: ICON.arrozPiangua, color: 0xf4f1e8 },
+  cazuela_mariscos: { name: 'Cazuela de mariscos', zone: 'manglar', value: 220000, icon: ICON.cazuela, color: 0xd9772e },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

@@ -301,6 +301,18 @@ export const STATIONS = [
   { id: 'pargo_smoker', zone: 'bahia', name: 'Ahumadero de pargo', icon: ICON.smokedPargo, in: { pargo_fillet: 2 }, out: { smoked_pargo: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.40' },
   { id: 'tapao_kitchen', zone: 'bahia', name: 'Cocina del tapao', icon: ICON.tapao, in: { clean_pargo: 4 }, imports: [{ product: 'alino', perCycle: 1, route: 'alino' }], out: { tapao: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.40' },
 
+  // Costa Pacífica · El Manglar (v3.41): las piangüeras sacan la piangua del barro del manglar; se lava, se cocina,
+  // se desconcha y se encoca en leche de coco. La piangua encocada se reparte entre la Mesa del arroz con piangua, que
+  // la sirve con los patacones del Platanal, y la Cocina de la cazuela, que además lleva el pargo de la Bahía. Mismos
+  // números que el Hato, la Quesera, Paipa y el Hato llanero.
+  { id: 'mangrove_flats', zone: 'manglar', name: 'Manglar', icon: ICON.mangrove, infinite: true, out: { piangua: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.41' },
+  { id: 'piangua_washer', zone: 'manglar', name: 'Lavadero de piangua', icon: ICON.piangua, in: { piangua: 2 }, out: { washed_piangua: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.41' },
+  { id: 'piangua_cooker', zone: 'manglar', name: 'Olla de la piangua', icon: ICON.cookedPiangua, in: { washed_piangua: 1 }, out: { cooked_piangua: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.41' },
+  { id: 'piangua_sheller', zone: 'manglar', name: 'Desconchadora', icon: ICON.pianguaMeat, in: { cooked_piangua: 1 }, out: { piangua_meat: 1 }, cycle: 4, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '3.41' },
+  { id: 'encocado_pot', zone: 'manglar', name: 'Olla del encocado', icon: ICON.encocado, in: { piangua_meat: 2 }, out: { encocado: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '3.41' },
+  { id: 'piangua_lunch', zone: 'manglar', name: 'Mesa del arroz con piangua', icon: ICON.arrozPiangua, in: { encocado: 2 }, imports: [{ product: 'patacon_bag', perCycle: 1, route: 'patacones' }], out: { arroz_piangua: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.41' },
+  { id: 'cazuela_kitchen', zone: 'manglar', name: 'Cocina de la cazuela', icon: ICON.cazuela, in: { encocado: 2 }, imports: [{ product: 'patacon_bag', perCycle: 1, route: 'patacones' }, { product: 'clean_pargo', perCycle: 4, route: 'pargos' }], out: { cazuela_mariscos: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.41' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

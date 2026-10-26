@@ -163,6 +163,13 @@ export class Terrain {
           g.moveTo(a.x, a.y).lineTo(b.x, b.y).lineTo(c2.x, c2.y).stroke({ width: 2.2, color: 0x8a6a45, alpha: 0.55 });
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
           g.moveTo(p.x - 5, p.y).lineTo(p.x + 5, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.55 });
+        } else if (type === 'farm' && this.zone.theme === 'mangrove') {
+          // El Manglar (v3.41): el barro de la marea baja, con charcos que brillan.
+          if (rng() < 0.5) {
+            const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
+            g.ellipse(p.x, p.y, 6 + rng() * 5, 2.4 + rng() * 1.5).fill({ color: 0x5a8f9a, alpha: 0.7 });
+            g.moveTo(p.x - 3, p.y - 0.5).lineTo(p.x + 2, p.y - 0.5).stroke({ width: 1, color: 0xe8f6ff, alpha: 0.6 });
+          }
         } else if (type === 'farm' && this.zone.theme === 'bay') {
           // La Bahía (v3.40): el mar, con olas que brillan y alguna espuma.
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
@@ -363,6 +370,12 @@ export class Terrain {
           else if (r < 0.055) obj = egret(rng);
           else if (r < 0.075) obj = coconutPalm(rng);
           else if (r < 0.088) obj = ceiba(rng);
+        } else if (this.zone.theme === 'mangrove') {
+          // El Manglar (v3.41): mangles sueltos, garzas, heliconias y palmas de coco.
+          if (r < 0.04) obj = mangroveTree(rng);
+          else if (r < 0.065) obj = egret(rng);
+          else if (r < 0.085) obj = heliconia(rng);
+          else if (r < 0.1) obj = coconutPalm(rng);
         } else if (this.zone.theme === 'bay') {
           // La Bahía (v3.40): palmas de coco, piedras de la playa, redes al sol, heliconias y chontaduros.
           if (r < 0.04) obj = coconutPalm(rng);
@@ -572,6 +585,7 @@ const FARM_SOIL = {
   plantain: (v) => mix(0x5a4a30, 0x4a3d28, v * 0.5), // la tierra negra y mojada del platanal (v3.38)
   azotea: (v) => mix(0x6a5a3a, 0x5a4a30, v * 0.5), // el patio de las azoteas (v3.39)
   bay: (v) => mix(0x2f86a8, 0x3a94b4, v * 0.6), // el mar de la Bahía (v3.40)
+  mangrove: (v) => mix(0x5d5040, 0x6a5c48, v * 0.5), // el barro del manglar (v3.41)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
@@ -1186,6 +1200,23 @@ export function drawAzoteaBed(g, x, y, scale, rng, tier = 0) {
     for (const dx of [-2, 0, 2]) g.moveTo(hx, hy).lineTo(hx + dx * s, hy - h).stroke({ width: 1.6 * s, color: col, cap: 'round' });
     if (tier >= 2 && i % 2 === 0) g.circle(hx, hy - h - 1, 1.2 * s).fill(0x7e57c2);
   }
+}
+
+// Mangle (v3.41): la copa verde oscura sobre el tronco y las raíces zancudas que se abren hasta el barro.
+export function drawMangroveTree(g, x, y, scale, rng) {
+  const s = scale * (0.9 + rng() * 0.2);
+  shadow(g, x + 3, y + 2, 18 * s, 6 * s);
+  for (const dx of [-12, -6, 0, 6, 12]) g.moveTo(x, y - 14 * s).quadraticCurveTo(x + dx * 0.5 * s, y - 8 * s, x + dx * s, y).stroke({ width: 1.6, color: 0x6d4c41 });
+  g.rect(x - 1.6 * s, y - 26 * s, 3.2 * s, 13 * s).fill(0x6d4c41);
+  for (const [dx, dy, r] of [[-9, -30, 9], [9, -31, 9], [0, -38, 10], [-3, -27, 7], [5, -26, 7]]) g.circle(x + dx * s, y + dy * s, r * s).fill(dy < -34 ? 0x2e6b22 : 0x245a1c).stroke({ width: 0.6, color: 0x1a3a12, alpha: 0.4 });
+}
+
+function mangroveTree(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  drawMangroveTree(g, 0, 0, 0.9, rng);
+  c.addChild(g);
+  return c;
 }
 
 // Palma de chontaduro (v3.38): el tronco delgado con sus anillos de espinas, las hojas de plumas y los racimos

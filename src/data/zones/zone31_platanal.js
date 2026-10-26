@@ -29,6 +29,10 @@ export const ZONE31 = {
   exitText: 'A Quibdó ➜',
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
+  // Los patacones salen de la bodega hacia el Manglar (v3.41).
+  routes: {
+    patacones: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Patacones al Manglar ➜' },
+  },
   unlockedBy: null, // la primera de la Costa Pacífica: se abre con la región
   next: 'azotea',
 };

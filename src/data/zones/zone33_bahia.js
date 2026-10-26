@@ -33,6 +33,8 @@ export const ZONE33 = {
   // Carretera por la que llega la Ruta del aliño, hasta la Cocina del tapao.
   routes: {
     alino: { road: [[25.9, 14.5], [20.3, 14.5]], sign: [24.2, 13.3], text: '⬅ De la Azotea' },
+    // La Ruta del pargo sale de la bodega hacia el Manglar (v3.41).
+    pargos: { road: [[24.5, 17.2], [24.5, 16.5], [25.9, 16.5]], sign: [25.3, 15.6], text: 'Pargo al Manglar ➜' },
   },
   unlockedBy: 'azotea',
   next: 'manglar',

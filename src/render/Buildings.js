@@ -4951,6 +4951,192 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Costa Pacífica · El Manglar (v3.41): la cocina de la piangua, a la orilla del estero ---
+
+  // Lavadero de piangua: la ramada con el potrillo (la canoa vieja) lleno de agua, donde se lavan las catangas de
+  // piangua; al lado, las catangas que esperan.
+  piangua_washer(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    const a = iso(x0 + 0.3, y0 + 0.9, 6);
+    const b = iso(x0 + 2.1, y0 + 0.9, 6);
+    g.moveTo(a.x - 6, a.y - 4).lineTo(b.x + 6, b.y - 4).quadraticCurveTo(b.x + 2, b.y + 6, b.x - 8, b.y + 5).lineTo(a.x + 6, a.y + 5).quadraticCurveTo(a.x - 4, a.y + 4, a.x - 6, a.y - 4).fill(0x8d5a32).stroke(OUTLINE);
+    g.moveTo(a.x - 3, a.y - 2).lineTo(b.x + 3, b.y - 2).quadraticCurveTo(b.x, b.y + 3, b.x - 6, b.y + 2).lineTo(a.x + 4, a.y + 2).closePath().fill(0x5a8f9a);
+    for (const [bx, by] of [[0.45, 2.4], [0.9, 2.55], [2.6, 2.3]].slice(0, 2 + Math.min(ctx.tier, 1))) {
+      const q = iso(x + bx, y + by);
+      g.poly([q.x - 7, q.y - 12, q.x + 7, q.y - 12, q.x + 5, q.y, q.x - 5, q.y]).fill(0xc8a26a).stroke(OUTLINE);
+      for (let k = 0; k < 3; k++) g.circle(q.x - 4 + k * 4, q.y - 13, 2.2).fill(PRODUCTS.piangua.color);
+    }
+    ramada(this, g, x0, y0 - 0.1, 2.4, 1.7, 28 + ctx.up, 0x9a7b5a);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x0 + 1.2, y0 + 1.6);
+      worker(anim, wp.x, wp.y, 0xf2c14e);
+      const c = iso(x0 + 1.2, y0 + 0.9, 6);
+      const dip = this.working ? (Math.sin(time * 3) + 1) * 2.5 : 2;
+      anim.poly([c.x - 6, c.y - 8 + dip, c.x + 6, c.y - 8 + dip, c.x + 4, c.y + dip, c.x - 4, c.y + dip]).fill(0xc8a26a).stroke({ width: 0.6, color: 0x3a2418 });
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 1.6 + i / 3) % 1;
+        anim.circle(c.x - 8 + i * 8, c.y - 2 - Math.sin(f * Math.PI) * 5, 1).fill(0xe8f6ff);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Olla de la piangua: el fogón de leña bajo la ramada con la olla grande donde hierve la piangua hasta que se
+  // abre; el vapor sube y la leña espera al lado.
+  piangua_cooker(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.4;
+    box(g, x0 + 0.4, y0 + 0.5, 1.4, 1.0, 10, 0xa1887f);
+    const pot = iso(x0 + 1.1, y0 + 1.0, 10);
+    g.moveTo(pot.x - 14, pot.y - 16).lineTo(pot.x - 12, pot.y).quadraticCurveTo(pot.x, pot.y + 5, pot.x + 12, pot.y).lineTo(pot.x + 14, pot.y - 16).closePath().fill(0xb0bec5).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 16, 14, 5).fill(0x90a4ae).stroke(OUTLINE);
+    const fire = iso(x0 + 1.1, y0 + 1.5, 3);
+    g.ellipse(fire.x, fire.y, 6, 2.5).fill(0x212121);
+    for (let k = 0; k < 3; k++) box(g, x + 2.0 + k * 0.08, y + 2.55 - k * 0.05, 0.9, 0.1, 3, 0x6b4a2e, { z: k * 3 });
+    ramada(this, g, x0, y0, 2.2, 1.6, 30 + ctx.up, 0x9aa3a8);
+    this.smokePoints = [{ x: pot.x, y: pot.y - 26 }];
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      anim.poly([fire.x - 5, fire.y, fire.x, fire.y - 6 - (this.working ? Math.sin(time * 9) * 1.5 : 0), fire.x + 5, fire.y]).fill(this.working ? 0xff7043 : 0x5d4037);
+      for (let k = 0; k < 4; k++) {
+        const jump = this.working ? Math.abs(Math.sin(time * 3 + k)) * 1.5 : 0;
+        anim.ellipse(pot.x - 8 + k * 5, pot.y - 17 - jump, 2.6, 1.8).fill(PRODUCTS.cooked_piangua.color);
+      }
+      const wp = iso(x0 + 1.9, y0 + 1.75);
+      worker(anim, wp.x, wp.y, 0x4fb3bf);
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.8 + i / 3) % 1;
+        anim.circle(pot.x - 6 + i * 6, pot.y - 20 - f * 12, 2 + f * 2).fill({ color: 0xeceff1, alpha: 0.6 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Desconchadora: la casa de tablas sobre pilotes (amarilla), con la mesa del corredor donde se abren las
+  // pianguas con la cuchara; el montón de conchas vacías crece con los hitos.
+  piangua_sheller(g, x, y, ctx) {
+    const hx = x + 0.2;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 1.7, 1.3, 20, ctx, { wall: 0xf2c14e, trim: 0x1e88e5 });
+    box(g, x + 2.2, y + 0.5, 0.45, 1.2, 9, 0x8d6e4a);
+    const pile = iso(x + 2.2, y + 2.4);
+    const n = 6 + Math.min(ctx.tier, 3) * 3;
+    for (let k = 0; k < n; k++) g.ellipse(pile.x - 8 + (k % 5) * 4, pile.y - 2 - Math.floor(k / 5) * 2.5, 2.6, 1.8).fill(k % 2 ? 0x2b2622 : 0x3a3028).stroke({ width: 0.4, color: 0x000000, alpha: 0.4 });
+    const bowl = iso(x + 2.42, y + 0.8, 9);
+    g.ellipse(bowl.x, bowl.y, 5, 2).fill(0xffffff).stroke({ width: 0.6, color: 0x3a2418 });
+    g.ellipse(bowl.x, bowl.y - 0.5, 3.5, 1.2).fill(PRODUCTS.piangua_meat.color);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const t = iso(x + 2.42, y + 1.3, 9);
+      anim.ellipse(t.x, t.y - 1, 3, 2).fill(PRODUCTS.cooked_piangua.color);
+      const wp = iso(x + 2.95, y + 1.15);
+      worker(anim, wp.x, wp.y, 0xe5737f);
+      if (!this.working) return;
+      const f = (time * 1.1) % 1;
+      anim.ellipse(t.x + (pile.x - t.x) * f, t.y + (pile.y - 4 - t.y) * f - Math.sin(f * Math.PI) * 10, 2.2, 1.5).fill(0x2b2622);
+    };
+    this.animate(0);
+  },
+
+  // Olla del encocado: la cocina sobre pilotes (rosada), con el montón de cocos, el rallo y la olla donde la
+  // piangua se cocina en leche de coco.
+  encocado_pot(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    stiltHouse(this, g, hx, hy, 1.9, 1.3, 22, ctx, { wall: 0xe5737f, trim: 0xf7f4ee });
+    box(g, x + 1.6, y + 2.0, 1.0, 0.7, 10, 0xa1887f);
+    const pot = iso(x + 2.1, y + 2.35, 10);
+    g.moveTo(pot.x - 10, pot.y - 12).lineTo(pot.x - 9, pot.y).quadraticCurveTo(pot.x, pot.y + 4, pot.x + 9, pot.y).lineTo(pot.x + 10, pot.y - 12).closePath().fill(0x37474f).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 12, 10, 3.5).fill(PRODUCTS.encocado.color).stroke(OUTLINE);
+    const coco = iso(x + 0.6, y + 2.5);
+    for (let k = 0; k < 4 + Math.min(ctx.tier, 2); k++) g.circle(coco.x - 6 + (k % 3) * 6, coco.y - 3 - Math.floor(k / 3) * 4, 3).fill(0x7a5a2e).stroke({ width: 0.6, color: 0x3a2418 });
+    this.smokePoints = [{ x: pot.x, y: pot.y - 20 }];
+    const fire = iso(x + 2.1, y + 2.72, 3);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      anim.poly([fire.x - 4, fire.y, fire.x, fire.y - 5 - (this.working ? Math.sin(time * 9) * 1.5 : 0), fire.x + 4, fire.y]).fill(this.working ? 0xff7043 : 0x5d4037);
+      for (let k = 0; k < 3; k++) anim.ellipse(pot.x - 5 + k * 5, pot.y - 12.5, 2, 1.2).fill(PRODUCTS.piangua_meat.color);
+      const wp = iso(x + 1.3, y + 2.85);
+      worker(anim, wp.x, wp.y, 0xf7f4ee);
+      const stir = this.working ? time * 3 : 0;
+      anim.moveTo(pot.x + Math.cos(stir) * 5, pot.y - 12 + Math.sin(stir) * 1.5).lineTo(pot.x - 8, pot.y - 28).stroke({ width: 1.8, color: 0xbc8a5f });
+    };
+    this.animate(0);
+  },
+
+  // Mesa del arroz con piangua: el restaurante de tablas sobre pilotes (azul), con las mesas del corredor bajo
+  // el alero, los platos servidos y la mesera que va y viene.
+  piangua_lunch(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 2.1, 1.3, 22, ctx, { wall: 0x5c8dd6, trim: 0xf2c14e });
+    const tables = ctx.tier >= 2 ? [[0.7, 2.2], [1.6, 2.2], [2.5, 2.2]] : [[0.9, 2.2], [2.0, 2.2]];
+    this.plates = [];
+    for (const [tx, ty] of tables) {
+      box(g, x + tx - 0.3, y + ty - 0.2, 0.6, 0.4, 9, 0xf7f4ee);
+      const q = iso(x + tx, y + ty, 9);
+      g.ellipse(q.x - 4, q.y, 3.2, 1.4).fill(0xffffff).stroke({ width: 0.5, color: 0x3a2418 });
+      g.ellipse(q.x - 4, q.y - 0.4, 2, 0.8).fill(PRODUCTS.arroz_piangua.color === 0xf4f1e8 ? 0xf6d77a : PRODUCTS.arroz_piangua.color);
+      g.ellipse(q.x + 4, q.y + 1, 3.2, 1.4).fill(0xffffff).stroke({ width: 0.5, color: 0x3a2418 });
+      g.ellipse(q.x + 4, q.y + 0.6, 2, 0.8).fill(PRODUCTS.patacon.color);
+      this.plates.push(q);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, q] of this.plates.entries()) worker(anim, q.x + (k % 2 ? 10 : -10), q.y + 10, [0xe5737f, 0x6cbf6c, 0xf2c14e][k % 3]);
+      const f = this.working ? (Math.sin(time * 0.7) + 1) / 2 : 0.5;
+      const w = iso(x + 0.6 + f * 2, y + 2.75);
+      worker(anim, w.x, w.y, 0xffffff);
+      anim.ellipse(w.x + 4, w.y - 17, 4, 1.5).fill(0xffffff).stroke({ width: 0.5, color: 0x3a2418 });
+    };
+    this.animate(0);
+  },
+
+  // Cocina de la cazuela: la cocina grande sobre pilotes (verde), con las cazuelas de barro hirviendo en el fogón
+  // del corredor y las servidas en la mesa.
+  cazuela_kitchen(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 2.1, 1.3, 22, ctx, { wall: 0x6cbf6c, trim: 0xe5737f });
+    box(g, x + 0.5, y + 2.0, 1.9, 0.6, 10, 0xa1887f);
+    this.pots = [];
+    for (const f of [0.3, 0.7]) {
+      const q = iso(x + 0.5 + 1.9 * f, y + 2.3, 10);
+      g.ellipse(q.x, q.y - 3, 10, 4).fill(0xa1522f).stroke(OUTLINE);
+      g.ellipse(q.x, q.y - 4, 8, 2.8).fill(0xf0c27a);
+      this.pots.push(q);
+    }
+    this.smokePoints = this.pots.map((q) => ({ x: q.x, y: q.y - 14 }));
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, q] of this.pots.entries()) {
+        anim.ellipse(q.x - 3, q.y - 4.5, 2, 1.3).fill(0x2b2622);
+        anim.ellipse(q.x + 3, q.y - 4.2, 2.2, 1.2).fill(PRODUCTS.clean_pargo.color);
+        if (!this.working) continue;
+        for (let i = 0; i < 2; i++) anim.circle(q.x - 4 + i * 7, q.y - 5 - ((time * 2 + i * 0.4 + k) % 1) * 3, 0.9).fill({ color: 0xfff8e1, alpha: 0.9 });
+      }
+      const wp = iso(x + 1.45, y + 2.95);
+      worker(anim, wp.x, wp.y, 0xf7f4ee);
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.
