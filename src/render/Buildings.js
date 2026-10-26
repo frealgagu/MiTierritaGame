@@ -3523,6 +3523,199 @@ const DRAW = {
     };
   },
 
+  // --- Los Llanos · La Palma (v3.31): la planta extractora, con naves de techo de zinc ---
+
+  // Desgranadora: la ramada de zinc con el tambor que gira y suelta el fruto de los racimos; al lado, el
+  // montón de racimos que llegan y el de tusas (los racimos vacíos).
+  bunch_thresher(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const w = 2.4;
+    const d = 1.5;
+    const H = 26 + ctx.up;
+    // Montón de racimos rojos y el de tusas.
+    for (const [bx, by, col] of [[0.55, 2.3, PRODUCTS.palm_bunch.color], [0.95, 2.45, PRODUCTS.palm_bunch.color], [2.35, 2.3, 0x8d6e4a]]) {
+      const p = iso(x + bx, y + by);
+      g.ellipse(p.x, p.y - 4, 8, 5.5).fill(col).stroke(OUTLINE);
+      for (let k = 0; k < 4; k++) g.circle(p.x - 4 + k * 2.6, p.y - 6 - (k % 2) * 2, 1.6).fill(col === 0x8d6e4a ? 0x6d5236 : 0xe65100);
+    }
+    box(g, x0 + 0.3, y0 + 0.4, 1.8, 0.7, 6, 0x6d6d6d);
+    for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, 0x8a8f94);
+    gableRoof(g, x0, y0, w, d, H, 11, 0x9aa3a8, 0xd9dde0);
+    this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 11);
+    const drum = new Graphics();
+    this.anim.addChild(drum);
+    this.animate = (time) => {
+      drum.clear();
+      const a = iso(x0 + 0.5, y0 + 0.75, 13);
+      const b = iso(x0 + 1.9, y0 + 0.75, 13);
+      drum.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 14, color: 0x78909c, cap: 'round' });
+      const turn = this.working ? time * 4 : 0;
+      for (let k = 0; k < 5; k++) {
+        const f = (k / 5 + (turn / (Math.PI * 2)) * 0.2) % 1;
+        drum.moveTo(a.x + (b.x - a.x) * f, a.y + (b.y - a.y) * f - 6).lineTo(a.x + (b.x - a.x) * f, a.y + (b.y - a.y) * f + 6).stroke({ width: 1.4, color: 0x546e7a });
+      }
+      if (!this.working) return;
+      for (let i = 0; i < 5; i++) {
+        const f = (time * 1.4 + i / 5) % 1;
+        drum.circle(a.x + (b.x - a.x) * (0.2 + i * 0.15), a.y + 6 + f * 10, 1.8).fill(PRODUCTS.palm_fruit.color);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Esterilizador: el autoclave, un cilindro de acero acostado, con la vagoneta de fruto sobre los rieles y el
+  // vapor que se escapa.
+  fruit_sterilizer(g, x, y, ctx) {
+    const a = iso(x + 0.45, y + 1.0, 14);
+    const b = iso(x + 2.3, y + 1.0, 14);
+    for (const f of [0.15, 0.85]) {
+      const p = iso(x + 0.45 + 1.85 * f, y + 1.0);
+      g.rect(p.x - 2, p.y - 8, 4, 8).fill(0x5d6a72);
+    }
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 22, color: 0x90a4ae, cap: 'round' });
+    g.moveTo(a.x, a.y - 6).lineTo(b.x, b.y - 6).stroke({ width: 4, color: 0xcfd8dc, cap: 'round' });
+    g.circle(b.x + 4, b.y + 2, 10).fill(0xb0bec5).stroke(OUTLINE);
+    g.circle(b.x + 4, b.y + 2, 6).stroke({ width: 1.5, color: 0x607d8b });
+    // Rieles hacia la boca del autoclave.
+    const r0 = iso(x + 2.4, y + 1.6);
+    const r1 = iso(x + 2.9, y + 2.9);
+    g.moveTo(r0.x, r0.y).lineTo(r1.x, r1.y).stroke({ width: 1.5, color: 0x5d4037 }).moveTo(r0.x + 8, r0.y).lineTo(r1.x + 8, r1.y).stroke({ width: 1.5, color: 0x5d4037 });
+    this.smokePoints = [iso(x + 1.4, y + 1.0, 26)];
+    this.roofTop = iso(x + 1.4, y + 1.0, 30);
+    const cart = new Graphics();
+    this.anim.addChild(cart);
+    this.animate = (time) => {
+      cart.clear();
+      const f = this.working ? (Math.sin(time * 0.6) + 1) / 2 : 0.5;
+      const p = iso(x + 2.45 + f * 0.35, y + 1.85 + f * 0.9);
+      cart.poly([p.x - 9, p.y - 10, p.x + 9, p.y - 10, p.x + 7, p.y - 2, p.x - 7, p.y - 2]).fill(0x78909c).stroke(OUTLINE);
+      for (let k = 0; k < 4; k++) cart.circle(p.x - 6 + k * 4, p.y - 11 - (k % 2) * 1.5, 2.4).fill(PRODUCTS.cooked_fruit.color);
+      cart.circle(p.x - 5, p.y - 1, 1.8).fill(0x37474f);
+      cart.circle(p.x + 5, p.y - 1, 1.8).fill(0x37474f);
+    };
+    this.animate(0);
+  },
+
+  // Prensa de aceite: la nave de zinc con la prensa de tornillo; el aceite crudo, rojo, corre por la canal a
+  // los tambores.
+  palm_press(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xe8e2d0, roofColor: 0x9aa3a8, roofH: 12 });
+    door(g, hx, hy, 1.5, 0.7, 16, 0x8d6e4a);
+    windowOnRight(this, g, hx, hy, 1.9, 0.75, 13, 0xffe0b2);
+    // La canal y los tambores de aceite crudo.
+    const c0 = iso(x + 1.6, y + 2.2, 4);
+    const c1 = iso(x + 2.4, y + 2.2, 2);
+    g.moveTo(c0.x, c0.y).lineTo(c1.x, c1.y).stroke({ width: 4, color: 0x8a8f94 });
+    for (const [bx, by] of [[2.65, 2.05], [2.65, 2.55], [0.6, 2.4]].slice(0, 2 + Math.min(ctx.tier, 1))) {
+      const p = iso(x + bx, y + by);
+      g.rect(p.x - 5, p.y - 12, 10, 12).fill(PRODUCTS.crude_oil.color).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 12, 5, 2).fill(0x5d2a0a).stroke(OUTLINE);
+      g.moveTo(p.x - 5, p.y - 6).lineTo(p.x + 5, p.y - 6).stroke({ width: 1, color: 0x5d2a0a });
+    }
+    box(g, x + 1.1, y + 2.0, 0.5, 0.4, 10, 0x607d8b);
+    const flow = new Graphics();
+    this.anim.addChild(flow);
+    this.animate = (time) => {
+      flow.clear();
+      const s = iso(x + 1.35, y + 2.2, 18);
+      const turn = this.working ? time * 3 : 0;
+      flow.moveTo(s.x, s.y).lineTo(s.x, s.y - 10).stroke({ width: 2, color: 0x37474f });
+      flow.ellipse(s.x, s.y - 10, 6, 2).fill(0x546e7a);
+      flow.moveTo(s.x + Math.cos(turn) * 6, s.y - 10 + Math.sin(turn) * 2).lineTo(s.x - Math.cos(turn) * 6, s.y - 10 - Math.sin(turn) * 2).stroke({ width: 1.5, color: 0x263238 });
+      if (!this.working) return;
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.8 + i / 4) % 1;
+        flow.circle(c0.x + (c1.x - c0.x) * f, c0.y + (c1.y - c0.y) * f - 1, 1.6).fill(PRODUCTS.crude_oil.color);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Clarificador: los tanques donde el aceite se asienta; por la mirilla se ve el aceite anaranjado que sube.
+  oil_clarifier(g, x, y, ctx) {
+    const tanks = ctx.tier >= 2 ? [[0.6, 0.7], [1.5, 0.7], [2.4, 0.7], [1.0, 1.8], [1.9, 1.8]] : [[0.7, 0.8], [1.7, 0.8], [1.2, 1.9]];
+    this.tanks = [];
+    for (const [tx, ty] of tanks) {
+      const base = iso(x + tx, y + ty);
+      const h = 30 + ctx.up / 2;
+      shadow(g, base.x + 3, base.y + 1, 13, 5);
+      g.rect(base.x - 10, base.y - h, 20, h).fill(0xb0bec5).stroke(OUTLINE);
+      g.rect(base.x - 7, base.y - h, 4, h).fill(0xcfd8dc);
+      g.ellipse(base.x, base.y - h, 10, 4).fill(0xcfd8dc).stroke(OUTLINE);
+      g.rect(base.x + 2, base.y - h + 6, 5, h - 10).fill(0x37474f);
+      this.tanks.push({ x: base.x + 4.5, y: base.y - 4, h: h - 10 });
+    }
+    const pipe0 = iso(x + tanks[0][0], y + tanks[0][1], 8);
+    const pipe1 = iso(x + tanks[1][0], y + tanks[1][1], 8);
+    g.moveTo(pipe0.x, pipe0.y).lineTo(pipe1.x, pipe1.y).stroke({ width: 3, color: 0x8a8f94 });
+    this.roofTop = iso(x + 1.5, y + 1.2, 38);
+    const level = new Graphics();
+    this.anim.addChild(level);
+    this.animate = (time) => {
+      level.clear();
+      for (const [k, t] of this.tanks.entries()) {
+        const f = this.working ? 0.55 + Math.sin(time * 0.8 + k) * 0.25 : 0.6;
+        level.rect(t.x - 2, t.y - t.h * f, 4, t.h * f).fill(PRODUCTS.palm_oil.color);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Envasadora: la nave con la banda donde las botellas se llenan de aceite y se tapan.
+  oil_bottler(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 1.9, 1.6, 28, ctx, { wall: 0xf7f4ee, roofColor: 0x9aa3a8, roofH: 12 });
+    door(g, hx, hy, 1.6, 0.7, 16, 0xd7263d);
+    windowOnRight(this, g, hx, hy, 1.9, 0.8, 14, 0xffe0b2);
+    box(g, x + 0.4, y + 2.15, 1.9, 0.35, 8, 0x555555);
+    const tap = iso(x + 1.0, y + 2.32, 22);
+    g.rect(tap.x - 3, tap.y - 6, 6, 8).fill(0x8a8f94).stroke(OUTLINE);
+    const belt = new Graphics();
+    this.anim.addChild(belt);
+    this.animate = (time) => {
+      belt.clear();
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.35 + i / 4) % 1;
+        const p = iso(x + 0.45 + f * 1.7, y + 2.32, 8);
+        const full = f > 0.3;
+        belt.roundRect(p.x - 2.5, p.y - 11, 5, 11, 1.5).fill(full ? PRODUCTS.oil_bottle.color : 0xffe0b2).stroke(OUTLINE);
+        belt.rect(p.x - 1.5, p.y - 13, 3, 2.5).fill(f > 0.45 ? 0xd7263d : 0xffffff);
+      }
+      if (!this.working) return;
+      const f = (time * 2) % 1;
+      belt.moveTo(tap.x, tap.y + 2).lineTo(tap.x, tap.y + 6 + f * 3).stroke({ width: 1.2, color: PRODUCTS.palm_oil.color });
+    };
+  },
+
+  // Cajonera de aceite: la bodega con las cajas de aceite arrumadas en el patio (más arrumes con los hitos).
+  oil_boxer(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xe8e2d0, roofColor: 0x9aa3a8, roofH: 14 });
+    door(g, hx, hy, 1.6, 1.6, 20, 0x8d6e4a);
+    windowOnRight(this, g, hx, hy, 2.4, 0.8, 15, 0xffffff);
+    const stack = (bx, by, rows) => {
+      for (let r = 0; r < rows; r++) for (let k = 0; k < rows - r; k++) box(g, x + bx + k * 0.3 + r * 0.15, y + by, 0.26, 0.26, 7, PRODUCTS.oil_box.color, { z: r * 7 });
+    };
+    stack(0.35, 2.3, 3);
+    if (ctx.tier >= 2) stack(1.5, 2.35, 2);
+    const carrier = new Graphics();
+    this.anim.addChild(carrier);
+    this.animate = (time) => {
+      carrier.clear();
+      const f = (time * 0.25) % 1;
+      const back = f > 0.5;
+      const k = back ? 1 - (f - 0.5) * 2 : f * 2;
+      const p = iso(x + 1.4 + k * 1.1, y + 2.1);
+      worker(carrier, p.x, p.y, 0x2e7d32);
+      if (!back) carrier.rect(p.x - 6, p.y - 30, 12, 9).fill(PRODUCTS.oil_box.color).stroke(OUTLINE);
+    };
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

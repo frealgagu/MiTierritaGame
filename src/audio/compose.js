@@ -179,10 +179,44 @@ function renderTorbellino(buf, index) {
   }
 }
 
+// Compás de joropo (3/4 rápido, corcheas 0 a 5): el bajo con sus bordones, el cuatro rasgueando cada corchea
+// con los golpes apagados (el «chasquido»), las maracas sin parar y el arpa en la melodía, con la mano
+// izquierda doblando una octava abajo.
+function renderJoropo(buf, index) {
+  const { song, beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const jitter = () => (rng() - 0.5) * 0.008;
+  const { root, tones } = parseChord(song.chords[index]);
+  const at = (e) => t0 + e * eighth + jitter();
+
+  const low = above(root, 40);
+  const fifth = above((root + 7) % 12, 40);
+  for (const [e, m, n] of [[0, low, 1.6], [3, fifth, 0.9], [4, low + 12, 0.9]]) {
+    pluck(buf, at(e), freqOf(m), eighth * n, { amp: 0.4, t60: 1.4, bright: 0.3, pan: -0.15, pos: 0.25 });
+  }
+  // El cuatro: cuatro cuerdas en el registro medio; abierto en el uno y en el «y» del dos, apagado en el dos y
+  // en el «y» del tres.
+  const cuatro = tones.slice(0, 4).map((pc) => above(pc, 59)).sort((a, b) => a - b);
+  for (let e = 0; e < 6; e++) {
+    const muted = e === 2 || e === 5;
+    strum(buf, at(e), cuatro, eighth * (muted ? 0.25 : 0.75), { amp: muted ? 0.05 : e === 0 || e === 3 ? 0.085 : 0.06, t60: muted ? 0.15 : 0.7, bright: 0.7, pan: 0.3, pos: 0.15 }, e % 2 === 1);
+  }
+  // Las maracas: semicorcheas, más fuertes en el uno y en el «y» del dos.
+  for (let k = 0; k < 12; k++) scrape(buf, at(k / 2), eighth * 0.4, k === 0 || k === 6 ? 0.07 : k % 2 ? 0.025 : 0.045, k % 2 ? -0.45 : 0.45);
+  // El arpa.
+  for (const [e, n, note] of song.melody[index] ?? []) {
+    const f = freqOf(midi(note));
+    pluck(buf, at(e), f, n * eighth * 0.95, { amp: 0.28, t60: 1.3, bright: 0.8, pan: 0.05, pos: 0.18 });
+    if (e % 3 === 0) pluck(buf, at(e) + 0.004, f / 2, n * eighth * 0.95, { amp: 0.12, t60: 1.3, bright: 0.6, pan: -0.05, pos: 0.18 });
+  }
+}
+
 // Toca el compás `index`: bajo, guitarra, tiple y melodía.
 export function renderBar(buf, index) {
   if (buf.song.style === 'cumbia') return renderCumbia(buf, index);
   if (buf.song.style === 'torbellino') return renderTorbellino(buf, index);
+  if (buf.song.style === 'joropo') return renderJoropo(buf, index);
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
   const t0 = (index * buf.bar) / buf.sr;

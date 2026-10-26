@@ -174,6 +174,15 @@ export const PRODUCTS = {
   fiambre_paseo: { name: 'Fiambre del paseo', zone: 'villa_leyva', value: 2000000, icon: ICON.fiambrePaseo, color: 0x2e7d32 },
   excursion_fosil: { name: 'Excursión al Fósil', zone: 'villa_leyva', value: 24000000, icon: ICON.excursionFosil, color: 0xc9b48a },
 
+  // Los Llanos · La Palma (v3.31): mismos valores que el Papal.
+  palm_bunch: { name: 'Racimo de palma', zone: 'palma', value: 1, icon: ICON.palmBunch, color: 0xc0392b },
+  palm_fruit: { name: 'Fruto de palma', zone: 'palma', value: 3, icon: ICON.palmFruit, color: 0xe65100 },
+  cooked_fruit: { name: 'Fruto cocido', zone: 'palma', value: 6, icon: ICON.cookedFruit, color: 0xbf5a1a },
+  crude_oil: { name: 'Aceite crudo', zone: 'palma', value: 10, icon: '🛢️', color: 0xa8380e },
+  palm_oil: { name: 'Aceite de palma', zone: 'palma', value: 30, icon: ICON.palmOil, color: 0xf57c00 },
+  oil_bottle: { name: 'Botella de aceite', zone: 'palma', value: 45, icon: ICON.oilBottle, color: 0xf9a825 },
+  oil_box: { name: 'Caja de aceite', zone: 'palma', value: 250, icon: ICON.oilBox, color: 0xc8a26a },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

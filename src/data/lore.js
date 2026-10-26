@@ -175,6 +175,14 @@ export const FACTS = {
   coconut_grater: ['El coco se ralla a mano, en un rallador de lata con huequitos.'],
   coconut_press: ['La leche de coco sale de exprimir el coco rallado en un trapo.', 'El arroz con coco se hace con leche de coco y panela.'],
   cocada_kitchen: ['Las palenqueras venden cocadas en las calles de Cartagena.', 'Hay cocadas blancas, de panela, de piña y de guayaba.'],
+  // Los Llanos · La Palma (v3.31)
+  palm_grove: ['El Meta es de los departamentos que más palma de aceite siembran.', 'La palma de aceite vino de África y da racimos todo el año.'],
+  bunch_thresher: ['Un racimo de palma puede pesar más de 20 kilos.'],
+  fruit_sterilizer: ['El fruto se cocina al vapor para que el aceite no se dañe.'],
+  palm_press: ['Del fruto sale el aceite rojo; de la almendra, el de palmiste.'],
+  oil_clarifier: ['El aceite se clarifica: se le quitan el agua y la arenilla.'],
+  oil_bottler: ['Colombia es el país de América que más aceite de palma produce.'],
+  oil_boxer: ['Con aceite se fríen la yuca y el plátano del almuerzo llanero.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -203,6 +211,7 @@ export const PEOPLE = {
   paipa: { icon: '👵🏻', name: 'Doña Gertrudis', role: 'la quesera' },
   ruanas: { icon: '👴🏻', name: 'Don Clímaco', role: 'el tejedor' },
   villa_leyva: { icon: '👩🏻', name: 'Doña Mercedes', role: 'la guía' },
+  palma: { icon: '👨🏽‍🌾', name: 'Don Eusebio', role: 'el palmicultor' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -231,6 +240,7 @@ export const WELCOME = {
   sombrero: '¡Bienvenido a Tuchín, compadre! Aquí la caña flecha se vuelve trenza, y la trenza, sombrero vueltiao.',
   quesera: '¡Ajá, mi amor, bienvenido a la sabana! De esta leche sale el queso costeño, y del queso, el mote.',
   cienaga: '¡Qué hubo, primo! Bienvenido a la Ciénaga. Aquí se pesca en canoa, con atarraya, como los abuelos.',
+  palma: '¡Buenas, compadre, bienvenido al Llano! Aquí la palma da racimos todo el año, y de ellos sale el aceite.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

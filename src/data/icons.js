@@ -156,6 +156,13 @@ export const ICON = {
   canastaMercado: '\uE096', // Canasta del mercado: el canasto del sábado con frutas, mazorca y una jarra de barro
   fiambrePaseo: '\uE097', // Fiambre del paseo: el atado envuelto en hoja de plátano sobre el mantel de cuadros
   excursionFosil: '\uE098', // Excursión al Fósil: el esqueleto del kronosaurio sobre la piedra y la amonita
+  oilPalm: '\uE099', // Palma de aceite: tronco grueso con las bases de las hojas, hojas arqueadas y racimos rojos
+  palmBunch: '\uE09A', // Racimo de palma: el racimo pesado, lleno de frutos rojos, anaranjados y negros, con sus espinas
+  palmFruit: '\uE09B', // Fruto de palma: los frutos sueltos, ya desgranados del racimo
+  cookedFruit: '\uE09C', // Fruto cocido: la vagoneta del esterilizador llena de fruto, echando vapor
+  palmOil: '\uE09D', // Aceite de palma: el tanque con el aceite rojo anaranjado y la gota que cae
+  oilBottle: '\uE09E', // Botella de aceite: la botella plástica con el aceite dorado, la tapa roja y la etiqueta con la palma
+  oilBox: '\uE09F', // Caja de aceite: la caja de cartón con las tapas rojas de las botellas asomadas
 };
 
 export const ICON_FONT = 'Cafetal Icons';

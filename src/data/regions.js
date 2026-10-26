@@ -36,6 +36,18 @@ export const REGIONS = [
     music: 'boyaca',
     unlock: { region: 'costa', zone: 'cartagena' },
   },
+  // Los Llanos (v3.31): se abren al completar Villa de Leyva. Llegan zona por zona, como la Costa y Boyacá;
+  // mientras estén en obra (`wip`) no tienen final, y las zonas que faltan se anuncian (`soon`).
+  {
+    id: 'llanos',
+    name: 'Los Llanos',
+    icon: '🐎',
+    zones: ['palma'],
+    soon: ['El Frutal', 'La Cachamera', 'El Hato llanero', 'La Talabartería', 'Villavicencio'],
+    wip: true,
+    music: 'llanos',
+    unlock: { region: 'boyaca', zone: 'villa_leyva' },
+  },
 ];
 
 export const REGIONS_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]));

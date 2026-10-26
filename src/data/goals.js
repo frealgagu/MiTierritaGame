@@ -550,5 +550,38 @@ const VILLA_LEYVA = [
   { id: 'u_final', type: 'sold', product: 'excursion_fosil', amount: 7000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA };
-export const GOALS = [...FINCA, ...TRAPICHE, ...LECHERIA, ...CACAOTAL, ...MAIZAL, ...PUEBLO, ...GUAYABERA, ...TABACAL, ...FIQUERA, ...HATO, ...HORMIGAS, ...BARICHARA, ...ARROZAL, ...COCAL, ...CIENAGA, ...QUESERA, ...SOMBRERO, ...CARTAGENA, ...PAPAL, ...CERVECERIA, ...RAQUIRA, ...PAIPA, ...RUANAS, ...VILLA_LEYVA];
+// Los Llanos · La Palma (v3.31): la misma lista que el Papal.
+const PALMA = [
+  { id: 'lp01', type: 'sold', product: 'palm_bunch', amount: 20, reward: 15 },
+  { id: 'lp02', type: 'level', target: 'palm_grove', level: 5, reward: 20 },
+  { id: 'lp03', type: 'level', target: 'palm_grove:transport', level: 5, reward: 25 },
+  { id: 'lp04', type: 'unlock', station: 'bunch_thresher', reward: 30 },
+  { id: 'lp06', type: 'produced', product: 'palm_fruit', amount: 50, reward: 80 },
+  { id: 'lp07', type: 'level', target: 'palm_grove', level: 10, reward: 100 },
+  { id: 'lp08', type: 'unlock', station: 'fruit_sterilizer', reward: 150 },
+  { id: 'lp09', type: 'level', target: 'dispatch:palma', level: 5, reward: 150 },
+  { id: 'lp10', type: 'produced', product: 'cooked_fruit', amount: 200, reward: 300 },
+  { id: 'lp11', type: 'unlock', station: 'palm_press', reward: 500 },
+  { id: 'lp12', type: 'research', research: 'herraduras_ll', reward: 500 },
+  { id: 'lp13', type: 'income', zone: 'palma', perSecond: 5, reward: 600 },
+  { id: 'lp14', type: 'level', target: 'fruit_sterilizer', level: 10, reward: 800 },
+  { id: 'lp15', type: 'unlock', station: 'oil_clarifier', reward: 1500 },
+  { id: 'lp16', type: 'produced', product: 'palm_oil', amount: 100, reward: 2000 },
+  { id: 'lp17', type: 'researchCount', count: 3, reward: 2500 },
+  { id: 'lp18', type: 'income', zone: 'palma', perSecond: 20, reward: 4000 },
+  { id: 'lp19', type: 'allLevels', zone: 'palma', level: 10, reward: 5000 },
+  { id: 'lp20', type: 'unlock', station: 'oil_bottler', reward: 8000 },
+  { id: 'lp21', type: 'produced', product: 'oil_bottle', amount: 500, reward: 12000 },
+  { id: 'lp22', type: 'level', target: 'palm_grove', level: 25, reward: 15000 },
+  { id: 'lp23', type: 'income', zone: 'palma', perSecond: 100, reward: 20000 },
+  { id: 'lp24', type: 'unlock', station: 'oil_boxer', reward: 40000 },
+  { id: 'lp25', type: 'sold', product: 'oil_box', amount: 50, reward: 50000 },
+  { id: 'lp26', type: 'research', research: 'sello_ll', reward: 80000 },
+  { id: 'lp27', type: 'allLevels', zone: 'palma', level: 25, reward: 100000 },
+  { id: 'lp05', type: 'research', research: 'palma_hibrida', reward: 50000 },
+  { id: 'lp28', type: 'sold', product: 'oil_box', amount: 500, reward: 150000 },
+  { id: 'lp_final', type: 'sold', product: 'oil_box', amount: 2000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA };
+export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

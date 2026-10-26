@@ -300,6 +300,13 @@ export class Terrain {
           else if (r < 0.065) obj = cypress(rng);
           else if (r < 0.085) obj = hayBale(rng);
           else if (r < 0.105) obj = rock(rng);
+        } else if (this.zone.theme === 'palm') {
+          // Los Llanos (v3.31): morichales, comejeneras, garzas y alguna palma de aceite suelta.
+          if (r < 0.03) obj = morichePalm(rng);
+          else if (r < 0.055) obj = termiteMound(rng);
+          else if (r < 0.075) obj = egret(rng);
+          else if (r < 0.095) obj = oilPalm(rng);
+          else if (r < 0.105) obj = saman(rng);
         } else if (this.zone.theme === 'potato') {
           // Altiplano (v3.22): eucaliptos, frailejones del páramo, piedras y algún ciprés.
           if (r < 0.04) obj = eucalyptus(rng);
@@ -513,6 +520,7 @@ const FARM_SOIL = {
   fique: (v) => mix(0xb8805a, 0x9c6a48, v * 0.4),
   ants: (v) => mix(0xc0784a, 0xa86438, v * 0.4),
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
+  palm: (v) => mix(0x6a9a3e, 0x7aa848, v * 0.5), // el palmar sobre pasto (v3.31)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
@@ -1069,6 +1077,73 @@ export function drawCoconutPalm(g, x, y, scale, rng, nuts = 3, green = false) {
   }
   const spots = [[-2, 3], [2, 3.5], [0, 5.5], [-4, 5], [4, 5.5], [-1.5, 7.5], [2, 8]];
   for (const [dx, dy] of spots.slice(0, nuts)) g.circle(cx + dx * s * 1.2, cy + dy * s * 1.2, 2.4 * Math.max(s, 0.8)).fill(green ? 0x8bc34a : 0x7a5a2e).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+}
+
+// Palma de aceite (v3.31): tronco grueso y corto con las bases de las hojas, la corona de hojas largas
+// que se arquean y los racimos rojos pegados al tronco (más con cada hito).
+export function drawOilPalm(g, x, y, scale, rng, bunches = 2) {
+  const s = scale * (0.9 + rng() * 0.2);
+  const h = (26 + rng() * 8) * s;
+  shadow(g, x + 3, y + 2, 16 * s, 6 * s);
+  g.moveTo(x - 4.5 * s, y).lineTo(x - 3.5 * s, y - h).lineTo(x + 3.5 * s, y - h).lineTo(x + 4.5 * s, y).closePath().fill(0x8d6e4a).stroke({ width: 1, color: 0x3a2418, alpha: 0.45 });
+  for (let k = 1; k < 5; k++) {
+    const yy = y - (h * k) / 5;
+    g.moveTo(x - 3.5 * s, yy).lineTo(x, yy - 3 * s).lineTo(x + 3.5 * s, yy).stroke({ width: 1, color: 0x5d4632, alpha: 0.7 });
+  }
+  const cy = y - h;
+  for (let i = 0; i < 10; i++) {
+    const a = (i / 10) * Math.PI * 2 + 0.2;
+    const ex = x + Math.cos(a) * 22 * s;
+    const ey = cy + (Math.sin(a) * 8 + 9) * s;
+    g.moveTo(x, cy).quadraticCurveTo(x + Math.cos(a) * 12 * s, cy - 12 * s, ex, ey).stroke({ width: 3.6 * Math.max(s, 0.8), color: i % 2 ? 0x2e6b22 : 0x4a8a30, cap: 'round' });
+  }
+  for (let b = 0; b < bunches; b++) {
+    const bx = x + (b % 2 ? 3.5 : -3.5) * s;
+    const by = cy + (4 + Math.floor(b / 2) * 4) * s;
+    g.ellipse(bx, by, 3.4 * s, 3 * s).fill(0xc0392b).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+    g.circle(bx - 1 * s, by - 1 * s, 1 * s).fill(0xf57c00);
+  }
+}
+
+function oilPalm(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  drawOilPalm(g, 0, 0, 0.9, rng, 2);
+  c.addChild(g);
+  return c;
+}
+
+// Palma de moriche (v3.31): la del morichal llanero, alta y derecha, con la corona de hojas en abanico.
+function morichePalm(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const s = 0.85 + rng() * 0.35;
+  const h = (60 + rng() * 20) * s;
+  shadow(g, 3, 2, 12 * s, 4 * s);
+  g.rect(-2 * s, -h, 4 * s, h).fill(0x9e9e8a).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
+  for (let i = 0; i < 9; i++) {
+    const a = -Math.PI * 0.95 + (i / 8) * Math.PI * 0.9 + (i > 4 ? 0.2 : 0);
+    const len = (14 + (i % 3) * 2) * s;
+    const ex = Math.cos(a) * len;
+    const ey = -h + Math.sin(a) * len * 0.8;
+    g.moveTo(0, -h).lineTo(ex, ey).stroke({ width: 1, color: 0x2e5e22 });
+    g.poly([ex - 4 * s, ey - 1, ex + 4 * s, ey - 1, ex, ey + 6 * s]).fill(i % 2 ? 0x3f7a2a : 0x5e9a3c);
+  }
+  g.circle(0, -h + 4 * s, 2.4 * s).fill(0x8d4a24);
+  c.addChild(g);
+  return c;
+}
+
+// Comejenera (v3.31): el montículo de tierra roja de los comejenes, en la sabana.
+function termiteMound(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const s = 0.8 + rng() * 0.4;
+  shadow(g, 2, 1, 9 * s, 3.5 * s);
+  g.moveTo(-8 * s, 0).quadraticCurveTo(-6 * s, -14 * s, -1 * s, -22 * s).quadraticCurveTo(3 * s, -14 * s, 3 * s, -10 * s).quadraticCurveTo(7 * s, -9 * s, 8 * s, 0).closePath().fill(0xb5653a).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  g.moveTo(-4 * s, -6 * s).quadraticCurveTo(-3 * s, -12 * s, -1 * s, -18 * s).stroke({ width: 1.2 * s, color: 0xd08a5a, alpha: 0.8 });
+  c.addChild(g);
+  return c;
 }
 
 function coconutPalm(rng) {

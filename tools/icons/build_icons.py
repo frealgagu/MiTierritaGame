@@ -2357,6 +2357,97 @@ def excursion_fosil():
 
 
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
+# ---------- Los Llanos · La Palma (v3.31) ----------
+
+def palm_fruit_shape(cx, cy, r, rot, color):
+    """Fruto de palma de aceite: ovalado, rojo anaranjado con la punta oscura."""
+    return [(OUTLINE, [ellipse(cx, cy, r + 1.6, r * 1.3 + 1.6, rot)]), (color, [ellipse(cx, cy, r, r * 1.3, rot)]),
+            ('#4e1f0a', [ellipse(cx + math.sin(math.radians(rot)) * r * 0.75, cy - math.cos(math.radians(rot)) * r * 0.75, r * 0.45, r * 0.35, rot)]),
+            ('#ffb74d', [ellipse(cx - r * 0.3, cy + r * 0.2, r * 0.25, r * 0.4, rot)])]
+
+
+def oil_palm():
+    """Palma de aceite: tronco grueso con las bases de las hojas, hojas arqueadas y racimos rojos."""
+    layers = [('#5d8f3a', [ellipse(50, 94, 26, 5)])]
+    layers.append((OUTLINE, ['M 38 94 L 42 46 L 58 46 L 62 94 Z']))
+    layers.append(('#8d6e4a', ['M 40.8 91.5 L 44.5 48.5 L 55.5 48.5 L 59.2 91.5 Z']))
+    layers.append(('#6d5236', [poly(44, 56 + k * 9, 50, 52 + k * 9, 56, 56 + k * 9, 50, 60 + k * 9) for k in range(4)]))
+    fronds = [(50, 40, 8, 54, 8), (50, 40, 16, 22, 8), (50, 40, 40, 8, 7), (50, 40, 62, 8, 7), (50, 40, 86, 22, 8), (50, 40, 92, 54, 8), (50, 40, 30, 44, 6), (50, 40, 72, 44, 6)]
+    for x0, y0, x1, y1, w in fronds:
+        layers.append(('#2e7d32', [leaf(x0, y0, x1, y1, w)]))
+    layers.append(('#66bb6a', [rib(x0, y0, x1, y1, 1) for x0, y0, x1, y1, w in fronds]))
+    for cx, cy in [(40, 48), (60, 48)]:
+        for dx, dy in [(-4, -2), (4, -2), (0, 3), (-3, 6), (3, 6)]:
+            layers += palm_fruit_shape(cx + dx, cy + dy, 3.2, 0, '#d84315')
+    return layers
+
+
+def palm_bunch():
+    """Racimo de palma: el racimo pesado, lleno de frutos rojos, anaranjados y negros, con sus espinas."""
+    layers = [(OUTLINE, [ellipse(50, 56, 38, 36)]), ('#6d4c1f', [ellipse(50, 56, 35.5, 33.5)])]
+    layers.append(('#5d4037', [rect(46, 10, 8, 16)]))
+    fruits = [(34, 40, '#bf360c'), (50, 34, '#e65100'), (66, 40, '#d84315'), (28, 58, '#e65100'), (44, 52, '#4e1f0a'), (60, 54, '#bf360c'), (72, 60, '#e65100'), (36, 74, '#d84315'), (52, 70, '#e65100'), (66, 76, '#bf360c'), (50, 86, '#d84315')]
+    for cx, cy, col in fruits:
+        layers += palm_fruit_shape(cx, cy, 6.5, (cx - 50) * 0.8, col)
+    return layers
+
+
+def palm_fruit():
+    """Fruto de palma: los frutos sueltos, ya desgranados del racimo."""
+    layers = []
+    for cx, cy, r, rot, col in [(30, 62, 13, -20, '#d84315'), (66, 56, 14, 15, '#e65100'), (46, 80, 11, 5, '#bf360c'), (50, 34, 11, -5, '#e65100')]:
+        layers += palm_fruit_shape(cx, cy, r, rot, col)
+    return layers
+
+
+def cooked_fruit():
+    """Fruto cocido: la vagoneta del esterilizador llena de fruto, echando vapor."""
+    layers = [(OUTLINE, [poly(10, 44, 90, 44, 82, 82, 18, 82)]), ('#78909c', [poly(13.5, 46.5, 86.5, 46.5, 79.8, 79.5, 20.2, 79.5)])]
+    layers.append(('#546e7a', [rect(22, 52, 56, 3), rect(22, 64, 56, 3)]))
+    for cx, cy, col in [(26, 42, '#bf5a1a'), (40, 40, '#a8461a'), (54, 40, '#bf5a1a'), (68, 42, '#a8461a'), (33, 34, '#8d3b14'), (61, 34, '#a8461a'), (47, 32, '#bf5a1a')]:
+        layers += palm_fruit_shape(cx, cy, 6, 0, col)
+    layers += [(OUTLINE, [circle(30, 88, 7), circle(70, 88, 7)]), ('#37474f', [circle(30, 88, 4.5), circle(70, 88, 4.5)])]
+    layers.append(('#eceff1', ['M 30 22 Q 24 14 32 8 Q 26 16 34 22 Z', 'M 52 20 Q 46 12 54 6 Q 48 14 56 20 Z', 'M 72 22 Q 66 14 74 8 Q 68 16 76 22 Z']))
+    return layers
+
+
+def palm_oil():
+    """Aceite de palma: el tanque con el aceite rojo anaranjado y la gota que cae."""
+    layers = [(OUTLINE, [rect(18, 30, 64, 62)]), ('#b0bec5', [rect(21, 33, 58, 56)])]
+    layers.append(('#f57c00', [rect(21, 50, 58, 39)]))
+    layers.append(('#ffb74d', [rect(26, 54, 8, 30)]))
+    layers.append(('#90a4ae', [rect(16, 26, 68, 7)]))
+    layers += [(OUTLINE, ['M 50 4 Q 62 18 62 24 Q 62 32 50 32 Q 38 32 38 24 Q 38 18 50 4 Z']), ('#e65100', ['M 50 8.5 Q 59.5 19.5 59.5 24 Q 59.5 29.5 50 29.5 Q 40.5 29.5 40.5 24 Q 40.5 19.5 50 8.5 Z'])]
+    layers.append(('#ffcc80', [ellipse(45, 23, 2.4, 4, -20)]))
+    return layers
+
+
+def oil_bottle():
+    """Botella de aceite: la botella plástica con el aceite dorado, la tapa roja y la etiqueta con la palma."""
+    layers = [(OUTLINE, ['M 40 6 L 60 6 L 60 18 Q 74 26 74 42 L 74 92 L 26 92 L 26 42 Q 26 26 40 18 Z'])]
+    layers.append(('#ffe0b2', ['M 42.5 8.5 L 57.5 8.5 L 57.5 19.5 Q 71.5 27.5 71.5 42 L 71.5 89.5 L 28.5 89.5 L 28.5 42 Q 28.5 27.5 42.5 19.5 Z']))
+    layers.append(('#f9a825', ['M 28.5 40 L 71.5 40 L 71.5 89.5 L 28.5 89.5 Z']))
+    layers.append(('#d7263d', [rect(40, 4, 20, 8)]))
+    layers.append(('#ffffff', [rect(28.5, 52, 43, 22)]))
+    layers.append(('#2e7d32', [leaf(50, 70, 38, 56, 3), leaf(50, 70, 62, 56, 3), leaf(50, 70, 50, 54, 3)]))
+    layers.append(('#d84315', [circle(50, 68, 3)]))
+    layers.append(('#fff3c4', [rect(33, 44, 4, 40)]))
+    return layers
+
+
+def oil_box():
+    """Caja de aceite: la caja de cartón con las tapas rojas de las botellas asomadas."""
+    layers = [(OUTLINE, [poly(8, 40, 50, 26, 92, 40, 92, 82, 50, 96, 8, 82)])]
+    layers.append(('#c8a26a', [poly(11, 42, 50, 55, 50, 92.5, 11, 80)]))
+    layers.append(('#b08850', [poly(50, 55, 89, 42, 89, 80, 50, 92.5)]))
+    for cx in (30, 50, 70):
+        top = 14 + abs(cx - 50) * 0.3
+        layers += [(OUTLINE, [rect(cx - 7, top, 14, 32)]), ('#f9a825', [rect(cx - 5.5, top + 6, 11, 24.5)]), ('#d7263d', [rect(cx - 5.5, top + 1.5, 11, 5)])]
+    layers.append(('#d9b98a', [poly(11, 42, 50, 29, 89, 42, 50, 55)]))
+    layers += [('#2e7d32', [leaf(66, 76, 58, 66, 2.5), leaf(66, 76, 74, 66, 2.5)]), ('#d84315', [circle(66, 74, 2.4)])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -2510,6 +2601,13 @@ ICONS = [
     (0xE096, 'canasta_mercado', canasta_mercado),
     (0xE097, 'fiambre_paseo', fiambre_paseo),
     (0xE098, 'excursion_fosil', excursion_fosil),
+    (0xE099, 'oil_palm', oil_palm),
+    (0xE09A, 'palm_bunch', palm_bunch),
+    (0xE09B, 'palm_fruit', palm_fruit),
+    (0xE09C, 'cooked_fruit', cooked_fruit),
+    (0xE09D, 'palm_oil', palm_oil),
+    (0xE09E, 'oil_bottle', oil_bottle),
+    (0xE09F, 'oil_box', oil_box),
 ]
 
 

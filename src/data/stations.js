@@ -209,6 +209,17 @@ export const STATIONS = [
   { id: 'canastos_paseo', zone: 'villa_leyva', name: 'Canastos del paseo', icon: ICON.fiambrePaseo, in: { canasta_mercado: 1 }, imports: [{ product: 'piquete', perCycle: 1, route: 'piquetes' }, { product: 'canasta_amasijos', perCycle: 1, route: 'amasijos' }], out: { fiambre_paseo: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.27' },
   { id: 'salida_fosil', zone: 'villa_leyva', name: 'Salida al Fósil', icon: ICON.excursionFosil, in: { fiambre_paseo: 4 }, out: { excursion_fosil: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.27' },
 
+  // Los Llanos · La Palma (v3.31), en las sabanas del Meta: los racimos de la palma de aceite se desgranan, el
+  // fruto se cocina al vapor, se prensa (el aceite crudo), se clarifica, se envasa en botellas y las botellas en
+  // cajas. Mismos números que la Finca, la Guayabera, el Arrozal y el Papal: la región empieza de cero.
+  { id: 'palm_grove', zone: 'palma', name: 'Palmar', icon: ICON.oilPalm, infinite: true, out: { palm_bunch: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.31' },
+  { id: 'bunch_thresher', zone: 'palma', name: 'Desgranadora', icon: ICON.palmFruit, in: { palm_bunch: 2 }, out: { palm_fruit: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.31' },
+  { id: 'fruit_sterilizer', zone: 'palma', name: 'Esterilizador', icon: ICON.cookedFruit, in: { palm_fruit: 1 }, out: { cooked_fruit: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.31' },
+  { id: 'palm_press', zone: 'palma', name: 'Prensa de aceite', icon: '🛢️', in: { cooked_fruit: 1 }, out: { crude_oil: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.31' },
+  { id: 'oil_clarifier', zone: 'palma', name: 'Clarificador', icon: ICON.palmOil, in: { crude_oil: 2 }, out: { palm_oil: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.31' },
+  { id: 'oil_bottler', zone: 'palma', name: 'Envasadora', icon: ICON.oilBottle, in: { palm_oil: 1 }, out: { oil_bottle: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.31' },
+  { id: 'oil_boxer', zone: 'palma', name: 'Cajonera de aceite', icon: ICON.oilBox, in: { oil_bottle: 4 }, out: { oil_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.31' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

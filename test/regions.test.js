@@ -721,3 +721,24 @@ test('al cargar una partida de la v3.29, los cupos pasan a ser dos para todo el 
   assert.equal(back.regions.santander.events.slots, undefined);
   assert.ok(back.regions.santander.events.boards.guayabera);
 });
+
+test('Los Llanos se abren al completar Villa de Leyva; mientras estén en obra no se terminan (v3.31)', async () => {
+  const { claimGoal } = await import('../src/sim/goals.js');
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  root.regions.santander.zones.barichara.complete = true;
+  openRegions(root);
+  root.regions.costa.zones.cartagena.complete = true;
+  openRegions(root);
+  assert.deepEqual(openRegions(root), []);
+  root.regions.boyaca.zones.villa_leyva.complete = true;
+  assert.deepEqual(openRegions(root), ['llanos']);
+  const l = regionState(root, 'llanos');
+  assert.ok(l.zones.palma.unlocked);
+  l.stats.sold = { oil_box: 1e9 };
+  l.goals.claimed.push(...GOALS_BY_ZONE.palma.filter((g) => !g.final).map((g) => g.id));
+  claimGoal(l, GOALS_BY_ZONE.palma.find((g) => g.final).id, { emit() {} });
+  assert.equal(l.zones.palma.complete, true);
+  assert.ok(!l.regionDone, 'en obra: todavía no tiene final');
+});

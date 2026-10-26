@@ -1,5 +1,18 @@
 # Registro de cambios
 
+## v3.31.0 — Los Llanos: La Palma
+- **🐎 Los Llanos**, la quinta región, se abren al completar Villa de Leyva. Tienen su propia economía, como las demás, y llegarán zona por zona.
+- **🌴 La Palma**, su primera zona: el Palmar → la Desgranadora → el Esterilizador → la Prensa de aceite → el Clarificador → la Envasadora → la Cajonera de aceite. Va del racimo de palma a la caja de aceite, pasando por el fruto, el aceite crudo y la botella. Tiene los mismos números que el Papal, porque la región empieza de cero.
+- Su persona es **Don Eusebio, el palmicultor**, con sus datos curiosos, objetivos, 15 investigaciones, su victoria y 7 íconos nuevos (de la palma de aceite a la caja).
+- **El mapa:** el palmar de racimos rojos, morichales, comejeneras, garzas y algún samán. La planta extractora tiene naves de techo de zinc:
+  - el tambor que desgrana los racimos;
+  - el autoclave con la vagoneta de fruto;
+  - la prensa con los tambores de aceite crudo;
+  - los tanques del clarificador, con el aceite que sube;
+  - la banda de botellas que se llenan y se tapan.
+- **Música:** el **Joropo de la sabana**, con el arpa en la melodía, el cuatro rasgueando con sus golpes apagados, las maracas y el bajo.
+- Después vendrán El Frutal, La Cachamera, El Hato llanero, La Talabartería y Villavicencio.
+
 ## v3.30.1 — Pausar un evento ganado
 - Con el evento ganado, **⏸️ Pausar** sigue funcionando: vuelves al mapa y el evento ganado te espera en la lista hasta que toques **🏁 Terminar evento**. Solo **🔄 Reiniciar** queda deshabilitado.
 

@@ -326,6 +326,23 @@ export const RESEARCH = [
   { zone: 'villa_leyva', id: 'pueblo_patrimonio', name: 'Pueblo patrimonio', icon: '🏅', desc: 'Todo lo que vende Villa de Leyva vale un 50 % más.', cost: 25000000000, requires: 'canastos_paseo', effect: { type: 'zoneValue', target: 'villa_leyva', mult: 1.5 } },
   { zone: 'villa_leyva', id: 'maestria_villa', name: 'Maestría: Villa de Leyva', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'villa_leyva', mult: 4 } },
   { zone: 'villa_leyva', id: 'supremacia_villa', name: 'Supremacía: Villa de Leyva', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'villa_leyva', mult: 8 } },
+
+  // Los Llanos · La Palma (v3.31): las mismas del Papal, con la palma de aceite.
+  { zone: 'palma', id: 'palma_hibrida', name: 'Palma híbrida', icon: ICON.oilPalm, desc: 'El Palmar produce el doble.', cost: 300, requires: 'bunch_thresher', effect: { type: 'stationSpeed', target: 'palm_grove', mult: 2 } },
+  { zone: 'palma', id: 'tambor_desgranador', name: 'Tambor desgranador', icon: '⚙️', desc: 'La Desgranadora desgrana el doble.', cost: 400, requires: 'bunch_thresher', effect: { type: 'stationSpeed', target: 'bunch_thresher', mult: 2 } },
+  { zone: 'palma', id: 'herraduras_ll', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'fruit_sterilizer', effect: { type: 'muleSpeed', mult: 1.5 } },
+  { zone: 'palma', id: 'remolque_ll', name: 'Remolque para el Willys', icon: '🚙', desc: 'El Willys lleva el doble por viaje.', cost: 2500, requires: 'palm_press', effect: { type: 'dispatchCapacity', target: 'palma', mult: 2 } },
+  { zone: 'palma', id: 'autoclave', name: 'Autoclave', icon: ICON.cookedFruit, desc: 'El Esterilizador cocina el doble.', cost: 6000, requires: 'palm_press', effect: { type: 'stationSpeed', target: 'fruit_sterilizer', mult: 2 } },
+  { zone: 'palma', id: 'prensa_palmera', name: 'Prensa palmera', icon: '⚙️', desc: 'La Prensa de aceite prensa el doble.', cost: 8000, requires: 'oil_clarifier', effect: { type: 'stationSpeed', target: 'palm_press', mult: 2 } },
+  { zone: 'palma', id: 'aceite_claro', name: 'Aceite bien clarificado', icon: '🏅', desc: 'El aceite de palma vale un 50 % más.', cost: 20000, requires: 'oil_clarifier', effect: { type: 'productValue', target: 'palm_oil', mult: 1.5 } },
+  { zone: 'palma', id: 'centrifuga_aceite', name: 'Centrífuga de aceite', icon: ICON.palmOil, desc: 'El Clarificador clarifica el doble.', cost: 25000, requires: 'oil_bottler', effect: { type: 'stationSpeed', target: 'oil_clarifier', mult: 2 } },
+  { zone: 'palma', id: 'palma_llanera', name: 'Palma llanera', icon: '🐎', desc: 'Aceite de origen: todo lo que vende la Palma vale un 50 % más.', cost: 50000, requires: 'oil_bottler', effect: { type: 'zoneValue', target: 'palma', mult: 1.5 } },
+  { zone: 'palma', id: 'envasadora_auto', name: 'Envasadora automática', icon: ICON.oilBottle, desc: 'La Envasadora envasa el doble.', cost: 60000, requires: 'oil_boxer', effect: { type: 'stationSpeed', target: 'oil_bottler', mult: 2 } },
+  { zone: 'palma', id: 'cajonera_aceite', name: 'Cajonera automática', icon: '📦', desc: 'La Cajonera de aceite llena el doble de cajas.', cost: 150000, requires: 'oil_boxer', effect: { type: 'stationSpeed', target: 'oil_boxer', mult: 2 } },
+  { zone: 'palma', id: 'cable_ll', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'oil_boxer', effect: { type: 'muleSpeed', mult: 2 } },
+  { zone: 'palma', id: 'sello_ll', name: 'Sello de calidad', icon: '🏅', desc: 'Las cajas de aceite valen un 50 % más.', cost: 300000, requires: 'oil_boxer', effect: { type: 'productValue', target: 'oil_box', mult: 1.5 } },
+  { zone: 'palma', id: 'maestria_palma', name: 'Maestría: Palma', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'palma', mult: 4 } },
+  { zone: 'palma', id: 'supremacia_palma', name: 'Supremacía: Palma', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'palma', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al
