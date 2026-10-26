@@ -324,6 +324,16 @@ export const STATIONS = [
   { id: 'werregue_weaver', zone: 'werregue', name: 'Tejedoras', icon: ICON.werregueJar, in: { werregue_thread: 1 }, out: { werregue_jar: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.42' },
   { id: 'tienda_pacifico', zone: 'werregue', name: 'Tienda de artesanías', icon: ICON.recuerdoPacifico, in: { werregue_jar: 4 }, imports: [{ product: 'dried_fish', perCycle: 1, route: 'secos' }, { product: 'smoked_pargo', perCycle: 1, route: 'pargos_ahumados' }], out: { recuerdo_pacifico: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.42' },
 
+  // Costa Pacífica · Buenaventura (v3.43), el puerto y el final de la región: como Barichara, Cartagena, Villa de
+  // Leyva y Villavicencio, sin fuente propia. Cada estación recibe el producto final de una zona del Pacífico; todo
+  // termina en las salidas a ver las ballenas.
+  { id: 'fritanga_puerto', zone: 'buenaventura', name: 'Fritanga del puerto', icon: ICON.marranitas, imports: [{ product: 'patacon_box', perCycle: 1, route: 'cajas_patacones' }], out: { marranitas: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.43' },
+  { id: 'cevicheria', zone: 'buenaventura', name: 'Cevichería del malecón', icon: ICON.ceviche, in: { marranitas: 1 }, imports: [{ product: 'alino_box', perCycle: 1, route: 'cajas_alino' }], out: { ceviche: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.43' },
+  { id: 'hotel_bahia', zone: 'buenaventura', name: 'Hotel de la bahía', icon: ICON.nocheBuenaventura, in: { ceviche: 2 }, imports: [{ product: 'recuerdo_pacifico', perCycle: 1, route: 'recuerdos_pacifico' }], out: { noche_buenaventura: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.43' },
+  { id: 'galeria_pueblo_nuevo', zone: 'buenaventura', name: 'Galería de Pueblo Nuevo', icon: ICON.almuerzoGaleria, in: { marranitas: 1 }, imports: [{ product: 'tapao', perCycle: 1, route: 'platos_tapao' }], out: { almuerzo_galeria: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '3.43' },
+  { id: 'loncheras_lancha', zone: 'buenaventura', name: 'Loncheras de la lancha', icon: ICON.loncheraLancha, in: { almuerzo_galeria: 1 }, imports: [{ product: 'arroz_piangua', perCycle: 1, route: 'arroces_piangua' }, { product: 'cazuela_mariscos', perCycle: 1, route: 'cazuelas_mariscos' }], out: { lonchera_lancha: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.43' },
+  { id: 'salida_ballenas', zone: 'buenaventura', name: 'Salida a las ballenas', icon: ICON.ballenas, in: { lonchera_lancha: 4 }, out: { excursion_ballenas: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.43' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

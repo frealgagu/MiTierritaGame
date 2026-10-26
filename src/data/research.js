@@ -470,6 +470,18 @@ export const RESEARCH = [
   { zone: 'werregue', id: 'arte_wounaan', name: 'Arte wounaan', icon: '🏅', desc: 'Todo lo que vende el Werregue vale un 50 % más.', cost: 400000000, requires: 'werregue_weaver', effect: { type: 'zoneValue', target: 'werregue', mult: 1.5 } },
   { zone: 'werregue', id: 'maestria_werregue', name: 'Maestría: Werregue', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'werregue', mult: 4 } },
   { zone: 'werregue', id: 'supremacia_werregue', name: 'Supremacía: Werregue', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'werregue', mult: 8 } },
+
+  // Costa Pacífica · Buenaventura (v3.43): las mismas de Villavicencio.
+  { zone: 'buenaventura', id: 'fritangueras', name: 'Fritangueras', icon: ICON.marranitas, desc: 'La Fritanga del puerto fríe el doble de marranitas (pide el doble de cajas al Platanal).', cost: 1000000000, requires: 'cevicheria', effect: { type: 'stationSpeed', target: 'fritanga_puerto', mult: 2 } },
+  { zone: 'buenaventura', id: 'mesas_malecon', name: 'Mesas en el malecón', icon: ICON.ceviche, desc: 'La Cevichería del malecón atiende el doble.', cost: 1500000000, requires: 'cevicheria', effect: { type: 'stationSpeed', target: 'cevicheria', mult: 2 } },
+  { zone: 'buenaventura', id: 'lancha_turismo', name: 'Lancha de turismo', icon: '🚤', desc: 'El despacho de Buenaventura lleva el doble por viaje.', cost: 2500000000, requires: 'hotel_bahia', effect: { type: 'dispatchCapacity', target: 'buenaventura', mult: 2 } },
+  { zone: 'buenaventura', id: 'hotel_vista_mar', name: 'Habitaciones con vista al mar', icon: '🌊', desc: 'El Hotel de la bahía recibe el doble de huéspedes.', cost: 4000000000, requires: 'hotel_bahia', effect: { type: 'stationSpeed', target: 'hotel_bahia', mult: 2 } },
+  { zone: 'buenaventura', id: 'puestos_galeria', name: 'Puestos de la galería', icon: ICON.almuerzoGaleria, desc: 'La Galería de Pueblo Nuevo sirve el doble.', cost: 8000000000, requires: 'galeria_pueblo_nuevo', effect: { type: 'stationSpeed', target: 'galeria_pueblo_nuevo', mult: 2 } },
+  { zone: 'buenaventura', id: 'loncheras_grandes', name: 'Loncheras grandes', icon: ICON.loncheraLancha, desc: 'Las Loncheras de la lancha se arman el doble de rápido.', cost: 15000000000, requires: 'loncheras_lancha', effect: { type: 'stationSpeed', target: 'loncheras_lancha', mult: 2 } },
+  { zone: 'buenaventura', id: 'guias_ballenas', name: 'Guías de ballenas', icon: '🐋', desc: 'La Salida a las ballenas despacha el doble de excursiones.', cost: 40000000000, requires: 'salida_ballenas', effect: { type: 'stationSpeed', target: 'salida_ballenas', mult: 2 } },
+  { zone: 'buenaventura', id: 'puerto_pacifico', name: 'Puerto del Pacífico', icon: '🏅', desc: 'Todo lo que vende Buenaventura vale un 50 % más.', cost: 25000000000, requires: 'loncheras_lancha', effect: { type: 'zoneValue', target: 'buenaventura', mult: 1.5 } },
+  { zone: 'buenaventura', id: 'maestria_buenaventura', name: 'Maestría: Buenaventura', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'buenaventura', mult: 4 } },
+  { zone: 'buenaventura', id: 'supremacia_buenaventura', name: 'Supremacía: Buenaventura', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'buenaventura', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

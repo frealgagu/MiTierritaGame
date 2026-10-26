@@ -443,6 +443,8 @@ const PLAZA_HOUSE = {
   // Villavicencio (v3.36): casona amarilla con remates de colores y toldo verde.
   villavo: { wall: 0xf6d860, trims: [0x2e6fd1, 0xd7263d, 0x2f7d4f, 0x2e6fd1, 0x8e44ad, 0xffd700], awning: 0x2f7d4f, sign: 'cup' },
   salento: { wall: 0xfbf8f1, trims: [0xd7263d, 0x2e6fd1, 0x2fa36b, 0xf07f1d, 0x8e44ad, 0xf2b705], awning: 0xd7263d, sign: 'cup' },
+  // Buenaventura (v3.43): casona turquesa con remates de colores y toldo naranja.
+  buenaventura: { wall: 0x4fb3bf, trims: [0xf2c14e, 0xe5737f, 0xf7f4ee, 0xf2c14e, 0x8e44ad, 0xffd700], awning: 0xf08a3c, sign: 'cup' },
 };
 
 function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {

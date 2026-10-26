@@ -225,6 +225,12 @@ export const ICON = {
   werregueThread: '\uE0DB', // Hebra de werregue: los rollos de hebra torcida, negra, roja y clara, listos para tejer
   werregueJar: '\uE0DC', // Jarrón de werregue: el jarrón tejido, de boca angosta, con sus grecas negras y rojas
   recuerdoPacifico: '\uE0DD', // Recuerdo del Pacífico: el jarrón de werregue con el pescado seco y el pargo ahumado, envueltos para el viaje
+  marranitas: '\uE0DE', // Marranitas: las bolitas de plátano verde rellenas de chicharrón, doradas, en la canasta con la servilleta
+  ceviche: '\uE0DF', // Ceviche del malecón: la copa con el camarón, la cebolla, el tomate y el cilantro, y las galletas de soda
+  nocheBuenaventura: '\uE0E0', // Noche en Buenaventura: el hotel frente a la bahía, con la luna sobre el mar y las luces del muelle
+  almuerzoGaleria: '\uE0E1', // Almuerzo de la galería: el tapao en el plato hondo, con arroz, patacones y el jugo de borojó
+  loncheraLancha: '\uE0E2', // Lonchera de la lancha: el portacomidas con el arroz con piangua y la cazuela, y el chaleco salvavidas naranja
+  ballenas: '\uE0E3', // Salida a ver las ballenas: la ballena jorobada que salta del mar, con la cría y la lancha de los turistas
 };
 
 export const ICON_FONT = 'Cafetal Icons';

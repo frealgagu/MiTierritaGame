@@ -3256,6 +3256,79 @@ def recuerdo_pacifico():
     return layers
 
 
+# ---------- Costa Pacífica · Buenaventura (v3.43) ----------
+
+def marranitas():
+    """Marranitas: las bolitas de plátano verde rellenas de chicharrón, doradas, en la canasta con la servilleta."""
+    layers = [(OUTLINE, ['M 8 56 L 92 56 L 82 90 L 18 90 Z']), ('#c8a26a', ['M 11.5 58.5 L 88.5 58.5 L 80.2 87.5 L 19.8 87.5 Z'])]
+    layers.append(('#a8804a', [rib(14 + k * 0, 66 + k * 8, 86, 66 + k * 8, 1.2) for k in range(3)]))
+    layers += [('#f7f4ee', [poly(12, 58, 40, 50, 60, 58)])]
+    for cx, cy, r in [(30, 48, 14), (54, 44, 15), (74, 52, 12), (42, 30, 12)]:
+        layers += [(OUTLINE, [circle(cx, cy, r + 2)]), ('#d9a032', [circle(cx, cy, r)]), ('#f0c060', [circle(cx - r * 0.3, cy - r * 0.35, r * 0.35)])]
+        layers.append(('#8d5524', [circle(cx + r * 0.2, cy + r * 0.2, 1.4), circle(cx - r * 0.4, cy + r * 0.3, 1.2), circle(cx + r * 0.45, cy - r * 0.2, 1.1)]))
+    return layers
+
+
+def ceviche():
+    """Ceviche del malecón: la copa con el camarón, la cebolla, el tomate y el cilantro, y las galletas de soda."""
+    layers = [(OUTLINE, ['M 14 30 L 86 30 Q 84 62 50 66 Q 16 62 14 30 Z']), ('#e8f6ff', ['M 17 32.5 L 83 32.5 Q 81 59.5 50 63.5 Q 19 59.5 17 32.5 Z'])]
+    layers += [(OUTLINE, [rect(46, 64, 8, 18), ellipse(50, 86, 20, 6)]), ('#e8f6ff', [rect(47.5, 64, 5, 18), ellipse(50, 86, 18, 4.5)])]
+    layers.append(('#ffab91', [ellipse(50, 34, 33, 6)]))
+    for cx, cy, rot in [(32, 30, -20), (50, 26, 10), (68, 30, 25)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 9, 5.5, rot)]), ('#ff8a65', [ellipse(cx, cy, 7.5, 4, rot)]), ('#ffccbc', [rib(cx - 5, cy, cx + 5, cy, 1)])]
+    layers += [('#e53935', [circle(40, 34, 2.4), circle(60, 36, 2.2)]), ('#f3e5f5', [circle(46, 36, 2), circle(56, 32, 1.8)]), ('#43a047', [circle(36, 28, 1.4), circle(64, 26, 1.4), circle(52, 34, 1.2)])]
+    for cx, cy in [(10, 72), (88, 74)]:
+        layers += [(OUTLINE, [rect(cx - 9, cy - 7, 18, 14)]), ('#f0d9a0', [rect(cx - 7.5, cy - 5.5, 15, 11)]), ('#c8a26a', [circle(cx - 3, cy - 2, 0.9), circle(cx + 3, cy + 2, 0.9), circle(cx + 3, cy - 2, 0.9)])]
+    return layers
+
+
+def noche_buenaventura():
+    """Noche en Buenaventura: el hotel frente a la bahía, con la luna sobre el mar y las luces del muelle."""
+    layers = [('#1a2a4a', [rect(4, 4, 92, 92)]), ('#fff8e1', [circle(76, 22, 9)]), ('#1a2a4a', [circle(80, 19, 7)])]
+    layers.append(('#ffffff', [circle(20, 14, 1), circle(42, 22, 1), circle(58, 10, 1)]))
+    layers.append(('#1e4a7a', [rect(4, 64, 92, 32)]))
+    layers.append(('#fff8e180', [rect(70, 66, 4, 2), rect(66, 72, 10, 2), rect(72, 80, 6, 2)]))
+    layers += [(OUTLINE, [rect(12, 30, 40, 36)]), ('#f28c9a', [rect(14, 32, 36, 32)]), ('#9aa3a8', [poly(10, 32, 32, 20, 54, 32)])]
+    for wx, wy in [(18, 38), (28, 38), (38, 38), (18, 50), (38, 50)]:
+        layers.append(('#ffe082', [rect(wx, wy, 6, 7)]))
+    layers += [('#6d4c41', [rect(28, 50, 6, 14)])]
+    layers += [(OUTLINE, [rect(54, 60, 36, 4)]), ('#8d6e4a', [rect(55, 61, 34, 2)]), ('#ffe082', [circle(60, 56, 2), circle(84, 56, 2)])]
+    return layers
+
+
+def almuerzo_galeria():
+    """Almuerzo de la galería: el tapao en el plato hondo, con arroz, patacones y el jugo de borojó."""
+    layers = [(OUTLINE, [ellipse(44, 64, 40, 22)]), ('#ffffff', [ellipse(44, 64, 37.5, 19.5)])]
+    layers += [(OUTLINE, [ellipse(32, 60, 18, 10)]), ('#c98a24', [ellipse(32, 60, 16, 8)])]
+    layers += fish_shape(32, 58, 22, 9, '#e57373', '#ffccbc', -4)
+    layers += [(OUTLINE, [ellipse(54, 66, 12, 6)]), ('#fafafa', [ellipse(54, 66, 10.5, 4.6)])]
+    layers += patacon_disc(62, 54, 7) + patacon_disc(68, 68, 6)
+    layers += [(OUTLINE, ['M 76 18 L 94 18 L 91 50 L 79 50 Z']), ('#6d4c2a', ['M 78.3 21 L 91.7 21 L 89.2 47.5 L 80.8 47.5 Z']), ('#e8f6ff80', [rect(80, 22, 3, 22)])]
+    return layers
+
+
+def lonchera_lancha():
+    """Lonchera de la lancha: el portacomidas con el arroz con piangua y la cazuela, y el chaleco salvavidas naranja."""
+    layers = [(OUTLINE, [rect(18, 34, 40, 54)]), ('#e0e0e0', [rect(20.5, 36.5, 35, 49)])]
+    layers.append(('#bdbdbd', [rect(20.5, 52, 35, 2.5), rect(20.5, 69, 35, 2.5)]))
+    layers += [(OUTLINE, [rect(30, 22, 16, 14)]), ('#9e9e9e', [rect(32.5, 24.5, 11, 9)])]
+    layers += [(OUTLINE, ['M 56 30 L 86 30 L 92 50 L 90 90 L 52 90 L 50 50 Z']), ('#ff6f00', ['M 58 32.5 L 84 32.5 L 89.4 50.5 L 87.6 87.5 L 54.4 87.5 L 52.6 50.5 Z'])]
+    layers += [('#4e342e', [rect(69, 32.5, 4, 55)]), ('#e0e0e0', [rect(54, 60, 34, 4), rect(54, 74, 34, 4)])]
+    return layers
+
+
+def ballenas():
+    """Salida a ver las ballenas: la ballena jorobada que salta del mar, con la cría y la lancha de los turistas."""
+    layers = [('#1e88e5', [rect(4, 70, 92, 26)]), ('#90caf9', [rect(4, 70, 92, 3)])]
+    body = 'M 18 66 Q 20 36 46 24 Q 66 16 78 26 Q 70 30 72 36 Q 60 30 50 40 Q 36 54 34 70 Z'
+    layers += [(OUTLINE, [body]), ('#37474f', ['M 21 64 Q 23 38 47 27 Q 64 20 73 25.5 Q 67.5 29 68.5 32.5 Q 58.5 28 48 38.5 Q 34.5 52.5 31.5 66 Z'])]
+    layers += [('#cfd8dc', ['M 28 62 Q 32 44 46 34 Q 40 46 36 62 Z']), ('#263238', [circle(62, 26, 1.6)])]
+    layers += [(OUTLINE, ['M 36 46 Q 22 50 14 58 Q 26 58 38 52 Z']), ('#546e7a', ['M 35.5 47.5 Q 24 51 17 56.5 Q 27 56.5 36.5 51 Z'])]
+    layers += [('#ffffff', ['M 12 70 Q 18 62 24 70 Z', 'M 30 70 Q 36 64 42 70 Z']), ('#e3f2fd', [circle(16, 64, 2), circle(40, 62, 1.6), circle(26, 58, 1.4)])]
+    layers += [(OUTLINE, ['M 66 76 L 94 76 L 90 84 L 70 84 Z']), ('#f7f4ee', ['M 68.5 77.5 L 91.5 77.5 L 88.5 82.5 L 71.5 82.5 Z']), ('#ff6f00', [circle(76, 73, 2.4), circle(84, 73, 2.4)])]
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -3479,6 +3552,12 @@ ICONS = [
     (0xE0DB, 'werregue_thread', werregue_thread),
     (0xE0DC, 'werregue_jar', werregue_jar),
     (0xE0DD, 'recuerdo_pacifico', recuerdo_pacifico),
+    (0xE0DE, 'marranitas', marranitas),
+    (0xE0DF, 'ceviche', ceviche),
+    (0xE0E0, 'noche_buenaventura', noche_buenaventura),
+    (0xE0E1, 'almuerzo_galeria', almuerzo_galeria),
+    (0xE0E2, 'lonchera_lancha', lonchera_lancha),
+    (0xE0E3, 'ballenas', ballenas),
 ]
 
 

@@ -31,6 +31,8 @@ export const ZONE32 = {
   // Carretera de la Ruta del aliño (v3.40): sale de la bodega hacia la Bahía.
   routes: {
     alino: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Bahía ➜' },
+    // Las cajas de aliño salen hacia Buenaventura (v3.43).
+    cajas_alino: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Buenaventura ➜' },
   },
   next: 'bahia',
 };

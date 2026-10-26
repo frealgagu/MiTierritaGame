@@ -264,6 +264,14 @@ export const PRODUCTS = {
   werregue_jar: { name: 'Jarrón de werregue', zone: 'werregue', value: 120000, icon: ICON.werregueJar, color: 0xd9a85a },
   recuerdo_pacifico: { name: 'Recuerdo del Pacífico', zone: 'werregue', value: 1200000, icon: ICON.recuerdoPacifico, color: 0x8d3b1f },
 
+  // Costa Pacífica · Buenaventura (v3.43): mismos valores que Villavicencio.
+  marranitas: { name: 'Marranitas', zone: 'buenaventura', value: 150000, icon: ICON.marranitas, color: 0xd9a032 },
+  ceviche: { name: 'Ceviche del malecón', zone: 'buenaventura', value: 400000, icon: ICON.ceviche, color: 0xff8a65 },
+  noche_buenaventura: { name: 'Noche en Buenaventura', zone: 'buenaventura', value: 3200000, icon: ICON.nocheBuenaventura, color: 0x1e88e5 },
+  almuerzo_galeria: { name: 'Almuerzo de la galería', zone: 'buenaventura', value: 600000, icon: ICON.almuerzoGaleria, color: 0xf4c430 },
+  lonchera_lancha: { name: 'Lonchera de la lancha', zone: 'buenaventura', value: 2000000, icon: ICON.loncheraLancha, color: 0x43a047 },
+  excursion_ballenas: { name: 'Salida a ver las ballenas', zone: 'buenaventura', value: 24000000, icon: ICON.ballenas, color: 0x37474f },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

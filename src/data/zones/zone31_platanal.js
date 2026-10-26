@@ -32,6 +32,8 @@ export const ZONE31 = {
   // Los patacones salen de la bodega hacia el Manglar (v3.41).
   routes: {
     patacones: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Patacones al Manglar ➜' },
+    // Las cajas de patacones salen hacia Buenaventura (v3.43).
+    cajas_patacones: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'A Buenaventura ➜' },
   },
   unlockedBy: null, // la primera de la Costa Pacífica: se abre con la región
   next: 'azotea',

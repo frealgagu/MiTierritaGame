@@ -254,6 +254,13 @@ export const FACTS = {
   werregue_twister: ['La fibra se tuerce sobre el muslo hasta volverse una hebra fuerte.'],
   werregue_weaver: ['Un jarrón de werregue puede tardar meses en tejerse.', 'El tejido es tan apretado que algunos jarrones aguantan agua.'],
   tienda_pacifico: ['Cada jarrón lleva dibujos de animales, ríos y caminos de la selva.'],
+  // Costa Pacífica · Buenaventura (v3.43)
+  fritanga_puerto: ['Buenaventura es el puerto más grande de Colombia sobre el Pacífico.'],
+  cevicheria: ['En el malecón se come ceviche de camarón y de piangua, con galletas.'],
+  hotel_bahia: ['En Buenaventura se celebra el Festival Folclórico del Pacífico.'],
+  galeria_pueblo_nuevo: ['En la galería de Pueblo Nuevo se vende pescado, piangua y chontaduro.'],
+  loncheras_lancha: ['De Buenaventura salen las lanchas a Juanchaco y Ladrilleros.'],
+  salida_ballenas: ['Las ballenas jorobadas llegan de julio a octubre a tener sus crías.', 'Vienen desde la Antártida: nadan más de 8.000 kilómetros.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -293,6 +300,7 @@ export const PEOPLE = {
   bahia: { icon: '🧔🏿', name: 'Don Cupertino', role: 'el pescador' },
   manglar: { icon: '👩🏿', name: 'Doña Ligia', role: 'la piangüera' },
   werregue: { icon: '👩🏾', name: 'Doña Aminta', role: 'la tejedora wounaan' },
+  buenaventura: { icon: '👩🏿‍🦱', name: 'Doña Libia', role: 'la guía' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -332,6 +340,7 @@ export const WELCOME = {
   bahia: '¡Bienvenido a la Bahía, primo! Aquí salimos en lancha por el pargo, y en la playa lo dejamos listo.',
   manglar: '¡Bienvenido al Manglar, mijo! Cuando baja la marea, las piangüeras salimos a sacar la concha del barro.',
   werregue: '¡Bienvenido, hermano! Aquí tejemos el werregue como nos enseñaron las abuelas wounaan.',
+  buenaventura: '¡Bienvenido a Buenaventura, mi rey! Aquí llega lo mejor del Pacífico, y de aquí salen las lanchas a ver las ballenas.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

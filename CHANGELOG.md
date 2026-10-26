@@ -1,5 +1,18 @@
 # Registro de cambios
 
+## v3.43.0 — Costa Pacífica: Buenaventura
+- **🐋 Buenaventura**, el puerto y última zona de la Costa Pacífica, se abre al completar El Werregue. Como Barichara, Cartagena, Villa de Leyva y Villavicencio, no tiene fuente propia: cada estación recibe el producto final de una zona del Pacífico.
+  - La **Fritanga del puerto** fríe marranitas con las cajas de patacones del Platanal.
+  - La **Cevichería del malecón** sirve el ceviche con las cajas de aliño de la Azotea.
+  - El **Hotel de la bahía** da la noche en Buenaventura con el Recuerdo del Pacífico.
+  - La **Galería de Pueblo Nuevo** sirve el almuerzo con el tapao de la Bahía.
+  - Las **Loncheras de la lancha**, con el arroz con piangua y la cazuela del Manglar.
+  - La **Salida a las ballenas**: las lanchas a ver las ballenas jorobadas.
+- **Seis rutas nuevas** hacia Buenaventura, con sus carreteras en los mapas. Tiene los mismos números que Villavicencio.
+- Su persona es **Doña Libia, la guía**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (de las marranitas a las ballenas).
+- **El mapa:** casas de colores con techo de zinc, palmas de coco, almendros y faroles; el malecón gris con la casona turquesa y su toldo naranja, la cevichería, el hotel rosado de tres pisos, la galería con sus toldos de colores, la bodeguita verde con los chalecos salvavidas y el muelle con las lanchas y una ballena que salta de vez en cuando.
+- La Costa Pacífica ya tiene sus seis zonas. Sus eventos, su álbum, sus logros y su segundo final llegan en la próxima versión.
+
 ## v3.42.0 — Costa Pacífica: El Werregue
 - **🏺 El Werregue**, la quinta zona de la Costa Pacífica, se abre al completar El Manglar: el Palmar de werregue → la Desfibradora → la Tintorería (negro de jagua y rojo de achiote) → la Torcedora → las Tejedoras → la Tienda de artesanías. La tienda vende el **Recuerdo del Pacífico**: jarrones de werregue con el pescado seco y el pargo ahumado de la Bahía para el camino. Tiene los mismos números que la Talabartería.
 - **Dos rutas nuevas desde la Bahía:** la Ruta del pescado seco y la Ruta del pargo ahumado, con su chiva y sus carreteras.

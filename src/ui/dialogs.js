@@ -55,6 +55,7 @@ const VICTORY = {
   bahia: { title: '¡Tapao para toda la costa!', text: 'Completaste <b>La Bahía</b>, en la Costa Pacífica. Seis mil tapaos de pescado, con el aliño que llegó de la Azotea.', stat: (s) => `Platos vendidos: ${formatNumber(s.stats.sold.tapao ?? 0)}` },
   manglar: { title: '¡Cazuela para toda la costa!', text: 'Completaste <b>El Manglar</b>, en la Costa Pacífica. Cuatro mil cazuelas de mariscos, con los patacones del Platanal y el pargo de la Bahía.', stat: (s) => `Cazuelas vendidas: ${formatNumber(s.stats.sold.cazuela_mariscos ?? 0)}` },
   werregue: { title: '¡Werregue para todo el país!', text: 'Completaste <b>El Werregue</b>, en la Costa Pacífica. Seis mil recuerdos del Pacífico: jarrones de werregue con pescado seco y pargo ahumado para el camino.', stat: (s) => `Recuerdos vendidos: ${formatNumber(s.stats.sold.recuerdo_pacifico ?? 0)}` },
+  buenaventura: { title: '¡La Costa Pacífica, de punta a punta!', text: 'Completaste <b>Buenaventura</b> y la Costa Pacífica. Siete mil salidas a ver las ballenas, con los patacones, el aliño, el pescado, la piangua y el werregue de todas tus zonas.', stat: (s) => `Salidas a ver las ballenas: ${formatNumber(s.stats.sold.excursion_ballenas ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

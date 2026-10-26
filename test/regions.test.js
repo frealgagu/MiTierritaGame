@@ -929,3 +929,24 @@ test('El Werregue vende el Recuerdo del Pacífico con el pescado seco y el pargo
   assert.ok((game.state.stats.sold.recuerdo_pacifico ?? 0) > 0, 'vende recuerdos del Pacífico');
 });
 
+test('Buenaventura recibe lo de las cinco zonas de la Costa Pacífica y arma las loncheras de la lancha (v3.43)', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const { ROUTES } = await import('../src/data/routes.js');
+  const game = new Game(createInitialState(0, 'choco'));
+  for (const z of ['azotea', 'bahia', 'manglar', 'werregue', 'buenaventura']) game.unlockZone(z);
+  assert.deepEqual(new Set(ROUTES.filter((r) => r.to === 'buenaventura').map((r) => r.from)), new Set(['platanal', 'azotea', 'bahia', 'manglar', 'werregue']));
+  game.state.coins = 1e18;
+  for (const z of ['platanal', 'azotea', 'bahia', 'manglar', 'werregue', 'buenaventura']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 30;
+    game.state.zones[z].dispatch.level = 30;
+  }
+  for (const r of Object.keys(game.state.routes)) game.state.routes[r].level = 30;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 1500; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  for (const p of ['patacon_box', 'alino_box', 'tapao', 'arroz_piangua', 'cazuela_mariscos', 'recuerdo_pacifico']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
+  assert.ok((game.state.stats.produced.lonchera_lancha ?? 0) > 0, 'arma loncheras de la lancha');
+});

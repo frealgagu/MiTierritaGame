@@ -38,6 +38,8 @@ export const ZONE33 = {
     // El pescado seco y el pargo ahumado salen hacia El Werregue (v3.42).
     secos: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Pescado seco al Werregue ⬇' },
     pargos_ahumados: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Pargo ahumado ⬇' },
+    // El tapao sale hacia Buenaventura (v3.43).
+    platos_tapao: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'Tapao a Buenaventura ➜' },
   },
   unlockedBy: 'azotea',
   next: 'manglar',

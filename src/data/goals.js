@@ -801,5 +801,26 @@ const WERREGUE = [
   { id: 'cw_final', type: 'sold', product: 'recuerdo_pacifico', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE };
+// Costa Pacífica · Buenaventura (v3.43): la misma lista que Villavicencio. Su final es el de la Costa Pacífica.
+const BUENAVENTURA = [
+  { id: 'cv01', type: 'imported', product: 'patacon_box', amount: 50, reward: 5000000 },
+  { id: 'cv02', type: 'level', target: 'fritanga_puerto', level: 10, reward: 10000000 },
+  { id: 'cv03', type: 'unlock', station: 'cevicheria', reward: 20000000 },
+  { id: 'cv04', type: 'level', target: 'route:cajas_patacones', level: 10, reward: 40000000 },
+  { id: 'cv05', type: 'produced', product: 'ceviche', amount: 200, reward: 60000000 },
+  { id: 'cv07', type: 'unlock', station: 'hotel_bahia', reward: 150000000 },
+  { id: 'cv08', type: 'level', target: 'dispatch:buenaventura', level: 10, reward: 200000000 },
+  { id: 'cv09', type: 'sold', product: 'noche_buenaventura', amount: 300, reward: 300000000 },
+  { id: 'cv10', type: 'unlock', station: 'galeria_pueblo_nuevo', reward: 300000000 },
+  { id: 'cv11', type: 'imported', product: 'tapao', amount: 300, reward: 400000000 },
+  { id: 'cv12', type: 'unlock', station: 'loncheras_lancha', reward: 500000000 },
+  { id: 'cv13', type: 'imported', product: 'cazuela_mariscos', amount: 300, reward: 800000000 },
+  { id: 'cv14', type: 'unlock', station: 'salida_ballenas', reward: 800000000 },
+  { id: 'cv15', type: 'allLevels', zone: 'buenaventura', level: 25, reward: 1500000000 },
+  { id: 'cv06', type: 'research', research: 'fritangueras', reward: 1500000000 },
+  { id: 'cv16', type: 'sold', product: 'excursion_ballenas', amount: 100, reward: 2500000000 },
+  { id: 'cv_final', type: 'sold', product: 'excursion_ballenas', amount: 7000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

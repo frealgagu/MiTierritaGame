@@ -33,6 +33,9 @@ export const ZONE34 = {
   routes: {
     patacones: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Patacones del Platanal' },
     pargos: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Pargo de la Bahía' },
+    // Las cazuelas y el arroz con piangua salen hacia Buenaventura (v3.43).
+    cazuelas_mariscos: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Cazuelas a Buenaventura ➜' },
+    arroces_piangua: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [23.7, 23.6], text: 'Arroz con piangua ⬇' },
   },
   unlockedBy: 'bahia',
   next: 'werregue',
