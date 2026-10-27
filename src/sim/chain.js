@@ -57,6 +57,14 @@ export function nextToUnlock(state, zoneId = 'finca') {
   return chainOf(zoneId).find((id) => !isUnlocked(state, id)) ?? null;
 }
 
+// Lo que falta construir en la zona fuera de la cadena (v3.58): la Compostera de la Finca, que no es parte de
+// la cadena y se puede dejar sin construir; mientras falte, la zona no está al máximo.
+export function nextSideToUnlock(state, zoneId) {
+  if (!zoneUnlocked(state, zoneId)) return null;
+  const chain = chainOf(zoneId);
+  return ZONES_BY_ID[zoneId].plots.map((p) => p.stationId).find((id) => !chain.includes(id) && !isUnlocked(state, id)) ?? null;
+}
+
 // Estaciones construidas de una zona (cadena principal y ramas).
 export function builtStations(state, zoneId) {
   return Object.keys(state.stations).filter((id) => zoneOf(id) === zoneId);

@@ -2,7 +2,7 @@ import { formatMult, formatNumber, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { pendingUpgrade, recommendUpgrade, upgradeLevel } from '../sim/analysis.js';
 import { legacyMult } from '../sim/modifiers.js';
-import { nextToUnlock, zoneOf } from '../sim/chain.js';
+import { nextSideToUnlock, nextToUnlock, zoneOf } from '../sim/chain.js';
 import { clockLabel } from '../render/DayNight.js';
 import { clockOf, seasonOf } from '../sim/calendar.js';
 import { EVENTS_BY_ID, EVENT_ACTIONS_BY_ID } from '../data/events.js';
@@ -89,7 +89,7 @@ export class HUD {
     if (!rec) {
       // Ninguna mejora suma: o falta construir algo, o falta subir algo que ya no cambia lo que se vende
       // (v3.54: se dice igual, para no hacer creer que todo está al máximo), o la zona está al máximo.
-      const next = nextToUnlock(s, zone);
+      const next = nextToUnlock(s, zone) ?? nextSideToUnlock(s, zone);
       const pending = next ? null : pendingUpgrade(s, (id, mode) => this.game.quote(id, mode), zone);
       this.chip.hidden = false;
       if (next) setFitted(this.chip, `🏗️ Siguiente: construye ${STATIONS_BY_ID[next].name}`);

@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v3.58.0 — La Compostera cuenta para «zona al máximo»
+- La Compostera de la Finca no es parte de la cadena y se puede dejar sin construir. Por eso, con todo lo demás al máximo, la Finca decía **🏁 Esta zona está al máximo** aunque faltara la Compostera. Ahora, mientras no esté construida, la sugerencia dice **🏗️ Siguiente: construye Compostera**; ya construida, cuenta como cualquier estación para «Falta subir». Es la única estación de todas las zonas que está fuera de su cadena.
+
 ## v3.57.0 — Cobrar todos, comprar todas y el multiplicador abreviado
 - **🔁 Multiplicador:** se muestra con el mismo formato que las monedas: ×512, ×2,05K, ×1,05M, ×4,29B.
 - **📋 Objetivos:**

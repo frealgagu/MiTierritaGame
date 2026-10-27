@@ -149,3 +149,16 @@ test('«Zona al máximo» solo cuando todo está al máximo: si no, se sugiere l
   game.state.stations.fish_fryer.level = 1;
   assert.equal(advice(game)?.id, 'fish_fryer');
 });
+
+test('la Compostera sin construir: la Finca no está al máximo (v3.58)', async () => {
+  const { nextSideToUnlock, nextToUnlock } = await import('../src/sim/chain.js');
+  const game = new Game();
+  const s = game.state;
+  s.coins = 1e30;
+  assert.equal(nextSideToUnlock(s, 'finca'), 'composter');
+  for (const id of ['wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer']) game.unlock(id);
+  assert.equal(nextToUnlock(s, 'finca'), null, 'la cadena está completa');
+  assert.equal(nextSideToUnlock(s, 'finca'), 'composter', 'pero falta la Compostera');
+  game.unlock('composter');
+  assert.equal(nextSideToUnlock(s, 'finca'), null);
+});
