@@ -4,7 +4,7 @@ import { ZONES_BY_ID } from '../data/zones/index.js';
 import { activeGoals, goalProgress, goalText } from '../sim/goals.js';
 import { finalZone, masteryParts } from '../sim/legacy.js';
 import { regionOf } from '../data/regions.js';
-import { legacyMult } from '../sim/modifiers.js';
+import { nextLegacyMult } from '../sim/modifiers.js';
 import { fit } from './fit.js';
 
 // Objetivos: un marcador abajo a la izquierda con el objetivo actual y una lista con los tres visibles.
@@ -90,7 +90,7 @@ function masteryCard(state, compact) {
   const have = parts.reduce((n, p) => n + Math.min(p.have, p.need), 0);
   const need = parts.reduce((n, p) => n + p.need, 0);
   const action = state.mastered
-    ? `<button class="btn claim" data-mastery>🔁 Volver a empezar ${formatMult(legacyMult(state) * 2)}</button>`
+    ? `<button class="btn claim" data-mastery>🔁 Volver a empezar ${formatMult(nextLegacyMult(state))}</button>`
     : `<span class="goal-reward">🏅 Segundo final</span>`;
   const rows = compact ? '' : `<ul class="mastery-parts">${parts.map((p) => `<li class="${p.have >= p.need ? 'ok' : ''}">${p.have >= p.need ? '✅' : p.icon} ${p.label}<span>${Math.min(p.have, p.need)} / ${p.need}</span></li>`).join('')}</ul>`;
   return `

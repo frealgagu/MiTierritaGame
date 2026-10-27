@@ -32,7 +32,7 @@ import { ROUTES_BY_ID } from './data/routes.js';
 import { STATIONS_BY_ID } from './data/stations.js';
 import { ICON, ICON_FONT } from './data/icons.js';
 import { RESEARCH_BY_ID } from './data/research.js';
-import { legacyMult, offlineCapSeconds } from './sim/modifiers.js';
+import { nextLegacyMult, offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
 import { bindDevOptions, savedSpeed } from './ui/DevOptions.js';
 import { Sound } from './audio/Sound.js';
@@ -534,7 +534,7 @@ function bindMenu(game, sound, music, getActive) {
     const restartBtn = document.getElementById('restart-btn');
     const here = getActive().state;
     restartBtn.hidden = !here.mastered;
-    restartBtn.textContent = `🔁 Volver a empezar ${here.region === 'cafetero' ? '' : `${REGIONS_BY_ID[here.region].name} `}${formatMult(legacyMult(here) * 2)}`;
+    restartBtn.textContent = `🔁 Volver a empezar ${here.region === 'cafetero' ? '' : `${REGIONS_BY_ID[here.region].name} `}${formatMult(nextLegacyMult(here))}`;
     menu.hidden = false;
   });
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));

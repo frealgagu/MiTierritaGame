@@ -163,11 +163,19 @@ test('Maestría ×4 con toda la zona al 75 y Supremacía ×8 con toda al 100', a
   assert.equal(speedMult(s, 'farm'), 32);
 });
 
-test('sin límite de reinicios: a ×2⁴⁰ (más de un billón) el juego sigue funcionando', () => {
+test('el multiplicador llega hasta ×2³²: se puede seguir reiniciando, pero ya no se duplica (v3.56)', async () => {
+  const { nextLegacyMult } = await import('../src/sim/modifiers.js');
   let state = new Game().state;
-  for (let k = 0; k < 40; k++) state = restartState(state);
-  assert.equal(state.legacy.resets, 40);
-  assert.equal(legacyMult(state), 2 ** 40);
+  for (let k = 0; k < 31; k++) state = restartState(state);
+  assert.equal(legacyMult(state), 2 ** 31);
+  assert.equal(nextLegacyMult(state), 2 ** 32);
+  state = restartState(state);
+  assert.equal(legacyMult(state), 2 ** 32);
+  assert.equal(nextLegacyMult(state), 2 ** 32, 'ya no se duplica');
+  for (let k = 0; k < 8; k++) state = restartState(state);
+  assert.equal(state.legacy.resets, 40, 'los reinicios se siguen contando');
+  assert.equal(legacyMult(state), 2 ** 32);
+  assert.equal(state.legacy.history.at(-1).mult, 2 ** 32);
   assert.equal(state.legacy.history.length, 40);
   const game = new Game(state);
   run(game, 60);

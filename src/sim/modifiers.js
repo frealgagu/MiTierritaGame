@@ -37,7 +37,12 @@ function product(state, type, target) {
 // Segundo final (v1.6): cada vez que se reinicia el juego tras llevar todo al nivel 100, la producción
 // se duplica (×2, ×4, ×8…). Multiplica la velocidad de las estaciones y lo que lleva el Willys; los
 // arrieros y las rutas se calculan con la velocidad de su estación, así que todo sigue cuadrando.
-export const legacyMult = (state) => 2 ** (state.legacy?.resets ?? 0);
+// Desde la v3.56 el multiplicador llega hasta ×2³² (32 reinicios): se puede seguir reiniciando (cuenta para
+// el Renombre y los logros), pero la producción ya no se duplica más.
+export const MAX_LEGACY_RESETS = 32;
+export const legacyMult = (state) => 2 ** Math.min(state.legacy?.resets ?? 0, MAX_LEGACY_RESETS);
+// El multiplicador que tendrá la partida después de reiniciar.
+export const nextLegacyMult = (state) => 2 ** Math.min((state.legacy?.resets ?? 0) + 1, MAX_LEGACY_RESETS);
 
 // La temporada (v1.9) sube o baja todas las estaciones a la vez; arrieros y rutas se calculan con esta
 // velocidad, así que la cadena sigue cuadrando. En el tablero de un evento (v2.0), lo que el evento le

@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v3.56.0 — Tope del reinicio: ×2³²
+- El multiplicador de producción del reinicio llega hasta **×2³²** (32 reinicios, unos 4.295 millones). Se puede seguir volviendo a empezar —cada vez sigue dando ⭐ de Renombre y cuenta para los logros—, pero la producción ya no se duplica: se queda en ×2³².
+- La pantalla del segundo final y los botones de volver a empezar dicen la producción que tendrá la partida nueva y, ya en el tope, que es el máximo.
+
 ## v3.55.0 — «Zona al máximo» solo cuando lo está
 - El aviso **🏁 Esta zona está al máximo** salía apenas ninguna mejora sumaba ganancia, aunque quedaran cosas sin subir. Ahora solo sale cuando todo está de verdad en el nivel máximo: las estaciones, sus arrieros, la Bodega y Despacho y las rutas que llegan a la zona.
 - Si falta algo, la sugerencia lo dice: **💡 Falta subir: …** con su nivel, señalando lo más bajo. Puede ser una rama que no cambia lo que se vende (la Freidora de la Ciénaga, el Moquén del Lago) o un despacho en el 92 que ya alcanza a llevarlo todo. Tocarla abre esa mejora, como la recomendada.

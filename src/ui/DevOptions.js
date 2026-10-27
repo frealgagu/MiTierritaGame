@@ -2,6 +2,7 @@ import { toast } from './toast.js';
 import { setCredit } from '../sim/upgrades.js';
 import { formatMult } from '../core/format.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
+import { MAX_LEGACY_RESETS } from '../sim/modifiers.js';
 
 // Opciones de desarrollador, ocultas en el menú: se muestran tocando 7 veces la versión.
 // Acelerar el tiempo, permitir saldo negativo y simular reinicios del segundo final (multiplicador de
@@ -11,9 +12,8 @@ import { REGIONS_BY_ID } from '../data/regions.js';
 const KEY = 'cafetal-dev';
 const TAPS = 7;
 const MAX_SPEED = 100;
-// En el juego los reinicios no tienen límite. Aquí, el de los números de JavaScript: más allá de ×2⁹⁰⁰
-// las monedas acumuladas dejarían de caber (el mayor número que se puede guardar es ~1,8e308).
-const MAX_RESETS = 900;
+// Como en el juego (v3.56): el multiplicador llega hasta ×2³².
+const MAX_RESETS = MAX_LEGACY_RESETS;
 
 function load() {
   try {
@@ -82,7 +82,7 @@ export function bindDevOptions(game, getActive = () => game) {
   });
   input.addEventListener('change', () => (input.value = prefs.speed = speed()));
 
-  // Multiplicador de producción: como si ya se hubiera reiniciado n veces (×2ⁿ), sin límite.
+  // Multiplicador de producción: como si ya se hubiera reiniciado n veces (×2ⁿ), hasta ×2³².
   const legacy = document.getElementById('dev-legacy');
   const legacyMultText = document.getElementById('dev-legacy-mult');
   legacy.max = MAX_RESETS;
