@@ -623,6 +623,12 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .zones-region { margin: 6px 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; width: 100%; padding: 8px 10px; border: 2px solid var(--ink); border-radius: 10px; background: rgba(255, 255, 255, 0.55); color: inherit; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
 .zones-region small { margin-left: auto; font-weight: 500; opacity: 0.8; }
 .zones-fold { display: inline-block; width: 1em; }
+/* Cada región en un panel sombreado, con sus zonas adentro y un poco más angostas (v3.59). */
+.zones-group { display: flex; flex-direction: column; gap: 6px; margin: 2px 0 6px; padding: 6px 8px 8px; border: 2px solid rgba(58, 36, 24, 0.18); border-radius: 14px; background: rgba(58, 36, 24, 0.08); }
+.zones-group > .zones-region, .zones-group > .research-other { margin: 0; }
+.zones-group > .zones-region { background: #fffaf0; }
+.zones-group > .research { position: relative; margin-left: 14px; }
+.zones-group > .research::before { content: ''; position: absolute; left: -10px; top: 50%; width: 8px; border-top: 2px solid rgba(58, 36, 24, 0.25); }
 
 /* Versión nueva de la app (v3.6.1) */
 .update-notes { max-height: 45vh; overflow-y: auto; text-align: left; margin: 8px 0 12px; }

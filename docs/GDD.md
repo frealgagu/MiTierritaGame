@@ -608,6 +608,7 @@ export const COST_GROWTH = 1.15;
 | v3.56 ✅ | Tope del reinicio: la producción llega hasta ×2³² (32 reinicios); se puede seguir reiniciando, pero ya no se duplica | Balance |
 | v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía); los dos botones abajo, fuera de la lista | Comodidad |
 | v3.58 ✅ | La Compostera sin construir: la Finca no está al máximo («Siguiente: construye Compostera») | Claridad |
+| v3.59 ✅ | Selector de zonas: cada región en un panel sombreado, con sus zonas adentro y más angostas | Navegación |
 | v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía) | Comodidad |
 
 **Cómo se conectan las zonas:** ver §4b.

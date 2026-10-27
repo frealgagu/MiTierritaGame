@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v3.59.0 — Las regiones en su panel
+- **🗺️ Zonas:** cada región va en un panel sombreado, con su nombre arriba y sus zonas adentro, un poco más angostas y unidas al panel por una rayita: ya no se confunde a qué región pertenece cada zona.
+
 ## v3.58.0 — La Compostera cuenta para «zona al máximo»
 - La Compostera de la Finca no es parte de la cadena y se puede dejar sin construir. Por eso, con todo lo demás al máximo, la Finca decía **🏁 Esta zona está al máximo** aunque faltara la Compostera. Ahora, mientras no esté construida, la sugerencia dice **🏗️ Siguiente: construye Compostera**; ya construida, cuenta como cualquier estación para «Falta subir». Es la única estación de todas las zonas que está fuera de su cadena.
 

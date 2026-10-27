@@ -75,7 +75,7 @@ export class ZonesView {
       if (!state) {
         const head = `<h3 class="research-other">${region.icon} ${region.name}</h3>`;
         const from = ZONES_BY_ID[region.unlock.zone];
-        return `${head}<div class="research locked"><span class="research-icon">🔒</span><span class="research-text"><b>${region.name}</b><br><small>Se abre al completar ${from.name}.</small></span></div>`;
+        return group(`${head}<div class="research locked"><span class="research-icon">🔒</span><span class="research-text"><b>${region.name}</b><br><small>Se abre al completar ${from.name}.</small></span></div>`);
       }
       // La cabecera pliega la región; plegada, dice cuántas zonas lleva y cuánto rinde.
       const folded = this.folded(region.id);
@@ -84,7 +84,7 @@ export class ZonesView {
       const income = opened.reduce((sum, z) => sum + analyzeChain(state, z).income, 0);
       const here = region.zones.includes(this.getZone()) ? ' · 📍 Aquí estás' : '';
       const head = `<button class="zones-region research-other" data-fold="${region.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${region.icon} ${region.name}<small>${done}/${region.zones.length} 🏁 · ${formatRate(income)} 💰/s${here}</small></button>`;
-      if (folded) return head;
+      if (folded) return group(head);
       const rows = region.zones.map((id, i) => {
         const zone = ZONES_BY_ID[id];
         const st = state.zones[id];
@@ -108,8 +108,12 @@ export class ZonesView {
       const soon = (region.soon ?? []).map(
         (name, k) => `<div class="research locked"><span class="research-icon">🚧</span><span class="research-text"><b>Zona ${region.zones.length + k + 1} · ${name}</b><br><small>Llega pronto</small></span></div>`,
       );
-      return head + rows.join('') + soon.join('');
+      return group(head + rows.join('') + soon.join(''));
     }).join('');
     if (html !== this.html) this.body.innerHTML = this.html = html;
   }
 }
+
+// Cada región en su panel sombreado (v3.59): la cabecera arriba y sus zonas adentro, un poco más angostas, para
+// que se vea a qué región pertenece cada una.
+const group = (html) => `<div class="zones-group">${html}</div>`;
