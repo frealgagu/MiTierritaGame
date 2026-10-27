@@ -85,3 +85,14 @@ test('cada investigación, compra de evento, objetivo, estación, producto y rut
     assert.deepEqual(repeated, [], `${name} repetidas`);
   }
 });
+
+test('la fuente de íconos cubre todos los íconos propios (v3.53)', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { ICON } = await import('../src/data/icons.js');
+  const css = readFileSync(new URL('../src/ui/styles.css', import.meta.url), 'utf8');
+  const [, lo, hi] = css.match(/unicode-range: U\+([0-9A-F]+)-([0-9A-F]+);/);
+  for (const [name, ch] of Object.entries(ICON)) {
+    const cp = ch.codePointAt(0);
+    assert.ok(cp >= parseInt(lo, 16) && cp <= parseInt(hi, 16), `${name}: U+${cp.toString(16)}`);
+  }
+});

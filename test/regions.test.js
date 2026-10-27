@@ -963,8 +963,11 @@ test('Buenaventura recibe lo de las cinco zonas de la Costa Pacífica y arma las
   assert.ok((game.state.stats.produced.lonchera_lancha ?? 0) > 0, 'arma loncheras de la lancha');
 });
 
-test('El Amazonas se abre al completar Buenaventura; mientras esté en obra no se termina (v3.47)', async () => {
+test('El Amazonas se abre al completar Buenaventura; con Leticia completa queda terminado (v3.47, v3.53)', async () => {
   const { claimGoal } = await import('../src/sim/goals.js');
+  const { regionEvents } = await import('../src/sim/events.js');
+  const { albumOf } = await import('../src/data/album.js');
+  const { logrosOf } = await import('../src/data/logros.js');
   const root = createInitialState(0);
   root.zones.pueblo.complete = true;
   openRegions(root);
@@ -976,13 +979,23 @@ test('El Amazonas se abre al completar Buenaventura; mientras esté en obra no s
   root.regions.pacifico.zones.buenaventura.complete = true;
   assert.deepEqual(openRegions(root), ['amazonas']);
   const a = regionState(root, 'amazonas');
+  const zones = ['asaizal', 'ajizal', 'lago', 'casaberia', 'yanchama', 'leticia'];
+  assert.deepEqual(Object.keys(a.zones), zones);
   assert.ok(a.zones.asaizal.unlocked);
-  a.stats.sold = { asai_box: 1e9 };
-  a.goals.claimed.push(...GOALS_BY_ZONE.asaizal.filter((g) => !g.final).map((g) => g.id));
-  claimGoal(a, GOALS_BY_ZONE.asaizal.find((g) => g.final).id, { emit() {} });
-  assert.equal(a.zones.asaizal.complete, true);
-  assert.ok(a.zones.ajizal.unlocked, 'El Asaizal abre El Ajizal (v3.48)');
-  assert.ok(!a.regionDone, 'en obra: todavía no tiene final');
+  // Cada zona abre la siguiente (v3.48 a v3.52) y Leticia, la última, termina la región.
+  a.stats.sold = { asai_box: 1e9, aji_box: 1e9, pirarucu_aji: 1e9, banquete_maloca: 1e9, recuerdo_amazonas: 1e9, excursion_delfines: 1e9 };
+  for (const zone of zones) {
+    assert.ok(!a.regionDone, zone);
+    a.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
+    claimGoal(a, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
+    assert.equal(a.zones[zone].complete, true);
+  }
+  assert.ok(a.regionDone);
+  // Con todo lo suyo (v3.53): seis eventos, seis páginas de álbum y sus logros.
+  assert.equal(regionEvents('amazonas').length, 6);
+  assert.equal(albumOf('amazonas').length, 6);
+  assert.ok(logrosOf('amazonas').length >= 10);
+  assert.ok(!REGIONS.find((r) => r.id === 'amazonas').wip);
 });
 
 test('El Lago sirve el pirarucú al ají negro con el ají negro que llega del Ajizal (v3.49)', async () => {

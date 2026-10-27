@@ -3,7 +3,7 @@
 @font-face {
   font-family: 'Cafetal Icons';
   src: url('../assets/cafetal-icons.woff2') format('woff2');
-  unicode-range: U+E000-E0FF;
+  unicode-range: U+E000-E1FF;
   font-display: block;
 }
 

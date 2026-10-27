@@ -57,14 +57,13 @@ export const REGIONS = [
     music: 'pacifico',
     unlock: { region: 'llanos', zone: 'villavicencio' },
   },
-  // El Amazonas (v3.47): se abre al completar Buenaventura. Llega zona por zona, como la Costa Pacífica; mientras
-  // esté en obra (`wip`) no tiene final, y las zonas que faltan se anuncian (`soon`).
+  // El Amazonas (v3.47): se abre al completar Buenaventura. Llegó zona por zona, como la Costa Pacífica (v3.47 a
+  // v3.52), y desde la v3.53 tiene sus eventos, su álbum y sus logros.
   {
     id: 'amazonas',
     name: 'Amazonas',
     icon: '🦜',
     zones: ['asaizal', 'ajizal', 'lago', 'casaberia', 'yanchama', 'leticia'],
-    wip: true,
     music: 'amazonas',
     unlock: { region: 'pacifico', zone: 'buenaventura' },
   },

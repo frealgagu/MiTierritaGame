@@ -498,7 +498,89 @@ const PACIFICO = [
   },
 ];
 
-export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' }))];
+// El Amazonas (v3.53).
+const AMAZONAS = [
+  {
+    id: 'selva_amazonas',
+    icon: ICON.asaiPalm,
+    name: 'La selva',
+    stickers: [
+      { id: 'ceiba_amazonas', icon: '🌳', name: 'La ceiba', cost: 1, text: 'El árbol gigante de la selva: pasa de 50 metros y tiene raíces de tabla.' },
+      { id: 'asai_album', icon: ICON.asaiBunch, name: 'El asaí', cost: 1, text: 'La palma delgada de las vegas: sus racimos morados dan el jugo espeso.' },
+      { id: 'victoria_regia', icon: '🪷', name: 'La victoria regia', cost: 2, text: 'El nenúfar gigante de los lagos: sus hojas pasan de un metro.' },
+      { id: 'jaguar', icon: '🐆', name: 'El jaguar', cost: 2, text: 'El gran felino de la selva: nada bien y caza en la orilla del río.' },
+      { id: 'guacamaya', icon: '🦜', name: 'La guacamaya', cost: 2, text: 'Roja, azul y amarilla: vuela en pareja y come arcilla en los barrancos.' },
+      { id: 'perezoso', icon: '🦥', name: 'El perezoso', cost: 3, text: 'Cuelga de los yarumos y baja al suelo solo una vez por semana.' },
+    ],
+  },
+  {
+    id: 'cocina_amazonas',
+    icon: ICON.casabe,
+    name: 'La cocina',
+    stickers: [
+      { id: 'casabe_album', icon: ICON.casabe, name: 'El casabe', cost: 1, text: 'La torta de yuca brava asada en el budare: el pan de la selva.' },
+      { id: 'farina', icon: '🥣', name: 'La fariña', cost: 1, text: 'Yuca rallada y tostada en granitos: se echa al jugo, a la sopa y al pescado.' },
+      { id: 'tucupi_album', icon: ICON.ajiNegro, name: 'El tucupí', cost: 2, text: 'El jugo de la yuca brava, cocinado días: con ají se vuelve ají negro.' },
+      { id: 'camu_camu', icon: '🍒', name: 'El camu camu', cost: 2, text: 'Fruta roja de las orillas inundadas, con muchísima vitamina C.' },
+      { id: 'copoazu', icon: '🥥', name: 'El copoazú', cost: 2, text: 'Pariente del cacao, de pulpa blanca y ácida: para jugos y dulces.' },
+      { id: 'chicha_chontaduro', icon: '🍶', name: 'La chicha de chontaduro', cost: 3, text: 'La bebida de las fiestas, que se sirve en totuma en la maloca.' },
+    ],
+  },
+  {
+    id: 'rio_amazonas',
+    icon: ICON.pirarucu,
+    name: 'El río',
+    stickers: [
+      { id: 'pirarucu_album', icon: ICON.pirarucu, name: 'El pirarucú', cost: 1, text: 'Uno de los peces de río más grandes del mundo: sube a respirar aire.' },
+      { id: 'canoa_amazonas', icon: '🛶', name: 'La canoa', cost: 1, text: 'Tallada de un solo tronco: con ella se pesca, se va al colegio y al mercado.' },
+      { id: 'delfin_rosado', icon: '🐬', name: 'El delfín rosado', cost: 2, text: 'El bufeo del Amazonas: entre más viejo, más rosado.' },
+      { id: 'piranha', icon: '🐟', name: 'La piraña', cost: 2, text: 'De dientes afilados: se pesca con un pedazo de carne y se come frita.' },
+      { id: 'tarapoto_album', icon: '🏞️', name: 'Los lagos de Tarapoto', cost: 2, text: 'Lagos de agua negra cerca de Puerto Nariño, donde llegan los delfines.' },
+      { id: 'creciente_amazonas', icon: '🌊', name: 'La creciente', cost: 3, text: 'El río sube más de diez metros al año y entra a la selva inundada.' },
+    ],
+  },
+  {
+    id: 'pueblos_amazonas',
+    icon: ICON.ticunaMask,
+    name: 'Los pueblos',
+    stickers: [
+      { id: 'ticuna', icon: ICON.ticunaMask, name: 'Los ticuna', cost: 1, text: 'El pueblo más grande del trapecio amazónico, a lado y lado del río.' },
+      { id: 'maloca_album', icon: '🛖', name: 'La maloca', cost: 1, text: 'La casa grande y redonda de la comunidad, con techo de palma.' },
+      { id: 'chagra_album', icon: ICON.yucaPlant, name: 'La chagra', cost: 2, text: 'La huerta de la selva: yuca, plátano, piña y ají sembrados juntos.' },
+      { id: 'pelazon_album', icon: '🎭', name: 'La Pelazón', cost: 2, text: 'La fiesta ticuna en que la muchacha se vuelve mujer, con máscaras.' },
+      { id: 'manguare', icon: '🥁', name: 'El manguaré', cost: 2, text: 'Los dos tambores de palo que se oyen a kilómetros por la selva.' },
+      { id: 'uitoto', icon: '🌿', name: 'Los uitoto', cost: 3, text: 'Pueblo de la coca y el tabaco, que guarda sus historias en la maloca.' },
+    ],
+  },
+  {
+    id: 'manos_amazonas',
+    icon: ICON.paintedCloth,
+    name: 'Las manos',
+    stickers: [
+      { id: 'yanchama_album', icon: ICON.barkCloth, name: 'La yanchama', cost: 1, text: 'La tela de corteza golpeada con mazo, que se pinta con jagua y achiote.' },
+      { id: 'tipiti_album', icon: ICON.tipiti, name: 'El tipití', cost: 1, text: 'El tubo tejido de palma que exprime la yuca brava y le saca el veneno.' },
+      { id: 'chambira', icon: '🧶', name: 'La chambira', cost: 2, text: 'Fibra de palma con que se tejen hamacas, mochilas y collares.' },
+      { id: 'cerbatana', icon: '🎋', name: 'La cerbatana', cost: 2, text: 'El tubo largo de madera con que se cazaba soplando dardos.' },
+      { id: 'palo_sangre', icon: '🪵', name: 'Las tallas de palo sangre', cost: 2, text: 'Animales tallados en madera roja: delfines, peces y tortugas.' },
+      { id: 'semillas', icon: '📿', name: 'Los collares de semillas', cost: 3, text: 'Hechos con semillas de la selva, de colores y formas distintas.' },
+    ],
+  },
+  {
+    id: 'leticia_album',
+    icon: ICON.delfines,
+    name: 'Leticia',
+    stickers: [
+      { id: 'triple_frontera_album', icon: '🗺️', name: 'La triple frontera', cost: 1, text: 'Donde se juntan Colombia, Brasil y Perú, sobre el río Amazonas.' },
+      { id: 'parque_santander', icon: '🦜', name: 'El parque Santander', cost: 1, text: 'Cada tarde llegan miles de loros a dormir en sus árboles.' },
+      { id: 'tabatinga', icon: '🏘️', name: 'Tabatinga', cost: 2, text: 'La ciudad brasilera pegada a Leticia: se pasa caminando.' },
+      { id: 'puerto_narino', icon: '🛶', name: 'Puerto Nariño', cost: 2, text: 'El pueblo sin carros, de andenes y jardines, río arriba de Leticia.' },
+      { id: 'isla_micos', icon: '🐒', name: 'La isla de los Micos', cost: 2, text: 'Isla del río llena de micos ardilla que se suben a los visitantes.' },
+      { id: 'amacayacu', icon: '🌳', name: 'Amacayacu', cost: 3, text: 'El parque nacional de la selva inundada, con sus puentes colgantes.' },
+    ],
+  },
+];
+
+export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' })), ...AMAZONAS.map((pg) => ({ ...pg, region: 'amazonas' }))];
 // Las páginas del álbum de una región.
 export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 

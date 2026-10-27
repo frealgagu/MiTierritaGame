@@ -1,5 +1,18 @@
 # Registro de cambios
 
+## v3.53.0 — El Amazonas completo: eventos, álbum y logros
+- **Seis eventos nuevos**, uno por zona del Amazonas, cada uno con su escena en el tablero que cambia con cada compra:
+  - 🌴 **Las palmas muy altas** (Asaizal): pretinas para trepar, escaleras de guadua y asaí bajito;
+  - ☀️ **Sequía en el Amazonas** (Ajizal): tanques de agua lluvia, motobomba al río y pozo profundo;
+  - 🐟 **Se acabó la veda** (Lago): todo el río quiere pirarucú salado, moqueado y al ají negro;
+  - 🏜️ **Llegó la vaciante** (Casabería): el río bajó y el bote del asaí no pasa;
+  - 🎭 **La fiesta de la Pelazón** (Yanchama): todos quieren máscaras y hay pocas manos;
+  - 🎉 **Festival de la Confraternidad Amazónica** (Leticia): la ciudad se llena de visitantes que quieren ver los delfines rosados.
+- **Álbum del Amazonas:** seis páginas (la selva, la cocina, el río, los pueblos, las manos y Leticia) con 36 láminas, de la ceiba al parque Santander.
+- **Logros del Amazonas:** cosechero de asaí, ajicera, pescador de pirarucú, casabera, mascarero, a ver los delfines y los de siempre.
+- El Amazonas queda terminado: al completar Leticia tiene su segundo final y su reinicio, y sus eventos salen en todas sus zonas y dan el premio de medallas.
+- **Arreglo:** los íconos nuevos de la Yanchama y de Leticia (v3.51 y v3.52) salían como un cuadrito o una letra suelta, porque la fuente de íconos solo cubría hasta U+E0FF. Ya se ven todos.
+
 ## v3.52.0 — El Amazonas: Leticia
 - **🐬 Leticia**, la última zona del Amazonas, se abre al completar La Yanchama. Es el puerto de la triple frontera y no tiene fuente propia: cada estación espera lo suyo de otra zona, como en Buenaventura.
   - la **Heladería de asaí** hace helados con las cajas de asaí del Asaizal;

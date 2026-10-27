@@ -122,7 +122,26 @@ const PACIFICO = [
   { id: 'pa_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('pacifico')], reward: [1, 2, 4] },
 ];
 
-export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'pacifico' }))];
+// Los del Amazonas (v3.53).
+const AMAZONAS = [
+  { id: 'am_asai', icon: ICON.asaiBox, name: 'Cosechero de asaí', text: 'Vende {n} cajas de asaí', metric: 'sold:asai_box', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
+  { id: 'am_aji', icon: ICON.ajiNegro, name: 'Ajicera', text: 'Cocina {n} frascos de ají negro', metric: 'produced:aji_negro', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'am_pirarucu', icon: ICON.pirarucuAji, name: 'Pescador de pirarucú', text: 'Sirve {n} platos de pirarucú al ají negro', metric: 'produced:pirarucu_aji', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'am_banquete', icon: ICON.banqueteMaloca, name: 'Casabera', text: 'Sirve {n} banquetes de la maloca', metric: 'produced:banquete_maloca', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'am_mascaras', icon: ICON.ticunaMask, name: 'Mascarero', text: 'Haz {n} máscaras ticuna', metric: 'produced:ticuna_mask', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'am_delfines', icon: ICON.delfines, name: 'A ver los delfines', text: 'Vende {n} salidas a ver los delfines rosados', metric: 'sold:excursion_delfines', tiers: [1000, 100000, 10000000], reward: [2, 4, 8] },
+  { id: 'am_monedas', icon: '💰', name: 'Patrón del Amazonas', text: 'Gana {n} monedas en total', metric: 'earned', tiers: [1e9, 1e15, 1e21], reward: [1, 2, 4] },
+  { id: 'am_anos', icon: '📅', name: 'Del Amazonas', text: 'Vive {n} años de juego en el Amazonas', metric: 'years', tiers: [4, 16, 64], reward: [1, 2, 4] },
+  { id: 'am_leticia', icon: ICON.delfines, name: 'Hasta Leticia', text: 'Completa Leticia {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
+  { id: 'am_maestro', icon: '🏅', name: 'Maestro del Amazonas', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
+  { id: 'am_medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [6, 24, 60], reward: [1, 2, 4] },
+  { id: 'am_todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
+  { id: 'am_oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
+  { id: 'am_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
+  { id: 'am_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('amazonas')], reward: [1, 2, 4] },
+];
+
+export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'pacifico' })), ...AMAZONAS.map((l) => ({ ...l, region: 'amazonas' }))];
 export const logrosOf = (region) => LOGROS.filter((l) => l.region === region);
 
 export const LOGROS_BY_ID = Object.fromEntries(LOGROS.map((l) => [l.id, l]));
