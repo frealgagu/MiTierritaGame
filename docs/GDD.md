@@ -604,6 +604,7 @@ export const COST_GROWTH = 1.15;
 | v3.52 ✅ | **Leticia** (el final del Amazonas: heladería, restaurante, hotel de la selva, mercado del puerto, provisiones de canoa y salidas a ver los delfines rosados), con seis rutas | El Amazonas crece |
 | v3.53 ✅ | **El Amazonas completo**: sus seis eventos (las palmas muy altas, la sequía, el fin de la veda, la vaciante, la Pelazón y el Festival de la Confraternidad), su álbum y sus logros | El Amazonas crece |
 | v3.54 ✅ | Regiones plegables en el selector de zonas; el mar Pacífico con ballenas jorobadas detrás de Buenaventura | Navegación y vida en el mapa |
+| v3.55 ✅ | «Zona al máximo» solo con todo en el nivel máximo; si no, la sugerencia dice qué falta subir | Claridad |
 
 **Cómo se conectan las zonas:** ver §4b.
 

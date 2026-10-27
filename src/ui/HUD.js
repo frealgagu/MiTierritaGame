@@ -1,6 +1,6 @@
 import { formatMult, formatNumber, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
-import { recommendUpgrade } from '../sim/analysis.js';
+import { pendingUpgrade, recommendUpgrade, upgradeLevel } from '../sim/analysis.js';
 import { legacyMult } from '../sim/modifiers.js';
 import { nextToUnlock, zoneOf } from '../sim/chain.js';
 import { clockLabel } from '../render/DayNight.js';
@@ -87,11 +87,15 @@ export class HUD {
     this.recommended = rec?.id ?? null;
     this.guide = this.guideTarget(s, rec, zone);
     if (!rec) {
-      // No queda nada que subir: o falta construir algo, o la zona está al máximo.
+      // Ninguna mejora suma: o falta construir algo, o falta subir algo que ya no cambia lo que se vende
+      // (v3.54: se dice igual, para no hacer creer que todo está al máximo), o la zona está al máximo.
       const next = nextToUnlock(s, zone);
+      const pending = next ? null : pendingUpgrade(s, (id, mode) => this.game.quote(id, mode), zone);
       this.chip.hidden = false;
-      setFitted(this.chip, next ? `🏗️ Siguiente: construye ${STATIONS_BY_ID[next].name}` : '🏁 Esta zona está al máximo');
-      if (next) this.recommended = next;
+      if (next) setFitted(this.chip, `🏗️ Siguiente: construye ${STATIONS_BY_ID[next].name}`);
+      else if (pending) setFitted(this.chip, `💡 Falta subir: ${upgradeName(pending.id)} · Nv ${upgradeLevel(s, pending.id)}`);
+      else setFitted(this.chip, '🏁 Esta zona está al máximo');
+      this.recommended = next ?? pending?.id ?? null;
       this.hintUnlock(s, zone);
       return;
     }

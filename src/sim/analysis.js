@@ -208,7 +208,7 @@ function analyze(state, zoneId, withExports, depth, memo) {
 }
 
 // Nivel de lo que se mejora con un id de mejora ('farm', 'farm:transport', 'dispatch:<zona>', 'route:<ruta>').
-function upgradeLevel(state, id) {
+export function upgradeLevel(state, id) {
   const [sid, part] = id.split(':');
   if (sid === 'dispatch') return state.zones[part].dispatch.level;
   if (sid === 'route') return state.routes[part].level;
@@ -508,4 +508,23 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
   // Sin cuello de botella que se pueda mejorar (todo al máximo): no hay recomendación.
   if (!neck) return null;
   return { id: neck, cost: quote(neck, 1).cost, gain: 0 };
+}
+
+// Lo que falta subir en la zona cuando ya ninguna mejora suma (v3.54): la estación, los arrieros, el
+// despacho o la ruta de menor nivel que todavía no está al máximo. Así el aviso de «zona al máximo» solo
+// sale cuando de verdad está todo al máximo, aunque lo que falta ya alcance a llevar todo (un despacho en
+// el 92 que da abasto) o sea una rama que no cambia lo que se vende. En un evento, solo lo de su objetivo.
+export function pendingUpgrade(state, quote, zoneId) {
+  const ids = [`dispatch:${zoneId}`];
+  for (const id of Object.keys(state.stations)) {
+    if (zoneOf(id) !== zoneId) continue;
+    ids.push(id);
+    if (!STATIONS_BY_ID[id].side) ids.push(`${id}:transport`);
+  }
+  for (const r of ROUTES) if (r.to === zoneId && routeActive(state, r.id)) ids.push(`route:${r.id}`);
+  const allowed = state.event ? new Set(objectiveUpgrades(state)) : null;
+  const open = ids.filter((id) => (!allowed || allowed.has(id)) && !quote(id, 1).maxed && !quote(id, 1).locked);
+  if (!open.length) return null;
+  const id = open.reduce((low, x) => (upgradeLevel(state, x) < upgradeLevel(state, low) ? x : low));
+  return { id, cost: quote(id, 1).cost, gain: 0, pending: true };
 }

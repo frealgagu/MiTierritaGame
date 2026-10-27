@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.55.0 — «Zona al máximo» solo cuando lo está
+- El aviso **🏁 Esta zona está al máximo** salía apenas ninguna mejora sumaba ganancia, aunque quedaran cosas sin subir. Ahora solo sale cuando todo está de verdad en el nivel máximo: las estaciones, sus arrieros, la Bodega y Despacho y las rutas que llegan a la zona.
+- Si falta algo, la sugerencia lo dice: **💡 Falta subir: …** con su nivel, señalando lo más bajo. Puede ser una rama que no cambia lo que se vende (la Freidora de la Ciénaga, el Moquén del Lago) o un despacho en el 92 que ya alcanza a llevarlo todo. Tocarla abre esa mejora, como la recomendada.
+- Se revisaron todas las zonas de todas las regiones: había 48 casos en que el aviso salía antes de tiempo; ya no queda ninguno.
+
 ## v3.54.0 — Regiones plegables y las ballenas de Buenaventura
 - **🗺️ Zonas:** cada región se pliega y despliega tocando su nombre. Plegada, dice cuántas zonas lleva completadas, cuánto rinde entre todas y si estás en ella. Al abrir la lista solo se ve desplegada la región donde estás; lo que pliegues o despliegues se queda así.
 - **🐋 Buenaventura** ahora tiene el **mar Pacífico** detrás del mapa, con su playa de arena oscura. En el mar, las **ballenas jorobadas** echan el chorro, se sumergen mostrando la cola y a veces saltan fuera del agua y caen con un chapuzón; las lanchas de los turistas las miran desde lejos. Es solo dibujo: las zonas, las estaciones y los caminos no cambian (la Salida a las ballenas sigue siendo la última estación).

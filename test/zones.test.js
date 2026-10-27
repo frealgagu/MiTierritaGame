@@ -111,3 +111,41 @@ test('una partida de la v1.0 se carga con las zonas y, si la Finca estaba comple
   run(game, 60);
   assert.ok((game.state.stats.sold.cane ?? 0) > 0);
 });
+
+test('«Zona al máximo» solo cuando todo está al máximo: si no, se sugiere lo que falta subir (v3.54)', async () => {
+  const { recommendUpgrade, pendingUpgrade } = await import('../src/sim/analysis.js');
+  const { createInitialState } = await import('../src/sim/state.js');
+  const { RESEARCH } = await import('../src/data/research.js');
+  const { REGIONS_BY_ID } = await import('../src/data/regions.js');
+  const { chainOf } = await import('../src/sim/chain.js');
+  const zones = REGIONS_BY_ID.costa.zones;
+  const make = () => {
+    const game = new Game(createInitialState(0, 'costa'));
+    game.state.coins = 1e30;
+    for (const z of zones) {
+      game.unlockZone(z);
+      for (const id of chainOf(z).slice(1)) game.unlock(id);
+    }
+    game.state.research = RESEARCH.filter((r) => zones.includes(r.zone)).map((r) => r.id);
+    for (const z of zones) {
+      for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 100;
+      game.state.zones[z].dispatch.level = 100;
+    }
+    for (const r of Object.keys(game.state.routes)) game.state.routes[r].level = 100;
+    return game;
+  };
+  const advice = (game) => {
+    const q = (id, m) => game.quote(id, m);
+    for (let t = 0; t < 30; t += 0.25) game.step(0.25);
+    return recommendUpgrade(game.state, q, 'cienaga') ?? pendingUpgrade(game.state, q, 'cienaga');
+  };
+  // Todo al 100: de verdad está al máximo.
+  assert.equal(advice(make()), null);
+  // Un despacho en el 92 ya lleva todo, y la Freidora en el 1 no cambia lo que se vende: igual se sugieren.
+  let game = make();
+  game.state.zones.cienaga.dispatch.level = 92;
+  assert.equal(advice(game)?.id, 'dispatch:cienaga');
+  game = make();
+  game.state.stations.fish_fryer.level = 1;
+  assert.equal(advice(game)?.id, 'fish_fryer');
+});
