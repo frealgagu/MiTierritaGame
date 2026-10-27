@@ -5480,6 +5480,181 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Amazonas · El Asaizal (v3.47): casas de madera sobre pilotes, con techo de palma o de zinc ---
+
+  // Desgranadora: la ramada de palma donde se sacuden los racimos sobre la lona y las bolitas caen; al lado,
+  // los racimos que llegan y los ramilletes vacíos.
+  asai_thresher(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    const tarp = isoPoly([[x0 + 0.3, y0 + 0.4], [x0 + 2.0, y0 + 0.4], [x0 + 2.0, y0 + 1.3], [x0 + 0.3, y0 + 1.3]]);
+    g.poly(tarp).fill(0x1e88e5).stroke(OUTLINE);
+    const mid = iso(x0 + 1.15, y0 + 0.85);
+    for (let k = 0; k < 4 + Math.min(ctx.tier, 3) * 2; k++) g.circle(mid.x - 12 + (k * 7) % 24, mid.y - 2 + ((k * 5) % 6) - 3, 1.8).fill(PRODUCTS.asai_fruit.color);
+    for (const [bx, by] of [[0.45, 2.4], [0.9, 2.55]]) {
+      const q = iso(x + bx, y + by);
+      g.ellipse(q.x, q.y - 4, 7, 5).fill(PRODUCTS.asai_bunch.color).stroke(OUTLINE);
+      for (let k = 0; k < 5; k++) g.circle(q.x - 5 + k * 2.5, q.y - 7 - (k % 2) * 2, 1.2).fill(0x7e57c2);
+    }
+    const stems = iso(x + 2.6, y + 2.5);
+    for (let k = 0; k < 4; k++) g.moveTo(stems.x - 6 + k * 3, stems.y).lineTo(stems.x - 2 + k * 3, stems.y - 9).stroke({ width: 1.2, color: 0x8d6e4a });
+    ramada(this, g, x0, y0, 2.3, 1.6, 28 + ctx.up, 0xc9a96b);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x0 + 1.15, y0 + 1.55);
+      worker(anim, wp.x, wp.y, 0xf2c14e);
+      const shake = this.working ? Math.sin(time * 8) * 3 : 0;
+      anim.ellipse(wp.x + shake, wp.y - 24, 6, 4).fill(PRODUCTS.asai_bunch.color).stroke({ width: 0.6, color: 0x3a2418 });
+      if (!this.working) return;
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 1.5 + i / 4) % 1;
+        anim.circle(wp.x - 6 + i * 4 + shake, wp.y - 20 + f * 14, 1.4).fill(PRODUCTS.asai_fruit.color);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Tanque de remojo: los tanques azules llenos de agua tibia, que se tiñe de morado, con el vapor; las
+  // canastillas con el fruto remojado.
+  asai_soaker(g, x, y, ctx) {
+    const tanks = ctx.tier >= 2 ? [[0.6, 0.7], [1.5, 0.7], [2.4, 0.7], [1.0, 1.7]] : [[0.8, 0.8], [1.8, 0.8], [1.3, 1.8]];
+    this.tanks = [];
+    for (const [tx, ty] of tanks) {
+      const b = iso(x + tx, y + ty);
+      shadow(g, b.x + 3, b.y + 1, 12, 5);
+      g.rect(b.x - 9, b.y - 18, 18, 18).fill(0x1e88e5).stroke(OUTLINE);
+      g.rect(b.x - 6, b.y - 18, 3, 18).fill(0x42a5f5);
+      g.ellipse(b.x, b.y - 18, 9, 3.5).fill(0x5e35b1).stroke(OUTLINE);
+      this.tanks.push({ x: b.x, y: b.y - 18 });
+    }
+    const crate = iso(x + 2.6, y + 2.5);
+    g.poly([crate.x - 8, crate.y - 8, crate.x + 8, crate.y - 8, crate.x + 7, crate.y, crate.x - 7, crate.y]).fill(0x2e7d32).stroke(OUTLINE);
+    for (let k = 0; k < 4; k++) g.circle(crate.x - 5 + k * 3.3, crate.y - 9, 1.6).fill(PRODUCTS.soaked_asai.color);
+    this.roofTop = iso(x + 1.5, y + 1.2, 26);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      if (!this.working) return;
+      for (const [k, t] of this.tanks.entries()) {
+        const f = (time * 0.6 + k * 0.3) % 1;
+        anim.circle(t.x - 3 + k, t.y - 3 - f * 12, 2 + f * 2).fill({ color: 0xeceff1, alpha: 0.5 * (1 - f) });
+        anim.circle(t.x + Math.sin(time * 2 + k) * 4, t.y, 1).fill(0x311b4e);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Despulpadora de asaí: la casa de madera sobre pilotes con techo de zinc; en el corredor, la máquina de acero
+  // que bota la pulpa morada al balde.
+  asai_pulper(g, x, y, ctx) {
+    const hx = x + 0.2;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 1.7, 1.4, 22, ctx, { wall: 0xa1887f, trim: 0x6cbf6c });
+    box(g, x + 2.2, y + 0.6, 0.5, 0.6, 8, 0x8d6e4a);
+    const m = iso(x + 2.45, y + 0.9, 8);
+    g.rect(m.x - 6, m.y - 14, 12, 14).fill(0xb0bec5).stroke(OUTLINE);
+    g.ellipse(m.x, m.y - 14, 6, 2.2).fill(0x90a4ae).stroke(OUTLINE);
+    const pail = iso(x + 2.5, y + 1.6);
+    g.poly([pail.x - 6, pail.y - 9, pail.x + 6, pail.y - 9, pail.x + 5, pail.y, pail.x - 5, pail.y]).fill(0xffffff).stroke(OUTLINE);
+    g.ellipse(pail.x, pail.y - 9, 6, 2).fill(PRODUCTS.asai_pulp.color);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x + 2.95, y + 1.0);
+      worker(anim, wp.x, wp.y, 0xe5737f);
+      const turn = this.working ? time * 6 : 0;
+      anim.moveTo(m.x, m.y - 14).lineTo(m.x + Math.cos(turn) * 5, m.y - 14 + Math.sin(turn) * 2).stroke({ width: 1.4, color: 0x37474f });
+      if (!this.working) return;
+      const f = (time * 2) % 1;
+      anim.moveTo(m.x + 4, m.y - 4).lineTo(pail.x, pail.y - 9 + f).stroke({ width: 2, color: PRODUCTS.asai_pulp.color });
+    };
+    this.animate(0);
+  },
+
+  // Batidora: el puesto de madera sobre pilotes (verde claro), con la licuadora en el mostrador, los vasos
+  // de asaí batido y el que lo toma.
+  asai_blender(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 1.8, 1.3, 20, ctx, { wall: 0x9ccc65, trim: 0xf7f4ee, roofColor: 0xc9a96b });
+    box(g, x + 0.5, y + 2.0, 1.8, 0.4, 10, 0x8d6e4a);
+    const bl = iso(x + 0.9, y + 2.2, 10);
+    g.rect(bl.x - 4, bl.y - 14, 8, 14).fill(0xe8f6ff).stroke(OUTLINE);
+    g.rect(bl.x - 4, bl.y - 9, 8, 9).fill(PRODUCTS.asai_shake.color);
+    g.rect(bl.x - 5, bl.y - 16, 10, 2.5).fill(0x37474f);
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 3); k++) {
+      const q = iso(x + 1.3 + k * 0.25, y + 2.2, 10);
+      g.rect(q.x - 2, q.y - 7, 4, 7).fill(PRODUCTS.asai_shake.color).stroke({ width: 0.5, color: 0x3a2418 });
+      g.rect(q.x - 2, q.y - 8, 4, 1.4).fill(0xe8d9a0);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x + 1.4, y + 2.85);
+      worker(anim, wp.x, wp.y, 0x4fb3bf);
+      if (!this.working) return;
+      const sp = time * 20;
+      anim.moveTo(bl.x - 3, bl.y - 5).lineTo(bl.x + Math.cos(sp) * 3, bl.y - 5 + Math.sin(sp)).stroke({ width: 1, color: 0xe1bee7 });
+    };
+    this.animate(0);
+  },
+
+  // Empacadora de asaí: la casa grande sobre pilotes (blanca), con la banda donde la pulpa cae en las bolsas
+  // moradas y el congelador al lado.
+  asai_bagger(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 2.0, 1.4, 22, ctx, { wall: 0xf7f4ee, trim: 0x7b1fa2 });
+    box(g, x + 0.4, y + 2.15, 2.0, 0.35, 8, 0x555555);
+    box(g, x + 2.5, y + 1.6, 0.45, 0.6, 10, 0xeceff1);
+    const hopper = iso(x + 0.9, y + 2.32, 20);
+    g.poly([hopper.x - 7, hopper.y - 8, hopper.x + 7, hopper.y - 8, hopper.x + 3, hopper.y, hopper.x - 3, hopper.y]).fill(0x8a8f94).stroke(OUTLINE);
+    g.ellipse(hopper.x, hopper.y - 8, 7, 2).fill(PRODUCTS.asai_pulp.color);
+    const belt = new Graphics();
+    this.anim.addChild(belt);
+    this.animate = (time) => {
+      belt.clear();
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.35 + i / 4) % 1;
+        const p = iso(x + 0.45 + f * 1.8, y + 2.32, 8);
+        const full = f > 0.3;
+        belt.roundRect(p.x - 4, p.y - 10, 8, 10, 1.5).fill(full ? PRODUCTS.asai_bag.color : 0xf3e5f5).stroke(OUTLINE);
+      }
+      if (!this.working) return;
+      const f = (time * 2) % 1;
+      belt.moveTo(hopper.x, hopper.y + 1).lineTo(hopper.x, hopper.y + 3 + f * 4).stroke({ width: 1.6, color: PRODUCTS.asai_pulp.color });
+    };
+  },
+
+  // Cajonera de asaí: la bodega sobre pilotes con techo de zinc, las cajas de icopor arrumadas y el cargador
+  // que las lleva al patio.
+  asai_boxer(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 2.4, 1.5, 24, ctx, { wall: 0xbcaaa4, trim: 0xf7f4ee, roofH: 14 });
+    const stack = (bx, by, rows) => {
+      for (let r = 0; r < rows; r++) for (let k = 0; k < rows - r; k++) box(g, x + bx + k * 0.3 + r * 0.15, y + by, 0.26, 0.26, 7, 0xeceff1, { z: r * 7 });
+    };
+    stack(1.3, 2.35, 3);
+    if (ctx.tier >= 2) stack(2.2, 2.6, 2);
+    const carrier = new Graphics();
+    this.anim.addChild(carrier);
+    this.animate = (time) => {
+      carrier.clear();
+      const f = (time * 0.25) % 1;
+      const back = f > 0.5;
+      const k = back ? 1 - (f - 0.5) * 2 : f * 2;
+      const p = iso(x + 0.5 + k * 0.9, y + 2.2 + k * 0.5);
+      worker(carrier, p.x, p.y, 0x7b1fa2);
+      if (!back) carrier.rect(p.x - 6, p.y - 30, 12, 9).fill(0xeceff1).stroke(OUTLINE);
+    };
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

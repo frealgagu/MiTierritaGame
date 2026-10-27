@@ -231,6 +231,14 @@ export const ICON = {
   almuerzoGaleria: '\uE0E1', // Almuerzo de la galería: el tapao en el plato hondo, con arroz, patacones y el jugo de borojó
   loncheraLancha: '\uE0E2', // Lonchera de la lancha: el portacomidas con el arroz con piangua y la cazuela, y el chaleco salvavidas naranja
   ballenas: '\uE0E3', // Salida a ver las ballenas: la ballena jorobada que salta del mar, con la cría y la lancha de los turistas
+  asaiPalm: '\uE0E4', // Asaizal: la palma de asaí, delgada y alta, con las hojas de plumas y los racimos morados
+  asaiBunch: '\uE0E5', // Racimo de asaí: el racimo de ramitas cargado de bolitas moradas
+  asaiFruit: '\uE0E6', // Frutos de asaí: las bolitas moradas sueltas, ya desgranadas, en la batea
+  soakedAsai: '\uE0E7', // Asaí remojado: los frutos en la ponchera con agua tibia, que ya se tiñe de morado
+  asaiPulp: '\uE0E8', // Pulpa de asaí: la olleta llena de la pulpa morada y espesa, con el cucharón
+  asaiShake: '\uE0E9', // Asaí batido: el vaso de asaí morado, espeso, con la fariña por encima y el pitillo
+  asaiBag: '\uE0EA', // Bolsa de asaí: la bolsa de pulpa congelada, morada, con la escarcha y la etiqueta de la palma
+  asaiBox: '\uE0EB', // Caja de asaí: la caja de icopor con las bolsas moradas asomadas y el hielo
 };
 
 export const ICON_FONT = 'Cafetal Icons';

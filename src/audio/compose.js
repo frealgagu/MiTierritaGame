@@ -299,12 +299,53 @@ function renderChirimia(buf, index) {
   }
 }
 
+// Compás de cumbia amazónica (v3.47; 4/4, corcheas 0 a 7): la de la triple frontera. El bajo salta con su
+// síncopa, el teclado marca el contratiempo, las maracas no paran, el manguaré (el tambor de palo de los
+// pueblos de la selva) da el golpe grave y el seco, y la guitarra eléctrica puntea la melodía, con el trémolo en
+// las notas largas.
+function renderAmazonica(buf, index) {
+  const { song, beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const jitter = () => (rng() - 0.5) * 0.008;
+  const { root, tones } = parseChord(song.chords[index]);
+  const at = (e) => t0 + e * eighth + jitter();
+
+  const low = above(root, 40);
+  const fifth = above((root + 7) % 12, 40);
+  for (const [e, m, n] of [[0, low, 1.4], [3, low, 0.8], [4, fifth, 1.4], [6, low + 12, 0.8], [7, fifth, 0.8]]) {
+    pluck(buf, at(e), freqOf(m), eighth * n, { amp: 0.32, t60: 1.2, bright: 0.25, pan: -0.15, pos: 0.3 });
+  }
+  const chord = tones.map((pc) => above(pc, 60)).sort((a, b) => a - b);
+  for (const e of [1, 3, 5, 7]) strum(buf, at(e), chord, eighth * 0.4, { amp: 0.06, t60: 0.4, bright: 0.5, pan: -0.35 }, false);
+  for (let k = 0; k < 16; k++) scrape(buf, at(k / 2), eighth * 0.35, k % 4 === 0 ? 0.06 : 0.03, k % 2 ? -0.4 : 0.4);
+  // El manguaré: dos tonos de madera.
+  for (const e of [0, 4]) drum(buf, at(e), 150, 115, 0.11, 0.2, -0.1, 0.35);
+  for (const e of [2, 5, 7]) drum(buf, at(e), 230, 205, 0.06, 0.12, 0.2, 0.4);
+  if (index % 4 === 3) for (const e of [6, 6.5, 7, 7.5]) drum(buf, at(e), 380, 330, 0.05, 0.1, 0.3, 0.3);
+  // La guitarra eléctrica, con un segundo pulso apenas desafinado.
+  for (const [e, n, note] of song.melody[index] ?? []) {
+    const f = freqOf(midi(note));
+    const opts = { amp: 0.4, t60: 0.9, bright: 0.9, pan: 0.15, pos: 0.1 };
+    if (n < 3) {
+      pluck(buf, at(e), f, n * eighth * 0.9, opts);
+      pluck(buf, at(e) + 0.006, f * 1.004, n * eighth * 0.9, { ...opts, amp: 0.16, pan: -0.15 });
+      continue;
+    }
+    const start = t0 + e * eighth;
+    const step = eighth / 2;
+    const count = Math.floor((n * eighth - 0.03) / step);
+    for (let k = 0; k < count; k++) pluck(buf, start + k * step, f, step * 0.9, { ...opts, amp: k ? 0.28 : 0.4 });
+  }
+}
+
 // Toca el compás `index`: bajo, guitarra, tiple y melodía.
 export function renderBar(buf, index) {
   if (buf.song.style === 'cumbia') return renderCumbia(buf, index);
   if (buf.song.style === 'torbellino') return renderTorbellino(buf, index);
   if (buf.song.style === 'joropo') return renderJoropo(buf, index);
   if (buf.song.style === 'chirimia') return renderChirimia(buf, index);
+  if (buf.song.style === 'amazonica') return renderAmazonica(buf, index);
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
   const t0 = (index * buf.bar) / buf.sr;

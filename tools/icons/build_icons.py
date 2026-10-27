@@ -3329,6 +3329,108 @@ def ballenas():
     return layers
 
 
+# ---------- Amazonas · El Asaizal (v3.47) ----------
+
+def asai_berries(cx, cy, r, n, spread, rng_seed=1, color='#311b4e'):
+    """Un puñado de bolitas de asaí, moradas casi negras, con su brillo."""
+    import random
+    rnd = random.Random(rng_seed)
+    layers = []
+    pts_ = []
+    for i in range(n):
+        a = rnd.random() * math.pi * 2
+        d = math.sqrt(rnd.random()) * spread
+        pts_.append((cx + math.cos(a) * d, cy + math.sin(a) * d * 0.8))
+    pts_.sort(key=lambda q: q[1])
+    for x, y in pts_:
+        layers += [(OUTLINE, [circle(x, y, r + 1.4)]), (color, [circle(x, y, r)]), ('#7e57c2', [circle(x - r * 0.35, y - r * 0.35, r * 0.3)])]
+    return layers
+
+
+def asai_palm():
+    """Asaizal: la palma de asaí, delgada y alta, con las hojas de plumas y los racimos morados."""
+    layers = [('#5d8f3a', [ellipse(46, 95, 22, 4)])]
+    layers += [(OUTLINE, ['M 43 95 Q 46 60 50 30 L 54 30 Q 50 60 48 95 Z']), ('#8d8a6a', ['M 44.6 93 Q 47.4 60 51 32 L 52.6 32 Q 49 60 46.6 93 Z'])]
+    fronds = [(51, 30, 8, 38, 6), (51, 30, 94, 34, 6), (51, 28, 20, 10, 6), (51, 28, 82, 8, 6), (51, 27, 50, 2, 5)]
+    for x0, y0, x1, y1, w in fronds:
+        layers += [(OUTLINE, [leaf(x0, y0, x1, y1, w + 1.5)]), ('#2e7d32' if x1 < 51 else '#43a047', [leaf(x0, y0, x1, y1, w)])]
+        for k in range(1, 6):
+            f = k / 6
+            bx, by = x0 + (x1 - x0) * f, y0 + (y1 - y0) * f
+            layers.append(('#1b5e20', [rib(bx, by, bx + (1 if x1 > x0 else -1) * 3, by + 6, 0.9)]))
+    layers += [(OUTLINE, [rib(52, 34, 62, 46, 2.4)]), ('#6d4c41', [rib(52, 34, 62, 46, 1.2)])]
+    layers += asai_berries(64, 54, 2.6, 16, 9, 3)
+    return layers
+
+
+def asai_bunch():
+    """Racimo de asaí: el racimo de ramitas cargado de bolitas moradas."""
+    layers = [(OUTLINE, [rib(50, 4, 50, 36, 6)]), ('#8d6e4a', [rib(50, 4, 50, 36, 3.5)])]
+    for k in range(9):
+        a = math.radians(-160 + k * 17.5)
+        x1, y1 = 50 + math.cos(a) * 44, 36 - math.sin(a) * 50
+        layers.append(('#8d6e4a', [rib(50, 36, x1, max(y1, 40), 1.6)]))
+    layers += asai_berries(50, 66, 3.6, 46, 30, 7)
+    return layers
+
+
+def asai_fruit():
+    """Frutos de asaí: las bolitas moradas sueltas, ya desgranadas, en la batea."""
+    layers = [(OUTLINE, [ellipse(50, 70, 46, 18)]), ('#8d6e4a', [ellipse(50, 70, 43.5, 15.5)]), ('#6d4c41', [ellipse(50, 66, 36, 9)])]
+    layers += asai_berries(50, 54, 4.5, 30, 24, 11)
+    return layers
+
+
+def soaked_asai():
+    """Asaí remojado: los frutos en la ponchera con agua tibia, que ya se tiñe de morado."""
+    layers = [(OUTLINE, ['M 6 50 L 94 50 Q 90 92 50 92 Q 10 92 6 50 Z']), ('#4fa3c7', ['M 9.5 52.5 L 90.5 52.5 Q 87 89.5 50 89.5 Q 13 89.5 9.5 52.5 Z'])]
+    layers += [(OUTLINE, [ellipse(50, 51, 43, 8)]), ('#7e57c2', [ellipse(50, 51, 40.5, 6)])]
+    layers += asai_berries(50, 46, 4, 20, 26, 5)
+    layers.append(('#eceff1a0', ['M 30 30 Q 24 20 32 8 Q 26 20 36 30 Z', 'M 66 28 Q 60 18 68 6 Q 62 18 72 28 Z']))
+    return layers
+
+
+def asai_pulp():
+    """Pulpa de asaí: la olleta llena de la pulpa morada y espesa, con el cucharón."""
+    layers = [(OUTLINE, ['M 14 40 L 86 40 L 80 88 Q 50 96 20 88 Z']), ('#b0bec5', ['M 17 42.5 L 83 42.5 L 77.6 85.6 Q 50 93 22.4 85.6 Z'])]
+    layers += [(OUTLINE, [ellipse(50, 40, 37, 9)]), ('#4a148c', [ellipse(50, 40, 34.5, 7)]), ('#7b1fa2', [ellipse(42, 38, 12, 2.5)])]
+    layers += [(OUTLINE, [rect(60, 6, 8, 40, 20)]), ('#8d6e4a', [rect(62, 8, 4, 36, 20)])]
+    return layers
+
+
+def asai_shake():
+    """Asaí batido: el vaso de asaí morado, espeso, con la fariña por encima y el pitillo."""
+    layers = [(OUTLINE, ['M 24 22 L 76 22 L 68 92 L 32 92 Z']), ('#e8f6ff', ['M 27 24.5 L 73 24.5 L 65.6 89.5 L 34.4 89.5 Z'])]
+    layers.append(('#6a1b9a', ['M 28 34 L 72 34 L 65.6 89.5 L 34.4 89.5 Z']))
+    layers.append(('#9c4dcc', [rect(32, 40, 5, 44, 4)]))
+    layers += [(OUTLINE, [ellipse(50, 30, 24, 6)]), ('#e8d9a0', [ellipse(50, 30, 22, 4.5)]), ('#c8a26a', [circle(44, 29, 1.2), circle(56, 31, 1.2), circle(50, 28, 1)])]
+    layers += [(OUTLINE, [rect(58, 4, 6, 34, 14)]), ('#d7263d', [rect(59.5, 5.5, 3, 31, 14)])]
+    return layers
+
+
+def asai_bag():
+    """Bolsa de asaí: la bolsa de pulpa congelada, morada, con la escarcha y la etiqueta de la palma."""
+    layers = [(OUTLINE, ['M 22 12 L 78 12 L 80 88 L 20 88 Z']), ('#7b1fa2', ['M 24.5 14.5 L 75.5 14.5 L 77.4 85.5 L 22.6 85.5 Z'])]
+    layers.append(('#e1bee7', [rect(24.5, 14.5, 51, 6)]))
+    layers += [(OUTLINE, [rect(30, 40, 40, 30)]), ('#ffffff', [rect(32, 42, 36, 26)])]
+    layers += [('#2e7d32', [leaf(50, 64, 38, 48, 3), leaf(50, 64, 62, 48, 3), leaf(50, 64, 50, 46, 3)]), ('#4a148c', [circle(50, 60, 3)])]
+    layers.append(('#ffffffc0', [circle(30, 30, 1.4), circle(66, 26, 1.2), circle(70, 78, 1.4), circle(28, 78, 1.2), circle(60, 34, 1)]))
+    return layers
+
+
+def asai_box():
+    """Caja de asaí: la caja de icopor con las bolsas moradas asomadas y el hielo."""
+    layers = [(OUTLINE, [poly(8, 40, 50, 26, 92, 40, 92, 82, 50, 96, 8, 82)])]
+    layers.append(('#eceff1', [poly(11, 42, 50, 55, 50, 92.5, 11, 80)]))
+    layers.append(('#cfd8dc', [poly(50, 55, 89, 42, 89, 80, 50, 92.5)]))
+    for cx in (30, 50, 70):
+        top = 14 + abs(cx - 50) * 0.3
+        layers += [(OUTLINE, [rect(cx - 9, top, 18, 32)]), ('#7b1fa2', [rect(cx - 7.5, top + 1.5, 15, 29)]), ('#e1bee7', [rect(cx - 7.5, top + 1.5, 15, 4)])]
+    layers.append(('#f5f5f5', [poly(11, 42, 50, 29, 89, 42, 50, 55)]))
+    layers += [('#2e7d32', [leaf(66, 76, 58, 66, 2.5), leaf(66, 76, 74, 66, 2.5)]), ('#4a148c', [circle(66, 74, 2.4)])]
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -3558,6 +3660,14 @@ ICONS = [
     (0xE0E1, 'almuerzo_galeria', almuerzo_galeria),
     (0xE0E2, 'lonchera_lancha', lonchera_lancha),
     (0xE0E3, 'ballenas', ballenas),
+    (0xE0E4, 'asai_palm', asai_palm),
+    (0xE0E5, 'asai_bunch', asai_bunch),
+    (0xE0E6, 'asai_fruit', asai_fruit),
+    (0xE0E7, 'soaked_asai', soaked_asai),
+    (0xE0E8, 'asai_pulp', asai_pulp),
+    (0xE0E9, 'asai_shake', asai_shake),
+    (0xE0EA, 'asai_bag', asai_bag),
+    (0xE0EB, 'asai_box', asai_box),
 ]
 
 

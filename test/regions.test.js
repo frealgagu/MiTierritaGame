@@ -962,3 +962,24 @@ test('Buenaventura recibe lo de las cinco zonas de la Costa Pacífica y arma las
   for (const p of ['patacon_box', 'alino_box', 'tapao', 'arroz_piangua', 'cazuela_mariscos', 'recuerdo_pacifico']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
   assert.ok((game.state.stats.produced.lonchera_lancha ?? 0) > 0, 'arma loncheras de la lancha');
 });
+
+test('El Amazonas se abre al completar Buenaventura; mientras esté en obra no se termina (v3.47)', async () => {
+  const { claimGoal } = await import('../src/sim/goals.js');
+  const root = createInitialState(0);
+  root.zones.pueblo.complete = true;
+  openRegions(root);
+  for (const [region, zone] of [['santander', 'barichara'], ['costa', 'cartagena'], ['boyaca', 'villa_leyva'], ['llanos', 'villavicencio']]) {
+    root.regions[region].zones[zone].complete = true;
+    openRegions(root);
+  }
+  assert.deepEqual(openRegions(root), []);
+  root.regions.pacifico.zones.buenaventura.complete = true;
+  assert.deepEqual(openRegions(root), ['amazonas']);
+  const a = regionState(root, 'amazonas');
+  assert.ok(a.zones.asaizal.unlocked);
+  a.stats.sold = { asai_box: 1e9 };
+  a.goals.claimed.push(...GOALS_BY_ZONE.asaizal.filter((g) => !g.final).map((g) => g.id));
+  claimGoal(a, GOALS_BY_ZONE.asaizal.find((g) => g.final).id, { emit() {} });
+  assert.equal(a.zones.asaizal.complete, true);
+  assert.ok(!a.regionDone, 'en obra: todavía no tiene final');
+});

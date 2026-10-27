@@ -1,5 +1,18 @@
 # Registro de cambios
 
+## v3.47.0 — El Amazonas: El Asaizal
+- **🦜 El Amazonas**, la séptima región, se abre al completar Buenaventura. Tiene su propia economía, como las demás, y llegará zona por zona.
+- **🌴 El Asaizal**, su primera zona: el Asaizal → la Desgranadora → el Tanque de remojo → la Despulpadora de asaí → la Batidora → la Empacadora de asaí → la Cajonera de asaí. Va del racimo de asaí a la caja de bolsas congeladas, pasando por el fruto, el asaí remojado, la pulpa y el asaí batido. Tiene los mismos números que la primera zona de cada región, porque el Amazonas empieza de cero.
+- Su persona es **Don Abel, el cosechero**, con sus datos curiosos, objetivos, 15 investigaciones, su victoria y 8 íconos nuevos (de la palma de asaí a la caja).
+- **El mapa:** la vega húmeda con las matas de asaí de tallos delgados, que echan racimos morados con cada hito; alrededor, ceibas gigantes, heliconias, plátano y guacamayas. Las casas son de madera, sobre pilotes, con techo de zinc o de palma:
+  - la ramada donde se sacuden los racimos sobre la lona;
+  - los tanques azules de remojo, con el vapor;
+  - la despulpadora que bota la pulpa morada al balde;
+  - el puesto verde de la batidora, con los vasos de asaí;
+  - la empacadora blanca con la banda de bolsas y el congelador, y la bodega con las cajas de icopor.
+- **Música:** la **Cumbia del Amazonas**, la de Leticia y la triple frontera: guitarra eléctrica punteada, bajo, teclado, maracas y manguaré, el tambor de palo de los pueblos de la selva.
+- Después vendrán El Ajizal, El Lago, La Casabería, La Yanchama y Leticia.
+
 ## v3.46.0 — El id de la Costa Pacífica
 - Por dentro, la Costa Pacífica se llama ahora `pacifico` (salió como `choco`). No cambia nada en el juego.
 

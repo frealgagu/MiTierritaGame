@@ -334,6 +334,17 @@ export const STATIONS = [
   { id: 'loncheras_lancha', zone: 'buenaventura', name: 'Loncheras de la lancha', icon: ICON.loncheraLancha, in: { almuerzo_galeria: 1 }, imports: [{ product: 'arroz_piangua', perCycle: 1, route: 'arroces_piangua' }, { product: 'cazuela_mariscos', perCycle: 1, route: 'cazuelas_mariscos' }], out: { lonchera_lancha: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.43' },
   { id: 'salida_ballenas', zone: 'buenaventura', name: 'Salida a las ballenas', icon: ICON.ballenas, in: { lonchera_lancha: 4 }, out: { excursion_ballenas: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.43' },
 
+  // Amazonas · El Asaizal (v3.47), a la orilla del río: los racimos de asaí se desgranan, el fruto se remoja en
+  // agua tibia, se despulpa, se bate y el asaí se empaca en bolsas congeladas y las bolsas en cajas. Mismos
+  // números que la primera zona de cada región: el Amazonas empieza de cero.
+  { id: 'asai_grove', zone: 'asaizal', name: 'Asaizal', icon: ICON.asaiPalm, infinite: true, out: { asai_bunch: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.47' },
+  { id: 'asai_thresher', zone: 'asaizal', name: 'Desgranadora', icon: ICON.asaiFruit, in: { asai_bunch: 2 }, out: { asai_fruit: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.47' },
+  { id: 'asai_soaker', zone: 'asaizal', name: 'Tanque de remojo', icon: ICON.soakedAsai, in: { asai_fruit: 1 }, out: { soaked_asai: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.47' },
+  { id: 'asai_pulper', zone: 'asaizal', name: 'Despulpadora de asaí', icon: ICON.asaiPulp, in: { soaked_asai: 1 }, out: { asai_pulp: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.47' },
+  { id: 'asai_blender', zone: 'asaizal', name: 'Batidora', icon: ICON.asaiShake, in: { asai_pulp: 2 }, out: { asai_shake: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.47' },
+  { id: 'asai_bagger', zone: 'asaizal', name: 'Empacadora de asaí', icon: ICON.asaiBag, in: { asai_shake: 1 }, out: { asai_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.47' },
+  { id: 'asai_boxer', zone: 'asaizal', name: 'Cajonera de asaí', icon: ICON.asaiBox, in: { asai_bag: 4 }, out: { asai_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.47' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

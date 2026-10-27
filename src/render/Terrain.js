@@ -152,7 +152,7 @@ export class Terrain {
             const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : this.zone.style === 'buenaventura' ? [0xb8bcc0, 0xd0d4d6] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
-        } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea' || this.zone.theme === 'werregue')) {
+        } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea' || this.zone.theme === 'werregue' || this.zone.theme === 'asai')) {
           // Hojarasca bajo los cacaos (y bajo el platanal del Pacífico, v3.38).
           for (let k = 0; k < 2; k++) {
             const p = iso(gx + rng(), gy + rng());
@@ -451,6 +451,14 @@ export class Terrain {
           else if (r < 0.055) obj = egret(rng);
           else if (r < 0.075) obj = coconutPalm(rng);
           else if (r < 0.088) obj = ceiba(rng);
+        } else if (this.zone.theme === 'asai') {
+          // El Amazonas (v3.47): la selva de la orilla, con ceibas gigantes, heliconias, plátano, asaí suelto y alguna
+          // guacamaya en su palo.
+          if (r < 0.025) obj = ceiba(rng);
+          else if (r < 0.05) obj = asaiPalm(rng);
+          else if (r < 0.075) obj = heliconia(rng);
+          else if (r < 0.095) obj = banana(rng);
+          else if (r < 0.105) obj = macaw(rng);
         } else if (this.zone.theme === 'werregue') {
           // El Werregue (v3.42): la selva del río San Juan, con algún tambo wounaan, chontaduros, heliconias y borojós.
           if (r < 0.012) obj = tambo(rng);
@@ -805,6 +813,7 @@ const FARM_SOIL = {
   bay: (v) => mix(0x2f86a8, 0x3a94b4, v * 0.6), // el mar de la Bahía (v3.40)
   mangrove: (v) => mix(0x5d5040, 0x6a5c48, v * 0.5), // el barro del manglar (v3.41)
   werregue: (v) => mix(0x4f5a30, 0x5a6638, v * 0.5), // el suelo del palmar de werregue (v3.42)
+  asai: (v) => mix(0x4a5236, 0x56603e, v * 0.5), // la vega húmeda del asaizal (v3.47)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
@@ -1474,6 +1483,53 @@ function tambo(rng) {
   g.moveTo(-22 * s, -24 * s).lineTo(0, -44 * s).lineTo(22 * s, -24 * s).quadraticCurveTo(0, -18 * s, -22 * s, -24 * s).fill(0xc9a96b).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.6 });
   for (let k = 1; k < 4; k++) g.moveTo(-22 * s * (1 - k / 4), (-24 - 20 * k / 4) * s).lineTo(22 * s * (1 - k / 4), (-24 - 20 * k / 4) * s).stroke({ width: 0.8, color: 0xa1854f });
   g.moveTo(-8 * s, -12 * s).lineTo(-12 * s, 0).moveTo(-6 * s, -12 * s).lineTo(-10 * s, 0).stroke({ width: 1, color: 0x6d4c41 });
+  c.addChild(g);
+  return c;
+}
+
+// Palma de asaí (v3.47): la mata de dos o tres tallos delgados y altos, con las hojas de plumas que cuelgan y,
+// con cada hito, más racimos morados bajo la corona.
+export function drawAsaiPalm(g, x, y, scale, rng, bunches = 1) {
+  const s = scale * (0.9 + rng() * 0.2);
+  shadow(g, x + 3, y + 2, 14 * s, 5 * s);
+  const stems = [[-3, 40], [2, 48], [6, 34]];
+  for (const [dx, h0] of stems) {
+    const h = (h0 + rng() * 6) * s;
+    const tx = x + dx * s + (dx > 0 ? 3 : -3) * s;
+    g.moveTo(x + dx * s, y).quadraticCurveTo(x + dx * s, y - h * 0.6, tx, y - h).stroke({ width: 1.8 * s, color: 0x8d8a6a });
+    for (let i = 0; i < 6; i++) {
+      const a = -Math.PI + (i / 5) * Math.PI;
+      g.moveTo(tx, y - h).quadraticCurveTo(tx + Math.cos(a) * 7 * s, y - h - 6 * s, tx + Math.cos(a) * 13 * s, y - h + (Math.sin(a) * 4 + 8) * s).stroke({ width: 1.6, color: i % 2 ? 0x2e6b22 : 0x43a047, cap: 'round' });
+    }
+    if (bunches > 0 && dx !== 6) {
+      for (let k = 0; k < Math.min(bunches, 3) + 2; k++) g.circle(tx + (k % 3 - 1) * 1.6 * s + 2 * s, y - h + (4 + Math.floor(k / 3) * 1.8) * s, 1.2 * s).fill(0x311b4e);
+    }
+  }
+}
+
+function asaiPalm(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  drawAsaiPalm(g, 0, 0, 0.95, rng, 2);
+  c.addChild(g);
+  return c;
+}
+
+// Guacamaya (v3.47): la roja, amarilla y azul, parada en un palo seco.
+function macaw(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const f = rng() < 0.5 ? 1 : -1;
+  shadow(g, 0, 1, 6, 2);
+  g.moveTo(0, 0).lineTo(0, -26).stroke({ width: 2, color: 0x6d4c41 });
+  g.moveTo(0, -18).lineTo(6 * f, -24).stroke({ width: 1.4, color: 0x6d4c41 });
+  g.ellipse(2 * f, -31, 3.4, 5).fill(0xd32f2f).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+  g.circle(3 * f, -36.5, 2.4).fill(0xd32f2f);
+  g.circle(3.6 * f, -37, 0.7).fill(0xffffff);
+  g.poly([5 * f, -36.5, 7 * f, -35.5, 5 * f, -34.5]).fill(0x37474f);
+  g.ellipse(0, -30, 2, 4).fill(0xfbc02d);
+  g.ellipse(-0.5 * f, -28, 1.8, 3.4).fill(0x1e88e5);
+  g.poly([0, -27, -2 * f, -16, 1 * f, -17]).fill(0x1e88e5);
   c.addChild(g);
   return c;
 }

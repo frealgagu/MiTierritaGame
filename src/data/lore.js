@@ -261,6 +261,14 @@ export const FACTS = {
   galeria_pueblo_nuevo: ['En la galería de Pueblo Nuevo se vende pescado, piangua y chontaduro.'],
   loncheras_lancha: ['De Buenaventura salen las lanchas a Juanchaco y Ladrilleros.'],
   salida_ballenas: ['Las ballenas jorobadas llegan de julio a octubre a tener sus crías.', 'Vienen desde la Antártida: nadan más de 8.000 kilómetros.'],
+  // Amazonas · El Asaizal (v3.47)
+  asai_grove: ['El asaí es una palma delgada que crece a la orilla de los ríos.', 'Sus racimos dan bolitas moradas, casi negras, como uvas.'],
+  asai_thresher: ['Los racimos se bajan trepando la palma, con un lazo en los pies.'],
+  asai_soaker: ['El fruto se remoja en agua tibia para que suelte la pulpa.'],
+  asai_pulper: ['De la pulpa sale una bebida morada, espesa y muy nutritiva.'],
+  asai_blender: ['En el Amazonas el asaí se toma con fariña o con azúcar.'],
+  asai_bagger: ['La pulpa se congela enseguida para que no se dañe.'],
+  asai_boxer: ['Por el río Amazonas viajan las cajas de asaí hasta Leticia.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -301,6 +309,7 @@ export const PEOPLE = {
   manglar: { icon: '👩🏿', name: 'Doña Ligia', role: 'la piangüera' },
   werregue: { icon: '👩🏾', name: 'Doña Aminta', role: 'la tejedora wounaan' },
   buenaventura: { icon: '👩🏿‍🦱', name: 'Doña Libia', role: 'la guía' },
+  asaizal: { icon: '👨🏽‍🌾', name: 'Don Abel', role: 'el cosechero' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -341,6 +350,7 @@ export const WELCOME = {
   manglar: '¡Bienvenido al Manglar, mijo! Cuando baja la marea, las piangüeras salimos a sacar la concha del barro.',
   werregue: '¡Bienvenido, hermano! Aquí tejemos el werregue como nos enseñaron las abuelas wounaan.',
   buenaventura: '¡Bienvenido a Buenaventura, mi rey! Aquí llega lo mejor del Pacífico, y de aquí salen las lanchas a ver las ballenas.',
+  asaizal: '¡Bienvenido al Amazonas, paisano! Aquí la palma de asaí da racimos morados a la orilla del río.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

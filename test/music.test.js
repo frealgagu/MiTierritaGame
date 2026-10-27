@@ -23,7 +23,7 @@ test('cada pieza tiene una melodía por compás, dentro de su compás', () => {
   }
 });
 
-for (const id of ['cafetero', 'costa', 'boyaca', 'llanos', 'pacifico']) test(`la pieza (${id}) suena, no satura y dura lo que dicen sus compases`, () => {
+for (const id of ['cafetero', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas']) test(`la pieza (${id}) suena, no satura y dura lo que dicen sus compases`, () => {
   const sr = 16000;
   const song = SONGS[id];
   const buf = renderSong(song, sr);

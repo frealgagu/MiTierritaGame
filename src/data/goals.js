@@ -822,5 +822,38 @@ const BUENAVENTURA = [
   { id: 'cv_final', type: 'sold', product: 'excursion_ballenas', amount: 7000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA };
+// Amazonas · El Asaizal (v3.47): la misma lista que el Platanal.
+const ASAIZAL = [
+  { id: 'aa01', type: 'sold', product: 'asai_bunch', amount: 20, reward: 15 },
+  { id: 'aa02', type: 'level', target: 'asai_grove', level: 5, reward: 20 },
+  { id: 'aa03', type: 'level', target: 'asai_grove:transport', level: 5, reward: 25 },
+  { id: 'aa04', type: 'unlock', station: 'asai_thresher', reward: 30 },
+  { id: 'aa06', type: 'produced', product: 'asai_fruit', amount: 50, reward: 80 },
+  { id: 'aa07', type: 'level', target: 'asai_grove', level: 10, reward: 100 },
+  { id: 'aa08', type: 'unlock', station: 'asai_soaker', reward: 150 },
+  { id: 'aa09', type: 'level', target: 'dispatch:asaizal', level: 5, reward: 150 },
+  { id: 'aa10', type: 'produced', product: 'soaked_asai', amount: 200, reward: 300 },
+  { id: 'aa11', type: 'unlock', station: 'asai_pulper', reward: 500 },
+  { id: 'aa12', type: 'research', research: 'herraduras_am', reward: 500 },
+  { id: 'aa13', type: 'income', zone: 'asaizal', perSecond: 5, reward: 600 },
+  { id: 'aa14', type: 'level', target: 'asai_soaker', level: 10, reward: 800 },
+  { id: 'aa15', type: 'unlock', station: 'asai_blender', reward: 1500 },
+  { id: 'aa16', type: 'produced', product: 'asai_shake', amount: 100, reward: 2000 },
+  { id: 'aa17', type: 'researchCount', count: 3, reward: 2500 },
+  { id: 'aa18', type: 'income', zone: 'asaizal', perSecond: 20, reward: 4000 },
+  { id: 'aa19', type: 'allLevels', zone: 'asaizal', level: 10, reward: 5000 },
+  { id: 'aa20', type: 'unlock', station: 'asai_bagger', reward: 8000 },
+  { id: 'aa21', type: 'produced', product: 'asai_bag', amount: 500, reward: 12000 },
+  { id: 'aa22', type: 'level', target: 'asai_grove', level: 25, reward: 15000 },
+  { id: 'aa23', type: 'income', zone: 'asaizal', perSecond: 100, reward: 20000 },
+  { id: 'aa24', type: 'unlock', station: 'asai_boxer', reward: 40000 },
+  { id: 'aa25', type: 'sold', product: 'asai_box', amount: 50, reward: 50000 },
+  { id: 'aa26', type: 'research', research: 'sello_am', reward: 80000 },
+  { id: 'aa27', type: 'allLevels', zone: 'asaizal', level: 25, reward: 100000 },
+  { id: 'aa05', type: 'research', research: 'asai_seleccionado', reward: 50000 },
+  { id: 'aa28', type: 'sold', product: 'asai_box', amount: 500, reward: 150000 },
+  { id: 'aa_final', type: 'sold', product: 'asai_box', amount: 2000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

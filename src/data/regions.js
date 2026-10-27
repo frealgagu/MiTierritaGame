@@ -57,6 +57,18 @@ export const REGIONS = [
     music: 'pacifico',
     unlock: { region: 'llanos', zone: 'villavicencio' },
   },
+  // El Amazonas (v3.47): se abre al completar Buenaventura. Llega zona por zona, como la Costa Pacífica; mientras
+  // esté en obra (`wip`) no tiene final, y las zonas que faltan se anuncian (`soon`).
+  {
+    id: 'amazonas',
+    name: 'Amazonas',
+    icon: '🦜',
+    zones: ['asaizal'],
+    soon: ['El Ajizal', 'El Lago', 'La Casabería', 'La Yanchama', 'Leticia'],
+    wip: true,
+    music: 'amazonas',
+    unlock: { region: 'pacifico', zone: 'buenaventura' },
+  },
 ];
 
 export const REGIONS_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]));

@@ -482,6 +482,23 @@ export const RESEARCH = [
   { zone: 'buenaventura', id: 'puerto_pacifico', name: 'Puerto del Pacífico', icon: '🏅', desc: 'Todo lo que vende Buenaventura vale un 50 % más.', cost: 25000000000, requires: 'loncheras_lancha', effect: { type: 'zoneValue', target: 'buenaventura', mult: 1.5 } },
   { zone: 'buenaventura', id: 'maestria_buenaventura', name: 'Maestría: Buenaventura', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'buenaventura', mult: 4 } },
   { zone: 'buenaventura', id: 'supremacia_buenaventura', name: 'Supremacía: Buenaventura', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'buenaventura', mult: 8 } },
+
+  // Amazonas · El Asaizal (v3.47): las mismas del Platanal, con el asaí.
+  { zone: 'asaizal', id: 'asai_seleccionado', name: 'Asaí seleccionado', icon: ICON.asaiPalm, desc: 'El Asaizal produce el doble.', cost: 300, requires: 'asai_thresher', effect: { type: 'stationSpeed', target: 'asai_grove', mult: 2 } },
+  { zone: 'asaizal', id: 'mesa_desgrane', name: 'Mesa de desgrane', icon: '⚙️', desc: 'La Desgranadora desgrana el doble.', cost: 400, requires: 'asai_thresher', effect: { type: 'stationSpeed', target: 'asai_thresher', mult: 2 } },
+  { zone: 'asaizal', id: 'herraduras_am', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'asai_soaker', effect: { type: 'muleSpeed', mult: 1.5 } },
+  { zone: 'asaizal', id: 'remolque_am', name: 'Remolque para el Willys', icon: '🚙', desc: 'El Willys lleva el doble por viaje.', cost: 2500, requires: 'asai_pulper', effect: { type: 'dispatchCapacity', target: 'asaizal', mult: 2 } },
+  { zone: 'asaizal', id: 'remojo_tibio', name: 'Remojo tibio', icon: ICON.soakedAsai, desc: 'El Tanque de remojo remoja el doble.', cost: 6000, requires: 'asai_pulper', effect: { type: 'stationSpeed', target: 'asai_soaker', mult: 2 } },
+  { zone: 'asaizal', id: 'despulpadora_doble', name: 'Despulpadora doble', icon: '⚙️', desc: 'La Despulpadora de asaí despulpa el doble.', cost: 8000, requires: 'asai_blender', effect: { type: 'stationSpeed', target: 'asai_pulper', mult: 2 } },
+  { zone: 'asaizal', id: 'asai_espeso', name: 'Asaí espeso', icon: '🏅', desc: 'El asaí batido vale un 50 % más.', cost: 20000, requires: 'asai_blender', effect: { type: 'productValue', target: 'asai_shake', mult: 1.5 } },
+  { zone: 'asaizal', id: 'batidora_grande', name: 'Batidora grande', icon: ICON.asaiShake, desc: 'La Batidora bate el doble.', cost: 25000, requires: 'asai_bagger', effect: { type: 'stationSpeed', target: 'asai_blender', mult: 2 } },
+  { zone: 'asaizal', id: 'asai_amazonico', name: 'Asaí amazónico', icon: '🦜', desc: 'Asaí de origen: todo lo que vende el Asaizal vale un 50 % más.', cost: 50000, requires: 'asai_bagger', effect: { type: 'zoneValue', target: 'asaizal', mult: 1.5 } },
+  { zone: 'asaizal', id: 'empacadora_frio', name: 'Empacadora en frío', icon: ICON.asaiBag, desc: 'La Empacadora de asaí empaca el doble.', cost: 60000, requires: 'asai_boxer', effect: { type: 'stationSpeed', target: 'asai_bagger', mult: 2 } },
+  { zone: 'asaizal', id: 'cajonera_asai', name: 'Cajonera automática', icon: '📦', desc: 'La Cajonera de asaí llena el doble de cajas.', cost: 150000, requires: 'asai_boxer', effect: { type: 'stationSpeed', target: 'asai_boxer', mult: 2 } },
+  { zone: 'asaizal', id: 'cable_am', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'asai_boxer', effect: { type: 'muleSpeed', mult: 2 } },
+  { zone: 'asaizal', id: 'sello_am', name: 'Sello de calidad', icon: '🏅', desc: 'Las cajas de asaí valen un 50 % más.', cost: 300000, requires: 'asai_boxer', effect: { type: 'productValue', target: 'asai_box', mult: 1.5 } },
+  { zone: 'asaizal', id: 'maestria_asaizal', name: 'Maestría: Asaizal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'asaizal', mult: 4 } },
+  { zone: 'asaizal', id: 'supremacia_asaizal', name: 'Supremacía: Asaizal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'asaizal', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al
