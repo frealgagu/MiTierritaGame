@@ -855,5 +855,24 @@ const ASAIZAL = [
   { id: 'aa_final', type: 'sold', product: 'asai_box', amount: 2000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL };
+// Amazonas · El Ajizal (v3.48): la misma lista que la Azotea.
+const AJIZAL = [
+  { id: 'aj01', type: 'sold', product: 'aji', amount: 50, reward: 500 },
+  { id: 'aj02', type: 'level', target: 'aji_field', level: 10, reward: 1000 },
+  { id: 'aj03', type: 'unlock', station: 'aji_washer', reward: 2000 },
+  { id: 'aj04', type: 'level', target: 'aji_field:transport', level: 10, reward: 2000 },
+  { id: 'aj05', type: 'unlock', station: 'aji_grinder', reward: 5000 },
+  { id: 'aj06', type: 'produced', product: 'ground_aji', amount: 200, reward: 8000 },
+  { id: 'aj08', type: 'unlock', station: 'tucupi_pot', reward: 20000 },
+  { id: 'aj09', type: 'level', target: 'dispatch:ajizal', level: 10, reward: 20000 },
+  { id: 'aj10', type: 'produced', product: 'aji_negro', amount: 500, reward: 40000 },
+  { id: 'aj11', type: 'unlock', station: 'aji_packer', reward: 80000 },
+  { id: 'aj12', type: 'allLevels', zone: 'ajizal', level: 25, reward: 100000 },
+  { id: 'aj07', type: 'research', research: 'lavadero_aji', reward: 50000 },
+  { id: 'aj13', type: 'income', zone: 'ajizal', perSecond: 500, reward: 150000 },
+  { id: 'aj14', type: 'sold', product: 'aji_box', amount: 1000, reward: 300000 },
+  { id: 'aj_final', type: 'sold', product: 'aji_box', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

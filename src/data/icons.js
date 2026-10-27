@@ -239,6 +239,11 @@ export const ICON = {
   asaiShake: '\uE0E9', // Asaí batido: el vaso de asaí morado, espeso, con la fariña por encima y el pitillo
   asaiBag: '\uE0EA', // Bolsa de asaí: la bolsa de pulpa congelada, morada, con la escarcha y la etiqueta de la palma
   asaiBox: '\uE0EB', // Caja de asaí: la caja de icopor con las bolsas moradas asomadas y el hielo
+  ajiPlant: '\uE0EC', // Ajizal: la mata de ají con sus hojas y los ajíes rojos, amarillos y morados colgando
+  ajiPeppers: '\uE0ED', // Ají amazónico: los ajíes rojos, amarillos y morados, recién cogidos
+  groundAji: '\uE0EE', // Ají molido: el molino de mano con la pasta roja que sale y los ajíes al lado
+  ajiNegro: '\uE0EF', // Ají negro: el frasco con el ají negro del tucupí, espeso y brillante, con un ají rojo encima
+  ajiBox: '\uE0F0', // Caja de ají negro: la caja de cartón con los frascos de tapa de madera asomados
 };
 
 export const ICON_FONT = 'Cafetal Icons';

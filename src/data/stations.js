@@ -345,6 +345,15 @@ export const STATIONS = [
   { id: 'asai_bagger', zone: 'asaizal', name: 'Empacadora de asaí', icon: ICON.asaiBag, in: { asai_shake: 1 }, out: { asai_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.47' },
   { id: 'asai_boxer', zone: 'asaizal', name: 'Cajonera de asaí', icon: ICON.asaiBox, in: { asai_bag: 4 }, out: { asai_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.47' },
 
+  // Amazonas · El Ajizal (v3.48): el ají de la chagra se lava, se muele y se cocina en el tucupí (el jugo de la
+  // yuca brava) hasta volverse ají negro, que se envasa en frascos. Mismos números que el Tabacal, el Cocal, la
+  // Cervecería, el Frutal y la Azotea; el ají negro es el que después viajará al Lago, y las cajas, a Leticia.
+  { id: 'aji_field', zone: 'ajizal', name: 'Ajizal', icon: ICON.ajiPlant, infinite: true, out: { aji: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.48' },
+  { id: 'aji_washer', zone: 'ajizal', name: 'Lavadero de ají', icon: ICON.ajiPeppers, in: { aji: 1 }, out: { washed_aji: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.48' },
+  { id: 'aji_grinder', zone: 'ajizal', name: 'Molino de ají', icon: ICON.groundAji, in: { washed_aji: 2 }, out: { ground_aji: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.48' },
+  { id: 'tucupi_pot', zone: 'ajizal', name: 'Olla del tucupí', icon: ICON.ajiNegro, in: { ground_aji: 2 }, out: { aji_negro: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.48' },
+  { id: 'aji_packer', zone: 'ajizal', name: 'Envasadora de ají negro', icon: ICON.ajiBox, in: { aji_negro: 1 }, out: { aji_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.48' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

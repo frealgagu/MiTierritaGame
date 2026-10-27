@@ -269,6 +269,12 @@ export const FACTS = {
   asai_blender: ['En el Amazonas el asaí se toma con fariña o con azúcar.'],
   asai_bagger: ['La pulpa se congela enseguida para que no se dañe.'],
   asai_boxer: ['Por el río Amazonas viajan las cajas de asaí hasta Leticia.'],
+  // Amazonas · El Ajizal (v3.48)
+  aji_field: ['En la chagra se siembran muchos ajíes: rojos, amarillos y morados.', 'La chagra es la huerta que se abre en la selva y se deja descansar.'],
+  aji_washer: ['Al lavar el ají, mejor con guantes: pica hasta en las manos.'],
+  aji_grinder: ['El ají se muele con piedra o en el molino, con semillas y todo.'],
+  tucupi_pot: ['El ají negro se cocina días enteros en el jugo de la yuca brava.', 'Al jugo de la yuca brava, cocinado, lo llaman tucupí.'],
+  aji_packer: ['El ají negro es la sal de la selva: va con el pescado y el casabe.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -310,6 +316,7 @@ export const PEOPLE = {
   werregue: { icon: '👩🏾', name: 'Doña Aminta', role: 'la tejedora wounaan' },
   buenaventura: { icon: '👩🏿‍🦱', name: 'Doña Libia', role: 'la guía' },
   asaizal: { icon: '👨🏽‍🌾', name: 'Don Abel', role: 'el cosechero' },
+  ajizal: { icon: '👵🏽', name: 'Doña Remedios', role: 'la ajicera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -351,6 +358,7 @@ export const WELCOME = {
   werregue: '¡Bienvenido, hermano! Aquí tejemos el werregue como nos enseñaron las abuelas wounaan.',
   buenaventura: '¡Bienvenido a Buenaventura, mi rey! Aquí llega lo mejor del Pacífico, y de aquí salen las lanchas a ver las ballenas.',
   asaizal: '¡Bienvenido al Amazonas, paisano! Aquí la palma de asaí da racimos morados a la orilla del río.',
+  ajizal: '¡Bienvenido al Ajizal, mijo! Aquí el ají se cocina en tucupí hasta volverse ají negro, la sal de la selva.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

@@ -281,6 +281,13 @@ export const PRODUCTS = {
   asai_bag: { name: 'Bolsa de asaí', zone: 'asaizal', value: 45, icon: ICON.asaiBag, color: 0x8e24aa },
   asai_box: { name: 'Caja de asaí', zone: 'asaizal', value: 250, icon: ICON.asaiBox, color: 0xc8a26a },
 
+  // Amazonas · El Ajizal (v3.48): mismos valores que la Azotea.
+  aji: { name: 'Ají amazónico', zone: 'ajizal', value: 10, icon: ICON.ajiPeppers, color: 0xe53935 },
+  washed_aji: { name: 'Ají lavado', zone: 'ajizal', value: 25, icon: ICON.ajiPeppers, color: 0xef5350 },
+  ground_aji: { name: 'Ají molido', zone: 'ajizal', value: 60, icon: ICON.groundAji, color: 0xc62828 },
+  aji_negro: { name: 'Ají negro', zone: 'ajizal', value: 150, icon: ICON.ajiNegro, color: 0x3e2723 },
+  aji_box: { name: 'Caja de ají negro', zone: 'ajizal', value: 250, icon: ICON.ajiBox, color: 0xc8a26a },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

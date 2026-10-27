@@ -499,6 +499,17 @@ export const RESEARCH = [
   { zone: 'asaizal', id: 'sello_am', name: 'Sello de calidad', icon: '🏅', desc: 'Las cajas de asaí valen un 50 % más.', cost: 300000, requires: 'asai_boxer', effect: { type: 'productValue', target: 'asai_box', mult: 1.5 } },
   { zone: 'asaizal', id: 'maestria_asaizal', name: 'Maestría: Asaizal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'asaizal', mult: 4 } },
   { zone: 'asaizal', id: 'supremacia_asaizal', name: 'Supremacía: Asaizal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'asaizal', mult: 8 } },
+
+  // Amazonas · El Ajizal (v3.48): las mismas de la Azotea, con el ají.
+  { zone: 'ajizal', id: 'lavadero_aji', name: 'Lavadero doble', icon: ICON.ajiPeppers, desc: 'El Lavadero de ají lava el doble.', cost: 20000, requires: 'aji_washer', effect: { type: 'stationSpeed', target: 'aji_washer', mult: 2 } },
+  { zone: 'ajizal', id: 'aji_de_chagra', name: 'Semilla de la chagra', icon: ICON.ajiPlant, desc: 'El Ajizal produce el doble.', cost: 50000, requires: 'aji_grinder', effect: { type: 'stationSpeed', target: 'aji_field', mult: 2 } },
+  { zone: 'ajizal', id: 'molino_aji', name: 'Molino de piedra', icon: ICON.groundAji, desc: 'El Molino de ají muele el doble.', cost: 40000, requires: 'aji_grinder', effect: { type: 'stationSpeed', target: 'aji_grinder', mult: 2 } },
+  { zone: 'ajizal', id: 'bote_aji', name: 'Bote de carga', icon: '🚤', desc: 'El despacho del Ajizal lleva el doble por viaje.', cost: 80000, requires: 'aji_grinder', effect: { type: 'dispatchCapacity', target: 'ajizal', mult: 2 } },
+  { zone: 'ajizal', id: 'olla_tucupi', name: 'Olla grande', icon: ICON.ajiNegro, desc: 'La Olla del tucupí cocina el doble.', cost: 300000, requires: 'tucupi_pot', effect: { type: 'stationSpeed', target: 'tucupi_pot', mult: 2 } },
+  { zone: 'ajizal', id: 'llenadora_ajinegro', name: 'Llenadora de frascos', icon: ICON.ajiBox, desc: 'La Envasadora de ají negro envasa el doble.', cost: 600000, requires: 'aji_packer', effect: { type: 'stationSpeed', target: 'aji_packer', mult: 2 } },
+  { zone: 'ajizal', id: 'aji_de_la_abuela', name: 'Ají de la abuela', icon: '🏅', desc: 'Las cajas de ají negro valen un 50 % más.', cost: 1500000, requires: 'aji_packer', effect: { type: 'productValue', target: 'aji_box', mult: 1.5 } },
+  { zone: 'ajizal', id: 'maestria_ajizal', name: 'Maestría: Ajizal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'ajizal', mult: 4 } },
+  { zone: 'ajizal', id: 'supremacia_ajizal', name: 'Supremacía: Ajizal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'ajizal', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

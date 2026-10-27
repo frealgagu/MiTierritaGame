@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.48.0 — El Amazonas: El Ajizal
+- **🌶️ El Ajizal**, la segunda zona del Amazonas, se abre al completar El Asaizal: el Ajizal → el Lavadero de ají → el Molino de ají → la Olla del tucupí → la Envasadora de ají negro. El ají de la chagra se lava, se muele y se cocina días enteros en el tucupí (el jugo de la yuca brava) hasta volverse **ají negro**, la sal de la selva. Tiene los mismos números que la Azotea; el ají negro es el que después viajará al Lago, y las cajas, a Leticia.
+- Su persona es **Doña Remedios, la ajicera**, con sus datos curiosos, objetivos, 9 investigaciones, su victoria y 5 íconos nuevos (de la mata de ají a la caja de ají negro).
+- **El mapa:** la chagra de tierra rojiza con las matas cargadas de ajíes rojos, amarillos y morados; en las estaciones, la batea bajo la ramada de palma, la casa azul del molino, la cocina con la olla del tucupí y el tipití colgado, y la envasadora amarilla con sus frascos.
+
 ## v3.47.0 — El Amazonas: El Asaizal
 - **🦜 El Amazonas**, la séptima región, se abre al completar Buenaventura. Tiene su propia economía, como las demás, y llegará zona por zona.
 - **🌴 El Asaizal**, su primera zona: el Asaizal → la Desgranadora → el Tanque de remojo → la Despulpadora de asaí → la Batidora → la Empacadora de asaí → la Cajonera de asaí. Va del racimo de asaí a la caja de bolsas congeladas, pasando por el fruto, el asaí remojado, la pulpa y el asaí batido. Tiene los mismos números que la primera zona de cada región, porque el Amazonas empieza de cero.

@@ -981,5 +981,6 @@ test('El Amazonas se abre al completar Buenaventura; mientras esté en obra no s
   a.goals.claimed.push(...GOALS_BY_ZONE.asaizal.filter((g) => !g.final).map((g) => g.id));
   claimGoal(a, GOALS_BY_ZONE.asaizal.find((g) => g.final).id, { emit() {} });
   assert.equal(a.zones.asaizal.complete, true);
+  assert.ok(a.zones.ajizal.unlocked, 'El Asaizal abre El Ajizal (v3.48)');
   assert.ok(!a.regionDone, 'en obra: todavía no tiene final');
 });

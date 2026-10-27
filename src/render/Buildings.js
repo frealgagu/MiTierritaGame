@@ -5655,6 +5655,126 @@ const DRAW = {
     };
   },
 
+  // --- Amazonas · El Ajizal (v3.48): la cocina del ají negro, en casas de madera sobre pilotes ---
+
+  // Lavadero de ají: la ramada de palma con la batea de agua; la ajicera lava los ajíes con guantes y los
+  // pone a escurrir en el canasto.
+  aji_washer(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    box(g, x0 + 0.4, y0 + 0.6, 1.6, 0.7, 9, 0x8d6e4a);
+    const tub = iso(x0 + 1.2, y0 + 0.95, 9);
+    g.ellipse(tub.x, tub.y, 18, 6).fill(0x6d4c41).stroke(OUTLINE);
+    g.ellipse(tub.x, tub.y, 15, 4.5).fill(0x4fa3c7);
+    const basket = iso(x + 2.6, y + 2.3);
+    g.poly([basket.x - 9, basket.y - 9, basket.x + 9, basket.y - 9, basket.x + 7, basket.y, basket.x - 7, basket.y]).fill(0xc8a26a).stroke(OUTLINE);
+    for (let k = 0; k < 5; k++) g.ellipse(basket.x - 6 + k * 3, basket.y - 10, 1.4, 2.6).fill([0xe53935, 0xfbc02d, 0x8e24aa][k % 3]);
+    ramada(this, g, x0, y0, 2.3, 1.6, 28 + ctx.up, 0xc9a96b);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (let k = 0; k < 4; k++) {
+        const bob = this.working ? Math.sin(time * 3 + k * 2) * 1.2 : 0;
+        anim.ellipse(tub.x - 9 + k * 6, tub.y - 1 + bob, 1.3, 2.4).fill([0xe53935, 0xfbc02d, 0xe53935, 0x8e24aa][k]);
+      }
+      const wp = iso(x0 + 1.2, y0 + 1.75);
+      worker(anim, wp.x, wp.y, 0xf2c14e);
+      if (!this.working) return;
+      anim.moveTo(tub.x - 12 + Math.sin(time * 5) * 3, tub.y - 1).lineTo(tub.x - 6 + Math.sin(time * 5) * 3, tub.y - 1).stroke({ width: 1, color: 0xe8f6ff });
+    };
+    this.animate(0);
+  },
+
+  // Molino de ají: la casa de madera sobre pilotes (azul) con el molino de mano en el corredor y la pasta roja
+  // que cae en la ponchera.
+  aji_grinder(g, x, y, ctx) {
+    const hx = x + 0.2;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 1.7, 1.3, 20, ctx, { wall: 0x5c8dd6, trim: 0xf7f4ee, roofColor: 0xc9a96b, lift: 8 });
+    box(g, x + 2.2, y + 0.5, 0.45, 1.2, 9, 0x8d6e4a);
+    const mill = iso(x + 2.42, y + 0.9, 9);
+    g.rect(mill.x - 4, mill.y - 14, 8, 14).fill(0x90a4ae).stroke(OUTLINE);
+    g.rect(mill.x - 6, mill.y - 17, 12, 3).fill(0xb0bec5).stroke(OUTLINE);
+    const bowl = iso(x + 2.42, y + 1.5, 9);
+    g.ellipse(bowl.x, bowl.y, 7, 2.6).fill(0xcfd8dc).stroke(OUTLINE);
+    g.ellipse(bowl.x, bowl.y - 0.5, 5, 1.6).fill(PRODUCTS.ground_aji.color);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const turn = this.working ? time * 4 : 0;
+      const c = { x: mill.x + 6, y: mill.y - 9 };
+      anim.moveTo(c.x, c.y).lineTo(c.x + Math.cos(turn) * 6, c.y + Math.sin(turn) * 3).stroke({ width: 1.6, color: 0x607d8b });
+      anim.circle(c.x + Math.cos(turn) * 6, c.y + Math.sin(turn) * 3, 1.6).fill(0x8d6e4a);
+      const wp = iso(x + 2.95, y + 1.1);
+      worker(anim, wp.x, wp.y, 0xe5737f);
+      if (!this.working) return;
+      anim.moveTo(mill.x, mill.y).lineTo(bowl.x, bowl.y - 1).stroke({ width: 1.6, color: PRODUCTS.ground_aji.color });
+    };
+    this.animate(0);
+  },
+
+  // Olla del tucupí: la cocina de madera sobre pilotes con techo de palma; en el corredor, la olla grande donde
+  // el ají se cocina días enteros en el jugo de la yuca brava, que se pone negro.
+  tucupi_pot(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    stiltHouse(this, g, hx, hy, 1.9, 1.3, 22, ctx, { wall: 0xa1887f, trim: 0xf2c14e, roofColor: 0xc9a96b });
+    box(g, x + 1.6, y + 2.0, 1.0, 0.7, 10, 0xa1887f);
+    const pot = iso(x + 2.1, y + 2.35, 10);
+    g.moveTo(pot.x - 10, pot.y - 12).lineTo(pot.x - 9, pot.y).quadraticCurveTo(pot.x, pot.y + 4, pot.x + 9, pot.y).lineTo(pot.x + 10, pot.y - 12).closePath().fill(0x37474f).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 12, 10, 3.5).fill(PRODUCTS.aji_negro.color).stroke(OUTLINE);
+    // El tipití colgado (para sacar el jugo de la yuca) y la leña.
+    const tp = iso(x + 0.6, y + 2.4, 0);
+    g.moveTo(tp.x, tp.y - 30).lineTo(tp.x, tp.y - 26).stroke({ width: 1, color: 0x6d4c41 });
+    g.roundRect(tp.x - 2.5, tp.y - 26, 5, 22, 2).fill(0xc9a96b).stroke(OUTLINE);
+    for (let k = 0; k < 5; k++) g.moveTo(tp.x - 2.5, tp.y - 24 + k * 4).lineTo(tp.x + 2.5, tp.y - 22 + k * 4).stroke({ width: 0.6, color: 0x8d6e4a });
+    for (let k = 0; k < 3; k++) box(g, x + 0.9 + k * 0.08, y + 2.6 - k * 0.05, 0.6, 0.1, 3, 0x6b4a2e, { z: k * 3 });
+    this.smokePoints = [{ x: pot.x, y: pot.y - 20 }];
+    const fire = iso(x + 2.1, y + 2.72, 3);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      anim.poly([fire.x - 4, fire.y, fire.x, fire.y - 5 - (this.working ? Math.sin(time * 9) * 1.5 : 0), fire.x + 4, fire.y]).fill(this.working ? 0xff7043 : 0x5d4037);
+      const wp = iso(x + 1.45, y + 2.95);
+      worker(anim, wp.x, wp.y, 0xf7f4ee);
+      const stir = this.working ? time * 2 : 0;
+      anim.moveTo(pot.x + Math.cos(stir) * 5, pot.y - 12 + Math.sin(stir) * 1.5).lineTo(pot.x - 8, pot.y - 28).stroke({ width: 1.8, color: 0xbc8a5f });
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) anim.circle(pot.x - 5 + i * 5, pot.y - 13 - ((time * 1.5 + i * 0.3) % 1) * 3, 1).fill({ color: 0x6d4c41, alpha: 0.9 });
+    };
+    this.animate(0);
+  },
+
+  // Envasadora de ají negro: la casa grande sobre pilotes (amarilla), con la mesa donde el ají negro cae en los
+  // frascos y se tapan con la tapa de madera.
+  aji_packer(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 2.1, 1.4, 22, ctx, { wall: 0xf2c14e, trim: 0x2e7d32 });
+    box(g, x + 0.4, y + 2.15, 2.0, 0.35, 8, 0x8d6e4a);
+    const tap = iso(x + 0.9, y + 2.32, 22);
+    g.rect(tap.x - 5, tap.y - 10, 10, 10).fill(PRODUCTS.aji_negro.color).stroke(OUTLINE);
+    for (let k = 0; k < 1 + Math.min(ctx.tier, 2); k++) box(g, x + 2.5, y + 0.6 + k * 0.4, 0.32, 0.32, 8, PRODUCTS.aji_box.color);
+    const belt = new Graphics();
+    this.anim.addChild(belt);
+    this.animate = (time) => {
+      belt.clear();
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.3 + i / 4) % 1;
+        const p = iso(x + 0.45 + f * 1.8, y + 2.32, 8);
+        const full = f > 0.3;
+        belt.rect(p.x - 2.5, p.y - 9, 5, 9).fill(full ? PRODUCTS.aji_negro.color : 0xe8f6ff).stroke(OUTLINE);
+        belt.rect(p.x - 2.5, p.y - 11, 5, 2.2).fill(f > 0.55 ? 0x8d6e4a : 0xe8f6ff);
+      }
+      if (!this.working) return;
+      const f = (time * 2) % 1;
+      belt.moveTo(tap.x, tap.y + 1).lineTo(tap.x, tap.y + 4 + f * 3).stroke({ width: 1.4, color: PRODUCTS.aji_negro.color });
+    };
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

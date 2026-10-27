@@ -3431,6 +3431,70 @@ def asai_box():
     return layers
 
 
+# ---------- Amazonas · El Ajizal (v3.48) ----------
+
+def chili(x0, y0, x1, y1, bend, w, color):
+    """Un ají: alargado y curvo, con su pedúnculo verde."""
+    layers = finger(x0, y0, x1, y1, bend, w, color, tip=False)
+    layers += [(OUTLINE, [rib(x0, y0, x0 - (x1 - x0) * 0.12, y0 - (y1 - y0) * 0.12, 4)]), ('#2e7d32', [rib(x0, y0, x0 - (x1 - x0) * 0.12, y0 - (y1 - y0) * 0.12, 2.2)])]
+    layers.append(('#ffffff70', [rib(x0 + (x1 - x0) * 0.2, y0 + (y1 - y0) * 0.2 - w * 0.2, x0 + (x1 - x0) * 0.6, y0 + (y1 - y0) * 0.6 - w * 0.2, 1.2)]))
+    return layers
+
+
+def aji_plant():
+    """Ajizal: la mata de ají con sus hojas y los ajíes rojos, amarillos y morados colgando."""
+    layers = [('#5d8f3a', [ellipse(50, 94, 26, 5)]), (OUTLINE, [rib(50, 94, 50, 50, 5)]), ('#558b2f', [rib(50, 94, 50, 50, 3)])]
+    for x1, y1 in [(22, 40), (78, 40), (30, 22), (70, 22), (50, 12), (20, 62), (80, 62)]:
+        layers += [(OUTLINE, [rib(50, 60, x1, y1, 3.6)]), ('#558b2f', [rib(50, 60, x1, y1, 2)])]
+        layers += [(OUTLINE, [leaf(x1, y1, x1 + (x1 - 50) * 0.25, y1 - 10, 6)]), ('#43a047', [leaf(x1, y1, x1 + (x1 - 50) * 0.25, y1 - 10, 4.6)])]
+    for x0, y0, col in [(26, 44, '#e53935'), (40, 30, '#fbc02d'), (62, 30, '#e53935'), (74, 44, '#8e24aa'), (34, 64, '#fbc02d'), (66, 64, '#e53935')]:
+        layers += chili(x0, y0, x0 + 2, y0 + 18, 2, 6, col)
+    return layers
+
+
+def aji_peppers():
+    """Ají amazónico: los ajíes rojos, amarillos y morados, recién cogidos."""
+    layers = []
+    for x0, y0, x1, y1, col in [(20, 30, 40, 84, '#e53935'), (40, 20, 54, 80, '#fbc02d'), (62, 24, 66, 86, '#e53935'), (80, 34, 78, 82, '#8e24aa')]:
+        layers += chili(x0, y0, x1, y1, 4, 13, col)
+    return layers
+
+
+def ground_aji():
+    """Ají molido: el molino de mano con la pasta roja que sale y los ajíes al lado."""
+    layers = [(OUTLINE, [ellipse(50, 80, 40, 12)]), ('#cfd8dc', [ellipse(50, 80, 37.5, 9.5)]), ('#c62828', [ellipse(50, 78, 30, 6)])]
+    layers.append(('#ff8a80', [circle(40, 77, 1.4), circle(58, 79, 1.2), circle(50, 76, 1)]))
+    layers += [(OUTLINE, [rect(34, 22, 32, 40)]), ('#90a4ae', [rect(36.5, 24.5, 27, 35)]), (OUTLINE, [rect(26, 14, 48, 10)]), ('#b0bec5', [rect(28, 16, 44, 6)])]
+    layers += [(OUTLINE, [rect(66, 34, 24, 6)]), ('#607d8b', [rect(68, 35.5, 20, 3)]), (OUTLINE, [rect(86, 30, 6, 16)]), ('#8d6e4a', [rect(87.5, 31.5, 3, 13)])]
+    layers += [(OUTLINE, ['M 44 62 L 56 62 L 54 72 L 46 72 Z']), ('#c62828', ['M 46 63.5 L 54 63.5 L 52.6 70.5 L 47.4 70.5 Z'])]
+    layers += chili(8, 50, 14, 74, 2, 6, '#e53935')
+    return layers
+
+
+def aji_negro():
+    """Ají negro: el frasco con el ají negro del tucupí, espeso y brillante, con un ají rojo encima."""
+    layers = [(OUTLINE, [rect(26, 26, 48, 66)]), ('#e8f6ff', [rect(28.5, 28.5, 43, 61)])]
+    layers.append(('#3e2723', [rect(28.5, 38, 43, 51.5)]))
+    layers.append(('#5d4037', [ellipse(42, 50, 6, 2), ellipse(58, 66, 7, 2), ellipse(46, 78, 5, 1.6)]))
+    layers.append(('#ffffff50', [rect(32, 40, 4, 44)]))
+    layers += [(OUTLINE, [rect(24, 16, 52, 12)]), ('#8d6e4a', [rect(26.5, 18.5, 47, 7)])]
+    layers += chili(60, 6, 90, 16, -2, 7, '#e53935')
+    return layers
+
+
+def aji_box():
+    """Caja de ají negro: la caja de cartón con los frascos de tapa de madera asomados."""
+    layers = [(OUTLINE, [poly(8, 40, 50, 26, 92, 40, 92, 82, 50, 96, 8, 82)])]
+    layers.append(('#c8a26a', [poly(11, 42, 50, 55, 50, 92.5, 11, 80)]))
+    layers.append(('#b08850', [poly(50, 55, 89, 42, 89, 80, 50, 92.5)]))
+    for cx in (30, 50, 70):
+        top = 18 + abs(cx - 50) * 0.3
+        layers += [(OUTLINE, [rect(cx - 9, top, 18, 30)]), ('#3e2723', [rect(cx - 7.5, top + 5, 15, 23.5)]), ('#8d6e4a', [rect(cx - 7.5, top + 1.5, 15, 4)])]
+    layers.append(('#d9b98a', [poly(11, 42, 50, 29, 89, 42, 50, 55)]))
+    layers += chili(58, 70, 80, 64, -2, 6, '#e53935')
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -3668,6 +3732,11 @@ ICONS = [
     (0xE0E9, 'asai_shake', asai_shake),
     (0xE0EA, 'asai_bag', asai_bag),
     (0xE0EB, 'asai_box', asai_box),
+    (0xE0EC, 'aji_plant', aji_plant),
+    (0xE0ED, 'aji_peppers', aji_peppers),
+    (0xE0EE, 'ground_aji', ground_aji),
+    (0xE0EF, 'aji_negro', aji_negro),
+    (0xE0F0, 'aji_box', aji_box),
 ]
 
 

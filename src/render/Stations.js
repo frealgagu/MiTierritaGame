@@ -3,7 +3,7 @@ import { iso, isoPoly, depth, shade } from './iso.js';
 import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPlantainPlant, drawAzoteaBed, drawMangroveTree, drawWerreguePalm, drawAsaiPalm, drawPassionVine, drawPondTile, drawHideFrame, drawPotatoPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPlantainPlant, drawAzoteaBed, drawMangroveTree, drawWerreguePalm, drawAsaiPalm, drawAjiPlant, drawPassionVine, drawPondTile, drawHideFrame, drawPotatoPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -187,6 +187,7 @@ export class FarmView extends StationView {
           else if (this.theme === 'barley') drawBarley(g, p.x, p.y, scale, rng, tier);
           else if (this.theme === 'hides') drawHideFrame(g, p.x, p.y, 0.8 + tier * 0.04, rng, (gx + gy) % 2 === 0);
           else if (this.theme === 'fruit') drawPassionVine(g, p.x, p.y, 0.75 + tier * 0.05, rng, 2 + Math.min(tier, 3));
+          else if (this.theme === 'aji') drawAjiPlant(g, p.x, p.y, scale, rng, 2 + Math.min(tier, 4));
           else if (this.theme === 'asai') drawAsaiPalm(g, p.x, p.y, 0.7 + tier * 0.05, rng, Math.min(tier, 3));
           else if (this.theme === 'werregue') drawWerreguePalm(g, p.x, p.y, 0.8 + tier * 0.05, rng, tier);
           else if (this.theme === 'azotea') drawAzoteaBed(g, p.x, p.y, 0.8 + tier * 0.04, rng, tier);
