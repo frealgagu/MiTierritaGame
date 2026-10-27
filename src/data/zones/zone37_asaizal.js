@@ -32,6 +32,8 @@ export const ZONE37 = {
   // Las bolsas de asaí salen hacia la Casabería por la Ruta del asaí (v3.50).
   routes: {
     bolsas_asai: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Asaí a la Casabería ➜' },
+    // Las cajas de asaí salen hacia Leticia (v3.52).
+    cajas_asai: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'A Leticia ➜' },
   },
   unlockedBy: null, // la primera del Amazonas: se abre con la región
   next: 'ajizal',

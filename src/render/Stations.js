@@ -449,6 +449,8 @@ const PLAZA_HOUSE = {
   salento: { wall: 0xfbf8f1, trims: [0xd7263d, 0x2e6fd1, 0x2fa36b, 0xf07f1d, 0x8e44ad, 0xf2b705], awning: 0xd7263d, sign: 'cup' },
   // Buenaventura (v3.43): casona turquesa con remates de colores y toldo naranja.
   buenaventura: { wall: 0x4fb3bf, trims: [0xf2c14e, 0xe5737f, 0xf7f4ee, 0xf2c14e, 0x8e44ad, 0xffd700], awning: 0xf08a3c, sign: 'cup' },
+  // Leticia (v3.52): la heladería de asaí, verde agua con remates morados, toldo morado y letrero de helado.
+  leticia: { wall: 0x8fd3c4, trims: [0x7b1fa2, 0xf2c14e, 0x2e7d32, 0x7b1fa2, 0xe5737f, 0xffd700], awning: 0x7b1fa2, sign: 'icecream' },
 };
 
 function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
@@ -476,10 +478,13 @@ function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
     const b = a + (w - 0.2) / 6;
     g.poly(isoPoly([[a, oy + d, 21], [b, oy + d, 21], [b, oy + d + 0.35, 15], [a, oy + d + 0.35, 15]])).fill(i % 2 ? 0xffffff : look.awning).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
   }
-  // Letrero con una taza (o con un bocadillo).
+  // Letrero con una taza (o con un bocadillo, o con un helado).
   const s = iso(ox + w / 2, oy + d, 26);
   g.roundRect(s.x - 15, s.y - 7, 30, 13, 3).fill(PAL.woodDark).stroke(OUTLINE);
-  if (look.sign === 'sweet') {
+  if (look.sign === 'icecream') {
+    g.poly([s.x - 3, s.y - 1, s.x + 3, s.y - 1, s.x, s.y + 5]).fill(0xe0a95a);
+    g.circle(s.x, s.y - 2.5, 3.4).fill(0x7b1fa2);
+  } else if (look.sign === 'sweet') {
     g.rect(s.x - 7, s.y - 3, 14, 6).fill(PRODUCTS.bocadillo.color);
     g.rect(s.x - 7, s.y + 1, 14, 1.5).fill(0xfce4ec);
   } else {

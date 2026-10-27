@@ -149,7 +149,7 @@ export class Terrain {
           // Plaza empedrada.
           for (let k = 0; k < 4; k++) {
             const p = iso(gx + 0.25 + (k % 2) * 0.5, gy + 0.25 + Math.floor(k / 2) * 0.5);
-            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : this.zone.style === 'buenaventura' ? [0xb8bcc0, 0xd0d4d6] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
+            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : this.zone.style === 'buenaventura' ? [0xb8bcc0, 0xd0d4d6] : this.zone.style === 'leticia' ? [0xb89a7a, 0xd0b896] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
         } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea' || this.zone.theme === 'werregue' || this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'chagra' || this.zone.theme === 'yanchama')) {
@@ -328,8 +328,10 @@ export class Terrain {
           const villa = this.zone.style === 'villa';
           const villavo = this.zone.style === 'villavo'; // Villavicencio (v3.36): moriches y mangos
           const puerto = this.zone.style === 'buenaventura'; // Buenaventura (v3.43): palmas de coco y almendros
+          const leticia = this.zone.style === 'leticia'; // Leticia (v3.52): ceibas, palmas de asaí y guacamayas
           if (r < 0.06 || (walled && r < 0.4)) obj = townHouse(rng, this.zone.style);
           else if (villavo && r < 0.135) obj = r < 0.085 ? mangoTree(rng) : r < 0.1 ? streetLamp() : morichePalm(rng);
+          else if (leticia && r < 0.135) obj = r < 0.08 ? asaiPalm(rng) : r < 0.095 ? streetLamp() : r < 0.12 ? ceiba(rng) : macaw(rng);
           else if (puerto && r < 0.135) obj = r < 0.09 ? coconutPalm(rng) : r < 0.105 ? streetLamp() : mangoTree(rng);
           else if (r < 0.09) obj = salento && r < 0.075 ? palm(rng) : cartagena ? coconutPalm(rng) : villa ? cypress(rng) : guayacan(rng);
           else if (r < 0.105) obj = streetLamp();
@@ -873,7 +875,7 @@ function townHouse(rng, style) {
   const villa = style === 'villa';
   const salento = style === 'salento' || cartagena || villa; // de dos pisos con balcón
   const villavo = style === 'villavo';
-  const puerto = style === 'buenaventura';
+  const puerto = style === 'buenaventura' || style === 'leticia';
   const walls = style === 'barichara' ? BARICHARA_WALLS : cartagena ? CARTAGENA_WALLS : villa ? VILLA_WALLS : villavo ? VILLAVO_WALLS : puerto ? PUERTO_WALLS : salento ? SALENTO_WALLS : HOUSE_WALLS;
   const trims = cartagena ? CARTAGENA_TRIMS : villa ? VILLA_TRIMS : villavo ? VILLAVO_TRIMS : puerto ? PUERTO_TRIMS : salento ? SALENTO_TRIMS : HOUSE_TRIMS;
   const wall = walls[Math.floor(rng() * walls.length)];

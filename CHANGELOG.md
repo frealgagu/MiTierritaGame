@@ -1,5 +1,18 @@
 # Registro de cambios
 
+## v3.52.0 — El Amazonas: Leticia
+- **🐬 Leticia**, la última zona del Amazonas, se abre al completar La Yanchama. Es el puerto de la triple frontera y no tiene fuente propia: cada estación espera lo suyo de otra zona, como en Buenaventura.
+  - la **Heladería de asaí** hace helados con las cajas de asaí del Asaizal;
+  - el **Restaurante de la ribera** sirve la cena con las cajas de ají negro del Ajizal;
+  - el **Hotel de la selva** recibe huéspedes con los recuerdos de la Yanchama;
+  - el **Mercado del puerto** sirve el almuerzo con el pirarucú al ají negro del Lago;
+  - las **Provisiones de la canoa** arman los canastos con el desayuno y el banquete de la Casabería;
+  - la **Salida a los delfines** lleva a los turistas a ver los delfines rosados.
+- **🚌 Seis rutas nuevas**, una desde cada zona del Amazonas, con sus carreteras en los dos mapas. Tiene los mismos números que Buenaventura.
+- Su persona es **Doña Graciela, la guía**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (del helado de asaí a la salida a ver los delfines).
+- **El mapa:** el pueblo de casas de colores con techo de zinc, ceibas, palmas de asaí y guacamayas; la heladería verde agua con el toldo morado, el restaurante con techo de palma, el hotel de madera de tres pisos, el mercado con sus puestos, la bodeguita de las provisiones y el muelle sobre el río negro, donde salta un delfín rosado.
+- El Amazonas ya tiene sus seis zonas; en la próxima versión llegan sus eventos, su álbum y sus logros.
+
 ## v3.51.0 — El Amazonas: La Yanchama
 - **🎭 La Yanchama**, la quinta zona del Amazonas, se abre al completar La Casabería: los Árboles de yanchama → el Remojo de corteza → el Golpeadero → los Pintores de yanchama → el Taller de máscaras → la Tienda de la Yanchama. La corteza se remoja en la quebrada, se golpea con el mazo hasta volverse tela, se pinta con jagua y achiote y se vuelve **máscara ticuna**, la de la fiesta de la Pelazón; la tienda vende el **Recuerdo del Amazonas**. Tiene los mismos números que el Werregue.
 - **🚌 Ruta del pirarucú salado** y **🚌 Ruta del moqueado:** salen del Lago hacia la Tienda de la Yanchama.

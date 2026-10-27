@@ -31,6 +31,8 @@ export const ZONE38 = {
   // El ají negro sale hacia El Lago por la Ruta del ají negro (v3.49).
   routes: {
     ajinegro: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Al Lago ➜' },
+    // Las cajas de ají negro salen hacia Leticia (v3.52).
+    cajas_aji: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Leticia ➜' },
   },
   next: 'lago',
 };

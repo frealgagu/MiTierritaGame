@@ -313,6 +313,14 @@ export const PRODUCTS = {
   ticuna_mask: { name: 'Máscara ticuna', zone: 'yanchama', value: 120000, icon: ICON.ticunaMask, color: 0xc0392b },
   recuerdo_amazonas: { name: 'Recuerdo del Amazonas', zone: 'yanchama', value: 1200000, icon: ICON.recuerdoAmazonas, color: 0x6d4c41 },
 
+  // Amazonas · Leticia (v3.52): mismos valores que Buenaventura.
+  helado_asai: { name: 'Helado de asaí', zone: 'leticia', value: 150000, icon: ICON.heladoAsai, color: 0x8e24aa },
+  cena_ribera: { name: 'Cena de la ribera', zone: 'leticia', value: 400000, icon: ICON.cenaRibera, color: 0xc97a32 },
+  noche_leticia: { name: 'Noche en Leticia', zone: 'leticia', value: 3200000, icon: ICON.nocheLeticia, color: 0x2e7d32 },
+  almuerzo_mercado: { name: 'Almuerzo del mercado', zone: 'leticia', value: 600000, icon: ICON.almuerzoMercado, color: 0xf4c430 },
+  provision_canoa: { name: 'Provisión de la canoa', zone: 'leticia', value: 2000000, icon: ICON.provisionCanoa, color: 0x8d6e4a },
+  excursion_delfines: { name: 'Salida a ver los delfines rosados', zone: 'leticia', value: 24000000, icon: ICON.delfines, color: 0xf48fb1 },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

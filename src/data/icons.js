@@ -264,6 +264,12 @@ export const ICON = {
   paintedCloth: '\uE102', // Tela pintada: la yanchama con los dibujos ticuna en negro de jagua y rojo de achiote, y el pincel
   ticunaMask: '\uE103', // Máscara ticuna: la máscara de yanchama pintada, con los ojos grandes, la boca y el pelo de fibra
   recuerdoAmazonas: '\uE104', // Recuerdo del Amazonas: la máscara ticuna y la yanchama pintada, con el pirarucú moqueado envuelto en hoja
+  heladoAsai: '\uE105', // Helado de asaí: el cono con dos bolas moradas de asaí, la galleta y la fariña por encima
+  cenaRibera: '\uE106', // Cena de la ribera: el plato con el pescado frito, el patacón, la ensalada y el frasquito de ají negro
+  nocheLeticia: '\uE107', // Noche en Leticia: la cabaña del hotel entre los árboles de la selva, con la luna sobre el río y los loros
+  almuerzoMercado: '\uE108', // Almuerzo del mercado: la posta de pirarucú con ají negro, el arroz, la fariña y el jugo de camu camu
+  provisionCanoa: '\uE109', // Provisión de la canoa: el canasto tejido con el casabe, las bolsas de asaí, la totuma y el racimo de plátano
+  delfines: '\uE10A', // Salida a ver los delfines rosados: el delfín rosado que salta del río negro, con la canoa de los turistas
 };
 
 export const ICON_FONT = 'Cafetal Icons';

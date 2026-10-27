@@ -3766,6 +3766,79 @@ def recuerdo_amazonas():
     return layers
 
 
+# ---------- Amazonas · Leticia (v3.52) ----------
+
+def helado_asai():
+    """Helado de asaí: el cono con dos bolas moradas de asaí, la galleta y la fariña por encima."""
+    layers = [(OUTLINE, ['M 34 52 L 66 52 L 50 96 Z']), ('#e0a95a', ['M 37.5 54.5 L 62.5 54.5 L 50 91 Z'])]
+    layers.append(('#b47a32', [rib(40 + k * 5, 55, 50 + k * 2, 88, 0.8) for k in range(-1, 4)] + [rib(60 - k * 5, 55, 50 - k * 2, 88, 0.8) for k in range(-1, 4)]))
+    for cx, cy, r in [(42, 46, 14), (58, 44, 14), (50, 28, 14)]:
+        layers += [(OUTLINE, [circle(cx, cy, r + 2.2)]), ('#6a1b9a', [circle(cx, cy, r)]), ('#9c4dcc', [circle(cx - r * 0.35, cy - r * 0.35, r * 0.35)])]
+    layers.append(('#e8d9a0', [circle(46, 20, 1.4), circle(54, 24, 1.2), circle(50, 30, 1.2), circle(40, 40, 1.2), circle(62, 38, 1.2)]))
+    layers += [(OUTLINE, [rect(64, 6, 10, 24, 20)]), ('#f3e3b8', [rect(65.5, 7.5, 7, 21, 20)])]
+    return layers
+
+
+def cena_ribera():
+    """Cena de la ribera: el plato con el pescado frito, el patacón, la ensalada y el frasquito de ají negro."""
+    layers = [(OUTLINE, [ellipse(46, 64, 42, 22)]), ('#ffffff', [ellipse(46, 64, 39.5, 19.5)])]
+    layers += fish_shape(40, 60, 46, 18, '#c9862e', '#f0c27a', -6)
+    layers += [('#43a047', [ellipse(66, 70, 9, 4)]), ('#e53935', [circle(64, 68, 2.4), circle(70, 72, 2)])]
+    layers += [(OUTLINE, [ellipse(24, 74, 8, 4)]), ('#f4c430', [ellipse(24, 74, 6.5, 3)])]
+    layers += [(OUTLINE, [rect(76, 26, 16, 24)]), ('#3e2723', [rect(77.5, 30, 13, 18.5)]), ('#8d6e4a', [rect(77.5, 27.5, 13, 3.5)])]
+    return layers
+
+
+def noche_leticia():
+    """Noche en Leticia: la cabaña del hotel entre los árboles de la selva, con la luna sobre el río y los loros."""
+    layers = [('#1a2a4a', [rect(4, 4, 92, 92)]), ('#fff8e1', [circle(74, 20, 9)]), ('#1a2a4a', [circle(78, 17, 7)])]
+    layers.append(('#ffffff', [circle(20, 14, 1), circle(44, 22, 1), circle(56, 10, 1)]))
+    layers.append(('#3b5a4a', [rect(4, 74, 92, 22)]))
+    layers.append(('#fff8e180', [rect(66, 78, 10, 2), rect(72, 86, 6, 2)]))
+    layers += [('#1f4a2a', [circle(10, 50, 14), circle(90, 52, 14), circle(20, 38, 10), circle(84, 40, 10)])]
+    layers += [(OUTLINE, [rect(26, 46, 44, 26)]), ('#a1887f', [rect(28, 48, 40, 22)]), ('#6d4c41', [rect(24, 70, 48, 4)])]
+    layers += [(OUTLINE, ['M 20 48 L 48 26 L 76 48 Z']), ('#c9a96b', ['M 24 46.5 L 48 29 L 72 46.5 Z'])]
+    for wx in (32, 56):
+        layers.append(('#ffe082', [rect(wx, 54, 8, 8)]))
+    layers += [('#4e342e', [rect(44, 56, 8, 14)])]
+    for x, y in [(30, 18), (40, 12)]:
+        layers += [('#e53935', [ellipse(x, y, 4, 1.6)]), ('#1e88e5', [ellipse(x + 3, y, 2, 1)])]
+    return layers
+
+
+def almuerzo_mercado():
+    """Almuerzo del mercado: la posta de pirarucú con ají negro, el arroz, la fariña y el jugo de camu camu."""
+    layers = [(OUTLINE, [ellipse(44, 64, 40, 22)]), ('#ffffff', [ellipse(44, 64, 37.5, 19.5)])]
+    layers += [(OUTLINE, [rect(18, 52, 28, 18, -6)]), ('#c97a32', [rect(20, 54, 24, 14, -6)]), ('#3e2723', ['M 22 58 Q 32 52 42 56 Q 34 62 24 62 Z'])]
+    layers += [(OUTLINE, [ellipse(56, 66, 12, 6)]), ('#fafafa', [ellipse(56, 66, 10.5, 4.6)])]
+    layers += [(OUTLINE, [ellipse(46, 78, 9, 4)]), ('#e8d9a0', [ellipse(46, 78, 7.5, 3)])]
+    layers += [(OUTLINE, ['M 72 26 L 92 26 L 89 74 L 75 74 Z']), ('#e8f6ff', ['M 74.5 28.5 L 89.5 28.5 L 86.8 71.5 L 77.2 71.5 Z']), ('#d81b60', ['M 75 38 L 89 38 L 86.8 71.5 L 77.2 71.5 Z'])]
+    return layers
+
+
+def provision_canoa():
+    """Provisión de la canoa: el canasto tejido con el casabe, las bolsas de asaí, la totuma y el racimo de plátano."""
+    layers = [(OUTLINE, ['M 12 46 L 88 46 L 80 92 L 20 92 Z']), ('#c9a96b', ['M 15 48.5 L 85 48.5 L 77.8 89.5 L 22.2 89.5 Z'])]
+    layers.append(('#a07a3e', [rib(16 + k * 2, 56 + k * 8, 84 - k * 2, 56 + k * 8, 1) for k in range(5)]))
+    layers += [(OUTLINE, [ellipse(34, 40, 18, 7)]), ('#f3e3b8', [ellipse(34, 40, 16, 5.5)])]
+    layers += [(OUTLINE, ['M 52 18 L 70 18 L 72 46 L 50 46 Z']), ('#7b1fa2', ['M 54 20.5 L 68 20.5 L 69.6 43.5 L 52.4 43.5 Z']), ('#e1bee7', [rect(54, 20.5, 14, 4)])]
+    layers += [(OUTLINE, ['M 72 34 Q 82 52 92 34 Z']), ('#6d4c41', ['M 74.5 36 Q 82 48 89.5 36 Z'])]
+    layers += [(OUTLINE, [rib(30, 18, 42, 8, 6)]), ('#9ccc65', [rib(30, 18, 42, 8, 4)])]
+    return layers
+
+
+def delfines():
+    """Salida a ver los delfines rosados: el delfín rosado que salta del río negro, con la canoa de los turistas."""
+    layers = [('#3e5a50', [rect(4, 70, 92, 26)]), ('#7fa69a', [rect(4, 70, 92, 3)])]
+    body = 'M 16 70 Q 20 40 46 30 Q 64 24 80 30 L 92 28 L 84 36 Q 70 34 58 42 Q 40 52 34 70 Z'
+    layers += [(OUTLINE, [body]), ('#f48fb1', ['M 19 68 Q 23 42 47 33 Q 63 27.5 78 32.5 L 86 31 L 81.5 35.5 Q 69 33 56.5 40 Q 38 50 31.5 68 Z'])]
+    layers += [('#f8bbd0', ['M 26 64 Q 32 46 48 38 Q 40 50 36 64 Z']), ('#263238', [circle(72, 32, 1.6)])]
+    layers += [(OUTLINE, ['M 44 34 Q 40 24 46 16 Q 50 26 52 32 Z']), ('#ec6f9b', ['M 45.5 33 Q 42.5 25 46 19 Q 49 27 50.5 31.5 Z'])]
+    layers += [('#ffffff', ['M 10 70 Q 16 62 22 70 Z', 'M 30 70 Q 36 64 42 70 Z']), ('#e3f2fd', [circle(14, 64, 2), circle(38, 62, 1.6)])]
+    layers += [(OUTLINE, ['M 58 78 Q 76 88 96 78 L 92 84 Q 76 92 62 84 Z']), ('#8d5a32', ['M 61 79.5 Q 76 87 93 79.5 L 90 82.5 Q 76 89 64 82.5 Z']), ('#ff6f00', [circle(70, 76, 2.4), circle(80, 76, 2.4)])]
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -4028,6 +4101,12 @@ ICONS = [
     (0xE102, 'painted_cloth', painted_cloth),
     (0xE103, 'ticuna_mask', ticuna_mask),
     (0xE104, 'recuerdo_amazonas', recuerdo_amazonas),
+    (0xE105, 'helado_asai', helado_asai),
+    (0xE106, 'cena_ribera', cena_ribera),
+    (0xE107, 'noche_leticia', noche_leticia),
+    (0xE108, 'almuerzo_mercado', almuerzo_mercado),
+    (0xE109, 'provision_canoa', provision_canoa),
+    (0xE10A, 'delfines', delfines),
 ]
 
 

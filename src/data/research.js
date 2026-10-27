@@ -548,6 +548,18 @@ export const RESEARCH = [
   { zone: 'yanchama', id: 'arte_ticuna', name: 'Arte ticuna', icon: '🏅', desc: 'Todo lo que vende la Yanchama vale un 50 % más.', cost: 400000000, requires: 'mask_maker', effect: { type: 'zoneValue', target: 'yanchama', mult: 1.5 } },
   { zone: 'yanchama', id: 'maestria_yanchama', name: 'Maestría: Yanchama', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'yanchama', mult: 4 } },
   { zone: 'yanchama', id: 'supremacia_yanchama', name: 'Supremacía: Yanchama', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'yanchama', mult: 8 } },
+
+  // Amazonas · Leticia (v3.52): las mismas de Buenaventura, en la triple frontera.
+  { zone: 'leticia', id: 'heladeros', name: 'Heladeros', icon: ICON.heladoAsai, desc: 'La Heladería de asaí hace el doble de helados (pide el doble de cajas al Asaizal).', cost: 1000000000, requires: 'restaurante_ribera', effect: { type: 'stationSpeed', target: 'heladeria_asai', mult: 2 } },
+  { zone: 'leticia', id: 'mesas_ribera', name: 'Mesas en la ribera', icon: ICON.cenaRibera, desc: 'El Restaurante de la ribera atiende el doble.', cost: 1500000000, requires: 'restaurante_ribera', effect: { type: 'stationSpeed', target: 'restaurante_ribera', mult: 2 } },
+  { zone: 'leticia', id: 'bote_turismo', name: 'Bote de turismo', icon: '🚤', desc: 'El despacho de Leticia lleva el doble por viaje.', cost: 2500000000, requires: 'hotel_selva', effect: { type: 'dispatchCapacity', target: 'leticia', mult: 2 } },
+  { zone: 'leticia', id: 'cabanas_selva', name: 'Cabañas en la selva', icon: '🌳', desc: 'El Hotel de la selva recibe el doble de huéspedes.', cost: 4000000000, requires: 'hotel_selva', effect: { type: 'stationSpeed', target: 'hotel_selva', mult: 2 } },
+  { zone: 'leticia', id: 'puestos_mercado', name: 'Puestos del mercado', icon: ICON.almuerzoMercado, desc: 'El Mercado del puerto sirve el doble.', cost: 8000000000, requires: 'mercado_puerto', effect: { type: 'stationSpeed', target: 'mercado_puerto', mult: 2 } },
+  { zone: 'leticia', id: 'canoas_grandes', name: 'Canoas grandes', icon: ICON.provisionCanoa, desc: 'Las Provisiones de la canoa se arman el doble de rápido.', cost: 15000000000, requires: 'provisiones_canoa', effect: { type: 'stationSpeed', target: 'provisiones_canoa', mult: 2 } },
+  { zone: 'leticia', id: 'guias_delfines', name: 'Guías de delfines', icon: '🐬', desc: 'La Salida a los delfines despacha el doble de excursiones.', cost: 40000000000, requires: 'salida_delfines', effect: { type: 'stationSpeed', target: 'salida_delfines', mult: 2 } },
+  { zone: 'leticia', id: 'triple_frontera', name: 'Triple frontera', icon: '🏅', desc: 'Todo lo que vende Leticia vale un 50 % más.', cost: 25000000000, requires: 'provisiones_canoa', effect: { type: 'zoneValue', target: 'leticia', mult: 1.5 } },
+  { zone: 'leticia', id: 'maestria_leticia', name: 'Maestría: Leticia', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'leticia', mult: 4 } },
+  { zone: 'leticia', id: 'supremacia_leticia', name: 'Supremacía: Leticia', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'leticia', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

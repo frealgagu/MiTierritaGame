@@ -38,6 +38,8 @@ export const ZONE39 = {
     // El pirarucú salado y el moqueado salen hacia la Yanchama (v3.51).
     pirarucus_salados: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Pirarucú salado a la Yanchama ⬇' },
     moqueados: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Moqueado ⬇' },
+    // El pirarucú al ají negro sale hacia Leticia (v3.52).
+    platos_pirarucu: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'Pirarucú a Leticia ➜' },
   },
   unlockedBy: 'ajizal',
   next: 'casaberia',

@@ -61,6 +61,7 @@ const VICTORY = {
   lago: { title: '¡Pirarucú para todo el río!', text: 'Completaste <b>El Lago</b>, en el Amazonas. Seis mil platos de pirarucú al ají negro, con el ají que llegó del Ajizal.', stat: (s) => `Platos vendidos: ${formatNumber(s.stats.sold.pirarucu_aji ?? 0)}` },
   casaberia: { title: '¡Casabe para toda la maloca!', text: 'Completaste <b>La Casabería</b>, en el Amazonas. Cuatro mil banquetes de la maloca, con el asaí del Asaizal y el pirarucú del Lago.', stat: (s) => `Banquetes servidos: ${formatNumber(s.stats.sold.banquete_maloca ?? 0)}` },
   yanchama: { title: '¡Máscaras para toda la selva!', text: 'Completaste <b>La Yanchama</b>, en el Amazonas. Seis mil recuerdos del Amazonas: máscaras ticuna con el pirarucú salado y moqueado del Lago.', stat: (s) => `Recuerdos vendidos: ${formatNumber(s.stats.sold.recuerdo_amazonas ?? 0)}` },
+  leticia: { title: '¡El Amazonas, de punta a punta!', text: 'Completaste <b>Leticia</b> y el Amazonas. Siete mil salidas a ver los delfines rosados, con el asaí, el ají negro, el pirarucú, el casabe y las máscaras de todas tus zonas.', stat: (s) => `Salidas a ver los delfines: ${formatNumber(s.stats.sold.excursion_delfines ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

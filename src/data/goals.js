@@ -937,5 +937,26 @@ const YANCHAMA = [
   { id: 'ay_final', type: 'sold', product: 'recuerdo_amazonas', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA };
+// Amazonas · Leticia (v3.52): la misma lista que Buenaventura.
+const LETICIA = [
+  { id: 'av01', type: 'imported', product: 'asai_box', amount: 50, reward: 5000000 },
+  { id: 'av02', type: 'level', target: 'heladeria_asai', level: 10, reward: 10000000 },
+  { id: 'av03', type: 'unlock', station: 'restaurante_ribera', reward: 20000000 },
+  { id: 'av04', type: 'level', target: 'route:cajas_asai', level: 10, reward: 40000000 },
+  { id: 'av05', type: 'produced', product: 'cena_ribera', amount: 200, reward: 60000000 },
+  { id: 'av07', type: 'unlock', station: 'hotel_selva', reward: 150000000 },
+  { id: 'av08', type: 'level', target: 'dispatch:leticia', level: 10, reward: 200000000 },
+  { id: 'av09', type: 'sold', product: 'noche_leticia', amount: 300, reward: 300000000 },
+  { id: 'av10', type: 'unlock', station: 'mercado_puerto', reward: 300000000 },
+  { id: 'av11', type: 'imported', product: 'pirarucu_aji', amount: 300, reward: 400000000 },
+  { id: 'av12', type: 'unlock', station: 'provisiones_canoa', reward: 500000000 },
+  { id: 'av13', type: 'imported', product: 'banquete_maloca', amount: 300, reward: 800000000 },
+  { id: 'av14', type: 'unlock', station: 'salida_delfines', reward: 800000000 },
+  { id: 'av15', type: 'allLevels', zone: 'leticia', level: 25, reward: 1500000000 },
+  { id: 'av06', type: 'research', research: 'heladeros', reward: 1500000000 },
+  { id: 'av16', type: 'sold', product: 'excursion_delfines', amount: 100, reward: 2500000000 },
+  { id: 'av_final', type: 'sold', product: 'excursion_delfines', amount: 7000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

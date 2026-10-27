@@ -385,6 +385,17 @@ export const STATIONS = [
   { id: 'mask_maker', zone: 'yanchama', name: 'Taller de máscaras', icon: ICON.ticunaMask, in: { painted_cloth: 1 }, out: { ticuna_mask: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.51' },
   { id: 'tienda_yanchama', zone: 'yanchama', name: 'Tienda de la Yanchama', icon: ICON.recuerdoAmazonas, in: { ticuna_mask: 4 }, imports: [{ product: 'salted_pirarucu', perCycle: 1, route: 'pirarucus_salados' }, { product: 'moqueado', perCycle: 1, route: 'moqueados' }], out: { recuerdo_amazonas: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.51' },
 
+  // Amazonas · Leticia (v3.52): el puerto de la triple frontera, donde todo termina. La Heladería de asaí recibe
+  // las cajas del Asaizal; el Restaurante de la ribera, el ají negro del Ajizal; el Hotel de la selva, los
+  // recuerdos de la Yanchama; el Mercado del puerto, el pirarucú al ají negro del Lago, y las Provisiones de la
+  // canoa, el desayuno y el banquete de la Casabería. Mismos números que Buenaventura.
+  { id: 'heladeria_asai', zone: 'leticia', name: 'Heladería de asaí', icon: ICON.heladoAsai, imports: [{ product: 'asai_box', perCycle: 1, route: 'cajas_asai' }], out: { helado_asai: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.52' },
+  { id: 'restaurante_ribera', zone: 'leticia', name: 'Restaurante de la ribera', icon: ICON.cenaRibera, in: { helado_asai: 1 }, imports: [{ product: 'aji_box', perCycle: 1, route: 'cajas_aji' }], out: { cena_ribera: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.52' },
+  { id: 'hotel_selva', zone: 'leticia', name: 'Hotel de la selva', icon: ICON.nocheLeticia, in: { cena_ribera: 2 }, imports: [{ product: 'recuerdo_amazonas', perCycle: 1, route: 'recuerdos_amazonas' }], out: { noche_leticia: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.52' },
+  { id: 'mercado_puerto', zone: 'leticia', name: 'Mercado del puerto', icon: ICON.almuerzoMercado, in: { helado_asai: 1 }, imports: [{ product: 'pirarucu_aji', perCycle: 1, route: 'platos_pirarucu' }], out: { almuerzo_mercado: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '3.52' },
+  { id: 'provisiones_canoa', zone: 'leticia', name: 'Provisiones de la canoa', icon: ICON.provisionCanoa, in: { almuerzo_mercado: 1 }, imports: [{ product: 'desayuno_amazonico', perCycle: 1, route: 'desayunos_amazonicos' }, { product: 'banquete_maloca', perCycle: 1, route: 'banquetes_maloca' }], out: { provision_canoa: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.52' },
+  { id: 'salida_delfines', zone: 'leticia', name: 'Salida a los delfines', icon: ICON.delfines, in: { provision_canoa: 4 }, out: { excursion_delfines: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.52' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

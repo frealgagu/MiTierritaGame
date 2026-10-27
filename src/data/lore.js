@@ -297,6 +297,13 @@ export const FACTS = {
   cloth_painter: ['Se pinta con el negro de la jagua y el rojo del achiote.'],
   mask_maker: ['Los ticuna usan máscaras de yanchama en la fiesta de la Pelazón.', 'Las máscaras representan a los animales y los espíritus de la selva.'],
   tienda_yanchama: ['La yanchama pintada se vende en Leticia, Puerto Nariño y Macedonia.'],
+  // Amazonas · Leticia (v3.52)
+  heladeria_asai: ['Leticia es la capital del Amazonas y queda en la triple frontera.'],
+  restaurante_ribera: ['Desde Leticia se camina a Tabatinga, en Brasil, sin pasar aduana.'],
+  hotel_selva: ['Cada tarde miles de loros llegan a dormir al parque Santander.'],
+  mercado_puerto: ['En el mercado del puerto se vende pirarucú, fariña y frutas de la selva.'],
+  provisiones_canoa: ['De Leticia salen las canoas a Puerto Nariño y a la isla de los Micos.'],
+  salida_delfines: ['El delfín rosado vive en el río Amazonas y en sus lagos.', 'Es rosado por los vasos de sangre que tiene bajo la piel.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -342,6 +349,7 @@ export const PEOPLE = {
   lago: { icon: '🧔🏽', name: 'Don Jacinto', role: 'el pescador' },
   casaberia: { icon: '👵🏽', name: 'Abuela Tránsito', role: 'la casabera' },
   yanchama: { icon: '🧑🏽', name: 'Don Eliseo', role: 'el artesano ticuna' },
+  leticia: { icon: '👩🏽', name: 'Doña Graciela', role: 'la guía' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -387,6 +395,7 @@ export const WELCOME = {
   lago: '¡Bienvenido al Lago, paisano! Aquí salimos en canoa por el pirarucú, el gigante de los ríos.',
   casaberia: '¡Bienvenido a la Casabería, mijo! De la yuca brava sale el casabe: el pan de la selva.',
   yanchama: '¡Bienvenido a la Yanchama, paisano! De la corteza del árbol sacamos tela, y de la tela, máscaras.',
+  leticia: '¡Bienvenido a Leticia, paisano! Aquí, en la triple frontera, termina el viaje por el Amazonas.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».
