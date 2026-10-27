@@ -175,3 +175,22 @@ test('el mapa de Colombia tiene todas las zonas y cada región sus departamentos
   for (const r of REGIONS) assert.ok(DEPARTMENTS.some((d) => d.region === r.id), `${r.id} tiene departamentos`);
   assert.equal(new Set(DEPARTMENTS.map((d) => d.id)).size, DEPARTMENTS.length);
 });
+
+test('los objetivos de vender algo que otra estación consume cuentan lo producido (v3.61)', async () => {
+  const { goalProgress, goalText, countsProduced } = await import('../src/sim/goals.js');
+  const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
+  const game = new Game();
+  const s = game.state;
+  s.coins = 1e12;
+  const g01 = GOALS_BY_ZONE.finca[0]; // vender 20 cerezas, que se lleva el Beneficiadero
+  assert.ok(countsProduced(g01));
+  assert.match(goalText(g01), /^Produce 20/);
+  // Con el Beneficiadero construido y al mismo ritmo, casi nada llega a la bodega, pero el objetivo avanza.
+  game.unlock('wetmill');
+  for (let t = 0; t < 120; t += 0.1) game.step(0.1);
+  assert.ok((s.stats.sold.cherry ?? 0) < 20, `vendidas: ${s.stats.sold.cherry}`);
+  assert.ok(goalProgress(s, g01).done);
+  // Los de productos que van a la bodega siguen contando lo vendido.
+  const last = GOALS_BY_ZONE.finca.find((g) => g.final);
+  assert.ok(!countsProduced(last));
+});

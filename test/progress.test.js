@@ -111,7 +111,7 @@ test('los objetivos se cobran en orden y dan su recompensa', () => {
   const game = new Game();
   assert.deepEqual(activeGoals(game.state).map((g) => g.id), ['g01', 'g02', 'g03']);
   assert.equal(game.claimGoal('g01'), false); // aún no se cumple
-  game.state.stats.sold.cherry = 25;
+  game.state.stats.produced.cherry = 25; // (v3.61: la cereza se la lleva el Beneficiadero: cuenta lo producido)
   assert.ok(goalProgress(game.state, GOALS[0]).done);
   const before = game.state.coins;
   assert.ok(game.claimGoal('g01'));

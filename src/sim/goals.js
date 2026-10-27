@@ -2,7 +2,7 @@ import { GOALS, GOALS_BY_ZONE } from '../data/goals.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { createSourceState } from './production.js';
 import { sourceOf } from './chain.js';
-import { STATIONS_BY_ID, DISPATCH } from '../data/stations.js';
+import { STATIONS, STATIONS_BY_ID, DISPATCH } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
 import { formatNumber } from '../core/format.js';
@@ -28,13 +28,19 @@ function targetName(target) {
   return part === 'transport' ? `los arrieros del ${STATIONS_BY_ID[id].name}` : STATIONS_BY_ID[id].name;
 }
 
+// Productos que otra estación consume (la cereza, que va al Beneficiadero; el sombrero vueltiao, al Parador).
+// Un objetivo de «vender» uno de estos (v3.61) cuenta lo producido: con la estación siguiente construida casi
+// nunca llega a la bodega (solo lo que se desvía) y el objetivo podía quedarse sin avanzar.
+const CONSUMED = new Set(STATIONS.flatMap((s) => Object.keys(s.in ?? {})));
+export const countsProduced = (goal) => goal.type === 'sold' && CONSUMED.has(goal.product);
+
 // Progreso de un objetivo: { current, target, done }.
 export function goalProgress(state, goal) {
   let current = 0;
   let target = 1;
   switch (goal.type) {
     case 'sold':
-      current = state.stats.sold[goal.product] ?? 0;
+      current = (countsProduced(goal) ? state.stats.produced : state.stats.sold)[goal.product] ?? 0;
       target = goal.amount;
       break;
     case 'produced':
@@ -81,6 +87,7 @@ export function goalProgress(state, goal) {
 export function goalText(goal) {
   switch (goal.type) {
     case 'sold':
+      if (countsProduced(goal)) return `Produce ${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()}`;
       return `Vende ${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()}`;
     case 'produced':
       return `Produce ${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()}`;

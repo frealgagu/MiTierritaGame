@@ -610,6 +610,7 @@ export const COST_GROWTH = 1.15;
 | v3.58 ✅ | La Compostera sin construir: la Finca no está al máximo («Siguiente: construye Compostera») | Claridad |
 | v3.59 ✅ | Selector de zonas: cada región en un panel sombreado, con sus zonas adentro y más angostas | Navegación |
 | v3.60 ✅ | Mapa de Colombia en el selector de zonas: el país con las regiones de color, acercamiento a cada región con sus zonas en sus pueblos, y un muñequito que camina a la zona elegida (`src/ui/ZoneMap.js`, `src/data/colombiaMap.js` generado por `tools/geo/build_map.py`, `src/data/zoneGeo.js`) | Navegación |
+| v3.61 ✅ | Los objetivos de vender algo que otra estación consume cuentan lo producido (dicen «Produce»): con esa estación construida, el objetivo ya no se queda quieto | Claridad |
 | v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía) | Comodidad |
 
 **Cómo se conectan las zonas:** ver §4b.

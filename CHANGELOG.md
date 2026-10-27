@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v3.61.0 — Objetivos que siempre se pueden cumplir
+- Había 42 objetivos de **vender** algo que otra estación de la zona se lleva: la cereza que va al Beneficiadero, la leche al Pasteurizador, el sombrero vueltiao al Parador, la máscara ticuna a la Tienda, etc. Si se construía esa estación antes de cumplir el objetivo, el producto casi nunca llegaba a la bodega (solo lo que se desviaba) y el objetivo podía quedarse quieto para siempre.
+- Ahora esos objetivos dicen **Produce** y cuentan lo producido, que siempre avanza. Los que piden vender algo que va a la bodega siguen igual. En las partidas que ya iban, cuenta todo lo producido desde el comienzo de la partida.
+
 ## v3.60.0 — El mapa de Colombia
 - **🗺️ Ver el mapa de Colombia:** en el selector de zonas, un botón abre el mapa en grande. Para volver a la lista, se cierra.
   - Primero se ve el país, con sus departamentos y cada región del juego de su color. Las que todavía no se abren salen en gris, con 🔒, y un 📍 marca dónde estás.
