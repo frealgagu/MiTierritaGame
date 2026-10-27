@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v3.60.0 — El mapa de Colombia
+- **🗺️ Ver el mapa de Colombia:** en el selector de zonas, un botón abre el mapa en grande. Para volver a la lista, se cierra.
+  - Primero se ve el país, con sus departamentos y cada región del juego de su color. Las que todavía no se abren salen en gris, con 🔒, y un 📍 marca dónde estás.
+  - Al tocar una región, el mapa se acerca y muestra sus zonas, cada una en el pueblo que la inspira (Salento, Barichara, Cartagena, Villa de Leyva, Villavicencio, Buenaventura, Leticia…). Las zonas van unidas por el camino punteado, en orden, con su estado. El botón **⬅ Colombia** vuelve al país.
+  - Al elegir otra zona, **un muñequito camina hasta allá**: por el mapa de la región si es de la misma, o por el mapa del país si es de otra. Al llegar, se va a la zona.
+- El mapa se hizo con el Marco Geoestadístico Nacional 2018 del DANE (sin San Andrés, que queda muy lejos para esta escala).
+
 ## v3.59.0 — Las regiones en su panel
 - **🗺️ Zonas:** cada región va en un panel sombreado, con su nombre arriba y sus zonas adentro, un poco más angostas y unidas al panel por una rayita: ya no se confunde a qué región pertenece cada zona.
 

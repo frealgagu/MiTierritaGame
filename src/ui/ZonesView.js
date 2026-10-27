@@ -3,6 +3,8 @@ import { ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS } from '../data/regions.js';
 import { analyzeChain } from '../sim/analysis.js';
 import { regionState } from '../sim/regions.js';
+import { ZoneMap } from './ZoneMap.js';
+import { toast } from './toast.js';
 
 // Selector de zonas (v3.0: por regiones): cuáles están abiertas, cuánto rinde cada una y a cuál ir.
 // El botón 🗺️ aparece cuando hay más de una zona abierta (en cualquier región).
@@ -17,6 +19,25 @@ export class ZonesView {
     this.body = document.getElementById('zones-body');
     this.button = document.getElementById('zones-btn');
     this.badge = document.getElementById('zones-badge');
+    // El mapa de Colombia (v3.60): en grande, en su propia ventana; al cerrarlo se vuelve a la lista.
+    this.mapModal = document.getElementById('zones-map-modal');
+    this.map = new ZoneMap(document.getElementById('zones-map'), {
+      root,
+      getZone,
+      say: (text) => toast(text, 2500),
+      onGo: (z) => {
+        this.mapModal.hidden = true;
+        this.close();
+        this.onGo(z);
+      },
+    });
+    document.getElementById('zones-map-btn').addEventListener('click', () => this.openMap());
+    document.getElementById('zones-map-close').addEventListener('click', () => {
+      if (this.map.busy) return;
+      this.mapModal.hidden = true;
+      this.open();
+    });
+    this.mapModal.addEventListener('click', (e) => e.target === this.mapModal && !this.map.busy && (this.mapModal.hidden = true));
     this.button.addEventListener('click', () => this.open());
     document.getElementById('zones-close').addEventListener('click', () => this.close());
     this.modal.addEventListener('click', (e) => {
@@ -41,6 +62,12 @@ export class ZonesView {
     this.modal.hidden = false;
     this.html = null;
     this.update();
+  }
+
+  openMap() {
+    this.close();
+    this.mapModal.hidden = false;
+    this.map.show();
   }
 
   close() {

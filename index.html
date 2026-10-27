@@ -137,7 +137,19 @@
           <button id="zones-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>
         <p class="chain-help">Todas las zonas abiertas producen a la vez; aquí eliges cuál ver.</p>
+        <button id="zones-map-btn" class="btn zones-map-open">🗺️ Ver el mapa de Colombia</button>
         <div id="zones-body" class="list-body"></div>
+      </div>
+    </div>
+
+    <!-- El mapa de Colombia (v3.60): en grande, aparte de la lista; al cerrarlo se vuelve a la lista. -->
+    <div id="zones-map-modal" class="modal" hidden>
+      <div class="modal-card map-card">
+        <div class="chain-head">
+          <h2>🗺️ Colombia</h2>
+          <button id="zones-map-close" class="close-btn" aria-label="Volver a la lista">✕</button>
+        </div>
+        <div id="zones-map" class="zones-map"></div>
       </div>
     </div>
     </div>

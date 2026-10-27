@@ -162,3 +162,16 @@ test('la Compostera sin construir: la Finca no está al máximo (v3.58)', async 
   game.unlock('composter');
   assert.equal(nextSideToUnlock(s, 'finca'), null);
 });
+
+test('el mapa de Colombia tiene todas las zonas y cada región sus departamentos (v3.60)', async () => {
+  const { ZONE_LIST } = await import('../src/data/zones/index.js');
+  const { ZONE_GEO } = await import('../src/data/zoneGeo.js');
+  const { DEPARTMENTS } = await import('../src/data/colombiaMap.js');
+  const { REGIONS } = await import('../src/data/regions.js');
+  for (const zone of ZONE_LIST) {
+    const [lat, lon] = ZONE_GEO[zone.id] ?? [];
+    assert.ok(lat > -5 && lat < 13 && lon > -80 && lon < -66, `${zone.id} en Colombia`);
+  }
+  for (const r of REGIONS) assert.ok(DEPARTMENTS.some((d) => d.region === r.id), `${r.id} tiene departamentos`);
+  assert.equal(new Set(DEPARTMENTS.map((d) => d.id)).size, DEPARTMENTS.length);
+});

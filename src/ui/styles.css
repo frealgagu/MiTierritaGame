@@ -655,3 +655,26 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .list-foot { margin-top: 10px; }
 .list-foot:empty { display: none; }
 .btn.bulk { display: block; width: 100%; padding: 10px 12px; font-size: 0.95rem; }
+
+/* El mapa de Colombia del selector de zonas (v3.60): en su propia ventana, casi a pantalla completa. */
+.zones-map-open { width: 100%; justify-content: center; margin-top: 6px; }
+.map-card { width: min(980px, 100%); height: calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); max-height: none; display: flex; flex-direction: column; padding: 14px; }
+.zones-map { position: relative; flex: 1 1 auto; min-height: 0; margin-top: 4px; border: 2px solid rgba(58, 36, 24, 0.18); border-radius: 14px; background: #bfe3ef; overflow: hidden; }
+.zones-map-svg { display: block; width: 100%; height: 100%; touch-action: manipulation; }
+.zones-map-back { position: absolute; top: 8px; left: 8px; z-index: 1; }
+.zones-map-dept { stroke: #fffaf0; stroke-width: 0.8; transition: opacity 0.4s; }
+.zones-map-dept.pick { cursor: pointer; }
+.zones-map-dept.dim { opacity: 0.35; }
+.zones-map-label { cursor: pointer; }
+.zones-map-label .name, .zones-map-zone .name { font-weight: 700; fill: #3a2418; paint-order: stroke; stroke: #fffaf0; stroke-linejoin: round; }
+.zones-map-label.locked { opacity: 0.6; }
+.zones-map-zone { cursor: pointer; }
+.zones-map-zone .dot { fill: #fffaf0; stroke: #3a2418; }
+.zones-map-zone.done .dot { fill: #e8f5e0; }
+.zones-map-zone.here .dot { fill: #fff3b0; }
+.zones-map-zone .ring { fill: none; stroke: #e07a1f; stroke-width: 0.6; animation: zones-ring 1.4s ease-in-out infinite; }
+.zones-map-zone.locked { opacity: 0.55; }
+.zones-map-road { fill: none; stroke: #7a5230; stroke-linecap: round; opacity: 0.75; }
+.zones-map-walker .shadow { fill: rgba(0, 0, 0, 0.25); }
+@keyframes zones-ring { 50% { opacity: 0.2; } }
+.list-body[hidden] { display: none; }
