@@ -123,7 +123,7 @@ export class FarmView extends StationView {
 
   update(dt, t) {
     super.update(dt, t);
-    if ((this.theme === 'cienaga' || this.theme === 'bay') && this.boats) this.drawBoats(t);
+    if ((this.theme === 'cienaga' || this.theme === 'bay' || this.theme === 'lake') && this.boats) this.drawBoats(t);
     if (this.theme === 'mangrove' && this.pickers) this.drawPickers(t);
     if (!this.def.harvest) return;
     if (!this.flyers) this.addChild((this.flyers = new Graphics()));
@@ -159,8 +159,8 @@ export class FarmView extends StationView {
       this.drawMangrove(g, tier, rng);
       return;
     }
-    // La Bahía (v3.40): el mar, con las mismas canoas de pescadores de la Ciénaga.
-    if (this.theme === 'cienaga' || this.theme === 'bay') {
+    // La Bahía (v3.40) y El Lago (v3.49): el agua, con las mismas canoas de pescadores de la Ciénaga.
+    if (this.theme === 'cienaga' || this.theme === 'bay' || this.theme === 'lake') {
       this.drawLagoon(g, tier, rng);
       return;
     }

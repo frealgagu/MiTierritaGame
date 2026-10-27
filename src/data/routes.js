@@ -1087,6 +1087,23 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.43',
   },
+  // Amazonas (v3.49): el ají negro del Ajizal, para la Cocina del pirarucú del Lago.
+  {
+    id: 'ajinegro',
+    name: 'Ruta del ají negro',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'aji_negro',
+    from: 'ajizal',
+    to: 'lago',
+    stations: ['pirarucu_kitchen'],
+    tab: 'Ají negro',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 1000,
+    growth: 1.15,
+    release: '3.49',
+  },
 ];
 
 export const ROUTES_BY_ID = Object.fromEntries(ROUTES.map((r) => [r.id, r]));

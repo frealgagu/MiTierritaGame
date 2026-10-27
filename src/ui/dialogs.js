@@ -58,6 +58,7 @@ const VICTORY = {
   buenaventura: { title: '¡La Costa Pacífica, de punta a punta!', text: 'Completaste <b>Buenaventura</b> y la Costa Pacífica. Siete mil salidas a ver las ballenas, con los patacones, el aliño, el pescado, la piangua y el werregue de todas tus zonas.', stat: (s) => `Salidas a ver las ballenas: ${formatNumber(s.stats.sold.excursion_ballenas ?? 0)}` },
   asaizal: { title: '¡Asaí para toda la selva!', text: 'Completaste <b>El Asaizal</b>, en el Amazonas. Dos mil cajas de asaí, del racimo a la bolsa.', stat: (s) => `Cajas de asaí vendidas: ${formatNumber(s.stats.sold.asai_box ?? 0)}` },
   ajizal: { title: '¡Ají negro para toda la selva!', text: 'Completaste <b>El Ajizal</b>, en el Amazonas. Seis mil cajas de ají negro, de la chagra al frasco.', stat: (s) => `Cajas de ají negro vendidas: ${formatNumber(s.stats.sold.aji_box ?? 0)}` },
+  lago: { title: '¡Pirarucú para todo el río!', text: 'Completaste <b>El Lago</b>, en el Amazonas. Seis mil platos de pirarucú al ají negro, con el ají que llegó del Ajizal.', stat: (s) => `Platos vendidos: ${formatNumber(s.stats.sold.pirarucu_aji ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

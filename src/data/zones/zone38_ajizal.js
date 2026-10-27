@@ -28,5 +28,9 @@ export const ZONE38 = {
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
   unlockedBy: 'asaizal', // se abre al completar El Asaizal
+  // El ají negro sale hacia El Lago por la Ruta del ají negro (v3.49).
+  routes: {
+    ajinegro: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Al Lago ➜' },
+  },
   next: 'lago',
 };

@@ -3495,6 +3495,89 @@ def aji_box():
     return layers
 
 
+# ---------- Amazonas · El Lago (v3.49) ----------
+
+def pirarucu_body(cx, cy, length, height, rot=0, eye=True):
+    """El pirarucú: el pez gigante del Amazonas, largo y oscuro, con la cola roja y las escamas marcadas."""
+    layers = fish_shape(cx, cy, length, height, '#4e5b4a', '#c9b48a', rot, eye)
+    a = math.radians(rot)
+    L = length / 2
+    # La mitad de atrás se pone roja, como la del pirarucú de verdad.
+    tx, ty = cx + math.cos(a) * L * 0.55, cy + math.sin(a) * L * 0.55
+    layers.append(('#c62828', [ellipse(tx, ty, L * 0.3, height * 0.36, rot)]))
+    for k in range(5):
+        x = cx - L * 0.3 + k * L * 0.2
+        layers.append(('#3a4537', [ellipse(x, cy - height * 0.12 + (x - cx) * math.tan(a), 2.6, 1.6, rot)]))
+    return layers
+
+
+def pirarucu():
+    """Pirarucú: el pez gigante del lago, recién sacado de la canoa, con el agua que todavía le escurre."""
+    layers = [('#4f8f96', [ellipse(50, 86, 44, 8)]), ('#7fbcc0', [ellipse(32, 85, 10, 1.6), ellipse(70, 88, 8, 1.4)])]
+    layers += pirarucu_body(46, 54, 82, 30, -4)
+    layers.append(('#ffffff50', [ellipse(36, 46, 14, 2.6, -6)]))
+    layers.append(('#4fc3f7', [circle(88, 24, 3), circle(93, 34, 2.2), circle(82, 34, 1.8)]))
+    return layers
+
+
+def clean_pirarucu():
+    """Pirarucú limpio: el pirarucú sin vísceras, abierto sobre la hoja de bijao, con su carne blanca."""
+    layers = [('#2e7d32', [leaf(4, 80, 96, 64, 18)]), ('#66bb6a', [rib(8, 79, 92, 65, 1.2)])]
+    layers += pirarucu_body(48, 54, 76, 28, -6)
+    layers += [(OUTLINE, [ellipse(46, 58, 22, 5.5, -6)]), ('#fff3e6', [ellipse(46, 58, 20, 4, -6)])]
+    layers.append(('#ffffffb0', [ellipse(38, 46, 11, 2, -6)]))
+    return layers
+
+
+def pirarucu_fillet():
+    """Postas de pirarucú: las tajadas gruesas de carne blanca, con la piel oscura, en la tabla y con el machete."""
+    layers = [(OUTLINE, [rect(6, 56, 88, 30, -6)]), ('#c68a4a', [rect(9, 59, 82, 24, -6)])]
+    for cx, cy, rot in [(26, 58, -8), (50, 62, 4), (74, 58, 10)]:
+        layers.append((OUTLINE, [rect(cx - 11, cy - 12, 22, 22, rot)]))
+        layers.append(('#4e5b4a', [rect(cx - 9.5, cy - 10.5, 19, 19, rot)]))
+        layers.append(('#fff3ee', [rect(cx - 8, cy - 9, 16, 15, rot)]))
+        layers.append(('#ffd9c4', [rib(cx - 6, cy - 4, cx + 6, cy - 4, 1), rib(cx - 6, cy + 1, cx + 6, cy + 1, 1)]))
+    layers += [(OUTLINE, [rect(54, 12, 40, 9, 22)]), ('#cfd8dc', [rect(56, 14, 28, 5.5, 22)]), ('#5d4037', [rect(82, 26, 12, 6, 22)])]
+    return layers
+
+
+def moqueado():
+    """Pescado moqueado: las postas de pirarucú doradas sobre la parrilla de palos del moquén, con el humo que sube."""
+    layers = [(OUTLINE, [rect(6, 64, 88, 8)]), ('#6d4c2e', [rect(8, 65.5, 84, 5)])]
+    layers.append(('#4e342e', [rib(14, 72, 10, 94, 3), rib(86, 72, 90, 94, 3), rib(50, 72, 50, 94, 3)]))
+    for cx, cy, rot in [(28, 54, -6), (52, 56, 4), (76, 54, -2)]:
+        layers.append((OUTLINE, [rect(cx - 10, cy - 10, 20, 18, rot)]))
+        layers.append(('#8d4a1f', [rect(cx - 8.5, cy - 8.5, 17, 15, rot)]))
+        layers.append(('#c97a32', [rect(cx - 6.5, cy - 6.5, 13, 9, rot)]))
+        layers.append(('#5d2e12', [rib(cx - 7, cy + 3, cx + 7, cy + 3, 1.2)]))
+    layers.append(('#b0bec5a0', ['M 22 40 Q 16 28 24 16 Q 18 28 28 40 Z', 'M 52 38 Q 46 24 54 10 Q 48 24 58 38 Z', 'M 78 40 Q 72 28 80 16 Q 74 28 84 40 Z']))
+    layers += [('#ff7043', [ellipse(50, 90, 26, 4)]), ('#ffcc80', [ellipse(50, 90, 14, 2)])]
+    return layers
+
+
+def salted_pirarucu():
+    """Pirarucú salado: la manta de pirarucú abierta, salada y seca, doblada y amarrada con bejuco."""
+    layers = [(OUTLINE, [poly(10, 34, 90, 26, 94, 78, 14, 86)])]
+    layers.append(('#d7c49e', [poly(13, 37, 87, 29.5, 91, 75.5, 16.5, 83)]))
+    layers.append(('#b89a6a', [rib(16, 50, 89, 43, 1.2), rib(17, 66, 90, 59, 1.2)]))
+    layers.append(('#a1887f', [rib(14, 36, 18, 84, 2.4)]))
+    layers += [(OUTLINE, [rect(44, 22, 7, 68, -3)]), ('#8d6e4a', [rect(45.5, 23.5, 4, 65, -3)])]
+    layers.append(('#ffffff', [circle(26, 44, 1.3), circle(66, 40, 1.3), circle(34, 72, 1.1), circle(74, 68, 1.2), circle(58, 56, 1), circle(80, 50, 1)]))
+    return layers
+
+
+def pirarucu_aji():
+    """Pirarucú al ají negro: el plato con la posta dorada, el ají negro por encima, el casabe y el limón."""
+    layers = [(OUTLINE, [ellipse(50, 64, 46, 22)]), ('#f5f0e6', [ellipse(50, 64, 43.5, 19.5)]), ('#e6ddcc', [ellipse(50, 64, 34, 14)])]
+    layers += [(OUTLINE, [rect(28, 50, 34, 20, -4)]), ('#c97a32', [rect(30, 52, 30, 16, -4)]), ('#e8a55a', [rect(32, 54, 24, 6, -4)])]
+    layers.append(('#3e2723', ['M 32 56 Q 44 50 58 54 Q 50 60 36 60 Z']))
+    layers.append(('#5d4037', [circle(40, 55, 1.4), circle(50, 55, 1.2)]))
+    layers += [(OUTLINE, [circle(76, 60, 11)]), ('#f3e3b8', [circle(76, 60, 9.5)]), ('#e0c98a', [circle(73, 57, 2), circle(80, 63, 1.6), circle(78, 55, 1.2)])]
+    layers += [(OUTLINE, [circle(24, 72, 7)]), ('#9ccc65', [circle(24, 72, 5.5)]), ('#dce775', [circle(24, 72, 3)])]
+    layers += chili(60, 14, 88, 26, -2, 6, '#e53935')
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -3737,6 +3820,12 @@ ICONS = [
     (0xE0EE, 'ground_aji', ground_aji),
     (0xE0EF, 'aji_negro', aji_negro),
     (0xE0F0, 'aji_box', aji_box),
+    (0xE0F1, 'pirarucu', pirarucu),
+    (0xE0F2, 'clean_pirarucu', clean_pirarucu),
+    (0xE0F3, 'pirarucu_fillet', pirarucu_fillet),
+    (0xE0F4, 'moqueado', moqueado),
+    (0xE0F5, 'salted_pirarucu', salted_pirarucu),
+    (0xE0F6, 'pirarucu_aji', pirarucu_aji),
 ]
 
 

@@ -510,6 +510,19 @@ export const RESEARCH = [
   { zone: 'ajizal', id: 'aji_de_la_abuela', name: 'Ají de la abuela', icon: '🏅', desc: 'Las cajas de ají negro valen un 50 % más.', cost: 1500000, requires: 'aji_packer', effect: { type: 'productValue', target: 'aji_box', mult: 1.5 } },
   { zone: 'ajizal', id: 'maestria_ajizal', name: 'Maestría: Ajizal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'ajizal', mult: 4 } },
   { zone: 'ajizal', id: 'supremacia_ajizal', name: 'Supremacía: Ajizal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'ajizal', mult: 8 } },
+
+  // Amazonas · El Lago (v3.49): las mismas de la Bahía, con el pirarucú.
+  { zone: 'lago', id: 'peque_peque', name: 'Motor peque-peque', icon: ICON.pirarucu, desc: 'Las Canoas del lago pescan el doble.', cost: 300000, requires: 'pirarucu_cleaner', effect: { type: 'stationSpeed', target: 'pirarucu_canoes', mult: 2 } },
+  { zone: 'lago', id: 'mesa_pirarucu', name: 'Mesa de limpieza', icon: ICON.cleanPirarucu, desc: 'La Limpieza de pirarucú limpia el doble.', cost: 400000, requires: 'pirarucu_cleaner', effect: { type: 'stationSpeed', target: 'pirarucu_cleaner', mult: 2 } },
+  { zone: 'lago', id: 'machete_postas', name: 'Machete de postas', icon: ICON.pirarucuFillet, desc: 'La Fileteadora de pirarucú corta el doble.', cost: 1200000, requires: 'pirarucu_filleter', effect: { type: 'stationSpeed', target: 'pirarucu_filleter', mult: 2 } },
+  { zone: 'lago', id: 'deslizador', name: 'Deslizador', icon: '🚤', desc: 'El despacho del Lago lleva el doble por viaje.', cost: 1500000, requires: 'pirarucu_salter', effect: { type: 'dispatchCapacity', target: 'lago', mult: 2 } },
+  { zone: 'lago', id: 'moquen_grande', name: 'Moquén grande', icon: ICON.moqueado, desc: 'El Moquén moquea el doble.', cost: 3000000, requires: 'moquen', effect: { type: 'stationSpeed', target: 'moquen', mult: 2 } },
+  { zone: 'lago', id: 'tendales_pirarucu', name: 'Tendales al sol', icon: ICON.saltedPirarucu, desc: 'El Saladero de pirarucú sala el doble.', cost: 8000000, requires: 'pirarucu_salter', effect: { type: 'stationSpeed', target: 'pirarucu_salter', mult: 2 } },
+  { zone: 'lago', id: 'pirarucu_tarapoto', name: 'Pirarucú de Tarapoto', icon: '🏅', desc: 'El pirarucú salado vale un 50 % más.', cost: 15000000, requires: 'pirarucu_salter', effect: { type: 'productValue', target: 'salted_pirarucu', mult: 1.5 } },
+  { zone: 'lago', id: 'fogon_lago', name: 'Fogón de leña', icon: ICON.pirarucuAji, desc: 'La Cocina del pirarucú sirve el doble (la Chiva de la ruta se ajusta sola).', cost: 25000000, requires: 'pirarucu_kitchen', effect: { type: 'stationSpeed', target: 'pirarucu_kitchen', mult: 2 } },
+  { zone: 'lago', id: 'sazon_amazonica', name: 'Sazón amazónica', icon: '🏅', desc: 'El pirarucú al ají negro vale un 50 % más.', cost: 50000000, requires: 'pirarucu_kitchen', effect: { type: 'productValue', target: 'pirarucu_aji', mult: 1.5 } },
+  { zone: 'lago', id: 'maestria_lago', name: 'Maestría: Lago', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'lago', mult: 4 } },
+  { zone: 'lago', id: 'supremacia_lago', name: 'Supremacía: Lago', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'lago', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

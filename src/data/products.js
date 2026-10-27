@@ -288,6 +288,14 @@ export const PRODUCTS = {
   aji_negro: { name: 'Ají negro', zone: 'ajizal', value: 150, icon: ICON.ajiNegro, color: 0x3e2723 },
   aji_box: { name: 'Caja de ají negro', zone: 'ajizal', value: 250, icon: ICON.ajiBox, color: 0xc8a26a },
 
+  // Amazonas · El Lago (v3.49): mismos valores que la Bahía.
+  pirarucu: { name: 'Pirarucú', zone: 'lago', value: 125, icon: ICON.pirarucu, color: 0x4e5b4a },
+  clean_pirarucu: { name: 'Pirarucú limpio', zone: 'lago', value: 300, icon: ICON.cleanPirarucu, color: 0xfff3e6 },
+  pirarucu_fillet: { name: 'Posta de pirarucú', zone: 'lago', value: 800, icon: ICON.pirarucuFillet, color: 0xffe0d6 },
+  moqueado: { name: 'Pirarucú moqueado', zone: 'lago', value: 2000, icon: ICON.moqueado, color: 0x8d5524 },
+  salted_pirarucu: { name: 'Pirarucú salado', zone: 'lago', value: 2400, icon: ICON.saltedPirarucu, color: 0xe0cfa4 },
+  pirarucu_aji: { name: 'Pirarucú al ají negro', zone: 'lago', value: 4000, icon: ICON.pirarucuAji, color: 0xc97a32 },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

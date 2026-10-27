@@ -874,5 +874,26 @@ const AJIZAL = [
   { id: 'aj_final', type: 'sold', product: 'aji_box', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL };
+// Amazonas · El Lago (v3.49): la misma lista que la Bahía.
+const LAGO = [
+  { id: 'al01', type: 'sold', product: 'pirarucu', amount: 50, reward: 10000 },
+  { id: 'al02', type: 'level', target: 'pirarucu_canoes', level: 10, reward: 20000 },
+  { id: 'al03', type: 'unlock', station: 'pirarucu_cleaner', reward: 40000 },
+  { id: 'al04', type: 'level', target: 'pirarucu_canoes:transport', level: 10, reward: 40000 },
+  { id: 'al05', type: 'unlock', station: 'pirarucu_salter', reward: 80000 },
+  { id: 'al06', type: 'produced', product: 'salted_pirarucu', amount: 100, reward: 120000 },
+  { id: 'al08', type: 'unlock', station: 'pirarucu_filleter', reward: 250000 },
+  { id: 'al09', type: 'level', target: 'dispatch:lago', level: 10, reward: 250000 },
+  { id: 'al10', type: 'unlock', station: 'moquen', reward: 500000 },
+  { id: 'al11', type: 'produced', product: 'moqueado', amount: 200, reward: 800000 },
+  { id: 'al12', type: 'unlock', station: 'pirarucu_kitchen', reward: 1200000 },
+  { id: 'al13', type: 'imported', product: 'aji_negro', amount: 200, reward: 1500000 },
+  { id: 'al14', type: 'level', target: 'route:ajinegro', level: 25, reward: 2000000 },
+  { id: 'al15', type: 'allLevels', zone: 'lago', level: 25, reward: 3000000 },
+  { id: 'al07', type: 'research', research: 'peque_peque', reward: 1500000 },
+  { id: 'al16', type: 'sold', product: 'pirarucu_aji', amount: 1000, reward: 5000000 },
+  { id: 'al_final', type: 'sold', product: 'pirarucu_aji', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

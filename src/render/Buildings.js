@@ -5775,6 +5775,164 @@ const DRAW = {
     };
   },
 
+  // --- Amazonas · El Lago (v3.49): el puerto de los pescadores de pirarucú, en el lago de Tarapoto ---
+
+  // Limpieza de pirarucú: la ramada de palma a la orilla, con la mesa larga donde cabe el pez gigante; el
+  // pescador lo abre con el machete, los baldes de agua del lago y la garza que espera su parte.
+  pirarucu_cleaner(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    box(g, x0 + 0.2, y0 + 0.6, 2.0, 0.6, 9, 0x8d6e4a);
+    const top = iso(x0 + 1.2, y0 + 0.9, 9);
+    for (let k = 0; k < 1 + Math.min(ctx.tier, 2); k++) g.rect(top.x - 16 + k * 6, top.y - 4 - (k % 2), 5, 4).fill(PRODUCTS.clean_pirarucu.color).stroke({ width: 0.5, color: 0x3a2418 });
+    for (const [bx, by] of [[0.45, 2.45], [0.95, 2.6]]) {
+      const b = iso(x + bx, y + by);
+      g.poly([b.x - 6, b.y - 10, b.x + 6, b.y - 10, b.x + 5, b.y, b.x - 5, b.y]).fill(0x2e7d32).stroke(OUTLINE);
+      g.ellipse(b.x, b.y - 10, 6, 2).fill(0x365a50);
+    }
+    ramada(this, g, x0, y0, 2.4, 1.5, 28 + ctx.up, 0xc9a96b);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x0 + 1.2, y0 + 1.55);
+      worker(anim, wp.x, wp.y, 0xf2c14e);
+      // El pirarucú entero, largo y con la cola roja.
+      anim.ellipse(top.x + 8, top.y - 3, 13, 3.6).fill(PRODUCTS.pirarucu.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.7 });
+      anim.ellipse(top.x + 15, top.y - 3, 5, 3).fill(0xc62828);
+      anim.poly([top.x + 20, top.y - 3, top.x + 25, top.y - 7, top.x + 25, top.y + 1]).fill(0xc62828);
+      const bird = iso(x + 2.7, y + 2.3);
+      const hop = this.working ? Math.abs(Math.sin(time * 2)) * 2 : 0;
+      anim.moveTo(bird.x, bird.y).lineTo(bird.x, bird.y - 8).stroke({ width: 0.8, color: 0x37474f });
+      anim.ellipse(bird.x, bird.y - 11 - hop, 4.5, 3).fill(0xf7f4ee).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      anim.moveTo(bird.x - 3, bird.y - 12 - hop).lineTo(bird.x - 4, bird.y - 19 - hop).stroke({ width: 1.4, color: 0xf7f4ee });
+      anim.poly([bird.x - 4, bird.y - 20 - hop, bird.x - 11, bird.y - 18 - hop, bird.x - 4, bird.y - 18.5 - hop]).fill(0xfbc02d);
+      if (!this.working) return;
+      const f = (time * 1.6) % 1;
+      anim.moveTo(top.x - 2 + f * 12, top.y - 9).lineTo(top.x + 4 + f * 12, top.y - 14).stroke({ width: 1.6, color: 0xcfd8dc });
+    };
+    this.animate(0);
+  },
+
+  // Saladero de pirarucú: los tendales de varas al sol, con las mantas de pirarucú abiertas y saladas, y los
+  // costales de sal.
+  pirarucu_salter(g, x, y, ctx) {
+    const rows = ctx.tier >= 2 ? [0.5, 1.3, 2.1] : [0.7, 1.7];
+    this.lines = [];
+    for (const ry of rows) {
+      const a = iso(x + 0.4, y + ry, 0);
+      const b = iso(x + 2.6, y + ry, 0);
+      for (const p of [a, b]) g.rect(p.x - 1.2, p.y - 24, 2.4, 24).fill(0x6b4a2e);
+      g.moveTo(a.x, a.y - 22).lineTo(b.x, b.y - 22).stroke({ width: 1.4, color: 0x8d6e4a });
+      this.lines.push([a, b]);
+    }
+    for (const [sx, sy] of [[2.7, 2.6], [2.35, 2.75]]) sack(g, x + sx, y + sy, 0, 0xffffff);
+    this.roofTop = iso(x + 1.5, y + 1.3, 30);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, [a, b]] of this.lines.entries()) {
+        for (let i = 0; i < 3; i++) {
+          const f = (i + 0.5) / 3;
+          const sway = this.working ? Math.sin(time * 1.2 + i + k) * 0.8 : 0;
+          const px = a.x + (b.x - a.x) * f + sway;
+          const py = a.y + (b.y - a.y) * f - 21;
+          anim.poly([px - 7, py, px + 7, py, px + 6, py + 15, px - 6, py + 15]).fill(PRODUCTS.salted_pirarucu.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+          anim.moveTo(px - 5, py + 7).lineTo(px + 5, py + 7).stroke({ width: 0.6, color: 0xb89a6a });
+        }
+      }
+    };
+    this.animate(0);
+  },
+
+  // Fileteadora de pirarucú: la casa de madera sobre pilotes con techo de palma, con la mesa del corredor
+  // donde se cortan las postas; las postas pasan al Moquén de al lado.
+  pirarucu_filleter(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 1.7, 1.3, 20, ctx, { wall: 0x8fbf9f, trim: 0xf7f4ee, roofColor: 0xc9a96b, lift: 8 });
+    box(g, x + 2.2, y + 0.5, 0.45, 1.2, 9, 0x8d6e4a);
+    const t = iso(x + 2.42, y + 1.1, 9);
+    for (let k = 0; k < 3; k++) g.rect(t.x - 7 + k * 5, t.y - 2 + k * 2, 4, 3.4).fill(PRODUCTS.pirarucu_fillet.color).stroke({ width: 0.5, color: 0x4e5b4a });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      anim.ellipse(t.x - 2, t.y - 6, 9, 2.6).fill(PRODUCTS.clean_pirarucu.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.7 });
+      const wp = iso(x + 2.95, y + 1.1);
+      worker(anim, wp.x, wp.y, 0x2e7d32);
+      if (!this.working) return;
+      const f = (time * 2.2) % 1;
+      anim.moveTo(t.x - 7 + f * 10, t.y - 9).lineTo(t.x - 3 + f * 10, t.y - 14).stroke({ width: 1.6, color: 0xcfd8dc });
+    };
+    this.animate(0);
+  },
+
+  // Moquén: la parrilla alta de palos amarrados con bejuco sobre la candela, a la manera indígena, con las
+  // postas de pirarucú que se ahúman despacio; al lado, la leña.
+  moquen(g, x, y, ctx) {
+    const x0 = x + 0.5;
+    const y0 = y + 0.5;
+    const n = ctx.tier >= 2 ? 2 : 1;
+    this.grills = [];
+    for (let k = 0; k < n; k++) {
+      const gx = x0 + k * 1.1;
+      for (const [px, py] of [[0, 0], [0.9, 0], [0, 0.9], [0.9, 0.9]]) box(g, gx + px - 0.04, y0 + py - 0.04, 0.08, 0.08, 22, 0x6b4a2e);
+      const grill = iso(gx + 0.45, y0 + 0.45, 20);
+      g.poly([grill.x - 16, grill.y, grill.x, grill.y - 8, grill.x + 16, grill.y, grill.x, grill.y + 8]).fill({ color: 0x4e342e, alpha: 0.35 });
+      for (let i = -2; i <= 2; i++) g.moveTo(grill.x - 14 + Math.abs(i) * 3, grill.y + i * 3).lineTo(grill.x + 14 - Math.abs(i) * 3, grill.y + i * 3).stroke({ width: 1.2, color: 0x6d4c2e });
+      this.grills.push(grill);
+      const fire = iso(gx + 0.45, y0 + 0.45, 0);
+      g.ellipse(fire.x, fire.y, 8, 3).fill(0x212121);
+    }
+    for (let k = 0; k < 3; k++) box(g, x + 0.4 + k * 0.08, y + 2.55 - k * 0.05, 0.9, 0.1, 3, 0x6b4a2e, { z: k * 3 });
+    this.smokePoints = this.grills.map((p) => ({ x: p.x, y: p.y - 8 }));
+    this.roofTop = iso(x0 + 0.45, y0 + 0.45, 40);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, p] of this.grills.entries()) {
+        const fire = iso(x0 + k * 1.1 + 0.45, y0 + 0.45, 0);
+        anim.poly([fire.x - 5, fire.y, fire.x, fire.y - 8 - (this.working ? Math.sin(time * 9 + k) * 2 : 0), fire.x + 5, fire.y]).fill(this.working ? 0xff7043 : 0x5d4037);
+        for (let i = 0; i < 3; i++) anim.rect(p.x - 10 + i * 7, p.y - 3 + (i % 2) * 2, 6, 4).fill(PRODUCTS.moqueado.color).stroke({ width: 0.5, color: 0x3a2418 });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Cocina del pirarucú: la cocina de madera sobre pilotes con techo de palma, con el fogón en el corredor, la
+  // olla y el plato del pirarucú al ají negro; el ají negro llega del Ajizal.
+  pirarucu_kitchen(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    stiltHouse(this, g, hx, hy, 2.0, 1.3, 22, ctx, { wall: 0xd98b4a, trim: 0xf7f4ee, roofColor: 0xc9a96b });
+    box(g, x + 1.6, y + 2.0, 1.0, 0.7, 10, 0xa1887f);
+    const pan = iso(x + 2.1, y + 2.35, 10);
+    g.ellipse(pan.x, pan.y - 2, 12, 4.5).fill(0x37474f).stroke(OUTLINE);
+    g.ellipse(pan.x, pan.y - 2.5, 10, 3.4).fill(0x5d4037);
+    g.moveTo(pan.x + 12, pan.y - 2).lineTo(pan.x + 20, pan.y - 5).stroke({ width: 1.8, color: 0x37474f });
+    // Los frascos de ají negro y el casabe en la mesa.
+    box(g, x + 0.45, y + 2.2, 0.9, 0.45, 8, 0x8d6e4a);
+    const t = iso(x + 0.9, y + 2.42, 8);
+    g.ellipse(t.x - 5, t.y - 2, 5, 2).fill(0xf3e3b8).stroke({ width: 0.5, color: 0x3a2418 });
+    for (let k = 0; k < 2; k++) g.rect(t.x + 2 + k * 4, t.y - 8, 3, 6).fill(PRODUCTS.aji_negro.color).stroke({ width: 0.5, color: 0x3a2418 });
+    this.smokePoints = [{ x: pan.x, y: pan.y - 12 }];
+    const fire = iso(x + 2.1, y + 2.72, 3);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      anim.poly([fire.x - 4, fire.y, fire.x, fire.y - 5 - (this.working ? Math.sin(time * 9) * 1.5 : 0), fire.x + 4, fire.y]).fill(this.working ? 0xff7043 : 0x5d4037);
+      const flip = this.working ? Math.max(0, Math.sin(time * 2)) * 4 : 0;
+      anim.rect(pan.x - 5, pan.y - 5 - flip, 10, 4).fill(PRODUCTS.pirarucu_aji.color).stroke({ width: 0.5, color: 0x3a2418 });
+      const wp = iso(x + 1.45, y + 2.95);
+      worker(anim, wp.x, wp.y, 0xf7f4ee);
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

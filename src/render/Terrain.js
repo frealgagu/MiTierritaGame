@@ -173,6 +173,18 @@ export class Terrain {
             g.ellipse(p.x, p.y, 6 + rng() * 5, 2.4 + rng() * 1.5).fill({ color: 0x5a8f9a, alpha: 0.7 });
             g.moveTo(p.x - 3, p.y - 0.5).lineTo(p.x + 2, p.y - 0.5).stroke({ width: 1, color: 0xe8f6ff, alpha: 0.6 });
           }
+        } else if (type === 'farm' && this.zone.theme === 'lake') {
+          // El Lago (v3.49): el agua negra del lago de Tarapoto, con brillos y hojas de victoria regia flotando.
+          const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
+          g.moveTo(p.x - 6, p.y).quadraticCurveTo(p.x, p.y - 2, p.x + 6, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.45 });
+          if (rng() < 0.3) {
+            const q = iso(gx + 0.15 + rng() * 0.7, gy + 0.15 + rng() * 0.7);
+            const r = 5 + rng() * 4;
+            g.ellipse(q.x, q.y, r + 1.2, (r + 1.2) * 0.5).fill(0x8a3a3a);
+            g.ellipse(q.x, q.y - 0.6, r, r * 0.5).fill(0x5e9a3c);
+            g.moveTo(q.x, q.y - 0.6).lineTo(q.x + r * 0.9, q.y - 0.6).stroke({ width: 1, color: 0x3f7a2a, alpha: 0.8 });
+            if (rng() < 0.3) g.circle(q.x - r * 0.4, q.y - 2.5, 2).fill(0xf8f0f4).circle(q.x - r * 0.4, q.y - 2.5, 0.9).fill(0xf48fb1);
+          }
         } else if (type === 'farm' && this.zone.theme === 'bay') {
           // La Bahía (v3.40): el mar, con olas que brillan y alguna espuma.
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
@@ -451,7 +463,7 @@ export class Terrain {
           else if (r < 0.055) obj = egret(rng);
           else if (r < 0.075) obj = coconutPalm(rng);
           else if (r < 0.088) obj = ceiba(rng);
-        } else if (this.zone.theme === 'asai' || this.zone.theme === 'aji') {
+        } else if (this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'lake') {
           // El Amazonas (v3.47): la selva de la orilla, con ceibas gigantes, heliconias, plátano, asaí suelto y alguna
           // guacamaya en su palo.
           if (r < 0.025) obj = ceiba(rng);
@@ -815,6 +827,7 @@ const FARM_SOIL = {
   werregue: (v) => mix(0x4f5a30, 0x5a6638, v * 0.5), // el suelo del palmar de werregue (v3.42)
   asai: (v) => mix(0x4a5236, 0x56603e, v * 0.5), // la vega húmeda del asaizal (v3.47)
   aji: (v) => mix(0x7a5236, 0x6a462e, v * 0.5), // la tierra de la chagra (v3.48)
+  lake: (v) => mix(0x2e5048, 0x365a50, v * 0.6), // el agua negra del lago (v3.49)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),

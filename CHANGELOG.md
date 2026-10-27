@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.49.0 — El Amazonas: El Lago
+- **🐟 El Lago**, la tercera zona del Amazonas, se abre al completar El Ajizal: las Canoas del lago → la Limpieza de pirarucú, que reparte el pez entre el **Saladero** (pirarucú salado), la **Fileteadora** (postas que pasan al **Moquén**, donde se ahúman a la manera indígena) y la **Cocina del pirarucú**, que sirve el **pirarucú al ají negro**. Tiene los mismos números que la Bahía.
+- **🚌 Ruta del ají negro:** la chiva lleva los frascos de ají negro del Ajizal a la Cocina del pirarucú.
+- Su persona es **Don Jacinto, el pescador**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 6 íconos nuevos (del pirarucú recién sacado al plato con ají negro y casabe).
+- **El mapa:** el agua negra de los lagos de Tarapoto, con hojas de victoria regia y las canoas de los pescadores; en la orilla, la ramada de palma donde se abre el pez gigante (con su garza), los tendales con las mantas de pirarucú salado, la fileteadora verde sobre pilotes, el moquén de palos sobre la candela y la cocina naranja con su sartén.
+
 ## v3.48.0 — El Amazonas: El Ajizal
 - **🌶️ El Ajizal**, la segunda zona del Amazonas, se abre al completar El Asaizal: el Ajizal → el Lavadero de ají → el Molino de ají → la Olla del tucupí → la Envasadora de ají negro. El ají de la chagra se lava, se muele y se cocina días enteros en el tucupí (el jugo de la yuca brava) hasta volverse **ají negro**, la sal de la selva. Tiene los mismos números que la Azotea; el ají negro es el que después viajará al Lago, y las cajas, a Leticia.
 - Su persona es **Doña Remedios, la ajicera**, con sus datos curiosos, objetivos, 9 investigaciones, su victoria y 5 íconos nuevos (de la mata de ají a la caja de ají negro).

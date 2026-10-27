@@ -984,3 +984,24 @@ test('El Amazonas se abre al completar Buenaventura; mientras esté en obra no s
   assert.ok(a.zones.ajizal.unlocked, 'El Asaizal abre El Ajizal (v3.48)');
   assert.ok(!a.regionDone, 'en obra: todavía no tiene final');
 });
+
+test('El Lago sirve el pirarucú al ají negro con el ají negro que llega del Ajizal (v3.49)', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const game = new Game(createInitialState(0, 'amazonas'));
+  for (const z of ['ajizal', 'lago']) game.unlockZone(z);
+  assert.ok(game.state.routes.ajinegro, 'la Ruta del ají negro es del Amazonas');
+  game.state.coins = 1e15;
+  for (const z of ['ajizal', 'lago']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+    game.state.zones[z].dispatch.level = 20;
+  }
+  game.state.routes.ajinegro.level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 600; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  assert.ok((game.state.stats.imported.aji_negro ?? 0) > 0, 'llega ají negro del Ajizal');
+  for (const p of ['salted_pirarucu', 'moqueado', 'pirarucu_aji']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+});

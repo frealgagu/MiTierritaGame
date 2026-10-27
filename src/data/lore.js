@@ -275,6 +275,13 @@ export const FACTS = {
   aji_grinder: ['El ají se muele con piedra o en el molino, con semillas y todo.'],
   tucupi_pot: ['El ají negro se cocina días enteros en el jugo de la yuca brava.', 'Al jugo de la yuca brava, cocinado, lo llaman tucupí.'],
   aji_packer: ['El ají negro es la sal de la selva: va con el pescado y el casabe.'],
+  // Amazonas · El Lago (v3.49)
+  pirarucu_canoes: ['El pirarucú es uno de los peces de río más grandes del mundo.', 'Sube a respirar aire cada rato: así lo ven los pescadores.'],
+  pirarucu_cleaner: ['Las escamas del pirarucú son tan duras que sirven de lima de uñas.'],
+  pirarucu_salter: ['El pirarucú salado y seco aguanta semanas sin nevera.'],
+  pirarucu_filleter: ['Del pirarucú se sacan postas grandes, sin espinas.'],
+  moquen: ['El moquén es una parrilla de palos sobre fuego lento: así se ahúma.'],
+  pirarucu_kitchen: ['El pirarucú con ají negro y casabe es comida de fiesta en la selva.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -317,6 +324,7 @@ export const PEOPLE = {
   buenaventura: { icon: '👩🏿‍🦱', name: 'Doña Libia', role: 'la guía' },
   asaizal: { icon: '👨🏽‍🌾', name: 'Don Abel', role: 'el cosechero' },
   ajizal: { icon: '👵🏽', name: 'Doña Remedios', role: 'la ajicera' },
+  lago: { icon: '🧔🏽', name: 'Don Jacinto', role: 'el pescador' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -359,6 +367,7 @@ export const WELCOME = {
   buenaventura: '¡Bienvenido a Buenaventura, mi rey! Aquí llega lo mejor del Pacífico, y de aquí salen las lanchas a ver las ballenas.',
   asaizal: '¡Bienvenido al Amazonas, paisano! Aquí la palma de asaí da racimos morados a la orilla del río.',
   ajizal: '¡Bienvenido al Ajizal, mijo! Aquí el ají se cocina en tucupí hasta volverse ají negro, la sal de la selva.',
+  lago: '¡Bienvenido al Lago, paisano! Aquí salimos en canoa por el pirarucú, el gigante de los ríos.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

@@ -354,6 +354,16 @@ export const STATIONS = [
   { id: 'tucupi_pot', zone: 'ajizal', name: 'Olla del tucupí', icon: ICON.ajiNegro, in: { ground_aji: 2 }, out: { aji_negro: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.48' },
   { id: 'aji_packer', zone: 'ajizal', name: 'Envasadora de ají negro', icon: ICON.ajiBox, in: { aji_negro: 1 }, out: { aji_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.48' },
 
+  // Amazonas · El Lago (v3.49): el pirarucú se pesca en canoa en los lagos de Tarapoto, se limpia y se reparte entre
+  // el Saladero (el pirarucú salado y seco al sol), la Fileteadora (que le pasa las postas al Moquén, la parrilla de
+  // palos donde se ahúma) y la Cocina, que lo sirve con el ají negro del Ajizal. Mismos números que la Bahía.
+  { id: 'pirarucu_canoes', zone: 'lago', name: 'Canoas del lago', icon: ICON.pirarucu, infinite: true, out: { pirarucu: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.49' },
+  { id: 'pirarucu_cleaner', zone: 'lago', name: 'Limpieza de pirarucú', icon: ICON.cleanPirarucu, in: { pirarucu: 1 }, out: { clean_pirarucu: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.49' },
+  { id: 'pirarucu_salter', zone: 'lago', name: 'Saladero de pirarucú', icon: ICON.saltedPirarucu, in: { clean_pirarucu: 4 }, out: { salted_pirarucu: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.49' },
+  { id: 'pirarucu_filleter', zone: 'lago', name: 'Fileteadora de pirarucú', icon: ICON.pirarucuFillet, in: { clean_pirarucu: 2 }, out: { pirarucu_fillet: 1 }, cycle: 16, unlockCost: 1000000, upgradeBase: 600, growth: 1.15, release: '3.49' },
+  { id: 'moquen', zone: 'lago', name: 'Moquén', icon: ICON.moqueado, in: { pirarucu_fillet: 2 }, out: { moqueado: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.49' },
+  { id: 'pirarucu_kitchen', zone: 'lago', name: 'Cocina del pirarucú', icon: ICON.pirarucuAji, in: { clean_pirarucu: 4 }, imports: [{ product: 'aji_negro', perCycle: 1, route: 'ajinegro' }], out: { pirarucu_aji: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.49' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

@@ -244,6 +244,12 @@ export const ICON = {
   groundAji: '\uE0EE', // Ají molido: el molino de mano con la pasta roja que sale y los ajíes al lado
   ajiNegro: '\uE0EF', // Ají negro: el frasco con el ají negro del tucupí, espeso y brillante, con un ají rojo encima
   ajiBox: '\uE0F0', // Caja de ají negro: la caja de cartón con los frascos de tapa de madera asomados
+  pirarucu: '\uE0F1', // Pirarucú: el pez gigante del lago, recién sacado de la canoa, con el agua que todavía le escurre
+  cleanPirarucu: '\uE0F2', // Pirarucú limpio: el pirarucú sin vísceras, abierto sobre la hoja de bijao, con su carne blanca
+  pirarucuFillet: '\uE0F3', // Postas de pirarucú: las tajadas gruesas de carne blanca, con la piel oscura, en la tabla y con el machete
+  moqueado: '\uE0F4', // Pescado moqueado: las postas de pirarucú doradas sobre la parrilla de palos del moquén, con el humo que sube
+  saltedPirarucu: '\uE0F5', // Pirarucú salado: la manta de pirarucú abierta, salada y seca, doblada y amarrada con bejuco
+  pirarucuAji: '\uE0F6', // Pirarucú al ají negro: el plato con la posta dorada, el ají negro por encima, el casabe y el limón
 };
 
 export const ICON_FONT = 'Cafetal Icons';
