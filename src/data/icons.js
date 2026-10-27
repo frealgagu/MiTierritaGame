@@ -258,6 +258,12 @@ export const ICON = {
   casabe: '\uE0FC', // Casabe: las tortas grandes, planas y redondas de yuca, tostadas en el budare, una encima de otra
   desayunoAmazonico: '\uE0FD', // Desayuno amazónico: el casabe, el vaso de asaí con fariña y el frasquito de ají negro, sobre la hoja
   banqueteMaloca: '\uE0FE', // Banquete de la maloca: la batea grande con el pirarucú moqueado, el casabe, el asaí y el ají, para compartir
+  yanchamaTree: '\uE0FF', // Árbol de yanchama: el tronco liso y claro con las raíces de tabla, la copa ancha, y la tira de corteza sacada
+  yanchamaBark: '\uE100', // Corteza de yanchama: las tiras de corteza, café por fuera y claras por dentro, remojándose en el agua del río
+  barkCloth: '\uE101', // Tela de yanchama: la tela clara y fibrosa que sale de golpear la corteza, con el mazo de palo encima
+  paintedCloth: '\uE102', // Tela pintada: la yanchama con los dibujos ticuna en negro de jagua y rojo de achiote, y el pincel
+  ticunaMask: '\uE103', // Máscara ticuna: la máscara de yanchama pintada, con los ojos grandes, la boca y el pelo de fibra
+  recuerdoAmazonas: '\uE104', // Recuerdo del Amazonas: la máscara ticuna y la yanchama pintada, con el pirarucú moqueado envuelto en hoja
 };
 
 export const ICON_FONT = 'Cafetal Icons';

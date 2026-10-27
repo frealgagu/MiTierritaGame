@@ -6129,6 +6129,192 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Amazonas · La Yanchama (v3.51): la tela de corteza y las máscaras ticuna ---
+
+  // Remojo de corteza: el pozo de agua de quebrada, encerrado con palos, donde las tiras de corteza se ablandan
+  // bajo las piedras; el artesano saca una y la pone a escurrir en la vara.
+  bark_soaker(g, x, y, ctx) {
+    const c = iso(x + 1.3, y + 1.2, 0);
+    g.ellipse(c.x, c.y, 36, 17).fill(0x6d4c41).stroke(OUTLINE);
+    g.ellipse(c.x, c.y, 32, 14.5).fill(0x4f8f96);
+    for (let k = 0; k < 10; k++) {
+      const a = (k / 10) * Math.PI * 2;
+      g.rect(c.x + Math.cos(a) * 34 - 1, c.y + Math.sin(a) * 16 - 8, 2.2, 8).fill(0x6b4a2e);
+    }
+    const n = 3 + Math.min(ctx.tier, 2);
+    for (let k = 0; k < n; k++) {
+      const dy = -8 + k * (16 / n);
+      g.moveTo(c.x - 22 + k * 2, c.y + dy).lineTo(c.x + 18 - k * 2, c.y + dy - 4).stroke({ width: 4, color: PRODUCTS.soaked_bark.color, cap: 'round' });
+    }
+    for (const [dx, dy] of [[-10, -4], [8, 4], [14, -6]]) g.ellipse(c.x + dx, c.y + dy, 4, 2.6).fill(0x8a8f94).stroke({ width: 0.5, color: 0x3a2418 });
+    const a = iso(x + 0.3, y + 2.6, 0);
+    const b = iso(x + 1.6, y + 2.8, 0);
+    for (const p of [a, b]) g.rect(p.x - 1.2, p.y - 20, 2.4, 20).fill(0x6b4a2e);
+    g.moveTo(a.x, a.y - 18).lineTo(b.x, b.y - 18).stroke({ width: 1.6, color: 0x6b4a2e });
+    for (let k = 0; k < 3; k++) {
+      const px = a.x + (b.x - a.x) * (k + 0.5) / 3;
+      const py = a.y + (b.y - a.y) * (k + 0.5) / 3 - 18;
+      g.rect(px - 2, py, 4, 12).fill(PRODUCTS.soaked_bark.color).stroke({ width: 0.5, color: 0x3a2418 });
+    }
+    this.roofTop = iso(x + 1.3, y + 1.2, 24);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x + 2.6, y + 1.9);
+      worker(anim, wp.x, wp.y, 0x6cbf6c);
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.6 + i / 3) % 1;
+        anim.ellipse(c.x - 10 + i * 10, c.y + 2, 4 + f * 8, (4 + f * 8) * 0.4).stroke({ width: 0.8, color: 0xe8f6ff, alpha: 1 - f });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Golpeadero: la ramada de palma con el tronco tendido donde la corteza se golpea con el mazo de palo hasta
+  // volverse tela; la tela clara cuelga de la vara.
+  bark_beater(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    const a = iso(x0 + 0.3, y0 + 0.9, 0);
+    const b = iso(x0 + 2.0, y0 + 0.9, 0);
+    g.moveTo(a.x, a.y - 10).lineTo(b.x, b.y - 10).lineTo(b.x, b.y).lineTo(a.x, a.y).closePath().fill(0x8d6e4a).stroke(OUTLINE);
+    g.ellipse(b.x, b.y - 5, 3, 5).fill(0xc9a96b).stroke({ width: 0.6, color: 0x3a2418 });
+    g.moveTo(a.x + 6, a.y - 10.5).lineTo(b.x - 4, b.y - 10.5).stroke({ width: 3, color: PRODUCTS.bark_cloth.color });
+    ramada(this, g, x0, y0, 2.3, 1.6, 28 + ctx.up, 0xc9a96b);
+    const bar0 = iso(x0 + 0.1, y0 + 1.6, 22 + ctx.up);
+    const bar1 = iso(x0 + 2.2, y0 + 1.6, 22 + ctx.up);
+    g.moveTo(bar0.x, bar0.y).lineTo(bar1.x, bar1.y).stroke({ width: 1.6, color: 0x6b4a2e });
+    const n = 2 + Math.min(ctx.tier, 2);
+    for (let k = 0; k < n; k++) {
+      const f = (k + 0.5) / n;
+      const px = bar0.x + (bar1.x - bar0.x) * f;
+      const py = bar0.y + (bar1.y - bar0.y) * f;
+      g.rect(px - 4, py, 8, 13).fill(PRODUCTS.bark_cloth.color).stroke({ width: 0.5, color: 0x8d6e4a });
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, f] of [[0, 0.35], [1, 0.7]]) {
+        const p = { x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f };
+        worker(anim, p.x - 2, p.y + 14, k ? 0xe5737f : 0xf2c14e);
+        const up = this.working ? Math.abs(Math.sin(time * 5 + k * 1.6)) : 0.5;
+        const hx = p.x + 4;
+        const hy = p.y - 12 - up * 10;
+        anim.moveTo(p.x, p.y + 0).lineTo(hx, hy).stroke({ width: 1.6, color: 0x6b4a2e });
+        anim.ellipse(hx, hy, 4, 2.6).fill(0xa1887f).stroke({ width: 0.5, color: 0x3a2418 });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Pintores de yanchama: el tambo pequeño donde se pinta la tela con jagua y achiote; las telas pintadas se
+  // secan colgadas de la cuerda.
+  cloth_painter(g, x, y, ctx) {
+    const floor = tamboHouse(this, g, x + 1.2, y + 1.1, 0.95, ctx);
+    const a = iso(x + 0.4, y + 2.6, 0);
+    const b = iso(x + 2.7, y + 2.5, 0);
+    for (const p of [a, b]) g.rect(p.x - 1.2, p.y - 22, 2.4, 22).fill(0x6b4a2e);
+    g.moveTo(a.x, a.y - 20).lineTo(b.x, b.y - 20).stroke({ width: 1, color: 0x8d6e4a });
+    const n = 3 + Math.min(ctx.tier, 2);
+    for (let k = 0; k < n; k++) {
+      const f = (k + 0.5) / n;
+      const px = a.x + (b.x - a.x) * f;
+      const py = a.y + (b.y - a.y) * f - 19;
+      g.rect(px - 5, py, 10, 12).fill(PRODUCTS.bark_cloth.color).stroke({ width: 0.5, color: 0x3a2418 });
+      g.moveTo(px - 4, py + 3).lineTo(px - 2, py + 5).lineTo(px, py + 3).lineTo(px + 2, py + 5).lineTo(px + 4, py + 3).stroke({ width: 1, color: 0xb23a2a });
+      g.poly([px - 2, py + 8.5, px, py + 6.5, px + 2, py + 8.5, px, py + 10.5]).fill(0x2b2018);
+    }
+    for (const [dx, col] of [[10, 0x2b2018], [16, 0xb23a2a]]) g.ellipse(floor.x + dx, floor.y + 2, 3, 1.4).fill(col).stroke({ width: 0.5, color: 0x3a2418 });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.tamboRoof();
+    this.animate = (time) => {
+      anim.clear();
+      const p = { x: floor.x - 6, y: floor.y };
+      anim.rect(p.x + 2, p.y - 3, 12, 6).fill(PRODUCTS.bark_cloth.color).stroke({ width: 0.5, color: 0x3a2418 });
+      anim.roundRect(p.x - 3.2, p.y - 12, 6.4, 8, 2).fill(0xe5737f);
+      anim.circle(p.x, p.y - 14.5, 2.8).fill(0x6d4c32);
+      anim.rect(p.x - 2.8, p.y - 16, 5.6, 1.6).fill(0x2b2018);
+      const brush = this.working ? Math.sin(time * 4) * 3 : 0;
+      anim.moveTo(p.x + 3, p.y - 8).lineTo(p.x + 8 + brush, p.y - 1).stroke({ width: 1.2, color: 0x8d6e4a });
+      anim.moveTo(p.x + 4, p.y - 1).lineTo(p.x + 8 + brush, p.y - 1).stroke({ width: 1, color: 0xb23a2a });
+    };
+    this.animate(0);
+  },
+
+  // Taller de máscaras: el tambo grande donde se arman las máscaras de la Pelazón; las terminadas miran desde
+  // los palos de la entrada.
+  mask_maker(g, x, y, ctx) {
+    const floor = tamboHouse(this, g, x + 1.5, y + 1.3, 1.2, ctx);
+    const mask = (mx, my) => {
+      g.moveTo(mx - 5, my - 12).quadraticCurveTo(mx, my - 15, mx + 5, my - 12).lineTo(mx + 5, my - 4).quadraticCurveTo(mx, my + 2, mx - 5, my - 4).closePath().fill(PRODUCTS.bark_cloth.color).stroke({ width: 0.6, color: 0x3a2418 });
+      g.ellipse(mx - 2.2, my - 8, 1.6, 1.2).fill(0x2b2018);
+      g.ellipse(mx + 2.2, my - 8, 1.6, 1.2).fill(0x2b2018);
+      g.moveTo(mx, my - 6).lineTo(mx, my - 3).stroke({ width: 0.8, color: 0xb23a2a });
+      for (let k = -2; k <= 2; k++) g.moveTo(mx + k * 2, my - 2).lineTo(mx + k * 2.4, my + 4).stroke({ width: 0.6, color: 0xc9a96b });
+    };
+    const n = 2 + Math.min(ctx.tier, 3);
+    for (let k = 0; k < n; k++) {
+      const p = iso(x + 0.3 + k * 0.55, y + 2.85, 0);
+      g.rect(p.x - 1, p.y - 22, 2, 22).fill(0x6b4a2e);
+      mask(p.x, p.y - 18);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.tamboRoof();
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, dx] of [[0, -8], [1, 10]]) {
+        const p = { x: floor.x + dx, y: floor.y - 2 };
+        anim.roundRect(p.x - 3.2, p.y - 12, 6.4, 8, 2).fill(k ? 0x4fb3bf : 0xf2c14e);
+        anim.circle(p.x, p.y - 14.5, 2.8).fill(0x6d4c32);
+        anim.rect(p.x - 2.8, p.y - 16, 5.6, 1.6).fill(0x2b2018);
+        const w = this.working ? Math.sin(time * 3 + k * 2) * 1.5 : 0;
+        const mx = p.x + 6 * (k ? -1 : 1);
+        anim.moveTo(mx - 3.5, p.y - 9 + w * 0.3).quadraticCurveTo(mx, p.y - 11 + w * 0.3, mx + 3.5, p.y - 9 + w * 0.3).lineTo(mx + 3.5, p.y - 3).quadraticCurveTo(mx, p.y + 1, mx - 3.5, p.y - 3).closePath().fill(PRODUCTS.bark_cloth.color).stroke({ width: 0.5, color: 0x3a2418 });
+        anim.circle(mx - 1.5, p.y - 6, 0.9).fill(0x2b2018).circle(mx + 1.5, p.y - 6, 0.9).fill(0x2b2018);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Tienda de la Yanchama: la casa de madera sobre pilotes con techo de palma, con las máscaras y las telas
+  // pintadas en el corredor, el letrero y los visitantes que compran.
+  tienda_yanchama(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 2.1, 1.3, 22, ctx, { wall: 0xb08850, trim: 0xb23a2a, roofColor: 0xc9a96b });
+    box(g, x + 0.5, y + 2.0, 1.9, 0.4, 12, 0x8d6e4a);
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 2); k++) {
+      const q = iso(x + 0.7 + k * 0.38, y + 2.2, 12);
+      if (k % 2) {
+        g.rect(q.x - 4, q.y - 10, 8, 10).fill(PRODUCTS.painted_cloth.color).stroke({ width: 0.5, color: 0x3a2418 });
+        g.moveTo(q.x - 3, q.y - 6).lineTo(q.x - 1, q.y - 8).lineTo(q.x + 1, q.y - 6).lineTo(q.x + 3, q.y - 8).stroke({ width: 0.8, color: 0x2b2018 });
+      } else {
+        g.moveTo(q.x - 4, q.y - 9).quadraticCurveTo(q.x, q.y - 12, q.x + 4, q.y - 9).lineTo(q.x + 4, q.y - 3).quadraticCurveTo(q.x, q.y + 1, q.x - 4, q.y - 3).closePath().fill(PRODUCTS.bark_cloth.color).stroke({ width: 0.5, color: 0x3a2418 });
+        g.circle(q.x - 1.6, q.y - 6, 1).fill(0x2b2018).circle(q.x + 1.6, q.y - 6, 1).fill(0x2b2018);
+        g.moveTo(q.x - 2, q.y - 2.5).lineTo(q.x + 2, q.y - 2.5).stroke({ width: 0.8, color: 0xb23a2a });
+      }
+    }
+    const sign = iso(x + 1.4, y + 1.5, 46 + ctx.up);
+    g.rect(sign.x - 16, sign.y - 6, 32, 9).fill(0xe8d9b5).stroke(OUTLINE);
+    g.moveTo(sign.x - 13, sign.y - 1).lineTo(sign.x - 8, sign.y - 4).lineTo(sign.x - 3, sign.y - 1).lineTo(sign.x + 2, sign.y - 4).lineTo(sign.x + 7, sign.y - 1).lineTo(sign.x + 12, sign.y - 4).stroke({ width: 1.2, color: 0xb23a2a });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const f = this.working ? (Math.sin(time * 0.5) + 1) / 2 : 0.3;
+      for (const [k, sh] of [[0, 0xe5737f], [1, 0x6cbf6c]]) {
+        const p = iso(x + 0.8 + f * 1.4 + k * 0.5, y + 2.85 + k * 0.1);
+        worker(anim, p.x, p.y, sh);
+      }
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

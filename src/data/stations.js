@@ -375,6 +375,16 @@ export const STATIONS = [
   { id: 'desayuno_table', zone: 'casaberia', name: 'Mesa del desayuno', icon: ICON.desayunoAmazonico, in: { casabe: 2 }, imports: [{ product: 'asai_bag', perCycle: 1, route: 'bolsas_asai' }], out: { desayuno_amazonico: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.50' },
   { id: 'maloca', zone: 'casaberia', name: 'Maloca', icon: ICON.banqueteMaloca, in: { casabe: 2 }, imports: [{ product: 'asai_bag', perCycle: 1, route: 'bolsas_asai' }, { product: 'clean_pirarucu', perCycle: 4, route: 'pirarucus' }], out: { banquete_maloca: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.50' },
 
+  // Amazonas · La Yanchama (v3.51): los ticuna sacan la corteza del árbol de yanchama, la remojan en el río, la
+  // golpean con el mazo hasta volverla tela, la pintan con tintes de la selva y tallan las máscaras del ritual de la
+  // Pelazón. La Tienda las vende con el pirarucú salado y moqueado del Lago. Mismos números que el Werregue.
+  { id: 'yanchama_trees', zone: 'yanchama', name: 'Árboles de yanchama', icon: ICON.yanchamaTree, infinite: true, out: { yanchama_bark: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.51' },
+  { id: 'bark_soaker', zone: 'yanchama', name: 'Remojo de corteza', icon: ICON.yanchamaBark, in: { yanchama_bark: 1 }, out: { soaked_bark: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.51' },
+  { id: 'bark_beater', zone: 'yanchama', name: 'Golpeadero', icon: ICON.barkCloth, in: { soaked_bark: 2 }, out: { bark_cloth: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.51' },
+  { id: 'cloth_painter', zone: 'yanchama', name: 'Pintores de yanchama', icon: ICON.paintedCloth, in: { bark_cloth: 2 }, out: { painted_cloth: 1 }, cycle: 8, unlockCost: 200000000, upgradeBase: 60000, growth: 1.15, release: '3.51' },
+  { id: 'mask_maker', zone: 'yanchama', name: 'Taller de máscaras', icon: ICON.ticunaMask, in: { painted_cloth: 1 }, out: { ticuna_mask: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.51' },
+  { id: 'tienda_yanchama', zone: 'yanchama', name: 'Tienda de la Yanchama', icon: ICON.recuerdoAmazonas, in: { ticuna_mask: 4 }, imports: [{ product: 'salted_pirarucu', perCycle: 1, route: 'pirarucus_salados' }, { product: 'moqueado', perCycle: 1, route: 'moqueados' }], out: { recuerdo_amazonas: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.51' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

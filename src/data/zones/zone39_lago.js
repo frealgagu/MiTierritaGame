@@ -35,6 +35,9 @@ export const ZONE39 = {
     ajinegro: { road: [[25.9, 14.5], [20.3, 14.5]], sign: [24.2, 13.3], text: '⬅ Del Ajizal' },
     // El pirarucú limpio sale de la bodega hacia la Casabería (v3.50).
     pirarucus: { road: [[24.5, 17.2], [24.5, 16.5], [25.9, 16.5]], sign: [25.3, 15.6], text: 'Pirarucú a la Casabería ➜' },
+    // El pirarucú salado y el moqueado salen hacia la Yanchama (v3.51).
+    pirarucus_salados: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Pirarucú salado a la Yanchama ⬇' },
+    moqueados: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Moqueado ⬇' },
   },
   unlockedBy: 'ajizal',
   next: 'casaberia',

@@ -917,5 +917,25 @@ const CASABERIA = [
   { id: 'ac_final', type: 'sold', product: 'banquete_maloca', amount: 4000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA };
+// Amazonas · La Yanchama (v3.51): la misma lista que el Werregue.
+const YANCHAMA = [
+  { id: 'ay01', type: 'sold', product: 'yanchama_bark', amount: 50, reward: 1000000 },
+  { id: 'ay02', type: 'level', target: 'yanchama_trees', level: 10, reward: 2000000 },
+  { id: 'ay03', type: 'unlock', station: 'bark_soaker', reward: 4000000 },
+  { id: 'ay04', type: 'level', target: 'yanchama_trees:transport', level: 10, reward: 4000000 },
+  { id: 'ay05', type: 'unlock', station: 'bark_beater', reward: 8000000 },
+  { id: 'ay06', type: 'produced', product: 'bark_cloth', amount: 200, reward: 12000000 },
+  { id: 'ay08', type: 'unlock', station: 'cloth_painter', reward: 25000000 },
+  { id: 'ay09', type: 'level', target: 'dispatch:yanchama', level: 10, reward: 25000000 },
+  { id: 'ay10', type: 'unlock', station: 'mask_maker', reward: 50000000 },
+  { id: 'ay11', type: 'sold', product: 'ticuna_mask', amount: 300, reward: 80000000 },
+  { id: 'ay12', type: 'unlock', station: 'tienda_yanchama', reward: 120000000 },
+  { id: 'ay13', type: 'imported', product: 'salted_pirarucu', amount: 200, reward: 150000000 },
+  { id: 'ay14', type: 'allLevels', zone: 'yanchama', level: 25, reward: 200000000 },
+  { id: 'ay07', type: 'research', research: 'yanchama_sembrada', reward: 100000000 },
+  { id: 'ay15', type: 'sold', product: 'recuerdo_amazonas', amount: 1000, reward: 300000000 },
+  { id: 'ay_final', type: 'sold', product: 'recuerdo_amazonas', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

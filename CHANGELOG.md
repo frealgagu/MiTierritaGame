@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.51.0 — El Amazonas: La Yanchama
+- **🎭 La Yanchama**, la quinta zona del Amazonas, se abre al completar La Casabería: los Árboles de yanchama → el Remojo de corteza → el Golpeadero → los Pintores de yanchama → el Taller de máscaras → la Tienda de la Yanchama. La corteza se remoja en la quebrada, se golpea con el mazo hasta volverse tela, se pinta con jagua y achiote y se vuelve **máscara ticuna**, la de la fiesta de la Pelazón; la tienda vende el **Recuerdo del Amazonas**. Tiene los mismos números que el Werregue.
+- **🚌 Ruta del pirarucú salado** y **🚌 Ruta del moqueado:** salen del Lago hacia la Tienda de la Yanchama.
+- Su persona es **Don Eliseo, el artesano ticuna**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (del árbol de yanchama al recuerdo).
+- **El mapa:** el monte oscuro de yanchamas de tronco liso y claro, con raíces de tabla y la herida de la corteza sacada; en las estaciones, el pozo de la quebrada con las tiras bajo las piedras, la ramada del golpeadero con el tronco y los mazos, los tambos de los pintores y de las máscaras (con las máscaras que miran desde los palos) y la tienda de madera con su letrero pintado.
+
 ## v3.50.0 — El Amazonas: La Casabería
 - **🫓 La Casabería**, la cuarta zona del Amazonas, se abre al completar El Lago: la Chagra de yuca → la Peladora de yuca → el Rallador de yuca → el **Tipití** (el tubo tejido de palma que exprime la masa y le saca el jugo venenoso de la yuca brava) → el Budare de casabe. El casabe se reparte entre la **Mesa del desayuno** (el desayuno amazónico) y la **Maloca** (el banquete de la maloca). Tiene los mismos números que el Manglar.
 - **🚌 Ruta del asaí:** las bolsas de asaí del Asaizal llegan a la Mesa del desayuno y a la Maloca. **🚌 Ruta del pirarucú:** el pirarucú limpio del Lago llega a la Maloca.

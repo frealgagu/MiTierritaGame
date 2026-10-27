@@ -152,7 +152,7 @@ export class Terrain {
             const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : this.zone.style === 'buenaventura' ? [0xb8bcc0, 0xd0d4d6] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
-        } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea' || this.zone.theme === 'werregue' || this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'chagra')) {
+        } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea' || this.zone.theme === 'werregue' || this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'chagra' || this.zone.theme === 'yanchama')) {
           // Hojarasca bajo los cacaos (y bajo el platanal del Pacífico, v3.38).
           for (let k = 0; k < 2; k++) {
             const p = iso(gx + rng(), gy + rng());
@@ -463,7 +463,7 @@ export class Terrain {
           else if (r < 0.055) obj = egret(rng);
           else if (r < 0.075) obj = coconutPalm(rng);
           else if (r < 0.088) obj = ceiba(rng);
-        } else if (this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'lake' || this.zone.theme === 'chagra') {
+        } else if (this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'lake' || this.zone.theme === 'chagra' || this.zone.theme === 'yanchama') {
           // El Amazonas (v3.47): la selva de la orilla, con ceibas gigantes, heliconias, plátano, asaí suelto y alguna
           // guacamaya en su palo.
           if (r < 0.025) obj = ceiba(rng);
@@ -829,6 +829,7 @@ const FARM_SOIL = {
   aji: (v) => mix(0x7a5236, 0x6a462e, v * 0.5), // la tierra de la chagra (v3.48)
   lake: (v) => mix(0x2e5048, 0x365a50, v * 0.6), // el agua negra del lago (v3.49)
   chagra: (v) => mix(0x6e4a30, 0x7a5638, v * 0.5), // la tierra de la chagra de yuca (v3.50)
+  yanchama: (v) => mix(0x3f4a2e, 0x4a5636, v * 0.5), // el suelo oscuro del monte de yanchamas (v3.51)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
@@ -1514,6 +1515,20 @@ export function drawAjiPlant(g, x, y, scale, rng, peppers = 3) {
     const py = y - (7 + rng() * 9) * s;
     g.ellipse(px, py, 0.9 * s, 2.2 * s).fill(cols[k % cols.length]);
   }
+}
+
+// Árbol de yanchama (v3.51): el tronco liso y claro con las raíces de tabla y la copa ancha; con cada hito
+// crece, y a algunos ya se les sacó una tira de corteza (la herida clara en el tronco).
+export function drawYanchamaTree(g, x, y, scale, rng, peeled = false) {
+  const s = scale * (0.9 + rng() * 0.2);
+  shadow(g, x + 4, y + 2, 16 * s, 6 * s);
+  const h = 34 * s;
+  g.poly([x - 9 * s, y + 1, x - 2.5 * s, y - 8 * s, x - 2 * s, y]).fill(0xa8936a);
+  g.poly([x + 9 * s, y + 1, x + 2.5 * s, y - 8 * s, x + 2 * s, y]).fill(0x98845e);
+  g.rect(x - 2.6 * s, y - h, 5.2 * s, h).fill(0xc9b48a);
+  g.rect(x + 0.8 * s, y - h, 1.8 * s, h).fill(0xa8936a);
+  if (peeled) g.rect(x - 1.4 * s, y - h * 0.6, 2.2 * s, h * 0.35).fill(0xe8d9b5);
+  for (const [dx, dy, r, c] of [[-7, -h / s - 2, 9, 0x2e6b22], [7, -h / s - 3, 9, 0x2e6b22], [0, -h / s - 8, 10, 0x43a047], [-3, -h / s - 1, 7, 0x388e3c]]) g.circle(x + dx * s, y + dy * s, r * s).fill(c);
 }
 
 // Mata de yuca (v3.50): el tallo de nudos, delgado y alto, con las hojas palmeadas de dedos largos arriba; con

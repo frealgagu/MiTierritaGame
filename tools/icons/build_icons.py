@@ -3689,6 +3689,83 @@ def banquete_maloca():
     return layers
 
 
+# ---------- Amazonas · La Yanchama (v3.51) ----------
+
+def ticuna_motif(cx, cy, w, h, dark='#2b2018', red='#b23a2a'):
+    """Los dibujos ticuna: rombos negros, la línea roja en zigzag y los puntos."""
+    layers = []
+    zig = []
+    n = 6
+    for k in range(n + 1):
+        zig.append((cx - w / 2 + w * k / n, cy + (h / 2 if k % 2 else -h / 2)))
+    layers.append((red, [rib(zig[k][0], zig[k][1], zig[k + 1][0], zig[k + 1][1], 1.6) for k in range(n)]))
+    for k in range(0, n, 2):
+        x = cx - w / 2 + w * (k + 1) / n
+        layers.append((dark, [poly(x - 3, cy, x, cy - 4, x + 3, cy, x, cy + 4)]))
+    return layers
+
+
+def yanchama_tree():
+    """Árbol de yanchama: el tronco liso y claro con las raíces de tabla, la copa ancha, y la tira de corteza sacada."""
+    layers = [('#5d4037', [ellipse(50, 90, 34, 6)])]
+    layers += [(OUTLINE, ['M 40 90 L 43 40 L 57 40 L 60 90 Z', 'M 26 92 L 42 70 L 44 90 Z', 'M 74 92 L 58 70 L 56 90 Z'])]
+    layers += [('#c9b48a', ['M 42.5 88 L 45 42 L 55 42 L 57.5 88 Z']), ('#a8936a', ['M 29 90.5 L 42 73 L 43 89 Z', 'M 71 90.5 L 58 73 L 57 89 Z'])]
+    layers += [(OUTLINE, [rect(46.5, 54, 6, 22)]), ('#e8d9b5', [rect(47.5, 55, 4, 20)])]
+    layers += [(OUTLINE, [ellipse(50, 30, 42, 22)]), ('#2e7d32', [ellipse(50, 30, 39.5, 19.5)]), ('#43a047', [ellipse(36, 24, 16, 9), ellipse(62, 22, 18, 9), ellipse(50, 36, 18, 7)])]
+    return layers
+
+
+def yanchama_bark():
+    """Corteza de yanchama: las tiras de corteza, café por fuera y claras por dentro, remojándose en el agua del río."""
+    layers = [('#4f8f96', [ellipse(50, 74, 46, 16)]), ('#7fbcc0', [ellipse(30, 72, 10, 1.6), ellipse(72, 78, 8, 1.4)])]
+    for x0, y0, x1, y1 in [(12, 40, 80, 62), (22, 56, 90, 76), (8, 70, 64, 86)]:
+        layers += [(OUTLINE, [rib(x0, y0, x1, y1, 13)]), ('#8d6e4a', [rib(x0, y0, x1, y1, 10.5)]), ('#e8d9b5', [rib(x0 + 2, y0 + 1, x1 - 2, y1 - 1, 5.5)])]
+    return layers
+
+
+def bark_cloth():
+    """Tela de yanchama: la tela clara y fibrosa que sale de golpear la corteza, con el mazo de palo encima."""
+    layers = [(OUTLINE, [poly(8, 46, 84, 30, 94, 76, 18, 92)]), ('#e8d9b5', [poly(11, 48, 82, 33, 91, 74, 20, 89)])]
+    layers.append(('#d1c09a', [rib(14 + k * 2, 52 + k * 8, 86 + k, 38 + k * 8, 0.8) for k in range(5)]))
+    layers += [(OUTLINE, [rib(30, 30, 66, 14, 7)]), ('#8d5a32', [rib(31, 29.5, 65, 14.5, 4.6)])]
+    layers += [(OUTLINE, [ellipse(26, 34, 11, 8, -24)]), ('#a1887f', [ellipse(26, 34, 9, 6, -24)])]
+    return layers
+
+
+def painted_cloth():
+    """Tela pintada: la yanchama con los dibujos ticuna en negro de jagua y rojo de achiote, y el pincel."""
+    layers = [(OUTLINE, [rect(10, 22, 80, 64, -4)]), ('#e8d9b5', [rect(12.5, 24.5, 75, 59, -4)])]
+    layers += ticuna_motif(50, 38, 62, 10)
+    layers += ticuna_motif(50, 68, 62, 10, dark='#b23a2a', red='#2b2018')
+    layers += [('#2b2018', [circle(26, 53, 2), circle(42, 52, 2), circle(58, 52, 2), circle(74, 51, 2)])]
+    layers += [(OUTLINE, [rib(70, 96, 96, 70, 4.6)]), ('#8d6e4a', [rib(71, 95, 95, 71, 2.6)]), ('#b23a2a', [circle(70, 96, 3)])]
+    return layers
+
+
+def ticuna_mask():
+    """Máscara ticuna: la máscara de yanchama pintada, con los ojos grandes, la boca y el pelo de fibra."""
+    layers = [(OUTLINE, ['M 24 20 Q 50 6 76 20 L 78 62 Q 50 96 22 62 Z']), ('#e8d9b5', ['M 26.5 22 Q 50 9 73.5 22 L 75.5 61.5 Q 50 92 24.5 61.5 Z'])]
+    layers.append(('#c9a96b', [rib(22 + k * 4, 64 + abs(k - 7) * 1.4, 20 + k * 4.4, 92, 1.6) for k in range(15)]))
+    layers += [(OUTLINE, ['M 24 20 Q 50 6 76 20 L 78 62 Q 50 96 22 62 Z']), ('#e8d9b5', ['M 26.5 22 Q 50 9 73.5 22 L 75.5 61.5 Q 50 92 24.5 61.5 Z'])]
+    layers += [('#2b2018', [ellipse(38, 42, 9, 7), ellipse(62, 42, 9, 7)]), ('#ffffff', [circle(38, 42, 3.4), circle(62, 42, 3.4)]), ('#2b2018', [circle(38, 42, 1.8), circle(62, 42, 1.8)])]
+    layers += [('#b23a2a', [rib(30, 32, 46, 30, 2), rib(54, 30, 70, 32, 2), rib(50, 46, 50, 58, 2.4)])]
+    layers += [('#2b2018', ['M 38 66 Q 50 74 62 66 Q 50 70 38 66 Z']), ('#b23a2a', [poly(28, 52, 32, 56, 28, 60), poly(72, 52, 68, 56, 72, 60)])]
+    layers += ticuna_motif(50, 18, 40, 5)
+    return layers
+
+
+def recuerdo_amazonas():
+    """Recuerdo del Amazonas: la máscara ticuna y la yanchama pintada, con el pirarucú moqueado envuelto en hoja."""
+    layers = [(OUTLINE, [rect(4, 30, 52, 60, -8)]), ('#e8d9b5', [rect(6.5, 32.5, 47, 55, -8)])]
+    layers += ticuna_motif(30, 50, 36, 8)
+    layers += ticuna_motif(32, 72, 36, 8, dark='#b23a2a', red='#2b2018')
+    layers += [(OUTLINE, ['M 46 14 Q 66 4 86 14 L 88 46 Q 66 72 44 46 Z']), ('#d9b98a', ['M 48.5 16 Q 66 7 83.5 16 L 85.5 45.5 Q 66 68 46.5 45.5 Z'])]
+    layers += [('#2b2018', [ellipse(58, 30, 6, 5), ellipse(74, 30, 6, 5)]), ('#ffffff', [circle(58, 30, 2), circle(74, 30, 2)]), ('#b23a2a', [rib(66, 34, 66, 44, 2), rib(58, 52, 74, 52, 2)])]
+    layers += [(OUTLINE, [leaf(54, 94, 96, 74, 14)]), ('#2e7d32', [leaf(54, 94, 96, 74, 12)])]
+    layers += [(OUTLINE, [rect(66, 76, 16, 10, -24)]), ('#8d4a1f', [rect(67.5, 77.5, 13, 7, -24)]), ('#c97a32', [rect(69, 78.5, 9, 3, -24)])]
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -3945,6 +4022,12 @@ ICONS = [
     (0xE0FC, 'casabe', casabe),
     (0xE0FD, 'desayuno_amazonico', desayuno_amazonico),
     (0xE0FE, 'banquete_maloca', banquete_maloca),
+    (0xE0FF, 'yanchama_tree', yanchama_tree),
+    (0xE100, 'yanchama_bark', yanchama_bark),
+    (0xE101, 'bark_cloth', bark_cloth),
+    (0xE102, 'painted_cloth', painted_cloth),
+    (0xE103, 'ticuna_mask', ticuna_mask),
+    (0xE104, 'recuerdo_amazonas', recuerdo_amazonas),
 ]
 
 

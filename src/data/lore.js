@@ -290,6 +290,13 @@ export const FACTS = {
   casabe_budare: ['El budare es el plato de barro caliente donde se asa el casabe.'],
   desayuno_table: ['En el Amazonas se desayuna casabe con asaí o con ají negro.'],
   maloca: ['La maloca es la casa grande y comunitaria de los pueblos de la selva.'],
+  // Amazonas · La Yanchama (v3.51)
+  yanchama_trees: ['La yanchama es la corteza interna de árboles como el ojé y el caucho.', 'Se saca una tira de corteza sin tumbar el árbol.'],
+  bark_soaker: ['La corteza se deja remojando en el río varios días, hasta ablandarse.'],
+  bark_beater: ['Con el mazo de palo la corteza se golpea hasta volverse tela.'],
+  cloth_painter: ['Se pinta con el negro de la jagua y el rojo del achiote.'],
+  mask_maker: ['Los ticuna usan máscaras de yanchama en la fiesta de la Pelazón.', 'Las máscaras representan a los animales y los espíritus de la selva.'],
+  tienda_yanchama: ['La yanchama pintada se vende en Leticia, Puerto Nariño y Macedonia.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -334,6 +341,7 @@ export const PEOPLE = {
   ajizal: { icon: '👵🏽', name: 'Doña Remedios', role: 'la ajicera' },
   lago: { icon: '🧔🏽', name: 'Don Jacinto', role: 'el pescador' },
   casaberia: { icon: '👵🏽', name: 'Abuela Tránsito', role: 'la casabera' },
+  yanchama: { icon: '🧑🏽', name: 'Don Eliseo', role: 'el artesano ticuna' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -378,6 +386,7 @@ export const WELCOME = {
   ajizal: '¡Bienvenido al Ajizal, mijo! Aquí el ají se cocina en tucupí hasta volverse ají negro, la sal de la selva.',
   lago: '¡Bienvenido al Lago, paisano! Aquí salimos en canoa por el pirarucú, el gigante de los ríos.',
   casaberia: '¡Bienvenido a la Casabería, mijo! De la yuca brava sale el casabe: el pan de la selva.',
+  yanchama: '¡Bienvenido a la Yanchama, paisano! De la corteza del árbol sacamos tela, y de la tela, máscaras.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

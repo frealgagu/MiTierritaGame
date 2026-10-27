@@ -305,6 +305,14 @@ export const PRODUCTS = {
   desayuno_amazonico: { name: 'Desayuno amazónico', zone: 'casaberia', value: 100000, icon: ICON.desayunoAmazonico, color: 0x8e24aa },
   banquete_maloca: { name: 'Banquete de la maloca', zone: 'casaberia', value: 220000, icon: ICON.banqueteMaloca, color: 0xc97a32 },
 
+  // Amazonas · La Yanchama (v3.51): mismos valores que el Werregue.
+  yanchama_bark: { name: 'Corteza de yanchama', zone: 'yanchama', value: 6000, icon: ICON.yanchamaTree, color: 0x8d6e4a },
+  soaked_bark: { name: 'Corteza remojada', zone: 'yanchama', value: 12000, icon: ICON.yanchamaBark, color: 0xc9a96b },
+  bark_cloth: { name: 'Tela de yanchama', zone: 'yanchama', value: 30000, icon: ICON.barkCloth, color: 0xe8d9b5 },
+  painted_cloth: { name: 'Tela pintada', zone: 'yanchama', value: 70000, icon: ICON.paintedCloth, color: 0xd9a85a },
+  ticuna_mask: { name: 'Máscara ticuna', zone: 'yanchama', value: 120000, icon: ICON.ticunaMask, color: 0xc0392b },
+  recuerdo_amazonas: { name: 'Recuerdo del Amazonas', zone: 'yanchama', value: 1200000, icon: ICON.recuerdoAmazonas, color: 0x6d4c41 },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

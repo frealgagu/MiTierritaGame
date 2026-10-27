@@ -536,6 +536,18 @@ export const RESEARCH = [
   { zone: 'casaberia', id: 'sabor_chagra', name: 'Sabor de la chagra', icon: '🏅', desc: 'Todo lo que vende la Casabería vale un 50 % más.', cost: 60000000, requires: 'desayuno_table', effect: { type: 'zoneValue', target: 'casaberia', mult: 1.5 } },
   { zone: 'casaberia', id: 'maestria_casaberia', name: 'Maestría: Casabería', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'casaberia', mult: 4 } },
   { zone: 'casaberia', id: 'supremacia_casaberia', name: 'Supremacía: Casabería', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'casaberia', mult: 8 } },
+
+  // Amazonas · La Yanchama (v3.51): las mismas del Werregue, con la yanchama.
+  { zone: 'yanchama', id: 'yanchama_sembrada', name: 'Yanchamas sembradas', icon: ICON.yanchamaTree, desc: 'Los Árboles de yanchama dan el doble.', cost: 15000000, requires: 'bark_soaker', effect: { type: 'stationSpeed', target: 'yanchama_trees', mult: 2 } },
+  { zone: 'yanchama', id: 'remojo_rio', name: 'Remojo en el río', icon: ICON.yanchamaBark, desc: 'El Remojo de corteza remoja el doble.', cost: 18000000, requires: 'bark_soaker', effect: { type: 'stationSpeed', target: 'bark_soaker', mult: 2 } },
+  { zone: 'yanchama', id: 'mazo_palo', name: 'Mazo de palo', icon: ICON.barkCloth, desc: 'El Golpeadero golpea el doble.', cost: 45000000, requires: 'cloth_painter', effect: { type: 'stationSpeed', target: 'bark_beater', mult: 2 } },
+  { zone: 'yanchama', id: 'canoa_artesanias', name: 'Canoa de las artesanías', icon: '🛶', desc: 'El despacho de la Yanchama lleva el doble por viaje.', cost: 60000000, requires: 'bark_beater', effect: { type: 'dispatchCapacity', target: 'yanchama', mult: 2 } },
+  { zone: 'yanchama', id: 'tintes_selva', name: 'Tintes de la selva', icon: ICON.paintedCloth, desc: 'Los Pintores de yanchama pintan el doble.', cost: 120000000, requires: 'mask_maker', effect: { type: 'stationSpeed', target: 'cloth_painter', mult: 2 } },
+  { zone: 'yanchama', id: 'escuela_mascaras', name: 'Escuela de máscaras', icon: ICON.ticunaMask, desc: 'El Taller de máscaras hace el doble.', cost: 300000000, requires: 'tienda_yanchama', effect: { type: 'stationSpeed', target: 'mask_maker', mult: 2 } },
+  { zone: 'yanchama', id: 'tienda_ribera', name: 'Tienda de la ribera', icon: ICON.recuerdoAmazonas, desc: 'La Tienda de la Yanchama vende el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'tienda_yanchama', effect: { type: 'stationSpeed', target: 'tienda_yanchama', mult: 2 } },
+  { zone: 'yanchama', id: 'arte_ticuna', name: 'Arte ticuna', icon: '🏅', desc: 'Todo lo que vende la Yanchama vale un 50 % más.', cost: 400000000, requires: 'mask_maker', effect: { type: 'zoneValue', target: 'yanchama', mult: 1.5 } },
+  { zone: 'yanchama', id: 'maestria_yanchama', name: 'Maestría: Yanchama', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'yanchama', mult: 4 } },
+  { zone: 'yanchama', id: 'supremacia_yanchama', name: 'Supremacía: Yanchama', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'yanchama', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al
