@@ -5933,6 +5933,202 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Amazonas · La Casabería (v3.50): de la yuca brava al casabe, en la chagra y la maloca ---
+
+  // Peladora de yuca: la ramada de palma con la batea de agua; la casabera pela la yuca con cuchillo y las
+  // cáscaras se amontonan al lado. El montón de yuca sin pelar crece con los hitos.
+  yuca_peeler(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    box(g, x0 + 0.4, y0 + 0.6, 1.6, 0.7, 9, 0x8d6e4a);
+    const tub = iso(x0 + 1.2, y0 + 0.95, 9);
+    g.ellipse(tub.x, tub.y, 18, 6).fill(0x6d4c41).stroke(OUTLINE);
+    g.ellipse(tub.x, tub.y, 15, 4.5).fill(0x5a9aa0);
+    const pile = iso(x + 2.6, y + 2.3);
+    for (let k = 0; k < 4 + Math.min(ctx.tier, 3) * 2; k++) {
+      const px = pile.x - 8 + (k % 4) * 5;
+      const py = pile.y - 2 - Math.floor(k / 4) * 3;
+      g.ellipse(px, py, 4.5, 1.6).fill(PRODUCTS.yuca_brava.color).stroke({ width: 0.5, color: 0x3a2418 });
+    }
+    const peels = iso(x + 0.5, y + 2.6);
+    for (let k = 0; k < 5; k++) g.moveTo(peels.x - 6 + k * 3, peels.y - 1).quadraticCurveTo(peels.x - 4 + k * 3, peels.y - 4, peels.x - 2 + k * 3, peels.y).stroke({ width: 1.4, color: 0x8d5a32 });
+    ramada(this, g, x0, y0, 2.3, 1.6, 28 + ctx.up, 0xc9a96b);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (let k = 0; k < 3; k++) {
+        const bob = this.working ? Math.sin(time * 2.5 + k * 2) * 0.8 : 0;
+        anim.ellipse(tub.x - 7 + k * 7, tub.y - 1 + bob, 4, 1.4).fill(PRODUCTS.peeled_yuca.color).stroke({ width: 0.4, color: 0x8d6e4a });
+      }
+      const wp = iso(x0 + 1.2, y0 + 1.75);
+      worker(anim, wp.x, wp.y, 0xe5737f);
+      if (!this.working) return;
+      const f = (time * 2) % 1;
+      anim.moveTo(tub.x + 10, tub.y - 6 + f * 3).lineTo(tub.x + 14, tub.y - 9 + f * 3).stroke({ width: 1.2, color: 0xcfd8dc });
+    };
+    this.animate(0);
+  },
+
+  // Rallador de yuca: la casa de madera sobre pilotes con techo de palma; en el corredor, la artesa (la canoa
+  // de madera) con el rallador de lata, donde la yuca pelada se vuelve masa.
+  yuca_grater(g, x, y, ctx) {
+    const hx = x + 0.2;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 1.7, 1.3, 20, ctx, { wall: 0xb08850, trim: 0xf7f4ee, roofColor: 0xc9a96b, lift: 8 });
+    const a = iso(x + 2.05, y + 0.6, 4);
+    const b = iso(x + 2.05, y + 2.2, 4);
+    g.moveTo(a.x - 4, a.y - 3).lineTo(b.x - 4, b.y - 3).lineTo(b.x + 6, b.y).lineTo(a.x + 6, a.y).closePath().fill(0x8d5a32).stroke(OUTLINE);
+    g.moveTo(a.x - 1, a.y - 1).lineTo(b.x - 1, b.y - 1).lineTo(b.x + 3, b.y).lineTo(a.x + 3, a.y).closePath().fill(PRODUCTS.grated_yuca.color);
+    const gr = iso(x + 2.05, y + 1.3, 10);
+    g.poly([gr.x - 5, gr.y - 2, gr.x + 3, gr.y - 8, gr.x + 6, gr.y - 2, gr.x - 2, gr.y + 4]).fill(0xb0bec5).stroke(OUTLINE);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const rub = this.working ? Math.sin(time * 8) * 3 : 0;
+      anim.ellipse(gr.x + rub, gr.y - 4 - rub * 0.5, 4, 1.6).fill(PRODUCTS.peeled_yuca.color).stroke({ width: 0.4, color: 0x8d6e4a });
+      const wp = iso(x + 2.75, y + 1.3);
+      worker(anim, wp.x, wp.y, 0x6cbf6c);
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) anim.circle(gr.x - 2 + i * 2, gr.y + 2 + ((time * 3 + i * 0.3) % 1) * 4, 0.8).fill(0xffffff);
+    };
+    this.animate(0);
+  },
+
+  // Tipití: el marco de palos donde cuelga el tipití, el tubo tejido de palma lleno de masa; la casabera se sienta
+  // en el palo de abajo y lo estira, y el jugo (el que se vuelve tucupí) cae en la totuma. Con los hitos, dos.
+  tipiti_press(g, x, y, ctx) {
+    const n = ctx.tier >= 2 ? 2 : 1;
+    this.frames = [];
+    for (let k = 0; k < n; k++) {
+      const fx = x + 0.9 + k * 1.2;
+      const fy = y + 1.4 - k * 0.2;
+      const p = iso(fx, fy, 0);
+      for (const dx of [-12, 12]) g.rect(p.x + dx - 1.4, p.y - 46, 2.8, 46).fill(0x6b4a2e).stroke({ width: 0.6, color: 0x3a2418 });
+      g.rect(p.x - 14, p.y - 48, 28, 3).fill(0x6b4a2e).stroke({ width: 0.6, color: 0x3a2418 });
+      g.ellipse(p.x + 6, p.y - 1, 5, 2).fill(0x5d4037).stroke({ width: 0.5, color: 0x3a2418 });
+      this.frames.push(p);
+    }
+    for (const [sx, sy] of [[2.6, 2.6], [2.25, 2.75]]) sack(g, x + sx, y + sy, 0, PRODUCTS.pressed_yuca.color);
+    this.roofTop = iso(x + 1.5, y + 1.3, 50);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, p] of this.frames.entries()) {
+        const s = this.working ? (Math.sin(time * 1.5 + k) + 1) * 2.5 : 0;
+        const top = p.y - 45;
+        const bot = p.y - 18 + s;
+        const w = 4.5 - s * 0.3;
+        anim.moveTo(p.x - w, top).lineTo(p.x + w, top).lineTo(p.x + w * 0.8, bot).lineTo(p.x - w * 0.8, bot).closePath().fill(0xd9b26a).stroke({ width: 0.6, color: 0x3a2418 });
+        for (let i = 1; i < 6; i++) anim.moveTo(p.x - w, top + (bot - top) * i / 6).lineTo(p.x + w, top + (bot - top) * (i + 0.5) / 6).stroke({ width: 0.5, color: 0xa07a3e });
+        anim.moveTo(p.x, bot).lineTo(p.x, bot + 4).stroke({ width: 1, color: 0x6d4c41 });
+        anim.moveTo(p.x - 14, bot + 4).lineTo(p.x + 16, bot + 6).stroke({ width: 2.4, color: 0x8d5a32 });
+        worker(anim, p.x + 16, p.y + 4, 0xe5737f);
+        if (this.working) anim.moveTo(p.x + 1, bot).lineTo(p.x + 5, p.y - 2).stroke({ width: 1, color: 0xf4d03f, alpha: 0.8 });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Budare de casabe: la cocina abierta con techo de palma y el budare (el plato redondo de barro) sobre las
+  // tres piedras y la candela; la casabera extiende la masa y voltea la torta, y al lado se secan los casabes.
+  casabe_budare(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    const c = iso(x0 + 1.1, y0 + 0.9, 0);
+    for (const [dx, dy] of [[-12, 2], [12, 2], [0, 7]]) g.ellipse(c.x + dx, c.y + dy - 2, 4, 3).fill(0x78716c).stroke({ width: 0.6, color: 0x3a2418 });
+    g.ellipse(c.x, c.y - 8, 22, 9).fill(0x8d4a2f).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 9, 19, 7.5).fill(0x5d3a28);
+    // Los casabes que se secan sobre la estera.
+    const mat = iso(x + 2.5, y + 2.5, 0);
+    g.poly([mat.x - 16, mat.y, mat.x, mat.y - 8, mat.x + 16, mat.y, mat.x, mat.y + 8]).fill(0xc9a96b).stroke({ width: 0.6, color: 0x3a2418 });
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) g.ellipse(mat.x - 6 + (k % 2) * 10, mat.y - 2 + Math.floor(k / 2) * 3 - (k % 2) * 2, 6, 2.6).fill(PRODUCTS.casabe.color).stroke({ width: 0.5, color: 0x8d6e4a });
+    ramada(this, g, x0, y0, 2.2, 1.8, 30 + ctx.up, 0xc9a96b);
+    this.smokePoints = [{ x: c.x, y: c.y - 20 }];
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      anim.poly([c.x - 6, c.y + 1, c.x - 2, c.y - 4 - (this.working ? Math.sin(time * 9) * 1.5 : 0), c.x + 2, c.y + 1]).fill(this.working ? 0xff7043 : 0x5d4037);
+      anim.poly([c.x + 2, c.y + 1, c.x + 6, c.y - 3 - (this.working ? Math.sin(time * 7) * 1.5 : 0), c.x + 10, c.y + 1]).fill(this.working ? 0xffa726 : 0x5d4037);
+      const flip = this.working ? Math.abs(Math.sin(time * 1.2)) : 0;
+      anim.ellipse(c.x, c.y - 9.5 - flip * 6, 15, 6 * (1 - flip * 0.8)).fill(flip > 0.5 ? 0xe8cf94 : PRODUCTS.casabe.color).stroke({ width: 0.5, color: 0x8d6e4a });
+      const wp = iso(x0 + 1.9, y0 + 1.6);
+      worker(anim, wp.x, wp.y, 0xf2c14e);
+    };
+    this.animate(0);
+  },
+
+  // Mesa del desayuno: la casa de madera sobre pilotes (verde agua) con las mesas del corredor; en cada mesa, el
+  // casabe y el vaso de asaí que llega del Asaizal, y la mesera que va y viene.
+  desayuno_table(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    stiltHouse(this, g, hx, hy, 2.1, 1.3, 22, ctx, { wall: 0x4fb3bf, trim: 0xf2c14e, roofColor: 0xc9a96b });
+    const tables = ctx.tier >= 2 ? [[0.7, 2.2], [1.6, 2.2], [2.5, 2.2]] : [[0.9, 2.2], [2.0, 2.2]];
+    this.plates = [];
+    for (const [tx, ty] of tables) {
+      box(g, x + tx - 0.3, y + ty - 0.2, 0.6, 0.4, 9, 0x8d6e4a);
+      const q = iso(x + tx, y + ty, 9);
+      g.ellipse(q.x - 3, q.y, 4.5, 1.8).fill(PRODUCTS.casabe.color).stroke({ width: 0.5, color: 0x3a2418 });
+      g.rect(q.x + 3, q.y - 6, 3.4, 6).fill(PRODUCTS.asai_bag.color).stroke({ width: 0.5, color: 0x3a2418 });
+      this.plates.push(q);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, q] of this.plates.entries()) worker(anim, q.x + (k % 2 ? 10 : -10), q.y + 10, [0xe5737f, 0x6cbf6c, 0xf2c14e][k % 3]);
+      const f = this.working ? (Math.sin(time * 0.7) + 1) / 2 : 0.5;
+      const w = iso(x + 0.6 + f * 2, y + 2.75);
+      worker(anim, w.x, w.y, 0xffffff);
+      anim.rect(w.x + 3, w.y - 20, 3, 5).fill(PRODUCTS.asai_bag.color).stroke({ width: 0.5, color: 0x3a2418 });
+    };
+    this.animate(0);
+  },
+
+  // Maloca: la casa grande y redonda de la comunidad, con el techo de palma que baja casi hasta el suelo y el
+  // frente de corteza pintado; afuera, la candela y la gente que llega al banquete con el pirarucú del Lago.
+  maloca(g, x, y, ctx) {
+    const c = iso(x + 1.4, y + 1.2, 0);
+    const rx = 52;
+    const ry = 26;
+    g.ellipse(c.x, c.y, rx, ry).fill(0x8d6e4a).stroke(OUTLINE);
+    const wallH = 10;
+    g.moveTo(c.x - rx * 0.92, c.y).lineTo(c.x - rx * 0.92, c.y - wallH).quadraticCurveTo(c.x, c.y + ry * 0.9 - wallH, c.x + rx * 0.92, c.y - wallH).lineTo(c.x + rx * 0.92, c.y).quadraticCurveTo(c.x, c.y + ry * 0.9, c.x - rx * 0.92, c.y).fill(0x6b4a2e).stroke(OUTLINE);
+    // El techo cónico de palma, que baja casi hasta el suelo.
+    const H = 46 + ctx.up;
+    const eave = c.y - wallH + 2;
+    g.moveTo(c.x - rx * 1.05, eave).lineTo(c.x, eave - H).lineTo(c.x + rx * 1.05, eave).quadraticCurveTo(c.x, eave + ry * 0.95, c.x - rx * 1.05, eave).fill(0xc9a96b).stroke(OUTLINE);
+    for (let k = 1; k < 5; k++) g.moveTo(c.x - rx * 1.05 * (1 - k / 5), eave - H * k / 5).quadraticCurveTo(c.x, eave - H * k / 5 + ry * 0.95 * (1 - k / 5), c.x + rx * 1.05 * (1 - k / 5), eave - H * k / 5).stroke({ width: 0.8, color: 0xa1854f });
+    // El frente de corteza pintado, con la puerta.
+    const fy = c.y + ry * 0.55;
+    g.poly([c.x - 14, fy - 2, c.x + 14, fy - 2, c.x + 12, fy - 26, c.x, fy - 34, c.x - 12, fy - 26]).fill(0xe8d9b5).stroke(OUTLINE);
+    for (const [ox, col] of [[-8, 0x3e2723], [8, 0x3e2723], [0, 0xc62828]]) g.poly([c.x + ox - 3, fy - 22, c.x + ox, fy - 27, c.x + ox + 3, fy - 22, c.x + ox, fy - 17]).fill(col);
+    g.moveTo(c.x - 12, fy - 12).lineTo(c.x - 6, fy - 15).lineTo(c.x, fy - 12).lineTo(c.x + 6, fy - 15).lineTo(c.x + 12, fy - 12).stroke({ width: 1.2, color: 0xc62828 });
+    g.rect(c.x - 4, fy - 11, 8, 9).fill(0x3e2723);
+    this.roofTop = { x: c.x, y: eave - H };
+    const fire = iso(x + 2.7, y + 2.7, 0);
+    for (const [dx, dy] of [[-5, 0], [5, 0], [0, 3]]) g.ellipse(fire.x + dx, fire.y + dy, 2.6, 1.8).fill(0x78716c);
+    this.smokePoints = [{ x: fire.x, y: fire.y - 10 }];
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      anim.poly([fire.x - 4, fire.y, fire.x, fire.y - 7 - (this.working ? Math.sin(time * 9) * 1.5 : 0), fire.x + 4, fire.y]).fill(this.working ? 0xff7043 : 0x5d4037);
+      const n = this.working ? 3 : 1;
+      for (let k = 0; k < n; k++) {
+        const f = this.working ? (time * 0.15 + k / 3) % 1 : 0.3;
+        const p = iso(x + 0.3 + f * 1.4, y + 2.9 - f * 0.2, 0);
+        worker(anim, p.x, p.y, [0xc62828, 0xf2c14e, 0x6cbf6c][k]);
+        anim.ellipse(p.x + 4, p.y - 18, 5, 2).fill(k === 1 ? PRODUCTS.casabe.color : PRODUCTS.clean_pirarucu.color).stroke({ width: 0.5, color: 0x3a2418 });
+      }
+    };
+    this.animate(0);
+  },
+
   // --- Santander · El Tabacal (v3.1) ---
 
   // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.

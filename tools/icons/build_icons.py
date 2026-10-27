@@ -3578,6 +3578,117 @@ def pirarucu_aji():
     return layers
 
 
+# ---------- Amazonas · La Casabería (v3.50) ----------
+
+def yuca_root(x0, y0, x1, y1, w, skin='#8d5a32', flesh=None):
+    """Una raíz de yuca: alargada y ahusada, con la cáscara café (o pelada, blanca) y sus anillos."""
+    layers = [(OUTLINE, [leaf(x0, y0, x1, y1, w + 2.4)]), (skin, [leaf(x0, y0, x1, y1, w)])]
+    if flesh:
+        layers.append((flesh, [leaf(x0 + (x1 - x0) * 0.04, y0 + (y1 - y0) * 0.04, x1 - (x1 - x0) * 0.04, y1 - (y1 - y0) * 0.04, w * 0.78)]))
+    ring = shade_hex(skin, 0.75) if not flesh else '#e0d6bf'
+    for f in (0.3, 0.5, 0.7):
+        cx, cy = x0 + (x1 - x0) * f, y0 + (y1 - y0) * f
+        dx, dy = (y1 - y0), -(x1 - x0)
+        n = math.hypot(dx, dy) or 1
+        k = w * 0.42 * (1 - abs(f - 0.5) * 1.2)
+        layers.append((ring, [rib(cx - dx / n * k, cy - dy / n * k, cx + dx / n * k, cy + dy / n * k, 1)]))
+    return layers
+
+
+def yuca_plant():
+    """Mata de yuca: el tallo de nudos con las hojas palmeadas de siete dedos, y las raíces que asoman en la tierra."""
+    layers = [('#7a5236', [ellipse(50, 84, 40, 10)])]
+    layers += yuca_root(30, 80, 12, 92, 7) + yuca_root(64, 82, 88, 92, 7)
+    layers += [(OUTLINE, [rib(50, 84, 48, 30, 5.4)]), ('#a1887f', [rib(50, 84, 48, 30, 3.2)])]
+    layers.append(('#6d4c41', [rib(46.5, 70, 51, 70, 1), rib(46.5, 56, 50.5, 56, 1), rib(46.5, 42, 50, 42, 1)]))
+    for cx, cy, sc in [(30, 34, 1), (68, 30, 1), (48, 18, 0.9)]:
+        for a in range(-90, 91, 30):
+            r = math.radians(a - 90)
+            L = 18 * sc * (1 - abs(a) / 300)
+            layers += [(OUTLINE, [leaf(cx, cy, cx + math.cos(r) * L, cy + math.sin(r) * L, 6 * sc)])]
+        for a in range(-90, 91, 30):
+            r = math.radians(a - 90)
+            L = 18 * sc * (1 - abs(a) / 300)
+            layers += [('#43a047', [leaf(cx, cy, cx + math.cos(r) * L, cy + math.sin(r) * L, 4.4 * sc)])]
+        layers.append(('#2e7d32', [circle(cx, cy, 2)]))
+    return layers
+
+
+def yuca_brava():
+    """Yuca brava: las raíces largas recién arrancadas de la chagra, con su cáscara café y la tierra."""
+    layers = yuca_root(10, 70, 88, 46, 15) + yuca_root(14, 52, 82, 24, 13) + yuca_root(20, 88, 92, 76, 12)
+    layers.append(('#5d4037', [circle(24, 60, 1.6), circle(70, 40, 1.4), circle(56, 84, 1.4), circle(40, 30, 1.2)]))
+    return layers
+
+
+def peeled_yuca():
+    """Yuca pelada: las raíces blancas, sin cáscara, en la batea con agua, y las cáscaras al lado."""
+    layers = [(OUTLINE, [ellipse(50, 70, 46, 20)]), ('#8d6e4a', [ellipse(50, 70, 43.5, 17.5)]), ('#5a9aa0', [ellipse(50, 66, 38, 12)])]
+    layers += yuca_root(18, 66, 78, 54, 11, '#8d5a32', '#f8f3e6') + yuca_root(26, 76, 84, 66, 10, '#8d5a32', '#f5efe0')
+    layers += yuca_root(52, 30, 86, 20, 8)
+    layers.append(('#e8f6ff', [rib(24, 60, 34, 60, 1), rib(60, 74, 72, 74, 1)]))
+    return layers
+
+
+def yuca_mass():
+    """Masa de yuca: la yuca rallada, blanca y húmeda, en la ponchera, con el rallador de lata encima."""
+    layers = [(OUTLINE, ['M 8 50 L 92 50 L 80 88 Q 50 96 20 88 Z']), ('#c8a26a', ['M 11 52.5 L 89 52.5 L 77.8 85.6 Q 50 93 22.2 85.6 Z'])]
+    layers += [(OUTLINE, [ellipse(50, 50, 43, 11)]), ('#f3ecd8', [ellipse(50, 50, 40.5, 9)])]
+    layers.append(('#e0d6bf', [circle(32, 48, 2), circle(44, 52, 1.6), circle(58, 47, 1.8), circle(70, 52, 1.6), circle(50, 49, 1.2)]))
+    layers += [(OUTLINE, [rect(50, 8, 26, 40, 20)]), ('#b0bec5', [rect(52, 10, 22, 36, 20)])]
+    layers.append(('#607d8b', [circle(56 + i * 5 + j * 2, 18 + j * 6 + i * 1.8, 1) for i in range(3) for j in range(4)]))
+    return layers
+
+
+def tipiti():
+    """Tipití: el tubo tejido de palma colgado y estirado con el palo, que exprime la masa; el jugo cae a la totuma."""
+    layers = [('#6d4c41', [rib(50, 2, 50, 12, 2)])]
+    layers += [(OUTLINE, ['M 38 12 L 62 12 L 58 74 L 42 74 Z']), ('#d9b26a', ['M 40.5 14.5 L 59.5 14.5 L 55.6 71.5 L 44.4 71.5 Z'])]
+    for k in range(9):
+        y = 18 + k * 6
+        layers.append(('#a07a3e', [rib(41 + k * 0.4, y, 59 - k * 0.4, y + 4, 1), rib(41 + k * 0.4, y + 4, 59 - k * 0.4, y, 1)]))
+    layers += [(OUTLINE, [rib(50, 74, 50, 80, 3)]), (OUTLINE, [rib(20, 80, 84, 80, 5)]), ('#8d5a32', [rib(22, 80, 82, 80, 3)])]
+    layers.append(('#f9e79f', [rib(46, 74, 44, 86, 1.6)]))
+    layers += [(OUTLINE, ['M 28 86 Q 44 100 60 86 Z']), ('#5d4037', ['M 31 87.5 Q 44 97 57 87.5 Z']), ('#f4d03f', [ellipse(44, 88, 11, 1.8)])]
+    return layers
+
+
+def casabe():
+    """Casabe: las tortas grandes, planas y redondas de yuca, tostadas en el budare, una encima de otra."""
+    layers = []
+    for cy, rx in [(74, 44), (60, 42)]:
+        layers += [(OUTLINE, [ellipse(50, cy, rx + 2.2, rx * 0.34 + 2.2)]), ('#d9c08a', [ellipse(50, cy + 2, rx, rx * 0.34)]), ('#f3e3b8', [ellipse(50, cy, rx, rx * 0.34)])]
+    layers.append(('#d6b46e', [ellipse(x, y, r * 1.6, r, 0) for x, y, r in [(30, 58, 2), (44, 64, 2.4), (62, 56, 2), (74, 62, 1.8), (52, 54, 1.4)]]))
+    # Un pedazo partido, recostado encima.
+    layers += [(OUTLINE, ['M 30 44 L 74 30 Q 62 16 38 22 Z']), ('#efdcaa', ['M 33.5 41 L 70 29.5 Q 60 19 39.5 24.5 Z'])]
+    layers.append(('#d6b46e', [ellipse(48, 30, 2.4, 1.4), ellipse(58, 26, 2, 1.2)]))
+    return layers
+
+
+def desayuno_amazonico():
+    """Desayuno amazónico: el casabe, el vaso de asaí con fariña y el frasquito de ají negro, sobre la hoja."""
+    layers = [('#2e7d32', [leaf(4, 84, 96, 70, 20)]), ('#66bb6a', [rib(8, 83, 92, 71, 1.2)])]
+    layers += [(OUTLINE, [ellipse(34, 68, 28, 10)]), ('#f3e3b8', [ellipse(34, 68, 25.5, 7.8)]), ('#d6b46e', [ellipse(28, 66, 3, 1.6), ellipse(42, 70, 3, 1.6)])]
+    layers += [(OUTLINE, ['M 58 22 L 90 22 L 85 76 L 63 76 Z']), ('#e8f6ff', ['M 60.5 24.5 L 87.5 24.5 L 82.8 73.5 L 65.2 73.5 Z'])]
+    layers.append(('#6a1b9a', ['M 61.4 32 L 86.6 32 L 82.8 73.5 L 65.2 73.5 Z']))
+    layers += [(OUTLINE, [ellipse(74, 28, 14, 4)]), ('#e8d9a0', [ellipse(74, 28, 12.5, 3)])]
+    layers += [(OUTLINE, [rect(18, 36, 16, 22)]), ('#3e2723', [rect(19.5, 40, 13, 16.5)]), ('#8d6e4a', [rect(19.5, 37.5, 13, 3.5)])]
+    return layers
+
+
+def banquete_maloca():
+    """Banquete de la maloca: la batea grande con el pirarucú moqueado, el casabe, el asaí y el ají, para compartir."""
+    layers = [(OUTLINE, [ellipse(50, 66, 47, 22)]), ('#8d5a32', [ellipse(50, 66, 44.5, 19.5)]), ('#a8743e', [ellipse(50, 64, 38, 14)])]
+    layers += [(OUTLINE, [ellipse(32, 62, 18, 7)]), ('#f3e3b8', [ellipse(32, 62, 16, 5.4)])]
+    for cx, cy in [(50, 58), (62, 64), (56, 70)]:
+        layers += [(OUTLINE, [rect(cx - 7, cy - 5, 14, 9, -6)]), ('#8d4a1f', [rect(cx - 5.8, cy - 3.8, 11.6, 6.6, -6)]), ('#c97a32', [rect(cx - 4.5, cy - 3, 9, 3.4, -6)])]
+    layers += [(OUTLINE, [circle(78, 58, 8)]), ('#6a1b9a', [circle(78, 58, 6.5)]), ('#9c4dcc', [circle(76, 56, 2)])]
+    layers += chili(14, 72, 30, 80, 2, 4.4, '#e53935')
+    # La totuma de chicha de chontaduro, atrás.
+    layers += [(OUTLINE, ['M 38 24 Q 50 52 62 24 Z']), ('#6d4c41', ['M 40.5 26 Q 50 48 59.5 26 Z']), ('#f4b860', [ellipse(50, 26, 9.5, 2.4)])]
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -3826,6 +3937,14 @@ ICONS = [
     (0xE0F4, 'moqueado', moqueado),
     (0xE0F5, 'salted_pirarucu', salted_pirarucu),
     (0xE0F6, 'pirarucu_aji', pirarucu_aji),
+    (0xE0F7, 'yuca_plant', yuca_plant),
+    (0xE0F8, 'yuca_brava', yuca_brava),
+    (0xE0F9, 'peeled_yuca', peeled_yuca),
+    (0xE0FA, 'yuca_mass', yuca_mass),
+    (0xE0FB, 'tipiti', tipiti),
+    (0xE0FC, 'casabe', casabe),
+    (0xE0FD, 'desayuno_amazonico', desayuno_amazonico),
+    (0xE0FE, 'banquete_maloca', banquete_maloca),
 ]
 
 

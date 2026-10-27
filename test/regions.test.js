@@ -1005,3 +1005,24 @@ test('El Lago sirve el pirarucú al ají negro con el ají negro que llega del A
   assert.ok((game.state.stats.imported.aji_negro ?? 0) > 0, 'llega ají negro del Ajizal');
   for (const p of ['salted_pirarucu', 'moqueado', 'pirarucu_aji']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
 });
+
+test('La Casabería sirve el desayuno y el banquete con el asaí del Asaizal y el pirarucú del Lago (v3.50)', async () => {
+  const { chainOf } = await import('../src/sim/chain.js');
+  const { CALENDAR } = await import('../src/sim/calendar.js');
+  const game = new Game(createInitialState(0, 'amazonas'));
+  for (const z of ['ajizal', 'lago', 'casaberia']) game.unlockZone(z);
+  for (const r of ['bolsas_asai', 'pirarucus']) assert.ok(game.state.routes[r], `la ruta ${r} es del Amazonas`);
+  game.state.coins = 1e15;
+  for (const z of ['asaizal', 'lago', 'casaberia']) {
+    for (const id of chainOf(z).slice(1)) game.unlock(id);
+    for (const id of chainOf(z)) game.state.stations[id].level = game.state.stations[id].transport.level = 20;
+    game.state.zones[z].dispatch.level = 20;
+  }
+  for (const r of ['bolsas_asai', 'pirarucus']) game.state.routes[r].level = 20;
+  const on = CALENDAR.on;
+  CALENDAR.on = false;
+  for (let t = 0; t < 900; t += 0.1) game.step(0.1);
+  CALENDAR.on = on;
+  for (const p of ['asai_bag', 'clean_pirarucu']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
+  for (const p of ['desayuno_amazonico', 'banquete_maloca']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+});

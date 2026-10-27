@@ -523,6 +523,19 @@ export const RESEARCH = [
   { zone: 'lago', id: 'sazon_amazonica', name: 'Sazón amazónica', icon: '🏅', desc: 'El pirarucú al ají negro vale un 50 % más.', cost: 50000000, requires: 'pirarucu_kitchen', effect: { type: 'productValue', target: 'pirarucu_aji', mult: 1.5 } },
   { zone: 'lago', id: 'maestria_lago', name: 'Maestría: Lago', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'lago', mult: 4 } },
   { zone: 'lago', id: 'supremacia_lago', name: 'Supremacía: Lago', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'lago', mult: 8 } },
+
+  // Amazonas · La Casabería (v3.50): las mismas del Manglar, con la yuca.
+  { zone: 'casaberia', id: 'chagra_nueva', name: 'Chagra nueva', icon: ICON.yucaPlant, desc: 'La Chagra de yuca da el doble.', cost: 1000000, requires: 'yuca_peeler', effect: { type: 'stationSpeed', target: 'yuca_chagra', mult: 2 } },
+  { zone: 'casaberia', id: 'cuchillo_pelar', name: 'Cuchillo de pelar', icon: ICON.yucaBrava, desc: 'La Peladora de yuca pela el doble.', cost: 1200000, requires: 'yuca_peeler', effect: { type: 'stationSpeed', target: 'yuca_peeler', mult: 2 } },
+  { zone: 'casaberia', id: 'rallador_lata', name: 'Rallador de lata', icon: ICON.peeledYuca, desc: 'El Rallador de yuca ralla el doble.', cost: 3000000, requires: 'tipiti_press', effect: { type: 'stationSpeed', target: 'yuca_grater', mult: 2 } },
+  { zone: 'casaberia', id: 'bote_casaberia', name: 'Bote de la Casabería', icon: '🚤', desc: 'El despacho de la Casabería lleva el doble por viaje.', cost: 5000000, requires: 'yuca_grater', effect: { type: 'dispatchCapacity', target: 'casaberia', mult: 2 } },
+  { zone: 'casaberia', id: 'tipiti_largo', name: 'Tipití largo', icon: ICON.tipiti, desc: 'El Tipití exprime el doble.', cost: 8000000, requires: 'casabe_budare', effect: { type: 'stationSpeed', target: 'tipiti_press', mult: 2 } },
+  { zone: 'casaberia', id: 'budare_casabe', name: 'Budare de barro', icon: ICON.casabe, desc: 'El Budare de casabe asa el doble.', cost: 20000000, requires: 'desayuno_table', effect: { type: 'stationSpeed', target: 'casabe_budare', mult: 2 } },
+  { zone: 'casaberia', id: 'mesa_desayuno', name: 'Mesa de la ribera', icon: ICON.desayunoAmazonico, desc: 'La Mesa del desayuno sirve el doble.', cost: 50000000, requires: 'maloca', effect: { type: 'stationSpeed', target: 'desayuno_table', mult: 2 } },
+  { zone: 'casaberia', id: 'maloca_grande', name: 'Maloca grande', icon: ICON.banqueteMaloca, desc: 'La Maloca sirve el doble (las rutas se ajustan solas).', cost: 80000000, requires: 'maloca', effect: { type: 'stationSpeed', target: 'maloca', mult: 2 } },
+  { zone: 'casaberia', id: 'sabor_chagra', name: 'Sabor de la chagra', icon: '🏅', desc: 'Todo lo que vende la Casabería vale un 50 % más.', cost: 60000000, requires: 'desayuno_table', effect: { type: 'zoneValue', target: 'casaberia', mult: 1.5 } },
+  { zone: 'casaberia', id: 'maestria_casaberia', name: 'Maestría: Casabería', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'casaberia', mult: 4 } },
+  { zone: 'casaberia', id: 'supremacia_casaberia', name: 'Supremacía: Casabería', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'casaberia', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

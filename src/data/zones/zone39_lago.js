@@ -33,6 +33,8 @@ export const ZONE39 = {
   // Carretera por la que llega la Ruta del ají negro, hasta la Cocina del pirarucú.
   routes: {
     ajinegro: { road: [[25.9, 14.5], [20.3, 14.5]], sign: [24.2, 13.3], text: '⬅ Del Ajizal' },
+    // El pirarucú limpio sale de la bodega hacia la Casabería (v3.50).
+    pirarucus: { road: [[24.5, 17.2], [24.5, 16.5], [25.9, 16.5]], sign: [25.3, 15.6], text: 'Pirarucú a la Casabería ➜' },
   },
   unlockedBy: 'ajizal',
   next: 'casaberia',

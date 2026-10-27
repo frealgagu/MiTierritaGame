@@ -364,6 +364,17 @@ export const STATIONS = [
   { id: 'moquen', zone: 'lago', name: 'Moquén', icon: ICON.moqueado, in: { pirarucu_fillet: 2 }, out: { moqueado: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.49' },
   { id: 'pirarucu_kitchen', zone: 'lago', name: 'Cocina del pirarucú', icon: ICON.pirarucuAji, in: { clean_pirarucu: 4 }, imports: [{ product: 'aji_negro', perCycle: 1, route: 'ajinegro' }], out: { pirarucu_aji: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.49' },
 
+  // Amazonas · La Casabería (v3.50): la yuca brava de la chagra se pela, se ralla, se exprime en el tipití (para
+  // sacarle el jugo venenoso, que se vuelve tucupí) y se asa en el budare: es el casabe. Con el asaí del Asaizal
+  // se sirve el desayuno amazónico, y con el pirarucú del Lago, el banquete de la maloca. Mismos números que el Manglar.
+  { id: 'yuca_chagra', zone: 'casaberia', name: 'Chagra de yuca', icon: ICON.yucaPlant, infinite: true, out: { yuca_brava: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.50' },
+  { id: 'yuca_peeler', zone: 'casaberia', name: 'Peladora de yuca', icon: ICON.yucaBrava, in: { yuca_brava: 2 }, out: { peeled_yuca: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.50' },
+  { id: 'yuca_grater', zone: 'casaberia', name: 'Rallador de yuca', icon: ICON.peeledYuca, in: { peeled_yuca: 1 }, out: { grated_yuca: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.50' },
+  { id: 'tipiti_press', zone: 'casaberia', name: 'Tipití', icon: ICON.tipiti, in: { grated_yuca: 1 }, out: { pressed_yuca: 1 }, cycle: 4, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '3.50' },
+  { id: 'casabe_budare', zone: 'casaberia', name: 'Budare de casabe', icon: ICON.casabe, in: { pressed_yuca: 2 }, out: { casabe: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '3.50' },
+  { id: 'desayuno_table', zone: 'casaberia', name: 'Mesa del desayuno', icon: ICON.desayunoAmazonico, in: { casabe: 2 }, imports: [{ product: 'asai_bag', perCycle: 1, route: 'bolsas_asai' }], out: { desayuno_amazonico: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.50' },
+  { id: 'maloca', zone: 'casaberia', name: 'Maloca', icon: ICON.banqueteMaloca, in: { casabe: 2 }, imports: [{ product: 'asai_bag', perCycle: 1, route: 'bolsas_asai' }, { product: 'clean_pirarucu', perCycle: 4, route: 'pirarucus' }], out: { banquete_maloca: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.50' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

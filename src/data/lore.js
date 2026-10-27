@@ -282,6 +282,14 @@ export const FACTS = {
   pirarucu_filleter: ['Del pirarucú se sacan postas grandes, sin espinas.'],
   moquen: ['El moquén es una parrilla de palos sobre fuego lento: así se ahúma.'],
   pirarucu_kitchen: ['El pirarucú con ají negro y casabe es comida de fiesta en la selva.'],
+  // Amazonas · La Casabería (v3.50)
+  yuca_chagra: ['La chagra es la huerta de la selva: yuca, piña, plátano y ají juntos.', 'La yuca brava es venenosa cruda: hay que sacarle el jugo.'],
+  yuca_peeler: ['La yuca brava se pela a mano, con cuchillo, en el río.'],
+  yuca_grater: ['Antes se rallaba con tablas de espinas de palma; hoy, con lata.'],
+  tipiti_press: ['El tipití es un tubo tejido que, al estirarlo, exprime la masa.', 'El jugo que suelta el tipití, cocinado, se vuelve tucupí.'],
+  casabe_budare: ['El budare es el plato de barro caliente donde se asa el casabe.'],
+  desayuno_table: ['En el Amazonas se desayuna casabe con asaí o con ají negro.'],
+  maloca: ['La maloca es la casa grande y comunitaria de los pueblos de la selva.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -325,6 +333,7 @@ export const PEOPLE = {
   asaizal: { icon: '👨🏽‍🌾', name: 'Don Abel', role: 'el cosechero' },
   ajizal: { icon: '👵🏽', name: 'Doña Remedios', role: 'la ajicera' },
   lago: { icon: '🧔🏽', name: 'Don Jacinto', role: 'el pescador' },
+  casaberia: { icon: '👵🏽', name: 'Abuela Tránsito', role: 'la casabera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -368,6 +377,7 @@ export const WELCOME = {
   asaizal: '¡Bienvenido al Amazonas, paisano! Aquí la palma de asaí da racimos morados a la orilla del río.',
   ajizal: '¡Bienvenido al Ajizal, mijo! Aquí el ají se cocina en tucupí hasta volverse ají negro, la sal de la selva.',
   lago: '¡Bienvenido al Lago, paisano! Aquí salimos en canoa por el pirarucú, el gigante de los ríos.',
+  casaberia: '¡Bienvenido a la Casabería, mijo! De la yuca brava sale el casabe: el pan de la selva.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

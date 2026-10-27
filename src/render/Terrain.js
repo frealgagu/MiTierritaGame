@@ -152,7 +152,7 @@ export class Terrain {
             const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : this.zone.style === 'buenaventura' ? [0xb8bcc0, 0xd0d4d6] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
-        } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea' || this.zone.theme === 'werregue' || this.zone.theme === 'asai' || this.zone.theme === 'aji')) {
+        } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea' || this.zone.theme === 'werregue' || this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'chagra')) {
           // Hojarasca bajo los cacaos (y bajo el platanal del Pacífico, v3.38).
           for (let k = 0; k < 2; k++) {
             const p = iso(gx + rng(), gy + rng());
@@ -463,7 +463,7 @@ export class Terrain {
           else if (r < 0.055) obj = egret(rng);
           else if (r < 0.075) obj = coconutPalm(rng);
           else if (r < 0.088) obj = ceiba(rng);
-        } else if (this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'lake') {
+        } else if (this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'lake' || this.zone.theme === 'chagra') {
           // El Amazonas (v3.47): la selva de la orilla, con ceibas gigantes, heliconias, plátano, asaí suelto y alguna
           // guacamaya en su palo.
           if (r < 0.025) obj = ceiba(rng);
@@ -828,6 +828,7 @@ const FARM_SOIL = {
   asai: (v) => mix(0x4a5236, 0x56603e, v * 0.5), // la vega húmeda del asaizal (v3.47)
   aji: (v) => mix(0x7a5236, 0x6a462e, v * 0.5), // la tierra de la chagra (v3.48)
   lake: (v) => mix(0x2e5048, 0x365a50, v * 0.6), // el agua negra del lago (v3.49)
+  chagra: (v) => mix(0x6e4a30, 0x7a5638, v * 0.5), // la tierra de la chagra de yuca (v3.50)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
@@ -1513,6 +1514,28 @@ export function drawAjiPlant(g, x, y, scale, rng, peppers = 3) {
     const py = y - (7 + rng() * 9) * s;
     g.ellipse(px, py, 0.9 * s, 2.2 * s).fill(cols[k % cols.length]);
   }
+}
+
+// Mata de yuca (v3.50): el tallo de nudos, delgado y alto, con las hojas palmeadas de dedos largos arriba; con
+// cada hito, más tallos y alguna raíz que asoma en la tierra.
+export function drawYucaPlant(g, x, y, scale, rng, stems = 1) {
+  const s = scale * (0.9 + rng() * 0.2);
+  shadow(g, x + 2, y + 1, 10 * s, 4 * s);
+  g.ellipse(x, y, 6 * s, 2.4 * s).fill(0x5d3f28);
+  for (let k = 0; k < stems; k++) {
+    const dx = (k - (stems - 1) / 2) * 4 * s;
+    const h = (24 + rng() * 6 - k * 2) * s;
+    const tx = x + dx * 1.4;
+    g.moveTo(x + dx, y).lineTo(tx, y - h).stroke({ width: 1.6 * s, color: 0x9e8a78 });
+    for (let j = 1; j < 4; j++) g.circle(x + dx + (tx - x - dx) * j / 4, y - h * j / 4, 0.8 * s).fill(0x6d4c41);
+    for (let i = 0; i < 7; i++) {
+      const a = -Math.PI * 0.95 + (i / 6) * Math.PI * 0.9;
+      const L = (8 - Math.abs(i - 3) * 0.8) * s;
+      g.moveTo(tx, y - h).lineTo(tx + Math.cos(a) * L, y - h + Math.sin(a) * L * 0.7 + 2 * s).stroke({ width: 2.2 * s, color: i % 2 ? 0x2e7d32 : 0x43a047, cap: 'round' });
+    }
+    g.circle(tx, y - h, 1.2 * s).fill(0xad1457);
+  }
+  if (stems > 2) g.ellipse(x + 6 * s, y + 1, 4 * s, 1.4 * s).fill(0x8d5a32);
 }
 
 // Palma de asaí (v3.47): la mata de dos o tres tallos delgados y altos, con las hojas de plumas que cuelgan y,

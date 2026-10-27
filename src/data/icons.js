@@ -250,6 +250,14 @@ export const ICON = {
   moqueado: '\uE0F4', // Pescado moqueado: las postas de pirarucú doradas sobre la parrilla de palos del moquén, con el humo que sube
   saltedPirarucu: '\uE0F5', // Pirarucú salado: la manta de pirarucú abierta, salada y seca, doblada y amarrada con bejuco
   pirarucuAji: '\uE0F6', // Pirarucú al ají negro: el plato con la posta dorada, el ají negro por encima, el casabe y el limón
+  yucaPlant: '\uE0F7', // Mata de yuca: el tallo de nudos con las hojas palmeadas de siete dedos, y las raíces que asoman en la tierra
+  yucaBrava: '\uE0F8', // Yuca brava: las raíces largas recién arrancadas de la chagra, con su cáscara café y la tierra
+  peeledYuca: '\uE0F9', // Yuca pelada: las raíces blancas, sin cáscara, en la batea con agua, y las cáscaras al lado
+  yucaMass: '\uE0FA', // Masa de yuca: la yuca rallada, blanca y húmeda, en la ponchera, con el rallador de lata encima
+  tipiti: '\uE0FB', // Tipití: el tubo tejido de palma colgado y estirado con el palo, que exprime la masa; el jugo cae a la totuma
+  casabe: '\uE0FC', // Casabe: las tortas grandes, planas y redondas de yuca, tostadas en el budare, una encima de otra
+  desayunoAmazonico: '\uE0FD', // Desayuno amazónico: el casabe, el vaso de asaí con fariña y el frasquito de ají negro, sobre la hoja
+  banqueteMaloca: '\uE0FE', // Banquete de la maloca: la batea grande con el pirarucú moqueado, el casabe, el asaí y el ají, para compartir
 };
 
 export const ICON_FONT = 'Cafetal Icons';

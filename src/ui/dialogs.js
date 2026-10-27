@@ -59,6 +59,7 @@ const VICTORY = {
   asaizal: { title: '¡Asaí para toda la selva!', text: 'Completaste <b>El Asaizal</b>, en el Amazonas. Dos mil cajas de asaí, del racimo a la bolsa.', stat: (s) => `Cajas de asaí vendidas: ${formatNumber(s.stats.sold.asai_box ?? 0)}` },
   ajizal: { title: '¡Ají negro para toda la selva!', text: 'Completaste <b>El Ajizal</b>, en el Amazonas. Seis mil cajas de ají negro, de la chagra al frasco.', stat: (s) => `Cajas de ají negro vendidas: ${formatNumber(s.stats.sold.aji_box ?? 0)}` },
   lago: { title: '¡Pirarucú para todo el río!', text: 'Completaste <b>El Lago</b>, en el Amazonas. Seis mil platos de pirarucú al ají negro, con el ají que llegó del Ajizal.', stat: (s) => `Platos vendidos: ${formatNumber(s.stats.sold.pirarucu_aji ?? 0)}` },
+  casaberia: { title: '¡Casabe para toda la maloca!', text: 'Completaste <b>La Casabería</b>, en el Amazonas. Cuatro mil banquetes de la maloca, con el asaí del Asaizal y el pirarucú del Lago.', stat: (s) => `Banquetes servidos: ${formatNumber(s.stats.sold.banquete_maloca ?? 0)}` },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: (s) => `Arequipe vendido: ${formatNumber(s.stats.sold.arequipe ?? 0)}` },
 };
 

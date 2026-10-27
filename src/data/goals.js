@@ -895,5 +895,27 @@ const LAGO = [
   { id: 'al_final', type: 'sold', product: 'pirarucu_aji', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO };
+// Amazonas · La Casabería (v3.50): la misma lista que el Manglar.
+const CASABERIA = [
+  { id: 'ac01', type: 'sold', product: 'yuca_brava', amount: 50, reward: 75000 },
+  { id: 'ac02', type: 'level', target: 'yuca_chagra', level: 10, reward: 125000 },
+  { id: 'ac03', type: 'unlock', station: 'yuca_peeler', reward: 250000 },
+  { id: 'ac04', type: 'level', target: 'yuca_chagra:transport', level: 10, reward: 250000 },
+  { id: 'ac05', type: 'unlock', station: 'yuca_grater', reward: 500000 },
+  { id: 'ac06', type: 'produced', product: 'grated_yuca', amount: 200, reward: 750000 },
+  { id: 'ac08', type: 'unlock', station: 'tipiti_press', reward: 1500000 },
+  { id: 'ac09', type: 'level', target: 'dispatch:casaberia', level: 10, reward: 1500000 },
+  { id: 'ac10', type: 'unlock', station: 'casabe_budare', reward: 2500000 },
+  { id: 'ac11', type: 'produced', product: 'casabe', amount: 300, reward: 3750000 },
+  { id: 'ac12', type: 'unlock', station: 'desayuno_table', reward: 6250000 },
+  { id: 'ac13', type: 'sold', product: 'desayuno_amazonico', amount: 200, reward: 7500000 },
+  { id: 'ac14', type: 'unlock', station: 'maloca', reward: 12500000 },
+  { id: 'ac15', type: 'imported', product: 'clean_pirarucu', amount: 500, reward: 15000000 },
+  { id: 'ac16', type: 'allLevels', zone: 'casaberia', level: 25, reward: 20000000 },
+  { id: 'ac07', type: 'research', research: 'chagra_nueva', reward: 10000000 },
+  { id: 'ac17', type: 'sold', product: 'banquete_maloca', amount: 1000, reward: 30000000 },
+  { id: 'ac_final', type: 'sold', product: 'banquete_maloca', amount: 4000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

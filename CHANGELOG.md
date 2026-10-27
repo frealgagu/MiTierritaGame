@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.50.0 — El Amazonas: La Casabería
+- **🫓 La Casabería**, la cuarta zona del Amazonas, se abre al completar El Lago: la Chagra de yuca → la Peladora de yuca → el Rallador de yuca → el **Tipití** (el tubo tejido de palma que exprime la masa y le saca el jugo venenoso de la yuca brava) → el Budare de casabe. El casabe se reparte entre la **Mesa del desayuno** (el desayuno amazónico) y la **Maloca** (el banquete de la maloca). Tiene los mismos números que el Manglar.
+- **🚌 Ruta del asaí:** las bolsas de asaí del Asaizal llegan a la Mesa del desayuno y a la Maloca. **🚌 Ruta del pirarucú:** el pirarucú limpio del Lago llega a la Maloca.
+- Su persona es la **Abuela Tránsito, la casabera**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 8 íconos nuevos (de la mata de yuca al banquete).
+- **El mapa:** la chagra de tierra café con las matas de yuca de tallos de nudos y hojas palmeadas; en las estaciones, la ramada donde se pela la yuca junto a la batea, la casa del rallador con su artesa, los marcos de palo con los tipitíes que se estiran, la cocina de palma con el budare sobre las tres piedras y los casabes secándose en la estera, la casa verde agua del desayuno y la **maloca**, redonda, con el techo de palma hasta el suelo y el frente de corteza pintado.
+
 ## v3.49.0 — El Amazonas: El Lago
 - **🐟 El Lago**, la tercera zona del Amazonas, se abre al completar El Ajizal: las Canoas del lago → la Limpieza de pirarucú, que reparte el pez entre el **Saladero** (pirarucú salado), la **Fileteadora** (postas que pasan al **Moquén**, donde se ahúman a la manera indígena) y la **Cocina del pirarucú**, que sirve el **pirarucú al ají negro**. Tiene los mismos números que la Bahía.
 - **🚌 Ruta del ají negro:** la chiva lleva los frascos de ají negro del Ajizal a la Cocina del pirarucú.

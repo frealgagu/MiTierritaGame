@@ -296,6 +296,15 @@ export const PRODUCTS = {
   salted_pirarucu: { name: 'Pirarucú salado', zone: 'lago', value: 2400, icon: ICON.saltedPirarucu, color: 0xe0cfa4 },
   pirarucu_aji: { name: 'Pirarucú al ají negro', zone: 'lago', value: 4000, icon: ICON.pirarucuAji, color: 0xc97a32 },
 
+  // Amazonas · La Casabería (v3.50): mismos valores que el Manglar.
+  yuca_brava: { name: 'Yuca brava', zone: 'casaberia', value: 1000, icon: ICON.yucaBrava, color: 0x8d6e4a },
+  peeled_yuca: { name: 'Yuca pelada', zone: 'casaberia', value: 2500, icon: ICON.peeledYuca, color: 0xf5efe0 },
+  grated_yuca: { name: 'Masa de yuca', zone: 'casaberia', value: 4400, icon: ICON.yucaMass, color: 0xf0e6cc },
+  pressed_yuca: { name: 'Masa exprimida', zone: 'casaberia', value: 8800, icon: ICON.tipiti, color: 0xe8dcbc },
+  casabe: { name: 'Casabe', zone: 'casaberia', value: 22000, icon: ICON.casabe, color: 0xf3e3b8 },
+  desayuno_amazonico: { name: 'Desayuno amazónico', zone: 'casaberia', value: 100000, icon: ICON.desayunoAmazonico, color: 0x8e24aa },
+  banquete_maloca: { name: 'Banquete de la maloca', zone: 'casaberia', value: 220000, icon: ICON.banqueteMaloca, color: 0xc97a32 },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },
