@@ -8,8 +8,8 @@ import { stepJeep } from '../sim/dispatch.js';
 import { stepRoute } from '../sim/routes.js';
 import { ROUTES } from '../data/routes.js';
 import { offlineCapSeconds } from '../sim/modifiers.js';
-import { buyResearch, buyUpgrade, quoteResearch, quoteUnlock, quoteUpgrade, unlockStation } from '../sim/upgrades.js';
-import { claimGoal, unlockZone } from '../sim/goals.js';
+import { buyAllResearch, buyResearch, buyUpgrade, quoteResearch, quoteUnlock, quoteUpgrade, unlockStation } from '../sim/upgrades.js';
+import { claimAllGoals, claimGoal, unlockZone } from '../sim/goals.js';
 import { checkMastery } from '../sim/legacy.js';
 import { stepAlerts } from '../sim/alerts.js';
 import { clockOf, workOf, workSeconds } from '../sim/calendar.js';
@@ -158,6 +158,28 @@ export class Game {
     const bought = buyResearch(this.state, id, this.bus);
     if (bought) checkMastery(this.state, this.bus); // (v3.12: el segundo final pide todas)
     return bought;
+  }
+
+  // «Comprar todas» y «Cobrar todos» (v3.57): cada compra o cobro avisa marcado `bulk` (para no llenar la
+  // pantalla de avisos) y al final va un solo aviso con el resumen.
+  researchAll(zoneId) {
+    const bulk = { emit: (type, data) => this.bus.emit(type, { ...data, bulk: true }) };
+    const bought = buyAllResearch(this.state, zoneId, bulk);
+    if (bought.length) {
+      checkMastery(this.state, this.bus);
+      this.bus.emit('researchAll', { ids: bought });
+    }
+    return bought;
+  }
+
+  claimAllGoals(zoneId) {
+    const bulk = { emit: (type, data) => this.bus.emit(type, { ...data, bulk: true }) };
+    const done = claimAllGoals(this.state, zoneId, bulk);
+    if (done.count) {
+      checkMastery(this.state, this.bus);
+      this.bus.emit('goalsClaimed', done);
+    }
+    return done;
   }
 
   claimGoal(id) {

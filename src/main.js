@@ -305,7 +305,8 @@ async function start() {
   const mastery = (g = active) => showMastery(g.state, () => restart(g));
   // Lo que avisa cada región: objetivos, finales e investigaciones.
   const wire = (g) => {
-    g.bus.on('goalClaimed', ({ goal, zone }) => {
+    g.bus.on('goalClaimed', ({ goal, zone, bulk }) => {
+      if (bulk) return; // «Cobrar todos»: un solo aviso al final (goalsClaimed)
       if (!goal.final) {
         sound.coin();
         toast(`🎯 ¡Objetivo cumplido! +${formatNumber(goal.reward)} 💰`, 3000);
@@ -339,7 +340,16 @@ async function start() {
       });
       watch.observe(victory, { attributes: true, attributeFilter: ['hidden'] });
     });
-    g.bus.on('research', ({ id }) => {
+    g.bus.on('goalsClaimed', ({ count, reward }) => {
+      sound.coin();
+      toast(`🎯 ¡${count} objetivo${count === 1 ? '' : 's'} cobrado${count === 1 ? '' : 's'}! +${formatNumber(reward)} 💰`, 3000);
+    });
+    g.bus.on('researchAll', ({ ids }) => {
+      sound.milestone();
+      toast(ids.length === 1 ? `🔬 ${RESEARCH_BY_ID[ids[0]].name}: ${RESEARCH_BY_ID[ids[0]].desc}` : `🔬 ¡${ids.length} investigaciones compradas! ${ids.map((id) => RESEARCH_BY_ID[id].name).join(', ')}`, 4000);
+    });
+    g.bus.on('research', ({ id, bulk }) => {
+      if (bulk) return; // «Comprar todas»: un solo aviso al final (researchAll)
       sound.milestone();
       toast(`🔬 ${RESEARCH_BY_ID[id].name}: ${RESEARCH_BY_ID[id].desc}`, 4000);
     });

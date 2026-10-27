@@ -1,6 +1,6 @@
 import { formatNumber } from '../core/format.js';
 import { RESEARCH, RESEARCH_BY_ID } from '../data/research.js';
-import { researchBlocker } from '../sim/upgrades.js';
+import { bulkResearch, previewAllResearch, researchBlocker } from '../sim/upgrades.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 
@@ -13,6 +13,7 @@ export class ResearchView {
     this.onGo = onGo;
     this.modal = document.getElementById('research');
     this.body = document.getElementById('research-body');
+    this.foot = document.getElementById('research-foot'); // «Comprar todas», abajo y fuera de la lista (v3.57)
     this.badge = document.getElementById('research-badge');
     document.getElementById('research-btn').addEventListener('click', () => this.open());
     document.getElementById('research-close').addEventListener('click', () => this.close());
@@ -20,6 +21,11 @@ export class ResearchView {
       if (e.target === this.modal) this.close();
       const btn = e.target.closest('[data-research]');
       if (btn) return void this.game.research(btn.dataset.research);
+      if (e.target.closest('[data-research-all]')) {
+        this.game.researchAll(this.getZone());
+        this.scrollPending = true;
+        return void this.update();
+      }
       // Una bloqueada: a la estación que le falta.
       const row = e.target.closest('[data-blocked]');
       if (!row) return;
@@ -33,7 +39,18 @@ export class ResearchView {
   open() {
     this.modal.hidden = false;
     this.html = null;
+    this.scrollPending = true;
     this.update();
+  }
+
+  // Al abrir y tras «Comprar todas» (v3.57): la lista baja hasta la más barata que falta de esta zona o, si ya
+  // están todas, hasta la Maestría y la Supremacía (que quedan aparte), para que se vean.
+  scrollToPending() {
+    const zone = this.getZone();
+    const left = bulkResearch(this.game.state, zone).filter((r) => !this.game.state.research.includes(r.id));
+    const target = left[0] ?? RESEARCH.find((r) => r.zone === zone && r.minLevel && !this.game.state.research.includes(r.id));
+    const row = target && this.body.querySelector(`[data-row="${target.id}"]`);
+    if (row) this.body.scrollTop = Math.max(0, row.offsetTop - this.body.offsetTop - 60);
   }
 
   close() {
@@ -53,10 +70,19 @@ export class ResearchView {
 
     const here = all.filter(([r]) => r.zone === zone);
     const elsewhere = all.filter(([r, q]) => r.zone !== zone && (q.ok || q.reason === 'coins'));
+    // «Comprar todas» (v3.57): las de esta zona que alcanza el dinero, de la más barata a la más cara
+    // (sin la Maestría ni la Supremacía).
+    const preview = previewAllResearch(this.game.state, zone);
+    const buyAll = preview.count > 0 ? `<button class="btn buy bulk" data-research-all>🛒 Comprar todas (${preview.count}) · 💰 ${formatNumber(preview.cost)}</button>` : '';
+    if (buyAll !== this.footHtml) this.foot.innerHTML = this.footHtml = buyAll;
     const html =
       this.rows(here) +
       (elsewhere.length ? `<h3 class="research-other">En otras zonas</h3>${this.rows(elsewhere, true)}` : '');
     if (html !== this.html) this.body.innerHTML = this.html = html;
+    if (this.scrollPending) {
+      this.scrollPending = false;
+      this.scrollToPending();
+    }
   }
 
   // withZone: con la zona en el nombre (las de otras zonas).
@@ -70,7 +96,7 @@ export class ResearchView {
         else if (q.reason === 'locked') action = `<span class="locked">🔒 Construye ${STATIONS_BY_ID[r.requires].name}</span>`;
         else action = `<button class="btn buy small" data-research="${r.id}" ${q.ok ? '' : 'disabled'}>💰 ${formatNumber(r.cost)}</button>`;
         return `
-          <div class="research ${q.reason === 'owned' ? 'owned' : ''} ${q.reason === 'locked' ? 'locked goto' : ''}" ${q.reason === 'locked' ? `data-blocked="${r.id}" title="Ir a lo que falta"` : ''}>
+          <div data-row="${r.id}" class="research ${q.reason === 'owned' ? 'owned' : ''} ${q.reason === 'locked' ? 'locked goto' : ''}" ${q.reason === 'locked' ? `data-blocked="${r.id}" title="Ir a lo que falta"` : ''}>
             <span class="research-icon">${r.icon}</span>
             <span class="research-text"><b>${r.name}</b>${withZone ? ` <small>· ${ZONES_BY_ID[r.zone].icon} ${ZONES_BY_ID[r.zone].name}</small>` : ''}<br><small>${r.desc}</small></span>
             ${action}

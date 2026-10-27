@@ -108,6 +108,30 @@ export function activeGoals(state, zoneId = 'finca') {
   return GOALS_BY_ZONE[zoneId].filter((g) => !state.goals.claimed.includes(g.id)).slice(0, VISIBLE_GOALS);
 }
 
+// Lo que ya se puede cobrar (v3.57): cumplido y sin cobrar; el final de la zona, solo si ya se ve.
+function claimable(state, goal, zoneId) {
+  if (state.goals.claimed.includes(goal.id) || !goalProgress(state, goal).done) return false;
+  return !goal.final || activeGoals(state, zoneId).includes(goal);
+}
+export const claimableGoals = (state, zoneId) => (state.zones[zoneId]?.unlocked ? GOALS_BY_ZONE[zoneId].filter((g) => claimable(state, g, zoneId)) : []);
+
+// «Cobrar todos» (v3.57): todos los cumplidos de la zona menos el final (ese se cobra aparte, con su
+// pantalla). Cobrar uno puede cumplir otro (los que piden monedas): se repite hasta que no quede ninguno.
+// Devuelve cuántos cobró y cuánto ganó.
+export function claimAllGoals(state, zoneId, bus) {
+  let count = 0;
+  let reward = 0;
+  for (;;) {
+    const ready = claimableGoals(state, zoneId).filter((g) => !g.final);
+    if (!ready.length) break;
+    for (const g of ready) if (claimGoal(state, g.id, bus)) {
+      count++;
+      reward += g.reward;
+    }
+  }
+  return { count, reward };
+}
+
 export const goalZone = (goal) => Object.keys(GOALS_BY_ZONE).find((z) => GOALS_BY_ZONE[z].includes(goal));
 
 // Abre una zona: su fuente ilimitada empieza a producir.
@@ -125,7 +149,9 @@ export function claimGoal(state, id, bus) {
   const goal = GOALS.find((g) => g.id === id);
   if (!goal || state.goals.claimed.includes(id)) return false;
   const zoneId = goalZone(goal);
-  if (!activeGoals(state, zoneId).includes(goal) || !goalProgress(state, goal).done) return false;
+  // Desde la v3.57 se cobra cualquiera ya cumplido, aunque no esté entre los tres que se ven; el final de
+  // la zona, solo cuando le llega el turno (es el último de la lista).
+  if (!claimable(state, goal, zoneId)) return false;
   state.goals.claimed.push(id);
   state.coins += goal.reward;
   state.totalEarned += goal.reward;

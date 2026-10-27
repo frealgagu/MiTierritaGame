@@ -606,6 +606,8 @@ export const COST_GROWTH = 1.15;
 | v3.54 ✅ | Regiones plegables en el selector de zonas; el mar Pacífico con ballenas jorobadas detrás de Buenaventura | Navegación y vida en el mapa |
 | v3.55 ✅ | «Zona al máximo» solo con todo en el nivel máximo; si no, la sugerencia dice qué falta subir | Claridad |
 | v3.56 ✅ | Tope del reinicio: la producción llega hasta ×2³² (32 reinicios); se puede seguir reiniciando, pero ya no se duplica | Balance |
+| v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía); los dos botones abajo, fuera de la lista | Comodidad |
+| v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía) | Comodidad |
 
 **Cómo se conectan las zonas:** ver §4b.
 

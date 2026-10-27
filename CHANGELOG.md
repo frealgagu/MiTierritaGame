@@ -1,5 +1,27 @@
 # Registro de cambios
 
+## v3.57.0 — Cobrar todos, comprar todas y el multiplicador abreviado
+- **🔁 Multiplicador:** se muestra con el mismo formato que las monedas: ×512, ×2,05K, ×1,05M, ×4,29B.
+- **📋 Objetivos:**
+  - el número del botón cuenta todos los objetivos de la zona que ya se pueden cobrar, no solo los tres que se ven;
+  - cualquier objetivo cumplido se puede cobrar, aunque todavía no se vea;
+  - abajo, fuera de la lista, **✅ Cobrar todos (N) · +💰** cobra de una vez todos los cumplidos de la zona. El final de la zona no entra: se cobra aparte, cuando le llega el turno, con su pantalla de victoria.
+- **🔬 Investigaciones:**
+  - abajo, fuera de la lista, **🛒 Comprar todas (N) · 💰** compra las de la zona en la que estás, de la más barata a la más cara, hasta donde alcance el dinero;
+  - la Maestría y la Supremacía quedan aparte, para comprarlas a propósito;
+  - al abrir la lista y después de comprar, la lista baja sola hasta la más barata que falta; si ya están todas, hasta la Maestría y la Supremacía.
+
+## v3.57.0 — Cobrar todos, comprar todas y el multiplicador abreviado
+- **🔁 Multiplicador:** se muestra con el mismo formato que las monedas: ×512, ×2,05K, ×1,05M, ×4,29B.
+- **📋 Objetivos:**
+  - el número del botón cuenta todos los objetivos de la zona que ya se pueden cobrar, no solo los tres que se ven;
+  - cualquier objetivo cumplido se puede cobrar, aunque todavía no se vea;
+  - arriba de la lista, **✅ Cobrar todos (N) · +💰** cobra de una vez todos los cumplidos de la zona. El final de la zona no entra: se cobra aparte, cuando le llega el turno, con su pantalla de victoria.
+- **🔬 Investigaciones:**
+  - arriba de la lista, **🛒 Comprar todas (N) · 💰** compra las de la zona en la que estás, de la más barata a la más cara, hasta donde alcance el dinero;
+  - la Maestría y la Supremacía quedan aparte, para comprarlas a propósito;
+  - al abrir la lista y después de comprar, baja sola hasta la más barata que falta; si ya están todas, hasta la Maestría y la Supremacía.
+
 ## v3.56.0 — Tope del reinicio: ×2³²
 - El multiplicador de producción del reinicio llega hasta **×2³²** (32 reinicios, unos 4.295 millones). Se puede seguir volviendo a empezar —cada vez sigue dando ⭐ de Renombre y cuenta para los logros—, pero la producción ya no se duplica: se queda en ×2³².
 - La pantalla del segundo final y los botones de volver a empezar dicen la producción que tendrá la partida nueva y, ya en el tope, que es el máximo.

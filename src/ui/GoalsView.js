@@ -1,7 +1,7 @@
 import { formatMult, formatNumber } from '../core/format.js';
 import { GOALS_BY_ZONE } from '../data/goals.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
-import { activeGoals, goalProgress, goalText } from '../sim/goals.js';
+import { activeGoals, claimableGoals, goalProgress, goalText } from '../sim/goals.js';
 import { finalZone, masteryParts } from '../sim/legacy.js';
 import { regionOf } from '../data/regions.js';
 import { nextLegacyMult } from '../sim/modifiers.js';
@@ -14,6 +14,7 @@ export class GoalsView {
     this.getZone = getZone;
     this.modal = document.getElementById('goals');
     this.body = document.getElementById('goals-body');
+    this.foot = document.getElementById('goals-foot'); // «Cobrar todos», abajo y fuera de la lista (v3.57)
     this.tracker = document.getElementById('tracker');
     this.badge = document.getElementById('goals-badge');
     document.getElementById('goals-btn').addEventListener('click', () => this.open());
@@ -22,6 +23,7 @@ export class GoalsView {
       if (e.target === this.modal) this.close();
       const btn = e.target.closest('[data-claim]');
       if (btn) this.game.claimGoal(btn.dataset.claim);
+      if (e.target.closest('[data-claim-all]')) this.game.claimAllGoals(this.getZone());
       if (e.target.closest('[data-mastery]')) this.onMastery?.();
     });
     this.tracker.addEventListener('click', (e) => {
@@ -48,9 +50,10 @@ export class GoalsView {
     const zone = this.getZone();
     const goals = activeGoals(state, zone);
     const progress = goals.map((g) => goalProgress(state, g));
-    const claimable = progress.filter((p) => p.done).length;
-    this.badge.hidden = claimable === 0;
-    this.badge.textContent = claimable;
+    // El número cuenta todos los que ya se pueden cobrar en la zona, no solo los tres que se ven (v3.57).
+    const ready = claimableGoals(state, zone);
+    this.badge.hidden = ready.length === 0;
+    this.badge.textContent = ready.length;
 
     // Marcador: el primer objetivo (o el primero que ya se puede cobrar). Con todas las zonas
     // completas y sin objetivos aquí, el segundo final: todas las estaciones al nivel 100.
@@ -74,6 +77,11 @@ export class GoalsView {
     if (this.modal.hidden) return;
     const list = GOALS_BY_ZONE[zone];
     const done = list.filter((g) => state.goals.claimed.includes(g.id)).length;
+    // «Cobrar todos» (v3.57): los cumplidos de la zona, también los que no se ven; el final, aparte.
+    const bulk = ready.filter((g) => !g.final);
+    const bulkReward = bulk.reduce((n, g) => n + g.reward, 0);
+    const claimAll = bulk.length > 0 ? `<button class="btn claim bulk" data-claim-all>✅ Cobrar todos (${bulk.length}) · +${formatNumber(bulkReward)} 💰</button>` : '';
+    if (claimAll !== this.footHtml) this.foot.innerHTML = this.footHtml = claimAll;
     const html = `
       <p class="goals-count">${ZONES_BY_ID[zone].icon} ${ZONES_BY_ID[zone].name} · objetivo ${Math.min(done + 1, list.length)} de ${list.length}</p>
       ${goals.map((goal, k) => goalCard(goal, progress[k], false)).join('')}

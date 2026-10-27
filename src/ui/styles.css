@@ -643,3 +643,9 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .medal-bonus span.got { background: #e6f4ea; }
 .pet-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 4px 0; }
 .pet-row .btn { width: auto; }
+
+/* «Cobrar todos» y «Comprar todas» (v3.57): abajo, fuera de la lista que se desplaza, a todo el ancho. */
+.list-modal .list-body { flex: 1 1 auto; }
+.list-foot { margin-top: 10px; }
+.list-foot:empty { display: none; }
+.btn.bulk { display: block; width: 100%; padding: 10px 12px; font-size: 0.95rem; }

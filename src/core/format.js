@@ -20,10 +20,9 @@ export function formatNumber(n) {
   return sign + n.toFixed(digits).replace('.', ',') + SUFFIXES[i];
 }
 
-// Multiplicador de producción: exacto con puntos de miles mientras sea legible (×2.048, ×1.048.576);
-// si no, abreviado como cualquier número.
+// Multiplicador de producción, con el mismo formato que las monedas (v3.57): ×512, ×2,05K, ×4,29B.
 export function formatMult(m) {
-  return `×${m < 1e12 ? Math.round(m).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : formatNumber(m)}`;
+  return `×${m < 1000 ? Math.round(m) : formatNumber(m)}`;
 }
 
 // Tasas por segundo: muestra decimales cuando son pequeñas.

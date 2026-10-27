@@ -197,8 +197,10 @@ test('los números enormes se leen: sufijos hasta Dc y luego notación científi
   assert.equal(formatNumber(2.5e6), '2,50M');
   assert.equal(formatNumber(4.2e33), '4,20Dc');
   assert.equal(formatNumber(4.2e40), '4,20e40');
-  assert.equal(formatMult(2048), '×2.048');
-  assert.equal(formatMult(2 ** 20), '×1.048.576');
+  assert.equal(formatMult(512), '×512');
+  assert.equal(formatMult(2048), '×2,05K');
+  assert.equal(formatMult(2 ** 20), '×1,05M');
+  assert.equal(formatMult(2 ** 32), '×4,29B');
   assert.equal(formatMult(2 ** 100), '×1,27No');
   assert.equal(formatMult(2 ** 200), '×1,61e60');
 });
@@ -222,4 +224,39 @@ test('el segundo final pide también arrieros, rutas, objetivos e investigacione
   assert.equal(missing(() => s.research.pop()), false, 'las investigaciones');
   assert.ok(masteryReady(s));
   assert.deepEqual(masteryParts(s).map((p) => p.id), ['stations', 'transport', 'routes', 'goals', 'research']);
+});
+
+test('«Cobrar todos» y «Comprar todas» (v3.57)', async () => {
+  const { claimableGoals, activeGoals } = await import('../src/sim/goals.js');
+  const { previewAllResearch } = await import('../src/sim/upgrades.js');
+  const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
+  const { RESEARCH } = await import('../src/data/research.js');
+  // Objetivos: cuenta todos los cumplidos (no solo los tres que se ven) y los cobra, menos el final.
+  const game = everything(100);
+  const s = game.state;
+  s.stats.sold = Object.fromEntries(Object.keys(s.stats.sold ?? {}).map((k) => [k, 0]));
+  for (const g of GOALS_BY_ZONE.finca) if (g.type === 'sold' || g.type === 'produced') (s.stats[g.type] ??= {})[g.product] = 1e12;
+  const ready = claimableGoals(s, 'finca');
+  assert.ok(ready.length > 3, `cumplidos: ${ready.length}`);
+  assert.ok(!ready.some((g) => g.final), 'el final no, mientras no se vea');
+  const coins = s.coins;
+  const { count, reward } = game.claimAllGoals('finca');
+  assert.equal(count, ready.length);
+  assert.equal(s.coins, coins + reward);
+  assert.ok(!s.zones.finca.complete, 'el final se cobra aparte');
+  assert.ok(activeGoals(s, 'finca').every((g) => g.final || !claimableGoals(s, 'finca').includes(g)));
+  // Investigaciones: de la más barata a la más cara hasta donde alcance, sin Maestría ni Supremacía.
+  const fresh = everything(100);
+  const st = fresh.state;
+  st.research = [];
+  const cheap = RESEARCH.filter((r) => r.zone === 'finca' && !r.minLevel).sort((a, b) => a.cost - b.cost);
+  st.coins = cheap[0].cost + cheap[1].cost + cheap[2].cost;
+  assert.deepEqual(previewAllResearch(st, 'finca'), { count: 3, cost: st.coins });
+  const bought = fresh.researchAll('finca');
+  assert.deepEqual(bought, cheap.slice(0, 3).map((r) => r.id));
+  assert.equal(st.coins, 0);
+  st.coins = 1e30;
+  fresh.researchAll('finca');
+  assert.ok(cheap.every((r) => st.research.includes(r.id)), 'todas');
+  assert.ok(!st.research.some((id) => RESEARCH.find((r) => r.id === id).minLevel), 'sin Maestría ni Supremacía');
 });

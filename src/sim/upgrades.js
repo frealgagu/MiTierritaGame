@@ -3,7 +3,7 @@ import { bulkUpgrade, maxLevel, MILESTONES } from './rules.js';
 import { chainOf, nextToUnlock, zoneOf, zoneUnlocked } from './chain.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { createStationState } from './production.js';
-import { RESEARCH_BY_ID } from '../data/research.js';
+import { RESEARCH, RESEARCH_BY_ID } from '../data/research.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive } from './routes.js';
 
@@ -140,4 +140,38 @@ export function buyResearch(state, id, bus) {
   state.research.push(id);
   bus.emit('research', { id });
   return true;
+}
+
+// «Comprar todas» (v3.57): las investigaciones de una zona que alcanza el dinero, de la más barata a la
+// más cara, hasta que no alcance para ninguna más. La Maestría y la Supremacía quedan aparte: se compran a
+// propósito. Devuelve las que compró.
+export const bulkResearch = (state, zoneId) => RESEARCH.filter((r) => r.zone === zoneId && !r.minLevel).sort((a, b) => a.cost - b.cost);
+export function buyAllResearch(state, zoneId, bus) {
+  const bought = [];
+  for (let again = true; again; ) {
+    again = false;
+    for (const r of bulkResearch(state, zoneId)) {
+      if (buyResearch(state, r.id, bus)) {
+        bought.push(r.id);
+        again = true;
+      }
+    }
+  }
+  return bought;
+}
+
+// Cuántas compraría «Comprar todas» con el dinero de ahora, y cuánto costarían.
+export function previewAllResearch(state, zoneId) {
+  let coins = state.coins;
+  let count = 0;
+  let cost = 0;
+  for (const r of bulkResearch(state, zoneId)) {
+    const q = quoteResearch(state, r.id);
+    if (q.reason !== 'coins' && !q.ok) continue;
+    if (!canPay({ ...state, coins }, r.cost)) break;
+    coins -= r.cost;
+    cost += r.cost;
+    count++;
+  }
+  return { count, cost };
 }
