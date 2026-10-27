@@ -603,6 +603,7 @@ export const COST_GROWTH = 1.15;
 | v3.51 ✅ | **La Yanchama** (corteza de yanchama → tela golpeada → pintada → máscara ticuna; la tienda vende el Recuerdo del Amazonas), con las rutas del pirarucú salado y del moqueado | El Amazonas crece |
 | v3.52 ✅ | **Leticia** (el final del Amazonas: heladería, restaurante, hotel de la selva, mercado del puerto, provisiones de canoa y salidas a ver los delfines rosados), con seis rutas | El Amazonas crece |
 | v3.53 ✅ | **El Amazonas completo**: sus seis eventos (las palmas muy altas, la sequía, el fin de la veda, la vaciante, la Pelazón y el Festival de la Confraternidad), su álbum y sus logros | El Amazonas crece |
+| v3.54 ✅ | Regiones plegables en el selector de zonas; el mar Pacífico con ballenas jorobadas detrás de Buenaventura | Navegación y vida en el mapa |
 
 **Cómo se conectan las zonas:** ver §4b.
 

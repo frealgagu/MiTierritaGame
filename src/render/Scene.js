@@ -328,6 +328,7 @@ export class Scene {
     // En el tablero de un evento siempre es media mañana (su reloj es otro).
     this.dayNight.update(state.event ? EVENT_DAYTIME : clockOf(state));
     this.background.update(dt, this.camera);
+    this.terrain.update(this.time);
     this.farm.sync(state);
     this.warehouse.sync(state.zones[this.zone.id], warehouseCap(state, this.zone.id));
     for (const id of this.stationIds) {

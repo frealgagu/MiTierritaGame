@@ -55,10 +55,12 @@ export class Terrain {
     this.decor = []; // objetos altos que se ordenan por profundidad junto al resto
     this.occupied = new Set(); // casillas con decoración (`gx,gy`): la gente no las atraviesa
     this.glows = []; // luces de noche de lo que no es una estación: { x, y, r, color } (v3.29)
+    this.animated = []; // lo que se mueve en la decoración: { update(t) } (v3.54: las ballenas y sus lanchas)
     this.drawGround();
     if (zone.plaza) drawAtrium(this.ground, zone.plaza);
     if (zone.plaza) this.buildPlaza();
     if (zone.walls) this.buildWalls();
+    if (zone.sea) this.buildWhales();
     this.buildDecor();
   }
 
@@ -96,7 +98,8 @@ export class Terrain {
     const n = this.zone.size;
     const rng = createRng(this.zone.seed);
 
-    if (this.zone.walls?.sea) this.drawSea(g, n, rng);
+    const sea = this.zone.walls?.sea || this.zone.sea; // el mar detrás del mapa: Cartagena (v3.45) y Buenaventura (v3.54)
+    if (sea) this.drawSea(g, n, rng);
     // Bordes del «diorama».
     g.poly(isoPoly([[0, n, 0], [n, n, 0], [n, n, -CLIFF], [0, n, -CLIFF]])).fill(PAL.cliffTop);
     g.poly(isoPoly([[n, 0, 0], [n, n, 0], [n, n, -CLIFF], [n, 0, -CLIFF]])).fill(PAL.cliffSide);
@@ -119,7 +122,7 @@ export class Terrain {
         else if (type === 'farm') color = (FARM_SOIL[this.zone.style] ?? FARM_SOIL[this.zone.theme])?.(v) ?? mix(PAL.soil, 0x6e4529, v * 0.35);
         else if (type === 'plaza') color = mix(0xd9c9a8, 0xc4b08a, v * 0.5);
         else if (type === 'plot' || type === 'building') color = mix(PAL.plot, 0xc9a06c, v * 0.4);
-        else if (this.zone.walls?.sea && (gx === 0 || gy === 0)) color = mix(0xe9d8a6, 0xdcc78e, v * 0.6); // la playa, por fuera de la muralla
+        else if (sea && (gx === 0 || gy === 0)) color = mix(this.zone.sea ? 0xb8a27a : 0xe9d8a6, this.zone.sea ? 0xa8926a : 0xdcc78e, v * 0.6); // la playa (en el Pacífico, de arena oscura)
         else color = mix(PAL.grass, (gx + gy) % 2 ? 0x8cc65a : 0x6fae44, 0.35 + v * 0.3);
         g.poly(isoPoly([[gx, gy], [gx + 1, gy], [gx + 1, gy + 1], [gx, gy + 1]])).fill(color);
 
@@ -294,6 +297,36 @@ export class Terrain {
       obj.position.set(p.x, p.y);
       put(obj, gx, gy);
     }
+  }
+
+  // El mar de Buenaventura (v3.54): las ballenas jorobadas que llegan a la bahía, y las lanchas de los turistas
+  // que las miran desde lejos. Se mueven solas (update), por fuera del mapa.
+  buildWhales() {
+    const S = this.zone.sea;
+    const put = (obj, gx, gy, update) => {
+      const p = iso(gx, gy);
+      obj.position.set(p.x, p.y);
+      obj.zIndex = depth(gx, gy);
+      obj.grid = [gx, gy];
+      this.decor.push(obj);
+      this.animated.push({ update });
+    };
+    for (const [k, [gx, gy, dir]] of S.whales.entries()) {
+      const c = new Container();
+      const g = new Graphics();
+      c.addChild(g);
+      c.scale.set(1.5); // grandes, para que se vean desde el mapa entero
+      put(c, gx, gy, (t) => drawWhale(g, t + k * 5.3, dir, k % 2 === 0));
+    }
+    for (const [k, [gx, gy]] of S.boats.entries()) {
+      const c = motorBoat();
+      const base = iso(gx, gy);
+      put(c, gx, gy, (t) => c.position.set(base.x + Math.sin(t * 0.3 + k) * 6, base.y + Math.sin(t * 1.4 + k * 2) * 1.2));
+    }
+  }
+
+  update(t) {
+    for (const a of this.animated) a.update(t);
   }
 
   isFree(gx, gy, margin = 1, tiles = this.tiles) {
@@ -760,6 +793,73 @@ function garita(gx, gy) {
   g.rect(p.x - 1, p.y - 10, 2, 4).fill(0x3a2a1a);
   c.addChild(g);
   return c;
+}
+
+// Ballena jorobada (v3.54), en un ciclo de 16 s: nada asomando el lomo y echa el chorro, se sumerge
+// mostrando la cola y, si salta (breach), sale casi entera del agua y cae con un chapuzón. dir: 1 o -1 (hacia
+// dónde nada).
+const WHALE = 0x37474f;
+function drawWhale(g, t, dir, breach) {
+  g.clear();
+  const T = 16;
+  const u = (((t % T) + T) % T) / T;
+  const x = (u - 0.5) * 36 * dir;
+  const ripple = (cx, r, a) => g.ellipse(cx, 2, r, r * 0.3).stroke({ width: 1, color: 0xffffff, alpha: a });
+  if (u < 0.36) {
+    // El lomo, que sube y baja, con la aleta dorsal; al principio, el chorro.
+    const up = Math.sin((u / 0.36) * Math.PI);
+    const h = 3 + up * 4;
+    g.ellipse(x, 2, 24, 4).fill({ color: 0x1f5f80, alpha: 0.6 });
+    g.moveTo(x - 20 * dir, 2).quadraticCurveTo(x, 2 - h * 2, x + 20 * dir, 2).closePath().fill(WHALE).stroke({ width: 0.8, color: 0x263238 });
+    g.poly([x - 6 * dir, 2 - h * 0.9, x - 9 * dir, 2 - h - 3, x - 11 * dir, 2 - h * 0.6]).fill(WHALE);
+    ripple(x, 26, 0.45);
+    if (u < 0.12) {
+      const f = u / 0.12;
+      const sx = x + 12 * dir;
+      for (let i = 0; i < 7; i++) {
+        const a = (i / 6 - 0.5) * 1.2;
+        g.circle(sx + Math.sin(a) * 9 * f, 2 - h - 4 - 22 * f * Math.cos(a), 2.2 - f).fill({ color: 0xffffff, alpha: 0.8 * (1 - f * 0.6) });
+      }
+    }
+  } else if (u < 0.5) {
+    // Se sumerge: la cola sale del agua, con la cara de abajo blanca, y se va hundiendo.
+    const f = (u - 0.36) / 0.14;
+    const h = Math.sin(f * Math.PI) * 18;
+    const cx = x + 10 * dir;
+    g.moveTo(cx - 2, 2).lineTo(cx - 1.5, 2 - h + 6).lineTo(cx + 1.5, 2 - h + 6).lineTo(cx + 2, 2).closePath().fill(WHALE);
+    g.moveTo(cx, 2 - h + 6).quadraticCurveTo(cx - 8, 2 - h + 2, cx - 14, 2 - h - 4).quadraticCurveTo(cx - 6, 2 - h - 1, cx, 2 - h + 2).quadraticCurveTo(cx + 6, 2 - h - 1, cx + 14, 2 - h - 4).quadraticCurveTo(cx + 8, 2 - h + 2, cx, 2 - h + 6).fill(WHALE).stroke({ width: 0.8, color: 0x263238 });
+    g.moveTo(cx - 10, 2 - h - 1.5).quadraticCurveTo(cx - 4, 2 - h + 0.5, cx, 2 - h + 4).quadraticCurveTo(cx + 4, 2 - h + 0.5, cx + 10, 2 - h - 1.5).stroke({ width: 1.4, color: 0xcfd8dc });
+    for (let i = 0; i < 4; i++) g.circle(cx - 9 + i * 6, 2 - h - 2 + Math.sin(i * 2 + f * 6) * 2 + f * 6, 1).fill({ color: 0xffffff, alpha: 0.8 * (1 - f) });
+    ripple(cx, 10 + f * 10, 0.6 * (1 - f));
+  } else if (breach && u > 0.7 && u < 0.84) {
+    // El salto: sale de lado, con la aleta larga blanca, y cae.
+    const f = (u - 0.7) / 0.14;
+    const h = Math.sin(f * Math.PI) * 30;
+    const rot = (-0.9 + f * 1.6) * dir;
+    const cos = Math.cos(rot);
+    const sin = Math.sin(rot);
+    const at = (px, py) => [x + px * cos - py * sin, 2 - h + px * sin + py * cos];
+    const body = [];
+    for (let i = 0; i <= 16; i++) {
+      const a = (i / 16) * Math.PI * 2;
+      body.push(...at(Math.cos(a) * 20, Math.sin(a) * 6));
+    }
+    g.ellipse(x, 2, 18 + f * 10, 4).fill({ color: 0xffffff, alpha: 0.5 });
+    g.poly(body).fill(WHALE).stroke({ width: 0.8, color: 0x263238 });
+    g.poly([...at(-14, 3), ...at(14, 4), ...at(-6, 6)]).fill(0xcfd8dc);
+    g.poly([...at(-6 * dir, 2), ...at(-2 * dir, 18), ...at(2 * dir, 3)]).fill(0xeceff1).stroke({ width: 0.6, color: 0x263238 });
+    for (let i = 0; i < 8; i++) g.circle(x - 16 + i * 4.5, 2 - Math.abs(Math.sin(i * 1.7)) * 6 * (1 - f), 1.4).fill({ color: 0xffffff, alpha: 0.85 });
+  } else if (breach && u >= 0.84 && u < 0.92) {
+    // El chapuzón.
+    const f = (u - 0.84) / 0.08;
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 11) * Math.PI;
+      g.circle(x + Math.cos(a) * 18 * (0.5 + f), 2 - Math.sin(a) * 18 * (1 - f) * (0.6 + (i % 3) * 0.2), 2.2 - f).fill({ color: 0xffffff, alpha: 0.9 * (1 - f) });
+    }
+    ripple(x, 14 + f * 22, 0.7 * (1 - f));
+  } else if (u > 0.92) {
+    ripple(x, 6 + (u - 0.92) * 120, 0.3);
+  }
 }
 
 // Velero en la bahía, con la vela blanca.

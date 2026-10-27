@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v3.54.0 — Regiones plegables y las ballenas de Buenaventura
+- **🗺️ Zonas:** cada región se pliega y despliega tocando su nombre. Plegada, dice cuántas zonas lleva completadas, cuánto rinde entre todas y si estás en ella. Al abrir la lista solo se ve desplegada la región donde estás; lo que pliegues o despliegues se queda así.
+- **🐋 Buenaventura** ahora tiene el **mar Pacífico** detrás del mapa, con su playa de arena oscura. En el mar, las **ballenas jorobadas** echan el chorro, se sumergen mostrando la cola y a veces saltan fuera del agua y caen con un chapuzón; las lanchas de los turistas las miran desde lejos. Es solo dibujo: las zonas, las estaciones y los caminos no cambian (la Salida a las ballenas sigue siendo la última estación).
+
 ## v3.53.0 — El Amazonas completo: eventos, álbum y logros
 - **Seis eventos nuevos**, uno por zona del Amazonas, cada uno con su escena en el tablero que cambia con cada compra:
   - 🌴 **Las palmas muy altas** (Asaizal): pretinas para trepar, escaleras de guadua y asaí bajito;

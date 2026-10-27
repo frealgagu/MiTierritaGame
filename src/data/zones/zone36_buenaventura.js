@@ -39,6 +39,12 @@ export const ZONE36 = {
     recuerdos_pacifico: { road: [[6.5, 25.9], [6.5, 11.2]], sign: [5.3, 23.6], text: 'Werregue ⬆' },
     platos_tapao: { road: [[12.5, 25.9], [12.5, 15.2]], sign: [11.3, 23.6], text: 'Tapao ⬆' },
   },
+  // El Pacífico detrás del mapa (v3.54): las ballenas jorobadas que llegan a la bahía de julio a octubre, y las
+  // lanchas de los turistas que salen a verlas. [gx, gy, hacia dónde nada]; las lanchas, [gx, gy].
+  sea: {
+    whales: [[-3.2, 6, 1], [8, -3.4, -1], [-4.6, 16, -1], [17, -4.2, 1], [-2.6, 23, 1]],
+    boats: [[-2, 9.5], [11.5, -2.2], [21, -2.6]],
+  },
   unlockedBy: 'werregue',
   next: null, // la última de la Costa Pacífica
 };

@@ -619,6 +619,10 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 @keyframes splash-slide { from { transform: translateX(-100%); } to { transform: translateX(290%); } }
 .splash-note { margin: 10px 0 0; font-size: 0.82rem; opacity: 0.75; min-height: 1em; }
 .research-other { margin: 12px 0 6px; font-size: 1rem; }
+/* Cabecera de región del selector de zonas (v3.54): un botón que la pliega o despliega. */
+.zones-region { margin: 6px 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; width: 100%; padding: 8px 10px; border: 2px solid var(--ink); border-radius: 10px; background: rgba(255, 255, 255, 0.55); color: inherit; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
+.zones-region small { margin-left: auto; font-weight: 500; opacity: 0.8; }
+.zones-fold { display: inline-block; width: 1em; }
 
 /* Versión nueva de la app (v3.6.1) */
 .update-notes { max-height: 45vh; overflow-y: auto; text-align: left; margin: 8px 0 12px; }

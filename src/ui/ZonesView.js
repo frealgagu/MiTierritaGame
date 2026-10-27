@@ -21,6 +21,14 @@ export class ZonesView {
     document.getElementById('zones-close').addEventListener('click', () => this.close());
     this.modal.addEventListener('click', (e) => {
       if (e.target === this.modal) this.close();
+      // Plegar o desplegar una región (v3.54).
+      const fold = e.target.closest('[data-fold]');
+      if (fold) {
+        const folds = (this.root.state.settings.zonesFold ??= {});
+        folds[fold.dataset.fold] = !this.folded(fold.dataset.fold);
+        this.update();
+        return;
+      }
       const btn = e.target.closest('[data-zone]');
       if (btn) {
         this.close();
@@ -37,6 +45,14 @@ export class ZonesView {
 
   close() {
     this.modal.hidden = true;
+  }
+
+  // Una región está plegada si así la dejó el jugador; si no la ha tocado, solo se ve abierta la de la zona
+  // donde está (v3.54).
+  folded(regionId) {
+    const fold = this.root.state.settings.zonesFold?.[regionId];
+    if (fold !== undefined) return fold;
+    return !REGIONS.find((r) => r.id === regionId).zones.includes(this.getZone());
   }
 
   update() {
@@ -56,11 +72,19 @@ export class ZonesView {
 
     const html = REGIONS.map((region) => {
       const state = regionState(root, region.id);
-      const head = `<h3 class="research-other">${region.icon} ${region.name}</h3>`;
       if (!state) {
+        const head = `<h3 class="research-other">${region.icon} ${region.name}</h3>`;
         const from = ZONES_BY_ID[region.unlock.zone];
         return `${head}<div class="research locked"><span class="research-icon">🔒</span><span class="research-text"><b>${region.name}</b><br><small>Se abre al completar ${from.name}.</small></span></div>`;
       }
+      // La cabecera pliega la región; plegada, dice cuántas zonas lleva y cuánto rinde.
+      const folded = this.folded(region.id);
+      const opened = region.zones.filter((z) => state.zones[z]?.unlocked);
+      const done = region.zones.filter((z) => state.zones[z]?.complete).length;
+      const income = opened.reduce((sum, z) => sum + analyzeChain(state, z).income, 0);
+      const here = region.zones.includes(this.getZone()) ? ' · 📍 Aquí estás' : '';
+      const head = `<button class="zones-region research-other" data-fold="${region.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${region.icon} ${region.name}<small>${done}/${region.zones.length} 🏁 · ${formatRate(income)} 💰/s${here}</small></button>`;
+      if (folded) return head;
       const rows = region.zones.map((id, i) => {
         const zone = ZONES_BY_ID[id];
         const st = state.zones[id];
