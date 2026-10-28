@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.63.0 — Invítame un tinto
+- **☕ Invítame un tinto**, en el menú ⚙️ de la versión de Google Play: una propina voluntaria para quien hace el juego (un tinto, una arepa o un almuerzo), con los cobros de Google. No da nada dentro del juego.
+- Antes de pagar hay una **barrera para adultos**: una multiplicación (como 13 × 7) que un niño pequeño no resuelve de un toque. En las cuentas de niños con control parental, Google además le pide permiso al adulto.
+- Se puede invitar las veces que se quiera. Un pago que quede pendiente (por ejemplo, en efectivo) se completa solo la próxima vez que se abra el juego.
+- En la web saldrá el mismo botón con un enlace a Ko-fi, cuando exista. El APK de prueba no lo trae: los cobros de Google solo funcionan con la app instalada desde la tienda.
+
 ## v3.62.0 — Encantos de Mi Tierrita
 - **El juego cambia de nombre:** ahora se llama **Encantos de Mi Tierrita** (en el teléfono, «Mi Tierrita»). La web se mudó a https://frealgagu.github.io/MiTierritaGame/.
 - **Ícono nuevo:** el mapa de Colombia con los colores de las regiones del juego, un sombrero vueltiao, una palmera, una ramita de café y una mazorca de cacao. Sale en la pantalla de carga, en la app y en la web instalada.

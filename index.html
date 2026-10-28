@@ -194,6 +194,7 @@
           <button id="intro-btn" class="btn">❓ Cómo se juega</button>
           <button id="sound-btn" class="btn"></button>
           <button id="music-btn" class="btn"></button>
+          <button id="tip-btn" class="btn" hidden>☕ Invítame un tinto</button>
           <a id="apk-link" class="btn" href="./mitierrita.apk" download="MiTierrita.apk" hidden>📱 App de Android</a>
           <button id="update-btn" class="btn" hidden>🔄 Buscar actualización</button>
           <button id="restart-btn" class="btn buy" hidden></button>
@@ -201,6 +202,27 @@
           <button id="close-menu" class="btn">Seguir jugando</button>
         </div>
         <p class="chain-help credits">Música: «Bambuco de la finca», compuesta para el juego y tocada por él (tiple, guitarra y bandola sintetizados).</p>
+      </div>
+    </div>
+
+    <div id="tip" class="modal" hidden>
+      <div class="modal-card">
+        <div class="chain-head">
+          <h2>☕ Invítame un tinto</h2>
+          <button id="tip-close" class="close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <form id="tip-gate-form" class="tip-gate">
+          <div id="tip-gate">
+            <p>Esto es para adultos. Si eres niño o niña, pídele ayuda a un adulto.</p>
+            <label for="tip-answer" id="tip-question"></label>
+            <div class="dev-row">
+              <input id="tip-answer" type="number" inputmode="numeric" autocomplete="off" aria-labelledby="tip-question" />
+              <button class="btn small" type="submit">Seguir</button>
+            </div>
+          </div>
+        </form>
+        <div id="tip-options" class="tip-options" hidden></div>
+        <p id="tip-msg" class="chain-help"></p>
       </div>
     </div>
 

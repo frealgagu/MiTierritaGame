@@ -53,6 +53,8 @@ El APK de depuración se instala directamente en el teléfono (hay que permitir 
 
 **Google Play.** La clave de subida no está en el código: se genera en un computador con `keytool` y se guarda en los secretos del repositorio `PLAY_UPLOAD_KEYSTORE_BASE64` (el archivo .p12 en base64), `PLAY_UPLOAD_KEYSTORE_PASSWORD`, `PLAY_UPLOAD_KEY_ALIAS` y `PLAY_UPLOAD_KEY_PASSWORD`. Con esos secretos, cada push publica también el AAB en https://frealgagu.github.io/MiTierritaGame/mitierrita.aab, listo para subirlo a Play Console. Google firma la app final con su propia clave (Play App Signing), así que si la clave de subida se pierde se puede pedir otra.
 
+**☕ Invítame un tinto** (`src/tip.js`): solo en la versión de Play, con los cobros de Google (complemento `@capgo/native-purchases`). En Play Console van tres productos de una sola compra con los identificadores `tinto`, `arepa` y `almuerzo` (US$0,99, US$2,99 y US$4,99); el juego los consume al comprarlos, así que se pueden repetir. En la web, el botón aparece cuando `KOFI_URL` tenga el enlace.
+
 ### Instalar en el móvil
 Abre https://frealgagu.github.io/MiTierritaGame/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).
 

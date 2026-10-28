@@ -678,3 +678,8 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .zones-map-walker .shadow { fill: rgba(0, 0, 0, 0.25); }
 @keyframes zones-ring { 50% { opacity: 0.2; } }
 .list-body[hidden] { display: none; }
+
+/* ☕ Invítame un tinto (v3.63) */
+#tip-question { display: block; font-weight: 700; font-size: 1.15rem; margin-top: 4px; }
+#tip-answer { flex: 1; min-width: 0; font: inherit; font-size: 1.1rem; padding: 8px 10px; border: 2px solid var(--ink); border-radius: 12px; background: #fff; }
+.tip-options { display: flex; flex-direction: column; gap: 8px; }

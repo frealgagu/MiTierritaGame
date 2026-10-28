@@ -25,6 +25,7 @@ import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
 import { openRegions, regionState } from './sim/regions.js';
 import { bindNative, isNativeApp } from './native.js';
 import { checkForUpdate } from './update.js';
+import { bindTip, tipMode } from './tip.js';
 import { checkMastery, restartState } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
 import { ZONES_BY_ID } from './data/zones/index.js';
@@ -485,6 +486,7 @@ async function start() {
 
   bindMenu(game, sound, music, () => active);
   bindDevOptions(game, () => active);
+  bindTip(tipMode({ native: isNativeApp(), playStore: typeof __PLAY_STORE__ !== 'undefined' && __PLAY_STORE__ }));
   // En la app de Android el juego ya va dentro del paquete: sin service worker, con el botón «atrás».
   if (isNativeApp()) {
     // ¿Hay un APK más nuevo? Al abrir, al volver a la app (cada pocas horas) y desde el menú (v3.6.1). La de
