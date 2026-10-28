@@ -691,6 +691,11 @@ export const COST_GROWTH = 1.15;
 - **Próximas regiones (aprobadas, para más adelante)**: completan el mapa de Colombia (hoy Cundinamarca, Bogotá, Tolima y Huila no son de ninguna región). Llegarían zona por zona, como las demás.
   - **🎺 Tolima Grande** (Tolima y Huila, que fueron un solo departamento): se abriría al completar Leticia. Zonas: **Los Achirales** (Huila: achira → raíz → almidón → bizcochos de achira → caja), **La Represa de Betania** (Huila: tilapia fresca, frita y en filete), **La Lechonería** (Tolima: lechona tolimense y tamal tolimense), **Las Chivas de Pitalito** (Huila: barro → chivas de cerámica pintadas), **El Desierto de la Tatacoa** (caminatas y observación de estrellas) e **Ibagué**, el final (la capital musical: el Festival Folclórico y el San Pedro). Música: sanjuanero y bambuco tolimense.
   - **🏛️ Bogotá y la Sabana** (Cundinamarca y Bogotá), el gran final del país: **Las Flores de la Sabana** (rosas y claveles de exportación), **Las Salinas de Zipaquirá** (sal, con la Catedral de Sal), **Los Freseros de Sibaté** (fresas con crema), **La Quesería de Ubaté** (la capital lechera), **La Cocina santafereña** (ajiaco y chocolate con queso) y **Bogotá**, el final (La Candelaria, Monserrate y los museos), que podría recibir algo de todas las regiones del país.
+- **Pendiente (aprobado, para más adelante): textos más prudentes para la política de Familias de Google Play.** La clasificación ya acepta las referencias a alcohol y tabaco (sin consumo), pero se prefiere suavizarlas:
+  - lámina «Los uitoto»: «Pueblo de la coca y el tabaco…» → «Pueblo de la maloca, que guarda sus historias en cantos y relatos»;
+  - lámina «El chicote»: sin el 🚬;
+  - «En Boyacá también se toma chicha» (lore de los fermentadores) → una frase sobre cómo se hace;
+  - revisar que ningún texto (objetivos, eventos, diálogos) suene a invitar a beber o fumar. El Tabacal y La Cervecería se quedan, como oficio y tradición.
 - Ideas de productos:
   - **Santander**: bocadillo veleño (guayaba), tabaco, hormigas culonas, fique (costales y alpargatas).
   - **Costa Caribe**: coco y cocadas, plátano y patacones, yuca y enyucado, queso costeño, caña flecha y sombrero vueltiao.
