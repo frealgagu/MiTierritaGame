@@ -25,4 +25,4 @@ export const PAL = {
 export const OUTLINE = { width: 1.5, color: PAL.outline, alpha: 0.6 };
 
 // Con la fuente de íconos del juego primero (ver src/data/icons.js).
-export const FONT = '"Cafetal Icons", Fredoka, "Baloo 2", system-ui, sans-serif';
+export const FONT = '"MiTierrita Icons", Fredoka, "Baloo 2", system-ui, sans-serif';

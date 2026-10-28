@@ -4,7 +4,7 @@
 // siempre carga la versión publicada.
 import { isNewer } from '../tools/release-notes.js';
 
-const SITE = 'https://frealgagu.github.io/Game';
+const SITE = 'https://frealgagu.github.io/MiTierritaGame';
 const RECHECK_MS = 6 * 3600 * 1000;
 export const APP_VERSION = typeof __APP_VERSION__ === 'undefined' ? '0.0.0' : __APP_VERSION__;
 
@@ -38,7 +38,7 @@ function show(info) {
   // Descarga el APK nuevo: la app pasa el enlace al navegador del teléfono, y Android pide instalarlo.
   document.getElementById('update-go').onclick = () => {
     modal.hidden = true;
-    window.location.href = `${SITE}/cafetal.apk`;
+    window.location.href = `${SITE}/mitierrita.apk`;
   };
   document.getElementById('update-later').onclick = () => (modal.hidden = true);
   modal.hidden = false;

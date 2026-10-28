@@ -154,7 +154,7 @@ function divertNote(state, row, icon) {
   return notes.join('');
 }
 
-// ---------- Diagrama (como el plano de producción de Frozen City) ----------
+// ---------- Diagrama (como un plano de producción) ----------
 // Cada estación es una tarjeta; las del mismo paso van en la misma fila y las ramas en columnas. Los
 // tubos bajan de una a la siguiente (con el producto corriendo, o en rojo donde se frena), lo que
 // llega de otras zonas entra como etiquetas azules encima de la estación, y todo termina en la bodega.

@@ -86,7 +86,7 @@ test('una partida de la v1.3 con el Cacaotal completo abre el Maizal', async () 
   delete old.zones.maizal;
   delete old.routes.queso;
   delete old.routes.mantequilla;
-  const store = { 'cafetal.save': JSON.stringify(old) };
+  const store = { 'mitierrita.save': JSON.stringify(old) };
   globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
   const s = loadGame();
   delete globalThis.localStorage;

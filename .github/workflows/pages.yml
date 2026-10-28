@@ -1,7 +1,9 @@
 name: Publicar la web y la app de Android
 
 # En cada push: pruebas y web (GitHub Pages) por un lado, APK de Android por otro, y al final se
-# publican juntos: el APK queda en la misma página, en ./cafetal.apk (el menú del juego lo enlaza).
+# publican juntos: el APK queda en la misma página, en ./mitierrita.apk (el menú del juego lo enlaza).
+# Si existen los secretos de la clave de subida (PLAY_UPLOAD_*, ver clave-play.yml), también se genera el
+# AAB para Google Play (./mitierrita.aab): sin el aviso de actualización propio, porque Play actualiza solo.
 on:
   push:
     branches: [main, claude/frozen-city-supply-chain-game-jpdsxh]
@@ -59,22 +61,36 @@ jobs:
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           if [ -n "$KEYSTORE_BASE64" ]; then
-            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/cafetal.keystore"
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/mitierrita.keystore"
             {
-              echo "CAFETAL_KEYSTORE=$RUNNER_TEMP/cafetal.keystore"
-              echo "CAFETAL_KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"
-              echo "CAFETAL_KEY_ALIAS=$KEY_ALIAS"
-              echo "CAFETAL_KEY_PASSWORD=$KEY_PASSWORD"
+              echo "MITIERRITA_KEYSTORE=$RUNNER_TEMP/mitierrita.keystore"
+              echo "MITIERRITA_KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"
+              echo "MITIERRITA_KEY_ALIAS=$KEY_ALIAS"
+              echo "MITIERRITA_KEY_PASSWORD=$KEY_PASSWORD"
             } >> "$GITHUB_ENV"
           fi
       # Compila el juego, lo copia a android/ y genera el APK firmado con la clave de pruebas.
       - run: |
           npm run android:apk
-          cp android/app/build/outputs/apk/debug/app-debug.apk cafetal.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk mitierrita.apk
+      # AAB para Google Play, firmado con la clave de subida (solo si están los secretos).
+      - env:
+          KEYSTORE_BASE64: ${{ secrets.PLAY_UPLOAD_KEYSTORE_BASE64 }}
+          MITIERRITA_UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.PLAY_UPLOAD_KEYSTORE_PASSWORD }}
+          MITIERRITA_UPLOAD_KEY_ALIAS: ${{ secrets.PLAY_UPLOAD_KEY_ALIAS }}
+          MITIERRITA_UPLOAD_KEY_PASSWORD: ${{ secrets.PLAY_UPLOAD_KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then echo "Sin clave de subida: no se genera el AAB."; exit 0; fi
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/subida.p12"
+          export MITIERRITA_UPLOAD_KEYSTORE="$RUNNER_TEMP/subida.p12"
+          PLAY_STORE=1 npm run android:sync
+          (cd android && ./gradlew bundleRelease)
+          cp android/app/build/outputs/bundle/release/app-release.aab mitierrita.aab
+          rm "$RUNNER_TEMP/subida.p12"
       - uses: actions/upload-artifact@v4
         with:
           name: android
-          path: cafetal.apk
+          path: mitierrita.a*
 
   deploy:
     needs: [web, android]

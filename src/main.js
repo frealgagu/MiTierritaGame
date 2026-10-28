@@ -170,7 +170,7 @@ async function start() {
     scene = new Scene(app, active, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
     scene.onTalk = (z) => chatter?.talk(z);
-    if (import.meta.env.DEV) window.__cafetal = { game: active, root: game, games, scene, panel, select, music };
+    if (import.meta.env.DEV) window.__mitierrita = { game: active, root: game, games, scene, panel, select, music };
   };
   showZone(view.zone);
   hud = new HUD(active, select, () => scene.dayNight.hour, getZone);
@@ -242,7 +242,7 @@ async function start() {
     useGame(eg);
     document.body.classList.add('event-mode');
     eventBar.show(eg);
-    if (import.meta.env.DEV) window.__cafetal = { ...window.__cafetal, scene, board };
+    if (import.meta.env.DEV) window.__mitierrita = { ...window.__mitierrita, scene, board };
   };
   const leaveBoard = () => {
     board = null;
@@ -487,12 +487,16 @@ async function start() {
   bindDevOptions(game, () => active);
   // En la app de Android el juego ya va dentro del paquete: sin service worker, con el botón «atrás».
   if (isNativeApp()) {
-    bindNative({ closeTop, onHide, onShow: () => (onShow(), checkForUpdate()) });
-    // ¿Hay un APK más nuevo? Al abrir, al volver a la app (cada pocas horas) y desde el menú (v3.6.1).
-    checkForUpdate();
-    const updateBtn = document.getElementById('update-btn');
-    updateBtn.hidden = false;
-    updateBtn.addEventListener('click', () => checkForUpdate({ manual: true, toast }));
+    // ¿Hay un APK más nuevo? Al abrir, al volver a la app (cada pocas horas) y desde el menú (v3.6.1). La de
+    // Google Play (v3.62) no: se actualiza solo desde la tienda, como lo piden sus reglas.
+    const selfUpdate = typeof __PLAY_STORE__ === 'undefined' || !__PLAY_STORE__;
+    bindNative({ closeTop, onHide, onShow: () => (onShow(), selfUpdate && checkForUpdate()) });
+    if (selfUpdate) {
+      checkForUpdate();
+      const updateBtn = document.getElementById('update-btn');
+      updateBtn.hidden = false;
+      updateBtn.addEventListener('click', () => checkForUpdate({ manual: true, toast }));
+    }
   }
   else if (import.meta.env.PROD) {
     // En la web publicada, el menú ofrece el APK (lo publica el mismo flujo de GitHub Actions).
@@ -565,7 +569,7 @@ function bindMenu(game, sound, music, getActive) {
   document.getElementById('import-btn').addEventListener('click', () => {
     const state = importSave(text.value);
     if (!state) {
-      msg.textContent = '⛔ Ese texto no es una partida válida de Cafetal.';
+      msg.textContent = '⛔ Ese texto no es una partida válida de Encantos de Mi Tierrita.';
       return;
     }
     resetting = true;

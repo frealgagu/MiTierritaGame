@@ -11,7 +11,7 @@ import { ALBUM, PAGE_BONUS } from '../data/album.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
 import { masteryReady } from '../sim/legacy.js';
 
-const KEY = 'cafetal.save';
+const KEY = 'mitierrita.save';
 
 export function saveGame(state) {
   state.savedAt = Date.now();

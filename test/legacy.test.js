@@ -140,7 +140,7 @@ test('una partida de la v1.5 se carga sin multiplicador y sin el segundo final',
   const old = new Game().state;
   delete old.legacy;
   delete old.mastered;
-  const store = { 'cafetal.save': JSON.stringify(old) };
+  const store = { 'mitierrita.save': JSON.stringify(old) };
   globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
   const s = loadGame();
   delete globalThis.localStorage;

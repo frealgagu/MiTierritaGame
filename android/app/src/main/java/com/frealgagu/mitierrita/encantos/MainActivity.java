@@ -1,4 +1,4 @@
-package io.github.frealgagu.cafetal;
+package com.frealgagu.mitierrita.encantos;
 
 import com.getcapacitor.BridgeActivity;
 

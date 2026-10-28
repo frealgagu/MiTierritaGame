@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-    <title>Cafetal</title>
+    <title>Encantos de Mi Tierrita</title>
     <link rel="icon" type="image/png" href="./icons/icon-192.png" />
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
     <link rel="manifest" href="./manifest.webmanifest" />
@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="description" content="Cosecha, procesa y despacha café en una finca de montaña. Un juego de cadena de suministros." />
+    <meta name="description" content="Produce, transporta y descubre los encantos de Colombia: del café del Eje Cafetero al asaí del Amazonas. Un juego educativo de cadena de producción." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -22,8 +22,8 @@
          se produjo sin conexión (main.js la quita). -->
     <div id="splash" class="splash">
       <div class="splash-card">
-        <div class="splash-logo">☕</div>
-        <h1>Cafetal</h1>
+        <img class="splash-logo" src="./icons/icon-192.png" alt="" width="96" height="96" />
+        <h1>Encantos de Mi Tierrita</h1>
         <p id="splash-text">Preparando la finca…</p>
         <div class="bar splash-bar"><div id="splash-fill"></div></div>
         <p id="splash-note" class="splash-note"></p>
@@ -32,7 +32,7 @@
     <div id="app"></div>
 
     <header id="hud">
-      <div class="brand">☕ Cafetal</div>
+      <div class="brand">🌺 Mi Tierrita</div>
       <div class="coins">
         <span class="coin-icon">💰</span>
         <span id="coins">0</span>
@@ -156,7 +156,7 @@
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Cafetal <small id="menu-version">v3.7.0</small></h2>
+        <h2>Encantos de Mi Tierrita <small id="menu-version">v3.7.0</small></h2>
         <p id="save-where">Tu partida se guarda sola en este navegador.</p>
         <p id="menu-stats"></p>
         <details class="save-box">
@@ -194,13 +194,13 @@
           <button id="intro-btn" class="btn">❓ Cómo se juega</button>
           <button id="sound-btn" class="btn"></button>
           <button id="music-btn" class="btn"></button>
-          <a id="apk-link" class="btn" href="./cafetal.apk" download="Cafetal.apk" hidden>📱 App de Android</a>
+          <a id="apk-link" class="btn" href="./mitierrita.apk" download="MiTierrita.apk" hidden>📱 App de Android</a>
           <button id="update-btn" class="btn" hidden>🔄 Buscar actualización</button>
           <button id="restart-btn" class="btn buy" hidden></button>
           <button id="reset-btn" class="btn danger">Borrar partida</button>
           <button id="close-menu" class="btn">Seguir jugando</button>
         </div>
-        <p class="chain-help credits">Música: «Bambuco de la finca», compuesta para Cafetal y tocada por el juego (tiple, guitarra y bandola sintetizados).</p>
+        <p class="chain-help credits">Música: «Bambuco de la finca», compuesta para el juego y tocada por él (tiple, guitarra y bandola sintetizados).</p>
       </div>
     </div>
 
@@ -220,7 +220,7 @@
     <div id="intro" class="modal" hidden>
       <div class="modal-card list-modal intro">
         <div class="chain-head">
-          <h2>☕ Cafetal</h2>
+          <h2>🌺 Encantos de Mi Tierrita</h2>
           <button id="intro-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>
         <p class="chain-help">Del grano de la montaña a un contenedor rumbo al puerto.</p>

@@ -1,8 +1,8 @@
 /* Íconos propios del juego (src/data/icons.js): solo tiene letras de uso privado, así que va primero
    en la lista de fuentes y el resto del texto sigue en Fredoka. */
 @font-face {
-  font-family: 'Cafetal Icons';
-  src: url('../assets/cafetal-icons.woff2') format('woff2');
+  font-family: 'MiTierrita Icons';
+  src: url('../assets/mitierrita-icons.woff2') format('woff2');
   unicode-range: U+E000-E1FF;
   font-display: block;
 }
@@ -29,7 +29,7 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  font-family: 'Cafetal Icons', 'Fredoka', 'Baloo 2', system-ui, sans-serif;
+  font-family: 'MiTierrita Icons', 'Fredoka', 'Baloo 2', system-ui, sans-serif;
   color: var(--ink);
   background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 70%);
   user-select: none;
@@ -609,7 +609,7 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
   padding: 20px 22px;
   text-align: center;
 }
-.splash-logo { font-size: 3.2rem; line-height: 1; animation: splash-bob 1.4s ease-in-out infinite; }
+.splash-logo { display: block; width: 96px; height: 96px; margin: 0 auto; border-radius: 22px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18); animation: splash-bob 1.4s ease-in-out infinite; }
 @keyframes splash-bob { 50% { transform: translateY(-6px) rotate(-6deg); } }
 .splash h1 { margin: 6px 0 8px; font-size: 1.8rem; }
 #splash-text { margin: 0 0 10px; font-weight: 600; line-height: 1.35; }

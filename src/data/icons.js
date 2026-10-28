@@ -1,5 +1,5 @@
 // Generado por tools/icons/build_icons.py (no editar a mano).
-// Íconos propios (fuente «Cafetal Icons», src/assets/cafetal-icons.woff2) para los productos que no
+// Íconos propios (fuente «MiTierrita Icons», src/assets/mitierrita-icons.woff2) para los productos que no
 // tienen un emoji parecido. Son letras de uso privado, así que funcionan en cualquier texto (paneles,
 // objetivos, textos del mapa) igual que un emoji, siempre que la fuente esté en la lista de fuentes
 // (ver styles.css y FONT).
@@ -272,4 +272,4 @@ export const ICON = {
   delfines: '\uE10A', // Salida a ver los delfines rosados: el delfín rosado que salta del río negro, con la canoa de los turistas
 };
 
-export const ICON_FONT = 'Cafetal Icons';
+export const ICON_FONT = 'MiTierrita Icons';

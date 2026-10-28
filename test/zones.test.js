@@ -98,7 +98,7 @@ test('una partida de la v1.0 se carga con las zonas y, si la Finca estaba comple
     jeep: { phase: 'idle', t: 0, waited: 0, load: {} }, stats: { produced: {}, sold: { coffee_bag: 1000 } },
     hints: [], settings: { sound: true }, research: ['abono'], goals: { claimed: ['g01', 'abono', 'final'] }, zoneComplete: true,
   };
-  store.set('cafetal.save', JSON.stringify(v4));
+  store.set('mitierrita.save', JSON.stringify(v4));
   const state = loadGame();
   assert.equal(state.zones.finca.dispatch.level, 12);
   assert.equal(state.zones.finca.warehouse.cherry, 7);

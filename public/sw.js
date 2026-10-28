@@ -1,7 +1,7 @@
 // Service worker: permite abrir el juego sin internet.
 // - La página (index.html) se pide primero a la red, para recibir las versiones nuevas.
 // - El resto (JS, CSS, iconos) se sirve desde la caché y se guarda la primera vez que se pide.
-const CACHE = 'cafetal-v123';
+const CACHE = 'mitierrita-v124';
 
 self.addEventListener('install', () => self.skipWaiting());
 
@@ -17,8 +17,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
-  // El APK de Android (8 MB) se descarga de la red, sin guardarlo en la caché del juego.
-  if (new URL(req.url).pathname.endsWith('.apk')) return;
+  // El APK y el AAB de Android (8 MB) se descargan de la red, sin guardarlo en la caché del juego.
+  if (new URL(req.url).pathname.match(/\.(apk|aab)$/)) return;
   // La música se pide por trozos (Range): eso no se puede guardar en la caché, que lo sirva la red.
   if (req.headers.has('range')) return;
 

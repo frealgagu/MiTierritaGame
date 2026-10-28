@@ -94,7 +94,7 @@ test('una partida de la v0.1 se carga en la v0.2', async () => {
     mules: [{ id: 4, productId: 'cherry', amount: 5, t: 2, duration: 9 }],
     jeep: { phase: 'idle', t: 0, waited: 0, load: {} }, stats: { produced: {}, sold: { cherry: 30 } },
   };
-  store.set('cafetal.save', JSON.stringify(v1));
+  store.set('mitierrita.save', JSON.stringify(v1));
   const game = new Game(loadGame());
   assert.equal(game.state.stations.farm.level, 7);
   assert.equal(game.state.stations.farm.input, 0);
@@ -112,7 +112,7 @@ test('una partida de la v0.2 se carga en la v0.3 con arrieros', async () => {
     mules: [{ id: 8, productId: 'cherry', amount: 5, from: 'farm', to: 'wetmill', s0: 0, s1: 2, t: 0.2, duration: 1.5 }],
     jeep: { phase: 'idle', t: 0, waited: 0, load: {} }, stats: { produced: {}, sold: {} }, hints: ['wetmill'],
   };
-  localStorage.setItem('cafetal.save', JSON.stringify(v2));
+  localStorage.setItem('mitierrita.save', JSON.stringify(v2));
   const game = new Game(loadGame());
   assert.equal(game.state.stations.wetmill.transport.level, 1);
   assert.equal(game.state.mules[0].phase, 'go');

@@ -157,7 +157,7 @@ test('una partida de la v1.1 con el Trapiche completo abre la Lechería y la rut
   delete old.zones.lecheria;
   delete old.routes;
   delete old.stats.imported;
-  const store = { 'cafetal.save': JSON.stringify(old) };
+  const store = { 'mitierrita.save': JSON.stringify(old) };
   globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
   const s = loadGame();
   delete globalThis.localStorage;

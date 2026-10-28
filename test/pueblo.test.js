@@ -161,7 +161,7 @@ test('una partida de la v1.4 con el Maizal completo abre el Pueblo', async () =>
   for (const z of ['trapiche', 'lecheria', 'cacaotal', 'maizal']) old.zones[z] = { ...old.zones[z], unlocked: true, complete: true };
   delete old.zones.pueblo;
   for (const id of PUEBLO_ROUTES) delete old.routes[id];
-  const store = { 'cafetal.save': JSON.stringify(old) };
+  const store = { 'mitierrita.save': JSON.stringify(old) };
   globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
   const s = loadGame();
   delete globalThis.localStorage;

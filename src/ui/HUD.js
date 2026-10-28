@@ -59,7 +59,7 @@ export class HUD {
     // En rojo si hay deuda (saldo negativo de las opciones de desarrollador).
     this.coins.classList.toggle('debt', s.coins < 0);
     // Las monedas también en la pestaña del navegador.
-    const title = `💰 ${formatNumber(s.coins)} · Cafetal`;
+    const title = `💰 ${formatNumber(s.coins)} · Mi Tierrita`;
     if (document.title !== title) document.title = title;
     this.income.textContent = `+${formatRate(this.game.incomePerSecond())}/s`;
     const hour = this.getHour();

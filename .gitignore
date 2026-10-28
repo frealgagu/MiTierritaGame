@@ -5,4 +5,4 @@ dist/
 # clave de pruebas, hasta configurar los secretos (ver android/app/build.gradle).
 *.keystore
 *.jks
-!android/app/cafetal-pruebas.keystore
+!android/app/mitierrita-pruebas.keystore

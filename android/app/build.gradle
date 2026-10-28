@@ -5,10 +5,10 @@ def pkg = new groovy.json.JsonSlurper().parse(rootProject.file('../package.json'
 def (major, minor, patch) = pkg.version.tokenize('.').collect { it as int }
 
 android {
-    namespace = "io.github.frealgagu.cafetal"
+    namespace = "com.frealgagu.mitierrita.encantos"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "io.github.frealgagu.cafetal"
+        applicationId "com.frealgagu.mitierrita.encantos"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode major * 10000 + minor * 100 + patch
@@ -24,15 +24,28 @@ android {
     // anterior sin perder la partida. Llega por variables de entorno (en GitHub Actions, desde los
     // secretos del repositorio; ver .github/workflows/pages.yml). Mientras no existan, se usa la de
     // pruebas guardada en el repositorio (temporal: se cambiará por los secretos con Google Play).
-    def keystore = System.getenv('CAFETAL_KEYSTORE') ?: (file('cafetal-pruebas.keystore').exists() ? 'cafetal-pruebas.keystore' : null)
-    def fromEnv = System.getenv('CAFETAL_KEYSTORE') != null
+    def keystore = System.getenv('MITIERRITA_KEYSTORE') ?: (file('mitierrita-pruebas.keystore').exists() ? 'mitierrita-pruebas.keystore' : null)
+    def fromEnv = System.getenv('MITIERRITA_KEYSTORE') != null
     if (keystore) {
         signingConfigs {
             pruebas {
                 storeFile file(keystore)
-                storePassword fromEnv ? System.getenv('CAFETAL_KEYSTORE_PASSWORD') : 'android'
-                keyAlias fromEnv ? System.getenv('CAFETAL_KEY_ALIAS') : 'androiddebugkey'
-                keyPassword fromEnv ? System.getenv('CAFETAL_KEY_PASSWORD') : 'android'
+                storePassword fromEnv ? System.getenv('MITIERRITA_KEYSTORE_PASSWORD') : 'android'
+                keyAlias fromEnv ? System.getenv('MITIERRITA_KEY_ALIAS') : 'androiddebugkey'
+                keyPassword fromEnv ? System.getenv('MITIERRITA_KEY_PASSWORD') : 'android'
+            }
+        }
+    }
+    // Clave de subida a Google Play (el AAB de la tienda): solo llega por variables de entorno, desde los
+    // secretos PLAY_UPLOAD_* del repositorio. Google firma después con su propia clave (Play App Signing).
+    def uploadKeystore = System.getenv('MITIERRITA_UPLOAD_KEYSTORE')
+    if (uploadKeystore) {
+        signingConfigs {
+            subida {
+                storeFile file(uploadKeystore)
+                storePassword System.getenv('MITIERRITA_UPLOAD_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('MITIERRITA_UPLOAD_KEY_ALIAS')
+                keyPassword System.getenv('MITIERRITA_UPLOAD_KEY_PASSWORD')
             }
         }
     }
@@ -41,6 +54,7 @@ android {
             if (keystore) signingConfig signingConfigs.pruebas
         }
         release {
+            if (uploadKeystore) signingConfig signingConfigs.subida
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

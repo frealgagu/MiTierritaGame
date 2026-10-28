@@ -9,7 +9,7 @@ import { MAX_LEGACY_RESETS } from '../sim/modifiers.js';
 // producción en potencias de 2). Los dos primeros viven en este navegador; el multiplicador, en la partida. Si se cierra
 // el juego acelerado, al volver sigue acelerado y el tiempo fuera cuenta a esa velocidad (el ⏩ de
 // arriba lo recuerda).
-const KEY = 'cafetal-dev';
+const KEY = 'mitierrita-dev';
 const TAPS = 7;
 const MAX_SPEED = 100;
 // Como en el juego (v3.56): el multiplicador llega hasta ×2³².

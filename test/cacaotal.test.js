@@ -124,7 +124,7 @@ test('una partida de la v1.2 se carga: lo importado pasa a ir por producto y se 
   delete old.routes.panela_cacao;
   delete old.routes.leche;
   old.stations.arequipe_pot = { level: 20, input: 3, imported: 7, transport: { level: 20 } };
-  const store = { 'cafetal.save': JSON.stringify(old) };
+  const store = { 'mitierrita.save': JSON.stringify(old) };
   globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
   const s = loadGame();
   delete globalThis.localStorage;

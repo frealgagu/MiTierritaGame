@@ -1,9 +1,9 @@
-"""Fuente de íconos del juego (Cafetal Icons): glifos de color (COLR v0 + CPAL) para los productos
+"""Fuente de íconos del juego (MiTierrita Icons): glifos de color (COLR v0 + CPAL) para los productos
 que no tienen un emoji que se les parezca (la cereza de café, el guarapo, la panela...).
 
 Cada ícono es una lista de capas (color, trazos) dibujadas en un lienzo de 100 × 100 (y hacia abajo,
 como SVG). Se generan:
-  src/assets/cafetal-icons.woff2   la fuente (la usan la interfaz y los textos del mapa)
+  src/assets/mitierrita-icons.woff2   la fuente (la usan la interfaz y los textos del mapa)
   src/data/icons.js                el código de cada ícono (ICON.cherry = U+E001...), para usarlos
   tools/icons/preview.svg          todos los íconos en grande, para revisarlos
 
@@ -4164,12 +4164,12 @@ def build():
     fb.setupHorizontalMetrics(metrics)
     descent = round(100 * SCALE - TOP)
     fb.setupHorizontalHeader(ascent=TOP, descent=-descent)
-    fb.setupNameTable({'familyName': 'Cafetal Icons', 'styleName': 'Regular'})
+    fb.setupNameTable({'familyName': 'MiTierrita Icons', 'styleName': 'Regular'})
     fb.setupOS2(sTypoAscender=TOP, sTypoDescender=-descent, usWinAscent=TOP, usWinDescent=descent)
     fb.setupPost()
     fb.font['COLR'] = buildCOLR(colr, version=0)
     fb.font['CPAL'] = buildCPAL([palette])
-    out = ROOT / 'src/assets/cafetal-icons.woff2'
+    out = ROOT / 'src/assets/mitierrita-icons.woff2'
     out.parent.mkdir(parents=True, exist_ok=True)
     fb.font.flavor = 'woff2'
     fb.save(out)
@@ -4199,12 +4199,12 @@ def icons_js():
         rows.append(f"  {camel(name)}: '\\u{code:04X}', // {doc}")
     src = (
         '// Generado por tools/icons/build_icons.py (no editar a mano).\n'
-        '// Íconos propios (fuente «Cafetal Icons», src/assets/cafetal-icons.woff2) para los productos que no\n'
+        '// Íconos propios (fuente «MiTierrita Icons», src/assets/mitierrita-icons.woff2) para los productos que no\n'
         '// tienen un emoji parecido. Son letras de uso privado, así que funcionan en cualquier texto (paneles,\n'
         '// objetivos, textos del mapa) igual que un emoji, siempre que la fuente esté en la lista de fuentes\n'
         '// (ver styles.css y FONT).\n'
         'export const ICON = {\n' + '\n'.join(rows) + '\n};\n\n'
-        "export const ICON_FONT = 'Cafetal Icons';\n"
+        "export const ICON_FONT = 'MiTierrita Icons';\n"
     )
     (ROOT / 'src/data/icons.js').write_text(src)
 

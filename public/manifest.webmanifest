@@ -1,7 +1,7 @@
 {
-  "name": "Cafetal",
-  "short_name": "Cafetal",
-  "description": "Juego de cadena de suministros: cosecha, procesa y despacha café en una finca de montaña.",
+  "name": "Encantos de Mi Tierrita",
+  "short_name": "Mi Tierrita",
+  "description": "Produce, transporta y descubre los encantos de Colombia: un juego educativo de cadena de producción.",
   "lang": "es",
   "start_url": "./",
   "scope": "./",

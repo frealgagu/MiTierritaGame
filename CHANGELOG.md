@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.62.0 — Encantos de Mi Tierrita
+- **El juego cambia de nombre:** ahora se llama **Encantos de Mi Tierrita** (en el teléfono, «Mi Tierrita»). La web se mudó a https://frealgagu.github.io/MiTierritaGame/.
+- **Ícono nuevo:** el mapa de Colombia con los colores de las regiones del juego, un sombrero vueltiao, una palmera, una ramita de café y una mazorca de cacao. Sale en la pantalla de carga, en la app y en la web instalada.
+- **La app de Android es otra:** su identificador ahora es `com.frealgagu.mitierrita.encantos`, así que se instala aparte de la anterior (la vieja se puede desinstalar). Las partidas guardadas empiezan de nuevo.
+- **Versión para Google Play:** además del APK, se genera el AAB para la tienda, firmado con una clave de subida que vive solo en los secretos del repositorio. Esa versión no trae el aviso de actualización propio, porque las actualizaciones llegan por Google Play.
+
 ## v3.61.0 — Objetivos que siempre se pueden cumplir
 - Había 42 objetivos de **vender** algo que otra estación de la zona se lleva: la cereza que va al Beneficiadero, la leche al Pasteurizador, el sombrero vueltiao al Parador, la máscara ticuna a la Tienda, etc. Si se construía esa estación antes de cumplir el objetivo, el producto casi nunca llegaba a la bodega (solo lo que se desviaba) y el objetivo podía quedarse quieto para siempre.
 - Ahora esos objetivos dicen **Produce** y cuentan lo producido, que siempre avanza. Los que piden vender algo que va a la bodega siguen igual. En las partidas que ya iban, cuenta todo lo producido desde el comienzo de la partida.
@@ -689,7 +695,7 @@
 
 ## v1.8.4 — Diagrama de la cadena
 - La ventana de la cadena (🔗) tiene dos pestañas: **🗺️ Diagrama** y **📋 Detalle** (la lista de antes, con todos los números). Se recuerda la última que se usó.
-- El **diagrama** es como el plano de producción de Frozen City: cada estación es una tarjeta (con su nivel y lo que produce), de arriba hacia abajo en el orden de la cadena, y las ramas van en columnas, una al lado de la otra. Tubos con el producto corriendo unen cada estación con la siguiente y todas terminan en la Bodega y Willys.
+- El **diagrama** es como un plano de producción: cada estación es una tarjeta (con su nivel y lo que produce), de arriba hacia abajo en el orden de la cadena, y las ramas van en columnas, una al lado de la otra. Tubos con el producto corriendo unen cada estación con la siguiente y todas terminan en la Bodega y Willys.
   - Lo que llega de **otras zonas** son etiquetas azules encima de la estación que lo usa («🧂 🎋 Trapiche»), con su tubo azul.
   - En **rojo**, lo que frena la cadena (la estación, sus arrieros o la ruta); en **gris con candado**, la siguiente por construir.
   - Cada tarjeta ocupa el ancho de las ramas que tiene debajo, para que tres ramas quepan en el teléfono. Tocar una tarjeta o una etiqueta abre su panel.

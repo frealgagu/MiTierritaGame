@@ -1,6 +1,6 @@
 {
-  "appId": "io.github.frealgagu.cafetal",
-  "appName": "Cafetal",
+  "appId": "com.frealgagu.mitierrita.encantos",
+  "appName": "Mi Tierrita",
   "webDir": "dist",
   "android": {
     "backgroundColor": "#cfe8f2"

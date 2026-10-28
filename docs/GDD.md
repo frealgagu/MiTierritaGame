@@ -1,7 +1,7 @@
-# Cafetal — Documento de Diseño (GDD) v0.3
+# Encantos de Mi Tierrita — Documento de Diseño (GDD)
 
-> Juego incremental de **cadena de suministros**: un recurso inicial ilimitado pero lento alimenta a una estación, esa estación alimenta a la siguiente, y todo se mejora para producir cada vez más.
-> De Frozen City solo se toman la cadena de producción visible y el estilo gráfico isométrico «de juguete», con personajes que llevan cargas.
+> Juego educativo e incremental de **cadena de suministros** ambientado en Colombia (antes se llamó «Cafetal»): un recurso inicial ilimitado pero lento alimenta a una estación, esa estación alimenta a la siguiente, y todo se mejora para producir cada vez más.
+> Del género se toman solo la cadena de producción visible y el estilo gráfico isométrico «de juguete», con personajes que llevan cargas.
 > No hay supervivencia, ni clima hostil, ni población que alimentar, ni héroes.
 > Una sola zona que se puede terminar y que se ampliará con actualizaciones. JavaScript (Vite + PixiJS).
 
@@ -374,9 +374,9 @@ Mientras se calcula se ve una pantalla de carga con una barra de avance y cuánt
 
 ---
 
-## 8. Dirección de arte (estilo Frozen City, ambientación cafetera)
+## 8. Dirección de arte (isométrico «de juguete», ambientación colombiana)
 
-### Lo que se toma de Frozen City
+### Lo que se toma del género
 - Isométrico limpio, con edificios «de juguete», volúmenes sencillos, contornos suaves y sombras proyectadas.
 - **Vida pequeña por todas partes:** personajes y animales que caminan llevando cargas visibles, máquinas que se mueven, humo y números flotando.
 - **Los edificios crecen con el nivel:** cada hito cambia el modelo (cobertizo → casa → fábrica).
@@ -546,7 +546,7 @@ export const COST_GROWTH = 1.15;
 | **v0.1** ✅ | Mapa isométrico, cámara, Cafetal + Despacho, mejora de nivel, HUD de monedas | Producir cerezas, venderlas y mejorar |
 | **v0.2** ✅ | Las 7 estaciones, recetas, buffers, desvío a bodega, desbloqueos | La cadena completa funciona |
 | **v0.3** ✅ | Arrieros reales por el camino, mejoras de transporte, Willys, indicadores de estado, vista «Ver cadena» | Los cuellos de botella son visibles |
-| **v0.4** ✅ | Hitos con cambio de modelo, efectos, día y noche cosmético, sonido básico | Se siente vivo, al estilo Frozen City |
+| **v0.4** ✅ | Hitos con cambio de modelo, efectos, día y noche cosmético, sonido básico | Se siente vivo |
 | **v0.5** ✅ | Objetivos, investigaciones, guardado, ganancias sin conexión, simulador de balance | Se juega de principio a fin |
 | **v1.0** | Contenedor de exportación, pantalla final y balance ajustado | **Zona 1 completa** |
 | v1.1 ✅ | **Zona 2: El Trapiche**: caña → panela; bagazo como combustible; varias zonas a la vez y selector de zonas | Expansión |
@@ -611,6 +611,7 @@ export const COST_GROWTH = 1.15;
 | v3.59 ✅ | Selector de zonas: cada región en un panel sombreado, con sus zonas adentro y más angostas | Navegación |
 | v3.60 ✅ | Mapa de Colombia en el selector de zonas: el país con las regiones de color, acercamiento a cada región con sus zonas en sus pueblos, y un muñequito que camina a la zona elegida (`src/ui/ZoneMap.js`, `src/data/colombiaMap.js` generado por `tools/geo/build_map.py`, `src/data/zoneGeo.js`) | Navegación |
 | v3.61 ✅ | Los objetivos de vender algo que otra estación consume cuentan lo producido (dicen «Produce»): con esa estación construida, el objetivo ya no se queda quieto | Claridad |
+| v3.62 ✅ | Nuevo nombre, «Encantos de Mi Tierrita», con su ícono (el mapa de Colombia con sombrero vueltiao, palmera, café y cacao) e identificador `com.frealgagu.mitierrita.encantos`; versión para Google Play (AAB, sin aviso de actualización propio) firmada con una clave de subida que vive solo en los secretos | Publicación |
 | v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía) | Comodidad |
 
 **Cómo se conectan las zonas:** ver §4b.

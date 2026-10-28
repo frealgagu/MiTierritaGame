@@ -1,12 +1,12 @@
-# Cafetal
+# Encantos de Mi Tierrita
 
-Juego incremental de cadena de suministros con estilo visual inspirado en *Frozen City*. Un cafetal ilimitado pero lento alimenta una cadena de estaciones (beneficiadero, secado, trilla, tueste, molienda y empaque) que se mejoran para producir cada vez más. Una sola zona que se puede completar, ampliable con actualizaciones. Escrito en JavaScript (Vite + PixiJS).
+Juego educativo de cadena de producción ambientado en Colombia: produce, transporta y descubre los encantos de cada región, del café del Eje Cafetero al asaí del Amazonas. En cada zona, una fuente ilimitada pero lenta alimenta una cadena de estaciones que se mejoran para producir cada vez más, y las zonas se ayudan unas a otras por rutas. Escrito en JavaScript (Vite + PixiJS); también es una app de Android.
 
 El diseño completo está en [`docs/GDD.md`](docs/GDD.md).
 
 ## Jugar
 
-Versión publicada: **https://frealgagu.github.io/Game/** (se actualiza sola con cada push gracias a `.github/workflows/pages.yml`).
+Versión publicada: **https://frealgagu.github.io/MiTierritaGame/** (se actualiza sola con cada push gracias a `.github/workflows/pages.yml`).
 
 ## Jugar en local
 
@@ -47,15 +47,17 @@ El mismo juego empaquetado con [Capacitor](https://capacitorjs.com) (como Melvor
 npm run android:apk   # compila el juego, lo copia a android/ y genera android/app/build/outputs/apk/debug/app-debug.apk
 ```
 
-El APK de depuración se instala directamente en el teléfono (hay que permitir «instalar apps desconocidas»). Para Google Play hará falta una versión firmada (AAB) con una clave propia.
+El APK de depuración se instala directamente en el teléfono (hay que permitir «instalar apps desconocidas»). Para Google Play se genera un AAB (`PLAY_STORE=1 npm run android:sync && cd android && ./gradlew bundleRelease`) firmado con la clave de subida; esa versión no trae el aviso de actualización propio, porque las actualizaciones llegan por la tienda.
 
-**Cada push publica las dos cosas a la vez** (`.github/workflows/pages.yml`): la web en GitHub Pages y el APK en https://frealgagu.github.io/Game/cafetal.apk (el menú ⚙️ de la web lo enlaza). Los APK de prueba se firman siempre con la misma clave, así que cada versión se instala encima de la anterior sin perder la partida. Si existen los secretos del repositorio (`ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`), se usa esa clave; mientras tanto, temporalmente, la de pruebas guardada en `android/app/cafetal-pruebas.keystore`. La versión de la app sale de `package.json`. Con cada publicación también sale `version.json` (la versión y sus novedades, del CHANGELOG): la app lo consulta al abrirse y, si hay una más nueva, ofrece descargar el APK (`src/update.js`).
+**Cada push publica las dos cosas a la vez** (`.github/workflows/pages.yml`): la web en GitHub Pages y el APK en https://frealgagu.github.io/MiTierritaGame/mitierrita.apk (el menú ⚙️ de la web lo enlaza). Los APK de prueba se firman siempre con la misma clave, así que cada versión se instala encima de la anterior sin perder la partida. Si existen los secretos del repositorio (`ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`), se usa esa clave; mientras tanto, temporalmente, la de pruebas guardada en `android/app/mitierrita-pruebas.keystore`. La versión de la app sale de `package.json`. Con cada publicación también sale `version.json` (la versión y sus novedades, del CHANGELOG): la app lo consulta al abrirse y, si hay una más nueva, ofrece descargar el APK (`src/update.js`).
+
+**Google Play.** La clave de subida no está en el código: la crea una sola vez el flujo manual `.github/workflows/clave-play.yml` (Actions → «Crear la clave de subida a Google Play»), que la genera con contraseñas aleatorias y la guarda directamente en los secretos `PLAY_UPLOAD_KEYSTORE_BASE64`, `PLAY_UPLOAD_KEYSTORE_PASSWORD`, `PLAY_UPLOAD_KEY_ALIAS` y `PLAY_UPLOAD_KEY_PASSWORD` (para eso necesita, solo mientras se ejecuta, el secreto `SECRETS_TOKEN`: un token de grano fino con permiso «Secrets: Read and write»). Desde entonces cada push publica también el AAB en https://frealgagu.github.io/MiTierritaGame/mitierrita.aab, listo para subirlo a Play Console. Google firma la app final con su propia clave (Play App Signing), así que si la clave de subida se pierde se puede pedir otra.
 
 ### Instalar en el móvil
-Abre https://frealgagu.github.io/Game/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).
+Abre https://frealgagu.github.io/MiTierritaGame/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).
 
 ## Origen y originalidad
-La idea parte del género de los juegos incrementales de **cadena de producción** (un recurso ilimitado pero lento que alimenta estaciones que se mejoran), del que *Frozen City* es un ejemplo; de ahí se tomaron solo ideas generales: la cadena visible y un aspecto isométrico «de juguete» con personajes que llevan cargas. El tema (café, panela, leche, cacao y maíz colombianos), las zonas, las recetas, los números, el código, los dibujos (hechos con código, sin imágenes de otros juegos) y los textos son propios. La música también es propia.
+La idea parte del género de los juegos incrementales de **cadena de producción** (un recurso ilimitado pero lento que alimenta estaciones que se mejoran); del género se tomaron solo ideas generales: la cadena visible y un aspecto isométrico «de juguete» con personajes que llevan cargas. El tema (los productos y las regiones de Colombia), las zonas, las recetas, los números, el código, los dibujos (hechos con código, sin imágenes de otros juegos) y los textos son propios. La música también es propia.
 
 ## Licencia
 El código, los gráficos y la música son [MIT](LICENSE).
@@ -69,7 +71,7 @@ src/
 ├─ data/     productos, estaciones (las 6 zonas), rutas entre zonas y mapas de las zonas jugables
 ├─ render/   dibujo isométrico procedural con PixiJS
 ├─ ui/       barra superior, panel de estación, avisos
-└─ assets/   fuente de íconos propios (cafetal-icons.woff2)
+└─ assets/   fuente de íconos propios (mitierrita-icons.woff2)
 tools/
 ├─ icons/build_icons.py   genera la fuente de íconos (cereza de café, guarapo, panela, queso campesino…)
 ├─ event-bots.js          jugadores automáticos de los eventos

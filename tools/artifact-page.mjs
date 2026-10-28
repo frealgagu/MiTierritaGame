@@ -10,7 +10,7 @@ const script = html.match(/<script type="module"[^>]*><\/script>/)[0];
 const fonts = html.match(/<link href="https:\/\/fonts\.googleapis\.com[^>]*>/)[0];
 const body = html.slice(html.indexOf('<body>') + 6, html.indexOf('</body>')).trim();
 
-const page = `<title>Cafetal</title>
+const page = `<title>Encantos de Mi Tierrita</title>
 ${fonts}
 <style>${css}</style>
 ${body}
