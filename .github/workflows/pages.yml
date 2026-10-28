@@ -2,11 +2,11 @@ name: Publicar la web y la app de Android
 
 # En cada push: pruebas y web (GitHub Pages) por un lado, APK de Android por otro, y al final se
 # publican juntos: el APK queda en la misma página, en ./mitierrita.apk (el menú del juego lo enlaza).
-# Si existen los secretos de la clave de subida (PLAY_UPLOAD_*, ver clave-play.yml), también se genera el
+# Si existen los secretos de la clave de subida (PLAY_UPLOAD_*, ver el README), también se genera el
 # AAB para Google Play (./mitierrita.aab): sin el aviso de actualización propio, porque Play actualiza solo.
 on:
   push:
-    branches: [main, claude/frozen-city-supply-chain-game-jpdsxh]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
