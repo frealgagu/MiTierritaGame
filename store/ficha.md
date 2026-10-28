@@ -60,7 +60,7 @@ Orden sugerido de las capturas: la finca, la estación (Tostadora), la cadena, E
 ## Categoría y contacto
 
 - **Tipo:** Juego. **Categoría:** Simulación. Etiquetas sugeridas: «Gestión», «Educativos», «Inactivo» (las que ofrezca la consola).
-- **Correo de contacto:** (el que elijas; Play lo muestra en la ficha).
+- **Correo de contacto:** frealgagu@gmail.com
 - **Sitio web:** https://frealgagu.github.io/MiTierritaGame/
 - **Política de privacidad:** https://frealgagu.github.io/MiTierritaGame/privacidad.html
 
