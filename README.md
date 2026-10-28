@@ -55,6 +55,8 @@ El APK de depuración se instala directamente en el teléfono (hay que permitir 
 
 **☕ Invítame un tinto** (`src/tip.js`): solo en la versión de Play, con los cobros de Google (complemento `@capgo/native-purchases`). En Play Console van tres productos de una sola compra con los identificadores `tinto`, `arepa` y `almuerzo` (US$0,99, US$2,99 y US$4,99); el juego los consume al comprarlos, así que se pueden repetir. En la web, el botón aparece cuando `KOFI_URL` tenga el enlace.
 
+La ficha de la tienda (textos, capturas y respuestas de los formularios) está en `store/ficha.md`, y la política de privacidad en `public/privacidad.html`.
+
 ### Instalar en el móvil
 Abre https://frealgagu.github.io/MiTierritaGame/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).
 

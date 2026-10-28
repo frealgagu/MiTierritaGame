@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.64.0 — Privacidad y ficha de Google Play
+- **🔒 Privacidad:** la política está en https://frealgagu.github.io/MiTierritaGame/privacidad.html y hay un resumen en el menú ⚙️. El juego no recoge ni comparte datos personales: no tiene cuentas, publicidad ni rastreo, y la partida se guarda solo en el dispositivo.
+- **La letra va dentro del juego:** Fredoka ya no se descarga de Google Fonts. Así la app se ve igual sin internet y el juego no se conecta a ningún servidor de fuentes.
+- **Ficha de Google Play** (`store/`): textos, capturas de 1080 × 1920 y las respuestas para los formularios de la consola.
+
 ## v3.63.0 — Invítame un tinto
 - **☕ Invítame un tinto**, en el menú ⚙️ de la versión de Google Play: una propina voluntaria para quien hace el juego (un tinto, una arepa o un almuerzo), con los cobros de Google. No da nada dentro del juego.
 - Antes de pagar hay una **barrera para adultos**: una multiplicación (como 13 × 7) que un niño pequeño no resuelve de un toque. En las cuentas de niños con control parental, Google además le pide permiso al adulto.

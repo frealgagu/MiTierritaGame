@@ -613,6 +613,7 @@ export const COST_GROWTH = 1.15;
 | v3.61 ✅ | Los objetivos de vender algo que otra estación consume cuentan lo producido (dicen «Produce»): con esa estación construida, el objetivo ya no se queda quieto | Claridad |
 | v3.62 ✅ | Nuevo nombre, «Encantos de Mi Tierrita», con su ícono (el mapa de Colombia con sombrero vueltiao, palmera, café y cacao) e identificador `com.frealgagu.mitierrita.encantos`; versión para Google Play (AAB, sin aviso de actualización propio) firmada con una clave de subida que vive solo en los secretos | Publicación |
 | v3.63 ✅ | ☕ Invítame un tinto (solo en la versión de Play): propina voluntaria con los cobros de Google (tinto, arepa, almuerzo; consumibles), sin premio en el juego y detrás de una barrera para adultos; en la web, Ko-fi cuando exista | Publicación |
+| v3.64 ✅ | Política de privacidad (web y resumen en ⚙️), la letra Fredoka dentro del juego (sin conexiones externas) y la ficha de Google Play (`store/`: textos, capturas y formularios) | Publicación |
 | v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía) | Comodidad |
 
 **Cómo se conectan las zonas:** ver §4b.
