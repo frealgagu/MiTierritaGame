@@ -614,6 +614,7 @@ export const COST_GROWTH = 1.15;
 | v3.62 ✅ | Nuevo nombre, «Encantos de Mi Tierrita», con su ícono (el mapa de Colombia con sombrero vueltiao, palmera, café y cacao) e identificador `com.frealgagu.mitierrita.encantos`; versión para Google Play (AAB, sin aviso de actualización propio) firmada con una clave de subida que vive solo en los secretos | Publicación |
 | v3.63 ✅ | ☕ Invítame un tinto (solo en la versión de Play): propina voluntaria con los cobros de Google (tinto, arepa, almuerzo; consumibles), sin premio en el juego y detrás de una barrera para adultos; en la web, Ko-fi cuando exista | Publicación |
 | v3.64 ✅ | Política de privacidad (web y resumen en ⚙️), la letra Fredoka dentro del juego (sin conexiones externas) y la ficha de Google Play (`store/`: textos, capturas y formularios) | Publicación |
+| v3.65 ✅ | Tradiciones contadas con cuidado (política de Familias): tabaco torcido sin encender, láminas de bebidas por cómo se hacen, los uitoto sin la coca | Publicación |
 | v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía) | Comodidad |
 
 **Cómo se conectan las zonas:** ver §4b.
@@ -691,11 +692,7 @@ export const COST_GROWTH = 1.15;
 - **Próximas regiones (aprobadas, para más adelante)**: completan el mapa de Colombia (hoy Cundinamarca, Bogotá, Tolima y Huila no son de ninguna región). Llegarían zona por zona, como las demás.
   - **🎺 Tolima Grande** (Tolima y Huila, que fueron un solo departamento): se abriría al completar Leticia. Zonas: **Los Achirales** (Huila: achira → raíz → almidón → bizcochos de achira → caja), **La Represa de Betania** (Huila: tilapia fresca, frita y en filete), **La Lechonería** (Tolima: lechona tolimense y tamal tolimense), **Las Chivas de Pitalito** (Huila: barro → chivas de cerámica pintadas), **El Desierto de la Tatacoa** (caminatas y observación de estrellas) e **Ibagué**, el final (la capital musical: el Festival Folclórico y el San Pedro). Música: sanjuanero y bambuco tolimense.
   - **🏛️ Bogotá y la Sabana** (Cundinamarca y Bogotá), el gran final del país: **Las Flores de la Sabana** (rosas y claveles de exportación), **Las Salinas de Zipaquirá** (sal, con la Catedral de Sal), **Los Freseros de Sibaté** (fresas con crema), **La Quesería de Ubaté** (la capital lechera), **La Cocina santafereña** (ajiaco y chocolate con queso) y **Bogotá**, el final (La Candelaria, Monserrate y los museos), que podría recibir algo de todas las regiones del país.
-- **Pendiente (aprobado, para más adelante): textos más prudentes para la política de Familias de Google Play.** La clasificación ya acepta las referencias a alcohol y tabaco (sin consumo), pero se prefiere suavizarlas:
-  - lámina «Los uitoto»: «Pueblo de la coca y el tabaco…» → «Pueblo de la maloca, que guarda sus historias en cantos y relatos»;
-  - lámina «El chicote»: sin el 🚬;
-  - «En Boyacá también se toma chicha» (lore de los fermentadores) → una frase sobre cómo se hace;
-  - revisar que ningún texto (objetivos, eventos, diálogos) suene a invitar a beber o fumar. El Tabacal y La Cervecería se quedan, como oficio y tradición.
+- **Textos prudentes para la política de Familias (v3.65 ✅).** El Tabacal y La Cervecería se quedan como oficio y tradición, pero ningún texto ni dibujo invita a fumar o a beber: el tabaco torcido sin encender, el chicote sin 🚬, las bebidas del álbum contadas por cómo se hacen, y los uitoto sin la coca. Lo mismo para lo que venga: el alcohol y el tabaco, solo como producción y cultura.
 - Ideas de productos:
   - **Santander**: bocadillo veleño (guayaba), tabaco, hormigas culonas, fique (costales y alpargatas).
   - **Costa Caribe**: coco y cocadas, plátano y patacones, yuca y enyucado, queso costeño, caña flecha y sombrero vueltiao.

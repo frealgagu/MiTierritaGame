@@ -125,12 +125,12 @@ export const FACTS = {
   pot_maker: ['Las ollas de barro se usan para cocinar: dicen que la comida sabe mejor.'],
   potter_wheel: ['En el torno, el alfarero sube el barro con las manos mojadas.'],
   pottery_kiln: ['Las piezas se hornean con leña y después se pintan de colores.', 'Los caballitos de Ráquira llevan ollitas a lado y lado, como las mulas.'],
-  jarras: ['En las fiestas del pueblo la cerveza se sirve en jarras de barro.'],
+  jarras: ['En Ráquira las jarras se tornean a mano y se hornean con leña.'],
   // Boyacá · La Cervecería (v3.23)
   barley_field: ['La cebada se da en el altiplano frío de Boyacá, junto al trigo.', 'De la cebada sale la malta, y de la malta, la cerveza.'],
   maltings: ['Maltear es dejar germinar el grano y luego secarlo con calor.'],
   brew_kettle: ['La malta molida se cocina en agua caliente: así sale el mosto dulce.'],
-  fermenters: ['La levadura se come el azúcar del mosto y lo vuelve cerveza.', 'En Boyacá también se toma chicha, hecha con maíz fermentado.'],
+  fermenters: ['La levadura se come el azúcar del mosto y lo vuelve cerveza.', 'La chicha se hace con maíz molido que fermenta en múcuras de barro.'],
   bottler: ['La cerveza se reparte en canastas de botellas retornables.'],
   // Boyacá · El Papal (v3.22)
   potato_field: ['Boyacá es uno de los departamentos que más papa siembra en Colombia.', 'La papa se da en tierra fría, entre los 2.500 y los 3.500 metros.', 'Hay papa pastusa, sabanera, tocarreña y la criolla, amarilla y chiquita.'],

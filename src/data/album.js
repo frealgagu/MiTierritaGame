@@ -112,7 +112,7 @@ const SANTANDER = [
       { id: 'caney', icon: '🛖', name: 'El caney', cost: 1, text: 'Rancho alto y ventilado donde se cuelga la hoja a curar.' },
       { id: 'hoja_curada', icon: ICON.curedLeaf, name: 'La hoja curada', cost: 2, text: 'Colgada al aire pasa de verde a dorada y luego a marrón.' },
       { id: 'torcedora', icon: ICON.cigar, name: 'La torcedora', cost: 2, text: 'Enrolla a mano cada tabaco, hoja por hoja.' },
-      { id: 'chicote', icon: '🚬', name: 'El chicote', cost: 2, text: 'El tabaco corto y fuerte de los abuelos del campo.' },
+      { id: 'chicote', icon: ICON.fermentedTobacco, name: 'El chicote', cost: 2, text: 'Tabaco corto, torcido a mano con hojas sencillas: el más antiguo del campo.' },
       { id: 'tabaco_colonia', icon: '⛵', name: 'Tabaco para el mundo', cost: 3, text: 'Desde la Colonia, Santander es tierra de tabaco que se vendía hasta Europa.' },
     ],
   },
@@ -274,8 +274,8 @@ const BOYACA = [
     stickers: [
       { id: 'cebada', icon: ICON.barleyPlant, name: 'La cebada', cost: 1, text: 'Crece en el altiplano frío, junto al trigo, y se cosecha dorada.' },
       { id: 'malta', icon: ICON.malt, name: 'La malta', cost: 1, text: 'El grano germinado y tostado que le da color y sabor a la cerveza.' },
-      { id: 'chicha', icon: '🫙', name: 'La chicha', cost: 2, text: 'Bebida de maíz fermentado, la de los muiscas y las fiestas de pueblo.' },
-      { id: 'guarapo_b', icon: '🥤', name: 'El guarapo', cost: 2, text: 'Jugo de caña o de panela fermentado, para el trabajo del campo.' },
+      { id: 'chicha', icon: '🫙', name: 'La chicha', cost: 2, text: 'Se hace con maíz molido que se deja fermentar en múcuras de barro: una herencia muisca.' },
+      { id: 'guarapo_b', icon: '🥤', name: 'El guarapo', cost: 2, text: 'Jugo de caña o de panela que se deja fermentar: una receta antigua del campo.' },
       { id: 'tejo', icon: '🎯', name: 'El tejo', cost: 2, text: 'El deporte nacional: se lanza el tejo a la mecha y ¡totea!' },
       { id: 'tibasosa', icon: '🍈', name: 'Tibasosa', cost: 3, text: 'Pueblo de la feijoa, de casas blancas, en el valle de Sogamoso.' },
     ],
@@ -441,7 +441,7 @@ const PACIFICO = [
       { id: 'tapao_album', icon: ICON.tapao, name: 'El tapao', cost: 2, text: 'Pescado con plátano verde y hierbas, cocinado en olla tapada.' },
       { id: 'encocado_album', icon: ICON.encocado, name: 'El encocado', cost: 2, text: 'Piangua, jaiba o pescado cocinados en leche de coco.' },
       { id: 'arroz_clavado', icon: '🍚', name: 'El arroz clavado', cost: 2, text: 'Arroz con queso costeño y longaniza, como lo hacen en el Chocó.' },
-      { id: 'viche', icon: '🍶', name: 'El viche', cost: 3, text: 'La bebida de caña de los abuelos, patrimonio del Pacífico.' },
+      { id: 'viche', icon: '🎋', name: 'El viche', cost: 3, text: 'Destilado de caña hecho con saberes de los abuelos: patrimonio cultural del Pacífico.' },
     ],
   },
   {
@@ -523,7 +523,7 @@ const AMAZONAS = [
       { id: 'tucupi_album', icon: ICON.ajiNegro, name: 'El tucupí', cost: 2, text: 'El jugo de la yuca brava, cocinado días: con ají se vuelve ají negro.' },
       { id: 'camu_camu', icon: '🍒', name: 'El camu camu', cost: 2, text: 'Fruta roja de las orillas inundadas, con muchísima vitamina C.' },
       { id: 'copoazu', icon: '🥥', name: 'El copoazú', cost: 2, text: 'Pariente del cacao, de pulpa blanca y ácida: para jugos y dulces.' },
-      { id: 'chicha_chontaduro', icon: '🍶', name: 'La chicha de chontaduro', cost: 3, text: 'La bebida de las fiestas, que se sirve en totuma en la maloca.' },
+      { id: 'chicha_chontaduro', icon: '🫙', name: 'La chicha de chontaduro', cost: 3, text: 'El chontaduro cocinado y fermentado en ollas de barro, como se prepara en la maloca.' },
     ],
   },
   {
@@ -549,7 +549,7 @@ const AMAZONAS = [
       { id: 'chagra_album', icon: ICON.yucaPlant, name: 'La chagra', cost: 2, text: 'La huerta de la selva: yuca, plátano, piña y ají sembrados juntos.' },
       { id: 'pelazon_album', icon: '🎭', name: 'La Pelazón', cost: 2, text: 'La fiesta ticuna en que la muchacha se vuelve mujer, con máscaras.' },
       { id: 'manguare', icon: '🥁', name: 'El manguaré', cost: 2, text: 'Los dos tambores de palo que se oyen a kilómetros por la selva.' },
-      { id: 'uitoto', icon: '🌿', name: 'Los uitoto', cost: 3, text: 'Pueblo de la coca y el tabaco, que guarda sus historias en la maloca.' },
+      { id: 'uitoto', icon: '🌿', name: 'Los uitoto', cost: 3, text: 'Pueblo de la maloca, que guarda sus historias en cantos y relatos.' },
     ],
   },
   {

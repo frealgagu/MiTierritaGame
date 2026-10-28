@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## v3.65.0 — Tradiciones contadas con cuidado
+El juego es también para niños. El Tabacal y La Cervecería se quedan, como oficio y tradición, pero ningún texto ni dibujo invita a fumar o a beber:
+- El ícono del **tabaco torcido** ya no tiene la punta encendida ni el humo.
+- Álbum:
+  - **El chicote**: sin el 🚬, con el manojo de tabaco.
+  - **La chicha**, **el guarapo**, **el viche** y **la chicha de chontaduro**: cuentan cómo se hacen y de dónde vienen, no cuándo se toman.
+  - **Los uitoto**: «Pueblo de la maloca, que guarda sus historias en cantos y relatos».
+- Lo que cuentan las estaciones: los fermentadores de la Cervecería explican cómo se hace la chicha, y las Jarras de Ráquira, cómo se tornean y se hornean.
+
 ## v3.64.1 — «Mi Tierrita» en el teléfono
 - En la pantalla de inicio del teléfono el ícono decía «Encantos de Mi Tierrita», que no cabe; ahora dice **Mi Tierrita**. En Play Store el nombre completo sigue siendo «Encantos de Mi Tierrita».
 

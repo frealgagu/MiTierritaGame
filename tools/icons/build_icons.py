@@ -916,17 +916,16 @@ def fermented_tobacco():
 
 
 def cigar():
-    """Tabaco torcido: el puro enrollado a mano, con su anillo y la punta encendida."""
+    """Tabaco torcido: el puro enrollado a mano, con su anillo y la punta cortada, sin encender (v3.65)."""
     return [
-        ('#ffffff90', ['M 86 30 Q 80 20 88 12 Q 84 22 90 28 Z']),
         (OUTLINE, [rect(6, 50, 82, 18, -25, 47, 59)]),
         ('#7b4a22', [rect(8, 52, 78, 14, -25, 47, 59)]),
         ('#9c6634', [rect(8, 52, 78, 5, -25, 47, 59)]),
         ('#5d3a1a', [rib(22, 74, 26, 62, 1), rib(36, 68, 40, 56, 1), rib(52, 61, 56, 49, 1)]),
         ('#d7263d', [rect(22, 52, 10, 14, -25, 47, 59)]),
         ('#e8b90f', [rect(25, 52, 4, 14, -25, 47, 59)]),
-        ('#9e9e9e', [ellipse(84, 41, 4, 7, -25)]),
-        ('#ff7043', [ellipse(85.5, 40.5, 2, 4.5, -25)]),
+        ('#5d3a1a', [ellipse(84, 41, 4, 7, -25)]),
+        ('#9c6634', [ellipse(84.5, 41, 2.2, 4.8, -25)]),
     ]
 
 
