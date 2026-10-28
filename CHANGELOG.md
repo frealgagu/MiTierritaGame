@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v3.64.1 — «Mi Tierrita» en el teléfono
+- En la pantalla de inicio del teléfono el ícono decía «Encantos de Mi Tierrita», que no cabe; ahora dice **Mi Tierrita**. En Play Store el nombre completo sigue siendo «Encantos de Mi Tierrita».
+
 ## v3.64.0 — Privacidad y ficha de Google Play
 - **🔒 Privacidad:** la política está en https://frealgagu.github.io/MiTierritaGame/privacidad.html y hay un resumen en el menú ⚙️. El juego no recoge ni comparte datos personales: no tiene cuentas, publicidad ni rastreo, y la partida se guarda solo en el dispositivo.
 - **La letra va dentro del juego:** Fredoka ya no se descarga de Google Fonts. Así la app se ve igual sin internet y el juego no se conecta a ningún servidor de fuentes.

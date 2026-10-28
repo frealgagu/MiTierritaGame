@@ -1,7 +1,7 @@
 {
   "name": "encantos-mi-tierrita",
   "private": true,
-  "version": "3.64.0",
+  "version": "3.64.1",
   "license": "MIT",
   "type": "module",
   "scripts": {

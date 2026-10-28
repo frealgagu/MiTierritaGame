@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">Mi Tierrita</string>
-    <string name="title_activity_main">Encantos de Mi Tierrita</string>
+    <string name="title_activity_main">Mi Tierrita</string>
     <string name="package_name">com.frealgagu.mitierrita.encantos</string>
     <string name="custom_url_scheme">com.frealgagu.mitierrita.encantos</string>
 </resources>
