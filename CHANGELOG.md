@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## v3.65.1 — Abre más rápido, el tinto funciona y las caras en su sitio
+- **El juego abre mucho más rápido** después de un tiempo cerrado. Con todas las regiones avanzadas y un día fuera, el cálculo de lo producido mientras tanto pasó de unos 25 segundos a unos 4 (en un computador; en el teléfono la diferencia se nota más). Las ganancias son las mismas (menos de 1 % de diferencia):
+  - las mulas en camino se cuentan una sola vez por paso, y no una vez por cada estación;
+  - se simulan de verdad 30 minutos de juego (casi 4 días) en vez de 2 horas, y el resto se calcula al mismo ritmo;
+  - los avisos del mapa no se calculan mientras tanto (nadie los ve).
+- **Las personas de cada zona** (Don Jairo, Doña Inés…) tienen la cabeza dibujada como el resto del juego, con su tono de piel, su pelo, su barba o su sombrero. Antes era un emoji, y en muchos Android (los Samsung, por ejemplo) el emoji traía cuello y hombros y quedaba corrido sobre el cuerpo.
+- **☕ Invítame un tinto** se quedaba en «Cargando…» para siempre en la versión de Google Play: el juego esperaba el complemento de cobros de una forma que nunca terminaba. Ahora muestra los precios en pesos, y si Google Play no responde en 20 segundos, lo dice.
+
 ## v3.65.0 — Tradiciones contadas con cuidado
 El juego es también para niños. El Tabacal y La Cervecería se quedan, como oficio y tradición, pero ningún texto ni dibujo invita a fumar o a beber:
 - El ícono del **tabaco torcido** ya no tiene la punta encendida ni el humo.

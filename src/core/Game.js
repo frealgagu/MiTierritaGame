@@ -16,7 +16,10 @@ import { clockOf, workOf, workSeconds } from '../sim/calendar.js';
 import { refillSlots, stepSupply } from '../sim/events.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
-const MAX_SIMULATED = 2 * 3600; // s de juego que se simulan de verdad al volver; el resto se extrapola
+// s de juego que se simulan de verdad al volver; el resto se extrapola. Hasta la v3.65 eran 2 h: con la
+// partida ya andando, 30 min (casi 4 días del juego) dan lo mismo (menos de 1 % de diferencia) y el juego
+// abre 4 veces más rápido.
+const MAX_SIMULATED = 30 * 60;
 
 // Lo que se extrapola del tiempo sin conexión.
 const snapshot = (s) => ({ coins: s.coins, totalEarned: s.totalEarned, sold: { ...s.stats.sold }, produced: { ...s.stats.produced }, imported: { ...s.stats.imported } });
@@ -58,7 +61,9 @@ export class Game {
     for (const route of ROUTES) stepRoute(this.state, route.id, dt, this.bus);
     if (this.state.event) stepSupply(this.state, dt);
     else if ((this.state.region ?? 'cafetero') === 'cafetero') refillSlots(this.state); // los cupos de eventos (v3.30: de todo el juego)
-    stepAlerts(this.state, dt);
+    // Los avisos del mapa (⏸️, bodega llena…) son para quien mira: mientras se calcula el tiempo fuera no
+    // hacen falta (no cambian la producción) y se ahorra tiempo al abrir el juego (v3.65.1).
+    if (!this.offline) stepAlerts(this.state, dt);
   }
 
   // Ganancias mientras el juego estuvo cerrado: se simula en pasos de 1 s, sin efectos visuales (y con
@@ -99,6 +104,7 @@ export class Game {
     const before = s.coins;
     const simulated = Math.min(total, MAX_SIMULATED);
     this.bus.muted = true;
+    this.offline = true;
     let mark = null;
     try {
       for (let t = 0; t < simulated; t += 1) {
@@ -108,6 +114,7 @@ export class Game {
       }
     } finally {
       this.bus.muted = false;
+      this.offline = false;
     }
     const rest = total - simulated;
     if (rest > 0 && mark) {

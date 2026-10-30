@@ -12,6 +12,10 @@ export const TIPS = [
   { id: 'almuerzo', icon: '🍲', name: 'Un almuerzo', thanks: 'el almuerzo' },
 ];
 export const KOFI_URL = '';
+const PRODUCTS_TIMEOUT_MS = 20000; // si Google Play no responde, se avisa en vez de quedarse en «Cargando…»
+
+export const withTimeout = (promise, ms) =>
+  Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))]);
 
 // La barrera: un número de dos cifras por uno de una (13 × 7), que un niño pequeño no resuelve de un toque.
 export function gateQuestion(random = Math.random) {
@@ -38,7 +42,7 @@ export function bindTip(mode) {
   const options = document.getElementById('tip-options');
   const msg = document.getElementById('tip-msg');
   let q = null;
-  let store = null; // el complemento de cobros, se carga solo en la versión de Play
+  let billing = null; // el módulo del complemento de cobros, se carga solo en la versión de Play
 
   const ask = () => {
     q = gateQuestion();
@@ -70,24 +74,28 @@ export function bindTip(mode) {
     else await showProducts();
   });
 
+  // Se guarda el módulo y no el complemento: una función async no puede devolver el complemento, porque
+  // Capacitor responde a cualquier método, también a `then`, y la promesa se queda esperándolo para siempre
+  // (v3.65.1: por eso «Cargando…» no terminaba).
   async function loadStore() {
-    if (!store) store = (await import('@capgo/native-purchases')).NativePurchases;
-    return store;
+    billing ??= await import('@capgo/native-purchases');
+    return billing;
   }
 
   async function showProducts() {
     options.replaceChildren(note('Cargando…'));
     let prices = {};
     try {
-      const s = await loadStore();
-      const { products } = await s.getProducts({ productIdentifiers: TIPS.map((t) => t.id), productType: 'inapp' });
+      const s = (await loadStore()).NativePurchases;
+      const query = s.getProducts({ productIdentifiers: TIPS.map((t) => t.id), productType: 'inapp' });
+      const { products } = await withTimeout(query, PRODUCTS_TIMEOUT_MS);
       prices = Object.fromEntries(products.map((p) => [p.identifier, p.priceString]));
     } catch {
       // sin conexión o sin Google Play: se dice abajo
     }
     const available = TIPS.filter((t) => prices[t.id]);
     if (!available.length) {
-      options.replaceChildren(note('Ahora no se puede: revisa la conexión a internet e intenta más tarde.'));
+      options.replaceChildren(note('Ahora no se puede invitar el tinto. Intenta más tarde (revisa que haya internet).'));
       return;
     }
     options.replaceChildren(
@@ -105,7 +113,7 @@ export function bindTip(mode) {
   async function buy(tip, b) {
     b.disabled = true;
     try {
-      const s = await loadStore();
+      const s = (await loadStore()).NativePurchases;
       await s.purchaseProduct({ productIdentifier: tip.id, productType: 'inapp', isConsumable: true });
       modal.hidden = true;
       toast(`${tip.icon} ¡Gracias por ${tip.thanks}! Con eso el juego sigue creciendo.`, 5000);
@@ -122,7 +130,7 @@ export function bindTip(mode) {
   if (mode === 'play') settlePending();
   async function settlePending() {
     try {
-      const s = await loadStore();
+      const s = (await loadStore()).NativePurchases;
       const { purchases } = await s.getPurchases({ productType: 'inapp' });
       for (const p of purchases) if (p.purchaseState === '1' && p.purchaseToken) await s.consumePurchase({ purchaseToken: p.purchaseToken });
     } catch {

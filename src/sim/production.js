@@ -3,6 +3,7 @@ import { ZONES_BY_ID } from '../data/zones/index.js';
 import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
 import { capMult, consumeCompost, speedMult } from './modifiers.js';
 import { CALENDAR, clockOf, resting, seasonOf } from './calendar.js';
+import { fleetOf } from './fleet.js';
 
 export function createStationState() {
   return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, imported: {}, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
@@ -107,7 +108,8 @@ export function stepStation(state, id, dt, bus) {
 export function inputSpace(state, id) {
   const def = STATIONS_BY_ID[id];
   const s = state.stations[id];
-  const incoming = state.mules.reduce((n, m) => (m.to === id && m.phase === 'go' ? n + m.amount : n), 0);
+  const f = fleetOf(state);
+  const incoming = f ? f.incoming[id] ?? 0 : state.mules.reduce((n, m) => (m.to === id && m.phase === 'go' ? n + m.amount : n), 0);
   return stationInputCap(def, s.level, capMult(state, id)) - s.input - incoming;
 }
 

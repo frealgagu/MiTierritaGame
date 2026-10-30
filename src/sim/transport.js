@@ -8,6 +8,7 @@ import { ROUTE_STOCK, routeActive, routeCapacity, routeRate, routeReserve } from
 import { inputSpace } from './production.js';
 import { capMult, dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
 import { resting } from './calendar.js';
+import { addMule, countFleet, endFleet, fleetOf } from './fleet.js';
 
 const MAX_IDLE = 6; // s: si hay algo en el patio y no sale una mula en este tiempo, sale con lo que haya
 // Si la carga no cabe entera en la siguiente estación, las mulas esperan a que haya sitio; solo con el
@@ -30,6 +31,8 @@ export function legTime(from, to, speedMult = 1) {
 
 // Unidades en camino hacia una estación, o hacia la bodega de una zona.
 export function inTransit(state, to = 'warehouse', zoneId = 'finca') {
+  const f = fleetOf(state);
+  if (f) return (to === 'warehouse' ? f.toWarehouse[zoneId] : f.incoming[to]) ?? 0;
   return state.mules.reduce((n, m) => {
     if (m.phase !== 'go' || m.to !== to) return n;
     if (to === 'warehouse' && zoneOf(m.from) !== zoneId) return n;
@@ -53,17 +56,23 @@ export function normalDest(state, id) {
 // Rutas que se llevan a otra zona un producto intermedio de esta estación (la leche pasteurizada): la
 // estación les guarda una parte, como a una rama más. Sus mulas lo dejan en la bodega, de donde sale la ruta.
 export function exportsOf(state, id) {
-  if (!CHILDREN[id]?.length) return [];
-  const out = Object.keys(STATIONS_BY_ID[id].out)[0];
-  return ROUTES.filter((r) => r.from === zoneOf(id) && r.product === out && routeActive(state, r.id));
+  return (ROUTES_OF[id] ?? []).filter((r) => routeActive(state, r.id));
 }
+
+// Rutas que pueden llevarse el producto de cada estación (de su zona y con su producto), calculadas una vez.
+const ROUTES_OF = Object.fromEntries(
+  Object.values(STATIONS_BY_ID)
+    .filter((def) => CHILDREN[def.id]?.length)
+    .map((def) => {
+      const out = Object.keys(def.out)[0];
+      return [def.id, ROUTES.filter((r) => r.from === def.zone && r.product === out)];
+    }),
+);
 
 // Rutas que se llevarán el producto de esta estación pero aún no abren (la Ruta de la leche, antes
 // de abrir el Cacaotal): la parte que les toca se vende mientras tanto, y eso no es un problema.
 export function pendingRoutes(state, id) {
-  if (!CHILDREN[id]?.length) return [];
-  const out = Object.keys(STATIONS_BY_ID[id].out)[0];
-  return ROUTES.filter((r) => r.from === zoneOf(id) && r.product === out && !routeActive(state, r.id));
+  return (ROUTES_OF[id] ?? []).filter((r) => !routeActive(state, r.id));
 }
 
 // ¿Las estaciones siguientes procesan menos de lo que esta produce? (Más las rutas que se llevan su
@@ -85,7 +94,10 @@ export function exportSpace(state, routeId) {
   const r = ROUTES_BY_ID[routeId];
   const cap = ROUTE_STOCK * routeCapacity(state, routeId);
   const stock = state.zones[r.from].warehouse[r.product] ?? 0;
-  const coming = state.mules.reduce((n, m) => (m.phase === 'go' && m.to === 'warehouse' && m.productId === r.product && zoneOf(m.from) === r.from ? n + m.amount : n), 0);
+  const f = fleetOf(state);
+  const coming = f
+    ? f.toExport[`${r.from}|${r.product}`] ?? 0
+    : state.mules.reduce((n, m) => (m.phase === 'go' && m.to === 'warehouse' && m.productId === r.product && zoneOf(m.from) === r.from ? n + m.amount : n), 0);
   return { space: cap - stock - coming, cap };
 }
 
@@ -109,6 +121,8 @@ export function teamCapacity(state, id, dest = normalDest(state, id), level = st
 
 // Mulas de una estación que están en camino (ida o vuelta).
 export function busyMules(state, id) {
+  const f = fleetOf(state);
+  if (f) return f.busy[id] ?? 0;
   return state.mules.reduce((n, m) => (m.from === id ? n + 1 : n), 0);
 }
 
@@ -153,9 +167,14 @@ export function stepMules(state, dt, bus) {
 
   // De noche no sale ninguna recua (las que van de camino terminan su viaje).
   if (resting(state)) return;
-  for (const zone of ZONE_LIST) {
-    if (!zoneUnlocked(state, zone.id)) continue;
-    for (const id of chainOf(zone.id)) if (state.stations[id]) dispatchFrom(state, id, dt, bus);
+  countFleet(state);
+  try {
+    for (const zone of ZONE_LIST) {
+      if (!zoneUnlocked(state, zone.id)) continue;
+      for (const id of chainOf(zone.id)) if (state.stations[id]) dispatchFrom(state, id, dt, bus);
+    }
+  } finally {
+    endFleet();
   }
 }
 
@@ -173,6 +192,12 @@ function dispatchFrom(state, id, dt, bus) {
   const level = s.transport.level;
   s.sinceDeparture += dt;
   s.waiting = null;
+  // Sin producto en el patio, o con todas las mulas fuera, no sale nadie: no hace falta calcular la carga.
+  if (s.buffer <= 0) return;
+  if (busyMules(state, id) >= muleCount(level)) {
+    s.waiting = 'mules';
+    return;
+  }
   const load = teamLoad(state, id);
   const targets = [...consumers(state, id), ...exportsOf(state, id).map((r) => `export:${r.id}`)];
 
@@ -242,5 +267,6 @@ function sendMule(state, from, to, amount, bus) {
   s.sinceDeparture = 0;
   const mule = { id: state.nextId++, productId, amount, from, to, phase: 'go', t: 0, duration: legTime(from, to, muleSpeedMult(state)) };
   state.mules.push(mule);
+  addMule(mule);
   bus.emit('muleDeparted', mule);
 }

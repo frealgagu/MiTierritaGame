@@ -25,3 +25,9 @@ test('tinto: cobros de Google solo en la versión de Play; Ko-fi solo en la web 
   assert.equal(tipMode({ native: false, playStore: false, kofi: '' }), null);
   assert.equal(tipMode({ native: false, playStore: false, kofi: 'https://ko-fi.com/x' }), 'web');
 });
+
+test('tinto: si Google Play no responde, el pedido de precios se corta', async () => {
+  const { withTimeout } = await import('../src/tip.js');
+  await assert.rejects(withTimeout(new Promise(() => {}), 20), /timeout/);
+  assert.equal(await withTimeout(Promise.resolve(7), 20), 7);
+});
