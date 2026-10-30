@@ -191,10 +191,12 @@
             <button id="dev-hide" class="btn small">Ocultar opciones de desarrollador</button>
           </div>
         </details>
+        <div class="volume-box">
+          <label class="volume-row"><span id="sound-vol-icon" class="volume-icon">🔊</span><span>Sonidos</span><input id="sound-vol" type="range" min="0" max="100" step="5" aria-label="Volumen de los sonidos" /><b id="sound-vol-val"></b></label>
+          <label class="volume-row"><span id="music-vol-icon" class="volume-icon">🎵</span><span>Música</span><input id="music-vol" type="range" min="0" max="100" step="5" aria-label="Volumen de la música" /><b id="music-vol-val"></b></label>
+        </div>
         <div class="modal-actions">
           <button id="intro-btn" class="btn">❓ Cómo se juega</button>
-          <button id="sound-btn" class="btn"></button>
-          <button id="music-btn" class="btn"></button>
           <button id="tip-btn" class="btn" hidden>☕ Invítame un tinto</button>
           <a id="apk-link" class="btn" href="./mitierrita.apk" download="MiTierrita.apk" hidden>📱 App de Android</a>
           <button id="update-btn" class="btn" hidden>🔄 Buscar actualización</button>
@@ -263,12 +265,15 @@
               <li>Se trabaja de <b>6:00 a 12:00 y de 14:00 a 20:00</b>: al almuerzo y de noche todo descansa (con Renombre ⭐ se compran más horas). Las <b>temporadas</b> (☀️ verano, 🌦️ entrada de aguas, 🌧️ invierno, 🌤️ veranillo) suben o bajan la producción; toca el reloj para ver el calendario.</li>
               <li>Cuando ya conoces una zona, llega su <b>evento 🏅</b> una vez al año: un tablero aparte con su propio reloj. Cuanto más rápido, mejor la medalla, y las medallas dan <b>Renombre ⭐</b>, que no se pierde al volver a empezar.</li>
               <li>Aunque cierres el juego, la finca sigue produciendo un tiempo y al volver te espera lo ganado.</li>
+              <li>¿No sabes qué es un ícono? <b>Tócalo</b> y te dice su nombre.</li>
             </ul>
           </section>
           <section>
             <h3>🏁 El objetivo</h3>
             <p>Cumple los objetivos de cada zona para abrir la siguiente: <b>la Finca, el Trapiche, la Lechería, el Cacaotal, el Maizal y Salento</b>. Las zonas se abastecen entre sí con rutas de chivas 🚌: la panela del Trapiche endulza el arequipe y el chocolate, y en el Pueblo todo termina en canastas de regalo que se exportan.</p>
             <p>Después de Salento hay un <b>segundo final 🏅</b>: lleva todas las estaciones al nivel 100 y vuelve a empezar con la producción al doble (×2, ×4, ×8…).</p>
+            <h3>🗺️ Por toda Colombia</h3>
+            <p>Al completar Salento se abre <b>Santander</b>, y cada región abre la siguiente: <b>☕ Eje Cafetero, Santander, 🌴 La Costa, ⛰️ Boyacá, 🐎 Los Llanos, 🐋 la Costa Pacífica y 🦜 el Amazonas</b>. Cada una tiene seis zonas inspiradas en lugares reales, sus productos, su música, sus eventos y su propia partida (monedas, niveles y segundo final). Todas las zonas abiertas siguen produciendo aunque estés en otra; en <b>🗺️ Zonas</b> eliges a cuál ir y puedes ver el mapa de Colombia.</p>
           </section>
         </div>
         <div class="intro-foot">

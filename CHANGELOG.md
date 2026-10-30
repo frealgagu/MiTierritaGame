@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v3.66.0 — Lo que pidieron los testers
+- **¿Qué es este ícono?** Al tocar un ícono en cualquier texto del juego (el panel de una estación, la cadena, los objetivos, las investigaciones…) aparece su nombre: «Cereza de café», «Bolsas de café», «Monedas».
+- **📦 La bodega por dentro:** el Despacho tiene una pestaña nueva, **Bodega**, con lo que hay de cada producto de la zona, a cuánto se vende cada uno y cuánto vale todo. Lo que espera una ruta se marca con 🚌.
+- **La cadena y la bodega:** cada estación tiene una etiqueta 📦 que dice cuánto manda directo a la bodega para venderlo sin procesar (en naranja si es porque la siguiente no da abasto) y lleva a la bodega al tocarla. El detalle de cada estación lo explica y tiene un botón **📦 Bodega**.
+- **Volumen:** en el menú ⚙️, la música y los sonidos tienen cada uno su control, de 0 (apagado) a 100. La música empieza al **40 %** de lo que sonaba antes, para que no tape los sonidos.
+- **Cómo se juega** cuenta que, después del Eje Cafetero, se van abriendo las otras regiones de Colombia (Santander, La Costa, Boyacá, Los Llanos, la Costa Pacífica y el Amazonas), y que tocar un ícono dice su nombre.
+
 ## v3.65.1 — Abre más rápido, el tinto funciona y las caras en su sitio
 - **El juego abre mucho más rápido** después de un tiempo cerrado. Con todas las regiones avanzadas y un día fuera, el cálculo de lo producido mientras tanto pasó de unos 25 segundos a unos 4 (en un computador; en el teléfono la diferencia se nota más). Las ganancias son las mismas (menos de 1 % de diferencia):
   - las mulas en camino se cuentan una sola vez por paso, y no una vez por cada estación;

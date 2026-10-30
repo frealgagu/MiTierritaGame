@@ -25,7 +25,7 @@ import { COMPOST_VALUE, compostValueBoost, jeepCount, muleSpeedMult, saleValue }
 import { PARENT, branchShare, consumers, zoneOf } from '../sim/chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { jeepResting } from '../sim/dispatch.js';
-import { routeActive, routeCapacity, routeRate, routeStations, stationImportRate } from '../sim/routes.js';
+import { routeActive, routeCapacity, routeRate, routeReserve, routeStations, stationImportRate } from '../sim/routes.js';
 import { capMult, speedMult } from '../sim/modifiers.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { dispatchMult } from '../sim/modifiers.js';
@@ -63,6 +63,7 @@ const isBuilt = (state, id) => id.startsWith('dispatch') || id.startsWith('route
 // Pestañas de una estación: la estación, su transporte y una por cada ruta que la abastece.
 // [clave, ícono, nombre]
 function tabsOf(state, id) {
+  if (id.startsWith('dispatch')) return [['station', DISPATCH.icon, 'Despacho'], ['stock', '📦', 'Bodega']];
   const tabs = [
     ['station', '⚙️', 'Estación'],
     ['transport', ...(hasBelt(state.stations[id]?.transport.level ?? 0) ? ['⚡', 'Banda'] : ['🐴', 'Arrieros'])],
@@ -99,7 +100,9 @@ export class StationPanel {
   render() {
     const id = this.id;
     this.built = isBuilt(this.game.state, id);
-    if (id.startsWith('dispatch')) this.renderUpgradable(dispatchInfo(id.split(':')[1] ?? 'finca'));
+    this.stock = null;
+    if (id.startsWith('dispatch') && this.tab === 'stock') this.renderStock(id.split(':')[1] ?? 'finca');
+    else if (id.startsWith('dispatch')) this.renderUpgradable(dispatchInfo(id.split(':')[1] ?? 'finca'));
     else if (id.startsWith('route:')) this.renderUpgradable(routeInfo(id.split(':')[1], null));
     else if (this.built && this.tab === 'transport') this.renderUpgradable(transportInfo(id));
     else if (this.built && this.tab.startsWith('route:')) this.renderUpgradable(routeInfo(this.tab.split(':')[1], id));
@@ -199,6 +202,46 @@ export class StationPanel {
     });
   }
 
+  // La bodega por dentro (v3.66): cuánto hay de cada producto de la zona y a cuánto se vende. Lo de las
+  // estaciones que todavía no se construyen no sale; lo que espera una ruta se marca 🚌.
+  renderStock(zoneId) {
+    this.info = null;
+    this.variant = undefined;
+    this.stock = zoneId;
+    this.el.innerHTML = this.frame({
+      icon: DISPATCH.icon,
+      title: DISPATCH.name,
+      subtitle: `${ZONES_BY_ID[zoneId].name}: lo que hay en la bodega y a cuánto lo vende el Willys`,
+      tabs: tabButtons(tabsOf(this.game.state, this.id), 'stock'),
+      recipe: '<span data-ref="stockTotal"></span>',
+      rows: '',
+      button: '',
+    });
+    this.el.querySelector('.stats').outerHTML = '<div class="stock-list" data-ref="stockList"></div>';
+    this.collectRefs();
+    for (const btn of this.el.querySelectorAll('[data-tab]')) {
+      btn.addEventListener('click', () => {
+        this.tab = btn.dataset.tab;
+        this.render();
+        this.update();
+      });
+    }
+    this.stockHtml = null;
+  }
+
+  updateStock() {
+    const s = this.game.state;
+    const zoneId = this.stock;
+    const z = s.zones[zoneId];
+    const dock = dockStock(s, zoneId);
+    const cap = warehouseCapacity(z.dispatch.level, dispatchMult(s, zoneId));
+    setFitted(this.refs.stockTotal, `📦 ${formatNumber(sumValues(z.warehouse) - dock)} / ${formatNumber(cap)}${dock > 0.5 ? ` · 🚌 ${formatNumber(dock)} para las rutas` : ''}`);
+    const html = stockRows(s, zoneId);
+    if (html !== this.stockHtml) this.refs.stockList.innerHTML = this.stockHtml = html;
+    const value = Object.entries(z.warehouse).reduce((n, [p, q]) => n + q * saleValue(s, p), 0);
+    this.setStatus({ text: `💰 Todo lo que hay vale ${formatNumber(value)}. El Willys se lo lleva al pueblo y cada producto se vende a su precio.`, bad: false });
+  }
+
   collectRefs() {
     this.refs = {};
     for (const el of this.el.querySelectorAll('[data-ref]')) this.refs[el.dataset.ref] = el;
@@ -218,6 +261,7 @@ export class StationPanel {
 
   update() {
     if (!this.id) return;
+    if (this.stock) return this.updateStock();
     const state = this.game.state;
     const r = this.refs;
     // Si la estación se construyó por otra vía, rehacer el panel.
@@ -537,6 +581,7 @@ function dispatchInfo(zoneId) {
     recipe: `📦 Bodega <span>➜</span> ${DISPATCH.icon} <span>➜</span> 💰 Pueblo`,
     milestoneWhat: 'carga',
     upgradeId: `dispatch:${zoneId}`,
+    tabs: true,
     level: (s) => z(s).dispatch.level,
     rows: [
       { key: 'cap', label: 'Carga por viaje', value: (s, l) => `${formatNumber(dispatchCapacity(l, mult(s)))}`, next: (l, s) => formatNumber(dispatchCapacity(l, mult(s))) },
@@ -569,4 +614,22 @@ function dispatchInfo(zoneId) {
       return { text: phase[z(s).jeep.phase], bad: false };
     },
   };
+}
+
+// Una fila por producto: el de cada estación construida de la zona (en el orden de la cadena) y cualquier
+// otro que haya en la bodega.
+function stockRows(state, zoneId) {
+  const zone = ZONES_BY_ID[zoneId];
+  const wh = state.zones[zoneId].warehouse;
+  const ids = [...zone.chain, ...zone.plots.map((p) => p.stationId)].filter((id) => state.stations[id] && !STATIONS_BY_ID[id].side);
+  const products = [...new Set([...ids.map((id) => Object.keys(STATIONS_BY_ID[id].out)[0]), ...Object.keys(wh)])];
+  const reserved = routeReserve(state, zoneId);
+  return products
+    .map((p) => {
+      const product = PRODUCTS[p];
+      const n = wh[p] ?? 0;
+      const route = reserved[p] > 0 ? ' 🚌' : '';
+      return `<div class="stock-row ${n < 0.5 ? 'empty' : ''}"><span class="stock-icon">${product.icon}</span><span class="stock-name">${product.name}${route}</span><b>${formatNumber(n)}</b><span class="stock-price">${formatAmount(saleValue(state, p))} 💰 c/u</span></div>`;
+    })
+    .join('');
 }

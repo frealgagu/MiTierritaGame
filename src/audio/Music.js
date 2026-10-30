@@ -4,7 +4,7 @@
 import { SONGS } from './songs.js';
 import { createSong, normalize, renderBar } from './compose.js';
 
-const VOLUME = 0.5;
+const VOLUME = 0.5; // la música al 100 % del control del menú (por defecto va al 40 %: ver main.js)
 const FADE_S = 2.5;
 const RATE = 32000; // muestras por segundo de la pieza (sobra para cuerdas de fondo y se arma más rápido)
 const REVERB = 0.22; // cuánto eco de sala se mezcla
@@ -13,6 +13,7 @@ export class Music {
   // region: qué pieza toca (por ahora solo el Eje Cafetero).
   constructor(enabled, region = 'cafetero') {
     this.enabled = enabled;
+    this.volume = 1; // del control del menú (v3.66), de 0 a 1
     this.region = region;
     this.ctx = null;
     this.source = null;
@@ -76,7 +77,7 @@ export class Music {
     const ctx = this.ensure();
     if (!ctx) return;
     ctx.resume();
-    this.fadeTo(VOLUME);
+    this.fadeTo(VOLUME * this.volume);
     if (this.source || this.building) return;
     this.building = true;
     const audio = await this.build(this.region);
@@ -103,6 +104,14 @@ export class Music {
     }, FADE_S * 1000);
   }
 
+  // Volumen de 0 a 1: en 0 se apaga (y deja de gastar); al moverlo se oye enseguida el cambio.
+  setVolume(v) {
+    const was = this.enabled;
+    this.volume = v;
+    if (v > 0 !== was) return this.setEnabled(v > 0);
+    if (v > 0 && this.started) this.fadeTo(VOLUME * v, 0.15);
+  }
+
   setEnabled(on) {
     this.enabled = on;
     if (!this.started) return;
@@ -114,12 +123,12 @@ export class Music {
     }
   }
 
-  fadeTo(target) {
+  fadeTo(target, seconds = FADE_S) {
     const g = this.gain?.gain;
     if (!g) return;
     const now = this.ctx.currentTime;
     g.cancelScheduledValues(now);
     g.setValueAtTime(g.value, now);
-    g.linearRampToValueAtTime(target, now + FADE_S);
+    g.linearRampToValueAtTime(target, now + seconds);
   }
 }

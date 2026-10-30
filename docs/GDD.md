@@ -615,6 +615,7 @@ export const COST_GROWTH = 1.15;
 | v3.63 ✅ | ☕ Invítame un tinto (solo en la versión de Play): propina voluntaria con los cobros de Google (tinto, arepa, almuerzo; consumibles), sin premio en el juego y detrás de una barrera para adultos; en la web, Ko-fi cuando exista | Publicación |
 | v3.64 ✅ | Política de privacidad (web y resumen en ⚙️), la letra Fredoka dentro del juego (sin conexiones externas) y la ficha de Google Play (`store/`: textos, capturas y formularios) | Publicación |
 | v3.65 ✅ | Tradiciones contadas con cuidado (política de Familias): tabaco torcido sin encender, láminas de bebidas por cómo se hacen, los uitoto sin la coca | Publicación |
+| v3.66 ✅ | Lo que pidieron los testers: el nombre de cada ícono al tocarlo, la bodega por producto (pestaña del Despacho), la etiqueta 📦 de cada estación en la cadena, volumen de música y sonidos (música al 40 %) y las regiones en «Cómo se juega» | Claridad |
 | v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía) | Comodidad |
 
 **Cómo se conectan las zonas:** ver §4b.

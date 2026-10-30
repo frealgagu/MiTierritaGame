@@ -1,5 +1,7 @@
 // Sonidos sintetizados con Web Audio (sin archivos). El navegador solo deja sonar tras un toque.
 
+const MASTER = 0.35; // volumen de los sonidos al 100 % del control del menú
+
 // Lo que suena al abrir cada estación (v3.3.2): su oficio, en pocos tipos de sonido.
 const STATION_SOUNDS = {
   field: ['farm', 'canefield', 'cacao_grove', 'cornfield', 'guava_grove', 'tobacco_field', 'fique_field', 'rice_field', 'coconut_grove', 'fishing_canoes', 'canaflechal', 'potato_field', 'palm_grove', 'plantain_grove', 'asai_grove', 'barley_field', 'passion_vines', 'azotea_beds', 'aji_field', 'clay_pit', 'fish_ponds', 'mangrove_flats', 'yuca_chagra', 'pargo_boats', 'pirarucu_canoes', 'sheep_pasture', 'hide_yard', 'werregue_palms', 'yanchama_trees', 'composter', 'anthill', 'camino_real'],
@@ -29,6 +31,7 @@ export class Sound {
   constructor() {
     this.ctx = null;
     this.enabled = true;
+    this.volume = 1; // del control del menú (v3.66), de 0 a 1
     this.lastPlayed = {};
     // El contexto de audio se crea con el primer toque del jugador.
     const unlock = () => {
@@ -44,13 +47,20 @@ export class Sound {
     if (!AC) return null;
     this.ctx = new AC();
     this.master = this.ctx.createGain();
-    this.master.gain.value = 0.35;
+    this.master.gain.value = MASTER * this.volume;
     this.master.connect(this.ctx.destination);
     return this.ctx;
   }
 
   setEnabled(on) {
     this.enabled = on;
+  }
+
+  // Volumen de 0 a 1; en 0 no suena nada.
+  setVolume(v) {
+    this.volume = v;
+    this.enabled = v > 0;
+    if (this.master) this.master.gain.value = MASTER * v;
   }
 
   // Una nota con ataque y caída cortos.

@@ -36,11 +36,13 @@ import { RESEARCH_BY_ID } from './data/research.js';
 import { nextLegacyMult, offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
 import { bindDevOptions, savedSpeed } from './ui/DevOptions.js';
+import { bindIconTips } from './ui/iconTips.js';
 import { Sound } from './audio/Sound.js';
 import { Music } from './audio/Music.js';
 
 const AUTOSAVE_MS = 10_000;
 const MIN_OFFLINE_S = 30;
+const DEFAULT_MUSIC_VOLUME = 40; // % (v3.66: al 100 % tapaba los sonidos)
 let resetting = false;
 
 async function start() {
@@ -85,10 +87,15 @@ async function start() {
     if (r) regionOffline.push([id, r]);
   }
 
+  // Volumen de 0 a 100 (v3.66). Las partidas de antes solo tenían sí o no: la música, si sonaba, queda
+  // al 40 % (sonaba muy fuerte frente a los sonidos) y los sonidos al 100 %.
+  const settings = game.state.settings;
+  settings.soundVolume ??= settings.sound === false ? 0 : 100;
+  settings.musicVolume ??= settings.music === false ? 0 : DEFAULT_MUSIC_VOLUME;
   const sound = new Sound();
-  sound.setEnabled(game.state.settings.sound);
-  // Las partidas de antes no tienen el ajuste: la música suena salvo que se haya quitado.
-  const music = new Music(game.state.settings.music !== false);
+  sound.setVolume(settings.soundVolume / 100);
+  const music = new Music(settings.musicVolume > 0);
+  music.setVolume(settings.musicVolume / 100);
   // Un clic suave en cada botón de la interfaz.
   document.addEventListener('click', (e) => {
     if (e.target.closest('button')) sound.click();
@@ -124,9 +131,11 @@ async function start() {
       research.open();
       return;
     }
+    // 'dispatch:<zona>:stock' (v3.66): la pestaña 📦 de la bodega, con lo que hay de cada producto.
     if (stationId === 'dispatch') {
+      const [, zone, tab] = id.split(':');
       scene.select('dispatch');
-      panel.open(id);
+      panel.open(zone ? `dispatch:${zone}` : id, tab === 'stock' ? 'stock' : 'station');
       sound.station('dispatch');
       return;
     }
@@ -486,6 +495,7 @@ async function start() {
 
   bindMenu(game, sound, music, () => active);
   bindDevOptions(game, () => active);
+  bindIconTips();
   bindTip(tipMode({ native: isNativeApp(), playStore: typeof __PLAY_STORE__ !== 'undefined' && __PLAY_STORE__ }));
   // En la app de Android el juego ya va dentro del paquete: sin service worker, con el botón «atrás».
   if (isNativeApp()) {
@@ -526,23 +536,28 @@ async function applyOffline(game, seconds, region = null, profile = game.state.p
 // getActive: la partida de la región que se está viendo (su segundo final y su reinicio).
 function bindMenu(game, sound, music, getActive) {
   const menu = document.getElementById('menu');
-  const soundBtn = document.getElementById('sound-btn');
-  const paintSound = () => (soundBtn.textContent = game.state.settings.sound ? '🔊 Sonido: sí' : '🔇 Sonido: no');
-  paintSound();
-  soundBtn.addEventListener('click', () => {
-    game.state.settings.sound = !game.state.settings.sound;
-    sound.setEnabled(game.state.settings.sound);
-    paintSound();
-  });
-  const musicBtn = document.getElementById('music-btn');
-  const musicOn = () => game.state.settings.music !== false;
-  const paintMusic = () => (musicBtn.textContent = musicOn() ? '🎵 Música: sí' : '🎵 Música: no');
-  paintMusic();
-  musicBtn.addEventListener('click', () => {
-    game.state.settings.music = !musicOn();
-    music.setEnabled(game.state.settings.music);
-    paintMusic();
-  });
+  // Volumen de los sonidos y de la música (v3.66), de 0 (apagado) a 100.
+  const slider = (key, flag, icons, apply) => {
+    const input = document.getElementById(`${key}-vol`);
+    const label = document.getElementById(`${key}-vol-val`);
+    const icon = document.getElementById(`${key}-vol-icon`);
+    const paint = () => {
+      const v = game.state.settings[`${key}Volume`];
+      input.value = v;
+      label.textContent = v ? `${v} %` : 'No';
+      icon.textContent = v ? icons[0] : icons[1];
+    };
+    paint();
+    input.addEventListener('input', () => {
+      const v = Number(input.value);
+      game.state.settings[`${key}Volume`] = v;
+      game.state.settings[flag] = v > 0;
+      apply(v / 100);
+      paint();
+    });
+  };
+  slider('sound', 'sound', ['🔊', '🔇'], (v) => (sound.setVolume(v), sound.click()));
+  slider('music', 'music', ['🎵', '🔕'], (v) => music.setVolume(v));
   document.getElementById('menu-btn').addEventListener('click', () => {
     const s = game.state;
     document.getElementById('menu-stats').textContent =
