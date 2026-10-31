@@ -83,8 +83,8 @@ export const STATIONS = [
   { id: 'guava_pulper', zone: 'guayabera', name: 'Despulpadora de guayaba', icon: '⚙️', in: { guava: 2 }, out: { guava_pulp: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.0' },
   { id: 'guava_pot', zone: 'guayabera', name: 'Paila de bocadillo', icon: '🔥', in: { guava_pulp: 1 }, out: { guava_jelly: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.0' },
   { id: 'guava_molds', zone: 'guayabera', name: 'Moldes de madera', icon: '🪵', in: { guava_jelly: 1 }, out: { bocadillo_block: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.0' },
-  { id: 'bocadillo_cutter', zone: 'guayabera', name: 'Cortadora', icon: '🔪', in: { bocadillo_block: 2 }, out: { bocadillo: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.0' },
-  { id: 'bijao_wrapper', zone: 'guayabera', name: 'Envoltura en bijao', icon: '🍃', in: { bocadillo: 1 }, out: { bocadillo_bijao: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.0' },
+  { id: 'bocadillo_cutter', zone: 'guayabera', name: 'Cortadora', icon: '🔪', in: { bocadillo_block: 4 }, out: { bocadillo: 3 }, cycle: 16, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.0' },
+  { id: 'bijao_wrapper', zone: 'guayabera', name: 'Envoltura en bijao', icon: '🍃', in: { bocadillo: 1 }, out: { bocadillo_bijao: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.0' },
   { id: 'crate_packer', zone: 'guayabera', name: 'Cajonera', icon: '📦', in: { bocadillo_bijao: 4 }, out: { bocadillo_crate: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.0' },
 
   // Costa · El Arrozal (v3.15), en las vegas del Sinú y del Magdalena: el arroz en cáscara se seca, se
@@ -94,16 +94,16 @@ export const STATIONS = [
   { id: 'rice_dryer', zone: 'arrozal', name: 'Secadora de arroz', icon: '☀️', in: { paddy: 2 }, out: { dry_paddy: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.15' },
   { id: 'rice_huller', zone: 'arrozal', name: 'Descascaradora', icon: '⚙️', in: { dry_paddy: 1 }, out: { brown_rice: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.15' },
   { id: 'rice_polisher', zone: 'arrozal', name: 'Pulidora', icon: '✨', in: { brown_rice: 1 }, out: { white_rice: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.15' },
-  { id: 'rice_sorter', zone: 'arrozal', name: 'Clasificadora', icon: '🔍', in: { white_rice: 2 }, out: { premium_rice: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.15' },
-  { id: 'rice_bagger', zone: 'arrozal', name: 'Empacadora de arroz', icon: ICON.riceBag, in: { premium_rice: 1 }, out: { rice_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.15' },
+  { id: 'rice_sorter', zone: 'arrozal', name: 'Clasificadora', icon: '🔍', in: { white_rice: 4 }, out: { premium_rice: 3 }, cycle: 16, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.15' },
+  { id: 'rice_bagger', zone: 'arrozal', name: 'Empacadora de arroz', icon: ICON.riceBag, in: { premium_rice: 1 }, out: { rice_bag: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.15' },
   { id: 'rice_stacker', zone: 'arrozal', name: 'Bultera', icon: ICON.riceSack, in: { rice_bag: 4 }, out: { rice_sack: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.15' },
 
   // Costa · El Cocal (v3.16), en el golfo de Morrosquillo: el coco se pela, se ralla, se exprime y su
   // leche se cocina en paila con panela hasta volverse cocada. Mismos números que el Tabacal.
-  { id: 'coconut_grove', zone: 'cocal', name: 'Cocal', icon: ICON.coconutPalm, infinite: true, out: { coconut: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.16' },
-  { id: 'coconut_peeler', zone: 'cocal', name: 'Peladero de cocos', icon: ICON.peeledCoconut, in: { coconut: 1 }, out: { peeled_coconut: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.16' },
-  { id: 'coconut_grater', zone: 'cocal', name: 'Ralladora', icon: ICON.gratedCoconut, in: { peeled_coconut: 2 }, out: { grated_coconut: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.16' },
-  { id: 'coconut_press', zone: 'cocal', name: 'Prensa de coco', icon: ICON.coconutMilk, in: { grated_coconut: 2 }, out: { coconut_milk: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.16' },
+  { id: 'coconut_grove', zone: 'cocal', name: 'Cocal', icon: ICON.coconutPalm, infinite: true, out: { coconut: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.16' },
+  { id: 'coconut_peeler', zone: 'cocal', name: 'Peladero de cocos', icon: ICON.peeledCoconut, in: { coconut: 1 }, out: { peeled_coconut: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.16' },
+  { id: 'coconut_grater', zone: 'cocal', name: 'Ralladora', icon: ICON.gratedCoconut, in: { peeled_coconut: 2 }, out: { grated_coconut: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.16' },
+  { id: 'coconut_press', zone: 'cocal', name: 'Prensa de coco', icon: ICON.coconutMilk, in: { grated_coconut: 2 }, out: { coconut_milk: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.16' },
   { id: 'cocada_kitchen', zone: 'cocal', name: 'Paila de cocadas', icon: ICON.cocada, in: { coconut_milk: 1 }, out: { cocada: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.16' },
 
   // Costa · La Ciénaga (v3.17), en la Ciénaga Grande: los pescadores sacan el bocachico en canoa; se limpia
@@ -155,17 +155,17 @@ export const STATIONS = [
   { id: 'potato_washer', zone: 'papal', name: 'Lavadero de papa', icon: ICON.washedPotato, in: { potato: 2 }, out: { washed_potato: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.22' },
   { id: 'potato_grader', zone: 'papal', name: 'Seleccionadora', icon: ICON.gradedPotato, in: { washed_potato: 1 }, out: { graded_potato: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.22' },
   { id: 'potato_peeler', zone: 'papal', name: 'Peladora de papa', icon: ICON.peeledPotato, in: { graded_potato: 1 }, out: { peeled_potato: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.22' },
-  { id: 'criollas_fryer', zone: 'papal', name: 'Freidora', icon: ICON.criollas, in: { peeled_potato: 2 }, out: { criollas: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.22' },
-  { id: 'criollas_bagger', zone: 'papal', name: 'Empacadora de papitas', icon: ICON.criollasBag, in: { criollas: 1 }, out: { criollas_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.22' },
+  { id: 'criollas_fryer', zone: 'papal', name: 'Freidora', icon: ICON.criollas, in: { peeled_potato: 4 }, out: { criollas: 3 }, cycle: 16, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.22' },
+  { id: 'criollas_bagger', zone: 'papal', name: 'Empacadora de papitas', icon: ICON.criollasBag, in: { criollas: 1 }, out: { criollas_bag: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.22' },
   { id: 'criollas_boxer', zone: 'papal', name: 'Cajonera', icon: ICON.criollasBox, in: { criollas_bag: 4 }, out: { criollas_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.22' },
 
   // Boyacá · La Cervecería (v3.23), en el altiplano de Tibasosa y Duitama: la cebada se maltea, la malta se
   // muele y se cocina en la paila (el mosto), el mosto fermenta en los tanques y la cerveza se embotella.
   // Mismos números que el Tabacal y el Cocal.
-  { id: 'barley_field', zone: 'cerveceria', name: 'Cebadal', icon: ICON.barleyPlant, infinite: true, out: { barley: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.23' },
-  { id: 'maltings', zone: 'cerveceria', name: 'Maltería', icon: ICON.malt, in: { barley: 1 }, out: { malt: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.23' },
-  { id: 'brew_kettle', zone: 'cerveceria', name: 'Paila de cocción', icon: ICON.wort, in: { malt: 2 }, out: { wort: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.23' },
-  { id: 'fermenters', zone: 'cerveceria', name: 'Tanques de fermentación', icon: ICON.beer, in: { wort: 2 }, out: { beer: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.23' },
+  { id: 'barley_field', zone: 'cerveceria', name: 'Cebadal', icon: ICON.barleyPlant, infinite: true, out: { barley: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.23' },
+  { id: 'maltings', zone: 'cerveceria', name: 'Maltería', icon: ICON.malt, in: { barley: 1 }, out: { malt: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.23' },
+  { id: 'brew_kettle', zone: 'cerveceria', name: 'Paila de cocción', icon: ICON.wort, in: { malt: 2 }, out: { wort: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.23' },
+  { id: 'fermenters', zone: 'cerveceria', name: 'Tanques de fermentación', icon: ICON.beer, in: { wort: 2 }, out: { beer: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.23' },
   { id: 'bottler', zone: 'cerveceria', name: 'Embotelladora', icon: ICON.beerCrate, in: { beer: 1 }, out: { beer_crate: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.23' },
 
   // Boyacá · Ráquira (v3.24), el pueblo de los alfareros: la greda se amasa y el barro se reparte entre las
@@ -216,17 +216,17 @@ export const STATIONS = [
   { id: 'bunch_thresher', zone: 'palma', name: 'Desgranadora', icon: ICON.palmFruit, in: { palm_bunch: 2 }, out: { palm_fruit: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.31' },
   { id: 'fruit_sterilizer', zone: 'palma', name: 'Esterilizador', icon: ICON.cookedFruit, in: { palm_fruit: 1 }, out: { cooked_fruit: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.31' },
   { id: 'palm_press', zone: 'palma', name: 'Prensa de aceite', icon: '🛢️', in: { cooked_fruit: 1 }, out: { crude_oil: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.31' },
-  { id: 'oil_clarifier', zone: 'palma', name: 'Clarificador', icon: ICON.palmOil, in: { crude_oil: 2 }, out: { palm_oil: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.31' },
-  { id: 'oil_bottler', zone: 'palma', name: 'Envasadora', icon: ICON.oilBottle, in: { palm_oil: 1 }, out: { oil_bottle: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.31' },
+  { id: 'oil_clarifier', zone: 'palma', name: 'Clarificador', icon: ICON.palmOil, in: { crude_oil: 4 }, out: { palm_oil: 3 }, cycle: 16, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.31' },
+  { id: 'oil_bottler', zone: 'palma', name: 'Envasadora', icon: ICON.oilBottle, in: { palm_oil: 1 }, out: { oil_bottle: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.31' },
   { id: 'oil_boxer', zone: 'palma', name: 'Cajonera de aceite', icon: ICON.oilBox, in: { oil_bottle: 4 }, out: { oil_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.31' },
 
   // Los Llanos · El Frutal (v3.32), en las vegas del Meta: el maracuyá se despulpa, la pulpa se pasteuriza, se
   // vuelve jugo en la mezcladora y el jugo se envasa en cajitas. Mismos números que el Tabacal, el Cocal y la
   // Cervecería; el jugo es el que después viajará a la Cachamera, y las cajas, a Villavicencio.
-  { id: 'passion_vines', zone: 'frutal', name: 'Maracuyal', icon: ICON.passionVine, infinite: true, out: { passion_fruit: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.32' },
-  { id: 'passion_pulper', zone: 'frutal', name: 'Despulpadora de maracuyá', icon: ICON.passionPulp, in: { passion_fruit: 1 }, out: { passion_pulp: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.32' },
-  { id: 'pulp_pasteurizer', zone: 'frutal', name: 'Pasteurizadora de pulpa', icon: ICON.pastPulp, in: { passion_pulp: 2 }, out: { past_pulp: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.32' },
-  { id: 'juice_mixer', zone: 'frutal', name: 'Mezcladora de jugos', icon: ICON.passionJuice, in: { past_pulp: 2 }, out: { passion_juice: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.32' },
+  { id: 'passion_vines', zone: 'frutal', name: 'Maracuyal', icon: ICON.passionVine, infinite: true, out: { passion_fruit: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.32' },
+  { id: 'passion_pulper', zone: 'frutal', name: 'Despulpadora de maracuyá', icon: ICON.passionPulp, in: { passion_fruit: 1 }, out: { passion_pulp: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.32' },
+  { id: 'pulp_pasteurizer', zone: 'frutal', name: 'Pasteurizadora de pulpa', icon: ICON.pastPulp, in: { passion_pulp: 2 }, out: { past_pulp: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.32' },
+  { id: 'juice_mixer', zone: 'frutal', name: 'Mezcladora de jugos', icon: ICON.passionJuice, in: { past_pulp: 2 }, out: { passion_juice: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.32' },
   { id: 'juice_packer', zone: 'frutal', name: 'Envasadora de jugos', icon: ICON.juiceBox, in: { passion_juice: 1 }, out: { juice_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.32' },
 
   // Los Llanos · La Cachamera (v3.33): la cachama se cría en estanques, se limpia y se reparte entre la Pisillera
@@ -278,17 +278,17 @@ export const STATIONS = [
   { id: 'plantain_dehander', zone: 'platanal', name: 'Desmanadora', icon: ICON.plantainHand, in: { plantain_bunch: 2 }, out: { plantain_hand: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.38' },
   { id: 'plantain_washer', zone: 'platanal', name: 'Tanque de lavado', icon: ICON.washedPlantain, in: { plantain_hand: 1 }, out: { washed_plantain: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.38' },
   { id: 'plantain_peeler', zone: 'platanal', name: 'Peladora', icon: ICON.peeledPlantain, in: { washed_plantain: 1 }, out: { peeled_plantain: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.38' },
-  { id: 'patacon_fryer', zone: 'platanal', name: 'Fritanga de patacones', icon: ICON.patacon, in: { peeled_plantain: 2 }, out: { patacon: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.38' },
-  { id: 'patacon_bagger', zone: 'platanal', name: 'Empacadora', icon: ICON.pataconBag, in: { patacon: 1 }, out: { patacon_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.38' },
+  { id: 'patacon_fryer', zone: 'platanal', name: 'Fritanga de patacones', icon: ICON.patacon, in: { peeled_plantain: 4 }, out: { patacon: 3 }, cycle: 16, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.38' },
+  { id: 'patacon_bagger', zone: 'platanal', name: 'Empacadora', icon: ICON.pataconBag, in: { patacon: 1 }, out: { patacon_bag: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.38' },
   { id: 'patacon_boxer', zone: 'platanal', name: 'Cajonera de patacones', icon: ICON.pataconBox, in: { patacon_bag: 4 }, out: { patacon_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.38' },
 
   // Costa Pacífica · La Azotea (v3.39): las hierbas de las azoteas (huertas alzadas sobre pilotes) se lavan, se machacan
   // en el pilón con ajo y cebolla, se sofríen en el refrito y el aliño se envasa en frascos. Mismos números que el
   // Tabacal, el Cocal, la Cervecería y el Frutal; el aliño es el que después viajará a la Bahía, y las cajas, a Quibdó.
-  { id: 'azotea_beds', zone: 'azotea', name: 'Azoteas', icon: ICON.azotea, infinite: true, out: { herbs: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.39' },
-  { id: 'herb_washer', zone: 'azotea', name: 'Lavadero de hierbas', icon: ICON.washedHerbs, in: { herbs: 1 }, out: { washed_herbs: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.39' },
-  { id: 'herb_pestle', zone: 'azotea', name: 'Pilón', icon: ICON.poundedHerbs, in: { washed_herbs: 2 }, out: { pounded_herbs: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.39' },
-  { id: 'refrito_pot', zone: 'azotea', name: 'Olla del refrito', icon: ICON.alino, in: { pounded_herbs: 2 }, out: { alino: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.39' },
+  { id: 'azotea_beds', zone: 'azotea', name: 'Azoteas', icon: ICON.azotea, infinite: true, out: { herbs: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.39' },
+  { id: 'herb_washer', zone: 'azotea', name: 'Lavadero de hierbas', icon: ICON.washedHerbs, in: { herbs: 1 }, out: { washed_herbs: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.39' },
+  { id: 'herb_pestle', zone: 'azotea', name: 'Pilón', icon: ICON.poundedHerbs, in: { washed_herbs: 2 }, out: { pounded_herbs: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.39' },
+  { id: 'refrito_pot', zone: 'azotea', name: 'Olla del refrito', icon: ICON.alino, in: { pounded_herbs: 2 }, out: { alino: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.39' },
   { id: 'alino_packer', zone: 'azotea', name: 'Envasadora de aliño', icon: ICON.alinoBox, in: { alino: 1 }, out: { alino_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.39' },
 
   // Costa Pacífica · La Bahía (v3.40): el pargo rojo se pesca en lancha, se limpia en la playa y se reparte entre el
@@ -341,17 +341,17 @@ export const STATIONS = [
   { id: 'asai_thresher', zone: 'asaizal', name: 'Desgranadora', icon: ICON.asaiFruit, in: { asai_bunch: 2 }, out: { asai_fruit: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.47' },
   { id: 'asai_soaker', zone: 'asaizal', name: 'Tanque de remojo', icon: ICON.soakedAsai, in: { asai_fruit: 1 }, out: { soaked_asai: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.47' },
   { id: 'asai_pulper', zone: 'asaizal', name: 'Despulpadora de asaí', icon: ICON.asaiPulp, in: { soaked_asai: 1 }, out: { asai_pulp: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.47' },
-  { id: 'asai_blender', zone: 'asaizal', name: 'Batidora', icon: ICON.asaiShake, in: { asai_pulp: 2 }, out: { asai_shake: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.47' },
-  { id: 'asai_bagger', zone: 'asaizal', name: 'Empacadora de asaí', icon: ICON.asaiBag, in: { asai_shake: 1 }, out: { asai_bag: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.47' },
+  { id: 'asai_blender', zone: 'asaizal', name: 'Batidora', icon: ICON.asaiShake, in: { asai_pulp: 4 }, out: { asai_shake: 3 }, cycle: 16, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.47' },
+  { id: 'asai_bagger', zone: 'asaizal', name: 'Empacadora de asaí', icon: ICON.asaiBag, in: { asai_shake: 1 }, out: { asai_bag: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.47' },
   { id: 'asai_boxer', zone: 'asaizal', name: 'Cajonera de asaí', icon: ICON.asaiBox, in: { asai_bag: 4 }, out: { asai_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.47' },
 
   // Amazonas · El Ajizal (v3.48): el ají de la chagra se lava, se muele y se cocina en el tucupí (el jugo de la
   // yuca brava) hasta volverse ají negro, que se envasa en frascos. Mismos números que el Tabacal, el Cocal, la
   // Cervecería, el Frutal y la Azotea; el ají negro es el que después viajará al Lago, y las cajas, a Leticia.
-  { id: 'aji_field', zone: 'ajizal', name: 'Ajizal', icon: ICON.ajiPlant, infinite: true, out: { aji: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.48' },
-  { id: 'aji_washer', zone: 'ajizal', name: 'Lavadero de ají', icon: ICON.ajiPeppers, in: { aji: 1 }, out: { washed_aji: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.48' },
-  { id: 'aji_grinder', zone: 'ajizal', name: 'Molino de ají', icon: ICON.groundAji, in: { washed_aji: 2 }, out: { ground_aji: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.48' },
-  { id: 'tucupi_pot', zone: 'ajizal', name: 'Olla del tucupí', icon: ICON.ajiNegro, in: { ground_aji: 2 }, out: { aji_negro: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.48' },
+  { id: 'aji_field', zone: 'ajizal', name: 'Ajizal', icon: ICON.ajiPlant, infinite: true, out: { aji: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.48' },
+  { id: 'aji_washer', zone: 'ajizal', name: 'Lavadero de ají', icon: ICON.ajiPeppers, in: { aji: 1 }, out: { washed_aji: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.48' },
+  { id: 'aji_grinder', zone: 'ajizal', name: 'Molino de ají', icon: ICON.groundAji, in: { washed_aji: 2 }, out: { ground_aji: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.48' },
+  { id: 'tucupi_pot', zone: 'ajizal', name: 'Olla del tucupí', icon: ICON.ajiNegro, in: { ground_aji: 2 }, out: { aji_negro: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.48' },
   { id: 'aji_packer', zone: 'ajizal', name: 'Envasadora de ají negro', icon: ICON.ajiBox, in: { aji_negro: 1 }, out: { aji_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.48' },
 
   // Amazonas · El Lago (v3.49): el pirarucú se pesca en canoa en los lagos de Tarapoto, se limpia y se reparte entre
@@ -398,10 +398,10 @@ export const STATIONS = [
 
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
-  { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },
-  { id: 'caney', zone: 'tabacal', name: 'Caney de curado', icon: '🛖', in: { tobacco_leaf: 1 }, out: { cured_leaf: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.1' },
-  { id: 'stripper', zone: 'tabacal', name: 'Despalilladora', icon: '✂️', in: { cured_leaf: 2 }, out: { stripped_leaf: 1 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.1' },
-  { id: 'tobacco_piles', zone: 'tabacal', name: 'Pilones de fermentación', icon: '♨️', in: { stripped_leaf: 2 }, out: { fermented_tobacco: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.1' },
+  { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },
+  { id: 'caney', zone: 'tabacal', name: 'Caney de curado', icon: '🛖', in: { tobacco_leaf: 1 }, out: { cured_leaf: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.1' },
+  { id: 'stripper', zone: 'tabacal', name: 'Despalilladora', icon: '✂️', in: { cured_leaf: 2 }, out: { stripped_leaf: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.1' },
+  { id: 'tobacco_piles', zone: 'tabacal', name: 'Pilones de fermentación', icon: '♨️', in: { stripped_leaf: 2 }, out: { fermented_tobacco: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.1' },
   { id: 'cigar_roller', zone: 'tabacal', name: 'Torcedores', icon: '🤲', in: { fermented_tobacco: 1 }, out: { cigar: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.1' },
 
   // Santander · La Fiquera (v3.2). De la penca sale la fibra, que se reparte como la leche de la

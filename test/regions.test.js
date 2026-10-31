@@ -130,9 +130,14 @@ test('el Tabacal se abre al completar la Guayabera y su cadena tuerce tabacos si
   for (let t = 0; t < 300; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
   assert.ok((game.state.stats.sold.cigar ?? 0) > 0, 'vende tabaco torcido');
-  // A igual nivel la cadena cuadra: ninguna estación le quita el paso a la siguiente.
+  // A igual nivel la cadena cuadra: ninguna estación le quita el paso a la siguiente. Desde la v3.67 el
+  // tabaco fermentado sale un 25 % más que lo que tuerce la Torcedora: esa parte es la de la Ruta del tabaco
+  // a la Fiquera (todavía cerrada), y mientras tanto se vende.
   const { rows } = analyzeChain(game.state, 'tabacal');
-  for (const row of rows.filter((r) => r.children.length)) assert.ok(row.diverted < 1e-9, `${row.id} desvía ${row.diverted}/s`);
+  for (const row of rows.filter((r) => r.children.length)) {
+    const routeShare = row.id === 'tobacco_piles' ? row.output * 0.2 : 0;
+    assert.ok(row.diverted < routeShare + 1e-6, `${row.id} desvía ${row.diverted}/s`);
+  }
 });
 
 test('la Fiquera se abre con el Tabacal completo y arma tercios con el tabaco que llega por la ruta', async () => {

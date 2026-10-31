@@ -616,6 +616,7 @@ export const COST_GROWTH = 1.15;
 | v3.64 ✅ | Política de privacidad (web y resumen en ⚙️), la letra Fredoka dentro del juego (sin conexiones externas) y la ficha de Google Play (`store/`: textos, capturas y formularios) | Publicación |
 | v3.65 ✅ | Tradiciones contadas con cuidado (política de Familias): tabaco torcido sin encender, láminas de bebidas por cómo se hacen, los uitoto sin la coca | Publicación |
 | v3.66 ✅ | Lo que pidieron los testers: el nombre de cada ícono al tocarlo, la bodega por producto (pestaña del Despacho), la etiqueta 📦 de cada estación en la cadena, volumen de música y sonidos (música al 40 %) y las regiones en «Cómo se juega» | Claridad |
+| v3.67 ✅ | El mapa primero (región y zona resaltadas, viaje animado entre zonas y regiones, Tolima y Bogotá «Próximamente»); regiones sin fugas al máximo (×1,5 la primera zona y ×1,25 la segunda); menú con Acerca de; tocar fuera cierra; objetivos completos; eventos plegables y ruta exacta en el tablero | Claridad |
 | v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía) | Comodidad |
 
 **Cómo se conectan las zonas:** ver §4b.

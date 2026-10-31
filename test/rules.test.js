@@ -56,9 +56,11 @@ test('al nivel 100 cada estación produce una potencia de 2 por segundo', async 
   assert.equal(MAX_LEVEL, 100);
   const playable = new Set(ZONE_LIST.flatMap((z) => [...z.chain, ...z.plots.map((p) => p.stationId)]));
   for (const def of STATIONS.filter((s) => playable.has(s.id))) {
+    // Desde la v3.67, las zonas que abastecen dos rutas a la vez rinden ×1,5 al final de su cadena (la primera
+    // de cada región) o ×1,25 (la segunda), para que con todo al máximo alcance para todas.
     const rate = stationOutputRate(def, 100);
-    const exp = Math.log2(rate);
-    assert.ok(Math.abs(exp - Math.round(exp)) < 1e-9, `${def.id}: ${rate}/s al nivel 100`);
+    const ok = [1, 1.5, 1.25].some((k) => Math.abs(Math.log2(rate / k) - Math.round(Math.log2(rate / k))) < 1e-9);
+    assert.ok(ok, `${def.id}: ${rate}/s al nivel 100`);
   }
 });
 

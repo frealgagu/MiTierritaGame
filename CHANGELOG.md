@@ -1,5 +1,27 @@
 # Registro de cambios
 
+## v3.67.0 — El mapa primero, ventanas más cómodas y regiones sin fugas
+- **🗺️ El mapa, primero:** el botón de zonas abre el mapa de Colombia con tu región resaltada, que enseguida se ve de cerca con tu zona resaltada. La lista está en **📋 Lista**.
+  - **Al ir a otra zona** (al terminar una, o al elegirla en la lista o en el mapa) se ve el viaje: en la misma región, el muñequito camina hasta allá; a otra región, el mapa se aleja al país, se resalta la región nueva, se acerca y el muñequito llega caminando.
+  - **Gran Tolima 🎺** y **Bogotá y la Sabana 🏛️** aparecen como «Próximamente».
+- **Regiones sin fugas:** en las seis regiones después del Eje Cafetero, con todo al máximo, algunas estaciones mandaban producto a la bodega aunque tuvieran a dónde llevarlo. La primera y la segunda zona de cada región no producían lo suficiente para su propia zona y para las rutas a la vez. Ahora rinden lo justo, ×1,5 la primera (la Cortadora de la Guayabera y sus parecidas sacan 3 de cada 4) y ×1,25 la segunda (toda su cadena va más rápido), y con todo al máximo no se escapa nada, como en el Eje Cafetero.
+- **Ventanas:** tocar fuera de una ventana la cierra, y tocar el mapa fuera del panel de una estación también lo cierra.
+- **Menú ⚙️:**
+  - Una ✕ arriba en vez de «Seguir jugando» y **Borrar partida** solo, al final.
+  - Estadísticas una por renglón: tiempo jugado, ganado en total y **productos vendidos** (de todas las regiones; antes, solo cerezas).
+  - Muestra la versión de verdad (antes decía siempre «v3.7.0»).
+  - Nuevo **ℹ️ Acerca de**: quién hace el juego, contacto, privacidad, créditos de la música de la región donde estás, la letra y el mapa.
+- **Música de Santander:** la guabina ya no lleva tiple y la guitarra va punteada; se parecía mucho al bambuco del Eje Cafetero.
+- **Estaciones:** al tocarlas siempre abren en ⚙️ Estación. Si lo que toca mejorar son sus arrieros o su ruta, esa pestaña parpadea.
+- **📋 Objetivos:** la lista completa de la zona, como las investigaciones: los cobrados en un renglón y todos los que faltan con su avance, para que ninguno cumplido quede escondido.
+- **Eventos:**
+  - El objetivo va un producto por renglón, siempre con alto de tres: ya se ve el tercero.
+  - En la ventana de eventos, el Renombre arriba y sus botones (Álbum, Decorar, Logros, Horas) en un renglón aparte; cada región se pliega, como en la lista de zonas.
+  - En la ventana del Renombre, las regiones en tres columnas y un botón **← Eventos** para volver.
+  - **La ruta en el tablero del evento** es exacta: va al nivel de su estación, dice cuánto llega (lo que gasta la estación y un 25 % más), cuánto cabe y qué parte llega; no se mejora aparte. Si el evento la corta (el derrumbe, la creciente), dice qué comprar.
+- **La cadena** explica el ⛔ de las ramas: lo que una rama no alcanza a procesar va a la bodega, que queda más lejos, y el transporte no da abasto con ese viaje.
+- **Texto:** «Ahora se trabajan las 24 horas».
+
 ## v3.66.0 — Lo que pidieron los testers
 - **¿Qué es este ícono?** Al tocar un ícono en cualquier texto del juego (el panel de una estación, la cadena, los objetivos, las investigaciones…) aparece su nombre: «Cereza de café», «Bolsas de café», «Monedas».
 - **📦 La bodega por dentro:** el Despacho tiene una pestaña nueva, **Bodega**, con lo que hay de cada producto de la zona, a cuánto se vende cada uno y cuánto vale todo. Lo que espera una ruta se marca con 🚌.
