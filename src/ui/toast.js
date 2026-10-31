@@ -1,7 +1,7 @@
 // Avisos en lo alto de la pantalla. Lo que dice la persona de una zona (`speech`, v3.3.2) dura según lo
 // largo del texto; un aviso corto que llega encima se muestra y después vuelve el comentario con lo que
-// le quedaba; otro comentario espera su turno (como mucho tres en fila). Desde la v3.67 no tapa los toques
-// (se cierra solo): una estación que quede debajo se puede tocar.
+// le quedaba; otro comentario espera su turno (como mucho tres en fila). Tocar el aviso lo cierra (en la
+// v3.67.1 dejaba pasar los toques, pero entonces no se podía quitar de encima de una ventana).
 const MS_PER_CHAR = 75; // unas 13 letras por segundo, más 3 s para empezar a leer
 const MAX_QUEUE = 3;
 

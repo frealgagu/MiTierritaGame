@@ -260,9 +260,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   max-width: calc(100vw - 32px);
   text-align: center;
   animation: pop2 0.2s ease-out;
-  /* No tapa los toques (v3.67): una estación debajo de un aviso o de lo que dice una persona se puede tocar
-     igual. Antes el aviso se tragaba el toque y parecía que la estación no respondía. */
-  pointer-events: none;
+  cursor: pointer; /* tocarlo lo cierra */
 }
 @keyframes pop2 { from { transform: translateX(-50%) translateY(-10px); opacity: 0; } }
 

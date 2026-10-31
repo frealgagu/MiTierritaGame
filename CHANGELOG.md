@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v3.67.3 — Los avisos se cierran al tocarlos y las zonas recuerdan cómo las dejaste
+- **Tocar lo que dice una persona, o un aviso de arriba, lo cierra otra vez**, como antes de la v3.67.1. En esa versión dejaban pasar los toques y no había cómo quitarlos de encima de una ventana (los objetivos, los logros, las investigaciones).
+- **🗺️ Zonas abre como lo dejaste:** si la última vez usaste el mapa, abre el mapa; si usaste **📋 Lista**, abre la lista. Al ir a otra zona (al terminar una, o con «Ir» en la lista) se sigue viendo el viaje en el mapa.
+
 ## v3.67.2 — La mejora recomendada lleva a donde dice
 - **La mejora recomendada, los objetivos y las investigaciones vuelven a abrir la pestaña que piden** (🐴 Arrieros o 🚌 la ruta), como antes de la v3.67.0; en esa versión abrían siempre ⚙️ Estación. Tocar la estación en el mapa sigue abriendo ⚙️ Estación.
 

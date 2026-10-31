@@ -39,7 +39,8 @@ export class ZonesView {
       this.mapModal.hidden = true;
       this.open();
     });
-    this.button.addEventListener('click', () => this.openMap());
+    // Abre como se dejó la última vez (v3.67.3): el mapa (lo de siempre) o la lista.
+    this.button.addEventListener('click', () => (this.root.state.settings.zonesView === 'list' ? this.open() : this.openMap()));
     document.getElementById('zones-close').addEventListener('click', () => this.close());
     this.modal.addEventListener('click', (e) => {
       if (e.target === this.modal) this.close();
@@ -57,12 +58,14 @@ export class ZonesView {
   }
 
   open() {
+    this.root.state.settings.zonesView = 'list';
     this.modal.hidden = false;
     this.html = null;
     this.update();
   }
 
   openMap() {
+    this.root.state.settings.zonesView = 'map';
     this.close();
     this.mapModal.hidden = false;
     this.map.show();
