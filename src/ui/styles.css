@@ -736,9 +736,6 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .about-head { display: flex; align-items: center; gap: 12px; margin: 4px 0 8px; }
 .about-head img { border-radius: 14px; flex: none; }
 .about-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; font-size: 0.92rem; line-height: 1.35; }
-/* La pestaña que hay que mirar (v3.67: los arrieros, cuando son ellos los que toca mejorar). */
-.tab.hint { animation: tab-hint 1s ease-in-out infinite; border-color: #e8b90f; }
-@keyframes tab-hint { 50% { background: #ffe082; transform: translateY(-2px); } }
 /* Objetivo ya cobrado (v3.67): un renglón tenue, sin barra. */
 .goal.claimed { grid-template-columns: 1fr auto; align-items: center; padding: 6px 10px; border-width: 1px; border-color: #cbbfa8; background: none; opacity: 0.7; }
 .goal.claimed .goal-text { font-size: 0.85rem; font-weight: 500; }

@@ -52,11 +52,11 @@ const listNames = (ids, article = false) => {
   return names.length > 1 ? `${names.slice(0, -1).join(', ')} y ${names.at(-1)}` : names[0];
 };
 // Con cuatro pestañas, las de la estación y el transporte muestran solo el ícono.
-const tabButtons = (tabs, active, hint = null) =>
+const tabButtons = (tabs, active) =>
   tabs
     .map(([key, icon, name]) => {
       const short = tabs.length > 3 && !key.startsWith('route:') ? 'short' : '';
-      return `<button class="tab ${short} ${active === key ? 'active' : ''} ${hint === key && active !== key ? 'hint' : ''}" data-tab="${key}" title="${name}">${icon}<span class="tab-name"> ${name}</span></button>`;
+      return `<button class="tab ${short} ${active === key ? 'active' : ''}" data-tab="${key}" title="${name}">${icon}<span class="tab-name"> ${name}</span></button>`;
     })
     .join('');
 const isBuilt = (state, id) => id.startsWith('dispatch') || id.startsWith('route:') || Boolean(state.stations[id]);
@@ -88,11 +88,9 @@ export class StationPanel {
   }
 
   // tab: 'station' | 'transport' | 'route:<ruta>' (estaciones que reciben un producto de otra zona)
-  // hint: una pestaña para señalar (la de los arrieros, cuando son ellos los que hay que mejorar).
-  open(id, tab = 'station', hint = null) {
+  open(id, tab = 'station') {
     this.id = id;
     this.tab = tab;
-    this.hint = hint;
     this.el.hidden = false;
     document.body.classList.add('panel-open');
     this.render();
@@ -148,7 +146,7 @@ export class StationPanel {
       icon: look.icon,
       title: look.title,
       subtitle: look.subtitle,
-      tabs: info.tabs ? tabButtons(tabsOf(this.game.state, this.id), this.tab, this.hint) : '',
+      tabs: info.tabs ? tabButtons(tabsOf(this.game.state, this.id), this.tab) : '',
       recipe: typeof info.recipe === 'function' ? info.recipe(this.game.state) : info.recipe,
       rows: info.rows.map((r) => `<div class="stat"><span>${r.label}</span><b><span data-ref="${r.key}"></span> <span class="next" data-ref="${r.key}Next"></span></b></div>`).join(''),
       milestone: `<div class="milestone-top"><span class="level-badge" data-ref="level"></span><span data-ref="milestoneText"></span></div>
@@ -164,7 +162,6 @@ export class StationPanel {
     for (const btn of this.el.querySelectorAll('[data-tab]')) {
       btn.addEventListener('click', () => {
         this.tab = btn.dataset.tab;
-        this.hint = null;
         this.render();
         this.update();
       });
@@ -225,7 +222,6 @@ export class StationPanel {
     for (const btn of this.el.querySelectorAll('[data-tab]')) {
       btn.addEventListener('click', () => {
         this.tab = btn.dataset.tab;
-        this.hint = null;
         this.render();
         this.update();
       });

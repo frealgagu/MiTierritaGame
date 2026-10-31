@@ -45,7 +45,7 @@ export class ChainView {
       const target = e.target.closest('[data-open]');
       if (target) {
         this.close();
-        this.onOpen(target.dataset.open, true);
+        this.onOpen(target.dataset.open);
       }
     });
   }
