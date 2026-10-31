@@ -121,7 +121,8 @@ async function start() {
   };
   // id puede ser 'farm', 'farm:transport' (pestaña de arrieros), 'dispatch:<zona>', 'route:<ruta>'
   // (pestaña 🚌 de la estación que abastece, o un panel suelto si se ve otra zona) o 'research:<id>'.
-  const select = (id) => {
+  // explicit: se eligió esa pestaña a propósito (el botón 🐴 Arrieros de la cadena): se abre ella misma.
+  const select = (id, explicit = false) => {
     const [stationId, part] = id.split(':');
     if (stationId === 'research' && board) return; // en el tablero no hay investigaciones
     // Una compra del evento (v3.8.2): se señala su botón en la barra del evento.
@@ -164,7 +165,8 @@ async function start() {
     scene.select(stationId);
     // Siempre en la pestaña de la estación (v3.67); si lo que toca mejorar son sus arrieros, esa pestaña
     // se señala (parpadea) en vez de abrirse sola.
-    panel.open(stationId, 'station', part === 'transport' ? 'transport' : null);
+    if (explicit && part === 'transport') panel.open(stationId, 'transport');
+    else panel.open(stationId, 'station', part === 'transport' ? 'transport' : null);
     // Al entrar a una estación suena su oficio (v3.3.2).
     sound.station(stationId);
   };

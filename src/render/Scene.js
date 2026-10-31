@@ -170,12 +170,27 @@ export class Scene {
     this.ambientTimer = 0;
   }
 
+  // La estación de un toque (v3.67): la de adelante cuyo terreno se tocó; si ninguno, la de adelante cuyo
+  // edificio (hasta su letrero) se tocó.
+  stationAt(global) {
+    const p = this.objects.toLocal(global);
+    const front = (list) => list.sort((a, b) => b[1].zIndex - a[1].zIndex)[0]?.[0] ?? null;
+    const views = Object.entries(this.stations).filter(([, v]) => v.parent);
+    return front(views.filter(([, v]) => v.footArea?.contains(p.x, p.y))) ?? front(views.filter(([, v]) => v.hitArea?.contains(p.x, p.y)));
+  }
+
   addStationView(id, view, labelHeight) {
     this.stations[id] = view;
     this.objects.addChild(view);
-    view.on('pointertap', () => {
-      if (!this.camera.dragged) this.onSelect(id === 'dispatch' ? `dispatch:${this.zone.id}` : id);
-    });
+    const select = (sid) => this.onSelect(sid === 'dispatch' ? `dispatch:${this.zone.id}` : sid);
+    // Se toca todo el edificio, hasta donde va su letrero, y también el letrero (v3.67). Si el toque cae en
+    // dos estaciones (el techo de una tapa el terreno de la de atrás), gana la del terreno tocado.
+    view.on('pointertap', (e) => !this.camera.dragged && select(this.stationAt(e.global) ?? id));
+    view.setHitHeight?.(labelHeight ?? 60);
+    const pick = () => !this.camera.dragged && select(id);
+    view.label.eventMode = 'static';
+    view.label.cursor = 'pointer';
+    view.label.on('pointertap', pick);
     const a = view.anchorPoint(labelHeight);
     view.label.position.set(a.x, a.y);
     view.status.position.set(a.x, a.y - 30);

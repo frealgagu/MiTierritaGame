@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## v3.67.1 — Tocar las estaciones sin fallar
+- **Las estaciones responden al toque** en todo su dibujo: el terreno, el edificio completo (el techo, los tanques, la casa del Cafetal) y su letrero con el nombre. Antes solo respondía el terreno de abajo; en el Cafetal había que tocar las matas. Si un toque cae en dos estaciones, gana la del terreno tocado.
+- **Los globos de lo que dicen las personas y los avisos de arriba ya no tapan los toques**: si una estación queda debajo, se puede tocar igual (antes el toque se perdía y parecía que no respondía). Se cierran solos, como siempre.
+- **Un toque con el dedo un poco movido ya no se toma como arrastre del mapa.**
+- Con el panel de una estación abierto, tocar otra la abre, y tocar el mapa vacío lo cierra.
+- **Desde la cadena, el botón 🐴 Arrieros abre la pestaña de los arrieros** (al tocar la estación en el mapa sigue abriendo ⚙️ Estación).
+- **La segunda zona de cada región ya no vende nada con todo al máximo**, como las del Eje Cafetero: todo lo que produce se lo lleva la ruta a la zona final. Allá, la estación que usa su producto (el Café del parque con los tabacos, el Restaurante de la muralla con las cocadas, la Terraza de la plaza con las canastas de cerveza, el Kiosco del parque con las cajas de jugo, la Cevichería con las cajas de aliño y el Restaurante de la ribera con las cajas de ají) gasta 4 por tanda en vez de 1.
+- **Mejora recomendada:** con todo al mismo nivel, en la primera zona de las regiones nuevas recomendaba subir la última estación (la Cajonera). Ahora, como en el Eje Cafetero, recomienda el cultivo. Lo que se lleva una ruta cuenta primero para la ruta, y la parte de una ruta que todavía no abre no cuenta como atraso.
+
 ## v3.67.0 — El mapa primero, ventanas más cómodas y regiones sin fugas
 - **🗺️ El mapa, primero:** el botón de zonas abre el mapa de Colombia con tu región resaltada, que enseguida se ve de cerca con tu zona resaltada. La lista está en **📋 Lista**.
   - **Al ir a otra zona** (al terminar una, o al elegirla en la lista o en el mapa) se ve el viaje: en la misma región, el muñequito camina hasta allá; a otra región, el mapa se aleja al país, se resalta la región nueva, se acerca y el muñequito llega caminando.

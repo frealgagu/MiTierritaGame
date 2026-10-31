@@ -43,6 +43,7 @@ export class StationView extends Container {
     this.eventMode = 'static';
     this.cursor = 'pointer';
     this.hitArea = new Polygon(isoPoly([[x, y, 0], [x + w, y, 0], [x + w, y + h, 0], [x, y + h, 0]]));
+    this.footArea = this.hitArea; // solo el terreno (ver Scene.stationAt)
     this.highlight = new Graphics();
     this.addChild(this.highlight);
     this.selected = false;
@@ -74,6 +75,19 @@ export class StationView extends Container {
   setStatus(icon) {
     this.status.visible = Boolean(icon);
     if (icon && this.status.text !== icon) this.status.text = icon;
+  }
+
+  // Zona que se puede tocar (v3.67): la huella y todo lo que se levanta sobre ella hasta `h` (el edificio, los
+  // árboles), no solo el terreno. Antes había que tocar el piso de la estación (en el Cafetal, las matas de
+  // abajo) y un toque en el techo no hacía nada.
+  setHitHeight(h) {
+    const { x, y, w, h: d } = this.foot;
+    const pts = [];
+    for (const z of [0, h]) for (const [px, py] of [[x, y], [x + w, y], [x + w, y + d], [x, y + d]]) {
+      const p = iso(px, py, z);
+      pts.push([p.x, p.y]);
+    }
+    this.hitArea = new Polygon(hull(pts).flat());
   }
 
   // Punto de anclaje para etiquetas y efectos.
@@ -731,3 +745,20 @@ export class PlotView extends StationView {
     if (this.available) this.glow.alpha = 0.5 + Math.sin(t * 4) * 0.5;
   }
 }
+
+// Envolvente convexa de unos puntos [x, y] (cadena monótona).
+function hull(points) {
+  const p = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const half = (list) => {
+    const out = [];
+    for (const q of list) {
+      while (out.length >= 2 && cross(out.at(-2), out.at(-1), q) <= 0) out.pop();
+      out.push(q);
+    }
+    out.pop();
+    return out;
+  };
+  return [...half(p), ...half([...p].reverse())];
+}
+

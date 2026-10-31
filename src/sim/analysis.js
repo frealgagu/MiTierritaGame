@@ -2,10 +2,10 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { RESEARCH } from '../data/research.js';
 import { dispatchRate, maxLevel, stationRate } from './rules.js';
-import { PARENT, chainOf, consumers, sourceOf, zoneOf } from './chain.js';
+import { PARENT, branchShare, chainOf, consumers, sourceOf, zoneOf } from './chain.js';
 import { routeActive, routeRate, routeStations, stationImportRate } from './routes.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
-import { exportsOf, teamCapacity } from './transport.js';
+import { exportsOf, pendingRoutes, teamCapacity } from './transport.js';
 import { COMPOST_VALUE, WASHED_PER_COMPOST, dispatchMult, jeepCount, productValue, speedMult } from './modifiers.js';
 import { PRODUCTS } from '../data/products.js';
 import { canPay, researchLocked } from './upgrades.js';
@@ -134,12 +134,25 @@ function analyze(state, zoneId, withExports, depth, memo) {
     if (children.length) {
       const caps = children.map((c) => capacityOf(c));
       const exportCaps = exportsHere.map((r) => Math.min(routeDemandRate(state, r.id), routeRate(state, r.id)));
-      const nextCapacity = [...caps, ...exportCaps].reduce((a, b) => a + b, 0);
+      // La parte de una ruta que todavía no abre (v3.67) no es de las ramas: se vende mientras tanto. Así subir
+      // una rama por encima de las demás no parece rendir más (la Cajonera se llevaba lo de la Ruta del
+      // bocadillo antes de abrir el Hato).
+      const reserved = routes && pendingRoutes(state, id).length ? output * Math.max(0, 1 - children.reduce((n, c) => n + branchShare(id, c), 0)) : 0;
+      const childLimit = Math.min(caps.reduce((a, b) => a + b, 0), output - reserved);
+      row.reserved = reserved;
+      const nextCapacity = childLimit + exportCaps.reduce((a, b) => a + b, 0);
       row.toNext = Math.min(output, transport, nextCapacity);
-      // Cada una recibe en proporción a lo que procesa (las mulas van a la de la entrada más vacía).
-      children.forEach((c, k) => (allocated[c] = nextCapacity > 0 ? (row.toNext * caps[k]) / nextCapacity : 0));
+      // Primero las rutas (v3.67): lo que piden ya lo cuenta su zona de destino, y la estación les guarda su
+      // parte en la bodega. El resto, a las ramas, en proporción a lo que procesa cada una (las mulas van a la
+      // de la entrada más vacía). Antes todo se repartía en proporción, y subir la estación de aquí (la
+      // Cajonera) parecía rendir más porque le quitaba producto a la ruta.
+      const exportCap = exportCaps.reduce((a, b) => a + b, 0);
+      const toExports = Math.min(row.toNext, exportCap);
+      const childCap = caps.reduce((a, b) => a + b, 0);
+      const toChildren = Math.min(row.toNext - toExports, childLimit);
+      children.forEach((c, k) => (allocated[c] = childCap > 0 ? (toChildren * caps[k]) / childCap : 0));
       exportsHere.forEach((r, k) => {
-        const units = nextCapacity > 0 ? (row.toNext * exportCaps[k]) / nextCapacity : 0;
+        const units = exportCap > 0 ? (toExports * exportCaps[k]) / exportCap : 0;
         exported[r.product] = (exported[r.product] ?? 0) + units;
       });
       const left = output - row.toNext;
@@ -191,7 +204,8 @@ function analyze(state, zoneId, withExports, depth, memo) {
   const jammed = rows.find((r) => r.lost > r.output * LOSS && r.transport < r.output * (1 - LOSS));
   if (jammed) bottleneck = `${jammed.id}:transport`;
   for (const row of bottleneck ? [] : rows) {
-    const shortfall = row.children.length ? row.output - row.toNext : row.lost;
+    // (Lo que espera una ruta que todavía no abre no es un faltante: se vende mientras tanto.)
+    const shortfall = row.children.length ? row.output - row.toNext - (row.reserved ?? 0) : row.lost;
     if (shortfall <= row.output * LOSS) continue;
     bottleneck = row.children.length && row.nextCapacity <= row.transport ? slowestConsumer(state, row.children, rows) : `${row.id}:transport`;
     break;

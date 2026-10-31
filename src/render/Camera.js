@@ -1,7 +1,8 @@
 // Cámara: arrastrar para mover, rueda o pellizco para zoom.
 const MIN_ZOOM = 0.45;
 const MAX_ZOOM = 2.2;
-const DRAG_THRESHOLD = 6; // px antes de considerar que es arrastre y no toque
+const DRAG_THRESHOLD = 12; // px antes de considerar que es arrastre y no toque (v3.67: eran 6, y en un
+// teléfono el dedo se mueve un poco al tocar: el toque se tomaba como arrastre y la estación no respondía)
 
 export class Camera {
   constructor(world, canvas, bounds) {
