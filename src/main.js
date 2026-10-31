@@ -183,6 +183,7 @@ async function start() {
     setLook(root.profile, REGION_OF_ZONE[zoneId]);
     scene = new Scene(app, active, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
+    scene.onBackground = () => panel.id && panel.close();
     scene.onTalk = (z) => chatter?.talk(z);
     if (import.meta.env.DEV) window.__mitierrita = { game: active, root: game, games, scene, panel, select, music };
   };
@@ -252,6 +253,7 @@ async function start() {
     setLook(root.profile, REGION_OF_ZONE[zoneId]);
     scene = new Scene(app, eg, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
+    scene.onBackground = () => panel.id && panel.close();
     scene.onTalk = (z) => chatter?.talk(z);
     useGame(eg);
     document.body.classList.add('event-mode');
@@ -279,6 +281,7 @@ async function start() {
     scene.destroy();
     scene = new Scene(app, board.game, sound, ZONES_BY_ID[board.zone]);
     scene.onSelect = select;
+    scene.onBackground = () => panel.id && panel.close();
     scene.onTalk = (z) => chatter?.talk(z);
   });
   for (const [id, tab] of [['album-btn', 'album'], ['decor-btn', 'decor'], ['logros-btn', 'logros'], ['offline-btn', 'offline']]) {

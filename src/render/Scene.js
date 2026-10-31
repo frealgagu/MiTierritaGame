@@ -54,6 +54,14 @@ export class Scene {
     this.restSince = [null, null];
     this.jeepPhase = 'idle';
     this.onSelect = () => {};
+    // Tocar el mapa donde no hay nada (v3.67): main.js cierra el panel de la estación.
+    this.onBackground = () => {};
+    this.app.stage.eventMode = 'static';
+    this.app.stage.hitArea = this.app.screen;
+    this.bgTap = (e) => {
+      if (e.target === this.app.stage && !this.camera?.dragged) this.onBackground();
+    };
+    this.app.stage.on('pointertap', this.bgTap);
 
     this.background = new Background();
     this.world = new Container();
@@ -302,6 +310,7 @@ export class Scene {
 
   // Quita la escena del escenario y suelta sus eventos (al cambiar de zona).
   destroy() {
+    this.app.stage.off('pointertap', this.bgTap);
     for (const off of this.unsubs) off();
     this.camera.destroy();
     for (const child of this.app.stage.removeChildren()) child.destroy({ children: true });
