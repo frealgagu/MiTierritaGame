@@ -344,7 +344,8 @@ async function start() {
       }
       // La región que sigue, si ya estaba abierta (al completar de nuevo la última zona tras reiniciar).
       const after = !ZONES_BY_ID[zone].next && REGIONS.find((r) => r.unlock?.zone === zone && regionState(root, r.id));
-      showVictory(g.state, zone, (next) => showZone(next), opened, after?.id);
+      // Ir a la zona que sigue (v3.67): con el viaje en el mapa.
+      showVictory(g.state, zone, (next) => zones.travel(next), opened, after?.id);
     });
     g.bus.on('mastered', () => {
       // Si llega al cobrar el primer final (ya estaba todo al 100), primero la pantalla del final de

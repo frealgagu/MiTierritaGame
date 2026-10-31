@@ -752,3 +752,13 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .events-renown-tabs { margin: 0 0 10px; }
 .events-renown-tabs .tab { flex: 1; }
 .renown-back { width: auto; flex: none; padding: 4px 10px; font-size: 0.85rem; margin-right: 6px; }
+
+/* El mapa (v3.67): la región resaltada en el país, las que vienen («Próximamente») y la zona de destino. */
+.zones-map-dept.lit { stroke: #3a2418; stroke-width: 1.6; }
+.zones-map-dept.soft { opacity: 0.55; }
+.zones-map-dept.soon { stroke-dasharray: 3 2; }
+.zones-map-label.soon { opacity: 0.85; cursor: pointer; }
+.zones-map-label .soon-tag { fill: #8a6d3b; font-style: italic; }
+.zones-map-zone.target .dot { fill: #ffe082; animation: map-target 0.8s ease-in-out infinite; }
+@keyframes map-target { 50% { opacity: 0.55; } }
+.zones-list-btn { width: auto; flex: none; margin-left: auto; margin-right: 6px; padding: 4px 10px; font-size: 0.85rem; }

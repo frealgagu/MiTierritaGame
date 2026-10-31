@@ -19,7 +19,8 @@ export class ZonesView {
     this.body = document.getElementById('zones-body');
     this.button = document.getElementById('zones-btn');
     this.badge = document.getElementById('zones-badge');
-    // El mapa de Colombia (v3.60): en grande, en su propia ventana; al cerrarlo se vuelve a la lista.
+    // El mapa de Colombia (v3.60): en grande, en su propia ventana. Desde la v3.67 es lo que abre el botón 🗺️;
+    // la lista se ve con «📋 Lista».
     this.mapModal = document.getElementById('zones-map-modal');
     this.map = new ZoneMap(document.getElementById('zones-map'), {
       root,
@@ -32,13 +33,13 @@ export class ZonesView {
       },
     });
     document.getElementById('zones-map-btn').addEventListener('click', () => this.openMap());
-    document.getElementById('zones-map-close').addEventListener('click', () => {
+    document.getElementById('zones-map-close').addEventListener('click', () => !this.map.busy && (this.mapModal.hidden = true));
+    document.getElementById('zones-list-btn').addEventListener('click', () => {
       if (this.map.busy) return;
       this.mapModal.hidden = true;
       this.open();
     });
-    this.mapModal.addEventListener('click', (e) => e.target === this.mapModal && !this.map.busy && (this.mapModal.hidden = true));
-    this.button.addEventListener('click', () => this.open());
+    this.button.addEventListener('click', () => this.openMap());
     document.getElementById('zones-close').addEventListener('click', () => this.close());
     this.modal.addEventListener('click', (e) => {
       if (e.target === this.modal) this.close();
@@ -51,10 +52,7 @@ export class ZonesView {
         return;
       }
       const btn = e.target.closest('[data-zone]');
-      if (btn) {
-        this.close();
-        this.onGo(btn.dataset.zone);
-      }
+      if (btn) this.travel(btn.dataset.zone);
     });
   }
 
@@ -68,6 +66,15 @@ export class ZonesView {
     this.close();
     this.mapModal.hidden = false;
     this.map.show();
+  }
+
+  // Ir a otra zona mostrando el viaje en el mapa (v3.67): al elegirla en la lista o al terminar una zona.
+  travel(zoneId) {
+    if (this.map.busy) return;
+    this.close();
+    this.mapModal.hidden = false;
+    this.map.show();
+    this.map.travel(zoneId);
   }
 
   close() {

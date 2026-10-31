@@ -6,14 +6,22 @@ import { regionState } from '../sim/regions.js';
 import { FONT } from '../render/palette.js';
 
 // El mapa de Colombia del selector de zonas (v3.60): primero el país, con cada región del juego de su color;
-// al tocar una región se acerca y muestra sus zonas, cada una en el pueblo que la inspira. Al elegir otra zona,
-// un muñequito camina hasta allá (si es de otra región, por el mapa del país) y luego se va a la zona.
+// al tocar una región se acerca y muestra sus zonas, cada una en el pueblo que la inspira. Desde la v3.67 es lo
+// primero que se ve en 🗺️ Zonas: el país con la región de ahora resaltada, que enseguida se ve de cerca con la
+// zona de ahora resaltada. Al ir a otra zona, un muñequito camina hasta allá (ver travel).
 //   root: la partida principal   getZone: la zona que se ve   onGo(zona): ir a la zona   say(texto): un aviso
 const NS = 'http://www.w3.org/2000/svg';
 const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a' };
 const LAND = '#e8dcc3'; // los departamentos que no son de ninguna región del juego
 const LOCKED = '#cfc6b4'; // las regiones que todavía no se abren
 const ZOOM_MS = 650;
+const PEEK_MS = 800; // al abrir el mapa, cuánto se ve el país antes de acercarse a la región donde se está
+// Las regiones que vienen (v3.67), en los departamentos que todavía no son de ninguna: «Próximamente».
+const SOON = [
+  { id: 'tolima', name: 'Tolima Grande', icon: '🎺', depts: ['Tolima', 'Huila'], color: '#efd9c0' },
+  { id: 'bogota', name: 'Bogotá y la Sabana', icon: '🏛️', depts: ['Cundinamarca', 'Bogotá'], color: '#e3d6ea' },
+];
+const SOON_OF = Object.fromEntries(SOON.flatMap((r) => r.depts.map((d) => [d, r])));
 
 const proj = ([lat, lon]) => [(lon - MAP_ORIGIN[0]) * MAP_SCALE, (MAP_ORIGIN[1] - lat) * MAP_SCALE];
 
@@ -37,6 +45,7 @@ const viewOf = (b, pad) => ({ x: b.x0 - pad, y: b.y0 - pad, w: b.x1 - b.x0 + pad
 const DEPT_BOX = Object.fromEntries(DEPARTMENTS.map((d) => [d.id, pathBox(d.d)]));
 const COUNTRY = union(Object.values(DEPT_BOX));
 const REGION_BOX = Object.fromEntries(REGIONS.map((r) => [r.id, union(DEPARTMENTS.filter((d) => d.region === r.id).map((d) => DEPT_BOX[d.id]))]));
+const SOON_BOX = Object.fromEntries(SOON.map((r) => [r.id, union(DEPARTMENTS.filter((d) => r.depts.includes(d.name)).map((d) => DEPT_BOX[d.id]))]));
 
 // Dónde va cada zona en el mapa de su región: en su pueblo, pero si dos quedan muy juntas (Barichara y San
 // Gil) se separan hasta que quepan sus marcas. La región se mira de cerca alrededor de sus zonas (en los
@@ -98,22 +107,34 @@ export class ZoneMap {
     this.depts = el('g', {}, this.svg);
     this.paths = DEPARTMENTS.map((d) => {
       const p = el('path', { d: d.d, class: 'zones-map-dept' }, this.depts);
-      p.addEventListener('click', () => this.pickRegion(d.region));
+      p.addEventListener('click', () => (SOON_OF[d.name] ? this.soon(SOON_OF[d.name]) : this.pickRegion(d.region)));
       return p;
     });
+    this.highlight = null; // la región resaltada en el país (la de ahora, o la de destino en un viaje)
+    this.peek = null; // el acercamiento automático pendiente al abrir
     this.overlay = el('g', { style: `font-family: ${FONT}` }, this.svg);
     this.vb = viewOf(COUNTRY, 12);
     this.applyView();
   }
 
-  // Al abrir el mapa: el país, con las regiones abiertas de color.
+  // Al abrir el mapa (v3.67): el país con la región de ahora resaltada y, enseguida, de cerca, con la zona de
+  // ahora resaltada.
   show() {
     if (this.busy) return;
+    clearTimeout(this.peek);
     this.region = null;
+    this.highlight = REGION_OF_ZONE[this.getZone()];
     this.vb = viewOf(COUNTRY, 12);
     this.applyView();
     this.paint();
     this.drawOverlay();
+    this.peek = setTimeout(() => {
+      if (!this.busy && !this.region && this.container.isConnected && this.container.offsetParent) this.zoomTo(this.highlight);
+    }, PEEK_MS);
+  }
+
+  soon(r) {
+    this.say(`${r.icon} ${r.name} llega próximamente al juego.`);
   }
 
   open(regionId) {
@@ -122,10 +143,15 @@ export class ZoneMap {
 
   paint() {
     DEPARTMENTS.forEach((d, i) => {
-      const color = !d.region ? LAND : this.open(d.region) ? COLORS[d.region] : LOCKED;
+      const color = SOON_OF[d.name] ? SOON_OF[d.name].color : !d.region ? LAND : this.open(d.region) ? COLORS[d.region] : LOCKED;
       this.paths[i].setAttribute('fill', color);
       this.paths[i].classList.toggle('dim', Boolean(this.region && d.region !== this.region));
       this.paths[i].classList.toggle('pick', Boolean(d.region && !this.region));
+      // En el país, la región resaltada (la de ahora o la de destino) se marca y las demás se apagan un poco.
+      const lit = !this.region && this.highlight;
+      this.paths[i].classList.toggle('lit', Boolean(lit && d.region === this.highlight));
+      this.paths[i].classList.toggle('soft', Boolean(lit && d.region !== this.highlight));
+      this.paths[i].classList.toggle('soon', Boolean(SOON_OF[d.name]));
     });
   }
 
@@ -157,6 +183,7 @@ export class ZoneMap {
   }
 
   pickRegion(regionId) {
+    clearTimeout(this.peek);
     if (this.busy || this.region) return;
     if (!regionId) return this.say('🗺️ Esta parte del país todavía no está en el juego.');
     if (!this.open(regionId)) {
@@ -184,6 +211,15 @@ export class ZoneMap {
         el('text', { 'font-size': 4.4 * u, 'text-anchor': 'middle', y: 4 * u, class: 'name', 'stroke-width': 1.2 * u }, label).textContent = r.name;
         label.addEventListener('click', () => this.pickRegion(r.id));
       }
+      // Las que vienen: su nombre y «Próximamente».
+      for (const r of SOON) {
+        const b = SOON_BOX[r.id];
+        const label = el('g', { class: 'zones-map-label soon', transform: `translate(${(b.x0 + b.x1) / 2} ${(b.y0 + b.y1) / 2})` }, g);
+        el('text', { 'font-size': 4.6 * u, 'text-anchor': 'middle', y: -1.2 * u }, label).textContent = r.icon;
+        el('text', { 'font-size': 2.9 * u, 'text-anchor': 'middle', y: 2.6 * u, class: 'name', 'stroke-width': 0.9 * u }, label).textContent = r.name;
+        el('text', { 'font-size': 2.5 * u, 'text-anchor': 'middle', y: 5.6 * u, class: 'name soon-tag', 'stroke-width': 0.8 * u }, label).textContent = 'Próximamente';
+        label.addEventListener('click', () => this.soon(r));
+      }
       // Dónde se está: el alfiler en la zona de ahora.
       const [x, y] = proj(ZONE_GEO[here]);
       el('text', { x, y, 'font-size': 6.5 * u, 'text-anchor': 'middle', class: 'zones-map-pin' }, g).textContent = '📍';
@@ -199,7 +235,7 @@ export class ZoneMap {
       const st = state.zones[z];
       const [x, y] = ZONE_POS[z];
       const cls = ['zones-map-zone', st?.unlocked ? '' : 'locked', st?.complete ? 'done' : '', z === here ? 'here' : ''].join(' ');
-      const m = el('g', { class: cls, transform: `translate(${x} ${y})` }, g);
+      const m = el('g', { class: cls, transform: `translate(${x} ${y})`, 'data-zone': z }, g);
       if (z === here) el('circle', { r: 6.2 * u, class: 'ring' }, m);
       el('circle', { r: 4.6 * u, class: 'dot', 'stroke-width': 0.6 * u }, m);
       el('text', { 'font-size': 4.6 * u, 'text-anchor': 'middle', y: 1.6 * u }, m).textContent = st?.unlocked ? zone.icon : '🔒';
@@ -217,31 +253,68 @@ export class ZoneMap {
       return this.say(`🔒 ${ZONES_BY_ID[z].name} se abre al completar ${ZONES_BY_ID[zones[zones.indexOf(z) - 1]].name}.`);
     }
     if (z === this.getZone()) return this.say(`📍 Ya estás en ${ZONES_BY_ID[z].name}.`);
-    this.walkTo(z);
+    this.travel(z);
   }
 
-  // El muñequito camina de la zona de ahora a la elegida: en el mapa de la región si es de la misma; si no, se
-  // aleja al país y camina por el mapa. Al llegar, se va a la zona.
-  async walkTo(target) {
+  // El viaje a otra zona (v3.67, también al terminar una zona o al elegirla en la lista). En la misma región,
+  // el muñequito camina por el mapa de la región. A otra región: la región de ahora, se aleja al país, se
+  // resalta la región nueva, se acerca a ella y el muñequito llega caminando a la zona. Al llegar, se va.
+  async travel(target) {
+    clearTimeout(this.peek);
     this.busy = true;
     const from = this.getZone();
-    const same = REGION_OF_ZONE[from] === REGION_OF_ZONE[target] && this.region === REGION_OF_ZONE[target];
-    if (!same) await this.zoomTo(null);
-    const a = same ? ZONE_POS[from] : proj(ZONE_GEO[from]);
-    const b = same ? ZONE_POS[target] : proj(ZONE_GEO[target]);
-    const u = this.vb.w / 100;
-    if (!same) {
-      // El destino, marcado.
-      el('text', { x: b[0], y: b[1], 'font-size': 5 * u, 'text-anchor': 'middle', class: 'zones-map-pin' }, this.overlay).textContent = ZONES_BY_ID[target].icon;
+    const here = REGION_OF_ZONE[from];
+    const there = REGION_OF_ZONE[target];
+    if (here === there) {
+      if (this.region !== here) await this.zoomTo(here);
+      await this.walk(ZONE_POS[from], ZONE_POS[target], target);
+    } else {
+      // Si ya se está mirando la región de destino (se eligió la zona ahí), no hace falta el recorrido.
+      if (this.region !== there) {
+        if (this.region !== here) {
+          this.highlight = here;
+          await this.zoomTo(here);
+          await wait(450);
+        }
+        this.highlight = here;
+        await this.zoomTo(null);
+        await wait(350);
+        this.highlight = there;
+        this.paint();
+        await wait(750);
+        await this.zoomTo(there);
+      }
+      // Entra caminando desde el borde del mapa, del lado de donde viene.
+      await this.walk(this.edgeToward(proj(ZONE_GEO[from]), ZONE_POS[target]), ZONE_POS[target], target);
     }
+    await wait(250);
+    this.busy = false;
+    this.onGo(target);
+  }
+
+  // El punto del borde de lo que se ve, en la dirección de `from` vista desde `to`.
+  edgeToward(from, to) {
+    const v = this.vb;
+    const dx = from[0] - to[0];
+    const dy = from[1] - to[1];
+    const kx = dx ? (dx > 0 ? v.x + v.w - to[0] : v.x - to[0]) / dx : Infinity;
+    const ky = dy ? (dy > 0 ? v.y + v.h - to[1] : v.y - to[1]) / dy : Infinity;
+    const k = Math.min(Math.abs(kx), Math.abs(ky), 1) * 0.92;
+    return [to[0] + dx * k, to[1] + dy * k];
+  }
+
+  // El muñequito camina de a a b (en lo que se ve), con el camino punteado; la zona de destino se resalta.
+  async walk(a, b, target) {
+    const u = this.vb.w / 100;
+    this.overlay.querySelector(`[data-zone="${target}"]`)?.classList.add('target');
     el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], class: 'zones-map-road', 'stroke-width': 0.7 * u, 'stroke-dasharray': `${1.4 * u} ${1.1 * u}` }, this.overlay);
     const walker = el('g', { class: 'zones-map-walker' }, this.overlay);
     el('ellipse', { rx: 2.6 * u, ry: 0.9 * u, class: 'shadow' }, walker);
-    const body = el('text', { 'font-size': (same ? 7 : 10) * u, 'text-anchor': 'middle' }, walker);
+    const body = el('text', { 'font-size': 7 * u, 'text-anchor': 'middle' }, walker);
     body.textContent = '🚶';
     // El emoji mira a la izquierda: hacia la derecha se voltea.
     const flip = b[0] > a[0] ? -1 : 1;
-    const ms = 900 + Math.min(1200, Math.hypot(b[0] - a[0], b[1] - a[1]) / u * 22);
+    const ms = 900 + Math.min(1200, (Math.hypot(b[0] - a[0], b[1] - a[1]) / u) * 22);
     const t0 = performance.now();
     await new Promise((ok) => {
       const step = (now) => {
@@ -249,7 +322,7 @@ export class ZoneMap {
         const k = ease(t);
         const x = a[0] + (b[0] - a[0]) * k;
         const y = a[1] + (b[1] - a[1]) * k;
-        const hop = Math.abs(Math.sin(t * ms / 110)) * 1.2 * u;
+        const hop = Math.abs(Math.sin((t * ms) / 110)) * 1.2 * u;
         walker.setAttribute('transform', `translate(${x} ${y})`);
         body.setAttribute('transform', `translate(0 ${-hop}) scale(${flip} 1)`);
         if (t < 1) requestAnimationFrame(step);
@@ -257,8 +330,5 @@ export class ZoneMap {
       };
       requestAnimationFrame(step);
     });
-    await wait(250);
-    this.busy = false;
-    this.onGo(target);
   }
 }
