@@ -24,6 +24,13 @@ export class EventsView {
     document.getElementById('events-close').addEventListener('click', () => this.close());
     this.modal.addEventListener('click', (e) => {
       if (e.target === this.modal) return this.close();
+      // Plegar o desplegar una región (v3.67, como en la lista de zonas).
+      const fold = e.target.closest('[data-efold]');
+      if (fold) {
+        const settings = this.game.state.settings;
+        settings.eventsFold = { ...settings.eventsFold, [fold.dataset.efold]: !this.folded(fold.dataset.efold) };
+        return this.render();
+      }
       const play = e.target.closest('[data-play]');
       if (!play) return;
       this.close();
@@ -34,6 +41,13 @@ export class EventsView {
   open() {
     this.render();
     this.modal.hidden = false;
+  }
+
+  // Plegada si así la dejó el jugador; si no, solo las regiones sin nada que jugar ahora.
+  folded(regionId) {
+    const saved = this.game.state.settings.eventsFold?.[regionId];
+    if (saved !== undefined) return saved;
+    return !EVENTS.some((def) => REGION_OF_ZONE[def.zone] === regionId && ['active', 'won', 'available'].includes(eventStatus(this.game.state, def.zone)?.kind));
   }
 
   close() {
@@ -81,7 +95,16 @@ export class EventsView {
       return kind === 'active' || kind === 'won' || kind === 'available' ? 0 : 1;
     };
     const groups = REGIONS.map((r) => ({ r, cards: EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === r.id).sort((a, b) => rank(a) - rank(b)).map(card).filter(Boolean) })).filter((g) => g.cards.length);
-    const html = groups.map((g) => (groups.length > 1 ? `<h3 class="research-other">${g.r.icon} ${g.r.name}</h3>` : '') + g.cards.join('')).join('');
+    // Cada región se pliega (v3.67): su título dice cuántos se pueden jugar.
+    const html = groups
+      .map((g) => {
+        if (groups.length < 2) return g.cards.join('');
+        const folded = this.folded(g.r.id);
+        const ready = EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === g.r.id && ['active', 'won', 'available'].includes(eventStatus(s, def.zone)?.kind)).length;
+        const head = `<button class="zones-region research-other" data-efold="${g.r.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${g.r.icon} ${g.r.name}<small>${ready ? `${ready} para jugar` : 'nada por ahora'}</small></button>`;
+        return `<div class="zones-group events-group">${head}${folded ? '' : g.cards.join('')}</div>`;
+      })
+      .join('');
     this.body.innerHTML = `${html}<p class="event-soon">Cada zona que abras trae su evento.</p>${medalsHtml(profile)}`;
   }
 

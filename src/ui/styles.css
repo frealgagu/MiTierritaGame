@@ -573,8 +573,10 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .events-renown-row { display: flex; align-items: center; gap: 8px; margin: 4px 0 10px; flex-wrap: wrap; }
 .events-renown-row .events-renown { flex: 1; margin: 0; }
 .events-renown-row .btn { width: auto; padding: 6px 10px; font-size: 0.85rem; }
-.renown-regions { display: flex; gap: 6px; margin: 6px 0 2px; }
-.renown-regions button { flex: 1; padding: 6px 4px; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); color: var(--ink); font: inherit; font-weight: 700; font-size: 0.85rem; }
+/* Las regiones en tres columnas (v3.67): con todas abiertas ya no caben en una fila. */
+.renown-regions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 6px 0 2px; }
+.renown-regions[hidden] { display: none; }
+.renown-regions button { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 6px 4px; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); color: var(--ink); font: inherit; font-weight: 700; font-size: 0.85rem; }
 .renown-regions button.on { background: var(--yellow); }
 .album-pages { display: flex; gap: 6px; margin-bottom: 8px; }
 .album-pages button { flex: 1; padding: 6px 0; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); font-size: 1.2rem; position: relative; }
@@ -724,3 +726,29 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 
 /* El nombre de un ícono al tocarlo (v3.66). */
 #icon-tip { position: fixed; z-index: 1000; max-width: min(260px, calc(100vw - 12px)); padding: 5px 10px; border-radius: 10px; background: var(--ink); color: #fff8ec; font-size: 0.85rem; font-weight: 600; line-height: 1.2; pointer-events: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25); }
+
+/* Menú (v3.67): estadísticas una por renglón, «Borrar partida» solo abajo, y la ventana «Acerca de». */
+.menu-stats { list-style: none; margin: 6px 0 10px; padding: 0; display: grid; gap: 3px; font-size: 0.95rem; }
+.menu-reset { margin-top: 14px; padding-top: 12px; border-top: 2px dashed var(--paper-2); }
+.about-head { display: flex; align-items: center; gap: 12px; margin: 4px 0 8px; }
+.about-head img { border-radius: 14px; flex: none; }
+.about-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; font-size: 0.92rem; line-height: 1.35; }
+/* La pestaña que hay que mirar (v3.67: los arrieros, cuando son ellos los que toca mejorar). */
+.tab.hint { animation: tab-hint 1s ease-in-out infinite; border-color: #e8b90f; }
+@keyframes tab-hint { 50% { background: #ffe082; transform: translateY(-2px); } }
+/* Objetivo ya cobrado (v3.67): un renglón tenue, sin barra. */
+.goal.claimed { grid-template-columns: 1fr auto; align-items: center; padding: 6px 10px; border-width: 1px; border-color: #cbbfa8; background: none; opacity: 0.7; }
+.goal.claimed .goal-text { font-size: 0.85rem; font-weight: 500; }
+.goal.claimed .goal-reward { font-size: 0.78rem; }
+
+/* El objetivo del evento (v3.67): un producto por renglón, siempre tres renglones de alto. */
+.event-items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-rows: repeat(3, 1.2rem); font-size: 0.85rem; }
+.event-items li { display: flex; justify-content: space-between; gap: 8px; align-items: center; white-space: nowrap; overflow: hidden; }
+.event-items li span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.event-items li b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.event-items li.ok b { color: var(--green-dark); }
+
+/* Ventana de eventos (v3.67): el Renombre arriba y sus botones en un renglón aparte, como pestañas. */
+.events-renown-tabs { margin: 0 0 10px; }
+.events-renown-tabs .tab { flex: 1; }
+.renown-back { width: auto; flex: none; padding: 4px 10px; font-size: 0.85rem; margin-right: 6px; }

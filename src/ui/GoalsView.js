@@ -7,7 +7,8 @@ import { regionOf } from '../data/regions.js';
 import { nextLegacyMult } from '../sim/modifiers.js';
 import { fit } from './fit.js';
 
-// Objetivos: un marcador abajo a la izquierda con el objetivo actual y una lista con los tres visibles.
+// Objetivos: un marcador abajo a la izquierda con el objetivo actual y la lista de todos los de la zona
+// (v3.67; antes, solo los tres visibles).
 export class GoalsView {
   constructor(game, getZone) {
     this.game = game;
@@ -38,6 +39,7 @@ export class GoalsView {
   open() {
     this.modal.hidden = false;
     this.html = null;
+    this.scroll = true;
     this.update();
   }
 
@@ -82,12 +84,22 @@ export class GoalsView {
     const bulkReward = bulk.reduce((n, g) => n + g.reward, 0);
     const claimAll = bulk.length > 0 ? `<button class="btn claim bulk" data-claim-all>✅ Cobrar todos (${bulk.length}) · +${formatNumber(bulkReward)} 💰</button>` : '';
     if (claimAll !== this.footHtml) this.foot.innerHTML = this.footHtml = claimAll;
+    // La lista completa (v3.67, como las investigaciones): los cobrados arriba, en pequeño, y todos los
+    // que faltan con su avance (antes solo se veían tres y un cumplido podía quedar escondido).
+    const claimed = new Set(state.goals.claimed);
     const html = `
-      <p class="goals-count">${ZONES_BY_ID[zone].icon} ${ZONES_BY_ID[zone].name} · objetivo ${Math.min(done + 1, list.length)} de ${list.length}</p>
-      ${goals.map((goal, k) => goalCard(goal, progress[k], false)).join('')}
-      ${goals.length === 0 ? `<p class="goals-count">¡Completaste todos los objetivos de ${ZONES_BY_ID[zone].name}!</p>` : ''}
+      <p class="goals-count">${ZONES_BY_ID[zone].icon} ${ZONES_BY_ID[zone].name} · ${done} de ${list.length} cobrados</p>
+      ${list.map((goal) => (claimed.has(goal.id) ? claimedCard(goal) : goalCard(goal, goalProgress(state, goal), false))).join('')}
+      ${done === list.length ? `<p class="goals-count">¡Completaste todos los objetivos de ${ZONES_BY_ID[zone].name}!</p>` : ''}
       ${finished ? masteryCard(state, false) : ''}`;
-    if (html !== this.html) this.body.innerHTML = this.html = html;
+    if (html !== this.html) {
+      this.body.innerHTML = this.html = html;
+      // Al abrir, la lista baja hasta el primero que falta.
+      if (this.scroll) {
+        this.scroll = false;
+        this.body.querySelector('.goal:not(.claimed)')?.scrollIntoView({ block: 'start' });
+      }
+    }
   }
 }
 
@@ -129,3 +141,9 @@ function goalCard(goal, p, compact) {
       <div class="goal-foot">${action}</div>
     </div>`;
 }
+
+// Un objetivo ya cobrado: un renglón, sin barra.
+function claimedCard(goal) {
+  return `<div class="goal claimed"><div class="goal-text">✅ ${goalText(goal)}</div><span class="goal-reward">${goal.final ? '🏁 Zona completada' : 'Cobrado'}</span></div>`;
+}
+

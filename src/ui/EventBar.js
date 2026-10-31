@@ -60,6 +60,7 @@ export class EventBar {
     this.game = game;
     this.el.hidden = !game;
     this.drawn = null;
+    this.itemsHtml = null;
     if (game) this.paint();
   }
 
@@ -80,11 +81,18 @@ export class EventBar {
     const missing = def.actions.filter((a) => !board.research.includes(a.id)).map((a) => a.name);
     const goal = done
       ? `🏁 ¡Ganado con ${medal.icon} ${medal.name}!`
-      : secured && !allActionsBought(board) ? `✅ ${medal.icon} asegurada. Para terminar, compra: ${missing.join(', ')}` : objectiveText(obj);
+      : secured && !allActionsBought(board) ? `✅ ${medal.icon} asegurada. Para terminar, compra: ${missing.join(', ')}` : `${obj.kind === 'sold' ? 'Vende' : 'Produce'}:`;
     setFitted(document.getElementById('event-goal'), goal, 0.6);
-    // Con un producto, «37 / 100»; con varios, cuánto lleva de cada uno.
-    const count = items.length === 1 ? `${formatNumber(Math.floor(items[0].have))} / ${formatNumber(items[0].need)}` : items.map((i) => `${PRODUCTS[i.product].icon} ${formatNumber(Math.floor(i.have))}`).join(' ');
-    document.getElementById('event-count').textContent = count;
+    // Un producto por renglón, con cuánto lleva (v3.67: antes en una sola línea y el tercero no se veía).
+    // Siempre tres renglones, para que la barra no cambie de alto.
+    const rows = items.map((i) => {
+      const p = PRODUCTS[i.product];
+      const ok = i.have >= i.need;
+      return `<li class="${ok ? 'ok' : ''}"><span>${p.icon} ${p.name}</span><b>${ok ? '✓ ' : ''}${formatNumber(Math.floor(Math.min(i.have, i.need)))} / ${formatNumber(i.need)}</b></li>`;
+    });
+    while (rows.length < 3) rows.push('<li></li>');
+    const list = rows.join('');
+    if (list !== this.itemsHtml) document.getElementById('event-items').innerHTML = this.itemsHtml = list;
     document.getElementById('event-fill').style.width = `${100 * eventProgress(board)}%`;
     // Lo que frena el evento (v3.12): «🪲 Cafetal al 40 % por la broca».
     const hs = eventHandicaps(board).filter((h) => h.pct < 1);

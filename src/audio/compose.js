@@ -357,16 +357,25 @@ export function renderBar(buf, index) {
   pluck(buf, at(0), freqOf(above(root, 40)), beat * 2.2, { amp: 0.5, t60: 2.5, bright: 0.25, pan: -0.15, pos: 0.3 });
   pluck(buf, at(4), freqOf(above((root + 7) % 12, 40)), beat * 1.1, { amp: 0.3, t60: 2, bright: 0.25, pan: -0.15, pos: 0.3 });
 
-  // Guitarra: rasgueo en el segundo y el tercer tiempo.
+  // Guitarra: rasgueo en el segundo y el tercer tiempo; en la guabina (v3.67, `arpeggio`), punteada: las
+  // notas del acorde una por una, en cada corchea, para que no suene igual al bambuco.
   const guitar = tones.map((pc) => above(pc, 55)).sort((a, b) => a - b);
-  strum(buf, at(2), guitar, beat * 0.9, { amp: 0.16, t60: 1.2, bright: 0.45, pan: -0.35 });
-  strum(buf, at(4), guitar, beat * 0.8, { amp: 0.12, t60: 1.2, bright: 0.45, pan: -0.35 });
+  if (song.arpeggio) {
+    const notes = [...guitar, guitar[1] + 12];
+    for (let e = 1; e < 6; e++) pluck(buf, at(e), freqOf(notes[(e - 1) % notes.length]), eighth * 1.6, { amp: 0.13, t60: 1.4, bright: 0.4, pan: -0.3, pos: 0.25 });
+  } else {
+    strum(buf, at(2), guitar, beat * 0.9, { amp: 0.16, t60: 1.2, bright: 0.45, pan: -0.35 });
+    strum(buf, at(4), guitar, beat * 0.8, { amp: 0.12, t60: 1.2, bright: 0.45, pan: -0.35 });
+  }
 
   // Tiple: golpes cortos y apagados en el contratiempo («y» del dos y del tres). Sus cuerdas van de a
-  // tres: dos al unísono (un poco desafinadas entre sí) y la de en medio una octava abajo.
-  const tiple = tones.slice(0, 4).map((pc) => above(pc, 64)).sort((a, b) => a - b);
-  const courses = tiple.flatMap((m, k) => (k < 3 ? [m - 12, m, m + 0.04] : [m, m + 0.04]));
-  for (const e of [3, 5]) strum(buf, at(e), courses, 0.13, { amp: 0.07, t60: 0.8, bright: 0.8, pan: 0.35, pos: 0.12 }, true);
+  // tres: dos al unísono (un poco desafinadas entre sí) y la de en medio una octava abajo. La guabina
+  // (v3.67, `tiple: false`) va sin él.
+  if (song.tiple !== false) {
+    const tiple = tones.slice(0, 4).map((pc) => above(pc, 64)).sort((a, b) => a - b);
+    const courses = tiple.flatMap((m, k) => (k < 3 ? [m - 12, m, m + 0.04] : [m, m + 0.04]));
+    for (const e of [3, 5]) strum(buf, at(e), courses, 0.13, { amp: 0.07, t60: 0.8, bright: 0.8, pan: 0.35, pos: 0.12 }, true);
+  }
 
   // Melodía de bandola: las notas largas, en trémolo.
   for (const [e, n, note] of song.melody[index] ?? []) {

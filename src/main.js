@@ -24,7 +24,9 @@ import { MEDALS } from './data/events.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
 import { openRegions, regionState } from './sim/regions.js';
 import { bindNative, isNativeApp } from './native.js';
-import { checkForUpdate } from './update.js';
+import { APP_VERSION, checkForUpdate } from './update.js';
+import { SONGS } from './audio/songs.js';
+import { sumValues } from './sim/state.js';
 import { bindTip, tipMode } from './tip.js';
 import { checkMastery, restartState } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
@@ -143,7 +145,7 @@ async function start() {
       const station = ROUTES_BY_ID[part].stations.find((sid) => scene.stations[sid] && active.state.stations[sid]);
       if (station) {
         scene.select(station);
-        panel.open(station, id);
+        panel.open(station, 'station', id); // la pestaña 🚌 de la ruta, señalada (v3.67)
         sound.station(station);
       } else {
         scene.select(null);
@@ -160,7 +162,9 @@ async function start() {
       toast(`${ZONES_BY_ID[view.zone].icon} ${ZONES_BY_ID[view.zone].name}`, 2000);
     }
     scene.select(stationId);
-    panel.open(stationId, part === 'transport' ? 'transport' : 'station');
+    // Siempre en la pestaña de la estación (v3.67); si lo que toca mejorar son sus arrieros, esa pestaña
+    // se señala (parpadea) en vez de abrirse sola.
+    panel.open(stationId, 'station', part === 'transport' ? 'transport' : null);
     // Al entrar a una estación suena su oficio (v3.3.2).
     sound.station(stationId);
   };
@@ -284,6 +288,11 @@ async function start() {
       renown.open(tab, REGION_OF_ZONE[board ? board.zone : view.zone]);
     });
   }
+  // Volver a la ventana de eventos desde el Renombre (v3.67), sin cerrar y volver a abrir.
+  document.getElementById('renown-back').addEventListener('click', () => {
+    document.getElementById('renown').hidden = true;
+    events.open();
+  });
   const showEventResult = (r) => {
     const m = MEDALS[r.medal];
     document.getElementById('event-result-medal').textContent = m.icon;
@@ -383,6 +392,17 @@ async function start() {
   };
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeTop();
+  });
+  // Tocar fuera de una ventana la cierra (v3.67), como su ✕. No las que piden decidir algo (cobrar lo
+  // ganado sin conexión, la victoria, el segundo final, el resultado o la confirmación de un evento, la
+  // actualización). El panel de la estación tampoco: ese se cierra solo con su ✕.
+  const STICKY = new Set(['welcome', 'victory', 'mastery', 'event-result', 'event-confirm', 'update']);
+  document.addEventListener('click', (e) => {
+    const m = e.target;
+    if (!m.classList?.contains('modal') || m.hidden || STICKY.has(m.id)) return;
+    const x = m.querySelector('.close-btn');
+    if (x) x.click();
+    else m.hidden = true;
   });
 
   hideSplash();
@@ -558,10 +578,23 @@ function bindMenu(game, sound, music, getActive) {
   };
   slider('sound', 'sound', ['🔊', '🔇'], (v) => (sound.setVolume(v), sound.click()));
   slider('music', 'music', ['🎵', '🔕'], (v) => music.setVolume(v));
+  document.getElementById('menu-version').textContent = `v${APP_VERSION}`;
+  // La música que suena ahora (la de la región que se está viendo), para los créditos (v3.67).
+  const musicCredit = () => {
+    const song = SONGS[music.region] ?? SONGS.cafetero;
+    return `🎵 Música: «${song.name}», compuesta para el juego y tocada por él (${song.instruments}, sintetizados).`;
+  };
   document.getElementById('menu-btn').addEventListener('click', () => {
     const s = game.state;
-    document.getElementById('menu-stats').textContent =
-      `Tiempo jugado: ${formatDuration(s.playTime)} · Ganado en total: 💰 ${formatNumber(s.totalEarned)} · Cerezas vendidas: ${formatNumber(s.stats.sold.cherry ?? 0)}`;
+    // De todas las regiones (v3.67: antes solo las cerezas del Eje Cafetero).
+    const all = [s, ...Object.values(s.regions ?? {})];
+    const sold = all.reduce((n, st) => n + sumValues(st.stats.sold), 0);
+    const earned = all.reduce((n, st) => n + (st.totalEarned ?? 0), 0);
+    document.getElementById('menu-stats').innerHTML = [
+      `⏱️ Tiempo jugado: <b>${formatDuration(s.playTime)}</b>`,
+      `💰 Ganado en total: <b>${formatNumber(earned)}</b>`,
+      `📦 Productos vendidos: <b>${formatNumber(sold)}</b>`,
+    ].map((li) => `<li>${li}</li>`).join('');
     const restartBtn = document.getElementById('restart-btn');
     const here = getActive().state;
     restartBtn.hidden = !here.mastered;
@@ -569,6 +602,14 @@ function bindMenu(game, sound, music, getActive) {
     menu.hidden = false;
   });
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));
+  const about = document.getElementById('about');
+  document.getElementById('about-btn').addEventListener('click', () => {
+    document.getElementById('about-version').textContent = `Versión ${APP_VERSION}`;
+    document.getElementById('about-music').textContent = musicCredit();
+    menu.hidden = true;
+    about.hidden = false;
+  });
+  document.getElementById('about-close').addEventListener('click', () => (about.hidden = true));
 
   // Copia de seguridad en texto.
   const text = document.getElementById('save-text');

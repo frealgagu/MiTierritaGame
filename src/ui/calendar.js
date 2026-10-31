@@ -28,7 +28,7 @@ export function showCalendar(state) {
   const season = seasonOf(t);
   document.getElementById('calendar-now').textContent =
     `${clockLabel(hourOf(t))} · ${isWorkTime(t, extra) ? 'jornada de trabajo' : isLunch(t, extra) ? 'hora del almuerzo, todo descansa' : 'de noche, todo descansa'}\n${season.icon} ${season.name}, día ${seasonDay(t)} de ${SEASON_DAYS} · año ${yearOf(t)}`;
-  document.getElementById('calendar-work').textContent = workText(workBlocks(extra));
+  document.getElementById('calendar-work').textContent = workSentence(workBlocks(extra), true);
   // La mitaca es del Eje Cafetero.
   document.querySelector('#calendar .calendar-fact').hidden = (state.region ?? 'cafetero') !== 'cafetero';
   const list = document.getElementById('calendar-seasons');
@@ -48,6 +48,14 @@ export function showCalendar(state) {
 }
 
 // La jornada (v3.8) en una línea: «6:00 a 12:00 y 14:00 a 22:00», con los bloques comprados juntos.
+// «Se trabaja de 6:00 a 12:00 y de 14:00 a 20:00» o «Se trabajan las 24 horas» (v3.67: antes «se trabaja de
+// las 24 horas»). capital: con mayúscula al principio.
+export function workSentence(blocks, capital = false) {
+  const text = workText(blocks);
+  const s = text === 'las 24 horas' ? `se trabajan ${text}` : `se trabaja de ${text}`;
+  return capital ? s[0].toUpperCase() + s.slice(1) : s;
+}
+
 export function workText(blocks) {
   const hours = Array.from({ length: 24 }, (_, h) => blocks.some(([a, b]) => h >= a && h < b));
   if (hours.every(Boolean)) return 'las 24 horas';

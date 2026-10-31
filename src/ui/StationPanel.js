@@ -31,9 +31,9 @@ import { ZONES_BY_ID } from '../data/zones/index.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { fit, setFitted } from './fit.js';
 import { alerts } from '../sim/alerts.js';
-import { FACTS } from '../data/lore.js';
+import { FACTS, withArticle } from '../data/lore.js';
 import { clockOf, hourLabel, isLunch, nextWorkHour, resting, workOf } from '../sim/calendar.js';
-import { eventDef, eventHandicaps, handicapText } from '../sim/events.js';
+import { eventDef, eventHandicaps, handicapText, supplyFraction } from '../sim/events.js';
 import { harvestFactor, waitingHarvest } from '../sim/production.js';
 
 const SUBTITLE_MS = 7000; // cada cuánto cambia el subtítulo (descripción y datos reales)
@@ -47,16 +47,16 @@ const MODES = [
 const recipe = (obj) => Object.entries(obj).map(([id, n]) => `${n} ${PRODUCTS[id].icon}`).join(' + ');
 const nameOf = (id) => (id.startsWith('dispatch') ? DISPATCH.name : id === 'warehouse' ? 'la bodega' : STATIONS_BY_ID[id].name);
 // «la Descremadora, la Quesera y la Paila de arequipe»
-const listNames = (ids) => {
-  const names = ids.map((id) => STATIONS_BY_ID[id].name);
+const listNames = (ids, article = false) => {
+  const names = ids.map((id) => (article ? withArticle(STATIONS_BY_ID[id].name) : STATIONS_BY_ID[id].name));
   return names.length > 1 ? `${names.slice(0, -1).join(', ')} y ${names.at(-1)}` : names[0];
 };
 // Con cuatro pestañas, las de la estación y el transporte muestran solo el ícono.
-const tabButtons = (tabs, active) =>
+const tabButtons = (tabs, active, hint = null) =>
   tabs
     .map(([key, icon, name]) => {
       const short = tabs.length > 3 && !key.startsWith('route:') ? 'short' : '';
-      return `<button class="tab ${short} ${active === key ? 'active' : ''}" data-tab="${key}" title="${name}">${icon}<span class="tab-name"> ${name}</span></button>`;
+      return `<button class="tab ${short} ${active === key ? 'active' : ''} ${hint === key && active !== key ? 'hint' : ''}" data-tab="${key}" title="${name}">${icon}<span class="tab-name"> ${name}</span></button>`;
     })
     .join('');
 const isBuilt = (state, id) => id.startsWith('dispatch') || id.startsWith('route:') || Boolean(state.stations[id]);
@@ -88,9 +88,11 @@ export class StationPanel {
   }
 
   // tab: 'station' | 'transport' | 'route:<ruta>' (estaciones que reciben un producto de otra zona)
-  open(id, tab = 'station') {
+  // hint: una pestaña para señalar (la de los arrieros, cuando son ellos los que hay que mejorar).
+  open(id, tab = 'station', hint = null) {
     this.id = id;
     this.tab = tab;
+    this.hint = hint;
     this.el.hidden = false;
     document.body.classList.add('panel-open');
     this.render();
@@ -105,7 +107,7 @@ export class StationPanel {
     else if (id.startsWith('dispatch')) this.renderUpgradable(dispatchInfo(id.split(':')[1] ?? 'finca'));
     else if (id.startsWith('route:')) this.renderUpgradable(routeInfo(id.split(':')[1], null));
     else if (this.built && this.tab === 'transport') this.renderUpgradable(transportInfo(id));
-    else if (this.built && this.tab.startsWith('route:')) this.renderUpgradable(routeInfo(this.tab.split(':')[1], id));
+    else if (this.built && this.tab.startsWith('route:')) this.renderUpgradable((this.game.state.event ? eventRouteInfo : routeInfo)(this.tab.split(':')[1], id));
     else if (this.built) this.renderUpgradable(stationInfo(id));
     else this.renderLocked(STATIONS_BY_ID[id]);
   }
@@ -146,12 +148,12 @@ export class StationPanel {
       icon: look.icon,
       title: look.title,
       subtitle: look.subtitle,
-      tabs: info.tabs ? tabButtons(tabsOf(this.game.state, this.id), this.tab) : '',
+      tabs: info.tabs ? tabButtons(tabsOf(this.game.state, this.id), this.tab, this.hint) : '',
       recipe: typeof info.recipe === 'function' ? info.recipe(this.game.state) : info.recipe,
       rows: info.rows.map((r) => `<div class="stat"><span>${r.label}</span><b><span data-ref="${r.key}"></span> <span class="next" data-ref="${r.key}Next"></span></b></div>`).join(''),
       milestone: `<div class="milestone-top"><span class="level-badge" data-ref="level"></span><span data-ref="milestoneText"></span></div>
         <div class="bar"><div data-ref="milestoneBar"></div></div>`,
-      modes: MODES.map((m) => `<button class="mode" data-mode="${m.key}">${m.label}</button>`).join(''),
+      modes: info.fixed ? '' : MODES.map((m) => `<button class="mode" data-mode="${m.key}">${m.label}</button>`).join(''),
       button: '<button class="btn buy" data-buy><span data-ref="buyLabel"></span><span data-ref="buyCost"></span></button>',
     });
     this.collectRefs();
@@ -162,6 +164,7 @@ export class StationPanel {
     for (const btn of this.el.querySelectorAll('[data-tab]')) {
       btn.addEventListener('click', () => {
         this.tab = btn.dataset.tab;
+        this.hint = null;
         this.render();
         this.update();
       });
@@ -222,6 +225,7 @@ export class StationPanel {
     for (const btn of this.el.querySelectorAll('[data-tab]')) {
       btn.addEventListener('click', () => {
         this.tab = btn.dataset.tab;
+        this.hint = null;
         this.render();
         this.update();
       });
@@ -283,7 +287,8 @@ export class StationPanel {
     const info = this.info;
     if (this.subtitles) setFitted(this.refs.subtitle, this.subtitles[Math.floor(performance.now() / SUBTITLE_MS) % this.subtitles.length]);
     const level = info.level(state);
-    const q = this.game.quote(info.upgradeId, this.mode);
+    // Lo que no se mejora aparte (v3.67: la ruta en un evento, que va con su estación).
+    const q = info.fixed ? { levels: 0, cost: 0, affordable: false, maxed: false } : this.game.quote(info.upgradeId, this.mode);
     const after = level + Math.max(q.levels, 1);
 
     r.level.textContent = `Nv ${level}`;
@@ -312,7 +317,10 @@ export class StationPanel {
     for (const btn of this.el.querySelectorAll('[data-mode]')) btn.classList.toggle('active', String(this.mode) === btn.dataset.mode);
     const buy = this.el.querySelector('[data-buy]');
     buy.disabled = !q.affordable;
-    if (q.maxed) {
+    if (info.fixed) {
+      r.buyLabel.textContent = info.fixed;
+      r.buyCost.textContent = '';
+    } else if (q.maxed) {
       r.buyLabel.textContent = state.event ? `Nivel máximo del evento (${maxLevel(state)})` : 'Nivel máximo';
       r.buyCost.textContent = '';
     } else {
@@ -471,9 +479,10 @@ function stationStatus(state, id) {
     // Lo que sobra porque las siguientes no dan abasto: es a ellas a las que hay que subir.
     const slow = a.waiting === 'mules' ? slowConsumers(state, id) : [];
     if (slow.length) {
+      // Lo que sobra va a la bodega, más lejos: en ese viaje el transporte lleva menos (v3.67: se explica).
       const text = slow.length > 1
-        ? `↪️ Patio lleno: las siguientes, ${listNames(slow)}, no alcanzan a procesar todo lo que produce esta. Súbelas de nivel.`
-        : `↪️ Patio lleno: la estación siguiente (${listNames(slow)}) no alcanza a procesar todo lo que produce esta. Súbela de nivel.`;
+        ? `↪️ Patio lleno: ${listNames(slow, true)} no alcanzan a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbelas de nivel.`
+        : `↪️ Patio lleno: ${listNames(slow, true)} no alcanza a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbela de nivel.`;
       return { text, bad: true };
     }
     if (a.waiting === 'mules') return { text: hasBelt(st.transport.level) ? '⛔ Patio lleno: la banda no da abasto. Mejórala (pestaña ⚡).' : '⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).', bad: true };
@@ -633,3 +642,40 @@ function stockRows(state, zoneId) {
     })
     .join('');
 }
+
+// La ruta en el tablero de un evento (v3.67). Ahí no hay otras zonas ni chivas: lo de afuera llega solo, a
+// cada estación lo que gasta a toda marcha y un 25 % más (sim/events.js: stepSupply). Por eso la ruta va
+// al nivel de su estación y no se mejora aparte; lo que se ve es exacto. Con un derrumbe o una creciente,
+// llega solo una parte, hasta comprar lo de la barra del evento.
+function eventRouteInfo(routeId, station) {
+  const r = ROUTES_BY_ID[routeId];
+  const product = PRODUCTS[r.product];
+  const def = STATIONS_BY_ID[station];
+  const imp = def.imports.find((i) => i.route === routeId);
+  const use = (s, l) => stationRate(def, l) * speedMult(s, station) * imp.perCycle;
+  return {
+    icon: def.icon,
+    title: def.name,
+    subtitle: `🚌 En el evento, ${product.name.toLowerCase()} llega sola de ${ZONES_BY_ID[r.from].name}`,
+    recipe: `${ZONES_BY_ID[r.from].icon} ${product.icon} <span>➜</span> ${r.icon} <span>➜</span> ${def.name}`,
+    milestoneWhat: 'carga (con la estación)',
+    upgradeId: `route:${routeId}`,
+    fixed: '🚌 Sube con la estación',
+    tabs: true,
+    level: (s) => s.stations[station].level,
+    rows: [
+      { key: 'supply', label: 'Llega de afuera', value: (s) => `${Math.round(supplyFraction(s, r.product) * 100)} % de lo que se necesita` },
+      { key: 'rate', label: 'Llega', value: (s, l) => `${formatRate(supplyFraction(s, r.product) * use(s, l) * 1.25)} ${product.icon}/s` },
+      { key: 'need', label: 'La estación gasta', value: (s, l) => `${formatRate(use(s, l))} ${product.icon}/s` },
+      { key: 'stock', label: 'En la estación', value: (s, l) => `${formatAmount(s.stations[station].imported[r.product] ?? 0)} / ${formatNumber(stationImportCap(def, l, speedMult(s, station), imp))} ${product.icon}` },
+    ],
+    status: (s) => {
+      const f = supplyFraction(s, r.product);
+      if (f >= 1) return { text: `✅ Llega todo lo que gasta ${withArticle(def.name)} y un 25 % más. Al subir la estación sube también la ruta.`, bad: false };
+      const next = eventDef(s).actions.find((a) => !s.research.includes(a.id) && (a.effects ?? (a.effect ? [a.effect] : [])).some((e) => e.type === 'supply' && e.product === r.product));
+      const now = f > 0 ? `Llega solo el ${Math.round(f * 100)} %` : 'No llega nada';
+      return { text: `⛔ ${now} de ${product.name.toLowerCase()}${eventDef(s).blame ? ` por ${eventDef(s).blame}` : ''}.${next ? ` Compra ${next.icon} ${next.name} en la barra del evento.` : ''}`, bad: true };
+    },
+  };
+}
+

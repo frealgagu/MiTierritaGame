@@ -62,7 +62,8 @@
         <button id="event-restart" class="btn">🔄 Reiniciar</button>
         <button id="event-end" class="btn">🏁 Terminar</button>
       </div>
-      <div class="event-goal"><span id="event-goal"></span><span id="event-count"></span></div>
+      <div class="event-goal"><span id="event-goal"></span></div>
+      <ul id="event-items" class="event-items"></ul>
       <div class="bar"><div id="event-fill" class="bar-fill"></div></div>
       <div id="event-medals" class="event-medals"></div>
       <div id="event-handicap" class="event-handicap" hidden></div>
@@ -153,9 +154,12 @@
 
     <div id="menu" class="modal" hidden>
       <div class="modal-card">
-        <h2>Encantos de Mi Tierrita <small id="menu-version">v3.7.0</small></h2>
+        <div class="chain-head">
+          <h2>Encantos de Mi Tierrita <small id="menu-version"></small></h2>
+          <button id="close-menu" class="close-btn" aria-label="Cerrar">✕</button>
+        </div>
         <p id="save-where">Tu partida se guarda sola en este navegador.</p>
-        <p id="menu-stats"></p>
+        <ul id="menu-stats" class="menu-stats"></ul>
         <details class="save-box">
           <summary>Copia de seguridad de la partida</summary>
           <p class="chain-help">Exporta para llevar tu partida a otro dispositivo; pega aquí el texto para importarla.</p>
@@ -197,14 +201,40 @@
         </div>
         <div class="modal-actions">
           <button id="intro-btn" class="btn">❓ Cómo se juega</button>
+          <button id="about-btn" class="btn">ℹ️ Acerca de</button>
           <button id="tip-btn" class="btn" hidden>☕ Invítame un tinto</button>
           <a id="apk-link" class="btn" href="./mitierrita.apk" download="MiTierrita.apk" hidden>📱 App de Android</a>
           <button id="update-btn" class="btn" hidden>🔄 Buscar actualización</button>
           <button id="restart-btn" class="btn buy" hidden></button>
-          <button id="reset-btn" class="btn danger">Borrar partida</button>
-          <button id="close-menu" class="btn">Seguir jugando</button>
         </div>
-        <p class="chain-help credits">Música: «Bambuco de la finca», compuesta para el juego y tocada por él (tiple, guitarra y bandola sintetizados). Letra: Fredoka (licencia SIL OFL 1.1).</p>
+        <div class="modal-actions menu-reset">
+          <button id="reset-btn" class="btn danger">Borrar partida</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="about" class="modal" hidden>
+      <div class="modal-card">
+        <div class="chain-head">
+          <h2>ℹ️ Acerca de</h2>
+          <button id="about-close" class="close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="about-head">
+          <img src="./icons/icon-192.png" alt="" width="64" height="64" />
+          <div><b>Encantos de Mi Tierrita</b><br /><span id="about-version" class="chain-help"></span></div>
+        </div>
+        <p>Un juego educativo de cadenas de producción por las regiones de Colombia: produce, transporta y descubre lo que hace única a cada una.</p>
+        <ul class="about-list">
+          <li>👤 Lo hace <b>frealgagu</b>, un desarrollador independiente en Colombia.</li>
+          <li>✉️ Contacto: frealgagu@gmail.com</li>
+          <li>🌐 Web: frealgagu.github.io/MiTierritaGame</li>
+          <li>🔒 Sin publicidad y sin recoger datos personales: la partida se guarda solo en este dispositivo. Política de privacidad en la web, en /privacidad.html.</li>
+          <li id="about-music"></li>
+          <li>🔤 Letra: Fredoka (licencia SIL OFL 1.1).</li>
+          <li>🗺️ Mapa de Colombia: Marco Geoestadístico Nacional 2018, del DANE.</li>
+          <li>🎨 Los dibujos, la música y los textos son propios del juego, hechos con código.</li>
+          <li>📜 El código es libre, con licencia MIT.</li>
+        </ul>
       </div>
     </div>
 
@@ -292,7 +322,7 @@
         <p id="calendar-now" class="calendar-now"></p>
         <p id="calendar-event" class="chain-help" hidden>El tablero tiene su propio reloj, que solo corre mientras juegas en él. Aquí se trabaja todo el tiempo: no hay noches, almuerzo ni temporadas.</p>
         <div id="calendar-country">
-        <p class="chain-help">Se trabaja de <b id="calendar-work">6:00 a 12:00 y 14:00 a 20:00</b>: a la hora del almuerzo y de noche las estaciones descansan y los arrieros no salen (el Willys y las chivas sí). Con Renombre ⭐ se compran más horas de trabajo. Un día dura 8 minutos y el año tiene 16 días, en cuatro temporadas de 4 días que cambian la producción de todas las estaciones a la vez:</p>
+        <p class="chain-help"><b id="calendar-work">Se trabaja de 6:00 a 12:00 y 14:00 a 20:00</b>: a la hora del almuerzo y de noche las estaciones descansan y los arrieros no salen (el Willys y las chivas sí). Con Renombre ⭐ se compran más horas de trabajo. Un día dura 8 minutos y el año tiene 16 días, en cuatro temporadas de 4 días que cambian la producción de todas las estaciones a la vez:</p>
         <ul id="calendar-seasons" class="calendar-seasons"></ul>
         <p class="chain-help calendar-fact">💡 En el Eje Cafetero hay dos cosechas al año: la grande y la <b>mitaca</b>, una cosecha más pequeña que llega unos seis meses después.</p>
         </div>
@@ -305,13 +335,13 @@
           <h2>🏅 Eventos</h2>
           <button id="events-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>
-        <p class="chain-help">Hay dos eventos a la vez en todo el juego, nunca de la misma región: tableros aparte, con sus propias monedas y niveles y un reloj que solo corre mientras juegas en ellos (⏸️ Pausar te devuelve al mapa). Cuanto más rápido cumplas el objetivo, mejor la medalla (🥇 da 4 ⭐ de Renombre, 🥈 2 y 🥉 1); para ganar el evento, además hay que comprar sus tres mejoras. Ganado, puedes quedarte mirándolo (o pausarlo) hasta tocar 🏁 Terminar; ya no se reinicia. Con 🔄 lo vuelves a empezar, y con 🏁 lo terminas aunque no lo hayas ganado (sin medalla). Al terminarlo, ese cupo descansa 2 años del juego (unas 4 h 16 min) y luego sale el evento de otra zona. Con la región ya terminada, salen los eventos de todas sus zonas aunque vuelvas a empezar. El Renombre y las medallas no se pierden al volver a empezar.</p>
-        <div class="events-renown-row">
-          <span id="events-renown" class="events-renown"></span>
-          <button id="album-btn" class="btn">📖 Álbum</button>
-          <button id="decor-btn" class="btn">🎨 Decoración</button>
-          <button id="logros-btn" class="btn">🏆 Logros</button>
-          <button id="offline-btn" class="btn">⏰ Horas</button>
+        <p class="chain-help">Hay dos eventos a la vez en todo el juego, nunca de la misma región: tableros aparte, con sus propias monedas y niveles y un reloj que solo corre mientras juegas en ellos (⏸️ Pausar te devuelve al mapa). Cuanto más rápido cumplas el objetivo, mejor la medalla (🥇 da 4 ⭐ de Renombre, 🥈 2 y 🥉 1); para ganar el evento, además hay que comprar sus tres mejoras. Ganado, puedes quedarte mirándolo (o pausarlo) hasta tocar 🏁 Terminar; ya no se reinicia. Con 🔄 lo vuelves a empezar, y con 🏁 lo terminas aunque no lo hayas ganado (sin medalla). Al terminarlo, ese cupo descansa 2 años del juego (unas 4 h 16 min) y luego sale el evento de otra zona. Con la región ya terminada, salen los eventos de todas sus zonas aunque vuelvas a empezar. El Renombre y las medallas no se pierden al volver a empezar. En el tablero no están las otras zonas: lo que llega de ellas (la panela, la leche…) llega solo, a cada estación lo que gasta y un 25 % más, y su ruta 🚌 sube con la estación; solo algunos eventos lo cortan, hasta que compres lo de la barra.</p>
+        <p id="events-renown" class="events-renown"></p>
+        <div class="tabs chain-tabs events-renown-tabs">
+          <button id="album-btn" class="tab">📖 Álbum</button>
+          <button id="decor-btn" class="tab">🎨 Decorar</button>
+          <button id="logros-btn" class="tab">🏆 Logros</button>
+          <button id="offline-btn" class="tab">⏰ Horas</button>
         </div>
         <div id="events-body" class="list-body"></div>
       </div>
@@ -320,6 +350,7 @@
     <div id="renown" class="modal" hidden>
       <div class="modal-card list-modal">
         <div class="chain-head">
+          <button id="renown-back" class="btn small renown-back">← Eventos</button>
           <h2 id="renown-title">⭐ Renombre</h2>
           <button id="renown-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>

@@ -6,11 +6,16 @@ import { hasBelt } from '../sim/rules.js';
 import { CHILDREN, PARENT, branchShare, nextToUnlock } from '../sim/chain.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
-import { pendingRoutes } from '../sim/transport.js';
+import { pendingRoutes, slowConsumers } from '../sim/transport.js';
 import { withArticle } from '../data/lore.js';
 import { saleValue } from '../sim/modifiers.js';
 
 const outIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].out)[0]].icon;
+// «la Mesa de chocolate y la Chocolatería»
+const listNames = (ids) => {
+  const names = ids.map((id) => withArticle(STATIONS_BY_ID[id].name));
+  return names.length > 1 ? `${names.slice(0, -1).join(', ')} y ${names.at(-1)}` : names[0];
+};
 // La cadena (v3.0.1): un diagrama con las estaciones unidas por eslabones y, sobre cada eslabón, cuánto
 // pasa por segundo. Al tocar una estación aparece abajo su detalle (lo que recibe y procesa, sus
 // arrieros, lo que se desvía o se pierde, lo que llega de otras zonas) con botones para ir a ella.
@@ -135,7 +140,16 @@ function detailOf(state, a, rows, sel, zone) {
     lines.push(`📦 ${row.children.length ? '' : 'Mientras no se construya la siguiente, '}<b>${formatRate(row.diverted)} ${icon}/s</b> van directo a la bodega y se venden a ${formatAmount(saleValue(state, outId))} 💰 cada uno.`);
     if (row.children.length) lines.push(divertNote(state, row, icon));
   }
-  if (row.lost > 0.005) lines.push(`<span class="lost">⛔ ${formatRate(row.lost)} ${icon}/s no alcanzan a salir.</span>`);
+  if (row.lost > 0.005) {
+    // Por qué (v3.67): lo que las siguientes no alcanzan a procesar va a la bodega, más lejos que ellas, y en
+    // ese viaje largo el transporte lleva menos.
+    const slow = row.children.length && row.diverted > 0.005 ? slowConsumers(state, id) : [];
+    const who = hasBelt(st.transport.level) ? 'la banda no da' : 'los arrieros no dan';
+    const why = slow.length
+      ? `: lo que ${listNames(slow)} no ${slow.length > 1 ? 'alcanzan' : 'alcanza'} a procesar va a la bodega, que queda más lejos, y ${who} abasto con ese viaje largo (la estación para a ratos). Sube ${listNames(slow)} al nivel de esta estación, o ${hasBelt(st.transport.level) ? 'la banda' : 'los arrieros'}.`
+      : '.';
+    lines.push(`<span class="lost">⛔ ${formatRate(row.lost)} ${icon}/s no alcanzan a salir${why}</span>`);
+  }
   const hot = a.bottleneck === id ? '<p class="lost">🔴 Esta estación es la que frena la cadena.</p>' : a.bottleneck === `${id}:transport` ? '<p class="lost">🔴 Sus arrieros son los que frenan la cadena.</p>' : '';
   return `
     <div class="cd-head"><span class="cd-icon">${def.icon}</span><b>${def.name}</b> <small>Nv ${st.level}</small></div>

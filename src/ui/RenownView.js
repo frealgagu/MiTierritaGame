@@ -5,7 +5,7 @@ import { PAGE_BONUS, albumOf } from '../data/album.js';
 import { DECOR } from '../data/decor.js';
 import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, PETS, WORK_COSTS, albumDone, buyPet, decorOf, petsOf, quotePet, buyOffline, buyWillys2, buyWork, quoteWillys2, quoteWork, workLevel, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
 import { EXTRA_BLOCKS, workBlocks } from '../sim/calendar.js';
-import { workText } from './calendar.js';
+import { workSentence } from './calendar.js';
 import { openRegionStates, regionState } from '../sim/regions.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
 import { toast } from './toast.js';
@@ -63,7 +63,7 @@ export class RenownView {
       const w2 = e.target.closest('[data-willys2]');
       if (w2) this.buyJeep(w2.dataset.willys2);
       if (e.target.closest('[data-work]') && buyWork(profileOf(this.game.state), this.regionState())) {
-        toast(`🕐 En ${REGIONS_BY_ID[this.region].name} ahora se trabaja de ${workText(workBlocks(workLevel(this.regionState())))}.`, 3500);
+        toast(`🕐 En ${REGIONS_BY_ID[this.region].name} ahora ${workSentence(workBlocks(workLevel(this.regionState())))}.`, 3500);
         this.render();
       }
     });
@@ -195,7 +195,7 @@ export class RenownView {
       ? '<p>✅ Al máximo: se trabaja las 24 horas.</p>'
       : `<button class="btn buy" data-work ${q.ok ? '' : 'disabled'}>+2 h (de ${a}:00 a ${b % 24}:00) · ⭐ ${q.cost}</button>`;
     return `<div class="logro"><div class="logro-head"><b>🕐 Jornada en ${REGIONS_BY_ID[this.region].name}: ${hours} h</b><span class="logro-stars">${steps}</span></div>
-      <p>Se trabaja de ${workText(workBlocks(level))}. Fuera de la jornada las estaciones descansan.</p>
+      <p>${workSentence(workBlocks(level), true)}. Fuera de la jornada las estaciones descansan.</p>
       <div class="bar"><div style="width:${(100 * hours) / 24}%"></div></div>${next}</div>`;
   }
 

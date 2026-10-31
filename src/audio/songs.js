@@ -7,6 +7,7 @@
 // fuerte y se amarra al compás siguiente, como canta el bambuco.
 const BAMBUCO = {
   name: 'Bambuco de la finca',
+  instruments: 'tiple, guitarra y bandola', // para los créditos (v3.67)
   bpm: 108,
   chords: [
     // A, en mi menor
@@ -52,9 +53,13 @@ const BAMBUCO = {
   ],
 };
 
-// Santander: una guabina, más lenta y nostálgica, en si menor que pasa a re mayor (v3.0).
+// Santander: una guabina, más lenta y nostálgica, en si menor que pasa a re mayor (v3.0). Desde la v3.67, sin
+// tiple y con la guitarra punteada: sonaba casi igual al bambuco del Eje Cafetero.
 const GUABINA = {
   name: 'Guabina del Chicamocha',
+  instruments: 'guitarra punteada y bandola', // para los créditos (v3.67)
+  tiple: false,
+  arpeggio: true,
   bpm: 92,
   chords: [
     'Bm', 'Bm', 'F#7', 'F#7', 'F#7', 'F#7', 'Bm', 'Bm',
@@ -102,6 +107,7 @@ const GUABINA = {
 // suena distinto: gaita en la melodía, guacharaca, llamador, tambora y tambor alegre (ver compose.js).
 const CUMBIA = {
   name: 'Cumbia del arrozal',
+  instruments: 'gaita, guacharaca, llamador, tambora y tambor alegre', // para los créditos (v3.67)
   bpm: 100,
   beats: 4,
   style: 'cumbia',
@@ -151,6 +157,7 @@ const CUMBIA = {
 // compás, el requinto en la melodía (punteada, sin trémolo) y el chucho (ver compose.js).
 const TORBELLINO = {
   name: 'Torbellino del altiplano',
+  instruments: 'tiple, requinto, guitarra y chucho', // para los créditos (v3.67)
   bpm: 126,
   style: 'torbellino',
   chords: [
@@ -199,6 +206,7 @@ const TORBELLINO = {
 // melodía, el cuatro rasgueando con sus golpes apagados, las maracas y el bajo (ver compose.js).
 const JOROPO = {
   name: 'Joropo de la sabana',
+  instruments: 'arpa, cuatro, maracas y bajo', // para los créditos (v3.67)
   bpm: 160,
   style: 'joropo',
   chords: [
@@ -248,6 +256,7 @@ const JOROPO = {
 // platillos el ritmo (4/4, corcheas 0 a 7).
 const CHIRIMIA = {
   name: 'Chirimía de San Pacho',
+  instruments: 'clarinete, bombardino, tambora, redoblante y platillos', // para los créditos (v3.67)
   bpm: 116,
   beats: 4,
   style: 'chirimia',
@@ -298,6 +307,7 @@ const CHIRIMIA = {
 // (4/4, corcheas 0 a 7).
 const AMAZONICA = {
   name: 'Cumbia del Amazonas',
+  instruments: 'guitarra eléctrica, bajo, teclado, maracas y manguaré', // para los créditos (v3.67)
   bpm: 108,
   beats: 4,
   style: 'amazonica',
