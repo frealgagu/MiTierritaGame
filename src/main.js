@@ -2,6 +2,7 @@ import { Application } from 'pixi.js';
 import { Game } from './core/Game.js';
 import { clearSave, exportSave, importSave, loadGame, saveGame } from './core/SaveSystem.js';
 import { formatDuration, formatMult, formatNumber } from './core/format.js';
+import { clockOf } from './sim/calendar.js';
 import { Scene } from './render/Scene.js';
 import { HUD } from './ui/HUD.js';
 import { StationPanel } from './ui/StationPanel.js';
@@ -19,7 +20,7 @@ import { setLook } from './render/look.js';
 import { checkLogros } from './sim/logros.js';
 import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/splash.js';
 import { EventBar, formatClock } from './ui/EventBar.js';
-import { EVENT_COOLDOWN, checkMedalBonus, endEvent, finishEvent, restartEvent, startEvent } from './sim/events.js';
+import { EVENT_COOLDOWN, allActionsBought, awaySeconds, checkMedalBonus, endEvent, finishEvent, restartEvent, startEvent } from './sim/events.js';
 import { MEDALS } from './data/events.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
 import { openRegions, regionState } from './sim/regions.js';
@@ -240,7 +241,21 @@ async function start() {
       toast('🏁 Evento terminado sin medalla.', 3000);
     });
   };
-  const eventBar = new EventBar(() => exitEvent(), restartBoard, endBoard);
+  // ⏸️ Pausar o 🚪 Salir (v3.67.4): lo elige el jugador en el menú, para todos los eventos.
+  const exitMode = () => (game.state.settings.eventExit === 'leave' ? 'leave' : 'pause');
+  const eventBar = new EventBar(() => exitEvent(), restartBoard, endBoard, exitMode);
+  const exitSelect = document.getElementById('event-exit-mode');
+  const exitHint = () => {
+    document.getElementById('event-exit-hint').textContent =
+      exitMode() === 'leave' ? 'El evento sigue corriendo por detrás, también con el juego cerrado.' : 'El reloj del evento se detiene hasta que vuelvas.';
+  };
+  exitSelect.value = exitMode();
+  exitHint();
+  exitSelect.addEventListener('change', () => {
+    game.state.settings.eventExit = exitSelect.value;
+    eventBar.paintExit();
+    exitHint();
+  });
   // El evento de una zona se guarda en la partida de su región (v3.6: Santander también tiene eventos);
   // los cupos, en la principal (v3.30).
   const enterEvent = (zoneId) => {
@@ -259,10 +274,29 @@ async function start() {
     scene.onTalk = (z) => chatter?.talk(z);
     useGame(eg);
     document.body.classList.add('event-mode');
+    catchUpBoard(eg);
     eventBar.show(eg);
     if (import.meta.env.DEV) window.__mitierrita = { ...window.__mitierrita, scene, board };
   };
+  // Si se salió con 🚪, lo que el tablero hizo mientras tanto (v3.67.4), con el reloj del país: también
+  // cuenta el tiempo con el juego cerrado (hasta el tope de horas sin conexión, como la partida).
+  const catchUpBoard = (eg) => {
+    const state = eg.state;
+    const away = awaySeconds(state, game.state);
+    delete state.event.away;
+    if (away < 1) return;
+    const r = eg.catchUpBoard(away);
+    // Con las tres mejoras ya compradas, el evento se gana en el siguiente cuadro (y sale su ventana).
+    if (r.secured && !allActionsBought(state)) {
+      const m = MEDALS[state.event.medal];
+      toast(`🚪 El evento siguió ${formatDuration(r.seconds)} sin ti: ¡${m.icon} medalla de ${m.name} asegurada! Para terminarlo, compra las mejoras que faltan.`, 6000);
+      sound.milestone();
+    } else toast(`🚪 El evento siguió ${formatDuration(r.seconds)} sin ti.`, 4000);
+  };
   const leaveBoard = () => {
+    // 🚪 Salir (con el botón o yendo a una zona): el tablero sigue corriendo desde ahora, con el reloj del
+    // país; ⏸️ Pausar: se queda quieto (v3.67.4).
+    if (exitMode() === 'leave') board.game.state.event.away = clockOf(game.state);
     board = null;
     useGame(active);
     document.body.classList.remove('event-mode');
@@ -494,6 +528,8 @@ async function start() {
   let hiddenAt = null;
   const onHide = () => {
     hiddenAt ??= Date.now();
+    // Con 🚪 Salir, el tablero abierto también sigue con el juego cerrado (v3.67.4).
+    if (board && exitMode() === 'leave') board.game.state.event.away ??= clockOf(game.state);
     persist();
   };
   // Al volver, lo producido mientras tanto (una sola vez, aunque avisen la página y la app). Mientras
@@ -511,6 +547,7 @@ async function start() {
         if (rr) toast(`${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name} también siguió trabajando: +💰 ${formatNumber(rr.coins)}`, 5000);
       }
       if (r) showWelcome(r, () => sound.coin());
+      if (board) catchUpBoard(board.game);
     } finally {
       catching = false;
       hideSplash();

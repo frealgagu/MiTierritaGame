@@ -709,6 +709,10 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .volume-icon { font-size: 1.15rem; text-align: center; }
 .volume-row input[type='range'] { width: 100%; accent-color: var(--ink); }
 .volume-row b { text-align: right; font-variant-numeric: tabular-nums; }
+/* ⏸️ Pausar o 🚪 Salir de los eventos (v3.67.4). */
+.option-row { display: grid; grid-template-columns: 1.6em auto 1fr; align-items: center; gap: 8px; font-weight: 600; }
+.option-hint { margin: -2px 0 0 calc(1.6em + 8px); font-size: 0.85rem; color: var(--muted); }
+.option-row select { min-width: 0; font: inherit; font-weight: 500; color: var(--ink); background: var(--paper); border: 2px solid var(--paper-2); border-radius: 10px; padding: 4px 6px; }
 
 /* La bodega por dentro (v3.66): una fila por producto con lo que hay y su precio. */
 .stock-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; margin: 10px 0 8px; display: grid; align-content: start; gap: 4px; }

@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.67.4 — Pausar o salir de un evento
+- **Nueva opción en el menú ⚙️: «Al dejar un evento»**, para todos los eventos:
+  - **⏸️ Pausar** (como hasta ahora): el reloj del evento se detiene hasta que vuelvas.
+  - **🚪 Salir**: vuelves al mapa y el evento sigue corriendo por detrás, también con el juego cerrado (hasta tu tope de horas sin conexión, como la partida). Al volver a entrar se calcula lo que pasó; si el objetivo se cumplió mientras tanto, la medalla queda con el minuto en que se cumplió. Las tres mejoras siguen siendo compra tuya. En la lista de eventos se ve cuánto marcaría su reloj.
+- **El reloj de los eventos llega hasta 999:59 y ahí se queda**; el tablero sigue produciendo.
+
 ## v3.67.3 — Los avisos se cierran al tocarlos y las zonas recuerdan cómo las dejaste
 - **Tocar lo que dice una persona, o un aviso de arriba, lo cierra otra vez**, como antes de la v3.67.1. En esa versión dejaban pasar los toques y no había cómo quitarlos de encima de una ventana (los objetivos, los logros, las investigaciones).
 - **🗺️ Zonas abre como lo dejaste:** si la última vez usaste el mapa, abre el mapa; si usaste **📋 Lista**, abre la lista. Al ir a otra zona (al terminar una, o con «Ir» en la lista) se sigue viendo el viaje en el mapa.

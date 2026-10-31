@@ -3,6 +3,7 @@
 import { SEASONS, SEASON_DAYS, clockOf, hourOf, isLunch, isWorkTime, seasonDay, seasonOf, workBlocks, workOf, yearOf } from '../sim/calendar.js';
 import { clockLabel } from '../render/DayNight.js';
 import { EVENTS_BY_ID } from '../data/events.js';
+import { eventClock } from '../sim/events.js';
 import { formatClock } from './EventBar.js';
 
 const pct = (m) => (m === 1 ? 'normal' : `${m > 1 ? '+' : '−'}${Math.round(Math.abs(m - 1) * 100)} %`);
@@ -19,7 +20,7 @@ export function showCalendar(state) {
   if (state.event) {
     const def = EVENTS_BY_ID[state.event.id];
     document.getElementById('calendar-title').textContent = '⏱ Reloj del evento';
-    document.getElementById('calendar-now').textContent = `${def.icon} ${def.name} · ⏱ ${formatClock(state.playTime)}`;
+    document.getElementById('calendar-now').textContent = `${def.icon} ${def.name} · ⏱ ${formatClock(eventClock(state))}`;
     return;
   }
   document.getElementById('calendar-title').textContent = '📅 Calendario';

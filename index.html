@@ -199,6 +199,13 @@
         <div class="volume-box">
           <label class="volume-row"><span id="sound-vol-icon" class="volume-icon">🔊</span><span>Sonidos</span><input id="sound-vol" type="range" min="0" max="100" step="5" aria-label="Volumen de los sonidos" /><b id="sound-vol-val"></b></label>
           <label class="volume-row"><span id="music-vol-icon" class="volume-icon">🎵</span><span>Música</span><input id="music-vol" type="range" min="0" max="100" step="5" aria-label="Volumen de la música" /><b id="music-vol-val"></b></label>
+          <label class="option-row"><span class="volume-icon">🏅</span><span>Al dejar un evento</span>
+            <select id="event-exit-mode" aria-label="Al dejar un evento">
+              <option value="pause">⏸️ Pausar</option>
+              <option value="leave">🚪 Salir</option>
+            </select>
+          </label>
+          <p id="event-exit-hint" class="option-hint"></p>
         </div>
         <div class="modal-actions">
           <button id="intro-btn" class="btn">❓ Cómo se juega</button>
@@ -336,7 +343,7 @@
           <h2>🏅 Eventos</h2>
           <button id="events-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>
-        <p class="chain-help">Hay dos eventos a la vez en todo el juego, nunca de la misma región: tableros aparte, con sus propias monedas y niveles y un reloj que solo corre mientras juegas en ellos (⏸️ Pausar te devuelve al mapa). Cuanto más rápido cumplas el objetivo, mejor la medalla (🥇 da 4 ⭐ de Renombre, 🥈 2 y 🥉 1); para ganar el evento, además hay que comprar sus tres mejoras. Ganado, puedes quedarte mirándolo (o pausarlo) hasta tocar 🏁 Terminar; ya no se reinicia. Con 🔄 lo vuelves a empezar, y con 🏁 lo terminas aunque no lo hayas ganado (sin medalla). Al terminarlo, ese cupo descansa 2 años del juego (unas 4 h 16 min) y luego sale el evento de otra zona. Con la región ya terminada, salen los eventos de todas sus zonas aunque vuelvas a empezar. El Renombre y las medallas no se pierden al volver a empezar. En el tablero no están las otras zonas: lo que llega de ellas (la panela, la leche…) llega solo, a cada estación lo que gasta y un 25 % más, y su ruta 🚌 sube con la estación; solo algunos eventos lo cortan, hasta que compres lo de la barra.</p>
+        <p class="chain-help">Hay dos eventos a la vez en todo el juego, nunca de la misma región: tableros aparte, con sus propias monedas y niveles y un reloj que llega hasta 999:59. En el menú eliges qué pasa al dejar un evento: con ⏸️ Pausar, el reloj solo corre mientras juegas en él; con 🚪 Salir, sigue corriendo por detrás (también con el juego cerrado) y al volver se calcula lo que pasó. Cuanto más rápido cumplas el objetivo, mejor la medalla (🥇 da 4 ⭐ de Renombre, 🥈 2 y 🥉 1); para ganar el evento, además hay que comprar sus tres mejoras. Ganado, puedes quedarte mirándolo (o pausarlo) hasta tocar 🏁 Terminar; ya no se reinicia. Con 🔄 lo vuelves a empezar, y con 🏁 lo terminas aunque no lo hayas ganado (sin medalla). Al terminarlo, ese cupo descansa 2 años del juego (unas 4 h 16 min) y luego sale el evento de otra zona. Con la región ya terminada, salen los eventos de todas sus zonas aunque vuelvas a empezar. El Renombre y las medallas no se pierden al volver a empezar. En el tablero no están las otras zonas: lo que llega de ellas (la panela, la leche…) llega solo, a cada estación lo que gasta y un 25 % más, y su ruta 🚌 sube con la estación; solo algunos eventos lo cortan, hasta que compres lo de la barra.</p>
         <p id="events-renown" class="events-renown"></p>
         <div class="tabs chain-tabs events-renown-tabs">
           <button id="album-btn" class="tab">📖 Álbum</button>

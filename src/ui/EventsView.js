@@ -3,7 +3,7 @@
 import { EVENTS, MEDALS } from '../data/events.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS, REGION_OF_ZONE } from '../data/regions.js';
-import { MEDAL_BONUS, eventObjective, eventStatus, medalCount, regionEvents } from '../sim/events.js';
+import { MEDAL_BONUS, awaySeconds, boardClockNow, eventObjective, eventStatus, medalCount, regionEvents } from '../sim/events.js';
 import { clockOf } from '../sim/calendar.js';
 import { formatDuration } from '../core/format.js';
 import { formatClock, objectiveText } from './EventBar.js';
@@ -77,9 +77,11 @@ export class EventsView {
         foot = `<p>🏁 ¡Ganado con ${m.icon} ${m.name}! Entra a verlo y toca 🏁 Terminar evento para cerrarlo.</p><button class="btn buy" data-play="${def.zone}">Ver y terminar</button>`;
       } else if (st.kind === 'active') {
         const secured = st.board.event.medal;
+        // 🚪 Si se salió de él, sigue corriendo (v3.67.4): el reloj que marcaría ahora.
+        const running = awaySeconds(st.board, s) > 0 ? ' · 🚪 corriendo' : '';
         foot = secured
           ? `<p>✅ ${MEDALS[secured].icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.</p><button class="btn buy" data-play="${def.zone}">Seguir</button>`
-          : `<button class="btn buy" data-play="${def.zone}">Seguir · ⏱ ${formatClock(st.board.playTime)}</button>`;
+          : `<button class="btn buy" data-play="${def.zone}">Seguir · ⏱ ${formatClock(boardClockNow(st.board, s))}${running}</button>`;
       } else foot = `<button class="btn buy" data-play="${def.zone}">Jugar</button>`;
       return `<div class="event-card">
         ${title}

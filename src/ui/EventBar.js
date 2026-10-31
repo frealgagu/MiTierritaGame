@@ -1,7 +1,7 @@
 // Barra del tablero de un evento (v2.0): el objetivo, el reloj del evento, las medallas y las compras
 // del evento (cada una pide la anterior).
 import { formatNumber } from '../core/format.js';
-import { allActionsBought, boardRound, buyAction, boardObjective, eventDef, eventHandicaps, eventItems, eventProgress, handicapText, medalFor, quoteAction } from '../sim/events.js';
+import { allActionsBought, boardRound, buyAction, boardObjective, eventClock, eventDef, eventHandicaps, eventItems, eventProgress, handicapText, medalFor, quoteAction } from '../sim/events.js';
 import { EVENT_ACTIONS_BY_ID, MEDALS } from '../data/events.js';
 import { PRODUCTS } from '../data/products.js';
 import { setFitted } from './fit.js';
@@ -17,8 +17,10 @@ export function objectiveText(obj) {
 }
 
 export class EventBar {
-  // onPause: volver al mapa con el evento en pausa. onRestart / onEnd: reiniciarlo o terminarlo (v3.30).
-  constructor(onPause, onRestart, onEnd) {
+  // onPause: volver al mapa, con el evento en pausa o corriendo por detrás según el menú (v3.67.4).
+  // onRestart / onEnd: reiniciarlo o terminarlo (v3.30).   exitMode(): 'pause' o 'leave'
+  constructor(onPause, onRestart, onEnd, exitMode = () => 'pause') {
+    this.exitMode = exitMode;
     this.el = document.getElementById('event-bar');
     this.actions = document.getElementById('event-actions');
     this.game = null;
@@ -61,7 +63,13 @@ export class EventBar {
     this.el.hidden = !game;
     this.drawn = null;
     this.itemsHtml = null;
+    this.paintExit();
     if (game) this.paint();
+  }
+
+  // ⏸️ Pausar o 🚪 Salir, según la opción del menú.
+  paintExit() {
+    this.pauseBtn.textContent = this.exitMode() === 'leave' ? '🚪 Salir' : '⏸️ Pausar';
   }
 
   paint() {
@@ -72,8 +80,9 @@ export class EventBar {
     setFitted(document.getElementById('event-title'), `${def.icon} ${def.name} ${boardRound(board)}`);
     // Con el objetivo cumplido, la medalla queda fija con su tiempo (v3.7): falta comprar las mejoras.
     const secured = board.event.medal;
-    const medal = MEDALS[secured ?? medalFor(obj, board.playTime)];
-    document.getElementById('event-clock').textContent = `${medal.icon} ⏱ ${formatClock(secured ? board.event.time : board.playTime)}`;
+    // El reloj llega hasta 999:59 y ahí se queda (v3.67.4).
+    const medal = MEDALS[secured ?? medalFor(obj, eventClock(board))];
+    document.getElementById('event-clock').textContent = `${medal.icon} ⏱ ${formatClock(secured ? board.event.time : eventClock(board))}`;
     // Ganado (v3.30): se sigue mirando (y se puede pausar); ya no se reinicia. Se cierra con «Terminar».
     const done = Boolean(board.event.done);
     this.restartBtn.disabled = done;

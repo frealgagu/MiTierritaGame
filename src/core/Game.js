@@ -13,7 +13,7 @@ import { claimAllGoals, claimGoal, unlockZone } from '../sim/goals.js';
 import { checkMastery } from '../sim/legacy.js';
 import { stepAlerts } from '../sim/alerts.js';
 import { clockOf, workOf, workSeconds } from '../sim/calendar.js';
-import { refillSlots, stepSupply } from '../sim/events.js';
+import { boardObjective, eventItems, refillSlots, secureMedal, stepSupply } from '../sim/events.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
 // s de juego que se simulan de verdad al volver; el resto se extrapola. Hasta la v3.65 eran 2 h: con la
@@ -130,6 +130,55 @@ export class Game {
       s.playTime += rest;
     }
     return { seconds: total, coins: s.coins - before };
+  }
+
+  // El tablero de un evento que siguió corriendo por detrás (v3.67.4, «🚪 Salir»): como el tiempo sin
+  // conexión, se simulan de verdad hasta MAX_SIMULATED s y el resto se suma al ritmo de la segunda mitad
+  // (en el tablero siempre es de día). Sin tope: el tablero no para de producir; solo su reloj se queda
+  // en 999:59. Si el objetivo se cumple en lo que se suma, la medalla queda con el momento en que se
+  // cumple al ritmo medido de cada producto que falta.
+  // Devuelve { seconds, secured } (secured: si se aseguró la medalla mientras tanto).
+  catchUpBoard(seconds) {
+    const s = this.state;
+    const total = Math.max(seconds, 0);
+    const simulated = Math.min(total, MAX_SIMULATED);
+    let secured = false;
+    let mark = null;
+    this.bus.muted = true;
+    this.offline = true;
+    try {
+      for (let t = 0; t < simulated; t += 1) {
+        if (!mark && t >= simulated / 2) mark = { t: s.playTime, ...snapshot(s) };
+        this.step(Math.min(1, simulated - t));
+        if (secureMedal(s)) secured = true;
+      }
+    } finally {
+      this.bus.muted = false;
+      this.offline = false;
+    }
+    const rest = total - simulated;
+    const span = mark ? s.playTime - mark.t : 0;
+    if (rest > 0 && span > 0) {
+      const start = s.playTime;
+      const after = snapshot(s);
+      const kind = boardObjective(s).kind;
+      // Cuándo se cumple lo que falta, cada producto a su ritmo (Infinity si alguno no avanza).
+      let when = 0;
+      for (const { product, have, need } of eventItems(s)) {
+        if (have >= need) continue;
+        const rate = ((after[kind][product] ?? 0) - (mark[kind][product] ?? 0)) / span;
+        when = rate > 0 ? Math.max(when, (need - have) / rate) : Infinity;
+      }
+      const k = rest / span;
+      s.coins += (after.coins - mark.coins) * k;
+      s.totalEarned += (after.totalEarned - mark.totalEarned) * k;
+      for (const kd of ['sold', 'produced', 'imported']) {
+        for (const [id, n] of Object.entries(after[kd])) s.stats[kd][id] = n + (n - (mark[kd][id] ?? 0)) * k;
+      }
+      s.playTime += rest;
+      if (!s.event.medal && when <= rest && secureMedal(s, start + when)) secured = true;
+    } else if (rest > 0) s.playTime += rest;
+    return { seconds: total, secured };
   }
 
   incomePerSecond() {

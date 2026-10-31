@@ -1,6 +1,6 @@
 // Eventos (v2.0, GDD §10.2). Cada tablero es una partida aparte (un estado como el del juego, con solo
 // la zona del evento) que se juega con su propio Game: sus monedas, sus niveles y su reloj (su
-// playTime), que avanza solo mientras se está en el tablero. Se guarda dentro de la partida, en
+// playTime), que avanza mientras se está en el tablero (y por detrás tras «🚪 Salir», v3.67.4). Se guarda dentro de la partida, en
 // state.events.boards[zona]. En los tableros siempre es de día y no hay temporada.
 //
 // Cuándo hay evento (v3.30): 2 cupos para todo el juego (hasta la v3.29, 2 por región), que guarda la
@@ -28,6 +28,8 @@ import { gainRenown, profileOf } from './renown.js';
 
 export const EVENT_SLOTS = 2;
 export const EVENT_COOLDOWN = 2 * YEAR_DAYS * DAY_LENGTH; // 2 años del juego (4 h 16 min; hasta la v3.29, 3)
+// El reloj del evento llega hasta 999:59 y ahí se queda (v3.67.4); el tablero sigue produciendo.
+export const EVENT_CLOCK_MAX = 999 * 60 + 59;
 
 export const eventDef = (board) => EVENTS_BY_ID[board.event.id];
 // El reto n.º `round` de un evento: van en orden y vuelven a empezar.
@@ -204,6 +206,23 @@ export function objectiveUpgrades(board) {
   return [...[...ids].flatMap((id) => [id, `${id}:transport`]), ...(obj.kind === 'sold' ? [`dispatch:${def.zone}`] : [])];
 }
 
+// Lo que marca el reloj del evento: su tiempo de juego, hasta 999:59.
+export const eventClock = (board) => Math.min(board.playTime ?? 0, EVENT_CLOCK_MAX);
+
+// «🚪 Salir» (v3.67.4): el tablero sigue corriendo por detrás desde `event.away` (el reloj del país al
+// salir); lo que pasó se calcula al volver a entrar (Game.catchUpBoard). Mientras tanto, cuánto marcaría.
+export const awaySeconds = (board, root) => (board.event.away === undefined ? 0 : Math.max(0, clockOf(root) - board.event.away));
+export const boardClockNow = (board, root) => Math.min((board.playTime ?? 0) + awaySeconds(board, root), EVENT_CLOCK_MAX);
+
+// Con el objetivo cumplido, la medalla queda asegurada con el tiempo de ese momento (`at`, el del tablero
+// si no se dice otro; hasta 999:59). Devuelve true si se acaba de asegurar.
+export function secureMedal(board, at = board.playTime) {
+  if (board.event.medal || eventProgress(board) < 1 - 1e-9) return false;
+  board.event.time = Math.min(at, EVENT_CLOCK_MAX);
+  board.event.medal = medalFor(boardObjective(board), board.event.time);
+  return true;
+}
+
 export function medalFor(obj, seconds) {
   if (seconds <= obj.medals[0]) return 'gold';
   if (seconds <= obj.medals[1]) return 'silver';
@@ -250,9 +269,7 @@ export function finishEvent(root, zoneId) {
   if (!board || board.event.done) return null;
   const def = eventDef(board);
   if (!board.event.medal) {
-    if (eventProgress(board) < 1) return null;
-    board.event.medal = medalFor(boardObjective(board), board.playTime);
-    board.event.time = board.playTime;
+    if (!secureMedal(board)) return null;
     if (!allActionsBought(board)) return { secured: true, def, medal: board.event.medal, time: board.event.time };
   }
   if (!allActionsBought(board)) return null;
