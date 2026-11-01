@@ -1,6 +1,7 @@
 // Capturas para la ficha de Google Play (1080×1920): una partida avanzada armada con el modo de desarrollo.
 // Uso: `npx vite --port 5199` y, en otra terminal, `node tools/capturas-play.mjs store/capturas [idioma]`
-// (v3.68: con `en`, las capturas en inglés, p. ej. `node tools/capturas-play.mjs store/capturas-en en`)
+// (v3.68: con `en`, las capturas en inglés, p. ej. `node tools/capturas-play.mjs store/capturas-en en`;
+//  v3.70: también `pt` y `fr`)
 // (necesita Playwright; CHROMIUM puede indicar el navegador).
 import { chromium } from 'playwright-core';
 const out = process.argv[2] ?? 'store/capturas';

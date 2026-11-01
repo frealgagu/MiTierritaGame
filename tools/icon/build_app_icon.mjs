@@ -2,8 +2,9 @@
 //   assets/icon-only.png, icon-foreground.png, icon-background.png, splash.png, splash-dark.png
 //     (de ahí salen los de Android con: npx @capacitor/assets generate --android)
 //   public/icons/icon-192.png, icon-512.png, icon-maskable-512.png, apple-touch-icon.png   (la web)
-//   store/icon-512.png, store/feature-graphic.png, feature-graphic-en.png   (la ficha de Google Play)
+//   store/icon-512.png, store/feature-graphic.png, feature-graphic-en/pt/fr.png   (la ficha de Google Play)
 // Uso: node tools/icon/build_app_icon.mjs   (necesita Playwright con Chromium)
+//      node tools/icon/build_app_icon.mjs --features   (solo las imágenes destacadas de la ficha)
 import { createRequire } from 'node:module';
 import { appIconSvg, backgroundSvg } from './app_icon.mjs';
 
@@ -25,6 +26,8 @@ async function shot(html, w, h, path, transparent = false) {
 }
 
 const full = appIconSvg();
+const onlyFeatures = process.argv.includes('--features');
+if (!onlyFeatures) {
 // Android: la figura más pequeña sobre el fondo aparte (el sistema recorta el ícono adaptable).
 await shot(sized(full, 1024), 1024, 1024, 'assets/icon-only.png');
 await shot(sized(appIconSvg({ withBackground: false, scale: 0.62 }), 1024), 1024, 1024, 'assets/icon-foreground.png', true);
@@ -40,7 +43,8 @@ await shot(sized(appIconSvg({ scale: 0.8 }), 512), 512, 512, 'public/icons/icon-
 await shot(sized(full, 180), 180, 180, 'public/icons/apple-touch-icon.png');
 // Google Play: el ícono (512 × 512) y la imagen destacada (1024 × 500).
 await shot(sized(full, 512), 512, 512, 'store/icon-512.png');
-// La imagen destacada en cada idioma de la ficha (v3.68: también en inglés).
+}
+// La imagen destacada en cada idioma de la ficha (v3.68: también en inglés; v3.70: portugués y francés).
 const feature = (subtitle, path) =>
   shot(
     `<div style="width:1024px;height:500px;background:linear-gradient(180deg,#bfe6f2,#fdf3dc);display:flex;align-items:center;gap:36px;padding:0 56px;box-sizing:border-box;font-family:Fredoka,sans-serif;color:#3a2418">
@@ -51,4 +55,6 @@ const feature = (subtitle, path) =>
     1024, 500, path);
 await feature('Produce, transporta y descubre<br>los encantos de Colombia', 'store/feature-graphic.png');
 await feature('Produce, transport and discover<br>the charms of Colombia', 'store/feature-graphic-en.png');
+await feature('Produza, transporte e descubra<br>os encantos da Colômbia', 'store/feature-graphic-pt.png');
+await feature('Produis, transporte et découvre<br>les charmes de la Colombie', 'store/feature-graphic-fr.png');
 await browser.close();
