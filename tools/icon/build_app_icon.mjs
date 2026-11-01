@@ -2,7 +2,7 @@
 //   assets/icon-only.png, icon-foreground.png, icon-background.png, splash.png, splash-dark.png
 //     (de ahí salen los de Android con: npx @capacitor/assets generate --android)
 //   public/icons/icon-192.png, icon-512.png, icon-maskable-512.png, apple-touch-icon.png   (la web)
-//   store/icon-512.png, store/feature-graphic.png   (la ficha de Google Play)
+//   store/icon-512.png, store/feature-graphic.png, feature-graphic-en.png   (la ficha de Google Play)
 // Uso: node tools/icon/build_app_icon.mjs   (necesita Playwright con Chromium)
 import { createRequire } from 'node:module';
 import { appIconSvg, backgroundSvg } from './app_icon.mjs';
@@ -40,11 +40,15 @@ await shot(sized(appIconSvg({ scale: 0.8 }), 512), 512, 512, 'public/icons/icon-
 await shot(sized(full, 180), 180, 180, 'public/icons/apple-touch-icon.png');
 // Google Play: el ícono (512 × 512) y la imagen destacada (1024 × 500).
 await shot(sized(full, 512), 512, 512, 'store/icon-512.png');
-await shot(
-  `<div style="width:1024px;height:500px;background:linear-gradient(180deg,#bfe6f2,#fdf3dc);display:flex;align-items:center;gap:36px;padding:0 56px;box-sizing:border-box;font-family:Fredoka,sans-serif;color:#3a2418">
+// La imagen destacada en cada idioma de la ficha (v3.68: también en inglés).
+const feature = (subtitle, path) =>
+  shot(
+    `<div style="width:1024px;height:500px;background:linear-gradient(180deg,#bfe6f2,#fdf3dc);display:flex;align-items:center;gap:36px;padding:0 56px;box-sizing:border-box;font-family:Fredoka,sans-serif;color:#3a2418">
     <div style="flex:none;width:400px;height:400px">${sized(appIconSvg({ withBackground: false }), 400)}</div>
     <div><div style="font-size:66px;font-weight:700;line-height:1.02">Encantos de<br>Mi Tierrita</div>
-    <div style="font-size:30px;font-weight:600;margin-top:18px;color:#5d4037">Produce, transporta y descubre<br>los encantos de Colombia</div></div>
+    <div style="font-size:30px;font-weight:600;margin-top:18px;color:#5d4037">${subtitle}</div></div>
   </div>`,
-  1024, 500, 'store/feature-graphic.png');
+    1024, 500, path);
+await feature('Produce, transporta y descubre<br>los encantos de Colombia', 'store/feature-graphic.png');
+await feature('Produce, transport and discover<br>the charms of Colombia', 'store/feature-graphic-en.png');
 await browser.close();
