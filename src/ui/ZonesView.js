@@ -5,6 +5,7 @@ import { analyzeChain } from '../sim/analysis.js';
 import { regionState } from '../sim/regions.js';
 import { ZoneMap } from './ZoneMap.js';
 import { toast } from './toast.js';
+import { t } from '../i18n/index.js';
 
 // Selector de zonas (v3.0: por regiones): cuáles están abiertas, cuánto rinde cada una y a cuál ir.
 // El botón 🗺️ aparece cuando hay más de una zona abierta (en cualquier región).
@@ -112,14 +113,14 @@ export class ZonesView {
       if (!state) {
         const head = `<h3 class="research-other">${region.icon} ${region.name}</h3>`;
         const from = ZONES_BY_ID[region.unlock.zone];
-        return group(`${head}<div class="research locked"><span class="research-icon">🔒</span><span class="research-text"><b>${region.name}</b><br><small>Se abre al completar ${from.name}.</small></span></div>`);
+        return group(`${head}<div class="research locked"><span class="research-icon">🔒</span><span class="research-text"><b>${region.name}</b><br><small>${t('Se abre al completar {zone}.', { zone: from.name })}</small></span></div>`);
       }
       // La cabecera pliega la región; plegada, dice cuántas zonas lleva y cuánto rinde.
       const folded = this.folded(region.id);
       const opened = region.zones.filter((z) => state.zones[z]?.unlocked);
       const done = region.zones.filter((z) => state.zones[z]?.complete).length;
       const income = opened.reduce((sum, z) => sum + analyzeChain(state, z).income, 0);
-      const here = region.zones.includes(this.getZone()) ? ' · 📍 Aquí estás' : '';
+      const here = region.zones.includes(this.getZone()) ? ` · ${t('📍 Aquí estás')}` : '';
       const head = `<button class="zones-region research-other" data-fold="${region.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${region.icon} ${region.name}<small>${done}/${region.zones.length} 🏁 · ${formatRate(income)} 💰/s${here}</small></button>`;
       if (folded) return group(head);
       const rows = region.zones.map((id, i) => {
@@ -128,22 +129,22 @@ export class ZonesView {
         const current = id === this.getZone();
         let status;
         let action = '';
-        if (!st.unlocked) status = `<small>🔒 Completa ${ZONES_BY_ID[region.zones[i - 1]].name}</small>`;
+        if (!st.unlocked) status = `<small>${t('🔒 Completa {zone}', { zone: ZONES_BY_ID[region.zones[i - 1]].name })}</small>`;
         else {
           const income = analyzeChain(state, id).income;
-          status = `<small>${st.complete ? '🏁 Completada' : '⏳ En juego'} · ${formatRate(income)} 💰/s</small>`;
-          action = current ? '<span class="owned">Aquí estás</span>' : `<button class="btn buy small" data-zone="${id}">Ir</button>`;
+          status = `<small>${st.complete ? t('🏁 Completada') : t('⏳ En juego')} · ${formatRate(income)} 💰/s</small>`;
+          action = current ? `<span class="owned">${t('Aquí estás')}</span>` : `<button class="btn buy small" data-zone="${id}">${t('Ir')}</button>`;
         }
         return `
           <div class="research ${st.unlocked ? '' : 'locked'} ${current ? 'owned' : ''}">
             <span class="research-icon">${zone.icon}</span>
-            <span class="research-text"><b>Zona ${i + 1} · ${zone.name}</b><br>${status}</span>
+            <span class="research-text"><b>${t('Zona {n}', { n: i + 1 })} · ${zone.name}</b><br>${status}</span>
             ${action}
           </div>`;
       });
       // Las que todavía no existen (llegan en las próximas versiones).
       const soon = (region.soon ?? []).map(
-        (name, k) => `<div class="research locked"><span class="research-icon">🚧</span><span class="research-text"><b>Zona ${region.zones.length + k + 1} · ${name}</b><br><small>Llega pronto</small></span></div>`,
+        (name, k) => `<div class="research locked"><span class="research-icon">🚧</span><span class="research-text"><b>${t('Zona {n}', { n: region.zones.length + k + 1 })} · ${t(name)}</b><br><small>${t('Llega pronto')}</small></span></div>`,
       );
       return group(head + rows.join('') + soon.join(''));
     }).join('');

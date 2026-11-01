@@ -8,6 +8,7 @@ import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
 import { formatNumber } from '../core/format.js';
+import { t } from '../i18n/index.js';
 
 
 // Etiqueta flotante con nombre y nivel, al estilo de los juegos de gestión.
@@ -144,7 +145,7 @@ export class FarmView extends StationView {
     const farm = state.stations[this.def.id];
     const tier = milestoneTier(farm.level);
     if (tier !== this.tier) this.draw(tier);
-    this.label.set(`${this.def.icon} ${this.def.name} · Nv ${farm.level}`);
+    this.label.set(`${this.def.icon} ${this.def.name} · ${t('Nv')} ${farm.level}`);
     // Cosecha de temporada (v3.4): mientras se cosecha, las reinas vuelan sobre los hormigueros.
     this.swarming = Boolean(this.def.harvest) && farm.status === 'working';
   }
@@ -606,7 +607,7 @@ export class WarehouseView extends StationView {
     this.house = new Graphics();
     this.sacks = new Graphics();
     this.addChild(this.house, this.sacks);
-    this.label = new Label('Bodega');
+    this.label = new Label(t('Bodega'));
     this.lastSacks = -1;
     this.drawHouse();
     const c = iso(wh.x + 2.4, wh.y + 0.9, 70);
@@ -681,7 +682,7 @@ export class WarehouseView extends StationView {
   sync(zone, capacity) {
     const stock = Object.values(zone.warehouse).reduce((a, b) => a + b, 0);
     const n = stock <= 0 ? 0 : Math.min(9, Math.ceil((stock / capacity) * 9));
-    this.label.set(`🚙 Bodega · Nv ${zone.dispatch.level}`);
+    this.label.set(`🚙 ${t('Bodega')} · ${t('Nv')} ${zone.dispatch.level}`);
     if (n === this.lastSacks) return;
     this.lastSacks = n;
     const g = this.sacks.clear();

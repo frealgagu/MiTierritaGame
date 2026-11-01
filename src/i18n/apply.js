@@ -8,8 +8,11 @@
 //     routes { id: [nombre, vehículo, pestaña] } · zones { id: [nombre, letrero de salida, { ruta: letrero }] }
 //     facts { id: [dato, …] } · people { zona: [nombre, oficio] } · welcome { zona: saludo }
 //     decor { id: [nombre, { opción: nombre }] } · regions { id: nombre } · songs { región: [nombre, instrumentos] }
+//     dispatch: nombre de la bodega · seasons { id: [nombre, corto, texto] }
+//     victory { zona: [título, texto, lo que se cuenta] } · pets { id: [nombre, plural] }
 // Lo que falte se queda en español.
-import { STATIONS } from '../data/stations.js';
+import { DISPATCH, STATIONS } from '../data/stations.js';
+import { SEASONS } from '../sim/calendar.js';
 import { PRODUCTS, ZONES as PRODUCT_ZONES } from '../data/products.js';
 import { RESEARCH } from '../data/research.js';
 import { EVENTS, EVENT_ACTIONS_BY_ID, MEDALS } from '../data/events.js';
@@ -21,6 +24,8 @@ import { FACTS, PEOPLE, WELCOME } from '../data/lore.js';
 import { DECOR } from '../data/decor.js';
 import { REGIONS } from '../data/regions.js';
 import { SONGS } from '../audio/songs.js';
+import { VICTORY } from '../data/victory.js';
+import { PETS } from '../sim/renown.js';
 
 // Pone los campos `fields` de cada objeto de `items` (por su id) con lo que diga `texts[id]`: un texto
 // (el primer campo) o una lista (en orden; null deja el de español).
@@ -73,4 +78,8 @@ export function applyContent(c) {
   for (const d of DECOR) patch(d.options, c.decor?.[d.id]?.[1], ['name']);
   patch(REGIONS, c.regions, ['name']);
   for (const [id, [name, instruments]] of Object.entries(c.songs ?? {})) if (SONGS[id]) Object.assign(SONGS[id], { name, instruments });
+  if (c.dispatch) DISPATCH.name = c.dispatch;
+  patch(SEASONS, c.seasons, ['name', 'short', 'text']);
+  applyKeyed(PETS, c.pets, ['name', 'plural']);
+  for (const [id, [title, text, stat]] of Object.entries(c.victory ?? {})) if (VICTORY[id]) Object.assign(VICTORY[id], { title, text, stat: [stat, VICTORY[id].stat[1]] });
 }

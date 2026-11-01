@@ -9,12 +9,13 @@ import { ZONES_BY_ID } from '../data/zones/index.js';
 import { pendingRoutes, slowConsumers } from '../sim/transport.js';
 import { withArticle } from '../data/lore.js';
 import { saleValue } from '../sim/modifiers.js';
+import { listJoin, t } from '../i18n/index.js';
 
 const outIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].out)[0]].icon;
 // «la Mesa de chocolate y la Chocolatería»
 const listNames = (ids) => {
   const names = ids.map((id) => withArticle(STATIONS_BY_ID[id].name));
-  return names.length > 1 ? `${names.slice(0, -1).join(', ')} y ${names.at(-1)}` : names[0];
+  return listJoin(names);
 };
 // La cadena (v3.0.1): un diagrama con las estaciones unidas por eslabones y, sobre cada eslabón, cuánto
 // pasa por segundo. Al tocar una estación aparece abajo su detalle (lo que recibe y procesa, sus
@@ -82,10 +83,10 @@ function detailOf(state, a, rows, sel, zone) {
   const [kind, part] = sel.split(':');
   if (kind === 'dispatch') {
     return `
-      <div class="cd-head"><span class="cd-icon">${DISPATCH.icon}</span><b>Bodega y Willys</b> <small>Nv ${state.zones[zone].dispatch.level}</small></div>
-      <p>Todo lo que sale de la cadena llega aquí: <b>${formatRate(a.toWarehouse)} u/s</b>. El Willys vende hasta <b>${formatRate(a.dispatch)} u/s</b>.</p>
-      <p>Ingreso estimado: <b>${formatRate(a.income)} 💰/s</b></p>
-      <div class="cd-actions"><button class="btn buy" data-open="dispatch:${zone}">🚙 Ir al despacho</button><button class="btn" data-open="dispatch:${zone}:stock">📦 Ver la bodega</button></div>`;
+      <div class="cd-head"><span class="cd-icon">${DISPATCH.icon}</span><b>${t('Bodega y Willys')}</b> <small>${t('Nv')} ${state.zones[zone].dispatch.level}</small></div>
+      <p>${t('Todo lo que sale de la cadena llega aquí: <b>{in} u/s</b>. El Willys vende hasta <b>{out} u/s</b>.', { in: formatRate(a.toWarehouse), out: formatRate(a.dispatch) })}</p>
+      <p>${t('Ingreso estimado: <b>{n} 💰/s</b>', { n: formatRate(a.income) })}</p>
+      <div class="cd-actions"><button class="btn buy" data-open="dispatch:${zone}">${t('🚙 Ir al despacho')}</button><button class="btn" data-open="dispatch:${zone}:stock">${t('📦 Ver la bodega')}</button></div>`;
   }
   if (kind === 'route') {
     const r = ROUTES_BY_ID[part];
@@ -95,10 +96,10 @@ function detailOf(state, a, rows, sel, zone) {
     const arriving = id ? r.stations.reduce((n, sid) => n + (rows[sid]?.imported?.[r.product] ?? 0), 0) : 0;
     const short = r.stations.some((sid) => rows[sid]?.importLimited === r.id);
     return `
-      <div class="cd-head"><span class="cd-icon">${product.icon}</span><b>${product.name}</b> <small>desde ${from.icon} ${from.name}</small></div>
-      <p>${r.icon} ${r.name} · Nv ${state.routes[r.id].level} · llegan <b>${formatRate(arriving)}/s</b></p>
-      ${short ? '<p class="lost">⏸️ No alcanza: la estación espera.</p>' : ''}
-      <div class="cd-actions"><button class="btn buy" data-open="route:${r.id}">${r.icon} Ir a la ruta</button></div>`;
+      <div class="cd-head"><span class="cd-icon">${product.icon}</span><b>${product.name}</b> <small>${t('desde {zone}', { zone: `${from.icon} ${from.name}` })}</small></div>
+      <p>${r.icon} ${r.name} · ${t('Nv')} ${state.routes[r.id].level} · ${t('llegan <b>{n}/s</b>', { n: formatRate(arriving) })}</p>
+      ${short ? `<p class="lost">${t('⏸️ No alcanza: la estación espera.')}</p>` : ''}
+      <div class="cd-actions"><button class="btn buy" data-open="route:${r.id}">${r.icon} ${t('Ir a la ruta')}</button></div>`;
   }
   const id = kind;
   const def = STATIONS_BY_ID[id];
@@ -106,59 +107,63 @@ function detailOf(state, a, rows, sel, zone) {
   // Una rama aparte (v3.12: la Compostera), que no lleva nada a la bodega.
   if (def.side && state.stations[id]) {
     return `
-      <div class="cd-head"><span class="cd-icon">${def.icon}</span><b>${def.name}</b> <small>Nv ${state.stations[id].level}</small></div>
+      <div class="cd-head"><span class="cd-icon">${def.icon}</span><b>${def.name}</b> <small>${t('Nv')} ${state.stations[id].level}</small></div>
       <p>${sideText(state, id)}</p>
-      <div class="cd-actions"><button class="btn buy" data-open="${id}">🏗️ Ir al edificio</button></div>`;
+      <div class="cd-actions"><button class="btn buy" data-open="${id}">${t('🏗️ Ir al edificio')}</button></div>`;
   }
   if (!row) {
     return `
       <div class="cd-head"><span class="cd-icon">${def.icon}</span><b>${def.name}</b> <small>🔒 ${formatNumber(def.unlockCost)} 💰</small></div>
-      <p>La siguiente estación por construir.</p>
-      <div class="cd-actions"><button class="btn buy" data-open="${id}">🏗️ Ir a construirla</button></div>`;
+      <p>${t('La siguiente estación por construir.')}</p>
+      <div class="cd-actions"><button class="btn buy" data-open="${id}">${t('🏗️ Ir a construirla')}</button></div>`;
   }
   const st = state.stations[id];
   const icon = outIcon(id);
   const lines = [];
   lines.push(row.incoming === null
-    ? `Produce <b>${formatRate(row.output)} ${icon}/s</b>.`
-    : `Recibe ${formatRate(row.incoming)}/s y procesa hasta ${formatRate(row.capacity)}/s → <b>${formatRate(row.output)} ${icon}/s</b>.`);
+    ? t('Produce <b>{n}</b>.', { n: `${formatRate(row.output)} ${icon}/s` })
+    : t('Recibe {in}/s y procesa hasta {cap}/s → <b>{out}</b>.', { in: formatRate(row.incoming), cap: formatRate(row.capacity), out: `${formatRate(row.output)} ${icon}/s` }));
   // Lo que llega de otras zonas.
   for (const imp of def.imports ?? []) {
     const r = ROUTES_BY_ID[imp.route];
     const from = ZONES_BY_ID[r.from];
-    lines.push(`${PRODUCTS[imp.product].icon} ${PRODUCTS[imp.product].name} desde ${from.icon} ${from.name}: llegan ${formatRate(row.imported[imp.product])}/s (${r.icon} Nv ${state.routes[r.id].level}).${row.importLimited === r.id ? ' <span class="lost">⏸️ No alcanza: la estación espera.</span>' : ''}`);
+    lines.push(`${t('{p} desde {zone}: llegan {n}/s ({route}).', { p: `${PRODUCTS[imp.product].icon} ${PRODUCTS[imp.product].name}`, zone: `${from.icon} ${from.name}`, n: formatRate(row.imported[imp.product]), route: `${r.icon} ${t('Nv')} ${state.routes[r.id].level}` })}${row.importLimited === r.id ? ` <span class="lost">${t('⏸️ No alcanza: la estación espera.')}</span>` : ''}`);
   }
   // Los arrieros: cuánto llevan y a dónde.
   const kids = [...row.children, ...(PARENT[nextToUnlock(state, zone)] === id ? [nextToUnlock(state, zone)] : [])];
-  const route = row.exports?.length ? ` y la ${ROUTES_BY_ID[row.exports[0]].name}` : '';
+  const route = row.exports?.length ? ` ${t('y {route}', { route: withArticle(ROUTES_BY_ID[row.exports[0]].name) })}` : '';
   const carries = kids.length > 1 || (kids.length && row.exports?.length)
-    ? `reparten <b>${formatRate(row.toNext)}</b> entre ${kids.length} ${kids.length > 1 ? 'ramas' : 'estación'}${route}`
-    : kids.length ? `llevan <b>${formatRate(row.toNext)}</b> a ${withArticle(STATIONS_BY_ID[kids[0]].name)}` : `llevan <b>${formatRate(row.output)}</b> a la bodega`;
-  lines.push(`${hasBelt(st.transport.level) ? '⚡ La banda' : '🐴 Los arrieros'} (Nv ${st.transport.level}) ${carries}; pueden llevar hasta ${formatRate(row.transport)} ${icon}/s.`);
+    ? (kids.length > 1 ? t('reparten <b>{n}</b> entre {k} ramas', { n: formatRate(row.toNext), k: kids.length }) : t('reparten <b>{n}</b> entre {k} estación', { n: formatRate(row.toNext), k: kids.length })) + route
+    : kids.length ? t('llevan <b>{n}</b> a {station}', { n: formatRate(row.toNext), station: withArticle(STATIONS_BY_ID[kids[0]].name) }) : t('llevan <b>{n}</b> a la bodega', { n: formatRate(row.output) });
+  lines.push(t('{who} ({level}) {carries}; pueden llevar hasta {cap}.', { who: hasBelt(st.transport.level) ? t('⚡ La banda') : t('🐴 Los arrieros'), level: `${t('Nv')} ${st.transport.level}`, carries, cap: `${formatRate(row.transport)} ${icon}/s` }));
   if (kids.length && row.diverted > 0.005) {
     const outId = Object.keys(def.out)[0];
-    lines.push(`📦 ${row.children.length ? '' : 'Mientras no se construya la siguiente, '}<b>${formatRate(row.diverted)} ${icon}/s</b> van directo a la bodega y se venden a ${formatAmount(saleValue(state, outId))} 💰 cada uno.`);
+    const vars = { n: `${formatRate(row.diverted)} ${icon}/s`, price: formatAmount(saleValue(state, outId)) };
+    lines.push(`📦 ${row.children.length ? t('<b>{n}</b> van directo a la bodega y se venden a {price} 💰 cada uno.', vars) : t('Mientras no se construya la siguiente, <b>{n}</b> van directo a la bodega y se venden a {price} 💰 cada uno.', vars)}`);
     if (row.children.length) lines.push(divertNote(state, row, icon));
   }
   if (row.lost > 0.005) {
     // Por qué (v3.67): lo que las siguientes no alcanzan a procesar va a la bodega, más lejos que ellas, y en
     // ese viaje largo el transporte lleva menos.
     const slow = row.children.length && row.diverted > 0.005 ? slowConsumers(state, id) : [];
-    const who = hasBelt(st.transport.level) ? 'la banda no da' : 'los arrieros no dan';
-    const why = slow.length
-      ? `: lo que ${listNames(slow)} no ${slow.length > 1 ? 'alcanzan' : 'alcanza'} a procesar va a la bodega, que queda más lejos, y ${who} abasto con ese viaje largo (la estación para a ratos). Sube ${listNames(slow)} al nivel de esta estación, o ${hasBelt(st.transport.level) ? 'la banda' : 'los arrieros'}.`
-      : '.';
-    lines.push(`<span class="lost">⛔ ${formatRate(row.lost)} ${icon}/s no alcanzan a salir${why}</span>`);
+    const belt = hasBelt(st.transport.level);
+    const v = { n: `${formatRate(row.lost)} ${icon}/s`, stations: listNames(slow) };
+    const text = !slow.length
+      ? t('⛔ {n} no alcanzan a salir.', v)
+      : belt
+        ? t('⛔ {n} no alcanzan a salir: lo que {stations} no procesa va a la bodega, que queda más lejos, y la banda no da abasto con ese viaje largo (la estación para a ratos). Sube {stations} al nivel de esta estación, o la banda.', v)
+        : t('⛔ {n} no alcanzan a salir: lo que {stations} no procesa va a la bodega, que queda más lejos, y los arrieros no dan abasto con ese viaje largo (la estación para a ratos). Sube {stations} al nivel de esta estación, o los arrieros.', v);
+    lines.push(`<span class="lost">${text}</span>`);
   }
-  const hot = a.bottleneck === id ? '<p class="lost">🔴 Esta estación es la que frena la cadena.</p>' : a.bottleneck === `${id}:transport` ? '<p class="lost">🔴 Sus arrieros son los que frenan la cadena.</p>' : '';
+  const hot = a.bottleneck === id ? `<p class="lost">${t('🔴 Esta estación es la que frena la cadena.')}</p>` : a.bottleneck === `${id}:transport` ? `<p class="lost">${t('🔴 Sus arrieros son los que frenan la cadena.')}</p>` : '';
   return `
-    <div class="cd-head"><span class="cd-icon">${def.icon}</span><b>${def.name}</b> <small>Nv ${st.level}</small></div>
+    <div class="cd-head"><span class="cd-icon">${def.icon}</span><b>${def.name}</b> <small>${t('Nv')} ${st.level}</small></div>
     ${lines.map((l) => `<p>${l}</p>`).join('')}
     ${hot}
     <div class="cd-actions">
-      <button class="btn buy" data-open="${id}">🏗️ Ir al edificio</button>
-      ${STATIONS_BY_ID[id].side ? '' : `<button class="btn" data-open="${id}:transport">${hasBelt(st.transport.level) ? '⚡ Banda' : '🐴 Arrieros'}</button>`}
-      <button class="btn" data-open="dispatch:${zone}:stock">📦 Bodega</button>
+      <button class="btn buy" data-open="${id}">${t('🏗️ Ir al edificio')}</button>
+      ${STATIONS_BY_ID[id].side ? '' : `<button class="btn" data-open="${id}:transport">${hasBelt(st.transport.level) ? t('⚡ Banda') : t('🐴 Arrieros')}</button>`}
+      <button class="btn" data-open="dispatch:${zone}:stock">${t('📦 Bodega')}</button>
     </div>`;
 }
 
@@ -173,8 +178,8 @@ function divertSplit(state, row) {
 function divertNote(state, row, icon) {
   const { pending, reserved, extra } = divertSplit(state, row);
   const notes = [];
-  if (reserved > 0.005) notes.push(`<span>🚌 ${formatRate(Math.min(reserved, row.diverted))} ${icon}/s a la bodega: se venden hasta que abra la ${pending[0].name}</span>`);
-  if (extra > 0.005 + row.diverted * 0.02) notes.push(`<span class="divert">↪️ ${formatRate(extra)} ${icon}/s se venden sin procesar</span>`);
+  if (reserved > 0.005) notes.push(`<span>${t('🚌 {n} a la bodega: se venden hasta que abra {route}', { n: `${formatRate(Math.min(reserved, row.diverted))} ${icon}/s`, route: withArticle(pending[0].name) })}</span>`);
+  if (extra > 0.005 + row.diverted * 0.02) notes.push(`<span class="divert">${t('↪️ {n} se venden sin procesar', { n: `${formatRate(extra)} ${icon}/s` })}</span>`);
   return notes.join('');
 }
 
@@ -194,7 +199,7 @@ const sideText = (state, id) => {
   const def = STATIONS_BY_ID[id];
   const from = STATIONS_BY_ID[def.requires];
   const bonus = Math.round((expectedCompostValue(state) - 1) * 100);
-  return `Recibe ${Object.keys(def.in).map((p) => `${PRODUCTS[p].icon} ${PRODUCTS[p].name.toLowerCase()}`).join(', ')} de ${withArticle(from.name)} y la vuelve ${PRODUCTS[Object.keys(def.out)[0]].name.toLowerCase()}: todo lo que vende la zona vale <b>+${bonus} %</b>.`;
+  return t('Recibe {in} de {from} y la vuelve {out}: todo lo que vende la zona vale <b>+{n} %</b>.', { in: Object.keys(def.in).map((p) => `${PRODUCTS[p].icon} ${PRODUCTS[p].name.toLowerCase()}`).join(', '), from: withArticle(from.name), out: PRODUCTS[Object.keys(def.out)[0]].name.toLowerCase(), n: bonus });
 };
 
 function diagram(state, a, rows, locked, zone, width, selected) {
@@ -266,7 +271,7 @@ function diagram(state, a, rows, locked, zone, width, selected) {
       nodes.push(
         built
           ? `<button class="dg-node dg-side ${b.w < NARROW ? 'narrow' : ''} ${sel(id)}" data-pick="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">
-        <span class="dg-icon">${def.icon}</span><span class="dg-name">${def.name}</span><span class="dg-meta">Nv ${state.stations[id].level} · 💰 +${Math.round((expectedCompostValue(state) - 1) * 100)} %</span></button>`
+        <span class="dg-icon">${def.icon}</span><span class="dg-name">${def.name}</span><span class="dg-meta">${t('Nv')} ${state.stations[id].level} · 💰 +${Math.round((expectedCompostValue(state) - 1) * 100)} %</span></button>`
           : `<button class="dg-node locked ${b.w < NARROW ? 'narrow' : ''} ${sel(id)}" data-pick="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">
         <span class="dg-icon">${def.icon}</span><span class="dg-name">${def.name}</span><span class="dg-meta">🔒 ${formatNumber(def.unlockCost)} 💰</span></button>`,
       );
@@ -290,7 +295,7 @@ function diagram(state, a, rows, locked, zone, width, selected) {
       const left = b.left + (b.w < NARROW ? 22 : 32);
       const hot = a.bottleneck === `route:${r.id}` || row?.importLimited === r.id;
       const arriving = row?.imported?.[imp.product] ?? 0;
-      nodes.push(`<button class="dg-tag ${hot ? 'hot' : ''} ${sel(`route:${r.id}`)}" data-pick="route:${r.id}" title="${PRODUCTS[imp.product].name} desde ${from.name}" style="left:${left}px;top:${top + 2}px;width:${b.w - (b.w < NARROW ? 22 : 32)}px">
+      nodes.push(`<button class="dg-tag ${hot ? 'hot' : ''} ${sel(`route:${r.id}`)}" data-pick="route:${r.id}" title="${t('{p} desde {zone}', { p: PRODUCTS[imp.product].name, zone: from.name })}" style="left:${left}px;top:${top + 2}px;width:${b.w - (b.w < NARROW ? 22 : 32)}px">
         ${PRODUCTS[imp.product].icon} <span>${row ? formatRate(arriving) : from.icon}</span></button>`);
       if (i === n - 1) pipe(`M ${left + 10} ${top + TAG_H - 2} V ${b.top}`, hot ? 'hot' : row ? 'import' : 'locked');
     });
@@ -302,13 +307,13 @@ function diagram(state, a, rows, locked, zone, width, selected) {
     const hotLink = a.bottleneck === `${id}:transport`;
     nodes.push(`<button class="dg-node ${a.bottleneck === id ? 'hot' : ''} ${hotLink ? 'hot-link' : ''} ${b.w < NARROW ? 'narrow' : ''} ${sel(id)}" data-pick="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">
       <span class="dg-icon">${def.icon}</span><span class="dg-name">${def.name}</span>
-      <span class="dg-meta">Nv ${state.stations[id].level}</span></button>`);
+      <span class="dg-meta">${t('Nv')} ${state.stations[id].level}</span></button>`);
     // Las que siguen a otra estación (v3.66): una etiqueta 📦 lleva a la bodega y dice cuánto se manda a
     // vender directo (en naranja si es porque la siguiente no da abasto).
     if (kidsOf(id).length) {
       const sells = row.diverted > 0.005 ? row.diverted : 0;
       const warn = sells && row.children.length && divertSplit(state, row).extra > 0.005 + row.diverted * 0.02;
-      const what = sells ? `${formatRate(sells)} por segundo van directo a la bodega` : 'Nada va directo a la bodega';
+      const what = sells ? t('{n} por segundo van directo a la bodega', { n: formatRate(sells) }) : t('Nada va directo a la bodega');
       nodes.push(`<button class="dg-sell ${warn ? 'warn' : ''} ${sells ? '' : 'none'}" data-open="dispatch:${zone}:stock" title="${what}" style="left:${b.left + b.w}px;top:${b.bottom}px">📦${sells ? ` ${formatRate(sells)}` : ''}</button>`);
     }
     // Las que no siguen a otra estación terminan en la bodega.
@@ -319,8 +324,8 @@ function diagram(state, a, rows, locked, zone, width, selected) {
     }
   }
   nodes.push(`<button class="dg-node dg-bodega ${a.bottleneck === `dispatch:${zone}` ? 'hot' : ''} ${sel(`dispatch:${zone}`)}" data-pick="dispatch:${zone}" style="left:${bodega.left}px;top:${bodega.top}px;width:${bodega.w}px">
-    <span class="dg-icon">${DISPATCH.icon}</span><span class="dg-name">Bodega y Willys</span>
-    <span class="dg-meta">Nv ${state.zones[zone].dispatch.level} · 💰 ${formatRate(a.income)}/s</span></button>`);
+    <span class="dg-icon">${DISPATCH.icon}</span><span class="dg-name">${t('Bodega y Willys')}</span>
+    <span class="dg-meta">${t('Nv')} ${state.zones[zone].dispatch.level} · 💰 ${formatRate(a.income)}/s</span></button>`);
   return `
     <div class="dg-scroll"><div class="dg" style="width:${total}px;height:${height}px">
       <svg class="dg-pipes" width="${total}" height="${height}" viewBox="0 0 ${total} ${height}">${pipes.join('')}</svg>

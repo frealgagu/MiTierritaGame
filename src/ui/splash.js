@@ -2,6 +2,7 @@
 // calcular lo que se produjo sin conexión (al abrir o al volver a la app), con su barra de avance. Así
 // no parece que el juego se trabó.
 import { formatDuration } from '../core/format.js';
+import { t } from '../i18n/index.js';
 
 const el = () => document.getElementById('splash');
 
@@ -18,11 +19,12 @@ export function splashWait(text) {
 // Con barra: el cálculo de lo que se produjo mientras no estabas.
 // region: la región que se calcula (las que no son el Eje Cafetero lo dicen).
 export function splashOffline(seconds, cap, region = null) {
-  const where = region ? ` en ${region.icon} ${region.name}` : '';
-  splashWait(`Pasaron ${formatDuration(seconds)} desde la última vez. Calculando lo que se produjo${where} mientras no estabas…`);
+  splashWait(region
+    ? t('Pasaron {time} desde la última vez. Calculando lo que se produjo en {region} mientras no estabas…', { time: formatDuration(seconds), region: `${region.icon} ${region.name}` })
+    : t('Pasaron {time} desde la última vez. Calculando lo que se produjo mientras no estabas…', { time: formatDuration(seconds) }));
   el().classList.remove('indeterminate');
   setSplashProgress(0);
-  document.getElementById('splash-note').textContent = seconds > cap ? `Sin conexión se produce hasta ${formatDuration(cap)}.` : 'Las noches y las temporadas también cuentan.';
+  document.getElementById('splash-note').textContent = seconds > cap ? t('Sin conexión se produce hasta {time}.', { time: formatDuration(cap) }) : t('Las noches y las temporadas también cuentan.');
 }
 
 export function setSplashProgress(f) {

@@ -16,6 +16,7 @@ import { createInitialState } from './state.js';
 import { legacyMult } from './modifiers.js';
 import { bankRun } from './logros.js';
 import { RESTART_RENOWN, gainRenown, profileOf } from './renown.js';
+import { tk } from '../i18n/index.js'; // las etiquetas se traducen donde se muestran (GoalsView)
 
 const zoneStations = (z) => [...z.chain, ...z.plots.map((p) => p.stationId)];
 // Estaciones jugables de todas las regiones: las cadenas y sus ramas (la Compostera).
@@ -39,11 +40,11 @@ export function masteryParts(state) {
   const goals = region.zones.flatMap((z) => GOALS_BY_ZONE[z] ?? []);
   const research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === region.id);
   return [
-    { id: 'stations', icon: '🏭', label: 'Estaciones en el nivel 100', have: stations.filter((id) => at100(state.stations[id]?.level)).length, need: stations.length },
-    { id: 'transport', icon: '🐴', label: 'Arrieros en el nivel 100', have: carried.filter((id) => at100(state.stations[id]?.transport?.level)).length, need: carried.length },
-    { id: 'routes', icon: '🚚', label: 'Rutas entre zonas en el nivel 100', have: routes.filter((id) => at100(state.routes[id]?.level)).length, need: routes.length },
-    { id: 'goals', icon: '🎯', label: 'Objetivos cobrados', have: goals.filter((g) => state.goals.claimed.includes(g.id)).length, need: goals.length },
-    { id: 'research', icon: '🔬', label: 'Investigaciones compradas', have: research.filter((r) => state.research.includes(r.id)).length, need: research.length },
+    { id: 'stations', icon: '🏭', label: tk('Estaciones en el nivel 100'), have: stations.filter((id) => at100(state.stations[id]?.level)).length, need: stations.length },
+    { id: 'transport', icon: '🐴', label: tk('Arrieros en el nivel 100'), have: carried.filter((id) => at100(state.stations[id]?.transport?.level)).length, need: carried.length },
+    { id: 'routes', icon: '🚚', label: tk('Rutas entre zonas en el nivel 100'), have: routes.filter((id) => at100(state.routes[id]?.level)).length, need: routes.length },
+    { id: 'goals', icon: '🎯', label: tk('Objetivos cobrados'), have: goals.filter((g) => state.goals.claimed.includes(g.id)).length, need: goals.length },
+    { id: 'research', icon: '🔬', label: tk('Investigaciones compradas'), have: research.filter((r) => state.research.includes(r.id)).length, need: research.length },
   ];
 }
 export const masteryReady = (state) => masteryParts(state).every((p) => p.have >= p.need);

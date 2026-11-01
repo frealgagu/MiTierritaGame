@@ -10,6 +10,8 @@ import { FONT } from '../render/palette.js';
 // primero que se ve en 🗺️ Zonas: el país con la región de ahora resaltada, que enseguida se ve de cerca con la
 // zona de ahora resaltada. Al ir a otra zona, un muñequito camina hasta allá (ver travel).
 //   root: la partida principal   getZone: la zona que se ve   onGo(zona): ir a la zona   say(texto): un aviso
+import { t } from '../i18n/index.js';
+
 const NS = 'http://www.w3.org/2000/svg';
 const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a' };
 const LAND = '#e8dcc3'; // los departamentos que no son de ninguna región del juego
@@ -18,8 +20,8 @@ const ZOOM_MS = 650;
 const PEEK_MS = 800; // al abrir el mapa, cuánto se ve el país antes de acercarse a la región donde se está
 // Las regiones que vienen (v3.67), en los departamentos que todavía no son de ninguna: «Próximamente».
 const SOON = [
-  { id: 'tolima', name: 'Tolima Grande', icon: '🎺', depts: ['Tolima', 'Huila'], color: '#efd9c0' },
-  { id: 'bogota', name: 'Bogotá y la Sabana', icon: '🏛️', depts: ['Cundinamarca', 'Bogotá'], color: '#e3d6ea' },
+  { id: 'tolima', name: t('Tolima Grande'), icon: '🎺', depts: ['Tolima', 'Huila'], color: '#efd9c0' },
+  { id: 'bogota', name: t('Bogotá y la Sabana'), icon: '🏛️', depts: ['Cundinamarca', 'Bogotá'], color: '#e3d6ea' },
 ];
 const SOON_OF = Object.fromEntries(SOON.flatMap((r) => r.depts.map((d) => [d, r])));
 
@@ -99,7 +101,7 @@ export class ZoneMap {
     this.busy = false; // mientras camina el muñequito
     this.back = document.createElement('button');
     this.back.className = 'btn small zones-map-back';
-    this.back.textContent = '⬅ Colombia';
+    this.back.textContent = t('⬅ Colombia');
     this.back.hidden = true;
     this.back.addEventListener('click', () => !this.busy && this.zoomTo(null));
     this.svg = el('svg', { class: 'zones-map-svg', preserveAspectRatio: 'xMidYMid meet' });
@@ -134,7 +136,7 @@ export class ZoneMap {
   }
 
   soon(r) {
-    this.say(`${r.icon} ${r.name} llega próximamente al juego.`);
+    this.say(t('{region} llega próximamente al juego.', { region: `${r.icon} ${r.name}` }));
   }
 
   open(regionId) {
@@ -185,10 +187,10 @@ export class ZoneMap {
   pickRegion(regionId) {
     clearTimeout(this.peek);
     if (this.busy || this.region) return;
-    if (!regionId) return this.say('🗺️ Esta parte del país todavía no está en el juego.');
+    if (!regionId) return this.say(t('🗺️ Esta parte del país todavía no está en el juego.'));
     if (!this.open(regionId)) {
       const r = REGIONS_BY_ID[regionId];
-      return this.say(`🔒 ${r.icon} ${r.name} se abre al completar ${ZONES_BY_ID[r.unlock.zone].name}.`);
+      return this.say(t('🔒 {region} se abre al completar {zone}.', { region: `${r.icon} ${r.name}`, zone: ZONES_BY_ID[r.unlock.zone].name }));
     }
     this.zoomTo(regionId);
   }
@@ -217,7 +219,7 @@ export class ZoneMap {
         const label = el('g', { class: 'zones-map-label soon', transform: `translate(${(b.x0 + b.x1) / 2} ${(b.y0 + b.y1) / 2})` }, g);
         el('text', { 'font-size': 4.6 * u, 'text-anchor': 'middle', y: -1.2 * u }, label).textContent = r.icon;
         el('text', { 'font-size': 2.9 * u, 'text-anchor': 'middle', y: 2.6 * u, class: 'name', 'stroke-width': 0.9 * u }, label).textContent = r.name;
-        el('text', { 'font-size': 2.5 * u, 'text-anchor': 'middle', y: 5.6 * u, class: 'name soon-tag', 'stroke-width': 0.8 * u }, label).textContent = 'Próximamente';
+        el('text', { 'font-size': 2.5 * u, 'text-anchor': 'middle', y: 5.6 * u, class: 'name soon-tag', 'stroke-width': 0.8 * u }, label).textContent = t('Próximamente');
         label.addEventListener('click', () => this.soon(r));
       }
       // Dónde se está: el alfiler en la zona de ahora.
@@ -250,9 +252,9 @@ export class ZoneMap {
     const st = regionState(this.root.state, REGION_OF_ZONE[z])?.zones[z];
     if (!st?.unlocked) {
       const zones = REGIONS_BY_ID[REGION_OF_ZONE[z]].zones;
-      return this.say(`🔒 ${ZONES_BY_ID[z].name} se abre al completar ${ZONES_BY_ID[zones[zones.indexOf(z) - 1]].name}.`);
+      return this.say(t('🔒 {region} se abre al completar {zone}.', { region: ZONES_BY_ID[z].name, zone: ZONES_BY_ID[zones[zones.indexOf(z) - 1]].name }));
     }
-    if (z === this.getZone()) return this.say(`📍 Ya estás en ${ZONES_BY_ID[z].name}.`);
+    if (z === this.getZone()) return this.say(t('📍 Ya estás en {zone}.', { zone: ZONES_BY_ID[z].name }));
     this.travel(z);
   }
 

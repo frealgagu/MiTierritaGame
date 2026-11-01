@@ -3,6 +3,7 @@ import { setCredit } from '../sim/upgrades.js';
 import { formatMult } from '../core/format.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
 import { MAX_LEGACY_RESETS } from '../sim/modifiers.js';
+import { t } from '../i18n/index.js';
 
 // Opciones de desarrollador, ocultas en el menú: se muestran tocando 7 veces la versión.
 // Acelerar el tiempo, permitir saldo negativo y simular reinicios del segundo final (multiplicador de
@@ -54,13 +55,13 @@ export function bindDevOptions(game, getActive = () => game) {
     prefs.credit = credit.checked;
     setCredit(prefs.credit);
     store(prefs);
-    toast(prefs.credit ? '💸 Saldo negativo permitido: compra lo que quieras' : '💰 Solo se compra con lo que hay');
+    toast(prefs.credit ? t('💸 Saldo negativo permitido: compra lo que quieras') : t('💰 Solo se compra con lo que hay'));
   });
 
   const speed = () => Math.min(MAX_SPEED, Math.max(1, Math.round(Number(input.value) || 1)));
   const paint = () => {
     const on = game.timeScale > 1;
-    toggle.textContent = on ? '⏹️ Volver a ×1' : `⏩ Acelerar ×${speed()}`;
+    toggle.textContent = on ? t('⏹️ Volver a ×1') : t('⏩ Acelerar ×{n}', { n: speed() });
     chip.hidden = !on;
     chip.textContent = `⏩ ×${game.timeScale}`;
   };
@@ -104,7 +105,7 @@ export function bindDevOptions(game, getActive = () => game) {
   });
   legacy.addEventListener('change', () => {
     legacy.value = String(resets());
-    toast(`🔁 ${REGIONS_BY_ID[region().region ?? 'cafetero'].name}: producción ${formatMult(2 ** resets())}`);
+    toast(t('🔁 {region}: producción {mult}', { region: REGIONS_BY_ID[region().region ?? 'cafetero'].name, mult: formatMult(2 ** resets()) }));
   });
   chip.addEventListener('click', () => setScale(1));
 
@@ -120,7 +121,7 @@ export function bindDevOptions(game, getActive = () => game) {
     box.open = true;
     prefs.visible = true;
     store(prefs);
-    toast('🛠️ Opciones de desarrollador activadas');
+    toast(t('🛠️ Opciones de desarrollador activadas'));
   });
   document.getElementById('dev-hide').addEventListener('click', () => {
     prefs.visible = false;

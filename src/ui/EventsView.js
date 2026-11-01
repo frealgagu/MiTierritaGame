@@ -8,8 +8,9 @@ import { clockOf } from '../sim/calendar.js';
 import { formatDuration } from '../core/format.js';
 import { formatClock, objectiveText } from './EventBar.js';
 import { moreButton, refreshMore } from './more.js';
+import { t } from '../i18n/index.js';
 
-export const medalLine = (obj) => `🥇 hasta ${formatClock(obj.medals[0])} · 🥈 hasta ${formatClock(obj.medals[1])} · 🥉 después`;
+export const medalLine = (obj) => t('🥇 hasta {gold} · 🥈 hasta {silver} · 🥉 después', { gold: formatClock(obj.medals[0]), silver: formatClock(obj.medals[1]) });
 
 export class EventsView {
   // onPlay(zona): entrar al tablero. La partida principal (game) guarda el perfil (medallas y Renombre) y
@@ -59,7 +60,7 @@ export class EventsView {
   render() {
     const s = this.game.state;
     const profile = s.profile ?? { renown: 0, medals: {} };
-    document.getElementById('events-renown').textContent = `⭐ Renombre: ${profile.renown} · 🏆 Prestigio: ${profile.renownTotal ?? profile.renown}`;
+    document.getElementById('events-renown').textContent = t('⭐ Renombre: {n} · 🏆 Prestigio: {total}', { n: profile.renown, total: profile.renownTotal ?? profile.renown });
     const card = (def) => {
       const st = eventStatus(s, def.zone);
       if (!st) return '';
@@ -68,27 +69,27 @@ export class EventsView {
       const obj = eventObjective(def, st.round);
       const title = `<h3><span>${def.icon} ${def.name} · ${zone.icon} ${zone.name}</span><span>${best ? MEDALS[best].icon : ''}</span></h3>`;
       // Los que esperan (sin cupo o sin todas sus estaciones), en una línea (v3.7).
-      if (st.kind === 'locked') return `<div class="event-card locked">${title}<p>🔒 Sale cuando construyas todas las estaciones de ${zone.name}.</p></div>`;
+      if (st.kind === 'locked') return `<div class="event-card locked">${title}<p>${t('🔒 Sale cuando construyas todas las estaciones de {zone}.', { zone: zone.name })}</p></div>`;
       if (st.kind === 'waiting') {
-        const when = st.nextAt === null ? 'cuando termines uno de los dos eventos y pasen 2 años' : `en ${formatDuration(st.nextAt - clockOf(s))} se libera un cupo (los dos eventos nunca son de la misma región)`;
-        return `<div class="event-card locked">${title}<p>⏳ Espera turno: ${when}.</p></div>`;
+        const when = st.nextAt === null ? t('cuando termines uno de los dos eventos y pasen 2 años') : t('en {time} se libera un cupo (los dos eventos nunca son de la misma región)', { time: formatDuration(st.nextAt - clockOf(s)) });
+        return `<div class="event-card locked">${title}<p>${t('⏳ Espera turno: {when}.', { when })}</p></div>`;
       }
       let foot;
       if (st.kind === 'won') {
         const m = MEDALS[st.board.event.medal];
-        foot = `<p>🏁 ¡Ganado con ${m.icon} ${m.name}! Entra a verlo y toca 🏁 Terminar evento para cerrarlo.</p><button class="btn buy" data-play="${def.zone}">Ver y terminar</button>`;
+        foot = `<p>${t('🏁 ¡Ganado con {medal}! Entra a verlo y toca 🏁 Terminar evento para cerrarlo.', { medal: `${m.icon} ${m.name}` })}</p><button class="btn buy" data-play="${def.zone}">${t('Ver y terminar')}</button>`;
       } else if (st.kind === 'active') {
         const secured = st.board.event.medal;
         // 🚪 Si se salió de él, sigue corriendo (v3.67.4): el reloj que marcaría ahora.
-        const running = awaySeconds(st.board, s) > 0 ? ' · 🚪 corriendo' : '';
+        const running = awaySeconds(st.board, s) > 0 ? ` · ${t('🚪 corriendo')}` : '';
         foot = secured
-          ? `<p>✅ ${MEDALS[secured].icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.</p><button class="btn buy" data-play="${def.zone}">Seguir</button>`
-          : `<button class="btn buy" data-play="${def.zone}">Seguir · ⏱ ${formatClock(boardClockNow(st.board, s))}${running}</button>`;
-      } else foot = `<button class="btn buy" data-play="${def.zone}">Jugar</button>`;
+          ? `<p>${t('✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.', { icon: MEDALS[secured].icon })}</p><button class="btn buy" data-play="${def.zone}">${t('Seguir')}</button>`
+          : `<button class="btn buy" data-play="${def.zone}">${t('Seguir')} · ⏱ ${formatClock(boardClockNow(st.board, s))}${running}</button>`;
+      } else foot = `<button class="btn buy" data-play="${def.zone}">${t('Jugar')}</button>`;
       return `<div class="event-card">
         ${title}
         <p class="clamp" style="--lines: 2">${def.intro}</p>${moreButton()}
-        <p class="event-year">Reto ${st.round}: ${objectiveText(obj)}.<br>${medalLine(obj)}</p>
+        <p class="event-year">${t('Reto {n}', { n: st.round })}: ${objectiveText(obj)}.<br>${medalLine(obj)}</p>
         ${foot}
       </div>`;
     };
@@ -105,11 +106,11 @@ export class EventsView {
         if (groups.length < 2) return g.cards.join('');
         const folded = this.folded(g.r.id);
         const ready = EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === g.r.id && ['active', 'won', 'available'].includes(eventStatus(s, def.zone)?.kind)).length;
-        const head = `<button class="zones-region research-other" data-efold="${g.r.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${g.r.icon} ${g.r.name}<small>${ready ? `${ready} para jugar` : 'nada por ahora'}</small></button>`;
+        const head = `<button class="zones-region research-other" data-efold="${g.r.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${g.r.icon} ${g.r.name}<small>${ready ? t('{n} para jugar', { n: ready }) : t('nada por ahora')}</small></button>`;
         return `<div class="zones-group events-group">${head}${folded ? '' : g.cards.join('')}</div>`;
       })
       .join('');
-    this.body.innerHTML = `${html}<p class="event-soon">Cada zona que abras trae su evento.</p>${medalsHtml(profile)}`;
+    this.body.innerHTML = `${html}<p class="event-soon">${t('Cada zona que abras trae su evento.')}</p>${medalsHtml(profile)}`;
     refreshMore(this.body);
   }
 
@@ -133,7 +134,7 @@ function medalsHtml(profile) {
     const rows = regionEvents(r.id)
       .map((def) => {
         const best = profile.medals?.[def.id]?.best;
-        return `<li><span>${def.icon} ${def.name}</span><span>${best ? `${MEDALS[best].icon} ${MEDALS[best].name}` : '— sin medalla'}</span></li>`;
+        return `<li><span>${def.icon} ${def.name}</span><span>${best ? `${MEDALS[best].icon} ${MEDALS[best].name}` : t('— sin medalla')}</span></li>`;
       })
       .join('');
     const n = regionEvents(r.id).length;
@@ -145,7 +146,7 @@ function medalsHtml(profile) {
       .join('');
     return `<h4>${r.icon} ${r.name}</h4><ul class="medal-list">${rows}</ul><p class="medal-bonus">${bonus}</p>`;
   });
-  return `<details class="medals-box"><summary>🏅 Tus medallas</summary>
-    <p class="chain-help">La mejor medalla de cada evento. Con todos los de una región en bronce o mejor ganas ${MEDAL_BONUS.bronze} ⭐; en plata o mejor, ${MEDAL_BONUS.silver} ⭐; todos en oro, ${MEDAL_BONUS.gold} ⭐.</p>
+  return `<details class="medals-box"><summary>${t('🏅 Tus medallas')}</summary>
+    <p class="chain-help">${t('La mejor medalla de cada evento. Con todos los de una región en bronce o mejor ganas {b} ⭐; en plata o mejor, {s} ⭐; todos en oro, {g} ⭐.', { b: MEDAL_BONUS.bronze, s: MEDAL_BONUS.silver, g: MEDAL_BONUS.gold })}</p>
     ${regions.join('')}</details>`;
 }

@@ -27,6 +27,12 @@ export function t(text, vars) {
   return s;
 }
 
+// «A, B y C» en el idioma elegido («A, B and C»).
+export function listJoin(items) {
+  if (items.length < 2) return items[0] ?? '';
+  return `${items.slice(0, -1).join(', ')} ${t('y')} ${items.at(-1)}`;
+}
+
 const stored = () => {
   try {
     return localStorage.getItem(KEY);
@@ -66,6 +72,10 @@ export async function loadLang(lang) {
   setDecimal(m.DECIMAL ?? '.');
   if (typeof document !== 'undefined') document.documentElement.lang = lang;
 }
+
+// Marca una frase para traducir sin traducirla todavía (se traduce donde se muestra, con t(texto)): así
+// tools/i18n-code.mjs la encuentra.
+export const tk = (text) => text;
 
 // Pone el diccionario a mano (para las pruebas).
 export function useDict(d, lang = 'xx') {

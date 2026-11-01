@@ -34,6 +34,7 @@ import { routeActive, routeCapacity } from '../sim/routes.js';
 import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
 import { DayNight } from './DayNight.js';
 import { Weather } from './Weather.js';
+import { t } from '../i18n/index.js';
 
 
 // Altura (px) de la etiqueta sobre cada tipo de edificio.
@@ -265,7 +266,7 @@ export class Scene {
   }
 
   drawExitSign() {
-    const view = new WoodSign(this.zone.exitText ?? 'Al pueblo ➜');
+    const view = new WoodSign(this.zone.exitText ?? t('Al pueblo ➜'));
     // Con dos carriles (v3.9) el letrero quedaría en el del segundo Willys: pasa al otro lado de la carretera.
     const [sx, sy] = this.zone.exitSign;
     const [gx, gy] = this.jeepCount > 1 ? [sx - 2.1, sy] : [sx, sy];
@@ -335,8 +336,8 @@ export class Scene {
       else this.sound.levelUp();
       this.effects.ring(p.x, p.y + 30);
       const belt = part === 'transport' && milestone === BELT_LEVEL;
-      const what = route ? `🚌 ${route.tab} nivel ${to}` : part === 'transport' ? `${hasBelt(to) ? '⚡ Banda' : '🐴 Arrieros'} nivel ${to}` : `Nivel ${to}`;
-      this.effects.floatText(p.x, p.y - 20, belt ? `⚡ ¡Banda eléctrica! ×${milestoneBoost(milestone)}` : milestone ? `¡Hito nivel ${milestone}! ×${milestoneBoost(milestone)}` : what, {
+      const what = route ? `🚌 ${route.tab} ${t('nivel {n}', { n: to })}` : part === 'transport' ? `${hasBelt(to) ? t('⚡ Banda') : t('🐴 Arrieros')} ${t('nivel {n}', { n: to })}` : t('Nivel {n}', { n: to });
+      this.effects.floatText(p.x, p.y - 20, belt ? `${t('⚡ ¡Banda eléctrica!')} ×${milestoneBoost(milestone)}` : milestone ? `${t('¡Hito nivel {n}!', { n: milestone })} ×${milestoneBoost(milestone)}` : what, {
         color: milestone ? 0xffe066 : 0xffffff,
         size: milestone ? 22 : 16,
         life: milestone ? 2.2 : 1.2,
@@ -351,7 +352,7 @@ export class Scene {
       const p = this.stations[id].anchorPoint(40);
       this.effects.ring(p.x, p.y + 40, 0xffffff);
       this.effects.confetti(p.x, p.y, 60);
-      this.effects.floatText(p.x, p.y - 30, `¡${STATIONS_BY_ID[id].name}!`, { color: 0xffe066, size: 22, life: 2.4 });
+      this.effects.floatText(p.x, p.y - 30, t('¡{station}!', { station: STATIONS_BY_ID[id].name }), { color: 0xffe066, size: 22, life: 2.4 });
     });
   }
 

@@ -6,7 +6,6 @@ import { chooseLang, loadLang, translateDom } from './i18n/index.js';
   try {
     await loadLang(chooseLang());
     translateDom(document.body);
-    document.title = document.querySelector('title')?.textContent ?? document.title;
   } catch (err) {
     console.error(err); // si el idioma no carga, el juego sale en español
   }

@@ -5,6 +5,7 @@ import { box, gableRoof, shadow } from './procedural/shapes.js';
 import { StationView, Label } from './Stations.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
+import { t } from '../i18n/index.js';
 
 // Color de remates (zócalo, puertas, balcones) según los hitos alcanzados.
 export const TRIMS = [PAL.balconyGreen, PAL.balconyBlue, PAL.balconyRed, PAL.balconyYellow, 0x8e44ad, 0xffd700];
@@ -48,7 +49,7 @@ export class BuildingView extends StationView {
     const tier = milestoneTier(st.level);
     if (tier !== this.tier) this.draw(tier);
     this.working = st.status === 'working';
-    this.label.set(`${this.def.icon} ${this.def.name} · Nv ${st.level}`);
+    this.label.set(`${this.def.icon} ${this.def.name} · ${t('Nv')} ${st.level}`);
   }
 
   draw(tier) {

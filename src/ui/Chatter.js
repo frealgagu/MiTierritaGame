@@ -7,6 +7,8 @@ import { alerts } from '../sim/alerts.js';
 import { slowConsumers } from '../sim/transport.js';
 import { waitingHarvest } from '../sim/production.js';
 import { toast } from './toast.js';
+import { t } from '../i18n/index.js';
+import { decimal } from '../core/format.js';
 import { clockOf, hourLabel, isLunch, isWorkTime, nextWorkHour, seasonOf, workOf } from '../sim/calendar.js';
 import { EVENTS } from '../data/events.js';
 import { eventDef, eventHandicaps, eventStatus, handicapText } from '../sim/events.js';
@@ -77,13 +79,13 @@ export class Chatter {
     if (season !== this.season) {
       this.season = season;
       this.lastAny = now;
-      const mult = season.mult === 1 ? '' : ` (×${String(season.mult).replace('.', ',')})`;
+      const mult = season.mult === 1 ? '' : ` (×${decimal(season.mult)})`;
       // Con las Hormigas abiertas, la entrada de aguas la anuncia Doña Gloria (v3.4).
       if (season.id === 'entrada' && state.zones.hormigas?.unlocked) {
-        say('hormigas', '🌦️ ¡Llegó la entrada de aguas y salieron las hormigas culonas! Es la cosecha de todo el año: suba el Hormiguero y sus arrieros.', 7000);
+        say('hormigas', t('🌦️ ¡Llegó la entrada de aguas y salieron las hormigas culonas! Es la cosecha de todo el año: suba el Hormiguero y sus arrieros.'), 7000);
         return;
       }
-      say(zone, `${season.icon} ¡Llegó ${withArticle(season.name.toLowerCase())}! ${capital(season.text)}${mult}.`, 7000);
+      say(zone, `${season.icon} ${t('¡Llegó {season}! {text}.', { season: withArticle(season.name.toLowerCase()), text: capital(season.text) + mult })}`, 7000);
       return;
     }
     // Un evento que se abre (una vez al año), dicho por la persona de su zona.
@@ -99,10 +101,10 @@ export class Chatter {
     }
     // De noche no hay problemas que avisar: todo descansa.
     // (v3.8: también a la hora del almuerzo, de 12 a 14, mientras no se compre ese bloque).
-    const t = clockOf(state);
+    const clock = clockOf(state);
     const extra = workOf(state);
-    if (!isWorkTime(t, extra)) {
-      const lunch = isLunch(t, extra);
+    if (!isWorkTime(clock, extra)) {
+      const lunch = isLunch(clock, extra);
       const hint = lunch ? 'lunch' : 'night';
       if (!state.hints.includes(hint)) {
         state.hints.push(hint);
@@ -110,8 +112,8 @@ export class Chatter {
         say(
           zone,
           lunch
-            ? '¡A almorzar! De 12 a 2 se para: la jornada sigue a las 14:00. Con Renombre ⭐ se puede trabajar también a esta hora.'
-            : `De noche no se trabaja: las estaciones descansan hasta las ${hourLabel(nextWorkHour(t, extra))}. ¡Hasta mañana, patrón!`,
+            ? t('¡A almorzar! De 12 a 2 se para: la jornada sigue a las 14:00. Con Renombre ⭐ se puede trabajar también a esta hora.')
+            : t('De noche no se trabaja: las estaciones descansan hasta las {hour}. ¡Hasta mañana, patrón!', { hour: hourLabel(nextWorkHour(clock, extra)) }),
           7000,
         );
       }
@@ -147,9 +149,9 @@ export class Chatter {
       const def = eventDef(state);
       for (const h of eventHandicaps(state)) if (h.pct < 1) out.push(handicapText(state, h));
       const next = def.actions.find((a) => !state.research.includes(a.id));
-      if (next) out.push(`${next.icon} Compre ${next.name} (💰 ${formatNumber(next.cost)}): ${next.desc}`);
-      if (state.event.done) out.push(`🏁 ¡Ganamos el evento! Mire todo lo que quiera; para cerrarlo, toque 🏁 Terminar evento.`);
-      else if (state.event.medal) out.push(`✅ La medalla ya está asegurada. Faltan las compras del evento para terminarlo.`);
+      if (next) out.push(t('{icon} Compre {action} (💰 {cost}): {desc}', { icon: next.icon, action: next.name, cost: formatNumber(next.cost), desc: next.desc }));
+      if (state.event.done) out.push(t('🏁 ¡Ganamos el evento! Mire todo lo que quiera; para cerrarlo, toque 🏁 Terminar evento.'));
+      else if (state.event.medal) out.push(t('✅ La medalla ya está asegurada. Faltan las compras del evento para terminarlo.'));
       else out.push(`${def.icon} ${def.intro}`);
       return out;
     }
@@ -158,14 +160,14 @@ export class Chatter {
     }
     // Lo que ya se puede construir.
     const build = nextToUnlock(state, zone);
-    if (build && quoteUnlock(state, build).ok) out.push(`¡Ya alcanza para construir ${withArticle(STATIONS_BY_ID[build].name)}! Toque su parcela en el mapa.`);
-    const t = clockOf(state);
+    if (build && quoteUnlock(state, build).ok) out.push(t('¡Ya alcanza para construir {station}! Toque su parcela en el mapa.', { station: withArticle(STATIONS_BY_ID[build].name) }));
+    const clock = clockOf(state);
     const extra = workOf(state);
-    if (!isWorkTime(t, extra)) {
+    if (!isWorkTime(clock, extra)) {
       out.push(
-        isLunch(t, extra)
-          ? '¡A almorzar! De 12 a 2 se para: la jornada sigue a las 14:00. Con Renombre ⭐ se puede trabajar también a esta hora.'
-          : `De noche no se trabaja: las estaciones descansan hasta las ${hourLabel(nextWorkHour(t, extra))}. ¡Hasta mañana, patrón!`,
+        isLunch(clock, extra)
+          ? t('¡A almorzar! De 12 a 2 se para: la jornada sigue a las 14:00. Con Renombre ⭐ se puede trabajar también a esta hora.')
+          : t('De noche no se trabaja: las estaciones descansan hasta las {hour}. ¡Hasta mañana, patrón!', { hour: hourLabel(nextWorkHour(clock, extra)) }),
       );
     } else {
       for (const [id, st] of Object.entries(state.stations)) {
@@ -176,10 +178,10 @@ export class Chatter {
         if (on) out.push(this.message(state, id, on, a));
       }
     }
-    const season = seasonOf(t);
-    if (season.id !== 'none') out.push(`${season.icon} Estamos en ${season.name.toLowerCase()} (${season.text}).`);
+    const season = seasonOf(clock);
+    if (season.id !== 'none') out.push(`${season.icon} ${t('Estamos en {season} ({text}).', { season: season.name.toLowerCase(), text: season.text })}`);
     const facts = Object.keys(state.stations).filter((id) => STATIONS_BY_ID[id].zone === zone).flatMap((id) => FACTS[id] ?? []);
-    if (facts.length) out.push(`💡 ¿Sabía que…? ${facts[Math.floor(Math.random() * facts.length)]}`);
+    if (facts.length) out.push(`💡 ${t('¿Sabía que…?')} ${facts[Math.floor(Math.random() * facts.length)]}`);
     return out;
   }
 
@@ -190,12 +192,12 @@ export class Chatter {
 
   message(state, id, kind, a) {
     const name = STATIONS_BY_ID[id].name;
-    if (kind === 'starved' && waitingHarvest(state, STATIONS_BY_ID[id].zone)) return 'Se acabó lo de la despensa: toca esperar a que salgan las hormigas en la entrada de aguas 🌦️.';
-    if (kind === 'starved') return `${WithArticle(name)} está esperando producto: hay que mejorar las estaciones anteriores.`;
-    if (kind === 'diverting') return `En ${withArticle(name)} se está vendiendo producto sin procesar: la siguiente no da abasto.`;
-    if (a.waiting === 'space') return '¡Se llenó la bodega! Hay que mejorar el Despacho.';
+    if (kind === 'starved' && waitingHarvest(state, STATIONS_BY_ID[id].zone)) return t('Se acabó lo de la despensa: toca esperar a que salgan las hormigas en la entrada de aguas 🌦️.');
+    if (kind === 'starved') return t('{station} está esperando producto: hay que mejorar las estaciones anteriores.', { station: WithArticle(name) });
+    if (kind === 'diverting') return t('En {station} se está vendiendo producto sin procesar: la siguiente no da abasto.', { station: withArticle(name) });
+    if (a.waiting === 'space') return t('¡Se llenó la bodega! Hay que mejorar el Despacho.');
     const slow = slowConsumers(state, id);
-    if (slow.length) return `${WithArticle(name)} produce más de lo que alcanza a procesar ${withArticle(STATIONS_BY_ID[slow[0]].name)}. ¡Hay que subirle el nivel!`;
-    return `¡En ${withArticle(name)} las mulas no dan abasto, patrón! Hay que mejorar a los arrieros.`;
+    if (slow.length) return t('{station} produce más de lo que alcanza a procesar {next}. ¡Hay que subirle el nivel!', { station: WithArticle(name), next: withArticle(STATIONS_BY_ID[slow[0]].name) });
+    return t('¡En {station} las mulas no dan abasto, patrón! Hay que mejorar a los arrieros.', { station: withArticle(name) });
   }
 }

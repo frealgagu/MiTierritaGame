@@ -3,6 +3,7 @@
 // y, si hay una versión más nueva, muestra sus novedades y ofrece descargar el APK. La web no lo necesita:
 // siempre carga la versión publicada.
 import { isNewer } from '../tools/release-notes.js';
+import { t } from './i18n/index.js';
 
 const SITE = 'https://frealgagu.github.io/MiTierritaGame';
 const RECHECK_MS = 6 * 3600 * 1000;
@@ -28,8 +29,8 @@ const escape = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '
 
 function show(info) {
   const modal = document.getElementById('update');
-  document.getElementById('update-title').textContent = `Hay una versión nueva: v${info.version}`;
-  document.getElementById('update-text').textContent = `Tienes la v${APP_VERSION}. Tu partida se conserva al actualizar.`;
+  document.getElementById('update-title').textContent = t('Hay una versión nueva: v{v}', { v: info.version });
+  document.getElementById('update-text').textContent = t('Tienes la v{v}. Tu partida se conserva al actualizar.', { v: APP_VERSION });
   // Las novedades de las versiones que te faltan (hasta tres).
   const missing = (info.notes ?? []).filter((n) => isNewer(n.version, APP_VERSION)).slice(0, 3);
   document.getElementById('update-notes').innerHTML = missing
@@ -50,9 +51,9 @@ export async function checkForUpdate({ manual = false, toast } = {}) {
   lastCheck = Date.now();
   const info = await published();
   if (!info) {
-    if (manual) toast?.('📶 No se pudo revisar: hace falta internet.');
+    if (manual) toast?.(t('📶 No se pudo revisar: hace falta internet.'));
     return;
   }
   if (isNewer(info.version, APP_VERSION)) show(info);
-  else if (manual) toast?.(`✅ Tienes la última versión (v${APP_VERSION}).`);
+  else if (manual) toast?.(t('✅ Tienes la última versión (v{v}).', { v: APP_VERSION }));
 }

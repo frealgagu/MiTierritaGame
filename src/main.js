@@ -51,7 +51,7 @@ const DEFAULT_MUSIC_VOLUME = 40; // % (v3.66: al 100 % tapaba los sonidos)
 let resetting = false;
 
 async function start() {
-  splashWait('Preparando la finca…');
+  splashWait(t('Preparando la finca…'));
   try {
     // La fuente de los íconos propios también: el mapa los dibuja en textos de Pixi.
     await Promise.all([document.fonts.load('600 16px Fredoka'), document.fonts.load(`16px "${ICON_FONT}"`, Object.values(ICON).join(''))]);
@@ -222,12 +222,12 @@ async function start() {
   };
   const restartBoard = () => {
     if (!board || board.game.state.event.done) return;
-    confirmEvent('🔄', '¿Reiniciar el evento?', 'Vuelve a empezar este mismo reto desde cero: monedas, niveles, compras y reloj. Si ya tenías la medalla asegurada, también se borra.', '🔄 Reiniciar', () => {
+    confirmEvent('🔄', t('¿Reiniciar el evento?'), t('Vuelve a empezar este mismo reto desde cero: monedas, niveles, compras y reloj. Si ya tenías la medalla asegurada, también se borra.'), t('🔄 Reiniciar'), () => {
       const zone = board.zone;
       restartEvent(game.state, zone);
       leaveBoard();
       enterEvent(zone);
-      toast('🔄 El evento empezó de nuevo.', 2500);
+      toast(t('🔄 El evento empezó de nuevo.'), 2500);
     });
   };
   const endBoard = () => {
@@ -238,9 +238,9 @@ async function start() {
       exitEvent();
     };
     if (board.game.state.event.done) return close();
-    confirmEvent('🏁', '¿Terminar el evento?', `Se cierra sin medalla ni Renombre. Su cupo queda libre en 2 años del juego (unas ${formatDuration(EVENT_COOLDOWN)}) y la próxima vez sale el mismo reto.`, '🏁 Terminar sin ganar', () => {
+    confirmEvent('🏁', t('¿Terminar el evento?'), t('Se cierra sin medalla ni Renombre. Su cupo queda libre en 2 años del juego (unas {time}) y la próxima vez sale el mismo reto.', { time: formatDuration(EVENT_COOLDOWN) }), t('🏁 Terminar sin ganar'), () => {
       close();
-      toast('🏁 Evento terminado sin medalla.', 3000);
+      toast(t('🏁 Evento terminado sin medalla.'), 3000);
     });
   };
   // ⏸️ Pausar o 🚪 Salir (v3.67.4): lo elige el jugador en el menú, para todos los eventos.
@@ -249,7 +249,7 @@ async function start() {
   const exitSelect = document.getElementById('event-exit-mode');
   const exitHint = () => {
     document.getElementById('event-exit-hint').textContent =
-      exitMode() === 'leave' ? 'El evento sigue corriendo por detrás, también con el juego cerrado.' : 'El reloj del evento se detiene hasta que vuelvas.';
+      exitMode() === 'leave' ? t('El evento sigue corriendo por detrás, también con el juego cerrado.') : t('El reloj del evento se detiene hasta que vuelvas.');
   };
   exitSelect.value = exitMode();
   exitHint();
@@ -291,9 +291,9 @@ async function start() {
     // Con las tres mejoras ya compradas, el evento se gana en el siguiente cuadro (y sale su ventana).
     if (r.secured && !allActionsBought(state)) {
       const m = MEDALS[state.event.medal];
-      toast(`🚪 El evento siguió ${formatDuration(r.seconds)} sin ti: ¡${m.icon} medalla de ${m.name} asegurada! Para terminarlo, compra las mejoras que faltan.`, 6000);
+      toast(t('🚪 El evento siguió {time} sin ti: ¡{icon} medalla de {medal} asegurada! Para terminarlo, compra las mejoras que faltan.', { time: formatDuration(r.seconds), icon: m.icon, medal: m.name }), 6000);
       sound.milestone();
-    } else toast(`🚪 El evento siguió ${formatDuration(r.seconds)} sin ti.`, 4000);
+    } else toast(t('🚪 El evento siguió {time} sin ti.', { time: formatDuration(r.seconds) }), 4000);
   };
   const leaveBoard = () => {
     // 🚪 Salir (con el botón o yendo a una zona): el tablero sigue corriendo desde ahora, con el reloj del
@@ -337,9 +337,9 @@ async function start() {
   const showEventResult = (r) => {
     const m = MEDALS[r.medal];
     document.getElementById('event-result-medal').textContent = m.icon;
-    document.getElementById('event-result-title').textContent = `¡Medalla de ${m.name}!`;
+    document.getElementById('event-result-title').textContent = t('¡Medalla de {medal}!', { medal: m.name });
     document.getElementById('event-result-text').textContent =
-      `${r.def.icon} ${r.def.name} ${r.round}: cumpliste el objetivo en ${formatClock(r.time)} y compraste las tres mejoras.\n+${m.renown} ⭐ de Renombre (tienes ${game.state.profile.renown}).\nEste cupo de eventos queda libre en 2 años del juego (unas ${formatDuration(EVENT_COOLDOWN)}).`;
+      t('{event}: cumpliste el objetivo en {time} y compraste las tres mejoras.\n+{renown} ⭐ de Renombre (tienes {total}).\nEste cupo de eventos queda libre en 2 años del juego (unas {cooldown}).', { event: `${r.def.icon} ${r.def.name} ${r.round}`, time: formatClock(r.time), renown: m.renown, total: game.state.profile.renown, cooldown: formatDuration(EVENT_COOLDOWN) });
     const modal = document.getElementById('event-result');
     // Terminar, o quedarse mirando el tablero (v3.30): se puede pausar, pero se cierra con «Terminar».
     document.getElementById('event-result-ok').onclick = () => {
@@ -369,7 +369,7 @@ async function start() {
       if (bulk) return; // «Cobrar todos»: un solo aviso al final (goalsClaimed)
       if (!goal.final) {
         sound.coin();
-        toast(`🎯 ¡Objetivo cumplido! +${formatNumber(goal.reward)} 💰`, 3000);
+        toast(t('🎯 ¡Objetivo cumplido! +{coins} 💰', { coins: formatNumber(goal.reward) }), 3000);
         return;
       }
       sound.milestone();
@@ -403,11 +403,11 @@ async function start() {
     });
     g.bus.on('goalsClaimed', ({ count, reward }) => {
       sound.coin();
-      toast(`🎯 ¡${count} objetivo${count === 1 ? '' : 's'} cobrado${count === 1 ? '' : 's'}! +${formatNumber(reward)} 💰`, 3000);
+      toast(count === 1 ? t('🎯 ¡{n} objetivo cobrado! +{coins} 💰', { n: count, coins: formatNumber(reward) }) : t('🎯 ¡{n} objetivos cobrados! +{coins} 💰', { n: count, coins: formatNumber(reward) }), 3000);
     });
     g.bus.on('researchAll', ({ ids }) => {
       sound.milestone();
-      toast(ids.length === 1 ? `🔬 ${RESEARCH_BY_ID[ids[0]].name}: ${RESEARCH_BY_ID[ids[0]].desc}` : `🔬 ¡${ids.length} investigaciones compradas! ${ids.map((id) => RESEARCH_BY_ID[id].name).join(', ')}`, 4000);
+      toast(ids.length === 1 ? `🔬 ${RESEARCH_BY_ID[ids[0]].name}: ${RESEARCH_BY_ID[ids[0]].desc}` : t('🔬 ¡{n} investigaciones compradas! {names}', { n: ids.length, names: ids.map((id) => RESEARCH_BY_ID[id].name).join(', ') }), 4000);
     });
     g.bus.on('research', ({ id, bulk }) => {
       if (bulk) return; // «Comprar todas»: un solo aviso al final (researchAll)
@@ -449,7 +449,7 @@ async function start() {
 
   hideSplash();
   if (offline) showWelcome(offline, () => sound.coin());
-  for (const [id, r] of regionOffline) toast(`${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name} también siguió trabajando: +💰 ${formatNumber(r.coins)}`, 5000);
+  for (const [id, r] of regionOffline) toast(t('{region} también siguió trabajando: +💰 {coins}', { region: `${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name}`, coins: formatNumber(r.coins) }), 5000);
   // Cómo se juega, encima de todo (la bienvenida queda debajo, para después).
   if (introOnStart(game.state)) showIntro(game.state);
   // En un evento, el reloj de su tablero (v3.9.1).
@@ -487,7 +487,7 @@ async function start() {
       // v3.7: cumplir el objetivo asegura la medalla; el evento termina al tener las tres mejoras.
       if (r?.secured) {
         const m = MEDALS[r.medal];
-        toast(`${m.icon} ¡Medalla de ${m.name} asegurada! Para terminar el evento, compra las mejoras que faltan.`, 6000);
+        toast(t('{icon} ¡Medalla de {medal} asegurada! Para terminar el evento, compra las mejoras que faltan.', { icon: m.icon, medal: m.name }), 6000);
         sound.milestone();
       }
       if (r?.done) {
@@ -507,14 +507,14 @@ async function start() {
         const won = Object.values(games).flatMap((g) => checkLogros(g.state, root.profile));
         // Premio por las medallas de toda una región (v3.12).
         for (const b of checkMedalBonus(root.profile)) {
-          toast(`🏅 ¡Todos los eventos de ${REGIONS_BY_ID[b.region].name} con ${MEDALS[b.medal].icon} ${MEDALS[b.medal].name} o mejor! +${b.renown} ⭐ de Renombre`, 5000);
+          toast(t('🏅 ¡Todos los eventos de {region} con {medal} o mejor! +{renown} ⭐ de Renombre', { region: REGIONS_BY_ID[b.region].name, medal: `${MEDALS[b.medal].icon} ${MEDALS[b.medal].name}`, renown: b.renown }), 5000);
           sound.milestone();
         }
         if (!won.length) return;
         const stars = won.reduce((n, w) => n + w.reward, 0);
         const [w] = won;
         // Varios a la vez (una partida de antes de la v2.3), en un solo aviso.
-        toast(won.length > 1 ? `🏆 ${won.length} logros: +${stars} ⭐ de Renombre` : `🏆 ${w.logro.icon} ${w.logro.name} (nivel ${w.tier}): +${stars} ⭐ de Renombre`, 4000);
+        toast(won.length > 1 ? t('🏆 {n} logros: +{stars} ⭐ de Renombre', { n: won.length, stars }) : t('🏆 {logro} (nivel {tier}): +{stars} ⭐ de Renombre', { logro: `${w.logro.icon} ${w.logro.name}`, tier: w.tier, stars }), 4000);
         sound.milestone();
       });
       // En el tablero de un evento, la persona de la zona no avisa lo de la partida.
@@ -546,7 +546,7 @@ async function start() {
       for (const [id, g] of Object.entries(games)) {
         if (id === 'cafetero') continue;
         const rr = await applyOffline(g, away, REGIONS_BY_ID[id], game.state.profile);
-        if (rr) toast(`${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name} también siguió trabajando: +💰 ${formatNumber(rr.coins)}`, 5000);
+        if (rr) toast(t('{region} también siguió trabajando: +💰 {coins}', { region: `${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name}`, coins: formatNumber(rr.coins) }), 5000);
       }
       if (r) showWelcome(r, () => sound.coin());
       if (board) catchUpBoard(board.game);
@@ -595,7 +595,7 @@ async function applyOffline(game, seconds, region = null, profile = game.state.p
   const cap = offlineCapSeconds(game.state, profile);
   splashOffline(seconds, cap, region);
   const r = await game.catchUpAsync(seconds, cap, setSplashProgress);
-  splashWait('¡Listo! Preparando el mapa…');
+  splashWait(t('¡Listo! Preparando el mapa…'));
   return r.coins > 0 ? { ...r, cap, capped: seconds > cap } : null;
 }
 
@@ -610,7 +610,7 @@ function bindMenu(game, sound, music, getActive) {
     const paint = () => {
       const v = game.state.settings[`${key}Volume`];
       input.value = v;
-      label.textContent = v ? `${v} %` : 'No';
+      label.textContent = v ? `${v} %` : t('No');
       icon.textContent = v ? icons[0] : icons[1];
     };
     paint();
@@ -637,7 +637,7 @@ function bindMenu(game, sound, music, getActive) {
   // La música que suena ahora (la de la región que se está viendo), para los créditos (v3.67).
   const musicCredit = () => {
     const song = SONGS[music.region] ?? SONGS.cafetero;
-    return `🎵 Música: «${song.name}», compuesta para el juego y tocada por él (${song.instruments}, sintetizados).`;
+    return t('🎵 Música: «{song}», compuesta para el juego y tocada por él ({instruments}, sintetizados).', { song: song.name, instruments: song.instruments });
   };
   document.getElementById('menu-btn').addEventListener('click', () => {
     const s = game.state;
@@ -646,20 +646,20 @@ function bindMenu(game, sound, music, getActive) {
     const sold = all.reduce((n, st) => n + sumValues(st.stats.sold), 0);
     const earned = all.reduce((n, st) => n + (st.totalEarned ?? 0), 0);
     document.getElementById('menu-stats').innerHTML = [
-      `⏱️ Tiempo jugado: <b>${formatDuration(s.playTime)}</b>`,
-      `💰 Ganado en total: <b>${formatNumber(earned)}</b>`,
-      `📦 Productos vendidos: <b>${formatNumber(sold)}</b>`,
+      t('⏱️ Tiempo jugado: <b>{time}</b>', { time: formatDuration(s.playTime) }),
+      t('💰 Ganado en total: <b>{coins}</b>', { coins: formatNumber(earned) }),
+      t('📦 Productos vendidos: <b>{n}</b>', { n: formatNumber(sold) }),
     ].map((li) => `<li>${li}</li>`).join('');
     const restartBtn = document.getElementById('restart-btn');
     const here = getActive().state;
     restartBtn.hidden = !here.mastered;
-    restartBtn.textContent = `🔁 Volver a empezar ${here.region === 'cafetero' ? '' : `${REGIONS_BY_ID[here.region].name} `}${formatMult(nextLegacyMult(here))}`;
+    restartBtn.textContent = here.region === 'cafetero' ? t('🔁 Volver a empezar {mult}', { mult: formatMult(nextLegacyMult(here)) }) : t('🔁 Volver a empezar {region} {mult}', { region: REGIONS_BY_ID[here.region].name, mult: formatMult(nextLegacyMult(here)) });
     menu.hidden = false;
   });
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));
   const about = document.getElementById('about');
   document.getElementById('about-btn').addEventListener('click', () => {
-    document.getElementById('about-version').textContent = `Versión ${APP_VERSION}`;
+    document.getElementById('about-version').textContent = t('Versión {v}', { v: APP_VERSION });
     document.getElementById('about-music').textContent = musicCredit();
     menu.hidden = true;
     about.hidden = false;
@@ -674,15 +674,15 @@ function bindMenu(game, sound, music, getActive) {
     text.select();
     try {
       await navigator.clipboard.writeText(text.value);
-      msg.textContent = '✅ Copiado. Pégalo en otro dispositivo para seguir allí.';
+      msg.textContent = t('✅ Copiado. Pégalo en otro dispositivo para seguir allí.');
     } catch {
-      msg.textContent = 'Selecciona el texto y cópialo.';
+      msg.textContent = t('Selecciona el texto y cópialo.');
     }
   });
   document.getElementById('import-btn').addEventListener('click', () => {
     const state = importSave(text.value);
     if (!state) {
-      msg.textContent = '⛔ Ese texto no es una partida válida de Encantos de Mi Tierrita.';
+      msg.textContent = t('⛔ Ese texto no es una partida válida de Encantos de Mi Tierrita.');
       return;
     }
     resetting = true;
@@ -694,10 +694,10 @@ function bindMenu(game, sound, music, getActive) {
   let armed = null;
   reset.addEventListener('click', () => {
     if (!armed) {
-      reset.textContent = 'Toca otra vez para borrar';
+      reset.textContent = t('Toca otra vez para borrar');
       armed = setTimeout(() => {
         armed = null;
-        reset.textContent = 'Borrar partida';
+        reset.textContent = t('Borrar partida');
       }, 3000);
       return;
     }

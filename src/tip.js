@@ -5,11 +5,12 @@
 //   - Web: un enlace a Ko-fi, cuando exista (KOFI_URL).
 //   - APK de prueba: sin botón (los cobros de Google solo funcionan con la app instalada desde la tienda).
 import { toast } from './ui/toast.js';
+import { t, tk } from './i18n/index.js';
 
 export const TIPS = [
-  { id: 'tinto', icon: '☕', name: 'Un tinto', thanks: 'el tinto' },
-  { id: 'arepa', icon: '🫓', name: 'Una arepa', thanks: 'la arepa' },
-  { id: 'almuerzo', icon: '🍲', name: 'Un almuerzo', thanks: 'el almuerzo' },
+  { id: 'tinto', icon: '☕', name: tk('Un tinto'), thanks: tk('el tinto') },
+  { id: 'arepa', icon: '🫓', name: tk('Una arepa'), thanks: tk('la arepa') },
+  { id: 'almuerzo', icon: '🍲', name: tk('Un almuerzo'), thanks: tk('el almuerzo') },
 ];
 export const KOFI_URL = '';
 const PRODUCTS_TIMEOUT_MS = 20000; // si Google Play no responde, se avisa en vez de quedarse en «Cargando…»
@@ -46,7 +47,7 @@ export function bindTip(mode) {
 
   const ask = () => {
     q = gateQuestion();
-    question.textContent = `¿Cuánto es ${q.text}?`;
+    question.textContent = t('¿Cuánto es {q}?', { q: q.text });
     input.value = '';
   };
   btn.hidden = false;
@@ -63,7 +64,7 @@ export function bindTip(mode) {
   document.getElementById('tip-gate-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!gatePasses(q, input.value)) {
-      msg.textContent = 'Esa no es. Prueba con esta otra.';
+      msg.textContent = t('Esa no es. Prueba con esta otra.');
       ask();
       return;
     }
@@ -83,28 +84,28 @@ export function bindTip(mode) {
   }
 
   async function showProducts() {
-    options.replaceChildren(note('Cargando…'));
+    options.replaceChildren(note(t('Cargando…')));
     let prices = {};
     try {
       const s = (await loadStore()).NativePurchases;
-      const query = s.getProducts({ productIdentifiers: TIPS.map((t) => t.id), productType: 'inapp' });
+      const query = s.getProducts({ productIdentifiers: TIPS.map((tip) => tip.id), productType: 'inapp' });
       const { products } = await withTimeout(query, PRODUCTS_TIMEOUT_MS);
       prices = Object.fromEntries(products.map((p) => [p.identifier, p.priceString]));
     } catch {
       // sin conexión o sin Google Play: se dice abajo
     }
-    const available = TIPS.filter((t) => prices[t.id]);
+    const available = TIPS.filter((tip) => prices[tip.id]);
     if (!available.length) {
-      options.replaceChildren(note('Ahora no se puede invitar el tinto. Intenta más tarde (revisa que haya internet).'));
+      options.replaceChildren(note(t('Ahora no se puede invitar el tinto. Intenta más tarde (revisa que haya internet).')));
       return;
     }
     options.replaceChildren(
-      note('Es una propina para quien hace el juego: no da nada dentro del juego. ¡Gracias!'),
-      ...available.map((t) => {
+      note(t('Es una propina para quien hace el juego: no da nada dentro del juego. ¡Gracias!')),
+      ...available.map((tip) => {
         const b = document.createElement('button');
         b.className = 'btn buy';
-        b.textContent = `${t.icon} ${t.name} · ${prices[t.id]}`;
-        b.addEventListener('click', () => buy(t, b));
+        b.textContent = `${tip.icon} ${t(tip.name)} · ${prices[tip.id]}`;
+        b.addEventListener('click', () => buy(tip, b));
         return b;
       }),
     );
@@ -116,11 +117,11 @@ export function bindTip(mode) {
       const s = (await loadStore()).NativePurchases;
       await s.purchaseProduct({ productIdentifier: tip.id, productType: 'inapp', isConsumable: true });
       modal.hidden = true;
-      toast(`${tip.icon} ¡Gracias por ${tip.thanks}! Con eso el juego sigue creciendo.`, 5000);
+      toast(t('{icon} ¡Gracias por {what}! Con eso el juego sigue creciendo.', { icon: tip.icon, what: t(tip.thanks) }), 5000);
     } catch (err) {
       const text = String(err?.code ?? err?.message ?? '');
-      if (/pending/i.test(text)) msg.textContent = 'El pago quedó pendiente. Cuando se confirme, ¡gracias!';
-      else if (!/cancel/i.test(text)) msg.textContent = 'No se pudo completar el pago. Intenta más tarde.';
+      if (/pending/i.test(text)) msg.textContent = t('El pago quedó pendiente. Cuando se confirme, ¡gracias!');
+      else if (!/cancel/i.test(text)) msg.textContent = t('No se pudo completar el pago. Intenta más tarde.');
     }
     b.disabled = false;
   }
@@ -145,8 +146,8 @@ function showKofi(options) {
   a.href = KOFI_URL;
   a.target = '_blank';
   a.rel = 'noopener';
-  a.textContent = '☕ Invitar en Ko-fi';
-  options.replaceChildren(note('Es una propina para quien hace el juego: no da nada dentro del juego. ¡Gracias!'), a);
+  a.textContent = t('☕ Invitar en Ko-fi');
+  options.replaceChildren(note(t('Es una propina para quien hace el juego: no da nada dentro del juego. ¡Gracias!')), a);
 }
 
 function note(text) {
