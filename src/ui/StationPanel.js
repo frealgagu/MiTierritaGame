@@ -512,7 +512,8 @@ function stationStatus(state, id) {
   }
   const targets = consumers(state, id);
   const routes = exportsOf(state, id);
-  const where = [...(targets.length ? [listNames(targets)] : []), ...(routes.length || !targets.length ? [t('la bodega')] : [])].join(` ${t('y a')} `);
+  // En español sin artículo («a Molino», no «a el Molino»); en los otros, con él («para o Moinho», «to the Grinder»).
+  const where = [...(targets.length ? [listNames(targets, LANG !== 'es')] : []), ...(routes.length || !targets.length ? [t('la bodega')] : [])].join(` ${t('y a')} `);
   const why = routes.length > 1 ? ` ${t('(para {n} rutas)', { n: routes.length })}` : routes.length ? ` ${t('(para {route})', { route: withArticle(routes[0].name) })}` : '';
   // La parte de una ruta que aún no abre va a la bodega y se vende.
   const pending = pendingRoutes(state, id);

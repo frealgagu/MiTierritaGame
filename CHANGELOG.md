@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.69.0 — Encantos de Mi Tierrita, em português
+- **🌐 Idioma:** el juego ya se puede jugar en **portugués de Brasil**. Se elige en el menú ⚙️ (**🌐 Idioma**), y quien tiene el teléfono en portugués lo ve así desde la primera vez.
+- Está todo traducido, como en inglés: ventanas, avisos, paneles, estaciones, productos, zonas, rutas, eventos, álbum, logros, datos curiosos y lo que dicen las personas. Lo que en Brasil tiene su nombre se dice así (rapadura, goiabada, beiju, açaí, tucupi); lo propio de Colombia (arequipe, bocadillo veleño, chiva, budare, ruana…) se deja como allá. Los números van con coma decimal, como en español.
+- Quien juega en español o en inglés no descarga nada de más: el portugués llega solo si se elige.
+- En inglés, el panel de la estación dice a dónde llevan las mulas el producto con su artículo («to the Grinder»).
+
 ## v3.68.3 — Un multiplicador más grande
 - **El multiplicador del segundo final llega ahora hasta ×1,15Qi** (2⁶⁰, con 60 reinicios); antes se quedaba en ×4,29B (32 reinicios). Se puede seguir volviendo a empezar después, pero ya no se duplica.
 - **Las monedas tienen un techo de 999Dc**, el número más grande que se escribe con sufijo: así nunca se ven en notación científica.
