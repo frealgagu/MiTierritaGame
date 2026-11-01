@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v3.68.2 — El multiplicador al máximo
+- **Con el multiplicador de producción al máximo, la barra de abajo lo dice** («🏆 Multiplicador al máximo») en vez de ofrecer volver a empezar. Se puede seguir reiniciando desde 📋 Objetivos.
+
 ## v3.68.1 — La chiva del evento, con su nivel
 - **En un evento, la cadena muestra la ruta 🚌 con el nivel de su estación**, que es el que tiene: allí la ruta sube con la estación. Antes mostraba el nivel propio de la ruta, que en el evento no cambia (siempre 1).
 - En inglés, el letrero pintado de la bodega dice «WAREHOUSE».

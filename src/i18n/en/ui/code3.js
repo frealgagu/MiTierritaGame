@@ -136,4 +136,5 @@ export default {
   'Tienes la v{v}. Tu partida se conserva al actualizar.': 'You have v{v}. Your game is kept when you update.',
   '📶 No se pudo revisar: hace falta internet.': "📶 Couldn't check: an internet connection is needed.",
   '✅ Tienes la última versión (v{v}).': '✅ You have the latest version (v{v}).',
+  '🏆 Multiplicador al máximo ({mult})': '🏆 Multiplier maxed out ({mult})',
 };

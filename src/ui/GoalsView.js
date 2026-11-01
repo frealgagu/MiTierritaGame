@@ -5,7 +5,7 @@ import { activeGoals, claimableGoals, goalProgress, goalText } from '../sim/goal
 import { finalZone, masteryParts } from '../sim/legacy.js';
 import { t } from '../i18n/index.js';
 import { regionOf } from '../data/regions.js';
-import { nextLegacyMult } from '../sim/modifiers.js';
+import { MAX_LEGACY_RESETS, legacyMult, nextLegacyMult } from '../sim/modifiers.js';
 import { fit } from './fit.js';
 
 // Objetivos: un marcador abajo a la izquierda con el objetivo actual y la lista de todos los de la zona
@@ -64,7 +64,10 @@ export class GoalsView {
     const g = goals[i];
     // (v3.12: con la última zona de la región, no solo el Pueblo: en Santander no salía.)
     const finished = Boolean(state.zones[finalZone(state)]?.complete) && !regionOf(state).wip;
-    const master = !g && finished ? masteryCard(state, true) : null;
+    // Con el multiplicador al máximo (v3.68.2) la barra ya no ofrece volver a empezar: solo lo dice; se
+    // puede seguir reiniciando desde la ventana de objetivos.
+    const atMax = (state.legacy?.resets ?? 0) >= MAX_LEGACY_RESETS;
+    const master = !g && finished ? (atMax ? maxCard(state) : masteryCard(state, true)) : null;
     this.tracker.hidden = !g && !master;
     const trackerHtml = g ? goalCard(g, progress[i], true) : master;
     if (trackerHtml && trackerHtml !== this.trackerHtml) {
@@ -106,6 +109,10 @@ export class GoalsView {
 
 // Segundo final: lo que pide (v3.12: estaciones, arrieros y rutas en el nivel 100, todos los objetivos
 // y todas las investigaciones), cuánto va de cada cosa y, al lograrlo, el botón para volver a empezar.
+// «🏆 Multiplicador al máximo (×4,29B)», en la barra de abajo.
+const maxCard = (state) =>
+  `<div class="goal final done compact"><div class="goal-text">${t('🏆 Multiplicador al máximo ({mult})', { mult: formatMult(legacyMult(state)) })}</div></div>`;
+
 function masteryCard(state, compact) {
   const parts = masteryParts(state);
   const have = parts.reduce((n, p) => n + Math.min(p.have, p.need), 0);

@@ -1,6 +1,7 @@
 // En qué se gasta el Renombre ⭐ (v2.2): láminas del álbum y decoración. Todo vive en state.profile,
 // que no se pierde al reiniciar. Nada de esto cambia la economía.
 import { ALBUM, PAGE_BONUS, STICKERS_BY_ID, albumOf } from '../data/album.js';
+import { canPayRenown } from './upgrades.js';
 import { DECOR_BY_ID, DEFAULT_DECOR } from '../data/decor.js';
 
 // El perfil de la partida, con lo que le falte (partidas de antes de la v2.2).
@@ -27,7 +28,7 @@ export const pageDone = (profile, pageId) => ALBUM.find((pg) => pg.id === pageId
 export function quoteSticker(profile, id) {
   const s = STICKERS_BY_ID[id];
   if (profile.album.includes(id)) return { ok: false, reason: 'owned', cost: s.cost };
-  if (profile.renown < s.cost) return { ok: false, reason: 'renown', cost: s.cost };
+  if (!canPayRenown(profile, s.cost)) return { ok: false, reason: 'renown', cost: s.cost };
   return { ok: true, cost: s.cost };
 }
 
@@ -51,7 +52,7 @@ export const ownsDecor = (profile, cat, opt, region = 'cafetero') => optionOf(ca
 export function quoteDecor(profile, cat, opt, region = 'cafetero') {
   const o = optionOf(cat, opt);
   if (ownsDecor(profile, cat, opt, region)) return { ok: false, reason: 'owned', cost: o.cost };
-  if (profile.renown < o.cost) return { ok: false, reason: 'renown', cost: o.cost };
+  if (!canPayRenown(profile, o.cost)) return { ok: false, reason: 'renown', cost: o.cost };
   return { ok: true, cost: o.cost };
 }
 
@@ -90,7 +91,7 @@ export const offlineHours = (profile) => OFFLINE_BASE_HOURS + OFFLINE_STEP_HOURS
 export function quoteOffline(profile) {
   const cost = OFFLINE_COSTS[offlineLevel(profile)];
   if (cost === undefined) return { ok: false, reason: 'max' };
-  if (profile.renown < cost) return { ok: false, reason: 'renown', cost };
+  if (!canPayRenown(profile, cost)) return { ok: false, reason: 'renown', cost };
   return { ok: true, cost };
 }
 
@@ -111,7 +112,7 @@ export const workLevel = (region) => region?.workLevel ?? 0;
 export function quoteWork(profile, region) {
   const cost = WORK_COSTS[workLevel(region)];
   if (cost === undefined) return { ok: false, reason: 'max' };
-  if (profile.renown < cost) return { ok: false, reason: 'renown', cost };
+  if (!canPayRenown(profile, cost)) return { ok: false, reason: 'renown', cost };
   return { ok: true, cost };
 }
 
@@ -134,7 +135,7 @@ export function quoteWillys2(profile, region) {
   if (!region) return { ok: false, reason: 'region', cost: WILLYS2_COST };
   if (region.willys2) return { ok: false, reason: 'owned', cost: WILLYS2_COST };
   if (!albumDone(profile, region.region ?? 'cafetero')) return { ok: false, reason: 'album', cost: WILLYS2_COST };
-  if (profile.renown < WILLYS2_COST) return { ok: false, reason: 'renown', cost: WILLYS2_COST };
+  if (!canPayRenown(profile, WILLYS2_COST)) return { ok: false, reason: 'renown', cost: WILLYS2_COST };
   return { ok: true, cost: WILLYS2_COST };
 }
 
@@ -160,7 +161,7 @@ export const petsOf = (profile, region = 'cafetero') => {
 export function quotePet(profile, region, kind) {
   const def = PETS[kind];
   if (petsOf(profile, region)[kind] >= def.max) return { ok: false, reason: 'max', cost: def.cost };
-  if (profile.renown < def.cost) return { ok: false, reason: 'renown', cost: def.cost };
+  if (!canPayRenown(profile, def.cost)) return { ok: false, reason: 'renown', cost: def.cost };
   return { ok: true, cost: def.cost };
 }
 

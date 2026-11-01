@@ -15,6 +15,8 @@ const TRANSPORT_COST_FACTOR = 0.5;
 let credit = false;
 export const setCredit = (on) => (credit = Boolean(on));
 export const canPay = (state, cost) => credit || state.coins >= cost;
+// Lo mismo con el Renombre (v3.68.2): con saldo negativo, también se compra sin estrellas.
+export const canPayRenown = (profile, cost) => credit || profile.renown >= cost;
 
 // Lo que se puede mejorar: 'dispatch:<zona>', 'route:<ruta>', el id de una estación o 'id:transport' (sus arrieros).
 function target(state, id) {
