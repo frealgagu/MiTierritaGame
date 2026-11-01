@@ -1,4 +1,4 @@
-import { Container, Graphics, Polygon, Sprite, Text } from 'pixi.js';
+import { Container, Graphics, Polygon, Rectangle, Sprite, Text } from 'pixi.js';
 import { iso, isoPoly, depth, shade } from './iso.js';
 import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
@@ -31,6 +31,9 @@ export class Label extends Container {
     this.text.text = text;
     const w = this.text.width + 18;
     this.bg.clear().roundRect(-w / 2, -11, w, 22, 11).fill({ color: 0x3a2418, alpha: 0.78 }).stroke({ width: 1.5, color: 0xffffff, alpha: 0.35 });
+    // Todo el letrero se puede tocar (v3.67.6): sin esto el toque pasaba al dibujo de abajo, y un letrero
+    // encima de otra estación abría esa otra. Como los letreros van encima de todo, el letrero gana.
+    this.hitArea = new Rectangle(-w / 2 - 2, -13, w + 4, 26);
   }
 }
 
@@ -88,6 +91,17 @@ export class StationView extends Container {
       pts.push([p.x, p.y]);
     }
     this.hitArea = new Polygon(hull(pts).flat());
+  }
+
+  // ¿El punto (global) cae en algo dibujado de la estación (el edificio, los árboles, el letrero de la
+  // parcela)? Sin contar el resaltado de la selección (v3.67.6).
+  drawnAt(global) {
+    const hit = (node) => {
+      if (!node.visible || node === this.highlight) return false;
+      if (node instanceof Graphics && node.containsPoint(node.toLocal(global))) return true;
+      return node.children?.some(hit) ?? false;
+    };
+    return this.children.some(hit);
   }
 
   // Punto de anclaje para etiquetas y efectos.

@@ -58,8 +58,14 @@ export class Scene {
     this.onBackground = () => {};
     this.app.stage.eventMode = 'static';
     this.app.stage.hitArea = this.app.screen;
+    // Pixi da el toque a lo primero que esté dibujado bajo el dedo, aunque sea adorno (una nube, una mula,
+    // las monedas que suben): entonces llega aquí, al fondo, y no al letrero o la estación de debajo. Por
+    // eso aquí se busca primero el letrero y luego la estación (v3.67.6); si no hay ninguno, es el fondo.
     this.bgTap = (e) => {
-      if (e.target === this.app.stage && !this.camera?.dragged) this.onBackground();
+      if (e.target !== this.app.stage || this.camera?.dragged) return;
+      const id = this.pickAt(e.global);
+      if (id) this.selectStation(id);
+      else this.onBackground();
     };
     this.app.stage.on('pointertap', this.bgTap);
 
@@ -170,22 +176,48 @@ export class Scene {
     this.ambientTimer = 0;
   }
 
-  // La estación de un toque (v3.67): la de adelante cuyo terreno se tocó; si ninguno, la de adelante cuyo
-  // edificio (hasta su letrero) se tocó.
+  // El letrero bajo el punto (global), el de más arriba si hay varios (v3.67.6).
+  labelAt(global) {
+    const hits = Object.entries(this.stations).filter(([, v]) => {
+      const l = v.label;
+      if (!v.parent || !l?.parent || !l.visible || !l.hitArea) return false;
+      const p = l.toLocal(global);
+      return l.hitArea.contains(p.x, p.y);
+    });
+    return hits.sort((a, b) => this.labels.getChildIndex(b[1].label) - this.labels.getChildIndex(a[1].label))[0]?.[0] ?? null;
+  }
+
+  // Lo que abre un toque: el letrero primero, luego la estación (stationAt).
+  pickAt(global) {
+    return this.labelAt(global) ?? this.stationAt(global);
+  }
+
+  selectStation(id) {
+    this.onSelect(id === 'dispatch' ? `dispatch:${this.zone.id}` : id);
+  }
+
+  // La estación de un toque (v3.67.6). El letrero tiene su propio toque y gana siempre (va encima de todo).
+  // Si no: la de adelante cuyo dibujo (el edificio, los árboles) se tocó; si ninguno, la de adelante cuyo
+  // terreno se tocó; y si tampoco, la de adelante en cuyo espacio hasta el letrero cayó el toque. (En la
+  // v3.67 ganaba el terreno: el techo de una estación que tapaba el terreno de la de atrás abría la de atrás.)
   stationAt(global) {
     const p = this.objects.toLocal(global);
     const front = (list) => list.sort((a, b) => b[1].zIndex - a[1].zIndex)[0]?.[0] ?? null;
     const views = Object.entries(this.stations).filter(([, v]) => v.parent);
-    return front(views.filter(([, v]) => v.footArea?.contains(p.x, p.y))) ?? front(views.filter(([, v]) => v.hitArea?.contains(p.x, p.y)));
+    return (
+      front(views.filter(([, v]) => v.drawnAt?.(global))) ??
+      front(views.filter(([, v]) => v.footArea?.contains(p.x, p.y))) ??
+      front(views.filter(([, v]) => v.hitArea?.contains(p.x, p.y)))
+    );
   }
 
   addStationView(id, view, labelHeight) {
     this.stations[id] = view;
     this.objects.addChild(view);
-    const select = (sid) => this.onSelect(sid === 'dispatch' ? `dispatch:${this.zone.id}` : sid);
+    const select = (sid) => this.selectStation(sid);
     // Se toca todo el edificio, hasta donde va su letrero, y también el letrero (v3.67). Si el toque cae en
-    // dos estaciones (el techo de una tapa el terreno de la de atrás), gana la del terreno tocado.
-    view.on('pointertap', (e) => !this.camera.dragged && select(this.stationAt(e.global) ?? id));
+    // dos estaciones, decide stationAt: el letrero primero, luego el edificio (v3.67.6).
+    view.on('pointertap', (e) => !this.camera.dragged && select(this.pickAt(e.global) ?? id));
     view.setHitHeight?.(labelHeight ?? 60);
     const pick = () => !this.camera.dragged && select(id);
     view.label.eventMode = 'static';
