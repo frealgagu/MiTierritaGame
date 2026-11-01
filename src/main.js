@@ -40,6 +40,7 @@ import { nextLegacyMult, offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
 import { bindDevOptions, savedSpeed } from './ui/DevOptions.js';
 import { bindIconTips } from './ui/iconTips.js';
+import { bindMore } from './ui/more.js';
 import { Sound } from './audio/Sound.js';
 import { Music } from './audio/Music.js';
 
@@ -559,6 +560,7 @@ async function start() {
   bindMenu(game, sound, music, () => active);
   bindDevOptions(game, () => active);
   bindIconTips();
+  bindMore(); // «Ver más» en los textos largos (v3.67.5)
   bindTip(tipMode({ native: isNativeApp(), playStore: typeof __PLAY_STORE__ !== 'undefined' && __PLAY_STORE__ }));
   // En la app de Android el juego ya va dentro del paquete: sin service worker, con el botón «atrás».
   if (isNativeApp()) {

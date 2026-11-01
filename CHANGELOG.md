@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.67.5 — Ventanas que caben en pantallas pequeñas
+- **🏅 Eventos:** la explicación de arriba se ve en tres renglones, con **Ver más ▾** para leerla completa (y **Ver menos ▴** para recogerla); la presentación de cada evento, en dos. En un teléfono pequeño la explicación ocupaba toda la ventana y no se veían los eventos.
+- **📖 Álbum, 🎨 Decorar, 🏆 Logros y ⏰ Horas** van de a dos en el teléfono: en una sola fila se cortaban los nombres.
+- **🔬 Investigaciones:** lo que falta (🔒 Construye…, 🔒 Nv 25…) pasa debajo de la descripción cuando no cabe al lado; antes la dejaba con una palabra por renglón.
+
 ## v3.67.4 — Pausar o salir de un evento
 - **Nueva opción en el menú ⚙️: «Al dejar un evento»**, para todos los eventos:
   - **⏸️ Pausar** (como hasta ahora): el reloj del evento se detiene hasta que vuelvas.

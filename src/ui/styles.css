@@ -453,6 +453,11 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .research-text { flex: 1; min-width: 0; font-size: 0.9rem; }
 .research-text small { color: var(--muted); }
 .research .owned, .research .locked { font-size: 0.8rem; font-weight: 600; text-align: right; flex: none; white-space: nowrap; }
+/* Lo que falta (🔒 Construye Beneficiadero, 🔒 Nv 25 y 🐴 25) pasa debajo si no cabe al lado (v3.67.5): en
+   una pantalla angosta dejaba la descripción con una palabra por renglón. */
+.research { flex-wrap: wrap; }
+.research-text { flex: 1 1 130px; }
+.research > :last-child { margin-left: auto; }
 .btn.small { width: auto; padding: 6px 10px; font-size: 0.9rem; white-space: nowrap; }
 
 .modal-card.center { text-align: center; display: grid; gap: 8px; justify-items: center; }
@@ -753,6 +758,12 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 /* Ventana de eventos (v3.67): el Renombre arriba y sus botones en un renglón aparte, como pestañas. */
 .events-renown-tabs { margin: 0 0 10px; }
 .events-renown-tabs .tab { flex: 1; }
+/* Álbum, Decorar, Logros y Horas (v3.67.5): en un teléfono no caben los cuatro en una fila (se cortaban
+   los nombres); van de a dos. */
+@media (max-width: 440px) {
+  .tabs.four-tabs { display: grid; grid-template-columns: 1fr 1fr; height: auto; }
+  .tabs.four-tabs .tab { height: 34px; }
+}
 .renown-back { width: auto; flex: none; padding: 4px 10px; font-size: 0.85rem; margin-right: 6px; }
 
 /* El mapa (v3.67): la región resaltada en el país, las que vienen («Próximamente») y la zona de destino. */
@@ -764,3 +775,12 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .zones-map-zone.target .dot { fill: #ffe082; animation: map-target 0.8s ease-in-out infinite; }
 @keyframes map-target { 50% { opacity: 0.55; } }
 .zones-list-btn { width: auto; flex: none; margin-left: auto; margin-right: 6px; padding: 4px 10px; font-size: 0.85rem; }
+
+/* «Ver más» (v3.67.5, ui/more.js): un texto largo en pocas líneas, con un botón para verlo completo. */
+/* Con alto fijo además del recorte por líneas: los emojis hacen algunos renglones más altos y se asomaba
+   un pedazo del siguiente. */
+.clamp { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: var(--lines, 3); line-clamp: var(--lines, 3); overflow: hidden; line-height: 1.4; max-height: calc(var(--lines, 3) * 1.4em); }
+.clamp.open { flex: none; max-height: 45vh; overflow-y: auto; } /* abierto, con su propio desplazamiento si es muy largo */
+.clamp.open { display: block; -webkit-line-clamp: unset; line-clamp: none; }
+.more-btn { flex: none; align-self: flex-start; margin: -2px 0 6px; padding: 2px 0; border: none; background: none; color: var(--wood); font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+.more-btn[hidden] { display: none; }
