@@ -399,10 +399,14 @@ export const WELCOME = {
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».
-export function withArticle(name) {
+function spanishArticle(name) {
   const first = name.split(' ')[0];
   const article = first.endsWith('as') ? 'las' : first.endsWith('es') ? 'los' : first.endsWith('a') ? 'la' : 'el';
   return `${article} ${name}`;
 }
+// Cada idioma pone su regla (v3.68: en inglés, «the Wet Mill»).
+let articleRule = spanishArticle;
+export const setArticleRule = (rule) => (articleRule = rule);
+export const withArticle = (name) => articleRule(name);
 const capital = (s) => s[0].toUpperCase() + s.slice(1);
 export const WithArticle = (name) => capital(withArticle(name));
