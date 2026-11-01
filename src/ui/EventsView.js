@@ -7,6 +7,7 @@ import { MEDAL_BONUS, awaySeconds, boardClockNow, eventObjective, eventStatus, m
 import { clockOf } from '../sim/calendar.js';
 import { formatDuration } from '../core/format.js';
 import { formatClock, objectiveText } from './EventBar.js';
+import { moreButton, refreshMore } from './more.js';
 
 export const medalLine = (obj) => `🥇 hasta ${formatClock(obj.medals[0])} · 🥈 hasta ${formatClock(obj.medals[1])} · 🥉 después`;
 
@@ -39,8 +40,9 @@ export class EventsView {
   }
 
   open() {
-    this.render();
+    // Primero a la vista: así se sabe qué textos no caben y llevan «Ver más» (v3.67.5).
     this.modal.hidden = false;
+    this.render();
   }
 
   // Plegada si así la dejó el jugador; si no, solo las regiones sin nada que jugar ahora.
@@ -85,7 +87,7 @@ export class EventsView {
       } else foot = `<button class="btn buy" data-play="${def.zone}">Jugar</button>`;
       return `<div class="event-card">
         ${title}
-        <p>${def.intro}</p>
+        <p class="clamp" style="--lines: 2">${def.intro}</p>${moreButton()}
         <p class="event-year">Reto ${st.round}: ${objectiveText(obj)}.<br>${medalLine(obj)}</p>
         ${foot}
       </div>`;
@@ -108,6 +110,7 @@ export class EventsView {
       })
       .join('');
     this.body.innerHTML = `${html}<p class="event-soon">Cada zona que abras trae su evento.</p>${medalsHtml(profile)}`;
+    refreshMore(this.body);
   }
 
   update() {
