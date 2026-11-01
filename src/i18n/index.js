@@ -1,4 +1,4 @@
-// Idiomas (v3.68; portugués de Brasil, v3.69). El juego está escrito en español; los demás idiomas son diccionarios aparte que solo
+// Idiomas (v3.68: inglés; v3.69: portugués de Brasil; v3.70: francés). El juego está escrito en español; los demás idiomas son diccionarios aparte que solo
 // se descargan si se eligen (quien juega en español no baja nada de más).
 //   - La interfaz: cada frase pasa por t('frase en español', { variables }). El diccionario tiene la frase
 //     en español como clave; si falta, se ve en español.
@@ -12,11 +12,12 @@ export const LANGS = [
   { id: 'es', name: 'Español', flag: '🇨🇴' },
   { id: 'en', name: 'English', flag: '🇬🇧' },
   { id: 'pt', name: 'Português', flag: '🇧🇷' },
+  { id: 'fr', name: 'Français', flag: '🇫🇷' },
 ];
 const KEY = 'mitierrita-lang';
-// Mientras no estén sus traducciones, quien tiene el teléfono en francés, italiano, catalán o gallego
-// juega en español (se le parece más que el inglés). El portugués tiene el suyo desde la v3.69.
-const NEAR_SPANISH = ['fr', 'it', 'ca', 'gl'];
+// Quien tiene el teléfono en italiano, catalán o gallego juega en español (se le parece más que el
+// inglés). El portugués tiene el suyo desde la v3.69 y el francés desde la v3.70.
+const NEAR_SPANISH = ['it', 'ca', 'gl'];
 
 let dict = null;
 export let LANG = 'es';
@@ -61,7 +62,7 @@ export function saveLang(lang) {
   }
 }
 
-const LOADERS = { en: () => import('./en/index.js'), pt: () => import('./pt/index.js') };
+const LOADERS = { en: () => import('./en/index.js'), pt: () => import('./pt/index.js'), fr: () => import('./fr/index.js') };
 
 // Carga el idioma (antes de que arranque el juego).
 export async function loadLang(lang) {
