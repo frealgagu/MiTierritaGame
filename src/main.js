@@ -41,6 +41,7 @@ import { toast } from './ui/toast.js';
 import { bindDevOptions, savedSpeed } from './ui/DevOptions.js';
 import { bindIconTips } from './ui/iconTips.js';
 import { bindMore } from './ui/more.js';
+import { LANG, LANGS, saveLang, t } from './i18n/index.js';
 import { Sound } from './audio/Sound.js';
 import { Music } from './audio/Music.js';
 
@@ -624,6 +625,15 @@ function bindMenu(game, sound, music, getActive) {
   slider('sound', 'sound', ['🔊', '🔇'], (v) => (sound.setVolume(v), sound.click()));
   slider('music', 'music', ['🎵', '🔕'], (v) => music.setVolume(v));
   document.getElementById('menu-version').textContent = `v${APP_VERSION}`;
+  // Idioma (v3.68): se guarda y el juego vuelve a cargar (la partida se guarda antes).
+  const langSelect = document.getElementById('lang-select');
+  langSelect.innerHTML = LANGS.map((l) => `<option value="${l.id}">${l.flag} ${l.name}</option>`).join('');
+  langSelect.value = LANG;
+  langSelect.addEventListener('change', () => {
+    saveLang(langSelect.value);
+    saveGame(game.state);
+    location.reload();
+  });
   // La música que suena ahora (la de la región que se está viendo), para los créditos (v3.67).
   const musicCredit = () => {
     const song = SONGS[music.region] ?? SONGS.cafetero;

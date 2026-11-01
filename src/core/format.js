@@ -1,5 +1,10 @@
 const SUFFIXES = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc'];
 
+// La coma decimal: en español «2,50M»; en inglés «2.50M» (v3.68, la pone el idioma).
+let DECIMAL = ',';
+export const setDecimal = (d) => (DECIMAL = d);
+export const decimal = (s) => String(s).replace('.', DECIMAL);
+
 // 950 → "950", 12345 → "12,3K", 2.5e6 → "2,50M". Más allá de los sufijos (con muchos reinicios del
 // segundo final los números no tienen techo), notación científica: 4.2e40 → "4,20e40".
 export function formatNumber(n) {
@@ -9,7 +14,7 @@ export function formatNumber(n) {
   if (n < 1000) return sign + Math.floor(n).toString();
   if (n >= 1000 ** SUFFIXES.length) {
     const [mantissa, exp] = n.toExponential(2).split('e+');
-    return `${sign}${mantissa.replace('.', ',')}e${exp}`;
+    return `${sign}${decimal(mantissa)}e${exp}`;
   }
   let i = 0;
   while (n >= 1000 && i < SUFFIXES.length - 1) {
@@ -17,7 +22,7 @@ export function formatNumber(n) {
     i++;
   }
   const digits = n < 10 ? 2 : n < 100 ? 1 : 0;
-  return sign + n.toFixed(digits).replace('.', ',') + SUFFIXES[i];
+  return sign + decimal(n.toFixed(digits)) + SUFFIXES[i];
 }
 
 // Multiplicador de producción, con el mismo formato que las monedas (v3.57): ×512, ×2,05K, ×4,29B.
@@ -27,7 +32,7 @@ export function formatMult(m) {
 
 // Tasas por segundo: muestra decimales cuando son pequeñas.
 export function formatRate(n) {
-  if (n < 10) return n.toFixed(n < 1 ? 2 : 1).replace('.', ',');
+  if (n < 10) return decimal(n.toFixed(n < 1 ? 2 : 1));
   return formatNumber(n);
 }
 
@@ -42,6 +47,6 @@ export function formatDuration(seconds) {
 
 // Cantidades que pueden tener decimales (carga de las mulas): 0,8 · 3,5 · 12 · 1,2K
 export function formatAmount(n) {
-  if (n < 10 && Math.abs(n - Math.round(n)) > 0.05) return n.toFixed(1).replace('.', ',');
+  if (n < 10 && Math.abs(n - Math.round(n)) > 0.05) return decimal(n.toFixed(1));
   return formatNumber(Math.round(n));
 }
