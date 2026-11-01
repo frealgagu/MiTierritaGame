@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.67.6 — El letrero manda
+- **Tocar el letrero de una estación abre esa estación**, aunque el letrero quede encima de otra (la de adelante o la de atrás). Antes el toque pasaba a lo que hubiera debajo del letrero, y en algunos puntos no respondía, por ejemplo en la orilla del letrero de la Bodega.
+- **Fuera de los letreros, gana el edificio:** al tocar el techo o las paredes de una estación que tapa el terreno de la de atrás, se abre la del edificio (antes, la del terreno). Si no se toca ningún dibujo, cuenta el terreno.
+- Un toque que caía sobre un adorno (una nube, una mula, las monedas que suben) a veces no abría nada; ahora busca el letrero o la estación de debajo.
+
 ## v3.67.5 — Ventanas que caben en pantallas pequeñas
 - **🏅 Eventos:** la explicación de arriba se ve en tres renglones, con **Ver más ▾** para leerla completa (y **Ver menos ▴** para recogerla); la presentación de cada evento, en dos. En un teléfono pequeño la explicación ocupaba toda la ventana y no se veían los eventos.
 - **📖 Álbum, 🎨 Decorar, 🏆 Logros y ⏰ Horas** van de a dos en el teléfono: en una sola fila se cortaban los nombres.
