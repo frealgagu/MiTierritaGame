@@ -1,6 +1,6 @@
 import { toast } from './toast.js';
 import { setCredit } from '../sim/upgrades.js';
-import { formatMult } from '../core/format.js';
+import { decimal, formatMult } from '../core/format.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
 import { MAX_LEGACY_RESETS } from '../sim/modifiers.js';
 import { t } from '../i18n/index.js';
@@ -13,7 +13,8 @@ import { t } from '../i18n/index.js';
 const KEY = 'mitierrita-dev';
 const TAPS = 7;
 const MAX_SPEED = 100;
-// Como en el juego (v3.56): el multiplicador llega hasta ×2³².
+const MIN_SPEED = 0.01; // v3.68.2: también más despacio que lo normal, en centésimas (×0.25, ×0.01)
+// Como en el juego: el multiplicador llega hasta ×2^MAX_LEGACY_RESETS.
 const MAX_RESETS = MAX_LEGACY_RESETS;
 
 function load() {
@@ -27,8 +28,10 @@ function load() {
 // Velocidad con la que se cerró el juego (1 si no estaba acelerado).
 export function savedSpeed() {
   const prefs = load();
-  return prefs.visible && prefs.active ? Math.min(MAX_SPEED, Math.max(1, prefs.speed)) : 1;
+  return prefs.visible && prefs.active ? clampSpeed(prefs.speed) : 1;
 }
+
+const clampSpeed = (v) => Math.min(MAX_SPEED, Math.max(MIN_SPEED, Math.round((Number(v) || 1) * 100) / 100));
 
 function store(prefs) {
   try {
@@ -47,6 +50,7 @@ export function bindDevOptions(game, getActive = () => game) {
   const chip = document.getElementById('speed-chip');
   const credit = document.getElementById('dev-credit');
   input.max = MAX_SPEED;
+  input.min = MIN_SPEED;
   input.value = prefs.speed;
   box.hidden = !prefs.visible;
   credit.checked = prefs.visible && prefs.credit;
@@ -58,27 +62,27 @@ export function bindDevOptions(game, getActive = () => game) {
     toast(prefs.credit ? t('💸 Saldo negativo permitido: compra lo que quieras') : t('💰 Solo se compra con lo que hay'));
   });
 
-  const speed = () => Math.min(MAX_SPEED, Math.max(1, Math.round(Number(input.value) || 1)));
+  const speed = () => clampSpeed(String(input.value).replace(',', '.'));
   const paint = () => {
-    const on = game.timeScale > 1;
-    toggle.textContent = on ? t('⏹️ Volver a ×1') : t('⏩ Acelerar ×{n}', { n: speed() });
+    const on = game.timeScale !== 1;
+    toggle.textContent = on ? t('⏹️ Volver a ×1') : t('⏩ Acelerar ×{n}', { n: decimal(speed()) });
     chip.hidden = !on;
-    chip.textContent = `⏩ ×${game.timeScale}`;
+    chip.textContent = `${game.timeScale < 1 ? '🐢' : '⏩'} ×${decimal(game.timeScale)}`;
   };
   const setScale = (s) => {
     game.timeScale = s;
-    prefs.active = s > 1;
+    prefs.active = s !== 1;
     store(prefs);
     paint();
   };
 
-  toggle.addEventListener('click', () => setScale(game.timeScale > 1 ? 1 : speed()));
+  toggle.addEventListener('click', () => setScale(game.timeScale !== 1 ? 1 : speed()));
   // Mientras se escribe, el botón ya dice la velocidad nueva (y, si está acelerado, se aplica).
   input.addEventListener('input', () => {
     if (!input.value) return;
     prefs.speed = speed();
     store(prefs);
-    if (game.timeScale > 1 && prefs.speed > 1) setScale(prefs.speed);
+    if (game.timeScale !== 1 && prefs.speed !== 1) setScale(prefs.speed);
     else paint();
   });
   input.addEventListener('change', () => (input.value = prefs.speed = speed()));
