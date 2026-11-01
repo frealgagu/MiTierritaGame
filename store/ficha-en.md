@@ -44,7 +44,7 @@ Bambuco, guabina, cumbia, torbellino, joropo, chirimía and Amazon cumbia: each 
 • Works offline.
 • No ads and no personal data collected.
 • Suitable for the whole family.
-• Available in English and Spanish.
+• Available in English, Spanish, Portuguese and French.
 • If you enjoy it, you can buy the developer a tinto (optional, with no in-game advantages).
 ```
 
@@ -66,12 +66,10 @@ Suggested order: the farm, the station (Roaster), the chain, the Hat Workshop (C
 | `arepa` | An arepa | Buy an arepa for the person who makes the game. It gives nothing inside the game. Thank you! |
 | `almuerzo` | A lunch | Buy lunch for the person who makes the game. It gives nothing inside the game. Thank you! |
 
-## Release notes (v3.68)
+## Release notes (v3.70)
 
 ```
 <en-US>
-• The game is now available in English! Choose the language in the ⚙️ menu (🌐 Language).
-• Tapping a station's sign always opens that station.
-• Windows fit better on small phones.
+The game is now available in French! Choose it in ⚙️ Menu › 🌐 Language; phones set to French use it from the start. Everything is translated: stations, products, zones, events, album, achievements and fun facts. The game now speaks Spanish, English, Portuguese and French.
 </en-US>
 ```

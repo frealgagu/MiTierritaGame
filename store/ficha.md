@@ -55,7 +55,7 @@ Bambuco, guabina, cumbia, torbellino, joropo, chirimía y cumbia amazónica: cad
 | Gráfico destacado | `store/feature-graphic.png` | 1024 × 500 |
 | Capturas de teléfono (2 a 8) | `store/capturas/1-finca.png` … `6-zonas.png` | 1080 × 1920 |
 
-La ficha en inglés (textos, capturas e imagen destacada) está en `store/ficha-en.md`.
+Las fichas en otros idiomas (textos, capturas e imagen destacada) están en `store/ficha-en.md` (inglés), `store/ficha-pt.md` (portugués de Brasil) y `store/ficha-fr.md` (francés).
 
 Orden sugerido de las capturas: la finca, la estación (Tostadora), la cadena, El Sombrero (La Costa), el mapa de Colombia y el selector de zonas. Se regeneran con `tools/capturas-play.mjs`.
 
