@@ -9,6 +9,11 @@ const RELEASE = 0.03; // s que tarda en callarse una cuerda que se apaga con la 
 
 const freqOf = (m) => 440 * 2 ** ((m - 69) / 12);
 
+// Para exportar a MIDI (v3.71, tools/music-export.mjs): si la pieza trae `events`, cada nota y cada golpe
+// quedan anotados con la voz que los toca (`buf.voice`). El juego no los pide y suena igual.
+const logNote = (buf, at, freq, dur, amp) => buf.events?.push({ voice: buf.voice, at: buf.strumAt ?? at, midi: 69 + 12 * Math.log2(freq / 440), dur, amp });
+const hit = (buf, at, dur, amp) => buf.events?.push({ voice: buf.voice, at, dur, amp, perc: true });
+
 // La nota más baja con esa clase de altura desde `from` (MIDI).
 const above = (pc, from) => from + ((pc - from) % 12 + 12) % 12;
 
@@ -22,6 +27,7 @@ export function createSong(song, sr) {
 // Una cuerda pulsada. at: s desde el inicio de la pieza (lo que sobra al final suena al empezar la vuelta).
 // t60: s en que se apaga sola; bright: 0..1 qué tan metálica; pos: dónde se pulsa (0..0.5).
 function pluck(buf, at, freq, dur, { amp = 0.3, t60 = 1.5, bright = 0.5, pan = 0, pos = 0.2 } = {}) {
+  logNote(buf, at, freq, dur, amp);
   const { sr, length, left, right, rng } = buf;
   const delay = sr / freq - 0.5; // el filtro de dos puntos suma media muestra
   const n0 = Math.ceil(delay) + 2;
@@ -65,7 +71,9 @@ function pluck(buf, at, freq, dur, { amp = 0.3, t60 = 1.5, bright = 0.5, pan = 0
 // Rasgueo: las cuerdas una tras otra, hacia abajo (de la grave a la aguda) o hacia arriba.
 function strum(buf, at, notes, dur, opts, up = false) {
   const list = up ? [...notes].reverse() : notes;
+  buf.strumAt = at; // en el MIDI, el acorde entero en el golpe
   list.forEach((m, k) => pluck(buf, at + k * 0.012, freqOf(m), dur, opts));
+  delete buf.strumAt;
 }
 
 // Suma un sonido hecho muestra a muestra (fn(s desde el golpe) → valor) desde `at`, con paneo.
@@ -85,6 +93,7 @@ function add(buf, at, dur, pan, fn) {
 
 // Tambor: un tono que cae de f0 a f1 y se apaga en `decay` s, con un poco de golpe de cuero (ruido).
 function drum(buf, at, f0, f1, decay, amp, pan, slap = 0.2) {
+  hit(buf, at, decay, amp);
   const { rng } = buf;
   let phase = 0;
   const sr = buf.sr;
@@ -97,6 +106,7 @@ function drum(buf, at, f0, f1, decay, amp, pan, slap = 0.2) {
 
 // Guacharaca: el raspado de la caña con el trinche, ruido agudo que vibra con las estrías.
 function scrape(buf, at, dur, amp, pan) {
+  hit(buf, at, dur, amp);
   const { rng } = buf;
   let last = 0;
   add(buf, at, dur, pan, (t) => {
@@ -111,6 +121,7 @@ function scrape(buf, at, dur, amp, pan) {
 
 // Gaita (o millo): un tono soplado, con armónicos suaves, vibrato y algo de aire.
 function blow(buf, at, freq, dur, amp, pan) {
+  logNote(buf, at, freq, dur, amp);
   const { rng } = buf;
   const sr = buf.sr;
   let phase = 0;
@@ -134,22 +145,29 @@ function renderCumbia(buf, index) {
   const at = (e) => t0 + e * eighth + jitter();
 
   // Bajo: tónica, tónica, quinta y tónica, a saltos.
+  buf.voice = 'bass';
   const low = above(root, 36);
   const fifth = above((root + 7) % 12, 36);
   for (const [e, m, n] of [[0, low, 1.6], [3, low, 0.9], [4, fifth, 1.6], [6, low, 0.9]]) {
     pluck(buf, at(e), freqOf(m), eighth * n, { amp: 0.42, t60: 1.5, bright: 0.2, pan: -0.1, pos: 0.3 });
   }
   // Guitarra: golpes cortos en cada contratiempo.
+  buf.voice = 'guitar';
   const chord = tones.map((pc) => above(pc, 57)).sort((a, b) => a - b);
   for (const e of [1, 3, 5, 7]) strum(buf, at(e), chord, eighth * 0.55, { amp: 0.08, t60: 0.6, bright: 0.6, pan: -0.35 }, e % 4 === 3);
   // Guacharaca: largo en el tiempo, corto en el contratiempo («chu-ku, chu-ku»).
+  buf.voice = 'guacharaca';
   for (let e = 0; e < 8; e++) scrape(buf, at(e), eighth * (e % 2 ? 0.45 : 0.85), e % 2 ? 0.05 : 0.08, 0.45);
   // Llamador en el dos y el cuatro; tambora en el uno y el tres.
+  buf.voice = 'llamador';
   for (const e of [2, 6]) drum(buf, at(e), 260, 190, 0.07, 0.22, 0.25, 0.35);
+  buf.voice = 'tambora';
   for (const e of [0, 4]) drum(buf, at(e), 120, 70, 0.14, 0.38, -0.2, 0.15);
   // Tambor alegre: repica a su gusto.
+  buf.voice = 'alegre';
   for (const e of [1, 3, 5, 7]) if (rng() < 0.55) drum(buf, at(e) + (rng() < 0.3 ? eighth / 2 : 0), 330, 280, 0.05, 0.16 + rng() * 0.08, 0.3, 0.5);
   // Gaita.
+  buf.voice = 'melody';
   for (const [e, n, note] of song.melody[index] ?? []) blow(buf, at(e), freqOf(midi(note)), n * eighth * 0.92, 0.2, 0.05);
 }
 
@@ -163,17 +181,22 @@ function renderTorbellino(buf, index) {
   const { root, tones } = parseChord(song.chords[index]);
   const at = (e) => t0 + e * eighth + jitter();
 
+  buf.voice = 'bass';
   pluck(buf, at(0), freqOf(above(root, 40)), beat * 1.6, { amp: 0.45, t60: 2, bright: 0.25, pan: -0.15, pos: 0.3 });
   pluck(buf, at(4), freqOf(above((root + 7) % 12, 40)), beat * 0.9, { amp: 0.3, t60: 1.6, bright: 0.25, pan: -0.15, pos: 0.3 });
+  buf.voice = 'guitar';
   const guitar = tones.map((pc) => above(pc, 55)).sort((a, b) => a - b);
   for (const e of [2, 4]) strum(buf, at(e), guitar, beat * 0.7, { amp: 0.13, t60: 1, bright: 0.45, pan: -0.35 });
   // El tiple: tres cuerdas por orden, rasgueo de abajo arriba y de arriba abajo en cada corchea.
+  buf.voice = 'tiple';
   const tiple = tones.slice(0, 4).map((pc) => above(pc, 64)).sort((a, b) => a - b);
   const courses = tiple.flatMap((m, k) => (k < 3 ? [m - 12, m, m + 0.04] : [m, m + 0.04]));
   for (let e = 0; e < 6; e++) strum(buf, at(e), courses, eighth * 0.7, { amp: e % 2 ? 0.045 : 0.065, t60: 0.7, bright: 0.8, pan: 0.35, pos: 0.12 }, e % 2 === 1);
   // El chucho (maraca de guadua): largo en el tiempo, corto en el contratiempo.
+  buf.voice = 'chucho';
   for (let e = 0; e < 6; e++) scrape(buf, at(e), eighth * (e % 2 ? 0.35 : 0.7), e % 2 ? 0.035 : 0.06, 0.5);
   // El requinto: notas punteadas, brillantes.
+  buf.voice = 'melody';
   for (const [e, n, note] of song.melody[index] ?? []) {
     pluck(buf, at(e), freqOf(midi(note)), n * eighth * 0.92, { amp: 0.3, t60: 0.9, bright: 0.85, pan: 0.1, pos: 0.13 });
   }
@@ -190,6 +213,7 @@ function renderJoropo(buf, index) {
   const { root, tones } = parseChord(song.chords[index]);
   const at = (e) => t0 + e * eighth + jitter();
 
+  buf.voice = 'bass';
   const low = above(root, 40);
   const fifth = above((root + 7) % 12, 40);
   for (const [e, m, n] of [[0, low, 1.6], [3, fifth, 0.9], [4, low + 12, 0.9]]) {
@@ -197,14 +221,17 @@ function renderJoropo(buf, index) {
   }
   // El cuatro: cuatro cuerdas en el registro medio; abierto en el uno y en el «y» del dos, apagado en el dos y
   // en el «y» del tres.
+  buf.voice = 'cuatro';
   const cuatro = tones.slice(0, 4).map((pc) => above(pc, 59)).sort((a, b) => a - b);
   for (let e = 0; e < 6; e++) {
     const muted = e === 2 || e === 5;
     strum(buf, at(e), cuatro, eighth * (muted ? 0.25 : 0.75), { amp: muted ? 0.05 : e === 0 || e === 3 ? 0.085 : 0.06, t60: muted ? 0.15 : 0.7, bright: 0.7, pan: 0.3, pos: 0.15 }, e % 2 === 1);
   }
   // Las maracas: semicorcheas, más fuertes en el uno y en el «y» del dos.
+  buf.voice = 'maracas';
   for (let k = 0; k < 12; k++) scrape(buf, at(k / 2), eighth * 0.4, k === 0 || k === 6 ? 0.07 : k % 2 ? 0.025 : 0.045, k % 2 ? -0.45 : 0.45);
   // El arpa.
+  buf.voice = 'melody';
   for (const [e, n, note] of song.melody[index] ?? []) {
     const f = freqOf(midi(note));
     pluck(buf, at(e), f, n * eighth * 0.95, { amp: 0.28, t60: 1.3, bright: 0.8, pan: 0.05, pos: 0.18 });
@@ -214,6 +241,7 @@ function renderJoropo(buf, index) {
 
 // Clarinete (v3.38): caña, con los armónicos impares más fuertes, un ataque corto y un vibrato leve.
 function reed(buf, at, freq, dur, amp, pan) {
+  logNote(buf, at, freq, dur, amp);
   const { rng } = buf;
   const sr = buf.sr;
   let phase = 0;
@@ -228,6 +256,7 @@ function reed(buf, at, freq, dur, amp, pan) {
 
 // Bombardino (v3.38): metal grave y redondo, con los armónicos pares, que se infla al entrar.
 function brass(buf, at, freq, dur, amp, pan) {
+  logNote(buf, at, freq, dur, amp);
   const sr = buf.sr;
   let phase = 0;
   add(buf, at, dur + 0.05, pan, (t) => {
@@ -240,6 +269,7 @@ function brass(buf, at, freq, dur, amp, pan) {
 
 // Redoblante: el golpe del parche con el ruido de los bordones.
 function snare(buf, at, amp, pan) {
+  hit(buf, at, 0.16, amp);
   const { rng } = buf;
   const sr = buf.sr;
   let phase = 0;
@@ -255,6 +285,7 @@ function snare(buf, at, amp, pan) {
 
 // Platillos: el choque de los dos, ruido muy agudo que se apaga despacio.
 function cymbal(buf, at, amp, pan, decay = 0.25) {
+  hit(buf, at, decay, amp);
   const { rng } = buf;
   let a = 0;
   let b = 0;
@@ -283,17 +314,23 @@ function renderChirimia(buf, index) {
   const fifth = above((root + 7) % 12, 41);
   const third = above(tones[1], 41);
   const lead = above(next, 41) + (rng() < 0.5 ? -1 : 2);
+  buf.voice = 'bass';
   for (const [e, m, n] of [[0, low, 1.6], [3, fifth, 0.9], [4, low, 1.4], [6, third, 0.9], [7, lead, 0.8]]) brass(buf, at(e), freqOf(m), eighth * n, 0.14, -0.2);
+  buf.voice = 'tambora';
   for (const e of [0, 4]) drum(buf, at(e), 110, 55, 0.16, 0.26, -0.1, 0.2);
   if (rng() < 0.4) drum(buf, at(3), 110, 55, 0.12, 0.15, -0.1, 0.2);
+  buf.voice = 'snare';
   for (const e of [1, 3, 5, 7]) snare(buf, at(e), 0.13, 0.3);
   for (let e = 0; e < 8; e++) if (e % 2 === 0 && rng() < 0.35) snare(buf, at(e) + eighth / 2, 0.07, 0.3);
+  buf.voice = 'cymbal';
   for (const e of [2, 6]) cymbal(buf, at(e), 0.12, 0.45);
-  for (const [e, n, note] of song.melody[index] ?? []) {
-    const m = midi(note);
+  for (const [e, n, nt] of song.melody[index] ?? []) {
+    const m = midi(nt);
+    buf.voice = 'melody';
     reed(buf, at(e), freqOf(m), n * eighth * 0.9, 0.2, 0.1);
     if (n >= 2) {
       const below = tones.map((pc) => m - (((m - pc) % 12) + 12) % 12).filter((x) => m - x >= 3 && m - x <= 5);
+      buf.voice = 'second';
       if (below.length) reed(buf, at(e) + 0.006, freqOf(below[0]), n * eighth * 0.9, 0.09, -0.1);
     }
   }
@@ -313,17 +350,24 @@ function renderAmazonica(buf, index) {
 
   const low = above(root, 40);
   const fifth = above((root + 7) % 12, 40);
+  buf.voice = 'bass';
   for (const [e, m, n] of [[0, low, 1.4], [3, low, 0.8], [4, fifth, 1.4], [6, low + 12, 0.8], [7, fifth, 0.8]]) {
     pluck(buf, at(e), freqOf(m), eighth * n, { amp: 0.32, t60: 1.2, bright: 0.25, pan: -0.15, pos: 0.3 });
   }
+  buf.voice = 'keys';
   const chord = tones.map((pc) => above(pc, 60)).sort((a, b) => a - b);
   for (const e of [1, 3, 5, 7]) strum(buf, at(e), chord, eighth * 0.4, { amp: 0.06, t60: 0.4, bright: 0.5, pan: -0.35 }, false);
+  buf.voice = 'maracas';
   for (let k = 0; k < 16; k++) scrape(buf, at(k / 2), eighth * 0.35, k % 4 === 0 ? 0.06 : 0.03, k % 2 ? -0.4 : 0.4);
   // El manguaré: dos tonos de madera.
+  buf.voice = 'manguareLow';
   for (const e of [0, 4]) drum(buf, at(e), 150, 115, 0.11, 0.2, -0.1, 0.35);
+  buf.voice = 'manguareHigh';
   for (const e of [2, 5, 7]) drum(buf, at(e), 230, 205, 0.06, 0.12, 0.2, 0.4);
+  buf.voice = 'manguareRoll';
   if (index % 4 === 3) for (const e of [6, 6.5, 7, 7.5]) drum(buf, at(e), 380, 330, 0.05, 0.1, 0.3, 0.3);
   // La guitarra eléctrica, con un segundo pulso apenas desafinado.
+  buf.voice = 'melody';
   for (const [e, n, note] of song.melody[index] ?? []) {
     const f = freqOf(midi(note));
     const opts = { amp: 0.4, t60: 0.9, bright: 0.9, pan: 0.15, pos: 0.1 };
@@ -354,11 +398,13 @@ export function renderBar(buf, index) {
   const at = (e) => t0 + e * eighth + jitter();
 
   // Bajo de la guitarra: la tónica en el primer tiempo y la quinta en el tercero.
+  buf.voice = 'bass';
   pluck(buf, at(0), freqOf(above(root, 40)), beat * 2.2, { amp: 0.5, t60: 2.5, bright: 0.25, pan: -0.15, pos: 0.3 });
   pluck(buf, at(4), freqOf(above((root + 7) % 12, 40)), beat * 1.1, { amp: 0.3, t60: 2, bright: 0.25, pan: -0.15, pos: 0.3 });
 
   // Guitarra: rasgueo en el segundo y el tercer tiempo; en la guabina (v3.67, `arpeggio`), punteada: las
   // notas del acorde una por una, en cada corchea, para que no suene igual al bambuco.
+  buf.voice = 'guitar';
   const guitar = tones.map((pc) => above(pc, 55)).sort((a, b) => a - b);
   if (song.arpeggio) {
     const notes = [...guitar, guitar[1] + 12];
@@ -371,6 +417,7 @@ export function renderBar(buf, index) {
   // Tiple: golpes cortos y apagados en el contratiempo («y» del dos y del tres). Sus cuerdas van de a
   // tres: dos al unísono (un poco desafinadas entre sí) y la de en medio una octava abajo. La guabina
   // (v3.67, `tiple: false`) va sin él.
+  buf.voice = 'tiple';
   if (song.tiple !== false) {
     const tiple = tones.slice(0, 4).map((pc) => above(pc, 64)).sort((a, b) => a - b);
     const courses = tiple.flatMap((m, k) => (k < 3 ? [m - 12, m, m + 0.04] : [m, m + 0.04]));
@@ -378,6 +425,7 @@ export function renderBar(buf, index) {
   }
 
   // Melodía de bandola: las notas largas, en trémolo.
+  buf.voice = 'melody';
   for (const [e, n, note] of song.melody[index] ?? []) {
     const f = freqOf(midi(note));
     const opts = { amp: 0.32, t60: 1.1, bright: 0.75, pan: 0.1, pos: 0.15 };

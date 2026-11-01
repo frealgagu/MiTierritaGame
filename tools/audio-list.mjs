@@ -1,0 +1,37 @@
+// Los efectos de sonido que se publican para descargar (v3.71), con su nombre en cada idioma. Los usan
+// tools/sfx-export.mjs (que los graba) y tools/music-page.mjs (que arma la página de descargas).
+//   [archivo, cómo se toca en Sound.js, si va también en MIDI, { es, en, pt, fr }]
+// Los de las estaciones (`kind`) suenan con la primera estación de ese oficio.
+export const EFFECTS = [
+  ['monedas', 'coin', true, { es: 'Monedas', en: 'Coins', pt: 'Moedas', fr: 'Pièces' }],
+  ['subir-de-nivel', 'levelUp', true, { es: 'Subir de nivel', en: 'Level up', pt: 'Subir de nível', fr: 'Niveau supérieur' }],
+  ['hito', 'milestone', true, { es: 'Hito', en: 'Milestone', pt: 'Marco', fr: 'Palier' }],
+  ['construir', 'build', true, { es: 'Construir', en: 'Build', pt: 'Construir', fr: 'Construire' }],
+  ['toque', 'click', false, { es: 'Toque', en: 'Tap', pt: 'Toque', fr: 'Touche' }],
+  ['campanas', 'bells', true, { es: 'Campanas de la iglesia', en: 'Church bells', pt: 'Sinos da igreja', fr: 'Cloches de l’église' }],
+  ['pajaro', 'chirp', false, { es: 'Pájaro', en: 'Bird', pt: 'Pássaro', fr: 'Oiseau' }],
+  ['grillo', 'cricket', false, { es: 'Grillo', en: 'Cricket', pt: 'Grilo', fr: 'Grillon' }],
+  ['vaca', 'moo', false, { es: 'Vaca', en: 'Cow', pt: 'Vaca', fr: 'Vache' }],
+  ['gallo', 'rooster', false, { es: 'Gallo', en: 'Rooster', pt: 'Galo', fr: 'Coq' }],
+  ['gallinas', 'cluck', false, { es: 'Gallinas', en: 'Hens', pt: 'Galinhas', fr: 'Poules' }],
+  ['perro', 'bark', false, { es: 'Perro', en: 'Dog', pt: 'Cachorro', fr: 'Chien' }],
+  ['loro', 'parrot', false, { es: 'Loro', en: 'Parrot', pt: 'Papagaio', fr: 'Perroquet' }],
+  ['trapiche', 'grind', false, { es: 'Trapiche moliendo', en: 'Sugar mill grinding', pt: 'Engenho moendo', fr: 'Moulin à canne' }],
+  ['miel-hirviendo', 'bubble', false, { es: 'Miel hirviendo', en: 'Boiling syrup', pt: 'Melado fervendo', fr: 'Sirop qui bout' }],
+  ['cultivo', { kind: 'field' }, false, { es: 'Cultivo', en: 'Field', pt: 'Plantação', fr: 'Champ' }],
+  ['agua', { kind: 'water' }, false, { es: 'Agua', en: 'Water', pt: 'Água', fr: 'Eau' }],
+  ['maquina', { kind: 'machine' }, false, { es: 'Máquina', en: 'Machine', pt: 'Máquina', fr: 'Machine' }],
+  ['giro', { kind: 'whir' }, false, { es: 'Algo que gira', en: 'Spinning', pt: 'Algo girando', fr: 'Rotation' }],
+  ['fuego', { kind: 'fire' }, false, { es: 'Fuego', en: 'Fire', pt: 'Fogo', fr: 'Feu' }],
+  ['hervor', { kind: 'boil' }, false, { es: 'Paila hirviendo', en: 'Boiling pot', pt: 'Tacho fervendo', fr: 'Chaudron qui bout' }],
+  ['viento', { kind: 'wind' }, false, { es: 'Viento', en: 'Wind', pt: 'Vento', fr: 'Vent' }],
+  ['fermentacion', { kind: 'ferment' }, false, { es: 'Fermentación', en: 'Fermentation', pt: 'Fermentação', fr: 'Fermentation' }],
+  ['cuchillo', { kind: 'chop' }, false, { es: 'Cuchillo', en: 'Knife', pt: 'Faca', fr: 'Couteau' }],
+  ['telar', { kind: 'loom' }, true, { es: 'Telar', en: 'Loom', pt: 'Tear', fr: 'Métier à tisser' }],
+  ['bultos', { kind: 'thud' }, false, { es: 'Bultos', en: 'Sacks', pt: 'Sacos', fr: 'Sacs' }],
+  ['sirena-del-barco', { kind: 'horn' }, false, { es: 'Sirena del barco', en: 'Ship horn', pt: 'Apito do navio', fr: 'Sirène du bateau' }],
+  ['chisporroteo', { kind: 'sizzle' }, false, { es: 'Chisporroteo', en: 'Sizzle', pt: 'Chiado', fr: 'Grésillement' }],
+  ['pocillos', { kind: 'clink' }, true, { es: 'Pocillos', en: 'Cups', pt: 'Xícaras', fr: 'Tasses' }],
+  ['sal', { kind: 'pour' }, false, { es: 'Sal que cae', en: 'Pouring salt', pt: 'Sal caindo', fr: 'Sel qui tombe' }],
+  ['willys', { kind: 'engine' }, false, { es: 'El Willys', en: 'The Willys', pt: 'O Willys', fr: 'La Willys' }],
+];
