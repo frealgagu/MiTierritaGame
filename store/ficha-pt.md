@@ -70,6 +70,6 @@ Ordem sugerida: a fazenda, a estação (Torrador), a cadeia, o Chapéu (Costa do
 
 ```
 <pt-BR>
-O jogo agora está em português e francês! Escolha em ⚙️ Menu › 🌐 Idioma; celulares nesses idiomas já abrem assim. Tudo traduzido: estações, produtos, zonas, eventos, álbum, conquistas e curiosidades.
+O jogo agora também está em francês! Escolha em ⚙️ Menu › 🌐 Idioma; celulares em francês já abrem assim. Tudo traduzido: estações, produtos, zonas, eventos, álbum, conquistas e curiosidades. Agora são quatro idiomas: espanhol, inglês, português e francês.
 </pt-BR>
 ```
