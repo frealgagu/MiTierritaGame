@@ -31,25 +31,26 @@ import { ZONES_BY_ID } from '../data/zones/index.js';
 import { dispatchMult } from '../sim/modifiers.js';
 import { fit, setFitted } from './fit.js';
 import { alerts } from '../sim/alerts.js';
-import { FACTS, withArticle } from '../data/lore.js';
+import { FACTS, WithArticle, withArticle } from '../data/lore.js';
 import { clockOf, hourLabel, isLunch, nextWorkHour, resting, workOf } from '../sim/calendar.js';
 import { eventDef, eventHandicaps, handicapText, supplyFraction } from '../sim/events.js';
 import { harvestFactor, waitingHarvest } from '../sim/production.js';
+import { LANG, listJoin, t } from '../i18n/index.js';
 
 const SUBTITLE_MS = 7000; // cada cuánto cambia el subtítulo (descripción y datos reales)
 
 const MODES = [
   { key: 1, label: '×1' },
   { key: 10, label: '×10' },
-  { key: 'max', label: 'Máx' },
+  { key: 'max', label: 'Máx' }, // (se traduce al dibujar)
 ];
 
 const recipe = (obj) => Object.entries(obj).map(([id, n]) => `${n} ${PRODUCTS[id].icon}`).join(' + ');
-const nameOf = (id) => (id.startsWith('dispatch') ? DISPATCH.name : id === 'warehouse' ? 'la bodega' : STATIONS_BY_ID[id].name);
+const nameOf = (id) => (id.startsWith('dispatch') ? DISPATCH.name : id === 'warehouse' ? t('la bodega') : STATIONS_BY_ID[id].name);
 // «la Descremadora, la Quesera y la Paila de arequipe»
 const listNames = (ids, article = false) => {
   const names = ids.map((id) => (article ? withArticle(STATIONS_BY_ID[id].name) : STATIONS_BY_ID[id].name));
-  return names.length > 1 ? `${names.slice(0, -1).join(', ')} y ${names.at(-1)}` : names[0];
+  return listJoin(names);
 };
 // Con cuatro pestañas, las de la estación y el transporte muestran solo el ícono.
 const tabButtons = (tabs, active) =>
@@ -63,10 +64,10 @@ const isBuilt = (state, id) => id.startsWith('dispatch') || id.startsWith('route
 // Pestañas de una estación: la estación, su transporte y una por cada ruta que la abastece.
 // [clave, ícono, nombre]
 function tabsOf(state, id) {
-  if (id.startsWith('dispatch')) return [['station', DISPATCH.icon, 'Despacho'], ['stock', '📦', 'Bodega']];
+  if (id.startsWith('dispatch')) return [['station', DISPATCH.icon, t('Despacho')], ['stock', '📦', t('Bodega')]];
   const tabs = [
-    ['station', '⚙️', 'Estación'],
-    ['transport', ...(hasBelt(state.stations[id]?.transport.level ?? 0) ? ['⚡', 'Banda'] : ['🐴', 'Arrieros'])],
+    ['station', '⚙️', t('Estación')],
+    ['transport', ...(hasBelt(state.stations[id]?.transport.level ?? 0) ? ['⚡', t('Banda')] : ['🐴', t('Arrieros')])],
   ];
   for (const imp of STATIONS_BY_ID[id]?.imports ?? []) tabs.push([`route:${imp.route}`, '🚌', ROUTES_BY_ID[imp.route].tab]);
   return tabs;
@@ -125,7 +126,7 @@ export class StationPanel {
       <div class="panel-head">
         <div class="panel-icon">${icon}</div>
         <div class="panel-title"><h3 data-fit>${title}</h3><p data-fit data-ref="subtitle">${subtitle}</p></div>
-        <button class="close-btn" data-close aria-label="Cerrar">✕</button>
+        <button class="close-btn" data-close aria-label="${t('Cerrar')}">✕</button>
       </div>
       ${tabs ? `<div class="tabs">${tabs}</div>` : ''}
       <div class="recipe small" data-fit>${recipe}</div>
@@ -151,7 +152,7 @@ export class StationPanel {
       rows: info.rows.map((r) => `<div class="stat"><span>${r.label}</span><b><span data-ref="${r.key}"></span> <span class="next" data-ref="${r.key}Next"></span></b></div>`).join(''),
       milestone: `<div class="milestone-top"><span class="level-badge" data-ref="level"></span><span data-ref="milestoneText"></span></div>
         <div class="bar"><div data-ref="milestoneBar"></div></div>`,
-      modes: info.fixed ? '' : MODES.map((m) => `<button class="mode" data-mode="${m.key}">${m.label}</button>`).join(''),
+      modes: info.fixed ? '' : MODES.map((m) => `<button class="mode" data-mode="${m.key}">${m.key === 'max' ? t('Máx') : m.label}</button>`).join(''),
       button: '<button class="btn buy" data-buy><span data-ref="buyLabel"></span><span data-ref="buyCost"></span></button>',
     });
     this.collectRefs();
@@ -181,19 +182,19 @@ export class StationPanel {
     const [inId] = Object.keys(def.in);
     const gain = PRODUCTS[outId].value * def.out[outId] - PRODUCTS[inId].value * def.in[inId];
     const rows = def.side
-      ? `<div class="stat"><span>Produce</span><b>${PRODUCTS[outId].name}</b></div>
-         <div class="stat"><span>Efecto</span><b class="next">+${pct(COMPOST_VALUE)} a las ventas de la Finca</b></div>
-         <div class="stat"><span>Transporte</span><b>Canaleta directa, sin mulas</b></div>`
-      : `<div class="stat"><span>Produce</span><b>${PRODUCTS[outId].name}</b></div>
-         <div class="stat"><span>Precio de venta</span><b>${PRODUCTS[outId].value} 💰 por unidad</b></div>
-         <div class="stat"><span>Ganancia por proceso</span><b class="next">+${gain} 💰</b></div>`;
+      ? `<div class="stat"><span>${t('Produce')}</span><b>${PRODUCTS[outId].name}</b></div>
+         <div class="stat"><span>${t('Efecto')}</span><b class="next">${t('+{pct} a las ventas de la Finca', { pct: pct(COMPOST_VALUE) })}</b></div>
+         <div class="stat"><span>${t('Transporte')}</span><b>${t('Canaleta directa, sin mulas')}</b></div>`
+      : `<div class="stat"><span>${t('Produce')}</span><b>${PRODUCTS[outId].name}</b></div>
+         <div class="stat"><span>${t('Precio de venta')}</span><b>${t('{n} 💰 por unidad', { n: PRODUCTS[outId].value })}</b></div>
+         <div class="stat"><span>${t('Ganancia por proceso')}</span><b class="next">+${gain} 💰</b></div>`;
     this.el.innerHTML = this.frame({
       icon: def.icon,
       title: def.name,
-      subtitle: def.side ? 'Rama opcional: aprovecha la pulpa del Beneficiadero' : 'Siguiente paso de la cadena',
+      subtitle: def.side ? t('Rama opcional: aprovecha la pulpa del Beneficiadero') : t('Siguiente paso de la cadena'),
       recipe: `${recipe(def.in)} <span>➜</span> ${recipe(def.out)}`,
       rows,
-      button: '<button class="btn buy" data-unlock><span>Construir</span><span data-ref="unlockCost"></span></button>',
+      button: `<button class="btn buy" data-unlock><span>${t('Construir')}</span><span data-ref="unlockCost"></span></button>`,
     });
     this.collectRefs();
     this.el.querySelector('[data-unlock]').addEventListener('click', () => {
@@ -211,7 +212,7 @@ export class StationPanel {
     this.el.innerHTML = this.frame({
       icon: DISPATCH.icon,
       title: DISPATCH.name,
-      subtitle: `${ZONES_BY_ID[zoneId].name}: lo que hay en la bodega y a cuánto lo vende el Willys`,
+      subtitle: t('{zone}: lo que hay en la bodega y a cuánto lo vende el Willys', { zone: ZONES_BY_ID[zoneId].name }),
       tabs: tabButtons(tabsOf(this.game.state, this.id), 'stock'),
       recipe: '<span data-ref="stockTotal"></span>',
       rows: '',
@@ -235,11 +236,11 @@ export class StationPanel {
     const z = s.zones[zoneId];
     const dock = dockStock(s, zoneId);
     const cap = warehouseCapacity(z.dispatch.level, dispatchMult(s, zoneId));
-    setFitted(this.refs.stockTotal, `📦 ${formatNumber(sumValues(z.warehouse) - dock)} / ${formatNumber(cap)}${dock > 0.5 ? ` · 🚌 ${formatNumber(dock)} para las rutas` : ''}`);
+    setFitted(this.refs.stockTotal, `📦 ${formatNumber(sumValues(z.warehouse) - dock)} / ${formatNumber(cap)}${dock > 0.5 ? ` · ${t('🚌 {n} para las rutas', { n: formatNumber(dock) })}` : ''}`);
     const html = stockRows(s, zoneId);
     if (html !== this.stockHtml) this.refs.stockList.innerHTML = this.stockHtml = html;
     const value = Object.entries(z.warehouse).reduce((n, [p, q]) => n + q * saleValue(s, p), 0);
-    this.setStatus({ text: `💰 Todo lo que hay vale ${formatNumber(value)}. El Willys se lo lleva al pueblo y cada producto se vende a su precio.`, bad: false });
+    this.setStatus({ text: t('💰 Todo lo que hay vale {coins}. El Willys se lo lleva al pueblo y cada producto se vende a su precio.', { coins: formatNumber(value) }), bad: false });
   }
 
   collectRefs() {
@@ -274,7 +275,7 @@ export class StationPanel {
       r.unlockCost.textContent = `💰 ${formatNumber(q.cost)}`;
       this.el.querySelector('[data-unlock]').disabled = !q.ok;
       this.setStatus({
-        text: q.reason === 'order' ? `🔒 Primero construye: ${nameOf(q.previous)}.` : q.ok ? '✅ ¡Listo para construir!' : `💰 Te faltan ${formatNumber(Math.ceil(q.cost - state.coins))} monedas.`,
+        text: q.reason === 'order' ? t('🔒 Primero construye: {station}.', { station: nameOf(q.previous) }) : q.ok ? t('✅ ¡Listo para construir!') : t('💰 Te faltan {n} monedas.', { n: formatNumber(Math.ceil(q.cost - state.coins)) }),
         bad: q.reason === 'order',
       });
       return;
@@ -287,7 +288,7 @@ export class StationPanel {
     const q = info.fixed ? { levels: 0, cost: 0, affordable: false, maxed: false } : this.game.quote(info.upgradeId, this.mode);
     const after = level + Math.max(q.levels, 1);
 
-    r.level.textContent = `Nv ${level}`;
+    r.level.textContent = t('Nv {n}', { n: level });
     for (const row of info.rows) {
       const value = row.value(state, level);
       const next = row.next && level < maxLevel(state) ? `→ ${row.next(after, state)}` : '';
@@ -303,10 +304,10 @@ export class StationPanel {
     if (next && next <= maxLevel(state)) {
       const prev = [...MILESTONES].reverse().find((m) => m <= level) ?? 1;
       const what = typeof info.milestoneWhat === 'function' ? info.milestoneWhat(next) : info.milestoneWhat;
-      setFitted(r.milestoneText, `Hito del nivel ${next}: ×${milestoneBoost(next)} ${what}`);
+      setFitted(r.milestoneText, t('Hito del nivel {n}: ×{mult} {what}', { n: next, mult: milestoneBoost(next), what }));
       r.milestoneBar.style.width = `${((level - prev) / (next - prev)) * 100}%`;
     } else {
-      setFitted(r.milestoneText, state.event ? `¡Todos los hitos del evento! (hasta el nivel ${maxLevel(state)})` : '¡Todos los hitos conseguidos!');
+      setFitted(r.milestoneText, state.event ? t('¡Todos los hitos del evento! (hasta el nivel {n})', { n: maxLevel(state) }) : t('¡Todos los hitos conseguidos!'));
       r.milestoneBar.style.width = '100%';
     }
 
@@ -317,10 +318,10 @@ export class StationPanel {
       r.buyLabel.textContent = info.fixed;
       r.buyCost.textContent = '';
     } else if (q.maxed) {
-      r.buyLabel.textContent = state.event ? `Nivel máximo del evento (${maxLevel(state)})` : 'Nivel máximo';
+      r.buyLabel.textContent = state.event ? t('Nivel máximo del evento ({n})', { n: maxLevel(state) }) : t('Nivel máximo');
       r.buyCost.textContent = '';
     } else {
-      r.buyLabel.textContent = `Mejorar +${Math.max(q.levels, 1)}`;
+      r.buyLabel.textContent = t('Mejorar +{n}', { n: Math.max(q.levels, 1) });
       r.buyCost.textContent = `💰 ${formatNumber(q.cost)}`;
     }
   }
@@ -334,13 +335,13 @@ function stationInfo(id) {
   const rows = [
     {
       key: 'rate',
-      label: 'Producción',
+      label: t('Producción'),
       value: (s, l) => `${formatRate(stationOutputRate(def, l) * productionMult(s, id) * harvestFactor(s, def))} ${out.icon}/s`,
       next: (l, s) => formatRate(stationOutputRate(def, l) * productionMult(s, id) * harvestFactor(s, def)),
     },
   ];
   if (inId) {
-    rows.push({ key: 'input', label: 'Entrada', value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${PRODUCTS[inId].icon}` });
+    rows.push({ key: 'input', label: t('Entrada'), value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${PRODUCTS[inId].icon}` });
   }
   for (const imp of def.imports ?? []) {
     const product = PRODUCTS[imp.product];
@@ -355,23 +356,23 @@ function stationInfo(id) {
     const fuel = PRODUCTS[def.fuel.product];
     rows.push({
       key: 'fuel',
-      label: `${fuel.name} (combustible)`,
-      value: (s, l) => `${formatAmount(s.stations[id].fuel ?? 0)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${fuel.icon} · ${(s.stations[id].fuel ?? 0) > 0 ? `×${def.fuel.boost} 🔥` : 'sin 🔥'}`,
+      label: t('{fuel} (combustible)', { fuel: fuel.name }),
+      value: (s, l) => `${formatAmount(s.stations[id].fuel ?? 0)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${fuel.icon} · ${(s.stations[id].fuel ?? 0) > 0 ? `×${def.fuel.boost} 🔥` : t('sin 🔥')}`,
     });
   }
   if (def.side) {
     rows.push(
-      { key: 'buffer', label: 'Compost guardado', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, capMult(s, id)))} ${out.icon}` },
-      { key: 'effect', label: 'Bono a las ventas', value: (s) => (compostValueBoost(s) > 1 ? `+${pct(COMPOST_VALUE)} (hay compost)` : 'sin bono (no hay compost)') },
-      { key: 'sustain', label: 'Puede sostener', value: (s) => `+${pct(expectedCompostValue(s))} de +${pct(COMPOST_VALUE)}` },
+      { key: 'buffer', label: t('Compost guardado'), value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, capMult(s, id)))} ${out.icon}` },
+      { key: 'effect', label: t('Bono a las ventas'), value: (s) => (compostValueBoost(s) > 1 ? t('+{pct} (hay compost)', { pct: pct(COMPOST_VALUE) }) : t('sin bono (no hay compost)')) },
+      { key: 'sustain', label: t('Puede sostener'), value: (s) => t('+{a} de +{b}', { a: pct(expectedCompostValue(s)), b: pct(COMPOST_VALUE) }) },
     );
   } else {
     rows.push(
-      { key: 'buffer', label: def.harvest ? 'Despensa (por enviar)' : 'Patio (por enviar)', value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, capMult(s, id)))} ${out.icon}` },
+      { key: 'buffer', label: def.harvest ? t('Despensa (por enviar)') : t('Patio (por enviar)'), value: (s, l) => `${formatNumber(s.stations[id].buffer)} / ${formatNumber(stationBufferCap(def, l, capMult(s, id)))} ${out.icon}` },
       {
         key: 'value',
-        label: 'Precio de venta',
-        value: (s) => `${formatAmount(saleValue(s, outId))} 💰 por ${out.icon}${out.zone === 'finca' && compostValueBoost(s) > 1 ? ' 🪱' : ''}`,
+        label: t('Precio de venta'),
+        value: (s) => `${t('{n} 💰 por {icon}', { n: formatAmount(saleValue(s, outId)), icon: out.icon })}${out.zone === 'finca' && compostValueBoost(s) > 1 ? ' 🪱' : ''}`,
       },
     );
   }
@@ -379,13 +380,13 @@ function stationInfo(id) {
     icon: def.icon,
     title: def.name,
     subtitle: inId
-      ? `Convierte ${PRODUCTS[inId].name.toLowerCase()} en ${out.name.toLowerCase()}`
+      ? t('Convierte {a} en {b}', { a: PRODUCTS[inId].name.toLowerCase(), b: out.name.toLowerCase() })
       : def.imports
-        ? `Convierte ${listProducts(def.imports)} de otras zonas en ${out.name.toLowerCase()}`
-        : `Fuente ilimitada de ${out.name.toLowerCase()}`,
+        ? t('Convierte {a} de otras zonas en {b}', { a: listProducts(def.imports), b: out.name.toLowerCase() })
+        : t('Fuente ilimitada de {p}', { p: out.name.toLowerCase() }),
     recipe: inId || def.imports ? `${[...(inId ? [recipe(def.in)] : []), ...(def.imports ?? []).map((imp) => `${imp.perCycle} ${PRODUCTS[imp.product].icon}🚌`)].join(' + ')} <span>➜</span> ${recipe(def.out)}` : `${def.icon} <span>➜</span> ${recipe(def.out)}`,
     facts: FACTS[id],
-    milestoneWhat: 'velocidad',
+    milestoneWhat: t('velocidad'),
     upgradeId: id,
     tabs: !def.side,
     level: (s) => s.stations[id].level,
@@ -404,44 +405,43 @@ function transportInfo(id) {
   return {
     icon: def.icon,
     title: def.name,
-    subtitle: '🐴 Arrieros: al nivel de la estación, llevan todo lo que produce',
+    subtitle: t('🐴 Arrieros: al nivel de la estación, llevan todo lo que produce'),
     variant: belt,
-    look: (s) => (belt(s) ? { icon: def.icon, title: def.name, subtitle: '⚡ Banda eléctrica: reemplaza a las mulas y deja libre el camino' } : null),
+    look: (s) => (belt(s) ? { icon: def.icon, title: def.name, subtitle: t('⚡ Banda eléctrica: reemplaza a las mulas y deja libre el camino') } : null),
     // Qué lleva y adónde: «🍒 ➜ 🐴 ➜ Beneficiadero».
     recipe: (s) => `${out.icon} <span>➜</span> ${belt(s) ? '⚡' : '🐴'} <span>➜</span> ${nameOf(normalDest(s, id))}`,
-    milestoneWhat: (next) => (next === BELT_LEVEL ? 'carga y banda eléctrica' : 'carga'),
+    milestoneWhat: (next) => (next === BELT_LEVEL ? t('carga y banda eléctrica') : t('carga')),
     upgradeId: `${id}:transport`,
     tabs: true,
     level: (s) => s.stations[id].transport.level,
     rows: [
-      { key: 'mules', label: 'Envíos a la vez', value: (s, l) => `${muleCount(l)} (${busyMules(s, id)} en camino)`, next: (l) => muleCount(l) },
-      { key: 'load', label: 'Carga por envío', value: (s, l) => `${formatAmount(teamLoad(s, id, l))} ${out.icon}`, next: (l, s) => formatAmount(teamLoad(s, id, l)) },
-      { key: 'trip', label: 'Ida y vuelta', value: (s) => `${formatRate(2 * legTime(id, normalDest(s, id), muleSpeedMult(s)))} s, hasta ${nameOf(normalDest(s, id))}` },
+      { key: 'mules', label: t('Envíos a la vez'), value: (s, l) => t('{n} ({busy} en camino)', { n: muleCount(l), busy: busyMules(s, id) }), next: (l) => muleCount(l) },
+      { key: 'load', label: t('Carga por envío'), value: (s, l) => `${formatAmount(teamLoad(s, id, l))} ${out.icon}`, next: (l, s) => formatAmount(teamLoad(s, id, l)) },
+      { key: 'trip', label: t('Ida y vuelta'), value: (s) => t('{n} s, hasta {station}', { n: formatRate(2 * legTime(id, normalDest(s, id), muleSpeedMult(s))), station: nameOf(normalDest(s, id)) }) },
       {
         key: 'cap',
-        label: 'Llevan',
+        label: t('Llevan'),
         value: (s, l) => `${formatRate(teamCapacity(s, id, undefined, l))} ${out.icon}/s`,
         next: (l, s) => formatRate(teamCapacity(s, id, undefined, l)),
       },
-      { key: 'produce', label: 'La estación produce', value: (s) => `${formatRate(produce(s))} ${out.icon}/s` },
+      { key: 'produce', label: t('La estación produce'), value: (s) => `${formatRate(produce(s))} ${out.icon}/s` },
     ],
     status: (s) => {
       const st = s.stations[id];
       const cap = teamCapacity(s, id);
-      const who = belt(s) ? 'la banda' : 'las mulas';
-      if (resting(s)) return { text: belt(s) ? `${pause(s)} la banda se apaga: sigue a las ${hourLabel(nextWorkHour(clockOf(s), workOf(s)))}.` : `${pause(s)} los arrieros descansan; los que van de camino terminan el viaje.`, bad: false };
+      if (resting(s)) return { text: belt(s) ? t('{when} la banda se apaga: sigue a las {hour}.', { when: pause(s), hour: hourLabel(nextWorkHour(clockOf(s), workOf(s))) }) : t('{when} los arrieros descansan; los que van de camino terminan el viaje.', { when: pause(s) }), bad: false };
       const a = alerts(st);
-      if (a.blocked && a.waiting === 'mules') return { text: `⛔ ${belt(s) ? 'La banda no da' : 'Las mulas no dan'} abasto y el patio se llenó: mejora el transporte.`, bad: true };
-      if (cap < produce(s)) return { text: `⚠️ La estación produce ${formatRate(produce(s))} ${out.icon}/s y ${who} ${belt(s) ? 'lleva' : 'llevan'} ${formatRate(cap)}/s. Sube el transporte al nivel de la estación (${st.level}).`, bad: true };
-      if (!belt(s)) return { text: `✅ Los arrieros llevan todo lo que produce la estación. En el nivel ${BELT_LEVEL}, las mulas se cambian por una banda eléctrica.`, bad: false };
-      return { text: '✅ La banda lleva todo lo que produce la estación.', bad: false };
+      if (a.blocked && a.waiting === 'mules') return { text: belt(s) ? t('⛔ La banda no da abasto y el patio se llenó: mejora el transporte.') : t('⛔ Las mulas no dan abasto y el patio se llenó: mejora el transporte.'), bad: true };
+      if (cap < produce(s)) return { text: ((v) => (belt(s) ? t('⚠️ La estación produce {rate} y la banda lleva {cap}/s. Sube el transporte al nivel de la estación ({level}).', v) : t('⚠️ La estación produce {rate} y las mulas llevan {cap}/s. Sube el transporte al nivel de la estación ({level}).', v)))({ rate: `${formatRate(produce(s))} ${out.icon}/s`, cap: formatRate(cap), level: st.level }), bad: true };
+      if (!belt(s)) return { text: t('✅ Los arrieros llevan todo lo que produce la estación. En el nivel {n}, las mulas se cambian por una banda eléctrica.', { n: BELT_LEVEL }), bad: false };
+      return { text: t('✅ La banda lleva todo lo que produce la estación.'), bad: false };
     },
   };
 }
 
 // Fuera de la jornada (v3.8: también a la hora del almuerzo).
-const pause = (state) => (isLunch(clockOf(state), workOf(state)) ? '🍲 A la hora del almuerzo' : '🌙 De noche');
-const restText = (state) => `${pause(state)} no se trabaja: la jornada sigue a las ${hourLabel(nextWorkHour(clockOf(state), workOf(state)))}.`;
+const pause = (state) => (isLunch(clockOf(state), workOf(state)) ? t('🍲 A la hora del almuerzo') : t('🌙 De noche'));
+const restText = (state) => t('{when} no se trabaja: la jornada sigue a las {hour}.', { when: pause(state), hour: hourLabel(nextWorkHour(clockOf(state), workOf(state))) });
 
 // Explica en una línea qué le pasa a la estación y qué hacer.
 function stationStatus(state, id) {
@@ -452,19 +452,19 @@ function stationStatus(state, id) {
   const h = eventHandicaps(state).find((x) => x.station === id && x.pct < 1);
   if (h) {
     const next = eventDef(state).actions.find((a) => !state.research.includes(a.id));
-    return { text: `${handicapText(state, h)}${next ? ` Compra ${next.icon} ${next.name} en la barra del evento.` : ''}`, bad: true };
+    return { text: `${handicapText(state, h)}${next ? ` ${t('Compra {action} en la barra del evento.', { action: `${next.icon} ${next.name}` })}` : ''}`, bad: true };
   }
   if (def.side) return composterStatus(state, st);
   // Cosecha de temporada (v3.4): fuera de ella no produce, y no es un problema.
   if (!def.harvest && st.status === 'starved' && waitingHarvest(state, def.zone)) {
-    return { text: '🐜 Se acabó lo de la despensa del Hormiguero: la cadena sigue cuando salgan las hormigas, en la entrada de aguas 🌦️.', bad: false };
+    return { text: t('🐜 Se acabó lo de la despensa del Hormiguero: la cadena sigue cuando salgan las hormigas, en la entrada de aguas 🌦️.'), bad: false };
   }
   if (def.harvest && st.status === 'season') {
-    const left = st.buffer > 0 ? `los arrieros siguen llevando lo de la despensa (${formatNumber(st.buffer)} ${PRODUCTS[Object.keys(def.out)[0]].icon})` : 'la despensa está vacía: a esperar la próxima cosecha';
-    return { text: `🐜 Las hormigas solo salen en la entrada de aguas 🌦️: ${left}.`, bad: false };
+    const left = st.buffer > 0 ? t('los arrieros siguen llevando lo de la despensa ({n})', { n: `${formatNumber(st.buffer)} ${PRODUCTS[Object.keys(def.out)[0]].icon}` }) : t('la despensa está vacía: a esperar la próxima cosecha');
+    return { text: t('🐜 Las hormigas solo salen en la entrada de aguas 🌦️: {left}.', { left }), bad: false };
   }
   if (def.harvest && st.status === 'working' && harvestFactor(state, def) > 1) {
-    return { text: `🐜 ¡Salieron las hormigas! En la entrada de aguas se cosecha ×${def.harvest.mult}: lo que no alcanza a salir se guarda en la despensa para el resto del año.`, bad: false };
+    return { text: t('🐜 ¡Salieron las hormigas! En la entrada de aguas se cosecha ×{n}: lo que no alcanza a salir se guarda en la despensa para el resto del año.', { n: def.harvest.mult }), bad: false };
   }
   const analysis = analyzeChain(state, zoneOf(id));
   const row = analysis.rows.find((r) => r.id === id);
@@ -477,12 +477,12 @@ function stationStatus(state, id) {
     if (slow.length) {
       // Lo que sobra va a la bodega, más lejos: en ese viaje el transporte lleva menos (v3.67: se explica).
       const text = slow.length > 1
-        ? `↪️ Patio lleno: ${listNames(slow, true)} no alcanzan a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbelas de nivel.`
-        : `↪️ Patio lleno: ${listNames(slow, true)} no alcanza a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbela de nivel.`;
+        ? t('↪️ Patio lleno: {stations} no alcanzan a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbelas de nivel.', { stations: listNames(slow, true) })
+        : t('↪️ Patio lleno: {stations} no alcanza a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbela de nivel.', { stations: listNames(slow, true) });
       return { text, bad: true };
     }
-    if (a.waiting === 'mules') return { text: hasBelt(st.transport.level) ? '⛔ Patio lleno: la banda no da abasto. Mejórala (pestaña ⚡).' : '⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).', bad: true };
-    return { text: '⛔ Patio lleno: la bodega no tiene espacio. Mejora el Despacho.', bad: true };
+    if (a.waiting === 'mules') return { text: hasBelt(st.transport.level) ? t('⛔ Patio lleno: la banda no da abasto. Mejórala (pestaña ⚡).') : t('⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).'), bad: true };
+    return { text: t('⛔ Patio lleno: la bodega no tiene espacio. Mejora el Despacho.'), bad: true };
   }
   // Falta el producto que llega de otra zona.
   const lacking = row?.importLimited ?? (a.starved ? def.imports?.find((imp) => imp.product === st.missing)?.route : null);
@@ -492,8 +492,8 @@ function stationStatus(state, id) {
     const routeShort = routeRate(state, r.id) < routeFlow(state, r.id) * 1.02 + 1e-9;
     return {
       text: routeShort
-        ? `⏸️ Falta ${imp.name.toLowerCase()}: la ${r.name} no da abasto. Mejórala (pestaña 🚌 ${r.tab}).`
-        : `⏸️ Falta ${imp.name.toLowerCase()}: ${ZONES_BY_ID[r.from].name} no produce suficiente. Mejora allá la cadena.`,
+        ? t('⏸️ Falta {p}: {route} no da abasto. Mejórala (pestaña 🚌 {tab}).', { p: imp.name.toLowerCase(), route: withArticle(r.name), tab: r.tab })
+        : t('⏸️ Falta {p}: {zone} no produce suficiente. Mejora allá la cadena.', { p: imp.name.toLowerCase(), zone: ZONES_BY_ID[r.from].name }),
       bad: true,
     };
   }
@@ -503,25 +503,25 @@ function stationStatus(state, id) {
   if (row && parent && parent.diverted > 0.005 && row.incoming >= row.capacity * 0.98 && row.capacity < share * 0.98) {
     const inIcon = PRODUCTS[Object.keys(def.in)[0]].icon;
     const text = parent.children.length > 1
-      ? `↪️ De ${nameOf(parent.id)} a esta rama le tocan ${formatRate(share)} ${inIcon}/s y procesa ${formatRate(row.capacity)}/s. El resto se vende sin procesar: mejórala.`
-      : `↪️ La estación anterior produce ${formatRate(parent.output)} ${inIcon}/s y esta procesa ${formatRate(row.capacity)}/s. El resto se vende sin procesar: mejórala.`;
+      ? t('↪️ De {station} a esta rama le tocan {share} y procesa {cap}/s. El resto se vende sin procesar: mejórala.', { station: nameOf(parent.id), share: `${formatRate(share)} ${inIcon}/s`, cap: formatRate(row.capacity) })
+      : t('↪️ La estación anterior produce {rate} y esta procesa {cap}/s. El resto se vende sin procesar: mejórala.', { rate: `${formatRate(parent.output)} ${inIcon}/s`, cap: formatRate(row.capacity) });
     return { text, bad: true };
   }
   if (a.starved) {
-    return { text: `⏸️ Esperando producto de: ${nameOf(PARENT[id])}. Mejora las estaciones anteriores.`, bad: false };
+    return { text: t('⏸️ Esperando producto de: {station}. Mejora las estaciones anteriores.', { station: nameOf(PARENT[id]) }), bad: false };
   }
   const targets = consumers(state, id);
   const routes = exportsOf(state, id);
-  const where = [...(targets.length ? [listNames(targets)] : []), ...(routes.length || !targets.length ? ['la bodega'] : [])].join(' y a ');
-  const why = routes.length > 1 ? ` (para ${routes.length} rutas)` : routes.length ? ` (para la ${routes[0].name})` : '';
+  const where = [...(targets.length ? [listNames(targets)] : []), ...(routes.length || !targets.length ? [t('la bodega')] : [])].join(` ${t('y a')} `);
+  const why = routes.length > 1 ? ` ${t('(para {n} rutas)', { n: routes.length })}` : routes.length ? ` ${t('(para {route})', { route: withArticle(routes[0].name) })}` : '';
   // La parte de una ruta que aún no abre va a la bodega y se vende.
   const pending = pendingRoutes(state, id);
-  const later = pending.length ? ` Su parte para la ${pending[0].name} se vende hasta que abra ${ZONES_BY_ID[pending[0].to].name}.` : '';
-  return { text: `✅ Trabajando. Las mulas llevan el producto a ${where}${why}.${later}`, bad: false };
+  const later = pending.length ? ` ${t('Su parte para {route} se vende hasta que abra {zone}.', { route: withArticle(pending[0].name), zone: ZONES_BY_ID[pending[0].to].name })}` : '';
+  return { text: `${t('✅ Trabajando. Las mulas llevan el producto a {where}', { where: where + why })}.${later}`, bad: false };
 }
 
 // «bolsas de café y panela pulverizada»: los importados de una estación, en minúsculas.
-const listProducts = (imports) => imports.map((imp) => PRODUCTS[imp.product].name.toLowerCase()).join(' y ');
+const listProducts = (imports) => listJoin(imports.map((imp) => PRODUCTS[imp.product].name.toLowerCase()));
 
 // Bono como porcentaje: 1,3 → «30 %».
 const pct = (mult) => `${Math.round((mult - 1) * 100)} %`;
@@ -529,14 +529,14 @@ const pct = (mult) => `${Math.round((mult - 1) * 100)} %`;
 function composterStatus(state, st) {
   const bonus = expectedCompostValue(state);
   const a = alerts(st);
-  if (a.blocked) return { text: `✅ Compost de sobra: todo lo que vende la Finca vale +${pct(COMPOST_VALUE)}.`, bad: false };
+  if (a.blocked) return { text: t('✅ Compost de sobra: todo lo que vende la Finca vale +{pct}.', { pct: pct(COMPOST_VALUE) }), bad: false };
   if (a.starved) {
     const w = state.stations.wetmill;
-    if (alerts(w).blocked) return { text: '⏸️ Sin pulpa: el Beneficiadero está detenido (patio lleno). Mejora sus arrieros o la estación siguiente.', bad: true };
-    return { text: '⏸️ Esperando pulpa del Beneficiadero.', bad: false };
+    if (alerts(w).blocked) return { text: t('⏸️ Sin pulpa: el Beneficiadero está detenido (patio lleno). Mejora sus arrieros o la estación siguiente.'), bad: true };
+    return { text: t('⏸️ Esperando pulpa del Beneficiadero.'), bad: false };
   }
-  if (bonus < COMPOST_VALUE - 0.005) return { text: `⚠️ El Beneficiadero gasta más compost del que se produce: el bono solo dura parte del tiempo (+${pct(bonus)} en promedio). Mejora la Compostera.`, bad: true };
-  return { text: `✅ Produciendo compost: todo lo que vende la Finca vale +${pct(COMPOST_VALUE)}.`, bad: false };
+  if (bonus < COMPOST_VALUE - 0.005) return { text: t('⚠️ El Beneficiadero gasta más compost del que se produce: el bono solo dura parte del tiempo (+{pct} en promedio). Mejora la Compostera.', { pct: pct(bonus) }), bad: true };
+  return { text: t('✅ Produciendo compost: todo lo que vende la Finca vale +{pct}.', { pct: pct(COMPOST_VALUE) }), bad: false };
 }
 
 // Ruta entre zonas: la Chiva que trae el producto importado. `station`: la estación de cuyo panel es
@@ -551,27 +551,27 @@ function routeInfo(routeId, station) {
   return {
     icon: station ? STATIONS_BY_ID[station].icon : r.icon,
     title: station ? STATIONS_BY_ID[station].name : r.name,
-    subtitle: `${station ? '🚌 ' : ''}La ${r.vehicle} trae ${imp.name.toLowerCase()} de ${ZONES_BY_ID[r.from].name}`,
+    subtitle: `${station ? '🚌 ' : ''}${t('{vehicle} trae {p} de {zone}', { vehicle: WithArticle(r.vehicle), p: imp.name.toLowerCase(), zone: ZONES_BY_ID[r.from].name })}`,
     recipe: `${ZONES_BY_ID[r.from].icon} ${imp.icon} <span>➜</span> ${r.icon} <span>➜</span> ${station ? STATIONS_BY_ID[station].name : ZONES_BY_ID[r.to].name}`,
-    milestoneWhat: 'carga',
+    milestoneWhat: t('carga'),
     upgradeId: `route:${routeId}`,
     tabs: Boolean(station),
     level: (s) => s.routes[routeId].level,
     rows: [
-      { key: 'cap', label: 'Carga por viaje', value: (s, l) => `${formatAmount(routeCapacity(s, routeId, l))} ${imp.icon}`, next: (l, s) => formatAmount(routeCapacity(s, routeId, l)) },
-      { key: 'rate', label: 'Lleva', value: (s, l) => `${formatRate(routeRate(s, routeId, l))} ${imp.icon}/s`, next: (l, s) => formatRate(routeRate(s, routeId, l)) },
-      { key: 'need', label: 'Gastan', value: (s) => `${formatRate(need(s))} ${imp.icon}/s (${routeStations(s, routeId).length > 1 ? `${routeStations(s, routeId).length} estaciones` : names(s)})` },
-      { key: 'stock', label: `Bodega de ${ZONES_BY_ID[r.from].name}`, value: (s) => `${formatAmount(s.zones[r.from].warehouse[r.product] ?? 0)} ${imp.icon}` },
-      { key: 'trip', label: 'Ida y vuelta', value: () => `${r.tripTime} s` },
+      { key: 'cap', label: t('Carga por viaje'), value: (s, l) => `${formatAmount(routeCapacity(s, routeId, l))} ${imp.icon}`, next: (l, s) => formatAmount(routeCapacity(s, routeId, l)) },
+      { key: 'rate', label: t('Lleva'), value: (s, l) => `${formatRate(routeRate(s, routeId, l))} ${imp.icon}/s`, next: (l, s) => formatRate(routeRate(s, routeId, l)) },
+      { key: 'need', label: t('Gastan'), value: (s) => `${formatRate(need(s))} ${imp.icon}/s (${routeStations(s, routeId).length > 1 ? t('{n} estaciones', { n: routeStations(s, routeId).length }) : names(s)})` },
+      { key: 'stock', label: t('Bodega de {zone}', { zone: ZONES_BY_ID[r.from].name }), value: (s) => `${formatAmount(s.zones[r.from].warehouse[r.product] ?? 0)} ${imp.icon}` },
+      { key: 'trip', label: t('Ida y vuelta'), value: () => `${r.tripTime} s` },
     ],
     status: (s) => {
       const route = s.routes[routeId];
-      if (!routeActive(s, routeId)) return { text: `🔒 Construye ${listNames(r.stations)} para abrir la ruta.`, bad: false };
-      if (routeRate(s, routeId) < need(s) * 0.99) return { text: `⚠️ ${names(s)} ${routeStations(s, routeId).length > 1 ? 'gastan' : 'gasta'} ${formatRate(need(s))} ${imp.icon}/s y la ${r.vehicle} lleva ${formatRate(routeRate(s, routeId))}/s. Sube la ruta al nivel de ${routeStations(s, routeId).length > 1 ? 'esas estaciones' : 'la estación'} (${top(s)}).`, bad: true };
-      if (route.phase === 'go') return { text: `🚌 La ${r.vehicle} va camino a ${ZONES_BY_ID[r.to].name} con ${formatAmount(route.load)} ${imp.icon}.`, bad: false };
-      if (route.phase === 'back') return { text: `↩️ La ${r.vehicle} vuelve a ${ZONES_BY_ID[r.from].name}.`, bad: false };
-      if ((s.zones[r.from].warehouse[r.product] ?? 0) <= 0) return { text: `⏳ Esperando ${imp.name.toLowerCase()} en la bodega de ${ZONES_BY_ID[r.from].name}.`, bad: false };
-      return { text: `🅿️ La ${r.vehicle} está cargando en ${ZONES_BY_ID[r.from].name}.`, bad: false };
+      if (!routeActive(s, routeId)) return { text: t('🔒 Construye {stations} para abrir la ruta.', { stations: listNames(r.stations) }), bad: false };
+      if (routeRate(s, routeId) < need(s) * 0.99) return { text: ((v) => (routeStations(s, routeId).length > 1 ? t('⚠️ {stations} gastan {need} y {vehicle} lleva {rate}/s. Sube la ruta al nivel de esas estaciones ({level}).', v) : t('⚠️ {stations} gasta {need} y {vehicle} lleva {rate}/s. Sube la ruta al nivel de la estación ({level}).', v)))({ stations: names(s), need: `${formatRate(need(s))} ${imp.icon}/s`, vehicle: withArticle(r.vehicle), rate: formatRate(routeRate(s, routeId)), level: top(s) }), bad: true };
+      if (route.phase === 'go') return { text: t('🚌 {vehicle} va camino a {zone} con {load}.', { vehicle: WithArticle(r.vehicle), zone: ZONES_BY_ID[r.to].name, load: `${formatAmount(route.load)} ${imp.icon}` }), bad: false };
+      if (route.phase === 'back') return { text: t('↩️ {vehicle} vuelve a {zone}.', { vehicle: WithArticle(r.vehicle), zone: ZONES_BY_ID[r.from].name }), bad: false };
+      if ((s.zones[r.from].warehouse[r.product] ?? 0) <= 0) return { text: t('⏳ Esperando {p} en la bodega de {zone}.', { p: imp.name.toLowerCase(), zone: ZONES_BY_ID[r.from].name }), bad: false };
+      return { text: t('🅿️ {vehicle} está cargando en {zone}.', { vehicle: WithArticle(r.vehicle), zone: ZONES_BY_ID[r.from].name }), bad: false };
     },
   };
 }
@@ -582,40 +582,42 @@ function dispatchInfo(zoneId) {
   return {
     icon: DISPATCH.icon,
     title: DISPATCH.name,
-    subtitle: `${ZONES_BY_ID[zoneId].name}: el Willys vende lo que llega a la bodega`,
-    recipe: `📦 Bodega <span>➜</span> ${DISPATCH.icon} <span>➜</span> 💰 Pueblo`,
-    milestoneWhat: 'carga',
+    subtitle: t('{zone}: el Willys vende lo que llega a la bodega', { zone: ZONES_BY_ID[zoneId].name }),
+    recipe: `📦 ${t('Bodega')} <span>➜</span> ${DISPATCH.icon} <span>➜</span> 💰 ${t('Pueblo')}`,
+    milestoneWhat: t('carga'),
     upgradeId: `dispatch:${zoneId}`,
     tabs: true,
     level: (s) => z(s).dispatch.level,
     rows: [
-      { key: 'cap', label: 'Carga por viaje', value: (s, l) => `${formatNumber(dispatchCapacity(l, mult(s)))}`, next: (l, s) => formatNumber(dispatchCapacity(l, mult(s))) },
+      { key: 'cap', label: t('Carga por viaje'), value: (s, l) => `${formatNumber(dispatchCapacity(l, mult(s)))}`, next: (l, s) => formatNumber(dispatchCapacity(l, mult(s))) },
       // Con el segundo Willys (v3.9), cada uno lleva su carga: se vende el doble.
-      { key: 'rate', label: 'Ritmo de venta', value: (s, l) => `${formatRate(dispatchRate(l, mult(s)) * jeepCount(s))} u/s${jeepCount(s) > 1 ? ' · 🚙🚙' : ''}`, next: (l, s) => formatRate(dispatchRate(l, mult(s)) * jeepCount(s)) },
+      { key: 'rate', label: t('Ritmo de venta'), value: (s, l) => `${formatRate(dispatchRate(l, mult(s)) * jeepCount(s))} u/s${jeepCount(s) > 1 ? ' · 🚙🚙' : ''}`, next: (l, s) => formatRate(dispatchRate(l, mult(s)) * jeepCount(s)) },
       {
         key: 'stock',
-        label: 'Bodega',
+        label: t('Bodega'),
         value: (s, l) => {
           const dock = dockStock(s, zoneId);
-          return `${formatNumber(sumValues(z(s).warehouse) - dock)} / ${formatNumber(warehouseCapacity(l, mult(s)))}${dock > 0.5 ? ` · andén de las rutas: ${formatNumber(dock)}` : ''}`;
+          return `${formatNumber(sumValues(z(s).warehouse) - dock)} / ${formatNumber(warehouseCapacity(l, mult(s)))}${dock > 0.5 ? ` · ${t('andén de las rutas: {n}', { n: formatNumber(dock) })}` : ''}`;
         },
       },
-      { key: 'trip', label: 'Ida y vuelta', value: () => `${DISPATCH.tripTime} s` },
+      { key: 'trip', label: t('Ida y vuelta'), value: () => `${DISPATCH.tripTime} s` },
     ],
     status: (s) => {
       const full = alerts(z(s)).full;
-      if (full) return { text: '⛔ Bodega llena: el Willys no da abasto.', bad: true };
+      if (full) return { text: t('⛔ Bodega llena: el Willys no da abasto.'), bad: true };
       if (jeepResting(s, zoneId)) {
         const routes = ROUTES.filter((r) => r.from === zoneId && routeActive(s, r.id));
         if (routes.length) {
           // «al Pueblo», «a Barichara» (si todas van a la misma) o «a las otras zonas».
           const to = ZONES_BY_ID[routes[0].to].name;
-          const where = routes.every((r) => r.to === routes[0].to) ? (to.startsWith('El ') ? `al ${to.slice(3)}` : `a ${to}`) : 'a las otras zonas';
-          const name = ZONES_BY_ID[zoneId].name.replace(/^(El|La) /, (a) => a.toLowerCase());
-          return { text: `☕ Todo lo que produce ${name} se lo lleva la chiva ${where}; el Willys solo sale con lo que sobra.`, bad: false };
+          const same = routes.every((r) => r.to === routes[0].to);
+          const name = ZONES_BY_ID[zoneId].name.replace(/^(El|La|The) /, (a) => a.toLowerCase());
+          if (!same) return { text: t('☕ Todo lo que produce {zone} se lo lleva la chiva a las otras zonas; el Willys solo sale con lo que sobra.', { zone: name }), bad: false };
+          const where = LANG === 'es' ? (to.startsWith('El ') ? `al ${to.slice(3)}` : `a ${to}`) : to;
+          return { text: t('☕ Todo lo que produce {zone} se lo lleva la chiva {where}; el Willys solo sale con lo que sobra.', { zone: name, where }), bad: false };
         }
       }
-      const phase = { idle: '🅿️ El Willys está cargando en la bodega.', out: '🚙 El Willys va camino al pueblo.', back: '↩️ El Willys vuelve a la bodega.' };
+      const phase = { idle: t('🅿️ El Willys está cargando en la bodega.'), out: t('🚙 El Willys va camino al pueblo.'), back: t('↩️ El Willys vuelve a la bodega.') };
       return { text: phase[z(s).jeep.phase], bad: false };
     },
   };
@@ -634,7 +636,7 @@ function stockRows(state, zoneId) {
       const product = PRODUCTS[p];
       const n = wh[p] ?? 0;
       const route = reserved[p] > 0 ? ' 🚌' : '';
-      return `<div class="stock-row ${n < 0.5 ? 'empty' : ''}"><span class="stock-icon">${product.icon}</span><span class="stock-name">${product.name}${route}</span><b>${formatNumber(n)}</b><span class="stock-price">${formatAmount(saleValue(state, p))} 💰 c/u</span></div>`;
+      return `<div class="stock-row ${n < 0.5 ? 'empty' : ''}"><span class="stock-icon">${product.icon}</span><span class="stock-name">${product.name}${route}</span><b>${formatNumber(n)}</b><span class="stock-price">${t('{n} 💰 c/u', { n: formatAmount(saleValue(state, p)) })}</span></div>`;
     })
     .join('');
 }
@@ -652,25 +654,27 @@ function eventRouteInfo(routeId, station) {
   return {
     icon: def.icon,
     title: def.name,
-    subtitle: `🚌 En el evento, ${product.name.toLowerCase()} llega sola de ${ZONES_BY_ID[r.from].name}`,
+    subtitle: t('🚌 En el evento, {p} llega sola de {zone}', { p: product.name.toLowerCase(), zone: ZONES_BY_ID[r.from].name }),
     recipe: `${ZONES_BY_ID[r.from].icon} ${product.icon} <span>➜</span> ${r.icon} <span>➜</span> ${def.name}`,
-    milestoneWhat: 'carga (con la estación)',
+    milestoneWhat: t('carga (con la estación)'),
     upgradeId: `route:${routeId}`,
-    fixed: '🚌 Sube con la estación',
+    fixed: t('🚌 Sube con la estación'),
     tabs: true,
     level: (s) => s.stations[station].level,
     rows: [
-      { key: 'supply', label: 'Llega de afuera', value: (s) => `${Math.round(supplyFraction(s, r.product) * 100)} % de lo que se necesita` },
-      { key: 'rate', label: 'Llega', value: (s, l) => `${formatRate(supplyFraction(s, r.product) * use(s, l) * 1.25)} ${product.icon}/s` },
-      { key: 'need', label: 'La estación gasta', value: (s, l) => `${formatRate(use(s, l))} ${product.icon}/s` },
-      { key: 'stock', label: 'En la estación', value: (s, l) => `${formatAmount(s.stations[station].imported[r.product] ?? 0)} / ${formatNumber(stationImportCap(def, l, speedMult(s, station), imp))} ${product.icon}` },
+      { key: 'supply', label: t('Llega de afuera'), value: (s) => t('{n} % de lo que se necesita', { n: Math.round(supplyFraction(s, r.product) * 100) }) },
+      { key: 'rate', label: t('Llega'), value: (s, l) => `${formatRate(supplyFraction(s, r.product) * use(s, l) * 1.25)} ${product.icon}/s` },
+      { key: 'need', label: t('La estación gasta'), value: (s, l) => `${formatRate(use(s, l))} ${product.icon}/s` },
+      { key: 'stock', label: t('En la estación'), value: (s, l) => `${formatAmount(s.stations[station].imported[r.product] ?? 0)} / ${formatNumber(stationImportCap(def, l, speedMult(s, station), imp))} ${product.icon}` },
     ],
     status: (s) => {
       const f = supplyFraction(s, r.product);
-      if (f >= 1) return { text: `✅ Llega todo lo que gasta ${withArticle(def.name)} y un 25 % más. Al subir la estación sube también la ruta.`, bad: false };
+      if (f >= 1) return { text: t('✅ Llega todo lo que gasta {station} y un 25 % más. Al subir la estación sube también la ruta.', { station: withArticle(def.name) }), bad: false };
       const next = eventDef(s).actions.find((a) => !s.research.includes(a.id) && (a.effects ?? (a.effect ? [a.effect] : [])).some((e) => e.type === 'supply' && e.product === r.product));
-      const now = f > 0 ? `Llega solo el ${Math.round(f * 100)} %` : 'No llega nada';
-      return { text: `⛔ ${now} de ${product.name.toLowerCase()}${eventDef(s).blame ? ` por ${eventDef(s).blame}` : ''}.${next ? ` Compra ${next.icon} ${next.name} en la barra del evento.` : ''}`, bad: true };
+      const p = product.name.toLowerCase();
+      const now = f > 0 ? t('Llega solo el {n} % de {p}', { n: Math.round(f * 100), p }) : t('No llega nada de {p}', { p });
+      const blame = eventDef(s).blame ? ` ${t('por {what}', { what: eventDef(s).blame })}` : '';
+      return { text: `⛔ ${now}${blame}.${next ? ` ${t('Compra {action} en la barra del evento.', { action: `${next.icon} ${next.name}` })}` : ''}`, bad: true };
     },
   };
 }

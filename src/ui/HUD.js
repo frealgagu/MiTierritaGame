@@ -13,6 +13,7 @@ import { ROUTES_BY_ID } from '../data/routes.js';
 import { setFitted } from './fit.js';
 import { say } from './Chatter.js';
 import { withArticle } from '../data/lore.js';
+import { t } from '../i18n/index.js';
 
 // Nombre legible de lo que se mejora: 'farm', 'farm:transport', 'dispatch:<zona>' o 'route:<ruta>'.
 export function upgradeName(id) {
@@ -21,7 +22,7 @@ export function upgradeName(id) {
   if (sid === 'action') return `${EVENT_ACTIONS_BY_ID[part].icon} ${EVENT_ACTIONS_BY_ID[part].name}`; // compra de un evento
   if (sid === 'dispatch') return DISPATCH.name;
   if (sid === 'route') return `${ROUTES_BY_ID[part].icon} ${ROUTES_BY_ID[part].name}`;
-  return part === 'transport' ? `Arrieros del ${STATIONS_BY_ID[sid].name}` : STATIONS_BY_ID[sid].name;
+  return part === 'transport' ? t('Arrieros del {station}', { station: STATIONS_BY_ID[sid].name }) : STATIONS_BY_ID[sid].name;
 }
 
 const REC_INTERVAL_MS = 1000;
@@ -54,7 +55,7 @@ export class HUD {
     // Multiplicador de producción de esta partida (tras reiniciar en el segundo final).
     const mult = legacyMult(s);
     this.legacy.hidden = mult <= 1 || Boolean(s.event);
-    const legacyText = `🔁 Producción ${formatMult(mult)}`;
+    const legacyText = t('🔁 Producción {mult}', { mult: formatMult(mult) });
     if (this.legacy.textContent !== legacyText) this.legacy.textContent = legacyText;
     // En rojo si hay deuda (saldo negativo de las opciones de desarrollador).
     this.coins.classList.toggle('debt', s.coins < 0);
@@ -66,7 +67,7 @@ export class HUD {
     if (s.event) {
       // En el tablero de un evento, su propio reloj.
       setText(this.clock, `⏱ ${formatClock(s.playTime)}`);
-      setText(this.season, `${EVENTS_BY_ID[s.event.id].icon} Evento`);
+      setText(this.season, `${EVENTS_BY_ID[s.event.id].icon} ${t('Evento')}`);
     } else {
       if (hour !== undefined) setText(this.clock, clockLabel(hour));
       const season = seasonOf(clockOf(s));
@@ -92,9 +93,9 @@ export class HUD {
       const next = nextToUnlock(s, zone) ?? nextSideToUnlock(s, zone);
       const pending = next ? null : pendingUpgrade(s, (id, mode) => this.game.quote(id, mode), zone);
       this.chip.hidden = false;
-      if (next) setFitted(this.chip, `🏗️ Siguiente: construye ${STATIONS_BY_ID[next].name}`);
-      else if (pending) setFitted(this.chip, `💡 Falta subir: ${upgradeName(pending.id)} · Nv ${upgradeLevel(s, pending.id)}`);
-      else setFitted(this.chip, '🏁 Esta zona está al máximo');
+      if (next) setFitted(this.chip, t('🏗️ Siguiente: construye {station}', { station: STATIONS_BY_ID[next].name }));
+      else if (pending) setFitted(this.chip, t('💡 Falta subir: {name} · Nv {level}', { name: upgradeName(pending.id), level: upgradeLevel(s, pending.id) }));
+      else setFitted(this.chip, t('🏁 Esta zona está al máximo'));
       this.recommended = next ?? pending?.id ?? null;
       this.hintUnlock(s, zone);
       return;
@@ -104,7 +105,7 @@ export class HUD {
     const [sid] = rec.id.split(':');
     const otherZone = sid === 'research' ? RESEARCH_BY_ID[rec.id.split(':')[1]].zone : STATIONS_BY_ID[sid] ? zoneOf(sid) : zone;
     const elsewhere = otherZone !== zone ? ` (${ZONES_BY_ID[otherZone].icon} ${ZONES_BY_ID[otherZone].name})` : '';
-    setFitted(this.chip, `💡 Mejora recomendada: ${upgradeName(rec.id)}${elsewhere}`);
+    setFitted(this.chip, t('💡 Mejora recomendada: {name}', { name: upgradeName(rec.id) + elsewhere }));
     this.hintUnlock(s, zone);
   }
 
@@ -129,6 +130,6 @@ export class HUD {
     const q = this.game.quoteUnlock(id);
     if (!q.ok) return;
     s.hints.push(id);
-    say(zone, `¡Ya alcanza para construir ${withArticle(STATIONS_BY_ID[id].name)}! Toque su parcela en el mapa.`);
+    say(zone, t('¡Ya alcanza para construir {station}! Toque su parcela en el mapa.', { station: withArticle(STATIONS_BY_ID[id].name) }));
   }
 }

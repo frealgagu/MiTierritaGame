@@ -2,7 +2,7 @@
 // src/i18n/<idioma>/content/<parte>.js (ver src/i18n/apply.js). Sirve para traducir y para saber qué falta.
 //   node tools/i18n-skeleton.mjs <parte> [idioma]   (con idioma, solo lo que ese idioma todavía no tiene)
 //   partes: stations products productZones research events eventActions medals albumPages stickers logros
-//           routes zones facts people welcome decor regions songs
+//           routes zones facts people welcome decor regions songs victory
 import { STATIONS } from '../src/data/stations.js';
 import { PRODUCTS, ZONES as PRODUCT_ZONES } from '../src/data/products.js';
 import { RESEARCH } from '../src/data/research.js';
@@ -15,6 +15,7 @@ import { FACTS, PEOPLE, WELCOME } from '../src/data/lore.js';
 import { DECOR } from '../src/data/decor.js';
 import { REGIONS } from '../src/data/regions.js';
 import { SONGS } from '../src/audio/songs.js';
+import { VICTORY } from '../src/data/victory.js';
 
 const pick = (list, fields) => Object.fromEntries(list.map((x) => [x.id, fields.length === 1 ? x[fields[0]] : fields.map((f) => x[f] ?? null)]));
 
@@ -37,6 +38,7 @@ export const PARTS = {
   decor: () => Object.fromEntries(DECOR.map((d) => [d.id, [d.name, Object.fromEntries(d.options.map((o) => [o.id, o.name]))]])),
   regions: () => pick(REGIONS, ['name']),
   songs: () => Object.fromEntries(Object.entries(SONGS).map(([id, s]) => [id, [s.name, s.instruments]])),
+  victory: () => Object.fromEntries(Object.entries(VICTORY).map(([id, v]) => [id, [v.title, v.text, v.stat[0]]])),
 };
 
 if (import.meta.url === `file://${process.argv[1]}`) {

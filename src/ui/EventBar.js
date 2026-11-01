@@ -6,14 +6,14 @@ import { EVENT_ACTIONS_BY_ID, MEDALS } from '../data/events.js';
 import { PRODUCTS } from '../data/products.js';
 import { setFitted } from './fit.js';
 import { toast } from './toast.js';
+import { listJoin, t } from '../i18n/index.js';
 
 export const formatClock = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 // «Vende 120 🧀 queso, 60 🧈 mantequilla y 40 🍮 arequipe».
 export function objectiveText(obj) {
   const parts = Object.entries(obj.items).map(([id, n]) => `${formatNumber(n)} ${PRODUCTS[id].icon} ${PRODUCTS[id].name.toLowerCase()}`);
-  const list = parts.length > 1 ? `${parts.slice(0, -1).join(', ')} y ${parts.at(-1)}` : parts[0];
-  return `${obj.kind === 'sold' ? 'Vende' : 'Produce'} ${list}`;
+  return obj.kind === 'sold' ? t('Vende {list}', { list: listJoin(parts) }) : t('Produce {list}', { list: listJoin(parts) });
 }
 
 export class EventBar {
@@ -39,9 +39,9 @@ export class EventBar {
       const q = quoteAction(board, a.id);
       const before = list[list.indexOf(a) - 1];
       if (buyAction(board, a.id, this.game.bus)) toast(`${a.icon} ${a.name}: ${a.desc}`, 4500);
-      else if (q.reason === 'owned') toast(`${a.icon} ${a.name}: ya está.`, 2500);
-      else if (q.reason === 'locked') toast(`${a.icon} ${a.name}: primero, ${before.icon} ${before.name}.`, 3000);
-      else toast(`${a.icon} ${a.name} (faltan monedas): ${a.desc}`, 4500);
+      else if (q.reason === 'owned') toast(t('{action}: ya está.', { action: `${a.icon} ${a.name}` }), 2500);
+      else if (q.reason === 'locked') toast(t('{action}: primero, {before}.', { action: `${a.icon} ${a.name}`, before: `${before.icon} ${before.name}` }), 3000);
+      else toast(t('{action} (faltan monedas): {desc}', { action: `${a.icon} ${a.name}`, desc: a.desc }), 4500);
       this.paint();
     });
   }
@@ -69,7 +69,7 @@ export class EventBar {
 
   // ⏸️ Pausar o 🚪 Salir, según la opción del menú.
   paintExit() {
-    this.pauseBtn.textContent = this.exitMode() === 'leave' ? '🚪 Salir' : '⏸️ Pausar';
+    this.pauseBtn.textContent = this.exitMode() === 'leave' ? t('🚪 Salir') : t('⏸️ Pausar');
   }
 
   paint() {
@@ -86,11 +86,11 @@ export class EventBar {
     // Ganado (v3.30): se sigue mirando (y se puede pausar); ya no se reinicia. Se cierra con «Terminar».
     const done = Boolean(board.event.done);
     this.restartBtn.disabled = done;
-    this.endBtn.textContent = done ? '🏁 Terminar evento' : '🏁 Terminar';
+    this.endBtn.textContent = done ? t('🏁 Terminar evento') : t('🏁 Terminar');
     const missing = def.actions.filter((a) => !board.research.includes(a.id)).map((a) => a.name);
     const goal = done
-      ? `🏁 ¡Ganado con ${medal.icon} ${medal.name}!`
-      : secured && !allActionsBought(board) ? `✅ ${medal.icon} asegurada. Para terminar, compra: ${missing.join(', ')}` : `${obj.kind === 'sold' ? 'Vende' : 'Produce'}:`;
+      ? t('🏁 ¡Ganado con {medal}!', { medal: `${medal.icon} ${medal.name}` })
+      : secured && !allActionsBought(board) ? t('✅ {icon} asegurada. Para terminar, compra: {list}', { icon: medal.icon, list: missing.join(', ') }) : obj.kind === 'sold' ? t('Vende:') : t('Produce:');
     setFitted(document.getElementById('event-goal'), goal, 0.6);
     // Un producto por renglón, con cuánto lleva (v3.67: antes en una sola línea y el tercero no se veía).
     // Siempre tres renglones, para que la barra no cambie de alto.
@@ -107,8 +107,8 @@ export class EventBar {
     const hs = eventHandicaps(board).filter((h) => h.pct < 1);
     const hEl = document.getElementById('event-handicap');
     hEl.hidden = !hs.length;
-    if (hs.length) setFitted(hEl, `${def.icon} ${[...new Set(hs.map((h) => handicapText(board, h, true)))].join(' · ')}${def.blame ? ` por ${def.blame}` : ''}`);
-    setFitted(document.getElementById('event-medals'), `🥇 hasta ${formatClock(obj.medals[0])} · 🥈 hasta ${formatClock(obj.medals[1])} · 🥉 después`);
+    if (hs.length) setFitted(hEl, `${def.icon} ${[...new Set(hs.map((h) => handicapText(board, h, true)))].join(' · ')}${def.blame ? ` ${t('por {what}', { what: def.blame })}` : ''}`);
+    setFitted(document.getElementById('event-medals'), t('🥇 hasta {gold} · 🥈 hasta {silver} · 🥉 después', { gold: formatClock(obj.medals[0]), silver: formatClock(obj.medals[1]) }));
     // Las compras: se redibujan solo si cambió algo (para no perder el toque a mitad de un clic).
     const states = def.actions.map((a) => {
       const q = quoteAction(board, a.id);
@@ -118,7 +118,7 @@ export class EventBar {
     if (key === this.drawn) return;
     this.drawn = key;
     this.actions.innerHTML = def.actions
-      .map((a, k) => `<button class="event-action ${states[k]}" data-action="${a.id}"><b>${a.icon} ${a.name}</b>${states[k] === 'owned' ? '✓ listo' : `💰 ${formatNumber(a.cost)}`}</button>`)
+      .map((a, k) => `<button class="event-action ${states[k]}" data-action="${a.id}"><b>${a.icon} ${a.name}</b>${states[k] === 'owned' ? t('✓ listo') : `💰 ${formatNumber(a.cost)}`}</button>`)
       .join('');
   }
 

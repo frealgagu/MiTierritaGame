@@ -25,6 +25,7 @@ import { PARENT } from './chain.js';
 import { PRODUCTS } from '../data/products.js';
 import { WithArticle, withArticle } from '../data/lore.js';
 import { gainRenown, profileOf } from './renown.js';
+import { LANG, t } from '../i18n/index.js';
 
 export const EVENT_SLOTS = 2;
 export const EVENT_COOLDOWN = 2 * YEAR_DAYS * DAY_LENGTH; // 2 años del juego (4 h 16 min; hasta la v3.29, 3)
@@ -372,11 +373,18 @@ export function handicapText(board, h, short = false) {
   const def = eventDef(board);
   const name = STATIONS_BY_ID[h.station].name;
   const pct = `${Math.round(h.pct * 100)} %`;
-  if (short) return h.product ? `${PRODUCTS[h.product].icon} ${PRODUCTS[h.product].name.toLowerCase()} al ${pct}` : `${name} al ${pct}`;
+  if (short) return t('{what} al {pct}', { what: h.product ? `${PRODUCTS[h.product].icon} ${PRODUCTS[h.product].name.toLowerCase()}` : name, pct });
+  const p = h.product && PRODUCTS[h.product].name.toLowerCase();
+  // En español se contrae «de el» y «a el» (v3.68: los demás idiomas, con su frase).
+  if (LANG !== 'es') {
+    const blame = def.blame ? t(' por culpa de {blame}', { blame: def.blame }) : '';
+    if (h.product) return `${def.icon} ${t('A {station} le llega el {pct} de {p}{blame}.', { station: WithArticle(name), pct, p, blame })}`;
+    return `${def.icon} ${t('{station} produce al {pct}{blame}.', { station: WithArticle(name), pct, blame })}`;
+  }
   const blame = def.blame ? ` por culpa ${def.blame.startsWith('el ') ? `del ${def.blame.slice(3)}` : `de ${def.blame}`}` : '';
   if (h.product) {
     const to = withArticle(name);
-    return `${def.icon} ${to.startsWith('el ') ? `Al ${to.slice(3)}` : `A ${to}`} le llega el ${pct} de ${PRODUCTS[h.product].name.toLowerCase()}${blame}.`;
+    return `${def.icon} ${to.startsWith('el ') ? `Al ${to.slice(3)}` : `A ${to}`} le llega el ${pct} de ${p}${blame}.`;
   }
   return `${def.icon} ${WithArticle(name)} produce al ${pct}${blame}.`;
 }

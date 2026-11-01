@@ -9,6 +9,8 @@ import { formatNumber } from '../core/format.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { analyzeChain } from './analysis.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
+import { withArticle } from '../data/lore.js';
+import { t } from '../i18n/index.js';
 
 export const VISIBLE_GOALS = 3;
 
@@ -21,11 +23,13 @@ function levelOf(state, target) {
   return part === 'transport' ? st.transport.level : st.level;
 }
 
-function targetName(target) {
+// «Sube el nivel de Cafetal a 5», «Sube a los arrieros del Cafetal a 5», «Sube la Ruta de la panela a 10».
+function levelText(target, n) {
   const [id, part] = target.split(':');
-  if (id === 'dispatch') return `${DISPATCH.name} (${ZONES_BY_ID[part ?? 'finca'].name})`;
-  if (id === 'route') return `la ${ROUTES_BY_ID[part].name}`;
-  return part === 'transport' ? `los arrieros del ${STATIONS_BY_ID[id].name}` : STATIONS_BY_ID[id].name;
+  if (id === 'dispatch') return t('Sube {name} a {n}', { name: `${DISPATCH.name} (${ZONES_BY_ID[part ?? 'finca'].name})`, n });
+  if (id === 'route') return t('Sube {name} a {n}', { name: withArticle(ROUTES_BY_ID[part].name), n });
+  if (part === 'transport') return t('Sube a los arrieros del {station} a {n}', { station: STATIONS_BY_ID[id].name, n });
+  return t('Sube el nivel de {station} a {n}', { station: STATIONS_BY_ID[id].name, n });
 }
 
 // Productos que otra estación consume (la cereza, que va al Beneficiadero; el sombrero vueltiao, al Parador).
@@ -83,28 +87,31 @@ export function goalProgress(state, goal) {
   return { current: Math.min(current, target), target, done: current >= target };
 }
 
+// «120 🧀 queso campesino».
+const amountOf = (goal) => `${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()}`;
+
 // Texto del objetivo para la interfaz.
 export function goalText(goal) {
   switch (goal.type) {
     case 'sold':
-      if (countsProduced(goal)) return `Produce ${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()}`;
-      return `Vende ${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()}`;
+      if (countsProduced(goal)) return t('Produce {list}', { list: amountOf(goal) });
+      return t('Vende {list}', { list: amountOf(goal) });
     case 'produced':
-      return `Produce ${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()}`;
+      return t('Produce {list}', { list: amountOf(goal) });
     case 'imported':
-      return `Recibe ${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()} por la ruta`;
+      return t('Recibe {list} por la ruta', { list: amountOf(goal) });
     case 'level':
-      return `Sube ${goal.target.includes(':') ? '' : 'el nivel de '}${targetName(goal.target)} a ${goal.level}`.replace('Sube los', 'Sube a los');
+      return levelText(goal.target, goal.level);
     case 'unlock':
-      return `Construye: ${STATIONS_BY_ID[goal.station].icon} ${STATIONS_BY_ID[goal.station].name}`;
+      return t('Construye: {station}', { station: `${STATIONS_BY_ID[goal.station].icon} ${STATIONS_BY_ID[goal.station].name}` });
     case 'research':
-      return `Investiga: ${RESEARCH_BY_ID[goal.research].icon} ${RESEARCH_BY_ID[goal.research].name}`;
+      return t('Investiga: {name}', { name: `${RESEARCH_BY_ID[goal.research].icon} ${RESEARCH_BY_ID[goal.research].name}` });
     case 'researchCount':
-      return `Completa ${goal.count} investigaciones`;
+      return t('Completa {n} investigaciones', { n: goal.count });
     case 'income':
-      return `Gana ${formatNumber(goal.perSecond)} 💰/s`;
+      return t('Gana {n} 💰/s', { n: formatNumber(goal.perSecond) });
     case 'allLevels':
-      return `Sube todas las estaciones a nivel ${goal.level}`;
+      return t('Sube todas las estaciones a nivel {n}', { n: goal.level });
   }
   return '';
 }

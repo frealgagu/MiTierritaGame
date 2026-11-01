@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.68.0 — Encantos de Mi Tierrita, in English
+- **🌐 Idioma:** el juego ya se puede jugar en **inglés**. Se elige en el menú ⚙️ (**🌐 Idioma**); la primera vez toma el idioma del teléfono (si está en portugués, francés o italiano, sigue en español mientras llegan esas traducciones). Al cambiarlo, la partida se guarda y el juego vuelve a cargar.
+- Está todo traducido: las ventanas, los avisos, los paneles, los nombres de estaciones, productos, zonas y rutas, los eventos, el álbum, los logros, los datos curiosos y lo que dicen las personas de cada zona. Las palabras propias de Colombia (panela, arequipe, tinto, bocadillo, chiva, budare…) y los nombres de las personas se dejan como allá. Los números van con punto decimal (2.50K).
+- Quien juega en español no descarga nada de más: el inglés llega solo si se elige.
+
 ## v3.67.6 — El letrero manda
 - **Tocar el letrero de una estación abre esa estación**, aunque el letrero quede encima de otra (la de adelante o la de atrás). Antes el toque pasaba a lo que hubiera debajo del letrero, y en algunos puntos no respondía, por ejemplo en la orilla del letrero de la Bodega.
 - **Fuera de los letreros, gana el edificio:** al tocar el techo o las paredes de una estación que tapa el terreno de la de atrás, se abre la del edificio (antes, la del terreno). Si no se toca ningún dibujo, cuenta el terreno.

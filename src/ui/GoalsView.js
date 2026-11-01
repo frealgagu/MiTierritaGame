@@ -3,6 +3,7 @@ import { GOALS_BY_ZONE } from '../data/goals.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { activeGoals, claimableGoals, goalProgress, goalText } from '../sim/goals.js';
 import { finalZone, masteryParts } from '../sim/legacy.js';
+import { t } from '../i18n/index.js';
 import { regionOf } from '../data/regions.js';
 import { nextLegacyMult } from '../sim/modifiers.js';
 import { fit } from './fit.js';
@@ -82,15 +83,15 @@ export class GoalsView {
     // «Cobrar todos» (v3.57): los cumplidos de la zona, también los que no se ven; el final, aparte.
     const bulk = ready.filter((g) => !g.final);
     const bulkReward = bulk.reduce((n, g) => n + g.reward, 0);
-    const claimAll = bulk.length > 0 ? `<button class="btn claim bulk" data-claim-all>✅ Cobrar todos (${bulk.length}) · +${formatNumber(bulkReward)} 💰</button>` : '';
+    const claimAll = bulk.length > 0 ? `<button class="btn claim bulk" data-claim-all>${t('✅ Cobrar todos ({n})', { n: bulk.length })} · +${formatNumber(bulkReward)} 💰</button>` : '';
     if (claimAll !== this.footHtml) this.foot.innerHTML = this.footHtml = claimAll;
     // La lista completa (v3.67, como las investigaciones): los cobrados arriba, en pequeño, y todos los
     // que faltan con su avance (antes solo se veían tres y un cumplido podía quedar escondido).
     const claimed = new Set(state.goals.claimed);
     const html = `
-      <p class="goals-count">${ZONES_BY_ID[zone].icon} ${ZONES_BY_ID[zone].name} · ${done} de ${list.length} cobrados</p>
+      <p class="goals-count">${ZONES_BY_ID[zone].icon} ${ZONES_BY_ID[zone].name} · ${t('{done} de {total} cobrados', { done, total: list.length })}</p>
       ${list.map((goal) => (claimed.has(goal.id) ? claimedCard(goal) : goalCard(goal, goalProgress(state, goal), false))).join('')}
-      ${done === list.length ? `<p class="goals-count">¡Completaste todos los objetivos de ${ZONES_BY_ID[zone].name}!</p>` : ''}
+      ${done === list.length ? `<p class="goals-count">${t('¡Completaste todos los objetivos de {zone}!', { zone: ZONES_BY_ID[zone].name })}</p>` : ''}
       ${finished ? masteryCard(state, false) : ''}`;
     if (html !== this.html) {
       this.body.innerHTML = this.html = html;
@@ -110,12 +111,12 @@ function masteryCard(state, compact) {
   const have = parts.reduce((n, p) => n + Math.min(p.have, p.need), 0);
   const need = parts.reduce((n, p) => n + p.need, 0);
   const action = state.mastered
-    ? `<button class="btn claim" data-mastery>🔁 Volver a empezar ${formatMult(nextLegacyMult(state))}</button>`
-    : `<span class="goal-reward">🏅 Segundo final</span>`;
-  const rows = compact ? '' : `<ul class="mastery-parts">${parts.map((p) => `<li class="${p.have >= p.need ? 'ok' : ''}">${p.have >= p.need ? '✅' : p.icon} ${p.label}<span>${Math.min(p.have, p.need)} / ${p.need}</span></li>`).join('')}</ul>`;
+    ? `<button class="btn claim" data-mastery>${t('🔁 Volver a empezar {mult}', { mult: formatMult(nextLegacyMult(state)) })}</button>`
+    : `<span class="goal-reward">${t('🏅 Segundo final')}</span>`;
+  const rows = compact ? '' : `<ul class="mastery-parts">${parts.map((p) => `<li class="${p.have >= p.need ? 'ok' : ''}">${p.have >= p.need ? '✅' : p.icon} ${t(p.label)}<span>${Math.min(p.have, p.need)} / ${p.need}</span></li>`).join('')}</ul>`;
   return `
     <div class="goal final ${state.mastered ? 'done' : ''} ${compact ? 'compact' : ''}">
-      <div class="goal-text">${state.mastered ? '✅' : '🏅'} Todo al nivel 100, con todos los objetivos y las investigaciones</div>
+      <div class="goal-text">${state.mastered ? '✅' : '🏅'} ${t('Todo al nivel 100, con todos los objetivos y las investigaciones')}</div>
       <div class="goal-row">
         <div class="bar"><div style="width:${Math.round((have / need) * 100)}%"></div></div>
         <span class="goal-count">${Math.round((have / need) * 100)} %</span>
@@ -127,9 +128,9 @@ function masteryCard(state, compact) {
 function goalCard(goal, p, compact) {
   const pct = Math.round((p.current / p.target) * 100);
   const showCount = p.target > 1;
-  const reward = goal.final ? '🏁 Final de la zona' : `+${formatNumber(goal.reward)} 💰`;
+  const reward = goal.final ? t('🏁 Final de la zona') : `+${formatNumber(goal.reward)} 💰`;
   const action = p.done
-    ? `<button class="btn claim" data-claim="${goal.id}">${goal.final ? '¡Completar zona!' : `Cobrar ${reward}`}</button>`
+    ? `<button class="btn claim" data-claim="${goal.id}">${goal.final ? t('¡Completar zona!') : t('Cobrar {reward}', { reward })}</button>`
     : `<span class="goal-reward">${reward}</span>`;
   return `
     <div class="goal ${p.done ? 'done' : ''} ${goal.final ? 'final' : ''} ${compact ? 'compact' : ''}">
@@ -144,6 +145,6 @@ function goalCard(goal, p, compact) {
 
 // Un objetivo ya cobrado: un renglón, sin barra.
 function claimedCard(goal) {
-  return `<div class="goal claimed"><div class="goal-text">✅ ${goalText(goal)}</div><span class="goal-reward">${goal.final ? '🏁 Zona completada' : 'Cobrado'}</span></div>`;
+  return `<div class="goal claimed"><div class="goal-text">✅ ${goalText(goal)}</div><span class="goal-reward">${goal.final ? t('🏁 Zona completada') : t('Cobrado')}</span></div>`;
 }
 

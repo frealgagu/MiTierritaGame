@@ -4,30 +4,31 @@
 // siguen funcionando como siempre (ahí no sale el nombre).
 import { PRODUCTS } from '../data/products.js';
 import { STATIONS } from '../data/stations.js';
+import { t } from '../i18n/index.js';
 
 // Los íconos de la interfaz que no son productos.
 const GENERAL = {
-  '💰': 'Monedas',
-  '🐴': 'Arrieros (mulas)',
-  '⚡': 'Banda eléctrica',
-  '🚌': 'Ruta entre zonas (chiva)',
-  '📦': 'Bodega',
-  '🚙': 'Willys',
-  '⭐': 'Renombre',
-  '🏅': 'Eventos y medallas',
-  '🥇': 'Medalla de oro',
-  '🥈': 'Medalla de plata',
-  '🥉': 'Medalla de bronce',
-  '🔬': 'Investigaciones',
-  '📋': 'Objetivos',
-  '🔗': 'La cadena',
-  '🗺️': 'Zonas',
-  '🪱': 'Compost: la Finca vende más caro',
-  '⏸️': 'Detenida',
-  '⛔': 'Problema',
-  '↪️': 'Se vende sin procesar',
-  '🔒': 'Por abrir',
-  '🏁': 'Zona completa',
+  '💰': t('Monedas'),
+  '🐴': t('Arrieros (mulas)'),
+  '⚡': t('Banda eléctrica'),
+  '🚌': t('Ruta entre zonas (chiva)'),
+  '📦': t('Bodega'),
+  '🚙': t('Willys'),
+  '⭐': t('Renombre'),
+  '🏅': t('Eventos y medallas'),
+  '🥇': t('Medalla de oro'),
+  '🥈': t('Medalla de plata'),
+  '🥉': t('Medalla de bronce'),
+  '🔬': t('Investigaciones'),
+  '📋': t('Objetivos'),
+  '🔗': t('La cadena'),
+  '🗺️': t('Zonas'),
+  '🪱': t('Compost: la Finca vende más caro'),
+  '⏸️': t('Detenida'),
+  '⛔': t('Problema'),
+  '↪️': t('Se vende sin procesar'),
+  '🔒': t('Por abrir'),
+  '🏁': t('Zona completa'),
 };
 
 const clean = (s) => s.replace(/️/g, '');

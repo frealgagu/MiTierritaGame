@@ -1,4 +1,5 @@
 import { formatNumber } from '../core/format.js';
+import { t } from '../i18n/index.js';
 import { RESEARCH, RESEARCH_BY_ID } from '../data/research.js';
 import { bulkResearch, previewAllResearch, researchBlocker } from '../sim/upgrades.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
@@ -73,11 +74,11 @@ export class ResearchView {
     // «Comprar todas» (v3.57): las de esta zona que alcanza el dinero, de la más barata a la más cara
     // (sin la Maestría ni la Supremacía).
     const preview = previewAllResearch(this.game.state, zone);
-    const buyAll = preview.count > 0 ? `<button class="btn buy bulk" data-research-all>🛒 Comprar todas (${preview.count}) · 💰 ${formatNumber(preview.cost)}</button>` : '';
+    const buyAll = preview.count > 0 ? `<button class="btn buy bulk" data-research-all>${t('🛒 Comprar todas ({n})', { n: preview.count })} · 💰 ${formatNumber(preview.cost)}</button>` : '';
     if (buyAll !== this.footHtml) this.foot.innerHTML = this.footHtml = buyAll;
     const html =
       this.rows(here) +
-      (elsewhere.length ? `<h3 class="research-other">En otras zonas</h3>${this.rows(elsewhere, true)}` : '');
+      (elsewhere.length ? `<h3 class="research-other">${t('En otras zonas')}</h3>${this.rows(elsewhere, true)}` : '');
     if (html !== this.html) this.body.innerHTML = this.html = html;
     if (this.scrollPending) {
       this.scrollPending = false;
@@ -90,13 +91,13 @@ export class ResearchView {
     return quotes
       .map(([r, q]) => {
         let action;
-        if (q.reason === 'owned') action = '<span class="owned">✅ Investigado</span>';
-        else if (q.reason === 'locked' && r.minLevel) action = `<span class="locked">🔒 Todo al nivel ${r.minLevel} (${atLevel(this.game.state, r)})</span>`;
+        if (q.reason === 'owned') action = `<span class="owned">${t('✅ Investigado')}</span>`;
+        else if (q.reason === 'locked' && r.minLevel) action = `<span class="locked">${t('🔒 Todo al nivel {n} ({have})', { n: r.minLevel, have: atLevel(this.game.state, r) })}</span>`;
         else if (q.reason === 'locked' && r.stationLevel && this.game.state.stations[r.requires]) action = `<span class="locked">${stationLevelText(this.game.state, r)}</span>`;
-        else if (q.reason === 'locked') action = `<span class="locked">🔒 Construye ${STATIONS_BY_ID[r.requires].name}</span>`;
+        else if (q.reason === 'locked') action = `<span class="locked">${t('🔒 Construye {station}', { station: STATIONS_BY_ID[r.requires].name })}</span>`;
         else action = `<button class="btn buy small" data-research="${r.id}" ${q.ok ? '' : 'disabled'}>💰 ${formatNumber(r.cost)}</button>`;
         return `
-          <div data-row="${r.id}" class="research ${q.reason === 'owned' ? 'owned' : ''} ${q.reason === 'locked' ? 'locked goto' : ''}" ${q.reason === 'locked' ? `data-blocked="${r.id}" title="Ir a lo que falta"` : ''}>
+          <div data-row="${r.id}" class="research ${q.reason === 'owned' ? 'owned' : ''} ${q.reason === 'locked' ? 'locked goto' : ''}" ${q.reason === 'locked' ? `data-blocked="${r.id}" title="${t('Ir a lo que falta')}"` : ''}>
             <span class="research-icon">${r.icon}</span>
             <span class="research-text"><b>${r.name}</b>${withZone ? ` <small>· ${ZONES_BY_ID[r.zone].icon} ${ZONES_BY_ID[r.zone].name}</small>` : ''}<br><small>${r.desc}</small></span>
             ${action}
@@ -111,8 +112,8 @@ export class ResearchView {
 function stationLevelText(state, r) {
   const st = state.stations[r.requires];
   const n = r.stationLevel;
-  if (STATIONS_BY_ID[r.requires].side) return `🔒 Nv ${n}<br><small>va en ${st.level}</small>`;
-  return `🔒 Nv ${n} y 🐴 ${n}<br><small>va en ${st.level} y 🐴 ${st.transport.level}</small>`;
+  if (STATIONS_BY_ID[r.requires].side) return `🔒 ${t('Nv')} ${n}<br><small>${t('va en {n}', { n: st.level })}</small>`;
+  return `🔒 ${t('Nv')} ${n} ${t('y')} 🐴 ${n}<br><small>${t('va en {n}', { n: st.level })} ${t('y')} 🐴 ${st.transport.level}</small>`;
 }
 
 // Cuántos edificios de la zona ya llegaron al nivel que pide la Maestría o la Supremacía: «5/7».

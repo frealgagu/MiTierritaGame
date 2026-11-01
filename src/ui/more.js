@@ -2,7 +2,9 @@
 // presentación de cada uno) tapaba lo de abajo. Se muestra en pocas líneas, con «Ver más ▾» para leerlo
 // completo y «Ver menos ▴» para recogerlo. El botón solo aparece si el texto no cabe.
 //   <p class="clamp" style="--lines: 3">…</p><button class="more-btn" type="button" hidden>Ver más ▾</button>
-const LABEL = { more: 'Ver más ▾', less: 'Ver menos ▴' };
+import { t } from '../i18n/index.js';
+
+const LABEL = { more: t('Ver más ▾'), less: t('Ver menos ▴') };
 
 export const moreButton = () => `<button class="more-btn" type="button" hidden>${LABEL.more}</button>`;
 
