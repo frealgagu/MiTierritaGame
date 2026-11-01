@@ -109,7 +109,7 @@ export class GoalsView {
 
 // Segundo final: lo que pide (v3.12: estaciones, arrieros y rutas en el nivel 100, todos los objetivos
 // y todas las investigaciones), cuánto va de cada cosa y, al lograrlo, el botón para volver a empezar.
-// «🏆 Multiplicador al máximo (×4,29B)», en la barra de abajo.
+// «🏆 Multiplicador al máximo (×1,15Qi)», en la barra de abajo.
 const maxCard = (state) =>
   `<div class="goal final done compact"><div class="goal-text">${t('🏆 Multiplicador al máximo ({mult})', { mult: formatMult(legacyMult(state)) })}</div></div>`;
 
