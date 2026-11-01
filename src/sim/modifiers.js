@@ -37,9 +37,16 @@ function product(state, type, target) {
 // Segundo final (v1.6): cada vez que se reinicia el juego tras llevar todo al nivel 100, la producción
 // se duplica (×2, ×4, ×8…). Multiplica la velocidad de las estaciones y lo que lleva el Willys; los
 // arrieros y las rutas se calculan con la velocidad de su estación, así que todo sigue cuadrando.
-// Desde la v3.56 el multiplicador llega hasta ×2³² (32 reinicios): se puede seguir reiniciando (cuenta para
-// el Renombre y los logros), pero la producción ya no se duplica más.
-export const MAX_LEGACY_RESETS = 32;
+// El multiplicador tiene un tope: se puede seguir reiniciando (cuenta para el Renombre y los logros), pero
+// la producción ya no se duplica más. v3.56: ×2³² (32 reinicios, ×4,29B); v3.68.3: ×2⁶⁰ (60, ×1,15Qi).
+export const MAX_LEGACY_RESETS = 60;
+// Techo de las monedas (v3.68.3): 999Dc, el número más grande que se escribe con sufijo. Con ×2⁶⁰ y una
+// región al máximo se llega en unos 90 días reales sin parar; así nunca se ve en notación científica.
+export const MAX_COINS = 999e33;
+export function capCoins(state) {
+  if (state.coins > MAX_COINS) state.coins = MAX_COINS;
+  if (state.totalEarned > MAX_COINS) state.totalEarned = MAX_COINS;
+}
 export const legacyMult = (state) => 2 ** Math.min(state.legacy?.resets ?? 0, MAX_LEGACY_RESETS);
 // El multiplicador que tendrá la partida después de reiniciar.
 export const nextLegacyMult = (state) => 2 ** Math.min((state.legacy?.resets ?? 0) + 1, MAX_LEGACY_RESETS);

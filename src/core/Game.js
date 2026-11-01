@@ -7,7 +7,7 @@ import { stepMules } from '../sim/transport.js';
 import { stepJeep } from '../sim/dispatch.js';
 import { stepRoute } from '../sim/routes.js';
 import { ROUTES } from '../data/routes.js';
-import { offlineCapSeconds } from '../sim/modifiers.js';
+import { capCoins, offlineCapSeconds } from '../sim/modifiers.js';
 import { buyAllResearch, buyResearch, buyUpgrade, quoteResearch, quoteUnlock, quoteUpgrade, unlockStation } from '../sim/upgrades.js';
 import { claimAllGoals, claimGoal, unlockZone } from '../sim/goals.js';
 import { checkMastery } from '../sim/legacy.js';
@@ -64,6 +64,7 @@ export class Game {
     // Los avisos del mapa (⏸️, bodega llena…) son para quien mira: mientras se calcula el tiempo fuera no
     // hacen falta (no cambian la producción) y se ahorra tiempo al abrir el juego (v3.65.1).
     if (!this.offline) stepAlerts(this.state, dt);
+    capCoins(this.state);
   }
 
   // Ganancias mientras el juego estuvo cerrado: se simula en pasos de 1 s, sin efectos visuales (y con
@@ -128,6 +129,7 @@ export class Game {
         for (const [id, n] of Object.entries(after[kind])) s.stats[kind][id] = n + (n - (mark[kind][id] ?? 0)) * k;
       }
       s.playTime += rest;
+      capCoins(s);
     }
     return { seconds: total, coins: s.coins - before };
   }
@@ -176,6 +178,7 @@ export class Game {
         for (const [id, n] of Object.entries(after[kd])) s.stats[kd][id] = n + (n - (mark[kd][id] ?? 0)) * k;
       }
       s.playTime += rest;
+      capCoins(s);
       if (!s.event.medal && when <= rest && secureMedal(s, start + when)) secured = true;
     } else if (rest > 0) s.playTime += rest;
     return { seconds: total, secured };

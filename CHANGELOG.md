@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v3.68.3 — Un multiplicador más grande
+- **El multiplicador del segundo final llega ahora hasta ×1,15Qi** (2⁶⁰, con 60 reinicios); antes se quedaba en ×4,29B (32 reinicios). Se puede seguir volviendo a empezar después, pero ya no se duplica.
+- **Las monedas tienen un techo de 999Dc**, el número más grande que se escribe con sufijo: así nunca se ven en notación científica.
+
 ## v3.68.2 — El multiplicador al máximo
 - **Con el multiplicador de producción al máximo, la barra de abajo lo dice** («🏆 Multiplicador al máximo») en vez de ofrecer volver a empezar. Se puede seguir reiniciando desde 📋 Objetivos.
 

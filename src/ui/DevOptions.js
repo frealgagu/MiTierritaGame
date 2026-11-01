@@ -87,7 +87,7 @@ export function bindDevOptions(game, getActive = () => game) {
   });
   input.addEventListener('change', () => (input.value = prefs.speed = speed()));
 
-  // Multiplicador de producción: como si ya se hubiera reiniciado n veces (×2ⁿ), hasta ×2³².
+  // Multiplicador de producción: como si ya se hubiera reiniciado n veces (×2ⁿ), hasta el tope del juego.
   const legacy = document.getElementById('dev-legacy');
   const legacyMultText = document.getElementById('dev-legacy-mult');
   legacy.max = MAX_RESETS;

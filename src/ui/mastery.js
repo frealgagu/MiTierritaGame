@@ -10,7 +10,7 @@ import { t } from '../i18n/index.js';
 export function showMastery(state, onRestart) {
   const mult = legacyMult(state);
   const next = nextLegacyMult(state);
-  // Con el tope (×2³²), reiniciar ya no duplica: se dice.
+  // Con el tope (×2⁶⁰), reiniciar ya no duplica: se dice.
   const capped = next === mult;
   const runs = (state.legacy?.history?.length ?? 0) + 1;
   document.getElementById('mastery-text').innerHTML =

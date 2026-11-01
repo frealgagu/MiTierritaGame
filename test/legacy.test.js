@@ -163,20 +163,20 @@ test('Maestría ×4 con toda la zona al 75 y Supremacía ×8 con toda al 100', a
   assert.equal(speedMult(s, 'farm'), 32);
 });
 
-test('el multiplicador llega hasta ×2³²: se puede seguir reiniciando, pero ya no se duplica (v3.56)', async () => {
+test('el multiplicador llega hasta ×2⁶⁰: se puede seguir reiniciando, pero ya no se duplica (v3.56, v3.68.3)', async () => {
   const { nextLegacyMult } = await import('../src/sim/modifiers.js');
   let state = new Game().state;
-  for (let k = 0; k < 31; k++) state = restartState(state);
-  assert.equal(legacyMult(state), 2 ** 31);
-  assert.equal(nextLegacyMult(state), 2 ** 32);
+  for (let k = 0; k < 59; k++) state = restartState(state);
+  assert.equal(legacyMult(state), 2 ** 59);
+  assert.equal(nextLegacyMult(state), 2 ** 60);
   state = restartState(state);
-  assert.equal(legacyMult(state), 2 ** 32);
-  assert.equal(nextLegacyMult(state), 2 ** 32, 'ya no se duplica');
+  assert.equal(legacyMult(state), 2 ** 60);
+  assert.equal(nextLegacyMult(state), 2 ** 60, 'ya no se duplica');
   for (let k = 0; k < 8; k++) state = restartState(state);
-  assert.equal(state.legacy.resets, 40, 'los reinicios se siguen contando');
-  assert.equal(legacyMult(state), 2 ** 32);
-  assert.equal(state.legacy.history.at(-1).mult, 2 ** 32);
-  assert.equal(state.legacy.history.length, 40);
+  assert.equal(state.legacy.resets, 68, 'los reinicios se siguen contando');
+  assert.equal(legacyMult(state), 2 ** 60);
+  assert.equal(state.legacy.history.at(-1).mult, 2 ** 60);
+  assert.equal(state.legacy.history.length, 68);
   const game = new Game(state);
   run(game, 60);
   assert.ok(Number.isFinite(game.state.coins) && game.state.coins > 0, `monedas: ${game.state.coins}`);
@@ -201,6 +201,7 @@ test('los números enormes se leen: sufijos hasta Dc y luego notación científi
   assert.equal(formatMult(2048), '×2,05K');
   assert.equal(formatMult(2 ** 20), '×1,05M');
   assert.equal(formatMult(2 ** 32), '×4,29B');
+  assert.equal(formatMult(2 ** 60), '×1,15Qi');
   assert.equal(formatMult(2 ** 100), '×1,27No');
   assert.equal(formatMult(2 ** 200), '×1,61e60');
 });
@@ -259,4 +260,19 @@ test('«Cobrar todos» y «Comprar todas» (v3.57)', async () => {
   fresh.researchAll('finca');
   assert.ok(cheap.every((r) => st.research.includes(r.id)), 'todas');
   assert.ok(!st.research.some((id) => RESEARCH.find((r) => r.id === id).minLevel), 'sin Maestría ni Supremacía');
+});
+
+test('las monedas tienen un techo de 999Dc (v3.68.3)', async () => {
+  const { MAX_COINS } = await import('../src/sim/modifiers.js');
+  const { formatNumber } = await import('../src/core/format.js');
+  const game = new Game();
+  game.state.coins = 5e40;
+  game.state.totalEarned = 5e40;
+  game.step(0.1);
+  assert.equal(game.state.coins, MAX_COINS);
+  assert.equal(game.state.totalEarned, MAX_COINS);
+  assert.equal(formatNumber(MAX_COINS), '999Dc');
+  game.state.coins = 1e30;
+  game.step(0.1);
+  assert.ok(game.state.coins < MAX_COINS, 'por debajo del techo no cambia nada');
 });
