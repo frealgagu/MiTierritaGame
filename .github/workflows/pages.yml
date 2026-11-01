@@ -1,7 +1,8 @@
 name: Publicar la web y la app de Android
 
 # En cada push: pruebas y web (GitHub Pages) por un lado, APK de Android por otro, y al final se
-# publican juntos: el APK queda en la misma página, en ./mitierrita.apk (el menú del juego lo enlaza).
+# publican juntos: el APK queda en la misma página, en ./mitierrita.apk (el menú del juego lo enlaza), y la
+# música y los sonidos para descargar (web/musica) en ./musica/.
 # Si existen los secretos de la clave de subida (PLAY_UPLOAD_*, ver el README), también se genera el
 # AAB para Google Play (./mitierrita.aab): sin el aviso de actualización propio, porque Play actualiza solo.
 on:
@@ -99,6 +100,11 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # Lo que va solo en la página y no en la app (v3.71): la música y los sonidos para descargar (web/musica),
+      # con un .zip de todo.
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: web
       - uses: actions/download-artifact@v4
         with:
           name: web
@@ -107,6 +113,9 @@ jobs:
         with:
           name: android
           path: site
+      - run: |
+          cp -r web/. site/
+          (cd site/musica && zip -q -r encantos-de-mi-tierrita-musica.zip . -i '*.mp3' '*.mid')
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site

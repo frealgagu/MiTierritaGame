@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.71.0 — La música para llevar
+- **🎧 La música y los sonidos del juego, para descargar** en frealgagu.github.io/MiTierritaGame/musica: las siete piezas (una por región) en **MP3**, tocadas igual que en el juego, de unos dos minutos y medio, y en **MIDI**, con cada instrumento en su pista para tocarlas o hacer arreglos. También los 31 efectos de sonido en MP3, y en MIDI los que son notas (monedas, subir de nivel, campanas…). Se puede descargar todo en un .zip.
+- La página está en español, inglés, portugués y francés. En ⚙️ › ℹ️ Acerca de está la dirección.
+- Nada de esto va dentro de la app: no la hace más pesada.
+
 ## v3.70.0 — Encantos de Mi Tierrita, en français
 - **🌐 Idioma:** el juego ya se puede jugar en **francés**. Se elige en el menú ⚙️ (**🌐 Idioma**), y quien tiene el teléfono en francés lo ve así desde la primera vez. Con esto quedan español, inglés, portugués y francés; los demás idiomas siguen en inglés (o en español si el teléfono está en italiano, catalán o gallego).
 - Está todo traducido, como en los otros idiomas: ventanas, avisos, paneles, estaciones, productos, zonas, rutas, eventos, álbum, logros, datos curiosos y lo que dicen las personas. Lo propio de Colombia (panela, arequipe, tinto, bocadillo, chiva, budare, ruana…) se deja como allá. Va con la tipografía francesa (espacio antes de ! ? : ;) y coma decimal.

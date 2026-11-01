@@ -61,6 +61,7 @@ export default {
   '✉️ Contacto: frealgagu@gmail.com': '✉️ Contact : frealgagu@gmail.com',
   '🌐 Web: frealgagu.github.io/MiTierritaGame': '🌐 Site : frealgagu.github.io/MiTierritaGame',
   '🔒 Sin publicidad y sin recoger datos personales: la partida se guarda solo en este dispositivo. Política de privacidad en la web, en /privacidad.html.': '🔒 Sans publicité et sans collecte de données personnelles : la partie n’est enregistrée que sur cet appareil. Politique de confidentialité sur le site, à /privacidad.html.',
+  '🎧 La música y los sonidos del juego, en MP3 y MIDI: frealgagu.github.io/MiTierritaGame/musica': '🎧 La musique et les sons du jeu, en MP3 et MIDI : frealgagu.github.io/MiTierritaGame/musica',
   '🔤 Letra: Fredoka (licencia SIL OFL 1.1).': '🔤 Police : Fredoka (licence SIL OFL 1.1).',
   '🗺️ Mapa de Colombia: Marco Geoestadístico Nacional 2018, del DANE.': '🗺️ Carte de la Colombie : Cadre géostatistique national 2018, du DANE.',
   '🎨 Los dibujos, la música y los textos son propios del juego, hechos con código.': '🎨 Les dessins, la musique et les textes sont propres au jeu, faits avec du code.',
