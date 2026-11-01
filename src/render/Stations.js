@@ -671,11 +671,12 @@ export class WarehouseView extends StationView {
     // Letrero.
     const s = iso(ox + 1.2, oy + D, 38);
     g.roundRect(s.x - 22, s.y - 7, 44, 13, 3).fill(PAL.wood).stroke(OUTLINE);
-    const t = new Text({ text: 'BODEGA', style: { fontFamily: FONT, fontSize: 9, fontWeight: '700', fill: 0xfff3d6 }, resolution: 3 });
-    t.anchor.set(0.5);
-    t.position.set(s.x, s.y - 0.5);
-    t.skew.set(0, 0.46);
-    this.addChild(t);
+    const sign = new Text({ text: t('Bodega').toUpperCase(), style: { fontFamily: FONT, fontSize: 9, fontWeight: '700', fill: 0xfff3d6 }, resolution: 3 });
+    sign.anchor.set(0.5);
+    sign.position.set(s.x, s.y - 0.5);
+    sign.skew.set(0, 0.46);
+    if (sign.width > 40) sign.scale.x = 40 / sign.width; // «WAREHOUSE» es más largo que «BODEGA»
+    this.addChild(sign);
   }
 
   // Costales apilados en el patio según lo que hay en bodega. `zone` es el estado de la zona.

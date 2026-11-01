@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v3.68.1 — La chiva del evento, con su nivel
+- **En un evento, la cadena muestra la ruta 🚌 con el nivel de su estación**, que es el que tiene: allí la ruta sube con la estación. Antes mostraba el nivel propio de la ruta, que en el evento no cambia (siempre 1).
+- En inglés, el letrero pintado de la bodega dice «WAREHOUSE».
+- La ficha de Google Play en inglés (textos, capturas e imagen destacada), en `store/ficha-en.md`.
+
 ## v3.68.0 — Encantos de Mi Tierrita, in English
 - **🌐 Idioma:** el juego ya se puede jugar en **inglés**. Se elige en el menú ⚙️ (**🌐 Idioma**); la primera vez toma el idioma del teléfono (si está en portugués, francés o italiano, sigue en español mientras llegan esas traducciones). Al cambiarlo, la partida se guarda y el juego vuelve a cargar.
 - Está todo traducido: las ventanas, los avisos, los paneles, los nombres de estaciones, productos, zonas y rutas, los eventos, el álbum, los logros, los datos curiosos y lo que dicen las personas de cada zona. Las palabras propias de Colombia (panela, arequipe, tinto, bocadillo, chiva, budare…) y los nombres de las personas se dejan como allá. Los números van con punto decimal (2.50K).

@@ -1,15 +1,18 @@
 // Capturas para la ficha de Google Play (1080×1920): una partida avanzada armada con el modo de desarrollo.
-// Uso: `npx vite --port 5199` y, en otra terminal, `node tools/capturas-play.mjs store/capturas`
+// Uso: `npx vite --port 5199` y, en otra terminal, `node tools/capturas-play.mjs store/capturas [idioma]`
+// (v3.68: con `en`, las capturas en inglés, p. ej. `node tools/capturas-play.mjs store/capturas-en en`)
 // (necesita Playwright; CHROMIUM puede indicar el navegador).
 import { chromium } from 'playwright-core';
 const out = process.argv[2] ?? 'store/capturas';
+const lang = process.argv[3] ?? 'es';
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM, args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
 // 405×720 a 2,667 = 1080×1920 (9:16)
 const page = await browser.newPage({ viewport: { width: 405, height: 720 }, deviceScaleFactor: 1080 / 405, hasTouch: true });
 const errs = []; page.on('pageerror', (e) => errs.push(e.message));
+await page.addInitScript((l) => localStorage.setItem('mitierrita-lang', l), lang);
 await page.goto('http://localhost:5199/');
 await page.waitForFunction(() => window.__mitierrita);
-await page.evaluate(() => { localStorage.clear(); document.getElementById('intro').hidden = true; });
+await page.evaluate((l) => { localStorage.clear(); localStorage.setItem('mitierrita-lang', l); document.getElementById('intro').hidden = true; }, lang);
 const hideModals = () => page.evaluate(() => { for (const el of document.querySelectorAll('.modal:not([hidden])')) el.hidden = true; });
 const finish = (zone, region) => page.evaluate(async ([zone, region]) => {
   const game = window.__mitierrita.games[region];
@@ -47,13 +50,15 @@ for (const [region, zones] of Object.entries(regions)) {
 await hideModals();
 await page.addStyleTag({ content: '#toast { display: none !important; }' });
 const go = async (zone) => {
-  await page.evaluate(() => (window.__mitierrita.root.state.settings.zonesFold = { cafetero: false, santander: false, costa: false }));
+  // Por la lista (v3.67: el botón abre lo último que se usó) y «Ir», que hace el viaje en el mapa.
+  await page.evaluate(() => Object.assign(window.__mitierrita.root.state.settings, { zonesView: 'list', zonesFold: { cafetero: false, santander: false, costa: false } }));
   await page.click('#zones-btn');
   await page.waitForTimeout(400);
   await page.evaluate((zone) => {
     document.querySelector(`[data-zone="${zone}"]`)?.click();
   }, zone);
-  await page.waitForTimeout(2500);
+  await page.waitForFunction((zone) => window.__mitierrita.root.state.settings.zone === zone, zone, { timeout: 20000 });
+  await page.waitForTimeout(1500);
   await hideModals();
 };
 const shot = async (name, wait = 4000) => { await page.waitForTimeout(wait); await page.evaluate(() => document.getElementById('toast')?.click()); await page.screenshot({ path: `${out}/${name}.png` }); };
@@ -70,12 +75,12 @@ await hideModals();
 await go('sombrero');
 for (const z of regions.costa) await develop(z, 'costa', 8.3e7, z === 'sombrero' ? 250 : 0);
 await shot('4-sombrero', 8000);
+// Desde la v3.67 el botón de zonas abre el mapa (o la lista, si fue lo último que se usó).
+await page.evaluate(() => (window.__mitierrita.root.state.settings.zonesView = 'map'));
 await page.click('#zones-btn');
-await page.waitForTimeout(500);
-await page.click('#zones-map-btn');
 await shot('5-mapa', 2500);
 await hideModals();
-await page.evaluate(() => (window.__mitierrita.root.state.settings.zonesFold = { cafetero: true, santander: true, costa: false }));
+await page.evaluate(() => Object.assign(window.__mitierrita.root.state.settings, { zonesView: 'list', zonesFold: { cafetero: true, santander: true, costa: false } }));
 await page.click('#zones-btn');
 await shot('6-zonas', 1200);
 console.log('errores:', errs.join('; ') || 'ninguno');

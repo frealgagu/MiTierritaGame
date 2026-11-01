@@ -78,6 +78,14 @@ export class ChainView {
   }
 }
 
+// El nivel de una ruta. En el tablero de un evento (v3.68.1) la ruta va con su estación (ver StationPanel:
+// eventRouteInfo): se muestra el de la estación, no el de la ruta, que ahí no cambia.
+function routeLevel(state, r) {
+  if (!state.event) return state.routes[r.id].level;
+  const id = r.stations.find((sid) => state.stations[sid]);
+  return id ? state.stations[id].level : state.routes[r.id].level;
+}
+
 // El detalle de lo que se tocó: una estación (construida o por construir), una ruta o la bodega.
 function detailOf(state, a, rows, sel, zone) {
   const [kind, part] = sel.split(':');
@@ -97,7 +105,7 @@ function detailOf(state, a, rows, sel, zone) {
     const short = r.stations.some((sid) => rows[sid]?.importLimited === r.id);
     return `
       <div class="cd-head"><span class="cd-icon">${product.icon}</span><b>${product.name}</b> <small>${t('desde {zone}', { zone: `${from.icon} ${from.name}` })}</small></div>
-      <p>${r.icon} ${r.name} · ${t('Nv')} ${state.routes[r.id].level} · ${t('llegan <b>{n}/s</b>', { n: formatRate(arriving) })}</p>
+      <p>${r.icon} ${r.name} · ${t('Nv')} ${routeLevel(state, r)} · ${t('llegan <b>{n}/s</b>', { n: formatRate(arriving) })}</p>
       ${short ? `<p class="lost">${t('⏸️ No alcanza: la estación espera.')}</p>` : ''}
       <div class="cd-actions"><button class="btn buy" data-open="route:${r.id}">${r.icon} ${t('Ir a la ruta')}</button></div>`;
   }
@@ -127,7 +135,7 @@ function detailOf(state, a, rows, sel, zone) {
   for (const imp of def.imports ?? []) {
     const r = ROUTES_BY_ID[imp.route];
     const from = ZONES_BY_ID[r.from];
-    lines.push(`${t('{p} desde {zone}: llegan {n}/s ({route}).', { p: `${PRODUCTS[imp.product].icon} ${PRODUCTS[imp.product].name}`, zone: `${from.icon} ${from.name}`, n: formatRate(row.imported[imp.product]), route: `${r.icon} ${t('Nv')} ${state.routes[r.id].level}` })}${row.importLimited === r.id ? ` <span class="lost">${t('⏸️ No alcanza: la estación espera.')}</span>` : ''}`);
+    lines.push(`${t('{p} desde {zone}: llegan {n}/s ({route}).', { p: `${PRODUCTS[imp.product].icon} ${PRODUCTS[imp.product].name}`, zone: `${from.icon} ${from.name}`, n: formatRate(row.imported[imp.product]), route: `${r.icon} ${t('Nv')} ${routeLevel(state, r)}` })}${row.importLimited === r.id ? ` <span class="lost">${t('⏸️ No alcanza: la estación espera.')}</span>` : ''}`);
   }
   // Los arrieros: cuánto llevan y a dónde.
   const kids = [...row.children, ...(PARENT[nextToUnlock(state, zone)] === id ? [nextToUnlock(state, zone)] : [])];
