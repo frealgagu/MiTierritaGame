@@ -5,13 +5,14 @@ import { PARTS } from '../tools/i18n-skeleton.mjs';
 import { chooseLang, listJoin, t, useDict } from '../src/i18n/index.js';
 import UI from '../src/i18n/en/ui.js';
 import UI_PT from '../src/i18n/pt/ui.js';
+import UI_FR from '../src/i18n/fr/ui.js';
 
-// Idiomas (v3.68: inglés; v3.69: portugués de Brasil). Cada frase de la interfaz y cada texto del contenido
+// Idiomas (v3.68: inglés; v3.69: portugués de Brasil; v3.70: francés). Cada frase de la interfaz y cada texto del contenido
 // tienen su traducción en cada idioma, con las mismas variables; si alguien agrega una frase y no la
 // traduce, esta prueba lo dice.
 
 const vars = (s) => [...String(s).matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort().join(',');
-const LANGS = { en: ['inglés', UI], pt: ['portugués', UI_PT] };
+const LANGS = { en: ['inglés', UI], pt: ['portugués', UI_PT], fr: ['francés', UI_FR] };
 
 for (const [lang, [name, dict]] of Object.entries(LANGS)) {
   test(`cada frase de la interfaz (t y tk) tiene su traducción al ${name}`, () => {
@@ -46,14 +47,15 @@ for (const [lang, [name, dict]] of Object.entries(LANGS)) {
   });
 }
 
-test('el idioma: el guardado, si no el del teléfono; el francés juega en español por ahora', () => {
+test('el idioma: el guardado, si no el del teléfono; el italiano juega en español', () => {
   assert.equal(chooseLang('en', ['es-CO']), 'en');
   assert.equal(chooseLang('pt', ['es-CO']), 'pt');
   assert.equal(chooseLang(null, ['es-CO']), 'es');
   assert.equal(chooseLang(null, ['en-US']), 'en');
   assert.equal(chooseLang(null, ['pt-BR']), 'pt');
   assert.equal(chooseLang(null, ['pt-PT']), 'pt');
-  assert.equal(chooseLang(null, ['fr-FR', 'en']), 'es');
+  assert.equal(chooseLang(null, ['fr-FR', 'en']), 'fr');
+  assert.equal(chooseLang(null, ['it-IT', 'en']), 'es');
   assert.equal(chooseLang(null, ['de-DE']), 'en');
   assert.equal(chooseLang(null, []), 'es');
   assert.equal(chooseLang('xx', ['es']), 'es');
@@ -103,5 +105,28 @@ test('al poner el portugués, los datos quedan en portugués, con su artículo',
   assert.equal(withArticle('primeiras chuvas'), 'as primeiras chuvas');
   useDict(UI_PT, 'pt');
   assert.equal(listJoin(['a', 'b', 'c']), 'a, b e c');
+  useDict(null);
+});
+
+test('al poner el francés, los datos quedan en francés, con su artículo y sus espacios', async () => {
+  const { applyData, UI: dict } = await import('../src/i18n/fr/index.js');
+  applyData();
+  const { STATIONS_BY_ID } = await import('../src/data/stations.js');
+  const { PRODUCTS } = await import('../src/data/products.js');
+  const { STICKERS_BY_ID } = await import('../src/data/album.js');
+  const { withArticle, WithArticle } = await import('../src/data/lore.js');
+  assert.equal(STATIONS_BY_ID.wetmill.name, 'Dépulpeur');
+  assert.equal(PRODUCTS.coffee_bag.name, 'Sachet de café');
+  assert.equal(STICKERS_BY_ID.mula.name, 'La mule');
+  assert.equal(withArticle('Dépulpeur'), 'le Dépulpeur');
+  assert.equal(withArticle('Fromagerie'), 'la Fromagerie');
+  assert.equal(withArticle('Écrémeuse'), 'l’Écrémeuse');
+  assert.equal(WithArticle('Tisserandes'), 'Les Tisserandes');
+  assert.equal(withArticle('Budare'), 'le Budare');
+  assert.equal(withArticle('Nettoyage du poisson'), 'le Nettoyage du poisson');
+  assert.equal(withArticle('premières pluies'), 'les premières pluies');
+  useDict(dict, 'fr');
+  assert.equal(t('🎯 ¡Objetivo cumplido! +{coins} 💰', { coins: 5 }), '🎯 Objectif rempli\u00a0! +5 💰');
+  assert.equal(listJoin(['a', 'b']), 'a et b');
   useDict(null);
 });
