@@ -353,8 +353,57 @@ const AMAZONICA = {
   ],
 };
 
+// El Tolima Grande (v4.0): un sanjuanero, el bambuco fiestero del San Pedro, en re mayor que pasa a si menor. Más
+// rápido que el bambuco del Eje Cafetero: la bandola en trémolo, el tiple, la guitarra, la tambora y la carrasca.
+const SANJUANERO = {
+  name: 'Sanjuanero del San Pedro',
+  instruments: 'tiple, guitarra, bandola, tambora y carrasca', // para los créditos
+  bpm: 132,
+  style: 'sanjuanero',
+  chords: [
+    'A', 'A', 'E7', 'E7', 'E7', 'E7', 'A', 'A',
+    'A7', 'A7', 'D', 'D', 'A', 'E7', 'A', 'A',
+    'F#m', 'F#m', 'C#7', 'C#7', 'C#7', 'C#7', 'F#m', 'F#m',
+    'D', 'D', 'A', 'A', 'Bm', 'E7', 'A', 'E7',
+  ],
+  melody: [
+    [[1, 1, 'C#5'], [2, 1, 'E5'], [3, 2, 'A5'], [5, 1, 'G#5']],
+    [[0, 2, 'F#5'], [2, 1, 'E5'], [3, 1, 'C#5'], [4, 2, 'E5']],
+    [[1, 1, 'B4'], [2, 1, 'D5'], [3, 2, 'G#5'], [5, 1, 'F#5']],
+    [[0, 3, 'E5'], [3, 1, 'D5'], [4, 2, 'B4']],
+    [[1, 1, 'G#4'], [2, 1, 'B4'], [3, 1, 'D5'], [4, 1, 'E5'], [5, 1, 'D5']],
+    [[0, 2, 'B4'], [2, 1, 'G#4'], [3, 1, 'B4'], [4, 1, 'D5'], [5, 1, 'F#5']],
+    [[0, 3, 'E5'], [3, 1, 'C#5'], [4, 1, 'B4'], [5, 1, 'A4']],
+    [[0, 4, 'A4']],
+    [[1, 1, 'C#5'], [2, 1, 'E5'], [3, 2, 'G5'], [5, 1, 'E5']],
+    [[0, 2, 'C#5'], [2, 1, 'A4'], [3, 1, 'C#5'], [4, 1, 'E5'], [5, 1, 'G5']],
+    [[0, 3, 'F#5'], [3, 1, 'A5'], [4, 2, 'D5']],
+    [[0, 1, 'E5'], [1, 1, 'F#5'], [2, 2, 'D5'], [4, 2, 'A4']],
+    [[1, 1, 'A4'], [2, 1, 'C#5'], [3, 1, 'E5'], [4, 1, 'A5'], [5, 1, 'E5']],
+    [[0, 2, 'D5'], [2, 1, 'B4'], [3, 1, 'G#4'], [4, 1, 'B4'], [5, 1, 'D5']],
+    [[0, 6, 'C#5']],
+    [[4, 1, 'E4'], [5, 1, 'G#4']],
+    [[0, 2, 'A4'], [2, 1, 'C#5'], [3, 1, 'F#5'], [4, 1, 'E5'], [5, 1, 'C#5']],
+    [[0, 3, 'A4'], [3, 1, 'G#4'], [4, 2, 'F#4']],
+    [[1, 1, 'G#4'], [2, 1, 'B4'], [3, 2, 'F5'], [5, 1, 'G#5']],
+    [[0, 3, 'G#5'], [3, 1, 'F#5'], [4, 2, 'F5']],
+    [[1, 1, 'C#5'], [2, 1, 'F5'], [3, 1, 'G#5'], [4, 1, 'B5'], [5, 1, 'G#5']],
+    [[0, 2, 'F5'], [2, 1, 'C#5'], [3, 1, 'B4'], [4, 1, 'G#4'], [5, 1, 'F4']],
+    [[0, 3, 'F#4'], [3, 1, 'A4'], [4, 2, 'C#5']],
+    [[0, 4, 'F#5'], [4, 1, 'E5'], [5, 1, 'D5']],
+    [[0, 2, 'D5'], [2, 1, 'F#5'], [3, 1, 'A5'], [4, 2, 'F#5']],
+    [[0, 1, 'E5'], [1, 1, 'D5'], [2, 2, 'A4'], [4, 1, 'D5'], [5, 1, 'E5']],
+    [[0, 2, 'C#5'], [2, 1, 'E5'], [3, 1, 'A5'], [4, 2, 'E5']],
+    [[0, 3, 'C#5'], [3, 1, 'B4'], [4, 1, 'A4'], [5, 1, 'C#5']],
+    [[0, 2, 'D5'], [2, 1, 'B4'], [3, 1, 'F#4'], [4, 1, 'B4'], [5, 1, 'D5']],
+    [[0, 2, 'E5'], [2, 1, 'G#5'], [3, 1, 'B5'], [4, 1, 'G#5'], [5, 1, 'E5']],
+    [[0, 3, 'A5'], [3, 1, 'E5'], [4, 2, 'C#5']],
+    [[1, 1, 'B4'], [2, 1, 'D5'], [3, 1, 'E5'], [4, 1, 'G#5'], [5, 1, 'B4']],
+  ],
+};
+
 // Por región.
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA };
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO };
 
 // Acordes: tónica y notas (en semitonos sobre la tónica).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };
