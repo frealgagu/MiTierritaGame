@@ -158,6 +158,21 @@ export class ZoneMap {
     }, PEEK_MS);
   }
 
+  // Al cambiar de zona (v4.0): el mapa abre ya de cerca, en la región de ahora, sin pasar por el país. Si la zona
+  // nueva es de la misma región, el muñequito solo camina; si es de otra, se aleja al país y se acerca a la nueva.
+  showHere() {
+    if (this.busy) return;
+    clearTimeout(this.peek);
+    const here = REGION_OF_ZONE[this.getZone()];
+    this.region = here;
+    this.highlight = here;
+    this.vb = { ...ZONES_VIEW[here] };
+    this.back.hidden = false;
+    this.applyView();
+    this.paint();
+    this.drawOverlay();
+  }
+
   soon(r) {
     this.say(t('{region} llega próximamente al juego.', { region: `${r.icon} ${r.name}` }));
   }

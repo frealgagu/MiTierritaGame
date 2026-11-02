@@ -118,3 +118,17 @@ test('una partida de antes: las rutas nuevas arrancan al nivel de la estación q
   assert.equal(s.regions.llanos.routes.cueros.level, 52);
   assert.equal(s.regions.llanos.routes.aceite.level, 1, 'las de antes no cambian');
 });
+
+test('una partida de antes: los reinicios quedan en el tope (60) y sin el registro de cada partida', () => {
+  const root = createInitialState(0, 'cafetero');
+  root.legacy = { resets: 68, history: Array.from({ length: 68 }, (_, k) => ({ mult: 2 ** Math.min(k, 60), playTime: 100, totalEarned: 1 })) };
+  const llanos = createInitialState(0, 'llanos');
+  llanos.legacy = { resets: 3, history: [{ mult: 1 }, { mult: 2 }, { mult: 4 }] };
+  root.regions = { llanos };
+  const store = { 'mitierrita.save': JSON.stringify(root) };
+  globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
+  const s = loadGame();
+  delete globalThis.localStorage;
+  assert.deepEqual(s.legacy, { resets: 60 });
+  assert.deepEqual(s.regions.llanos.legacy, { resets: 3 });
+});

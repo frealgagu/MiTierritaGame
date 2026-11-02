@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v4.0.1 — Reinicios hasta 60 y un viaje más directo en el mapa
+- **Los reinicios de cada región llegan hasta 60** y ahí se quedan: volver a empezar con el multiplicador al máximo (×2⁶⁰) ya no suma más reinicios. Los logros de las veces que se completó la región cuentan esos reinicios.
+- **Se dejó de guardar un registro de cada partida terminada**, que crecía con cada reinicio y hacía más pesada la copia de seguridad. Las partidas de antes conservan su número de reinicios (hasta 60).
+- **🗺️ Al ir a otra zona, el mapa abre ya en tu región:** si la zona nueva es de la misma región, el muñequito camina sin acercar ni alejar; si es de otra, se aleja a Colombia y se acerca a la región nueva. Al abrir el mapa con 🗺️ se sigue viendo primero el país.
+
 ## v4.0.0 — El Tolima Grande
 - **🌵 El Tolima Grande, la octava región**, se abre al completar Leticia. Seis zonas: **Los Achirales** (los bizcochos de achira de Natagaima), **El Café del Huila** (café especial), **La Represa de Betania** (tilapia ahumada, en escabeche y frita con patacón), **La Lechonería** (lechona tolimense y desayuno con tamal), **La Chamba** (la loza negra hecha a mano) y **Neiva**, donde todo termina en salidas a ver las estrellas en el desierto de la Tatacoa. Con su sanjuanero, sus seis eventos, su álbum, sus logros y once rutas.
 - **Estaciones con dos productos:** algunas sacan un segundo producto que sigue su propio camino. En el Café del Huila, la cáscara de la cereza va al Secadero y sale como té para Neiva; en la Lechonería, el Desposte saca la carne y el cuero. El Beneficiadero de la Finca hace lo mismo con la pulpa para la Compostera.

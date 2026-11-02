@@ -104,7 +104,7 @@ export function bindDevOptions(game, getActive = () => game) {
   legacy.addEventListener('input', () => {
     if (legacy.value === '') return;
     const s = region();
-    s.legacy = { history: [], ...s.legacy, resets: resets() };
+    s.legacy = { resets: resets() };
     showMult();
   });
   legacy.addEventListener('change', () => {

@@ -119,7 +119,7 @@ test('volver a empezar: todo desde cero, con la producción al doble y los ajust
   const next = restartState(s);
   assert.equal(next.legacy.resets, 2);
   assert.equal(legacyMult(next), 4);
-  assert.deepEqual(next.legacy.history, [{ mult: 2, playTime: 36000, totalEarned: 1e20 }]);
+  assert.equal(next.legacy.history, undefined, 'sin registro de partidas (v4.0)');
   assert.equal(next.coins, 0);
   assert.equal(next.playTime, 0);
   assert.equal(next.mastered, false);
@@ -163,7 +163,7 @@ test('Maestría ×4 con toda la zona al 75 y Supremacía ×8 con toda al 100', a
   assert.equal(speedMult(s, 'farm'), 32);
 });
 
-test('el multiplicador llega hasta ×2⁶⁰: se puede seguir reiniciando, pero ya no se duplica (v3.56, v3.68.3)', async () => {
+test('el multiplicador llega hasta ×2⁶⁰: se puede seguir reiniciando, pero ya no se duplica ni se cuenta (v3.56, v3.68.3, v4.0)', async () => {
   const { nextLegacyMult } = await import('../src/sim/modifiers.js');
   let state = new Game().state;
   for (let k = 0; k < 59; k++) state = restartState(state);
@@ -173,10 +173,8 @@ test('el multiplicador llega hasta ×2⁶⁰: se puede seguir reiniciando, pero 
   assert.equal(legacyMult(state), 2 ** 60);
   assert.equal(nextLegacyMult(state), 2 ** 60, 'ya no se duplica');
   for (let k = 0; k < 8; k++) state = restartState(state);
-  assert.equal(state.legacy.resets, 68, 'los reinicios se siguen contando');
+  assert.equal(state.legacy.resets, 60, 'los reinicios se quedan en el tope (v4.0)');
   assert.equal(legacyMult(state), 2 ** 60);
-  assert.equal(state.legacy.history.at(-1).mult, 2 ** 60);
-  assert.equal(state.legacy.history.length, 68);
   const game = new Game(state);
   run(game, 60);
   assert.ok(Number.isFinite(game.state.coins) && game.state.coins > 0, `monedas: ${game.state.coins}`);
