@@ -3,7 +3,7 @@ import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { analyzeChain, expectedCompostValue } from '../sim/analysis.js';
 import { hasBelt } from '../sim/rules.js';
-import { CHILDREN, PARENT, branchShare, nextToUnlock } from '../sim/chain.js';
+import { BY_CHILDREN, CHILDREN, JOIN_FROM, PARENT, branchShare, chainOf, nextToUnlock } from '../sim/chain.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { pendingRoutes, slowConsumers } from '../sim/transport.js';
@@ -12,6 +12,7 @@ import { saleValue } from '../sim/modifiers.js';
 import { listJoin, t } from '../i18n/index.js';
 
 const outIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].out)[0]].icon;
+const byIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].by)[0]].icon;
 // «la Mesa de chocolate y la Chocolatería»
 const listNames = (ids) => {
   const names = ids.map((id) => withArticle(STATIONS_BY_ID[id].name));
@@ -137,6 +138,17 @@ function detailOf(state, a, rows, sel, zone) {
     const from = ZONES_BY_ID[r.from];
     lines.push(`${t('{p} desde {zone}: llegan {n}/s ({route}).', { p: `${PRODUCTS[imp.product].icon} ${PRODUCTS[imp.product].name}`, zone: `${from.icon} ${from.name}`, n: formatRate(row.imported[imp.product]), route: `${r.icon} ${t('Nv')} ${routeLevel(state, r)}` })}${row.importLimited === r.id ? ` <span class="lost">${t('⏸️ No alcanza: la estación espera.')}</span>` : ''}`);
   }
+  // Lo que junta de otra estación de su zona (v4.0).
+  for (const [product, from] of Object.entries(JOIN_FROM[id] ?? {})) {
+    lines.push(`${t('{p} de {station}: llegan {n}/s.', { p: `${PRODUCTS[product].icon} ${PRODUCTS[product].name}`, station: withArticle(STATIONS_BY_ID[from].name), n: formatRate(row.joined?.[product] ?? 0) })}${row.joinLimited === product ? ` <span class="lost">${t('⏸️ No alcanza: la estación espera.')}</span>` : ''}`);
+  }
+  // Su subproducto, por la canaleta (v4.0).
+  if (row.byOutput !== undefined) {
+    const by = PRODUCTS[Object.keys(def.by)[0]];
+    const kidsBy = BY_CHILDREN[id].filter((c) => rows[c]);
+    lines.push(t('Además saca {n} de {p}, que pasan por la canaleta a {stations}.', { n: `${formatRate(row.byOutput)} ${by.icon}/s`, p: by.name.toLowerCase(), stations: listNames(kidsBy) }));
+    if (row.byLost > 0.005) lines.push(`<span class="lost">${t('🗑️ {n} se desechan: {stations} no da abasto.', { n: `${formatRate(row.byLost)} ${by.icon}/s`, stations: listNames(kidsBy) })}</span>`);
+  }
   // Los arrieros: cuánto llevan y a dónde.
   const kids = [...row.children, ...(PARENT[nextToUnlock(state, zone)] === id ? [nextToUnlock(state, zone)] : [])];
   const route = row.exports?.length ? ` ${t('y {route}', { route: withArticle(ROUTES_BY_ID[row.exports[0]].name) })}` : '';
@@ -213,8 +225,12 @@ const sideText = (state, id) => {
 function diagram(state, a, rows, locked, zone, width, selected) {
   // Las ramas aparte (v3.12: la Compostera) cuelgan de la estación que las habilita.
   const sides = ZONES_BY_ID[zone].plots.map((p) => p.stationId).filter((id) => STATIONS_BY_ID[id].side);
+  // En el árbol, cada estación cuelga de la que le da su entrada principal o su subproducto (v4.0); lo que
+  // junta de otra se dibuja aparte, con un tubo desde esa.
+  const byKids = (id) => (BY_CHILDREN[id] ?? []).filter((c) => rows[c] && chainOf(zone).includes(c));
   const kidsOf = (id) => [
-    ...(rows[id]?.children ?? []),
+    ...(rows[id]?.children ?? []).filter((c) => PARENT[c] === id),
+    ...(rows[id] ? byKids(id) : []),
     ...(locked && PARENT[locked] === id ? [locked] : []),
     ...(rows[id] ? sides.filter((s) => STATIONS_BY_ID[s].requires === id) : []),
   ];
@@ -292,7 +308,18 @@ function diagram(state, a, rows, locked, zone, width, selected) {
       const mid = p.bottom + GAP / 2;
       const kind = !row ? 'locked' : a.bottleneck === `${parent}:transport` || a.bottleneck === id ? 'hot' : 'flow';
       pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${ex} V ${b.top}`, kind);
-      if (row) flow(ex, (mid + b.top) / 2 + (pos[parent].x === pos[id].x ? -GAP / 4 : 0), outIcon(parent), row.incoming, kind === 'hot');
+      const icon = BY_CHILDREN[parent]?.includes(id) ? byIcon(parent) : outIcon(parent);
+      if (row) flow(ex, (mid + b.top) / 2 + (pos[parent].x === pos[id].x ? -GAP / 4 : 0), icon, row.incoming, kind === 'hot');
+    }
+    // Lo que junta de otra estación de su zona (v4.0): otro tubo, que entra por la derecha de la tarjeta.
+    for (const [product, from] of Object.entries(JOIN_FROM[id] ?? {})) {
+      if (!pos[from]) continue;
+      const p = box(from);
+      const ex = b.left + b.w - (b.w < NARROW ? 12 : 18);
+      const mid = Math.max(p.bottom + GAP / 4, b.top - GAP / 2 + 6);
+      const kind = !row || !state.stations[from] ? 'locked' : row.joinLimited === product || a.bottleneck === `${from}:transport` ? 'hot' : 'flow';
+      pipe(`M ${p.cx + 8} ${p.bottom} V ${mid} H ${ex} V ${b.top}`, kind);
+      if (row) flow(ex, (mid + b.top) / 2, PRODUCTS[product].icon, row.joined?.[product] ?? 0, kind === 'hot');
     }
     // Etiquetas de lo que llega de otras zonas, apiladas encima de la estación, a la derecha.
     tagsOf(id).forEach((imp, i) => {
@@ -318,14 +345,14 @@ function diagram(state, a, rows, locked, zone, width, selected) {
       <span class="dg-meta">${t('Nv')} ${state.stations[id].level}</span></button>`);
     // Las que siguen a otra estación (v3.66): una etiqueta 📦 lleva a la bodega y dice cuánto se manda a
     // vender directo (en naranja si es porque la siguiente no da abasto).
-    if (kidsOf(id).length) {
+    if (kidsOf(id).length || row.children.length) {
       const sells = row.diverted > 0.005 ? row.diverted : 0;
       const warn = sells && row.children.length && divertSplit(state, row).extra > 0.005 + row.diverted * 0.02;
       const what = sells ? t('{n} por segundo van directo a la bodega', { n: formatRate(sells) }) : t('Nada va directo a la bodega');
       nodes.push(`<button class="dg-sell ${warn ? 'warn' : ''} ${sells ? '' : 'none'}" data-open="dispatch:${zone}:stock" title="${what}" style="left:${b.left + b.w}px;top:${b.bottom}px">📦${sells ? ` ${formatRate(sells)}` : ''}</button>`);
     }
     // Las que no siguen a otra estación terminan en la bodega.
-    if (!kidsOf(id).length) {
+    if (!kidsOf(id).length && !row.children.length) {
       const busY = bodega.top - GAP / 2;
       pipe(`M ${b.cx} ${b.bottom} V ${busY} H ${total / 2} V ${bodega.top}`, hotLink ? 'hot' : 'flow');
       flow(b.cx, (b.bottom + busY) / 2, outIcon(id), row.output - row.lost, hotLink);

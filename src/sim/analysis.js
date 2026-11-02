@@ -2,7 +2,7 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { RESEARCH } from '../data/research.js';
 import { dispatchRate, maxLevel, stationRate } from './rules.js';
-import { PARENT, branchShare, chainOf, consumers, sourceOf, zoneOf } from './chain.js';
+import { BY_CHILDREN, JOIN_FROM, PARENT, branchShare, chainOf, consumers, joinOf, perCycleOf, sourceOf, zoneOf } from './chain.js';
 import { routeActive, routeRate, routeStations, stationImportRate } from './routes.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { exportsOf, pendingRoutes, teamCapacity } from './transport.js';
@@ -40,17 +40,12 @@ export function analyzeChain(state, zoneId = 'finca', { exports: withExports = t
 function analyze(state, zoneId, withExports, depth, memo) {
   const routes = depth < MAX_ROUTE_DEPTH;
   const ids = chainOf(zoneId).filter((id) => state.stations[id]);
-  const rows = [];
-  let toWarehouse = 0;
-  const flows = []; // { product, units, value, leaf } que llegan a la bodega
-  const byRate = {}; // subproducto que genera cada estación (por s), p. ej. bagazo de la Molienda
-  const allocated = {}; // lo que cada estación recibe de su proveedor (por s)
-  const exported = {}; // producto intermedio guardado para rutas (por s), que va a la bodega sin venderse
 
   // Precio de venta esperado: en la Finca, con el bono del compost que la Compostera puede sostener.
   const compost = zoneId === 'finca' ? expectedCompostValue(state) : 1;
   const value = (pid) => productValue(state, pid) * (PRODUCTS[pid].zone === 'finca' ? compost : 1);
 
+  let byRate = {}; // subproducto que genera cada estación (por s), p. ej. bagazo de la Molienda
   // Ciclos por segundo de una estación, con investigaciones y combustible.
   const cycleRate = (id) => {
     const def = STATIONS_BY_ID[id];
@@ -74,108 +69,160 @@ function analyze(state, zoneId, withExports, depth, memo) {
   // En el tablero de un evento no hay rutas: llega de afuera lo que diga el evento.
   const importOf = (id, imp) =>
     state.event ? supplyFraction(state, imp.product) * cycleRate(id) * imp.perCycle : routes ? flowOf(imp.route) * routeShare(state, imp.route, id) : 0;
-  // Unidades de su entrada principal que puede procesar por segundo (frenada por los importados si faltan).
-  const capacityOf = (id) => {
+  // Una estación que junta dos (v4.0) trabaja al ritmo del que menos llega. La primera pasada supone que le
+  // llega todo; la segunda le pone a cada producto el tope de lo que de verdad alcanza a usar (`limit`), salvo
+  // al que la frena: así lo que le sobra a un proveedor se reparte entre las otras o va a la bodega.
+  let limit = {};
+  // Unidades de `product` (su entrada principal, si no se dice) que puede procesar por segundo (frenada por
+  // los importados si faltan).
+  const capacityOf = (id, product) => {
     const def = STATIONS_BY_ID[id];
-    const need = Object.values(def.in)[0];
+    product ??= Object.keys(def.in)[0];
     let cycles = cycleRate(id);
     for (const imp of def.imports ?? []) cycles = Math.min(cycles, importOf(id, imp) / imp.perCycle);
-    return cycles * need;
+    const l = limit[id];
+    if (l && l.binding !== product) cycles = Math.min(cycles, l.cycles);
+    return cycles * perCycleOf(id, product);
   };
-  // Lo que sale de esta zona por rutas (unidades/s por producto): no pasa por el Willys.
-  const exports = {};
-  if (withExports && routes) {
-    for (const r of ROUTES) if (r.from === zoneId) exports[r.product] = (exports[r.product] ?? 0) + flowOf(r.id);
-  }
 
-  for (const id of ids) {
-    const st = state.stations[id];
-    const def = STATIONS_BY_ID[id];
-    const outId = Object.keys(def.out)[0];
-    const outAmt = def.out[outId];
-    const rate = cycleRate(id);
-    const incoming = def.in ? allocated[id] ?? 0 : null;
-    let capacity;
-    let cycles;
-    if (def.in) {
-      const need = Object.values(def.in)[0];
-      capacity = capacityOf(id);
-      cycles = Math.min(incoming, capacity) / need;
-    } else {
-      // Fuente: ilimitada, o (en el Pueblo) lo que dejan los importados que le llegan.
-      cycles = rate;
-      for (const imp of def.imports ?? []) cycles = Math.min(cycles, importOf(id, imp) / imp.perCycle);
-      capacity = cycles * outAmt;
+  const pass = () => {
+    const rows = [];
+    let toWarehouse = 0;
+    const flows = []; // { product, units, value, leaf } que llegan a la bodega
+    const allocated = {}; // lo que cada estación recibe de su proveedor (por s)
+    const joinedIn = {}; // lo que junta cada estación, por producto (por s)
+    const exported = {}; // producto intermedio guardado para rutas (por s), que va a la bodega sin venderse
+    byRate = {};
+    // Lo que sale de esta zona por rutas (unidades/s por producto): no pasa por el Willys.
+    const exports = {};
+    if (withExports && routes) {
+      for (const r of ROUTES) if (r.from === zoneId) exports[r.product] = (exports[r.product] ?? 0) + flowOf(r.id);
     }
-    const output = cycles * outAmt;
-    if (def.by) byRate[id] = cycles * Object.values(def.by)[0];
 
-    const children = consumers(state, id);
-    // Las rutas que se llevan un producto intermedio cuentan como una rama más (ver transport.exportsOf).
-    const exportsHere = routes ? exportsOf(state, id) : [];
-    const transport = teamCapacity(state, id);
-    const row = { id, incoming, capacity, output, transport, children, exports: exportsHere.map((r) => r.id), next: children[0] ?? null, toNext: 0, diverted: 0, lost: 0 };
-    if (def.imports) {
-      row.imported = {};
-      row.importLimited = null;
-      // La que más frena es la que llega en menor proporción a lo que la estación necesita.
-      let tightest = 1 - LOSS;
-      for (const imp of def.imports) {
-        row.imported[imp.product] = importOf(id, imp);
-        const ratio = row.imported[imp.product] / (rate * imp.perCycle);
-        // En el tablero de un evento no hay rutas que mejorar: lo que llega de afuera no se sube.
-        if (ratio < tightest && !state.event) {
-          tightest = ratio;
-          row.importLimited = imp.route;
+    for (const id of ids) {
+      const def = STATIONS_BY_ID[id];
+      const outId = Object.keys(def.out)[0];
+      const outAmt = def.out[outId];
+      const rate = cycleRate(id);
+      const incoming = def.in ? allocated[id] ?? 0 : null;
+      let capacity;
+      let cycles;
+      let joinLimited = null;
+      if (def.in) {
+        const need = Object.values(def.in)[0];
+        capacity = capacityOf(id);
+        cycles = Math.min(incoming, capacity) / need;
+        // Lo que junta (v4.0): cada producto alcanza para tantos ciclos; el que menos, la frena.
+        for (const j of def.joins ?? []) {
+          const n = (joinedIn[id]?.[j.product] ?? 0) / j.perCycle;
+          if (n < cycles * (1 - LOSS)) joinLimited = j.product;
+          cycles = Math.min(cycles, n);
+        }
+      } else {
+        // Fuente: ilimitada, o (en el Pueblo) lo que dejan los importados que le llegan.
+        cycles = rate;
+        for (const imp of def.imports ?? []) cycles = Math.min(cycles, importOf(id, imp) / imp.perCycle);
+        capacity = cycles * outAmt;
+      }
+      const output = cycles * outAmt;
+      if (def.by) byRate[id] = cycles * Object.values(def.by)[0];
+
+      const children = consumers(state, id);
+      // Las rutas que se llevan un producto intermedio cuentan como una rama más (ver transport.exportsOf).
+      const exportsHere = routes ? exportsOf(state, id) : [];
+      const transport = teamCapacity(state, id);
+      const row = { id, incoming, capacity, output, transport, children, exports: exportsHere.map((r) => r.id), next: children[0] ?? null, toNext: 0, diverted: 0, lost: 0, cycles };
+      if (def.joins) {
+        row.joined = Object.fromEntries(def.joins.map((j) => [j.product, joinedIn[id]?.[j.product] ?? 0]));
+        row.joinLimited = joinLimited;
+      }
+      if (def.imports) {
+        row.imported = {};
+        row.importLimited = null;
+        // La que más frena es la que llega en menor proporción a lo que la estación necesita.
+        let tightest = 1 - LOSS;
+        for (const imp of def.imports) {
+          row.imported[imp.product] = importOf(id, imp);
+          const ratio = row.imported[imp.product] / (rate * imp.perCycle);
+          // En el tablero de un evento no hay rutas que mejorar: lo que llega de afuera no se sube.
+          if (ratio < tightest && !state.event) {
+            tightest = ratio;
+            row.importLimited = imp.route;
+          }
         }
       }
-    }
+      // Subproducto (v4.0): pasa por la canaleta a las estaciones de la zona que lo usan, en proporción a lo
+      // que procesa cada una; lo que no usan se desecha.
+      const byKids = (BY_CHILDREN[id] ?? []).filter((c) => ids.includes(c));
+      if (def.by && byKids.length) {
+        const byId = Object.keys(def.by)[0];
+        const caps = byKids.map((c) => capacityOf(c, byId));
+        const total = caps.reduce((a, b) => a + b, 0);
+        const used = Math.min(byRate[id], total);
+        byKids.forEach((c, k) => (allocated[c] = total > 0 ? (used * caps[k]) / total : 0));
+        row.byOutput = byRate[id];
+        row.byLost = byRate[id] - used;
+      }
 
-    if (children.length) {
-      const caps = children.map((c) => capacityOf(c));
-      const exportCaps = exportsHere.map((r) => Math.min(routeDemandRate(state, r.id), routeRate(state, r.id)));
-      // La parte de una ruta que todavía no abre (v3.67) no es de las ramas: se vende mientras tanto. Así subir
-      // una rama por encima de las demás no parece rendir más (la Cajonera se llevaba lo de la Ruta del
-      // bocadillo antes de abrir el Hato).
-      const reserved = routes && pendingRoutes(state, id).length ? output * Math.max(0, 1 - children.reduce((n, c) => n + branchShare(id, c), 0)) : 0;
-      const childLimit = Math.min(caps.reduce((a, b) => a + b, 0), output - reserved);
-      row.reserved = reserved;
-      const nextCapacity = childLimit + exportCaps.reduce((a, b) => a + b, 0);
-      row.toNext = Math.min(output, transport, nextCapacity);
-      // Primero las rutas (v3.67): lo que piden ya lo cuenta su zona de destino, y la estación les guarda su
-      // parte en la bodega. El resto, a las ramas, en proporción a lo que procesa cada una (las mulas van a la
-      // de la entrada más vacía). Antes todo se repartía en proporción, y subir la estación de aquí (la
-      // Cajonera) parecía rendir más porque le quitaba producto a la ruta.
-      const exportCap = exportCaps.reduce((a, b) => a + b, 0);
-      const toExports = Math.min(row.toNext, exportCap);
-      const childCap = caps.reduce((a, b) => a + b, 0);
-      const toChildren = Math.min(row.toNext - toExports, childLimit);
-      children.forEach((c, k) => (allocated[c] = childCap > 0 ? (toChildren * caps[k]) / childCap : 0));
-      exportsHere.forEach((r, k) => {
-        const units = exportCap > 0 ? (toExports * exportCaps[k]) / exportCap : 0;
-        exported[r.product] = (exported[r.product] ?? 0) + units;
-      });
-      const left = output - row.toNext;
-      // Las mulas que sobran llevan el resto a la bodega (viaje más largo).
-      const free = Math.max(0, 1 - row.toNext / transport);
-      row.diverted = Math.min(left, free * teamCapacity(state, id, 'warehouse'));
-      row.lost = left - row.diverted;
-      row.nextCapacity = nextCapacity;
-    } else {
-      row.diverted = Math.min(output, transport);
-      row.lost = output - row.diverted;
+      if (children.length) {
+        const caps = children.map((c) => capacityOf(c, outId));
+        const exportCaps = exportsHere.map((r) => Math.min(routeDemandRate(state, r.id), routeRate(state, r.id)));
+        // La parte de una ruta que todavía no abre (v3.67) no es de las ramas: se vende mientras tanto. Así subir
+        // una rama por encima de las demás no parece rendir más (la Cajonera se llevaba lo de la Ruta del
+        // bocadillo antes de abrir el Hato).
+        const reserved = routes && pendingRoutes(state, id).length ? output * Math.max(0, 1 - children.reduce((n, c) => n + branchShare(id, c), 0)) : 0;
+        const childLimit = Math.min(caps.reduce((a, b) => a + b, 0), output - reserved);
+        row.reserved = reserved;
+        const nextCapacity = childLimit + exportCaps.reduce((a, b) => a + b, 0);
+        row.toNext = Math.min(output, transport, nextCapacity);
+        // Primero las rutas (v3.67): lo que piden ya lo cuenta su zona de destino, y la estación les guarda su
+        // parte en la bodega. El resto, a las ramas, en proporción a lo que procesa cada una (las mulas van a la
+        // de la entrada más vacía). Antes todo se repartía en proporción, y subir la estación de aquí (la
+        // Cajonera) parecía rendir más porque le quitaba producto a la ruta.
+        const exportCap = exportCaps.reduce((a, b) => a + b, 0);
+        const toExports = Math.min(row.toNext, exportCap);
+        const childCap = caps.reduce((a, b) => a + b, 0);
+        const toChildren = Math.min(row.toNext - toExports, childLimit);
+        children.forEach((c, k) => {
+          const units = childCap > 0 ? (toChildren * caps[k]) / childCap : 0;
+          // A la que junta, lo suyo va aparte de su entrada principal.
+          if (joinOf(c, outId)) (joinedIn[c] ??= {})[outId] = units;
+          else allocated[c] = units;
+        });
+        exportsHere.forEach((r, k) => {
+          const units = exportCap > 0 ? (toExports * exportCaps[k]) / exportCap : 0;
+          exported[r.product] = (exported[r.product] ?? 0) + units;
+        });
+        const left = output - row.toNext;
+        // Las mulas que sobran llevan el resto a la bodega (viaje más largo).
+        const free = Math.max(0, 1 - row.toNext / transport);
+        row.diverted = Math.min(left, free * teamCapacity(state, id, 'warehouse'));
+        row.lost = left - row.diverted;
+        row.nextCapacity = nextCapacity;
+      } else {
+        row.diverted = Math.min(output, transport);
+        row.lost = output - row.diverted;
+      }
+      toWarehouse += row.diverted;
+      let units = row.diverted;
+      // Lo que se lleva la ruta sale primero de lo que la estación le guardó; solo el resto, de los desvíos.
+      if (exports[outId] && exported[outId]) exports[outId] = Math.max(0, exports[outId] - exported[outId]);
+      if (exports[outId]) {
+        const out = Math.min(units, exports[outId]);
+        units -= out;
+        exports[outId] -= out;
+      }
+      flows.push({ product: outId, units, value: value(outId), leaf: !children.length });
+      rows.push(row);
     }
-    toWarehouse += row.diverted;
-    let units = row.diverted;
-    // Lo que se lleva la ruta sale primero de lo que la estación le guardó; solo el resto, de los desvíos.
-    if (exports[outId] && exported[outId]) exports[outId] = Math.max(0, exports[outId] - exported[outId]);
-    if (exports[outId]) {
-      const out = Math.min(units, exports[outId]);
-      units -= out;
-      exports[outId] -= out;
-    }
-    flows.push({ product: outId, units, value: value(outId), leaf: !children.length });
-    rows.push(row);
+    return { rows, toWarehouse, flows, exported };
+  };
+
+  let { rows, toWarehouse, flows, exported } = pass();
+  const joiners = rows.filter((r) => r.joined);
+  if (joiners.length) {
+    limit = Object.fromEntries(joiners.map((r) => [r.id, { cycles: r.cycles, binding: r.joinLimited ?? Object.keys(STATIONS_BY_ID[r.id].in)[0] }]));
+    ({ rows, toWarehouse, flows, exported } = pass());
   }
 
   const dispatch = dispatchRate(state.zones[zoneId].dispatch.level, dispatchMult(state, zoneId)) * jeepCount(state);
@@ -206,6 +253,12 @@ function analyze(state, zoneId, withExports, depth, memo) {
   for (const row of bottleneck ? [] : rows) {
     // (Lo que espera una ruta que todavía no abre no es un faltante: se vende mientras tanto.)
     const shortfall = row.children.length ? row.output - row.toNext - (row.reserved ?? 0) : row.lost;
+    // El subproducto que se desecha porque las que lo usan no dan abasto (v4.0): la más atrasada de ellas.
+    if (shortfall <= row.output * LOSS && row.byLost > row.byOutput * LOSS) {
+      const kids = BY_CHILDREN[row.id].filter((c) => state.stations[c]);
+      bottleneck = kids.reduce((low, c) => (state.stations[c].level < state.stations[low].level ? c : low));
+      break;
+    }
     if (shortfall <= row.output * LOSS) continue;
     bottleneck = row.children.length && row.nextCapacity <= row.transport ? slowestConsumer(state, row.children, rows) : `${row.id}:transport`;
     break;
@@ -236,6 +289,8 @@ export function upgradeLevel(state, id) {
 function slowestConsumer(state, children, rows) {
   for (const c of children) {
     const row = rows.find((r) => r.id === c);
+    // Si espera lo que junta (v4.0), lo que hay que subir es la estación que se lo hace.
+    if (row?.joinLimited) return JOIN_FROM[c][row.joinLimited];
     const route = row?.importLimited;
     if (route && routeRate(state, route) < routeFlow(state, route) * (1 + LOSS) + 1e-9) return `route:${route}`;
   }
@@ -298,7 +353,13 @@ function supplyPath(state, r) {
   const path = [];
   for (const id of chainOf(r.from)) {
     if (!state.stations[id] || Object.keys(STATIONS_BY_ID[id].out)[0] !== r.product) continue;
-    for (let at = id; at; at = PARENT[at]) path.push(at);
+    const walk = (at) => {
+      if (!at || path.includes(at)) return;
+      path.push(at);
+      walk(PARENT[at]);
+      for (const from of Object.values(JOIN_FROM[at] ?? {})) walk(from); // lo que junta (v4.0)
+    };
+    walk(id);
   }
   return path;
 }
