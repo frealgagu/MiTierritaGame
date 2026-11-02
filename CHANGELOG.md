@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v4.0.0 — El Tolima Grande
+- **🌵 El Tolima Grande, la octava región**, se abre al completar Leticia. Seis zonas: **Los Achirales** (los bizcochos de achira de Natagaima), **El Café del Huila** (café especial), **La Represa de Betania** (tilapia ahumada, en escabeche y frita con patacón), **La Lechonería** (lechona tolimense y desayuno con tamal), **La Chamba** (la loza negra hecha a mano) y **Neiva**, donde todo termina en salidas a ver las estrellas en el desierto de la Tatacoa. Con su sanjuanero, sus seis eventos, su álbum, sus logros y once rutas.
+- **Estaciones con dos productos:** algunas sacan un segundo producto que sigue su propio camino. En el Café del Huila, la cáscara de la cereza va al Secadero y sale como té para Neiva; en la Lechonería, el Desposte saca la carne y el cuero. El Beneficiadero de la Finca hace lo mismo con la pulpa para la Compostera.
+- **Estaciones que juntan dos productos de su zona,** sin chivas: el Horno de leña de la Lechonería junta el relleno con el cuero limpio en la lechona. En la cadena 🔗, lo que se junta baja por su propia columna y entra por arriba.
+- **Las regiones de antes también cambian:** el Horno de almojábanas de Paipa junta cuajada y queso; la Quesera saca suero costeño para la bandeja; la Prensa de la Palma saca almendra de palmiste para el hotel de Villavicencio; el Desposte del Hato llanero saca el cuero que ahora curte la Talabartería; y el bagazo de la Cervecería alimenta las vacas de Paipa. Las rutas nuevas arrancan al nivel de la estación que abastecen, para que nadie se frene.
+- **Con todo al máximo no se escapa nada** en ninguna de las ocho regiones: las zonas que no son la última no le venden nada al Willys.
+- **🗺️ El mapa de Colombia tiene zoom:** con dos dedos, la rueda del ratón o los botones ＋ y －, y se arrastra para moverse. Al alejarse de una región se vuelve al país, y de cerca es más fácil tocar Bogotá o Boyacá.
+- **Corregido:** en un evento de otra región, tocar una ruta en la cadena llevaba a una ruta suelta en nivel 1; ahora lleva a la estación que la recibe.
+- 🎧 El sanjuanero también se puede descargar en MP3 y MIDI.
+
 ## v3.72.0 — Un reto por evento
 - **🏅 Cada evento tiene ahora un solo reto**, y los seis de cada región son distintos entre sí: uno pide la cadena completa (vender el producto final), otro un arranque rápido (mucho de un producto temprano), otro una feria de tres ramas, otro dos ramas al tiempo, otro cortar la cadena en un producto intermedio y otro el producto final junto con otra rama. Antes cada evento tenía tres retos que se turnaban y se parecían mucho.
 - **Primero salen los eventos que todavía no tienen oro.** Los que ya lo tienen vuelven a salir cuando todos los demás también lo tengan. Repetir un oro sigue dando su Renombre.
