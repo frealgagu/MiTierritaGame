@@ -1,6 +1,7 @@
 import { createInitialState, SAVE_VERSION } from '../sim/state.js';
 import { createSourceState, createStationState } from '../sim/production.js';
 import { createRouteState } from '../sim/routes.js';
+import { ROUTES } from '../data/routes.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { OFFLINE_BASE_HOURS, OFFLINE_COSTS, OFFLINE_STEP_HOURS } from '../sim/renown.js';
@@ -200,6 +201,12 @@ function migrateProfile(root) {
 function finish(data, base, stations, zones, mules) {
   const routes = {};
   for (const id of Object.keys(base.routes)) routes[id] = { ...createRouteState(), ...data.routes?.[id] };
+  // v4.0: las rutas nuevas de las regiones de antes (el bagazo, el palmiste y los cueros) llevan algo que
+  // ahora necesita una estación que ya se jugaba. Para no frenarla, arrancan al nivel de esa estación.
+  for (const r of ROUTES) {
+    if (r.release !== '4.0' || !routes[r.id] || !data.routes || data.routes[r.id]) continue;
+    routes[r.id].level = Math.max(1, ...r.stations.map((id) => stations[id]?.level ?? 0));
+  }
   // Hasta la v1.0.1 los objetivos de investigación se guardaban con el id de la investigación.
   const OLD_GOAL_IDS = { abono: 'g05', herraduras: 'g12', sello: 'g26' };
   const claimed = (data.goals?.claimed ?? []).map((id) => OLD_GOAL_IDS[id] ?? id);

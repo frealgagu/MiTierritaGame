@@ -121,12 +121,12 @@ export const STATIONS = [
   // entre la Fonda costeña, que lo sirve con el arroz del Arrozal, y la Cocina de la bandeja, que además
   // lleva el pescado de la Ciénaga. Mismos números que el Hato.
   { id: 'milking_corral', zone: 'quesera', name: 'Corral de ordeño', icon: ICON.cebu, infinite: true, out: { ordeno_milk: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.18' },
-  { id: 'curdler', zone: 'quesera', name: 'Cuajadera', icon: ICON.cuajada, in: { ordeno_milk: 2 }, out: { cuajada: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.18' },
+  { id: 'curdler', zone: 'quesera', name: 'Cuajadera', icon: ICON.cuajada, in: { ordeno_milk: 2 }, out: { cuajada: 1 }, by: { suero_costeno: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.18' },
   { id: 'curd_mill', zone: 'quesera', name: 'Molino de cuajada', icon: ICON.saltedCurd, in: { cuajada: 1 }, out: { salted_curd: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.18' },
   { id: 'cheese_press', zone: 'quesera', name: 'Prensa de queso', icon: ICON.quesoCosteno, in: { salted_curd: 1 }, out: { queso_costeno: 1 }, cycle: 4, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '3.18' },
   { id: 'mote_pot', zone: 'quesera', name: 'Olla del mote', icon: ICON.moteQueso, in: { queso_costeno: 2 }, out: { mote_queso: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '3.18' },
   { id: 'costeno_fonda', zone: 'quesera', name: 'Fonda costeña', icon: ICON.almuerzoCosteno, in: { mote_queso: 2 }, imports: [{ product: 'rice_bag', perCycle: 1, route: 'arroz' }], out: { almuerzo_costeno: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.18' },
-  { id: 'bandeja_kitchen', zone: 'quesera', name: 'Cocina de la bandeja', icon: ICON.bandejaCostena, in: { mote_queso: 2 }, imports: [{ product: 'rice_bag', perCycle: 1, route: 'arroz' }, { product: 'clean_fish', perCycle: 4, route: 'pescado' }], out: { bandeja_costena: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.18' },
+  { id: 'bandeja_kitchen', zone: 'quesera', name: 'Cocina de la bandeja', icon: ICON.bandejaCostena, in: { mote_queso: 2 }, joins: [{ product: 'suero_costeno', perCycle: 8, from: 'curdler' }], imports: [{ product: 'rice_bag', perCycle: 1, route: 'arroz' }, { product: 'clean_fish', perCycle: 4, route: 'pescado' }], out: { bandeja_costena: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.18' },
 
   // Costa · El Sombrero (v3.19), en Tuchín y San Andrés de Sotavento, tierra zenú: la caña flecha se raspa,
   // la fibra se tiñe de negro con barro y bija, se trenza y la trenza se cose en vueltas hasta el sombrero
@@ -164,7 +164,7 @@ export const STATIONS = [
   // Mismos números que el Tabacal y el Cocal.
   { id: 'barley_field', zone: 'cerveceria', name: 'Cebadal', icon: ICON.barleyPlant, infinite: true, out: { barley: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.23' },
   { id: 'maltings', zone: 'cerveceria', name: 'Maltería', icon: ICON.malt, in: { barley: 1 }, out: { malt: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.23' },
-  { id: 'brew_kettle', zone: 'cerveceria', name: 'Paila de cocción', icon: ICON.wort, in: { malt: 2 }, out: { wort: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.23' },
+  { id: 'brew_kettle', zone: 'cerveceria', name: 'Paila de cocción', icon: ICON.wort, in: { malt: 2 }, out: { wort: 1 }, by: { bagazo_cervecero: 8 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.23' },
   { id: 'fermenters', zone: 'cerveceria', name: 'Tanques de fermentación', icon: ICON.beer, in: { wort: 2 }, out: { beer: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.23' },
   { id: 'bottler', zone: 'cerveceria', name: 'Embotelladora', icon: ICON.beerCrate, in: { beer: 1 }, out: { beer_crate: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.23' },
 
@@ -182,7 +182,7 @@ export const STATIONS = [
   // madura en la cava (el queso Paipa), y con el queso se hacen almojábanas. Las almojábanas se reparten entre
   // la Mesa del piquete, que las sirve con las papitas del Papal, y el Horno de barro, que hace la canasta de
   // amasijos y se mantiene con el barro de Ráquira. Mismos números que el Hato y la Quesera.
-  { id: 'paipa_herd', zone: 'paipa', name: 'Hato lechero', icon: ICON.rawMilk, infinite: true, out: { paipa_milk: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.25' },
+  { id: 'paipa_herd', zone: 'paipa', name: 'Hato lechero', icon: ICON.rawMilk, imports: [{ product: 'bagazo_cervecero', perCycle: 5, route: 'bagazo' }], out: { paipa_milk: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.25' },
   { id: 'paipa_curdler', zone: 'paipa', name: 'Cuajadera de Paipa', icon: ICON.cuajada, in: { paipa_milk: 2 }, out: { paipa_curd: 2 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.25' },
   { id: 'cheese_molds', zone: 'paipa', name: 'Moldes de queso', icon: ICON.moldedCheese, in: { paipa_curd: 1 }, out: { molded_cheese: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.25' },
   { id: 'cheese_cave', zone: 'paipa', name: 'Cava de maduración', icon: ICON.quesoPaipa, in: { molded_cheese: 1 }, out: { queso_paipa: 1 }, cycle: 4, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '3.25' },
@@ -215,7 +215,7 @@ export const STATIONS = [
   { id: 'palm_grove', zone: 'palma', name: 'Palmar', icon: ICON.oilPalm, infinite: true, out: { palm_bunch: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.31' },
   { id: 'bunch_thresher', zone: 'palma', name: 'Desgranadora', icon: ICON.palmFruit, in: { palm_bunch: 2 }, out: { palm_fruit: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.31' },
   { id: 'fruit_sterilizer', zone: 'palma', name: 'Esterilizador', icon: ICON.cookedFruit, in: { palm_fruit: 1 }, out: { cooked_fruit: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.31' },
-  { id: 'palm_press', zone: 'palma', name: 'Prensa de aceite', icon: '🛢️', in: { cooked_fruit: 1 }, out: { crude_oil: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.31' },
+  { id: 'palm_press', zone: 'palma', name: 'Prensa de aceite', icon: '🛢️', in: { cooked_fruit: 1 }, out: { crude_oil: 1 }, by: { palmiste: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '3.31' },
   { id: 'oil_clarifier', zone: 'palma', name: 'Clarificador', icon: ICON.palmOil, in: { crude_oil: 4 }, out: { palm_oil: 3 }, cycle: 16, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '3.31' },
   { id: 'oil_bottler', zone: 'palma', name: 'Envasadora', icon: ICON.oilBottle, in: { palm_oil: 1 }, out: { oil_bottle: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.31' },
   { id: 'oil_boxer', zone: 'palma', name: 'Cajonera de aceite', icon: ICON.oilBox, in: { oil_bottle: 4 }, out: { oil_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.31' },
@@ -244,7 +244,7 @@ export const STATIONS = [
   // el aceite de la Palma, y el Asadero de la parranda, que además asa la cachama de la Cachamera. Mismos números
   // que el Hato, la Quesera y Paipa.
   { id: 'llanero_herd', zone: 'hato_llanero', name: 'Sabana del hato', icon: ICON.cebu, infinite: true, out: { llanero_steer: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.34' },
-  { id: 'llanero_butcher', zone: 'hato_llanero', name: 'Desposte', icon: '🥩', in: { llanero_steer: 2 }, out: { ternera: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.34' },
+  { id: 'llanero_butcher', zone: 'hato_llanero', name: 'Desposte', icon: '🥩', in: { llanero_steer: 2 }, out: { ternera: 1 }, by: { fresh_hide: 2 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.34' },
   { id: 'adobadero', zone: 'hato_llanero', name: 'Adobadero', icon: ICON.adobada, in: { ternera: 1 }, out: { ternera_adobada: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.34' },
   { id: 'vara_grill', zone: 'hato_llanero', name: 'Asador de vara', icon: ICON.mamona, in: { ternera_adobada: 1 }, out: { mamona: 1 }, cycle: 4, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '3.34' },
   { id: 'carving_table', zone: 'hato_llanero', name: 'Trinchadora', icon: ICON.carneLlanera, in: { mamona: 2 }, out: { carne_llanera: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '3.34' },
@@ -254,7 +254,7 @@ export const STATIONS = [
   // Los Llanos · La Talabartería (v3.35): el cuero crudo se curte, se corta, se repuja y se vuelve silla de montar.
   // La Tienda llanera vende el Recuerdo del Llano: sillas con el pisillo y la cachama ahumada de la Cachamera para
   // el camino. Mismos números que las Hormigas, el Sombrero y Las Ruanas.
-  { id: 'hide_yard', zone: 'talabarteria', name: 'Saladero de cueros', icon: ICON.rawHide, infinite: true, out: { raw_hide: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.35' },
+  { id: 'hide_yard', zone: 'talabarteria', name: 'Saladero de cueros', icon: ICON.rawHide, imports: [{ product: 'fresh_hide', perCycle: 1, route: 'cueros' }], out: { raw_hide: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.35' },
   { id: 'tannery', zone: 'talabarteria', name: 'Curtiembre', icon: ICON.leather, in: { raw_hide: 1 }, out: { tanned_leather: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.35' },
   { id: 'leather_cutter', zone: 'talabarteria', name: 'Cortadora de cuero', icon: ICON.leatherPieces, in: { tanned_leather: 2 }, out: { leather_pieces: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.35' },
   { id: 'leather_tooler', zone: 'talabarteria', name: 'Repujado', icon: ICON.tooledLeather, in: { leather_pieces: 2 }, out: { tooled_leather: 1 }, cycle: 8, unlockCost: 200000000, upgradeBase: 60000, growth: 1.15, release: '3.35' },
@@ -266,7 +266,7 @@ export const STATIONS = [
   // la excursión a Caño Cristales.
   { id: 'empanaderia', zone: 'villavicencio', name: 'Empanadería', icon: ICON.empanadas, imports: [{ product: 'oil_box', perCycle: 1, route: 'cajas_aceite' }], out: { empanadas: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.36' },
   { id: 'kiosco_parque', zone: 'villavicencio', name: 'Kiosco del parque', icon: ICON.tardeParque, in: { empanadas: 1 }, imports: [{ product: 'juice_box', perCycle: 4, route: 'cajas_jugos' }], out: { tarde_parque: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.36' },
-  { id: 'hotel_campestre', zone: 'villavicencio', name: 'Hotel campestre', icon: ICON.nocheVillavo, in: { tarde_parque: 2 }, imports: [{ product: 'recuerdo_llano', perCycle: 1, route: 'recuerdos_llano' }], out: { noche_villavo: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.36' },
+  { id: 'hotel_campestre', zone: 'villavicencio', name: 'Hotel campestre', icon: ICON.nocheVillavo, in: { tarde_parque: 2 }, imports: [{ product: 'recuerdo_llano', perCycle: 1, route: 'recuerdos_llano' }, { product: 'palmiste', perCycle: 8, route: 'palmiste' }], out: { noche_villavo: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.36' },
   { id: 'plaza_mercado', zone: 'villavicencio', name: 'Plaza de mercado', icon: ICON.almuerzoPlaza, in: { empanadas: 1 }, imports: [{ product: 'cachama_maracuya', perCycle: 1, route: 'platos_cachama' }], out: { almuerzo_plaza: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '3.36' },
   { id: 'morrales_viaje', zone: 'villavicencio', name: 'Morrales del viaje', icon: ICON.fiambreViaje, in: { almuerzo_plaza: 1 }, imports: [{ product: 'almuerzo_llanero', perCycle: 1, route: 'almuerzos_llaneros' }, { product: 'parranda_llanera', perCycle: 1, route: 'parrandas' }], out: { fiambre_viaje: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.36' },
   { id: 'salida_cano', zone: 'villavicencio', name: 'Salida a Caño Cristales', icon: ICON.canoCristales, in: { fiambre_viaje: 4 }, out: { excursion_cano: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.36' },

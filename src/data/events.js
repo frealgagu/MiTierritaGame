@@ -478,14 +478,14 @@ export const EVENTS = [
     stations: ['paipa_herd', 'paipa_curdler', 'cheese_molds', 'cheese_cave', 'almojabana_oven', 'piquete_table', 'clay_oven'],
     level: 10,
     coins: 1000000,
-    supply: { criollas_bag: 0, barro: 1 },
+    supply: { criollas_bag: 0, barro: 1, bagazo_cervecero: 1 },
     stock: { criollas_bag: 60 },
     actions: [
       { id: 'obras_mulas', icon: '🐴', name: 'Mulas por la trocha', desc: 'Unas mulas pasan por la trocha: llega una cuarta parte de las papitas.', cost: 1000000, effect: { type: 'supply', product: 'criollas_bag', fraction: 0.25 } },
       { id: 'obras_carril', icon: '🚦', name: 'Paso a un carril', desc: 'Los carros pasan por turnos: llega el 60 % de las papitas.', cost: 3000000, effect: { type: 'supply', product: 'criollas_bag', fraction: 0.6 } },
       { id: 'obras_via', icon: '🛣️', name: 'Vía nueva', desc: 'Con la carretera terminada, las papitas vuelven a llegar todas.', cost: 8000000, effect: { type: 'supply', product: 'criollas_bag', fraction: 1 } },
     ],
-    objective: { type: 'ramas', kind: 'produced', items: { piquete: 100, canasta_amasijos: 100 }, medals: [615, 915] },
+    objective: { type: 'ramas', kind: 'produced', items: { piquete: 100, canasta_amasijos: 100 }, medals: [630, 930] },
   },
   {
     id: 'heladas',
@@ -622,7 +622,7 @@ export const EVENTS = [
     stations: ['hide_yard', 'tannery', 'leather_cutter', 'leather_tooler', 'saddler', 'tienda_llanera'],
     level: 10,
     coins: 2500000,
-    supply: { pisillo: 1, smoked_cachama: 1 },
+    supply: { pisillo: 1, smoked_cachama: 1, fresh_hide: 1 },
     speed: { saddler: 0.4 },
     actions: [
       { id: 'coleo_aprendices', icon: ICON.leatherPieces, name: 'Aprendices', desc: 'Unos muchachos aprenden el oficio: del 40 al 60 %.', cost: 2500000, effect: { type: 'stationSpeed', target: 'saddler', mult: 1.5 } },
@@ -643,7 +643,7 @@ export const EVENTS = [
     stations: ['empanaderia', 'kiosco_parque', 'hotel_campestre', 'plaza_mercado', 'morrales_viaje', 'salida_cano'],
     level: 10,
     coins: 20000000,
-    supply: { oil_box: 1, juice_box: 1, recuerdo_llano: 1, cachama_maracuya: 1, almuerzo_llanero: 1, parranda_llanera: 1 },
+    supply: { oil_box: 1, juice_box: 1, recuerdo_llano: 1, cachama_maracuya: 1, almuerzo_llanero: 1, parranda_llanera: 1, palmiste: 1 },
     speed: { salida_cano: 0.4 },
     actions: [
       { id: 'joropo_guias', icon: '🧭', name: 'Guías de La Macarena', desc: 'Llegan guías de La Macarena: del 40 al 60 %.', cost: 20000000, effect: { type: 'stationSpeed', target: 'salida_cano', mult: 1.5 } },

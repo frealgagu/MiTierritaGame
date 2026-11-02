@@ -38,6 +38,8 @@ export const ZONE30 = {
     almuerzos_llaneros: { road: [[25.9, 8.5], [16.2, 8.5]], sign: [24.6, 7.6], text: '⬅ Almuerzos del Hato' },
     recuerdos_llano: { road: [[6.5, 25.9], [6.5, 11.2]], sign: [5.3, 23.6], text: 'Sillas de la Talabartería ⬆' },
     platos_cachama: { road: [[12.5, 25.9], [12.5, 15.2]], sign: [11.3, 23.6], text: 'Cachama ⬆' },
+    // La almendra de palmiste de la Palma, para el Hotel campestre (v4.0).
+    palmiste: { road: [[4.5, 25.9], [4.5, 11.2]], sign: [3.3, 21.6], text: 'Palmiste ⬆' },
   },
   unlockedBy: 'talabarteria',
   next: null, // la última de los Llanos

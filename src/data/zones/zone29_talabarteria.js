@@ -34,6 +34,8 @@ export const ZONE29 = {
     ahumadas: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Cachama ahumada' },
     // Los recuerdos salen hacia Villavicencio (v3.36).
     recuerdos_llano: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'A Villavicencio ➜' },
+    // Los cueros del Hato llanero, para el Saladero (v4.0).
+    cueros: { road: [[25.9, 1.5], [7.6, 1.5]], sign: [24.2, 0.4], text: '⬅ Cueros del Hato' },
   },
   unlockedBy: 'hato_llanero',
   next: 'villavicencio',
