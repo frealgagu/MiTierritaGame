@@ -210,6 +210,7 @@ function divertNote(state, row, icon) {
 const NODE_H = 62;
 const GAP = 46; // espacio vertical para los eslabones (y lo que pasa por ellos)
 const TAG_H = 26; // alto de cada etiqueta de importación
+const JOIN_W = 22; // lo que se angostan esas etiquetas si además le llega algo que junta (v4.0)
 const MIN_COL = 98;
 const NARROW = 118; // más angostas que esto, la tarjeta pone el ícono arriba y el nombre abajo
 
@@ -225,15 +226,35 @@ const sideText = (state, id) => {
 function diagram(state, a, rows, locked, zone, width, selected) {
   // Las ramas aparte (v3.12: la Compostera) cuelgan de la estación que las habilita.
   const sides = ZONES_BY_ID[zone].plots.map((p) => p.stationId).filter((id) => STATIONS_BY_ID[id].side);
-  // En el árbol, cada estación cuelga de la que le da su entrada principal o su subproducto (v4.0); lo que
-  // junta de otra se dibuja aparte, con un tubo desde esa.
-  const byKids = (id) => (BY_CHILDREN[id] ?? []).filter((c) => rows[c] && chainOf(zone).includes(c));
-  const kidsOf = (id) => [
-    ...(rows[id]?.children ?? []).filter((c) => PARENT[c] === id),
-    ...(rows[id] ? byKids(id) : []),
-    ...(locked && PARENT[locked] === id ? [locked] : []),
-    ...(rows[id] ? sides.filter((s) => STATIONS_BY_ID[s].requires === id) : []),
-  ];
+  // En el árbol, cada estación cuelga de la que le da su entrada principal o su subproducto (v4.0). Lo que una
+  // estación junta de otra (v4.0) baja por su propia columna, un carril (`lane:<la que junta>`) que cuelga de la
+  // que lo hace, y entra por arriba, junto al camino principal.
+  const byKids = (id) => (BY_CHILDREN[id] ?? []).filter((c) => rows[c] && PARENT[c] === id && chainOf(zone).includes(c));
+  const lanes = (id) => (rows[id] ? Object.keys(JOIN_FROM).filter((j) => rows[j] && Object.values(JOIN_FROM[j]).includes(id)).map((j) => `lane:${j}`) : []);
+  const rawKids = (id) =>
+    id.startsWith('lane:')
+      ? []
+      : [
+          ...(rows[id]?.children ?? []).filter((c) => PARENT[c] === id),
+          ...(rows[id] ? byKids(id) : []),
+          ...(locked && PARENT[locked] === id ? [locked] : []),
+          ...(rows[id] ? sides.filter((s) => STATIONS_BY_ID[s].requires === id) : []),
+          ...lanes(id),
+        ];
+  const under = (id) => [id, ...rawKids(id).flatMap(under)];
+  // La rama que lleva lo que se junta va justo a la derecha de la rama donde está la que lo junta: así el carril
+  // queda al lado y no cruza otras ramas.
+  const kidsOf = (id) => {
+    const kids = rawKids(id);
+    for (const k of [...kids]) {
+      const joins = under(k).filter((x) => x.startsWith('lane:')).map((x) => x.slice(5));
+      const host = kids.find((m) => m !== k && joins.some((j) => under(m).includes(j)));
+      if (!host) continue;
+      kids.splice(kids.indexOf(k), 1);
+      kids.splice(kids.indexOf(host) + 1, 0, k);
+    }
+    return kids;
+  };
   // Columnas: cada hoja una, cada estación centrada sobre sus ramas.
   const pos = {};
   let leaf = 0;
@@ -251,7 +272,7 @@ function diagram(state, a, rows, locked, zone, width, selected) {
   const colW = Math.max(MIN_COL, Math.floor((width - 4) / cols));
   const total = colW * cols;
   const widthOf = (id) => Math.min(pos[id].span * colW - 12, 210);
-  const ids = Object.keys(pos);
+  const ids = Object.keys(pos).filter((id) => !id.startsWith('lane:'));
   const depthMax = Math.max(...ids.map((id) => pos[id].depth));
   // Cada fila deja arriba el alto de las etiquetas de importación que tenga.
   const tagsOf = (id) => STATIONS_BY_ID[id].imports ?? [];
@@ -311,17 +332,20 @@ function diagram(state, a, rows, locked, zone, width, selected) {
       const icon = BY_CHILDREN[parent]?.includes(id) ? byIcon(parent) : outIcon(parent);
       if (row) flow(ex, (mid + b.top) / 2 + (pos[parent].x === pos[id].x ? -GAP / 4 : 0), icon, row.incoming, kind === 'hot');
     }
-    // Lo que junta de otra estación de su zona (v4.0): otro tubo, que entra por la derecha de la tarjeta.
+    // Lo que junta de otra estación de su zona (v4.0): baja por su carril, a la derecha, y entra por arriba.
     for (const [product, from] of Object.entries(JOIN_FROM[id] ?? {})) {
-      if (!pos[from]) continue;
-      // Sale por la derecha de la que lo hace, baja por fuera de las tarjetas y entra por la derecha de esta.
+      const lane = pos[`lane:${id}`];
+      if (!pos[from] || !lane) continue;
       const p = box(from);
-      const x = Math.min(total - 3, Math.max(p.left + p.w, b.left + b.w) + 5);
-      const y0 = p.top + NODE_H / 2;
-      const y1 = b.top + NODE_H / 2;
-      const kind = !row || !state.stations[from] ? 'locked' : row.joinLimited === product || a.bottleneck === `${from}:transport` ? 'hot' : 'flow';
-      pipe(`M ${p.left + p.w} ${y0} H ${x} V ${y1} H ${b.left + b.w}`, kind);
-      if (row) flow(x, (y0 + y1) / 2, PRODUCTS[product].icon, row.joined?.[product] ?? 0, kind === 'hot');
+      const lx = (lane.x + 0.5) * colW;
+      // Con etiquetas de importados encima, entra por la orilla derecha, al lado de ellas (que se angostan).
+      const tags = tagsOf(id).length;
+      const ex = tags ? b.left + b.w - JOIN_W / 2 : b.left + b.w * 0.78;
+      const mid = p.bottom + GAP / 2;
+      const turn = b.top - tags * TAG_H - GAP / 2 + 9;
+      const kind = !row ? 'locked' : row.joinLimited === product || a.bottleneck === `${from}:transport` ? 'hot' : 'flow';
+      pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${lx} V ${turn} H ${ex} V ${b.top}`, kind);
+      if (row) flow(lx, (mid + turn) / 2, PRODUCTS[product].icon, row.joined?.[product] ?? 0, kind === 'hot');
     }
     // Etiquetas de lo que llega de otras zonas, apiladas encima de la estación, a la derecha.
     tagsOf(id).forEach((imp, i) => {
@@ -332,7 +356,7 @@ function diagram(state, a, rows, locked, zone, width, selected) {
       const left = b.left + (b.w < NARROW ? 22 : 32);
       const hot = a.bottleneck === `route:${r.id}` || row?.importLimited === r.id;
       const arriving = row?.imported?.[imp.product] ?? 0;
-      nodes.push(`<button class="dg-tag ${hot ? 'hot' : ''} ${sel(`route:${r.id}`)}" data-pick="route:${r.id}" title="${t('{p} desde {zone}', { p: PRODUCTS[imp.product].name, zone: from.name })}" style="left:${left}px;top:${top + 2}px;width:${b.w - (b.w < NARROW ? 22 : 32)}px">
+      nodes.push(`<button class="dg-tag ${hot ? 'hot' : ''} ${sel(`route:${r.id}`)}" data-pick="route:${r.id}" title="${t('{p} desde {zone}', { p: PRODUCTS[imp.product].name, zone: from.name })}" style="left:${left}px;top:${top + 2}px;width:${b.w - (b.w < NARROW ? 22 : 32) - (JOIN_FROM[id] ? JOIN_W : 0)}px">
         ${PRODUCTS[imp.product].icon} <span>${row ? formatRate(arriving) : from.icon}</span></button>`);
       if (i === n - 1) pipe(`M ${left + 10} ${top + TAG_H - 2} V ${b.top}`, hot ? 'hot' : row ? 'import' : 'locked');
     });
