@@ -158,4 +158,6 @@ export default {
   '{p} de {station}: llegan {n}/s.': '{p} from {station}: {n}/s arrive.',
   'Además saca {n} de {p}, que pasan por la canaleta a {stations}.': 'It also yields {n} of {p}, which flow down the chute to {stations}.',
   '🗑️ {n} se desechan: {stations} no da abasto.': '🗑️ {n} are thrown away: {stations} can’t keep up.',
+  'Acercar': 'Zoom in',
+  'Alejar': 'Zoom out',
 };

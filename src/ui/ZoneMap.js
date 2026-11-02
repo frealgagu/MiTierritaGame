@@ -13,14 +13,17 @@ import { FONT } from '../render/palette.js';
 import { t } from '../i18n/index.js';
 
 const NS = 'http://www.w3.org/2000/svg';
-const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a' };
+const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a', tolima: '#e39b6a' };
 const LAND = '#e8dcc3'; // los departamentos que no son de ninguna región del juego
 const LOCKED = '#cfc6b4'; // las regiones que todavía no se abren
 const ZOOM_MS = 650;
+// Zoom a mano (v4.0): con dos dedos o la rueda del ratón, y arrastrando se mueve. MIN_W: lo más cerca (el ancho de
+// lo que se ve, en unidades del mapa). Al alejarse lo suficiente de una región se vuelve al país.
+const MIN_W = 24;
+const DRAG_PX = 6; // lo que se mueve el dedo antes de que cuente como arrastrar (y no como toque)
 const PEEK_MS = 800; // al abrir el mapa, cuánto se ve el país antes de acercarse a la región donde se está
 // Las regiones que vienen (v3.67), en los departamentos que todavía no son de ninguna: «Próximamente».
 const SOON = [
-  { id: 'tolima', name: t('Tolima Grande'), icon: '🎺', depts: ['Tolima', 'Huila'], color: '#efd9c0' },
   { id: 'bogota', name: t('Bogotá y la Sabana'), icon: '🏛️', depts: ['Cundinamarca', 'Bogotá'], color: '#e3d6ea' },
 ];
 const SOON_OF = Object.fromEntries(SOON.flatMap((r) => r.depts.map((d) => [d, r])));
@@ -46,6 +49,7 @@ const viewOf = (b, pad) => ({ x: b.x0 - pad, y: b.y0 - pad, w: b.x1 - b.x0 + pad
 
 const DEPT_BOX = Object.fromEntries(DEPARTMENTS.map((d) => [d.id, pathBox(d.d)]));
 const COUNTRY = union(Object.values(DEPT_BOX));
+const COUNTRY_VIEW = viewOf(COUNTRY, 12);
 const REGION_BOX = Object.fromEntries(REGIONS.map((r) => [r.id, union(DEPARTMENTS.filter((d) => d.region === r.id).map((d) => DEPT_BOX[d.id]))]));
 const SOON_BOX = Object.fromEntries(SOON.map((r) => [r.id, union(DEPARTMENTS.filter((d) => r.depts.includes(d.name)).map((d) => DEPT_BOX[d.id]))]));
 
@@ -105,7 +109,26 @@ export class ZoneMap {
     this.back.hidden = true;
     this.back.addEventListener('click', () => !this.busy && this.zoomTo(null));
     this.svg = el('svg', { class: 'zones-map-svg', preserveAspectRatio: 'xMidYMid meet' });
-    container.append(this.back, this.svg);
+    // ＋ y －, para acercarse sin dos dedos ni rueda.
+    this.zoomBtns = document.createElement('div');
+    this.zoomBtns.className = 'zones-map-zoom';
+    for (const [label, k, title] of [['＋', 0.6, t('Acercar')], ['－', 1 / 0.6, t('Alejar')]]) {
+      const b = document.createElement('button');
+      b.className = 'btn small';
+      b.textContent = label;
+      b.title = title;
+      b.setAttribute('aria-label', title);
+      b.addEventListener('click', () => this.zoomBy(k));
+      this.zoomBtns.append(b);
+    }
+    container.append(this.back, this.zoomBtns, this.svg);
+    this.pointers = new Map();
+    this.svg.addEventListener('pointerdown', (e) => this.down(e));
+    window.addEventListener('pointermove', (e) => this.move(e));
+    for (const ev of ['pointerup', 'pointercancel']) window.addEventListener(ev, (e) => this.up(e));
+    this.svg.addEventListener('wheel', (e) => this.wheel(e), { passive: false });
+    // Tras arrastrar o pellizcar, el toque no elige nada.
+    this.svg.addEventListener('click', (e) => this.dragged && (e.stopPropagation(), e.preventDefault()), true);
     this.depts = el('g', {}, this.svg);
     this.paths = DEPARTMENTS.map((d) => {
       const p = el('path', { d: d.d, class: 'zones-map-dept' }, this.depts);
@@ -162,14 +185,144 @@ export class ZoneMap {
     this.svg.setAttribute('viewBox', `${v.x} ${v.y} ${v.w} ${v.h}`);
   }
 
-  // Se acerca a una región (o se aleja al país) en un movimiento suave.
-  async zoomTo(regionId) {
+  // ---------- Zoom a mano (v4.0) ----------
+  // Un punto de la pantalla en unidades del mapa.
+  toMap(x, y) {
+    const m = this.svg.getScreenCTM();
+    if (!m) return [this.vb.x + this.vb.w / 2, this.vb.y + this.vb.h / 2];
+    const p = new DOMPoint(x, y).matrixTransform(m.inverse());
+    return [p.x, p.y];
+  }
+
+  // Unidades del mapa por pixel de pantalla.
+  unitsPerPx() {
+    const m = this.svg.getScreenCTM();
+    return m ? 1 / m.a : this.vb.w / (this.svg.clientWidth || 1);
+  }
+
+  // Acerca (k < 1) o aleja (k > 1) alrededor del punto (cx, cy) del mapa, sin pasar de lo más cerca ni de todo el país.
+  zoomAt(cx, cy, k) {
+    const v = this.vb;
+    const w = Math.min(COUNTRY_VIEW.w, Math.max(MIN_W, v.w * k));
+    const f = w / v.w;
+    this.vb = { x: cx - (cx - v.x) * f, y: cy - (cy - v.y) * f, w, h: v.h * f };
+    this.clampView();
+    this.applyView();
+    this.redraw();
+    // Desde una región, alejarse lo suficiente vuelve al país (como «⬅ Colombia»).
+    if (this.region && k > 1) {
+      const out = Math.min(COUNTRY_VIEW.w, Math.max(ZONES_VIEW[this.region].w * 1.35, COUNTRY_VIEW.w * 0.6));
+      if (this.vb.w >= out - 1e-6) {
+        this.highlight = this.region;
+        this.zoomTo(null);
+      }
+    }
+  }
+
+  // Mover lo que se ve (en unidades del mapa), sin que el país se salga del todo.
+  panBy(dx, dy) {
+    this.vb = { ...this.vb, x: this.vb.x + dx, y: this.vb.y + dy };
+    this.clampView();
+    this.applyView();
+  }
+
+  clampView() {
+    const v = this.vb;
+    const cx = Math.min(COUNTRY.x1, Math.max(COUNTRY.x0, v.x + v.w / 2));
+    const cy = Math.min(COUNTRY.y1, Math.max(COUNTRY.y0, v.y + v.h / 2));
+    this.vb = { ...v, x: cx - v.w / 2, y: cy - v.h / 2 };
+  }
+
+  // Las marcas y los nombres se vuelven a dibujar del tamaño de siempre (una vez por cuadro).
+  redraw() {
+    if (this.redrawing) return;
+    this.redrawing = true;
+    requestAnimationFrame(() => {
+      this.redrawing = false;
+      if (!this.busy && !this.animating) this.drawOverlay();
+    });
+  }
+
+  canTouch() {
+    return !this.busy && !this.animating;
+  }
+
+  // Los botones ＋ y －: alrededor del centro, con un movimiento suave.
+  async zoomBy(k) {
+    if (!this.canTouch()) return;
+    clearTimeout(this.peek);
+    const v = this.vb;
+    const w = Math.min(COUNTRY_VIEW.w, Math.max(MIN_W, v.w * k));
+    if (Math.abs(w - v.w) < 1e-6) return;
+    const out = this.region && k > 1 ? Math.min(COUNTRY_VIEW.w, Math.max(ZONES_VIEW[this.region].w * 1.35, COUNTRY_VIEW.w * 0.6)) : Infinity;
+    if (w >= out - 1e-6) {
+      this.highlight = this.region;
+      return this.zoomTo(null);
+    }
+    const f = w / v.w;
+    const cx = v.x + v.w / 2;
+    const cy = v.y + v.h / 2;
+    await this.animate({ x: cx - (v.w * f) / 2, y: cy - (v.h * f) / 2, w, h: v.h * f });
+    this.clampView();
+    this.applyView();
+    this.drawOverlay();
+  }
+
+  down(e) {
+    if (!this.canTouch()) return;
+    clearTimeout(this.peek);
+    if (!this.pointers.size) {
+      this.dragged = false;
+      this.travelled = 0;
+    }
+    this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  }
+
+  move(e) {
+    const p = this.pointers.get(e.pointerId);
+    if (!p || !this.canTouch()) return;
+    const pts = [...this.pointers.values()];
+    if (pts.length >= 2) {
+      // Dos dedos: acerca o aleja según se juntan o se separan, alrededor del punto medio, y lo arrastra.
+      const [a, b] = pts;
+      const before = { mid: [(a.x + b.x) / 2, (a.y + b.y) / 2], dist: Math.hypot(a.x - b.x, a.y - b.y) };
+      p.x = e.clientX;
+      p.y = e.clientY;
+      const after = { mid: [(a.x + b.x) / 2, (a.y + b.y) / 2], dist: Math.hypot(a.x - b.x, a.y - b.y) };
+      this.dragged = true;
+      const u = this.unitsPerPx();
+      this.panBy((before.mid[0] - after.mid[0]) * u, (before.mid[1] - after.mid[1]) * u);
+      if (after.dist > 10 && before.dist > 10) this.zoomAt(...this.toMap(...after.mid), before.dist / after.dist);
+      return;
+    }
+    const dx = e.clientX - p.x;
+    const dy = e.clientY - p.y;
+    p.x = e.clientX;
+    p.y = e.clientY;
+    this.travelled += Math.hypot(dx, dy);
+    if (this.travelled < DRAG_PX) return;
+    this.dragged = true;
+    const u = this.unitsPerPx();
+    this.panBy(-dx * u, -dy * u);
+  }
+
+  up(e) {
+    this.pointers.delete(e.pointerId);
+    // El toque que sigue a un arrastre se ignora; después, se vuelve a poder tocar.
+    if (!this.pointers.size && this.dragged) setTimeout(() => (this.dragged = false), 0);
+  }
+
+  wheel(e) {
+    e.preventDefault();
+    if (!this.canTouch()) return;
+    clearTimeout(this.peek);
+    this.zoomAt(...this.toMap(e.clientX, e.clientY), Math.exp(Math.max(-60, Math.min(60, e.deltaY)) * 0.004));
+  }
+
+  // De lo que se ve ahora a `to`, en un movimiento suave.
+  async animate(to) {
     const from = { ...this.vb };
-    const to = regionId ? ZONES_VIEW[regionId] : viewOf(COUNTRY, 12);
-    this.region = regionId;
-    this.overlay.replaceChildren();
-    this.paint();
-    this.back.hidden = !regionId;
+    this.animating = true;
     const t0 = performance.now();
     await new Promise((ok) => {
       const step = (now) => {
@@ -181,6 +334,30 @@ export class ZoneMap {
       };
       requestAnimationFrame(step);
     });
+    this.animating = false;
+  }
+
+  // Se acerca a una región (o se aleja al país) en un movimiento suave.
+  async zoomTo(regionId) {
+    const from = { ...this.vb };
+    const to = regionId ? ZONES_VIEW[regionId] : viewOf(COUNTRY, 12);
+    this.region = regionId;
+    this.overlay.replaceChildren();
+    this.paint();
+    this.back.hidden = !regionId;
+    this.animating = true;
+    const t0 = performance.now();
+    await new Promise((ok) => {
+      const step = (now) => {
+        const t = ease(Math.min(1, (now - t0) / ZOOM_MS));
+        this.vb = { x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t, w: from.w + (to.w - from.w) * t, h: from.h + (to.h - from.h) * t };
+        this.applyView();
+        if (t < 1) requestAnimationFrame(step);
+        else ok();
+      };
+      requestAnimationFrame(step);
+    });
+    this.animating = false;
     this.drawOverlay();
   }
 

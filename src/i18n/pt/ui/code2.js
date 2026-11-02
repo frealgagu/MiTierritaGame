@@ -158,4 +158,6 @@ export default {
   '{p} de {station}: llegan {n}/s.': '{p} de {station}: chegam {n}/s.',
   'Además saca {n} de {p}, que pasan por la canaleta a {stations}.': 'Também tira {n} de {p}, que passam pela calha até {stations}.',
   '🗑️ {n} se desechan: {stations} no da abasto.': '🗑️ {n} são descartados: {stations} não dá conta.',
+  'Acercar': 'Aproximar',
+  'Alejar': 'Afastar',
 };

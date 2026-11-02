@@ -158,4 +158,6 @@ export default {
   '{p} de {station}: llegan {n}/s.': '{p} de {station} : il arrive {n}/s.',
   'Además saca {n} de {p}, que pasan por la canaleta a {stations}.': 'Elle sort aussi {n} de {p}, qui passent par la rigole jusqu’à {stations}.',
   '🗑️ {n} se desechan: {stations} no da abasto.': '🗑️ {n} sont jetés : {stations} ne suit pas.',
+  'Acercar': 'Zoomer',
+  'Alejar': 'Dézoomer',
 };

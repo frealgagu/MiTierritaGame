@@ -684,9 +684,11 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .zones-map-open { width: 100%; justify-content: center; margin-top: 6px; }
 .map-card { width: min(980px, 100%); height: calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); max-height: none; display: flex; flex-direction: column; padding: 14px; }
 .zones-map { position: relative; flex: 1 1 auto; min-height: 0; margin-top: 4px; border: 2px solid rgba(58, 36, 24, 0.18); border-radius: 14px; background: #bfe3ef; overflow: hidden; }
-.zones-map-svg { display: block; width: 100%; height: 100%; touch-action: manipulation; }
+.zones-map-svg { display: block; width: 100%; height: 100%; touch-action: none; user-select: none; -webkit-user-select: none; }
+.zones-map-zoom { position: absolute; right: 8px; bottom: 8px; z-index: 1; display: flex; flex-direction: column; gap: 6px; }
+.zones-map-zoom .btn { min-width: 38px; font-size: 18px; line-height: 1; }
 .zones-map-back { position: absolute; top: 8px; left: 8px; z-index: 1; }
-.zones-map-dept { stroke: #fffaf0; stroke-width: 0.8; transition: opacity 0.4s; }
+.zones-map-dept { stroke: #fffaf0; stroke-width: 1px; vector-effect: non-scaling-stroke; transition: opacity 0.4s; }
 .zones-map-dept.pick { cursor: pointer; }
 .zones-map-dept.dim { opacity: 0.35; }
 .zones-map-label { cursor: pointer; }
@@ -767,7 +769,7 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .renown-back { width: auto; flex: none; padding: 4px 10px; font-size: 0.85rem; margin-right: 6px; }
 
 /* El mapa (v3.67): la región resaltada en el país, las que vienen («Próximamente») y la zona de destino. */
-.zones-map-dept.lit { stroke: #3a2418; stroke-width: 1.6; }
+.zones-map-dept.lit { stroke: #3a2418; stroke-width: 2px; }
 .zones-map-dept.soft { opacity: 0.55; }
 .zones-map-dept.soon { stroke-dasharray: 3 2; }
 .zones-map-label.soon { opacity: 0.85; cursor: pointer; }
