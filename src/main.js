@@ -146,7 +146,10 @@ async function start() {
       return;
     }
     if (stationId === 'route') {
-      const station = ROUTES_BY_ID[part].stations.find((sid) => scene.stations[sid] && active.state.stations[sid]);
+      // La estación que la recibe, en lo que se ve: en un evento, la del tablero (antes se buscaba en la partida y,
+      // si allá no estaba construida, se abría un panel suelto de la ruta, en nivel 1).
+      const here = (board ? board.game : active).state;
+      const station = ROUTES_BY_ID[part].stations.find((sid) => scene.stations[sid] && here.stations[sid]);
       if (station) {
         scene.select(station);
         panel.open(station, id);
