@@ -42,4 +42,10 @@ export default {
   yanchama: ['Des masques pour toute la forêt !', 'Tu as terminé la <b>Yanchama</b>, en Amazonie. Six mille souvenirs d’Amazonie : des masques ticuna avec le pirarucú salé et boucané du Lac.', 'Souvenirs vendus'],
   leticia: ['L’Amazonie, d’un bout à l’autre !', 'Tu as terminé <b>Leticia</b> et l’Amazonie. Sept mille sorties pour voir les dauphins roses, avec l’açaí, l’ají negro, le pirarucú, la cassave et les masques de toutes tes zones.', 'Sorties pour voir les dauphins'],
   lecheria: ['De l’arequipe pour tout le village !', 'Tu as terminé la <b>Zone 3 · Laiterie</b>. Six mille arequipes faits avec ton lait et la panela du Moulin à canne.', 'Arequipe vendu'],
+  achirales: ['Des biscuits pour tout le Tolima !', 'Tu as terminé <b>Les Champs d’achira</b>, dans le Tolima Grande. Deux mille caisses de biscuits, du rhizome d’achira au four en terre.', 'Caisses de biscuits vendues'],
+  cafe_huila: ['Café de spécialité du Huila !', 'Tu as terminé <b>Le Café du Huila</b>. Six mille sachets de café de spécialité, et avec la cosse de la cerise, du thé pour Neiva.', 'Sachets de café vendus'],
+  betania: ['Du tilapia pour tout le Huila !', 'Tu as terminé <b>Le Barrage de Betania</b>. Six mille déjeuners de tilapia frit avec patacón, au bord du barrage.', 'Déjeuners vendus'],
+  lechoneria: ['De la lechona pour toute la San Pedro !', 'Tu as terminé <b>La Lechonería</b>. Quatre mille lechonas, avec la couenne et la viande de chaque cochon réunies dans le four à bois.', 'Lechonas vendues'],
+  chamba: ['De la poterie noire pour tout le pays !', 'Tu as terminé <b>La Chamba</b>. Six mille souvenirs du Tolima : marmites noires avec le tilapia fumé et l’escabèche de Betania.', 'Souvenirs vendus'],
+  neiva: ['Le Tolima Grande, d’un bout à l’autre !', 'Tu as terminé <b>Neiva</b> et le Tolima Grande. Sept mille nuits étoilées dans la Tatacoa, avec les biscuits, le café, le tilapia, la lechona et la poterie de toutes tes zones.', 'Sorties à la Tatacoa'],
 };

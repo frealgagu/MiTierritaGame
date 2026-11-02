@@ -42,4 +42,10 @@ export default {
   casaberia: ['Grandma Tránsito', 'the casabe baker'],
   yanchama: ['Don Eliseo', 'the Ticuna artisan'],
   leticia: ['Doña Graciela', 'the guide'],
+  achirales: ['Doña Hermelinda', 'the biscuit maker'],
+  cafe_huila: ['Don Rubiel', 'the coffee grower'],
+  betania: ['Don Fabio', 'the fisherman'],
+  lechoneria: ['Doña Fanny', 'the lechona cook'],
+  chamba: ['Doña Ofelia', 'the potter'],
+  neiva: ['Doña Marleny', 'the San Pedro queen'],
 };

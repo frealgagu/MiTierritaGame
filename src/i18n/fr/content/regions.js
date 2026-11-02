@@ -7,4 +7,5 @@ export default {
   llanos: 'Llanos',
   pacifico: 'Côte pacifique',
   amazonas: 'Amazonie',
+  tolima: 'Tolima Grande',
 };

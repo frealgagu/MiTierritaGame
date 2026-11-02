@@ -42,4 +42,10 @@ export default {
   yanchama: ['Máscaras para a selva inteira!', 'Você completou a <b>Yanchama</b>, na Amazônia. Seis mil lembranças da Amazônia: máscaras ticuna com o pirarucu salgado e moqueado do Lago.', 'Lembranças vendidas'],
   leticia: ['A Amazônia, de ponta a ponta!', 'Você completou <b>Leticia</b> e a Amazônia. Sete mil passeios para ver os botos-cor-de-rosa, com o açaí, o ají negro, o pirarucu, o beiju e as máscaras de todas as suas zonas.', 'Passeios para ver os botos'],
   lecheria: ['Doce de leite para a cidade inteira!', 'Você completou a <b>Zona 3 · Leiteria</b>. Seis mil doces de leite feitos com o seu leite e a rapadura do Engenho.', 'Doce de leite vendido'],
+  achirales: ['Biscoitos para todo o Tolima!', 'Você completou <b>Os Achirais</b>, no Tolima Grande. Duas mil caixas de biscoitos, do rizoma de achira ao forno de barro.', 'Caixas de biscoitos vendidas'],
+  cafe_huila: ['Café especial do Huila!', 'Você completou <b>O Café do Huila</b>. Seis mil pacotes de café especial e, com a casca da cereja, chá para Neiva.', 'Pacotes de café especial vendidos'],
+  betania: ['Tilápia para todo o Huila!', 'Você completou <b>A Represa de Betania</b>. Seis mil almoços de tilápia frita com patacón, à beira da represa.', 'Almoços vendidos'],
+  lechoneria: ['Lechona para todo o San Pedro!', 'Você completou <b>A Lechonería</b>. Quatro mil lechonas, com o couro e a carne de cada porco juntos no forno a lenha.', 'Lechonas vendidas'],
+  chamba: ['Louça preta para o país inteiro!', 'Você completou <b>La Chamba</b>. Seis mil lembranças do Tolima: panelas de louça preta com tilápia defumada e escabeche de Betania.', 'Lembranças vendidas'],
+  neiva: ['O Tolima Grande, de ponta a ponta!', 'Você completou <b>Neiva</b> e o Tolima Grande. Sete mil noites de estrelas na Tatacoa, com os biscoitos, o café, a tilápia, a lechona e a louça de todas as suas zonas.', 'Passeios à Tatacoa'],
 };

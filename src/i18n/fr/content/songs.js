@@ -7,4 +7,5 @@ export default {
   llanos: ['Joropo de la savane', 'harpe, cuatro, maracas et basse'],
   pacifico: ['Chirimía de San Pacho', 'clarinette, euphonium, tambora, caisse claire et cymbales'],
   amazonas: ['Cumbia de l’Amazone', 'guitare électrique, basse, clavier, maracas et manguaré'],
+  tolima: ['Sanjuanero du San Pedro', 'tiple, guitare, bandola, tambora et carrasca'],
 };

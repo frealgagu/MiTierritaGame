@@ -43,4 +43,10 @@ export default {
   casaberia: ['Casa do Beiju', 'Para Puerto Nariño ➜', { bolsas_asai: '⬅ Açaí do Açaizal', pirarucus: '⬅ Pirarucu do Lago', banquetes_maloca: 'Banquetes para Leticia ➜', desayunos_amazonicos: 'Cafés da manhã ⬇' }],
   yanchama: ['Yanchama', 'Para Macedonia ➜', { pirarucus_salados: '⬅ Pirarucu salgado do Lago', moqueados: '⬅ Moqueado', recuerdos_amazonas: 'Para Leticia ➜' }],
   leticia: ['Leticia', 'Para Puerto Nariño ➜', { cajas_asai: '⬅ Açaí do Açaizal', cajas_aji: '⬅ Ají negro', banquetes_maloca: '⬅ Banquetes', desayunos_amazonicos: '⬅ Cafés da manhã', recuerdos_amazonas: 'Yanchama ⬆', platos_pirarucu: 'Pirarucu ⬆' }],
+  achirales: ['Os Achirais', 'Para Natagaima ➜', { bizcochos: 'Biscoitos para a Lechonería ➜', cajas_bizcochos: 'Para Neiva ➜' }],
+  cafe_huila: ['O Café do Huila', 'Para Pitalito ➜', { tinto: 'Cafezinho para a Lechonería ➜', te_cascara: 'Chá de casca para Neiva ➜', cafe_especial: 'Para Neiva ➜' }],
+  betania: ['A Represa de Betania', 'Para Yaguará ➜', { ahumadas_tilapia: 'Tilápia defumada para La Chamba ⬇', escabeches: 'Escabeche ⬇', almuerzos_represa: 'Almoços para Neiva ➜' }],
+  lechoneria: ['A Lechonería', 'Para Ibagué ➜', { bizcochos: '⬅ Biscoitos dos Achirais', tinto: '⬅ Cafezinho do Huila', lechonas: 'Lechonas para Neiva ➜', desayunos_tolimenses: 'Cafés da manhã ⬇' }],
+  chamba: ['La Chamba', 'Para El Guamo ➜', { ahumadas_tilapia: '⬅ Tilápia defumada de Betania', escabeches: '⬅ Escabeche', recuerdos_tolima: 'Para Neiva ➜' }],
+  neiva: ['Neiva', 'Para Villavieja ➜', { cajas_bizcochos: '⬅ Biscoitos dos Achirais', cafe_especial: '⬅ Café do Huila', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Cafés da manhã', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Chá de casca ⬆', almuerzos_represa: 'Tilápia ⬆' }],
 };

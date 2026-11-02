@@ -42,4 +42,10 @@ export default {
   pueblos_amazonas: 'The peoples',
   manos_amazonas: 'The hands',
   leticia_album: 'Leticia',
+  tierra_tolima: 'The land',
+  cocina_tolima: 'The kitchen',
+  achiras_tolima: 'Achira',
+  musica_tolima: 'The music',
+  manos_tolima: 'The hands',
+  neiva_album: 'Neiva and the Tatacoa',
 };
