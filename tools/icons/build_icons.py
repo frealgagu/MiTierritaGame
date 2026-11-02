@@ -3878,6 +3878,395 @@ def bagazo_cervecero():
     return layers
 
 
+# ---------- Tolima Grande (v4.0) ----------
+
+def achira_plant():
+    """Achira: la mata de hojas anchas, verdes con el borde morado, y sus flores rojas encima."""
+    layers = [('#6d8f3a', [ellipse(50, 92, 30, 5)])]
+    for x0, y0, x1, y1, w in [(50, 90, 18, 34, 13), (50, 90, 82, 36, 13), (50, 90, 34, 18, 11), (50, 90, 66, 20, 11)]:
+        layers += [(OUTLINE, [leaf(x0, y0, x1, y1, w + 2)]), ('#4e8a34', [leaf(x0, y0, x1, y1, w)]), ('#7b3f6e', [rib(x0, y0, x1, y1, 1)])]
+    layers += [(OUTLINE, [rect(47.5, 10, 5, 50)]), ('#5d8f3a', [rect(48.5, 11, 3, 48)])]
+    for cx, cy, rot in [(44, 10, -30), (56, 8, 30), (50, 4, 0), (46, 18, -50), (55, 17, 50)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 5.5, 9, rot)]), ('#e53935', [ellipse(cx, cy, 4, 7.5, rot)])]
+    layers.append(('#ffca28', [circle(50, 9, 1.8)]))
+    return layers
+
+
+def achira_root():
+    """Rizoma de achira: los tubérculos gordos y anillados, con sus raicitas, recién sacados de la tierra."""
+    layers = [('#8d6e4a', [ellipse(50, 88, 38, 6)])]
+    for cx, cy, rx, ry, rot in [(34, 62, 20, 13, -25), (64, 58, 22, 14, 20), (50, 76, 18, 11, 0)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, rx + 2, ry + 2, rot)]), ('#c9a27a', [ellipse(cx, cy, rx, ry, rot)])]
+        layers.append(('#a07a52', [rib(cx - rx * 0.5, cy - ry * 0.8, cx - rx * 0.3, cy + ry * 0.8, 0.9), rib(cx + rx * 0.2, cy - ry * 0.9, cx + rx * 0.4, cy + ry * 0.8, 0.9)]))
+    layers.append(('#6d4c32', [rib(16, 66, 8, 74, 0.8), rib(82, 62, 92, 70, 0.8), rib(40, 86, 36, 94, 0.8)]))
+    layers += [(OUTLINE, [leaf(60, 46, 70, 16, 7)]), ('#4e8a34', [leaf(60, 46, 70, 16, 5)])]
+    return layers
+
+
+def achira_mash():
+    """Achira rallada: la batea de madera con la masa blanca y fibrosa, y el rallador de lata."""
+    layers = [(OUTLINE, ['M 8 52 Q 50 96 92 52 Z']), ('#8d5a32', ['M 12 54.5 Q 50 91 88 54.5 Z'])]
+    layers += [(OUTLINE, [ellipse(50, 52, 42, 10)]), ('#e8dcc0', [ellipse(50, 52, 39, 7.5)])]
+    layers.append(('#cdbf9e', [rib(26 + k * 8, 48, 30 + k * 8, 56, 0.8) for k in range(6)]))
+    layers += [(OUTLINE, [rect(60, 8, 16, 38, 18)]), ('#b0bec5', [rect(62, 10, 12, 34, 18)])]
+    layers.append(('#78909c', [circle(66 + (k % 3) * 3, 16 + (k // 3) * 6, 0.9) for k in range(12)]))
+    return layers
+
+
+def wet_starch():
+    """Almidón húmedo: el tanque donde se asienta el almidón blanco bajo el agua."""
+    layers = [(OUTLINE, [rect(10, 34, 80, 54)]), ('#90a4ae', [rect(13, 37, 74, 48)])]
+    layers += [('#bbdefb', [rect(13, 37, 74, 22)]), ('#f1ece0', [rect(13, 59, 74, 26)]), ('#ffffff', [rect(18, 62, 30, 3)])]
+    layers.append(('#e3f2fd', [rib(20, 46, 40, 46, 1), rib(52, 50, 76, 50, 1)]))
+    layers += [(OUTLINE, [rect(6, 30, 88, 6)]), ('#78909c', [rect(8, 31.5, 84, 3)])]
+    return layers
+
+
+def achira_starch():
+    """Almidón de achira: el costal abierto con el almidón seco, blanquísimo, y la cuchara de palo."""
+    layers = [(OUTLINE, ['M 16 40 L 84 40 L 90 94 L 10 94 Z']), ('#e0cf94', ['M 18.5 42.5 L 81.5 42.5 L 87 91.5 L 13 91.5 Z'])]
+    layers += [(OUTLINE, [ellipse(50, 40, 36, 11)]), ('#faf8f2', [ellipse(50, 40, 33, 8.5)]), ('#ffffff', [ellipse(42, 37, 12, 3)])]
+    layers += [(OUTLINE, [rect(60, 6, 7, 36, 25)]), ('#c9a96b', [rect(61.5, 7.5, 4, 33, 25)])]
+    layers.append(('#c8b07a', [rib(22, 60, 78, 60, 1), rib(18, 76, 82, 76, 1)]))
+    return layers
+
+
+def bizcocho_dough():
+    """Masa de bizcocho: la bola de masa de almidón, cuajada y mantequilla sobre la mesa, con el rodillo."""
+    layers = [(OUTLINE, [rect(4, 64, 92, 26)]), ('#a1887f', [rect(6.5, 66.5, 87, 21)])]
+    layers += [(OUTLINE, [ellipse(46, 56, 34, 20)]), ('#f3e3b8', [ellipse(46, 56, 31, 17.5)]), ('#fff8e1', [ellipse(38, 49, 12, 6)])]
+    layers += [(OUTLINE, [rect(54, 70, 40, 9, -12)]), ('#c9a96b', [rect(55.5, 71.5, 37, 6, -12)])]
+    layers.append(('#ffffff', [circle(70, 30, 1.6), circle(76, 36, 1.2), circle(64, 34, 1.4)]))
+    return layers
+
+
+def biscuit(cx, cy, s=1.0, rot=0):
+    """Un bizcocho de achira: el bastoncito dorado, un poco curvo."""
+    return [(OUTLINE, [ellipse(cx, cy, 15 * s, 6 * s, rot)]), ('#e8b860', [ellipse(cx, cy, 13 * s, 4.4 * s, rot)]),
+            ('#f6d690', [ellipse(cx - 3 * s, cy - 1.2 * s, 6 * s, 1.6 * s, rot)])]
+
+
+def bizcochos():
+    """Bizcochos de achira: la bolsita de papel abierta con los bizcochos dorados asomando."""
+    layers = [(OUTLINE, ['M 22 38 L 78 38 L 84 96 L 16 96 Z']), ('#f3e3b8', ['M 24.5 40.5 L 75.5 40.5 L 81 93.5 L 19 93.5 Z'])]
+    for cx, cy, rot in [(38, 34, -60), (52, 28, -80), (64, 34, -110), (46, 40, -70)]:
+        layers += biscuit(cx, cy, 1.1, rot)
+    layers += [('#e53935', [rect(28, 62, 44, 12)]), ('#ffffff', [rect(32, 66, 36, 4)])]
+    return layers
+
+
+def bizcocho_box():
+    """Caja de bizcochos: la caja de cartón con las bolsitas de bizcochos de achira y la flor roja de la achira."""
+    layers = [(OUTLINE, ['M 8 40 L 92 40 L 88 92 L 12 92 Z']), ('#c8a26a', ['M 10.5 42.5 L 89.5 42.5 L 85.5 89.5 L 14.5 89.5 Z'])]
+    for cx in (28, 50, 72):
+        layers += biscuit(cx, 36, 0.9, -70)
+    layers += [(OUTLINE, [rect(30, 56, 40, 24)]), ('#fff3d6', [rect(32, 58, 36, 20)])]
+    layers += [('#e53935', [ellipse(50, 66, 4, 7, -20), ellipse(55, 65, 4, 7, 25)]), ('#4e8a34', [leaf(44, 76, 52, 70, 3)])]
+    return layers
+
+
+def cafe_excelso():
+    """Café excelso: el grano verde ya trillado y seleccionado, en el plato de la catadora."""
+    layers = [(OUTLINE, [ellipse(50, 70, 44, 18)]), ('#e8e0cc', [ellipse(50, 70, 41, 15.5)])]
+    for cx, cy, rot in [(32, 64, -20), (50, 60, 10), (68, 64, 30), (40, 74, 40), (60, 76, -10), (50, 50, -30)]:
+        layers += coffee_bean(cx, cy, 10, 7, rot, '#8fae5d', '#4e6b2e', '#c5dc9a')
+    layers.append(('#d7263d', [rect(70, 14, 18, 22, 10)]))
+    layers.append(('#ffffff', [rect(73, 18, 12, 3, 10), rect(73, 24, 9, 2, 10)]))
+    return layers
+
+
+def cafe_especial():
+    """Café especial del Huila: la bolsa negra con válvula, la etiqueta dorada y la montaña del Huila."""
+    layers = [(OUTLINE, ['M 20.5 22 L 79.5 22 L 84.5 97.5 L 15.5 97.5 Z']), ('#3e2723', ['M 23 24 L 77 24 L 82 95 L 18 95 Z'])]
+    layers += [(OUTLINE, [rect(21.5, 6.5, 57, 19)]), ('#5d4037', [rect(24, 9, 52, 14)])]
+    layers += [('#e0b84a', [rect(28, 44, 44, 38)]), ('#2e7d32', ['M 30 72 L 42 54 L 50 64 L 58 50 L 70 72 Z']), ('#ffffff', ['M 54 56 L 58 50 L 62 56 Z'])]
+    layers += coffee_bean(50, 78, 6, 4, -20, '#5a3420', '#1e0f06', '#b0805c')
+    layers.append(('#9e9e9e', [circle(66, 32, 3)]))
+    return layers
+
+
+def cascara():
+    """Cáscara de café: la cascarilla roja y seca de la cereza, regada en una zaranda de secado."""
+    layers = [(OUTLINE, [rect(6, 50, 88, 34, 0)]), ('#8d6e4a', [rect(8.5, 52.5, 83, 29)])]
+    layers.append(('#a1887f', [rib(8 + k * 8, 52, 8 + k * 8, 82, 0.6) for k in range(11)]))
+    for cx, cy, rot in [(22, 60, 20), (36, 66, -10), (52, 58, 40), (66, 68, 0), (80, 60, -30), (30, 76, 60), (60, 76, 15), (46, 72, -40)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 7, 4.6, rot)]), ('#9b2335', [ellipse(cx, cy, 5.5, 3.3, rot)]), ('#c0392b', [ellipse(cx - 1, cy - 1, 2.4, 1.2, rot)])]
+    for cx, cy in [(38, 30), (60, 26)]:
+        layers += [(OUTLINE, [circle(cx, cy, 11)]), ('#d7263d', [circle(cx, cy, 9)]), ('#ff6f61', [circle(cx - 3, cy - 3, 3)])]
+    return layers
+
+
+def te_cascara():
+    """Té de cáscara: la taza de vidrio con la infusión rojiza de la cascarilla del café y su bolsita."""
+    layers = [(OUTLINE, [ellipse(50, 90, 38, 7)]), ('#eceff1', [ellipse(50, 90, 35, 5)])]
+    layers += [(OUTLINE, ['M 24 40 L 76 40 L 70 88 L 30 88 Z', 'M 74 50 Q 92 52 88 66 Q 84 76 72 74 L 72 68 Q 82 68 82 62 Q 82 56 74 56 Z'])]
+    layers += [('#e3f2fd', ['M 26.5 42.5 L 73.5 42.5 L 67.8 85.5 L 32.2 85.5 Z']), ('#c0622b', ['M 28 52 L 72 52 L 67.8 85.5 L 32.2 85.5 Z']), ('#e08a52', [rect(32, 54, 8, 26)])]
+    layers += [('#9b2335', [ellipse(40, 46, 4, 2.5), ellipse(54, 44, 3.5, 2.2)])]
+    layers.append(('#b0bec5', ['M 40 34 Q 36 22 40 10 L 43 10 Q 39 22 43 34 Z', 'M 58 34 Q 54 24 58 14 L 61 14 Q 57 24 61 34 Z']))
+    return layers
+
+
+def tilapia():
+    """Tilapia: el pescado gris plateado de las jaulas de la represa, con sus rayas oscuras."""
+    layers = fish_shape(50, 52, 74, 40, '#8a9a9a', '#cfd8dc')
+    layers.append(('#5f6f6f', [rib(36 + k * 9, 38, 34 + k * 9, 64, 1.4) for k in range(4)]))
+    layers.append(('#4fc3f7', [rib(10, 88, 90, 88, 1.6)]))
+    return layers
+
+
+def clean_tilapia():
+    """Tilapia limpia: la tilapia sin escamas ni tripa, rosadita, sobre la hoja de plátano."""
+    layers = [('#2e7d32', [leaf(4, 82, 96, 70, 16)]), ('#66bb6a', [rib(8, 81, 92, 71, 1.2)])]
+    layers += fish_shape(50, 52, 70, 34, '#e8b8a8', '#f8e4dc')
+    layers.append(('#ffffff', [rib(30, 48, 60, 46, 1.4)]))
+    return layers
+
+
+def tilapia_fillet():
+    """Filete de tilapia: los filetes blancos y rosados, sin espinas, en la bandeja."""
+    layers = [(OUTLINE, [rect(6, 56, 88, 28)]), ('#cfd8dc', [rect(8.5, 58.5, 83, 23)])]
+    for cx, cy, rot in [(32, 56, -10), (66, 52, 8)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 22, 11, rot)]), ('#fbe9e7', [ellipse(cx, cy, 20, 9, rot)]), ('#f8bbd0', [rib(cx - 14, cy + 2, cx + 14, cy - 2, 1.2)])]
+    return layers
+
+
+def escabeche():
+    """Tilapia en escabeche: el frasco de vidrio con los filetes en vinagre, cebolla, zanahoria y laurel."""
+    layers = [(OUTLINE, [rect(22, 22, 56, 72)]), ('#fff3d6', [rect(25, 25, 50, 66)])]
+    layers += [('#f6dfa0', [rect(25, 34, 50, 57)])]
+    for cx, cy in [(38, 52), (60, 64), (44, 78)]:
+        layers += [('#fbe9e7', [ellipse(cx, cy, 12, 5, 15)])]
+    layers += [('#ff8f00', [circle(56, 46, 3.5), circle(36, 66, 3), circle(62, 82, 3)]), ('#ffffff', [ellipse(46, 60, 5, 2), ellipse(58, 76, 4.5, 1.8)]), ('#558b2f', [leaf(30, 86, 42, 70, 3)])]
+    layers += [(OUTLINE, [rect(18, 10, 64, 14)]), ('#d7263d', [rect(20.5, 12.5, 59, 9)]), ('#ffffff', [circle(30, 17, 1.5), circle(50, 17, 1.5), circle(70, 17, 1.5)])]
+    return layers
+
+
+def tilapia_ahumada():
+    """Tilapia ahumada: la tilapia dorada y oscura del humo, colgada de la vara del ahumadero."""
+    layers = [(OUTLINE, [rect(6, 10, 88, 6)]), ('#6d4c41', [rect(8, 11.5, 84, 3)])]
+    layers += fish_shape(50, 56, 34 * 2, 34, '#a8642a', '#d9a05a', 90, eye=False)
+    layers.append(('#5d3a1e', [rib(40, 40 + k * 10, 60, 40 + k * 10, 1.4) for k in range(4)]))
+    layers.append(('#5d4037', [rib(50, 14, 50, 22, 1.4)]))
+    layers.append(('#b0bec5', ['M 24 40 Q 18 28 24 16 L 27 16 Q 21 28 27 40 Z', 'M 78 46 Q 72 34 78 22 L 81 22 Q 75 34 81 46 Z']))
+    return layers
+
+
+def almuerzo_represa():
+    """Almuerzo de la represa: la tilapia frita con patacones, arroz, ensalada y limón."""
+    layers = [(OUTLINE, [ellipse(50, 64, 46, 24)]), ('#ffffff', [ellipse(50, 64, 43, 21.5)])]
+    layers += fish_shape(46, 58, 56, 22, '#c9862e', '#f0c27a', -6)
+    for cx, cy in [(24, 74), (34, 80)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 9, 5)]), ('#f4c430', [ellipse(cx, cy, 7.5, 3.8)])]
+    layers += [(OUTLINE, [ellipse(70, 76, 10, 5)]), ('#fafafa', [ellipse(70, 76, 8.5, 3.8)]), ('#43a047', [ellipse(76, 64, 7, 3.5)]), ('#9ccc65', [circle(84, 70, 4)])]
+    return layers
+
+
+def pig(cx, cy, s, body='#f4a7b0', spot=None):
+    """Un cerdito de perfil, mirando a la izquierda."""
+    layers = [(OUTLINE, [ellipse(cx, cy, 26 * s, 17 * s), circle(cx - 25 * s, cy - 2 * s, 11 * s)])]
+    for lx in (-14, -6, 8, 16):
+        layers.append((OUTLINE, [rect(cx + lx * s - 3 * s, cy + 10 * s, 6 * s, 14 * s)]))
+        layers.append((body, [rect(cx + lx * s - 1.8 * s, cy + 11 * s, 3.6 * s, 11.5 * s)]))
+    layers += [(body, [ellipse(cx, cy, 24 * s, 15 * s), circle(cx - 25 * s, cy - 2 * s, 9 * s)])]
+    if spot:
+        layers.append((spot, [ellipse(cx + 8 * s, cy - 4 * s, 9 * s, 7 * s)]))
+    layers += [('#f48fb1', [ellipse(cx - 33 * s, cy, 4.5 * s, 5.5 * s)]), ('#ad5a6a', [circle(cx - 34 * s, cy - 1.5 * s, 1 * s), circle(cx - 32 * s, cy + 1.5 * s, 1 * s)])]
+    layers += [('#263238', [circle(cx - 27 * s, cy - 6 * s, 1.6 * s)]), (body, [poly(cx - 22 * s, cy - 11 * s, cx - 16 * s, cy - 20 * s, cx - 14 * s, cy - 9 * s)])]
+    layers.append((OUTLINE, [rib(cx + 24 * s, cy - 4 * s, cx + 30 * s, cy - 10 * s, 1.2)]))
+    return layers
+
+
+def cerdo():
+    """Cerdo: el cerdito rosado con una mancha negra, en el barro."""
+    return [('#8d6e4a', [ellipse(50, 90, 40, 6)])] + pig(56, 58, 1.2, spot='#424242')
+
+
+def carne_cerdo():
+    """Carne de cerdo: los pedazos de carne roja con su gordo blanco, sobre la tabla."""
+    layers = [(OUTLINE, [rect(4, 62, 92, 26)]), ('#c9a96b', [rect(6.5, 64.5, 87, 21)])]
+    for cx, cy, rot in [(32, 58, -10), (64, 56, 12), (48, 44, 0)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 18, 12, rot)]), ('#e57373', [ellipse(cx, cy, 16, 10, rot)]), ('#fce4ec', [ellipse(cx + 6, cy - 4, 7, 3, rot)])]
+    return layers
+
+
+def cuero_cerdo():
+    """Cuero de cerdo: el cuero rosado, enrollado, recién sacado en el desposte."""
+    layers = [(OUTLINE, [ellipse(50, 60, 40, 24)]), ('#f0b9a8', [ellipse(50, 60, 37, 21)])]
+    layers += [(OUTLINE, [ellipse(70, 58, 14, 18)]), ('#e8a090', [ellipse(70, 58, 11, 15)]), ('#f8d0c4', [ellipse(70, 58, 6, 9)])]
+    layers.append(('#d98a7a', [rib(18, 50, 54, 46, 1), rib(16, 62, 54, 60, 1), rib(20, 74, 54, 72, 1)]))
+    return layers
+
+
+def cuero_limpio():
+    """Cuero limpio: el cuero pelado y adobado con comino, extendido para envolver la lechona."""
+    layers = [(OUTLINE, [rect(8, 34, 84, 48, -6)]), ('#e8c49a', [rect(11, 37, 78, 42, -6)])]
+    layers.append(('#c9925a', [circle(24 + (k % 6) * 10, 46 + (k // 6) * 12 + (k % 2) * 3, 1.4) for k in range(18)]))
+    layers.append(('#fff3d6', [rib(14, 44, 86, 36, 1.2)]))
+    return layers
+
+
+def relleno():
+    """Relleno de la lechona: la paila con el arroz amarillo, la arveja y la carne adobada."""
+    layers = [(OUTLINE, ['M 10 46 L 90 46 L 82 84 Q 50 94 18 84 Z']), ('#424242', ['M 13.5 48.5 L 86.5 48.5 L 79.5 81.5 Q 50 91 20.5 81.5 Z'])]
+    layers += [(OUTLINE, [ellipse(50, 46, 40, 11)]), ('#d9a441', [ellipse(50, 46, 37, 8.5)])]
+    layers.append(('#7cb342', [circle(30 + (k * 13) % 42, 42 + (k * 5) % 8, 2.2) for k in range(9)]))
+    layers.append(('#a1452a', [ellipse(44, 46, 6, 3), ellipse(62, 44, 5, 2.5), ellipse(34, 48, 4, 2)]))
+    layers.append(('#b0bec5', ['M 34 36 Q 30 24 34 12 L 37 12 Q 33 24 37 36 Z', 'M 60 36 Q 56 26 60 16 L 63 16 Q 59 26 63 36 Z']))
+    return layers
+
+
+def tamal():
+    """Tamal tolimense: el tamal envuelto en hoja de plátano, amarrado con cabuya, y uno abierto."""
+    layers = [(OUTLINE, [rect(8, 46, 50, 36, -10)]), ('#4e8a34', [rect(11, 49, 44, 30, -10)]), ('#9ccc65', [rib(14, 56, 52, 50, 1)])]
+    layers.append(('#c9a96b', [rib(30, 44, 36, 84, 1.6), rib(10, 66, 58, 58, 1.6)]))
+    layers += [(OUTLINE, [leaf(46, 86, 96, 60, 18)]), ('#6aa84f', [leaf(46, 86, 96, 60, 16)])]
+    layers += [(OUTLINE, [ellipse(70, 72, 16, 9, -25)]), ('#f4c430', [ellipse(70, 72, 14, 7, -25)])]
+    layers += [('#a1452a', [ellipse(66, 72, 4, 2.5)]), ('#ffffff', [ellipse(74, 69, 3, 2)]), ('#ff8f00', [circle(72, 76, 1.8)])]
+    return layers
+
+
+def lechona():
+    """Lechona tolimense: el cerdo entero, dorado y tostado, relleno, servido en la batea."""
+    layers = [(OUTLINE, ['M 4 68 Q 50 100 96 68 Z']), ('#8d5a32', ['M 8 70 Q 50 95 92 70 Z'])]
+    layers += [(OUTLINE, [ellipse(52, 56, 38, 18), circle(16, 52, 12)]), ('#c9782c', [ellipse(52, 56, 35.5, 15.5), circle(16, 52, 10)])]
+    layers += [('#e8a050', [ellipse(50, 48, 24, 5)]), ('#d9a441', [ellipse(64, 62, 12, 5)]), ('#7cb342', [circle(60, 62, 1.6), circle(68, 63, 1.6)])]
+    layers += [('#263238', [circle(12, 48, 1.4)]), ('#a0521a', [ellipse(7, 54, 3.5, 4.5)]), ('#f44336', [circle(4, 54, 2.5)])]
+    return layers
+
+
+def desayuno_tolimense():
+    """Desayuno tolimense: el tamal abierto en su hoja, la taza de tinto y los bizcochos de achira."""
+    layers = [(OUTLINE, [leaf(4, 74, 66, 56, 22)]), ('#4e8a34', [leaf(4, 74, 66, 56, 20)])]
+    layers += [(OUTLINE, [ellipse(34, 64, 18, 10, -15)]), ('#f4c430', [ellipse(34, 64, 16, 8, -15)]), ('#a1452a', [ellipse(32, 64, 5, 3)]), ('#ffffff', [ellipse(40, 61, 3, 2)])]
+    layers += [(OUTLINE, ['M 62 28 L 88 28 L 85 56 L 65 56 Z']), ('#ffffff', ['M 64.5 30.5 L 85.5 30.5 L 82.8 53.5 L 67.2 53.5 Z']), ('#4e2a14', [ellipse(75, 32, 10, 2.5)])]
+    layers += biscuit(66, 82, 1.0, -15) + biscuit(84, 74, 0.9, 30)
+    layers.append(('#b0bec5', ['M 72 24 Q 68 14 72 4 L 75 4 Q 71 14 75 24 Z']))
+    return layers
+
+
+def arcilla():
+    """Arcilla: el terrón de arcilla gris del barranco del río Magdalena, con la pala."""
+    layers = [(OUTLINE, ['M 8 86 Q 20 40 50 36 Q 82 40 92 86 Z']), ('#8d6e63', ['M 12 84 Q 23 43 50 39 Q 79 43 88 84 Z'])]
+    layers.append(('#a1887f', [ellipse(36, 58, 10, 5), ellipse(62, 70, 12, 5), ellipse(54, 48, 7, 3)]))
+    layers += [(OUTLINE, [rect(66, 6, 7, 42, 20)]), ('#6d4c41', [rect(67.5, 7.5, 4, 39, 20)])]
+    layers += [(OUTLINE, ['M 56 42 L 72 46 L 70 58 L 54 54 Z']), ('#90a4ae', ['M 58 44 L 70 47.5 L 68.5 56 L 56 52.5 Z'])]
+    return layers
+
+
+def barro_pisado():
+    """Barro pisado: el barro amasado con los pies, con las huellas, y la arena fina para mezclar."""
+    layers = [(OUTLINE, [ellipse(50, 64, 44, 24)]), ('#795548', [ellipse(50, 64, 41, 21)])]
+    for cx, cy, rot in [(36, 58, -20), (52, 72, -10), (64, 56, 15)]:
+        layers += [('#5d4037', [ellipse(cx, cy, 5, 9, rot)]), ('#5d4037', [circle(cx + 1, cy - 11, 2), circle(cx + 4, cy - 10, 1.6)])]
+    layers += [(OUTLINE, [ellipse(82, 30, 12, 7)]), ('#e0c890', [ellipse(82, 30, 10, 5)])]
+    return layers
+
+
+def black_pot(cx, cy, s, color='#2b2b2b', shine='#6d6d6d'):
+    """Una cazuela de loza negra de La Chamba, con sus dos asas."""
+    return [(OUTLINE, ['M %.1f %.1f Q %.1f %.1f %.1f %.1f Q %.1f %.1f %.1f %.1f Z' % (cx - 22 * s, cy - 8 * s, cx - 20 * s, cy + 14 * s, cx, cy + 16 * s, cx + 20 * s, cy + 14 * s, cx + 22 * s, cy - 8 * s),
+             ellipse(cx - 24 * s, cy - 4 * s, 4 * s, 2.5 * s), ellipse(cx + 24 * s, cy - 4 * s, 4 * s, 2.5 * s)]),
+            (color, ['M %.1f %.1f Q %.1f %.1f %.1f %.1f Q %.1f %.1f %.1f %.1f Z' % (cx - 19.5 * s, cy - 7 * s, cx - 18 * s, cy + 11.5 * s, cx, cy + 13.5 * s, cx + 18 * s, cy + 11.5 * s, cx + 19.5 * s, cy - 7 * s)]),
+            (OUTLINE, [ellipse(cx, cy - 8 * s, 23 * s, 6 * s)]), (color, [ellipse(cx, cy - 8 * s, 21 * s, 4.5 * s)]),
+            (shine, [ellipse(cx - 10 * s, cy + 2 * s, 3 * s, 7 * s, 15)])]
+
+
+def pieza_cruda():
+    """Pieza modelada: la cazuela de barro crudo, color tierra, recién hecha a mano sobre la tabla."""
+    layers = [(OUTLINE, [ellipse(50, 88, 36, 6)]), ('#a1887f', [ellipse(50, 88, 33, 4.5)])]
+    layers += black_pot(50, 64, 1.5, '#a1887f', '#c9b0a0')
+    layers.append(('#8d6e63', [rib(32, 66, 68, 66, 0.8)]))
+    return layers
+
+
+def pieza_brunida():
+    """Pieza bruñida: la cazuela pulida a mano con la piedra de río, que brilla, y la piedra al lado."""
+    layers = black_pot(46, 60, 1.4, '#bc8f6f', '#f3d9c4')
+    layers += [(OUTLINE, [ellipse(80, 84, 10, 6)]), ('#90a4ae', [ellipse(80, 84, 8, 4.5)]), ('#cfd8dc', [ellipse(77, 82, 3, 1.5)])]
+    layers.append(('#ffffff', [rib(30, 52, 34, 66, 1.4)]))
+    return layers
+
+
+def loza_negra():
+    """Loza negra: la cazuela negra y brillante de La Chamba, con su tapa, y una ollita."""
+    layers = black_pot(42, 64, 1.3)
+    layers += [(OUTLINE, [ellipse(42, 48, 20, 6)]), ('#2b2b2b', [ellipse(42, 48, 18, 4.5)]), (OUTLINE, [circle(42, 42, 4)]), ('#3a3a3a', [circle(42, 42, 2.6)])]
+    layers += black_pot(80, 80, 0.55)
+    return layers
+
+
+def recuerdo_tolima():
+    """Recuerdo del Tolima: la cazuela negra de La Chamba con la tilapia ahumada y el frasco de escabeche."""
+    layers = black_pot(44, 66, 1.3)
+    layers += fish_shape(44, 48, 40, 14, '#a8642a', '#d9a05a', -10, eye=False)
+    layers += [(OUTLINE, [rect(70, 40, 22, 48)]), ('#f6dfa0', [rect(72.5, 42.5, 17, 43)]), ('#d7263d', [rect(70, 34, 22, 8)]), ('#fbe9e7', [ellipse(81, 60, 6, 3), ellipse(81, 72, 6, 3)])]
+    layers += [('#e53935', [ellipse(18, 22, 4, 7, -20), ellipse(24, 20, 4, 7, 25)]), ('#4e8a34', [leaf(14, 36, 22, 26, 3)])]
+    return layers
+
+
+def merienda_malecon():
+    """Merienda del malecón: el pocillo de chocolate, los bizcochos de achira y el quesillo, junto al río."""
+    layers = [('#4fc3f7', [rect(4, 80, 92, 16)]), ('#e3f2fd', [rib(10, 86, 40, 86, 1), rib(56, 90, 90, 90, 1)])]
+    layers += [(OUTLINE, [ellipse(50, 70, 44, 12)]), ('#ffffff', [ellipse(50, 70, 41, 9.5)])]
+    layers += [(OUTLINE, ['M 18 36 L 46 36 L 43 66 L 21 66 Z']), ('#fff3e0', ['M 20.5 38.5 L 43.5 38.5 L 40.8 63.5 L 23.2 63.5 Z']), ('#6d3a1e', [ellipse(32, 40, 11, 2.5)])]
+    layers += biscuit(66, 62, 1.0, -10) + biscuit(72, 52, 0.9, 20)
+    layers += [(OUTLINE, [rect(54, 66, 22, 10)]), ('#fffde7', [rect(56, 68, 18, 6)])]
+    return layers
+
+
+def cena_opita():
+    """Cena opita: el asado huilense con su yuca, el arroz y el envuelto de maíz."""
+    layers = [(OUTLINE, [ellipse(48, 66, 44, 22)]), ('#ffffff', [ellipse(48, 66, 41, 19.5)])]
+    layers += [(OUTLINE, [ellipse(40, 60, 18, 10, -10)]), ('#a1452a', [ellipse(40, 60, 16, 8, -10)]), ('#7b2e14', [rib(28, 58, 52, 56, 1.2)])]
+    layers += [(OUTLINE, [rect(56, 62, 20, 8, 15)]), ('#fff3d6', [rect(57.5, 63.5, 17, 5, 15)])]
+    layers += [(OUTLINE, [ellipse(34, 76, 9, 4)]), ('#fafafa', [ellipse(34, 76, 7.5, 3)])]
+    layers += [(OUTLINE, [leaf(70, 40, 96, 30, 8)]), ('#9ccc65', [leaf(70, 40, 96, 30, 6)])]
+    return layers
+
+
+def noche_sanpedro():
+    """Noche del San Pedro: la pareja bailando el sanjuanero bajo las banderitas y los fuegos artificiales."""
+    layers = [('#1a2a4a', [rect(4, 4, 92, 92)])]
+    for cx, cy, col in [(24, 20, '#ffca28'), (74, 16, '#ec407a'), (50, 10, '#66bb6a')]:
+        layers.append((col, [rib(cx, cy, cx + dx, cy + dy, 1.2) for dx, dy in [(8, 0), (-8, 0), (0, 8), (0, -8), (6, 6), (-6, 6), (6, -6), (-6, -6)]]))
+    layers.append(('#ffffff', [rib(4, 34, 96, 30, 0.8)]))
+    layers.append(('#e53935', [poly(10 + k * 14, 33 - k * 0.4, 18 + k * 14, 33 - k * 0.4, 14 + k * 14, 40) for k in range(0, 6, 2)]))
+    layers.append(('#fdd835', [poly(10 + k * 14, 33 - k * 0.4, 18 + k * 14, 33 - k * 0.4, 14 + k * 14, 40) for k in range(1, 6, 2)]))
+    layers.append(('#5d4037', [rect(4, 84, 92, 12)]))
+    layers += [(OUTLINE, ['M 30 84 L 40 50 L 52 84 Z']), ('#e53935', ['M 32.5 82 L 40 55 L 49.5 82 Z']), ('#fdd835', [rect(31, 76, 20, 3)]), ('#6d4c32', [circle(40, 46, 5)])]
+    layers += [(OUTLINE, [rect(60, 56, 10, 28)]), ('#fafafa', [rect(61.5, 57.5, 7, 15)]), ('#424242', [rect(61.5, 72, 7, 12)]), ('#6d4c32', [circle(65, 51, 5)]), ('#f4e3b5', [ellipse(65, 47, 9, 2.2)])]
+    layers.append(('#d7263d', [rib(68, 60, 78, 58, 1.6)]))
+    return layers
+
+
+def almuerzo_opita():
+    """Almuerzo opita: el asado huilense con arroz, yuca y el jugo de cholupa del mercado."""
+    layers = [(OUTLINE, [ellipse(44, 64, 40, 22)]), ('#ffffff', [ellipse(44, 64, 37.5, 19.5)])]
+    layers += [(OUTLINE, [rect(18, 52, 28, 18, -6)]), ('#a1452a', [rect(20, 54, 24, 14, -6)])]
+    layers += [(OUTLINE, [ellipse(56, 66, 12, 6)]), ('#fafafa', [ellipse(56, 66, 10.5, 4.6)]), (OUTLINE, [rect(34, 74, 20, 7, 10)]), ('#fff3d6', [rect(35.5, 75.5, 17, 4, 10)])]
+    layers += [(OUTLINE, ['M 72 26 L 92 26 L 89 74 L 75 74 Z']), ('#e8f6ff', ['M 74.5 28.5 L 89.5 28.5 L 86.8 71.5 L 77.2 71.5 Z']), ('#ffb74d', ['M 75 38 L 89 38 L 86.8 71.5 L 77.2 71.5 Z'])]
+    return layers
+
+
+def fiambre_tatacoa():
+    """Fiambre de la Tatacoa: el fiambre envuelto en hoja de bijao, con la lechona, el tamal y la cantimplora."""
+    layers = [(OUTLINE, [leaf(6, 70, 94, 70, 30)]), ('#4e8a34', [leaf(6, 70, 94, 70, 28)]), ('#9ccc65', [rib(10, 70, 90, 70, 1)])]
+    layers += [(OUTLINE, [ellipse(38, 64, 18, 10)]), ('#c9782c', [ellipse(38, 64, 16, 8)]), (OUTLINE, [ellipse(62, 66, 14, 8)]), ('#f4c430', [ellipse(62, 66, 12, 6)])]
+    layers += [(OUTLINE, [circle(80, 30, 14)]), ('#78909c', [circle(80, 30, 12)]), ('#5d4037', [rect(77, 12, 6, 6)]), ('#c9a96b', [rib(66, 22, 94, 40, 1.6)])]
+    return layers
+
+
+def tatacoa():
+    """Noche de estrellas en la Tatacoa: el desierto rojo con sus cárcavas y cactus bajo el cielo estrellado."""
+    layers = [('#0d1440', [rect(4, 4, 92, 92)]), ('#1a237e', [rect(4, 40, 92, 30)])]
+    layers.append(('#ffffff', [circle(14, 12, 1.2), circle(30, 22, 1), circle(46, 10, 1.4), circle(62, 20, 1), circle(80, 12, 1.2), circle(88, 28, 1), circle(22, 34, 0.9), circle(56, 34, 0.9), circle(72, 40, 1)]))
+    layers.append(('#e3f2fd80', [ellipse(50, 26, 40, 4, -15)]))
+    layers += [('#c0582b', ['M 4 96 L 4 66 L 16 58 L 26 66 L 36 54 L 50 64 L 62 52 L 74 62 L 86 56 L 96 64 L 96 96 Z']), ('#8e3a1a', ['M 20 96 L 26 70 L 32 96 Z', 'M 56 96 L 62 62 L 70 96 Z', 'M 84 96 L 86 66 L 92 96 Z'])]
+    layers += [(OUTLINE, [rect(40, 64, 7, 28)]), ('#558b2f', [rect(41.5, 65.5, 4, 26)]), ('#558b2f', [rect(34, 72, 7, 4), rect(34, 66, 4, 9), rect(46, 76, 7, 4), rect(49, 70, 4, 9)])]
+    layers += [(OUTLINE, [rect(72, 74, 3, 18)]), ('#455a64', [rect(66, 70, 15, 5, -20)])]
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -4150,6 +4539,44 @@ ICONS = [
     (0xE10C, 'palmiste', palmiste),
     (0xE10D, 'fresh_hide', fresh_hide),
     (0xE10E, 'bagazo_cervecero', bagazo_cervecero),
+    (0xE10F, 'achira_plant', achira_plant),
+    (0xE110, 'achira_root', achira_root),
+    (0xE111, 'achira_mash', achira_mash),
+    (0xE112, 'wet_starch', wet_starch),
+    (0xE113, 'achira_starch', achira_starch),
+    (0xE114, 'bizcocho_dough', bizcocho_dough),
+    (0xE115, 'bizcochos', bizcochos),
+    (0xE116, 'bizcocho_box', bizcocho_box),
+    (0xE117, 'cafe_excelso', cafe_excelso),
+    (0xE118, 'cafe_especial', cafe_especial),
+    (0xE119, 'cascara', cascara),
+    (0xE11A, 'te_cascara', te_cascara),
+    (0xE11B, 'tilapia', tilapia),
+    (0xE11C, 'clean_tilapia', clean_tilapia),
+    (0xE11D, 'tilapia_fillet', tilapia_fillet),
+    (0xE11E, 'escabeche', escabeche),
+    (0xE11F, 'tilapia_ahumada', tilapia_ahumada),
+    (0xE120, 'almuerzo_represa', almuerzo_represa),
+    (0xE121, 'cerdo', cerdo),
+    (0xE122, 'carne_cerdo', carne_cerdo),
+    (0xE123, 'cuero_cerdo', cuero_cerdo),
+    (0xE124, 'cuero_limpio', cuero_limpio),
+    (0xE125, 'relleno', relleno),
+    (0xE126, 'tamal', tamal),
+    (0xE127, 'lechona', lechona),
+    (0xE128, 'desayuno_tolimense', desayuno_tolimense),
+    (0xE129, 'arcilla', arcilla),
+    (0xE12A, 'barro_pisado', barro_pisado),
+    (0xE12B, 'pieza_cruda', pieza_cruda),
+    (0xE12C, 'pieza_brunida', pieza_brunida),
+    (0xE12D, 'loza_negra', loza_negra),
+    (0xE12E, 'recuerdo_tolima', recuerdo_tolima),
+    (0xE12F, 'merienda_malecon', merienda_malecon),
+    (0xE130, 'cena_opita', cena_opita),
+    (0xE131, 'noche_sanpedro', noche_sanpedro),
+    (0xE132, 'almuerzo_opita', almuerzo_opita),
+    (0xE133, 'fiambre_tatacoa', fiambre_tatacoa),
+    (0xE134, 'tatacoa', tatacoa),
 ]
 
 
