@@ -2,7 +2,7 @@ import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID, ZONE_LIST } from '../data/zones/index.js';
 import { muleCount, muleLoad, stationBufferCap, stationInputCap, stationOutputRate, stationRate, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
-import { CHILDREN, ROAD_POS, chainOf, consumers, zoneOf, zoneUnlocked } from './chain.js';
+import { CHILDREN, ROAD_POS, chainOf, consumers, joinOf, perCycleOf, zoneOf, zoneUnlocked } from './chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { ROUTE_STOCK, routeActive, routeCapacity, routeRate, routeReserve } from './routes.js';
 import { inputSpace } from './production.js';
@@ -83,7 +83,8 @@ export function slowConsumers(state, id) {
   if (!children.length) return [];
   const def = STATIONS_BY_ID[id];
   const output = stationOutputRate(def, state.stations[id].level) * speedMult(state, id);
-  const take = (c) => stationRate(STATIONS_BY_ID[c], state.stations[c].level) * speedMult(state, c) * Object.values(STATIONS_BY_ID[c].in)[0];
+  const product = Object.keys(def.out)[0];
+  const take = (c) => stationRate(STATIONS_BY_ID[c], state.stations[c].level) * speedMult(state, c) * perCycleOf(c, product);
   const capacity = children.reduce((n, c) => n + take(c), 0) + exportsOf(state, id).reduce((n, r) => n + routeRate(state, r.id), 0);
   if (capacity >= output * 0.98) return [];
   return children.filter((c) => state.stations[c].level === Math.min(...children.map((x) => state.stations[x].level)));
@@ -101,8 +102,9 @@ export function exportSpace(state, routeId) {
   return { space: cap - stock - coming, cap };
 }
 
-// Destinos de las mulas de una estación: estaciones construidas y rutas ('export:<ruta>').
-const targetSpace = (state, t) => (t.startsWith('export:') ? exportSpace(state, t.slice(7)).space : inputSpace(state, t));
+// Destinos de las mulas de una estación: estaciones construidas y rutas ('export:<ruta>'). `product`: lo que
+// llevan (en una estación que junta dos, cada producto tiene su propio espacio; v4.0).
+const targetSpace = (state, t, product) => (t.startsWith('export:') ? exportSpace(state, t.slice(7)).space : inputSpace(state, t, joinOf(t, product) ? product : undefined));
 const targetCap = (state, t) => (t.startsWith('export:') ? exportSpace(state, t.slice(7)).cap : stationInputCap(STATIONS_BY_ID[t], state.stations[t].level, capMult(state, t)));
 const targetDest = (t) => (t.startsWith('export:') ? 'warehouse' : t);
 
@@ -179,7 +181,9 @@ export function stepMules(state, dt, bus) {
 }
 
 function deliver(state, m) {
-  if (m.to !== 'warehouse' && state.stations[m.to]) state.stations[m.to].input += m.amount;
+  const s = m.to !== 'warehouse' ? state.stations[m.to] : null;
+  if (s && joinOf(m.to, m.productId)) (s.joined ??= {})[m.productId] = (s.joined[m.productId] ?? 0) + m.amount;
+  else if (s) s.input += m.amount;
   else {
     const wh = state.zones[zoneOf(m.from)].warehouse;
     wh[m.productId] = (wh[m.productId] ?? 0) + m.amount;
@@ -199,6 +203,7 @@ function dispatchFrom(state, id, dt, bus) {
     return;
   }
   const load = teamLoad(state, id);
+  const product = Object.keys(def.out)[0];
   const targets = [...consumers(state, id), ...exportsOf(state, id).map((r) => `export:${r.id}`)];
 
   // Pueden salir varias mulas en el mismo instante si hay producto y mulas libres.
@@ -209,19 +214,19 @@ function dispatchFrom(state, id, dt, bus) {
     }
     if (s.buffer < load && s.sinceDeparture < MAX_IDLE) return;
     const amount = Math.min(s.buffer, load);
-    const next = pickConsumer(state, targets, amount);
+    const next = pickConsumer(state, targets, amount, product);
     if (next) {
-      sendMule(state, id, targetDest(next), Math.min(amount, targetSpace(state, next)), bus);
+      sendMule(state, id, targetDest(next), Math.min(amount, targetSpace(state, next, product)), bus);
       continue;
     }
     const almostFull = s.buffer >= PATIO_ALMOST_FULL * stationBufferCap(def, s.level, capMult(state, id));
-    const partial = almostFull ? pickConsumer(state, targets, amount * MIN_PARTIAL) : null;
+    const partial = almostFull ? pickConsumer(state, targets, amount * MIN_PARTIAL, product) : null;
     if (partial) {
-      sendMule(state, id, targetDest(partial), Math.min(amount, targetSpace(state, partial)), bus);
+      sendMule(state, id, targetDest(partial), Math.min(amount, targetSpace(state, partial, product)), bus);
       continue;
     }
     // Hay sitio, pero no para una carga entera: mejor esperar que salir con migajas.
-    if (!almostFull && targets.some((c) => targetSpace(state, c) > 0)) return;
+    if (!almostFull && targets.some((c) => targetSpace(state, c, product) > 0)) return;
     const zoneId = zoneOf(id);
     const reserve = targets.length ? DIVERT_RESERVE * warehouseCap(state, zoneId) : 0;
     const room = warehouseSpace(state, zoneId) - reserve;
@@ -244,11 +249,11 @@ function dispatchFrom(state, id, dt, bus) {
 // A una estación cuya entrada no alcanza para una carga entera (una rama por debajo del nivel de la
 // anterior) le basta con tener media entrada libre: se le lleva lo que quepa. Si no, nunca recibiría
 // nada y se quedaría parada.
-function pickConsumer(state, targets, amount) {
+function pickConsumer(state, targets, amount, product) {
   let best = null;
   let bestFill = Infinity;
   for (const c of targets) {
-    const space = targetSpace(state, c);
+    const space = targetSpace(state, c, product);
     const need = Math.min(amount, targetCap(state, c) * 0.5);
     if (space <= 0 || space < need - 1e-9) continue;
     const fill = 1 - space / targetCap(state, c);

@@ -1,6 +1,6 @@
 import { EventBus } from './EventBus.js';
 import { createInitialState } from '../sim/state.js';
-import { stepComposter, stepFuel, stepStation } from '../sim/production.js';
+import { stepByproducts, stepComposter, stepFuel, stepStation } from '../sim/production.js';
 import { ZONE_LIST } from '../data/zones/index.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { stepMules } from '../sim/transport.js';
@@ -46,7 +46,9 @@ export class Game {
 
   step(dt) {
     this.state.playTime += dt;
-    // Todas las zonas abiertas producen a la vez, aunque solo se vea una.
+    // Los subproductos pasan por su canaleta (v4.0); luego todas las zonas abiertas producen a la vez,
+    // aunque solo se vea una.
+    stepByproducts(this.state);
     for (const zone of ZONE_LIST) {
       if (!this.state.zones[zone.id]?.unlocked) continue;
       for (const id of zone.chain) {

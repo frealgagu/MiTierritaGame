@@ -4,9 +4,10 @@ import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
 import { capMult, consumeCompost, speedMult } from './modifiers.js';
 import { CALENDAR, clockOf, resting, seasonOf } from './calendar.js';
 import { fleetOf } from './fleet.js';
+import { BY_CHILDREN, joinOf } from './chain.js';
 
 export function createStationState() {
-  return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, imported: {}, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
+  return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, imported: {}, joined: {}, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
 }
 
 // La fuente de una zona al abrirla. Una cosecha de temporada (el Hormiguero, v3.4) empieza con la despensa
@@ -67,6 +68,13 @@ export function stepStation(state, id, dt, bus) {
     if (n < byInput) byInput = n;
     if (n <= 0 && !s.missing) s.missing = imp.product;
   }
+  // Lo que junta de otra estación de su zona (v4.0): sin eso tampoco trabaja (`lacking`: cuál le falta).
+  s.lacking = null;
+  for (const j of def.joins ?? []) {
+    const n = Math.floor(((s.joined ??= {})[j.product] ?? 0) / j.perCycle + 1e-9);
+    if (n < byInput) byInput = n;
+    if (n <= 0 && !s.lacking) s.lacking = j.product;
+  }
   const byOutput = Math.floor(space / outAmt);
 
   if (byOutput <= 0) {
@@ -101,17 +109,24 @@ export function stepStation(state, id, dt, bus) {
   if (id === 'wetmill') consumeCompost(state, cycles * outAmt);
   if (def.fuel && s.fuel > 0) s.fuel = Math.max(0, s.fuel - cycles * def.fuel.perCycle);
   for (const imp of def.imports ?? []) s.imported[imp.product] = Math.max(0, s.imported[imp.product] - cycles * imp.perCycle);
+  for (const j of def.joins ?? []) s.joined[j.product] = Math.max(0, s.joined[j.product] - cycles * j.perCycle);
   bus.emit('produced', { stationId: id, productId: outId, amount: cycles * outAmt });
 }
 
-// Espacio de entrada libre, contando lo que ya viene en camino.
-export function inputSpace(state, id) {
+// Espacio de entrada libre, contando lo que ya viene en camino. `product`: lo que se le lleva (su entrada o,
+// en una estación que junta dos, lo que junta; v4.0): cada uno tiene su propio espacio.
+export function inputSpace(state, id, product = mainInput(id)) {
   const def = STATIONS_BY_ID[id];
   const s = state.stations[id];
   const f = fleetOf(state);
-  const incoming = f ? f.incoming[id] ?? 0 : state.mules.reduce((n, m) => (m.to === id && m.phase === 'go' ? n + m.amount : n), 0);
-  return stationInputCap(def, s.level, capMult(state, id)) - s.input - incoming;
+  const key = incomingKey(id, product);
+  const incoming = f ? f.incoming[key] ?? 0 : state.mules.reduce((n, m) => (m.phase === 'go' && incomingKey(m.to, m.productId) === key ? n + m.amount : n), 0);
+  const have = joinOf(id, product) ? s.joined?.[product] ?? 0 : s.input;
+  return stationInputCap(def, s.level, capMult(state, id)) - have - incoming;
 }
+export const mainInput = (id) => Object.keys(STATIONS_BY_ID[id].in ?? {})[0];
+// La entrada principal se cuenta como siempre (la estación); lo que junta, aparte.
+export const incomingKey = (id, product) => (STATIONS_BY_ID[id] && joinOf(id, product) ? `${id}|${product}` : id);
 
 // Combustible: el subproducto de una estación (bagazo de la Molienda) pasa directo a la que lo
 // quema (Hornilla). Si nadie lo usa, se desecha al llenarse el patio de subproductos.
@@ -126,17 +141,28 @@ export function stepFuel(state, id) {
   src.byBuffer -= move;
 }
 
-// Compostera: recibe la pulpa del Beneficiadero por una canaleta (sin mulas) y produce compost,
-// que se queda en su patio y que el Cafetal va gastando.
-export function stepComposter(state, dt, bus) {
-  const c = state.stations.composter;
-  if (!c) return;
-  const w = state.stations.wetmill;
-  if (w?.byBuffer > 0) {
-    const room = stationInputCap(STATIONS_BY_ID.composter, c.level, capMult(state, 'composter')) - c.input;
-    const move = Math.max(0, Math.min(room, w.byBuffer));
-    c.input += move;
-    w.byBuffer -= move;
+// Subproductos (v4.0): lo que una estación saca además de su producto (la pulpa del Beneficiadero) pasa por
+// una canaleta, sin mulas, a las estaciones de su zona que lo usan; si son varias, primero a la de entrada más
+// vacía. Lo que nadie usa se queda en su patio de subproductos y, lleno, se desecha.
+export function stepByproducts(state) {
+  for (const [id, kids] of Object.entries(BY_CHILDREN)) {
+    const src = state.stations[id];
+    if (!src?.byBuffer || !kids.length) continue;
+    const built = kids.filter((c) => state.stations[c]);
+    while (src.byBuffer > 1e-9 && built.length) {
+      const room = (c) => stationInputCap(STATIONS_BY_ID[c], state.stations[c].level, capMult(state, c)) - state.stations[c].input;
+      const target = built.reduce((best, c) => (room(c) > room(best) ? c : best));
+      const move = Math.min(room(target), src.byBuffer);
+      if (move <= 1e-9) break;
+      state.stations[target].input += move;
+      src.byBuffer -= move;
+    }
   }
+}
+
+// Compostera: recibe la pulpa del Beneficiadero por la canaleta (stepByproducts) y produce compost, que se
+// queda en su patio y que el Cafetal va gastando.
+export function stepComposter(state, dt, bus) {
+  if (!state.stations.composter) return;
   stepStation(state, 'composter', dt, bus);
 }
