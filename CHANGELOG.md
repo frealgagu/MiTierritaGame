@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v4.0.2 — Cada producto con su color en la cadena
+- **🔗 En la cadena, cada producto tiene su propio color de tubo:** se ve cuándo una estación saca dos productos distintos (cada uno sigue con el suyo) y cuándo un producto se convierte en otro (el color cambia al pasar por la estación). Lo que llega de otras zonas sigue en azul, lo que frena en rojo y lo que falta por abrir en gris claro.
+- **🐈 Los gatos cuestan 5 ⭐** (antes 10).
+- **Corregido:** al tocar en el mapa algunas estaciones (como las Moldeadoras de La Chamba), el panel se abría en la pestaña de los arrieros 🐴 en vez de la estación: el mismo toque caía sobre la pestaña al abrirse el panel. Ahora el panel ignora ese toque.
+
 ## v4.0.1 — Reinicios hasta 60 y un viaje más directo en el mapa
 - **Los reinicios de cada región llegan hasta 60** y ahí se quedan: volver a empezar con el multiplicador al máximo (×2⁶⁰) ya no suma más reinicios. Los logros de las veces que se completó la región cuentan esos reinicios.
 - **Se dejó de guardar un registro de cada partida terminada**, que crecía con cada reinicio y hacía más pesada la copia de seguridad. Las partidas de antes conservan su número de reinicios (hasta 60).
