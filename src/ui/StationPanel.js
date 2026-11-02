@@ -86,22 +86,12 @@ export class StationPanel {
     this.built = null;
     // Al girar el teléfono cambia el ancho: los textos se vuelven a ajustar.
     window.addEventListener('resize', () => this.id && this.fitAll());
-    // Clic fantasma: al tocar una estación el panel se abre bajo el dedo y el navegador
-    // manda luego un «click» que caía en la pestaña 🐴 (o en «Mejorar»). Se ignora.
-    this.openedAt = -Infinity;
-    this.el.addEventListener('click', (e) => {
-      if (performance.now() - this.openedAt < 450) {
-        e.stopPropagation();
-        e.preventDefault();
-      }
-    }, true);
   }
 
   // tab: 'station' | 'transport' | 'route:<ruta>' (estaciones que reciben un producto de otra zona)
   open(id, tab = 'station') {
     this.id = id;
     this.tab = tab;
-    this.openedAt = performance.now();
     this.el.hidden = false;
     document.body.classList.add('panel-open');
     this.render();
