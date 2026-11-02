@@ -63,7 +63,7 @@ function importRoad(zone, product) {
   for (const [id, r] of Object.entries(zone.routes ?? {})) if (ROUTE_PRODUCT[id] === product) return r.road;
   return null;
 }
-const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag', papitas: 'criollas_bag', aceite: 'oil_bottle', patacones: 'patacon_bag', bolsas_asai: 'asai_bag' };
+const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag', papitas: 'criollas_bag', aceite: 'oil_bottle', patacones: 'patacon_bag', bolsas_asai: 'asai_bag', bizcochos: 'bizcochos' };
 
 export class EventArt {
   // scene: la escena del tablero (para el mapa y sus objetos).
@@ -1333,6 +1333,161 @@ const ART = {
       for (const [gx, gy] of [[a.x + a.w + 1.6, a.y + 2.6], [a.x + a.w + 2.6, a.y + 3.6]]) {
         art.clear(gx, gy, 0.8);
         art.prop(gx, gy, (g, p) => post(g, p.x, p.y, 0x2e7d32));
+      }
+    }
+  },
+
+  // --- El Tolima Grande (v4.0) ---
+
+  // El verano en el achiral: las matas secas, de hojas cafés, en el achiral (menos con cada compra); las mangueras
+  // que bajan de la quebrada, el jagüey lleno de agua y las matas nuevas que aguantan.
+  verano_achiral(art, stage, zone) {
+    const a = areaOf(zone, zone.farm.stationId);
+    if (stage < 3) {
+      art.prop(a.x + a.w, a.y + a.h, (g) => {
+        const n = [14, 9, 4][stage];
+        for (let i = 0; i < n; i++) {
+          const p = iso(a.x + 2.2 + ((i * 7) % 10) * 0.36, a.y + 2.2 + ((i * 3) % 9) * 0.38);
+          g.ellipse(p.x, p.y, 9, 4).fill({ color: 0xb08a4a, alpha: 0.8 });
+          for (const d of [-4, 0, 4]) g.moveTo(p.x + d, p.y).lineTo(p.x + d * 1.6, p.y - 9).stroke({ width: 1.6, color: 0x9a7a3a });
+        }
+      }, -4);
+    }
+    if (stage >= 1) {
+      art.prop(a.x + a.w, a.y + a.h, (g) => {
+        const p0 = iso(a.x - 0.5, a.y + a.h - 0.5);
+        const p1 = iso(a.x + a.w - 1, a.y + a.h - 1.5);
+        g.moveTo(p0.x, p0.y).quadraticCurveTo((p0.x + p1.x) / 2, p0.y + 10, p1.x, p1.y).stroke({ width: 2.2, color: 0x2e7d32 });
+      }, -4);
+    }
+    if (stage >= 2) {
+      art.clear(a.x + a.w + 0.8, a.y + 1, 1.2);
+      art.prop(a.x + a.w + 0.8, a.y + 1, (g, p) => {
+        g.ellipse(p.x, p.y, 26, 11).fill(0x8d6e4a).stroke(OUTLINE);
+        g.ellipse(p.x, p.y - 1, 22, 9).fill(0x4fa3c7);
+        g.moveTo(p.x - 10, p.y - 2).lineTo(p.x + 4, p.y - 2).stroke({ width: 1, color: 0xe8f6ff, alpha: 0.7 });
+      });
+    }
+    if (stage >= 3) {
+      art.anim(a.x + 0.6, a.y + a.h + 0.6, (g, t) => {
+        const p = iso(a.x + 0.6, a.y + a.h + 0.6);
+        person(g, p.x, p.y, { shirt: 0xe53935, skin: SKIN[2], hat: true, arm: Math.abs(Math.sin(t * 2)) });
+      }, 0.6);
+    }
+  },
+
+  // La traviesa: las cajas de cereza que esperan junto al Beneficiadero (menos con cada compra), la despulpadora
+  // prestada, los tanques nuevos y el letrero del beneficio ecológico.
+  traviesa(art, stage, zone) {
+    const a = areaOf(zone, 'huila_wetmill');
+    const px = a.x + a.w + 0.5;
+    const py = a.y + 0.8;
+    art.clear(px, py, 1.6);
+    const n = [12, 8, 5, 2][stage];
+    art.prop(px, py, (g, p) => {
+      for (let i = 0; i < n; i++) {
+        const row = Math.floor(i / 4);
+        const x = p.x + ((i % 4) - 1.5) * 10 + row * 4;
+        const y = p.y - row * 7;
+        g.rect(x - 4.5, y - 7, 9, 7).fill(0x8d6e4a).stroke(THIN);
+        for (let k = 0; k < 3; k++) g.circle(x - 3 + k * 3, y - 8, 1.6).fill(0xd7263d);
+      }
+    });
+    if (stage >= 1) {
+      art.clear(px, py + 1.4, 1);
+      art.prop(px, py + 1.4, (g, p) => {
+        g.rect(p.x - 8, p.y - 14, 16, 14).fill(0xb0bec5).stroke(OUTLINE);
+        g.poly([p.x - 6, p.y - 14, p.x + 6, p.y - 14, p.x + 3, p.y - 22, p.x - 3, p.y - 22]).fill(0x90a4ae).stroke(THIN);
+      });
+    }
+    if (stage >= 2) {
+      art.clear(px + 1.2, py + 1.4, 1);
+      art.prop(px + 1.2, py + 1.4, (g, p) => {
+        for (let k = 0; k < 2; k++) {
+          g.rect(p.x - 12 + k * 13, p.y - 12, 10, 12).fill(0x1e88e5).stroke(OUTLINE);
+          g.ellipse(p.x - 7 + k * 13, p.y - 12, 5, 1.8).fill(0x6d4c41).stroke(THIN);
+        }
+      });
+    }
+    if (stage >= 3) art.prop(px - 0.8, py + 2.4, (g, p) => post(g, p.x, p.y, 0x2e7d32));
+  },
+
+  // Semana Santa en la represa: puestos con toldos morado, blanco y verde, uno por compra, y la gente.
+  semana_santa_betania(art, stage) {
+    fairScene(art, stage, [0x7b1fa2, 0xf5f5f5, 0x2e7d32]);
+  },
+
+  // Derrumbe en la vía: las piedras en la carretera de los bizcochos; las mulas por la trocha, el paso a un
+  // carril y la vía despejada.
+  derrumbe_tolima(art, stage, zone) {
+    landslideScene(art, stage, zone, 'bizcochos', 'derrumbe');
+  },
+
+  // La leña mojada: la lluvia sobre el Horno de quema y la leña empapada (menos con cada compra); la ramada con la
+  // leña seca, los costales de boñiga seca y el horno con techo.
+  lena_mojada(art, stage, zone) {
+    const a = areaOf(zone, 'black_kiln');
+    if (stage < 3) {
+      const n = [26, 16, 8][stage];
+      swarm(art, { x: a.x - 0.5, y: a.y - 0.5, w: a.w + 1, h: a.h + 1 }, n, (g, x, y) => g.moveTo(x, y - 30).lineTo(x - 2, y - 22).stroke({ width: 1.2, color: 0x90caf9, alpha: 0.8 }), true);
+    }
+    const sx = a.x + a.w + 0.5;
+    const sy = a.y + 0.6;
+    art.clear(sx, sy, 1.4);
+    art.prop(sx, sy, (g, p) => {
+      for (let k = 0; k < 4; k++) g.roundRect(p.x - 12 + (k % 2) * 4, p.y - 4 - k * 3, 22, 3.5, 1.5).fill(stage >= 1 ? 0x8b5a2b : 0x5d4a3a).stroke(THIN);
+      if (stage >= 1) {
+        for (const d of [-14, 14]) g.rect(p.x + d - 1, p.y - 26, 2, 26).fill(0x6b4a2e);
+        g.poly([p.x - 18, p.y - 26, p.x + 18, p.y - 26, p.x + 14, p.y - 32, p.x - 14, p.y - 32]).fill(0x9aa3a8).stroke(OUTLINE);
+      }
+    });
+    if (stage >= 2) {
+      art.clear(sx, sy + 1.4, 1);
+      art.prop(sx, sy + 1.4, (g, p) => {
+        for (let k = 0; k < 3; k++) {
+          g.ellipse(p.x - 10 + k * 10, p.y - 5, 6, 5).fill(0xd7b98a).stroke(THIN);
+          g.ellipse(p.x - 10 + k * 10, p.y - 9, 3, 1.4).fill(0x6d5a3a);
+        }
+      });
+    }
+  },
+
+  // Festival del Bambuco: la fila de visitantes frente a la Salida, las parejas bailando el sanjuanero, los guías con
+  // banderitas, el campero que sale al desierto y los letreros.
+  festival_bambuco(art, stage, zone) {
+    const a = areaOf(zone, 'salida_tatacoa');
+    queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
+    art.anim(a.x - 3, a.y - 1, (g, t) => {
+      for (let k = 0; k < 3; k++) {
+        const p = iso(a.x - 4 + k * 1.2, a.y - 0.5 + (k % 2) * 0.8);
+        const step = Math.abs(Math.sin(t * 5 + k)) * 2;
+        person(g, p.x, p.y - step, { shirt: 0xffffff, skin: SKIN[1], hat: true, arm: Math.abs(Math.sin(t * 5 + k)) });
+        person(g, p.x + 10, p.y - Math.abs(Math.sin(t * 5 + k + 1.5)) * 2, { shirt: 0xffffff, skin: SKIN[1], skirt: [0xd7263d, 0xfdd835, 0x2e7d32][k], arm: 1 });
+      }
+    }, 1);
+    const guides = stage >= 3 ? 4 : stage >= 1 ? 2 : 0;
+    if (guides) {
+      art.anim(a.x + a.w + 0.4, a.y + 1, (g, t) => {
+        for (let k = 0; k < guides; k++) {
+          const p = iso(a.x + a.w + 0.4 + (k % 2) * 0.7, a.y + 0.6 + Math.floor(k / 2) * 0.9);
+          person(g, p.x, p.y, { shirt: 0x1a237e, skin: SKIN[1], hat: 0x3e2723, arm: 1 });
+          const wave = Math.sin(t * 4 + k) * 2;
+          g.moveTo(p.x + 5.5, p.y - 16).lineTo(p.x + 5.5, p.y - 30).stroke({ width: 1, color: 0x5e3b1c });
+          g.poly([p.x + 5.5, p.y - 30, p.x + 14, p.y - 27 + wave, p.x + 5.5, p.y - 24]).fill(0xfdd835).stroke(THIN);
+        }
+      });
+    }
+    if (stage >= 2) {
+      art.anim(a.x, a.y - 4, (g, t) => {
+        const f = (t * 0.06) % 1;
+        const p = iso(a.x - 2 + f * 8, a.y - 2 + f * 2);
+        g.roundRect(p.x - 12, p.y - 12, 24, 9, 2).fill(0x2e7d32).stroke(OUTLINE);
+        g.roundRect(p.x - 6, p.y - 18, 12, 7, 2).fill(0x388e3c).stroke(OUTLINE);
+        for (const d of [-7, 7]) g.circle(p.x + d, p.y - 3, 3).fill(0x263238);
+      }, 3);
+      for (const [gx, gy] of [[a.x + a.w + 1.6, a.y + 2.6], [a.x + a.w + 2.6, a.y + 3.6]]) {
+        art.clear(gx, gy, 0.8);
+        art.prop(gx, gy, (g, p) => post(g, p.x, p.y, 0xd7263d));
       }
     }
   },
