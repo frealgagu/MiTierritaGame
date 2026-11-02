@@ -22,7 +22,7 @@ import { sumValues } from '../sim/state.js';
 import { busyMules, dockStock, exportsOf, pendingRoutes, slowConsumers, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
 import { analyzeChain, expectedCompostValue, routeFlow } from '../sim/analysis.js';
 import { COMPOST_VALUE, compostValueBoost, jeepCount, muleSpeedMult, saleValue } from '../sim/modifiers.js';
-import { PARENT, branchShare, consumers, zoneOf } from '../sim/chain.js';
+import { BY_CHILDREN, JOIN_FROM, PARENT, branchShare, consumers, zoneOf } from '../sim/chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { jeepResting } from '../sim/dispatch.js';
 import { routeActive, routeCapacity, routeRate, routeReserve, routeStations, stationImportRate } from '../sim/routes.js';
@@ -343,6 +343,16 @@ function stationInfo(id) {
   if (inId) {
     rows.push({ key: 'input', label: t('Entrada'), value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${PRODUCTS[inId].icon}` });
   }
+  // Lo que junta de otra estación de su zona (v4.0), con su propio espacio.
+  for (const j of def.joins ?? []) {
+    const product = PRODUCTS[j.product];
+    rows.push({ key: `join_${j.product}`, label: `🔗 ${product.name}`, value: (s, l) => `${formatAmount(s.stations[id].joined?.[j.product] ?? 0)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${product.icon}` });
+  }
+  // Su subproducto, que pasa por la canaleta a las que lo usan (v4.0; la pulpa del Beneficiadero).
+  const byId = def.by && BY_CHILDREN[id]?.length ? Object.keys(def.by)[0] : null;
+  if (byId) {
+    rows.push({ key: 'by', label: t('{p} (subproducto)', { p: PRODUCTS[byId].name }), value: (s, l) => `${formatNumber(s.stations[id].byBuffer ?? 0)} / ${formatNumber(stationBufferCap(def, l, capMult(s, id)))} ${PRODUCTS[byId].icon}` });
+  }
   for (const imp of def.imports ?? []) {
     const product = PRODUCTS[imp.product];
     const r = ROUTES_BY_ID[imp.route];
@@ -379,12 +389,18 @@ function stationInfo(id) {
   return {
     icon: def.icon,
     title: def.name,
-    subtitle: inId
+    subtitle: inId && def.joins
+      ? t('Junta {a} y {b} en {c}', { a: PRODUCTS[inId].name.toLowerCase(), b: listJoin(def.joins.map((j) => PRODUCTS[j.product].name.toLowerCase())), c: out.name.toLowerCase() })
+      : inId && byId
+        ? t('Convierte {a} en {b} y {c}', { a: PRODUCTS[inId].name.toLowerCase(), b: out.name.toLowerCase(), c: PRODUCTS[byId].name.toLowerCase() })
+        : inId
       ? t('Convierte {a} en {b}', { a: PRODUCTS[inId].name.toLowerCase(), b: out.name.toLowerCase() })
       : def.imports
         ? t('Convierte {a} de otras zonas en {b}', { a: listProducts(def.imports), b: out.name.toLowerCase() })
         : t('Fuente ilimitada de {p}', { p: out.name.toLowerCase() }),
-    recipe: inId || def.imports ? `${[...(inId ? [recipe(def.in)] : []), ...(def.imports ?? []).map((imp) => `${imp.perCycle} ${PRODUCTS[imp.product].icon}🚌`)].join(' + ')} <span>➜</span> ${recipe(def.out)}` : `${def.icon} <span>➜</span> ${recipe(def.out)}`,
+    recipe: inId || def.imports
+      ? `${[...(inId ? [recipe(def.in)] : []), ...(def.joins ?? []).map((j) => `${j.perCycle} ${PRODUCTS[j.product].icon}`), ...(def.imports ?? []).map((imp) => `${imp.perCycle} ${PRODUCTS[imp.product].icon}🚌`)].join(' + ')} <span>➜</span> ${recipe(def.out)}${byId ? ` + ${recipe(def.by)}` : ''}`
+      : `${def.icon} <span>➜</span> ${recipe(def.out)}`,
     facts: FACTS[id],
     milestoneWhat: t('velocidad'),
     upgradeId: id,
@@ -496,6 +512,13 @@ function stationStatus(state, id) {
         : t('⏸️ Falta {p}: {zone} no produce suficiente. Mejora allá la cadena.', { p: imp.name.toLowerCase(), zone: ZONES_BY_ID[r.from].name }),
       bad: true,
     };
+  }
+  // Espera lo que junta de otra estación de su zona (v4.0): es esa la que hay que subir (o construir).
+  const joinLack = row?.joinLimited ?? (a.starved ? st.lacking : null);
+  if (joinLack) {
+    const from = JOIN_FROM[id][joinLack];
+    const p = PRODUCTS[joinLack].name.toLowerCase();
+    return { text: state.stations[from] ? t('⏸️ Falta {p}: {station} no produce suficiente. Mejórala.', { p, station: nameOf(from) }) : t('⏸️ Falta {p}: construye {station}.', { p, station: nameOf(from) }), bad: true };
   }
   // Le llega más de lo que puede procesar: procesa menos de lo que le toca de la anterior (en una rama,
   // su parte; lo que la anterior guarda para una ruta que aún no abre se vende y no es culpa de esta).

@@ -22,7 +22,7 @@ import { stationImportCap, stationRate } from './rules.js';
 import { effectsOf, speedMult } from './modifiers.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { REGION_OF_ZONE } from '../data/regions.js';
-import { PARENT } from './chain.js';
+import { JOIN_FROM, PARENT } from './chain.js';
 import { PRODUCTS } from '../data/products.js';
 import { WithArticle, withArticle } from '../data/lore.js';
 import { gainRenown, profileOf } from './renown.js';
@@ -211,11 +211,14 @@ export function objectiveUpgrades(board) {
   const missing = eventItems(board).filter((i) => i.have < i.need);
   const ids = new Set();
   for (const { product } of missing.length ? missing : eventItems(board)) {
-    let id = def.stations.find((s) => Object.keys(STATIONS_BY_ID[s].out)[0] === product);
-    while (id) {
+    // Hacia atrás por la cadena y, en una estación que junta dos (v4.0), también por la que le hace lo otro.
+    const walk = (id) => {
+      if (!id || ids.has(id)) return;
       ids.add(id);
-      id = PARENT[id];
-    }
+      walk(PARENT[id]);
+      for (const from of Object.values(JOIN_FROM[id] ?? {})) walk(from);
+    };
+    walk(def.stations.find((s) => Object.keys(STATIONS_BY_ID[s].out)[0] === product));
   }
   return [...[...ids].flatMap((id) => [id, `${id}:transport`]), ...(obj.kind === 'sold' ? [`dispatch:${def.zone}`] : [])];
 }

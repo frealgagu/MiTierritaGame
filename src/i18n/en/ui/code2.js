@@ -150,4 +150,12 @@ export default {
   '✅ La banda lleva todo lo que produce la estación.': '✅ The belt carries everything the station produces.',
   '🍲 A la hora del almuerzo': '🍲 At lunchtime',
   '🌙 De noche': '🌙 At night',
+  '{p} (subproducto)': '{p} (by-product)',
+  'Junta {a} y {b} en {c}': 'Combines {a} and {b} into {c}',
+  'Convierte {a} en {b} y {c}': 'Turns {a} into {b} and {c}',
+  '⏸️ Falta {p}: {station} no produce suficiente. Mejórala.': '⏸️ Missing {p}: {station} doesn’t make enough. Upgrade it.',
+  '⏸️ Falta {p}: construye {station}.': '⏸️ Missing {p}: build {station}.',
+  '{p} de {station}: llegan {n}/s.': '{p} from {station}: {n}/s arrive.',
+  'Además saca {n} de {p}, que pasan por la canaleta a {stations}.': 'It also yields {n} of {p}, which flow down the chute to {stations}.',
+  '🗑️ {n} se desechan: {stations} no da abasto.': '🗑️ {n} are thrown away: {stations} can’t keep up.',
 };

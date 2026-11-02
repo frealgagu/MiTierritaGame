@@ -150,4 +150,12 @@ export default {
   '✅ La banda lleva todo lo que produce la estación.': '✅ Le tapis porte tout ce que produit la station.',
   '🍲 A la hora del almuerzo': '🍲 À l’heure du déjeuner',
   '🌙 De noche': '🌙 La nuit',
+  '{p} (subproducto)': '{p} (sous-produit)',
+  'Junta {a} y {b} en {c}': 'Réunit {a} et {b} en {c}',
+  'Convierte {a} en {b} y {c}': 'Transforme {a} en {b} et {c}',
+  '⏸️ Falta {p}: {station} no produce suficiente. Mejórala.': '⏸️ Il manque {p} : {station} n’en produit pas assez. Améliore-la.',
+  '⏸️ Falta {p}: construye {station}.': '⏸️ Il manque {p} : construis {station}.',
+  '{p} de {station}: llegan {n}/s.': '{p} de {station} : il arrive {n}/s.',
+  'Además saca {n} de {p}, que pasan por la canaleta a {stations}.': 'Elle sort aussi {n} de {p}, qui passent par la rigole jusqu’à {stations}.',
+  '🗑️ {n} se desechan: {stations} no da abasto.': '🗑️ {n} sont jetés : {stations} ne suit pas.',
 };
