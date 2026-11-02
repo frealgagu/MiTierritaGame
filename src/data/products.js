@@ -325,6 +325,53 @@ export const PRODUCTS = {
   provision_canoa: { name: 'Provisión de la canoa', zone: 'leticia', value: 2000000, icon: ICON.provisionCanoa, color: 0x8d6e4a },
   excursion_delfines: { name: 'Salida a ver los delfines rosados', zone: 'leticia', value: 24000000, icon: ICON.delfines, color: 0xf48fb1 },
 
+  // Tolima Grande (v4.0)
+  achira_root: { name: 'Rizoma de achira', zone: 'achirales', value: 1, icon: ICON.achiraRoot, color: 0xc9a27a },
+  achira_mash: { name: 'Achira rallada', zone: 'achirales', value: 3, icon: ICON.achiraMash, color: 0xe8dcc0 },
+  wet_starch: { name: 'Almidón húmedo', zone: 'achirales', value: 6, icon: ICON.wetStarch, color: 0xf1ece0 },
+  achira_starch: { name: 'Almidón de achira', zone: 'achirales', value: 10, icon: ICON.achiraStarch, color: 0xfaf8f2 },
+  bizcocho_dough: { name: 'Masa de bizcocho', zone: 'achirales', value: 30, icon: ICON.bizcochoDough, color: 0xf3e3b8 },
+  bizcochos: { name: 'Bizcochos de achira', zone: 'achirales', value: 45, icon: ICON.bizcochos, color: 0xe8b860 },
+  bizcocho_box: { name: 'Caja de bizcochos', zone: 'achirales', value: 250, icon: ICON.bizcochoBox, color: 0xc8a26a },
+
+  huila_cherry: { name: 'Cereza del Huila', zone: 'cafe_huila', value: 10, icon: ICON.cherry, color: 0xd7263d },
+  huila_parchment: { name: 'Pergamino del Huila', zone: 'cafe_huila', value: 25, icon: ICON.parchment, color: 0xcfae7a },
+  cafe_excelso: { name: 'Café excelso', zone: 'cafe_huila', value: 60, icon: ICON.cafeExcelso, color: 0x8fae5d },
+  huila_roasted: { name: 'Café tostado del Huila', zone: 'cafe_huila', value: 150, icon: ICON.roastedCoffee, color: 0x6b3e26 },
+  cafe_especial: { name: 'Café especial del Huila', zone: 'cafe_huila', value: 250, icon: ICON.cafeEspecial, color: 0xb5452f },
+  cascara: { name: 'Cáscara de café', zone: 'cafe_huila', value: 8, icon: ICON.cascara, color: 0x9b2335 },
+  te_cascara: { name: 'Té de cáscara', zone: 'cafe_huila', value: 120, icon: ICON.teCascara, color: 0xc0622b },
+
+  tilapia: { name: 'Tilapia', zone: 'betania', value: 125, icon: ICON.tilapia, color: 0x8a9a9a },
+  clean_tilapia: { name: 'Tilapia limpia', zone: 'betania', value: 300, icon: ICON.cleanTilapia, color: 0xf2e6e0 },
+  tilapia_fillet: { name: 'Filete de tilapia', zone: 'betania', value: 800, icon: ICON.tilapiaFillet, color: 0xfbe9e7 },
+  escabeche: { name: 'Tilapia en escabeche', zone: 'betania', value: 2000, icon: ICON.escabeche, color: 0xf2a03d },
+  tilapia_ahumada: { name: 'Tilapia ahumada', zone: 'betania', value: 4000, icon: ICON.tilapiaAhumada, color: 0xa8642a },
+  almuerzo_represa: { name: 'Almuerzo de la represa', zone: 'betania', value: 4000, icon: ICON.almuerzoRepresa, color: 0xf4c430 },
+
+  cerdo: { name: 'Cerdo', zone: 'lechoneria', value: 1000, icon: ICON.cerdo, color: 0xf4a7b0 },
+  carne_cerdo: { name: 'Carne de cerdo', zone: 'lechoneria', value: 2500, icon: ICON.carneCerdo, color: 0xe57373 },
+  cuero_cerdo: { name: 'Cuero de cerdo', zone: 'lechoneria', value: 1200, icon: ICON.cueroCerdo, color: 0xf0b9a8 },
+  cuero_limpio: { name: 'Cuero limpio', zone: 'lechoneria', value: 3000, icon: ICON.cueroLimpio, color: 0xe8c49a },
+  relleno: { name: 'Relleno de la lechona', zone: 'lechoneria', value: 5000, icon: ICON.relleno, color: 0xd9a441 },
+  tamal: { name: 'Tamal tolimense', zone: 'lechoneria', value: 5000, icon: ICON.tamal, color: 0x6aa84f },
+  lechona: { name: 'Lechona tolimense', zone: 'lechoneria', value: 220000, icon: ICON.lechona, color: 0xc9782c },
+  desayuno_tolimense: { name: 'Desayuno tolimense', zone: 'lechoneria', value: 100000, icon: ICON.desayunoTolimense, color: 0x6aa84f },
+
+  arcilla: { name: 'Arcilla', zone: 'chamba', value: 6000, icon: ICON.arcilla, color: 0x8d6e63 },
+  barro_pisado: { name: 'Barro pisado', zone: 'chamba', value: 12000, icon: ICON.barroPisado, color: 0x795548 },
+  pieza_cruda: { name: 'Pieza modelada', zone: 'chamba', value: 30000, icon: ICON.piezaCruda, color: 0xa1887f },
+  pieza_brunida: { name: 'Pieza bruñida', zone: 'chamba', value: 70000, icon: ICON.piezaBrunida, color: 0xbc8f6f },
+  loza_negra: { name: 'Loza negra', zone: 'chamba', value: 120000, icon: ICON.lozaNegra, color: 0x2b2b2b },
+  recuerdo_tolima: { name: 'Recuerdo del Tolima', zone: 'chamba', value: 1200000, icon: ICON.recuerdoTolima, color: 0x3e2723 },
+
+  merienda_malecon: { name: 'Merienda del malecón', zone: 'neiva', value: 150000, icon: ICON.meriendaMalecon, color: 0xe8b860 },
+  cena_opita: { name: 'Cena opita', zone: 'neiva', value: 400000, icon: ICON.cenaOpita, color: 0xc97a32 },
+  noche_sanpedro: { name: 'Noche del San Pedro', zone: 'neiva', value: 3200000, icon: ICON.nocheSanpedro, color: 0xd81b60 },
+  almuerzo_opita: { name: 'Almuerzo opita', zone: 'neiva', value: 600000, icon: ICON.almuerzoOpita, color: 0xf4c430 },
+  fiambre_tatacoa: { name: 'Fiambre de la Tatacoa', zone: 'neiva', value: 2000000, icon: ICON.fiambreTatacoa, color: 0x8d6e4a },
+  excursion_tatacoa: { name: 'Noche de estrellas en la Tatacoa', zone: 'neiva', value: 24000000, icon: ICON.tatacoa, color: 0x1a237e },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

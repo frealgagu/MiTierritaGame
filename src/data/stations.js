@@ -396,6 +396,66 @@ export const STATIONS = [
   { id: 'provisiones_canoa', zone: 'leticia', name: 'Provisiones de la canoa', icon: ICON.provisionCanoa, in: { almuerzo_mercado: 1 }, imports: [{ product: 'desayuno_amazonico', perCycle: 1, route: 'desayunos_amazonicos' }, { product: 'banquete_maloca', perCycle: 1, route: 'banquetes_maloca' }], out: { provision_canoa: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.52' },
   { id: 'salida_delfines', zone: 'leticia', name: 'Salida a los delfines', icon: ICON.delfines, in: { provision_canoa: 4 }, out: { excursion_delfines: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.52' },
 
+  // Tolima Grande (v4.0), la octava región: se abre al completar Leticia. Mismos números que el Amazonas, con
+  // las dos mecánicas de la v4.0: en el Café del Huila el Beneficiadero saca también la cáscara (que el Secadero
+  // vuelve té); en la Lechonería el Desposte saca carne y cuero, y el Horno de leña los junta en la lechona.
+  // Los Achirales (sur del Tolima: Natagaima y Coyaima): del rizoma de achira a los bizcochos.
+  { id: 'achiral', zone: 'achirales', name: 'Achiral', icon: ICON.achiraPlant, infinite: true, out: { achira_root: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '4.0' },
+  { id: 'achira_grater', zone: 'achirales', name: 'Rallador de achira', icon: ICON.achiraMash, in: { achira_root: 2 }, out: { achira_mash: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '4.0' },
+  { id: 'starch_tanks', zone: 'achirales', name: 'Tanques de asiento', icon: ICON.wetStarch, in: { achira_mash: 1 }, out: { wet_starch: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '4.0' },
+  { id: 'starch_patio', zone: 'achirales', name: 'Patio de secado', icon: ICON.achiraStarch, in: { wet_starch: 1 }, out: { achira_starch: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '4.0' },
+  { id: 'achira_kneader', zone: 'achirales', name: 'Amasadero', icon: ICON.bizcochoDough, in: { achira_starch: 4 }, out: { bizcocho_dough: 3 }, cycle: 16, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '4.0' },
+  { id: 'bizcocho_oven', zone: 'achirales', name: 'Horno de bizcochos', icon: ICON.bizcochos, in: { bizcocho_dough: 1 }, out: { bizcochos: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '4.0' },
+  { id: 'bizcocho_packer', zone: 'achirales', name: 'Empacadora de bizcochos', icon: ICON.bizcochoBox, in: { bizcochos: 4 }, out: { bizcocho_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '4.0' },
+
+  // El Café del Huila (Pitalito): el Beneficiadero saca el café pergamino y la cáscara de la cereza (la
+  // cascarilla), que pasa por la canaleta al Secadero de cáscara y sale como té hacia Neiva.
+  { id: 'cafetal_huila', zone: 'cafe_huila', name: 'Cafetal de montaña', icon: ICON.cherry, infinite: true, out: { huila_cherry: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '4.0' },
+  { id: 'huila_wetmill', zone: 'cafe_huila', name: 'Beneficiadero del Huila', icon: ICON.parchment, in: { huila_cherry: 1 }, out: { huila_parchment: 1 }, by: { cascara: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '4.0' },
+  { id: 'huila_huller', zone: 'cafe_huila', name: 'Trilladora', icon: ICON.cafeExcelso, in: { huila_parchment: 2 }, out: { cafe_excelso: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '4.0' },
+  { id: 'huila_roaster', zone: 'cafe_huila', name: 'Tostadora', icon: ICON.roastedCoffee, in: { cafe_excelso: 2 }, out: { huila_roasted: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '4.0' },
+  { id: 'huila_packer', zone: 'cafe_huila', name: 'Empacadora de café especial', icon: ICON.cafeEspecial, in: { huila_roasted: 1 }, out: { cafe_especial: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '4.0' },
+  { id: 'cascara_dryer', zone: 'cafe_huila', name: 'Secadero de cáscara', icon: ICON.teCascara, in: { cascara: 4 }, out: { te_cascara: 1 }, cycle: 6.4, unlockCost: 400000, upgradeBase: 500, growth: 1.15, release: '4.0' },
+
+  // La Represa de Betania: la tilapia de las jaulas se reparte entre el Ahumadero, la Fileteadora (que le pasa los
+  // filetes a la Olla del escabeche) y la Cocina de la represa (tilapia frita con patacón).
+  { id: 'tilapia_cages', zone: 'betania', name: 'Jaulas de tilapia', icon: ICON.tilapia, infinite: true, out: { tilapia: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '4.0' },
+  { id: 'tilapia_cleaner', zone: 'betania', name: 'Limpieza de tilapia', icon: ICON.cleanTilapia, in: { tilapia: 1 }, out: { clean_tilapia: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '4.0' },
+  { id: 'tilapia_smoker', zone: 'betania', name: 'Ahumadero', icon: ICON.tilapiaAhumada, in: { clean_tilapia: 8 }, out: { tilapia_ahumada: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '4.0' },
+  { id: 'tilapia_filleter', zone: 'betania', name: 'Fileteadora de tilapia', icon: ICON.tilapiaFillet, in: { clean_tilapia: 2 }, out: { tilapia_fillet: 1 }, cycle: 16, unlockCost: 1000000, upgradeBase: 600, growth: 1.15, release: '4.0' },
+  { id: 'escabeche_pot', zone: 'betania', name: 'Olla del escabeche', icon: ICON.escabeche, in: { tilapia_fillet: 2 }, out: { escabeche: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '4.0' },
+  { id: 'represa_kitchen', zone: 'betania', name: 'Cocina de la represa', icon: ICON.almuerzoRepresa, in: { clean_tilapia: 4 }, out: { almuerzo_represa: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '4.0' },
+
+  // La Lechonería (Ibagué): el Desposte saca la carne y el cuero. La carne se reparte entre la Paila del relleno y el
+  // Fogón del tamal; el cuero pasa por la canaleta a la Limpieza del cuero, y el Horno de leña junta el relleno con
+  // el cuero limpio en la lechona. La Mesa del desayuno sirve el tamal con bizcochos de achira y café del Huila.
+  { id: 'pigsty', zone: 'lechoneria', name: 'Chiquero', icon: ICON.cerdo, infinite: true, out: { cerdo: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '4.0' },
+  { id: 'pork_butcher', zone: 'lechoneria', name: 'Desposte de cerdo', icon: ICON.carneCerdo, in: { cerdo: 2 }, out: { carne_cerdo: 1 }, by: { cuero_cerdo: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '4.0' },
+  { id: 'skin_cleaner', zone: 'lechoneria', name: 'Limpieza del cuero', icon: ICON.cueroLimpio, in: { cuero_cerdo: 2 }, out: { cuero_limpio: 1 }, cycle: 8, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '4.0' },
+  { id: 'relleno_pot', zone: 'lechoneria', name: 'Paila del relleno', icon: ICON.relleno, in: { carne_cerdo: 1 }, out: { relleno: 1 }, cycle: 8, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '4.0' },
+  { id: 'tamal_stove', zone: 'lechoneria', name: 'Fogón del tamal', icon: ICON.tamal, in: { carne_cerdo: 1 }, out: { tamal: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '4.0' },
+  { id: 'lechona_oven', zone: 'lechoneria', name: 'Horno de leña', icon: ICON.lechona, in: { relleno: 4 }, joins: [{ product: 'cuero_limpio', perCycle: 4, from: 'skin_cleaner' }], out: { lechona: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '4.0' },
+  { id: 'desayuno_tolimense_table', zone: 'lechoneria', name: 'Mesa del desayuno tolimense', icon: ICON.desayunoTolimense, in: { tamal: 4 }, imports: [{ product: 'bizcochos', perCycle: 2, route: 'bizcochos' }, { product: 'huila_roasted', perCycle: 1, route: 'tinto' }], out: { desayuno_tolimense: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '4.0' },
+
+  // La Chamba (El Guamo): la loza negra. El barro se pisa, se modela a mano, se bruñe con piedras y se quema con
+  // boñiga para que salga negro. La tienda la vende con la tilapia ahumada y el escabeche de Betania.
+  { id: 'clay_bank', zone: 'chamba', name: 'Barranco de arcilla', icon: ICON.arcilla, infinite: true, out: { arcilla: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '4.0' },
+  { id: 'clay_treader', zone: 'chamba', name: 'Pisadero de barro', icon: ICON.barroPisado, in: { arcilla: 1 }, out: { barro_pisado: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '4.0' },
+  { id: 'pot_modelers', zone: 'chamba', name: 'Moldeadoras', icon: ICON.piezaCruda, in: { barro_pisado: 2 }, out: { pieza_cruda: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '4.0' },
+  { id: 'pot_burnishers', zone: 'chamba', name: 'Bruñidoras', icon: ICON.piezaBrunida, in: { pieza_cruda: 2 }, out: { pieza_brunida: 1 }, cycle: 8, unlockCost: 200000000, upgradeBase: 60000, growth: 1.15, release: '4.0' },
+  { id: 'black_kiln', zone: 'chamba', name: 'Horno de quema', icon: ICON.lozaNegra, in: { pieza_brunida: 1 }, out: { loza_negra: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '4.0' },
+  { id: 'tienda_chamba', zone: 'chamba', name: 'Tienda de La Chamba', icon: ICON.recuerdoTolima, in: { loza_negra: 4 }, imports: [{ product: 'tilapia_ahumada', perCycle: 1, route: 'ahumadas_tilapia' }, { product: 'escabeche', perCycle: 1, route: 'escabeches' }], out: { recuerdo_tolima: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '4.0' },
+
+  // Neiva, la última del Tolima Grande: como Leticia, sin fuente propia. Cada estación recibe lo suyo de una zona
+  // de la región; en el Hotel del San Pedro se juntan los recuerdos de La Chamba y el té de cáscara del Huila, y
+  // todo termina en la salida a ver las estrellas en el desierto de la Tatacoa.
+  { id: 'cafeteria_malecon', zone: 'neiva', name: 'Cafetería del malecón', icon: ICON.meriendaMalecon, imports: [{ product: 'bizcocho_box', perCycle: 1, route: 'cajas_bizcochos' }], out: { merienda_malecon: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '4.0' },
+  { id: 'restaurante_rio', zone: 'neiva', name: 'Restaurante del río', icon: ICON.cenaOpita, in: { merienda_malecon: 1 }, imports: [{ product: 'cafe_especial', perCycle: 4, route: 'cafe_especial' }], out: { cena_opita: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '4.0' },
+  { id: 'hotel_sanpedro', zone: 'neiva', name: 'Hotel del San Pedro', icon: ICON.nocheSanpedro, in: { cena_opita: 2 }, imports: [{ product: 'recuerdo_tolima', perCycle: 1, route: 'recuerdos_tolima' }, { product: 'te_cascara', perCycle: 5, route: 'te_cascara' }], out: { noche_sanpedro: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '4.0' },
+  { id: 'plaza_neiva', zone: 'neiva', name: 'Plaza de mercado de Neiva', icon: ICON.almuerzoOpita, in: { merienda_malecon: 1 }, imports: [{ product: 'almuerzo_represa', perCycle: 1, route: 'almuerzos_represa' }], out: { almuerzo_opita: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '4.0' },
+  { id: 'fiambrera_tatacoa', zone: 'neiva', name: 'Fiambrera del paseo', icon: ICON.fiambreTatacoa, in: { almuerzo_opita: 1 }, imports: [{ product: 'desayuno_tolimense', perCycle: 1, route: 'desayunos_tolimenses' }, { product: 'lechona', perCycle: 1, route: 'lechonas' }], out: { fiambre_tatacoa: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '4.0' },
+  { id: 'salida_tatacoa', zone: 'neiva', name: 'Salida a la Tatacoa', icon: ICON.tatacoa, in: { fiambre_tatacoa: 4 }, out: { excursion_tatacoa: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '4.0' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

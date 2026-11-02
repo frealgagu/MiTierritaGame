@@ -67,6 +67,16 @@ export const REGIONS = [
     music: 'amazonas',
     unlock: { region: 'pacifico', zone: 'buenaventura' },
   },
+  // El Tolima Grande (v4.0): el Tolima y el Huila, con su música de sanjuanero. Se abre al completar Leticia y
+  // llegó completo, con las dos mecánicas nuevas (estación con dos productos y estación que junta dos).
+  {
+    id: 'tolima',
+    name: 'Tolima Grande',
+    icon: '🌵',
+    zones: ['achirales', 'cafe_huila', 'betania', 'lechoneria', 'chamba', 'neiva'],
+    music: 'tolima',
+    unlock: { region: 'amazonas', zone: 'leticia' },
+  },
 ];
 
 export const REGIONS_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]));

@@ -15,4 +15,6 @@ export const ZONE_GEO = {
   platanal: [5.69, -76.66], azotea: [2.57, -77.89], bahia: [6.22, -77.4], manglar: [1.8, -78.76], werregue: [4.25, -77.36], buenaventura: [3.88, -77.03],
   // Amazonas: Puerto Leguízamo, La Chorrera, los lagos de Tarapoto, Mitú, Macedonia y Leticia.
   asaizal: [-0.19, -74.78], ajizal: [-1.45, -72.8], lago: [-3.2, -71.4], casaberia: [1.25, -70.23], yanchama: [-3.85, -70.25], leticia: [-4.21, -69.94],
+  // Tolima Grande: Natagaima, Pitalito, la represa de Betania, Ibagué, La Chamba (El Guamo) y Neiva.
+  achirales: [3.62, -75.09], cafe_huila: [1.85, -76.05], betania: [2.68, -75.43], lechoneria: [4.44, -75.23], chamba: [4.03, -74.97], neiva: [2.93, -75.28],
 };
