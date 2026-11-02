@@ -2,7 +2,7 @@ import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID, ZONE_LIST } from '../data/zones/index.js';
 import { muleCount, muleLoad, stationBufferCap, stationInputCap, stationOutputRate, stationRate, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
-import { CHILDREN, ROAD_POS, chainOf, consumers, joinOf, perCycleOf, zoneOf, zoneUnlocked } from './chain.js';
+import { BY_CHILDREN, BY_ROUTES, CHILDREN, ROAD_POS, chainOf, consumers, joinOf, perCycleOf, zoneOf, zoneUnlocked } from './chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { ROUTE_STOCK, routeActive, routeCapacity, routeRate, routeReserve } from './routes.js';
 import { inputSpace } from './production.js';
@@ -274,4 +274,47 @@ function sendMule(state, from, to, amount, bus) {
   state.mules.push(mule);
   addMule(mule);
   bus.emit('muleDeparted', mule);
+}
+
+// Subproductos (v4.0): lo que una estación saca además de su producto (la pulpa del Beneficiadero) pasa por
+// una canaleta, sin mulas. Primero a la bodega, lo que guarda para las rutas que se lo llevan (como las
+// estaciones con su producto, v3.67); luego a las estaciones de su zona que lo usan (de entrada o para
+// juntarlo), primero a la de entrada más vacía; y si sobra y tiene ruta (abierta o no), a la bodega a
+// venderse. Lo que nadie usa se queda en su patio de subproductos y, lleno, se desecha.
+export function stepByproducts(state) {
+  for (const [id, src] of Object.entries(state.stations)) {
+    if (!(src.byBuffer > 1e-9)) continue;
+    const kids = (BY_CHILDREN[id] ?? []).filter((c) => state.stations[c]);
+    const routes = BY_ROUTES[id] ?? [];
+    if (!kids.length && !routes.length) continue;
+    const product = Object.keys(STATIONS_BY_ID[id].by)[0];
+    const wh = state.zones[zoneOf(id)].warehouse;
+    const toWarehouse = (n) => {
+      wh[product] = (wh[product] ?? 0) + n;
+      src.byBuffer -= n;
+    };
+    for (const r of routes) {
+      if (!routeActive(state, r.id)) continue;
+      const n = Math.min(src.byBuffer, exportSpace(state, r.id).space);
+      if (n > 1e-9) toWarehouse(n);
+    }
+    const room = (c) => {
+      const st = state.stations[c];
+      const have = joinOf(c, product) ? st.joined?.[product] ?? 0 : st.input;
+      return stationInputCap(STATIONS_BY_ID[c], st.level, capMult(state, c)) - have;
+    };
+    while (src.byBuffer > 1e-9 && kids.length) {
+      const target = kids.reduce((best, c) => (room(c) > room(best) ? c : best));
+      const move = Math.min(room(target), src.byBuffer);
+      if (move <= 1e-9) break;
+      const st = state.stations[target];
+      if (joinOf(target, product)) (st.joined ??= {})[product] = (st.joined[product] ?? 0) + move;
+      else st.input += move;
+      src.byBuffer -= move;
+    }
+    if (routes.length && src.byBuffer > 1e-9) {
+      const n = Math.min(src.byBuffer, warehouseSpace(state, zoneOf(id)) - DIVERT_RESERVE * warehouseCap(state, zoneOf(id)));
+      if (n > 1e-9) toWarehouse(n);
+    }
+  }
 }

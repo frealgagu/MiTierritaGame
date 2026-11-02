@@ -2,6 +2,7 @@
 import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { pathLength, projectOnPath } from '../core/path.js';
+import { ROUTES } from '../data/routes.js';
 
 export const zoneOf = (stationId) => STATIONS_BY_ID[stationId].zone;
 export const chainOf = (zoneId) => ZONES_BY_ID[zoneId].chain;
@@ -43,8 +44,10 @@ for (const zone of ZONE_LIST) {
 //   mulas, a las estaciones de su zona que lo usan de entrada, y desde ahí sigue su propia cadena.
 //   BY_CHILDREN[estación] = las que reciben su subproducto; su PARENT es la estación del subproducto.
 // · Estación que junta dos: además de su entrada (de PARENT), espera otro producto de una estación de su
-//   misma zona (`joins: [{ product, perCycle, from }]`), que se lo traen sus mulas. Esa estación la cuenta
-//   entre sus CHILDREN (sus mulas reparten entre todas), y JOIN_FROM[estación][producto] = de dónde llega.
+//   misma zona (`joins: [{ product, perCycle, from }]`). Si es el producto principal de esa, se lo traen sus
+//   mulas (la cuenta entre sus CHILDREN: reparten entre todas); si es su subproducto, la canaleta (entre sus
+//   BY_CHILDREN). JOIN_FROM[estación][producto] = de dónde llega.
+// · El subproducto que se lleva una ruta (`product` de la ruta) pasa por la canaleta a la bodega (BY_ROUTES).
 export const BY_CHILDREN = {};
 export const JOIN_FROM = {};
 const byProduct = (id) => Object.keys(STATIONS_BY_ID[id].by ?? {})[0];
@@ -58,12 +61,24 @@ for (const zone of ZONE_LIST) {
   }
   for (const id of zone.chain) {
     for (const j of STATIONS_BY_ID[id].joins ?? []) {
-      if (STATIONS_BY_ID[j.from]?.zone !== zone.id || Object.keys(STATIONS_BY_ID[j.from].out)[0] !== j.product) throw new Error(`${id}: junta ${j.product} de ${j.from}, que no lo hace en su zona`);
+      const from = STATIONS_BY_ID[j.from];
+      const main = from && Object.keys(from.out)[0] === j.product;
+      if (from?.zone !== zone.id || (!main && byProduct(j.from) !== j.product)) throw new Error(`${id}: junta ${j.product} de ${j.from}, que no lo hace en su zona`);
       (JOIN_FROM[id] ??= {})[j.product] = j.from;
-      CHILDREN[j.from].push(id);
+      // Su producto principal lo traen las mulas de esa estación; su subproducto, la canaleta.
+      if (main) CHILDREN[j.from].push(id);
+      else (BY_CHILDREN[j.from] ??= []).push(id);
     }
   }
 }
+
+// Rutas de su zona que se llevan el subproducto de cada estación (v4.0: la almendra de palmiste de la Prensa).
+export const BY_ROUTES = Object.fromEntries(
+  Object.keys(STATIONS_BY_ID)
+    .filter((id) => byProduct(id))
+    .map((id) => [id, ROUTES.filter((r) => r.from === STATIONS_BY_ID[id].zone && r.product === byProduct(id))])
+    .filter(([, routes]) => routes.length),
+);
 
 // Lo que una estación recibe de su proveedor `from`: su entrada principal o lo que junta (v4.0).
 export function suppliedProduct(id, from) {

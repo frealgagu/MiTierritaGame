@@ -4,7 +4,7 @@ import { stationBufferCap, stationInputCap, stationRate } from './rules.js';
 import { capMult, consumeCompost, speedMult } from './modifiers.js';
 import { CALENDAR, clockOf, resting, seasonOf } from './calendar.js';
 import { fleetOf } from './fleet.js';
-import { BY_CHILDREN, joinOf } from './chain.js';
+import { joinOf } from './chain.js';
 
 export function createStationState() {
   return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, imported: {}, joined: {}, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
@@ -139,25 +139,6 @@ export function stepFuel(state, id) {
   const move = Math.max(0, Math.min(room, src.byBuffer));
   s.fuel = (s.fuel ?? 0) + move;
   src.byBuffer -= move;
-}
-
-// Subproductos (v4.0): lo que una estación saca además de su producto (la pulpa del Beneficiadero) pasa por
-// una canaleta, sin mulas, a las estaciones de su zona que lo usan; si son varias, primero a la de entrada más
-// vacía. Lo que nadie usa se queda en su patio de subproductos y, lleno, se desecha.
-export function stepByproducts(state) {
-  for (const [id, kids] of Object.entries(BY_CHILDREN)) {
-    const src = state.stations[id];
-    if (!src?.byBuffer || !kids.length) continue;
-    const built = kids.filter((c) => state.stations[c]);
-    while (src.byBuffer > 1e-9 && built.length) {
-      const room = (c) => stationInputCap(STATIONS_BY_ID[c], state.stations[c].level, capMult(state, c)) - state.stations[c].input;
-      const target = built.reduce((best, c) => (room(c) > room(best) ? c : best));
-      const move = Math.min(room(target), src.byBuffer);
-      if (move <= 1e-9) break;
-      state.stations[target].input += move;
-      src.byBuffer -= move;
-    }
-  }
 }
 
 // Compostera: recibe la pulpa del Beneficiadero por la canaleta (stepByproducts) y produce compost, que se

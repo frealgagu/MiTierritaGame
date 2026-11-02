@@ -2,7 +2,7 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { RESEARCH } from '../data/research.js';
 import { dispatchRate, maxLevel, stationRate } from './rules.js';
-import { BY_CHILDREN, JOIN_FROM, PARENT, branchShare, chainOf, consumers, joinOf, perCycleOf, sourceOf, zoneOf } from './chain.js';
+import { BY_CHILDREN, BY_ROUTES, JOIN_FROM, PARENT, branchShare, chainOf, consumers, joinOf, perCycleOf, sourceOf, zoneOf } from './chain.js';
 import { routeActive, routeRate, routeStations, stationImportRate } from './routes.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { exportsOf, pendingRoutes, teamCapacity } from './transport.js';
@@ -151,17 +151,40 @@ function analyze(state, zoneId, withExports, depth, memo) {
           }
         }
       }
-      // Subproducto (v4.0): pasa por la canaleta a las estaciones de la zona que lo usan, en proporción a lo
-      // que procesa cada una; lo que no usan se desecha.
+      // Subproducto (v4.0): pasa por la canaleta. Primero lo que piden sus rutas; luego a las estaciones de la
+      // zona que lo usan, en proporción a lo que procesa cada una; lo que sobra se vende si tiene ruta (abierta o
+      // no) y, si no, se desecha.
       const byKids = (BY_CHILDREN[id] ?? []).filter((c) => ids.includes(c));
-      if (def.by && byKids.length) {
+      const byRoutes = BY_ROUTES[id] ?? [];
+      if (def.by && (byKids.length || byRoutes.length)) {
         const byId = Object.keys(def.by)[0];
+        const open = routes ? byRoutes.filter((r) => routeActive(state, r.id)) : [];
+        const toRoutes = Math.min(byRate[id], open.reduce((n, r) => n + Math.min(routeDemandRate(state, r.id), routeRate(state, r.id)), 0));
+        if (toRoutes > 0) exported[byId] = (exported[byId] ?? 0) + toRoutes;
         const caps = byKids.map((c) => capacityOf(c, byId));
         const total = caps.reduce((a, b) => a + b, 0);
-        const used = Math.min(byRate[id], total);
-        byKids.forEach((c, k) => (allocated[c] = total > 0 ? (used * caps[k]) / total : 0));
+        const used = Math.min(byRate[id] - toRoutes, total);
+        byKids.forEach((c, k) => {
+          const units = total > 0 ? (used * caps[k]) / total : 0;
+          if (joinOf(c, byId)) (joinedIn[c] ??= {})[byId] = units;
+          else allocated[c] = units;
+        });
+        const left = byRate[id] - toRoutes - used;
         row.byOutput = byRate[id];
-        row.byLost = byRate[id] - used;
+        row.byLost = byRoutes.length ? 0 : left;
+        row.bySold = byRoutes.length ? left : 0;
+        if (row.bySold > 0) {
+          toWarehouse += left;
+          // Lo que se lleve una ruta (con lo que se le guardó) no se vende aquí.
+          let units = left;
+          if (exports[byId] && exported[byId]) exports[byId] = Math.max(0, exports[byId] - exported[byId]);
+          if (exports[byId]) {
+            const out = Math.min(units, exports[byId]);
+            units -= out;
+            exports[byId] -= out;
+          }
+          flows.push({ product: byId, units, value: value(byId), leaf: false });
+        }
       }
 
       if (children.length) {
@@ -316,6 +339,8 @@ export function routeFlow(state, routeId, depth = 0, memo = null) {
   const siblings = ROUTES.filter((x) => x.from === r.from && x.product === r.product).reduce((n, x) => n + want(x.id), 0);
   const source = analyzeChain(state, r.from, { exports: false, depth, memo });
   let supply = (source.exported[r.product] ?? 0) + source.rows.filter((row) => Object.keys(STATIONS_BY_ID[row.id].out)[0] === r.product).reduce((n, row) => n + row.diverted, 0);
+  // Y el subproducto que llega a la bodega por la canaleta (v4.0).
+  supply += source.rows.filter((row) => Object.keys(STATIONS_BY_ID[row.id].by ?? {})[0] === r.product).reduce((n, row) => n + (row.bySold ?? 0), 0);
   // Si a la bodega de allá le llega más de lo que el Willys vende y las rutas se llevan, se llena y la
   // zona entera se frena, también lo que manda esta ruta (la leche que sobraba en la Lechería dejaba
   // sin queso al Maizal). Se reduce en la misma proporción.
@@ -352,7 +377,8 @@ const isGradual = (id) => STATIONS_BY_ID[id]?.side || id.endsWith(':transport') 
 function supplyPath(state, r) {
   const path = [];
   for (const id of chainOf(r.from)) {
-    if (!state.stations[id] || Object.keys(STATIONS_BY_ID[id].out)[0] !== r.product) continue;
+    const def = STATIONS_BY_ID[id];
+    if (!state.stations[id] || (Object.keys(def.out)[0] !== r.product && Object.keys(def.by ?? {})[0] !== r.product)) continue;
     const walk = (at) => {
       if (!at || path.includes(at)) return;
       path.push(at);

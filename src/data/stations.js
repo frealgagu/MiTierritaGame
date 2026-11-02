@@ -183,10 +183,10 @@ export const STATIONS = [
   // la Mesa del piquete, que las sirve con las papitas del Papal, y el Horno de barro, que hace la canasta de
   // amasijos y se mantiene con el barro de Ráquira. Mismos números que el Hato y la Quesera.
   { id: 'paipa_herd', zone: 'paipa', name: 'Hato lechero', icon: ICON.rawMilk, infinite: true, out: { paipa_milk: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.25' },
-  { id: 'paipa_curdler', zone: 'paipa', name: 'Cuajadera de Paipa', icon: ICON.cuajada, in: { paipa_milk: 2 }, out: { paipa_curd: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.25' },
+  { id: 'paipa_curdler', zone: 'paipa', name: 'Cuajadera de Paipa', icon: ICON.cuajada, in: { paipa_milk: 2 }, out: { paipa_curd: 2 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.25' },
   { id: 'cheese_molds', zone: 'paipa', name: 'Moldes de queso', icon: ICON.moldedCheese, in: { paipa_curd: 1 }, out: { molded_cheese: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.25' },
   { id: 'cheese_cave', zone: 'paipa', name: 'Cava de maduración', icon: ICON.quesoPaipa, in: { molded_cheese: 1 }, out: { queso_paipa: 1 }, cycle: 4, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '3.25' },
-  { id: 'almojabana_oven', zone: 'paipa', name: 'Horno de almojábanas', icon: ICON.almojabana, in: { queso_paipa: 2 }, out: { almojabana: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '3.25' },
+  { id: 'almojabana_oven', zone: 'paipa', name: 'Horno de almojábanas', icon: ICON.almojabana, in: { queso_paipa: 2 }, joins: [{ product: 'paipa_curd', perCycle: 2, from: 'paipa_curdler' }], out: { almojabana: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '3.25' },
   { id: 'piquete_table', zone: 'paipa', name: 'Mesa del piquete', icon: ICON.piquete, in: { almojabana: 2 }, imports: [{ product: 'criollas_bag', perCycle: 1, route: 'papitas' }], out: { piquete: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.25' },
   { id: 'clay_oven', zone: 'paipa', name: 'Horno de barro', icon: ICON.amasijos, in: { almojabana: 2 }, imports: [{ product: 'criollas_bag', perCycle: 1, route: 'papitas' }, { product: 'barro', perCycle: 4, route: 'barro' }], out: { canasta_amasijos: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.25' },
 
