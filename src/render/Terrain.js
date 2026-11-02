@@ -152,7 +152,7 @@ export class Terrain {
           // Plaza empedrada.
           for (let k = 0; k < 4; k++) {
             const p = iso(gx + 0.25 + (k % 2) * 0.5, gy + 0.25 + Math.floor(k / 2) * 0.5);
-            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : this.zone.style === 'buenaventura' ? [0xb8bcc0, 0xd0d4d6] : this.zone.style === 'leticia' ? [0xb89a7a, 0xd0b896] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
+            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : this.zone.style === 'buenaventura' ? [0xb8bcc0, 0xd0d4d6] : this.zone.style === 'leticia' ? [0xb89a7a, 0xd0b896] : this.zone.style === 'neiva' ? [0xc9a882, 0xe0c9a6] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
         } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea' || this.zone.theme === 'werregue' || this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'chagra' || this.zone.theme === 'yanchama')) {
@@ -209,6 +209,14 @@ export class Terrain {
             const d = rng() < 0.5 ? -1 : 1;
             g.moveTo(p.x - 7 * d, p.y - 2).quadraticCurveTo(p.x, p.y - 4, p.x + 7 * d, p.y + 1).stroke({ width: 1.6, color: 0xb08a4a, alpha: 0.7 });
           }
+        } else if (type === 'farm' && this.zone.theme === 'pigs') {
+          // El corral de los cerdos (v4.0): pasto ralo y charcos de barro donde se revuelcan.
+          if (rng() < 0.35) {
+            const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
+            g.ellipse(p.x, p.y, 8 + rng() * 6, 3 + rng() * 2).fill({ color: 0x6b4a2e, alpha: 0.75 });
+          }
+          const q = iso(gx + rng(), gy + rng());
+          g.moveTo(q.x - 2, q.y).lineTo(q.x - 1, q.y - 4).moveTo(q.x + 1, q.y).lineTo(q.x + 2, q.y - 5).stroke({ width: 1.2, color: 0x5a7a2a });
         } else if (type === 'farm' && (this.zone.theme === 'dairy' || this.zone.theme === 'ranch' || this.zone.theme === 'savanna' || this.zone.theme === 'sheep')) {
           // Potrero: pasto más alto y tupido, sin surcos.
           for (let k = 0; k < 3; k++) {
@@ -362,13 +370,30 @@ export class Terrain {
           const villavo = this.zone.style === 'villavo'; // Villavicencio (v3.36): moriches y mangos
           const puerto = this.zone.style === 'buenaventura'; // Buenaventura (v3.43): palmas de coco y almendros
           const leticia = this.zone.style === 'leticia'; // Leticia (v3.52): ceibas, palmas de asaí y guacamayas
+          const neiva = this.zone.style === 'neiva'; // Neiva (v4.0): guayacanes, ceibas y palmas
           if (r < 0.06 || (walled && r < 0.4)) obj = townHouse(rng, this.zone.style);
           else if (villavo && r < 0.135) obj = r < 0.085 ? mangoTree(rng) : r < 0.1 ? streetLamp() : morichePalm(rng);
+          else if (neiva && r < 0.135) obj = r < 0.08 ? guayacan(rng) : r < 0.095 ? streetLamp() : r < 0.12 ? ceiba(rng) : palm(rng);
           else if (leticia && r < 0.135) obj = r < 0.08 ? asaiPalm(rng) : r < 0.095 ? streetLamp() : r < 0.12 ? ceiba(rng) : macaw(rng);
           else if (puerto && r < 0.135) obj = r < 0.09 ? coconutPalm(rng) : r < 0.105 ? streetLamp() : mangoTree(rng);
           else if (r < 0.09) obj = salento && r < 0.075 ? palm(rng) : cartagena ? coconutPalm(rng) : villa ? cypress(rng) : guayacan(rng);
           else if (r < 0.105) obj = streetLamp();
           else if (r < (salento || cartagena || villa ? 0.135 : 0.12)) obj = cartagena ? coconutPalm(rng) : villa ? eucalyptus(rng) : palm(rng);
+        } else if (this.zone.region === 'tolima') {
+          // El Tolima Grande (v4.0): tierra caliente del valle del Magdalena, con samanes, guayacanes amarillos,
+          // palos de mango y garzas; en el Huila, cafetos sueltos y guamos de sombra; en los Achirales y La Chamba,
+          // más seco, con algún cactus, y en La Chamba, ollas de loza negra puestas a la venta.
+          const z = this.zone.id;
+          if (z === 'cafe_huila') {
+            if (r < 0.04) obj = guamo(rng);
+            else if (r < 0.08) obj = banana(rng);
+            else if (r < 0.13) obj = coffeeBush(rng);
+            else if (r < 0.15) obj = rock(rng);
+          } else if (r < 0.03) obj = saman(rng);
+          else if (r < 0.055) obj = guayacan(rng);
+          else if (r < 0.075) obj = z === 'chamba' ? potStand(rng, true) : z === 'betania' ? egret(rng) : mangoTree(rng);
+          else if (r < 0.09) obj = z === 'lechoneria' ? banana(rng) : z === 'betania' ? rock(rng) : cactus(rng);
+          else if (r < 0.1) obj = palm(rng);
         } else if (this.zone.theme === 'guava') {
           // Santander: matas de fique, guayabos sueltos, piedras y algún cactus del cañón.
           if (r < 0.05) obj = fique(rng);
@@ -938,6 +963,11 @@ const FARM_SOIL = {
   potato: (v) => mix(0x4a3526, 0x3a291d, v * 0.5),
   sheep: (v) => mix(0x8fa86a, 0x7f9a5c, v * 0.5), // el pasto del páramo
   clay: (v) => mix(0xc0784a, 0xa8653c, v * 0.45), // la greda roja de Ráquira
+  // Tolima Grande (v4.0)
+  achira: (v) => mix(0x7a5a3a, 0x6a4e30, v * 0.45), // la tierra del achiral
+  pigs: (v) => mix(0x8a8a4a, 0x7a7a42, v * 0.5), // el corral de los cerdos, con barro
+  betania: (v) => mix(0x3f7f78, 0x4a8a80, v * 0.6), // el agua verde de la represa
+  chamba: (v) => mix(0x8d6e5a, 0x7a5c4a, v * 0.45), // el barranco de arcilla gris del Magdalena
   barley: (v) => mix(0x8a6a3a, 0x7a5c30, v * 0.5), // la tierra negra del altiplano
   canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // la tierra seca de la sabana zenú // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6),
@@ -1322,6 +1352,7 @@ function hayBale(rng) {
 const HOLSTEIN = { body: 0xfbf8f1, legs: 0xf4f1e8, spots: 0x2b2b2b, udder: true };
 export function drawCow(g, x, y, scale, rng, flip = false, coat = HOLSTEIN) {
   if (coat.sheep) return drawSheep(g, x, y, scale * 0.85, rng, flip, coat);
+  if (coat.pig) return drawPig(g, x, y, scale * 0.85, rng, flip, coat);
   const f = flip ? -1 : 1;
   const s = scale;
   shadow(g, x, y + 1, 13 * s, 4 * s);
@@ -1342,6 +1373,40 @@ export function drawCow(g, x, y, scale, rng, flip = false, coat = HOLSTEIN) {
   g.moveTo(x + 10 * s * f, y - 18 * s).lineTo(x + 9 * s * f, y - 21 * s).moveTo(x + 13 * s * f, y - 18 * s).lineTo(x + 14 * s * f, y - 21 * s).stroke({ width: 1.2, color: 0xe8dcc0 });
   // Cola.
   g.moveTo(x - 10 * s * f, y - 14 * s).quadraticCurveTo(x - 13 * s * f, y - 10 * s, x - 12 * s * f, y - 6 * s).stroke({ width: 1, color: 0x3a2418 });
+}
+
+// Cerdo (v4.0): rosado, con manchas o negro (el zungo criollo), con el hocico y la colita enroscada. Lo usa la
+// Lechonería en vez de vacas.
+function drawPig(g, x, y, s, rng, flip, coat) {
+  const f = flip ? -1 : 1;
+  shadow(g, x, y + 1, 11 * s, 3.5 * s);
+  for (const lx of [-6, -2, 3, 7]) g.rect(x + lx * s * f - 0.9, y - 5 * s, 1.8 * s, 5 * s).fill(shade(coat.body, 0.8));
+  g.ellipse(x, y - 9 * s, 10 * s, 5.5 * s).fill(coat.body).stroke({ width: 1, color: 0x3a2418, alpha: 0.5 });
+  if (coat.spots) g.ellipse(x - 2 * s * f, y - 10 * s, 3.5 * s, 2.5 * s).fill(coat.spots);
+  g.circle(x + 9 * s * f, y - 10 * s, 4 * s).fill(coat.body).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  g.ellipse(x + 12.5 * s * f, y - 9.5 * s, 1.8 * s, 2.2 * s).fill(coat.snout);
+  g.circle(x + 9.5 * s * f, y - 11.5 * s, 0.7 * s).fill(0x1a1a1a);
+  g.poly([x + 7 * s * f, y - 13 * s, x + 8.5 * s * f, y - 16 * s, x + 10 * s * f, y - 13.5 * s]).fill(shade(coat.body, 0.85));
+  g.moveTo(x - 10 * s * f, y - 10 * s).quadraticCurveTo(x - 13 * s * f, y - 13 * s, x - 11 * s * f, y - 14 * s).stroke({ width: 1, color: shade(coat.body, 0.7) });
+}
+
+// Mata de achira (v4.0): hojas anchas y erguidas, verdes con el borde morado, y las flores rojas en lo alto (más
+// matas florecidas con los hitos).
+export function drawAchiraPlant(g, x, y, scale, rng, flowers = 1) {
+  const s = scale;
+  shadow(g, x + 2, y + 1, 12 * s, 4 * s);
+  for (const [dx, h, lean] of [[-6, 22, -7], [6, 24, 7], [-2, 28, -2], [2, 26, 3], [-9, 16, -9], [9, 17, 9]]) {
+    const bx = x + dx * s * 0.4;
+    const tx = x + (dx + lean) * s;
+    const ty = y - h * s;
+    g.moveTo(bx, y).quadraticCurveTo(tx - 6 * s, y - h * 0.5 * s, tx, ty).quadraticCurveTo(tx + 6 * s, y - h * 0.5 * s, bx + 1, y).fill(0x4e8a34).stroke({ width: 0.8, color: 0x7b3f6e, alpha: 0.8 });
+  }
+  for (let k = 0; k < flowers; k++) {
+    const fx = x + (k - (flowers - 1) / 2) * 6 * s + (rng() - 0.5) * 3;
+    const fy = y - (31 + rng() * 4) * s;
+    g.moveTo(fx, fy + 6 * s).lineTo(fx, y - 20 * s).stroke({ width: 1.2, color: 0x5d8f3a });
+    for (const [ox, oy] of [[-2, 0], [2, -1], [0, -3]]) g.ellipse(fx + ox * s, fy + oy * s, 1.8 * s, 3.2 * s).fill(0xe53935);
+  }
 }
 
 // Oveja (v3.26): cuerpo de lana en bolitas, cara y patas oscuras. La usan las Ruanas en vez de vacas.
@@ -1921,13 +1986,14 @@ export function drawClayMound(g, x, y, scale, rng, shovel = false) {
 }
 
 // Ollas de barro puestas a la venta en una tabla, a la orilla del camino (v3.24).
-function potStand(rng) {
+// Ollas a la venta en una tabla: de barro rojo en Ráquira; en La Chamba (v4.0, `black`), de loza negra.
+function potStand(rng, black = false) {
   const c = new Container();
   const g = new Graphics();
   shadow(g, 0, 1, 14, 4);
   g.rect(-13, -6, 26, 3).fill(0x8b5a2b);
   for (const [dx, dy] of [[-12, -4], [12, -4]]) g.rect(dx - 1, dy, 2, 6).fill(0x5e3b1c);
-  const colors = [0x4e342e, 0xd9772e, 0xb5653a];
+  const colors = black ? [0x2b2b2b, 0x3a3a3a, 0x1f1f1f] : [0x4e342e, 0xd9772e, 0xb5653a];
   for (let k = 0; k < 3; k++) {
     const cx = -8 + k * 8;
     g.ellipse(cx, -11, 4.5, 5).fill(colors[(k + Math.floor(rng() * 3)) % 3]).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });

@@ -3,7 +3,7 @@ import { iso, isoPoly, depth, shade } from './iso.js';
 import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPlantainPlant, drawYucaPlant, drawYanchamaTree, drawAzoteaBed, drawMangroveTree, drawWerreguePalm, drawAsaiPalm, drawAjiPlant, drawPassionVine, drawPondTile, drawHideFrame, drawPotatoPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPlantainPlant, drawYucaPlant, drawYanchamaTree, drawAzoteaBed, drawMangroveTree, drawWerreguePalm, drawAsaiPalm, drawAjiPlant, drawPassionVine, drawPondTile, drawHideFrame, drawPotatoPlant, drawAchiraPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -180,7 +180,7 @@ export class FarmView extends StationView {
       return;
     }
     this.lights = drawHut(g, x, y, tier);
-    if (this.theme === 'dairy' || this.theme === 'ranch' || this.theme === 'savanna' || this.theme === 'sheep') {
+    if (this.theme === 'dairy' || this.theme === 'ranch' || this.theme === 'savanna' || this.theme === 'sheep' || this.theme === 'pigs') {
       this.drawPasture(g, tier, rng);
       return;
     }
@@ -203,7 +203,7 @@ export class FarmView extends StationView {
           continue;
         }
         // Los cacaos son más grandes: uno por casilla.
-        for (const ox of this.theme === 'cacao' || this.theme === 'guava' || this.theme === 'ants' || this.theme === 'coconut' || this.theme === 'clay' || this.theme === 'palm' || this.theme === 'plantain' || this.theme === 'azotea' || this.theme === 'werregue' || this.theme === 'asai' || this.theme === 'chagra' || this.theme === 'yanchama' || this.theme === 'fruit' || this.theme === 'hides' ? [0.5] : [0.28, 0.75]) {
+        for (const ox of this.theme === 'cacao' || this.theme === 'guava' || this.theme === 'ants' || this.theme === 'coconut' || this.theme === 'clay' || this.theme === 'palm' || this.theme === 'plantain' || this.theme === 'azotea' || this.theme === 'werregue' || this.theme === 'asai' || this.theme === 'chagra' || this.theme === 'yanchama' || this.theme === 'fruit' || this.theme === 'hides' || this.theme === 'achira' ? [0.5] : [0.28, 0.75]) {
           const p = iso(gx + ox, gy + 0.5);
           this.bushes.push(p);
           if (this.theme === 'cane') drawCaneClump(g, p.x, p.y, scale, rng);
@@ -219,6 +219,7 @@ export class FarmView extends StationView {
           else if (this.theme === 'yanchama') drawYanchamaTree(g, p.x, p.y, 0.75 + tier * 0.05, rng, (gx + gy) % 3 === 0);
           else if (this.theme === 'chagra') drawYucaPlant(g, p.x, p.y, 0.8 + tier * 0.05, rng, 1 + Math.min(tier, 2));
           else if (this.theme === 'aji') drawAjiPlant(g, p.x, p.y, scale, rng, 2 + Math.min(tier, 4));
+          else if (this.theme === 'achira') drawAchiraPlant(g, p.x, p.y, 0.8 + tier * 0.05, rng, 1 + Math.min(tier, 3));
           else if (this.theme === 'asai') drawAsaiPalm(g, p.x, p.y, 0.7 + tier * 0.05, rng, Math.min(tier, 3));
           else if (this.theme === 'werregue') drawWerreguePalm(g, p.x, p.y, 0.8 + tier * 0.05, rng, tier);
           else if (this.theme === 'azotea') drawAzoteaBed(g, p.x, p.y, 0.8 + tier * 0.04, rng, tier);
@@ -255,6 +256,21 @@ export class FarmView extends StationView {
     for (const b of this.boats) {
       const p = iso(b.gx, b.gy);
       this.bushes.push({ x: p.x, y: p.y - 6 });
+    }
+    // En Betania (v4.0), las jaulas flotantes de la tilapia: marcos de tubo con su malla y sus boyas (más con los hitos).
+    if (this.zoneStyle === 'betania') {
+      const cages = [[3.2, 3.4], [4.6, 3.4], [3.2, 4.8], [4.6, 4.8], [1.8, 4.8], [1.8, 3.4]].slice(0, 2 + Math.min(tier, 4));
+      for (const [cx, cy] of cages) {
+        const pts = isoPoly([[x + cx - 0.5, y + cy - 0.5], [x + cx + 0.5, y + cy - 0.5], [x + cx + 0.5, y + cy + 0.5], [x + cx - 0.5, y + cy + 0.5]]);
+        g.poly(pts).fill({ color: 0x2e5a50, alpha: 0.55 }).stroke({ width: 2.5, color: 0xcfd8dc });
+        for (const [dx, dy] of [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]]) {
+          const q = iso(x + cx + dx, y + cy + dy);
+          g.circle(q.x, q.y - 1, 2.6).fill(0xff8f00).stroke({ width: 0.6, color: 0x3a2418 });
+        }
+        const c = iso(x + cx, y + cy);
+        g.ellipse(c.x - 5, c.y, 3, 1.2).fill({ color: 0xcfd8dc, alpha: 0.7 });
+        this.bushes.push({ x: c.x, y: c.y - 4 });
+      }
     }
   }
 
@@ -365,6 +381,13 @@ export class FarmView extends StationView {
         g.ellipse(p.x, p.y - 5, 7, 5.5).fill(0xece4cf).stroke(OUTLINE);
         for (const [dx, dy] of [[-3, -7], [2, -8], [0, -4]]) g.circle(p.x + dx, p.y + dy, 2).fill(0xfbfaf6);
       }
+    } else if (this.theme === 'pigs') {
+      // En la Lechonería (v4.0), la canoa de madera con la comida de los cerdos y un charco grande de barro.
+      box(g, x + 0.3, y + 2.2, 1.1, 0.3, 5, PAL.wood);
+      g.poly(isoPoly([[x + 0.35, y + 2.25, 5], [x + 1.35, y + 2.25, 5], [x + 1.35, y + 2.45, 5], [x + 0.35, y + 2.45, 5]])).fill(0xd9b65a);
+      const mud = iso(x + w * 0.6, y + h * 0.55);
+      g.ellipse(mud.x, mud.y, 40, 16).fill({ color: 0x6b4a2e, alpha: 0.85 });
+      g.ellipse(mud.x - 6, mud.y - 2, 14, 4).fill({ color: 0x8d6e4a, alpha: 0.6 });
     } else if (this.theme === 'ranch') {
       // En el Hato, en vez de cantinas, el saladero del ganado: una canoa de madera con sal.
       box(g, x + 0.3, y + 2.2, 1.0, 0.3, 5, PAL.wood);
@@ -479,6 +502,8 @@ const PLAZA_HOUSE = {
   // Buenaventura (v3.43): casona turquesa con remates de colores y toldo naranja.
   buenaventura: { wall: 0x4fb3bf, trims: [0xf2c14e, 0xe5737f, 0xf7f4ee, 0xf2c14e, 0x8e44ad, 0xffd700], awning: 0xf08a3c, sign: 'cup' },
   // Leticia (v3.52): la heladería de asaí, verde agua con remates morados, toldo morado y letrero de helado.
+  // Neiva (v4.0): la cafetería del malecón, blanca con remates rojos y amarillos (los colores del San Pedro).
+  neiva: { wall: 0xfbf8f1, trims: [0xd7263d, 0xf2c14e, 0x2f7d4f, 0xd7263d, 0x8e44ad, 0xffd700], awning: 0xd7263d, sign: 'cup' },
   leticia: { wall: 0x8fd3c4, trims: [0x7b1fa2, 0xf2c14e, 0x2e7d32, 0x7b1fa2, 0xe5737f, 0xffd700], awning: 0x7b1fa2, sign: 'icecream' },
 };
 
