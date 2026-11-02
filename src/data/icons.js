@@ -274,6 +274,44 @@ export const ICON = {
   palmiste: '\uE10C', // Almendra de palmiste: las nueces oscuras del fruto de palma, una partida con su almendra blanca
   freshHide: '\uE10D', // Cuero fresco: el cuero recién sacado en el desposte, doblado sobre la vara, todavía con su pelo
   bagazoCervecero: '\uE10E', // Bagazo cervecero: el costal abierto con la cebada cocida y húmeda que sobra de la paila, para las vacas
+  achiraPlant: '\uE10F', // Achira: la mata de hojas anchas, verdes con el borde morado, y sus flores rojas encima
+  achiraRoot: '\uE110', // Rizoma de achira: los tubérculos gordos y anillados, con sus raicitas, recién sacados de la tierra
+  achiraMash: '\uE111', // Achira rallada: la batea de madera con la masa blanca y fibrosa, y el rallador de lata
+  wetStarch: '\uE112', // Almidón húmedo: el tanque donde se asienta el almidón blanco bajo el agua
+  achiraStarch: '\uE113', // Almidón de achira: el costal abierto con el almidón seco, blanquísimo, y la cuchara de palo
+  bizcochoDough: '\uE114', // Masa de bizcocho: la bola de masa de almidón, cuajada y mantequilla sobre la mesa, con el rodillo
+  bizcochos: '\uE115', // Bizcochos de achira: la bolsita de papel abierta con los bizcochos dorados asomando
+  bizcochoBox: '\uE116', // Caja de bizcochos: la caja de cartón con las bolsitas de bizcochos de achira y la flor roja de la achira
+  cafeExcelso: '\uE117', // Café excelso: el grano verde ya trillado y seleccionado, en el plato de la catadora
+  cafeEspecial: '\uE118', // Café especial del Huila: la bolsa negra con válvula, la etiqueta dorada y la montaña del Huila
+  cascara: '\uE119', // Cáscara de café: la cascarilla roja y seca de la cereza, regada en una zaranda de secado
+  teCascara: '\uE11A', // Té de cáscara: la taza de vidrio con la infusión rojiza de la cascarilla del café y su bolsita
+  tilapia: '\uE11B', // Tilapia: el pescado gris plateado de las jaulas de la represa, con sus rayas oscuras
+  cleanTilapia: '\uE11C', // Tilapia limpia: la tilapia sin escamas ni tripa, rosadita, sobre la hoja de plátano
+  tilapiaFillet: '\uE11D', // Filete de tilapia: los filetes blancos y rosados, sin espinas, en la bandeja
+  escabeche: '\uE11E', // Tilapia en escabeche: el frasco de vidrio con los filetes en vinagre, cebolla, zanahoria y laurel
+  tilapiaAhumada: '\uE11F', // Tilapia ahumada: la tilapia dorada y oscura del humo, colgada de la vara del ahumadero
+  almuerzoRepresa: '\uE120', // Almuerzo de la represa: la tilapia frita con patacones, arroz, ensalada y limón
+  cerdo: '\uE121', // Cerdo: el cerdito rosado con una mancha negra, en el barro
+  carneCerdo: '\uE122', // Carne de cerdo: los pedazos de carne roja con su gordo blanco, sobre la tabla
+  cueroCerdo: '\uE123', // Cuero de cerdo: el cuero rosado, enrollado, recién sacado en el desposte
+  cueroLimpio: '\uE124', // Cuero limpio: el cuero pelado y adobado con comino, extendido para envolver la lechona
+  relleno: '\uE125', // Relleno de la lechona: la paila con el arroz amarillo, la arveja y la carne adobada
+  tamal: '\uE126', // Tamal tolimense: el tamal envuelto en hoja de plátano, amarrado con cabuya, y uno abierto
+  lechona: '\uE127', // Lechona tolimense: el cerdo entero, dorado y tostado, relleno, servido en la batea
+  desayunoTolimense: '\uE128', // Desayuno tolimense: el tamal abierto en su hoja, la taza de tinto y los bizcochos de achira
+  arcilla: '\uE129', // Arcilla: el terrón de arcilla gris del barranco del río Magdalena, con la pala
+  barroPisado: '\uE12A', // Barro pisado: el barro amasado con los pies, con las huellas, y la arena fina para mezclar
+  piezaCruda: '\uE12B', // Pieza modelada: la cazuela de barro crudo, color tierra, recién hecha a mano sobre la tabla
+  piezaBrunida: '\uE12C', // Pieza bruñida: la cazuela pulida a mano con la piedra de río, que brilla, y la piedra al lado
+  lozaNegra: '\uE12D', // Loza negra: la cazuela negra y brillante de La Chamba, con su tapa, y una ollita
+  recuerdoTolima: '\uE12E', // Recuerdo del Tolima: la cazuela negra de La Chamba con la tilapia ahumada y el frasco de escabeche
+  meriendaMalecon: '\uE12F', // Merienda del malecón: el pocillo de chocolate, los bizcochos de achira y el quesillo, junto al río
+  cenaOpita: '\uE130', // Cena opita: el asado huilense con su yuca, el arroz y el envuelto de maíz
+  nocheSanpedro: '\uE131', // Noche del San Pedro: la pareja bailando el sanjuanero bajo las banderitas y los fuegos artificiales
+  almuerzoOpita: '\uE132', // Almuerzo opita: el asado huilense con arroz, yuca y el jugo de cholupa del mercado
+  fiambreTatacoa: '\uE133', // Fiambre de la Tatacoa: el fiambre envuelto en hoja de bijao, con la lechona, el tamal y la cantimplora
+  tatacoa: '\uE134', // Noche de estrellas en la Tatacoa: el desierto rojo con sus cárcavas y cactus bajo el cielo estrellado
 };
 
 export const ICON_FONT = 'MiTierrita Icons';
