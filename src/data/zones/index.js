@@ -41,7 +41,13 @@ import { ZONE39 } from './zone39_lago.js';
 import { ZONE40 } from './zone40_casaberia.js';
 import { ZONE41 } from './zone41_yanchama.js';
 import { ZONE42 } from './zone42_leticia.js';
+import { ZONE43 } from './zone43_achirales.js';
+import { ZONE44 } from './zone44_cafe_huila.js';
+import { ZONE45 } from './zone45_betania.js';
+import { ZONE46 } from './zone46_lechoneria.js';
+import { ZONE47 } from './zone47_chamba.js';
+import { ZONE48 } from './zone48_neiva.js';
 
 // Todas las regiones (cada zona dice la suya; sin `region`, es del Eje Cafetero).
-export const ZONE_LIST = [ZONE1, ZONE2, ZONE3, ZONE4, ZONE5, ZONE6, ZONE7, ZONE8, ZONE9, ZONE10, ZONE11, ZONE12, ZONE13, ZONE14, ZONE15, ZONE16, ZONE17, ZONE18, ZONE19, ZONE20, ZONE21, ZONE22, ZONE23, ZONE24, ZONE25, ZONE26, ZONE27, ZONE28, ZONE29, ZONE30, ZONE31, ZONE32, ZONE33, ZONE34, ZONE35, ZONE36, ZONE37, ZONE38, ZONE39, ZONE40, ZONE41, ZONE42];
+export const ZONE_LIST = [ZONE1, ZONE2, ZONE3, ZONE4, ZONE5, ZONE6, ZONE7, ZONE8, ZONE9, ZONE10, ZONE11, ZONE12, ZONE13, ZONE14, ZONE15, ZONE16, ZONE17, ZONE18, ZONE19, ZONE20, ZONE21, ZONE22, ZONE23, ZONE24, ZONE25, ZONE26, ZONE27, ZONE28, ZONE29, ZONE30, ZONE31, ZONE32, ZONE33, ZONE34, ZONE35, ZONE36, ZONE37, ZONE38, ZONE39, ZONE40, ZONE41, ZONE42, ZONE43, ZONE44, ZONE45, ZONE46, ZONE47, ZONE48];
 export const ZONES_BY_ID = Object.fromEntries(ZONE_LIST.map((z) => [z.id, z]));
