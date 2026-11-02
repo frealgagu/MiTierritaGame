@@ -12,6 +12,21 @@ import { saleValue } from '../sim/modifiers.js';
 import { listJoin, t } from '../i18n/index.js';
 
 const outIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].out)[0]].icon;
+const outOf = (id) => Object.keys(STATIONS_BY_ID[id].out)[0];
+const byOf = (id) => Object.keys(STATIONS_BY_ID[id].by)[0];
+// El color del tubo de cada producto (v4.0.2): el del producto, oscurecido si es muy claro para que se vea sobre el
+// papel. Así se distingue lo que sale de una estación con dos productos y se ve cuando un producto se vuelve otro.
+function pipeColor(product) {
+  const c = PRODUCTS[product]?.color ?? 0x8b5a2b;
+  let [r, g, b] = [(c >> 16) & 255, (c >> 8) & 255, c & 255];
+  const light = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  // Los muy claros (cuajada, leche…) se oscurecen para leerse sobre el papel y no confundirse con lo bloqueado.
+  if (light > 0.55) {
+    const k = 0.5 / light;
+    [r, g, b] = [r * k, g * k, b * k].map(Math.round);
+  }
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+}
 const byIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].by)[0]].icon;
 // «la Mesa de chocolate y la Chocolatería»
 const listNames = (ids) => {
@@ -295,7 +310,11 @@ function diagram(state, a, rows, locked, zone, width, selected) {
 
   // Eslabones: el camino dibujado dos veces (el eslabón y su hueco) en trazos que se mueven.
   const pipes = [];
-  const pipe = (d, kind) => pipes.push(`<path d="${d}" class="dg-link ${kind}"/><path d="${d}" class="dg-hole ${kind}"/>`);
+  // Lo que corre por el tubo lleva el color de su producto; lo que frena va en rojo y lo que falta construir, en gris.
+  const pipe = (d, kind, product = null) => {
+    const color = kind === 'flow' && product ? ` style="stroke:${pipeColor(product)}"` : '';
+    pipes.push(`<path d="${d}" class="dg-link ${kind}"${color}/><path d="${d}" class="dg-hole ${kind}"/>`);
+  };
   const nodes = [];
   // Lo que pasa por un eslabón: solo el ícono y el número.
   const flow = (x, y, product, rate, hot) =>
@@ -328,8 +347,9 @@ function diagram(state, a, rows, locked, zone, width, selected) {
       const ex = tagsOf(id).length ? b.left + (b.w < NARROW ? 12 : 18) : b.cx;
       const mid = p.bottom + GAP / 2;
       const kind = !row ? 'locked' : a.bottleneck === `${parent}:transport` || a.bottleneck === id ? 'hot' : 'flow';
-      pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${ex} V ${b.top}`, kind);
-      const icon = BY_CHILDREN[parent]?.includes(id) ? byIcon(parent) : outIcon(parent);
+      const isBy = BY_CHILDREN[parent]?.includes(id);
+      pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${ex} V ${b.top}`, kind, isBy ? byOf(parent) : outOf(parent));
+      const icon = isBy ? byIcon(parent) : outIcon(parent);
       if (row) flow(ex, (mid + b.top) / 2 + (pos[parent].x === pos[id].x ? -GAP / 4 : 0), icon, row.incoming, kind === 'hot');
     }
     // Lo que junta de otra estación de su zona (v4.0): baja por su carril, a la derecha, y entra por arriba.
@@ -344,7 +364,7 @@ function diagram(state, a, rows, locked, zone, width, selected) {
       const mid = p.bottom + GAP / 2;
       const turn = b.top - tags * TAG_H - GAP / 2 + 9;
       const kind = !row ? 'locked' : row.joinLimited === product || a.bottleneck === `${from}:transport` ? 'hot' : 'flow';
-      pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${lx} V ${turn} H ${ex} V ${b.top}`, kind);
+      pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${lx} V ${turn} H ${ex} V ${b.top}`, kind, product);
       if (row) flow(lx, (mid + turn) / 2, PRODUCTS[product].icon, row.joined?.[product] ?? 0, kind === 'hot');
     }
     // Etiquetas de lo que llega de otras zonas, apiladas encima de la estación, a la derecha.
@@ -380,7 +400,7 @@ function diagram(state, a, rows, locked, zone, width, selected) {
     // Las que no siguen a otra estación terminan en la bodega.
     if (!kidsOf(id).length && !row.children.length) {
       const busY = bodega.top - GAP / 2;
-      pipe(`M ${b.cx} ${b.bottom} V ${busY} H ${total / 2} V ${bodega.top}`, hotLink ? 'hot' : 'flow');
+      pipe(`M ${b.cx} ${b.bottom} V ${busY} H ${total / 2} V ${bodega.top}`, hotLink ? 'hot' : 'flow', outOf(id));
       flow(b.cx, (b.bottom + busY) / 2, outIcon(id), row.output - row.lost, hotLink);
     }
   }
