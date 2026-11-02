@@ -47,6 +47,14 @@ const SHEEP_COATS = [
   { sheep: true, body: 0x37474f, spots: 0x263238, face: 0x1a1a1a },
 ];
 
+// Cerdos de la Lechonería (v4.0): rosados, alguno manchado y alguno negro (el zungo criollo).
+const PIG_COATS = [
+  { pig: true, body: 0xf4a7b0, snout: 0xf48fb1 },
+  { pig: true, body: 0xf4a7b0, snout: 0xf48fb1 },
+  { pig: true, body: 0xf6b8c0, snout: 0xf48fb1, spots: 0x3a3a3a },
+  { pig: true, body: 0x3a3a3a, snout: 0x5d5d5d },
+];
+
 class Critter extends Container {
   // walk(ax, ay, bx, by): si puede ir en línea recta de un punto al otro (sin walk, a cualquier lado).
   constructor(kind, area, rng, walk = null) {
@@ -260,7 +268,7 @@ export class Critters {
     }
     // Gallinas junto a la casa de la finca (afuera del cultivo).
     add('chicken', spots(near(grass, f.x, f.y, f.x + 2, f.y + 2, 2), this.rng), 4);
-    if (zone.theme === 'dairy' || zone.theme === 'ranch' || zone.theme === 'savanna' || zone.theme === 'sheep') {
+    if (zone.theme === 'dairy' || zone.theme === 'ranch' || zone.theme === 'savanna' || zone.theme === 'sheep' || zone.theme === 'pigs') {
       // Vacas en el potrero, lejos de la casa.
       const pasture = [];
       for (let i = 0; i < 80; i++) {
@@ -272,7 +280,7 @@ export class Critters {
       this.pasture = pasture;
       // Novillos del Hato (v3.3): pardos, rojizos o grises, sin ubre.
       // Vacas cebú de la Quesera (v3.18): blancas o grises, con giba y ubre; alguna romosinuana, rojiza.
-      this.coats = zone.style === 'llanos' ? LLANO_COATS : zone.theme === 'ranch' ? RANCH_COATS : zone.theme === 'savanna' ? CEBU_COATS : zone.theme === 'sheep' ? SHEEP_COATS : null;
+      this.coats = zone.style === 'llanos' ? LLANO_COATS : zone.theme === 'ranch' ? RANCH_COATS : zone.theme === 'savanna' ? CEBU_COATS : zone.theme === 'sheep' ? SHEEP_COATS : zone.theme === 'pigs' ? PIG_COATS : null;
       this.cows = [];
     }
   }
