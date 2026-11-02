@@ -77,4 +77,7 @@ export default {
   platos_pirarucu: ['Rota do pirarucu ao ají', 'Chiva', 'Pirarucu'],
   desayunos_amazonicos: ['Rota do café da manhã amazônico', 'Chiva', 'Café da manhã'],
   banquetes_maloca: ['Rota do banquete', 'Chiva', 'Banquete'],
+  bagazo: ['Rota do bagaço', 'Chiva', 'Bagaço'],
+  palmiste: ['Rota do palmiste', 'Chiva', 'Palmiste'],
+  cueros: ['Rota dos couros', 'Chiva', 'Couros'],
 };

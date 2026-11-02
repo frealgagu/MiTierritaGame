@@ -77,4 +77,7 @@ export default {
   platos_pirarucu: ['Pirarucú in chili route', 'Chiva', 'Pirarucú'],
   desayunos_amazonicos: ['Amazon breakfast route', 'Chiva', 'Breakfast'],
   banquetes_maloca: ['Feast route', 'Chiva', 'Feast'],
+  bagazo: ['Spent grain route', 'Chiva', 'Grain'],
+  palmiste: ['Palm kernel route', 'Chiva', 'Kernels'],
+  cueros: ['Hide route', 'Chiva', 'Hides'],
 };

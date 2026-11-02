@@ -32,6 +32,8 @@ export const ZONE20 = {
     cerveza: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A Ráquira ➜' },
     // Las canastas de cerveza salen hacia Villa de Leyva (v3.27).
     canastas_cerveza: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Villa de Leyva ➜' },
+    // El bagazo de la Paila sale hacia las vacas de Paipa (v4.0).
+    bagazo: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'Bagazo a Paipa ➜' },
   },
   next: 'raquira',
 };

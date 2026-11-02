@@ -270,6 +270,10 @@ export const ICON = {
   almuerzoMercado: '\uE108', // Almuerzo del mercado: la posta de pirarucú con ají negro, el arroz, la fariña y el jugo de camu camu
   provisionCanoa: '\uE109', // Provisión de la canoa: el canasto tejido con el casabe, las bolsas de asaí, la totuma y el racimo de plátano
   delfines: '\uE10A', // Salida a ver los delfines rosados: el delfín rosado que salta del río negro, con la canoa de los turistas
+  sueroCosteno: '\uE10B', // Suero costeño: la totuma con el suero blanco y espeso, la cuchara de palo y un pedazo de bollo
+  palmiste: '\uE10C', // Almendra de palmiste: las nueces oscuras del fruto de palma, una partida con su almendra blanca
+  freshHide: '\uE10D', // Cuero fresco: el cuero recién sacado en el desposte, doblado sobre la vara, todavía con su pelo
+  bagazoCervecero: '\uE10E', // Bagazo cervecero: el costal abierto con la cebada cocida y húmeda que sobra de la paila, para las vacas
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

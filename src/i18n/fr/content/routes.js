@@ -77,4 +77,7 @@ export default {
   platos_pirarucu: ['Route du pirarucú à l’ají', 'Chiva', 'Pirarucú'],
   desayunos_amazonicos: ['Route du petit-déjeuner amazonien', 'Chiva', 'Petit-déjeuner'],
   banquetes_maloca: ['Route du banquet', 'Chiva', 'Banquet'],
+  bagazo: ['Route de la drêche', 'Chiva', 'Drêche'],
+  palmiste: ['Route du palmiste', 'Chiva', 'Palmiste'],
+  cueros: ['Route des cuirs', 'Chiva', 'Cuirs'],
 };

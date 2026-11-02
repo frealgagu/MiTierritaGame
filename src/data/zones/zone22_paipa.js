@@ -37,6 +37,8 @@ export const ZONE22 = {
     // Los amasijos y los piquetes salen hacia Villa de Leyva (v3.27).
     amasijos: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Amasijos a Villa de Leyva ➜' },
     piquetes: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [23.7, 23.6], text: 'Piquetes ⬇' },
+    // El bagazo de la Cervecería, para el Hato lechero (v4.0).
+    bagazo: { road: [[25.9, 1.5], [7.6, 1.5]], sign: [24.2, 0.4], text: '⬅ Bagazo de la Cervecería' },
   },
   unlockedBy: 'raquira',
   next: 'ruanas',

@@ -3838,6 +3838,46 @@ def delfines():
     return layers
 
 
+# ---------- v4.0: subproductos de las regiones de antes ----------
+
+def suero_costeno():
+    """Suero costeño: la totuma con el suero blanco y espeso, la cuchara de palo y un pedazo de bollo."""
+    layers = [(OUTLINE, ['M 10 46 Q 12 88 50 90 Q 88 88 90 46 Z']), ('#8d5a32', ['M 13.5 48.5 Q 15.5 85 50 87 Q 84.5 85 86.5 48.5 Z'])]
+    layers.append(('#6d4325', [rib(22, 62, 30, 80, 1.2), rib(70, 80, 78, 62, 1.2)]))
+    layers += [(OUTLINE, [ellipse(50, 46, 40, 11)]), ('#f6f0dc', [ellipse(50, 46, 37, 8.5)]), ('#fffdf5', [ellipse(42, 44, 14, 3.4)])]
+    layers += [(OUTLINE, [rect(58, 8, 8, 42, 24)]), ('#c9a96b', [rect(59.5, 9.5, 5, 39, 24)])]
+    layers += [(OUTLINE, [ellipse(22, 30, 10, 6, -20)]), ('#f3e3b8', [ellipse(22, 30, 8, 4.4, -20)])]
+    return layers
+
+
+def palmiste():
+    """Almendra de palmiste: las nueces oscuras del fruto de palma, una partida con su almendra blanca."""
+    layers = []
+    for cx, cy, r, rot in [(30, 60, 15, -20), (66, 64, 15, 15), (48, 36, 13, 5)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, r + 2, r * 1.15 + 2, rot)]), ('#4e342e', [ellipse(cx, cy, r, r * 1.15, rot)]), ('#6d4c41', [ellipse(cx - r * 0.3, cy - r * 0.35, r * 0.3, r * 0.45, rot)])]
+    layers += [(OUTLINE, [ellipse(66, 64, 9.5, 11, 15)]), ('#f3e9d2', [ellipse(66, 64, 7.5, 9, 15)]), ('#d7c7a2', [ellipse(68, 67, 3, 4, 15)])]
+    return layers
+
+
+def fresh_hide():
+    """Cuero fresco: el cuero recién sacado en el desposte, doblado sobre la vara, todavía con su pelo."""
+    layers = [('#5d4037', [rect(6, 26, 88, 6)])]
+    layers += hide_shape(50, 60, 0.95, '#b07a52', '#9a6440')
+    layers.append(('#f5f0e6', [ellipse(36, 56, 7, 5), ellipse(62, 64, 8, 5.5), ellipse(50, 74, 5, 3)]))
+    layers.append(('#3e2723', [ellipse(54, 50, 5, 3.5), ellipse(40, 70, 4, 3)]))
+    return layers
+
+
+def bagazo_cervecero():
+    """Bagazo cervecero: el costal abierto con la cebada cocida y húmeda que sobra de la paila, para las vacas."""
+    layers = [(OUTLINE, ['M 18 40 L 82 40 L 88 92 L 12 92 Z']), ('#d7b98a', ['M 20.5 42.5 L 79.5 42.5 L 85 89.5 L 15 89.5 Z'])]
+    layers.append(('#b8986a', [rib(24, 56, 76, 56, 1), rib(22, 72, 78, 72, 1)]))
+    layers += [(OUTLINE, [ellipse(50, 40, 34, 12)]), ('#a0703a', [ellipse(50, 40, 31.5, 9.5)])]
+    layers.append(('#c98f4a', [ellipse(36 + (k % 5) * 7, 36 + (k // 5) * 6, 2.6, 1.6, 30) for k in range(10)]))
+    layers.append(('#b0bec5', ['M 40 26 Q 36 16 40 6 L 43 6 Q 39 16 43 26 Z', 'M 60 26 Q 56 18 60 10 L 63 10 Q 59 18 63 26 Z']))
+    return layers
+
+
 # Código de cada ícono (U+E001...), el nombre en src/data/icons.js y cómo se dibuja.
 ICONS = [
     (0xE001, 'cherry', cherry),
@@ -4106,6 +4146,10 @@ ICONS = [
     (0xE108, 'almuerzo_mercado', almuerzo_mercado),
     (0xE109, 'provision_canoa', provision_canoa),
     (0xE10A, 'delfines', delfines),
+    (0xE10B, 'suero_costeno', suero_costeno),
+    (0xE10C, 'palmiste', palmiste),
+    (0xE10D, 'fresh_hide', fresh_hide),
+    (0xE10E, 'bagazo_cervecero', bagazo_cervecero),
 ]
 
 

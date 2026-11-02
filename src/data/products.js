@@ -103,6 +103,7 @@ export const PRODUCTS = {
   // Costa · La Quesera (v3.18): los mismos valores que el Hato.
   ordeno_milk: { name: 'Leche de ordeño', zone: 'quesera', value: 1000, icon: ICON.ordenoMilk, color: 0xfbfaf6 },
   cuajada: { name: 'Cuajada', zone: 'quesera', value: 2500, icon: ICON.cuajada, color: 0xf4f1e8 },
+  suero_costeno: { name: 'Suero costeño', zone: 'quesera', value: 2000, icon: ICON.sueroCosteno, color: 0xf6f0dc },
   salted_curd: { name: 'Cuajada salada', zone: 'quesera', value: 4400, icon: ICON.saltedCurd, color: 0xece6d6 },
   queso_costeno: { name: 'Queso costeño', zone: 'quesera', value: 8800, icon: ICON.quesoCosteno, color: 0xf4efe1 },
   mote_queso: { name: 'Mote de queso', zone: 'quesera', value: 22000, icon: ICON.moteQueso, color: 0xf2e3b3 },
@@ -138,6 +139,7 @@ export const PRODUCTS = {
   barley: { name: 'Cebada', zone: 'cerveceria', value: 10, icon: ICON.barley, color: 0xe6b93a },
   malt: { name: 'Malta', zone: 'cerveceria', value: 25, icon: ICON.malt, color: 0xa0612d },
   wort: { name: 'Mosto', zone: 'cerveceria', value: 60, icon: ICON.wort, color: 0xc46a2a },
+  bagazo_cervecero: { name: 'Bagazo cervecero', zone: 'cerveceria', value: 40, icon: ICON.bagazoCervecero, color: 0xb98b4e },
   beer: { name: 'Cerveza', zone: 'cerveceria', value: 150, icon: ICON.beer, color: 0xe8a317 },
   beer_crate: { name: 'Canasta de cerveza', zone: 'cerveceria', value: 250, icon: ICON.beerCrate, color: 0xd7263d },
 
@@ -179,6 +181,7 @@ export const PRODUCTS = {
   palm_fruit: { name: 'Fruto de palma', zone: 'palma', value: 3, icon: ICON.palmFruit, color: 0xe65100 },
   cooked_fruit: { name: 'Fruto cocido', zone: 'palma', value: 6, icon: ICON.cookedFruit, color: 0xbf5a1a },
   crude_oil: { name: 'Aceite crudo', zone: 'palma', value: 10, icon: '🛢️', color: 0xa8380e },
+  palmiste: { name: 'Almendra de palmiste', zone: 'palma', value: 8, icon: ICON.palmiste, color: 0x5d4037 },
   palm_oil: { name: 'Aceite de palma', zone: 'palma', value: 30, icon: ICON.palmOil, color: 0xf57c00 },
   oil_bottle: { name: 'Botella de aceite', zone: 'palma', value: 45, icon: ICON.oilBottle, color: 0xf9a825 },
   oil_box: { name: 'Caja de aceite', zone: 'palma', value: 250, icon: ICON.oilBox, color: 0xc8a26a },
@@ -201,6 +204,7 @@ export const PRODUCTS = {
   // Los Llanos · El Hato llanero (v3.34): mismos valores que Paipa.
   llanero_steer: { name: 'Novillo llanero', zone: 'hato_llanero', value: 1000, icon: ICON.cebu, color: 0xeceae4 },
   ternera: { name: 'Ternera', zone: 'hato_llanero', value: 2500, icon: '🥩', color: 0xc0392b },
+  fresh_hide: { name: 'Cuero fresco', zone: 'hato_llanero', value: 2500, icon: ICON.freshHide, color: 0xb07a52 },
   ternera_adobada: { name: 'Ternera adobada', zone: 'hato_llanero', value: 4400, icon: ICON.adobada, color: 0xa93226 },
   mamona: { name: 'Mamona a la vara', zone: 'hato_llanero', value: 8800, icon: ICON.mamona, color: 0x8e3b1f },
   carne_llanera: { name: 'Carne a la llanera', zone: 'hato_llanero', value: 22000, icon: ICON.carneLlanera, color: 0x8d3b1f },

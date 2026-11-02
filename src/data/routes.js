@@ -1266,6 +1266,57 @@ export const ROUTES = [
     costBase: 1000000,
     growth: 1.15,
     release: '3.52',
-  },];
+  },  // v4.0: un subproducto que viaja (sale de la bodega, adonde llega por la canaleta).
+  {
+    id: 'bagazo',
+    name: 'Ruta del bagazo',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'bagazo_cervecero',
+    from: 'cerveceria',
+    to: 'paipa',
+    stations: ['paipa_herd'],
+    tab: 'Bagazo',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 5000,
+    growth: 1.15,
+    release: '4.0',
+  },
+  // v4.0: un subproducto que viaja (sale de la bodega, adonde llega por la canaleta).
+  {
+    id: 'palmiste',
+    name: 'Ruta del palmiste',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'palmiste',
+    from: 'palma',
+    to: 'villavicencio',
+    stations: ['hotel_campestre'],
+    tab: 'Palmiste',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 500000,
+    growth: 1.15,
+    release: '4.0',
+  },
+  // v4.0: un subproducto que viaja (sale de la bodega, adonde llega por la canaleta).
+  {
+    id: 'cueros',
+    name: 'Ruta de los cueros',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'fresh_hide',
+    from: 'hato_llanero',
+    to: 'talabarteria',
+    stations: ['hide_yard'],
+    tab: 'Cueros',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 50000,
+    growth: 1.15,
+    release: '4.0',
+  },
+];
 
 export const ROUTES_BY_ID = Object.fromEntries(ROUTES.map((r) => [r.id, r]));

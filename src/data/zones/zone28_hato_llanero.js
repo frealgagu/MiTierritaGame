@@ -37,6 +37,8 @@ export const ZONE28 = {
     // Los asados y los almuerzos salen hacia Villavicencio (v3.36).
     parrandas: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Asados a Villavicencio ➜' },
     almuerzos_llaneros: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [23.7, 23.6], text: 'Almuerzos ⬇' },
+    // Los cueros del Desposte salen hacia la Talabartería (v4.0).
+    cueros: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 19.6], text: 'Cueros ➜' },
   },
   unlockedBy: 'cachamera',
   next: 'talabarteria',
