@@ -304,6 +304,56 @@ export const FACTS = {
   mercado_puerto: ['En el mercado del puerto se vende pirarucú, fariña y frutas de la selva.'],
   provisiones_canoa: ['De Leticia salen las canoas a Puerto Nariño y a la isla de los Micos.'],
   salida_delfines: ['El delfín rosado vive en el río Amazonas y en sus lagos.', 'Es rosado por los vasos de sangre que tiene bajo la piel.'],
+
+  // Tolima Grande · Los Achirales (v4.0)
+  achiral: ['La achira es una planta de flores rojas; lo que se come es su rizoma.', 'Natagaima y Coyaima son tierra de achiras y de bizcochos.'],
+  achira_grater: ['El rizoma se lava y se ralla hasta volverlo una masa blanca.'],
+  starch_tanks: ['La masa se lava con agua y el almidón se asienta en el fondo.'],
+  starch_patio: ['El almidón se seca al sol, regado sobre esteras, hasta quedar fino.'],
+  achira_kneader: ['Los bizcochos llevan almidón de achira, cuajada, mantequilla y huevo.'],
+  bizcocho_oven: ['Los bizcochos de achira se hornean en hornos de barro y leña.', 'Son tan secos y livianos que duran semanas sin dañarse.'],
+  bizcocho_packer: ['Los bizcochos de achira se venden en las carreteras del Tolima y el Huila.'],
+
+  // Tolima Grande · El Café del Huila (v4.0)
+  cafetal_huila: ['El Huila es el departamento que más café produce en Colombia.', 'Pitalito tiene fama por sus cafés especiales.'],
+  huila_wetmill: ['Al despulpar la cereza sale el grano y también su cáscara roja.'],
+  huila_huller: ['La trilladora le quita al grano la cascarilla del pergamino.'],
+  huila_roaster: ['Cada café especial tiene su punto de tueste según su sabor.'],
+  huila_packer: ['Los cafés especiales del Huila ganan concursos en todo el mundo.'],
+  cascara_dryer: ['Con la cáscara seca de la cereza se hace una infusión: la «cáscara».', 'El té de cáscara sabe a frutas y tiene algo de cafeína.'],
+
+  // Tolima Grande · La Represa de Betania (v4.0)
+  tilapia_cages: ['La represa de Betania, en el Huila, embalsa el río Magdalena.', 'En sus jaulas flotantes se cría mucha de la tilapia del país.'],
+  tilapia_cleaner: ['A la tilapia se le quitan las escamas y la tripa recién sacada.'],
+  tilapia_smoker: ['El humo de la leña cocina la tilapia y la ayuda a conservarse.'],
+  tilapia_filleter: ['El filete de tilapia es blanco, suave y casi sin espinas.'],
+  escabeche_pot: ['El escabeche conserva el pescado en vinagre, cebolla y laurel.'],
+  represa_kitchen: ['En la orilla de la represa se come tilapia frita con patacón.'],
+
+  // Tolima Grande · La Lechonería (v4.0)
+  pigsty: ['La lechona es el plato más famoso del Tolima.'],
+  pork_butcher: ['Para la lechona se aparta la carne y el cuero entero del cerdo.'],
+  skin_cleaner: ['El cuero se pela, se raspa y se adoba: con él se envuelve la lechona.'],
+  relleno_pot: ['El relleno lleva arroz, arveja, cebolla, comino y la carne adobada.'],
+  tamal_stove: ['El tamal tolimense lleva maíz, arroz, carne, huevo y zanahoria.', 'Se envuelve en hoja de plátano y se cocina durante horas.'],
+  lechona_oven: ['La lechona se asa toda la noche en horno de leña.', 'El cuero queda dorado y crocante: es lo que más se pelea.'],
+  desayuno_tolimense_table: ['Un buen desayuno tolimense: tamal, chocolate o tinto y bizcochos.'],
+
+  // Tolima Grande · La Chamba (v4.0)
+  clay_bank: ['La Chamba es una vereda del Guamo, a orillas del río Magdalena.', 'Allí las familias hacen loza de barro desde hace siglos.'],
+  clay_treader: ['La arcilla se mezcla con arena fina y se pisa con los pies.'],
+  pot_modelers: ['Las piezas de La Chamba se modelan a mano, sin torno.'],
+  pot_burnishers: ['Las piezas se pulen con piedras de río hasta que brillan.'],
+  black_kiln: ['El color negro sale de ahumar las piezas con boñiga al quemarlas.'],
+  tienda_chamba: ['En las cazuelas de La Chamba se sirven sancochos y ajiacos.'],
+
+  // Tolima Grande · Neiva (v4.0)
+  cafeteria_malecon: ['Neiva, la capital del Huila, queda a orillas del río Magdalena.'],
+  restaurante_rio: ['El asado huilense es cerdo adobado y asado al horno de leña.'],
+  hotel_sanpedro: ['En junio Neiva celebra el Festival del Bambuco y el San Pedro.', 'El sanjuanero es el baile típico del Tolima Grande.'],
+  plaza_neiva: ['En la plaza de Neiva se venden cholupas, achiras y asado.'],
+  fiambrera_tatacoa: ['El desierto de la Tatacoa está cerca de Villavieja, en el Huila.'],
+  salida_tatacoa: ['La Tatacoa no es un desierto de verdad: es un bosque seco tropical.', 'Su cielo despejado es de los mejores del país para ver estrellas.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -350,6 +400,13 @@ export const PEOPLE = {
   casaberia: { icon: '👵🏽', name: 'Abuela Tránsito', role: 'la casabera' },
   yanchama: { icon: '🧑🏽', name: 'Don Eliseo', role: 'el artesano ticuna' },
   leticia: { icon: '👩🏽', name: 'Doña Graciela', role: 'la guía' },
+  // Tolima Grande (v4.0)
+  achirales: { icon: '👵🏽', name: 'Doña Hermelinda', role: 'la bizcochera' },
+  cafe_huila: { icon: '👨🏽‍🌾', name: 'Don Rubiel', role: 'el caficultor' },
+  betania: { icon: '🧑🏽', name: 'Don Fabio', role: 'el pescador' },
+  lechoneria: { icon: '👩🏽‍🍳', name: 'Doña Fanny', role: 'la lechonera' },
+  chamba: { icon: '👩🏾', name: 'Doña Ofelia', role: 'la alfarera' },
+  neiva: { icon: '💃🏽', name: 'Doña Marleny', role: 'la reina del San Pedro' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -396,6 +453,13 @@ export const WELCOME = {
   casaberia: '¡Bienvenido a la Casabería, mijo! De la yuca brava sale el casabe: el pan de la selva.',
   yanchama: '¡Bienvenido a la Yanchama, paisano! De la corteza del árbol sacamos tela, y de la tela, máscaras.',
   leticia: '¡Bienvenido a Leticia, paisano! Aquí, en la triple frontera, termina el viaje por el Amazonas.',
+  // Tolima Grande (v4.0)
+  achirales: '¡Bienvenido al Tolima Grande, mijo! De la achira sale el almidón, y del almidón, los bizcochos.',
+  cafe_huila: '¡Quiubo, paisano! Aquí en el Huila el café es especial, y hasta la cáscara se aprovecha.',
+  betania: '¡Bienvenido a la represa de Betania! Aquí la tilapia se cría en jaulas sobre el agua.',
+  lechoneria: '¡Llegó a la Lechonería, mijo! Del cerdo sale la carne y el cuero, y en el horno se juntan en la lechona.',
+  chamba: '¡Bienvenido a La Chamba! Aquí el barro se pisa, se modela a mano y se quema hasta quedar negro.',
+  neiva: '¡Bienvenido a Neiva, en pleno San Pedro! De aquí sale el paseo a ver las estrellas en la Tatacoa.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».
