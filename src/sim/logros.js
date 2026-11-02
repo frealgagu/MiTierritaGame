@@ -34,7 +34,8 @@ export function metric(state, name, profile = profileOf(state)) {
   const region = state.region ?? 'cafetero';
   const life = lifetimeOf(profile, region);
   const [kind, product] = name.split(':');
-  const runs = state.legacy?.history?.length ?? 0;
+  // Las partidas terminadas: los reinicios de la región (v4.0; hasta 60, como el multiplicador).
+  const runs = state.legacy?.resets ?? 0;
   // Las medallas de los eventos de esta región.
   const medals = Object.entries(profile.medals)
     .filter(([id]) => REGION_OF_ZONE[EVENTS_BY_ID[id]?.zone] === region)

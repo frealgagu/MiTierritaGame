@@ -77,7 +77,7 @@ export class ZonesView {
     if (this.map.busy) return;
     this.close();
     this.mapModal.hidden = false;
-    this.map.show();
+    this.map.showHere();
     this.map.travel(zoneId);
   }
 

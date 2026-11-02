@@ -13,7 +13,7 @@ import { GOALS_BY_ZONE } from '../data/goals.js';
 import { RESEARCH } from '../data/research.js';
 import { REGION_OF_ZONE } from '../data/regions.js';
 import { createInitialState } from './state.js';
-import { legacyMult } from './modifiers.js';
+import { MAX_LEGACY_RESETS, legacyMult } from './modifiers.js';
 import { bankRun } from './logros.js';
 import { RESTART_RENOWN, gainRenown, profileOf } from './renown.js';
 import { tk } from '../i18n/index.js'; // las etiquetas se traducen donde se muestran (GoalsView)
@@ -68,8 +68,9 @@ export function checkMastery(state, bus) {
 export function restartState(state, now = Date.now(), profile = null) {
   const region = regionOf(state);
   const next = createInitialState(now, region.id);
-  const history = [...(state.legacy?.history ?? []), { mult: legacyMult(state), playTime: state.playTime, totalEarned: state.totalEarned }];
-  next.legacy = { resets: (state.legacy?.resets ?? 0) + 1, history };
+  // Los reinicios llegan hasta el tope del multiplicador (v4.0: ahí se quedan; antes se seguían sumando y se
+  // guardaba un registro de cada partida, que crecía sin fin).
+  next.legacy = { resets: Math.min(MAX_LEGACY_RESETS, (state.legacy?.resets ?? 0) + 1) };
   next.clockOffset = clockOf(state);
   next.settings = { ...state.settings, zone: region.zones[0] };
   next.hints = [...(state.hints ?? [])];
