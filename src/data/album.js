@@ -580,7 +580,90 @@ const AMAZONAS = [
   },
 ];
 
-export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' })), ...AMAZONAS.map((pg) => ({ ...pg, region: 'amazonas' }))];
+
+// El Tolima Grande (v4.0).
+const TOLIMA = [
+  {
+    id: 'tierra_tolima',
+    icon: '🌵',
+    name: 'La tierra',
+    stickers: [
+      { id: 'nevado_tolima', icon: '🏔️', name: 'El Nevado del Tolima', cost: 1, text: 'Volcán cubierto de nieve en la cordillera Central, sobre Ibagué.' },
+      { id: 'magdalena_album', icon: '🌊', name: 'El río Magdalena', cost: 1, text: 'Nace en el Huila y atraviesa el Tolima Grande camino al mar.' },
+      { id: 'tatacoa_album', icon: '🏜️', name: 'El desierto de la Tatacoa', cost: 2, text: 'Cárcavas rojas y grises, cactus y fósiles cerca de Villavieja.' },
+      { id: 'san_agustin', icon: '🗿', name: 'San Agustín', cost: 2, text: 'Estatuas de piedra de hace siglos, en el sur del Huila.' },
+      { id: 'guayacan_album', icon: '🌼', name: 'El guayacán amarillo', cost: 2, text: 'En verano se cubre de flores amarillas y bota todas sus hojas.' },
+      { id: 'estrecho_magdalena', icon: '🪨', name: 'El estrecho del Magdalena', cost: 3, text: 'Donde el río más largo del país pasa por solo dos metros de roca.' },
+    ],
+  },
+  {
+    id: 'cocina_tolima',
+    icon: ICON.lechona,
+    name: 'La cocina',
+    stickers: [
+      { id: 'lechona_album', icon: ICON.lechona, name: 'La lechona', cost: 1, text: 'El cerdo relleno de arroz, arveja y su carne, asado toda la noche.' },
+      { id: 'tamal_album', icon: ICON.tamal, name: 'El tamal tolimense', cost: 1, text: 'Envuelto en hoja de plátano, con maíz, arroz, carne, huevo y arveja.' },
+      { id: 'insulso', icon: '🍮', name: 'El insulso', cost: 2, text: 'Dulce de maíz y panela, que acompaña a la lechona.' },
+      { id: 'asado_huilense', icon: '🍖', name: 'El asado huilense', cost: 2, text: 'Cerdo adobado con naranja agria y asado en horno de leña.' },
+      { id: 'cholupa', icon: '🍈', name: 'La cholupa', cost: 2, text: 'Fruta de la familia del maracuyá que solo se da en el Huila.' },
+      { id: 'mistela', icon: '🍷', name: 'La mistela', cost: 3, text: 'Bebida dulce de frutas que se ofrece en las fiestas de San Pedro.' },
+    ],
+  },
+  {
+    id: 'achiras_tolima',
+    icon: ICON.bizcochos,
+    name: 'La achira',
+    stickers: [
+      { id: 'achira_planta', icon: ICON.achiraPlant, name: 'La achira', cost: 1, text: 'Planta de hojas anchas y flores rojas, de rizoma comestible.' },
+      { id: 'almidon_album', icon: ICON.achiraStarch, name: 'El almidón', cost: 1, text: 'Sale de lavar el rizoma rallado: blanco y muy fino.' },
+      { id: 'bizcocho_album', icon: ICON.bizcochos, name: 'El bizcocho de achira', cost: 2, text: 'Galleta seca y crocante, sin harina de trigo.' },
+      { id: 'natagaima', icon: '🏘️', name: 'Natagaima', cost: 2, text: 'Pueblo del sur del Tolima famoso por sus bizcochos de achira.' },
+      { id: 'pijao', icon: '🏹', name: 'Los pijao', cost: 2, text: 'El pueblo indígena del sur del Tolima, de Coyaima y Natagaima.' },
+      { id: 'horno_barro_album', icon: '🔥', name: 'El horno de barro', cost: 3, text: 'Se calienta con leña y se barre la ceniza antes de hornear.' },
+    ],
+  },
+  {
+    id: 'musica_tolima',
+    icon: '🎻',
+    name: 'La música',
+    stickers: [
+      { id: 'sanjuanero', icon: '💃', name: 'El sanjuanero', cost: 1, text: 'El baile del Tolima Grande: la pareja coquetea dando vueltas.' },
+      { id: 'rajaleña', icon: '🎤', name: 'La rajaleña', cost: 1, text: 'Coplas picarescas cantadas con tiple, tambora y carrasca.' },
+      { id: 'bambuco_album', icon: '🎶', name: 'El bambuco', cost: 2, text: 'Ritmo andino en seis por ocho, el más tocado en el Festival.' },
+      { id: 'tiple_album', icon: '🎸', name: 'El tiple', cost: 2, text: 'Guitarra pequeña de doce cuerdas, el alma de la música andina.' },
+      { id: 'tambora', icon: '🥁', name: 'La tambora', cost: 2, text: 'Tambor de dos parches que marca el ritmo de la rajaleña.' },
+      { id: 'ibague_musical', icon: '🎼', name: 'Ibagué, ciudad musical', cost: 3, text: 'Así le dicen a Ibagué por su conservatorio y su festival de música.' },
+    ],
+  },
+  {
+    id: 'manos_tolima',
+    icon: ICON.lozaNegra,
+    name: 'Las manos',
+    stickers: [
+      { id: 'chamba_album', icon: ICON.lozaNegra, name: 'La loza de La Chamba', cost: 1, text: 'Cazuelas negras y brillantes, hechas a mano en El Guamo.' },
+      { id: 'sombrero_suaza', icon: '👒', name: 'El sombrero de Suaza', cost: 1, text: 'Tejido con palma de iraca en el Huila, fino y fresco.' },
+      { id: 'chiva_pitalito', icon: '🚌', name: 'La chiva de Pitalito', cost: 2, text: 'Las chivitas de cerámica pintadas a mano, recuerdo del Huila.' },
+      { id: 'brunido', icon: '🪨', name: 'El bruñido', cost: 2, text: 'Se pule el barro con una piedra de río hasta que brilla.' },
+      { id: 'canasto_tolima', icon: '🧺', name: 'El canasto', cost: 2, text: 'Tejido de bejuco o de caña para llevar el mercado.' },
+      { id: 'rejo', icon: '🐂', name: 'El rejo', cost: 3, text: 'Lazo de cuero trenzado de los vaqueros del valle.' },
+    ],
+  },
+  {
+    id: 'neiva_album',
+    icon: ICON.tatacoa,
+    name: 'Neiva y la Tatacoa',
+    stickers: [
+      { id: 'neiva_malecon', icon: '🌉', name: 'El malecón de Neiva', cost: 1, text: 'Paseo a la orilla del río Magdalena, en el centro de Neiva.' },
+      { id: 'san_pedro_album', icon: '🎉', name: 'El San Pedro', cost: 1, text: 'La gran fiesta de junio, con reinado y desfiles de sanjuanero.' },
+      { id: 'observatorio', icon: '🔭', name: 'El observatorio', cost: 2, text: 'En la Tatacoa se ven de noche miles de estrellas y planetas.' },
+      { id: 'fosiles_tatacoa', icon: '🦴', name: 'Los fósiles', cost: 2, text: 'En la Tatacoa hay fósiles de tortugas gigantes y cocodrilos.' },
+      { id: 'piscina_tatacoa', icon: '🏊', name: 'Los Hoyos', cost: 2, text: 'Una piscina de agua fresca en medio del desierto gris.' },
+      { id: 'cusco_tatacoa', icon: '🌵', name: 'El cardón', cost: 3, text: 'Cactus alto del desierto, donde anidan los pájaros.' },
+    ],
+  },
+];
+
+export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' })), ...AMAZONAS.map((pg) => ({ ...pg, region: 'amazonas' })), ...TOLIMA.map((pg) => ({ ...pg, region: 'tolima' }))];
 // Las páginas del álbum de una región.
 export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 
