@@ -7264,4 +7264,700 @@ const DRAW = {
       }
     };
   },
+
+  // ---------- Tolima Grande (v4.0) ----------
+  // Los Achirales. Rallador de achira: la ramada con la batea y la rueda de rallar que se mueve a manivela; al
+  // lado, el montón de rizomas.
+  achira_grater(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    box(g, x0 + 0.4, y0 + 0.5, 1.4, 0.6, 7, PAL.wood);
+    const t = iso(x0 + 1.1, y0 + 0.8, 7);
+    g.ellipse(t.x, t.y, 22, 6).fill(PRODUCTS.achira_mash.color).stroke(OUTLINE);
+    for (const [bx, by] of [[0.4, 2.4], [0.8, 2.6], [0.6, 2.2]]) {
+      const q = iso(x + bx, y + by);
+      g.ellipse(q.x, q.y - 4, 7, 4.5).fill(PRODUCTS.achira_root.color).stroke(OUTLINE);
+    }
+    ramada(this, g, x0, y0, 2.3, 1.6, 28 + ctx.up, 0xc9a96b);
+    const wheel = iso(x0 + 1.9, y0 + 0.8, 14);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const a = this.working ? time * 5 : 0;
+      anim.circle(wheel.x, wheel.y, 9).fill(0xb0bec5).stroke(OUTLINE);
+      for (let k = 0; k < 4; k++) anim.moveTo(wheel.x, wheel.y).lineTo(wheel.x + Math.cos(a + k * 1.57) * 9, wheel.y + Math.sin(a + k * 1.57) * 9).stroke({ width: 1.2, color: 0x607d8b });
+      const wp = iso(x0 + 0.6, y0 + 1.4);
+      worker(anim, wp.x, wp.y, 0xe53935);
+    };
+    this.animate(0);
+  },
+
+  // Tanques de asiento: los tanques de cemento donde se lava la achira rallada y se asienta el almidón; el agua
+  // lechosa corre por la canal.
+  starch_tanks(g, x, y, ctx) {
+    const tanks = ctx.tier >= 2 ? [[0.3, 0.4], [1.4, 0.4], [0.3, 1.5], [1.4, 1.5]] : [[0.4, 0.5], [1.5, 0.5], [0.9, 1.6]];
+    this.tanks = [];
+    for (const [tx, ty] of tanks) {
+      box(g, x + tx, y + ty, 0.9, 0.9, 10, 0xb0bec5);
+      g.poly(isoPoly([[x + tx + 0.08, y + ty + 0.08, 10], [x + tx + 0.82, y + ty + 0.08, 10], [x + tx + 0.82, y + ty + 0.82, 10], [x + tx + 0.08, y + ty + 0.82, 10]])).fill(0xe8f0f2);
+      this.tanks.push(iso(x + tx + 0.45, y + ty + 0.45, 10));
+    }
+    const c0 = iso(x + 2.6, y + 0.3, 14);
+    const c1 = iso(x + 2.6, y + 2.6, 4);
+    g.moveTo(c0.x, c0.y).lineTo(c1.x, c1.y).stroke({ width: 4, color: 0x90a4ae });
+    this.roofTop = iso(x + 1.3, y + 1.3, 20);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, t] of this.tanks.entries()) {
+        const f = this.working ? (time * 0.5 + k * 0.3) % 1 : 0;
+        anim.ellipse(t.x, t.y, 10 - f * 6, 4 - f * 2).fill({ color: 0xffffff, alpha: 0.5 * (1 - f) });
+      }
+      const f = (time * 1.2) % 1;
+      if (this.working) anim.circle(c0.x + (c1.x - c0.x) * f, c0.y + (c1.y - c0.y) * f, 2).fill(0xf1ece0);
+    };
+    this.animate(0);
+  },
+
+  // Patio de secado: las esteras con el almidón blanco al sol, y la secadora que lo voltea con el rastrillo.
+  starch_patio(g, x, y, ctx) {
+    const mats = ctx.tier >= 2 ? [[0.3, 0.3], [1.5, 0.3], [0.3, 1.5], [1.5, 1.5]] : [[0.4, 0.4], [1.5, 0.6], [0.7, 1.6]];
+    for (const [mx, my] of mats) {
+      g.poly(isoPoly([[x + mx, y + my], [x + mx + 1.1, y + my], [x + mx + 1.1, y + my + 1.0], [x + mx, y + my + 1.0]])).fill(0xc9a96b).stroke(OUTLINE);
+      g.poly(isoPoly([[x + mx + 0.1, y + my + 0.1], [x + mx + 1.0, y + my + 0.1], [x + mx + 1.0, y + my + 0.9], [x + mx + 0.1, y + my + 0.9]])).fill(PRODUCTS.achira_starch.color);
+    }
+    for (const [sx, sy] of [[2.6, 2.4], [2.3, 2.7]]) {
+      const q = iso(x + sx, y + sy);
+      g.ellipse(q.x, q.y - 5, 7, 5.5).fill(PAL.sack).stroke(OUTLINE);
+      g.ellipse(q.x, q.y - 9, 4, 1.8).fill(0xffffff);
+    }
+    this.roofTop = iso(x + 1.4, y + 1.4, 12);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const f = this.working ? (Math.sin(time * 0.8) + 1) / 2 : 0.5;
+      const w = iso(x + 0.6 + f * 1.6, y + 2.5);
+      worker(anim, w.x, w.y, 0xfdd835);
+      anim.moveTo(w.x + 3, w.y - 14).lineTo(w.x + 12, w.y - 2).stroke({ width: 1.4, color: 0x8d6e4a });
+    };
+    this.animate(0);
+  },
+
+  // Amasadero: la casa de bahareque blanca con zócalo rojo y la mesa larga donde se amasa con la cuajada.
+  achira_kneader(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.2, 1.4, 26, ctx, { wall: 0xfbf8f1 });
+    door(g, hx, hy, 1.4, 1.6, 17, 0xd7263d);
+    windowOnRight(this, g, hx, hy, 2.2, 0.7, 12, 0x2f7d4f);
+    box(g, x + 0.5, y + 2.15, 1.8, 0.5, 8, PAL.wood);
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 3); k++) {
+      const q = iso(x + 0.75 + k * 0.4, y + 2.4, 8);
+      g.ellipse(q.x, q.y - 2, 5, 3).fill(PRODUCTS.bizcocho_dough.color).stroke({ width: 0.6, color: 0x3a2418 });
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const q = iso(x + 1.4, y + 2.9);
+      worker(anim, q.x, q.y, 0xf2c14e);
+      const press = this.working ? Math.abs(Math.sin(time * 5)) * 3 : 0;
+      anim.ellipse(q.x, q.y - 21 + press, 3, 2).fill(0x6d4c32);
+    };
+    this.animate(0);
+  },
+
+  // Horno de bizcochos: el horno de barro en cúpula, con la boca encendida, la pala y las latas de bizcochos.
+  bizcocho_oven(g, x, y, ctx) {
+    const k = iso(x + 1.2, y + 1.2);
+    shadow(g, k.x + 4, k.y + 2, 32, 12);
+    g.moveTo(k.x - 28, k.y).quadraticCurveTo(k.x - 28, k.y - 38, k.x, k.y - 40).quadraticCurveTo(k.x + 28, k.y - 38, k.x + 28, k.y).quadraticCurveTo(k.x, k.y + 8, k.x - 28, k.y).closePath().fill(0xc97a46).stroke(OUTLINE);
+    g.moveTo(k.x - 8, k.y + 3).lineTo(k.x - 8, k.y - 11).quadraticCurveTo(k.x, k.y - 19, k.x + 8, k.y - 11).lineTo(k.x + 8, k.y + 3).closePath().fill(0x2b1d14);
+    this.lights.push({ x: k.x, y: k.y - 4, r: 24, color: 0xff7a1a });
+    this.smokePoints.push(iso(x + 1.2, y + 1.0, 42 + ctx.up));
+    this.roofTop = iso(x + 1.2, y + 1.2, 40);
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 2.3 + (i % 2) * 0.35, y + 1.9 + Math.floor(i / 2) * 0.3);
+      g.rect(q.x - 7, q.y - 3, 14, 3).fill(0x90a4ae).stroke({ width: 0.5, color: 0x3a2418 });
+      for (let b = 0; b < 3; b++) g.roundRect(q.x - 6 + b * 4.5, q.y - 5, 3.5, 2.2, 1).fill(PRODUCTS.bizcochos.color);
+    }
+    const fire = new Graphics();
+    this.anim.addChild(fire);
+    this.animate = (time) => {
+      fire.clear();
+      if (!this.working) return;
+      const h = 8 + Math.sin(time * 9) * 3;
+      fire.poly([k.x - 6, k.y + 2, k.x - 2, k.y - h * 0.6, k.x, k.y - h, k.x + 3, k.y - h * 0.5, k.x + 6, k.y + 2]).fill(0xff8c1a);
+    };
+    this.animate(0);
+  },
+
+  // Empacadora de bizcochos: la casa con el letrero de la achira roja; en el corredor, las cajas apiladas.
+  bizcocho_packer(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.3, 1.5, 28, ctx, { wall: 0xf6d860 });
+    door(g, hx, hy, 1.5, 1.7, 18, 0xd7263d);
+    windowOnRight(this, g, hx, hy, 2.3, 0.75, 14, 0xd7263d);
+    const s = iso(hx + 0.8, hy + 1.5, 24 + ctx.up);
+    g.roundRect(s.x - 12, s.y - 7, 24, 12, 3).fill(0xfffaf0).stroke(OUTLINE);
+    g.ellipse(s.x - 2, s.y - 1, 2.5, 4).fill(0xe53935);
+    g.ellipse(s.x + 2, s.y - 2, 2.5, 4).fill(0xe53935);
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 4); i++) box(g, x + 1.6 + (i % 3) * 0.4, y + 2.1 + Math.floor(i / 3) * 0.4, 0.35, 0.3, 7, PRODUCTS.bizcocho_box.color, { z: Math.floor(i / 3) === 0 ? 0 : 0 });
+  },
+
+  // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja
+  // que se amontona para el Secadero.
+  huila_wetmill(g, x, y, ctx) {
+    DRAW.wetmill.call(this, g, x, y, ctx);
+    const c0 = iso(x + 2.3, y + 0.5, 10);
+    const c1 = iso(x + 2.8, y + 2.2, 2);
+    g.moveTo(c0.x, c0.y).lineTo(c1.x, c1.y).stroke({ width: 4, color: 0x8d6e4a });
+    const pile = iso(x + 2.6, y + 2.6);
+    g.ellipse(pile.x, pile.y - 3, 12, 6).fill(PRODUCTS.cascara.color).stroke(OUTLINE);
+    for (let k = 0; k < 5; k++) g.circle(pile.x - 7 + k * 3.5, pile.y - 5 - (k % 2) * 2, 1.4).fill(0xc0392b);
+  },
+
+  // Secadero de cáscara: las zarandas con la cascarilla roja al sol, bajo el techo corredizo de los secaderos del
+  // Huila; al lado, los costalitos del té.
+  cascara_dryer(g, x, y, ctx) {
+    const beds = ctx.tier >= 2 ? [[0.3, 0.4], [0.3, 1.2], [1.5, 0.4], [1.5, 1.2]] : [[0.4, 0.5], [0.4, 1.4], [1.6, 0.9]];
+    for (const [bx, by] of beds) {
+      box(g, x + bx, y + by, 1.0, 0.7, 6, PAL.wood);
+      g.poly(isoPoly([[x + bx + 0.06, y + by + 0.06, 6], [x + bx + 0.94, y + by + 0.06, 6], [x + bx + 0.94, y + by + 0.64, 6], [x + bx + 0.06, y + by + 0.64, 6]])).fill(PRODUCTS.cascara.color);
+    }
+    // El techo corredizo de zinc, sobre rieles.
+    const roofZ = 22 + ctx.up;
+    for (const [px, py] of [[0.2, 0.3], [2.6, 0.3], [0.2, 2.1], [2.6, 2.1]]) box(g, x + px, y + py, 0.08, 0.08, roofZ, 0x6b4a2e);
+    g.poly(isoPoly([[x + 0.2, y + 0.3, roofZ], [x + 1.6, y + 0.3, roofZ + 6], [x + 1.6, y + 2.1, roofZ + 6], [x + 0.2, y + 2.1, roofZ]])).fill({ color: 0x9aa3a8, alpha: 0.95 }).stroke(OUTLINE);
+    this.roofTop = iso(x + 1.4, y + 1.2, roofZ + 6);
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 2.3 + (i % 2) * 0.3, y + 2.4 + Math.floor(i / 2) * 0.25);
+      g.ellipse(q.x, q.y - 4, 5, 4).fill(PRODUCTS.te_cascara.color).stroke(OUTLINE);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const f = this.working ? (Math.sin(time * 0.9) + 1) / 2 : 0.3;
+      const w = iso(x + 0.5 + f * 1.8, y + 2.6);
+      worker(anim, w.x, w.y, 0x2e7d32);
+    };
+    this.animate(0);
+  },
+
+  // La Represa de Betania. Olla del escabeche: el fogón con la olla grande, la mesa de los frascos y la cebolla.
+  escabeche_pot(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.4;
+    box(g, x0, y0, 1.4, 1.1, 10, 0xb5653a);
+    const c = iso(x0 + 0.7, y0 + 0.55, 10);
+    g.ellipse(c.x, c.y - 6, 16, 6).fill(0x546e7a).stroke(OUTLINE);
+    g.rect(c.x - 16, c.y - 14, 32, 8).fill(0x607d8b).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 14, 16, 6).fill(PRODUCTS.escabeche.color).stroke(OUTLINE);
+    this.lights.push({ x: c.x, y: c.y + 4, r: 20, color: 0xff7a1a });
+    ramada(this, g, x + 0.2, y + 0.2, 2.5, 1.7, 30 + ctx.up, 0xc9a96b);
+    box(g, x + 1.9, y + 2.1, 0.9, 0.5, 8, PAL.wood);
+    for (let i = 0; i < 3 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 2.0 + (i % 3) * 0.28, y + 2.25 + Math.floor(i / 3) * 0.2, 8);
+      g.roundRect(q.x - 2.5, q.y - 8, 5, 8, 1).fill(PRODUCTS.escabeche.color).stroke({ width: 0.5, color: 0x3a2418 });
+      g.rect(q.x - 2.5, q.y - 9.5, 5, 2).fill(0xd7263d);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      if (!this.working) return;
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.6 + i / 3) % 1;
+        anim.circle(c.x - 8 + i * 8, c.y - 18 - f * 16, 2 + f * 3).fill({ color: 0xffffff, alpha: 0.45 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Cocina de la represa: el restaurante de la orilla con su kiosco de palma, las mesas con la tilapia frita y la
+  // paila del aceite.
+  represa_kitchen(g, x, y, ctx) {
+    const c = iso(x + 1.1, y + 1.0, 0);
+    for (const a of [0, 1.57, 3.14, 4.71]) g.rect(c.x + Math.cos(a + 0.78) * 30 - 1.2, c.y + Math.sin(a + 0.78) * 15 - 26 - ctx.up, 2.4, 26 + ctx.up).fill(0x6b4a2e);
+    const top = c.y - 26 - ctx.up;
+    g.moveTo(c.x - 42, top).lineTo(c.x, top - 28).lineTo(c.x + 42, top).quadraticCurveTo(c.x, top + 18, c.x - 42, top).fill(0xc9a96b).stroke(OUTLINE);
+    this.roofTop = { x: c.x, y: top - 28 };
+    const tables = ctx.tier >= 2 ? [[0.6, 2.3], [1.5, 2.4], [2.4, 2.3]] : [[0.8, 2.3], [2.0, 2.4]];
+    this.plates = [];
+    for (const [tx, ty] of tables) {
+      box(g, x + tx - 0.3, y + ty - 0.2, 0.6, 0.4, 8, 0xd7263d);
+      const q = iso(x + tx, y + ty, 8);
+      fishOn(g, q.x, q.y - 1, 4, PRODUCTS.almuerzo_represa.color);
+      this.plates.push(q);
+    }
+    const pan = iso(x + 2.4, y + 0.7, 8);
+    box(g, x + 2.1, y + 0.45, 0.6, 0.5, 8, 0x8d6e4a);
+    g.ellipse(pan.x, pan.y, 10, 4).fill(0x3a3a3a).stroke(OUTLINE);
+    g.ellipse(pan.x, pan.y, 8, 3).fill(0xe0a800);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      if (this.working) for (let i = 0; i < 4; i++) anim.circle(pan.x - 5 + i * 3.5, pan.y - 1 - Math.abs(Math.sin(time * 12 + i)) * 3, 0.9).fill(0xfff59d);
+      const f = this.working ? (Math.sin(time * 0.7) + 1) / 2 : 0.5;
+      const w = iso(x + 0.5 + f * 2, y + 2.85);
+      worker(anim, w.x, w.y, 0xffffff);
+    };
+    this.animate(0);
+  },
+
+  // La Lechonería. Desposte de cerdo: la casa con la mesa de desposte, los ganchos con la carne y, por la canaleta,
+  // los cueros que van a la Limpieza.
+  pork_butcher(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.0, 1.4, 26, ctx, { wall: 0xfbf8f1 });
+    door(g, hx, hy, 1.4, 1.4, 17, 0x2f7d4f);
+    box(g, x + 2.35, y + 0.3, 0.1, 1.4, 22 + ctx.up, 0x6b4a2e);
+    for (let k = 0; k < 3; k++) {
+      const q = iso(x + 2.4, y + 0.5 + k * 0.45, 18 + ctx.up);
+      g.moveTo(q.x, q.y).lineTo(q.x, q.y + 4).stroke({ width: 1, color: 0x9e9e9e });
+      g.ellipse(q.x, q.y + 9, 4, 6).fill(PRODUCTS.carne_cerdo.color).stroke({ width: 0.6, color: 0x3a2418 });
+    }
+    box(g, x + 0.6, y + 2.1, 1.4, 0.5, 8, PAL.wood);
+    const s0 = iso(x + 2.1, y + 2.3, 6);
+    const s1 = iso(x + 2.9, y + 2.9, 1);
+    g.moveTo(s0.x, s0.y).lineTo(s1.x, s1.y).stroke({ width: 4, color: 0x8d6e4a });
+    const hide = iso(x + 2.8, y + 2.8);
+    g.ellipse(hide.x, hide.y - 2, 8, 4).fill(PRODUCTS.cuero_cerdo.color).stroke(OUTLINE);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const q = iso(x + 1.2, y + 2.85);
+      worker(anim, q.x, q.y, 0xffffff);
+      const cut = this.working ? Math.abs(Math.sin(time * 6)) * 4 : 0;
+      anim.moveTo(q.x + 3, q.y - 16 + cut).lineTo(q.x + 8, q.y - 12 + cut).stroke({ width: 1.4, color: 0xb0bec5 });
+    };
+    this.animate(0);
+  },
+
+  // Limpieza del cuero: los cueros extendidos en el bastidor, la artesa del agua caliente y quien los raspa.
+  skin_cleaner(g, x, y, ctx) {
+    for (const [fx, fy] of ctx.tier >= 2 ? [[0.3, 0.4], [1.3, 0.4], [2.2, 0.4]] : [[0.5, 0.4], [1.6, 0.4]]) {
+      box(g, x + fx, y + fy, 0.08, 0.08, 24, 0x6b4a2e);
+      box(g, x + fx + 0.7, y + fy, 0.08, 0.08, 24, 0x6b4a2e);
+      const a = iso(x + fx + 0.05, y + fy + 0.05, 20);
+      const b = iso(x + fx + 0.75, y + fy + 0.05, 20);
+      g.poly([a.x, a.y, b.x, b.y, b.x, b.y + 14, a.x, a.y + 14]).fill(PRODUCTS.cuero_limpio.color).stroke(OUTLINE);
+    }
+    box(g, x + 0.6, y + 1.6, 1.4, 0.6, 7, 0x8d6e4a);
+    const w = iso(x + 1.3, y + 1.9, 7);
+    g.ellipse(w.x, w.y, 18, 5).fill(0xbcaaa4);
+    this.roofTop = iso(x + 1.4, y + 0.6, 26);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      if (this.working) for (let i = 0; i < 2; i++) {
+        const f = (time * 0.5 + i / 2) % 1;
+        anim.circle(w.x - 6 + i * 12, w.y - 4 - f * 14, 2 + f * 3).fill({ color: 0xffffff, alpha: 0.4 * (1 - f) });
+      }
+      const q = iso(x + 1.3, y + 2.75);
+      worker(anim, q.x, q.y, 0x1e88e5);
+      const r = this.working ? Math.sin(time * 6) * 4 : 0;
+      anim.moveTo(q.x + 3, q.y - 15).lineTo(q.x + 8 + r, q.y - 19).stroke({ width: 1.4, color: 0x8d6e4a });
+    };
+    this.animate(0);
+  },
+
+  // Paila del relleno: el fogón de leña con la paila grande donde se cocina el arroz con arveja y la carne adobada.
+  relleno_pot(g, x, y, ctx) {
+    const x0 = x + 0.5;
+    const y0 = y + 0.5;
+    box(g, x0, y0, 1.6, 1.3, 9, 0xb5653a);
+    const c = iso(x0 + 0.8, y0 + 0.65, 9);
+    g.ellipse(c.x, c.y, 24, 9).fill(0x3a3a3a).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 1, 21, 7).fill(PRODUCTS.relleno.color);
+    for (let k = 0; k < 8; k++) g.circle(c.x - 14 + (k * 9) % 28, c.y - 3 + (k * 5) % 5, 1.4).fill(0x7cb342);
+    const mouth = iso(x0 + 0.5, y0 + 1.3, 3);
+    g.ellipse(mouth.x, mouth.y, 6, 3.5).fill(0x2b1a10).stroke(OUTLINE);
+    this.lights.push({ x: mouth.x, y: mouth.y, r: 22, color: 0xff7a1a });
+    ramada(this, g, x + 0.25, y + 0.25, 2.5, 2.0, 34 + ctx.up, PAL.roof);
+    for (let i = 0; i < 3; i++) {
+      const p = iso(x + 0.2 + i * 0.12, y + 2.8, i * 2);
+      g.roundRect(p.x - 10, p.y - 4, 20, 4, 2).fill(0x8b5a2b).stroke(OUTLINE);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      if (this.working) for (let i = 0; i < 3; i++) {
+        const f = (time * 0.6 + i / 3) % 1;
+        anim.circle(c.x - 10 + i * 10, c.y - 5 - f * 18, 2 + f * 3).fill({ color: 0xffffff, alpha: 0.45 * (1 - f) });
+      }
+      const w = iso(x0 + 1.9, y0 + 0.9);
+      worker(anim, w.x, w.y, 0xf2c14e);
+      const st = this.working ? Math.sin(time * 4) * 4 : 0;
+      anim.moveTo(w.x - 3, w.y - 15).lineTo(c.x + 8 + st, c.y - 2).stroke({ width: 1.6, color: 0x8d6e4a });
+    };
+    this.animate(0);
+  },
+
+  // Fogón del tamal: la cocina abierta con la olla grande donde se cuecen los tamales y las hojas de plátano.
+  tamal_stove(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 1.6, 1.2, 24, ctx, { wall: 0xf5e6c8 });
+    door(g, hx, hy, 1.2, 0.8, 16, 0xd7263d);
+    box(g, x + 2.0, y + 0.6, 0.8, 0.8, 7, 0xb5653a);
+    const c = iso(x + 2.4, y + 1.0, 7);
+    g.rect(c.x - 9, c.y - 16, 18, 16).fill(0x546e7a).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 16, 9, 3.5).fill(0x607d8b).stroke(OUTLINE);
+    this.lights.push({ x: c.x, y: c.y + 2, r: 18, color: 0xff7a1a });
+    box(g, x + 0.5, y + 2.0, 1.6, 0.6, 8, PAL.wood);
+    for (let i = 0; i < 3 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 0.7 + (i % 3) * 0.45, y + 2.2 + Math.floor(i / 3) * 0.25, 8);
+      g.roundRect(q.x - 4, q.y - 4, 8, 4, 1.5).fill(PRODUCTS.tamal.color).stroke({ width: 0.6, color: 0x3a2418 });
+      g.moveTo(q.x, q.y - 4).lineTo(q.x, q.y).stroke({ width: 0.8, color: 0xc9a96b });
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      if (this.working) for (let i = 0; i < 2; i++) {
+        const f = (time * 0.5 + i / 2) % 1;
+        anim.circle(c.x - 3 + i * 6, c.y - 20 - f * 16, 2 + f * 3).fill({ color: 0xffffff, alpha: 0.45 * (1 - f) });
+      }
+      const w = iso(x + 1.4, y + 2.9);
+      worker(anim, w.x, w.y, 0xe53935);
+    };
+    this.animate(0);
+  },
+
+  // Horno de leña: el horno grande de ladrillo donde se asa la lechona envuelta en su cuero; afuera, la lechona
+  // dorada en la batea.
+  lechona_oven(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    box(g, hx, hy, 1.9, 1.5, 22 + ctx.up, 0xb5562e);
+    for (let r = 1; r < 5; r++) {
+      const a = iso(hx, hy + 1.5, r * 5);
+      const b = iso(hx + 1.9, hy + 1.5, r * 5);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 0.8, color: 0x8a3b1f, alpha: 0.7 });
+    }
+    gableRoof(g, hx, hy, 1.9, 1.5, 22 + ctx.up, 12, PAL.roof, 0xb5562e);
+    this.roofTop = iso(hx + 0.95, hy + 0.75, 34 + ctx.up);
+    const m = isoPoly([[hx + 0.6, hy + 1.5, 0], [hx + 1.3, hy + 1.5, 0], [hx + 1.3, hy + 1.5, 12], [hx + 0.6, hy + 1.5, 12]]);
+    g.poly(m).fill(0x2b1d14).stroke(OUTLINE);
+    const mouth = iso(hx + 0.95, hy + 1.5, 5);
+    this.lights.push({ x: mouth.x, y: mouth.y, r: 26, color: 0xff7a1a });
+    box(g, hx + 1.5, hy + 0.2, 0.3, 0.3, 46 + ctx.up, 0x8a3b1f);
+    this.smokePoints.push(iso(hx + 1.65, hy + 0.35, 46 + ctx.up));
+    const t = iso(x + 2.1, y + 2.4, 6);
+    box(g, x + 1.6, y + 2.1, 1.1, 0.6, 6, PAL.wood);
+    g.ellipse(t.x, t.y, 15, 6).fill(0x8d5a32).stroke(OUTLINE);
+    g.ellipse(t.x, t.y - 3, 12, 5).fill(PRODUCTS.lechona.color).stroke({ width: 0.8, color: 0x3a2418 });
+    g.circle(t.x - 12, t.y - 4, 4).fill(PRODUCTS.lechona.color).stroke({ width: 0.8, color: 0x3a2418 });
+    const fire = new Graphics();
+    this.anim.addChild(fire);
+    this.animate = (time) => {
+      fire.clear();
+      if (!this.working) return;
+      const h = 6 + Math.sin(time * 9) * 2;
+      fire.poly([mouth.x - 7, mouth.y + 4, mouth.x - 2, mouth.y - h, mouth.x + 2, mouth.y - h * 0.6, mouth.x + 7, mouth.y + 4]).fill(0xff8c1a);
+    };
+    this.animate(0);
+  },
+
+  // Mesa del desayuno tolimense: el corredor de la casa con las mesas: el tamal, la taza de tinto del Huila y los
+  // bizcochos de los Achirales.
+  desayuno_tolimense_table(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    house(this, g, hx, hy, 2.4, 1.3, 26, ctx, { wall: 0xfbf8f1 });
+    door(g, hx, hy, 1.3, 1.2, 17, 0x2f7d4f);
+    windowOnFront(this, g, hx, hy, 1.3, 2.0, 10, 0x2f7d4f);
+    const tables = ctx.tier >= 2 ? [[0.7, 2.2], [1.6, 2.2], [2.5, 2.2]] : [[0.9, 2.2], [2.0, 2.2]];
+    this.plates = [];
+    for (const [tx, ty] of tables) {
+      box(g, x + tx - 0.3, y + ty - 0.2, 0.6, 0.4, 9, 0xd7263d);
+      const q = iso(x + tx, y + ty, 9);
+      g.roundRect(q.x - 6, q.y - 2, 6, 3, 1).fill(PRODUCTS.tamal.color).stroke({ width: 0.5, color: 0x3a2418 });
+      g.rect(q.x + 2, q.y - 5, 3, 4).fill(0xffffff).stroke({ width: 0.5, color: 0x3a2418 });
+      g.roundRect(q.x - 2, q.y + 1, 5, 1.6, 0.8).fill(PRODUCTS.bizcochos.color);
+      this.plates.push(q);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, q] of this.plates.entries()) worker(anim, q.x + (k % 2 ? 10 : -10), q.y + 10, [0xe5737f, 0x6cbf6c, 0xf2c14e][k % 3]);
+      const f = this.working ? (Math.sin(time * 0.7) + 1) / 2 : 0.5;
+      const w = iso(x + 0.6 + f * 2, y + 2.75);
+      worker(anim, w.x, w.y, 0xffffff);
+      if (this.working) anim.circle(w.x + 4, w.y - 24 - ((time * 2) % 1) * 6, 1.5).fill({ color: 0xffffff, alpha: 0.6 });
+    };
+    this.animate(0);
+  },
+
+  // La Chamba. Pisadero de barro: el barro en el suelo, que se pisa descalzo, con la arena fina al lado.
+  clay_treader(g, x, y, ctx) {
+    const c = iso(x + 1.2, y + 1.3);
+    g.ellipse(c.x, c.y, 38, 18).fill(0x6d4c41).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 1, 34, 15).fill(PRODUCTS.barro_pisado.color);
+    for (let k = 0; k < 6; k++) g.ellipse(c.x - 20 + k * 8, c.y - 4 + (k % 2) * 6, 2.5, 4).fill(0x5d4037);
+    const sand = iso(x + 2.6, y + 2.5);
+    g.ellipse(sand.x, sand.y - 3, 12, 6).fill(0xe0c890).stroke(OUTLINE);
+    ramada(this, g, x + 0.2, y + 0.3, 2.3, 2.0, 30 + ctx.up, 0xc9a96b);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const n = ctx.tier >= 2 ? 2 : 1;
+      for (let k = 0; k < n; k++) {
+        const step = this.working ? Math.sin(time * 6 + k * 2) * 2 : 0;
+        worker(anim, c.x - 10 + k * 20, c.y + 4 + step, k ? 0xd7263d : 0xf2c14e);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Moldeadoras: las mujeres sentadas frente a sus piezas, que modelan a mano las cazuelas (sin torno, como en La
+  // Chamba), bajo la ramada.
+  pot_modelers(g, x, y, ctx) {
+    ramada(this, g, x + 0.25, y + 0.25, 2.5, 2.2, 30 + ctx.up, 0xc9a96b);
+    const spots = ctx.tier >= 2 ? [[0.8, 1.0], [1.9, 1.0], [0.8, 2.0], [1.9, 2.0]] : [[0.9, 1.1], [1.9, 1.6]];
+    this.spots = spots.map(([sx, sy]) => iso(x + sx, y + sy));
+    for (const p of this.spots) {
+      g.ellipse(p.x + 10, p.y - 4, 8, 5).fill(PRODUCTS.pieza_cruda.color).stroke(OUTLINE);
+      g.ellipse(p.x + 10, p.y - 8, 7, 2).fill(0x8d6e63);
+    }
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 2.5 + (i % 2) * 0.25, y + 2.6 - Math.floor(i / 2) * 0.3);
+      g.ellipse(q.x, q.y - 4, 5, 4).fill(PRODUCTS.pieza_cruda.color).stroke({ width: 0.6, color: 0x3a2418 });
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, p] of this.spots.entries()) {
+        anim.roundRect(p.x - 4, p.y - 12, 8, 9, 2).fill([0xe5737f, 0x6cbf6c, 0xf2c14e, 0x4fb3bf][k % 4]);
+        anim.circle(p.x, p.y - 15, 2.8).fill(0x6d4c32);
+        const r = this.working ? Math.sin(time * 4 + k) * 2 : 0;
+        anim.moveTo(p.x + 3, p.y - 9).lineTo(p.x + 8 + r, p.y - 7).stroke({ width: 1.4, color: 0x6d4c32 });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Bruñidoras: las piezas puestas a orear sobre la mesa y las mujeres que las pulen con la piedra de río hasta que
+  // brillan; los brillos van y vienen.
+  pot_burnishers(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.8, 1.2, 22, ctx, { wall: 0xf5e6c8 });
+    door(g, hx, hy, 1.2, 0.9, 15, 0x2f7d4f);
+    box(g, x + 0.4, y + 1.9, 2.2, 0.6, 8, PAL.wood);
+    this.pots = [];
+    for (let i = 0; i < 3 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 0.6 + (i % 4) * 0.5, y + 2.1 + Math.floor(i / 4) * 0.25, 8);
+      g.ellipse(q.x, q.y - 4, 5, 4).fill(PRODUCTS.pieza_brunida.color).stroke({ width: 0.6, color: 0x3a2418 });
+      this.pots.push(q);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const w = iso(x + 1.5, y + 2.9);
+      worker(anim, w.x, w.y, 0xc77dff);
+      if (!this.working) return;
+      const q = this.pots[Math.floor(time * 1.5) % this.pots.length];
+      anim.circle(q.x - 2, q.y - 6, 1.6 + Math.abs(Math.sin(time * 6))).fill({ color: 0xffffff, alpha: 0.9 });
+    };
+    this.animate(0);
+  },
+
+  // Horno de quema: el horno abierto donde las piezas se queman con leña y luego se ahúman con boñiga para que salgan
+  // negras; el humo es oscuro y espeso.
+  black_kiln(g, x, y, ctx) {
+    const k = iso(x + 1.3, y + 1.2);
+    shadow(g, k.x + 4, k.y + 2, 32, 12);
+    g.moveTo(k.x - 30, k.y).lineTo(k.x - 26, k.y - 26).lineTo(k.x + 26, k.y - 26).lineTo(k.x + 30, k.y).quadraticCurveTo(k.x, k.y + 10, k.x - 30, k.y).closePath().fill(0x8d6e63).stroke(OUTLINE);
+    g.ellipse(k.x, k.y - 26, 26, 9).fill(0x3e2723).stroke(OUTLINE);
+    for (let i = 0; i < 4; i++) g.ellipse(k.x - 14 + i * 9, k.y - 28, 5, 3).fill(0x2b2b2b);
+    g.moveTo(k.x - 8, k.y + 4).lineTo(k.x - 8, k.y - 8).lineTo(k.x + 8, k.y - 8).lineTo(k.x + 8, k.y + 4).closePath().fill(0x2b1d14);
+    this.lights.push({ x: k.x, y: k.y - 2, r: 26, color: 0xff7a1a });
+    this.roofTop = iso(x + 1.3, y + 1.2, 30);
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 2.4 + (i % 2) * 0.3, y + 2.0 + Math.floor(i / 2) * 0.3);
+      g.ellipse(q.x, q.y - 4, 5.5, 4).fill(PRODUCTS.loza_negra.color).stroke({ width: 0.6, color: 0x000000 });
+      g.ellipse(q.x - 2, q.y - 5, 1.2, 2).fill(0x777777);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      if (!this.working) return;
+      for (let i = 0; i < 4; i++) {
+        const f = (time * 0.4 + i / 4) % 1;
+        anim.circle(k.x - 10 + i * 7 + Math.sin(time + i) * 3, k.y - 32 - f * 34, 4 + f * 6).fill({ color: 0x424242, alpha: 0.55 * (1 - f) });
+      }
+      const h = 6 + Math.sin(time * 9) * 2;
+      anim.poly([k.x - 6, k.y + 3, k.x - 2, k.y - h, k.x + 2, k.y - h * 0.6, k.x + 6, k.y + 3]).fill(0xff8c1a);
+    };
+    this.animate(0);
+  },
+
+  // Tienda de La Chamba: la casa con las cazuelas negras colgadas y en el suelo, la tilapia ahumada y los frascos de
+  // escabeche que llegan de Betania.
+  tienda_chamba(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.4, 28, ctx, { wall: 0xfbf8f1 });
+    door(g, hx, hy, 1.4, 1.2, 18, 0xd7263d);
+    windowOnFront(this, g, hx, hy, 1.4, 2.0, 10, 0xd7263d);
+    for (let i = 0; i < 4 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 0.4 + (i % 5) * 0.48, y + 2.2 + Math.floor(i / 5) * 0.35);
+      g.ellipse(q.x, q.y - 4, 6, 4.5).fill(PRODUCTS.loza_negra.color).stroke({ width: 0.6, color: 0x000000 });
+      g.ellipse(q.x, q.y - 8, 5, 1.6).fill(0x3a3a3a);
+    }
+    const s = iso(x + 2.6, y + 1.3, 6);
+    box(g, x + 2.45, y + 1.0, 0.35, 0.6, 6, PAL.wood);
+    g.rect(s.x - 3, s.y - 8, 6, 8).fill(PRODUCTS.escabeche.color).stroke({ width: 0.5, color: 0x3a2418 });
+    fishOn(g, s.x + 2, s.y - 12, 4, PRODUCTS.tilapia_ahumada.color);
+  },
+
+  // Neiva. Restaurante del río: la casona sobre el malecón del Magdalena, con la terraza y sus faroles.
+  restaurante_rio(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.5, 30, ctx, { wall: 0xf6d860 });
+    door(g, hx, hy, 1.5, 1.6, 18, 0xd7263d);
+    windowOnRight(this, g, hx, hy, 2.4, 0.75, 14, 0xd7263d);
+    const tables = ctx.tier >= 2 ? [[0.6, 2.3], [1.5, 2.4], [2.4, 2.3]] : [[0.8, 2.3], [2.0, 2.4]];
+    for (const [tx, ty] of tables) {
+      const p = iso(x + tx, y + ty);
+      g.rect(p.x - 1, p.y - 20, 2, 20).fill(0x555555);
+      g.ellipse(p.x, p.y - 8, 7, 3.5).fill(0xffffff).stroke(OUTLINE);
+      g.poly([p.x, p.y - 28, p.x - 13, p.y - 19, p.x + 13, p.y - 19]).fill(0x2f7d4f).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+      g.ellipse(p.x - 2, p.y - 9, 3, 1.4).fill(PRODUCTS.cena_opita.color);
+    }
+  },
+
+  // Hotel del San Pedro: el hotel de dos pisos con balcones, adornado con las banderitas rojas y amarillas del
+  // festival; en la puerta, la pareja que baila el sanjuanero.
+  hotel_sanpedro(g, x, y, ctx) {
+    const hx = x + 0.2;
+    const hy = y + 0.2;
+    house(this, g, hx, hy, 2.5, 1.6, 34, { ...ctx, up: ctx.up || UPPER_FLOOR }, { wall: 0xfbf8f1 });
+    door(g, hx, hy, 1.6, 1.25, 18, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.5, 0.8, 14, 0x2f7d4f);
+    const a = iso(hx, hy + 1.65, 30);
+    const b = iso(hx + 2.5, hy + 1.65, 30);
+    g.moveTo(a.x, a.y).quadraticCurveTo((a.x + b.x) / 2, (a.y + b.y) / 2 + 8, b.x, b.y).stroke({ width: 0.8, color: 0x5d4037 });
+    for (let k = 1; k < 9; k++) {
+      const f = k / 9;
+      const px = a.x + (b.x - a.x) * f;
+      const py = a.y + (b.y - a.y) * f + Math.sin(f * Math.PI) * 8;
+      g.poly([px - 2.5, py, px + 2.5, py, px, py + 5]).fill(k % 2 ? 0xd7263d : 0xfdd835);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time, clock) => {
+      anim.clear();
+      const c = iso(x + 1.8, y + 2.6);
+      const sp = clock * 2;
+      const r = 5;
+      const dx = Math.cos(sp) * r;
+      const dy = Math.sin(sp) * r * 0.5;
+      anim.poly([c.x + dx - 5, c.y + dy, c.x + dx, c.y + dy - 14, c.x + dx + 5, c.y + dy]).fill(0xd7263d);
+      anim.circle(c.x + dx, c.y + dy - 16, 2.5).fill(0x6d4c32);
+      worker(anim, c.x - dx, c.y - dy, 0xffffff);
+    };
+    this.animate(0, 0);
+  },
+
+  // Plaza de mercado de Neiva: la galería de techo alto con los puestos de frutas, el asado y la tilapia de Betania.
+  plaza_neiva(g, x, y, ctx) {
+    const H = 30 + ctx.up;
+    for (const [px, py] of [[0.2, 0.3], [2.7, 0.3], [0.2, 2.4], [2.7, 2.4], [1.45, 0.3], [1.45, 2.4]]) box(g, x + px, y + py, 0.12, 0.12, H, 0x9e9e9e);
+    gableRoof(g, x + 0.15, y + 0.25, 2.7, 2.25, H, 14, 0x9aa3a8, 0xd2cbbd);
+    this.roofTop = iso(x + 1.5, y + 1.4, H + 14);
+    const stalls = [[0.6, 1.0, 0xffb74d], [1.6, 1.0, 0xe53935], [0.6, 1.9, 0x9ccc65], [1.6, 1.9, PRODUCTS.almuerzo_opita.color]];
+    for (const [sx, sy, col] of stalls.slice(0, 2 + Math.min(ctx.tier, 2))) {
+      box(g, x + sx, y + sy, 0.8, 0.45, 8, PAL.wood);
+      for (let k = 0; k < 4; k++) {
+        const q = iso(x + sx + 0.15 + k * 0.17, y + sy + 0.22, 8);
+        g.circle(q.x, q.y - 2, 2.2).fill(col);
+      }
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const f = this.working ? (Math.sin(time * 0.6) + 1) / 2 : 0.5;
+      const w = iso(x + 0.5 + f * 2, y + 1.55);
+      worker(anim, w.x, w.y, 0x1e88e5);
+    };
+    this.animate(0);
+  },
+
+  // Fiambrera del paseo: la casa donde se arman los fiambres en hoja de bijao, con la mesa y los canastos para la
+  // Tatacoa.
+  fiambrera_tatacoa(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.2, 1.4, 28, ctx, { wall: 0xf28c9a });
+    door(g, hx, hy, 1.4, 1.5, 18, 0x2f7d4f);
+    box(g, x + 0.5, y + 2.1, 1.8, 0.5, 8, PAL.wood);
+    for (let i = 0; i < 3 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 0.7 + (i % 4) * 0.4, y + 2.3 + Math.floor(i / 4) * 0.2, 8);
+      g.ellipse(q.x, q.y - 2, 5, 2.5).fill(0x4e8a34).stroke({ width: 0.5, color: 0x3a2418 });
+    }
+    basketShape(g, x + 2.6, y + 2.6, 0, 0.9);
+  },
+
+  // Salida a la Tatacoa: el campero de los paseos, el telescopio y la carpa, en la tierra roja con un cactus; de
+  // noche el telescopio mira al cielo.
+  salida_tatacoa(g, x, y, ctx) {
+    g.poly(isoPoly([[x + 0.2, y + 0.2], [x + 2.8, y + 0.2], [x + 2.8, y + 2.8], [x + 0.2, y + 2.8]])).fill({ color: 0xc0582b, alpha: 0.75 });
+    for (const [cx, cy] of [[0.5, 0.6], [2.5, 2.4]]) {
+      const p = iso(x + cx, y + cy);
+      g.rect(p.x - 2.5, p.y - 22, 5, 22).fill(0x558b2f).stroke(OUTLINE);
+      g.rect(p.x - 8, p.y - 14, 5, 3).fill(0x558b2f);
+      g.rect(p.x - 8, p.y - 19, 3, 6).fill(0x558b2f);
+      g.rect(p.x + 3, p.y - 11, 5, 3).fill(0x558b2f);
+      g.rect(p.x + 5, p.y - 16, 3, 6).fill(0x558b2f);
+    }
+    const tent = iso(x + 0.9, y + 1.9);
+    g.poly([tent.x - 18, tent.y, tent.x, tent.y - 22, tent.x + 18, tent.y]).fill(0xf2c14e).stroke(OUTLINE);
+    g.poly([tent.x - 4, tent.y, tent.x, tent.y - 12, tent.x + 4, tent.y]).fill(0x5d4037);
+    box(g, x + 1.5, y + 0.7, 1.0, 0.55, 10, 0x2e7d32);
+    box(g, x + 1.55, y + 0.75, 0.55, 0.45, 8, 0x2e7d32, { z: 10 });
+    for (const [wx, wy] of [[1.6, 1.25], [2.35, 1.25]]) {
+      const w = iso(x + wx, y + wy);
+      g.circle(w.x, w.y - 2, 3.5).fill(0x263238);
+    }
+    this.roofTop = iso(x + 1.8, y + 0.95, 18);
+    const t = iso(x + 2.3, y + 2.0);
+    for (const dx of [-4, 0, 4]) g.moveTo(t.x, t.y - 12).lineTo(t.x + dx, t.y).stroke({ width: 1, color: 0x424242 });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time, clock) => {
+      anim.clear();
+      const a = -0.8 + Math.sin(clock * 0.3) * 0.2;
+      anim.moveTo(t.x, t.y - 12).lineTo(t.x + Math.cos(a) * 12, t.y - 12 + Math.sin(a) * 12).stroke({ width: 3, color: 0xeceff1 });
+    };
+    this.animate(0, 0);
+  },
 };
+
+// Tolima Grande (v4.0): las máquinas que se ven igual en otras zonas.
+DRAW.huila_huller = DRAW.huller;
+DRAW.huila_roaster = DRAW.roaster;
+DRAW.huila_packer = DRAW.packer;
+DRAW.tilapia_cleaner = DRAW.fish_cleaner;
+DRAW.tilapia_filleter = DRAW.fish_filleter;
+DRAW.tilapia_smoker = DRAW.cachama_smoker;
+
