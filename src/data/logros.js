@@ -141,7 +141,26 @@ const AMAZONAS = [
   { id: 'am_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('amazonas')], reward: [1, 2, 4] },
 ];
 
-export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'pacifico' })), ...AMAZONAS.map((l) => ({ ...l, region: 'amazonas' }))];
+// Los del Tolima Grande (v4.0).
+const TOLIMA = [
+  { id: 'to_bizcochos', icon: ICON.bizcochoBox, name: 'Bizcochera', text: 'Vende {n} cajas de bizcochos de achira', metric: 'sold:bizcocho_box', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
+  { id: 'to_te', icon: ICON.teCascara, name: 'Nada se pierde', text: 'Seca {n} bolsas de té de cáscara', metric: 'produced:te_cascara', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'to_tilapia', icon: ICON.almuerzoRepresa, name: 'Pescador de la represa', text: 'Sirve {n} almuerzos de la represa', metric: 'produced:almuerzo_represa', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'to_lechona', icon: ICON.lechona, name: 'Lechonera', text: 'Asa {n} lechonas', metric: 'produced:lechona', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'to_loza', icon: ICON.lozaNegra, name: 'Alfarera de La Chamba', text: 'Quema {n} piezas de loza negra', metric: 'produced:loza_negra', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'to_tatacoa', icon: ICON.tatacoa, name: 'Bajo las estrellas', text: 'Vende {n} salidas a la Tatacoa', metric: 'sold:excursion_tatacoa', tiers: [1000, 100000, 10000000], reward: [2, 4, 8] },
+  { id: 'to_monedas', icon: '💰', name: 'Patrón del Tolima', text: 'Gana {n} monedas en total', metric: 'earned', tiers: [1e9, 1e15, 1e21], reward: [1, 2, 4] },
+  { id: 'to_anos', icon: '📅', name: 'Opita de corazón', text: 'Vive {n} años de juego en el Tolima Grande', metric: 'years', tiers: [4, 16, 64], reward: [1, 2, 4] },
+  { id: 'to_neiva', icon: ICON.tatacoa, name: 'Hasta Neiva', text: 'Completa Neiva {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
+  { id: 'to_maestro', icon: '🏅', name: 'Maestro del Tolima Grande', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
+  { id: 'to_medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [6, 24, 60], reward: [1, 2, 4] },
+  { id: 'to_todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
+  { id: 'to_oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
+  { id: 'to_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
+  { id: 'to_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('tolima')], reward: [1, 2, 4] },
+];
+
+export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'pacifico' })), ...AMAZONAS.map((l) => ({ ...l, region: 'amazonas' })), ...TOLIMA.map((l) => ({ ...l, region: 'tolima' }))];
 export const logrosOf = (region) => LOGROS.filter((l) => l.region === region);
 
 export const LOGROS_BY_ID = Object.fromEntries(LOGROS.map((l) => [l.id, l]));
