@@ -19,10 +19,9 @@ const buildAll = (s) => {
 test('los eventos están bien armados', () => {
   for (const e of EVENTS) {
     for (const id of e.stations) assert.equal(STATIONS_BY_ID[id]?.zone, e.zone, `${e.id}: ${id}`);
-    for (const o of e.objectives) {
-      for (const p of Object.keys(o.items)) assert.ok(PRODUCTS[p]?.zone === e.zone || e.zone === 'pueblo', `${e.id}: ${p}`);
-      assert.ok(o.medals[0] < o.medals[1], `${e.id}: el oro pide menos tiempo que la plata`);
-    }
+    const o = e.objective;
+    for (const p of Object.keys(o.items)) assert.ok(PRODUCTS[p]?.zone === e.zone || e.zone === 'pueblo', `${e.id}: ${p}`);
+    assert.ok(o.medals[0] < o.medals[1], `${e.id}: el oro pide menos tiempo que la plata`);
   }
   assert.deepEqual(Object.values(MEDALS).map((m) => m.renown), [4, 2, 1]);
 });
@@ -102,9 +101,9 @@ test('al ganar, el tablero sigue abierto hasta terminarlo; su cupo queda vacío 
   assert.equal(eventStatus(s, 'trapiche').kind, 'available');
   assert.equal(eventStatus(s, 'finca').kind, 'waiting');
   assert.equal(eventStatus(s, 'guayabera').kind, 'available', 'el otro cupo siguió con lo suyo');
-  // El reto de la Finca avanzó: la próxima vez será el 2.
+  // La próxima vez de la Finca es la segunda, con el mismo reto (v3.72: uno por evento).
   assert.equal(eventStatus(s, 'finca').round, 2);
-  assert.notDeepEqual(eventObjective(EVENTS[0], 2), first);
+  assert.deepEqual(eventObjective(EVENTS[0]), first);
 });
 
 test('reiniciar empieza el mismo reto de cero; terminar sin ganar no da medalla y gasta el cupo (v3.30)', () => {
@@ -342,4 +341,42 @@ test('premio por región: todos sus eventos en bronce, plata u oro dan 5, 10 y 2
   assert.equal(checkMedalBonus(p)[0].renown, 20);
   assert.equal(p.renown, 35);
   assert.equal(p.renownTotal, 35);
+});
+
+test('cada evento tiene un reto, y los seis de cada región son de tipos distintos (v3.72)', async () => {
+  const { REGIONS } = await import('../src/data/regions.js');
+  const { OBJECTIVE_TYPES } = await import('../src/data/events.js');
+  for (const r of REGIONS) {
+    const types = r.zones.map((z) => EVENT_OF_ZONE[z].objective.type);
+    assert.deepEqual(types, OBJECTIVE_TYPES, r.id);
+  }
+  for (const e of EVENTS) assert.equal(e.objectives, undefined, e.id);
+});
+
+test('un tablero que estaba en juego antes de la v3.72 termina con el reto que tenía', async () => {
+  const { LEGACY_OBJECTIVES } = await import('../src/sim/legacyObjectives.js');
+  const board = createEventState(EVENT_OF_ZONE.finca, 2);
+  assert.deepEqual(boardObjective(board), EVENT_OF_ZONE.finca.objective);
+  delete board.event.single; // como los guardados antes
+  assert.deepEqual(boardObjective(board), LEGACY_OBJECTIVES.broca[1]);
+  board.event.round = 4;
+  assert.deepEqual(boardObjective(board), LEGACY_OBJECTIVES.broca[0]);
+});
+
+test('primero salen los eventos sin oro y al final los de oro (v3.72)', () => {
+  const { game, s } = twoRegions();
+  game.step(0.1);
+  // La Finca y el Trapiche ya se jugaron: la Finca con oro, el Trapiche con plata, y la Finca hace más.
+  for (const id of ['broca', 'molienda', 'feria']) s.profile.medals[id] = { best: 'gold', count: { gold: 1 } };
+  s.profile.medals.molienda.best = 'silver';
+  s.events.last = { finca: 10, trapiche: 20, lecheria: 30 };
+  s.events.count = { finca: 1, trapiche: 1, lecheria: 1 };
+  s.events.slots = [null, { zone: 'guayabera' }];
+  game.step(0.1);
+  assert.equal(s.events.slots[0].zone, 'trapiche', 'el que no tiene oro, aunque la Finca lleve más tiempo sin jugarse');
+  // Con todos en oro, sale el que lleva más tiempo sin jugarse.
+  s.profile.medals.molienda.best = 'gold';
+  s.events.slots = [null, { zone: 'guayabera' }];
+  game.step(0.1);
+  assert.equal(s.events.slots[0].zone, 'finca');
 });

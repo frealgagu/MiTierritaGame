@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v3.72.0 — Un reto por evento
+- **🏅 Cada evento tiene ahora un solo reto**, y los seis de cada región son distintos entre sí: uno pide la cadena completa (vender el producto final), otro un arranque rápido (mucho de un producto temprano), otro una feria de tres ramas, otro dos ramas al tiempo, otro cortar la cadena en un producto intermedio y otro el producto final junto con otra rama. Antes cada evento tenía tres retos que se turnaban y se parecían mucho.
+- **Primero salen los eventos que todavía no tienen oro.** Los que ya lo tienen vuelven a salir cuando todos los demás también lo tengan. Repetir un oro sigue dando su Renombre.
+- Un evento que estaba en juego al actualizar se termina con el reto que tenía. Las medallas ya ganadas se conservan.
+- **Corregido:** al volver a empezar una región (tras el segundo final), el juego abría en el Cafetal; ahora abre en la región que se reinició.
+
 ## v3.71.0 — La música para llevar
 - **🎧 La música y los sonidos del juego, para descargar** en frealgagu.github.io/MiTierritaGame/musica: las siete piezas (una por región) en **MP3**, tocadas igual que en el juego, de unos dos minutos y medio, y en **MIDI**, con cada instrumento en su pista para tocarlas o hacer arreglos. También los 31 efectos de sonido en MP3, y en MIDI los que son notas (monedas, subir de nivel, campanas…). Se puede descargar todo en un .zip.
 - La página está en español, inglés, portugués y francés. En ⚙️ › ℹ️ Acerca de está la dirección.

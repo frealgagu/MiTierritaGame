@@ -5,7 +5,7 @@
 // Al lograrlo se puede volver a empezar la región con la producción multiplicada (ver modifiers.js:
 // legacyMult). Desde la v3.0, cada región tiene el suyo.
 import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
-import { REGIONS_BY_ID, regionOf } from '../data/regions.js';
+import { REGIONS, REGIONS_BY_ID, regionOf } from '../data/regions.js';
 import { clockOf } from './calendar.js';
 import { MAX_LEVEL } from './rules.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
@@ -105,4 +105,20 @@ export function restartState(state, now = Date.now(), profile = null) {
     }
   }
   return next;
+}
+
+// La zona con que abre el juego (v3.72): la que se estaba viendo, si sigue abierta; si no (al volver a
+// empezar una región se cierran sus zonas), la primera de su región; y si tampoco, la Finca. Hasta la v3.71
+// volvía siempre a la Finca: al reiniciar otra región se terminaba en el Cafetal.
+//   root: la partida principal (la del Eje Cafetero, con las otras regiones en root.regions)
+export function startZone(root, zone) {
+  const regionOfZone = (z) => REGIONS.find((r) => r.zones.includes(z));
+  const stateOf = (r) => (r.id === (root.region ?? 'cafetero') ? root : root.regions?.[r.id]);
+  const open = (z) => {
+    const r = regionOfZone(z);
+    return Boolean(r && stateOf(r)?.zones?.[z]?.unlocked);
+  };
+  if (open(zone)) return zone;
+  const first = regionOfZone(zone)?.zones[0];
+  return first && open(first) ? first : 'finca';
 }

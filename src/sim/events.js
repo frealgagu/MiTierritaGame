@@ -5,10 +5,11 @@
 //
 // Cuándo hay evento (v3.30): 2 cupos para todo el juego (hasta la v3.29, 2 por región), que guarda la
 // partida principal. Un cupo libre se llena con el evento de una zona lista (con todas sus estaciones
-// construidas) de una región que no tenga ya el otro: primero las que nunca se han jugado, luego la que
-// lleva más tiempo sin jugarse. El evento espera ahí hasta que se juegue (no se vence). Al ganarlo o al
-// terminarlo sin ganar, ese cupo queda vacío 2 años del juego; los dos cupos van cada uno por su lado.
-// El reto de cada zona avanza al ganarlo (1, 2, 3 y vuelve al 1).
+// construidas) de una región que no tenga ya el otro: primero las que nunca se han jugado, luego las que no
+// tienen oro (v3.72) y al final las de oro; entre iguales, la que lleva más tiempo sin jugarse. El evento
+// espera ahí hasta que se juegue (no se vence). Al ganarlo o al terminarlo sin ganar, ese cupo queda vacío
+// 2 años del juego; los dos cupos van cada uno por su lado.
+// Cada evento tiene un reto (v3.72; hasta la v3.71, tres que se turnaban). `round` cuenta las veces.
 // Tras ganarlo, el tablero sigue abierto para mirarlo (`event.done`) hasta que se toque «Terminar».
 //   principal: state.events = { boards, slots: [ { zone } | { until } | null ], last, count, global }
 //   cada región: state.events = { boards: { zona: tablero }, last: { zona: reloj }, count: { zona: veces } }
@@ -25,6 +26,7 @@ import { PARENT } from './chain.js';
 import { PRODUCTS } from '../data/products.js';
 import { WithArticle, withArticle } from '../data/lore.js';
 import { gainRenown, profileOf } from './renown.js';
+import { LEGACY_OBJECTIVES } from './legacyObjectives.js';
 import { LANG, t } from '../i18n/index.js';
 
 export const EVENT_SLOTS = 2;
@@ -33,11 +35,18 @@ export const EVENT_COOLDOWN = 2 * YEAR_DAYS * DAY_LENGTH; // 2 años del juego (
 export const EVENT_CLOCK_MAX = 999 * 60 + 59;
 
 export const eventDef = (board) => EVENTS_BY_ID[board.event.id];
-// El reto n.º `round` de un evento: van en orden y vuelven a empezar.
-export const eventObjective = (def, round) => def.objectives[(round - 1) % def.objectives.length];
-// (Los tableros de antes de la v3.7 guardaban el año en vez del reto.)
+// El reto de un evento (v3.72: uno solo por evento).
+export const eventObjective = (def) => def.objective;
+// Las veces que se ha jugado (los tableros de antes de la v3.7 guardaban el año).
 export const boardRound = (board) => board.event.round ?? board.event.year;
-export const boardObjective = (board) => eventObjective(eventDef(board), boardRound(board));
+// El reto del tablero. Uno que ya estaba en juego al llegar la v3.72 (sin `single`) termina con el que
+// tenía: el de su vuelta entre los tres de antes.
+export function boardObjective(board) {
+  const def = eventDef(board);
+  if (board.event.single) return def.objective;
+  const old = LEGACY_OBJECTIVES[def.id];
+  return old ? old[(boardRound(board) - 1) % old.length] : def.objective;
+}
 
 // Los eventos de la partida, con lo que les falte.
 export function eventsOf(state) {
@@ -83,12 +92,16 @@ export function refillSlots(root) {
     if (held.length + loose.length >= slots.length) return;
     const busy = new Set([...held, ...boards.map(([zone]) => zone)]);
     const regions = new Set([...held, ...loose].map((zone) => REGION_OF_ZONE[zone]));
-    // Primero las nunca jugadas (en el orden de las zonas), luego la que lleva más tiempo sin jugarse.
+    // Primero las nunca jugadas (en el orden de las zonas), luego las que no tienen oro y al final las de
+    // oro (v3.72); entre iguales, la que lleva más tiempo sin jugarse.
+    const medals = root.profile?.medals ?? {};
+    const tier = (def, last) => (last === -Infinity ? 0 : medals[def.id]?.best === 'gold' ? 2 : 1);
     const next = EVENTS.filter((def) => !busy.has(def.zone) && !regions.has(REGION_OF_ZONE[def.zone]))
       .map((def) => ({ def, owner: ownerOf(root, def.zone) }))
       .filter(({ def, owner }) => owner && ready(owner, def))
       .map(({ def, owner }, k) => ({ def, k, last: eventsOf(owner).last[def.zone] ?? -Infinity }))
-      .sort((x, y) => x.last - y.last || x.k - y.k)[0];
+      .map((x) => ({ ...x, tier: tier(x.def, x.last) }))
+      .sort((x, y) => x.tier - y.tier || x.last - y.last || x.k - y.k)[0];
     if (!next) return;
     slots[i] = { zone: next.def.zone };
   }
@@ -121,7 +134,7 @@ export function createEventState(def, round) {
   const s = createInitialState(undefined, REGION_OF_ZONE[def.zone]);
   delete s.events;
   delete s.profile;
-  s.event = { id: def.id, zone: def.zone, round };
+  s.event = { id: def.id, zone: def.zone, round, single: true };
   for (const z of Object.keys(s.zones)) s.zones[z] = createZoneState(z === def.zone);
   s.zones[def.zone].dispatch.level = def.level;
   s.stations = {};

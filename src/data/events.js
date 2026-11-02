@@ -1,6 +1,6 @@
 // Eventos (v2.0, GDD §10.2): cada zona tiene un evento al año, que se juega en un tablero aparte con
 // las piezas de esa zona, sus propias monedas y niveles y su propio reloj (que solo corre mientras se
-// juega). El objetivo cambia de un año al siguiente; según lo rápido que se cumpla se gana una medalla.
+// juega). Tiene un reto; según lo rápido que se cumpla se gana una medalla.
 //   announce: lo que dice la persona de la zona cuando el evento se abre (una vez al año)
 //   stations: estaciones que ya están construidas al empezar (en el nivel `level`)
 //   coins:    con cuánto se empieza (v3.1.1: lo que cuesta la primera compra del evento, para que desde el
@@ -11,12 +11,23 @@
 //             tablero no hay otras zonas; stock: lo que ya tienen guardado las estaciones al empezar
 //   actions:  compras del evento (como las investigaciones, solo en el tablero); cada una pide la anterior.
 //             Efecto (effect, o varios en effects): los de las investigaciones o { type: 'supply', product, fraction }
-//   objectives: uno por año, en orden (y vuelve a empezar): kind ('sold' o 'produced'), items
-//             (producto → cantidad) y medals = [s para el oro, s para la plata]
+//   objective: el reto del evento (v3.72: uno solo; hasta la v3.71 eran tres que se turnaban, ver
+//             sim/legacyObjectives.js): type, kind ('sold' o 'produced'), items (producto → cantidad) y
+//             medals = [s para el oro, s para la plata]. Los seis eventos de cada región son de tipos distintos,
+//             según el lugar de la zona en la región (OBJECTIVE_TYPES).
 // Las medallas se calibran con tools/event-sim.js (v3.1.1): el oro es el tiempo del mejor jugador
 // automático que decide cada segundo, más un 9 % (difícil, pero posible para alguien atento); la plata,
 // 5 minutos más.
 import { ICON } from './icons.js';
+
+// Los seis tipos de reto (v3.72), uno por zona de cada región, en su orden:
+//   cadena: vender el producto final (toda la cadena, hasta el despacho)
+//   arranque: mucho de un producto temprano (apurar el comienzo y las compras del evento)
+//   feria: tres ramas en una proporción
+//   ramas: dos ramas al tiempo
+//   corte: un producto intermedio (las últimas estaciones no hacen falta)
+//   final: pocos del producto final y muchos de otra rama
+export const OBJECTIVE_TYPES = ['cadena', 'arranque', 'feria', 'ramas', 'corte', 'final'];
 
 export const MEDALS = {
   gold: { icon: '🥇', name: 'oro', renown: 4 },
@@ -43,11 +54,7 @@ export const EVENTS = [
       { id: 'broca_hongo', icon: '🍄', name: 'Hongo Beauveria', desc: 'Un hongo que enferma a la broca sin dañar el café: del 60 al 80 %.', cost: 2500, effect: { type: 'stationSpeed', target: 'farm', mult: 4 / 3 } },
       { id: 'broca_rere', icon: '🧺', name: 'Re-re', desc: 'Recoger los granos caídos y los que quedan en la mata: la broca ya no tiene dónde esconderse. Del 80 al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'farm', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { coffee_bag: 100 }, medals: [720, 1020] },
-      { kind: 'produced', items: { roasted: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { green: 1000 }, medals: [630, 930] },
-    ],
+    objective: { type: 'cadena', kind: 'sold', items: { coffee_bag: 100 }, medals: [720, 1020] },
   },
   {
     id: 'molienda',
@@ -67,11 +74,7 @@ export const EVENTS = [
       { id: 'molienda_hornilla', icon: '🧱', name: 'Hornilla reparada', desc: 'Ladrillos nuevos que no dejan escapar el calor: del 60 al 80 %.', cost: 15000, effect: { type: 'stationSpeed', target: 'furnace', mult: 4 / 3 } },
       { id: 'molienda_fuelle', icon: '🌬️', name: 'Fuelle', desc: 'Más aire para el fuego: la Hornilla vuelve al 100 %.', cost: 35000, effect: { type: 'stationSpeed', target: 'furnace', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { panela_powder: 500 }, medals: [675, 975] },
-      { kind: 'produced', items: { panela: 550 }, medals: [720, 1020] },
-      { kind: 'produced', items: { melado: 1100 }, medals: [675, 975] },
-    ],
+    objective: { type: 'arranque', kind: 'produced', items: { melado: 1100 }, medals: [675, 975] },
   },
   {
     id: 'feria',
@@ -90,11 +93,7 @@ export const EVENTS = [
       { id: 'feria_batidora', icon: '🧈', name: 'Batidora', desc: 'La Mantequera y la Descremadora hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'churn', mult: 1.5 }, { type: 'stationSpeed', target: 'separator', mult: 1.5 }] },
       { id: 'feria_paila', icon: '🍯', name: 'Paila de cobre', desc: 'La Paila hace un 50 % más de arequipe.', cost: 550000, effect: { type: 'stationSpeed', target: 'arequipe_pot', mult: 1.5 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { cheese: 150, butter: 75, arequipe: 50 }, medals: [570, 870] },
-      { kind: 'sold', items: { cheese: 60, butter: 120, arequipe: 40 }, medals: [615, 915] },
-      { kind: 'sold', items: { cheese: 90, butter: 90, arequipe: 120 }, medals: [615, 915] },
-    ],
+    objective: { type: 'feria', kind: 'sold', items: { cheese: 90, butter: 90, arequipe: 120 }, medals: [615, 915] },
   },
   {
     id: 'derrumbe',
@@ -115,11 +114,7 @@ export const EVENTS = [
       { id: 'derrumbe_trocha', icon: '🛻', name: 'Trocha', desc: 'Un camino destapado por donde pasa un carro: llega el 60 % de la panela.', cost: 3000000, effect: { type: 'supply', product: 'panela_powder', fraction: 0.6 } },
       { id: 'derrumbe_via', icon: '🚧', name: 'Despejar la vía', desc: 'Con la vía libre, la panela vuelve a llegar toda.', cost: 8000000, effect: { type: 'supply', product: 'panela_powder', fraction: 1 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { table_chocolate: 150 }, medals: [495, 795] },
-      { kind: 'produced', items: { milk_chocolate: 130 }, medals: [540, 840] },
-      { kind: 'produced', items: { table_chocolate: 100, milk_chocolate: 100 }, medals: [615, 915] },
-    ],
+    objective: { type: 'ramas', kind: 'produced', items: { table_chocolate: 100, milk_chocolate: 100 }, medals: [615, 915] },
   },
   {
     id: 'fiesta',
@@ -140,11 +135,7 @@ export const EVENTS = [
       { id: 'fiesta_lena', icon: '🪵', name: 'Leña seca', desc: 'Fuego parejo: del 60 al 80 %.', cost: 15000000, effect: { type: 'stationSpeed', target: 'budare', mult: 4 / 3 } },
       { id: 'fiesta_vecinas', icon: '👵', name: 'Las vecinas ayudan', desc: 'Más manos para voltear las arepas: el Budare vuelve al 100 %.', cost: 35000000, effect: { type: 'stationSpeed', target: 'budare', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { cheese_arepa: 120 }, medals: [600, 900] },
-      { kind: 'produced', items: { arepa: 850 }, medals: [765, 1065] },
-      { kind: 'produced', items: { corn_dough: 850 }, medals: [720, 1020] },
-    ],
+    objective: { type: 'corte', kind: 'produced', items: { arepa: 850 }, medals: [765, 1065] },
   },
   {
     id: 'barco',
@@ -165,11 +156,7 @@ export const EVENTS = [
       { id: 'barco_grua', icon: '🏗️', name: 'Grúa arreglada', desc: 'La grúa vuelve a subir los contenedores: del 60 al 80 %.', cost: 130000000, effect: { type: 'stationSpeed', target: 'export_dock', mult: 4 / 3 } },
       { id: 'barco_turno', icon: '👷', name: 'Turno extra', desc: 'Los estibadores trabajan de corrido: el Patio vuelve al 100 %.', cost: 300000000, effect: { type: 'stationSpeed', target: 'export_dock', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { container: 24 }, medals: [675, 975] },
-      { kind: 'produced', items: { gift_basket: 120 }, medals: [690, 990] },
-      { kind: 'sold', items: { container: 6, breakfast: 180 }, medals: [840, 1140] },
-    ],
+    objective: { type: 'final', kind: 'sold', items: { container: 6, breakfast: 180 }, medals: [840, 1140] },
   },
   // ---------- Santander (v3.6): uno por zona, con la misma mecánica que el de su par del Eje Cafetero ----------
   {
@@ -190,11 +177,7 @@ export const EVENTS = [
       { id: 'mosca_bolsas', icon: '🛍️', name: 'Embolsar las guayabas', desc: 'Cada guayaba en su bolsita, para que la mosca no la alcance: del 60 al 80 %.', cost: 2500, effect: { type: 'stationSpeed', target: 'guava_grove', mult: 4 / 3 } },
       { id: 'mosca_recoger', icon: '🧺', name: 'Recoger la fruta caída', desc: 'Sin guayabas podridas en el suelo, la mosca no tiene dónde criar. Del 80 al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'guava_grove', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { bocadillo_crate: 100 }, medals: [720, 1020] },
-      { kind: 'produced', items: { bocadillo: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { bocadillo_block: 1000 }, medals: [630, 930] },
-    ],
+    objective: { type: 'cadena', kind: 'sold', items: { bocadillo_crate: 100 }, medals: [720, 1020] },
   },
   {
     id: 'humedad',
@@ -214,11 +197,7 @@ export const EVENTS = [
       { id: 'humedad_fogones', icon: '🔥', name: 'Fogones de secado', desc: 'Un calorcito bajo las varas seca el aire: del 60 al 80 %.', cost: 15000, effect: { type: 'stationSpeed', target: 'caney', mult: 4 / 3 } },
       { id: 'humedad_techo', icon: '🏚️', name: 'Techo nuevo', desc: 'Sin goteras, el Caney vuelve al 100 %.', cost: 35000, effect: { type: 'stationSpeed', target: 'caney', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { cigar: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { fermented_tobacco: 550 }, medals: [780, 1080] },
-      { kind: 'produced', items: { stripped_leaf: 1100 }, medals: [765, 1065] },
-    ],
+    objective: { type: 'arranque', kind: 'produced', items: { stripped_leaf: 1100 }, medals: [765, 1065] },
   },
   {
     id: 'artesanal',
@@ -237,11 +216,7 @@ export const EVENTS = [
       { id: 'artesanal_hormas', icon: ICON.alpargatas, name: 'Hormas y ruecas', desc: 'La Hiladora y la Alpargatería hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'alpargata_shop', mult: 1.5 }, { type: 'stationSpeed', target: 'spinner', mult: 1.5 }] },
       { id: 'artesanal_prensa', icon: ICON.tobaccoBale, name: 'Prensa de tercios', desc: 'La Empacadora arma un 50 % más de tercios.', cost: 550000, effect: { type: 'stationSpeed', target: 'tercio_packer', mult: 1.5 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { fique_sack: 150, alpargatas: 75, tobacco_bale: 50 }, medals: [570, 870] },
-      { kind: 'sold', items: { fique_sack: 60, alpargatas: 120, tobacco_bale: 40 }, medals: [615, 915] },
-      { kind: 'sold', items: { fique_sack: 90, alpargatas: 90, tobacco_bale: 120 }, medals: [615, 915] },
-    ],
+    objective: { type: 'feria', kind: 'sold', items: { fique_sack: 90, alpargatas: 90, tobacco_bale: 120 }, medals: [615, 915] },
   },
   {
     id: 'creciente',
@@ -262,11 +237,7 @@ export const EVENTS = [
       { id: 'creciente_planchon', icon: '🛶', name: 'Planchón', desc: 'Una balsa grande pasa el carro de lado a lado: llega el 60 % del bocadillo.', cost: 3000000, effect: { type: 'supply', product: 'bocadillo_bijao', fraction: 0.6 } },
       { id: 'creciente_puente', icon: '🌉', name: 'Puente nuevo', desc: 'Con el puente arreglado, el bocadillo vuelve a llegar todo.', cost: 8000000, effect: { type: 'supply', product: 'bocadillo_bijao', fraction: 1 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { almuerzo: 150 }, medals: [495, 795] },
-      { kind: 'produced', items: { fiambre: 130 }, medals: [540, 840] },
-      { kind: 'produced', items: { almuerzo: 100, fiambre: 100 }, medals: [615, 915] },
-    ],
+    objective: { type: 'ramas', kind: 'produced', items: { almuerzo: 100, fiambre: 100 }, medals: [615, 915] },
   },
   {
     id: 'turistas',
@@ -287,11 +258,7 @@ export const EVENTS = [
       { id: 'turistas_resma', icon: '📦', name: 'Una resma entera', desc: 'Papel de sobra: del 60 al 80 %.', cost: 15000000, effect: { type: 'stationSpeed', target: 'cone_table', mult: 4 / 3 } },
       { id: 'turistas_vecinas', icon: '👵', name: 'Las vecinas ayudan', desc: 'Más manos doblando cucuruchos: la Mesa vuelve al 100 %.', cost: 35000000, effect: { type: 'stationSpeed', target: 'cone_table', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { recuerdo: 120 }, medals: [600, 900] },
-      { kind: 'produced', items: { ant_cone: 850 }, medals: [765, 1065] },
-      { kind: 'produced', items: { toasted_ants: 850 }, medals: [720, 1020] },
-    ],
+    objective: { type: 'corte', kind: 'produced', items: { ant_cone: 850 }, medals: [765, 1065] },
   },
   {
     id: 'puente_festivo',
@@ -312,11 +279,7 @@ export const EVENTS = [
       { id: 'puente_senales', icon: '🪧', name: 'Señalizar el camino', desc: 'Con letreros, los grupos salen más rápido: del 60 al 80 %.', cost: 130000000, effect: { type: 'stationSpeed', target: 'camino_real', mult: 4 / 3 } },
       { id: 'puente_guias', icon: '🥾', name: 'Guías del pueblo', desc: 'Los muchachos del pueblo también guían: la Salida vuelve al 100 %.', cost: 300000000, effect: { type: 'stationSpeed', target: 'camino_real', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { excursion: 24 }, medals: [675, 975] },
-      { kind: 'produced', items: { canasta_caminante: 120 }, medals: [690, 990] },
-      { kind: 'sold', items: { excursion: 6, estadia: 180 }, medals: [840, 1140] },
-    ],
+    objective: { type: 'final', kind: 'sold', items: { excursion: 6, estadia: 180 }, medals: [840, 1140] },
   },
 
   // La Costa (v3.21): los mismos números que los de Santander, zona por zona.
@@ -338,11 +301,7 @@ export const EVENTS = [
       { id: 'pajaros_cintas', icon: '🎗️', name: 'Cintas que brillan', desc: 'Cintas plateadas que suenan con el viento: del 60 al 80 %.', cost: 2500, effect: { type: 'stationSpeed', target: 'rice_field', mult: 4 / 3 } },
       { id: 'pajaros_pajareros', icon: '🪃', name: 'Los pajareros', desc: 'Muchachos que recorren los camellones aplaudiendo y silbando. Del 80 al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'rice_field', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { rice_sack: 100 }, medals: [720, 1020] },
-      { kind: 'produced', items: { premium_rice: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { white_rice: 1000 }, medals: [630, 930] },
-    ],
+    objective: { type: 'cadena', kind: 'sold', items: { rice_sack: 100 }, medals: [720, 1020] },
   },
   {
     id: 'machetes',
@@ -362,11 +321,7 @@ export const EVENTS = [
       { id: 'machetes_nuevos', icon: '🔪', name: 'Machetes nuevos', desc: 'Un machete para cada pelador: del 60 al 80 %.', cost: 15000, effect: { type: 'stationSpeed', target: 'coconut_peeler', mult: 4 / 3 } },
       { id: 'machetes_peladora', icon: '⚙️', name: 'Peladora de cocos', desc: 'Una máquina que quita la cáscara: el Peladero vuelve al 100 %.', cost: 35000, effect: { type: 'stationSpeed', target: 'coconut_peeler', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { cocada: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { coconut_milk: 550 }, medals: [780, 1080] },
-      { kind: 'produced', items: { grated_coconut: 1100 }, medals: [765, 1065] },
-    ],
+    objective: { type: 'arranque', kind: 'produced', items: { grated_coconut: 1100 }, medals: [765, 1065] },
   },
   {
     id: 'semana_santa',
@@ -385,11 +340,7 @@ export const EVENTS = [
       { id: 'semana_calderos', icon: ICON.friedFish, name: 'Cuchillos y calderos', desc: 'La Fileteadora y la Fritanga hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'fish_fryer', mult: 1.5 }, { type: 'stationSpeed', target: 'fish_filleter', mult: 1.5 }] },
       { id: 'semana_fogones', icon: ICON.fishInCoconut, name: 'Más fogones', desc: 'La Cocina hace un 50 % más de pescado en coco.', cost: 550000, effect: { type: 'stationSpeed', target: 'coconut_fish_kitchen', mult: 1.5 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { salted_fish: 150, fried_fish: 75, fish_in_coconut: 50 }, medals: [570, 870] },
-      { kind: 'sold', items: { salted_fish: 60, fried_fish: 120, fish_in_coconut: 40 }, medals: [615, 915] },
-      { kind: 'sold', items: { salted_fish: 90, fried_fish: 90, fish_in_coconut: 120 }, medals: [615, 915] },
-    ],
+    objective: { type: 'feria', kind: 'sold', items: { salted_fish: 90, fried_fish: 90, fish_in_coconut: 120 }, medals: [615, 915] },
   },
   {
     id: 'inundacion',
@@ -410,11 +361,7 @@ export const EVENTS = [
       { id: 'inundacion_chalupa', icon: '🛥️', name: 'Chalupa', desc: 'Una chalupa con motor lleva el arroz de un lado al otro: llega el 60 %.', cost: 3000000, effect: { type: 'supply', product: 'rice_bag', fraction: 0.6 } },
       { id: 'inundacion_terraplen', icon: '🚧', name: 'Terraplén nuevo', desc: 'Con la carretera levantada sobre el agua, el arroz vuelve a llegar todo.', cost: 8000000, effect: { type: 'supply', product: 'rice_bag', fraction: 1 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { almuerzo_costeno: 150 }, medals: [495, 795] },
-      { kind: 'produced', items: { bandeja_costena: 130 }, medals: [540, 840] },
-      { kind: 'produced', items: { almuerzo_costeno: 100, bandeja_costena: 100 }, medals: [615, 915] },
-    ],
+    objective: { type: 'ramas', kind: 'produced', items: { almuerzo_costeno: 100, bandeja_costena: 100 }, medals: [615, 915] },
   },
   {
     id: 'festival_sombrero',
@@ -435,11 +382,7 @@ export const EVENTS = [
       { id: 'festival_repuestos', icon: '🪡', name: 'Agujas y repuestos', desc: 'Ninguna máquina parada: del 60 al 80 %.', cost: 15000000, effect: { type: 'stationSpeed', target: 'hat_sewer', mult: 4 / 3 } },
       { id: 'festival_costureras', icon: '👩🏽', name: 'Las costureras ayudan', desc: 'Más manos cosiendo vueltas: la Costura vuelve al 100 %.', cost: 35000000, effect: { type: 'stationSpeed', target: 'hat_sewer', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { recuerdo_costa: 120 }, medals: [600, 900] },
-      { kind: 'produced', items: { sombrero_vueltiao: 850 }, medals: [765, 1065] },
-      { kind: 'produced', items: { trenza: 850 }, medals: [720, 1020] },
-    ],
+    objective: { type: 'corte', kind: 'produced', items: { sombrero_vueltiao: 850 }, medals: [765, 1065] },
   },
   {
     id: 'crucero',
@@ -460,11 +403,7 @@ export const EVENTS = [
       { id: 'crucero_turnos', icon: '🎫', name: 'Turnos en el muelle', desc: 'Con fichas y turnos los grupos salen más rápido: del 60 al 80 %.', cost: 130000000, effect: { type: 'stationSpeed', target: 'muelle', mult: 4 / 3 } },
       { id: 'crucero_lancheros', icon: '🧑🏾‍✈️', name: 'Lancheros del barrio', desc: 'Los lancheros de Getsemaní también salen: el Muelle vuelve al 100 %.', cost: 300000000, effect: { type: 'stationSpeed', target: 'muelle', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { paseo_islas: 24 }, medals: [675, 975] },
-      { kind: 'produced', items: { lonchera_paseo: 120 }, medals: [690, 990] },
-      { kind: 'sold', items: { paseo_islas: 6, noche_hotel: 180 }, medals: [840, 1140] },
-    ],
+    objective: { type: 'final', kind: 'sold', items: { paseo_islas: 6, noche_hotel: 180 }, medals: [840, 1140] },
   },
 
   // Boyacá (v3.28): los mismos números que los de la Costa y Santander, zona por zona.
@@ -486,11 +425,7 @@ export const EVENTS = [
       { id: 'gota_aporque', icon: '⛏️', name: 'Aporcar las matas', desc: 'Tierra arrimada a cada mata para que la papa no se dañe: del 60 al 80 %.', cost: 2500, effect: { type: 'stationSpeed', target: 'potato_field', mult: 4 / 3 } },
       { id: 'gota_semilla', icon: ICON.potato, name: 'Semilla resistente', desc: 'Papa que aguanta la gota: el Papal vuelve al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'potato_field', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { criollas_box: 100 }, medals: [720, 1020] },
-      { kind: 'produced', items: { criollas: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { peeled_potato: 1000 }, medals: [630, 930] },
-    ],
+    objective: { type: 'cadena', kind: 'sold', items: { criollas_box: 100 }, medals: [720, 1020] },
   },
   {
     id: 'horno_malta',
@@ -510,11 +445,7 @@ export const EVENTS = [
       { id: 'malta_ventilador', icon: '🌀', name: 'Ventilador', desc: 'El aire caliente llega a toda la malta: del 60 al 80 %.', cost: 15000, effect: { type: 'stationSpeed', target: 'maltings', mult: 4 / 3 } },
       { id: 'malta_quemador', icon: '🔥', name: 'Quemador a gas', desc: 'Un fuego parejo: la Maltería vuelve al 100 %.', cost: 35000, effect: { type: 'stationSpeed', target: 'maltings', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { beer_crate: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { beer: 550 }, medals: [780, 1080] },
-      { kind: 'produced', items: { wort: 1100 }, medals: [765, 1065] },
-    ],
+    objective: { type: 'arranque', kind: 'produced', items: { wort: 1100 }, medals: [765, 1065] },
   },
   {
     id: 'mercado_artesanias',
@@ -533,11 +464,7 @@ export const EVENTS = [
       { id: 'artesanias_tornos', icon: ICON.matera, name: 'Tornos y leña', desc: 'El Torno y el Horno de leña hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'pottery_kiln', mult: 1.5 }, { type: 'stationSpeed', target: 'potter_wheel', mult: 1.5 }] },
       { id: 'artesanias_jarras', icon: ICON.jarraCerveza, name: 'Más jarras', desc: 'Las Jarras salen un 50 % más.', cost: 550000, effect: { type: 'stationSpeed', target: 'jarras', mult: 1.5 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { olla_barro: 150, matera: 75, jarra_cerveza: 50 }, medals: [570, 870] },
-      { kind: 'sold', items: { olla_barro: 60, matera: 120, jarra_cerveza: 40 }, medals: [615, 915] },
-      { kind: 'sold', items: { olla_barro: 90, matera: 90, jarra_cerveza: 120 }, medals: [615, 915] },
-    ],
+    objective: { type: 'feria', kind: 'sold', items: { olla_barro: 90, matera: 90, jarra_cerveza: 120 }, medals: [615, 915] },
   },
   {
     id: 'obras',
@@ -558,11 +485,7 @@ export const EVENTS = [
       { id: 'obras_carril', icon: '🚦', name: 'Paso a un carril', desc: 'Los carros pasan por turnos: llega el 60 % de las papitas.', cost: 3000000, effect: { type: 'supply', product: 'criollas_bag', fraction: 0.6 } },
       { id: 'obras_via', icon: '🛣️', name: 'Vía nueva', desc: 'Con la carretera terminada, las papitas vuelven a llegar todas.', cost: 8000000, effect: { type: 'supply', product: 'criollas_bag', fraction: 1 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { piquete: 150 }, medals: [495, 795] },
-      { kind: 'produced', items: { canasta_amasijos: 130 }, medals: [540, 840] },
-      { kind: 'produced', items: { piquete: 100, canasta_amasijos: 100 }, medals: [615, 915] },
-    ],
+    objective: { type: 'ramas', kind: 'produced', items: { piquete: 100, canasta_amasijos: 100 }, medals: [615, 915] },
   },
   {
     id: 'heladas',
@@ -583,11 +506,7 @@ export const EVENTS = [
       { id: 'heladas_lanzaderas', icon: '🪡', name: 'Lanzaderas nuevas', desc: 'Ningún telar parado: del 60 al 80 %.', cost: 15000000, effect: { type: 'stationSpeed', target: 'ruana_loom', mult: 4 / 3 } },
       { id: 'heladas_tejedoras', icon: '👵🏻', name: 'Las tejedoras ayudan', desc: 'Más manos en los telares: el Telar vuelve al 100 %.', cost: 35000000, effect: { type: 'stationSpeed', target: 'ruana_loom', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { recuerdo_boyaca: 120 }, medals: [600, 900] },
-      { kind: 'produced', items: { ruana: 850 }, medals: [765, 1065] },
-      { kind: 'produced', items: { wool_yarn: 850 }, medals: [720, 1020] },
-    ],
+    objective: { type: 'corte', kind: 'produced', items: { ruana: 850 }, medals: [765, 1065] },
   },
   {
     id: 'cometas',
@@ -608,11 +527,7 @@ export const EVENTS = [
       { id: 'cometas_turnos', icon: '🪧', name: 'Turnos y letreros', desc: 'Los grupos salen en orden: del 60 al 80 %.', cost: 130000000, effect: { type: 'stationSpeed', target: 'salida_fosil', mult: 4 / 3 } },
       { id: 'cometas_jovenes', icon: '🥾', name: 'Los jóvenes del pueblo', desc: 'Los muchachos del pueblo también guían: la Salida vuelve al 100 %.', cost: 300000000, effect: { type: 'stationSpeed', target: 'salida_fosil', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { excursion_fosil: 24 }, medals: [675, 975] },
-      { kind: 'produced', items: { fiambre_paseo: 120 }, medals: [690, 990] },
-      { kind: 'sold', items: { excursion_fosil: 6, noche_villa: 180 }, medals: [840, 1140] },
-    ],
+    objective: { type: 'final', kind: 'sold', items: { excursion_fosil: 6, noche_villa: 180 }, medals: [840, 1140] },
   },
   // Los Llanos (v3.37): los mismos números que los de Boyacá, la Costa y Santander, zona por zona.
   {
@@ -633,11 +548,7 @@ export const EVENTS = [
       { id: 'pudricion_drenajes', icon: '💧', name: 'Drenajes', desc: 'Zanjas para que no se encharque el palmar: del 60 al 80 %.', cost: 2500, effect: { type: 'stationSpeed', target: 'palm_grove', mult: 4 / 3 } },
       { id: 'pudricion_hibrida', icon: ICON.oilPalm, name: 'Palma híbrida', desc: 'Palma que aguanta la pudrición: el Palmar vuelve al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'palm_grove', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { oil_box: 100 }, medals: [720, 1020] },
-      { kind: 'produced', items: { palm_oil: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { crude_oil: 1000 }, medals: [630, 930] },
-    ],
+    objective: { type: 'cadena', kind: 'sold', items: { oil_box: 100 }, medals: [720, 1020] },
   },
   {
     id: 'despulpadora',
@@ -657,11 +568,7 @@ export const EVENTS = [
       { id: 'despulpa_motor', icon: '⚡', name: 'Motor nuevo', desc: 'Un motor con más fuerza: del 60 al 80 %.', cost: 15000, effect: { type: 'stationSpeed', target: 'passion_pulper', mult: 4 / 3 } },
       { id: 'despulpa_tamiz', icon: ICON.passionPulp, name: 'Tamiz de acero', desc: 'La pulpa sale limpia de una vez: la Despulpadora vuelve al 100 %.', cost: 35000, effect: { type: 'stationSpeed', target: 'passion_pulper', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { juice_box: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { passion_juice: 550 }, medals: [780, 1080] },
-      { kind: 'produced', items: { past_pulp: 1100 }, medals: [765, 1065] },
-    ],
+    objective: { type: 'arranque', kind: 'produced', items: { past_pulp: 1100 }, medals: [765, 1065] },
   },
   {
     id: 'feria_pescado',
@@ -680,11 +587,7 @@ export const EVENTS = [
       { id: 'pescado_ahumaderos', icon: ICON.smokedCachama, name: 'Más ahumaderos', desc: 'La Fileteadora y el Ahumadero hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'cachama_smoker', mult: 1.5 }, { type: 'stationSpeed', target: 'cachama_filleter', mult: 1.5 }] },
       { id: 'pescado_fogones', icon: ICON.cachamaMaracuya, name: 'Más fogones', desc: 'La Cocina de la cachama sirve un 50 % más.', cost: 550000, effect: { type: 'stationSpeed', target: 'cachama_kitchen', mult: 1.5 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { pisillo: 150, smoked_cachama: 75, cachama_maracuya: 50 }, medals: [570, 870] },
-      { kind: 'sold', items: { pisillo: 60, smoked_cachama: 120, cachama_maracuya: 40 }, medals: [615, 915] },
-      { kind: 'sold', items: { pisillo: 90, smoked_cachama: 90, cachama_maracuya: 120 }, medals: [615, 915] },
-    ],
+    objective: { type: 'feria', kind: 'sold', items: { pisillo: 90, smoked_cachama: 90, cachama_maracuya: 120 }, medals: [615, 915] },
   },
   {
     id: 'puente_caido',
@@ -705,11 +608,7 @@ export const EVENTS = [
       { id: 'puente_planchon', icon: '⛴️', name: 'Planchón', desc: 'El planchón pasa los carros de a uno: llega el 60 % del aceite.', cost: 3000000, effect: { type: 'supply', product: 'oil_bottle', fraction: 0.6 } },
       { id: 'puente_nuevo', icon: '🌉', name: 'Puente nuevo', desc: 'Con el puente nuevo, el aceite vuelve a llegar todo.', cost: 8000000, effect: { type: 'supply', product: 'oil_bottle', fraction: 1 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { almuerzo_llanero: 150 }, medals: [495, 795] },
-      { kind: 'produced', items: { parranda_llanera: 130 }, medals: [540, 840] },
-      { kind: 'produced', items: { almuerzo_llanero: 100, parranda_llanera: 100 }, medals: [615, 915] },
-    ],
+    objective: { type: 'ramas', kind: 'produced', items: { almuerzo_llanero: 100, parranda_llanera: 100 }, medals: [615, 915] },
   },
   {
     id: 'coleo',
@@ -730,11 +629,7 @@ export const EVENTS = [
       { id: 'coleo_hormas', icon: ICON.saddle, name: 'Hormas prestadas', desc: 'Ninguna silla espera horma: del 60 al 80 %.', cost: 15000000, effect: { type: 'stationSpeed', target: 'saddler', mult: 4 / 3 } },
       { id: 'coleo_maestros', icon: '👴🏽', name: 'Los maestros talabarteros', desc: 'Llegan los maestros del pueblo: el Taller de sillas vuelve al 100 %.', cost: 35000000, effect: { type: 'stationSpeed', target: 'saddler', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { recuerdo_llano: 120 }, medals: [600, 900] },
-      { kind: 'produced', items: { silla_montar: 850 }, medals: [765, 1065] },
-      { kind: 'produced', items: { tooled_leather: 850 }, medals: [720, 1020] },
-    ],
+    objective: { type: 'corte', kind: 'produced', items: { silla_montar: 850 }, medals: [765, 1065] },
   },
   {
     id: 'torneo_joropo',
@@ -755,11 +650,7 @@ export const EVENTS = [
       { id: 'joropo_avionetas', icon: '✈️', name: 'Más avionetas', desc: 'Más vuelos a La Macarena: del 60 al 80 %.', cost: 130000000, effect: { type: 'stationSpeed', target: 'salida_cano', mult: 4 / 3 } },
       { id: 'joropo_jovenes', icon: '🥾', name: 'Los jóvenes guías', desc: 'Los muchachos de la ciudad también guían: la Salida vuelve al 100 %.', cost: 300000000, effect: { type: 'stationSpeed', target: 'salida_cano', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { excursion_cano: 24 }, medals: [675, 975] },
-      { kind: 'produced', items: { fiambre_viaje: 120 }, medals: [690, 990] },
-      { kind: 'sold', items: { excursion_cano: 6, noche_villavo: 180 }, medals: [840, 1140] },
-    ],
+    objective: { type: 'final', kind: 'sold', items: { excursion_cano: 6, noche_villavo: 180 }, medals: [840, 1140] },
   },
   // La Costa Pacífica (v3.44): los mismos números que los de los Llanos, Boyacá, la Costa y Santander, zona por zona.
   {
@@ -780,11 +671,7 @@ export const EVENTS = [
       { id: 'sigatoka_drenajes', icon: '💧', name: 'Drenajes', desc: 'Zanjas para que no se encharque el platanal: del 60 al 80 %.', cost: 2500, effect: { type: 'stationSpeed', target: 'plantain_grove', mult: 4 / 3 } },
       { id: 'sigatoka_resistente', icon: ICON.plantainPlant, name: 'Plátano resistente', desc: 'Matas que aguantan el hongo: el Platanal vuelve al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'plantain_grove', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { patacon_box: 100 }, medals: [720, 1020] },
-      { kind: 'produced', items: { patacon: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { peeled_plantain: 1000 }, medals: [630, 930] },
-    ],
+    objective: { type: 'cadena', kind: 'sold', items: { patacon_box: 100 }, medals: [720, 1020] },
   },
   {
     id: 'agua_sucia',
@@ -804,11 +691,7 @@ export const EVENTS = [
       { id: 'agua_bomba', icon: '⚡', name: 'Bomba de agua', desc: 'Una bomba sube el agua del pozo: del 60 al 80 %.', cost: 15000, effect: { type: 'stationSpeed', target: 'herb_washer', mult: 4 / 3 } },
       { id: 'agua_filtro', icon: ICON.washedHerbs, name: 'Filtro de agua', desc: 'El agua sale limpia otra vez: el Lavadero vuelve al 100 %.', cost: 35000, effect: { type: 'stationSpeed', target: 'herb_washer', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { alino_box: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { alino: 550 }, medals: [780, 1080] },
-      { kind: 'produced', items: { pounded_herbs: 1100 }, medals: [765, 1065] },
-    ],
+    objective: { type: 'arranque', kind: 'produced', items: { pounded_herbs: 1100 }, medals: [765, 1065] },
   },
   {
     id: 'semana_santa_pacifico',
@@ -827,11 +710,7 @@ export const EVENTS = [
       { id: 'santa_ahumaderos', icon: ICON.smokedPargo, name: 'Más fogones altos', desc: 'La Fileteadora y el Ahumadero hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'pargo_smoker', mult: 1.5 }, { type: 'stationSpeed', target: 'pargo_filleter', mult: 1.5 }] },
       { id: 'santa_ollas', icon: ICON.tapao, name: 'Más ollas', desc: 'La Cocina del tapao sirve un 50 % más.', cost: 550000, effect: { type: 'stationSpeed', target: 'tapao_kitchen', mult: 1.5 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { dried_fish: 150, smoked_pargo: 75, tapao: 50 }, medals: [570, 870] },
-      { kind: 'sold', items: { dried_fish: 60, smoked_pargo: 120, tapao: 40 }, medals: [615, 915] },
-      { kind: 'sold', items: { dried_fish: 90, smoked_pargo: 90, tapao: 120 }, medals: [615, 915] },
-    ],
+    objective: { type: 'feria', kind: 'sold', items: { dried_fish: 90, smoked_pargo: 90, tapao: 120 }, medals: [615, 915] },
   },
   {
     id: 'lancha_varada',
@@ -852,11 +731,7 @@ export const EVENTS = [
       { id: 'varada_alquiler', icon: '⛴️', name: 'Lancha de alquiler', desc: 'Otra lancha da la vuelta por el mar: llega el 60 % de los patacones.', cost: 3000000, effect: { type: 'supply', product: 'patacon_bag', fraction: 0.6 } },
       { id: 'varada_pleamar', icon: '🌊', name: 'La pleamar', desc: 'Sube la marea y la lancha sale: los patacones vuelven a llegar todos.', cost: 8000000, effect: { type: 'supply', product: 'patacon_bag', fraction: 1 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { arroz_piangua: 150 }, medals: [495, 795] },
-      { kind: 'produced', items: { cazuela_mariscos: 130 }, medals: [540, 840] },
-      { kind: 'produced', items: { arroz_piangua: 100, cazuela_mariscos: 100 }, medals: [615, 915] },
-    ],
+    objective: { type: 'ramas', kind: 'produced', items: { arroz_piangua: 100, cazuela_mariscos: 100 }, medals: [615, 915] },
   },
   {
     id: 'feria_artesanias',
@@ -877,11 +752,7 @@ export const EVENTS = [
       { id: 'feria_fibra', icon: ICON.werregueFiber, name: 'Fibra de las comunidades', desc: 'Llega fibra de los otros ríos: del 60 al 80 %.', cost: 15000000, effect: { type: 'stationSpeed', target: 'werregue_weaver', mult: 4 / 3 } },
       { id: 'feria_abuelas', icon: '👵🏾', name: 'Las abuelas tejedoras', desc: 'Las abuelas tejen con todas: las Tejedoras vuelven al 100 %.', cost: 35000000, effect: { type: 'stationSpeed', target: 'werregue_weaver', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { recuerdo_pacifico: 120 }, medals: [600, 900] },
-      { kind: 'produced', items: { werregue_jar: 850 }, medals: [765, 1065] },
-      { kind: 'produced', items: { werregue_thread: 850 }, medals: [720, 1020] },
-    ],
+    objective: { type: 'corte', kind: 'produced', items: { werregue_jar: 850 }, medals: [765, 1065] },
   },
   {
     id: 'festival_pacifico',
@@ -902,11 +773,7 @@ export const EVENTS = [
       { id: 'festival_lanchas', icon: '🚤', name: 'Más lanchas', desc: 'Más lanchas salen a la bahía: del 60 al 80 %.', cost: 130000000, effect: { type: 'stationSpeed', target: 'salida_ballenas', mult: 4 / 3 } },
       { id: 'festival_jovenes', icon: '🦺', name: 'Los jóvenes guías', desc: 'Los muchachos del puerto también guían: la Salida vuelve al 100 %.', cost: 300000000, effect: { type: 'stationSpeed', target: 'salida_ballenas', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { excursion_ballenas: 24 }, medals: [675, 975] },
-      { kind: 'produced', items: { lonchera_lancha: 120 }, medals: [690, 990] },
-      { kind: 'sold', items: { excursion_ballenas: 6, noche_buenaventura: 180 }, medals: [840, 1140] },
-    ],
+    objective: { type: 'final', kind: 'sold', items: { excursion_ballenas: 6, noche_buenaventura: 180 }, medals: [840, 1140] },
   },
   // El Amazonas (v3.53): los mismos números que los de la Costa Pacífica, los Llanos, Boyacá, la Costa y Santander, zona por zona.
   {
@@ -927,11 +794,7 @@ export const EVENTS = [
       { id: 'palmas_escaleras', icon: '🪜', name: 'Escaleras de guadua', desc: 'Escaleras amarradas a las palmas: del 60 al 80 %.', cost: 2500, effect: { type: 'stationSpeed', target: 'asai_grove', mult: 4 / 3 } },
       { id: 'palmas_enanas', icon: ICON.asaiPalm, name: 'Asaí bajito', desc: 'Palmas nuevas que dan racimos a la mano: el Asaizal vuelve al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'asai_grove', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { asai_box: 100 }, medals: [720, 1020] },
-      { kind: 'produced', items: { asai_shake: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { asai_pulp: 1000 }, medals: [630, 930] },
-    ],
+    objective: { type: 'cadena', kind: 'sold', items: { asai_box: 100 }, medals: [720, 1020] },
   },
   {
     id: 'sequia_amazonas',
@@ -951,11 +814,7 @@ export const EVENTS = [
       { id: 'sequia_motobomba', icon: '⚡', name: 'Motobomba al río', desc: 'Una motobomba sube agua del río: del 60 al 80 %.', cost: 15000, effect: { type: 'stationSpeed', target: 'aji_washer', mult: 4 / 3 } },
       { id: 'sequia_pozo', icon: ICON.ajiPeppers, name: 'Pozo profundo', desc: 'Agua limpia todo el año: el Lavadero vuelve al 100 %.', cost: 35000, effect: { type: 'stationSpeed', target: 'aji_washer', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { aji_box: 500 }, medals: [735, 1035] },
-      { kind: 'produced', items: { aji_negro: 550 }, medals: [780, 1080] },
-      { kind: 'produced', items: { ground_aji: 1100 }, medals: [765, 1065] },
-    ],
+    objective: { type: 'arranque', kind: 'produced', items: { ground_aji: 1100 }, medals: [765, 1065] },
   },
   {
     id: 'fin_veda',
@@ -974,11 +833,7 @@ export const EVENTS = [
       { id: 'veda_moquenes', icon: ICON.moqueado, name: 'Más moquenes', desc: 'La Fileteadora y el Moquén hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'moquen', mult: 1.5 }, { type: 'stationSpeed', target: 'pirarucu_filleter', mult: 1.5 }] },
       { id: 'veda_fogones', icon: ICON.pirarucuAji, name: 'Más fogones', desc: 'La Cocina del pirarucú sirve un 50 % más.', cost: 550000, effect: { type: 'stationSpeed', target: 'pirarucu_kitchen', mult: 1.5 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { salted_pirarucu: 150, moqueado: 75, pirarucu_aji: 50 }, medals: [570, 870] },
-      { kind: 'sold', items: { salted_pirarucu: 60, moqueado: 120, pirarucu_aji: 40 }, medals: [615, 915] },
-      { kind: 'sold', items: { salted_pirarucu: 90, moqueado: 90, pirarucu_aji: 120 }, medals: [615, 915] },
-    ],
+    objective: { type: 'feria', kind: 'sold', items: { salted_pirarucu: 90, moqueado: 90, pirarucu_aji: 120 }, medals: [615, 915] },
   },
   {
     id: 'vaciante',
@@ -999,11 +854,7 @@ export const EVENTS = [
       { id: 'vaciante_motocarro', icon: '🛺', name: 'Motocarro por la trocha', desc: 'Un motocarro da la vuelta por tierra: llega el 60 % del asaí.', cost: 3000000, effect: { type: 'supply', product: 'asai_bag', fraction: 0.6 } },
       { id: 'vaciante_lluvias', icon: '🌧️', name: 'Las lluvias', desc: 'Llueve, el río sube y el bote vuelve a pasar: el asaí llega todo.', cost: 8000000, effect: { type: 'supply', product: 'asai_bag', fraction: 1 } },
     ],
-    objectives: [
-      { kind: 'produced', items: { desayuno_amazonico: 150 }, medals: [495, 795] },
-      { kind: 'produced', items: { banquete_maloca: 130 }, medals: [540, 840] },
-      { kind: 'produced', items: { desayuno_amazonico: 100, banquete_maloca: 100 }, medals: [615, 915] },
-    ],
+    objective: { type: 'ramas', kind: 'produced', items: { desayuno_amazonico: 100, banquete_maloca: 100 }, medals: [615, 915] },
   },
   {
     id: 'pelazon',
@@ -1024,11 +875,7 @@ export const EVENTS = [
       { id: 'pelazon_corteza', icon: ICON.yanchamaBark, name: 'Corteza de las comunidades', desc: 'Llega corteza de los otros resguardos: del 60 al 80 %.', cost: 15000000, effect: { type: 'stationSpeed', target: 'mask_maker', mult: 4 / 3 } },
       { id: 'pelazon_abuelos', icon: '👴🏽', name: 'Los abuelos sabedores', desc: 'Los abuelos trabajan con todos: el Taller vuelve al 100 %.', cost: 35000000, effect: { type: 'stationSpeed', target: 'mask_maker', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { recuerdo_amazonas: 120 }, medals: [600, 900] },
-      { kind: 'produced', items: { ticuna_mask: 850 }, medals: [765, 1065] },
-      { kind: 'produced', items: { painted_cloth: 850 }, medals: [720, 1020] },
-    ],
+    objective: { type: 'corte', kind: 'produced', items: { ticuna_mask: 850 }, medals: [765, 1065] },
   },
   {
     id: 'confraternidad',
@@ -1049,11 +896,7 @@ export const EVENTS = [
       { id: 'confra_botes', icon: '🚤', name: 'Más botes', desc: 'Más botes salen al río: del 60 al 80 %.', cost: 130000000, effect: { type: 'stationSpeed', target: 'salida_delfines', mult: 4 / 3 } },
       { id: 'confra_jovenes', icon: '🦺', name: 'Los jóvenes guías', desc: 'Los muchachos del puerto también guían: la Salida vuelve al 100 %.', cost: 300000000, effect: { type: 'stationSpeed', target: 'salida_delfines', mult: 1.25 } },
     ],
-    objectives: [
-      { kind: 'sold', items: { excursion_delfines: 24 }, medals: [675, 975] },
-      { kind: 'produced', items: { provision_canoa: 120 }, medals: [690, 990] },
-      { kind: 'sold', items: { excursion_delfines: 6, noche_leticia: 180 }, medals: [840, 1140] },
-    ],
+    objective: { type: 'final', kind: 'sold', items: { excursion_delfines: 6, noche_leticia: 180 }, medals: [840, 1140] },
   },
 ];
 
