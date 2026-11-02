@@ -115,6 +115,10 @@ export class Camera {
     const up = (e) => this.pointers.delete(e.pointerId);
     listen('pointerup', up);
     listen('pointercancel', up);
+    // Sin clic fantasma (v4.0.2): al soltar el dedo el navegador emula un «click» un rato después, donde quedó
+    // el dedo. Como el toque ya abrió el panel, ese clic caía en lo que el panel puso ahí (la pestaña 🐴 de los
+    // arrieros, «Mejorar»…). El mapa usa solo eventos de puntero: el clic emulado no le sirve de nada.
+    listen('touchend', (e) => e.cancelable && e.preventDefault(), { passive: false });
     listen(
       'wheel',
       (e) => {
