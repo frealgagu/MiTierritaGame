@@ -1,4 +1,4 @@
-// Juega cada objetivo de los eventos con jugadores automáticos (tools/event-bots.js) y propone las
+// Juega el reto de cada evento con jugadores automáticos (tools/event-bots.js) y propone las
 // medallas. Uso: node tools/event-sim.js [evento] [--detalle]
 //   mejor:  el más rápido de todos los estilos y ahorros, decidiendo cada segundo
 //   atento: sigue la mejora recomendada y decide cada 5 s
@@ -14,8 +14,9 @@ const mmss = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart
 
 for (const def of defs) {
   console.log(`== ${def.icon} ${def.name}`);
-  for (let year = 1; year <= def.objectives.length; year++) {
-    const obj = def.objectives[year - 1];
+  // Un reto por evento (v3.72); `year` es solo la vez que se juega.
+  for (let year = 1; year <= 1; year++) {
+    const obj = def.objective;
     const best = bestRun(def, year);
     const attentive = play(def, year, { style: 'rec', save: 30, every: 5 });
     const slow = play(def, year, { style: 'obj', save: 60, every: 30 });

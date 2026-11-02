@@ -29,7 +29,7 @@ import { APP_VERSION, checkForUpdate } from './update.js';
 import { SONGS } from './audio/songs.js';
 import { sumValues } from './sim/state.js';
 import { bindTip, tipMode } from './tip.js';
-import { checkMastery, restartState } from './sim/legacy.js';
+import { checkMastery, restartState, startZone } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
 import { ZONES_BY_ID } from './data/zones/index.js';
 import { ROUTES_BY_ID } from './data/routes.js';
@@ -107,8 +107,7 @@ async function start() {
   });
 
   // Zona que se está viendo (las demás siguen produciendo). Se recuerda con la partida.
-  const saw = root.settings.zone;
-  const view = { zone: gameOf(saw)?.state.zones[saw]?.unlocked ? saw : 'finca' };
+  const view = { zone: startZone(root, root.settings.zone) };
   // La partida de la región que se está viendo (la del Eje Cafetero o la de otra región).
   let active = gameOf(view.zone);
   // Tablero de un evento en juego (v2.0): { zone, game } con su propio Game, o null.
@@ -339,7 +338,7 @@ async function start() {
     document.getElementById('event-result-medal').textContent = m.icon;
     document.getElementById('event-result-title').textContent = t('¡Medalla de {medal}!', { medal: m.name });
     document.getElementById('event-result-text').textContent =
-      t('{event}: cumpliste el objetivo en {time} y compraste las tres mejoras.\n+{renown} ⭐ de Renombre (tienes {total}).\nEste cupo de eventos queda libre en 2 años del juego (unas {cooldown}).', { event: `${r.def.icon} ${r.def.name} ${r.round}`, time: formatClock(r.time), renown: m.renown, total: game.state.profile.renown, cooldown: formatDuration(EVENT_COOLDOWN) });
+      t('{event}: cumpliste el objetivo en {time} y compraste las tres mejoras.\n+{renown} ⭐ de Renombre (tienes {total}).\nEste cupo de eventos queda libre en 2 años del juego (unas {cooldown}).', { event: `${r.def.icon} ${r.def.name}`, time: formatClock(r.time), renown: m.renown, total: game.state.profile.renown, cooldown: formatDuration(EVENT_COOLDOWN) });
     const modal = document.getElementById('event-result');
     // Terminar, o quedarse mirando el tablero (v3.30): se puede pausar, pero se cierra con «Terminar».
     document.getElementById('event-result-ok').onclick = () => {
@@ -358,6 +357,8 @@ async function start() {
     if (g === game) saveGame(restartState(root));
     else {
       root.regions[g.state.region] = restartState(g.state, Date.now(), root.profile);
+      // Que abra en la región que se reinició (v3.72), en su primera zona.
+      root.settings.zone = root.regions[g.state.region].settings.zone;
       saveGame(root);
     }
     location.reload();

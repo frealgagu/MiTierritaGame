@@ -21,7 +21,6 @@ export default {
   '🚪 corriendo': '🚪 running',
   '✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.': '✅ {icon} Medal secured. To finish, buy the upgrades that are missing.',
   Jugar: 'Play',
-  'Reto {n}': 'Challenge {n}',
   '{n} para jugar': '{n} to play',
   'nada por ahora': 'nothing for now',
   'Cada zona que abras trae su evento.': 'Every zone you open brings its own event.',

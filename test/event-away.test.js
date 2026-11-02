@@ -68,7 +68,8 @@ test('al volver, la medalla queda con el segundo en que se cumplió (sumado al r
   const g = board(0, 'turistas');
   const r = g.catchUpBoard(30000);
   assert.equal(r.secured, true);
-  assert.ok(Math.abs(g.state.event.time - exact) <= 5, `${g.state.event.time} frente a ${exact}`);
+  // Lo que va después de lo simulado se suma al ritmo medido: una estimación (hasta medio por ciento).
+  assert.ok(Math.abs(g.state.event.time - exact) <= Math.max(5, exact * 0.005), `${g.state.event.time} frente a ${exact}`);
   assert.equal(g.state.playTime, 30000);
 });
 

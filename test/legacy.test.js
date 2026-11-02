@@ -276,3 +276,17 @@ test('las monedas tienen un techo de 999Dc (v3.68.3)', async () => {
   game.step(0.1);
   assert.ok(game.state.coins < MAX_COINS, 'por debajo del techo no cambia nada');
 });
+
+test('al volver a empezar otra región, el juego abre en ella y no en el Cafetal (v3.72)', async () => {
+  const { startZone } = await import('../src/sim/legacy.js');
+  const { createInitialState } = await import('../src/sim/state.js');
+  const root = createInitialState(0);
+  root.zones.trapiche.unlocked = true;
+  root.regions = { santander: createInitialState(0, 'santander') };
+  // Santander recién reiniciada: solo su primera zona abierta; se estaba viendo Barichara.
+  assert.equal(startZone(root, 'barichara'), 'guayabera');
+  assert.equal(startZone(root, 'guayabera'), 'guayabera');
+  assert.equal(startZone(root, 'trapiche'), 'trapiche');
+  assert.equal(startZone(root, 'lecheria'), 'finca', 'zona cerrada del Eje Cafetero: su primera');
+  assert.equal(startZone(root, 'arrozal'), 'finca', 'región que todavía no se abre: la Finca');
+});

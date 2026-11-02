@@ -21,7 +21,6 @@ export default {
   '🚪 corriendo': '🚪 correndo',
   '✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.': '✅ {icon} Medalha garantida. Para encerrar, compre as melhorias que faltam.',
   Jugar: 'Jogar',
-  'Reto {n}': 'Desafio {n}',
   '{n} para jugar': '{n} para jogar',
   'nada por ahora': 'nada por enquanto',
   'Cada zona que abras trae su evento.': 'Cada zona que você abrir traz seu evento.',

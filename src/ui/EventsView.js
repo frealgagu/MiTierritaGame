@@ -3,7 +3,7 @@
 import { EVENTS, MEDALS } from '../data/events.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS, REGION_OF_ZONE } from '../data/regions.js';
-import { MEDAL_BONUS, awaySeconds, boardClockNow, eventObjective, eventStatus, medalCount, regionEvents } from '../sim/events.js';
+import { MEDAL_BONUS, awaySeconds, boardClockNow, boardObjective, eventObjective, eventStatus, medalCount, regionEvents } from '../sim/events.js';
 import { clockOf } from '../sim/calendar.js';
 import { formatDuration } from '../core/format.js';
 import { formatClock, objectiveText } from './EventBar.js';
@@ -66,7 +66,7 @@ export class EventsView {
       if (!st) return '';
       const zone = ZONES_BY_ID[def.zone];
       const best = profile.medals[def.id]?.best;
-      const obj = eventObjective(def, st.round);
+      const obj = st.board ? boardObjective(st.board) : eventObjective(def);
       const title = `<h3><span>${def.icon} ${def.name} · ${zone.icon} ${zone.name}</span><span>${best ? MEDALS[best].icon : ''}</span></h3>`;
       // Los que esperan (sin cupo o sin todas sus estaciones), en una línea (v3.7).
       if (st.kind === 'locked') return `<div class="event-card locked">${title}<p>${t('🔒 Sale cuando construyas todas las estaciones de {zone}.', { zone: zone.name })}</p></div>`;
@@ -89,7 +89,7 @@ export class EventsView {
       return `<div class="event-card">
         ${title}
         <p class="clamp" style="--lines: 2">${def.intro}</p>${moreButton()}
-        <p class="event-year">${t('Reto {n}', { n: st.round })}: ${objectiveText(obj)}.<br>${medalLine(obj)}</p>
+        <p class="event-year">${objectiveText(obj)}.<br>${medalLine(obj)}</p>
         ${foot}
       </div>`;
     };
