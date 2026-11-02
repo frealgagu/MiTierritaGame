@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v4.0.3 — Cadenas de colores y adiós al toque fantasma
+- **🔗 En la cadena, cada producto va en un color bien distinto** (verde, naranja, morado, mostaza, turquesa, rosado…): cuando una estación saca dos productos, cada uno sigue por su tubo de otro color, y cuando un producto se convierte en otro, el tubo cambia de color. La Compostera también recibe la pulpa en su color (antes salía en azul, como si llegara de otra zona).
+- **Corregido de raíz:** al tocar una estación en el mapa, el panel ya no se abre en la pestaña de los arrieros 🐴. Al soltar el dedo, el teléfono mandaba un segundo «clic» que caía en lo que el panel acababa de poner bajo el dedo; ahora ese clic no se produce. Probado tocando cada estación de las 48 zonas.
+
 ## v4.0.2 — Cada producto con su color en la cadena
 - **🔗 En la cadena, cada producto tiene su propio color de tubo:** se ve cuándo una estación saca dos productos distintos (cada uno sigue con el suyo) y cuándo un producto se convierte en otro (el color cambia al pasar por la estación). Lo que llega de otras zonas sigue en azul, lo que frena en rojo y lo que falta por abrir en gris claro.
 - **🐈 Los gatos cuestan 5 ⭐** (antes 10).

@@ -16,17 +16,10 @@ const outOf = (id) => Object.keys(STATIONS_BY_ID[id].out)[0];
 const byOf = (id) => Object.keys(STATIONS_BY_ID[id].by)[0];
 // El color del tubo de cada producto (v4.0.2): el del producto, oscurecido si es muy claro para que se vea sobre el
 // papel. Así se distingue lo que sale de una estación con dos productos y se ve cuando un producto se vuelve otro.
-function pipeColor(product) {
-  const c = PRODUCTS[product]?.color ?? 0x8b5a2b;
-  let [r, g, b] = [(c >> 16) & 255, (c >> 8) & 255, c & 255];
-  const light = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  // Los muy claros (cuajada, leche…) se oscurecen para leerse sobre el papel y no confundirse con lo bloqueado.
-  if (light > 0.55) {
-    const k = 0.5 / light;
-    [r, g, b] = [r * k, g * k, b * k].map(Math.round);
-  }
-  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
-}
+// Cada producto de la cadena con su color (v4.0.2): colores bien distintos entre sí (no el del producto, que
+// casi siempre es café o crema), en el orden en que aparecen, para que dos seguidos nunca se parezcan. Fuera
+// quedan el azul (lo importado), el rojo (lo que frena) y el gris (lo que falta construir).
+const PIPE_COLORS = ['#2f9e44', '#e8590c', '#7b3fb5', '#c99a06', '#0c8599', '#d6338a', '#8b5a2b', '#495057', '#82c91e'];
 const byIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].by)[0]].icon;
 // «la Mesa de chocolate y la Chocolatería»
 const listNames = (ids) => {
@@ -311,8 +304,14 @@ function diagram(state, a, rows, locked, zone, width, selected) {
   // Eslabones: el camino dibujado dos veces (el eslabón y su hueco) en trazos que se mueven.
   const pipes = [];
   // Lo que corre por el tubo lleva el color de su producto; lo que frena va en rojo y lo que falta construir, en gris.
+  const colorOf = {};
+  for (const id of under(root).filter((x) => !x.startsWith('lane:'))) {
+    for (const product of [...Object.keys(STATIONS_BY_ID[id].out ?? {}), ...Object.keys(STATIONS_BY_ID[id].by ?? {})]) {
+      colorOf[product] ??= PIPE_COLORS[Object.keys(colorOf).length % PIPE_COLORS.length];
+    }
+  }
   const pipe = (d, kind, product = null) => {
-    const color = kind === 'flow' && product ? ` style="stroke:${pipeColor(product)}"` : '';
+    const color = kind === 'flow' && colorOf[product] ? ` style="stroke:${colorOf[product]}"` : '';
     pipes.push(`<path d="${d}" class="dg-link ${kind}"${color}/><path d="${d}" class="dg-hole ${kind}"/>`);
   };
   const nodes = [];
@@ -331,7 +330,7 @@ function diagram(state, a, rows, locked, zone, width, selected) {
       const p = box(parent);
       const built = Boolean(state.stations[id]);
       const mid = p.bottom + GAP / 2;
-      pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${b.cx} V ${b.top}`, built ? 'import' : 'locked');
+      pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${b.cx} V ${b.top}`, built ? 'flow' : 'locked', Object.keys(def.in ?? {})[0]);
       nodes.push(
         built
           ? `<button class="dg-node dg-side ${b.w < NARROW ? 'narrow' : ''} ${sel(id)}" data-pick="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">
