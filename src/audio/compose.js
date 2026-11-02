@@ -390,6 +390,29 @@ export function renderBar(buf, index) {
   if (buf.song.style === 'joropo') return renderJoropo(buf, index);
   if (buf.song.style === 'chirimia') return renderChirimia(buf, index);
   if (buf.song.style === 'amazonica') return renderAmazonica(buf, index);
+  if (buf.song.style === 'sanjuanero') return renderSanjuanero(buf, index);
+  return renderBambuco(buf, index);
+}
+
+// Compás de sanjuanero (v4.0, 3/4 rápido): el bambuco de siempre (bajo, guitarra, tiple y bandola) con la tambora
+// del San Pedro (el golpe en el uno, el aro en el «y» del dos y el parche en el tres) y la carrasca raspando cada
+// corchea.
+function renderSanjuanero(buf, index) {
+  renderBambuco(buf, index);
+  const { beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const at = (e) => t0 + e * eighth + (rng() - 0.5) * 0.008;
+  buf.voice = 'tambora';
+  drum(buf, at(0), 120, 70, 0.14, 0.4, -0.2, 0.15);
+  drum(buf, at(3), 420, 380, 0.03, 0.12, -0.25, 0.8);
+  drum(buf, at(4), 140, 90, 0.1, 0.28, -0.2, 0.2);
+  buf.voice = 'carrasca';
+  for (let e = 0; e < 6; e++) scrape(buf, at(e), eighth * (e % 2 ? 0.35 : 0.6), e % 2 ? 0.03 : 0.055, 0.45);
+}
+
+// Compás de bambuco (3/4): el de todas las regiones andinas.
+function renderBambuco(buf, index) {
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
   const t0 = (index * buf.bar) / buf.sr;
