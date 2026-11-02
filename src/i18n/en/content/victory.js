@@ -42,4 +42,10 @@ export default {
   casaberia: ['Casabe for the whole maloca!', 'You completed <b>The Casabe House</b>, in the Amazon. Four thousand maloca feasts, with açaí from the Açaí Grove and pirarucú from the Lake.', 'Feasts served'],
   yanchama: ['Masks for the whole jungle!', 'You completed <b>The Yanchama</b>, in the Amazon. Six thousand Amazon souvenirs: Ticuna masks with salted and smoked pirarucú from the Lake.', 'Souvenirs sold'],
   leticia: ['The Amazon, from end to end!', 'You completed <b>Leticia</b> and the Amazon. Seven thousand pink dolphin tours, with the açaí, black chili, pirarucú, casabe and masks from all your zones.', 'Dolphin tours'],
+  achirales: ['Biscuits for all of Tolima!', 'You completed <b>The Achira Fields</b>, in Tolima Grande. Two thousand boxes of biscuits, from the achira root to the clay oven.', 'Biscuit boxes sold'],
+  cafe_huila: ['Huila specialty coffee!', 'You completed <b>Huila Coffee</b>. Six thousand bags of specialty coffee, and from the cherry husk, tea for Neiva.', 'Bags of specialty coffee sold'],
+  betania: ['Tilapia for all of Huila!', 'You completed <b>The Betania Reservoir</b>. Six thousand lunches of fried tilapia with patacón, on the reservoir shore.', 'Lunches sold'],
+  lechoneria: ['Lechona for all of San Pedro!', 'You completed <b>The Lechonería</b>. Four thousand lechonas, with the skin and meat of each pig together in the wood-fired oven.', 'Lechonas sold'],
+  chamba: ['Black pottery for the whole country!', 'You completed <b>La Chamba</b>. Six thousand Tolima souvenirs: black clay pots with smoked tilapia and escabeche from Betania.', 'Souvenirs sold'],
+  neiva: ['Tolima Grande, from end to end!', 'You completed <b>Neiva</b> and Tolima Grande. Seven thousand starry nights in the Tatacoa, with the biscuits, coffee, tilapia, lechona and pottery from all your zones.', 'Tatacoa trips'],
 };

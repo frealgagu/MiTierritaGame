@@ -43,4 +43,10 @@ export default {
   casaberia: ['Casaberie', 'Vers Puerto Nariño ➜', { bolsas_asai: '⬅ Açaí de la Palmeraie', pirarucus: '⬅ Pirarucú du Lac', banquetes_maloca: 'Banquets vers Leticia ➜', desayunos_amazonicos: 'Petits-déjeuners ⬇' }],
   yanchama: ['Yanchama', 'Vers Macedonia ➜', { pirarucus_salados: '⬅ Pirarucú salé du Lac', moqueados: '⬅ Boucané', recuerdos_amazonas: 'Vers Leticia ➜' }],
   leticia: ['Leticia', 'Vers Puerto Nariño ➜', { cajas_asai: '⬅ Açaí de la Palmeraie', cajas_aji: '⬅ Ají negro', banquetes_maloca: '⬅ Banquets', desayunos_amazonicos: '⬅ Petits-déjeuners', recuerdos_amazonas: 'Yanchama ⬆', platos_pirarucu: 'Pirarucú ⬆' }],
+  achirales: ['Les Champs d’achira', 'Vers Natagaima ➜', { bizcochos: 'Biscuits vers la Lechonería ➜', cajas_bizcochos: 'Vers Neiva ➜' }],
+  cafe_huila: ['Le Café du Huila', 'Vers Pitalito ➜', { tinto: 'Café vers la Lechonería ➜', te_cascara: 'Thé de cascara vers Neiva ➜', cafe_especial: 'Vers Neiva ➜' }],
+  betania: ['Le Barrage de Betania', 'Vers Yaguará ➜', { ahumadas_tilapia: 'Tilapia fumé vers La Chamba ⬇', escabeches: 'Escabèche ⬇', almuerzos_represa: 'Déjeuners vers Neiva ➜' }],
+  lechoneria: ['La Lechonería', 'Vers Ibagué ➜', { bizcochos: '⬅ Biscuits des Champs d’achira', tinto: '⬅ Café du Huila', lechonas: 'Lechonas vers Neiva ➜', desayunos_tolimenses: 'Petits-déjeuners ⬇' }],
+  chamba: ['La Chamba', 'Vers El Guamo ➜', { ahumadas_tilapia: '⬅ Tilapia fumé de Betania', escabeches: '⬅ Escabèche', recuerdos_tolima: 'Vers Neiva ➜' }],
+  neiva: ['Neiva', 'Vers Villavieja ➜', { cajas_bizcochos: '⬅ Biscuits des Champs d’achira', cafe_especial: '⬅ Café du Huila', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Petits-déjeuners', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Thé de cascara ⬆', almuerzos_represa: 'Tilapia ⬆' }],
 };

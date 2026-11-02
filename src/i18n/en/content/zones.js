@@ -42,4 +42,10 @@ export default {
   casaberia: ['The Casabe House', 'To Puerto Nariño ➜', { bolsas_asai: '⬅ Açaí from the Açaí Grove', pirarucus: '⬅ Pirarucú from the Lake', banquetes_maloca: 'Feasts to Leticia ➜', desayunos_amazonicos: 'Breakfasts ⬇' }],
   yanchama: ['The Yanchama', 'To Macedonia ➜', { pirarucus_salados: '⬅ Salted pirarucú from the Lake', moqueados: '⬅ Smoked pirarucú', recuerdos_amazonas: 'To Leticia ➜' }],
   leticia: ['Leticia', 'To Puerto Nariño ➜', { cajas_asai: '⬅ Açaí from the Açaí Grove', cajas_aji: '⬅ Black chili', banquetes_maloca: '⬅ Feasts', desayunos_amazonicos: '⬅ Breakfasts', recuerdos_amazonas: 'Yanchama ⬆', platos_pirarucu: 'Pirarucú ⬆' }],
+  achirales: ['The Achira Fields', 'To Natagaima ➜', { bizcochos: 'Biscuits to the Lechonería ➜', cajas_bizcochos: 'To Neiva ➜' }],
+  cafe_huila: ['Huila Coffee', 'To Pitalito ➜', { tinto: 'Coffee to the Lechonería ➜', te_cascara: 'Cascara tea to Neiva ➜', cafe_especial: 'To Neiva ➜' }],
+  betania: ['The Betania Reservoir', 'To Yaguará ➜', { ahumadas_tilapia: 'Smoked tilapia to La Chamba ⬇', escabeches: 'Escabeche ⬇', almuerzos_represa: 'Lunches to Neiva ➜' }],
+  lechoneria: ['The Lechonería', 'To Ibagué ➜', { bizcochos: '⬅ Biscuits from the Achira Fields', tinto: '⬅ Coffee from Huila', lechonas: 'Lechonas to Neiva ➜', desayunos_tolimenses: 'Breakfasts ⬇' }],
+  chamba: ['La Chamba', 'To El Guamo ➜', { ahumadas_tilapia: '⬅ Smoked tilapia from Betania', escabeches: '⬅ Escabeche', recuerdos_tolima: 'To Neiva ➜' }],
+  neiva: ['Neiva', 'To Villavieja ➜', { cajas_bizcochos: '⬅ Biscuits from the Achira Fields', cafe_especial: '⬅ Huila coffee', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Breakfasts', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Cascara tea ⬆', almuerzos_represa: 'Tilapia ⬆' }],
 };

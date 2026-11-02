@@ -43,4 +43,10 @@ export default {
   casaberia: 'Welcome to the Casabe House, mijo! Bitter cassava becomes casabe: the bread of the jungle.',
   yanchama: 'Welcome to the Yanchama, paisano! From the tree bark we make cloth, and from the cloth, masks.',
   leticia: 'Welcome to Leticia, paisano! Here, at the triple border, the journey through the Amazon ends.',
+  achirales: 'Welcome to Tolima Grande, mijo! Starch comes from the achira, and from the starch, the biscuits.',
+  cafe_huila: 'Hey there, paisano! Here in Huila the coffee is special, and even the husk gets used.',
+  betania: 'Welcome to the Betania reservoir! Here tilapia is raised in cages on the water.',
+  lechoneria: 'You made it to the Lechonería, mijo! The pig gives meat and skin, and in the oven they come together in the lechona.',
+  chamba: 'Welcome to La Chamba! Here the clay is trodden, shaped by hand and fired until it turns black.',
+  neiva: 'Welcome to Neiva, right in the middle of San Pedro! From here the trip leaves to see the stars in the Tatacoa.',
 };

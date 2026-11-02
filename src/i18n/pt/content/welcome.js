@@ -42,4 +42,10 @@ export default {
   casaberia: 'Bem-vindo à Casa do Beiju, meu filho! Da mandioca brava sai o beiju: o pão da selva.',
   yanchama: 'Bem-vindo à Yanchama, conterrâneo! Da casca da árvore tiramos tecido, e do tecido, máscaras.',
   leticia: 'Bem-vindo a Leticia, conterrâneo! Aqui, na tríplice fronteira, termina a viagem pelo Amazonas.',
+  achirales: 'Bem-vindo ao Tolima Grande, mijo! Da achira sai o amido, e do amido, os biscoitos.',
+  cafe_huila: 'E aí, paisano! Aqui no Huila o café é especial, e até a casca se aproveita.',
+  betania: 'Bem-vindo à represa de Betania! Aqui a tilápia é criada em gaiolas sobre a água.',
+  lechoneria: 'Chegou à Lechonería, mijo! Do porco sai a carne e o couro, e no forno eles se juntam na lechona.',
+  chamba: 'Bem-vindo a La Chamba! Aqui o barro é pisado, modelado à mão e queimado até ficar preto.',
+  neiva: 'Bem-vindo a Neiva, em pleno San Pedro! Daqui sai o passeio para ver as estrelas na Tatacoa.',
 };

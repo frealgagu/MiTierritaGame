@@ -42,4 +42,10 @@ export default {
   casaberia: 'Bienvenue à la casaberie, mon petit ! Du manioc amer sort la cassave : le pain de la forêt.',
   yanchama: 'Bienvenue à la Yanchama, l’ami ! De l’écorce de l’arbre, on tire une étoffe, et de l’étoffe, des masques.',
   leticia: 'Bienvenue à Leticia, l’ami ! Ici, à la triple frontière, se termine le voyage en Amazonie.',
+  achirales: 'Bienvenue au Tolima Grande, mijo ! De l’achira sort l’amidon, et de l’amidon, les biscuits.',
+  cafe_huila: 'Salut, paisano ! Ici au Huila le café est spécial, et même la cosse sert à quelque chose.',
+  betania: 'Bienvenue au barrage de Betania ! Ici le tilapia est élevé dans des cages sur l’eau.',
+  lechoneria: 'Te voilà à la Lechonería, mijo ! Du cochon sortent la viande et la couenne, et au four elles se réunissent dans la lechona.',
+  chamba: 'Bienvenue à La Chamba ! Ici l’argile est foulée, modelée à la main et cuite jusqu’à devenir noire.',
+  neiva: 'Bienvenue à Neiva, en plein San Pedro ! D’ici part l’excursion pour voir les étoiles dans la Tatacoa.',
 };
