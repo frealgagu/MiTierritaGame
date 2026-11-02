@@ -11,7 +11,7 @@ test('cada región tiene su álbum de seis páginas de seis láminas, con ids ú
   for (const region of ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima']) assert.equal(ALBUM.filter((pg) => pg.region === region).length, 6, region);
   assert.equal(new Set(ALBUM.map((pg) => pg.id)).size, 48);
   for (const page of ALBUM) assert.equal(page.stickers.length, 6, page.id);
-  assert.equal(Object.keys(STICKERS_BY_ID).length, 252);
+  assert.equal(Object.keys(STICKERS_BY_ID).length, 288);
   for (const s of Object.values(STICKERS_BY_ID)) assert.ok(s.text.length <= 90, `${s.id}: ${s.text.length}`);
 });
 
