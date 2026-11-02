@@ -4,6 +4,7 @@
 // fuera. Ahora se cuentan una vez al empezar el despacho y se suma cada mula que sale. Se suma en el
 // mismo orden que antes (el de la lista), así que los resultados son idénticos.
 import { STATIONS_BY_ID } from '../data/stations.js';
+import { incomingKey } from './production.js';
 
 let fleet = null;
 
@@ -21,7 +22,10 @@ export function addMule(m) {
     fleet.toWarehouse[zone] = (fleet.toWarehouse[zone] ?? 0) + m.amount;
     const key = `${zone}|${m.productId}`;
     fleet.toExport[key] = (fleet.toExport[key] ?? 0) + m.amount;
-  } else fleet.incoming[m.to] = (fleet.incoming[m.to] ?? 0) + m.amount;
+  } else {
+    const key = incomingKey(m.to, m.productId);
+    fleet.incoming[key] = (fleet.incoming[key] ?? 0) + m.amount;
+  }
 }
 
 export function endFleet() {

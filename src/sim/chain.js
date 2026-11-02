@@ -38,6 +38,46 @@ for (const zone of ZONE_LIST) {
   for (const [id, parent] of Object.entries(PARENT)) if (STATIONS_BY_ID[id].zone === zone.id) CHILDREN[parent].push(id);
 }
 
+// v4.0: las dos mecánicas nuevas.
+// · Estación con dos productos: su subproducto (`by`, como la pulpa del Beneficiadero) pasa por canaleta, sin
+//   mulas, a las estaciones de su zona que lo usan de entrada, y desde ahí sigue su propia cadena.
+//   BY_CHILDREN[estación] = las que reciben su subproducto; su PARENT es la estación del subproducto.
+// · Estación que junta dos: además de su entrada (de PARENT), espera otro producto de una estación de su
+//   misma zona (`joins: [{ product, perCycle, from }]`), que se lo traen sus mulas. Esa estación la cuenta
+//   entre sus CHILDREN (sus mulas reparten entre todas), y JOIN_FROM[estación][producto] = de dónde llega.
+export const BY_CHILDREN = {};
+export const JOIN_FROM = {};
+const byProduct = (id) => Object.keys(STATIONS_BY_ID[id].by ?? {})[0];
+for (const zone of ZONE_LIST) {
+  const ids = [...new Set([...zone.chain, ...(zone.plots ?? []).map((p) => p.stationId)])];
+  for (const id of ids) {
+    const by = byProduct(id);
+    if (!by) continue;
+    BY_CHILDREN[id] = ids.filter((c) => c !== id && STATIONS_BY_ID[c].in?.[by] && STATIONS_BY_ID[c].fuel?.from !== id);
+    for (const c of BY_CHILDREN[id]) PARENT[c] ??= id;
+  }
+  for (const id of zone.chain) {
+    for (const j of STATIONS_BY_ID[id].joins ?? []) {
+      if (STATIONS_BY_ID[j.from]?.zone !== zone.id || Object.keys(STATIONS_BY_ID[j.from].out)[0] !== j.product) throw new Error(`${id}: junta ${j.product} de ${j.from}, que no lo hace en su zona`);
+      (JOIN_FROM[id] ??= {})[j.product] = j.from;
+      CHILDREN[j.from].push(id);
+    }
+  }
+}
+
+// Lo que una estación recibe de su proveedor `from`: su entrada principal o lo que junta (v4.0).
+export function suppliedProduct(id, from) {
+  const join = (STATIONS_BY_ID[id].joins ?? []).find((j) => j.from === from);
+  return join ? join.product : Object.keys(STATIONS_BY_ID[id].in ?? {})[0];
+}
+
+// ¿`product` es lo que junta la estación (no su entrada principal)? Y cuánto gasta de él por ciclo.
+export const joinOf = (id, product) => (STATIONS_BY_ID[id].joins ?? []).find((j) => j.product === product) ?? null;
+export function perCycleOf(id, product) {
+  const def = STATIONS_BY_ID[id];
+  return joinOf(id, product)?.perCycle ?? def.in?.[product] ?? Object.values(def.in ?? {})[0] ?? 0;
+}
+
 export function isUnlocked(state, id) {
   return Boolean(state.stations[id]);
 }
