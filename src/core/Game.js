@@ -1,9 +1,9 @@
 import { EventBus } from './EventBus.js';
 import { createInitialState } from '../sim/state.js';
-import { stepByproducts, stepComposter, stepFuel, stepStation } from '../sim/production.js';
+import { stepComposter, stepFuel, stepStation } from '../sim/production.js';
 import { ZONE_LIST } from '../data/zones/index.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
-import { stepMules } from '../sim/transport.js';
+import { stepByproducts, stepMules } from '../sim/transport.js';
 import { stepJeep } from '../sim/dispatch.js';
 import { stepRoute } from '../sim/routes.js';
 import { ROUTES } from '../data/routes.js';

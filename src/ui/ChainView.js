@@ -314,12 +314,14 @@ function diagram(state, a, rows, locked, zone, width, selected) {
     // Lo que junta de otra estación de su zona (v4.0): otro tubo, que entra por la derecha de la tarjeta.
     for (const [product, from] of Object.entries(JOIN_FROM[id] ?? {})) {
       if (!pos[from]) continue;
+      // Sale por la derecha de la que lo hace, baja por fuera de las tarjetas y entra por la derecha de esta.
       const p = box(from);
-      const ex = b.left + b.w - (b.w < NARROW ? 12 : 18);
-      const mid = Math.max(p.bottom + GAP / 4, b.top - GAP / 2 + 6);
+      const x = Math.min(total - 3, Math.max(p.left + p.w, b.left + b.w) + 5);
+      const y0 = p.top + NODE_H / 2;
+      const y1 = b.top + NODE_H / 2;
       const kind = !row || !state.stations[from] ? 'locked' : row.joinLimited === product || a.bottleneck === `${from}:transport` ? 'hot' : 'flow';
-      pipe(`M ${p.cx + 8} ${p.bottom} V ${mid} H ${ex} V ${b.top}`, kind);
-      if (row) flow(ex, (mid + b.top) / 2, PRODUCTS[product].icon, row.joined?.[product] ?? 0, kind === 'hot');
+      pipe(`M ${p.left + p.w} ${y0} H ${x} V ${y1} H ${b.left + b.w}`, kind);
+      if (row) flow(x, (y0 + y1) / 2, PRODUCTS[product].icon, row.joined?.[product] ?? 0, kind === 'hot');
     }
     // Etiquetas de lo que llega de otras zonas, apiladas encima de la estación, a la derecha.
     tagsOf(id).forEach((imp, i) => {
