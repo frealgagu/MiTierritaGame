@@ -196,7 +196,7 @@ async function start() {
   };
   showZone(view.zone);
   hud = new HUD(active, select, () => scene.dayNight.hour, getZone);
-  chain = new ChainView(active, select, getZone);
+  chain = new ChainView(active, select, getZone, () => game.state);
   chatter = new Chatter(active, getZone, () => game.state);
   goals = new GoalsView(active, getZone);
   research = new ResearchView(active, getZone, (id) => select(id));

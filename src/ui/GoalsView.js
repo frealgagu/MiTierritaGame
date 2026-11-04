@@ -135,7 +135,7 @@ function masteryCard(state, compact) {
 function goalCard(goal, p, compact) {
   const pct = Math.round((p.current / p.target) * 100);
   const showCount = p.target > 1;
-  const reward = goal.final ? t('🏁 Final de la zona') : `+${formatNumber(goal.reward)} 💰`;
+  const reward = goal.final ? t('🚩 Final de la zona') : `+${formatNumber(goal.reward)} 💰`;
   const action = p.done
     ? `<button class="btn claim" data-claim="${goal.id}">${goal.final ? t('¡Completar zona!') : t('Cobrar {reward}', { reward })}</button>`
     : `<span class="goal-reward">${reward}</span>`;
@@ -152,6 +152,6 @@ function goalCard(goal, p, compact) {
 
 // Un objetivo ya cobrado: un renglón, sin barra.
 function claimedCard(goal) {
-  return `<div class="goal claimed"><div class="goal-text">✅ ${goalText(goal)}</div><span class="goal-reward">${goal.final ? t('🏁 Zona completada') : t('Cobrado')}</span></div>`;
+  return `<div class="goal claimed"><div class="goal-text">✅ ${goalText(goal)}</div><span class="goal-reward">${goal.final ? t('🚩 Zona completada') : t('Cobrado')}</span></div>`;
 }
 

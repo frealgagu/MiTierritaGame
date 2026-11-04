@@ -16,6 +16,7 @@ import { createInitialState } from './state.js';
 import { MAX_LEGACY_RESETS, legacyMult } from './modifiers.js';
 import { bankRun } from './logros.js';
 import { RESTART_RENOWN, gainRenown, profileOf } from './renown.js';
+import { ROUTES_BY_ID } from '../data/routes.js';
 import { tk } from '../i18n/index.js'; // las etiquetas se traducen donde se muestran (GoalsView)
 
 const zoneStations = (z) => [...z.chain, ...z.plots.map((p) => p.stationId)];
@@ -46,6 +47,19 @@ export function masteryParts(state) {
     { id: 'goals', icon: '🎯', label: tk('Objetivos cobrados'), have: goals.filter((g) => state.goals.claimed.includes(g.id)).length, need: goals.length },
     { id: 'research', icon: '🔬', label: tk('Investigaciones compradas'), have: research.filter((r) => state.research.includes(r.id)).length, need: research.length },
   ];
+}
+// Una zona «al máximo» (v4.1, en la lista de zonas): sus estaciones, sus arrieros, su bodega y las rutas que
+// le llegan en el nivel 100, y sus investigaciones y objetivos completos.
+export function zoneMaxed(state, zoneId) {
+  const at100 = (level) => (level ?? 0) >= MAX_LEVEL;
+  for (const id of new Set(zoneStations(ZONES_BY_ID[zoneId]))) {
+    const st = state.stations[id];
+    if (!at100(st?.level) || (!STATIONS_BY_ID[id].side && !at100(st.transport?.level))) return false;
+  }
+  if (!at100(state.zones[zoneId]?.dispatch?.level)) return false;
+  for (const [id, r] of Object.entries(state.routes ?? {})) if (ROUTES_BY_ID[id]?.to === zoneId && !at100(r.level)) return false;
+  if ((GOALS_BY_ZONE[zoneId] ?? []).some((g) => !state.goals.claimed.includes(g.id))) return false;
+  return RESEARCH.every((r) => r.zone !== zoneId || state.research.includes(r.id));
 }
 export const masteryReady = (state) => masteryParts(state).every((p) => p.have >= p.need);
 

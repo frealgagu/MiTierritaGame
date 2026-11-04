@@ -1,8 +1,9 @@
-import { formatRate } from '../core/format.js';
+import { formatNumber, formatRate } from '../core/format.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS } from '../data/regions.js';
 import { analyzeChain } from '../sim/analysis.js';
 import { regionState } from '../sim/regions.js';
+import { zoneMaxed } from '../sim/legacy.js';
 import { ZoneMap } from './ZoneMap.js';
 import { toast } from './toast.js';
 import { t } from '../i18n/index.js';
@@ -119,9 +120,13 @@ export class ZonesView {
       const folded = this.folded(region.id);
       const opened = region.zones.filter((z) => state.zones[z]?.unlocked);
       const done = region.zones.filter((z) => state.zones[z]?.complete).length;
+      // Al máximo (v4.1): 🏁; completada, 🚩. El de al máximo no se dice mientras no haya ninguna.
+      const maxed = new Set(region.zones.filter((z) => state.zones[z]?.complete && zoneMaxed(state, z)));
       const income = opened.reduce((sum, z) => sum + analyzeChain(state, z).income, 0);
       const here = region.zones.includes(this.getZone()) ? ` · ${t('📍 Aquí estás')}` : '';
-      const head = `<button class="zones-region research-other" data-fold="${region.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${region.icon} ${region.name}<small>${done}/${region.zones.length} 🏁 · ${formatRate(income)} 💰/s${here}</small></button>`;
+      // Siempre en dos renglones (v4.1): el nombre arriba; abajo, cómo va y el dinero de la región.
+      const counts = `${done}/${region.zones.length} 🚩${maxed.size ? ` · ${maxed.size}/${region.zones.length} 🏁` : ''}`;
+      const head = `<button class="zones-region research-other" data-fold="${region.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${region.icon} ${region.name}<small>${counts} · 💰 ${formatNumber(state.coins)} (${formatRate(income)} 💰/s)${here}</small></button>`;
       if (folded) return group(head);
       const rows = region.zones.map((id, i) => {
         const zone = ZONES_BY_ID[id];
@@ -132,7 +137,7 @@ export class ZonesView {
         if (!st.unlocked) status = `<small>${t('🔒 Completa {zone}', { zone: ZONES_BY_ID[region.zones[i - 1]].name })}</small>`;
         else {
           const income = analyzeChain(state, id).income;
-          status = `<small>${st.complete ? t('🏁 Completada') : t('⏳ En juego')} · ${formatRate(income)} 💰/s</small>`;
+          status = `<small>${maxed.has(id) ? t('🏁 Al máximo') : st.complete ? t('🚩 Completada') : t('⏳ En juego')} · ${formatRate(income)} 💰/s</small>`;
           action = current ? `<span class="owned">${t('Aquí estás')}</span>` : `<button class="btn buy small" data-zone="${id}">${t('Ir')}</button>`;
         }
         return `

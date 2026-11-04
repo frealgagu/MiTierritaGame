@@ -295,6 +295,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .chain-head { display: flex; align-items: center; justify-content: space-between; }
 .chain-head h2 { margin: 0; }
 .chain-help { margin: 4px 0 10px; font-size: 0.85rem; color: var(--muted); }
+/* Mejorar toda la zona (v4.1) */
+.chain-boost { background: var(--paper-2); border: 2px solid var(--ink); border-radius: 14px; padding: 8px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
+.chain-boost .modes { margin: 0; height: 30px; }
+.chain-boost-row { display: flex; gap: 6px; }
+.chain-boost-row .btn { flex: 1; padding: 8px 6px; font-size: 0.9rem; display: flex; flex-direction: column; align-items: center; line-height: 1.15; }
+.chain-boost-row .btn small { font-weight: 500; opacity: 0.9; }
+.chain-boost p { margin: 0; font-size: 0.8rem; color: var(--muted); }
 .chain-body { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding-right: 2px; }
 
 /* Diagrama: tarjetas con posición fija y eslabones en SVG. */
@@ -645,7 +652,7 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .research-other { margin: 12px 0 6px; font-size: 1rem; }
 /* Cabecera de región del selector de zonas (v3.54): un botón que la pliega o despliega. */
 .zones-region { margin: 6px 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; width: 100%; padding: 8px 10px; border: 2px solid var(--ink); border-radius: 10px; background: rgba(255, 255, 255, 0.55); color: inherit; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
-.zones-region small { margin-left: auto; font-weight: 500; opacity: 0.8; }
+.zones-region small { flex-basis: 100%; text-align: right; font-weight: 500; opacity: 0.8; } /* siempre en su renglón (v4.1) */
 .zones-fold { display: inline-block; width: 1em; }
 /* Cada región en un panel sombreado, con sus zonas adentro y un poco más angostas (v3.59). */
 .zones-group { display: flex; flex-direction: column; gap: 6px; margin: 2px 0 6px; padding: 6px 8px 8px; border: 2px solid rgba(58, 36, 24, 0.18); border-radius: 14px; background: rgba(58, 36, 24, 0.08); }
