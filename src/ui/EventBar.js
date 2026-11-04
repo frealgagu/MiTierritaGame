@@ -1,14 +1,15 @@
 // Barra del tablero de un evento (v2.0): el objetivo, el reloj del evento, las medallas y las compras
 // del evento (cada una pide la anterior).
 import { formatNumber } from '../core/format.js';
-import { allActionsBought, boardRound, buyAction, boardObjective, eventClock, eventDef, eventHandicaps, eventItems, eventProgress, handicapText, medalFor, quoteAction } from '../sim/events.js';
+import { allActionsBought, boardRound, buyAction, boardObjective, EVENT_CLOCK_MAX, eventClock, eventDef, eventHandicaps, eventItems, eventProgress, handicapText, medalFor, quoteAction } from '../sim/events.js';
 import { EVENT_ACTIONS_BY_ID, MEDALS } from '../data/events.js';
 import { PRODUCTS } from '../data/products.js';
 import { setFitted } from './fit.js';
 import { toast } from './toast.js';
 import { listJoin, t } from '../i18n/index.js';
 
-export const formatClock = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+// Pasado 999:59, el reloj del evento dice ∞ (v4.1; antes el de arriba seguía a 1000:00).
+export const formatClock = (s) => (s >= EVENT_CLOCK_MAX ? '∞' : `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`);
 
 // «Vende 120 🧀 queso, 60 🧈 mantequilla y 40 🍮 arequipe».
 export function objectiveText(obj) {
@@ -80,7 +81,7 @@ export class EventBar {
     setFitted(document.getElementById('event-title'), `${def.icon} ${def.name} ${boardRound(board)}`);
     // Con el objetivo cumplido, la medalla queda fija con su tiempo (v3.7): falta comprar las mejoras.
     const secured = board.event.medal;
-    // El reloj llega hasta 999:59 y ahí se queda (v3.67.4).
+    // El reloj llega hasta 999:59 y ahí se queda (v3.67.4); desde ahí dice ∞ (v4.1).
     const medal = MEDALS[secured ?? medalFor(obj, eventClock(board))];
     document.getElementById('event-clock').textContent = `${medal.icon} ⏱ ${formatClock(secured ? board.event.time : eventClock(board))}`;
     // Ganado (v3.30): se sigue mirando (y se puede pausar); ya no se reinicia. Se cierra con «Terminar».

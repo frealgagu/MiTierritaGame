@@ -35,6 +35,7 @@ function target(state, id) {
   if (part === 'transport') return { base: def.upgradeBase * TRANSPORT_COST_FACTOR, growth: def.growth, holder: st.transport };
   return { base: def.upgradeBase, growth: def.growth, holder: st };
 }
+export const upgradeTarget = target; // (v4.1: para mejorar toda la zona)
 
 // mode: 1 | 10 | 'max'
 export function quoteUpgrade(state, id, mode) {

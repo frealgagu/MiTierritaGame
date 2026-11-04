@@ -14,6 +14,7 @@ import { checkMastery } from '../sim/legacy.js';
 import { stepAlerts } from '../sim/alerts.js';
 import { clockOf, workOf, workSeconds } from '../sim/calendar.js';
 import { boardObjective, eventItems, refillSlots, secureMedal, stepSupply } from '../sim/events.js';
+import { buyZoneBoost, followRecommended } from '../sim/zoneBoost.js';
 
 export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
 // s de juego que se simulan de verdad al volver; el resto se extrapola. Hasta la v3.65 eran 2 h: con la
@@ -200,6 +201,19 @@ export class Game {
   buy(id, mode) {
     const bought = buyUpgrade(this.state, id, mode, this.bus);
     if (bought) checkMastery(this.state, this.bus);
+    return bought;
+  }
+
+  // Mejorar toda la zona (v4.1): ⬆️ parejo (mode 1 | 10 | 'max') o 🤖 siguiendo la recomendada.
+  boostZone(zoneId, mode) {
+    const plan = buyZoneBoost(this.state, zoneId, mode, this.bus);
+    if (plan) checkMastery(this.state, this.bus);
+    return plan;
+  }
+
+  followRecommended(zoneId) {
+    const bought = followRecommended(this.state, zoneId, this.bus);
+    if (bought.length) checkMastery(this.state, this.bus);
     return bought;
   }
 

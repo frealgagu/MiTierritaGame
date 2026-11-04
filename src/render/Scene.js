@@ -321,7 +321,7 @@ export class Scene {
         this.effects.hop(p.x, p.y, PRODUCTS[productId].color);
       }
     });
-    on('levelUp', ({ id, to, milestone }) => {
+    on('levelUp', ({ id, to, milestone, bulk }) => {
       let [sid, part] = id.split(':');
       // Una ruta se celebra en la estación de esta zona que abastece (si se está viendo esa zona).
       const route = sid === 'route' ? ROUTES_BY_ID[part] : null;
@@ -332,8 +332,13 @@ export class Scene {
       const p = view.anchorPoint(30);
       view.bounce?.('bump');
       this.effects.sparkle(p.x, p.y);
-      if (milestone) this.sound.milestone();
-      else this.sound.levelUp();
+      // Al mejorar toda la zona (v4.1) llegan muchas juntas: un solo sonido por tanda.
+      const quiet = bulk && performance.now() - (this.bulkSoundAt ?? -Infinity) < 250;
+      if (bulk && !quiet) this.bulkSoundAt = performance.now();
+      if (!quiet) {
+        if (milestone) this.sound.milestone();
+        else this.sound.levelUp();
+      }
       this.effects.ring(p.x, p.y + 30);
       const belt = part === 'transport' && milestone === BELT_LEVEL;
       const what = route ? `🚌 ${route.tab} ${t('nivel {n}', { n: to })}` : part === 'transport' ? `${hasBelt(to) ? t('⚡ Banda') : t('🐴 Arrieros')} ${t('nivel {n}', { n: to })}` : t('Nivel {n}', { n: to });

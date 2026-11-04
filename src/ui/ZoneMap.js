@@ -3,12 +3,14 @@ import { ZONE_GEO } from '../data/zoneGeo.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { regionState } from '../sim/regions.js';
+import { chosenDecor } from '../sim/renown.js';
+import { zoneMaxed } from '../sim/legacy.js';
 import { FONT } from '../render/palette.js';
 
 // El mapa de Colombia del selector de zonas (v3.60): primero el país, con cada región del juego de su color;
 // al tocar una región se acerca y muestra sus zonas, cada una en el pueblo que la inspira. Desde la v3.67 es lo
 // primero que se ve en 🗺️ Zonas: el país con la región de ahora resaltada, que enseguida se ve de cerca con la
-// zona de ahora resaltada. Al ir a otra zona, un muñequito camina hasta allá (ver travel).
+// zona de ahora resaltada. Al ir a otra zona, el Willys va hasta allá; a otra región, primero la avioneta (ver travel).
 //   root: la partida principal   getZone: la zona que se ve   onGo(zona): ir a la zona   say(texto): un aviso
 import { t } from '../i18n/index.js';
 
@@ -102,7 +104,7 @@ export class ZoneMap {
     this.say = say;
     this.container = container;
     this.region = null; // la región que se ve de cerca (null: el país)
-    this.busy = false; // mientras camina el muñequito
+    this.busy = false; // mientras va el Willys (o vuela la avioneta)
     this.back = document.createElement('button');
     this.back.className = 'btn small zones-map-back';
     this.back.textContent = t('⬅ Colombia');
@@ -434,7 +436,7 @@ export class ZoneMap {
       el('circle', { r: 4.6 * u, class: 'dot', 'stroke-width': 0.6 * u }, m);
       el('text', { 'font-size': 4.6 * u, 'text-anchor': 'middle', y: 1.6 * u }, m).textContent = st?.unlocked ? zone.icon : '🔒';
       const name = el('text', { 'font-size': 2.8 * u, 'text-anchor': 'middle', y: 8.4 * u, class: 'name', 'stroke-width': 0.8 * u }, m);
-      name.textContent = `${i + 1} · ${zone.name}${st?.complete ? ' 🏁' : ''}`;
+      name.textContent = `${i + 1} · ${zone.name}${st?.complete ? (zoneMaxed(state, z) ? ' 🏁' : ' 🚩') : ''}`;
       m.addEventListener('click', () => this.pickZone(z));
     });
   }
@@ -451,8 +453,8 @@ export class ZoneMap {
   }
 
   // El viaje a otra zona (v3.67, también al terminar una zona o al elegirla en la lista). En la misma región,
-  // el muñequito camina por el mapa de la región. A otra región: la región de ahora, se aleja al país, se
-  // resalta la región nueva, se acerca a ella y el muñequito llega caminando a la zona. Al llegar, se va.
+  // el Willys va por el mapa de la región. A otra región (v4.1): se aleja al país, la avioneta vuela hasta la
+  // región nueva, se acerca a ella y el Willys entra desde el borde, del lado por donde llegó el avión.
   async travel(target) {
     clearTimeout(this.peek);
     this.busy = true;
@@ -461,7 +463,7 @@ export class ZoneMap {
     const there = REGION_OF_ZONE[target];
     if (here === there) {
       if (this.region !== here) await this.zoomTo(here);
-      await this.walk(ZONE_POS[from], ZONE_POS[target], target);
+      await this.drive(ZONE_POS[from], ZONE_POS[target], target);
     } else {
       // Si ya se está mirando la región de destino (se eligió la zona ahí), no hace falta el recorrido.
       if (this.region !== there) {
@@ -472,14 +474,16 @@ export class ZoneMap {
         }
         this.highlight = here;
         await this.zoomTo(null);
-        await wait(350);
+        await wait(250);
         this.highlight = there;
         this.paint();
-        await wait(750);
+        const v = ZONES_VIEW[there];
+        await this.fly(ZONE_POS[from], [v.x + v.w / 2, v.y + v.h / 2]);
+        await wait(200);
         await this.zoomTo(there);
       }
-      // Entra caminando desde el borde del mapa, del lado de donde viene.
-      await this.walk(this.edgeToward(proj(ZONE_GEO[from]), ZONE_POS[target]), ZONE_POS[target], target);
+      // Entra desde el borde del mapa, del lado de donde viene.
+      await this.drive(this.edgeToward(proj(ZONE_GEO[from]), ZONE_POS[target]), ZONE_POS[target], target);
     }
     await wait(250);
     this.busy = false;
@@ -497,32 +501,107 @@ export class ZoneMap {
     return [to[0] + dx * k, to[1] + dy * k];
   }
 
-  // El muñequito camina de a a b (en lo que se ve), con el camino punteado; la zona de destino se resalta.
-  async walk(a, b, target) {
+  // El Willys va de a a b (en lo que se ve), por el camino punteado; la zona de destino se resalta (v4.1: antes
+  // caminaba un muñequito). Sale del color que se eligió para el Willys en la región de destino.
+  async drive(a, b, target) {
     const u = this.vb.w / 100;
     this.overlay.querySelector(`[data-zone="${target}"]`)?.classList.add('target');
     el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], class: 'zones-map-road', 'stroke-width': 0.7 * u, 'stroke-dasharray': `${1.4 * u} ${1.1 * u}` }, this.overlay);
-    const walker = el('g', { class: 'zones-map-walker' }, this.overlay);
-    el('ellipse', { rx: 2.6 * u, ry: 0.9 * u, class: 'shadow' }, walker);
-    const body = el('text', { 'font-size': 7 * u, 'text-anchor': 'middle' }, walker);
-    body.textContent = '🚶';
-    // El emoji mira a la izquierda: hacia la derecha se voltea.
-    const flip = b[0] > a[0] ? -1 : 1;
+    const color = chosenDecor(this.root.state.profile, REGION_OF_ZONE[target]).willys.color;
+    const car = el('g', { class: 'zones-map-walker' }, this.overlay);
+    el('ellipse', { rx: 4.6 * u, ry: 0.9 * u, class: 'shadow' }, car);
+    const body = willys(car, `#${color.toString(16).padStart(6, '0')}`);
+    // El dibujo mira a la derecha: hacia la izquierda se voltea.
+    const flip = b[0] < a[0] ? -1 : 1;
     const ms = 900 + Math.min(1200, (Math.hypot(b[0] - a[0], b[1] - a[1]) / u) * 22);
-    const t0 = performance.now();
-    await new Promise((ok) => {
-      const step = (now) => {
-        const t = Math.min(1, (now - t0) / ms);
-        const k = ease(t);
-        const x = a[0] + (b[0] - a[0]) * k;
-        const y = a[1] + (b[1] - a[1]) * k;
-        const hop = Math.abs(Math.sin((t * ms) / 110)) * 1.2 * u;
-        walker.setAttribute('transform', `translate(${x} ${y})`);
-        body.setAttribute('transform', `translate(0 ${-hop}) scale(${flip} 1)`);
-        if (t < 1) requestAnimationFrame(step);
-        else ok();
-      };
-      requestAnimationFrame(step);
+    await animate(ms, (t) => {
+      const k = ease(t);
+      // Brinca por la trocha: saltitos cortos y un cabeceo.
+      const bump = Math.abs(Math.sin((t * ms) / 90)) * 0.5 * u;
+      const tilt = Math.sin((t * ms) / 130) * 3;
+      car.setAttribute('transform', `translate(${a[0] + (b[0] - a[0]) * k} ${a[1] + (b[1] - a[1]) * k})`);
+      body.setAttribute('transform', `translate(0 ${-bump}) scale(${flip * 0.42 * u} ${0.42 * u}) rotate(${tilt})`);
     });
   }
+
+  // La avioneta vuela de a a b sobre el país (v4.1): en arco, con su sombra en el suelo, que se aleja mientras
+  // sube y se acerca al aterrizar.
+  async fly(a, b) {
+    const u = this.vb.w / 100;
+    const [dx, dy] = [b[0] - a[0], b[1] - a[1]];
+    const dist = Math.hypot(dx, dy) || 1;
+    // El arco se curva hacia arriba de la pantalla.
+    const side = dx >= 0 ? -1 : 1;
+    const c = [(a[0] + b[0]) / 2 + (side * -dy / dist) * dist * 0.25, (a[1] + b[1]) / 2 + (side * dx / dist) * dist * 0.25];
+    const at = (t) => [(1 - t) ** 2 * a[0] + 2 * (1 - t) * t * c[0] + t * t * b[0], (1 - t) ** 2 * a[1] + 2 * (1 - t) * t * c[1] + t * t * b[1]];
+    el('path', { d: `M ${a[0]} ${a[1]} Q ${c[0]} ${c[1]} ${b[0]} ${b[1]}`, class: 'zones-map-road', 'stroke-width': 0.45 * u, 'stroke-dasharray': `${1.2 * u} ${1.2 * u}` }, this.overlay);
+    const shadow = el('g', { opacity: 0.22 }, this.overlay);
+    plane(shadow, true);
+    const g = el('g', {}, this.overlay);
+    const prop = plane(g);
+    const ms = 1300 + Math.min(1100, (dist / u) * 12);
+    await animate(ms, (t) => {
+      const k = ease(t);
+      const [x, y] = at(k);
+      const [x2, y2] = at(Math.min(1, k + 0.01));
+      const angle = (Math.atan2(y2 - y, x2 - x) * 180) / Math.PI;
+      const lift = Math.sin(Math.PI * k); // 0 en tierra, 1 en lo más alto
+      const size = (0.42 + 0.16 * lift) * u;
+      g.setAttribute('transform', `translate(${x} ${y - lift * 2.5 * u}) rotate(${angle}) scale(${size})`);
+      shadow.setAttribute('transform', `translate(${x + lift * 2 * u} ${y + lift * 1.5 * u}) rotate(${angle}) scale(${0.42 * u})`);
+      prop.setAttribute('transform', `scale(1 ${Math.cos((t * ms) / 25)})`);
+    });
+  }
+}
+
+// Una animación de `ms` milisegundos: `frame(t)` con t de 0 a 1.
+const animate = (ms, frame) =>
+  new Promise((ok) => {
+    const t0 = performance.now();
+    frame(0); // ya en su sitio y a su tamaño desde el primer cuadro
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / ms);
+      frame(t);
+      if (t < 1) requestAnimationFrame(step);
+      else ok();
+    };
+    requestAnimationFrame(step);
+  });
+
+// El Willys de lado, mirando a la derecha, con las ruedas en el suelo (0, 0): carrocería del color dado,
+// capó, parabrisas, carpa de lona, la llanta de repuesto atrás y el farol.
+function willys(parent, color) {
+  const g = el('g', {}, parent);
+  const ink = '#3a2418';
+  el('path', { d: 'M -9.5 -13 H 1 L 2 -8.5 H -10.5 Z', fill: '#cdb683', stroke: ink, 'stroke-width': 0.7, 'stroke-linejoin': 'round' }, g);
+  el('path', { d: 'M -8.5 -12.6 V -8.7 M -4.5 -12.6 V -8.7', stroke: '#a8925f', 'stroke-width': 0.6 }, g);
+  el('path', { d: 'M 1.2 -13.2 L 2.4 -8.4', stroke: '#6b6b6b', 'stroke-width': 0.9, 'stroke-linecap': 'round' }, g);
+  el('circle', { cx: -11, cy: -6, r: 2, fill: '#2b2b2b', stroke: ink, 'stroke-width': 0.5 }, g);
+  el('path', { d: 'M -10.5 -8.5 H 2.2 L 2.6 -8.6 H 10 Q 10.8 -8.6 10.8 -7.6 V -4.2 Q 10.8 -3.2 9.8 -3.2 H -9.6 Q -10.6 -3.2 -10.6 -4.2 Z', fill: color, stroke: ink, 'stroke-width': 0.7, 'stroke-linejoin': 'round' }, g);
+  el('path', { d: 'M -9.2 -3.3 A 3.3 3.3 0 0 1 -2.8 -3.3 M 2.8 -3.3 A 3.3 3.3 0 0 1 9.2 -3.3', fill: 'none', stroke: ink, 'stroke-width': 1.1 }, g);
+  el('circle', { cx: 10.1, cy: -7, r: 0.75, fill: '#ffe9a0', stroke: ink, 'stroke-width': 0.4 }, g);
+  for (const x of [-6, 6]) {
+    el('circle', { cx: x, cy: -2.6, r: 2.6, fill: '#2b2b2b', stroke: ink, 'stroke-width': 0.5 }, g);
+    el('circle', { cx: x, cy: -2.6, r: 1, fill: '#c9c2b4' }, g);
+  }
+  return g;
+}
+
+// La avioneta vista desde arriba, con la nariz a la derecha: alas amarillas, fuselaje blanco y la cola con
+// azul y rojo. `flat`: solo la silueta (para la sombra). Devuelve la hélice, que gira.
+function plane(parent, flat = false) {
+  const ink = flat ? 'none' : '#3a2418';
+  const paint = (c) => (flat ? '#000' : c);
+  const sw = flat ? 0 : 0.5;
+  el('path', { d: 'M -8.5 -4 H -6.8 L -6 0 L -6.8 4 H -8.5 L -8 0 Z', fill: paint('#2e6fd1'), stroke: ink, 'stroke-width': sw, 'stroke-linejoin': 'round' }, parent);
+  el('path', { d: 'M 0.5 -11 H 3.8 L 3.4 11 H 0.5 Z', fill: paint('#f2c14e'), stroke: ink, 'stroke-width': sw, 'stroke-linejoin': 'round' }, parent);
+  el('path', { d: 'M -9 0 Q -8 -1.5 -2 -1.6 L 7 -1.4 Q 9.6 -1 9.6 0 Q 9.6 1 7 1.4 L -2 1.6 Q -8 1.5 -9 0 Z', fill: paint('#fbf6ec'), stroke: ink, 'stroke-width': sw }, parent);
+  if (!flat) {
+    el('path', { d: 'M -8.6 -0.6 H -3 M -8.6 0.6 H -3', stroke: '#d7263d', 'stroke-width': 0.5 }, parent);
+    el('ellipse', { cx: 4.8, cy: 0, rx: 1.6, ry: 0.9, fill: '#7fb3d5', stroke: ink, 'stroke-width': 0.35 }, parent);
+  }
+  const prop = el('g', {}, parent);
+  // La hélice, en la nariz: gira achicándose de alto (está centrada en y = 0).
+  el('path', { d: 'M 10.1 -3 V 3', stroke: flat ? '#000' : '#6b6b6b', 'stroke-width': 0.8, 'stroke-linecap': 'round' }, prop);
+  return prop;
 }

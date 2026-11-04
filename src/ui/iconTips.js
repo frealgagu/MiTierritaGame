@@ -28,7 +28,8 @@ const GENERAL = {
   '⛔': t('Problema'),
   '↪️': t('Se vende sin procesar'),
   '🔒': t('Por abrir'),
-  '🏁': t('Zona completa'),
+  '🚩': t('Zona completa'),
+  '🏁': t('Zona al máximo'),
 };
 
 const clean = (s) => s.replace(/️/g, '');

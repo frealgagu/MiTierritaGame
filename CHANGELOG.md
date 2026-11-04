@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## v4.1.0 — Toda la zona de una vez, en Willys y en avioneta
+- **⬆️ Mejorar toda la zona,** en la cadena 🔗. Después de reiniciar una región por primera vez, se desbloquea con **10 ⭐ de Renombre** y queda para todas sus zonas. Dos botones:
+  - **⬆️ Toda la zona (+1, +10 o Máx):** sube parejo las estaciones, los arrieros y la bodega, empezando por lo más bajo, y dice antes cuánto cuesta.
+  - **🤖 Recomendada:** compra una y otra vez la mejora recomendada mientras alcance el dinero (aunque sea de otra zona que abastece a esta, o una investigación) y al final dice qué compró.
+  - También funciona en los eventos que ya ganaste con oro.
+- **🗺️ En el mapa, el viaje va en Willys** (del color que le elegiste a la región) por la trocha, y **entre regiones en avioneta**: vuela sobre Colombia hasta la región nueva y el Willys entra desde el lado por donde llegó.
+- **Lista de zonas:** cada región muestra siempre, en su segundo renglón, cuántas zonas lleva completas 🚩, cuántas tiene al máximo 🏁, su dinero y lo que gana por segundo (entre paréntesis). Una zona queda **🏁 Al máximo** cuando sus estaciones, sus arrieros, su bodega y las rutas que le llegan están en el nivel 100 y tiene todas sus investigaciones y objetivos; antes de eso, **🚩 Completada**. El mapa y los objetivos usan las mismas banderas.
+- **⏱ ∞ en los eventos:** pasado 999:59 el reloj del evento dice ∞ (el de arriba seguía a 1000:00).
+
 ## v4.0.3 — Cadenas de colores y adiós al toque fantasma
 - **🔗 En la cadena, cada producto va en un color bien distinto** (verde, naranja, morado, mostaza, turquesa, rosado…): cuando una estación saca dos productos, cada uno sigue por su tubo de otro color, y cuando un producto se convierte en otro, el tubo cambia de color. La Compostera también recibe la pulpa en su color (antes salía en azul, como si llegara de otra zona).
 - **Corregido de raíz:** al tocar una estación en el mapa, el panel ya no se abre en la pestaña de los arrieros 🐴. Al soltar el dedo, el teléfono mandaba un segundo «clic» que caía en lo que el panel acababa de poner bajo el dedo; ahora ese clic no se produce. Probado tocando cada estación de las 48 zonas.
