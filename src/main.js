@@ -262,6 +262,18 @@ async function start() {
     eventBar.paintExit();
     exitHint();
   });
+  // Viajes entre zonas (v4.1.3): con el viaje en el mapa (lo de siempre) o directo, sin animación.
+  const travelSelect = document.getElementById('travel-mode');
+  const travelHint = () => {
+    document.getElementById('travel-hint').textContent =
+      travelSelect.value === 'direct' ? t('Se pasa a la otra zona enseguida, sin el viaje en el mapa.') : t('El Willys y la avioneta muestran el viaje en el mapa.');
+  };
+  travelSelect.value = game.state.settings.travel === 'direct' ? 'direct' : 'trip';
+  travelHint();
+  travelSelect.addEventListener('change', () => {
+    game.state.settings.travel = travelSelect.value;
+    travelHint();
+  });
   // El evento de una zona se guarda en la partida de su región (v3.6: Santander también tiene eventos);
   // los cupos, en la principal (v3.30).
   const enterEvent = (zoneId) => {

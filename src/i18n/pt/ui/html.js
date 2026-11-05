@@ -112,4 +112,8 @@ export default {
   // v4.1.1: el panel del dinero
   '💰 De dónde sale': '💰 De onde vem',
   'Lo que gana por segundo la región que estás viendo, zona por zona, y lo que lo multiplica.': 'O que a região que você está vendo ganha por segundo, zona por zona, e o que multiplica.',
+  // v4.1.3: los viajes entre zonas
+  'Viajes entre zonas': 'Viagens entre zonas',
+  '🗺️ Con el viaje': '🗺️ Com a viagem',
+  '⚡ Directo': '⚡ Direto',
 };

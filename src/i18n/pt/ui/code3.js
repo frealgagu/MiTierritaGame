@@ -167,4 +167,7 @@ export default {
   '🪱 Compost: lo que vende la Finca': '🪱 Composto: o que a Fazenda vende',
   'Lo que lo multiplica': 'O que multiplica',
   'Nada todavía: llega con las investigaciones, los reinicios y el verano.': 'Nada ainda: vem com as pesquisas, os reinícios e o verão.',
+  // v4.1.3: los viajes entre zonas
+  'Se pasa a la otra zona enseguida, sin el viaje en el mapa.': 'Você passa para a outra zona na hora, sem a viagem no mapa.',
+  'El Willys y la avioneta muestran el viaje en el mapa.': 'O Willys e o aviãozinho mostram a viagem no mapa.',
 };

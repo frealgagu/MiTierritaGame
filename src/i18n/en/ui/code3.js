@@ -167,4 +167,7 @@ export default {
   '🪱 Compost: lo que vende la Finca': '🪱 Compost: what the Farm sells',
   'Lo que lo multiplica': 'What multiplies it',
   'Nada todavía: llega con las investigaciones, los reinicios y el verano.': 'Nothing yet: it comes with upgrades, restarts and summer.',
+  // v4.1.3: los viajes entre zonas
+  'Se pasa a la otra zona enseguida, sin el viaje en el mapa.': 'You go straight to the other zone, without the trip on the map.',
+  'El Willys y la avioneta muestran el viaje en el mapa.': 'The Willys and the small plane show the trip on the map.',
 };
