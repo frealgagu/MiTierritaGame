@@ -457,6 +457,8 @@ export class ZoneMap {
   // región nueva, se acerca a ella y el Willys entra desde el borde, del lado por donde llegó el avión.
   async travel(target) {
     clearTimeout(this.peek);
+    // «⚡ Directo» (v4.1.3, en el menú): sin el viaje.
+    if (this.root.state.settings.travel === 'direct') return this.onGo(target);
     this.busy = true;
     const from = this.getZone();
     const here = REGION_OF_ZONE[from];

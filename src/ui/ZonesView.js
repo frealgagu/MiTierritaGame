@@ -74,9 +74,14 @@ export class ZonesView {
   }
 
   // Ir a otra zona mostrando el viaje en el mapa (v3.67): al elegirla en la lista o al terminar una zona.
+  // Con la opción «⚡ Directo» del menú (v4.1.3), sin el viaje: se pasa enseguida.
   travel(zoneId) {
     if (this.map.busy) return;
     this.close();
+    if (this.root.state.settings.travel === 'direct') {
+      this.mapModal.hidden = true;
+      return this.onGo(zoneId);
+    }
     this.mapModal.hidden = false;
     this.map.showHere();
     this.map.travel(zoneId);

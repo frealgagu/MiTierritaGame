@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v4.1.3 — Viajes directos
+- **🚙 Viajes entre zonas,** nueva opción en el menú ⚙️: **🗺️ Con el viaje** (lo de siempre: el Willys y la avioneta en el mapa) o **⚡ Directo**, que pasa a la otra zona enseguida, sin el viaje. Vale para todos los viajes: al elegir una zona en la lista o en el mapa, y al pasar a la siguiente cuando se completa una zona. Viene con el viaje.
+
 ## v4.1.2 — Salento sin puerto
 - **Salento no tiene puerto**, y el juego ya no lo pinta así. El **Patio de contenedores** pasa a ser el **Despacho de exportación**: una bodega donde un montacargas llena el contenedor que se lleva la tractomula, sin la grúa de puerto. El letrero de salida dice **«A Buenaventura ➜»**, porque el café baja por carretera hasta el puerto.
 - El evento del Pueblo ahora es **🚚 La tractomula sale el viernes**: hay que llenar los contenedores antes de que salga la tractomula, pero el montacargas está varado. Sus compras son los repuestos, el montacargas arreglado y el turno extra de los coteros. La investigación **Grúa de contenedores** se llama ahora **Segundo montacargas**, y el logro «Al puerto» lleva una tractomula 🚚 en vez del barco.
