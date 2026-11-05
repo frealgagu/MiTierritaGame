@@ -123,10 +123,11 @@ export class ZonesView {
       // Al máximo (v4.1): 🏁; completada, 🚩. El de al máximo no se dice mientras no haya ninguna.
       const maxed = new Set(region.zones.filter((z) => state.zones[z]?.complete && zoneMaxed(state, z)));
       const income = opened.reduce((sum, z) => sum + analyzeChain(state, z).income, 0);
-      const here = region.zones.includes(this.getZone()) ? ` · ${t('📍 Aquí estás')}` : '';
+      // «Aquí estás» en el primer renglón, a la derecha del nombre (v4.1.1: así no hace un tercero).
+      const here = region.zones.includes(this.getZone()) ? `<span class="zones-here">${t('📍 Aquí estás')}</span>` : '';
       // Siempre en dos renglones (v4.1): el nombre arriba; abajo, cómo va y el dinero de la región.
       const counts = `${done}/${region.zones.length} 🚩${maxed.size ? ` · ${maxed.size}/${region.zones.length} 🏁` : ''}`;
-      const head = `<button class="zones-region research-other" data-fold="${region.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${region.icon} ${region.name}<small>${counts} · 💰 ${formatNumber(state.coins)} (${formatRate(income)} 💰/s)${here}</small></button>`;
+      const head = `<button class="zones-region research-other" data-fold="${region.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${region.icon} ${region.name}${here}<small>${counts} · 💰 ${formatNumber(state.coins)} (${formatRate(income)} 💰/s)</small></button>`;
       if (folded) return group(head);
       const rows = region.zones.map((id, i) => {
         const zone = ZONES_BY_ID[id];

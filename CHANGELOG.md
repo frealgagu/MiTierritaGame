@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v4.1.1 — Construir, subir al próximo hito y ver de dónde sale el dinero
+- **Abajo de la cadena 🔗, dos botones** (como «Comprar todas» en las investigaciones):
+  - **🏗️ Construir:** construye, en el orden de la cadena, todas las estaciones que falten y alcance el dinero. Está desde el principio; si no alcanza para ninguna, dice cuánto cuesta la siguiente.
+  - **⬆️ Todo al nivel X:** toma lo más bajo de la zona y lo sube al siguiente hito (10, 25, 50, 75 o 100) junto con todo lo que esté por debajo de ese hito: estaciones, arrieros, bodega y las chivas que traen productos de otras zonas. Lo que ya está más alto se queda igual. Solo se puede si alcanza para todo. Se desbloquea igual que antes (tras el primer reinicio de la región, 10 ⭐) y reemplaza a +1/+10/Máx y a «Recomendada».
+- **💰 De dónde sale:** al tocar el dinero de la barra de arriba se abre un panel con lo que gana cada zona de la región, lo que vende el Willys en la zona que ves (cuánto, a qué precio y lo que se queda sin vender) y lo que lo multiplica (reinicios, temporada, investigaciones, segundo Willys, compost).
+- **Lista de zonas:** «📍 Aquí estás» va en el renglón del nombre de la región, para que la cabecera no pase de dos renglones.
+
 ## v4.1.0 — Toda la zona de una vez, en Willys y en avioneta
 - **⬆️ Mejorar toda la zona,** en la cadena 🔗. Después de reiniciar una región por primera vez, se desbloquea con **10 ⭐ de Renombre** y queda para todas sus zonas. Dos botones:
   - **⬆️ Toda la zona (+1, +10 o Máx):** sube parejo las estaciones, los arrieros y la bodega, empezando por lo más bajo, y dice antes cuánto cuesta.
