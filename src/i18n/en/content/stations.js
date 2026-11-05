@@ -38,7 +38,7 @@ export default {
   fonda: 'Fonda',
   basket_shop: 'Basket Workshop',
   gift_wrap: 'Gift Wrapping',
-  export_dock: 'Container Yard',
+  export_dock: 'Export Dispatch',
   guava_grove: 'Guava Orchard',
   guava_pulper: 'Guava Pulper',
   guava_pot: 'Bocadillo Pot',

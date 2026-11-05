@@ -83,7 +83,7 @@ export default {
   camion_cacao: 'Truck for the Cacao Grove', tostador_bombo: 'Drum roaster', molino_bolas: 'Ball mill', temperadora: 'Tempering machine', cacao_fino: 'Fine flavor cacao',
   maiz_hibrido: 'Hybrid corn', desgranadora_motor: 'Motorized sheller', piladora_electrica: 'Electric huller', camion_maiz: 'Truck for the Cornfield', molino_discos: 'Disc mill',
   budare_grande: 'Big budare', plancha_doble: 'Double griddle', receta_abuela: "Grandma's recipe", catadores: 'Expert cuppers', greca_doble: 'Two-tap urn',
-  tractomula: 'Semi-truck', mas_mesas: 'More tables at the Fonda', tejedoras: 'Fique weavers', monos: 'Ribbons and bows', grua: 'Container crane', denominacion: 'Designation of origin',
+  tractomula: 'Semi-truck', mas_mesas: 'More tables at the Fonda', tejedoras: 'Fique weavers', monos: 'Ribbons and bows', grua: 'Second forklift', denominacion: 'Designation of origin',
   injerto_guayabo: 'Grafted guava trees', despulpadora_motor: 'Motorized pulper', moldes_dobles: 'Double molds', guayaba_roja: 'Red guava', cortadora_hilo: 'Wire cutter',
   veleno: 'Vélez designation', envolvedoras: 'Vélez wrappers', caney_grande: 'Big caney', abono_tabaco: 'Tobacco fertilizer', mesas_despalillar: 'Destemming tables',
   chiva_s: 'Chiva for the Tobacco Farm', pilones_altos: 'Taller piles', torcedoras: 'Rolling school', tabaco_negro: 'Dark tobacco with origin', abono_fique: 'Fique fertilizer',

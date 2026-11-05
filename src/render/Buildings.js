@@ -1352,38 +1352,51 @@ const DRAW = {
     this.roofTop = iso(hx + 1.05, hy + 0.7, H + 16);
   },
 
-  // Patio de contenedores: contenedores apilados de colores y una grúa pórtico que va y viene.
+  // Despacho de exportación (v4.1.2; antes, un patio de contenedores con grúa de puerto, pero Salento no tiene
+  // puerto): la bodega, contenedores esperando turno y la tractomula con su contenedor, que sale para
+  // Buenaventura. Un montacargas va y viene de la bodega al camión con las canastas.
   export_dock(g, x, y, ctx) {
     g.poly(isoPoly([[x + 0.1, y + 0.1], [x + 2.9, y + 0.1], [x + 2.9, y + 2.9], [x + 0.1, y + 2.9]])).fill({ color: 0x8f8f8f, alpha: 0.5 });
-    const colors = [0x2e6fd1, PAL.balconyRed, PAL.balconyGreen, 0xe67e22, 0x8e44ad, PAL.balconyYellow];
-    const stacks = [[0.3, 0.4], [0.3, 1.1], [1.6, 0.4]];
-    const levels = 1 + Math.min(ctx.tier, 3);
-    stacks.forEach(([sx, sy], i) => {
-      for (let k = 0; k < (i === 2 ? Math.max(1, levels - 1) : levels); k++) container(g, x + sx, y + sy, k * 11, colors[(i * 2 + k) % colors.length]);
-    });
-    // Rieles de la grúa.
-    for (const ry of [0.2, 2.6]) {
-      const a = iso(x + 0.1, y + ry);
-      const b = iso(x + 2.9, y + ry);
-      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 2, color: 0x555555 });
+    const hx = x + 0.2;
+    const hy = y + 0.2;
+    house(this, g, hx, hy, 1.5, 1.25, 26, ctx, { wall: 0xe9e1cf, roofH: 12 });
+    door(g, hx, hy, 1.25, 0.75, 18, 0x7a5230);
+    windowOnRight(this, g, hx, hy, 1.5, 0.6, 12, 0xffffff);
+    const roof = this.roofTop;
+    // Los contenedores que esperan: más con cada hito.
+    const colors = [0x2e6fd1, PAL.balconyRed, PAL.balconyGreen, 0xe67e22];
+    const levels = 1 + Math.min(ctx.tier, 2);
+    for (let k = 0; k < levels; k++) container(g, x + 1.85, y + 0.3, k * 11, colors[k % colors.length]);
+    for (let k = 0; k < Math.max(1, levels - 1); k++) container(g, x + 1.85, y + 1.0, k * 11, colors[(k + 2) % colors.length]);
+    // La tractomula: la cabina roja a un lado (a la vista, lejos del letrero de la bodega) y el remolque con su
+    // contenedor.
+    const ty = y + 2.2;
+    box(g, x + 0.2, ty, 0.55, 0.6, 15, 0xc0392b, { z: 3 });
+    box(g, x + 0.2, ty + 0.05, 0.25, 0.5, 6, 0xc0392b, { z: 18 });
+    g.poly(isoPoly([[x + 0.2, ty + 0.6, 10], [x + 0.75, ty + 0.6, 10], [x + 0.75, ty + 0.6, 16], [x + 0.2, ty + 0.6, 16]])).fill(0x9fd3ec).stroke(OUTLINE);
+    box(g, x + 0.8, ty + 0.05, 1.55, 0.5, 5, 0x3d3d3d, { z: 3 });
+    container(g, x + 1.05, ty, 8, 0xd35400);
+    for (const wx of [0.45, 1.2, 2.1]) {
+      const w = iso(x + wx, ty + 0.6, 3);
+      g.ellipse(w.x, w.y, 4.2, 3.2).fill(0x222222).stroke(OUTLINE);
+      g.ellipse(w.x, w.y, 1.6, 1.2).fill(0xbbbbbb);
     }
-    const crane = new Graphics();
-    this.anim.addChild(crane);
-    const H = 52 + ctx.up;
-    this.roofTop = iso(x + 1.5, y + 1.4, H + 4);
-    this.lights.push({ x: this.roofTop.x, y: this.roofTop.y + 6, r: 30 });
+    // El montacargas, de la puerta de la bodega a la cola del camión.
+    const lift = new Graphics();
+    this.anim.addChild(lift);
+    this.roofTop = roof;
+    this.lights.push({ x: roof.x, y: roof.y + 8, r: 30 });
     this.animate = (time) => {
-      crane.clear();
-      const cx = x + 0.6 + (Math.sin(time * 0.6) * 0.5 + 0.5) * 1.8;
-      for (const ry of [0.2, 2.6]) box(crane, cx - 0.06, y + ry - 0.06, 0.12, 0.12, H, PAL.balconyYellow);
-      const a = iso(cx, y + 0.2, H);
-      const b = iso(cx, y + 2.6, H);
-      crane.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 4, color: 0xd9a400 });
-      const hookY = y + 1.4;
-      const top = iso(cx, hookY, H);
-      const drop = 14 + (Math.sin(time * 1.2) * 0.5 + 0.5) * 12;
-      crane.moveTo(top.x, top.y).lineTo(top.x, top.y + drop).stroke({ width: 1, color: 0x333333 });
-      container(crane, cx - 0.35, hookY - 0.15, H - drop - 10, 0x2e6fd1, 0.7);
+      lift.clear();
+      const k = Math.sin(time * 0.9) * 0.5 + 0.5;
+      const fx = x + 0.35 + k * 1.0;
+      const fy = y + 1.62;
+      const up = 4 + (1 - Math.abs(k - 0.5) * 2) * 6;
+      box(lift, fx, fy, 0.38, 0.28, 7, 0xe8b90f);
+      box(lift, fx + 0.08, fy + 0.04, 0.16, 0.2, 5, 0x333333, { z: 7 });
+      const m = iso(fx + 0.4, fy + 0.14, 0);
+      lift.moveTo(m.x, m.y).lineTo(m.x, m.y - 18).stroke({ width: 1.6, color: 0x555555 });
+      box(lift, fx + 0.42, fy + 0.02, 0.24, 0.24, 6, 0xb07a3a, { z: up });
     };
     this.animate(0);
   },

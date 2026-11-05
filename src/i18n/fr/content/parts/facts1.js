@@ -37,7 +37,7 @@ export default {
   fonda: ['Le petit-déjeuner paysan comprend arepa, œufs, bouillon et chocolat.'],
   basket_shop: ['Le fique est une plante à fibre solide pour les sacs et les paniers.'],
   gift_wrap: ['Les paniers-cadeaux réunissent des produits de plusieurs régions.'],
-  export_dock: ['Le café colombien part dans le monde en conteneurs depuis les ports.'],
+  export_dock: ['Le café descend en camion jusqu’au port et part dans le monde en conteneurs.'],
   guava_grove: ['Vélez et Barbosa, à Santander, sont la terre du bocadillo, la pâte de goyave.', 'La goyave contient plus de vitamine C que l’orange.'],
   guava_pulper: ['La dépulpeuse sépare la pulpe des graines dures de la goyave.'],
   guava_pot: ['Le bocadillo cuit au chaudron, en remuant, jusqu’à ce qu’il « prenne ».'],

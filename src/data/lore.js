@@ -45,7 +45,7 @@ export const FACTS = {
   fonda: ['El desayuno campesino lleva arepa, huevos, caldo y chocolate.'],
   basket_shop: ['El fique es una planta de fibra fuerte para costales y canastos.'],
   gift_wrap: ['Las canastas de regalo juntan productos de varias regiones.'],
-  export_dock: ['El café colombiano sale al mundo en contenedores desde los puertos.'],
+  export_dock: ['El café baja en tractomula al puerto y sale al mundo en contenedores.'],
   // Santander · La Guayabera
   guava_grove: ['Vélez y Barbosa, en Santander, son la tierra del bocadillo.', 'La guayaba tiene más vitamina C que la naranja.'],
   guava_pulper: ['La despulpadora separa la pulpa de las semillas duras de la guayaba.'],

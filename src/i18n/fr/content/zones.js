@@ -6,7 +6,7 @@ export default {
   lecheria: ['Laiterie', null, { panela: '⬅ Du Moulin à canne', leche: 'Vers la Cacaoyère ➜', queso: 'Fromage vers le Champ de maïs ⬇', mantequilla: 'Beurre vers le Champ de maïs ⬇', arequipe: 'Arequipe vers Salento ➜' }],
   cacaotal: ['Cacaoyère', null, { panela_cacao: '⬅ Panela du Moulin à canne', leche: '⬅ Lait de la Laiterie', chocolatinas: 'Barres de chocolat vers Salento ➜', chocolate_mesa: 'Chocolat vers Salento ⬇' }],
   maizal: ['Champ de maïs', null, { queso: '⬅ Fromage de la Laiterie', mantequilla: '⬅ Beurre', arepas: 'Vers Salento ➜' }],
-  pueblo: ['Salento', 'Vers le port ➜', { cafe: '⬅ Café de la Ferme', panela_pueblo: '⬅ Panela du Moulin à canne', chocolatinas: '⬅ Barres de chocolat', chocolate_mesa: '⬅ Chocolat de la Cacaoyère', arepas: 'Arepas du Champ de maïs ⬆', arequipe: 'Arequipe de la Laiterie ⬆' }],
+  pueblo: ['Salento', 'Vers Buenaventura ➜', { cafe: '⬅ Café de la Ferme', panela_pueblo: '⬅ Panela du Moulin à canne', chocolatinas: '⬅ Barres de chocolat', chocolate_mesa: '⬅ Chocolat de la Cacaoyère', arepas: 'Arepas du Champ de maïs ⬆', arequipe: 'Arequipe de la Laiterie ⬆' }],
   guayabera: ['Goyaveraie', 'Vers Vélez ➜', { bocadillo: 'Bocadillo vers le Ranch ➜', dulces: 'Vers Barichara ➜' }],
   tabacal: ['Plantation de tabac', 'Vers Piedecuesta ➜', { tabaco: 'Vers la Fiquerie ➜', tabacos: 'Vers Barichara ➜' }],
   fiquera: ['Fiquerie', 'Vers Curití ➜', { tabaco: '⬅ De la Plantation de tabac', cabuya: 'Fil de fique vers le Ranch ➜', costales: 'Sacs vers les Fourmis ⬇', alpargatas: 'Espadrilles ⬇', tercios: 'Ballots vers Barichara ➜' }],

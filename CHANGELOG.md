@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v4.1.2 — Salento sin puerto
+- **Salento no tiene puerto**, y el juego ya no lo pinta así. El **Patio de contenedores** pasa a ser el **Despacho de exportación**: una bodega donde un montacargas llena el contenedor que se lleva la tractomula, sin la grúa de puerto. El letrero de salida dice **«A Buenaventura ➜»**, porque el café baja por carretera hasta el puerto.
+- El evento del Pueblo ahora es **🚚 La tractomula sale el viernes**: hay que llenar los contenedores antes de que salga la tractomula, pero el montacargas está varado. Sus compras son los repuestos, el montacargas arreglado y el turno extra de los coteros. La investigación **Grúa de contenedores** se llama ahora **Segundo montacargas**, y el logro «Al puerto» lleva una tractomula 🚚 en vez del barco.
+- Nada cambia en la economía: mismos productos, costos y avances.
+
 ## v4.1.1 — Construir, subir al próximo hito y ver de dónde sale el dinero
 - **Abajo de la cadena 🔗, dos botones** (como «Comprar todas» en las investigaciones):
   - **🏗️ Construir:** construye, en el orden de la cadena, todas las estaciones que falten y alcance el dinero. Está desde el principio; si no alcanza para ninguna, dice cuánto cuesta la siguiente.

@@ -139,22 +139,22 @@ export const EVENTS = [
   },
   {
     id: 'barco',
-    blame: 'la grúa varada', // lo que frena (v3.12: «al 40 % por culpa de …»)
+    blame: 'el montacargas varado', // lo que frena (v3.12: «al 40 % por culpa de …»)
     zone: 'pueblo',
-    icon: '🚢',
-    name: 'El barco sale el viernes',
+    icon: '🚚',
+    name: 'La tractomula sale el viernes', // (v4.1.2: era «El barco…»; Salento no tiene puerto)
     intro:
-      'El barco zarpa el viernes y hay que llenar los contenedores, pero la grúa del puerto está varada: carga al 40 %. Consigue repuestos, arregla la grúa y pon un turno extra.',
-    announce: '¡El barco sale el viernes y la grúa está varada! Toque 🏅 Eventos y llenemos esos contenedores.',
+      'La tractomula sale el viernes para Buenaventura y hay que llenar los contenedores, pero el montacargas está varado: se carga al 40 %. Consigue repuestos, arregla el montacargas y pon un turno extra.',
+    announce: '¡La tractomula sale el viernes y el montacargas está varado! Toque 🏅 Eventos y llenemos esos contenedores.',
     stations: ['coffee_house', 'greca', 'fonda', 'basket_shop', 'gift_wrap', 'export_dock'],
     level: 10,
     coins: 20000000,
     supply: { coffee_bag: 1, panela_powder: 1, cheese_arepa: 1, arequipe: 1, table_chocolate: 1, milk_chocolate: 1 },
     speed: { export_dock: 0.4 },
     actions: [
-      { id: 'barco_repuestos', icon: '🔧', name: 'Repuestos', desc: 'Llegan los repuestos de la grúa: del 40 al 60 %.', cost: 20000000, effect: { type: 'stationSpeed', target: 'export_dock', mult: 1.5 } },
-      { id: 'barco_grua', icon: '🏗️', name: 'Grúa arreglada', desc: 'La grúa vuelve a subir los contenedores: del 60 al 80 %.', cost: 130000000, effect: { type: 'stationSpeed', target: 'export_dock', mult: 4 / 3 } },
-      { id: 'barco_turno', icon: '👷', name: 'Turno extra', desc: 'Los estibadores trabajan de corrido: el Patio vuelve al 100 %.', cost: 300000000, effect: { type: 'stationSpeed', target: 'export_dock', mult: 1.25 } },
+      { id: 'barco_repuestos', icon: '🔧', name: 'Repuestos', desc: 'Llegan los repuestos del montacargas: del 40 al 60 %.', cost: 20000000, effect: { type: 'stationSpeed', target: 'export_dock', mult: 1.5 } },
+      { id: 'barco_grua', icon: '🛠️', name: 'Montacargas arreglado', desc: 'El montacargas vuelve a subir los contenedores al camión: del 60 al 80 %.', cost: 130000000, effect: { type: 'stationSpeed', target: 'export_dock', mult: 4 / 3 } },
+      { id: 'barco_turno', icon: '👷', name: 'Turno extra', desc: 'Los coteros trabajan de corrido: el Despacho vuelve al 100 %.', cost: 300000000, effect: { type: 'stationSpeed', target: 'export_dock', mult: 1.25 } },
     ],
     objective: { type: 'final', kind: 'sold', items: { container: 6, breakfast: 180 }, medals: [840, 1140] },
   },

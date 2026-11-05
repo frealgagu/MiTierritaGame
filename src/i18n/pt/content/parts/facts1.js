@@ -37,7 +37,7 @@ export default {
   fonda: ['O café da manhã caipira colombiano tem arepa, ovos, caldo e chocolate.'],
   basket_shop: ['O fique é uma planta de fibra forte para sacos e cestos.'],
   gift_wrap: ['As cestas de presente juntam produtos de várias regiões.'],
-  export_dock: ['O café colombiano sai para o mundo em contêineres, pelos portos.'],
+  export_dock: ['O café desce de carreta até o porto e dali sai para o mundo em contêineres.'],
   guava_grove: ['Vélez e Barbosa, em Santander, são a terra do bocadillo, a goiabada colombiana.', 'A goiaba tem mais vitamina C que a laranja.'],
   guava_pulper: ['A despolpadeira separa a polpa das sementes duras da goiaba.'],
   guava_pot: ['A goiabada é cozida no tacho, mexendo, até «dar o ponto».'],

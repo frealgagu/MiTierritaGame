@@ -575,7 +575,7 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
     }
   }
   // Una estación puede estar frenada a la vez por su nivel, sus arrieros y sus rutas (el Puesto de
-  // arepas espera queso y mantequilla; el Patio de contenedores recién construido no tiene con qué
+  // arepas espera queso y mantequilla; el Despacho de exportación recién construido no tiene con qué
   // sacar lo que hace): se prueba subirla y poner a su altura lo que va con ella. Se recomienda lo más
   // atrasado del grupo, que es lo que hay que comprar primero.
   for (const id of ids) {

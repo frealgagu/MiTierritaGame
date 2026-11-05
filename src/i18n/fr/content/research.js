@@ -123,7 +123,7 @@ export default {
   mas_mesas: 'Plus de tables à la Fonda',
   tejedoras: 'Tisserandes de fique',
   monos: 'Rubans et nœuds',
-  grua: 'Grue à conteneurs',
+  grua: 'Deuxième chariot élévateur',
   denominacion: 'Appellation d’origine',
   injerto_guayabo: 'Goyaviers greffés',
   despulpadora_motor: 'Dépulpeuse à moteur',
