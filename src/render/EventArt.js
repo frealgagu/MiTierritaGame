@@ -407,8 +407,9 @@ const ART = {
     }
   },
 
-  // El barco: la grúa varada y torcida con su aviso; los repuestos, la grúa derecha subiendo contenedores
-  // y el turno extra con sus estibadores.
+  // La tractomula sale el viernes (v4.1.2; antes, la grúa de un puerto que Salento no tiene): el montacargas
+  // varado, con la uña abajo, humo y su aviso; los repuestos; arreglado, va y viene subiendo la estiba al
+  // camión, y el turno extra con sus coteros.
   barco(art, stage, zone) {
     const a = areaOf(zone, 'export_dock');
     const cx = a.x + a.w + 0.6;
@@ -416,20 +417,28 @@ const ART = {
     art.clear(cx, cy, 1.8);
     const fixed = stage >= 2;
     art.anim(cx, cy, (g, t) => {
-      const p = iso(cx, cy);
-      const lean = fixed ? 0 : 0.35;
-      g.rect(p.x - 3, p.y - 46, 6, 46).fill(0xf2b705).stroke(OUTLINE);
-      for (let k = 0; k < 6; k++) g.moveTo(p.x - 3, p.y - k * 8).lineTo(p.x + 3, p.y - k * 8 - 8).stroke({ width: 0.8, color: 0x8a6a00 });
-      const ex = p.x + Math.cos(-0.2 - lean) * 34;
-      const ey = p.y - 46 + Math.sin(lean) * 26;
-      g.moveTo(p.x, p.y - 46).lineTo(ex, ey).stroke({ width: 4, color: 0xf2b705 });
-      const drop = fixed ? 14 + Math.sin(t * 1.2) * 10 : 6;
-      g.moveTo(ex, ey).lineTo(ex, ey + drop).stroke({ width: 1, color: 0x333333 });
-      if (fixed) g.rect(ex - 7, ey + drop, 14, 8).fill(0x2e6fd1).stroke(OUTLINE);
+      const k = fixed ? Math.sin(t * 0.9) * 0.5 + 0.5 : 0;
+      const p = iso(cx + k * 0.6, cy);
+      const lift = fixed ? 4 + (1 - Math.abs(k - 0.5) * 2) * 12 : 0;
+      // Cuerpo amarillo, cabina con techo y el mástil adelante.
+      g.rect(p.x - 12, p.y - 12, 18, 10).fill(0xe8b90f).stroke(OUTLINE);
+      g.rect(p.x - 10, p.y - 24, 1.6, 12).fill(0x333333);
+      g.rect(p.x - 1, p.y - 24, 1.6, 12).fill(0x333333);
+      g.rect(p.x - 11, p.y - 25, 13, 2).fill(0x333333);
+      g.circle(p.x - 8, p.y - 1, 3.2).fill(0x222222).stroke(OUTLINE);
+      g.circle(p.x + 3, p.y - 1, 3.2).fill(0x222222).stroke(OUTLINE);
+      g.rect(p.x + 7, p.y - 28, 2, 26).fill(0x555555).stroke(OUTLINE);
+      g.rect(p.x + 9, p.y - 3 - lift, 9, 1.6).fill(0x555555);
+      // La estiba de canastas sobre la uña.
+      g.rect(p.x + 9, p.y - 11 - lift, 9, 8).fill(0xb07a3a).stroke(OUTLINE);
       if (!fixed) {
-        g.poly([p.x + 10, p.y - 8, p.x + 18, p.y - 22, p.x + 26, p.y - 8]).fill(0xf2d22e).stroke(OUTLINE);
-        g.rect(p.x + 17.2, p.y - 18, 1.6, 6).fill(0x1a1a1a);
-        g.circle(p.x + 18, p.y - 10.5, 0.9).fill(0x1a1a1a);
+        for (let j = 0; j < 3; j++) {
+          const r = (t * 0.6 + j / 3) % 1;
+          g.circle(p.x - 13 - r * 4, p.y - 14 - r * 16, 2 + r * 3).fill({ color: 0x6b6b6b, alpha: 0.5 * (1 - r) });
+        }
+        g.poly([p.x + 20, p.y - 6, p.x + 28, p.y - 20, p.x + 36, p.y - 6]).fill(0xf2d22e).stroke(OUTLINE);
+        g.rect(p.x + 27.2, p.y - 16, 1.6, 6).fill(0x1a1a1a);
+        g.circle(p.x + 28, p.y - 8.5, 0.9).fill(0x1a1a1a);
       }
     });
     if (stage >= 1) {

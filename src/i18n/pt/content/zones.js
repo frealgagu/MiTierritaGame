@@ -6,7 +6,7 @@ export default {
   lecheria: ['Leiteria', null, { panela: '⬅ Do Engenho', leche: 'Para o Cacaual ➜', queso: 'Queijo para o Milharal ⬇', mantequilla: 'Manteiga para o Milharal ⬇', arequipe: 'Doce de leite para Salento ➜' }],
   cacaotal: ['Cacaual', null, { panela_cacao: '⬅ Rapadura do Engenho', leche: '⬅ Leite da Leiteria', chocolatinas: 'Chocolates para Salento ➜', chocolate_mesa: 'Chocolate para Salento ⬇' }],
   maizal: ['Milharal', null, { queso: '⬅ Queijo da Leiteria', mantequilla: '⬅ Manteiga', arepas: 'Para Salento ➜' }],
-  pueblo: ['Salento', 'Para o porto ➜', { cafe: '⬅ Café da Fazenda', panela_pueblo: '⬅ Rapadura do Engenho', chocolatinas: '⬅ Chocolates', chocolate_mesa: '⬅ Chocolate do Cacaual', arepas: 'Arepas do Milharal ⬆', arequipe: 'Doce de leite da Leiteria ⬆' }],
+  pueblo: ['Salento', 'Para Buenaventura ➜', { cafe: '⬅ Café da Fazenda', panela_pueblo: '⬅ Rapadura do Engenho', chocolatinas: '⬅ Chocolates', chocolate_mesa: '⬅ Chocolate do Cacaual', arepas: 'Arepas do Milharal ⬆', arequipe: 'Doce de leite da Leiteria ⬆' }],
   guayabera: ['Goiabeira', 'Para Vélez ➜', { bocadillo: 'Goiabada para a Fazenda de gado ➜', dulces: 'Para Barichara ➜' }],
   tabacal: ['Tabacal', 'Para Piedecuesta ➜', { tabaco: 'Para o Fiqueiral ➜', tabacos: 'Para Barichara ➜' }],
   fiquera: ['Fiqueiral', 'Para Curití ➜', { tabaco: '⬅ Do Tabacal', cabuya: 'Fio de fique para a Fazenda de gado ➜', costales: 'Sacos para as Formigas ⬇', alpargatas: 'Alpargatas ⬇', tercios: 'Fardos para Barichara ➜' }],

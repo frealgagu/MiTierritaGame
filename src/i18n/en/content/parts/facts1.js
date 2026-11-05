@@ -37,7 +37,7 @@ export default {
   fonda: ['A country breakfast has arepa, eggs, broth and hot chocolate.'],
   basket_shop: ['Fique is a plant with strong fiber for sacks and baskets.'],
   gift_wrap: ['Gift baskets bring together products from several regions.'],
-  export_dock: ['Colombian coffee leaves for the world in containers from the ports.'],
+  export_dock: ['Coffee goes down to the port by truck and leaves for the world in containers.'],
   guava_grove: ['Vélez and Barbosa, in Santander, are the land of bocadillo.', 'Guava has more vitamin C than an orange.'],
   guava_pulper: ['The pulper separates the pulp from the guava\'s hard seeds.'],
   guava_pot: ['Bocadillo is cooked in a big pan, stirring, until it «sets».'],

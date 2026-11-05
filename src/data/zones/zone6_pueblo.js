@@ -27,8 +27,8 @@ export const ZONE6 = {
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
   jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
   exitSign: [21.5, 24.2],
-  // El Willys del Pueblo lleva lo que se vende hasta la carretera al puerto.
-  exitText: 'Al puerto ➜',
+  // El Willys del Pueblo lleva lo que se vende hasta la carretera a Buenaventura.
+  exitText: 'A Buenaventura ➜', // (v4.1.2: Salento no tiene puerto; el café baja en tractomula)
   muleSpeed: 4,
   dispatchCost: { base: 400000, growth: 1.17 },
   // Seis carreteras: por la derecha llegan el café, la panela y los chocolates; por abajo, las arepas

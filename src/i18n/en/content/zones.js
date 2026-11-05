@@ -5,7 +5,7 @@ export default {
   lecheria: ['The Dairy', null, { panela: '⬅ From the Sugar Mill', leche: 'To the Cacao Grove ➜', queso: 'Cheese to the Cornfield ⬇', mantequilla: 'Butter to the Cornfield ⬇', arequipe: 'Arequipe to Salento ➜' }],
   cacaotal: ['The Cacao Grove', null, { panela_cacao: '⬅ Panela from the Sugar Mill', leche: '⬅ Milk from the Dairy', chocolatinas: 'Chocolate bars to Salento ➜', chocolate_mesa: 'Chocolate to Salento ⬇' }],
   maizal: ['The Cornfield', null, { queso: '⬅ Cheese from the Dairy', mantequilla: '⬅ Butter', arepas: 'To Salento ➜' }],
-  pueblo: ['Salento', 'To the port ➜', { cafe: '⬅ Coffee from the Farm', panela_pueblo: '⬅ Panela from the Sugar Mill', chocolatinas: '⬅ Chocolate bars', chocolate_mesa: '⬅ Chocolate from the Cacao Grove', arepas: 'Arepas from the Cornfield ⬆', arequipe: 'Arequipe from the Dairy ⬆' }],
+  pueblo: ['Salento', 'To Buenaventura ➜', { cafe: '⬅ Coffee from the Farm', panela_pueblo: '⬅ Panela from the Sugar Mill', chocolatinas: '⬅ Chocolate bars', chocolate_mesa: '⬅ Chocolate from the Cacao Grove', arepas: 'Arepas from the Cornfield ⬆', arequipe: 'Arequipe from the Dairy ⬆' }],
   guayabera: ['The Guava Orchard', 'To Vélez ➜', { bocadillo: 'Bocadillo to the Ranch ➜', dulces: 'To Barichara ➜' }],
   tabacal: ['The Tobacco Farm', 'To Piedecuesta ➜', { tabaco: 'To the Fique Farm ➜', tabacos: 'To Barichara ➜' }],
   fiquera: ['The Fique Farm', 'To Curití ➜', { tabaco: '⬅ From the Tobacco Farm', cabuya: 'Fique yarn to the Ranch ➜', costales: 'Sacks to the Ant Farm ⬇', alpargatas: 'Espadrilles ⬇', tercios: 'Bales to Barichara ➜' }],

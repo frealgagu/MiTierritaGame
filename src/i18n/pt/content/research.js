@@ -123,7 +123,7 @@ export default {
   mas_mesas: 'Mais mesas na Fonda',
   tejedoras: 'Tecelãs de fique',
   monos: 'Fitas e laços',
-  grua: 'Guindaste de contêineres',
+  grua: 'Segunda empilhadeira',
   denominacion: 'Denominação de origem',
   injerto_guayabo: 'Goiabeiras enxertadas',
   despulpadora_motor: 'Despolpadeira a motor',

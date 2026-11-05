@@ -38,7 +38,7 @@ export default {
   fonda: 'Fonda',
   basket_shop: 'Oficina de cestas',
   gift_wrap: 'Embalagem de presentes',
-  export_dock: 'Pátio de contêineres',
+  export_dock: 'Despacho de exportação',
   guava_grove: 'Goiabal',
   guava_pulper: 'Despolpadeira de goiaba',
   guava_pot: 'Tacho de goiabada',

@@ -38,7 +38,7 @@ export default {
   fonda: 'Fonda',
   basket_shop: 'Atelier de paniers',
   gift_wrap: 'Emballage cadeau',
-  export_dock: 'Parc à conteneurs',
+  export_dock: 'Expédition à l’export',
   guava_grove: 'Goyaveraie',
   guava_pulper: 'Dépulpeuse à goyaves',
   guava_pot: 'Chaudron à bocadillo',

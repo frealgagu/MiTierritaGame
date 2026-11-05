@@ -76,7 +76,7 @@ export const RESEARCH = [
   { zone: 'pueblo', id: 'mas_mesas', name: 'Más mesas en la Fonda', icon: '🍽️', desc: 'La Fonda sirve el doble de desayunos.', cost: 4000000000, requires: 'fonda', effect: { type: 'stationSpeed', target: 'fonda', mult: 2 } },
   { zone: 'pueblo', id: 'tejedoras', name: 'Tejedoras de fique', icon: '🧶', desc: 'El Taller teje el doble de canastas.', cost: 8000000000, requires: 'basket_shop', effect: { type: 'stationSpeed', target: 'basket_shop', mult: 2 } },
   { zone: 'pueblo', id: 'monos', name: 'Cintas y moños', icon: '🎀', desc: 'El Empaque de regalos arma el doble de canastas.', cost: 15000000000, requires: 'gift_wrap', effect: { type: 'stationSpeed', target: 'gift_wrap', mult: 2 } },
-  { zone: 'pueblo', id: 'grua', name: 'Grúa de contenedores', icon: '🏗️', desc: 'El Patio de contenedores llena el doble.', cost: 40000000000, requires: 'export_dock', effect: { type: 'stationSpeed', target: 'export_dock', mult: 2 } },
+  { zone: 'pueblo', id: 'grua', name: 'Segundo montacargas', icon: '📦', desc: 'El Despacho de exportación llena el doble.', cost: 40000000000, requires: 'export_dock', effect: { type: 'stationSpeed', target: 'export_dock', mult: 2 } },
   { zone: 'pueblo', id: 'denominacion', name: 'Denominación de origen', icon: '🏅', desc: 'Todo lo que vende Salento vale un 50 % más.', cost: 25000000000, requires: 'gift_wrap', effect: { type: 'zoneValue', target: 'pueblo', mult: 1.5 } },
   // Maestría (v1.7): con todos los edificios de una zona en el nivel 75, toda la zona produce ×4; y
   // Supremacía, en el nivel 100, ×8 más. Ayudan a llegar al segundo final (todo al nivel 100).

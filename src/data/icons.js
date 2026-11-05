@@ -32,7 +32,7 @@ export const ICON = {
   cacaoPaste: '\uE01A', // Pasta de cacao: el cacao molido, espeso y brillante, en una totuma con su cuchara
   cafeOrigen: '\uE01B', // Café de origen: costal de fique amarrado, con granos tostados y una franja de Colombia
   rawMilk: '\uE01C', // Leche cruda: cantina de aluminio de las fincas, recién ordeñada
-  container: '\uE01D', // Contenedor de exportación: el contenedor de acero, con sus puertas, listo para el barco
+  container: '\uE01D', // Contenedor de exportación: el contenedor de acero, con sus puertas, listo para la tractomula
   breakfast: '\uE01E', // Desayuno campesino: arepa, huevo frito y una taza de chocolate
   coffeePlant: '\uE01F', // Mata de café: arbusto verde oscuro, de hojas brillantes, con racimos de cerezas rojas
   guavaTree: '\uE020', // Guayabo: árbol de tronco liso y copa redonda, con guayabas amarillas
