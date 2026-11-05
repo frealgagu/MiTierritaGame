@@ -30,7 +30,7 @@
 
     <header id="hud">
       <div class="brand">🌺 Mi Tierrita</div>
-      <div class="coins">
+      <div id="coins-btn" class="coins" role="button" tabindex="0">
         <span class="coin-icon">💰</span>
         <span id="coins">0</span>
         <span id="income" class="rate">+0/s</span>
@@ -80,6 +80,18 @@
         </div>
         <div id="goals-body" class="list-body"></div>
         <div id="goals-foot" class="list-foot"></div>
+      </div>
+    </div>
+
+    <!-- 💰 De dónde sale (v4.1.1): al tocar el dinero de la barra de arriba. -->
+    <div id="money" class="modal" hidden>
+      <div class="modal-card list-modal">
+        <div class="chain-head">
+          <h2>💰 De dónde sale</h2>
+          <button id="money-close" class="close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <p class="chain-help">Lo que gana por segundo la región que estás viendo, zona por zona, y lo que lo multiplica.</p>
+        <div id="money-body" class="list-body"></div>
       </div>
     </div>
 
@@ -278,9 +290,9 @@
           <button id="chain-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>
         <p class="chain-help" id="chain-help">Lo que pasa por segundo de una estación a otra. En azul, lo que llega de otras zonas; en rojo, lo que frena. Toca una estación para ver su detalle.</p>
-        <div id="chain-boost" class="chain-boost" hidden></div>
         <div id="chain-body" class="chain-body"></div>
         <div id="chain-detail" class="chain-detail" hidden></div>
+        <div id="chain-foot" class="list-foot chain-foot"></div>
       </div>
     </div>
 

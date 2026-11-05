@@ -256,10 +256,15 @@ function analyze(state, zoneId, withExports, depth, memo) {
   let mainRoom = dispatch;
   let income = 0;
   let mainIncome = 0;
+  // Lo que vende el Willys de cada producto y lo que se queda sin vender (v4.1.1: el panel del dinero).
+  const sold = {};
   for (const f of flows.sort((a, b) => b.value - a.value)) {
     const units = Math.min(f.units, room);
     income += units * f.value;
     room -= units;
+    const line = (sold[f.product] ??= { product: f.product, units: 0, unsold: 0, value: f.value });
+    line.units += units;
+    line.unsold += f.units - units;
     if (f.leaf) {
       const main = Math.min(f.units, mainRoom);
       mainIncome += main * f.value;
@@ -294,7 +299,7 @@ function analyze(state, zoneId, withExports, depth, memo) {
   if (!bottleneck) bottleneck = toWarehouse > dispatch * (1 + LOSS) ? `dispatch:${zoneId}` : sourceOf(zoneId);
   // Lo que ya está en el nivel 100 no se puede mejorar: no se señala (si todo está al máximo, nada).
   if (upgradeLevel(state, bottleneck) >= maxLevel(state)) bottleneck = null;
-  return { rows, toWarehouse, dispatch, bottleneck, income, mainIncome, exported };
+  return { rows, toWarehouse, dispatch, bottleneck, income, mainIncome, exported, sold: Object.values(sold) };
 }
 
 // Nivel de lo que se mejora con un id de mejora ('farm', 'farm:transport', 'dispatch:<zona>', 'route:<ruta>').

@@ -11,8 +11,7 @@ import { withArticle } from '../data/lore.js';
 import { saleValue } from '../sim/modifiers.js';
 import { listJoin, t } from '../i18n/index.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
-import { buyZoneBoostUnlock, planZoneBoost, quoteZoneBoostUnlock, ZONE_BOOST_COST, zoneBoostStatus } from '../sim/zoneBoost.js';
-import { upgradeName } from './HUD.js';
+import { buyZoneBoostUnlock, planZoneBoost, previewBuild, quoteZoneBoostUnlock, ZONE_BOOST_COST, zoneBoostStatus } from '../sim/zoneBoost.js';
 import { toast } from './toast.js';
 
 const outIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].out)[0]].icon;
@@ -39,8 +38,7 @@ export class ChainView {
     this.game = game;
     this.getZone = getZone;
     this.getRoot = getRoot;
-    this.boostMode = 1;
-    this.boost = document.getElementById('chain-boost');
+    this.foot = document.getElementById('chain-foot');
     this.onOpen = onOpen;
     this.el = document.getElementById('chain');
     this.body = document.getElementById('chain-body');
@@ -50,7 +48,7 @@ export class ChainView {
     document.getElementById('chain-close').addEventListener('click', () => this.close());
     this.el.addEventListener('click', (e) => {
       if (e.target === this.el) return this.close();
-      if (this.boostClick(e)) return;
+      if (this.footClick(e)) return;
       // Tocar una estación muestra su detalle (tocarla otra vez lo cierra).
       const pick = e.target.closest('[data-pick]');
       if (pick) {
@@ -87,7 +85,7 @@ export class ChainView {
     const a = analyzeChain(state, zone);
     const rows = Object.fromEntries(a.rows.map((r) => [r.id, r]));
     const locked = nextToUnlock(state, zone);
-    this.updateBoost(state, zone);
+    this.updateFoot(state, zone);
     // Solo se reescribe si algo cambió, para no perder toques a medio hacer.
     const html = diagram(state, a, rows, locked, zone, this.body.clientWidth || 320, this.selected);
     if (html !== this.html) this.body.innerHTML = this.html = html;
@@ -96,71 +94,46 @@ export class ChainView {
     if (detail !== this.detailHtml) this.detail.innerHTML = this.detailHtml = detail;
   }
 
-  // La barra de «Mejorar toda la zona» (v4.1): no se ve hasta reiniciar la región; luego se compra con Renombre
-  // y queda para todas sus zonas (y para sus eventos ya ganados con oro).
-  updateBoost(state, zone) {
+  // Los botones de abajo (v4.1.1): 🏗️ Construir, mientras falten estaciones, y ⬆️ Al nivel X, que no se ve hasta
+  // reiniciar la región; luego se compra con Renombre y queda para todas sus zonas (y sus eventos ganados con oro).
+  updateFoot(state, zone) {
     const root = this.getRoot();
+    const buttons = [];
+    const build = previewBuild(state, zone);
+    if (build) {
+      const label = build.count ? t('🏗️ Construir ({n})', { n: build.count }) : t('🏗️ Construir');
+      buttons.push(`<button class="btn buy bulk" data-build-all ${build.count ? '' : 'disabled'}>${label} · 💰 ${formatNumber(build.count ? build.cost : build.next)}</button>`);
+    }
     const status = zoneBoostStatus(root, state, zone);
-    let html = '';
     if (status === 'locked') {
-      const region = REGIONS_BY_ID[REGION_OF_ZONE[zone]];
-      const q = quoteZoneBoostUnlock(root.profile, region.id);
-      html = `
-        <p>${t('⬆️ <b>Mejorar toda la zona</b>: sube de una vez las estaciones, los arrieros y la bodega, o sigue la mejora recomendada. Sirve en todas las zonas de {region}.', { region: `${region.icon} ${region.name}` })}</p>
-        <div class="chain-boost-row"><button class="btn buy" data-boost-unlock ${q.ok ? '' : 'disabled'}>${t('🔒 Desbloquear · {n} ⭐', { n: ZONE_BOOST_COST })}<small>${t('Tienes {n} ⭐', { n: formatNumber(Math.floor(root.profile.renown)) })}</small></button></div>`;
+      const q = quoteZoneBoostUnlock(root.profile, REGION_OF_ZONE[zone]);
+      buttons.push(`<button class="btn buy bulk" data-boost-unlock ${q.ok ? '' : 'disabled'} title="${t('Sube toda la zona al próximo hito de una vez. Sirve en todas las zonas de la región.')}">${t('🔒 ⬆️ Todo al próximo hito · {n} ⭐', { n: ZONE_BOOST_COST })}</button>`);
     } else if (status === 'ready') {
-      const plan = planZoneBoost(state, zone, this.boostMode);
-      const modes = [1, 10, 'max'].map((m) => `<button class="mode ${this.boostMode === m ? 'active' : ''}" data-boost-mode="${m}">${m === 'max' ? t('Máx') : `+${m}`}</button>`).join('');
-      const label = plan.maxed ? t('🏁 Todo al máximo') : this.boostMode === 'max' ? t('⬆️ Toda la zona +{n}', { n: plan.levels || 1 }) : t('⬆️ Toda la zona +{n}', { n: this.boostMode });
-      const cost = plan.maxed ? '' : `<small>💰 ${formatNumber(plan.affordable ? plan.cost : plan.next ?? plan.cost)}</small>`;
-      html = `
-        <div class="modes">${modes}</div>
-        <div class="chain-boost-row">
-          <button class="btn buy" data-boost ${plan.affordable ? '' : 'disabled'}>${label}${cost}</button>
-          <button class="btn" data-follow>${t('🤖 Recomendada')}<small>${t('lo que más rinde')}</small></button>
-        </div>`;
+      const plan = planZoneBoost(state, zone);
+      if (plan) buttons.push(`<button class="btn buy bulk" data-boost ${plan.affordable ? '' : 'disabled'}>${t('⬆️ Todo al nivel {n}', { n: plan.level })} · 💰 ${formatNumber(plan.cost)}</button>`);
     }
-    this.boost.hidden = !html;
-    if (html !== this.boostHtml) this.boost.innerHTML = this.boostHtml = html;
+    const html = buttons.join('');
+    if (html !== this.footHtml) this.foot.innerHTML = this.footHtml = html;
   }
 
-  // Los toques en la barra. Devuelve true si era de ella.
-  boostClick(e) {
+  // Los toques en esos botones. Devuelve true si era de ellos.
+  footClick(e) {
     const zone = this.getZone();
-    const mode = e.target.closest('[data-boost-mode]');
-    if (mode) {
-      this.boostMode = mode.dataset.boostMode === 'max' ? 'max' : Number(mode.dataset.boostMode);
-      this.update();
-      return true;
-    }
-    if (e.target.closest('[data-boost-unlock]')) {
+    if (e.target.closest('[data-build-all]')) {
+      const built = this.game.buildAll(zone);
+      if (built.length) toast(t('🏗️ Construidas: {list}', { list: listJoin(built.map((id) => STATIONS_BY_ID[id].name)) }), 3500);
+    } else if (e.target.closest('[data-boost-unlock]')) {
       const region = REGION_OF_ZONE[zone];
-      if (buyZoneBoostUnlock(this.getRoot().profile, region)) toast(t('⬆️ ¡Ya puedes mejorar toda la zona en {region}!', { region: REGIONS_BY_ID[region].name }), 3000);
-      this.update();
-      return true;
-    }
-    if (e.target.closest('[data-boost]')) {
-      const plan = this.game.boostZone(zone, this.boostMode);
-      if (plan) toast(t('⬆️ Toda la zona: +{n} niveles en {k} mejoras (💰 {cost})', { n: plan.levels, k: plan.items.length, cost: formatNumber(plan.cost) }), 3000);
-      this.html = null;
-      this.update();
-      return true;
-    }
-    if (e.target.closest('[data-follow]')) {
-      const bought = this.game.followRecommended(zone);
-      toast(bought.length ? t('🤖 Compradas: {list}', { list: boughtList(bought) }) : t('🤖 No alcanza para la mejora recomendada'), bought.length ? 4500 : 2500);
-      this.html = null;
-      this.update();
-      return true;
-    }
-    return false;
-  }
-}
+      if (buyZoneBoostUnlock(this.getRoot().profile, region)) toast(t('⬆️ ¡Ya puedes subir toda la zona al próximo hito en {region}!', { region: REGIONS_BY_ID[region].name }), 3500);
+    } else if (e.target.closest('[data-boost]')) {
+      const plan = this.game.boostZone(zone);
+      if (plan) toast(t('⬆️ ¡Toda la zona al nivel {n}! {k} mejoras (💰 {cost})', { n: plan.level, k: plan.items.length, cost: formatNumber(plan.cost) }), 3000);
+    } else return false;
+    this.html = null;
+    this.update();
+    return true;
 
-// «Moldeadoras +3, Arrieros del Horno de quema +2…» (las seis primeras; las demás, contadas).
-function boughtList(bought) {
-  const names = bought.slice(0, 6).map(([id, n]) => (n > 1 ? `${upgradeName(id)} +${n}` : upgradeName(id)));
-  return bought.length > 6 ? `${names.join(', ')} ${t('y {n} más', { n: bought.length - 6 })}` : names.join(', ');
+  }
 }
 
 // El nivel de una ruta. En el tablero de un evento (v3.68.1) la ruta va con su estación (ver StationPanel:

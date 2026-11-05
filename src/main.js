@@ -20,6 +20,7 @@ import { setLook } from './render/look.js';
 import { checkLogros } from './sim/logros.js';
 import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/splash.js';
 import { EventBar, formatClock } from './ui/EventBar.js';
+import { MoneyView } from './ui/MoneyView.js';
 import { EVENT_COOLDOWN, allActionsBought, awaySeconds, checkMedalBonus, endEvent, finishEvent, restartEvent, startEvent } from './sim/events.js';
 import { MEDALS } from './data/events.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
@@ -116,9 +117,9 @@ async function start() {
   let scene = null;
   const panel = new StationPanel(active, () => scene?.select(null));
   // Lo que muestra la interfaz: la región que se está viendo o el tablero de un evento.
-  let hud, chain, chatter, goals, research, zones;
+  let hud, chain, chatter, goals, research, zones, money;
   const useGame = (g) => {
-    for (const v of [hud, panel, chain, chatter, goals, research]) if (v) v.game = g;
+    for (const v of [hud, panel, chain, chatter, goals, research, money]) if (v) v.game = g;
     if (hud) hud.recDirty = true;
   };
   // id puede ser 'farm', 'farm:transport' (pestaña de arrieros), 'dispatch:<zona>', 'route:<ruta>'
@@ -197,6 +198,7 @@ async function start() {
   showZone(view.zone);
   hud = new HUD(active, select, () => scene.dayNight.hour, getZone);
   chain = new ChainView(active, select, getZone, () => game.state);
+  money = new MoneyView(active, getZone);
   chatter = new Chatter(active, getZone, () => game.state);
   goals = new GoalsView(active, getZone);
   research = new ResearchView(active, getZone, (id) => select(id));
@@ -522,7 +524,7 @@ async function start() {
         sound.milestone();
       });
       // En el tablero de un evento, la persona de la zona no avisa lo de la partida.
-      for (const view of [panel, chain, goals, research, zones, events, eventBar, ...(board ? [] : [chatter])]) safely(() => view.update());
+      for (const view of [panel, chain, money, goals, research, zones, events, eventBar, ...(board ? [] : [chatter])]) safely(() => view.update());
     }
   });
 

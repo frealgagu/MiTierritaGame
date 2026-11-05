@@ -47,6 +47,8 @@ export function capCoins(state) {
   if (state.coins > MAX_COINS) state.coins = MAX_COINS;
   if (state.totalEarned > MAX_COINS) state.totalEarned = MAX_COINS;
 }
+// El producto de un tipo de efecto de las investigaciones (v4.1.1: el panel del dinero lo muestra).
+export const researchMult = (state, type, target) => product(state, type, target);
 export const legacyMult = (state) => 2 ** Math.min(state.legacy?.resets ?? 0, MAX_LEGACY_RESETS);
 // El multiplicador que tendrá la partida después de reiniciar.
 export const nextLegacyMult = (state) => 2 ** Math.min((state.legacy?.resets ?? 0) + 1, MAX_LEGACY_RESETS);

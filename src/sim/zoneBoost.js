@@ -1,25 +1,55 @@
-// Mejorar toda la zona (v4.1), desde la cadena 🔗. Se desbloquea con Renombre, una vez por región, y solo
-// después de haber reiniciado esa región al menos una vez. En un evento funciona si ese evento ya se ganó
-// con oro alguna vez.
-//   ⬆️ Toda la zona: sube parejo las estaciones, sus arrieros y la bodega de la zona (+1, +10 o lo que
-//      alcance), empezando por lo más bajo.
-//   🤖 Recomendada: compra una y otra vez la mejora recomendada (aunque sea de otra zona que la abastece, o
-//      una investigación) mientras alcance el dinero.
+// Los botones de abajo de la cadena 🔗 (v4.1.1):
+//   🏗️ Construir: construye, en el orden de la cadena, todas las estaciones que falten y alcance el dinero.
+//      Está desde el principio.
+//   ⬆️ Al nivel X: lleva lo más bajo de la zona al siguiente hito (10, 25, 50, 75, 100) junto con todo lo que
+//      esté por debajo de ese hito: las estaciones, sus arrieros, la bodega y las chivas que traen productos de
+//      otras zonas. Solo si alcanza para todo. Se ve después de reiniciar la región una vez, se desbloquea con
+//      10 ⭐ por región y en un evento funciona si ese evento ya se ganó con oro.
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
+import { ROUTES_BY_ID } from '../data/routes.js';
 import { REGION_OF_ZONE } from '../data/regions.js';
-import { bulkUpgrade, maxLevel, upgradeCost } from './rules.js';
-import { buyResearch, buyUpgrade, canPay, canPayRenown, quoteUpgrade, upgradeTarget } from './upgrades.js';
-import { recommendUpgrade } from './analysis.js';
-import { buyAction } from './events.js';
+import { bulkUpgrade, maxLevel, MILESTONES } from './rules.js';
+import { buyUpgrade, canPay, canPayRenown, quoteUnlock, unlockStation, upgradeTarget } from './upgrades.js';
+import { nextSideToUnlock, nextToUnlock } from './chain.js';
+import { createStationState } from './production.js';
+import { routeActive } from './routes.js';
 import { regionState } from './regions.js';
 
 export const ZONE_BOOST_COST = 10; // ⭐, una vez por región
-// «Recomendada»: hasta cuántas compras y cuánto tiempo pensando (calcular la recomendación cuesta) por toque.
-const FOLLOW_MAX = 100;
-const FOLLOW_MS = 400;
 
-// --- El desbloqueo (en el perfil del jugador: profile.zoneBoost = [regiones]) ---
+// --- 🏗️ Construir ---
+
+const nextToBuild = (state, zoneId) => nextToUnlock(state, zoneId) ?? nextSideToUnlock(state, zoneId);
+
+// Cuántas se construirían con el dinero de ahora y cuánto costarían: { count, cost, next } (next: lo que
+// cuesta la siguiente, para decirlo cuando no alcanza para ninguna). null si ya no falta nada.
+export function previewBuild(state, zoneId) {
+  const sim = { ...state, stations: { ...state.stations } };
+  let { coins } = state;
+  let count = 0;
+  let cost = 0;
+  let next = null;
+  for (let id = nextToBuild(sim, zoneId); id; id = nextToBuild(sim, zoneId)) {
+    const q = quoteUnlock({ ...sim, coins }, id);
+    next ??= q.cost;
+    if (!q.ok) break;
+    coins -= q.cost;
+    cost += q.cost;
+    count++;
+    sim.stations[id] = createStationState();
+  }
+  return next === null ? null : { count, cost, next };
+}
+
+// Las construye; devuelve los ids construidos.
+export function buildAll(state, zoneId, bus) {
+  const built = [];
+  for (let id = nextToBuild(state, zoneId); id && unlockStation(state, id, bus); id = nextToBuild(state, zoneId)) built.push(id);
+  return built;
+}
+
+// --- ⬆️ Al nivel X: el desbloqueo (en el perfil del jugador: profile.zoneBoost = [regiones]) ---
 
 export const hasZoneBoost = (profile, regionId) => Boolean(profile?.zoneBoost?.includes(regionId));
 
@@ -36,8 +66,8 @@ export function buyZoneBoostUnlock(profile, regionId) {
   return true;
 }
 
-// Qué se muestra en la cadena: 'hidden' (aún no se ha reiniciado la región; en un evento, si no se puede
-// usar), 'locked' (se puede comprar) o 'ready'.
+// Qué se muestra: 'hidden' (aún no se ha reiniciado la región; en un evento, si no se puede usar), 'locked'
+// (se puede comprar) o 'ready'.
 //   root: la partida (con el perfil y las regiones); state: lo que se ve (la región o el tablero del evento).
 export function zoneBoostStatus(root, state, zoneId) {
   const regionId = REGION_OF_ZONE[zoneId];
@@ -48,10 +78,10 @@ export function zoneBoostStatus(root, state, zoneId) {
   return owned ? 'ready' : 'locked';
 }
 
-// --- ⬆️ Toda la zona ---
+// --- ⬆️ Al nivel X: la compra ---
 
-// Lo que se sube: las estaciones construidas de la zona (también la Compostera), los arrieros de las que
-// los tienen y la bodega.
+// Lo que sube: las estaciones construidas de la zona (también la Compostera), sus arrieros, la bodega y las
+// chivas que le traen productos de otras zonas (en un evento no: allí la ruta va con su estación).
 export function zoneBoostTargets(state, zoneId) {
   const zone = ZONES_BY_ID[zoneId];
   const ids = [];
@@ -62,86 +92,34 @@ export function zoneBoostTargets(state, zoneId) {
     if (st.transport) ids.push(`${id}:transport`);
   }
   if (state.zones[zoneId]?.dispatch) ids.push(`dispatch:${zoneId}`);
+  if (!state.event) for (const id of Object.keys(state.routes ?? {})) if (ROUTES_BY_ID[id]?.to === zoneId && routeActive(state, id)) ids.push(`route:${id}`);
   return ids;
 }
 
-// El plan de compra: { items: [[id, niveles]], levels, cost, affordable, maxed }.
-//   mode 1 | 10: cada cosa sube esos niveles (o hasta el tope); se compra todo o nada.
-//   mode 'max': de a un nivel, siempre lo más bajo (y entre iguales, lo más barato), hasta que no alcance.
-export function planZoneBoost(state, zoneId, mode) {
-  const max = maxLevel(state);
+// El plan: { level (el hito), items: [[id, niveles]], cost, affordable } o null si todo está en el tope.
+export function planZoneBoost(state, zoneId) {
+  const max = maxLevel(state); // en un evento, 50
   const targets = zoneBoostTargets(state, zoneId).map((id) => ({ id, ...upgradeTarget(state, id) }));
-  const open = targets.filter((x) => x.holder.level < max);
-  const plan = { items: [], levels: 0, cost: 0, affordable: false, maxed: open.length === 0 };
-  if (plan.maxed) return plan;
-  if (mode !== 'max') {
-    for (const x of open) {
-      const q = bulkUpgrade(x.base, x.growth, x.holder.level, mode, Infinity, max);
-      plan.items.push([x.id, q.levels]);
-      plan.levels += q.levels;
-      plan.cost += q.cost;
-    }
-    plan.affordable = canPay(state, plan.cost);
-    return plan;
+  if (!targets.length) return null;
+  const low = Math.min(...targets.map((x) => x.holder.level));
+  const level = MILESTONES.find((m) => m > low && m <= max) ?? (low < max ? max : null);
+  if (level === null) return null;
+  const plan = { level, items: [], cost: 0, affordable: false };
+  for (const x of targets) {
+    if (x.holder.level >= level) continue;
+    const q = bulkUpgrade(x.base, x.growth, x.holder.level, level - x.holder.level, Infinity, max);
+    plan.items.push([x.id, q.levels]);
+    plan.cost += q.cost;
   }
-  const level = new Map(open.map((x) => [x.id, x.holder.level]));
-  const bought = new Map();
-  const budget = canPay(state, Infinity) ? Infinity : state.coins;
-  for (;;) {
-    let pick = null;
-    let price = Infinity;
-    for (const x of open) {
-      const l = level.get(x.id);
-      if (l >= max) continue;
-      const c = upgradeCost(x.base, x.growth, l);
-      if (!pick || l < level.get(pick.id) || (l === level.get(pick.id) && c < price)) {
-        pick = x;
-        price = c;
-      }
-    }
-    if (!pick || plan.cost + price > budget) break;
-    plan.cost += price;
-    plan.levels++;
-    level.set(pick.id, level.get(pick.id) + 1);
-    bought.set(pick.id, (bought.get(pick.id) ?? 0) + 1);
-  }
-  plan.items = [...bought];
-  plan.affordable = plan.levels > 0;
-  // Lo que costaría el siguiente nivel (para decir cuánto falta cuando no alcanza para nada).
-  if (!plan.affordable) {
-    const low = open.reduce((a, b) => (b.holder.level < a.holder.level ? b : a));
-    plan.next = upgradeCost(low.base, low.growth, low.holder.level);
-  }
+  plan.affordable = canPay(state, plan.cost);
   return plan;
 }
 
-// Compra el plan. Cada mejora avisa marcada `bulk` (para no llenar la pantalla) y devuelve el plan, o null.
-export function buyZoneBoost(state, zoneId, mode, bus) {
-  const plan = planZoneBoost(state, zoneId, mode);
-  if (!plan.affordable) return null;
+// Compra el plan (todo o nada). Cada mejora avisa marcada `bulk` (un solo sonido) y devuelve el plan, o null.
+export function buyZoneBoost(state, zoneId, bus) {
+  const plan = planZoneBoost(state, zoneId);
+  if (!plan?.affordable) return null;
   const bulk = { emit: (type, data) => bus.emit(type, { ...data, bulk: true }) };
   for (const [id, n] of plan.items) buyUpgrade(state, id, n, bulk);
   return plan;
-}
-
-// --- 🤖 Recomendada ---
-
-// Compra la recomendada mientras alcance. Devuelve [[id, veces]] en el orden en que se compraron.
-export function followRecommended(state, zoneId, bus, { max = FOLLOW_MAX, ms = FOLLOW_MS } = {}) {
-  const bulk = { emit: (type, data) => bus.emit(type, { ...data, bulk: true }) };
-  const quote = (id, mode) => quoteUpgrade(state, id, mode);
-  const bought = new Map();
-  const t0 = performance.now();
-  for (let i = 0; i < max && performance.now() - t0 < ms; i++) {
-    const rec = recommendUpgrade(state, quote, zoneId);
-    if (!rec) break;
-    const [kind, part] = rec.id.split(':');
-    let ok;
-    if (kind === 'research') ok = buyResearch(state, part, bulk);
-    else if (kind === 'action') ok = buyAction(state, part, bulk);
-    else ok = quote(rec.id, 1).affordable && buyUpgrade(state, rec.id, 1, bulk);
-    if (!ok) break;
-    bought.set(rec.id, (bought.get(rec.id) ?? 0) + 1);
-  }
-  return [...bought];
 }
