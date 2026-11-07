@@ -19,7 +19,7 @@
 @font-face {
   font-family: 'MiTierrita Icons';
   src: url('../assets/mitierrita-icons.woff2') format('woff2');
-  unicode-range: U+E000-E1FF;
+  unicode-range: U+E000-E3FF; /* (v4.3: más láminas propias) */
   font-display: block;
 }
 

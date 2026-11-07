@@ -440,6 +440,85 @@ export const ICON = {
   cometas: '\uE1B2', // Las cometas de Villa de Leyva: en agosto el cielo se llena de cometas de colores sobre las lomas
   pozosAzules: '\uE1B3', // Los Pozos Azules: las lagunitas de agua azul turquesa en medio del desierto ocre, cerca de Villa de Leyva
   casaTerracota: '\uE1B4', // La Casa Terracota: la casa entera hecha de barro cocido, de formas redondas como una gran vasija
+  moriche: '\uE1B5', // La palma de moriche: crece en los morichales, en el agua donde nace el agua del Llano
+  comejenera: '\uE1B6', // La comejenera: el montículo de tierra roja que levantan los comejenes en la sabana
+  corocora: '\uE1B7', // La corocora: el ave roja de los esteros, de pico largo y curvo, volando sobre el agua al atardecer
+  atardecerLlanero: '\uE1B8', // El atardecer llanero: el sol rojo que se pone sobre la sabana sin fin, con las palmas y el ganado
+  mangoLlanero: '\uE1B9', // El mango: el palo de mango que da sombra y fruta en la finca, y los mangos maduros
+  pina: '\uE1BA', // La piña del Meta: dulce, con su cáscara de escamas y su corona de hojas
+  araza: '\uE1BB', // El arazá: la fruta amarilla y ácida de la Orinoquía, entera y partida, para jugos y helados
+  panArroz: '\uE1BC', // El pan de arroz: el pan redondo de harina de arroz y queso, dorado, el del desayuno llanero
+  masato: '\uE1BD', // El masato: la bebida espesa de arroz fermentado, servida fría en el vaso, con canela y el arroz
+  rioMeta: '\uE1BE', // El río Meta: el río ancho de los Llanos con el planchón que pasa el camión de una orilla a la otra
+  chiguiro: '\uE1BF', // El chigüiro: el roedor más grande del mundo, de cuerpo redondo y hocico chato, a la orilla del agua
+  babilla: '\uE1C0', // La babilla: el caimán pequeño de los esteros, asoleándose en la orilla con la boca entreabierta
+  tonina: '\uE1C1', // La tonina: el delfín rosado de los ríos de la Orinoquía, de pico largo, saltando del agua
+  anaconda: '\uE1C2', // La anaconda: la gran serpiente verde de manchas negras, enrollada y asomando del agua del estero
+  vaqueroLlanero: '\uE1C3', // El vaquero llanero: a caballo por la sabana, con sombrero de ala ancha, arreando el ganado y cantando
+  sanmartinero: '\uE1C4', // El sanmartinero: el ganado criollo rojizo de San Martín, criado en el Llano desde hace siglos
+  cabrestero: '\uE1C5', // El cabrestero: el llanero que va adelante del ganado, cantando para guiarlo por la sabana
+  hallaca: '\uE1C6', // La hallaca: la masa de maíz rellena de carne, envuelta en hoja de plátano y amarrada en cruz
+  caballoCriollo: '\uE1C7', // El caballo criollo: pequeño y fuerte, con su crin, el compañero del llanero en la sabana
+  cotizas: '\uE1C8', // Las cotizas: las alpargatas del llanero, de suela y tiras de cuero
+  sombreroLlanero: '\uE1C9', // El sombrero llanero: de ala ancha y copa baja, el de pelo de guama, para el sol de la sabana
+  coleo: '\uE1CA', // El coleo: el toro que corre en la manga y el jinete que lo tumba halándolo por la cola, a todo galope
+  puertaLlano: '\uE1CB', // La Puerta del Llano: el arco a la entrada de Villavicencio y, al otro lado, la sabana que empieza
+  joropo: '\uE1CC', // El joropo: la pareja zapateando, ella con la falda blanca de flores y él con liquiliqui y sombrero
+  arpa: '\uE1CD', // El arpa llanera: el marco de madera con sus muchas cuerdas, que lleva la melodía del joropo
+  cuatro: '\uE1CE', // El cuatro: la guitarrita de cuatro cuerdas que rasguea el ritmo del joropo, con las maracas
+  macarena: '\uE1CF', // La Macarena: la sierra antigua de mesetas entre los Andes, el Llano y la selva, con el caño de colores
+  chontaduro: '\uE1D0', // El chontaduro: el racimo de frutos rojos y anaranjados de la palma espinosa, y uno cocido partido con sal y miel
+  borojo: '\uE1D1', // El borojó: la fruta parda y redonda del Chocó, y el jugo espeso servido en el vaso
+  ranaDorada: '\uE1D2', // La rana dorada: pequeña, amarilla y venenosa, sobre una hoja de la selva del Pacífico
+  lluviaChoco: '\uE1D3', // La lluvia del Chocó: los nubarrones que descargan sobre la selva, una de las más lluviosas del mundo
+  heliconia: '\uE1D4', // La heliconia: la flor roja y amarilla de brácteas en zigzag, con el colibrí que la visita
+  arrozClavado: '\uE1D5', // El arroz clavado: el arroz con queso costeño derretido y rodajas de longaniza, como se hace en el Chocó
+  viche: '\uE1D6', // El viche: el destilado tradicional de caña, en su botella con la tusa de corcho, junto a la caña y las hierbas
+  potrillo: '\uE1D7', // El potrillo: la canoa chica de un solo tronco, con su canalete, en el estero entre los mangles
+  tortugaMarina: '\uE1D8', // La tortuga marina: llega de noche a la playa a poner sus huevos en la arena, bajo la luna
+  marimba: '\uE1D9', // La marimba de chonta: las tablas de palma sobre el marco, con los tubos de guadua debajo y los tacos
+  cununo: '\uE1DA', // El cununo: el tambor de un solo parche, de forma de cono, que se toca con las manos
+  guasa: '\uE1DB', // El guasá: el tubo de guadua con semillas adentro, decorado, que sacuden las cantadoras
+  currulao: '\uE1DC', // El currulao: la cantadora bailando con la falda blanca que gira, el turbante y el pañuelo en la mano
+  chirimia: '\uE1DD', // La chirimía: la banda del Chocó con el clarinete, el bombardino y los platillos
+  sanPacho: '\uE1DE', // San Pacho: las fiestas de Quibdó, con banderas de colores, la balsada por el río Atrato y la chirimía
+  tambo: '\uE1DF', // El tambo: la casa redonda sobre pilotes, abierta, con su techo cónico de palma y la escalera de tronco
+  catanga: '\uE1E0', // La catanga: el canasto que la piangüera lleva a la espalda, con sus correas y lleno de pianguas
+  canalete: '\uE1E1', // El canalete: el remo tallado en una sola pieza de madera, con la pala en forma de hoja y su puño
+  casaPilotes: '\uE1E2', // La casa en pilotes: la casa de tablas de colores alzada sobre palos para que no la alcance el agua
+  jaguaAchiote: '\uE1E3', // La jagua y el achiote: el fruto de jagua partido que tiñe de negro, la cápsula de achiote con sus semillas rojas y el trazo pintado
+  puertoBuenaventura: '\uE1E4', // El puerto de Buenaventura: el buque de contenedores atracado y la grúa pórtico que los carga, sobre el Pacífico
+  maleconPacifico: '\uE1E5', // El malecón de Buenaventura: el paseo al atardecer sobre el mar, con la baranda, la palma y el vasito de ceviche
+  juanchaco: '\uE1E6', // Juanchaco y Ladrilleros: la playa de arena oscura al pie de la selva, a donde se llega en lancha
+  festivalPacifico: '\uE1E7', // El Festival Folclórico del puerto: la corona de la reina, el cununo y el pañuelo blanco del currulao
+  ceiba: '\uE1E8', // La ceiba: el árbol gigante de la selva, de copa ancha y raíces de tabla, junto a una persona chiquita
+  victoriaRegia: '\uE1E9', // La victoria regia: el nenúfar gigante de los lagos, con sus hojas redondas de borde alzado y la flor
+  jaguar: '\uE1EA', // El jaguar: el gran felino de la selva, amarillo con rosetas negras, caminando por la orilla del río
+  guacamaya: '\uE1EB', // La guacamaya: roja, azul y amarilla, de cola larga, posada en la rama
+  perezoso: '\uE1EC', // El perezoso: colgado del yarumo con sus garras largas, con la cara de antifaz y sonriendo
+  farina: '\uE1ED', // La fariña: los granitos de yuca rallada y tostada en la totuma, y el colador de yarumo al lado
+  camuCamu: '\uE1EE', // El camu camu: la rama de la orilla inundada con sus frutos redondos rojos y morados, llenos de vitamina C
+  copoazu: '\uE1EF', // El copoazú: el fruto pariente del cacao, de cáscara parda, entero y partido con su pulpa blanca y ácida
+  chichaChontaduro: '\uE1F0', // La chicha de chontaduro: la olla de barro con la chicha anaranjada, los chontaduros cocinados y la totuma
+  canoaAmazonas: '\uE1F1', // La canoa del Amazonas: tallada de un solo tronco, con el remero en el río café y la selva al fondo
+  delfinRosado: '\uE1F2', // El delfín rosado del Amazonas: el bufeo de pico largo y frente redonda, saliendo del agua oscura del río
+  pirana: '\uE1F3', // La piraña: el pez de dientes afilados, de lomo gris y panza roja, que se pesca con carne y se come frito
+  tarapoto: '\uE1F4', // Los lagos de Tarapoto: el lago de agua negra rodeado de selva, con la aleta del delfín y el cielo reflejado
+  creciente: '\uE1F5', // La creciente: el río sube más de diez metros y se mete a la selva; los árboles quedan con el agua al tronco
+  maloca: '\uE1F6', // La maloca: la casa grande y redonda de la comunidad, con techo de palma hasta el suelo y la fachada pintada
+  pelazon: '\uE1F7', // La Pelazón: la fiesta ticuna de la muchacha que se vuelve mujer, con las máscaras de corteza pintada
+  manguare: '\uE1F8', // El manguaré: los dos troncos ahuecados que se golpean con mazos y se oyen a kilómetros por la selva
+  uitoto: '\uE1F9', // Los uitoto: el abuelo sabedor con su corona de plumas, que cuenta en la maloca las historias del sol, el río y la anaconda
+  chambira: '\uE1FA', // La chambira: las madejas de fibra de palma, cruda y teñida, y la mochila tejida con ellas
+  cerbatana: '\uE1FB', // La cerbatana: el tubo largo de madera para cazar soplando, con la aljaba de dardos y el algodón
+  paloSangre: '\uE1FC', // Las tallas de palo sangre: el delfín, el pez y la tortuga tallados en madera roja y pulida
+  collarSemillas: '\uE1FD', // Los collares de semillas: semillas de la selva de colores y formas distintas, ensartadas en un hilo
+  tripleFrontera: '\uE1FE', // La triple frontera: el río Amazonas donde se juntan Colombia, Brasil y Perú, cada uno con su bandera
+  parqueSantander: '\uE1FF', // El parque Santander de Leticia: al atardecer llegan miles de loros a dormir en sus árboles
+  tabatinga: '\uE200', // Tabatinga: la calle que sigue de Leticia a Brasil sin puesto de frontera, con el hito y las dos banderas
+  puertoNarino: '\uE201', // Puerto Nariño: el pueblo sin carros, de andenes de cemento entre jardines y casas de colores, junto al río
+  micoArdilla: '\uE202', // La isla de los Micos: el mico ardilla de brazos amarillos y cara blanca de hocico negro, colgado de la rama
+  amacayacu: '\uE203', // Amacayacu: el puente colgante de cuerdas y tablas entre los árboles gigantes de la selva inundada
 };
 
 export const ICON_FONT = 'MiTierrita Icons';
