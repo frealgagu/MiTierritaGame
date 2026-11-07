@@ -87,7 +87,8 @@ export class ChainView {
     const locked = nextToUnlock(state, zone);
     this.updateFoot(state, zone);
     // Solo se reescribe si algo cambió, para no perder toques a medio hacer.
-    const html = diagram(state, a, rows, locked, zone, this.body.clientWidth || 320, this.selected);
+    // Menos el margen de la caja que se desliza (v4.3.1), para que lo de las orillas no quede cortado.
+    const html = diagram(state, a, rows, locked, zone, (this.body.clientWidth || 320) - 2 * DG_PAD, this.selected);
     if (html !== this.html) this.body.innerHTML = this.html = html;
     const detail = this.selected ? detailOf(state, a, rows, this.selected, zone) : '';
     this.detail.hidden = !detail;
@@ -265,10 +266,11 @@ function divertNote(state, row, icon) {
 // tubos bajan de una a la siguiente (con el producto corriendo, o en rojo donde se frena), lo que
 // llega de otras zonas entra como etiquetas azules encima de la estación, y todo termina en la bodega.
 const NODE_H = 62;
+const DG_PAD = 6; // margen a cada lado del diagrama (lo mismo que .dg-scroll en styles.css)
 const GAP = 46; // espacio vertical para los eslabones (y lo que pasa por ellos)
 const TAG_H = 26; // alto de cada etiqueta de importación
 const JOIN_W = 22; // lo que se angostan esas etiquetas si además le llega algo que junta (v4.0)
-const MIN_COL = 98;
+const MIN_COL = 80; // (v4.3.1: antes 98; con tres columnas no cabía en un teléfono angosto y se cortaba la de la derecha)
 const NARROW = 118; // más angostas que esto, la tarjeta pone el ícono arriba y el nombre abajo
 
 // Lo que hace una rama aparte: la Compostera vuelve abono la pulpa del Beneficiadero y todo lo que

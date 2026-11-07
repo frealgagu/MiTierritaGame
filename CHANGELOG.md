@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v4.3.1 — (en preparación)
+- **Partida 60:** con los reinicios al tope, la pantalla del segundo final sigue diciendo «Partida 60» (antes decía 61, aunque volver a empezar ya no cambia nada).
+- **La cadena cabe a lo ancho:** en los teléfonos angostos, las zonas con tres ramas ya no cortan la de la derecha ni lo que queda en las orillas.
+
 ## v4.3.0 — Dibujos propios en todo el juego
 - **Adiós a los emojis del teléfono.** Todos los dibujos del juego son ahora propios, con el mismo estilo de las estaciones: las 288 láminas del álbum (cada una con su dibujo: la lechona, el fósil de tortuga, el tiple, la chiva…), y los casi 250 íconos de la interfaz, los objetivos, los eventos y los personajes (medallas, candado, relojes, clima, vehículos, animales, comida, banderas…).
 - **Los personajes**, con su tono de piel y su oficio: la cocinera con su gorro, el campesino con su sombrero y la espiga, la abuela con sus gafas, la de pelo crespo, el piloto…

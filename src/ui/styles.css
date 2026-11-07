@@ -311,7 +311,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .chain-body { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding-right: 2px; }
 
 /* Diagrama: tarjetas con posición fija y eslabones en SVG. */
-.dg-scroll { overflow-x: auto; touch-action: pan-x pan-y; padding-bottom: 6px; }
+.dg-scroll { overflow-x: auto; touch-action: pan-x pan-y; padding: 0 6px 6px; /* 6px a los lados: DG_PAD en ChainView.js */ }
+/* En un teléfono angosto la cadena aprovecha más el ancho (v4.3.1). */
+@media (max-width: 440px) { .chain-modal { padding: 14px 10px; } }
 .dg { position: relative; margin: 0 auto; }
 .dg-pipes { position: absolute; inset: 0; pointer-events: none; }
 /* Eslabones (v3.0.1): cada trazo es un eslabón (el borde y su hueco) y la cadena corre hacia abajo. */
