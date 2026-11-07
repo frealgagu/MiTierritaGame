@@ -32,5 +32,5 @@ export const ZONE49 = {
   // Los ramos irán a las Salinas y las cajas a Zipaquirá (cuando lleguen esas zonas).
   routes: {},
   unlockedBy: null, // la primera de Cundinamarca: se abre con la región
-  next: null,
+  next: 'fresas',
 };

@@ -45,4 +45,10 @@ export default {
   boncheo: ['A bunch holds 25 roses, wrapped in corrugated cardboard.'],
   cuarto_frio: ['Flowers wait in cold rooms, at about 2 °C, before travelling.'],
   empacadora_flores: ['In the week before Valentine’s Day, planes leave full of flowers.', 'The flowers reach the United States a day or two after cutting.'],
+  fresal: ['Sibaté is the land of strawberries and cream, on the edge of the Savanna.', 'Strawberries grow on beds covered in plastic, off the mud.'],
+  lavadero_fresas: ['Small or bruised strawberries aren’t thrown away: they become jam.'],
+  seleccionadora_fresas: ['Strawberries are sorted by size and color, one by one.'],
+  llenadora_bandejas: ['A tray of strawberries weighs about 500 grams.'],
+  mesa_fresas_crema: ['On the road to Sibaté there are stands of strawberries with cream.'],
+  marmita_mermelada: ['Jam is cooked with sugar and lime until it thickens.'],
 };

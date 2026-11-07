@@ -7570,6 +7570,153 @@ const DRAW = {
     for (let i = 0; i < 2 + Math.min(ctx.tier, 4); i++) box(g, x + 1.5 + (i % 2) * 0.55, y + 2.1 + Math.floor(i / 2) * 0.3, 0.5, 0.25, 6, PRODUCTS.caja_flores.color, { z: 0 });
   },
 
+  // Los Freseros de Sibaté. Lavadero de fresas: las canastillas en la pila de agua corriente con la ducha; por la
+  // canaleta de atrás, la fresa de segunda se amontona para la Marmita.
+  lavadero_fresas(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.35;
+    box(g, x0, y0 + 0.4, 1.9, 1.1, 10, 0xb0bec5);
+    g.poly(isoPoly([[x0 + 0.08, y0 + 0.48, 10], [x0 + 1.82, y0 + 0.48, 10], [x0 + 1.82, y0 + 1.42, 10], [x0 + 0.08, y0 + 1.42, 10]])).fill(0x81d4fa);
+    for (let k = 0; k < 3; k++) {
+      const q = iso(x0 + 0.4 + k * 0.55, y0 + 0.95, 12);
+      g.rect(q.x - 7, q.y - 5, 14, 6).fill(0x43a047).stroke({ width: 0.7, color: 0x1b5e20 });
+      for (const dx of [-4, 0, 4]) g.circle(q.x + dx, q.y - 6, 2.3).fill(PRODUCTS.fresa.color);
+    }
+    const c0 = iso(x + 2.3, y + 0.5, 10);
+    const c1 = iso(x + 2.8, y + 2.2, 2);
+    g.moveTo(c0.x, c0.y).lineTo(c1.x, c1.y).stroke({ width: 4, color: 0x8d6e4a });
+    const pile = iso(x + 2.6, y + 2.6);
+    g.ellipse(pile.x, pile.y - 3, 12, 6).fill(0x8d6e4a).stroke(OUTLINE);
+    for (let k = 0; k < 6; k++) g.circle(pile.x - 8 + k * 3.2, pile.y - 5 - (k % 2) * 2, 1.8).fill(PRODUCTS.fresa_segunda.color);
+    ramada(this, g, x0, y0, 2.0, 1.7, 28 + ctx.up, 0x9aa3a8);
+    const shower = iso(x0 + 1.0, y0 + 0.95, 24);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      if (!this.working) return;
+      for (let k = 0; k < 5; k++) {
+        const f = (time * 2 + k * 0.2) % 1;
+        anim.circle(shower.x - 8 + k * 4, shower.y + f * 12, 1).fill({ color: 0xe1f5fe, alpha: 1 - f });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Seleccionadora: la mesa larga bajo la ramada donde se escogen las fresas, con las canastillas verdes llenas.
+  seleccionadora_fresas(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    box(g, x0 + 0.2, y0 + 0.5, 1.9, 0.6, 9, PAL.wood);
+    for (let k = 0; k < 5; k++) {
+      const q = iso(x0 + 0.4 + k * 0.33, y0 + 0.8, 9);
+      g.circle(q.x, q.y - 2, 2.3).fill(PRODUCTS.fresa.color);
+    }
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 0.5 + (i % 3) * 0.45, y + 2.4 + Math.floor(i / 3) * 0.35);
+      g.rect(q.x - 6, q.y - 6, 12, 6).fill(0x43a047).stroke({ width: 0.7, color: 0x1b5e20 });
+      for (const dx of [-3, 0, 3]) g.circle(q.x + dx, q.y - 7, 2).fill(PRODUCTS.fresa.color);
+    }
+    ramada(this, g, x0, y0, 2.3, 1.6, 28 + ctx.up, 0x9aa3a8);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, wx] of [[0, 0.7], [1, 1.6]]) {
+        const wp = iso(x0 + wx, y0 + 1.5);
+        worker(anim, wp.x, wp.y, k ? 0x1e88e5 : 0xe53935);
+        const reach = this.working ? Math.abs(Math.sin(time * 3 + k)) * 3 : 0;
+        anim.circle(wp.x + 3, wp.y - 16 - reach, 2).fill(PRODUCTS.fresa.color);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Llenadora de bandejas: la nave blanca con la banda que lleva las bandejas tapadas; las cajas de cartón afuera.
+  llenadora_bandejas(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.2, 1.4, 24, ctx, { wall: 0xf4f6f8, roofColor: 0x90a4ae });
+    door(g, hx, hy, 1.4, 1.6, 16, 0x546e7a);
+    windowOnRight(this, g, hx, hy, 2.2, 0.7, 12, 0x546e7a);
+    box(g, x + 0.4, y + 2.2, 2.0, 0.35, 7, 0x455a64);
+    for (let i = 0; i < 1 + Math.min(ctx.tier, 3); i++) box(g, x + 2.4 + (i % 2) * 0.3, y + 1.8 + Math.floor(i / 2) * 0.3, 0.28, 0.25, 6, 0xc8a26a);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (let k = 0; k < 3; k++) {
+        const f = ((this.working ? time * 0.3 : 0) + k / 3) % 1;
+        const q = iso(x + 0.5 + f * 1.8, y + 2.37, 8);
+        anim.rect(q.x - 5, q.y - 3, 10, 3).fill(0xeceff1).stroke({ width: 0.6, color: 0x3a2418 });
+        for (const dx of [-3, 0, 3]) anim.circle(q.x + dx, q.y - 3.5, 1.6).fill(PRODUCTS.fresa.color);
+      }
+    };
+    this.animate(0);
+  },
+
+  // Mesa de fresas con crema: el puesto de la carretera, con el toldo rojo y blanco, los vasos y el letrero.
+  mesa_fresas_crema(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.5;
+    box(g, x0, y0 + 0.5, 2.0, 0.7, 12, 0xfafafa);
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 3); k++) {
+      const q = iso(x0 + 0.3 + (k % 4) * 0.42, y0 + 0.7 + Math.floor(k / 4) * 0.3, 12);
+      g.rect(q.x - 2.5, q.y - 7, 5, 7).fill(0xfafafa).stroke({ width: 0.6, color: 0x3a2418 });
+      g.circle(q.x, q.y - 8, 2.6).fill(0xfff3e0);
+      g.circle(q.x, q.y - 10, 1.4).fill(PRODUCTS.fresa.color);
+    }
+    const r = 28 + ctx.up;
+    for (const [px, py] of [[0, 0.3], [2.1, 0.3], [0, 1.4], [2.1, 1.4]]) box(g, x0 + px, y0 + py, 0.08, 0.08, r, 0x8d6e4a);
+    for (let k = 0; k < 6; k++) {
+      g.poly(isoPoly([[x0 + k * 0.36, y0 + 0.2, r], [x0 + (k + 1) * 0.36, y0 + 0.2, r], [x0 + (k + 1) * 0.36, y0 + 1.5, r + 4], [x0 + k * 0.36, y0 + 1.5, r + 4]])).fill(k % 2 ? 0xfafafa : 0xe53935).stroke({ width: 0.6, color: 0x3a2418 });
+    }
+    this.roofTop = iso(x0 + 1.1, y0 + 0.85, r + 4);
+    const sign = iso(x0 + 2.4, y0 + 1.8, 18);
+    g.moveTo(sign.x, sign.y + 18).lineTo(sign.x, sign.y).stroke({ width: 1.5, color: 0x6b4a2e });
+    g.roundRect(sign.x - 11, sign.y - 8, 22, 10, 2).fill(0xfffaf0).stroke(OUTLINE);
+    g.circle(sign.x - 4, sign.y - 3, 3).fill(PRODUCTS.fresa.color);
+    g.circle(sign.x + 4, sign.y - 3, 3).fill(0xfff3e0).stroke({ width: 0.5, color: 0x3a2418 });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x0 + 1.0, y0 + 2.0);
+      worker(anim, wp.x, wp.y, 0xe53935);
+      const spoon = this.working ? Math.sin(time * 5) * 3 : 0;
+      anim.moveTo(wp.x + 4, wp.y - 15).lineTo(wp.x + 9 + spoon, wp.y - 19).stroke({ width: 1.2, color: 0xb0bec5 });
+    };
+    this.animate(0);
+  },
+
+  // Marmita de mermelada: la marmita de cobre al fuego, con el cucharón que revuelve, y los frascos tapados en fila.
+  marmita_mermelada(g, x, y, ctx) {
+    const x0 = x + 0.5;
+    const y0 = y + 0.5;
+    box(g, x0, y0, 1.3, 1.1, 8, 0x9e9e9e);
+    const c = iso(x0 + 0.65, y0 + 0.55, 8);
+    g.ellipse(c.x, c.y - 6, 16, 7).fill(0xb87333).stroke(OUTLINE);
+    g.rect(c.x - 16, c.y - 16, 32, 10).fill(0xc98a4b).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 16, 16, 6).fill(0xb87333).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 16, 13, 4.5).fill(PRODUCTS.mermelada_fresa.color);
+    this.lights.push({ x: c.x, y: c.y + 2, r: 18, color: 0xff7a1a });
+    this.smokePoints.push(iso(x0 + 0.65, y0 + 0.55, 30));
+    for (let i = 0; i < 3 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 0.4 + i * 0.32, y + 2.5);
+      g.rect(q.x - 3, q.y - 8, 6, 8).fill(PRODUCTS.mermelada_fresa.color).stroke({ width: 0.6, color: 0x3a2418 });
+      g.rect(q.x - 3.5, q.y - 10, 7, 2.5).fill(0xe53935).stroke({ width: 0.5, color: 0x3a2418 });
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const a = this.working ? time * 2 : 0;
+      anim.moveTo(c.x + Math.cos(a) * 8, c.y - 16 + Math.sin(a) * 2.5).lineTo(c.x + 14 + Math.cos(a) * 4, c.y - 34).stroke({ width: 2, color: 0x8d6e4a });
+      if (this.working) for (let k = 0; k < 3; k++) anim.circle(c.x - 6 + k * 6, c.y - 17 - ((time * 3 + k) % 1) * 3, 1.4).fill({ color: 0xef5350, alpha: 0.8 });
+    };
+    this.animate(0);
+  },
+
   // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja
   // que se amontona para el Secadero.
   huila_wetmill(g, x, y, ctx) {

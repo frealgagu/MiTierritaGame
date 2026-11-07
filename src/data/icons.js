@@ -527,6 +527,14 @@ export const ICON = {
   boncheRosas: '\uE209', // El bonche: veinticinco rosas apretadas, envueltas en el cartón corrugado
   ramoRosas: '\uE20A', // El ramo de rosas listo para regalar, con su papel y el moño
   cajaFlores: '\uE20B', // La caja larga de exportación, con los bonches adentro y el sello del avión
+  fresal: '\uE20C', // El fresal: las matas sobre el lomo cubierto de plástico, bajo el macrotúnel
+  fresa: '\uE20D', // Una fresa roja con su corona
+  fresaLavada: '\uE20E', // Las fresas lavadas en el colador, escurriendo agua
+  fresaSeleccionada: '\uE20F', // Las fresas grandes, escogidas una por una, en la canastilla
+  bandejaFresas: '\uE210', // La bandeja de fresas, tapada con su plástico transparente y la etiqueta
+  fresasCrema: '\uE211', // El vaso de fresas con crema, como en Sibaté: la crema batida, las fresas picadas y la cucharita
+  fresaSegunda: '\uE212', // La fresa de segunda: las pequeñas y las magulladas, que van para la mermelada
+  mermeladaFresa: '\uE213', // El frasco de mermelada de fresa, con su tapa de cuadros
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

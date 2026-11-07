@@ -49,4 +49,5 @@ export default {
   chamba: 'Bem-vindo a La Chamba! Aqui o barro é pisado, modelado à mão e queimado até ficar preto.',
   neiva: 'Bem-vindo a Neiva, em pleno San Pedro! Daqui sai o passeio para ver as estrelas na Tatacoa.',
   flores: 'Bem-vindo à Savana, sumercé! Aqui as rosas saem da estufa e viajam de avião para meio mundo.',
+  fresas: 'E aí, sumercé! Aqui em Sibaté os morangos são lavados, escolhidos e servidos com creme; os de segunda viram geleia.',
 };

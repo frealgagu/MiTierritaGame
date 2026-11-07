@@ -314,4 +314,11 @@ export default {
   bonche_rosas: 'Botte de roses',
   ramo_rosas: 'Bouquet de roses',
   caja_flores: 'Carton de fleurs',
+  fresa: 'Fraise',
+  fresa_lavada: 'Fraise lavée',
+  fresa_seleccionada: 'Fraise triée',
+  bandeja_fresas: 'Barquette de fraises',
+  fresas_crema: 'Fraises à la crème',
+  fresa_segunda: 'Fraise de second choix',
+  mermelada_fresa: 'Confiture de fraises',
 };

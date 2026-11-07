@@ -3,7 +3,7 @@ import { iso, isoPoly, depth, shade } from './iso.js';
 import { LOOK } from './look.js';
 import { PAL, OUTLINE, FONT } from './palette.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
-import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPlantainPlant, drawYucaPlant, drawYanchamaTree, drawAzoteaBed, drawMangroveTree, drawWerreguePalm, drawAsaiPalm, drawAjiPlant, drawPassionVine, drawPondTile, drawHideFrame, drawPotatoPlant, drawAchiraPlant, drawRoseBush, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
+import { drawCacaoTree, drawCaneClump, drawCoffeeBush, drawAnthill, drawBarley, drawCanaFlecha, drawClayMound, drawOilPalm, drawPlantainPlant, drawYucaPlant, drawYanchamaTree, drawAzoteaBed, drawMangroveTree, drawWerreguePalm, drawAsaiPalm, drawAjiPlant, drawPassionVine, drawPondTile, drawHideFrame, drawPotatoPlant, drawAchiraPlant, drawRoseBush, drawStrawberryPlant, drawCoconutPalm, drawCornStalk, drawFiquePlant, drawGuavaTree, drawRicePlant, drawTobaccoPlant } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
@@ -221,6 +221,7 @@ export class FarmView extends StationView {
           else if (this.theme === 'aji') drawAjiPlant(g, p.x, p.y, scale, rng, 2 + Math.min(tier, 4));
           else if (this.theme === 'achira') drawAchiraPlant(g, p.x, p.y, 0.8 + tier * 0.05, rng, 1 + Math.min(tier, 3));
           else if (this.theme === 'roses') drawRoseBush(g, p.x, p.y, 0.85 + tier * 0.04, rng, 1 + Math.min(tier, 3));
+          else if (this.theme === 'strawberry') drawStrawberryPlant(g, p.x, p.y, 0.85 + tier * 0.04, rng, 1 + Math.min(tier, 3));
           else if (this.theme === 'asai') drawAsaiPalm(g, p.x, p.y, 0.7 + tier * 0.05, rng, Math.min(tier, 3));
           else if (this.theme === 'werregue') drawWerreguePalm(g, p.x, p.y, 0.8 + tier * 0.05, rng, tier);
           else if (this.theme === 'azotea') drawAzoteaBed(g, p.x, p.y, 0.8 + tier * 0.04, rng, tier);
@@ -235,14 +236,13 @@ export class FarmView extends StationView {
         }
       }
     }
-    if (this.theme === 'roses') this.drawGreenhouses(g, tier);
+    if (this.theme === 'roses' || this.theme === 'strawberry') this.drawGreenhouses(g, tier, this.theme === 'strawberry' ? 22 : 34);
   }
 
   // Las Flores de la Sabana (v4.4): naves de plástico a lo largo de las filas de rosales, de dos casillas de ancho;
   // con los hitos se cubren más filas. Transparentes, para que se vean las rosas adentro.
-  drawGreenhouses(g, tier) {
+  drawGreenhouses(g, tier, H = 34) {
     const { x, y, w, h } = this.zoneFarm;
-    const H = 34;
     const naves = [];
     for (let gy = y; gy + 2 <= y + h; gy += 2) naves.push([gy < y + 2 ? x + 2 : x, gy]);
     for (const [k, [x0, gy]] of naves.entries()) {

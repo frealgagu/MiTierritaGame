@@ -49,4 +49,5 @@ export default {
   chamba: ['Dona Ofelia', 'a ceramista'],
   neiva: ['Dona Marleny', 'a rainha do San Pedro'],
   flores: ['Dona Rocío', 'a floricultora'],
+  fresas: ['Dom Gilberto', 'o morangueiro'],
 };

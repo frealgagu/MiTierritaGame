@@ -314,4 +314,11 @@ export default {
   bonche_rosas: 'Bunch of roses',
   ramo_rosas: 'Rose bouquet',
   caja_flores: 'Flower box',
+  fresa: 'Strawberry',
+  fresa_lavada: 'Washed strawberry',
+  fresa_seleccionada: 'Sorted strawberry',
+  bandeja_fresas: 'Strawberry tray',
+  fresas_crema: 'Strawberries and cream',
+  fresa_segunda: 'Second-grade strawberry',
+  mermelada_fresa: 'Strawberry jam',
 };

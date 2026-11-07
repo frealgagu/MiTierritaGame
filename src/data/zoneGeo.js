@@ -19,4 +19,6 @@ export const ZONE_GEO = {
   achirales: [3.62, -75.09], cafe_huila: [1.85, -76.05], betania: [2.68, -75.43], lechoneria: [4.44, -75.23], chamba: [4.03, -74.97], neiva: [2.93, -75.28],
   // Cundinamarca: Madrid (la Sabana de las flores).
   flores: [4.73, -74.26],
+  // Sibaté (las fresas).
+  fresas: [4.49, -74.26],
 };

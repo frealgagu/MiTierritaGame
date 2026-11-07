@@ -204,4 +204,12 @@ export default {
   flor_sabana: 'Savanna flower',
   cadena_frio: 'Cold chain',
   sello_cund: 'Export seal',
+  lavado_presion: 'Pressure washing',
+  fresa_albion: 'Albion strawberries',
+  banda_seleccion: 'Sorting belt',
+  campero_fresero: 'Strawberry jeep',
+  bandejas_termoformadas: 'Thermoformed trays',
+  crema_batida: 'Whipped cream',
+  fresas_sibate: 'Sibaté strawberries',
+  marmita_cobre: 'Copper kettle',
 };

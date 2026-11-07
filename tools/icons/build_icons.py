@@ -8616,6 +8616,113 @@ def caja_flores():
     return layers
 
 
+
+# ---------- Cundinamarca · Los Freseros de Sibaté (v4.4) ----------
+
+def strawberry(cx, cy, s=1.0, color='#e53935', rot=0, seeds=True, leaves=True):
+    """Una fresa: el corazón rojo con sus semillas amarillas y la corona de hojas verdes."""
+    def P(x, y):
+        a = math.radians(rot)
+        return (cx + (x * math.cos(a) - y * math.sin(a)) * s, cy + (x * math.sin(a) + y * math.cos(a)) * s)
+    def path(pts_):
+        (x0, y0), *rest = pts_
+        out = f'M {x0:.2f} {y0:.2f}'
+        for i in range(0, len(rest), 2):
+            (qx, qy), (x1, y1) = rest[i], rest[i + 1]
+            out += f' Q {qx:.2f} {qy:.2f} {x1:.2f} {y1:.2f}'
+        return out + ' Z'
+    body = [P(-10, -6), P(-12, 4), P(0, 14), P(12, 4), P(10, -6), P(0, -10), P(-10, -6)]
+    outline = [P(-11.8, -6.8), P(-14, 4.5), P(0, 16.4), P(14, 4.5), P(11.8, -6.8), P(0, -12), P(-11.8, -6.8)]
+    layers = [(OUTLINE, [path(outline)]), (color, [path(body)]), (tone(color, 1.3), [ellipse(*P(-4, -2), 2.2 * s, 4 * s, rot + 20)])]
+    if seeds:
+        layers.append(('#ffe082', [ellipse(*P(x, y), 0.8 * s, 1.2 * s, rot) for x, y in ((-5, 0), (0, -3), (5, 0), (-6, 5), (0, 3), (6, 5), (-2, 9), (3, 9), (0, 12))]))
+    if leaves:
+        lv = [leaf(*P(0, -8), *P(dx, dy), 2.8 * s) for dx, dy in ((-10, -10), (10, -10), (-4, -14), (4, -14))]
+        layers += [(OUTLINE, [leaf(*P(0, -8), *P(dx * 1.12, dy * 1.12), 3.8 * s) for dx, dy in ((-10, -10), (10, -10), (-4, -14), (4, -14))]), ('#43a047', lv)]
+    return layers
+
+
+def fresal():
+    """El fresal: las matas sobre el lomo cubierto de plástico, bajo el macrotúnel."""
+    layers = [(OUTLINE, ['M 4 86 Q 50 70 96 86 L 96 94 L 4 94 Z']), ('#37474f', ['M 6 87 Q 50 72.6 94 87 L 94 92 L 6 92 Z'])]
+    for x in (20, 50, 80):
+        layers += [(OUTLINE, [circle(x - 7, 70, 9), circle(x + 7, 70, 9), circle(x, 62, 10)]), ('#43a047', [circle(x - 7, 70, 7.5), circle(x + 7, 70, 7.5), circle(x, 62, 8.5)])]
+        layers.append(('#2e7d32', [rib(x, 72, x, 58, 1), rib(x - 7, 72, x - 11, 66, 1), rib(x + 7, 72, x + 11, 66, 1)]))
+        layers += strawberry(x - 6, 80, 0.45, leaves=False) + strawberry(x + 7, 79, 0.42, leaves=False)
+    layers.append(('#e8f2f6', ['M 4 86 L 4 40 Q 50 6 96 40 L 96 86 L 92 86 L 92 42 Q 50 12 8 42 L 8 86 Z']))
+    layers.append((OUTLINE, ['M 2 86 L 2 39 Q 50 3 98 39 L 98 86 L 96 86 L 96 40 Q 50 6 4 40 L 4 86 Z']))
+    return layers
+
+
+def fresa():
+    """Una fresa roja con su corona."""
+    return strawberry(50, 54, 3)
+
+
+def fresa_lavada():
+    """Las fresas lavadas en el colador, escurriendo agua."""
+    layers = []
+    for x, y, r in ((36, 40, -15), (54, 34, 10), (66, 46, 25)):
+        layers += strawberry(x, y, 1.3, rot=r)
+    layers += [(OUTLINE, ['M 8 48 L 92 48 Q 88 92 50 92 Q 12 92 8 48 Z']), ('#eceff1', ['M 11 50.6 L 89 50.6 Q 85.4 89.4 50 89.4 Q 14.6 89.4 11 50.6 Z'])]
+    layers.append(('#b0bec5', [circle(30 + (i % 5) * 10, 62 + (i // 5) * 10, 2) for i in range(10)]))
+    layers += [(OUTLINE, [rect(2, 46, 10, 6), rect(88, 46, 10, 6)]), ('#cfd8dc', [rect(3.4, 47.4, 7.2, 3.2), rect(89.4, 47.4, 7.2, 3.2)])]
+    layers.append(('#4fc3f7', [drop_path(34, 97, 0.12), drop_path(50, 98, 0.14), drop_path(66, 97, 0.12)]))
+    return layers
+
+
+def fresa_seleccionada():
+    """Las fresas grandes, escogidas una por una, en la canastilla."""
+    layers = []
+    for x, y in ((26, 36), (44, 30), (62, 32), (78, 38), (36, 44), (54, 42), (70, 46)):
+        layers += strawberry(x, y, 1.05)
+    layers += [(OUTLINE, [poly(6, 46, 94, 46, 88, 90, 12, 90)]), ('#43a047', [poly(9, 48.6, 91, 48.6, 85.6, 87.4, 14.4, 87.4)])]
+    layers.append(('#2e7d32', [rect(14 + i * 9, 54, 4, 28) for i in range(8)]))
+    return layers
+
+
+def bandeja_fresas():
+    """La bandeja de fresas, tapada con su plástico transparente y la etiqueta."""
+    layers = [(OUTLINE, [poly(6, 56, 94, 56, 88, 86, 12, 86)]), ('#eceff1', [poly(8.6, 58.4, 91.4, 58.4, 86, 83.4, 14, 83.4)])]
+    for x, y in ((22, 50), (38, 46), (54, 48), (70, 46), (84, 50), (30, 56), (46, 56), (62, 56), (76, 56)):
+        layers += strawberry(x, y, 0.75, leaves=y < 52)
+    layers.append(('#e1f5fe', ['M 6 56 Q 50 28 94 56 Z']))
+    layers.append((OUTLINE, ['M 6 56 Q 50 26 94 56 L 94 57.6 Q 50 29.6 6 57.6 Z']))
+    layers += [(OUTLINE, [rect(36, 66, 28, 12)]), ('#fafafa', [rect(37.4, 67.4, 25.2, 9.2)]), ('#e53935', [rect(40, 70, 20, 3)])]
+    return layers
+
+
+def fresas_crema():
+    """El vaso de fresas con crema, como en Sibaté: la crema batida, las fresas picadas y la cucharita."""
+    layers = [(OUTLINE, ['M 22 44 L 78 44 L 68 94 L 32 94 Z']), ('#fafafa', ['M 25 46.4 L 75 46.4 L 65.8 91.6 L 34.2 91.6 Z'])]
+    layers.append(('#ef5350', [poly(28, 60, 72, 60, 70, 70, 30, 70), poly(31, 80, 69, 80, 67.6, 88, 32.4, 88)]))
+    layers.append(('#fff3e0', [poly(29.5, 70, 70.5, 70, 69, 80, 31, 80)]))
+    layers += [(OUTLINE, [circle(36, 40, 11), circle(50, 34, 13), circle(64, 40, 11)]), ('#fff8e7', [circle(36, 40, 9), circle(50, 34, 11), circle(64, 40, 9)])]
+    layers += strawberry(50, 20, 0.9)
+    layers += bar(66, 32, 86, 10, 2.4, '#b0bec5', 1.2)
+    return layers
+
+
+def fresa_segunda():
+    """La fresa de segunda: las pequeñas y las magulladas, que van para la mermelada."""
+    layers = []
+    for x, y, r, c in ((30, 50, -20, '#c62828'), (60, 44, 15, '#e53935'), (46, 68, 5, '#d84315'), (72, 66, -10, '#c62828')):
+        layers += strawberry(x, y, 1.2, color=c, rot=r)
+    layers.append(('#7b1f1f', [ellipse(64, 48, 3, 2), ellipse(28, 54, 2.4, 2)]))
+    return layers
+
+
+def mermelada_fresa():
+    """El frasco de mermelada de fresa, con su tapa de cuadros."""
+    layers = [(OUTLINE, ['M 24 30 L 76 30 L 80 40 Q 84 52 82 70 Q 80 92 50 92 Q 20 92 18 70 Q 16 52 20 40 Z']), ('#c62828', ['M 26.4 32.4 L 73.6 32.4 L 77.4 41 Q 81.4 52 79.6 70 Q 78 89.4 50 89.4 Q 22 89.4 20.4 70 Q 18.6 52 22.6 41 Z'])]
+    layers.append(('#ef9a9a', [ellipse(32, 60, 3.4, 12, 6)]))
+    layers += [(OUTLINE, [rect(18, 14, 64, 20)]), ('#fafafa', [rect(19.6, 15.6, 60.8, 16.8)])]
+    layers.append(('#e53935', [rect(19.6 + i * 15.2, 15.6 + (j * 8.4), 7.6, 8.4) for i in range(4) for j in range(2) if (i + j) % 2 == 0]))
+    layers += [(OUTLINE, [rect(30, 54, 40, 22)]), ('#fffde7', [rect(31.4, 55.4, 37.2, 19.2)])]
+    layers += strawberry(50, 64, 0.5)
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9149,6 +9256,15 @@ ICONS = [
     (0xE209, 'bonche_rosas', bonche_rosas),
     (0xE20A, 'ramo_rosas', ramo_rosas),
     (0xE20B, 'caja_flores', caja_flores),
+    # Cundinamarca · Los Freseros de Sibaté (v4.4)
+    (0xE20C, 'fresal', fresal),
+    (0xE20D, 'fresa', fresa),
+    (0xE20E, 'fresa_lavada', fresa_lavada),
+    (0xE20F, 'fresa_seleccionada', fresa_seleccionada),
+    (0xE210, 'bandeja_fresas', bandeja_fresas),
+    (0xE211, 'fresas_crema', fresas_crema),
+    (0xE212, 'fresa_segunda', fresa_segunda),
+    (0xE213, 'mermelada_fresa', mermelada_fresa),
 ]
 
 

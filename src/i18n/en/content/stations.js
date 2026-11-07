@@ -306,4 +306,10 @@ export default {
   boncheo: 'Bunching Table',
   cuarto_frio: 'Cold Room',
   empacadora_flores: 'Flower Packer',
+  fresal: 'Strawberry Field',
+  lavadero_fresas: 'Strawberry Washer',
+  seleccionadora_fresas: 'Sorting Table',
+  llenadora_bandejas: 'Tray Filler',
+  mesa_fresas_crema: 'Strawberries & Cream Table',
+  marmita_mermelada: 'Jam Kettle',
 };

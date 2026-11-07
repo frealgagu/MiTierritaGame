@@ -45,4 +45,10 @@ export default {
   boncheo: ['Um maço leva 25 rosas, embrulhadas em papelão ondulado.'],
   cuarto_frio: ['As flores esperam em câmaras frias, a uns 2 °C, antes de viajar.'],
   empacadora_flores: ['Na semana do Dia dos Namorados dos EUA saem aviões cheios de flores.', 'As flores chegam aos Estados Unidos um ou dois dias após o corte.'],
+  fresal: ['Sibaté é a terra dos morangos com creme, na beira da Savana.', 'Os morangos crescem em canteiros cobertos de plástico, longe do barro.'],
+  lavadero_fresas: ['Os morangos pequenos ou machucados não vão fora: viram geleia.'],
+  seleccionadora_fresas: ['Os morangos são escolhidos por tamanho e cor, um a um.'],
+  llenadora_bandejas: ['Uma bandeja de morangos pesa uns 500 gramas.'],
+  mesa_fresas_crema: ['Na estrada para Sibaté há barracas de morangos com creme.'],
+  marmita_mermelada: ['A geleia é cozida com açúcar e limão até engrossar.'],
 };

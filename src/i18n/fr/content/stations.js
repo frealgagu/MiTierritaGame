@@ -306,4 +306,10 @@ export default {
   boncheo: 'Table de bottelage',
   cuarto_frio: 'Chambre froide',
   empacadora_flores: 'Emballeuse à fleurs',
+  fresal: 'Fraiseraie',
+  lavadero_fresas: 'Laveuse à fraises',
+  seleccionadora_fresas: 'Table de tri',
+  llenadora_bandejas: 'Remplisseuse de barquettes',
+  mesa_fresas_crema: 'Table des fraises à la crème',
+  marmita_mermelada: 'Chaudron à confiture',
 };
