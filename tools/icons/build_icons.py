@@ -4751,8 +4751,8 @@ def arriero():
     return layers
 
 
-def mule(cx, cy, s=1.0, body='#6d4c41', load=True):
-    """La mula de perfil, mirando a la izquierda, con su enjalma y la carga de café."""
+def mule(cx, cy, s=1.0, body='#6d4c41', load=True, horse=False):
+    """La mula de perfil, mirando a la izquierda, con su enjalma y la carga de café (horse: caballo, de orejas cortas y crin)."""
     def P(*xy):
         return pts([(cx + x * s, cy + y * s) for x, y in zip(xy[0::2], xy[1::2])])
     def E(x, y, rx, ry, rot=0):
@@ -4763,8 +4763,12 @@ def mule(cx, cy, s=1.0, body='#6d4c41', load=True):
     layers += [(OUTLINE, [E(0, 0, 30, 13)]), (body, [E(0, 0, 28, 11)])]
     layers += [(OUTLINE, [P(-24, -2, -40, -24, -46, -20, -32, 4)]), (body, [P(-24.5, -3, -39.5, -21.6, -43.6, -19.6, -31, 2.4)])]
     layers += [(OUTLINE, [E(-46, -18, 9, 6, 20)]), (body, [E(-46, -18, 7.6, 4.6, 20)]), ('#3e2723', [E(-52, -15, 2.6, 2.2)])]
-    layers += [(OUTLINE, [P(-42, -24, -38, -42, -34, -24)]), (body, [P(-40.6, -24, -38, -38, -35.4, -24)])]
-    layers += [(OUTLINE, [P(-38, -24, -30, -40, -30, -22)]), (body, [P(-36.4, -24, -31, -36.6, -31, -23)])]
+    if horse:
+        layers += [(OUTLINE, [P(-41, -24, -39, -32, -35, -24)]), (body, [P(-39.8, -24, -38.8, -29.4, -36.2, -24)])]
+        layers += [('#3e2723', [P(-36, -26, -22, -4, -26, -2, -40, -22)])]
+    else:
+        layers += [(OUTLINE, [P(-42, -24, -38, -42, -34, -24)]), (body, [P(-40.6, -24, -38, -38, -35.4, -24)])]
+        layers += [(OUTLINE, [P(-38, -24, -30, -40, -30, -22)]), (body, [P(-36.4, -24, -31, -36.6, -31, -23)])]
     layers += [('#1b1b1b', [E(-44, -20, 1.2, 1.2)]), ('#3e2723', [P(28, -6, 36, 6, 34, 18, 30, 6)])]
     if load:
         layers += [(OUTLINE, [E(-8, -12, 12, 9), E(10, -12, 12, 9)]), ('#c8a165', [E(-8, -12, 10.4, 7.4), E(10, -12, 10.4, 7.4)]), ('#a1793f', [P(-14, -14, -2, -14, -2, -12.6, -14, -12.6), P(4, -14, 16, -14, 16, -12.6, 4, -12.6)])]
@@ -5191,6 +5195,890 @@ def castillo_polvora():
     return layers
 
 
+
+# ---------- Láminas de Santander (v4.3) ----------
+
+def bocadillo_lonja():
+    """El bocadillo de lonja: la tajada de dos capas, guayaba roja y guayaba blanca, sobre la hoja de bijao."""
+    layers = [(OUTLINE, [leaf(4, 78, 96, 66, 22)]), ('#689f38', [leaf(6, 78, 94, 66, 19.6)]), ('#8bc34a', [rib(8, 77, 92, 67, 1.2)])]
+    layers += [(OUTLINE, [poly(20, 46, 70, 36, 84, 46, 84, 70, 34, 80, 20, 70)])]
+    layers += [('#c2185b', [poly(22.4, 47.4, 70, 38.4, 81.6, 47, 81.6, 57, 34, 66, 22.4, 57.6)]), ('#f8e1d0', [poly(22.4, 57.6, 34, 66, 81.6, 57, 81.6, 68.6, 34, 77.6, 22.4, 68.6)])]
+    layers += [('#e05a8a', [poly(22.4, 47.4, 70, 38.4, 81.6, 47, 34, 56)]), ('#ad1457', [rect(34, 56, 1.4, 22, -12)]), ('#fff3e8', [ellipse(54, 66, 10, 1.6, -12)])]
+    return layers
+
+
+def cajitas():
+    """Las cajitas de madera: las cajas de balso apiladas, una abierta con los bocadillos envueltos en bijao."""
+    layers = []
+    for x, y in [(8, 62), (40, 62), (24, 38)]:
+        layers += [(OUTLINE, [poly(x, y, x + 30, y - 6, x + 46, y + 2, x + 16, y + 8), poly(x, y, x + 16, y + 8, x + 16, y + 26, x, y + 18), poly(x + 16, y + 8, x + 46, y + 2, x + 46, y + 20, x + 16, y + 26)]),
+                   ('#e8cf9a', [poly(x + 2, y + 0.2, x + 30, y - 4.4, x + 43, y + 2, x + 16, y + 6.6)]), ('#d9b97a', [poly(x + 1.4, y + 2.4, x + 14.6, y + 9, x + 14.6, y + 23.4, x + 1.4, y + 16.8)]), ('#c9a464', [poly(x + 17.4, y + 9, x + 44.6, y + 3.6, x + 44.6, y + 18.6, x + 17.4, y + 24)])]
+        layers.append(('#a1793f', [rib(x + 20, y + 16, x + 42, y + 11, 1.2)]))
+    layers += [('#558b2f', [poly(30, 37, 52, 33, 62, 38, 40, 42)]), ('#8bc34a', [rib(34, 38, 54, 34.5, 1.2), rib(38, 40, 58, 36, 1.2)])]
+    return layers
+
+
+def velez():
+    """Vélez: la capital del bocadillo y del torbellino, con su requinto y los bocadillos en bijao."""
+    layers = tiple_shape(34, 58, 0.85, -18)
+    for x, y in [(66, 74), (80, 64), (74, 86)]:
+        layers += [(OUTLINE, [rect(x - 10, y - 6, 20, 12, 20)]), ('#689f38', [rect(x - 8.6, y - 4.6, 17.2, 9.2, 20)]), ('#c2185b', [rect(x - 5, y - 2.4, 10, 4.8, 20)])]
+    layers += note(74, 32, 0.8) + note(88, 22, 0.7)
+    return layers
+
+
+def caney():
+    """El caney: el rancho alto de palos y techo de paja donde cuelga la hoja de tabaco a curar."""
+    layers = oval(50, 92, 46, 4, '#d7ccc8', d=1.2)
+    for x in (12, 50, 88):
+        layers += bar(x, 92, x, 34, 3.4, '#795548')
+    layers += [(OUTLINE, [poly(2, 38, 50, 6, 98, 38)]), ('#c8a165', [poly(6, 36.4, 50, 9, 94, 36.4)]), ('#a1793f', [rib(12, 34, 50, 10, 1.2), rib(30, 36, 50, 12, 1.2), rib(70, 36, 50, 12, 1.2), rib(88, 34, 50, 10, 1.2)])]
+    for k, y in enumerate((44, 62)):
+        layers += [(OUTLINE, [rect(10, y - 1.4, 80, 2.8)])]
+        for i in range(8):
+            x = 15 + 10 * i
+            col = ['#7cb342', '#c0a040', '#8d5a32'][(i + k) % 3]
+            layers += [(OUTLINE, [leaf(x, y, x, y + 16, 4.4)]), (col, [leaf(x, y + 0.6, x, y + 15, 3.4)])]
+    return layers
+
+
+def galeon():
+    """Tabaco para el mundo: el velero de la Colonia, cargado de fardos de tabaco rumbo a Europa."""
+    layers = [(OUTLINE, [rect(2, 80, 96, 16)]), ('#4fa3d9', [rect(3.4, 81.4, 93.2, 13.2)]), ('#b3e0f2', [rib(10, 88, 26, 88, 1.4), rib(60, 90, 80, 90, 1.4)])]
+    layers += [(OUTLINE, ['M 10 66 L 90 66 L 80 84 L 20 84 Z']), ('#8d5a32', ['M 13 68 L 87 68 L 78.6 82 L 21.4 82 Z']), ('#c8a165', [rect(16, 72, 66, 2)])]
+    layers += bar(50, 66, 50, 8, 2.6, '#5d4037') + bar(28, 66, 28, 22, 2, '#5d4037')
+    layers += [(OUTLINE, ['M 52 12 Q 76 22 52 46 Z', 'M 52 48 Q 82 54 52 62 Z', 'M 30 26 Q 44 38 30 54 Z'])]
+    layers += [('#fafafa', ['M 53.6 15 Q 72 23 53.6 42.6 Z', 'M 53.6 50 Q 77 54 53.6 60 Z', 'M 31.6 29.6 Q 41 38 31.6 50.4 Z'])]
+    layers += [(OUTLINE, [rect(48, 2, 12, 6)]), ('#c62828', [rect(49.4, 3.4, 9.2, 3.2)])]
+    for x in (62, 72):
+        layers += [(OUTLINE, [rect(x, 56, 9, 10)]), ('#a1793f', [rect(x + 1.4, 57.4, 6.2, 7.2)]), ('#5d3a1e', [rib(x + 1.4, 61, x + 7.6, 61, 1)])]
+    return layers
+
+
+def telar():
+    """Curití: el telar de madera con los hilos de fique tensos y la tela que va creciendo."""
+    layers = [(OUTLINE, [rect(8, 10, 6, 84), rect(86, 10, 6, 84), rect(8, 10, 84, 6), rect(8, 74, 84, 6)]), ('#8d5a32', [rect(9.4, 11.4, 3.2, 81.2), rect(87.4, 11.4, 3.2, 81.2), rect(9.4, 11.4, 81.2, 3.2), rect(9.4, 75.4, 81.2, 3.2)])]
+    layers.append(('#e8d9b0', [rect(18 + 4.4 * i, 16, 1.2, 58) for i in range(16)]))
+    layers += [(OUTLINE, [rect(16, 44, 70, 30)]), ('#d4b06a', [rect(17.4, 45.4, 67.2, 27.2)])]
+    layers.append(('#b5864a', [rect(17.4, 48 + 4 * k, 67.2, 1.4) for k in range(6)]))
+    layers.append(('#c62828', [rect(17.4, 58, 67.2, 3)]))
+    layers += [(OUTLINE, [rect(14, 38, 74, 5)]), ('#a1693f', [rect(15.4, 39.4, 71.2, 2.2)])]
+    layers += [(OUTLINE, [ellipse(52, 30, 12, 4)]), ('#a1693f', [ellipse(52, 30, 10.4, 2.6)]), ('#e8d9b0', [ellipse(52, 30, 6, 1.6)])]
+    return layers
+
+
+def horse_rider():
+    """Un caballo de perfil con su jinete de sombrero, para el vaquero y el llanero."""
+    layers = mule(54, 60, 0.85, body='#8d5a32', load=False, horse=True)
+    layers += [(OUTLINE, [rect(46, 46, 16, 6)]), ('#5d3a1e', [rect(47.4, 47.4, 13.2, 3.2)])]
+    layers += shape([(46, 50), (48, 30), (60, 30), (62, 50)], '#f5f5f5', 1.8)
+    layers += bar(50, 52, 44, 68, 3.4, '#1565c0')
+    layers += bar(58, 34, 72, 26, 3, '#f5f5f5') + oval(74, 24, 3, 3, '#c68642', d=1.2)
+    layers.append(('#a1693f', [curve(74, 22, 86, 6, 94, 20, 1.4), ellipse(90, 16, 6, 4)]))
+    layers += oval(54, 22, 6, 7, '#c68642', d=1.6)
+    layers += oval(54, 16, 12, 2.6, '#6d4c41', d=1.6) + [(OUTLINE, ['M 47 16 Q 47 6 54 6 Q 61 6 61 16 Z']), ('#6d4c41', ['M 48.4 15.6 Q 48.4 7.4 54 7.4 Q 59.6 7.4 59.6 15.6 Z'])]
+    return layers
+
+
+def vaquero():
+    """El vaquero: a caballo, con camisa blanca y sombrero, revoleando el lazo por los potreros."""
+    return oval(50, 95, 40, 3, '#9ccc65', d=1.2) + horse_rider()
+
+
+def cabro():
+    """El cabro: el chivo de las tierras secas, con sus cachos hacia atrás, la barba y la cola parada."""
+    body = '#a1887f'
+    layers = oval(50, 93, 36, 3, '#d7a86e', d=1.2)
+    for lx in (32, 40, 62, 70):
+        layers += [(OUTLINE, [rect(lx - 3, 58, 6, 34)]), (body, [rect(lx - 1.6, 58, 3.2, 32.6)]), ('#3e2723', [rect(lx - 2.2, 88, 4.4, 4)])]
+    layers += oval(52, 54, 26, 13, body) + [('#d7ccc8', [ellipse(52, 62, 18, 4)]), ('#6d4c41', [ellipse(60, 46, 12, 4)])]
+    layers += [(OUTLINE, [poly(76, 48, 84, 38, 82, 50)]), (body, [poly(77.6, 48, 82.6, 41, 81.4, 48.6)])]
+    layers += [(OUTLINE, [poly(30, 50, 22, 30, 30, 26, 36, 46)]), (body, [poly(31.4, 49, 24, 31, 29.4, 28, 34.6, 46)])]
+    layers += oval(22, 32, 9, 7, body, -20) + [('#1b1b1b', [circle(20, 30, 1.2)]), ('#5d4037', [ellipse(14, 34, 1.4, 1)])]
+    layers += [(OUTLINE, [poly(16, 38, 22, 38, 18, 48)]), ('#efebe9', [poly(17.4, 39, 20.6, 39, 18.2, 45)])]
+    layers += [(OUTLINE, [curve(24, 26, 30, 12, 40, 18, 3.6)]), ('#8d8d7a', [curve(24, 26, 30, 13.6, 39, 18.6, 1.6)])]
+    layers += [(OUTLINE, [poly(26, 28, 34, 26, 32, 32)]), (body, [poly(27.4, 28.4, 32.6, 27, 31.4, 30.6)])]
+    return layers
+
+
+def plato(cx=50, cy=70, rx=44, ry=14):
+    """El plato blanco, de lado."""
+    return oval(cx, cy, rx, ry, '#fafafa') + [('#e3eef3', [ellipse(cx, cy, rx * 0.72, ry * 0.6)])]
+
+
+def pepitoria():
+    """La pepitoria: el arroz amarillo revuelto con las menudencias del cabro, con arveja y cilantro, en el plato."""
+    layers = plato(50, 70, 44, 15)
+    layers += [(OUTLINE, ['M 16 70 Q 18 40 50 36 Q 82 40 84 70 Q 50 80 16 70 Z']), ('#e6b84a', ['M 18.6 69 Q 20.6 42.4 50 38.6 Q 79.4 42.4 81.4 69 Q 50 77.4 18.6 69 Z'])]
+    layers.append(('#f3d47a', [ellipse(x, y, 2.2, 1.2) for x, y in [(30, 54), (40, 48), (50, 44), (60, 50), (70, 58), (36, 62), (56, 62), (46, 56), (64, 66)]]))
+    layers.append(('#6d3b1e', [ellipse(x, y, 3, 2.2) for x, y in [(34, 58), (48, 50), (62, 56), (44, 66), (70, 64), (56, 44)]]))
+    layers.append(('#7cb342', [circle(x, y, 1.8) for x, y in [(28, 64), (42, 56), (58, 58), (66, 50), (52, 68)]]))
+    layers.append(('#2e7d32', [leaf(48, 40, 56, 34, 2.4), leaf(48, 40, 42, 34, 2.4)]))
+    return layers
+
+
+def plato_hondo(cx, cy, s, soup):
+    """El plato hondo de barro con caldo."""
+    def S(v):
+        return v * s
+    layers = [(OUTLINE, [f'M {cx - S(44)} {cy} Q {cx - S(40)} {cy + S(32)} {cx} {cy + S(32)} Q {cx + S(40)} {cy + S(32)} {cx + S(44)} {cy} Z']), ('#a85a32', [f'M {cx - S(41)} {cy + S(1)} Q {cx - S(37.6)} {cy + S(29.4)} {cx} {cy + S(29.4)} Q {cx + S(37.6)} {cy + S(29.4)} {cx + S(41)} {cy + S(1)} Z'])]
+    layers += [(OUTLINE, [ellipse(cx, cy, S(44), S(10))]), (soup, [ellipse(cx, cy, S(41), S(7.6))])]
+    return layers
+
+
+def mute():
+    """El mute: la sopa espesa de maíz pelado con carnes, papa y verduras, en el plato hondo, humeando."""
+    layers = plato_hondo(50, 54, 1.0, '#e8c27a')
+    layers.append(('#fdf3d4', [ellipse(x, y, 2.6, 1.8) for x, y in [(26, 54), (32, 50), (42, 56), (58, 52), (66, 56), (72, 52), (38, 50), (50, 58)]]))
+    layers.append(('#8d4a2a', [ellipse(x, y, 4.4, 2.6) for x, y in [(36, 54), (56, 56), (64, 50)]]))
+    layers.append(('#f5e6c4', [ellipse(46, 50, 4, 2.4), ellipse(74, 56, 3, 2)]))
+    layers.append(('#43a047', [circle(x, y, 1.4) for x, y in [(30, 56), (52, 50), (60, 58), (44, 54)]]))
+    layers.append(('#b0bec5', ['M 40 40 Q 34 30 42 22 Q 46 16 42 10 L 46 10 Q 50 17 46 23 Q 38 31 44 40 Z', 'M 60 40 Q 54 32 60 26 L 63 26 Q 58 32 64 40 Z']))
+    return layers
+
+
+def chicamocha():
+    """El cañón del Chicamocha: las montañas secas y hondas a lado y lado, el río al fondo y el teleférico cruzando."""
+    layers = [(OUTLINE, [pts([(2, 96), (2, 20), (14, 14), (26, 30), (40, 70), (48, 88), (52, 88), (60, 70), (74, 28), (86, 12), (98, 22), (98, 96)])])]
+    layers += [('#c9a06a', [pts([(3.4, 94.6), (3.4, 21), (14, 16), (25, 31.6), (38.6, 71), (47, 87), (53, 87), (61.4, 71), (75, 29.6), (86, 14), (96.6, 23), (96.6, 94.6)])])]
+    layers += [('#a87d4a', [poly(14, 16, 25, 31.6, 38.6, 71, 47, 87, 30, 94.6, 3.4, 94.6, 3.4, 60)]), ('#8bae5a', [ellipse(14, 22, 10, 4), ellipse(86, 20, 10, 4), ellipse(70, 50, 6, 3), ellipse(28, 50, 5, 3)])]
+    layers += [(OUTLINE, [poly(44, 96, 48, 86, 52, 86, 56, 96)]), ('#4fa3d9', [poly(45.6, 96, 48.6, 87.6, 51.4, 87.6, 54.4, 96)])]
+    layers.append(('#37474f', [rib(10, 18, 90, 16, 1)]))
+    layers += [(OUTLINE, [rect(44, 18, 12, 10)]), ('#e53935', [rect(45.4, 19.4, 9.2, 7.2)]), ('#b3e5fc', [rect(46.4, 20.4, 7.2, 3)]), (OUTLINE, [rect(49.4, 16, 1.2, 3)])]
+    return layers
+
+
+def winged_ant(cx, cy, s=1.0, rot=0):
+    """Una hormiga reina con alas, volando."""
+    def S(v):
+        return v * s
+    layers = [('#e3f2fd', [ellipse(cx - S(4), cy - S(8), S(10), S(4), rot - 30), ellipse(cx + S(4), cy - S(8), S(10), S(4), rot + 30)]), ('#90a4ae', [rib(cx - S(4), cy - S(4), cx - S(12), cy - S(12), S(0.8)), rib(cx + S(4), cy - S(4), cx + S(12), cy - S(12), S(0.8))])]
+    layers += [(OUTLINE, [ellipse(cx, cy + S(7), S(4.6), S(6.6), rot), circle(cx, cy - S(1), S(3.4)), circle(cx, cy - S(6), S(3))]), ('#8d3b1e', [ellipse(cx, cy + S(7), S(3.4), S(5.4), rot), circle(cx, cy - S(1), S(2.2)), circle(cx, cy - S(6), S(1.9))])]
+    return layers
+
+
+def salida():
+    """La salida de las hormigas: con las primeras lluvias las reinas salen volando del hormiguero."""
+    layers = oval(30, 18, 16, 8, '#cfd8dc') + oval(44, 14, 12, 8, '#cfd8dc', d=0)
+    layers.append(('#4fa3d9', [ellipse(x, y, 1.2, 3) for x, y in [(22, 32), (32, 36), (40, 30), (50, 34), (28, 44)]]))
+    layers += [(OUTLINE, ['M 10 94 Q 30 64 50 62 Q 70 64 90 94 Z']), ('#a0522d', ['M 13 92.6 Q 31 66.4 50 64.4 Q 69 66.4 87 92.6 Z']), ('#5d2f19', [ellipse(50, 66, 5, 2), ellipse(36, 78, 3, 1.4), ellipse(62, 80, 3, 1.4)])]
+    layers += winged_ant(70, 30, 1.2) + winged_ant(54, 46, 0.9) + winged_ant(82, 54, 0.8)
+    return layers
+
+
+def recoleccion():
+    """La recolección: al amanecer, con sombrero y tarro, se recogen las reinas a la salida del hormiguero."""
+    layers = oval(76, 20, 9, 9, '#ffb74d', d=1.6)
+    layers += [(OUTLINE, ['M 46 94 Q 64 70 80 70 Q 94 72 98 94 Z']), ('#a0522d', ['M 49.4 92.6 Q 65 72.4 80 72.4 Q 92.6 74.4 96 92.6 Z']), ('#5d2f19', [ellipse(76, 74, 4, 1.6)])]
+    layers.append(('#5d2f19', [ellipse(x, y, 1.6, 1) for x, y in [(70, 80), (84, 84), (78, 88), (90, 80), (62, 88)]]))
+    layers += shape([(14, 94), (16, 66), (36, 66), (38, 94)], '#3e2723', 1.6)
+    layers += shape([(12, 70), (14, 40), (38, 40), (40, 70)], '#1e88e5', 1.8)
+    layers += bar(38, 46, 52, 62, 3.4, '#1e88e5') + [(OUTLINE, [rect(50, 58, 12, 16)]), ('#b0bec5', [rect(51.4, 59.4, 9.2, 13.2)]), ('#8d3b1e', [ellipse(56, 66, 1.6, 2.4), ellipse(54, 62, 1.4, 2)])]
+    layers += oval(26, 30, 8, 9, '#c68642', d=1.8)
+    layers += oval(26, 24, 15, 3, '#e8d9b0', d=1.6) + [(OUTLINE, ['M 18 24 Q 18 12 26 12 Q 34 12 34 24 Z']), ('#e8d9b0', ['M 19.4 23.6 Q 19.4 13.4 26 13.4 Q 32.6 13.4 32.6 23.6 Z']), ('#5d4037', [rect(19.4, 20, 13.2, 2.4)])]
+    layers.append(('#2b1d14', [circle(23, 30, 1), circle(29, 30, 1), curve(23, 35, 26, 37, 29, 35, 1.1)]))
+    return layers
+
+
+def rafting():
+    """San Gil: el bote de rafting bajando los rápidos del río, con sus remos y los cascos."""
+    layers = [(OUTLINE, [rect(2, 54, 96, 42)]), ('#4fa3d9', [rect(3.4, 55.4, 93.2, 39.2)])]
+    layers.append(('#e3f2fd', ['M 4 70 Q 14 62 22 70 Q 30 78 40 68 L 40 72 Q 30 82 22 74 Q 14 66 4 74 Z', 'M 56 86 Q 66 78 76 86 Q 86 94 96 84 L 96 88 Q 86 98 76 90 Q 66 82 56 90 Z', 'M 70 62 Q 78 56 86 62 L 86 65 Q 78 59 70 65 Z']))
+    layers += [(OUTLINE, ['M 10 66 Q 50 92 90 66 Q 92 54 84 52 L 16 52 Q 8 54 10 66 Z']), ('#ffca28', ['M 12.6 65 Q 50 89 87.4 65 Q 89 56 83.4 54.4 L 16.6 54.4 Q 11 56 12.6 65 Z']), ('#f57f17', [rect(16, 56, 68, 3)])]
+    for x, c in [(30, '#e53935'), (50, '#1e88e5'), (70, '#43a047')]:
+        layers += shape([(x - 6, 54), (x - 5, 40), (x + 5, 40), (x + 6, 54)], '#fafafa', 1.6) + oval(x, 34, 5, 5.4, '#c68642', d=1.4) + [(OUTLINE, [f'M {x - 6} 33 Q {x - 6} 24 {x} 24 Q {x + 6} 24 {x + 6} 33 Z']), (c, [f'M {x - 4.8} 32 Q {x - 4.8} 25.4 {x} 25.4 Q {x + 4.8} 25.4 {x + 4.8} 32 Z'])]
+        layers += bar(x + 4, 42, x + 14, 70, 1.6, '#5d4037') + [(OUTLINE, [ellipse(x + 15, 72, 3.4, 6, -20)]), ('#37474f', [ellipse(x + 15, 72, 2.2, 4.6, -20)])]
+    return layers
+
+
+def piedra_amarilla():
+    """La piedra amarilla de Barichara: los bloques de piedra labrada, apilados, con el cincel y el mazo."""
+    layers = []
+    for x, y, w in [(6, 70, 30), (38, 70, 30), (70, 70, 26), (20, 48, 30), (52, 48, 30), (36, 26, 30)]:
+        layers += [(OUTLINE, [rect(x, y, w, 20)]), ('#e8c46a', [rect(x + 1.6, y + 1.6, w - 3.2, 16.8)]), ('#d4a845', [rect(x + 1.6, y + 14, w - 3.2, 4.4)]), ('#f3d98f', [rect(x + 4, y + 4, w * 0.4, 2)])]
+        layers.append(('#c9993a', [circle(x + w * 0.7, y + 9, 1), circle(x + w * 0.3, y + 11, 0.8)]))
+    layers += bar(74, 30, 92, 12, 3, '#90a4ae') + bar(80, 44, 92, 30, 4, '#8d6e63') + [(OUTLINE, [rect(86, 22, 12, 9, 40)]), ('#6d4c41', [rect(87.6, 23.6, 8.8, 5.8, 40)])]
+    return layers
+
+
+def tapia():
+    """La tapia pisada: el muro de tierra apisonada por capas dentro de su molde de tablas, con el pisón."""
+    layers = [(OUTLINE, [rect(6, 50, 88, 44)]), ('#c98d5a', [rect(7.6, 51.6, 84.8, 40.8)])]
+    layers.append(('#a86d3e', [rect(7.6, 58 + 9 * k, 84.8, 1.6) for k in range(4)]))
+    layers.append(('#dba679', [ellipse(x, y, 2, 1.2) for x, y in [(20, 62), (44, 72), (70, 64), (34, 84), (80, 82), (58, 54)]]))
+    layers += [(OUTLINE, [rect(2, 26, 96, 24)]), ('#d9b97a', [rect(3.4, 27.4, 93.2, 21.2)]), ('#b8975a', [rect(3.4, 34, 93.2, 1.2), rect(3.4, 41, 93.2, 1.2)])]
+    layers += [(OUTLINE, [rect(10, 20, 5, 34), rect(85, 20, 5, 34)]), ('#8d5a32', [rect(11.4, 21.4, 2.2, 31.2), rect(86.4, 21.4, 2.2, 31.2)])]
+    layers += bar(50, 4, 52, 34, 3, '#8d6e63') + [(OUTLINE, [rect(44, 30, 16, 10)]), ('#6d4c41', [rect(45.4, 31.4, 13.2, 7.2)])]
+    return layers
+
+
+def amonita():
+    """Guane y su museo: la amonita, el fósil en espiral de cuando el cañón era mar, sobre su piedra."""
+    layers = shape([(6, 84), (12, 30), (40, 14), (80, 18), (96, 46), (90, 84), (50, 94)], '#d7c49a')
+    layers += oval(50, 54, 30, 30, '#b59b6a')
+    pts_sp = []
+    for t in range(0, 260):
+        a = t / 18
+        r = 28 * math.exp(-a / 5.6)
+        pts_sp.append((50 + r * math.cos(a), 54 + r * math.sin(a)))
+    layers.append(('#8a6d40', ['M ' + ' L '.join(f'{x:.1f} {y:.1f}' for x, y in pts_sp) + ' ' + ' L '.join(f'{50 + (x - 50) * 0.92:.1f} {54 + (y - 54) * 0.92:.1f}' for x, y in reversed(pts_sp)) + ' Z']))
+    layers.append(('#d9c08f', [rib(50 + 26 * math.cos(a), 54 + 26 * math.sin(a), 50 + 18 * math.cos(a), 54 + 18 * math.sin(a), 1.2) for a in [i * math.pi / 8 for i in range(16)]]))
+    layers.append(('#c9ae7c', [circle(50, 54, 4)]))
+    return layers
+
+
+def vasija_guane():
+    """Los guanes: la vasija de cerámica pintada con figuras rojas y negras, y la mota de algodón que tejían."""
+    layers = [(OUTLINE, ['M 30 90 Q 10 80 14 56 Q 18 36 34 30 L 34 20 L 58 20 L 58 30 Q 74 36 78 56 Q 82 80 62 90 Z']), ('#f0dfc0', ['M 31 87.6 Q 12.6 78.6 16.4 56 Q 20.4 38 36.4 32.4 L 36.4 22.4 L 55.6 22.4 L 55.6 32.4 Q 71.6 38 75.6 56 Q 79.4 78.6 61 87.6 Z'])]
+    layers.append(('#a0371c', [rect(16.4, 50, 59.2, 4), rect(18, 66, 56, 4)]))
+    layers.append(('#2b1d14', [poly(22 + 10 * i, 56, 27 + 10 * i, 64, 32 + 10 * i, 56) for i in range(5)] + [rect(36.4, 26, 19.2, 2)]))
+    layers.append(('#a0371c', [circle(30 + 8 * i, 44, 1.6) for i in range(5)]))
+    layers += oval(84, 30, 8, 7, '#fafafa', d=1.6) + oval(78, 24, 6, 5, '#fafafa', d=1.4) + oval(90, 22, 6, 5, '#fafafa', d=1.4)
+    layers += [('#8d6e63', [poly(78, 36, 90, 36, 84, 46)])]
+    return layers
+
+
+def mirador():
+    """El mirador de Barichara: la baranda de piedra al borde del pueblo y el valle del río Suárez al atardecer."""
+    layers = [(OUTLINE, [rect(2, 2, 96, 96)]), ('#ffcc80', [rect(3.6, 3.6, 92.8, 50)]), ('#ffb74d', [rect(3.6, 34, 92.8, 20)])]
+    layers += oval(50, 40, 10, 10, '#fff176', d=0)
+    layers += [('#8d9a6a', [poly(3.6, 54, 20, 40, 40, 50, 60, 38, 80, 48, 96.4, 40, 96.4, 70, 3.6, 70)]), ('#6f8a4a', [poly(3.6, 62, 30, 52, 58, 60, 82, 52, 96.4, 58, 96.4, 74, 3.6, 74)])]
+    layers.append(('#4fa3d9', ['M 3.6 70 Q 40 62 96.4 68 L 96.4 72 Q 40 66 3.6 74 Z']))
+    layers += [(OUTLINE, [rect(2, 74, 96, 24)]), ('#e8c46a', [rect(3.6, 75.6, 92.8, 20.8)]), ('#d4a845', [rect(3.6, 84, 92.8, 1.4)] + [rect(14 + 18 * i, 75.6, 1.4, 8.4) for i in range(5)] + [rect(5 + 18 * i, 85.4, 1.4, 11) for i in range(6)])]
+    return layers
+
+
+
+# ---------- Láminas de la Costa (v4.3) ----------
+
+def water_rect(x, y, w, h, color='#4fa3d9'):
+    """Un rectángulo de agua con su borde y unas ondas."""
+    return [(OUTLINE, [rect(x, y, w, h)]), (color, [rect(x + 1.4, y + 1.4, w - 2.8, h - 2.8)]), ('#b3e0f2', [rib(x + w * 0.1, y + h * 0.4, x + w * 0.3, y + h * 0.4, 1.2), rib(x + w * 0.55, y + h * 0.7, x + w * 0.8, y + h * 0.7, 1.2)])]
+
+
+def palm(x, y, h, lean=0, s=1.0):
+    """Palma de coco: el tronco curvo y las hojas."""
+    top = (x + lean, y - h)
+    layers = [(OUTLINE, [curve(x, y, x + lean * 0.2, y - h * 0.5, top[0], top[1], 4.6 * s)]), ('#8d6e63', [curve(x, y, x + lean * 0.2, y - h * 0.5, top[0], top[1], 2.4 * s)])]
+    layers.append(('#2e7d32', [leaf(top[0], top[1], top[0] - 16 * s, top[1] + 6 * s, 4 * s), leaf(top[0], top[1], top[0] + 16 * s, top[1] + 4 * s, 4 * s), leaf(top[0], top[1], top[0] - 8 * s, top[1] - 12 * s, 3.4 * s), leaf(top[0], top[1], top[0] + 10 * s, top[1] - 12 * s, 3.4 * s), leaf(top[0], top[1], top[0] + 2 * s, top[1] - 16 * s, 3 * s)]))
+    layers.append(('#795548', [circle(top[0] - 2 * s, top[1] + 3 * s, 2 * s), circle(top[0] + 2 * s, top[1] + 3 * s, 2 * s)]))
+    return layers
+
+
+def rio_sinu():
+    """El río Sinú: el río que riega las vegas verdes de Córdoba, con los cuadros de arroz y una canoa."""
+    layers = [(OUTLINE, [rect(2, 2, 96, 96)]), ('#9ccc65', [rect(3.6, 3.6, 92.8, 92.8)])]
+    for x, y in [(8, 8), (30, 8), (8, 28), (64, 60), (80, 76), (62, 80)]:
+        layers += [('#c5e17a', [rect(x, y, 18, 16)]), ('#7cb342', [rib(x + 2, y + 4 + 4 * k, x + 16, y + 4 + 4 * k, 1) for k in range(3)])]
+    layers += [(OUTLINE, ['M 56 3.6 Q 40 30 60 46 Q 78 62 46 96.4 L 30 96.4 Q 62 62 46 48 Q 26 30 40 3.6 Z']), ('#4fa3d9', ['M 54 3.6 Q 37.6 30 58.4 47 Q 75.4 62 44 96.4 L 32.4 96.4 Q 64 62 48 48 Q 28.4 30 42.4 3.6 Z'])]
+    layers += [(OUTLINE, ['M 42 56 L 58 52 L 56 58 L 44 61 Z']), ('#8d5a32', ['M 43.6 56.6 L 56 53.6 L 54.8 57 L 45 59.4 Z'])]
+    layers += palm(84, 40, 26, -4, 0.8)
+    return layers
+
+
+def garza():
+    """La garza blanca: de pie en el arrozal inundado, con su cuello largo y el pico amarillo, buscando bichos."""
+    layers = [(OUTLINE, [rect(2, 70, 96, 26)]), ('#81c784', [rect(3.4, 71.4, 93.2, 23.2)]), ('#4fa3d9', [rect(3.4, 82, 93.2, 12.6)])]
+    layers.append(('#558b2f', [rib(8 + 9 * i, 82, 6 + 9 * i, 66, 1.4) for i in range(10)] + [rib(10 + 9 * i, 82, 12 + 9 * i, 68, 1.2) for i in range(10)]))
+    layers += bar(46, 64, 44, 88, 1.6, '#3e2723') + bar(54, 64, 56, 88, 1.6, '#3e2723')
+    layers += oval(52, 54, 18, 11, '#fafafa', -15)
+    layers.append(('#eceff1', [leaf(40, 52, 70, 64, 4)]))
+    layers += [(OUTLINE, [curve(40, 50, 26, 34, 36, 20, 6.4)]), ('#fafafa', [curve(40, 50, 26.6, 34, 36, 20.6, 3.6)])]
+    layers += oval(38, 18, 6, 5, '#fafafa', d=1.6) + [(OUTLINE, [poly(42, 16, 60, 18, 42, 21)]), ('#fdd835', [poly(43, 17, 57.6, 18.4, 43, 20)]), ('#1b1b1b', [circle(38, 17, 1.2)])]
+    return layers
+
+
+def pilon_shape(grain='#f4c430'):
+    """El pilón de madera con su mano y los granos (de maíz o de arroz)."""
+    layers = [(OUTLINE, ['M 22 92 L 26 40 L 74 40 L 78 92 Z']), ('#8d5a32', ['M 24.6 89.6 L 28.4 42.4 L 71.6 42.4 L 75.4 89.6 Z']), ('#6d4128', [rect(34, 46, 2, 40), rect(54, 50, 2, 34)])]
+    layers += [(OUTLINE, [ellipse(50, 40, 26, 7)]), ('#a1693f', [ellipse(50, 40, 24, 5.4)]), ('#3e2723', [ellipse(50, 40, 16, 3.4)]), (grain, [ellipse(50, 39, 12, 2)])]
+    layers += [(OUTLINE, [rect(46, 2, 9, 40, 8)]), ('#c8945a', [rect(47.6, 3.6, 5.8, 36.8, 8)]), (OUTLINE, [ellipse(48, 4, 7, 4, 8)]), ('#c8945a', [ellipse(48, 4, 5.4, 2.6, 8)])]
+    layers.append((grain, [ellipse(x, y, 2.4, 1.4) for x, y in [(14, 90), (18, 86), (84, 90), (88, 86), (10, 94), (90, 94), (22, 94)]]))
+    return layers
+
+
+def pilon_arroz():
+    """El pilón del arroz: el tronco hueco y la mano de pilón con que se pilaba el arroz, con el grano blanco."""
+    layers = pilon_shape('#fafafa')
+    layers += [(OUTLINE, [ellipse(88, 70, 9, 6)]), ('#c8a165', [ellipse(88, 70, 7.6, 4.6)]), ('#fafafa', [ellipse(88, 68, 6, 2.6)])]
+    return layers
+
+
+def smoked_fish(cx, cy, s=1.0, rot=0, color='#b0753a'):
+    """Un pescado ahumado, dorado, de lado."""
+    def S(v):
+        return v * s
+    layers = oval(cx, cy, S(18), S(6.4), color, rot, 1.6)
+    a = math.radians(rot)
+    tx, ty = cx + math.cos(a) * S(18), cy + math.sin(a) * S(18)
+    layers += [(OUTLINE, [poly(tx - 1, ty, tx + S(9) * math.cos(a) - S(6) * math.sin(a), ty + S(9) * math.sin(a) + S(6) * math.cos(a), tx + S(9) * math.cos(a) + S(6) * math.sin(a), ty + S(9) * math.sin(a) - S(6) * math.cos(a))]),
+               (color, [poly(tx, ty, tx + S(7.4) * math.cos(a) - S(4.6) * math.sin(a), ty + S(7.4) * math.sin(a) + S(4.6) * math.cos(a), tx + S(7.4) * math.cos(a) + S(4.6) * math.sin(a), ty + S(7.4) * math.sin(a) - S(4.6) * math.cos(a))])]
+    hx, hy = cx - math.cos(a) * S(12), cy - math.sin(a) * S(12)
+    layers.append(('#1b1b1b', [circle(hx, hy - S(1), S(1.3))]))
+    layers.append(('#7a4a1c', [rib(cx - S(6), cy - S(3), cx - S(2), cy + S(3), S(0.9)), rib(cx, cy - S(3), cx + S(4), cy + S(3), S(0.9)), rib(cx + S(6), cy - S(3), cx + S(10), cy + S(3), S(0.9))]))
+    return layers
+
+
+def arroz_lisa():
+    """El arroz de lisa: el arroz revuelto con la lisa ahumada desmenuzada, con la lisa entera encima, en el plato."""
+    layers = plato(50, 72, 44, 15)
+    layers += [(OUTLINE, ['M 14 72 Q 16 46 50 42 Q 84 46 86 72 Q 50 82 14 72 Z']), ('#f2dfb0', ['M 16.6 71 Q 18.6 48.4 50 44.6 Q 81.4 48.4 83.4 71 Q 50 79.4 16.6 71 Z'])]
+    layers.append(('#b0753a', [ellipse(x, y, 3, 1.6) for x, y in [(28, 64), (40, 58), (58, 62), (70, 66), (46, 70), (34, 70)]]))
+    layers.append(('#e65100', [circle(x, y, 1.2) for x, y in [(24, 66), (52, 66), (66, 58), (38, 64)]]))
+    layers += smoked_fish(52, 46, 1.3, -8)
+    return layers
+
+
+def mompox():
+    """Mompox: la iglesia de Santa Bárbara de torre amarilla con balcón, a la orilla del río Magdalena."""
+    layers = water_rect(2, 78, 96, 18)
+    layers += shape([(10, 78), (10, 48), (52, 48), (52, 78)], '#fff3c4', 1.8) + [(OUTLINE, [poly(6, 50, 31, 36, 56, 50)]), ('#c0592b', [poly(10, 48.6, 31, 38.6, 52, 48.6)])]
+    layers += shape([(56, 78), (56, 30), (80, 30), (80, 78)], '#fbc02d', 1.8)
+    layers += shape([(58, 30), (58, 16), (78, 16), (78, 30)], '#fdd835', 1.8) + [(OUTLINE, ['M 60 16 Q 68 0 76 16 Z']), ('#fbc02d', ['M 61.6 15.6 Q 68 3.4 74.4 15.6 Z'])]
+    layers += [(OUTLINE, [rect(54, 44, 28, 3), rect(56, 47, 2, 6), rect(64, 47, 2, 6), rect(72, 47, 2, 6), rect(78, 47, 2, 6)]), ('#8d5a32', [rect(55, 44.8, 26, 1.4)])]
+    layers += [('#5d4037', [rect(64, 20, 8, 8), rect(63, 58, 10, 20), rect(26, 60, 10, 18)]), ('#ffffff', [rect(66.6, 34, 3, 6)])]
+    layers += [(OUTLINE, [rect(67, 0, 2, 4)])]
+    return layers
+
+
+def champan():
+    """El río Magdalena: el champán, la barca de techo curvo de palma, con el boga empujando con la vara."""
+    layers = water_rect(2, 64, 96, 32)
+    layers += [(OUTLINE, ['M 6 62 L 94 62 Q 88 76 74 78 L 26 78 Q 12 76 6 62 Z']), ('#8d5a32', ['M 9.4 64 L 90.6 64 Q 85.6 74.4 73.6 75.8 L 26.4 75.8 Q 14.4 74.4 9.4 64 Z']), ('#a1693f', [rect(12, 64, 76, 2)])]
+    layers += [(OUTLINE, ['M 22 62 Q 22 34 50 32 Q 78 34 78 62 Z']), ('#d4b06a', ['M 24.4 62 Q 24.4 36.4 50 34.4 Q 75.6 36.4 75.6 62 Z'])]
+    layers.append(('#b08c46', [curve(26, 58, 50, 40, 74, 58, 1.2), curve(28, 50, 50, 36, 72, 50, 1.2)]))
+    layers += [(OUTLINE, [rect(30, 48, 12, 14), rect(46, 48, 12, 14)]), ('#c8a165', [rect(31.4, 49.4, 9.2, 11.2)]), ('#fafafa', [rect(47.4, 49.4, 9.2, 11.2)])]
+    layers += shape([(84, 62), (85, 44), (91, 44), (92, 62)], '#fafafa', 1.4) + oval(88, 38, 4, 4.4, '#8d5a32', d=1.4)
+    layers += bar(80, 30, 72, 92, 1.8, '#795548')
+    return layers
+
+
+def enyucado():
+    """El enyucado: la tajada de torta de yuca con coco y queso, dorada por encima, con semillas de anís."""
+    layers = plato(50, 72, 44, 14)
+    layers += [(OUTLINE, [poly(18, 52, 70, 42, 84, 52, 84, 68, 32, 80, 18, 68)])]
+    layers += [('#f6e7b4', [poly(20.4, 53.4, 70, 44.4, 81.6, 52.8, 81.6, 66.4, 32, 77.6, 20.4, 66.6)]), ('#e3a64b', [poly(20.4, 53.4, 70, 44.4, 81.6, 52.8, 32, 61)]), ('#c98a2a', [ellipse(46, 52, 10, 2.4, -12), ellipse(64, 50, 5, 1.4, -12)])]
+    layers.append(('#fff8e1', [ellipse(x, y, 1.6, 0.9) for x, y in [(36, 68), (50, 64), (62, 66), (44, 72), (72, 62)]]))
+    layers.append(('#5d4037', [ellipse(x, y, 1.3, 0.6, 30) for x, y in [(34, 54), (48, 52), (58, 50), (40, 58), (66, 54)]]))
+    return layers
+
+
+def playa_tolu():
+    """Tolú y Coveñas: la playa de arena con palmas de coco, el mar del golfo de Morrosquillo y una lancha."""
+    layers = [(OUTLINE, [rect(2, 2, 96, 96)]), ('#b3e5fc', [rect(3.6, 3.6, 92.8, 40)]), ('#29b6f6', [rect(3.6, 40, 92.8, 26)]), ('#f3dfa2', ['M 3.6 66 Q 50 56 96.4 66 L 96.4 96.4 L 3.6 96.4 Z'])]
+    layers.append(('#e1f5fe', [rib(10, 50, 30, 50, 1.4), rib(50, 56, 70, 56, 1.4), rib(70, 46, 86, 46, 1.4)]))
+    layers += oval(78, 18, 8, 8, '#ffca28', d=0)
+    layers += [(OUTLINE, ['M 36 48 L 56 48 L 52 54 L 40 54 Z']), ('#e53935', ['M 37.6 49 L 54.4 49 L 51.4 52.8 L 40.6 52.8 Z'])]
+    layers += palm(18, 90, 52, 10, 1.0) + palm(80, 92, 40, -10, 0.8)
+    return layers
+
+
+def palafitos():
+    """Los palafitos: las casas de madera sobre pilotes en medio de la ciénaga, con la canoa amarrada."""
+    layers = water_rect(2, 62, 96, 34)
+    for x, c in [(8, '#4fc3f7'), (54, '#ffb74d')]:
+        for px in (x + 4, x + 18, x + 32):
+            layers += bar(px, 58, px, 84, 2.6, '#6d4c41')
+        layers += shape([(x, 58), (x, 34), (x + 38, 34), (x + 38, 58)], c, 1.8)
+        layers += [(OUTLINE, [poly(x - 4, 36, x + 19, 20, x + 42, 36)]), ('#a1887f', [poly(x - 0.6, 34.6, x + 19, 22.6, x + 38.6, 34.6)])]
+        layers += [('#5d4037', [rect(x + 15, 42, 8, 16)]), ('#fafafa', [rect(x + 4, 40, 7, 7), rect(x + 27, 40, 7, 7)])]
+    layers += [(OUTLINE, ['M 36 80 L 62 78 L 58 86 L 40 87 Z']), ('#8d5a32', ['M 38 81 L 60 79.4 L 57 84.6 L 41 85.4 Z'])]
+    return layers
+
+
+def mangle_raices(cx, base, s=1.0):
+    """Un mangle con sus raíces en arco metidas en el agua y la copa verde."""
+    def S(v):
+        return v * s
+    layers = []
+    for dx in (-14, -7, 0, 7, 14):
+        layers += [(OUTLINE, [curve(cx, base - S(24), cx + S(dx) * 0.6, base - S(18), cx + S(dx), base, S(3.4))]), ('#6d4c41', [curve(cx, base - S(24), cx + S(dx) * 0.6, base - S(18), cx + S(dx), base, S(1.6))])]
+    layers += bar(cx, base - S(22), cx, base - S(40), S(3.4), '#6d4c41')
+    blobs = [(cx, base - S(50), S(14)), (cx - S(12), base - S(42), S(10)), (cx + S(12), base - S(42), S(10))]
+    layers += [(OUTLINE, [circle(x, y, r + 2) for x, y, r in blobs]), ('#388e3c', [circle(x, y, r) for x, y, r in blobs]), ('#66bb6a', [circle(cx - S(4), base - S(54), S(4))])]
+    return layers
+
+
+def manglar():
+    """El manglar: los mangles con las raíces en el agua salobre, donde se crían los peces."""
+    layers = water_rect(2, 70, 96, 26, '#5fa8a0')
+    layers += mangle_raices(28, 78, 1.0) + mangle_raices(72, 76, 0.9)
+    layers += [(OUTLINE, [ellipse(52, 88, 6, 2.6)]), ('#ffb74d', [ellipse(52, 88, 4.6, 1.6)]), ('#1b1b1b', [circle(49, 87.6, 0.6)])]
+    return layers
+
+
+def cienaga_grande():
+    """La Ciénaga Grande: la laguna inmensa, el pescador lanzando la atarraya desde la canoa y las aves."""
+    layers = [(OUTLINE, [rect(2, 2, 96, 96)]), ('#c8e6f5', [rect(3.6, 3.6, 92.8, 40)]), ('#4fa3d9', [rect(3.6, 42, 92.8, 54.4)]), ('#7cb342', [rect(3.6, 40, 92.8, 4)])]
+    layers.append(('#37474f', [curve(16, 18, 20, 14, 24, 18, 1.2), curve(24, 18, 28, 14, 32, 18, 1.2), curve(40, 12, 44, 8, 48, 12, 1.2), curve(48, 12, 52, 8, 56, 12, 1.2)]))
+    layers += [(OUTLINE, ['M 18 78 L 66 76 L 60 84 L 24 85 Z']), ('#8d5a32', ['M 20 79 L 63.4 77.2 L 59 82.6 L 25 83.4 Z'])]
+    layers += shape([(30, 78), (31, 60), (39, 60), (40, 78)], '#fafafa', 1.4) + oval(35, 55, 4, 4.4, '#8d5a32', d=1.4)
+    layers += bar(38, 64, 52, 50, 2, '#8d5a32')
+    layers.append(('#eceff1', ['M 52 50 Q 70 46 86 60 Q 80 74 66 76 Q 58 64 52 50 Z']))
+    layers.append(('#90a4ae', [rib(52, 50, 66 + 4 * k, 76 - 3 * k, 0.8) for k in range(5)] + [curve(58, 56, 72, 58, 84, 62, 0.8), curve(62, 64, 74, 66, 82, 70, 0.8)]))
+    return layers
+
+
+def suero_taza():
+    """El suero costeño: la taza de crema agria blanca y espesa, con los trozos de yuca y el bollo al lado."""
+    layers = [(OUTLINE, ['M 6 44 L 66 44 Q 64 86 36 86 Q 8 86 6 44 Z']), ('#8d4a2a', ['M 8.6 46.4 L 63.4 46.4 Q 61.6 83.6 36 83.6 Q 10.4 83.6 8.6 46.4 Z'])]
+    layers += [(OUTLINE, [ellipse(36, 44, 30, 7)]), ('#fffdf5', [ellipse(36, 44, 28, 5.4)]), ('#f1ead8', [ellipse(42, 45, 10, 2)])]
+    for x, y, r in [(70, 76, -20), (84, 66, 10)]:
+        layers += oval(x, y, 11, 6, '#fff3d6', r, 1.8) + [('#e8d3a0', [ellipse(x + 2, y + 1, 5, 1.6, r)])]
+    layers += [(OUTLINE, [leaf(60, 92, 96, 84, 7)]), ('#c5d58a', [leaf(61, 91, 95, 84.6, 5.4)])]
+    return layers
+
+
+def bollo_limpio():
+    """El bollo limpio: la masa de maíz envuelta en la hoja y amarrada, uno abierto, y la tajada de queso costeño."""
+    layers = [(OUTLINE, [rect(8, 30, 54, 18, -15)]), ('#c5d58a', [rect(9.6, 31.6, 50.8, 14.8, -15)]), ('#9eb35a', [rib(12, 42, 58, 30, 1.2)])]
+    layers += [(OUTLINE, [rect(24, 28, 3.6, 22, -15), rect(42, 23, 3.6, 22, -15)]), ('#8d6e63', [rect(25, 29, 1.6, 20, -15), rect(43, 24, 1.6, 20, -15)])]
+    layers += [(OUTLINE, [leaf(20, 78, 74, 62, 14)]), ('#c5d58a', [leaf(22, 77, 72, 62.6, 12)])]
+    layers += oval(46, 70, 20, 7, '#fff3c4', -15, 1.8) + [('#f4dc8a', [ellipse(42, 70, 9, 2.4, -15)])]
+    layers += [(OUTLINE, [poly(66, 70, 92, 62, 96, 76, 70, 84)]), ('#fffdf5', [poly(67.8, 71, 90.8, 64, 94, 75, 71, 82)]), ('#f1ead8', [poly(70, 78, 94, 71, 94, 75, 71, 82)])]
+    return layers
+
+
+def trompeta(cx, cy, s=1.0):
+    """La trompeta dorada de la banda."""
+    def S(v):
+        return v * s
+    return [(OUTLINE, [f'M {cx - S(30)} {cy - S(3)} L {cx + S(16)} {cy - S(3)} L {cx + S(30)} {cy - S(12)} L {cx + S(30)} {cy + S(12)} L {cx + S(16)} {cy + S(3)} L {cx - S(30)} {cy + S(3)} Z', rect(cx - S(14), cy - S(12), S(20), S(14))]),
+            ('#fbc02d', [f'M {cx - S(28.6)} {cy - S(1.6)} L {cx + S(16.4)} {cy - S(1.6)} L {cx + S(28.6)} {cy - S(9.6)} L {cx + S(28.6)} {cy + S(9.6)} L {cx + S(16.4)} {cy + S(1.6)} L {cx - S(28.6)} {cy + S(1.6)} Z', rect(cx - S(12.6), cy - S(10.6), S(17.2), S(11.2))]),
+            ('#fff176', [rect(cx - S(12.6), cy - S(10.6), S(17.2), S(2)), rect(cx - S(26), cy - S(1.6), S(20), S(1))]), ('#f57f17', [rect(cx - S(8), cy - S(16), S(2), S(6)), rect(cx - S(3), cy - S(16), S(2), S(6)), rect(cx + S(2), cy - S(16), S(2), S(6))])]
+
+
+def redoblante(cx, cy, s=1.0):
+    """El redoblante: el tambor de la banda con su aro rojo y las baquetas."""
+    def S(v):
+        return v * s
+    layers = bar(cx - S(10), cy - S(14), cx + S(14), cy - S(34), S(2.4), '#8d6e63') + bar(cx + S(10), cy - S(14), cx - S(12), cy - S(32), S(2.4), '#8d6e63')
+    layers += [(OUTLINE, [rect(cx - S(22), cy - S(10), S(44), S(22)), ellipse(cx, cy + S(12), S(22), S(6))]), ('#e53935', [rect(cx - S(20.6), cy - S(8.6), S(41.2), S(20.6)), ellipse(cx, cy + S(12), S(20.6), S(4.6))])]
+    layers += oval(cx, cy - S(10), S(22), S(6), '#f5f5f5', d=1.6)
+    layers.append(('#fafafa', [rib(cx - S(20) + S(8) * i, cy - S(6), cx - S(16) + S(8) * i, cy + S(10), S(1.2)) for i in range(5)]))
+    return layers
+
+
+def porro():
+    """El porro: la música de banda de la sabana, con la trompeta, el bombardino y el redoblante."""
+    layers = redoblante(68, 74, 0.9)
+    layers += trompeta(38, 30, 0.95)
+    layers += [(OUTLINE, ['M 10 90 Q 6 60 18 50 L 24 50 Q 16 62 20 86 Q 30 92 34 80 L 30 62 L 36 62 L 40 84 Q 34 98 10 90 Z']), ('#fbc02d', ['M 12 88.4 Q 8.6 61 19 52.4 L 21 52.4 Q 14 62 18 87.4 Q 30 94 36 80.6 L 32 63.6 L 34.4 63.6 L 38.4 84 Q 33 96 12 88.4 Z'])]
+    layers += note(56, 42, 0.8) + note(84, 30, 0.7)
+    return layers
+
+
+def pintas():
+    """Las pintas: la trenza de caña flecha con sus figuras negras y blancas, cada una con su nombre."""
+    layers = []
+    for k, y in enumerate((16, 44, 72)):
+        layers += [(OUTLINE, [rect(6, y, 88, 18)]), ('#f3ead2', [rect(7.6, y + 1.6, 84.8, 14.8)])]
+        if k == 0:
+            layers.append(('#1b1b1b', [poly(10 + 12 * i, y + 15, 16 + 12 * i, y + 3, 22 + 12 * i, y + 15) for i in range(7)]))
+        elif k == 1:
+            layers.append(('#1b1b1b', [rect(12 + 14 * i, y + 4, 8, 8, 45) for i in range(6)]))
+            layers.append(('#f3ead2', [rect(14.4 + 14 * i, y + 6.4, 3.2, 3.2, 45) for i in range(6)]))
+        else:
+            layers.append(('#1b1b1b', [rect(10 + 10 * i, y + 3 + 6 * (i % 2), 6, 6) for i in range(8)]))
+        layers.append(('#d4c49a', [rib(7.6, y + 1.6 + 3.7 * j, 92.4, y + 1.6 + 3.7 * j, 0.5) for j in range(1, 4)]))
+    return layers
+
+
+def oro_zenu():
+    """Los zenúes: la orejera de oro en filigrana, el trabajo de orfebrería del pueblo de las ciénagas."""
+    layers = [(OUTLINE, [circle(50, 50, 46)]), ('#3e2a1e', [circle(50, 50, 44)])]
+    layers += [(OUTLINE, ['M 18 40 Q 50 4 82 40 Q 86 70 50 92 Q 14 70 18 40 Z']), ('#e0a800', ['M 20.6 40.6 Q 50 8 79.4 40.6 Q 83 68.4 50 89 Q 17 68.4 20.6 40.6 Z'])]
+    layers += [(OUTLINE, [circle(50, 46, 14)]), ('#3e2a1e', [circle(50, 46, 11.6)])]
+    layers.append(('#ffd54f', [curve(26, 44, 34, 30, 44, 26, 1.6), curve(74, 44, 66, 30, 56, 26, 1.6), curve(28, 62, 38, 76, 50, 82, 1.6), curve(72, 62, 62, 76, 50, 82, 1.6)]))
+    layers.append(('#ffd54f', [circle(30 + 10 * math.cos(a), 52 + 10 * math.sin(a), 1.4) for a in [i * math.pi / 4 for i in range(8)]] + [circle(70 + 6 * math.cos(a), 52 + 6 * math.sin(a), 1.2) for a in [i * math.pi / 4 for i in range(8)]]))
+    layers.append(('#ffe082', [circle(50, 46, 4), rib(50, 34, 50, 40, 1.2), rib(50, 52, 50, 58, 1.2), rib(38, 46, 44, 46, 1.2), rib(56, 46, 62, 46, 1.2)]))
+    return layers
+
+
+def vueltiao_small(cx, cy, s=1.0):
+    """El sombrero vueltiao, chico, con sus trenzas negras y blancas."""
+    def S(v):
+        return v * s
+    layers = oval(cx, cy, S(24), S(7), '#f3ead2', d=1.6)
+    layers.append(('#1b1b1b', [ellipse(cx, cy, S(19), S(4.6)), ellipse(cx, cy, S(13), S(3))]))
+    layers.append(('#f3ead2', [ellipse(cx, cy, S(16), S(3.6))]))
+    layers += [(OUTLINE, [f'M {cx - S(12)} {cy} Q {cx - S(12)} {cy - S(16)} {cx} {cy - S(16)} Q {cx + S(12)} {cy - S(16)} {cx + S(12)} {cy} Z']), ('#f3ead2', [f'M {cx - S(10.6)} {cy - S(0.6)} Q {cx - S(10.6)} {cy - S(14.6)} {cx} {cy - S(14.6)} Q {cx + S(10.6)} {cy - S(14.6)} {cx + S(10.6)} {cy - S(0.6)} Z'])]
+    layers.append(('#1b1b1b', [rect(cx - S(10.6), cy - S(6), S(21.2), S(2)), rect(cx - S(9), cy - S(11), S(18), S(1.6))]))
+    return layers
+
+
+def tuchin():
+    """Tuchín: el pueblo zenú de los sombreros vueltiaos, con la tienda que los cuelga a la vista."""
+    layers = oval(50, 92, 46, 4, '#d7ccc8', d=1.2)
+    layers += shape([(6, 90), (6, 46), (94, 46), (94, 90)], '#fafafa', 1.8)
+    layers += [(OUTLINE, [poly(2, 48, 50, 22, 98, 48)]), ('#c8a165', [poly(6, 46.6, 50, 25, 94, 46.6)]), ('#a1793f', [rib(14, 44, 50, 26, 1), rib(86, 44, 50, 26, 1)])]
+    layers += [('#5d4037', [rect(42, 66, 16, 24)])]
+    layers += vueltiao_small(22, 64, 0.7) + vueltiao_small(78, 64, 0.7) + vueltiao_small(22, 82, 0.6) + vueltiao_small(78, 82, 0.6)
+    layers += [(OUTLINE, [rect(34, 50, 32, 10)]), ('#fdd835', [rect(35.6, 51.6, 28.8, 6.8)]), ('#1b1b1b', [poly(38 + 6 * i, 57, 41 + 6 * i, 53, 44 + 6 * i, 57) for i in range(4)])]
+    return layers
+
+
+def murallas():
+    """Las murallas de Cartagena: el muro de piedra coralina con su garita, frente al mar."""
+    layers = water_rect(2, 80, 96, 16)
+    layers += [(OUTLINE, [poly(2, 82, 2, 40, 98, 40, 98, 82)]), ('#d9c79b', [poly(3.6, 80.6, 3.6, 41.6, 96.4, 41.6, 96.4, 80.6)])]
+    layers.append(('#bba57a', [rect(3.6, 52 + 10 * k, 92.8, 1.4) for k in range(3)] + [rect(10 + 16 * i + 8 * (k % 2), 42 + 10 * k, 1.4, 10) for k in range(4) for i in range(6)]))
+    layers += [(OUTLINE, [rect(2, 34, 96, 7)] + [rect(4 + 12 * i, 28, 7, 7) for i in range(8)]), ('#e8d9b0', [rect(3.6, 35.6, 92.8, 3.8)])]
+    layers += [(OUTLINE, ['M 56 40 L 56 18 L 76 18 L 76 40 Z', 'M 54 18 Q 66 0 78 18 Z']), ('#e8d9b0', [rect(57.6, 19.6, 16.8, 20)]), ('#d9c79b', ['M 56.4 17 Q 66 3.4 75.6 17 Z']), ('#3e2723', [rect(63, 24, 6, 8)])]
+    return layers
+
+
+def palenquera():
+    """La palenquera: con su vestido de colores y la ponchera de frutas en la cabeza; viene de San Basilio de Palenque."""
+    layers = oval(50, 95, 30, 3, '#d7ccc8', d=1.2)
+    layers += [(OUTLINE, ['M 20 94 Q 24 60 36 54 L 64 54 Q 76 60 80 94 Z']), ('#fdd835', ['M 22.6 92.6 Q 26.4 61.6 37 56.4 L 63 56.4 Q 73.6 61.6 77.4 92.6 Z']), ('#1e88e5', ['M 24 80 Q 50 76 76 80 L 77 86 Q 50 82 23.2 86 Z']), ('#e53935', ['M 22.8 88 Q 50 84 77.2 88 L 77.4 92.6 L 22.6 92.6 Z'])]
+    layers += shape([(34, 58), (36, 40), (64, 40), (66, 58)], '#e53935', 1.8) + [('#ffffff', [circle(42, 48, 1.6), circle(50, 52, 1.6), circle(58, 46, 1.6)])]
+    layers += bar(36, 44, 26, 20, 3.4, '#5d3a24') + bar(64, 44, 74, 20, 3.4, '#5d3a24')
+    layers += oval(50, 30, 8, 9, '#5d3a24', d=1.8) + [('#2b1d14', [circle(47, 29, 1), circle(53, 29, 1), curve(47, 34, 50, 36, 53, 34, 1.2)])]
+    layers += [(OUTLINE, ['M 36 22 Q 50 14 64 22 L 64 24 L 36 24 Z']), ('#fafafa', ['M 37.6 22.4 Q 50 16 62.4 22.4 L 62.4 23 L 37.6 23 Z'])]
+    layers += [(OUTLINE, ['M 22 18 L 78 18 Q 74 26 50 26 Q 26 26 22 18 Z']), ('#cfd8dc', ['M 24.6 19.4 L 75.4 19.4 Q 72 24.4 50 24.4 Q 28 24.4 24.6 19.4 Z'])]
+    layers += oval(34, 13, 6, 5, '#e53935', d=1.4) + oval(48, 10, 7, 6, '#ff9800', d=1.4) + oval(62, 12, 6, 5, '#7cb342', d=1.4)
+    layers += [(OUTLINE, [leaf(54, 8, 72, 2, 4)]), ('#fdd835', [leaf(55, 8, 71, 3, 3)])]
+    return layers
+
+
+def balcon_cartagena():
+    """Los balcones de Cartagena: la casa colonial de colores con el balcón de madera cubierto de bugambilias."""
+    layers = shape([(6, 94), (6, 8), (94, 8), (94, 94)], '#ffd180', 1.8)
+    layers += [(OUTLINE, [rect(2, 4, 96, 6)]), ('#e8a050', [rect(3.4, 5.4, 93.2, 3.2)])]
+    for x in (16, 58):
+        layers += [(OUTLINE, [rect(x, 18, 26, 26)]), ('#2e7d32', [rect(x + 1.6, 19.6, 22.8, 22.8)]), ('#1b5e20', [rect(x + 12, 19.6, 1.4, 22.8)])]
+    layers += [(OUTLINE, [rect(8, 42, 84, 8), rect(8, 50, 84, 2)] + [rect(11 + 6 * i, 50, 2, 10) for i in range(14)] + [rect(8, 60, 84, 3)]), ('#8d5a32', [rect(9.6, 43.6, 80.8, 4.8)])]
+    layers += [('#ec407a', [circle(x, y, 3.4) for x, y in [(12, 40), (18, 36), (24, 42), (70, 38), (78, 34), (86, 40), (90, 46), (8, 48)]]), ('#f48fb1', [circle(x, y, 1.6) for x, y in [(14, 38), (22, 40), (74, 36), (84, 38)]]), ('#43a047', [leaf(20, 40, 30, 34, 2.4), leaf(80, 36, 70, 30, 2.4)])]
+    layers += [(OUTLINE, ['M 38 94 L 38 72 Q 50 64 62 72 L 62 94 Z']), ('#5d4037', ['M 39.6 94 L 39.6 72.6 Q 50 66 60.4 72.6 L 60.4 94 Z'])]
+    return layers
+
+
+def san_felipe():
+    """El castillo de San Felipe: la fortaleza de piedra en escalones sobre el cerro, con sus garitas y la bandera."""
+    layers = [(OUTLINE, [poly(2, 94, 2, 80, 98, 80, 98, 94)]), ('#7cb342', [poly(3.6, 92.6, 3.6, 81.6, 96.4, 81.6, 96.4, 92.6)])]
+    for x0, x1, y in [(4, 96, 62), (16, 84, 44), (30, 70, 28)]:
+        layers += [(OUTLINE, [poly(x0, 82 if y == 62 else y + 18, x0 + 4, y, x1 - 4, y, x1, 82 if y == 62 else y + 18)]), ('#c9b38a', [poly(x0 + 1.8, 81 if y == 62 else y + 17, x0 + 5.4, y + 1.6, x1 - 5.4, y + 1.6, x1 - 1.8, 81 if y == 62 else y + 17)])]
+        layers.append(('#a8916a', [rect(x0 + 6, y + 6, x1 - x0 - 12, 1.2)]))
+    for x, y in [(8, 56), (88, 56), (20, 38), (78, 38)]:
+        layers += [(OUTLINE, ['M %s %s L %s %s L %s %s L %s %s Z' % (x - 4, y + 8, x - 4, y, x + 4, y, x + 4, y + 8), 'M %s %s Q %s %s %s %s Z' % (x - 5, y, x, y - 8, x + 5, y)]), ('#e8d9b0', [rect(x - 2.6, y + 1, 5.2, 6), 'M %s %s Q %s %s %s %s Z' % (x - 3.6, y - 0.4, x, y - 6, x + 3.6, y - 0.4)])]
+    layers += bar(50, 28, 50, 6, 1.6, '#5d4037') + [(OUTLINE, [rect(51, 6, 14, 9)]), ('#fdd835', [rect(52.2, 7.2, 11.6, 3.4)]), ('#1e88e5', [rect(52.2, 10.6, 11.6, 1.8)]), ('#e53935', [rect(52.2, 12.4, 11.6, 1.8)])]
+    layers.append(('#5d4037', [rect(46, 36, 8, 8), rect(30, 52, 6, 6), rect(64, 52, 6, 6)]))
+    return layers
+
+
+def islas_rosario():
+    """Las Islas del Rosario: la isla de arena blanca con su palma en el mar turquesa, los corales y la lancha."""
+    layers = [(OUTLINE, [rect(2, 2, 96, 96)]), ('#b3e5fc', [rect(3.6, 3.6, 92.8, 34)]), ('#26c6da', [rect(3.6, 36, 92.8, 60.4)]), ('#80deea', [ellipse(50, 70, 40, 14)])]
+    layers += oval(46, 68, 26, 8, '#fff3d6')
+    layers.append(('#ff8a80', [ellipse(20, 86, 4, 2), ellipse(78, 88, 5, 2), ellipse(84, 80, 3, 1.4)]))
+    layers += palm(44, 66, 40, 8, 0.9)
+    layers += [(OUTLINE, ['M 66 50 L 90 50 L 86 56 L 70 56 Z']), ('#fafafa', ['M 67.6 51 L 88.4 51 L 85.4 54.8 L 70.6 54.8 Z']), ('#1e88e5', [rect(70, 52.6, 16, 1.4)])]
+    return layers
+
+
+
+# ---------- Láminas de Boyacá (v4.3) ----------
+
+def ruana_person(cx, base, ruana='#8d6e63', stripe='#5d4037', hat='#5d4037', skin='#d9a46c'):
+    """Una persona de ruana y sombrero, de frente (el campesino del altiplano)."""
+    layers = shape([(cx - 9, base), (cx - 8, base - 22), (cx + 8, base - 22), (cx + 9, base)], '#37474f', 1.6)
+    layers += [(OUTLINE, [f'M {cx - 22} {base - 18} Q {cx - 20} {base - 48} {cx} {base - 50} Q {cx + 20} {base - 48} {cx + 22} {base - 18} Z']), (ruana, [f'M {cx - 19.6} {base - 19.6} Q {cx - 17.6} {base - 46} {cx} {base - 47.6} Q {cx + 17.6} {base - 46} {cx + 19.6} {base - 19.6} Z'])]
+    layers.append((stripe, [rect(cx - 19, base - 28, 38, 2.4), rect(cx - 18, base - 33, 36, 1.4)]))
+    layers += oval(cx, base - 56, 7.4, 8, skin, d=1.8) + [('#2b1d14', [circle(cx - 2.6, base - 56, 1), circle(cx + 2.6, base - 56, 1), curve(cx - 2.6, base - 52, cx, base - 50.4, cx + 2.6, base - 52, 1)])]
+    layers += oval(cx, base - 62, 13, 2.6, hat, d=1.6) + [(OUTLINE, [f'M {cx - 7} {base - 62} Q {cx - 7} {base - 72} {cx} {base - 72} Q {cx + 7} {base - 72} {cx + 7} {base - 62} Z']), (hat, [f'M {cx - 5.6} {base - 62.4} Q {cx - 5.6} {base - 70.6} {cx} {base - 70.6} Q {cx + 5.6} {base - 70.6} {cx + 5.6} {base - 62.4} Z'])]
+    return layers
+
+
+def papa_pieza(cx, cy, rx, ry, color='#c9a06a', rot=0):
+    """Una papa con sus ojitos."""
+    return oval(cx, cy, rx, ry, color, rot, 1.6) + [(tone(color, 0.75), [circle(cx - rx * 0.3, cy - ry * 0.2, 0.9), circle(cx + rx * 0.35, cy + ry * 0.25, 0.9)])]
+
+
+def tone(color, k):
+    """El mismo color más oscuro (k < 1) o más claro (k > 1)."""
+    c = color.lstrip('#')
+    r, g, b = (int(c[i:i + 2], 16) for i in (0, 2, 4))
+    f = lambda v: max(0, min(255, round(v * k if k <= 1 else v + (255 - v) * (k - 1))))
+    return '#%02x%02x%02x' % (f(r), f(g), f(b))
+
+
+def papicultor():
+    """El papicultor: de ruana y sombrero, con el azadón, junto a las matas de papa y el bulto de la cosecha."""
+    layers = oval(50, 94, 46, 3.6, '#8d6e63', d=1.2)
+    layers += bar(66, 36, 70, 92, 2.4, '#8d6e63') + [(OUTLINE, [poly(62, 88, 80, 88, 78, 96, 64, 96)]), ('#90a4ae', [poly(63.6, 89.4, 78.4, 89.4, 77, 94.6, 65, 94.6)])]
+    layers += ruana_person(40, 92, '#795548', '#d7ccc8', '#3e2723')
+    layers += [(OUTLINE, [poly(78, 92, 80, 64, 96, 64, 98, 92)]), ('#c8a165', [poly(79.6, 90.6, 81.4, 65.6, 94.6, 65.6, 96.4, 90.6)]), ('#a1793f', [rib(80, 72, 96, 72, 1.2)])]
+    layers += papa_pieza(14, 90, 5, 3.6) + papa_pieza(24, 92, 4, 3)
+    layers.append(('#558b2f', [leaf(8, 82, 2, 70, 3), leaf(8, 82, 14, 70, 3)]))
+    return layers
+
+
+def cocido():
+    """El cocido boyacense: en la bandeja, papas, mazorca, habas, cubios, chuguas y carnes, cocinados juntos."""
+    layers = oval(50, 70, 46, 18, '#a1693f')
+    layers += [('#8d5a32', [ellipse(50, 70, 40, 13)])]
+    layers += oval(30, 58, 14, 6, '#f4c430', -20, 1.6) + [('#e8a317', [ellipse(22 + 4 * i, 61 - 1.6 * i, 1.6, 2) for i in range(5)])]
+    layers += papa_pieza(56, 60, 8, 6) + papa_pieza(70, 66, 7, 5, '#d4a65a') + papa_pieza(44, 74, 6, 4.4, '#fbc02d')
+    layers += oval(26, 76, 6, 3, '#e57373', 30, 1.4) + oval(34, 82, 5, 2.6, '#fdd835', -20, 1.4) + oval(78, 76, 5, 3, '#ef9a9a', 10, 1.4)
+    layers += oval(60, 80, 9, 5, '#8d4a2a', -10, 1.6) + oval(80, 58, 7, 4, '#a0522d', 20, 1.4)
+    layers.append(('#9ccc65', [ellipse(x, y, 2.6, 1.6, 30) for x, y in [(46, 64), (50, 82), (68, 74), (38, 66)]]))
+    return layers
+
+
+def cubios():
+    """Cubios y chuguas: los tubérculos del altiplano, los cubios largos y pintados, y las chuguas redondas de colores."""
+    layers = []
+    for x, y, r in [(26, 34, 30), (50, 30, -10), (70, 40, 50)]:
+        layers += oval(x, y, 16, 7, '#f2d65c', r, 1.8) + [('#9c4fb5', [ellipse(x + 8 * math.cos(math.radians(r)) * (k - 1) * 0.6, y + 8 * math.sin(math.radians(r)) * (k - 1) * 0.6, 1.4, 6, r) for k in range(3)])]
+    for x, y, c in [(22, 74, '#fdd835'), (40, 80, '#e53935'), (58, 74, '#fb8c00'), (76, 80, '#fdd835'), (32, 64, '#ef5350'), (66, 62, '#ffca28')]:
+        layers += oval(x, y, 7, 6, c, d=1.6) + [('#ffffff', [ellipse(x - 2, y - 2, 2, 1.2)])]
+    return layers
+
+
+def frailejon_plant(cx, base, s=1.0):
+    """Un frailejón: el tallo cubierto de hojas secas y la roseta de hojas peludas, con sus flores amarillas."""
+    def S(v):
+        return v * s
+    layers = [(OUTLINE, [rect(cx - S(6), base - S(40), S(12), S(40))]), ('#8d6e63', [rect(cx - S(4.6), base - S(40), S(9.2), S(38.6))]), ('#6d4c41', [rect(cx - S(4.6), base - S(36) + S(8) * k, S(9.2), S(1.4)) for k in range(5)])]
+    leaves = [leaf(cx, base - S(40), cx + S(18) * math.cos(a), base - S(40) + S(12) * math.sin(a), S(4.4)) for a in [math.pi + i * math.pi / 6 for i in range(7)]]
+    layers += [(OUTLINE, [leaf(cx, base - S(40), cx + S(20) * math.cos(a), base - S(40) + S(13) * math.sin(a), S(6)) for a in [math.pi + i * math.pi / 6 for i in range(7)]]), ('#b5c4a0', leaves)]
+    layers.append(('#e3ead6', [leaf(cx, base - S(40), cx + S(14) * math.cos(a), base - S(40) + S(9) * math.sin(a), S(1.6)) for a in [math.pi + i * math.pi / 6 for i in range(7)]]))
+    for dx in (-8, 0, 8):
+        layers += bar(cx + S(dx * 0.4), base - S(44), cx + S(dx), base - S(56), S(1), '#7c8b5c', 1) + oval(cx + S(dx), base - S(58), S(2.6), S(2.6), '#fdd835', d=1.2)
+    return layers
+
+
+def frailejon():
+    """El frailejón: la planta peluda del páramo, que guarda el agua de la neblina."""
+    layers = oval(50, 92, 44, 5, '#8bae5a', d=1.4)
+    layers += frailejon_plant(60, 92, 1.3) + frailejon_plant(22, 90, 0.8)
+    return layers
+
+
+def neblina():
+    """La neblina del páramo: los frailejones y las lomas en la madrugada fría, cubiertos de niebla."""
+    layers = [(OUTLINE, [rect(2, 2, 96, 96)]), ('#cfd8dc', [rect(3.6, 3.6, 92.8, 92.8)]), ('#9aa88a', [poly(3.6, 60, 30, 40, 56, 54, 80, 36, 96.4, 48, 96.4, 96.4, 3.6, 96.4)]), ('#7c8b5c', [poly(3.6, 76, 40, 62, 70, 74, 96.4, 64, 96.4, 96.4, 3.6, 96.4)])]
+    layers += frailejon_plant(30, 92, 0.7) + frailejon_plant(70, 94, 0.8)
+    layers.append(('#eceff1', [rect(3.6, 46, 92.8, 6), rect(3.6, 70, 92.8, 7), rect(3.6, 24, 70, 5)]))
+    layers.append(('#f5f7f8', [rect(20, 58, 76.4, 4), rect(3.6, 84, 60, 4)]))
+    return layers
+
+
+def tunjo():
+    """Los muiscas: el tunjo de oro, la figurita plana que ofrecían, delante del sol que adoraban."""
+    layers = oval(50, 46, 40, 40, '#ffe082', d=0)
+    layers.append(('#ffca28', [rib(50 + 30 * math.cos(a), 46 + 30 * math.sin(a), 50 + 44 * math.cos(a), 46 + 44 * math.sin(a), 3) for a in [i * math.pi / 8 for i in range(16)]]))
+    body = [(36, 92), (38, 34), (32, 22), (40, 12), (60, 12), (68, 22), (62, 34), (64, 92), (56, 92), (54, 60), (46, 60), (44, 92)]
+    layers += shape(body, '#d4a017', 2.2)
+    layers.append(('#a87d00', [rect(42, 22, 4, 2), rect(54, 22, 4, 2), rect(46, 30, 8, 2), rect(40, 40, 20, 1.6), rect(40, 48, 20, 1.6), rect(36, 16, 28, 1.6)]))
+    layers += bar(38, 40, 26, 58, 2.4, '#d4a017') + bar(62, 40, 74, 58, 2.4, '#d4a017')
+    return layers
+
+
+def mucura(cx, cy, s=1.0, color='#b5653a'):
+    """La múcura: la vasija de barro de cuello angosto."""
+    def S(v):
+        return v * s
+    return [(OUTLINE, [f'M {cx - S(8)} {cy - S(30)} L {cx + S(8)} {cy - S(30)} L {cx + S(8)} {cy - S(22)} Q {cx + S(24)} {cy - S(14)} {cx + S(22)} {cy + S(6)} Q {cx + S(18)} {cy + S(22)} {cx} {cy + S(22)} Q {cx - S(18)} {cy + S(22)} {cx - S(22)} {cy + S(6)} Q {cx - S(24)} {cy - S(14)} {cx - S(8)} {cy - S(22)} Z']),
+            (color, [f'M {cx - S(6.4)} {cy - S(28.4)} L {cx + S(6.4)} {cy - S(28.4)} L {cx + S(6.4)} {cy - S(20.6)} Q {cx + S(22)} {cy - S(13)} {cx + S(20)} {cy + S(5.4)} Q {cx + S(16.6)} {cy + S(19.6)} {cx} {cy + S(19.6)} Q {cx - S(16.6)} {cy + S(19.6)} {cx - S(20)} {cy + S(5.4)} Q {cx - S(22)} {cy - S(13)} {cx - S(6.4)} {cy - S(20.6)} Z']),
+            (tone(color, 0.75), [rect(cx - S(20), cy - S(4), S(40), S(2)), rect(cx - S(18), cy + S(4), S(36), S(1.4))]), (tone(color, 1.3), [ellipse(cx - S(10), cy - S(8), S(3), S(6), 20)])]
+
+
+def chicha():
+    """La chicha: la múcura de barro donde fermenta el maíz y la totuma servida, con las mazorcas al lado."""
+    layers = mucura(36, 62, 1.25)
+    layers += [(OUTLINE, ['M 62 70 Q 64 92 80 92 Q 96 92 98 70 Z']), ('#8d5a32', ['M 64.6 71.4 Q 66.4 89.6 80 89.6 Q 93.6 89.6 95.4 71.4 Z'])]
+    layers += [(OUTLINE, [ellipse(80, 70, 18, 4.4)]), ('#f3e2a0', [ellipse(80, 70, 16.4, 3)]), ('#fffbe6', [ellipse(76, 69.6, 6, 1.2)])]
+    layers += oval(78, 34, 14, 6, '#f4c430', -30, 1.6) + [('#e8a317', [ellipse(72 + 4 * i, 38 - 2.4 * i, 1.6, 2) for i in range(4)]), ('#c5d58a', [leaf(90, 26, 98, 12, 3)])]
+    return layers
+
+
+def guarapo_olla():
+    """El guarapo: la olla grande de barro donde fermenta el jugo de caña con panela, espumoso, y la totuma."""
+    layers = [(OUTLINE, ['M 10 40 L 70 40 Q 74 70 62 88 L 18 88 Q 6 70 10 40 Z']), ('#a85a32', ['M 12.6 42.4 L 67.4 42.4 Q 71 70 60.4 85.6 L 19.6 85.6 Q 9 70 12.6 42.4 Z']), ('#8d4a2a', [rect(12, 56, 56, 2.4)])]
+    layers += [(OUTLINE, [ellipse(40, 40, 32, 7)]), ('#c9a24a', [ellipse(40, 40, 30, 5.4)]), ('#f6efd8', [ellipse(x, y, 4, 1.8) for x, y in [(28, 39), (38, 41), (48, 38), (54, 41), (34, 37)]])]
+    layers += [(OUTLINE, ['M 72 76 Q 74 94 86 94 Q 98 94 98 76 Z']), ('#8d5a32', ['M 74.4 77.4 Q 76 91.6 86 91.6 Q 95.6 91.6 95.6 77.4 Z']), (OUTLINE, [ellipse(85, 76, 13, 3.4)]), ('#c9a24a', [ellipse(85, 76, 11.4, 2.2)])]
+    layers += bar(76, 66, 92, 14, 3.4, '#9ccc65') + [('#558b2f', [rect(78 + 3 * k, 54 - 12 * k, 4, 1.4, -17) for k in range(4)])]
+    return layers
+
+
+def tejo():
+    """El tejo: la cancha de greda con el bocín, las mechas rojas de pólvora y el tejo de hierro que va a totear."""
+    layers = [(OUTLINE, [poly(6, 70, 50, 54, 94, 70, 50, 90)]), ('#8d6e63', [poly(9.6, 70, 50, 56.6, 90.4, 70, 50, 87.4)]), ('#b5917a', [poly(16, 70, 50, 59, 84, 70, 50, 83)])]
+    layers += [(OUTLINE, [ellipse(50, 70, 12, 5)]), ('#5d4037', [ellipse(50, 70, 10.4, 3.6)])]
+    for x, y in [(38, 66), (62, 66), (50, 77)]:
+        layers += [(OUTLINE, [poly(x - 6, y + 2, x + 6, y + 2, x, y - 8)]), ('#fafafa', [poly(x - 4.4, y + 1, x + 4.4, y + 1, x, y - 5.6)]), ('#e53935', [poly(x - 2.4, y + 1, x + 2.4, y + 1, x, y - 2.6)])]
+    layers += oval(76, 24, 12, 6, '#78909c', -20) + [('#b0bec5', [ellipse(72, 22, 5, 2, -20)])]
+    layers.append(('#ff7043', [poly(56, 48, 60, 40, 62, 48, 70, 44, 64, 52, 72, 56, 62, 56, 60, 64, 56, 56, 48, 56, 54, 52, 46, 44)]))
+    layers.append(('#ffca28', [poly(58, 50, 60, 46, 61, 50, 65, 49, 62, 52, 66, 54, 61, 54, 60, 58, 58, 54, 54, 54, 57, 52, 53, 49)]))
+    return layers
+
+
+def feijoa(cx, cy, s=1.0, rot=0):
+    """La feijoa: la fruta verde ovalada con su corona."""
+    def S(v):
+        return v * s
+    return oval(cx, cy, S(12), S(16), '#689f38', rot, 1.8) + [('#8bc34a', [ellipse(cx - S(4), cy - S(4), S(3), S(7), rot)]), ('#3e2723', [circle(cx + S(16) * math.sin(math.radians(rot)), cy - S(16) * math.cos(math.radians(rot)), S(2))])]
+
+
+def tibasosa():
+    """Tibasosa: la feijoa, entera y partida con su pulpa clara, delante de una casa blanca del pueblo."""
+    layers = shape([(44, 70), (44, 36), (92, 36), (92, 70)], '#fafafa', 1.8) + [(OUTLINE, [poly(40, 38, 68, 20, 96, 38)]), ('#c0592b', [poly(44, 36.6, 68, 22.6, 92, 36.6)]), ('#2e7d32', [rect(62, 50, 12, 20), rect(50, 44, 7, 7), rect(80, 44, 7, 7)])]
+    layers += feijoa(24, 70, 1.4, -15)
+    layers += oval(62, 82, 16, 11, '#689f38') + [('#f1f0d4', [ellipse(62, 82, 13, 8.6)]), ('#d9d6a0', [ellipse(62, 82, 7, 4)]), ('#8a8455', [circle(62 + 4 * math.cos(a), 82 + 2.4 * math.sin(a), 0.7) for a in [i * math.pi / 4 for i in range(8)]])]
+    return layers
+
+
+def alfarera():
+    """La alfarera: sentada al torno, amasando y subiendo la olla de barro con las manos mojadas."""
+    layers = oval(50, 94, 40, 3, '#a1887f', d=1.2)
+    layers += [(OUTLINE, [rect(42, 74, 16, 20), ellipse(50, 74, 22, 5)]), ('#6d4c41', [rect(43.6, 75.6, 12.8, 18)]), ('#8d6e63', [ellipse(50, 74, 20.4, 3.6)])]
+    layers += [(OUTLINE, ['M 38 72 Q 34 56 42 46 L 58 46 Q 66 56 62 72 Z']), ('#b5653a', ['M 40.4 70.6 Q 36.6 56.6 43.6 48.4 L 56.4 48.4 Q 63.4 56.6 59.6 70.6 Z']), ('#d98552', [ellipse(46, 58, 2.4, 6)])]
+    layers += [(OUTLINE, [ellipse(50, 46, 8, 2.4)]), ('#7a3e1e', [ellipse(50, 46, 6.4, 1.4)])]
+    layers += shape([(14, 92), (16, 56), (34, 56), (36, 92)], '#e53935', 1.8) + [('#fdd835', [rect(16, 80, 19, 3)])]
+    layers += bar(30, 62, 40, 56, 3, '#c68642') + bar(30, 70, 40, 66, 3, '#c68642')
+    layers += oval(25, 44, 8, 9, '#c68642', d=1.8) + [('#2b1d14', ['M 16 44 Q 16 30 25 30 Q 34 30 34 44 Q 30 36 25 36 Q 20 36 16 44 Z', circle(27, 44, 1), curve(22, 49, 25, 51, 28, 49, 1.1)])]
+    layers += [(OUTLINE, [rect(14, 30, 3, 26)]), ('#2b1d14', [rect(14.8, 30.8, 1.4, 24.4)])]
+    return layers
+
+
+def alcancia():
+    """La alcancía: el marranito de barro con la ranura en el lomo, para guardar las monedas."""
+    layers = oval(48, 58, 34, 24, '#c8693a')
+    layers += [(OUTLINE, [rect(26, 76, 8, 12), rect(58, 76, 8, 12)]), ('#b0582d', [rect(27.4, 77.4, 5.2, 9.2), rect(59.4, 77.4, 5.2, 9.2)])]
+    layers += oval(48, 58, 34, 24, '#c8693a')
+    layers.append(('#e08a52', [ellipse(40, 46, 14, 6, -10)]))
+    layers += oval(14, 58, 7, 9, '#d9784a', d=1.6) + [('#7a3e1e', [ellipse(12, 55, 1.2, 2), ellipse(12, 61, 1.2, 2)])]
+    layers += [(OUTLINE, [poly(22, 40, 26, 26, 34, 38)]), ('#b0582d', [poly(23.6, 39.4, 26.6, 29.4, 32, 38)])]
+    layers += [('#1b1b1b', [circle(24, 48, 1.6)]), (OUTLINE, [rect(44, 34, 14, 3, -5)]), ('#3e2723', [rect(45, 34.8, 12, 1.4, -5)])]
+    layers += [(OUTLINE, [curve(82, 54, 92, 50, 88, 42, 2.6)]), ('#c8693a', [curve(82, 54, 91, 50, 88, 43, 1)])]
+    layers.append(('#2196f3', [rib(30 + 8 * i, 64, 34 + 8 * i, 70, 1.4) for i in range(4)]))
+    layers += oval(84, 86, 7, 2.6, '#fbc02d', d=1.4) + oval(84, 82, 7, 2.6, '#fdd835', d=1.4) + oval(74, 90, 6, 2.4, '#fbc02d', d=1.4)
+    return layers
+
+
+def candelaria():
+    """La Candelaria: el monasterio blanco de tejas en medio del desierto, con sus arcos y los cactus."""
+    layers = [(OUTLINE, [rect(2, 2, 96, 96)]), ('#ffe0b2', [rect(3.6, 3.6, 92.8, 50)]), ('#d9a86c', [poly(3.6, 64, 30, 54, 70, 58, 96.4, 52, 96.4, 96.4, 3.6, 96.4)])]
+    layers += shape([(14, 82), (14, 50), (78, 50), (78, 82)], '#fafafa', 1.8) + [(OUTLINE, [rect(10, 44, 72, 8)]), ('#c0592b', [rect(11.6, 45.6, 68.8, 4.8)])]
+    layers += shape([(64, 50), (64, 24), (80, 24), (80, 50)], '#fafafa', 1.8) + [(OUTLINE, [poly(60, 26, 72, 14, 84, 26)]), ('#c0592b', [poly(63, 25, 72, 17, 81, 25)]), ('#5d4037', [rect(69, 30, 6, 8)])]
+    layers.append(('#a1887f', ['M %s 82 L %s 66 Q %s 60 %s 66 L %s 82 Z' % (20 + 12 * i, 20 + 12 * i, 25 + 12 * i, 30 + 12 * i, 30 + 12 * i) for i in range(4)]))
+    layers += bar(90, 92, 90, 70, 3.4, '#558b2f') + bar(8, 94, 8, 78, 3, '#558b2f')
+    return layers
+
+
+def raquira():
+    """Ráquira: el pueblo de las ollas, con las casas pintadas de colores vivos y las vasijas a la puerta."""
+    layers = oval(50, 92, 46, 4, '#d7ccc8', d=1.2)
+    layers += house_front(6, 50, 30, 34, '#ec407a', '#c0592b', '#1e88e5') + house_front(40, 46, 26, 38, '#fdd835', '#c0592b', '#43a047') + house_front(70, 52, 26, 32, '#29b6f6', '#c0592b', '#e53935')
+    layers += mucura(20, 86, 0.32) + mucura(52, 86, 0.36, '#c8693a') + mucura(84, 86, 0.3)
+    return layers
+
+
+def kumis_almojabana():
+    """El kumis de Paipa: el vaso de leche fermentada con canela y la almojábana al lado."""
+    layers = [(OUTLINE, [poly(22, 18, 64, 18, 60, 92, 26, 92)]), ('#e3f2f8', [poly(24.6, 20.4, 61.4, 20.4, 57.6, 89.6, 28.4, 89.6)]), ('#fdf8ec', [poly(25.2, 30, 60.8, 30, 57.6, 89.6, 28.4, 89.6)])]
+    layers += [('#c8a165', [ellipse(43, 30, 17.6, 2.6)]), ('#ffffff', [rect(28, 34, 3, 50)])]
+    layers += oval(78, 80, 16, 12, '#f2c66d') + [('#f9e2a8', [ellipse(74, 76, 7, 4)]), ('#d9a441', [curve(68, 82, 78, 86, 88, 82, 1.2)])]
+    return layers
+
+
+def termales():
+    """Los termales de Paipa: la poza de agua caliente que sale de la tierra con vapor, entre las piedras."""
+    layers = oval(50, 72, 44, 20, '#9e9e9e')
+    layers += [('#757575', [ellipse(20, 64, 8, 5), ellipse(80, 66, 9, 5), ellipse(50, 88, 10, 4)])]
+    layers += [(OUTLINE, [ellipse(50, 70, 34, 12)]), ('#4dd0e1', [ellipse(50, 70, 32.4, 10.6)]), ('#b2ebf2', [ellipse(42, 68, 10, 2.4), ellipse(60, 73, 8, 1.8)])]
+    for x in (34, 50, 66):
+        layers.append(('#eceff1', [f'M {x - 3} 62 Q {x - 9} 50 {x - 2} 40 Q {x + 3} 32 {x - 2} 22 L {x + 2} 22 Q {x + 7} 32 {x + 2} 41 Q {x - 4} 50 {x + 1} 62 Z']))
+    return layers
+
+
+def lanceros():
+    """El Pantano de Vargas: el monumento de bronce de los catorce lanceros, el jinete con la lanza sobre su pedestal."""
+    layers = [(OUTLINE, [rect(18, 78, 64, 18), rect(12, 90, 76, 6)]), ('#b0a99a', [rect(19.6, 79.6, 60.8, 14.8), rect(13.6, 91.6, 72.8, 2.8)])]
+    layers += mule(52, 58, 0.62, body='#7d6a4a', load=False, horse=True)
+    layers += shape([(46, 50), (48, 34), (58, 34), (60, 50)], '#8a7650', 1.6) + oval(53, 28, 5, 5.6, '#8a7650', d=1.4)
+    layers += bar(30, 6, 74, 52, 1.8, '#5d5240') + [(OUTLINE, [poly(26, 2, 34, 6, 30, 10)]), ('#8a7650', [poly(27.6, 3.4, 32.6, 6, 30, 8.6)])]
+    layers += bar(56, 38, 64, 30, 2.4, '#8a7650')
+    layers.append(('#a0905e', [ellipse(44, 52, 3, 6, 20)]))
+    return layers
+
+
+def telar_lana():
+    """El telar de la ruana: el telar de madera donde la ruana de lana crece franja por franja."""
+    layers = [(OUTLINE, [rect(6, 12, 6, 82), rect(88, 12, 6, 82), rect(6, 12, 88, 6), rect(6, 72, 88, 6)]), ('#8d5a32', [rect(7.4, 13.4, 3.2, 79.2), rect(89.4, 13.4, 3.2, 79.2), rect(7.4, 13.4, 85.2, 3.2), rect(7.4, 73.4, 85.2, 3.2)])]
+    layers.append(('#d7ccc8', [rect(16 + 4.4 * i, 18, 1.2, 54) for i in range(17)]))
+    layers += [(OUTLINE, [rect(14, 40, 72, 32)]), ('#8d6e63', [rect(15.4, 41.4, 69.2, 29.2)])]
+    layers.append(('#d7ccc8', [rect(15.4, 46, 69.2, 3), rect(15.4, 60, 69.2, 3)]))
+    layers.append(('#5d4037', [rect(15.4, 53, 69.2, 2)]))
+    layers += [(OUTLINE, [rect(12, 34, 76, 5)]), ('#a1693f', [rect(13.4, 35.4, 73.2, 2.2)])]
+    layers += [(OUTLINE, [ellipse(52, 26, 12, 4)]), ('#a1693f', [ellipse(52, 26, 10.4, 2.6)]), ('#8d6e63', [ellipse(52, 26, 6, 1.6)])]
+    layers += oval(84, 88, 8, 6, '#bcaaa4', d=1.6) + [('#8d6e63', [curve(78, 86, 84, 84, 90, 88, 0.8)])]
+    return layers
+
+
+def nobsa():
+    """Nobsa: las ruanas de colores colgadas a la puerta del taller, en el pueblo de las ruanas."""
+    layers = oval(50, 92, 46, 4, '#d7ccc8', d=1.2)
+    layers += shape([(10, 90), (10, 40), (90, 40), (90, 90)], '#fafafa', 1.8) + [(OUTLINE, [poly(4, 42, 50, 18, 96, 42)]), ('#c0592b', [poly(8, 40.6, 50, 21, 92, 40.6)])]
+    layers += [(OUTLINE, [rect(8, 46, 84, 2.4)])]
+    for x, c, st in [(14, '#8d6e63', '#d7ccc8'), (40, '#455a64', '#e53935'), (66, '#d7ccc8', '#5d4037')]:
+        layers += [(OUTLINE, [rect(x, 47, 22, 34)]), (c, [rect(x + 1.4, 48.4, 19.2, 31.2)]), (st, [rect(x + 1.4, 70, 19.2, 3), rect(x + 1.4, 75, 19.2, 1.6)])]
+        layers.append(('#fafafa', [rect(x + 10, 48.4, 2, 6)]))
+    return layers
+
+
+def plaza_empedrada():
+    """La plaza de Villa de Leyva: la plaza grande toda de piedra, con la pila en el centro y las casas blancas."""
+    layers = [(OUTLINE, [poly(2, 96, 14, 54, 86, 54, 98, 96)]), ('#c9b98f', [poly(4, 94.6, 15.4, 55.6, 84.6, 55.6, 96, 94.6)])]
+    layers.append(('#a8986e', [ellipse(14 + 8 * i + 4 * (j % 2), 62 + 7 * j, 3, 1.6) for j in range(5) for i in range(10) if 8 + 8 * i < 90]))
+    layers += shape([(2, 54), (2, 26), (98, 26), (98, 54)], '#fafafa', 1.6) + [(OUTLINE, [rect(0, 22, 100, 6)]), ('#c0592b', [rect(1.4, 23.4, 97.2, 3.2)])]
+    layers += [('#2e7d32', [rect(8 + 14 * i, 34, 6, 10) for i in range(7)]), ('#5d4037', [rect(10 + 14 * i, 46, 4, 8) for i in range(7)])]
+    layers += [(OUTLINE, [ellipse(50, 78, 14, 5), rect(46, 62, 8, 16), ellipse(50, 62, 8, 3)]), ('#e0d6c0', [ellipse(50, 78, 12.4, 3.6), rect(47.4, 63, 5.2, 14), ellipse(50, 62, 6.6, 1.8)]), ('#4fa3d9', [ellipse(50, 77.6, 9, 2)])]
+    return layers
+
+
+def cometa(cx, cy, s, color, accent, rot=0):
+    """Una cometa de rombo con su cola de moñitos."""
+    def S(v):
+        return v * s
+    pts_k = [(cx, cy - S(14)), (cx + S(10), cy - S(2)), (cx, cy + S(16)), (cx - S(10), cy - S(2))]
+    layers = shape(pts_k, color, 1.6) + [(accent, [poly(cx, cy - S(14), cx + S(10), cy - S(2), cx, cy - S(2))]), (OUTLINE, [rib(cx, cy - S(14), cx, cy + S(16), 0.8), rib(cx - S(10), cy - S(2), cx + S(10), cy - S(2), 0.8)])]
+    layers.append((OUTLINE, [curve(cx, cy + S(16), cx - S(6), cy + S(26), cx + S(2), cy + S(36), 0.8)]))
+    layers.append((accent, [poly(cx - S(3), cy + S(22), cx + S(3), cy + S(20), cx + S(1), cy + S(25)), poly(cx - S(2), cy + S(30), cx + S(4), cy + S(29), cx + S(1), cy + S(33))]))
+    return layers
+
+
+def cometas():
+    """Las cometas de Villa de Leyva: en agosto el cielo se llena de cometas de colores sobre las lomas."""
+    layers = [(OUTLINE, [rect(2, 2, 96, 96)]), ('#b3e5fc', [rect(3.6, 3.6, 92.8, 92.8)]), ('#c9a86a', [poly(3.6, 80, 30, 66, 60, 76, 96.4, 64, 96.4, 96.4, 3.6, 96.4)])]
+    layers += oval(16, 18, 7, 4, '#ffffff', d=0) + oval(80, 76, 4, 4, '#fafafa', d=0)
+    layers += cometa(30, 30, 1.2, '#e53935', '#fdd835', 0) + cometa(70, 24, 1.0, '#1e88e5', '#ffffff') + cometa(56, 54, 0.8, '#43a047', '#fdd835')
+    layers.append((OUTLINE, [rib(30, 49, 40, 94, 0.6), rib(70, 40, 60, 94, 0.6)]))
+    return layers
+
+
+def pozos_azules():
+    """Los Pozos Azules: las lagunitas de agua azul turquesa en medio del desierto ocre, cerca de Villa de Leyva."""
+    layers = [(OUTLINE, [rect(2, 2, 96, 96)]), ('#ffe0b2', [rect(3.6, 3.6, 92.8, 30)]), ('#d9a86c', [rect(3.6, 30, 92.8, 66.4)]), ('#c08d50', [poly(3.6, 36, 30, 26, 56, 32, 80, 24, 96.4, 30, 96.4, 40, 3.6, 40)])]
+    for x, y, rx, ry in [(30, 56, 20, 9), (68, 72, 22, 10), (34, 84, 12, 5)]:
+        layers += [(OUTLINE, [ellipse(x, y, rx + 2, ry + 2)]), ('#26c6da', [ellipse(x, y, rx, ry)]), ('#80deea', [ellipse(x - rx * 0.3, y - ry * 0.3, rx * 0.4, ry * 0.25)])]
+    layers.append(('#7cb342', [ellipse(14, 66, 4, 2), ellipse(88, 54, 5, 2)]))
+    return layers
+
+
+def casa_terracota():
+    """La Casa Terracota: la casa entera hecha de barro cocido, de formas redondas como una gran vasija."""
+    layers = oval(50, 92, 46, 4, '#d9a86c', d=1.2)
+    layers += [(OUTLINE, ['M 8 90 Q 4 56 22 46 Q 30 22 52 24 Q 66 10 80 26 Q 98 38 92 90 Z']), ('#c8693a', ['M 10.6 88 Q 7 57 24 48 Q 32 25 52 26.6 Q 66 13.4 79 28 Q 95 40 89.6 88 Z'])]
+    layers.append(('#e08a52', [ellipse(36, 40, 10, 4, -20), ellipse(70, 34, 6, 3)]))
+    layers += [(OUTLINE, [circle(32, 60, 7), circle(64, 52, 6), circle(78, 68, 5)]), ('#ffe082', [circle(32, 60, 5.4), circle(64, 52, 4.4), circle(78, 68, 3.6)])]
+    layers += [(OUTLINE, ['M 44 90 L 44 72 Q 52 62 60 72 L 60 90 Z']), ('#7a3e1e', ['M 45.6 90 L 45.6 72.6 Q 52 64.6 58.4 72.6 L 58.4 90 Z'])]
+    layers.append(('#a0522d', [curve(14, 76, 30, 80, 42, 78, 1.4), curve(62, 80, 76, 84, 88, 78, 1.4)]))
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -5566,6 +6454,73 @@ ICONS = [
     (0xE172, 'fonda', fonda),
     (0xE173, 'balcones', balcones),
     (0xE174, 'castillo_polvora', castillo_polvora),
+    # Láminas del álbum de Santander (v4.3)
+    (0xE175, 'bocadillo_lonja', bocadillo_lonja),
+    (0xE176, 'cajitas', cajitas),
+    (0xE177, 'velez', velez),
+    (0xE178, 'caney', caney),
+    (0xE179, 'galeon', galeon),
+    (0xE17A, 'telar', telar),
+    (0xE17B, 'vaquero', vaquero),
+    (0xE17C, 'cabro', cabro),
+    (0xE17D, 'pepitoria', pepitoria),
+    (0xE17E, 'mute', mute),
+    (0xE17F, 'chicamocha', chicamocha),
+    (0xE180, 'salida', salida),
+    (0xE181, 'recoleccion', recoleccion),
+    (0xE182, 'rafting', rafting),
+    (0xE183, 'piedra_amarilla', piedra_amarilla),
+    (0xE184, 'tapia', tapia),
+    (0xE185, 'amonita', amonita),
+    (0xE186, 'vasija_guane', vasija_guane),
+    (0xE187, 'mirador', mirador),
+    # Láminas del álbum de la Costa (v4.3)
+    (0xE188, 'rio_sinu', rio_sinu),
+    (0xE189, 'garza', garza),
+    (0xE18A, 'pilon_arroz', pilon_arroz),
+    (0xE18B, 'arroz_lisa', arroz_lisa),
+    (0xE18C, 'mompox', mompox),
+    (0xE18D, 'champan', champan),
+    (0xE18E, 'enyucado', enyucado),
+    (0xE18F, 'playa_tolu', playa_tolu),
+    (0xE190, 'palafitos', palafitos),
+    (0xE191, 'manglar', manglar),
+    (0xE192, 'cienaga_grande', cienaga_grande),
+    (0xE193, 'suero_taza', suero_taza),
+    (0xE194, 'bollo_limpio', bollo_limpio),
+    (0xE195, 'porro', porro),
+    (0xE196, 'pintas', pintas),
+    (0xE197, 'oro_zenu', oro_zenu),
+    (0xE198, 'tuchin', tuchin),
+    (0xE199, 'murallas', murallas),
+    (0xE19A, 'palenquera', palenquera),
+    (0xE19B, 'balcon_cartagena', balcon_cartagena),
+    (0xE19C, 'san_felipe', san_felipe),
+    (0xE19D, 'islas_rosario', islas_rosario),
+    # Láminas del álbum de Boyacá (v4.3)
+    (0xE19E, 'papicultor', papicultor),
+    (0xE19F, 'cocido', cocido),
+    (0xE1A0, 'cubios', cubios),
+    (0xE1A1, 'neblina', neblina),
+    (0xE1A2, 'tunjo', tunjo),
+    (0xE1A3, 'chicha', chicha),
+    (0xE1A4, 'guarapo_olla', guarapo_olla),
+    (0xE1A5, 'tejo', tejo),
+    (0xE1A6, 'tibasosa', tibasosa),
+    (0xE1A7, 'alfarera', alfarera),
+    (0xE1A8, 'alcancia', alcancia),
+    (0xE1A9, 'candelaria', candelaria),
+    (0xE1AA, 'raquira', raquira),
+    (0xE1AB, 'kumis_almojabana', kumis_almojabana),
+    (0xE1AC, 'termales', termales),
+    (0xE1AD, 'lanceros', lanceros),
+    (0xE1AE, 'telar_lana', telar_lana),
+    (0xE1AF, 'frailejon', frailejon),
+    (0xE1B0, 'nobsa', nobsa),
+    (0xE1B1, 'plaza_empedrada', plaza_empedrada),
+    (0xE1B2, 'cometas', cometas),
+    (0xE1B3, 'pozos_azules', pozos_azules),
+    (0xE1B4, 'casa_terracota', casa_terracota),
 ]
 
 
