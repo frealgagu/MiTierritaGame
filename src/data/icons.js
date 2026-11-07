@@ -551,6 +551,10 @@ export const ICON = {
   panSal: '\uE221', // El pan de sal de los muiscas: el cono de sal compacta que salía de la gacha de barro
   cofreSal: '\uE222', // El cofre de regalo: la cajita de madera con la sal y la figurita tallada
   canastaSabanera: '\uE223', // La canasta de regalo de la Sabana: el pan de sal, las rosas y la bandeja de fresas
+  caldoPapas: '\uE224', // El caldo de las tres papas en la olla, humeando: la pastusa, la sabanera y la criolla que lo espesa
+  ajiaco: '\uE225', // La olla del ajiaco santafereño: el caldo amarillo con la mazorca, el pollo y las ramas de guascas
+  platoAjiaco: '\uE226', // El ajiaco servido: el plato hondo con la crema, las alcaparras, el aguacate y la mazorca al lado
+  almuerzoSabanero: '\uE227', // El almuerzo sabanero del restaurante: el ajiaco, la trucha ahumada y el ceviche, en la mesa de mantel de cuadros
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

@@ -325,4 +325,10 @@ export default {
   gachas_barro: 'Gachas de barro',
   empaque_regalo: 'Embalagem de presente',
   armadora_canastas: 'Montadora de cestas',
+  huerta_papa: 'Horta de batata',
+  peladero: 'Descascadeira',
+  olla_caldo: 'Panela do caldo',
+  olla_ajiaco: 'Panela do ajiaco',
+  servidora_ajiaco: 'Balcão de servir',
+  restaurante_santafereno: 'Restaurante santafereño',
 };

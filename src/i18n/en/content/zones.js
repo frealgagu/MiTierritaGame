@@ -50,6 +50,7 @@ export default {
   neiva: ['Neiva', 'To Villavieja ➜', { cajas_bizcochos: '⬅ Biscuits from the Achira Fields', cafe_especial: '⬅ Huila coffee', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Breakfasts', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Cascara tea ⬆', almuerzos_represa: 'Tilapia ⬆' }],
   flores: ['The Flowers of the Savanna', 'To the airport ➜', { ramos_rosas: 'Bouquets to the Salt Works ➜' }],
   fresas: ['The Strawberry Growers of Sibaté', 'To Sibaté ➜', { bandejas_fresa: 'Trays to the Salt Works ➜' }],
-  truchas: ['The Trout of Guatavita', 'To Guatavita ➜', {}],
+  truchas: ['The Trout of Guatavita', 'To Guatavita ➜', { ahumadas_trucha: 'Smoked trout to the Kitchen ⬇', ceviches: 'Ceviche ⬇' }],
   salinas: ['The Salt Works of Nemocón', 'To Nemocón ➜', { ramos_rosas: '⬅ Bouquets from the Flowers', bandejas_fresa: '⬅ Strawberries from Sibaté' }],
+  cocina: ['The Savanna Kitchen', 'To Chía ➜', { ahumadas_trucha: '⬅ Smoked trout from Guatavita', ceviches: '⬅ Ceviche' }],
 };

@@ -508,4 +508,12 @@ export default {
   mesa_regalos: 'Table des cadeaux',
   canastos_mimbre: 'Paniers en osier',
   sal_nemocon: 'Sel de Nemocón',
+  papa_pastusa: 'Pommes de terre pastusa',
+  peladoras: 'Plus d’éplucheuses',
+  olla_presion: 'Autocuiseur',
+  tren_sabana: 'Train de la Savane',
+  guascas_frescas: 'Guascas fraîches',
+  cucharones: 'Grandes louches',
+  salon_santafereno: 'Grande salle',
+  receta_santafe: 'Recette santafereña',
 };

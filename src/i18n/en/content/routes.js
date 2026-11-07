@@ -93,4 +93,6 @@ export default {
   lechonas: ['Lechona route', 'Chiva', 'Lechona'],
   ramos_rosas: ['Bouquet route', 'Chiva', 'Bouquets'],
   bandejas_fresa: ['Strawberry tray route', 'Chiva', 'Strawberries'],
+  ahumadas_trucha: ['Smoked trout route', 'Chiva', 'Smoked'],
+  ceviches: ['Ceviche route', 'Chiva', 'Ceviche'],
 };

@@ -7932,6 +7932,112 @@ const DRAW = {
     this.animate(0);
   },
 
+  // La Cocina de la Sabana. Olla del caldo: el fogón de leña con la olla grande donde se deshacen las tres papas; el
+  // vapor sube y la cocinera revuelve.
+  olla_caldo(g, x, y, ctx) {
+    const x0 = x + 0.45;
+    const y0 = y + 0.45;
+    box(g, x0, y0, 1.5, 1.2, 10, 0xb5653a);
+    const c = iso(x0 + 0.75, y0 + 0.6, 10);
+    g.rect(c.x - 15, c.y - 18, 30, 14).fill(0x90a4ae).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 18, 15, 5.5).fill(0x78909c).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 18, 12.5, 4).fill(PRODUCTS.caldo_papas.color);
+    for (const [dx, col] of [[-5, 0xfdd835], [3, 0xe8d6a8]]) g.circle(c.x + dx, c.y - 18, 2.2).fill(col);
+    this.lights.push({ x: c.x, y: c.y + 2, r: 18, color: 0xff7a1a });
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 0.4 + i * 0.4, y + 2.5);
+      g.ellipse(q.x, q.y - 4, 6, 4).fill(0x8d6e4a).stroke(OUTLINE);
+      g.circle(q.x - 2, q.y - 6, 1.8).fill(0xc9a06a);
+      g.circle(q.x + 2, q.y - 6, 1.6).fill(0xfdd835);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      if (this.working) for (let k = 0; k < 3; k++) {
+        const f = (time * 0.6 + k * 0.33) % 1;
+        anim.circle(c.x - 6 + k * 6 + Math.sin(time + k) * 2, c.y - 24 - f * 20, 3 + f * 3).fill({ color: 0xffffff, alpha: 0.5 * (1 - f) });
+      }
+      const wp = iso(x0 + 1.6, y0 + 1.5);
+      worker(anim, wp.x, wp.y, 0xfafafa);
+      const stir = this.working ? Math.sin(time * 3) * 4 : 0;
+      anim.moveTo(c.x + stir, c.y - 18).lineTo(c.x + 10 + stir, c.y - 34).stroke({ width: 2, color: 0x8d6e4a });
+    };
+    this.animate(0);
+  },
+
+  // Olla del ajiaco: la cocina de bahareque con el fogón de las ollas de barro y las ramas de guascas colgadas.
+  olla_ajiaco(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.2, 1.4, 24, ctx, { wall: 0xfbf8f1, roofColor: 0xb5512e });
+    door(g, hx, hy, 1.4, 1.6, 16, 0x2e7d32);
+    windowOnRight(this, g, hx, hy, 2.2, 0.7, 12, 0x2e7d32);
+    this.smokePoints.push(iso(hx + 1.8, hy + 0.4, 40 + ctx.up));
+    box(g, x + 0.4, y + 2.1, 1.9, 0.55, 8, 0xb5653a);
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) {
+      const q = iso(x + 0.7 + k * 0.5, y + 2.4, 8);
+      g.ellipse(q.x, q.y - 4, 7, 5).fill(0x8d5a32).stroke(OUTLINE);
+      g.ellipse(q.x, q.y - 7, 6, 2.2).fill(PRODUCTS.ajiaco.color);
+    }
+    const h = iso(hx + 2.2, hy + 0.4, 20);
+    for (let k = 0; k < 3; k++) g.moveTo(h.x + 2 + k * 3, h.y).quadraticCurveTo(h.x + 4 + k * 3, h.y + 8, h.x + 1 + k * 3, h.y + 12).stroke({ width: 2, color: 0x558b2f });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const q = iso(x + 1.4, y + 2.95);
+      worker(anim, q.x, q.y, 0xe53935);
+      if (this.working) anim.circle(q.x + 6, q.y - 26 - ((time * 2) % 1) * 6, 2).fill({ color: 0xffffff, alpha: 0.6 });
+    };
+    this.animate(0);
+  },
+
+  // Servidora: el mostrador donde se sirven los platos con la crema, las alcaparras y el aguacate.
+  servidora_ajiaco(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.45;
+    box(g, x0, y0 + 0.4, 2.0, 0.8, 12, 0xfafafa);
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 3); k++) {
+      const q = iso(x0 + 0.25 + (k % 4) * 0.45, y0 + 0.65 + Math.floor(k / 4) * 0.35, 12);
+      g.ellipse(q.x, q.y - 1, 5.5, 3).fill(0xa85a32).stroke({ width: 0.6, color: 0x3a2418 });
+      g.ellipse(q.x, q.y - 2, 4.4, 2).fill(PRODUCTS.ajiaco.color);
+      g.circle(q.x - 1.4, q.y - 2.4, 1.1).fill(0xfffaf0);
+      g.circle(q.x + 1.6, q.y - 2.2, 0.8).fill(0x558b2f);
+    }
+    ramada(this, g, x0 - 0.1, y0 - 0.1, 2.2, 1.5, 26 + ctx.up, 0x9aa3a8);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const f = this.working ? (Math.sin(time * 0.8) + 1) / 2 : 0.5;
+      const wp = iso(x0 + 0.4 + f * 1.4, y0 + 1.6);
+      worker(anim, wp.x, wp.y, 0xfafafa);
+    };
+    this.animate(0);
+  },
+
+  // Restaurante santafereño: la casona de balcón con el letrero del ajiaco y las mesas de mantel de cuadros en el patio.
+  restaurante_santafereno(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.4, 1.4, 30, ctx, { wall: 0xfbf8f1, roofColor: 0xb5512e });
+    door(g, hx, hy, 1.4, 1.7, 18, 0x2e5d8a);
+    windowOnRight(this, g, hx, hy, 2.4, 0.7, 16, 0x2e5d8a);
+    balcony(g, hx, hy, 2.4, 1.4, 16, 0x2e5d8a);
+    const s2 = iso(hx + 0.8, hy + 1.4, 26 + ctx.up);
+    g.roundRect(s2.x - 13, s2.y - 7, 26, 12, 3).fill(0xfffaf0).stroke(OUTLINE);
+    g.ellipse(s2.x, s2.y - 1, 6, 3).fill(0xa85a32);
+    g.ellipse(s2.x, s2.y - 2, 4.6, 1.8).fill(PRODUCTS.ajiaco.color);
+    const tables = ctx.tier >= 2 ? [[0.6, 2.4], [1.5, 2.5], [2.4, 2.4]] : [[0.8, 2.4], [2.0, 2.5]];
+    for (const [tx, ty] of tables) {
+      box(g, x + tx - 0.3, y + ty - 0.2, 0.6, 0.4, 8, 0xe53935);
+      const q = iso(x + tx, y + ty, 8);
+      g.ellipse(q.x, q.y - 1, 5, 2.6).fill(0xa85a32);
+      g.ellipse(q.x, q.y - 1.6, 3.8, 1.6).fill(PRODUCTS.ajiaco.color);
+    }
+  },
+
   // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja
   // que se amontona para el Secadero.
   huila_wetmill(g, x, y, ctx) {
@@ -8482,6 +8588,8 @@ DRAW.huila_huller = DRAW.huller;
 DRAW.limpieza_trucha = DRAW.fish_cleaner;
 DRAW.ahumadero_trucha = DRAW.cachama_smoker;
 DRAW.fileteadora_trucha = DRAW.fish_filleter;
+// La Cocina de la Sabana (v4.4): el Peladero, como la Peladora de papa de Boyacá.
+DRAW.peladero = DRAW.potato_peeler;
 DRAW.huila_roaster = DRAW.roaster;
 DRAW.huila_packer = DRAW.packer;
 DRAW.tilapia_cleaner = DRAW.fish_cleaner;

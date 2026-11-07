@@ -381,6 +381,12 @@ export const FACTS = {
   gachas_barro: ['Los muiscas cuajaban la sal en ollas de barro llamadas gachas.', 'El pan de sal servía para comerciar con otros pueblos.'],
   empaque_regalo: ['Las figuras de sal y la sal de colores se venden de recuerdo en Nemocón.'],
   armadora_canastas: ['La canasta sabanera: sal de Nemocón, rosas de Madrid y fresas de Sibaté.'],
+  huerta_papa: ['El ajiaco lleva tres papas: la pastusa, la sabanera y la criolla.'],
+  peladero: ['La papa criolla casi no se pela: su cáscara es tan fina que se come.'],
+  olla_caldo: ['La papa criolla se deshace en el caldo y lo vuelve espeso y amarillo.'],
+  olla_ajiaco: ['Las guascas son una hierba de la Sabana que le da su sabor al ajiaco.', 'Al ajiaco se le echa pollo desmechado y mazorca.'],
+  servidora_ajiaco: ['El ajiaco se sirve con crema de leche, alcaparras y aguacate.'],
+  restaurante_santafereno: ['Santafereño es lo de Bogotá, que antes se llamó Santafé.', 'Después del ajiaco viene el chocolate con queso y almojábana.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -439,6 +445,7 @@ export const PEOPLE = {
   fresas: { icon: '👨🏽‍🌾', name: 'Don Gilberto', role: 'el fresero' },
   truchas: { icon: '🧔🏽', name: 'Don Ernesto', role: 'el truchero' },
   salinas: { icon: '👵🏽', name: 'Doña Blanca', role: 'la salinera' },
+  cocina: { icon: '👩🏽‍🍳', name: 'Doña Teresa', role: 'la cocinera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -497,6 +504,7 @@ export const WELCOME = {
   fresas: '¡Quiubo, sumercé! Aquí en Sibaté las fresas se lavan, se escogen y se sirven con crema; las de segunda, en mermelada.',
   truchas: '¡Bienvenido a Guatavita, sumercé! En estos estanques de agua helada se crían las truchas, y allá arriba está la laguna de El Dorado.',
   salinas: '¡Bienvenido a Nemocón, sumercé! De esta montaña sale la sal: se disuelve en salmuera, se cuaja y hasta se talla.',
+  cocina: '¡Siga, sumercé, que el ajiaco está listo! Aquí van las tres papas, las guascas y la mazorca, y se sirve con crema y alcaparras.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

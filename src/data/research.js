@@ -678,6 +678,16 @@ export const RESEARCH = [
   { zone: 'salinas', id: 'sal_nemocon', name: 'Sal de Nemocón', icon: '🏅', desc: 'Todo lo que venden las Salinas vale un 50 % más.', cost: 60000000, requires: 'empaque_regalo', effect: { type: 'zoneValue', target: 'salinas', mult: 1.5 } },
   { zone: 'salinas', id: 'maestria_salinas', name: 'Maestría: Salinas', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'salinas', mult: 4 } },
   { zone: 'salinas', id: 'supremacia_salinas', name: 'Supremacía: Salinas', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'salinas', mult: 8 } },
+  { zone: 'cocina', id: 'papa_pastusa', name: 'Papa pastusa', icon: ICON.potatoPlant, desc: 'La Huerta de papa da el doble.', cost: 15000000, requires: 'peladero', effect: { type: 'stationSpeed', target: 'huerta_papa', mult: 2 } },
+  { zone: 'cocina', id: 'peladoras', name: 'Más peladoras', icon: ICON.peeledPotato, desc: 'El Peladero pela el doble.', cost: 18000000, requires: 'peladero', effect: { type: 'stationSpeed', target: 'peladero', mult: 2 } },
+  { zone: 'cocina', id: 'olla_presion', name: 'Olla a presión', icon: ICON.caldoPapas, desc: 'La Olla del caldo cocina el doble.', cost: 45000000, requires: 'olla_ajiaco', effect: { type: 'stationSpeed', target: 'olla_caldo', mult: 2 } },
+  { zone: 'cocina', id: 'tren_sabana', name: 'Tren de la Sabana', icon: '🚂', desc: 'El despacho de la Cocina lleva el doble por viaje.', cost: 60000000, requires: 'olla_caldo', effect: { type: 'dispatchCapacity', target: 'cocina', mult: 2 } },
+  { zone: 'cocina', id: 'guascas_frescas', name: 'Guascas frescas', icon: ICON.ajiaco, desc: 'La Olla del ajiaco cocina el doble.', cost: 120000000, requires: 'servidora_ajiaco', effect: { type: 'stationSpeed', target: 'olla_ajiaco', mult: 2 } },
+  { zone: 'cocina', id: 'cucharones', name: 'Cucharones grandes', icon: ICON.platoAjiaco, desc: 'La Servidora sirve el doble.', cost: 300000000, requires: 'restaurante_santafereno', effect: { type: 'stationSpeed', target: 'servidora_ajiaco', mult: 2 } },
+  { zone: 'cocina', id: 'salon_santafereno', name: 'Salón grande', icon: ICON.almuerzoSabanero, desc: 'El Restaurante santafereño sirve el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'restaurante_santafereno', effect: { type: 'stationSpeed', target: 'restaurante_santafereno', mult: 2 } },
+  { zone: 'cocina', id: 'receta_santafe', name: 'Receta santafereña', icon: '🏅', desc: 'Todo lo que vende la Cocina vale un 50 % más.', cost: 400000000, requires: 'servidora_ajiaco', effect: { type: 'zoneValue', target: 'cocina', mult: 1.5 } },
+  { zone: 'cocina', id: 'maestria_cocina', name: 'Maestría: Cocina', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cocina', mult: 4 } },
+  { zone: 'cocina', id: 'supremacia_cocina', name: 'Supremacía: Cocina', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cocina', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

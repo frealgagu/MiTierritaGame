@@ -335,4 +335,10 @@ export default {
   pan_sal: 'Pão de sal',
   cofre_sal: 'Caixinha de sal',
   canasta_sabanera: 'Cesta da Savana',
+  papa_sabanera: 'Batata da Savana',
+  papa_pelada_sabana: 'Batata descascada',
+  caldo_papas: 'Caldo de batata',
+  ajiaco: 'Ajiaco',
+  plato_ajiaco: 'Ajiaco servido',
+  almuerzo_sabanero: 'Almoço da Savana',
 };

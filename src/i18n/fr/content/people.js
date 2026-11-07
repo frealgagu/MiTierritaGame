@@ -52,4 +52,5 @@ export default {
   fresas: ['Don Gilberto', 'le producteur de fraises'],
   truchas: ['Don Ernesto', 'le pisciculteur'],
   salinas: ['Doña Blanca', 'la saunière'],
+  cocina: ['Doña Teresa', 'la cuisinière'],
 };

@@ -8920,6 +8920,62 @@ def canasta_sabanera():
     return layers
 
 
+
+# ---------- Cundinamarca · La Cocina de la Sabana (v4.4) ----------
+
+def olla(cx, cy, w, h, color='#78909c'):
+    """La olla de aluminio con sus dos orejas."""
+    layers = [(OUTLINE, [rect(cx - w / 2 - 6, cy - h * 0.15, 8, 5), rect(cx + w / 2 - 2, cy - h * 0.15, 8, 5)])]
+    layers += [(OUTLINE, [f'M {cx - w / 2} {cy - h / 2} L {cx + w / 2} {cy - h / 2} L {cx + w / 2 - 3} {cy + h / 2} Q {cx} {cy + h / 2 + 5} {cx - w / 2 + 3} {cy + h / 2} Z']),
+               (color, [f'M {cx - w / 2 + 2.4} {cy - h / 2 + 2} L {cx + w / 2 - 2.4} {cy - h / 2 + 2} L {cx + w / 2 - 5} {cy + h / 2 - 2} Q {cx} {cy + h / 2 + 2.6} {cx - w / 2 + 5} {cy + h / 2 - 2} Z']),
+               (tone(color, 1.3), [rect(cx - w / 2 + 6, cy - h / 2 + 4, 4, h - 10)])]
+    layers += oval(cx, cy - h / 2, w / 2, 5, tone(color, 0.85), d=2)
+    return layers
+
+
+def caldo_papas():
+    """El caldo de las tres papas en la olla, humeando: la pastusa, la sabanera y la criolla que lo espesa."""
+    layers = olla(50, 62, 64, 40)
+    layers.append(('#f2d36b', [ellipse(50, 42, 28, 3.6)]))
+    layers += oval(40, 41, 5, 3, '#fdd835', d=1.2) + oval(56, 42, 6, 3, '#e8d6a8', d=1.2)
+    layers.append(('#eceff1', ['M 34 30 Q 28 22 34 16 Q 32 24 38 28 Z', 'M 50 28 Q 44 18 52 10 Q 48 20 54 26 Z', 'M 66 30 Q 60 22 66 16 Q 64 24 70 28 Z']))
+    return layers
+
+
+def ajiaco():
+    """La olla del ajiaco santafereño: el caldo amarillo con la mazorca, el pollo y las ramas de guascas."""
+    layers = olla(50, 62, 64, 40, '#8d6e63')
+    layers.append(('#f2c94c', [ellipse(50, 42, 28, 3.6)]))
+    layers += [(OUTLINE, [rect(30, 30, 22, 9, -20)]), ('#fbc02d', [rect(31.4, 31.4, 19.2, 6.2, -20)])]
+    layers.append(('#f57f17', [circle(34 + i * 4, 37 - i * 1.4, 1.1) for i in range(4)]))
+    layers += [(OUTLINE, [leaf(62, 40, 72, 22, 4.4), leaf(66, 40, 80, 30, 4)]), ('#558b2f', [leaf(62, 40, 72, 22, 3.2), leaf(66, 40, 80, 30, 2.8)])]
+    layers.append(('#eceff1', ['M 44 28 Q 38 18 46 10 Q 42 20 48 26 Z']))
+    return layers
+
+
+def plato_ajiaco():
+    """El ajiaco servido: el plato hondo con la crema, las alcaparras, el aguacate y la mazorca al lado."""
+    layers = plato_hondo(50, 58, 1.1, '#f2c94c')
+    layers += [(OUTLINE, [ellipse(42, 50, 9, 5)]), ('#fffaf0', [ellipse(42, 50, 7.4, 3.6)])]
+    layers.append(('#558b2f', [circle(54 + (i % 3) * 3, 48 + (i // 3) * 3, 1.3) for i in range(6)]))
+    layers += [(OUTLINE, [ellipse(72, 30, 12, 8, -20)]), ('#c5e1a5', [ellipse(72, 30, 10, 6, -20)]), ('#8bc34a', [ellipse(72, 30, 6, 3.6, -20)]), ('#6d4c41', [circle(74, 29, 2.6)])]
+    layers += [(OUTLINE, [rect(14, 24, 26, 10, 25)]), ('#fbc02d', [rect(15.4, 25.4, 23.2, 7.2, 25)])]
+    return layers
+
+
+def almuerzo_sabanero():
+    """El almuerzo sabanero del restaurante: el ajiaco, la trucha ahumada y el ceviche, en la mesa de mantel de cuadros."""
+    layers = [(OUTLINE, [poly(4, 70, 96, 70, 96, 96, 4, 96)]), ('#fafafa', [poly(5.6, 71.6, 94.4, 71.6, 94.4, 94.4, 5.6, 94.4)])]
+    layers.append(('#e53935', [rect(5.6 + i * 11, 71.6 + j * 7.6, 5.5, 3.8) for i in range(8) for j in range(3)]))
+    layers += plato_hondo(32, 54, 0.75, '#f2c94c')
+    layers += [(OUTLINE, [ellipse(26, 48, 6, 3.4)]), ('#fffaf0', [ellipse(26, 48, 4.8, 2.4)])]
+    layers += oval(72, 62, 22, 8, '#fafafa', d=1.8)
+    layers += trout(72, 56, 0.45, body='#b8742a')
+    layers += [(OUTLINE, ['M 56 20 L 80 20 Q 78 36 68 37 Q 58 36 56 20 Z']), ('#e1f5fe', ['M 58.4 22.2 L 77.6 22.2 Q 75.8 34.4 68 35 Q 60.2 34.4 58.4 22.2 Z']), ('#f8bbd0', [ellipse(64, 26, 3.6, 2.4), ellipse(71, 26, 3.6, 2.4), ellipse(68, 30, 3.6, 2.4)])]
+    layers += bar(68, 37, 68, 44, 2.4, '#e1f5fe', 1.2)
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9480,6 +9536,11 @@ ICONS = [
     (0xE221, 'pan_sal', pan_sal),
     (0xE222, 'cofre_sal', cofre_sal),
     (0xE223, 'canasta_sabanera', canasta_sabanera),
+    # Cundinamarca · La Cocina de la Sabana (v4.4)
+    (0xE224, 'caldo_papas', caldo_papas),
+    (0xE225, 'ajiaco', ajiaco),
+    (0xE226, 'plato_ajiaco', plato_ajiaco),
+    (0xE227, 'almuerzo_sabanero', almuerzo_sabanero),
 ]
 
 

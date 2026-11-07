@@ -37,5 +37,5 @@ export const ZONE52 = {
     // El cofre y la canasta irán a Zipaquirá (cuando llegue).
   },
   unlockedBy: 'truchas',
-  next: null,
+  next: 'cocina',
 };

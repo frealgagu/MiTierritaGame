@@ -335,4 +335,10 @@ export default {
   pan_sal: 'Pain de sel',
   cofre_sal: 'Coffret de sel',
   canasta_sabanera: 'Panier de la Savane',
+  papa_sabanera: 'Pomme de terre de la Savane',
+  papa_pelada_sabana: 'Pomme de terre épluchée',
+  caldo_papas: 'Bouillon de pommes de terre',
+  ajiaco: 'Ajiaco',
+  plato_ajiaco: 'Ajiaco servi',
+  almuerzo_sabanero: 'Déjeuner de la Savane',
 };

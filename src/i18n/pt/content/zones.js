@@ -51,6 +51,7 @@ export default {
   neiva: ['Neiva', 'Para Villavieja ➜', { cajas_bizcochos: '⬅ Biscoitos dos Achirais', cafe_especial: '⬅ Café do Huila', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Cafés da manhã', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Chá de casca ⬆', almuerzos_represa: 'Tilápia ⬆' }],
   flores: ['As Flores da Savana', 'Ao aeroporto ➜', { ramos_rosas: 'Buquês para as Salinas ➜' }],
   fresas: ['Os Morangueiros de Sibaté', 'A Sibaté ➜', { bandejas_fresa: 'Bandejas para as Salinas ➜' }],
-  truchas: ['As Trutas de Guatavita', 'A Guatavita ➜', {}],
+  truchas: ['As Trutas de Guatavita', 'A Guatavita ➜', { ahumadas_trucha: 'Truta defumada para a Cozinha ⬇', ceviches: 'Ceviche ⬇' }],
   salinas: ['As Salinas de Nemocón', 'A Nemocón ➜', { ramos_rosas: '⬅ Buquês das Flores', bandejas_fresa: '⬅ Morangos de Sibaté' }],
+  cocina: ['A Cozinha da Savana', 'A Chía ➜', { ahumadas_trucha: '⬅ Truta defumada de Guatavita', ceviches: '⬅ Ceviche' }],
 };
