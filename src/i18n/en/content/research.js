@@ -230,4 +230,12 @@ export default {
   mesa_regalos: 'Gift table',
   canastos_mimbre: 'Wicker baskets',
   sal_nemocon: 'Nemocón salt',
+  papa_pastusa: 'Pastusa potatoes',
+  peladoras: 'More peelers',
+  olla_presion: 'Pressure cooker',
+  tren_sabana: 'Savanna train',
+  guascas_frescas: 'Fresh guascas',
+  cucharones: 'Big ladles',
+  salon_santafereno: 'Big dining room',
+  receta_santafe: 'Santafé recipe',
 };

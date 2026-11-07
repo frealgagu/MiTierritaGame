@@ -52,4 +52,5 @@ export default {
   fresas: 'Salut, sumercé ! Ici à Sibaté, les fraises sont lavées, triées et servies à la crème ; celles de second choix deviennent confiture.',
   truchas: 'Bienvenue à Guatavita, sumercé ! Dans ces bassins d’eau glacée on élève les truites, et là-haut se trouve la lagune de l’El Dorado.',
   salinas: 'Bienvenue à Nemocón, sumercé ! De cette montagne sort le sel : on le dissout en saumure, on le moule en pains et on le sculpte même.',
+  cocina: 'Entrez, sumercé, l’ajiaco est prêt ! Trois pommes de terre, des guascas et du maïs, servi avec crème et câpres.',
 };

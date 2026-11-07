@@ -64,4 +64,10 @@ export default {
   gachas_barro: ['Les Muiscas moulaient le sel dans des pots en terre : le pain de sel.', 'Le pain de sel servait à commercer avec d’autres peuples.'],
   empaque_regalo: ['On vend des figurines et du sel coloré en souvenir à Nemocón.'],
   armadora_canastas: ['Un panier de la Savane : sel de Nemocón, roses de Madrid, fraises de Sibaté.'],
+  huerta_papa: ['L’ajiaco a trois pommes de terre : pastusa, sabanera et criolla.'],
+  peladero: ['La criolla s’épluche à peine : sa peau est si fine qu’on la mange.'],
+  olla_caldo: ['La criolla fond dans le bouillon et le rend épais et jaune.'],
+  olla_ajiaco: ['Les guascas sont une herbe de la Savane qui parfume l’ajiaco.', 'On y met du poulet effiloché et des épis de maïs.'],
+  servidora_ajiaco: ['L’ajiaco se sert avec de la crème, des câpres et de l’avocat.'],
+  restaurante_santafereno: ['Santafereño veut dire de Bogotá, autrefois appelée Santafé.', 'Après l’ajiaco vient le chocolat chaud au fromage et l’almojábana.'],
 };

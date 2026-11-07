@@ -1190,5 +1190,25 @@ const SALINAS = [
   { id: 'cn_final', type: 'sold', product: 'cofre_sal', amount: 4000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS, salinas: SALINAS };
+// La Cocina de la Sabana: la de La Chamba.
+const COCINA = [
+  { id: 'cc01', type: 'sold', product: 'papa_sabanera', amount: 50, reward: 1000000 },
+  { id: 'cc02', type: 'level', target: 'huerta_papa', level: 10, reward: 2000000 },
+  { id: 'cc03', type: 'unlock', station: 'peladero', reward: 4000000 },
+  { id: 'cc04', type: 'level', target: 'huerta_papa:transport', level: 10, reward: 4000000 },
+  { id: 'cc05', type: 'unlock', station: 'olla_caldo', reward: 8000000 },
+  { id: 'cc06', type: 'produced', product: 'caldo_papas', amount: 200, reward: 12000000 },
+  { id: 'cc08', type: 'unlock', station: 'olla_ajiaco', reward: 25000000 },
+  { id: 'cc09', type: 'level', target: 'dispatch:cocina', level: 10, reward: 25000000 },
+  { id: 'cc10', type: 'unlock', station: 'servidora_ajiaco', reward: 50000000 },
+  { id: 'cc11', type: 'sold', product: 'plato_ajiaco', amount: 300, reward: 80000000 },
+  { id: 'cc12', type: 'unlock', station: 'restaurante_santafereno', reward: 120000000 },
+  { id: 'cc13', type: 'imported', product: 'trucha_ahumada', amount: 200, reward: 150000000 },
+  { id: 'cc14', type: 'allLevels', zone: 'cocina', level: 25, reward: 200000000 },
+  { id: 'cc07', type: 'research', research: 'papa_pastusa', reward: 100000000 },
+  { id: 'cc15', type: 'sold', product: 'almuerzo_sabanero', amount: 1000, reward: 300000000 },
+  { id: 'cc_final', type: 'sold', product: 'almuerzo_sabanero', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS, salinas: SALINAS, cocina: COCINA };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

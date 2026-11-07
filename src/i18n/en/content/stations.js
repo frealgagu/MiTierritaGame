@@ -325,4 +325,10 @@ export default {
   gachas_barro: 'Clay Gachas',
   empaque_regalo: 'Gift Packing',
   armadora_canastas: 'Basket Maker',
+  huerta_papa: 'Potato Patch',
+  peladero: 'Peeling Station',
+  olla_caldo: 'Broth Pot',
+  olla_ajiaco: 'Ajiaco Pot',
+  servidora_ajiaco: 'Serving Counter',
+  restaurante_santafereno: 'Santafereño Restaurant',
 };

@@ -51,6 +51,7 @@ export default {
   neiva: ['Neiva', 'Vers Villavieja ➜', { cajas_bizcochos: '⬅ Biscuits des Champs d’achira', cafe_especial: '⬅ Café du Huila', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Petits-déjeuners', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Thé de cascara ⬆', almuerzos_represa: 'Tilapia ⬆' }],
   flores: ['Les Fleurs de la Savane', 'Vers l’aéroport ➜', { ramos_rosas: 'Bouquets vers les Salines ➜' }],
   fresas: ['Les Fraisiers de Sibaté', 'Vers Sibaté ➜', { bandejas_fresa: 'Barquettes vers les Salines ➜' }],
-  truchas: ['Les Truites de Guatavita', 'Vers Guatavita ➜', {}],
+  truchas: ['Les Truites de Guatavita', 'Vers Guatavita ➜', { ahumadas_trucha: 'Truite fumée vers la Cuisine ⬇', ceviches: 'Ceviche ⬇' }],
   salinas: ['Les Salines de Nemocón', 'Vers Nemocón ➜', { ramos_rosas: '⬅ Bouquets des Fleurs', bandejas_fresa: '⬅ Fraises de Sibaté' }],
+  cocina: ['La Cuisine de la Savane', 'Vers Chía ➜', { ahumadas_trucha: '⬅ Truite fumée de Guatavita', ceviches: '⬅ Ceviche' }],
 };

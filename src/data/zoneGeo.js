@@ -25,4 +25,6 @@ export const ZONE_GEO = {
   truchas: [4.93, -73.83],
   // Nemocón (la sal).
   salinas: [5.07, -73.88],
+  // Chía (la cocina de la Sabana).
+  cocina: [4.86, -74.05],
 };

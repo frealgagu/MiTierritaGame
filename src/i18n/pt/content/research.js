@@ -508,4 +508,12 @@ export default {
   mesa_regalos: 'Mesa de presentes',
   canastos_mimbre: 'Cestos de vime',
   sal_nemocon: 'Sal de Nemocón',
+  papa_pastusa: 'Batata pastusa',
+  peladoras: 'Mais descascadoras',
+  olla_presion: 'Panela de pressão',
+  tren_sabana: 'Trem da Savana',
+  guascas_frescas: 'Guascas frescas',
+  cucharones: 'Conchas grandes',
+  salon_santafereno: 'Salão grande',
+  receta_santafe: 'Receita santafereña',
 };

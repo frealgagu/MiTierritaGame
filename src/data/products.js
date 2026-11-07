@@ -405,6 +405,13 @@ export const PRODUCTS = {
   cofre_sal: { name: 'Cofre de sal', zone: 'salinas', value: 220000, icon: ICON.cofreSal, color: 0xa1693f },
   canasta_sabanera: { name: 'Canasta sabanera', zone: 'salinas', value: 100000, icon: ICON.canastaSabanera, color: 0xc9a26a },
 
+  papa_sabanera: { name: 'Papa sabanera', zone: 'cocina', value: 6000, icon: ICON.potato, color: 0xc9a06a },
+  papa_pelada_sabana: { name: 'Papa pelada', zone: 'cocina', value: 12000, icon: ICON.peeledPotato, color: 0xf2d36b },
+  caldo_papas: { name: 'Caldo de papas', zone: 'cocina', value: 30000, icon: ICON.caldoPapas, color: 0xe8d6a8 },
+  ajiaco: { name: 'Ajiaco', zone: 'cocina', value: 70000, icon: ICON.ajiaco, color: 0xf2c94c },
+  plato_ajiaco: { name: 'Ajiaco servido', zone: 'cocina', value: 120000, icon: ICON.platoAjiaco, color: 0xa85a32 },
+  almuerzo_sabanero: { name: 'Almuerzo sabanero', zone: 'cocina', value: 1200000, icon: ICON.almuerzoSabanero, color: 0xe53935 },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

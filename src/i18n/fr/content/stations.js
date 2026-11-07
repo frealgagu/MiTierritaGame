@@ -325,4 +325,10 @@ export default {
   gachas_barro: 'Gachas en terre',
   empaque_regalo: 'Emballage cadeau',
   armadora_canastas: 'Monteuse de paniers',
+  huerta_papa: 'Potager de pommes de terre',
+  peladero: 'Épluchoir',
+  olla_caldo: 'Marmite du bouillon',
+  olla_ajiaco: 'Marmite de l’ajiaco',
+  servidora_ajiaco: 'Comptoir de service',
+  restaurante_santafereno: 'Restaurant santafereño',
 };

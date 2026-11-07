@@ -93,4 +93,6 @@ export default {
   lechonas: ['Rota das lechonas', 'Chiva', 'Lechona'],
   ramos_rosas: ['Rota dos buquês', 'Chiva', 'Buquês'],
   bandejas_fresa: ['Rota das bandejas de morango', 'Chiva', 'Morangos'],
+  ahumadas_trucha: ['Rota da truta defumada', 'Chiva', 'Defumada'],
+  ceviches: ['Rota do ceviche', 'Chiva', 'Ceviche'],
 };

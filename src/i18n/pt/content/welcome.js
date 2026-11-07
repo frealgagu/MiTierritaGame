@@ -52,4 +52,5 @@ export default {
   fresas: 'E aí, sumercé! Aqui em Sibaté os morangos são lavados, escolhidos e servidos com creme; os de segunda viram geleia.',
   truchas: 'Bem-vindo a Guatavita, sumercé! Nestes tanques de água gelada se criam as trutas, e lá em cima fica a lagoa do El Dorado.',
   salinas: 'Bem-vindo a Nemocón, sumercé! Desta montanha sai o sal: ele vira salmoura, é moldado em pães e até entalhado.',
+  cocina: 'Entre, sumercé, que o ajiaco está pronto! Vão as três batatas, as guascas e o milho, e se serve com creme e alcaparras.',
 };

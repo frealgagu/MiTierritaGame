@@ -335,4 +335,10 @@ export default {
   pan_sal: 'Salt loaf',
   cofre_sal: 'Salt gift box',
   canasta_sabanera: 'Savanna gift basket',
+  papa_sabanera: 'Savanna potato',
+  papa_pelada_sabana: 'Peeled potato',
+  caldo_papas: 'Potato broth',
+  ajiaco: 'Ajiaco',
+  plato_ajiaco: 'Served ajiaco',
+  almuerzo_sabanero: 'Savanna lunch',
 };

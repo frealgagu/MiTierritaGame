@@ -496,6 +496,15 @@ export const STATIONS = [
   { id: 'empaque_regalo', zone: 'salinas', name: 'Empaque de regalo', icon: ICON.cofreSal, in: { sal_refinada: 4 }, joins: [{ product: 'figura_sal', perCycle: 4, from: 'taller_tallado' }], out: { cofre_sal: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '4.4' },
   { id: 'armadora_canastas', zone: 'salinas', name: 'Armadora de canastas', icon: ICON.canastaSabanera, in: { pan_sal: 4 }, imports: [{ product: 'ramo_rosas', perCycle: 2, route: 'ramos_rosas' }, { product: 'bandeja_fresas', perCycle: 1, route: 'bandejas_fresa' }], out: { canasta_sabanera: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '4.4' },
 
+  // La Cocina de la Sabana (Chía): el ajiaco santafereño, de la papa al plato servido con crema y alcaparras. El
+  // Restaurante santafereño lo sirve con la trucha ahumada y el ceviche de Guatavita.
+  { id: 'huerta_papa', zone: 'cocina', name: 'Huerta de papa', icon: ICON.potatoPlant, infinite: true, out: { papa_sabanera: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '4.4' },
+  { id: 'peladero', zone: 'cocina', name: 'Peladero', icon: ICON.peeledPotato, in: { papa_sabanera: 1 }, out: { papa_pelada_sabana: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '4.4' },
+  { id: 'olla_caldo', zone: 'cocina', name: 'Olla del caldo', icon: ICON.caldoPapas, in: { papa_pelada_sabana: 2 }, out: { caldo_papas: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '4.4' },
+  { id: 'olla_ajiaco', zone: 'cocina', name: 'Olla del ajiaco', icon: ICON.ajiaco, in: { caldo_papas: 2 }, out: { ajiaco: 1 }, cycle: 8, unlockCost: 200000000, upgradeBase: 60000, growth: 1.15, release: '4.4' },
+  { id: 'servidora_ajiaco', zone: 'cocina', name: 'Servidora', icon: ICON.platoAjiaco, in: { ajiaco: 1 }, out: { plato_ajiaco: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '4.4' },
+  { id: 'restaurante_santafereno', zone: 'cocina', name: 'Restaurante santafereño', icon: ICON.almuerzoSabanero, in: { plato_ajiaco: 4 }, imports: [{ product: 'trucha_ahumada', perCycle: 1, route: 'ahumadas_trucha' }, { product: 'ceviche_trucha', perCycle: 1, route: 'ceviches' }], out: { almuerzo_sabanero: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '4.4' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

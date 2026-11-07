@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v4.4.4 — Cundinamarca: La Cocina de la Sabana
+- **🍲 Zona 5 de Cundinamarca: La Cocina de la Sabana**, en Chía, que se abre al completar Las Salinas. El **ajiaco santafereño** de principio a fin: la **huerta de papa**, el **peladero**, la **olla del caldo** (donde la papa criolla lo espesa), la **olla del ajiaco** (con guascas, mazorca y pollo) y la **servidora**, que le pone crema, alcaparras y aguacate.
+- **Nuevas rutas:** el **Restaurante santafereño** sirve el **almuerzo sabanero** con el ajiaco, la **trucha ahumada** y el **ceviche** que llegan de Guatavita. Doña Teresa, la cocinera, le da la bienvenida.
+- Si ya habías completado Las Salinas, La Cocina se abre sola al actualizar.
+
 ## v4.4.3 — Cundinamarca: Las Salinas de Nemocón
 - **🧂 Zona 4 de Cundinamarca: Las Salinas de Nemocón**, que se abre al completar Las Truchas. Del **socavón** sale la roca de sal, que en los **Pozos de salmuera** se disuelve y da dos productos: la salmuera y los **bloques de sal**, que pasan por la canaleta al **Taller de tallado**. La salmuera se reparte entre los **Tachos de evaporación** (sal refinada) y las **Gachas de barro**, donde se cuaja el pan de sal como lo hacían los muiscas. El **Empaque de regalo** junta la sal con las figuras talladas en el **cofre de sal**.
 - **Las primeras rutas de Cundinamarca:** la **Armadora de canastas** arma la **canasta sabanera** con el pan de sal, los **ramos de rosas** que llegan de Las Flores y las **bandejas de fresa** de Sibaté.

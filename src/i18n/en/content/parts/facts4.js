@@ -64,4 +64,10 @@ export default {
   gachas_barro: ['The Muisca set salt in clay pots, the gachas: that made the salt loaf.', 'Salt loaves were used to trade with other peoples.'],
   empaque_regalo: ['Salt figures and colored salt are sold as souvenirs in Nemocón.'],
   armadora_canastas: ['A Savanna basket: Nemocón salt, Madrid roses and Sibaté strawberries.'],
+  huerta_papa: ['Ajiaco has three potatoes: pastusa, sabanera and criolla.'],
+  peladero: ['The criolla potato is barely peeled: its skin is so thin you eat it.'],
+  olla_caldo: ['The criolla potato melts into the broth and makes it thick and yellow.'],
+  olla_ajiaco: ['Guascas are a Savanna herb that gives ajiaco its flavor.', 'Shredded chicken and corn on the cob go into the ajiaco.'],
+  servidora_ajiaco: ['Ajiaco is served with cream, capers and avocado.'],
+  restaurante_santafereno: ['Santafereño means from Bogotá, which used to be called Santafé.', 'After the ajiaco comes hot chocolate with cheese and almojábana.'],
 };

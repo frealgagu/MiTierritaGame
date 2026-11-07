@@ -64,4 +64,10 @@ export default {
   gachas_barro: ['Os muíscas moldavam o sal em potes de barro, as gachas: assim saía o pão de sal.', 'O pão de sal servia para comerciar com outros povos.'],
   empaque_regalo: ['Figuras de sal e sal colorido são vendidos como lembrança em Nemocón.'],
   armadora_canastas: ['Uma cesta da Savana: sal de Nemocón, rosas de Madrid e morangos de Sibaté.'],
+  huerta_papa: ['O ajiaco leva três batatas: a pastusa, a sabanera e a criolla.'],
+  peladero: ['A batata criolla quase não se descasca: a casca é tão fina que se come.'],
+  olla_caldo: ['A batata criolla se desmancha no caldo e o deixa grosso e amarelo.'],
+  olla_ajiaco: ['As guascas são uma erva da Savana que dá o sabor ao ajiaco.', 'O ajiaco leva frango desfiado e espiga de milho.'],
+  servidora_ajiaco: ['O ajiaco é servido com creme de leite, alcaparras e abacate.'],
+  restaurante_santafereno: ['Santafereño é o de Bogotá, que antes se chamava Santafé.', 'Depois do ajiaco vem o chocolate com queijo e almojábana.'],
 };
