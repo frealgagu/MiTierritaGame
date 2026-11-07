@@ -473,4 +473,13 @@ export default {
   fiambres_bijao: 'Folhas de bijao',
   guias_tatacoa: 'Guias da Tatacoa',
   festival_bambuco: 'Festival do Bambuco',
+  rosal_injertado: 'Roseiras enxertadas',
+  tijeras_podar: 'Tesoura de poda',
+  solucion_hidratante: 'Solução hidratante',
+  banda_clasificadora: 'Esteira classificadora',
+  tallo_largo: 'Haste longa',
+  mesa_boncheo: 'Bancada de maços',
+  flor_sabana: 'Flor da Savana',
+  cadena_frio: 'Cadeia de frio',
+  sello_cund: 'Selo de exportação',
 };

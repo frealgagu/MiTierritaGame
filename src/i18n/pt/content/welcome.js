@@ -48,4 +48,5 @@ export default {
   lechoneria: 'Chegou à Lechonería, mijo! Do porco sai a carne e o couro, e no forno eles se juntam na lechona.',
   chamba: 'Bem-vindo a La Chamba! Aqui o barro é pisado, modelado à mão e queimado até ficar preto.',
   neiva: 'Bem-vindo a Neiva, em pleno San Pedro! Daqui sai o passeio para ver as estrelas na Tatacoa.',
+  flores: 'Bem-vindo à Savana, sumercé! Aqui as rosas saem da estufa e viajam de avião para meio mundo.',
 };

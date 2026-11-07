@@ -49,4 +49,5 @@ export default {
   lechoneria: 'You made it to the Lechonería, mijo! The pig gives meat and skin, and in the oven they come together in the lechona.',
   chamba: 'Welcome to La Chamba! Here the clay is trodden, shaped by hand and fired until it turns black.',
   neiva: 'Welcome to Neiva, right in the middle of San Pedro! From here the trip leaves to see the stars in the Tatacoa.',
+  flores: 'Welcome to the Savanna, sumercé! Here the roses leave the greenhouse and fly by plane to half the world.',
 };

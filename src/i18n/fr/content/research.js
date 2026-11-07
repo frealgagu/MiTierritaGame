@@ -473,4 +473,13 @@ export default {
   fiambres_bijao: 'Feuilles de bijao',
   guias_tatacoa: 'Guides de la Tatacoa',
   festival_bambuco: 'Festival du Bambuco',
+  rosal_injertado: 'Rosiers greffés',
+  tijeras_podar: 'Sécateur',
+  solucion_hidratante: 'Solution hydratante',
+  banda_clasificadora: 'Tapis calibreur',
+  tallo_largo: 'Tige longue',
+  mesa_boncheo: 'Établi de bottelage',
+  flor_sabana: 'Fleur de la Savane',
+  cadena_frio: 'Chaîne du froid',
+  sello_cund: 'Sceau d’exportation',
 };

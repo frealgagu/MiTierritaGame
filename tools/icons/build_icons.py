@@ -8508,6 +8508,114 @@ def e_flag_fr():
     return flag_frame([('#0055a4', [rect(8, 22, 28, 56)]), ('#ffffff', [rect(36, 22, 28, 56)]), ('#ef4135', [rect(64, 22, 28, 56)])])
 
 
+
+# ---------- Cundinamarca · Las Flores de la Sabana (v4.4) ----------
+
+ROSE, ROSE_D, ROSE_L = '#d81b3c', '#9e0f2a', '#f06275'
+
+
+def rose_head(cx, cy, r, color=ROSE):
+    """Una rosa vista de lado: el botón con sus pétalos envueltos y los dos de afuera abiertos."""
+    dark, light = tone(color, 0.7), tone(color, 1.35)
+    layers = [(OUTLINE, [f'M {cx - r * 1.15:.2f} {cy - r * 0.1:.2f} Q {cx - r * 1.2:.2f} {cy + r * 0.95:.2f} {cx:.2f} {cy + r * 1.05:.2f} Q {cx + r * 1.2:.2f} {cy + r * 0.95:.2f} {cx + r * 1.15:.2f} {cy - r * 0.1:.2f} Q {cx + r * 0.9:.2f} {cy - r * 1.2:.2f} {cx:.2f} {cy - r * 1.15:.2f} Q {cx - r * 0.9:.2f} {cy - r * 1.2:.2f} {cx - r * 1.15:.2f} {cy - r * 0.1:.2f} Z'])]
+    layers.append((color, [f'M {cx - r:.2f} {cy - r * 0.05:.2f} Q {cx - r * 1.05:.2f} {cy + r * 0.85:.2f} {cx:.2f} {cy + r * 0.92:.2f} Q {cx + r * 1.05:.2f} {cy + r * 0.85:.2f} {cx + r:.2f} {cy - r * 0.05:.2f} Q {cx + r * 0.8:.2f} {cy - r * 1.02:.2f} {cx:.2f} {cy - r:.2f} Q {cx - r * 0.8:.2f} {cy - r * 1.02:.2f} {cx - r:.2f} {cy - r * 0.05:.2f} Z']))
+    layers.append((dark, [f'M {cx - r * 0.55:.2f} {cy - r * 0.35:.2f} Q {cx:.2f} {cy + r * 0.2:.2f} {cx + r * 0.55:.2f} {cy - r * 0.35:.2f} Q {cx + r * 0.3:.2f} {cy - r * 0.05:.2f} {cx:.2f} {cy:.2f} Q {cx - r * 0.3:.2f} {cy - r * 0.05:.2f} {cx - r * 0.55:.2f} {cy - r * 0.35:.2f} Z',
+                           f'M {cx - r * 0.9:.2f} {cy + r * 0.1:.2f} Q {cx - r * 0.3:.2f} {cy + r * 0.75:.2f} {cx + r * 0.2:.2f} {cy + r * 0.6:.2f} Q {cx - r * 0.35:.2f} {cy + r * 0.45:.2f} {cx - r * 0.9:.2f} {cy + r * 0.1:.2f} Z']))
+    layers.append((light, [f'M {cx - r * 0.4:.2f} {cy - r * 0.75:.2f} Q {cx:.2f} {cy - r * 0.95:.2f} {cx + r * 0.35:.2f} {cy - r * 0.7:.2f} Q {cx:.2f} {cy - r * 0.6:.2f} {cx - r * 0.4:.2f} {cy - r * 0.75:.2f} Z']))
+    return layers
+
+
+def rose_stem(x0, y0, x1, y1, w=2.4, leaves=()):
+    """El tallo largo de la rosa de exportación, con sus hojas dentadas."""
+    layers = bar(x0, y0, x1, y1, w, '#3f7f3a', 1.2)
+    for lx, ly, ex, ey in leaves:
+        layers += [(OUTLINE, [leaf(lx, ly, ex, ey, 4.2)]), ('#4e9a3e', [leaf(lx, ly, ex, ey, 3)]), ('#2e6b2a', [rib(lx, ly, ex - (ex - lx) * 0.2, ey - (ey - ly) * 0.2, 0.8)])]
+    return layers
+
+
+def rosal():
+    """El invernadero de rosas: la nave de plástico sobre los rosales en flor."""
+    layers = [(OUTLINE, [rect(4, 84, 92, 10)]), ('#6d4c41', [rect(5.4, 85.4, 89.2, 7.2)])]
+    for x in (18, 38, 58, 78):
+        layers += rose_stem(x, 86, x, 52, 2, [(x, 72, x - 9, 66), (x, 66, x + 9, 60)])
+    for x, y in ((18, 48), (38, 44), (58, 48), (78, 44)):
+        layers += rose_head(x, y, 7)
+    # La nave de plástico, transparente, con los arcos.
+    layers.append(('#dff2f7', ['M 6 86 L 6 34 Q 50 2 94 34 L 94 86 L 90 86 L 90 36 Q 50 8 10 36 L 10 86 Z']))
+    layers.append((OUTLINE, ['M 4 86 L 4 33 Q 50 -1 96 33 L 96 86 L 94 86 L 94 34 Q 50 2 6 34 L 6 86 Z', rect(48.8, 4, 2.4, 82)]))
+    return layers
+
+
+def rosa():
+    """Una rosa roja de tallo largo."""
+    return rose_stem(52, 96, 48, 40, 3, [(50, 70, 32, 60), (49, 58, 66, 50)]) + rose_head(48, 28, 20)
+
+
+def rosas_cortadas():
+    """Las rosas recién cortadas, con los tallos largos, sobre la mesa de corte."""
+    layers = [(OUTLINE, [poly(4, 74, 96, 74, 92, 86, 8, 86)]), ('#a1693f', [poly(6.4, 75.6, 93.6, 75.6, 90.4, 84.4, 9.6, 84.4)])]
+    for i, (x0, y0, x1, y1) in enumerate(((10, 70, 70, 52), (14, 66, 76, 40), (12, 60, 66, 30))):
+        layers += rose_stem(x0, y0, x1, y1, 2.4, [((x0 + x1) / 2, (y0 + y1) / 2, (x0 + x1) / 2 - 4, (y0 + y1) / 2 - 9)])
+        layers += rose_head(x1 + 7, y1 - 4, 9)
+    layers += [(OUTLINE, [rect(72, 60, 22, 6, -20)]), ('#b0bec5', [rect(73, 61, 20, 4, -20)])]
+    return layers
+
+
+def rosa_hidratada():
+    """Las rosas puestas en la tina de agua con la solución que las hidrata."""
+    layers = []
+    for x, y in ((34, 26), (52, 18), (68, 28)):
+        layers += rose_stem(x, 60, x, y + 6, 2.4)
+        layers += rose_head(x, y, 9)
+    layers += [(OUTLINE, ['M 18 50 L 82 50 L 76 94 L 24 94 Z']), ('#4fc3f7', ['M 20.6 52.4 L 79.4 52.4 L 74 91.6 L 26 91.6 Z']), ('#b3e5fc', ['M 20.6 52.4 L 79.4 52.4 L 78.6 58 L 21.4 58 Z']), ('#e1f5fe', [ellipse(32, 72, 3, 9, 8)])]
+    return layers
+
+
+def rosa_clasificada():
+    """Las rosas clasificadas por el largo del tallo, en la regla de medir."""
+    layers = [(OUTLINE, [rect(6, 80, 88, 12)]), ('#fdd835', [rect(7.4, 81.4, 85.2, 9.2)])]
+    layers.append(('#3e2723', [rect(8 + i * 8.4, 81.4, 1.2, 4 if i % 2 else 7) for i in range(11)]))
+    for x, top, c in ((22, 26, ROSE), (44, 34, '#f06292'), (66, 42, '#fafafa'), (84, 50, '#fbc02d')):
+        layers += rose_stem(x, 80, x, top + 6, 2.4, [(x, 64, x + 8, 58)])
+        layers += rose_head(x, top, 7.5, c)
+    return layers
+
+
+def bonche_rosas():
+    """El bonche: veinticinco rosas apretadas, envueltas en el cartón corrugado."""
+    layers = []
+    for x, y in ((34, 20), (50, 14), (66, 20), (42, 30), (58, 30)):
+        layers += rose_head(x, y, 9)
+    layers += [(OUTLINE, ['M 22 28 L 78 28 L 64 76 L 36 76 Z']), ('#f5e6c8', ['M 25 30.4 L 75 30.4 L 62.2 73.6 L 37.8 73.6 Z'])]
+    layers.append(('#d7bf94', [rib(30 + i * 7, 32, 38 + i * 4, 72, 1.2) for i in range(6)]))
+    layers += bar(46, 74, 44, 96, 2.4, '#3f7f3a', 1.2) + bar(54, 74, 56, 96, 2.4, '#3f7f3a', 1.2) + bar(50, 74, 50, 96, 2.4, '#3f7f3a', 1.2)
+    layers += [(OUTLINE, [rect(38, 64, 24, 6)]), ('#e53935', [rect(39.4, 65.4, 21.2, 3.2)])]
+    return layers
+
+
+def ramo_rosas():
+    """El ramo de rosas listo para regalar, con su papel y el moño."""
+    layers = rose_stem(50, 70, 46, 96, 2.4) + rose_stem(50, 70, 54, 96, 2.4)
+    layers += [(OUTLINE, ['M 20 30 L 80 30 L 56 80 L 44 80 Z']), ('#f8bbd0', ['M 23.4 32.4 L 76.6 32.4 L 54.6 77.6 L 45.4 77.6 Z']), ('#f48fb1', ['M 50 32.4 L 76.6 32.4 L 54.6 77.6 Z'])]
+    for x, y, c in ((32, 26, ROSE), (50, 18, '#f06292'), (68, 26, ROSE), (40, 34, '#f06292'), (60, 34, ROSE)):
+        layers += rose_head(x, y, 9, c)
+    layers += [(OUTLINE, [ellipse(42, 78, 8, 5, -25), ellipse(58, 78, 8, 5, 25)]), ('#e53935', [ellipse(42, 78, 6.4, 3.4, -25), ellipse(58, 78, 6.4, 3.4, 25)]), (OUTLINE, [circle(50, 78, 4)]), ('#c62828', [circle(50, 78, 2.6)])]
+    return layers
+
+
+def caja_flores():
+    """La caja larga de exportación, con los bonches adentro y el sello del avión."""
+    layers = []
+    for x in (30, 48, 66):
+        layers += rose_head(x, 32, 8)
+    layers += [(OUTLINE, [poly(6, 40, 94, 40, 94, 84, 6, 84)]), ('#c8a26a', [poly(8, 42, 92, 42, 92, 82, 8, 82)]), ('#b08850', [rect(8, 42, 84, 6)])]
+    layers += [(OUTLINE, [poly(6, 40, 20, 28, 86, 28, 94, 40)]), ('#d9b97f', [poly(10, 39, 22, 30, 84, 30, 90, 39)])]
+    layers += [(OUTLINE, [rect(54, 56, 30, 18)]), ('#fafafa', [rect(55.4, 57.4, 27.2, 15.2)])]
+    layers.append(('#1e88e5', [pts(rot_pts([(69, 58), (71, 64), (80, 66), (80, 68), (71, 67), (70, 72), (72, 73), (72, 74), (66, 73), (66, 72), (68, 71), (67, 67), (58, 68), (58, 66), (67, 64)], 0))]))
+    layers.append(('#e53935', [rect(14, 56, 32, 4), rect(14, 64, 24, 4)]))
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9032,6 +9140,15 @@ ICONS = [
     (0xE201, 'puerto_narino', puerto_narino),
     (0xE202, 'mico_ardilla', mico_ardilla),
     (0xE203, 'amacayacu', amacayacu),
+    # Cundinamarca · Las Flores de la Sabana (v4.4)
+    (0xE204, 'rosal', rosal),
+    (0xE205, 'rosa', rosa),
+    (0xE206, 'rosas_cortadas', rosas_cortadas),
+    (0xE207, 'rosa_hidratada', rosa_hidratada),
+    (0xE208, 'rosa_clasificada', rosa_clasificada),
+    (0xE209, 'bonche_rosas', bonche_rosas),
+    (0xE20A, 'ramo_rosas', ramo_rosas),
+    (0xE20B, 'caja_flores', caja_flores),
 ]
 
 
@@ -9236,7 +9353,7 @@ for _seq, _name in [
     ('🍒', 'cherry'), ('🍲', 'mute'), ('🛶', 'potrillo'), ('⛴️', 'rio_meta'), ('🛳️', 'puerto_buenaventura'), ('🚡', 'chicamocha'), ('🛖', 'tambo'),
     ('⛪', 'plaza_pueblo'), ('🏛️', 'ibague_musical'), ('🏜️', 'desierto_tatacoa'), ('🌵', 'cardon'), ('🌅', 'atardecer_llanero'), ('🏊', 'hoyos_tatacoa'),
     ('🔭', 'observatorio'), ('🎭', 'pelazon'), ('🪁', 'cometas'), ('🎉', 'fiesta_sanpedro'), ('🥁', 'tambora'), ('💃', 'currulao'), ('💃🏽', 'currulao'),
-    ('🧺', 'canasto'), ('🏺', 'vasija_guane'), ('👒', 'aguadeno'), ('♨️', 'termales'),
+    ('🌹', 'rosa'), ('🧺', 'canasto'), ('🏺', 'vasija_guane'), ('👒', 'aguadeno'), ('♨️', 'termales'),
 ]:
     emoji(_seq, _ALBUM[_name])
 

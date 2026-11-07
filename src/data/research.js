@@ -629,6 +629,23 @@ export const RESEARCH = [
   { zone: 'neiva', id: 'festival_bambuco', name: 'Festival del Bambuco', icon: '🏅', desc: 'Todo lo que vende Neiva vale un 50 % más.', cost: 25000000000, requires: 'fiambrera_tatacoa', effect: { type: 'zoneValue', target: 'neiva', mult: 1.5 } },
   { zone: 'neiva', id: 'maestria_neiva', name: 'Maestría: Neiva', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'neiva', mult: 4 } },
   { zone: 'neiva', id: 'supremacia_neiva', name: 'Supremacía: Neiva', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'neiva', mult: 8 } },
+
+  // Cundinamarca (v4.4): las mismas que el Tolima Grande.
+  { zone: 'flores', id: 'rosal_injertado', name: 'Rosal injertado', icon: ICON.rosal, desc: 'El Invernadero de rosas produce el doble.', cost: 300, requires: 'mesa_corte', effect: { type: 'stationSpeed', target: 'invernadero_rosas', mult: 2 } },
+  { zone: 'flores', id: 'tijeras_podar', name: 'Tijeras de podar', icon: '✂️', desc: 'La Mesa de corte corta el doble.', cost: 400, requires: 'mesa_corte', effect: { type: 'stationSpeed', target: 'mesa_corte', mult: 2 } },
+  { zone: 'flores', id: 'herraduras_cund', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'tinas_hidratacion', effect: { type: 'muleSpeed', mult: 1.5 } },
+  { zone: 'flores', id: 'remolque_cund', name: 'Remolque para el Willys', icon: '🚙', desc: 'El Willys lleva el doble por viaje.', cost: 2500, requires: 'clasificadora_flores', effect: { type: 'dispatchCapacity', target: 'flores', mult: 2 } },
+  { zone: 'flores', id: 'solucion_hidratante', name: 'Solución hidratante', icon: ICON.rosaHidratada, desc: 'Las Tinas de hidratación hidratan el doble.', cost: 6000, requires: 'clasificadora_flores', effect: { type: 'stationSpeed', target: 'tinas_hidratacion', mult: 2 } },
+  { zone: 'flores', id: 'banda_clasificadora', name: 'Banda clasificadora', icon: ICON.rosaClasificada, desc: 'La Clasificadora clasifica el doble.', cost: 8000, requires: 'boncheo', effect: { type: 'stationSpeed', target: 'clasificadora_flores', mult: 2 } },
+  { zone: 'flores', id: 'tallo_largo', name: 'Tallo largo', icon: '🏅', desc: 'Los bonches de rosas valen un 50 % más.', cost: 20000, requires: 'boncheo', effect: { type: 'productValue', target: 'bonche_rosas', mult: 1.5 } },
+  { zone: 'flores', id: 'mesa_boncheo', name: 'Mesa de boncheo', icon: ICON.boncheRosas, desc: 'El Boncheo arma el doble.', cost: 25000, requires: 'cuarto_frio', effect: { type: 'stationSpeed', target: 'boncheo', mult: 2 } },
+  { zone: 'flores', id: 'flor_sabana', name: 'Flor de la Sabana', icon: ICON.rosa, desc: 'Flor de origen: todo lo que venden las Flores vale un 50 % más.', cost: 50000, requires: 'cuarto_frio', effect: { type: 'zoneValue', target: 'flores', mult: 1.5 } },
+  { zone: 'flores', id: 'cadena_frio', name: 'Cadena de frío', icon: '❄️', desc: 'El Cuarto frío enfría el doble.', cost: 60000, requires: 'empacadora_flores', effect: { type: 'stationSpeed', target: 'cuarto_frio', mult: 2 } },
+  { zone: 'flores', id: 'empacadora_auto_flores', name: 'Empacadora automática', icon: '📦', desc: 'La Empacadora de flores empaca el doble.', cost: 150000, requires: 'empacadora_flores', effect: { type: 'stationSpeed', target: 'empacadora_flores', mult: 2 } },
+  { zone: 'flores', id: 'cable_cund', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'empacadora_flores', effect: { type: 'muleSpeed', mult: 2 } },
+  { zone: 'flores', id: 'sello_cund', name: 'Sello de exportación', icon: '✈️', desc: 'Las cajas de flores valen un 50 % más.', cost: 300000, requires: 'empacadora_flores', effect: { type: 'productValue', target: 'caja_flores', mult: 1.5 } },
+  { zone: 'flores', id: 'maestria_flores', name: 'Maestría: Flores', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'flores', mult: 4 } },
+  { zone: 'flores', id: 'supremacia_flores', name: 'Supremacía: Flores', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'flores', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

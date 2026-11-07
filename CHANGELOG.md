@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v4.4.0 — Cundinamarca: Las Flores de la Sabana
+- **🌹 Nueva región: Cundinamarca**, la Sabana de Bogotá. Se abre al completar Neiva (la última zona del Tolima Grande) y llega zona por zona; la primera es **Las Flores de la Sabana**, en Madrid y Facatativá: del **invernadero de rosas** a la **mesa de corte**, las **tinas de hidratación**, la **clasificadora**, el **boncheo**, el **cuarto frío** y la **empacadora**, que despacha las cajas de flores hacia el aeropuerto. Doña Rocío, la floricultora, le da la bienvenida.
+- Su música es el **Pasillo de la Sabana** (bandola, tiple y guitarra), también para descargar en MP3 y MIDI.
+- En el mapa de Colombia, Cundinamarca ya es una región; Bogotá sigue «Próximamente». Las otras cinco zonas (los Freseros de Sibaté, las Truchas de Guatavita, las Salinas de Nemocón, la Cocina de la Sabana y Zipaquirá) salen como «Llega pronto».
+
 ## v4.3.2 — Borrar deslizando y eventos más justos
 - **🗑️ Borrar la partida ahora se hace deslizando** la perilla hasta el final de la barra; si se suelta antes, vuelve a su sitio y no pasa nada. Antes bastaban dos toques y hubo quien la borró sin querer.
 - **Eventos:** sin hacer nada ya no se gana la plata (en los de la feria y la Semana Santa se llegaba sola); el oro sigue igual. Y en los de la vía tapada (el derrumbe, la creciente, la inundación…) ahora llega siempre un hilito del producto, así que, dejándolo correr, se termina con bronce; las compras del evento siguen siendo lo que lo saca adelante.

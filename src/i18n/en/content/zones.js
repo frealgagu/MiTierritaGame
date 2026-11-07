@@ -48,4 +48,5 @@ export default {
   lechoneria: ['The Lechonería', 'To Ibagué ➜', { bizcochos: '⬅ Biscuits from the Achira Fields', tinto: '⬅ Coffee from Huila', lechonas: 'Lechonas to Neiva ➜', desayunos_tolimenses: 'Breakfasts ⬇' }],
   chamba: ['La Chamba', 'To El Guamo ➜', { ahumadas_tilapia: '⬅ Smoked tilapia from Betania', escabeches: '⬅ Escabeche', recuerdos_tolima: 'To Neiva ➜' }],
   neiva: ['Neiva', 'To Villavieja ➜', { cajas_bizcochos: '⬅ Biscuits from the Achira Fields', cafe_especial: '⬅ Huila coffee', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Breakfasts', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Cascara tea ⬆', almuerzos_represa: 'Tilapia ⬆' }],
+  flores: ['The Flowers of the Savanna', 'To the airport ➜', {}],
 };

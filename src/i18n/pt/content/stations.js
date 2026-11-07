@@ -299,4 +299,11 @@ export default {
   plaza_neiva: 'Mercado de Neiva',
   fiambrera_tatacoa: 'Marmitaria do passeio',
   salida_tatacoa: 'Passeio à Tatacoa',
+  invernadero_rosas: 'Estufa de rosas',
+  mesa_corte: 'Mesa de corte',
+  tinas_hidratacion: 'Tinas de hidratação',
+  clasificadora_flores: 'Classificadora',
+  boncheo: 'Montagem de maços',
+  cuarto_frio: 'Câmara fria',
+  empacadora_flores: 'Embaladora de flores',
 };

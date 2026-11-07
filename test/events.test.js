@@ -343,7 +343,8 @@ test('premio por región: todos sus eventos en bronce, plata u oro dan 5, 10 y 2
 test('cada evento tiene un reto, y los seis de cada región son de tipos distintos (v3.72)', async () => {
   const { REGIONS } = await import('../src/data/regions.js');
   const { OBJECTIVE_TYPES } = await import('../src/data/events.js');
-  for (const r of REGIONS) {
+  // Las regiones en obra (`wip`) aún no tienen eventos.
+  for (const r of REGIONS.filter((x) => !x.wip)) {
     const types = r.zones.map((z) => EVENT_OF_ZONE[z].objective.type);
     assert.deepEqual(types, OBJECTIVE_TYPES, r.id);
   }

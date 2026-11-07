@@ -307,4 +307,11 @@ export default {
   almuerzo_opita: 'Almoço opita',
   fiambre_tatacoa: 'Marmita da Tatacoa',
   excursion_tatacoa: 'Noite de estrelas na Tatacoa',
+  rosa: 'Rosa',
+  rosas_cortadas: 'Rosas cortadas',
+  rosa_hidratada: 'Rosa hidratada',
+  rosa_clasificada: 'Rosa classificada',
+  bonche_rosas: 'Maço de rosas',
+  ramo_rosas: 'Buquê de rosas',
+  caja_flores: 'Caixa de flores',
 };

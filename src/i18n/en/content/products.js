@@ -307,4 +307,11 @@ export default {
   almuerzo_opita: 'Opita lunch',
   fiambre_tatacoa: 'Tatacoa packed lunch',
   excursion_tatacoa: 'Starry night in the Tatacoa',
+  rosa: 'Rose',
+  rosas_cortadas: 'Cut roses',
+  rosa_hidratada: 'Hydrated rose',
+  rosa_clasificada: 'Graded rose',
+  bonche_rosas: 'Bunch of roses',
+  ramo_rosas: 'Rose bouquet',
+  caja_flores: 'Flower box',
 };

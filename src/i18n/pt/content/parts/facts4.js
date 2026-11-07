@@ -38,4 +38,11 @@ export default {
   plaza_neiva: ['No mercado de Neiva se vendem cholupas, biscoitos de achira e asado.'],
   fiambrera_tatacoa: ['O deserto da Tatacoa fica perto de Villavieja, no Huila.'],
   salida_tatacoa: ['A Tatacoa não é um deserto de verdade: é uma floresta seca tropical.', 'Seu céu limpo é dos melhores do país para ver estrelas.'],
+  invernadero_rosas: ['A Colômbia é o segundo maior exportador de flores do mundo.', 'Quase todas saem da Savana de Bogotá e de Antioquia.'],
+  mesa_corte: ['As rosas são cortadas em botão, antes de abrir de vez.'],
+  tinas_hidratacion: ['Recém-cortadas, as rosas bebem água com nutrientes por horas.'],
+  clasificadora_flores: ['As rosas são classificadas pelo tamanho da haste e do botão.'],
+  boncheo: ['Um maço leva 25 rosas, embrulhadas em papelão ondulado.'],
+  cuarto_frio: ['As flores esperam em câmaras frias, a uns 2 °C, antes de viajar.'],
+  empacadora_flores: ['Na semana do Dia dos Namorados dos EUA saem aviões cheios de flores.', 'As flores chegam aos Estados Unidos um ou dois dias após o corte.'],
 };

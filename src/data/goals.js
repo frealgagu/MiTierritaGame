@@ -1093,5 +1093,38 @@ const NEIVA = [
   { id: 'tn_final', type: 'sold', product: 'excursion_tatacoa', amount: 7000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA };
+// Cundinamarca (v4.4) · Las Flores de la Sabana: la de los Achirales.
+const FLORES = [
+  { id: 'cf01', type: 'sold', product: 'rosa', amount: 20, reward: 15 },
+  { id: 'cf02', type: 'level', target: 'invernadero_rosas', level: 5, reward: 20 },
+  { id: 'cf03', type: 'level', target: 'invernadero_rosas:transport', level: 5, reward: 25 },
+  { id: 'cf04', type: 'unlock', station: 'mesa_corte', reward: 30 },
+  { id: 'cf06', type: 'produced', product: 'rosas_cortadas', amount: 50, reward: 80 },
+  { id: 'cf07', type: 'level', target: 'invernadero_rosas', level: 10, reward: 100 },
+  { id: 'cf08', type: 'unlock', station: 'tinas_hidratacion', reward: 150 },
+  { id: 'cf09', type: 'level', target: 'dispatch:flores', level: 5, reward: 150 },
+  { id: 'cf10', type: 'produced', product: 'rosa_hidratada', amount: 200, reward: 300 },
+  { id: 'cf11', type: 'unlock', station: 'clasificadora_flores', reward: 500 },
+  { id: 'cf12', type: 'research', research: 'herraduras_cund', reward: 500 },
+  { id: 'cf13', type: 'income', zone: 'flores', perSecond: 5, reward: 600 },
+  { id: 'cf14', type: 'level', target: 'tinas_hidratacion', level: 10, reward: 800 },
+  { id: 'cf15', type: 'unlock', station: 'boncheo', reward: 1500 },
+  { id: 'cf16', type: 'produced', product: 'bonche_rosas', amount: 100, reward: 2000 },
+  { id: 'cf17', type: 'researchCount', count: 3, reward: 2500 },
+  { id: 'cf18', type: 'income', zone: 'flores', perSecond: 20, reward: 4000 },
+  { id: 'cf19', type: 'allLevels', zone: 'flores', level: 10, reward: 5000 },
+  { id: 'cf20', type: 'unlock', station: 'cuarto_frio', reward: 8000 },
+  { id: 'cf21', type: 'produced', product: 'ramo_rosas', amount: 500, reward: 12000 },
+  { id: 'cf22', type: 'level', target: 'invernadero_rosas', level: 25, reward: 15000 },
+  { id: 'cf23', type: 'income', zone: 'flores', perSecond: 100, reward: 20000 },
+  { id: 'cf24', type: 'unlock', station: 'empacadora_flores', reward: 40000 },
+  { id: 'cf25', type: 'sold', product: 'caja_flores', amount: 50, reward: 50000 },
+  { id: 'cf26', type: 'research', research: 'sello_cund', reward: 80000 },
+  { id: 'cf27', type: 'allLevels', zone: 'flores', level: 25, reward: 100000 },
+  { id: 'cf05', type: 'research', research: 'rosal_injertado', reward: 50000 },
+  { id: 'cf28', type: 'sold', product: 'caja_flores', amount: 500, reward: 150000 },
+  { id: 'cf_final', type: 'sold', product: 'caja_flores', amount: 2000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

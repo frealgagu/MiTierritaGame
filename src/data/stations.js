@@ -456,6 +456,16 @@ export const STATIONS = [
   { id: 'fiambrera_tatacoa', zone: 'neiva', name: 'Fiambrera del paseo', icon: ICON.fiambreTatacoa, in: { almuerzo_opita: 1 }, imports: [{ product: 'desayuno_tolimense', perCycle: 1, route: 'desayunos_tolimenses' }, { product: 'lechona', perCycle: 1, route: 'lechonas' }], out: { fiambre_tatacoa: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '4.0' },
   { id: 'salida_tatacoa', zone: 'neiva', name: 'Salida a la Tatacoa', icon: ICON.tatacoa, in: { fiambre_tatacoa: 4 }, out: { excursion_tatacoa: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '4.0' },
 
+  // Cundinamarca (v4.4), la novena región: se abre al completar Neiva. Mismos números que el Tolima Grande.
+  // Las Flores de la Sabana (Madrid y Facatativá): la rosa de exportación, del invernadero a la caja que se va en avión.
+  { id: 'invernadero_rosas', zone: 'flores', name: 'Invernadero de rosas', icon: ICON.rosal, infinite: true, out: { rosa: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '4.4' },
+  { id: 'mesa_corte', zone: 'flores', name: 'Mesa de corte', icon: ICON.rosasCortadas, in: { rosa: 2 }, out: { rosas_cortadas: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '4.4' },
+  { id: 'tinas_hidratacion', zone: 'flores', name: 'Tinas de hidratación', icon: ICON.rosaHidratada, in: { rosas_cortadas: 1 }, out: { rosa_hidratada: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '4.4' },
+  { id: 'clasificadora_flores', zone: 'flores', name: 'Clasificadora', icon: ICON.rosaClasificada, in: { rosa_hidratada: 1 }, out: { rosa_clasificada: 1 }, cycle: 4, unlockCost: 1000, upgradeBase: 20, growth: 1.15, release: '4.4' },
+  { id: 'boncheo', zone: 'flores', name: 'Boncheo', icon: ICON.boncheRosas, in: { rosa_clasificada: 4 }, out: { bonche_rosas: 3 }, cycle: 16, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '4.4' },
+  { id: 'cuarto_frio', zone: 'flores', name: 'Cuarto frío', icon: ICON.ramoRosas, in: { bonche_rosas: 1 }, out: { ramo_rosas: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '4.4' },
+  { id: 'empacadora_flores', zone: 'flores', name: 'Empacadora de flores', icon: ICON.cajaFlores, in: { ramo_rosas: 4 }, out: { caja_flores: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '4.4' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

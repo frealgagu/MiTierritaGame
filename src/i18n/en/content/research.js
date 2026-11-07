@@ -195,4 +195,13 @@ export default {
   fiambres_bijao: 'Bijao leaves',
   guias_tatacoa: 'Tatacoa guides',
   festival_bambuco: 'Bambuco Festival',
+  rosal_injertado: 'Grafted rose bushes',
+  tijeras_podar: 'Pruning shears',
+  solucion_hidratante: 'Hydrating solution',
+  banda_clasificadora: 'Grading belt',
+  tallo_largo: 'Long stem',
+  mesa_boncheo: 'Bunching bench',
+  flor_sabana: 'Savanna flower',
+  cadena_frio: 'Cold chain',
+  sello_cund: 'Export seal',
 };

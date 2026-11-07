@@ -77,6 +77,19 @@ export const REGIONS = [
     music: 'tolima',
     unlock: { region: 'amazonas', zone: 'leticia' },
   },
+  // Cundinamarca (v4.4): la Sabana de Bogotá y sus pueblos (las flores, las fresas, las truchas, la sal y el ajiaco),
+  // con su música de pasillo. Se abre al completar Neiva y llega zona por zona; mientras le falten zonas está en obra
+  // (`wip`) y anuncia las que vienen (`soon`). Termina en Zipaquirá, con la Catedral de Sal.
+  {
+    id: 'cundinamarca',
+    name: 'Cundinamarca',
+    icon: ICON.rosa,
+    zones: ['flores'],
+    music: 'cundinamarca',
+    unlock: { region: 'tolima', zone: 'neiva' },
+    wip: true,
+    soon: ['Los Freseros de Sibaté', 'Las Truchas de Guatavita', 'Las Salinas de Nemocón', 'La Cocina de la Sabana', 'Zipaquirá'],
+  },
 ];
 
 export const REGIONS_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]));

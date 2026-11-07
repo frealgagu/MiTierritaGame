@@ -519,6 +519,14 @@ export const ICON = {
   puertoNarino: '\uE201', // Puerto Nariño: el pueblo sin carros, de andenes de cemento entre jardines y casas de colores, junto al río
   micoArdilla: '\uE202', // La isla de los Micos: el mico ardilla de brazos amarillos y cara blanca de hocico negro, colgado de la rama
   amacayacu: '\uE203', // Amacayacu: el puente colgante de cuerdas y tablas entre los árboles gigantes de la selva inundada
+  rosal: '\uE204', // El invernadero de rosas: la nave de plástico sobre los rosales en flor
+  rosa: '\uE205', // Una rosa roja de tallo largo
+  rosasCortadas: '\uE206', // Las rosas recién cortadas, con los tallos largos, sobre la mesa de corte
+  rosaHidratada: '\uE207', // Las rosas puestas en la tina de agua con la solución que las hidrata
+  rosaClasificada: '\uE208', // Las rosas clasificadas por el largo del tallo, en la regla de medir
+  boncheRosas: '\uE209', // El bonche: veinticinco rosas apretadas, envueltas en el cartón corrugado
+  ramoRosas: '\uE20A', // El ramo de rosas listo para regalar, con su papel y el moño
+  cajaFlores: '\uE20B', // La caja larga de exportación, con los bonches adentro y el sello del avión
 };
 
 export const ICON_FONT = 'MiTierrita Icons';
