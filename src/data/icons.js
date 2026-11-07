@@ -32,7 +32,7 @@ export const ICON = {
   cacaoPaste: '\uE01A', // Pasta de cacao: el cacao molido, espeso y brillante, en una totuma con su cuchara
   cafeOrigen: '\uE01B', // Café de origen: costal de fique amarrado, con granos tostados y una franja de Colombia
   rawMilk: '\uE01C', // Leche cruda: cantina de aluminio de las fincas, recién ordeñada
-  container: '\uE01D', // Contenedor de exportación: el contenedor de acero, con sus puertas, listo para la tractomula
+  container: '\uE01D', // Contenedor de exportación: el contenedor de acero, con sus puertas, listo para el barco
   breakfast: '\uE01E', // Desayuno campesino: arepa, huevo frito y una taza de chocolate
   coffeePlant: '\uE01F', // Mata de café: arbusto verde oscuro, de hojas brillantes, con racimos de cerezas rojas
   guavaTree: '\uE020', // Guayabo: árbol de tronco liso y copa redonda, con guayabas amarillas
@@ -298,7 +298,7 @@ export const ICON = {
   cueroLimpio: '\uE124', // Cuero limpio: el cuero pelado y adobado con comino, extendido para envolver la lechona
   relleno: '\uE125', // Relleno de la lechona: la paila con el arroz amarillo, la arveja y la carne adobada
   tamal: '\uE126', // Tamal tolimense: el tamal envuelto en hoja de plátano, amarrado con cabuya, y uno abierto
-  lechona: '\uE127', // Lechona tolimense: el cerdo entero, dorado y tostado, relleno, servido en la batea
+  lechona: '\uE127', // Lechona tolimense: el cerdo entero dorado, con cabeza, orejas y patas, abierto por encima con el relleno de arroz y arveja, en la batea
   desayunoTolimense: '\uE128', // Desayuno tolimense: el tamal abierto en su hoja, la taza de tinto y los bizcochos de achira
   arcilla: '\uE129', // Arcilla: el terrón de arcilla gris del barranco del río Magdalena, con la pala
   barroPisado: '\uE12A', // Barro pisado: el barro amasado con los pies, con las huellas, y la arena fina para mezclar
@@ -312,6 +312,36 @@ export const ICON = {
   almuerzoOpita: '\uE132', // Almuerzo opita: el asado huilense con arroz, yuca y el jugo de cholupa del mercado
   fiambreTatacoa: '\uE133', // Fiambre de la Tatacoa: el fiambre envuelto en hoja de bijao, con la lechona, el tamal y la cantimplora
   tatacoa: '\uE134', // Noche de estrellas en la Tatacoa: el desierto rojo con sus cárcavas y cactus bajo el cielo estrellado
+  nevadoTolima: '\uE135', // El Nevado del Tolima: el volcán de cono perfecto, con su nieve y el cráter, sobre las montañas verdes
+  rioMagdalena: '\uE136', // El río Magdalena: el río ancho entre orillas verdes, con un champán de techo curvo
+  desiertoTatacoa: '\uE137', // El desierto de la Tatacoa: las cárcavas rojas cortadas por el agua, un cactus y el sol
+  estatuaAgustin: '\uE138', // San Agustín: la estatua de piedra con ojos grandes, nariz ancha y boca de colmillos cruzados
+  guayacan: '\uE139', // El guayacán amarillo: el árbol sin hojas, cubierto de flores amarillas, y las flores caídas
+  estrechoMagdalena: '\uE13A', // El estrecho del Magdalena: el río que pasa entre dos paredes de roca, con su espuma
+  insulso: '\uE13B', // El insulso: el dulce oscuro de maíz y panela, en cuadros sobre la hoja de plátano
+  asadoHuilense: '\uE13C', // El asado huilense: los trozos de cerdo adobado y dorado en la cazuela, con naranja agria partida
+  cholupa: '\uE13D', // La cholupa: la fruta redonda de cáscara amarilla pecosa, entera y partida, con su pulpa gris y semillas negras
+  mistela: '\uE13E', // La mistela: el frasco de vidrio con la bebida dulce de frutas, las moras y uchuvas adentro, y el vasito servido
+  puebloNatagaima: '\uE13F', // Natagaima: la calle de casas de colores con techo de teja, la iglesia y el bizcocho de achira
+  pijao: '\uE140', // Los pijao: una mujer del pueblo pijao, con su cabello largo, la manta de franjas y collar de semillas
+  hornoBarro: '\uE141', // El horno de barro: la cúpula de barro con la boca encendida, la leña al lado y el humo
+  sanjuanero: '\uE142', // El sanjuanero: la pareja bailando, ella con la falda de colores y flores, él con sombrero y pañuelo rojo
+  rajalena: '\uE143', // La rajaleña: el tiple, la carrasca de dientes que se raspa con un palito y las coplas que se cantan
+  bambuco: '\uE144', // El bambuco: el pañuelo rojo que se agita al bailar, el sombrero aguadeño y la música
+  tiple: '\uE145', // El tiple: la guitarra pequeña de doce cuerdas en cuatro órdenes, de madera clara
+  tambora: '\uE146', // La tambora: el tambor de madera con dos parches de cuero, amarrado con cuerdas, y sus dos baquetas
+  ibagueMusical: '\uE147', // Ibagué, ciudad musical: el conservatorio de columnas blancas y la música que sale de él
+  sombreroSuaza: '\uE148', // El sombrero de Suaza: el sombrero fino de palma de iraca, de ala ancha y cinta negra
+  chivaPitalito: '\uE149', // La chiva de Pitalito: la chivita de cerámica pintada de colores, con su escalera y la carga en el techo
+  brunido: '\uE14A', // El bruñido: la piedra de río que pule la cazuela de barro hasta dejarla brillante
+  canasto: '\uE14B', // El canasto: tejido de bejuco con asa, lleno del mercado: plátanos, cebolla y tomates
+  rejo: '\uE14C', // El rejo: el lazo de cuero trenzado, enrollado, con la punta y la argolla
+  maleconNeiva: '\uE14D', // El malecón de Neiva: el paseo a la orilla del Magdalena, con baranda, farol, palma y el atardecer
+  fiestaSanpedro: '\uE14E', // El San Pedro: la corona de la reina, las banderitas y los fuegos artificiales de la fiesta
+  observatorio: '\uE14F', // El observatorio de la Tatacoa: la cúpula con el telescopio asomado bajo el cielo lleno de estrellas
+  fosilTortuga: '\uE150', // Los fósiles de la Tatacoa: el caparazón de una tortuga gigante convertido en piedra, con su pincel
+  hoyosTatacoa: '\uE151', // Los Hoyos: la piscina de agua fresca y azul en medio de las cárcavas grises del desierto
+  cardon: '\uE152', // El cardón: el cactus alto y acanalado del desierto, con un pajarito en su nido
 };
 
 export const ICON_FONT = 'MiTierrita Icons';
