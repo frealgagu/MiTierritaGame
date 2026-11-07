@@ -51,4 +51,5 @@ export default {
   neiva: 'Welcome to Neiva, right in the middle of San Pedro! From here the trip leaves to see the stars in the Tatacoa.',
   flores: 'Welcome to the Savanna, sumercé! Here the roses leave the greenhouse and fly by plane to half the world.',
   fresas: 'Hey there, sumercé! Here in Sibaté strawberries are washed, sorted and served with cream; the second-grade ones become jam.',
+  truchas: 'Welcome to Guatavita, sumercé! Trout are raised in these icy ponds, and up there is the lagoon of El Dorado.',
 };

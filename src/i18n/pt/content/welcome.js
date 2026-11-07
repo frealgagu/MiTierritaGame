@@ -50,4 +50,5 @@ export default {
   neiva: 'Bem-vindo a Neiva, em pleno San Pedro! Daqui sai o passeio para ver as estrelas na Tatacoa.',
   flores: 'Bem-vindo à Savana, sumercé! Aqui as rosas saem da estufa e viajam de avião para meio mundo.',
   fresas: 'E aí, sumercé! Aqui em Sibaté os morangos são lavados, escolhidos e servidos com creme; os de segunda viram geleia.',
+  truchas: 'Bem-vindo a Guatavita, sumercé! Nestes tanques de água gelada se criam as trutas, e lá em cima fica a lagoa do El Dorado.',
 };

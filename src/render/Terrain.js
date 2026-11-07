@@ -388,6 +388,7 @@ export class Terrain {
           else if (r < 0.085) obj = rock(rng);
           else if (z === 'flores' && r < 0.1) obj = smallGreenhouse(rng);
           else if (z === 'fresas' && r < 0.1) obj = r < 0.093 ? smallGreenhouse(rng) : strawberryStand(rng);
+          else if (z === 'truchas' && r < 0.105) obj = frailejon(rng);
         } else if (this.zone.region === 'tolima') {
           // El Tolima Grande (v4.0): tierra caliente del valle del Magdalena, con samanes, guayacanes amarillos,
           // palos de mango y garzas; en el Huila, cafetos sueltos y guamos de sombra; en los Achirales y La Chamba,

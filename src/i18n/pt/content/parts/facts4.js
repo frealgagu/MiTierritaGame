@@ -51,4 +51,10 @@ export default {
   llenadora_bandejas: ['Uma bandeja de morangos pesa uns 500 gramas.'],
   mesa_fresas_crema: ['Na estrada para Sibaté há barracas de morangos com creme.'],
   marmita_mermelada: ['A geleia é cozida com açúcar e limão até engrossar.'],
+  estanques_trucha: ['A truta arco-íris precisa de água muito fria e limpa, de páramo.', 'Ao redor de Guatavita e sua lagoa há criadouros de truta.'],
+  limpieza_trucha: ['A truta é limpa assim que sai da água, para manter o frescor.'],
+  ahumadero_trucha: ['A truta defumada fica pendurada sobre a fumaça da lenha por horas.'],
+  fileteadora_trucha: ['O filé de truta é rosado pelo que ela come: pequenos crustáceos.'],
+  mesa_ceviche: ['O ceviche «cozinha» no limão, sem fogo.'],
+  cocina_laguna: ['Junto à lagoa se come truta frita com batata salgada e limão.', 'A lagoa de Guatavita é a da lenda do El Dorado.'],
 };

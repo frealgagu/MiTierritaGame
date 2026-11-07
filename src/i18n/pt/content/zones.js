@@ -51,4 +51,5 @@ export default {
   neiva: ['Neiva', 'Para Villavieja ➜', { cajas_bizcochos: '⬅ Biscoitos dos Achirais', cafe_especial: '⬅ Café do Huila', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Cafés da manhã', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Chá de casca ⬆', almuerzos_represa: 'Tilápia ⬆' }],
   flores: ['As Flores da Savana', 'Ao aeroporto ➜', {}],
   fresas: ['Os Morangueiros de Sibaté', 'A Sibaté ➜', {}],
+  truchas: ['As Trutas de Guatavita', 'A Guatavita ➜', {}],
 };

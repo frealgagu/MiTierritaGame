@@ -50,4 +50,5 @@ export default {
   neiva: ['Doña Marleny', 'the San Pedro queen'],
   flores: ['Doña Rocío', 'the flower grower'],
   fresas: ['Don Gilberto', 'the strawberry grower'],
+  truchas: ['Don Ernesto', 'the trout farmer'],
 };

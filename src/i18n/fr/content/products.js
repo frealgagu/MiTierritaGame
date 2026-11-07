@@ -321,4 +321,10 @@ export default {
   fresas_crema: 'Fraises à la crème',
   fresa_segunda: 'Fraise de second choix',
   mermelada_fresa: 'Confiture de fraises',
+  trucha: 'Truite',
+  trucha_limpia: 'Truite vidée',
+  filete_trucha: 'Filet de truite',
+  ceviche_trucha: 'Ceviche de truite',
+  trucha_ahumada: 'Truite fumée',
+  almuerzo_trucha: 'Déjeuner de truite',
 };

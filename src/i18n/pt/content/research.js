@@ -490,4 +490,13 @@ export default {
   crema_batida: 'Creme batido',
   fresas_sibate: 'Morangos de Sibaté',
   marmita_cobre: 'Tacho de cobre',
+  agua_manantial: 'Água de nascente',
+  mesa_acero: 'Mesa de aço',
+  cuchillo_trucha: 'Faca de filetar',
+  camion_frio: 'Caminhão refrigerado',
+  limones_tahiti: 'Limões taiti',
+  ahumadero_trucha_doble: 'Defumador duplo',
+  humo_eucalipto: 'Fumaça de eucalipto',
+  freidora_laguna: 'Fritadeira grande',
+  papa_salada: 'Batata salgada',
 };

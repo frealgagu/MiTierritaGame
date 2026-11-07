@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v4.4.2 — Cundinamarca: Las Truchas de Guatavita
+- **🐟 Zona 3 de Cundinamarca: Las Truchas de Guatavita**, que se abre al completar Los Freseros. Las truchas arcoíris se crían en estanques de agua helada y, ya limpias, se reparten entre el **Ahumadero**, la **Fileteadora** (que le pasa los filetes a la **Mesa del ceviche**) y la **Cocina de la laguna**, con la trucha frita y la papa salada. Don Ernesto, el truchero, le da la bienvenida, y en los alrededores hay frailejones del páramo.
+- Si ya habías completado Los Freseros, Las Truchas se abren solas al actualizar.
+
 ## v4.4.1 — Cundinamarca: Los Freseros de Sibaté
 - **🍓 Zona 2 de Cundinamarca: Los Freseros de Sibaté**, que se abre al completar Las Flores. Las fresas crecen bajo los macrotúneles de plástico y pasan por el **lavadero**, la **seleccionadora**, la **llenadora de bandejas** y la **mesa de fresas con crema**, como en los puestos de la carretera de Sibaté.
 - **Con dos productos:** el Lavadero saca también la **fresa de segunda** (las pequeñas y las magulladas), que pasa por la canaleta a la **Marmita de mermelada**. Don Gilberto, el fresero, le da la bienvenida.

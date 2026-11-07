@@ -389,6 +389,13 @@ export const PRODUCTS = {
   fresa_segunda: { name: 'Fresa de segunda', zone: 'fresas', value: 8, icon: ICON.fresaSegunda, color: 0xc62828 },
   mermelada_fresa: { name: 'Mermelada de fresa', zone: 'fresas', value: 120, icon: ICON.mermeladaFresa, color: 0xb71c1c },
 
+  trucha: { name: 'Trucha', zone: 'truchas', value: 125, icon: ICON.trucha, color: 0x8d9c6a },
+  trucha_limpia: { name: 'Trucha limpia', zone: 'truchas', value: 300, icon: ICON.truchaLimpia, color: 0xcfd8dc },
+  filete_trucha: { name: 'Filete de trucha', zone: 'truchas', value: 800, icon: ICON.fileteTrucha, color: 0xf8a5a5 },
+  ceviche_trucha: { name: 'Ceviche de trucha', zone: 'truchas', value: 2000, icon: ICON.cevicheTrucha, color: 0xf8bbd0 },
+  trucha_ahumada: { name: 'Trucha ahumada', zone: 'truchas', value: 4000, icon: ICON.truchaAhumada, color: 0xb8742a },
+  almuerzo_trucha: { name: 'Almuerzo de trucha', zone: 'truchas', value: 4000, icon: ICON.almuerzoTrucha, color: 0xe6c26a },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

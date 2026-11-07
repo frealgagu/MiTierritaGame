@@ -312,4 +312,10 @@ export default {
   llenadora_bandejas: 'Tray Filler',
   mesa_fresas_crema: 'Strawberries & Cream Table',
   marmita_mermelada: 'Jam Kettle',
+  estanques_trucha: 'Trout Ponds',
+  limpieza_trucha: 'Trout Cleaning',
+  ahumadero_trucha: 'Trout Smokehouse',
+  fileteadora_trucha: 'Trout Filleting',
+  mesa_ceviche: 'Ceviche Table',
+  cocina_laguna: 'Lagoon Kitchen',
 };

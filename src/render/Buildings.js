@@ -7717,6 +7717,64 @@ const DRAW = {
     this.animate(0);
   },
 
+  // Las Truchas de Guatavita. Mesa del ceviche: la mesa de acero con las copas, el tazón donde se marinan los filetes
+  // en limón y el canasto de limones.
+  mesa_ceviche(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.45;
+    box(g, x0, y0 + 0.4, 1.8, 0.8, 10, 0xb0bec5);
+    const bowl = iso(x0 + 0.5, y0 + 0.8, 10);
+    g.ellipse(bowl.x, bowl.y - 3, 10, 5).fill(0xeceff1).stroke(OUTLINE);
+    g.ellipse(bowl.x, bowl.y - 4, 7.5, 3).fill(PRODUCTS.ceviche_trucha.color);
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 3); k++) {
+      const q = iso(x0 + 1.0 + (k % 3) * 0.28, y0 + 0.65 + Math.floor(k / 3) * 0.3, 10);
+      g.poly([q.x - 4, q.y - 7, q.x + 4, q.y - 7, q.x + 1, q.y - 2, q.x - 1, q.y - 2]).fill(0xe1f5fe).stroke({ width: 0.6, color: 0x3a2418 });
+      g.rect(q.x - 0.6, q.y - 2, 1.2, 2).fill(0xe1f5fe);
+      g.ellipse(q.x, q.y - 6.5, 3.2, 1.2).fill(PRODUCTS.ceviche_trucha.color);
+    }
+    const basket = iso(x + 2.5, y + 2.4);
+    g.ellipse(basket.x, basket.y - 3, 9, 5).fill(0x8d6e4a).stroke(OUTLINE);
+    for (let k = 0; k < 5; k++) g.circle(basket.x - 6 + k * 3, basket.y - 6 - (k % 2) * 2, 2.2).fill(0x9ccc65).stroke({ width: 0.5, color: 0x33691e });
+    ramada(this, g, x0 - 0.1, y0 - 0.1, 2.0, 1.5, 26 + ctx.up, 0x9aa3a8);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x0 + 0.6, y0 + 1.6);
+      worker(anim, wp.x, wp.y, 0xfafafa);
+      const sq = this.working ? Math.abs(Math.sin(time * 4)) * 2 : 0;
+      anim.circle(bowl.x + 2, bowl.y - 12 - sq, 2.3).fill(0x9ccc65);
+      if (this.working && sq > 1.5) anim.circle(bowl.x + 2, bowl.y - 7, 0.9).fill(0xfff59d);
+    };
+    this.animate(0);
+  },
+
+  // Cocina de la laguna: el restaurante de tejas con el fogón de las truchas fritas y las mesas con mantel de cuadros.
+  cocina_laguna(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.2, 1.3, 24, ctx, { wall: 0xfbf8f1, roofColor: 0xb5512e });
+    door(g, hx, hy, 1.3, 1.5, 16, 0x2e7d32);
+    windowOnRight(this, g, hx, hy, 2.2, 0.65, 12, 0x2e7d32);
+    this.smokePoints.push(iso(hx + 1.8, hy + 0.4, 40 + ctx.up));
+    const tables = ctx.tier >= 2 ? [[0.6, 2.3], [1.5, 2.4], [2.4, 2.3]] : [[0.8, 2.3], [2.0, 2.4]];
+    for (const [tx, ty] of tables) {
+      box(g, x + tx - 0.3, y + ty - 0.2, 0.6, 0.4, 8, 0xe53935);
+      const q = iso(x + tx, y + ty, 8);
+      g.ellipse(q.x, q.y - 1, 6, 3).fill(0xfafafa).stroke({ width: 0.5, color: 0x3a2418 });
+      fishOn(g, q.x, q.y - 1.5, 4, PRODUCTS.almuerzo_trucha.color);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const f = this.working ? (Math.sin(time * 0.7) + 1) / 2 : 0.5;
+      const w = iso(x + 0.5 + f * 2, y + 2.85);
+      worker(anim, w.x, w.y, 0xfafafa);
+    };
+    this.animate(0);
+  },
+
   // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja
   // que se amontona para el Secadero.
   huila_wetmill(g, x, y, ctx) {
@@ -8263,6 +8321,10 @@ const DRAW = {
 
 // Tolima Grande (v4.0): las máquinas que se ven igual en otras zonas.
 DRAW.huila_huller = DRAW.huller;
+// Las Truchas de Guatavita (v4.4): la limpieza, el ahumadero y la fileteadora, como en Betania.
+DRAW.limpieza_trucha = DRAW.fish_cleaner;
+DRAW.ahumadero_trucha = DRAW.cachama_smoker;
+DRAW.fileteadora_trucha = DRAW.fish_filleter;
 DRAW.huila_roaster = DRAW.roaster;
 DRAW.huila_packer = DRAW.packer;
 DRAW.tilapia_cleaner = DRAW.fish_cleaner;

@@ -31,5 +31,5 @@ export const ZONE50 = {
   unlockedBy: 'flores',
   // Las bandejas irán a las Salinas, y las fresas con crema y la mermelada a Zipaquirá (cuando lleguen esas zonas).
   routes: {},
-  next: null,
+  next: 'truchas',
 };
