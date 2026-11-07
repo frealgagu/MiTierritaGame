@@ -12,7 +12,10 @@ import { Effects } from './Effects.js';
 import { FarmView, PlotView, WarehouseView } from './Stations.js';
 import { BuildingView } from './Buildings.js';
 import { ChivaView, JeepView, MuleView } from './Carriers.js';
-import { Belts } from './Belts.js';
+import { Belts, GENERAL_SIDE, SEG_LANE, SEG_SIDE } from './Belts.js';
+import { productColors } from './pipeColors.js';
+
+const BELT_HOLD = 1.5; // s que una banda sigue encendida después de llevar algo (para que no parpadee)
 import { Critters } from './Critters.js';
 import { iso } from './iso.js';
 import { pointAt, pointAtDistance } from '../core/path.js';
@@ -482,22 +485,35 @@ export class Scene {
   syncMules(state) {
     const alive = new Set();
     const pos = ROAD_POS[this.zone.id];
-    // Estaciones con banda eléctrica: su tramo hasta el destino normal (y el de los desvíos en curso).
-    const intervals = [];
-    const crates = [];
-    for (const id of this.stationIds) {
-      const st = state.stations[id];
-      if (st && pos[id] !== undefined && hasBelt(st.transport.level)) intervals.push([pos[id], pos[normalDest(state, id)]]);
+    // Bandas (v4.3.1, solo dibujo): las de tramo, de cada estación con banda a donde manda (la siguiente, la que
+    // junta o la bodega si es la última), y la general, que lleva a la bodega lo que se vende sin procesar.
+    // Cada una se enciende mientras lleva algo (y un momento después, para que no parpadee).
+    const segs = (this.beltSegs ??= new Map());
+    const lastGeneral = (this.beltGeneral ??= new Map());
+    const belted = this.stationIds.filter((id) => state.stations[id] && pos[id] !== undefined && hasBelt(state.stations[id].transport.level));
+    for (const id of belted) {
+      const dest = normalDest(state, id);
+      const key = `${id}>${dest}`;
+      if (!segs.has(key) && pos[dest] !== undefined) segs.set(key, { from: id, a: pos[id], b: pos[dest], product: Object.keys(STATIONS_BY_ID[id].out)[0], last: -Infinity });
     }
+    const crates = [];
+    const moving = [];
     for (const m of state.mules) {
       if (zoneOf(m.from) !== this.zone.id) continue;
       if (hasBelt(state.stations[m.from].transport.level)) {
         // Sobre la banda solo se ve lo que va; la «vuelta» no existe.
-        if (m.to === 'warehouse') intervals.push([pos[m.from], pos.warehouse]);
-        if (m.phase === 'go') {
-          const a = pos[m.from];
-          crates.push({ s: a + (pos[m.to] - a) * Math.min(m.t / m.duration, 1), productId: m.productId });
+        if (m.phase !== 'go') continue;
+        const general = m.to === 'warehouse' && normalDest(state, m.from) !== 'warehouse';
+        const key = general ? null : `${m.from}>${m.to}`;
+        if (general) lastGeneral.set(m.from, this.time);
+        else {
+          if (!segs.has(key) && pos[m.to] !== undefined) segs.set(key, { from: m.from, a: pos[m.from], b: pos[m.to], product: m.productId, last: -Infinity });
+          const seg = segs.get(key);
+          if (seg) seg.last = this.time;
         }
+        const a = pos[m.from];
+        if (pos[m.to] === undefined) continue;
+        moving.push({ key, s: a + (pos[m.to] - a) * Math.min(m.t / m.duration, 1), productId: m.productId });
         continue;
       }
       alive.add(m.id);
@@ -517,12 +533,38 @@ export class Scene {
       view.setLoaded(going);
       view.place(p.gx, p.gy, p.dx * dir, p.dy * dir, this.time);
     }
+    // Carriles: las bandas de tramo que se cruzan van una más afuera que la otra.
+    const colors = productColors(this.zone.id);
+    // Se quedan las de las estaciones con banda: la de su destino normal y las que llevaron algo hace poco (si
+    // se construye una estación nueva en medio, la vieja desaparece).
+    const normal = new Set(belted.map((id) => `${id}>${normalDest(state, id)}`));
+    const live = [...segs.entries()].filter(([key, x]) => belted.includes(x.from) && (normal.has(key) || this.time - x.last < 30)).sort((x, y) => Math.min(x[1].a, x[1].b) - Math.min(y[1].a, y[1].b));
+    const laneEnd = [];
+    const sideOf = {};
+    const belts = [];
+    for (const [key, x] of live) {
+      const lo = Math.min(x.a, x.b);
+      let lane = laneEnd.findIndex((e) => e <= lo + 0.05);
+      if (lane < 0) lane = laneEnd.length;
+      laneEnd[lane] = Math.max(x.a, x.b);
+      sideOf[key] = SEG_SIDE + lane * SEG_LANE;
+      belts.push({ a: x.a, b: x.b, side: sideOf[key], color: parseInt((colors[x.product] ?? '#6f777e').slice(1), 16), on: this.time - x.last < BELT_HOLD });
+    }
+    // La general: de cada estación con banda que no es la última hasta la bodega.
+    // Es una sola banda (desde la primera de esas estaciones), encendida desde la primera que esté mandando algo.
+    const feeders = belted.filter((id) => normalDest(state, id) !== 'warehouse');
+    if (feeders.length) {
+      belts.push({ a: Math.min(...feeders.map((id) => pos[id])), b: pos.warehouse, side: GENERAL_SIDE, color: null, on: false });
+      const sending = feeders.filter((id) => this.time - (lastGeneral.get(id) ?? -Infinity) < BELT_HOLD);
+      if (sending.length) belts.push({ a: Math.min(...sending.map((id) => pos[id])), b: pos.warehouse, side: GENERAL_SIDE, color: null, on: true });
+    }
+    for (const c of moving) crates.push({ s: c.s, side: c.key ? sideOf[c.key] ?? SEG_SIDE : GENERAL_SIDE, productId: c.productId });
     for (const [id, view] of this.mules) {
       if (alive.has(id)) continue;
       view.destroy({ children: true });
       this.mules.delete(id);
     }
-    this.belts.setIntervals(intervals);
+    this.belts.setBelts(belts);
     this.belts.update(crates, this.time);
   }
 
