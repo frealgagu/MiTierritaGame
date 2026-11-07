@@ -113,7 +113,7 @@ export default {
   '🔴 Sus arrieros son los que frenan la cadena.': '🔴 Ce sont ses muletiers qui freinent la chaîne.',
   '📦 Bodega': '📦 Entrepôt',
   '🚌 {n} a la bodega: se venden hasta que abra {route}': '🚌 {n} à l’entrepôt : vendus jusqu’à l’ouverture de {route}',
-  '↪️ {n} se venden sin procesar': '↪️ {n} vendus sans transformation',
+  '↪ {n} se venden sin procesar': '↪ {n} vendus sans transformation',
   'Recibe {in} de {from} y la vuelve {out}: todo lo que vende la zona vale <b>+{n} %</b>.': 'Reçoit {in} ({from}) et le transforme en {out} : tout ce que vend la zone vaut <b>+{n} %</b>.',
   '{p} desde {zone}': '{p} depuis {zone}',
   '{n} por segundo van directo a la bodega': '{n} par seconde vont droit à l’entrepôt',

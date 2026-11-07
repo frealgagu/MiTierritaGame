@@ -108,7 +108,7 @@ export default {
   '👀 Seguir mirando': '👀 Continuar olhando',
   'Volver al evento': 'Voltar ao evento',
   'Más tarde': 'Mais tarde',
-  '⬇️ Actualizar': '⬇️ Atualizar',
+  '⬇ Actualizar': '⬇ Atualizar',
   // v4.1.1: el panel del dinero
   '💰 De dónde sale': '💰 De onde vem',
   'Lo que gana por segundo la región que estás viendo, zona por zona, y lo que lo multiplica.': 'O que a região que você está vendo ganha por segundo, zona por zona, e o que multiplica.',

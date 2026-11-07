@@ -236,7 +236,7 @@ function dispatchFrom(state, id, dt, bus) {
     }
     const diverted = Math.min(amount, room);
     sendMule(state, id, 'warehouse', diverted, bus);
-    // El aviso ↪️ solo para desvíos de verdad (al menos media carga), no por un sobrante suelto ni cuando
+    // El aviso ↪ solo para desvíos de verdad (al menos media carga), no por un sobrante suelto ni cuando
     // la bodega es también donde espera la ruta (lo que llega de más ahí se lo lleva la siguiente carga),
     // ni cuando es la parte de una ruta que aún no abre (se vende mientras tanto).
     const exporting = targets.some((t) => t.startsWith('export:')) || pendingRoutes(state, id).length > 0;

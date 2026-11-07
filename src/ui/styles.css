@@ -19,7 +19,8 @@
 @font-face {
   font-family: 'MiTierrita Icons';
   src: url('../assets/mitierrita-icons.woff2') format('woff2');
-  unicode-range: U+E000-E3FF; /* (v4.3: más láminas propias) */
+  /* (v4.3) Los íconos propios y los emojis que el juego dibuja a su manera, con su mismo carácter. */
+  unicode-range: U+E000-E3FF, U+00A9, U+00AE, U+200D, U+203C, U+2049, U+2122, U+2139, U+231A-23FF, U+24C2, U+25AA-25FE, U+2600-27BF, U+2B1B-2B55, U+3030, U+303D, U+3297, U+3299, U+FE0F, U+1F000-1FAFF;
   font-display: block;
 }
 
@@ -304,7 +305,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .chain-head { display: flex; align-items: center; justify-content: space-between; }
 .chain-head h2 { margin: 0; }
 .chain-help { margin: 4px 0 10px; font-size: 0.85rem; color: var(--muted); }
-/* Los botones de abajo de la cadena (v4.1.1): 🏗️ Construir y ⬆️ Al nivel X, uno al lado del otro */
+/* Los botones de abajo de la cadena (v4.1.1): 🏗️ Construir y ⬆ Al nivel X, uno al lado del otro */
 .chain-foot { display: flex; gap: 6px; flex: none; }
 .chain-foot .btn.bulk { flex: 1; min-width: 0; padding: 8px 6px; font-size: 0.88rem; line-height: 1.2; }
 .chain-body { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding-right: 2px; }

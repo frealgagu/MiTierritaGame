@@ -1,7 +1,7 @@
 // Los botones de abajo de la cadena 🔗 (v4.1.1):
 //   🏗️ Construir: construye, en el orden de la cadena, todas las estaciones que falten y alcance el dinero.
 //      Está desde el principio.
-//   ⬆️ Al nivel X: lleva lo más bajo de la zona al siguiente hito (10, 25, 50, 75, 100) junto con todo lo que
+//   ⬆ Al nivel X: lleva lo más bajo de la zona al siguiente hito (10, 25, 50, 75, 100) junto con todo lo que
 //      esté por debajo de ese hito: las estaciones, sus arrieros, la bodega y las chivas que traen productos de
 //      otras zonas. Solo si alcanza para todo. Se ve después de reiniciar la región una vez, se desbloquea con
 //      10 ⭐ por región y en un evento funciona si ese evento ya se ganó con oro.
@@ -49,7 +49,7 @@ export function buildAll(state, zoneId, bus) {
   return built;
 }
 
-// --- ⬆️ Al nivel X: el desbloqueo (en el perfil del jugador: profile.zoneBoost = [regiones]) ---
+// --- ⬆ Al nivel X: el desbloqueo (en el perfil del jugador: profile.zoneBoost = [regiones]) ---
 
 export const hasZoneBoost = (profile, regionId) => Boolean(profile?.zoneBoost?.includes(regionId));
 
@@ -78,7 +78,7 @@ export function zoneBoostStatus(root, state, zoneId) {
   return owned ? 'ready' : 'locked';
 }
 
-// --- ⬆️ Al nivel X: la compra ---
+// --- ⬆ Al nivel X: la compra ---
 
 // Lo que sube: las estaciones construidas de la zona (también la Compostera), sus arrieros, la bodega y las
 // chivas que le traen productos de otras zonas (en un evento no: allí la ruta va con su estación).

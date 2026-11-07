@@ -7023,6 +7023,1491 @@ def amacayacu():
     return layers
 
 
+
+# ---------- Emojis propios: interfaz (v4.3) ----------
+
+GOLD, GOLD_D, SILVER, BRONZE = '#fbc02d', '#f57f17', '#b0bec5', '#cd7f32'
+
+
+def star_pts(cx, cy, r1, r2, n=5, rot=-90):
+    return [(cx + (r1 if i % 2 == 0 else r2) * math.cos(math.radians(rot + i * 180 / n)), cy + (r1 if i % 2 == 0 else r2) * math.sin(math.radians(rot + i * 180 / n))) for i in range(2 * n)]
+
+
+def e_star():
+    """Estrella dorada (Renombre)."""
+    return shape(star_pts(50, 54, 44, 19), GOLD, 2.6) + [('#fff59d', [pts(star_pts(44, 46, 14, 6))])]
+
+
+def medal(color, ribbon='#1e88e5', label=None):
+    layers = [(OUTLINE, [poly(26, 4, 42, 4, 54, 46, 38, 46), poly(74, 4, 58, 4, 46, 46, 62, 46)]), (ribbon, [poly(28, 6, 40, 6, 51, 44, 40, 44)]), ('#e53935', [poly(72, 6, 60, 6, 49, 44, 60, 44)])]
+    layers += oval(50, 66, 28, 28, color) + [(tone(color, 0.8), [circle(50, 66, 20)]), (color, [circle(50, 66, 17)])]
+    if label:
+        layers.append((tone(color, 0.6), [label]))
+    else:
+        layers.append((tone(color, 1.35), [pts(star_pts(50, 66, 12, 5))]))
+    return layers
+
+
+def e_medal():
+    """Medalla de los eventos."""
+    return medal(GOLD)
+
+
+def digit_path(d, cx, cy, s):
+    """Un número 1, 2 o 3 sencillo, de trazo grueso."""
+    if d == 1:
+        return pts([(cx - 2 * s, cy - 10 * s), (cx + 3 * s, cy - 12 * s), (cx + 3 * s, cy + 10 * s), (cx - 2 * s, cy + 10 * s)])
+    if d == 2:
+        return f'M {cx - 7 * s} {cy - 6 * s} Q {cx - 6 * s} {cy - 13 * s} {cx} {cy - 13 * s} Q {cx + 8 * s} {cy - 12 * s} {cx + 6 * s} {cy - 3 * s} L {cx - 2 * s} {cy + 5 * s} L {cx + 8 * s} {cy + 5 * s} L {cx + 8 * s} {cy + 11 * s} L {cx - 8 * s} {cy + 11 * s} L {cx - 8 * s} {cy + 6 * s} L {cx + 1 * s} {cy - 4 * s} Q {cx + 2 * s} {cy - 8 * s} {cx} {cy - 8 * s} Q {cx - 2 * s} {cy - 8 * s} {cx - 2 * s} {cy - 6 * s} Z'
+    return f'M {cx - 7 * s} {cy - 8 * s} Q {cx - 4 * s} {cy - 13 * s} {cx + 1 * s} {cy - 13 * s} Q {cx + 8 * s} {cy - 12 * s} {cx + 6 * s} {cy - 3 * s} Q {cx + 9 * s} {cy + 2 * s} {cx + 6 * s} {cy + 8 * s} Q {cx} {cy + 14 * s} {cx - 8 * s} {cy + 8 * s} L {cx - 6 * s} {cy + 3 * s} Q {cx} {cy + 8 * s} {cx + 1 * s} {cy + 3 * s} Q {cx + 2 * s} {cy - 1 * s} {cx - 3 * s} {cy - 1 * s} L {cx - 3 * s} {cy - 5 * s} Q {cx + 2 * s} {cy - 5 * s} {cx + 1 * s} {cy - 8 * s} Q {cx - 1 * s} {cy - 10 * s} {cx - 5 * s} {cy - 5 * s} Z'
+
+
+def e_gold():
+    """Medalla de oro."""
+    return medal(GOLD, label=digit_path(1, 50, 66, 1.2))
+
+
+def e_silver():
+    """Medalla de plata."""
+    return medal(SILVER, label=digit_path(2, 50, 66, 1.1))
+
+
+def e_bronze():
+    """Medalla de bronce."""
+    return medal(BRONZE, label=digit_path(3, 50, 66, 1.1))
+
+
+def e_money():
+    """El costal de la plata, con su signo de pesos."""
+    layers = [(OUTLINE, ['M 34 26 Q 26 14 36 10 L 64 10 Q 74 14 66 26 Q 92 40 90 70 Q 88 94 50 94 Q 12 94 10 70 Q 8 40 34 26 Z']), ('#c8a165', ['M 36.6 26.6 Q 30 15.6 37 12.6 L 63 12.6 Q 70 15.6 63.4 26.6 Q 87.6 40.6 87.4 70 Q 85.4 91.4 50 91.4 Q 14.6 91.4 12.6 70 Q 12.4 40.6 36.6 26.6 Z'])]
+    layers += [(OUTLINE, [rect(32, 24, 36, 6)]), ('#8d5a32', [rect(33.4, 25.4, 33.2, 3.2)]), ('#e0c088', [ellipse(30, 56, 6, 12, 20)])]
+    layers.append(('#2e7d32', ['M 58 46 Q 52 40 46 42 Q 38 46 44 54 L 56 60 Q 62 66 54 70 Q 46 72 40 66 L 36 70 Q 44 78 54 76 Q 68 72 64 60 Q 62 54 52 50 Q 44 46 48 44 Q 54 44 56 50 Z', rect(48, 32, 4, 50)]))
+    return layers
+
+
+def e_check():
+    """Hecho: el chulo verde en su cuadro."""
+    return [(OUTLINE, [rect(6, 6, 88, 88)]), ('#43a047', [rect(8.6, 8.6, 82.8, 82.8)]), ('#ffffff', [poly(22, 50, 30, 42, 44, 56, 72, 26, 80, 34, 44, 72)])]
+
+
+def e_flag_finish():
+    """Bandera de cuadros (al máximo)."""
+    layers = bar(18, 96, 18, 6, 3, '#5d4037') + [(OUTLINE, [poly(20, 8, 88, 12, 86, 52, 20, 48)]), ('#fafafa', [poly(22, 10, 86, 14, 84.4, 50, 22, 46)])]
+    layers.append(('#1b1b1b', [rect(22 + 16 * i + (8 if j % 2 else 0), 10 + 9 * j + 0.5 * i, 8, 9) for i in range(4) for j in range(4) if 22 + 16 * i + (8 if j % 2 else 0) < 84]))
+    return layers
+
+
+def e_flag_red():
+    """Bandera roja (zona completada)."""
+    return bar(18, 96, 18, 6, 3, '#5d4037') + [(OUTLINE, ['M 20 8 Q 54 0 88 14 L 86 50 Q 54 38 20 46 Z']), ('#e53935', ['M 22 10 Q 54 3 86 15.6 L 84.4 47.6 Q 54 36 22 43.6 Z']), ('#ef9a9a', ['M 26 14 Q 50 9 70 14 L 70 18 Q 50 13 26 18 Z'])]
+
+
+def e_lock():
+    """Candado: cerrado, por abrir."""
+    return [(OUTLINE, [curve(30, 48, 50, 0, 70, 48, 8)]), ('#90a4ae', [curve(30, 48, 50, 2, 70, 48, 4)])] + shape([(18, 44), (82, 44), (82, 92), (18, 92)], GOLD, 2.4) + [(OUTLINE, [circle(50, 62, 6), rect(47, 64, 6, 14)]), ('#fff59d', [rect(22, 48, 4, 40)])]
+
+
+def e_pause():
+    """Pausa: dos barras en el cuadro azul."""
+    return [(OUTLINE, [rect(6, 6, 88, 88)]), ('#1e88e5', [rect(8.6, 8.6, 82.8, 82.8)]), ('#ffffff', [rect(30, 26, 14, 48), rect(56, 26, 14, 48)])]
+
+
+def e_stop_sq():
+    """Detener: el cuadro en el botón azul."""
+    return [(OUTLINE, [rect(6, 6, 88, 88)]), ('#1e88e5', [rect(8.6, 8.6, 82.8, 82.8)]), ('#ffffff', [rect(28, 28, 44, 44)])]
+
+
+def e_fast():
+    """Rápido: dos flechas adelante."""
+    return [(OUTLINE, [rect(6, 6, 88, 88)]), ('#1e88e5', [rect(8.6, 8.6, 82.8, 82.8)]), ('#ffffff', [poly(22, 26, 50, 50, 22, 74), poly(50, 26, 78, 50, 50, 74)])]
+
+
+def e_no():
+    """Prohibido: el círculo rojo con la raya blanca."""
+    return oval(50, 50, 44, 44, '#e53935') + [('#ffffff', [rect(18, 42, 64, 16)])]
+
+
+def e_red_dot():
+    """El punto rojo (lo que frena)."""
+    return oval(50, 50, 38, 38, '#e53935') + [('#ef9a9a', [ellipse(38, 36, 10, 6, -30)])]
+
+
+def e_map():
+    """El mapa doblado, con el camino punteado y la equis."""
+    layers = [(OUTLINE, [poly(4, 22, 34, 12, 66, 22, 96, 12, 96, 82, 66, 92, 34, 82, 4, 92)]), ('#c5e1a5', [poly(6.6, 24, 34, 14.6, 34, 79.6, 6.6, 89)]), ('#e6ee9c', [poly(34, 14.6, 66, 24.6, 66, 89.4, 34, 79.6)]), ('#a5d6a7', [poly(66, 24.6, 93.4, 15.6, 93.4, 80, 66, 89.4)])]
+    layers.append(('#4fa3d9', ['M 6.6 60 Q 30 50 40 64 Q 52 80 66 70 L 66 74 Q 52 86 38 68 Q 28 56 6.6 64 Z']))
+    layers.append(('#e53935', [rect(16 + 8 * i, 40 - 2 * i, 4, 3) for i in range(6)] + [poly(70, 30, 74, 34, 82, 26, 86, 30, 78, 38, 86, 46, 82, 50, 74, 42, 70, 46, 66, 42, 74, 38, 66, 30)]))
+    return layers
+
+
+def e_micro():
+    """Microscopio (las investigaciones)."""
+    layers = [(OUTLINE, [rect(16, 86, 60, 8), rect(54, 40, 8, 48)]), ('#546e7a', [rect(17.4, 87.4, 57.2, 5.2), rect(55.4, 41.4, 5.2, 45.2)])]
+    layers += [(OUTLINE, [rect(30, 10, 14, 50, -25)]), ('#78909c', [rect(31.6, 11.6, 10.8, 46.8, -25)]), (OUTLINE, [rect(34, 56, 26, 6)]), ('#90a4ae', [rect(35.4, 57.4, 23.2, 3.2)])]
+    layers += [(OUTLINE, [curve(60, 60, 76, 72, 60, 86, 4)]), ('#546e7a', [curve(60, 60, 74, 72, 60, 86, 2)]), ('#4fa3d9', [circle(42, 68, 3)])]
+    return layers
+
+
+def e_bolt():
+    """Rayo (electricidad, banda eléctrica)."""
+    return shape([(58, 4), (20, 56), (46, 56), (36, 96), (82, 40), (54, 40)], '#fdd835', 2.6) + [('#fff59d', [poly(52, 14, 30, 50, 44, 50)])]
+
+
+def e_crown():
+    """Corona dorada."""
+    return shape([(10, 82), (8, 28), (30, 52), (50, 18), (70, 52), (92, 28), (90, 82)], GOLD, 2.6) + [(GOLD_D, [rect(12, 72, 76, 6)]), ('#e53935', [circle(50, 58, 5)]), ('#1e88e5', [circle(28, 62, 4), circle(72, 62, 4)]), ('#fff59d', [circle(8, 28, 4), circle(50, 18, 4), circle(92, 28, 4)])]
+
+
+def e_trophy():
+    """Trofeo (logros)."""
+    layers = [(OUTLINE, [curve(24, 22, 4, 30, 26, 52, 5), curve(76, 22, 96, 30, 74, 52, 5)]), (GOLD, [curve(24, 22, 7, 30, 26, 51, 2.4), curve(76, 22, 93, 30, 74, 51, 2.4)])]
+    layers += [(OUTLINE, ['M 20 10 L 80 10 Q 80 56 50 62 Q 20 56 20 10 Z', rect(44, 60, 12, 16), rect(28, 76, 44, 16)]), (GOLD, ['M 22.6 12.6 L 77.4 12.6 Q 77.4 54 50 59.4 Q 22.6 54 22.6 12.6 Z', rect(45.4, 61.4, 9.2, 14.6)]), ('#8d5a32', [rect(29.4, 77.4, 41.2, 13.2)]), ('#fff59d', [rect(30, 16, 6, 30)]), (GOLD, [rect(38, 82, 24, 4)])]
+    return layers
+
+
+def e_cycle():
+    """Repetir: dos flechas en círculo."""
+    layers = [(OUTLINE, [rect(6, 6, 88, 88)]), ('#1e88e5', [rect(8.6, 8.6, 82.8, 82.8)])]
+    layers.append(('#ffffff', ['M 24 50 Q 24 26 50 26 L 62 26 L 62 16 L 80 32 L 62 48 L 62 38 L 50 38 Q 36 38 36 50 Z', 'M 76 50 Q 76 74 50 74 L 38 74 L 38 84 L 20 68 L 38 52 L 38 62 L 50 62 Q 64 62 64 50 Z']))
+    return layers
+
+
+def e_crane():
+    """La grúa de construcción (construir)."""
+    layers = [(OUTLINE, [rect(26, 14, 8, 82), rect(8, 14, 84, 8), rect(18, 88, 26, 8)]), (GOLD, [rect(27.4, 15.4, 5.2, 72.6), rect(9.4, 15.4, 81.2, 5.2)]), ('#5d4037', [rect(19.4, 89.4, 23.2, 5.2)])]
+    layers.append((GOLD_D, [rib(27.6, 22 + 8 * k, 32.4, 30 + 8 * k, 1.2) for k in range(8)] + [rib(40 + 8 * k, 15.6, 48 + 8 * k, 20.4, 1.2) for k in range(6)]))
+    layers += [(OUTLINE, [rect(70, 22, 1.6, 30)])] + shape([(60, 52), (82, 52), (82, 70), (60, 70)], '#e53935', 1.6)
+    return layers
+
+
+def e_box():
+    """La caja de cartón (bodega)."""
+    return [(OUTLINE, [poly(6, 30, 50, 14, 94, 30, 94, 76, 50, 94, 6, 76)]), ('#d9a56b', [poly(9, 31.6, 50, 17, 91, 31.6, 50, 47)]), ('#c08850', [poly(9, 34, 48.6, 49, 48.6, 90, 9, 74.4)]), ('#a8743f', [poly(51.4, 49, 91, 34, 91, 74.4, 51.4, 90)]), ('#f5deb3', [poly(22, 26, 64, 12, 72, 16, 30, 31)]), (OUTLINE, [rib(50, 47, 50, 92, 1.6)])]
+
+
+def e_door():
+    """La puerta (salir)."""
+    return [(OUTLINE, [rect(16, 6, 68, 90)]), ('#8d5a32', [rect(18.6, 8.6, 62.8, 84.8)]), ('#a1693f', [rect(26, 16, 48, 30), rect(26, 54, 48, 32)]), ('#fdd835', [circle(70, 54, 4)])]
+
+
+def e_warning():
+    """Cuidado: el triángulo amarillo con el signo."""
+    return shape([(50, 8), (96, 88), (4, 88)], '#fdd835', 3) + [('#1b1b1b', [rect(45, 34, 10, 30), circle(50, 74, 5.4)])]
+
+
+def e_refresh():
+    """Volver a empezar: la flecha que da la vuelta."""
+    layers = [(OUTLINE, [rect(6, 6, 88, 88)]), ('#1e88e5', [rect(8.6, 8.6, 82.8, 82.8)])]
+    pts_c = [(50 + 26 * math.cos(math.radians(a)), 52 + 26 * math.sin(math.radians(a))) for a in range(-60, 241, 10)]
+    inner = [(50 + 16 * math.cos(math.radians(a)), 52 + 16 * math.sin(math.radians(a))) for a in range(240, -61, -10)]
+    layers.append(('#ffffff', [pts(pts_c + inner), poly(58, 14, 82, 26, 60, 40)]))
+    return layers
+
+
+def e_bulb():
+    """Bombillo (la mejora recomendada, la idea)."""
+    return oval(50, 40, 30, 32, '#fff176') + [('#fffde7', [ellipse(40, 30, 8, 10, -20)]), (OUTLINE, [rect(36, 68, 28, 22)]), ('#90a4ae', [rect(37.4, 69.4, 25.2, 19.2)]), ('#607d8b', [rect(37.4, 74, 25.2, 2), rect(37.4, 80, 25.2, 2)]), ('#f9a825', [curve(42, 66, 46, 50, 50, 56, 1.6), curve(50, 56, 54, 50, 58, 66, 1.6)])]
+
+
+def e_alarm():
+    """Despertador (las horas)."""
+    layers = [(OUTLINE, [circle(24, 18, 12), circle(76, 18, 12)]), ('#e53935', [circle(24, 18, 10), circle(76, 18, 10)])]
+    layers += bar(26, 80, 18, 94, 3, '#e53935') + bar(74, 80, 82, 94, 3, '#e53935')
+    layers += oval(50, 54, 38, 38, '#e53935') + [('#fafafa', [circle(50, 54, 30)]), ('#1b1b1b', [rect(48, 32, 4, 24), rect(48, 52, 18, 4, 30)]), ('#e53935', [circle(50, 54, 3)])]
+    return layers
+
+
+def clock_face(hour_a=-60, minute_a=-90, color='#fafafa', ring='#90a4ae'):
+    layers = oval(50, 50, 44, 44, ring) + [(color, [circle(50, 50, 36)])]
+    layers.append(('#5d4037', [rect(48.4, 16, 3.2, 6), rect(48.4, 78, 3.2, 6), rect(16, 48.4, 6, 3.2), rect(78, 48.4, 6, 3.2)]))
+    layers.append(('#1b1b1b', [rib(50, 50, 50 + 20 * math.cos(math.radians(hour_a)), 50 + 20 * math.sin(math.radians(hour_a)), 4), rib(50, 50, 50 + 30 * math.cos(math.radians(minute_a)), 50 + 30 * math.sin(math.radians(minute_a)), 2.6), circle(50, 50, 3.4)]))
+    return layers
+
+
+def e_clock():
+    """Reloj (una hora en punto)."""
+    return clock_face(-60, -90)
+
+
+def e_stopwatch():
+    """Cronómetro (el reloj del evento)."""
+    layers = [(OUTLINE, [rect(42, 2, 16, 10), rect(46, 10, 8, 10)]), ('#90a4ae', [rect(43.4, 3.4, 13.2, 7.2)])]
+    layers += oval(50, 58, 38, 38, '#78909c') + [('#fafafa', [circle(50, 58, 30)]), ('#e53935', [rib(50, 58, 66, 38, 3), circle(50, 58, 3.4)]), ('#5d4037', [rect(48.4, 30, 3.2, 6), rect(48.4, 80, 3.2, 6)])]
+    return layers
+
+
+def e_hourglass():
+    """Reloj de arena (en espera)."""
+    layers = [(OUTLINE, [rect(18, 4, 64, 10), rect(18, 86, 64, 10)]), ('#8d5a32', [rect(19.4, 5.4, 61.2, 7.2), rect(19.4, 87.4, 61.2, 7.2)])]
+    layers += [(OUTLINE, ['M 26 14 L 74 14 Q 74 40 54 50 Q 74 60 74 86 L 26 86 Q 26 60 46 50 Q 26 40 26 14 Z']), ('#e3f2fd', ['M 28.6 16 L 71.4 16 Q 71 39 52 50 Q 71 61 71.4 84 L 28.6 84 Q 29 61 48 50 Q 29 39 28.6 16 Z'])]
+    layers.append(('#fbc02d', ['M 34 28 L 66 28 Q 62 40 50 46 Q 38 40 34 28 Z', 'M 32 84 Q 40 66 50 64 Q 60 66 68 84 Z', rect(49, 46, 2, 18)]))
+    return layers
+
+
+def e_fire():
+    """Fuego (algo que se calienta, una racha)."""
+    return [(OUTLINE, ['M 50 4 Q 62 26 74 36 Q 92 54 84 76 Q 74 98 50 96 Q 24 96 16 76 Q 8 56 26 40 Q 28 54 38 56 Q 34 30 50 4 Z']), ('#ff7043', ['M 50 9 Q 61 29 72 38 Q 89 55 81.6 75 Q 72.6 95 50 93.4 Q 26 93.4 18.4 75 Q 11.6 57 25 44 Q 28.6 57 40 59 Q 36 32 50 9 Z']), ('#ffca28', ['M 50 48 Q 60 60 66 70 Q 70 86 50 88 Q 30 86 34 70 Q 38 62 44 66 Q 44 56 50 48 Z'])]
+
+
+def e_target():
+    """La diana (los objetivos y los retos)."""
+    layers = oval(46, 54, 40, 40, '#fafafa') + [('#e53935', [circle(46, 54, 34)]), ('#fafafa', [circle(46, 54, 24)]), ('#e53935', [circle(46, 54, 14)]), ('#fafafa', [circle(46, 54, 5)])]
+    layers += bar(46, 54, 84, 16, 3, '#5d4037') + [('#1e88e5', [poly(80, 10, 94, 6, 90, 20), poly(84, 16, 96, 16, 88, 24)])]
+    return layers
+
+
+def e_gear():
+    """Engranaje (el menú)."""
+    teeth = []
+    for i in range(8):
+        a = math.radians(i * 45)
+        teeth.append(rect(50 - 7, 4, 14, 20))
+    layers = [(OUTLINE, [rect(43 + 0 * i, 4, 14, 20, i * 45, 50, 50) for i in range(8)] + [circle(50, 50, 34)])]
+    layers += [('#78909c', [rect(44.6, 5.6, 10.8, 18, i * 45, 50, 50) for i in range(8)] + [circle(50, 50, 31.6)]), ('#fafafa', [circle(50, 50, 13)]), (OUTLINE, [circle(50, 50, 10)]), ('#fff8ec', [circle(50, 50, 8)])]
+    return layers
+
+
+def e_clipboard():
+    """Tablilla con la lista (los objetivos)."""
+    layers = [(OUTLINE, [rect(14, 10, 72, 86)]), ('#8d5a32', [rect(16.6, 12.6, 66.8, 80.8)]), (OUTLINE, [rect(22, 20, 56, 70)]), ('#fafafa', [rect(23.6, 21.6, 52.8, 66.8)])]
+    layers += [(OUTLINE, [rect(34, 4, 32, 14)]), ('#b0bec5', [rect(35.6, 5.6, 28.8, 10.8)])]
+    for k in range(4):
+        layers += [('#43a047' if k < 2 else '#b0bec5', [rect(28, 30 + 14 * k, 8, 8)]), ('#78909c', [rect(40, 32 + 14 * k, 30, 4)])]
+    return layers
+
+
+def e_book():
+    """El libro abierto (el álbum)."""
+    return [(OUTLINE, ['M 4 20 Q 28 12 50 24 Q 72 12 96 20 L 96 86 Q 72 78 50 90 Q 28 78 4 86 Z']), ('#fafafa', ['M 7 22.4 Q 28 15.4 48.6 26 L 48.6 86.4 Q 28 76 7 82.6 Z', 'M 51.4 26 Q 72 15.4 93 22.4 L 93 82.6 Q 72 76 51.4 86.4 Z']), ('#1e88e5', [rect(14, 34, 26, 16), rect(60, 32, 24, 18)]), ('#90a4ae', [rect(14, 56, 26, 3), rect(14, 64, 20, 3), rect(60, 56, 24, 3), rect(60, 64, 18, 3)]), ('#e53935', [rect(48.4, 24, 3.2, 70)])]
+
+
+def e_link():
+    """Dos eslabones (la cadena)."""
+    layers = []
+    for cx, cy, rot in [(34, 60, -40), (66, 40, -40)]:
+        layers += [(OUTLINE, [ellipse(cx, cy, 26, 14, rot)]), ('#90a4ae', [ellipse(cx, cy, 23, 11, rot)]), ('#fff8ec', [ellipse(cx, cy, 14, 4.4, rot)])]
+    layers.append(('#cfd8dc', [ellipse(58, 34, 8, 2, -40), ellipse(26, 54, 8, 2, -40)]))
+    return layers
+
+
+def e_calendar():
+    """El calendario (las temporadas)."""
+    layers = [(OUTLINE, [rect(8, 14, 84, 80)]), ('#fafafa', [rect(10.6, 16.6, 78.8, 74.8)]), ('#e53935', [rect(10.6, 16.6, 78.8, 18)])]
+    layers += [(OUTLINE, [rect(24, 6, 8, 18), rect(68, 6, 8, 18)]), ('#90a4ae', [rect(25.4, 7.4, 5.2, 15.2), rect(69.4, 7.4, 5.2, 15.2)])]
+    layers.append(('#90a4ae', [rect(16 + 15 * i, 42 + 12 * j, 10, 8) for i in range(5) for j in range(4)]))
+    layers.append(('#1e88e5', [rect(46, 54, 10, 8)]))
+    return layers
+
+
+def e_pin():
+    """El alfiler rojo del mapa (aquí estás)."""
+    return [(OUTLINE, ['M 50 96 Q 18 58 18 36 Q 18 6 50 6 Q 82 6 82 36 Q 82 58 50 96 Z']), ('#e53935', ['M 50 91 Q 21 57 21 36 Q 21 9 50 9 Q 79 9 79 36 Q 79 57 50 91 Z']), ('#fafafa', [circle(50, 36, 12)]), ('#ef9a9a', [ellipse(34, 26, 4, 8, 20)])]
+
+
+def e_tools():
+    """Martillo y llave (arreglar, construir)."""
+    layers = bar(20, 84, 74, 24, 6, '#8d5a32') + [(OUTLINE, [rect(58, 10, 30, 16, 45)]), ('#78909c', [rect(60, 12, 26, 12, 45)])]
+    layers += bar(80, 84, 30, 30, 6, '#90a4ae') + [(OUTLINE, [circle(26, 26, 13)]), ('#90a4ae', [circle(26, 26, 10.4)]), ('#fff8ec', [rect(16, 16, 10, 10, 45)])]
+    return layers
+
+
+def e_parking():
+    """La P de parqueo (un lugar para dejar)."""
+    return [(OUTLINE, [rect(6, 6, 88, 88)]), ('#1e88e5', [rect(8.6, 8.6, 82.8, 82.8)]), ('#ffffff', ['M 30 20 L 56 20 Q 76 20 76 40 Q 76 60 56 60 L 44 60 L 44 82 L 30 82 Z']), ('#1e88e5', ['M 44 32 L 54 32 Q 62 32 62 40 Q 62 48 54 48 L 44 48 Z'])]
+
+
+def e_info():
+    """Información: la i en el cuadro azul."""
+    return [(OUTLINE, [rect(6, 6, 88, 88)]), ('#1e88e5', [rect(8.6, 8.6, 82.8, 82.8)]), ('#ffffff', [circle(50, 26, 8), rect(42, 40, 16, 40), rect(36, 40, 10, 8), rect(36, 74, 28, 8)])]
+
+
+def e_globe():
+    """El globo terráqueo con meridianos (el idioma)."""
+    layers = oval(50, 50, 44, 44, '#4fa3d9') + [('#81c784', ['M 20 30 Q 34 20 46 26 Q 50 40 38 48 Q 30 60 22 52 Q 14 42 20 30 Z', 'M 58 56 Q 74 50 82 62 Q 78 82 62 86 Q 56 72 58 56 Z', 'M 60 16 Q 74 18 80 30 Q 70 32 62 26 Z'])]
+    layers.append(('#e3f2fd', [ellipse(50, 50, 18, 42.6), ellipse(50, 50, 2, 42.6), rect(7.4, 49, 85.2, 2), rect(12, 28, 76, 1.6), rect(12, 71, 76, 1.6)]))
+    layers.append(('#4fa3d9', [ellipse(50, 50, 16, 41)]))
+    return layers
+
+
+def e_signal():
+    """Barras de señal (internet)."""
+    return [(OUTLINE, [rect(6, 6, 88, 88)]), ('#1e88e5', [rect(8.6, 8.6, 82.8, 82.8)]), ('#ffffff', [rect(18 + 17 * i, 70 - 14 * i, 11, 12 + 14 * i) for i in range(4)])]
+
+
+def e_money_wings():
+    """El billete que se va volando (un gasto)."""
+    layers = [(OUTLINE, ['M 28 40 Q 10 20 4 30 Q 14 40 30 52 Z', 'M 72 40 Q 90 20 96 30 Q 86 40 70 52 Z']), ('#fafafa', ['M 27 42 Q 12 24 7.6 30.6 Q 16 39 29 49 Z', 'M 73 42 Q 88 24 92.4 30.6 Q 84 39 71 49 Z'])]
+    layers += [(OUTLINE, [rect(18, 36, 64, 40, -6)]), ('#66bb6a', [rect(20.6, 38.6, 58.8, 34.8, -6)]), ('#a5d6a7', [circle(50, 56, 10)]), ('#2e7d32', [rect(48, 46, 4, 20, -6), rect(26, 42, 8, 4, -6), rect(66, 66, 8, 4, -6)])]
+    return layers
+
+
+def e_trash():
+    """La caneca de la basura (borrar)."""
+    layers = [(OUTLINE, [rect(14, 18, 72, 10), rect(40, 8, 20, 12)]), ('#90a4ae', [rect(15.4, 19.4, 69.2, 7.2)])]
+    layers += [(OUTLINE, ['M 20 28 L 80 28 L 74 94 L 26 94 Z']), ('#b0bec5', ['M 22.6 30.6 L 77.4 30.6 L 71.6 91.4 L 28.4 91.4 Z']), ('#78909c', [rect(36, 36, 4, 50), rect(48, 36, 4, 50), rect(60, 36, 4, 50)])]
+    return layers
+
+
+def e_question():
+    """La pregunta: el signo rojo."""
+    return [(OUTLINE, ['M 26 32 Q 26 8 50 8 Q 76 8 76 32 Q 76 46 58 54 L 58 66 L 42 66 L 42 48 Q 60 42 60 32 Q 60 22 50 22 Q 40 22 40 34 Z', circle(50, 82, 10)]), ('#e53935', ['M 28.6 32 Q 28.6 10.6 50 10.6 Q 73.4 10.6 73.4 32 Q 73.4 44.6 55.4 52.4 L 55.4 63.4 L 44.6 63.4 L 44.6 49.6 Q 62.6 43.4 62.6 32 Q 62.6 19.4 50 19.4 Q 37.4 19.4 37.4 31.4 Z', circle(50, 82, 7.4)])]
+
+
+def e_phone():
+    """El celular."""
+    return [(OUTLINE, [rect(24, 4, 52, 92)]), ('#37474f', [rect(26.6, 6.6, 46.8, 86.8)]), ('#81d4fa', [rect(30, 14, 40, 66)]), ('#fafafa', [circle(50, 87, 3)]), ('#4fc3f7', [rect(34, 20, 14, 10), rect(52, 20, 14, 10), rect(34, 34, 14, 10)])]
+
+
+def e_person():
+    """La silueta de una persona (el perfil)."""
+    return oval(50, 30, 18, 20, '#90a4ae') + [(OUTLINE, ['M 10 96 Q 12 56 50 54 Q 88 56 90 96 Z']), ('#90a4ae', ['M 13 93.4 Q 15 59 50 57 Q 85 59 87 93.4 Z'])]
+
+
+def e_mail():
+    """El sobre (escribir, el correo)."""
+    return [(OUTLINE, [rect(6, 20, 88, 62)]), ('#fafafa', [rect(8.6, 22.6, 82.8, 56.8)]), (OUTLINE, [poly(8, 24, 50, 56, 92, 24, 92, 30, 50, 62, 8, 30)]), ('#e0e0e0', [poly(10, 26, 50, 56, 90, 26, 50, 52)])]
+
+
+def e_headphones():
+    """Los audífonos (la música para descargar)."""
+    layers = [(OUTLINE, [curve(16, 60, 50, -10, 84, 60, 8)]), ('#37474f', [curve(16, 60, 50, -7, 84, 60, 4)])]
+    for x in (18, 82):
+        layers += oval(x, 66, 12, 18, '#e53935') + [('#b71c1c', [ellipse(x, 66, 6, 10)])]
+    return layers
+
+
+def e_abc():
+    """Las letras (el idioma de los textos)."""
+    return [(OUTLINE, [rect(6, 6, 88, 88)]), ('#1e88e5', [rect(8.6, 8.6, 82.8, 82.8)]), ('#ffffff', ['M 14 74 L 26 26 L 36 26 L 48 74 L 38 74 L 35 62 L 27 62 L 24 74 Z', 'M 54 26 L 70 26 Q 84 26 84 38 Q 84 46 78 49 Q 86 52 86 62 Q 86 74 70 74 L 54 74 Z']), ('#1e88e5', [poly(29, 52, 31, 40, 33, 52), rect(63, 34, 10, 10), rect(63, 54, 12, 12)])]
+
+
+def e_scroll():
+    """El pergamino (la historia, los créditos)."""
+    return [(OUTLINE, [rect(18, 14, 64, 72)]), ('#f3e2b3', [rect(20.6, 16.6, 58.8, 66.8)]), ('#a1887f', [rect(28, 28, 44, 3), rect(28, 38, 44, 3), rect(28, 48, 36, 3), rect(28, 58, 40, 3)])] + oval(50, 14, 38, 7, '#e8cf8f') + oval(50, 86, 38, 7, '#e8cf8f')
+
+
+def e_gamepad():
+    """El control de juego."""
+    layers = [(OUTLINE, ['M 20 30 L 80 30 Q 96 30 96 56 Q 96 82 82 82 Q 72 82 66 66 L 34 66 Q 28 82 18 82 Q 4 82 4 56 Q 4 30 20 30 Z']), ('#546e7a', ['M 20 32.6 L 80 32.6 Q 93.4 32.6 93.4 56 Q 93.4 79.4 82 79.4 Q 74 79.4 68 63.4 L 32 63.4 Q 26 79.4 18 79.4 Q 6.6 79.4 6.6 56 Q 6.6 32.6 20 32.6 Z'])]
+    layers += [('#eceff1', [rect(22, 40, 6, 20), rect(15, 47, 20, 6)]), ('#e53935', [circle(72, 44, 5)]), ('#43a047', [circle(82, 54, 5)]), ('#fdd835', [circle(62, 54, 5)]), ('#1e88e5', [circle(72, 62, 4)])]
+    return layers
+
+
+def e_eyes():
+    """Los ojos (mirar)."""
+    layers = []
+    for x in (30, 70):
+        layers += oval(x, 50, 18, 26, '#fafafa') + [('#3e2723', [ellipse(x + 4, 56, 8, 11)]), ('#fafafa', [circle(x + 6, 52, 2.6)])]
+    return layers
+
+
+def e_paws():
+    """Las huellas de patitas (las mascotas)."""
+    layers = []
+    for cx, cy in [(32, 64), (68, 36)]:
+        layers += [('#795548', [ellipse(cx, cy + 6, 11, 9)] + [ellipse(cx + dx, cy + dy, 4.4, 5.4) for dx, dy in [(-12, -6), (-5, -13), (5, -13), (12, -6)]])]
+    return layers
+
+
+def e_cart():
+    """El carrito de mercado (comprar)."""
+    layers = [(OUTLINE, ['M 4 14 L 18 14 L 26 62 L 82 62 L 92 26 L 22 26 L 20 20 L 4 20 Z']), ('#90a4ae', ['M 23 28.6 L 88.6 28.6 L 80 59.4 L 28 59.4 Z'])]
+    layers.append(('#cfd8dc', [rect(32 + 12 * i, 30, 2, 28) for i in range(5)] + [rect(26, 40, 58, 2), rect(28, 50, 54, 2)]))
+    layers += [(OUTLINE, [rect(24, 62, 58, 6)])] + oval(32, 82, 8, 8, '#37474f', d=1.8) + oval(74, 82, 8, 8, '#37474f', d=1.8)
+    return layers
+
+
+def e_bags():
+    """Las bolsas de compras (la tienda)."""
+    layers = []
+    for x, y, c in [(10, 36, '#e53935'), (42, 28, '#1e88e5')]:
+        layers += [(OUTLINE, [curve(x + 12, y + 2, x + 22, y - 18, x + 32, y + 2, 4)])] + shape([(x, y), (x + 44, y), (x + 48, y + 62), (x - 4, y + 62)], c, 2.4)
+    layers.append(('#fafafa', [rect(54, 50, 20, 4), rect(54, 58, 14, 4)]))
+    return layers
+
+
+def e_backpack():
+    """El morral."""
+    layers = [(OUTLINE, [curve(34, 22, 50, 0, 66, 22, 4)])] + shape([(20, 26), (80, 26), (84, 94), (16, 94)], '#e53935', 2.4)
+    layers += shape([(30, 58), (70, 58), (72, 86), (28, 86)], '#c62828', 1.8) + [('#fdd835', [rect(46, 60, 8, 4)])]
+    return layers
+
+
+def e_megaphone():
+    """Sonido: el parlante con sus ondas."""
+    layers = shape([(10, 36), (30, 36), (56, 14), (56, 86), (30, 64), (10, 64)], '#546e7a', 2.4)
+    layers.append(('#1e88e5', [curve(66, 34, 74, 50, 66, 66, 4), curve(78, 24, 92, 50, 78, 76, 4)]))
+    return layers
+
+
+def e_mute():
+    """Sin sonido: el parlante tachado."""
+    return shape([(10, 36), (30, 36), (56, 14), (56, 86), (30, 64), (10, 64)], '#546e7a', 2.4) + [('#e53935', [rib(64, 34, 94, 66, 6), rib(94, 34, 64, 66, 6)])]
+
+
+def e_bell_off():
+    """La campana tachada (sin avisos)."""
+    layers = [(OUTLINE, ['M 50 8 Q 78 10 78 46 L 78 66 L 88 78 L 12 78 L 22 66 L 22 46 Q 22 10 50 8 Z', circle(50, 86, 8)]), (GOLD, ['M 50 10.6 Q 75.4 12.6 75.4 46 L 75.4 67 L 82.6 75.4 L 17.4 75.4 L 24.6 67 L 24.6 46 Q 24.6 12.6 50 10.6 Z', circle(50, 86, 5.4)])]
+    return layers + [('#e53935', [rib(12, 12, 88, 88, 7)])]
+
+
+def e_magnifier():
+    """La lupa (buscar)."""
+    return bar(60, 60, 90, 90, 10, '#8d5a32') + oval(40, 40, 30, 30, '#90a4ae') + [('#e3f2fd', [circle(40, 40, 22)]), ('#ffffff', [ellipse(32, 30, 8, 5, -40)])]
+
+
+def e_wrench():
+    """La llave de tuercas (mejorar)."""
+    return [(OUTLINE, ['M 26 8 Q 6 12 8 32 L 20 24 L 30 32 L 28 46 L 14 50 Q 26 62 40 52 L 80 94 L 94 80 L 52 40 Q 60 22 46 10 L 38 22 L 26 18 Z']), ('#90a4ae', ['M 25 11.6 Q 10 16 11.4 28.6 L 20.6 21.4 L 33 31 L 30.6 48.6 L 19 51.6 Q 28 58 40.6 48.6 L 80 90.4 L 90.4 80 L 48.6 40.6 Q 55 24.6 46 14 L 39.4 25.4 L 25 21 Z'])]
+
+
+def e_speech():
+    """El globo de diálogo."""
+    return [(OUTLINE, ['M 14 12 L 86 12 Q 96 12 96 22 L 96 62 Q 96 72 86 72 L 44 72 L 22 92 L 26 72 L 14 72 Q 4 72 4 62 L 4 22 Q 4 12 14 12 Z']), ('#fafafa', ['M 14 14.6 L 86 14.6 Q 93.4 14.6 93.4 22 L 93.4 62 Q 93.4 69.4 86 69.4 L 43 69.4 L 26.4 84 L 29.4 69.4 L 14 69.4 Q 6.6 69.4 6.6 62 L 6.6 22 Q 6.6 14.6 14 14.6 Z']), ('#90a4ae', [circle(30, 42, 6), circle(50, 42, 6), circle(70, 42, 6)])]
+
+
+def e_newspaper():
+    """El periódico (las novedades)."""
+    return [(OUTLINE, [rect(8, 14, 84, 74)]), ('#fafafa', [rect(10.6, 16.6, 78.8, 68.8)]), ('#37474f', [rect(16, 22, 68, 10)]), ('#90a4ae', [rect(16, 38, 30, 26)] + [rect(52, 38 + 7 * k, 32, 3) for k in range(4)] + [rect(16, 70 + 7 * k, 68, 3) for k in range(2)])]
+
+
+def e_sparkles():
+    """Destellos (algo nuevo)."""
+    return shape(star_pts(40, 56, 34, 10, 4, -90), GOLD, 2) + shape(star_pts(78, 22, 16, 5, 4, -90), '#fff176', 1.6) + shape(star_pts(80, 80, 10, 3, 4, -90), '#fff176', 1.4)
+
+
+def e_gift():
+    """El regalo con su moño."""
+    layers = shape([(10, 40), (90, 40), (90, 94), (10, 94)], '#e53935', 2.4) + shape([(6, 28), (94, 28), (94, 42), (6, 42)], '#ef5350', 2.4)
+    layers.append((GOLD, [rect(44, 28, 12, 66)]))
+    layers += [(OUTLINE, [ellipse(36, 20, 14, 9, 20), ellipse(64, 20, 14, 9, -20)]), (GOLD, [ellipse(36, 20, 11, 6, 20), ellipse(64, 20, 11, 6, -20)])]
+    return layers
+
+
+def e_bow():
+    """El moño (la decoración)."""
+    return [(OUTLINE, [poly(50, 50, 6, 20, 6, 80), poly(50, 50, 94, 20, 94, 80), poly(46, 54, 30, 96, 42, 92, 50, 60), poly(54, 54, 70, 96, 58, 92, 50, 60)]), ('#ec407a', [poly(48, 50, 9, 24.6, 9, 75.4), poly(52, 50, 91, 24.6, 91, 75.4), poly(46.4, 57, 33.4, 92.6, 41, 90, 49, 62), poly(53.6, 57, 66.6, 92.6, 59, 90, 51, 62)])] + oval(50, 50, 10, 10, '#d81b60')
+
+
+def e_ribbon():
+    """El lazo conmemorativo."""
+    return [(OUTLINE, ['M 50 30 Q 30 4 22 20 Q 18 34 44 52 L 20 94 L 34 94 L 50 64 L 66 94 L 80 94 L 56 52 Q 82 34 78 20 Q 70 4 50 30 Z']), (GOLD, ['M 50 34 Q 31 8 25 21 Q 22 33 46.6 52 L 24 91.4 L 32.6 91.4 L 50 59.4 L 67.4 91.4 L 76 91.4 L 53.4 52 Q 78 33 75 21 Q 69 8 50 34 Z'])]
+
+
+def e_military_medal():
+    """La condecoración: medalla con estrella y cinta de rayas."""
+    layers = [(OUTLINE, [rect(30, 4, 40, 36)]), ('#1e88e5', [rect(31.6, 5.6, 36.8, 32.8)]), ('#fdd835', [rect(38, 5.6, 6, 32.8), rect(56, 5.6, 6, 32.8)]), ('#e53935', [rect(47, 5.6, 6, 32.8)])]
+    return layers + shape(star_pts(50, 66, 30, 13), GOLD, 2.4) + [('#fff59d', [circle(50, 66, 7)])]
+
+
+def e_ticket():
+    """La boleta (entrada a un evento)."""
+    return [(OUTLINE, ['M 6 26 L 94 26 L 94 40 Q 86 50 94 60 L 94 74 L 6 74 L 6 60 Q 14 50 6 40 Z']), ('#fdd835', ['M 8.6 28.6 L 91.4 28.6 L 91.4 39 Q 83 50 91.4 61 L 91.4 71.4 L 8.6 71.4 L 8.6 61 Q 17 50 8.6 39 Z']), ('#f57f17', [rect(66, 30, 2, 40)] + [rect(20, 40, 36, 4), rect(20, 50, 28, 4), rect(20, 60, 32, 4)])]
+
+
+def e_compass():
+    """La brújula."""
+    return oval(50, 50, 44, 44, '#a1693f') + [('#fafafa', [circle(50, 50, 34)]), ('#e53935', [poly(50, 18, 58, 50, 42, 50)]), ('#546e7a', [poly(50, 82, 58, 50, 42, 50)]), (OUTLINE, [circle(50, 50, 4)])]
+
+
+def e_flask():
+    """El frasco de laboratorio."""
+    return [(OUTLINE, ['M 38 6 L 62 6 L 62 12 L 58 12 L 58 36 L 86 84 Q 90 94 80 94 L 20 94 Q 10 94 14 84 L 42 36 L 42 12 L 38 12 Z']), ('#e3f2fd', ['M 44.6 14 L 55.4 14 L 55.4 37 L 83 84.6 Q 85 91.4 80 91.4 L 20 91.4 Q 15 91.4 17 84.6 L 44.6 37 Z']), ('#66bb6a', ['M 30 62 L 70 62 L 83 84.6 Q 85 91.4 80 91.4 L 20 91.4 Q 15 91.4 17 84.6 Z']), ('#a5d6a7', [circle(40, 76, 3), circle(56, 70, 2.4), circle(62, 82, 3)])]
+
+
+def e_thread():
+    """El carrete de hilo con la aguja."""
+    layers = [(OUTLINE, [rect(22, 14, 56, 10), rect(22, 76, 56, 10)]), ('#a1693f', [rect(23.6, 15.6, 52.8, 6.8), rect(23.6, 77.6, 52.8, 6.8)])]
+    layers += [(OUTLINE, [rect(28, 24, 44, 52)]), ('#e53935', [rect(29.6, 25.6, 40.8, 48.8)]), ('#c62828', [rect(29.6, 30 + 8 * k, 40.8, 2) for k in range(6)])]
+    return layers
+
+
+def e_yarn():
+    """El ovillo de lana."""
+    layers = oval(48, 50, 38, 38, '#8e6bbf')
+    layers.append(('#b39ddb', [curve(16, 40, 48, 20, 80, 46, 2), curve(14, 56, 48, 40, 84, 64, 2), curve(24, 76, 50, 60, 78, 80, 2), curve(30, 18, 40, 50, 30, 84, 2)]))
+    layers += [(OUTLINE, [curve(76, 72, 90, 84, 96, 94, 2.4)])]
+    return layers
+
+
+def e_scissors():
+    """Las tijeras."""
+    layers = [(OUTLINE, [circle(26, 76, 14), circle(56, 84, 12)]), ('#e53935', [circle(26, 76, 11)]), ('#e53935', [circle(56, 84, 9)]), ('#fff8ec', [circle(26, 76, 6), circle(56, 84, 4.6)])]
+    layers += [(OUTLINE, [poly(34, 66, 90, 8, 94, 12, 44, 72), poly(50, 74, 70, 6, 76, 8, 58, 78)]), ('#b0bec5', [poly(36, 66, 90, 10.4, 92, 12.4, 43, 70.6), poly(51.6, 73.4, 71, 8.6, 74.4, 9.6, 57, 76)])]
+    return layers
+
+
+def e_needle():
+    """La aguja con su hilo."""
+    return bar(14, 86, 86, 14, 3, '#b0bec5') + [(OUTLINE, [ellipse(82, 18, 5, 2.4, -45)]), ('#fff8ec', [ellipse(82, 18, 3, 1, -45)])] + [(OUTLINE, [curve(82, 18, 60, 60, 20, 50, 1.6)]), ('#e53935', [curve(82, 18, 60, 59, 21, 50, 0.8)])]
+
+
+def e_pick():
+    """La pica (minería, sal)."""
+    return bar(30, 94, 60, 30, 5, '#8d5a32') + [(OUTLINE, ['M 20 30 Q 50 6 90 18 Q 60 18 52 34 Z']), ('#90a4ae', ['M 23.6 29 Q 50 9.4 84 18.4 Q 58 19.6 51 31 Z'])]
+
+
+def e_axe():
+    """El hacha."""
+    return bar(22, 94, 66, 18, 5, '#8d5a32') + [(OUTLINE, ['M 56 10 Q 86 4 92 30 Q 80 26 70 36 Z']), ('#90a4ae', ['M 59 11.6 Q 84 7 89 27 Q 79 24 70.4 32 Z'])]
+
+
+def e_ladder():
+    """La escalera de mano."""
+    return bar(28, 96, 40, 4, 3, '#8d5a32') + bar(72, 96, 84, 4, 3, '#8d5a32') + [(OUTLINE, [rect(30 + 1.4 * k, 84 - 14 * k, 44, 4) for k in range(6)]), ('#a1693f', [rect(31 + 1.4 * k, 85 - 14 * k, 42, 2) for k in range(6)])]
+
+
+def e_knot():
+    """El nudo de lazo."""
+    return [(OUTLINE, [curve(6, 70, 40, 20, 60, 50, 6), curve(60, 50, 80, 80, 94, 30, 6), ellipse(50, 50, 14, 10)]), ('#c8a165', [curve(6, 70, 40, 21, 60, 50, 3), curve(60, 50, 80, 79, 94, 30, 3), ellipse(50, 50, 11, 7.4)]), ('#a1793f', [rib(42, 46, 58, 54, 1.4)])]
+
+
+def e_boomerang():
+    """El bumerán."""
+    return shape([(10, 20), (30, 12), (52, 60), (88, 72), (84, 92), (40, 82)], '#c8945a', 2.4)
+
+
+def e_knife():
+    """El cuchillo de cocina."""
+    return [(OUTLINE, ['M 8 82 L 62 28 Q 88 6 94 10 Q 92 28 66 46 L 30 82 Z']), ('#b0bec5', ['M 12 81 L 63 30 Q 86 10 90.4 12.6 Q 88 27 65 44 L 34 79 Z'])] + bar(6, 94, 26, 74, 8, '#5d4037')
+
+
+def e_clamp():
+    """La prensa (comprimir)."""
+    return [(OUTLINE, [rect(14, 10, 72, 12), rect(14, 78, 72, 12), rect(14, 10, 12, 80)]), ('#546e7a', [rect(15.6, 11.6, 68.8, 8.8), rect(15.6, 79.6, 68.8, 8.8), rect(15.6, 11.6, 8.8, 76.8)])] + bar(60, 22, 60, 64, 4, '#90a4ae') + [(OUTLINE, [rect(46, 62, 28, 8)]), ('#e53935', [rect(47.6, 63.6, 24.8, 4.8)])]
+
+
+def e_trap():
+    """La trampa de ratón."""
+    return [(OUTLINE, [rect(6, 60, 88, 20)]), ('#c8945a', [rect(7.6, 61.6, 84.8, 16.8)]), (OUTLINE, [curve(18, 60, 50, 26, 82, 60, 3)]), ('#b0bec5', [curve(18, 60, 50, 27.6, 82, 60, 1.4)])] + oval(72, 54, 10, 6, '#fdd835', d=1.6)
+
+
+def e_sign():
+    """El letrero de madera clavado."""
+    return bar(50, 96, 50, 50, 5, '#8d5a32') + shape([(10, 14), (90, 14), (90, 56), (10, 56)], '#c8945a', 2.4) + [('#8d5a32', [rect(18, 24, 64, 4), rect(18, 34, 50, 4), rect(18, 44, 56, 4)])]
+
+
+def e_works():
+    """En obra: la barrera de rayas."""
+    return bar(20, 96, 20, 30, 4, '#5d4037') + bar(80, 96, 80, 30, 4, '#5d4037') + [(OUTLINE, [rect(6, 34, 88, 22)]), ('#fafafa', [rect(7.6, 35.6, 84.8, 18.8)]), ('#ff7043', [poly(10 + 16 * i, 54.4, 18 + 16 * i, 35.6, 26 + 16 * i, 35.6, 18 + 16 * i, 54.4) for i in range(5)])] + oval(20, 26, 5, 5, '#fdd835', d=1.6) + oval(80, 26, 5, 5, '#fdd835', d=1.6)
+
+
+def e_traffic():
+    """El semáforo."""
+    return [(OUTLINE, [rect(30, 4, 40, 84), rect(46, 88, 8, 10)]), ('#37474f', [rect(32.6, 6.6, 34.8, 78.8)]), ('#e53935', [circle(50, 20, 10)]), ('#fdd835', [circle(50, 45, 10)]), ('#43a047', [circle(50, 70, 10)])]
+
+
+def e_road():
+    """La carretera que se pierde en el horizonte."""
+    return [(OUTLINE, [rect(2, 2, 96, 96)]), ('#b3e5fc', [rect(3.6, 3.6, 92.8, 40)]), ('#9ccc65', [rect(3.6, 40, 92.8, 56.4)]), ('#607d8b', [poly(20, 96.4, 46, 40, 54, 40, 80, 96.4)]), ('#fafafa', [poly(48.8, 48, 51.2, 48, 51.6, 56, 48.4, 56), poly(48.2, 64, 51.8, 64, 52.6, 76, 47.4, 76), poly(47.2, 84, 52.8, 84, 53.6, 96.4, 46.4, 96.4)])]
+
+
+def e_hole():
+    """El hueco en el piso."""
+    return oval(50, 64, 44, 18, '#8d6e63') + [('#1b1b1b', [ellipse(50, 66, 34, 12)]), ('#3e2723', [ellipse(50, 60, 34, 6)])]
+
+
+def e_handshake():
+    """El apretón de manos (un trato)."""
+    return [(OUTLINE, ['M 4 40 L 30 28 L 56 40 L 70 30 L 96 42 L 96 62 L 80 62 L 58 82 Q 48 88 40 80 L 18 62 L 4 62 Z']), ('#e0a36c', ['M 6.6 42 L 30 31 L 54 42 L 50 46 Q 40 40 34 48 L 52 66 Q 56 70 60 66 L 80 50 L 93.4 59.4 L 79 59.4 L 57 79.4 Q 48 85 41.6 78.4 L 19.6 59.4 L 6.6 59.4 Z']), ('#c68642', ['M 56 42 L 70 33 L 93.4 44 L 93.4 59 L 80 48 L 60 64 Q 56 66 54 62 L 38 48 Q 44 42 50 46 Z']), ('#1e88e5', [rect(2, 40, 8, 24), rect(90, 40, 8, 24)])]
+
+
+def e_hands():
+    """Las manos abiertas, juntas (ofrecer)."""
+    return [(OUTLINE, ['M 8 48 Q 6 30 14 28 L 22 30 L 34 62 L 48 58 L 50 84 L 30 92 Q 12 84 8 48 Z', 'M 92 48 Q 94 30 86 28 L 78 30 L 66 62 L 52 58 L 50 84 L 70 92 Q 88 84 92 48 Z']), ('#e0a36c', ['M 10.6 48 Q 9 32 15 31 L 20 32.4 L 32.6 64.6 L 45.6 61 L 47.4 82 L 30 89.4 Q 14.6 82 10.6 48 Z', 'M 89.4 48 Q 91 32 85 31 L 80 32.4 L 67.4 64.6 L 54.4 61 L 52.6 82 L 70 89.4 Q 85.4 82 89.4 48 Z'])]
+
+
+def e_nose():
+    """La nariz (el olor)."""
+    return [(OUTLINE, ['M 46 8 Q 52 8 54 20 L 72 70 Q 80 86 64 90 Q 54 92 50 86 Q 46 92 36 90 Q 22 86 30 72 L 40 22 Q 42 8 46 8 Z']), ('#e0a36c', ['M 47 11 Q 50.6 11 51.6 21 L 69.6 71 Q 76 84 64 87.4 Q 55 89 50 82 Q 45 89 36 87.4 Q 25 84 32.6 72.6 L 42.6 22.6 Q 44 11 47 11 Z']), ('#8d5a32', [ellipse(42, 82, 4, 2.4), ellipse(58, 82, 4, 2.4)])]
+
+
+def e_vest():
+    """El chaleco reflectivo."""
+    return [(OUTLINE, ['M 20 10 L 36 10 Q 50 30 64 10 L 80 10 L 92 40 L 84 94 L 16 94 L 8 40 Z']), ('#ff7043', ['M 22 12.6 L 34.6 12.6 Q 50 34 65.4 12.6 L 78 12.6 L 89.4 40 L 81.6 91.4 L 18.4 91.4 L 10.6 40 Z']), ('#fff59d', [rect(10, 56, 80, 6), rect(12, 72, 76, 6)]), ('#e64a19', [rect(48.6, 30, 2.8, 62)])]
+
+
+
+# ---------- Emojis propios: vehículos, animales y clima (v4.3) ----------
+
+def wheel(cx, cy, r):
+    """Una llanta con su rin."""
+    return [(OUTLINE, [circle(cx, cy, r + 1.8)]), ('#37474f', [circle(cx, cy, r)]), ('#b0bec5', [circle(cx, cy, r * 0.45)])]
+
+
+def rot_pts(points, a, cx=50, cy=50):
+    r = math.radians(a)
+    return [(cx + (x - cx) * math.cos(r) - (y - cy) * math.sin(r), cy + (x - cx) * math.sin(r) + (y - cy) * math.cos(r)) for x, y in points]
+
+
+def e_willys():
+    """El Willys de los cafeteros."""
+    return willys_side(50, 70, 1.15)
+
+
+def e_truck():
+    """El camión de estacas, con el furgón y la cabina."""
+    layers = shape([(8, 28), (62, 28), (62, 72), (8, 72)], '#fafafa')
+    layers.append(('#fbc02d', [rect(8, 48, 54, 6)]))
+    layers += shape([(64, 42), (80, 42), (92, 56), (92, 72), (64, 72)], '#1e88e5')
+    layers.append(('#b3e5fc', [poly(68, 46, 78, 46, 86, 56, 68, 56)]))
+    layers.append(('#fff59d', [rect(88, 62, 4, 4)]))
+    return layers + wheel(24, 76, 9) + wheel(78, 76, 9)
+
+
+def e_tractomula():
+    """La tractomula: el remolque largo y el cabezote con la cabina dormitorio."""
+    layers = shape([(4, 30), (66, 30), (66, 70), (4, 70)], '#eceff1')
+    layers.append(('#e53935', [rect(4, 44, 62, 5)]))
+    layers += shape([(68, 34), (80, 34), (82, 46), (94, 52), (94, 72), (68, 72)], '#e53935')
+    layers.append(('#b3e5fc', [poly(81, 38, 81, 48, 91, 53, 91, 56, 82, 56, 82, 48)]))
+    layers.append(('#b3e5fc', [poly(80, 48, 90, 53, 90, 58, 80, 58)]))
+    layers.append((OUTLINE, [rect(74, 20, 3, 14)]))
+    return layers + wheel(14, 76, 7) + wheel(30, 76, 7) + wheel(56, 76, 7) + wheel(84, 76, 7)
+
+
+def e_tractor():
+    """El tractor verde: llanta grande atrás, cabina y el exhosto."""
+    layers = shape([(30, 30), (54, 30), (54, 56), (30, 56)], '#c8e6c9')
+    layers += shape([(26, 26), (58, 26), (58, 30), (26, 30)], '#43a047')
+    layers += shape([(30, 50), (88, 50), (90, 68), (30, 68)], '#43a047')
+    layers += bar(76, 50, 76, 32, 3, '#546e7a')
+    layers.append(('#fdd835', [rect(80, 56, 8, 3)]))
+    return layers + wheel(32, 68, 22) + wheel(80, 76, 12)
+
+
+def e_speedboat():
+    """La lancha rápida, con su raya roja, sobre las olas."""
+    layers = [(OUTLINE, [rect(2, 72, 96, 22)]), ('#1e88e5', [rect(3.6, 73.6, 92.8, 18.8)])]
+    layers += shape([(6, 50), (78, 50), (96, 44), (84, 72), (14, 72)], '#fafafa')
+    layers.append(('#e53935', [poly(10, 58, 88, 58, 86, 63, 12, 63)]))
+    layers += shape([(30, 50), (40, 36), (54, 36), (58, 50)], '#b3e5fc', 1.8)
+    layers.append(('#bbdefb', [rib(10, 84, 26, 84, 2), rib(44, 88, 62, 88, 2), rib(74, 82, 90, 82, 2)]))
+    return layers
+
+
+def e_pickup():
+    """La camioneta de platón."""
+    layers = shape([(6, 52), (50, 52), (52, 36), (72, 36), (84, 52), (94, 54), (94, 72), (6, 72)], '#8e24aa')
+    layers.append(('#b3e5fc', [poly(56, 40, 70, 40, 79, 52, 56, 52)]))
+    layers.append(('#6a1b9a', [rect(8, 56, 40, 3)]))
+    layers.append(('#fff59d', [rect(90, 58, 4, 4)]))
+    return layers + wheel(24, 74, 10) + wheel(76, 74, 10)
+
+
+def e_mototaxi():
+    """El mototaxi de tres ruedas, con su techo de lona."""
+    layers = shape([(14, 26), (78, 26), (80, 32), (12, 32)], '#2e7d32')
+    layers += bar(18, 32, 18, 60, 2.4, '#455a64') + bar(70, 32, 74, 56, 2.4, '#455a64')
+    layers += shape([(10, 56), (58, 56), (62, 40), (72, 40), (90, 62), (90, 72), (10, 72)], '#fdd835')
+    layers.append(('#b3e5fc', [poly(64, 44, 70, 44, 82, 58, 64, 58)]))
+    layers += shape([(22, 44), (44, 44), (44, 56), (22, 56)], '#6d4c41', 1.6)
+    return layers + wheel(24, 76, 9) + wheel(80, 76, 9)
+
+
+def e_plane():
+    """El avión, visto desde arriba, rumbo al noreste."""
+    wing = rot_pts([(50, 36), (94, 56), (94, 64), (50, 54), (6, 64), (6, 56)], 45)
+    tail = rot_pts([(50, 76), (68, 88), (68, 93), (50, 86), (32, 93), (32, 88)], 45)
+    layers = shape(wing, '#cfd8dc') + shape(tail, '#cfd8dc')
+    layers += oval(50, 50, 7, 42, '#eceff1', rot=45)
+    layers.append(('#1e88e5', [ellipse(50 + 22 * 0.707, 50 - 22 * 0.707, 3, 7, 45)]))
+    layers.append(('#e53935', [ellipse(50 - 30 * 0.707, 50 + 30 * 0.707, 2.6, 7, 45)]))
+    return layers
+
+
+def e_ant():
+    """La hormiga arriera, con su pedacito de hoja."""
+    layers = [(OUTLINE, [rib(26, 60, 18, 84, 2.4), rib(40, 60, 40, 86, 2.4), rib(54, 60, 64, 84, 2.4), rib(32, 58, 22, 40, 2), rib(44, 58, 54, 38, 2),
+                         curve(70, 46, 76, 30, 84, 26, 2), curve(74, 48, 86, 36, 94, 38, 2)])]
+    layers += oval(22, 58, 16, 12, '#6d2b1a') + oval(44, 58, 8, 7, '#6d2b1a') + oval(66, 52, 11, 10, '#6d2b1a')
+    layers.append(('#ffffff', [circle(70, 49, 2.2)]))
+    layers += shape([(54, 18), (78, 6), (82, 22), (62, 30)], '#7cb342', 1.6)
+    return layers
+
+
+def e_whale():
+    """La ballena jorobada, echando su chorro."""
+    body = 'M 6 58 Q 8 34 40 34 Q 66 34 78 50 L 92 36 L 94 66 L 82 60 Q 74 80 44 82 Q 8 82 6 58 Z'
+    layers = [(OUTLINE, [body]), ('#1e88e5', ['M 9 58 Q 11 37 40 37 Q 64 37 76 53 L 90 41 L 91.5 62.5 L 80 56.5 Q 72 77 44 79 Q 11 79 9 58 Z'])]
+    layers.append(('#bbdefb', ['M 12 64 Q 30 70 56 66 Q 50 78 40 78 Q 16 78 12 64 Z']))
+    layers.append(('#0d2b45', [circle(22, 54, 2.6)]))
+    layers.append(('#4fc3f7', [curve(34, 32, 30, 18, 22, 12, 3), curve(34, 32, 36, 18, 44, 12, 3), curve(34, 32, 33, 18, 33, 8, 3)]))
+    return layers
+
+
+def e_fish():
+    """El pescado, con su aleta y la cola."""
+    layers = shape([(70, 50), (94, 30), (90, 50), (94, 70)], '#ff8a65')
+    layers += oval(44, 50, 34, 20, '#ffab91')
+    layers.append(('#ff7043', [poly(40, 31, 56, 22, 60, 32), poly(46, 52, 58, 60, 44, 62)]))
+    layers.append(('#ffffff', [circle(22, 46, 5)]))
+    layers.append(('#263238', [circle(21, 46, 2.6)]))
+    layers.append(('#e64a19', [curve(32, 38, 36, 50, 32, 62, 1.6)]))
+    return layers
+
+
+def e_cat():
+    """Un gato atigrado, sentado."""
+    layers = [(OUTLINE, [curve(70, 86, 94, 78, 88, 54, 7.6)]), ('#fb8c00', [curve(70, 86, 94, 78, 88, 54, 4.2)])]
+    layers += oval(50, 72, 21, 20, '#ffa726')
+    layers += shape([(28, 26), (30, 8), (42, 20)], '#ffa726', 1.8) + shape([(72, 26), (70, 8), (58, 20)], '#ffa726', 1.8)
+    layers += oval(50, 36, 24, 20, '#ffa726')
+    layers.append(('#fb8c00', [rib(40, 18, 42, 26, 2.4), rib(50, 16, 50, 26, 2.4), rib(60, 18, 58, 26, 2.4), rib(36, 66, 44, 68, 2.6), rib(36, 76, 46, 78, 2.6), rib(66, 66, 58, 68, 2.6)]))
+    layers.append(('#2e7d32', [ellipse(41, 36, 3.6, 4.6), ellipse(59, 36, 3.6, 4.6)]))
+    layers.append(('#1b1b1b', [ellipse(41, 36, 1.2, 3.6), ellipse(59, 36, 1.2, 3.6), poly(47, 44, 53, 44, 50, 47)]))
+    layers.append((OUTLINE, [rib(18, 44, 36, 46, 1), rib(18, 50, 36, 48, 1), rib(82, 44, 64, 46, 1), rib(82, 50, 64, 48, 1)]))
+    return layers
+
+
+def e_bird():
+    """Un pajarito azul, de perfil."""
+    layers = shape([(70, 52), (94, 40), (90, 60)], '#1565c0', 1.8)
+    layers += oval(52, 56, 26, 20, '#42a5f5')
+    layers += oval(32, 40, 15, 14, '#42a5f5')
+    layers += shape([(17, 38), (6, 43), (18, 46)], '#fbc02d', 1.6)
+    layers.append(('#1565c0', ['M 44 52 Q 60 44 76 54 Q 64 70 46 62 Z']))
+    layers.append(('#e3f2fd', [ellipse(50, 66, 14, 8)]))
+    layers.append(('#ffffff', [circle(30, 37, 4)]))
+    layers.append(('#0d2b45', [circle(29, 37, 2.2)]))
+    layers += bar(46, 74, 42, 90, 1.6, '#fb8c00') + bar(58, 74, 60, 90, 1.6, '#fb8c00')
+    return layers
+
+
+def e_beetle():
+    """El cucarrón, visto desde arriba."""
+    legs = [(30, 40, 14, 30), (30, 56, 10, 56), (32, 70, 16, 86), (70, 40, 86, 30), (70, 56, 90, 56), (68, 70, 84, 86)]
+    layers = [(OUTLINE, [rib(*l, 3) for l in legs] + [curve(44, 22, 38, 10, 30, 8, 2), curve(56, 22, 62, 10, 70, 8, 2)])]
+    layers += oval(50, 26, 10, 8, '#263238')
+    layers += oval(50, 60, 24, 30, '#2e7d32')
+    layers.append((OUTLINE, [rect(49, 32, 2, 56)]))
+    layers.append(('#81c784', [ellipse(40, 50, 4, 9, 10), ellipse(60, 50, 4, 9, -10)]))
+    return layers
+
+
+def e_fly():
+    """La mosca, con sus alas transparentes."""
+    layers = [(OUTLINE, [ellipse(32, 36, 18, 10, 35), ellipse(68, 36, 18, 10, -35)]), ('#e1f5fe', [ellipse(32, 36, 16, 8, 35), ellipse(68, 36, 16, 8, -35)])]
+    layers.append((OUTLINE, [rib(42, 56, 26, 66, 2.4), rib(58, 56, 74, 66, 2.4), rib(44, 66, 30, 82, 2.4), rib(56, 66, 70, 82, 2.4)]))
+    layers += oval(50, 62, 11, 20, '#455a64')
+    layers.append(('#263238', [rib(40, 62, 60, 62, 2.4), rib(42, 70, 58, 70, 2.4)]))
+    layers += oval(50, 34, 11, 9, '#37474f')
+    layers.append(('#c62828', [circle(42, 32, 5), circle(58, 32, 5)]))
+    return layers
+
+
+def e_microbe():
+    """El microbio verde, con sus pelitos."""
+    spikes = [(50 + 36 * math.cos(math.radians(a)), 50 + 32 * math.sin(math.radians(a)), 50 + 44 * math.cos(math.radians(a)), 50 + 40 * math.sin(math.radians(a))) for a in range(0, 360, 30)]
+    layers = [(OUTLINE, [rib(x0, y0, x1, y1, 3.6) for x0, y0, x1, y1 in spikes] + [circle(x1, y1, 3.6) for _, _, x1, y1 in spikes])]
+    layers.append(('#9ccc65', [circle(x1, y1, 2) for _, _, x1, y1 in spikes]))
+    blob = [(50 + (34 + 3 * math.sin(math.radians(a * 5))) * math.cos(math.radians(a)), 50 + (30 + 3 * math.sin(math.radians(a * 5))) * math.sin(math.radians(a))) for a in range(0, 360, 6)]
+    layers += shape(blob, '#7cb342')
+    layers.append(('#558b2f', [circle(38, 42, 5), circle(60, 38, 4), circle(56, 62, 6), circle(36, 62, 3)]))
+    return layers
+
+
+def e_worm():
+    """La lombriz rosada, culebreando."""
+    path = [(12, 70), (30, 50), (48, 70), (66, 50), (84, 64)]
+    def band(w):
+        return [curve(path[0][0], path[0][1], 21, 40, 30, 50, w), curve(30, 50, 39, 74, 48, 70, w), curve(48, 70, 57, 40, 66, 50, w), curve(66, 50, 75, 64, 84, 64, w)]
+    layers = [(OUTLINE, band(17) + [circle(12, 70, 8.5), circle(84, 64, 8.5)]), ('#f48fb1', band(12) + [circle(12, 70, 6), circle(84, 64, 6)])]
+    layers.append(('#ec407a', [rib(26, 44, 24, 56, 2), rib(42, 66, 50, 74, 2), rib(60, 44, 58, 56, 2)]))
+    layers.append(('#2b1d14', [circle(86, 61, 1.6)]))
+    return layers
+
+
+def sun_shape(cx, cy, r, rays=12):
+    out_r = r * 1.45
+    tri = []
+    for i in range(rays):
+        a = math.radians(i * 360 / rays)
+        b1, b2 = a - math.pi / rays * 0.55, a + math.pi / rays * 0.55
+        tri.append(poly(cx + r * 1.08 * math.cos(b1), cy + r * 1.08 * math.sin(b1), cx + out_r * math.cos(a), cy + out_r * math.sin(a), cx + r * 1.08 * math.cos(b2), cy + r * 1.08 * math.sin(b2)))
+    grown = []
+    for i in range(rays):
+        a = math.radians(i * 360 / rays)
+        b1, b2 = a - math.pi / rays * 0.75, a + math.pi / rays * 0.75
+        grown.append(poly(cx + r * math.cos(b1), cy + r * math.sin(b1), cx + (out_r + 3) * math.cos(a), cy + (out_r + 3) * math.sin(a), cx + r * math.cos(b2), cy + r * math.sin(b2)))
+    return [(OUTLINE, grown + [circle(cx, cy, r + 2)]), ('#ffb300', tri), ('#fdd835', [circle(cx, cy, r)]), ('#fff59d', [ellipse(cx - r * 0.3, cy - r * 0.3, r * 0.35, r * 0.25, -30)])]
+
+
+def cloud(cx, cy, s=1.0, color='#eceff1'):
+    puffs = [(-18, 4, 12), (-4, -6, 16), (14, 0, 13), (24, 8, 9)]
+    base = rect(cx - 28 * s, cy + 2 * s, 54 * s, 14 * s)
+    return [(OUTLINE, [circle(cx + x * s, cy + y * s, (r + 2.2) * s) for x, y, r in puffs] + [rect(cx - 30.2 * s, cy - 0.2 * s, 58.4 * s, 18.4 * s)]),
+            (color, [circle(cx + x * s, cy + y * s, r * s) for x, y, r in puffs] + [base]), ('#ffffff', [ellipse(cx - 6 * s, cy - 12 * s, 7 * s, 3 * s, -10)])]
+
+
+def rain_drops(spots):
+    return [(OUTLINE, [rib(x, y, x - 4, y + 12, 5) for x, y in spots]), ('#29b6f6', [rib(x, y, x - 4, y + 12, 2.6) for x, y in spots])]
+
+
+def e_sun():
+    """El sol."""
+    return sun_shape(50, 50, 24)
+
+
+def e_rain():
+    """La nube con aguacero."""
+    return cloud(50, 36, 1.3, '#b0bec5') + rain_drops([(30, 66), (46, 70), (62, 66), (78, 70), (38, 84), (58, 84)])
+
+
+def e_sun_rain():
+    """Sol y lluvia: el clima de montaña."""
+    return sun_shape(34, 32, 16) + cloud(56, 48, 1.15, '#cfd8dc') + rain_drops([(38, 74), (54, 78), (70, 74)])
+
+
+def e_sun_cloud():
+    """Sol con una nubecita."""
+    return sun_shape(40, 40, 22) + cloud(66, 66, 0.9)
+
+
+def crescent(c1, r1, c2, r2, n=180):
+    theta0 = math.atan2(c1[1] - c2[1], c1[0] - c2[0])
+    outer = []
+    for i in range(n + 1):
+        a = theta0 - math.pi + 2 * math.pi * i / n
+        p = (c1[0] + r1 * math.cos(a), c1[1] + r1 * math.sin(a))
+        if math.hypot(p[0] - c2[0], p[1] - c2[1]) > r2:
+            outer.append(p)
+    inner = []
+    for i in range(n + 1):
+        a = theta0 + math.pi - 2 * math.pi * i / n
+        p = (c2[0] + r2 * math.cos(a), c2[1] + r2 * math.sin(a))
+        if math.hypot(p[0] - c1[0], p[1] - c1[1]) < r1:
+            inner.append(p)
+    if math.dist(inner[0], outer[-1]) > math.dist(inner[-1], outer[-1]):
+        inner.reverse()
+    return pts(outer + inner)
+
+
+def e_moon():
+    """La luna en cuarto creciente."""
+    return [(OUTLINE, [crescent((44, 52), 40, (66, 40), 32)]), ('#fdd835', [crescent((44, 52), 37.4, (66, 40), 34.6)]),
+            ('#fff59d', [ellipse(20, 54, 3, 8, 10)])]
+
+
+def e_snow():
+    """El copo de nieve de los páramos."""
+    arms = []
+    for i in range(6):
+        a = math.radians(i * 60 - 90)
+        x1, y1 = 50 + 40 * math.cos(a), 50 + 40 * math.sin(a)
+        arms.append((50, 50, x1, y1))
+        for k, d in ((0.55, 12), (0.8, 8)):
+            bx, by = 50 + 40 * k * math.cos(a), 50 + 40 * k * math.sin(a)
+            for s in (-1, 1):
+                b = a + s * math.radians(50)
+                arms.append((bx, by, bx + d * math.cos(b), by + d * math.sin(b)))
+    return [(OUTLINE, [rib(*r, 8) for r in arms]), ('#81d4fa', [rib(*r, 4) for r in arms]), ('#e1f5fe', [circle(50, 50, 5)])]
+
+
+def e_thermo():
+    """El termómetro."""
+    layers = [(OUTLINE, [rect(40, 6, 20, 70), circle(50, 78, 16), circle(50, 8, 10)]), ('#fafafa', [rect(42.4, 8, 15.2, 68), circle(50, 78, 13.6), circle(50, 8, 7.6)])]
+    layers.append(('#e53935', [rect(46, 34, 8, 44), circle(50, 78, 10)]))
+    layers.append(('#90a4ae', [rect(60, 20, 8, 2), rect(60, 32, 6, 2), rect(60, 44, 8, 2), rect(60, 56, 6, 2)]))
+    return layers
+
+
+def e_wind():
+    """El viento: tres ráfagas con su rizo."""
+    def gust(y, x1, k):
+        return [curve(8, y, 40, y + 2, x1, y, k), f'M {x1} {y + k / 2} Q {x1 + 12} {y - 2} {x1 + 4} {y - 12} Q {x1 - 4} {y - 16} {x1 - 8} {y - 8} L {x1 - 8 + k * 0.8} {y - 8} Q {x1 - 2} {y - 12} {x1 + 2} {y - 8} Q {x1 + 6} {y - 2} {x1} {y - k / 2} Z']
+    layers = [(OUTLINE, gust(34, 64, 9) + gust(56, 80, 9) + gust(76, 52, 9))]
+    layers.append(('#b3e5fc', gust(34, 64, 4.6) + gust(56, 80, 4.6) + gust(76, 52, 4.6)))
+    return layers
+
+
+def spiral_band(cx, cy, a0, a1, r0, r1, w):
+    out, inn = [], []
+    n = 120
+    for i in range(n + 1):
+        t = a0 + (a1 - a0) * i / n
+        r = r0 + (r1 - r0) * i / n
+        ww = w * (0.35 + 0.65 * i / n)
+        out.append((cx + (r + ww / 2) * math.cos(t), cy + (r + ww / 2) * math.sin(t)))
+        inn.append((cx + (r - ww / 2) * math.cos(t), cy + (r - ww / 2) * math.sin(t)))
+    return pts(out + inn[::-1])
+
+
+def e_cyclone():
+    """El remolino."""
+    return [(OUTLINE, [spiral_band(50, 50, 0, 4 * math.pi, 2, 38, 18)]), ('#42a5f5', [spiral_band(50, 50, 0.1, 4 * math.pi - 0.05, 2.2, 38, 12)])]
+
+
+def drop_path(cx, cy, s):
+    def P(x, y):
+        return f'{cx + x * s:.2f} {cy + y * s:.2f}'
+    return f'M {P(0, -42)} Q {P(8, -20)} {P(24, 2)} Q {P(36, 30)} {P(12, 40)} Q {P(0, 44)} {P(-12, 40)} Q {P(-36, 30)} {P(-24, 2)} Q {P(-8, -20)} {P(0, -42)} Z'
+
+
+def e_drop():
+    """La gota de agua."""
+    return [(OUTLINE, [drop_path(50, 50, 1.06)]), ('#4fc3f7', [drop_path(50, 51, 0.98)]), ('#e1f5fe', [ellipse(36, 58, 4, 9, 20)])]
+
+
+def e_wave():
+    """La ola que se encrespa."""
+    body = 'M 4 92 L 4 64 Q 10 28 44 22 Q 76 18 90 42 Q 74 34 62 42 Q 52 52 62 62 Q 76 70 94 60 L 96 92 Z'
+    layers = [(OUTLINE, [body]), ('#1e88e5', ['M 6.6 89.6 L 6.6 64 Q 12.4 30.4 44 24.6 Q 70 21 84 37 Q 72 33 60 40 Q 48 52 60 64 Q 76 73 93 63 L 93.4 89.6 Z'])]
+    layers.append(('#ffffff', ['M 44 24.6 Q 70 21 84 37 Q 74 34 64 38 Q 66 30 44 24.6 Z', rib(14, 80, 30, 80, 2.4), rib(40, 84, 58, 84, 2.4)]))
+    layers.append(('#64b5f6', ['M 12 70 Q 18 44 40 36 Q 30 50 30 70 Z']))
+    return layers
+
+
+
+# ---------- Emojis propios: naturaleza, lugares, comida y objetos (v4.3) ----------
+
+def e_palm():
+    """La palma de coco."""
+    layers = [(OUTLINE, [ellipse(50, 92, 30, 4)]), ('#e6c88a', [ellipse(50, 92, 28, 3)])]
+    return layers + palm(44, 92, 52, lean=10, s=2.2) + oval(50, 44, 4, 4, '#8d6e63', d=1.4) + oval(58, 44, 4, 4, '#8d6e63', d=1.4)
+
+
+def e_tree():
+    """Un árbol frondoso."""
+    layers = shape([(44, 92), (46, 56), (54, 56), (56, 92)], '#8d6e63')
+    puffs = [(50, 30, 22), (30, 46, 18), (70, 46, 18), (50, 54, 18)]
+    layers += [(OUTLINE, [circle(x, y, r + 2.4) for x, y, r in puffs]), ('#43a047', [circle(x, y, r) for x, y, r in puffs])]
+    layers.append(('#66bb6a', [circle(44, 24, 8), circle(26, 42, 6), circle(64, 40, 7)]))
+    return layers
+
+
+def e_hibiscus():
+    """La flor de cayeno, roja."""
+    layers = []
+    for i in range(5):
+        a = math.radians(i * 72 - 90)
+        x, y = 50 + 22 * math.cos(a), 50 + 22 * math.sin(a)
+        layers += oval(x, y, 20, 15, '#e53935', rot=i * 72)
+    layers.append(('#c62828', [circle(50, 50, 12)]))
+    layers += bar(50, 50, 72, 26, 2.4, '#fdd835')
+    layers.append(('#fbc02d', [circle(72, 26, 3), circle(66, 24, 2.4), circle(74, 32, 2.4)]))
+    return layers
+
+
+def e_seedling():
+    """La matica que brota."""
+    layers = [(OUTLINE, ['M 14 92 Q 50 66 86 92 Z']), ('#8d6e63', ['M 18 90.4 Q 50 70 82 90.4 Z'])]
+    layers += bar(50, 82, 50, 46, 3, '#558b2f')
+    layers += [(OUTLINE, [leaf(50, 50, 14, 30, 13), leaf(50, 46, 86, 22, 14)]), ('#7cb342', [leaf(50, 50, 17, 31.5, 10), leaf(50, 46, 83, 23.5, 11)])]
+    layers.append(('#558b2f', [rib(50, 50, 22, 34, 1.4), rib(50, 46, 78, 26, 1.4)]))
+    return layers
+
+
+def e_leaves():
+    """Dos hojas que se lleva el viento."""
+    layers = [(OUTLINE, [leaf(14, 84, 58, 30, 18), leaf(44, 88, 92, 54, 14)]), ('#66bb6a', [leaf(17, 81, 56, 33, 15)]), ('#43a047', [leaf(47, 86, 89, 56, 11)])]
+    layers.append(('#2e7d32', [rib(17, 81, 52, 37, 1.6), rib(47, 86, 86, 58, 1.6)]))
+    layers.append((OUTLINE, [curve(56, 12, 72, 6, 90, 14, 2.4), curve(64, 24, 78, 20, 94, 28, 2.4)]))
+    return layers
+
+
+def e_fallen_leaves():
+    """Hojas secas que caen."""
+    layers = [(OUTLINE, [leaf(10, 70, 56, 30, 16), leaf(40, 90, 90, 64, 14), leaf(50, 46, 86, 10, 12)])]
+    layers.append(('#ef6c00', [leaf(13, 68, 53, 33, 13)]))
+    layers.append(('#a1572a', [leaf(43, 88, 87, 66, 11)]))
+    layers.append(('#fbc02d', [leaf(53, 44, 83, 13, 9)]))
+    layers.append(('#6d3b14', [rib(13, 68, 50, 36, 1.4), rib(43, 88, 84, 68, 1.4), rib(53, 44, 80, 16, 1.4)]))
+    return layers
+
+
+def e_mushroom():
+    """El hongo de sombrero rojo con pintas."""
+    layers = shape([(40, 90), (42, 52), (58, 52), (60, 90)], '#f5ead6')
+    layers += [(OUTLINE, ['M 6 58 Q 6 10 50 10 Q 94 10 94 58 Z']), ('#e53935', ['M 9 55.6 Q 9 13 50 13 Q 91 13 91 55.6 Z'])]
+    layers.append(('#ffffff', [ellipse(30, 34, 7, 5), ellipse(56, 24, 6, 4), ellipse(72, 42, 7, 5), ellipse(46, 46, 5, 4)]))
+    return layers
+
+
+def e_guadua():
+    """La guadua: cañas con sus nudos y hojitas."""
+    layers = []
+    for x, top in ((30, 8), (52, 18), (72, 4)):
+        layers += shape([(x - 6, 94), (x - 6, top), (x + 6, top), (x + 6, 94)], '#7cb342', 1.8)
+        layers.append(('#558b2f', [rect(x - 6, y, 12, 2.6) for y in range(top + 16, 92, 18)]))
+        layers.append(('#aed581', [rect(x - 3, top + 4, 2.4, 86 - top)]))
+    layers += [(OUTLINE, [leaf(36, 30, 50, 6, 6), leaf(58, 40, 80, 30, 6), leaf(78, 22, 96, 16, 5)]), ('#43a047', [leaf(37, 28, 49, 9, 4), leaf(60, 39, 78, 31, 4), leaf(80, 21, 94, 17, 3)])]
+    return layers
+
+
+def e_log():
+    """Un tronco de madera, con sus anillos."""
+    layers = shape([(14, 36), (78, 36), (78, 76), (14, 76)], '#a1693f')
+    layers.append(('#7a4a26', [rib(20, 48, 70, 48, 2), rib(24, 62, 74, 62, 2)]))
+    layers += oval(78, 56, 14, 20, '#e0b27a')
+    layers += [('#a1693f', [ellipse(78, 56, 9, 13)]), ('#e0b27a', [ellipse(78, 56, 6, 9)]), ('#a1693f', [ellipse(78, 56, 2.4, 3.6)])]
+    layers += oval(14, 56, 6, 20, '#a1693f')
+    return layers
+
+
+def e_brick():
+    """Los ladrillos de la tapia."""
+    layers = [(OUTLINE, [rect(6, 18, 88, 66)]), ('#e8d9c0', [rect(8, 20, 84, 62)])]
+    bricks = []
+    for row in range(4):
+        y = 21 + row * 15.4
+        off = 0 if row % 2 == 0 else -10
+        for c in range(5):
+            x = 9 + off + c * 20.6
+            x0, x1 = max(9, x), min(91, x + 18.6)
+            bricks.append(rect(x0, y, x1 - x0, 13.4))
+    layers.append(('#c0573a', bricks))
+    layers.append(('#d9775a', [rect(12, 23, 8, 2), rect(54, 38, 8, 2), rect(32, 69, 8, 2)]))
+    return layers
+
+
+def e_rock():
+    """Una piedra."""
+    layers = shape([(10, 84), (14, 56), (30, 30), (52, 20), (74, 30), (90, 56), (92, 84)], '#90a4ae')
+    layers.append(('#b0bec5', [poly(30, 34, 52, 24, 60, 32, 40, 46)]))
+    layers.append(('#78909c', [poly(60, 60, 88, 62, 90, 82, 56, 82)]))
+    return layers
+
+
+def windows(x0, y0, cols, rows, w, h, gx, gy, color='#b3e5fc'):
+    return [rect(x0 + c * gx, y0 + r * gy, w, h) for c in range(cols) for r in range(rows)]
+
+
+def e_hotel():
+    """El hotel, con su letrero."""
+    layers = shape([(16, 94), (16, 18), (84, 18), (84, 94)], '#ffcc80')
+    layers.append(('#b3e5fc', windows(22, 40, 4, 3, 10, 9, 15.4, 14)))
+    layers += shape([(34, 6), (66, 6), (66, 26), (34, 26)], '#e53935', 1.8)
+    layers.append(('#ffffff', [rect(42, 10, 3, 12), rect(55, 10, 3, 12), rect(42, 14.6, 16, 3)]))
+    layers += shape([(42, 94), (42, 80), (58, 80), (58, 94)], '#6d4c41', 1.6)
+    return layers
+
+
+def e_factory():
+    """La fábrica: techo de sierra y la chimenea humeando."""
+    layers = [(OUTLINE, [circle(80, 16, 7), circle(88, 8, 5)]), ('#cfd8dc', [circle(80, 16, 5), circle(88, 8, 3.4)])]
+    layers += shape([(72, 94), (72, 24), (84, 24), (84, 94)], '#8d6e63')
+    layers += shape([(6, 94), (6, 50), (24, 38), (24, 50), (42, 38), (42, 50), (60, 38), (60, 50), (76, 50), (76, 94)], '#bcaaa4')
+    layers.append(('#ffe082', windows(12, 62, 4, 2, 9, 8, 15.6, 14)))
+    return layers
+
+
+def e_old_house():
+    """La casa abandonada: tablas, tejas caídas y la ventana rota."""
+    layers = shape([(14, 94), (14, 46), (50, 18), (86, 46), (86, 94)], '#a1887f')
+    layers.append(('#795548', [poly(10, 48, 50, 14, 66, 28, 62, 30, 50, 22, 14, 52)]))
+    layers += shape([(26, 54), (44, 54), (44, 70), (26, 70)], '#37474f', 1.6)
+    layers.append(('#a1887f', [poly(26, 54, 34, 54, 26, 64)]))
+    layers += shape([(56, 94), (56, 64), (72, 64), (72, 94)], '#5d4037', 1.6)
+    layers.append(('#d7ccc8', [rect(24, 62, 22, 3, 25), rect(54, 76, 20, 3, -20)]))
+    layers.append((OUTLINE, [rib(60, 40, 66, 52, 1.4), rib(66, 52, 62, 58, 1.4)]))
+    return layers
+
+
+def e_bridge():
+    """El puente colgante sobre el río."""
+    layers = [(OUTLINE, [rect(2, 70, 96, 26)]), ('#4fa3d9', [rect(3.6, 71.6, 92.8, 22.8)]), ('#b3e0f2', [rib(10, 84, 26, 84, 2), rib(60, 88, 80, 88, 2)])]
+    def cy(x):
+        t = (x - 22) / 56
+        return (1 - t) ** 2 * 22 + 2 * t * (1 - t) * 82 + t * t * 22
+    layers.append(('#5d4037', [rect(x - 0.8, cy(x), 1.6, 58 - cy(x)) for x in range(29, 76, 7)]))
+    cables = [curve(22, 22, 50, 82, 78, 22, 2), curve(4, 58, 12, 40, 22, 22, 2), curve(78, 22, 88, 40, 96, 58, 2)]
+    layers += [(OUTLINE, [curve(22, 22, 50, 82, 78, 22, 4), curve(4, 58, 12, 40, 22, 22, 4), curve(78, 22, 88, 40, 96, 58, 4)]), ('#e53935', cables)]
+    layers += shape([(18, 70), (18, 18), (26, 18), (26, 70)], '#8d6e63', 1.8) + shape([(74, 70), (74, 18), (82, 18), (82, 70)], '#8d6e63', 1.8)
+    layers += shape([(2, 58), (98, 58), (98, 64), (2, 64)], '#6d4c41', 1.8)
+    return layers
+
+
+def e_city_sunset():
+    """La ciudad al atardecer."""
+    layers = [(OUTLINE, [rect(2, 8, 96, 86)]), ('#ffb74d', [rect(3.6, 9.6, 92.8, 82.8)]), ('#ff8a65', [rect(3.6, 9.6, 92.8, 28)])]
+    layers.append(('#fff176', [circle(50, 56, 16)]))
+    for x, w, h in ((4, 16, 40), (20, 12, 56), (32, 18, 32), (52, 14, 60), (66, 16, 44), (82, 14.4, 52)):
+        layers.append(('#5d4037', [rect(x, 92.4 - h, w, h)]))
+        layers.append(('#ffe082', windows(x + 3, 96 - h, max(1, int(w // 6)), max(1, int(h // 12)), 2.6, 3.4, 5.4, 10)))
+    return layers
+
+
+def mountain(points, color, snow=None):
+    layers = shape(points, color)
+    if snow:
+        layers.append(('#ffffff', [poly(*snow)]))
+    return layers
+
+
+def e_mountain():
+    """La montaña de nieve, con la loma verde."""
+    layers = mountain([(4, 90), (46, 14), (94, 90)], '#78909c', (46, 14, 58, 36, 50, 32, 44, 40, 36, 32))
+    layers += mountain([(30, 90), (70, 46), (98, 90)], '#689f38')
+    return layers
+
+
+def e_sunrise_mtn():
+    """El amanecer entre montañas."""
+    layers = [(OUTLINE, [rect(2, 8, 96, 86)]), ('#ffe0b2', [rect(3.6, 9.6, 92.8, 82.8)])]
+    layers += sun_shape(50, 56, 15)
+    layers.append(('#7cb342', [poly(3.6, 92.4, 3.6, 50, 30, 36, 56, 70, 72, 46, 96.4, 64, 96.4, 92.4)]))
+    layers.append(('#558b2f', [poly(3.6, 92.4, 3.6, 72, 40, 62, 96.4, 80, 96.4, 92.4)]))
+    return layers
+
+
+def e_butter():
+    """El bloque de mantequilla en su platico."""
+    layers = oval(50, 74, 44, 12, '#e3f2fd')
+    layers += shape([(18, 70), (18, 46), (34, 32), (82, 32), (82, 58), (66, 70)], '#fff176')
+    layers.append(('#fdd835', [poly(66, 46, 82, 32, 82, 58, 66, 70)]))
+    layers.append(('#fff9c4', [poly(18, 46, 34, 32, 82, 32, 66, 46)]))
+    layers.append((OUTLINE, [rib(66, 46, 66, 70, 1.4), rib(18, 46, 66, 46, 1.4), rib(66, 46, 82, 32, 1.4)]))
+    return layers
+
+
+def e_honey():
+    """La olla de miel, con el cucharón y el chorrito."""
+    layers = oval(50, 64, 34, 28, '#ffb300')
+    layers += shape([(26, 34), (74, 34), (74, 44), (26, 44)], '#ffca28')
+    layers.append(('#ff8f00', ['M 22 50 Q 34 58 44 52 Q 46 62 50 54 Q 60 60 78 50 L 78 46 L 22 46 Z']))
+    layers += bar(58, 40, 82, 6, 3, '#a1693f')
+    layers.append(('#fff3c4', [ellipse(36, 72, 4, 8, 20)]))
+    return layers
+
+
+def e_flan():
+    """El flan de caramelo."""
+    layers = oval(50, 80, 44, 10, '#e3f2fd')
+    layers += [(OUTLINE, ['M 18 80 L 28 34 Q 50 26 72 34 L 82 80 Z']), ('#ffd54f', ['M 21 78 L 30.4 36 Q 50 29 69.6 36 L 79 78 Z'])]
+    layers.append(('#8d4a17', ['M 30.4 36 Q 50 29 69.6 36 L 70.6 42 Q 64 52 60 44 Q 54 56 48 44 Q 40 54 36 44 Q 32 50 29.4 42 Z']))
+    layers.append(('#fff59d', [rect(28, 54, 4, 18, 12)]))
+    return layers
+
+
+def e_egg_pan():
+    """La paila con el huevo frito."""
+    layers = bar(70, 62, 96, 82, 6, '#37474f')
+    layers += oval(42, 52, 38, 36, '#455a64')
+    layers.append(('#607d8b', [circle(42, 52, 32)]))
+    layers += [(OUTLINE, ['M 22 50 Q 18 30 38 30 Q 52 22 60 38 Q 72 50 60 66 Q 46 78 30 68 Q 20 62 22 50 Z']), ('#ffffff', ['M 24 50 Q 21 32 38 32.6 Q 51 25 58 39 Q 69 50 58.6 64 Q 46 75 31 66 Q 22 61 24 50 Z'])]
+    layers += oval(42, 50, 10, 10, '#fbc02d', d=1.6)
+    layers.append(('#fff59d', [circle(38, 46, 3)]))
+    return layers
+
+
+def e_arepa():
+    """La arepa asada, con su cuadriculado de parrilla y la mantequilla."""
+    layers = oval(50, 54, 42, 34, '#f5d58a')
+    layers.append(('#e6b85c', [ellipse(50, 54, 36, 28)]))
+    layers.append(('#f5d58a', [ellipse(50, 54, 33, 25)]))
+    layers.append(('#a0662a', [rib(26, 38, 48, 76, 3), rib(42, 32, 66, 74, 3), rib(60, 32, 78, 64, 3), rib(22, 60, 70, 30, 3), rib(32, 76, 80, 48, 3)]))
+    layers += shape([(44, 44), (60, 40), (64, 52), (48, 56)], '#fff176', 1.6)
+    return layers
+
+
+def e_beans():
+    """Los fríjoles rojos."""
+    layers = []
+    for x, y, r in ((30, 40, -20), (58, 32, 15), (72, 58, -30), (44, 64, 10), (24, 72, 40)):
+        layers += [(OUTLINE, [f'M {x - 14} {y} Q {x - 14} {y - 12} {x} {y - 11} Q {x + 14} {y - 10} {x + 14} {y + 2} Q {x + 12} {y + 12} {x} {y + 8} Q {x - 4} {y + 6} {x - 8} {y + 10} Q {x - 15} {y + 10} {x - 14} {y} Z'])]
+        layers.append(('#a32e2a', [f'M {x - 12} {y} Q {x - 12} {y - 9.6} {x} {y - 8.8} Q {x + 11.6} {y - 8} {x + 11.6} {y + 2} Q {x + 10} {y + 9.6} {x} {y + 6} Q {x - 4} {y + 4} {x - 8} {y + 7.6} Q {x - 12.6} {y + 7.6} {x - 12} {y} Z']))
+        layers.append(('#d0605a', [ellipse(x - 2, y - 4, 5, 2.2)]))
+    return layers
+
+
+def e_meat():
+    """La posta de carne con su hueso."""
+    layers = [(OUTLINE, ['M 12 50 Q 10 20 44 18 Q 84 18 88 46 Q 92 78 56 84 Q 16 88 12 50 Z']), ('#e57373', ['M 14.6 50 Q 13 22.6 44 20.6 Q 81.6 20.6 85.4 46 Q 89 75.6 56 81.4 Q 18.6 85 14.6 50 Z'])]
+    layers.append(('#ffcdd2', ['M 20 46 Q 30 30 50 34 Q 40 40 36 54 Q 30 60 20 46 Z', rib(52, 60, 76, 50, 3)]))
+    layers += oval(66, 40, 9, 9, '#f5f0e6') + [('#e0d6c2', [circle(66, 40, 4)])]
+    return layers
+
+
+def e_dinner():
+    """El plato con el tenedor y el cuchillo."""
+    layers = oval(50, 54, 32, 32, '#fafafa') + [('#e0e0e0', [circle(50, 54, 22)]), ('#fafafa', [circle(50, 54, 19)])]
+    layers += [(OUTLINE, [rect(6, 20, 10, 72), rect(84, 20, 10, 72)])]
+    layers.append(('#b0bec5', [rect(9, 50, 4, 40), rect(7.6, 22, 1.8, 18), rect(10.1, 22, 1.8, 18), rect(12.6, 22, 1.8, 18), rect(7.6, 38, 6.8, 12), rect(87, 50, 4, 40), 'M 87 22 Q 93 30 91 50 L 87 50 Z']))
+    return layers
+
+
+def e_bed():
+    """La cama con su almohada y la cobija."""
+    layers = shape([(8, 86), (8, 34), (16, 34), (16, 86)], '#8d6e63', 1.8) + shape([(84, 86), (84, 52), (92, 52), (92, 86)], '#8d6e63', 1.8)
+    layers += shape([(10, 72), (90, 72), (90, 58), (10, 58)], '#fafafa')
+    layers += shape([(18, 58), (18, 46), (38, 46), (38, 58)], '#fafafa', 1.8)
+    layers += shape([(36, 74), (36, 52), (90, 56), (90, 74)], '#1e88e5')
+    layers.append(('#64b5f6', [rect(40, 60, 46, 3)]))
+    return layers
+
+
+def e_barrel():
+    """La caneca de aceite."""
+    layers = shape([(24, 92), (24, 14), (76, 14), (76, 92)], '#1e88e5')
+    layers.append(('#1565c0', [rect(24, 34, 52, 4), rect(24, 68, 52, 4)]))
+    layers += oval(50, 14, 26, 6, '#64b5f6', d=2)
+    layers.append(('#90caf9', [rect(30, 20, 4, 66)]))
+    return layers
+
+
+def e_boot():
+    """La bota de caucho para el barro."""
+    layers = shape([(30, 8), (58, 8), (58, 64), (90, 72), (92, 90), (28, 90)], '#2e3b33')
+    layers.append(('#455a50', [rect(34, 12, 4, 48)]))
+    layers.append(('#fbc02d', [rect(28, 84, 64, 4)]))
+    layers.append(('#4b5d52', [rect(30, 8, 28, 6)]))
+    return layers
+
+
+def e_music():
+    """Notas musicales."""
+    return [(OUTLINE, [ellipse(28, 76, 12, 9, -20), ellipse(72, 66, 12, 9, -20), rect(34, 18, 7, 58), rect(78, 10, 7, 58), poly(34, 18, 85, 8, 85, 22, 34, 32)]),
+            ('#5e35b1', [ellipse(28, 76, 9.6, 6.6, -20), ellipse(72, 66, 9.6, 6.6, -20), rect(35.6, 20, 3.8, 56), rect(79.6, 12, 3.8, 56), poly(35.6, 20, 83.4, 10.4, 83.4, 20, 35.6, 29.6)])]
+
+
+def e_fishing():
+    """La caña de pescar con el pescado picando."""
+    layers = bar(10, 90, 66, 10, 3, '#8d6e63')
+    layers.append((OUTLINE, [rib(66, 10, 76, 48, 1.2)]))
+    layers += oval(14, 84, 5, 5, '#455a64', d=1.6)
+    fish = e_fish()
+    return layers + scale_layers(fish, 0.48, 46, 50)
+
+
+def scale_layers(layers, s, dx, dy):
+    """Encoge unas capas (para dibujar un ícono dentro de otro)."""
+    import re
+    def fix(d):
+        nums = re.split(r'(-?\d+(?:\.\d+)?)', d)
+        out, k = [], 0
+        for tok in nums:
+            if re.fullmatch(r'-?\d+(?:\.\d+)?', tok):
+                v = float(tok)
+                out.append(f'{(v * s + (dx if k % 2 == 0 else dy)):.2f}')
+                k += 1
+            else:
+                out.append(tok)
+        return ''.join(out)
+    return [(c, [fix(d) for d in ds]) for c, ds in layers]
+
+
+def e_shower():
+    """La ducha con su chorro."""
+    layers = bar(20, 94, 20, 20, 4, '#90a4ae') + bar(20, 20, 50, 20, 4, '#90a4ae')
+    layers += [(OUTLINE, ['M 34 40 Q 34 24 50 24 Q 66 24 66 40 Z']), ('#b0bec5', ['M 36.4 38 Q 36.4 26.4 50 26.4 Q 63.6 26.4 63.6 38 Z'])]
+    return layers + rain_drops([(42, 48), (52, 48), (62, 48), (46, 66), (58, 66), (52, 82)])
+
+
+def e_ice():
+    """Los cubos de hielo."""
+    layers = []
+    for x, y, s in ((14, 40, 36), (50, 24, 36), (36, 56, 34)):
+        layers += shape([(x, y), (x + s, y - 4), (x + s + 4, y + s - 4), (x + 4, y + s)], '#b3e5fc', 2)
+        layers.append(('#e1f5fe', [poly(x + 4, y + 3, x + 14, y + 2, x + 6, y + 14)]))
+    return layers
+
+
+def e_window():
+    """La ventana de cuatro vidrios."""
+    layers = shape([(14, 10), (86, 10), (86, 90), (14, 90)], '#8d6e63')
+    layers.append(('#b3e5fc', [rect(20, 16, 27, 33), rect(53, 16, 27, 33), rect(20, 55, 27, 29), rect(53, 55, 27, 29)]))
+    layers.append(('#e1f5fe', [poly(22, 30, 34, 18, 38, 18, 22, 34), poly(55, 30, 67, 18, 71, 18, 55, 34)]))
+    return layers
+
+
+def e_cross():
+    """La cruz."""
+    return shape([(42, 6), (58, 6), (58, 28), (80, 28), (80, 44), (58, 44), (58, 94), (42, 94), (42, 44), (20, 44), (20, 28), (42, 28)], '#8d5a32') + [('#a87447', [rect(46, 10, 3, 80)])]
+
+
+def e_palette():
+    """La paleta de pintor."""
+    body = 'M 50 8 Q 92 8 94 46 Q 94 70 74 70 Q 62 70 64 82 Q 64 94 46 92 Q 6 88 6 50 Q 8 8 50 8 Z'
+    layers = [(OUTLINE, [body]), ('#d7a86e', ['M 50 10.6 Q 89.6 10.6 91.4 46 Q 91.4 67.4 74 67.4 Q 59.4 67.4 61.4 82 Q 61.4 91.4 46 89.4 Q 8.6 85.6 8.6 50 Q 10.6 10.6 50 10.6 Z'])]
+    for x, y, c in ((30, 30, '#e53935'), (52, 22, '#fdd835'), (74, 32, '#1e88e5'), (22, 54, '#43a047'), (32, 74, '#8e24aa')):
+        layers += oval(x, y, 7, 6, c, d=1.6)
+    layers.append(('#f5ead6', [ellipse(70, 52, 6, 5)]))
+    return layers
+
+
+def e_windsock():
+    """El pez de tela en su palo (la manga de viento)."""
+    layers = bar(12, 94, 12, 8, 3, '#8d6e63')
+    layers += [(OUTLINE, ['M 14 14 Q 50 6 80 22 L 96 14 L 90 34 L 96 52 L 80 44 Q 50 54 14 44 Z']), ('#e53935', ['M 16 16.6 Q 50 9 79 24.6 L 92 18 L 87.4 34 L 92 48 L 79 41.6 Q 50 51 16 41.4 Z'])]
+    layers.append(('#ffffff', [circle(26, 26, 4.6), rib(40, 16, 44, 44, 2), rib(56, 16, 60, 44, 2)]))
+    layers.append(('#263238', [circle(26, 26, 2.4)]))
+    return layers
+
+
+def e_briefcase():
+    """El maletín."""
+    layers = [(OUTLINE, [rect(36, 14, 28, 16)]), ('#fff8ec', [rect(40, 18, 20, 10)])]
+    layers += shape([(8, 28), (92, 28), (92, 88), (8, 88)], '#8d5a32')
+    layers.append(('#6d4224', [rect(8, 50, 84, 4)]))
+    layers += shape([(44, 46), (56, 46), (56, 58), (44, 58)], '#fbc02d', 1.6)
+    return layers
+
+
+
+# ---------- Emojis propios: personas (con los cinco tonos de piel) y banderas (v4.3) ----------
+
+SKIN = {None: '#efbd85', 1: '#f3d0b0', 2: '#e2b48a', 3: '#c68642', 4: '#8d5524', 5: '#5c3a21'}
+HAIR_DARK, HAIR_GRAY, HAIR_WHITE = '#3e2723', '#9e9e9e', '#eeeeee'
+
+
+def bust(skin, kind='person', extra=None, hair=None):
+    """Una persona de medio cuerpo, de frente. kind: woman, man, person, old_man, old_woman, older, beard.
+    extra: farmer (sombrero y espiga), cook (gorro), office (corbata), pilot (gorra), worker (casco)."""
+    old = kind in ('old_man', 'old_woman', 'older')
+    hair = hair or (HAIR_GRAY if old else '#5d4037' if kind == 'woman' else HAIR_DARK)
+    shirt = {'woman': '#e91e63', 'man': '#1e88e5', 'person': '#43a047', 'old_man': '#8d6e63', 'old_woman': '#7e57c2', 'older': '#00897b', 'beard': '#f57c00'}[kind]
+    if extra == 'farmer':
+        shirt = '#fafafa'
+    if extra == 'cook':
+        shirt = '#fafafa'
+    if extra in ('office', 'pilot'):
+        shirt = '#263238'
+    if extra == 'worker':
+        shirt = '#ff7043'
+    feat = '#2b1d14' if skin not in (SKIN[4], SKIN[5]) else '#140a05'
+    if hair == HAIR_DARK and skin in (SKIN[4], SKIN[5]):
+        hair = '#1a0f0a'
+    layers = []
+    if kind == 'woman' and extra != 'cook':
+        layers += [(OUTLINE, ['M 22 62 Q 18 14 50 12 Q 82 14 78 62 Z']), (hair, ['M 24.4 60 Q 21 16.6 50 14.6 Q 79 16.6 75.6 60 Z'])]
+    if kind == 'old_woman':
+        layers += oval(50, 12, 10, 8, hair, d=2)
+    layers += [(OUTLINE, ['M 8 98 Q 8 70 34 66 L 66 66 Q 92 70 92 98 Z']), (shirt, ['M 10.6 98 Q 11 72.4 34.4 68.4 L 65.6 68.4 Q 89 72.4 89.4 98 Z'])]
+    layers += shape([(42, 70), (42, 58), (58, 58), (58, 70)], skin, 1.8)
+    if extra == 'office':
+        layers.append(('#fafafa', [poly(40, 68, 60, 68, 50, 90)]))
+        layers.append(('#c62828', [poly(47, 68, 53, 68, 54, 74, 52, 90, 48, 90, 46, 74)]))
+    if extra == 'pilot':
+        layers.append(('#fafafa', [poly(42, 68, 58, 68, 50, 82)]))
+        layers.append(('#fbc02d', [rect(14, 86, 14, 3), rect(72, 86, 14, 3)]))
+    if extra == 'farmer':
+        layers.append(('#795548', [rect(30, 68, 4, 30), rect(66, 68, 4, 30)]))
+    if extra == 'worker':
+        layers.append(('#fff176', [rect(22, 80, 56, 4), rect(30, 68, 4, 30), rect(66, 68, 4, 30)]))
+    if kind == 'person':
+        layers += [(OUTLINE, ['M 24 46 Q 20 14 50 14 Q 80 14 76 46 Z']), (hair, ['M 26.4 44 Q 23 16.6 50 16.6 Q 77 16.6 73.6 44 Z'])]
+    layers += oval(50, 40, 21, 24, skin)
+    layers += oval(29, 42, 3, 5, skin, d=1.6) + oval(71, 42, 3, 5, skin, d=1.6)
+    if kind in ('woman',):
+        layers.append((hair, ['M 28 36 Q 28 14 50 14 Q 72 14 72 36 Q 62 24 50 26 Q 38 24 28 36 Z']))
+    elif kind in ('man', 'beard'):
+        layers += [(OUTLINE, ['M 27 38 Q 26 13 50 13 Q 74 13 73 38 Q 66 22 50 23 Q 34 22 27 38 Z']), (hair, ['M 29 34 Q 29 15.4 50 15.4 Q 71 15.4 71 34 Q 64 21 50 21 Q 36 21 29 34 Z'])]
+    elif kind == 'person':
+        layers.append((hair, ['M 29 34 Q 30 16 50 16 Q 70 16 71 34 Q 60 22 46 26 Q 36 26 29 34 Z']))
+    elif kind == 'old_man':
+        layers += [(OUTLINE, [ellipse(29, 32, 5, 9), ellipse(71, 32, 5, 9)]), (hair, [ellipse(29, 32, 3.4, 7.4), ellipse(71, 32, 3.4, 7.4)])]
+        layers.append((tone(skin, 0.85), [rib(42, 24, 58, 24, 1.2), rib(44, 28, 56, 28, 1.2)]))
+    elif kind == 'old_woman':
+        layers.append((hair, ['M 28 38 Q 26 16 50 16 Q 74 16 72 38 Q 66 24 50 24 Q 34 24 28 38 Z']))
+    elif kind == 'older':
+        layers.append((hair, ['M 28 34 Q 28 17 50 17 Q 72 17 72 34 Q 62 26 50 25 Q 38 26 28 34 Z']))
+    if kind == 'beard':
+        layers += [(OUTLINE, ['M 28 42 Q 30 70 50 70 Q 70 70 72 42 Q 66 56 50 56 Q 34 56 28 42 Z']), (hair, ['M 30.4 45 Q 32 67.6 50 67.6 Q 68 67.6 69.6 45 Q 64 58.4 50 58.4 Q 36 58.4 30.4 45 Z'])]
+    layers.append((feat, [ellipse(42, 40, 2.2, 3), ellipse(58, 40, 2.2, 3)]))
+    if kind == 'beard':
+        layers.append(('#b0473d', [curve(43, 54, 50, 58, 57, 54, 2)]))
+    else:
+        layers.append((feat, [curve(42, 51, 50, 57, 58, 51, 1.8)]))
+        layers.append(((tone(skin, 0.8) if skin in (SKIN[4], SKIN[5]) else '#f48fb1'), [ellipse(35, 49, 3.4, 2.2), ellipse(65, 49, 3.4, 2.2)]))
+    if kind in ('old_woman', 'older'):
+        layers += [(OUTLINE, [circle(42, 40, 6.4), circle(58, 40, 6.4), rect(47, 39, 6, 1.6)]), ('#e3f2fd', [circle(42, 40, 4.8), circle(58, 40, 4.8)]), (feat, [ellipse(42, 40, 2, 2.6), ellipse(58, 40, 2, 2.6)])]
+    if extra == 'farmer':
+        layers += oval(50, 22, 34, 6, '#f2d78a', d=2) + [(OUTLINE, ['M 32 22 Q 32 2 50 2 Q 68 2 68 22 Z']), ('#f2d78a', ['M 34.4 21 Q 34.4 4.4 50 4.4 Q 65.6 4.4 65.6 21 Z']), ('#8d6e63', [rect(34, 16, 32, 4)])]
+        layers += bar(84, 98, 90, 60, 1.6, '#c9a227')
+        layers += [(OUTLINE, [ellipse(90, 56, 5, 10, 8)]), ('#e8c34a', [ellipse(90, 56, 3.4, 8.4, 8)]), ('#c9a227', [rib(88, 50, 92, 62, 1)])]
+    if extra == 'cook':
+        layers += [(OUTLINE, [circle(36, 12, 11), circle(50, 7, 12), circle(64, 12, 11), rect(32, 12, 36, 14)]), ('#fafafa', [circle(36, 12, 9), circle(50, 7, 10), circle(64, 12, 9), rect(34.4, 12, 31.2, 11.6)])]
+    if extra == 'pilot':
+        layers += [(OUTLINE, ['M 26 24 Q 28 6 50 6 Q 72 6 74 24 Z', rect(26, 22, 48, 6)]), ('#263238', ['M 28.4 22.4 Q 30 8.4 50 8.4 Q 70 8.4 71.6 22.4 Z']), ('#111111', [rect(28, 23.4, 44, 3.2)]), ('#fbc02d', [ellipse(50, 15, 4, 3)])]
+    if extra == 'worker':
+        layers += [(OUTLINE, ['M 24 26 Q 24 4 50 4 Q 76 4 76 26 Z', rect(20, 23, 60, 6)]), ('#fdd835', ['M 26.4 24 Q 26.4 6.4 50 6.4 Q 73.6 6.4 73.6 24 Z', rect(22, 24.4, 56, 3.2)]), ('#fbc02d', [rect(47, 6, 6, 18)])]
+    return layers
+
+
+def curly(skin, hair=HAIR_DARK):
+    """La mujer de pelo crespo."""
+    puffs = [(28, 30), (34, 18), (46, 12), (58, 12), (68, 18), (74, 30), (76, 44), (24, 44), (26, 58), (74, 58)]
+    layers = [(OUTLINE, [circle(x, y, 11) for x, y in puffs]), (hair, [circle(x, y, 9) for x, y in puffs])]
+    return layers + _curly_rest(skin, hair)
+
+
+def _curly_rest(skin, hair):
+    feat = '#2b1d14' if skin not in (SKIN[4], SKIN[5]) else '#140a05'
+    base = [(OUTLINE, ['M 8 98 Q 8 70 34 66 L 66 66 Q 92 70 92 98 Z']), ('#ffb300', ['M 10.6 98 Q 11 72.4 34.4 68.4 L 65.6 68.4 Q 89 72.4 89.4 98 Z'])]
+    base += shape([(42, 70), (42, 58), (58, 58), (58, 70)], skin, 1.8)
+    base += oval(50, 40, 21, 24, skin)
+    base.append((hair, [circle(36, 22, 7), circle(48, 18, 7), circle(60, 20, 7), circle(66, 28, 5)]))
+    base.append((feat, [ellipse(42, 40, 2.2, 3), ellipse(58, 40, 2.2, 3), curve(42, 51, 50, 57, 58, 51, 1.8)]))
+    base.append(((tone(skin, 0.8) if skin in (SKIN[4], SKIN[5]) else '#f48fb1'), [ellipse(35, 49, 3.4, 2.2), ellipse(65, 49, 3.4, 2.2)]))
+    return base
+
+
+def standing(skin=SKIN[None]):
+    """Una persona de pie, de cuerpo entero."""
+    layers = shape([(36, 94), (38, 60), (62, 60), (64, 94), (52, 94), (50, 72), (48, 94)], '#3949ab', 1.8)
+    layers += shape([(34, 64), (32, 32), (68, 32), (66, 64)], '#43a047')
+    layers += bar(32, 36, 24, 62, 6, '#43a047') + bar(68, 36, 76, 62, 6, '#43a047')
+    layers += oval(24, 64, 4, 4, skin, d=1.6) + oval(76, 64, 4, 4, skin, d=1.6)
+    layers += oval(50, 18, 12, 13, skin)
+    layers.append((HAIR_DARK, ['M 38 16 Q 38 4 50 4 Q 62 4 62 16 Q 56 10 50 11 Q 44 10 38 16 Z']))
+    layers.append(('#2b1d14', [circle(45, 18, 1.4), circle(55, 18, 1.4), curve(46, 23, 50, 26, 54, 23, 1.2)]))
+    return layers
+
+
+def e_cowboy():
+    """La cara sonriente con sombrero llanero."""
+    layers = oval(50, 58, 34, 34, '#fdd835')
+    layers += oval(50, 30, 46, 8, '#a1693f') + [(OUTLINE, ['M 28 30 Q 28 4 50 4 Q 72 4 72 30 Z']), ('#a1693f', ['M 30.4 28.6 Q 30.4 6.4 50 6.4 Q 69.6 6.4 69.6 28.6 Z']), ('#5d4037', [rect(30, 22, 40, 4)])]
+    layers.append(('#5d4037', [ellipse(38, 54, 3, 4.4), ellipse(62, 54, 3, 4.4), 'M 32 66 Q 50 86 68 66 Q 50 76 32 66 Z']))
+    return layers
+
+
+def hair_tuft(color, curly_hair=False):
+    if curly_hair:
+        puffs = [(30, 40), (42, 30), (56, 30), (70, 40), (36, 54), (50, 46), (64, 54)]
+        return [(OUTLINE, [circle(x, y, 12) for x, y in puffs]), (color, [circle(x, y, 10) for x, y in puffs])]
+    return [(OUTLINE, ['M 16 80 Q 10 20 50 18 Q 90 20 84 80 Q 74 44 50 44 Q 26 44 16 80 Z']), (color, ['M 19 74 Q 14 22.6 50 20.6 Q 86 22.6 81 74 Q 72 41.4 50 41.4 Q 28 41.4 19 74 Z'])]
+
+
+def e_hair_white():
+    """El pelo blanco."""
+    return hair_tuft(HAIR_WHITE)
+
+
+def e_hair_curly():
+    """El pelo crespo."""
+    return hair_tuft(HAIR_DARK, True)
+
+
+def flag_frame(inner):
+    return [(OUTLINE, [rect(6, 20, 88, 60)])] + inner
+
+
+def e_flag_co():
+    """La bandera de Colombia."""
+    return flag_frame([('#fcd116', [rect(8, 22, 84, 28)]), ('#003893', [rect(8, 50, 84, 14)]), ('#ce1126', [rect(8, 64, 84, 14)])])
+
+
+def e_flag_gb():
+    """La bandera del Reino Unido."""
+    return flag_frame([('#012169', [rect(8, 22, 84, 56)]),
+                       ('#ffffff', [poly(8, 22, 16, 22, 92, 72, 92, 78, 84, 78, 8, 28), poly(92, 22, 84, 22, 8, 72, 8, 78, 16, 78, 92, 28)]),
+                       ('#c8102e', [poly(8, 22, 11, 22, 92, 75, 92, 78, 89, 78, 8, 25), poly(92, 22, 89, 22, 8, 75, 8, 78, 11, 78, 92, 25)]),
+                       ('#ffffff', [rect(42, 22, 16, 56), rect(8, 41, 84, 18)]), ('#c8102e', [rect(45, 22, 10, 56), rect(8, 44, 84, 12)])])
+
+
+def e_flag_br():
+    """La bandera de Brasil."""
+    return flag_frame([('#009c3b', [rect(8, 22, 84, 56)]), ('#ffdf00', [poly(50, 26, 88, 50, 50, 74, 12, 50)]), ('#002776', [circle(50, 50, 14)]),
+                       ('#ffffff', [curve(37, 47, 50, 42, 63, 52, 2)])])
+
+
+def e_flag_fr():
+    """La bandera de Francia."""
+    return flag_frame([('#0055a4', [rect(8, 22, 28, 56)]), ('#ffffff', [rect(36, 22, 28, 56)]), ('#ef4135', [rect(64, 22, 28, 56)])])
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -7568,6 +9053,26 @@ def draw_glyph(paths):
     return pen.glyph()
 
 
+# ---------- Emojis propios (v4.3) ----------
+# Los emojis que usa el juego (en textos, botones y avisos) se dibujan aquí con su mismo carácter: la fuente va
+# primero en la lista de fuentes, así que el navegador usa estos dibujos y no los del teléfono. Cada entrada es
+# (secuencia, dibujo); las secuencias de varias partes (tono de piel, unión, banderas) se arman con ligaduras.
+EMOJI = []
+
+
+def emoji(seq, make):
+    EMOJI.append((seq, make))
+
+
+# Las partes que no se ven solas: el selector de emoji, la unión y los tonos de piel (cada uno distinto, para
+# que las ligaduras distingan 👩🏽 de 👩🏾) y las letras de las banderas.
+INVISIBLE = {0xFE0F: 'vs16', 0x200D: 'zwj', **{0x1F3FB + i: f'tone{i + 1}' for i in range(5)}, **{0x1F1E6 + i: f'ri_{chr(65 + i)}' for i in range(26)}}
+
+
+def emoji_name(seq):
+    return 'emo_' + '_'.join(f'{ord(c):04X}' for c in seq if ord(c) != 0xFE0F)
+
+
 def build():
     glyph_order = ['.notdef', 'space']
     glyphs = {'.notdef': TTGlyphPen(None).glyph(), 'space': TTGlyphPen(None).glyph()}
@@ -7593,6 +9098,41 @@ def build():
                 palette.append(c)
             colr[base].append((lname, palette.index(c)))
 
+    # Emojis propios: un glifo por secuencia; los de un solo carácter, directo en el cmap; los demás, por ligadura.
+    for code, gname in INVISIBLE.items():
+        glyph_order.append(gname)
+        glyphs[gname] = TTGlyphPen(None).glyph()
+        metrics[gname] = (0, 0)
+        cmap[code] = gname
+    ligatures = []
+    for seq, make in EMOJI:
+        base = emoji_name(seq)
+        if base in glyphs:
+            continue
+        layers = make()
+        glyph_order.append(base)
+        glyphs[base] = draw_glyph([d for _, ds in layers for d in ds])
+        metrics[base] = (ADVANCE, 0)
+        colr[base] = []
+        for i, (color, ds) in enumerate(layers):
+            lname = f'{base}.{i}'
+            glyph_order.append(lname)
+            glyphs[lname] = draw_glyph(ds)
+            metrics[lname] = (ADVANCE, 0)
+            c = color_tuple(color)
+            if c not in palette:
+                palette.append(c)
+            colr[base].append((lname, palette.index(c)))
+        parts = [ord(c) for c in seq if ord(c) != 0xFE0F]
+        if len(parts) == 1:
+            cmap[parts[0]] = base
+        else:
+            ligatures.append((seq, base))
+    for seq, base in ligatures:
+        for c in seq:
+            if ord(c) not in cmap:
+                raise SystemExit(f'falta el emoji suelto {c} ({ord(c):X}) para la secuencia {seq}')
+
     fb = FontBuilder(UPM, isTTF=True)
     fb.setupGlyphOrder(glyph_order)
     fb.setupCharacterMap(cmap)
@@ -7607,13 +9147,27 @@ def build():
     fb.setupNameTable({'familyName': 'MiTierrita Icons', 'styleName': 'Regular'})
     fb.setupOS2(sTypoAscender=TOP, sTypoDescender=-descent, usWinAscent=TOP, usWinDescent=descent)
     fb.setupPost()
+    if ligatures:
+        from fontTools.feaLib.builder import addOpenTypeFeaturesFromString
+        rules = []
+        # Con y sin el selector de emoji (FE0F), que unos textos traen y otros no.
+        variants = {}
+        for seq, base in ligatures:
+            variants.setdefault(seq, base)
+            variants.setdefault(seq.replace('\ufe0f', ''), base)
+        for seq, base in sorted(variants.items(), key=lambda x: -len(x[0])):
+            names = [cmap[ord(c)] for c in seq]
+            if len(names) > 1:
+                rules.append(f"    sub {' '.join(names)} by {base};")
+        fea = 'languagesystem DFLT dflt;\nlanguagesystem latn dflt;\nfeature ccmp {\n' + '\n'.join(rules) + '\n} ccmp;\n'
+        addOpenTypeFeaturesFromString(fb.font, fea)
     fb.font['COLR'] = buildCOLR(colr, version=0)
     fb.font['CPAL'] = buildCPAL([palette])
     out = ROOT / 'src/assets/mitierrita-icons.woff2'
     out.parent.mkdir(parents=True, exist_ok=True)
     fb.font.flavor = 'woff2'
     fb.save(out)
-    print(f'{out.relative_to(ROOT)}: {out.stat().st_size} bytes, {len(ICONS)} íconos')
+    print(f'{out.relative_to(ROOT)}: {out.stat().st_size} bytes, {len(ICONS)} íconos, {len(EMOJI)} emojis')
 
 
 def preview():
@@ -7647,6 +9201,64 @@ def icons_js():
         "export const ICON_FONT = 'MiTierrita Icons';\n"
     )
     (ROOT / 'src/data/icons.js').write_text(src)
+
+
+# Los emojis que el juego dibuja a su manera: cada uno con su mismo carácter (o secuencia), así el texto no cambia.
+_ALBUM = {name: make for code, name, make in ICONS}
+for _seq, _make in [
+    ('🏅', e_medal), ('⭐', e_star), ('💰', e_money), ('✅', e_check), ('🏁', e_flag_finish), ('🔒', e_lock), ('⏸️', e_pause), ('⛔', e_no),
+    ('🗺️', e_map), ('🔬', e_micro), ('⚡', e_bolt), ('👑', e_crown), ('🏆', e_trophy), ('🔁', e_cycle), ('🏗️', e_crane), ('📦', e_box),
+    ('🚪', e_door), ('⚠️', e_warning), ('🔄', e_refresh), ('💡', e_bulb), ('⏰', e_alarm), ('🥇', e_gold), ('🥈', e_silver), ('🥉', e_bronze),
+    ('🚩', e_flag_red), ('🔥', e_fire), ('🎯', e_target), ('⚙️', e_gear), ('📋', e_clipboard), ('📖', e_book), ('⏳', e_hourglass), ('🔗', e_link),
+    ('📅', e_calendar), ('📍', e_pin), ('🛠️', e_tools), ('🅿️', e_parking), ('🕐', e_clock), ('🔴', e_red_dot), ('⏱', e_stopwatch), ('⏩', e_fast),
+    ('ℹ️', e_info), ('🌐', e_globe), ('📶', e_signal), ('💸', e_money_wings), ('⏹️', e_stop_sq), ('🛒', e_cart), ('🗑️', e_trash), ('❓', e_question),
+    ('📱', e_phone), ('👤', e_person), ('✉️', e_mail), ('🎧', e_headphones), ('🔤', e_abc), ('📜', e_scroll), ('🎮', e_gamepad), ('👀', e_eyes),
+    ('🐾', e_paws), ('🛍️', e_bags), ('🎒', e_backpack), ('🔊', e_megaphone), ('🔇', e_mute), ('🔕', e_bell_off), ('🔍', e_magnifier), ('🔧', e_wrench),
+    ('💬', e_speech), ('📰', e_newspaper), ('✨', e_sparkles), ('🎁', e_gift), ('🎀', e_bow), ('🎗️', e_ribbon), ('🎖️', e_military_medal), ('🎫', e_ticket),
+    ('🧭', e_compass), ('🧪', e_flask), ('🧵', e_thread), ('🧶', e_yarn), ('✂️', e_scissors), ('🪡', e_needle), ('⛏️', e_pick), ('🪓', e_axe),
+    ('🪜', e_ladder), ('🪢', e_knot), ('🪃', e_boomerang), ('🔪', e_knife), ('🗜️', e_clamp), ('🪤', e_trap), ('🪧', e_sign), ('🚧', e_works),
+    ('🚦', e_traffic), ('🛣️', e_road), ('🕳️', e_hole), ('🤝', e_handshake), ('🤲', e_hands), ('👃', e_nose), ('🦺', e_vest),
+    ('🚙', e_willys), ('🚚', e_truck), ('🚛', e_tractomula), ('🚜', e_tractor), ('🚤', e_speedboat), ('🛥️', e_speedboat), ('🛻', e_pickup), ('🛺', e_mototaxi),
+    ('✈️', e_plane), ('🐜', e_ant), ('🐋', e_whale), ('🐟', e_fish), ('🐈', e_cat), ('🐦', e_bird), ('🪲', e_beetle), ('🪰', e_fly), ('🦠', e_microbe), ('🪱', e_worm),
+    ('☀️', e_sun), ('🌧️', e_rain), ('🌦️', e_sun_rain), ('🌤️', e_sun_cloud), ('🌙', e_moon), ('❄️', e_snow), ('🌡️', e_thermo), ('🌬️', e_wind),
+    ('🌀', e_cyclone), ('💧', e_drop), ('🌊', e_wave), ('🌴', e_palm), ('🌳', e_tree), ('🌺', e_hibiscus), ('🌱', e_seedling), ('🍃', e_leaves),
+    ('🍂', e_fallen_leaves), ('🍄', e_mushroom), ('🎋', e_guadua), ('🪵', e_log), ('🧱', e_brick), ('🪨', e_rock), ('🏨', e_hotel), ('🏭', e_factory),
+    ('🏚️', e_old_house), ('🌉', e_bridge), ('🌇', e_city_sunset), ('⛰️', e_mountain), ('🌄', e_sunrise_mtn), ('🧈', e_butter), ('🍯', e_honey), ('🍮', e_flan),
+    ('🍳', e_egg_pan), ('🫓', e_arepa), ('🫘', e_beans), ('🥩', e_meat), ('🍽️', e_dinner), ('🛏️', e_bed), ('🛢️', e_barrel), ('🥾', e_boot),
+    ('🎵', e_music), ('🎣', e_fishing), ('🚿', e_shower), ('🧊', e_ice), ('🪟', e_window), ('✝️', e_cross), ('🎨', e_palette), ('🎏', e_windsock),
+    ('💼', e_briefcase), ('🤠', e_cowboy), ('🧍', standing), ('🦳', e_hair_white), ('🦱', e_hair_curly),
+    ('🇨🇴', e_flag_co), ('🇬🇧', e_flag_gb), ('🇧🇷', e_flag_br), ('🇫🇷', e_flag_fr),
+]:
+    emoji(_seq, _make)
+for _seq, _name in [
+    ('🚌', 'chiva_bus'), ('🐴', 'mula'), ('☕', 'tinto'), ('🐄', 'normando'), ('🐮', 'normando'), ('🐂', 'sanmartinero'), ('🐎', 'caballo_criollo'),
+    ('🌽', 'choclo'), ('🦜', 'guacamaya'), ('🐬', 'tonina'), ('🐢', 'tortuga_marina'), ('🌾', 'rice_plant'), ('🍫', 'milk_chocolate'), ('🧀', 'cheese'),
+    ('🍒', 'cherry'), ('🍲', 'mute'), ('🛶', 'potrillo'), ('⛴️', 'rio_meta'), ('🛳️', 'puerto_buenaventura'), ('🚡', 'chicamocha'), ('🛖', 'tambo'),
+    ('⛪', 'plaza_pueblo'), ('🏛️', 'ibague_musical'), ('🏜️', 'desierto_tatacoa'), ('🌵', 'cardon'), ('🌅', 'atardecer_llanero'), ('🏊', 'hoyos_tatacoa'),
+    ('🔭', 'observatorio'), ('🎭', 'pelazon'), ('🪁', 'cometas'), ('🎉', 'fiesta_sanpedro'), ('🥁', 'tambora'), ('💃', 'currulao'), ('💃🏽', 'currulao'),
+    ('🧺', 'canasto'), ('🏺', 'vasija_guane'), ('👒', 'aguadeno'), ('♨️', 'termales'),
+]:
+    emoji(_seq, _ALBUM[_name])
+
+# Las personas: cada base con los cinco tonos de piel, y los oficios y peinados unidos con ZWJ.
+_BASES = {'👩': 'woman', '👨': 'man', '🧑': 'person', '👴': 'old_man', '👵': 'old_woman', '🧓': 'older', '🧔': 'beard'}
+_TONES = [('', None)] + [(chr(0x1F3FB + i), i + 1) for i in range(5)]
+_EXTRAS = {'🌾': 'farmer', '🍳': 'cook', '💼': 'office', '✈️': 'pilot', '🦳': 'white', '🦱': 'curly'}
+for _b, _kind in _BASES.items():
+    for _t, _k in _TONES:
+        emoji(_b + _t, (lambda kind=_kind, k=_k: bust(SKIN[k], kind)))
+        if _b in ('👩', '👨', '🧑'):
+            for _e, _x in _EXTRAS.items():
+                if _x == 'white':
+                    make = (lambda kind=_kind, k=_k: bust(SKIN[k], kind, hair=HAIR_WHITE))
+                elif _x == 'curly':
+                    make = (lambda k=_k: curly(SKIN[k]))
+                else:
+                    make = (lambda kind=_kind, k=_k, x=_x: bust(SKIN[k], kind, x))
+                emoji(_b + _t + '‍' + _e, make)
+for _t, _k in _TONES:
+    emoji('👷' + _t, (lambda k=_k: bust(SKIN[k], 'man', 'worker')))
+    emoji('🧍' + _t, (lambda k=_k: standing(SKIN[k])))
 
 
 if __name__ == '__main__':
