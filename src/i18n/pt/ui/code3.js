@@ -170,4 +170,12 @@ export default {
   // v4.1.3: los viajes entre zonas
   'Se pasa a la otra zona enseguida, sin el viaje en el mapa.': 'Você passa para a outra zona na hora, sem a viagem no mapa.',
   'El Willys y la avioneta muestran el viaje en el mapa.': 'O Willys e o aviãozinho mostram a viagem no mapa.',
+  // v4.2: chivas más seguidas
+  '🚌 En {region} las chivas salen ahora cada {n} s.': '🚌 Em {region} as chivas agora saem a cada {n} s.',
+  '✅ Al máximo: una chiva cada 15 s.': '✅ No máximo: uma chiva a cada 15 s.',
+  'Una chiva cada {n} s': 'Uma chiva a cada {n} s',
+  '🚌 Chivas: cada {n} s': '🚌 Chivas: a cada {n} s',
+  'Salen más seguido y cada una lleva su parte: llega lo mismo por minuto, pero las estaciones no se quedan esperando.': 'Saem com mais frequência e cada uma leva sua parte: chega o mesmo por minuto, mas as estações não ficam esperando.',
+  'Se compran con el álbum de la región lleno.': 'Compram-se com o álbum da região completo.',
+  'Se compran después de reiniciar la región una vez.': 'Compram-se depois de reiniciar a região uma vez.',
 };

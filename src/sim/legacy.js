@@ -92,6 +92,7 @@ export function restartState(state, now = Date.now(), profile = null) {
   if (state.regions) next.regions = state.regions;
   // El segundo Willys de la región (v3.9) y su jornada (v3.10) se quedan.
   if (state.willys2) next.willys2 = true;
+  if (state.chivas) next.chivas = state.chivas; // las chivas más seguidas (v4.2)
   if (state.workLevel) next.workLevel = state.workLevel;
   // La región ya se terminó (v3.8): sus eventos siguen saliendo en todas sus zonas.
   next.regionDone = Boolean(state.regionDone || state.zones[region.zones.at(-1)]?.complete);

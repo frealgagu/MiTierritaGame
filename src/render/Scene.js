@@ -30,7 +30,7 @@ import { eventPenalty } from '../sim/events.js';
 import { EVENTS_BY_ID } from '../data/events.js';
 import { quoteUnlock } from '../sim/upgrades.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
-import { routeActive, routeCapacity } from '../sim/routes.js';
+import { routeActive, routeCapacity, tripTimeOf } from '../sim/routes.js';
 import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
 import { DayNight } from './DayNight.js';
 import { Weather } from './Weather.js';
@@ -583,7 +583,7 @@ export class Scene {
       rv.sign.visible = active;
       let pos = null;
       let reverse = false;
-      const f = st.phase === 'idle' ? 0 : st.t / (r.tripTime / 2);
+      const f = st.phase === 'idle' ? 0 : st.t / (tripTimeOf(state, r) / 2);
       if (active && rv.outgoing) {
         if (st.phase === 'idle') pos = 0;
         else if (st.phase === 'go' && f < 0.4) pos = f / 0.4;

@@ -25,7 +25,7 @@ import { COMPOST_VALUE, compostValueBoost, jeepCount, muleSpeedMult, saleValue }
 import { BY_CHILDREN, JOIN_FROM, PARENT, branchShare, consumers, zoneOf } from '../sim/chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { jeepResting } from '../sim/dispatch.js';
-import { routeActive, routeCapacity, routeRate, routeReserve, routeStations, stationImportRate } from '../sim/routes.js';
+import { routeActive, routeCapacity, routeRate, routeReserve, routeStations, stationImportRate, tripTimeOf } from '../sim/routes.js';
 import { capMult, speedMult } from '../sim/modifiers.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { dispatchMult } from '../sim/modifiers.js';
@@ -586,7 +586,7 @@ function routeInfo(routeId, station) {
       { key: 'rate', label: t('Lleva'), value: (s, l) => `${formatRate(routeRate(s, routeId, l))} ${imp.icon}/s`, next: (l, s) => formatRate(routeRate(s, routeId, l)) },
       { key: 'need', label: t('Gastan'), value: (s) => `${formatRate(need(s))} ${imp.icon}/s (${routeStations(s, routeId).length > 1 ? t('{n} estaciones', { n: routeStations(s, routeId).length }) : names(s)})` },
       { key: 'stock', label: t('Bodega de {zone}', { zone: ZONES_BY_ID[r.from].name }), value: (s) => `${formatAmount(s.zones[r.from].warehouse[r.product] ?? 0)} ${imp.icon}` },
-      { key: 'trip', label: t('Ida y vuelta'), value: () => `${r.tripTime} s` },
+      { key: 'trip', label: t('Ida y vuelta'), value: (s) => `${tripTimeOf(s, r)} s` },
     ],
     status: (s) => {
       const route = s.routes[routeId];

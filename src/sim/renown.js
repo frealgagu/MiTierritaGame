@@ -147,6 +147,33 @@ export function buyWillys2(profile, region) {
   return true;
 }
 
+// Chivas más seguidas (v4.2): por región, con Renombre. Primero cada 30 s (10 ⭐) y después cada 15 s (20 ⭐).
+// Como el segundo Willys, pide el álbum de la región lleno; además, haberla reiniciado al menos una vez.
+// Se guarda en la partida de la región (`chivas`: 30 o 15) y no se pierde al reiniciarla.
+export const CHIVA_STEPS = [
+  { every: 30, cost: 10 },
+  { every: 15, cost: 20 },
+];
+export const chivaEvery = (region) => region?.chivas ?? 60;
+
+export function quoteChivas(profile, region) {
+  const step = CHIVA_STEPS.find((s) => s.every < chivaEvery(region));
+  if (!region) return { ok: false, reason: 'region' };
+  if (!step) return { ok: false, reason: 'max' };
+  if (!albumDone(profile, region.region ?? 'cafetero')) return { ok: false, reason: 'album', ...step };
+  if (!(region.legacy?.resets >= 1)) return { ok: false, reason: 'restart', ...step };
+  if (!canPayRenown(profile, step.cost)) return { ok: false, reason: 'renown', ...step };
+  return { ok: true, ...step };
+}
+
+export function buyChivas(profile, region) {
+  const q = quoteChivas(profile, region);
+  if (!q.ok) return false;
+  profile.renown -= q.cost;
+  region.chivas = q.every;
+  return true;
+}
+
 // Mascotas (v3.12): gatos y loros que andan por el mapa de cada región, solo de adorno. Se compran con
 // Renombre en cada región, hasta un máximo. Los gatos, de vez en cuando, persiguen a los loros.
 export const PETS = {
