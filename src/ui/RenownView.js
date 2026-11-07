@@ -3,7 +3,7 @@
 // cuál se ve (empieza en la que se está jugando). El Renombre y las horas sin conexión son del jugador.
 import { PAGE_BONUS, albumOf } from '../data/album.js';
 import { DECOR } from '../data/decor.js';
-import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, PETS, WORK_COSTS, albumDone, buyPet, decorOf, petsOf, quotePet, buyOffline, buyWillys2, buyWork, quoteWillys2, quoteWork, workLevel, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
+import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, PETS, WORK_COSTS, albumDone, buyChivas, buyPet, chivaEvery, CHIVA_STEPS, quoteChivas, decorOf, petsOf, quotePet, buyOffline, buyWillys2, buyWork, quoteWillys2, quoteWork, workLevel, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
 import { EXTRA_BLOCKS, workBlocks } from '../sim/calendar.js';
 import { workSentence } from './calendar.js';
 import { openRegionStates, regionState } from '../sim/regions.js';
@@ -59,6 +59,10 @@ export class RenownView {
         const def = PETS[pet.dataset.pet];
         toast(t('{icon} ¡Un {pet} nuevo en {region}!', { icon: def.icon, pet: def.name.toLowerCase(), region: REGIONS_BY_ID[this.region].name }), 3000);
         this.onDecor(profileOf(this.game.state));
+        this.render();
+      }
+      if (e.target.closest('[data-chivas]') && buyChivas(profileOf(this.game.state), this.regionState())) {
+        toast(t('🚌 En {region} las chivas salen ahora cada {n} s.', { region: REGIONS_BY_ID[this.region].name, n: chivaEvery(this.regionState()) }), 3500);
         this.render();
       }
       const w2 = e.target.closest('[data-willys2]');
@@ -165,7 +169,7 @@ export class RenownView {
         return `<div class="sticker empty"><div class="big">${s.icon}</div><b>${s.name}</b><button class="btn ${q.ok ? 'buy' : ''}" data-sticker="${s.id}" ${q.ok ? '' : 'disabled'}>${t('Pegar')} · ⭐ ${s.cost}</button></div>`;
       })
       .join('');
-    return `${this.willysHtml(profile)}<div class="album-pages">${pages}</div><div class="album-head"><span>${page.icon} ${page.name}</span><span>${have} / ${page.stickers.length}${have === page.stickers.length ? ' ✅' : ` · ${t('llena: +{n} ⭐', { n: PAGE_BONUS })}`}</span></div><div class="album-grid">${cards}</div>`;
+    return `${this.willysHtml(profile)}${this.chivasHtml(profile)}<div class="album-pages">${pages}</div><div class="album-head"><span>${page.icon} ${page.name}</span><span>${have} / ${page.stickers.length}${have === page.stickers.length ? ' ✅' : ` · ${t('llena: +{n} ⭐', { n: PAGE_BONUS })}`}</span></div><div class="album-grid">${cards}</div>`;
   }
 
   logrosHtml() {
@@ -198,6 +202,18 @@ export class RenownView {
     return `<div class="logro"><div class="logro-head"><b>${t('🕐 Jornada en {region}: {n} h', { region: REGIONS_BY_ID[this.region].name, n: hours })}</b><span class="logro-stars">${steps}</span></div>
       <p>${workSentence(workBlocks(level), true)}. ${t('Fuera de la jornada las estaciones descansan.')}</p>
       <div class="bar"><div style="width:${(100 * hours) / 24}%"></div></div>${next}</div>`;
+  }
+
+  // Chivas más seguidas (v4.2): cada 30 s y luego cada 15 s, por región; cada una lleva su parte.
+  chivasHtml(profile) {
+    const every = chivaEvery(this.regionState());
+    const steps = CHIVA_STEPS.map((s) => (every <= s.every ? '★' : '☆')).join('');
+    const q = quoteChivas(profile, this.regionState());
+    const next = q.reason === 'max'
+      ? `<p>${t('✅ Al máximo: una chiva cada 15 s.')}</p>`
+      : `<button class="btn buy" data-chivas ${q.ok ? '' : 'disabled'}>${t('Una chiva cada {n} s', { n: q.every })} · ⭐ ${q.cost}</button>`;
+    return `<div class="logro"><div class="logro-head"><b>${t('🚌 Chivas: cada {n} s', { n: every })}</b><span class="logro-stars">${steps}</span></div>
+      <p>${t('Salen más seguido y cada una lleva su parte: llega lo mismo por minuto, pero las estaciones no se quedan esperando.')}${q.reason === 'album' ? ` ${t('Se compran con el álbum de la región lleno.')}` : q.reason === 'restart' ? ` ${t('Se compran después de reiniciar la región una vez.')}` : ''}</p>${next}</div>`;
   }
 
   // Horas sin conexión (v3.7): de 2 h a 24 h, 2 h por nivel.

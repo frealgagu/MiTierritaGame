@@ -170,4 +170,12 @@ export default {
   // v4.1.3: los viajes entre zonas
   'Se pasa a la otra zona enseguida, sin el viaje en el mapa.': 'You go straight to the other zone, without the trip on the map.',
   'El Willys y la avioneta muestran el viaje en el mapa.': 'The Willys and the small plane show the trip on the map.',
+  // v4.2: chivas más seguidas
+  '🚌 En {region} las chivas salen ahora cada {n} s.': '🚌 In {region} the chivas now leave every {n} s.',
+  '✅ Al máximo: una chiva cada 15 s.': '✅ Maxed out: one chiva every 15 s.',
+  'Una chiva cada {n} s': 'One chiva every {n} s',
+  '🚌 Chivas: cada {n} s': '🚌 Chivas: every {n} s',
+  'Salen más seguido y cada una lleva su parte: llega lo mismo por minuto, pero las estaciones no se quedan esperando.': "They leave more often and each one carries its share: the same amount arrives per minute, but the stations don't sit waiting.",
+  'Se compran con el álbum de la región lleno.': "They're bought once the region's album is full.",
+  'Se compran después de reiniciar la región una vez.': 'They can be bought after restarting the region once.',
 };

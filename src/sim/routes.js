@@ -32,17 +32,23 @@ export function stationImportRate(state, r, id, level = state.stations[id].level
   return stationRate(STATIONS_BY_ID[id], level) * speedMult(state, id) * routeImport(r, id).perCycle;
 }
 
+// Chivas más seguidas (v4.2): con Renombre, por región, cada 30 s y luego cada 15 s (en vez de cada 60 s).
+// Cada una lleva la parte que le toca (la mitad o un cuarto): llega lo mismo por minuto, pero más seguido.
+// En el tablero de un evento no cambia nada (allí las rutas van con su estación).
+export const chivaSpeed = (state) => (state.event ? 1 : state.chivas === 15 ? 4 : state.chivas === 30 ? 2 : 1);
+export const tripTimeOf = (state, r) => r.tripTime / chivaSpeed(state);
+
 // Unidades por viaje: a igual nivel que las estaciones que abastece, un 25 % más de lo que estas
 // consumen en un viaje de ida y vuelta (contando sus investigaciones, como la carga de las mulas).
 export function routeCapacity(state, routeId, level = state.routes[routeId].level) {
   const r = ROUTES_BY_ID[routeId];
   const perSecond = routeStations(state, routeId).reduce((n, id) => n + stationImportRate(state, r, id, level), 0);
-  return perSecond * r.tripTime * TRANSPORT_MARGIN;
+  return perSecond * tripTimeOf(state, r) * TRANSPORT_MARGIN;
 }
 
 // Unidades por segundo que puede mover la ruta.
 export function routeRate(state, routeId, level) {
-  return routeCapacity(state, routeId, level) / ROUTES_BY_ID[routeId].tripTime;
+  return routeCapacity(state, routeId, level) / tripTimeOf(state, ROUTES_BY_ID[routeId]);
 }
 
 // Cuánto le cabe todavía a una estación de destino.
@@ -89,7 +95,7 @@ export function stepRoute(state, routeId, dt, bus) {
   const r = ROUTES_BY_ID[routeId];
   const route = state.routes[routeId];
   if (!routeActive(state, routeId)) return;
-  const half = r.tripTime / 2;
+  const half = tripTimeOf(state, r) / 2;
 
   if (route.phase === 'idle') {
     const wh = state.zones[r.from].warehouse;
@@ -100,7 +106,7 @@ export function stepRoute(state, routeId, dt, bus) {
       return;
     }
     route.waited = stock > 0 ? route.waited + dt : 0;
-    if (stock >= want || (stock > 0 && route.waited >= r.maxWait)) {
+    if (stock >= want || (stock > 0 && route.waited >= r.maxWait / chivaSpeed(state))) {
       route.load = Math.min(stock, want);
       wh[r.product] = stock - route.load;
       if (wh[r.product] <= 1e-9) delete wh[r.product];

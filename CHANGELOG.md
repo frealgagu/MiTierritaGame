@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v4.2.0 — Chivas más seguidas
+- **🚌 Chivas cada 30 s y cada 15 s,** con Renombre, en cada región: primero **cada 30 s por 10 ⭐** y después **cada 15 s por 20 ⭐** (antes, una por minuto). Salen más seguido y cada una lleva su parte (la mitad o un cuarto): llega lo mismo por minuto, pero las estaciones no se quedan esperando la carga. Como el segundo Willys, se compran con el álbum de la región lleno, y además después de reiniciarla una vez; están en ⭐ Renombre › 📖 Álbum y se conservan al reiniciar.
+
 ## v4.1.3 — Viajes directos
 - **🚙 Viajes entre zonas,** nueva opción en el menú ⚙️: **🗺️ Con el viaje** (lo de siempre: el Willys y la avioneta en el mapa) o **⚡ Directo**, que pasa a la otra zona enseguida, sin el viaje. Vale para todos los viajes: al elegir una zona en la lista o en el mapa, y al pasar a la siguiente cuando se completa una zona. Viene con el viaje.
 

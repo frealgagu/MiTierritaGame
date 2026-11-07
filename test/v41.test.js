@@ -117,3 +117,43 @@ test('una zona «al máximo»: todo en 100, sus investigaciones y sus objetivos 
   s.research = s.research.filter((id) => id !== RESEARCH.find((r) => r.zone === 'chamba').id);
   assert.equal(zoneMaxed(s, 'chamba'), false, 'falta una investigación');
 });
+
+test('🚌 chivas más seguidas: con el álbum lleno y un reinicio, cada 30 s y luego 15 s, con el mismo flujo (v4.2)', async () => {
+  const { buyChivas, profileOf, quoteChivas } = await import('../src/sim/renown.js');
+  const { routeCapacity, routeRate, stepRoute, tripTimeOf } = await import('../src/sim/routes.js');
+  const { ROUTES_BY_ID } = await import('../src/data/routes.js');
+  const { ALBUM } = await import('../src/data/album.js');
+  const { restartState } = await import('../src/sim/legacy.js');
+  const s = createInitialState(0);
+  s.coins = 1e15;
+  for (const z of ['trapiche', 'lecheria']) {
+    s.zones[z].unlocked = true;
+    for (const id of ZONES_BY_ID[z].chain) s.stations[id] = createStationState();
+  }
+  for (const id of ZONES_BY_ID.finca.chain) unlockStation(s, id, bus);
+  const p = profileOf(s);
+  p.renown = 100;
+  assert.equal(quoteChivas(p, s).reason, 'album');
+  p.album = ALBUM.filter((pg) => pg.region === 'cafetero').flatMap((pg) => pg.stickers.map((x) => x.id));
+  assert.equal(quoteChivas(p, s).reason, 'restart');
+  s.legacy = { resets: 1 };
+  const rate = routeRate(s, 'panela');
+  const cap = routeCapacity(s, 'panela');
+  assert.equal(tripTimeOf(s, ROUTES_BY_ID.panela), 60);
+  assert.deepEqual([quoteChivas(p, s).every, quoteChivas(p, s).cost], [30, 10]);
+  assert.ok(buyChivas(p, s));
+  assert.equal(tripTimeOf(s, ROUTES_BY_ID.panela), 30);
+  assert.ok(Math.abs(routeCapacity(s, 'panela') - cap / 2) < 1e-9, 'la mitad por viaje');
+  assert.ok(Math.abs(routeRate(s, 'panela') - rate) < 1e-9, 'el mismo flujo');
+  assert.deepEqual([quoteChivas(p, s).every, quoteChivas(p, s).cost], [15, 20]);
+  assert.ok(buyChivas(p, s));
+  assert.equal(p.renown, 70);
+  assert.equal(tripTimeOf(s, ROUTES_BY_ID.panela), 15);
+  assert.ok(Math.abs(routeCapacity(s, 'panela') - cap / 4) < 1e-9, 'un cuarto por viaje');
+  assert.equal(quoteChivas(p, s).reason, 'max');
+  // En un evento no cambia.
+  assert.equal(tripTimeOf({ ...s, event: { id: 'broca' } }, ROUTES_BY_ID.panela), 60);
+  // Se conserva al reiniciar la región.
+  assert.equal(restartState(s).chivas, 15);
+  void stepRoute;
+});
