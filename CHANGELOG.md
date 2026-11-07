@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v4.3.2 — Borrar deslizando y eventos más justos
+- **🗑️ Borrar la partida ahora se hace deslizando** la perilla hasta el final de la barra; si se suelta antes, vuelve a su sitio y no pasa nada. Antes bastaban dos toques y hubo quien la borró sin querer.
+- **Eventos:** sin hacer nada ya no se gana la plata (en los de la feria y la Semana Santa se llegaba sola); el oro sigue igual. Y en los de la vía tapada (el derrumbe, la creciente, la inundación…) ahora llega siempre un hilito del producto, así que, dejándolo correr, se termina con bronce; las compras del evento siguen siendo lo que lo saca adelante.
+- Los eventos ya no llevan un número en el título.
+- **Viaje a otra región:** la avioneta aterriza en una pista junto a la última zona de la región, y de ahí sale el Willys (antes entraba desde el borde del mapa).
+- La bolsa de dinero 💰 es amarilla y la bandera de cuadros 🏁 tiene el mástil rojo.
+
 ## v4.3.1 — Bandas de colores y chivas por encima
 - **Partida 60:** con los reinicios al tope, la pantalla del segundo final sigue diciendo «Partida 60» (antes decía 61, aunque volver a empezar ya no cambia nada).
 - **La cadena cabe a lo ancho:** en los teléfonos angostos, las zonas con tres ramas ya no cortan la de la derecha ni lo que queda en las orillas.

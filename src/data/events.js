@@ -93,7 +93,7 @@ export const EVENTS = [
       { id: 'feria_batidora', icon: '🧈', name: 'Batidora', desc: 'La Mantequera y la Descremadora hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'churn', mult: 1.5 }, { type: 'stationSpeed', target: 'separator', mult: 1.5 }] },
       { id: 'feria_paila', icon: '🍯', name: 'Paila de cobre', desc: 'La Paila hace un 50 % más de arequipe.', cost: 550000, effect: { type: 'stationSpeed', target: 'arequipe_pot', mult: 1.5 } },
     ],
-    objective: { type: 'feria', kind: 'sold', items: { cheese: 90, butter: 90, arequipe: 120 }, medals: [615, 915] },
+    objective: { type: 'feria', kind: 'sold', items: { cheese: 90, butter: 90, arequipe: 120 }, medals: [615, 780] },
   },
   {
     id: 'derrumbe',
@@ -216,7 +216,7 @@ export const EVENTS = [
       { id: 'artesanal_hormas', icon: ICON.alpargatas, name: 'Hormas y ruecas', desc: 'La Hiladora y la Alpargatería hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'alpargata_shop', mult: 1.5 }, { type: 'stationSpeed', target: 'spinner', mult: 1.5 }] },
       { id: 'artesanal_prensa', icon: ICON.tobaccoBale, name: 'Prensa de tercios', desc: 'La Empacadora arma un 50 % más de tercios.', cost: 550000, effect: { type: 'stationSpeed', target: 'tercio_packer', mult: 1.5 } },
     ],
-    objective: { type: 'feria', kind: 'sold', items: { fique_sack: 90, alpargatas: 90, tobacco_bale: 120 }, medals: [615, 915] },
+    objective: { type: 'feria', kind: 'sold', items: { fique_sack: 90, alpargatas: 90, tobacco_bale: 120 }, medals: [615, 780] },
   },
   {
     id: 'creciente',
@@ -340,7 +340,7 @@ export const EVENTS = [
       { id: 'semana_calderos', icon: ICON.friedFish, name: 'Cuchillos y calderos', desc: 'La Fileteadora y la Fritanga hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'fish_fryer', mult: 1.5 }, { type: 'stationSpeed', target: 'fish_filleter', mult: 1.5 }] },
       { id: 'semana_fogones', icon: ICON.fishInCoconut, name: 'Más fogones', desc: 'La Cocina hace un 50 % más de pescado en coco.', cost: 550000, effect: { type: 'stationSpeed', target: 'coconut_fish_kitchen', mult: 1.5 } },
     ],
-    objective: { type: 'feria', kind: 'sold', items: { salted_fish: 90, fried_fish: 90, fish_in_coconut: 120 }, medals: [615, 915] },
+    objective: { type: 'feria', kind: 'sold', items: { salted_fish: 90, fried_fish: 90, fish_in_coconut: 120 }, medals: [615, 780] },
   },
   {
     id: 'inundacion',
@@ -464,7 +464,7 @@ export const EVENTS = [
       { id: 'artesanias_tornos', icon: ICON.matera, name: 'Tornos y leña', desc: 'El Torno y el Horno de leña hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'pottery_kiln', mult: 1.5 }, { type: 'stationSpeed', target: 'potter_wheel', mult: 1.5 }] },
       { id: 'artesanias_jarras', icon: ICON.jarraCerveza, name: 'Más jarras', desc: 'Las Jarras salen un 50 % más.', cost: 550000, effect: { type: 'stationSpeed', target: 'jarras', mult: 1.5 } },
     ],
-    objective: { type: 'feria', kind: 'sold', items: { olla_barro: 90, matera: 90, jarra_cerveza: 120 }, medals: [615, 915] },
+    objective: { type: 'feria', kind: 'sold', items: { olla_barro: 90, matera: 90, jarra_cerveza: 120 }, medals: [615, 780] },
   },
   {
     id: 'obras',
@@ -587,7 +587,7 @@ export const EVENTS = [
       { id: 'pescado_ahumaderos', icon: ICON.smokedCachama, name: 'Más ahumaderos', desc: 'La Fileteadora y el Ahumadero hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'cachama_smoker', mult: 1.5 }, { type: 'stationSpeed', target: 'cachama_filleter', mult: 1.5 }] },
       { id: 'pescado_fogones', icon: ICON.cachamaMaracuya, name: 'Más fogones', desc: 'La Cocina de la cachama sirve un 50 % más.', cost: 550000, effect: { type: 'stationSpeed', target: 'cachama_kitchen', mult: 1.5 } },
     ],
-    objective: { type: 'feria', kind: 'sold', items: { pisillo: 90, smoked_cachama: 90, cachama_maracuya: 120 }, medals: [615, 915] },
+    objective: { type: 'feria', kind: 'sold', items: { pisillo: 90, smoked_cachama: 90, cachama_maracuya: 120 }, medals: [615, 780] },
   },
   {
     id: 'puente_caido',
@@ -710,7 +710,7 @@ export const EVENTS = [
       { id: 'santa_ahumaderos', icon: ICON.smokedPargo, name: 'Más fogones altos', desc: 'La Fileteadora y el Ahumadero hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'pargo_smoker', mult: 1.5 }, { type: 'stationSpeed', target: 'pargo_filleter', mult: 1.5 }] },
       { id: 'santa_ollas', icon: ICON.tapao, name: 'Más ollas', desc: 'La Cocina del tapao sirve un 50 % más.', cost: 550000, effect: { type: 'stationSpeed', target: 'tapao_kitchen', mult: 1.5 } },
     ],
-    objective: { type: 'feria', kind: 'sold', items: { dried_fish: 90, smoked_pargo: 90, tapao: 120 }, medals: [615, 915] },
+    objective: { type: 'feria', kind: 'sold', items: { dried_fish: 90, smoked_pargo: 90, tapao: 120 }, medals: [615, 780] },
   },
   {
     id: 'lancha_varada',
@@ -833,7 +833,7 @@ export const EVENTS = [
       { id: 'veda_moquenes', icon: ICON.moqueado, name: 'Más moquenes', desc: 'La Fileteadora y el Moquén hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'moquen', mult: 1.5 }, { type: 'stationSpeed', target: 'pirarucu_filleter', mult: 1.5 }] },
       { id: 'veda_fogones', icon: ICON.pirarucuAji, name: 'Más fogones', desc: 'La Cocina del pirarucú sirve un 50 % más.', cost: 550000, effect: { type: 'stationSpeed', target: 'pirarucu_kitchen', mult: 1.5 } },
     ],
-    objective: { type: 'feria', kind: 'sold', items: { salted_pirarucu: 90, moqueado: 90, pirarucu_aji: 120 }, medals: [615, 915] },
+    objective: { type: 'feria', kind: 'sold', items: { salted_pirarucu: 90, moqueado: 90, pirarucu_aji: 120 }, medals: [615, 780] },
   },
   {
     id: 'vaciante',
@@ -955,7 +955,7 @@ export const EVENTS = [
       { id: 'betania_ollas', icon: ICON.escabeche, name: 'Más ollas', desc: 'La Fileteadora y la Olla del escabeche hacen un 50 % más.', cost: 230000, effects: [{ type: 'stationSpeed', target: 'escabeche_pot', mult: 1.5 }, { type: 'stationSpeed', target: 'tilapia_filleter', mult: 1.5 }] },
       { id: 'betania_pailas', icon: ICON.almuerzoRepresa, name: 'Más pailas', desc: 'La Cocina de la represa sirve un 50 % más.', cost: 550000, effect: { type: 'stationSpeed', target: 'represa_kitchen', mult: 1.5 } },
     ],
-    objective: { type: 'feria', kind: 'sold', items: { tilapia_ahumada: 90, escabeche: 90, almuerzo_represa: 120 }, medals: [615, 915] },
+    objective: { type: 'feria', kind: 'sold', items: { tilapia_ahumada: 90, escabeche: 90, almuerzo_represa: 120 }, medals: [615, 780] },
   },
   {
     id: 'derrumbe_tolima',

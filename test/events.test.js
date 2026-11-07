@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { EVENTS, EVENT_ACTIONS_BY_ID, EVENT_OF_ZONE, MEDALS } from '../src/data/events.js';
-import { EVENT_COOLDOWN, boardObjective, buyAction, createEventState, endEvent, eventDef, eventObjective, eventProgress, eventStatus, finishEvent, medalFor, quoteAction, restartEvent, startEvent, supplyFraction } from '../src/sim/events.js';
+import { EVENT_COOLDOWN, boardObjective, buyAction, createEventState, endEvent, eventDef, eventObjective, eventProgress, eventStatus, finishEvent, medalFor, quoteAction, restartEvent, startEvent, supplyFraction, SUPPLY_TRICKLE } from '../src/sim/events.js';
 import { createInitialState } from '../src/sim/state.js';
 import { speedMult } from '../src/sim/modifiers.js';
 import { restartState } from '../src/sim/legacy.js';
@@ -219,16 +219,13 @@ test('los seis tableros arrancan y avanzan hacia su objetivo', () => {
   }
 });
 
-test('derrumbe: sin vía la panela no llega (solo la guardada) y con las compras vuelve a llegar', () => {
+test('derrumbe: sin vía llega solo un hilito de panela (v4.3.2) y con las compras vuelve a llegar toda', () => {
   const def = EVENTS.find((e) => e.id === 'derrumbe');
   const board = createEventState(def, 1);
   assert.equal(board.stations.chocolate_table.imported.panela_powder, def.stock.panela_powder);
-  assert.equal(supplyFraction(board, 'panela_powder'), 0);
+  assert.equal(supplyFraction(board, 'panela_powder'), SUPPLY_TRICKLE);
   assert.equal(supplyFraction(board, 'milk'), 1);
   const game = new Game(board);
-  board.stations.chocolate_table.imported.panela_powder = 0;
-  for (let t = 0; t < 10; t += 0.1) game.step(0.1);
-  assert.equal(board.stations.chocolate_table.imported.panela_powder, 0);
   board.coins = 1e12;
   for (const a of def.actions) assert.ok(buyAction(board, a.id));
   assert.equal(supplyFraction(board, 'panela_powder'), 1);

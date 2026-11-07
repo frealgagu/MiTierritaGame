@@ -1,7 +1,7 @@
 // Barra del tablero de un evento (v2.0): el objetivo, el reloj del evento, las medallas y las compras
 // del evento (cada una pide la anterior).
 import { formatNumber } from '../core/format.js';
-import { allActionsBought, boardRound, buyAction, boardObjective, EVENT_CLOCK_MAX, eventClock, eventDef, eventHandicaps, eventItems, eventProgress, handicapText, medalFor, quoteAction } from '../sim/events.js';
+import { allActionsBought, buyAction, boardObjective, EVENT_CLOCK_MAX, eventClock, eventDef, eventHandicaps, eventItems, eventProgress, handicapText, medalFor, quoteAction } from '../sim/events.js';
 import { EVENT_ACTIONS_BY_ID, MEDALS } from '../data/events.js';
 import { PRODUCTS } from '../data/products.js';
 import { setFitted } from './fit.js';
@@ -78,7 +78,7 @@ export class EventBar {
     const def = eventDef(board);
     const obj = boardObjective(board);
     const items = eventItems(board);
-    setFitted(document.getElementById('event-title'), `${def.icon} ${def.name} ${boardRound(board)}`);
+    setFitted(document.getElementById('event-title'), `${def.icon} ${def.name}`);
     // Con el objetivo cumplido, la medalla queda fija con su tiempo (v3.7): falta comprar las mejoras.
     const secured = board.event.medal;
     // El reloj llega hasta 999:59 y ahí se queda (v3.67.4); desde ahí dice ∞ (v4.1).

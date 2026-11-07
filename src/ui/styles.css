@@ -758,6 +758,12 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 /* Menú (v3.67): estadísticas una por renglón, «Borrar partida» solo abajo, y la ventana «Acerca de». */
 .menu-stats { list-style: none; margin: 6px 0 10px; padding: 0; display: grid; gap: 3px; font-size: 0.95rem; }
 .menu-reset { margin-top: 14px; padding-top: 12px; border-top: 2px dashed var(--paper-2); }
+/* Borrar la partida deslizando (v4.3.2). */
+.slide-confirm { --slide: 0; position: relative; width: 100%; height: 48px; border: 2px solid var(--ink); border-radius: 999px; background: linear-gradient(90deg, rgba(200, 40, 50, calc(0.15 + 0.6 * var(--slide))) 0 100%), #fff3d6; overflow: hidden; touch-action: none; user-select: none; }
+.slide-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding-left: 52px; font-weight: 700; font-size: 0.9rem; color: #8f1d2c; opacity: calc(1 - var(--slide)); pointer-events: none; }
+.slide-confirm.done .slide-label { opacity: 1; }
+.slide-knob { position: absolute; left: 3px; top: 3px; width: 38px; height: 38px; border: 2px solid var(--ink); border-radius: 50%; background: var(--red); color: #fff; font-size: 1.1rem; line-height: 1; padding: 0; cursor: grab; touch-action: none; transition: transform 0.25s ease; }
+.slide-confirm.dragging .slide-knob { transition: none; cursor: grabbing; }
 .about-head { display: flex; align-items: center; gap: 12px; margin: 4px 0 8px; }
 .about-head img { border-radius: 14px; flex: none; }
 .about-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; font-size: 0.92rem; line-height: 1.35; }

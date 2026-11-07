@@ -35,6 +35,8 @@ export default {
   'Selecciona el texto y cópialo.': 'Selecione o texto e copie.',
   '⛔ Ese texto no es una partida válida de Encantos de Mi Tierrita.': '⛔ Esse texto não é uma partida válida de Encantos de Mi Tierrita.',
   'Toca otra vez para borrar': 'Toque de novo para apagar',
+  'Desliza para borrar la partida': 'Deslize para apagar a partida',
+  'Borrando…': 'Apagando…',
   'Tu partida se guarda sola en este teléfono.': 'Sua partida é salva automaticamente neste celular.',
   Nv: 'Nv',
   'Al pueblo ➜': 'Para a cidade ➜',
