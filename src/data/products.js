@@ -381,6 +381,14 @@ export const PRODUCTS = {
   ramo_rosas: { name: 'Ramo de rosas', zone: 'flores', value: 45, icon: ICON.ramoRosas, color: 0xf8bbd0 },
   caja_flores: { name: 'Caja de flores', zone: 'flores', value: 250, icon: ICON.cajaFlores, color: 0xc8a26a },
 
+  fresa: { name: 'Fresa', zone: 'fresas', value: 10, icon: ICON.fresa, color: 0xe53935 },
+  fresa_lavada: { name: 'Fresa lavada', zone: 'fresas', value: 25, icon: ICON.fresaLavada, color: 0xef5350 },
+  fresa_seleccionada: { name: 'Fresa seleccionada', zone: 'fresas', value: 60, icon: ICON.fresaSeleccionada, color: 0x43a047 },
+  bandeja_fresas: { name: 'Bandeja de fresas', zone: 'fresas', value: 150, icon: ICON.bandejaFresas, color: 0xeceff1 },
+  fresas_crema: { name: 'Fresas con crema', zone: 'fresas', value: 250, icon: ICON.fresasCrema, color: 0xfff3e0 },
+  fresa_segunda: { name: 'Fresa de segunda', zone: 'fresas', value: 8, icon: ICON.fresaSegunda, color: 0xc62828 },
+  mermelada_fresa: { name: 'Mermelada de fresa', zone: 'fresas', value: 120, icon: ICON.mermeladaFresa, color: 0xb71c1c },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

@@ -1126,5 +1126,26 @@ const FLORES = [
   { id: 'cf_final', type: 'sold', product: 'caja_flores', amount: 2000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES };
+// Los Freseros de Sibaté: la del Café del Huila.
+const FRESAS = [
+  { id: 'cs01', type: 'sold', product: 'fresa', amount: 50, reward: 500 },
+  { id: 'cs02', type: 'level', target: 'fresal', level: 10, reward: 1000 },
+  { id: 'cs03', type: 'unlock', station: 'lavadero_fresas', reward: 2000 },
+  { id: 'cs04', type: 'level', target: 'fresal:transport', level: 10, reward: 2000 },
+  { id: 'cs05', type: 'unlock', station: 'seleccionadora_fresas', reward: 5000 },
+  { id: 'cs06', type: 'produced', product: 'fresa_seleccionada', amount: 200, reward: 8000 },
+  { id: 'cs08', type: 'unlock', station: 'llenadora_bandejas', reward: 20000 },
+  { id: 'cs09', type: 'level', target: 'dispatch:fresas', level: 10, reward: 20000 },
+  { id: 'cs10', type: 'produced', product: 'bandeja_fresas', amount: 500, reward: 40000 },
+  { id: 'cs11', type: 'unlock', station: 'mesa_fresas_crema', reward: 80000 },
+  { id: 'cs12', type: 'unlock', station: 'marmita_mermelada', reward: 100000 },
+  { id: 'cs13', type: 'produced', product: 'mermelada_fresa', amount: 300, reward: 120000 },
+  { id: 'cs14', type: 'allLevels', zone: 'fresas', level: 25, reward: 100000 },
+  { id: 'cs07', type: 'research', research: 'lavado_presion', reward: 50000 },
+  { id: 'cs15', type: 'income', zone: 'fresas', perSecond: 500, reward: 150000 },
+  { id: 'cs16', type: 'sold', product: 'fresas_crema', amount: 1000, reward: 300000 },
+  { id: 'cs_final', type: 'sold', product: 'fresas_crema', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

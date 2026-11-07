@@ -50,4 +50,5 @@ export default {
   chamba: ['La Chamba', 'Vers El Guamo ➜', { ahumadas_tilapia: '⬅ Tilapia fumé de Betania', escabeches: '⬅ Escabèche', recuerdos_tolima: 'Vers Neiva ➜' }],
   neiva: ['Neiva', 'Vers Villavieja ➜', { cajas_bizcochos: '⬅ Biscuits des Champs d’achira', cafe_especial: '⬅ Café du Huila', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Petits-déjeuners', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Thé de cascara ⬆', almuerzos_represa: 'Tilapia ⬆' }],
   flores: ['Les Fleurs de la Savane', 'Vers l’aéroport ➜', {}],
+  fresas: ['Les Fraisiers de Sibaté', 'Vers Sibaté ➜', {}],
 };

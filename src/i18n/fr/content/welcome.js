@@ -49,4 +49,5 @@ export default {
   chamba: 'Bienvenue à La Chamba ! Ici l’argile est foulée, modelée à la main et cuite jusqu’à devenir noire.',
   neiva: 'Bienvenue à Neiva, en plein San Pedro ! D’ici part l’excursion pour voir les étoiles dans la Tatacoa.',
   flores: 'Bienvenue dans la Savane, sumercé ! Ici les roses quittent la serre et partent en avion vers la moitié du monde.',
+  fresas: 'Salut, sumercé ! Ici à Sibaté, les fraises sont lavées, triées et servies à la crème ; celles de second choix deviennent confiture.',
 };

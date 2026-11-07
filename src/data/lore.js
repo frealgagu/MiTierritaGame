@@ -362,6 +362,12 @@ export const FACTS = {
   boncheo: ['Un bonche lleva 25 rosas, envueltas en cartón corrugado.'],
   cuarto_frio: ['Las flores esperan en cuartos fríos, a unos 2 °C, antes de viajar.'],
   empacadora_flores: ['En la semana de San Valentín salen aviones llenos de flores.', 'Las flores llegan a Estados Unidos un día o dos después del corte.'],
+  fresal: ['Sibaté es la tierra de las fresas con crema, a orillas de la Sabana.', 'Las fresas crecen sobre lomos tapados con plástico, sin tocar el barro.'],
+  lavadero_fresas: ['Las fresas pequeñas o golpeadas no se botan: se vuelven mermelada.'],
+  seleccionadora_fresas: ['Las fresas se escogen por tamaño y por color, una por una.'],
+  llenadora_bandejas: ['Una bandeja de fresas pesa unos 500 gramos.'],
+  mesa_fresas_crema: ['En la carretera a Sibaté hay puestos de fresas con crema y arequipe.'],
+  marmita_mermelada: ['La mermelada se cocina con azúcar y limón hasta que espesa.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -417,6 +423,7 @@ export const PEOPLE = {
   neiva: { icon: '💃🏽', name: 'Doña Marleny', role: 'la reina del San Pedro' },
   // Cundinamarca (v4.4)
   flores: { icon: '👩🏽', name: 'Doña Rocío', role: 'la floricultora' },
+  fresas: { icon: '👨🏽‍🌾', name: 'Don Gilberto', role: 'el fresero' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -472,6 +479,7 @@ export const WELCOME = {
   neiva: '¡Bienvenido a Neiva, en pleno San Pedro! De aquí sale el paseo a ver las estrellas en la Tatacoa.',
   // Cundinamarca (v4.4)
   flores: '¡Bienvenido a la Sabana, sumercé! Aquí las rosas salen del invernadero y viajan en avión a medio mundo.',
+  fresas: '¡Quiubo, sumercé! Aquí en Sibaté las fresas se lavan, se escogen y se sirven con crema; las de segunda, en mermelada.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

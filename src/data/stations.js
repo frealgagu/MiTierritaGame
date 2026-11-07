@@ -466,6 +466,15 @@ export const STATIONS = [
   { id: 'cuarto_frio', zone: 'flores', name: 'Cuarto frío', icon: ICON.ramoRosas, in: { bonche_rosas: 1 }, out: { ramo_rosas: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '4.4' },
   { id: 'empacadora_flores', zone: 'flores', name: 'Empacadora de flores', icon: ICON.cajaFlores, in: { ramo_rosas: 4 }, out: { caja_flores: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '4.4' },
 
+  // Los Freseros de Sibaté: el Lavadero saca la fresa buena y la de segunda (las pequeñas y las magulladas), que pasa
+  // por la canaleta a la Marmita y sale como mermelada hacia Zipaquirá.
+  { id: 'fresal', zone: 'fresas', name: 'Fresal', icon: ICON.fresal, infinite: true, out: { fresa: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '4.4' },
+  { id: 'lavadero_fresas', zone: 'fresas', name: 'Lavadero de fresas', icon: ICON.fresaLavada, in: { fresa: 1 }, out: { fresa_lavada: 1 }, by: { fresa_segunda: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '4.4' },
+  { id: 'seleccionadora_fresas', zone: 'fresas', name: 'Seleccionadora', icon: ICON.fresaSeleccionada, in: { fresa_lavada: 2 }, out: { fresa_seleccionada: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '4.4' },
+  { id: 'llenadora_bandejas', zone: 'fresas', name: 'Llenadora de bandejas', icon: ICON.bandejaFresas, in: { fresa_seleccionada: 2 }, out: { bandeja_fresas: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '4.4' },
+  { id: 'mesa_fresas_crema', zone: 'fresas', name: 'Mesa de fresas con crema', icon: ICON.fresasCrema, in: { bandeja_fresas: 1 }, out: { fresas_crema: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '4.4' },
+  { id: 'marmita_mermelada', zone: 'fresas', name: 'Marmita de mermelada', icon: ICON.mermeladaFresa, in: { fresa_segunda: 4 }, out: { mermelada_fresa: 1 }, cycle: 6.4, unlockCost: 400000, upgradeBase: 500, growth: 1.15, release: '4.4' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

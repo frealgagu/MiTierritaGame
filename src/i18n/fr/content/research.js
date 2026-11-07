@@ -482,4 +482,12 @@ export default {
   flor_sabana: 'Fleur de la Savane',
   cadena_frio: 'Chaîne du froid',
   sello_cund: 'Sceau d’exportation',
+  lavado_presion: 'Lavage sous pression',
+  fresa_albion: 'Fraises Albion',
+  banda_seleccion: 'Tapis de tri',
+  campero_fresero: 'Jeep du fraisier',
+  bandejas_termoformadas: 'Barquettes thermoformées',
+  crema_batida: 'Crème fouettée',
+  fresas_sibate: 'Fraises de Sibaté',
+  marmita_cobre: 'Chaudron en cuivre',
 };

@@ -306,4 +306,10 @@ export default {
   boncheo: 'Montagem de maços',
   cuarto_frio: 'Câmara fria',
   empacadora_flores: 'Embaladora de flores',
+  fresal: 'Morangal',
+  lavadero_fresas: 'Lavador de morangos',
+  seleccionadora_fresas: 'Seletora',
+  llenadora_bandejas: 'Enchedora de bandejas',
+  mesa_fresas_crema: 'Mesa de morangos com creme',
+  marmita_mermelada: 'Tacho de geleia',
 };

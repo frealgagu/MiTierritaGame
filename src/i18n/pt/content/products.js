@@ -314,4 +314,11 @@ export default {
   bonche_rosas: 'Maço de rosas',
   ramo_rosas: 'Buquê de rosas',
   caja_flores: 'Caixa de flores',
+  fresa: 'Morango',
+  fresa_lavada: 'Morango lavado',
+  fresa_seleccionada: 'Morango selecionado',
+  bandeja_fresas: 'Bandeja de morangos',
+  fresas_crema: 'Morangos com creme',
+  fresa_segunda: 'Morango de segunda',
+  mermelada_fresa: 'Geleia de morango',
 };

@@ -387,6 +387,7 @@ export class Terrain {
           else if (r < 0.07) obj = cypress(rng);
           else if (r < 0.085) obj = rock(rng);
           else if (z === 'flores' && r < 0.1) obj = smallGreenhouse(rng);
+          else if (z === 'fresas' && r < 0.1) obj = r < 0.093 ? smallGreenhouse(rng) : strawberryStand(rng);
         } else if (this.zone.region === 'tolima') {
           // El Tolima Grande (v4.0): tierra caliente del valle del Magdalena, con samanes, guayacanes amarillos,
           // palos de mango y garzas; en el Huila, cafetos sueltos y guamos de sombra; en los Achirales y La Chamba,
@@ -975,6 +976,7 @@ const FARM_SOIL = {
   achira: (v) => mix(0x7a5a3a, 0x6a4e30, v * 0.45), // la tierra del achiral
   // Cundinamarca (v4.4)
   roses: (v) => mix(0x5a4a36, 0x4e402e, v * 0.45), // la tierra negra de la Sabana, bajo los invernaderos
+  strawberry: (v) => mix(0x5a4a36, 0x4e402e, v * 0.45), // la misma tierra negra, para los fresales
   pigs: (v) => mix(0x8a8a4a, 0x7a7a42, v * 0.5), // el corral de los cerdos, con barro
   betania: (v) => mix(0x3f7f78, 0x4a8a80, v * 0.6), // el agua verde de la represa
   chamba: (v) => mix(0x8d6e5a, 0x7a5c4a, v * 0.45), // el barranco de arcilla gris del Magdalena
@@ -1347,6 +1349,32 @@ function smallGreenhouse(rng) {
   g.poly([e.x, e.y, d.x, d.y, d.x, d.y - 22, e.x, e.y - 22]).fill({ color: 0xe8f2f6, alpha: 0.45 }).stroke({ width: 1, color: 0xffffff, alpha: 0.9 });
   c.addChild(g);
   return c;
+}
+
+// Puesto de fresas con crema de la carretera de Sibaté (v4.4): la mesa con el toldo rojo y los vasos.
+function strawberryStand(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 3, 2, 16, 6);
+  g.rect(-10, -9, 20, 9).fill(0xfafafa).stroke({ width: 1, color: 0x3a2418, alpha: 0.6 });
+  for (const dx of [-6, -1, 4]) g.circle(dx, -11, 2.2).fill(0xe53935);
+  for (const px of [-11, 10]) g.rect(px, -24, 1.4, 15).fill(0x8d6e4a);
+  for (let k = 0; k < 4; k++) g.poly([-12 + k * 6, -26, -6 + k * 6, -26, -6 + k * 6, -21, -12 + k * 6, -21]).fill(k % 2 ? 0xfafafa : 0xe53935);
+  c.addChild(g);
+  return c;
+}
+
+// Mata de fresa (v4.4): hojas de a tres, redondas y dentadas, sobre el lomo de plástico negro, con las fresas
+// colgando a un lado (más fresas con los hitos).
+export function drawStrawberryPlant(g, x, y, scale, rng, fruits = 2) {
+  const s = scale;
+  g.ellipse(x, y, 11 * s, 4 * s).fill(0x37474f);
+  for (const [dx, dy, r] of [[-5, -6, 4.5], [5, -6, 4.5], [0, -9, 5], [-2, -3, 4], [3, -3, 4]]) g.circle(x + dx * s, y + dy * s, r * s).fill(0x43a047).stroke({ width: 0.6, color: 0x1b5e20, alpha: 0.6 });
+  for (let k = 0; k < fruits; k++) {
+    const fx = x + (k % 2 ? 7 : -7) * s + (rng() - 0.5) * 2;
+    const fy = y - (1 + (k >> 1) * 2) * s;
+    g.poly([fx - 2.2 * s, fy - 2 * s, fx + 2.2 * s, fy - 2 * s, fx, fy + 3 * s]).fill(0xe53935).stroke({ width: 0.5, color: 0x7a0c1e });
+  }
 }
 
 // Rosal de exportación (v4.4): la mata de hojas oscuras con los tallos largos y las rosas rojas en botón (más

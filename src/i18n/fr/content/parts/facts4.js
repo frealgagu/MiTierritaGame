@@ -45,4 +45,10 @@ export default {
   boncheo: ['Une botte compte 25 roses, enveloppées de carton ondulé.'],
   cuarto_frio: ['Les fleurs attendent en chambre froide, vers 2 °C, avant le voyage.'],
   empacadora_flores: ['Avant la Saint-Valentin, des avions partent chargés de fleurs.', 'Les fleurs arrivent aux États-Unis un ou deux jours après la coupe.'],
+  fresal: ['Sibaté est la terre des fraises à la crème, au bord de la Savane.', 'Les fraises poussent sur des buttes bâchées, loin de la boue.'],
+  lavadero_fresas: ['Les fraises petites ou abîmées ne se jettent pas : elles deviennent confiture.'],
+  seleccionadora_fresas: ['Les fraises sont triées par taille et couleur, une à une.'],
+  llenadora_bandejas: ['Une barquette de fraises pèse environ 500 grammes.'],
+  mesa_fresas_crema: ['Sur la route de Sibaté, on vend des fraises à la crème.'],
+  marmita_mermelada: ['La confiture cuit avec du sucre et du citron jusqu’à épaissir.'],
 };

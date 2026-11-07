@@ -482,4 +482,12 @@ export default {
   flor_sabana: 'Flor da Savana',
   cadena_frio: 'Cadeia de frio',
   sello_cund: 'Selo de exportação',
+  lavado_presion: 'Lavagem a pressão',
+  fresa_albion: 'Morango Albion',
+  banda_seleccion: 'Esteira de seleção',
+  campero_fresero: 'Jipe do morangueiro',
+  bandejas_termoformadas: 'Bandejas termoformadas',
+  crema_batida: 'Creme batido',
+  fresas_sibate: 'Morangos de Sibaté',
+  marmita_cobre: 'Tacho de cobre',
 };

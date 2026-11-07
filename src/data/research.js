@@ -646,6 +646,16 @@ export const RESEARCH = [
   { zone: 'flores', id: 'sello_cund', name: 'Sello de exportación', icon: '✈️', desc: 'Las cajas de flores valen un 50 % más.', cost: 300000, requires: 'empacadora_flores', effect: { type: 'productValue', target: 'caja_flores', mult: 1.5 } },
   { zone: 'flores', id: 'maestria_flores', name: 'Maestría: Flores', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'flores', mult: 4 } },
   { zone: 'flores', id: 'supremacia_flores', name: 'Supremacía: Flores', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'flores', mult: 8 } },
+  { zone: 'fresas', id: 'lavado_presion', name: 'Lavado a presión', icon: ICON.fresaLavada, desc: 'El Lavadero de fresas lava el doble.', cost: 20000, requires: 'lavadero_fresas', effect: { type: 'stationSpeed', target: 'lavadero_fresas', mult: 2 } },
+  { zone: 'fresas', id: 'fresa_albion', name: 'Fresa Albión', icon: ICON.fresal, desc: 'El Fresal produce el doble.', cost: 50000, requires: 'seleccionadora_fresas', effect: { type: 'stationSpeed', target: 'fresal', mult: 2 } },
+  { zone: 'fresas', id: 'banda_seleccion', name: 'Banda de selección', icon: ICON.fresaSeleccionada, desc: 'La Seleccionadora escoge el doble.', cost: 40000, requires: 'seleccionadora_fresas', effect: { type: 'stationSpeed', target: 'seleccionadora_fresas', mult: 2 } },
+  { zone: 'fresas', id: 'campero_fresero', name: 'Campero fresero', icon: '🚙', desc: 'El despacho de los Freseros lleva el doble por viaje.', cost: 80000, requires: 'seleccionadora_fresas', effect: { type: 'dispatchCapacity', target: 'fresas', mult: 2 } },
+  { zone: 'fresas', id: 'bandejas_termoformadas', name: 'Bandejas termoformadas', icon: ICON.bandejaFresas, desc: 'La Llenadora de bandejas llena el doble.', cost: 300000, requires: 'llenadora_bandejas', effect: { type: 'stationSpeed', target: 'llenadora_bandejas', mult: 2 } },
+  { zone: 'fresas', id: 'crema_batida', name: 'Crema de leche batida', icon: ICON.fresasCrema, desc: 'La Mesa de fresas con crema sirve el doble.', cost: 600000, requires: 'mesa_fresas_crema', effect: { type: 'stationSpeed', target: 'mesa_fresas_crema', mult: 2 } },
+  { zone: 'fresas', id: 'fresas_sibate', name: 'Fresas de Sibaté', icon: '🏅', desc: 'Las fresas con crema valen un 50 % más.', cost: 1500000, requires: 'mesa_fresas_crema', effect: { type: 'productValue', target: 'fresas_crema', mult: 1.5 } },
+  { zone: 'fresas', id: 'marmita_cobre', name: 'Marmita de cobre', icon: ICON.mermeladaFresa, desc: 'La Marmita de mermelada cocina el doble.', cost: 1000000, requires: 'marmita_mermelada', effect: { type: 'stationSpeed', target: 'marmita_mermelada', mult: 2 } },
+  { zone: 'fresas', id: 'maestria_fresas', name: 'Maestría: Freseros', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'fresas', mult: 4 } },
+  { zone: 'fresas', id: 'supremacia_fresas', name: 'Supremacía: Freseros', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'fresas', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al
