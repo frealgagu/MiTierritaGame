@@ -13,16 +13,11 @@ import { listJoin, t } from '../i18n/index.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { buyZoneBoostUnlock, planZoneBoost, previewBuild, quoteZoneBoostUnlock, ZONE_BOOST_COST, zoneBoostStatus } from '../sim/zoneBoost.js';
 import { toast } from './toast.js';
+import { productColors } from '../render/pipeColors.js';
 
 const outIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].out)[0]].icon;
 const outOf = (id) => Object.keys(STATIONS_BY_ID[id].out)[0];
 const byOf = (id) => Object.keys(STATIONS_BY_ID[id].by)[0];
-// El color del tubo de cada producto (v4.0.2): el del producto, oscurecido si es muy claro para que se vea sobre el
-// papel. Así se distingue lo que sale de una estación con dos productos y se ve cuando un producto se vuelve otro.
-// Cada producto de la cadena con su color (v4.0.2): colores bien distintos entre sí (no el del producto, que
-// casi siempre es café o crema), en el orden en que aparecen, para que dos seguidos nunca se parezcan. Fuera
-// quedan el azul (lo importado), el rojo (lo que frena) y el gris (lo que falta construir).
-const PIPE_COLORS = ['#2f9e44', '#e8590c', '#7b3fb5', '#c99a06', '#0c8599', '#d6338a', '#8b5a2b', '#495057', '#82c91e'];
 const byIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].by)[0]].icon;
 // «la Mesa de chocolate y la Chocolatería»
 const listNames = (ids) => {
@@ -355,12 +350,8 @@ function diagram(state, a, rows, locked, zone, width, selected) {
   // Eslabones: el camino dibujado dos veces (el eslabón y su hueco) en trazos que se mueven.
   const pipes = [];
   // Lo que corre por el tubo lleva el color de su producto; lo que frena va en rojo y lo que falta construir, en gris.
-  const colorOf = {};
-  for (const id of under(root).filter((x) => !x.startsWith('lane:'))) {
-    for (const product of [...Object.keys(STATIONS_BY_ID[id].out ?? {}), ...Object.keys(STATIONS_BY_ID[id].by ?? {})]) {
-      colorOf[product] ??= PIPE_COLORS[Object.keys(colorOf).length % PIPE_COLORS.length];
-    }
-  }
+  // Los mismos colores que las bandas del mapa (v4.3.1).
+  const colorOf = productColors(zone);
   const pipe = (d, kind, product = null) => {
     const color = kind === 'flow' && colorOf[product] ? ` style="stroke:${colorOf[product]}"` : '';
     pipes.push(`<path d="${d}" class="dg-link ${kind}"${color}/><path d="${d}" class="dg-hole ${kind}"/>`);

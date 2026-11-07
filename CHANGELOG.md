@@ -4,6 +4,7 @@
 - **Partida 60:** con los reinicios al tope, la pantalla del segundo final sigue diciendo «Partida 60» (antes decía 61, aunque volver a empezar ya no cambia nada).
 - **La cadena cabe a lo ancho:** en los teléfonos angostos, las zonas con tres ramas ya no cortan la de la derecha ni lo que queda en las orillas.
 - **Las chivas van siempre por encima** de los edificios y la decoración: antes, una estación de adelante podía taparlas y parecía que pasaban por debajo o que la atravesaban.
+- **Dos clases de banda en el mapa** (cuando los arrieros pasan a banda eléctrica, desde el nivel 50): las **bandas por tramos**, cada una del color de su producto —el mismo de su tubo en la cadena 🔗—, que van de una estación a la siguiente (y en carriles aparte si se cruzan), y la **banda general**, plateada, al otro lado del camino, que lleva a la bodega lo que se vende sin procesar. Cada banda **se apaga** (gris y quieta) mientras no tiene nada que llevar.
 - **El segundo Willys, bien explicado:** hace que la bodega despache más seguido, sin esperar a que vuelva el primero; si uno solo ya alcanzaba, se vende lo mismo por minuto. Ya no dice que vende el doble, y el panel 💰 De dónde sale ya no lo cuenta como ×2.
 
 ## v4.3.0 — Dibujos propios en todo el juego
