@@ -1,6 +1,6 @@
 import { formatDuration, formatMult, formatNumber } from '../core/format.js';
 import { RESTART_RENOWN } from '../sim/renown.js';
-import { legacyMult, nextLegacyMult } from '../sim/modifiers.js';
+import { MAX_LEGACY_RESETS, legacyMult, nextLegacyMult } from '../sim/modifiers.js';
 import { regionOf } from '../data/regions.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { t } from '../i18n/index.js';
@@ -12,7 +12,8 @@ export function showMastery(state, onRestart) {
   const next = nextLegacyMult(state);
   // Con el tope (×2⁶⁰), reiniciar ya no duplica: se dice.
   const capped = next === mult;
-  const runs = (state.legacy?.resets ?? 0) + 1;
+  // La partida se cuenta hasta el tope (v4.3.1): en el reinicio 60 sigue diciendo 60, porque reiniciar ya no cambia nada.
+  const runs = Math.min((state.legacy?.resets ?? 0) + 1, MAX_LEGACY_RESETS);
   document.getElementById('mastery-text').innerHTML =
     t('Llevaste todas las estaciones de {region}, sus <b>arrieros</b> y sus <b>rutas</b> al <b>nivel 100</b>, con todos los objetivos y todas las investigaciones. Todo trabaja a toda marcha.', { region: regionOf(state).name });
   document.getElementById('mastery-stats').textContent =
