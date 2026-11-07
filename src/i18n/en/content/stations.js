@@ -299,4 +299,11 @@ export default {
   plaza_neiva: 'Neiva Market Hall',
   fiambrera_tatacoa: 'Trip Lunch Packer',
   salida_tatacoa: 'Tatacoa Tour',
+  invernadero_rosas: 'Rose Greenhouse',
+  mesa_corte: 'Cutting Table',
+  tinas_hidratacion: 'Hydration Tubs',
+  clasificadora_flores: 'Grading Line',
+  boncheo: 'Bunching Table',
+  cuarto_frio: 'Cold Room',
+  empacadora_flores: 'Flower Packer',
 };

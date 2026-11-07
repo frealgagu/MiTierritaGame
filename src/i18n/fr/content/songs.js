@@ -8,4 +8,5 @@ export default {
   pacifico: ['Chirimía de San Pacho', 'clarinette, euphonium, tambora, caisse claire et cymbales'],
   amazonas: ['Cumbia de l’Amazone', 'guitare électrique, basse, clavier, maracas et manguaré'],
   tolima: ['Sanjuanero du San Pedro', 'tiple, guitare, bandola, tambora et carrasca'],
+  cundinamarca: ['Pasillo de la Savane', 'bandola, tiple et guitare'],
 };

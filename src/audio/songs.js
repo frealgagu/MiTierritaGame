@@ -402,8 +402,57 @@ const SANJUANERO = {
   ],
 };
 
+// Cundinamarca (v4.4): un pasillo, el de las serenatas de la Sabana y los cafés de Bogotá, en mi menor que pasa a sol
+// mayor. La bandola canta en trémolo, la guitarra marca el «y» del dos y el tres, y el tiple pica en el contratiempo.
+const PASILLO = {
+  name: 'Pasillo de la Sabana',
+  instruments: 'bandola, tiple y guitarra', // para los créditos
+  bpm: 120,
+  style: 'pasillo',
+  chords: [
+    'Em', 'Em', 'B7', 'B7', 'B7', 'B7', 'Em', 'Em',
+    'E7', 'E7', 'Am', 'Am', 'Em', 'B7', 'Em', 'Em',
+    'G', 'G', 'D7', 'D7', 'D7', 'D7', 'G', 'G',
+    'G7', 'G7', 'C', 'C', 'G', 'D7', 'G', 'B7',
+  ],
+  melody: [
+    [[0, 2, 'B4'], [2, 1, 'E5'], [3, 1, 'F#5'], [4, 2, 'G5']],
+    [[0, 3, 'B5'], [3, 1, 'A5'], [4, 2, 'G5']],
+    [[0, 2, 'F#5'], [2, 1, 'D#5'], [3, 1, 'E5'], [4, 2, 'F#5']],
+    [[0, 4, 'A5'], [4, 2, 'F#5']],
+    [[0, 2, 'B4'], [2, 1, 'D#5'], [3, 1, 'F#5'], [4, 2, 'A5']],
+    [[0, 3, 'G5'], [3, 1, 'F#5'], [4, 2, 'E5']],
+    [[0, 2, 'G5'], [2, 1, 'F#5'], [3, 1, 'E5'], [4, 2, 'B4']],
+    [[0, 6, 'E5']],
+    [[0, 2, 'E5'], [2, 1, 'G#5'], [3, 1, 'B5'], [4, 2, 'D5']],
+    [[0, 3, 'C6'], [3, 1, 'B5'], [4, 2, 'G#5']],
+    [[0, 2, 'A5'], [2, 1, 'C6'], [3, 1, 'B5'], [4, 2, 'A5']],
+    [[0, 3, 'E5'], [3, 1, 'F#5'], [4, 2, 'G5']],
+    [[0, 2, 'B5'], [2, 1, 'G5'], [3, 1, 'E5'], [4, 2, 'G5']],
+    [[0, 2, 'F#5'], [2, 1, 'A5'], [3, 1, 'D#5'], [4, 2, 'F#5']],
+    [[0, 6, 'E5']],
+    [[3, 1, 'B4'], [4, 1, 'D5'], [5, 1, 'F#5']],
+    [[0, 2, 'G5'], [2, 1, 'B5'], [3, 1, 'A5'], [4, 2, 'G5']],
+    [[0, 3, 'D5'], [3, 1, 'E5'], [4, 2, 'G5']],
+    [[0, 2, 'F#5'], [2, 1, 'A5'], [3, 1, 'C6'], [4, 2, 'A5']],
+    [[0, 4, 'F#5'], [4, 2, 'D5']],
+    [[0, 2, 'C5'], [2, 1, 'D5'], [3, 1, 'F#5'], [4, 2, 'A5']],
+    [[0, 3, 'C6'], [3, 1, 'B5'], [4, 2, 'A5']],
+    [[0, 2, 'B5'], [2, 1, 'A5'], [3, 1, 'G5'], [4, 2, 'D5']],
+    [[0, 6, 'G5']],
+    [[0, 2, 'G5'], [2, 1, 'B5'], [3, 1, 'C6'], [4, 2, 'F5']],
+    [[0, 3, 'F5'], [3, 1, 'E5'], [4, 2, 'D5']],
+    [[0, 2, 'E5'], [2, 1, 'G5'], [3, 1, 'C6'], [4, 2, 'G5']],
+    [[0, 3, 'E5'], [3, 1, 'D5'], [4, 2, 'C5']],
+    [[0, 2, 'B4'], [2, 1, 'D5'], [3, 1, 'G5'], [4, 2, 'B5']],
+    [[0, 2, 'A5'], [2, 1, 'F#5'], [3, 1, 'D5'], [4, 2, 'C5']],
+    [[0, 6, 'B4']],
+    [[0, 2, 'D#5'], [2, 1, 'F#5'], [3, 1, 'A5'], [4, 2, 'B5']],
+  ],
+};
+
 // Por región.
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO };
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO };
 
 // Acordes: tónica y notas (en semitonos sobre la tónica).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };

@@ -372,6 +372,15 @@ export const PRODUCTS = {
   fiambre_tatacoa: { name: 'Fiambre de la Tatacoa', zone: 'neiva', value: 2000000, icon: ICON.fiambreTatacoa, color: 0x8d6e4a },
   excursion_tatacoa: { name: 'Noche de estrellas en la Tatacoa', zone: 'neiva', value: 24000000, icon: ICON.tatacoa, color: 0x1a237e },
 
+  // Cundinamarca (v4.4): mismos valores que el Tolima Grande.
+  rosa: { name: 'Rosa', zone: 'flores', value: 1, icon: ICON.rosa, color: 0xd81b3c },
+  rosas_cortadas: { name: 'Rosas cortadas', zone: 'flores', value: 3, icon: ICON.rosasCortadas, color: 0x4e9a3e },
+  rosa_hidratada: { name: 'Rosa hidratada', zone: 'flores', value: 6, icon: ICON.rosaHidratada, color: 0x4fc3f7 },
+  rosa_clasificada: { name: 'Rosa clasificada', zone: 'flores', value: 10, icon: ICON.rosaClasificada, color: 0xf06292 },
+  bonche_rosas: { name: 'Bonche de rosas', zone: 'flores', value: 30, icon: ICON.boncheRosas, color: 0xf5e6c8 },
+  ramo_rosas: { name: 'Ramo de rosas', zone: 'flores', value: 45, icon: ICON.ramoRosas, color: 0xf8bbd0 },
+  caja_flores: { name: 'Caja de flores', zone: 'flores', value: 250, icon: ICON.cajaFlores, color: 0xc8a26a },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

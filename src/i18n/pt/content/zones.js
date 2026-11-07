@@ -49,4 +49,5 @@ export default {
   lechoneria: ['A Lechonería', 'Para Ibagué ➜', { bizcochos: '⬅ Biscoitos dos Achirais', tinto: '⬅ Cafezinho do Huila', lechonas: 'Lechonas para Neiva ➜', desayunos_tolimenses: 'Cafés da manhã ⬇' }],
   chamba: ['La Chamba', 'Para El Guamo ➜', { ahumadas_tilapia: '⬅ Tilápia defumada de Betania', escabeches: '⬅ Escabeche', recuerdos_tolima: 'Para Neiva ➜' }],
   neiva: ['Neiva', 'Para Villavieja ➜', { cajas_bizcochos: '⬅ Biscoitos dos Achirais', cafe_especial: '⬅ Café do Huila', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Cafés da manhã', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Chá de casca ⬆', almuerzos_represa: 'Tilápia ⬆' }],
+  flores: ['As Flores da Savana', 'Ao aeroporto ➜', {}],
 };

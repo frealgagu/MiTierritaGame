@@ -178,4 +178,10 @@ export default {
   'Salen más seguido y cada una lleva su parte: llega lo mismo por minuto, pero las estaciones no se quedan esperando.': "They leave more often and each one carries its share: the same amount arrives per minute, but the stations don't sit waiting.",
   'Se compran con el álbum de la región lleno.': "They're bought once the region's album is full.",
   'Se compran después de reiniciar la región una vez.': 'They can be bought after restarting the region once.',
+  'Bogotá': 'Bogotá',
+  'Los Freseros de Sibaté': 'The Strawberry Growers of Sibaté',
+  'Las Truchas de Guatavita': 'The Trout of Guatavita',
+  'Las Salinas de Nemocón': 'The Salt Works of Nemocón',
+  'La Cocina de la Sabana': 'The Savanna Kitchen',
+  'Zipaquirá': 'Zipaquirá',
 };

@@ -48,4 +48,5 @@ export default {
   lechoneria: 'Te voilà à la Lechonería, mijo ! Du cochon sortent la viande et la couenne, et au four elles se réunissent dans la lechona.',
   chamba: 'Bienvenue à La Chamba ! Ici l’argile est foulée, modelée à la main et cuite jusqu’à devenir noire.',
   neiva: 'Bienvenue à Neiva, en plein San Pedro ! D’ici part l’excursion pour voir les étoiles dans la Tatacoa.',
+  flores: 'Bienvenue dans la Savane, sumercé ! Ici les roses quittent la serre et partent en avion vers la moitié du monde.',
 };

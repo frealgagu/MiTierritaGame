@@ -8,4 +8,5 @@ export default {
   pacifico: 'The Pacific Coast',
   amazonas: 'Amazonas',
   tolima: 'Tolima Grande',
+  cundinamarca: 'Cundinamarca',
 };

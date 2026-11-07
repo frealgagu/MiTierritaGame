@@ -354,6 +354,14 @@ export const FACTS = {
   plaza_neiva: ['En la plaza de Neiva se venden cholupas, achiras y asado.'],
   fiambrera_tatacoa: ['El desierto de la Tatacoa está cerca de Villavieja, en el Huila.'],
   salida_tatacoa: ['La Tatacoa no es un desierto de verdad: es un bosque seco tropical.', 'Su cielo despejado es de los mejores del país para ver estrellas.'],
+  // Cundinamarca (v4.4)
+  invernadero_rosas: ['Colombia es el segundo exportador de flores del mundo.', 'Casi todas salen de la Sabana de Bogotá y de Antioquia.'],
+  mesa_corte: ['Las rosas se cortan en botón, antes de abrir del todo.'],
+  tinas_hidratacion: ['Recién cortadas, las rosas toman agua con nutrientes por horas.'],
+  clasificadora_flores: ['Las rosas se clasifican por el largo del tallo y el tamaño del botón.'],
+  boncheo: ['Un bonche lleva 25 rosas, envueltas en cartón corrugado.'],
+  cuarto_frio: ['Las flores esperan en cuartos fríos, a unos 2 °C, antes de viajar.'],
+  empacadora_flores: ['En la semana de San Valentín salen aviones llenos de flores.', 'Las flores llegan a Estados Unidos un día o dos después del corte.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -407,6 +415,8 @@ export const PEOPLE = {
   lechoneria: { icon: '👩🏽‍🍳', name: 'Doña Fanny', role: 'la lechonera' },
   chamba: { icon: '👩🏾', name: 'Doña Ofelia', role: 'la alfarera' },
   neiva: { icon: '💃🏽', name: 'Doña Marleny', role: 'la reina del San Pedro' },
+  // Cundinamarca (v4.4)
+  flores: { icon: '👩🏽', name: 'Doña Rocío', role: 'la floricultora' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -460,6 +470,8 @@ export const WELCOME = {
   lechoneria: '¡Llegó a la Lechonería, mijo! Del cerdo sale la carne y el cuero, y en el horno se juntan en la lechona.',
   chamba: '¡Bienvenido a La Chamba! Aquí el barro se pisa, se modela a mano y se quema hasta quedar negro.',
   neiva: '¡Bienvenido a Neiva, en pleno San Pedro! De aquí sale el paseo a ver las estrellas en la Tatacoa.',
+  // Cundinamarca (v4.4)
+  flores: '¡Bienvenido a la Sabana, sumercé! Aquí las rosas salen del invernadero y viajan en avión a medio mundo.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

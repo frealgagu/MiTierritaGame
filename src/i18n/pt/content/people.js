@@ -48,4 +48,5 @@ export default {
   lechoneria: ['Dona Fanny', 'a lechoneira'],
   chamba: ['Dona Ofelia', 'a ceramista'],
   neiva: ['Dona Marleny', 'a rainha do San Pedro'],
+  flores: ['Dona Rocío', 'a floricultora'],
 };

@@ -178,4 +178,10 @@ export default {
   'Salen más seguido y cada una lleva su parte: llega lo mismo por minuto, pero las estaciones no se quedan esperando.': "Elles partent plus souvent et chacune porte sa part : il arrive autant par minute, mais les stations n'attendent plus.",
   'Se compran con el álbum de la región lleno.': "Elles s'achètent une fois l'album de la région complet.",
   'Se compran después de reiniciar la región una vez.': "Elles s'achètent après avoir relancé la région une fois.",
+  'Bogotá': 'Bogotá',
+  'Los Freseros de Sibaté': 'Les Fraisiers de Sibaté',
+  'Las Truchas de Guatavita': 'Les Truites de Guatavita',
+  'Las Salinas de Nemocón': 'Les Salines de Nemocón',
+  'La Cocina de la Sabana': 'La Cuisine de la Savane',
+  'Zipaquirá': 'Zipaquirá',
 };

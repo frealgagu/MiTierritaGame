@@ -379,6 +379,14 @@ export class Terrain {
           else if (r < 0.09) obj = salento && r < 0.075 ? palm(rng) : cartagena ? coconutPalm(rng) : villa ? cypress(rng) : guayacan(rng);
           else if (r < 0.105) obj = streetLamp();
           else if (r < (salento || cartagena || villa ? 0.135 : 0.12)) obj = cartagena ? coconutPalm(rng) : villa ? eucalyptus(rng) : palm(rng);
+        } else if (this.zone.region === 'cundinamarca') {
+          // Cundinamarca (v4.4): la Sabana de Bogotá, fría y verde, con eucaliptos, cipreses de las cercas, piedras y,
+          // en las Flores, invernaderos sueltos de plástico.
+          const z = this.zone.id;
+          if (r < 0.04) obj = eucalyptus(rng);
+          else if (r < 0.07) obj = cypress(rng);
+          else if (r < 0.085) obj = rock(rng);
+          else if (z === 'flores' && r < 0.1) obj = smallGreenhouse(rng);
         } else if (this.zone.region === 'tolima') {
           // El Tolima Grande (v4.0): tierra caliente del valle del Magdalena, con samanes, guayacanes amarillos,
           // palos de mango y garzas; en el Huila, cafetos sueltos y guamos de sombra; en los Achirales y La Chamba,
@@ -965,6 +973,8 @@ const FARM_SOIL = {
   clay: (v) => mix(0xc0784a, 0xa8653c, v * 0.45), // la greda roja de Ráquira
   // Tolima Grande (v4.0)
   achira: (v) => mix(0x7a5a3a, 0x6a4e30, v * 0.45), // la tierra del achiral
+  // Cundinamarca (v4.4)
+  roses: (v) => mix(0x5a4a36, 0x4e402e, v * 0.45), // la tierra negra de la Sabana, bajo los invernaderos
   pigs: (v) => mix(0x8a8a4a, 0x7a7a42, v * 0.5), // el corral de los cerdos, con barro
   betania: (v) => mix(0x3f7f78, 0x4a8a80, v * 0.6), // el agua verde de la represa
   chamba: (v) => mix(0x8d6e5a, 0x7a5c4a, v * 0.45), // el barranco de arcilla gris del Magdalena
@@ -1319,6 +1329,38 @@ function eucalyptus(rng) {
   }
   c.addChild(g);
   return c;
+}
+
+// Invernadero suelto de la Sabana (v4.4): la nave de plástico blanco sobre sus palos, con las rosas adentro.
+function smallGreenhouse(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 4, 3, 26, 10);
+  const a = iso(-0.7, -0.5);
+  const b = iso(0.7, -0.5);
+  const d = iso(0.7, 0.5);
+  const e = iso(-0.7, 0.5);
+  for (const q of [a, b, d, e]) g.moveTo(q.x, q.y).lineTo(q.x, q.y - 14).stroke({ width: 1.2, color: 0x8d6e4a });
+  for (let k = 0; k < 4; k++) g.circle(-8 + k * 6 + (rng() - 0.5) * 2, -3 + (k % 2) * 3, 2).fill(0xd81b3c);
+  g.poly([a.x, a.y - 14, b.x, b.y - 14, b.x, b.y - 22, a.x, a.y - 22]).fill({ color: 0xffffff, alpha: 0.55 }).stroke({ width: 1, color: 0xffffff });
+  g.poly([a.x, a.y - 22, b.x, b.y - 22, d.x, d.y - 22, e.x, e.y - 22]).fill({ color: 0xf4f8fa, alpha: 0.6 }).stroke({ width: 1, color: 0xffffff });
+  g.poly([e.x, e.y, d.x, d.y, d.x, d.y - 22, e.x, e.y - 22]).fill({ color: 0xe8f2f6, alpha: 0.45 }).stroke({ width: 1, color: 0xffffff, alpha: 0.9 });
+  c.addChild(g);
+  return c;
+}
+
+// Rosal de exportación (v4.4): la mata de hojas oscuras con los tallos largos y las rosas rojas en botón (más
+// rosas con los hitos).
+export function drawRoseBush(g, x, y, scale, rng, flowers = 2) {
+  const s = scale;
+  shadow(g, x + 2, y + 1, 9 * s, 3 * s);
+  for (const [dx, dy, r] of [[-4, -8, 5], [4, -9, 5], [0, -13, 5.5], [-2, -5, 4.5], [3, -5, 4]]) g.circle(x + dx * s, y + dy * s, r * s).fill(0x2f6b34).stroke({ width: 0.6, color: 0x1e3f20, alpha: 0.5 });
+  for (let k = 0; k < flowers; k++) {
+    const fx = x + (k - (flowers - 1) / 2) * 4 * s + (rng() - 0.5) * 2;
+    const fy = y - (19 + rng() * 4) * s;
+    g.moveTo(fx, fy).lineTo(fx, y - 12 * s).stroke({ width: 1, color: 0x3f7f3a });
+    g.ellipse(fx, fy, 2.4 * s, 2.9 * s).fill(0xd81b3c).stroke({ width: 0.6, color: 0x7a0c1e });
+  }
 }
 
 // Ciprés: cono oscuro y estrecho, típico de las cercas de las fincas lecheras.

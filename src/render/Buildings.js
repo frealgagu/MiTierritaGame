@@ -7422,6 +7422,154 @@ const DRAW = {
     for (let i = 0; i < 2 + Math.min(ctx.tier, 4); i++) box(g, x + 1.6 + (i % 3) * 0.4, y + 2.1 + Math.floor(i / 3) * 0.4, 0.35, 0.3, 7, PRODUCTS.bizcocho_box.color, { z: Math.floor(i / 3) === 0 ? 0 : 0 });
   },
 
+  // ---------- Cundinamarca (v4.4) ----------
+  // Las Flores de la Sabana. Mesa de corte: la ramada con la mesa larga llena de rosas recién cortadas; la cortadora
+  // con sus tijeras, y los baldes de rosas al lado.
+  mesa_corte(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    box(g, x0 + 0.2, y0 + 0.5, 1.9, 0.6, 9, PAL.wood);
+    for (let k = 0; k < 4 + Math.min(ctx.tier, 3); k++) {
+      const a = iso(x0 + 0.35 + k * 0.24, y0 + 0.62, 9);
+      const b = iso(x0 + 0.5 + k * 0.24, y0 + 0.98, 9);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.2, color: 0x3f7f3a });
+      g.circle(b.x, b.y - 1, 2.4).fill(PRODUCTS.rosa.color);
+    }
+    for (const [bx, by] of [[0.5, 2.4], [0.9, 2.6]]) {
+      const q = iso(x + bx, y + by);
+      g.rect(q.x - 5, q.y - 9, 10, 9).fill(0x90a4ae).stroke(OUTLINE);
+      for (const dx of [-3, 0, 3]) g.circle(q.x + dx, q.y - 12, 2.4).fill(PRODUCTS.rosa.color);
+    }
+    ramada(this, g, x0, y0, 2.3, 1.6, 28 + ctx.up, 0xeef4f6);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x0 + 1.1, y0 + 1.5);
+      worker(anim, wp.x, wp.y, 0xe91e63);
+      const snip = this.working ? Math.abs(Math.sin(time * 6)) * 3 : 1;
+      anim.moveTo(wp.x + 4, wp.y - 14).lineTo(wp.x + 9, wp.y - 16 - snip).stroke({ width: 1.2, color: 0x607d8b });
+      anim.moveTo(wp.x + 4, wp.y - 14).lineTo(wp.x + 9, wp.y - 12 + snip).stroke({ width: 1.2, color: 0x607d8b });
+    };
+    this.animate(0);
+  },
+
+  // Tinas de hidratación: las tinas azules llenas de agua con la solución, con las rosas paradas adentro; el agua
+  // se mece.
+  tinas_hidratacion(g, x, y, ctx) {
+    const tubs = ctx.tier >= 2 ? [[0.3, 0.4], [1.4, 0.4], [0.3, 1.5], [1.4, 1.5]] : [[0.4, 0.5], [1.5, 0.5], [0.9, 1.6]];
+    this.tubs = [];
+    for (const [tx, ty] of tubs) {
+      box(g, x + tx, y + ty, 0.9, 0.9, 8, 0x1e88e5);
+      g.poly(isoPoly([[x + tx + 0.08, y + ty + 0.08, 8], [x + tx + 0.82, y + ty + 0.08, 8], [x + tx + 0.82, y + ty + 0.82, 8], [x + tx + 0.08, y + ty + 0.82, 8]])).fill(0x81d4fa);
+      for (let k = 0; k < 5; k++) {
+        const q = iso(x + tx + 0.2 + (k % 3) * 0.25, y + ty + 0.25 + Math.floor(k / 3) * 0.35, 8);
+        g.moveTo(q.x, q.y).lineTo(q.x, q.y - 12).stroke({ width: 1, color: 0x3f7f3a });
+        g.circle(q.x, q.y - 13, 2.6).fill(k % 2 ? 0xd81b3c : 0xf06292).stroke({ width: 0.6, color: 0x7a0c1e });
+      }
+      this.tubs.push(iso(x + tx + 0.45, y + ty + 0.45, 8));
+    }
+    this.roofTop = iso(x + 1.3, y + 1.3, 22);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, t] of this.tubs.entries()) {
+        const f = this.working ? (time * 0.6 + k * 0.3) % 1 : 0;
+        anim.ellipse(t.x, t.y, 6 + f * 8, 2 + f * 3).stroke({ width: 1, color: 0xffffff, alpha: 0.7 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Clasificadora: la nave con la banda donde pasan las rosas y la regla para medirles el tallo.
+  clasificadora_flores(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.4;
+    box(g, x0, y0 + 0.6, 2.3, 0.5, 8, 0x455a64);
+    g.poly(isoPoly([[x0, y0 + 0.65, 8], [x0 + 2.3, y0 + 0.65, 8], [x0 + 2.3, y0 + 1.05, 8], [x0, y0 + 1.05, 8]])).fill(0x263238);
+    box(g, x0 + 0.2, y0 + 1.4, 1.8, 0.3, 6, 0xfdd835);
+    ramada(this, g, x0, y0, 2.4, 1.8, 30 + ctx.up, 0xeef4f6);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (let k = 0; k < 4; k++) {
+        const f = ((this.working ? time * 0.25 : 0) + k / 4) % 1;
+        const q = iso(x0 + 0.1 + f * 2.1, y0 + 0.85, 9);
+        anim.moveTo(q.x - 5, q.y + 2).lineTo(q.x + 4, q.y - 1).stroke({ width: 1.2, color: 0x3f7f3a });
+        anim.circle(q.x + 5, q.y - 2, 2.4).fill([0xd81b3c, 0xf06292, 0xfafafa, 0xfbc02d][k]);
+      }
+      const wp = iso(x0 + 1.2, y0 + 1.9);
+      worker(anim, wp.x, wp.y, 0x7e57c2);
+    };
+    this.animate(0);
+  },
+
+  // Boncheo: la casa blanca con la mesa larga donde se arman los bonches en su cartón; los bonches listos al lado.
+  boncheo(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.2, 1.4, 26, ctx, { wall: 0xfbf8f1, roofColor: 0x6d8f4e });
+    door(g, hx, hy, 1.4, 1.6, 17, 0x2e7d32);
+    windowOnRight(this, g, hx, hy, 2.2, 0.7, 12, 0x2e7d32);
+    box(g, x + 0.5, y + 2.15, 1.8, 0.5, 8, PAL.wood);
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 3); k++) {
+      const q = iso(x + 0.75 + k * 0.4, y + 2.4, 8);
+      g.poly([q.x - 4, q.y - 2, q.x + 4, q.y - 2, q.x + 2, q.y + 4, q.x - 2, q.y + 4]).fill(PRODUCTS.bonche_rosas.color).stroke({ width: 0.6, color: 0x3a2418 });
+      for (const dx of [-2.5, 0, 2.5]) g.circle(q.x + dx, q.y - 3.5, 1.9).fill(PRODUCTS.rosa.color);
+    }
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const q = iso(x + 1.4, y + 2.9);
+      worker(anim, q.x, q.y, 0xf06292);
+      const wrap = this.working ? Math.abs(Math.sin(time * 4)) * 3 : 0;
+      anim.circle(q.x - 2 + wrap, q.y - 20, 2.2).fill(PRODUCTS.rosa.color);
+    };
+    this.animate(0);
+  },
+
+  // Cuarto frío: la bodega blanca de paredes gruesas, con la puerta de cámara, el equipo de frío en el techo (el
+  // ventilador da vueltas) y la escarcha en la puerta.
+  cuarto_frio(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    box(g, x0, y0, 2.2, 1.7, 30 + ctx.up, 0xf4f6f8);
+    door(g, x0, y0, 1.7, 1.2, 20, 0x90a4ae);
+    const fr = iso(x0 + 2.2, y0 + 1.1, 12);
+    g.rect(fr.x - 1, fr.y - 8, 6, 3).fill({ color: 0xe1f5fe, alpha: 0.9 });
+    box(g, x0 + 0.5, y0 + 0.4, 1.0, 0.8, 8, 0xb0bec5, { z: 30 + ctx.up });
+    this.fan = iso(x0 + 1.0, y0 + 0.8, 38 + ctx.up);
+    this.roofTop = iso(x0 + 1.1, y0 + 0.85, 40 + ctx.up);
+    for (let i = 0; i < 1 + Math.min(ctx.tier, 3); i++) box(g, x + 0.4 + i * 0.45, y + 2.4, 0.38, 0.3, 6, PRODUCTS.bonche_rosas.color);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const a = this.working ? time * 8 : 0;
+      anim.ellipse(this.fan.x, this.fan.y, 9, 4.5).fill(0x607d8b);
+      for (let k = 0; k < 3; k++) anim.moveTo(this.fan.x, this.fan.y).lineTo(this.fan.x + Math.cos(a + k * 2.09) * 8, this.fan.y + Math.sin(a + k * 2.09) * 4).stroke({ width: 2, color: 0xcfd8dc });
+    };
+    this.animate(0);
+  },
+
+  // Empacadora de flores: la casa con el letrero de la rosa y el avión; en el corredor, las cajas largas apiladas
+  // para el aeropuerto.
+  empacadora_flores(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.3, 1.5, 28, ctx, { wall: 0xf8e1e7, roofColor: 0x8d6e63 });
+    door(g, hx, hy, 1.5, 1.7, 18, 0x6d4c41);
+    windowOnRight(this, g, hx, hy, 2.3, 0.75, 14, 0x6d4c41);
+    const s = iso(hx + 0.8, hy + 1.5, 24 + ctx.up);
+    g.roundRect(s.x - 13, s.y - 7, 26, 12, 3).fill(0xfffaf0).stroke(OUTLINE);
+    g.circle(s.x - 5, s.y - 1, 3.5).fill(PRODUCTS.rosa.color);
+    g.poly([s.x + 1, s.y - 1, s.x + 10, s.y - 1, s.x + 6, s.y - 4, s.x + 6, s.y + 2]).fill(0x1e88e5);
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 4); i++) box(g, x + 1.5 + (i % 2) * 0.55, y + 2.1 + Math.floor(i / 2) * 0.3, 0.5, 0.25, 6, PRODUCTS.caja_flores.color, { z: 0 });
+  },
+
   // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja
   // que se amontona para el Secadero.
   huila_wetmill(g, x, y, ctx) {
