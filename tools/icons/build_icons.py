@@ -7079,8 +7079,8 @@ def e_bronze():
 
 def e_money():
     """El costal de la plata, con su signo de pesos."""
-    layers = [(OUTLINE, ['M 34 26 Q 26 14 36 10 L 64 10 Q 74 14 66 26 Q 92 40 90 70 Q 88 94 50 94 Q 12 94 10 70 Q 8 40 34 26 Z']), ('#c8a165', ['M 36.6 26.6 Q 30 15.6 37 12.6 L 63 12.6 Q 70 15.6 63.4 26.6 Q 87.6 40.6 87.4 70 Q 85.4 91.4 50 91.4 Q 14.6 91.4 12.6 70 Q 12.4 40.6 36.6 26.6 Z'])]
-    layers += [(OUTLINE, [rect(32, 24, 36, 6)]), ('#8d5a32', [rect(33.4, 25.4, 33.2, 3.2)]), ('#e0c088', [ellipse(30, 56, 6, 12, 20)])]
+    layers = [(OUTLINE, ['M 34 26 Q 26 14 36 10 L 64 10 Q 74 14 66 26 Q 92 40 90 70 Q 88 94 50 94 Q 12 94 10 70 Q 8 40 34 26 Z']), ('#fbc02d', ['M 36.6 26.6 Q 30 15.6 37 12.6 L 63 12.6 Q 70 15.6 63.4 26.6 Q 87.6 40.6 87.4 70 Q 85.4 91.4 50 91.4 Q 14.6 91.4 12.6 70 Q 12.4 40.6 36.6 26.6 Z'])]
+    layers += [(OUTLINE, [rect(32, 24, 36, 6)]), ('#8d5a32', [rect(33.4, 25.4, 33.2, 3.2)]), ('#fff59d', [ellipse(30, 56, 6, 12, 20)])]
     layers.append(('#2e7d32', ['M 58 46 Q 52 40 46 42 Q 38 46 44 54 L 56 60 Q 62 66 54 70 Q 46 72 40 66 L 36 70 Q 44 78 54 76 Q 68 72 64 60 Q 62 54 52 50 Q 44 46 48 44 Q 54 44 56 50 Z', rect(48, 32, 4, 50)]))
     return layers
 
@@ -7092,7 +7092,7 @@ def e_check():
 
 def e_flag_finish():
     """Bandera de cuadros (al máximo)."""
-    layers = bar(18, 96, 18, 6, 3, '#5d4037') + [(OUTLINE, [poly(20, 8, 88, 12, 86, 52, 20, 48)]), ('#fafafa', [poly(22, 10, 86, 14, 84.4, 50, 22, 46)])]
+    layers = bar(18, 96, 18, 6, 3, '#e53935') + [(OUTLINE, [poly(20, 8, 88, 12, 86, 52, 20, 48)]), ('#fafafa', [poly(22, 10, 86, 14, 84.4, 50, 22, 46)])]
     layers.append(('#1b1b1b', [rect(22 + 16 * i + (8 if j % 2 else 0), 10 + 9 * j + 0.5 * i, 8, 9) for i in range(4) for j in range(4) if 22 + 16 * i + (8 if j % 2 else 0) < 84]))
     return layers
 

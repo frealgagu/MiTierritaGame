@@ -318,8 +318,11 @@ export function eventPenalty(board, stationId) {
 }
 
 // Qué parte de lo que piden las estaciones llega de afuera por un importado (0 a 1).
+// Aunque la vía esté tapada, algo pasa siempre (v4.3.2): un hilito, como quien lo lleva a pie. Así, sin hacer nada,
+// el evento se termina (tarde, con bronce); las compras del evento siguen siendo lo que lo saca adelante.
+export const SUPPLY_TRICKLE = 0.1;
 export function supplyFraction(board, product) {
-  let f = eventDef(board).supply?.[product] ?? 0;
+  let f = Math.max(eventDef(board).supply?.[product] ?? 0, SUPPLY_TRICKLE);
   for (const id of board.research) {
     for (const e of effectsOf(EVENT_ACTIONS_BY_ID[id])) if (e.type === 'supply' && e.product === product) f = Math.max(f, e.fraction);
   }

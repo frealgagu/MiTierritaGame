@@ -60,6 +60,7 @@ const SOON_BOX = Object.fromEntries(SOON.map((r) => [r.id, union(DEPARTMENTS.fil
 // Llanos y el Amazonas, los departamentos son enormes y las zonas quedan en una esquina).
 const ZONE_POS = {};
 const ZONES_VIEW = {};
+const AIRSTRIP = {};
 const box = (pts) => union(pts.map(([x, y]) => ({ x0: x, y0: y, x1: x, y1: y })));
 for (const r of REGIONS) {
   const pts = r.zones.map((z) => proj(ZONE_GEO[z]));
@@ -82,6 +83,13 @@ for (const r of REGIONS) {
     }
   }
   r.zones.forEach((z, k) => (ZONE_POS[z] = pts[k]));
+  // La pista de cada región (v4.3.2): al lado de su última zona (la ciudad), hacia afuera. Ahí aterriza la
+  // avioneta y de ahí sale el Willys.
+  const cx = pts.reduce((n, p) => n + p[0], 0) / pts.length;
+  const cy = pts.reduce((n, p) => n + p[1], 0) / pts.length;
+  const last = pts.at(-1);
+  const away = Math.hypot(last[0] - cx, last[1] - cy) || 1;
+  AIRSTRIP[r.id] = [last[0] + ((last[0] - cx) / away) * size * 0.2, last[1] + ((last[1] - cy) / away) * size * 0.2];
   const b = box(pts);
   const s = Math.max(b.x1 - b.x0, b.y1 - b.y0, 90);
   ZONES_VIEW[r.id] = viewOf(b, s * 0.3);
@@ -479,28 +487,29 @@ export class ZoneMap {
         await wait(250);
         this.highlight = there;
         this.paint();
-        const v = ZONES_VIEW[there];
-        await this.fly(ZONE_POS[from], [v.x + v.w / 2, v.y + v.h / 2]);
+        // Aterriza en la pista de la región, junto a su última zona (v4.3.2: antes, en el centro, y el Willys
+        // entraba desde el borde del mapa).
+        await this.fly(ZONE_POS[from], AIRSTRIP[there]);
         await wait(200);
         await this.zoomTo(there);
       }
-      // Entra desde el borde del mapa, del lado de donde viene.
-      await this.drive(this.edgeToward(proj(ZONE_GEO[from]), ZONE_POS[target]), ZONE_POS[target], target);
+      // El Willys sale de la pista.
+      this.runway(AIRSTRIP[there]);
+      await this.drive(AIRSTRIP[there], ZONE_POS[target], target);
     }
     await wait(250);
     this.busy = false;
     this.onGo(target);
   }
 
-  // El punto del borde de lo que se ve, en la dirección de `from` vista desde `to`.
-  edgeToward(from, to) {
-    const v = this.vb;
-    const dx = from[0] - to[0];
-    const dy = from[1] - to[1];
-    const kx = dx ? (dx > 0 ? v.x + v.w - to[0] : v.x - to[0]) / dx : Infinity;
-    const ky = dy ? (dy > 0 ? v.y + v.h - to[1] : v.y - to[1]) / dy : Infinity;
-    const k = Math.min(Math.abs(kx), Math.abs(ky), 1) * 0.92;
-    return [to[0] + dx * k, to[1] + dy * k];
+  // La pista de aterrizaje (v4.3.2), con la avioneta parqueada al lado.
+  runway([x, y]) {
+    const u = this.vb.w / 100;
+    const g = el('g', { transform: `translate(${x} ${y}) rotate(-28)` }, this.overlay);
+    el('rect', { x: -7 * u, y: -1.3 * u, width: 14 * u, height: 2.6 * u, rx: 0.6 * u, fill: '#6d6f73', stroke: '#3a2418', 'stroke-width': 0.25 * u }, g);
+    for (let i = -5; i <= 4; i += 2) el('rect', { x: i * u, y: -0.15 * u, width: 1.1 * u, height: 0.3 * u, fill: '#f4efe6' }, g);
+    const parked = el('g', { transform: `translate(${3 * u} ${-3.4 * u}) scale(${0.32 * u})` }, g);
+    plane(parked);
   }
 
   // El Willys va de a a b (en lo que se ve), por el camino punteado; la zona de destino se resalta (v4.1: antes

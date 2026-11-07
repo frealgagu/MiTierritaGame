@@ -707,22 +707,43 @@ function bindMenu(game, sound, music, getActive) {
     saveGame(state);
     location.reload();
   });
-  // Confirmación en dos toques (sin diálogos del navegador).
-  const reset = document.getElementById('reset-btn');
-  let armed = null;
-  reset.addEventListener('click', () => {
-    if (!armed) {
-      reset.textContent = t('Toca otra vez para borrar');
-      armed = setTimeout(() => {
-        armed = null;
-        reset.textContent = t('Borrar partida');
-      }, 3000);
-      return;
-    }
-    resetting = true;
-    clearSave();
-    location.reload();
+  // Borrar la partida (v4.3.2): hay que deslizar la perilla hasta el final de la barra; si se suelta antes,
+  // vuelve a su sitio. Antes bastaban dos toques y hubo quien la borró sin querer.
+  const slide = document.getElementById('reset-slide');
+  const knob = document.getElementById('reset-knob');
+  slide.querySelector('.slide-label').textContent = t('Desliza para borrar la partida');
+  let drag = null;
+  const maxX = () => slide.clientWidth - knob.offsetWidth - 8;
+  const place = (x) => {
+    knob.style.transform = `translateX(${x}px)`;
+    slide.style.setProperty('--slide', String(Math.min(1, x / Math.max(1, maxX()))));
+  };
+  const release = () => {
+    if (!drag) return;
+    drag = null;
+    slide.classList.remove('dragging');
+    place(0);
+  };
+  knob.addEventListener('pointerdown', (e) => {
+    drag = { start: e.clientX, id: e.pointerId };
+    knob.setPointerCapture(e.pointerId);
+    slide.classList.add('dragging');
   });
+  knob.addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const x = Math.max(0, Math.min(maxX(), e.clientX - drag.start));
+    place(x);
+    if (x >= maxX() - 2) {
+      drag = null;
+      slide.classList.add('done');
+      slide.querySelector('.slide-label').textContent = t('Borrando…');
+      resetting = true;
+      clearSave();
+      setTimeout(() => location.reload(), 250);
+    }
+  });
+  knob.addEventListener('pointerup', release);
+  knob.addEventListener('pointercancel', release);
 }
 
 start();
