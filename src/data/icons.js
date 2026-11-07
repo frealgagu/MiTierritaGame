@@ -376,6 +376,70 @@ export const ICON = {
   fonda: '\uE172', // La fonda: la casa del camino con balcón, el letrero, la mesa afuera y la mula amarrada a la puerta
   balcones: '\uE173', // Los balcones: la casa de bahareque de dos pisos, de puertas y balcones de colores y materas de flores
   castilloPolvora: '\uE174', // Las fiestas del pueblo: el castillo de pólvora con sus ruedas encendidas, los voladores y las banderitas
+  bocadilloLonja: '\uE175', // El bocadillo de lonja: la tajada de dos capas, guayaba roja y guayaba blanca, sobre la hoja de bijao
+  cajitas: '\uE176', // Las cajitas de madera: las cajas de balso apiladas, una abierta con los bocadillos envueltos en bijao
+  velez: '\uE177', // Vélez: la capital del bocadillo y del torbellino, con su requinto y los bocadillos en bijao
+  caney: '\uE178', // El caney: el rancho alto de palos y techo de paja donde cuelga la hoja de tabaco a curar
+  galeon: '\uE179', // Tabaco para el mundo: el velero de la Colonia, cargado de fardos de tabaco rumbo a Europa
+  telar: '\uE17A', // Curití: el telar de madera con los hilos de fique tensos y la tela que va creciendo
+  vaquero: '\uE17B', // El vaquero: a caballo, con camisa blanca y sombrero, revoleando el lazo por los potreros
+  cabro: '\uE17C', // El cabro: el chivo de las tierras secas, con sus cachos hacia atrás, la barba y la cola parada
+  pepitoria: '\uE17D', // La pepitoria: el arroz amarillo revuelto con las menudencias del cabro, con arveja y cilantro, en el plato
+  mute: '\uE17E', // El mute: la sopa espesa de maíz pelado con carnes, papa y verduras, en el plato hondo, humeando
+  chicamocha: '\uE17F', // El cañón del Chicamocha: las montañas secas y hondas a lado y lado, el río al fondo y el teleférico cruzando
+  salida: '\uE180', // La salida de las hormigas: con las primeras lluvias las reinas salen volando del hormiguero
+  recoleccion: '\uE181', // La recolección: al amanecer, con sombrero y tarro, se recogen las reinas a la salida del hormiguero
+  rafting: '\uE182', // San Gil: el bote de rafting bajando los rápidos del río, con sus remos y los cascos
+  piedraAmarilla: '\uE183', // La piedra amarilla de Barichara: los bloques de piedra labrada, apilados, con el cincel y el mazo
+  tapia: '\uE184', // La tapia pisada: el muro de tierra apisonada por capas dentro de su molde de tablas, con el pisón
+  amonita: '\uE185', // Guane y su museo: la amonita, el fósil en espiral de cuando el cañón era mar, sobre su piedra
+  vasijaGuane: '\uE186', // Los guanes: la vasija de cerámica pintada con figuras rojas y negras, y la mota de algodón que tejían
+  mirador: '\uE187', // El mirador de Barichara: la baranda de piedra al borde del pueblo y el valle del río Suárez al atardecer
+  rioSinu: '\uE188', // El río Sinú: el río que riega las vegas verdes de Córdoba, con los cuadros de arroz y una canoa
+  garza: '\uE189', // La garza blanca: de pie en el arrozal inundado, con su cuello largo y el pico amarillo, buscando bichos
+  pilonArroz: '\uE18A', // El pilón del arroz: el tronco hueco y la mano de pilón con que se pilaba el arroz, con el grano blanco
+  arrozLisa: '\uE18B', // El arroz de lisa: el arroz revuelto con la lisa ahumada desmenuzada, con la lisa entera encima, en el plato
+  mompox: '\uE18C', // Mompox: la iglesia de Santa Bárbara de torre amarilla con balcón, a la orilla del río Magdalena
+  champan: '\uE18D', // El río Magdalena: el champán, la barca de techo curvo de palma, con el boga empujando con la vara
+  enyucado: '\uE18E', // El enyucado: la tajada de torta de yuca con coco y queso, dorada por encima, con semillas de anís
+  playaTolu: '\uE18F', // Tolú y Coveñas: la playa de arena con palmas de coco, el mar del golfo de Morrosquillo y una lancha
+  palafitos: '\uE190', // Los palafitos: las casas de madera sobre pilotes en medio de la ciénaga, con la canoa amarrada
+  manglar: '\uE191', // El manglar: los mangles con las raíces en el agua salobre, donde se crían los peces
+  cienagaGrande: '\uE192', // La Ciénaga Grande: la laguna inmensa, el pescador lanzando la atarraya desde la canoa y las aves
+  sueroTaza: '\uE193', // El suero costeño: la taza de crema agria blanca y espesa, con los trozos de yuca y el bollo al lado
+  bolloLimpio: '\uE194', // El bollo limpio: la masa de maíz envuelta en la hoja y amarrada, uno abierto, y la tajada de queso costeño
+  porro: '\uE195', // El porro: la música de banda de la sabana, con la trompeta, el bombardino y el redoblante
+  pintas: '\uE196', // Las pintas: la trenza de caña flecha con sus figuras negras y blancas, cada una con su nombre
+  oroZenu: '\uE197', // Los zenúes: la orejera de oro en filigrana, el trabajo de orfebrería del pueblo de las ciénagas
+  tuchin: '\uE198', // Tuchín: el pueblo zenú de los sombreros vueltiaos, con la tienda que los cuelga a la vista
+  murallas: '\uE199', // Las murallas de Cartagena: el muro de piedra coralina con su garita, frente al mar
+  palenquera: '\uE19A', // La palenquera: con su vestido de colores y la ponchera de frutas en la cabeza; viene de San Basilio de Palenque
+  balconCartagena: '\uE19B', // Los balcones de Cartagena: la casa colonial de colores con el balcón de madera cubierto de bugambilias
+  sanFelipe: '\uE19C', // El castillo de San Felipe: la fortaleza de piedra en escalones sobre el cerro, con sus garitas y la bandera
+  islasRosario: '\uE19D', // Las Islas del Rosario: la isla de arena blanca con su palma en el mar turquesa, los corales y la lancha
+  papicultor: '\uE19E', // El papicultor: de ruana y sombrero, con el azadón, junto a las matas de papa y el bulto de la cosecha
+  cocido: '\uE19F', // El cocido boyacense: en la bandeja, papas, mazorca, habas, cubios, chuguas y carnes, cocinados juntos
+  cubios: '\uE1A0', // Cubios y chuguas: los tubérculos del altiplano, los cubios largos y pintados, y las chuguas redondas de colores
+  neblina: '\uE1A1', // La neblina del páramo: los frailejones y las lomas en la madrugada fría, cubiertos de niebla
+  tunjo: '\uE1A2', // Los muiscas: el tunjo de oro, la figurita plana que ofrecían, delante del sol que adoraban
+  chicha: '\uE1A3', // La chicha: la múcura de barro donde fermenta el maíz y la totuma servida, con las mazorcas al lado
+  guarapoOlla: '\uE1A4', // El guarapo: la olla grande de barro donde fermenta el jugo de caña con panela, espumoso, y la totuma
+  tejo: '\uE1A5', // El tejo: la cancha de greda con el bocín, las mechas rojas de pólvora y el tejo de hierro que va a totear
+  tibasosa: '\uE1A6', // Tibasosa: la feijoa, entera y partida con su pulpa clara, delante de una casa blanca del pueblo
+  alfarera: '\uE1A7', // La alfarera: sentada al torno, amasando y subiendo la olla de barro con las manos mojadas
+  alcancia: '\uE1A8', // La alcancía: el marranito de barro con la ranura en el lomo, para guardar las monedas
+  candelaria: '\uE1A9', // La Candelaria: el monasterio blanco de tejas en medio del desierto, con sus arcos y los cactus
+  raquira: '\uE1AA', // Ráquira: el pueblo de las ollas, con las casas pintadas de colores vivos y las vasijas a la puerta
+  kumisAlmojabana: '\uE1AB', // El kumis de Paipa: el vaso de leche fermentada con canela y la almojábana al lado
+  termales: '\uE1AC', // Los termales de Paipa: la poza de agua caliente que sale de la tierra con vapor, entre las piedras
+  lanceros: '\uE1AD', // El Pantano de Vargas: el monumento de bronce de los catorce lanceros, el jinete con la lanza sobre su pedestal
+  telarLana: '\uE1AE', // El telar de la ruana: el telar de madera donde la ruana de lana crece franja por franja
+  frailejon: '\uE1AF', // El frailejón: la planta peluda del páramo, que guarda el agua de la neblina
+  nobsa: '\uE1B0', // Nobsa: las ruanas de colores colgadas a la puerta del taller, en el pueblo de las ruanas
+  plazaEmpedrada: '\uE1B1', // La plaza de Villa de Leyva: la plaza grande toda de piedra, con la pila en el centro y las casas blancas
+  cometas: '\uE1B2', // Las cometas de Villa de Leyva: en agosto el cielo se llena de cometas de colores sobre las lomas
+  pozosAzules: '\uE1B3', // Los Pozos Azules: las lagunitas de agua azul turquesa en medio del desierto ocre, cerca de Villa de Leyva
+  casaTerracota: '\uE1B4', // La Casa Terracota: la casa entera hecha de barro cocido, de formas redondas como una gran vasija
 };
 
 export const ICON_FONT = 'MiTierrita Icons';
