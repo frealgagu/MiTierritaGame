@@ -6,7 +6,7 @@ import { PRODUCTS } from '../data/products.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { analyzeChain } from '../sim/analysis.js';
-import { COMPOST_VALUE, compostValueBoost, jeepCount, legacyMult, researchMult } from '../sim/modifiers.js';
+import { COMPOST_VALUE, compostValueBoost, legacyMult, researchMult } from '../sim/modifiers.js';
 import { clockOf, seasonOf } from '../sim/calendar.js';
 import { t } from '../i18n/index.js';
 
@@ -88,7 +88,8 @@ export class MoneyView {
     if (sold.some((x) => researchMult(s, 'productValue', x.product) !== 1)) mults.push(row(t('🔬 Investigaciones: precio de algunos productos'), t('ver arriba')));
     const carry = researchMult(s, 'dispatchCapacity', zone);
     if (carry !== 1) mults.push(row(t('🔬 Investigaciones: lo que lleva el Willys'), mult(carry)));
-    if (jeepCount(s) > 1) mults.push(row(t('🚙 Segundo Willys'), mult(jeepCount(s))));
+    // El segundo Willys no multiplica el dinero (v4.3.1): despacha más seguido, pero si uno solo ya alcanzaba
+    // se vende lo mismo. Por eso ya no sale aquí (decía ×2).
     if (zone === 'finca' && compostValueBoost(s) > 1) mults.push(row(t('🪱 Compost: lo que vende la Finca'), `+${Math.round((COMPOST_VALUE - 1) * 100)} %`));
     parts.push(`<h3 class="research-other">${t('Lo que lo multiplica')}</h3>`);
     parts.push(mults.length ? mults.join('') : `<p class="money-note">${t('Nada todavía: llega con las investigaciones, los reinicios y el verano.')}</p>`);

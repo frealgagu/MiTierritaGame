@@ -99,7 +99,7 @@ export class RenownView {
   buyJeep(regionId) {
     const profile = profileOf(this.game.state);
     if (!buyWillys2(profile, regionState(this.game.state, regionId))) return;
-    toast(t('🚙 ¡Segundo Willys para {region}! Cada zona tiene ahora dos: el despacho vende el doble.', { region: REGIONS_BY_ID[regionId].name }), 4500);
+    toast(t('🚙 ¡Segundo Willys para {region}! Cada zona tiene ahora dos: la bodega despacha más seguido.', { region: REGIONS_BY_ID[regionId].name }), 4500);
     this.onDecor(profile);
     this.render();
   }
@@ -116,8 +116,8 @@ export class RenownView {
         ? `<button class="btn" disabled>${region.icon} ${region.name} ✓</button>`
         : `<button class="btn ${q.ok ? 'buy' : ''}" data-willys2="${region.id}" ${q.ok ? '' : 'disabled'}>${region.icon} ${region.name} · ⭐ ${q.cost}</button>`;
     const text = albumDone(profile, this.region)
-      ? t('Cada zona de la región tiene un segundo Willys, por su propio carril: el despacho vende el doble. Se pinta aparte en Decoración.')
-      : t('Llena este álbum ({have} / {total} láminas) para comprar un segundo Willys en {region}: el despacho vende el doble.', { have, total, region: region.name });
+      ? t('Cada zona de la región tiene un segundo Willys, por su propio carril: la bodega despacha más seguido, sin esperar a que vuelva el primero (lo que se vende por minuto es lo mismo si uno solo ya alcanzaba). Se pinta aparte en Decoración.')
+      : t('Llena este álbum ({have} / {total} láminas) para comprar un segundo Willys en {region}: la bodega despacha más seguido.', { have, total, region: region.name });
     return `<div class="logro willys2"><div class="logro-head"><b>${t('🚙 Segundo Willys')}</b></div><p>${text}</p><div class="willys2-btns">${button}</div></div>`;
   }
 

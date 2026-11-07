@@ -276,6 +276,8 @@ function drawWillys(g, toGrid, sacks, resting = false, paint = LOOK.willys.color
   return cup;
 }
 
+const CHIVA_LAYER = 100000;
+
 // Chiva: bus de escalera pintado de colores, para las rutas entre zonas. Lleva la carga en el techo.
 export class ChivaView extends Container {
   // productId: lo que lleva (da color a la carga del techo).
@@ -339,7 +341,9 @@ export class ChivaView extends Container {
   place(gx, gy, dx, dy, load) {
     const p = iso(gx, gy);
     this.position.set(p.x, p.y);
-    this.zIndex = depth(gx, gy) + 0.3;
+    // Siempre por encima de los edificios y la decoración (v4.3.1): ordenada por profundidad, una estación de
+    // adelante la tapaba y parecía que la chiva pasaba por debajo o la atravesaba. Entre chivas, la de adelante.
+    this.zIndex = CHIVA_LAYER + depth(gx, gy);
     const alongX = Math.abs(dx) > Math.abs(dy);
     this.alongX.visible = alongX;
     this.alongY.visible = !alongX;
