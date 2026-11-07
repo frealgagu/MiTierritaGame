@@ -396,6 +396,15 @@ export const PRODUCTS = {
   trucha_ahumada: { name: 'Trucha ahumada', zone: 'truchas', value: 4000, icon: ICON.truchaAhumada, color: 0xb8742a },
   almuerzo_trucha: { name: 'Almuerzo de trucha', zone: 'truchas', value: 4000, icon: ICON.almuerzoTrucha, color: 0xe6c26a },
 
+  roca_sal: { name: 'Roca de sal', zone: 'salinas', value: 1000, icon: ICON.rocaSal, color: 0xe8e2d6 },
+  salmuera: { name: 'Salmuera', zone: 'salinas', value: 2500, icon: ICON.salmuera, color: 0x4fc3f7 },
+  bloque_sal: { name: 'Bloque de sal', zone: 'salinas', value: 1200, icon: ICON.bloqueSal, color: 0xcfc8bb },
+  figura_sal: { name: 'Figura de sal', zone: 'salinas', value: 3000, icon: ICON.figuraSal, color: 0xf4f1ea },
+  sal_refinada: { name: 'Sal refinada', zone: 'salinas', value: 5000, icon: ICON.salRefinada, color: 0xffffff },
+  pan_sal: { name: 'Pan de sal', zone: 'salinas', value: 5000, icon: ICON.panSal, color: 0xe2dccf },
+  cofre_sal: { name: 'Cofre de sal', zone: 'salinas', value: 220000, icon: ICON.cofreSal, color: 0xa1693f },
+  canasta_sabanera: { name: 'Canasta sabanera', zone: 'salinas', value: 100000, icon: ICON.canastaSabanera, color: 0xc9a26a },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

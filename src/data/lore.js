@@ -374,6 +374,13 @@ export const FACTS = {
   fileteadora_trucha: ['El filete de trucha es rosado por lo que come: pequeños crustáceos.'],
   mesa_ceviche: ['El ceviche se «cocina» en limón, sin fuego.'],
   cocina_laguna: ['Junto a la laguna se come trucha frita con papa salada y limón.', 'La laguna de Guatavita es la de la leyenda de El Dorado.'],
+  socavon_sal: ['En Nemocón se saca sal desde antes de la llegada de los españoles.', 'La mina de sal de Nemocón tiene socavones de más de 80 metros de hondo.'],
+  pozos_salmuera: ['La roca se disuelve en agua y queda la salmuera, el agua salada.'],
+  taller_tallado: ['En la mina hay figuras, cruces y espejos de salmuera tallados en la sal.'],
+  tachos_evaporacion: ['Al hervir la salmuera, el agua se va y la sal queda en el fondo del tacho.'],
+  gachas_barro: ['Los muiscas cuajaban la sal en ollas de barro llamadas gachas.', 'El pan de sal servía para comerciar con otros pueblos.'],
+  empaque_regalo: ['Las figuras de sal y la sal de colores se venden de recuerdo en Nemocón.'],
+  armadora_canastas: ['La canasta sabanera: sal de Nemocón, rosas de Madrid y fresas de Sibaté.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -431,6 +438,7 @@ export const PEOPLE = {
   flores: { icon: '👩🏽', name: 'Doña Rocío', role: 'la floricultora' },
   fresas: { icon: '👨🏽‍🌾', name: 'Don Gilberto', role: 'el fresero' },
   truchas: { icon: '🧔🏽', name: 'Don Ernesto', role: 'el truchero' },
+  salinas: { icon: '👵🏽', name: 'Doña Blanca', role: 'la salinera' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -488,6 +496,7 @@ export const WELCOME = {
   flores: '¡Bienvenido a la Sabana, sumercé! Aquí las rosas salen del invernadero y viajan en avión a medio mundo.',
   fresas: '¡Quiubo, sumercé! Aquí en Sibaté las fresas se lavan, se escogen y se sirven con crema; las de segunda, en mermelada.',
   truchas: '¡Bienvenido a Guatavita, sumercé! En estos estanques de agua helada se crían las truchas, y allá arriba está la laguna de El Dorado.',
+  salinas: '¡Bienvenido a Nemocón, sumercé! De esta montaña sale la sal: se disuelve en salmuera, se cuaja y hasta se talla.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

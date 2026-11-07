@@ -499,4 +499,13 @@ export default {
   humo_eucalipto: 'Fumée d’eucalyptus',
   freidora_laguna: 'Grande friteuse',
   papa_salada: 'Pommes de terre salées',
+  socavon_nuevo: 'Nouvelle galerie',
+  bombas_salmuera: 'Pompes à saumure',
+  cinceles: 'Ciseaux fins',
+  tren_sal: 'Train du sel',
+  tachos_grandes: 'Grandes poêles',
+  hornillas_gachas: 'Réchauds à charbon',
+  mesa_regalos: 'Table des cadeaux',
+  canastos_mimbre: 'Paniers en osier',
+  sal_nemocon: 'Sel de Nemocón',
 };

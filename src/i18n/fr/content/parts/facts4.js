@@ -57,4 +57,11 @@ export default {
   fileteadora_trucha: ['Le filet de truite est rose à cause de ce qu’elle mange : des crustacés.'],
   mesa_ceviche: ['Le ceviche « cuit » dans le jus de citron, sans feu.'],
   cocina_laguna: ['Au bord de la lagune, on mange la truite frite avec des pommes de terre.', 'La lagune de Guatavita est celle de la légende de l’El Dorado.'],
+  socavon_sal: ['On extrait du sel à Nemocón depuis avant l’arrivée des Espagnols.', 'La mine de sel de Nemocón a des galeries de plus de 80 mètres.'],
+  pozos_salmuera: ['La roche est dissoute dans l’eau : il reste la saumure, de l’eau salée.'],
+  taller_tallado: ['Dans la mine, il y a des figures, des croix et des miroirs de saumure.'],
+  tachos_evaporacion: ['Quand la saumure bout, l’eau s’en va et le sel reste au fond.'],
+  gachas_barro: ['Les Muiscas moulaient le sel dans des pots en terre : le pain de sel.', 'Le pain de sel servait à commercer avec d’autres peuples.'],
+  empaque_regalo: ['On vend des figurines et du sel coloré en souvenir à Nemocón.'],
+  armadora_canastas: ['Un panier de la Savane : sel de Nemocón, roses de Madrid, fraises de Sibaté.'],
 };

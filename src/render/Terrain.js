@@ -389,6 +389,7 @@ export class Terrain {
           else if (z === 'flores' && r < 0.1) obj = smallGreenhouse(rng);
           else if (z === 'fresas' && r < 0.1) obj = r < 0.093 ? smallGreenhouse(rng) : strawberryStand(rng);
           else if (z === 'truchas' && r < 0.105) obj = frailejon(rng);
+          else if (z === 'salinas' && r < 0.1) obj = saltCart(rng);
         } else if (this.zone.region === 'tolima') {
           // El Tolima Grande (v4.0): tierra caliente del valle del Magdalena, con samanes, guayacanes amarillos,
           // palos de mango y garzas; en el Huila, cafetos sueltos y guamos de sombra; en los Achirales y La Chamba,
@@ -978,6 +979,7 @@ const FARM_SOIL = {
   // Cundinamarca (v4.4)
   roses: (v) => mix(0x5a4a36, 0x4e402e, v * 0.45), // la tierra negra de la Sabana, bajo los invernaderos
   strawberry: (v) => mix(0x5a4a36, 0x4e402e, v * 0.45), // la misma tierra negra, para los fresales
+  salt: (v) => mix(0xb8ab98, 0xa8998a, v * 0.45), // el patio de la mina, gris claro de sal y polvo
   pigs: (v) => mix(0x8a8a4a, 0x7a7a42, v * 0.5), // el corral de los cerdos, con barro
   betania: (v) => mix(0x3f7f78, 0x4a8a80, v * 0.6), // el agua verde de la represa
   chamba: (v) => mix(0x8d6e5a, 0x7a5c4a, v * 0.45), // el barranco de arcilla gris del Magdalena
@@ -1376,6 +1378,31 @@ export function drawStrawberryPlant(g, x, y, scale, rng, fruits = 2) {
     const fy = y - (1 + (k >> 1) * 2) * s;
     g.poly([fx - 2.2 * s, fy - 2 * s, fx + 2.2 * s, fy - 2 * s, fx, fy + 3 * s]).fill(0xe53935).stroke({ width: 0.5, color: 0x7a0c1e });
   }
+}
+
+// Vagoneta de la mina de sal (v4.4): sobre su tramo de rieles, cargada de roca de sal.
+function saltCart(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  shadow(g, 2, 2, 14, 5);
+  g.moveTo(-14, 4).lineTo(12, -4).stroke({ width: 1.4, color: 0x5d4037 });
+  g.moveTo(-10, 7).lineTo(16, -1).stroke({ width: 1.4, color: 0x5d4037 });
+  g.poly([-8, -2, 8, -7, 10, -16, -8, -11]).fill(0x607d8b).stroke({ width: 1, color: 0x3a2418 });
+  for (const [dx, dy] of [[-4, -13], [1, -15], [5, -16]]) g.circle(dx, dy, 3 + rng()).fill(0xe8e2d6).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+  g.circle(-5, 0, 2.2).fill(0x263238);
+  g.circle(6, -3, 2.2).fill(0x263238);
+  c.addChild(g);
+  return c;
+}
+
+// Montón de sal de la mina (v4.4): un cono blanco grisáceo con sus vetas (más altos con los hitos).
+export function drawSaltPile(g, x, y, scale, rng) {
+  const s = scale;
+  shadow(g, x + 2, y + 1, 12 * s, 4 * s);
+  const h = (14 + rng() * 6) * s;
+  g.poly([x - 12 * s, y, x, y - h, x + 12 * s, y]).fill(0xeeeae2).stroke({ width: 1, color: 0x3a2418, alpha: 0.5 });
+  g.poly([x, y - h, x + 12 * s, y, x + 3 * s, y]).fill(0xd6d0c4);
+  g.moveTo(x - 6 * s, y - 3 * s).lineTo(x - 1 * s, y - h * 0.6).stroke({ width: 0.8, color: 0xb0a898 });
 }
 
 // Rosal de exportación (v4.4): la mata de hojas oscuras con los tallos largos y las rosas rojas en botón (más

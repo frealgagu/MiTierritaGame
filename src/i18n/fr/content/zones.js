@@ -49,7 +49,8 @@ export default {
   lechoneria: ['La Lechonería', 'Vers Ibagué ➜', { bizcochos: '⬅ Biscuits des Champs d’achira', tinto: '⬅ Café du Huila', lechonas: 'Lechonas vers Neiva ➜', desayunos_tolimenses: 'Petits-déjeuners ⬇' }],
   chamba: ['La Chamba', 'Vers El Guamo ➜', { ahumadas_tilapia: '⬅ Tilapia fumé de Betania', escabeches: '⬅ Escabèche', recuerdos_tolima: 'Vers Neiva ➜' }],
   neiva: ['Neiva', 'Vers Villavieja ➜', { cajas_bizcochos: '⬅ Biscuits des Champs d’achira', cafe_especial: '⬅ Café du Huila', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Petits-déjeuners', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Thé de cascara ⬆', almuerzos_represa: 'Tilapia ⬆' }],
-  flores: ['Les Fleurs de la Savane', 'Vers l’aéroport ➜', {}],
-  fresas: ['Les Fraisiers de Sibaté', 'Vers Sibaté ➜', {}],
+  flores: ['Les Fleurs de la Savane', 'Vers l’aéroport ➜', { ramos_rosas: 'Bouquets vers les Salines ➜' }],
+  fresas: ['Les Fraisiers de Sibaté', 'Vers Sibaté ➜', { bandejas_fresa: 'Barquettes vers les Salines ➜' }],
   truchas: ['Les Truites de Guatavita', 'Vers Guatavita ➜', {}],
+  salinas: ['Les Salines de Nemocón', 'Vers Nemocón ➜', { ramos_rosas: '⬅ Bouquets des Fleurs', bandejas_fresa: '⬅ Fraises de Sibaté' }],
 };

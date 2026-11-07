@@ -327,4 +327,12 @@ export default {
   ceviche_trucha: 'Ceviche de truite',
   trucha_ahumada: 'Truite fumée',
   almuerzo_trucha: 'Déjeuner de truite',
+  roca_sal: 'Sel gemme',
+  salmuera: 'Saumure',
+  bloque_sal: 'Bloc de sel',
+  figura_sal: 'Figurine de sel',
+  sal_refinada: 'Sel raffiné',
+  pan_sal: 'Pain de sel',
+  cofre_sal: 'Coffret de sel',
+  canasta_sabanera: 'Panier de la Savane',
 };

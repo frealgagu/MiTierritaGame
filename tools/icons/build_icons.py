@@ -8812,6 +8812,114 @@ def almuerzo_trucha():
     return layers
 
 
+
+# ---------- Cundinamarca · Las Salinas de Nemocón (v4.4) ----------
+
+SALT, SALT_D = '#f4f1ea', '#cfc8bb'
+
+
+def salt_rock(cx, cy, s=1.0, color='#e8e2d6'):
+    """Un trozo de roca de sal: facetado, blanco grisáceo, con vetas."""
+    p = [(cx - 14 * s, cy + 8 * s), (cx - 16 * s, cy - 2 * s), (cx - 6 * s, cy - 12 * s), (cx + 8 * s, cy - 11 * s), (cx + 16 * s, cy - 1 * s), (cx + 12 * s, cy + 10 * s)]
+    layers = shape(p, color, 2)
+    layers.append((tone(color, 0.85), [poly(cx - 6 * s, cy - 12 * s, cx + 8 * s, cy - 11 * s, cx + 2 * s, cy - 2 * s, cx - 4 * s, cy - 3 * s), poly(cx + 2 * s, cy - 2 * s, cx + 16 * s, cy - 1 * s, cx + 12 * s, cy + 10 * s, cx + 4 * s, cy + 6 * s)]))
+    layers.append(('#ffffff', [poly(cx - 13 * s, cy - 1 * s, cx - 6 * s, cy - 9 * s, cx - 4 * s, cy - 6 * s, cx - 10 * s, cy + 1 * s)]))
+    layers.append(('#b0a898', [rib(cx - 10 * s, cy + 4 * s, cx + 2 * s, cy - 2 * s, 0.8 * s)]))
+    return layers
+
+
+def socavon_sal():
+    """La boca del socavón en la montaña de sal, con sus vigas y la vagoneta cargada."""
+    layers = [(OUTLINE, ['M 2 90 L 2 52 Q 18 18 50 14 Q 82 18 98 52 L 98 90 Z']), ('#a1887f', ['M 4.4 88 L 4.4 52.6 Q 19.6 21 50 17 Q 80.4 21 95.6 52.6 L 95.6 88 Z'])]
+    layers.append(('#bcaaa4', ['M 10 50 Q 24 26 50 22 Q 40 34 30 52 Z']))
+    layers += [(OUTLINE, ['M 30 90 L 30 54 Q 50 38 70 54 L 70 90 Z']), ('#2b1d14', ['M 33 88 L 33 55.4 Q 50 42 67 55.4 L 67 88 Z'])]
+    layers += bar(31, 90, 31, 54, 4, '#8d6e4a') + bar(69, 90, 69, 54, 4, '#8d6e4a') + bar(28, 54, 72, 54, 4, '#8d6e4a')
+    layers.append(('#ffe082', [circle(50, 62, 2.4)]))
+    layers += [(OUTLINE, [rect(36, 92, 30, 2.4), rect(38, 96, 26, 2)])]
+    layers += shape([(40, 90), (60, 90), (58, 78), (42, 78)], '#607d8b', 1.6)
+    layers += salt_rock(46, 74, 0.35) + salt_rock(55, 75, 0.3)
+    layers += wheel(44, 92, 2.6) + wheel(56, 92, 2.6)
+    return layers
+
+
+def roca_sal():
+    """La roca de sal, recién sacada del socavón."""
+    return salt_rock(50, 54, 2.6)
+
+
+def salmuera():
+    """El balde de salmuera: el agua con la sal disuelta, con los cristalitos en el borde."""
+    layers = [(OUTLINE, ['M 18 32 L 82 32 L 74 92 L 26 92 Z']), ('#90a4ae', ['M 20.6 34.4 L 79.4 34.4 L 71.8 89.6 L 28.2 89.6 Z'])]
+    layers.append(('#b3e5fc', ['M 21.6 40 L 78.4 40 L 77.8 44 L 22.2 44 Z']))
+    layers.append(('#4fc3f7', ['M 22.2 44 L 77.8 44 L 71.8 89.6 L 28.2 89.6 Z']))
+    layers.append(('#ffffff', [rect(28 + i * 9, 36 + (i % 2), 4, 3, 45) for i in range(6)]))
+    layers += [(OUTLINE, ['M 18 32 Q 50 4 82 32 L 79 32 Q 50 8 21 32 Z'])]
+    layers.append(('#e1f5fe', [ellipse(34, 64, 3, 12, 8)]))
+    return layers
+
+
+def bloque_sal():
+    """El bloque de sal cortado para tallar."""
+    layers = [(OUTLINE, [poly(14, 40, 50, 24, 88, 38, 88, 76, 52, 94, 14, 78)])]
+    layers.append((SALT, [poly(16.4, 41.6, 50, 26.6, 85.6, 39.6, 52, 55, 16.4, 42)]))
+    layers.append((SALT_D, [poly(52, 55, 85.6, 39.6, 85.6, 75, 52, 91)]))
+    layers.append(('#e2dccf', [poly(16.4, 42, 52, 55, 52, 91, 16.4, 76.6)]))
+    layers.append(('#b0a898', [rib(24, 60, 44, 68, 1), rib(60, 70, 80, 60, 1)]))
+    return layers
+
+
+def figura_sal():
+    """La figura tallada en sal: una cruz pequeña sobre su base, como las de la mina."""
+    layers = shape([(22, 92), (78, 92), (72, 78), (28, 78)], SALT_D, 2)
+    layers += shape([(42, 78), (42, 46), (24, 46), (24, 36), (42, 36), (42, 16), (58, 16), (58, 36), (76, 36), (76, 46), (58, 46), (58, 78)], SALT, 2.2)
+    layers.append(('#ffffff', [rect(45, 20, 3, 54), rect(28, 39, 44, 2.4)]))
+    layers.append(('#b0a898', [rib(54, 50, 54, 74, 1)]))
+    return layers
+
+
+def sal_refinada():
+    """El costalito de sal refinada, abierto, con la sal blanca y fina."""
+    layers = [(OUTLINE, ['M 22 36 Q 16 64 22 92 L 78 92 Q 84 64 78 36 Z']), ('#e8d8b8', ['M 24.4 38.4 Q 18.6 64 24.4 89.6 L 75.6 89.6 Q 81.4 64 75.6 38.4 Z'])]
+    layers += [(OUTLINE, [ellipse(50, 36, 30, 10)]), ('#ffffff', [ellipse(50, 36, 27.6, 7.8)]), ('#eeeeee', [ellipse(50, 30, 16, 6)])]
+    layers += [(OUTLINE, [rect(30, 58, 40, 18)]), ('#fafafa', [rect(31.4, 59.4, 37.2, 15.2)]), ('#1e88e5', [rect(36, 64, 28, 4)])]
+    return layers
+
+
+def pan_sal():
+    """El pan de sal de los muiscas: el cono de sal compacta que salía de la gacha de barro."""
+    layers = [(OUTLINE, ['M 50 8 L 82 86 Q 50 98 18 86 Z']), (SALT, ['M 50 13 L 79 84.6 Q 50 95.4 21 84.6 Z'])]
+    layers.append((SALT_D, ['M 50 13 L 79 84.6 Q 66 91 54 92.6 Z']))
+    layers.append(('#ffffff', ['M 46 22 L 34 70 L 38 70 L 48 26 Z']))
+    layers += [(OUTLINE, [ellipse(72, 84, 14, 6)]), ('#a1693f', [ellipse(72, 84, 12, 4.4)])]
+    return layers
+
+
+def cofre_sal():
+    """El cofre de regalo: la cajita de madera con la sal y la figurita tallada."""
+    layers = [(OUTLINE, [poly(8, 50, 92, 50, 92, 90, 8, 90)]), ('#a1693f', [poly(10.4, 52.4, 89.6, 52.4, 89.6, 87.6, 10.4, 87.6)])]
+    layers.append(('#8d5a32', [rect(10.4, 70, 79.2, 3)]))
+    layers += [(OUTLINE, [poly(8, 50, 16, 16, 84, 16, 92, 50)]), ('#c08b5c', [poly(11, 48, 18, 19, 82, 19, 89, 48)])]
+    layers.append(('#ffffff', [ellipse(32, 50, 16, 5), ellipse(68, 50, 14, 5)]))
+    layers += shape([(46, 52), (46, 34), (38, 34), (38, 28), (46, 28), (46, 20), (54, 20), (54, 28), (62, 28), (62, 34), (54, 34), (54, 52)], SALT, 1.6)
+    layers += [(OUTLINE, [rect(44, 64, 12, 12)]), ('#fbc02d', [rect(45.4, 65.4, 9.2, 9.2)])]
+    return layers
+
+
+def canasta_sabanera():
+    """La canasta de regalo de la Sabana: el pan de sal, las rosas y la bandeja de fresas."""
+    layers = []
+    for x, y in ((24, 30), (34, 22)):
+        layers += rose_head(x, y, 7)
+    layers += [(OUTLINE, ['M 50 10 L 66 52 L 34 52 Z']), (SALT, ['M 50 15 L 62.6 49.6 L 37.4 49.6 Z'])]
+    layers += strawberry(74, 38, 0.6) + strawberry(82, 44, 0.55) + strawberry(70, 46, 0.5, leaves=False)
+    layers += [(OUTLINE, [f'M 22 44 Q 20 0 50 0 Q 80 0 78 44 L 74 44 Q 76 4 50 4 Q 24 4 26 44 Z'])]
+    layers += [(OUTLINE, ['M 8 46 L 92 46 L 82 92 L 18 92 Z']), ('#c9a26a', ['M 11 48.4 L 89 48.4 L 79.8 89.6 L 20.2 89.6 Z'])]
+    layers.append(('#a07a46', [rib(14, 60, 86, 60, 2), rib(16, 72, 84, 72, 2), rib(18, 84, 82, 84, 2)]))
+    layers.append(('#a07a46', [rib(30 + i * 10, 49, 32 + i * 8, 89, 1.6) for i in range(5)]))
+    layers += [(OUTLINE, [ellipse(50, 50, 14, 5)]), ('#e53935', [ellipse(50, 50, 12, 3.4)])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9362,6 +9470,16 @@ ICONS = [
     (0xE218, 'ceviche_trucha', ceviche_trucha),
     (0xE219, 'trucha_ahumada', trucha_ahumada),
     (0xE21A, 'almuerzo_trucha', almuerzo_trucha),
+    # Cundinamarca · Las Salinas de Nemocón (v4.4)
+    (0xE21B, 'socavon_sal', socavon_sal),
+    (0xE21C, 'roca_sal', roca_sal),
+    (0xE21D, 'salmuera', salmuera),
+    (0xE21E, 'bloque_sal', bloque_sal),
+    (0xE21F, 'figura_sal', figura_sal),
+    (0xE220, 'sal_refinada', sal_refinada),
+    (0xE221, 'pan_sal', pan_sal),
+    (0xE222, 'cofre_sal', cofre_sal),
+    (0xE223, 'canasta_sabanera', canasta_sabanera),
 ]
 
 

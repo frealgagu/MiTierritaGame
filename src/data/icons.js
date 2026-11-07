@@ -542,6 +542,15 @@ export const ICON = {
   cevicheTrucha: '\uE218', // La copa de ceviche de trucha, con cebolla morada, cilantro y el limón
   truchaAhumada: '\uE219', // La trucha ahumada, dorada por el humo, colgada del gancho
   almuerzoTrucha: '\uE21A', // El almuerzo de trucha frita con papa salada, ensalada y el limón
+  socavonSal: '\uE21B', // La boca del socavón en la montaña de sal, con sus vigas y la vagoneta cargada
+  rocaSal: '\uE21C', // La roca de sal, recién sacada del socavón
+  salmuera: '\uE21D', // El balde de salmuera: el agua con la sal disuelta, con los cristalitos en el borde
+  bloqueSal: '\uE21E', // El bloque de sal cortado para tallar
+  figuraSal: '\uE21F', // La figura tallada en sal: una cruz pequeña sobre su base, como las de la mina
+  salRefinada: '\uE220', // El costalito de sal refinada, abierto, con la sal blanca y fina
+  panSal: '\uE221', // El pan de sal de los muiscas: el cono de sal compacta que salía de la gacha de barro
+  cofreSal: '\uE222', // El cofre de regalo: la cajita de madera con la sal y la figurita tallada
+  canastaSabanera: '\uE223', // La canasta de regalo de la Sabana: el pan de sal, las rosas y la bandeja de fresas
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

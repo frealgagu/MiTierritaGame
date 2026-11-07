@@ -34,5 +34,5 @@ export const ZONE51 = {
   // La trucha ahumada y el ceviche irán a la Cocina de la Sabana, y el almuerzo a Zipaquirá (cuando lleguen esas zonas).
   routes: {},
   unlockedBy: 'fresas',
-  next: null,
+  next: 'salinas',
 };

@@ -84,11 +84,11 @@ export const REGIONS = [
     id: 'cundinamarca',
     name: 'Cundinamarca',
     icon: ICON.rosa,
-    zones: ['flores', 'fresas', 'truchas'],
+    zones: ['flores', 'fresas', 'truchas', 'salinas'],
     music: 'cundinamarca',
     unlock: { region: 'tolima', zone: 'neiva' },
     wip: true,
-    soon: ['Las Salinas de Nemocón', 'La Cocina de la Sabana', 'Zipaquirá'],
+    soon: ['La Cocina de la Sabana', 'Zipaquirá'],
   },
 ];
 

@@ -327,4 +327,12 @@ export default {
   ceviche_trucha: 'Ceviche de truta',
   trucha_ahumada: 'Truta defumada',
   almuerzo_trucha: 'Almoço de truta',
+  roca_sal: 'Pedra de sal',
+  salmuera: 'Salmoura',
+  bloque_sal: 'Bloco de sal',
+  figura_sal: 'Figura de sal',
+  sal_refinada: 'Sal refinado',
+  pan_sal: 'Pão de sal',
+  cofre_sal: 'Caixinha de sal',
+  canasta_sabanera: 'Cesta da Savana',
 };

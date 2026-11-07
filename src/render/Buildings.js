@@ -7775,6 +7775,163 @@ const DRAW = {
     this.animate(0);
   },
 
+  // Las Salinas de Nemocón. Pozos de salmuera: las albercas donde la roca se disuelve en agua; por la canaleta de atrás,
+  // los bloques de sal se apilan para el Taller de tallado.
+  pozos_salmuera(g, x, y, ctx) {
+    const pools = ctx.tier >= 2 ? [[0.3, 0.4], [1.3, 0.4], [0.3, 1.4], [1.3, 1.4]] : [[0.4, 0.5], [1.4, 0.5], [0.8, 1.5]];
+    this.pools = [];
+    for (const [px, py] of pools) {
+      box(g, x + px, y + py, 0.85, 0.85, 6, 0x9e9e9e);
+      g.poly(isoPoly([[x + px + 0.07, y + py + 0.07, 6], [x + px + 0.78, y + py + 0.07, 6], [x + px + 0.78, y + py + 0.78, 6], [x + px + 0.07, y + py + 0.78, 6]])).fill(0x9fd8ee);
+      const r = iso(x + px + 0.3, y + py + 0.35, 6);
+      g.poly([r.x - 4, r.y, r.x, r.y - 4, r.x + 5, r.y - 1, r.x + 2, r.y + 2]).fill(PRODUCTS.roca_sal.color).stroke({ width: 0.6, color: 0x3a2418 });
+      this.pools.push(iso(x + px + 0.42, y + py + 0.42, 6));
+    }
+    const c0 = iso(x + 2.3, y + 0.5, 10);
+    const c1 = iso(x + 2.8, y + 2.2, 2);
+    g.moveTo(c0.x, c0.y).lineTo(c1.x, c1.y).stroke({ width: 4, color: 0x8d6e4a });
+    for (let i = 0; i < 4; i++) box(g, x + 2.35 + (i % 2) * 0.3, y + 2.3 + Math.floor(i / 2) * 0.28, 0.26, 0.24, 8, PRODUCTS.bloque_sal.color, { z: 0 });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      for (const [k, t] of this.pools.entries()) {
+        const f = this.working ? (time * 0.5 + k * 0.27) % 1 : 0;
+        anim.ellipse(t.x, t.y, 4 + f * 9, 2 + f * 4).stroke({ width: 1, color: 0xffffff, alpha: 0.8 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Taller de tallado: la ramada donde el tallador le saca a cincel una cruz al bloque de sal; las figuras listas en la
+  // repisa.
+  taller_tallado(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    box(g, x0 + 0.3, y0 + 0.6, 0.6, 0.6, 12, PRODUCTS.bloque_sal.color);
+    box(g, x0 + 1.3, y0 + 0.4, 0.9, 0.35, 10, PAL.wood);
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 3); k++) {
+      const q = iso(x0 + 1.4 + k * 0.18, y0 + 0.55, 10);
+      g.rect(q.x - 1, q.y - 9, 2, 9).fill(0xf4f1ea).stroke({ width: 0.5, color: 0x3a2418 });
+      g.rect(q.x - 3, q.y - 7, 6, 1.6).fill(0xf4f1ea).stroke({ width: 0.5, color: 0x3a2418 });
+    }
+    ramada(this, g, x0, y0, 2.3, 1.6, 28 + ctx.up, 0x9aa3a8);
+    const block = iso(x0 + 0.6, y0 + 0.9, 12);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x0 + 0.9, y0 + 1.5);
+      worker(anim, wp.x, wp.y, 0x6d4c41);
+      const hit = this.working ? Math.abs(Math.sin(time * 7)) * 3 : 0;
+      anim.moveTo(wp.x - 2, wp.y - 16).lineTo(block.x + 4 + hit, block.y - 8).stroke({ width: 1.4, color: 0x607d8b });
+      if (this.working) for (let k = 0; k < 3; k++) anim.circle(block.x + 2 + ((time * 9 + k * 3) % 6), block.y - 12 - ((time * 4 + k) % 1) * 6, 0.9).fill(0xffffff);
+    };
+    this.animate(0);
+  },
+
+  // Tachos de evaporación: los tachos de lata sobre el horno de ladrillo, con la sal blanca que se va cuajando y el
+  // vapor que sube.
+  tachos_evaporacion(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.4;
+    box(g, x0, y0 + 0.2, 2.2, 1.5, 10, 0xb5653a);
+    const pans = ctx.tier >= 2 ? [[0.15, 0.3], [1.15, 0.3], [0.15, 1.0], [1.15, 1.0]] : [[0.2, 0.4], [1.2, 0.4], [0.7, 1.05]];
+    this.steam = [];
+    for (const [px, py] of pans) {
+      box(g, x0 + px, y0 + py, 0.85, 0.6, 4, 0x90a4ae, { z: 10 });
+      g.poly(isoPoly([[x0 + px + 0.06, y0 + py + 0.06, 14], [x0 + px + 0.79, y0 + py + 0.06, 14], [x0 + px + 0.79, y0 + py + 0.54, 14], [x0 + px + 0.06, y0 + py + 0.54, 14]])).fill(0xf7f7f2);
+      this.steam.push(iso(x0 + px + 0.42, y0 + py + 0.3, 16));
+    }
+    const mouth = iso(x0 + 1.1, y0 + 1.7, 3);
+    g.rect(mouth.x - 6, mouth.y - 6, 12, 6).fill(0x2b1d14);
+    this.lights.push({ x: mouth.x, y: mouth.y - 3, r: 16, color: 0xff7a1a });
+    this.roofTop = iso(x0 + 1.1, y0 + 0.9, 24);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      if (!this.working) return;
+      for (const [k, p] of this.steam.entries()) {
+        const f = (time * 0.6 + k * 0.3) % 1;
+        anim.circle(p.x + Math.sin(time + k) * 3, p.y - f * 22, 3 + f * 4).fill({ color: 0xffffff, alpha: 0.5 * (1 - f) });
+      }
+      anim.poly([mouth.x - 4, mouth.y, mouth.x, mouth.y - 5 - Math.sin(time * 9) * 1.5, mouth.x + 4, mouth.y]).fill(0xff8c1a);
+    };
+    this.animate(0);
+  },
+
+  // Gachas de barro: la fila de ollas de barro en forma de cono sobre las brasas, como las de los muiscas, y los panes
+  // de sal ya cuajados.
+  gachas_barro(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.6;
+    box(g, x0, y0 + 0.5, 2.0, 0.7, 4, 0x5d4037);
+    g.poly(isoPoly([[x0 + 0.05, y0 + 0.55, 4], [x0 + 1.95, y0 + 0.55, 4], [x0 + 1.95, y0 + 1.15, 4], [x0 + 0.05, y0 + 1.15, 4]])).fill(0x3e2723);
+    this.coals = [];
+    for (let k = 0; k < 4; k++) {
+      const q = iso(x0 + 0.3 + k * 0.45, y0 + 0.85, 4);
+      g.poly([q.x - 6, q.y - 14, q.x + 6, q.y - 14, q.x, q.y + 2]).fill(0xc0784a).stroke(OUTLINE);
+      g.ellipse(q.x, q.y - 14, 6, 2).fill(0xf4f1ea).stroke({ width: 0.6, color: 0x3a2418 });
+      this.coals.push(q);
+    }
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
+      const q = iso(x + 0.5 + i * 0.35, y + 2.5);
+      g.poly([q.x - 4, q.y, q.x, q.y - 11, q.x + 4, q.y]).fill(PRODUCTS.pan_sal.color).stroke({ width: 0.7, color: 0x3a2418 });
+    }
+    this.lights.push({ x: this.coals[1].x, y: this.coals[1].y, r: 22, color: 0xff6d00 });
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      if (!this.working) return;
+      for (const [k, q] of this.coals.entries()) anim.circle(q.x + Math.sin(time * 5 + k) * 3, q.y + 4, 1.4).fill({ color: 0xff8c1a, alpha: 0.7 + 0.3 * Math.sin(time * 7 + k) });
+    };
+    this.animate(0);
+  },
+
+  // Empaque de regalo: la casa blanca de la mina con los cofres de madera apilados en el corredor.
+  empaque_regalo(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.3, 1.5, 28, ctx, { wall: 0xfbf8f1, roofColor: 0x8d6e63 });
+    door(g, hx, hy, 1.5, 1.7, 18, 0x6d4c41);
+    windowOnRight(this, g, hx, hy, 2.3, 0.75, 14, 0x6d4c41);
+    const s2 = iso(hx + 0.8, hy + 1.5, 24 + ctx.up);
+    g.roundRect(s2.x - 12, s2.y - 7, 24, 12, 3).fill(0xfffaf0).stroke(OUTLINE);
+    g.rect(s2.x - 1, s2.y - 5, 2, 8).fill(0xb0a898);
+    g.rect(s2.x - 4, s2.y - 3, 8, 2).fill(0xb0a898);
+    for (let i = 0; i < 2 + Math.min(ctx.tier, 4); i++) box(g, x + 1.6 + (i % 3) * 0.4, y + 2.1 + Math.floor(i / 3) * 0.4, 0.34, 0.3, 7, PRODUCTS.cofre_sal.color, { z: 0 });
+  },
+
+  // Armadora de canastas: la mesa bajo el toldo donde se arman las canastas con el pan de sal, las rosas y las fresas.
+  armadora_canastas(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.4;
+    box(g, x0, y0 + 0.5, 2.0, 0.7, 10, PAL.wood);
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 3); k++) {
+      const q = iso(x0 + 0.25 + (k % 4) * 0.45, y0 + 0.75 + Math.floor(k / 4) * 0.3, 10);
+      g.ellipse(q.x, q.y - 2, 6, 3).fill(PRODUCTS.canasta_sabanera.color).stroke({ width: 0.7, color: 0x3a2418 });
+      g.circle(q.x - 2.5, q.y - 4, 1.8).fill(0xd81b3c);
+      g.poly([q.x, q.y - 9, q.x - 2, q.y - 3, q.x + 2, q.y - 3]).fill(0xf4f1ea);
+      g.circle(q.x + 3, q.y - 4, 1.5).fill(0xe53935);
+    }
+    const r = 26 + ctx.up;
+    for (const [px, py] of [[0, 0.3], [2.0, 0.3], [0, 1.4], [2.0, 1.4]]) box(g, x0 + px, y0 + py, 0.08, 0.08, r, 0x8d6e4a);
+    g.poly(isoPoly([[x0, y0 + 0.2, r], [x0 + 2.1, y0 + 0.2, r], [x0 + 2.1, y0 + 1.5, r + 4], [x0, y0 + 1.5, r + 4]])).fill(0x6d8f4e).stroke(OUTLINE);
+    this.roofTop = iso(x0 + 1.05, y0 + 0.85, r + 4);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    this.animate = (time) => {
+      anim.clear();
+      const wp = iso(x0 + 1.0, y0 + 1.9);
+      worker(anim, wp.x, wp.y, 0x7e57c2);
+      const lift = this.working ? Math.abs(Math.sin(time * 3)) * 3 : 0;
+      anim.circle(wp.x + 4, wp.y - 18 - lift, 2).fill(0xd81b3c);
+    };
+    this.animate(0);
+  },
+
   // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja
   // que se amontona para el Secadero.
   huila_wetmill(g, x, y, ctx) {

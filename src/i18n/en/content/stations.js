@@ -318,4 +318,11 @@ export default {
   fileteadora_trucha: 'Trout Filleting',
   mesa_ceviche: 'Ceviche Table',
   cocina_laguna: 'Lagoon Kitchen',
+  socavon_sal: 'Salt Mine Shaft',
+  pozos_salmuera: 'Brine Pits',
+  taller_tallado: 'Carving Workshop',
+  tachos_evaporacion: 'Evaporation Pans',
+  gachas_barro: 'Clay Gachas',
+  empaque_regalo: 'Gift Packing',
+  armadora_canastas: 'Basket Maker',
 };

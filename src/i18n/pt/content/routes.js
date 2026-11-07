@@ -91,4 +91,6 @@ export default {
   almuerzos_represa: ['Rota dos almoços da represa', 'Chiva', 'Tilápia'],
   desayunos_tolimenses: ['Rota dos cafés da manhã', 'Chiva', 'Café da manhã'],
   lechonas: ['Rota das lechonas', 'Chiva', 'Lechona'],
+  ramos_rosas: ['Rota dos buquês', 'Chiva', 'Buquês'],
+  bandejas_fresa: ['Rota das bandejas de morango', 'Chiva', 'Morangos'],
 };

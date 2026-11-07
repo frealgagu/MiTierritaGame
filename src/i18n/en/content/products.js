@@ -327,4 +327,12 @@ export default {
   ceviche_trucha: 'Trout ceviche',
   trucha_ahumada: 'Smoked trout',
   almuerzo_trucha: 'Trout lunch',
+  roca_sal: 'Rock salt',
+  salmuera: 'Brine',
+  bloque_sal: 'Salt block',
+  figura_sal: 'Salt carving',
+  sal_refinada: 'Refined salt',
+  pan_sal: 'Salt loaf',
+  cofre_sal: 'Salt gift box',
+  canasta_sabanera: 'Savanna gift basket',
 };

@@ -57,4 +57,11 @@ export default {
   fileteadora_trucha: ['Trout fillet is pink because of what it eats: tiny crustaceans.'],
   mesa_ceviche: ['Ceviche is “cooked” in lime juice, without fire.'],
   cocina_laguna: ['By the lagoon people eat fried trout with salted potatoes and lime.', 'The Guatavita lagoon is the one from the legend of El Dorado.'],
+  socavon_sal: ['Salt has been mined in Nemocón since before the Spaniards arrived.', 'The Nemocón salt mine has shafts over 80 meters deep.'],
+  pozos_salmuera: ['The rock is dissolved in water, leaving brine: salty water.'],
+  taller_tallado: ['In the mine there are figures, crosses and brine mirrors carved in salt.'],
+  tachos_evaporacion: ['When the brine boils, the water leaves and salt stays at the bottom.'],
+  gachas_barro: ['The Muisca set salt in clay pots, the gachas: that made the salt loaf.', 'Salt loaves were used to trade with other peoples.'],
+  empaque_regalo: ['Salt figures and colored salt are sold as souvenirs in Nemocón.'],
+  armadora_canastas: ['A Savanna basket: Nemocón salt, Madrid roses and Sibaté strawberries.'],
 };
