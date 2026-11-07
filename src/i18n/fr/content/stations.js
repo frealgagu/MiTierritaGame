@@ -312,4 +312,10 @@ export default {
   llenadora_bandejas: 'Remplisseuse de barquettes',
   mesa_fresas_crema: 'Table des fraises à la crème',
   marmita_mermelada: 'Chaudron à confiture',
+  estanques_trucha: 'Bassins à truites',
+  limpieza_trucha: 'Nettoyage des truites',
+  ahumadero_trucha: 'Fumoir à truites',
+  fileteadora_trucha: 'Filetage des truites',
+  mesa_ceviche: 'Table du ceviche',
+  cocina_laguna: 'Cuisine de la lagune',
 };

@@ -321,4 +321,10 @@ export default {
   fresas_crema: 'Morangos com creme',
   fresa_segunda: 'Morango de segunda',
   mermelada_fresa: 'Geleia de morango',
+  trucha: 'Truta',
+  trucha_limpia: 'Truta limpa',
+  filete_trucha: 'Filé de truta',
+  ceviche_trucha: 'Ceviche de truta',
+  trucha_ahumada: 'Truta defumada',
+  almuerzo_trucha: 'Almoço de truta',
 };

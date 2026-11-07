@@ -321,4 +321,10 @@ export default {
   fresas_crema: 'Strawberries and cream',
   fresa_segunda: 'Second-grade strawberry',
   mermelada_fresa: 'Strawberry jam',
+  trucha: 'Trout',
+  trucha_limpia: 'Cleaned trout',
+  filete_trucha: 'Trout fillet',
+  ceviche_trucha: 'Trout ceviche',
+  trucha_ahumada: 'Smoked trout',
+  almuerzo_trucha: 'Trout lunch',
 };

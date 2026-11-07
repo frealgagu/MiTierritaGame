@@ -475,6 +475,15 @@ export const STATIONS = [
   { id: 'mesa_fresas_crema', zone: 'fresas', name: 'Mesa de fresas con crema', icon: ICON.fresasCrema, in: { bandeja_fresas: 1 }, out: { fresas_crema: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '4.4' },
   { id: 'marmita_mermelada', zone: 'fresas', name: 'Marmita de mermelada', icon: ICON.mermeladaFresa, in: { fresa_segunda: 4 }, out: { mermelada_fresa: 1 }, cycle: 6.4, unlockCost: 400000, upgradeBase: 500, growth: 1.15, release: '4.4' },
 
+  // Las Truchas de Guatavita: la trucha limpia se reparte entre el Ahumadero, la Fileteadora (que le pasa los filetes a
+  // la Mesa del ceviche) y la Cocina de la laguna (trucha frita con papa salada).
+  { id: 'estanques_trucha', zone: 'truchas', name: 'Estanques de trucha', icon: ICON.estanquesTrucha, infinite: true, out: { trucha: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '4.4' },
+  { id: 'limpieza_trucha', zone: 'truchas', name: 'Limpieza de trucha', icon: ICON.truchaLimpia, in: { trucha: 1 }, out: { trucha_limpia: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '4.4' },
+  { id: 'ahumadero_trucha', zone: 'truchas', name: 'Ahumadero de trucha', icon: ICON.truchaAhumada, in: { trucha_limpia: 8 }, out: { trucha_ahumada: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '4.4' },
+  { id: 'fileteadora_trucha', zone: 'truchas', name: 'Fileteadora de trucha', icon: ICON.fileteTrucha, in: { trucha_limpia: 2 }, out: { filete_trucha: 1 }, cycle: 16, unlockCost: 1000000, upgradeBase: 600, growth: 1.15, release: '4.4' },
+  { id: 'mesa_ceviche', zone: 'truchas', name: 'Mesa del ceviche', icon: ICON.cevicheTrucha, in: { filete_trucha: 2 }, out: { ceviche_trucha: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '4.4' },
+  { id: 'cocina_laguna', zone: 'truchas', name: 'Cocina de la laguna', icon: ICON.almuerzoTrucha, in: { trucha_limpia: 4 }, out: { almuerzo_trucha: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '4.4' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

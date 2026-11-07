@@ -212,4 +212,13 @@ export default {
   crema_batida: 'Whipped cream',
   fresas_sibate: 'Sibaté strawberries',
   marmita_cobre: 'Copper kettle',
+  agua_manantial: 'Spring water',
+  mesa_acero: 'Steel table',
+  cuchillo_trucha: 'Filleting knife',
+  camion_frio: 'Refrigerated truck',
+  limones_tahiti: 'Tahiti limes',
+  ahumadero_trucha_doble: 'Double smokehouse',
+  humo_eucalipto: 'Eucalyptus smoke',
+  freidora_laguna: 'Big fryer',
+  papa_salada: 'Salted potatoes',
 };

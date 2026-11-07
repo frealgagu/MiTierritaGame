@@ -50,4 +50,5 @@ export default {
   neiva: ['Neiva', 'To Villavieja ➜', { cajas_bizcochos: '⬅ Biscuits from the Achira Fields', cafe_especial: '⬅ Huila coffee', lechonas: '⬅ Lechonas', desayunos_tolimenses: '⬅ Breakfasts', recuerdos_tolima: 'La Chamba ⬆', te_cascara: 'Cascara tea ⬆', almuerzos_represa: 'Tilapia ⬆' }],
   flores: ['The Flowers of the Savanna', 'To the airport ➜', {}],
   fresas: ['The Strawberry Growers of Sibaté', 'To Sibaté ➜', {}],
+  truchas: ['The Trout of Guatavita', 'To Guatavita ➜', {}],
 };

@@ -490,4 +490,13 @@ export default {
   crema_batida: 'Crème fouettée',
   fresas_sibate: 'Fraises de Sibaté',
   marmita_cobre: 'Chaudron en cuivre',
+  agua_manantial: 'Eau de source',
+  mesa_acero: 'Table en acier',
+  cuchillo_trucha: 'Couteau à fileter',
+  camion_frio: 'Camion frigorifique',
+  limones_tahiti: 'Citrons Tahiti',
+  ahumadero_trucha_doble: 'Fumoir double',
+  humo_eucalipto: 'Fumée d’eucalyptus',
+  freidora_laguna: 'Grande friteuse',
+  papa_salada: 'Pommes de terre salées',
 };

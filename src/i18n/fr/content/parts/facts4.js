@@ -51,4 +51,10 @@ export default {
   llenadora_bandejas: ['Une barquette de fraises pèse environ 500 grammes.'],
   mesa_fresas_crema: ['Sur la route de Sibaté, on vend des fraises à la crème.'],
   marmita_mermelada: ['La confiture cuit avec du sucre et du citron jusqu’à épaissir.'],
+  estanques_trucha: ['La truite arc-en-ciel a besoin d’une eau très froide et propre.', 'Autour de Guatavita et de sa lagune, on élève des truites.'],
+  limpieza_trucha: ['La truite est vidée dès sa sortie de l’eau, pour rester fraîche.'],
+  ahumadero_trucha: ['La truite fumée reste suspendue des heures au-dessus du feu de bois.'],
+  fileteadora_trucha: ['Le filet de truite est rose à cause de ce qu’elle mange : des crustacés.'],
+  mesa_ceviche: ['Le ceviche « cuit » dans le jus de citron, sans feu.'],
+  cocina_laguna: ['Au bord de la lagune, on mange la truite frite avec des pommes de terre.', 'La lagune de Guatavita est celle de la légende de l’El Dorado.'],
 };

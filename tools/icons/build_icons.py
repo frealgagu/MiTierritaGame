@@ -8723,6 +8723,95 @@ def mermelada_fresa():
     return layers
 
 
+
+# ---------- Cundinamarca · Las Truchas de Guatavita (v4.4) ----------
+
+def trout(cx, cy, s=1.0, flip=False, body='#8d9c6a', clean=False):
+    """La trucha arcoíris de lado: el lomo verde oliva con pintas, la franja rosada y la aleta de la cola."""
+    f = -1 if flip else 1
+    def X(x):
+        return cx + f * x * s
+    def Y(y):
+        return cy + y * s
+    out_body = f'M {X(-34):.2f} {Y(0):.2f} Q {X(-20):.2f} {Y(-16):.2f} {X(8):.2f} {Y(-14):.2f} Q {X(26):.2f} {Y(-12):.2f} {X(34):.2f} {Y(-2):.2f} Q {X(26):.2f} {Y(10):.2f} {X(8):.2f} {Y(12):.2f} Q {X(-20):.2f} {Y(14):.2f} {X(-34):.2f} {Y(0):.2f} Z'
+    in_body = f'M {X(-31):.2f} {Y(0):.2f} Q {X(-19):.2f} {Y(-13.6):.2f} {X(8):.2f} {Y(-11.6):.2f} Q {X(24):.2f} {Y(-10):.2f} {X(31):.2f} {Y(-2):.2f} Q {X(24):.2f} {Y(8):.2f} {X(8):.2f} {Y(9.6):.2f} Q {X(-19):.2f} {Y(11.6):.2f} {X(-31):.2f} {Y(0):.2f} Z'
+    tail_o = pts([(X(-30), Y(0)), (X(-46), Y(-12)), (X(-42), Y(0)), (X(-46), Y(12))])
+    tail_i = pts([(X(-31), Y(0)), (X(-43.4), Y(-8.6)), (X(-40), Y(0)), (X(-43.4), Y(8.6))])
+    layers = [(OUTLINE, [tail_o, out_body]), (body if not clean else '#cfd8dc', [tail_i, in_body])]
+    if clean:
+        layers.append(('#f8bbd0', [f'M {X(-26):.2f} {Y(2):.2f} Q {X(0):.2f} {Y(8):.2f} {X(26):.2f} {Y(1):.2f} Q {X(0):.2f} {Y(5):.2f} {X(-26):.2f} {Y(2):.2f} Z']))
+    else:
+        layers.append(('#e8f0dc', [f'M {X(-28):.2f} {Y(3):.2f} Q {X(0):.2f} {Y(12):.2f} {X(28):.2f} {Y(1):.2f} Q {X(0):.2f} {Y(7):.2f} {X(-28):.2f} {Y(3):.2f} Z']))
+        layers.append(('#f06292', [f'M {X(-28):.2f} {Y(0):.2f} Q {X(0):.2f} {Y(2):.2f} {X(28):.2f} {Y(-2):.2f} Q {X(0):.2f} {Y(5):.2f} {X(-28):.2f} {Y(0):.2f} Z']))
+        layers.append(('#3e4a2a', [circle(X(x), Y(y), 1.1 * s) for x, y in ((-18, -6), (-10, -9), (-2, -7), (6, -10), (14, -7), (-14, -3), (2, -3), (-24, -2), (18, -4))]))
+    layers.append(('#ffffff', [circle(X(24), Y(-5), 3.2 * s)]))
+    layers.append(('#1b1b1b', [circle(X(24.6), Y(-5), 1.8 * s)]))
+    layers.append((tone(body, 0.75), [pts([(X(2), Y(-11)), (X(10), Y(-20)), (X(14), Y(-11))])]))
+    return layers
+
+
+def estanques_trucha():
+    """Los estanques de agua fría donde se crían las truchas, con el chorro que entra y una trucha saltando."""
+    layers = [(OUTLINE, [poly(4, 48, 96, 48, 96, 92, 4, 92)]), ('#9e9e9e', [poly(6, 50, 94, 50, 94, 90, 6, 90)])]
+    layers += [('#4fc3f7', [rect(10, 54, 36, 32), rect(54, 54, 36, 32)]), ('#81d4fa', [rib(14, 62, 30, 62, 1.6), rib(60, 74, 80, 74, 1.6), rib(18, 78, 36, 78, 1.6)])]
+    layers += bar(4, 30, 30, 30, 4, '#78909c') + [('#4fc3f7', [poly(28, 30, 32, 30, 34, 54, 26, 54)])]
+    layers += trout(66, 34, 0.55, flip=True)
+    layers.append(('#e1f5fe', [ellipse(66, 52, 10, 2.4)]))
+    return layers
+
+
+def trucha():
+    """Una trucha arcoíris."""
+    return trout(54, 52, 1.25)
+
+
+def trucha_limpia():
+    """La trucha limpia, abierta, sobre la tabla."""
+    layers = [(OUTLINE, [rect(8, 60, 84, 24, -6)]), ('#c8a26a', [rect(10, 62, 80, 20, -6)])]
+    return layers + trout(52, 52, 1.05, clean=True)
+
+
+def filete_trucha():
+    """Los filetes rosados de trucha, sin espinas."""
+    layers = [(OUTLINE, [rect(6, 70, 88, 14)]), ('#eceff1', [rect(7.4, 71.4, 85.2, 11.2)])]
+    for k, (cx, cy) in enumerate(((34, 48), (66, 40))):
+        layers += [(OUTLINE, [f'M {cx - 28} {cy + 6} Q {cx - 10} {cy - 16} {cx + 26} {cy - 6} Q {cx + 30} {cy + 4} {cx + 18} {cy + 10} Q {cx - 6} {cy + 16} {cx - 28} {cy + 6} Z']),
+                   ('#f8a5a5', [f'M {cx - 24} {cy + 5} Q {cx - 9} {cy - 13} {cx + 23} {cy - 5} Q {cx + 26.6} {cy + 3} {cx + 16} {cy + 7.6} Q {cx - 6} {cy + 13} {cx - 24} {cy + 5} Z'])]
+        layers.append(('#fce4ec', [rib(cx - 18 + i * 9, cy + 6 - i, cx - 12 + i * 9, cy - 6 - i, 1.6) for i in range(5)]))
+    return layers
+
+
+def ceviche_trucha():
+    """La copa de ceviche de trucha, con cebolla morada, cilantro y el limón."""
+    layers = [(OUTLINE, ['M 14 40 L 86 40 Q 82 74 50 76 Q 18 74 14 40 Z']), ('#e1f5fe', ['M 17 42.6 L 83 42.6 Q 79.4 71.6 50 73.4 Q 20.6 71.6 17 42.6 Z'])]
+    layers += bar(50, 76, 50, 90, 4, '#e1f5fe', 1.6) + oval(50, 92, 18, 4, '#e1f5fe', d=1.6)
+    layers.append(('#f8bbd0', [ellipse(36, 50, 7, 5), ellipse(52, 48, 7, 5), ellipse(66, 52, 7, 5), ellipse(44, 58, 7, 5), ellipse(60, 60, 6, 4.4)]))
+    layers.append(('#8e24aa', [rib(30, 56, 38, 52, 1.6), rib(56, 54, 64, 50, 1.6), rib(46, 64, 54, 62, 1.6)]))
+    layers.append(('#43a047', [leaf(40, 46, 46, 40, 2), leaf(62, 46, 68, 40, 2), leaf(52, 62, 58, 56, 2)]))
+    layers += oval(76, 34, 11, 11, '#9ccc65') + [('#dcedc8', [circle(76, 34, 7.6)]), ('#9ccc65', [rib(76, 27, 76, 41, 1), rib(69, 34, 83, 34, 1), rib(71, 29, 81, 39, 1), rib(81, 29, 71, 39, 1)])]
+    return layers
+
+
+def trucha_ahumada():
+    """La trucha ahumada, dorada por el humo, colgada del gancho."""
+    layers = bar(50, 4, 50, 16, 2.4, '#8d6e63') + [(OUTLINE, [f'M 44 16 Q 50 10 56 16 L 54 18 Q 50 14 46 18 Z'])]
+    layers += trout(50, 54, 1.0, body='#b8742a')
+    layers.append(('#ffcc80', [ellipse(46, 46, 14, 3, -5)]))
+    layers.append(('#cfd8dc', [f'M 20 30 Q 14 22 22 16 Q 18 24 24 28 Z', f'M 78 30 Q 84 22 76 16 Q 80 24 74 28 Z']))
+    return layers
+
+
+def almuerzo_trucha():
+    """El almuerzo de trucha frita con papa salada, ensalada y el limón."""
+    layers = oval(50, 64, 46, 22, '#fafafa') + [('#eceff1', [ellipse(50, 64, 38, 16)]), ('#fafafa', [ellipse(50, 64, 35, 14)])]
+    layers += trout(46, 58, 0.72, body='#c08a3e')
+    for x, y in ((74, 70), (80, 62), (68, 76)):
+        layers += oval(x, y, 5.4, 4.4, '#e6c26a', d=1.2) + [('#fafafa', [circle(x - 1.4, y - 1, 1.1)])]
+    layers.append(('#66bb6a', [leaf(20, 70, 30, 76, 4), leaf(24, 66, 34, 72, 4)]))
+    layers += oval(26, 54, 6, 6, '#9ccc65', d=1.4) + [('#dcedc8', [circle(26, 54, 3.6)])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9265,6 +9354,14 @@ ICONS = [
     (0xE211, 'fresas_crema', fresas_crema),
     (0xE212, 'fresa_segunda', fresa_segunda),
     (0xE213, 'mermelada_fresa', mermelada_fresa),
+    # Cundinamarca · Las Truchas de Guatavita (v4.4)
+    (0xE214, 'estanques_trucha', estanques_trucha),
+    (0xE215, 'trucha', trucha),
+    (0xE216, 'trucha_limpia', trucha_limpia),
+    (0xE217, 'filete_trucha', filete_trucha),
+    (0xE218, 'ceviche_trucha', ceviche_trucha),
+    (0xE219, 'trucha_ahumada', trucha_ahumada),
+    (0xE21A, 'almuerzo_trucha', almuerzo_trucha),
 ]
 
 

@@ -51,4 +51,10 @@ export default {
   llenadora_bandejas: ['A tray of strawberries weighs about 500 grams.'],
   mesa_fresas_crema: ['On the road to Sibaté there are stands of strawberries with cream.'],
   marmita_mermelada: ['Jam is cooked with sugar and lime until it thickens.'],
+  estanques_trucha: ['Rainbow trout need very cold, clean water from the páramo.', 'Around Guatavita and its lagoon there are trout farms.'],
+  limpieza_trucha: ['Trout is cleaned right out of the water, so it stays fresh.'],
+  ahumadero_trucha: ['Smoked trout hangs over wood smoke for hours.'],
+  fileteadora_trucha: ['Trout fillet is pink because of what it eats: tiny crustaceans.'],
+  mesa_ceviche: ['Ceviche is “cooked” in lime juice, without fire.'],
+  cocina_laguna: ['By the lagoon people eat fried trout with salted potatoes and lime.', 'The Guatavita lagoon is the one from the legend of El Dorado.'],
 };

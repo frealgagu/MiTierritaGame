@@ -535,6 +535,13 @@ export const ICON = {
   fresasCrema: '\uE211', // El vaso de fresas con crema, como en Sibaté: la crema batida, las fresas picadas y la cucharita
   fresaSegunda: '\uE212', // La fresa de segunda: las pequeñas y las magulladas, que van para la mermelada
   mermeladaFresa: '\uE213', // El frasco de mermelada de fresa, con su tapa de cuadros
+  estanquesTrucha: '\uE214', // Los estanques de agua fría donde se crían las truchas, con el chorro que entra y una trucha saltando
+  trucha: '\uE215', // Una trucha arcoíris
+  truchaLimpia: '\uE216', // La trucha limpia, abierta, sobre la tabla
+  fileteTrucha: '\uE217', // Los filetes rosados de trucha, sin espinas
+  cevicheTrucha: '\uE218', // La copa de ceviche de trucha, con cebolla morada, cilantro y el limón
+  truchaAhumada: '\uE219', // La trucha ahumada, dorada por el humo, colgada del gancho
+  almuerzoTrucha: '\uE21A', // El almuerzo de trucha frita con papa salada, ensalada y el limón
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

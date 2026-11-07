@@ -21,4 +21,6 @@ export const ZONE_GEO = {
   flores: [4.73, -74.26],
   // Sibaté (las fresas).
   fresas: [4.49, -74.26],
+  // Guatavita (las truchas).
+  truchas: [4.93, -73.83],
 };

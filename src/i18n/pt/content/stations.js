@@ -312,4 +312,10 @@ export default {
   llenadora_bandejas: 'Enchedora de bandejas',
   mesa_fresas_crema: 'Mesa de morangos com creme',
   marmita_mermelada: 'Tacho de geleia',
+  estanques_trucha: 'Tanques de truta',
+  limpieza_trucha: 'Limpeza de truta',
+  ahumadero_trucha: 'Defumador de truta',
+  fileteadora_trucha: 'Filetagem de truta',
+  mesa_ceviche: 'Mesa do ceviche',
+  cocina_laguna: 'Cozinha da lagoa',
 };

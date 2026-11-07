@@ -368,6 +368,12 @@ export const FACTS = {
   llenadora_bandejas: ['Una bandeja de fresas pesa unos 500 gramos.'],
   mesa_fresas_crema: ['En la carretera a Sibaté hay puestos de fresas con crema y arequipe.'],
   marmita_mermelada: ['La mermelada se cocina con azúcar y limón hasta que espesa.'],
+  estanques_trucha: ['La trucha arcoíris necesita agua muy fría y limpia, de páramo.', 'Alrededor de Guatavita y su laguna hay criaderos de trucha.'],
+  limpieza_trucha: ['La trucha se limpia recién sacada del agua, para que no pierda frescura.'],
+  ahumadero_trucha: ['La trucha ahumada se cuelga sobre el humo de la leña durante horas.'],
+  fileteadora_trucha: ['El filete de trucha es rosado por lo que come: pequeños crustáceos.'],
+  mesa_ceviche: ['El ceviche se «cocina» en limón, sin fuego.'],
+  cocina_laguna: ['Junto a la laguna se come trucha frita con papa salada y limón.', 'La laguna de Guatavita es la de la leyenda de El Dorado.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -424,6 +430,7 @@ export const PEOPLE = {
   // Cundinamarca (v4.4)
   flores: { icon: '👩🏽', name: 'Doña Rocío', role: 'la floricultora' },
   fresas: { icon: '👨🏽‍🌾', name: 'Don Gilberto', role: 'el fresero' },
+  truchas: { icon: '🧔🏽', name: 'Don Ernesto', role: 'el truchero' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -480,6 +487,7 @@ export const WELCOME = {
   // Cundinamarca (v4.4)
   flores: '¡Bienvenido a la Sabana, sumercé! Aquí las rosas salen del invernadero y viajan en avión a medio mundo.',
   fresas: '¡Quiubo, sumercé! Aquí en Sibaté las fresas se lavan, se escogen y se sirven con crema; las de segunda, en mermelada.',
+  truchas: '¡Bienvenido a Guatavita, sumercé! En estos estanques de agua helada se crían las truchas, y allá arriba está la laguna de El Dorado.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

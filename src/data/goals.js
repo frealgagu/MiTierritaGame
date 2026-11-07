@@ -1147,5 +1147,26 @@ const FRESAS = [
   { id: 'cs_final', type: 'sold', product: 'fresas_crema', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS };
+// Las Truchas de Guatavita: la de Betania.
+const TRUCHAS = [
+  { id: 'ct01', type: 'sold', product: 'trucha', amount: 50, reward: 10000 },
+  { id: 'ct02', type: 'level', target: 'estanques_trucha', level: 10, reward: 20000 },
+  { id: 'ct03', type: 'unlock', station: 'limpieza_trucha', reward: 40000 },
+  { id: 'ct04', type: 'level', target: 'estanques_trucha:transport', level: 10, reward: 40000 },
+  { id: 'ct05', type: 'unlock', station: 'ahumadero_trucha', reward: 80000 },
+  { id: 'ct06', type: 'produced', product: 'trucha_ahumada', amount: 100, reward: 120000 },
+  { id: 'ct08', type: 'unlock', station: 'fileteadora_trucha', reward: 250000 },
+  { id: 'ct09', type: 'level', target: 'dispatch:truchas', level: 10, reward: 250000 },
+  { id: 'ct10', type: 'unlock', station: 'mesa_ceviche', reward: 500000 },
+  { id: 'ct11', type: 'produced', product: 'ceviche_trucha', amount: 200, reward: 800000 },
+  { id: 'ct12', type: 'unlock', station: 'cocina_laguna', reward: 1200000 },
+  { id: 'ct13', type: 'produced', product: 'almuerzo_trucha', amount: 200, reward: 1500000 },
+  { id: 'ct14', type: 'level', target: 'cocina_laguna', level: 25, reward: 2000000 },
+  { id: 'ct15', type: 'allLevels', zone: 'truchas', level: 25, reward: 3000000 },
+  { id: 'ct07', type: 'research', research: 'agua_manantial', reward: 1500000 },
+  { id: 'ct16', type: 'sold', product: 'almuerzo_trucha', amount: 1000, reward: 5000000 },
+  { id: 'ct_final', type: 'sold', product: 'almuerzo_trucha', amount: 6000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas
