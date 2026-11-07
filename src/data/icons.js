@@ -342,6 +342,40 @@ export const ICON = {
   fosilTortuga: '\uE150', // Los fósiles de la Tatacoa: el caparazón de una tortuga gigante convertido en piedra, con su pincel
   hoyosTatacoa: '\uE151', // Los Hoyos: la piscina de agua fresca y azul en medio de las cárcavas grises del desierto
   cardon: '\uE152', // El cardón: el cactus alto y acanalado del desierto, con un pajarito en su nido
+  arriero: '\uE153', // El arriero: con sombrero aguadeño, ruana al hombro, carriel terciado, pantalón remangado y alpargatas, con el zurriago
+  mula: '\uE154', // La mula: de paso firme, cargada con dos bultos de café sobre su enjalma roja
+  chapolera: '\uE155', // La chapolera: con pañoleta, camisa de manga larga y el canasto amarrado a la cintura, cogiendo café grano a grano
+  carriel: '\uE156', // El carriel: el bolso de cuero del arriero, con su tapa, el parche de piel de becerro y la correa
+  aguadeno: '\uE157', // El aguadeño: el sombrero blanco de iraca tejido en Aguadas, con la copa hundida y la cinta negra
+  yipao: '\uE158', // El yipao: un Willys cargado hasta el techo con bultos de café, racimos de plátano y hasta un taburete
+  trapicheMill: '\uE159', // El trapiche: los tres rodillos de hierro en su marco de madera, la caña que entra y el guarapo que cae a la canoa
+  molienda: '\uE15A', // La molienda: el atado de cañas recién cortadas, el machete, y el balde de guarapo para toda la familia
+  hornilla: '\uE15B', // La hornilla: el horno de ladrillo con las pailas hirviendo el guarapo, el fuego de bagazo y el humo de la chimenea
+  aguapanela: '\uE15C', // La aguapanela: el vaso de panela en agua con hielo y limón, y el bloque de panela al lado
+  melcocha: '\uE15D', // La melcocha: la miel de panela estirada a mano en el clavo, en una trenza dorada, y los trocitos torcidos en el papel
+  gaveras: '\uE15E', // Las gaveras: el molde de madera con sus huecos llenos de miel que cuaja, y las panelas ya sacadas
+  normando: '\uE15F', // La Normando: la vaca blanca con manchas cafés, de antifaz alrededor de los ojos
+  ordeno: '\uE160', // El ordeño: la ubre de la vaca, el chorro de leche que cae al balde de aluminio y el banquito
+  cuajadaMelao: '\uE161', // Cuajada con melao: la tajada de queso fresco blanco en el plato, bañada en miel de panela
+  kumis: '\uE162', // El kumis: el vaso de leche fermentada espesa, con su capa de canela, y el pandebono al lado
+  arequipeJar: '\uE163', // El arequipe: el frasco lleno de dulce de leche color caramelo, con la cuchara adentro
+  cantina: '\uE164', // La cantina: el tarro de aluminio de la leche, con su tapa, las asas y una abolladura
+  molinillo: '\uE165', // El molinillo: el batidor de madera tallada, con sus anillos, que se frota entre las manos para hacer espuma
+  santafereno: '\uE166', // El chocolate santafereño: la taza de chocolate caliente con los cuadros de queso que se derriten, y la almojábana
+  chocolatera: '\uE167', // La chocolatera: la olla de aluminio de boca ancha y mango largo, con el molinillo adentro y la espuma
+  cacaoFino: '\uE168', // Fino de aroma: la mazorca de cacao abierta con sus granos en pulpa blanca, el aroma y el sello de calidad
+  laminaChocolatina: '\uE169', // El álbum de chocolatina: la chocolatina en su envoltura y la lámina que salía adentro, con un pájaro
+  budare: '\uE16A', // El budare: la plancha redonda de barro sobre tres piedras y el fogón, con las arepas asándose
+  mazamorra: '\uE16B', // La mazamorra: la taza de maíz pilado cocido en leche, con la cuchara, y el pedazo de panela al lado
+  envuelto: '\uE16C', // El envuelto: la masa de maíz dulce envuelta en hoja y amarrada, y uno abierto mostrando la masa amarilla
+  pilon: '\uE16D', // El pilón: el tronco hueco donde se pila el maíz, con la mano de pilón y los granos alrededor
+  choclo: '\uE16E', // El choclo: la mazorca tierna asada en la parrilla, con las hojas abiertas, mantequilla y sal
+  plazaPueblo: '\uE16F', // La plaza del pueblo: la iglesia de dos torres, la palma del parque y el toldo del mercado del domingo
+  tinto: '\uE170', // El tinto: el pocillo de café negro humeante en su plato, con el azúcar al lado
+  chivaBus: '\uE171', // La chiva: el bus de escalera de madera pintado de colores, con gente en las bancas y bultos y gallinas en el techo
+  fonda: '\uE172', // La fonda: la casa del camino con balcón, el letrero, la mesa afuera y la mula amarrada a la puerta
+  balcones: '\uE173', // Los balcones: la casa de bahareque de dos pisos, de puertas y balcones de colores y materas de flores
+  castilloPolvora: '\uE174', // Las fiestas del pueblo: el castillo de pólvora con sus ruedas encendidas, los voladores y las banderitas
 };
 
 export const ICON_FONT = 'MiTierrita Icons';
