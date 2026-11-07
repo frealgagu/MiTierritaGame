@@ -91,4 +91,6 @@ export default {
   almuerzos_represa: ['Route des déjeuners du barrage', 'Chiva', 'Tilapia'],
   desayunos_tolimenses: ['Route des petits-déjeuners', 'Chiva', 'Petit-déj.'],
   lechonas: ['Route des lechonas', 'Chiva', 'Lechona'],
+  ramos_rosas: ['Route des bouquets', 'Chiva', 'Bouquets'],
+  bandejas_fresa: ['Route des barquettes de fraises', 'Chiva', 'Fraises'],
 };

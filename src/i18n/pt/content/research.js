@@ -499,4 +499,13 @@ export default {
   humo_eucalipto: 'Fumaça de eucalipto',
   freidora_laguna: 'Fritadeira grande',
   papa_salada: 'Batata salgada',
+  socavon_nuevo: 'Galeria nova',
+  bombas_salmuera: 'Bombas de salmoura',
+  cinceles: 'Cinzéis finos',
+  tren_sal: 'Trem do sal',
+  tachos_grandes: 'Tachos grandes',
+  hornillas_gachas: 'Fogareiros a carvão',
+  mesa_regalos: 'Mesa de presentes',
+  canastos_mimbre: 'Cestos de vime',
+  sal_nemocon: 'Sal de Nemocón',
 };

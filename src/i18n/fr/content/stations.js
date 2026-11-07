@@ -318,4 +318,11 @@ export default {
   fileteadora_trucha: 'Filetage des truites',
   mesa_ceviche: 'Table du ceviche',
   cocina_laguna: 'Cuisine de la lagune',
+  socavon_sal: 'Galerie de sel',
+  pozos_salmuera: 'Bassins de saumure',
+  taller_tallado: 'Atelier de sculpture',
+  tachos_evaporacion: 'Poêles d’évaporation',
+  gachas_barro: 'Gachas en terre',
+  empaque_regalo: 'Emballage cadeau',
+  armadora_canastas: 'Monteuse de paniers',
 };

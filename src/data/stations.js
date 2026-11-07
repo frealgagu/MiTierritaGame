@@ -484,6 +484,18 @@ export const STATIONS = [
   { id: 'mesa_ceviche', zone: 'truchas', name: 'Mesa del ceviche', icon: ICON.cevicheTrucha, in: { filete_trucha: 2 }, out: { ceviche_trucha: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '4.4' },
   { id: 'cocina_laguna', zone: 'truchas', name: 'Cocina de la laguna', icon: ICON.almuerzoTrucha, in: { trucha_limpia: 4 }, out: { almuerzo_trucha: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '4.4' },
 
+  // Las Salinas de Nemocón: los Pozos disuelven la roca en salmuera y sacan también bloques de sal, que pasan por la
+  // canaleta al Taller de tallado. La salmuera se reparte entre los Tachos (sal refinada) y las Gachas de barro (el pan de
+  // sal de los muiscas); el Empaque de regalo junta la sal con las figuras en el cofre. La Armadora de canastas arma la
+  // canasta sabanera con el pan de sal, los ramos de rosas de las Flores y las bandejas de fresa de Sibaté.
+  { id: 'socavon_sal', zone: 'salinas', name: 'Socavón de sal', icon: ICON.socavonSal, infinite: true, out: { roca_sal: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '4.4' },
+  { id: 'pozos_salmuera', zone: 'salinas', name: 'Pozos de salmuera', icon: ICON.salmuera, in: { roca_sal: 2 }, out: { salmuera: 1 }, by: { bloque_sal: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '4.4' },
+  { id: 'taller_tallado', zone: 'salinas', name: 'Taller de tallado', icon: ICON.figuraSal, in: { bloque_sal: 2 }, out: { figura_sal: 1 }, cycle: 8, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '4.4' },
+  { id: 'tachos_evaporacion', zone: 'salinas', name: 'Tachos de evaporación', icon: ICON.salRefinada, in: { salmuera: 1 }, out: { sal_refinada: 1 }, cycle: 8, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '4.4' },
+  { id: 'gachas_barro', zone: 'salinas', name: 'Gachas de barro', icon: ICON.panSal, in: { salmuera: 1 }, out: { pan_sal: 1 }, cycle: 8, unlockCost: 30000000, upgradeBase: 7000, growth: 1.15, release: '4.4' },
+  { id: 'empaque_regalo', zone: 'salinas', name: 'Empaque de regalo', icon: ICON.cofreSal, in: { sal_refinada: 4 }, joins: [{ product: 'figura_sal', perCycle: 4, from: 'taller_tallado' }], out: { cofre_sal: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '4.4' },
+  { id: 'armadora_canastas', zone: 'salinas', name: 'Armadora de canastas', icon: ICON.canastaSabanera, in: { pan_sal: 4 }, imports: [{ product: 'ramo_rosas', perCycle: 2, route: 'ramos_rosas' }, { product: 'bandeja_fresas', perCycle: 1, route: 'bandejas_fresa' }], out: { canasta_sabanera: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '4.4' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

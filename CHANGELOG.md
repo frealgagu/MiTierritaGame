@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v4.4.3 — Cundinamarca: Las Salinas de Nemocón
+- **🧂 Zona 4 de Cundinamarca: Las Salinas de Nemocón**, que se abre al completar Las Truchas. Del **socavón** sale la roca de sal, que en los **Pozos de salmuera** se disuelve y da dos productos: la salmuera y los **bloques de sal**, que pasan por la canaleta al **Taller de tallado**. La salmuera se reparte entre los **Tachos de evaporación** (sal refinada) y las **Gachas de barro**, donde se cuaja el pan de sal como lo hacían los muiscas. El **Empaque de regalo** junta la sal con las figuras talladas en el **cofre de sal**.
+- **Las primeras rutas de Cundinamarca:** la **Armadora de canastas** arma la **canasta sabanera** con el pan de sal, los **ramos de rosas** que llegan de Las Flores y las **bandejas de fresa** de Sibaté.
+- Doña Blanca, la salinera, le da la bienvenida; en el patio de la mina hay montones de sal y vagonetas.
+- Si ya habías completado Las Truchas, Las Salinas se abren solas al actualizar.
+
 ## v4.4.2 — Cundinamarca: Las Truchas de Guatavita
 - **🐟 Zona 3 de Cundinamarca: Las Truchas de Guatavita**, que se abre al completar Los Freseros. Las truchas arcoíris se crían en estanques de agua helada y, ya limpias, se reparten entre el **Ahumadero**, la **Fileteadora** (que le pasa los filetes a la **Mesa del ceviche**) y la **Cocina de la laguna**, con la trucha frita y la papa salada. Don Ernesto, el truchero, le da la bienvenida, y en los alrededores hay frailejones del páramo.
 - Si ya habías completado Los Freseros, Las Truchas se abren solas al actualizar.

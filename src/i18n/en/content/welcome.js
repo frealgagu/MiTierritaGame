@@ -52,4 +52,5 @@ export default {
   flores: 'Welcome to the Savanna, sumercé! Here the roses leave the greenhouse and fly by plane to half the world.',
   fresas: 'Hey there, sumercé! Here in Sibaté strawberries are washed, sorted and served with cream; the second-grade ones become jam.',
   truchas: 'Welcome to Guatavita, sumercé! Trout are raised in these icy ponds, and up there is the lagoon of El Dorado.',
+  salinas: 'Welcome to Nemocón, sumercé! Salt comes out of this mountain: it is dissolved into brine, set into loaves and even carved.',
 };

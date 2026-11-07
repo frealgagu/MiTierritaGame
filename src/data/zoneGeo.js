@@ -23,4 +23,6 @@ export const ZONE_GEO = {
   fresas: [4.49, -74.26],
   // Guatavita (las truchas).
   truchas: [4.93, -73.83],
+  // Nemocón (la sal).
+  salinas: [5.07, -73.88],
 };

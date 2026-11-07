@@ -318,4 +318,11 @@ export default {
   fileteadora_trucha: 'Filetagem de truta',
   mesa_ceviche: 'Mesa do ceviche',
   cocina_laguna: 'Cozinha da lagoa',
+  socavon_sal: 'Galeria de sal',
+  pozos_salmuera: 'Poços de salmoura',
+  taller_tallado: 'Oficina de entalhe',
+  tachos_evaporacion: 'Tachos de evaporação',
+  gachas_barro: 'Gachas de barro',
+  empaque_regalo: 'Embalagem de presente',
+  armadora_canastas: 'Montadora de cestas',
 };

@@ -29,8 +29,10 @@ export const ZONE49 = {
   exitText: 'Al aeropuerto ➜',
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
-  // Los ramos irán a las Salinas y las cajas a Zipaquirá (cuando lleguen esas zonas).
-  routes: {},
+  // Los ramos salen hacia las Salinas (las cajas irán a Zipaquirá cuando llegue).
+  routes: {
+    ramos_rosas: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Ramos a las Salinas ➜' },
+  },
   unlockedBy: null, // la primera de Cundinamarca: se abre con la región
   next: 'fresas',
 };

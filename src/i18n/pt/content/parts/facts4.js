@@ -57,4 +57,11 @@ export default {
   fileteadora_trucha: ['O filé de truta é rosado pelo que ela come: pequenos crustáceos.'],
   mesa_ceviche: ['O ceviche «cozinha» no limão, sem fogo.'],
   cocina_laguna: ['Junto à lagoa se come truta frita com batata salgada e limão.', 'A lagoa de Guatavita é a da lenda do El Dorado.'],
+  socavon_sal: ['Em Nemocón se extrai sal desde antes da chegada dos espanhóis.', 'A mina de sal de Nemocón tem galerias com mais de 80 metros de fundo.'],
+  pozos_salmuera: ['A rocha é dissolvida em água e fica a salmoura, a água salgada.'],
+  taller_tallado: ['Na mina há figuras, cruzes e espelhos de salmoura entalhados no sal.'],
+  tachos_evaporacion: ['Ao ferver a salmoura, a água vai embora e o sal fica no fundo.'],
+  gachas_barro: ['Os muíscas moldavam o sal em potes de barro, as gachas: assim saía o pão de sal.', 'O pão de sal servia para comerciar com outros povos.'],
+  empaque_regalo: ['Figuras de sal e sal colorido são vendidos como lembrança em Nemocón.'],
+  armadora_canastas: ['Uma cesta da Savana: sal de Nemocón, rosas de Madrid e morangos de Sibaté.'],
 };

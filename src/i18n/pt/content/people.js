@@ -51,4 +51,5 @@ export default {
   flores: ['Dona Rocío', 'a floricultora'],
   fresas: ['Dom Gilberto', 'o morangueiro'],
   truchas: ['Dom Ernesto', 'o criador de trutas'],
+  salinas: ['Dona Blanca', 'a salineira'],
 };

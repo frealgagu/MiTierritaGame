@@ -1168,5 +1168,27 @@ const TRUCHAS = [
   { id: 'ct_final', type: 'sold', product: 'almuerzo_trucha', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS };
+// Las Salinas de Nemocón: la de la Lechonería.
+const SALINAS = [
+  { id: 'cn01', type: 'sold', product: 'roca_sal', amount: 50, reward: 75000 },
+  { id: 'cn02', type: 'level', target: 'socavon_sal', level: 10, reward: 125000 },
+  { id: 'cn03', type: 'unlock', station: 'pozos_salmuera', reward: 250000 },
+  { id: 'cn04', type: 'level', target: 'socavon_sal:transport', level: 10, reward: 250000 },
+  { id: 'cn05', type: 'unlock', station: 'taller_tallado', reward: 500000 },
+  { id: 'cn06', type: 'produced', product: 'figura_sal', amount: 100, reward: 750000 },
+  { id: 'cn08', type: 'unlock', station: 'tachos_evaporacion', reward: 1500000 },
+  { id: 'cn09', type: 'level', target: 'dispatch:salinas', level: 10, reward: 1500000 },
+  { id: 'cn10', type: 'unlock', station: 'gachas_barro', reward: 2500000 },
+  { id: 'cn11', type: 'produced', product: 'pan_sal', amount: 300, reward: 3750000 },
+  { id: 'cn12', type: 'unlock', station: 'empaque_regalo', reward: 6250000 },
+  { id: 'cn13', type: 'sold', product: 'cofre_sal', amount: 200, reward: 7500000 },
+  { id: 'cn14', type: 'unlock', station: 'armadora_canastas', reward: 12500000 },
+  { id: 'cn15', type: 'imported', product: 'ramo_rosas', amount: 500, reward: 15000000 },
+  { id: 'cn16', type: 'allLevels', zone: 'salinas', level: 25, reward: 20000000 },
+  { id: 'cn07', type: 'research', research: 'socavon_nuevo', reward: 10000000 },
+  { id: 'cn17', type: 'sold', product: 'canasta_sabanera', amount: 1000, reward: 30000000 },
+  { id: 'cn_final', type: 'sold', product: 'cofre_sal', amount: 4000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS, salinas: SALINAS };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

@@ -221,4 +221,13 @@ export default {
   humo_eucalipto: 'Eucalyptus smoke',
   freidora_laguna: 'Big fryer',
   papa_salada: 'Salted potatoes',
+  socavon_nuevo: 'New shaft',
+  bombas_salmuera: 'Brine pumps',
+  cinceles: 'Fine chisels',
+  tren_sal: 'Salt train',
+  tachos_grandes: 'Big pans',
+  hornillas_gachas: 'Charcoal stoves',
+  mesa_regalos: 'Gift table',
+  canastos_mimbre: 'Wicker baskets',
+  sal_nemocon: 'Nemocón salt',
 };
