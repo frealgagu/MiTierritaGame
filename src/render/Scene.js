@@ -646,7 +646,7 @@ export class Scene {
   }
 }
 
-// Icono sobre la estación: ⛔ patio lleno, ⏸️ esperando entrada, ↪️ desviando a la bodega.
+// Icono sobre la estación: ⛔ patio lleno, ⏸️ esperando entrada, ↪ desviando a la bodega.
 // Solo si el problema dura (ver alerts.js): los momentos sueltos con todo nivelado no se avisan.
 export function statusIcon(state, id) {
   const st = state.stations[id];
@@ -657,9 +657,9 @@ export function statusIcon(state, id) {
   // La Compostera llena es compost de sobra (bueno): no se avisa.
   if (STATIONS_BY_ID[id].side && a.blocked) return null;
   // Patio lleno porque las siguientes no dan abasto: está desviando, la que hay que subir es la siguiente.
-  if (a.blocked) return a.waiting === 'mules' && slowConsumers(state, id).length ? '↪️' : '⛔';
+  if (a.blocked) return a.waiting === 'mules' && slowConsumers(state, id).length ? '↪' : '⛔';
   if (a.starved) return '⏸️';
-  if (a.diverting) return '↪️';
+  if (a.diverting) return '↪';
   return null;
 }
 

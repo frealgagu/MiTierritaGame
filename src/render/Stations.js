@@ -75,7 +75,7 @@ export class StationView extends Container {
     }
   }
 
-  // icon: '⛔' | '⏸️' | '↪️' | null
+  // icon: '⛔' | '⏸️' | '↪' | null
   setStatus(icon) {
     this.status.visible = Boolean(icon);
     if (icon && this.status.text !== icon) this.status.text = icon;

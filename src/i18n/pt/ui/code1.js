@@ -113,7 +113,7 @@ export default {
   '🔴 Sus arrieros son los que frenan la cadena.': '🔴 Seus tropeiros são os que travam a cadeia.',
   '📦 Bodega': '📦 Armazém',
   '🚌 {n} a la bodega: se venden hasta que abra {route}': '🚌 {n} para o armazém: são vendidos até abrir {route}',
-  '↪️ {n} se venden sin procesar': '↪️ {n} são vendidos sem processar',
+  '↪ {n} se venden sin procesar': '↪ {n} são vendidos sem processar',
   'Recibe {in} de {from} y la vuelve {out}: todo lo que vende la zona vale <b>+{n} %</b>.': 'Recebe {in} ({from}) e transforma em {out}: tudo o que a zona vende vale <b>+{n} %</b>.',
   '{p} desde {zone}': '{p} vindo de {zone}',
   '{n} por segundo van directo a la bodega': '{n} por segundo vão direto para o armazém',

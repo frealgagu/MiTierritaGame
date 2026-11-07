@@ -26,7 +26,7 @@ const GENERAL = {
   '🪱': t('Compost: la Finca vende más caro'),
   '⏸️': t('Detenida'),
   '⛔': t('Problema'),
-  '↪️': t('Se vende sin procesar'),
+  '↪': t('Se vende sin procesar'),
   '🔒': t('Por abrir'),
   '🚩': t('Zona completa'),
   '🏁': t('Zona al máximo'),

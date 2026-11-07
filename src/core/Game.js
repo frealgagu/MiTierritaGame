@@ -204,7 +204,7 @@ export class Game {
     return bought;
   }
 
-  // Los botones de abajo de la cadena (v4.1.1): 🏗️ construir lo que alcance y ⬆️ subir todo al próximo hito.
+  // Los botones de abajo de la cadena (v4.1.1): 🏗️ construir lo que alcance y ⬆ subir todo al próximo hito.
   buildAll(zoneId) {
     return buildAll(this.state, zoneId, this.bus);
   }

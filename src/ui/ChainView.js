@@ -94,7 +94,7 @@ export class ChainView {
     if (detail !== this.detailHtml) this.detail.innerHTML = this.detailHtml = detail;
   }
 
-  // Los botones de abajo (v4.1.1): 🏗️ Construir, mientras falten estaciones, y ⬆️ Al nivel X, que no se ve hasta
+  // Los botones de abajo (v4.1.1): 🏗️ Construir, mientras falten estaciones, y ⬆ Al nivel X, que no se ve hasta
   // reiniciar la región; luego se compra con Renombre y queda para todas sus zonas (y sus eventos ganados con oro).
   updateFoot(state, zone) {
     const root = this.getRoot();
@@ -107,10 +107,10 @@ export class ChainView {
     const status = zoneBoostStatus(root, state, zone);
     if (status === 'locked') {
       const q = quoteZoneBoostUnlock(root.profile, REGION_OF_ZONE[zone]);
-      buttons.push(`<button class="btn buy bulk" data-boost-unlock ${q.ok ? '' : 'disabled'} title="${t('Sube toda la zona al próximo hito de una vez. Sirve en todas las zonas de la región.')}">${t('🔒 ⬆️ Todo al próximo hito · {n} ⭐', { n: ZONE_BOOST_COST })}</button>`);
+      buttons.push(`<button class="btn buy bulk" data-boost-unlock ${q.ok ? '' : 'disabled'} title="${t('Sube toda la zona al próximo hito de una vez. Sirve en todas las zonas de la región.')}">${t('🔒 ⬆ Todo al próximo hito · {n} ⭐', { n: ZONE_BOOST_COST })}</button>`);
     } else if (status === 'ready') {
       const plan = planZoneBoost(state, zone);
-      if (plan) buttons.push(`<button class="btn buy bulk" data-boost ${plan.affordable ? '' : 'disabled'}>${t('⬆️ Todo al nivel {n}', { n: plan.level })} · 💰 ${formatNumber(plan.cost)}</button>`);
+      if (plan) buttons.push(`<button class="btn buy bulk" data-boost ${plan.affordable ? '' : 'disabled'}>${t('⬆ Todo al nivel {n}', { n: plan.level })} · 💰 ${formatNumber(plan.cost)}</button>`);
     }
     const html = buttons.join('');
     if (html !== this.footHtml) this.foot.innerHTML = this.footHtml = html;
@@ -124,10 +124,10 @@ export class ChainView {
       if (built.length) toast(t('🏗️ Construidas: {list}', { list: listJoin(built.map((id) => STATIONS_BY_ID[id].name)) }), 3500);
     } else if (e.target.closest('[data-boost-unlock]')) {
       const region = REGION_OF_ZONE[zone];
-      if (buyZoneBoostUnlock(this.getRoot().profile, region)) toast(t('⬆️ ¡Ya puedes subir toda la zona al próximo hito en {region}!', { region: REGIONS_BY_ID[region].name }), 3500);
+      if (buyZoneBoostUnlock(this.getRoot().profile, region)) toast(t('⬆ ¡Ya puedes subir toda la zona al próximo hito en {region}!', { region: REGIONS_BY_ID[region].name }), 3500);
     } else if (e.target.closest('[data-boost]')) {
       const plan = this.game.boostZone(zone);
-      if (plan) toast(t('⬆️ ¡Toda la zona al nivel {n}! {k} mejoras (💰 {cost})', { n: plan.level, k: plan.items.length, cost: formatNumber(plan.cost) }), 3000);
+      if (plan) toast(t('⬆ ¡Toda la zona al nivel {n}! {k} mejoras (💰 {cost})', { n: plan.level, k: plan.items.length, cost: formatNumber(plan.cost) }), 3000);
     } else return false;
     this.html = null;
     this.update();
@@ -256,7 +256,7 @@ function divertNote(state, row, icon) {
   const { pending, reserved, extra } = divertSplit(state, row);
   const notes = [];
   if (reserved > 0.005) notes.push(`<span>${t('🚌 {n} a la bodega: se venden hasta que abra {route}', { n: `${formatRate(Math.min(reserved, row.diverted))} ${icon}/s`, route: withArticle(pending[0].name) })}</span>`);
-  if (extra > 0.005 + row.diverted * 0.02) notes.push(`<span class="divert">${t('↪️ {n} se venden sin procesar', { n: `${formatRate(extra)} ${icon}/s` })}</span>`);
+  if (extra > 0.005 + row.diverted * 0.02) notes.push(`<span class="divert">${t('↪ {n} se venden sin procesar', { n: `${formatRate(extra)} ${icon}/s` })}</span>`);
   return notes.join('');
 }
 

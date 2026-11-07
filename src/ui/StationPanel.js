@@ -493,8 +493,8 @@ function stationStatus(state, id) {
     if (slow.length) {
       // Lo que sobra va a la bodega, más lejos: en ese viaje el transporte lleva menos (v3.67: se explica).
       const text = slow.length > 1
-        ? t('↪️ Patio lleno: {stations} no alcanzan a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbelas de nivel.', { stations: listNames(slow, true) })
-        : t('↪️ Patio lleno: {stations} no alcanza a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbela de nivel.', { stations: listNames(slow, true) });
+        ? t('↪ Patio lleno: {stations} no alcanzan a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbelas de nivel.', { stations: listNames(slow, true) })
+        : t('↪ Patio lleno: {stations} no alcanza a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbela de nivel.', { stations: listNames(slow, true) });
       return { text, bad: true };
     }
     if (a.waiting === 'mules') return { text: hasBelt(st.transport.level) ? t('⛔ Patio lleno: la banda no da abasto. Mejórala (pestaña ⚡).') : t('⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).'), bad: true };
@@ -526,8 +526,8 @@ function stationStatus(state, id) {
   if (row && parent && parent.diverted > 0.005 && row.incoming >= row.capacity * 0.98 && row.capacity < share * 0.98) {
     const inIcon = PRODUCTS[Object.keys(def.in)[0]].icon;
     const text = parent.children.length > 1
-      ? t('↪️ De {station} a esta rama le tocan {share} y procesa {cap}/s. El resto se vende sin procesar: mejórala.', { station: nameOf(parent.id), share: `${formatRate(share)} ${inIcon}/s`, cap: formatRate(row.capacity) })
-      : t('↪️ La estación anterior produce {rate} y esta procesa {cap}/s. El resto se vende sin procesar: mejórala.', { rate: `${formatRate(parent.output)} ${inIcon}/s`, cap: formatRate(row.capacity) });
+      ? t('↪ De {station} a esta rama le tocan {share} y procesa {cap}/s. El resto se vende sin procesar: mejórala.', { station: nameOf(parent.id), share: `${formatRate(share)} ${inIcon}/s`, cap: formatRate(row.capacity) })
+      : t('↪ La estación anterior produce {rate} y esta procesa {cap}/s. El resto se vende sin procesar: mejórala.', { rate: `${formatRate(parent.output)} ${inIcon}/s`, cap: formatRate(row.capacity) });
     return { text, bad: true };
   }
   if (a.starved) {
@@ -593,7 +593,7 @@ function routeInfo(routeId, station) {
       if (!routeActive(s, routeId)) return { text: t('🔒 Construye {stations} para abrir la ruta.', { stations: listNames(r.stations) }), bad: false };
       if (routeRate(s, routeId) < need(s) * 0.99) return { text: ((v) => (routeStations(s, routeId).length > 1 ? t('⚠️ {stations} gastan {need} y {vehicle} lleva {rate}/s. Sube la ruta al nivel de esas estaciones ({level}).', v) : t('⚠️ {stations} gasta {need} y {vehicle} lleva {rate}/s. Sube la ruta al nivel de la estación ({level}).', v)))({ stations: names(s), need: `${formatRate(need(s))} ${imp.icon}/s`, vehicle: withArticle(r.vehicle), rate: formatRate(routeRate(s, routeId)), level: top(s) }), bad: true };
       if (route.phase === 'go') return { text: t('🚌 {vehicle} va camino a {zone} con {load}.', { vehicle: WithArticle(r.vehicle), zone: ZONES_BY_ID[r.to].name, load: `${formatAmount(route.load)} ${imp.icon}` }), bad: false };
-      if (route.phase === 'back') return { text: t('↩️ {vehicle} vuelve a {zone}.', { vehicle: WithArticle(r.vehicle), zone: ZONES_BY_ID[r.from].name }), bad: false };
+      if (route.phase === 'back') return { text: t('↩ {vehicle} vuelve a {zone}.', { vehicle: WithArticle(r.vehicle), zone: ZONES_BY_ID[r.from].name }), bad: false };
       if ((s.zones[r.from].warehouse[r.product] ?? 0) <= 0) return { text: t('⏳ Esperando {p} en la bodega de {zone}.', { p: imp.name.toLowerCase(), zone: ZONES_BY_ID[r.from].name }), bad: false };
       return { text: t('🅿️ {vehicle} está cargando en {zone}.', { vehicle: WithArticle(r.vehicle), zone: ZONES_BY_ID[r.from].name }), bad: false };
     },
@@ -641,7 +641,7 @@ function dispatchInfo(zoneId) {
           return { text: t('☕ Todo lo que produce {zone} se lo lleva la chiva {where}; el Willys solo sale con lo que sobra.', { zone: name, where }), bad: false };
         }
       }
-      const phase = { idle: t('🅿️ El Willys está cargando en la bodega.'), out: t('🚙 El Willys va camino al pueblo.'), back: t('↩️ El Willys vuelve a la bodega.') };
+      const phase = { idle: t('🅿️ El Willys está cargando en la bodega.'), out: t('🚙 El Willys va camino al pueblo.'), back: t('↩ El Willys vuelve a la bodega.') };
       return { text: phase[z(s).jeep.phase], bad: false };
     },
   };
