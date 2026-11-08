@@ -341,4 +341,10 @@ export default {
   ajiaco: 'Ajiaco',
   plato_ajiaco: 'Ajiaco servido',
   almuerzo_sabanero: 'Almoço da Savana',
+  arreglo_floral: 'Arranjo floral',
+  onces_santafereñas: 'Onces santafereñas',
+  noche_zipaquira: 'Noite em Zipaquirá',
+  almuerzo_plaza_zipa: 'Almoço do mercado',
+  mochila_paseo: 'Mochila do passeio',
+  visita_catedral: 'Visita à Catedral de Sal',
 };

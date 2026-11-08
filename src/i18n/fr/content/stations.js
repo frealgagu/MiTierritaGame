@@ -331,4 +331,10 @@ export default {
   olla_ajiaco: 'Marmite de l’ajiaco',
   servidora_ajiaco: 'Comptoir de service',
   restaurante_santafereno: 'Restaurant santafereño',
+  floristeria_plaza: 'Fleuriste de la place',
+  salon_onces: 'Salon de thé des onces',
+  hotel_plaza_zipa: 'Hôtel de la place',
+  plaza_mercado_zipa: 'Halle de Zipaquirá',
+  mochilas_paseo: 'Sacs de l’excursion',
+  entrada_catedral: 'Entrée de la Cathédrale de sel',
 };

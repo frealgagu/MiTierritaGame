@@ -71,6 +71,9 @@ export const NOTES = {
   corredor_grande: 'A Mesa do café da manhã tolimense serve o dobro (as rotas se ajustam sozinhas).',
   tienda_chamba_grande: 'A Loja de La Chamba vende o dobro (as rotas se ajustam sozinhas).',
   meseros_malecon: 'A Cafeteria do calçadão serve o dobro (pede o dobro de caixas aos Achirais).',
+  floristas: 'A Floricultura da praça trabalha o dobro (pede o dobro de caixas às Flores).',
+  canastos_mimbre: 'A Montadora de cestas trabalha o dobro (as rotas se ajustam sozinhas).',
+  salon_santafereno: 'O Restaurante santafereño serve o dobro (as rotas se ajustam sozinhas).',
 };
 
 export default {
@@ -516,4 +519,12 @@ export default {
   cucharones: 'Conchas grandes',
   salon_santafereno: 'Salão grande',
   receta_santafe: 'Receita santafereña',
+  floristas: 'Floristas da praça',
+  chocolate_queso: 'Chocolate com queijo',
+  tren_turistico: 'Trem turístico',
+  casona_colonial: 'Casarão colonial',
+  galeria_mercado: 'Galeria do mercado',
+  mochilas_fique: 'Mochilas de fique',
+  guias_mineros: 'Guias mineiros',
+  maravilla_colombia: 'Maravilha da Colômbia',
 };

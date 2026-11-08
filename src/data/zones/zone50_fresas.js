@@ -29,9 +29,11 @@ export const ZONE50 = {
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
   unlockedBy: 'flores',
-  // Las bandejas salen hacia las Salinas (las fresas con crema y la mermelada irán a Zipaquirá cuando llegue).
+  // Las bandejas salen hacia las Salinas; las fresas con crema y la mermelada, hacia Zipaquirá.
   routes: {
     bandejas_fresa: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Bandejas a las Salinas ➜' },
+    mermeladas: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'Mermelada a Zipaquirá ➜' },
+    fresas_crema: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Zipaquirá ➜' },
   },
   next: 'truchas',
 };

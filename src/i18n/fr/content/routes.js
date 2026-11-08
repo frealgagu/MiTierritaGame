@@ -95,4 +95,11 @@ export default {
   bandejas_fresa: ['Route des barquettes de fraises', 'Chiva', 'Fraises'],
   ahumadas_trucha: ['Route de la truite fumée', 'Chiva', 'Fumée'],
   ceviches: ['Route du ceviche', 'Chiva', 'Ceviche'],
+  cajas_flores: ['Route des cartons de fleurs', 'Chiva', 'Fleurs'],
+  fresas_crema: ['Route des fraises à la crème', 'Chiva', 'Fraises'],
+  mermeladas: ['Route de la confiture', 'Chiva', 'Confiture'],
+  almuerzos_sabaneros: ['Route des déjeuners de la Savane', 'Chiva', 'Ajiaco'],
+  almuerzos_trucha: ['Route des déjeuners de truite', 'Chiva', 'Truite'],
+  canastas: ['Route des paniers', 'Chiva', 'Paniers'],
+  cofres_sal: ['Route des coffrets de sel', 'Chiva', 'Sel'],
 };

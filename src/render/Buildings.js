@@ -8038,6 +8038,41 @@ const DRAW = {
     }
   },
 
+  // Zipaquirá. Entrada a la Catedral de Sal: la boca de la mina en la montaña, con la cruz blanca encima, la luz azul
+  // que sale del túnel y la fila de visitantes con su casco; de noche brilla la cruz.
+  entrada_catedral(g, x, y, ctx) {
+    const c = iso(x + 1.3, y + 1.0);
+    shadow(g, c.x + 4, c.y + 6, 60, 22);
+    g.moveTo(c.x - 52, c.y + 6).quadraticCurveTo(c.x - 46, c.y - 46, c.x, c.y - 52).quadraticCurveTo(c.x + 46, c.y - 46, c.x + 52, c.y + 6).quadraticCurveTo(c.x, c.y + 22, c.x - 52, c.y + 6).fill(0x8d7f72).stroke(OUTLINE);
+    g.moveTo(c.x - 34, c.y - 20).quadraticCurveTo(c.x - 20, c.y - 44, c.x + 4, c.y - 46).quadraticCurveTo(c.x - 14, c.y - 34, c.x - 26, c.y - 14).closePath().fill(0xa89a8c);
+    g.moveTo(c.x - 14, c.y + 10).lineTo(c.x - 14, c.y - 12).quadraticCurveTo(c.x, c.y - 26, c.x + 14, c.y - 12).lineTo(c.x + 14, c.y + 10).closePath().fill(0x1a1f3a).stroke(OUTLINE);
+    g.moveTo(c.x - 9, c.y + 9).lineTo(c.x - 9, c.y - 9).quadraticCurveTo(c.x, c.y - 18, c.x + 9, c.y - 9).lineTo(c.x + 9, c.y + 9).closePath().fill(0x3949ab);
+    const cross = { x: c.x, y: c.y - 58 - ctx.up * 0.3 };
+    g.rect(cross.x - 2.5, cross.y - 16, 5, 22).fill(0xf4f1ea).stroke(OUTLINE);
+    g.rect(cross.x - 9, cross.y - 10, 18, 4.5).fill(0xf4f1ea).stroke(OUTLINE);
+    this.roofTop = { x: cross.x, y: cross.y - 16 };
+    this.lights.push({ x: c.x, y: c.y - 4, r: 30, color: 0x5c6bc0 }, { x: cross.x, y: cross.y - 4, r: 18, color: 0xe8eaf6 });
+    const sign = iso(x + 2.6, y + 2.3, 16);
+    g.moveTo(sign.x, sign.y + 16).lineTo(sign.x, sign.y).stroke({ width: 1.5, color: 0x6b4a2e });
+    g.roundRect(sign.x - 12, sign.y - 8, 24, 10, 2).fill(0xfffaf0).stroke(OUTLINE);
+    g.rect(sign.x - 1, sign.y - 7, 2, 8).fill(0x3949ab);
+    g.rect(sign.x - 4, sign.y - 5, 8, 2).fill(0x3949ab);
+    const anim = new Graphics();
+    this.anim.addChild(anim);
+    const n = 2 + Math.min(ctx.tier, 4);
+    this.animate = (time) => {
+      anim.clear();
+      for (let k = 0; k < n; k++) {
+        const f = ((this.working ? time * 0.08 : 0) + k / n) % 1;
+        const q = iso(x + 2.6 - f * 1.3, y + 2.9 - f * 1.5);
+        if (f > 0.92) continue;
+        worker(anim, q.x, q.y, [0xe53935, 0x1e88e5, 0x43a047, 0xfbc02d, 0x8e24aa, 0xff7043][k % 6]);
+        anim.ellipse(q.x, q.y - 21, 3.4, 1.6).fill(0xfdd835);
+      }
+    };
+    this.animate(0);
+  },
+
   // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja
   // que se amontona para el Secadero.
   huila_wetmill(g, x, y, ctx) {
@@ -8590,6 +8625,11 @@ DRAW.ahumadero_trucha = DRAW.cachama_smoker;
 DRAW.fileteadora_trucha = DRAW.fish_filleter;
 // La Cocina de la Sabana (v4.4): el Peladero, como la Peladora de papa de Boyacá.
 DRAW.peladero = DRAW.potato_peeler;
+// Zipaquirá (v4.4): la plaza colonial, con los edificios de Villa de Leyva.
+DRAW.salon_onces = DRAW.terraza_plaza;
+DRAW.hotel_plaza_zipa = DRAW.hospedaje_colonial;
+DRAW.plaza_mercado_zipa = DRAW.mercado_sabado;
+DRAW.mochilas_paseo = DRAW.canastos_paseo;
 DRAW.huila_roaster = DRAW.roaster;
 DRAW.huila_packer = DRAW.packer;
 DRAW.tilapia_cleaner = DRAW.fish_cleaner;

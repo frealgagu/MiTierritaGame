@@ -341,4 +341,10 @@ export default {
   ajiaco: 'Ajiaco',
   plato_ajiaco: 'Ajiaco servi',
   almuerzo_sabanero: 'Déjeuner de la Savane',
+  arreglo_floral: 'Composition florale',
+  onces_santafereñas: 'Onces santafereñas',
+  noche_zipaquira: 'Nuit à Zipaquirá',
+  almuerzo_plaza_zipa: 'Déjeuner du marché',
+  mochila_paseo: 'Sac de l’excursion',
+  visita_catedral: 'Visite de la Cathédrale de sel',
 };

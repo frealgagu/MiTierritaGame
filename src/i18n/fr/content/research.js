@@ -71,6 +71,9 @@ export const NOTES = {
   corredor_grande: 'La Table du petit-déjeuner du Tolima sert deux fois plus (les routes s’ajustent toutes seules).',
   tienda_chamba_grande: 'La Boutique de La Chamba vend deux fois plus (les routes s’ajustent toutes seules).',
   meseros_malecon: 'Le Café du quai sert deux fois plus (il demande deux fois plus de caisses aux Champs d’achira).',
+  floristas: 'La Fleuriste de la place travaille deux fois plus vite (elle demande deux fois plus de cartons aux Fleurs).',
+  canastos_mimbre: 'La Monteuse de paniers travaille deux fois plus vite (les routes s’ajustent seules).',
+  salon_santafereno: 'Le Restaurant santafereño sert deux fois plus (les routes s’ajustent seules).',
 };
 
 export default {
@@ -516,4 +519,12 @@ export default {
   cucharones: 'Grandes louches',
   salon_santafereno: 'Grande salle',
   receta_santafe: 'Recette santafereña',
+  floristas: 'Fleuristes de la place',
+  chocolate_queso: 'Chocolat au fromage',
+  tren_turistico: 'Train touristique',
+  casona_colonial: 'Demeure coloniale',
+  galeria_mercado: 'Galerie du marché',
+  mochilas_fique: 'Sacs en fique',
+  guias_mineros: 'Guides mineurs',
+  maravilla_colombia: 'Merveille de Colombie',
 };

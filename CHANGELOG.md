@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v4.4.5 — Cundinamarca: Zipaquirá y la Catedral de Sal
+- **⛪ Zona 6 de Cundinamarca: Zipaquirá**, la última de la región, que se abre al completar La Cocina. Como Neiva, no tiene fuente propia: a su plaza colonial de casonas blancas con balcones verdes llega una carretera de cada zona. La **Floristería de la plaza** arma arreglos con las cajas de flores; el **Salón de onces** sirve chocolate con queso y las fresas con crema de Sibaté; el **Hotel de la plaza** recibe el almuerzo sabanero y la mermelada; la **Plaza de mercado**, el almuerzo de trucha; las **Mochilas del paseo** llevan las canastas y los cofres de sal de Nemocón, y todo termina en la **Entrada a la Catedral de Sal**, la mina con la cruz tallada a 180 metros bajo tierra. Don Hernán, el guía de la mina, le da la bienvenida.
+- **Siete rutas nuevas** unen a Zipaquirá con las otras cinco zonas de Cundinamarca.
+- Los eventos, el álbum y los logros de Cundinamarca llegan en la próxima versión; mientras tanto la región no tiene segundo final.
+- Si ya habías completado La Cocina, Zipaquirá se abre sola al actualizar.
+
 ## v4.4.4 — Cundinamarca: La Cocina de la Sabana
 - **🍲 Zona 5 de Cundinamarca: La Cocina de la Sabana**, en Chía, que se abre al completar Las Salinas. El **ajiaco santafereño** de principio a fin: la **huerta de papa**, el **peladero**, la **olla del caldo** (donde la papa criolla lo espesa), la **olla del ajiaco** (con guascas, mazorca y pollo) y la **servidora**, que le pone crema, alcaparras y aguacate.
 - **Nuevas rutas:** el **Restaurante santafereño** sirve el **almuerzo sabanero** con el ajiaco, la **trucha ahumada** y el **ceviche** que llegan de Guatavita. Doña Teresa, la cocinera, le da la bienvenida.

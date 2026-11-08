@@ -331,4 +331,10 @@ export default {
   olla_ajiaco: 'Ajiaco Pot',
   servidora_ajiaco: 'Serving Counter',
   restaurante_santafereno: 'Santafereño Restaurant',
+  floristeria_plaza: 'Plaza Flower Shop',
+  salon_onces: 'Onces Tearoom',
+  hotel_plaza_zipa: 'Plaza Hotel',
+  plaza_mercado_zipa: 'Zipaquirá Market Hall',
+  mochilas_paseo: 'Trip Backpacks',
+  entrada_catedral: 'Salt Cathedral Entrance',
 };

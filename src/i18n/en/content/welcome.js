@@ -54,4 +54,5 @@ export default {
   truchas: 'Welcome to Guatavita, sumercé! Trout are raised in these icy ponds, and up there is the lagoon of El Dorado.',
   salinas: 'Welcome to Nemocón, sumercé! Salt comes out of this mountain: it is dissolved into brine, set into loaves and even carved.',
   cocina: 'Come on in, sumercé, the ajiaco is ready! Three potatoes, guascas and corn go in, and it is served with cream and capers.',
+  zipaquira: 'You made it to Zipaquirá, sumercé! The journey across the Savanna ends here: let’s go down to the Salt Cathedral.',
 };

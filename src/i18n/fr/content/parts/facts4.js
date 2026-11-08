@@ -70,4 +70,10 @@ export default {
   olla_ajiaco: ['Les guascas sont une herbe de la Savane qui parfume l’ajiaco.', 'On y met du poulet effiloché et des épis de maïs.'],
   servidora_ajiaco: ['L’ajiaco se sert avec de la crème, des câpres et de l’avocat.'],
   restaurante_santafereno: ['Santafereño veut dire de Bogotá, autrefois appelée Santafé.', 'Après l’ajiaco vient le chocolat chaud au fromage et l’almojábana.'],
+  floristeria_plaza: ['La place de Zipaquirá est l’une des plus grandes de la Savane.'],
+  salon_onces: ['Les onces : chocolat au fromage, almojábana et pain de manioc.'],
+  hotel_plaza_zipa: ['Zipaquirá garde des demeures coloniales blanches aux balcons verts.'],
+  plaza_mercado_zipa: ['Au marché, on mange le piquete : poulet, pommes de terre et maïs.'],
+  mochilas_paseo: ['Pour la mine, on emporte une ruana : il fait froid en bas.'],
+  entrada_catedral: ['La Cathédrale de sel est creusée à 180 mètres sous terre.', 'La croix de l’autel mesure 16 mètres, taillée dans le sel.'],
 };
