@@ -572,6 +572,10 @@ button:focus-visible, .tracker:focus-visible { outline: 3px solid var(--yellow);
   gap: 5px;
 }
 .event-bar[hidden] { display: none; }
+/* Tablero recogido (v4.4.7): solo el título, el reloj y la barra de avance. */
+.event-fold { flex: none; width: 34px; height: 30px; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); color: var(--ink); font: inherit; font-size: 1rem; font-weight: 700; line-height: 1; padding: 0; cursor: pointer; }
+.event-bar.folded > :not(.event-top):not(.bar) { display: none; }
+.event-bar.folded .event-top { cursor: pointer; }
 body.panel-open .event-bar { display: none; }
 .event-top { display: flex; align-items: center; gap: 8px; }
 .event-title { flex: 1; min-width: 0; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

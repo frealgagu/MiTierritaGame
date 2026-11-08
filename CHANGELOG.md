@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v4.4.7 — Tablero del evento recogible
+- **▾ Recoger el tablero del evento:** con el botón junto al reloj, el tablero queda solo con el título, el reloj y la barra de avance, y deja ver y tocar las estaciones en teléfonos pequeños. Con ▴ (o tocando la fila del título) se abre otra vez. El teléfono recuerda cómo lo dejaste.
+
 ## v4.4.6 — Borrar partida en dos pasos y botones parejos
 - **🗑️ Borrar partida:** en el menú aparece primero el botón; al tocarlo se muestra la barra para deslizar y confirmar. Si no se desliza en unos segundos, vuelve el botón.
 - **Todos los botones del juego tienen el mismo alto**, con el texto centrado, aunque el texto sea corto o largo.

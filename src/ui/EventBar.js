@@ -17,6 +17,8 @@ export function objectiveText(obj) {
   return obj.kind === 'sold' ? t('Vende {list}', { list: listJoin(parts) }) : t('Produce {list}', { list: listJoin(parts) });
 }
 
+const FOLD_KEY = 'mitierrita-eventbar-folded';
+
 export class EventBar {
   // onPause: volver al mapa, con el evento en pausa o corriendo por detrás según el menú (v3.67.4).
   // onRestart / onEnd: reiniciarlo o terminarlo (v3.30).   exitMode(): 'pause' o 'leave'
@@ -31,6 +33,23 @@ export class EventBar {
     this.pauseBtn.addEventListener('click', () => onPause());
     this.restartBtn.addEventListener('click', () => onRestart());
     this.endBtn.addEventListener('click', () => onEnd());
+    // Recoger y abrir el tablero (v4.4.7): en teléfonos pequeños tapaba las estaciones. Se recuerda en el teléfono.
+    this.foldBtn = document.getElementById('event-fold');
+    let folded = false;
+    try {
+      folded = localStorage.getItem(FOLD_KEY) === '1';
+    } catch {
+      /* sin almacenamiento: abierto */
+    }
+    this.setFolded(folded);
+    this.foldBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.setFolded(!this.folded);
+    });
+    // Recogido, toda la fila del título lo abre (un blanco más grande que el botón).
+    this.el.querySelector('.event-top').addEventListener('click', () => {
+      if (this.folded) this.setFolded(false);
+    });
     this.actions.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-action]');
       if (!btn || !this.game) return;
@@ -47,11 +66,25 @@ export class EventBar {
     });
   }
 
+  setFolded(folded) {
+    this.folded = folded;
+    this.el.classList.toggle('folded', folded);
+    this.foldBtn.textContent = folded ? '▴' : '▾';
+    this.foldBtn.setAttribute('aria-expanded', String(!folded));
+    this.foldBtn.setAttribute('aria-label', folded ? t('Abrir el tablero') : t('Recoger el tablero'));
+    try {
+      localStorage.setItem(FOLD_KEY, folded ? '1' : '0');
+    } catch {
+      /* sin almacenamiento */
+    }
+  }
+
   // Señala una compra (la mejora recomendada del tablero) y dice qué hace.
   highlight(id) {
     const a = EVENT_ACTIONS_BY_ID[id];
     const btn = this.actions.querySelector(`[data-action="${id}"]`);
     if (!a || !btn) return;
+    if (this.folded) this.setFolded(false); // recogido, la compra señalada no se vería
     btn.classList.remove('flash');
     void btn.offsetWidth; // para que la animación vuelva a empezar
     btn.classList.add('flash');
