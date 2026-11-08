@@ -3,7 +3,7 @@ import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { analyzeChain, expectedCompostValue } from '../sim/analysis.js';
 import { hasBelt } from '../sim/rules.js';
-import { BY_CHILDREN, CHILDREN, JOIN_FROM, PARENT, branchShare, chainOf, nextToUnlock } from '../sim/chain.js';
+import { BY_CHILDREN, CHILDREN, JOIN_FROM, PARENT, branchShare, buildableStations, chainOf } from '../sim/chain.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { pendingRoutes, slowConsumers } from '../sim/transport.js';
@@ -80,7 +80,7 @@ export class ChainView {
     const zone = this.getZone();
     const a = analyzeChain(state, zone);
     const rows = Object.fromEntries(a.rows.map((r) => [r.id, r]));
-    const locked = nextToUnlock(state, zone);
+    const locked = buildableStations(state, zone); // las que siguen (con barrios, v4.5, una por barrio)
     this.updateFoot(state, zone);
     // Solo se reescribe si algo cambió, para no perder toques a medio hacer.
     // Menos el margen de la caja que se desliza (v4.3.1), para que lo de las orillas no quede cortado.
@@ -204,7 +204,7 @@ function detailOf(state, a, rows, sel, zone) {
     if (row.byLost > 0.005) lines.push(`<span class="lost">${t('🗑️ {n} se desechan: {stations} no da abasto.', { n: `${formatRate(row.byLost)} ${by.icon}/s`, stations: listNames(kidsBy) })}</span>`);
   }
   // Los arrieros: cuánto llevan y a dónde.
-  const kids = [...row.children, ...(PARENT[nextToUnlock(state, zone)] === id ? [nextToUnlock(state, zone)] : [])];
+  const kids = [...row.children, ...buildableStations(state, zone).filter((l) => PARENT[l] === id)];
   const route = row.exports?.length ? ` ${t('y {route}', { route: withArticle(ROUTES_BY_ID[row.exports[0]].name) })}` : '';
   const carries = kids.length > 1 || (kids.length && row.exports?.length)
     ? (kids.length > 1 ? t('reparten <b>{n}</b> entre {k} ramas', { n: formatRate(row.toNext), k: kids.length }) : t('reparten <b>{n}</b> entre {k} estación', { n: formatRate(row.toNext), k: kids.length })) + route
@@ -292,7 +292,7 @@ function diagram(state, a, rows, locked, zone, width, selected) {
       : [
           ...(rows[id]?.children ?? []).filter((c) => PARENT[c] === id),
           ...(rows[id] ? byKids(id) : []),
-          ...(locked && PARENT[locked] === id ? [locked] : []),
+          ...locked.filter((l) => PARENT[l] === id),
           ...(rows[id] ? sides.filter((s) => STATIONS_BY_ID[s].requires === id) : []),
           ...lanes(id),
         ];
@@ -321,8 +321,8 @@ function diagram(state, a, rows, locked, zone, width, selected) {
     // span: cuántas columnas tiene debajo (la tarjeta puede ser así de ancha).
     pos[id] = { x, depth, span: Math.max(1, leaf - first) };
   };
-  const root = a.rows[0].id;
-  place(root, 0);
+  // Las raíces: la fuente y, con barrios (v4.5, Bogotá), la primera de cada uno, construida o la que sigue.
+  for (const root of chainOf(zone).filter((id) => !PARENT[id] && (rows[id] || locked.includes(id)))) place(root, 0);
   const cols = Math.max(1, leaf);
   const colW = Math.max(MIN_COL, Math.floor((width - 4) / cols));
   const total = colW * cols;

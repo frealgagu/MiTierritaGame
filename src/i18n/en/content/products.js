@@ -353,4 +353,10 @@ export default {
   chocolate_completo: 'Full chocolate',
   onces_bogotanas: 'Bogotá onces',
   tarde_candelaria: 'Afternoon in La Candelaria',
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  salsas_casa: 'House sauces',
+  picada_casa: 'House platter',
+  plato_fuerte: 'Main course',
+  menu_completo: 'Full menu',
+  cena_zona_g: 'Dinner in the Zona G',
 };

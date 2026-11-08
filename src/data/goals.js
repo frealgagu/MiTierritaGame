@@ -1259,6 +1259,18 @@ const BOGOTA = [
   { id: 'bg22', type: 'research', research: 'barrio_patrimonio', reward: 80000 },
   { id: 'bg23', type: 'allLevels', zone: 'bogota', level: 25, reward: 100000 },
   { id: 'bg24', type: 'sold', product: 'tarde_candelaria', amount: 500, reward: 150000 },
+  // Chapinero y la Zona G (v4.5).
+  { id: 'bz01', type: 'unlock', station: 'despensa_zona_g', reward: 20000 },
+  { id: 'bz02', type: 'produced', product: 'salsas_casa', amount: 200, reward: 30000 },
+  { id: 'bz03', type: 'unlock', station: 'cocina_entradas', reward: 40000 },
+  { id: 'bz04', type: 'level', target: 'route:tm_hormigas', level: 10, reward: 50000 },
+  { id: 'bz05', type: 'unlock', station: 'parrilla_zona_g', reward: 80000 },
+  { id: 'bz06', type: 'produced', product: 'plato_fuerte', amount: 300, reward: 120000 },
+  { id: 'bz07', type: 'unlock', station: 'reposteria_zona_g', reward: 200000 },
+  { id: 'bz08', type: 'imported', product: 'asai_box', amount: 500, reward: 250000 },
+  { id: 'bz09', type: 'unlock', station: 'restaurante_zona_g', reward: 400000 },
+  { id: 'bz10', type: 'sold', product: 'cena_zona_g', amount: 200, reward: 600000 },
+  { id: 'bz11', type: 'research', research: 'guia_gastronomica', reward: 800000 },
   { id: 'bg_final', type: 'sold', product: 'tarde_candelaria', amount: 2000, reward: 0, final: true },
 ];
 

@@ -75,6 +75,7 @@ export const NOTES = {
   canastos_mimbre: 'The Basket Maker works twice as fast (the routes adjust on their own).',
   salon_santafereno: 'The Santafereño Restaurant serves twice as much (the routes adjust on their own).',
   tostador_tambor: 'The Chorro Roastery roasts twice as much (it asks the truck for twice as much coffee).',
+  despensa_grande: 'The Zona G Pantry makes twice as much (it asks both its trucks for twice as much).',
 };
 
 export default {
@@ -258,4 +259,12 @@ export default {
   pailas_dulceria: 'Copper pans',
   casona_restaurada: 'Restored mansion',
   barrio_patrimonio: 'Heritage neighborhood',
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  despensa_grande: 'Big pantry',
+  freidora_doble: 'Double fryer',
+  camion_reparto: 'Delivery truck',
+  parrilla_carbon: 'Charcoal grill',
+  horno_reposteria: 'Pastry oven',
+  chef_regional: 'Regional chef',
+  guia_gastronomica: 'Food guide',
 };

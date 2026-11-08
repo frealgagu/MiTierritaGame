@@ -565,6 +565,11 @@ export const ICON = {
   oncesBogotanas: '\uE22F', // Las onces bogotanas: la bandeja con el chocolate, la almojábana, el bocadillo y la cocada
   tardeCandelaria: '\uE230', // La tarde en La Candelaria: la casa colonial de colores, con su balcón de madera, las flores y el farol
   monserrate: '\uE231', // Monserrate: el cerro verde con la iglesia blanca en la cumbre y el funicular que sube
+  salsasCasa: '\uE232', // Las salsas de la casa: los tres frascos de la despensa, el ají negro, el aliño verde y el hogao rojo
+  picadaCasa: '\uE233', // La picada de la casa: la tabla de madera con las papitas criollas, los patacones con hogao y las hormigas
+  platoFuerte: '\uE234', // El plato fuerte: el asado a la llanera con el arroz blanco, la ensalada y la papa
+  menuCompleto: '\uE235', // El menú completo: el plato fuerte, el tazón de asaí con banano y el jugo de maracuyá
+  cenaZonaG: '\uE236', // La cena en la Zona G: la mesa del restaurante con mantel, la vela encendida, el plato servido y el tinto
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

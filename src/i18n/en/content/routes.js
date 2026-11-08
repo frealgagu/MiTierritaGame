@@ -110,4 +110,13 @@ export default {
   tm_bocadillos: ['Bocadillo truck', 'Truck', 'Bocadillos'],
   tm_cocadas: ['Cocada truck', 'Truck', 'Cocadas'],
   tm_flores: ['Flower truck', 'Truck', 'Flowers'],
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  tm_alino: ['Seasoning truck', 'Truck', 'Seasoning'],
+  tm_aji: ['Black chili truck', 'Truck', 'Black chili'],
+  tm_papitas: ['Potato chips truck', 'Truck', 'Chips'],
+  tm_hormigas: ['Ant truck', 'Truck', 'Ants'],
+  tm_asado: ['Roast truck', 'Truck', 'Roast'],
+  tm_arroz: ['Rice truck', 'Truck', 'Rice'],
+  tm_asai: ['Açaí truck', 'Truck', 'Açaí'],
+  tm_jugos: ['Juice truck', 'Truck', 'Juices'],
 };

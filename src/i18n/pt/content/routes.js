@@ -110,4 +110,13 @@ export default {
   tm_bocadillos: ['Carreta dos bocadillos', 'Carreta', 'Bocadillos'],
   tm_cocadas: ['Carreta das cocadas', 'Carreta', 'Cocadas'],
   tm_flores: ['Carreta das flores', 'Carreta', 'Flores'],
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  tm_alino: ['Carreta do tempero', 'Carreta', 'Tempero'],
+  tm_aji: ['Carreta da pimenta preta', 'Carreta', 'Pimenta preta'],
+  tm_papitas: ['Carreta das batatinhas', 'Carreta', 'Batatinhas'],
+  tm_hormigas: ['Carreta das formigas', 'Carreta', 'Formigas'],
+  tm_asado: ['Carreta do assado', 'Carreta', 'Assado'],
+  tm_arroz: ['Carreta do arroz', 'Carreta', 'Arroz'],
+  tm_asai: ['Carreta do açaí', 'Carreta', 'Açaí'],
+  tm_jugos: ['Carreta dos sucos', 'Carreta', 'Sucos'],
 };

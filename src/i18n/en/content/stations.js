@@ -343,4 +343,10 @@ export default {
   chocolateria_candelaria: 'Santa Fe Chocolate House',
   dulceria_calle11: 'Calle 11 Sweet Shop',
   casa_colonial: 'Colonial House',
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  despensa_zona_g: 'Zona G Pantry',
+  cocina_entradas: 'Starters Kitchen',
+  parrilla_zona_g: 'Grill',
+  reposteria_zona_g: 'Desserts and Juices',
+  restaurante_zona_g: 'Zona G Restaurant',
 };

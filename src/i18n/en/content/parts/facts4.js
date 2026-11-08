@@ -82,4 +82,10 @@ export default {
   chocolateria_candelaria: ['Santa Fe chocolate comes with cheese: it melts in the cup.', 'Chocolate is whipped with a molinillo so it foams.'],
   dulceria_calle11: ['Onces is the afternoon snack: chocolate, bread and cheese.', 'Downtown sells obleas with arequipe and sweets from all over.'],
   casa_colonial: ['La Candelaria houses have wooden balconies and clay roof tiles.', 'Plaza de Bolívar and the Capitol are in La Candelaria.'],
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  despensa_zona_g: ['The G in Zona G stands for “gourmet”: it has every kind of restaurant.', 'Pacific seasoning and Amazon black chili flavor the kitchen.'],
+  cocina_entradas: ['Toasted big-bottomed ants are a Santander snack.', 'Small yellow criolla potatoes are fried whole, skin and all.'],
+  parrilla_zona_g: ['Llanero beef is roasted on stakes beside a wood fire.', 'Chapinero lies north of downtown, at the foot of the Cerros.'],
+  reposteria_zona_g: ['Amazon açaí is served cold, in a bowl, with banana.', 'Passion fruit juice is made with the strained pulp.'],
+  restaurante_zona_g: ['Bogotá has room for the cooking of every region.', 'After a meal, Bogotá offers you a tinto.'],
 };

@@ -9096,6 +9096,68 @@ def monserrate():
     return layers
 
 
+
+# ---------- Bogotá · Chapinero y la Zona G (v4.5) ----------
+
+def salsas_casa():
+    """Las salsas de la casa: los tres frascos de la despensa, el ají negro, el aliño verde y el hogao rojo."""
+    layers = []
+    for x, col, lid in ((22, '#3e2723', '#d7263d'), (50, '#7cb342', '#fbc02d'), (78, '#e53935', '#2f7d4f')):
+        layers += [(OUTLINE, [f'M {x - 14} 40 L {x + 14} 40 L {x + 15} 90 Q {x} 96 {x - 15} 90 Z']), ('#e3f2fd', [f'M {x - 11.6} 42.4 L {x + 11.6} 42.4 L {x + 12.6} 88 Q {x} 93 {x - 12.6} 88 Z'])]
+        layers.append((col, [f'M {x - 12} 54 L {x + 12} 54 L {x + 12.6} 88 Q {x} 93 {x - 12.6} 88 Z']))
+        layers += [(OUTLINE, [rect(x - 12, 28, 24, 13)]), (lid, [rect(x - 9.6, 30.4, 19.2, 8.2)])]
+        layers.append(('#ffffff', [rect(x - 8, 60, 4, 20)]))
+    return layers
+
+
+def picada_casa():
+    """La picada de la casa: la tabla de madera con las papitas criollas, los patacones con hogao y las hormigas."""
+    layers = [(OUTLINE, [ellipse(50, 66, 46, 24)]), ('#a1693f', [ellipse(50, 66, 43, 21.4)]), ('#c08b5c', [ellipse(50, 63, 38, 16)])]
+    for x, y in ((30, 60), (38, 70), (26, 72), (34, 52)):
+        layers += oval(x, y, 5.4, 4.6, '#fdd835', d=1.4)
+    for x, y in ((60, 56), (72, 64)):
+        layers += oval(x, y, 9, 6, '#e6c26a', d=1.6) + [('#e53935', [ellipse(x, y - 1, 4.6, 2.6)])]
+    layers += [(OUTLINE, [poly(52, 74, 66, 70, 70, 80, 56, 84)]), ('#f5ecd7', [poly(53.4, 74.6, 65, 71.6, 68.2, 79.4, 56.6, 82.4)])]
+    layers.append(('#3e2723', [ellipse(58 + k * 3, 77 - (k % 2) * 2, 1.6, 1.1) for k in range(4)]))
+    return layers
+
+
+def plato_fuerte():
+    """El plato fuerte: el asado a la llanera con el arroz blanco, la ensalada y la papa."""
+    layers = oval(50, 64, 46, 22, '#fafafa') + [('#eceff1', [ellipse(50, 64, 38, 16)]), ('#fafafa', [ellipse(50, 64, 35, 14)])]
+    layers += [(OUTLINE, ['M 26 56 Q 34 44 52 48 Q 62 52 58 64 Q 46 72 30 66 Q 22 62 26 56 Z']), ('#8d4f2a', ['M 28.4 56.6 Q 35 46.6 51 50.2 Q 59.4 53.6 56 63 Q 45.6 69.6 31 64 Q 24.8 60.8 28.4 56.6 Z'])]
+    layers.append(('#5d2f17', [rib(32 + k * 6, 54, 30 + k * 6, 64, 1.4) for k in range(4)]))
+    layers += oval(70, 62, 12, 8, '#ffffff', d=1.6) + [('#eeeeee', [circle(66, 60, 1.6), circle(72, 64, 1.6), circle(74, 59, 1.4)])]
+    layers.append(('#66bb6a', [leaf(50, 76, 60, 70, 3.4), leaf(54, 78, 66, 76, 3.4)]))
+    layers += oval(40, 74, 6, 4.4, '#fdd835', d=1.3)
+    return layers
+
+
+def menu_completo():
+    """El menú completo: el plato fuerte, el tazón de asaí con banano y el jugo de maracuyá."""
+    layers = oval(40, 72, 34, 15, '#fafafa') + [('#eceff1', [ellipse(40, 72, 27, 10.4)])]
+    layers += [(OUTLINE, ['M 24 70 Q 30 60 44 63 Q 52 66 48 74 Q 38 80 28 76 Z']), ('#8d4f2a', ['M 26.4 70.2 Q 31 62.6 43 65.2 Q 49.4 67.6 46 73 Q 38 77.6 29.4 74.6 Z'])]
+    layers += oval(56, 72, 7, 5, '#ffffff', d=1.4)
+    layers += [(OUTLINE, ['M 58 40 L 92 40 Q 90 60 75 61 Q 60 60 58 40 Z']), ('#ffffff', ['M 60.6 42.4 L 89.4 42.4 Q 87.6 58 75 58.8 Q 62.4 58 60.6 42.4 Z'])]
+    layers += [(OUTLINE, [ellipse(75, 40, 17, 6)]), ('#6a1b9a', [ellipse(75, 40, 15, 4.4)])]
+    layers.append(('#fff59d', [circle(70, 38.6, 2.4), circle(78, 39.6, 2.4), circle(74, 41.4, 2)]))
+    layers.append(('#c8a26a', [circle(66, 41, 1.2), circle(83, 41, 1.2), circle(80, 37.6, 1)]))
+    layers += [(OUTLINE, ['M 10 18 L 30 18 L 28 50 L 12 50 Z']), ('#fbc02d', ['M 12.4 22 L 27.6 22 L 26 47.6 L 14 47.6 Z']), ('#e1f5fe', [rect(12.4, 20.4, 15.2, 3)])]
+    layers.append(('#4e342e', [rib(24, 10, 21, 30, 1.6)]))
+    return layers
+
+
+def cena_zona_g():
+    """La cena en la Zona G: la mesa del restaurante con mantel, la vela encendida, el plato servido y el tinto."""
+    layers = [(OUTLINE, [poly(4, 64, 50, 46, 96, 64, 50, 86)]), ('#fafafa', [poly(9, 64, 50, 48.6, 91, 64, 50, 83.4)])]
+    layers += [(OUTLINE, [poly(4, 64, 50, 86, 50, 96, 4, 74)]), ('#e0e0e0', [poly(6.4, 66.4, 48.6, 87, 48.6, 93.6, 6.4, 72.4)])]
+    layers += [(OUTLINE, [poly(50, 86, 96, 64, 96, 74, 50, 96)]), ('#bdbdbd', [poly(51.4, 87, 93.6, 66.4, 93.6, 72.4, 51.4, 93.6)])]
+    layers += oval(40, 64, 16, 7, '#ffffff', d=1.6) + [('#8d4f2a', [ellipse(38, 62, 7, 3.4)]), ('#66bb6a', [ellipse(46, 64, 4, 2)])]
+    layers += [(OUTLINE, [rect(64, 34, 8, 22)]), ('#fff8e1', [rect(65.6, 35.6, 4.8, 18.8)]), ('#ff9800', [leaf(68, 34, 68, 22, 3)]), ('#ffeb3b', [leaf(68, 33, 68, 26, 1.6)])]
+    layers += taza(80, 62, 0.4, '#2b1a10')
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9673,6 +9735,12 @@ ICONS = [
     (0xE22F, 'onces_bogotanas', onces_bogotanas),
     (0xE230, 'tarde_candelaria', tarde_candelaria),
     (0xE231, 'monserrate', monserrate),
+    # Bogotá · Chapinero y la Zona G (v4.5)
+    (0xE232, 'salsas_casa', salsas_casa),
+    (0xE233, 'picada_casa', picada_casa),
+    (0xE234, 'plato_fuerte', plato_fuerte),
+    (0xE235, 'menu_completo', menu_completo),
+    (0xE236, 'cena_zona_g', cena_zona_g),
 ]
 
 

@@ -40,3 +40,30 @@ test('Bogotá se abre al completar Zipaquirá', () => {
   assert.ok(openRegions(root).includes('bogota'));
   assert.ok(regionState(root, 'bogota').zones.bogota.unlocked);
 });
+
+test('los barrios se construyen a la vez, cada uno en su orden', async () => {
+  const { buildableStations } = await import('../src/sim/chain.js');
+  const { quoteUnlock } = await import('../src/sim/upgrades.js');
+  const s = createInitialState(0, 'bogota');
+  // Al empezar: la siguiente de La Candelaria y la primera de la Zona G.
+  assert.deepEqual(buildableStations(s, 'bogota'), ['cafeteria_septima', 'despensa_zona_g']);
+  s.coins = 1e9;
+  assert.equal(quoteUnlock(s, 'despensa_zona_g').ok, true);
+  const q = quoteUnlock(s, 'cocina_entradas');
+  assert.equal(q.reason, 'order');
+  assert.equal(q.previous, 'despensa_zona_g');
+  // Construida la Despensa, la Zona G sigue sin esperar a La Candelaria.
+  const game = new Game(s);
+  assert.ok(game.unlock('despensa_zona_g'));
+  assert.deepEqual(buildableStations(s, 'bogota'), ['cafeteria_septima', 'cocina_entradas']);
+});
+
+test('la Zona G trabaja con sus tractomulas, aunque La Candelaria no esté', () => {
+  const s = createInitialState(0, 'bogota');
+  s.coins = 1e9;
+  const game = new Game(s);
+  for (const id of ['despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g']) assert.ok(game.unlock(id), id);
+  for (let i = 0; i < 6000; i++) game.step(0.1); // 10 minutos
+  assert.ok(s.stats.produced.cena_zona_g > 0, 'salió alguna cena');
+  for (const p of ['alino_box', 'aji_box', 'criollas_box', 'ant_cone', 'parranda_llanera', 'rice_sack', 'asai_box', 'juice_box']) assert.ok(s.stats.imported[p] > 0, `llegó ${p}`);
+});

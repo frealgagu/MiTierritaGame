@@ -1,6 +1,6 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { bulkUpgrade, maxLevel, MILESTONES } from './rules.js';
-import { chainOf, nextToUnlock, zoneOf, zoneUnlocked } from './chain.js';
+import { buildableStations, groupOf, groupsOf, zoneOf, zoneUnlocked } from './chain.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { createStationState } from './production.js';
 import { RESEARCH, RESEARCH_BY_ID } from '../data/research.js';
@@ -76,9 +76,12 @@ export function quoteUnlock(state, id) {
   if (def.side) {
     // Rama secundaria: solo pide la estación que la habilita.
     if (!state.stations[def.requires]) return { ok: false, reason: 'order', previous: def.requires, cost };
-  } else if (nextToUnlock(state, zoneOf(id)) !== id) {
-    const chain = chainOf(zoneOf(id));
-    const previous = chain[chain.indexOf(id) - 1];
+  } else if (!buildableStations(state, zoneOf(id)).includes(id)) {
+    // La anterior de su barrio (v4.5) o, si es la primera de un barrio que espera otros, la que les falta a esos.
+    const group = groupOf(id);
+    const k = group.stations.indexOf(id);
+    const waits = groupsOf(zoneOf(id)).filter((g) => (group.after ?? []).includes(g.id)).flatMap((g) => g.stations);
+    const previous = k > 0 ? group.stations[k - 1] : waits.find((s) => !state.stations[s]);
     return { ok: false, reason: 'order', previous, cost };
   }
   if (!canPay(state, cost)) return { ok: false, reason: 'coins', cost };
