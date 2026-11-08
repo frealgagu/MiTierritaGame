@@ -4,17 +4,18 @@ import { existsSync, readFileSync } from 'node:fs';
 import { SONGS } from '../src/audio/songs.js';
 import { createSong, renderBar, renderSong } from '../src/audio/compose.js';
 import { EFFECTS } from '../tools/audio-list.mjs';
-import { ORDER, fileOf } from '../tools/music-export.mjs';
+import { ORDER, PUBLIC, fileOf } from '../tools/music-export.mjs';
 import { writeMidi } from '../tools/midi.mjs';
 
 // La música y los sonidos para descargar (v3.71, web/musica). Si cambia una pieza o un efecto, hay que
 // volver a exportarlos: node tools/music-export.mjs && node tools/sfx-export.mjs && node tools/music-page.mjs
 const DIR = new URL('../web/musica/', import.meta.url).pathname;
 
-test('cada pieza tiene su MP3 y su MIDI, y la página la lista', () => {
+test('cada pieza tiene su MP3 y su MIDI, y la página la lista (las de regiones ocultas, todavía no)', () => {
   assert.deepEqual([...ORDER].sort(), Object.keys(SONGS).sort());
   const page = readFileSync(`${DIR}index.html`, 'utf8');
-  for (const region of ORDER) {
+  // Las de las regiones ocultas (Bogotá, mientras se construye) no se publican todavía.
+  for (const region of PUBLIC) {
     for (const ext of ['mp3', 'mid']) assert.ok(existsSync(`${DIR}${fileOf(region)}.${ext}`), `${fileOf(region)}.${ext}`);
     assert.ok(page.includes(`"file":"${fileOf(region)}"`), fileOf(region));
   }

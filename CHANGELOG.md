@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v4.4.10 — Aeropuertos en su sitio
+- **✈️ Los aeropuertos del mapa de zonas** están donde están los de verdad: El Edén en Armenia, Palonegro en Bucaramanga, Rafael Núñez en Cartagena, el de Sogamoso, La Vanguardia en Villavicencio, el de Buenaventura, el de Leticia, el de Neiva y El Dorado. Ahí aterriza la avioneta y de ahí sale el Willys.
+- **Ninguna zona ni aeropuerto se sale de su región** en el mapa: si un punto cae afuera o pegado al borde, se corre hacia adentro (el de Cundinamarca queda en la Sabana, junto a Bogotá).
+- **La mejora recomendada** ya no se queda sin sugerencia cuando una estación espera a la vez lo de la anterior y lo que llega por una ruta: también prueba subir los arrieros de la estación que la abastece.
+
 ## v4.4.9 — La flecha de subir de nivel, ahora sí
 - **La flecha verde de subir de nivel** («⬆ Todo al nivel…») ya se ve con su borde y su fondo claro sobre el botón verde. En la v4.4.8 el dibujo estaba listo, pero el juego seguía mostrando la flecha del teléfono.
 

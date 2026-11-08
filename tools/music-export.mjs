@@ -8,6 +8,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { SONGS } from '../src/audio/songs.js';
+import { REGIONS_BY_ID } from '../src/data/regions.js';
 import { createSong, renderBar } from '../src/audio/compose.js';
 import { createRng } from '../src/core/rng.js';
 import { writeMidi, writeWav } from './midi.mjs';
@@ -21,6 +22,8 @@ const ARTIST = 'Encantos de Mi Tierrita';
 
 // El orden de las regiones en el juego y el nombre de cada archivo.
 export const ORDER = ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima', 'cundinamarca', 'bogota'];
+// Lo que va en la página de descargas: sin las regiones que todavía están ocultas en el juego (v4.4.10: Bogotá).
+export const PUBLIC = ORDER.filter((region) => !REGIONS_BY_ID[region].hidden);
 const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export const fileOf = (region) => `${ORDER.indexOf(region) + 1}-${slug(SONGS[region].name)}`;
 
@@ -113,7 +116,7 @@ function encode(region, mixed, peakDb, out) {
   execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', mixed, '-af', `volume=${(-1 - peakDb).toFixed(2)}dB`,
     '-c:a', 'libmp3lame', '-b:a', '160k', '-ar', String(SR),
     '-metadata', `title=${song.name}`, '-metadata', `artist=${ARTIST}`, '-metadata', `album=${ARTIST}`,
-    '-metadata', `track=${ORDER.indexOf(region) + 1}/${ORDER.length}`, '-metadata', `comment=${song.instruments}`,
+    '-metadata', `track=${ORDER.indexOf(region) + 1}/${PUBLIC.length}`, '-metadata', `comment=${song.instruments}`,
     out]);
 }
 
@@ -165,7 +168,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   mkdirSync(OUT, { recursive: true });
   const tmp = mkdtempSync(join(tmpdir(), 'musica-'));
   try {
-    for (const region of ORDER) {
+    for (const region of PUBLIC) {
       const name = fileOf(region);
       writeFileSync(join(OUT, `${name}.mid`), midiFile(region));
       const { mixed, loops, seconds, info } = mp3(region, tmp);
