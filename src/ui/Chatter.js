@@ -10,7 +10,7 @@ import { toast } from './toast.js';
 import { t } from '../i18n/index.js';
 import { decimal } from '../core/format.js';
 import { clockOf, hourLabel, isLunch, isWorkTime, nextWorkHour, seasonOf, workOf } from '../sim/calendar.js';
-import { EVENTS } from '../data/events.js';
+import { EVENTS, eventKey } from '../data/events.js';
 import { eventDef, eventHandicaps, eventStatus, handicapText } from '../sim/events.js';
 
 // La persona de cada zona avisa lo importante (v1.8): la bienvenida la primera vez que se ve su zona
@@ -91,7 +91,7 @@ export class Chatter {
     // Un evento que se abre (una vez al año), dicho por la persona de su zona.
     for (const def of EVENTS) {
       if (!(def.zone in state.zones)) continue; // (los de las otras regiones los dice su gente)
-      const st = eventStatus(this.root(), def.zone);
+      const st = eventStatus(this.root(), eventKey(def));
       const hint = `evento:${def.id}:${st?.round}`; // (v3.7: por reto; antes, `event:` por año)
       if (st?.kind !== 'available' || state.hints.includes(hint)) continue;
       state.hints.push(hint);
@@ -156,7 +156,7 @@ export class Chatter {
       return out;
     }
     for (const def of EVENTS) {
-      if (def.zone === zone && eventStatus(this.root(), def.zone)?.kind === 'available') out.push(`${def.icon} ${def.announce}`);
+      if (def.zone === zone && eventStatus(this.root(), eventKey(def))?.kind === 'available') out.push(`${def.icon} ${def.announce}`);
     }
     // Lo que ya se puede construir.
     const build = nextToUnlock(state, zone);

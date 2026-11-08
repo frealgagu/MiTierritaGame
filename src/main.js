@@ -227,7 +227,7 @@ async function start() {
   const restartBoard = () => {
     if (!board || board.game.state.event.done) return;
     confirmEvent('🔄', t('¿Reiniciar el evento?'), t('Vuelve a empezar este mismo reto desde cero: monedas, niveles, compras y reloj. Si ya tenías la medalla asegurada, también se borra.'), t('🔄 Reiniciar'), () => {
-      const zone = board.zone;
+      const zone = board.key;
       restartEvent(game.state, zone);
       leaveBoard();
       enterEvent(zone);
@@ -236,7 +236,7 @@ async function start() {
   };
   const endBoard = () => {
     if (!board) return;
-    const zone = board.zone;
+    const zone = board.key;
     const close = () => {
       endEvent(game.state, zone);
       exitEvent();
@@ -279,12 +279,15 @@ async function start() {
   const enterEvent = (zoneId) => {
     const state = startEvent(game.state, zoneId);
     if (!state) return;
+    // zoneId es la clave del evento (v4.5: en Bogotá, varios eventos en la misma zona); el mapa es el de su zona.
+    const key = zoneId;
+    zoneId = state.event.zone;
     if (panel.id) panel.close();
     scene.destroy();
     const eg = new Game(state);
     eg.timeScale = game.timeScale;
     for (const type of ['levelUp', 'unlocked', 'research']) eg.bus.on(type, () => (hud.recDirty = true));
-    board = { zone: zoneId, game: eg };
+    board = { zone: zoneId, key, game: eg };
     setLook(root.profile, REGION_OF_ZONE[zoneId]);
     scene = new Scene(app, eg, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
@@ -501,7 +504,7 @@ async function start() {
       if (!board) return;
       board.game.timeScale = game.timeScale;
       board.game.update(dt);
-      const r = finishEvent(game.state, board.zone);
+      const r = finishEvent(game.state, board.key);
       // v3.7: cumplir el objetivo asegura la medalla; el evento termina al tener las tres mejoras.
       if (r?.secured) {
         const m = MEDALS[r.medal];
