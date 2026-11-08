@@ -361,4 +361,9 @@ export default {
   pescaderia_plaza: 'Peixaria',
   fritanga_plaza: 'Fritada da feira',
   plaza_paloquemao: 'Mercado de Paloquemao',
+  // Bogotá · El centro (v4.5)
+  hotel_capital: 'Hotel da capital',
+  funicular_monserrate: 'Funicular de Monserrate',
+  pabellon_regiones: 'Pavilhão das regiões',
+  gran_feria: 'Recinto da Grande Feira',
 };

@@ -561,4 +561,12 @@ export default {
   paila_fritanga: 'Tacho da fritada',
   nave_nueva: 'Pavilhão novo',
   mercado_madrugada: 'Mercado da madrugada',
+  // Bogotá · El centro (v4.5)
+  suite_presidencial: 'Suíte presidencial',
+  vagones_nuevos: 'Vagões novos',
+  carpa_grande: 'Tenda grande',
+  pabellones_nuevos: 'Pavilhões novos',
+  capital_del_pais: 'Capital do país inteiro',
+  maestria_bogota: 'Maestria: Bogotá',
+  supremacia_bogota: 'Supremacia: Bogotá',
 };

@@ -1231,9 +1231,9 @@ const ZIPAQUIRA = [
   { id: 'cz_final', type: 'sold', product: 'visita_catedral', amount: 7000, reward: 0, final: true },
 ];
 
-// Bogotá (v4.5): una sola zona grande, que llega barrio por barrio. Por ahora La Candelaria, con los números de una
-// primera zona (los Achirales) y las tractomulas. El final provisional (vender tardes en La Candelaria) se moverá al
-// de la Gran Feria cuando lleguen los demás barrios.
+// Bogotá (v4.5): una sola zona grande con cuatro barrios que se construyen a la vez, cada uno con los números de una
+// zona del Tolima Grande (La Candelaria, los Achirales; la Zona G, el Café del Huila; Usaquén, Betania; Paloquemao, la
+// Lechonería), y el centro, que los junta. La lista va barrio por barrio y termina en la Gran Feria.
 const BOGOTA = [
   { id: 'bg01', type: 'sold', product: 'cafe_capitalino', amount: 20, reward: 15 },
   { id: 'bg02', type: 'level', target: 'tostadero_chorro', level: 5, reward: 20 },
@@ -1295,7 +1295,20 @@ const BOGOTA = [
   { id: 'bp09', type: 'unlock', station: 'plaza_paloquemao', reward: 80000000 },
   { id: 'bp10', type: 'sold', product: 'manana_paloquemao', amount: 200, reward: 120000000 },
   { id: 'bp11', type: 'research', research: 'mercado_madrugada', reward: 160000000 },
-  { id: 'bg_final', type: 'sold', product: 'tarde_candelaria', amount: 2000, reward: 0, final: true },
+  // El centro (v4.5): se abre con los cuatro barrios construidos.
+  { id: 'bc01', type: 'unlock', station: 'hotel_capital', reward: 200000000 },
+  { id: 'bc02', type: 'produced', product: 'noche_bogota', amount: 100, reward: 300000000 },
+  { id: 'bc03', type: 'unlock', station: 'funicular_monserrate', reward: 400000000 },
+  { id: 'bc04', type: 'sold', product: 'subida_monserrate', amount: 200, reward: 600000000 },
+  { id: 'bc05', type: 'unlock', station: 'pabellon_regiones', reward: 800000000 },
+  { id: 'bc06', type: 'produced', product: 'pabellon_colombia', amount: 100, reward: 1200000000 },
+  { id: 'bc07', type: 'allLevels', zone: 'bogota', level: 50, reward: 1500000000 },
+  { id: 'bc08', type: 'unlock', station: 'gran_feria', reward: 2000000000 },
+  { id: 'bc09', type: 'sold', product: 'feria_mi_tierrita', amount: 50, reward: 3000000000 },
+  { id: 'bc10', type: 'research', research: 'capital_del_pais', reward: 5000000000 },
+  { id: 'bc11', type: 'sold', product: 'subida_monserrate', amount: 2000, reward: 8000000000 },
+  // El final de Bogotá: la Gran Feria de Mi Tierrita.
+  { id: 'bg_final', type: 'sold', product: 'feria_mi_tierrita', amount: 500, reward: 0, final: true },
 ];
 
 export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS, salinas: SALINAS, cocina: COCINA, zipaquira: ZIPAQUIRA, bogota: BOGOTA };

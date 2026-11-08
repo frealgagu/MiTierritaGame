@@ -8405,6 +8405,96 @@ const DRAW = {
     windowOnRight(this, g, hx, hy, w, 1.4, 14, 0xfff8e1);
   },
 
+  // --- Bogotá · El centro (v4.5) ---
+
+  // Hotel de la capital: el edificio blanco de cuatro pisos con las ventanas encendidas y las banderas en la entrada.
+  hotel_capital(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    const w = 2.3;
+    const d = 1.7;
+    const H = 50 + ctx.up;
+    box(g, hx, hy, w, d, H, 0xeceff1);
+    box(g, hx - 0.03, hy - 0.03, w + 0.06, d + 0.06, 3, 0xb0bec5, { z: H });
+    this.roofTop = iso(hx + w / 2, hy + d / 2, H + 3);
+    for (let f = 0; f < 4 + (ctx.up ? 1 : 0); f++) {
+      for (const at of [0.35, 0.85, 1.35, 1.85]) {
+        const z = 8 + f * 10;
+        g.poly(isoPoly([[hx + at - 0.12, hy + d, z], [hx + at + 0.12, hy + d, z], [hx + at + 0.12, hy + d, z + 6], [hx + at - 0.12, hy + d, z + 6]])).fill(0xffe082).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      }
+      windowOnRight(this, g, hx, hy, w, 0.85, 8 + f * 10, 0xffe082);
+    }
+    awningFront(g, hx + 0.7, hy, 0.9, d, 12, 0x1a237e);
+    for (const [fx, col] of [[0.3, 0xfdd835], [2.0, 0xd7263d]]) {
+      const p = iso(x + fx, y + 2.6);
+      g.rect(p.x - 0.8, p.y - 30, 1.6, 30).fill(0x9e9e9e);
+      g.poly([p.x + 0.8, p.y - 30, p.x + 12, p.y - 26, p.x + 0.8, p.y - 22]).fill(col).stroke({ width: 0.6, color: 0x3a2418 });
+    }
+  },
+
+  // Funicular de Monserrate: la estación de abajo, con la vía que sube hacia los Cerros y el vagón rojo.
+  funicular_monserrate(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 1.2;
+    house(this, g, hx, hy, 1.8, 1.4, 24, ctx, { wall: 0xfbf8f1, roofH: 12 });
+    door(g, hx, hy, 1.4, 0.9, 15, 0x5d4037);
+    // La vía: dos rieles que suben hacia el oriente (gy menor), donde está el cerro.
+    const a = iso(x + 1.2, y + 1.2, 6);
+    const b = iso(x + 2.2, y - 0.6, 40);
+    for (const off of [-3, 3]) g.moveTo(a.x + off, a.y).lineTo(b.x + off, b.y).stroke({ width: 1.6, color: 0x37474f });
+    for (let k = 1; k < 6; k++) {
+      const p = { x: a.x + ((b.x - a.x) * k) / 6, y: a.y + ((b.y - a.y) * k) / 6 };
+      g.moveTo(p.x - 4, p.y).lineTo(p.x + 4, p.y).stroke({ width: 1, color: 0x6d4c41 });
+    }
+    const c = { x: a.x + (b.x - a.x) * 0.55, y: a.y + (b.y - a.y) * 0.55 };
+    g.roundRect(c.x - 7, c.y - 9, 14, 9, 2).fill(0xd7263d).stroke(OUTLINE);
+    g.rect(c.x - 5, c.y - 7, 4, 3).fill(0xcfe3ee);
+    g.rect(c.x + 1, c.y - 7, 4, 3).fill(0xcfe3ee);
+  },
+
+  // Pabellón de las regiones: la carpa grande amarilla, azul y roja, con banderitas de los colores de cada región.
+  pabellon_regiones(g, x, y, ctx) {
+    const hx = x + 0.2;
+    const hy = y + 0.3;
+    const w = 2.6;
+    const d = 1.8;
+    const H = 18 + ctx.up / 2;
+    box(g, hx, hy, w, d, H, 0xfafafa);
+    gableRoof(g, hx, hy, w, d, H, 20, 0xfdd835, 0xfafafa, 0.2);
+    this.roofTop = iso(hx + w / 2, hy + d / 2, H + 20);
+    const cols = [0x8bc34a, 0xe5a15a, 0xf2c14e, 0x9fb4d8, 0xc8d66a, 0x4fb3bf, 0x3f9a5a, 0xe39b6a, 0xd98fb5];
+    for (let k = 0; k < cols.length; k++) {
+      const p = iso(hx + 0.1 + (k * (w - 0.2)) / (cols.length - 1), hy + d + 0.2, H - 1 - Math.sin((k / (cols.length - 1)) * Math.PI) * 4);
+      g.poly([p.x - 2.5, p.y, p.x + 2.5, p.y, p.x, p.y + 5]).fill(cols[k]);
+    }
+    const door0 = isoPoly([[hx + w / 2 - 0.35, hy + d, 0], [hx + w / 2 + 0.35, hy + d, 0], [hx + w / 2 + 0.35, hy + d, 14], [hx + w / 2 - 0.35, hy + d, 14]]);
+    g.poly(door0).fill(0xa1693f).stroke(OUTLINE);
+  },
+
+  // Recinto de la Gran Feria: el arco amarillo de la entrada con la franja azul y roja, los globos y la estrella.
+  gran_feria(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.2;
+    box(g, hx, hy, 2.5, 1.5, 22 + ctx.up, 0xeceff1);
+    gableRoof(g, hx, hy, 2.5, 1.5, 22 + ctx.up, 14, 0x1e5aa8, 0xeceff1);
+    const z = 0;
+    const a0 = iso(x + 0.5, y + 2.5, z);
+    const a1 = iso(x + 2.5, y + 2.5, z);
+    for (const p of [a0, a1]) {
+      g.rect(p.x - 3, p.y - 34, 6, 34).fill(0xfdd835).stroke(OUTLINE);
+      g.rect(p.x - 3, p.y - 14, 6, 7).fill(0x1e5aa8);
+      g.rect(p.x - 3, p.y - 7, 6, 7).fill(0xd7263d);
+    }
+    g.moveTo(a0.x, a0.y - 34).quadraticCurveTo((a0.x + a1.x) / 2, (a0.y + a1.y) / 2 - 56, a1.x, a1.y - 34).stroke({ width: 6, color: 0xfdd835 });
+    const top = { x: (a0.x + a1.x) / 2, y: (a0.y + a1.y) / 2 - 47 };
+    g.star(top.x, top.y - 6, 5, 7, 3).fill(0xffd54f).stroke(OUTLINE);
+    this.roofTop = { x: top.x, y: top.y - 12 };
+    for (const [dx, dy, c] of [[-14, -20, 0xd7263d], [-6, -26, 0x1e5aa8], [4, -22, 0xfdd835], [12, -28, 0x8bc34a]].slice(0, 2 + Math.min(ctx.tier, 2))) {
+      g.moveTo(top.x + dx, top.y + dy + 6).lineTo(top.x + dx * 0.6, top.y + 22).stroke({ width: 0.6, color: 0x37474f });
+      g.ellipse(top.x + dx, top.y + dy, 4, 5).fill(c).stroke({ width: 0.6, color: 0x3a2418 });
+    }
+  },
+
   // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja
   // que se amontona para el Secadero.
   huila_wetmill(g, x, y, ctx) {

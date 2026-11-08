@@ -28,6 +28,9 @@ const listNames = (ids) => {
 // La cadena (v3.0.1): un diagrama con las estaciones unidas por eslabones y, sobre cada eslabón, cuánto
 // pasa por segundo. Al tocar una estación aparece abajo su detalle (lo que recibe y procesa, sus
 // arrieros, lo que se desvía o se pierde, lo que llega de otras zonas) con botones para ir a ella.
+// Los barrios de Bogotá (v4.5), para las pestañas de la cadena.
+const GROUP_NAMES = { candelaria: t('Candelaria'), zona_g: t('Zona G'), usaquen: t('Usaquén'), paloquemao: t('Paloquemao'), centro: t('Centro') };
+
 export class ChainView {
   // getRoot: la partida (el perfil con el Renombre y las regiones), para mejorar toda la zona (v4.1).
   constructor(game, onOpen, getZone, getRoot) {
@@ -38,6 +41,8 @@ export class ChainView {
     this.onOpen = onOpen;
     this.el = document.getElementById('chain');
     this.body = document.getElementById('chain-body');
+    this.groupsEl = document.getElementById('chain-groups');
+    this.group = null; // el barrio que se ve (v4.5, Bogotá)
     this.detail = document.getElementById('chain-detail');
     this.selected = null;
     document.getElementById('chain-btn').addEventListener('click', () => this.open());
@@ -45,6 +50,15 @@ export class ChainView {
     this.el.addEventListener('click', (e) => {
       if (e.target === this.el) return this.close();
       if (this.footClick(e)) return;
+      const tab = e.target.closest('[data-group]');
+      if (tab) {
+        this.group = tab.dataset.group;
+        this.selected = null;
+        this.html = this.detailHtml = this.groupsHtml = null;
+        this.update();
+        this.body.scrollLeft = 0;
+        return;
+      }
       // Tocar una estación muestra su detalle (tocarla otra vez lo cierra).
       const pick = e.target.closest('[data-pick]');
       if (pick) {
@@ -80,11 +94,24 @@ export class ChainView {
     const zone = this.getZone();
     const a = analyzeChain(state, zone);
     const rows = Object.fromEntries(a.rows.map((r) => [r.id, r]));
-    const locked = buildableStations(state, zone); // las que siguen (con barrios, v4.5, una por barrio)
+    let locked = buildableStations(state, zone); // las que siguen (con barrios, v4.5, una por barrio)
     this.updateFoot(state, zone);
+    // Con barrios (v4.5, Bogotá): una pestaña por barrio, y en el diagrama solo las estaciones del que se ve (las que
+    // le faltan, en gris, aunque todavía no se puedan construir).
+    const groups = ZONES_BY_ID[zone].groups;
+    let only = null;
+    if (groups) {
+      if (!groups.some((g) => g.id === this.group)) this.group = groups[0].id;
+      const tabs = groups.map((g) => `<button class="tab ${g.id === this.group ? 'active' : ''}" data-group="${g.id}">${GROUP_NAMES[g.id] ?? g.name}</button>`).join('');
+      if (tabs !== this.groupsHtml) this.groupsEl.innerHTML = this.groupsHtml = tabs;
+      const group = groups.find((g) => g.id === this.group);
+      only = new Set(group.stations);
+      locked = group.stations.filter((id) => !state.stations[id]);
+    }
+    this.groupsEl.hidden = !groups;
     // Solo se reescribe si algo cambió, para no perder toques a medio hacer.
     // Menos el margen de la caja que se desliza (v4.3.1), para que lo de las orillas no quede cortado.
-    const html = diagram(state, a, rows, locked, zone, (this.body.clientWidth || 320) - 2 * DG_PAD, this.selected);
+    const html = diagram(state, a, rows, locked, zone, (this.body.clientWidth || 320) - 2 * DG_PAD, this.selected, only);
     if (html !== this.html) this.body.innerHTML = this.html = html;
     const detail = this.selected ? detailOf(state, a, rows, this.selected, zone) : '';
     this.detail.hidden = !detail;
@@ -278,19 +305,21 @@ const sideText = (state, id) => {
   return t('Recibe {in} de {from} y la vuelve {out}: todo lo que vende la zona vale <b>+{n} %</b>.', { in: Object.keys(def.in).map((p) => `${PRODUCTS[p].icon} ${PRODUCTS[p].name.toLowerCase()}`).join(', '), from: withArticle(from.name), out: PRODUCTS[Object.keys(def.out)[0]].name.toLowerCase(), n: bonus });
 };
 
-function diagram(state, a, rows, locked, zone, width, selected) {
+// only: con barrios (v4.5), las estaciones del que se ve; las demás no se dibujan.
+function diagram(state, a, rows, locked, zone, width, selected, only = null) {
+  const inSet = (id) => !only || only.has(id);
   // Las ramas aparte (v3.12: la Compostera) cuelgan de la estación que las habilita.
   const sides = ZONES_BY_ID[zone].plots.map((p) => p.stationId).filter((id) => STATIONS_BY_ID[id].side);
   // En el árbol, cada estación cuelga de la que le da su entrada principal o su subproducto (v4.0). Lo que una
   // estación junta de otra (v4.0) baja por su propia columna, un carril (`lane:<la que junta>`) que cuelga de la
   // que lo hace, y entra por arriba, junto al camino principal.
-  const byKids = (id) => (BY_CHILDREN[id] ?? []).filter((c) => rows[c] && PARENT[c] === id && chainOf(zone).includes(c));
-  const lanes = (id) => (rows[id] ? Object.keys(JOIN_FROM).filter((j) => rows[j] && Object.values(JOIN_FROM[j]).includes(id)).map((j) => `lane:${j}`) : []);
+  const byKids = (id) => (BY_CHILDREN[id] ?? []).filter((c) => rows[c] && PARENT[c] === id && chainOf(zone).includes(c) && inSet(c));
+  const lanes = (id) => (rows[id] ? Object.keys(JOIN_FROM).filter((j) => rows[j] && inSet(j) && Object.values(JOIN_FROM[j]).includes(id)).map((j) => `lane:${j}`) : []);
   const rawKids = (id) =>
     id.startsWith('lane:')
       ? []
       : [
-          ...(rows[id]?.children ?? []).filter((c) => PARENT[c] === id),
+          ...(rows[id]?.children ?? []).filter((c) => PARENT[c] === id && inSet(c)),
           ...(rows[id] ? byKids(id) : []),
           ...locked.filter((l) => PARENT[l] === id),
           ...(rows[id] ? sides.filter((s) => STATIONS_BY_ID[s].requires === id) : []),
@@ -322,7 +351,7 @@ function diagram(state, a, rows, locked, zone, width, selected) {
     pos[id] = { x, depth, span: Math.max(1, leaf - first) };
   };
   // Las raíces: la fuente y, con barrios (v4.5, Bogotá), la primera de cada uno, construida o la que sigue.
-  for (const root of chainOf(zone).filter((id) => !PARENT[id] && (rows[id] || locked.includes(id)))) place(root, 0);
+  for (const root of chainOf(zone).filter((id) => inSet(id) && (!PARENT[id] || !inSet(PARENT[id])) && (rows[id] || locked.includes(id)))) place(root, 0);
   const cols = Math.max(1, leaf);
   const colW = Math.max(MIN_COL, Math.floor((width - 4) / cols));
   const total = colW * cols;

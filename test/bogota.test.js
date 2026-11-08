@@ -67,3 +67,19 @@ test('la Zona G trabaja con sus tractomulas, aunque La Candelaria no esté', () 
   assert.ok(s.stats.produced.cena_zona_g > 0, 'salió alguna cena');
   for (const p of ['alino_box', 'aji_box', 'criollas_box', 'ant_cone', 'parranda_llanera', 'rice_sack', 'asai_box', 'juice_box']) assert.ok(s.stats.imported[p] > 0, `llegó ${p}`);
 });
+
+test('el centro se abre con los cuatro barrios construidos, y la Gran Feria junta todo', async () => {
+  const { buildableStations, groupsOf } = await import('../src/sim/chain.js');
+  const s = createInitialState(0, 'bogota');
+  s.coins = 1e13;
+  const game = new Game(s);
+  const barrios = groupsOf('bogota').filter((g) => g.id !== 'centro');
+  for (const g of barrios) for (const id of g.stations) if (!s.stations[id]) assert.ok(game.unlock(id), id);
+  assert.deepEqual(buildableStations(s, 'bogota'), ['hotel_capital']);
+  for (const id of ['hotel_capital', 'funicular_monserrate', 'pabellon_regiones', 'gran_feria']) assert.ok(game.unlock(id), id);
+  for (const id of Object.keys(s.stations)) s.stations[id].level = s.stations[id].transport.level = 50;
+  for (const r of Object.values(s.routes)) r.level = 50;
+  for (let i = 0; i < 30000; i++) game.step(0.1); // 50 minutos
+  assert.ok(s.stats.produced.subida_monserrate > 0, 'se subió a Monserrate');
+  assert.ok(s.stats.produced.feria_mi_tierrita > 0, 'hubo Gran Feria');
+});

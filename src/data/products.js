@@ -444,6 +444,11 @@ export const PRODUCTS = {
   canasta_plaza: { name: 'Canasta de la plaza', zone: 'bogota', value: 250, icon: ICON.canastaPaloquemao, color: 0xc9a26a },
   desayuno_plaza: { name: 'Desayuno de plaza', zone: 'bogota', value: 650, icon: ICON.desayunoPlaza, color: 0xd9a066 },
   manana_paloquemao: { name: 'Mañana en Paloquemao', zone: 'bogota', value: 1600, icon: ICON.mananaPaloquemao, color: 0x5d8aa8 },
+  // Bogotá · El centro (v4.5): donde se juntan los barrios. Los dos finales: la subida a Monserrate y la Gran Feria.
+  noche_bogota: { name: 'Noche en Bogotá', zone: 'bogota', value: 2500, icon: ICON.nocheBogota, color: 0x1a237e },
+  subida_monserrate: { name: 'Subida a Monserrate', zone: 'bogota', value: 1500, icon: ICON.monserrate, color: 0x4e8a34 },
+  pabellon_colombia: { name: 'Pabellón de Colombia', zone: 'bogota', value: 8000, icon: ICON.pabellonColombia, color: 0xfdd835 },
+  feria_mi_tierrita: { name: 'Gran Feria de Mi Tierrita', zone: 'bogota', value: 40000, icon: ICON.feriaMiTierrita, color: 0xd7263d },
 
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },

@@ -283,4 +283,12 @@ export default {
   paila_fritanga: 'Fry-up pan',
   nave_nueva: 'New hall',
   mercado_madrugada: 'Dawn market',
+  // Bogotá · El centro (v4.5)
+  suite_presidencial: 'Presidential suite',
+  vagones_nuevos: 'New cars',
+  carpa_grande: 'Big tent',
+  pabellones_nuevos: 'New pavilions',
+  capital_del_pais: 'Capital of the whole country',
+  maestria_bogota: 'Mastery: Bogotá',
+  supremacia_bogota: 'Supremacy: Bogotá',
 };

@@ -9289,6 +9289,51 @@ def manana_paloquemao():
     return layers
 
 
+
+# ---------- Bogotá · El centro (v4.5) ----------
+
+def noche_bogota():
+    """La noche en Bogotá: el hotel con las ventanas encendidas, la luna y los Cerros oscuros detrás."""
+    layers = [(OUTLINE, [rect(2, 8, 96, 86)]), ('#1a237e', [rect(3.6, 9.6, 92.8, 82.8)])]
+    layers.append(('#283593', ['M 3.6 60 Q 30 30 52 44 Q 74 24 96.4 46 L 96.4 92.4 L 3.6 92.4 Z']))
+    layers.append(('#fff59d', [crescent((80, 22), 8, (84, 18), 7)]))
+    layers.append(('#fafafa', [circle(14, 18, 1), circle(34, 14, 1.2), circle(56, 20, 1)]))
+    layers += [(OUTLINE, [rect(26, 30, 48, 64)]), ('#eceff1', [rect(28.4, 32.4, 43.2, 59.2)])]
+    layers.append(('#ffe082', [rect(32 + c * 10, 38 + r * 11, 6, 7) for r in range(4) for c in range(4) if (r + c) % 3]))
+    layers.append(('#5d4037', [rect(45, 80, 10, 12)]))
+    layers += [(OUTLINE, [rect(46, 18, 2, 14)]), ('#d7263d', [poly(48, 18, 58, 21, 48, 24)])]
+    return layers
+
+
+def pabellon_colombia():
+    """El pabellón de Colombia: la carpa grande de la feria, con las banderitas de colores de todas las regiones."""
+    layers = [(OUTLINE, [rect(10, 52, 80, 40)]), ('#fafafa', [rect(12.4, 54.4, 75.2, 35.2)])]
+    layers += [(OUTLINE, [poly(4, 56, 50, 14, 96, 56)]), ('#fdd835', [poly(9, 54, 50, 18, 91, 54)]), ('#1e5aa8', [poly(29.5, 54, 50, 36, 70.5, 54)]), ('#d7263d', [poly(40, 54, 50, 45, 60, 54)])]
+    layers.append(('#37474f', [rib(10, 52, 50, 66, 1), rib(50, 66, 90, 52, 1)]))
+    cols = ['#8bc34a', '#e5a15a', '#f2c14e', '#9fb4d8', '#c8d66a', '#4fb3bf', '#3f9a5a', '#e39b6a', '#d98fb5']
+    layers.append(('#37474f', [rib(12, 54, 88, 54, 0.8)]))
+    for k, c in enumerate(cols):
+        x = 14 + k * 8.4
+        y = 54 + (10 if 3 <= k <= 5 else 6 if k in (2, 6) else 2)
+        layers.append((c, [poly(x - 3, y, x + 3, y, x, y + 7)]))
+    layers += [(OUTLINE, ['M 40 92 L 40 72 Q 50 64 60 72 L 60 92 Z']), ('#a1693f', ['M 42.4 92 L 42.4 73 Q 50 66.6 57.6 73 L 57.6 92 Z'])]
+    return layers
+
+
+def feria_mi_tierrita():
+    """La Gran Feria de Mi Tierrita: el arco de la entrada con la bandera de Colombia, los globos y la estrella."""
+    layers = [(OUTLINE, ['M 8 96 L 8 46 Q 50 4 92 46 L 92 96 L 76 96 L 76 50 Q 50 22 24 50 L 24 96 Z'])]
+    layers.append(('#fdd835', ['M 10.4 93.6 L 10.4 47 Q 50 8 89.6 47 L 89.6 93.6 L 78.4 93.6 L 78.4 49 Q 50 19 21.6 49 L 21.6 93.6 Z']))
+    layers.append(('#1e5aa8', ['M 10.4 70 L 21.6 70 L 21.6 82 L 10.4 82 Z', 'M 78.4 70 L 89.6 70 L 89.6 82 L 78.4 82 Z']))
+    layers.append(('#d7263d', ['M 10.4 82 L 21.6 82 L 21.6 93.6 L 10.4 93.6 Z', 'M 78.4 82 L 89.6 82 L 89.6 93.6 L 78.4 93.6 Z']))
+    for x, y, c in ((34, 64, '#d7263d'), (50, 56, '#1e5aa8'), (66, 64, '#fdd835'), (42, 76, '#8bc34a'), (58, 76, '#f06292')):
+        layers += oval(x, y, 7, 8.4, c, d=1.6)
+        layers.append(('#37474f', [rib(x, y + 8.4, x + 1, y + 20, 0.8)]))
+        layers.append(('#ffffff', [ellipse(x - 2.4, y - 3, 1.6, 2.4)]))
+    layers += [(OUTLINE, [poly(50, 4, 54, 14, 64, 14, 56, 20, 59, 30, 50, 24, 41, 30, 44, 20, 36, 14, 46, 14)]), ('#ffd54f', [poly(50, 8, 52.8, 15.6, 60.4, 15.6, 54.4, 20, 56.6, 26.6, 50, 22.6, 43.4, 26.6, 45.6, 20, 39.6, 15.6, 47.2, 15.6)])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9884,6 +9929,10 @@ ICONS = [
     (0xE23E, 'canasta_paloquemao', canasta_paloquemao),
     (0xE23F, 'desayuno_plaza', desayuno_plaza),
     (0xE240, 'manana_paloquemao', manana_paloquemao),
+    # Bogotá · El centro (v4.5)
+    (0xE241, 'noche_bogota', noche_bogota),
+    (0xE242, 'pabellon_colombia', pabellon_colombia),
+    (0xE243, 'feria_mi_tierrita', feria_mi_tierrita),
 ]
 
 

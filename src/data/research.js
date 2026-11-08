@@ -731,6 +731,14 @@ export const RESEARCH = [
   { zone: 'bogota', id: 'paila_fritanga', name: 'Paila de la fritanga', icon: ICON.desayunoPlaza, desc: 'La Fritanga de la plaza fríe el doble.', cost: 300000000, requires: 'plaza_paloquemao', effect: { type: 'stationSpeed', target: 'fritanga_plaza', mult: 2 } },
   { zone: 'bogota', id: 'nave_nueva', name: 'Nave nueva', icon: ICON.mananaPaloquemao, desc: 'La Plaza de Paloquemao recibe el doble de gente.', cost: 500000000, requires: 'plaza_paloquemao', effect: { type: 'stationSpeed', target: 'plaza_paloquemao', mult: 2 } },
   { zone: 'bogota', id: 'mercado_madrugada', name: 'Mercado de madrugada', icon: '🏅', desc: 'La mañana en Paloquemao vale un 50 % más.', cost: 800000000, requires: 'plaza_paloquemao', effect: { type: 'productValue', target: 'manana_paloquemao', mult: 1.5 } },
+  // Bogotá · El centro (v4.5), y la maestría y la supremacía de la zona (una sola, la más grande).
+  { zone: 'bogota', id: 'suite_presidencial', name: 'Suite presidencial', icon: ICON.nocheBogota, desc: 'El Hotel de la capital recibe el doble de huéspedes.', cost: 1000000000, requires: 'funicular_monserrate', effect: { type: 'stationSpeed', target: 'hotel_capital', mult: 2 } },
+  { zone: 'bogota', id: 'vagones_nuevos', name: 'Vagones nuevos', icon: ICON.monserrate, desc: 'El Funicular de Monserrate sube el doble de gente.', cost: 2000000000, requires: 'pabellon_regiones', effect: { type: 'stationSpeed', target: 'funicular_monserrate', mult: 2 } },
+  { zone: 'bogota', id: 'carpa_grande', name: 'Carpa grande', icon: ICON.pabellonColombia, desc: 'El Pabellón de las regiones arma el doble.', cost: 4000000000, requires: 'gran_feria', effect: { type: 'stationSpeed', target: 'pabellon_regiones', mult: 2 } },
+  { zone: 'bogota', id: 'pabellones_nuevos', name: 'Pabellones nuevos', icon: ICON.feriaMiTierrita, desc: 'El Recinto de la Gran Feria recibe el doble de visitantes.', cost: 8000000000, requires: 'gran_feria', effect: { type: 'stationSpeed', target: 'gran_feria', mult: 2 } },
+  { zone: 'bogota', id: 'capital_del_pais', name: 'Capital de todo el país', icon: '🏅', desc: 'Todo lo que vende Bogotá vale un 50 % más.', cost: 15000000000, requires: 'gran_feria', effect: { type: 'zoneValue', target: 'bogota', mult: 1.5 } },
+  { zone: 'bogota', id: 'maestria_bogota', name: 'Maestría: Bogotá', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'bogota', mult: 4 } },
+  { zone: 'bogota', id: 'supremacia_bogota', name: 'Supremacía: Bogotá', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'bogota', mult: 8 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

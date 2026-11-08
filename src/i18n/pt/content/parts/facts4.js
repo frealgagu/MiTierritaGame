@@ -100,4 +100,9 @@ export default {
   pescaderia_plaza: ['A truta vem das lagoas frias e o pargo, do Pacífico.', 'O peixe defumado aguenta a longa viagem até a capital.'],
   fritanga_plaza: ['No mercado se toma café com lechona, tamal e caldo de costela.', 'A fritada leva linguiça, chouriço, batata criolla e banana.'],
   plaza_paloquemao: ['Paloquemao é um dos maiores mercados de Bogotá.', 'O mercado abre de madrugada para restaurantes e lojas.'],
+  // Bogotá · El centro (v4.5)
+  hotel_capital: ['Gente de todas as regiões chega a Bogotá para ficar uns dias.', 'À noite Bogotá é fria: sai-se de casaco e guarda-chuva.'],
+  funicular_monserrate: ['Monserrate fica a mais de 3.100 metros, acima da cidade.', 'Sobe-se o morro de funicular, de teleférico ou a pé.'],
+  pabellon_regiones: ['Nas feiras de Bogotá cada região monta o seu pavilhão.', 'Num só pavilhão cabe o país: comida, música e artesanato.'],
+  gran_feria: ['A Grande Feira junta o melhor das dez regiões do jogo.', 'Aqui termina a viagem: o país inteiro numa só feira.'],
 };

@@ -371,4 +371,9 @@ export default {
   canasta_plaza: 'Cesta da feira',
   desayuno_plaza: 'Café da manhã da feira',
   manana_paloquemao: 'Manhã em Paloquemao',
+  // Bogotá · El centro (v4.5)
+  noche_bogota: 'Noite em Bogotá',
+  subida_monserrate: 'Subida a Monserrate',
+  pabellon_colombia: 'Pavilhão da Colômbia',
+  feria_mi_tierrita: 'Grande Feira de Mi Tierrita',
 };

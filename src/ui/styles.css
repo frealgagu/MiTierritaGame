@@ -308,6 +308,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .tab.active { background: var(--yellow); }
 .tab.short { flex: 0 0 44px; }
+/* Los barrios de Bogotá en la cadena (v4.5): cinco pestañas en un teléfono. */
+.chain-groups { flex: none; margin: 0 0 8px; }
+.chain-groups[hidden] { display: none; }
+.chain-groups .tab { font-size: 0.78rem; padding: 6px 2px; }
 .tab.short .tab-name { display: none; }
 
 /* Vista de la cadena */

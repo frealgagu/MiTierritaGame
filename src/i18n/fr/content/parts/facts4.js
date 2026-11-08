@@ -100,4 +100,9 @@ export default {
   pescaderia_plaza: ['La truite vient des lacs froids et le vivaneau, du Pacifique.', 'Le poisson fumé supporte le long voyage jusqu’à la capitale.'],
   fritanga_plaza: ['Au marché, on déjeune de lechona, de tamal et de bouillon.', 'La fritanga a chorizo, boudin, pomme de terre criolla et banane.'],
   plaza_paloquemao: ['Paloquemao est l’un des plus grands marchés de Bogotá.', 'Le marché ouvre avant l’aube pour les restaurants et les boutiques.'],
+  // Bogotá · El centro (v4.5)
+  hotel_capital: ['On vient de toutes les régions à Bogotá pour y rester quelques jours.', 'La nuit, Bogotá est froide : on sort avec manteau et parapluie.'],
+  funicular_monserrate: ['Monserrate culmine à plus de 3 100 mètres, au-dessus de la ville.', 'On monte la colline en funiculaire, en téléphérique ou à pied.'],
+  pabellon_regiones: ['Aux foires de Bogotá, chaque région monte son pavillon.', 'Un seul pavillon contient tout le pays : cuisine, musique, artisanat.'],
+  gran_feria: ['La Grande Foire réunit le meilleur des dix régions du jeu.', 'Le voyage s’achève ici : tout le pays dans une seule foire.'],
 };

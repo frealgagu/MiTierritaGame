@@ -32,8 +32,9 @@ export const ZONE55 = {
     { id: 'zona_g', name: 'Chapinero y la Zona G', stations: ['despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g'] },
     { id: 'usaquen', name: 'Usaquén', stations: ['toldo_tejidos', 'toldo_sombreros', 'toldo_loza', 'toldo_mascaras', 'mercado_pulgas'] },
     { id: 'paloquemao', name: 'Paloquemao', stations: ['puesto_flores', 'puesto_frutas', 'pescaderia_plaza', 'fritanga_plaza', 'plaza_paloquemao'] },
+    { id: 'centro', name: 'El centro', stations: ['hotel_capital', 'funicular_monserrate', 'pabellon_regiones', 'gran_feria'], after: ['candelaria', 'zona_g', 'usaquen', 'paloquemao'] },
   ],
-  chain: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial', 'despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g', 'toldo_tejidos', 'toldo_sombreros', 'toldo_loza', 'toldo_mascaras', 'mercado_pulgas', 'puesto_flores', 'puesto_frutas', 'pescaderia_plaza', 'fritanga_plaza', 'plaza_paloquemao'],
+  chain: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial', 'despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g', 'toldo_tejidos', 'toldo_sombreros', 'toldo_loza', 'toldo_mascaras', 'mercado_pulgas', 'puesto_flores', 'puesto_frutas', 'pescaderia_plaza', 'fritanga_plaza', 'plaza_paloquemao', 'hotel_capital', 'funicular_monserrate', 'pabellon_regiones', 'gran_feria'],
   // El Chorro de Quevedo: la plazoleta donde empieza todo, al pie de los Cerros.
   farm: { stationId: 'tostadero_chorro', x: 35, y: 6, w: 6, h: 6 },
   plots: [
@@ -59,6 +60,12 @@ export const ZONE55 = {
     { stationId: 'pescaderia_plaza', x: 32, y: 27 },
     { stationId: 'fritanga_plaza', x: 34, y: 31 },
     { stationId: 'plaza_paloquemao', x: 36, y: 27 },
+    // El centro: el Hotel sobre la avenida del occidente, el Funicular al pie de Monserrate y, ya cerca de la bodega,
+    // el Pabellón de las regiones y el Recinto de la Gran Feria.
+    { stationId: 'hotel_capital', x: 12, y: 31 },
+    { stationId: 'funicular_monserrate', x: 27, y: 9 },
+    { stationId: 'pabellon_regiones', x: 39, y: 36 },
+    { stationId: 'gran_feria', x: 39, y: 40 },
   ],
   warehouse: { x: 47, y: 42, w: 3, h: 3 },
   muleRoad: [[40.5, 12.5], [4.5, 12.5], [4.5, 30.5], [42.5, 30.5], [42.5, 44.5], [46.5, 44.5], [46.5, 45.5], [47.4, 45.5]],
