@@ -77,6 +77,7 @@ export const NOTES = {
   tostador_tambor: 'A Torrefação do Chorro torra o dobro (pede o dobro de café à carreta).',
   despensa_grande: 'A Despensa da Zona G prepara o dobro (pede o dobro às suas duas carretas).',
   telar_grande: 'A Barraca de tecidos abastece o dobro (pede o dobro às suas duas carretas).',
+  cuarto_frio_plaza: 'A Banca de flores monta o dobro (pede o dobro de flores à carreta).',
 };
 
 export default {
@@ -553,4 +554,11 @@ export default {
   vitrina_mascaras: 'Vitrine de máscaras',
   calle_cerrada: 'Rua fechada aos domingos',
   sello_artesanal: 'Selo do artesanato',
+  // Bogotá · Paloquemao (v4.5)
+  cuarto_frio_plaza: 'Câmara fria do mercado',
+  fruteros: 'Fruteiros',
+  neveras_hielo: 'Caixas com gelo',
+  paila_fritanga: 'Tacho da fritada',
+  nave_nueva: 'Pavilhão novo',
+  mercado_madrugada: 'Mercado da madrugada',
 };

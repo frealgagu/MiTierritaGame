@@ -94,4 +94,10 @@ export default {
   toldo_loza: ['La poterie noire de La Chamba est polie à la pierre avant cuisson.', 'Le panier cadeau de l’Axe contient café, panela et arequipe.'],
   toldo_mascaras: ['Les masques ticunas sont peints sur du tissu d’écorce.', 'Le werregue se tresse en spirale avec de la fibre de palmier.'],
   mercado_pulgas: ['Usaquén était un village à part avant d’être dans Bogotá.', 'Au marché aux puces, il y a de tout : antiquités, disques, artisanat.'],
+  // Bogotá · Paloquemao (v4.5)
+  puesto_flores: ['Paloquemao a toute une halle aux fleurs, ouverte dès l’aube.', 'Les fleurs du marché arrivent de la Savane, fraîchement coupées.'],
+  puesto_frutas: ['Au marché, on trouve des fruits de tous les climats du pays.', 'On fait goûter le fruit au client avant qu’il l’achète.'],
+  pescaderia_plaza: ['La truite vient des lacs froids et le vivaneau, du Pacifique.', 'Le poisson fumé supporte le long voyage jusqu’à la capitale.'],
+  fritanga_plaza: ['Au marché, on déjeune de lechona, de tamal et de bouillon.', 'La fritanga a chorizo, boudin, pomme de terre criolla et banane.'],
+  plaza_paloquemao: ['Paloquemao est l’un des plus grands marchés de Bogotá.', 'Le marché ouvre avant l’aube pour les restaurants et les boutiques.'],
 };

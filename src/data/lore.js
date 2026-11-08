@@ -411,6 +411,12 @@ export const FACTS = {
   toldo_loza: ['La loza negra de La Chamba se brilla con piedra antes de quemarla.', 'La canasta de regalo del Eje lleva café, panela y arequipe.'],
   toldo_mascaras: ['Las máscaras ticunas se pintan sobre tela de corteza.', 'El werregue se teje en espiral con fibra de palma.'],
   mercado_pulgas: ['Usaquén fue un pueblo aparte antes de ser parte de Bogotá.', 'En el mercado de pulgas hay de todo: antigüedades, discos y artesanías.'],
+  // Bogotá · Paloquemao (v4.5)
+  puesto_flores: ['En Paloquemao hay un pabellón entero de flores, desde la madrugada.', 'Las flores de la plaza llegan de la Sabana, recién cortadas.'],
+  puesto_frutas: ['En la plaza se consiguen frutas de todos los climas del país.', 'Al marchante le dan a probar la fruta antes de comprarla.'],
+  pescaderia_plaza: ['La trucha llega de las lagunas frías y el pargo, del mar Pacífico.', 'El pescado ahumado aguanta el viaje largo hasta la capital.'],
+  fritanga_plaza: ['En la plaza se desayuna lechona, tamal y caldo de costilla.', 'La fritanga lleva chorizo, morcilla, papa criolla y plátano.'],
+  plaza_paloquemao: ['Paloquemao es una de las plazas de mercado más grandes de Bogotá.', 'La plaza abre de madrugada para los restaurantes y las tiendas.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).

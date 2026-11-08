@@ -8338,6 +8338,73 @@ const DRAW = {
     fleaStall(this, g, x + 0.2, y + 1.5, ctx, 0xd7263d, [0x2e4fa8, 0xe8b04c, 0x2b2b2b, 0xd7263d, 0x8d5a32], 1.3);
   },
 
+  // --- Bogotá · Paloquemao (v4.5): los puestos de la plaza de mercado y su nave de techo azul ---
+
+  // Puesto de flores: el toldo con los baldes de flores de colores al frente.
+  puesto_flores(g, x, y, ctx) {
+    fleaStall(this, g, x + 0.4, y + 0.3, ctx, 0x2f7d4f, [0xd81b3c, 0xfbc02d, 0xf06292, 0xfafafa, 0x8e24aa]);
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 2); k++) {
+      const p = iso(x + 0.6 + k * 0.42, y + 2.45);
+      g.rect(p.x - 3, p.y - 6, 6, 6).fill(0x78909c).stroke({ width: 0.6, color: 0x3a2418 });
+      for (const [dx, dy, c] of [[-2, -8, 0xd81b3c], [1.5, -9, 0xfbc02d], [0, -11, 0xf06292]]) g.circle(p.x + dx, p.y + dy, 2).fill(c);
+    }
+  },
+
+  // Puesto de frutas: el toldo con las pirámides de frutas.
+  puesto_frutas(g, x, y, ctx) {
+    fleaStall(this, g, x + 0.4, y + 0.3, ctx, 0xf2b705, [0xfbc02d, 0x6a1b9a, 0xe53935, 0x8bc34a, 0xff9800]);
+    for (const [k, c] of [[0, 0xfbc02d], [1, 0xe53935], [2, 0x8bc34a]].slice(0, 2 + Math.min(ctx.tier, 1))) {
+      const p = iso(x + 0.7 + k * 0.6, y + 2.45);
+      for (const [dx, dy] of [[-3, 0], [0, 0], [3, 0], [-1.5, -2.6], [1.5, -2.6], [0, -5.2]]) g.circle(p.x + dx, p.y - 2 + dy, 1.9).fill(c).stroke({ width: 0.4, color: 0x3a2418, alpha: 0.6 });
+    }
+  },
+
+  // Pescadería: el puesto de baldosa blanca con el toldo azul, el hielo y los pescados colgados.
+  pescaderia_plaza(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.2, 1.3, 24, ctx, { wall: 0xeef3f6, roofH: 12, roofColor: 0x5d8aa8 });
+    box(g, hx + 0.2, hy + 1.35, 1.6, 0.4, 9, 0xdff3fb);
+    for (let k = 0; k < 4; k++) {
+      const p = iso(hx + 0.35 + k * 0.38, hy + 1.55, 9);
+      g.ellipse(p.x, p.y - 1.5, 4, 1.6).fill(k % 2 ? 0xb8742a : 0xf8a5a5).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+    }
+    awningFront(g, hx + 0.1, hy, 2.0, 1.3, 21, 0x1e5aa8);
+    windowOnRight(this, g, hx, hy, 2.2, 0.65, 13, 0xcfe3ee);
+  },
+
+  // Fritanga de la plaza: el puesto con la paila grande hirviendo, la lechona y el humo.
+  fritanga_plaza(g, x, y, ctx) {
+    fleaStall(this, g, x + 0.4, y + 0.3, ctx, 0xd7263d, [0xd9a066, 0xfdd835, 0x5d2f17, 0xd9a066]);
+    const p = iso(x + 1.6, y + 2.4);
+    shadow(g, p.x, p.y + 2, 18, 7);
+    g.rect(p.x - 10, p.y - 8, 20, 8).fill(0x8a3b22).stroke(OUTLINE);
+    g.ellipse(p.x, p.y - 9, 13, 5).fill(0x2b2b2b).stroke(OUTLINE);
+    g.ellipse(p.x, p.y - 9.5, 10, 3.6).fill(0xd9a066);
+    for (const dx of [-5, 0, 5]) g.circle(p.x + dx, p.y - 10, 1.8).fill(0xfdd835);
+    this.smokePoints.push(iso(x + 1.6, y + 2.4, 16));
+  },
+
+  // Plaza de Paloquemao: la nave grande del mercado, de paredes claras y techo azul, con la entrada en arco.
+  plaza_paloquemao(g, x, y, ctx) {
+    const hx = x + 0.15;
+    const hy = y + 0.2;
+    const w = 2.7;
+    const d = 2.0;
+    const H = 26 + ctx.up;
+    box(g, hx, hy, w, d, H, 0xe0d6c4);
+    gableRoof(g, hx, hy, w, d, H, 18, 0x5d8aa8, 0xe0d6c4);
+    this.roofTop = iso(hx + w / 2, hy + d / 2, H + 18);
+    const a = isoPoly([[hx + w / 2 - 0.35, hy + d, 0], [hx + w / 2 + 0.35, hy + d, 0], [hx + w / 2 + 0.35, hy + d, 16], [hx + w / 2 - 0.35, hy + d, 16]]);
+    g.poly(a).fill(0x5d4037).stroke(OUTLINE);
+    for (const at of [0.45, 2.25]) {
+      const q = isoPoly([[hx + at - 0.25, hy + d, 12], [hx + at + 0.25, hy + d, 12], [hx + at + 0.25, hy + d, 18], [hx + at - 0.25, hy + d, 18]]);
+      g.poly(q).fill(0xfff8e1).stroke(OUTLINE);
+    }
+    windowOnRight(this, g, hx, hy, w, 0.7, 14, 0xfff8e1);
+    windowOnRight(this, g, hx, hy, w, 1.4, 14, 0xfff8e1);
+  },
+
   // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja
   // que se amontona para el Secadero.
   huila_wetmill(g, x, y, ctx) {

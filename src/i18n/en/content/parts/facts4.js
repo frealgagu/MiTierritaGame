@@ -94,4 +94,10 @@ export default {
   toldo_loza: ['La Chamba pottery is polished with a stone before firing.', 'The Eje gift basket has coffee, panela and arequipe.'],
   toldo_mascaras: ['Ticuna masks are painted on bark cloth.', 'Werregue is woven in a spiral with palm fiber.'],
   mercado_pulgas: ['Usaquén was a separate town before it became part of Bogotá.', 'The flea market has it all: antiques, records and crafts.'],
+  // Bogotá · Paloquemao (v4.5)
+  puesto_flores: ['Paloquemao has a whole flower hall, open from before dawn.', 'The market’s flowers come freshly cut from the Savanna.'],
+  puesto_frutas: ['The market sells fruit from every climate in the country.', 'Vendors let you taste the fruit before you buy it.'],
+  pescaderia_plaza: ['Trout comes from cold lakes and snapper from the Pacific.', 'Smoked fish holds up on the long trip to the capital.'],
+  fritanga_plaza: ['At the market people breakfast on lechona, tamal and rib soup.', 'A fritanga has chorizo, blood sausage, criolla potato and plantain.'],
+  plaza_paloquemao: ['Paloquemao is one of Bogotá’s biggest markets.', 'The market opens before dawn for restaurants and shops.'],
 };

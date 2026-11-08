@@ -355,4 +355,10 @@ export default {
   toldo_loza: 'Barraca de louça e cestas',
   toldo_mascaras: 'Barraca de máscaras e werregue',
   mercado_pulgas: 'Mercado de pulgas',
+  // Bogotá · Paloquemao (v4.5)
+  puesto_flores: 'Banca de flores',
+  puesto_frutas: 'Banca de frutas',
+  pescaderia_plaza: 'Peixaria',
+  fritanga_plaza: 'Fritada da feira',
+  plaza_paloquemao: 'Mercado de Paloquemao',
 };

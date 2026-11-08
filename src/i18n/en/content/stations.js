@@ -355,4 +355,10 @@ export default {
   toldo_loza: 'Pottery and Baskets Stall',
   toldo_mascaras: 'Masks and Werregue Stall',
   mercado_pulgas: 'Flea Market',
+  // Bogotá · Paloquemao (v4.5)
+  puesto_flores: 'Flower Stall',
+  puesto_frutas: 'Fruit Stall',
+  pescaderia_plaza: 'Fish Stall',
+  fritanga_plaza: 'Market Fry-up',
+  plaza_paloquemao: 'Paloquemao Market',
 };

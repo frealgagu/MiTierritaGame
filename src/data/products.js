@@ -438,6 +438,12 @@ export const PRODUCTS = {
   surtido_loza: { name: 'Surtido con loza', zone: 'bogota', value: 120, icon: ICON.surtidoLoza, color: 0x2b2b2b },
   gran_surtido: { name: 'Gran surtido artesanal', zone: 'bogota', value: 320, icon: ICON.granSurtido, color: 0xc08b5c },
   domingo_usaquen: { name: 'Domingo en Usaquén', zone: 'bogota', value: 800, icon: ICON.domingoUsaquen, color: 0xd7263d },
+  // Bogotá · Paloquemao (v4.5): la plaza de mercado. La canasta se va llenando de puesto en puesto.
+  canasta_flores: { name: 'Canasta con flores', zone: 'bogota', value: 40, icon: ICON.canastaFlores, color: 0xd81b3c },
+  canasta_frutas: { name: 'Canasta con frutas', zone: 'bogota', value: 90, icon: ICON.canastaFrutas, color: 0xfbc02d },
+  canasta_plaza: { name: 'Canasta de la plaza', zone: 'bogota', value: 250, icon: ICON.canastaPaloquemao, color: 0xc9a26a },
+  desayuno_plaza: { name: 'Desayuno de plaza', zone: 'bogota', value: 650, icon: ICON.desayunoPlaza, color: 0xd9a066 },
+  manana_paloquemao: { name: 'Mañana en Paloquemao', zone: 'bogota', value: 1600, icon: ICON.mananaPaloquemao, color: 0x5d8aa8 },
 
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },

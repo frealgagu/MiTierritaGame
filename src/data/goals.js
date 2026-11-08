@@ -1283,6 +1283,18 @@ const BOGOTA = [
   { id: 'bu09', type: 'unlock', station: 'mercado_pulgas', reward: 4000000 },
   { id: 'bu10', type: 'sold', product: 'domingo_usaquen', amount: 200, reward: 6000000 },
   { id: 'bu11', type: 'research', research: 'sello_artesanal', reward: 8000000 },
+  // Paloquemao (v4.5).
+  { id: 'bp01', type: 'unlock', station: 'puesto_flores', reward: 4000000 },
+  { id: 'bp02', type: 'level', target: 'route:tm_flores', level: 50, reward: 6000000 },
+  { id: 'bp03', type: 'unlock', station: 'puesto_frutas', reward: 10000000 },
+  { id: 'bp04', type: 'produced', product: 'canasta_frutas', amount: 1000, reward: 15000000 },
+  { id: 'bp05', type: 'unlock', station: 'pescaderia_plaza', reward: 20000000 },
+  { id: 'bp06', type: 'imported', product: 'trucha_ahumada', amount: 1000, reward: 30000000 },
+  { id: 'bp07', type: 'unlock', station: 'fritanga_plaza', reward: 40000000 },
+  { id: 'bp08', type: 'level', target: 'route:tm_lechona', level: 50, reward: 60000000 },
+  { id: 'bp09', type: 'unlock', station: 'plaza_paloquemao', reward: 80000000 },
+  { id: 'bp10', type: 'sold', product: 'manana_paloquemao', amount: 200, reward: 120000000 },
+  { id: 'bp11', type: 'research', research: 'mercado_madrugada', reward: 160000000 },
   { id: 'bg_final', type: 'sold', product: 'tarde_candelaria', amount: 2000, reward: 0, final: true },
 ];
 

@@ -77,6 +77,7 @@ export const NOTES = {
   tostador_tambor: 'The Chorro Roastery roasts twice as much (it asks the truck for twice as much coffee).',
   despensa_grande: 'The Zona G Pantry makes twice as much (it asks both its trucks for twice as much).',
   telar_grande: 'The Textiles Stall stocks twice as much (it asks both its trucks for twice as much).',
+  cuarto_frio_plaza: 'The Flower Stall arranges twice as much (it asks the truck for twice as many flowers).',
 };
 
 export default {
@@ -275,4 +276,11 @@ export default {
   vitrina_mascaras: 'Mask display case',
   calle_cerrada: 'Street closed on Sundays',
   sello_artesanal: 'Craft seal',
+  // Bogotá · Paloquemao (v4.5)
+  cuarto_frio_plaza: 'Market cold room',
+  fruteros: 'Fruit sellers',
+  neveras_hielo: 'Ice coolers',
+  paila_fritanga: 'Fry-up pan',
+  nave_nueva: 'New hall',
+  mercado_madrugada: 'Dawn market',
 };

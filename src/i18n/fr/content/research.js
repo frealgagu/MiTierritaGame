@@ -77,6 +77,7 @@ export const NOTES = {
   tostador_tambor: 'La Torréfaction du Chorro torréfie deux fois plus (elle demande deux fois plus de café au camion).',
   despensa_grande: 'Le Garde-manger de la Zona G prépare deux fois plus (il en demande deux fois plus à ses deux camions).',
   telar_grande: 'Le Stand des tissus en propose deux fois plus (il en demande deux fois plus à ses deux camions).',
+  cuarto_frio_plaza: 'L’Étal de fleurs en prépare deux fois plus (il demande deux fois plus de fleurs au camion).',
 };
 
 export default {
@@ -553,4 +554,11 @@ export default {
   vitrina_mascaras: 'Vitrine à masques',
   calle_cerrada: 'Rue fermée le dimanche',
   sello_artesanal: 'Label artisanal',
+  // Bogotá · Paloquemao (v4.5)
+  cuarto_frio_plaza: 'Chambre froide du marché',
+  fruteros: 'Marchands de fruits',
+  neveras_hielo: 'Glacières',
+  paila_fritanga: 'Bassine à friture',
+  nave_nueva: 'Nouvelle halle',
+  mercado_madrugada: 'Marché de l’aube',
 };

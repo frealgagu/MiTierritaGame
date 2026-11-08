@@ -365,4 +365,10 @@ export default {
   surtido_loza: 'Pottery assortment',
   gran_surtido: 'Grand craft assortment',
   domingo_usaquen: 'Sunday in Usaquén',
+  // Bogotá · Paloquemao (v4.5)
+  canasta_flores: 'Basket with flowers',
+  canasta_frutas: 'Basket with fruit',
+  canasta_plaza: 'Market basket',
+  desayuno_plaza: 'Market breakfast',
+  manana_paloquemao: 'Morning at Paloquemao',
 };

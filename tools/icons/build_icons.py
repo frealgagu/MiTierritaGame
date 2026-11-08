@@ -9225,6 +9225,70 @@ def domingo_usaquen():
     return layers
 
 
+
+# ---------- Bogotá · Paloquemao (v4.5) ----------
+
+def plaza_basket(layers_inside):
+    """La canasta de mimbre del mercado, con lo que va adentro (se dibuja antes del frente de la canasta)."""
+    layers = [(OUTLINE, [f'M 22 48 Q 20 4 50 4 Q 80 4 78 48 L 74 48 Q 76 8 50 8 Q 24 8 26 48 Z'])]
+    layers += layers_inside
+    layers += [(OUTLINE, ['M 8 48 L 92 48 L 82 94 L 18 94 Z']), ('#c9a26a', ['M 11 50.4 L 89 50.4 L 79.8 91.6 L 20.2 91.6 Z'])]
+    layers.append(('#a07a46', [rib(14, 62, 86, 62, 2), rib(16, 74, 84, 74, 2), rib(18, 86, 82, 86, 2)]))
+    return layers
+
+
+def canasta_flores():
+    """La canasta del mercado con el ramo de flores de Paloquemao."""
+    inside = []
+    for x, y, c in ((30, 34, ROSE), (44, 26, '#fbc02d'), (58, 30, '#f06292'), (70, 38, ROSE), (50, 40, '#fafafa'), (38, 42, '#8e24aa')):
+        inside += rose_head(x, y, 8, c)
+    inside += [('#43a047', [leaf(30, 46, 20, 36, 3), leaf(70, 46, 80, 36, 3)])]
+    return plaza_basket(inside)
+
+
+def canasta_frutas():
+    """La canasta con las flores, el maracuyá, la fresa y el asaí."""
+    inside = rose_head(28, 36, 7) + rose_head(40, 30, 7, '#fbc02d')
+    inside += oval(56, 36, 9, 9, '#fbc02d', d=1.8) + [('#8bc34a', [circle(56, 36, 3)])]
+    inside += oval(72, 40, 8, 8, '#6a1b9a', d=1.8)
+    inside += strawberry(46, 42, 0.5)
+    return plaza_basket(inside)
+
+
+def canasta_paloquemao():
+    """La canasta del mercado completa: flores, frutas y el pescado ahumado asomando."""
+    inside = rose_head(26, 38, 6) + oval(40, 38, 7, 7, '#fbc02d', d=1.6) + oval(54, 40, 6, 6, '#6a1b9a', d=1.6)
+    inside += trout(64, 34, 0.42, body='#b8742a')
+    return plaza_basket(inside)
+
+
+def desayuno_plaza():
+    """El desayuno de plaza: la lechona servida en hoja, la papa criolla y el chocolate."""
+    layers = [(OUTLINE, [ellipse(46, 66, 42, 20)]), ('#4e8a34', [ellipse(46, 66, 39, 17.4)]), ('#66bb6a', [ellipse(42, 62, 30, 11)])]
+    layers += [(OUTLINE, ['M 22 64 Q 30 50 50 54 Q 64 58 60 70 Q 46 78 28 74 Z']), ('#d9a066', ['M 24.6 64 Q 31 52.6 49.6 56.4 Q 61.6 59.6 58 68.6 Q 46 75.6 29.6 72 Z'])]
+    layers.append(('#fdd835', [circle(34, 62, 2), circle(44, 60, 2), circle(50, 66, 2)]))
+    layers.append(('#a0522d', ['M 40 52 Q 50 46 58 54 L 54 58 Q 48 52 42 56 Z']))
+    for x, y in ((70, 72), (76, 64)):
+        layers += oval(x, y, 5, 4.2, '#fdd835', d=1.3)
+    layers += taza(80, 38, 0.6, '#6d3b1e')
+    return layers
+
+
+def manana_paloquemao():
+    """La mañana en Paloquemao: la nave de la plaza de mercado con los puestos de flores y frutas a la entrada."""
+    layers = [(OUTLINE, [rect(6, 40, 88, 52)]), ('#e0d6c4', [rect(8.4, 42.4, 83.2, 47.2)])]
+    layers += [(OUTLINE, ['M 2 44 Q 50 6 98 44 Z']), ('#5d8aa8', ['M 7 42 Q 50 10.6 93 42 Z'])]
+    layers.append(('#7aa6c2', [rib(20, 36, 80, 36, 1.6), rib(32, 26, 68, 26, 1.6)]))
+    layers += [(OUTLINE, ['M 38 92 L 38 64 Q 50 52 62 64 L 62 92 Z']), ('#5d4037', ['M 40.4 92 L 40.4 65 Q 50 55.4 59.6 65 L 59.6 92 Z'])]
+    for x0, cols in ((12, ('#e53935', '#fbc02d', '#f06292')), (66, ('#fbc02d', '#8bc34a', '#6a1b9a'))):
+        layers += [(OUTLINE, [rect(x0, 76, 22, 10)]), ('#a1693f', [rect(x0 + 1.4, 77.4, 19.2, 7.2)])]
+        layers.append((cols[0], [circle(x0 + 5, 72, 3.4)]))
+        layers.append((cols[1], [circle(x0 + 11, 71, 3.4)]))
+        layers.append((cols[2], [circle(x0 + 17, 72, 3.4)]))
+    layers.append(('#fff8e1', [rect(14, 52, 16, 8), rect(70, 52, 16, 8)]))
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9814,6 +9878,12 @@ ICONS = [
     (0xE239, 'surtido_loza', surtido_loza),
     (0xE23A, 'gran_surtido', gran_surtido),
     (0xE23B, 'domingo_usaquen', domingo_usaquen),
+    # Bogotá · Paloquemao (v4.5)
+    (0xE23C, 'canasta_flores', canasta_flores),
+    (0xE23D, 'canasta_frutas', canasta_frutas),
+    (0xE23E, 'canasta_paloquemao', canasta_paloquemao),
+    (0xE23F, 'desayuno_plaza', desayuno_plaza),
+    (0xE240, 'manana_paloquemao', manana_paloquemao),
 ]
 
 

@@ -724,6 +724,13 @@ export const RESEARCH = [
   { zone: 'bogota', id: 'vitrina_mascaras', name: 'Vitrina de máscaras', icon: ICON.granSurtido, desc: 'El Toldo de máscaras y werregue surte el doble.', cost: 16000000, requires: 'mercado_pulgas', effect: { type: 'stationSpeed', target: 'toldo_mascaras', mult: 2 } },
   { zone: 'bogota', id: 'calle_cerrada', name: 'Calle cerrada los domingos', icon: ICON.domingoUsaquen, desc: 'El Mercado de las pulgas recibe el doble de gente.', cost: 30000000, requires: 'mercado_pulgas', effect: { type: 'stationSpeed', target: 'mercado_pulgas', mult: 2 } },
   { zone: 'bogota', id: 'sello_artesanal', name: 'Sello de las artesanías', icon: '🏅', desc: 'El domingo en Usaquén vale un 50 % más.', cost: 50000000, requires: 'mercado_pulgas', effect: { type: 'productValue', target: 'domingo_usaquen', mult: 1.5 } },
+  // Bogotá · Paloquemao (v4.5).
+  { zone: 'bogota', id: 'cuarto_frio_plaza', name: 'Cuarto frío de la plaza', icon: ICON.canastaFlores, desc: 'El Puesto de flores arma el doble (pide el doble de flores a la tractomula).', cost: 40000000, requires: 'puesto_frutas', effect: { type: 'stationSpeed', target: 'puesto_flores', mult: 2 } },
+  { zone: 'bogota', id: 'fruteros', name: 'Fruteros', icon: ICON.canastaFrutas, desc: 'El Puesto de frutas despacha el doble.', cost: 80000000, requires: 'pescaderia_plaza', effect: { type: 'stationSpeed', target: 'puesto_frutas', mult: 2 } },
+  { zone: 'bogota', id: 'neveras_hielo', name: 'Neveras con hielo', icon: ICON.canastaPaloquemao, desc: 'La Pescadería vende el doble.', cost: 160000000, requires: 'fritanga_plaza', effect: { type: 'stationSpeed', target: 'pescaderia_plaza', mult: 2 } },
+  { zone: 'bogota', id: 'paila_fritanga', name: 'Paila de la fritanga', icon: ICON.desayunoPlaza, desc: 'La Fritanga de la plaza fríe el doble.', cost: 300000000, requires: 'plaza_paloquemao', effect: { type: 'stationSpeed', target: 'fritanga_plaza', mult: 2 } },
+  { zone: 'bogota', id: 'nave_nueva', name: 'Nave nueva', icon: ICON.mananaPaloquemao, desc: 'La Plaza de Paloquemao recibe el doble de gente.', cost: 500000000, requires: 'plaza_paloquemao', effect: { type: 'stationSpeed', target: 'plaza_paloquemao', mult: 2 } },
+  { zone: 'bogota', id: 'mercado_madrugada', name: 'Mercado de madrugada', icon: '🏅', desc: 'La mañana en Paloquemao vale un 50 % más.', cost: 800000000, requires: 'plaza_paloquemao', effect: { type: 'productValue', target: 'manana_paloquemao', mult: 1.5 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

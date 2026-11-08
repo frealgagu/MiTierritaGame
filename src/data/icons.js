@@ -575,6 +575,11 @@ export const ICON = {
   surtidoLoza: '\uE239', // El surtido con loza: la olla de loza negra de La Chamba y la canasta de regalo del Eje
   granSurtido: '\uE23A', // El gran surtido artesanal: el huacal de madera con la máscara ticuna, el jarrón de werregue y el sombrero
   domingoUsaquen: '\uE23B', // El domingo en Usaquén: el toldo blanco del mercado de pulgas con sus cosas y la torre de la iglesia del pueblo
+  canastaFlores: '\uE23C', // La canasta del mercado con el ramo de flores de Paloquemao
+  canastaFrutas: '\uE23D', // La canasta con las flores, el maracuyá, la fresa y el asaí
+  canastaPaloquemao: '\uE23E', // La canasta del mercado completa: flores, frutas y el pescado ahumado asomando
+  desayunoPlaza: '\uE23F', // El desayuno de plaza: la lechona servida en hoja, la papa criolla y el chocolate
+  mananaPaloquemao: '\uE240', // La mañana en Paloquemao: la nave de la plaza de mercado con los puestos de flores y frutas a la entrada
 };
 
 export const ICON_FONT = 'MiTierrita Icons';
