@@ -583,6 +583,14 @@ export const ICON = {
   nocheBogota: '\uE241', // La noche en Bogotá: el hotel con las ventanas encendidas, la luna y los Cerros oscuros detrás
   pabellonColombia: '\uE242', // El pabellón de Colombia: la carpa grande de la feria, con las banderitas de colores de todas las regiones
   feriaMiTierrita: '\uE243', // La Gran Feria de Mi Tierrita: el arco de la entrada con la bandera de Colombia, los globos y la estrella
+  lagunaGuatavita: '\uE244', // La laguna de Guatavita: el agua redonda y verde en lo alto, rodeada de cerros con frailejones
+  saltoTequendama: '\uE245', // El Salto del Tequendama: el chorro blanco que cae por la roca entre la niebla, con la casona en el borde
+  eucalipto: '\uE246', // El eucalipto: el tronco alto y pelado, de corteza clara, con la copa gris verdosa
+  clavel: '\uE247', // El clavel: la flor de pétalos rizados, roja, con su tallo y sus hojas finas
+  balsaMuisca: '\uE248', // La balsa de El Dorado: la balsa de juncos con el cacique cubierto de oro y la laguna
+  caciqueMuisca: '\uE249', // El Zipa: el gobernante muisca con la corona de oro, la nariguera y la manta pintada
+  trenSabana: '\uE24A', // El tren de la Sabana: la locomotora de vapor negra y roja, con su chimenea humeando
+  bandola: '\uE24B', // La bandola: el instrumento de cuerdas en forma de pera que lleva la melodía del pasillo
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

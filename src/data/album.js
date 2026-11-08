@@ -663,7 +663,90 @@ const TOLIMA = [
   },
 ];
 
-export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' })), ...AMAZONAS.map((pg) => ({ ...pg, region: 'amazonas' })), ...TOLIMA.map((pg) => ({ ...pg, region: 'tolima' }))];
+
+// Cundinamarca (v4.4.8).
+const CUNDINAMARCA = [
+  {
+    id: 'sabana_album',
+    icon: ICON.lagunaGuatavita,
+    name: 'La Sabana',
+    stickers: [
+      { id: 'laguna_guatavita', icon: ICON.lagunaGuatavita, name: 'La laguna de Guatavita', cost: 1, text: 'Laguna redonda en lo alto, donde nació la leyenda de El Dorado.' },
+      { id: 'salto_tequendama', icon: ICON.saltoTequendama, name: 'El Salto del Tequendama', cost: 1, text: 'El río Bogotá cae más de cien metros entre la niebla.' },
+      { id: 'sumapaz', icon: ICON.frailejon, name: 'El páramo de Sumapaz', cost: 2, text: 'El páramo más grande del mundo, al sur de Bogotá.' },
+      { id: 'eucalipto_album', icon: ICON.eucalipto, name: 'El eucalipto', cost: 2, text: 'Árbol traído de Australia que llenó la Sabana.' },
+      { id: 'normanda_sabana', icon: ICON.normando, name: 'La vaca normanda', cost: 2, text: 'Blanca con manchas pardas: la de la leche de la Sabana.' },
+      { id: 'papa_sabanera_album', icon: ICON.potatoPlant, name: 'Las tres papas', cost: 3, text: 'Pastusa, sabanera y criolla: las tres del ajiaco.' },
+    ],
+  },
+  {
+    id: 'cocina_cund',
+    icon: ICON.platoAjiaco,
+    name: 'La cocina',
+    stickers: [
+      { id: 'ajiaco_album', icon: ICON.platoAjiaco, name: 'El ajiaco', cost: 1, text: 'Sopa de tres papas con pollo, mazorca y guascas.' },
+      { id: 'fresas_crema_album', icon: ICON.fresasCrema, name: 'Fresas con crema', cost: 1, text: 'El postre de los paseos de domingo a Sibaté.' },
+      { id: 'chocolate_queso', icon: ICON.santafereno, name: 'Chocolate con queso', cost: 2, text: 'El queso se echa en la taza y se come con cuchara.' },
+      { id: 'envuelto_mazorca', icon: ICON.envuelto, name: 'Los envueltos', cost: 2, text: 'Masa de mazorca dulce envuelta en su misma hoja.' },
+      { id: 'tamal_santafereno', icon: ICON.tamal, name: 'El tamal santafereño', cost: 2, text: 'Con pollo, cerdo y garbanzo, envuelto en hoja de plátano.' },
+      { id: 'onces_album', icon: ICON.onces, name: 'Las onces', cost: 3, text: 'La merienda de la tarde: chocolate, pan y queso.' },
+    ],
+  },
+  {
+    id: 'flores_cund',
+    icon: ICON.rosa,
+    name: 'Las flores',
+    stickers: [
+      { id: 'rosa_album', icon: ICON.rosa, name: 'La rosa', cost: 1, text: 'La flor que más se cultiva en la Sabana de Bogotá.' },
+      { id: 'clavel_album', icon: ICON.clavel, name: 'El clavel', cost: 1, text: 'Flor de pétalos rizados que también sale de la Sabana.' },
+      { id: 'invernadero_album', icon: ICON.rosal, name: 'El invernadero', cost: 2, text: 'Naves de plástico que guardan el calor del día.' },
+      { id: 'bonche_album', icon: ICON.boncheRosas, name: 'El bonche', cost: 2, text: 'El ramo de rosas atado y cubierto, listo para viajar.' },
+      { id: 'caja_flores_album', icon: ICON.cajaFlores, name: 'Las flores en avión', cost: 2, text: 'En uno o dos días las flores están en otro país.' },
+      { id: 'san_valentin', icon: ICON.ramoRosas, name: 'San Valentín', cost: 3, text: 'La semana en que más flores salen de Colombia.' },
+    ],
+  },
+  {
+    id: 'sal_cund',
+    icon: ICON.catedralSal,
+    name: 'La sal',
+    stickers: [
+      { id: 'catedral_album', icon: ICON.catedralSal, name: 'La Catedral de Sal', cost: 1, text: 'Una iglesia tallada dentro de una mina, en Zipaquirá.' },
+      { id: 'pan_sal_album', icon: ICON.panSal, name: 'El pan de sal', cost: 1, text: 'El cono de sal que cuajaban los muiscas en vasijas de barro.' },
+      { id: 'salmuera_album', icon: ICON.salmuera, name: 'La salmuera', cost: 2, text: 'Agua con la sal disuelta, que se hierve hasta que queda la sal.' },
+      { id: 'mina_nemocon', icon: ICON.socavonSal, name: 'La mina de Nemocón', cost: 2, text: 'Túneles con paredes de sal y espejos de salmuera.' },
+      { id: 'figura_sal_album', icon: ICON.figuraSal, name: 'Las figuras de sal', cost: 2, text: 'Se tallan en la roca de sal como si fuera piedra.' },
+      { id: 'roca_sal_album', icon: ICON.rocaSal, name: 'La roca de sal', cost: 3, text: 'Hace millones de años aquí hubo un mar que se secó.' },
+    ],
+  },
+  {
+    id: 'muiscas_cund',
+    icon: ICON.balsaMuisca,
+    name: 'Los muiscas',
+    stickers: [
+      { id: 'tunjo_dorado', icon: ICON.tunjo, name: 'El tunjo', cost: 1, text: 'Figurita de oro que los muiscas ofrecían en las lagunas.' },
+      { id: 'balsa_dorado', icon: ICON.balsaMuisca, name: 'La balsa de El Dorado', cost: 1, text: 'El cacique, cubierto de oro, hacía su ofrenda en la laguna.' },
+      { id: 'zipa', icon: ICON.caciqueMuisca, name: 'El Zipa', cost: 2, text: 'El gobernante muisca de Bacatá, la tierra de Bogotá.' },
+      { id: 'turmeque', icon: ICON.tejo, name: 'El turmequé', cost: 2, text: 'El juego muisca de lanzar el tejo, hoy deporte nacional.' },
+      { id: 'maiz_muisca', icon: ICON.choclo, name: 'El maíz', cost: 2, text: 'La comida de los muiscas, sembrada junto a la papa.' },
+      { id: 'mantas_muiscas', icon: ICON.telarLana, name: 'Las mantas', cost: 3, text: 'Tejían mantas de algodón que servían como moneda.' },
+    ],
+  },
+  {
+    id: 'pueblos_cund',
+    icon: ICON.trenSabana,
+    name: 'Los pueblos',
+    stickers: [
+      { id: 'tren_sabana_album', icon: ICON.trenSabana, name: 'El tren de la Sabana', cost: 1, text: 'El tren de vapor que lleva paseantes hasta Zipaquirá.' },
+      { id: 'zipaquira_album', icon: ICON.nocheZipaquira, name: 'Zipaquirá', cost: 1, text: 'La plaza de casonas blancas con balcones verdes.' },
+      { id: 'guatavita_nueva', icon: ICON.iglesiaVilla, name: 'Guatavita', cost: 2, text: 'Pueblo de casas blancas, hecho de nuevo junto al embalse.' },
+      { id: 'paseo_olla', icon: ICON.mochilaPaseo, name: 'El paseo de olla', cost: 2, text: 'El domingo en el río, con la olla del sancocho.' },
+      { id: 'chiva_sabana', icon: ICON.chivaBus, name: 'La chiva', cost: 2, text: 'Bus de escalera de colores para los paseos de fin de semana.' },
+      { id: 'pasillo_album', icon: ICON.bandola, name: 'El pasillo', cost: 3, text: 'La música de la Sabana, con bandola, tiple y guitarra.' },
+    ],
+  },
+];
+
+export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' })), ...AMAZONAS.map((pg) => ({ ...pg, region: 'amazonas' })), ...TOLIMA.map((pg) => ({ ...pg, region: 'tolima' })), ...CUNDINAMARCA.map((pg) => ({ ...pg, region: 'cundinamarca' }))];
 // Las páginas del álbum de una región.
 export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 

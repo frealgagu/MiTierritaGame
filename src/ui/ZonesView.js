@@ -119,7 +119,7 @@ export class ZonesView {
       if (!state) {
         const head = `<h3 class="research-other">${region.icon} ${region.name}</h3>`;
         const from = ZONES_BY_ID[region.unlock.zone];
-        return group(`${head}<div class="research locked"><span class="research-icon">🔒</span><span class="research-text"><b>${region.name}</b><br><small>${t('Se abre al completar {zone}.', { zone: from.name })}</small></span></div>`);
+        return group(`${head}<div class="research locked"><span class="research-icon">🔒</span><span class="research-text"><b>${region.name}</b><br><small>${region.hidden ? t('Próximamente') : t('Se abre al completar {zone}.', { zone: from.name })}</small></span></div>`);
       }
       // La cabecera pliega la región; plegada, dice cuántas zonas lleva y cuánto rinde.
       const folded = this.folded(region.id);

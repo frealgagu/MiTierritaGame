@@ -17,7 +17,7 @@ export function regionState(root, regionId) {
 export function openRegions(root, now = Date.now()) {
   const opened = [];
   for (const region of REGIONS) {
-    if (!region.unlock || regionState(root, region.id)) continue;
+    if (!region.unlock || region.hidden || regionState(root, region.id)) continue; // (v4.4.8) la que aún no se publica
     const from = regionState(root, region.unlock.region);
     const done = from?.regionDone && REGIONS_BY_ID[from.region ?? 'cafetero'].zones.at(-1) === region.unlock.zone;
     if (!from?.zones[region.unlock.zone]?.complete && !done) continue;

@@ -32,13 +32,26 @@ test('la tractomula trae carga sin bodega de origen y el Tostadero produce', () 
   assert.ok(routeFlow(s, 'tm_cafe') > 0);
 });
 
-test('Bogotá se abre al completar Zipaquirá', () => {
+test('Bogotá, mientras está oculta, no se abre al completar Zipaquirá (v4.4.8)', async () => {
+  const { REGIONS_BY_ID } = await import('../src/data/regions.js');
+  assert.ok(REGIONS_BY_ID.bogota.hidden);
+  const root = createInitialState(0);
+  root.regions = { cundinamarca: createInitialState(0, 'cundinamarca') };
+  root.regions.cundinamarca.zones.zipaquira.complete = true;
+  assert.ok(!openRegions(root).includes('bogota'));
+});
+
+test('Bogotá se abre al completar Zipaquirá', async () => {
+  const { REGIONS_BY_ID } = await import('../src/data/regions.js');
+  const hidden = REGIONS_BY_ID.bogota.hidden;
+  REGIONS_BY_ID.bogota.hidden = false; // como quedará al publicarla
   const root = createInitialState(0);
   root.regions = { cundinamarca: createInitialState(0, 'cundinamarca') };
   assert.deepEqual(openRegions(root), []);
   root.regions.cundinamarca.zones.zipaquira.complete = true;
   assert.ok(openRegions(root).includes('bogota'));
   assert.ok(regionState(root, 'bogota').zones.bogota.unlocked);
+  REGIONS_BY_ID.bogota.hidden = hidden;
 });
 
 test('los barrios se construyen a la vez, cada uno en su orden', async () => {

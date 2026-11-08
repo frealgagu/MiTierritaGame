@@ -160,7 +160,26 @@ const TOLIMA = [
   { id: 'to_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('tolima')], reward: [1, 2, 4] },
 ];
 
-export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'pacifico' })), ...AMAZONAS.map((l) => ({ ...l, region: 'amazonas' })), ...TOLIMA.map((l) => ({ ...l, region: 'tolima' }))];
+// Los de Cundinamarca (v4.4.8).
+const CUNDINAMARCA = [
+  { id: 'cu_flores', icon: ICON.cajaFlores, name: 'Floricultora', text: 'Vende {n} cajas de flores', metric: 'sold:caja_flores', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
+  { id: 'cu_mermelada', icon: ICON.mermeladaFresa, name: 'Nada se pierde', text: 'Cocina {n} frascos de mermelada', metric: 'produced:mermelada_fresa', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'cu_trucha', icon: ICON.almuerzoTrucha, name: 'Truchero de Guatavita', text: 'Sirve {n} almuerzos de trucha', metric: 'produced:almuerzo_trucha', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'cu_sal', icon: ICON.cofreSal, name: 'Salinero', text: 'Empaca {n} cofres de sal', metric: 'produced:cofre_sal', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'cu_ajiaco', icon: ICON.platoAjiaco, name: 'Ajiaquera', text: 'Sirve {n} platos de ajiaco', metric: 'produced:plato_ajiaco', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'cu_catedral', icon: ICON.catedralSal, name: 'Bajo la tierra', text: 'Vende {n} visitas a la Catedral de Sal', metric: 'sold:visita_catedral', tiers: [1000, 100000, 10000000], reward: [2, 4, 8] },
+  { id: 'cu_monedas', icon: '💰', name: 'Patrón de la Sabana', text: 'Gana {n} monedas en total', metric: 'earned', tiers: [1e9, 1e15, 1e21], reward: [1, 2, 4] },
+  { id: 'cu_anos', icon: '📅', name: 'Sabanero de corazón', text: 'Vive {n} años de juego en Cundinamarca', metric: 'years', tiers: [4, 16, 64], reward: [1, 2, 4] },
+  { id: 'cu_zipaquira', icon: ICON.catedralSal, name: 'Hasta Zipaquirá', text: 'Completa Zipaquirá {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
+  { id: 'cu_maestro', icon: '🏅', name: 'Maestro de la Sabana', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
+  { id: 'cu_medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [6, 24, 60], reward: [1, 2, 4] },
+  { id: 'cu_todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
+  { id: 'cu_oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
+  { id: 'cu_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
+  { id: 'cu_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('cundinamarca')], reward: [1, 2, 4] },
+];
+
+export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'pacifico' })), ...AMAZONAS.map((l) => ({ ...l, region: 'amazonas' })), ...TOLIMA.map((l) => ({ ...l, region: 'tolima' })), ...CUNDINAMARCA.map((l) => ({ ...l, region: 'cundinamarca' }))];
 export const logrosOf = (region) => LOGROS.filter((l) => l.region === region);
 
 export const LOGROS_BY_ID = Object.fromEntries(LOGROS.map((l) => [l.id, l]));

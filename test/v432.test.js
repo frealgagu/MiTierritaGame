@@ -28,3 +28,13 @@ test('sin hacer nada el evento de la vía tapada se termina, con bronce (v4.3.2)
   const t = idle(def, EVENT_CLOCK_MAX);
   assert.ok(t !== null && t > def.objective.medals[1], `terminó en ${t}`);
 });
+
+// Los de Cundinamarca (v4.4.8), con los números de los del Tolima Grande: lo mismo.
+test('Cundinamarca: sin hacer nada no se gana la plata, y el derrumbe se termina con bronce (v4.4.8)', () => {
+  for (const def of EVENTS.filter((e) => ['flores', 'fresas', 'truchas', 'salinas', 'cocina', 'zipaquira'].includes(e.zone))) {
+    assert.equal(idle(def, def.objective.medals[1]), null, `${def.id}: llega a la plata solo`);
+  }
+  const def = EVENTS.find((e) => e.id === 'derrumbe_sabana');
+  const t = idle(def, EVENT_CLOCK_MAX);
+  assert.ok(t !== null && t > def.objective.medals[1], `terminó en ${t}`);
+});

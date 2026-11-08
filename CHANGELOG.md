@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## v4.4.8 — Cundinamarca completa
+- **🌹 Cundinamarca queda completa** con sus seis eventos, su álbum y sus logros. Al completar Zipaquirá tiene su segundo final, como las demás regiones.
+- **Seis eventos nuevos:** las heladas en las Flores, la cosecha grande de fresa en Sibaté, la Semana Santa en Guatavita, el derrumbe que deja sin rosas a las Salinas, el domingo de ajiaco en la Cocina y la Navidad en la Catedral de Sal. Cada uno se ve en el mapa y cambia con cada compra.
+- **El álbum de Cundinamarca:** seis páginas (la Sabana, la cocina, las flores, la sal, los muiscas y los pueblos) con 36 láminas: la laguna de Guatavita, el Salto del Tequendama, la balsa de El Dorado, el tren de la Sabana, la bandola y más.
+- **Quince logros de la región** y las pantallas de victoria de sus seis zonas.
+- **El botón de cobrar** de los objetivos ya no queda pegado al borde ni a la barra de avance.
+- **La flecha verde de subir de nivel** («⬆ Todo al nivel…») tiene borde y fondo claro, para que se vea sobre el botón verde. El tren 🚂 también tiene ícono propio.
+
 ## v4.4.7 — Tablero del evento recogible
 - **▾ Recoger el tablero del evento:** con el botón junto al reloj, el tablero queda solo con el título, el reloj y la barra de avance, y deja ver y tocar las estaciones en teléfonos pequeños. Con ▴ (o tocando la fila del título) se abre otra vez. El teléfono recuerda cómo lo dejaste.
 

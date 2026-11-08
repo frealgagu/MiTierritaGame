@@ -63,7 +63,7 @@ function importRoad(zone, product) {
   for (const [id, r] of Object.entries(zone.routes ?? {})) if (ROUTE_PRODUCT[id] === product) return r.road;
   return null;
 }
-const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag', papitas: 'criollas_bag', aceite: 'oil_bottle', patacones: 'patacon_bag', bolsas_asai: 'asai_bag', bizcochos: 'bizcochos' };
+const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag', papitas: 'criollas_bag', aceite: 'oil_bottle', patacones: 'patacon_bag', bolsas_asai: 'asai_bag', bizcochos: 'bizcochos', ramos_rosas: 'ramo_rosas' };
 
 export class EventArt {
   // scene: la escena del tablero (para el mapa y sus objetos).
@@ -1498,6 +1498,169 @@ const ART = {
         art.clear(gx, gy, 0.8);
         art.prop(gx, gy, (g, p) => post(g, p.x, p.y, 0xd7263d));
       }
+    }
+  },
+
+  // --- Cundinamarca (v4.4.8) ---
+
+  // Las heladas: la escarcha blanca sobre los rosales (menos con cada compra); el riego que la deshace, las mallas
+  // térmicas sobre una parte del invernadero y el rosalero con los rosales nuevos.
+  heladas_sabana(art, stage, zone) {
+    const a = areaOf(zone, zone.farm.stationId);
+    if (stage < 3) {
+      art.prop(a.x + a.w, a.y + a.h, (g) => {
+        const n = [16, 10, 5][stage];
+        for (let i = 0; i < n; i++) {
+          const p = iso(a.x + 2.2 + ((i * 7) % 10) * 0.36, a.y + 2.2 + ((i * 3) % 9) * 0.38, 4);
+          g.ellipse(p.x, p.y, 8, 3.5).fill({ color: 0xffffff, alpha: 0.75 });
+          for (const d of [0, 1, 2]) {
+            const ang = (d * Math.PI) / 3;
+            g.moveTo(p.x - Math.cos(ang) * 4, p.y - 6 - Math.sin(ang) * 4).lineTo(p.x + Math.cos(ang) * 4, p.y - 6 + Math.sin(ang) * 4).stroke({ width: 1.2, color: 0xe3f2fd });
+          }
+        }
+      }, -4);
+    }
+    if (stage >= 1) {
+      art.anim(a.x + a.w, a.y + a.h, (g, t) => {
+        for (let k = 0; k < 3; k++) {
+          const p = iso(a.x + 1 + k * 1.6, a.y + a.h - 0.6, 18);
+          const f = (t * 1.5 + k * 0.3) % 1;
+          g.circle(p.x - 6 + f * 12, p.y - Math.sin(f * Math.PI) * 10, 1.4).fill({ color: 0x90caf9, alpha: 1 - f * 0.5 });
+          g.circle(p.x + 6 - f * 12, p.y - Math.sin(f * Math.PI) * 10, 1.4).fill({ color: 0x90caf9, alpha: 1 - f * 0.5 });
+        }
+      }, -3);
+    }
+    if (stage >= 2) {
+      art.prop(a.x + a.w, a.y + a.h, (g) => {
+        const p0 = iso(a.x + 0.4, a.y + 0.4, 30);
+        const p1 = iso(a.x + a.w * 0.5, a.y + 0.4, 30);
+        const p2 = iso(a.x + a.w * 0.5, a.y + a.h * 0.5, 30);
+        const p3 = iso(a.x + 0.4, a.y + a.h * 0.5, 30);
+        g.poly([p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y]).fill({ color: 0xffffff, alpha: 0.35 }).stroke({ width: 1, color: 0xb0bec5 });
+      }, 2);
+    }
+    if (stage >= 3) {
+      art.anim(a.x + 0.6, a.y + a.h + 0.6, (g, t) => {
+        const p = iso(a.x + 0.6, a.y + a.h + 0.6);
+        person(g, p.x, p.y, { shirt: 0x5d4037, skin: SKIN[2], hat: 0x3e2723, arm: Math.abs(Math.sin(t * 2)) });
+      }, 0.6);
+    }
+  },
+
+  // La cosecha grande: las canastillas de fresa que esperan junto al Lavadero (menos con cada compra), las tinas nuevas
+  // y la lavadora de banda.
+  cosecha_fresa(art, stage, zone) {
+    const a = areaOf(zone, 'lavadero_fresas');
+    const px = a.x + a.w + 0.5;
+    const py = a.y + 0.8;
+    art.clear(px, py, 1.6);
+    const n = [12, 8, 5, 2][stage];
+    art.prop(px, py, (g, p) => {
+      for (let i = 0; i < n; i++) {
+        const row = Math.floor(i / 4);
+        const x = p.x + ((i % 4) - 1.5) * 10 + row * 4;
+        const y = p.y - row * 7;
+        g.rect(x - 4.5, y - 6, 9, 6).fill(0xfafafa).stroke(THIN);
+        for (let k = 0; k < 3; k++) g.circle(x - 3 + k * 3, y - 7, 1.7).fill(0xe53935);
+      }
+    });
+    if (stage >= 1) {
+      art.clear(px, py + 1.4, 1);
+      art.prop(px, py + 1.4, (g, p) => {
+        for (let k = 0; k < 2; k++) {
+          g.ellipse(p.x - 7 + k * 14, p.y - 4, 7, 3.4).fill(0x1e88e5).stroke(OUTLINE);
+          g.ellipse(p.x - 7 + k * 14, p.y - 5, 5, 2).fill(0x90caf9);
+        }
+      });
+    }
+    if (stage >= 2) {
+      art.clear(px + 1.2, py + 1.4, 1);
+      art.prop(px + 1.2, py + 1.4, (g, p) => {
+        g.rect(p.x - 14, p.y - 8, 28, 5).fill(0x607d8b).stroke(OUTLINE);
+        for (let k = 0; k < 5; k++) g.circle(p.x - 10 + k * 5, p.y - 9.5, 1.6).fill(0xe53935);
+        for (const d of [-12, 12]) g.rect(p.x + d - 1, p.y - 3, 2, 4).fill(0x37474f);
+      });
+    }
+    if (stage >= 3) art.prop(px - 0.8, py + 2.4, (g, p) => post(g, p.x, p.y, 0xe53935));
+  },
+
+  // Semana Santa en Guatavita: puestos con toldos morado, blanco y azul, uno por compra, y la gente.
+  semana_santa_guatavita(art, stage) {
+    fairScene(art, stage, [0x7b1fa2, 0xf5f5f5, 0x1e88e5]);
+  },
+
+  // Derrumbe en la vía: las piedras en la carretera de las rosas; las mulas por la trocha, el paso a un carril y la vía
+  // despejada.
+  derrumbe_sabana(art, stage, zone) {
+    landslideScene(art, stage, zone, 'ramo_rosas', 'derrumbe');
+  },
+
+  // Domingo de ajiaco: la fila de comensales frente a la Servidora (más corta con cada compra), las vecinas que ayudan,
+  // las pilas de platos de barro y la barra de servicio.
+  domingo_ajiaco(art, stage, zone) {
+    const a = areaOf(zone, 'servidora_ajiaco');
+    queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: false });
+    if (stage >= 1) {
+      art.anim(a.x + a.w + 0.4, a.y + 1, (g, t) => {
+        for (let k = 0; k < 2; k++) {
+          const p = iso(a.x + a.w + 0.4 + k * 0.7, a.y + 0.8 + k * 0.3);
+          person(g, p.x, p.y, { shirt: 0xfafafa, skirt: 0x2e7d32, skin: SKIN[k + 1], arm: Math.abs(Math.sin(t * 3 + k)) });
+        }
+      });
+    }
+    if (stage >= 2) {
+      art.clear(a.x + a.w + 0.6, a.y + 2.4, 0.8);
+      art.prop(a.x + a.w + 0.6, a.y + 2.4, (g, p) => {
+        for (let k = 0; k < 3; k++) for (let h = 0; h < 4; h++) g.ellipse(p.x - 8 + k * 8, p.y - 2 - h * 2.4, 4, 1.6).fill(0xa85a32).stroke(THIN);
+      });
+    }
+    if (stage >= 3) {
+      art.clear(a.x - 0.2, a.y - 0.8, 1);
+      art.prop(a.x - 0.2, a.y - 0.8, (g, p) => {
+        g.rect(p.x - 18, p.y - 10, 36, 10).fill(0x8b5a2b).stroke(OUTLINE);
+        g.rect(p.x - 18, p.y - 12, 36, 3).fill(0xa1693f).stroke(THIN);
+        for (let k = 0; k < 4; k++) g.ellipse(p.x - 13 + k * 9, p.y - 13, 3.4, 1.4).fill(0xf2c94c);
+      });
+    }
+  },
+
+  // Navidad en la Catedral: la fila de visitantes frente a la Entrada, los guías mineros con casco, las luces de
+  // colores y el tren de la Sabana que llega con más gente.
+  navidad_catedral(art, stage, zone) {
+    const a = areaOf(zone, 'entrada_catedral');
+    queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
+    art.anim(a.x + a.w, a.y, (g, t) => {
+      const p0 = iso(a.x, a.y + a.h, 34);
+      const p1 = iso(a.x + a.w, a.y + a.h, 34);
+      const cols = [0xd7263d, 0xfdd835, 0x2e7d32, 0x1e88e5];
+      for (let k = 0; k <= 10; k++) {
+        const f = k / 10;
+        const x = p0.x + (p1.x - p0.x) * f;
+        const y = p0.y + (p1.y - p0.y) * f + Math.sin(f * Math.PI) * 6;
+        const on = (Math.floor(t * 3) + k) % 2 === 0;
+        g.circle(x, y, 2).fill({ color: cols[k % 4], alpha: on ? 1 : 0.35 });
+      }
+    }, 2);
+    const guides = stage >= 3 ? 4 : stage >= 1 ? 2 : 0;
+    if (guides) {
+      art.anim(a.x + a.w + 0.4, a.y + 1, (g) => {
+        for (let k = 0; k < guides; k++) {
+          const p = iso(a.x + a.w + 0.4 + (k % 2) * 0.7, a.y + 0.6 + Math.floor(k / 2) * 0.9);
+          person(g, p.x, p.y, { shirt: 0x37474f, skin: SKIN[k % SKIN.length], hat: 'helmet', arm: 1 });
+          g.circle(p.x + 6, p.y - 18, 2).fill(stage >= 2 ? 0xfff59d : 0x9e9e9e);
+        }
+      });
+    }
+    if (stage >= 3) {
+      art.anim(a.x, a.y - 4, (g, t) => {
+        const f = (t * 0.05) % 1;
+        const p = iso(a.x - 3 + f * 8, a.y - 3 + f * 2);
+        g.roundRect(p.x - 16, p.y - 14, 18, 12, 2).fill(0x263238).stroke(OUTLINE);
+        g.roundRect(p.x + 2, p.y - 18, 12, 16, 2).fill(0xb71c1c).stroke(OUTLINE);
+        g.rect(p.x - 12, p.y - 22, 4, 8).fill(0x263238);
+        for (const d of [-10, -2, 8]) g.circle(p.x + d, p.y - 1, 3).fill(0x37474f);
+        g.circle(p.x - 10, p.y - 26 - ((t * 20) % 6), 3).fill({ color: 0xeceff1, alpha: 0.8 });
+      }, 3);
     }
   },
 

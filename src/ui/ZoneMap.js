@@ -25,8 +25,8 @@ const MIN_W = 24;
 const DRAG_PX = 6; // lo que se mueve el dedo antes de que cuente como arrastrar (y no como toque)
 const PEEK_MS = 800; // al abrir el mapa, cuánto se ve el país antes de acercarse a la región donde se está
 // Las regiones que vienen (v3.67), en los departamentos que todavía no son de ninguna: «Próximamente».
-// (v4.5: Bogotá ya llegó; por ahora no viene ninguna otra.)
-const SOON = [];
+// (v4.4.8) Las que están en obra y ocultas (`hidden`): Bogotá, en sus departamentos.
+const SOON = REGIONS.filter((r) => r.hidden).map((r) => ({ id: r.id, name: t(r.name), icon: r.icon, depts: DEPARTMENTS.filter((d) => d.region === r.id).map((d) => d.name), color: '#e3d6ea' }));
 const SOON_OF = Object.fromEntries(SOON.flatMap((r) => r.depts.map((d) => [d, r])));
 
 const proj = ([lat, lon]) => [(lon - MAP_ORIGIN[0]) * MAP_SCALE, (MAP_ORIGIN[1] - lat) * MAP_SCALE];
@@ -407,6 +407,7 @@ export class ZoneMap {
     const here = this.getZone();
     if (!this.region) {
       for (const r of REGIONS) {
+        if (r.hidden) continue; // va con las que vienen (v4.4.8)
         const b = REGION_BOX[r.id];
         const open = this.open(r.id);
         const cx = (b.x0 + b.x1) / 2;

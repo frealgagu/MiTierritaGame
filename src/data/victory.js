@@ -49,5 +49,12 @@ export const VICTORY = {
   lechoneria: { title: '¡Lechona para todo el San Pedro!', text: 'Completaste <b>La Lechonería</b>. Cuatro mil lechonas, con el cuero y la carne de cada cerdo juntos en el horno de leña.', stat: ['Lechonas vendidas', 'lechona'] },
   chamba: { title: '¡Loza negra para todo el país!', text: 'Completaste <b>La Chamba</b>. Seis mil recuerdos del Tolima: cazuelas de loza negra con la tilapia ahumada y el escabeche de Betania.', stat: ['Recuerdos vendidos', 'recuerdo_tolima'] },
   neiva: { title: '¡El Tolima Grande, de punta a punta!', text: 'Completaste <b>Neiva</b> y el Tolima Grande. Siete mil noches de estrellas en la Tatacoa, con los bizcochos, el café, la tilapia, la lechona y la loza de todas tus zonas.', stat: ['Salidas a la Tatacoa', 'excursion_tatacoa'] },
+  // Cundinamarca (v4.4.8).
+  flores: { title: '¡Flores para el mundo!', text: 'Completaste <b>Las Flores de la Sabana</b>, en Cundinamarca. Dos mil cajas de rosas, del invernadero al cuarto frío y al avión.', stat: ['Cajas de flores vendidas', 'caja_flores'] },
+  fresas: { title: '¡Fresas con crema para toda la Sabana!', text: 'Completaste <b>Los Freseros de Sibaté</b>. Seis mil vasos de fresas con crema, y con las fresas de segunda, mermelada.', stat: ['Fresas con crema vendidas', 'fresas_crema'] },
+  truchas: { title: '¡Trucha para todo Guatavita!', text: 'Completaste <b>Las Truchas de Guatavita</b>. Seis mil almuerzos de trucha frita, a la orilla de los estanques de agua helada.', stat: ['Almuerzos vendidos', 'almuerzo_trucha'] },
+  salinas: { title: '¡Sal para toda la Sabana!', text: 'Completaste <b>Las Salinas de Nemocón</b>. Cuatro mil canastas sabaneras con el pan de sal, los ramos de rosas y las fresas.', stat: ['Canastas vendidas', 'canasta_sabanera'] },
+  cocina: { title: '¡Ajiaco para todo Bogotá!', text: 'Completaste <b>La Cocina de la Sabana</b>. Seis mil almuerzos sabaneros: el ajiaco con la trucha ahumada y el ceviche de Guatavita.', stat: ['Almuerzos sabaneros vendidos', 'almuerzo_sabanero'] },
+  zipaquira: { title: '¡Cundinamarca, de punta a punta!', text: 'Completaste <b>Zipaquirá</b> y Cundinamarca. Siete mil visitas a la Catedral de Sal, con las flores, las fresas, la trucha, la sal y el ajiaco de todas tus zonas.', stat: ['Visitas a la Catedral', 'visita_catedral'] },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: ['Arequipe vendido', 'arequipe'] },
 };
