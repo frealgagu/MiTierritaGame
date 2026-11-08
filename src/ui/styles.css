@@ -20,7 +20,7 @@
   font-family: 'MiTierrita Icons';
   src: url('../assets/mitierrita-icons.woff2') format('woff2');
   /* (v4.3) Los íconos propios y los emojis que el juego dibuja a su manera, con su mismo carácter. */
-  unicode-range: U+E000-E3FF, U+00A9, U+00AE, U+200D, U+203C, U+2049, U+2122, U+2139, U+231A-23FF, U+24C2, U+25AA-25FE, U+2600-27BF, U+2B1B-2B55, U+3030, U+303D, U+3297, U+3299, U+FE0F, U+1F000-1FAFF;
+  unicode-range: U+E000-E3FF, U+00A9, U+00AE, U+200D, U+203C, U+2049, U+2122, U+2139, U+231A-23FF, U+24C2, U+25AA-25FE, U+2600-27BF, U+2B06, U+2B1B-2B55, U+3030, U+303D, U+3297, U+3299, U+FE0F, U+1F000-1FAFF;
   font-display: block;
 }
 
