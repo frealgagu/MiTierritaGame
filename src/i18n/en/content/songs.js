@@ -9,4 +9,5 @@ export default {
   amazonas: ['Cumbia of the Amazon', 'electric guitar, bass, keyboard, maracas and manguaré'],
   tolima: ['San Pedro Sanjuanero', 'tiple, guitar, bandola, tambora and carrasca'],
   cundinamarca: ['Pasillo of the Savanna', 'bandola, tiple and guitar'],
+  bogota: ['La Candelaria Danza', 'bandola, tiple and guitar'],
 };

@@ -392,6 +392,7 @@ export function renderBar(buf, index) {
   if (buf.song.style === 'amazonica') return renderAmazonica(buf, index);
   if (buf.song.style === 'sanjuanero') return renderSanjuanero(buf, index);
   if (buf.song.style === 'pasillo') return renderPasillo(buf, index);
+  if (buf.song.style === 'danza') return renderDanza(buf, index);
   return renderBambuco(buf, index);
 }
 
@@ -434,6 +435,42 @@ function renderPasillo(buf, index) {
   for (const [e, n, note] of song.melody[index] ?? []) {
     const f = freqOf(midi(note));
     const opts = { amp: 0.32, t60: 1.2, bright: 0.72, pan: 0.1, pos: 0.15 };
+    if (n < 3) {
+      pluck(buf, at(e), f, n * eighth * 0.95, opts);
+      continue;
+    }
+    const start = t0 + e * eighth;
+    const step = eighth / 4;
+    const count = Math.floor((n * eighth - 0.04) / step);
+    for (let k = 0; k < count; k++) pluck(buf, start + k * step, f, step * 0.9, { ...opts, amp: (k ? 0.22 : 0.32) * (0.9 + rng() * 0.2) });
+  }
+}
+
+// Compás de danza (v4.5, 2/4 lento, corcheas 0 a 3): el bajo en el uno y la quinta en el dos, la guitarra con el ritmo
+// de habanera (el «y» partido del uno y el dos), el tiple corto en el contratiempo y la bandola, como en el pasillo, con
+// las notas largas en trémolo.
+function renderDanza(buf, index) {
+  const { song, beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const { root, tones } = parseChord(song.chords[index]);
+  const at = (e) => t0 + e * eighth + (rng() - 0.5) * 0.01;
+  buf.voice = 'bass';
+  pluck(buf, at(0), freqOf(above(root, 40)), beat * 1.4, { amp: 0.5, t60: 2.4, bright: 0.25, pan: -0.15, pos: 0.3 });
+  pluck(buf, at(2), freqOf(above((root + 7) % 12, 40)), beat * 0.9, { amp: 0.32, t60: 2, bright: 0.25, pan: -0.15, pos: 0.3 });
+  buf.voice = 'guitar';
+  const guitar = tones.map((pc) => above(pc, 55)).sort((a, b) => a - b);
+  strum(buf, at(1.5), guitar, eighth * 0.45, { amp: 0.11, t60: 0.9, bright: 0.45, pan: -0.35 }, true);
+  strum(buf, at(2), guitar, eighth * 0.9, { amp: 0.15, t60: 1.1, bright: 0.45, pan: -0.35 });
+  strum(buf, at(3), guitar, eighth * 0.9, { amp: 0.12, t60: 1.1, bright: 0.45, pan: -0.35 }, true);
+  buf.voice = 'tiple';
+  const tiple = tones.slice(0, 4).map((pc) => above(pc, 64)).sort((a, b) => a - b);
+  const courses = tiple.flatMap((m, k) => (k < 3 ? [m - 12, m, m + 0.04] : [m, m + 0.04]));
+  for (const e of [1, 3]) strum(buf, at(e), courses, 0.11, { amp: 0.055, t60: 0.7, bright: 0.8, pan: 0.35, pos: 0.12 }, true);
+  buf.voice = 'melody';
+  for (const [e, n, note] of song.melody[index] ?? []) {
+    const f = freqOf(midi(note));
+    const opts = { amp: 0.32, t60: 1.3, bright: 0.7, pan: 0.1, pos: 0.15 };
     if (n < 3) {
       pluck(buf, at(e), f, n * eighth * 0.95, opts);
       continue;
