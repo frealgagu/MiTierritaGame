@@ -48,4 +48,11 @@ export default {
   lechoneria: ['De la lechona pour toute la San Pedro !', 'Tu as terminé <b>La Lechonería</b>. Quatre mille lechonas, avec la couenne et la viande de chaque cochon réunies dans le four à bois.', 'Lechonas vendues'],
   chamba: ['De la poterie noire pour tout le pays !', 'Tu as terminé <b>La Chamba</b>. Six mille souvenirs du Tolima : marmites noires avec le tilapia fumé et l’escabèche de Betania.', 'Souvenirs vendus'],
   neiva: ['Le Tolima Grande, d’un bout à l’autre !', 'Tu as terminé <b>Neiva</b> et le Tolima Grande. Sept mille nuits étoilées dans la Tatacoa, avec les biscuits, le café, le tilapia, la lechona et la poterie de toutes tes zones.', 'Sorties à la Tatacoa'],
+  // Cundinamarca (v4.4.8)
+  flores: ['Des fleurs pour le monde !', 'Tu as terminé <b>Les Fleurs de la Savane</b>, en Cundinamarca. Deux mille caisses de roses, de la serre à la chambre froide et à l’avion.', 'Caisses de fleurs vendues'],
+  fresas: ['Fraises à la crème pour toute la Savane !', 'Tu as terminé <b>Les Fraisiers de Sibaté</b>. Six mille coupes de fraises à la crème et, avec les fraises de second choix, de la confiture.', 'Fraises à la crème vendues'],
+  truchas: ['De la truite pour tout Guatavita !', 'Tu as terminé <b>Les Truites de Guatavita</b>. Six mille déjeuners de truite frite, au bord des bassins d’eau glacée.', 'Déjeuners vendus'],
+  salinas: ['Du sel pour toute la Savane !', 'Tu as terminé <b>Les Salines de Nemocón</b>. Quatre mille paniers de la Savane avec le pain de sel, les bouquets de roses et les fraises.', 'Paniers vendus'],
+  cocina: ['De l’ajiaco pour tout Bogotá !', 'Tu as terminé <b>La Cuisine de la Savane</b>. Six mille déjeuners de la Savane : l’ajiaco avec la truite fumée et le ceviche de Guatavita.', 'Déjeuners de la Savane vendus'],
+  zipaquira: ['Le Cundinamarca d’un bout à l’autre !', 'Tu as terminé <b>Zipaquirá</b> et le Cundinamarca. Sept mille visites de la Cathédrale de sel, avec les fleurs, les fraises, la truite, le sel et l’ajiaco de toutes tes zones.', 'Visites de la Cathédrale'],
 };

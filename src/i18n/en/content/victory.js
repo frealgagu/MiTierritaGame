@@ -48,4 +48,11 @@ export default {
   lechoneria: ['Lechona for all of San Pedro!', 'You completed <b>The Lechonería</b>. Four thousand lechonas, with the skin and meat of each pig together in the wood-fired oven.', 'Lechonas sold'],
   chamba: ['Black pottery for the whole country!', 'You completed <b>La Chamba</b>. Six thousand Tolima souvenirs: black clay pots with smoked tilapia and escabeche from Betania.', 'Souvenirs sold'],
   neiva: ['Tolima Grande, from end to end!', 'You completed <b>Neiva</b> and Tolima Grande. Seven thousand starry nights in the Tatacoa, with the biscuits, coffee, tilapia, lechona and pottery from all your zones.', 'Tatacoa trips'],
+  // Cundinamarca (v4.4.8)
+  flores: ['Flowers for the world!', 'You completed <b>The Flowers of the Savanna</b>, in Cundinamarca. Two thousand boxes of roses, from the greenhouse to the cold room and onto the plane.', 'Boxes of flowers sold'],
+  fresas: ['Strawberries and cream for the whole Savanna!', 'You completed <b>The Sibaté Strawberry Growers</b>. Six thousand cups of strawberries and cream, and with the second-grade strawberries, jam.', 'Strawberries and cream sold'],
+  truchas: ['Trout for all of Guatavita!', 'You completed <b>The Trout of Guatavita</b>. Six thousand fried trout lunches, beside the ice-cold ponds.', 'Lunches sold'],
+  salinas: ['Salt for the whole Savanna!', 'You completed <b>The Salt Works of Nemocón</b>. Four thousand Savanna baskets with salt bread, rose bouquets and strawberries.', 'Baskets sold'],
+  cocina: ['Ajiaco for all of Bogotá!', 'You completed <b>The Savanna Kitchen</b>. Six thousand Savanna lunches: ajiaco with smoked trout and ceviche from Guatavita.', 'Savanna lunches sold'],
+  zipaquira: ['Cundinamarca, from end to end!', 'You completed <b>Zipaquirá</b> and Cundinamarca. Seven thousand visits to the Salt Cathedral, with the flowers, strawberries, trout, salt and ajiaco from all your zones.', 'Visits to the Cathedral'],
 };

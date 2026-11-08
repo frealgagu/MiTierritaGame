@@ -453,7 +453,8 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .goal.final:not(.compact) { border-width: 3px; border-color: var(--yellow); background: #fff7d1; }
 .goal-text { font-weight: 600; font-size: 0.95rem; }
 .goal.compact .goal-text { font-size: 0.85rem; line-height: 1.1rem; height: 2.2rem; overflow: hidden; }
-.goal.compact .goal-foot { height: 34px; align-items: center; }
+/* (v4.4.8) El botón mide lo de todos (--btn-h): el pie toma su alto y se separa de la barra, para no pegar en los bordes. */
+.goal.compact .goal-foot { height: var(--btn-h); margin-top: 4px; align-items: center; }
 .goal.compact .goal-row { height: 1.1rem; }
 .goal-row { display: flex; align-items: center; gap: 8px; }
 .goal-row .bar { flex: 1; margin: 0; }

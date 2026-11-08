@@ -48,4 +48,11 @@ export default {
   musica_tolima: 'La musique',
   manos_tolima: 'Les mains',
   neiva_album: 'Neiva et la Tatacoa',
+  // Cundinamarca (v4.4.8)
+  sabana_album: 'La Savane',
+  cocina_cund: 'La cuisine',
+  flores_cund: 'Les fleurs',
+  sal_cund: 'Le sel',
+  muiscas_cund: 'Les Muiscas',
+  pueblos_cund: 'Les villages',
 };

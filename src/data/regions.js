@@ -78,8 +78,8 @@ export const REGIONS = [
     unlock: { region: 'amazonas', zone: 'leticia' },
   },
   // Cundinamarca (v4.4): la Sabana de Bogotá y sus pueblos (las flores, las fresas, las truchas, la sal y el ajiaco),
-  // con su música de pasillo. Se abre al completar Neiva y llegó zona por zona (v4.4.0 a v4.4.5); sigue en obra (`wip`)
-  // hasta que lleguen sus eventos, su álbum y sus logros. Termina en Zipaquirá, con la Catedral de Sal.
+  // con su música de pasillo. Se abre al completar Neiva y llegó zona por zona (v4.4.0 a v4.4.5); con sus eventos, su
+  // álbum y sus logros (v4.4.8) quedó completa. Termina en Zipaquirá, con la Catedral de Sal.
   {
     id: 'cundinamarca',
     name: 'Cundinamarca',
@@ -87,7 +87,6 @@ export const REGIONS = [
     zones: ['flores', 'fresas', 'truchas', 'salinas', 'cocina', 'zipaquira'],
     music: 'cundinamarca',
     unlock: { region: 'tolima', zone: 'neiva' },
-    wip: true,
   },
   // Bogotá (v4.5): la región que no produce nada propio. Una sola zona del doble de lado, que llega barrio por barrio,
   // adonde todo llega en tractomula desde las otras regiones. Se abre al completar Cundinamarca y sigue en obra (`wip`).
@@ -100,6 +99,9 @@ export const REGIONS = [
     music: 'cundinamarca',
     unlock: { region: 'cundinamarca', zone: 'zipaquira' },
     wip: true,
+    // (v4.4.8) Mientras se construye no se abre en el juego publicado: en el mapa sale «Próximamente». Se quita al
+    // terminarla.
+    hidden: true,
   },
 ];
 

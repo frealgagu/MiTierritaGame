@@ -7640,6 +7640,15 @@ def rot_pts(points, a, cx=50, cy=50):
     return [(cx + (x - cx) * math.cos(r) - (y - cy) * math.sin(r), cy + (x - cx) * math.sin(r) + (y - cy) * math.cos(r)) for x, y in points]
 
 
+def e_up():
+    """Subir de nivel (v4.4.8): la flecha verde con borde oscuro sobre un cuadro claro, para que se vea en los botones verdes."""
+    layers = [(OUTLINE, ['M 16 6 L 84 6 Q 94 6 94 16 L 94 84 Q 94 94 84 94 L 16 94 Q 6 94 6 84 L 6 16 Q 6 6 16 6 Z']),
+              ('#fff8e1', ['M 17 12 L 83 12 Q 88 12 88 17 L 88 83 Q 88 88 83 88 L 17 88 Q 12 88 12 83 L 12 17 Q 12 12 17 12 Z'])]
+    layers += [(OUTLINE, [poly(50, 14, 82, 48, 64, 48, 64, 86, 36, 86, 36, 48, 18, 48)]), ('#2fa36b', [poly(50, 21, 74.4, 44.6, 59.6, 44.6, 59.6, 81.6, 40.4, 81.6, 40.4, 44.6, 25.6, 44.6)])]
+    layers.append(('#7bd29a', [poly(50, 25, 66, 41, 56, 41, 50, 33)]))
+    return layers
+
+
 def e_willys():
     """El Willys de los cafeteros."""
     return willys_side(50, 70, 1.15)
@@ -9334,6 +9343,104 @@ def feria_mi_tierrita():
     return layers
 
 
+
+# ---------- Cundinamarca · el álbum (v4.4.8) ----------
+
+def laguna_guatavita():
+    """La laguna de Guatavita: el agua redonda y verde en lo alto, rodeada de cerros con frailejones."""
+    layers = [(OUTLINE, ['M 2 86 L 2 52 Q 26 26 50 30 Q 76 26 98 52 L 98 86 Z']), ('#5d8a3a', ['M 4.4 84 L 4.4 53 Q 27 29 50 33 Q 74 29 95.6 53 L 95.6 84 Z'])]
+    layers.append(('#4a7530', ['M 50 33 Q 74 29 95.6 53 L 95.6 84 L 70 84 Q 72 56 50 33 Z']))
+    layers += [(OUTLINE, [ellipse(50, 66, 34, 16)]), ('#2e7d6b', [ellipse(50, 66, 31.6, 13.6)]), ('#4db6ac', [ellipse(46, 62, 20, 6)])]
+    for x, y in ((14, 70), (86, 72), (22, 50), (80, 50)):
+        layers += [('#8d6e4a', [rect(x - 1, y, 2, 8)]), ('#c5e1a5', [circle(x, y, 4)]), ('#9ccc65', [circle(x - 1.4, y - 1, 2)])]
+    layers.append(('#fafafa', [ellipse(30, 20, 14, 4), ellipse(72, 14, 12, 3.4)]))
+    return layers
+
+
+def salto_tequendama():
+    """El Salto del Tequendama: el chorro blanco que cae por la roca entre la niebla, con la casona en el borde."""
+    layers = [(OUTLINE, ['M 2 96 L 2 20 L 36 20 L 40 96 Z', 'M 98 96 L 98 20 L 64 20 L 60 96 Z']), ('#6d5a48', ['M 4.4 94 L 4.4 22.4 L 34 22.4 L 37.6 94 Z', 'M 95.6 94 L 95.6 22.4 L 66 22.4 L 62.4 94 Z'])]
+    layers.append(('#4e8a34', [rect(2, 16, 34, 6), rect(64, 16, 34, 6)]))
+    layers += [(OUTLINE, ['M 36 20 L 64 20 L 62 96 L 38 96 Z']), ('#e3f2fd', ['M 38.4 22.4 L 61.6 22.4 L 59.8 94 L 40.2 94 Z'])]
+    layers.append(('#90caf9', [rect(42 + k * 5, 26, 1.8, 66) for k in range(4)]))
+    layers.append(('#fafafa', [ellipse(50, 92, 30, 7), ellipse(30, 80, 14, 5), ellipse(72, 78, 14, 5)]))
+    layers += [(OUTLINE, [rect(70, 6, 18, 12), poly(68, 7, 79, 0, 90, 7)]), ('#fbf8f1', [rect(71.4, 7.4, 15.2, 9.2)]), ('#b5512e', [poly(71, 6.6, 79, 2, 87, 6.6)])]
+    return layers
+
+
+def eucalipto():
+    """El eucalipto: el tronco alto y pelado, de corteza clara, con la copa gris verdosa."""
+    layers = [(OUTLINE, ['M 44 96 L 46 40 L 54 40 L 56 96 Z']), ('#e0d6c4', ['M 46.4 94 L 48 42 L 52 42 L 53.6 94 Z']), ('#b0a898', [rect(48.6, 60, 2.4, 12), rect(49, 80, 2.4, 8)])]
+    for cx, cy, r in ((50, 26, 18), (34, 36, 13), (66, 36, 13), (40, 18, 11), (60, 16, 11)):
+        layers += [(OUTLINE, [circle(cx, cy, r + 2)])]
+    for cx, cy, r in ((50, 26, 18), (34, 36, 13), (66, 36, 13), (40, 18, 11), (60, 16, 11)):
+        layers += [('#7f9c84', [circle(cx, cy, r)])]
+    layers.append(('#a5c0a8', [circle(44, 20, 5), circle(62, 30, 4), circle(32, 34, 4)]))
+    return layers
+
+
+def clavel():
+    """El clavel: la flor de pétalos rizados, roja, con su tallo y sus hojas finas."""
+    layers = [('#43a047', [rib(50, 50, 50, 96, 3)]), (OUTLINE, [leaf(50, 76, 30, 64, 4), leaf(50, 84, 70, 70, 4)]), ('#66bb6a', [leaf(50, 76, 31, 64.6, 2.6), leaf(50, 84, 69, 70.6, 2.6)])]
+    layers += [(OUTLINE, ['M 42 50 L 58 50 L 56 60 L 44 60 Z']), ('#43a047', ['M 43.6 51.4 L 56.4 51.4 L 54.8 58.6 L 45.2 58.6 Z'])]
+    pts_out = []
+    for k in range(24):
+        a = math.pi * k / 23
+        r = 30 if k % 2 == 0 else 24
+        pts_out.append((50 + math.cos(math.pi + a) * r, 44 + math.sin(math.pi + a) * r * 0.9))
+    pts_out += [(76, 50), (24, 50)]
+    layers += [(OUTLINE, [grow(pts_out, 50, 40, 2.4)]), ('#e53935', [pts(pts_out)])]
+    layers.append(('#c62828', [rib(36, 40, 44, 22, 1.6), rib(50, 44, 50, 18, 1.6), rib(64, 40, 56, 22, 1.6), rib(30, 48, 70, 48, 1.4)]))
+    return layers
+
+
+def balsa_muisca():
+    """La balsa de El Dorado: la balsa de juncos con el cacique cubierto de oro y la laguna."""
+    layers = [(OUTLINE, [ellipse(50, 78, 48, 16)]), ('#2e7d6b', [ellipse(50, 78, 45.6, 13.6)]), ('#4db6ac', [ellipse(40, 74, 22, 4)])]
+    layers += [(OUTLINE, ['M 10 66 L 90 66 L 82 80 L 18 80 Z']), ('#e0c08a', ['M 13 68.4 L 87 68.4 L 80.4 77.6 L 19.6 77.6 Z'])]
+    layers.append(('#c8a26a', [rib(18 + k * 9, 68.4, 20 + k * 8, 77.6, 1.2) for k in range(8)]))
+    layers += [(OUTLINE, [rect(42, 40, 16, 26), circle(50, 32, 9)]), ('#fbc02d', [rect(44.4, 42.4, 11.2, 23.6), circle(50, 32, 6.8)])]
+    layers += [(OUTLINE, [poly(38, 26, 50, 12, 62, 26)]), ('#ffd54f', [poly(41.6, 24.6, 50, 15.4, 58.4, 24.6)])]
+    layers.append(('#fff59d', [circle(46, 30, 1.6), circle(54, 30, 1.6), rect(46, 46, 2, 14)]))
+    for x in (26, 74):
+        layers += [(OUTLINE, [rect(x - 4, 50, 8, 16), circle(x, 46, 5)]), ('#a1693f', [rect(x - 2.6, 51.4, 5.2, 13.2), circle(x, 46, 3.6)])]
+    return layers
+
+
+def cacique_muisca():
+    """El Zipa: el gobernante muisca con la corona de oro, la nariguera y la manta pintada."""
+    layers = [(OUTLINE, ['M 18 96 Q 20 62 50 60 Q 80 62 82 96 Z']), ('#f4efe6', ['M 20.6 94 Q 22.6 64.4 50 62.4 Q 77.4 64.4 79.4 94 Z'])]
+    layers.append(('#a1693f', [rect(24 + k * 10, 72, 5, 5) for k in range(6)] + [rect(26 + k * 10, 84, 5, 5) for k in range(5)]))
+    layers += [(OUTLINE, [ellipse(50, 42, 16, 19)]), ('#a86b3c', [ellipse(50, 42, 13.6, 16.6)])]
+    layers.append(('#1b1b1b', [ellipse(44, 40, 2, 1.4), ellipse(56, 40, 2, 1.4)]))
+    layers += [(OUTLINE, [ellipse(50, 52, 6, 3)]), ('#fbc02d', [ellipse(50, 52, 4.6, 1.8)])]
+    layers += [(OUTLINE, [poly(30, 30, 34, 8, 42, 22, 50, 4, 58, 22, 66, 8, 70, 30)]), ('#fbc02d', [poly(33, 28, 35.4, 13, 42, 25, 50, 9, 58, 25, 64.6, 13, 67, 28)])]
+    layers.append(('#ffd54f', [circle(42, 22, 1.8), circle(58, 22, 1.8), circle(50, 18, 2)]))
+    return layers
+
+
+def tren_sabana():
+    """El tren de la Sabana: la locomotora de vapor negra y roja, con su chimenea humeando."""
+    layers = [(OUTLINE, [rect(8, 46, 58, 30), rect(60, 30, 30, 46), rect(18, 30, 10, 16)]), ('#263238', [rect(10.4, 48.4, 53.2, 25.2), rect(18.6, 32.4, 6.8, 13.6)]), ('#b71c1c', [rect(62.4, 32.4, 25.2, 41.2)])]
+    layers.append(('#cfe3ee', [rect(68, 38, 14, 12)]))
+    layers += [(OUTLINE, [rect(4, 52, 6, 18)]), ('#fbc02d', [rect(5.4, 53.4, 3.2, 15.2)])]
+    layers.append(('#fbc02d', [rect(10.4, 58, 53.2, 3)]))
+    layers += wheel(22, 80, 9) + wheel(46, 80, 9) + wheel(76, 82, 7)
+    layers.append(('#eceff1', [ellipse(22, 22, 9, 6), ellipse(34, 12, 11, 7), ellipse(50, 6, 9, 5)]))
+    return layers
+
+
+def bandola():
+    """La bandola: el instrumento de cuerdas en forma de pera que lleva la melodía del pasillo."""
+    layers = [(OUTLINE, ['M 50 30 Q 80 34 78 64 Q 76 92 50 94 Q 24 92 22 64 Q 20 34 50 30 Z']), ('#c8843c', ['M 50 32.6 Q 77.4 36 75.6 64 Q 73.8 89.6 50 91.6 Q 26.2 89.6 24.4 64 Q 22.6 36 50 32.6 Z'])]
+    layers += [(OUTLINE, [circle(50, 58, 9)]), ('#3e2723', [circle(50, 58, 7)])]
+    layers += [(OUTLINE, [rect(45, 2, 10, 34)]), ('#5d4037', [rect(46.6, 3.6, 6.8, 30.8)])]
+    layers.append(('#fafafa', [rect(47.4 + k * 1.8, 6, 0.8, 76) for k in range(3)]))
+    layers += [(OUTLINE, [rect(42, 80, 16, 4)]), ('#3e2723', [rect(43, 81, 14, 2)])]
+    layers.append(('#f4efe6', [circle(44, 8, 1.6), circle(56, 8, 1.6), circle(44, 16, 1.6), circle(56, 16, 1.6)]))
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9933,6 +10040,15 @@ ICONS = [
     (0xE241, 'noche_bogota', noche_bogota),
     (0xE242, 'pabellon_colombia', pabellon_colombia),
     (0xE243, 'feria_mi_tierrita', feria_mi_tierrita),
+    # Cundinamarca · el álbum (v4.4.8)
+    (0xE244, 'laguna_guatavita', laguna_guatavita),
+    (0xE245, 'salto_tequendama', salto_tequendama),
+    (0xE246, 'eucalipto', eucalipto),
+    (0xE247, 'clavel', clavel),
+    (0xE248, 'balsa_muisca', balsa_muisca),
+    (0xE249, 'cacique_muisca', cacique_muisca),
+    (0xE24A, 'tren_sabana', tren_sabana),
+    (0xE24B, 'bandola', bandola),
 ]
 
 
@@ -10119,7 +10235,7 @@ for _seq, _make in [
     ('🧭', e_compass), ('🧪', e_flask), ('🧵', e_thread), ('🧶', e_yarn), ('✂️', e_scissors), ('🪡', e_needle), ('⛏️', e_pick), ('🪓', e_axe),
     ('🪜', e_ladder), ('🪢', e_knot), ('🪃', e_boomerang), ('🔪', e_knife), ('🗜️', e_clamp), ('🪤', e_trap), ('🪧', e_sign), ('🚧', e_works),
     ('🚦', e_traffic), ('🛣️', e_road), ('🕳️', e_hole), ('🤝', e_handshake), ('🤲', e_hands), ('👃', e_nose), ('🦺', e_vest),
-    ('🚙', e_willys), ('🚚', e_truck), ('🚛', e_tractomula), ('🚜', e_tractor), ('🚤', e_speedboat), ('🛥️', e_speedboat), ('🛻', e_pickup), ('🛺', e_mototaxi),
+    ('⬆️', e_up), ('🚙', e_willys), ('🚚', e_truck), ('🚛', e_tractomula), ('🚜', e_tractor), ('🚤', e_speedboat), ('🛥️', e_speedboat), ('🛻', e_pickup), ('🛺', e_mototaxi),
     ('✈️', e_plane), ('🐜', e_ant), ('🐋', e_whale), ('🐟', e_fish), ('🐈', e_cat), ('🐦', e_bird), ('🪲', e_beetle), ('🪰', e_fly), ('🦠', e_microbe), ('🪱', e_worm),
     ('☀️', e_sun), ('🌧️', e_rain), ('🌦️', e_sun_rain), ('🌤️', e_sun_cloud), ('🌙', e_moon), ('❄️', e_snow), ('🌡️', e_thermo), ('🌬️', e_wind),
     ('🌀', e_cyclone), ('💧', e_drop), ('🌊', e_wave), ('🌴', e_palm), ('🌳', e_tree), ('🌺', e_hibiscus), ('🌱', e_seedling), ('🍃', e_leaves),
@@ -10132,7 +10248,7 @@ for _seq, _make in [
 ]:
     emoji(_seq, _make)
 for _seq, _name in [
-    ('🚌', 'chiva_bus'), ('🐴', 'mula'), ('☕', 'tinto'), ('🐄', 'normando'), ('🐮', 'normando'), ('🐂', 'sanmartinero'), ('🐎', 'caballo_criollo'),
+    ('🚌', 'chiva_bus'), ('🚂', 'tren_sabana'), ('🐴', 'mula'), ('☕', 'tinto'), ('🐄', 'normando'), ('🐮', 'normando'), ('🐂', 'sanmartinero'), ('🐎', 'caballo_criollo'),
     ('🌽', 'choclo'), ('🦜', 'guacamaya'), ('🐬', 'tonina'), ('🐢', 'tortuga_marina'), ('🌾', 'rice_plant'), ('🍫', 'milk_chocolate'), ('🧀', 'cheese'),
     ('🍒', 'cherry'), ('🍲', 'mute'), ('🛶', 'potrillo'), ('⛴️', 'rio_meta'), ('🛳️', 'puerto_buenaventura'), ('🚡', 'chicamocha'), ('🛖', 'tambo'),
     ('⛪', 'plaza_pueblo'), ('🏛️', 'ibague_musical'), ('🏜️', 'desierto_tatacoa'), ('🌵', 'cardon'), ('🌅', 'atardecer_llanero'), ('🏊', 'hoyos_tatacoa'),

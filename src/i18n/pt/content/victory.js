@@ -48,4 +48,11 @@ export default {
   lechoneria: ['Lechona para todo o San Pedro!', 'Você completou <b>A Lechonería</b>. Quatro mil lechonas, com o couro e a carne de cada porco juntos no forno a lenha.', 'Lechonas vendidas'],
   chamba: ['Louça preta para o país inteiro!', 'Você completou <b>La Chamba</b>. Seis mil lembranças do Tolima: panelas de louça preta com tilápia defumada e escabeche de Betania.', 'Lembranças vendidas'],
   neiva: ['O Tolima Grande, de ponta a ponta!', 'Você completou <b>Neiva</b> e o Tolima Grande. Sete mil noites de estrelas na Tatacoa, com os biscoitos, o café, a tilápia, a lechona e a louça de todas as suas zonas.', 'Passeios à Tatacoa'],
+  // Cundinamarca (v4.4.8)
+  flores: ['Flores para o mundo!', 'Você completou <b>As Flores da Savana</b>, em Cundinamarca. Duas mil caixas de rosas, da estufa à câmara fria e ao avião.', 'Caixas de flores vendidas'],
+  fresas: ['Morangos com creme para toda a Savana!', 'Você completou <b>Os Morangueiros de Sibaté</b>. Seis mil copos de morangos com creme e, com os morangos de segunda, geleia.', 'Morangos com creme vendidos'],
+  truchas: ['Truta para toda Guatavita!', 'Você completou <b>As Trutas de Guatavita</b>. Seis mil almoços de truta frita, à beira dos tanques de água gelada.', 'Almoços vendidos'],
+  salinas: ['Sal para toda a Savana!', 'Você completou <b>As Salinas de Nemocón</b>. Quatro mil cestas da Savana com o pão de sal, os buquês de rosas e os morangos.', 'Cestas vendidas'],
+  cocina: ['Ajiaco para toda Bogotá!', 'Você completou <b>A Cozinha da Savana</b>. Seis mil almoços da Savana: o ajiaco com a truta defumada e o ceviche de Guatavita.', 'Almoços da Savana vendidos'],
+  zipaquira: ['Cundinamarca, de ponta a ponta!', 'Você completou <b>Zipaquirá</b> e Cundinamarca. Sete mil visitas à Catedral de Sal, com as flores, os morangos, a truta, o sal e o ajiaco de todas as suas zonas.', 'Visitas à Catedral'],
 };
