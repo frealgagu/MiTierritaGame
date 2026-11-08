@@ -561,4 +561,12 @@ export default {
   paila_fritanga: 'Bassine à friture',
   nave_nueva: 'Nouvelle halle',
   mercado_madrugada: 'Marché de l’aube',
+  // Bogotá · El centro (v4.5)
+  suite_presidencial: 'Suite présidentielle',
+  vagones_nuevos: 'Nouvelles cabines',
+  carpa_grande: 'Grand chapiteau',
+  pabellones_nuevos: 'Nouveaux pavillons',
+  capital_del_pais: 'Capitale de tout le pays',
+  maestria_bogota: 'Maîtrise : Bogotá',
+  supremacia_bogota: 'Suprématie : Bogotá',
 };

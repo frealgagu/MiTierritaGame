@@ -417,6 +417,11 @@ export const FACTS = {
   pescaderia_plaza: ['La trucha llega de las lagunas frías y el pargo, del mar Pacífico.', 'El pescado ahumado aguanta el viaje largo hasta la capital.'],
   fritanga_plaza: ['En la plaza se desayuna lechona, tamal y caldo de costilla.', 'La fritanga lleva chorizo, morcilla, papa criolla y plátano.'],
   plaza_paloquemao: ['Paloquemao es una de las plazas de mercado más grandes de Bogotá.', 'La plaza abre de madrugada para los restaurantes y las tiendas.'],
+  // Bogotá · El centro (v4.5)
+  hotel_capital: ['A Bogotá llega gente de todas las regiones a quedarse unos días.', 'En la noche, Bogotá es fría: se sale con abrigo y paraguas.'],
+  funicular_monserrate: ['Monserrate está a más de 3.100 metros, sobre la ciudad.', 'Al cerro se sube en funicular, en teleférico o a pie.'],
+  pabellon_regiones: ['En las ferias de Bogotá cada región arma su pabellón.', 'En un solo pabellón cabe el país: su comida, su música y su artesanía.'],
+  gran_feria: ['La Gran Feria junta lo mejor de las diez regiones del juego.', 'Aquí termina el viaje: todo el país en una sola feria.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).

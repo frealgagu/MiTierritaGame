@@ -361,4 +361,9 @@ export default {
   pescaderia_plaza: 'Fish Stall',
   fritanga_plaza: 'Market Fry-up',
   plaza_paloquemao: 'Paloquemao Market',
+  // Bogotá · El centro (v4.5)
+  hotel_capital: 'Capital Hotel',
+  funicular_monserrate: 'Monserrate Funicular',
+  pabellon_regiones: 'Regions Pavilion',
+  gran_feria: 'Grand Fair Grounds',
 };

@@ -186,4 +186,9 @@ export default {
   'Zipaquirá': 'Zipaquirá',
   'Carga en {zone}': 'Chargement à {zone}',
   'sin límite': 'illimité',
+  'Candelaria': 'Candelaria',
+  'Zona G': 'Zona G',
+  'Usaquén': 'Usaquén',
+  'Paloquemao': 'Paloquemao',
+  'Centro': 'Centre',
 };

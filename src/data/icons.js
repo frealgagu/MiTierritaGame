@@ -580,6 +580,9 @@ export const ICON = {
   canastaPaloquemao: '\uE23E', // La canasta del mercado completa: flores, frutas y el pescado ahumado asomando
   desayunoPlaza: '\uE23F', // El desayuno de plaza: la lechona servida en hoja, la papa criolla y el chocolate
   mananaPaloquemao: '\uE240', // La mañana en Paloquemao: la nave de la plaza de mercado con los puestos de flores y frutas a la entrada
+  nocheBogota: '\uE241', // La noche en Bogotá: el hotel con las ventanas encendidas, la luna y los Cerros oscuros detrás
+  pabellonColombia: '\uE242', // El pabellón de Colombia: la carpa grande de la feria, con las banderitas de colores de todas las regiones
+  feriaMiTierrita: '\uE243', // La Gran Feria de Mi Tierrita: el arco de la entrada con la bandera de Colombia, los globos y la estrella
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

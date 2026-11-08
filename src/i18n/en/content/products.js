@@ -371,4 +371,9 @@ export default {
   canasta_plaza: 'Market basket',
   desayuno_plaza: 'Market breakfast',
   manana_paloquemao: 'Morning at Paloquemao',
+  // Bogotá · El centro (v4.5)
+  noche_bogota: 'Night in Bogotá',
+  subida_monserrate: 'Trip up Monserrate',
+  pabellon_colombia: 'Colombia Pavilion',
+  feria_mi_tierrita: 'Mi Tierrita Grand Fair',
 };

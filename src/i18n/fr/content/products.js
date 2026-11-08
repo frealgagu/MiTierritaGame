@@ -371,4 +371,9 @@ export default {
   canasta_plaza: 'Panier du marché',
   desayuno_plaza: 'Petit-déjeuner du marché',
   manana_paloquemao: 'Matinée à Paloquemao',
+  // Bogotá · El centro (v4.5)
+  noche_bogota: 'Nuit à Bogotá',
+  subida_monserrate: 'Montée à Monserrate',
+  pabellon_colombia: 'Pavillon de la Colombie',
+  feria_mi_tierrita: 'Grande Foire de Mi Tierrita',
 };

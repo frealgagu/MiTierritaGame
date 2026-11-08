@@ -100,4 +100,9 @@ export default {
   pescaderia_plaza: ['Trout comes from cold lakes and snapper from the Pacific.', 'Smoked fish holds up on the long trip to the capital.'],
   fritanga_plaza: ['At the market people breakfast on lechona, tamal and rib soup.', 'A fritanga has chorizo, blood sausage, criolla potato and plantain.'],
   plaza_paloquemao: ['Paloquemao is one of Bogotá’s biggest markets.', 'The market opens before dawn for restaurants and shops.'],
+  // Bogotá · El centro (v4.5)
+  hotel_capital: ['People from every region come to Bogotá to stay a few days.', 'Bogotá nights are cold: you go out with a coat and an umbrella.'],
+  funicular_monserrate: ['Monserrate stands over 3,100 meters high, above the city.', 'You go up the hill by funicular, cable car or on foot.'],
+  pabellon_regiones: ['At Bogotá’s fairs, each region sets up its own pavilion.', 'One pavilion holds the whole country: food, music and crafts.'],
+  gran_feria: ['The Grand Fair brings together the best of the game’s ten regions.', 'The journey ends here: the whole country in a single fair.'],
 };
