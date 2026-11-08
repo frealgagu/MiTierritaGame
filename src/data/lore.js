@@ -405,6 +405,12 @@ export const FACTS = {
   parrilla_zona_g: ['La carne a la llanera se asa en varas, junto al fuego de leña.', 'Chapinero queda al norte del centro, al pie de los Cerros.'],
   reposteria_zona_g: ['El asaí del Amazonas se sirve frío, en tazón, con banano.', 'El jugo de maracuyá se hace con la pulpa colada.'],
   restaurante_zona_g: ['En Bogotá cabe la cocina de todas las regiones del país.', 'Después de comer, en Bogotá se ofrece un tinto.'],
+  // Bogotá · Usaquén (v4.5)
+  toldo_tejidos: ['Los domingos, Usaquén se llena de toldos de artesanías.', 'La ruana de lana de Boyacá abriga en las tardes frías de Bogotá.'],
+  toldo_sombreros: ['El sombrero vueltiao se teje con caña flecha, en la Costa.', 'La silla de montar llanera se hace de cuero repujado.'],
+  toldo_loza: ['La loza negra de La Chamba se brilla con piedra antes de quemarla.', 'La canasta de regalo del Eje lleva café, panela y arequipe.'],
+  toldo_mascaras: ['Las máscaras ticunas se pintan sobre tela de corteza.', 'El werregue se teje en espiral con fibra de palma.'],
+  mercado_pulgas: ['Usaquén fue un pueblo aparte antes de ser parte de Bogotá.', 'En el mercado de pulgas hay de todo: antigüedades, discos y artesanías.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).

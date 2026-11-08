@@ -717,6 +717,13 @@ export const RESEARCH = [
   { zone: 'bogota', id: 'horno_reposteria', name: 'Horno de repostería', icon: ICON.menuCompleto, desc: 'La Repostería y jugos prepara el doble.', cost: 600000, requires: 'restaurante_zona_g', effect: { type: 'stationSpeed', target: 'reposteria_zona_g', mult: 2 } },
   { zone: 'bogota', id: 'chef_regional', name: 'Chef de cocina regional', icon: ICON.cenaZonaG, desc: 'El Restaurante de la Zona G atiende el doble.', cost: 1000000, requires: 'restaurante_zona_g', effect: { type: 'stationSpeed', target: 'restaurante_zona_g', mult: 2 } },
   { zone: 'bogota', id: 'guia_gastronomica', name: 'Guía gastronómica', icon: '🏅', desc: 'La cena en la Zona G vale un 50 % más.', cost: 1500000, requires: 'restaurante_zona_g', effect: { type: 'productValue', target: 'cena_zona_g', mult: 1.5 } },
+  // Bogotá · Usaquén (v4.5).
+  { zone: 'bogota', id: 'telar_grande', name: 'Telar grande', icon: ICON.surtidoTejidos, desc: 'El Toldo de tejidos surte el doble (pide el doble a sus dos tractomulas).', cost: 2000000, requires: 'toldo_sombreros', effect: { type: 'stationSpeed', target: 'toldo_tejidos', mult: 2 } },
+  { zone: 'bogota', id: 'toldo_doble', name: 'Toldo doble', icon: ICON.surtidoFeria, desc: 'El Toldo de sombreros surte el doble.', cost: 4000000, requires: 'toldo_loza', effect: { type: 'stationSpeed', target: 'toldo_sombreros', mult: 2 } },
+  { zone: 'bogota', id: 'estanteria_loza', name: 'Estantería para la loza', icon: ICON.surtidoLoza, desc: 'El Toldo de loza y canastas surte el doble.', cost: 8000000, requires: 'toldo_mascaras', effect: { type: 'stationSpeed', target: 'toldo_loza', mult: 2 } },
+  { zone: 'bogota', id: 'vitrina_mascaras', name: 'Vitrina de máscaras', icon: ICON.granSurtido, desc: 'El Toldo de máscaras y werregue surte el doble.', cost: 16000000, requires: 'mercado_pulgas', effect: { type: 'stationSpeed', target: 'toldo_mascaras', mult: 2 } },
+  { zone: 'bogota', id: 'calle_cerrada', name: 'Calle cerrada los domingos', icon: ICON.domingoUsaquen, desc: 'El Mercado de las pulgas recibe el doble de gente.', cost: 30000000, requires: 'mercado_pulgas', effect: { type: 'stationSpeed', target: 'mercado_pulgas', mult: 2 } },
+  { zone: 'bogota', id: 'sello_artesanal', name: 'Sello de las artesanías', icon: '🏅', desc: 'El domingo en Usaquén vale un 50 % más.', cost: 50000000, requires: 'mercado_pulgas', effect: { type: 'productValue', target: 'domingo_usaquen', mult: 1.5 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

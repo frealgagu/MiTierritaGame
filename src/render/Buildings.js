@@ -204,6 +204,25 @@ function balcony(g, x, y, w, d, z, color) {
   }
 }
 
+// Toldo del mercado de pulgas (Usaquén, v4.5): la carpa blanca de cuatro palos con una franja de color y, en la
+// mesa, las cosas a la venta (`goods`: sus colores). w: el ancho en casillas.
+function fleaStall(view, g, x0, y0, ctx, stripe, goods, w = 2.2) {
+  const d = 1.4;
+  const H = 22 + Math.min(ctx.tier, 2) * 2;
+  box(g, x0 + 0.15, y0 + 0.5, w - 0.3, 0.6, 9, 0xa1693f);
+  const n = Math.min(goods.length, 3 + ctx.tier);
+  for (let k = 0; k < n; k++) {
+    const p = iso(x0 + 0.3 + (k * (w - 0.6)) / Math.max(1, n - 1), y0 + 0.8, 9);
+    g.roundRect(p.x - 3.5, p.y - 6, 7, 6, 1.5).fill(goods[k]).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.7 });
+  }
+  for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.04, y0 + py - 0.04, 0.08, 0.08, H, 0x8d6e63);
+  gableRoof(g, x0, y0, w, d, H, 9, 0xfafafa, 0xfafafa, 0.15);
+  const a = iso(x0 - 0.15, y0 + d + 0.15, H);
+  const b = iso(x0 + w + 0.15, y0 + d + 0.15, H);
+  g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 3, color: stripe });
+  view.roofTop = view.roofTop ?? iso(x0 + w / 2, y0 + d / 2, H + 9);
+}
+
 // Ladrillo a la vista de Bogotá (v4.5) y el toldo sobre la fachada delantera, a la altura z.
 const BRICK = 0xb35a33;
 function awningFront(g, x, y, w, d, z, color) {
@@ -8287,6 +8306,36 @@ const DRAW = {
       g.rect(p.x - 0.8, p.y - 14, 1.6, 4).fill(0xfff8e1);
       g.circle(p.x, p.y - 15, 1.2).fill(0xff9800);
     }
+  },
+
+  // --- Bogotá · Usaquén (v4.5): los toldos blancos del mercado de pulgas del domingo ---
+
+  toldo_tejidos(g, x, y, ctx) {
+    fleaStall(this, g, x + 0.4, y + 0.5, ctx, 0x2e4fa8, [0x5d4037, 0x3e2723, 0x2e4fa8, 0xf4f1ea, 0x8d6e63]);
+  },
+  toldo_sombreros(g, x, y, ctx) {
+    fleaStall(this, g, x + 0.4, y + 0.5, ctx, 0xd7263d, [0xf4efe6, 0x8d5a32, 0xf4efe6, 0x5d3a1e, 0xf4efe6]);
+  },
+  toldo_loza(g, x, y, ctx) {
+    fleaStall(this, g, x + 0.4, y + 0.5, ctx, 0x2f7d4f, [0x2b2b2b, 0xc9a26a, 0x2b2b2b, 0xc9a26a, 0x424242]);
+  },
+  toldo_mascaras(g, x, y, ctx) {
+    fleaStall(this, g, x + 0.4, y + 0.5, ctx, 0xf2b705, [0xe0c08a, 0xe8b04c, 0xd7263d, 0xe8b04c, 0x3e2723]);
+  },
+
+  // Mercado de las pulgas: la iglesia blanca de Usaquén y, delante, dos toldos con de todo un poco.
+  mercado_pulgas(g, x, y, ctx) {
+    const cx = x + 1.7;
+    const cy = y + 0.2;
+    box(g, cx, cy, 1.1, 1.0, 30 + ctx.up, 0xfbf8f1);
+    gableRoof(g, cx, cy, 1.1, 1.0, 30 + ctx.up, 12, PAL.roof, 0xfbf8f1);
+    box(g, cx + 0.75, cy + 0.6, 0.4, 0.4, 48 + ctx.up, 0xfbf8f1);
+    const t = iso(cx + 0.95, cy + 0.8, 48 + ctx.up);
+    g.poly([t.x - 8, t.y, t.x, t.y - 12, t.x + 8, t.y]).fill(PAL.roof).stroke(OUTLINE);
+    g.rect(t.x - 0.8, t.y - 20, 1.6, 8).fill(0x5d4037);
+    g.rect(t.x - 3, t.y - 17, 6, 1.6).fill(0x5d4037);
+    this.roofTop = { x: t.x, y: t.y - 20 };
+    fleaStall(this, g, x + 0.2, y + 1.5, ctx, 0xd7263d, [0x2e4fa8, 0xe8b04c, 0x2b2b2b, 0xd7263d, 0x8d5a32], 1.3);
   },
 
   // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja

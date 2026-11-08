@@ -119,4 +119,14 @@ export default {
   tm_arroz: ['Camion du riz', 'Camion', 'Riz'],
   tm_asai: ['Camion de l’açaí', 'Camion', 'Açaí'],
   tm_jugos: ['Camion des jus', 'Camion', 'Jus'],
+  // Bogotá · Usaquén (v4.5)
+  tm_ruanas: ['Camion des ruanas', 'Camion', 'Ruanas'],
+  tm_alpargatas: ['Camion des espadrilles', 'Camion', 'Espadrilles'],
+  tm_sombreros: ['Camion des chapeaux', 'Camion', 'Chapeaux'],
+  tm_sillas: ['Camion des selles', 'Camion', 'Selles'],
+  tm_loza: ['Camion de la poterie noire', 'Camion', 'Poterie'],
+  tm_canastas: ['Camion des paniers cadeaux', 'Camion', 'Paniers'],
+  tm_mascaras: ['Camion des masques', 'Camion', 'Masques'],
+  tm_werregue: ['Camion du werregue', 'Camion', 'Werregue'],
+  tm_cofres: ['Camion des coffrets de sel', 'Camion', 'Coffrets'],
 };

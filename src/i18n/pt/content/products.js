@@ -359,4 +359,10 @@ export default {
   plato_fuerte: 'Prato principal',
   menu_completo: 'Menu completo',
   cena_zona_g: 'Jantar na Zona G',
+  // Bogotá · Usaquén (v4.5)
+  surtido_tejidos: 'Sortimento de tecidos',
+  surtido_feria: 'Sortimento da feira',
+  surtido_loza: 'Sortimento com louça',
+  gran_surtido: 'Grande sortimento artesanal',
+  domingo_usaquen: 'Domingo em Usaquén',
 };

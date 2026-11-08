@@ -570,6 +570,11 @@ export const ICON = {
   platoFuerte: '\uE234', // El plato fuerte: el asado a la llanera con el arroz blanco, la ensalada y la papa
   menuCompleto: '\uE235', // El menú completo: el plato fuerte, el tazón de asaí con banano y el jugo de maracuyá
   cenaZonaG: '\uE236', // La cena en la Zona G: la mesa del restaurante con mantel, la vela encendida, el plato servido y el tinto
+  surtidoTejidos: '\uE237', // El surtido de tejidos: la ruana doblada de lana con sus rayas y el par de alpargatas encima
+  surtidoFeria: '\uE238', // El surtido de la feria: el sombrero vueltiao sobre la silla de montar de cuero
+  surtidoLoza: '\uE239', // El surtido con loza: la olla de loza negra de La Chamba y la canasta de regalo del Eje
+  granSurtido: '\uE23A', // El gran surtido artesanal: el huacal de madera con la máscara ticuna, el jarrón de werregue y el sombrero
+  domingoUsaquen: '\uE23B', // El domingo en Usaquén: el toldo blanco del mercado de pulgas con sus cosas y la torre de la iglesia del pueblo
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

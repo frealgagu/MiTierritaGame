@@ -9158,6 +9158,73 @@ def cena_zona_g():
     return layers
 
 
+
+# ---------- Bogotá · Usaquén (v4.5) ----------
+
+def surtido_tejidos():
+    """El surtido de tejidos: la ruana doblada de lana con sus rayas y el par de alpargatas encima."""
+    layers = [(OUTLINE, [poly(8, 56, 50, 40, 92, 56, 50, 76)]), ('#5d4037', [poly(12, 56, 50, 42.6, 88, 56, 50, 73.4)])]
+    layers += [(OUTLINE, [poly(8, 56, 50, 76, 50, 94, 8, 74)]), ('#4e342e', [poly(10.4, 58.6, 47.6, 77, 47.6, 90.4, 10.4, 72.4)])]
+    layers += [(OUTLINE, [poly(50, 76, 92, 56, 92, 74, 50, 94)]), ('#3e2723', [poly(52.4, 77, 89.6, 58.6, 89.6, 72.4, 52.4, 90.4)])]
+    layers.append(('#f4f1ea', [poly(10.4, 64, 47.6, 82, 47.6, 84, 10.4, 66), poly(52.4, 82, 89.6, 64, 89.6, 66, 52.4, 84)]))
+    for cx in (36, 62):
+        layers += [(OUTLINE, [ellipse(cx, 46, 12, 6, -10)]), ('#f4f1ea', [ellipse(cx, 46, 10, 4.4, -10)]), ('#2e4fa8', [ellipse(cx + 3, 45, 6, 3, -10)])]
+        layers.append(('#c8a26a', [ellipse(cx, 50.4, 11, 2.2, -10)]))
+    return layers
+
+
+def surtido_feria():
+    """El surtido de la feria: el sombrero vueltiao sobre la silla de montar de cuero."""
+    layers = [(OUTLINE, ['M 12 70 Q 30 50 50 54 Q 70 50 88 70 L 84 86 Q 50 76 16 86 Z']), ('#8d5a32', ['M 15 71 Q 31 53.4 50 57 Q 69 53.4 85 71 L 82 83 Q 50 73.6 18 83 Z'])]
+    layers.append(('#5d3a1e', [rib(20, 78, 80, 78, 2), rib(50, 58, 50, 76, 2)]))
+    layers += [(OUTLINE, [ellipse(50, 46, 40, 11)]), ('#f4efe6', [ellipse(50, 46, 37.6, 8.8)])]
+    layers.append(('#3e2723', [ellipse(50, 46, 32, 6.4), ellipse(50, 46, 26, 4.6)]))
+    layers.append(('#f4efe6', [ellipse(50, 46, 29, 5.4), ellipse(50, 46, 22, 3.6)]))
+    layers += [(OUTLINE, ['M 34 46 Q 34 22 50 22 Q 66 22 66 46 Z']), ('#f4efe6', ['M 36.4 45 Q 36.4 24.4 50 24.4 Q 63.6 24.4 63.6 45 Z'])]
+    layers.append(('#3e2723', [rib(37, 34, 63, 34, 1.6), rib(36.6, 40, 63.4, 40, 1.6), rib(38, 28, 62, 28, 1.6)]))
+    return layers
+
+
+def surtido_loza():
+    """El surtido con loza: la olla de loza negra de La Chamba y la canasta de regalo del Eje."""
+    layers = [(OUTLINE, ['M 10 50 Q 6 74 18 88 Q 34 98 50 88 Q 60 74 56 50 Z']), ('#2b2b2b', ['M 12.6 52.4 Q 9 74 20 85.6 Q 34 94.6 48 85.6 Q 57 74 53.4 52.4 Z'])]
+    layers += [(OUTLINE, [ellipse(33, 50, 25, 7)]), ('#424242', [ellipse(33, 50, 22.6, 5)])]
+    layers.append(('#757575', [ellipse(22, 66, 3, 10, 10)]))
+    layers += [(OUTLINE, [rect(6, 56, 8, 5), rect(52, 56, 8, 5)])]
+    layers += [(OUTLINE, ['M 54 56 L 94 56 L 88 92 L 60 92 Z']), ('#c9a26a', ['M 57 58.4 L 91 58.4 L 85.8 89.6 L 62.2 89.6 Z'])]
+    layers.append(('#a07a46', [rib(58, 68, 90, 68, 1.6), rib(59, 78, 88, 78, 1.6)]))
+    layers += [(OUTLINE, ['M 60 56 Q 74 30 88 56 L 84 56 Q 74 36 64 56 Z'])]
+    layers += [(OUTLINE, [rect(64, 44, 10, 14)]), ('#c8956a', [rect(65.4, 45.4, 7.2, 11.2)]), ('#d7263d', [circle(80, 50, 4.4)]), ('#fdd835', [circle(80, 50, 1.8)])]
+    return layers
+
+
+def gran_surtido():
+    """El gran surtido artesanal: el huacal de madera con la máscara ticuna, el jarrón de werregue y el sombrero."""
+    layers = [(OUTLINE, [poly(6, 54, 94, 54, 88, 94, 12, 94)]), ('#c08b5c', [poly(9, 56.4, 91, 56.4, 85.8, 91.6, 14.2, 91.6)])]
+    layers.append(('#8d5a32', [rect(9, 66, 82, 3), rect(9, 78, 80, 3)]))
+    layers += [(OUTLINE, ['M 18 54 Q 16 22 30 16 Q 44 22 42 54 Z']), ('#e0c08a', ['M 20.4 52 Q 18.6 24 30 18.6 Q 41.4 24 39.6 52 Z'])]
+    layers.append(('#3e2723', [ellipse(25, 32, 3, 2), ellipse(35, 32, 3, 2), rib(26, 42, 34, 42, 1.6)]))
+    layers.append(('#d7263d', [rib(22, 26, 38, 26, 1.4), rib(22, 48, 38, 48, 1.4)]))
+    layers += [(OUTLINE, ['M 50 54 Q 46 30 56 22 L 64 22 Q 74 30 70 54 Z']), ('#e8b04c', ['M 52.6 52 Q 49 31 57.4 24.4 L 62.6 24.4 Q 71 31 67.4 52 Z'])]
+    layers.append(('#3e2723', [rib(52, 34, 68, 34, 1.6), rib(51, 42, 69, 42, 1.6)]))
+    layers += [(OUTLINE, [ellipse(82, 40, 14, 5)]), ('#f4efe6', [ellipse(82, 40, 12, 3.4)])]
+    layers += [(OUTLINE, ['M 74 40 Q 74 26 82 26 Q 90 26 90 40 Z']), ('#f4efe6', ['M 75.8 39 Q 75.8 28 82 28 Q 88.2 28 88.2 39 Z']), ('#3e2723', [rib(76, 34, 88, 34, 1.4)])]
+    return layers
+
+
+def domingo_usaquen():
+    """El domingo en Usaquén: el toldo blanco del mercado de pulgas con sus cosas y la torre de la iglesia del pueblo."""
+    layers = [(OUTLINE, [rect(70, 12, 18, 60), poly(66, 14, 79, 2, 92, 14)]), ('#fbf8f1', [rect(72.4, 14.4, 13.2, 55.2)]), ('#b5512e', [poly(70, 13, 79, 5, 88, 13)])]
+    layers.append(('#5d4037', [rect(76, 24, 6, 10), rect(77, 50, 4, 20)]))
+    layers += [(OUTLINE, [poly(4, 46, 34, 28, 64, 46)]), ('#fafafa', [poly(8, 45, 34, 31, 60, 45)]), ('#d7263d', [poly(20, 45, 34, 31, 34, 45)])]
+    layers += bar(8, 46, 8, 90, 2.4, '#8d6e63') + bar(60, 46, 60, 90, 2.4, '#8d6e63')
+    layers += [(OUTLINE, [rect(10, 68, 48, 8)]), ('#a1693f', [rect(11.4, 69.4, 45.2, 5.2)])]
+    for x, col in ((16, '#2e4fa8'), (26, '#e8b04c'), (36, '#2b2b2b'), (46, '#d7263d')):
+        layers += [(OUTLINE, [rect(x - 3.6, 58, 9, 10.6)]), (col, [rect(x - 2.2, 59.4, 6.2, 7.8)])]
+    layers.append(('#4e8a34', [circle(20, 92, 4), circle(48, 92, 4)]))
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9741,6 +9808,12 @@ ICONS = [
     (0xE234, 'plato_fuerte', plato_fuerte),
     (0xE235, 'menu_completo', menu_completo),
     (0xE236, 'cena_zona_g', cena_zona_g),
+    # Bogotá · Usaquén (v4.5)
+    (0xE237, 'surtido_tejidos', surtido_tejidos),
+    (0xE238, 'surtido_feria', surtido_feria),
+    (0xE239, 'surtido_loza', surtido_loza),
+    (0xE23A, 'gran_surtido', gran_surtido),
+    (0xE23B, 'domingo_usaquen', domingo_usaquen),
 ]
 
 

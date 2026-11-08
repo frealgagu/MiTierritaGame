@@ -1271,6 +1271,18 @@ const BOGOTA = [
   { id: 'bz09', type: 'unlock', station: 'restaurante_zona_g', reward: 400000 },
   { id: 'bz10', type: 'sold', product: 'cena_zona_g', amount: 200, reward: 600000 },
   { id: 'bz11', type: 'research', research: 'guia_gastronomica', reward: 800000 },
+  // Usaquén (v4.5).
+  { id: 'bu01', type: 'unlock', station: 'toldo_tejidos', reward: 200000 },
+  { id: 'bu02', type: 'imported', product: 'ruana', amount: 300, reward: 300000 },
+  { id: 'bu03', type: 'unlock', station: 'toldo_sombreros', reward: 500000 },
+  { id: 'bu04', type: 'level', target: 'route:tm_sillas', level: 25, reward: 700000 },
+  { id: 'bu05', type: 'unlock', station: 'toldo_loza', reward: 1000000 },
+  { id: 'bu06', type: 'produced', product: 'surtido_loza', amount: 500, reward: 1500000 },
+  { id: 'bu07', type: 'unlock', station: 'toldo_mascaras', reward: 2000000 },
+  { id: 'bu08', type: 'imported', product: 'werregue_jar', amount: 1000, reward: 3000000 },
+  { id: 'bu09', type: 'unlock', station: 'mercado_pulgas', reward: 4000000 },
+  { id: 'bu10', type: 'sold', product: 'domingo_usaquen', amount: 200, reward: 6000000 },
+  { id: 'bu11', type: 'research', research: 'sello_artesanal', reward: 8000000 },
   { id: 'bg_final', type: 'sold', product: 'tarde_candelaria', amount: 2000, reward: 0, final: true },
 ];
 

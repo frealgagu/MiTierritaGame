@@ -76,6 +76,7 @@ export const NOTES = {
   salon_santafereno: 'The Santafereño Restaurant serves twice as much (the routes adjust on their own).',
   tostador_tambor: 'The Chorro Roastery roasts twice as much (it asks the truck for twice as much coffee).',
   despensa_grande: 'The Zona G Pantry makes twice as much (it asks both its trucks for twice as much).',
+  telar_grande: 'The Textiles Stall stocks twice as much (it asks both its trucks for twice as much).',
 };
 
 export default {
@@ -267,4 +268,11 @@ export default {
   horno_reposteria: 'Pastry oven',
   chef_regional: 'Regional chef',
   guia_gastronomica: 'Food guide',
+  // Bogotá · Usaquén (v4.5)
+  telar_grande: 'Big loom',
+  toldo_doble: 'Double stall',
+  estanteria_loza: 'Pottery shelves',
+  vitrina_mascaras: 'Mask display case',
+  calle_cerrada: 'Street closed on Sundays',
+  sello_artesanal: 'Craft seal',
 };

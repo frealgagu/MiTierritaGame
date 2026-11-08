@@ -88,4 +88,10 @@ export default {
   parrilla_zona_g: ['Llanero beef is roasted on stakes beside a wood fire.', 'Chapinero lies north of downtown, at the foot of the Cerros.'],
   reposteria_zona_g: ['Amazon açaí is served cold, in a bowl, with banana.', 'Passion fruit juice is made with the strained pulp.'],
   restaurante_zona_g: ['Bogotá has room for the cooking of every region.', 'After a meal, Bogotá offers you a tinto.'],
+  // Bogotá · Usaquén (v4.5)
+  toldo_tejidos: ['On Sundays, Usaquén fills up with craft stalls.', 'A wool ruana from Boyacá keeps you warm on cold Bogotá evenings.'],
+  toldo_sombreros: ['The sombrero vueltiao is woven from caña flecha, on the Coast.', 'The llanero saddle is made of tooled leather.'],
+  toldo_loza: ['La Chamba pottery is polished with a stone before firing.', 'The Eje gift basket has coffee, panela and arequipe.'],
+  toldo_mascaras: ['Ticuna masks are painted on bark cloth.', 'Werregue is woven in a spiral with palm fiber.'],
+  mercado_pulgas: ['Usaquén was a separate town before it became part of Bogotá.', 'The flea market has it all: antiques, records and crafts.'],
 };
