@@ -337,4 +337,10 @@ export default {
   plaza_mercado_zipa: 'Zipaquirá Market Hall',
   mochilas_paseo: 'Trip Backpacks',
   entrada_catedral: 'Salt Cathedral Entrance',
+  // Bogotá · La Candelaria (v4.5)
+  tostadero_chorro: 'Chorro Roastery',
+  cafeteria_septima: 'Séptima Café',
+  chocolateria_candelaria: 'Santa Fe Chocolate House',
+  dulceria_calle11: 'Calle 11 Sweet Shop',
+  casa_colonial: 'Colonial House',
 };

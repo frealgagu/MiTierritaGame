@@ -25,7 +25,7 @@ import { COMPOST_VALUE, compostValueBoost, jeepCount, muleSpeedMult, saleValue }
 import { BY_CHILDREN, JOIN_FROM, PARENT, branchShare, consumers, zoneOf } from '../sim/chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { jeepResting } from '../sim/dispatch.js';
-import { routeActive, routeCapacity, routeRate, routeReserve, routeStations, stationImportRate, tripTimeOf } from '../sim/routes.js';
+import { routeActive, routeCapacity, routeOrigin, routeRate, routeReserve, routeStations, stationImportRate, tripTimeOf } from '../sim/routes.js';
 import { capMult, speedMult } from '../sim/modifiers.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { dispatchMult } from '../sim/modifiers.js';
@@ -69,7 +69,7 @@ function tabsOf(state, id) {
     ['station', '⚙️', t('Estación')],
     ['transport', ...(hasBelt(state.stations[id]?.transport.level ?? 0) ? ['⚡', t('Banda')] : ['🐴', t('Arrieros')])],
   ];
-  for (const imp of STATIONS_BY_ID[id]?.imports ?? []) tabs.push([`route:${imp.route}`, '🚌', ROUTES_BY_ID[imp.route].tab]);
+  for (const imp of STATIONS_BY_ID[id]?.imports ?? []) tabs.push([`route:${imp.route}`, ROUTES_BY_ID[imp.route].icon, ROUTES_BY_ID[imp.route].tab]); // 🚌, o 🚛 la tractomula (v4.5)
   return tabs;
 }
 
@@ -358,7 +358,7 @@ function stationInfo(id) {
     const r = ROUTES_BY_ID[imp.route];
     rows.push({
       key: `import_${imp.product}`,
-      label: `🚌 ${product.name}`,
+      label: `${r.icon} ${product.name}`,
       value: (s, l) => `${formatAmount(s.stations[id].imported[imp.product] ?? 0)} / ${formatNumber(stationImportCap(def, l, speedMult(s, id), imp))} ${product.icon}`,
     });
   }
@@ -399,7 +399,7 @@ function stationInfo(id) {
         ? t('Convierte {a} de otras zonas en {b}', { a: listProducts(def.imports), b: out.name.toLowerCase() })
         : t('Fuente ilimitada de {p}', { p: out.name.toLowerCase() }),
     recipe: inId || def.imports
-      ? `${[...(inId ? [recipe(def.in)] : []), ...(def.joins ?? []).map((j) => `${j.perCycle} ${PRODUCTS[j.product].icon}`), ...(def.imports ?? []).map((imp) => `${imp.perCycle} ${PRODUCTS[imp.product].icon}🚌`)].join(' + ')} <span>➜</span> ${recipe(def.out)}${byId ? ` + ${recipe(def.by)}` : ''}`
+      ? `${[...(inId ? [recipe(def.in)] : []), ...(def.joins ?? []).map((j) => `${j.perCycle} ${PRODUCTS[j.product].icon}`), ...(def.imports ?? []).map((imp) => `${imp.perCycle} ${PRODUCTS[imp.product].icon}${ROUTES_BY_ID[imp.route].icon}`)].join(' + ')} <span>➜</span> ${recipe(def.out)}${byId ? ` + ${recipe(def.by)}` : ''}`
       : `${def.icon} <span>➜</span> ${recipe(def.out)}`,
     facts: FACTS[id],
     milestoneWhat: t('velocidad'),
@@ -508,8 +508,8 @@ function stationStatus(state, id) {
     const routeShort = routeRate(state, r.id) < routeFlow(state, r.id) * 1.02 + 1e-9;
     return {
       text: routeShort
-        ? t('⏸️ Falta {p}: {route} no da abasto. Mejórala (pestaña 🚌 {tab}).', { p: imp.name.toLowerCase(), route: withArticle(r.name), tab: r.tab })
-        : t('⏸️ Falta {p}: {zone} no produce suficiente. Mejora allá la cadena.', { p: imp.name.toLowerCase(), zone: ZONES_BY_ID[r.from].name }),
+        ? t('⏸️ Falta {p}: {route} no da abasto. Mejórala (pestaña 🚌 {tab}).', { p: imp.name.toLowerCase(), route: withArticle(r.name), tab: r.tab }).replace('🚌', r.icon)
+        : t('⏸️ Falta {p}: {zone} no produce suficiente. Mejora allá la cadena.', { p: imp.name.toLowerCase(), zone: routeOrigin(r).name }),
       bad: true,
     };
   }
@@ -575,8 +575,8 @@ function routeInfo(routeId, station) {
   return {
     icon: station ? STATIONS_BY_ID[station].icon : r.icon,
     title: station ? STATIONS_BY_ID[station].name : r.name,
-    subtitle: `${station ? '🚌 ' : ''}${t('{vehicle} trae {p} de {zone}', { vehicle: WithArticle(r.vehicle), p: imp.name.toLowerCase(), zone: ZONES_BY_ID[r.from].name })}`,
-    recipe: `${ZONES_BY_ID[r.from].icon} ${imp.icon} <span>➜</span> ${r.icon} <span>➜</span> ${station ? STATIONS_BY_ID[station].name : ZONES_BY_ID[r.to].name}`,
+    subtitle: `${station ? `${r.icon} ` : ''}${t('{vehicle} trae {p} de {zone}', { vehicle: WithArticle(r.vehicle), p: imp.name.toLowerCase(), zone: routeOrigin(r).name })}`,
+    recipe: `${routeOrigin(r).icon} ${imp.icon} <span>➜</span> ${r.icon} <span>➜</span> ${station ? STATIONS_BY_ID[station].name : ZONES_BY_ID[r.to].name}`,
     milestoneWhat: t('carga'),
     upgradeId: `route:${routeId}`,
     tabs: Boolean(station),
@@ -585,17 +585,20 @@ function routeInfo(routeId, station) {
       { key: 'cap', label: t('Carga por viaje'), value: (s, l) => `${formatAmount(routeCapacity(s, routeId, l))} ${imp.icon}`, next: (l, s) => formatAmount(routeCapacity(s, routeId, l)) },
       { key: 'rate', label: t('Lleva'), value: (s, l) => `${formatRate(routeRate(s, routeId, l))} ${imp.icon}/s`, next: (l, s) => formatRate(routeRate(s, routeId, l)) },
       { key: 'need', label: t('Gastan'), value: (s) => `${formatRate(need(s))} ${imp.icon}/s (${routeStations(s, routeId).length > 1 ? t('{n} estaciones', { n: routeStations(s, routeId).length }) : names(s)})` },
-      { key: 'stock', label: t('Bodega de {zone}', { zone: ZONES_BY_ID[r.from].name }), value: (s) => `${formatAmount(s.zones[r.from].warehouse[r.product] ?? 0)} ${imp.icon}` },
+      // La tractomula trae sin fin (v4.5): no hay bodega de origen que mirar.
+      r.unlimited
+        ? { key: 'stock', label: t('Carga en {zone}', { zone: routeOrigin(r).name }), value: () => t('sin límite') }
+        : { key: 'stock', label: t('Bodega de {zone}', { zone: routeOrigin(r).name }), value: (s) => `${formatAmount(s.zones[r.from].warehouse[r.product] ?? 0)} ${imp.icon}` },
       { key: 'trip', label: t('Ida y vuelta'), value: (s) => `${tripTimeOf(s, r)} s` },
     ],
     status: (s) => {
       const route = s.routes[routeId];
       if (!routeActive(s, routeId)) return { text: t('🔒 Construye {stations} para abrir la ruta.', { stations: listNames(r.stations) }), bad: false };
       if (routeRate(s, routeId) < need(s) * 0.99) return { text: ((v) => (routeStations(s, routeId).length > 1 ? t('⚠️ {stations} gastan {need} y {vehicle} lleva {rate}/s. Sube la ruta al nivel de esas estaciones ({level}).', v) : t('⚠️ {stations} gasta {need} y {vehicle} lleva {rate}/s. Sube la ruta al nivel de la estación ({level}).', v)))({ stations: names(s), need: `${formatRate(need(s))} ${imp.icon}/s`, vehicle: withArticle(r.vehicle), rate: formatRate(routeRate(s, routeId)), level: top(s) }), bad: true };
-      if (route.phase === 'go') return { text: t('🚌 {vehicle} va camino a {zone} con {load}.', { vehicle: WithArticle(r.vehicle), zone: ZONES_BY_ID[r.to].name, load: `${formatAmount(route.load)} ${imp.icon}` }), bad: false };
-      if (route.phase === 'back') return { text: t('↩ {vehicle} vuelve a {zone}.', { vehicle: WithArticle(r.vehicle), zone: ZONES_BY_ID[r.from].name }), bad: false };
-      if ((s.zones[r.from].warehouse[r.product] ?? 0) <= 0) return { text: t('⏳ Esperando {p} en la bodega de {zone}.', { p: imp.name.toLowerCase(), zone: ZONES_BY_ID[r.from].name }), bad: false };
-      return { text: t('🅿️ {vehicle} está cargando en {zone}.', { vehicle: WithArticle(r.vehicle), zone: ZONES_BY_ID[r.from].name }), bad: false };
+      if (route.phase === 'go') return { text: t('🚌 {vehicle} va camino a {zone} con {load}.', { vehicle: WithArticle(r.vehicle), zone: ZONES_BY_ID[r.to].name, load: `${formatAmount(route.load)} ${imp.icon}` }).replace('🚌', r.icon), bad: false };
+      if (route.phase === 'back') return { text: t('↩ {vehicle} vuelve a {zone}.', { vehicle: WithArticle(r.vehicle), zone: routeOrigin(r).name }), bad: false };
+      if (!r.unlimited && (s.zones[r.from].warehouse[r.product] ?? 0) <= 0) return { text: t('⏳ Esperando {p} en la bodega de {zone}.', { p: imp.name.toLowerCase(), zone: routeOrigin(r).name }), bad: false };
+      return { text: t('🅿️ {vehicle} está cargando en {zone}.', { vehicle: WithArticle(r.vehicle), zone: routeOrigin(r).name }), bad: false };
     },
   };
 }
@@ -678,8 +681,8 @@ function eventRouteInfo(routeId, station) {
   return {
     icon: def.icon,
     title: def.name,
-    subtitle: t('🚌 En el evento, {p} llega sola de {zone}', { p: product.name.toLowerCase(), zone: ZONES_BY_ID[r.from].name }),
-    recipe: `${ZONES_BY_ID[r.from].icon} ${product.icon} <span>➜</span> ${r.icon} <span>➜</span> ${def.name}`,
+    subtitle: t('🚌 En el evento, {p} llega sola de {zone}', { p: product.name.toLowerCase(), zone: routeOrigin(r).name }),
+    recipe: `${routeOrigin(r).icon} ${product.icon} <span>➜</span> ${r.icon} <span>➜</span> ${def.name}`,
     milestoneWhat: t('carga (con la estación)'),
     upgradeId: `route:${routeId}`,
     fixed: t('🚌 Sube con la estación'),

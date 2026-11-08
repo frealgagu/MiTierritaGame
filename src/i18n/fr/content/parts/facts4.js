@@ -76,4 +76,10 @@ export default {
   plaza_mercado_zipa: ['Au marché, on mange le piquete : poulet, pommes de terre et maïs.'],
   mochilas_paseo: ['Pour la mine, on emporte une ruana : il fait froid en bas.'],
   entrada_catedral: ['La Cathédrale de sel est creusée à 180 mètres sous terre.', 'La croix de l’autel mesure 16 mètres, taillée dans le sel.'],
+  // Bogotá · La Candelaria (v4.5)
+  tostadero_chorro: ['On dit que Bogotá fut fondée au Chorro de Quevedo, en 1538.', 'Bogotá est à environ 2 600 mètres d’altitude.'],
+  cafeteria_septima: ['La Séptima est l’une des plus vieilles rues de Bogotá.', 'À Bogotá, un petit café noir se commande comme un tinto.'],
+  chocolateria_candelaria: ['Le chocolat santafereño se boit avec du fromage : il fond dans la tasse.', 'On bat le chocolat au molinillo pour qu’il mousse.'],
+  dulceria_calle11: ['Les onces, c’est le goûter : chocolat, pain et fromage.', 'Au centre, on vend des obleas à l’arequipe et des douceurs du pays.'],
+  casa_colonial: ['Les maisons de La Candelaria ont des balcons en bois et des tuiles.', 'La place Bolívar et le Capitole sont à La Candelaria.'],
 };

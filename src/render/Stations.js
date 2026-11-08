@@ -533,6 +533,8 @@ const PLAZA_HOUSE = {
   // Leticia (v3.52): la heladería de asaí, verde agua con remates morados, toldo morado y letrero de helado.
   // Neiva (v4.0): la cafetería del malecón, blanca con remates rojos y amarillos (los colores del San Pedro).
   neiva: { wall: 0xfbf8f1, trims: [0xd7263d, 0xf2c14e, 0x2f7d4f, 0xd7263d, 0x8e44ad, 0xffd700], awning: 0xd7263d, sign: 'cup' },
+  // Bogotá (v4.5): el Tostadero del Chorro de Quevedo, casona azul cielo con remates rojos y verdes.
+  bogota: { wall: 0x8ec5e8, trims: [0xd7263d, 0x2f7d4f, 0xf2c94c, 0xd7263d, 0x8e44ad, 0xffd700], awning: 0xd7263d, sign: 'cup' },
   leticia: { wall: 0x8fd3c4, trims: [0x7b1fa2, 0xf2c14e, 0x2e7d32, 0x7b1fa2, 0xe5737f, 0xffd700], awning: 0x7b1fa2, sign: 'icecream' },
 };
 

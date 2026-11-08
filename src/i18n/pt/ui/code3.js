@@ -184,4 +184,6 @@ export default {
   'Las Salinas de Nemocón': 'As Salinas de Nemocón',
   'La Cocina de la Sabana': 'A Cozinha da Savana',
   'Zipaquirá': 'Zipaquirá',
+  'Carga en {zone}': 'Carga em {zone}',
+  'sin límite': 'sem limite',
 };

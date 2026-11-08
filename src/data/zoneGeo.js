@@ -29,4 +29,6 @@ export const ZONE_GEO = {
   cocina: [4.86, -74.05],
   // Zipaquirá (la Catedral de Sal).
   zipaquira: [5.02, -74.0],
+  // Bogotá (v4.5): La Candelaria.
+  bogota: [4.6, -74.07],
 };

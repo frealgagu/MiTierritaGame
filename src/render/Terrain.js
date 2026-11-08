@@ -6,7 +6,7 @@ import { box, gableRoof, shadow } from './procedural/shapes.js';
 
 const CLIFF = 46; // px de alto del borde del mapa
 // El letrero con el nombre de la zona (v3.12), junto a la carretera; ahí no se pone decoración.
-export const ZONE_SIGN = [18.9, 21.7];
+export const ZONE_SIGN = [18.9, 21.7]; // (en Bogotá, v4.5, corrido `zone.signShift` casillas)
 const SIGN_CELLS = new Set(['18,20', '19,20', '18,21', '19,21', '18,22', '19,22', '17,21', '17,22', '16,22', '16,23', '17,23']); // y la persona de la zona
 
 // Tipo de cada casilla del mapa a partir de los datos de la zona. jeeps: cuántos Willys tiene (v3.9: con
@@ -61,7 +61,35 @@ export class Terrain {
     if (zone.plaza) this.buildPlaza();
     if (zone.walls) this.buildWalls();
     if (zone.sea) this.buildWhales();
+    if (zone.style === 'bogota') this.buildMonserrate();
     this.buildDecor();
+  }
+
+  // Monserrate (Bogotá, v4.5): el cerro que se levanta sobre La Candelaria, con la iglesia blanca en la cumbre y la
+  // línea del funicular que sube.
+  buildMonserrate() {
+    const c = new Container();
+    const g = new Graphics();
+    const [mx, my] = MONSERRATE;
+    const base = iso(mx, my);
+    const top = { x: base.x, y: base.y - 120 };
+    g.poly([base.x - 120, base.y + 30, base.x - 40, top.y + 30, top.x - 14, top.y, top.x + 16, top.y, base.x + 60, top.y + 40, base.x + 140, base.y + 10, base.x + 40, base.y + 70]).fill(0x4e8a34).stroke(OUTLINE);
+    g.poly([top.x + 16, top.y, base.x + 60, top.y + 40, base.x + 140, base.y + 10, base.x + 40, base.y + 70, base.x + 10, top.y + 30]).fill(0x3d6e29);
+    for (const [dx, dy] of [[-70, 10], [-40, -30], [-20, -70], [30, -50], [60, -10], [-90, 30], [20, 20]]) g.circle(base.x + dx, base.y + dy, 7).fill(0x2e5a20);
+    // La línea del funicular, del pie del cerro a la cumbre.
+    g.moveTo(base.x - 60, base.y + 40).lineTo(top.x - 4, top.y + 12).stroke({ width: 2, color: 0x37474f });
+    const cab = { x: base.x - 34, y: base.y - 2 };
+    g.roundRect(cab.x - 6, cab.y - 5, 12, 8, 2).fill(0xd7263d).stroke(OUTLINE);
+    // La iglesia blanca.
+    const ch = new Graphics();
+    box(ch, -0.45, -0.3, 0.9, 0.6, 18, 0xfafafa);
+    gableRoof(ch, -0.45, -0.3, 0.9, 0.6, 18, 8, PAL.roof, 0xfafafa);
+    box(ch, -0.2, 0.15, 0.4, 0.3, 30, 0xfafafa);
+    ch.position.set(top.x, top.y + 6);
+    c.addChild(g, ch);
+    c.zIndex = depth(mx - 3, my - 3); // detrás de todo lo que está en el mapa
+    c.grid = [mx, my];
+    this.decor.push(c);
   }
 
   // La plaza de Vélez (v3.29): la iglesia de una torre con su atrio, la pila, árboles, bancas y faroles,
@@ -123,6 +151,7 @@ export class Terrain {
         else if (type === 'plaza') color = mix(0xd9c9a8, 0xc4b08a, v * 0.5);
         else if (type === 'plot' || type === 'building') color = mix(PAL.plot, 0xc9a06c, v * 0.4);
         else if (sea && (gx === 0 || gy === 0)) color = mix(this.zone.sea ? 0xb8a27a : 0xe9d8a6, this.zone.sea ? 0xa8926a : 0xdcc78e, v * 0.6); // la playa (en el Pacífico, de arena oscura)
+        else if (this.zone.style === 'bogota' && gy <= 3) color = mix(0x4e8a34, 0x3d7a2a, v * 0.6); // los Cerros (v4.5)
         else color = mix(PAL.grass, (gx + gy) % 2 ? 0x8cc65a : 0x6fae44, 0.35 + v * 0.3);
         g.poly(isoPoly([[gx, gy], [gx + 1, gy], [gx + 1, gy + 1], [gx, gy + 1]])).fill(color);
 
@@ -357,10 +386,20 @@ export class Terrain {
       for (let gy = 0; gy < n; gy++) {
         // Dentro de la muralla de Cartagena (v3.45) las casas van pegadas, como en el centro histórico.
         const walled = this.zone.walls && gx > 0 && gy > 0 && gx < 12 && gy < 11;
-        if (!this.isFree(gx, gy, walled ? 0 : 1, base)) continue;
+        // En Bogotá (v4.5), los Cerros Orientales: el borde de arriba a la derecha, tupido de eucaliptos.
+        const cerros = this.zone.style === 'bogota' && gy <= 3;
+        if (!this.isFree(gx, gy, walled || cerros ? 0 : 1, base)) continue;
         const r = rng();
         let obj = null;
-        if (this.zone.theme === 'town') {
+        if (this.zone.style === 'bogota') {
+          // Bogotá (v4.5): al pie de los Cerros, La Candelaria, de casas coloniales de colores; el resto de la ciudad,
+          // edificios de ladrillo, eucaliptos y faroles.
+          const centro = gx >= 24 && gx <= 42 && gy <= 24;
+          if (cerros) obj = MONSERRATE_CELLS(gx, gy) ? null : r < 0.5 ? eucalyptus(rng) : r < 0.6 ? rock(rng) : null;
+          else if (r < 0.1) obj = centro && r < 0.075 ? townHouse(rng, 'bogota') : brickBuilding(rng);
+          else if (r < 0.13) obj = eucalyptus(rng);
+          else if (r < 0.145) obj = streetLamp();
+        } else if (this.zone.theme === 'town') {
           // Pueblo: casitas de colores, guayacanes florecidos, faroles y alguna palma de cera. En Salento
           // (v3.12), más palmas de cera, las del valle de Cocora (los mismos números de rng: el resto del
           // mapa no se mueve).
@@ -588,7 +627,7 @@ export class Terrain {
           else if (r < 0.15) obj = coffeeBush(rng);
           else if (r < 0.17) obj = rock(rng);
         }
-        if (!obj || !this.isFree(gx, gy, walled ? 0 : 1) || SIGN_CELLS.has(`${gx},${gy}`) || this.wallCells?.has(`${gx},${gy}`)) continue;
+        if (!obj || !this.isFree(gx, gy, walled ? 0 : 1) || SIGN_CELLS.has(`${gx - (this.zone.signShift?.[0] ?? 0)},${gy - (this.zone.signShift?.[1] ?? 0)}`) || this.wallCells?.has(`${gx},${gy}`)) continue;
         this.occupied.add(`${gx},${gy}`);
         const ox = 0.3 + rng() * 0.4;
         const oy = 0.3 + rng() * 0.4;
@@ -990,6 +1029,7 @@ const FARM_SOIL = {
   cartagena: (v) => mix(0xe2d2ae, 0xcfbd94, v * 0.6),
   villavo: (v) => mix(0xd9c4a0, 0xc9b088, v * 0.6), // el parque de Villavicencio (v3.36)
   buenaventura: (v) => mix(0xc4c8c8, 0xb0b6b8, v * 0.6), // el malecón de Buenaventura (v3.43)
+  bogota: (v) => mix(0xb0a493, 0x9a8e7d, v * 0.6), // la plazoleta empedrada del Chorro de Quevedo (v4.5)
   villa: (v) => mix(0xb9b2a5, 0xa39b8c, v * 0.6), // la plaza empedrada de Villa de Leyva // la plaza de piedra coralina // la plaza de piedra amarilla
 };
 
@@ -1007,6 +1047,12 @@ const CARTAGENA_WALLS = [0xf6c244, 0xf28c9a, 0x6fc3e0, 0xf4a261, 0xb8e0a8, 0xfbf
 const CARTAGENA_TRIMS = [0x7a4a22, 0x7a4a22, 0x2f7d4f, 0x5d3a1e];
 // Villa de Leyva (v3.27): casonas blancas de dos pisos con balcones y puertas verdes.
 const VILLA_WALLS = [0xfbf8f1, 0xfbf8f1, 0xf7f4ee];
+// Monserrate (v4.5): dónde va el cerro, en los Cerros de Bogotá, y las casillas que deja libres de eucaliptos.
+const MONSERRATE = [38.5, 1.2];
+const MONSERRATE_CELLS = (gx, gy) => gx >= 35 && gx <= 42 && gy <= 3;
+// La Candelaria (v4.5): fachadas de colores y balcones de madera.
+const CANDELARIA_WALLS = [0xf2c94c, 0x5b8fd6, 0xf0a04b, 0xe57373, 0x8ec5e8, 0x81c784, 0xf3a6c0];
+const CANDELARIA_TRIMS = [0x5d4037, 0x6d4c41, 0x2f7d4f, 0x1e5aa8];
 const VILLA_TRIMS = [0x2f7d4f, 0x2f7d4f, 0x1f5a38, 0x5d3a1e];
 // Villavicencio (v3.36): casas de colores vivos, de un piso, con remates de otro color.
 const VILLAVO_WALLS = [0xf6d860, 0xf28c9a, 0x6fc3e0, 0xb8e0a8, 0xf4a261, 0xfbf8f1];
@@ -1019,11 +1065,12 @@ function townHouse(rng, style) {
   const g = new Graphics();
   const cartagena = style === 'cartagena';
   const villa = style === 'villa';
-  const salento = style === 'salento' || cartagena || villa; // de dos pisos con balcón
+  const bogota = style === 'bogota'; // La Candelaria (v4.5): de colores, con balcón de madera
+  const salento = style === 'salento' || cartagena || villa || bogota; // de dos pisos con balcón
   const villavo = style === 'villavo';
   const puerto = style === 'buenaventura' || style === 'leticia';
-  const walls = style === 'barichara' ? BARICHARA_WALLS : cartagena ? CARTAGENA_WALLS : villa ? VILLA_WALLS : villavo ? VILLAVO_WALLS : puerto ? PUERTO_WALLS : salento ? SALENTO_WALLS : HOUSE_WALLS;
-  const trims = cartagena ? CARTAGENA_TRIMS : villa ? VILLA_TRIMS : villavo ? VILLAVO_TRIMS : puerto ? PUERTO_TRIMS : salento ? SALENTO_TRIMS : HOUSE_TRIMS;
+  const walls = style === 'barichara' ? BARICHARA_WALLS : bogota ? CANDELARIA_WALLS : cartagena ? CARTAGENA_WALLS : villa ? VILLA_WALLS : villavo ? VILLAVO_WALLS : puerto ? PUERTO_WALLS : salento ? SALENTO_WALLS : HOUSE_WALLS;
+  const trims = bogota ? CANDELARIA_TRIMS : cartagena ? CARTAGENA_TRIMS : villa ? VILLA_TRIMS : villavo ? VILLAVO_TRIMS : puerto ? PUERTO_TRIMS : salento ? SALENTO_TRIMS : HOUSE_TRIMS;
   const wall = walls[Math.floor(rng() * walls.length)];
   const trim = trims[Math.floor(rng() * trims.length)];
   const w = 0.8 + rng() * 0.2;
@@ -1059,6 +1106,33 @@ function townHouse(rng, style) {
       g.circle(p.x + 2, p.y + 2, 1.6).fill(0x4e8a33);
     }
   }
+  c.addChild(g);
+  return c;
+}
+
+// Edificio de ladrillo (Bogotá, v4.5): el ladrillo rojo a la vista, de tres a seis pisos, con ventanas en hileras y,
+// a veces, el tanque del agua en la terraza.
+function brickBuilding(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const floors = 3 + Math.floor(rng() * 4);
+  const w = 0.8 + rng() * 0.15;
+  const d = 0.8 + rng() * 0.15;
+  const h = floors * 11 + 4;
+  const brick = [0xa5492a, 0xb35a33, 0x9c4426][Math.floor(rng() * 3)];
+  shadow(g, 8, 6, 34, 13);
+  box(g, -w / 2, -d / 2, w, d, h, brick);
+  // Hileras de ventanas en las dos caras que se ven.
+  for (let f = 0; f < floors; f++) {
+    const z = 6 + f * 11;
+    for (const at of [0.25, 0.75]) {
+      g.poly(isoPoly([[-w / 2 + w * at - 0.11, d / 2, z], [-w / 2 + w * at + 0.11, d / 2, z], [-w / 2 + w * at + 0.11, d / 2, z + 6], [-w / 2 + w * at - 0.11, d / 2, z + 6]])).fill(0xcfe3ee).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.poly(isoPoly([[w / 2, -d / 2 + d * at - 0.11, z], [w / 2, -d / 2 + d * at + 0.11, z], [w / 2, -d / 2 + d * at + 0.11, z + 6], [w / 2, -d / 2 + d * at - 0.11, z + 6]])).fill(0xb5ccd8).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    }
+  }
+  // El remate de la terraza y, a veces, el tanque.
+  box(g, -w / 2 - 0.03, -d / 2 - 0.03, w + 0.06, d + 0.06, 2, shade(brick, 0.85), { z: h });
+  if (rng() < 0.5) box(g, -0.15, -0.15, 0.3, 0.3, 7, 0x9aa3a8, { z: h + 2 });
   c.addChild(g);
   return c;
 }

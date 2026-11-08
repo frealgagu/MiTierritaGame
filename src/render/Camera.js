@@ -9,6 +9,7 @@ export class Camera {
     this.world = world;
     this.canvas = canvas;
     this.bounds = bounds; // { minX, maxX, minY, maxY } del mundo en px
+    this.minZoom = bounds.minZoom ?? MIN_ZOOM; // en el mapa grande de Bogotá (v4.5) se aleja más
     this.zoom = 1;
     this.x = 0; // centro de la vista en coordenadas del mundo
     this.y = 0;
@@ -37,7 +38,7 @@ export class Camera {
   fit(rect = this.bounds, topPad = 90) {
     const zx = this.viewW / (rect.maxX - rect.minX);
     const zy = (this.viewH - topPad) / (rect.maxY - rect.minY);
-    this.zoom = clamp(Math.min(zx, zy), MIN_ZOOM, 1.3);
+    this.zoom = clamp(Math.min(zx, zy), this.minZoom, 1.3);
     this.x = (rect.minX + rect.maxX) / 2;
     this.y = (rect.minY + rect.maxY) / 2 - topPad / 2 / this.zoom;
     this.apply();
@@ -59,7 +60,7 @@ export class Camera {
 
   zoomAt(factor, sx, sy) {
     const before = this.toWorld(sx, sy);
-    this.zoom = clamp(this.zoom * factor, MIN_ZOOM, MAX_ZOOM);
+    this.zoom = clamp(this.zoom * factor, this.minZoom, MAX_ZOOM);
     this.apply();
     const after = this.toWorld(sx, sy);
     this.x += before.x - after.x;

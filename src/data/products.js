@@ -419,6 +419,14 @@ export const PRODUCTS = {
   mochila_paseo: { name: 'Mochila del paseo', zone: 'zipaquira', value: 2000000, icon: ICON.mochilaPaseo, color: 0x8d6e63 },
   visita_catedral: { name: 'Visita a la Catedral de Sal', zone: 'zipaquira', value: 24000000, icon: ICON.catedralSal, color: 0x3949ab },
 
+  // Bogotá · La Candelaria (v4.5): la región que no produce nada propio; todo llega en tractomula. Los números de una
+  // primera zona (como los Achirales), comprimidos en cinco estaciones.
+  cafe_capitalino: { name: 'Café capitalino', zone: 'bogota', value: 1, icon: ICON.cafeCapitalino, color: 0x6d3b1e },
+  tinto_bizcochos: { name: 'Tinto con bizcochos', zone: 'bogota', value: 3, icon: ICON.tintoBizcochos, color: 0x2b1a10 },
+  chocolate_completo: { name: 'Chocolate completo', zone: 'bogota', value: 8, icon: ICON.santafereno, color: 0x6d3b1e },
+  onces_bogotanas: { name: 'Onces bogotanas', zone: 'bogota', value: 40, icon: ICON.oncesBogotanas, color: 0xa1693f },
+  tarde_candelaria: { name: 'Tarde en La Candelaria', zone: 'bogota', value: 250, icon: ICON.tardeCandelaria, color: 0xf2c94c },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

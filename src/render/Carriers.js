@@ -355,3 +355,79 @@ export class ChivaView extends Container {
     }
   }
 }
+
+// Tractomula (v4.5, Bogotá): cabina roja y remolque largo con la lona del color de lo que trae. A diferencia de la
+// chiva, se ve hacia dónde va: la cabina va adelante. Misma forma de usarla que ChivaView.
+export class TractomulaView extends Container {
+  constructor(productId) {
+    super();
+    this.color = PRODUCTS[productId]?.color ?? 0xc8a26a;
+    this.views = { xp: this.drawTruck(true, 1), xn: this.drawTruck(true, -1), yp: this.drawTruck(false, 1), yn: this.drawTruck(false, -1) };
+    this.addChild(...Object.values(this.views));
+  }
+
+  // alongX: si va por el eje gx; dir: hacia dónde mira la cabina (+1 o −1).
+  drawTruck(alongX, dir) {
+    const c = new Container();
+    const g = new Graphics();
+    const L = 2.3;
+    const W = 0.62;
+    const [w, d] = alongX ? [L, W] : [W, L];
+    const x0 = -w / 2;
+    const y0 = -d / 2;
+    const s = iso(0, 0);
+    shadow(g, s.x, s.y + 2, 58, 22, 0.28);
+    // Un tramo a lo largo del camión, medido desde la cola (0) hasta la trompa (L).
+    const span = (a0, a1) => (dir > 0 ? [a0, a1] : [L - a1, L - a0]);
+    const seg = (a0, a1, z, h, color, inset = 0) => {
+      const [lo, hi] = span(a0, a1);
+      if (alongX) box(g, x0 + lo, y0 + inset, hi - lo, d - 2 * inset, h, color, { z });
+      else box(g, x0 + inset, y0 + lo, w - 2 * inset, hi - lo, h, color, { z });
+    };
+    const wheel = (a) => {
+      const [lo] = span(a, a);
+      const p = alongX ? iso(x0 + lo, y0 + d, 5) : iso(x0 + w, y0 + lo, 5);
+      g.ellipse(p.x, p.y, 5.5, 5.5).fill(0x2b2b2b);
+      g.circle(p.x, p.y, 2).fill(0xb0b7bd);
+    };
+    const trailer = () => {
+      for (const a of [0.22, 0.52]) wheel(a);
+      seg(0.02, 1.66, 4, 3, 0x5f6b73); // chasis
+      seg(0, 1.68, 7, 19, 0xeceff1); // furgón
+      seg(0, 1.68, 13, 7, this.color, -0.01); // la franja de la lona, del color de la carga
+    };
+    const cab = () => {
+      for (const a of [1.88, 2.14]) wheel(a);
+      seg(1.74, 2.3, 4, 14, 0xd7263d); // cabina
+      seg(1.74, 2.0, 18, 6, 0xb71c2c); // dormitorio y deflector
+      // Parabrisas en la cara de adelante que se ve (solo si la trompa mira hacia el que mira).
+      if (dir > 0) {
+        const p = alongX ? iso(x0 + w, y0 + d / 2, 13) : iso(x0 + w / 2, y0 + d, 13);
+        g.roundRect(p.x - 6, p.y - 4, 12, 7, 2).fill(0xbfe3f2).stroke(OUTLINE);
+      }
+      // Ventana de la puerta, en el costado que se ve.
+      const [lo, hi] = span(1.92, 2.18);
+      const q = alongX ? iso(x0 + (lo + hi) / 2, y0 + d, 13) : iso(x0 + w, y0 + (lo + hi) / 2, 13);
+      g.roundRect(q.x - 4, q.y - 3, 8, 6, 1.5).fill(0xbfe3f2).stroke(OUTLINE);
+    };
+    // Primero lo de atrás (lo más lejos de quien mira), después lo de adelante.
+    if (dir > 0) {
+      trailer();
+      cab();
+    } else {
+      cab();
+      trailer();
+    }
+    c.addChild(g);
+    return c;
+  }
+
+  place(gx, gy, dx, dy, _load) {
+    const p = iso(gx, gy);
+    this.position.set(p.x, p.y);
+    this.zIndex = CHIVA_LAYER + depth(gx, gy);
+    const alongX = Math.abs(dx) > Math.abs(dy);
+    const key = alongX ? (dx >= 0 ? 'xp' : 'xn') : dy >= 0 ? 'yp' : 'yn';
+    for (const [k, v] of Object.entries(this.views)) v.visible = k === key;
+  }
+}

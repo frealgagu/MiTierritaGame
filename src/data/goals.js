@@ -1231,5 +1231,36 @@ const ZIPAQUIRA = [
   { id: 'cz_final', type: 'sold', product: 'visita_catedral', amount: 7000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS, salinas: SALINAS, cocina: COCINA, zipaquira: ZIPAQUIRA };
+// Bogotá (v4.5): una sola zona grande, que llega barrio por barrio. Por ahora La Candelaria, con los números de una
+// primera zona (los Achirales) y las tractomulas. El final provisional (vender tardes en La Candelaria) se moverá al
+// de la Gran Feria cuando lleguen los demás barrios.
+const BOGOTA = [
+  { id: 'bg01', type: 'sold', product: 'cafe_capitalino', amount: 20, reward: 15 },
+  { id: 'bg02', type: 'level', target: 'tostadero_chorro', level: 5, reward: 20 },
+  { id: 'bg03', type: 'level', target: 'route:tm_cafe', level: 5, reward: 25 },
+  { id: 'bg04', type: 'unlock', station: 'cafeteria_septima', reward: 30 },
+  { id: 'bg05', type: 'produced', product: 'tinto_bizcochos', amount: 50, reward: 80 },
+  { id: 'bg06', type: 'level', target: 'tostadero_chorro', level: 10, reward: 100 },
+  { id: 'bg07', type: 'level', target: 'route:tm_bizcochos', level: 5, reward: 120 },
+  { id: 'bg08', type: 'level', target: 'dispatch:bogota', level: 5, reward: 150 },
+  { id: 'bg09', type: 'unlock', station: 'chocolateria_candelaria', reward: 300 },
+  { id: 'bg10', type: 'produced', product: 'chocolate_completo', amount: 200, reward: 400 },
+  { id: 'bg11', type: 'research', research: 'herraduras_bog', reward: 500 },
+  { id: 'bg12', type: 'income', zone: 'bogota', perSecond: 5, reward: 600 },
+  { id: 'bg13', type: 'level', target: 'route:tm_amasijos', level: 10, reward: 800 },
+  { id: 'bg14', type: 'unlock', station: 'dulceria_calle11', reward: 1500 },
+  { id: 'bg15', type: 'produced', product: 'onces_bogotanas', amount: 100, reward: 2000 },
+  { id: 'bg16', type: 'researchCount', count: 3, reward: 2500 },
+  { id: 'bg17', type: 'income', zone: 'bogota', perSecond: 20, reward: 4000 },
+  { id: 'bg18', type: 'allLevels', zone: 'bogota', level: 10, reward: 5000 },
+  { id: 'bg19', type: 'imported', product: 'cocada', amount: 500, reward: 8000 },
+  { id: 'bg20', type: 'unlock', station: 'casa_colonial', reward: 40000 },
+  { id: 'bg21', type: 'sold', product: 'tarde_candelaria', amount: 50, reward: 50000 },
+  { id: 'bg22', type: 'research', research: 'barrio_patrimonio', reward: 80000 },
+  { id: 'bg23', type: 'allLevels', zone: 'bogota', level: 25, reward: 100000 },
+  { id: 'bg24', type: 'sold', product: 'tarde_candelaria', amount: 500, reward: 150000 },
+  { id: 'bg_final', type: 'sold', product: 'tarde_candelaria', amount: 2000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS, salinas: SALINAS, cocina: COCINA, zipaquira: ZIPAQUIRA, bogota: BOGOTA };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

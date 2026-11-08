@@ -337,4 +337,10 @@ export default {
   plaza_mercado_zipa: 'Halle de Zipaquirá',
   mochilas_paseo: 'Sacs de l’excursion',
   entrada_catedral: 'Entrée de la Cathédrale de sel',
+  // Bogotá · La Candelaria (v4.5)
+  tostadero_chorro: 'Torréfaction du Chorro',
+  cafeteria_septima: 'Café de la Séptima',
+  chocolateria_candelaria: 'Chocolaterie santafereña',
+  dulceria_calle11: 'Confiserie de la Calle 11',
+  casa_colonial: 'Maison coloniale',
 };

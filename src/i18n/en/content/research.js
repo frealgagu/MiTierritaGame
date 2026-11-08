@@ -74,6 +74,7 @@ export const NOTES = {
   floristas: 'The Plaza Flower Shop works twice as fast (it asks the Flowers for twice as many boxes).',
   canastos_mimbre: 'The Basket Maker works twice as fast (the routes adjust on their own).',
   salon_santafereno: 'The Santafereño Restaurant serves twice as much (the routes adjust on their own).',
+  tostador_tambor: 'The Chorro Roastery roasts twice as much (it asks the truck for twice as much coffee).',
 };
 
 export default {
@@ -249,4 +250,12 @@ export default {
   mochilas_fique: 'Fique backpacks',
   guias_mineros: 'Miner guides',
   maravilla_colombia: 'Wonder of Colombia',
+  // Bogotá · La Candelaria (v4.5)
+  tostador_tambor: 'Drum roaster',
+  greca_grande: 'Big coffee urn',
+  molinillos: 'Wooden molinillos',
+  queso_ubate: 'Ubaté cheese',
+  pailas_dulceria: 'Copper pans',
+  casona_restaurada: 'Restored mansion',
+  barrio_patrimonio: 'Heritage neighborhood',
 };

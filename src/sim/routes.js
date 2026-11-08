@@ -5,6 +5,8 @@ import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { stationImportCap, stationRate, TRANSPORT_MARGIN } from './rules.js';
 import { speedMult } from './modifiers.js';
+import { REGION_OF_ZONE, REGIONS_BY_ID } from '../data/regions.js';
+import { ZONES_BY_ID } from '../data/zones/index.js';
 
 // Lo que la bodega de origen guarda para una ruta, en cargas del vehículo.
 export const ROUTE_STOCK = 1.5;
@@ -21,10 +23,17 @@ export function routeStations(state, routeId) {
   return ROUTES_BY_ID[routeId].stations.filter((id) => state.stations[id]);
 }
 
+// Tractomulas (v4.5, Bogotá): rutas sin zona de origen en la partida (`unlimited`), que traen de otra región
+// (`origin`) una carga que no se acaba y no le quitan nada a esa región. Solo las frena su nivel.
+// La región de una ruta: la de su zona de origen o, en las tractomulas, la de su destino.
+export const routeRegion = (r) => REGION_OF_ZONE[r.from ?? r.to];
+// De dónde viene una ruta, para los textos: la zona de origen o, en las tractomulas, la región ({ name, icon }).
+export const routeOrigin = (r) => (r.unlimited ? REGIONS_BY_ID[r.origin] : ZONES_BY_ID[r.from]);
+
 // La ruta funciona cuando existe alguna estación que abastece (y la zona de origen está abierta).
 export function routeActive(state, routeId) {
   const r = ROUTES_BY_ID[routeId];
-  return routeStations(state, routeId).length > 0 && Boolean(state.zones[r.from]?.unlocked);
+  return routeStations(state, routeId).length > 0 && (r.unlimited || Boolean(state.zones[r.from]?.unlocked));
 }
 
 // Unidades por segundo del producto que gasta una estación a toda marcha (a `level`, o a su nivel).
@@ -98,8 +107,9 @@ export function stepRoute(state, routeId, dt, bus) {
   const half = tripTimeOf(state, r) / 2;
 
   if (route.phase === 'idle') {
-    const wh = state.zones[r.from].warehouse;
-    const stock = wh[r.product] ?? 0;
+    // La tractomula siempre encuentra carga (v4.5).
+    const wh = r.unlimited ? null : state.zones[r.from].warehouse;
+    const stock = r.unlimited ? Infinity : wh[r.product] ?? 0;
     const want = Math.min(routeCapacity(state, routeId), routeDemand(state, routeId));
     if (want <= 0.01) {
       route.waited = 0;
@@ -108,8 +118,10 @@ export function stepRoute(state, routeId, dt, bus) {
     route.waited = stock > 0 ? route.waited + dt : 0;
     if (stock >= want || (stock > 0 && route.waited >= r.maxWait / chivaSpeed(state))) {
       route.load = Math.min(stock, want);
-      wh[r.product] = stock - route.load;
-      if (wh[r.product] <= 1e-9) delete wh[r.product];
+      if (wh) {
+        wh[r.product] = stock - route.load;
+        if (wh[r.product] <= 1e-9) delete wh[r.product];
+      }
       route.phase = 'go';
       route.t = 0;
       route.waited = 0;

@@ -8073,6 +8073,112 @@ const DRAW = {
     this.animate(0);
   },
 
+  // --- Bogotá · La Candelaria (v4.5): casas coloniales de colores, balcones de madera y tejas de barro ---
+
+  // Cafetería de la Séptima: casa naranja de esquina con el toldo a rayas, las mesitas afuera y el letrero del tinto.
+  cafeteria_septima(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.1, 1.4, 28, ctx, { wall: 0xf0a04b, roofH: 14 });
+    door(g, hx, hy, 1.4, 0.6, 16, 0x1e5aa8);
+    windowOnRight(this, g, hx, hy, 2.1, 0.7, 14, 0x1e5aa8);
+    // El toldo a rayas sobre la puerta.
+    const a = iso(hx + 0.2, hy + 1.4, 20);
+    const b = iso(hx + 1.4, hy + 1.4, 20);
+    const c = iso(hx + 1.4, hy + 1.85, 15);
+    const d = iso(hx + 0.2, hy + 1.85, 15);
+    g.poly([a.x, a.y, b.x, b.y, c.x, c.y, d.x, d.y]).fill(0xfafafa).stroke(OUTLINE);
+    for (let k = 0; k < 6; k += 2) {
+      const p0 = iso(hx + 0.2 + k * 0.2, hy + 1.4, 20);
+      const p1 = iso(hx + 0.4 + k * 0.2, hy + 1.4, 20);
+      const p2 = iso(hx + 0.4 + k * 0.2, hy + 1.85, 15);
+      const p3 = iso(hx + 0.2 + k * 0.2, hy + 1.85, 15);
+      g.poly([p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y]).fill(0xd7263d);
+    }
+    for (const [tx, ty] of [[0.7, 2.5], [1.8, 2.4]].slice(0, 1 + Math.min(ctx.tier, 1))) {
+      const p = iso(x + tx, y + ty);
+      shadow(g, p.x, p.y + 1, 10, 4);
+      g.rect(p.x - 1, p.y - 9, 2, 9).fill(0x555555);
+      g.ellipse(p.x, p.y - 9, 7, 3.5).fill(0xffffff).stroke(OUTLINE);
+      g.ellipse(p.x - 2, p.y - 11, 1.8, 1.2).fill(0xfafafa).stroke({ width: 0.6, color: 0x3a2418 });
+      g.ellipse(p.x + 2.5, p.y - 10.5, 2.4, 1).fill(PRODUCTS.bizcochos.color);
+    }
+    const s = iso(hx + 2.1, hy + 0.2, 30);
+    g.roundRect(s.x - 2, s.y - 10, 16, 10, 2).fill(0x2b1a10).stroke(OUTLINE);
+    g.circle(s.x + 6, s.y - 5, 2.6).fill(0xfafafa);
+  },
+
+  // Chocolatería santafereña: casona azul de dos pisos con balcón de madera; adentro hierve la chocolatera.
+  chocolateria_candelaria(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    const up = Math.max(ctx.up, UPPER_FLOOR);
+    house(this, g, hx, hy, 2.3, 1.6, 30, { ...ctx, up }, { wall: 0x5b8fd6, roofH: 15 });
+    door(g, hx, hy, 1.6, 0.6, 17, 0x6d4c41);
+    door(g, hx, hy, 1.6, 1.5, 17, 0x6d4c41);
+    windowOnRight(this, g, hx, hy, 2.3, 0.8, 14, 0xffe082);
+    const z = 22 + up / 2;
+    g.poly(isoPoly([[hx, hy + 1.6, z], [hx + 2.3, hy + 1.6, z], [hx + 2.3, hy + 1.85, z], [hx, hy + 1.85, z]])).fill(0x5d4037).stroke(OUTLINE);
+    for (let k = 0; k <= 10; k++) {
+      const a = iso(hx + (2.3 * k) / 10, hy + 1.85, z);
+      const b = iso(hx + (2.3 * k) / 10, hy + 1.85, z + 7);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.2, color: 0x6d4c41 });
+    }
+    // El letrero: un pocillo de chocolate.
+    const s = iso(hx + 1.05, hy + 1.6, 18);
+    g.roundRect(s.x - 9, s.y - 8, 18, 9, 2).fill(0xfff3d6).stroke(OUTLINE);
+    g.ellipse(s.x, s.y - 3.5, 4, 2.4).fill(PRODUCTS.chocolate_completo.color);
+    this.smokePoints.push(iso(hx + 1.8, hy + 0.5, 30 + up + 15));
+  },
+
+  // Dulcería de la Calle 11: local rosado con la vitrina llena de dulces de colores y el toldo verde.
+  dulceria_calle11(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.2, 1.4, 27, ctx, { wall: 0xf3a6c0, roofH: 13 });
+    door(g, hx, hy, 1.4, 1.7, 16, 0x2f7d4f);
+    // La vitrina: el mueble de vidrio con los frascos y las bandejas.
+    box(g, hx + 0.25, hy + 1.5, 1.05, 0.45, 9, 0xdff3fb);
+    const colors = [PRODUCTS.cocada.color, PRODUCTS.bocadillo_crate.color, 0xfafafa, 0xe57373, PRODUCTS.onces_bogotanas.color];
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 2); k++) {
+      const p = iso(hx + 0.38 + k * 0.2, hy + 1.72, 9);
+      g.circle(p.x, p.y - 1.5, 2.2).fill(colors[k % colors.length]).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+    }
+    const a = iso(hx + 0.1, hy + 1.4, 22);
+    const b = iso(hx + 2.1, hy + 1.4, 22);
+    const c = iso(hx + 2.1, hy + 1.8, 18);
+    const d = iso(hx + 0.1, hy + 1.8, 18);
+    g.poly([a.x, a.y, b.x, b.y, c.x, c.y, d.x, d.y]).fill(0x2f7d4f).stroke(OUTLINE);
+    windowOnRight(this, g, hx, hy, 2.2, 0.7, 14, 0x2f7d4f);
+  },
+
+  // Casa colonial: la casona amarilla de dos pisos con balcón corrido de madera, geranios y el farol en la esquina.
+  casa_colonial(g, x, y, ctx) {
+    const hx = x + 0.2;
+    const hy = y + 0.2;
+    const up = Math.max(ctx.up, UPPER_FLOOR);
+    house(this, g, hx, hy, 2.5, 1.7, 30, { ...ctx, up }, { wall: 0xf2c94c, roofH: 16 });
+    door(g, hx, hy, 1.7, 0.8, 18, 0x1e5aa8);
+    door(g, hx, hy, 1.7, 1.8, 18, 0x1e5aa8);
+    windowOnRight(this, g, hx, hy, 2.5, 0.85, 14, 0x1e5aa8);
+    const z = 22 + up / 2;
+    g.poly(isoPoly([[hx, hy + 1.7, z], [hx + 2.5, hy + 1.7, z], [hx + 2.5, hy + 1.98, z], [hx, hy + 1.98, z]])).fill(0x5d4037).stroke(OUTLINE);
+    for (let k = 0; k <= 12; k++) {
+      const a = iso(hx + (2.5 * k) / 12, hy + 1.98, z);
+      const b = iso(hx + (2.5 * k) / 12, hy + 1.98, z + 7);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.2, color: 0x6d4c41 });
+    }
+    for (const bx of [0.3, 0.95, 1.6, 2.25]) {
+      const p = iso(hx + bx, hy + 1.98, z + 8);
+      g.rect(p.x - 2.5, p.y - 3, 5, 3).fill(0xa1693f);
+      for (const [dx, dy] of [[-2, -4], [1.5, -5], [0, -6.5]]) g.circle(p.x + dx, p.y + dy, 1.8).fill(0xd7263d);
+    }
+    const l = iso(hx + 2.5, hy + 1.7, 24);
+    g.rect(l.x - 1, l.y - 2, 6, 2).fill(0x2b2b2b);
+    g.rect(l.x + 3, l.y - 8, 6, 8).fill(0xffd27a).stroke({ width: 1.5, color: 0x2b2b2b });
+    this.lights.push({ x: l.x + 6, y: l.y - 4, r: 22 });
+  },
+
   // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja
   // que se amontona para el Secadero.
   huila_wetmill(g, x, y, ctx) {

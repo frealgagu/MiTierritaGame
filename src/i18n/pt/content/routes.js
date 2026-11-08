@@ -102,4 +102,12 @@ export default {
   almuerzos_trucha: ['Rota dos almoços de truta', 'Chiva', 'Truta'],
   canastas: ['Rota das cestas', 'Chiva', 'Cestas'],
   cofres_sal: ['Rota das caixinhas de sal', 'Chiva', 'Sal'],
+  // Bogotá · La Candelaria (v4.5)
+  tm_cafe: ['Carreta do café', 'Carreta', 'Café'],
+  tm_bizcochos: ['Carreta dos biscoitos', 'Carreta', 'Biscoitos'],
+  tm_chocolate: ['Carreta do chocolate', 'Carreta', 'Chocolate'],
+  tm_amasijos: ['Carreta dos pães', 'Carreta', 'Pães'],
+  tm_bocadillos: ['Carreta dos bocadillos', 'Carreta', 'Bocadillos'],
+  tm_cocadas: ['Carreta das cocadas', 'Carreta', 'Cocadas'],
+  tm_flores: ['Carreta das flores', 'Carreta', 'Flores'],
 };

@@ -11,7 +11,7 @@ import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { Effects } from './Effects.js';
 import { FarmView, PlotView, WarehouseView } from './Stations.js';
 import { BuildingView } from './Buildings.js';
-import { ChivaView, JeepView, MuleView } from './Carriers.js';
+import { ChivaView, JeepView, MuleView, TractomulaView } from './Carriers.js';
 import { Belts, GENERAL_SIDE, SEG_LANE, SEG_SIDE } from './Belts.js';
 import { productColors } from './pipeColors.js';
 
@@ -126,14 +126,15 @@ export class Scene {
     // La persona de la zona, junto al letrero (v3.12): al tocarla habla (main.js: onTalk).
     this.onTalk = () => {};
     this.keeper = new KeeperView(this.zone.id, ZONE_LIST.findIndex((z) => z.id === this.zone.id));
-    this.keeper.place(...KEEPER_SPOT);
+    const [sx, sy] = this.zone.signShift ?? [0, 0]; // el mapa grande de Bogotá (v4.5)
+    this.keeper.place(KEEPER_SPOT[0] + sx, KEEPER_SPOT[1] + sy);
     this.keeper.on('pointertap', () => {
       if (!this.camera?.dragged) this.onTalk(this.zone.id);
     });
     this.objects.addChild(this.keeper);
     // Rutas que salen de esta zona o llegan a ella: carretera, letrero y la Chiva.
     this.routes = ROUTES.filter((r) => this.zone.routes?.[r.id]).map((r) => {
-      const view = new ChivaView(r.product);
+      const view = r.vehicle === 'Tractomula' ? new TractomulaView(r.product) : new ChivaView(r.product);
       const open = () => {
         if (!this.camera?.dragged) this.onSelect(`route:${r.id}`);
       };
@@ -158,14 +159,19 @@ export class Scene {
     const left = iso(0, n);
     const right = iso(n, 0);
     const bottom = iso(n, n);
-    this.camera = new Camera(this.world, app.canvas, { minX: left.x, maxX: right.x, minY: -200, maxY: bottom.y });
+    this.camera = new Camera(this.world, app.canvas, { minX: left.x, maxX: right.x, minY: -200, maxY: bottom.y, minZoom: n > 26 ? 0.25 : undefined });
     this.resize(app.screen.width, app.screen.height);
-    // Vista inicial: del cafetal a la bodega.
-    const top = iso(this.zone.farm.x, this.zone.farm.y, 60);
-    const end = iso(...this.zone.jeepRoad.at(-1));
-    const l = iso(this.zone.farm.x, this.zone.farm.y + this.zone.farm.h + 6);
-    const r = iso(this.zone.warehouse.x + 4, this.zone.warehouse.y);
-    this.camera.fit({ minX: l.x, maxX: r.x, minY: top.y, maxY: end.y });
+    // Vista inicial: del cafetal a la bodega (en Bogotá, v4.5, el barrio de `zone.view`: el mapa entero se ve muy lejos).
+    if (this.zone.view) {
+      const v = this.zone.view;
+      this.camera.fit({ minX: iso(v.x0, v.y1).x, maxX: iso(v.x1, v.y0).x, minY: iso(v.x0, v.y0, 60).y, maxY: iso(v.x1, v.y1).y });
+    } else {
+      const top = iso(this.zone.farm.x, this.zone.farm.y, 60);
+      const end = iso(...this.zone.jeepRoad.at(-1));
+      const l = iso(this.zone.farm.x, this.zone.farm.y + this.zone.farm.h + 6);
+      const r = iso(this.zone.warehouse.x + 4, this.zone.warehouse.y);
+      this.camera.fit({ minX: l.x, maxX: r.x, minY: top.y, maxY: end.y });
+    }
 
     this.dayNight = new DayNight(this);
     // Flecha que señala qué tocar (ver HUD.guideTarget).
@@ -261,7 +267,8 @@ export class Scene {
   drawZoneSign() {
     const region = REGIONS_BY_ID[REGION_OF_ZONE[this.zone.id]];
     const view = new ZoneSign(`${this.zone.icon} ${this.zone.name}`, `${region.icon} ${region.name}`);
-    const [gx, gy] = ZONE_SIGN;
+    const [sx, sy] = this.zone.signShift ?? [0, 0];
+    const [gx, gy] = [ZONE_SIGN[0] + sx, ZONE_SIGN[1] + sy];
     const p = iso(gx, gy);
     view.position.set(p.x, p.y);
     view.zIndex = gx + gy;
@@ -309,7 +316,7 @@ export class Scene {
       const station = r.stations.find((id) => this.stations[id] && this.game.state.stations[id]);
       if (!station) return;
       const p = this.stations[station].anchorPoint(70);
-      this.effects.floatText(p.x, p.y, `🚌 +${formatAmount(load)} ${PRODUCTS[r.product].icon}`, { size: 16, color: 0xffe066 });
+      this.effects.floatText(p.x, p.y, `${r.icon} +${formatAmount(load)} ${PRODUCTS[r.product].icon}`, { size: 16, color: 0xffe066 });
     });
     on('routeDeparted', ({ route, load }) => {
       const r = ROUTES.find((x) => x.id === route);

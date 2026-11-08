@@ -89,6 +89,18 @@ export const REGIONS = [
     unlock: { region: 'tolima', zone: 'neiva' },
     wip: true,
   },
+  // Bogotá (v4.5): la región que no produce nada propio. Una sola zona del doble de lado, que llega barrio por barrio,
+  // adonde todo llega en tractomula desde las otras regiones. Se abre al completar Cundinamarca y sigue en obra (`wip`).
+  // Su música, por ahora, la de la Sabana.
+  {
+    id: 'bogota',
+    name: 'Bogotá',
+    icon: ICON.monserrate,
+    zones: ['bogota'],
+    music: 'cundinamarca',
+    unlock: { region: 'cundinamarca', zone: 'zipaquira' },
+    wip: true,
+  },
 ];
 
 export const REGIONS_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]));

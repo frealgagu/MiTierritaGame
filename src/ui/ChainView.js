@@ -7,6 +7,7 @@ import { BY_CHILDREN, CHILDREN, JOIN_FROM, PARENT, branchShare, chainOf, nextToU
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { pendingRoutes, slowConsumers } from '../sim/transport.js';
+import { routeOrigin } from '../sim/routes.js';
 import { withArticle } from '../data/lore.js';
 import { saleValue } from '../sim/modifiers.js';
 import { listJoin, t } from '../i18n/index.js';
@@ -152,7 +153,7 @@ function detailOf(state, a, rows, sel, zone) {
   }
   if (kind === 'route') {
     const r = ROUTES_BY_ID[part];
-    const from = ZONES_BY_ID[r.from];
+    const from = routeOrigin(r);
     const product = PRODUCTS[r.product];
     const id = r.stations.find((sid) => rows[sid]);
     const arriving = id ? r.stations.reduce((n, sid) => n + (rows[sid]?.imported?.[r.product] ?? 0), 0) : 0;
@@ -188,7 +189,7 @@ function detailOf(state, a, rows, sel, zone) {
   // Lo que llega de otras zonas.
   for (const imp of def.imports ?? []) {
     const r = ROUTES_BY_ID[imp.route];
-    const from = ZONES_BY_ID[r.from];
+    const from = routeOrigin(r);
     lines.push(`${t('{p} desde {zone}: llegan {n}/s ({route}).', { p: `${PRODUCTS[imp.product].icon} ${PRODUCTS[imp.product].name}`, zone: `${from.icon} ${from.name}`, n: formatRate(row.imported[imp.product]), route: `${r.icon} ${t('Nv')} ${routeLevel(state, r)}` })}${row.importLimited === r.id ? ` <span class="lost">${t('⏸️ No alcanza: la estación espera.')}</span>` : ''}`);
   }
   // Lo que junta de otra estación de su zona (v4.0).
@@ -411,7 +412,7 @@ function diagram(state, a, rows, locked, zone, width, selected) {
     // Etiquetas de lo que llega de otras zonas, apiladas encima de la estación, a la derecha.
     tagsOf(id).forEach((imp, i) => {
       const r = ROUTES_BY_ID[imp.route];
-      const from = ZONES_BY_ID[r.from];
+      const from = routeOrigin(r);
       const n = tagsOf(id).length;
       const top = b.top - (n - i) * TAG_H;
       const left = b.left + (b.w < NARROW ? 22 : 32);

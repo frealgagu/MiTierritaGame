@@ -55,4 +55,6 @@ export default {
   salinas: 'Welcome to Nemocón, sumercé! Salt comes out of this mountain: it is dissolved into brine, set into loaves and even carved.',
   cocina: 'Come on in, sumercé, the ajiaco is ready! Three potatoes, guascas and corn go in, and it is served with cream and capers.',
   zipaquira: 'You made it to Zipaquirá, sumercé! The journey across the Savanna ends here: let’s go down to the Salt Cathedral.',
+  // Bogotá (v4.5)
+  bogota: 'Welcome to Bogotá, sumercé! Nothing is grown here: everything comes from across the country by truck. Let’s start with a tinto in La Candelaria.',
 };

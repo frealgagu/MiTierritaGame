@@ -515,6 +515,14 @@ export const STATIONS = [
   { id: 'mochilas_paseo', zone: 'zipaquira', name: 'Mochilas del paseo', icon: ICON.mochilaPaseo, in: { almuerzo_plaza_zipa: 1 }, imports: [{ product: 'canasta_sabanera', perCycle: 1, route: 'canastas' }, { product: 'cofre_sal', perCycle: 1, route: 'cofres_sal' }], out: { mochila_paseo: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '4.4' },
   { id: 'entrada_catedral', zone: 'zipaquira', name: 'Entrada a la Catedral de Sal', icon: ICON.catedralSal, in: { mochila_paseo: 4 }, out: { visita_catedral: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '4.4' },
 
+  // Bogotá · La Candelaria (v4.5). Sin fuente propia: el Tostadero del Chorro de Quevedo tuesta el café que trae la
+  // tractomula del Eje Cafetero, y cada estación le suma lo que llega de otra región.
+  { id: 'tostadero_chorro', zone: 'bogota', name: 'Tostadero del Chorro', icon: ICON.cafeCapitalino, imports: [{ product: 'coffee_bag', perCycle: 1, route: 'tm_cafe' }], out: { cafe_capitalino: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '4.5' },
+  { id: 'cafeteria_septima', zone: 'bogota', name: 'Cafetería de la Séptima', icon: ICON.tintoBizcochos, in: { cafe_capitalino: 2 }, imports: [{ product: 'bizcocho_box', perCycle: 1, route: 'tm_bizcochos' }], out: { tinto_bizcochos: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '4.5' },
+  { id: 'chocolateria_candelaria', zone: 'bogota', name: 'Chocolatería santafereña', icon: ICON.santafereno, in: { tinto_bizcochos: 1 }, imports: [{ product: 'table_chocolate', perCycle: 1, route: 'tm_chocolate' }, { product: 'canasta_amasijos', perCycle: 1, route: 'tm_amasijos' }], out: { chocolate_completo: 1 }, cycle: 4, unlockCost: 500, upgradeBase: 15, growth: 1.15, release: '4.5' },
+  { id: 'dulceria_calle11', zone: 'bogota', name: 'Dulcería de la Calle 11', icon: ICON.oncesBogotanas, in: { chocolate_completo: 4 }, imports: [{ product: 'bocadillo_crate', perCycle: 1, route: 'tm_bocadillos' }, { product: 'cocada', perCycle: 2, route: 'tm_cocadas' }], out: { onces_bogotanas: 3 }, cycle: 16, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '4.5' },
+  { id: 'casa_colonial', zone: 'bogota', name: 'Casa colonial', icon: ICON.tardeCandelaria, in: { onces_bogotanas: 4 }, imports: [{ product: 'caja_flores', perCycle: 1, route: 'tm_flores' }], out: { tarde_candelaria: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '4.5' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },
