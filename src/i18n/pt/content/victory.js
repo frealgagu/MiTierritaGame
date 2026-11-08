@@ -55,4 +55,6 @@ export default {
   salinas: ['Sal para toda a Savana!', 'Você completou <b>As Salinas de Nemocón</b>. Quatro mil cestas da Savana com o pão de sal, os buquês de rosas e os morangos.', 'Cestas vendidas'],
   cocina: ['Ajiaco para toda Bogotá!', 'Você completou <b>A Cozinha da Savana</b>. Seis mil almoços da Savana: o ajiaco com a truta defumada e o ceviche de Guatavita.', 'Almoços da Savana vendidos'],
   zipaquira: ['Cundinamarca, de ponta a ponta!', 'Você completou <b>Zipaquirá</b> e Cundinamarca. Sete mil visitas à Catedral de Sal, com as flores, os morangos, a truta, o sal e o ajiaco de todas as suas zonas.', 'Visitas à Catedral'],
+  // Bogotá (v4.5)
+  bogota: ['O país inteiro em Bogotá!', 'Você completou <b>Bogotá</b>. Quinhentos ingressos para a Grande Feira de Mi Tierrita, com o café da Candelaria, os jantares da Zona G, os domingos de Usaquén, as manhãs de Paloquemao e tudo o que chegou de carreta de todas as regiões.', 'Ingressos da Grande Feira vendidos'],
 };

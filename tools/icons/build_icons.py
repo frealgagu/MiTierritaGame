@@ -9441,6 +9441,197 @@ def bandola():
     return layers
 
 
+
+# ---------- Bogotá · el álbum (v4.5) ----------
+
+def chorro_quevedo():
+    """El Chorro de Quevedo: la plazoleta empedrada con la fuente de piedra y la capillita blanca detrás."""
+    layers = [(OUTLINE, [poly(2, 70, 50, 52, 98, 70, 50, 92)]), ('#b0a596', [poly(5, 70, 50, 54.6, 95, 70, 50, 89.4)])]
+    layers.append(('#968a7a', [circle(28 + (k % 4) * 14, 66 + (k // 4) * 8, 1.6) for k in range(8)]))
+    layers += shape([(56, 22), (88, 22), (88, 56), (56, 56)], '#fbf8f1')
+    layers += [(OUTLINE, [poly(53, 23, 72, 8, 91, 23)]), ('#b5512e', [poly(57, 21.6, 72, 11, 87, 21.6)])]
+    layers += [(OUTLINE, [rect(66, 36, 12, 20)]), ('#6d4c41', [rect(68, 38, 8, 18)])]
+    layers += [('#3e2723', [rect(71, 0, 2, 9), rect(68, 3, 8, 2)])]
+    layers += [(OUTLINE, [ellipse(34, 70, 20, 8)]), ('#9e9e9e', [ellipse(34, 69, 17.6, 6)]), ('#64b5f6', [ellipse(34, 68, 13, 4)])]
+    layers += [(OUTLINE, [rect(31, 46, 6, 22)]), ('#bdbdbd', [rect(32.4, 47.4, 3.2, 19.6)])]
+    layers.append(('#90caf9', [ellipse(34, 44, 7, 3), rib(28, 46, 24, 62, 1.2), rib(40, 46, 44, 62, 1.2)]))
+    return layers
+
+
+def plaza_bolivar():
+    """La Plaza de Bolívar: la fachada de la Catedral Primada con sus dos torres y la plaza abierta adelante."""
+    layers = [(OUTLINE, [poly(0, 80, 50, 68, 100, 80, 50, 96)]), ('#c8bba6', [poly(4, 80, 50, 71, 96, 80, 50, 93)])]
+    layers += shape([(14, 30), (86, 30), (86, 72), (14, 72)], '#e8dcc6')
+    for x in (14, 72):
+        layers += shape([(x, 12), (x + 14, 12), (x + 14, 72), (x, 72)], '#efe5d2')
+        layers += [(OUTLINE, [poly(x - 1, 13, x + 7, 2, x + 15, 13)]), ('#9e9e9e', [poly(x + 1.4, 11.6, x + 7, 5, x + 12.6, 11.6)])]
+        layers.append(('#5d4037', [rect(x + 4.5, 20, 5, 8)]))
+    layers += [(OUTLINE, [poly(36, 30, 50, 18, 64, 30)]), ('#d7c9b0', [poly(39, 28.6, 50, 21, 61, 28.6)])]
+    layers += [(OUTLINE, ['M 40 72 L 40 52 Q 50 40 60 52 L 60 72 Z']), ('#5d4037', ['M 42.4 72 L 42.4 53 Q 50 43.4 57.6 53 L 57.6 72 Z'])]
+    layers.append(('#5d4037', [rect(24, 44, 6, 10), rect(70, 44, 6, 10)]))
+    return layers
+
+
+def paloma():
+    """La paloma de la plaza: gris, con el cuello tornasol verde y morado."""
+    layers = [(OUTLINE, [ellipse(48, 60, 32, 20, -10), poly(16, 58, 2, 50, 4, 66)]), ('#9ea7ad', [ellipse(48, 60, 29.6, 17.6, -10), poly(18, 58, 6, 52.6, 7, 63.4)])]
+    layers.append(('#78858c', [ellipse(50, 56, 18, 9, -15)]))
+    layers.append(('#5f6b72', [rib(40, 58, 62, 52, 1.6), rib(42, 63, 64, 57, 1.6)]))
+    layers += [(OUTLINE, [circle(76, 34, 12)]), ('#8e989e', [circle(76, 34, 9.6)])]
+    layers.append(('#4caf8a', [ellipse(72, 46, 8, 5)]))
+    layers.append(('#8e5ba8', [ellipse(76, 48, 6, 3.4)]))
+    layers += [(OUTLINE, [poly(86, 32, 97, 36, 86, 38)]), ('#e0a080', [poly(87.4, 33.6, 94, 36, 87.4, 36.6)])]
+    layers += [('#1b1b1b', [circle(79, 31, 2)]), ('#ff7043', [circle(79, 31, 0.8)])]
+    layers.append(('#d87a6a', [rect(42, 78, 2.4, 12), rect(52, 78, 2.4, 12), rect(38, 89, 8, 2), rect(48, 89, 8, 2)]))
+    return layers
+
+
+def grafiti():
+    """El grafiti de La Candelaria: una pared de ladrillo con un mural de colores y una cara grande."""
+    layers = shape([(4, 14), (96, 14), (96, 90), (4, 90)], '#b5653a')
+    layers.append(('#9c5230', [rect(6 + (k % 6) * 15 + (8 if (k // 6) % 2 else 0), 18 + (k // 6) * 9, 6, 1.4) for k in range(48) if 6 + (k % 6) * 15 + (8 if (k // 6) % 2 else 0) < 92]))
+    layers.append(('#ffca28', ['M 10 80 Q 18 30 50 24 Q 84 30 90 80 Z']))
+    layers.append(('#26a69a', ['M 16 80 Q 24 40 50 34 Q 76 40 84 80 Z']))
+    layers += [(OUTLINE, [circle(50, 56, 18)]), ('#ef5350', [circle(50, 56, 15.6)])]
+    layers += [('#fafafa', [circle(43, 52, 4.4), circle(57, 52, 4.4)]), ('#212121', [circle(44, 52, 2), circle(58, 52, 2)])]
+    layers.append(('#212121', ['M 42 62 Q 50 70 58 62 L 58 64 Q 50 72 42 64 Z']))
+    layers.append(('#7e57c2', [poly(20, 30, 28, 22, 30, 34), poly(78, 24, 86, 30, 74, 34)]))
+    return layers
+
+
+def changua():
+    """La changua: la taza de caldo de leche con el huevo, el cilantro y el calado de pan."""
+    layers = [(OUTLINE, ['M 8 46 L 92 46 Q 90 86 50 90 Q 10 86 8 46 Z']), ('#fbf8f1', ['M 10.6 48.4 L 89.4 48.4 Q 87 84 50 87.6 Q 13 84 10.6 48.4 Z'])]
+    layers.append(('#4e7fb5', ['M 14 62 L 86 62 L 84 68 L 16 68 Z']))
+    layers += [(OUTLINE, [ellipse(50, 46, 42, 12)]), ('#f3ead2', [ellipse(50, 46, 39.6, 9.6)])]
+    layers += [('#ffffff', [ellipse(46, 45, 14, 6)]), ('#fbc02d', [circle(46, 45, 4.4)])]
+    layers += [(OUTLINE, [rect(64, 38, 18, 10, -12)]), ('#e2b56a', [rect(65.4, 39.4, 15.2, 7.2, -12)])]
+    layers.append(('#43a047', [leaf(26, 44, 32, 40, 2.6), leaf(30, 48, 36, 47, 2.2), leaf(58, 50, 62, 46, 2.2)]))
+    layers.append(('#fafafa', [ellipse(36, 18, 3, 7), ellipse(52, 14, 3, 8), ellipse(66, 20, 3, 6)]))
+    return layers
+
+
+def oblea():
+    """La oblea: las dos galletas finas y redondas con arequipe y mermelada de mora en medio."""
+    layers = [(OUTLINE, [ellipse(50, 62, 44, 16)]), ('#f5e6c4', [ellipse(50, 62, 41.6, 13.6)])]
+    layers.append(('#a0522d', [ellipse(50, 56, 42, 10)]))
+    layers.append(('#7b1f3a', [ellipse(50, 52, 40, 9)]))
+    layers += [(OUTLINE, [ellipse(50, 46, 44, 16)]), ('#f7ebd0', [ellipse(50, 46, 41.6, 13.6)])]
+    layers.append(('#e8d6ae', [rib(18 + k * 9, 38, 22 + k * 9, 56, 0.8) for k in range(8)]))
+    layers.append(('#e8d6ae', [rib(12, 44, 88, 44, 0.8), rib(16, 50, 84, 50, 0.8)]))
+    layers.append(('#7b1f3a', [circle(24, 62, 2.4), circle(78, 60, 2)]))
+    return layers
+
+
+def teleferico():
+    """El teleférico de Monserrate: la cabina roja colgada del cable sobre el cerro verde, con la iglesia arriba."""
+    layers = [(OUTLINE, ['M 0 96 L 0 62 Q 50 20 100 30 L 100 96 Z']), ('#4f8a3a', ['M 2.4 94 L 2.4 63 Q 50 23 97.6 32.4 L 97.6 94 Z'])]
+    layers.append(('#3d7030', [circle(20 + k * 14, 70 + (k % 2) * 8, 4) for k in range(5)]))
+    layers += shape([(80, 14), (94, 14), (94, 26), (80, 26)], '#fbf8f1')
+    layers += [(OUTLINE, [poly(79, 15, 87, 8, 95, 15)]), ('#b5512e', [poly(81, 14, 87, 10, 93, 14)])]
+    layers.append(('#37474f', [rib(0, 64, 86, 22, 1.4)]))
+    layers.append(('#37474f', [rib(40, 45, 40, 52, 1.2)]))
+    layers += shape([(30, 52), (50, 52), (52, 68), (28, 68)], '#d32f2f')
+    layers.append(('#bbdefb', [rect(32, 55, 7, 6), rect(41, 55, 7, 6)]))
+    return layers
+
+
+def copeton():
+    """El copetón: el pajarito de Bogotá, pardo, con el copete en punta y el collar rojizo."""
+    layers = [(OUTLINE, [ellipse(48, 62, 26, 20)]), ('#a1887f', [ellipse(48, 62, 23.6, 17.6)])]
+    layers.append(('#efebe9', [ellipse(52, 70, 14, 10)]))
+    layers.append(('#795548', [ellipse(38, 60, 14, 9, 20), rib(28, 62, 44, 56, 1)]))
+    layers += [(OUTLINE, [poly(22, 66, 2, 80, 8, 84, 26, 72)]), ('#6d4c41', [poly(21, 68, 6, 79, 9, 81, 24, 71)])]
+    layers += [(OUTLINE, [circle(66, 38, 15)]), ('#9e9e9e', [circle(66, 38, 12.6)])]
+    layers += [(OUTLINE, [poly(56, 30, 58, 6, 70, 26)]), ('#616161', [poly(58.4, 28, 59.6, 11, 67.4, 26)])]
+    layers.append(('#212121', [rect(58, 33, 16, 2.4), rect(56, 41, 18, 2.4)]))
+    layers.append(('#c0582f', [ellipse(64, 52, 12, 4)]))
+    layers += [('#1b1b1b', [circle(70, 37, 2.2)]), (OUTLINE, [poly(79, 38, 90, 40, 79, 43)]), ('#5d4037', [poly(80, 39.4, 86, 40.4, 80, 41.6)])]
+    layers.append(('#5d4037', [rect(44, 80, 2.4, 12), rect(52, 80, 2.4, 12), rect(40, 91, 20, 2.4)]))
+    return layers
+
+
+def sombrilla():
+    """La sombrilla bogotana: el paraguas negro abierto, con gotas de lluvia alrededor."""
+    layers = [(OUTLINE, ['M 4 50 Q 10 12 50 10 Q 90 12 96 50 Z']), ('#263238', ['M 7 47.6 Q 13 15 50 12.4 Q 87 15 93 47.6 Z'])]
+    layers.append(('#37474f', ['M 50 12.4 Q 36 24 30 47.6 L 36 47.6 Q 40 26 50 12.4 Z', 'M 50 12.4 Q 64 24 70 47.6 L 64 47.6 Q 60 26 50 12.4 Z']))
+    layers += [(OUTLINE, [rect(47.6, 8, 4.8, 4)])]
+    layers += [(OUTLINE, ['M 47.6 50 L 52.4 50 L 52.4 82 Q 52.4 94 42 94 Q 34 94 34 86 L 38.8 86 Q 38.8 89.2 42 89.2 Q 47.6 89.2 47.6 82 Z']), ('#6d4c41', ['M 49 50 L 51 50 L 51 82 Q 51 92.6 42 92.6 Q 35.4 92.6 35.4 87.4 L 37.4 87.4 Q 37.6 90.6 42 90.6 Q 49 90.6 49 82 Z'])]
+    layers.append(('#64b5f6', [ellipse(14, 66, 2.4, 4), ellipse(84, 62, 2.4, 4), ellipse(72, 82, 2.4, 4), ellipse(22, 86, 2.4, 4), ellipse(90, 88, 2, 3.4)]))
+    return layers
+
+
+def transmilenio():
+    """El TransMilenio: el bus rojo articulado, con su fuelle negro en medio y las ventanas largas."""
+    layers = [(OUTLINE, [rect(2, 34, 50, 40), rect(56, 34, 42, 40)]), ('#d32f2f', [rect(4.4, 36.4, 45.2, 35.2), rect(58.4, 36.4, 37.2, 35.2)])]
+    layers += [(OUTLINE, [rect(49, 38, 10, 34)]), ('#37474f', [rect(50.4, 39.4, 7.2, 31.2)])]
+    layers.append(('#263238', [rib(52, 42, 52, 68, 0.8), rib(55, 42, 55, 68, 0.8)]))
+    layers.append(('#b3e5fc', [rect(8 + k * 11, 40, 8, 12) for k in range(4)] + [rect(62 + k * 11, 40, 8, 12) for k in range(3)]))
+    layers.append(('#fafafa', [rect(4.4, 56, 45.2, 3), rect(58.4, 56, 37.2, 3)]))
+    layers.append(('#fff59d', [rect(91, 62, 4, 4)]))
+    return layers + wheel(16, 76, 7) + wheel(40, 76, 7) + wheel(84, 76, 7)
+
+
+def bicicleta():
+    """La ciclovía: la bicicleta, con las ruedas grandes y el marco amarillo."""
+    layers = []
+    for cx in (24, 76):
+        layers += [(OUTLINE, [circle(cx, 66, 20)]), ('#37474f', [circle(cx, 66, 17.6)]), ('#eceff1', [circle(cx, 66, 14.6)])]
+        layers.append(('#90a4ae', [rib(cx - 14, 66, cx + 14, 66, 0.8), rib(cx, 52, cx, 80, 0.8), rib(cx - 10, 56, cx + 10, 76, 0.8), rib(cx - 10, 76, cx + 10, 56, 0.8)]))
+        layers.append(('#37474f', [circle(cx, 66, 2.6)]))
+    layers += [(OUTLINE, [rib(24, 66, 44, 40, 5.6), rib(44, 40, 70, 40, 5.6), rib(70, 40, 76, 66, 5.6), rib(44, 40, 50, 66, 5.6), rib(24, 66, 50, 66, 5.6), rib(50, 66, 70, 40, 5.6)])]
+    layers.append(('#fbc02d', [rib(24, 66, 44, 40, 3.2), rib(44, 40, 70, 40, 3.2), rib(70, 40, 76, 66, 3.2), rib(44, 40, 50, 66, 3.2), rib(24, 66, 50, 66, 3.2), rib(50, 66, 70, 40, 3.2)]))
+    layers += [(OUTLINE, [rect(36, 32, 16, 6)]), ('#3e2723', [rect(37.4, 33.4, 13.2, 3.2)])]
+    layers += [(OUTLINE, [rib(68, 40, 64, 26, 4), rib(58, 26, 74, 26, 4)]), ('#607d8b', [rib(68, 40, 64, 26, 2), rib(58, 26, 74, 26, 2)])]
+    return layers
+
+
+def tranvia():
+    """El tranvía de Bogotá de antes: el carro verde y crema sobre los rieles, con el trole al cable."""
+    layers = [('#37474f', [rib(2, 8, 98, 8, 1.2)]), (OUTLINE, [rib(50, 9, 40, 28, 2.4)])]
+    layers += shape([(10, 28), (90, 28), (90, 76), (10, 76)], '#2e7d32')
+    layers += [(OUTLINE, [rect(6, 24, 88, 6)]), ('#f3e5c0', [rect(7.4, 25.4, 85.2, 3.2)])]
+    layers.append(('#f3e5c0', [rect(10, 54, 80, 6)]))
+    layers.append(('#fff8e1', [rect(15 + k * 15, 34, 10, 16) for k in range(5)]))
+    layers.append(('#5d4037', [rect(10, 74, 80, 4)]))
+    layers += [('#78909c', [rect(0, 88, 100, 3)])]
+    return layers + wheel(28, 82, 6) + wheel(72, 82, 6)
+
+
+def poporo():
+    """El poporo quimbaya del Museo del Oro: la vasija de oro de cuello largo y barriga redonda."""
+    layers = [(OUTLINE, ['M 42 6 L 58 6 L 58 30 Q 88 40 86 66 Q 84 92 50 94 Q 16 92 14 66 Q 12 40 42 30 Z']), ('#e0a422', ['M 44.4 8.4 L 55.6 8.4 L 55.6 32 Q 84 41 83.6 66 Q 81.6 89.6 50 91.6 Q 18.4 89.6 16.4 66 Q 16 41 44.4 32 Z'])]
+    layers.append(('#f7d36b', ['M 30 50 Q 40 40 48 40 Q 36 50 34 70 Q 26 62 30 50 Z', rect(47, 10, 3, 18)]))
+    layers.append(('#b77e10', [ellipse(50, 30, 12, 3), circle(36, 62, 3.4), circle(64, 62, 3.4), ellipse(50, 78, 20, 2.4)]))
+    layers.append(('#b77e10', [circle(30, 46, 2.4), circle(70, 46, 2.4)]))
+    return layers
+
+
+def guitarra_rock():
+    """Rock al Parque: la guitarra eléctrica roja, con sus pastillas y el mástil largo."""
+    layers = [(OUTLINE, [rib(56, 48, 88, 8, 8)]), ('#8d6e63', [rib(56, 48, 88, 8, 5.4)])]
+    layers.append(('#d7ccc8', [rib(60 + k * 4.4, 43 - k * 5.4, 62 + k * 4.4, 45 - k * 5.4, 1.2) for k in range(6)]))
+    layers += [(OUTLINE, [rect(82, 2, 14, 12, -38)]), ('#3e2723', [rect(83.4, 3.4, 11.2, 9.2, -38)])]
+    layers += [(OUTLINE, ['M 30 40 Q 46 36 54 46 Q 62 54 56 62 Q 66 72 56 86 Q 44 98 24 90 Q 4 82 10 64 Q 14 54 22 54 Q 18 42 30 40 Z']), ('#d32f2f', ['M 30.4 42.4 Q 45 39 52 48 Q 59 54.6 53 62 Q 63 72 54 84 Q 43.6 95 25 88 Q 7 81 12.4 64.6 Q 16 56.6 25 56 Q 21 44 30.4 42.4 Z'])]
+    layers.append(('#fafafa', ['M 22 60 Q 40 56 48 64 Q 52 76 42 82 Q 28 84 22 74 Z']))
+    layers.append(('#263238', [rect(28, 62, 14, 4, -40), rect(32, 70, 14, 4, -40)]))
+    layers.append(('#9e9e9e', [circle(40, 80, 2), circle(46, 76, 2)]))
+    return layers
+
+
+def casa_ladrillo():
+    """Las casas de ladrillo de Teusaquillo: la casa inglesa de ladrillo con techo empinado y ventanas blancas."""
+    layers = shape([(10, 40), (90, 40), (90, 92), (10, 92)], '#b5653a')
+    layers.append(('#9c5230', [rect(12 + (k % 5) * 16 + (8 if (k // 5) % 2 else 0), 46 + (k // 5) * 8, 7, 1.4) for k in range(30) if 12 + (k % 5) * 16 + (8 if (k // 5) % 2 else 0) < 86]))
+    layers += [(OUTLINE, [poly(4, 42, 34, 8, 64, 42)]), ('#5d4037', [poly(8, 40, 34, 12, 60, 40)])]
+    layers += [(OUTLINE, [poly(56, 42, 74, 22, 96, 42)]), ('#6d4c41', [poly(60, 40, 74, 25, 92, 40)])]
+    for x, y in ((20, 50), (64, 50)):
+        layers += [(OUTLINE, [rect(x, y, 18, 16)]), ('#fafafa', [rect(x + 1.4, y + 1.4, 15.2, 13.2)]), ('#90caf9', [rect(x + 3, y + 3, 5, 4.4), rect(x + 10, y + 3, 5, 4.4), rect(x + 3, y + 9, 5, 4.4), rect(x + 10, y + 9, 5, 4.4)])]
+    layers += [(OUTLINE, [rect(42, 70, 16, 22)]), ('#2e5d3a', [rect(43.4, 71.4, 13.2, 20.6)])]
+    layers += [(OUTLINE, [rect(70, 8, 8, 16)]), ('#9c5230', [rect(71.4, 9.4, 5.2, 14)])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -10049,6 +10240,21 @@ ICONS = [
     (0xE249, 'cacique_muisca', cacique_muisca),
     (0xE24A, 'tren_sabana', tren_sabana),
     (0xE24B, 'bandola', bandola),
+    (0xE24C, 'chorro_quevedo', chorro_quevedo),
+    (0xE24D, 'plaza_bolivar', plaza_bolivar),
+    (0xE24E, 'paloma', paloma),
+    (0xE24F, 'grafiti', grafiti),
+    (0xE250, 'changua', changua),
+    (0xE251, 'oblea', oblea),
+    (0xE252, 'teleferico', teleferico),
+    (0xE253, 'copeton', copeton),
+    (0xE254, 'sombrilla', sombrilla),
+    (0xE255, 'transmilenio', transmilenio),
+    (0xE256, 'bicicleta', bicicleta),
+    (0xE257, 'tranvia', tranvia),
+    (0xE258, 'poporo', poporo),
+    (0xE259, 'guitarra_rock', guitarra_rock),
+    (0xE25A, 'casa_ladrillo', casa_ladrillo),
 ]
 
 
