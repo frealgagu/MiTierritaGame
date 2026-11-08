@@ -4,7 +4,8 @@
 //   casual: hace caso a la «mejora recomendada», cumple objetivos y ahorra para construir si le faltan menos de 10 min
 // Variables: BALANCE_PROGRESS=1 muestra el avance cada hora de juego; BALANCE_DUMP=minuto:archivo guarda la
 // partida en ese minuto (para estudiarla aparte); BALANCE_LOAD=archivo sigue una partida guardada así;
-// BALANCE_RESETS=n empieza como tras n reinicios del segundo final (producción ×2ⁿ).
+// BALANCE_RESETS=n empieza como tras n reinicios del segundo final (producción ×2ⁿ); BALANCE_REGION=región juega esa
+// región desde cero (v4.5).
 // Tras el Pueblo, los dos bots siguen hasta el segundo final (todas las estaciones al nivel 100).
 import { Game } from '../src/core/Game.js';
 import { analyzeChain, recommendUpgrade, reusable } from '../src/sim/analysis.js';
@@ -17,15 +18,16 @@ import { ZONE_LIST } from '../src/data/zones/index.js';
 import { formatNumber } from '../src/core/format.js';
 import { ROUTES } from '../src/data/routes.js';
 import { routeActive } from '../src/sim/routes.js';
+import { createInitialState } from '../src/sim/state.js';
 
 const hours = Number(process.argv[2] ?? 8);
 const style = process.argv[3] ?? 'bloque';
 const verbose = process.argv.includes('--detalle');
 let dumpAt = process.env.BALANCE_DUMP ? { minute: Number(process.env.BALANCE_DUMP.split(':')[0]), file: process.env.BALANCE_DUMP.split(':').slice(1).join(':') } : null;
-const game = new Game(process.env.BALANCE_LOAD ? JSON.parse((await import('node:fs')).readFileSync(process.env.BALANCE_LOAD)) : undefined);
+const game = new Game(process.env.BALANCE_LOAD ? JSON.parse((await import('node:fs')).readFileSync(process.env.BALANCE_LOAD)) : process.env.BALANCE_REGION ? createInitialState(0, process.env.BALANCE_REGION) : undefined);
 const s = game.state;
 const mmss = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
-const openZones = () => ZONE_LIST.filter((z) => s.zones[z.id].unlocked).map((z) => z.id);
+const openZones = () => ZONE_LIST.filter((z) => s.zones[z.id]?.unlocked).map((z) => z.id);
 // La zona en juego: la primera abierta sin completar.
 const currentZone = () => openZones().find((z) => !s.zones[z].complete) ?? null;
 // Ingreso del final de cada cadena (sin los desvíos, como la mejora recomendada): si contara lo que
@@ -185,7 +187,7 @@ for (let step = 0; step < hours * 36000 && (currentZone() || !s.mastered); step+
     }
   }
   // El capataz no sube el ingreso: se compra cuando sobra.
-  if (game.quoteResearch('capataz').ok && s.coins > 3 * 10000) game.research('capataz');
+  if (RESEARCH.some((r) => r.id === 'capataz') && game.quoteResearch('capataz').ok && s.coins > 3 * 10000) game.research('capataz');
 
   if (style === 'casual') {
     const next = nextToUnlock(s, zone);
@@ -234,7 +236,7 @@ if (zone) {
 }
 console.log('');
 for (const z of ZONE_LIST) {
-  if (!s.zones[z.id].unlocked) continue;
+  if (!s.zones[z.id]?.unlocked) continue;
   const done = s.zones[z.id].complete;
   const took = done ? ` → ${mmss(zoneEnd[z.id] - zoneStart[z.id])} en la zona` : '';
   console.log(`${z.icon} ${z.name}: ${done ? `🏁 completada (empezó ${mmss(zoneStart[z.id])}, terminó ${mmss(zoneEnd[z.id])}${took})` : 'sin terminar'}`);

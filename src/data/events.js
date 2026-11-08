@@ -1247,7 +1247,7 @@ export const EVENTS = [
       { id: 'ventarron_nuevos', icon: ICON.surtidoTejidos, name: 'Toldos nuevos', desc: 'Toldos más firmes: del 60 al 80 %.', cost: 230000, effect: { type: 'stationSpeed', target: 'toldo_tejidos', mult: 4 / 3 } },
       { id: 'ventarron_lona', icon: ICON.domingoUsaquen, name: 'Carpa de lona', desc: 'Una carpa grande que aguanta el viento: el Toldo de tejidos vuelve al 100 %.', cost: 550000, effect: { type: 'stationSpeed', target: 'toldo_tejidos', mult: 1.25 } },
     ],
-    objective: { type: 'arranque', kind: 'produced', items: { surtido_feria: 1500 }, medals: [675, 975] },
+    objective: { type: 'arranque', kind: 'produced', items: { surtido_feria: 3000 }, medals: [675, 975] },
   },
   {
     id: 'paro_camionero',
@@ -1269,7 +1269,7 @@ export const EVENTS = [
       { id: 'paro_turnos', icon: '🚦', name: 'Paso por turnos', desc: 'Dejan pasar la carga por turnos: llega el 60 % de las truchas.', cost: 3000000, effect: { type: 'supply', product: 'trucha_ahumada', fraction: 0.6 } },
       { id: 'paro_fin', icon: ICON.trucha, name: 'Fin del paro', desc: 'Se acabó el paro: las truchas vuelven a llegar todas.', cost: 8000000, effect: { type: 'supply', product: 'trucha_ahumada', fraction: 1 } },
     ],
-    objective: { type: 'ramas', kind: 'produced', items: { canasta_plaza: 450, desayuno_plaza: 180 }, medals: [885, 1185] },
+    objective: { type: 'ramas', kind: 'produced', items: { canasta_plaza: 2600, desayuno_plaza: 1000 }, medals: [645, 945] },
   },
 ];
 
