@@ -143,6 +143,9 @@ export class FarmView extends StationView {
 
   sync(state) {
     const farm = state.stations[this.def.id];
+    // En el tablero de un evento de otro barrio de Bogotá (v4.5) el Tostadero no está: no se dibuja.
+    this.visible = this.label.visible = Boolean(farm);
+    if (!farm) return;
     const tier = milestoneTier(farm.level);
     if (tier !== this.tier) this.draw(tier);
     this.label.set(`${this.def.icon} ${this.def.name} · ${t('Nv')} ${farm.level}`);
@@ -782,8 +785,10 @@ export class PlotView extends StationView {
     }
     // Letrero con icono y precio.
     const s = iso(x + 1.5, y + 1.5);
-    g.rect(s.x - 1.5, s.y - 26, 3, 26).fill(PAL.woodDark);
-    g.roundRect(s.x - 26, s.y - 48, 52, 26, 5).fill(PAL.wood).stroke(OUTLINE);
+    this.post = new Graphics();
+    this.post.rect(s.x - 1.5, s.y - 26, 3, 26).fill(PAL.woodDark);
+    this.post.roundRect(s.x - 26, s.y - 48, 52, 26, 5).fill(PAL.wood).stroke(OUTLINE);
+    this.addChild(this.post);
     this.sign = new Text({
       text: '',
       style: { fontFamily: FONT, fontSize: 11, fontWeight: '700', fill: 0xfff3d6, align: 'center' },
@@ -800,6 +805,8 @@ export class PlotView extends StationView {
 
   // quote: resultado de quoteUnlock.
   sync(quote) {
+    // En el tablero de un evento de Bogotá, las parcelas de los otros barrios quedan sin letrero (v4.5).
+    this.label.visible = this.post.visible = this.sign.visible = quote.reason !== 'event';
     const text = `${this.def.icon} ${formatNumber(quote.cost)}💰`;
     if (this.sign.text !== text) this.sign.text = text;
     const available = quote.ok;

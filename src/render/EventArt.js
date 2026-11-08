@@ -8,7 +8,7 @@ import { OUTLINE } from './palette.js';
 import { box, shadow } from './procedural/shapes.js';
 import { pointAt } from '../core/path.js';
 import { createRng } from '../core/rng.js';
-import { JeepView, MuleView } from './Carriers.js';
+import { JeepView, MuleView, TractomulaView } from './Carriers.js';
 import { EVENTS_BY_ID } from '../data/events.js';
 
 const THIN = { width: 0.8, color: 0x3a2418, alpha: 0.6 };
@@ -63,7 +63,7 @@ function importRoad(zone, product) {
   for (const [id, r] of Object.entries(zone.routes ?? {})) if (ROUTE_PRODUCT[id] === product) return r.road;
   return null;
 }
-const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag', papitas: 'criollas_bag', aceite: 'oil_bottle', patacones: 'patacon_bag', bolsas_asai: 'asai_bag', bizcochos: 'bizcochos', ramos_rosas: 'ramo_rosas' };
+const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag', papitas: 'criollas_bag', aceite: 'oil_bottle', patacones: 'patacon_bag', bolsas_asai: 'asai_bag', bizcochos: 'bizcochos', ramos_rosas: 'ramo_rosas', tm_asado: 'parranda_llanera', tm_trucha: 'trucha_ahumada' };
 
 export class EventArt {
   // scene: la escena del tablero (para el mapa y sus objetos).
@@ -1664,6 +1664,168 @@ const ART = {
     }
   },
 
+  // --- Bogotá (v4.5) ---
+  // El aguacero de la tarde: la lluvia sobre el Chorro (menos fuerte con cada compra) y los charcos frente al Tostadero;
+  // las carpas en la plazoleta, las canaletas que bajan el agua y el tostador bajo un techo de lata.
+  aguacero_chorro(art, stage, zone) {
+    const a = areaOf(zone, 'tostadero_chorro');
+    const drops = [70, 50, 30, 14][stage];
+    art.anim(a.x + a.w + 2, a.y + a.h + 2, (g, t) => {
+      for (let k = 0; k < drops; k++) {
+        const gx = a.x - 1 + ((k * 7.3) % (a.w + 4));
+        const gy = a.y - 1 + ((k * 3.7) % (a.h + 5));
+        const p = iso(gx, gy);
+        const f = (t * 1.6 + k * 0.137) % 1;
+        const y = p.y - 90 + f * 90;
+        g.moveTo(p.x + 4, y - 12).lineTo(p.x, y).stroke({ width: 1.6, color: 0x6fa8dc, alpha: 0.85 });
+      }
+    }, 4);
+    const puddles = [5, 4, 1, 0][stage];
+    for (let k = 0; k < puddles; k++) {
+      const gx = a.x + 0.8 + k * 1.1;
+      const gy = a.y + a.h + 0.5 + (k % 2) * 0.5;
+      art.prop(gx, gy, (g, p) => {
+        g.ellipse(p.x, p.y, 13, 5).fill({ color: 0x5b9bd5, alpha: 0.75 }).stroke(THIN);
+        g.ellipse(p.x - 3, p.y - 1, 5, 1.6).fill({ color: 0xd6ecff, alpha: 0.8 });
+      }, -0.2);
+    }
+    if (stage >= 1) {
+      for (let k = 0; k < 3; k++) {
+        const gx = a.x + a.w + 0.9;
+        const gy = a.y + 0.8 + k * 1.7;
+        art.clear(gx, gy, 0.9);
+        art.prop(gx, gy, (g, p) => {
+          for (const dx of [-14, 14]) g.rect(p.x + dx - 1, p.y - 20, 2, 20).fill(0x9e9e9e);
+          g.poly([p.x - 18, p.y - 20, p.x, p.y - 30, p.x + 18, p.y - 20, p.x, p.y - 12]).fill([0xd7263d, 0xf4efe6, 0x2e6fd1][k]).stroke(OUTLINE);
+        });
+      }
+    }
+    if (stage >= 2) {
+      // Las canaletas: dos bajantes en las esquinas y el agua que se va por la cuneta.
+      art.prop(a.x + a.w, a.y + a.h, (g) => {
+        for (const [gx, gy] of [[a.x + a.w, a.y + a.h], [a.x, a.y + a.h]]) {
+          const p = iso(gx, gy);
+          g.rect(p.x - 1.5, p.y - 34, 3, 34).fill(0x78909c).stroke(THIN);
+          g.ellipse(p.x, p.y, 5, 2).fill(0x5b9bd5);
+        }
+        const u = iso(a.x, a.y + a.h + 0.15);
+        const v = iso(a.x + a.w, a.y + a.h + 0.15);
+        g.moveTo(u.x, u.y).lineTo(v.x, v.y).stroke({ width: 3, color: 0x5b9bd5, alpha: 0.85 });
+      }, 0.2);
+    }
+    if (stage >= 3) {
+      const gx = a.x + a.w + 1.2;
+      const gy = a.y + a.h + 0.6;
+      art.clear(gx, gy, 1.2);
+      art.prop(gx, gy, (g, p) => {
+        g.position.set(p.x, p.y);
+        g.ellipse(0, -9, 9, 9).fill(0x4e342e).stroke(OUTLINE);
+        g.ellipse(0, -9, 4, 4).fill(0x8d6e63);
+        g.rect(-8, -1, 16, 3).fill(0x5d4037);
+        for (const dx of [-20, 20]) g.rect(dx - 1.2, -30, 2.4, 30).fill(0x6d4c41);
+        g.poly([-26, -30, 0, -40, 26, -30, 0, -22]).fill(0xb0bec5).stroke(OUTLINE);
+        for (let k = -18; k <= 18; k += 6) g.moveTo(k, -30 + Math.abs(k) * 0.05).lineTo(k * 0.4, -37).stroke({ width: 0.8, color: 0x78909c });
+      });
+    }
+  },
+
+  // El alumbrado de la Séptima: guirnaldas de luces sobre la calle de La Candelaria (una más con cada compra) y la gente
+  // que bajó a pasear, más con cada compra.
+  navidad_septima(art, stage, zone) {
+    const c = areaOf(zone, 'casa_colonial');
+    const e = areaOf(zone, 'cafeteria_septima');
+    const gy = c.y + c.h + 1;
+    const cols = [0xd7263d, 0xfdd835, 0x2e7d32, 0x1e88e5, 0xffffff];
+    for (let s = 0; s <= stage; s++) {
+      const y = gy - 0.2 + s * 0.6;
+      art.anim(e.x + e.w, y, (g, t) => {
+        const p0 = iso(c.x, y, 30);
+        const p1 = iso(e.x + e.w, y, 30);
+        g.moveTo(p0.x, p0.y).quadraticCurveTo((p0.x + p1.x) / 2, (p0.y + p1.y) / 2 + 10, p1.x, p1.y).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.7 });
+        for (let k = 1; k < 24; k++) {
+          const f = k / 24;
+          const x = p0.x + (p1.x - p0.x) * f;
+          const yy = p0.y + (p1.y - p0.y) * f + Math.sin(f * Math.PI) * 10;
+          const on = (Math.floor(t * 3) + k + s) % 3 !== 0;
+          g.circle(x, yy + 2, 2).fill({ color: cols[(k + s) % cols.length], alpha: on ? 1 : 0.3 });
+        }
+      }, 3);
+    }
+    for (const [gx, gy2] of [[c.x - 0.3, gy - 0.4], [e.x + e.w + 0.3, gy - 0.4]]) {
+      art.clear(gx, gy2, 0.6);
+      art.prop(gx, gy2, (g, p) => {
+        g.rect(p.x - 1.2, p.y - 34, 2.4, 34).fill(0x37474f);
+        g.circle(p.x, p.y - 36, 3.4).fill(0xfff59d).stroke(THIN);
+      });
+    }
+    queue(art, c.x + 0.6, gy + 0.6, 3 + stage * 2, { hats: false, packs: true });
+  },
+
+  // El festival gastronómico: los puestos con toldo (uno por compra), las banderitas y la fila de comensales.
+  festival_zona_g(art, stage, zone) {
+    const a = areaOf(zone, 'reposteria_zona_g');
+    fairScene(art, stage, [0xf07f1d, 0x2fa36b, 0x8e44ad], [a.x - 0.5, a.y - 2.5]);
+  },
+
+  // Pico y placa: la tractomula del asado parada a la entrada, con la señal; la camioneta de otra placa, las entregas
+  // de noche (otra camioneta) y, con el permiso, la tractomula que vuelve a andar.
+  pico_placa(art, stage, zone) {
+    truckScene(art, stage, zone, 'parranda_llanera', 'pico');
+  },
+
+  // El ventarrón del domingo: el viento que sopla sobre Usaquén (menos con cada compra) y los toldos caídos junto al
+  // Toldo de tejidos; los amarres, los toldos nuevos y la carpa de lona.
+  ventarron_usaquen(art, stage, zone) {
+    const a = areaOf(zone, 'toldo_tejidos');
+    const gusts = [10, 7, 4, 2][stage];
+    art.anim(a.x + a.w + 3, a.y + a.h + 2, (g, t) => {
+      for (let k = 0; k < gusts; k++) {
+        const f = (t * 0.5 + k / gusts) % 1;
+        const p = iso(a.x - 6 + f * 12, a.y - 1 + ((k * 2.3) % 6));
+        const y = p.y - 30 - (k % 3) * 8;
+        g.moveTo(p.x - 16, y).quadraticCurveTo(p.x, y - 5, p.x + 16, y).stroke({ width: 1.6, color: 0xffffff, alpha: 0.8 * Math.sin(f * Math.PI) });
+      }
+    }, 4);
+    const gx = a.x + 1.5;
+    const gy = a.y - 1.4;
+    art.clear(gx, gy, 2);
+    const fallen = [3, 2, 0, 0][stage];
+    for (let k = 0; k < 3; k++) {
+      const x = gx - 1.5 + k * 1.5;
+      const color = [0xd7263d, 0x2fa36b, 0xe8b90f][k];
+      art.prop(x, gy, (g, p) => {
+        g.position.set(p.x, p.y);
+        if (k < fallen) {
+          // Caído: el toldo de lado en el suelo y los palos tirados.
+          g.poly([-18, -2, 14, -10, 18, -2, -12, 6]).fill(color).stroke(OUTLINE);
+          g.moveTo(-14, 6).lineTo(10, 10).moveTo(-6, -4).lineTo(16, 2).stroke({ width: 2, color: 0x5e3b1c });
+        } else {
+          for (const dx of [-14, 14]) g.rect(dx - 1, -20, 2, 20).fill(0x5e3b1c);
+          g.poly([-18, -20, 18, -20, 20, -12, -20, -12]).fill(color).stroke(OUTLINE);
+          if (stage >= 1) for (const dx of [-18, 18]) g.moveTo(dx, -20).lineTo(dx * 1.6, 2).stroke({ width: 0.8, color: 0xf4efe6 });
+        }
+      });
+    }
+    if (stage >= 3) {
+      const tx = a.x + a.w + 1;
+      const ty = a.y + 1.2;
+      art.clear(tx, ty, 1.4);
+      art.prop(tx, ty, (g, p) => {
+        g.position.set(p.x, p.y);
+        g.poly([-26, -8, 0, -34, 26, -8, 0, 4]).fill(0xf4efe6).stroke(OUTLINE);
+        g.poly([-26, -8, 0, 4, 0, 10, -26, -2]).fill(0xd8d0c0).stroke(THIN);
+        g.poly([0, -34, 0, -40]).stroke({ width: 1.5, color: 0x5e3b1c });
+        g.poly([0, -40, 8, -37, 0, -34]).fill(0xd7263d);
+      });
+    }
+  },
+
+  // El paro camionero: la tractomula de las truchas parada en la vía, con los del paro y su bandera; las camionetas por
+  // la vía alterna, el paso por turnos y, al final, la tractomula que vuelve a andar.
+  paro_camionero(art, stage, zone) {
+    truckScene(art, stage, zone, 'trucha_ahumada', 'paro');
+  },
+
   crucero(art, stage, zone) {
     const a = areaOf(zone, 'muelle');
     queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
@@ -1792,10 +1954,51 @@ function landslideScene(art, stage, zone, product, kind) {
   }
 }
 
+// La tractomula de un importado de Bogotá (v4.5) que no puede entrar: parada en su vía con la señal del pico y placa o
+// con los del paro; luego camionetas y, con la última compra, la tractomula andando.
+function truckScene(art, stage, zone, product, kind) {
+  const road = importRoad(zone, product);
+  if (!road) return;
+  // El último tramo, el que llega a la estación: allí se para la tractomula.
+  const end = road.at(-1);
+  const prev = road.at(-2);
+  const last = [prev, end];
+  const stop = pointAt(last, 0.35);
+  if (stage < 3) {
+    art.clear(stop.gx, stop.gy, 1.6);
+    const truck = new TractomulaView(product);
+    truck.place(stop.gx, stop.gy, stop.dx, stop.dy);
+    art.scene.objects.addChild(truck);
+    art.props.push(truck);
+    const side = Math.abs(stop.dx) > Math.abs(stop.dy) ? [0, 1.2] : [1.2, 0];
+    const sx = stop.gx + side[0];
+    const sy = stop.gy + side[1];
+    art.prop(sx, sy, (g, p) => {
+      g.rect(p.x - 1, p.y - 26, 2, 26).fill(0x607d8b);
+      if (kind === 'pico') {
+        g.circle(p.x, p.y - 32, 8).fill(0xffffff).stroke({ width: 2.5, color: 0xd7263d });
+        g.rect(p.x - 5, p.y - 34, 10, 4).fill(0x263238);
+      } else {
+        g.poly([p.x + 1, p.y - 26, p.x + 16, p.y - 22, p.x + 1, p.y - 18]).fill(0xd7263d).stroke(THIN);
+      }
+    }, 0.6);
+    if (kind === 'paro') {
+      art.anim(sx, sy + 0.6, (g, t) => {
+        for (let k = 0; k < 3 - stage; k++) {
+          const p = iso(sx + 0.5 + k * 0.5, sy + 0.4 + k * 0.2);
+          person(g, p.x, p.y, { shirt: SHIRTS[k + 2], skin: SKIN[k], hat: k % 2 ? 0xc8643b : null, arm: Math.abs(Math.sin(t * 2 + k)) });
+        }
+      }, 0.7);
+    }
+  }
+  if (stage >= 1 && stage < 3) {
+    for (let k = 0; k < stage; k++) art.mover(new JeepView(k), road.slice(-3), 1.8, k * 0.5);
+  }
+  if (stage >= 3) art.mover(new TractomulaView(product), road.slice(-3), 1.4, 0.3);
+}
+
 // Puestos de feria con toldo de color (uno por compra) y gente mirando.
-function fairScene(art, stage, colors) {
-  const gx = 8.5;
-  const gy = 20.5;
+function fairScene(art, stage, colors, [gx, gy] = [8.5, 20.5]) {
   art.prop(gx + 2, gy - 0.6, (g) => {
     const a = iso(gx - 1, gy - 1, 26);
     const b = iso(gx + 5, gy - 1, 26);

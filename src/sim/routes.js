@@ -33,7 +33,10 @@ export const routeOrigin = (r) => (r.unlimited ? REGIONS_BY_ID[r.origin] : ZONES
 // La ruta funciona cuando existe alguna estación que abastece (y la zona de origen está abierta).
 export function routeActive(state, routeId) {
   const r = ROUTES_BY_ID[routeId];
-  return routeStations(state, routeId).length > 0 && (r.unlimited || Boolean(state.zones[r.from]?.unlocked));
+  // Las tractomulas (v4.5) no van en el tablero de un evento: allí lo de afuera llega como a cualquier tablero
+  // (sim/events.js, stepSupply), y así el pico y placa o el paro sí la cortan.
+  if (r.unlimited) return !state.event && routeStations(state, routeId).length > 0;
+  return routeStations(state, routeId).length > 0 && Boolean(state.zones[r.from]?.unlocked);
 }
 
 // Unidades por segundo del producto que gasta una estación a toda marcha (a `level`, o a su nivel).
