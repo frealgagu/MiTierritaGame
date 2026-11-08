@@ -96,7 +96,7 @@ export const REGIONS = [
     name: 'Bogotá',
     icon: ICON.monserrate,
     zones: ['bogota'],
-    music: 'cundinamarca',
+    music: 'bogota',
     unlock: { region: 'cundinamarca', zone: 'zipaquira' },
     wip: true,
     // (v4.4.8) Mientras se construye no se abre en el juego publicado: en el mapa sale «Próximamente». Se quita al
