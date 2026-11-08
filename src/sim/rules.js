@@ -16,7 +16,7 @@ export function milestoneTier(level) {
 }
 
 // Lo que multiplica cada hito (v1.7): nivel 10 ×2, 25 ×2, 50 ×4, 75 ×4 y 100 ×8 (×512 en total).
-const MILESTONE_MULTS = [2, 2, 4, 4, 8];
+export const MILESTONE_MULTS = [2, 2, 4, 4, 8];
 export const milestoneBoost = (milestone) => MILESTONE_MULTS[MILESTONES.indexOf(milestone)];
 
 export function milestoneMultiplier(level) {

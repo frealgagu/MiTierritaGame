@@ -1,0 +1,135 @@
+<title>Coordenadas de Mi Tierrita</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Una hoja de levantamiento: papel gris verdoso, tinta azul petróleo, cuadrícula punteada de meridianos y paralelos. */
+:root {
+  --bg: #eef1ec;
+  --paper: #f8faf6;
+  --ink: #1f2b30;
+  --muted: #5d6c70;
+  --land: #e2ddd0;
+  --edge: #8c8a80;
+  --grid: #4d6a75;
+  --shift: #c0392b;
+  --realair: #1d5fa8;
+  --line: #cfd6cf;
+  --display: 'Archivo Narrow', 'Arial Narrow', sans-serif;
+  --body: 'IBM Plex Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #141b1e; --paper: #1b2428; --ink: #e3ebe8; --muted: #9aaaa9; --land: #2c3330; --edge: #66706c; --grid: #8fb2bd; --shift: #ff7a6b; --realair: #7fb6f2; --line: #2e3a3e; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #141b1e; --paper: #1b2428; --ink: #e3ebe8; --muted: #9aaaa9; --land: #2c3330; --edge: #66706c; --grid: #8fb2bd; --shift: #ff7a6b; --realair: #7fb6f2; --line: #2e3a3e; color-scheme: dark; }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1100px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 28px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; margin: 0; text-wrap: balance; letter-spacing: 0.01em; }
+h1 { font-size: 2.2rem; line-height: 1.1; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
+p { margin: 0; max-width: 68ch; }
+.lede { display: grid; gap: 10px; }
+.kicker { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+code { font-family: var(--mono); font-size: 0.88em; background: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+.how { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.how > div { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; gap: 6px; min-width: 0; }
+.how b { font-family: var(--display); font-size: 1.05rem; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.88rem; color: var(--muted); align-items: center; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend svg { width: 18px; height: 18px; }
+.mapbox { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; overflow: auto; }
+.mapbox svg { display: block; width: 100%; height: auto; }
+.country svg { max-height: 120vh; }
+.nav { display: flex; flex-wrap: wrap; gap: 8px; }
+.nav a { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink); text-decoration: none; font-size: 0.88rem; }
+.nav a:hover, .nav a:focus-visible { border-color: var(--ink); outline: none; }
+.regions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr)); gap: 22px; }
+.region { display: grid; gap: 8px; min-width: 0; scroll-margin-top: 16px; }
+.sw { display: inline-block; width: 11px; height: 11px; border-radius: 3px; background: var(--c); border: 1px solid rgba(0,0,0,0.25); flex: none; }
+
+/* El dibujo */
+.dept { fill: var(--land); stroke: var(--edge); stroke-width: 0.8px; vector-effect: non-scaling-stroke; }
+.dept.on { fill: var(--c); fill-opacity: 0.55; }
+.gmin { stroke: var(--grid); stroke-width: 0.6px; stroke-dasharray: 1px 3px; opacity: 0.55; vector-effect: non-scaling-stroke; }
+.gmaj { stroke: var(--grid); stroke-width: 1px; stroke-dasharray: 2px 3px; opacity: 0.9; vector-effect: non-scaling-stroke; }
+.glab { fill: var(--grid); font-family: var(--mono); }
+.zone { fill: var(--c); stroke: var(--ink); stroke-width: 1.2px; vector-effect: non-scaling-stroke; }
+.real { fill: none; stroke: var(--ink); stroke-width: 1px; stroke-dasharray: 2px 2px; vector-effect: non-scaling-stroke; }
+.shift { stroke: var(--shift); stroke-width: 1.6px; stroke-dasharray: 4px 3px; vector-effect: non-scaling-stroke; }
+.shift.air { stroke: var(--realair); }
+.zlab { fill: var(--ink); font-family: var(--body); font-weight: 600; paint-order: stroke; stroke: var(--paper); stroke-width: 0.6; }
+.alab { fill: var(--ink); font-family: var(--mono); paint-order: stroke; stroke: var(--paper); stroke-width: 0.5; }
+.alab.real { fill: var(--realair); }
+.strip path { fill: var(--ink); stroke: var(--paper); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.realstrip path { fill: var(--paper); stroke: var(--realair); stroke-width: 1.6px; vector-effect: non-scaling-stroke; }
+
+/* Tablas */
+.tablebox { overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; white-space: nowrap; }
+th { font-family: var(--display); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); position: sticky; top: 0; background: var(--paper); }
+td:first-child { display: flex; gap: 6px; align-items: center; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.id { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+.same { color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header class="lede">
+    <div class="kicker">Encantos de Mi Tierrita · v%VERSION%</div>
+    <h1>Coordenadas de Mi Tierrita</h1>
+    <p>Las zonas y los aeropuertos de cada región sobre el mapa de Colombia del juego, con una cuadrícula punteada de latitud y longitud para ubicar los puntos que hay que corregir. Las coordenadas van en grados decimales (latitud, longitud); el oeste y el sur son negativos.</p>
+  </header>
+
+  <section class="how">
+    <div><b>Las zonas: latitud y longitud</b><p>Cada zona guarda <code>[latitud, longitud]</code> del pueblo que la inspira en <code>src/data/zoneGeo.js</code>. El mapa las convierte a sus unidades (1/40 de grado desde 79,1° O y 12,6° N).</p></div>
+    <div><b>En el mapa se separan</b><p>Al dibujar una región, si dos zonas quedan muy cerca (por ejemplo San Gil y Barichara), se empujan hasta que quepan sus marcas. Por eso algunas salen corridas de su pueblo; la línea roja punteada lo muestra.</p></div>
+    <div><b>Los aeropuertos</b><p>Desde la v4.4.10 cada región guarda la coordenada de un aeropuerto real cercano a su última zona (<code>AIRPORT_GEO</code>, en el mismo archivo; aproximadas, para verificar). Si queda fuera de la región o encima de una zona, el mapa lo corre; la línea azul punteada lo muestra.</p></div>
+    <div><b>Todo dentro de su región</b><p>Ninguna zona ni aeropuerto se dibuja fuera de los departamentos de su región ni pegado al borde: si se sale, se corre al punto más cercano de la región, un poco hacia adentro. Lo calcula <code>src/ui/mapLayout.js</code>, el mismo que usa el juego.</p></div>
+  </section>
+
+  <div class="legend" aria-label="Convenciones">
+    <span><svg viewBox="-6 -6 12 12"><circle r="4" fill="#8bc34a" stroke="currentColor" stroke-width="1"/></svg>Zona, donde se dibuja</span>
+    <span><svg viewBox="-6 -6 12 12"><circle r="4" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="1.6 1.2"/></svg>Coordenada guardada</span>
+    <span><svg viewBox="-6 -6 12 12"><line x1="-5" y1="0" x2="5" y2="0" stroke="#c0392b" stroke-width="1.4" stroke-dasharray="2 1.4"/></svg>Corrimiento</span>
+    <span><svg viewBox="-10 -10 20 20"><path d="M0,-9 L1.4,-3 L9,1.5 L9,3.2 L1.4,1.2 L1,6 L3.5,8 L3.5,9.4 L0,8.4 L-3.5,9.4 L-3.5,8 L-1,6 L-1.4,1.2 L-9,3.2 L-9,1.5 L-1.4,-3 Z" fill="currentColor"/></svg>Aeropuerto, donde se dibuja</span>
+    <span><svg viewBox="-10 -10 20 20"><path d="M0,-9 L1.4,-3 L9,1.5 L9,3.2 L1.4,1.2 L1,6 L3.5,8 L3.5,9.4 L0,8.4 L-3.5,9.4 L-3.5,8 L-1,6 L-1.4,1.2 L-9,3.2 L-9,1.5 L-1.4,-3 Z" fill="none" stroke="#1d5fa8" stroke-width="1.6"/></svg>Aeropuerto real (guardado)</span>
+    <span><svg viewBox="-6 -6 12 12"><line x1="-5" y1="0" x2="5" y2="0" stroke="#1d5fa8" stroke-width="1.4" stroke-dasharray="2 1.4"/></svg>Corrimiento del aeropuerto</span>
+  </div>
+
+  <section class="region">
+    <h2>Colombia</h2>
+    <p class="kicker">Cuadrícula cada 0,5°, rótulos cada 1°</p>
+    <div class="mapbox country">%COUNTRY%</div>
+  </section>
+
+  <section class="region">
+    <h2>Cada región de cerca</h2>
+    <p>Cuadrícula fina de 0,1° (unos 11 km), 0,25° o 0,5° según el tamaño de la región. Los rótulos van en las líneas gruesas.</p>
+    <nav class="nav">%NAV%</nav>
+  </section>
+  <div class="regions">%REGIONS%</div>
+
+  <section class="region" id="tabla-zonas">
+    <h2>Zonas</h2>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Región</th><th>Zona</th><th>Lugar</th><th>Guardada (lat, lon)</th><th>Se dibuja en</th><th>Corrida</th></tr></thead>
+        <tbody>%ZONES%</tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="region" id="tabla-pistas">
+    <h2>Aeropuertos</h2>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Región</th><th>Aeropuerto</th><th>Guardado (lat, lon)</th><th>Se dibuja en</th><th>Corrido</th></tr></thead>
+        <tbody>%AIR%</tbody>
+      </table>
+    </div>
+  </section>
+</div>

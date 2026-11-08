@@ -1,4 +1,5 @@
-import { DEPARTMENTS, MAP_ORIGIN, MAP_SCALE } from '../data/colombiaMap.js';
+import { DEPARTMENTS } from '../data/colombiaMap.js';
+import { AIRSTRIP, ZONE_POS, ZONES_VIEW, proj } from './mapLayout.js';
 import { ZONE_GEO } from '../data/zoneGeo.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
@@ -29,7 +30,6 @@ const PEEK_MS = 800; // al abrir el mapa, cuánto se ve el país antes de acerca
 const SOON = REGIONS.filter((r) => r.hidden).map((r) => ({ id: r.id, name: t(r.name), icon: r.icon, depts: DEPARTMENTS.filter((d) => d.region === r.id).map((d) => d.name), color: '#e3d6ea' }));
 const SOON_OF = Object.fromEntries(SOON.flatMap((r) => r.depts.map((d) => [d, r])));
 
-const proj = ([lat, lon]) => [(lon - MAP_ORIGIN[0]) * MAP_SCALE, (MAP_ORIGIN[1] - lat) * MAP_SCALE];
 
 // Caja de un camino SVG hecho solo de M, L y Z con coordenadas absolutas (así los escribe tools/geo).
 function pathBox(d) {
@@ -54,47 +54,7 @@ const COUNTRY_VIEW = viewOf(COUNTRY, 12);
 const REGION_BOX = Object.fromEntries(REGIONS.map((r) => [r.id, union(DEPARTMENTS.filter((d) => d.region === r.id).map((d) => DEPT_BOX[d.id]))]));
 const SOON_BOX = Object.fromEntries(SOON.map((r) => [r.id, union(DEPARTMENTS.filter((d) => r.depts.includes(d.name)).map((d) => DEPT_BOX[d.id]))]));
 
-// Dónde va cada zona en el mapa de su región: en su pueblo, pero si dos quedan muy juntas (Barichara y San
-// Gil) se separan hasta que quepan sus marcas. La región se mira de cerca alrededor de sus zonas (en los
-// Llanos y el Amazonas, los departamentos son enormes y las zonas quedan en una esquina).
-const ZONE_POS = {};
-const ZONES_VIEW = {};
-const AIRSTRIP = {};
-const box = (pts) => union(pts.map(([x, y]) => ({ x0: x, y0: y, x1: x, y1: y })));
-for (const r of REGIONS) {
-  const pts = r.zones.map((z) => proj(ZONE_GEO[z]));
-  const b0 = box(pts);
-  const size = Math.max(b0.x1 - b0.x0, b0.y1 - b0.y0, 90);
-  const min = size * 0.24;
-  for (let it = 0; it < 80; it++) {
-    for (let i = 0; i < pts.length; i++) {
-      for (let j = i + 1; j < pts.length; j++) {
-        const dx = pts[j][0] - pts[i][0];
-        const dy = pts[j][1] - pts[i][1];
-        const dist = Math.hypot(dx, dy) || 0.01;
-        if (dist >= min) continue;
-        const push = (min - dist) / 2 / dist;
-        pts[i][0] -= dx * push;
-        pts[i][1] -= dy * push;
-        pts[j][0] += dx * push;
-        pts[j][1] += dy * push;
-      }
-    }
-  }
-  r.zones.forEach((z, k) => (ZONE_POS[z] = pts[k]));
-  // La pista de cada región (v4.3.2): al lado de su última zona (la ciudad), hacia afuera. Ahí aterriza la
-  // avioneta y de ahí sale el Willys.
-  const cx = pts.reduce((n, p) => n + p[0], 0) / pts.length;
-  const cy = pts.reduce((n, p) => n + p[1], 0) / pts.length;
-  const last = pts.at(-1);
-  const away = Math.hypot(last[0] - cx, last[1] - cy) || 1;
-  AIRSTRIP[r.id] = [last[0] + ((last[0] - cx) / away) * size * 0.2, last[1] + ((last[1] - cy) / away) * size * 0.2];
-  // Con una sola zona (Bogotá, v4.5) no hay hacia dónde «afuera»: la pista queda al occidente, en El Dorado.
-  if (pts.length === 1) AIRSTRIP[r.id] = [last[0] - size * 0.2, last[1]];
-  const b = box(pts);
-  const s = Math.max(b.x1 - b.x0, b.y1 - b.y0, 90);
-  ZONES_VIEW[r.id] = viewOf(b, s * 0.3);
-}
+// Dónde va cada zona y cada aeropuerto en el mapa de su región, y qué se ve de cerca: ui/mapLayout.js (v4.4.10).
 
 const el = (tag, attrs = {}, parent = null) => {
   const e = document.createElementNS(NS, tag);

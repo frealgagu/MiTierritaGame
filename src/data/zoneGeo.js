@@ -32,3 +32,31 @@ export const ZONE_GEO = {
   // Bogotá (v4.5): La Candelaria.
   bogota: [4.6, -74.07],
 };
+
+// El aeropuerto de cada región (v4.4.10): [latitud, longitud] del aeropuerto real más cercano a su última zona. Ahí
+// aterriza la avioneta y de ahí sale el Willys. Si queda fuera de la región (El Dorado, para Cundinamarca) o encima de
+// una zona, el mapa lo corre hasta que cuadre (ver ui/mapLayout.js).
+export const AIRPORT_GEO = {
+  cafetero: [4.453, -75.766], // El Edén, Armenia
+  santander: [7.127, -73.185], // Palonegro, Bucaramanga
+  costa: [10.442, -75.513], // Rafael Núñez, Cartagena
+  boyaca: [5.677, -72.97], // Alberto Lleras Camargo, Sogamoso
+  llanos: [4.168, -73.614], // La Vanguardia, Villavicencio
+  pacifico: [3.82, -76.99], // Gerardo Tobar López, Buenaventura
+  amazonas: [-4.193, -69.943], // Alfredo Vásquez Cobo, Leticia
+  tolima: [2.95, -75.294], // Benito Salas, Neiva
+  cundinamarca: [4.702, -74.147], // El Dorado (queda en Bogotá: se corre a la Sabana)
+  bogota: [4.702, -74.147], // El Dorado, Bogotá
+};
+export const AIRPORT_NAME = {
+  cafetero: 'El Edén, Armenia',
+  santander: 'Palonegro, Bucaramanga',
+  costa: 'Rafael Núñez, Cartagena',
+  boyaca: 'Alberto Lleras Camargo, Sogamoso',
+  llanos: 'La Vanguardia, Villavicencio',
+  pacifico: 'Gerardo Tobar López, Buenaventura',
+  amazonas: 'Alfredo Vásquez Cobo, Leticia',
+  tolima: 'Benito Salas, Neiva',
+  cundinamarca: 'El Dorado, Bogotá',
+  bogota: 'El Dorado, Bogotá',
+};

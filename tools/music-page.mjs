@@ -8,7 +8,7 @@ import { existsSync, writeFileSync } from 'node:fs';
 import { SONGS } from '../src/audio/songs.js';
 import { REGIONS } from '../src/data/regions.js';
 import { EFFECTS } from './audio-list.mjs';
-import { ORDER, fileOf } from './music-export.mjs';
+import { PUBLIC, fileOf } from './music-export.mjs';
 
 const DIR = new URL('../web/musica/', import.meta.url).pathname;
 const LANGS = ['es', 'en', 'pt', 'fr'];
@@ -16,7 +16,7 @@ const content = async (lang, part) => (lang === 'es' ? null : (await import(`../
 const seconds = (path) => Math.round(Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', path], { encoding: 'utf8' })) * 10) / 10;
 
 const songs = [];
-for (const region of ORDER) {
+for (const region of PUBLIC) {
   const file = fileOf(region);
   const names = {};
   const instruments = {};
