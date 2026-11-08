@@ -38,3 +38,16 @@ test('Cundinamarca: sin hacer nada no se gana la plata, y el derrumbe se termina
   const t = idle(def, EVENT_CLOCK_MAX);
   assert.ok(t !== null && t > def.objective.medals[1], `terminó en ${t}`);
 });
+
+// Los de Bogotá (v4.5), varios en la misma zona: sin hacer nada no se gana la plata, y en los de la tractomula que no
+// llega (pico y placa, paro) sigue llegando un hilito, así que dejándolos correr se terminan con bronce.
+test('Bogotá: sin hacer nada no se gana la plata, y los de la tractomula se terminan con bronce (v4.5)', () => {
+  for (const def of EVENTS.filter((e) => e.zone === 'bogota')) {
+    assert.equal(idle(def, def.objective.medals[1]), null, `${def.id}: llega a la plata solo`);
+  }
+  for (const id of ['pico_placa', 'paro_camionero']) {
+    const def = EVENTS.find((e) => e.id === id);
+    const t = idle(def, EVENT_CLOCK_MAX);
+    assert.ok(t !== null && t > def.objective.medals[1], `${id}: terminó en ${t}`);
+  }
+});

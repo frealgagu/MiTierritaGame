@@ -296,7 +296,8 @@ function analyze(state, zoneId, withExports, depth, memo) {
     const starved = rows.find((r) => r.importLimited && r.incoming > r.capacity * (1 + LOSS));
     if (starved) bottleneck = `route:${starved.importLimited}`;
   }
-  if (!bottleneck) bottleneck = toWarehouse > dispatch * (1 + LOSS) ? `dispatch:${zoneId}` : sourceOf(zoneId);
+  // Sin otro, la fuente; en Bogotá (v4.5), la primera estación construida si la fuente no está (en el tablero de un barrio).
+  if (!bottleneck) bottleneck = toWarehouse > dispatch * (1 + LOSS) ? `dispatch:${zoneId}` : state.stations[sourceOf(zoneId)] ? sourceOf(zoneId) : ids[0];
   // Lo que ya está en el nivel 100 no se puede mejorar: no se señala (si todo está al máximo, nada).
   if (upgradeLevel(state, bottleneck) >= maxLevel(state)) bottleneck = null;
   return { rows, toWarehouse, dispatch, bottleneck, income, mainIncome, exported, sold: Object.values(sold) };

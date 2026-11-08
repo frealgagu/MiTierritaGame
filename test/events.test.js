@@ -348,6 +348,9 @@ test('cada evento tiene un reto, y los seis de cada región son de tipos distint
     const types = r.zones.map((z) => EVENT_OF_ZONE[z].objective.type);
     assert.deepEqual(types, OBJECTIVE_TYPES, r.id);
   }
+  // Bogotá (v4.5), una sola zona con seis eventos: también uno de cada tipo.
+  const { regionEvents } = await import('../src/sim/events.js');
+  assert.deepEqual(regionEvents('bogota').map((e) => e.objective.type).sort(), [...OBJECTIVE_TYPES].sort());
   for (const e of EVENTS) assert.equal(e.objectives, undefined, e.id);
 });
 

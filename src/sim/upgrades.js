@@ -6,6 +6,7 @@ import { createStationState } from './production.js';
 import { RESEARCH, RESEARCH_BY_ID } from '../data/research.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive } from './routes.js';
+import { EVENTS_BY_ID } from '../data/events.js';
 
 // Los arrieros cuestan la mitad que la estación a la que sirven.
 const TRANSPORT_COST_FACTOR = 0.5;
@@ -67,12 +68,20 @@ export function buyUpgrade(state, id, mode, bus) {
   return true;
 }
 
+// En el tablero de un evento de Bogotá (v4.5) solo cuenta el barrio del evento: lo de los otros no se construye.
+function outsideEvent(state, id) {
+  if (!state.event || !ZONES_BY_ID[zoneOf(id)].groups) return false;
+  const stations = EVENTS_BY_ID[state.event.id]?.stations ?? [];
+  return !groupOf(id)?.stations.some((s) => stations.includes(s));
+}
+
 // ¿Se puede construir esta estación? Hay que seguir el orden de la cadena.
 export function quoteUnlock(state, id) {
   const def = STATIONS_BY_ID[id];
   if (state.stations[id]) return { ok: false, reason: 'built', cost: 0 };
   const cost = def.unlockCost;
   if (!zoneUnlocked(state, zoneOf(id))) return { ok: false, reason: 'zone', cost };
+  if (outsideEvent(state, id)) return { ok: false, reason: 'event', cost };
   if (def.side) {
     // Rama secundaria: solo pide la estación que la habilita.
     if (!state.stations[def.requires]) return { ok: false, reason: 'order', previous: def.requires, cost };

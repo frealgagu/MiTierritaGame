@@ -163,7 +163,8 @@ export class Scene {
     this.resize(app.screen.width, app.screen.height);
     // Vista inicial: del cafetal a la bodega (en Bogotá, v4.5, el barrio de `zone.view`: el mapa entero se ve muy lejos).
     if (this.zone.view) {
-      const v = this.zone.view;
+      // En el tablero de un evento, el barrio del evento: sus estaciones y un poco alrededor.
+      const v = (game.state.event && this.eventView(game.state.event.id)) || this.zone.view;
       this.camera.fit({ minX: iso(v.x0, v.y1).x, maxX: iso(v.x1, v.y0).x, minY: iso(v.x0, v.y0, 60).y, maxY: iso(v.x1, v.y1).y });
     } else {
       const top = iso(this.zone.farm.x, this.zone.farm.y, 60);
@@ -184,6 +185,23 @@ export class Scene {
     this.bindEvents();
     this.smokeTimer = 0;
     this.ambientTimer = 0;
+  }
+
+  // El encuadre del barrio de un evento (Bogotá, v4.5): las casillas de sus estaciones con dos de margen y la calle
+  // de abajo. null si no hay cómo.
+  eventView(eventId) {
+    const def = EVENTS_BY_ID[eventId];
+    const z = this.zone;
+    const cells = (def?.stations ?? [])
+      .map((id) => (z.farm.stationId === id ? z.farm : z.plots.find((p) => p.stationId === id)))
+      .filter(Boolean)
+      .map((p) => ({ x: p.x, y: p.y, w: p.w ?? 3, h: p.h ?? 3 }));
+    if (!cells.length) return null;
+    const x0 = Math.min(...cells.map((c) => c.x)) - 2;
+    const y0 = Math.min(...cells.map((c) => c.y)) - 3;
+    const x1 = Math.max(...cells.map((c) => c.x + c.w)) + 2;
+    const y1 = Math.max(...cells.map((c) => c.y + c.h)) + 3;
+    return { x0: Math.max(0, x0), y0: Math.max(0, y0), x1: Math.min(z.size, x1), y1: Math.min(z.size, y1) };
   }
 
   // El letrero bajo el punto (global), el de más arriba si hay varios (v3.67.6).

@@ -299,6 +299,7 @@ async function start() {
     eventBar.show(eg);
     if (import.meta.env.DEV) window.__mitierrita = { ...window.__mitierrita, scene, board };
   };
+  if (import.meta.env.DEV) window.__mitierritaEvent = enterEvent;
   // Si se salió con 🚪, lo que el tablero hizo mientras tanto (v3.67.4), con el reloj del país: también
   // cuenta el tiempo con el juego cerrado (hasta el tope de horas sin conexión, como la partida).
   const catchUpBoard = (eg) => {
