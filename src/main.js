@@ -658,6 +658,9 @@ function bindMenu(game, sound, music, getActive) {
     return t('🎵 Música: «{song}», compuesta para el juego y tocada por él ({instruments}, sintetizados).', { song: song.name, instruments: song.instruments });
   };
   document.getElementById('menu-btn').addEventListener('click', () => {
+    // Al abrir el menú, borrar empieza otra vez por el botón (v4.4.6).
+    document.getElementById('reset-slide').hidden = true;
+    document.getElementById('reset-btn').hidden = false;
     const s = game.state;
     // De todas las regiones (v3.67: antes solo las cerezas del Eje Cafetero).
     const all = [s, ...Object.values(s.regions ?? {})];
@@ -711,6 +714,23 @@ function bindMenu(game, sound, music, getActive) {
   // vuelve a su sitio. Antes bastaban dos toques y hubo quien la borró sin querer.
   const slide = document.getElementById('reset-slide');
   const knob = document.getElementById('reset-knob');
+  // (v4.4.6) Primero el botón; al tocarlo aparece la barra. Si no se desliza en unos segundos, vuelve el botón.
+  const resetBtn = document.getElementById('reset-btn');
+  let back = null;
+  const showButton = () => {
+    clearTimeout(back);
+    slide.hidden = true;
+    resetBtn.hidden = false;
+  };
+  const armBack = () => {
+    clearTimeout(back);
+    back = setTimeout(showButton, 8000);
+  };
+  resetBtn.addEventListener('click', () => {
+    resetBtn.hidden = true;
+    slide.hidden = false;
+    armBack();
+  });
   slide.querySelector('.slide-label').textContent = t('Desliza para borrar la partida');
   let drag = null;
   const maxX = () => slide.clientWidth - knob.offsetWidth - 8;
@@ -723,8 +743,10 @@ function bindMenu(game, sound, music, getActive) {
     drag = null;
     slide.classList.remove('dragging');
     place(0);
+    armBack();
   };
   knob.addEventListener('pointerdown', (e) => {
+    clearTimeout(back);
     drag = { start: e.clientX, id: e.pointerId };
     knob.setPointerCapture(e.pointerId);
     slide.classList.add('dragging');

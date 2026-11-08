@@ -450,6 +450,8 @@ Sintetizado con Web Audio, sin archivos: clic de botones, monedas al vender, arp
   - Lateral: objetivos.
   - Botón «Ver cadena»: un diagrama compacto con el flujo/s de cada tramo y el cuello de botella resaltado en rojo.
   - Fuente: **Fredoka** o **Baloo 2**.
+  - Botones (v4.4.6): todos del mismo alto (50 px, el de un botón con el texto en dos renglones), con el texto centrado.
+  - Borrar partida (v4.3.2, v4.4.6): primero el botón rojo; al tocarlo aparece la barra que se desliza hasta el final para confirmar, y si no se desliza en 8 s vuelve el botón.
 
 ### Producción del arte sin artista
 1. **v0.1–0.3:** todo se dibuja por código (cajas isométricas, techos de dos aguas, arbustos redondos con puntos rojos para los cafetos). Rápido y coherente.

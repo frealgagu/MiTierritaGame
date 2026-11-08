@@ -238,8 +238,10 @@
           <button id="restart-btn" class="btn buy" hidden></button>
         </div>
         <div class="modal-actions menu-reset">
-          <!-- (v4.3.2) Se borra deslizando la perilla hasta el final: un toque suelto ya no borra. -->
-          <div id="reset-slide" class="slide-confirm" role="group" aria-label="Borrar partida">
+          <!-- (v4.3.2) Se borra deslizando la perilla hasta el final: un toque suelto ya no borra. (v4.4.6) Primero el
+               botón; al tocarlo aparece la barra para confirmar. -->
+          <button id="reset-btn" class="btn danger">Borrar partida</button>
+          <div id="reset-slide" class="slide-confirm" role="group" aria-label="Borrar partida" hidden>
             <span class="slide-label">Desliza para borrar la partida</span>
             <button id="reset-knob" class="slide-knob" type="button" aria-label="Borrar partida">🗑️</button>
           </div>

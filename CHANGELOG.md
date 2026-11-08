@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v4.4.6 — Borrar partida en dos pasos y botones parejos
+- **🗑️ Borrar partida:** en el menú aparece primero el botón; al tocarlo se muestra la barra para deslizar y confirmar. Si no se desliza en unos segundos, vuelve el botón.
+- **Todos los botones del juego tienen el mismo alto**, con el texto centrado, aunque el texto sea corto o largo.
+
 ## v4.4.5 — Cundinamarca: Zipaquirá y la Catedral de Sal
 - **⛪ Zona 6 de Cundinamarca: Zipaquirá**, la última de la región, que se abre al completar La Cocina. Como Neiva, no tiene fuente propia: a su plaza colonial de casonas blancas con balcones verdes llega una carretera de cada zona. La **Floristería de la plaza** arma arreglos con las cajas de flores; el **Salón de onces** sirve chocolate con queso y las fresas con crema de Sibaté; el **Hotel de la plaza** recibe el almuerzo sabanero y la mermelada; la **Plaza de mercado**, el almuerzo de trucha; las **Mochilas del paseo** llevan las canastas y los cofres de sal de Nemocón, y todo termina en la **Entrada a la Catedral de Sal**, la mina con la cruz tallada a 180 metros bajo tierra. Don Hernán, el guía de la mina, le da la bienvenida.
 - **Siete rutas nuevas** unen a Zipaquirá con las otras cinco zonas de Cundinamarca.
