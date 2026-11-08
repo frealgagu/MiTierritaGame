@@ -129,4 +129,8 @@ export default {
   tm_mascaras: ['Mask truck', 'Truck', 'Masks'],
   tm_werregue: ['Werregue truck', 'Truck', 'Werregue'],
   tm_cofres: ['Salt gift box truck', 'Truck', 'Salt boxes'],
+  // Bogotá · Paloquemao (v4.5)
+  tm_trucha: ['Trout truck', 'Truck', 'Trout'],
+  tm_pargo: ['Snapper truck', 'Truck', 'Snapper'],
+  tm_lechona: ['Lechona truck', 'Truck', 'Lechona'],
 };

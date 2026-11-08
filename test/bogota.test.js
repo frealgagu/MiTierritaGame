@@ -46,7 +46,7 @@ test('los barrios se construyen a la vez, cada uno en su orden', async () => {
   const { quoteUnlock } = await import('../src/sim/upgrades.js');
   const s = createInitialState(0, 'bogota');
   // Al empezar: la siguiente de La Candelaria y la primera de la Zona G.
-  assert.deepEqual(buildableStations(s, 'bogota'), ['cafeteria_septima', 'despensa_zona_g', 'toldo_tejidos']);
+  assert.deepEqual(buildableStations(s, 'bogota'), ['cafeteria_septima', 'despensa_zona_g', 'toldo_tejidos', 'puesto_flores']);
   s.coins = 1e9;
   assert.equal(quoteUnlock(s, 'despensa_zona_g').ok, true);
   const q = quoteUnlock(s, 'cocina_entradas');
@@ -55,7 +55,7 @@ test('los barrios se construyen a la vez, cada uno en su orden', async () => {
   // Construida la Despensa, la Zona G sigue sin esperar a La Candelaria.
   const game = new Game(s);
   assert.ok(game.unlock('despensa_zona_g'));
-  assert.deepEqual(buildableStations(s, 'bogota'), ['cafeteria_septima', 'cocina_entradas', 'toldo_tejidos']);
+  assert.deepEqual(buildableStations(s, 'bogota'), ['cafeteria_septima', 'cocina_entradas', 'toldo_tejidos', 'puesto_flores']);
 });
 
 test('la Zona G trabaja con sus tractomulas, aunque La Candelaria no esté', () => {

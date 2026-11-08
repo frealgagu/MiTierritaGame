@@ -31,8 +31,9 @@ export const ZONE55 = {
     { id: 'candelaria', name: 'La Candelaria', stations: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial'] },
     { id: 'zona_g', name: 'Chapinero y la Zona G', stations: ['despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g'] },
     { id: 'usaquen', name: 'Usaquén', stations: ['toldo_tejidos', 'toldo_sombreros', 'toldo_loza', 'toldo_mascaras', 'mercado_pulgas'] },
+    { id: 'paloquemao', name: 'Paloquemao', stations: ['puesto_flores', 'puesto_frutas', 'pescaderia_plaza', 'fritanga_plaza', 'plaza_paloquemao'] },
   ],
-  chain: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial', 'despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g', 'toldo_tejidos', 'toldo_sombreros', 'toldo_loza', 'toldo_mascaras', 'mercado_pulgas'],
+  chain: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial', 'despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g', 'toldo_tejidos', 'toldo_sombreros', 'toldo_loza', 'toldo_mascaras', 'mercado_pulgas', 'puesto_flores', 'puesto_frutas', 'pescaderia_plaza', 'fritanga_plaza', 'plaza_paloquemao'],
   // El Chorro de Quevedo: la plazoleta donde empieza todo, al pie de los Cerros.
   farm: { stationId: 'tostadero_chorro', x: 35, y: 6, w: 6, h: 6 },
   plots: [
@@ -52,6 +53,12 @@ export const ZONE55 = {
     { stationId: 'toldo_loza', x: 11, y: 9 },
     { stationId: 'toldo_mascaras', x: 9, y: 13 },
     { stationId: 'mercado_pulgas', x: 7, y: 9 },
+    // Paloquemao, al occidente del centro, sobre la avenida que baja hacia la bodega.
+    { stationId: 'puesto_flores', x: 28, y: 27 },
+    { stationId: 'puesto_frutas', x: 30, y: 31 },
+    { stationId: 'pescaderia_plaza', x: 32, y: 27 },
+    { stationId: 'fritanga_plaza', x: 34, y: 31 },
+    { stationId: 'plaza_paloquemao', x: 36, y: 27 },
   ],
   warehouse: { x: 47, y: 42, w: 3, h: 3 },
   muleRoad: [[40.5, 12.5], [4.5, 12.5], [4.5, 30.5], [42.5, 30.5], [42.5, 44.5], [46.5, 44.5], [46.5, 45.5], [47.4, 45.5]],
@@ -93,6 +100,10 @@ export const ZONE55 = {
     tm_mascaras: { road: [[18.5, 51.9], [18.5, 20.5], [10.5, 20.5], [10.5, 16.2]], sign: [19.7, 43.4], text: 'Máscaras, de El Dorado ⬆' },
     tm_werregue: { road: [[51.9, 20.5], [9.5, 20.5], [9.5, 16.2]], sign: [40.4, 21.6], text: '⬆ Werregue del Pacífico' },
     tm_cofres: { road: [[44.5, 51.9], [44.5, 20.5], [8.5, 20.5], [8.5, 12.5]], sign: [45.6, 46.4], text: 'Cofres de sal ⬆' },
+    // Paloquemao.
+    tm_trucha: { road: [[44.5, 51.9], [44.5, 20.5], [33.5, 20.5], [33.5, 26.2]], sign: [45.6, 43.4], text: 'Truchas de Guatavita ⬆' },
+    tm_pargo: { road: [[51.9, 20.5], [32.5, 20.5], [32.5, 26.2]], sign: [37.4, 21.6], text: '⬆ Pargo del Pacífico' },
+    tm_lechona: { road: [[51.9, 35.5], [35.5, 35.5], [35.5, 34.2]], sign: [49.4, 36.6], text: '⬆ Lechona del Tolima' },
   },
   unlockedBy: null, // la única de Bogotá: se abre con la región
   next: null,

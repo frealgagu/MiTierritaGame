@@ -94,4 +94,10 @@ export default {
   toldo_loza: ['A louça preta de La Chamba é polida com pedra antes da queima.', 'A cesta de presente do Eixo leva café, rapadura e doce de leite.'],
   toldo_mascaras: ['As máscaras ticunas são pintadas sobre tecido de casca.', 'O werregue é tecido em espiral com fibra de palmeira.'],
   mercado_pulgas: ['Usaquén era uma cidade à parte antes de ser parte de Bogotá.', 'No mercado de pulgas há de tudo: antiguidades, discos e artesanato.'],
+  // Bogotá · Paloquemao (v4.5)
+  puesto_flores: ['Paloquemao tem um pavilhão inteiro de flores, desde a madrugada.', 'As flores do mercado chegam da Savana, recém-cortadas.'],
+  puesto_frutas: ['No mercado há frutas de todos os climas do país.', 'O freguês prova a fruta antes de comprar.'],
+  pescaderia_plaza: ['A truta vem das lagoas frias e o pargo, do Pacífico.', 'O peixe defumado aguenta a longa viagem até a capital.'],
+  fritanga_plaza: ['No mercado se toma café com lechona, tamal e caldo de costela.', 'A fritada leva linguiça, chouriço, batata criolla e banana.'],
+  plaza_paloquemao: ['Paloquemao é um dos maiores mercados de Bogotá.', 'O mercado abre de madrugada para restaurantes e lojas.'],
 };

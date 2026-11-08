@@ -365,4 +365,10 @@ export default {
   surtido_loza: 'Sortimento com louça',
   gran_surtido: 'Grande sortimento artesanal',
   domingo_usaquen: 'Domingo em Usaquén',
+  // Bogotá · Paloquemao (v4.5)
+  canasta_flores: 'Cesta com flores',
+  canasta_frutas: 'Cesta com frutas',
+  canasta_plaza: 'Cesta da feira',
+  desayuno_plaza: 'Café da manhã da feira',
+  manana_paloquemao: 'Manhã em Paloquemao',
 };

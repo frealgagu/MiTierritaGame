@@ -129,4 +129,8 @@ export default {
   tm_mascaras: ['Carreta das máscaras', 'Carreta', 'Máscaras'],
   tm_werregue: ['Carreta do werregue', 'Carreta', 'Werregue'],
   tm_cofres: ['Carreta dos cofres de sal', 'Carreta', 'Cofres'],
+  // Bogotá · Paloquemao (v4.5)
+  tm_trucha: ['Carreta das trutas', 'Carreta', 'Truta'],
+  tm_pargo: ['Carreta do pargo', 'Carreta', 'Pargo'],
+  tm_lechona: ['Carreta da lechona', 'Carreta', 'Lechona'],
 };

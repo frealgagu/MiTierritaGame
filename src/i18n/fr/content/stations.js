@@ -355,4 +355,10 @@ export default {
   toldo_loza: 'Stand de poterie et paniers',
   toldo_mascaras: 'Stand des masques et du werregue',
   mercado_pulgas: 'Marché aux puces',
+  // Bogotá · Paloquemao (v4.5)
+  puesto_flores: 'Étal de fleurs',
+  puesto_frutas: 'Étal de fruits',
+  pescaderia_plaza: 'Poissonnerie',
+  fritanga_plaza: 'Friture du marché',
+  plaza_paloquemao: 'Marché de Paloquemao',
 };

@@ -129,4 +129,8 @@ export default {
   tm_mascaras: ['Camion des masques', 'Camion', 'Masques'],
   tm_werregue: ['Camion du werregue', 'Camion', 'Werregue'],
   tm_cofres: ['Camion des coffrets de sel', 'Camion', 'Coffrets'],
+  // Bogotá · Paloquemao (v4.5)
+  tm_trucha: ['Camion des truites', 'Camion', 'Truite'],
+  tm_pargo: ['Camion du vivaneau', 'Camion', 'Vivaneau'],
+  tm_lechona: ['Camion de la lechona', 'Camion', 'Lechona'],
 };

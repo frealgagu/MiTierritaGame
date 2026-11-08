@@ -365,4 +365,10 @@ export default {
   surtido_loza: 'Assortiment de poterie',
   gran_surtido: 'Grand assortiment artisanal',
   domingo_usaquen: 'Dimanche à Usaquén',
+  // Bogotá · Paloquemao (v4.5)
+  canasta_flores: 'Panier de fleurs',
+  canasta_frutas: 'Panier de fruits',
+  canasta_plaza: 'Panier du marché',
+  desayuno_plaza: 'Petit-déjeuner du marché',
+  manana_paloquemao: 'Matinée à Paloquemao',
 };
