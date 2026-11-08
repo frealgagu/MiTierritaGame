@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v4.4.11 — La avioneta llega a cada región
+- **🔁 Producción ×N** ahora va arriba, debajo de la mejora recomendada, a la derecha (antes iba abajo, encima de los objetivos).
+- **✈️ Al acercarte a otra región** en el mapa de zonas, la avioneta llega volando a su aeropuerto, aterriza y se va. Si eliges una de sus zonas, la pista vuelve a aparecer y el Willys sale de ahí hasta la zona. En la región donde estás, en las bloqueadas y con el viaje «⚡ Directo» no hay vuelo.
+
 ## v4.4.10 — Aeropuertos en su sitio
 - **✈️ Los aeropuertos del mapa de zonas** están donde están los de verdad: El Edén en Armenia, Palonegro en Bucaramanga, Rafael Núñez en Cartagena, el de Sogamoso, La Vanguardia en Villavicencio, el de Buenaventura, el de Leticia, el de Neiva y El Dorado. Ahí aterriza la avioneta y de ahí sale el Willys.
 - **Ninguna zona ni aeropuerto se sale de su región** en el mapa: si un punto cae afuera o pegado al borde, se corre hacia adentro (el de Cundinamarca queda en la Sabana, junto a Bogotá).
