@@ -106,10 +106,30 @@ export function consumers(state, id) {
   return (CHILDREN[id] ?? []).filter((c) => isUnlocked(state, c));
 }
 
-// Primera estación de la cadena de una zona aún sin construir.
+// Barrios (v4.5, Bogotá): una zona puede tener varias cadenas que se construyen a la vez, cada una en su orden
+// (`zone.groups`: [{ id, name, stations, after? }]); un barrio con `after` se abre cuando esos barrios están completos.
+// Sin barrios, la zona es uno solo: su cadena.
+export const groupsOf = (zoneId) => ZONES_BY_ID[zoneId].groups ?? [{ id: zoneId, stations: chainOf(zoneId) }];
+export const groupOf = (stationId) => groupsOf(zoneOf(stationId)).find((g) => g.stations.includes(stationId)) ?? null;
+const groupDone = (state, zoneId, groupId) => groupsOf(zoneId).find((g) => g.id === groupId).stations.every((id) => isUnlocked(state, id));
+
+// Las estaciones que ya se pueden construir: la primera que falta de cada barrio abierto.
+export function buildableStations(state, zoneId = 'finca') {
+  if (!zoneUnlocked(state, zoneId)) return [];
+  const out = [];
+  for (const g of groupsOf(zoneId)) {
+    if ((g.after ?? []).some((other) => !groupDone(state, zoneId, other))) continue;
+    const next = g.stations.find((id) => !isUnlocked(state, id));
+    if (next) out.push(next);
+  }
+  return out;
+}
+
+// Primera estación de la cadena de una zona aún sin construir (con barrios, la más barata de las que se pueden).
 export function nextToUnlock(state, zoneId = 'finca') {
-  if (!zoneUnlocked(state, zoneId)) return null;
-  return chainOf(zoneId).find((id) => !isUnlocked(state, id)) ?? null;
+  const list = buildableStations(state, zoneId);
+  if (list.length <= 1) return list[0] ?? null;
+  return list.reduce((best, id) => (STATIONS_BY_ID[id].unlockCost < STATIONS_BY_ID[best].unlockCost ? id : best));
 }
 
 // Lo que falta construir en la zona fuera de la cadena (v3.58): la Compostera de la Finca, que no es parte de

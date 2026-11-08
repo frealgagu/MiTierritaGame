@@ -56,5 +56,5 @@ export default {
   cocina: ['La Cuisine de la Savane', 'Vers Chía ➜', { ahumadas_trucha: '⬅ Truite fumée de Guatavita', ceviches: '⬅ Ceviche', almuerzos_sabaneros: 'Vers Zipaquirá ➜' }],
   zipaquira: ['Zipaquirá', 'Vers la mine ➜', { cajas_flores: '⬅ Fleurs de la Savane', fresas_crema: '⬅ Fraises de Sibaté', cofres_sal: '⬅ Coffrets de sel', canastas: '⬅ Paniers', almuerzos_sabaneros: 'Ajiaco ⬆', mermeladas: 'Confiture ⬆', almuerzos_trucha: 'Truite ⬆' }],
   // Bogotá (v4.5)
-  bogota: ['Bogotá', 'Vers l’Autopista Sur ➜', { tm_cafe: 'Café de l’Axe ⬆', tm_chocolate: 'Chocolat de l’Axe ⬆', tm_cocadas: 'Cocadas de la Côte ⬆', tm_amasijos: 'Pains de Boyacá ⬇', tm_bocadillos: 'Bocadillos de Santander ⬇', tm_bizcochos: '⬆ Biscuits du Tolima', tm_flores: 'Fleurs de la Savane ⬆' }],
+  bogota: ['Bogotá', 'Vers l’Autopista Sur ➜', { tm_cafe: 'Café de l’Axe ⬆', tm_chocolate: 'Chocolat de l’Axe ⬆', tm_cocadas: 'Cocadas de la Côte ⬆', tm_amasijos: 'Pains de Boyacá ⬇', tm_bocadillos: 'Bocadillos de Santander ⬇', tm_bizcochos: '⬆ Biscuits du Tolima', tm_flores: 'Fleurs de la Savane ⬆', tm_alino: '⬆ Assaisonnement du Pacifique', tm_aji: 'Piment noir, d’El Dorado ⬆', tm_papitas: 'Chips de Boyacá ⬇', tm_hormigas: 'Fourmis de Santander ⬇', tm_asado: '⬆ Rôti des Llanos', tm_arroz: 'Riz de la Côte ⬆', tm_asai: 'Açaí, d’El Dorado ⬆', tm_jugos: '⬆ Jus des Llanos' }],
 };

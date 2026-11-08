@@ -82,4 +82,10 @@ export default {
   chocolateria_candelaria: ['Le chocolat santafereño se boit avec du fromage : il fond dans la tasse.', 'On bat le chocolat au molinillo pour qu’il mousse.'],
   dulceria_calle11: ['Les onces, c’est le goûter : chocolat, pain et fromage.', 'Au centre, on vend des obleas à l’arequipe et des douceurs du pays.'],
   casa_colonial: ['Les maisons de La Candelaria ont des balcons en bois et des tuiles.', 'La place Bolívar et le Capitole sont à La Candelaria.'],
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  despensa_zona_g: ['Le G de la Zona G vient de « gourmet » : on y mange de tout.', 'L’assaisonnement du Pacifique et le piment noir relèvent les plats.'],
+  cocina_entradas: ['Les fourmis grillées sont un amuse-bouche de Santander.', 'La pomme de terre criolla, petite et jaune, se frit entière.'],
+  parrilla_zona_g: ['La viande à la llanera rôtit sur des broches, près du feu de bois.', 'Chapinero est au nord du centre, au pied des Cerros.'],
+  reposteria_zona_g: ['L’açaí d’Amazonie se sert froid, en bol, avec de la banane.', 'Le jus de fruit de la passion se fait avec la pulpe filtrée.'],
+  restaurante_zona_g: ['Bogotá accueille la cuisine de toutes les régions du pays.', 'Après le repas, à Bogotá, on offre un tinto.'],
 };

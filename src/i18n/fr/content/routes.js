@@ -110,4 +110,13 @@ export default {
   tm_bocadillos: ['Camion des bocadillos', 'Camion', 'Bocadillos'],
   tm_cocadas: ['Camion des cocadas', 'Camion', 'Cocadas'],
   tm_flores: ['Camion des fleurs', 'Camion', 'Fleurs'],
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  tm_alino: ['Camion de l’assaisonnement', 'Camion', 'Assaisonnement'],
+  tm_aji: ['Camion du piment noir', 'Camion', 'Piment noir'],
+  tm_papitas: ['Camion des chips', 'Camion', 'Chips'],
+  tm_hormigas: ['Camion des fourmis', 'Camion', 'Fourmis'],
+  tm_asado: ['Camion du rôti', 'Camion', 'Rôti'],
+  tm_arroz: ['Camion du riz', 'Camion', 'Riz'],
+  tm_asai: ['Camion de l’açaí', 'Camion', 'Açaí'],
+  tm_jugos: ['Camion des jus', 'Camion', 'Jus'],
 };

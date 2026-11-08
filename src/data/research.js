@@ -709,6 +709,14 @@ export const RESEARCH = [
   { zone: 'bogota', id: 'cable_bog', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'casa_colonial', effect: { type: 'muleSpeed', mult: 2 } },
   { zone: 'bogota', id: 'casona_restaurada', name: 'Casona restaurada', icon: ICON.tardeCandelaria, desc: 'La Casa colonial recibe el doble de visitas.', cost: 150000, requires: 'casa_colonial', effect: { type: 'stationSpeed', target: 'casa_colonial', mult: 2 } },
   { zone: 'bogota', id: 'barrio_patrimonio', name: 'Barrio patrimonio', icon: '🏅', desc: 'La tarde en La Candelaria vale un 50 % más.', cost: 300000, requires: 'casa_colonial', effect: { type: 'productValue', target: 'tarde_candelaria', mult: 1.5 } },
+  // Bogotá · Chapinero y la Zona G (v4.5): los precios del Café del Huila.
+  { zone: 'bogota', id: 'despensa_grande', name: 'Despensa grande', icon: ICON.salsasCasa, desc: 'La Despensa de la Zona G prepara el doble (pide el doble a sus dos tractomulas).', cost: 20000, requires: 'cocina_entradas', effect: { type: 'stationSpeed', target: 'despensa_zona_g', mult: 2 } },
+  { zone: 'bogota', id: 'freidora_doble', name: 'Freidora doble', icon: ICON.picadaCasa, desc: 'La Cocina de entradas fríe el doble.', cost: 50000, requires: 'parrilla_zona_g', effect: { type: 'stationSpeed', target: 'cocina_entradas', mult: 2 } },
+  { zone: 'bogota', id: 'camion_reparto', name: 'Camión de reparto', icon: '🚚', desc: 'El Willys de Bogotá lleva el doble por viaje.', cost: 80000, requires: 'parrilla_zona_g', effect: { type: 'dispatchCapacity', target: 'bogota', mult: 2 } },
+  { zone: 'bogota', id: 'parrilla_carbon', name: 'Parrilla de carbón', icon: ICON.platoFuerte, desc: 'La Parrilla asa el doble.', cost: 300000, requires: 'reposteria_zona_g', effect: { type: 'stationSpeed', target: 'parrilla_zona_g', mult: 2 } },
+  { zone: 'bogota', id: 'horno_reposteria', name: 'Horno de repostería', icon: ICON.menuCompleto, desc: 'La Repostería y jugos prepara el doble.', cost: 600000, requires: 'restaurante_zona_g', effect: { type: 'stationSpeed', target: 'reposteria_zona_g', mult: 2 } },
+  { zone: 'bogota', id: 'chef_regional', name: 'Chef de cocina regional', icon: ICON.cenaZonaG, desc: 'El Restaurante de la Zona G atiende el doble.', cost: 1000000, requires: 'restaurante_zona_g', effect: { type: 'stationSpeed', target: 'restaurante_zona_g', mult: 2 } },
+  { zone: 'bogota', id: 'guia_gastronomica', name: 'Guía gastronómica', icon: '🏅', desc: 'La cena en la Zona G vale un 50 % más.', cost: 1500000, requires: 'restaurante_zona_g', effect: { type: 'productValue', target: 'cena_zona_g', mult: 1.5 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al

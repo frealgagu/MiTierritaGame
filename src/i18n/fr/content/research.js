@@ -75,6 +75,7 @@ export const NOTES = {
   canastos_mimbre: 'La Monteuse de paniers travaille deux fois plus vite (les routes s’ajustent seules).',
   salon_santafereno: 'Le Restaurant santafereño sert deux fois plus (les routes s’ajustent seules).',
   tostador_tambor: 'La Torréfaction du Chorro torréfie deux fois plus (elle demande deux fois plus de café au camion).',
+  despensa_grande: 'Le Garde-manger de la Zona G prépare deux fois plus (il en demande deux fois plus à ses deux camions).',
 };
 
 export default {
@@ -536,4 +537,12 @@ export default {
   pailas_dulceria: 'Bassines en cuivre',
   casona_restaurada: 'Demeure restaurée',
   barrio_patrimonio: 'Quartier patrimonial',
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  despensa_grande: 'Grand garde-manger',
+  freidora_doble: 'Double friteuse',
+  camion_reparto: 'Camion de livraison',
+  parrilla_carbon: 'Grill au charbon',
+  horno_reposteria: 'Four à pâtisserie',
+  chef_regional: 'Chef de cuisine régionale',
+  guia_gastronomica: 'Guide gastronomique',
 };

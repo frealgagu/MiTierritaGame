@@ -426,6 +426,12 @@ export const PRODUCTS = {
   chocolate_completo: { name: 'Chocolate completo', zone: 'bogota', value: 8, icon: ICON.santafereno, color: 0x6d3b1e },
   onces_bogotanas: { name: 'Onces bogotanas', zone: 'bogota', value: 40, icon: ICON.oncesBogotanas, color: 0xa1693f },
   tarde_candelaria: { name: 'Tarde en La Candelaria', zone: 'bogota', value: 250, icon: ICON.tardeCandelaria, color: 0xf2c94c },
+  // Bogotá · Chapinero y la Zona G (v4.5): los números del Café del Huila.
+  salsas_casa: { name: 'Salsas de la casa', zone: 'bogota', value: 10, icon: ICON.salsasCasa, color: 0x7cb342 },
+  picada_casa: { name: 'Picada de la casa', zone: 'bogota', value: 25, icon: ICON.picadaCasa, color: 0xe6c26a },
+  plato_fuerte: { name: 'Plato fuerte', zone: 'bogota', value: 60, icon: ICON.platoFuerte, color: 0x8d4f2a },
+  menu_completo: { name: 'Menú completo', zone: 'bogota', value: 150, icon: ICON.menuCompleto, color: 0x6a1b9a },
+  cena_zona_g: { name: 'Cena en la Zona G', zone: 'bogota', value: 250, icon: ICON.cenaZonaG, color: 0xff9800 },
 
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },

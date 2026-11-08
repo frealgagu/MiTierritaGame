@@ -82,4 +82,10 @@ export default {
   chocolateria_candelaria: ['O chocolate santafereño vem com queijo: ele derrete na xícara.', 'O chocolate é batido com molinillo para fazer espuma.'],
   dulceria_calle11: ['As onces são o lanche da tarde: chocolate, pão e queijo.', 'No centro vendem obleas com arequipe e doces do país todo.'],
   casa_colonial: ['As casas de La Candelaria têm sacadas de madeira e telhas de barro.', 'A Praça de Bolívar e o Capitólio ficam em La Candelaria.'],
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  despensa_zona_g: ['O G da Zona G vem de «gourmet»: lá há restaurantes de tudo.', 'O tempero do Pacífico e a pimenta preta do Amazonas dão o sabor.'],
+  cocina_entradas: ['As formigas tanajuras torradas são um petisco de Santander.', 'A batata criolla, pequena e amarela, é frita inteira com casca.'],
+  parrilla_zona_g: ['A carne à llanera é assada em varas, junto ao fogo de lenha.', 'Chapinero fica ao norte do centro, ao pé dos Cerros.'],
+  reposteria_zona_g: ['O açaí do Amazonas é servido frio, na tigela, com banana.', 'O suco de maracujá é feito com a polpa coada.'],
+  restaurante_zona_g: ['Em Bogotá cabe a cozinha de todas as regiões do país.', 'Depois de comer, em Bogotá se oferece um tinto.'],
 };

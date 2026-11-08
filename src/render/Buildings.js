@@ -204,6 +204,16 @@ function balcony(g, x, y, w, d, z, color) {
   }
 }
 
+// Ladrillo a la vista de Bogotá (v4.5) y el toldo sobre la fachada delantera, a la altura z.
+const BRICK = 0xb35a33;
+function awningFront(g, x, y, w, d, z, color) {
+  const a = iso(x, y + d, z);
+  const b = iso(x + w, y + d, z);
+  const c = iso(x + w, y + d + 0.4, z - 5);
+  const e = iso(x, y + d + 0.4, z - 5);
+  g.poly([a.x, a.y, b.x, b.y, c.x, c.y, e.x, e.y]).fill(color).stroke(OUTLINE);
+}
+
 // Casa básica: zócalo de color, paredes encaladas, tejado de barro. Devuelve la altura de la pared.
 function house(view, g, hx, hy, w, d, wallH, ctx, { wall = PAL.wall, plinth = true, roofColor = PAL.roof, roofH = 16 } = {}) {
   const H = wallH + ctx.up;
@@ -8177,6 +8187,106 @@ const DRAW = {
     g.rect(l.x - 1, l.y - 2, 6, 2).fill(0x2b2b2b);
     g.rect(l.x + 3, l.y - 8, 6, 8).fill(0xffd27a).stroke({ width: 1.5, color: 0x2b2b2b });
     this.lights.push({ x: l.x + 6, y: l.y - 4, r: 22 });
+  },
+
+  // --- Bogotá · Chapinero y la Zona G (v4.5): casas de ladrillo a la vista, de tejado inclinado, con restaurantes ---
+
+  // Despensa de la Zona G: casa de ladrillo con toldo verde y la vitrina llena de frascos de salsas de colores.
+  despensa_zona_g(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.2, 1.4, 26, ctx, { wall: BRICK, roofH: 14, roofColor: 0x5d4037 });
+    door(g, hx, hy, 1.4, 1.75, 16, 0x2f7d4f);
+    windowOnRight(this, g, hx, hy, 2.2, 0.7, 14, 0xcfe3ee);
+    box(g, hx + 0.2, hy + 1.45, 1.2, 0.35, 10, 0x5d4037);
+    const jars = [0x3e2723, 0x7cb342, 0xe53935, 0xfbc02d, 0x6a1b9a, 0xff9800];
+    for (let k = 0; k < 4 + Math.min(ctx.tier, 2); k++) {
+      const p = iso(hx + 0.3 + k * 0.17, hy + 1.62, 10);
+      g.roundRect(p.x - 1.8, p.y - 6, 3.6, 6, 1).fill(jars[k]).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+    }
+    awningFront(g, hx + 0.1, hy, 2.0, 1.4, 22, 0x2f7d4f);
+  },
+
+  // Cocina de entradas: casa de ladrillo con la chimenea humeando y una mesita afuera con la picada.
+  cocina_entradas(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 2.0, 1.5, 26, ctx, { wall: BRICK, roofH: 15, roofColor: 0x37474f });
+    door(g, hx, hy, 1.5, 0.6, 16, 0x1e5aa8);
+    windowOnRight(this, g, hx, hy, 2.0, 0.75, 14, 0xffe082);
+    box(g, hx + 1.4, hy + 0.3, 0.3, 0.3, 26 + ctx.up + 20, 0x8a3b22);
+    this.smokePoints.push(iso(hx + 1.55, hy + 0.45, 26 + ctx.up + 22));
+    const p = iso(x + 1.2, y + 2.5);
+    shadow(g, p.x, p.y + 1, 12, 5);
+    g.rect(p.x - 1, p.y - 9, 2, 9).fill(0x555555);
+    g.ellipse(p.x, p.y - 9, 8, 4).fill(0xa1693f).stroke(OUTLINE);
+    for (const [dx, col] of [[-3, PRODUCTS.criollas_box.color], [1, 0xe6c26a], [4, 0x3e2723]]) g.circle(p.x + dx, p.y - 10, 1.6).fill(col);
+  },
+
+  // Parrilla: la casa de ladrillo con la parrilla grande al aire libre, las varas de carne y el humo.
+  parrilla_zona_g(g, x, y, ctx) {
+    const hx = x + 0.25;
+    const hy = y + 0.25;
+    house(this, g, hx, hy, 1.8, 1.4, 26, ctx, { wall: BRICK, roofH: 14, roofColor: 0x5d4037 });
+    door(g, hx, hy, 1.4, 0.6, 16, 0x5d4037);
+    windowOnRight(this, g, hx, hy, 1.8, 0.7, 14, 0xffe082);
+    // La parrilla: el fogón de ladrillo con la reja y la carne.
+    box(g, x + 1.9, y + 1.8, 0.9, 0.6, 10, 0x8a3b22);
+    const r = iso(x + 2.35, y + 2.1, 10);
+    g.ellipse(r.x, r.y, 14, 6).fill(0x2b2b2b);
+    for (let k = -2; k <= 2; k++) g.moveTo(r.x - 12, r.y + k * 1.8).lineTo(r.x + 12, r.y + k * 1.8).stroke({ width: 0.8, color: 0x9e9e9e });
+    for (const dx of [-6, 0, 6]) g.roundRect(r.x + dx - 2.5, r.y - 2.5, 5, 3, 1).fill(0x8d4f2a);
+    this.smokePoints.push(iso(x + 2.35, y + 2.1, 16));
+  },
+
+  // Repostería y jugos: casita de ladrillo pintada de rosado, con el dispensador de jugos y las tortas en la vitrina.
+  reposteria_zona_g(g, x, y, ctx) {
+    const hx = x + 0.3;
+    const hy = y + 0.3;
+    house(this, g, hx, hy, 2.1, 1.4, 26, ctx, { wall: 0xf8bbd0, roofH: 13, roofColor: 0x8a3b22 });
+    door(g, hx, hy, 1.4, 1.7, 16, 0x6a1b9a);
+    windowOnRight(this, g, hx, hy, 2.1, 0.7, 14, 0xcfe3ee);
+    box(g, hx + 0.2, hy + 1.45, 1.1, 0.35, 10, 0xdff3fb);
+    for (const [k, col] of [[0, 0x6a1b9a], [1, 0xfbc02d], [2, 0xfafafa], [3, 0xe57373]]) {
+      const p = iso(hx + 0.32 + k * 0.24, hy + 1.62, 10);
+      g.ellipse(p.x, p.y - 2, 3, 2).fill(col).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+    }
+    // El dispensador de jugos en la esquina.
+    const d = iso(hx + 2.1, hy + 1.6, 0);
+    g.rect(d.x - 4, d.y - 16, 8, 16).fill(0xeceff1).stroke(OUTLINE);
+    g.rect(d.x - 3, d.y - 15, 6, 6).fill(0xfbc02d);
+    g.rect(d.x - 3, d.y - 8, 6, 5).fill(0x6a1b9a);
+    awningFront(g, hx + 0.1, hy, 1.9, 1.4, 22, 0x6a1b9a);
+  },
+
+  // Restaurante de la Zona G: la casa de ladrillo de dos pisos con la terraza, las matas y las bombillas encendidas.
+  restaurante_zona_g(g, x, y, ctx) {
+    const hx = x + 0.2;
+    const hy = y + 0.2;
+    const up = Math.max(ctx.up, UPPER_FLOOR);
+    house(this, g, hx, hy, 2.5, 1.6, 30, { ...ctx, up }, { wall: BRICK, roofH: 16, roofColor: 0x37474f });
+    door(g, hx, hy, 1.6, 0.8, 18, 0x2b2b2b);
+    windowOnRight(this, g, hx, hy, 2.5, 0.8, 14, 0xffe082);
+    windowOnRight(this, g, hx, hy, 2.5, 0.8, 30, 0xffe082);
+    // Las bombillas colgadas sobre la terraza.
+    const a = iso(hx, hy + 2.6, 22);
+    const b = iso(hx + 2.5, hy + 2.6, 22);
+    g.moveTo(a.x, a.y).quadraticCurveTo((a.x + b.x) / 2, (a.y + b.y) / 2 + 6, b.x, b.y).stroke({ width: 1, color: 0x3a2418 });
+    for (let k = 1; k < 8; k++) {
+      const t = k / 8;
+      const px = a.x + (b.x - a.x) * t;
+      const py = a.y + (b.y - a.y) * t + Math.sin(t * Math.PI) * 4.5;
+      g.circle(px, py + 1.5, 1.6).fill(0xffe082);
+      if (k % 2) this.lights.push({ x: px, y: py, r: 12 });
+    }
+    for (const [tx, ty] of [[0.6, 2.5], [1.7, 2.6]]) {
+      const p = iso(x + tx, y + ty);
+      shadow(g, p.x, p.y + 1, 10, 4);
+      g.rect(p.x - 1, p.y - 9, 2, 9).fill(0x2b2b2b);
+      g.ellipse(p.x, p.y - 9, 7, 3.5).fill(0xfafafa).stroke(OUTLINE);
+      g.rect(p.x - 0.8, p.y - 14, 1.6, 4).fill(0xfff8e1);
+      g.circle(p.x, p.y - 15, 1.2).fill(0xff9800);
+    }
   },
 
   // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja

@@ -343,4 +343,10 @@ export default {
   chocolateria_candelaria: 'Chocolateria santafereña',
   dulceria_calle11: 'Doceria da Calle 11',
   casa_colonial: 'Casa colonial',
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  despensa_zona_g: 'Despensa da Zona G',
+  cocina_entradas: 'Cozinha de entradas',
+  parrilla_zona_g: 'Churrasqueira',
+  reposteria_zona_g: 'Doceria e sucos',
+  restaurante_zona_g: 'Restaurante da Zona G',
 };

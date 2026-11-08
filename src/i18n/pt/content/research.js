@@ -75,6 +75,7 @@ export const NOTES = {
   canastos_mimbre: 'A Montadora de cestas trabalha o dobro (as rotas se ajustam sozinhas).',
   salon_santafereno: 'O Restaurante santafereño serve o dobro (as rotas se ajustam sozinhas).',
   tostador_tambor: 'A Torrefação do Chorro torra o dobro (pede o dobro de café à carreta).',
+  despensa_grande: 'A Despensa da Zona G prepara o dobro (pede o dobro às suas duas carretas).',
 };
 
 export default {
@@ -536,4 +537,12 @@ export default {
   pailas_dulceria: 'Tachos de cobre',
   casona_restaurada: 'Casarão restaurado',
   barrio_patrimonio: 'Bairro patrimônio',
+  // Bogotá · Chapinero y la Zona G (v4.5)
+  despensa_grande: 'Despensa grande',
+  freidora_doble: 'Fritadeira dupla',
+  camion_reparto: 'Caminhão de entrega',
+  parrilla_carbon: 'Churrasqueira a carvão',
+  horno_reposteria: 'Forno de confeitaria',
+  chef_regional: 'Chef de cozinha regional',
+  guia_gastronomica: 'Guia gastronômico',
 };
