@@ -585,7 +585,10 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
   for (const id of ids) {
     const def = STATIONS_BY_ID[id];
     if (!def || def.side) continue;
-    const behind = [`${id}:transport`, ...(def.imports ?? []).filter((imp) => routeActive(state, imp.route)).map((imp) => `route:${imp.route}`)];
+    // (v4.5) Y los arrieros de la estación que la abastece: en Bogotá cada estación espera a la vez lo de la anterior
+    // y dos tractomulas, y si solo se suben las tractomulas, lo de la anterior sigue sin llegar.
+    const feeding = Object.keys(def.in ?? {}).flatMap((p) => Object.keys(state.stations).filter((s) => zoneOf(s) === zoneId && !STATIONS_BY_ID[s].side && Object.keys(STATIONS_BY_ID[s].out)[0] === p));
+    const behind = [`${id}:transport`, ...feeding.map((s) => `${s}:transport`), ...(def.imports ?? []).filter((imp) => routeActive(state, imp.route)).map((imp) => `route:${imp.route}`)];
     const trial = (step) => {
       const target = state.stations[id].level + step;
       const group = [[id, step], ...behind.map((b) => [b, target - upgradeLevel(state, b)]).filter(([, n]) => n > 0)];
