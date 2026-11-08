@@ -56,5 +56,7 @@ export const VICTORY = {
   salinas: { title: '¡Sal para toda la Sabana!', text: 'Completaste <b>Las Salinas de Nemocón</b>. Cuatro mil canastas sabaneras con el pan de sal, los ramos de rosas y las fresas.', stat: ['Canastas vendidas', 'canasta_sabanera'] },
   cocina: { title: '¡Ajiaco para todo Bogotá!', text: 'Completaste <b>La Cocina de la Sabana</b>. Seis mil almuerzos sabaneros: el ajiaco con la trucha ahumada y el ceviche de Guatavita.', stat: ['Almuerzos sabaneros vendidos', 'almuerzo_sabanero'] },
   zipaquira: { title: '¡Cundinamarca, de punta a punta!', text: 'Completaste <b>Zipaquirá</b> y Cundinamarca. Siete mil visitas a la Catedral de Sal, con las flores, las fresas, la trucha, la sal y el ajiaco de todas tus zonas.', stat: ['Visitas a la Catedral', 'visita_catedral'] },
+  // Bogotá (v4.5): una sola zona, el final de la región.
+  bogota: { title: '¡Todo el país en Bogotá!', text: 'Completaste <b>Bogotá</b>. Quinientas entradas a la Gran Feria de Mi Tierrita, con el café de La Candelaria, las cenas de la Zona G, los domingos de Usaquén, las mañanas de Paloquemao y lo que llegó en tractomula de todas las regiones.', stat: ['Entradas a la Gran Feria vendidas', 'feria_mi_tierrita'] },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: ['Arequipe vendido', 'arequipe'] },
 };

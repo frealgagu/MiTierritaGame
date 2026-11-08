@@ -55,4 +55,6 @@ export default {
   salinas: ['Salt for the whole Savanna!', 'You completed <b>The Salt Works of Nemocón</b>. Four thousand Savanna baskets with salt bread, rose bouquets and strawberries.', 'Baskets sold'],
   cocina: ['Ajiaco for all of Bogotá!', 'You completed <b>The Savanna Kitchen</b>. Six thousand Savanna lunches: ajiaco with smoked trout and ceviche from Guatavita.', 'Savanna lunches sold'],
   zipaquira: ['Cundinamarca, from end to end!', 'You completed <b>Zipaquirá</b> and Cundinamarca. Seven thousand visits to the Salt Cathedral, with the flowers, strawberries, trout, salt and ajiaco from all your zones.', 'Visits to the Cathedral'],
+  // Bogotá (v4.5)
+  bogota: ['The whole country in Bogotá!', 'You completed <b>Bogotá</b>. Five hundred tickets to the Great Mi Tierrita Fair, with the coffee from La Candelaria, the dinners from the Zona G, the Sundays in Usaquén, the mornings at Paloquemao and everything that came by truck from every region.', 'Great Fair tickets sold'],
 };

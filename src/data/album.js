@@ -746,7 +746,89 @@ const CUNDINAMARCA = [
   },
 ];
 
-export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' })), ...AMAZONAS.map((pg) => ({ ...pg, region: 'amazonas' })), ...TOLIMA.map((pg) => ({ ...pg, region: 'tolima' })), ...CUNDINAMARCA.map((pg) => ({ ...pg, region: 'cundinamarca' }))];
+// Bogotá (v4.5): La Candelaria, la comida, Monserrate y los cerros, el transporte, la cultura y los barrios.
+const BOGOTA = [
+  {
+    id: 'candelaria_bog',
+    icon: ICON.chorroQuevedo,
+    name: 'La Candelaria',
+    stickers: [
+      { id: 'chorro_quevedo', icon: ICON.chorroQuevedo, name: 'El Chorro de Quevedo', cost: 1, text: 'La plazoleta donde, según la tradición, se fundó Bogotá en 1538.' },
+      { id: 'plaza_bolivar_bog', icon: ICON.plazaBolivar, name: 'La Plaza de Bolívar', cost: 1, text: 'La plaza principal, con la Catedral Primada, el Capitolio y el Palacio Liévano.' },
+      { id: 'palomas_bog', icon: ICON.paloma, name: 'Las palomas', cost: 2, text: 'Cientos de palomas que comen maíz en la Plaza de Bolívar.' },
+      { id: 'balcones_bog', icon: ICON.balcones, name: 'Las casas coloniales', cost: 2, text: 'Casas de tapia con balcones de madera y tejas de barro.' },
+      { id: 'calle_embudo', icon: ICON.tardeCandelaria, name: 'La Calle del Embudo', cost: 2, text: 'Callejón angosto y empedrado que sale del Chorro de Quevedo.' },
+      { id: 'grafiti_bog', icon: ICON.grafiti, name: 'El grafiti', cost: 3, text: 'Murales de colores que cubren las paredes del centro.' },
+    ],
+  },
+  {
+    id: 'comida_bog',
+    icon: ICON.changua,
+    name: 'La comida',
+    stickers: [
+      { id: 'changua_album', icon: ICON.changua, name: 'La changua', cost: 1, text: 'Caldo de leche con huevo, cebolla y cilantro para el desayuno.' },
+      { id: 'obleas_album', icon: ICON.oblea, name: 'Las obleas', cost: 1, text: 'Dos galletas finas con arequipe, mermelada de mora y queso.' },
+      { id: 'tinto_esquina', icon: ICON.tinto, name: 'El tinto de la esquina', cost: 2, text: 'El café negro que se vende en termo en cada esquina.' },
+      { id: 'fritanga_album', icon: ICON.desayunoPlaza, name: 'La fritanga', cost: 2, text: 'Chorizo, morcilla, papa criolla y arepa, para compartir.' },
+      { id: 'onces_bog_album', icon: ICON.oncesBogotanas, name: 'Las onces santafereñas', cost: 2, text: 'Chocolate, pan, queso y algo dulce a media tarde.' },
+      { id: 'almojabanas_bog', icon: ICON.almojabana, name: 'La panadería', cost: 3, text: 'Almojábanas, pandeyucas y roscones recién horneados.' },
+    ],
+  },
+  {
+    id: 'cerros_bog',
+    icon: ICON.monserrate,
+    name: 'Monserrate y los cerros',
+    stickers: [
+      { id: 'monserrate_album', icon: ICON.monserrate, name: 'Monserrate', cost: 1, text: 'El cerro con la iglesia en lo alto, a más de 3.000 metros.' },
+      { id: 'teleferico_album', icon: ICON.teleferico, name: 'El teleférico', cost: 1, text: 'Sube a Monserrate colgado del cable; el funicular va por la montaña.' },
+      { id: 'copeton_album', icon: ICON.copeton, name: 'El copetón', cost: 2, text: 'El pajarito del copete, que canta en todos los parques de Bogotá.' },
+      { id: 'niebla_cerros', icon: ICON.neblina, name: 'La niebla de los cerros', cost: 2, text: 'Las nubes bajan por los Cerros Orientales casi todas las tardes.' },
+      { id: 'chingaza_album', icon: ICON.frailejon, name: 'El páramo de Chingaza', cost: 2, text: 'De este páramo sale casi toda el agua que se toma en Bogotá.' },
+      { id: 'sombrilla_album', icon: ICON.sombrilla, name: 'La sombrilla', cost: 3, text: 'En Bogotá llueve cualquier día: mejor salir con sombrilla.' },
+    ],
+  },
+  {
+    id: 'transporte_bog',
+    icon: ICON.transmilenio,
+    name: 'El transporte',
+    stickers: [
+      { id: 'transmilenio_album', icon: ICON.transmilenio, name: 'El TransMilenio', cost: 1, text: 'Buses rojos articulados que van por sus propios carriles.' },
+      { id: 'ciclovia_album', icon: ICON.bicicleta, name: 'La ciclovía', cost: 1, text: 'Los domingos cierran avenidas para que la gente monte en bicicleta.' },
+      { id: 'tranvia_album', icon: ICON.tranvia, name: 'El tranvía', cost: 2, text: 'Antes de los buses, el tranvía recorría la ciudad por rieles.' },
+      { id: 'el_dorado_album', icon: '✈️', name: 'El aeropuerto El Dorado', cost: 2, text: 'El aeropuerto más grande del país, con el nombre de la leyenda.' },
+      { id: 'tractomula_album', icon: '🚛', name: 'La tractomula', cost: 2, text: 'Por las carreteras llegan a Bogotá las cosas de todas las regiones.' },
+      { id: 'bus_album', icon: '🚌', name: 'El bus de colores', cost: 3, text: 'Antes, cada empresa pintaba sus buses de colores distintos.' },
+    ],
+  },
+  {
+    id: 'cultura_bog',
+    icon: ICON.poporo,
+    name: 'La cultura',
+    stickers: [
+      { id: 'museo_oro', icon: ICON.poporo, name: 'El Museo del Oro', cost: 1, text: 'Guarda miles de piezas de oro de los pueblos indígenas, como el poporo.' },
+      { id: 'teatro_colon', icon: '🎭', name: 'El Teatro Colón', cost: 1, text: 'El teatro más antiguo de la ciudad, con su techo pintado.' },
+      { id: 'museo_botero', icon: '🎨', name: 'El Museo Botero', cost: 2, text: 'Pinturas y esculturas de figuras gordas que donó Fernando Botero.' },
+      { id: 'biblioteca_arango', icon: '🏛️', name: 'La Biblioteca Luis Ángel Arango', cost: 2, text: 'Una de las bibliotecas más visitadas de América Latina.' },
+      { id: 'rock_parque', icon: ICON.guitarraRock, name: 'Rock al Parque', cost: 2, text: 'El festival gratis de rock al aire libre, en el parque Simón Bolívar.' },
+      { id: 'cometas_agosto', icon: ICON.cometas, name: 'Las cometas de agosto', cost: 3, text: 'Con los vientos de agosto, el cielo de los parques se llena de cometas.' },
+    ],
+  },
+  {
+    id: 'barrios_bog',
+    icon: ICON.casaLadrillo,
+    name: 'Los barrios',
+    stickers: [
+      { id: 'usaquen_album', icon: ICON.domingoUsaquen, name: 'Usaquén', cost: 1, text: 'Pueblo viejo dentro de la ciudad, con su mercado de pulgas los domingos.' },
+      { id: 'zona_g_album', icon: ICON.cenaZonaG, name: 'La Zona G', cost: 1, text: 'En Chapinero, las calles de los restaurantes de todo el mundo.' },
+      { id: 'paloquemao_album', icon: ICON.canastaPaloquemao, name: 'Paloquemao', cost: 2, text: 'La plaza de mercado, con las flores al amanecer.' },
+      { id: 'teusaquillo_album', icon: ICON.casaLadrillo, name: 'Teusaquillo', cost: 2, text: 'Barrio de casas de ladrillo con techos empinados, al estilo inglés.' },
+      { id: 'septima_album', icon: ICON.nocheBogota, name: 'La Séptima', cost: 2, text: 'La carrera más antigua: en el centro se camina sin carros.' },
+      { id: 'feria_album', icon: ICON.feriaMiTierrita, name: 'La Gran Feria', cost: 3, text: 'Todas las regiones del país, reunidas en Bogotá.' },
+    ],
+  },
+];
+
+export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' })), ...AMAZONAS.map((pg) => ({ ...pg, region: 'amazonas' })), ...TOLIMA.map((pg) => ({ ...pg, region: 'tolima' })), ...CUNDINAMARCA.map((pg) => ({ ...pg, region: 'cundinamarca' })), ...BOGOTA.map((pg) => ({ ...pg, region: 'bogota' }))];
 // Las páginas del álbum de una región.
 export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 

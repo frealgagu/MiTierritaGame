@@ -591,6 +591,21 @@ export const ICON = {
   caciqueMuisca: '\uE249', // El Zipa: el gobernante muisca con la corona de oro, la nariguera y la manta pintada
   trenSabana: '\uE24A', // El tren de la Sabana: la locomotora de vapor negra y roja, con su chimenea humeando
   bandola: '\uE24B', // La bandola: el instrumento de cuerdas en forma de pera que lleva la melodía del pasillo
+  chorroQuevedo: '\uE24C', // El Chorro de Quevedo: la plazoleta empedrada con la fuente de piedra y la capillita blanca detrás
+  plazaBolivar: '\uE24D', // La Plaza de Bolívar: la fachada de la Catedral Primada con sus dos torres y la plaza abierta adelante
+  paloma: '\uE24E', // La paloma de la plaza: gris, con el cuello tornasol verde y morado
+  grafiti: '\uE24F', // El grafiti de La Candelaria: una pared de ladrillo con un mural de colores y una cara grande
+  changua: '\uE250', // La changua: la taza de caldo de leche con el huevo, el cilantro y el calado de pan
+  oblea: '\uE251', // La oblea: las dos galletas finas y redondas con arequipe y mermelada de mora en medio
+  teleferico: '\uE252', // El teleférico de Monserrate: la cabina roja colgada del cable sobre el cerro verde, con la iglesia arriba
+  copeton: '\uE253', // El copetón: el pajarito de Bogotá, pardo, con el copete en punta y el collar rojizo
+  sombrilla: '\uE254', // La sombrilla bogotana: el paraguas negro abierto, con gotas de lluvia alrededor
+  transmilenio: '\uE255', // El TransMilenio: el bus rojo articulado, con su fuelle negro en medio y las ventanas largas
+  bicicleta: '\uE256', // La ciclovía: la bicicleta, con las ruedas grandes y el marco amarillo
+  tranvia: '\uE257', // El tranvía de Bogotá de antes: el carro verde y crema sobre los rieles, con el trole al cable
+  poporo: '\uE258', // El poporo quimbaya del Museo del Oro: la vasija de oro de cuello largo y barriga redonda
+  guitarraRock: '\uE259', // Rock al Parque: la guitarra eléctrica roja, con sus pastillas y el mástil largo
+  casaLadrillo: '\uE25A', // Las casas de ladrillo de Teusaquillo: la casa inglesa de ladrillo con techo empinado y ventanas blancas
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

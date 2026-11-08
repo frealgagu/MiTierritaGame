@@ -179,7 +179,26 @@ const CUNDINAMARCA = [
   { id: 'cu_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('cundinamarca')], reward: [1, 2, 4] },
 ];
 
-export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'pacifico' })), ...AMAZONAS.map((l) => ({ ...l, region: 'amazonas' })), ...TOLIMA.map((l) => ({ ...l, region: 'tolima' })), ...CUNDINAMARCA.map((l) => ({ ...l, region: 'cundinamarca' }))];
+// Bogotá (v4.5).
+const BOGOTA = [
+  { id: 'bg_cafe', icon: ICON.cafeCapitalino, name: 'Tostador del Chorro', text: 'Tuesta {n} bolsas de café capitalino', metric: 'produced:cafe_capitalino', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'bg_cenas', icon: ICON.cenaZonaG, name: 'Chef de la Zona G', text: 'Sirve {n} cenas en la Zona G', metric: 'produced:cena_zona_g', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'bg_domingos', icon: ICON.domingoUsaquen, name: 'Pulguero de Usaquén', text: 'Arma {n} domingos en el mercado de pulgas', metric: 'produced:domingo_usaquen', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'bg_mananas', icon: ICON.mananaPaloquemao, name: 'Madrugador de Paloquemao', text: 'Arma {n} mañanas en Paloquemao', metric: 'produced:manana_paloquemao', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'bg_monserrate', icon: ICON.monserrate, name: 'Romero de Monserrate', text: 'Sube {n} veces a Monserrate', metric: 'produced:subida_monserrate', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
+  { id: 'bg_feria', icon: ICON.feriaMiTierrita, name: 'Todo el país en Bogotá', text: 'Vende {n} entradas a la Gran Feria', metric: 'sold:feria_mi_tierrita', tiers: [1000, 100000, 10000000], reward: [2, 4, 8] },
+  { id: 'bg_monedas', icon: '💰', name: 'Patrón de la capital', text: 'Gana {n} monedas en total', metric: 'earned', tiers: [1e9, 1e15, 1e21], reward: [1, 2, 4] },
+  { id: 'bg_anos', icon: '📅', name: 'Rolo de corazón', text: 'Vive {n} años de juego en Bogotá', metric: 'years', tiers: [4, 16, 64], reward: [1, 2, 4] },
+  { id: 'bg_final', icon: ICON.plazaBolivar, name: 'Hasta la Gran Feria', text: 'Completa Bogotá {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
+  { id: 'bg_maestro', icon: '🏅', name: 'Maestro de la capital', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
+  { id: 'bg_medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [6, 24, 60], reward: [1, 2, 4] },
+  { id: 'bg_todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
+  { id: 'bg_oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
+  { id: 'bg_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
+  { id: 'bg_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [12, 24, researchOf('bogota')], reward: [1, 2, 4] },
+];
+
+export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'pacifico' })), ...AMAZONAS.map((l) => ({ ...l, region: 'amazonas' })), ...TOLIMA.map((l) => ({ ...l, region: 'tolima' })), ...CUNDINAMARCA.map((l) => ({ ...l, region: 'cundinamarca' })), ...BOGOTA.map((l) => ({ ...l, region: 'bogota' }))];
 export const logrosOf = (region) => LOGROS.filter((l) => l.region === region);
 
 export const LOGROS_BY_ID = Object.fromEntries(LOGROS.map((l) => [l.id, l]));

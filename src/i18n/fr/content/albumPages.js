@@ -55,4 +55,11 @@ export default {
   sal_cund: 'Le sel',
   muiscas_cund: 'Les Muiscas',
   pueblos_cund: 'Les villages',
+  // Bogotá (v4.5)
+  candelaria_bog: 'La Candelaria',
+  comida_bog: 'La cuisine',
+  cerros_bog: 'Monserrate et les collines',
+  transporte_bog: 'Les transports',
+  cultura_bog: 'La culture',
+  barrios_bog: 'Les quartiers',
 };
