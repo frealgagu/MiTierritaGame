@@ -142,4 +142,6 @@ export default {
   '⏩ Acelerar ×{n}': '⏩ Accélérer ×{n}',
   '🔁 {region}: producción {mult}': '🔁 {region} : production {mult}',
   '🛠️ Opciones de desarrollador activadas': '🛠️ Options pour les développeurs activées',
+  'Abrir el tablero': 'Ouvrir le tableau',
+  'Recoger el tablero': 'Replier le tableau',
 };

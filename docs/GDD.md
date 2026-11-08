@@ -451,6 +451,7 @@ Sintetizado con Web Audio, sin archivos: clic de botones, monedas al vender, arp
   - Botón «Ver cadena»: un diagrama compacto con el flujo/s de cada tramo y el cuello de botella resaltado en rojo.
   - Fuente: **Fredoka** o **Baloo 2**.
   - Botones (v4.4.6): todos del mismo alto (50 px, el de un botón con el texto en dos renglones), con el texto centrado.
+  - Tablero del evento (v4.4.7): se recoge con ▾ a la fila del título, el reloj y la barra de avance (se recuerda en el teléfono); se abre con ▴ o tocando el título, y solo al señalar la mejora recomendada.
   - Borrar partida (v4.3.2, v4.4.6): primero el botón rojo; al tocarlo aparece la barra que se desliza hasta el final para confirmar, y si no se desliza en 8 s vuelve el botón.
 
 ### Producción del arte sin artista
