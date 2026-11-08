@@ -119,4 +119,14 @@ export default {
   tm_arroz: ['Rice truck', 'Truck', 'Rice'],
   tm_asai: ['Açaí truck', 'Truck', 'Açaí'],
   tm_jugos: ['Juice truck', 'Truck', 'Juices'],
+  // Bogotá · Usaquén (v4.5)
+  tm_ruanas: ['Ruana truck', 'Truck', 'Ruanas'],
+  tm_alpargatas: ['Espadrille truck', 'Truck', 'Espadrilles'],
+  tm_sombreros: ['Hat truck', 'Truck', 'Hats'],
+  tm_sillas: ['Saddle truck', 'Truck', 'Saddles'],
+  tm_loza: ['Black pottery truck', 'Truck', 'Pottery'],
+  tm_canastas: ['Gift basket truck', 'Truck', 'Baskets'],
+  tm_mascaras: ['Mask truck', 'Truck', 'Masks'],
+  tm_werregue: ['Werregue truck', 'Truck', 'Werregue'],
+  tm_cofres: ['Salt gift box truck', 'Truck', 'Salt boxes'],
 };

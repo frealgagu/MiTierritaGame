@@ -349,4 +349,10 @@ export default {
   parrilla_zona_g: 'Churrasqueira',
   reposteria_zona_g: 'Doceria e sucos',
   restaurante_zona_g: 'Restaurante da Zona G',
+  // Bogotá · Usaquén (v4.5)
+  toldo_tejidos: 'Barraca de tecidos',
+  toldo_sombreros: 'Barraca de chapéus',
+  toldo_loza: 'Barraca de louça e cestas',
+  toldo_mascaras: 'Barraca de máscaras e werregue',
+  mercado_pulgas: 'Mercado de pulgas',
 };

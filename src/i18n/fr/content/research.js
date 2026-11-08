@@ -76,6 +76,7 @@ export const NOTES = {
   salon_santafereno: 'Le Restaurant santafereño sert deux fois plus (les routes s’ajustent seules).',
   tostador_tambor: 'La Torréfaction du Chorro torréfie deux fois plus (elle demande deux fois plus de café au camion).',
   despensa_grande: 'Le Garde-manger de la Zona G prépare deux fois plus (il en demande deux fois plus à ses deux camions).',
+  telar_grande: 'Le Stand des tissus en propose deux fois plus (il en demande deux fois plus à ses deux camions).',
 };
 
 export default {
@@ -545,4 +546,11 @@ export default {
   horno_reposteria: 'Four à pâtisserie',
   chef_regional: 'Chef de cuisine régionale',
   guia_gastronomica: 'Guide gastronomique',
+  // Bogotá · Usaquén (v4.5)
+  telar_grande: 'Grand métier à tisser',
+  toldo_doble: 'Double stand',
+  estanteria_loza: 'Étagères à poterie',
+  vitrina_mascaras: 'Vitrine à masques',
+  calle_cerrada: 'Rue fermée le dimanche',
+  sello_artesanal: 'Label artisanal',
 };

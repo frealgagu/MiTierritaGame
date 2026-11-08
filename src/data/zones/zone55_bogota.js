@@ -30,8 +30,9 @@ export const ZONE55 = {
   groups: [
     { id: 'candelaria', name: 'La Candelaria', stations: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial'] },
     { id: 'zona_g', name: 'Chapinero y la Zona G', stations: ['despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g'] },
+    { id: 'usaquen', name: 'Usaquén', stations: ['toldo_tejidos', 'toldo_sombreros', 'toldo_loza', 'toldo_mascaras', 'mercado_pulgas'] },
   ],
-  chain: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial', 'despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g'],
+  chain: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial', 'despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g', 'toldo_tejidos', 'toldo_sombreros', 'toldo_loza', 'toldo_mascaras', 'mercado_pulgas'],
   // El Chorro de Quevedo: la plazoleta donde empieza todo, al pie de los Cerros.
   farm: { stationId: 'tostadero_chorro', x: 35, y: 6, w: 6, h: 6 },
   plots: [
@@ -45,6 +46,12 @@ export const ZONE55 = {
     { stationId: 'parrilla_zona_g', x: 21, y: 13 },
     { stationId: 'reposteria_zona_g', x: 19, y: 9 },
     { stationId: 'restaurante_zona_g', x: 17, y: 13 },
+    // Usaquén, al final de la Séptima, al norte.
+    { stationId: 'toldo_tejidos', x: 15, y: 9 },
+    { stationId: 'toldo_sombreros', x: 13, y: 13 },
+    { stationId: 'toldo_loza', x: 11, y: 9 },
+    { stationId: 'toldo_mascaras', x: 9, y: 13 },
+    { stationId: 'mercado_pulgas', x: 7, y: 9 },
   ],
   warehouse: { x: 47, y: 42, w: 3, h: 3 },
   muleRoad: [[40.5, 12.5], [4.5, 12.5], [4.5, 30.5], [42.5, 30.5], [42.5, 44.5], [46.5, 44.5], [46.5, 45.5], [47.4, 45.5]],
@@ -76,6 +83,16 @@ export const ZONE55 = {
     tm_arroz: { road: [[8.5, 51.9], [8.5, 20.5], [21.5, 20.5], [21.5, 16.2]], sign: [9.7, 40.4], text: 'Arroz de la Costa ⬆' },
     tm_asai: { road: [[18.5, 51.9], [18.5, 20.5], [16.5, 20.5], [16.5, 12.5], [19.2, 12.5]], sign: [19.7, 46.4], text: 'Asaí, de El Dorado ⬆' },
     tm_jugos: { road: [[51.9, 8.5], [44.5, 8.5], [44.5, 20.5], [20.5, 20.5], [20.5, 12.5]], sign: [46.4, 9.6], text: '⬆ Jugos de los Llanos' },
+    // Usaquén.
+    tm_ruanas: { road: [[0.1, 20.5], [16.5, 20.5], [16.5, 12.5]], sign: [14.6, 19.4], text: 'Ruanas de Boyacá ⬇' },
+    tm_alpargatas: { road: [[0.1, 20.5], [12.5, 20.5], [12.5, 12.5], [15.2, 12.5]], sign: [17.6, 19.4], text: 'Alpargatas de Santander ⬇' },
+    tm_sombreros: { road: [[8.5, 51.9], [8.5, 20.5], [14.5, 20.5], [14.5, 16.2]], sign: [7.3, 49.4], text: 'Sombreros de la Costa ⬆' },
+    tm_sillas: { road: [[51.9, 8.5], [44.5, 8.5], [44.5, 20.5], [13.5, 20.5], [13.5, 16.2]], sign: [43.4, 9.6], text: '⬆ Sillas de los Llanos' },
+    tm_loza: { road: [[51.9, 20.5], [12.5, 20.5], [12.5, 12.5]], sign: [43.4, 21.6], text: '⬆ Loza del Tolima' },
+    tm_canastas: { road: [[8.5, 51.9], [8.5, 12.5], [10.8, 12.5]], sign: [7.3, 46.4], text: 'Canastas del Eje ⬆' },
+    tm_mascaras: { road: [[18.5, 51.9], [18.5, 20.5], [10.5, 20.5], [10.5, 16.2]], sign: [19.7, 43.4], text: 'Máscaras, de El Dorado ⬆' },
+    tm_werregue: { road: [[51.9, 20.5], [9.5, 20.5], [9.5, 16.2]], sign: [40.4, 21.6], text: '⬆ Werregue del Pacífico' },
+    tm_cofres: { road: [[44.5, 51.9], [44.5, 20.5], [8.5, 20.5], [8.5, 12.5]], sign: [45.6, 46.4], text: 'Cofres de sal ⬆' },
   },
   unlockedBy: null, // la única de Bogotá: se abre con la región
   next: null,

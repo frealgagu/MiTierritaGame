@@ -76,6 +76,7 @@ export const NOTES = {
   salon_santafereno: 'O Restaurante santafereño serve o dobro (as rotas se ajustam sozinhas).',
   tostador_tambor: 'A Torrefação do Chorro torra o dobro (pede o dobro de café à carreta).',
   despensa_grande: 'A Despensa da Zona G prepara o dobro (pede o dobro às suas duas carretas).',
+  telar_grande: 'A Barraca de tecidos abastece o dobro (pede o dobro às suas duas carretas).',
 };
 
 export default {
@@ -545,4 +546,11 @@ export default {
   horno_reposteria: 'Forno de confeitaria',
   chef_regional: 'Chef de cozinha regional',
   guia_gastronomica: 'Guia gastronômico',
+  // Bogotá · Usaquén (v4.5)
+  telar_grande: 'Tear grande',
+  toldo_doble: 'Barraca dupla',
+  estanteria_loza: 'Estante para a louça',
+  vitrina_mascaras: 'Vitrine de máscaras',
+  calle_cerrada: 'Rua fechada aos domingos',
+  sello_artesanal: 'Selo do artesanato',
 };

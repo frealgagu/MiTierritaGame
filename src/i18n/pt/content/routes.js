@@ -119,4 +119,14 @@ export default {
   tm_arroz: ['Carreta do arroz', 'Carreta', 'Arroz'],
   tm_asai: ['Carreta do açaí', 'Carreta', 'Açaí'],
   tm_jugos: ['Carreta dos sucos', 'Carreta', 'Sucos'],
+  // Bogotá · Usaquén (v4.5)
+  tm_ruanas: ['Carreta dos ponchos', 'Carreta', 'Ponchos'],
+  tm_alpargatas: ['Carreta das alpargatas', 'Carreta', 'Alpargatas'],
+  tm_sombreros: ['Carreta dos chapéus', 'Carreta', 'Chapéus'],
+  tm_sillas: ['Carreta das selas', 'Carreta', 'Selas'],
+  tm_loza: ['Carreta da louça preta', 'Carreta', 'Louça'],
+  tm_canastas: ['Carreta das cestas de presente', 'Carreta', 'Cestas'],
+  tm_mascaras: ['Carreta das máscaras', 'Carreta', 'Máscaras'],
+  tm_werregue: ['Carreta do werregue', 'Carreta', 'Werregue'],
+  tm_cofres: ['Carreta dos cofres de sal', 'Carreta', 'Cofres'],
 };

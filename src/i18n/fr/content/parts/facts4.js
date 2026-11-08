@@ -88,4 +88,10 @@ export default {
   parrilla_zona_g: ['La viande à la llanera rôtit sur des broches, près du feu de bois.', 'Chapinero est au nord du centre, au pied des Cerros.'],
   reposteria_zona_g: ['L’açaí d’Amazonie se sert froid, en bol, avec de la banane.', 'Le jus de fruit de la passion se fait avec la pulpe filtrée.'],
   restaurante_zona_g: ['Bogotá accueille la cuisine de toutes les régions du pays.', 'Après le repas, à Bogotá, on offre un tinto.'],
+  // Bogotá · Usaquén (v4.5)
+  toldo_tejidos: ['Le dimanche, Usaquén se remplit de stands d’artisanat.', 'La ruana en laine de Boyacá réchauffe les soirées froides.'],
+  toldo_sombreros: ['Le sombrero vueltiao se tresse en caña flecha, sur la Côte.', 'La selle llanera est en cuir repoussé.'],
+  toldo_loza: ['La poterie noire de La Chamba est polie à la pierre avant cuisson.', 'Le panier cadeau de l’Axe contient café, panela et arequipe.'],
+  toldo_mascaras: ['Les masques ticunas sont peints sur du tissu d’écorce.', 'Le werregue se tresse en spirale avec de la fibre de palmier.'],
+  mercado_pulgas: ['Usaquén était un village à part avant d’être dans Bogotá.', 'Au marché aux puces, il y a de tout : antiquités, disques, artisanat.'],
 };

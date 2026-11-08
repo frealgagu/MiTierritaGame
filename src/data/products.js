@@ -432,6 +432,12 @@ export const PRODUCTS = {
   plato_fuerte: { name: 'Plato fuerte', zone: 'bogota', value: 60, icon: ICON.platoFuerte, color: 0x8d4f2a },
   menu_completo: { name: 'Menú completo', zone: 'bogota', value: 150, icon: ICON.menuCompleto, color: 0x6a1b9a },
   cena_zona_g: { name: 'Cena en la Zona G', zone: 'bogota', value: 250, icon: ICON.cenaZonaG, color: 0xff9800 },
+  // Bogotá · Usaquén (v4.5): el mercado de pulgas, con una artesanía de cada región.
+  surtido_tejidos: { name: 'Surtido de tejidos', zone: 'bogota', value: 20, icon: ICON.surtidoTejidos, color: 0x5d4037 },
+  surtido_feria: { name: 'Surtido de la feria', zone: 'bogota', value: 45, icon: ICON.surtidoFeria, color: 0x8d5a32 },
+  surtido_loza: { name: 'Surtido con loza', zone: 'bogota', value: 120, icon: ICON.surtidoLoza, color: 0x2b2b2b },
+  gran_surtido: { name: 'Gran surtido artesanal', zone: 'bogota', value: 320, icon: ICON.granSurtido, color: 0xc08b5c },
+  domingo_usaquen: { name: 'Domingo en Usaquén', zone: 'bogota', value: 800, icon: ICON.domingoUsaquen, color: 0xd7263d },
 
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },

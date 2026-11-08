@@ -349,4 +349,10 @@ export default {
   parrilla_zona_g: 'Grill',
   reposteria_zona_g: 'Desserts et jus',
   restaurante_zona_g: 'Restaurant de la Zona G',
+  // Bogotá · Usaquén (v4.5)
+  toldo_tejidos: 'Stand des tissus',
+  toldo_sombreros: 'Stand des chapeaux',
+  toldo_loza: 'Stand de poterie et paniers',
+  toldo_mascaras: 'Stand des masques et du werregue',
+  mercado_pulgas: 'Marché aux puces',
 };
