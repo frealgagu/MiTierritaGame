@@ -102,4 +102,12 @@ export default {
   almuerzos_trucha: ['Trout lunch route', 'Chiva', 'Trout'],
   canastas: ['Basket route', 'Chiva', 'Baskets'],
   cofres_sal: ['Salt gift box route', 'Chiva', 'Salt'],
+  // Bogotá · La Candelaria (v4.5)
+  tm_cafe: ['Coffee truck', 'Truck', 'Coffee'],
+  tm_bizcochos: ['Biscuit truck', 'Truck', 'Biscuits'],
+  tm_chocolate: ['Chocolate truck', 'Truck', 'Chocolate'],
+  tm_amasijos: ['Baked goods truck', 'Truck', 'Baked goods'],
+  tm_bocadillos: ['Bocadillo truck', 'Truck', 'Bocadillos'],
+  tm_cocadas: ['Cocada truck', 'Truck', 'Cocadas'],
+  tm_flores: ['Flower truck', 'Truck', 'Flowers'],
 };

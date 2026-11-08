@@ -560,6 +560,11 @@ export const ICON = {
   almuerzoPlazaZipa: '\uE22A', // El almuerzo de la plaza de mercado: el piquete con pollo, papa criolla, mazorca y la trucha frita
   mochilaPaseo: '\uE22B', // La mochila del paseo a la mina: con la canasta, el cofre de sal y la ruana doblada
   catedralSal: '\uE22C', // La Catedral de Sal de Zipaquirá: la gran cruz tallada en la roca, iluminada de azul, en lo hondo de la mina
+  cafeCapitalino: '\uE22D', // El café capitalino: la bolsa de café recién tostado del tostadero, abierta, con el pocillo humeando al lado
+  tintoBizcochos: '\uE22E', // El tinto con bizcochos: el pocillo de café negro de la cafetería y los bizcochos de achira en el plato
+  oncesBogotanas: '\uE22F', // Las onces bogotanas: la bandeja con el chocolate, la almojábana, el bocadillo y la cocada
+  tardeCandelaria: '\uE230', // La tarde en La Candelaria: la casa colonial de colores, con su balcón de madera, las flores y el farol
+  monserrate: '\uE231', // Monserrate: el cerro verde con la iglesia blanca en la cumbre y el funicular que sube
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

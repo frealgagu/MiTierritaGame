@@ -74,6 +74,7 @@ export const NOTES = {
   floristas: 'La Fleuriste de la place travaille deux fois plus vite (elle demande deux fois plus de cartons aux Fleurs).',
   canastos_mimbre: 'La Monteuse de paniers travaille deux fois plus vite (les routes s’ajustent seules).',
   salon_santafereno: 'Le Restaurant santafereño sert deux fois plus (les routes s’ajustent seules).',
+  tostador_tambor: 'La Torréfaction du Chorro torréfie deux fois plus (elle demande deux fois plus de café au camion).',
 };
 
 export default {
@@ -527,4 +528,12 @@ export default {
   mochilas_fique: 'Sacs en fique',
   guias_mineros: 'Guides mineurs',
   maravilla_colombia: 'Merveille de Colombie',
+  // Bogotá · La Candelaria (v4.5)
+  tostador_tambor: 'Torréfacteur à tambour',
+  greca_grande: 'Grand percolateur',
+  molinillos: 'Molinillos en bois',
+  queso_ubate: 'Fromage d’Ubaté',
+  pailas_dulceria: 'Bassines en cuivre',
+  casona_restaurada: 'Demeure restaurée',
+  barrio_patrimonio: 'Quartier patrimonial',
 };

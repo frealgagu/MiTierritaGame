@@ -55,4 +55,6 @@ export default {
   salinas: ['As Salinas de Nemocón', 'A Nemocón ➜', { ramos_rosas: '⬅ Buquês das Flores', bandejas_fresa: '⬅ Morangos de Sibaté', cofres_sal: 'Caixinhas para Zipaquirá ➜', canastas: 'Cestas ⬇' }],
   cocina: ['A Cozinha da Savana', 'A Chía ➜', { ahumadas_trucha: '⬅ Truta defumada de Guatavita', ceviches: '⬅ Ceviche', almuerzos_sabaneros: 'A Zipaquirá ➜' }],
   zipaquira: ['Zipaquirá', 'À mina ➜', { cajas_flores: '⬅ Flores da Savana', fresas_crema: '⬅ Morangos de Sibaté', cofres_sal: '⬅ Caixinhas de sal', canastas: '⬅ Cestas', almuerzos_sabaneros: 'Ajiaco ⬆', mermeladas: 'Geleia ⬆', almuerzos_trucha: 'Truta ⬆' }],
+  // Bogotá (v4.5)
+  bogota: ['Bogotá', 'Para a Autopista Sur ➜', { tm_cafe: 'Café do Eixo ⬆', tm_chocolate: 'Chocolate do Eixo ⬆', tm_cocadas: 'Cocadas da Costa ⬆', tm_amasijos: 'Pães de Boyacá ⬇', tm_bocadillos: 'Bocadillos de Santander ⬇', tm_bizcochos: '⬆ Biscoitos do Tolima', tm_flores: 'Flores da Savana ⬆' }],
 };

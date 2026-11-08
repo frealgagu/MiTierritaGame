@@ -1,7 +1,7 @@
 import { createStationState } from './production.js';
-import { createRouteState } from './routes.js';
+import { createRouteState, routeRegion } from './routes.js';
 import { ROUTES } from '../data/routes.js';
-import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
+import { REGIONS_BY_ID } from '../data/regions.js';
 import { sourceOf } from './chain.js';
 
 export const SAVE_VERSION = 9;
@@ -30,7 +30,7 @@ export function createInitialState(now = Date.now(), regionId = 'cafetero') {
     // Por zona: desbloqueada, completada, despacho, bodega (productId -> unidades) y Willys.
     zones: Object.fromEntries(region.zones.map((z) => [z, createZoneState(z === first)])),
     // Rutas entre zonas de la región: nivel y vehículo (ver sim/routes.js).
-    routes: Object.fromEntries(ROUTES.filter((r) => REGION_OF_ZONE[r.from] === regionId).map((r) => [r.id, createRouteState()])),
+    routes: Object.fromEntries(ROUTES.filter((r) => routeRegion(r) === regionId).map((r) => [r.id, createRouteState()])),
     mules: [], // { id, productId, amount, from, to, phase: 'go' | 'back', t, duration }
     stats: { produced: {}, sold: {}, imported: {} },
     hints: [], // avisos ya mostrados

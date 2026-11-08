@@ -341,6 +341,7 @@ export function routeFlow(state, routeId, depth = 0, memo = null) {
   const r = ROUTES_BY_ID[routeId];
   const want = (id) => (routeActive(state, id) ? Math.min(routeDemandRate(state, id), routeRate(state, id)) : 0);
   const own = want(routeId);
+  if (r.unlimited) return own; // la tractomula no depende de ninguna bodega (v4.5)
   const siblings = ROUTES.filter((x) => x.from === r.from && x.product === r.product).reduce((n, x) => n + want(x.id), 0);
   const source = analyzeChain(state, r.from, { exports: false, depth, memo });
   let supply = (source.exported[r.product] ?? 0) + source.rows.filter((row) => Object.keys(STATIONS_BY_ID[row.id].out)[0] === r.product).reduce((n, row) => n + row.diverted, 0);
@@ -405,7 +406,7 @@ export function reusable(baseMemo, touched) {
   if (touched.all) return new Map(); // algo que cambia todas las zonas (las mulas más rápidas del Cable aéreo)
   const dirty = new Set(touched.zones);
   for (const id of touched.demand) {
-    dirty.add(ROUTES_BY_ID[id].from);
+    if (ROUTES_BY_ID[id].from) dirty.add(ROUTES_BY_ID[id].from); // las tractomulas no tienen (v4.5)
     dirty.add(ROUTES_BY_ID[id].to);
   }
   for (let grew = true; grew; ) {
@@ -433,13 +434,14 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
   // allá) y, si la ruta no trae todo lo que piden sus estaciones, también se prueban sus mejoras (si la
   // Paila espera panela, lo que hace falta puede ser la Pulverizadora del Trapiche).
   const incoming = ROUTES.filter((r) => r.to === zoneId && routeActive(state, r.id));
-  const zones = [zoneId, ...new Set(incoming.map((r) => r.from))];
+  const zones = [zoneId, ...new Set(incoming.filter((r) => !r.unlimited).map((r) => r.from))];
   const short = (r) => routeFlow(state, r.id, 1, baseMemo) < routeDemandRate(state, r.id) * (1 - LOSS);
   // De allá se prueba lo que más frena lo que manda la ruta, en el camino de estaciones que lleva hasta
   // eso (con el arequipe, el Potrero, la Pasteurizadora y la Paila): su cuello de botella, la estación
   // de menor nivel y los arrieros de menor nivel. Probarlas todas era lento con cinco zonas proveedoras.
   const feeders = new Set();
   for (const r of incoming.filter(short)) {
+    if (r.unlimited) continue; // la tractomula no tiene zona de origen que mejorar (v4.5)
     const path = supplyPath(state, r);
     if (!path.length) continue;
     const lowest = (key) => path.map(key).reduce((low, id) => (upgradeLevel(state, id) < upgradeLevel(state, low) ? id : low));
@@ -451,6 +453,7 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
   // Lo que de verdad frena un importado, siguiendo la cadena de zonas (ver más abajo, «Nada suma»).
   const chase = (r, hops) => {
     if (routeRate(state, r.id) < routeDemandRate(state, r.id) * (1 - LOSS) && !quote(`route:${r.id}`, 1).maxed) return `route:${r.id}`;
+    if (r.unlimited) return null;
     const path = supplyPath(state, r);
     if (hops < MAX_ROUTE_DEPTH) {
       for (const row of analyzeChain(state, r.from, { memo: baseMemo }).rows) {

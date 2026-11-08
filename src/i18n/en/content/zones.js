@@ -54,4 +54,6 @@ export default {
   salinas: ['The Salt Works of Nemocón', 'To Nemocón ➜', { ramos_rosas: '⬅ Bouquets from the Flowers', bandejas_fresa: '⬅ Strawberries from Sibaté', cofres_sal: 'Gift boxes to Zipaquirá ➜', canastas: 'Baskets ⬇' }],
   cocina: ['The Savanna Kitchen', 'To Chía ➜', { ahumadas_trucha: '⬅ Smoked trout from Guatavita', ceviches: '⬅ Ceviche', almuerzos_sabaneros: 'To Zipaquirá ➜' }],
   zipaquira: ['Zipaquirá', 'To the mine ➜', { cajas_flores: '⬅ Flowers of the Savanna', fresas_crema: '⬅ Strawberries from Sibaté', cofres_sal: '⬅ Salt gift boxes', canastas: '⬅ Baskets', almuerzos_sabaneros: 'Ajiaco ⬆', mermeladas: 'Jam ⬆', almuerzos_trucha: 'Trout ⬆' }],
+  // Bogotá (v4.5)
+  bogota: ['Bogotá', 'To the Autopista Sur ➜', { tm_cafe: 'Coffee from the Eje ⬆', tm_chocolate: 'Chocolate from the Eje ⬆', tm_cocadas: 'Cocadas from the Coast ⬆', tm_amasijos: 'Baked goods from Boyacá ⬇', tm_bocadillos: 'Bocadillos from Santander ⬇', tm_bizcochos: '⬆ Biscuits from Tolima', tm_flores: 'Flowers from the Savanna ⬆' }],
 };

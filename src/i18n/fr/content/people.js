@@ -54,4 +54,6 @@ export default {
   salinas: ['Doña Blanca', 'la saunière'],
   cocina: ['Doña Teresa', 'la cuisinière'],
   zipaquira: ['Don Hernán', 'le guide de la mine'],
+  // Bogotá (v4.5)
+  bogota: ['Doña Clemencia', 'la dame du café de La Candelaria'],
 };

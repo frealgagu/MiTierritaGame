@@ -76,4 +76,10 @@ export default {
   plaza_mercado_zipa: ['No mercado se come piquete: frango, batata criolla e milho.'],
   mochilas_paseo: ['Para o passeio à mina se leva ruana: lá embaixo faz frio.'],
   entrada_catedral: ['A Catedral de Sal fica a 180 metros debaixo da terra, numa mina.', 'A cruz do altar tem 16 metros de altura e é entalhada no sal.'],
+  // Bogotá · La Candelaria (v4.5)
+  tostadero_chorro: ['Dizem que Bogotá foi fundada no Chorro de Quevedo, em 1538.', 'Bogotá fica a uns 2.600 metros acima do nível do mar.'],
+  cafeteria_septima: ['A Séptima é uma das ruas mais antigas de Bogotá.', 'Em Bogotá, o cafezinho preto se pede como um tinto.'],
+  chocolateria_candelaria: ['O chocolate santafereño vem com queijo: ele derrete na xícara.', 'O chocolate é batido com molinillo para fazer espuma.'],
+  dulceria_calle11: ['As onces são o lanche da tarde: chocolate, pão e queijo.', 'No centro vendem obleas com arequipe e doces do país todo.'],
+  casa_colonial: ['As casas de La Candelaria têm sacadas de madeira e telhas de barro.', 'A Praça de Bolívar e o Capitólio ficam em La Candelaria.'],
 };

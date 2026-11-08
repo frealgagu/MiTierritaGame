@@ -102,4 +102,12 @@ export default {
   almuerzos_trucha: ['Route des déjeuners de truite', 'Chiva', 'Truite'],
   canastas: ['Route des paniers', 'Chiva', 'Paniers'],
   cofres_sal: ['Route des coffrets de sel', 'Chiva', 'Sel'],
+  // Bogotá · La Candelaria (v4.5)
+  tm_cafe: ['Camion du café', 'Camion', 'Café'],
+  tm_bizcochos: ['Camion des biscuits', 'Camion', 'Biscuits'],
+  tm_chocolate: ['Camion du chocolat', 'Camion', 'Chocolat'],
+  tm_amasijos: ['Camion des pains', 'Camion', 'Pains'],
+  tm_bocadillos: ['Camion des bocadillos', 'Camion', 'Bocadillos'],
+  tm_cocadas: ['Camion des cocadas', 'Camion', 'Cocadas'],
+  tm_flores: ['Camion des fleurs', 'Camion', 'Fleurs'],
 };

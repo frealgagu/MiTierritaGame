@@ -393,6 +393,12 @@ export const FACTS = {
   plaza_mercado_zipa: ['En la plaza de mercado se come piquete: pollo, papa criolla y mazorca.'],
   mochilas_paseo: ['Al paseo a la mina se lleva ruana: allá abajo hace frío.'],
   entrada_catedral: ['La Catedral de Sal está tallada a 180 metros bajo tierra, en una mina.', 'La cruz del altar mide 16 metros de alto y está tallada en la sal.'],
+  // Bogotá · La Candelaria (v4.5)
+  tostadero_chorro: ['En el Chorro de Quevedo, dicen, se fundó Bogotá en 1538.', 'Bogotá está a unos 2.600 metros sobre el nivel del mar.'],
+  cafeteria_septima: ['La Séptima es de las calles más antiguas de Bogotá.', 'En Bogotá, el café negro en pocillo se pide como un tinto.'],
+  chocolateria_candelaria: ['El chocolate santafereño se toma con queso: se derrite en la taza.', 'El chocolate se bate con molinillo para que haga espuma.'],
+  dulceria_calle11: ['Las onces son la merienda de la tarde: chocolate, pan y queso.', 'En el centro se venden obleas con arequipe y dulces de todo el país.'],
+  casa_colonial: ['Las casas de La Candelaria tienen balcones de madera y tejas de barro.', 'En La Candelaria están la Plaza de Bolívar y el Capitolio.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -453,6 +459,7 @@ export const PEOPLE = {
   salinas: { icon: '👵🏽', name: 'Doña Blanca', role: 'la salinera' },
   cocina: { icon: '👩🏽‍🍳', name: 'Doña Teresa', role: 'la cocinera' },
   zipaquira: { icon: '🧑🏽', name: 'Don Hernán', role: 'el guía de la mina' },
+  bogota: { icon: '👩🏻', name: 'Doña Clemencia', role: 'la del café de La Candelaria' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -513,6 +520,8 @@ export const WELCOME = {
   salinas: '¡Bienvenido a Nemocón, sumercé! De esta montaña sale la sal: se disuelve en salmuera, se cuaja y hasta se talla.',
   cocina: '¡Siga, sumercé, que el ajiaco está listo! Aquí van las tres papas, las guascas y la mazorca, y se sirve con crema y alcaparras.',
   zipaquira: '¡Llegó a Zipaquirá, sumercé! Aquí termina el viaje por la Sabana: bajemos a la Catedral de Sal.',
+  // Bogotá (v4.5)
+  bogota: '¡Bienvenido a Bogotá, sumercé! Aquí no se cultiva nada: todo llega del país en tractomula. Arranquemos con un tinto en La Candelaria.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

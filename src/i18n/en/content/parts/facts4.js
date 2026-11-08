@@ -76,4 +76,10 @@ export default {
   plaza_mercado_zipa: ['At the market they eat piquete: chicken, criolla potatoes and corn.'],
   mochilas_paseo: ['Take a ruana to the mine: it is cold down there.'],
   entrada_catedral: ['The Salt Cathedral is carved 180 meters underground, in a mine.', 'The altar cross is 16 meters tall and carved in salt.'],
+  // Bogotá · La Candelaria (v4.5)
+  tostadero_chorro: ['Tradition says Bogotá was founded at the Chorro de Quevedo in 1538.', 'Bogotá sits about 2,600 meters above sea level.'],
+  cafeteria_septima: ['La Séptima is one of the oldest streets in Bogotá.', 'In Bogotá, a small cup of black coffee is called a tinto.'],
+  chocolateria_candelaria: ['Santa Fe chocolate comes with cheese: it melts in the cup.', 'Chocolate is whipped with a molinillo so it foams.'],
+  dulceria_calle11: ['Onces is the afternoon snack: chocolate, bread and cheese.', 'Downtown sells obleas with arequipe and sweets from all over.'],
+  casa_colonial: ['La Candelaria houses have wooden balconies and clay roof tiles.', 'Plaza de Bolívar and the Capitol are in La Candelaria.'],
 };

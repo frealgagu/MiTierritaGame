@@ -55,4 +55,6 @@ export default {
   salinas: ['Les Salines de Nemocón', 'Vers Nemocón ➜', { ramos_rosas: '⬅ Bouquets des Fleurs', bandejas_fresa: '⬅ Fraises de Sibaté', cofres_sal: 'Coffrets vers Zipaquirá ➜', canastas: 'Paniers ⬇' }],
   cocina: ['La Cuisine de la Savane', 'Vers Chía ➜', { ahumadas_trucha: '⬅ Truite fumée de Guatavita', ceviches: '⬅ Ceviche', almuerzos_sabaneros: 'Vers Zipaquirá ➜' }],
   zipaquira: ['Zipaquirá', 'Vers la mine ➜', { cajas_flores: '⬅ Fleurs de la Savane', fresas_crema: '⬅ Fraises de Sibaté', cofres_sal: '⬅ Coffrets de sel', canastas: '⬅ Paniers', almuerzos_sabaneros: 'Ajiaco ⬆', mermeladas: 'Confiture ⬆', almuerzos_trucha: 'Truite ⬆' }],
+  // Bogotá (v4.5)
+  bogota: ['Bogotá', 'Vers l’Autopista Sur ➜', { tm_cafe: 'Café de l’Axe ⬆', tm_chocolate: 'Chocolat de l’Axe ⬆', tm_cocadas: 'Cocadas de la Côte ⬆', tm_amasijos: 'Pains de Boyacá ⬇', tm_bocadillos: 'Bocadillos de Santander ⬇', tm_bizcochos: '⬆ Biscuits du Tolima', tm_flores: 'Fleurs de la Savane ⬆' }],
 };

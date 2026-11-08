@@ -9,4 +9,6 @@ export default {
   amazonas: 'Amazonas',
   tolima: 'Tolima Grande',
   cundinamarca: 'Cundinamarca',
+  // Bogotá (v4.5)
+  bogota: 'Bogotá',
 };

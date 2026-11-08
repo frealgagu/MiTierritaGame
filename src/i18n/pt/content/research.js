@@ -74,6 +74,7 @@ export const NOTES = {
   floristas: 'A Floricultura da praça trabalha o dobro (pede o dobro de caixas às Flores).',
   canastos_mimbre: 'A Montadora de cestas trabalha o dobro (as rotas se ajustam sozinhas).',
   salon_santafereno: 'O Restaurante santafereño serve o dobro (as rotas se ajustam sozinhas).',
+  tostador_tambor: 'A Torrefação do Chorro torra o dobro (pede o dobro de café à carreta).',
 };
 
 export default {
@@ -527,4 +528,12 @@ export default {
   mochilas_fique: 'Mochilas de fique',
   guias_mineros: 'Guias mineiros',
   maravilla_colombia: 'Maravilha da Colômbia',
+  // Bogotá · La Candelaria (v4.5)
+  tostador_tambor: 'Torrador de tambor',
+  greca_grande: 'Cafeteira grande',
+  molinillos: 'Molinillos de madeira',
+  queso_ubate: 'Queijo de Ubaté',
+  pailas_dulceria: 'Tachos de cobre',
+  casona_restaurada: 'Casarão restaurado',
+  barrio_patrimonio: 'Bairro patrimônio',
 };

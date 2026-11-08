@@ -15,7 +15,7 @@ import { FONT } from '../render/palette.js';
 import { t } from '../i18n/index.js';
 
 const NS = 'http://www.w3.org/2000/svg';
-const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a', tolima: '#e39b6a', cundinamarca: '#d98fb5' };
+const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a', tolima: '#e39b6a', cundinamarca: '#d98fb5', bogota: '#b39ddb' };
 const LAND = '#e8dcc3'; // los departamentos que no son de ninguna región del juego
 const LOCKED = '#cfc6b4'; // las regiones que todavía no se abren
 const ZOOM_MS = 650;
@@ -25,9 +25,8 @@ const MIN_W = 24;
 const DRAG_PX = 6; // lo que se mueve el dedo antes de que cuente como arrastrar (y no como toque)
 const PEEK_MS = 800; // al abrir el mapa, cuánto se ve el país antes de acercarse a la región donde se está
 // Las regiones que vienen (v3.67), en los departamentos que todavía no son de ninguna: «Próximamente».
-const SOON = [
-  { id: 'bogota', name: t('Bogotá'), icon: '🏛️', depts: ['Bogotá'], color: '#e3d6ea' },
-];
+// (v4.5: Bogotá ya llegó; por ahora no viene ninguna otra.)
+const SOON = [];
 const SOON_OF = Object.fromEntries(SOON.flatMap((r) => r.depts.map((d) => [d, r])));
 
 const proj = ([lat, lon]) => [(lon - MAP_ORIGIN[0]) * MAP_SCALE, (MAP_ORIGIN[1] - lat) * MAP_SCALE];
@@ -90,6 +89,8 @@ for (const r of REGIONS) {
   const last = pts.at(-1);
   const away = Math.hypot(last[0] - cx, last[1] - cy) || 1;
   AIRSTRIP[r.id] = [last[0] + ((last[0] - cx) / away) * size * 0.2, last[1] + ((last[1] - cy) / away) * size * 0.2];
+  // Con una sola zona (Bogotá, v4.5) no hay hacia dónde «afuera»: la pista queda al occidente, en El Dorado.
+  if (pts.length === 1) AIRSTRIP[r.id] = [last[0] - size * 0.2, last[1]];
   const b = box(pts);
   const s = Math.max(b.x1 - b.x0, b.y1 - b.y0, 90);
   ZONES_VIEW[r.id] = viewOf(b, s * 0.3);

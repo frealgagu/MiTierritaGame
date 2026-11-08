@@ -9036,6 +9036,66 @@ def catedral_sal():
     return layers
 
 
+
+# ---------- Bogotá · La Candelaria (v4.5) ----------
+
+def cafe_capitalino():
+    """El café capitalino: la bolsa de café recién tostado del tostadero, abierta, con el pocillo humeando al lado."""
+    layers = [(OUTLINE, ['M 12 30 L 56 30 L 60 94 L 8 94 Z']), ('#c8956a', ['M 14.4 32.4 L 53.6 32.4 L 57.4 91.6 L 10.6 91.6 Z']), ('#ad7a52', ['M 44 32.4 L 53.6 32.4 L 57.4 91.6 L 47 91.6 Z'])]
+    layers += [(OUTLINE, [ellipse(34, 30, 23, 6)]), ('#4e2c17', [ellipse(34, 30, 20.6, 4)])]
+    layers.append(('#6d3b1e', [ellipse(28 + k * 6, 29 + (k % 2), 2.4, 1.6, -20) for k in range(3)]))
+    layers += [('#fff3d6', [rect(17, 50, 30, 26)]), ('#283593', [rect(17, 50, 30, 6)]), ('#fdd835', [rect(17, 56, 30, 2)])]
+    layers.append(('#6d3b1e', [ellipse(32, 67, 6, 4, -25)]))
+    layers += taza(76, 72, 0.85, '#2b1a10')
+    return layers
+
+
+def tinto_bizcochos():
+    """El tinto con bizcochos: el pocillo de café negro de la cafetería y los bizcochos de achira en el plato."""
+    layers = oval(50, 82, 44, 12, '#eceff1', d=2)
+    layers += taza(36, 58, 1.15, '#2b1a10', plate=False)
+    for cx, cy, rot in [(70, 74, -15), (82, 80, 10), (64, 84, 25)]:
+        layers += biscuit(cx, cy, 0.85, rot)
+    return layers
+
+
+def onces_bogotanas():
+    """Las onces bogotanas: la bandeja con el chocolate, la almojábana, el bocadillo y la cocada."""
+    layers = [(OUTLINE, [poly(4, 70, 50, 52, 96, 70, 50, 92)]), ('#a1693f', [poly(9, 70, 50, 54.6, 91, 70, 50, 89.4)]), ('#c08b5c', [poly(14, 70, 50, 57.6, 86, 70, 50, 86)])]
+    layers += taza(34, 50, 0.8, '#6d3b1e', plate=False)
+    layers.append(('#fffde7', [rect(28, 39.4, 4, 2.4, -10), rect(34, 40.2, 4, 2.4, 12)]))
+    layers += oval(66, 62, 10, 7, '#e8a53a', d=1.8) + [('#f6c66a', [ellipse(63, 60, 4, 2.4)])]
+    layers += [(OUTLINE, [poly(40, 76, 54, 70, 58, 76, 44, 82)]), ('#b4302f', [poly(41.6, 76, 53.6, 71.4, 56, 75.6, 44.4, 80.4)])]
+    layers += oval(74, 76, 8, 5, '#fbfaf6', d=1.6)
+    return layers
+
+
+def tarde_candelaria():
+    """La tarde en La Candelaria: la casa colonial de colores, con su balcón de madera, las flores y el farol."""
+    layers = [(OUTLINE, [rect(10, 34, 80, 62)]), ('#f2c94c', [rect(12.4, 36.4, 75.2, 57.2)])]
+    layers += [(OUTLINE, [poly(4, 38, 50, 14, 96, 38)]), ('#b5512e', [poly(9, 36, 50, 17.4, 91, 36)]), ('#8f3c22', [rib(18, 31, 82, 31, 1.4), rib(30, 25, 70, 25, 1.4)])]
+    layers += [(OUTLINE, [rect(18, 58, 18, 36), rect(60, 58, 22, 22)]), ('#1e5aa8', [rect(20, 60, 14, 34)]), ('#bfe3f2', [rect(62, 60, 18, 18)]), ('#1e5aa8', [rect(70, 60, 2, 18), rect(62, 68, 18, 2)])]
+    layers += [(OUTLINE, [rect(14, 44, 72, 6)]), ('#5d4037', [rect(15.4, 45.4, 69.2, 3.2)])]
+    layers.append(('#5d4037', [rect(18 + k * 9, 38, 2, 7) for k in range(8)]))
+    for x in (24, 44, 64, 80):
+        layers.append(('#e53935', [circle(x, 42, 2.6), circle(x + 3.4, 41, 2.2)]))
+        layers.append(('#43a047', [leaf(x - 2, 44, x - 7, 40, 1.6)]))
+    layers += [(OUTLINE, [rect(42, 52, 8, 12)]), ('#ffe082', [rect(43.4, 53.4, 5.2, 9.2)]), ('#37474f', [rib(46, 46, 46, 52, 1.4)])]
+    return layers
+
+
+def monserrate():
+    """Monserrate: el cerro verde con la iglesia blanca en la cumbre y el funicular que sube."""
+    layers = [(OUTLINE, ['M 0 96 L 0 76 Q 18 60 32 40 Q 42 24 52 22 Q 64 22 74 40 Q 86 58 100 66 L 100 96 Z']), ('#4e8a34', ['M 2.4 93.6 L 2.4 77 Q 20 61.6 34 42 Q 43 26.4 52 24.4 Q 62.6 24.4 71.8 41.4 Q 84 59.6 97.6 67.4 L 97.6 93.6 Z'])]
+    layers.append(('#3d6e29', ['M 52 24.4 Q 62.6 24.4 71.8 41.4 Q 84 59.6 97.6 67.4 L 97.6 93.6 L 58 93.6 Q 66 60 52 24.4 Z']))
+    layers.append(('#2e5a20', [circle(x, y, 3.4) for x, y in [(20, 74), (30, 62), (40, 48), (66, 50), (78, 64), (88, 74), (14, 84), (70, 80)]]))
+    layers += [(OUTLINE, [rect(38, 12, 28, 16), rect(46, 2, 12, 12)]), ('#fafafa', [rect(40.4, 14.4, 23.2, 11.6), rect(48.4, 4.4, 7.2, 9.6)])]
+    layers += [(OUTLINE, [poly(36, 14, 52, 6, 68, 14)]), ('#b5512e', [poly(40, 13, 52, 8, 64, 13)]), ('#5d4037', [rect(50, 18, 4, 8)])]
+    layers.append(('#37474f', [rib(10, 92, 46, 30, 1.6)]))
+    layers += [(OUTLINE, [rect(22, 62, 12, 9, -55)]), ('#d7263d', [rect(23.4, 63.4, 9.2, 6.2, -55)])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9607,6 +9667,12 @@ ICONS = [
     (0xE22A, 'almuerzo_plaza_zipa', almuerzo_plaza_zipa),
     (0xE22B, 'mochila_paseo', mochila_paseo),
     (0xE22C, 'catedral_sal', catedral_sal),
+    # Bogotá · La Candelaria (v4.5)
+    (0xE22D, 'cafe_capitalino', cafe_capitalino),
+    (0xE22E, 'tinto_bizcochos', tinto_bizcochos),
+    (0xE22F, 'onces_bogotanas', onces_bogotanas),
+    (0xE230, 'tarde_candelaria', tarde_candelaria),
+    (0xE231, 'monserrate', monserrate),
 ]
 
 

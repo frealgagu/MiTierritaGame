@@ -347,4 +347,10 @@ export default {
   almuerzo_plaza_zipa: 'Déjeuner du marché',
   mochila_paseo: 'Sac de l’excursion',
   visita_catedral: 'Visite de la Cathédrale de sel',
+  // Bogotá · La Candelaria (v4.5)
+  cafe_capitalino: 'Café de la capitale',
+  tinto_bizcochos: 'Tinto et biscuits',
+  chocolate_completo: 'Chocolat complet',
+  onces_bogotanas: 'Goûter bogotanais',
+  tarde_candelaria: 'Après-midi à La Candelaria',
 };

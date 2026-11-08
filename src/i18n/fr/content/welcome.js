@@ -54,4 +54,6 @@ export default {
   salinas: 'Bienvenue à Nemocón, sumercé ! De cette montagne sort le sel : on le dissout en saumure, on le moule en pains et on le sculpte même.',
   cocina: 'Entrez, sumercé, l’ajiaco est prêt ! Trois pommes de terre, des guascas et du maïs, servi avec crème et câpres.',
   zipaquira: 'Vous voici à Zipaquirá, sumercé ! Le voyage dans la Savane s’achève ici : descendons à la Cathédrale de sel.',
+  // Bogotá (v4.5)
+  bogota: 'Bienvenue à Bogotá, sumercé ! Ici, on ne cultive rien : tout arrive du pays en camion. Commençons par un tinto à La Candelaria.',
 };

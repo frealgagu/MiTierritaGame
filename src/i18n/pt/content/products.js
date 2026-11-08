@@ -347,4 +347,10 @@ export default {
   almuerzo_plaza_zipa: 'Almoço do mercado',
   mochila_paseo: 'Mochila do passeio',
   visita_catedral: 'Visita à Catedral de Sal',
+  // Bogotá · La Candelaria (v4.5)
+  cafe_capitalino: 'Café da capital',
+  tinto_bizcochos: 'Tinto com biscoitos',
+  chocolate_completo: 'Chocolate completo',
+  onces_bogotanas: 'Lanche bogotano',
+  tarde_candelaria: 'Tarde em La Candelaria',
 };

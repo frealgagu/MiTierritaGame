@@ -698,6 +698,17 @@ export const RESEARCH = [
   { zone: 'zipaquira', id: 'maravilla_colombia', name: 'Maravilla de Colombia', icon: '🏅', desc: 'Todo lo que vende Zipaquirá vale un 50 % más.', cost: 25000000000, requires: 'mochilas_paseo', effect: { type: 'zoneValue', target: 'zipaquira', mult: 1.5 } },
   { zone: 'zipaquira', id: 'maestria_zipaquira', name: 'Maestría: Zipaquirá', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'zipaquira', mult: 4 } },
   { zone: 'zipaquira', id: 'supremacia_zipaquira', name: 'Supremacía: Zipaquirá', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'zipaquira', mult: 8 } },
+  // Bogotá · La Candelaria (v4.5): los precios de una primera zona. Al acelerar una estación, pide más a su tractomula.
+  { zone: 'bogota', id: 'tostador_tambor', name: 'Tostador de tambor', icon: ICON.cafeCapitalino, desc: 'El Tostadero del Chorro tuesta el doble (pide el doble de café a la tractomula).', cost: 300, requires: 'cafeteria_septima', effect: { type: 'stationSpeed', target: 'tostadero_chorro', mult: 2 } },
+  { zone: 'bogota', id: 'greca_grande', name: 'Greca grande', icon: ICON.tinto, desc: 'La Cafetería de la Séptima sirve el doble.', cost: 400, requires: 'cafeteria_septima', effect: { type: 'stationSpeed', target: 'cafeteria_septima', mult: 2 } },
+  { zone: 'bogota', id: 'herraduras_bog', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'chocolateria_candelaria', effect: { type: 'muleSpeed', mult: 1.5 } },
+  { zone: 'bogota', id: 'remolque_bog', name: 'Remolque para el Willys', icon: '🚙', desc: 'El Willys lleva el doble por viaje.', cost: 2500, requires: 'chocolateria_candelaria', effect: { type: 'dispatchCapacity', target: 'bogota', mult: 2 } },
+  { zone: 'bogota', id: 'molinillos', name: 'Molinillos de madera', icon: ICON.molinillo, desc: 'La Chocolatería santafereña bate el doble.', cost: 6000, requires: 'dulceria_calle11', effect: { type: 'stationSpeed', target: 'chocolateria_candelaria', mult: 2 } },
+  { zone: 'bogota', id: 'queso_ubate', name: 'Queso de Ubaté', icon: '🧀', desc: 'El chocolate completo vale un 50 % más.', cost: 20000, requires: 'dulceria_calle11', effect: { type: 'productValue', target: 'chocolate_completo', mult: 1.5 } },
+  { zone: 'bogota', id: 'pailas_dulceria', name: 'Pailas de cobre', icon: ICON.oncesBogotanas, desc: 'La Dulcería de la Calle 11 arma el doble.', cost: 25000, requires: 'casa_colonial', effect: { type: 'stationSpeed', target: 'dulceria_calle11', mult: 2 } },
+  { zone: 'bogota', id: 'cable_bog', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'casa_colonial', effect: { type: 'muleSpeed', mult: 2 } },
+  { zone: 'bogota', id: 'casona_restaurada', name: 'Casona restaurada', icon: ICON.tardeCandelaria, desc: 'La Casa colonial recibe el doble de visitas.', cost: 150000, requires: 'casa_colonial', effect: { type: 'stationSpeed', target: 'casa_colonial', mult: 2 } },
+  { zone: 'bogota', id: 'barrio_patrimonio', name: 'Barrio patrimonio', icon: '🏅', desc: 'La tarde en La Candelaria vale un 50 % más.', cost: 300000, requires: 'casa_colonial', effect: { type: 'productValue', target: 'tarde_candelaria', mult: 1.5 } },
 ];
 
 // Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al
