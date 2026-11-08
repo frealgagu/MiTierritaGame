@@ -345,6 +345,28 @@ export class ZoneMap {
     });
     this.animating = false;
     this.drawOverlay();
+    // Acercarse a otra región (v4.4.11): la avioneta llega a su aeropuerto. Dentro de un viaje (busy) no, que ya voló.
+    if (regionId && !this.busy && regionId !== REGION_OF_ZONE[this.getZone()] && this.root.state.settings.travel !== 'direct') await this.arrive(regionId);
+  }
+
+  // La avioneta llega volando al aeropuerto de la región que se mira, desde el lado de la región donde se está,
+  // aterriza y se va con la pista. Si después se elige una zona de aquí, la pista vuelve y el Willys sale de ella.
+  async arrive(regionId) {
+    this.busy = true;
+    const strip = AIRSTRIP[regionId];
+    const from = ZONE_POS[this.getZone()];
+    const d = [strip[0] - from[0], strip[1] - from[1]];
+    const n = Math.hypot(d[0], d[1]) || 1;
+    const reach = Math.max(this.vb.w, this.vb.h) * 0.75;
+    const start = [strip[0] - (d[0] / n) * reach, strip[1] - (d[1] / n) * reach];
+    const before = this.overlay.childNodes.length;
+    await this.fly(start, strip);
+    for (const node of [...this.overlay.childNodes].slice(before)) node.remove();
+    const rw = this.runway(strip);
+    await wait(700);
+    await animate(450, (t) => rw.setAttribute('opacity', String(1 - t)));
+    rw.remove();
+    this.busy = false;
   }
 
   pickRegion(regionId) {
@@ -422,7 +444,8 @@ export class ZoneMap {
     this.travel(z);
   }
 
-  // El viaje a otra zona (v3.67, también al terminar una zona o al elegirla en la lista). En la misma región,
+  // El viaje a otra zona (v3.67, también al terminar una zona o al elegirla en la lista; v4.4.11: si ya se mira la
+  // región de destino, la avioneta ya llegó al acercarse, y el Willys sale de la pista). En la misma región,
   // el Willys va por el mapa de la región. A otra región (v4.1): se aleja al país, la avioneta vuela hasta la
   // región nueva, se acerca a ella y el Willys entra desde el borde, del lado por donde llegó el avión.
   async travel(target) {
@@ -472,6 +495,7 @@ export class ZoneMap {
     for (let i = -5; i <= 4; i += 2) el('rect', { x: i * u, y: -0.15 * u, width: 1.1 * u, height: 0.3 * u, fill: '#f4efe6' }, g);
     const parked = el('g', { transform: `translate(${3 * u} ${-3.4 * u}) scale(${0.32 * u})` }, g);
     plane(parked);
+    return g;
   }
 
   // El Willys va de a a b (en lo que se ve), por el camino punteado; la zona de destino se resalta (v4.1: antes

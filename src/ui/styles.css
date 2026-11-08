@@ -506,11 +506,12 @@ a.btn { text-decoration: none; color: inherit; display: inline-flex; align-items
 .intro-check input { width: 20px; height: 20px; accent-color: var(--ink); }
 .intro-foot .btn.buy { width: auto; flex: none; white-space: nowrap; padding: 10px 22px; }
 
-/* Multiplicador de producción tras reiniciar (segundo final), abajo a la derecha. */
+/* Multiplicador de producción tras reiniciar (segundo final): arriba a la derecha, debajo de la mejora recomendada
+   (v4.4.11; antes iba abajo, encima del marcador de objetivos). */
 .legacy-chip {
   position: fixed;
   right: max(16px, env(safe-area-inset-right, 0px));
-  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  top: calc(104px + env(safe-area-inset-top, 0px));
   border: 2px solid var(--ink);
   border-radius: 999px;
   padding: 3px 10px;
@@ -522,8 +523,7 @@ a.btn { text-decoration: none; color: inherit; display: inline-flex; align-items
 }
 .legacy-chip[hidden] { display: none; }
 body.panel-open .legacy-chip { display: none; }
-/* En el móvil, el marcador de objetivos ocupa el ancho de abajo: la leyenda va encima. */
-@media (max-width: 520px) { .legacy-chip { bottom: calc(112px + env(safe-area-inset-bottom, 0px)); font-size: 0.8rem; } }
+@media (max-width: 520px) { .legacy-chip { font-size: 0.8rem; } }
 
 .save-box { margin: 8px 0 12px; }
 .dev-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
