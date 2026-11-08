@@ -95,4 +95,11 @@ export default {
   bandejas_fresa: ['Rota das bandejas de morango', 'Chiva', 'Morangos'],
   ahumadas_trucha: ['Rota da truta defumada', 'Chiva', 'Defumada'],
   ceviches: ['Rota do ceviche', 'Chiva', 'Ceviche'],
+  cajas_flores: ['Rota das caixas de flores', 'Chiva', 'Flores'],
+  fresas_crema: ['Rota dos morangos com creme', 'Chiva', 'Morangos'],
+  mermeladas: ['Rota da geleia', 'Chiva', 'Geleia'],
+  almuerzos_sabaneros: ['Rota dos almoços da Savana', 'Chiva', 'Ajiaco'],
+  almuerzos_trucha: ['Rota dos almoços de truta', 'Chiva', 'Truta'],
+  canastas: ['Rota das cestas', 'Chiva', 'Cestas'],
+  cofres_sal: ['Rota das caixinhas de sal', 'Chiva', 'Sal'],
 };

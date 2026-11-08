@@ -70,4 +70,10 @@ export default {
   olla_ajiaco: ['As guascas são uma erva da Savana que dá o sabor ao ajiaco.', 'O ajiaco leva frango desfiado e espiga de milho.'],
   servidora_ajiaco: ['O ajiaco é servido com creme de leite, alcaparras e abacate.'],
   restaurante_santafereno: ['Santafereño é o de Bogotá, que antes se chamava Santafé.', 'Depois do ajiaco vem o chocolate com queijo e almojábana.'],
+  floristeria_plaza: ['A praça de Zipaquirá é uma das maiores e mais bonitas da Savana.'],
+  salon_onces: ['As onces santafereñas: chocolate com queijo, almojábana e pão de mandioca.'],
+  hotel_plaza_zipa: ['Zipaquirá conserva casarões coloniais brancos de sacadas verdes.'],
+  plaza_mercado_zipa: ['No mercado se come piquete: frango, batata criolla e milho.'],
+  mochilas_paseo: ['Para o passeio à mina se leva ruana: lá embaixo faz frio.'],
+  entrada_catedral: ['A Catedral de Sal fica a 180 metros debaixo da terra, numa mina.', 'A cruz do altar tem 16 metros de altura e é entalhada no sal.'],
 };

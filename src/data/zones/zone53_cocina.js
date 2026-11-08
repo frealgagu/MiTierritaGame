@@ -32,8 +32,8 @@ export const ZONE53 = {
   routes: {
     ahumadas_trucha: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Trucha ahumada de Guatavita' },
     ceviches: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Ceviche' },
-    // El almuerzo sabanero irá a Zipaquirá (cuando llegue).
+    almuerzos_sabaneros: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'A Zipaquirá ➜' },
   },
   unlockedBy: 'salinas',
-  next: null,
+  next: 'zipaquira',
 };

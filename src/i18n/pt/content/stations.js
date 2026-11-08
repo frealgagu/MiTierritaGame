@@ -331,4 +331,10 @@ export default {
   olla_ajiaco: 'Panela do ajiaco',
   servidora_ajiaco: 'Balcão de servir',
   restaurante_santafereno: 'Restaurante santafereño',
+  floristeria_plaza: 'Floricultura da praça',
+  salon_onces: 'Salão de onces',
+  hotel_plaza_zipa: 'Hotel da praça',
+  plaza_mercado_zipa: 'Mercado de Zipaquirá',
+  mochilas_paseo: 'Mochilas do passeio',
+  entrada_catedral: 'Entrada da Catedral de Sal',
 };

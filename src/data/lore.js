@@ -387,6 +387,12 @@ export const FACTS = {
   olla_ajiaco: ['Las guascas son una hierba de la Sabana que le da su sabor al ajiaco.', 'Al ajiaco se le echa pollo desmechado y mazorca.'],
   servidora_ajiaco: ['El ajiaco se sirve con crema de leche, alcaparras y aguacate.'],
   restaurante_santafereno: ['Santafereño es lo de Bogotá, que antes se llamó Santafé.', 'Después del ajiaco viene el chocolate con queso y almojábana.'],
+  floristeria_plaza: ['La plaza de Zipaquirá es de las más grandes y bonitas de la Sabana.'],
+  salon_onces: ['Las onces santafereñas: chocolate con queso, almojábana y pan de yuca.'],
+  hotel_plaza_zipa: ['Zipaquirá conserva casonas coloniales blancas de balcones verdes.'],
+  plaza_mercado_zipa: ['En la plaza de mercado se come piquete: pollo, papa criolla y mazorca.'],
+  mochilas_paseo: ['Al paseo a la mina se lleva ruana: allá abajo hace frío.'],
+  entrada_catedral: ['La Catedral de Sal está tallada a 180 metros bajo tierra, en una mina.', 'La cruz del altar mide 16 metros de alto y está tallada en la sal.'],
 };
 
 // Quién avisa en cada zona (en los avisos importantes, no en todos).
@@ -446,6 +452,7 @@ export const PEOPLE = {
   truchas: { icon: '🧔🏽', name: 'Don Ernesto', role: 'el truchero' },
   salinas: { icon: '👵🏽', name: 'Doña Blanca', role: 'la salinera' },
   cocina: { icon: '👩🏽‍🍳', name: 'Doña Teresa', role: 'la cocinera' },
+  zipaquira: { icon: '🧑🏽', name: 'Don Hernán', role: 'el guía de la mina' },
 };
 
 // Lo que dicen al abrir su zona por primera vez.
@@ -505,6 +512,7 @@ export const WELCOME = {
   truchas: '¡Bienvenido a Guatavita, sumercé! En estos estanques de agua helada se crían las truchas, y allá arriba está la laguna de El Dorado.',
   salinas: '¡Bienvenido a Nemocón, sumercé! De esta montaña sale la sal: se disuelve en salmuera, se cuaja y hasta se talla.',
   cocina: '¡Siga, sumercé, que el ajiaco está listo! Aquí van las tres papas, las guascas y la mazorca, y se sirve con crema y alcaparras.',
+  zipaquira: '¡Llegó a Zipaquirá, sumercé! Aquí termina el viaje por la Sabana: bajemos a la Catedral de Sal.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

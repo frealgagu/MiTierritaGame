@@ -70,4 +70,10 @@ export default {
   olla_ajiaco: ['Guascas are a Savanna herb that gives ajiaco its flavor.', 'Shredded chicken and corn on the cob go into the ajiaco.'],
   servidora_ajiaco: ['Ajiaco is served with cream, capers and avocado.'],
   restaurante_santafereno: ['Santafereño means from Bogotá, which used to be called Santafé.', 'After the ajiaco comes hot chocolate with cheese and almojábana.'],
+  floristeria_plaza: ['Zipaquirá’s plaza is one of the largest and prettiest in the Savanna.'],
+  salon_onces: ['Santafereño onces: chocolate with cheese, almojábana and cassava bread.'],
+  hotel_plaza_zipa: ['Zipaquirá keeps white colonial mansions with green balconies.'],
+  plaza_mercado_zipa: ['At the market they eat piquete: chicken, criolla potatoes and corn.'],
+  mochilas_paseo: ['Take a ruana to the mine: it is cold down there.'],
+  entrada_catedral: ['The Salt Cathedral is carved 180 meters underground, in a mine.', 'The altar cross is 16 meters tall and carved in salt.'],
 };

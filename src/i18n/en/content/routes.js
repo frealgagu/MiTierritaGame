@@ -95,4 +95,11 @@ export default {
   bandejas_fresa: ['Strawberry tray route', 'Chiva', 'Strawberries'],
   ahumadas_trucha: ['Smoked trout route', 'Chiva', 'Smoked'],
   ceviches: ['Ceviche route', 'Chiva', 'Ceviche'],
+  cajas_flores: ['Flower box route', 'Chiva', 'Flowers'],
+  fresas_crema: ['Strawberries and cream route', 'Chiva', 'Strawberries'],
+  mermeladas: ['Jam route', 'Chiva', 'Jam'],
+  almuerzos_sabaneros: ['Savanna lunch route', 'Chiva', 'Ajiaco'],
+  almuerzos_trucha: ['Trout lunch route', 'Chiva', 'Trout'],
+  canastas: ['Basket route', 'Chiva', 'Baskets'],
+  cofres_sal: ['Salt gift box route', 'Chiva', 'Salt'],
 };

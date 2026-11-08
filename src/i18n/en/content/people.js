@@ -53,4 +53,5 @@ export default {
   truchas: ['Don Ernesto', 'the trout farmer'],
   salinas: ['Doña Blanca', 'the salt maker'],
   cocina: ['Doña Teresa', 'the cook'],
+  zipaquira: ['Don Hernán', 'the mine guide'],
 };

@@ -412,6 +412,13 @@ export const PRODUCTS = {
   plato_ajiaco: { name: 'Ajiaco servido', zone: 'cocina', value: 120000, icon: ICON.platoAjiaco, color: 0xa85a32 },
   almuerzo_sabanero: { name: 'Almuerzo sabanero', zone: 'cocina', value: 1200000, icon: ICON.almuerzoSabanero, color: 0xe53935 },
 
+  arreglo_floral: { name: 'Arreglo floral', zone: 'zipaquira', value: 150000, icon: ICON.arregloFloral, color: 0x5c8dd6 },
+  onces_santafereñas: { name: 'Onces santafereñas', zone: 'zipaquira', value: 400000, icon: ICON.onces, color: 0x6d4c41 },
+  noche_zipaquira: { name: 'Noche en Zipaquirá', zone: 'zipaquira', value: 3200000, icon: ICON.nocheZipaquira, color: 0x283593 },
+  almuerzo_plaza_zipa: { name: 'Almuerzo de plaza', zone: 'zipaquira', value: 600000, icon: ICON.almuerzoPlazaZipa, color: 0xfdd835 },
+  mochila_paseo: { name: 'Mochila del paseo', zone: 'zipaquira', value: 2000000, icon: ICON.mochilaPaseo, color: 0x8d6e63 },
+  visita_catedral: { name: 'Visita a la Catedral de Sal', zone: 'zipaquira', value: 24000000, icon: ICON.catedralSal, color: 0x3949ab },
+
   // Santander · El Tabacal (v3.1): mismos valores que el Trapiche.
   tobacco_leaf: { name: 'Hoja de tabaco', zone: 'tabacal', value: 10, icon: ICON.tobaccoLeaf, color: 0x7cb342 },
   cured_leaf: { name: 'Hoja curada', zone: 'tabacal', value: 25, icon: ICON.curedLeaf, color: 0xc8913b },

@@ -71,6 +71,9 @@ export const NOTES = {
   corredor_grande: 'The Tolima Breakfast Table serves twice as much (the routes adjust on their own).',
   tienda_chamba_grande: 'The La Chamba Shop sells twice as much (the routes adjust on their own).',
   meseros_malecon: 'The Riverwalk Café serves twice as much (it asks the Achira Fields for twice as many boxes).',
+  floristas: 'The Plaza Flower Shop works twice as fast (it asks the Flowers for twice as many boxes).',
+  canastos_mimbre: 'The Basket Maker works twice as fast (the routes adjust on their own).',
+  salon_santafereno: 'The Santafereño Restaurant serves twice as much (the routes adjust on their own).',
 };
 
 export default {
@@ -238,4 +241,12 @@ export default {
   cucharones: 'Big ladles',
   salon_santafereno: 'Big dining room',
   receta_santafe: 'Santafé recipe',
+  floristas: 'Plaza florists',
+  chocolate_queso: 'Chocolate with cheese',
+  tren_turistico: 'Tourist train',
+  casona_colonial: 'Colonial mansion',
+  galeria_mercado: 'Market gallery',
+  mochilas_fique: 'Fique backpacks',
+  guias_mineros: 'Miner guides',
+  maravilla_colombia: 'Wonder of Colombia',
 };

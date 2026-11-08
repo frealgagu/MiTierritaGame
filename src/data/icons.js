@@ -555,6 +555,11 @@ export const ICON = {
   ajiaco: '\uE225', // La olla del ajiaco santafereño: el caldo amarillo con la mazorca, el pollo y las ramas de guascas
   platoAjiaco: '\uE226', // El ajiaco servido: el plato hondo con la crema, las alcaparras, el aguacate y la mazorca al lado
   almuerzoSabanero: '\uE227', // El almuerzo sabanero del restaurante: el ajiaco, la trucha ahumada y el ceviche, en la mesa de mantel de cuadros
+  arregloFloral: '\uE228', // El arreglo de flores en su jarrón, para las mesas de la plaza
+  nocheZipaquira: '\uE229', // La noche en Zipaquirá: la casona blanca de balcones verdes en la plaza, con la catedral y la luna
+  almuerzoPlazaZipa: '\uE22A', // El almuerzo de la plaza de mercado: el piquete con pollo, papa criolla, mazorca y la trucha frita
+  mochilaPaseo: '\uE22B', // La mochila del paseo a la mina: con la canasta, el cofre de sal y la ruana doblada
+  catedralSal: '\uE22C', // La Catedral de Sal de Zipaquirá: la gran cruz tallada en la roca, iluminada de azul, en lo hondo de la mina
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

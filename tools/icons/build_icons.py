@@ -8976,6 +8976,66 @@ def almuerzo_sabanero():
     return layers
 
 
+
+# ---------- Cundinamarca · Zipaquirá (v4.4) ----------
+
+def arreglo_floral():
+    """El arreglo de flores en su jarrón, para las mesas de la plaza."""
+    layers = []
+    for x, y, c in ((30, 34, ROSE), (50, 24, '#f06292'), (70, 34, ROSE), (40, 44, '#fbc02d'), (60, 44, '#fafafa'), (50, 38, ROSE)):
+        layers += rose_head(x, y, 8, c)
+    layers += [(OUTLINE, [leaf(50, 56, 20, 50, 5), leaf(50, 56, 80, 50, 5)]), ('#43a047', [leaf(50, 56, 22, 50.6, 3.6), leaf(50, 56, 78, 50.6, 3.6)])]
+    layers += [(OUTLINE, ['M 34 54 L 66 54 Q 72 74 60 94 L 40 94 Q 28 74 34 54 Z']), ('#5c8dd6', ['M 36.4 56.4 L 63.6 56.4 Q 69 74 58.4 91.6 L 41.6 91.6 Q 31 74 36.4 56.4 Z']), ('#bbdefb', [ellipse(42, 70, 2.4, 9, 6)])]
+    return layers
+
+
+def noche_zipaquira():
+    """La noche en Zipaquirá: la casona blanca de balcones verdes en la plaza, con la catedral y la luna."""
+    layers = [(OUTLINE, [rect(2, 8, 96, 86)]), ('#283593', [rect(3.6, 9.6, 92.8, 82.8)])]
+    layers.append(('#fff59d', [crescent((76, 24), 9, (80, 20), 8)]))
+    layers.append(('#fafafa', [circle(20, 20, 1.2), circle(40, 14, 1), circle(58, 24, 1.2)]))
+    layers += [(OUTLINE, [rect(10, 38, 34, 54)]), ('#fbf8f1', [rect(11.6, 39.6, 30.8, 50.8)]), ('#8d6e63', [poly(8, 40, 27, 26, 46, 40)])]
+    layers += [(OUTLINE, [rect(50, 46, 44, 46)]), ('#fbf8f1', [rect(51.6, 47.6, 40.8, 42.8)]), ('#b5512e', [poly(48, 48, 72, 36, 96, 48)])]
+    layers.append(('#2f7d4f', [rect(54, 56, 36, 4), rect(54, 60, 36, 2)]))
+    layers.append(('#ffe082', [rect(56 + i * 9, 64, 6, 8) for i in range(4)] + [rect(16, 50, 8, 10), rect(30, 50, 8, 10), rect(22, 72, 10, 20)]))
+    layers += [(OUTLINE, [rect(25, 14, 4, 14), rect(21, 18, 12, 4)])]
+    return layers
+
+
+def almuerzo_plaza_zipa():
+    """El almuerzo de la plaza de mercado: el piquete con pollo, papa criolla, mazorca y la trucha frita."""
+    layers = oval(50, 62, 46, 22, '#c8a26a') + [('#a07a46', [ellipse(50, 62, 38, 16)]), ('#c8a26a', [ellipse(50, 62, 35, 14)])]
+    layers += trout(42, 58, 0.55, body='#c08a3e')
+    for x, y in ((66, 66), (72, 58), (60, 72)):
+        layers += oval(x, y, 4.6, 3.8, '#fdd835', d=1.2)
+    layers += [(OUTLINE, [rect(22, 64, 22, 8, 25)]), ('#fbc02d', [rect(23.4, 65.4, 19.2, 5.2, 25)])]
+    layers += oval(76, 70, 6, 5, '#d7a86e', d=1.2)
+    return layers
+
+
+def mochila_paseo():
+    """La mochila del paseo a la mina: con la canasta, el cofre de sal y la ruana doblada."""
+    layers = [(OUTLINE, ['M 22 30 Q 50 18 78 30 L 84 88 Q 50 98 16 88 Z']), ('#8d6e63', ['M 24.6 32 Q 50 21 75.4 32 L 81 86 Q 50 95 19 86 Z'])]
+    layers.append(('#d7ccc8', [rect(28 + i * 10, 50, 5, 34) for i in range(5)]))
+    layers += [(OUTLINE, ['M 30 32 Q 26 6 50 6 Q 74 6 70 32 L 66 32 Q 68 10 50 10 Q 32 10 34 32 Z'])]
+    layers += [(OUTLINE, [rect(34, 18, 32, 16)]), ('#a1693f', [rect(35.4, 19.4, 29.2, 13.2)]), ('#f4f1ea', [rect(47, 21, 6, 10), rect(44, 24, 12, 3)])]
+    layers.append(('#e53935', [rib(22, 44, 78, 44, 4)]))
+    return layers
+
+
+def catedral_sal():
+    """La Catedral de Sal de Zipaquirá: la gran cruz tallada en la roca, iluminada de azul, en lo hondo de la mina."""
+    layers = [(OUTLINE, [rect(2, 2, 96, 96)]), ('#1a1f3a', [rect(3.6, 3.6, 92.8, 92.8)])]
+    layers.append(('#283593', ['M 3.6 96.4 L 3.6 30 Q 50 -6 96.4 30 L 96.4 96.4 Z']))
+    layers.append(('#3949ab', ['M 14 96.4 L 14 40 Q 50 10 86 40 L 86 96.4 Z']))
+    layers.append(('#5c6bc0', ['M 26 96.4 L 26 50 Q 50 28 74 50 L 74 96.4 Z']))
+    layers += [(OUTLINE, [rect(42, 18, 16, 72), rect(26, 36, 48, 14)]), ('#e8eaf6', [rect(44.4, 20.4, 11.2, 67.2), rect(28.4, 38.4, 43.2, 9.2)])]
+    layers.append(('#ffffff', [rect(46, 22, 3, 64), rect(30, 40, 40, 2.4)]))
+    layers.append(('#7986cb', [ellipse(50, 94, 34, 4)]))
+    layers += [(OUTLINE, [rect(8, 86, 14, 6), rect(78, 86, 14, 6)]), ('#9fa8da', [rect(9.4, 87.4, 11.2, 3.2), rect(79.4, 87.4, 11.2, 3.2)])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -9541,6 +9601,12 @@ ICONS = [
     (0xE225, 'ajiaco', ajiaco),
     (0xE226, 'plato_ajiaco', plato_ajiaco),
     (0xE227, 'almuerzo_sabanero', almuerzo_sabanero),
+    # Cundinamarca · Zipaquirá (v4.4)
+    (0xE228, 'arreglo_floral', arreglo_floral),
+    (0xE229, 'noche_zipaquira', noche_zipaquira),
+    (0xE22A, 'almuerzo_plaza_zipa', almuerzo_plaza_zipa),
+    (0xE22B, 'mochila_paseo', mochila_paseo),
+    (0xE22C, 'catedral_sal', catedral_sal),
 ]
 
 

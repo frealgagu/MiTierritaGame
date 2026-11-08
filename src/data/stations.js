@@ -505,6 +505,16 @@ export const STATIONS = [
   { id: 'servidora_ajiaco', zone: 'cocina', name: 'Servidora', icon: ICON.platoAjiaco, in: { ajiaco: 1 }, out: { plato_ajiaco: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '4.4' },
   { id: 'restaurante_santafereno', zone: 'cocina', name: 'Restaurante santafereño', icon: ICON.almuerzoSabanero, in: { plato_ajiaco: 4 }, imports: [{ product: 'trucha_ahumada', perCycle: 1, route: 'ahumadas_trucha' }, { product: 'ceviche_trucha', perCycle: 1, route: 'ceviches' }], out: { almuerzo_sabanero: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '4.4' },
 
+  // Zipaquirá, la última de Cundinamarca: como Neiva, sin fuente propia. Cada estación recibe lo suyo de una zona de la
+  // región; en el Hotel de la plaza se juntan el almuerzo sabanero y la mermelada de Sibaté, y todo termina en la
+  // visita a la Catedral de Sal.
+  { id: 'floristeria_plaza', zone: 'zipaquira', name: 'Floristería de la plaza', icon: ICON.arregloFloral, imports: [{ product: 'caja_flores', perCycle: 1, route: 'cajas_flores' }], out: { arreglo_floral: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '4.4' },
+  { id: 'salon_onces', zone: 'zipaquira', name: 'Salón de onces', icon: ICON.onces, in: { arreglo_floral: 1 }, imports: [{ product: 'fresas_crema', perCycle: 4, route: 'fresas_crema' }], out: { onces_santafereñas: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '4.4' },
+  { id: 'hotel_plaza_zipa', zone: 'zipaquira', name: 'Hotel de la plaza', icon: ICON.nocheZipaquira, in: { onces_santafereñas: 2 }, imports: [{ product: 'almuerzo_sabanero', perCycle: 1, route: 'almuerzos_sabaneros' }, { product: 'mermelada_fresa', perCycle: 5, route: 'mermeladas' }], out: { noche_zipaquira: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '4.4' },
+  { id: 'plaza_mercado_zipa', zone: 'zipaquira', name: 'Plaza de mercado de Zipaquirá', icon: ICON.almuerzoPlazaZipa, in: { arreglo_floral: 1 }, imports: [{ product: 'almuerzo_trucha', perCycle: 1, route: 'almuerzos_trucha' }], out: { almuerzo_plaza_zipa: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '4.4' },
+  { id: 'mochilas_paseo', zone: 'zipaquira', name: 'Mochilas del paseo', icon: ICON.mochilaPaseo, in: { almuerzo_plaza_zipa: 1 }, imports: [{ product: 'canasta_sabanera', perCycle: 1, route: 'canastas' }, { product: 'cofre_sal', perCycle: 1, route: 'cofres_sal' }], out: { mochila_paseo: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '4.4' },
+  { id: 'entrada_catedral', zone: 'zipaquira', name: 'Entrada a la Catedral de Sal', icon: ICON.catedralSal, in: { mochila_paseo: 4 }, out: { visita_catedral: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '4.4' },
+
   // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
   // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },

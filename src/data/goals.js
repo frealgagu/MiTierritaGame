@@ -1210,5 +1210,26 @@ const COCINA = [
   { id: 'cc_final', type: 'sold', product: 'almuerzo_sabanero', amount: 6000, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS, salinas: SALINAS, cocina: COCINA };
+// Zipaquirá: la de Neiva.
+const ZIPAQUIRA = [
+  { id: 'cz01', type: 'imported', product: 'caja_flores', amount: 50, reward: 5000000 },
+  { id: 'cz02', type: 'level', target: 'floristeria_plaza', level: 10, reward: 10000000 },
+  { id: 'cz03', type: 'unlock', station: 'salon_onces', reward: 20000000 },
+  { id: 'cz04', type: 'level', target: 'route:cajas_flores', level: 10, reward: 40000000 },
+  { id: 'cz05', type: 'produced', product: 'onces_santafereñas', amount: 200, reward: 60000000 },
+  { id: 'cz07', type: 'unlock', station: 'hotel_plaza_zipa', reward: 150000000 },
+  { id: 'cz08', type: 'level', target: 'dispatch:zipaquira', level: 10, reward: 200000000 },
+  { id: 'cz09', type: 'sold', product: 'noche_zipaquira', amount: 300, reward: 300000000 },
+  { id: 'cz10', type: 'unlock', station: 'plaza_mercado_zipa', reward: 300000000 },
+  { id: 'cz11', type: 'imported', product: 'almuerzo_trucha', amount: 300, reward: 400000000 },
+  { id: 'cz12', type: 'unlock', station: 'mochilas_paseo', reward: 500000000 },
+  { id: 'cz13', type: 'imported', product: 'cofre_sal', amount: 300, reward: 800000000 },
+  { id: 'cz14', type: 'unlock', station: 'entrada_catedral', reward: 800000000 },
+  { id: 'cz15', type: 'allLevels', zone: 'zipaquira', level: 25, reward: 1500000000 },
+  { id: 'cz06', type: 'research', research: 'floristas', reward: 1500000000 },
+  { id: 'cz16', type: 'sold', product: 'visita_catedral', amount: 100, reward: 2500000000 },
+  { id: 'cz_final', type: 'sold', product: 'visita_catedral', amount: 7000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS, salinas: SALINAS, cocina: COCINA, zipaquira: ZIPAQUIRA };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas

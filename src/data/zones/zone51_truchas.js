@@ -31,10 +31,11 @@ export const ZONE51 = {
   exitText: 'A Guatavita ➜',
   muleSpeed: 4,
   dispatchCost: { base: 500, growth: 1.17 },
-  // La trucha ahumada y el ceviche salen hacia la Cocina de la Sabana (el almuerzo irá a Zipaquirá cuando llegue).
+  // La trucha ahumada y el ceviche salen hacia la Cocina de la Sabana; el almuerzo, hacia Zipaquirá.
   routes: {
     ahumadas_trucha: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Trucha ahumada a la Cocina ⬇' },
     ceviches: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Ceviche ⬇' },
+    almuerzos_trucha: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'Almuerzos a Zipaquirá ➜' },
   },
   unlockedBy: 'fresas',
   next: 'salinas',
