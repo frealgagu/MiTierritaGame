@@ -1145,5 +1145,8 @@ export const EVENTS = [
 ];
 
 export const EVENTS_BY_ID = Object.fromEntries(EVENTS.map((e) => [e.id, e]));
-export const EVENT_OF_ZONE = Object.fromEntries(EVENTS.map((e) => [e.zone, e]));
+// La clave de un evento (v4.5): su zona o, en una zona con varios eventos (Bogotá), su `key`. Los cupos, los tableros y
+// las veces jugadas se guardan con ella; como es la zona en todos los de antes, las partidas guardadas no cambian.
+export const eventKey = (def) => def.key ?? def.zone;
+export const EVENT_OF_ZONE = Object.fromEntries(EVENTS.map((e) => [eventKey(e), e]));
 export const EVENT_ACTIONS_BY_ID = Object.fromEntries(EVENTS.flatMap((e) => e.actions.map((a, k) => [a.id, { ...a, event: e.id, requires: e.actions[k - 1]?.id ?? null }])));

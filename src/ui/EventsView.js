@@ -1,6 +1,6 @@
 // Ventana de eventos (v2.0): el evento de cada zona este año, cómo va, la mejor medalla y el Renombre.
 // «Jugar» o «Seguir» lleva al tablero del evento (main.js).
-import { EVENTS, MEDALS } from '../data/events.js';
+import { EVENTS, MEDALS, eventKey } from '../data/events.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS, REGION_OF_ZONE } from '../data/regions.js';
 import { MEDAL_BONUS, awaySeconds, boardClockNow, boardObjective, eventObjective, eventStatus, medalCount, regionEvents } from '../sim/events.js';
@@ -50,7 +50,7 @@ export class EventsView {
   folded(regionId) {
     const saved = this.game.state.settings.eventsFold?.[regionId];
     if (saved !== undefined) return saved;
-    return !EVENTS.some((def) => REGION_OF_ZONE[def.zone] === regionId && ['active', 'won', 'available'].includes(eventStatus(this.game.state, def.zone)?.kind));
+    return !EVENTS.some((def) => REGION_OF_ZONE[def.zone] === regionId && ['active', 'won', 'available'].includes(eventStatus(this.game.state, eventKey(def))?.kind));
   }
 
   close() {
@@ -62,7 +62,7 @@ export class EventsView {
     const profile = s.profile ?? { renown: 0, medals: {} };
     document.getElementById('events-renown').textContent = t('⭐ Renombre: {n} · 🏆 Prestigio: {total}', { n: profile.renown, total: profile.renownTotal ?? profile.renown });
     const card = (def) => {
-      const st = eventStatus(s, def.zone);
+      const st = eventStatus(s, eventKey(def));
       if (!st) return '';
       const zone = ZONES_BY_ID[def.zone];
       const best = profile.medals[def.id]?.best;
@@ -77,15 +77,15 @@ export class EventsView {
       let foot;
       if (st.kind === 'won') {
         const m = MEDALS[st.board.event.medal];
-        foot = `<p>${t('🏁 ¡Ganado con {medal}! Entra a verlo y toca 🏁 Terminar evento para cerrarlo.', { medal: `${m.icon} ${m.name}` })}</p><button class="btn buy" data-play="${def.zone}">${t('Ver y terminar')}</button>`;
+        foot = `<p>${t('🏁 ¡Ganado con {medal}! Entra a verlo y toca 🏁 Terminar evento para cerrarlo.', { medal: `${m.icon} ${m.name}` })}</p><button class="btn buy" data-play="${eventKey(def)}">${t('Ver y terminar')}</button>`;
       } else if (st.kind === 'active') {
         const secured = st.board.event.medal;
         // 🚪 Si se salió de él, sigue corriendo (v3.67.4): el reloj que marcaría ahora.
         const running = awaySeconds(st.board, s) > 0 ? ` · ${t('🚪 corriendo')}` : '';
         foot = secured
-          ? `<p>${t('✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.', { icon: MEDALS[secured].icon })}</p><button class="btn buy" data-play="${def.zone}">${t('Seguir')}</button>`
-          : `<button class="btn buy" data-play="${def.zone}">${t('Seguir')} · ⏱ ${formatClock(boardClockNow(st.board, s))}${running}</button>`;
-      } else foot = `<button class="btn buy" data-play="${def.zone}">${t('Jugar')}</button>`;
+          ? `<p>${t('✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.', { icon: MEDALS[secured].icon })}</p><button class="btn buy" data-play="${eventKey(def)}">${t('Seguir')}</button>`
+          : `<button class="btn buy" data-play="${eventKey(def)}">${t('Seguir')} · ⏱ ${formatClock(boardClockNow(st.board, s))}${running}</button>`;
+      } else foot = `<button class="btn buy" data-play="${eventKey(def)}">${t('Jugar')}</button>`;
       return `<div class="event-card">
         ${title}
         <p class="clamp" style="--lines: 2">${def.intro}</p>${moreButton()}
@@ -96,7 +96,7 @@ export class EventsView {
     // Por región (con su título, si ya hay más de una); las zonas que todavía no se abren no se muestran.
     // Primero los que se pueden jugar; luego los que esperan.
     const rank = (def) => {
-      const kind = eventStatus(s, def.zone)?.kind;
+      const kind = eventStatus(s, eventKey(def))?.kind;
       return kind === 'active' || kind === 'won' || kind === 'available' ? 0 : 1;
     };
     const groups = REGIONS.map((r) => ({ r, cards: EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === r.id).sort((a, b) => rank(a) - rank(b)).map(card).filter(Boolean) })).filter((g) => g.cards.length);
@@ -105,7 +105,7 @@ export class EventsView {
       .map((g) => {
         if (groups.length < 2) return g.cards.join('');
         const folded = this.folded(g.r.id);
-        const ready = EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === g.r.id && ['active', 'won', 'available'].includes(eventStatus(s, def.zone)?.kind)).length;
+        const ready = EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === g.r.id && ['active', 'won', 'available'].includes(eventStatus(s, eventKey(def))?.kind)).length;
         const head = `<button class="zones-region research-other" data-efold="${g.r.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${g.r.icon} ${g.r.name}<small>${ready ? t('{n} para jugar', { n: ready }) : t('nada por ahora')}</small></button>`;
         return `<div class="zones-group events-group">${head}${folded ? '' : g.cards.join('')}</div>`;
       })
@@ -115,7 +115,7 @@ export class EventsView {
   }
 
   update() {
-    const statuses = EVENTS.map((def) => eventStatus(this.game.state, def.zone)).filter(Boolean);
+    const statuses = EVENTS.map((def) => eventStatus(this.game.state, eventKey(def))).filter(Boolean);
     // El botón aparece cuando hay algún evento abierto, o cuando ya se tiene algo del Renombre (v3.8.1:
     // tras reiniciar seguían ahí el álbum, los logros y las horas aunque no hubiera evento); el número,
     // los que se pueden empezar.

@@ -13,7 +13,7 @@
 // Tras ganarlo, el tablero sigue abierto para mirarlo (`event.done`) hasta que se toque «Terminar».
 //   principal: state.events = { boards, slots: [ { zone } | { until } | null ], last, count, global }
 //   cada región: state.events = { boards: { zona: tablero }, last: { zona: reloj }, count: { zona: veces } }
-import { EVENTS, EVENTS_BY_ID, EVENT_ACTIONS_BY_ID, EVENT_OF_ZONE, MEDALS } from '../data/events.js';
+import { EVENTS, EVENTS_BY_ID, EVENT_ACTIONS_BY_ID, EVENT_OF_ZONE, MEDALS, eventKey } from '../data/events.js';
 import { createInitialState, createZoneState } from './state.js';
 import { createStationState } from './production.js';
 import { DAY_LENGTH, YEAR_DAYS, clockOf } from './calendar.js';
@@ -67,8 +67,11 @@ const ready = (state, def) => open(state, def.zone) && (state.regionDone || def.
 
 // La partida de la región de una zona, a partir de la principal (root). Con la partida de una región en
 // vez de la principal, solo sus propias zonas.
+// (v4.5) Las funciones de aquí reciben la clave del evento (`zoneId`: la zona, salvo en Bogotá; ver data/events.js).
+const zoneOfKey = (key) => EVENT_OF_ZONE[key]?.zone ?? key;
+const regionOfKey = (key) => REGION_OF_ZONE[zoneOfKey(key)];
 export function ownerOf(root, zoneId) {
-  const region = REGION_OF_ZONE[zoneId];
+  const region = regionOfKey(zoneId);
   if ((root.region ?? 'cafetero') === region) return root;
   return region === 'cafetero' ? null : root.regions?.[region] ?? null;
 }
@@ -91,19 +94,19 @@ export function refillSlots(root) {
     const loose = playing.filter((zone) => !held.includes(zone));
     if (held.length + loose.length >= slots.length) return;
     const busy = new Set([...held, ...boards.map(([zone]) => zone)]);
-    const regions = new Set([...held, ...loose].map((zone) => REGION_OF_ZONE[zone]));
+    const regions = new Set([...held, ...loose].map((key) => regionOfKey(key)));
     // Primero las nunca jugadas (en el orden de las zonas), luego las que no tienen oro y al final las de
     // oro (v3.72); entre iguales, la que lleva más tiempo sin jugarse.
     const medals = root.profile?.medals ?? {};
     const tier = (def, last) => (last === -Infinity ? 0 : medals[def.id]?.best === 'gold' ? 2 : 1);
-    const next = EVENTS.filter((def) => !busy.has(def.zone) && !regions.has(REGION_OF_ZONE[def.zone]))
-      .map((def) => ({ def, owner: ownerOf(root, def.zone) }))
+    const next = EVENTS.filter((def) => !busy.has(eventKey(def)) && !regions.has(REGION_OF_ZONE[def.zone]))
+      .map((def) => ({ def, owner: ownerOf(root, eventKey(def)) }))
       .filter(({ def, owner }) => owner && ready(owner, def))
-      .map(({ def, owner }, k) => ({ def, k, last: eventsOf(owner).last[def.zone] ?? -Infinity }))
+      .map(({ def, owner }, k) => ({ def, k, last: eventsOf(owner).last[eventKey(def)] ?? -Infinity }))
       .map((x) => ({ ...x, tier: tier(x.def, x.last) }))
       .sort((x, y) => x.tier - y.tier || x.last - y.last || x.k - y.k)[0];
     if (!next) return;
-    slots[i] = { zone: next.def.zone };
+    slots[i] = { zone: eventKey(next.def) };
   }
 }
 
@@ -121,7 +124,7 @@ export function nextSlotAt(root) {
 export function eventStatus(root, zoneId) {
   const def = EVENT_OF_ZONE[zoneId];
   const state = def && ownerOf(root, zoneId);
-  if (!state || !open(state, zoneId)) return null;
+  if (!state || !open(state, def.zone)) return null;
   const board = eventsOf(state).boards[zoneId];
   if (board) return { kind: board.event.done ? 'won' : 'active', def, round: boardRound(board), board };
   if (!ready(state, def)) return { kind: 'locked', def, round: nextRound(state, zoneId) };
@@ -134,7 +137,7 @@ export function createEventState(def, round) {
   const s = createInitialState(undefined, REGION_OF_ZONE[def.zone]);
   delete s.events;
   delete s.profile;
-  s.event = { id: def.id, zone: def.zone, round, single: true };
+  s.event = { id: def.id, zone: def.zone, key: eventKey(def), round, single: true };
   for (const z of Object.keys(s.zones)) s.zones[z] = createZoneState(z === def.zone);
   s.zones[def.zone].dispatch.level = def.level;
   s.stations = {};
