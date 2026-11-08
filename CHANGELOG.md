@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v4.4.9 — La flecha de subir de nivel, ahora sí
+- **La flecha verde de subir de nivel** («⬆ Todo al nivel…») ya se ve con su borde y su fondo claro sobre el botón verde. En la v4.4.8 el dibujo estaba listo, pero el juego seguía mostrando la flecha del teléfono.
+
 ## v4.4.8 — Cundinamarca completa
 - **🌹 Cundinamarca queda completa** con sus seis eventos, su álbum y sus logros. Al completar Zipaquirá tiene su segundo final, como las demás regiones.
 - **Seis eventos nuevos:** las heladas en las Flores, la cosecha grande de fresa en Sibaté, la Semana Santa en Guatavita, el derrumbe que deja sin rosas a las Salinas, el domingo de ajiaco en la Cocina y la Navidad en la Catedral de Sal. Cada uno se ve en el mapa y cambia con cada compra.
