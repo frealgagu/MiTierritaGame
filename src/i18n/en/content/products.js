@@ -376,4 +376,7 @@ export default {
   subida_monserrate: 'Trip up Monserrate',
   pabellon_colombia: 'Colombia Pavilion',
   feria_mi_tierrita: 'Mi Tierrita Grand Fair',
+  cafe_molido: 'Ground coffee',
+  chicharron: 'Chicharrón (pork crackling)',
+  caldo_costilla: 'Rib broth',
 };

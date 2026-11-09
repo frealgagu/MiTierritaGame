@@ -25,16 +25,12 @@ export const ZONE55 = {
   seed: 233,
   theme: 'town',
   style: 'bogota',
-  // Los barrios (v4.5): cada uno se construye en su orden y todos a la vez (ver sim/chain.js: groupsOf). La cadena
-  // es la de todos, uno tras otro.
-  groups: [
-    { id: 'candelaria', name: 'La Candelaria', stations: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial'] },
-    { id: 'zona_g', name: 'Chapinero y la Zona G', stations: ['despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g'] },
-    { id: 'usaquen', name: 'Usaquén', stations: ['toldo_tejidos', 'toldo_sombreros', 'toldo_loza', 'toldo_mascaras', 'mercado_pulgas'] },
-    { id: 'paloquemao', name: 'Paloquemao', stations: ['puesto_flores', 'puesto_frutas', 'pescaderia_plaza', 'fritanga_plaza', 'plaza_paloquemao'] },
-    { id: 'centro', name: 'El centro', stations: ['hotel_capital', 'funicular_monserrate', 'pabellon_regiones', 'gran_feria'], after: ['candelaria', 'zona_g', 'usaquen', 'paloquemao'] },
-  ],
-  chain: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial', 'despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g', 'toldo_tejidos', 'toldo_sombreros', 'toldo_loza', 'toldo_mascaras', 'mercado_pulgas', 'puesto_flores', 'puesto_frutas', 'pescaderia_plaza', 'fritanga_plaza', 'plaza_paloquemao', 'hotel_capital', 'funicular_monserrate', 'pabellon_regiones', 'gran_feria'],
+  // En red (v4.6; hasta la v4.5 eran cinco barrios, cada uno en su orden): una estación se puede construir cuando ya
+  // están todas las de Bogotá que la abastecen (ver sim/chain.js: buildableStations). La cadena va por niveles. Las
+  // estaciones siguen en el mapa en sus barrios: La Candelaria al pie de los Cerros, la Zona G y Usaquén al norte,
+  // Paloquemao al occidente y el centro.
+  network: true,
+  chain: ['tostadero_chorro', 'despensa_zona_g', 'toldo_tejidos', 'puesto_flores', 'puesto_frutas', 'cafeteria_septima', 'cocina_entradas', 'toldo_sombreros', 'pescaderia_plaza', 'chocolateria_candelaria', 'parrilla_zona_g', 'toldo_loza', 'fritanga_plaza', 'dulceria_calle11', 'reposteria_zona_g', 'toldo_mascaras', 'plaza_paloquemao', 'casa_colonial', 'restaurante_zona_g', 'mercado_pulgas', 'hotel_capital', 'funicular_monserrate', 'pabellon_regiones', 'gran_feria'],
   // El Chorro de Quevedo: la plazoleta donde empieza todo, al pie de los Cerros.
   farm: { stationId: 'tostadero_chorro', x: 35, y: 6, w: 6, h: 6 },
   plots: [
@@ -87,7 +83,7 @@ export const ZONE55 = {
     tm_amasijos: { road: [[0.1, 20.5], [33.5, 20.5], [33.5, 16.2]], sign: [2.6, 19.4], text: 'Amasijos de Boyacá ⬇' },
     tm_bocadillos: { road: [[0.1, 20.5], [32.5, 20.5], [32.5, 12.5]], sign: [5.6, 19.4], text: 'Bocadillos de Santander ⬇' },
     tm_bizcochos: { road: [[51.9, 20.5], [38.5, 20.5], [38.5, 16.2]], sign: [49.4, 21.6], text: '⬆ Bizcochos del Tolima' },
-    tm_flores: { road: [[44.5, 51.9], [44.5, 20.5], [30.5, 20.5], [30.5, 16.2]], sign: [45.6, 49.4], text: 'Flores de la Sabana ⬆' },
+    tm_flores: { road: [[44.5, 51.9], [44.5, 20.5], [29.5, 20.5], [29.5, 26.2]], sign: [45.6, 49.4], text: 'Flores de la Sabana ⬆' },
     // Chapinero y la Zona G.
     tm_alino: { road: [[51.9, 20.5], [26.5, 20.5], [26.5, 16.2]], sign: [46.4, 21.6], text: '⬆ Aliño del Pacífico' },
     tm_aji: { road: [[18.5, 51.9], [18.5, 20.5], [25.5, 20.5], [25.5, 16.2]], sign: [19.7, 49.4], text: 'Ají negro, de El Dorado ⬆' },
@@ -95,8 +91,8 @@ export const ZONE55 = {
     tm_hormigas: { road: [[0.1, 20.5], [20.5, 20.5], [20.5, 12.5], [23.2, 12.5]], sign: [11.6, 19.4], text: 'Hormigas de Santander ⬇' },
     tm_asado: { road: [[51.9, 8.5], [44.5, 8.5], [44.5, 20.5], [22.5, 20.5], [22.5, 16.2]], sign: [49.4, 9.6], text: '⬆ Asado de los Llanos' },
     tm_arroz: { road: [[8.5, 51.9], [8.5, 20.5], [21.5, 20.5], [21.5, 16.2]], sign: [9.7, 40.4], text: 'Arroz de la Costa ⬆' },
-    tm_asai: { road: [[18.5, 51.9], [18.5, 20.5], [16.5, 20.5], [16.5, 12.5], [19.2, 12.5]], sign: [19.7, 46.4], text: 'Asaí, de El Dorado ⬆' },
-    tm_jugos: { road: [[51.9, 8.5], [44.5, 8.5], [44.5, 20.5], [20.5, 20.5], [20.5, 12.5]], sign: [46.4, 9.6], text: '⬆ Jugos de los Llanos' },
+    tm_asai: { road: [[18.5, 51.9], [18.5, 20.5], [31.5, 20.5], [31.5, 30.8]], sign: [19.7, 46.4], text: 'Asaí, de El Dorado ⬆' },
+    tm_jugos: { road: [[51.9, 8.5], [44.5, 8.5], [44.5, 20.5], [31.5, 20.5], [31.5, 30.8]], sign: [46.4, 9.6], text: '⬆ Jugos de los Llanos' },
     // Usaquén.
     tm_ruanas: { road: [[0.1, 20.5], [16.5, 20.5], [16.5, 12.5]], sign: [14.6, 19.4], text: 'Ruanas de Boyacá ⬇' },
     tm_alpargatas: { road: [[0.1, 20.5], [12.5, 20.5], [12.5, 12.5], [15.2, 12.5]], sign: [17.6, 19.4], text: 'Alpargatas de Santander ⬇' },

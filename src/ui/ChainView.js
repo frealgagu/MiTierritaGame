@@ -47,7 +47,30 @@ export class ChainView {
     this.selected = null;
     document.getElementById('chain-btn').addEventListener('click', () => this.open());
     document.getElementById('chain-close').addEventListener('click', () => this.close());
+    // Con el ratón (v4.6), la cadena se arrastra en las cuatro direcciones (en el teléfono, con el dedo, ya se podía).
+    this.body.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      const sc = this.body.querySelector('.dg-scroll');
+      this.drag = { x: e.clientX, y: e.clientY, left: sc?.scrollLeft ?? 0, top: this.body.scrollTop, sc, moved: false };
+    });
+    window.addEventListener('pointermove', (e) => {
+      const d = this.drag;
+      if (!d) return;
+      const dx = e.clientX - d.x;
+      const dy = e.clientY - d.y;
+      if (!d.moved && Math.hypot(dx, dy) < 6) return;
+      d.moved = true;
+      if (d.sc) d.sc.scrollLeft = d.left - dx;
+      this.body.scrollTop = d.top - dy;
+    });
+    window.addEventListener('pointerup', () => {
+      // Lo que se suelta después de arrastrar no cuenta como toque.
+      this.dragged = Boolean(this.drag?.moved);
+      this.drag = null;
+      setTimeout(() => (this.dragged = false), 0);
+    });
     this.el.addEventListener('click', (e) => {
+      if (this.dragged) return;
       if (e.target === this.el) return this.close();
       if (this.footClick(e)) return;
       const tab = e.target.closest('[data-group]');
@@ -112,7 +135,14 @@ export class ChainView {
     // Solo se reescribe si algo cambió, para no perder toques a medio hacer.
     // Menos el margen de la caja que se desliza (v4.3.1), para que lo de las orillas no quede cortado.
     const html = diagram(state, a, rows, locked, zone, (this.body.clientWidth || 320) - 2 * DG_PAD, this.selected, only);
-    if (html !== this.html) this.body.innerHTML = this.html = html;
+    // Se redibuja en cada cuadro: lo que se corrió de lado se conserva (v4.6: en Bogotá la red es ancha). Mientras se
+    // arrastra no se redibuja.
+    if (html !== this.html && !this.drag?.moved) {
+      const left = this.body.querySelector('.dg-scroll')?.scrollLeft ?? 0;
+      this.body.innerHTML = this.html = html;
+      const sc = this.body.querySelector('.dg-scroll');
+      if (sc) sc.scrollLeft = left;
+    }
     const detail = this.selected ? detailOf(state, a, rows, this.selected, zone) : '';
     this.detail.hidden = !detail;
     if (detail !== this.detailHtml) this.detail.innerHTML = this.detailHtml = detail;
@@ -311,10 +341,10 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
   // Las ramas aparte (v3.12: la Compostera) cuelgan de la estación que las habilita.
   const sides = ZONES_BY_ID[zone].plots.map((p) => p.stationId).filter((id) => STATIONS_BY_ID[id].side);
   // En el árbol, cada estación cuelga de la que le da su entrada principal o su subproducto (v4.0). Lo que una
-  // estación junta de otra (v4.0) baja por su propia columna, un carril (`lane:<la que junta>`) que cuelga de la
-  // que lo hace, y entra por arriba, junto al camino principal.
+  // estación junta de otra (v4.0) baja por su propia columna, un carril (`lane:<la que junta>:<la que lo hace>`; desde
+  // la v4.6 una estación puede juntar de dos o tres) que cuelga de la que lo hace, y entra por arriba.
   const byKids = (id) => (BY_CHILDREN[id] ?? []).filter((c) => rows[c] && PARENT[c] === id && chainOf(zone).includes(c) && inSet(c));
-  const lanes = (id) => (rows[id] ? Object.keys(JOIN_FROM).filter((j) => rows[j] && inSet(j) && Object.values(JOIN_FROM[j]).includes(id)).map((j) => `lane:${j}`) : []);
+  const lanes = (id) => (rows[id] ? Object.keys(JOIN_FROM).filter((j) => rows[j] && inSet(j) && Object.values(JOIN_FROM[j]).includes(id)).map((j) => `lane:${j}:${id}`) : []);
   const rawKids = (id) =>
     id.startsWith('lane:')
       ? []
@@ -331,7 +361,7 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
   const kidsOf = (id) => {
     const kids = rawKids(id);
     for (const k of [...kids]) {
-      const joins = under(k).filter((x) => x.startsWith('lane:')).map((x) => x.slice(5));
+      const joins = under(k).filter((x) => x.startsWith('lane:')).map((x) => x.split(':')[1]);
       const host = kids.find((m) => m !== k && joins.some((j) => under(m).includes(j)));
       if (!host) continue;
       kids.splice(kids.indexOf(k), 1);
@@ -424,20 +454,21 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
       if (row) flow(ex, (mid + b.top) / 2 + (pos[parent].x === pos[id].x ? -GAP / 4 : 0), icon, row.incoming, kind === 'hot');
     }
     // Lo que junta de otra estación de su zona (v4.0): baja por su carril, a la derecha, y entra por arriba.
-    for (const [product, from] of Object.entries(JOIN_FROM[id] ?? {})) {
-      const lane = pos[`lane:${id}`];
-      if (!pos[from] || !lane) continue;
+    Object.entries(JOIN_FROM[id] ?? {}).forEach(([product, from], k) => {
+      const lane = pos[`lane:${id}:${from}`];
+      if (!pos[from] || !lane) return;
       const p = box(from);
       const lx = (lane.x + 0.5) * colW;
       // Con etiquetas de importados encima, entra por la orilla derecha, al lado de ellas (que se angostan).
       const tags = tagsOf(id).length;
-      const ex = tags ? b.left + b.w - JOIN_W / 2 : b.left + b.w * 0.78;
+      // Con varias (v4.6), cada una entra un poco más a la izquierda que la anterior.
+      const ex = (tags ? b.left + b.w - JOIN_W / 2 : b.left + b.w * 0.78) - k * 9;
       const mid = p.bottom + GAP / 2;
       const turn = b.top - tags * TAG_H - GAP / 2 + 9;
       const kind = !row ? 'locked' : row.joinLimited === product || a.bottleneck === `${from}:transport` ? 'hot' : 'flow';
       pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${lx} V ${turn} H ${ex} V ${b.top}`, kind, product);
       if (row) flow(lx, (mid + turn) / 2, PRODUCTS[product].icon, row.joined?.[product] ?? 0, kind === 'hot');
-    }
+    });
     // Etiquetas de lo que llega de otras zonas, apiladas encima de la estación, a la derecha.
     tagsOf(id).forEach((imp, i) => {
       const r = ROUTES_BY_ID[imp.route];

@@ -376,4 +376,7 @@ export default {
   subida_monserrate: 'Montée à Monserrate',
   pabellon_colombia: 'Pavillon de la Colombie',
   feria_mi_tierrita: 'Grande Foire de Mi Tierrita',
+  cafe_molido: 'Café moulu',
+  chicharron: 'Chicharrón (couenne grillée)',
+  caldo_costilla: 'Bouillon de côtes',
 };

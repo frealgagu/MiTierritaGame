@@ -149,7 +149,7 @@ export class ZonesView {
         return `
           <div class="research ${st.unlocked ? '' : 'locked'} ${current ? 'owned' : ''}">
             <span class="research-icon">${zone.icon}</span>
-            <span class="research-text"><b>${t('Zona {n}', { n: i + 1 })} · ${zone.name}</b><br>${status}</span>
+            <span class="research-text"><b>${region.zones.length > 1 ? `${t('Zona {n}', { n: i + 1 })} · ` : ''}${zone.name}</b><br>${status}</span>
             ${action}
           </div>`;
       });

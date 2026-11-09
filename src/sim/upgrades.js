@@ -1,6 +1,6 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { bulkUpgrade, maxLevel, MILESTONES } from './rules.js';
-import { buildableStations, groupOf, groupsOf, zoneOf, zoneUnlocked } from './chain.js';
+import { buildableStations, groupOf, groupsOf, suppliersOf, zoneOf, zoneUnlocked } from './chain.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { createStationState } from './production.js';
 import { RESEARCH, RESEARCH_BY_ID } from '../data/research.js';
@@ -68,10 +68,13 @@ export function buyUpgrade(state, id, mode, bus) {
   return true;
 }
 
-// En el tablero de un evento de Bogotá (v4.5) solo cuenta el barrio del evento: lo de los otros no se construye.
+// En el tablero de un evento de Bogotá (v4.5) solo cuenta lo del evento: lo demás no se construye.
 function outsideEvent(state, id) {
-  if (!state.event || !ZONES_BY_ID[zoneOf(id)].groups) return false;
+  const zone = ZONES_BY_ID[zoneOf(id)];
+  if (!state.event || !(zone.groups || zone.network)) return false;
   const stations = EVENTS_BY_ID[state.event.id]?.stations ?? [];
+  // En red (v4.6), solo las del evento.
+  if (zone.network) return !stations.includes(id);
   return !groupOf(id)?.stations.some((s) => stations.includes(s));
 }
 
@@ -87,10 +90,15 @@ export function quoteUnlock(state, id) {
     if (!state.stations[def.requires]) return { ok: false, reason: 'order', previous: def.requires, cost };
   } else if (!buildableStations(state, zoneOf(id)).includes(id)) {
     // La anterior de su barrio (v4.5) o, si es la primera de un barrio que espera otros, la que les falta a esos.
-    const group = groupOf(id);
-    const k = group.stations.indexOf(id);
-    const waits = groupsOf(zoneOf(id)).filter((g) => (group.after ?? []).includes(g.id)).flatMap((g) => g.stations);
-    const previous = k > 0 ? group.stations[k - 1] : waits.find((s) => !state.stations[s]);
+    // En red (v4.6, Bogotá): la primera de las que la abastecen que falta.
+    let previous;
+    if (ZONES_BY_ID[zoneOf(id)].network) previous = suppliersOf(id).find((s) => !state.stations[s]);
+    else {
+      const group = groupOf(id);
+      const k = group.stations.indexOf(id);
+      const waits = groupsOf(zoneOf(id)).filter((g) => (group.after ?? []).includes(g.id)).flatMap((g) => g.stations);
+      previous = k > 0 ? group.stations[k - 1] : waits.find((s) => !state.stations[s]);
+    }
     return { ok: false, reason: 'order', previous, cost };
   }
   if (!canPay(state, cost)) return { ok: false, reason: 'coins', cost };

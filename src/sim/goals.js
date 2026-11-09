@@ -79,8 +79,9 @@ export function goalProgress(state, goal) {
       const levels = Object.entries(state.stations)
         .filter(([id]) => STATIONS_BY_ID[id].zone === zone && !STATIONS_BY_ID[id].side)
         .map(([, s]) => s.level);
-      // En Bogotá (v4.5), con sus barrios que se construyen a la vez, cuentan las que ya están (al menos cinco).
-      const needed = ZONES_BY_ID[zone].groups ? 5 : ZONES_BY_ID[zone].chain.length - 1;
+      // En Bogotá (v4.5), con sus barrios que se construyen a la vez (y desde la v4.6 en red), cuentan las que ya están
+      // (al menos cinco).
+      const needed = ZONES_BY_ID[zone].groups || ZONES_BY_ID[zone].network ? 5 : ZONES_BY_ID[zone].chain.length - 1;
       current = levels.length >= needed ? Math.min(...levels) : 0;
       target = goal.level;
       break;

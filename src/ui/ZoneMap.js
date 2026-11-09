@@ -428,7 +428,8 @@ export class ZoneMap {
       el('circle', { r: 4.6 * u, class: 'dot', 'stroke-width': 0.6 * u }, m);
       el('text', { 'font-size': 4.6 * u, 'text-anchor': 'middle', y: 1.6 * u }, m).textContent = st?.unlocked ? zone.icon : '🔒';
       const name = el('text', { 'font-size': 2.8 * u, 'text-anchor': 'middle', y: 8.4 * u, class: 'name', 'stroke-width': 0.8 * u }, m);
-      name.textContent = `${i + 1} · ${zone.name}${st?.complete ? (zoneMaxed(state, z) ? ' 🏁' : ' 🚩') : ''}`;
+      // Con una sola zona (Bogotá, v4.6) va sin número.
+      name.textContent = `${r.zones.length > 1 ? `${i + 1} · ` : ''}${zone.name}${st?.complete ? (zoneMaxed(state, z) ? ' 🏁' : ' 🚩') : ''}`;
       m.addEventListener('click', () => this.pickZone(z));
     });
   }
