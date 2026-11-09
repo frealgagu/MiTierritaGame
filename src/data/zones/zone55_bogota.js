@@ -63,6 +63,13 @@ export const ZONE55 = {
     { stationId: 'pabellon_regiones', x: 39, y: 36 },
     { stationId: 'gran_feria', x: 39, y: 40 },
   ],
+  // El TransMilenio (v4.6), solo de adorno: su carril va junto a la Caracas, la 30 (la NQS, entre la Caracas y
+  // Paloquemao) y la Calle 80, que llega hasta la Caracas (ver render/Scene.js: syncBuses).
+  transmilenio: [
+    [[0.1, 21.5], [51.9, 21.5]],
+    [[0.1, 24.5], [51.9, 24.5]],
+    [[9.5, 51.9], [9.5, 21.5]],
+  ],
   warehouse: { x: 47, y: 42, w: 3, h: 3 },
   muleRoad: [[40.5, 12.5], [4.5, 12.5], [4.5, 30.5], [42.5, 30.5], [42.5, 44.5], [46.5, 44.5], [46.5, 45.5], [47.4, 45.5]],
   yard: { x: 46, y: 45, w: 4, h: 1 },
@@ -77,20 +84,20 @@ export const ZONE55 = {
   muleSpeed: 8,
   dispatchCost: { base: 10, growth: 1.17 },
   routes: {
-    tm_cafe: { road: [[8.5, 51.9], [8.5, 20.5], [36.5, 20.5], [36.5, 12.5]], sign: [9.7, 49.4], text: 'Café del Eje ⬆' },
-    tm_chocolate: { road: [[8.5, 51.9], [8.5, 20.5], [34.5, 20.5], [34.5, 16.2]], sign: [9.7, 46.4], text: 'Chocolate del Eje ⬆' },
-    tm_cocadas: { road: [[8.5, 51.9], [8.5, 20.5], [28.5, 20.5], [28.5, 12.5], [31.2, 12.5]], sign: [9.7, 43.4], text: 'Cocadas de la Costa ⬆' },
+    tm_cafe: { road: [[8.5, 51.9], [8.5, 20.5], [36.5, 20.5], [36.5, 12.5]], sign: [10.7, 49.4], text: 'Café del Eje ⬆' },
+    tm_chocolate: { road: [[8.5, 51.9], [8.5, 20.5], [34.5, 20.5], [34.5, 16.2]], sign: [10.7, 46.4], text: 'Chocolate del Eje ⬆' },
+    tm_cocadas: { road: [[8.5, 51.9], [8.5, 20.5], [28.5, 20.5], [28.5, 12.5], [31.2, 12.5]], sign: [10.7, 43.4], text: 'Cocadas de la Costa ⬆' },
     tm_amasijos: { road: [[0.1, 20.5], [33.5, 20.5], [33.5, 16.2]], sign: [2.6, 19.4], text: 'Amasijos de Boyacá ⬇' },
     tm_bocadillos: { road: [[0.1, 20.5], [32.5, 20.5], [32.5, 12.5]], sign: [5.6, 19.4], text: 'Bocadillos de Santander ⬇' },
-    tm_bizcochos: { road: [[51.9, 20.5], [38.5, 20.5], [38.5, 16.2]], sign: [49.4, 21.6], text: '⬆ Bizcochos del Tolima' },
+    tm_bizcochos: { road: [[51.9, 20.5], [38.5, 20.5], [38.5, 16.2]], sign: [49.4, 22.6], text: '⬆ Bizcochos del Tolima' },
     tm_flores: { road: [[44.5, 51.9], [44.5, 20.5], [29.5, 20.5], [29.5, 26.2]], sign: [45.6, 49.4], text: 'Flores de la Sabana ⬆' },
     // Chapinero y la Zona G.
-    tm_alino: { road: [[51.9, 20.5], [26.5, 20.5], [26.5, 16.2]], sign: [46.4, 21.6], text: '⬆ Aliño del Pacífico' },
+    tm_alino: { road: [[51.9, 20.5], [26.5, 20.5], [26.5, 16.2]], sign: [46.4, 22.6], text: '⬆ Aliño del Pacífico' },
     tm_aji: { road: [[18.5, 51.9], [18.5, 20.5], [25.5, 20.5], [25.5, 16.2]], sign: [19.7, 49.4], text: 'Ají negro, de El Dorado ⬆' },
     tm_papitas: { road: [[0.1, 20.5], [24.5, 20.5], [24.5, 12.5]], sign: [8.6, 19.4], text: 'Papitas de Boyacá ⬇' },
     tm_hormigas: { road: [[0.1, 20.5], [20.5, 20.5], [20.5, 12.5], [23.2, 12.5]], sign: [11.6, 19.4], text: 'Hormigas de Santander ⬇' },
     tm_asado: { road: [[51.9, 8.5], [44.5, 8.5], [44.5, 20.5], [22.5, 20.5], [22.5, 16.2]], sign: [49.4, 9.6], text: '⬆ Asado de los Llanos' },
-    tm_arroz: { road: [[8.5, 51.9], [8.5, 20.5], [21.5, 20.5], [21.5, 16.2]], sign: [9.7, 40.4], text: 'Arroz de la Costa ⬆' },
+    tm_arroz: { road: [[8.5, 51.9], [8.5, 20.5], [21.5, 20.5], [21.5, 16.2]], sign: [10.7, 40.4], text: 'Arroz de la Costa ⬆' },
     tm_asai: { road: [[18.5, 51.9], [18.5, 20.5], [31.5, 20.5], [31.5, 30.8]], sign: [19.7, 46.4], text: 'Asaí, de El Dorado ⬆' },
     tm_jugos: { road: [[51.9, 8.5], [44.5, 8.5], [44.5, 20.5], [31.5, 20.5], [31.5, 30.8]], sign: [46.4, 9.6], text: '⬆ Jugos de los Llanos' },
     // Usaquén.
@@ -98,14 +105,14 @@ export const ZONE55 = {
     tm_alpargatas: { road: [[0.1, 20.5], [12.5, 20.5], [12.5, 12.5], [15.2, 12.5]], sign: [17.6, 19.4], text: 'Alpargatas de Santander ⬇' },
     tm_sombreros: { road: [[8.5, 51.9], [8.5, 20.5], [14.5, 20.5], [14.5, 16.2]], sign: [7.3, 49.4], text: 'Sombreros de la Costa ⬆' },
     tm_sillas: { road: [[51.9, 8.5], [44.5, 8.5], [44.5, 20.5], [13.5, 20.5], [13.5, 16.2]], sign: [43.4, 9.6], text: '⬆ Sillas de los Llanos' },
-    tm_loza: { road: [[51.9, 20.5], [12.5, 20.5], [12.5, 12.5]], sign: [43.4, 21.6], text: '⬆ Loza del Tolima' },
+    tm_loza: { road: [[51.9, 20.5], [12.5, 20.5], [12.5, 12.5]], sign: [43.4, 22.6], text: '⬆ Loza del Tolima' },
     tm_canastas: { road: [[8.5, 51.9], [8.5, 12.5], [10.8, 12.5]], sign: [7.3, 46.4], text: 'Canastas del Eje ⬆' },
     tm_mascaras: { road: [[18.5, 51.9], [18.5, 20.5], [10.5, 20.5], [10.5, 16.2]], sign: [19.7, 43.4], text: 'Máscaras, de El Dorado ⬆' },
-    tm_werregue: { road: [[51.9, 20.5], [9.5, 20.5], [9.5, 16.2]], sign: [40.4, 21.6], text: '⬆ Werregue del Pacífico' },
+    tm_werregue: { road: [[51.9, 20.5], [9.5, 20.5], [9.5, 16.2]], sign: [40.4, 22.6], text: '⬆ Werregue del Pacífico' },
     tm_cofres: { road: [[44.5, 51.9], [44.5, 20.5], [8.5, 20.5], [8.5, 12.5]], sign: [45.6, 46.4], text: 'Cofres de sal ⬆' },
     // Paloquemao.
     tm_trucha: { road: [[44.5, 51.9], [44.5, 20.5], [33.5, 20.5], [33.5, 26.2]], sign: [45.6, 43.4], text: 'Truchas de Guatavita ⬆' },
-    tm_pargo: { road: [[51.9, 20.5], [32.5, 20.5], [32.5, 26.2]], sign: [37.4, 21.6], text: '⬆ Pargo del Pacífico' },
+    tm_pargo: { road: [[51.9, 20.5], [32.5, 20.5], [32.5, 26.2]], sign: [37.4, 22.6], text: '⬆ Pargo del Pacífico' },
     tm_lechona: { road: [[51.9, 35.5], [35.5, 35.5], [35.5, 34.2]], sign: [49.4, 36.6], text: '⬆ Lechona del Tolima' },
   },
   unlockedBy: null, // la única de Bogotá: se abre con la región

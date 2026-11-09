@@ -429,3 +429,62 @@ export class TractomulaView extends Container {
     for (const [k, v] of Object.entries(this.views)) v.visible = k === key;
   }
 }
+
+// TransMilenio (v4.6, Bogotá): el bus articulado rojo, solo de adorno. Dos cuerpos rojos unidos por el fuelle negro,
+// la franja de ventanas oscura y el techo claro. Va y viene por su carril (ver Scene.js: syncBuses).
+export class TransmilenioView extends Container {
+  constructor() {
+    super();
+    this.views = { xp: this.drawBus(true, 1), xn: this.drawBus(true, -1), yp: this.drawBus(false, 1), yn: this.drawBus(false, -1) };
+    this.addChild(...Object.values(this.views));
+  }
+
+  drawBus(alongX, dir) {
+    const c = new Container();
+    const g = new Graphics();
+    const L = 2.6;
+    const W = 0.6;
+    const [w, d] = alongX ? [L, W] : [W, L];
+    const x0 = -w / 2;
+    const y0 = -d / 2;
+    const s = iso(0, 0);
+    shadow(g, s.x, s.y + 2, 62, 22, 0.28);
+    const span = (a0, a1) => (dir > 0 ? [a0, a1] : [L - a1, L - a0]);
+    const seg = (a0, a1, z, h, color, inset = 0) => {
+      const [lo, hi] = span(a0, a1);
+      if (alongX) box(g, x0 + lo, y0 + inset, hi - lo, d - 2 * inset, h, color, { z });
+      else box(g, x0 + inset, y0 + lo, w - 2 * inset, hi - lo, h, color, { z });
+    };
+    for (const a of [0.3, 1.0, 1.6, 2.3]) {
+      const [lo] = span(a, a);
+      const p = alongX ? iso(x0 + lo, y0 + d, 5) : iso(x0 + w, y0 + lo, 5);
+      g.ellipse(p.x, p.y, 5.5, 5.5).fill(0x2b2b2b);
+      g.circle(p.x, p.y, 2).fill(0xb0b7bd);
+    }
+    // Los dos cuerpos y el fuelle (de atrás hacia adelante, para que lo de adelante tape a lo de atrás).
+    const body = (a0, a1) => {
+      seg(a0, a1, 4, 9, 0xc8102e); // el rojo de abajo
+      seg(a0, a1, 13, 6, 0x263238, -0.01); // las ventanas
+      seg(a0, a1, 19, 3, 0xc8102e); // el rojo de arriba
+      seg(a0 + 0.04, a1 - 0.04, 22, 2, 0xeceff1, 0.04); // el techo
+    };
+    const parts = [() => body(0, 1.24), () => seg(1.24, 1.36, 5, 17, 0x1c1c1c, 0.05), () => body(1.36, L)];
+    for (const draw of dir > 0 ? parts : [...parts].reverse()) draw();
+    // El parabrisas, en la cara de adelante que se ve.
+    if (dir > 0) {
+      const p = alongX ? iso(x0 + w, y0 + d / 2, 15) : iso(x0 + w / 2, y0 + d, 15);
+      g.roundRect(p.x - 6, p.y - 4, 12, 7, 2).fill(0xbfe3f2).stroke(OUTLINE);
+    }
+    c.addChild(g);
+    return c;
+  }
+
+  place(gx, gy, dx, dy) {
+    const p = iso(gx, gy);
+    this.position.set(p.x, p.y);
+    this.zIndex = moverDepth(gx, gy, 0.3);
+    const alongX = Math.abs(dx) > Math.abs(dy);
+    const key = alongX ? (dx >= 0 ? 'xp' : 'xn') : dy >= 0 ? 'yp' : 'yn';
+    for (const [k, v] of Object.entries(this.views)) v.visible = k === key;
+  }
+}
