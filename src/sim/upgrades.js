@@ -33,8 +33,11 @@ function target(state, id) {
   }
   const def = STATIONS_BY_ID[stationId];
   const st = state.stations[stationId];
-  if (part === 'transport') return { base: def.upgradeBase * TRANSPORT_COST_FACTOR, growth: def.growth, holder: st.transport };
-  return { base: def.upgradeBase, growth: def.growth, holder: st };
+  // En el tablero de un evento de Bogotá (v4.6) las mejoras cuestan menos (`costScale`): en la red, las estaciones del
+  // final cuestan mucho de subir y, sin el descuento, jugar bien casi no se notaba frente a no hacer nada.
+  const scale = (state.event && EVENTS_BY_ID[state.event.id]?.costScale) || 1;
+  if (part === 'transport') return { base: def.upgradeBase * TRANSPORT_COST_FACTOR * scale, growth: def.growth, holder: st.transport };
+  return { base: def.upgradeBase * scale, growth: def.growth, holder: st };
 }
 export const upgradeTarget = target; // (v4.1: para mejorar toda la zona)
 

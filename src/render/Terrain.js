@@ -17,7 +17,7 @@ export function buildTileMap(zone, jeeps = 1) {
   const fill = (x, y, w, h, type) => {
     for (let gx = x; gx < x + w; gx++) for (let gy = y; gy < y + h; gy++) if (tiles[gx]?.[gy]) tiles[gx][gy] = type;
   };
-  const road = (pts) => {
+  const road = (pts, type = 'road') => {
     for (let i = 1; i < pts.length; i++) {
       const [ax, ay] = pts[i - 1];
       const [bx, by] = pts[i];
@@ -25,13 +25,15 @@ export function buildTileMap(zone, jeeps = 1) {
       for (let s = 0; s <= steps; s++) {
         const gx = Math.floor(ax + ((bx - ax) * s) / steps);
         const gy = Math.floor(ay + ((by - ay) * s) / steps);
-        if (tiles[gx]?.[gy]) tiles[gx][gy] = 'road';
+        if (tiles[gx]?.[gy]) tiles[gx][gy] = type;
       }
     }
   };
   fill(zone.farm.x, zone.farm.y, zone.farm.w, zone.farm.h, 'farm');
   for (const p of zone.plots) fill(p.x, p.y, 3, 3, 'plot');
   fill(zone.warehouse.x, zone.warehouse.y, zone.warehouse.w, zone.warehouse.h, 'building');
+  // El carril del TransMilenio (v4.6, Bogotá): de concreto, junto a la avenida; las calles que lo cruzan van encima.
+  for (const lane of zone.transmilenio ?? []) road(lane, 'busway');
   road(zone.muleRoad);
   road(zone.jeepRoad);
   if (jeeps > 1) road(zone.jeepRoad2);
@@ -147,6 +149,7 @@ export class Terrain {
         const v = rng();
         let color;
         if (type === 'road') color = mix(PAL.road, 0xd8b07a, v * 0.4);
+        else if (type === 'busway') color = mix(0xa7a49c, 0x96938b, v * 0.5);
         else if (type === 'farm') color = (FARM_SOIL[this.zone.style] ?? FARM_SOIL[this.zone.theme])?.(v) ?? mix(PAL.soil, 0x6e4529, v * 0.35);
         else if (type === 'plaza') color = mix(0xd9c9a8, 0xc4b08a, v * 0.5);
         else if (type === 'plot' || type === 'building') color = mix(PAL.plot, 0xc9a06c, v * 0.4);

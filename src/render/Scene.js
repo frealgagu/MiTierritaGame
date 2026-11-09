@@ -12,14 +12,14 @@ import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { Effects } from './Effects.js';
 import { FarmView, PlotView, WarehouseView } from './Stations.js';
 import { BuildingView } from './Buildings.js';
-import { ChivaView, JeepView, MuleView, TractomulaView } from './Carriers.js';
+import { ChivaView, JeepView, MuleView, TractomulaView, TransmilenioView } from './Carriers.js';
 import { Belts, GENERAL_SIDE, SEG_LANE, SEG_SIDE } from './Belts.js';
 import { productColors } from './pipeColors.js';
 
 const BELT_HOLD = 1.5; // s que una banda sigue encendida después de llevar algo (para que no parpadee)
 import { Critters } from './Critters.js';
 import { iso } from './iso.js';
-import { pointAt, pointAtDistance } from '../core/path.js';
+import { pathLength, pointAt, pointAtDistance } from '../core/path.js';
 import { formatAmount, formatNumber } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
@@ -157,6 +157,14 @@ export class Scene {
       this.objects.addChild(sign);
       return { def: r, road: info.road, outgoing: r.from === this.zone.id, view, sign };
     });
+    // El TransMilenio de Bogotá (v4.6), solo de adorno: dos buses por carril, que van y vienen (ver syncBuses).
+    this.buses = (this.zone.transmilenio ?? []).flatMap((road, i) =>
+      [0, 0.5].map((phase) => {
+        const view = new TransmilenioView();
+        this.objects.addChild(view);
+        return { road, len: pathLength(road), phase: phase + i * 0.17, view };
+      }),
+    );
 
     const n = this.zone.size;
     const left = iso(0, n);
@@ -444,6 +452,7 @@ export class Scene {
     this.syncMules(state);
     this.syncJeep(state);
     this.syncRoutes(state);
+    this.syncBuses();
     this.keeper.update(this.time);
 
     this.smokeTimer -= dt;
@@ -680,6 +689,24 @@ export class Scene {
       rv.view.place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, load);
       this.vehicleLight(`chiva:${r.id}`, p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, true, 0.75);
     }
+  }
+
+  // El TransMilenio (v4.6): cada bus va de un extremo al otro de su carril a velocidad pareja, frena al llegar, espera un
+  // poco y vuelve. No tiene que ver con la producción.
+  syncBuses() {
+    const SPEED = 2.4; // casillas por segundo
+    const WAIT = 3; // segundos en cada extremo
+    this.buses.forEach((b, k) => {
+      const leg = b.len / SPEED + WAIT;
+      const f = (this.time / (2 * leg) + b.phase) % 1;
+      const back = f >= 0.5;
+      const t = Math.min(1, (((back ? f - 0.5 : f) * 2 * leg) / (leg - WAIT)));
+      const eased = t * t * (3 - 2 * t);
+      const p = pointAt(b.road, back ? 1 - eased : eased);
+      const [dx, dy] = back ? [-p.dx, -p.dy] : [p.dx, p.dy];
+      b.view.place(p.gx, p.gy, dx, dy);
+      this.vehicleLight(`tm:${k}`, p.gx, p.gy, dx, dy, t < 1, 1.3);
+    });
   }
 
   // Faros de un vehículo (v3.12): un halo cálido adelante, el que alumbra la carretera y una luz roja
