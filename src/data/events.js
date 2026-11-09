@@ -1142,7 +1142,7 @@ export const EVENTS = [
     ],
     objective: { type: 'final', kind: 'sold', items: { visita_catedral: 6, noche_zipaquira: 180 }, medals: [840, 1140] },
   },
-  // --- Bogotá (v4.5): una sola zona con varios eventos (cada uno con su `key`), uno o dos por barrio ---
+  // --- Bogotá (v4.5): una sola zona con varios eventos (cada uno con su `key`), cada uno sobre unas estaciones de la red ---
   {
     id: 'aguacero_chorro',
     key: 'aguacero_chorro',
@@ -1153,17 +1153,17 @@ export const EVENTS = [
     intro:
       'Cayó el aguacero de las tres de la tarde y el Chorro de Quevedo se inundó: el Tostadero trabaja al 40 %. Pon carpas sobre la plazoleta, destapa las canaletas y monta el tostador bajo techo.',
     announce: '¡Ay, sumercé, se vino el aguacero y se inundó el Chorro! Toque 🏅 Eventos.',
-    stations: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial'],
+    stations: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'puesto_frutas', 'dulceria_calle11', 'puesto_flores', 'casa_colonial'],
     level: 10,
     coins: 400,
-    supply: { coffee_bag: 1, bizcocho_box: 1, table_chocolate: 1, canasta_amasijos: 1, bocadillo_crate: 1, cocada: 1, caja_flores: 1 },
+    supply: { coffee_bag: 1, bizcocho_box: 1, table_chocolate: 1, canasta_amasijos: 1, juice_box: 1, asai_box: 1, bocadillo_crate: 1, cocada: 1, caja_flores: 1 },
     speed: { tostadero_chorro: 0.4 },
     actions: [
       { id: 'aguacero_carpas', icon: ICON.domingoUsaquen, name: 'Carpas en la plazoleta', desc: 'Las carpas tapan el aguacero: el Tostadero pasa del 40 al 60 %.', cost: 400, effect: { type: 'stationSpeed', target: 'tostadero_chorro', mult: 1.5 } },
       { id: 'aguacero_canaletas', icon: '💧', name: 'Canaletas destapadas', desc: 'El agua se va por las canaletas: del 60 al 80 %.', cost: 2500, effect: { type: 'stationSpeed', target: 'tostadero_chorro', mult: 4 / 3 } },
       { id: 'aguacero_techo', icon: ICON.cafeCapitalino, name: 'Tostador bajo techo', desc: 'El tostador queda adentro: el Tostadero vuelve al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'tostadero_chorro', mult: 1.25 } },
     ],
-    objective: { type: 'cadena', kind: 'sold', items: { tarde_candelaria: 110 }, medals: [720, 1020] },
+    objective: { type: 'cadena', kind: 'sold', items: { tarde_candelaria: 200 }, medals: [705, 1005] },
   },
   {
     id: 'navidad_septima',
@@ -1174,16 +1174,16 @@ export const EVENTS = [
     intro:
       'Es diciembre y la Séptima está iluminada: medio Bogotá baja al centro a pasear y todos quieren chocolate, onces y tardes en La Candelaria, a la vez. Reparte bien y mejora cada estación.',
     announce: '¡Prendieron el alumbrado y el centro está lleno! Toque 🏅 Eventos.',
-    stations: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'dulceria_calle11', 'casa_colonial'],
+    stations: ['tostadero_chorro', 'cafeteria_septima', 'chocolateria_candelaria', 'puesto_frutas', 'dulceria_calle11', 'puesto_flores', 'casa_colonial'],
     level: 10,
     coins: 600,
-    supply: { coffee_bag: 1, bizcocho_box: 1, table_chocolate: 1, canasta_amasijos: 1, bocadillo_crate: 1, cocada: 1, caja_flores: 1 },
+    supply: { coffee_bag: 1, bizcocho_box: 1, table_chocolate: 1, canasta_amasijos: 1, juice_box: 1, asai_box: 1, bocadillo_crate: 1, cocada: 1, caja_flores: 1 },
     actions: [
       { id: 'navidad_sep_chocolate', icon: ICON.santafereno, name: 'Más chocolateras', desc: 'La Chocolatería santafereña bate un 50 % más.', cost: 600, effect: { type: 'stationSpeed', target: 'chocolateria_candelaria', mult: 1.5 } },
       { id: 'navidad_sep_dulces', icon: ICON.oncesBogotanas, name: 'Mostrador doble', desc: 'La Dulcería de la Calle 11 arma un 50 % más.', cost: 3500, effect: { type: 'stationSpeed', target: 'dulceria_calle11', mult: 1.5 } },
       { id: 'navidad_sep_casa', icon: ICON.tardeCandelaria, name: 'Patio abierto', desc: 'La Casa colonial recibe un 50 % más.', cost: 9000, effect: { type: 'stationSpeed', target: 'casa_colonial', mult: 1.5 } },
     ],
-    objective: { type: 'final', kind: 'produced', items: { onces_bogotanas: 800, tarde_candelaria: 220 }, medals: [930, 1230] },
+    objective: { type: 'final', kind: 'produced', items: { onces_bogotanas: 700, tarde_candelaria: 190 }, medals: [825, 1125] },
   },
   {
     id: 'festival_zona_g',
@@ -1194,16 +1194,16 @@ export const EVENTS = [
     intro:
       'Llegó el festival gastronómico y la Zona G se llenó: la gente quiere probar las picadas, los platos fuertes y los menús, todo a la vez. Reparte bien y mejora cada cocina.',
     announce: '¡Empezó el festival y la Zona G está llena! Toque 🏅 Eventos.',
-    stations: ['despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g'],
+    stations: ['despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'puesto_frutas', 'reposteria_zona_g', 'tostadero_chorro', 'restaurante_zona_g'],
     level: 10,
     coins: 2400,
-    supply: { alino_box: 1, aji_box: 1, criollas_box: 1, ant_cone: 1, parranda_llanera: 1, rice_sack: 1, asai_box: 1, juice_box: 1, coffee_bag: 1 },
+    supply: { alino_box: 1, aji_box: 1, criollas_box: 1, ant_cone: 1, parranda_llanera: 1, rice_sack: 1, juice_box: 1, asai_box: 1, coffee_bag: 1 },
     actions: [
       { id: 'festival_g_freidoras', icon: ICON.picadaCasa, name: 'Más freidoras', desc: 'La Cocina de entradas fríe un 50 % más.', cost: 2400, effect: { type: 'stationSpeed', target: 'cocina_entradas', mult: 1.5 } },
       { id: 'festival_g_parrillas', icon: ICON.platoFuerte, name: 'Más parrillas', desc: 'La Parrilla asa un 50 % más.', cost: 15000, effect: { type: 'stationSpeed', target: 'parrilla_zona_g', mult: 1.5 } },
       { id: 'festival_g_meseros', icon: ICON.menuCompleto, name: 'Más meseros', desc: 'La Repostería y el Restaurante atienden un 50 % más.', cost: 35000, effects: [{ type: 'stationSpeed', target: 'reposteria_zona_g', mult: 1.5 }, { type: 'stationSpeed', target: 'restaurante_zona_g', mult: 1.5 }] },
     ],
-    objective: { type: 'feria', kind: 'produced', items: { picada_casa: 3000, plato_fuerte: 1250, menu_completo: 500 }, medals: [690, 990] },
+    objective: { type: 'feria', kind: 'produced', items: { picada_casa: 2700, plato_fuerte: 1125, menu_completo: 450 }, medals: [735, 1035] },
   },
   {
     id: 'pico_placa',
@@ -1215,17 +1215,17 @@ export const EVENTS = [
     intro:
       'Hoy tiene pico y placa la tractomula del asado y no puede entrar a la ciudad: a la Parrilla solo le queda lo guardado. Consigue una camioneta de otra placa, haz las entregas de noche y saca el permiso de carga.',
     announce: '¡Ay, sumercé, la tractomula del asado tiene pico y placa! Toque 🏅 Eventos.',
-    stations: ['despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g'],
+    stations: ['despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'puesto_frutas', 'reposteria_zona_g', 'tostadero_chorro', 'restaurante_zona_g'],
     level: 10,
     coins: 3000,
-    supply: { alino_box: 1, aji_box: 1, criollas_box: 1, ant_cone: 1, parranda_llanera: 0, rice_sack: 1, asai_box: 1, juice_box: 1, coffee_bag: 1 },
+    supply: { alino_box: 1, aji_box: 1, criollas_box: 1, ant_cone: 1, parranda_llanera: 0, rice_sack: 1, juice_box: 1, asai_box: 1, coffee_bag: 1 },
     stock: { parranda_llanera: 60 },
     actions: [
       { id: 'pico_camioneta', icon: '🚚', name: 'Camioneta de otra placa', desc: 'Una camioneta trae algo de asado: llega una cuarta parte.', cost: 3000, effect: { type: 'supply', product: 'parranda_llanera', fraction: 0.25 } },
       { id: 'pico_noche', icon: '🌙', name: 'Entregas de noche', desc: 'La tractomula entra cuando no hay pico y placa: llega el 60 %.', cost: 9000, effect: { type: 'supply', product: 'parranda_llanera', fraction: 0.6 } },
       { id: 'pico_permiso', icon: '🚛', name: 'Permiso de carga', desc: 'Con el permiso, la tractomula entra siempre: vuelve a llegar todo el asado.', cost: 24000, effect: { type: 'supply', product: 'parranda_llanera', fraction: 1 } },
     ],
-    objective: { type: 'corte', kind: 'produced', items: { plato_fuerte: 1300 }, medals: [795, 1095] },
+    objective: { type: 'corte', kind: 'produced', items: { plato_fuerte: 900 }, medals: [690, 990] },
   },
   {
     id: 'ventarron_usaquen',
@@ -1237,17 +1237,17 @@ export const EVENTS = [
     intro:
       'Es domingo de mercado de pulgas y un ventarrón tumbó los toldos: el Toldo de tejidos atiende al 40 %. Amarra bien las carpas, consigue toldos nuevos y monta una carpa de lona.',
     announce: '¡Ay, sumercé, el viento tumbó los toldos de Usaquén! Toque 🏅 Eventos.',
-    stations: ['toldo_tejidos', 'toldo_sombreros', 'toldo_loza', 'toldo_mascaras', 'mercado_pulgas'],
+    stations: ['toldo_tejidos', 'toldo_sombreros', 'puesto_flores', 'toldo_loza', 'toldo_mascaras'],
     level: 10,
     coins: 40000,
-    supply: { ruana: 1, alpargatas: 1, sombrero_vueltiao: 1, silla_montar: 1, loza_negra: 1, gift_basket: 1, ticuna_mask: 1, werregue_jar: 1, cofre_sal: 1 },
+    supply: { ruana: 1, alpargatas: 1, sombrero_vueltiao: 1, silla_montar: 1, caja_flores: 1, loza_negra: 1, gift_basket: 1, ticuna_mask: 1, werregue_jar: 1 },
     speed: { toldo_tejidos: 0.4 },
     actions: [
       { id: 'ventarron_amarrar', icon: '🪢', name: 'Amarrar los toldos', desc: 'Los toldos quedan bien amarrados: del 40 al 60 %.', cost: 40000, effect: { type: 'stationSpeed', target: 'toldo_tejidos', mult: 1.5 } },
       { id: 'ventarron_nuevos', icon: ICON.surtidoTejidos, name: 'Toldos nuevos', desc: 'Toldos más firmes: del 60 al 80 %.', cost: 230000, effect: { type: 'stationSpeed', target: 'toldo_tejidos', mult: 4 / 3 } },
       { id: 'ventarron_lona', icon: ICON.domingoUsaquen, name: 'Carpa de lona', desc: 'Una carpa grande que aguanta el viento: el Toldo de tejidos vuelve al 100 %.', cost: 550000, effect: { type: 'stationSpeed', target: 'toldo_tejidos', mult: 1.25 } },
     ],
-    objective: { type: 'arranque', kind: 'produced', items: { surtido_feria: 3000 }, medals: [675, 975] },
+    objective: { type: 'arranque', kind: 'produced', items: { surtido_feria: 3000 }, medals: [855, 1155] },
   },
   {
     id: 'paro_camionero',
@@ -1259,17 +1259,17 @@ export const EVENTS = [
     intro:
       'Hay paro camionero y la tractomula de las truchas está parada en la vía: a la Pescadería solo le queda lo guardado. Trae truchas en camionetas por la vía alterna, consigue que pasen por turnos y espera el fin del paro.',
     announce: '¡Ay, sumercé, hay paro camionero y no llegan las truchas! Toque 🏅 Eventos.',
-    stations: ['puesto_flores', 'puesto_frutas', 'pescaderia_plaza', 'fritanga_plaza', 'plaza_paloquemao'],
+    stations: ['puesto_frutas', 'pescaderia_plaza', 'despensa_zona_g', 'cocina_entradas', 'fritanga_plaza'],
     level: 10,
     coins: 1000000,
-    supply: { caja_flores: 1, juice_box: 1, asai_box: 1, trucha_ahumada: 0, smoked_pargo: 1, lechona: 1, criollas_box: 1 },
+    supply: { juice_box: 1, asai_box: 1, trucha_ahumada: 0, smoked_pargo: 1, alino_box: 1, aji_box: 1, criollas_box: 1, ant_cone: 1, lechona: 1 },
     stock: { trucha_ahumada: 60 },
     actions: [
       { id: 'paro_camionetas', icon: '🚚', name: 'Camionetas por la vía alterna', desc: 'Unas camionetas pasan por la vía alterna: llega una cuarta parte de las truchas.', cost: 1000000, effect: { type: 'supply', product: 'trucha_ahumada', fraction: 0.25 } },
       { id: 'paro_turnos', icon: '🚦', name: 'Paso por turnos', desc: 'Dejan pasar la carga por turnos: llega el 60 % de las truchas.', cost: 3000000, effect: { type: 'supply', product: 'trucha_ahumada', fraction: 0.6 } },
       { id: 'paro_fin', icon: ICON.trucha, name: 'Fin del paro', desc: 'Se acabó el paro: las truchas vuelven a llegar todas.', cost: 8000000, effect: { type: 'supply', product: 'trucha_ahumada', fraction: 1 } },
     ],
-    objective: { type: 'ramas', kind: 'produced', items: { canasta_plaza: 2600, desayuno_plaza: 1000 }, medals: [645, 945] },
+    objective: { type: 'ramas', kind: 'produced', items: { canasta_plaza: 1200, desayuno_plaza: 450 }, medals: [1005, 1305] },
   },
 ];
 

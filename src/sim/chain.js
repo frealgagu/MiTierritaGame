@@ -108,14 +108,20 @@ export function consumers(state, id) {
 
 // Barrios (v4.5, Bogotá): una zona puede tener varias cadenas que se construyen a la vez, cada una en su orden
 // (`zone.groups`: [{ id, name, stations, after? }]); un barrio con `after` se abre cuando esos barrios están completos.
-// Sin barrios, la zona es uno solo: su cadena.
+// Sin barrios, la zona es uno solo: su cadena. (Desde la v4.6 ninguna zona tiene barrios: Bogotá es una red.)
 export const groupsOf = (zoneId) => ZONES_BY_ID[zoneId].groups ?? [{ id: zoneId, stations: chainOf(zoneId) }];
 export const groupOf = (stationId) => groupsOf(zoneOf(stationId)).find((g) => g.stations.includes(stationId)) ?? null;
 const groupDone = (state, zoneId, groupId) => groupsOf(zoneId).find((g) => g.id === groupId).stations.every((id) => isUnlocked(state, id));
 
-// Las estaciones que ya se pueden construir: la primera que falta de cada barrio abierto.
+// En red (v4.6, Bogotá: `zone.network`): las estaciones de la zona que abastecen a esta, por su entrada o por lo que
+// junta (sin la fuente de afuera: las tractomulas no cuentan).
+export const suppliersOf = (id) => [...new Set([PARENT[id], ...Object.values(JOIN_FROM[id] ?? {})].filter(Boolean))];
+
+// Las estaciones que ya se pueden construir: la primera que falta de cada barrio abierto; en red, todas las que ya
+// tienen construidas las que las abastecen.
 export function buildableStations(state, zoneId = 'finca') {
   if (!zoneUnlocked(state, zoneId)) return [];
+  if (ZONES_BY_ID[zoneId].network) return chainOf(zoneId).filter((id) => !isUnlocked(state, id) && suppliersOf(id).every((s) => isUnlocked(state, s)));
   const out = [];
   for (const g of groupsOf(zoneId)) {
     if ((g.after ?? []).some((other) => !groupDone(state, zoneId, other))) continue;

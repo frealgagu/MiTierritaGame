@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## v4.6.0 — Bogotá en red
+- **🏔️ Bogotá ya no va por barrios: es una red.** Una estación se abre apenas estén construidas las que la abastecen, así que se empieza con cinco a la vez y baratas (el Tostadero del Chorro, la Despensa de la Zona G, el Toldo de tejidos, el Puesto de flores y el Puesto de frutas) y las del centro siguen siendo las más caras.
+- **Muchas estaciones reciben de dos o tres de la misma Bogotá**, además de su tractomula (la Fritanga recibe la canasta de la Pescadería, las salsas de la Despensa y el chicharrón de la Cocina de entradas). Las tractomulas llegan solo donde tiene sentido.
+- **Tres subproductos nuevos por la canaleta:** café molido del Tostadero, chicharrón de la Cocina de entradas y caldo de costilla de la Parrilla.
+- **Una sola cadena**, ancha, que se recorre hacia los lados y hacia arriba y abajo (en el computador también arrastrando).
+- **En la lista de zonas dice solo «Bogotá»**, sin «Zona 1», porque es su única zona.
+- **La Bogotá anterior se reinicia:** la región, sus medallas, láminas y logros se borran de la partida, sin devolver monedas. Los eventos se ajustaron a la red nueva.
+
 ## v4.5.1 — Nada pasa por encima de los techos
 - **Las chivas y las tractomulas ya no pasan por encima de los techos:** lo que se mueve (chivas, tractomulas, Willys, mulas, gente y animales) se pinta delante o detrás de cada estación y de la bodega según dónde esté de su huella. Antes las chivas iban siempre encima de todo y, al pasar por detrás de la bodega, se veían sobre la teja.
 - **Las estaciones grandes ya no tapan a las de adelante** (el Tostadero del Chorro, de 6×6, podía pintarse encima de la Chocolatería).

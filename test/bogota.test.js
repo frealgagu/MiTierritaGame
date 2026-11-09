@@ -6,8 +6,10 @@ import { openRegions, regionState } from '../src/sim/regions.js';
 import { ROUTES } from '../src/data/routes.js';
 import { routeActive, routeRegion } from '../src/sim/routes.js';
 import { routeFlow } from '../src/sim/analysis.js';
+import { ZONES_BY_ID } from '../src/data/zones/index.js';
 
-// Bogotá (v4.5): la región sin fuente propia, donde todo llega en tractomula con carga que no se acaba.
+// Bogotá (v4.5): la región sin fuente propia, donde todo llega en tractomula con carga que no se acaba. Desde la v4.6,
+// una red de estaciones en vez de barrios.
 
 test('la partida de Bogotá tiene sus tractomulas, y ninguna otra región las tiene', () => {
   const s = createInitialState(0, 'bogota');
@@ -43,45 +45,47 @@ test('Bogotá se abre al completar Zipaquirá, publicada y sin obra (v4.5)', asy
   assert.ok(regionState(root, 'bogota').zones.bogota.unlocked);
 });
 
-test('los barrios se construyen a la vez, cada uno en su orden', async () => {
-  const { buildableStations } = await import('../src/sim/chain.js');
+test('en red (v4.6): al empezar se pueden construir varias a la vez, baratas, y cada una cuando ya están las que la abastecen', async () => {
+  const { buildableStations, suppliersOf } = await import('../src/sim/chain.js');
   const { quoteUnlock } = await import('../src/sim/upgrades.js');
+  const { STATIONS_BY_ID } = await import('../src/data/stations.js');
   const s = createInitialState(0, 'bogota');
-  // Al empezar: la siguiente de La Candelaria y la primera de la Zona G.
-  assert.deepEqual(buildableStations(s, 'bogota'), ['cafeteria_septima', 'despensa_zona_g', 'toldo_tejidos', 'puesto_flores']);
+  const start = buildableStations(s, 'bogota');
+  assert.deepEqual(start, ['despensa_zona_g', 'toldo_tejidos', 'puesto_flores', 'puesto_frutas', 'cafeteria_septima']);
+  for (const id of start) assert.ok(STATIONS_BY_ID[id].unlockCost <= 3000, id);
   s.coins = 1e9;
-  assert.equal(quoteUnlock(s, 'despensa_zona_g').ok, true);
-  const q = quoteUnlock(s, 'cocina_entradas');
+  // La Fritanga junta lo de tres estaciones: pide las tres (y la de su entrada).
+  assert.deepEqual(suppliersOf('fritanga_plaza').sort(), ['cocina_entradas', 'despensa_zona_g', 'pescaderia_plaza']);
+  const q = quoteUnlock(s, 'fritanga_plaza');
   assert.equal(q.reason, 'order');
-  assert.equal(q.previous, 'despensa_zona_g');
-  // Construida la Despensa, la Zona G sigue sin esperar a La Candelaria.
   const game = new Game(s);
-  assert.ok(game.unlock('despensa_zona_g'));
-  assert.deepEqual(buildableStations(s, 'bogota'), ['cafeteria_septima', 'cocina_entradas', 'toldo_tejidos', 'puesto_flores']);
+  for (const id of ['despensa_zona_g', 'puesto_frutas', 'cocina_entradas', 'pescaderia_plaza']) assert.ok(game.unlock(id), id);
+  assert.ok(buildableStations(s, 'bogota').includes('fritanga_plaza'));
+  // Lo del centro es lo más caro.
+  assert.ok(STATIONS_BY_ID.gran_feria.unlockCost >= 1e9);
 });
 
-test('la Zona G trabaja con sus tractomulas, aunque La Candelaria no esté', () => {
+test('la Fritanga junta lo de tres estaciones (con el chicharrón de la Cocina, sin mulas) y trabaja', () => {
   const s = createInitialState(0, 'bogota');
   s.coins = 1e9;
   const game = new Game(s);
-  for (const id of ['despensa_zona_g', 'cocina_entradas', 'parrilla_zona_g', 'reposteria_zona_g', 'restaurante_zona_g']) assert.ok(game.unlock(id), id);
+  for (const id of ['despensa_zona_g', 'puesto_frutas', 'cocina_entradas', 'pescaderia_plaza', 'fritanga_plaza']) assert.ok(game.unlock(id), id);
   for (let i = 0; i < 6000; i++) game.step(0.1); // 10 minutos
-  assert.ok(s.stats.produced.cena_zona_g > 0, 'salió alguna cena');
-  for (const p of ['alino_box', 'aji_box', 'criollas_box', 'ant_cone', 'parranda_llanera', 'rice_sack', 'asai_box', 'juice_box']) assert.ok(s.stats.imported[p] > 0, `llegó ${p}`);
+  assert.ok(s.stats.produced.chicharron > 0, 'la Cocina sacó chicharrón');
+  assert.ok(s.stats.produced.desayuno_plaza > 0, 'salió algún desayuno');
+  for (const p of ['alino_box', 'criollas_box', 'juice_box', 'trucha_ahumada', 'lechona']) assert.ok(s.stats.imported[p] > 0, `llegó ${p}`);
 });
 
-test('el centro se abre con los cuatro barrios construidos, y la Gran Feria junta todo', async () => {
-  const { buildableStations, groupsOf } = await import('../src/sim/chain.js');
+test('con toda la red construida, la Gran Feria junta lo de tres estaciones del centro', () => {
   const s = createInitialState(0, 'bogota');
   s.coins = 1e13;
   const game = new Game(s);
-  const barrios = groupsOf('bogota').filter((g) => g.id !== 'centro');
-  for (const g of barrios) for (const id of g.stations) if (!s.stations[id]) assert.ok(game.unlock(id), id);
-  assert.deepEqual(buildableStations(s, 'bogota'), ['hotel_capital']);
-  for (const id of ['hotel_capital', 'funicular_monserrate', 'pabellon_regiones', 'gran_feria']) assert.ok(game.unlock(id), id);
+  const { chain } = ZONES_BY_ID.bogota;
+  for (const id of chain) if (!s.stations[id]) assert.ok(game.unlock(id), id);
   for (const id of Object.keys(s.stations)) s.stations[id].level = s.stations[id].transport.level = 50;
   for (const r of Object.values(s.routes)) r.level = 50;
   for (let i = 0; i < 30000; i++) game.step(0.1); // 50 minutos
   assert.ok(s.stats.produced.subida_monserrate > 0, 'se subió a Monserrate');
+  assert.ok(s.stats.produced.caldo_costilla > 0 && s.stats.produced.cafe_molido > 0, 'salieron los subproductos');
   assert.ok(s.stats.produced.feria_mi_tierrita > 0, 'hubo Gran Feria');
 });

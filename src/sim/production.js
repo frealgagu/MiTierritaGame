@@ -103,8 +103,10 @@ export function stepStation(state, id, dt, bus) {
   state.stats.produced[outId] = (state.stats.produced[outId] ?? 0) + cycles * outAmt;
   if (def.by) {
     // Subproducto (pulpa): se guarda aparte; si no hay quien lo use, se desecha al llenarse.
-    const [[, byAmt]] = Object.entries(def.by);
+    const [[byId, byAmt]] = Object.entries(def.by);
     s.byBuffer = Math.min(stationBufferCap(def, s.level, capMult(state, id)), (s.byBuffer ?? 0) + cycles * byAmt);
+    // (v4.6) También cuenta como producido: hay objetivos de subproductos (el chicharrón de Bogotá).
+    state.stats.produced[byId] = (state.stats.produced[byId] ?? 0) + cycles * byAmt;
   }
   if (id === 'wetmill') consumeCompost(state, cycles * outAmt);
   if (def.fuel && s.fuel > 0) s.fuel = Math.max(0, s.fuel - cycles * def.fuel.perCycle);

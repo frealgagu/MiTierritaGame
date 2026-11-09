@@ -128,8 +128,31 @@ const OLD_OFFLINE_RESEARCH = {
   mayordomo_s: [10000, 3], veguero: [300000, 3], asociacion_tejedoras: [3000000, 4], vaquero: [8000000, 4], cuidandera: [60000000, 4], administradora: [2500000000, 4],
 };
 
+// v4.5 → v4.6: Bogotá pasó de barrios a una red, con otras recetas. Lo jugado en la de antes se borra como si nunca
+// hubiera existido (sin devolver nada): su partida, sus eventos, medallas, láminas y logros. Quien estaba allá vuelve a
+// Zipaquirá. Se hace una vez (`bogotaNet`).
+const OLD_BOGOTA_EVENTS = ['aguacero_chorro', 'navidad_septima', 'festival_zona_g', 'pico_placa', 'ventarron_usaquen', 'paro_camionero'];
+function resetOldBogota(root) {
+  if (root.bogotaNet) return;
+  root.bogotaNet = true;
+  if (!root.regions?.bogota) return;
+  delete root.regions.bogota;
+  if (root.settings?.zone === 'bogota') root.settings.zone = 'zipaquira';
+  const p = root.profile;
+  if (p) {
+    for (const id of OLD_BOGOTA_EVENTS) delete p.medals?.[id];
+    if (p.history) p.history = p.history.filter((h) => !OLD_BOGOTA_EVENTS.includes(h.event));
+    const bogotaStickers = new Set(ALBUM.filter((pg) => pg.region === 'bogota').flatMap((pg) => pg.stickers.map((s) => s.id)));
+    if (p.album) p.album = p.album.filter((id) => !bogotaStickers.has(id));
+    for (const id of Object.keys(p.logros ?? {})) if (id.startsWith('bg_')) delete p.logros[id];
+  }
+  const ev = root.events;
+  if (ev?.slots) ev.slots = ev.slots.map((x) => (x?.zone && OLD_BOGOTA_EVENTS.includes(x.zone) ? null : x));
+}
+
 // Lo del jugador que cambió de forma (sobre la partida principal ya migrada, con sus regiones).
 function migrateProfile(root) {
+  resetOldBogota(root);
   const all = [root, ...Object.values(root.regions ?? {})];
   // v3.6 → v3.7: las horas sin conexión pasan al perfil. Nadie pierde horas: el perfil arranca con las
   // de la región que más tenía, y se devuelven las monedas de esas investigaciones (ya no existen).
