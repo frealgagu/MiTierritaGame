@@ -1206,7 +1206,7 @@ export const EVENTS = [
       { id: 'festival_g_parrillas', icon: ICON.platoFuerte, name: 'Más parrillas', desc: 'La Parrilla asa un 50 % más.', cost: 15000, effect: { type: 'stationSpeed', target: 'parrilla_zona_g', mult: 1.5 } },
       { id: 'festival_g_meseros', icon: ICON.menuCompleto, name: 'Más meseros', desc: 'La Repostería y el Restaurante atienden un 50 % más.', cost: 35000, effects: [{ type: 'stationSpeed', target: 'reposteria_zona_g', mult: 1.5 }, { type: 'stationSpeed', target: 'restaurante_zona_g', mult: 1.5 }] },
     ],
-    objective: { type: 'feria', kind: 'produced', items: { picada_casa: 4000, plato_fuerte: 1650, menu_completo: 660 }, medals: [735, 1035] },
+    objective: { type: 'feria', kind: 'produced', items: { picada_casa: 4000, plato_fuerte: 1650, menu_completo: 660 }, medals: [840, 1140] },
   },
   {
     id: 'pico_placa',
@@ -1229,7 +1229,7 @@ export const EVENTS = [
       { id: 'pico_noche', icon: '🌙', name: 'Entregas de noche', desc: 'La tractomula entra cuando no hay pico y placa: llega el 60 %.', cost: 9000, effect: { type: 'supply', product: 'parranda_llanera', fraction: 0.6 } },
       { id: 'pico_permiso', icon: '🚛', name: 'Permiso de carga', desc: 'Con el permiso, la tractomula entra siempre: vuelve a llegar todo el asado.', cost: 24000, effect: { type: 'supply', product: 'parranda_llanera', fraction: 1 } },
     ],
-    objective: { type: 'corte', kind: 'produced', items: { plato_fuerte: 2000 }, medals: [690, 990] },
+    objective: { type: 'corte', kind: 'produced', items: { plato_fuerte: 2000 }, medals: [1095, 1395] },
   },
   {
     id: 'ventarron_usaquen',
@@ -1275,7 +1275,7 @@ export const EVENTS = [
       { id: 'paro_turnos', icon: '🚦', name: 'Paso por turnos', desc: 'Dejan pasar la carga por turnos: llega el 60 % de las truchas.', cost: 3000000, effect: { type: 'supply', product: 'trucha_ahumada', fraction: 0.6 } },
       { id: 'paro_fin', icon: ICON.trucha, name: 'Fin del paro', desc: 'Se acabó el paro: las truchas vuelven a llegar todas.', cost: 8000000, effect: { type: 'supply', product: 'trucha_ahumada', fraction: 1 } },
     ],
-    objective: { type: 'ramas', kind: 'produced', items: { canasta_plaza: 1200, desayuno_plaza: 450 }, medals: [870, 1170] },
+    objective: { type: 'ramas', kind: 'produced', items: { canasta_plaza: 1200, desayuno_plaza: 450 }, medals: [945, 1245] },
   },
 ];
 
