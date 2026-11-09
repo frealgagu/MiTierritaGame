@@ -88,9 +88,10 @@ export const REGIONS = [
     music: 'cundinamarca',
     unlock: { region: 'tolima', zone: 'neiva' },
   },
-  // Bogotá (v4.5): la región que no produce nada propio. Una sola zona del doble de lado, que llega barrio por barrio,
-  // adonde todo llega en tractomula desde las otras regiones. Se abre al completar Cundinamarca y sigue en obra (`wip`).
-  // Su música, por ahora, la de la Sabana.
+  // Bogotá (v4.5): la región que no produce nada propio. Una sola zona del doble de lado, con cinco barrios que se
+  // construyen a la vez, adonde todo llega en tractomula desde las otras regiones. Se abre al completar Cundinamarca.
+  // Su música es la Danza de La Candelaria. (De la v4.4.8 a la v4.4.11 estuvo en obra y oculta, con `wip` y `hidden`:
+  // en el mapa salía «Próximamente».)
   {
     id: 'bogota',
     name: 'Bogotá',
@@ -98,10 +99,6 @@ export const REGIONS = [
     zones: ['bogota'],
     music: 'bogota',
     unlock: { region: 'cundinamarca', zone: 'zipaquira' },
-    wip: true,
-    // (v4.4.8) Mientras se construye no se abre en el juego publicado: en el mapa sale «Próximamente». Se quita al
-    // terminarla.
-    hidden: true,
   },
 ];
 
