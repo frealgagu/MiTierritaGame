@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v4.5.0 — Bogotá
+- **🏔️ Bogotá, la nueva región**, se abre al completar Zipaquirá. No produce nada propio: es una sola zona cuatro veces más grande que las demás, con los Cerros Orientales y Monserrate, adonde todo llega en **🚛 tractomula** desde las otras regiones, con carga que no se acaba.
+- **Cinco barrios que se construyen a la vez:** La Candelaria (café, chocolate y onces santafereñas), Chapinero y la Zona G (los restaurantes), Usaquén (el mercado de pulgas del domingo), Paloquemao (la plaza de mercado) y el centro, que se abre con los otros cuatro: el Hotel de la capital, el Funicular de Monserrate, el Pabellón de las regiones y la Gran Feria de Mi Tierrita, el final. La cadena tiene una pestaña por barrio. 24 estaciones y 27 tractomulas.
+- **Seis eventos:** el aguacero en el Chorro de Quevedo, el alumbrado de la Séptima, el festival gastronómico, el pico y placa, el ventarrón del domingo en Usaquén y el paro camionero. Cada uno se ve en el mapa y cambia con cada compra.
+- **Su álbum** (La Candelaria, la comida, Monserrate y los cerros, el transporte, la cultura y los barrios), con 36 láminas como el Chorro de Quevedo, la changua, el copetón, el TransMilenio, la ciclovía y el Museo del Oro; **quince logros** y su pantalla de victoria.
+- **Su música, la Danza de La Candelaria:** bandola, tiple y guitarra con el ritmo de habanera. También en la página de descargas.
+
 ## v4.4.11 — La avioneta llega a cada región
 - **🔁 Producción ×N** ahora va arriba, debajo de la mejora recomendada, a la derecha (antes iba abajo, encima de los objetivos).
 - **✈️ Al acercarte a otra región** en el mapa de zonas, la avioneta llega volando a su aeropuerto, aterriza y se va. Si eliges una de sus zonas, la pista vuelve a aparecer y el Willys sale de ahí hasta la zona. En la región donde estás, en las bloqueadas y con el viaje «⚡ Directo» no hay vuelo.

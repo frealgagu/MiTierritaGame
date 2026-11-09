@@ -1163,7 +1163,7 @@ export const EVENTS = [
       { id: 'aguacero_canaletas', icon: '💧', name: 'Canaletas destapadas', desc: 'El agua se va por las canaletas: del 60 al 80 %.', cost: 2500, effect: { type: 'stationSpeed', target: 'tostadero_chorro', mult: 4 / 3 } },
       { id: 'aguacero_techo', icon: ICON.cafeCapitalino, name: 'Tostador bajo techo', desc: 'El tostador queda adentro: el Tostadero vuelve al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'tostadero_chorro', mult: 1.25 } },
     ],
-    objective: { type: 'cadena', kind: 'sold', items: { tarde_candelaria: 110 }, medals: [630, 930] },
+    objective: { type: 'cadena', kind: 'sold', items: { tarde_candelaria: 110 }, medals: [720, 1020] },
   },
   {
     id: 'navidad_septima',
@@ -1183,7 +1183,7 @@ export const EVENTS = [
       { id: 'navidad_sep_dulces', icon: ICON.oncesBogotanas, name: 'Mostrador doble', desc: 'La Dulcería de la Calle 11 arma un 50 % más.', cost: 3500, effect: { type: 'stationSpeed', target: 'dulceria_calle11', mult: 1.5 } },
       { id: 'navidad_sep_casa', icon: ICON.tardeCandelaria, name: 'Patio abierto', desc: 'La Casa colonial recibe un 50 % más.', cost: 9000, effect: { type: 'stationSpeed', target: 'casa_colonial', mult: 1.5 } },
     ],
-    objective: { type: 'final', kind: 'produced', items: { onces_bogotanas: 700, tarde_candelaria: 140 }, medals: [735, 1035] },
+    objective: { type: 'final', kind: 'produced', items: { onces_bogotanas: 800, tarde_candelaria: 220 }, medals: [930, 1230] },
   },
   {
     id: 'festival_zona_g',
