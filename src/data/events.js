@@ -1146,7 +1146,7 @@ export const EVENTS = [
   {
     id: 'aguacero_chorro',
     key: 'aguacero_chorro',
-    costScale: 0.05, // las mejoras cuestan la vigésima parte (ver sim/upgrades.js)
+    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
     blame: 'el aguacero',
     zone: 'bogota',
     icon: '🌧️',
@@ -1169,7 +1169,7 @@ export const EVENTS = [
   {
     id: 'navidad_septima',
     key: 'navidad_septima',
-    costScale: 0.05, // las mejoras cuestan la vigésima parte (ver sim/upgrades.js)
+    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
     zone: 'bogota',
     icon: '✨',
     name: 'El alumbrado de la Séptima',
@@ -1190,7 +1190,7 @@ export const EVENTS = [
   {
     id: 'festival_zona_g',
     key: 'festival_zona_g',
-    costScale: 0.05, // las mejoras cuestan la vigésima parte (ver sim/upgrades.js)
+    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
     zone: 'bogota',
     icon: ICON.cenaZonaG,
     name: 'El festival gastronómico',
@@ -1211,7 +1211,7 @@ export const EVENTS = [
   {
     id: 'pico_placa',
     key: 'pico_placa',
-    costScale: 0.05, // las mejoras cuestan la vigésima parte (ver sim/upgrades.js)
+    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
     blame: 'el pico y placa',
     zone: 'bogota',
     icon: '🚦',
@@ -1234,7 +1234,7 @@ export const EVENTS = [
   {
     id: 'ventarron_usaquen',
     key: 'ventarron_usaquen',
-    costScale: 0.05, // las mejoras cuestan la vigésima parte (ver sim/upgrades.js)
+    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
     blame: 'el ventarrón',
     zone: 'bogota',
     icon: '🌬️',
@@ -1257,7 +1257,7 @@ export const EVENTS = [
   {
     id: 'paro_camionero',
     key: 'paro_camionero',
-    costScale: 0.05, // las mejoras cuestan la vigésima parte (ver sim/upgrades.js)
+    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
     blame: 'el paro',
     zone: 'bogota',
     icon: '🚛',
