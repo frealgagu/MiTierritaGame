@@ -2,7 +2,7 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { RESEARCH } from '../data/research.js';
 import { dispatchRate, maxLevel, stationRate } from './rules.js';
-import { BY_CHILDREN, BY_ROUTES, JOIN_FROM, PARENT, branchShare, chainOf, consumers, joinOf, perCycleOf, sourceOf, zoneOf } from './chain.js';
+import { BY_CHILDREN, BY_ROUTES, JOIN_FROM, PARENT, branchShare, chainOf, consumers, joinOf, perCycleOf, sourceOf, suppliersOf, zoneOf } from './chain.js';
 import { routeActive, routeRate, routeStations, stationImportRate } from './routes.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { exportsOf, pendingRoutes, teamCapacity } from './transport.js';
@@ -547,6 +547,31 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
     if (isGradual(id) && (!option || option.gain < minGain)) option = trialGain([id], 10) ?? option;
     if (option) options.push(option);
   }
+  // En red (v4.6, Bogotá) una rama entera puede quedarse frenada: cada estación espera a la vez lo de las que la
+  // abastecen y dos tractomulas, y subir una sola pieza no se nota en ningún lado. Se prueba además, para cada estación,
+  // subir junto con ella todo lo que la abastece (estaciones, arrieros y tractomulas, hasta su nivel) y se recomienda lo
+  // más atrasado de ese grupo.
+  if (ZONES_BY_ID[zoneId]?.network && !state.event) {
+    // Solo desde el final de cada rama (lo que ninguna estación construida recibe): su grupo ya incluye lo de atrás.
+    const built = Object.keys(state.stations).filter((id) => zoneOf(id) === zoneId && !STATIONS_BY_ID[id].side);
+    const fed = new Set(built.flatMap((id) => suppliersOf(id)));
+    for (const id of built) {
+      if (fed.has(id)) continue;
+      const branch = new Set([id]);
+      for (const x of branch) for (const sup of suppliersOf(x)) if (state.stations[sup]) branch.add(sup);
+      const items = [...branch].flatMap((x) => [x, `${x}:transport`, ...(STATIONS_BY_ID[x].imports ?? []).filter((imp) => routeActive(state, imp.route)).map((imp) => `route:${imp.route}`)]);
+      const trial = (step) => {
+        const target = state.stations[id].level + step;
+        const group = items.map((x) => [x, target - upgradeLevel(state, x)]).filter(([, n]) => n > 0);
+        return group.length < 2 ? null : { group, o: trialGain(group, 1) };
+      };
+      let t = trial(1);
+      if (t && !(t.o?.gain >= minGain)) t = trial(10);
+      if (!t?.o || !(t.o.gain >= minGain)) continue;
+      const lowest = t.group.map(([g]) => g).reduce((low, g) => (upgradeLevel(state, g) < upgradeLevel(state, low) ? g : low));
+      options.push({ ...t.o, id: lowest, group: true });
+    }
+  }
   const roi = (o) => o.gain / o.cost;
   let best = options.filter((o) => o.gain > 1e-9 && o.gain >= minGain).sort((a, b) => roi(b) - roi(a))[0];
   // En el tablero de un evento (v3.8.2) no hay investigaciones (las de la zona no se pueden comprar
@@ -572,6 +597,8 @@ export function recommendUpgrade(state, quote, zoneId = 'finca') {
     const option = { id: `research:${r.id}`, cost: r.cost, gain };
     if (gain > 1e-9 && (!best || roi(option) > roi(best))) best = option;
   }
+  // (De un grupo se recomienda una pieza: su precio es el de esa pieza.)
+  if (best?.group) return { id: best.id, cost: quote(best.id, 1).cost, gain: best.gain };
   if (best) return best;
   // Ninguna sola rinde: puede que dos se frenen entre sí (una ruta y los arrieros de la estación que
   // abastece). Se prueban de dos en dos, de 10 en 10 niveles, y se recomienda la primera del mejor par.
