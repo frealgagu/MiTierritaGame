@@ -1164,7 +1164,7 @@ export const EVENTS = [
       { id: 'aguacero_canaletas', icon: '💧', name: 'Canaletas destapadas', desc: 'El agua se va por las canaletas: del 60 al 80 %.', cost: 2500, effect: { type: 'stationSpeed', target: 'tostadero_chorro', mult: 4 / 3 } },
       { id: 'aguacero_techo', icon: ICON.cafeCapitalino, name: 'Tostador bajo techo', desc: 'El tostador queda adentro: el Tostadero vuelve al 100 %.', cost: 6000, effect: { type: 'stationSpeed', target: 'tostadero_chorro', mult: 1.25 } },
     ],
-    objective: { type: 'cadena', kind: 'sold', items: { tarde_candelaria: 300 }, medals: [705, 1005] },
+    objective: { type: 'cadena', kind: 'sold', items: { tarde_candelaria: 300 }, medals: [600, 900] },
   },
   {
     id: 'navidad_septima',
@@ -1185,7 +1185,7 @@ export const EVENTS = [
       { id: 'navidad_sep_dulces', icon: ICON.oncesBogotanas, name: 'Mostrador doble', desc: 'La Dulcería de la Calle 11 arma un 50 % más.', cost: 3500, effect: { type: 'stationSpeed', target: 'dulceria_calle11', mult: 1.5 } },
       { id: 'navidad_sep_casa', icon: ICON.tardeCandelaria, name: 'Patio abierto', desc: 'La Casa colonial recibe un 50 % más.', cost: 9000, effect: { type: 'stationSpeed', target: 'casa_colonial', mult: 1.5 } },
     ],
-    objective: { type: 'final', kind: 'produced', items: { onces_bogotanas: 1200, tarde_candelaria: 320 }, medals: [825, 1125] },
+    objective: { type: 'final', kind: 'produced', items: { onces_bogotanas: 1200, tarde_candelaria: 320 }, medals: [570, 870] },
   },
   {
     id: 'festival_zona_g',
@@ -1206,7 +1206,7 @@ export const EVENTS = [
       { id: 'festival_g_parrillas', icon: ICON.platoFuerte, name: 'Más parrillas', desc: 'La Parrilla asa un 50 % más.', cost: 15000, effect: { type: 'stationSpeed', target: 'parrilla_zona_g', mult: 1.5 } },
       { id: 'festival_g_meseros', icon: ICON.menuCompleto, name: 'Más meseros', desc: 'La Repostería y el Restaurante atienden un 50 % más.', cost: 35000, effects: [{ type: 'stationSpeed', target: 'reposteria_zona_g', mult: 1.5 }, { type: 'stationSpeed', target: 'restaurante_zona_g', mult: 1.5 }] },
     ],
-    objective: { type: 'feria', kind: 'produced', items: { picada_casa: 6000, plato_fuerte: 2500, menu_completo: 1000 }, medals: [735, 1035] },
+    objective: { type: 'feria', kind: 'produced', items: { picada_casa: 4000, plato_fuerte: 1650, menu_completo: 660 }, medals: [735, 1035] },
   },
   {
     id: 'pico_placa',
@@ -1229,7 +1229,7 @@ export const EVENTS = [
       { id: 'pico_noche', icon: '🌙', name: 'Entregas de noche', desc: 'La tractomula entra cuando no hay pico y placa: llega el 60 %.', cost: 9000, effect: { type: 'supply', product: 'parranda_llanera', fraction: 0.6 } },
       { id: 'pico_permiso', icon: '🚛', name: 'Permiso de carga', desc: 'Con el permiso, la tractomula entra siempre: vuelve a llegar todo el asado.', cost: 24000, effect: { type: 'supply', product: 'parranda_llanera', fraction: 1 } },
     ],
-    objective: { type: 'corte', kind: 'produced', items: { plato_fuerte: 3600 }, medals: [690, 990] },
+    objective: { type: 'corte', kind: 'produced', items: { plato_fuerte: 2000 }, medals: [690, 990] },
   },
   {
     id: 'ventarron_usaquen',
@@ -1252,7 +1252,7 @@ export const EVENTS = [
       { id: 'ventarron_nuevos', icon: ICON.surtidoTejidos, name: 'Toldos nuevos', desc: 'Toldos más firmes: del 60 al 80 %.', cost: 230000, effect: { type: 'stationSpeed', target: 'toldo_tejidos', mult: 4 / 3 } },
       { id: 'ventarron_lona', icon: ICON.domingoUsaquen, name: 'Carpa de lona', desc: 'Una carpa grande que aguanta el viento: el Toldo de tejidos vuelve al 100 %.', cost: 550000, effect: { type: 'stationSpeed', target: 'toldo_tejidos', mult: 1.25 } },
     ],
-    objective: { type: 'arranque', kind: 'produced', items: { surtido_feria: 7200 }, medals: [855, 1155] },
+    objective: { type: 'arranque', kind: 'produced', items: { surtido_feria: 7200 }, medals: [690, 990] },
   },
   {
     id: 'paro_camionero',
@@ -1275,7 +1275,7 @@ export const EVENTS = [
       { id: 'paro_turnos', icon: '🚦', name: 'Paso por turnos', desc: 'Dejan pasar la carga por turnos: llega el 60 % de las truchas.', cost: 3000000, effect: { type: 'supply', product: 'trucha_ahumada', fraction: 0.6 } },
       { id: 'paro_fin', icon: ICON.trucha, name: 'Fin del paro', desc: 'Se acabó el paro: las truchas vuelven a llegar todas.', cost: 8000000, effect: { type: 'supply', product: 'trucha_ahumada', fraction: 1 } },
     ],
-    objective: { type: 'ramas', kind: 'produced', items: { canasta_plaza: 1200, desayuno_plaza: 450 }, medals: [1005, 1305] },
+    objective: { type: 'ramas', kind: 'produced', items: { canasta_plaza: 1200, desayuno_plaza: 450 }, medals: [870, 1170] },
   },
 ];
 
