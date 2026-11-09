@@ -1,5 +1,6 @@
+import { moverDepth } from './occlusion.js';
 import { Container, Graphics } from 'pixi.js';
-import { iso, depth, shade } from './iso.js';
+import { iso, shade } from './iso.js';
 import { PAL, OUTLINE } from './palette.js';
 import { box, shadow } from './procedural/shapes.js';
 import { PRODUCTS } from '../data/products.js';
@@ -84,7 +85,7 @@ export class MuleView extends Container {
   place(gx, gy, dx, dy, t) {
     const p = iso(gx, gy);
     this.position.set(p.x, p.y);
-    this.zIndex = depth(gx, gy);
+    this.zIndex = moverDepth(gx, gy);
     const screenDx = dx - dy;
     if (screenDx !== 0) this.scale.x = screenDx > 0 ? 1 : -1;
     const step = Math.sin((t + this.phase) * 12);
@@ -155,7 +156,7 @@ export class JeepView extends Container {
   place(gx, gy, dx, dy, load, resting = false, t = 0) {
     const p = iso(gx, gy);
     this.position.set(p.x, p.y);
-    this.zIndex = depth(gx, gy) + 0.2;
+    this.zIndex = moverDepth(gx, gy, 0.2);
     // Parado (cargando en la bodega) sigue mirando hacia donde iba.
     if (dx || dy) this.dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? '+x' : '-x') : dy > 0 ? '+y' : '-y';
     // Como mucho lleno: si la capacidad baja de golpe (menos reinicios en las opciones de desarrollador),
@@ -276,8 +277,6 @@ function drawWillys(g, toGrid, sacks, resting = false, paint = LOOK.willys.color
   return cup;
 }
 
-const CHIVA_LAYER = 100000;
-
 // Chiva: bus de escalera pintado de colores, para las rutas entre zonas. Lleva la carga en el techo.
 export class ChivaView extends Container {
   // productId: lo que lleva (da color a la carga del techo).
@@ -341,9 +340,8 @@ export class ChivaView extends Container {
   place(gx, gy, dx, dy, load) {
     const p = iso(gx, gy);
     this.position.set(p.x, p.y);
-    // Siempre por encima de los edificios y la decoración (v4.3.1): ordenada por profundidad, una estación de
-    // adelante la tapaba y parecía que la chiva pasaba por debajo o la atravesaba. Entre chivas, la de adelante.
-    this.zIndex = CHIVA_LAYER + depth(gx, gy);
+    // Por delante o por detrás de cada edificio según su huella (v4.5.1; ver occlusion.js).
+    this.zIndex = moverDepth(gx, gy, 0.3);
     const alongX = Math.abs(dx) > Math.abs(dy);
     this.alongX.visible = alongX;
     this.alongY.visible = !alongX;
@@ -425,7 +423,7 @@ export class TractomulaView extends Container {
   place(gx, gy, dx, dy, _load) {
     const p = iso(gx, gy);
     this.position.set(p.x, p.y);
-    this.zIndex = CHIVA_LAYER + depth(gx, gy);
+    this.zIndex = moverDepth(gx, gy, 0.3);
     const alongX = Math.abs(dx) > Math.abs(dy);
     const key = alongX ? (dx >= 0 ? 'xp' : 'xn') : dy >= 0 ? 'yp' : 'yn';
     for (const [k, v] of Object.entries(this.views)) v.visible = k === key;

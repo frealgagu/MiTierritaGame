@@ -2,8 +2,9 @@
 // adorno. Los gatos pasean por la grama y se echan a dormir un rato; los loros van y vienen volando entre
 // los árboles y la grama. De vez en cuando (al azar, cada medio minuto o un minuto) un gato ve a un loro
 // posado y sale corriendo detrás; el loro alza el vuelo y se posa lejos, y el gato se queda mirando.
+import { moverDepth } from './occlusion.js';
 import { Container, Graphics } from 'pixi.js';
-import { iso, depth } from './iso.js';
+import { iso } from './iso.js';
 import { shadow } from './procedural/shapes.js';
 import { createRng } from '../core/rng.js';
 
@@ -82,7 +83,7 @@ class Cat extends Container {
     }
     const p = iso(this.gx, this.gy);
     this.position.set(p.x, p.y);
-    this.zIndex = depth(this.gx, this.gy);
+    this.zIndex = moverDepth(this.gx, this.gy);
     this.draw(t + this.phase);
   }
 
@@ -160,7 +161,7 @@ class Parrot extends Container {
     } else if ((this.wait -= dt) <= 0) this.fly();
     const p = iso(this.gx, this.gy);
     this.position.set(p.x, p.y);
-    this.zIndex = depth(this.gx, this.gy) + (this.alt > 8 ? 2 : 0);
+    this.zIndex = moverDepth(this.gx, this.gy) + (this.alt > 8 ? 2 : 0);
     this.draw(t + this.phase);
   }
 

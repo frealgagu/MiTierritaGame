@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v4.5.1 (en desarrollo, sin publicar)
+- **Las chivas y las tractomulas ya no pasan por encima de los techos:** lo que se mueve (chivas, tractomulas, Willys, mulas, gente y animales) se pinta delante o detrás de cada estación y de la bodega según dónde esté de su huella. Antes las chivas iban siempre encima de todo y, al pasar por detrás de la bodega, se veían sobre la teja.
+- **Las estaciones grandes ya no tapan a las de adelante** (el Tostadero del Chorro, de 6×6, podía pintarse encima de la Chocolatería).
+
 ## v4.5.0 — Bogotá
 - **🏔️ Bogotá, la nueva región**, se abre al completar Zipaquirá. No produce nada propio: es una sola zona cuatro veces más grande que las demás, con los Cerros Orientales y Monserrate, adonde todo llega en **🚛 tractomula** desde las otras regiones, con carga que no se acaba.
 - **Cinco barrios que se construyen a la vez:** La Candelaria (café, chocolate y onces santafereñas), Chapinero y la Zona G (los restaurantes), Usaquén (el mercado de pulgas del domingo), Paloquemao (la plaza de mercado) y el centro, que se abre con los otros cuatro: el Hotel de la capital, el Funicular de Monserrate, el Pabellón de las regiones y la Gran Feria de Mi Tierrita, el final. La cadena tiene una pestaña por barrio. 24 estaciones y 27 tractomulas.

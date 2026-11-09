@@ -3,8 +3,9 @@
 // note que se puede tocar. La cabeza se dibuja (v3.65.1) a partir de su emoji de PEOPLE (piel, pelo, barba,
 // sombrero): antes era el emoji mismo, y en muchos Android (los Samsung, por ejemplo) el emoji trae cuello y
 // hombros y quedaba corrido sobre el cuerpo.
+import { moverDepth } from './occlusion.js';
 import { Container, Graphics, Text } from 'pixi.js';
-import { iso, depth } from './iso.js';
+import { iso } from './iso.js';
 import { FONT } from './palette.js';
 import { shadow } from './procedural/shapes.js';
 import { PEOPLE } from '../data/lore.js';
@@ -50,7 +51,7 @@ export class KeeperView extends Container {
   place(gx, gy) {
     const p = iso(gx, gy);
     this.position.set(p.x, p.y);
-    this.zIndex = depth(gx, gy) + 0.3;
+    this.zIndex = moverDepth(gx, gy, 0.3);
   }
 
   // talk: si tiene algo que decir (se mece la burbuja).

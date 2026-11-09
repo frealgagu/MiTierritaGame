@@ -2,6 +2,7 @@
 // camina por el cafetal hasta que llegan las trampas, el hongo y el re-re; el derrumbe tapa la vía, las
 // mulas pasan por el monte, luego un carro por la trocha y al final la vía queda nueva… Cada evento
 // tiene su escena (ART) en tres etapas más la del comienzo (cuántas compras van). Solo es dibujo.
+import { moverDepth } from './occlusion.js';
 import { Container, Graphics } from 'pixi.js';
 import { iso, depth, shade } from './iso.js';
 import { OUTLINE } from './palette.js';
@@ -139,7 +140,7 @@ export class EventArt {
         const back = s > 1;
         const k = back ? 2 - s : s;
         const p = pointAt(path, k);
-        view.zIndex = depth(p.gx, p.gy) + 0.2;
+        view.zIndex = moverDepth(p.gx, p.gy, 0.2);
         if (view instanceof JeepView) view.place(p.gx, p.gy, back ? -p.dx : p.dx, back ? -p.dy : p.dy, back ? 0 : 0.8, false, t);
         else view.place(p.gx, p.gy, back ? -p.dx : p.dx, back ? -p.dy : p.dy, t);
         view.setLoaded?.(!back);
