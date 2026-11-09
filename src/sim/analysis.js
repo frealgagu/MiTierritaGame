@@ -11,6 +11,7 @@ import { PRODUCTS } from '../data/products.js';
 import { canPay, researchLocked } from './upgrades.js';
 import { objectiveUpgrades, supplyFraction } from './events.js';
 import { EVENTS_BY_ID } from '../data/events.js';
+import { ZONES_BY_ID } from '../data/zones/index.js';
 
 const LOSS = 0.02; // por debajo del 2 % no se considera cuello de botella
 const MAX_ROUTE_DEPTH = 4; // zonas encadenadas por rutas que se miran como mucho
@@ -300,6 +301,10 @@ function analyze(state, zoneId, withExports, depth, memo) {
   if (!bottleneck) bottleneck = toWarehouse > dispatch * (1 + LOSS) ? `dispatch:${zoneId}` : state.stations[sourceOf(zoneId)] ? sourceOf(zoneId) : ids[0];
   // Lo que ya está en el nivel 100 no se puede mejorar: no se señala (si todo está al máximo, nada).
   if (upgradeLevel(state, bottleneck) >= maxLevel(state)) bottleneck = null;
+  // En red (v4.6, Bogotá) lo que sobra en medio de la red también es de la cadena: muchas estaciones venden parte de lo
+  // que hacen porque la siguiente todavía no lo recibe todo, y subir una rama tarda varias compras en llegar al final.
+  // Si solo contara el final, la mejora recomendada señalaba compras que no suben nada.
+  if (ZONES_BY_ID[zoneId]?.network) mainIncome = income;
   return { rows, toWarehouse, dispatch, bottleneck, income, mainIncome, exported, sold: Object.values(sold) };
 }
 
