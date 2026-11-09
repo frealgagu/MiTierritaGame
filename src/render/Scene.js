@@ -6,6 +6,7 @@ import { Terrain, ZONE_SIGN } from './Terrain.js';
 import { KEEPER_SPOT, KeeperView } from './Keeper.js';
 import { Pets } from './Pets.js';
 import { EventArt } from './EventArt.js';
+import { orderFootprints, setBlockers } from './occlusion.js';
 import { LOOK } from './look.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { Effects } from './Effects.js';
@@ -107,6 +108,8 @@ export class Scene {
     }
 
     this.stations = {};
+    // Lo que se mueve se pinta delante o detrás de cada estación según su huella (v4.5.1).
+    setBlockers(() => Object.values(this.stations));
     this.farm = new FarmView(this.zone, STATIONS_BY_ID[this.sourceId]);
     this.warehouse = new WarehouseView(this.zone);
     this.addStationView(this.sourceId, this.farm, LABEL_HEIGHT.farm);
@@ -275,6 +278,7 @@ export class Scene {
     const built = Boolean(this.game.state.stations[id]);
     const view = built ? new BuildingView(plot, def) : new PlotView(plot, def);
     this.addStationView(id, view, built ? LABEL_HEIGHT.building : LABEL_HEIGHT.plot);
+    orderFootprints(Object.values(this.stations));
     if (this.pendingSelect === id) {
       view.setSelected(true);
       this.pendingSelect = null;

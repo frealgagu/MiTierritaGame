@@ -1,3 +1,4 @@
+import { moverDepth } from './occlusion.js';
 import { Container, Graphics } from 'pixi.js';
 import { iso, depth } from './iso.js';
 import { OUTLINE } from './palette.js';
@@ -125,7 +126,7 @@ class Critter extends Container {
     }
     const p = iso(this.pos.gx, this.pos.gy);
     this.position.set(p.x, p.y);
-    this.zIndex = depth(this.pos.gx, this.pos.gy);
+    this.zIndex = moverDepth(this.pos.gx, this.pos.gy);
     this.draw(t + this.phase);
   }
 
