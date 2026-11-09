@@ -82,7 +82,7 @@ export const ZONE55 = {
   // Lo que se ve al llegar: La Candelaria (el resto del mapa se recorre arrastrando).
   view: { x0: 25, y0: 3, x1: 42, y1: 22 },
   muleSpeed: 8,
-  dispatchCost: { base: 10, growth: 1.17 },
+  dispatchCost: { base: 40, growth: 1.17 },
   routes: {
     tm_cafe: { road: [[8.5, 51.9], [8.5, 20.5], [36.5, 20.5], [36.5, 12.5]], sign: [10.7, 49.4], text: 'Café del Eje ⬆' },
     tm_chocolate: { road: [[8.5, 51.9], [8.5, 20.5], [34.5, 20.5], [34.5, 16.2]], sign: [10.7, 46.4], text: 'Chocolate del Eje ⬆' },

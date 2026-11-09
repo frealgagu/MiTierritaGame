@@ -52,7 +52,7 @@ test('en red (v4.6): al empezar se pueden construir varias a la vez, baratas, y 
   const s = createInitialState(0, 'bogota');
   const start = buildableStations(s, 'bogota');
   assert.deepEqual(start, ['despensa_zona_g', 'toldo_tejidos', 'puesto_flores', 'puesto_frutas', 'cafeteria_septima']);
-  for (const id of start) assert.ok(STATIONS_BY_ID[id].unlockCost <= 3000, id);
+  for (const id of start) assert.ok(STATIONS_BY_ID[id].unlockCost <= 12000, id);
   s.coins = 1e9;
   // La Fritanga junta lo de tres estaciones: pide las tres (y la de su entrada).
   assert.deepEqual(suppliersOf('fritanga_plaza').sort(), ['cocina_entradas', 'despensa_zona_g', 'pescaderia_plaza']);
