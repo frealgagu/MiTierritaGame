@@ -53,8 +53,13 @@ export class Scene {
     this.app = app;
     this.game = game;
     this.sound = sound;
+    // En el tablero de un evento de Bogotá (v4.7.1) solo están las estaciones del evento: los lotes de las demás no se
+    // dibujan (no se pueden construir ahí).
+    const ev = game.state.event && EVENTS_BY_ID[game.state.event.id];
+    if (ev && (zone.network || zone.groups)) zone = { ...zone, plots: zone.plots.filter((p) => ev.stations.includes(p.stationId)) };
     this.zone = zone;
     this.sourceId = zone.farm.stationId;
+    this.hideFarm = Boolean(ev && (zone.network || zone.groups) && !ev.stations.includes(this.sourceId));
     this.time = 0;
     this.restSince = [null, null];
     this.jeepPhase = 'idle';
@@ -113,9 +118,11 @@ export class Scene {
     this.farm = new FarmView(this.zone, STATIONS_BY_ID[this.sourceId]);
     this.warehouse = new WarehouseView(this.zone);
     this.addStationView(this.sourceId, this.farm, LABEL_HEIGHT.farm);
+    // (Si el Tostadero no es del evento, la plazoleta queda sin su letrero ni su estación.)
+    if (this.hideFarm) this.farm.label.visible = this.farm.status.visible = false;
     this.addStationView('dispatch', this.warehouse, LABEL_HEIGHT.dispatch);
     for (const plot of this.zone.plots) this.buildStation(plot.stationId);
-    this.stationIds = [this.sourceId, ...this.zone.plots.map((p) => p.stationId)];
+    this.stationIds = [...(this.hideFarm ? [] : [this.sourceId]), ...this.zone.plots.map((p) => p.stationId)];
 
     this.jeeps = Array.from({ length: this.jeepCount }, (_, k) => new JeepView(k));
     for (const jeep of this.jeeps) this.objects.addChild(jeep);
@@ -228,7 +235,8 @@ export class Scene {
 
   // Lo que abre un toque: el letrero primero, luego la estación (stationAt).
   pickAt(global) {
-    return this.labelAt(global) ?? this.stationAt(global);
+    const id = this.labelAt(global) ?? this.stationAt(global);
+    return this.hideFarm && id === this.sourceId ? null : id;
   }
 
   selectStation(id) {
@@ -256,7 +264,11 @@ export class Scene {
     const select = (sid) => this.selectStation(sid);
     // Se toca todo el edificio, hasta donde va su letrero, y también el letrero (v3.67). Si el toque cae en
     // dos estaciones, decide stationAt: el letrero primero, luego el edificio (v3.67.6).
-    view.on('pointertap', (e) => !this.camera.dragged && select(this.pickAt(e.global) ?? id));
+    view.on('pointertap', (e) => {
+      if (this.camera.dragged) return;
+      const sid = this.pickAt(e.global) ?? (this.hideFarm && id === this.sourceId ? null : id);
+      if (sid) select(sid);
+    });
     view.setHitHeight?.(labelHeight ?? 60);
     const pick = () => !this.camera.dragged && select(id);
     view.label.eventMode = 'static';

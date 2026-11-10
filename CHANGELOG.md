@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v4.7.1 — Solo lo del evento
+- **En los eventos de Bogotá solo aparecen sus estaciones:** las demás de la red ya no se ven en el mapa ni en la cadena, ni se sugiere construirlas.
+- **Los objetivos de Bogotá que pedían vender café, mañanas, domingos o subidas ahora piden producirlos:** si otra estación los recibía todos, no se cumplían nunca.
+- **⭐ Zona especial:** al final de la lista de regiones se cuenta cuántas llevan el segundo final (o ya se reiniciaron). Cuando sean todas, se abre una zona de premio que llega en una versión próxima.
+- **Volver a empezar** ya no está en el menú: se hace desde los objetivos, en la tarjeta del segundo final.
+
 ## v4.7.0 — La Gran Feria
 - **🎪 Un séptimo evento en Bogotá: la Gran Feria**, con toda la red en el tablero. Sale cuando ya ganaste medalla en los otros seis. No frena nada: sus tres compras suben el precio de todo lo que se vende (×1,2, ×1,5 y ×2) por la demanda. Trae su logro, «La feria del país», que paga bien en Renombre.
 - **Maestría y Supremacía** ya cuentan bien las estaciones que llegaron al nivel (antes, faltando una, decía 9/11).

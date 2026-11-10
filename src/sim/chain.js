@@ -3,6 +3,7 @@ import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { pathLength, projectOnPath } from '../core/path.js';
 import { ROUTES } from '../data/routes.js';
+import { EVENTS_BY_ID } from '../data/events.js';
 
 export const zoneOf = (stationId) => STATIONS_BY_ID[stationId].zone;
 export const chainOf = (zoneId) => ZONES_BY_ID[zoneId].chain;
@@ -121,6 +122,10 @@ export const suppliersOf = (id) => [...new Set([PARENT[id], ...Object.values(JOI
 // tienen construidas las que las abastecen.
 export function buildableStations(state, zoneId = 'finca') {
   if (!zoneUnlocked(state, zoneId)) return [];
+  // En el tablero de un evento de Bogotá (v4.7.1) solo cuentan las estaciones del evento (las demás no se construyen ahí,
+  // y no se muestran ni se sugieren).
+  const ev = state.event && (ZONES_BY_ID[zoneId].network || ZONES_BY_ID[zoneId].groups) ? EVENTS_BY_ID[state.event.id] : null;
+  if (ev) return ev.stations.filter((id) => zoneOf(id) === zoneId && !isUnlocked(state, id));
   if (ZONES_BY_ID[zoneId].network) return chainOf(zoneId).filter((id) => !isUnlocked(state, id) && suppliersOf(id).every((s) => isUnlocked(state, s)));
   const out = [];
   for (const g of groupsOf(zoneId)) {

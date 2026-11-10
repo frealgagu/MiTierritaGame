@@ -1,7 +1,7 @@
 import { Application } from 'pixi.js';
 import { Game } from './core/Game.js';
 import { clearSave, exportSave, importSave, loadGame, saveGame } from './core/SaveSystem.js';
-import { formatDuration, formatMult, formatNumber } from './core/format.js';
+import { formatDuration, formatNumber } from './core/format.js';
 import { clockOf } from './sim/calendar.js';
 import { Scene } from './render/Scene.js';
 import { HUD } from './ui/HUD.js';
@@ -37,7 +37,7 @@ import { ROUTES_BY_ID } from './data/routes.js';
 import { STATIONS_BY_ID } from './data/stations.js';
 import { ICON, ICON_FONT } from './data/icons.js';
 import { RESEARCH_BY_ID } from './data/research.js';
-import { nextLegacyMult, offlineCapSeconds } from './sim/modifiers.js';
+import { offlineCapSeconds } from './sim/modifiers.js';
 import { toast } from './ui/toast.js';
 import { bindDevOptions, savedSpeed } from './ui/DevOptions.js';
 import { bindIconTips } from './ui/iconTips.js';
@@ -440,10 +440,7 @@ async function start() {
   };
   for (const g of Object.values(games)) wire(g);
   goals.onMastery = () => mastery(active);
-  document.getElementById('restart-btn').addEventListener('click', () => {
-    document.getElementById('menu').hidden = true;
-    mastery(active);
-  });
+  // (v4.7.1) Volver a empezar ya no está en el menú: se hace desde los objetivos (la tarjeta del segundo final).
   window.addEventListener('resize', () => scene.resize(app.screen.width, app.screen.height));
   // Esc (o «atrás» en Android) cierra la ventana abierta o, si no hay ninguna, el panel de la estación.
   // Devuelve si cerró algo.
@@ -675,10 +672,6 @@ function bindMenu(game, sound, music, getActive) {
       t('💰 Ganado en total: <b>{coins}</b>', { coins: formatNumber(earned) }),
       t('📦 Productos vendidos: <b>{n}</b>', { n: formatNumber(sold) }),
     ].map((li) => `<li>${li}</li>`).join('');
-    const restartBtn = document.getElementById('restart-btn');
-    const here = getActive().state;
-    restartBtn.hidden = !here.mastered;
-    restartBtn.textContent = here.region === 'cafetero' ? t('🔁 Volver a empezar {mult}', { mult: formatMult(nextLegacyMult(here)) }) : t('🔁 Volver a empezar {region} {mult}', { region: REGIONS_BY_ID[here.region].name, mult: formatMult(nextLegacyMult(here)) });
     menu.hidden = false;
   });
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));
