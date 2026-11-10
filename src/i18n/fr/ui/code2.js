@@ -160,4 +160,5 @@ export default {
   '🗑️ {n} se desechan: {stations} no da abasto.': '🗑️ {n} sont jetés : {stations} ne suit pas.',
   'Acercar': 'Zoomer',
   'Alejar': 'Dézoomer',
+  '🔒 Sale cuando ganes medalla en los otros eventos de {zone}.': '🔒 Arrive quand tu auras gagné une médaille dans les autres événements de {zone}.',
 };

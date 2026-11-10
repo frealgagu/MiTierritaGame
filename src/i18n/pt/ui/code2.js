@@ -160,4 +160,5 @@ export default {
   '🗑️ {n} se desechan: {stations} no da abasto.': '🗑️ {n} são descartados: {stations} não dá conta.',
   'Acercar': 'Aproximar',
   'Alejar': 'Afastar',
+  '🔒 Sale cuando ganes medalla en los otros eventos de {zone}.': '🔒 Sai quando você ganhar medalha nos outros eventos de {zone}.',
 };

@@ -160,4 +160,5 @@ export default {
   '🗑️ {n} se desechan: {stations} no da abasto.': '🗑️ {n} are thrown away: {stations} can’t keep up.',
   'Acercar': 'Zoom in',
   'Alejar': 'Zoom out',
+  '🔒 Sale cuando ganes medalla en los otros eventos de {zone}.': '🔒 It comes up when you win a medal in the other events of {zone}.',
 };

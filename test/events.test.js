@@ -350,7 +350,8 @@ test('cada evento tiene un reto, y los seis de cada región son de tipos distint
   }
   // Bogotá (v4.5), una sola zona con seis eventos: también uno de cada tipo.
   const { regionEvents } = await import('../src/sim/events.js');
-  assert.deepEqual(regionEvents('bogota').map((e) => e.objective.type).sort(), [...OBJECTIVE_TYPES].sort());
+  // (La Gran Feria, v4.6.1, es el séptimo: sale después de los otros seis, que son uno de cada tipo.)
+  assert.deepEqual(regionEvents('bogota').filter((e) => !e.after).map((e) => e.objective.type).sort(), [...OBJECTIVE_TYPES].sort());
   for (const e of EVENTS) assert.equal(e.objectives, undefined, e.id);
 });
 

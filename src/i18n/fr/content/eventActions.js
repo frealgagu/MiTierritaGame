@@ -182,4 +182,7 @@ export default {
   paro_camionetas: ['Camionnettes par la route secondaire', 'Quelques camionnettes passent par la route secondaire : il arrive un quart des truites.'],
   paro_turnos: ['Passage par tours', 'On laisse passer la cargaison par tours : il arrive 60 % des truites.'],
   paro_fin: ['Fin de la grève', 'La grève est finie : toutes les truites arrivent de nouveau.'],
+  gran_feria_carteles: ['Des affiches dans toute la ville', 'Plus de monde vient à la foire : tout se vend 20 % plus cher.'],
+  gran_feria_radio: ['La foire à la radio', 'On l’annonce dans tout le pays : tout se vend 50 % plus cher qu’au début.'],
+  gran_feria_tele: ['La foire à la télévision', 'Tout le pays veut venir : tout se vend le double du prix normal.'],
 };
