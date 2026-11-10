@@ -69,7 +69,7 @@ export class ChainView {
       this.drag = null;
       setTimeout(() => (this.dragged = false), 0);
     });
-    // Mientras se desliza con el dedo (v4.6.1) no se redibuja: en Bogotá, rehacer la cadena entera a cada cuadro trababa
+    // Mientras se desliza con el dedo (v4.7) no se redibuja: en Bogotá, rehacer la cadena entera a cada cuadro trababa
     // el desplazamiento (la caja de lado no avisa con burbuja: se escucha en la fase de captura).
     this.scrolledAt = 0;
     this.body.addEventListener('scroll', () => (this.scrolledAt = performance.now()), { capture: true, passive: true });
@@ -122,7 +122,7 @@ export class ChainView {
     if (this.el.hidden) return;
     const state = this.game.state;
     const zone = this.getZone();
-    // En red (v4.6.1, Bogotá) la cadena es grande: se rehace como mucho dos veces por segundo y nunca mientras se
+    // En red (v4.7, Bogotá) la cadena es grande: se rehace como mucho dos veces por segundo y nunca mientras se
     // desliza (lo que se toca, `this.html = null`, se rehace enseguida).
     const now = performance.now();
     if (ZONES_BY_ID[zone].network && this.html && this.zoneDrawn === zone) {
@@ -340,7 +340,7 @@ const DG_PAD = 6; // margen a cada lado del diagrama (lo mismo que .dg-scroll en
 const GAP = 46; // espacio vertical para los eslabones (y lo que pasa por ellos)
 const TAG_H = 26; // alto de cada etiqueta de importación
 const JOIN_W = 22; // lo que se angostan esas etiquetas si además le llega algo que junta (v4.0)
-const NET_COL = 152; // en red (v4.6.1), el ancho de cada columna: las tarjetas, todas iguales, de 140
+const NET_COL = 152; // en red (v4.7), el ancho de cada columna: las tarjetas, todas iguales, de 140
 const MIN_COL = 80; // (v4.3.1: antes 98; con tres columnas no cabía en un teléfono angosto y se cortaba la de la derecha)
 const NARROW = 118; // más angostas que esto, la tarjeta pone el ícono arriba y el nombre abajo
 
@@ -401,13 +401,13 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
   // Las raíces: la fuente y, con barrios (v4.5, Bogotá), la primera de cada uno, construida o la que sigue.
   for (const root of chainOf(zone).filter((id) => inSet(id) && (!PARENT[id] || !inSet(PARENT[id])) && (rows[id] || locked.includes(id)))) place(root, 0);
   const cols = Math.max(1, leaf);
-  // En red (v4.6.1, Bogotá) todas las tarjetas tienen el mismo ancho: con tantas ramas, las de una sola columna quedaban
+  // En red (v4.7, Bogotá) todas las tarjetas tienen el mismo ancho: con tantas ramas, las de una sola columna quedaban
   // muy angostas al lado de las que tienen varias debajo.
   const net = Boolean(ZONES_BY_ID[zone].network);
   const colW = net ? NET_COL : Math.max(MIN_COL, Math.floor((width - 4) / cols));
   const total = colW * cols;
   const widthOf = (id) => (net ? colW - 12 : Math.min(pos[id].span * colW - 12, 210));
-  // Los tramos que cruzan de lado (v4.6.1): cada uno a su propia altura dentro del espacio entre filas, para que en la red
+  // Los tramos que cruzan de lado (v4.7): cada uno a su propia altura dentro del espacio entre filas, para que en la red
   // no corran unos encima de otros y se vea de dónde viene cada uno.
   const slots = {};
   const slotY = (key, base) => {

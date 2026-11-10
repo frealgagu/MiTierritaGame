@@ -55,13 +55,13 @@ export class GoalsView {
     const progress = goals.map((g) => goalProgress(state, g));
     // El número cuenta todos los que ya se pueden cobrar en la zona, no solo los tres que se ven (v3.57).
     const ready = claimableGoals(state, zone);
-    // (v4.6.1) También el final ya cumplido, aunque todavía no le toque: sin él, el número decía uno menos de los
+    // (v4.7) También el final ya cumplido, aunque todavía no le toque: sin él, el número decía uno menos de los
     // ganados y, al ir cobrando, se repetía cuando el final aparecía entre los primeros.
     const won = state.zones[zone]?.unlocked ? GOALS_BY_ZONE[zone].filter((x) => !state.goals.claimed.includes(x.id) && goalProgress(state, x).done) : [];
     this.badge.hidden = won.length === 0;
     this.badge.textContent = won.length;
 
-    // Marcador: el primero que ya se puede cobrar (v4.6.1: aunque no esté entre los primeros de la lista, para
+    // Marcador: el primero que ya se puede cobrar (v4.7: aunque no esté entre los primeros de la lista, para
     // cobrarlo desde afuera sin entrar al panel) o, si no hay, el primer objetivo. Con todas las zonas completas y sin
     // objetivos aquí, el segundo final: todas las estaciones al nivel 100.
     const first = ready.find((x) => !x.final) ?? ready[0];
