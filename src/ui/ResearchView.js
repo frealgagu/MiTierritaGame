@@ -119,6 +119,7 @@ function stationLevelText(state, r) {
 // Cuántos edificios de la zona ya llegaron al nivel que pide la Maestría o la Supremacía: «5/7».
 function atLevel(state, r) {
   const z = ZONES_BY_ID[r.zone];
-  const ids = [...z.chain, ...z.plots.map((p) => p.stationId)];
+  // (Sin repetir: las de la cadena también están en los lotes; contadas dos veces, faltando una decía 9/11.)
+  const ids = [...new Set([...z.chain, ...z.plots.map((p) => p.stationId)])];
   return `${ids.filter((id) => (state.stations[id]?.level ?? 0) >= r.minLevel).length}/${ids.length}`;
 }

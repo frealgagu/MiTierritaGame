@@ -120,7 +120,7 @@ export function unlockStation(state, id, bus) {
 // Todos los edificios de la zona (construidos todos) en el nivel `level` o más.
 export function zoneAtLevel(state, zoneId, level) {
   const z = ZONES_BY_ID[zoneId];
-  return [...z.chain, ...z.plots.map((p) => p.stationId)].every((id) => (state.stations[id]?.level ?? 0) >= level);
+  return [...new Set([...z.chain, ...z.plots.map((p) => p.stationId)])].every((id) => (state.stations[id]?.level ?? 0) >= level);
 }
 
 // Si todavía falta algo para poder investigarla: su estación construida, la estación y sus arrieros al
