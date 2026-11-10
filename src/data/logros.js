@@ -195,7 +195,7 @@ const BOGOTA = [
   { id: 'bg_todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
   { id: 'bg_oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
   // La Gran Feria (v4.6.1), el séptimo evento: sale cuando ya se ganó medalla en los otros seis, y paga bien.
-  { id: 'bg_gran_feria', icon: ICON.feriaMiTierrita, name: 'La feria del país', text: 'Gana medalla en la Gran Feria: bronce, plata y oro', metric: 'eventRank:gran_feria_bog', tiers: [1, 2, 3], reward: [8, 16, 32] },
+  { id: 'bg_gran_feria', icon: ICON.feriaMiTierrita, name: 'La feria del país', text: 'Gana {n} medallas en la Gran Feria', metric: 'eventMedals:gran_feria_bog', tiers: [1, 3, 6], reward: [8, 16, 32] },
   { id: 'bg_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
   { id: 'bg_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [12, 24, researchOf('bogota')], reward: [1, 2, 4] },
 ];
