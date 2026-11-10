@@ -152,5 +152,5 @@ export default {
   bg_oro: ['En or', 'Gagne l’or dans {n} événements différents'],
   bg_album: ['Album complet', 'Remplis {n} pages de l’album'],
   bg_ciencia: ['Ingénieur', 'Achète {n} recherches dans une partie'],
-  bg_gran_feria: ['La foire du pays', 'Gagne une médaille à la Grande Foire : bronze, argent et or'],
+  bg_gran_feria: ['La foire du pays', 'Gagne {n} médailles à la Grande Foire'],
 };

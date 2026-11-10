@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v4.6.1 — La Gran Feria
+- **🎪 Un séptimo evento en Bogotá: la Gran Feria**, con toda la red en el tablero. Sale cuando ya ganaste medalla en los otros seis. No frena nada: sus tres compras suben el precio de todo lo que se vende (×1,2, ×1,5 y ×2) por la demanda. Trae su logro, «La feria del país», que paga bien en Renombre.
+- **Maestría y Supremacía** ya cuentan bien las estaciones que llegaron al nivel (antes, faltando una, decía 9/11).
+- **El número de los objetivos** ya incluye el final de la zona cuando está cumplido, y no se repite al ir cobrando. Un objetivo cumplido se puede cobrar desde afuera aunque no esté entre los primeros.
+- **La cadena de Bogotá:** todas las estaciones del mismo ancho, las líneas que se cruzan van a distinta altura y ya no se traba al recorrerla.
+
 ## v4.6.0 — Bogotá en red
 - **🏔️ Bogotá ya no va por barrios: es una red.** Una estación se abre apenas estén construidas las que la abastecen, así que se empieza con cinco a la vez y baratas (el Tostadero del Chorro, la Despensa de la Zona G, el Toldo de tejidos, el Puesto de flores y el Puesto de frutas) y las del centro siguen siendo las más caras.
 - **Muchas estaciones reciben de dos o tres de la misma Bogotá**, además de su tractomula (la Fritanga recibe la canasta de la Pescadería, las salsas de la Despensa y el chicharrón de la Cocina de entradas). Las tractomulas llegan solo donde tiene sentido.

@@ -1291,7 +1291,7 @@ export const EVENTS = [
     after: ['aguacero_chorro', 'navidad_septima', 'festival_zona_g', 'pico_placa', 'ventarron_usaquen', 'paro_camionero'],
     stations: ['tostadero_chorro', 'despensa_zona_g', 'toldo_tejidos', 'puesto_flores', 'puesto_frutas', 'cafeteria_septima', 'cocina_entradas', 'toldo_sombreros', 'pescaderia_plaza', 'chocolateria_candelaria', 'parrilla_zona_g', 'toldo_loza', 'fritanga_plaza', 'dulceria_calle11', 'reposteria_zona_g', 'toldo_mascaras', 'plaza_paloquemao', 'casa_colonial', 'restaurante_zona_g', 'mercado_pulgas', 'hotel_capital', 'funicular_monserrate', 'pabellon_regiones', 'gran_feria'],
     level: 10,
-    coins: 2000000,
+    coins: 20000000,
     supply: { coffee_bag: 1, alino_box: 1, aji_box: 1, ruana: 1, alpargatas: 1, caja_flores: 1, juice_box: 1, asai_box: 1, bizcocho_box: 1, criollas_box: 1, ant_cone: 1, sombrero_vueltiao: 1, silla_montar: 1, trucha_ahumada: 1, smoked_pargo: 1, table_chocolate: 1, canasta_amasijos: 1, parranda_llanera: 1, rice_sack: 1, loza_negra: 1, gift_basket: 1, lechona: 1, bocadillo_crate: 1, cocada: 1, ticuna_mask: 1, werregue_jar: 1, cofre_sal: 1 },
     // Cada compra deja los precios en ×1,2, ×1,5 y ×2 de lo normal (se multiplican: 1,2 · 1,25 · 4/3).
     actions: [
@@ -1299,7 +1299,7 @@ export const EVENTS = [
       { id: 'gran_feria_radio', icon: '📻', name: 'La feria en la radio', desc: 'La anuncian en todo el país: todo se vende un 50 % más caro que al empezar.', cost: 100000000, effect: { type: 'zoneValue', target: 'bogota', mult: 1.25 } },
       { id: 'gran_feria_tele', icon: ICON.feriaMiTierrita, name: 'La feria en televisión', desc: 'Todo el país quiere venir: todo se vende al doble de lo normal.', cost: 400000000, effect: { type: 'zoneValue', target: 'bogota', mult: 4 / 3 } },
     ],
-    objective: { type: 'cadena', kind: 'sold', items: { feria_mi_tierrita: 40 }, medals: [900, 1200] },
+    objective: { type: 'cadena', kind: 'sold', items: { feria_mi_tierrita: 60 }, medals: [690, 990] },
   },
 ];
 
