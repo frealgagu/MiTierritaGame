@@ -69,6 +69,13 @@ export class ChainView {
       this.drag = null;
       setTimeout(() => (this.dragged = false), 0);
     });
+    // Mientras se desliza con el dedo (v4.6.1) no se redibuja: en Bogotá, rehacer la cadena entera a cada cuadro trababa
+    // el desplazamiento (la caja de lado no avisa con burbuja: se escucha en la fase de captura).
+    this.scrolledAt = 0;
+    this.body.addEventListener('scroll', () => (this.scrolledAt = performance.now()), { capture: true, passive: true });
+    this.body.addEventListener('touchstart', () => (this.touching = true), { passive: true });
+    window.addEventListener('touchend', () => (this.touching = false), { passive: true });
+    window.addEventListener('touchcancel', () => (this.touching = false), { passive: true });
     this.el.addEventListener('click', (e) => {
       if (this.dragged) return;
       if (e.target === this.el) return this.close();
@@ -115,6 +122,14 @@ export class ChainView {
     if (this.el.hidden) return;
     const state = this.game.state;
     const zone = this.getZone();
+    // En red (v4.6.1, Bogotá) la cadena es grande: se rehace como mucho dos veces por segundo y nunca mientras se
+    // desliza (lo que se toca, `this.html = null`, se rehace enseguida).
+    const now = performance.now();
+    if (ZONES_BY_ID[zone].network && this.html && this.zoneDrawn === zone) {
+      if (this.touching || now - this.scrolledAt < 400 || now - this.drawnAt < 500) return;
+    }
+    this.drawnAt = now;
+    this.zoneDrawn = zone;
     const a = analyzeChain(state, zone);
     const rows = Object.fromEntries(a.rows.map((r) => [r.id, r]));
     let locked = buildableStations(state, zone); // las que siguen (con barrios, v4.5, una por barrio)
@@ -139,9 +154,11 @@ export class ChainView {
     // arrastra no se redibuja.
     if (html !== this.html && !this.drag?.moved) {
       const left = this.body.querySelector('.dg-scroll')?.scrollLeft ?? 0;
+      const top = this.body.scrollTop;
       this.body.innerHTML = this.html = html;
       const sc = this.body.querySelector('.dg-scroll');
       if (sc) sc.scrollLeft = left;
+      this.body.scrollTop = top;
     }
     const detail = this.selected ? detailOf(state, a, rows, this.selected, zone) : '';
     this.detail.hidden = !detail;
@@ -323,6 +340,7 @@ const DG_PAD = 6; // margen a cada lado del diagrama (lo mismo que .dg-scroll en
 const GAP = 46; // espacio vertical para los eslabones (y lo que pasa por ellos)
 const TAG_H = 26; // alto de cada etiqueta de importación
 const JOIN_W = 22; // lo que se angostan esas etiquetas si además le llega algo que junta (v4.0)
+const NET_COL = 152; // en red (v4.6.1), el ancho de cada columna: las tarjetas, todas iguales, de 140
 const MIN_COL = 80; // (v4.3.1: antes 98; con tres columnas no cabía en un teléfono angosto y se cortaba la de la derecha)
 const NARROW = 118; // más angostas que esto, la tarjeta pone el ícono arriba y el nombre abajo
 
@@ -383,9 +401,20 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
   // Las raíces: la fuente y, con barrios (v4.5, Bogotá), la primera de cada uno, construida o la que sigue.
   for (const root of chainOf(zone).filter((id) => inSet(id) && (!PARENT[id] || !inSet(PARENT[id])) && (rows[id] || locked.includes(id)))) place(root, 0);
   const cols = Math.max(1, leaf);
-  const colW = Math.max(MIN_COL, Math.floor((width - 4) / cols));
+  // En red (v4.6.1, Bogotá) todas las tarjetas tienen el mismo ancho: con tantas ramas, las de una sola columna quedaban
+  // muy angostas al lado de las que tienen varias debajo.
+  const net = Boolean(ZONES_BY_ID[zone].network);
+  const colW = net ? NET_COL : Math.max(MIN_COL, Math.floor((width - 4) / cols));
   const total = colW * cols;
-  const widthOf = (id) => Math.min(pos[id].span * colW - 12, 210);
+  const widthOf = (id) => (net ? colW - 12 : Math.min(pos[id].span * colW - 12, 210));
+  // Los tramos que cruzan de lado (v4.6.1): cada uno a su propia altura dentro del espacio entre filas, para que en la red
+  // no corran unos encima de otros y se vea de dónde viene cada uno.
+  const slots = {};
+  const slotY = (key, base) => {
+    if (!net) return base;
+    const k = (slots[key] = (slots[key] ?? -1) + 1);
+    return base + (((k % 5) - 2) * 6);
+  };
   const ids = Object.keys(pos).filter((id) => !id.startsWith('lane:'));
   const depthMax = Math.max(...ids.map((id) => pos[id].depth));
   // Cada fila deja arriba el alto de las etiquetas de importación que tenga.
@@ -446,7 +475,7 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
     if (parent && pos[parent]) {
       const p = box(parent);
       const ex = tagsOf(id).length ? b.left + (b.w < NARROW ? 12 : 18) : b.cx;
-      const mid = p.bottom + GAP / 2;
+      const mid = slotY(`mid:${pos[parent].depth}`, p.bottom + GAP / 2);
       const kind = !row ? 'locked' : a.bottleneck === `${parent}:transport` || a.bottleneck === id ? 'hot' : 'flow';
       const isBy = BY_CHILDREN[parent]?.includes(id);
       pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${ex} V ${b.top}`, kind, isBy ? byOf(parent) : outOf(parent));
@@ -463,8 +492,8 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
       const tags = tagsOf(id).length;
       // Con varias (v4.6), cada una entra un poco más a la izquierda que la anterior.
       const ex = (tags ? b.left + b.w - JOIN_W / 2 : b.left + b.w * 0.78) - k * 9;
-      const mid = p.bottom + GAP / 2;
-      const turn = b.top - tags * TAG_H - GAP / 2 + 9;
+      const mid = slotY(`mid:${pos[from].depth}`, p.bottom + GAP / 2);
+      const turn = slotY(`turn:${pos[id].depth}`, b.top - tags * TAG_H - GAP / 2 + 9);
       const kind = !row ? 'locked' : row.joinLimited === product || a.bottleneck === `${from}:transport` ? 'hot' : 'flow';
       pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${lx} V ${turn} H ${ex} V ${b.top}`, kind, product);
       if (row) flow(lx, (mid + turn) / 2, PRODUCTS[product].icon, row.joined?.[product] ?? 0, kind === 'hot');

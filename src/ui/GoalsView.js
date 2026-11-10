@@ -55,13 +55,19 @@ export class GoalsView {
     const progress = goals.map((g) => goalProgress(state, g));
     // El número cuenta todos los que ya se pueden cobrar en la zona, no solo los tres que se ven (v3.57).
     const ready = claimableGoals(state, zone);
-    this.badge.hidden = ready.length === 0;
-    this.badge.textContent = ready.length;
+    // (v4.6.1) También el final ya cumplido, aunque todavía no le toque: sin él, el número decía uno menos de los
+    // ganados y, al ir cobrando, se repetía cuando el final aparecía entre los primeros.
+    const won = state.zones[zone]?.unlocked ? GOALS_BY_ZONE[zone].filter((x) => !state.goals.claimed.includes(x.id) && goalProgress(state, x).done) : [];
+    this.badge.hidden = won.length === 0;
+    this.badge.textContent = won.length;
 
-    // Marcador: el primer objetivo (o el primero que ya se puede cobrar). Con todas las zonas
-    // completas y sin objetivos aquí, el segundo final: todas las estaciones al nivel 100.
+    // Marcador: el primero que ya se puede cobrar (v4.6.1: aunque no esté entre los primeros de la lista, para
+    // cobrarlo desde afuera sin entrar al panel) o, si no hay, el primer objetivo. Con todas las zonas completas y sin
+    // objetivos aquí, el segundo final: todas las estaciones al nivel 100.
+    const first = ready.find((x) => !x.final) ?? ready[0];
     const i = Math.max(0, progress.findIndex((p) => p.done));
-    const g = goals[i];
+    const g = first ?? goals[i];
+    const gProgress = first ? goalProgress(state, first) : progress[i];
     // (v3.12: con la última zona de la región, no solo el Pueblo: en Santander no salía.)
     const finished = Boolean(state.zones[finalZone(state)]?.complete) && !regionOf(state).wip;
     // Con el multiplicador al máximo (v3.68.2) la barra ya no ofrece volver a empezar: solo lo dice; se
@@ -69,7 +75,7 @@ export class GoalsView {
     const atMax = (state.legacy?.resets ?? 0) >= MAX_LEGACY_RESETS;
     const master = !g && finished ? (atMax ? maxCard(state) : masteryCard(state, true)) : null;
     this.tracker.hidden = !g && !master;
-    const trackerHtml = g ? goalCard(g, progress[i], true) : master;
+    const trackerHtml = g ? goalCard(g, gProgress, true) : master;
     if (trackerHtml && trackerHtml !== this.trackerHtml) {
       this.tracker.innerHTML = this.trackerHtml = trackerHtml;
       this.trackerFit = false;
