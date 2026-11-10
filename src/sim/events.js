@@ -64,6 +64,8 @@ export const nextRound = (state, zoneId) => (eventsOf(state).count[zoneId] ?? 0)
 // aunque tras reiniciar todavía no se hayan abierto: ya se jugaron.
 const open = (state, zoneId) => zoneId in state.zones && (state.regionDone || Boolean(state.zones[zoneId].unlocked));
 const ready = (state, def) => open(state, def.zone) && (state.regionDone || def.stations.every((id) => state.stations[id]));
+// Un evento con `after` (v4.6.1: la Gran Feria de Bogotá) solo sale cuando ya se ganó medalla en esos otros.
+export const afterDone = (root, def) => !def.after || def.after.every((id) => root.profile?.medals?.[id]?.best);
 
 // La partida de la región de una zona, a partir de la principal (root). Con la partida de una región en
 // vez de la principal, solo sus propias zonas.
@@ -101,7 +103,7 @@ export function refillSlots(root) {
     const tier = (def, last) => (last === -Infinity ? 0 : medals[def.id]?.best === 'gold' ? 2 : 1);
     const next = EVENTS.filter((def) => !busy.has(eventKey(def)) && !regions.has(REGION_OF_ZONE[def.zone]))
       .map((def) => ({ def, owner: ownerOf(root, eventKey(def)) }))
-      .filter(({ def, owner }) => owner && ready(owner, def))
+      .filter(({ def, owner }) => owner && ready(owner, def) && afterDone(root, def))
       .map(({ def, owner }, k) => ({ def, k, last: eventsOf(owner).last[eventKey(def)] ?? -Infinity }))
       .map((x) => ({ ...x, tier: tier(x.def, x.last) }))
       .sort((x, y) => x.tier - y.tier || x.last - y.last || x.k - y.k)[0];
@@ -127,6 +129,7 @@ export function eventStatus(root, zoneId) {
   if (!state || !open(state, def.zone)) return null;
   const board = eventsOf(state).boards[zoneId];
   if (board) return { kind: board.event.done ? 'won' : 'active', def, round: boardRound(board), board };
+  if (!afterDone(root, def)) return { kind: 'locked', def, round: nextRound(state, zoneId), after: true };
   if (!ready(state, def)) return { kind: 'locked', def, round: nextRound(state, zoneId) };
   if (eventsOf(root).slots.some((x) => x?.zone === zoneId)) return { kind: 'available', def, round: nextRound(state, zoneId) };
   return { kind: 'waiting', def, round: nextRound(state, zoneId), nextAt: nextSlotAt(root) };

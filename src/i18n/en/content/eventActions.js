@@ -182,4 +182,7 @@ export default {
   paro_camionetas: ['Vans on the back road', 'Some vans get through on the back road: a quarter of the trout arrive.'],
   paro_turnos: ['Passing in turns', 'Cargo is let through in turns: 60 % of the trout arrive.'],
   paro_fin: ['End of the strike', 'The strike is over: all the trout arrive again.'],
+  gran_feria_carteles: ['Posters all over the city', 'More people come to the fair: everything sells for 20 % more.'],
+  gran_feria_radio: ['The fair on the radio', 'They announce it all over the country: everything sells for 50 % more than at the start.'],
+  gran_feria_tele: ['The fair on television', 'The whole country wants to come: everything sells for twice the usual price.'],
 };

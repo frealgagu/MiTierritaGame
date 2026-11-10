@@ -69,6 +69,7 @@ export class EventsView {
       const obj = st.board ? boardObjective(st.board) : eventObjective(def);
       const title = `<h3><span>${def.icon} ${def.name} · ${zone.icon} ${zone.name}</span><span>${best ? MEDALS[best].icon : ''}</span></h3>`;
       // Los que esperan (sin cupo o sin todas sus estaciones), en una línea (v3.7).
+      if (st.kind === 'locked' && st.after) return `<div class="event-card locked">${title}<p>${t('🔒 Sale cuando ganes medalla en los otros eventos de {zone}.', { zone: zone.name })}</p></div>`;
       if (st.kind === 'locked') return `<div class="event-card locked">${title}<p>${t('🔒 Sale cuando construyas todas las estaciones de {zone}.', { zone: zone.name })}</p></div>`;
       if (st.kind === 'waiting') {
         const when = st.nextAt === null ? t('cuando termines uno de los dos eventos y pasen 2 años') : t('en {time} se libera un cupo (los dos eventos nunca son de la misma región)', { time: formatDuration(st.nextAt - clockOf(s)) });

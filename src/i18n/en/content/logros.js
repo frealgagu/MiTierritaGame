@@ -116,4 +116,5 @@ export default {
   bg_oro: ['Golden', 'Win gold in {n} different events'],
   bg_album: ['Full album', 'Fill {n} album pages'],
   bg_ciencia: ['Engineer', 'Buy {n} upgrades in one game'],
+  bg_gran_feria: ['The country’s fair', 'Win a medal at the Great Fair: bronze, silver and gold'],
 };

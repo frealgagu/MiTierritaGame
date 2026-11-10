@@ -59,6 +59,9 @@ export function metric(state, name, profile = profileOf(state)) {
       return medals.filter((m) => m.best).length;
     case 'eventsGold':
       return medals.filter((m) => m.best === 'gold').length;
+    // La mejor medalla de un evento (v4.6.1): 1 bronce, 2 plata, 3 oro.
+    case 'eventRank':
+      return ['bronze', 'silver', 'gold'].indexOf(profile.medals[product]?.best) + 1;
     case 'pages':
       return albumOf(region).filter((pg) => pageDone(profile, pg.id)).length;
     case 'research':

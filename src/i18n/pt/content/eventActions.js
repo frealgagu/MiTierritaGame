@@ -182,4 +182,7 @@ export default {
   paro_camionetas: ['Caminhonetes pela via alternativa', 'Algumas caminhonetes passam pela via alternativa: chega um quarto das trutas.'],
   paro_turnos: ['Passagem por turnos', 'Deixam a carga passar por turnos: chega 60 % das trutas.'],
   paro_fin: ['Fim da greve', 'A greve acabou: as trutas voltam a chegar todas.'],
+  gran_feria_carteles: ['Cartazes por toda a cidade', 'Vem mais gente à feira: tudo se vende 20 % mais caro.'],
+  gran_feria_radio: ['A feira no rádio', 'Anunciam no país inteiro: tudo se vende 50 % mais caro que no começo.'],
+  gran_feria_tele: ['A feira na televisão', 'O país inteiro quer vir: tudo se vende pelo dobro do normal.'],
 };
