@@ -1277,7 +1277,7 @@ export const EVENTS = [
     ],
     objective: { type: 'ramas', kind: 'produced', items: { canasta_plaza: 1200, desayuno_plaza: 450 }, medals: [945, 1245] },
   },
-  // El séptimo de Bogotá (v4.6.1): la Gran Feria, con toda la red. Solo se abre cuando ya se ganó medalla en los otros
+  // El séptimo de Bogotá (v4.7): la Gran Feria, con toda la red. Solo se abre cuando ya se ganó medalla en los otros
   // seis (`after`). No frena nada: sus compras suben el precio de todo lo que se vende en el tablero, por la demanda.
   {
     id: 'gran_feria_bog',

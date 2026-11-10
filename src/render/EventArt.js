@@ -1827,7 +1827,7 @@ const ART = {
     truckScene(art, stage, zone, 'trucha_ahumada', 'paro');
   },
 
-  // La Gran Feria (v4.6.1): junto al Recinto, los puestos con toldo de los colores de la bandera (uno por compra), las
+  // La Gran Feria (v4.7): junto al Recinto, los puestos con toldo de los colores de la bandera (uno por compra), las
   // banderitas y la fila de gente que crece con la demanda.
   gran_feria_bog(art, stage, zone) {
     const a = areaOf(zone, 'gran_feria');

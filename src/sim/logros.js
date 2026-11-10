@@ -59,7 +59,7 @@ export function metric(state, name, profile = profileOf(state)) {
       return medals.filter((m) => m.best).length;
     case 'eventsGold':
       return medals.filter((m) => m.best === 'gold').length;
-    // Las medallas ganadas en un evento (v4.6.1: la Gran Feria de Bogotá).
+    // Las medallas ganadas en un evento (v4.7: la Gran Feria de Bogotá).
     case 'eventMedals':
       return Object.values(profile.medals[product]?.count ?? {}).reduce((a, b) => a + b, 0);
     case 'pages':

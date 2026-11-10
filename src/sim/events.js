@@ -64,7 +64,7 @@ export const nextRound = (state, zoneId) => (eventsOf(state).count[zoneId] ?? 0)
 // aunque tras reiniciar todavía no se hayan abierto: ya se jugaron.
 const open = (state, zoneId) => zoneId in state.zones && (state.regionDone || Boolean(state.zones[zoneId].unlocked));
 const ready = (state, def) => open(state, def.zone) && (state.regionDone || def.stations.every((id) => state.stations[id]));
-// Un evento con `after` (v4.6.1: la Gran Feria de Bogotá) solo sale cuando ya se ganó medalla en esos otros.
+// Un evento con `after` (v4.7: la Gran Feria de Bogotá) solo sale cuando ya se ganó medalla en esos otros.
 export const afterDone = (root, def) => !def.after || def.after.every((id) => root.profile?.medals?.[id]?.best);
 
 // La partida de la región de una zona, a partir de la principal (root). Con la partida de una región en
