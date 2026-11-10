@@ -159,7 +159,18 @@ export class ZonesView {
       );
       return group(head + rows.join('') + soon.join(''));
     }).join('');
-    if (html !== this.html) this.body.innerHTML = this.html = html;
+    // La zona especial (v4.7.1): un premio que llega más adelante. Se abre con el segundo final (todo al nivel 100) en
+    // cada región, o con la región ya reiniciada; aquí se dice cuántas van.
+    const regions = REGIONS.filter((r) => !r.hidden && !r.wip);
+    const ready = regions.filter((r) => {
+      const st = regionState(root, r.id);
+      return st && (st.mastered || (st.legacy?.resets ?? 0) > 0);
+    }).length;
+    const special = group(
+      `<div class="research locked"><span class="research-icon">⭐</span><span class="research-text"><b>${t('Zona especial')}</b><br><small>${t('Se abre cuando logres el segundo final (todo al nivel 100) en cada región, o la hayas reiniciado: {n} de {total}.', { n: ready, total: regions.length })}</small></span></div>`,
+    );
+    const all = html + special;
+    if (all !== this.html) this.body.innerHTML = this.html = all;
   }
 }
 

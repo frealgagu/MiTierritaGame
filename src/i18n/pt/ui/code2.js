@@ -161,4 +161,6 @@ export default {
   'Acercar': 'Aproximar',
   'Alejar': 'Afastar',
   '🔒 Sale cuando ganes medalla en los otros eventos de {zone}.': '🔒 Sai quando você ganhar medalha nos outros eventos de {zone}.',
+  'Zona especial': 'Zona especial',
+  'Se abre cuando logres el segundo final (todo al nivel 100) en cada región, o la hayas reiniciado: {n} de {total}.': 'Abre quando você alcançar o segundo final (tudo no nível 100) em cada região, ou já a tiver reiniciado: {n} de {total}.',
 };

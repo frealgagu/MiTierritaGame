@@ -1235,7 +1235,9 @@ const ZIPAQUIRA = [
 // abastecen. La lista va por los niveles de la red, del primero (lo barato, desde el comienzo) al centro, y termina en
 // la Gran Feria.
 const BOGOTA = [
-  { id: 'bg01', type: 'sold', product: 'cafe_capitalino', amount: 20, reward: 60 },
+  // (v4.7.1) Lo que otra estación de la red puede recibir se pide producido, no vendido: si una estación lo consume
+  // todo, venderlo no se cumpliría nunca (el café, las mañanas, los domingos, las subidas).
+  { id: 'bg01', type: 'produced', product: 'cafe_capitalino', amount: 20, reward: 60 },
   { id: 'bg02', type: 'unlock', station: 'despensa_zona_g', reward: 80 },
   { id: 'bg03', type: 'level', target: 'tostadero_chorro', level: 5, reward: 100 },
   { id: 'bg04', type: 'unlock', station: 'toldo_tejidos', reward: 160 },
@@ -1268,19 +1270,19 @@ const BOGOTA = [
   { id: 'bg31', type: 'produced', product: 'caldo_costilla', amount: 500, reward: 1200000 },
   { id: 'bg32', type: 'unlock', station: 'toldo_mascaras', reward: 1600000 },
   { id: 'bg33', type: 'unlock', station: 'plaza_paloquemao', reward: 2400000 },
-  { id: 'bg34', type: 'sold', product: 'manana_paloquemao', amount: 50, reward: 3200000 },
+  { id: 'bg34', type: 'produced', product: 'manana_paloquemao', amount: 50, reward: 3200000 },
   { id: 'bg35', type: 'allLevels', zone: 'bogota', level: 25, reward: 4000000 },
   { id: 'bg36', type: 'unlock', station: 'casa_colonial', reward: 12000000 },
   { id: 'bg37', type: 'unlock', station: 'restaurante_zona_g', reward: 24000000 },
   { id: 'bg38', type: 'produced', product: 'cafe_molido', amount: 2000, reward: 32000000 },
   { id: 'bg39', type: 'unlock', station: 'mercado_pulgas', reward: 48000000 },
-  { id: 'bg40', type: 'sold', product: 'domingo_usaquen', amount: 100, reward: 80000000 },
+  { id: 'bg40', type: 'produced', product: 'domingo_usaquen', amount: 100, reward: 80000000 },
   { id: 'bg41', type: 'research', research: 'barrio_patrimonio', reward: 120000000 },
   { id: 'bg42', type: 'income', zone: 'bogota', perSecond: 100000, reward: 160000000 },
   { id: 'bg43', type: 'unlock', station: 'hotel_capital', reward: 320000000 },
   { id: 'bg44', type: 'produced', product: 'noche_bogota', amount: 100, reward: 600000000 },
   { id: 'bg45', type: 'unlock', station: 'funicular_monserrate', reward: 1000000000 },
-  { id: 'bg46', type: 'sold', product: 'subida_monserrate', amount: 200, reward: 1600000000 },
+  { id: 'bg46', type: 'produced', product: 'subida_monserrate', amount: 200, reward: 1600000000 },
   { id: 'bg47', type: 'unlock', station: 'pabellon_regiones', reward: 2400000000 },
   { id: 'bg48', type: 'produced', product: 'pabellon_colombia', amount: 100, reward: 3600000000 },
   { id: 'bg49', type: 'allLevels', zone: 'bogota', level: 50, reward: 4800000000 },

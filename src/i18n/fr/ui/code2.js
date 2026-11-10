@@ -161,4 +161,6 @@ export default {
   'Acercar': 'Zoomer',
   'Alejar': 'Dézoomer',
   '🔒 Sale cuando ganes medalla en los otros eventos de {zone}.': '🔒 Arrive quand tu auras gagné une médaille dans les autres événements de {zone}.',
+  'Zona especial': 'Zone spéciale',
+  'Se abre cuando logres el segundo final (todo al nivel 100) en cada región, o la hayas reiniciado: {n} de {total}.': 'Elle s’ouvre quand tu atteins la seconde fin (tout au niveau 100) dans chaque région, ou que tu l’as recommencée : {n} sur {total}.',
 };
