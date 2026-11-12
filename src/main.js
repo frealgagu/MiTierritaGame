@@ -198,6 +198,9 @@ async function start() {
   showZone(view.zone);
   hud = new HUD(active, select, () => scene.dayNight.hour, getZone);
   chain = new ChainView(active, select, getZone, () => game.state);
+  // Mientras se mueve la cadena (v4.7.2), el mapa de atrás (casi tapado) y la simulación van a 10 cuadros por segundo:
+  // así el desplazamiento no se traba en los teléfonos.
+  chain.onMoving = (on) => (app.ticker.maxFPS = on ? 10 : 0);
   money = new MoneyView(active, getZone);
   chatter = new Chatter(active, getZone, () => game.state);
   goals = new GoalsView(active, getZone);

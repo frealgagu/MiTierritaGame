@@ -59,7 +59,7 @@ export function showVictory(state, zoneId, onGo, opened = [], open = null) {
       onGo(next);
     };
   } else {
-    soon.innerHTML = t('¡Completaste todas las zonas que hay por ahora! Las que siguen llegan en las próximas versiones.');
+    soon.innerHTML = t('¡Completaste todas las zonas del país! Sigue jugando: el segundo final te espera, con todo al nivel 100.');
     go.hidden = true;
   }
   stay.textContent = next ? t('Quedarme aquí') : t('Seguir jugando');

@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v4.7.2 — Construir desde la cadena
+- **Construir desde la cadena ya no sale en blanco:** las estaciones de Bogotá que solo reciben de tractomula (como la Despensa de la Zona G) dejaban vacío su panel de construir.
+- **La cadena de Bogotá se mueve más suave:** mientras la mueves, las líneas se quedan quietas y el mapa de atrás descansa.
+- **Al completar todas las zonas**, el mensaje ya no dice que vienen más: ahora invita a buscar el segundo final.
+
 ## v4.7.1 — Solo lo del evento
 - **En los eventos de Bogotá solo aparecen sus estaciones:** las demás de la red ya no se ven en el mapa ni en la cadena, ni se sugiere construirlas.
 - **Los objetivos de Bogotá que pedían vender café, mañanas, domingos o subidas ahora piden producirlos:** si otra estación los recibía todos, no se cumplían nunca.

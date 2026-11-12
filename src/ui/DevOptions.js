@@ -1,5 +1,6 @@
 import { toast } from './toast.js';
 import { setCredit } from '../sim/upgrades.js';
+import { setFastEvents } from '../sim/events.js';
 import { decimal, formatMult } from '../core/format.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
 import { MAX_LEGACY_RESETS } from '../sim/modifiers.js';
@@ -60,6 +61,17 @@ export function bindDevOptions(game, getActive = () => game) {
     setCredit(prefs.credit);
     store(prefs);
     toast(prefs.credit ? t('💸 Saldo negativo permitido: compra lo que quieras') : t('💰 Solo se compra con lo que hay'));
+  });
+
+  // Eventos seguidos (v4.7.2): para probarlos todos sin esperar los 2 años de cada cupo.
+  const events = document.getElementById('dev-events');
+  events.checked = prefs.visible && Boolean(prefs.events);
+  setFastEvents(events.checked, game.state);
+  events.addEventListener('change', () => {
+    prefs.events = events.checked;
+    setFastEvents(prefs.events, game.state);
+    store(prefs);
+    toast(prefs.events ? t('⏱️ Eventos seguidos: cada cupo se libera al segundo') : t('📅 Eventos con su espera normal de 2 años'));
   });
 
   const speed = () => clampSpeed(String(input.value).replace(',', '.'));
@@ -132,6 +144,8 @@ export function bindDevOptions(game, getActive = () => game) {
     box.hidden = true;
     credit.checked = prefs.credit = false;
     setCredit(false);
+    events.checked = prefs.events = false;
+    setFastEvents(false);
     store(prefs);
     setScale(1);
   });
