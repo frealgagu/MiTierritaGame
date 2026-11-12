@@ -116,4 +116,5 @@ export default {
   'Viajes entre zonas': 'Travel between zones',
   '🗺️ Con el viaje': '🗺️ Show the trip',
   '⚡ Directo': '⚡ Direct',
+  'Eventos seguidos: al terminar uno, su cupo se libera al segundo (no a los 2 años)': 'Back-to-back events: when one ends, its slot frees up after one second (not after 2 years)',
 };

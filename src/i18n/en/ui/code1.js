@@ -144,4 +144,6 @@ export default {
   '🛠️ Opciones de desarrollador activadas': '🛠️ Developer options turned on',
   'Abrir el tablero': 'Open the board',
   'Recoger el tablero': 'Collapse the board',
+  '⏱️ Eventos seguidos: cada cupo se libera al segundo': '⏱️ Back-to-back events: each slot frees up after one second',
+  '📅 Eventos con su espera normal de 2 años': '📅 Events with their normal 2-year wait',
 };

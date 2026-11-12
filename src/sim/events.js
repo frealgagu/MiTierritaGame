@@ -165,11 +165,19 @@ export function startEvent(root, zoneId) {
   return (eventsOf(ownerOf(root, zoneId)).boards[zoneId] = createEventState(st.def, st.round));
 }
 
+// Opción de desarrollador (v4.7.2): «eventos seguidos», el cupo se libera al segundo en vez de a los 2 años.
+let fastEvents = false;
+export function setFastEvents(on, root = null) {
+  fastEvents = Boolean(on);
+  // Los cupos que ya esperaban se liberan enseguida.
+  if (fastEvents && root) for (const x of eventsOf(root).slots) if (x?.until !== undefined) x.until = Math.min(x.until, clockOf(root) + 1);
+}
+
 // El cupo del evento de la zona queda vacío 2 años (el de un tablero sin cupo no ocupa ninguno).
 function coolDown(root, zoneId) {
   const slots = eventsOf(root).slots;
   const k = slots.findIndex((x) => x?.zone === zoneId);
-  if (k >= 0) slots[k] = { until: clockOf(root) + EVENT_COOLDOWN };
+  if (k >= 0) slots[k] = { until: clockOf(root) + (fastEvents ? 1 : EVENT_COOLDOWN) };
 }
 
 // 🔄 Reiniciar (v3.30): el mismo reto desde cero (monedas, niveles, compras, reloj y la medalla asegurada).

@@ -179,8 +179,10 @@ export class StationPanel {
     this.info = null;
     this.variant = undefined;
     const [outId] = Object.keys(def.out);
-    const [inId] = Object.keys(def.in);
-    const gain = PRODUCTS[outId].value * def.out[outId] - PRODUCTS[inId].value * def.in[inId];
+    // (v4.7.2) Una estación sin entrada de otra estación (en Bogotá, las que solo reciben de tractomula) no tiene `in`:
+    // sin esto el panel quedaba en blanco.
+    const [inId] = Object.keys(def.in ?? {});
+    const gain = PRODUCTS[outId].value * def.out[outId] - (inId ? PRODUCTS[inId].value * def.in[inId] : 0);
     const rows = def.side
       ? `<div class="stat"><span>${t('Produce')}</span><b>${PRODUCTS[outId].name}</b></div>
          <div class="stat"><span>${t('Efecto')}</span><b class="next">${t('+{pct} a las ventas de la Finca', { pct: pct(COMPOST_VALUE) })}</b></div>
@@ -192,7 +194,7 @@ export class StationPanel {
       icon: def.icon,
       title: def.name,
       subtitle: def.side ? t('Rama opcional: aprovecha la pulpa del Beneficiadero') : t('Siguiente paso de la cadena'),
-      recipe: `${recipe(def.in)} <span>➜</span> ${recipe(def.out)}`,
+      recipe: `${[...(inId ? [recipe(def.in)] : []), ...(def.joins ?? []).map((j) => `${j.perCycle} ${PRODUCTS[j.product].icon}`), ...(def.imports ?? []).map((imp) => `${imp.perCycle} ${PRODUCTS[imp.product].icon}${ROUTES_BY_ID[imp.route].icon}`)].join(' + ')} <span>➜</span> ${recipe(def.out)}`,
       rows,
       button: `<button class="btn buy" data-unlock><span>${t('Construir')}</span><span data-ref="unlockCost"></span></button>`,
     });

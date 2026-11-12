@@ -116,4 +116,5 @@ export default {
   'Viajes entre zonas': 'Viagens entre zonas',
   '🗺️ Con el viaje': '🗺️ Com a viagem',
   '⚡ Directo': '⚡ Direto',
+  'Eventos seguidos: al terminar uno, su cupo se libera al segundo (no a los 2 años)': 'Eventos seguidos: ao terminar um, a vaga se libera em um segundo (não em 2 anos)',
 };

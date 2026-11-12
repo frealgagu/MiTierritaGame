@@ -98,7 +98,7 @@ export default {
   'Tu región <b>{region}</b> sigue abierta y produciendo.': 'Ta région <b>{region}</b> reste ouverte et continue de produire.',
   'Ir a {zone}': 'Aller à {zone}',
   'Se abrió la <b>Zona {n} · {zone}</b> {icon}': 'La <b>Zone {n} · {zone}</b> {icon} est ouverte',
-  '¡Completaste todas las zonas que hay por ahora! Las que siguen llegan en las próximas versiones.': 'Tu as terminé toutes les zones disponibles pour l’instant ! Les suivantes arrivent dans les prochaines versions.',
+  '¡Completaste todas las zonas del país! Sigue jugando: el segundo final te espera, con todo al nivel 100.': 'Tu as terminé toutes les zones du pays ! Continue à jouer : la seconde fin t’attend, avec tout au niveau 100.',
   'Quedarme aquí': 'Rester ici',
   'Seguir jugando': 'Continuer à jouer',
   '🗺️ Puedes ir a {region} cuando quieras con el botón de zonas.': '🗺️ Tu peux aller à {region} quand tu veux avec le bouton des zones.',

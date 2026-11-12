@@ -60,6 +60,7 @@ export class ChainView {
       const dy = e.clientY - d.y;
       if (!d.moved && Math.hypot(dx, dy) < 6) return;
       d.moved = true;
+      this.setMoving(true);
       if (d.sc) d.sc.scrollLeft = d.left - dx;
       this.body.scrollTop = d.top - dy;
     });
@@ -67,15 +68,39 @@ export class ChainView {
       // Lo que se suelta después de arrastrar no cuenta como toque.
       this.dragged = Boolean(this.drag?.moved);
       this.drag = null;
+      if (this.dragged) setTimeout(() => !this.drag && !this.touching && this.setMoving(false), 600);
       setTimeout(() => (this.dragged = false), 0);
     });
     // Mientras se desliza con el dedo (v4.7) no se redibuja: en Bogotá, rehacer la cadena entera a cada cuadro trababa
     // el desplazamiento (la caja de lado no avisa con burbuja: se escucha en la fase de captura).
+    // (v4.7.2) Y mientras se mueve, las líneas se quedan quietas: en Bogotá son un centenar, y dibujar su animación en cada
+    // cuadro era lo que trababa el desplazamiento. Vuelven a moverse un momento después de soltar.
     this.scrolledAt = 0;
-    this.body.addEventListener('scroll', () => (this.scrolledAt = performance.now()), { capture: true, passive: true });
-    this.body.addEventListener('touchstart', () => (this.touching = true), { passive: true });
-    window.addEventListener('touchend', () => (this.touching = false), { passive: true });
-    window.addEventListener('touchcancel', () => (this.touching = false), { passive: true });
+    this.onMoving = null; // main.js: mientras se mueve, el mapa de atrás se dibuja menos veces por segundo
+    this.setMoving = (on) => {
+      if (on === this.body.classList.contains('dg-moving')) return;
+      this.body.classList.toggle('dg-moving', on);
+      this.onMoving?.(on);
+    };
+    const moving = () => {
+      this.setMoving(true);
+      clearTimeout(this.stillTimer);
+      this.stillTimer = setTimeout(() => !this.touching && !this.drag && this.setMoving(false), 600);
+    };
+    this.body.addEventListener('scroll', () => {
+      this.scrolledAt = performance.now();
+      moving();
+    }, { capture: true, passive: true });
+    this.body.addEventListener('touchstart', () => {
+      this.touching = true;
+      moving();
+    }, { passive: true });
+    const release = () => {
+      this.touching = false;
+      moving();
+    };
+    window.addEventListener('touchend', release, { passive: true });
+    window.addEventListener('touchcancel', release, { passive: true });
     this.el.addEventListener('click', (e) => {
       if (this.dragged) return;
       if (e.target === this.el) return this.close();
@@ -116,6 +141,8 @@ export class ChainView {
 
   close() {
     this.el.hidden = true;
+    clearTimeout(this.stillTimer);
+    this.setMoving(false);
   }
 
   update() {

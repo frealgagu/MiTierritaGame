@@ -144,4 +144,6 @@ export default {
   '🛠️ Opciones de desarrollador activadas': '🛠️ Opções de desenvolvedor ativadas',
   'Abrir el tablero': 'Abrir o painel',
   'Recoger el tablero': 'Recolher o painel',
+  '⏱️ Eventos seguidos: cada cupo se libera al segundo': '⏱️ Eventos seguidos: cada vaga se libera em um segundo',
+  '📅 Eventos con su espera normal de 2 años': '📅 Eventos com a espera normal de 2 anos',
 };

@@ -144,4 +144,6 @@ export default {
   '🛠️ Opciones de desarrollador activadas': '🛠️ Options pour les développeurs activées',
   'Abrir el tablero': 'Ouvrir le tableau',
   'Recoger el tablero': 'Replier le tableau',
+  '⏱️ Eventos seguidos: cada cupo se libera al segundo': '⏱️ Événements à la suite : chaque place se libère au bout d’une seconde',
+  '📅 Eventos con su espera normal de 2 años': '📅 Événements avec leur attente normale de 2 ans',
 };

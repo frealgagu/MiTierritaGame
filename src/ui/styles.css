@@ -340,6 +340,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .dg-link.hot, .dg-hole.hot { animation-duration: 1.8s; }
 .dg-link.locked { stroke: #b9ad9a; }
 .dg-link.locked, .dg-hole.locked { animation: none; }
+/* Mientras se mueve la cadena (v4.7.2), las líneas quietas: pintar su animación en cada cuadro la trababa. */
+.dg-moving .dg-link, .dg-moving .dg-hole { animation-play-state: paused; }
 /* Lo que pasa por cada eslabón: ícono y número, sobre la cadena. */
 .dg-flow { position: absolute; transform: translate(-50%, -50%); padding: 0 6px; height: 18px; line-height: 16px; border: 1.5px solid #8b5a2b; border-radius: 999px; background: #fffaf0; font-size: 0.68rem; font-weight: 700; white-space: nowrap; /* se puede tocar para ver el nombre del producto (v3.66) */ font-variant-numeric: tabular-nums; }
 .dg-flow.hot { border-color: var(--red); color: #8f1d2c; background: #fde2e4; }
