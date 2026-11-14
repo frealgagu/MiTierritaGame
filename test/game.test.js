@@ -11,36 +11,36 @@ function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-test('las cerezas viajan a la bodega y el Willys las vende', () => {
+test('the cherries travel to the warehouse and the Willys sells them', () => {
   const game = new Game();
   const events = [];
   game.bus.on('sold', (e) => events.push(e));
   run(game, 60);
-  assert.ok(events.length > 0, 'debió haber ventas');
+  assert.ok(events.length > 0, 'there should have been sales');
   assert.ok(game.state.coins > 0);
   // At the start haulers bottleneck: one mule to the warehouse, the longest trip on the map.
-  assert.ok(game.state.coins >= 5 && game.state.coins <= 30, `monedas: ${game.state.coins}`);
+  assert.ok(game.state.coins >= 5 && game.state.coins <= 30, `coins: ${game.state.coins}`);
 });
 
-test('las opciones de desarrollador aceleran el tiempo de juego', () => {
+test('developer options speed up game time', () => {
   const game = new Game();
   game.timeScale = 10;
   for (let i = 0; i < 60; i++) game.update(1 / 60);
-  assert.ok(Math.abs(game.state.playTime - 10) < 0.11, `tiempo jugado: ${game.state.playTime}`);
+  assert.ok(Math.abs(game.state.playTime - 10) < 0.11, `time played: ${game.state.playTime}`);
 });
 
-test('con saldo negativo permitido se compra sin monedas y el saldo queda en deuda', () => {
+test('with a negative balance allowed you buy without coins and the balance is left in debt', () => {
   const game = new Game();
   const s = game.state;
-  assert.equal(game.buy('farm', 1), false, 'sin el ajuste, no alcanza');
+  assert.equal(game.buy('farm', 1), false, 'without the setting, it is not enough');
   setCredit(true);
   try {
     assert.ok(game.unlock('wetmill'));
     assert.ok(game.buy('farm', 'max'));
-    assert.equal(s.stations.farm.level, 100, '«máx» llega al tope');
+    assert.equal(s.stations.farm.level, 100, '«max» reaches the top');
     assert.ok(game.buy('farm:transport', 'max'));
-    assert.ok(game.research('abono'), 'investiga sin monedas');
-    assert.ok(s.coins < 0, `saldo: ${s.coins}`);
+    assert.ok(game.research('abono'), 'researches without coins');
+    assert.ok(s.coins < 0, `balance: ${s.coins}`);
   } finally {
     setCredit(false);
   }
@@ -48,7 +48,7 @@ test('con saldo negativo permitido se compra sin monedas y el saldo queda en deu
   assert.equal(game.buy('wetmill', 1), false);
 });
 
-test('mejorar el cafetal cuesta monedas y sube el nivel', () => {
+test('upgrading the coffee field costs coins and raises the level', () => {
   const game = new Game();
   game.state.coins = 100;
   assert.ok(game.buy('farm', 1));
@@ -58,21 +58,21 @@ test('mejorar el cafetal cuesta monedas y sube el nivel', () => {
   assert.ok(game.state.coins < game.quote('farm', 1).cost);
 });
 
-test('si el despacho no da abasto, la bodega se llena y el cafetal se detiene', () => {
+test('if dispatch cannot keep up, the warehouse fills and the coffee field stops', () => {
   const game = new Game();
   game.state.stations.farm.level = 60; // produces much more than a level 1 Willys can sell
   run(game, 120);
   assert.equal(game.state.stations.farm.status, 'blocked');
 });
 
-test('el progreso sin conexión genera monedas y respeta el tope', () => {
+test('offline progress makes coins and respects the cap', () => {
   const game = new Game();
   const { seconds, coins } = game.catchUp(10 * 3600);
   assert.equal(seconds, 2 * 3600);
   assert.ok(coins > 0);
 });
 
-test('al cruzar un hito se anuncia el hito alcanzado', () => {
+test('crossing a milestone announces the milestone reached', () => {
   const game = new Game();
   game.state.coins = 1e6;
   const events = [];
@@ -83,7 +83,7 @@ test('al cruzar un hito se anuncia el hito alcanzado', () => {
   assert.equal(events[1].milestone, null);
 });
 
-test('una partida de la v0.1 se carga en la v0.2', async () => {
+test('a v0.1 save loads in v0.2', async () => {
   const store = new Map();
   globalThis.localStorage = { getItem: (k) => store.get(k) ?? null, setItem: (k, v) => store.set(k, v), removeItem: (k) => store.delete(k) };
   const { loadGame } = await import('../src/core/SaveSystem.js');
@@ -103,7 +103,7 @@ test('una partida de la v0.1 se carga en la v0.2', async () => {
   assert.ok(game.state.coins > 12);
 });
 
-test('una partida de la v0.2 se carga en la v0.3 con arrieros', async () => {
+test('a v0.2 save loads in v0.3 with mule drivers', async () => {
   const { loadGame } = await import('../src/core/SaveSystem.js');
   const v2 = {
     version: 2, coins: 100, totalEarned: 300, playTime: 500, savedAt: Date.now(), nextId: 9,
@@ -120,7 +120,7 @@ test('una partida de la v0.2 se carga en la v0.3 con arrieros', async () => {
   assert.ok(game.state.stations.wetmill.input > 0 || game.state.stats.produced.washed > 0);
 });
 
-test('mucho tiempo sin conexión (p. ej. acelerado) se extrapola sin perder ganancias', () => {
+test('a long time offline (e.g. sped up) is extrapolated without losing earnings', () => {
   const setup = () => {
     const g = new Game();
     g.state.coins = 1e6;
@@ -141,9 +141,9 @@ test('mucho tiempo sin conexión (p. ej. acelerado) se extrapola sin perder gana
   const r = offline.catchUp(6 * 3600, 6 * 3600);
   assert.equal(r.seconds, 6 * 3600);
   const ratio = offline.state.coins / live.state.coins;
-  assert.ok(ratio > 0.95 && ratio < 1.05, `rápida / paso a paso = ${ratio.toFixed(3)}`);
+  assert.ok(ratio > 0.95 && ratio < 1.05, `fast / step by step = ${ratio.toFixed(3)}`);
   assert.ok(Math.abs(offline.state.playTime - live.state.playTime) < 1e-6);
   const sold = offline.state.stats.sold.green / live.state.stats.sold.green;
-  assert.ok(sold > 0.95 && sold < 1.05, `ventas para los objetivos: ${sold.toFixed(3)}`);
+  assert.ok(sold > 0.95 && sold < 1.05, `sales for the objectives: ${sold.toFixed(3)}`);
   assert.ok(performance.now() - t0 < 5000);
 });

@@ -53,7 +53,7 @@ function voiceOf(style, voice, ev) {
     case 'manguareRoll': return { name: 'Manguaré', perc: 76 };
     case 'bongoHigh': return { name: 'Bongó', perc: 60 };
     case 'bongoLow': return { name: 'Bongó', perc: 61 };
-    default: throw new Error(`voz sin pista: ${voice}`);
+    default: throw new Error(`voice without a track: ${voice}`);
   }
 }
 
@@ -176,7 +176,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       writeFileSync(join(OUT, `${name}.mid`), midiFile(region));
       const { mixed, loops, seconds, info } = mp3(region, tmp);
       const peak = Number(/max_volume: (-?[\d.]+) dB/.exec(info)?.[1]);
-      if (!Number.isFinite(peak)) throw new Error(`sin el pico de ${name}`);
+      if (!Number.isFinite(peak)) throw new Error(`no peak for ${name}`);
       encode(region, mixed, peak, join(OUT, `${name}.mp3`));
       console.log(`${name}: ${loops} vueltas, ${Math.round(seconds)} s`);
     }

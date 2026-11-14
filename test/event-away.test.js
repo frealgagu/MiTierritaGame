@@ -27,7 +27,7 @@ function exactMedalTime(g) {
   return g.state.event.time;
 }
 
-test('el reloj del evento llega hasta 999:59 y ahí se queda; el tablero sigue', () => {
+test('the event clock goes up to 999:59 and stays there; the board continues', () => {
   assert.equal(EVENT_CLOCK_MAX, 999 * 60 + 59);
   const g = board(0);
   g.state.playTime = EVENT_CLOCK_MAX + 500;
@@ -37,10 +37,10 @@ test('el reloj del evento llega hasta 999:59 y ahí se queda; el tablero sigue',
   const n = sum(before);
   g.update(1);
   g.update(1);
-  assert.ok(sum(g.state.stats.produced) >= n, 'sigue produciendo');
+  assert.ok(sum(g.state.stats.produced) >= n, 'it keeps producing');
 });
 
-test('mientras está fuera, el reloj que marcaría', () => {
+test('while away, the clock it would show', () => {
   const g = board(0);
   const root = { playTime: 1000 };
   assert.equal(awaySeconds(g.state, root), 0);
@@ -52,9 +52,9 @@ test('mientras está fuera, el reloj que marcaría', () => {
   assert.equal(boardClockNow(g.state, root), EVENT_CLOCK_MAX);
 });
 
-test('al volver, la medalla queda con el segundo en que se cumplió (simulado)', () => {
+test('on return, the medal keeps the second it was achieved (simulated)', () => {
   const exact = exactMedalTime(board(15));
-  assert.ok(exact < 1800, `se cumple dentro de lo simulado (${exact} s)`);
+  assert.ok(exact < 1800, `achieved within the simulated time (${exact} s)`);
   const g = board(15);
   const r = g.catchUpBoard(5000);
   assert.equal(r.secured, true);
@@ -62,18 +62,18 @@ test('al volver, la medalla queda con el segundo en que se cumplió (simulado)',
   assert.equal(g.state.playTime, 5000);
 });
 
-test('al volver, la medalla queda con el segundo en que se cumplió (sumado al ritmo medido)', () => {
+test('on return, the medal keeps the second it was achieved (added at the measured pace)', () => {
   const exact = exactMedalTime(board(0, 'turistas'));
-  assert.ok(exact > 1800, `se cumple después de lo simulado (${exact} s)`);
+  assert.ok(exact > 1800, `achieved after the simulated time (${exact} s)`);
   const g = board(0, 'turistas');
   const r = g.catchUpBoard(30000);
   assert.equal(r.secured, true);
   // Whatever falls after the simulated window is added at the measured rate: an estimate (within half a percent).
-  assert.ok(Math.abs(g.state.event.time - exact) <= Math.max(5, exact * 0.005), `${g.state.event.time} frente a ${exact}`);
+  assert.ok(Math.abs(g.state.event.time - exact) <= Math.max(5, exact * 0.005), `${g.state.event.time} versus ${exact}`);
   assert.equal(g.state.playTime, 30000);
 });
 
-test('más allá de 999:59, la medalla queda con 999:59', () => {
+test('beyond 999:59, the medal stays at 999:59', () => {
   const g = board(0);
   g.state.playTime = EVENT_CLOCK_MAX - 10;
   g.catchUpBoard(5000);

@@ -7,9 +7,9 @@ globalThis.document = { getElementById: () => el };
 mock.timers.enable({ apis: ['setTimeout', 'Date'] });
 const { toast, readingTime } = await import('../src/ui/toast.js');
 
-test('lo que dice una persona dura según lo largo; un aviso corto no lo borra y otro comentario espera', () => {
+test('what a person says lasts according to its length; a short notice does not erase it and another comment waits', () => {
   const long = '👴 Don Aurelio: ' + 'La Hornilla está esperando producto: hay que mejorar las estaciones anteriores.';
-  assert.ok(readingTime(long) > 9000, 'un comentario largo pasa de 9 s');
+  assert.ok(readingTime(long) > 9000, 'a long comment goes past 9 s');
   toast(long, 6000, { speech: true });
   assert.equal(el.textContent, long);
   mock.timers.tick(4000);
@@ -17,9 +17,9 @@ test('lo que dice una persona dura según lo largo; un aviso corto no lo borra y
   assert.equal(el.textContent, '🎯 ¡Objetivo cumplido!');
   toast('👴 Don Aurelio: otra cosa', 6000, { speech: true });
   mock.timers.tick(3000);
-  assert.equal(el.textContent, long, 'vuelve el comentario que se tapó');
+  assert.equal(el.textContent, long, 'the covered comment comes back');
   mock.timers.tick(readingTime(long) - 4000);
-  assert.equal(el.textContent, '👴 Don Aurelio: otra cosa', 'y luego el que esperaba');
+  assert.equal(el.textContent, '👴 Don Aurelio: otra cosa', 'and then the one that was waiting');
   el.onclick();
-  assert.equal(el.hidden, true, 'tocarlo lo cierra');
+  assert.equal(el.hidden, true, 'tapping it closes it');
 });

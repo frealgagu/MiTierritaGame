@@ -72,7 +72,7 @@ const html = `<!doctype html>
     <title>Música y sonidos · Encantos de Mi Tierrita</title>
     <meta name="description" content="La música y los efectos de sonido de Encantos de Mi Tierrita, en MP3 y MIDI." />
     <link rel="icon" href="../icons/icon-192.png" />
-    <!-- Generada con node tools/music-page.mjs: no editar a mano. -->
+    <!-- Generated with node tools/music-page.mjs: do not edit by hand. -->
     <style>
       :root { --ink: #3a2418; --paper: #fff8ec; --muted: #8a7462; --line: #e3d3b8; --bg: #e7eee6; --chip: #f3e6cf; --accent: #2e8b57; }
       @media (prefers-color-scheme: dark) {

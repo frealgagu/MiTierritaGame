@@ -16,38 +16,38 @@ function idle(def, limit) {
 }
 
 // All six event types (Tolima Grande's, one per zone): idle doesn't reach silver (v4.3.2).
-test('sin hacer nada no se gana la plata en un evento (v4.3.2)', () => {
+test('doing nothing does not win silver in an event (v4.3.2)', () => {
   for (const def of EVENTS.filter((e) => e.zone && ['achirales', 'cafe_huila', 'betania', 'lechoneria', 'chamba', 'neiva'].includes(e.zone))) {
-    assert.equal(idle(def, def.objective.medals[1]), null, `${def.id}: llega a la plata solo`);
+    assert.equal(idle(def, def.objective.medals[1]), null, `${def.id}: reaches silver on its own`);
   }
 });
 
 // Even when the road is blocked a trickle arrives: letting it run finishes with bronze (v4.3.2).
-test('sin hacer nada el evento de la vía tapada se termina, con bronce (v4.3.2)', () => {
+test('doing nothing the blocked road event ends, with bronze (v4.3.2)', () => {
   const def = EVENTS.find((e) => e.id === 'derrumbe_tolima');
   const t = idle(def, EVENT_CLOCK_MAX);
-  assert.ok(t !== null && t > def.objective.medals[1], `terminó en ${t}`);
+  assert.ok(t !== null && t > def.objective.medals[1], `it ended at ${t}`);
 });
 
 // Cundinamarca's (v4.4.8), with Tolima Grande's numbers: same behavior.
-test('Cundinamarca: sin hacer nada no se gana la plata, y el derrumbe se termina con bronce (v4.4.8)', () => {
+test('Cundinamarca: doing nothing does not win silver, and the landslide ends with bronze (v4.4.8)', () => {
   for (const def of EVENTS.filter((e) => ['flores', 'fresas', 'truchas', 'salinas', 'cocina', 'zipaquira'].includes(e.zone))) {
-    assert.equal(idle(def, def.objective.medals[1]), null, `${def.id}: llega a la plata solo`);
+    assert.equal(idle(def, def.objective.medals[1]), null, `${def.id}: reaches silver on its own`);
   }
   const def = EVENTS.find((e) => e.id === 'derrumbe_sabana');
   const t = idle(def, EVENT_CLOCK_MAX);
-  assert.ok(t !== null && t > def.objective.medals[1], `terminó en ${t}`);
+  assert.ok(t !== null && t > def.objective.medals[1], `it ended at ${t}`);
 });
 
 // Bogotá's (v4.5), several in the same zone: idle doesn't earn silver, and in ones where the tractomula doesn't
 // arrive (pico y placa, strike) a trickle still arrives, so letting them run finishes with bronze.
-test('Bogotá: sin hacer nada no se gana la plata, y los de la tractomula se terminan con bronce (v4.5)', () => {
+test('Bogotá: doing nothing does not win silver, and the truck ones end with bronze (v4.5)', () => {
   for (const def of EVENTS.filter((e) => e.zone === 'bogota')) {
-    assert.equal(idle(def, def.objective.medals[1]), null, `${def.id}: llega a la plata solo`);
+    assert.equal(idle(def, def.objective.medals[1]), null, `${def.id}: reaches silver on its own`);
   }
   for (const id of ['pico_placa', 'paro_camionero']) {
     const def = EVENTS.find((e) => e.id === id);
     const t = idle(def, EVENT_CLOCK_MAX);
-    assert.ok(t !== null && t > def.objective.medals[1], `${id}: terminó en ${t}`);
+    assert.ok(t !== null && t > def.objective.medals[1], `${id}: it ended at ${t}`);
   }
 });

@@ -79,4 +79,4 @@ fs.writeFileSync(
     .replace('%VERSION%', pkg.version)
     .replace('%DATA%', JSON.stringify(data).replace(/</g, '\\u003c')),
 );
-console.log(`${OUT}: ${regions.reduce((n, r) => n + r.zones.length, 0)} zonas, ${regions.reduce((n, r) => n + r.zones.reduce((k, z) => k + z.stations.length, 0), 0)} estaciones`);
+console.log(`${OUT}: ${regions.reduce((n, r) => n + r.zones.length, 0)} zones, ${regions.reduce((n, r) => n + r.zones.reduce((k, z) => k + z.stations.length, 0), 0)} stations`);

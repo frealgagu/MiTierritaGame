@@ -30,16 +30,16 @@ function run(region, zones, level, secs, routes = []) {
   return game;
 }
 
-test('la cadena sabe quién junta qué y de dónde le llega', () => {
+test('the chain knows who joins what and where it comes from', () => {
   assert.deepEqual(JOIN_FROM.almojabana_oven, { paipa_curd: 'paipa_curdler' });
-  assert.ok(CHILDREN.paipa_curdler.includes('almojabana_oven'), 'las mulas de la Cuajadera llevan cuajada al Horno');
+  assert.ok(CHILDREN.paipa_curdler.includes('almojabana_oven'), `the Cuajadera's mules take curd to the Horno`);
   assert.deepEqual(JOIN_FROM.bandeja_kitchen, { suero_costeno: 'curdler' });
-  assert.ok(BY_CHILDREN.curdler.includes('bandeja_kitchen'), 'el suero llega a la Cocina por la canaleta');
+  assert.ok(BY_CHILDREN.curdler.includes('bandeja_kitchen'), 'the whey reaches the Cocina by the channel');
   assert.ok(!CHILDREN.curdler.includes('bandeja_kitchen'));
   assert.deepEqual(BY_CHILDREN.wetmill, ['composter']);
 });
 
-test('Paipa: el Horno de almojábanas junta la cuajada de la Cuajadera con el queso Paipa', () => {
+test(`Paipa: the almojábana Horno joins the Cuajadera's curd with Paipa cheese`, () => {
   const game = run('boyaca', ['papal', 'cerveceria', 'raquira', 'paipa'], 20, 600, ['papitas', 'barro', 'bagazo']);
   const s = game.state;
   assert.ok(s.stats.produced.almojabana > 400, `almojábanas: ${s.stats.produced.almojabana}`);
@@ -49,7 +49,7 @@ test('Paipa: el Horno de almojábanas junta la cuajada de la Cuajadera con el qu
   assert.ok(row.joined.paipa_curd > 0 && !row.joinLimited);
 });
 
-test('Paipa: sin cuajada, el Horno espera y lo dice', () => {
+test('Paipa: without curd, the Horno waits and says so', () => {
   const game = run('boyaca', ['papal', 'cerveceria', 'raquira', 'paipa'], 20, 5, ['papitas', 'barro', 'bagazo']);
   const st = game.state.stations.almojabana_oven;
   st.joined = {};
@@ -64,15 +64,15 @@ test('Paipa: sin cuajada, el Horno espera y lo dice', () => {
   assert.equal(a.rows.find((r) => r.id === 'almojabana_oven').joinLimited, 'paipa_curd');
 });
 
-test('La Quesera: el suero de la Cuajadera pasa por la canaleta a la Cocina de la bandeja', () => {
+test(`La Quesera: the Cuajadera's whey goes by the channel to the platter Cocina`, () => {
   const game = run('costa', ['arrozal', 'cocal', 'cienaga', 'quesera'], 20, 900, ['arroz', 'pescado']);
   const s = game.state;
-  assert.ok((s.stats.produced.bandeja_costena ?? 0) > 0, 'hace bandejas');
-  assert.ok((s.stations.bandeja_kitchen.joined.suero_costeno ?? 0) > 0, 'le llega suero');
+  assert.ok((s.stats.produced.bandeja_costena ?? 0) > 0, 'it makes platters');
+  assert.ok((s.stations.bandeja_kitchen.joined.suero_costeno ?? 0) > 0, 'whey reaches it');
   assert.notEqual(s.stations.bandeja_kitchen.lacking, 'suero_costeno');
 });
 
-test('La Finca: la pulpa sigue llegando a la Compostera como antes', () => {
+test('La Finca: the pulp keeps reaching the Compostera as before', () => {
   const game = new Game();
   game.state.coins = 1e12;
   for (const id of chainOf('finca').slice(1)) game.unlock(id);
@@ -84,25 +84,25 @@ test('La Finca: la pulpa sigue llegando a la Compostera como antes', () => {
   assert.ok((game.state.stats.produced.compost ?? 0) > 0);
 });
 
-test('un subproducto con ruta se guarda en la bodega para ella; si la ruta aún no abre, se vende', () => {
+test('a by-product with a route is kept in the warehouse for it; if the route has not opened yet, it is sold', () => {
   // Hides from Desposte: with Talabartería open, the hides route carries them...
   const open = run('llanos', ['palma', 'frutal', 'cachamera', 'hato_llanero', 'talabarteria'], 20, 600, ['aceite', 'cachamas', 'cueros']);
-  assert.ok((open.state.stats.imported.fresh_hide ?? 0) > 0, 'llegan cueros a la Talabartería');
-  assert.ok(!(open.state.stats.sold.fresh_hide > 0), 'no se venden en el Hato');
+  assert.ok((open.state.stats.imported.fresh_hide ?? 0) > 0, 'hides reach the Talabartería');
+  assert.ok(!(open.state.stats.sold.fresh_hide > 0), 'they are not sold at the Hato');
   // ...and with Talabartería closed they are sold at the Hato.
   const closed = run('llanos', ['palma', 'frutal', 'cachamera', 'hato_llanero'], 20, 600, ['aceite', 'cachamas']);
-  assert.ok((closed.state.stats.sold.fresh_hide ?? 0) > 0, 'se venden los cueros');
+  assert.ok((closed.state.stats.sold.fresh_hide ?? 0) > 0, 'the hides are sold');
   const row = analyzeChain(closed.state, 'hato_llanero').rows.find((r) => r.id === 'llanero_butcher');
   assert.ok(row.bySold > 0 && !row.byLost);
 });
 
-test('en un evento, lo que lleva al reto incluye la estación que le hace a la otra lo que junta', () => {
+test('in an event, what leads to the challenge includes the station that makes for the other what it joins', () => {
   const board = createEventState(EVENTS_BY_ID.obras, 1);
   const ids = objectiveUpgrades(board);
   for (const id of ['almojabana_oven', 'cheese_cave', 'paipa_curdler', 'paipa_herd']) assert.ok(ids.includes(id), id);
 });
 
-test('una partida de antes: las rutas nuevas arrancan al nivel de la estación que abastecen', () => {
+test('an older save: new routes start at the level of the station they supply', () => {
   const old = createInitialState(0, 'llanos');
   delete old.routes.palmiste;
   delete old.routes.cueros;
@@ -116,10 +116,10 @@ test('una partida de antes: las rutas nuevas arrancan al nivel de la estación q
   delete globalThis.localStorage;
   assert.equal(s.regions.llanos.routes.palmiste.level, 37);
   assert.equal(s.regions.llanos.routes.cueros.level, 52);
-  assert.equal(s.regions.llanos.routes.aceite.level, 1, 'las de antes no cambian');
+  assert.equal(s.regions.llanos.routes.aceite.level, 1, 'the older ones do not change');
 });
 
-test('una partida de antes: los reinicios quedan en el tope (60) y sin el registro de cada partida', () => {
+test('an older save: restarts stay at the cap (60) and without the log of each game', () => {
   const root = createInitialState(0, 'cafetero');
   root.legacy = { resets: 68, history: Array.from({ length: 68 }, (_, k) => ({ mult: 2 ** Math.min(k, 60), playTime: 100, totalEarned: 1 })) };
   const llanos = createInitialState(0, 'llanos');

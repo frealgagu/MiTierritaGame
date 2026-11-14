@@ -3,7 +3,7 @@
 // and, if a newer version exists, shows release notes and offers the APK download. Web needs none of this:
 // it always loads the live site.
 import { isNewer } from '../tools/release-notes.js';
-import { t } from './i18n/index.js';
+import { LANG, t } from './i18n/index.js';
 
 const SITE = 'https://frealgagu.github.io/MiTierritaGame';
 const RECHECK_MS = 6 * 3600 * 1000;
@@ -32,7 +32,7 @@ function show(info) {
   document.getElementById('update-title').textContent = t('Hay una versión nueva: v{v}', { v: info.version });
   document.getElementById('update-text').textContent = t('Tienes la v{v}. Tu partida se conserva al actualizar.', { v: APP_VERSION });
   // Release notes for the versions missed since current (up to three).
-  const missing = (info.notes ?? []).filter((n) => isNewer(n.version, APP_VERSION)).slice(0, 3);
+  const missing = (info.notesByLang?.[LANG] ?? info.notes ?? []).filter((n) => isNewer(n.version, APP_VERSION)).slice(0, 3);
   document.getElementById('update-notes').innerHTML = missing
     .map((n) => `<h3>v${n.version} · ${escape(n.title)}</h3><ul>${n.items.slice(0, 4).map((i) => `<li>${escape(i)}</li>`).join('')}</ul>`)
     .join('');

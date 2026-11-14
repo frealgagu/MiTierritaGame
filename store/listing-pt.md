@@ -1,22 +1,22 @@
-# Ficha do Google Play — Português do Brasil (pt-BR)
+# Google Play listing — Brazilian Portuguese (pt-BR)
 
-Textos e imagens para o Play Console: *Crescimento → Presença na loja → Página principal da loja → Gerenciar traduções → Adicionar seu próprio texto de tradução → Português (Brasil) – pt-BR*. O idioma padrão continua sendo o espanhol (es-419).
+Texts and images for Play Console: *Grow → Store presence → Main store listing → Manage translations → Add your own translation text → Portuguese (Brazil) – pt-BR*. The default language stays Spanish (es-419).
 
-## Detalhes do app
+## App details
 
-**Nome do app** (máx. 30 caracteres):
+**App name** (max 30 characters):
 
 ```
 Encantos de Mi Tierrita
 ```
 
-**Descrição curta** (máx. 80 caracteres):
+**Short description** (max 80 characters):
 
 ```
 Produza, transporte e descubra os encantos das regiões da Colômbia.
 ```
 
-**Descrição completa** (máx. 4.000 caracteres):
+**Full description** (max 4000 characters):
 
 ```
 Do grão da montanha a um contêiner rumo ao porto: monte cadeias de produção por toda a Colômbia e descubra o que torna cada região única.
@@ -48,25 +48,25 @@ Bambuco, guabina, cumbia, torbellino, joropo, chirimía e cumbia amazônica: cad
 • Se você gostar, pode pagar um cafezinho para quem faz o jogo (opcional, sem vantagens no jogo).
 ```
 
-## Gráficos
+## Graphics
 
-| Recurso | Arquivo | Tamanho |
+| Asset | File | Size |
 |---|---|---|
-| Capturas de tela do celular (2 a 8) | `store/capturas-pt/1-finca.png` … `6-zonas.png` | 1080 × 1920 |
-| Ícone do app | `store/icon-512.png` (o mesmo do espanhol) | 512 × 512 |
-| Gráfico de recursos | `store/feature-graphic-pt.png` | 1024 × 500 |
+| Phone screenshots (2 to 8) | `store/screenshots-pt/1-farm.png` … `6-zones.png` | 1080 × 1920 |
+| App icon | `store/icon-512.png` (the same as in Spanish) | 512 × 512 |
+| Feature graphic | `store/feature-graphic-pt.png` | 1024 × 500 |
 
-Ordem sugerida: a fazenda, a estação (Torrador), a cadeia, o Chapéu (Costa do Caribe), o mapa da Colômbia e a lista de zonas. São geradas de novo com `node tools/capturas-play.mjs store/capturas-pt pt`.
+Suggested order: the farm, the station (Roaster), the chain, the Hat Workshop (Caribbean Coast), the map of Colombia and the zone list. They are regenerated with `node tools/play-screenshots.mjs store/screenshots-pt pt`.
 
-## Produtos no app (*Monetizar → Produtos → Produtos únicos*, tradução de cada um)
+## In-app products (*Monetize → Products → One-time products*, Portuguese translation of each)
 
-| ID | Nome | Descrição |
+| ID | Name | Description |
 |---|---|---|
 | `tinto` | Um cafezinho | Pague um tinto (o cafezinho colombiano) para quem faz o jogo. Não dá nada dentro do jogo. Obrigado! |
 | `arepa` | Uma arepa | Pague uma arepa para quem faz o jogo. Não dá nada dentro do jogo. Obrigado! |
 | `almuerzo` | Um almoço | Pague um almoço para quem faz o jogo. Não dá nada dentro do jogo. Obrigado! |
 
-## Notas da versão (v3.70)
+## Release notes (v3.70)
 
 ```
 <pt-BR>

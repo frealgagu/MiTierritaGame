@@ -29,12 +29,12 @@ function withMaizal(level = 30) {
   return game;
 }
 
-test('a igual nivel, el queso y la mantequilla de la Lechería alcanzan justo para el Puesto de arepas', () => {
+test(`at the same level, the Lechería's cheese and butter are just enough for the Puesto de arepas`, () => {
   const game = withMaizal();
   const s = game.state;
   for (const id of ['queso', 'mantequilla']) {
     const need = stationImportRate(s, ROUTES_BY_ID[id], 'arepa_stand');
-    assert.ok(Math.abs(routeFlow(s, id) - need) < 1e-9, `${id}: ${routeFlow(s, id)} de ${need}`);
+    assert.ok(Math.abs(routeFlow(s, id) - need) < 1e-9, `${id}: ${routeFlow(s, id)} of ${need}`);
   }
   const stand = analyzeChain(s, 'maizal').rows.find((r) => r.id === 'arepa_stand');
   assert.equal(stand.importLimited, null);
@@ -43,7 +43,7 @@ test('a igual nivel, el queso y la mantequilla de la Lechería alcanzan justo pa
   assert.ok(Math.abs(stand.capacity - budare.output) < 1e-9);
 });
 
-test('si el Puesto de arepas, sus arrieros y las dos rutas se frenan entre sí, se recomienda lo más atrasado', () => {
+test('if the Puesto de arepas, its mule drivers and the two routes hold each other back, the furthest behind is recommended', () => {
   const game = withMaizal(40);
   const s = game.state;
   // How a casual test playthrough ended up: nothing standalone (nor in pairs) paid off and Piladora was recommended.
@@ -56,15 +56,15 @@ test('si el Puesto de arepas, sus arrieros y las dos rutas se frenan entre sí, 
   assert.ok(rec.gain > 0);
 });
 
-test('el Puesto de arepas hace arepas de queso con lo que trae la Chiva', () => {
+test('the Puesto de arepas makes cheese arepas with what the Chiva brings', () => {
   const game = withMaizal();
   run(game, 600);
-  assert.ok((game.state.stats.imported.cheese ?? 0) > 0, 'llegó queso');
-  assert.ok((game.state.stats.imported.butter ?? 0) > 0, 'llegó mantequilla');
-  assert.ok((game.state.stats.sold.cheese_arepa ?? 0) > 0, 'vendió arepas de queso');
+  assert.ok((game.state.stats.imported.cheese ?? 0) > 0, 'cheese arrived');
+  assert.ok((game.state.stats.imported.butter ?? 0) > 0, 'butter arrived');
+  assert.ok((game.state.stats.sold.cheese_arepa ?? 0) > 0, 'it sold cheese arepas');
 });
 
-test('al nivel 100 en las cinco zonas, con todas las investigaciones, ningún patio se llena', async () => {
+test('at level 100 in the five zones, with all the research, no yard fills up', async () => {
   const { RESEARCH } = await import('../src/data/research.js');
   const game = withMaizal(100);
   const s = game.state;
@@ -78,7 +78,7 @@ test('al nivel 100 en las cinco zonas, con todas las investigaciones, ningún pa
   assert.deepEqual(blocked, {});
 });
 
-test('una partida de la v1.3 con el Cacaotal completo abre el Maizal', async () => {
+test('a v1.3 save with the Cacaotal complete opens the Maizal', async () => {
   const { loadGame } = await import('../src/core/SaveSystem.js');
   const old = new Game().state;
   old.version = 7;
@@ -95,7 +95,7 @@ test('una partida de la v1.3 con el Cacaotal completo abre el Maizal', async () 
   assert.equal(s.routes.queso.level, 1);
 });
 
-test('lo que espera una ruta va en el andén: no llena la bodega ni para la zona', async () => {
+test('what a route is waiting for goes on the platform: it does not fill the warehouse or stop the zone', async () => {
   const { warehouseCap, warehouseSpace } = await import('../src/sim/transport.js');
   const { routeReserve } = await import('../src/sim/routes.js');
   const game = withMaizal();
@@ -104,11 +104,11 @@ test('lo que espera una ruta va en el andén: no llena la bodega ni para la zona
   s.routes.leche.level = 80;
   s.zones.lecheria.dispatch.level = 5;
   const milk = routeReserve(s, 'lecheria').milk;
-  assert.ok(milk > warehouseCap(s, 'lecheria'), 'la reserva no cabría en la bodega');
+  assert.ok(milk > warehouseCap(s, 'lecheria'), 'the reserve would not fit in the warehouse');
   s.zones.lecheria.warehouse = { milk };
   s.mules = [];
   assert.equal(warehouseSpace(s, 'lecheria'), warehouseCap(s, 'lecheria'));
   // And Quesera keeps sending cheese to the warehouse for the cheese route.
   run(game, 300);
-  assert.ok((s.stats.imported.cheese ?? 0) > 0, 'llegó queso al Maizal');
+  assert.ok((s.stats.imported.cheese ?? 0) > 0, 'cheese reached the Maizal');
 });

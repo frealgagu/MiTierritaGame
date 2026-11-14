@@ -1,152 +1,151 @@
-# Encantos de Mi Tierrita — Documento de Diseño (GDD)
+# Encantos de Mi Tierrita — Game Design Document (GDD)
 
-> Juego educativo e incremental de **cadena de suministros** ambientado en Colombia (antes se llamó «Cafetal»): un recurso inicial ilimitado pero lento alimenta a una estación, esa estación alimenta a la siguiente, y todo se mejora para producir cada vez más.
-> Del género se toman solo la cadena de producción visible y el estilo gráfico isométrico «de juguete», con personajes que llevan cargas.
-> No hay supervivencia, ni clima hostil, ni población que alimentar, ni héroes.
-> **Estado actual (v4.7.4):** juego completo con **10 regiones**, **55 zonas jugables**, **360 estaciones**, **373 productos**, **129 rutas**, **4 idiomas** (`es`, `en`, `pt`, `fr`), **10 piezas musicales** y empaquetado en web (PWA) y Android (**Capacitor 8**). Escrito en JavaScript (Vite + PixiJS).
+> An educational, incremental **supply chain** game set in Colombia (it used to be called «Cafetal»): an unlimited but slow starting resource feeds a station, that station feeds the next one, and everything is upgraded to produce more and more.
+> From the genre it only takes the visible production chain and the isometric «toy» art style, with characters carrying loads.
+> There is no survival, no hostile weather, no population to feed, and no heroes.
+> **Current state (v4.7.4):** a complete game with **10 regions**, **55 playable zones**, **360 stations**, **373 products**, **129 routes**, **4 languages** (`es`, `en`, `pt`, `fr`), **10 music pieces**, packaged for the web (PWA) and Android (**Capacitor 8**). Written in JavaScript (Vite + PixiJS).
 
 ---
 
-## 1. Tema
+## 1. Theme
 
-Se buscó un tema en el que una cadena larga de transformación sea **natural y fácil de entender**, en el que cada paso **aumente el valor** del producto y en el que el origen sea **ilimitado**.
+We looked for a theme where a long transformation chain is **natural and easy to understand**, where every step **adds value** to the product, and where the source is **unlimited**.
 
-| Tema | Fuente ilimitada | Cadena | Notas |
+| Theme | Unlimited source | Chain | Notes |
 |------|------------------|--------|-------|
-| **Cafetal** (finca cafetera de montaña) | Cafeto (cerezas) | cereza → lavado → pergamino → verde → tostado → molido → bolsa | **Recomendado**: cadena real de 7 pasos, muy visual y con mucha identidad |
-| Panadería de pueblo | Trigal | trigo → harina → masa → pan → pastel | Más corta, ideal si se quiere algo muy simple |
-| Fábrica de chocolate | Cacaotal | cacao → fermentado → tostado → pasta → tableta → bombón | Muy parecida al café; buena como Zona 2 |
-| Herrería minera | Veta de mineral | mineral → lingote → barra → pieza → herramienta | Tono más industrial |
+| **Cafetal** (mountain coffee farm) | Coffee trees (cherries) | cherry → washed → parchment → green → roasted → ground → bag | **Recommended**: a real 7-step chain, very visual and full of identity |
+| Village bakery | Wheat field | wheat → flour → dough → bread → cake | Shorter, ideal for something very simple |
+| Chocolate factory | Cacao grove | cacao → fermented → roasted → paste → bar → bonbon | Very similar to coffee; good as Zone 2 |
+| Mining forge | Ore vein | ore → ingot → bar → part → tool | A more industrial tone |
 
-**Se elige Cafetal** porque:
-- La cadena real del café tiene muchos pasos con nombre propio, cada uno con su edificio reconocible.
-- El paisaje cafetero (montañas verdes, niebla, casas de colores con balcones, palmas altas, mulas y jeeps Willys cargados) da un estilo gráfico propio y encantador.
-- Las expansiones salen solas: tostaduría en el pueblo, cafetería con bebidas, puerto de exportación, cacao…
-
----
-
-## 2. Concepto
-
-> *Heredas una ladera con unos pocos cafetos y una mula. Cosecha, procesa y despacha café cada vez mejor hasta llenar tu primer contenedor de exportación.*
-
-- **Género:** incremental / idle de cadena de producción.
-- **Vista:** isométrica. La finca baja por la ladera: arriba el cafetal y abajo el pueblo donde se despacha. La cadena se lee de arriba abajo.
-- **Sesiones:** cortas (de 2 a 10 min) o dejándolo correr. Ganancias sin conexión con un límite.
-- **Zona 1:** de 3 a 5 horas hasta el objetivo final. **Tiene final**: no hay que esperar días.
-- **Sin:** héroes, gacha, energía, anuncios ni pagos.
-
-### Pilares
-1. **Cada producto alimenta al siguiente.** Siempre se ve qué estación está esperando y cuál se está atascando.
-2. **Mejorar siempre se nota.** Cada compra acelera algo de forma visible: más mulas, máquinas más rápidas, números más grandes.
-3. **El cuello de botella se mueve.** Si arreglas uno, aparece otro más abajo. Ese es el juego.
-4. **Pequeño y terminado.**
+**Cafetal is chosen** because:
+- The real coffee chain has many steps with their own names, each with a recognizable building.
+- The coffee landscape (green mountains, mist, colorful houses with balconies, tall palms, mules and loaded Willys jeeps) gives the art its own charming style.
+- Expansions come naturally: a roastery in town, a café with drinks, an export port, cacao…
 
 ---
 
-## 3. Bucle de juego
+## 2. Concept
+
+> *You inherit a hillside with a few coffee trees and a mule. Harvest, process and ship better and better coffee until you fill your first export container.*
+
+- **Genre:** incremental / idle production chain.
+- **View:** isometric. The farm runs down the hillside: the coffee field at the top and the town where goods are shipped at the bottom. The chain reads from top to bottom.
+- **Sessions:** short (2 to 10 min) or left running. Offline earnings with a cap.
+- **Zone 1:** 3 to 5 hours to the final goal. **It has an ending**: no waiting for days.
+- **Without:** heroes, gacha, energy, ads or payments.
+
+### Pillars
+1. **Every product feeds the next one.** You can always see which station is waiting and which one is jamming.
+2. **Upgrading is always noticeable.** Every purchase visibly speeds something up: more mules, faster machines, bigger numbers.
+3. **The bottleneck moves.** Fix one and another appears further down. That is the game.
+4. **Small and finished.**
+
+---
+
+## 3. Game loop
 
 ```
- Cafetal (ilimitado, lento)
-      │  cerezas
+ Coffee field (unlimited, slow)
+      │  cherries
       ▼
- Estación 2 ─► Estación 3 ─► … ─► Bodega ─► Despacho (Willys) ─► 💰 Monedas
-      ▲                                                            │
-      └──────────── Mejorar nivel / arrieros / desbloquear ◄───────┘
+ Station 2 ─► Station 3 ─► … ─► Warehouse ─► Dispatch (Willys) ─► 💰 Coins
+      ▲                                                             │
+      └──────────── Upgrade level / mule drivers / unlock ◄─────────┘
 ```
 
-1. El **Cafetal** produce cerezas sin fin, pero despacio.
-2. Cada **estación** transforma lo que recibe en un producto de mayor valor.
-3. Los **arrieros** (mulas) llevan el producto de una estación a la siguiente.
-4. Todo lo que llega a la **Bodega** lo vende el **Despacho** y se convierte en monedas.
-5. Con las monedas se **mejora**, se **desbloquean** estaciones y se compran **investigaciones**.
+1. The **coffee field** produces cherries endlessly, but slowly.
+2. Each **station** turns what it receives into a higher-value product.
+3. The **mule drivers** (mules) carry the product from one station to the next.
+4. Everything that reaches the **Warehouse** is sold by **Dispatch** and becomes coins.
+5. Coins are used to **upgrade**, **unlock** stations and buy **research**.
 
-**Decisión clave:** ¿mejoro producción, transporte o venta? El jugador busca el cuello de botella; la UI se lo marca.
+**Key decision:** do I upgrade production, transport or sales? The player looks for the bottleneck; the UI marks it.
 
 ---
+## 4. The chain (Zone 1)
 
-## 4. La cadena (Zona 1)
-
-| # | Estación | Entra | Sale | Ciclo (nv. 1) | Valor unidad | Desbloqueo | Coste base de mejora |
+| # | Station | In | Out | Cycle (lv. 1) | Unit value | Unlock | Base upgrade cost |
 |---|----------|-------|------|---------------|--------------|------------|----------------------|
-| 1 | **Cafetal** ♾️ | — | 1 🍒 cereza | 2 s | 1 | Inicial | 5 |
-| 2 | Beneficiadero (despulpar y lavar) | 2 🍒 | 1 💧 grano lavado | 4 s | 3 | 50 | 8 |
-| 3 | Marquesina de secado | 1 💧 | 1 🟫 pergamino | 4 s | 6 | 250 | 12 |
-| 4 | Trilladora | 1 🟫 | 1 🟢 café verde | 4 s | 10 | 1.000 | 20 |
-| 5 | Tostadora | 2 🟢 | 1 🟤 café tostado | 8 s | 30 | 4.000 | 35 |
-| 6 | Molino | 1 🟤 | 1 ☕ café molido | 8 s | 45 | 15.000 | 60 |
-| 7 | Empacadora | 4 ☕ | 1 🛍️ bolsa de café | 32 s | 250 | 60.000 | 100 |
-| — | **Bodega + Despacho** | cualquier producto | 💰 | viaje de 10 s | — | Inicial | 10 |
+| 1 | **Coffee field** ♾️ | — | 1 🍒 cherry | 2 s | 1 | Initial | 5 |
+| 2 | Beneficiadero (pulping and washing) | 2 🍒 | 1 💧 washed bean | 4 s | 3 | 50 | 8 |
+| 3 | Drying shed (marquesina) | 1 💧 | 1 🟫 parchment | 4 s | 6 | 250 | 12 |
+| 4 | Huller | 1 🟫 | 1 🟢 green coffee | 4 s | 10 | 1,000 | 20 |
+| 5 | Roaster | 2 🟢 | 1 🟤 roasted coffee | 8 s | 30 | 4,000 | 35 |
+| 6 | Mill | 1 🟤 | 1 ☕ ground coffee | 8 s | 45 | 15,000 | 60 |
+| 7 | Packer | 4 ☕ | 1 🛍️ bag of coffee | 32 s | 250 | 60,000 | 100 |
+| — | **Warehouse + Dispatch** | any product | 💰 | 10 s trip | — | Initial | 10 |
 
-> **Regla de balance (v0.2):** a igual nivel, cada estación procesa exactamente lo que le entrega la anterior (los ciclos se calcularon a partir de 0,5 🍒/s del Cafetal a nivel 1). Así, subir toda la cadena junta mantiene el flujo equilibrado y el cuello de botella aparece cuando una estación se queda atrás. Simulado: un jugador que sube la cadena en bloque construye la Empacadora a los ~67 min; uno que mejora estación por estación, a las ~2 h 20 min.
+> **Balance rule (v0.2):** at the same level, each station processes exactly what the previous one delivers (the cycles were computed from the coffee field's 0.5 🍒/s at level 1). So raising the whole chain together keeps the flow balanced, and the bottleneck appears when a station falls behind. Simulated: a player who raises the chain as a block builds the Packer at ~67 min; one who upgrades station by station, at ~2 h 20 min.
 
-- **Al principio solo existen el Cafetal y el Despacho:** se venden cerezas a 1 💰. Desbloquear el Beneficiadero vuelve más rentable cada cereza, y así sucesivamente.
-- **Cada paso aumenta el valor** más de lo que consume (2 🍒 = 2 → 1 💧 = 3), así que procesar siempre conviene, **si la estación da abasto**. Si no, el sobrante también se vende en crudo.
-- **Desvío automático:** si una estación está llena o bloqueada, su entrada se desvía a la Bodega y se vende tal cual. La cadena nunca se atasca del todo; solo rinde menos. La UI lo muestra con una flecha naranja de desvío.
+- **At first only the coffee field and Dispatch exist:** cherries sell for 1 💰. Unlocking the Beneficiadero makes each cherry more profitable, and so on.
+- **Every step adds more value** than it consumes (2 🍒 = 2 → 1 💧 = 3), so processing always pays, **if the station can keep up**. If not, the surplus is also sold raw.
+- **Automatic diversion:** if a station is full or blocked, its input is diverted to the Warehouse and sold as is. The chain never jams completely; it just yields less. The UI shows it with an orange diversion arrow.
 
 ---
 
-## 4b. Mapa completo de la cadena (todas las zonas)
+## 4b. Full map of the chain (all zones)
 
-> **Nota histórica:** el desglose siguiente corresponde al diseño fundacional de las **6 primeras zonas** (el Eje Cafetero, completado en la v1.5). Con las expansiones regionales (§10.3) el juego alcanzó **10 regiones** y **55 zonas jugables**.
+> **Historical note:** the breakdown below is the founding design of the **first 6 zones** (the Eje Cafetero, completed in v1.5). With the regional expansions (§10.3) the game reached **10 regions** and **55 playable zones**.
 
-### Resumen en números (Eje Cafetero / diseño inicial v1.5)
+### Summary in numbers (Eje Cafetero / initial design v1.5)
 
-| Concepto | Cantidad |
+| Item | Amount |
 |----------|----------|
-| Zonas | **6** |
-| Fuentes ilimitadas | **5** (cafetal, cañaduzal, potrero, cacaotal, maizal); el Pueblo no tiene |
-| Productos en total | **40** |
-| Estaciones (edificios de producción) | **38** |
-| Subproductos que potencian otras estaciones | 2 (pulpa → abono, bagazo) |
-| Productos que combinan varias zonas | 10 |
-| Producto final del juego | **Contenedor de exportación** |
-| Profundidad máxima (pasos desde una fuente hasta el final) | 10 (de la cereza al contenedor) |
+| Zones | **6** |
+| Unlimited sources | **5** (coffee field, cane field, pasture, cacao grove, corn field); the Pueblo has none |
+| Products in total | **40** |
+| Stations (production buildings) | **38** |
+| By-products that boost other stations | 2 (pulp → fertilizer, bagasse) |
+| Products combining several zones | 10 |
+| The game's final product | **Export container** |
+| Maximum depth (steps from a source to the end) | 10 (from the cherry to the container) |
 
-### Resumen actual del país (v4.7.4)
+### Current summary of the country (v4.7.4)
 
-| Concepto | Cantidad |
+| Item | Amount |
 |----------|----------|
-| Regiones jugables | **10** (Eje Cafetero, Santander, La Costa, Boyacá, Los Llanos, Costa Pacífica, Amazonas, Tolima Grande, Cundinamarca y Bogotá) + San Andrés anunciada como zona especial |
-| Zonas jugables | **55** (9 regiones × 6 zonas + Bogotá como red de 52×52 casillas) |
-| Estaciones | **360** |
-| Productos | **373** |
-| Rutas entre zonas | **129** (incluidas **27 tractomulas** ilimitadas hacia Bogotá) |
-| Investigaciones | **633** |
-| Eventos | **61** (6 por región en las 9 primeras + 7 en Bogotá con *La Gran Feria*) |
-| Álbum de láminas | **60 páginas** (**360 láminas** ilustradas por código) |
-| Logros | **151** |
-| Íconos propios (`mitierrita-icons.woff2`) | **602** glifos COLR |
-| Piezas musicales y efectos | **10** composiciones regionales + **17** tipos de sonido de estación |
-| Idiomas | **4** (`es`, `en`, `pt`, `fr`) |
+| Playable regions | **10** (Eje Cafetero, Santander, La Costa, Boyacá, Los Llanos, Costa Pacífica, Amazonas, Tolima Grande, Cundinamarca and Bogotá) + San Andrés announced as a special zone |
+| Playable zones | **55** (9 regions × 6 zones + Bogotá as a 52×52-tile network) |
+| Stations | **360** |
+| Products | **373** |
+| Routes between zones | **129** (including **27 unlimited trucks** to Bogotá) |
+| Research | **633** |
+| Events | **61** (6 per region in the first 9 + 7 in Bogotá with *La Gran Feria*) |
+| Sticker album | **60 pages** (**360 stickers** illustrated in code) |
+| Achievements | **151** |
+| Custom icons (`mitierrita-icons.woff2`) | **602** COLR glyphs |
+| Music pieces and effects | **10** regional compositions + **17** kinds of station sound |
+| Languages | **4** (`es`, `en`, `pt`, `fr`) |
 
-### Vista general
+### Overview
 
 ```mermaid
 flowchart LR
-  subgraph Z1[Zona 1 · La Finca]
-    C1[Cereza] --> C2[Lavado] --> C3[Pergamino] --> C4[Verde] --> C5[Tostado] --> C6[Molido] --> C7[Bolsa de café]
-    C2 -.pulpa.-> AB[Abono] -.potencia.-> C1
+  subgraph Z1[Zone 1 · La Finca]
+    C1[Cherry] --> C2[Washed] --> C3[Parchment] --> C4[Green] --> C5[Roasted] --> C6[Ground] --> C7[Bag of coffee]
+    C2 -.pulp.-> AB[Fertilizer] -.boosts.-> C1
   end
-  subgraph Z2[Zona 2 · El Trapiche]
-    T1[Caña] --> T2[Guarapo] --> T3[Melado] --> T4[Panela] --> T5[Panela pulverizada]
-    T1 -.bagazo.-> T3
+  subgraph Z2[Zone 2 · El Trapiche]
+    T1[Cane] --> T2[Guarapo] --> T3[Syrup] --> T4[Panela] --> T5[Powdered panela]
+    T1 -.bagasse.-> T3
   end
-  subgraph Z3[Zona 3 · La Lechería]
-    L1[Leche cruda] --> L2[Leche pasteurizada] --> L3[Crema] --> L4[Mantequilla]
-    L2 --> L5[Queso campesino]
+  subgraph Z3[Zone 3 · La Lechería]
+    L1[Raw milk] --> L2[Pasteurized milk] --> L3[Cream] --> L4[Butter]
+    L2 --> L5[Farmer cheese]
     L2 --> L6[Arequipe]
   end
-  subgraph Z4[Zona 4 · El Cacaotal]
-    K1[Mazorca de cacao] --> K2[Fermentado] --> K3[Seco] --> K4[Tostado] --> K5[Pasta de cacao]
-    K5 --> K6[Chocolate de mesa]
-    K5 --> K7[Chocolatina con leche]
+  subgraph Z4[Zone 4 · El Cacaotal]
+    K1[Cacao pod] --> K2[Fermented] --> K3[Dried] --> K4[Roasted] --> K5[Cacao paste]
+    K5 --> K6[Table chocolate]
+    K5 --> K7[Milk chocolate bar]
   end
-  subgraph Z5[Zona 5 · El Maizal]
-    M1[Mazorca de maíz] --> M2[Desgranado] --> M3[Pilado] --> M4[Masa] --> M5[Arepa] --> M6[Arepa de queso]
+  subgraph Z5[Zone 5 · El Maizal]
+    M1[Corn cob] --> M2[Shelled] --> M3[Hulled] --> M4[Dough] --> M5[Arepa] --> M6[Cheese arepa]
   end
-  subgraph Z6[Zona 6 · El Pueblo]
-    P1[Café de origen] --> P2[Tinto] --> P3[Desayuno campesino]
-    P1 --> P4[Canasta de fique] --> P5[Canasta de regalo] --> P6((Contenedor de exportación))
+  subgraph Z6[Zone 6 · El Pueblo]
+    P1[Origin coffee] --> P2[Tinto] --> P3[Farmer breakfast]
+    P1 --> P4[Fique basket] --> P5[Gift basket] --> P6((Export container))
   end
   T5 --> L6 & K6 & K7 & P2
   L2 --> K7
@@ -159,369 +158,367 @@ flowchart LR
   K7 --> P5
 ```
 
-### Detalle por zona
+### Detail per zone
 
-Los valores son orientativos y se ajustarán con el simulador de balance. ⇄ indica un producto importado de otra zona.
-
-#### Zona 1 · La Finca (café) — 8 estaciones, 9 productos — **v1.0**
-| # | Estación | Entrada | Salida | Valor |
+Values are indicative and will be tuned with the balance simulator. ⇄ marks a product imported from another zone.
+#### Zone 1 · La Finca (coffee) — 8 stations, 9 products — **v1.0**
+| # | Station | Input | Output | Value |
 |---|----------|---------|--------|-------|
-| 1 | Cafetal ♾️ | — | Cereza de café | 1 |
-| 2 | Beneficiadero | 2 cerezas | Café lavado + *pulpa* | 3 |
-| 3 | Marquesina de secado | 1 lavado | Café pergamino | 6 |
-| 4 | Trilladora | 1 pergamino | Café verde | 10 |
-| 5 | Tostadora | 2 verde | Café tostado | 30 |
-| 6 | Molino | 1 tostado | Café molido | 45 |
-| 7 | Empacadora | 4 molido | Bolsa de café | 250 |
-| 8 | Compostera *(rama opcional, v1.0)* | 4 pulpa (por canaleta, sin mulas) | Compost → todo lo que vende la Finca +30 % mientras haya (1 compost por cada 8 cafés lavados; no acelera ninguna estación, así que no descompensa la cadena) | — |
+| 1 | Coffee field ♾️ | — | Coffee cherry | 1 |
+| 2 | Beneficiadero | 2 cherries | Washed coffee + *pulp* | 3 |
+| 3 | Drying shed | 1 washed | Parchment coffee | 6 |
+| 4 | Huller | 1 parchment | Green coffee | 10 |
+| 5 | Roaster | 2 green | Roasted coffee | 30 |
+| 6 | Mill | 1 roasted | Ground coffee | 45 |
+| 7 | Packer | 4 ground | Bag of coffee | 250 |
+| 8 | Compost bin *(optional branch, v1.0)* | 4 pulp (by channel, no mules) | Compost → everything the Finca sells +30 % while there is some (1 compost per 8 washed coffees; it speeds up no station, so it does not unbalance the chain) | — |
 
-#### Zona 2 · El Trapiche (caña y panela) — 5 estaciones, 6 productos — **v1.1** ✅
-Se abre al completar la Finca. Los productos valen ×5 respecto al primer borrador porque la zona arranca con la economía de la Finca (las monedas se comparten y la Finca sigue produciendo). Misma regla de balance: a igual nivel, cada estación procesa lo que le entrega la anterior.
+#### Zone 2 · El Trapiche (cane and panela) — 5 stations, 6 products — **v1.1** ✅
+Opens upon completing the Finca. Products are worth ×5 compared with the first draft because the zone starts with the Finca's economy (coins are shared and the Finca keeps producing). Same balance rule: at the same level, each station processes what the previous one delivers.
 
-| # | Estación | Entrada | Salida | Ciclo (nv. 1) | Valor | Desbloqueo | Coste base |
+| # | Station | Input | Output | Cycle (lv. 1) | Value | Unlock | Base cost |
 |---|----------|---------|--------|---------------|-------|------------|------------|
-| 1 | Cañaduzal ♾️ | — | Caña | 2 s | 10 | Con la zona | 50 |
-| 2 | Molienda | 1 caña | Guarapo + *bagazo* | 2 s | 25 | 5.000 | 80 |
-| 3 | Hornilla | 2 guarapo (+ bagazo: ×2 de velocidad) | Melado | 4 s | 60 | 25.000 | 120 |
-| 4 | Gaveras | 2 melado | Panela | 8 s | 150 | 80.000 | 200 |
-| 5 | Pulverizadora | 1 panela | Panela pulverizada | 8 s | 250 | 250.000 | 350 |
+| 1 | Cane field ♾️ | — | Cane | 2 s | 10 | With the zone | 50 |
+| 2 | Molienda (cane mill) | 1 cane | Guarapo + *bagasse* | 2 s | 25 | 5,000 | 80 |
+| 3 | Hornilla (furnace) | 2 guarapo (+ bagasse: ×2 speed) | Syrup | 4 s | 60 | 25,000 | 120 |
+| 4 | Gaveras (molds) | 2 syrup | Panela | 8 s | 150 | 80,000 | 200 |
+| 5 | Pulverizer | 1 panela | Powdered panela | 8 s | 250 | 250,000 | 350 |
 
-- **Bagazo**: la Molienda lo produce (1 por ciclo) y pasa directo a la Hornilla, que va pegada a ella. Mientras la Hornilla tenga bagazo, trabaja ×2 y gasta 1 por ciclo.
-- **Investigaciones**: Trapiche con motor (Molienda ×2), Abono para la caña (Cañaduzal ×2), Chiva para el Trapiche (despacho ×2), Gaveras de acero (×2), Panela orgánica (+50 % de valor).
-- **Final**: «Primer cargamento de panela», vender 6.000 panelas pulverizadas (15 objetivos; 5.000 hasta la v1.6).
-- **Duración medida** (`npm run balance`, v1.3): unos 35 min después de completar la Finca (la Finca, que sigue produciendo, lo acelera mucho).
+- **Bagasse**: the Molienda produces it (1 per cycle) and it goes straight to the Hornilla, which sits next to it. While the Hornilla has bagasse, it works ×2 and uses 1 per cycle.
+- **Research**: Motorized trapiche (Molienda ×2), Fertilizer for the cane (cane field ×2), Chiva for the Trapiche (dispatch ×2), Steel gaveras (×2), Organic panela (+50 % value).
+- **Ending**: «First panela shipment», sell 6,000 powdered panelas (15 objectives; 5,000 until v1.6).
+- **Measured duration** (`npm run balance`, v1.3): about 35 min after completing the Finca (the Finca, which keeps producing, speeds it up a lot).
 
-#### Zona 3 · La Lechería — 6 estaciones, 6 productos — **v1.2** ✅
-Se abre al completar el Trapiche. Productos ×25 respecto al primer borrador (el Trapiche iba ×5). Es la primera zona con **ramas**: la leche pasteurizada se reparte entre la Quesera, la Descremadora y la Paila. A igual nivel, la Pasteurizadora da un cuarto a la Quesera, otro a la Descremadora, otro a la Paila y el último a la **Ruta de la leche** del Cacaotal (v1.3), así que la regla de balance se mantiene: con todo al mismo nivel, nada sobra. Mientras falta alguna rama, la leche que sobra se vende sin procesar.
+#### Zone 3 · La Lechería — 6 stations, 6 products — **v1.2** ✅
+Opens upon completing the Trapiche. Products ×25 compared with the first draft (the Trapiche was ×5). It is the first zone with **branches**: pasteurized milk is split among the Quesera, the Descremadora and the Paila. At the same level, the Pasteurizadora gives a quarter to the Quesera, another to the Descremadora, another to the Paila and the last one to the Cacaotal's **Milk route** (v1.3), so the balance rule holds: with everything at the same level, nothing is left over. While a branch is missing, the leftover milk is sold unprocessed.
 
-| # | Estación | Entrada | Salida | Ciclo (nv. 1) | Valor | Desbloqueo | Coste base |
+| # | Station | Input | Output | Cycle (lv. 1) | Value | Unlock | Base cost |
 |---|----------|---------|--------|---------------|-------|------------|------------|
-| 1 | Potrero y establo ♾️ | — | Leche cruda | 2 s | 125 | Con la zona | 250 |
-| 2 | Pasteurizadora | 1 cruda | Leche pasteurizada | 2 s | 300 | 200.000 | 400 |
-| 3 | Quesera *(rama, ¼ de la leche)* | 4 pasteurizada | Queso campesino | 32 s | 2.400 | 400.000 | 1.300 |
-| 4 | Descremadora *(rama, ¼)* | 2 pasteurizada | Crema de leche | 16 s | 800 | 1.000.000 | 600 |
-| 5 | Batidora | 2 crema | Mantequilla | 32 s | 2.000 | 2.000.000 | 900 |
-| 6 | Paila de arequipe *(rama, ¼)* | 4 pasteurizada + 1 panela pulverizada ⇄ | Arequipe | 32 s | 4.000 | 4.000.000 | 2.000 |
+| 1 | Pasture and barn ♾️ | — | Raw milk | 2 s | 125 | With the zone | 250 |
+| 2 | Pasteurizadora | 1 raw | Pasteurized milk | 2 s | 300 | 200,000 | 400 |
+| 3 | Quesera *(branch, ¼ of the milk)* | 4 pasteurized | Farmer cheese | 32 s | 2,400 | 400,000 | 1,300 |
+| 4 | Descremadora (skimmer) *(branch, ¼)* | 2 pasteurized | Cream | 16 s | 800 | 1,000,000 | 600 |
+| 5 | Churn | 2 cream | Butter | 32 s | 2,000 | 2,000,000 | 900 |
+| 6 | Arequipe paila *(branch, ¼)* | 4 pasteurized + 1 powdered panela ⇄ | Arequipe | 32 s | 4,000 | 4,000,000 | 2,000 |
 
-- **Reparto**: las mulas de la Pasteurizadora llevan cada carga a la rama con la entrada más vacía (contando lo que va en camino); la que trabaja más rápido recibe más, sin que el jugador tenga que repartir a mano. La carga se calcula para el viaje a la más lejana. Si la entrada de una rama no alcanza para una carga entera (va por debajo del nivel de la Pasteurizadora), se le lleva lo que quepa cuando tiene media entrada libre (desde la v1.7.11; antes no recibía nada). Vale para cualquier estación.
-- **El cuarto de la Ruta de la leche**: mientras el Cacaotal no abre, se vende como leche. No es un desvío ni un problema: no se marca con ↪️, el panel de la Pasteurizadora lo explica y la cadena (🔗) lo muestra aparte. Una rama solo se marca como atrasada si procesa menos que su cuarto.
-- **Primera ruta entre zonas — Ruta de la panela** (`src/data/routes.js`, `src/sim/routes.js`): una **Chiva** recoge panela pulverizada en la bodega del Trapiche y la lleva a la Paila (60 s ida y vuelta). Tiene su propio nivel (pestaña 🚌 de la Paila): a igual nivel que la Paila lleva todo lo que gasta (un 25 % más), contando sus investigaciones de velocidad. El Willys del Trapiche no vende la panela que espera la Chiva. Sin panela, la Paila espera; el resto de la Lechería sigue igual.
-- **Investigaciones**: Ordeño mecánico y Pasteurizadora de placas (×2, en pareja), Descremadora centrífuga, Batidora eléctrica, Cuajo de calidad, Paila de cobre (×2), Carrotanque (despacho ×2), Queso doble crema y Arequipe de exportación (+50 %).
-- **Final**: «Arequipe para todo el pueblo», vender 6.000 arequipes (17 objetivos; 3.000 hasta la v1.6).
-- **Duración medida** (`npm run balance`, v1.3): unas 2 h 20 min después de completar el Trapiche.
+- **Splitting**: the Pasteurizadora's mules take each load to the branch with the emptiest input (counting what is on the way); the one that works faster receives more, without the player splitting by hand. The load is sized for the trip to the farthest one. If a branch's input cannot take a whole load (it is below the Pasteurizadora's level), it is given what fits once half its input is free (since v1.7.11; before, it received nothing). This applies to any station.
+- **The Milk route's quarter**: until the Cacaotal opens, it is sold as milk. It is not a diversion or a problem: it is not marked with ↪️, the Pasteurizadora's panel explains it and the chain (🔗) shows it separately. A branch is only marked as lagging if it processes less than its quarter.
+- **First route between zones — the Panela route** (`src/data/routes.js`, `src/sim/routes.js`): a **Chiva** picks up powdered panela at the Trapiche's warehouse and takes it to the Paila (60 s round trip). It has its own level (the Paila's 🚌 tab): at the same level as the Paila it carries everything it uses (25 % more), counting its speed research. The Trapiche's Willys does not sell the panela the Chiva is waiting for. Without panela, the Paila waits; the rest of the Lechería is unaffected.
+- **Research**: Mechanical milking and Plate pasteurizer (×2, as a pair), Centrifugal skimmer, Electric churn, Quality rennet, Copper paila (×2), Tanker truck (dispatch ×2), Double-cream cheese and Export arequipe (+50 %).
+- **Ending**: «Arequipe for the whole town», sell 6,000 arequipes (17 objectives; 3,000 until v1.6).
+- **Measured duration** (`npm run balance`, v1.3): about 2 h 20 min after completing the Trapiche.
 
-#### Zona 4 · El Cacaotal (chocolate) — 7 estaciones, 7 productos — **v1.3** ✅
-Se abre al completar la Lechería. Productos ×125 respecto al primer borrador. Es la primera zona con **dos importaciones**: la panela del Trapiche (para la Mesa y la Chocolatería) y la leche de la Lechería (solo para la Chocolatería). La pasta de cacao se reparte entre la Mesa y la Chocolatería: a igual nivel, la mitad cada una.
+#### Zone 4 · El Cacaotal (chocolate) — 7 stations, 7 products — **v1.3** ✅
+Opens upon completing the Lechería. Products ×125 compared with the first draft. It is the first zone with **two imports**: the Trapiche's panela (for the Mesa and the Chocolatería) and the Lechería's milk (only for the Chocolatería). Cacao paste is split between the Mesa and the Chocolatería: at the same level, half each.
 
-| # | Estación | Entrada | Salida | Ciclo (nv. 1) | Valor | Desbloqueo | Coste base |
+| # | Station | Input | Output | Cycle (lv. 1) | Value | Unlock | Base cost |
 |---|----------|---------|--------|---------------|-------|------------|------------|
-| 1 | Cacaotal ♾️ | — | Mazorca de cacao | 2 s | 1.000 | Con la zona | 1.500 |
-| 2 | Cajones de fermentación | 2 mazorcas | Cacao fermentado | 4 s | 2.500 | 2 M | 2.000 |
-| 3 | Secadero | 1 fermentado | Cacao seco | 4 s | 4.400 | 5 M | 3.000 |
-| 4 | Tostador de cacao | 1 seco | Cacao tostado | 4 s | 8.800 | 12 M | 4.500 |
-| 5 | Molino de cacao | 2 tostado | Pasta de cacao | 8 s | 22.000 | 30 M | 7.000 |
-| 6 | Mesa de chocolate *(rama, ½)* | 2 pasta + 1 panela pulverizada ⇄ | Chocolate de mesa | 32 s | 100.000 | 40 M | 10.000 |
-| 7 | Chocolatería *(rama, ½)* | 2 pasta + 1 panela pulverizada ⇄ + 4 leche pasteurizada ⇄ | Chocolatina con leche | 32 s | 220.000 | 80 M | 16.000 |
+| 1 | Cacao grove ♾️ | — | Cacao pod | 2 s | 1,000 | With the zone | 1,500 |
+| 2 | Fermentation boxes | 2 pods | Fermented cacao | 4 s | 2,500 | 2 M | 2,000 |
+| 3 | Dryer | 1 fermented | Dried cacao | 4 s | 4,400 | 5 M | 3,000 |
+| 4 | Cacao roaster | 1 dried | Roasted cacao | 4 s | 8,800 | 12 M | 4,500 |
+| 5 | Cacao mill | 2 roasted | Cacao paste | 8 s | 22,000 | 30 M | 7,000 |
+| 6 | Chocolate table *(branch, ½)* | 2 paste + 1 powdered panela ⇄ | Table chocolate | 32 s | 100,000 | 40 M | 10,000 |
+| 7 | Chocolatería *(branch, ½)* | 2 paste + 1 powdered panela ⇄ + 4 pasteurized milk ⇄ | Milk chocolate bar | 32 s | 220,000 | 80 M | 16,000 |
 
-- **Rutas**: la **Ruta de la panela al Cacaotal** abastece a la Mesa y a la Chocolatería (a igual nivel que ellas, lleva lo que gastan las dos y reparte cada carga según el sitio que le queda a cada una). La **Ruta de la leche** lleva leche pasteurizada de la bodega de la Lechería a la Chocolatería. Como el Trapiche ya manda panela a la Lechería, las dos rutas de panela se reparten lo que hay según lo que pide cada una.
-- **Las rutas cuadran a igual nivel en todas las zonas**, también al nivel 100 y con todas las investigaciones (hay una prueba): la panela que piden la Paila, la Mesa y la Chocolatería es ¾ de lo que da el Trapiche (el resto se vende), y la Pasteurizadora guarda un cuarto de su leche para la Ruta de la leche, como una rama más: sus mulas la dejan en la bodega, de donde sale la Chiva lechera. Antes de abrir el Cacaotal, ese cuarto se vende como leche.
-- **Investigaciones**: Injertos de clones finos y Cajones en escalera (×2, en pareja), Secadero con techo corredizo, Tostador de bombo, Molino de bolas, Moldes de aluminio, Temperadora (×2), Camión para el Cacaotal (despacho ×2) y Cacao fino de aroma (todo lo que vende el Cacaotal +50 %).
-- **Final**: «Chocolate para la feria», vender 4.000 chocolatinas con leche (18 objetivos; 3.000 hasta la v1.6).
-- **Duración medida** (`npm run balance`, v1.3): 1 h 45 min (jugador atento) y 1 h 55 min (el que sigue la mejora recomendada) después de completar la Lechería. Juego completo hasta aquí: unas 7 h.
+- **Routes**: the **Panela route to the Cacaotal** supplies the Mesa and the Chocolatería (at their level, it carries what both use and splits each load by the room each one has left). The **Milk route** takes pasteurized milk from the Lechería's warehouse to the Chocolatería. Since the Trapiche already sends panela to the Lechería, the two panela routes split what there is according to what each one asks for.
+- **Routes balance at the same level in every zone**, also at level 100 and with all research (there is a test): the panela the Paila, the Mesa and the Chocolatería ask for is ¾ of what the Trapiche makes (the rest is sold), and the Pasteurizadora keeps a quarter of its milk for the Milk route, like one more branch: its mules leave it in the warehouse, where the milk Chiva departs from. Before the Cacaotal opens, that quarter is sold as milk.
+- **Research**: Fine clone grafts and Stepped boxes (×2, as a pair), Dryer with a sliding roof, Drum roaster, Ball mill, Aluminum molds, Tempering machine (×2), Truck for the Cacaotal (dispatch ×2) and Fine aroma cacao (everything the Cacaotal sells +50 %).
+- **Ending**: «Chocolate for the fair», sell 4,000 milk chocolate bars (18 objectives; 3,000 until v1.6).
+- **Measured duration** (`npm run balance`, v1.3): 1 h 45 min (attentive player) and 1 h 55 min (the one following the recommended upgrade) after completing the Lechería. Full game up to here: about 7 h.
 
-#### Zona 5 · El Maizal (arepas) — 6 estaciones, 6 productos — **v1.4** ✅
-Se abre al completar el Cacaotal. Productos ×1.000 respecto al primer borrador. Cadena lineal; el **Puesto de arepas** necesita queso y mantequilla de la Lechería, que llegan por dos rutas. A igual nivel, el Puesto gasta todo el queso de la Quesera y toda la mantequilla de la Batidora (son productos finales de la Lechería: lo que no se lleva la Chiva, se vende).
+#### Zone 5 · El Maizal (arepas) — 6 stations, 6 products — **v1.4** ✅
+Opens upon completing the Cacaotal. Products ×1,000 compared with the first draft. A linear chain; the **Puesto de arepas** needs cheese and butter from the Lechería, which arrive by two routes. At the same level, the Puesto uses all the Quesera's cheese and all the Churn's butter (they are the Lechería's final products: what the Chiva does not take is sold).
 
-| # | Estación | Entrada | Salida | Ciclo (nv. 1) | Valor | Desbloqueo | Coste base |
+| # | Station | Input | Output | Cycle (lv. 1) | Value | Unlock | Base cost |
 |---|----------|---------|--------|---------------|-------|------------|------------|
-| 1 | Maizal ♾️ | — | Mazorca de maíz | 2 s | 6.000 | Con la zona | 20.000 |
-| 2 | Desgranadora | 1 mazorca | Maíz desgranado | 2 s | 12.000 | 30 M | 25.000 |
-| 3 | Piladora | 2 desgranado | Maíz pilado | 4 s | 30.000 | 80 M | 40.000 |
-| 4 | Molino de masa | 2 pilado | Masa de maíz | 8 s | 70.000 | 200 M | 60.000 |
-| 5 | Budare | 1 masa | Arepa | 8 s | 120.000 | 500 M | 90.000 |
-| 6 | Puesto de arepas | 4 arepas + 1 queso ⇄ + 1 mantequilla ⇄ | Arepas de queso (bandeja) | 32 s | 1.200.000 | 600 M | 150.000 |
+| 1 | Corn field ♾️ | — | Corn cob | 2 s | 6,000 | With the zone | 20,000 |
+| 2 | Sheller | 1 cob | Shelled corn | 2 s | 12,000 | 30 M | 25,000 |
+| 3 | Huller (piladora) | 2 shelled | Hulled corn | 4 s | 30,000 | 80 M | 40,000 |
+| 4 | Dough mill | 2 hulled | Corn dough | 8 s | 70,000 | 200 M | 60,000 |
+| 5 | Budare (griddle) | 1 dough | Arepa | 8 s | 120,000 | 500 M | 90,000 |
+| 6 | Puesto de arepas | 4 arepas + 1 cheese ⇄ + 1 butter ⇄ | Cheese arepas (platter) | 32 s | 1,200,000 | 600 M | 150,000 |
 
-- **Rutas**: la **Ruta del queso** y la **Ruta de la mantequilla** salen de la bodega de la Lechería (por la carretera de abajo) hacia el Puesto.
-- **Investigaciones**: Maíz híbrido y Desgranadora con motor (×2, en pareja), Piladora eléctrica, Molino de discos, Budare grande, Plancha doble (×2), Camión para el Maizal (despacho ×2) y Receta de la abuela (todo lo que vende el Maizal +50 %).
-- **Final**: «¡Arepas para toda la plaza!», vender 6.000 bandejas de arepas de queso (16 objetivos; 3.000 hasta la v1.6).
-- **Duración medida** (`npm run balance`, v1.4): 1 h 45 min (jugador atento) y 1 h 10 min (el que sigue la mejora recomendada) después de completar el Cacaotal. Juego completo hasta aquí: unas 8 h 30 min.
+- **Routes**: the **Cheese route** and the **Butter route** leave the Lechería's warehouse (by the lower road) toward the Puesto.
+- **Research**: Hybrid corn and Motorized sheller (×2, as a pair), Electric huller, Disc mill, Big budare, Double griddle (×2), Truck for the Maizal (dispatch ×2) and Grandma's recipe (everything the Maizal sells +50 %).
+- **Ending**: «Arepas for the whole plaza!», sell 6,000 platters of cheese arepas (16 objectives; 3,000 until v1.6).
+- **Measured duration** (`npm run balance`, v1.4): 1 h 45 min (attentive player) and 1 h 10 min (the one following the recommended upgrade) after completing the Cacaotal. Full game up to here: about 8 h 30 min.
 
-#### Zona 6 · El Pueblo (ensamble final, sin fuente propia) — 6 estaciones, 6 productos — **v1.5** ✅
-Se abre al completar el Maizal y es la última zona. Es la única **sin recurso ilimitado**: todo llega importado, y es el «examen final» de la logística entre zonas. Seis rutas, una desde cada zona: cada zona proveedora tiene **un producto final que no se lleva nadie más** (a igual nivel, 1 cada 32 s por nivel): las bolsas de café de la Finca, el cuarto de panela que sobraba en el Trapiche, el arequipe de la Lechería, los dos chocolates del Cacaotal y las arepas de queso del Maizal. A igual nivel en todas las zonas, el Pueblo los gasta justo (hay una prueba).
+#### Zone 6 · El Pueblo (final assembly, no source of its own) — 6 stations, 6 products — **v1.5** ✅
+Opens upon completing the Maizal and is the last zone. It is the only one **without an unlimited resource**: everything arrives imported, and it is the «final exam» of the logistics between zones. Six routes, one from each zone: each supplying zone has **a final product nobody else takes** (at the same level, 1 every 32 s per level): the Finca's coffee bags, the quarter of panela the Trapiche had left over, the Lechería's arequipe, the Cacaotal's two chocolates and the Maizal's cheese arepas. At the same level in every zone, the Pueblo uses them exactly (there is a test).
 
-| # | Estación | Entrada | Salida | Ciclo (nv. 1) | Valor | Desbloqueo | Coste base |
+| # | Station | Input | Output | Cycle (lv. 1) | Value | Unlock | Base cost |
 |---|----------|---------|--------|---------------|-------|------------|------------|
-| 1 | Casa del café (en la plaza) | 1 bolsa de café ⇄ | 2 café de origen | 32 s | 150.000 | Con la zona | 300.000 |
-| 2 | Greca de tintos | 1 café de origen + 1 panela pulverizada ⇄ | 2 tintos | 32 s | 400.000 | 300 M | 400.000 |
-| 3 | Fonda | 2 tintos + 1 arepa de queso ⇄ | Desayuno campesino | 32 s | 3.200.000 | 700 M | 600.000 |
-| 4 | Taller de canastas | 1 café de origen + 1 arequipe ⇄ | Canasta de fique | 32 s | 600.000 | 1.500 M | 800.000 |
-| 5 | Empaque de regalos | 1 canasta + 1 chocolate de mesa ⇄ + 1 chocolatina ⇄ | Canasta de regalo | 32 s | 2.000.000 | 1.200 M | 1.000.000 |
-| 6 | Patio de contenedores | 4 canastas de regalo | **Contenedor de exportación** | 128 s | 24.000.000 | 2.000 M | 1.500.000 |
+| 1 | Casa del café (on the plaza) | 1 bag of coffee ⇄ | 2 origin coffee | 32 s | 150,000 | With the zone | 300,000 |
+| 2 | Tinto greca | 1 origin coffee + 1 powdered panela ⇄ | 2 tintos | 32 s | 400,000 | 300 M | 400,000 |
+| 3 | Fonda | 2 tintos + 1 cheese arepa ⇄ | Farmer breakfast | 32 s | 3,200,000 | 700 M | 600,000 |
+| 4 | Basket workshop | 1 origin coffee + 1 arequipe ⇄ | Fique basket | 32 s | 600,000 | 1,500 M | 800,000 |
+| 5 | Gift packing | 1 basket + 1 table chocolate ⇄ + 1 chocolate bar ⇄ | Gift basket | 32 s | 2,000,000 | 1,200 M | 1,000,000 |
+| 6 | Container yard | 4 gift baskets | **Export container** | 128 s | 24,000,000 | 2,000 M | 1,500,000 |
 
-- **Árbol**: la Casa del café reparte su café de origen entre la Greca (→ Fonda) y el Taller (→ Empaque → Patio de contenedores).
-- **Cambios respecto al primer borrador**: el borrador tenía siete estaciones que importaban café molido, leche y crema, productos intermedios que ya se gastan del todo en sus zonas; con ellos ninguna zona cuadraba a igual nivel. Ahora el Pueblo solo usa productos finales libres, la cafetería se resume en la Greca y la Fonda, y el Muelle es un Patio de contenedores (el pueblo está en la montaña).
-- **Investigaciones**: Catadores expertos (Casa del café ×2), Greca de dos llaves, Más mesas en la Fonda, Tejedoras de fique, Cintas y moños, Grúa de contenedores (×2 cada una), Tractomula (despacho ×2) y Denominación de origen (todo lo que vende el Pueblo +50 %).
-- **Final del juego**: «¡El café de la vereda viaja por el mundo!», exportar 7.000 contenedores (17 objetivos; 1.000 hasta la v1.6).
-- **Duración medida** (`npm run balance`, v1.5): 2 h (jugador atento) y 1 h 47 min (el que sigue la mejora recomendada) después de completar el Maizal. Juego completo: unas 11 h (atento) y 10 h 15 min (casual).
+- **Tree**: the Casa del café splits its origin coffee between the Greca (→ Fonda) and the Workshop (→ Packing → Container yard).
+- **Changes from the first draft**: the draft had seven stations importing ground coffee, milk and cream, intermediate products already fully used in their zones; with them no zone balanced at the same level. Now the Pueblo only uses free final products, the café is summed up in the Greca and the Fonda, and the Pier is a Container yard (the town is in the mountains).
+- **Research**: Expert tasters (Casa del café ×2), Two-tap greca, More tables at the Fonda, Fique weavers, Ribbons and bows, Container crane (×2 each), Tractor-trailer (dispatch ×2) and Designation of origin (everything the Pueblo sells +50 %).
+- **End of the game**: «The village coffee travels the world!», export 7,000 containers (17 objectives; 1,000 until v1.6).
+- **Measured duration** (`npm run balance`, v1.5): 2 h (attentive player) and 1 h 47 min (the one following the recommended upgrade) after completing the Maizal. Full game: about 11 h (attentive) and 10 h 15 min (casual).
 
-### Cómo viajan los productos entre zonas
-- Cada zona tiene una **Bodega de salida**. Entre zonas hay **rutas** con su propio transporte mejorable (la primera, la Ruta de la panela de la v1.2, usa una **chiva**).
-- Una ruta se configura así: *producto X, de la Zona A a la Zona B*. Igual que los arrieros dentro de una zona, la ruta tiene capacidad por minuto y puede ser el cuello de botella.
-- **Cada zona sigue siendo jugable sola:** si no llega el importado, las estaciones que lo necesitan se pausan, pero el resto de la cadena produce y vende normalmente.
-- **Al completar una zona** se desbloquea la siguiente y la anterior sigue produciendo en segundo plano, como si estuviera sin conexión.
+### How products travel between zones
+- Each zone has an **outgoing Warehouse**. Between zones there are **routes** with their own upgradable transport (the first one, v1.2's Panela route, uses a **chiva**).
+- A route is set up like this: *product X, from Zone A to Zone B*. Like the mule drivers within a zone, the route has a capacity per minute and can be the bottleneck.
+- **Each zone stays playable on its own:** if the import does not arrive, the stations that need it pause, but the rest of the chain produces and sells normally.
+- **On completing a zone** the next one unlocks and the previous one keeps producing in the background, as if offline.
 
-### Orden de llegada (por qué este orden)
-1. **Finca:** cadena lineal pura, enseña lo básico.
-2. **Trapiche:** introduce los **subproductos** (bagazo) y es el primer proveedor de otras zonas.
-3. **Lechería:** introduce la **ramificación** (una leche con 4 destinos) y la **primera importación** (arequipe).
-4. **Cacaotal:** combina 2 y 3 importaciones en una sola receta.
-5. **Maizal:** recetas con ingredientes de varias zonas en el producto estrella.
-6. **Pueblo:** todo importado; pone a prueba la red completa.
+### Order of arrival (why this order)
+1. **Finca:** a pure linear chain, teaches the basics.
+2. **Trapiche:** introduces **by-products** (bagasse) and is the first supplier to other zones.
+3. **Lechería:** introduces **branching** (one milk with 4 destinations) and the **first import** (arequipe).
+4. **Cacaotal:** combines 2 and 3 imports in a single recipe.
+5. **Maizal:** recipes with ingredients from several zones in the star product.
+6. **Pueblo:** everything imported; it tests the whole network.
 
 ---
+## 5. Upgrades
 
-## 5. Mejoras
+Each station has **two axes** of upgrades.
 
-Cada estación tiene **dos ejes** de mejora.
+### 5.1 Production level (1–100)
+- **Speed:** `speed(L) = base × (1 + 15/99 × (L − 1)) × milestones`. Milestones multiply: level 10 ×2, 25 ×2, 50 ×4, 75 ×4 and 100 ×8 (×512 in all; until v1.6 they were ×2 each). With 15/99 (≈ 0.1515) level 100 gives exactly ×8,192 (16 × 512), and since every cycle is a power of 2 (2, 4, 8, 16, 32 or 128 s), at level 100 every station produces a power of 2 per second: 4,096, 2,048, 1,024, 512, 256 or 64 (a test enforces it). The maximum level is 100.
+- **Mastery and Supremacy (v1.7):** with every building of a zone at level 75 its Mastery can be researched (the whole zone, Willys included, produces ×4); with all at 100, its Supremacy (×8 more). Meant for the second ending.
+- **Milestones** at levels 10, 25, 50, 75 and 100: speed **doubles** and the building changes its look (see §8).
+- **Cost:** `cost(L) = baseCost × 1.15^(L − 1)`.
+- Buy buttons ×1, ×10 and «max».
 
-### 5.1 Nivel de producción (1–100)
-- **Velocidad:** `vel(L) = base × (1 + 15/99 × (L − 1)) × hitos`. Los hitos multiplican: nivel 10 ×2, 25 ×2, 50 ×4, 75 ×4 y 100 ×8 (×512 en total; hasta la v1.6 eran ×2 cada uno). Con 15/99 (≈ 0,1515) el nivel 100 da exactamente ×8.192 (16 × 512), y como todos los ciclos son potencias de 2 (2, 4, 8, 16, 32 o 128 s), al nivel 100 cada estación produce una potencia de 2 por segundo: 4.096, 2.048, 1.024, 512, 256 o 64 (hay una prueba que lo exige). El nivel máximo es 100.
-- **Maestría y Supremacía (v1.7):** con todos los edificios de una zona en el nivel 75 se puede investigar su Maestría (toda la zona, Willys incluido, produce ×4); con todos en el 100, su Supremacía (×8 más). Pensadas para el segundo final.
-- **Hitos** en los niveles 10, 25, 50, 75 y 100: la velocidad se **duplica** y el edificio cambia de aspecto (ver §8).
-- **Coste:** `coste(L) = costeBase × 1,15^(L − 1)`.
-- Botones de compra ×1, ×10 y «máx».
+### 5.2 Mule drivers (transport to the next station)
+- Each station has its own mules. A mule loads up, goes to the next station (or to the warehouse if the next one does not exist or its input is full), delivers and **comes back empty**.
+- Mule drivers have their own **level (1–100)**, which costs half the station's:
+  - **Mules** = 1 + one more every 10 levels (max. 10).
+  - **Load per mule** (can have decimals): computed so the team moves **25 % more than the station produces at the same level**, counting the real distance to its normal destination and what speeds the station up (research, compost).
+- **Simple rule for the player: mule drivers at the same level as their station = they carry everything.** If they are below, they are the bottleneck; Horseshoes and the Aerial cable give extra margin.
+- Diversions to the warehouse use the same mules but the trip is longer, so they move less: they are an emergency resource, not a normal path.
+- If all the mules are on the way, the product piles up in the **yard**. When it is full, the station stops (⛔).
+- **«See chain» view (🔗)**: shows per station what it receives, processes and produces, and per stretch what the mule drivers carry, what is diverted and what is lost, with the bottleneck in red.
 
-### 5.2 Arrieros (transporte hacia la siguiente estación)
-- Cada estación tiene sus propias mulas. Una mula carga, va a la siguiente estación (o a la bodega si la siguiente no existe o tiene la entrada llena), entrega y **vuelve vacía**.
-- Los arrieros tienen su propio **nivel (1–100)**, que cuesta la mitad que el de la estación:
-  - **Mulas** = 1 + una más cada 10 niveles (máx. 10).
-  - **Carga por mula** (puede tener decimales): se calcula para que el equipo mueva un **25 % más de lo que produce la estación al mismo nivel**, contando la distancia real hasta su destino normal y lo que acelera la estación (investigaciones, compost).
-- **Regla simple para el jugador: arrieros al mismo nivel que su estación = llevan todo.** Si van por debajo, son el cuello de botella; Herraduras y Cable aéreo dan margen extra.
-- Los desvíos a la bodega usan las mismas mulas pero el viaje es más largo, así que mueven menos: son un recurso de emergencia, no un camino normal.
-- Si todas las mulas están en camino, el producto se acumula en el **patio**. Cuando se llena, la estación se detiene (⛔).
-- **Vista «Ver cadena» (🔗)**: muestra por estación lo que recibe, procesa y produce, y por tramo lo que llevan los arrieros, lo que se desvía y lo que se pierde, con el cuello de botella en rojo.
+- **Conveyor belt (v1.2.3):** from transport level 50 (a milestone), the station's mules are replaced by a conveyor belt along the road. It carries exactly the same (the simulation does not change); on screen, what is on the way is boxes on the belt instead of mules with a driver, all drawn at once so that many advanced stations do not weigh down the animation.
 
-- **Banda eléctrica (v1.2.3):** desde el nivel 50 de transporte (un hito), las mulas de la estación se cambian por una banda eléctrica a un lado del camino. Lleva exactamente lo mismo (la simulación no cambia); en pantalla, lo que va en camino son cajas sobre la banda en vez de mulas con arriero, todo dibujado de una vez para que muchas estaciones avanzadas no pesen en la animación.
+### 5.3 Dispatch
+- A **Willys** takes `N` units from the Warehouse to town and comes back. Capacity and speed can be upgraded and more jeeps bought (max. 5).
+- It is the last bottleneck. At first it has room to spare; with 7 stations at a good level it becomes critical.
 
-### 5.3 Despacho
-- Un **Willys** lleva `N` unidades de la Bodega al pueblo y vuelve. Se puede mejorar la capacidad, la velocidad y comprar más jeeps (máx. 5).
-- Es el último cuello de botella. Al principio sobra; con 7 estaciones a buen nivel se vuelve crítico.
+### 5.4 Research (one-time purchases, `src/data/research.js`)
 
-### 5.4 Investigaciones (compras únicas, `src/data/research.js`)
-
-**Regla:** toda estación de cada cadena tiene **exactamente una** investigación ×2 (hay una prueba que lo exige). Desde la **v2.3.2**, la ×2 de una estación se habilita cuando **esa estación y sus arrieros llegan al nivel 25** (la Compostera, que no tiene arrieros, solo con su nivel); antes aparecía al construir la siguiente estación, y la columna «Aparece con» de las tablas de abajo es de entonces para esas. Los objetivos que piden una ×2 (Abono orgánico, Trapiche con motor, Ordeño mecánico, Injertos, Maíz híbrido y Catadores) pasaron a ir justo después del de «todo al nivel 25» de su zona. Con todas compradas, la cadena queda igual de equilibrada que sin ninguna. Las mejoras «de segunda vuelta» suben el precio, no la velocidad: un segundo ×2 en una sola estación dejaría a las demás siempre atrás.
+**Rule:** every station of every chain has **exactly one** ×2 research (a test enforces it). Since **v2.3.2**, a station's ×2 becomes available when **that station and its mule drivers reach level 25** (the Compost bin, which has no mule drivers, only with its level); before, it appeared upon building the next station, and the «Appears with» column of the tables below is from then for those. The objectives that ask for a ×2 (Organic fertilizer, Motorized trapiche, Mechanical milking, Grafts, Hybrid corn and Tasters) moved to just after their zone's «everything at level 25» objective. With all of them bought, the chain stays as balanced as with none. «Second round» upgrades raise the price, not the speed: a second ×2 on a single station would leave the others always behind.
 
 **La Finca**
 
-| Investigación | Efecto | Coste | Aparece con |
+| Research | Effect | Cost | Appears with |
 |---------------|--------|-------|-------------|
-| 🌱 Abono orgánico | Cafetal ×2 | 300 | Beneficiadero |
-| ⚡ Despulpadora eléctrica | Beneficiadero ×2 | 400 | Beneficiadero |
-| 🐴 Herraduras | Mulas ×1,5 de velocidad | 900 | Marquesina |
-| 🚙 Remolque para el Willys | Despacho ×2 de carga | 2.500 | Trilladora |
-| ♨️ Secador mecánico | Marquesina ×2 | 6.000 | Trilladora |
-| 🌀 Trilladora de rodillos | Trilladora ×2 | 8.000 | Tostadora |
-| 🧑‍🌾 Capataz | Ganancias sin conexión: +3 h (las otras zonas tienen la suya: 24 h con las seis) | 10.000 | Tostadora |
-| 🔥 Tueste de origen | Café tostado +50 % de valor | 20.000 | Tostadora |
-| 🔥 Tostador de tambor grande | Tostadora ×2 | 25.000 | Molino |
-| 💧 Beneficio ecológico | Compostera ×2 | 20.000 | Compostera |
-| 🌳 Variedad Castillo | Todo lo que vende la Finca +50 % | 50.000 | Molino |
-| ⚙️ Molino eléctrico | Molino ×2 | 60.000 | Empacadora |
-| 🚡 Cable aéreo | Mulas ×2 de velocidad | 120.000 | Empacadora |
-| 📦 Empacadora automática | Empacadora ×2 | 150.000 | Empacadora |
-| 🏅 Sello de calidad | Bolsas +50 % de valor | 300.000 | Empacadora |
+| 🌱 Organic fertilizer | Coffee field ×2 | 300 | Beneficiadero |
+| ⚡ Electric pulper | Beneficiadero ×2 | 400 | Beneficiadero |
+| 🐴 Horseshoes | Mules ×1.5 speed | 900 | Drying shed |
+| 🚙 Trailer for the Willys | Dispatch ×2 load | 2,500 | Huller |
+| ♨️ Mechanical dryer | Drying shed ×2 | 6,000 | Huller |
+| 🌀 Roller huller | Huller ×2 | 8,000 | Roaster |
+| 🧑‍🌾 Foreman | Offline earnings: +3 h (the other zones have theirs: 24 h with all six) | 10,000 | Roaster |
+| 🔥 Origin roast | Roasted coffee +50 % value | 20,000 | Roaster |
+| 🔥 Big drum roaster | Roaster ×2 | 25,000 | Mill |
+| 💧 Eco-friendly processing | Compost bin ×2 | 20,000 | Compost bin |
+| 🌳 Castillo variety | Everything the Finca sells +50 % | 50,000 | Mill |
+| ⚙️ Electric mill | Mill ×2 | 60,000 | Packer |
+| 🚡 Aerial cable | Mules ×2 speed | 120,000 | Packer |
+| 📦 Automatic packer | Packer ×2 | 150,000 | Packer |
+| 🏅 Quality seal | Bags +50 % value | 300,000 | Packer |
 
-**El Trapiche:** Trapiche con motor (Molienda ×2), Abono para la caña (Cañaduzal ×2), Hornilla de más pailas (×2), Chiva (despacho ×2), Gaveras de acero (×2), Pulverizadora eléctrica (×2), Panela orgánica (+50 % de valor).
+**El Trapiche:** Motorized trapiche (Molienda ×2), Fertilizer for the cane (cane field ×2), Hornilla with more pans (×2), Chiva (dispatch ×2), Steel gaveras (×2), Electric pulverizer (×2), Organic panela (+50 % value).
 
-### 5.5 Mejora recomendada
-El aviso de arriba recomienda la mejora que más 💰/s suma **al final de la cadena** (lo que sale de la última estación construida) por moneda gastada, entre estaciones, arrieros y despacho. Lo que se vende desviado no cuenta: si contara, la recomendación llevaría a subir arrieros para vender materia prima en lugar de completar la cadena. También recomienda una **investigación** si ya alcanza el dinero y rinde más que el mejor nivel (nunca deja al jugador ahorrando). Los arrieros, las rutas y la Compostera se miden de 10 en 10 niveles cuando un nivel suelto no llega al mínimo (unos arrieros muy atrasados o el bono del compost suman poco nivel a nivel). Si la zona recibe algo por una ruta, también cuentan las estaciones de la zona que lo envía: la recomendación puede decir «Arrieros de la Pulverizadora (El Trapiche)», y tocarla lleva allá. Si ninguna mejora suelta rinde, prueba los arrieros y las rutas de dos en dos (pueden frenarse entre sí, como la Ruta de la leche y los arrieros de la Chocolatería) y recomienda la primera del mejor par; si tampoco, el cuello de botella. La vista «La cadena» sigue marcando el cuello de botella en rojo, salvo que ya esté en el nivel 100 (no se puede mejorar más): entonces no se marca nada y el aviso dice qué falta construir o que la zona está al máximo.
+### 5.5 Recommended upgrade
+The notice at the top recommends the upgrade that adds the most 💰/s **at the end of the chain** (what comes out of the last built station) per coin spent, among stations, mule drivers and dispatch. What is sold diverted does not count: if it did, the recommendation would lead to raising mule drivers to sell raw material instead of completing the chain. It also recommends a **research** if the money is already there and it yields more than the best level (it never leaves the player saving up). Mule drivers, routes and the Compost bin are measured 10 levels at a time when a single level does not reach the minimum (very lagging mule drivers or the compost bonus add little level by level). If the zone receives something by a route, the stations of the sending zone count too: the recommendation can say «Mule drivers of the Pulverizer (El Trapiche)», and tapping it goes there. If no single upgrade yields anything, it tries mule drivers and routes two at a time (they can hold each other back, like the Milk route and the Chocolatería's mule drivers) and recommends the first of the best pair; failing that, the bottleneck. The «The chain» view keeps marking the bottleneck in red, unless it is already at level 100 (it cannot be upgraded further): then nothing is marked and the notice says what is left to build or that the zone is at the maximum.
 
-### 5.6 Desvíos y bodega
-Lo que se desvía a la bodega solo puede ocupar hasta el 70 % de su capacidad: el 30 % restante queda siempre libre para el producto final de la cadena, para que el producto barato que sobra no atasque la Empacadora.
+### 5.6 Diversions and warehouse
+What is diverted to the warehouse can only take up to 70 % of its capacity: the remaining 30 % always stays free for the chain's final product, so the cheap leftover product does not jam the Packer.
 
 ---
 
-## 6. Objetivos y final de la zona
+## 6. Objectives and the zone ending
 
-Una lista de **29 objetivos en orden** (`src/data/goals.js`). Se ven 3 a la vez, el primero también en un marcador abajo a la izquierda, y al cumplirse se **cobran** (dan monedas). Tipos: vender o producir N de un producto, subir algo a un nivel, construir una estación, investigar, ganar N 💰/s y subir todas las estaciones a un nivel.
+A list of **29 objectives in order** (`src/data/goals.js`). 3 are shown at a time, the first one also in a tracker at the bottom left, and once met they are **collected** (they give coins). Kinds: sell or produce N of a product, raise something to a level, build a station, research, earn N 💰/s and raise every station to a level.
 
-**Final de la Zona 1: «Primer gran pedido»**, vender 2.000 bolsas de café (1.000 hasta la v1.6). Al cobrarlo aparece la pantalla de «Zona completada» con las estadísticas y el anuncio de la Zona 2; se puede seguir jugando en modo libre.
+**Ending of Zone 1: «First big order»**, sell 2,000 bags of coffee (1,000 until v1.6). Collecting it shows the «Zone completed» screen with the stats and the announcement of Zone 2; free play can continue.
 
-**Balance medido** con `npm run balance` (jugador automático, ver `tools/balance-sim.js`):
+**Balance measured** with `npm run balance` (automated player, see `tools/balance-sim.js`):
 
-| Jugador | Empacadora | Zona completada |
+| Player | Packer | Zone completed |
 |---------|-----------|-----------------|
-| Atento: sube toda la cadena junta y elige la compra más rentable | ~3 h | **~3 h 30 min** |
-| Casual: sigue la mejora recomendada y los objetivos, ahorra para construir si le queda cerca | ~3 h | **~3 h 20 min** |
+| Attentive: raises the whole chain together and picks the most profitable purchase | ~3 h | **~3 h 30 min** |
+| Casual: follows the recommended upgrade and the objectives, saves up to build if it is close | ~3 h | **~3 h 20 min** |
 
-(Medido en la v1.0.1, después de que los arrieros pasaran a ir al ritmo de su estación.)
+(Measured in v1.0.1, after the mule drivers started keeping pace with their station.)
 
-### Segundo final: maestro cafetero (v1.6)
-Tras el Pueblo (o la última zona de cada región), el marcador de objetivos muestra el segundo final: **llevar todas las estaciones, arrieros y rutas de la región al nivel 100, cobrar todos sus objetivos y comprar todas sus investigaciones** (`masteryParts` en `src/sim/legacy.js`; originalmente eran las 38 estaciones de las seis primeras zonas). Hace falta haber logrado el primer final (desde la v1.7.12): se puede tener todo al 100 sin haber exportado los 7.000 contenedores, y entonces el segundo final llega al cobrarlos, después de la pantalla del Pueblo. Al lograrlo aparece la pantalla del segundo final («¡Maestro cafetero!» o su equivalente regional) con las estadísticas de la partida y la opción de **volver a empezar** la región (monedas, niveles, investigaciones y objetivos desde cero) con **toda la producción al doble**: ×2 tras el primer reinicio, ×4 tras el segundo, ×8 tras el tercero… (desde la v4.7.1, volver a empezar se hace desde la tarjeta del segundo final en Objetivos, ya no desde el menú). El multiplicador se ve arriba debajo de la mejora recomendada (v4.4.11); en la v3.56 llegaba hasta ×2³² y desde la **v3.68.3** llega hasta **×2⁶⁰ (60 reinicios, ×1,15Qi)**: se puede seguir reiniciando (cada reinicio sigue dando Renombre y contando para los logros), pero la producción ya no se duplica más. Duplica la velocidad de todas las estaciones y lo que lleva el Willys; los arrieros, las rutas, los patios y las entradas se calculan con eso, así que a igual nivel todo sigue cuadrando. Se conservan los ajustes, los avisos vistos, las compras de Renombre y el contador de reinicios.
+### Second ending: master coffee grower (v1.6)
+After the Pueblo (or the last zone of each region), the objectives tracker shows the second ending: **bring every station, mule driver team and route of the region to level 100, collect all its objectives and buy all its research** (`masteryParts` in `src/sim/legacy.js`; originally the 38 stations of the first six zones). The first ending must have been achieved (since v1.7.12): you can have everything at 100 without having exported the 7,000 containers, and then the second ending comes upon collecting them, after the Pueblo screen. Achieving it shows the second-ending screen («Master coffee grower!» or its regional equivalent) with the game's stats and the option to **start the region over** (coins, levels, research and objectives from scratch) with **all production doubled**: ×2 after the first restart, ×4 after the second, ×8 after the third… (since v4.7.1, starting over is done from the second-ending card in Objectives, no longer from the menu). The multiplier is shown at the top below the recommended upgrade (v4.4.11); in v3.56 it went up to ×2³² and since **v3.68.3** it goes up to **×2⁶⁰ (60 restarts, ×1.15Qi)**: you can keep restarting (each restart still gives Renown and counts for achievements), but production no longer doubles. It doubles the speed of every station and what the Willys carries; mule drivers, routes, yards and inputs are computed from that, so at the same level everything still balances. Settings, seen notices, Renown purchases and the restart counter are kept.
 
-Duración medida (`npm run balance`, v1.6; casual = sigue la mejora recomendada, atento = elige la compra más rentable; tras el Pueblo, los dos suben siempre lo más atrasado):
+Measured duration (`npm run balance`, v1.6; casual = follows the recommended upgrade, attentive = picks the most profitable purchase; after the Pueblo, both always raise whatever is furthest behind):
 
-| Producción | Primer final (Pueblo), casual / atento | Segundo final (todo al 100), desde el inicio |
+| Production | First ending (Pueblo), casual / attentive | Second ending (everything at 100), from the start |
 |-----------|----------------------------------------|----------------------------------------------|
-| ×1 (normal) | 10 h 16 min / 10 h 57 min | unas 143 h (casual) |
-| ×2 (1 reinicio) | 5 h 58 min / 4 h 32 min | 72 h / 74 h |
-| ×4 (2 reinicios) | 2 h 44 min / 2 h 41 min | 36 h / 36 h |
-| ×8 (3 reinicios) | 1 h 39 min / 1 h 28 min | 18 h / 19 h |
+| ×1 (normal) | 10 h 16 min / 10 h 57 min | about 143 h (casual) |
+| ×2 (1 restart) | 5 h 58 min / 4 h 32 min | 72 h / 74 h |
+| ×4 (2 restarts) | 2 h 44 min / 2 h 41 min | 36 h / 36 h |
+| ×8 (3 restarts) | 1 h 39 min / 1 h 28 min | 18 h / 19 h |
 
-El segundo final es largo a propósito de la fórmula: cada nivel cuesta ×1,15 y los últimos 25 niveles valen mucho más que el ingreso que suman.
+The second ending is long on purpose because of the formula: each level costs ×1.15 and the last 25 levels are worth much more than the income they add.
 
-Con la **jornada y las temporadas (v1.9)**, sin compensar, en horas de juego con el juego abierto (a ×1, sin reinicios):
+With the **workday and seasons (v1.9)**, uncompensated, in hours of play with the game open (at ×1, without restarts):
 
-| Jugador | Primer final, v1.8.5 → v1.9 | Segundo final, v1.8.5 → v1.9 |
+| Player | First ending, v1.8.5 → v1.9 | Second ending, v1.8.5 → v1.9 |
 |---------|-----------------------------|------------------------------|
 | Casual | 13 h 31 min → **27 h 07 min** | 27 h 36 min → **72 h 41 min** |
-| Atento | 14 h 50 min → **33 h 45 min** | 25 h 07 min → **51 h 37 min** |
+| Attentive | 14 h 50 min → **33 h 45 min** | 25 h 07 min → **51 h 37 min** |
 
-Con las ×2 al nivel 25 de la estación y sus arrieros (**v2.3.3**): primer final 30 h 41 min (casual) y 25 h 31 min (atento); segundo final 58 h 26 min y 69 h 13 min. Por zona (casual / atento): Finca 4 h 50 / 4 h 50, Trapiche 1 h 21 / 1 h 18, Lechería 4 h 00 / 4 h 16, Cacaotal 6 h 56 / 4 h 23, Maizal 5 h 57 / 3 h 14, Pueblo 7 h 38 / 7 h 29. (Los bots varían bastante de una versión a otra en el Pueblo y en el segundo final: deciden distinto según lo que tengan.)
+With the ×2s at level 25 of the station and its mule drivers (**v2.3.3**): first ending 30 h 41 min (casual) and 25 h 31 min (attentive); second ending 58 h 26 min and 69 h 13 min. Per zone (casual / attentive): Finca 4 h 50 / 4 h 50, Trapiche 1 h 21 / 1 h 18, Lechería 4 h 00 / 4 h 16, Cacaotal 6 h 56 / 4 h 23, Maizal 5 h 57 / 3 h 14, Pueblo 7 h 38 / 7 h 29. (The bots vary quite a lot from one version to another in the Pueblo and the second ending: they decide differently depending on what they have.)
 
-En la v1.9, por zona (casual / atento): Finca 5 h 06 / 4 h 35, Trapiche 1 h 22 / 1 h 19, Lechería 4 h 13 / 3 h 51, Cacaotal 7 h 14 / 4 h 41, Maizal 3 h 27 / 2 h 57 y Pueblo 5 h 47 / 16 h 22. En el Pueblo, el bot atento casi no investiga hasta el final y tarda mucho en exportar los 7.000 contenedores (es cosa del bot, no del juego). Con las ganancias sin conexión (hasta 24 h), el tiempo real es menor.
+In v1.9, per zone (casual / attentive): Finca 5 h 06 / 4 h 35, Trapiche 1 h 22 / 1 h 19, Lechería 4 h 13 / 3 h 51, Cacaotal 7 h 14 / 4 h 41, Maizal 3 h 27 / 2 h 57 and Pueblo 5 h 47 / 16 h 22. In the Pueblo, the attentive bot barely researches until the end and takes a long time to export the 7,000 containers (that is the bot, not the game). With offline earnings (up to 24 h), real time is shorter.
 
-## 7. Ganancias sin conexión
+## 7. Offline earnings
 
-- Al volver se simulan de verdad hasta 2 h de juego; lo que pase de ahí se suma al ritmo de la última hora simulada (monedas, ventas, producción e importados). Siempre a velocidad normal: el tiempo acelerado de las opciones de desarrollador solo cuenta con el juego abierto (desde la v1.8.1).
-- **Tope**: 2 h, más una investigación por zona que suma horas (desde la v1.8.1): Capataz (Finca) +3 h, Trapichero de confianza +3 h, Ordeño programado +4 h, Vigilante del cacaotal +4 h, Vecina que cuida el budare +4 h y Administrador del Pueblo +4 h: **24 h** con las seis.
-- Con la jornada y las temporadas (v1.9), lo simulado ya tiene sus noches y sus temporadas, y lo que se suma más allá se reparte según cuánto se trabaja en cada tramo (las noches no cuentan y cada temporada rinde lo suyo; `workSeconds` en `src/sim/calendar.js`): da lo mismo que jugar en vivo sin simular las 24 h.
+- On return, up to 2 h of play is really simulated; anything beyond that is added at the pace of the last simulated hour (coins, sales, production and imports). Always at normal speed: the sped-up time of the developer options only counts with the game open (since v1.8.1).
+- **Cap**: 2 h, plus one research per zone that adds hours (since v1.8.1): Foreman (Finca) +3 h, Trusted trapiche worker +3 h, Scheduled milking +4 h, Cacao grove watchman +4 h, Neighbor who minds the budare +4 h and Pueblo administrator +4 h: **24 h** with all six.
+- With the workday and seasons (v1.9), the simulated part already has its nights and seasons, and what is added beyond it is spread according to how much work happens in each stretch (nights do not count and each season yields its own; `workSeconds` in `src/sim/calendar.js`): it gives the same as playing live without simulating the 24 h.
 
-Mientras se calcula se ve una pantalla de carga con una barra de avance y cuánto tiempo pasó (v2.3.1: el cálculo va por partes con `Game.catchUpAsync`). Se muestra una ventana de bienvenida con lo ganado y si se alcanzó el tope.
+While it computes, a loading screen shows a progress bar and how much time passed (v2.3.1: the computation goes in parts with `Game.catchUpAsync`). A welcome window shows what was earned and whether the cap was reached.
 
 ---
+## 8. Art direction (isometric «toy» look, Colombian setting)
 
-## 8. Dirección de arte (isométrico «de juguete», ambientación colombiana)
+### What is taken from the genre
+- Clean isometric view, with «toy» buildings, simple volumes, soft outlines and cast shadows.
+- **Small life everywhere:** characters and animals walking with visible loads, moving machines, smoke and floating numbers.
+- **Buildings grow with their level:** each milestone changes the model (shed → house → factory).
+- Thick, friendly UI: rounded panels, big icons and bouncy buttons.
 
-### Lo que se toma del género
-- Isométrico limpio, con edificios «de juguete», volúmenes sencillos, contornos suaves y sombras proyectadas.
-- **Vida pequeña por todas partes:** personajes y animales que caminan llevando cargas visibles, máquinas que se mueven, humo y números flotando.
-- **Los edificios crecen con el nivel:** cada hito cambia el modelo (cobertizo → casa → fábrica).
-- UI gruesa y amable: paneles redondeados, iconos grandes y botones que rebotan.
+### Setting
+- A green hillside on the diagonal, with the coffee field at the top and the town at the bottom. A zigzag dirt road joins the stations.
+- Background: layered mountains with mist, tall wax palms and passing clouds.
+- Stations are colorful farmhouses: white with a plinth, wooden doors and balconies painted red, blue, yellow or green, and clay roof tiles.
+- **Mule drivers:** mules with sacks and a farmer in an aguadeño hat and poncho.
+- **Dispatch:** a Willys jeep loaded to the top going down the road.
+- Day and night: a misty dawn, a bright day and a night with warm lanterns and lit windows. Since v1.9, there is no work at night (§10.1).
 
-### Ambientación
-- Ladera verde en diagonal, con el cafetal arriba y el pueblo abajo. Un camino de tierra en zigzag une las estaciones.
-- Fondo: montañas en capas con niebla, palmas de cera altas y nubes que pasan.
-- Las estaciones son casas campesinas de colores: blanco con zócalo, puertas y balcones de madera pintados de rojo, azul, amarillo o verde, y tejas de barro.
-- **Arrieros:** mulas con costales y un campesino de sombrero aguadeño y poncho.
-- **Despacho:** un jeep Willys cargado hasta arriba bajando la carretera.
-- Día y noche: amanecer con niebla, día brillante y noche con faroles cálidos y ventanas iluminadas. Desde la v1.9, de noche no se trabaja (§10.1).
+### Visual evolution by milestone (implemented in v0.4)
+Each station keeps its own drawing and gains details with each milestone:
 
-### Evolución visual por hitos (implementado en la v0.4)
-Cada estación conserva su dibujo propio y va ganando detalles con cada hito:
-
-| Hito | Nivel | Qué cambia |
+| Milestone | Level | What changes |
 |------|-------|------------|
-| 1 | 10 | Macetas con flores y remates de otro color |
-| 2 | 25 | Segundo piso con balcón (la Marquesina gana una cama más, la rueda del Molino crece) |
-| 3 | 50 | Dos faroles que se encienden de noche |
-| 4 | 75 | Patio empedrado |
-| 5 | 100 | Bandera de Colombia ondeando en el tejado y remates dorados |
+| 1 | 10 | Flower pots and trims in another color |
+| 2 | 25 | Second floor with a balcony (the Drying shed gains one more bed, the Mill's wheel grows) |
+| 3 | 50 | Two lanterns that light up at night |
+| 4 | 75 | Cobbled yard |
+| 5 | 100 | The flag of Colombia waving on the roof and golden trims |
 
-La casa del Cafetal evoluciona aparte (de rancho de madera a casa de dos pisos con balcón).
+The coffee field's house evolves separately (from a wooden hut to a two-story house with a balcony).
 
-### Día y noche (v0.4)
-- Un día dura 8 minutos de juego; una partida nueva empieza a las 8:00.
-- El mundo se tiñe (amanecer rosado, atardecer naranja, noche azul) y el cielo cambia de degradado. Las estrellas, ventanas, faroles, el fuego de la Tostadora y las luciérnagas brillan de noche.
-- Hasta la v1.8 era solo decorativo. Desde la **v1.9** hay jornada de trabajo (de 6:00 a 18:00; desde la v3.8, de 6:00 a 12:00 y de 14:00 a 20:00) y temporadas (§10.1); el calendario está en `src/sim/calendar.js`.
+### Day and night (v0.4)
+- A day lasts 8 minutes of play; a new game starts at 8:00.
+- The world is tinted (pink dawn, orange dusk, blue night) and the sky gradient changes. Stars, windows, lanterns, the Roaster's fire and fireflies glow at night.
+- Until v1.8 it was only decorative. Since **v1.9** there is a workday (from 6:00 to 18:00; since v3.8, from 6:00 to 12:00 and from 14:00 to 20:00) and seasons (§10.1); the calendar is in `src/sim/calendar.js`.
 
-### Sonido (v0.4)
-Sintetizado con Web Audio, sin archivos: clic de botones, monedas al vender, arpegio al subir de nivel y al cruzar un hito, martillazos al construir, pájaros de día y grillos de noche. Se apaga desde el menú y la preferencia se guarda con la partida.
+### Sound (v0.4)
+Synthesized with Web Audio, with no files: button clicks, coins when selling, an arpeggio on leveling up and crossing a milestone, hammering when building, birds by day and crickets at night. It can be turned off from the menu and the preference is saved with the game.
 
-**Al entrar a una estación (v3.3.2)** suena su oficio: las **360 estaciones** y la bodega se agrupan en **17 sonidos** (`STATION_SOUNDS` en `src/audio/Sound.js`): cultivo, mugido, agua, motor, giro, fuego, hervor, viento, fermentación, cuchillo, telar, cajas, sirena del barco, chisporroteo, pocillos, sal y el Willys. Desde la v3.66 el menú tiene controles independientes de volumen para música (por defecto 40 %) y efectos.
+**On entering a station (v3.3.2)** its trade is heard: the **360 stations** and the warehouse are grouped into **17 sounds** (`STATION_SOUNDS` in `src/audio/Sound.js`): field, moo, water, engine, spinning, fire, boiling, wind, fermentation, knife, loom, boxes, ship horn, sizzle, cups, salt and the Willys. Since v3.66 the menu has separate volume controls for music (40 % by default) and effects.
 
-**Música (v1.8.7, propia):** cada una de las **10 regiones** tiene su pieza (`src/audio/songs.js`); la del Eje Cafetero es un **bambuco** en 3/4 (mi menor y sol mayor, 32 compases, 108 negras por minuto). El juego la arma al empezar (`src/audio/compose.js`, unos 0,3 s, compás por compás para no trabarse) con cuerdas Karplus-Strong: bajo y rasgueo de guitarra en el primer, segundo y tercer tiempo, golpes apagados de tiple en el contratiempo y la melodía de bandola, con trémolo en las notas largas. Suena en bucle tras el primer toque, con eco de sala, fundido de entrada y salida, se pausa con la pestaña oculta y tiene su propio botón en el menú. Además, desde la v3.71 las 10 piezas (MP3 y MIDI por pistas) y los efectos están disponibles para descargar en `web/musica/` (`/musica/` en la web, fuera del APK/AAB).
+**Music (v1.8.7, original):** each of the **10 regions** has its piece (`src/audio/songs.js`); the Eje Cafetero's is a **bambuco** in 3/4 (E minor and G major, 32 bars, 108 quarter notes per minute). The game builds it on start (`src/audio/compose.js`, about 0.3 s, bar by bar so it does not stutter) with Karplus-Strong strings: guitar bass and strumming on the first, second and third beats, muted tiple strokes on the offbeat and the bandola melody, with tremolo on long notes. It loops after the first tap, with room echo, fade in and out, pauses when the tab is hidden and has its own button in the menu. Also, since v3.71 the 10 pieces (MP3 and per-track MIDI) and the effects can be downloaded from `web/musica/` (`/musica/` on the web, outside the APK/AAB).
 
-### Paleta
+### Palette
 
-| Uso | Hex |
+| Use | Hex |
 |-----|-----|
-| Cafetal verde (luz) | `#7DBA4E` |
-| Cafetal verde (sombra) | `#4E7F33` |
-| Montaña lejana | `#8FB3A0` → `#C9DCCF` (niebla) |
-| Cereza roja | `#D7263D` |
-| Café tostado | `#6B3E26` |
-| Tierra del camino | `#C79A64` |
-| Pared encalada | `#F4EFE6` |
-| Teja | `#B5512E` |
-| Balcones | `#2E6FD1` · `#E8B90F` · `#D7263D` · `#2FA36B` |
-| Contorno | `#3A2418` (60 %) |
-| Cielo de día | `#BFE3F2` |
-| Atardecer | `#F6B26B` → `#E07A5F` |
-| Noche (tinte) | `#2B2D5B` (multiply, 40 %) |
-| Farol | `#FFC864` (glow) |
+| Coffee field green (light) | `#7DBA4E` |
+| Coffee field green (shade) | `#4E7F33` |
+| Distant mountain | `#8FB3A0` → `#C9DCCF` (mist) |
+| Red cherry | `#D7263D` |
+| Roasted coffee | `#6B3E26` |
+| Road dirt | `#C79A64` |
+| Whitewashed wall | `#F4EFE6` |
+| Roof tile | `#B5512E` |
+| Balconies | `#2E6FD1` · `#E8B90F` · `#D7263D` · `#2FA36B` |
+| Outline | `#3A2418` (60 %) |
+| Day sky | `#BFE3F2` |
+| Dusk | `#F6B26B` → `#E07A5F` |
+| Night (tint) | `#2B2D5B` (multiply, 40 %) |
+| Lantern | `#FFC864` (glow) |
 
-### Reglas visuales
-- **Casillas:** rombos de 64×32 px. Las estaciones ocupan 3×3 casillas.
-- **Sombreado:** cara superior = base, izquierda = −15 % de luz, derecha = −30 %.
-- **Personajes:** de 16×24 px, cabeza grande y caminata de 3 fotogramas; mulas de 24×20 px con los costales de un color distinto según el producto.
-- **Efectos:**
-  - Número flotante «+250 💰» al vender.
-  - Monedas que saltan del Willys al llegar al pueblo.
-  - Humo en la tostadora, vapor en el beneficiadero y granos esparcidos en la marquesina.
-  - Destello y pequeño rebote al subir de nivel; confeti y cambio de modelo en cada hito.
-  - **Indicadores de estado sobre cada estación:** ⏸️ esperando entrada · ⛔ salida llena · ↪️ desviando a bodega. Desde la v1.7.8 solo salen si el problema dura: ocupa al menos la mitad de los últimos 10 s de juego (30 s en la v1.7.8) (esperar cuenta solo en rachas de 8 s o más sin entrada), y se quitan cuando baja de la quinta parte. Con todo nivelado, el producto viaja por tandas y los momentos sueltos de patio lleno o de espera son normales. El aviso del panel usa el mismo criterio. La Compostera llena no se marca (es compost de sobra).
-- **UI e interacciones (actualizado a v4.7.4):**
-  - Barra superior: 💰 (al tocarlo abre **💰 De dónde sale**, `MoneyView.js`, con el desglose por zona y multiplicadores) y 💰/s, reloj/temporada y accesos a Mapa/Zonas, Cadena, Investigaciones, Eventos/Renombre y Menú.
-  - Panel inferior de la estación seleccionada: pestañas ⚙️ Estación, 🐴 Arrieros y 🚌 Rutas / Bodega; botones ×1 / ×10 / máx.
-  - Lateral: objetivos y marcador del primer objetivo cobrable.
-  - Botón «Ver cadena» (`ChainView.js`): diagrama de flujo con tubos de **color propio por producto** (`pipeColors.js`), canales para subproductos y entradas múltiples, etiquetas 📦 por estación, cuello de botella en rojo y botones abajo de **🏗️ Construir** (construye en orden lo que alcance) y **⬆️ Todo al nivel X** (sube todo hasta el próximo hito tras el primer reinicio por 10 ⭐).
-  - Mapa de Colombia (`ZoneMap.js`): zoom, aeropuertos reales por región, viaje animado en Willys y avioneta o modo **⚡ Directo**.
-  - Fuente empaquetada **Fredoka** + fuente de íconos COLR propia **MiTierrita Icons** (**602 glifos** en `src/data/icons.js`, sin dependencias externas ni emojis variables del sistema) y **360 láminas** del álbum dibujadas con código, con tooltips descriptivos (`iconTips.js`).
-  - Botones (v4.4.6): todos del mismo alto (50 px, el de un botón con el texto en dos renglones), con el texto centrado.
-  - Tablero del evento (v4.4.7): se recoge con ▾ a la fila del título, el reloj y la barra de avance (se recuerda en el teléfono); se abre con ▴ o tocando el título, y solo al señalar la mejora recomendada.
-  - Borrar partida (v4.3.2, v4.4.6): primero el botón rojo; al tocarlo aparece la barra que se desliza hasta el final para confirmar, y si no se desliza en 8 s vuelve el botón.
+### Visual rules
+- **Tiles:** 64×32 px diamonds. Stations take up 3×3 tiles.
+- **Shading:** top face = base, left = −15 % light, right = −30 %.
+- **Characters:** 16×24 px, big head and a 3-frame walk; mules of 24×20 px with sacks of a different color for each product.
+- **Effects:**
+  - Floating «+250 💰» number when selling.
+  - Coins jumping from the Willys when it reaches town.
+  - Smoke in the roaster, steam in the beneficiadero and beans spread out in the drying shed.
+  - A flash and a small bounce on leveling up; confetti and a model change at each milestone.
+  - **Status indicators over each station:** ⏸️ waiting for input · ⛔ output full · ↪️ diverting to the warehouse. Since v1.7.8 they only show if the problem lasts: it takes up at least half of the last 10 s of play (30 s in v1.7.8) (waiting counts only in streaks of 8 s or more without input), and they go away when it drops below a fifth. With everything leveled, the product travels in batches and brief moments of a full yard or waiting are normal. The panel notice uses the same criterion. A full Compost bin is not marked (it is spare compost).
+- **UI and interactions (updated to v4.7.4):**
+  - Top bar: 💰 (tapping it opens **💰 Where it comes from**, `MoneyView.js`, with the breakdown by zone and multipliers) and 💰/s, clock/season and shortcuts to Map/Zones, Chain, Research, Events/Renown and Menu.
+  - Bottom panel of the selected station: tabs ⚙️ Station, 🐴 Mule drivers and 🚌 Routes / Warehouse; buttons ×1 / ×10 / max.
+  - Side: objectives and the tracker of the first collectible objective.
+  - «See chain» button (`ChainView.js`): a flow diagram with **per-product colored** pipes (`pipeColors.js`), channels for by-products and multiple inputs, 📦 labels per station, the bottleneck in red and buttons at the bottom for **🏗️ Build** (builds in order whatever is affordable) and **⬆️ Everything to level X** (raises everything to the next milestone after the first restart, for 10 ⭐).
+  - Map of Colombia (`ZoneMap.js`): zoom, real airports per region, animated travel by Willys and bush plane or **⚡ Direct** mode.
+  - Bundled **Fredoka** font + the game's own COLR icon font **MiTierrita Icons** (**602 glyphs** in `src/data/icons.js`, with no external dependencies or system emojis that vary) and **360 album stickers** drawn in code, with descriptive tooltips (`iconTips.js`).
+  - Buttons (v4.4.6): all the same height (50 px, that of a button with its text on two lines), with centered text.
+  - Event board (v4.4.7): it collapses with ▾ to the row with the title, the clock and the progress bar (remembered on the phone); it opens with ▴ or by tapping the title, and only when pointing to the recommended upgrade.
+  - Delete game (v4.3.2, v4.4.6): first the red button; tapping it shows the bar that is slid all the way to confirm, and if it is not slid within 8 s the button comes back.
 
-### Producción del arte sin artista
-1. **v0.1–0.3:** todo se dibujaba por código básico (cajas isométricas, techos de dos aguas, arbustos).
-2. **v0.4–v4.3+:** arquitectura modular por código (`Buildings.js`, `Terrain.js`, `EventArt.js`, `Album`, `tools/icons/build_icons.py`) con ilustraciones propias para las 360 láminas del álbum y 602 íconos COLR uniformes en cualquier dispositivo.
+### Producing the art without an artist
+1. **v0.1–0.3:** everything was drawn with basic code (isometric boxes, gabled roofs, bushes).
+2. **v0.4–v4.3+:** modular architecture in code (`Buildings.js`, `Terrain.js`, `EventArt.js`, `Album`, `tools/icons/build_icons.py`) with original illustrations for the 360 album stickers and 602 COLR icons that look the same on any device.
 
 ---
 
-## 9. Arquitectura técnica
+## 9. Technical architecture
 
-- **Stack:** JavaScript (ES modules), Vite, PixiJS v8 y **Capacitor 8** para Android (`android/`).
-- **Sin servidor:** se guarda en `localStorage` como JSON versionado, con **copia de seguridad en archivo** (`src/backup.js`: descargar/abrir `.json` en web y hoja nativa de Compartir/Archivos en móvil vía `@capacitor/filesystem` y `@capacitor/share`).
-- **La simulación y el dibujo van separados:**
-  - La simulación avanza a tick fijo (10/s), es pura y se prueba con Node (`npm test`).
-  - El dibujo (`src/render/`) solo lee el estado.
-- **Todo el contenido son datos:** regiones, zonas, estaciones, productos, rutas, mejoras, investigaciones, objetivos, eventos, álbum y logros viven en `src/data/`.
-- **Idiomas (`src/i18n/`):** base en español con traducciones dinámicas a **inglés (`en`), portugués (`pt`) y francés (`fr`)**, artículos y reglas tipográficas por idioma, y scripts de verificación (`tools/i18n-*.mjs`, `test/i18n.test.js`).
-- **Números grandes:** con `Number` hasta el techo de monedas **`999Dc`** (`MAX_COINS = 999e33`, v3.68.3) y multiplicadores de reinicio hasta **`×2⁶⁰` (`×1,15Qi`)**. Formato con coma o punto decimal según idioma (`1,23K · 3,45M · 5,67B … Dc`).
+- **Stack:** JavaScript (ES modules), Vite, PixiJS v8 and **Capacitor 8** for Android (`android/`).
+- **No server:** saved in `localStorage` as versioned JSON, with a **file backup** (`src/backup.js`: download/open `.json` on the web and the native Share/Files sheet on mobile via `@capacitor/filesystem` and `@capacitor/share`).
+- **Simulation and drawing are separate:**
+  - The simulation advances at a fixed tick (10/s), is pure and is tested with Node (`npm test`).
+  - Drawing (`src/render/`) only reads the state.
+- **All content is data:** regions, zones, stations, products, routes, upgrades, research, objectives, events, album and achievements live in `src/data/`.
+- **Languages (`src/i18n/`):** Spanish base with dynamic translations to **English (`en`), Portuguese (`pt`) and French (`fr`)**, articles and typographic rules per language, and verification scripts (`tools/i18n-*.mjs`, `test/i18n.test.js`).
+- **Big numbers:** with `Number` up to the coin ceiling **`999Dc`** (`MAX_COINS = 999e33`, v3.68.3) and restart multipliers up to **`×2⁶⁰` (`×1.15Qi`)**. Formatted with a decimal comma or point depending on the language (`1.23K · 3.45M · 5.67B … Dc`).
 
-### Carpetas
+### Folders
 
 ```
 /
 ├─ index.html
-├─ package.json                # scripts dev (puerto 3000), build, test, balance, android
+├─ package.json                # scripts dev (port 3000), build, test, balance, android
 ├─ vite.config.js
 ├─ capacitor.config.json
-├─ .github/workflows/pages.yml # publica web, mitierrita.apk, mitierrita.aab y /musica/
-├─ docs/GDD.md                 # documento de diseño
-├─ public/                     # manifest, sw.js, íconos PWA, privacidad.html, licencia Fredoka
-├─ store/                      # fichas de Google Play, capturas e imágenes en es/en/pt/fr
-├─ web/musica/                 # MP3 y MIDI descargables de las 10 regiones y 31 efectos
+├─ CHANGELOG.md                # release notes in English; CHANGELOG.es/pt/fr.md in the other languages
+├─ .github/workflows/pages.yml # publishes the web, mitierrita.apk, mitierrita.aab and /musica/
+├─ docs/GDD.md                 # design document
+├─ public/                     # manifest, sw.js, PWA icons, privacy policy (es/en/pt/fr), Fredoka license
+├─ store/                      # Google Play listings, screenshots and images in es/en/pt/fr
+├─ web/musica/                 # downloadable MP3 and MIDI of the 10 regions and 31 effects
 ├─ tools/                      # balance-sim, event-bots/sim/idle, i18n-*, music/sfx-export, geo, icons
 └─ src/
-   ├─ main.js, boot.js         # arranque, carga de idioma, escena y HUD
-   ├─ backup.js, native.js     # archivo/Share de copias de seguridad y ciclo de vida Capacitor
-   ├─ tip.js, update.js        # propinas Play/Ko-fi y aviso de actualización APK
+   ├─ main.js, boot.js         # startup, language loading, scene and HUD
+   ├─ backup.js, native.js     # backup file/Share and Capacitor lifecycle
+   ├─ tip.js, update.js        # Play/Ko-fi tips and the APK update notice
    ├─ core/                    # Game, EventBus, SaveSystem, format, path, rng
-   ├─ sim/                     # simulación pura (stations, transport, dispatch, chain, routes,
+   ├─ sim/                     # pure simulation (stations, transport, dispatch, chain, routes,
    │                           # upgrades, goals, events, calendar, regions, legacy, logros, renown...)
-   ├─ data/                    # 10 regiones, zones/zone1..55, stations, products, routes,
+   ├─ data/                    # 10 regions, zones/zone1..55, stations, products, routes,
    │                           # research, goals, events, album, logros, icons, colombiaMap, zoneGeo
    ├─ render/                  # PixiJS v8 (Scene, Buildings, Stations, Terrain, Belts, Carriers,
    │                           # Keeper, Pets, Critters, Weather, DayNight, Effects, EventArt, occlusion)
    ├─ ui/                      # HUD, StationPanel, ChainView, ZoneMap, ZonesView, MoneyView,
    │                           # GoalsView, EventsView, EventBar, RenownView, iconTips, calendar...
-   ├─ audio/                   # compose.js, Music.js, Sound.js, songs.js (10 piezas regionales)
+   ├─ audio/                   # compose.js, Music.js, Sound.js, songs.js (10 regional pieces)
    ├─ i18n/                    # apply.js, index.js, en/, pt/, fr/
-   └─ assets/                  # fuentes Fredoka y mitierrita-icons.woff2
+   └─ assets/                  # Fredoka fonts and mitierrita-icons.woff2
 ```
 
-### Ejemplo de datos
+### Data example
 
 ```js
 // src/data/stations.js
@@ -540,218 +537,216 @@ export const STATIONS = [
   // ...
 ];
 
-export const MILESTONES = [10, 25, 50, 75, 100]; // ×2 de velocidad en cada uno
+export const MILESTONES = [10, 25, 50, 75, 100]; // ×2 speed at each one
 export const COST_GROWTH = 1.15;
 ```
 
 ---
+## 10. Roadmap
 
-## 10. Hoja de ruta
-
-| Versión | Contenido | Resultado jugable |
+| Version | Content | Playable result |
 |---------|-----------|-------------------|
-| **v0.1** ✅ | Mapa isométrico, cámara, Cafetal + Despacho, mejora de nivel, HUD de monedas | Producir cerezas, venderlas y mejorar |
-| **v0.2** ✅ | Las 7 estaciones, recetas, buffers, desvío a bodega, desbloqueos | La cadena completa funciona |
-| **v0.3** ✅ | Arrieros reales por el camino, mejoras de transporte, Willys, indicadores de estado, vista «Ver cadena» | Los cuellos de botella son visibles |
-| **v0.4** ✅ | Hitos con cambio de modelo, efectos, día y noche cosmético, sonido básico | Se siente vivo |
-| **v0.5** ✅ | Objetivos, investigaciones, guardado, ganancias sin conexión, simulador de balance | Se juega de principio a fin |
-| **v1.0** | Contenedor de exportación, pantalla final y balance ajustado | **Zona 1 completa** |
-| v1.1 ✅ | **Zona 2: El Trapiche**: caña → panela; bagazo como combustible; varias zonas a la vez y selector de zonas | Expansión |
-| v1.2 ✅ | **Zona 3: La Lechería**: ramificación de la leche; **primera ruta entre zonas** (panela del Trapiche para el arequipe) | Expansión |
-| v1.3 ✅ | **Zona 4: El Cacaotal**: chocolate de mesa y chocolatina; dos importaciones a la vez y rutas que abastecen varias estaciones | Expansión |
-| v1.4 ✅ | **Zona 5: El Maizal**: arepas y arepas de queso con queso y mantequilla de la Lechería | Expansión |
-| v1.5 ✅ | **Zona 6: El Pueblo**: Casa del café, Greca, Fonda, canastas de regalo y Contenedor de exportación (**final del juego**) | Expansión final |
-| v1.6 ✅ | **Segundo final**: todo al nivel 100; volver a empezar con producción ×2, ×4, ×8… | Rejugable |
-| v1.7 ✅ | Hitos más fuertes (×2, ×2, ×4, ×4, ×8), **Maestría** ×4 y **Supremacía** ×8 por zona, objetivos finales más largos | Segundo final alcanzable |
-| v1.8 ✅ | **Ambiente**: datos reales en los paneles y una persona por zona que avisa lo importante; vida en el mapa (gallinas, perro, vacas, gente, palomas); sonidos por zona; la cadena como diagrama | Más personalidad |
-| v1.9 ✅ | **Jornada y temporadas** (§10.1): de noche no se trabaja; verano, entrada de aguas, invierno y veranillo | Ritmo |
-| v2.0 | **Eventos e insignias** (§10.2): un evento por zona al año, con medallas; progresión general que no se pierde al reiniciar | Rejugable a largo plazo |
-| v3.0 ✅ | **Regiones** (§10.3): Santander se abre al completar el Pueblo; su primera zona, **La Guayabera** (bocadillo veleño), y su música (guabina) | Más país |
-| v3.1 ✅ | **El Tabacal** (tabaco torcido a mano), la segunda zona de Santander | Santander crece |
-| v3.2 ✅ | **La Fiquera** (costales, alpargatas y tercios de tabaco), con la primera ruta de Santander: la del tabaco, desde el Tabacal | Santander crece |
-| v3.3 ✅ | **El Hato** (carne oreada, almuerzo y fiambre), con las rutas del bocadillo (Guayabera) y de la cabuya (Fiquera) | Santander crece |
-| v3.4 ✅ | **Las Hormigas** (hormiga culona, cosechada solo en la entrada de aguas), con las rutas de los costales y las alpargatas (Fiquera) | Santander crece |
-| v3.5 ✅ | **Barichara**, la última zona de Santander (como el Pueblo: recibe lo de las otras cinco y lo vuelve excursiones por el Camino Real a Guane) | Santander completo |
-| v3.15 ✅ | **La Costa** se abre al completar Barichara; su primera zona, **El Arrozal** (arroz de Montería y Mompox), y su música (cumbia) | Más país |
-| v3.16 ✅ | **El Cocal** (coco → leche de coco → cocadas), la segunda zona de la Costa | La Costa crece |
-| v3.17 ✅ | **La Ciénaga** (bocachico: pescado salado, frito con patacón y en coco), con la primera ruta de la Costa: la de la leche de coco, desde el Cocal | La Costa crece |
-| v3.18 ✅ | **La Quesera** (queso costeño y mote de queso: almuerzo costeño y bandeja costeña), con las rutas del arroz (Arrozal) y del pescado (Ciénaga) | La Costa crece |
-| v3.19 ✅ | **El Sombrero** (caña flecha → trenza → sombrero vueltiao; el Parador de Tuchín), con las rutas del pescado salado y del pescado frito (Ciénaga) | La Costa crece |
-| v3.20 ✅ | **Cartagena**, la última zona de la Costa (como Barichara: recibe lo de las otras cinco y lo vuelve paseos a las Islas del Rosario) | La Costa completa |
-| v3.21 ✅ | La Costa completa: sus 6 eventos, su álbum, sus logros y su segundo final | La Costa completa |
-| v3.22 ✅ | **Boyacá** se abre al completar Cartagena; su primera zona, **El Papal** (papitas criollas), y su música (torbellino) | Más país |
-| v3.23 ✅ | **La Cervecería** (cebada → malta → mosto → cerveza → canasta), la segunda zona de Boyacá | Boyacá crece |
-| v3.24 ✅ | **Ráquira** (ollas, materas pintadas y jarras de barro con cerveza), con la primera ruta de Boyacá: la de la cerveza, desde la Cervecería | Boyacá crece |
-| v3.25 ✅ | **Paipa** (queso Paipa, almojábanas, piquete y canasta de amasijos), con las rutas de las papitas (Papal) y del barro (Ráquira) | Boyacá crece |
-| v3.26 ✅ | **Las Ruanas** (oveja → lana → ruana; la Tienda de Nobsa), con las rutas de las ollas y las materas (Ráquira) | Boyacá crece |
-| v3.27 ✅ | **Villa de Leyva**, la última zona de Boyacá (como Barichara y Cartagena: recibe lo de las otras cinco y lo vuelve excursiones al Fósil) | Boyacá completa |
-| v3.28 ✅ | Boyacá completa: sus 6 eventos, su álbum, sus logros y su segundo final | Boyacá completa |
-| v3.29 ✅ | **La plaza de Vélez** en la mitad de la Guayabera, con su iglesia de una torre y campanas; las mulas la rodean con los mismos tiempos. Gatos a 10 ⭐ y loros a 8 ⭐ | Más personalidad |
-| v3.30 ✅ | **Menos eventos**: 2 cupos para todo el juego (nunca de la misma región) y 2 años de espera; pausar, reiniciar y terminar dentro del evento, y seguir mirándolo al ganarlo | Ritmo |
-| v3.31 ✅ | **Los Llanos** se abren al completar Villa de Leyva; su primera zona, **La Palma** (aceite de palma), y su música (joropo) | Más país |
-| v3.32 ✅ | **El Frutal** (maracuyá → pulpa → pulpa pasteurizada → jugo → caja de jugos), la segunda zona de los Llanos | Los Llanos crecen |
-| v3.33 ✅ | **La Cachamera** (pisillo, cachama ahumada y cachama al maracuyá), con la primera ruta de los Llanos: la del jugo, desde el Frutal | Los Llanos crecen |
-| v3.34 ✅ | **El Hato llanero** (mamona a la vara, carne a la llanera, almuerzo llanero y asado de la parranda), con las rutas del aceite (Palma) y de la cachama (Cachamera) | Los Llanos crecen |
-| v3.35 ✅ | **La Talabartería** (cuero → silla de montar; el Recuerdo del Llano), con las rutas del pisillo y de la cachama ahumada (Cachamera) | Los Llanos crecen |
-| v3.36 ✅ | **Villavicencio**, la última zona de los Llanos (como Villa de Leyva: recibe lo de las otras cinco y lo vuelve excursiones a Caño Cristales) | Los Llanos completos |
-| v3.37 ✅ | Los Llanos completos: sus 6 eventos, su álbum, sus logros y su segundo final | Los Llanos completos |
-| v3.38 ✅ | **La Costa Pacífica** (salió como «el Chocó») se abre al completar Villavicencio; su primera zona, **El Platanal** (patacones), y su música (chirimía) | Más país |
-| v3.39 ✅ | **La Azotea** (hierbas de azotea → lavadas → machacadas en el pilón → aliño → caja de aliño), la segunda zona de la Costa Pacífica; la región cambia de nombre | La Costa Pacífica crece |
-| v3.40 ✅ | **La Bahía** (pargo: pescado seco, ahumado y tapao), con la primera ruta de la Costa Pacífica: la del aliño, desde la Azotea | La Costa Pacífica crece |
-| v3.41 ✅ | **El Manglar** (piangua: arroz con piangua y cazuela de mariscos), con las rutas de los patacones (Platanal) y del pargo (Bahía) | La Costa Pacífica crece |
-| v3.42 ✅ | **El Werregue** (fibra → teñida → hebra → jarrón; el Recuerdo del Pacífico), con las rutas del pescado seco y del pargo ahumado (Bahía) | La Costa Pacífica crece |
-| v3.43 ✅ | **Buenaventura**, la última zona de la Costa Pacífica (como Villavicencio: recibe lo de las otras cinco y lo vuelve salidas a ver las ballenas) | La Costa Pacífica completa |
-| v3.44 ✅ | La Costa Pacífica completa: sus 6 eventos, su álbum, sus logros y su segundo final | La Costa Pacífica completa |
-| v3.45 ✅ | **Cartagena amurallada y frente al mar**: el Caribe, la playa, la muralla con garitas, las puertas y la Torre del Reloj (solo dibujo) | Más personalidad |
-| v3.47 ✅ | **El Amazonas** se abre al completar Buenaventura; su primera zona, **El Asaizal** (asaí), y su música (cumbia amazónica) | Más país |
-| v3.48 ✅ | **El Ajizal** (ají → lavado → molido → ají negro en el tucupí → caja), la segunda zona del Amazonas | El Amazonas crece |
-| v3.49 ✅ | **El Lago** (pirarucú: salado, moqueado y al ají negro), con la Ruta del ají negro | El Amazonas crece |
-| v3.50 ✅ | **La Casabería** (yuca brava → casabe; desayuno amazónico y banquete de la maloca), con las rutas del asaí y del pirarucú | El Amazonas crece |
-| v3.51 ✅ | **La Yanchama** (corteza de yanchama → tela golpeada → pintada → máscara ticuna; la tienda vende el Recuerdo del Amazonas), con las rutas del pirarucú salado y del moqueado | El Amazonas crece |
-| v3.52 ✅ | **Leticia** (el final del Amazonas: heladería, restaurante, hotel de la selva, mercado del puerto, provisiones de canoa y salidas a ver los delfines rosados), con seis rutas | El Amazonas crece |
-| v3.53 ✅ | **El Amazonas completo**: sus seis eventos (las palmas muy altas, la sequía, el fin de la veda, la vaciante, la Pelazón y el Festival de la Confraternidad), su álbum y sus logros | El Amazonas crece |
-| v3.54 ✅ | Regiones plegables en el selector de zonas; el mar Pacífico con ballenas jorobadas detrás de Buenaventura | Navegación y vida en el mapa |
-| v3.55 ✅ | «Zona al máximo» solo con todo en el nivel máximo; si no, la sugerencia dice qué falta subir | Claridad |
-| v3.56 ✅ | Tope del reinicio: la producción llega hasta ×2³² (32 reinicios); se puede seguir reiniciando, pero ya no se duplica | Balance |
-| v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía); los dos botones abajo, fuera de la lista | Comodidad |
-| v3.58 ✅ | La Compostera sin construir: la Finca no está al máximo («Siguiente: construye Compostera») | Claridad |
-| v3.59 ✅ | Selector de zonas: cada región en un panel sombreado, con sus zonas adentro y más angostas | Navegación |
-| v4.0 ✅ | **El Tolima Grande** completo (seis zonas, sanjuanero, eventos, álbum y logros); estaciones con dos productos (`by`, por la canaleta a otra estación, a una que lo junta o a una ruta) y estaciones que juntan dos productos de su zona (`joins`); los cambios en Paipa, la Quesera, la Palma, el Hato llanero y la Cervecería; prueba de cero fugas al máximo en todas las regiones (`test/maxflow.test.js`); zoom en el mapa de Colombia | Más país y cadenas más ricas |
-| v3.60 ✅ | Mapa de Colombia en el selector de zonas: el país con las regiones de color, acercamiento a cada región con sus zonas en sus pueblos, y un muñequito que camina a la zona elegida (`src/ui/ZoneMap.js`, `src/data/colombiaMap.js` generado por `tools/geo/build_map.py`, `src/data/zoneGeo.js`) | Navegación |
-| v3.61 ✅ | Los objetivos de vender algo que otra estación consume cuentan lo producido (dicen «Produce»): con esa estación construida, el objetivo ya no se queda quieto | Claridad |
-| v3.62 ✅ | Nuevo nombre, «Encantos de Mi Tierrita», con su ícono (el mapa de Colombia con sombrero vueltiao, palmera, café y cacao) e identificador `com.frealgagu.mitierrita.encantos`; versión para Google Play (AAB, sin aviso de actualización propio) firmada con una clave de subida que vive solo en los secretos | Publicación |
-| v3.63 ✅ | ☕ Invítame un tinto (solo en la versión de Play): propina voluntaria con los cobros de Google (tinto, arepa, almuerzo; consumibles), sin premio en el juego y detrás de una barrera para adultos; en la web, Ko-fi cuando exista | Publicación |
-| v3.64 ✅ | Política de privacidad (web y resumen en ⚙️), la letra Fredoka dentro del juego (sin conexiones externas) y la ficha de Google Play (`store/`: textos, capturas y formularios) | Publicación |
-| v3.65 ✅ | Tradiciones contadas con cuidado (política de Familias): tabaco torcido sin encender, láminas de bebidas por cómo se hacen, los uitoto sin la coca | Publicación |
-| v3.66 ✅ | Lo que pidieron los testers: el nombre de cada ícono al tocarlo, la bodega por producto (pestaña del Despacho), la etiqueta 📦 de cada estación en la cadena, volumen de música y sonidos (música al 40 %) y las regiones en «Cómo se juega» | Claridad |
-| v3.67 ✅ | El mapa primero (región y zona resaltadas, viaje animado entre zonas y regiones, Tolima y Bogotá «Próximamente»); regiones sin fugas al máximo (×1,5 la primera zona y ×1,25 la segunda); menú con Acerca de; tocar fuera cierra; objetivos completos; eventos plegables y ruta exacta en el tablero; ⏸️ Pausar o 🚪 Salir de los eventos (sigue corriendo por detrás) y su reloj hasta 999:59 | Claridad |
-| v3.68 ✅ | Idiomas: el juego en inglés (selector en el menú; la primera vez, el idioma del teléfono). Base en `src/i18n`: la interfaz pasa por `t('frase en español')` y cada idioma trae su diccionario; el contenido se traduce por id (`src/i18n/<idioma>/content`) y se pone sobre los datos al arrancar (`src/boot.js`). Herramientas: `tools/i18n-code.mjs`, `tools/i18n-html.mjs` y `tools/i18n-skeleton.mjs` listan lo que falta; `test/i18n.test.js` lo exige. Siguen portugués y francés | Alcance |
-| v3.68.3 ✅ | Tope del reinicio en ×2⁶⁰ (60 reinicios, ×1,15Qi) y techo de las monedas en 999Dc (`MAX_COINS`, `capCoins`): con una región al máximo se llega en unos 90 días reales sin parar | Balance |
-| v3.69 ✅ | Portugués de Brasil (`src/i18n/pt`, mismas partes que el inglés). Los nombres de zona y región van sin artículo, como nombres de lugar («vindo de Leiteria»), y el artículo de estaciones, rutas y temporadas sale de `ptArticle` («o Despolpador», «as Tecelãs»); lo que frena en un evento ya trae su contracción («por causa da broca»). Lo que tiene nombre en Brasil se dice así (rapadura, goiabada, beiju, açaí); coma decimal | Idiomas |
-| v3.70 ✅ | Francés (`src/i18n/fr`, mismas partes que el portugués). Artículo con `frArticle` («le Dépulpeur», «l’Écrémeuse», «les Tisserandes»; las palabras en -age, masculinas, y unas pocas excepciones en listas); zonas y regiones sin artículo; lo que frena en un evento ya trae su contracción («à cause du scolyte»). En `fr/index.js` los espacios antes de ! ? : ; y dentro de « » se vuelven insecables. Italiano, catalán y gallego siguen en español | Idiomas |
-| v3.71 ✅ | Música y efectos para descargar (`web/musica`, publicada en ./musica/ solo en la web, no en el APK/AAB). `tools/music-export.mjs`: cada pieza en Node con `compose.js` (que ahora anota cada nota con su voz, sin cambiar el sonido) y el eco de sala de Music.js por ffmpeg (`afir`, con la normalización de un ConvolverNode) → MP3; y MIDI formato 1 (`tools/midi.mjs`): una pista por instrumento, percusión en el canal 10, rejilla de 1/24 de tiempo. `tools/sfx-export.mjs`: los efectos de Sound.js grabados en Chromium con OfflineAudioContext → MP3, y en MIDI los de notas. `tools/music-page.mjs` arma la página en los cuatro idiomas; el .zip lo arma pages.yml | Descargas |
-| v3.72 ✅ | Un reto por evento (`objective`, con `type`): los seis de cada región, por el lugar de su zona, son `cadena`, `arranque`, `feria`, `ramas`, `corte` y `final` (`OBJECTIVE_TYPES`); se quedó el reto ya calibrado de ese tipo entre los tres que tenía cada evento. Los tableros en juego de antes (sin `event.single`) terminan con su reto de antes (`sim/legacyObjectives.js`). Cupos: nunca jugados → sin oro → con oro; entre iguales, el que lleva más tiempo sin jugarse. Al reiniciar una región se abre en ella (`startZone`) | Eventos |
-| v4.0 ✅ | **El Tolima Grande** completo (seis zonas, sanjuanero, eventos, álbum y logros); estaciones con dos productos (`by`, por la canaleta a otra estación, a una que lo junta o a una ruta) y estaciones que juntan dos productos de su zona (`joins`); los cambios en Paipa, la Quesera, la Palma, el Hato llanero y la Cervecería; prueba de cero fugas al máximo en todas las regiones (`test/maxflow.test.js`); zoom en el mapa de Colombia | Más país y cadenas más ricas |
-| v4.0.1–v4.0.3 ✅ | Tope de reinicios a 60 (`×2⁶⁰`), apertura del mapa directo en la región, tubos de color propio por producto en la cadena, gatos a 5 ⭐ y corrección de toque en mapa | Balance y fluidez |
-| v4.1 ✅ | **Construir y subir en cadena** (**🏗️ Construir**, **⬆️ Todo al nivel X**), **💰 De dónde sale** (`MoneyView.js`), viaje en **Willys y avioneta** por el mapa de Colombia, Salento con **Despacho de exportación** (en tractomula hacia Buenaventura) y opción de viaje **⚡ Directo** | Comodidad y mapa vivo |
-| v4.2 ✅ | **Chivas más seguidas** (cada 30 s por 10 ⭐ y cada 15 s por 20 ⭐ por región tras llenar álbum y reiniciar una vez) | Ritmo |
-| v4.3 ✅ | **Dibujos propios en todo el juego** (360 láminas del álbum y 602 íconos COLR propios sin emojis del teléfono), bandas por tramos de colores, segundo Willys aclarado, **borrar partida deslizando** y eventos calibrados con mínimo garantizado | Identidad visual y seguridad |
-| v4.4 ✅ | **Cundinamarca** completa (Las Flores de la Sabana, Los Freseros de Sibaté, Las Truchas de Guatavita, Las Salinas de Nemocón, La Cocina de la Sabana y Zipaquirá con su Catedral de Sal), su **Pasillo de la Sabana**, sus 6 eventos, su álbum y sus logros; tablero de eventos recogible (`v4.4.7`), botones parejos, aeropuertos reales y avioneta al acercarse | Más país y móvil |
-| v4.5–v4.7.2 ✅ | **Bogotá** (`zone55_bogota.js`): zona única de 52×52 en **red** (`network: true`) con 24 estaciones, **27 tractomulas** (`unlimited`) desde las otras nueve regiones, tres subproductos, **TransMilenio**, **Danza de La Candelaria**, 6 eventos de barrio + **🎪 La Gran Feria** (`v4.7`), orden de profundidad de techos/vehículos, anuncio de **⭐ Zona especial** (San Andrés) y reinicio desde Objetivos | Gran final del continente |
-| v4.7.3 ✅ | **🔁 Eventos a demanda** (20 ⭐ por región al tener oro en todos sus eventos para jugar cualquiera sin cupo ni espera de 2 años), reloj en botones de evento e indicador `⬆ Todo al 50` en ganados | Rejugabilidad |
-| v4.7.4 ✅ | **💾 Copia de seguridad en archivo** (`src/backup.js` con `@capacitor/filesystem` y `@capacitor/share` para guardar en archivos/Drive y abrir en otro dispositivo) | Respaldo seguro |
+| **v0.1** ✅ | Isometric map, camera, coffee field + Dispatch, level upgrade, coins HUD | Produce cherries, sell them and upgrade |
+| **v0.2** ✅ | The 7 stations, recipes, buffers, diversion to the warehouse, unlocks | The full chain works |
+| **v0.3** ✅ | Real mule drivers along the road, transport upgrades, Willys, status indicators, «See chain» view | Bottlenecks are visible |
+| **v0.4** ✅ | Milestones with model changes, effects, cosmetic day and night, basic sound | It feels alive |
+| **v0.5** ✅ | Objectives, research, saving, offline earnings, balance simulator | Playable from start to finish |
+| **v1.0** | Export container, final screen and tuned balance | **Zone 1 complete** |
+| v1.1 ✅ | **Zone 2: El Trapiche**: cane → panela; bagasse as fuel; several zones at once and a zone picker | Expansion |
+| v1.2 ✅ | **Zone 3: La Lechería**: milk branching; **first route between zones** (the Trapiche's panela for the arequipe) | Expansion |
+| v1.3 ✅ | **Zone 4: El Cacaotal**: table chocolate and chocolate bar; two imports at once and routes supplying several stations | Expansion |
+| v1.4 ✅ | **Zone 5: El Maizal**: arepas and cheese arepas with the Lechería's cheese and butter | Expansion |
+| v1.5 ✅ | **Zone 6: El Pueblo**: Casa del café, Greca, Fonda, gift baskets and the Export container (**end of the game**) | Final expansion |
+| v1.6 ✅ | **Second ending**: everything at level 100; start over with production ×2, ×4, ×8… | Replayable |
+| v1.7 ✅ | Stronger milestones (×2, ×2, ×4, ×4, ×8), **Mastery** ×4 and **Supremacy** ×8 per zone, longer final objectives | Reachable second ending |
+| v1.8 ✅ | **Ambience**: real facts in the panels and one person per zone who points out what matters; life on the map (hens, a dog, cows, people, pigeons); sounds per zone; the chain as a diagram | More personality |
+| v1.9 ✅ | **Workday and seasons** (§10.1): no work at night; dry season, start of the rains, rainy season and veranillo | Rhythm |
+| v2.0 | **Events and badges** (§10.2): one event per zone per year, with medals; general progression that is not lost on restart | Long-term replayability |
+| v3.0 ✅ | **Regions** (§10.3): Santander opens upon completing the Pueblo; its first zone, **La Guayabera** (bocadillo veleño), and its music (guabina) | More country |
+| v3.1 ✅ | **El Tabacal** (hand-rolled tobacco), Santander's second zone | Santander grows |
+| v3.2 ✅ | **La Fiquera** (sacks, espadrilles and tobacco bundles), with Santander's first route: the tobacco one, from the Tabacal | Santander grows |
+| v3.3 ✅ | **El Hato** (air-dried meat, lunch and fiambre), with the bocadillo (Guayabera) and fique (Fiquera) routes | Santander grows |
+| v3.4 ✅ | **Las Hormigas** (hormiga culona, harvested only at the start of the rains), with the sacks and espadrilles routes (Fiquera) | Santander grows |
+| v3.5 ✅ | **Barichara**, Santander's last zone (like the Pueblo: it receives what the other five make and turns it into tours along the Camino Real to Guane) | Santander complete |
+| v3.15 ✅ | **La Costa** opens upon completing Barichara; its first zone, **El Arrozal** (rice from Montería and Mompox), and its music (cumbia) | More country |
+| v3.16 ✅ | **El Cocal** (coconut → coconut milk → cocadas), the Costa's second zone | La Costa grows |
+| v3.17 ✅ | **La Ciénaga** (bocachico: salted fish, fried with patacón and in coconut), with the Costa's first route: coconut milk, from the Cocal | La Costa grows |
+| v3.18 ✅ | **La Quesera** (queso costeño and mote de queso: almuerzo costeño and bandeja costeña), with the rice (Arrozal) and fish (Ciénaga) routes | La Costa grows |
+| v3.19 ✅ | **El Sombrero** (caña flecha → braid → sombrero vueltiao; the Tuchín stop), with the salted fish and fried fish routes (Ciénaga) | La Costa grows |
+| v3.20 ✅ | **Cartagena**, the Costa's last zone (like Barichara: it receives what the other five make and turns it into trips to the Rosario Islands) | La Costa complete |
+| v3.21 ✅ | La Costa complete: its 6 events, its album, its achievements and its second ending | La Costa complete |
+| v3.22 ✅ | **Boyacá** opens upon completing Cartagena; its first zone, **El Papal** (papitas criollas), and its music (torbellino) | More country |
+| v3.23 ✅ | **La Cervecería** (barley → malt → wort → beer → crate), Boyacá's second zone | Boyacá grows |
+| v3.24 ✅ | **Ráquira** (pots, painted planters and clay jugs of beer), with Boyacá's first route: the beer one, from the Cervecería | Boyacá grows |
+| v3.25 ✅ | **Paipa** (Paipa cheese, almojábanas, piquete and a basket of amasijos), with the potatoes (Papal) and clay (Ráquira) routes | Boyacá grows |
+| v3.26 ✅ | **Las Ruanas** (sheep → wool → ruana; the Nobsa shop), with the pots and planters routes (Ráquira) | Boyacá grows |
+| v3.27 ✅ | **Villa de Leyva**, Boyacá's last zone (like Barichara and Cartagena: it receives what the other five make and turns it into trips to the Fossil) | Boyacá complete |
+| v3.28 ✅ | Boyacá complete: its 6 events, its album, its achievements and its second ending | Boyacá complete |
+| v3.29 ✅ | **The Vélez plaza** in the middle of the Guayabera, with its one-tower church and bells; the mules go around it in the same times. Cats at 10 ⭐ and parrots at 8 ⭐ | More personality |
+| v3.30 ✅ | **Fewer events**: 2 slots for the whole game (never from the same region) and a 2-year wait; pause, restart and finish inside the event, and keep looking at it after winning | Rhythm |
+| v3.31 ✅ | **Los Llanos** open upon completing Villa de Leyva; their first zone, **La Palma** (palm oil), and their music (joropo) | More country |
+| v3.32 ✅ | **El Frutal** (passion fruit → pulp → pasteurized pulp → juice → box of juices), the Llanos' second zone | Los Llanos grow |
+| v3.33 ✅ | **La Cachamera** (pisillo, smoked cachama and cachama with passion fruit), with the Llanos' first route: the juice one, from the Frutal | Los Llanos grow |
+| v3.34 ✅ | **El Hato llanero** (mamona a la vara, carne a la llanera, almuerzo llanero and the parranda roast), with the oil (Palma) and cachama (Cachamera) routes | Los Llanos grow |
+| v3.35 ✅ | **La Talabartería** (leather → saddle; the Llano souvenir), with the pisillo and smoked cachama routes (Cachamera) | Los Llanos grow |
+| v3.36 ✅ | **Villavicencio**, the Llanos' last zone (like Villa de Leyva: it receives what the other five make and turns it into trips to Caño Cristales) | Los Llanos complete |
+| v3.37 ✅ | Los Llanos complete: their 6 events, their album, their achievements and their second ending | Los Llanos complete |
+| v3.38 ✅ | **La Costa Pacífica** (released as «el Chocó») opens upon completing Villavicencio; its first zone, **El Platanal** (patacones), and its music (chirimía) | More country |
+| v3.39 ✅ | **La Azotea** (rooftop herbs → washed → crushed in the mortar → seasoning → box of seasoning), the Costa Pacífica's second zone; the region is renamed | La Costa Pacífica grows |
+| v3.40 ✅ | **La Bahía** (red snapper: dried, smoked and tapao), with the Costa Pacífica's first route: the seasoning one, from the Azotea | La Costa Pacífica grows |
+| v3.41 ✅ | **El Manglar** (piangua: rice with piangua and seafood cazuela), with the patacones (Platanal) and snapper (Bahía) routes | La Costa Pacífica grows |
+| v3.42 ✅ | **El Werregue** (fiber → dyed → thread → vase; the Pacific souvenir), with the dried fish and smoked snapper routes (Bahía) | La Costa Pacífica grows |
+| v3.43 ✅ | **Buenaventura**, the Costa Pacífica's last zone (like Villavicencio: it receives what the other five make and turns it into whale-watching trips) | La Costa Pacífica complete |
+| v3.44 ✅ | La Costa Pacífica complete: its 6 events, its album, its achievements and its second ending | La Costa Pacífica complete |
+| v3.45 ✅ | **Walled Cartagena by the sea**: the Caribbean, the beach, the wall with sentry boxes, the gates and the Clock Tower (drawing only) | More personality |
+| v3.47 ✅ | **El Amazonas** opens upon completing Buenaventura; its first zone, **El Asaizal** (açaí), and its music (Amazonian cumbia) | More country |
+| v3.48 ✅ | **El Ajizal** (chili → washed → ground → black chili in tucupí → box), the Amazonas' second zone | El Amazonas grows |
+| v3.49 ✅ | **El Lago** (pirarucú: salted, smoked and with black chili), with the Black chili route | El Amazonas grows |
+| v3.50 ✅ | **La Casabería** (bitter cassava → casabe; Amazonian breakfast and the maloca banquet), with the açaí and pirarucú routes | El Amazonas grows |
+| v3.51 ✅ | **La Yanchama** (yanchama bark → beaten cloth → painted → Ticuna mask; the shop sells the Amazon souvenir), with the salted and smoked pirarucú routes | El Amazonas grows |
+| v3.52 ✅ | **Leticia** (the Amazonas' ending: ice cream shop, restaurant, jungle hotel, port market, canoe provisions and pink dolphin trips), with six routes | El Amazonas grows |
+| v3.53 ✅ | **El Amazonas complete**: its six events (the very tall palms, the drought, the end of the closed season, the low water, the Pelazón and the Confraternity Festival), its album and its achievements | El Amazonas grows |
+| v3.54 ✅ | Collapsible regions in the zone picker; the Pacific Ocean with humpback whales behind Buenaventura | Navigation and life on the map |
+| v3.55 ✅ | «Zone at the maximum» only with everything at the maximum level; otherwise, the suggestion says what is left to raise | Clarity |
+| v3.56 ✅ | Restart cap: production goes up to ×2³² (32 restarts); you can keep restarting, but it no longer doubles | Balance |
+| v3.57 ✅ | Multiplier with K, M, B; objectives: the real number of collectible ones and «Collect all» (without the ending); research: the zone's «Buy all», from cheapest to most expensive (without Mastery or Supremacy); both buttons at the bottom, outside the list | Convenience |
+| v3.58 ✅ | The Compost bin not built: the Finca is not at the maximum («Next: build the Compost bin») | Clarity |
+| v3.59 ✅ | Zone picker: each region in a shaded panel, with its zones inside and narrower | Navigation |
+| v4.0 ✅ | **Tolima Grande** complete (six zones, sanjuanero, events, album and achievements); stations with two products (`by`, by channel to another station, to one that joins it or to a route) and stations that join two products of their zone (`joins`); the changes in Paipa, the Quesera, the Palma, the Hato llanero and the Cervecería; a zero-leak test at the maximum in every region (`test/maxflow.test.js`); zoom on the map of Colombia | More country and richer chains |
+| v3.60 ✅ | Map of Colombia in the zone picker: the country with the regions in color, zooming into each region with its zones in their towns, and a little figure that walks to the chosen zone (`src/ui/ZoneMap.js`, `src/data/colombiaMap.js` generated by `tools/geo/build_map.py`, `src/data/zoneGeo.js`) | Navigation |
+| v3.61 ✅ | Objectives to sell something another station consumes count what is produced (they say «Produce»): with that station built, the objective no longer stands still | Clarity |
+| v3.62 ✅ | New name, «Encantos de Mi Tierrita», with its icon (the map of Colombia with a sombrero vueltiao, a palm, coffee and cacao) and identifier `com.frealgagu.mitierrita.encantos`; a Google Play version (AAB, without its own update notice) signed with an upload key that lives only in the secrets | Publishing |
+| v3.63 ✅ | ☕ Buy me a tinto (only in the Play version): a voluntary tip with Google's billing (tinto, arepa, lunch; consumables), with no in-game prize and behind an adult gate; on the web, Ko-fi when it exists | Publishing |
+| v3.64 ✅ | Privacy policy (web and a summary in ⚙️), the Fredoka font inside the game (no external connections) and the Google Play listing (`store/`: texts, screenshots and forms) | Publishing |
+| v3.65 ✅ | Traditions told with care (Families policy): unlit hand-rolled tobacco, drink stickers about how they are made, the Uitoto without coca | Publishing |
+| v3.66 ✅ | What the testers asked for: each icon's name when tapped, the warehouse by product (Dispatch tab), each station's 📦 label in the chain, music and sound volume (music at 40 %) and the regions in «How to play» | Clarity |
+| v3.67 ✅ | The map first (region and zone highlighted, animated travel between zones and regions, Tolima and Bogotá «Coming soon»); regions without leaks at the maximum (×1.5 the first zone and ×1.25 the second); menu with About; tapping outside closes; full objectives; collapsible events and the exact route on the board; ⏸️ Pause or 🚪 Leave events (it keeps running in the background) and their clock up to 999:59 | Clarity |
+| v3.68 ✅ | Languages: the game in English (picker in the menu; the first time, the phone's language). Base in `src/i18n`: the interface goes through `t('phrase in Spanish')` and each language brings its dictionary; content is translated by id (`src/i18n/<language>/content`) and laid over the data on startup (`src/boot.js`). Tools: `tools/i18n-code.mjs`, `tools/i18n-html.mjs` and `tools/i18n-skeleton.mjs` list what is missing; `test/i18n.test.js` enforces it. Portuguese and French follow | Reach |
+| v3.68.3 ✅ | Restart cap at ×2⁶⁰ (60 restarts, ×1.15Qi) and coin ceiling at 999Dc (`MAX_COINS`, `capCoins`): with a region at the maximum it is reached in about 90 real days without stopping | Balance |
+| v3.69 ✅ | Brazilian Portuguese (`src/i18n/pt`, the same parts as English). Zone and region names go without an article, like place names («vindo de Leiteria»), and the article of stations, routes and seasons comes from `ptArticle` («o Despolpador», «as Tecelãs»); what slows things down in an event already carries its contraction («por causa da broca»). Whatever has a name in Brazil is called that (rapadura, goiabada, beiju, açaí); decimal comma | Languages |
+| v3.70 ✅ | French (`src/i18n/fr`, the same parts as Portuguese). Article with `frArticle` («le Dépulpeur», «l’Écrémeuse», «les Tisserandes»; words in -age, masculine, and a few exceptions in lists); zones and regions without an article; what slows things down in an event already carries its contraction («à cause du scolyte»). In `fr/index.js` the spaces before ! ? : ; and inside « » become non-breaking. Italian, Catalan and Galician stay in Spanish | Languages |
+| v3.71 ✅ | Music and effects to download (`web/musica`, published at ./musica/ only on the web, not in the APK/AAB). `tools/music-export.mjs`: each piece in Node with `compose.js` (which now tags each note with its voice, without changing the sound) and Music.js's room echo through ffmpeg (`afir`, with a ConvolverNode's normalization) → MP3; and format-1 MIDI (`tools/midi.mjs`): one track per instrument, percussion on channel 10, a 1/24-beat grid. `tools/sfx-export.mjs`: Sound.js's effects recorded in Chromium with OfflineAudioContext → MP3, and the note-based ones in MIDI. `tools/music-page.mjs` builds the page in the four languages; pages.yml builds the .zip | Downloads |
+| v3.72 ✅ | One challenge per event (`objective`, with a `type`): the six of each region, by the position of their zone, are `cadena`, `arranque`, `feria`, `ramas`, `corte` and `final` (`OBJECTIVE_TYPES`); the already-calibrated challenge of that type was kept among the three each event had. Boards in play from before (without `event.single`) end with their old challenge (`sim/legacyObjectives.js`). Slots: never played → without gold → with gold; among equals, the one unplayed the longest. Restarting a region opens it (`startZone`) | Events |
+| v4.0 ✅ | **Tolima Grande** complete (six zones, sanjuanero, events, album and achievements); stations with two products (`by`, by channel to another station, to one that joins it or to a route) and stations that join two products of their zone (`joins`); the changes in Paipa, the Quesera, the Palma, the Hato llanero and the Cervecería; a zero-leak test at the maximum in every region (`test/maxflow.test.js`); zoom on the map of Colombia | More country and richer chains |
+| v4.0.1–v4.0.3 ✅ | Restart cap at 60 (`×2⁶⁰`), the map opening directly on the region, per-product colored pipes in the chain, cats at 5 ⭐ and a map tap fix | Balance and smoothness |
+| v4.1 ✅ | **Build and raise along the chain** (**🏗️ Build**, **⬆️ Everything to level X**), **💰 Where it comes from** (`MoneyView.js`), travel by **Willys and bush plane** on the map of Colombia, Salento with an **Export dispatch** (by truck to Buenaventura) and the **⚡ Direct** travel option | Convenience and a living map |
+| v4.2 ✅ | **More frequent chivas** (every 30 s for 10 ⭐ and every 15 s for 20 ⭐ per region after filling the album and restarting once) | Rhythm |
+| v4.3 ✅ | **Original drawings in the whole game** (360 album stickers and 602 original COLR icons without the phone's emojis), belts by colored stretches, the second Willys clarified, **delete game by sliding** and events calibrated with a guaranteed minimum | Visual identity and safety |
+| v4.4 ✅ | **Cundinamarca** complete (Las Flores de la Sabana, Los Freseros de Sibaté, Las Truchas de Guatavita, Las Salinas de Nemocón, La Cocina de la Sabana and Zipaquirá with its Salt Cathedral), its **Pasillo de la Sabana**, its 6 events, its album and its achievements; a collapsible event board (`v4.4.7`), even buttons, real airports and the bush plane when getting close | More country and mobile |
+| v4.5–v4.7.2 ✅ | **Bogotá** (`zone55_bogota.js`): a single 52×52 zone as a **network** (`network: true`) with 24 stations, **27 trucks** (`unlimited`) from the other nine regions, three by-products, **TransMilenio**, **Danza de La Candelaria**, 6 neighborhood events + **🎪 La Gran Feria** (`v4.7`), depth ordering of roofs/vehicles, the **⭐ Special zone** announcement (San Andrés) and restarting from Objectives | The great finale of the mainland |
+| v4.7.3 ✅ | **🔁 Events on demand** (20 ⭐ per region once all its events have gold, to play any of them without a slot or the 2-year wait), a clock on event buttons and the `⬆ Everything to 50` indicator on won ones | Replayability |
+| v4.7.4 ✅ | **💾 File backup** (`src/backup.js` with `@capacitor/filesystem` and `@capacitor/share` to save to files/Drive and open on another device) | Safe backup |
 | v5.3.0 ✅ | Automatic versions: the publish workflow bumps the patch (with a CHANGELOG entry) when a commit arrives without a new version (`tools/auto-version.mjs`), and the Android versionCode comes from the version again, with five digits (major·10,000 + minor·100 + patch) | Publishing |
 | v5.5.0 ✅ | **Special zone, second delivery**: it opens for real; island look (sea all around, beaches, coral, island houses, pier), its event (the Green Moon Festival, with boosters instead of a slowdown), album, achievements, calypso, and twenty new icons | Reward zone |
 | v5.4.0 ✅ | **Special zone, first delivery** (San Andrés, hidden until it opens): region, unlock, eight-station linear chain with a ×32 research per station, balance of about 24 hours, and a developer option to open it (see «San Andrés, the special zone» below) | Reward zone |
+| v5.6.0 ✅ | Everything in the repository in English (documentation, tests, tools, commit history), one CHANGELOG per language with in-app notes in the player's language, and the privacy policy in four languages | Reach |
 
-**Cómo se conectan las zonas:** ver §4b.
+**How zones connect:** see §4b.
+### 10.1 Workday and seasons (v1.9 ✅)
+- **Workday**: stations work **from 6:00 to 12:00 and from 14:00 to 20:00** (12 h; until v3.7 it was 6:00 to 18:00) (a game day is 8 minutes); at lunchtime and at night they **stop completely**. Mule drivers finish their trip; the Willys and the chivas keep going. **It is not compensated**: the game gets longer on purpose. Offline time respects the schedule.
+- **More working hours (v3.8)**: with Renown ⭐ you buy 2-hour blocks, each at twice the previous one and in this order: 20–22 (2 ⭐), 4–6 (4 ⭐), 22–24 (8 ⭐), 2–4 (16 ⭐), 12–14 (32 ⭐, lunch) and 0–2 (64 ⭐): 126 ⭐ to work all 24 h. They belong to the player (the profile, `workLevel`): they apply in every region and are not lost on restart. Separate from the offline hours; both are in 🏅 Events › ⏰ Hours (`EXTRA_BLOCKS` in `src/sim/calendar.js`, `WORK_COSTS` in `src/sim/renown.js`). Event boards are always in daytime.
+- **Seasons**: a year of **16** game **days**, in **4 seasons of 4 days**. Each season raises or lowers the production of **every station at once** (not per zone), so as not to unbalance the chain. They are the country's general seasons, dry and rainy: ☀️ **Dry season** ×1.2 · 🌦️ **Start of the rains** ×1 · 🌧️ **Rainy season** ×0.8 · 🌤️ **Veranillo** ×1. It shows next to the clock and on the map (rain, gray sky, dry pastures in the dry season). The *mitaca* (the Eje Cafetero's small harvest) is only a fun fact in the panels.
+- **Offline**: computed without the developer multiplier, quickly simulating the elapsed time to count the night hours and the seasons.
+- **How it looks**: the season goes next to the clock; tapping the clock opens the **calendar** (time, season, day and year, and what each season yields, with the mitaca fact). At the start of the rains there are occasional downpours and in the rainy season it rains almost all the time. The zone's person announces each new season and, the first time, that there is no work at night. At night and at lunch the panels say so («🌙 No work at night…», «🍲 At lunchtime…») and the map shows no warnings.
+- A new game starts on the first day of the year, at 8:00, in the dry season. The second-ending restart goes back to the first day.
+- The chain tests switch the calendar off (`CALENDAR.on = false`: always daytime and no season); `test/calendar.test.js` tests the calendar.
 
-### 10.1 Jornada y temporadas (v1.9 ✅)
-- **Jornada**: las estaciones trabajan **de 6:00 a 12:00 y de 14:00 a 20:00** (12 h; hasta la v3.7 era de 6:00 a 18:00) (un día de juego son 8 minutos); a la hora del almuerzo y de noche **se detienen del todo**. Los arrieros terminan su viaje; el Willys y las chivas siguen. **No se compensa**: el juego se hace más largo a propósito. El tiempo sin conexión respeta el horario.
-- **Más horas de trabajo (v3.8)**: con Renombre ⭐ se compran bloques de 2 h, cada uno al doble del anterior y en este orden: 20–22 (2 ⭐), 4–6 (4 ⭐), 22–24 (8 ⭐), 2–4 (16 ⭐), 12–14 (32 ⭐, el almuerzo) y 0–2 (64 ⭐): 126 ⭐ para trabajar las 24 h. Son del jugador (el perfil, `workLevel`): valen en todas las regiones y no se pierden al reiniciar. Aparte de las horas sin conexión; las dos están en 🏅 Eventos › ⏰ Horas (`EXTRA_BLOCKS` en `src/sim/calendar.js`, `WORK_COSTS` en `src/sim/renown.js`). Los tableros de los eventos siguen siempre de día.
-- **Temporadas**: un año de **16 días** de juego, en **4 temporadas de 4 días**. Cada temporada sube o baja la producción de **todas las estaciones a la vez** (no por zonas), para no descompensar la cadena. Son las temporadas generales del país, secas y de lluvias: ☀️ **Verano** ×1,2 · 🌦️ **Entrada de aguas** ×1 · 🌧️ **Invierno** ×0,8 · 🌤️ **Veranillo** ×1. Se ve junto al reloj y en el mapa (lluvia, cielo gris, potreros secos en verano). La *mitaca* (la cosecha chica del Eje Cafetero) va solo como dato curioso en los paneles.
-- **Sin conexión**: se calcula sin el multiplicador de desarrollador, simulando rápido el tiempo que pasó para contar las horas de la noche y las temporadas.
-- **Cómo se ve**: junto al reloj va la temporada; tocar el reloj abre el **calendario** (hora, temporada, día y año, y lo que rinde cada temporada, con el dato de la mitaca). En la entrada de aguas caen aguaceros de vez en cuando y en invierno llueve casi todo el tiempo. La persona de la zona anuncia cada temporada nueva y, la primera vez, que de noche no se trabaja. De noche y al almuerzo los paneles lo dicen («🌙 De noche no se trabaja…», «🍲 A la hora del almuerzo…») y el mapa no muestra avisos.
-- Una partida nueva empieza el primer día del año, a las 8:00, en verano. El reinicio del segundo final vuelve al primer día.
-- Las pruebas de la cadena apagan el calendario (`CALENDAR.on = false`: siempre de día y sin temporada); `test/calendar.test.js` prueba el calendario.
-
-### 10.2 Eventos e insignias (v2.0–v2.3 ✅)
-- **Tableros aparte**: cada evento usa las piezas de una zona en un tablero separado del mapa, con sus propias monedas y niveles. Tiene **su propio reloj, que se pausa al salir** (para mirar el mapa general) y que no avanza sin conexión.
-- **Una vez al año por zona**: cada zona abre su evento una vez por año de juego; el objetivo cambia de un año al siguiente. Con el tiempo, **4 eventos por zona** (4 medallas por zona, 24 en total). Solo uno a la vez por zona: si pasa, hay que esperar al otro año.
-- **Medallas** según qué tan rápido se cumple: 🥉 bronce, 🥈 plata, 🥇 oro.
-- **Primeros eventos (uno por zona)**: Finca, *La broca* (una plaga que baja la cosecha; trampas, hongo Beauveria y re-re para controlarla); Trapiche, *La gran molienda* (sin leña: la hornilla solo arde con el bagazo que se produce); Lechería, *Feria ganadera* (pedidos con plazo de queso, crema y arequipe); Cacaotal, *Derrumbe en la vía* (la ruta de la panela cortada: aguantar con lo guardado y abrir una trocha); Maizal, *Fiesta del maíz* (tandas de arepas para la fiesta); Pueblo, *El barco sale el viernes* (contenedores llenos antes de que zarpe cada barco).
-- **Renombre ⭐**: las medallas dan Renombre (🥉 1, 🥈 2, 🥇 4), que se acumula en un total que **no se pierde al reiniciar** y nunca se convierte en monedas de la partida. Se gasta en **decoración** (colores de las casas y los balcones, pintura de la chiva y del Willys, ropa de los arrieros, adornos de la plaza) y en el **álbum de láminas** (como el de las chocolatinas: cada medalla y cada logro da una lámina; llenar una página da Renombre extra).
-- **Logros generales** que suman entre partidas (vender, exportar, ganar medallas en todas las zonas…), sin logros de velocidad: con cada reinicio todo va mucho más rápido.
-- **Cómo quedó en la v2.0** (`src/data/events.js`, `src/sim/events.js`):
-  - Cada tablero es una partida aparte (el mismo estado y la misma simulación, con solo la zona del evento) que se juega con su propio `Game`. Su reloj es su `playTime`: avanza mientras se está en el tablero y, con **🚪 Salir** (v3.67.4, opción del menú), también por detrás: al salir se guarda el reloj del país (`event.away`) y al volver a entrar `Game.catchUpBoard` calcula lo que pasó (30 min simulados y el resto al ritmo medido; la medalla queda con el momento en que se cumple el objetivo). El reloj que se muestra y el de la medalla llegan hasta 999:59 (`EVENT_CLOCK_MAX`); el tablero sigue produciendo. En el tablero siempre es de día y no hay temporada. Se guarda dentro de la partida (`state.events.boards`).
-  - Un evento se abre cuando en la partida están construidas todas las estaciones que usa (así ya se conocen las piezas) y la persona de la zona lo anuncia. Se juega una vez por año de juego; si se empieza, se puede seguir aunque pase el año.
-  - Las estaciones empiezan en el nivel 10, con el Despacho también en 10 y, desde la v3.1.1, con lo que cuesta la primera compra del evento (antes, 0 monedas: el primer minuto no había nada que hacer mientras el primer producto recorría la cadena). Las compras del evento son como investigaciones que solo valen en el tablero, en orden. Las investigaciones de la partida no valen en el tablero, ni los reinicios ×2.
-  - **La broca** (Finca): el Cafetal arranca al 40 %; 🪤 Trampas (400) lo deja al 60 %, 🍄 Hongo Beauveria (2.500) al 80 % y 🧺 Re-re (6.000) al 100 %. La plaga se ve sobre el Cafetal mientras no esté controlada. Objetivos por año: vender 100 bolsas, producir 500 de café tostado y producir 1.000 de café verde; luego se repiten. Cada objetivo tiene sus propios tiempos de medalla (ver más abajo la calibración de la v3.1.1).
-  - El Renombre, las medallas (la mejor de cada evento y cuántas de cada una) y el registro de eventos están en `state.profile`, que pasa a la partida nueva al reiniciar.
-  - **v2.1, los otros cinco** (en el tablero no hay otras zonas: lo que se importa llega «de afuera» según `supply`, de 0 a 1, y el objetivo puede pedir varios productos):
-    - 🔥 **La gran molienda** (Trapiche): sin leña, la Hornilla al 40 %; ☀️ bagacera, 🧱 hornilla reparada y 🌬️ fuelle. Panela pulverizada, panela, melado.
-    - 🐮 **Feria ganadera** (Lechería): pedidos de queso, mantequilla y arequipe a la vez (la panela llega sin falta); 🧀 moldes, 🧈 batidora (Descremadora y Mantequera) y 🍯 paila de cobre aceleran cada rama.
-    - 🪨 **Derrumbe en la vía** (Cacaotal): la panela no llega, solo 60 guardadas; 🫏 mulas por el monte (25 %), 🛻 trocha (60 %) y 🚧 despejar la vía (100 %). Chocolate de mesa, chocolatina o los dos.
-    - 🎉 **Fiesta del maíz** (Maizal): el budare grande se rajó (40 %); 🍳 budare prestado, 🪵 leña seca y 👵 las vecinas ayudan. Arepas de queso, arepas, masa.
-    - 🚢 **El barco sale el viernes** (Pueblo): todo lo importado llega; la grúa varada deja el Patio al 40 %; 🔧 repuestos, 🏗️ grúa arreglada y 👷 turno extra. Contenedores, canastas de regalo, contenedores con desayunos.
-  - **v2.2, en qué se gasta el Renombre** (`src/data/album.js`, `src/data/decor.js`, `src/sim/renown.js`), sin nada al azar (nada de sobres sorpresa):
-    - **Álbum de láminas**: seis páginas (el café, la panela, la leche, el cacao, el maíz y el pueblo) de seis láminas sobre lo que rodea a cada producto en Colombia (el arriero, la chapolera, el yipao, la melcocha, el kumis, el molinillo, la mazamorra, la chiva…). Cada lámina cuesta 1, 2 o 3 ⭐ y se pega la que uno elija; una página llena da 3 ⭐ de premio. Todo el álbum cuesta 72 ⭐ (54 descontando los premios).
-    - **Decoración** (solo se ve; vale también en los tableros): color del Willys (3 ⭐ cada uno), enjalma de las mulas (2 ⭐), pintura de la chiva (4 ⭐) y banderines frente a la bodega (5 ⭐). Lo de siempre es gratis; lo comprado se puede cambiar cuando se quiera.
-    - Se abre desde la ventana de eventos (📖 Álbum, 🎨 Decoración). Todo se guarda en `state.profile` y pasa a la partida nueva al reiniciar.
-    - **Por región (v3.10)**: cada región tiene su **álbum** (el de Santander: el bocadillo, el tabaco, el fique, el hato, las hormigas y Barichara, con láminas como el bijao, el caney, Curití, la pepitoria, el tiesto o el Camino Real), su **decoración** (lo comprado y lo elegido, aparte; `profile.decor[región]`), sus **logros** (los de Santander con sus productos: cajas de bocadillo, tabacos, alpargatas, fiambres, recuerdos y excursiones; las medallas, el álbum y las investigaciones cuentan solo las de la región; `profile.lifetimes[región]`) y su **jornada** (`workLevel` en la partida de la región). El Renombre y las horas sin conexión siguen siendo del jugador. En la ventana del Renombre se elige la región (empieza en la que se juega). Las partidas viejas pasan su decoración al Eje Cafetero y sus bloques de jornada a cada región.
-    - **Segundo Willys (v3.9)**: con el álbum de la región lleno se compra, por región, un segundo Willys (20 ⭐ cada región). Desde entonces cada zona de la región tiene dos: salen cada uno por su cuenta con la misma carga por viaje, así que el despacho vende el doble (`jeepCount` en `src/sim/modifiers.js`, `jeep2` en cada zona). La carretera se amplía con un segundo carril (`jeepRoad2`, por dentro del primero) para que no se choquen, y el letrero de salida pasa al otro lado. Es de la región (`willys2` en su partida): no se pierde al reiniciarla. Se pinta aparte (🎨 «Color del segundo Willys», que sale rojo). En los tableros de los eventos sigue habiendo uno solo.
-  - **v2.3, logros generales** (`src/data/logros.js`, `src/sim/logros.js`): 15 logros de uno a tres niveles, todos de cantidad y ninguno de velocidad: bolsas de café vendidas, panela, queso, chocolate y arepas de queso producidos, contenedores exportados, monedas ganadas, años de juego, veces que se completó el Pueblo y que se llegó al segundo final, medallas, eventos con medalla y con oro, páginas del álbum e investigaciones en una partida. Cada nivel da Renombre (de 1 a 16 ⭐). Lo de las partidas anteriores se guarda al reiniciar en `profile.lifetime` y sigue contando. Se ven en la ventana del Renombre (🏆 Logros).
-  - **v3.7, cupos y horas del jugador.** Los eventos ya no van por año: cada región tiene 2 cupos; al terminar un evento su cupo queda vacío 3 años del juego (cada cupo va por su lado), y al llenarse sale primero una zona nunca jugada o, si no hay, la que lleva más tiempo sin jugarse. Los eventos no se vencen y el reto de cada zona avanza al terminarlo. Cumplir el objetivo asegura la medalla con su tiempo; el evento termina al tener compradas las tres mejoras. Las horas sin conexión pasan al perfil (2 h, +2 h por nivel con Renombre hasta 24 h, de 2 a 12 ⭐), valen para todas las regiones y no se pierden al reiniciar; se quitaron las 12 investigaciones que las sumaban (`src/sim/events.js`, `src/sim/renown.js`).
-  - **v3.8, región terminada.** Al completar la última zona de una región (el Pueblo, Barichara) queda marcada para siempre (`regionDone`, se conserva al reiniciar): desde entonces los cupos se llenan con los eventos de **todas sus zonas**, aunque tras reiniciar solo esté abierta la primera, porque ya se jugaron. Las partidas viejas la marcan si ya tenían la última zona completa o algún reinicio.
-  - **v3.10.1, nivel máximo.** En los tableros de los eventos las estaciones, los arrieros y el despacho llegan hasta el **nivel 50** (en la partida, 100): `EVENT_MAX_LEVEL` y `maxLevel(state)` en `src/sim/rules.js`. Las medallas calibradas se siguen pudiendo lograr (la prueba de los jugadores automáticos lo vigila).
-  - **v3.11, Renombre de por vida.** Cada reinicio (segundo final) de cualquier región da 10 ⭐ (`RESTART_RENOWN`). Todo lo que da Renombre pasa por `gainRenown`, que suma también `profile.renownTotal`: el total ganado, que no baja al gastar (para clasificar jugadores más adelante). Las partidas viejas lo reconstruyen con las medallas, los logros y las páginas llenas.
-  - **v3.12.** El total ganado se llama **Prestigio**. El segundo final pide estaciones, arrieros y rutas en el nivel 100, todos los objetivos y todas las investigaciones de la región (`masteryParts` en `src/sim/legacy.js`); los que lo tenían con la regla de antes lo pierden si les falta algo. Reiniciar ya no quita los tableros de los eventos ni sus cupos. En los eventos, `eventHandicaps`/`handicapText` (y `blame` en cada evento) dicen cuánto rinde la estación frenada y por qué. El Pueblo se llama **Salento** (`style: 'salento'`: casas blancas con balcones de colores, más palmas de cera). Cada zona tiene su letrero con el nombre; los Willys y las chivas tienen faros de noche; la Compostera sale en la cadena; las investigaciones bloqueadas llevan a lo que les falta (`researchBlocker`).
-  - **v3.30, menos eventos.** Los cupos ya no son por región: hay **2 para todo el juego**, en la partida principal, y nunca de la misma región a la vez; al terminar un evento su cupo descansa **2 años** del juego (4 h 16 min; antes 3). En el tablero hay tres botones: **⏸️ Pausar** (o **🚪 Salir** según la configuración de «Al dejar un evento» de la v3.67.4), **🔄 Reiniciar** y **🏁 Terminar**. Al ganarlo se dan la medalla y el Renombre y empieza la espera del cupo, pero el tablero sigue abierto para mirarlo (`event.done`), también tras pausarlo o cerrar la app, hasta tocar «Terminar evento»; ganado, el botón de reiniciar queda deshabilitado (v3.30.1). Desde la **v4.4.7**, el tablero superior es recogible en pantallas pequeñas, y desde la **v4.7.3**, al tener **oro en todos los eventos de una región**, esa región deja de recibir eventos solos y por **20 ⭐** desbloquea **🔁 Eventos a demanda** (`profile.onDemand`) para jugar cualquiera cuando quiera (máx. 2 tableros abiertos a la vez); la lista muestra el reloj y avisa con `⬆ Todo al 50` cuando ya todo está al máximo.
-  - **v3.13.** La persona de cada zona está en el mapa (`render/Keeper.js`) y en los tableros; al tocarla habla (`talk` en `ui/Chatter.js`: repite lo último si aún aplica y luego recorre los avisos vigentes). Listado de medallas por evento y premio por región: todos en bronce o mejor 5 ⭐, plata 10 ⭐, oro 20 ⭐ (`checkMedalBonus`, `profile.medalBonus`). Mascotas por región, solo de adorno: gatos (5 ⭐ desde la v4.0.2, hasta 10) y loros (8 ⭐ desde la v3.29, hasta 5) (`PETS`, `profile.pets[región]`, `render/Pets.js`); los gatos persiguen a los loros cada medio minuto o un minuto, al azar.
-  - **v3.14.** Los eventos se ven en el mapa del tablero (`render/EventArt.js`): cada uno tiene su escena en cuatro etapas (cuántas compras van), con lo que se mueve (bichos, lluvia, humo, mulas, el carro, la balsa, la gente). Quita los árboles que le estorban (`grid` en la decoración del terreno).
-  - **v3.6, eventos de Santander**: uno por zona, con la mecánica del de su par del Eje Cafetero (la mosca de la fruta en la Guayabera, humedad en el caney del Tabacal, feria artesanal en la Fiquera, creciente del río en el Hato, temporada de turistas en las Hormigas y puente festivo en Barichara). El tablero se arma con las zonas de la región del evento y se guarda en su partida; las medallas y el Renombre van al perfil de la partida principal. Medallas calibradas igual que las demás.
-  - **v3.21, eventos de la Costa**: uno por zona, con los mismos números que su par de Santander (pájaros en el arrozal, machetes sin filo en el Cocal, Semana Santa en la Ciénaga, carretera inundada en la Quesera —no llega el arroz—, festival del sombrero en el Sombrero y un crucero en Cartagena). Medallas confirmadas con `tools/event-sim.js`. Con ellos llegan el álbum de la Costa (el arroz, el coco, la ciénaga, la sabana, el sombrero y Cartagena) y sus logros, y la región deja de estar en obra: tiene segundo final, sus eventos salen en todas sus zonas y da el premio de medallas.
-  - **v3.28, eventos de Boyacá**: uno por zona, con los mismos números que su par de la Costa (la gota en el Papal, horno de malta dañado en la Cervecería, mercado de artesanías en Ráquira, carretera en obras en Paipa —no llegan las papitas—, las heladas de diciembre en Las Ruanas y el festival de las cometas en Villa de Leyva). Medallas confirmadas con `tools/event-sim.js`. Con ellos llegan el álbum de Boyacá (la papa, la cerveza, el barro, los quesos, la lana y Villa de Leyva) y sus logros, y la región deja de estar en obra: tiene segundo final, sus eventos salen en todas sus zonas y da el premio de medallas.
-  - **v3.37, eventos de los Llanos**: uno por zona, con los mismos números que su par de Boyacá (la pudrición del cogollo en la Palma, la despulpadora varada en el Frutal, la feria del pescado en la Cachamera, el puente caído en el Hato llanero —no llega el aceite—, el torneo de coleo en la Talabartería y el torneo del joropo en Villavicencio). Medallas confirmadas con `tools/event-sim.js`. Con ellos llegan el álbum de los Llanos (la palma, las frutas, los ríos, el hato, el caballo y Villavicencio) y sus logros, y la región deja de estar en obra: tiene segundo final, sus eventos salen en todas sus zonas y da el premio de medallas.
-  - Medallas calibradas con `tools/event-sim.js`, que juega cada objetivo con tres jugadores automáticos (el que sube lo que lleva al objetivo, el que sigue la mejora recomendada y uno lento): el oro, el tiempo del más rápido (10–12 min); la plata, 5 min más.
-  - **v3.1.1, oro posible.** Con esa calibración, ni los mejores jugadores automáticos decidiendo cada segundo llegaban al oro en 5 de los 18 objetivos (les faltaban de 1 a 16 s). Cambios:
-    - El tablero empieza con lo que cuesta la primera compra del evento (400 en la broca… 20 M en el barco): desde el primer segundo se decide entre esa compra y subir estaciones.
-    - En el tablero, la mejora recomendada mira solo lo que lleva al objetivo: las estaciones que hacen los productos que todavía faltan (y las anteriores), sus arrieros y, si hay que vender, el despacho. Antes buscaba más monedas: en el derrumbe subía la Chocolatería, que se quedaba con la pasta y la panela del chocolate de mesa, y quien la seguía tardaba 55 min.
-    - Los jugadores automáticos están en `tools/event-bots.js` (tres estilos —objetivo, recomendada y mixta—, cuatro formas de ahorrar para las compras del evento y cada cuántos segundos deciden). `tools/event-sim.js` busca el más rápido decidiendo cada segundo y propone el **oro: ese tiempo más un 9 %, redondeado a 15 s** (de 8:15 a 14:00 según el objetivo); la **plata, 5 min más**. Decidir cada 5 o 10 s en vez de cada segundo cuesta solo 5–20 s: lo que pesa es la estrategia (ahorrar a tiempo para la siguiente compra del evento).
-    - `test/event-medals.test.js` comprueba que en cada objetivo alguien que decide cada 5 s con una de dos estrategias razonables logra el oro.
-
-### 10.3 Regiones (v3.0: Santander en camino; v3.1: El Tabacal; v3.2: La Fiquera; v3.3: El Hato; v3.4: Las Hormigas; v3.5: Barichara, Santander completo)
-- Cada región es un **mapa nuevo con sus propias zonas, cadenas y productos**, con **su propia economía** (monedas, niveles e investigaciones) y **su propio reinicio** (el ×2 del segundo final vale solo para esa región).
-- Entre regiones solo se comparte lo general: **Renombre ⭐, álbum de láminas, decoración y logros**.
-- Por ahora las regiones **no se conectan** entre sí. Más adelante podría haber exportación entre regiones (llevar productos de una a otra), pero no hace falta.
-- **Decisiones (v3.0):**
-  - Cada región tiene **seis zonas**, como el Eje Cafetero.
-  - **Santander se abre al completar el Pueblo** (el primer final del Eje Cafetero).
-  - **Todas las regiones producen a la vez** (también sin conexión: el cálculo se hace región por región, con la pantalla de carga).
-  - El **calendario es el del país**: una región que se abre después empieza en la fecha de ese día, y un reinicio sigue la fecha (`clockOffset`, `clockOf` en `src/sim/calendar.js`).
-- **Cómo quedó (v3.0)** (`src/data/regions.js`, `src/sim/regions.js`): la partida del Eje Cafetero es la principal y guarda las demás en `regions`, cada una como una partida completa (con su `region`, sus zonas, rutas, monedas, investigaciones, objetivos, segundo final y reinicio ×2). Cada región tiene su `Game`; la interfaz muestra la de la zona que se está viendo. El selector de zonas 🗺️ las agrupa por región. El perfil (Renombre, medallas, álbum, decoración y logros) lo guarda solo la principal. Los eventos son, por ahora, los del Eje Cafetero.
-- **Santander** (v3.0 en adelante), con sus seis zonas: 🍈 **La Guayabera** (guayaba → pulpa → melado → bloque → bocadillo → envuelto en hoja de bijao → caja; misma estructura y mismos números que la Finca, porque la región empieza de cero. Desde la v3.29 tiene en la mitad la **plaza de Vélez**: la iglesia blanca de una torre con su atrio, la pila, bancas, faroles y casas, y campanas a las 6, a las 12 y a las 18. El camino de las mulas rodea la plaza y los Moldes, la Cortadora y la Envoltura quedan alrededor de ella; cada estación sigue a la misma distancia del guayabal que en la Finca, así que los viajes duran lo mismo (`door` en `zone7_guayabera.js` y `plaza`, dibujada en `render/Terrain.js`)), 🌿 **El Tabacal** (v3.1: hoja de tabaco → curada en el caney → despalillada → fermentada en pilones → torcida a mano; mismos números que el Trapiche, sin el combustible de la Hornilla: a igual nivel la cadena cuadra sin él; su persona es Don Ramiro, el veguero), 🧵 **La Fiquera** (v3.2: penca → fibra en la desfibradora, que se reparte como la leche de la Lechería: costales en el telar, hilo y alpargatas, y los tercios de tabaco, que llevan el tabaco fermentado del Tabacal por la **Ruta del tabaco**; mismos números que la Lechería; su persona es Doña Carmen, la tejedora), 🐂 **El Hato** (v3.3: novillo → carne en la fama → adobada en el saladero → oreada al sol en el tendedero → asada; la carne asada se reparte entre la Mesa del almuerzo, con bocadillo de postre que llega de la Guayabera, y la Fiambrería, que además amarra cada fiambre con la cabuya de la Fiquera; mismos números que el Cacaotal; su persona es Don Efraín, el vaquero), 🐜 **Las Hormigas** (v3.4: hormiga culona → limpia → en salmuera → tostada en tiesto → cucurucho → recuerdo de Santander, con los costales y las alpargatas de la Fiquera; mismos números que el Maizal. El Hormiguero **solo cosecha en la entrada de aguas, ×4** (lo de todo el año) y guarda en su **despensa** (3.000 s de producción en vez de 15) lo que los arrieros llevan a la cadena el resto del año: en dos años simulados se cosecha lo mismo que con una fuente pareja. La zona abre con la despensa llena, para no arrancar parada; si se vacía fuera de temporada, la persona y los paneles dicen que hay que esperar, no subir niveles. Su persona es Doña Gloria, la hormiguera, que anuncia cada entrada de aguas) y ⛪ **Barichara** (v3.5, el final de la región: como el Pueblo, no tiene fuente propia. La Dulcería de la plaza hace dulces típicos con las cajas de bocadillo de la Guayabera; el Café del parque, la sobremesa con un tabaco del Tabacal; la Posada, la estadía con un recuerdo de las Hormigas; el Taller de cajas, la caja surtida con los tercios de la Fiquera; las Canastas del caminante, con el almuerzo y el fiambre del Hato; y la Salida al Camino Real, las excursiones a Guane. Cada ruta sale de la zona que corresponde a la del Pueblo y los productos valen lo mismo (la caja de bocadillos, 250, como la bolsa de café), así que el balance es el mismo. Se dibuja como el Pueblo pero blanca, de tapia pisada, con la plaza de piedra amarilla; su persona es Lucía, la guía). Su persona es Doña Inés, la bocadillera, y su música, la **Guabina del Chicamocha** (en si menor, 92 negras por minuto).
-- **La Costa** (v3.15 en adelante): se abre al completar Barichara. Sus zonas: 🌾 **El Arrozal** (v3.15: arroz en cáscara → secado al sol y en secadora → descascarado (arroz integral) → pulido (arroz blanco) → clasificado (arroz de primera) → bolsa → bulto; mismos números que la Guayabera, porque la región empieza de cero; su persona es Don Abelardo, el arrocero), 🌴 **El Cocal** (v3.16: coco → pelado a machete → rallado → leche de coco en la prensa → cocadas en la paila; mismos números que el Tabacal; la leche de coco y las cocadas son las que después viajarán a la Ciénaga y a Cartagena; su persona es Doña Eulalia, la cocadera; se dibuja sobre arena, con palmas de coco por todas partes y cocos caídos), 🛶 **La Ciénaga** (v3.17: bocachico → pescado limpio, que se reparte como la fibra de la Fiquera: pescado salado en el Saladero, filetes y pescado frito con patacón en la Fileteadora y la Fritanga, y pescado en coco en la Cocina, con la leche de coco del Cocal por la **Ruta de la leche de coco**; mismos números que la Fiquera; su persona es Don Aníbal, el pescador; la fuente es el agua de la ciénaga, con taruyas, un muelle y canoas cuyos pescadores tiran la atarraya), 🧀 **La Quesera** (v3.18: leche de ordeño de vacas cebú → cuajada → cuajada molida con sal → queso costeño en la prensa → mote de queso en la olla; el mote se reparte entre la Fonda costeña, que lo sirve con el arroz del Arrozal (**Ruta del arroz**), y la Cocina de la bandeja, que además lleva el pescado limpio de la Ciénaga (**Ruta del pescado**); mismos números que el Hato; su persona es Doña Rosmira, la quesera; se dibuja como un potrero de sabana con vacas cebú —blancas o grises, con giba— y alguna romosinuana, samanes y garzas bueyeras), 👒 **El Sombrero** (v3.19: caña flecha → fibra raspada → fibra teñida con barro y bija → trenza → sombrero vueltiao; el Parador de Tuchín vende el **Recuerdo de la Costa**: cuatro sombreros con el pescado salado y el frito de la Ciénaga, por la **Ruta del pescado salado** y la **Ruta del pescado frito**; mismos números que las Hormigas, sin su cosecha de temporada: la caña flecha se corta todo el año; su persona es Don Eliécer, el artesano; se dibuja con el cañaflechal de espigas plumosas, sombreros colgados de varas a la orilla del camino, samanes y palmas) y 🏰 **Cartagena** (v3.20, el final de la región: como Barichara, sin fuente propia. El Fogón de Getsemaní hace arroz con coco con los bultos del Arrozal; el Restaurante de la muralla, la cena con las cocadas del Cocal; el Hotel colonial, la noche en la ciudad amurallada con el recuerdo del Sombrero; la Cocina de la bahía, el almuerzo con el pescado en coco de la Ciénaga; las Loncheras del paseo, con el almuerzo costeño y la bandeja de la Quesera; y el Muelle de las lanchas, el paseo a las Islas del Rosario. Mismos valores que Barichara. Se dibuja como el Pueblo, con casas coloniales de colores, balcones de madera, bugambilias y palmas de coco, la plaza de piedra coralina, un tramo de muralla con su garita y el muelle con las lanchas; desde la v3.45 es la ciudad amurallada frente al mar: el Caribe por los bordes de atrás del mapa, con playa, veleros y lanchas, la muralla con almenas y garitas a lo largo de la playa y la que cierra el centro histórico por tierra, con puertas donde pasan los caminos y la Torre del Reloj, y adentro las casas pegadas; es solo dibujo (`walls` en `zone18_cartagena.js`, dibujado en `render/Terrain.js`); su persona es Doña Dionisia, la palenquera). Con Cartagena (v3.20) llegaron todas sus zonas y con la v3.21 sus eventos, su álbum y sus logros. Mientras a una región le falten zonas (`wip` en `src/data/regions.js`) no se termina: no tiene segundo final, eventos, álbum ni logros, y la lista de zonas muestra las que vienen como «Llega pronto». Se dibuja con el arrozal inundado (agua, camellones y matas que espigan con cada hito), ceibas, palmas de coco, garzas y plátano. Su música es la **Cumbia del arrozal** (en la menor, 4/4, 100 negras por minuto): gaita en la melodía, guacharaca, llamador, tambora, tambor alegre, bajo y golpes de guitarra.
-- **Boyacá** (v3.22 en adelante): se abre al completar Cartagena. Su primera zona, 🥔 **El Papal** (papa → lavada → de primera → pelada → papitas criollas fritas → bolsa → caja; mismos números que el Arrozal, porque la región empieza de cero; su persona es Don Aurelio, el papicultor), 🍺 **La Cervecería** (v3.23: cebada → malta en la maltería → mosto en la paila → cerveza en los tanques → canasta en la embotelladora; mismos números que el Tabacal y el Cocal; la cerveza es la que después viajará a Ráquira, para las jarras de barro, y las canastas a Villa de Leyva; su persona es Don Hernando, el cervecero; se dibuja con el cebadal que se dora con cada hito, pacas de paja, eucaliptos y cipreses), 🏺 **Ráquira** (v3.24: greda → barro amasado, que se reparte como la fibra de la Fiquera: ollas de barro, piezas del torno que el horno de leña vuelve materas pintadas, y jarras de barro llenas con la cerveza de la Cervecería por la **Ruta de la cerveza**; mismos números que la Fiquera y la Ciénaga; su persona es Doña Lucila, la alfarera; se dibuja con la mina de greda, montones de barro rojo, cactus, piedras y ollas a la venta), 🧀 **Paipa** (v3.25: leche → cuajada → queso en molde → queso Paipa en la cava → almojábanas; las almojábanas se reparten entre la Mesa del piquete, con las papitas del Papal (**Ruta de las papitas**), y el Horno de barro, que hace la canasta de amasijos con las papitas y el barro de Ráquira (**Ruta del barro**); mismos números que el Hato y la Quesera; su persona es Doña Gertrudis, la quesera; se dibuja como la Lechería, con vacas holstein, eucaliptos y frailejones), 🧶 **Las Ruanas** (v3.26: lana → lavada → cardada → hilo en la rueca → ruana en el telar; la Tienda de Nobsa vende el **Recuerdo de Boyacá**: cuatro ruanas con una olla y una matera de Ráquira, por la **Ruta de las ollas** y la **Ruta de las materas**; mismos números que las Hormigas y el Sombrero; su persona es Don Clímaco, el tejedor; se dibuja con el páramo y un rebaño de ovejas —blancas, alguna café y alguna negra— que andan por el potrero como las vacas, frailejones y eucaliptos), y 🏛️ **Villa de Leyva** (v3.27, el final de la región: como Barichara y Cartagena, sin fuente propia. La Tienda de la esquina hace las onces con las cajas de papitas del Papal; la Terraza de la plaza, la tarde con las canastas de cerveza; el Hospedaje colonial, la noche con el recuerdo de Las Ruanas; el Mercado del sábado, la canasta con las jarras de Ráquira; los Canastos del paseo, con el piquete y los amasijos de Paipa; y la Salida al Fósil, las excursiones. Se dibuja como el Pueblo, con casonas blancas de dos pisos con balcones verdes, la plaza empedrada, cipreses y eucaliptos; su persona es Doña Mercedes, la guía; el orden de las zonas cambió en la v3.23 para que las rutas encajen). Con Villa de Leyva (v3.27) llegaron todas sus zonas y con la v3.28 sus eventos, su álbum y sus logros. Se dibuja con la tierra negra del altiplano, matas de papa con flores blancas y moradas, eucaliptos, cipreses, piedras y frailejones. Su música es el **Torbellino del altiplano** (en re mayor que pasa a si menor, 3/4, 126 negras por minuto): el tiple rasgueando cada corchea, el requinto punteando la melodía, la guitarra, el bajo y el chucho.
-- **Los Llanos** (v3.31 en adelante): se abren al completar Villa de Leyva. Su primera zona, 🌴 **La Palma** (racimos de palma de aceite → fruto desgranado → fruto cocido al vapor en el autoclave → aceite crudo en la prensa → aceite clarificado → botella → caja; mismos números que el Papal, porque la región empieza de cero; su persona es Don Eusebio, el palmicultor; se dibuja con el palmar de racimos rojos, morichales, comejeneras, garzas y algún samán, y la planta extractora tiene naves de techo de zinc), 🥭 **El Frutal** (v3.32: maracuyá → pulpa en la despulpadora → pulpa pasteurizada en la marmita → jugo en la mezcladora → caja de jugos; mismos números que la Cervecería; el jugo es el que después viajará a la Cachamera, y las cajas, a Villavicencio; su persona es Doña Edilma, la frutera; se dibuja con las enramadas de maracuyá, palos de mango, morichales y comejeneras), 🐟 **La Cachamera** (v3.33: cachama de los estanques → cachama limpia, que se reparte como el barro de Ráquira: pisillo en la Pisillera, filetes que el Ahumadero vuelve cachama ahumada, y cachama al maracuyá en la Cocina, con el jugo del Frutal por la **Ruta del jugo**; mismos números que la Fiquera, la Ciénaga y Ráquira; su persona es Don Arcadio, el piscicultor; la fuente son los estanques de agua verdosa, con sus bordos y las cachamas que asoman), 🤠 **El Hato llanero** (v3.34: novillo → ternera en el desposte → ternera adobada con sal → mamona asada en vara → carne a la llanera en la trinchadora; se reparte entre la Mesa del almuerzo llanero, con la yuca frita en el aceite de la Palma (**Ruta del aceite**), y el Asadero de la parranda, que además asa la cachama de la Cachamera (**Ruta de la cachama**); mismos números que Paipa; su persona es Don Florentino, el vaquero; se dibuja con la sabana, el ganado cebú —blanco o gris, con giba— y alguno sanmartinero, rojizo, caneyes con techo de palma y la parranda con el arpa y una pareja bailando joropo), 🐎 **La Talabartería** (v3.35: cuero crudo → curtido en las pozas → piezas en la cortadora → cuero repujado → silla de montar en el taller; la Tienda llanera vende el **Recuerdo del Llano**: sillas con el pisillo y la cachama ahumada de la Cachamera, por la **Ruta del pisillo** y la **Ruta de la cachama ahumada**; mismos números que Las Ruanas; su persona es Don Ramón, el talabartero; se dibuja con los cueros templados en sus marcos, caballos criollos —alazanes, bayos, tordillos—, samanes y morichales) y 🏞️ **Villavicencio** (v3.36, el final de la región: como Barichara, Cartagena y Villa de Leyva, sin fuente propia. La Empanadería fríe empanadas con las cajas de aceite de la Palma; el Kiosco del parque, la tarde con las cajas de jugos del Frutal; el Hotel campestre, la noche con el Recuerdo del Llano; la Plaza de mercado, el almuerzo con la cachama al maracuyá; los Morrales del viaje, con el almuerzo llanero y el asado de la parranda del Hato; y la Salida a Caño Cristales, las excursiones. Se dibuja como el Pueblo, con casas de colores, guayacanes, moriches y mangos, el kiosco de palma, el hotel con piscina y el caño de colores; su persona es Doña Graciela, la guía). Con Villavicencio (v3.36) llegaron todas sus zonas y con la v3.37 sus eventos, su álbum y sus logros. Su música es el **Joropo de la sabana** (en re mayor que pasa a si menor, 3/4, 160 negras por minuto): el arpa en la melodía, el cuatro rasgueando con sus golpes apagados, las maracas y el bajo.
-- **La Costa Pacífica** (v3.38 en adelante; salió como «el Chocó»; desde la v3.46 su id es `pacifico`): se abre al completar Villavicencio. Su primera zona, 🍌 **El Platanal** (racimo de plátano → manos en la desmanadora → plátano lavado en el tanque → pelado a cuchillo → patacón en la fritanga → bolsa → caja; mismos números que la Palma, porque la región empieza de cero; su persona es Don Nicomedes, el platanero; se dibuja con la tierra negra y mojada del platanal, matas con racimo y bellota morada, palmas de chontaduro, borojós y heliconias, y casas de tabla sobre pilotes, pintadas de colores, con techo de zinc), 🌿 **La Azotea** (v3.39: hierbas de azotea → lavadas → machacadas en el pilón con ajo y cebolla → aliño en la olla del refrito → caja de frascos; mismos números que el Frutal; el aliño es el que después viajará a la Bahía, y las cajas, a Buenaventura; su persona es Doña Rosalba, la cocinera; la fuente son las azoteas, canoas viejas alzadas en pilotes y llenas de hierbas), 🐟 **La Bahía** (v3.40: pargo rojo de las lanchas → pargo limpio, que se reparte como la cachama de la Cachamera: pescado seco en el Secadero, filetes que el Ahumadero vuelve pargo ahumado, y tapao de pescado en la Cocina, con el aliño de la Azotea por la **Ruta del aliño**; mismos números que la Cachamera; su persona es Don Cupertino, el pescador; la fuente es el mar, con las canoas de la Ciénaga), 🐚 **El Manglar** (v3.41: piangua del barro → lavada → cocida → desconchada → encocada en leche de coco; se reparte entre la Mesa del arroz con piangua, con los patacones del Platanal (**Ruta de los patacones**), y la Cocina de la cazuela, que además lleva el pargo de la Bahía (**Ruta del pargo**); mismos números que el Hato llanero; su persona es Doña Ligia, la piangüera; la fuente es el barro del manglar en marea baja, con los mangles y las piangüeras que sacan la concha a mano), 🏺 **El Werregue** (v3.42: cogollo de la palma de werregue → fibra → fibra teñida con jagua y achiote → hebra torcida → jarrón tejido; la Tienda de artesanías vende el **Recuerdo del Pacífico**: jarrones con el pescado seco y el pargo ahumado de la Bahía, por la **Ruta del pescado seco** y la **Ruta del pargo ahumado**; mismos números que la Talabartería; su persona es Doña Aminta, la tejedora wounaan; se dibuja con el palmar espinoso, chontaduros, heliconias, borojós y tambos wounaan, y la torcedora y las tejedoras trabajan en tambos) y 🐋 **Buenaventura** (v3.43, el final de la región: como Barichara, Cartagena, Villa de Leyva y Villavicencio, sin fuente propia. La Fritanga del puerto fríe marranitas con las cajas de patacones del Platanal; la Cevichería del malecón, el ceviche con las cajas de aliño de la Azotea; el Hotel de la bahía, la noche con el Recuerdo del Pacífico; la Galería de Pueblo Nuevo, el almuerzo con el tapao de la Bahía; las Loncheras de la lancha, con el arroz con piangua y la cazuela del Manglar; y la Salida a las ballenas, las lanchas a ver las ballenas jorobadas. Se dibuja como el Pueblo, con casas de colores y techos de zinc, palmas de coco y almendros, el malecón, la galería con sus toldos y el muelle con las lanchas; su persona es Doña Libia, la guía). Con Buenaventura (v3.43) llegaron todas sus zonas y con la v3.44 sus eventos (la sigatoka negra en el Platanal, el agua enlodada en la Azotea, la Semana Santa en la Bahía, la lancha varada en el Manglar —no llegan los patacones—, la feria de artesanías en el Werregue y el Festival Folclórico del Pacífico en Buenaventura; mismos números que los de los Llanos), su álbum (la selva, la cocina, el mar, la música, las manos y Buenaventura) y sus logros. Su música es la **Chirimía de San Pacho** (porro chocoano en fa mayor que pasa a re menor, 4/4, 116 negras por minuto): dos clarinetes (la melodía y una tercera abajo en las notas largas), el bombardino en el bajo, la tambora, el redoblante y los platillos.
-- **El Amazonas** (v3.47 en adelante): se abre al completar Buenaventura. Su primera zona, 🌴 **El Asaizal** (racimo de asaí → frutos desgranados → remojados en agua tibia → pulpa en la despulpadora → asaí batido → bolsa congelada → caja; mismos números que la primera zona de cada región, porque el Amazonas empieza de cero; su persona es Don Abel, el cosechero; se dibuja con la vega húmeda, las matas de asaí de tallos delgados y racimos morados, ceibas gigantes, heliconias, plátano y guacamayas, y casas de madera sobre pilotes con techo de zinc o de palma), 🌶️ **El Ajizal** (v3.48: ají de la chagra → lavado → molido → ají negro, cocinado en el tucupí, el jugo de la yuca brava → caja de frascos; mismos números que la Azotea; el ají negro es el que después viajará al Lago, y las cajas, a Leticia; su persona es Doña Remedios, la ajicera; la fuente es la chagra con las matas de ají rojo, amarillo y morado), 🐟 **El Lago** (v3.49: pirarucú de las canoas → limpio → salado, en postas que se ahúman en el moquén, o al ají negro en la Cocina del pirarucú, que recibe el ají negro del Ajizal por la Ruta del ají negro; mismos números que la Bahía; su persona es Don Jacinto, el pescador; la fuente es el agua negra de los lagos de Tarapoto, con victorias regias y canoas), 🫓 **La Casabería** (v3.50: yuca brava de la chagra → pelada → rallada → exprimida en el tipití → casabe en el budare, que se reparte entre la Mesa del desayuno, con las bolsas de asaí del Asaizal, y la Maloca, con el asaí y el pirarucú limpio del Lago; mismos números que el Manglar; su persona es la Abuela Tránsito, la casabera; se dibuja con la chagra de yuca y la maloca redonda de techo de palma y frente pintado), 🎭 **La Yanchama** (v3.51: corteza de yanchama → remojada en la quebrada → golpeada hasta volverse tela → pintada con jagua y achiote → máscara ticuna; la Tienda de la Yanchama vende el Recuerdo del Amazonas con el pirarucú salado y el moqueado del Lago; mismos números que el Werregue; su persona es Don Eliseo, el artesano ticuna; la fuente es el monte de yanchamas de tronco liso, con raíces de tabla). 🐬 **Leticia** (v3.52) es el final: no tiene fuente propia y cada estación recibe lo suyo de otra zona (la Heladería de asaí, las cajas de asaí; el Restaurante de la ribera, las de ají negro; el Hotel de la selva, los recuerdos de la Yanchama; el Mercado del puerto, el pirarucú al ají negro; las Provisiones de la canoa, el desayuno y el banquete de la Casabería), y la Salida a los delfines lleva a ver los delfines rosados; mismos números que Buenaventura; su persona es Doña Graciela, la guía; se dibuja como el Pueblo (estilo 'leticia'), con casas de colores, ceibas, palmas de asaí y guacamayas. Desde la v3.53 tiene sus seis eventos (con los números de los de la Costa Pacífica), su álbum de seis páginas y sus logros, y deja de estar en obra. Su música es la **Cumbia del Amazonas** (en la menor que pasa a do mayor, 4/4, 108 negras por minuto): la guitarra eléctrica punteada, con trémolo en las notas largas, el bajo, el teclado en el contratiempo, las maracas y el manguaré.
-- **El Tolima Grande** (v4.0): se abre al completar Leticia y llegó completo, con los números del Amazonas. 🍪 **Los Achirales** (rizoma de achira → rallado → almidón asentado y secado al sol → masa con cuajada → bizcochos en horno de barro → caja; Doña Hermelinda, la bizcochera), ☕ **El Café del Huila** (cereza → el Beneficiadero saca el pergamino y la cáscara, que pasa por la canaleta al Secadero y sale como té de cáscara hacia el Hotel de Neiva → trillado → tostado, que viaja como tinto a la Lechonería → café especial; Don Rubiel), 🐟 **La Represa de Betania** (tilapia de las jaulas → limpia → ahumada, en escabeche o frita con patacón; Don Fabio), 🐷 **La Lechonería** (cerdo → el Desposte saca carne y cuero; la carne va a la Paila del relleno y al Fogón del tamal, el cuero a la Limpieza, y el Horno de leña junta relleno y cuero limpio en la lechona; la Mesa del desayuno sirve el tamal con bizcochos y tinto; Doña Fanny), ⚫ **La Chamba** (arcilla → pisada → modelada a mano → bruñida con piedra → quemada y ahumada con boñiga: loza negra; la tienda vende el Recuerdo del Tolima con la tilapia ahumada y el escabeche de Betania; Doña Ofelia) y 🌵 **Neiva** (cafetería del malecón, restaurante del río, Hotel del San Pedro, plaza de mercado, fiambrera y la Salida a la Tatacoa a ver las estrellas; Doña Marleny). Su música es el **Sanjuanero del San Pedro** (la mayor que pasa a fa sostenido menor, 3/4, 132 negras por minuto): el bambuco con la tambora y la carrasca.
-- **Cundinamarca** (v4.4 en adelante): se abre al completar Neiva y llega zona por zona, con los números del Tolima Grande. Su primera zona, 🌹 **Las Flores de la Sabana** (Madrid y Facatativá: invernadero de rosas → mesa de corte → tinas de hidratación → clasificadora → boncheo → cuarto frío → empacadora; Doña Rocío, la floricultora; se dibuja con las naves de plástico sobre los rosales, invernaderos sueltos, eucaliptos y cipreses). 🍓 **Los Freseros de Sibaté** (v4.4.1: fresal bajo macrotúneles → lavadero, que saca también la fresa de segunda por la canaleta hacia la marmita de mermelada → seleccionadora → llenadora de bandejas → mesa de fresas con crema; los números del Café del Huila; Don Gilberto, el fresero; puestos de fresas con crema en la decoración). 🐟 **Las Truchas de Guatavita** (v4.4.2: estanques de agua helada → limpieza, que se reparte entre el ahumadero, la fileteadora con la mesa del ceviche y la cocina de la laguna; los números de Betania; Don Ernesto, el truchero; frailejones en la decoración). 🧂 **Las Salinas de Nemocón** (v4.4.3: socavón → pozos de salmuera, que sacan también bloques de sal por la canaleta hacia el taller de tallado; la salmuera se reparte entre los tachos de evaporación y las gachas de barro del pan de sal; el empaque de regalo junta la sal con las figuras en el cofre, y la armadora de canastas recibe los ramos de rosas y las bandejas de fresa por las primeras rutas de la región; los números de la Lechonería; Doña Blanca, la salinera; montones de sal y vagonetas). 🍲 **La Cocina de la Sabana** (v4.4.4, en Chía: huerta de papa → peladero → olla del caldo → olla del ajiaco → servidora; el restaurante santafereño sirve el almuerzo sabanero con la trucha ahumada y el ceviche de Guatavita; los números de La Chamba; Doña Teresa, la cocinera). Y ⛪ **Zipaquirá** (v4.4.5), el final: como Neiva, sin fuente propia; la floristería de la plaza arma arreglos con las cajas de flores, el salón de onces sirve las fresas con crema, el hotel de la plaza recibe el almuerzo sabanero y la mermelada, la plaza de mercado el almuerzo de trucha, las mochilas del paseo llevan las canastas y los cofres de sal, y todo termina en la entrada a la Catedral de Sal; siete rutas; Don Hernán, el guía de la mina; se dibuja como Villa de Leyva, con casonas blancas de balcones verdes. Con la v4.4.8 quedó completa: sus eventos (las heladas, la cosecha grande de fresa, la Semana Santa en Guatavita, el derrumbe que corta las rosas a las Salinas, el domingo de ajiaco y la Navidad en la Catedral; con los números de los del Tolima Grande), su álbum (la Sabana, la cocina, las flores, la sal, los muiscas y los pueblos) y sus logros. Su música es el **Pasillo de la Sabana** (en mi menor que pasa a sol mayor, 3/4, 120 negras por minuto): la bandola en trémolo, la guitarra en el «y» del dos y en el tres, y el tiple picando en el contratiempo. Después, **Bogotá** es una región aparte (abajo).
-- **Bogotá** (v4.5): se abre al completar Cundinamarca. No produce nada propio: es una sola zona de 52×52 casillas (cuatro veces el área de las demás) a la que todo llega en **tractomula** desde las otras regiones. Las tractomulas (`unlimited` en `src/data/routes.js`) traen de su región (`origin`) una carga que no se acaba, no le quitan nada a esa región y se suben de nivel como las chivas; no tienen zona de origen (`from: null`). El mapa sigue la ciudad: los Cerros Orientales con Monserrate arriba a la derecha, la Carrera Séptima al pie de los Cerros (el camino de las mulas), la Avenida Caracas de norte a sur (por ella entran la Autopista Norte y la Autopista Sur) y, del occidente, la Calle 80, la Calle 26 (El Dorado) y la Calle 13; la bodega queda en la Central de abastos, al suroccidente. Desde la v4.6 es **una red**, no una cadena por barrio (`network: true` en la zona): cada estación se puede construir apenas estén construidas todas las que la abastecen (`suppliersOf` en `src/sim/chain.js`), así que se empieza con varias a la vez y baratas (el Tostadero del Chorro gratis, la Despensa de la Zona G, el Toldo de tejidos, el Puesto de flores y el Puesto de frutas, de 200 a 4000 monedas) y las del centro cuestan cientos de millones. Muchas reciben de dos o tres estaciones de la misma Bogotá además de su tractomula (por ejemplo, la Fritanga de la plaza recibe la canasta de la Pescadería, las salsas de la Despensa y el chicharrón de la Cocina de entradas; la Plaza de Paloquemao, el desayuno de la Fritanga, el caldo de costilla de la Parrilla y el tinto de la Cafetería), y no todas tienen tractomula: solo donde tiene sentido. Tres estaciones sacan también un subproducto por la canaleta: el Tostadero, café molido (para el Restaurante de la Zona G); la Cocina de entradas, chicharrón (para la Fritanga), y la Parrilla, caldo de costilla (para la Plaza de Paloquemao). Las estaciones quedan donde estaban los barrios en el mapa; la cadena es una sola, ancha, que se recorre hacia los lados y hacia arriba y abajo (también arrastrando con el mouse). Como hay una sola zona, la lista de zonas dice solo «Bogotá», sin número. El **TransMilenio** va y viene, solo de adorno, por su carril de concreto junto a la Caracas, la 30 (la NQS, entre la Caracas y Paloquemao) y la Calle 80 (`transmilenio` en la zona; dos buses articulados por carril). Al pasar a la v4.6 la Bogotá de barrios se borra de las partidas guardadas (región, medallas, láminas y logros), sin devolver monedas. En total 24 estaciones y 27 tractomulas (dos de comida y una de artesanía por región); el trazado de todo el mapa está en `src/data/zones/zone55_bogota.js`. Tiene seis eventos en la misma zona (cada uno con su `key`): el aguacero en el Chorro, el alumbrado de la Séptima, el festival gastronómico y el pico y placa en la Zona G, el ventarrón del domingo en Usaquén y el paro camionero en Paloquemao; en su tablero solo están las estaciones del evento (v4.7.1: las demás de la red no se dibujan ni salen en la cadena ni en las sugerencias), las mejoras cuestan la ochentava parte (`costScale`: en la red, las estaciones del final son caras de subir y, sin el descuento, jugar bien casi no se notaba) y las tractomulas no corren (lo de afuera llega como en cualquier tablero). Desde la v4.7 tiene un séptimo evento, **la Gran Feria**, con toda la red en el tablero y sin estación frenada: sale solo cuando ya se ganó medalla en los otros seis (`after`), y sus tres compras suben el precio de todo lo que se vende (×1,2, ×1,5 y ×2 de lo normal, por la demanda; `zoneValue`); su logro, «La feria del país», paga 8, 16 y 32 ⭐ por 1, 3 y 6 medallas ganadas en ella. Su álbum (La Candelaria, la comida, Monserrate y los cerros, el transporte, la cultura y los barrios), dieciséis logros y la victoria al llegar a la Gran Feria. Las tractomulas cuestan la cuarta parte de lo que cuesta subir su estación, porque cada estación tiene dos. Su música es la **Danza de La Candelaria** (en la menor que pasa a do mayor, 2/4, 72 negras por minuto): la guitarra con el ritmo de habanera, el bajo en el uno y la quinta en el dos, el tiple en el contratiempo y la bandola con las corcheas con puntillo. Con el jugador casual del simulador se completa en unas 33 horas (v4.6: costos ×4 y la mejora recomendada que prueba subir una rama entera; Cundinamarca, unas 22): es la región más larga y la que pide más atención, porque todo está en una sola zona.
-- **Regiones ya publicadas (antes «Próximas regiones»):**
-  - **🌵 Tolima Grande**: llegó completo en la **v4.0** (ver arriba).
-  - **🌹 Cundinamarca y 🏔️ Bogotá**: llegaron en la **v4.4** y la **v4.5–v4.7** (Cundinamarca en 6 zonas hasta Zipaquirá y Bogotá como región aparte en red de 24 estaciones y 27 tractomulas; ver arriba).
-- **Eventos a demanda** (v4.7.3): cuando una región tiene oro en todos sus eventos, ya no recibe eventos solos (`refillSlots`); con 20 ⭐ de Renombre por región (`profile.onDemand`, `buyOnDemand`) cualquiera de sus eventos se juega otra vez con «🔁 Jugar otra vez» (`startOnDemand`), sin cupo ni los 2 años de espera, nunca con más de dos tableros abiertos.
+### 10.2 Events and badges (v2.0–v2.3 ✅)
+- **Separate boards**: each event uses the pieces of a zone on a board separate from the map, with its own coins and levels. It has **its own clock, which pauses on leaving** (to look at the general map) and does not advance offline.
+- **Once a year per zone**: each zone opens its event once per game year; the objective changes from one year to the next. Over time, **4 events per zone** (4 medals per zone, 24 in all). Only one at a time per zone: if it passes, you wait for the next year.
+- **Medals** by how fast it is met: 🥉 bronze, 🥈 silver, 🥇 gold.
+- **First events (one per zone)**: Finca, *The borer* (a pest that cuts the harvest; traps, Beauveria fungus and re-re to control it); Trapiche, *The great milling* (no firewood: the hornilla only burns the bagasse it produces); Lechería, *Cattle fair* (timed orders of cheese, cream and arequipe); Cacaotal, *Landslide on the road* (the panela route cut off: hold out with what is stored and open a trail); Maizal, *Corn festival* (batches of arepas for the festival); Pueblo, *The ship sails on Friday* (full containers before each ship sails).
+- **Renown ⭐**: medals give Renown (🥉 1, 🥈 2, 🥇 4), which accumulates in a total that **is not lost on restart** and never turns into game coins. It is spent on **decoration** (colors of the houses and balconies, paint for the chiva and the Willys, the mule drivers' clothes, plaza decorations) and on the **sticker album** (like the chocolate-bar albums: each medal and each achievement gives a sticker; filling a page gives extra Renown).
+- **General achievements** that add up across games (selling, exporting, winning medals in every zone…), with no speed achievements: with each restart everything goes much faster.
+- **How it ended up in v2.0** (`src/data/events.js`, `src/sim/events.js`):
+  - Each board is a separate game (the same state and the same simulation, with only the event's zone) played with its own `Game`. Its clock is its `playTime`: it advances while on the board and, with **🚪 Leave** (v3.67.4, a menu option), also in the background: on leaving, the country's clock is saved (`event.away`) and on coming back in `Game.catchUpBoard` computes what happened (30 min simulated and the rest at the measured pace; the medal keeps the moment the objective is met). The clock shown and the medal's clock go up to 999:59 (`EVENT_CLOCK_MAX`); the board keeps producing. On the board it is always daytime and there is no season. It is saved inside the game (`state.events.boards`).
+  - An event opens when all the stations it uses are built in the game (so the pieces are already known) and the zone's person announces it. It is played once per game year; once started, it can go on even if the year passes.
+  - Stations start at level 10, with Dispatch also at 10 and, since v3.1.1, with what the event's first purchase costs (before, 0 coins: in the first minute there was nothing to do while the first product went through the chain). The event purchases are like research that only applies on the board, in order. The game's research does not apply on the board, nor do the ×2 restarts.
+  - **The borer** (Finca): the coffee field starts at 40 %; 🪤 Traps (400) brings it to 60 %, 🍄 Beauveria fungus (2,500) to 80 % and 🧺 Re-re (6,000) to 100 %. The pest shows over the coffee field while it is not controlled. Objectives per year: sell 100 bags, produce 500 roasted coffee and produce 1,000 green coffee; then they repeat. Each objective has its own medal times (see the v3.1.1 calibration below).
+  - Renown, medals (the best of each event and how many of each) and the event log are in `state.profile`, which moves to the new game on restart.
+  - **v2.1, the other five** (there are no other zones on the board: imports arrive «from outside» according to `supply`, from 0 to 1, and the objective can ask for several products):
+    - 🔥 **The great milling** (Trapiche): no firewood, the Hornilla at 40 %; ☀️ bagasse shed, 🧱 repaired hornilla and 🌬️ bellows. Powdered panela, panela, syrup.
+    - 🐮 **Cattle fair** (Lechería): orders of cheese, butter and arequipe at once (panela arrives without fail); 🧀 molds, 🧈 churn (Descremadora and Mantequera) and 🍯 copper paila speed up each branch.
+    - 🪨 **Landslide on the road** (Cacaotal): panela does not arrive, only 60 stored; 🫏 mules through the bush (25 %), 🛻 trail (60 %) and 🚧 clear the road (100 %). Table chocolate, chocolate bar or both.
+    - 🎉 **Corn festival** (Maizal): the big budare cracked (40 %); 🍳 borrowed budare, 🪵 dry firewood and 👵 the neighbors help. Cheese arepas, arepas, dough.
+    - 🚢 **The ship sails on Friday** (Pueblo): all imports arrive; the stuck crane leaves the Yard at 40 %; 🔧 spare parts, 🏗️ fixed crane and 👷 extra shift. Containers, gift baskets, containers with breakfasts.
+  - **v2.2, what Renown is spent on** (`src/data/album.js`, `src/data/decor.js`, `src/sim/renown.js`), with nothing random (no surprise packs):
+    - **Sticker album**: six pages (coffee, panela, milk, cacao, corn and the town) of six stickers about what surrounds each product in Colombia (the arriero, the chapolera, the yipao, the melcocha, the kumis, the molinillo, the mazamorra, the chiva…). Each sticker costs 1, 2 or 3 ⭐ and you stick the one you choose; a full page gives a 3 ⭐ prize. The whole album costs 72 ⭐ (54 counting the prizes).
+    - **Decoration** (looks only; also applies on the boards): the Willys' color (3 ⭐ each), the mules' packsaddle (2 ⭐), the chiva's paint (4 ⭐) and bunting in front of the warehouse (5 ⭐). The default is free; what was bought can be changed any time.
+    - Opened from the events window (📖 Album, 🎨 Decoration). Everything is saved in `state.profile` and moves to the new game on restart.
+    - **Per region (v3.10)**: each region has its **album** (Santander's: the bocadillo, tobacco, fique, the hato, the ants and Barichara, with stickers like the bijao, the caney, Curití, the pepitoria, the tiesto or the Camino Real), its **decoration** (what was bought and chosen, separately; `profile.decor[region]`), its **achievements** (Santander's with its products: bocadillo boxes, cigars, espadrilles, fiambres, souvenirs and tours; medals, album and research count only the region's; `profile.lifetimes[region]`) and its **workday** (`workLevel` in the region's game). Renown and offline hours still belong to the player. In the Renown window you pick the region (it starts on the one being played). Old games move their decoration to the Eje Cafetero and their workday blocks to each region.
+    - **Second Willys (v3.9)**: with the region's album full, a second Willys is bought per region (20 ⭐ per region). From then on each zone of the region has two: each leaves on its own with the same load per trip, so dispatch sells double (`jeepCount` in `src/sim/modifiers.js`, `jeep2` in each zone). The road is widened with a second lane (`jeepRoad2`, inside the first) so they do not crash, and the exit sign moves to the other side. It belongs to the region (`willys2` in its game): it is not lost on restarting it. It is painted separately (🎨 «Color of the second Willys», which starts red). On event boards there is still only one.
+  - **v2.3, general achievements** (`src/data/logros.js`, `src/sim/logros.js`): 15 achievements of one to three levels, all about quantity and none about speed: coffee bags sold, panela, cheese, chocolate and cheese arepas produced, containers exported, coins earned, game years, times the Pueblo was completed and the second ending reached, medals, events with a medal and with gold, album pages and research in a game. Each level gives Renown (1 to 16 ⭐). What earlier games did is saved on restart in `profile.lifetime` and keeps counting. They are shown in the Renown window (🏆 Achievements).
+  - **v3.7, slots and player hours.** Events no longer go by year: each region has 2 slots; on finishing an event its slot stays empty for 3 game years (each slot on its own), and when it fills up a never-played zone comes first or, if there is none, the one unplayed the longest. Events do not expire and each zone's challenge advances on finishing it. Meeting the objective secures the medal with its time; the event ends on having bought the three upgrades. Offline hours move to the profile (2 h, +2 h per level with Renown up to 24 h, from 2 to 12 ⭐), apply to every region and are not lost on restart; the 12 research items that added them were removed (`src/sim/events.js`, `src/sim/renown.js`).
+  - **v3.8, region finished.** On completing a region's last zone (the Pueblo, Barichara) it is marked forever (`regionDone`, kept on restart): from then on the slots are filled with the events of **all its zones**, even if after restarting only the first one is open, because they were already played. Old games mark it if they already had the last zone complete or a restart.
+  - **v3.10.1, maximum level.** On event boards the stations, mule drivers and dispatch go up to **level 50** (in the game, 100): `EVENT_MAX_LEVEL` and `maxLevel(state)` in `src/sim/rules.js`. The calibrated medals can still be achieved (the automated players' test watches it).
+  - **v3.11, lifetime Renown.** Each restart (second ending) of any region gives 10 ⭐ (`RESTART_RENOWN`). Everything that gives Renown goes through `gainRenown`, which also adds to `profile.renownTotal`: the total earned, which does not go down on spending (to rank players later). Old games rebuild it from medals, achievements and full pages.
+  - **v3.12.** The total earned is called **Prestige**. The second ending asks for stations, mule drivers and routes at level 100, every objective and all the region's research (`masteryParts` in `src/sim/legacy.js`); those who had it under the old rule lose it if something is missing. Restarting no longer removes the event boards or their slots. In events, `eventHandicaps`/`handicapText` (and `blame` in each event) say how much the slowed station yields and why. The Pueblo is called **Salento** (`style: 'salento'`: white houses with colorful balconies, more wax palms). Each zone has its name sign; the Willys and the chivas have headlights at night; the Compost bin shows in the chain; locked research leads to what it is missing (`researchBlocker`).
+  - **v3.30, fewer events.** Slots are no longer per region: there are **2 for the whole game**, in the main game, and never from the same region at once; on finishing an event its slot rests **2 game years** (4 h 16 min; before, 3). The board has three buttons: **⏸️ Pause** (or **🚪 Leave** depending on the «When leaving an event» setting of v3.67.4), **🔄 Restart** and **🏁 Finish**. On winning, the medal and Renown are given and the slot's wait starts, but the board stays open to look at (`event.done`), also after pausing it or closing the app, until «Finish event» is tapped; once won, the restart button is disabled (v3.30.1). Since **v4.4.7**, the top board collapses on small screens, and since **v4.7.3**, with **gold in every event of a region**, that region stops getting events on its own and for **20 ⭐** unlocks **🔁 Events on demand** (`profile.onDemand`) to play any of them whenever (max. 2 boards open at once); the list shows the clock and flags `⬆ Everything to 50` once everything is at the maximum.
+  - **v3.13.** Each zone's person is on the map (`render/Keeper.js`) and on the boards; tapping them makes them talk (`talk` in `ui/Chatter.js`: repeats the last thing if it still applies and then goes through the current notices). A list of medals per event and a region prize: all in bronze or better 5 ⭐, silver 10 ⭐, gold 20 ⭐ (`checkMedalBonus`, `profile.medalBonus`). Pets per region, decoration only: cats (5 ⭐ since v4.0.2, up to 10) and parrots (8 ⭐ since v3.29, up to 5) (`PETS`, `profile.pets[region]`, `render/Pets.js`); the cats chase the parrots every half minute or minute, at random.
+  - **v3.14.** Events show on the board's map (`render/EventArt.js`): each one has its scene in four stages (how many purchases are done), with what moves (bugs, rain, smoke, mules, the car, the raft, the people). It removes the trees in its way (`grid` in the terrain decoration).
+  - **v3.6, Santander events**: one per zone, with the mechanics of its Eje Cafetero counterpart (the fruit fly in the Guayabera, damp in the Tabacal's caney, a craft fair in the Fiquera, the river rising at the Hato, tourist season at the Hormigas and a holiday weekend in Barichara). The board is built with the event region's zones and saved in its game; medals and Renown go to the main game's profile. Medals calibrated like the others.
+  - **v3.21, Costa events**: one per zone, with the same numbers as their Santander counterpart (birds in the rice field, dull machetes in the Cocal, Holy Week in the Ciénaga, a flooded road at the Quesera —the rice does not arrive—, the hat festival at the Sombrero and a cruise ship in Cartagena). Medals confirmed with `tools/event-sim.js`. With them come the Costa album (rice, coconut, the ciénaga, the savanna, the hat and Cartagena) and its achievements, and the region is no longer under construction: it has a second ending, its events come out in all its zones and it gives the medal prize.
+  - **v3.28, Boyacá events**: one per zone, with the same numbers as their Costa counterpart (blight in the Papal, a broken malt kiln at the Cervecería, a crafts market in Ráquira, road works in Paipa —the potatoes do not arrive—, December frosts at Las Ruanas and the kite festival in Villa de Leyva). Medals confirmed with `tools/event-sim.js`. With them come the Boyacá album (potato, beer, clay, cheeses, wool and Villa de Leyva) and its achievements, and the region is no longer under construction: it has a second ending, its events come out in all its zones and it gives the medal prize.
+  - **v3.37, Llanos events**: one per zone, with the same numbers as their Boyacá counterpart (bud rot in the Palma, the broken pulper in the Frutal, the fish fair at the Cachamera, the fallen bridge at the Hato llanero —the oil does not arrive—, the coleo tournament at the Talabartería and the joropo tournament in Villavicencio). Medals confirmed with `tools/event-sim.js`. With them come the Llanos album (the palm, fruits, rivers, the hato, the horse and Villavicencio) and its achievements, and the region is no longer under construction: it has a second ending, its events come out in all its zones and it gives the medal prize.
+  - Medals calibrated with `tools/event-sim.js`, which plays each objective with three automated players (the one raising what leads to the objective, the one following the recommended upgrade and a slow one): gold, the fastest one's time (10–12 min); silver, 5 min more.
+  - **v3.1.1, gold possible.** With that calibration, not even the best automated players deciding every second reached gold in 5 of the 18 objectives (they were 1 to 16 s short). Changes:
+    - The board starts with what the event's first purchase costs (400 for the borer… 20 M for the ship): from the first second you decide between that purchase and raising stations.
+    - On the board, the recommended upgrade looks only at what leads to the objective: the stations that make the products still missing (and the ones before them), their mule drivers and, if selling is needed, dispatch. Before, it looked for more coins: in the landslide it raised the Chocolatería, which took the table chocolate's paste and panela, and whoever followed it took 55 min.
+    - The automated players are in `tools/event-bots.js` (three styles —objective, recommended and mixed—, four ways of saving up for the event purchases and how many seconds between decisions). `tools/event-sim.js` looks for the fastest one deciding every second and proposes **gold: that time plus 9 %, rounded up to 15 s** (from 8:15 to 14:00 depending on the objective); **silver, 5 min more**. Deciding every 5 or 10 s instead of every second costs only 5–20 s: what matters is the strategy (saving up in time for the next event purchase).
+    - `test/event-medals.test.js` checks that in each objective someone deciding every 5 s with one of two reasonable strategies gets gold.
+### 10.3 Regions (v3.0: Santander on the way; v3.1: El Tabacal; v3.2: La Fiquera; v3.3: El Hato; v3.4: Las Hormigas; v3.5: Barichara, Santander complete)
+- Each region is a **new map with its own zones, chains and products**, with **its own economy** (coins, levels and research) and **its own restart** (the second ending's ×2 applies only to that region).
+- Between regions only the general things are shared: **Renown ⭐, sticker album, decoration and achievements**.
+- For now regions **do not connect** to each other. Later there could be export between regions (taking products from one to another), but it is not needed.
+- **Decisions (v3.0):**
+  - Each region has **six zones**, like the Eje Cafetero.
+  - **Santander opens upon completing the Pueblo** (the Eje Cafetero's first ending).
+  - **All regions produce at once** (also offline: the computation is done region by region, with the loading screen).
+  - The **calendar is the country's**: a region that opens later starts on that day's date, and a restart keeps the date (`clockOffset`, `clockOf` in `src/sim/calendar.js`).
+- **How it ended up (v3.0)** (`src/data/regions.js`, `src/sim/regions.js`): the Eje Cafetero's game is the main one and keeps the others in `regions`, each one as a complete game (with its `region`, its zones, routes, coins, research, objectives, second ending and ×2 restart). Each region has its `Game`; the interface shows the one of the zone being viewed. The 🗺️ zone picker groups them by region. The profile (Renown, medals, album, decoration and achievements) is kept only by the main one. The events are, for now, the Eje Cafetero's.
+- **Santander** (v3.0 onward), with its six zones: 🍈 **La Guayabera** (guava → pulp → syrup → block → bocadillo → wrapped in bijao leaf → box; the same structure and numbers as the Finca, because the region starts from scratch. Since v3.29 it has the **Vélez plaza** in the middle: the white one-tower church with its atrium, the fountain, benches, lanterns and houses, and bells at 6, 12 and 18. The mule road goes around the plaza and the Molds, the Cutter and the Wrapping sit around it; each station stays at the same distance from the guava grove as in the Finca, so the trips last the same (`door` in `zone7_guayabera.js` and `plaza`, drawn in `render/Terrain.js`)), 🌿 **El Tabacal** (v3.1: tobacco leaf → cured in the caney → stemmed → fermented in piles → hand-rolled; the same numbers as the Trapiche, without the Hornilla's fuel: at the same level the chain balances without it; its person is Don Ramiro, the tobacco grower), 🧵 **La Fiquera** (v3.2: fique leaf → fiber in the decorticator, which is split like the Lechería's milk: sacks on the loom, yarn and espadrilles, and the tobacco bundles, which carry the Tabacal's fermented tobacco by the **Tobacco route**; the same numbers as the Lechería; its person is Doña Carmen, the weaver), 🐂 **El Hato** (v3.3: steer → meat at the butcher's → seasoned in the salting house → air-dried in the sun on the line → grilled; the grilled meat is split between the Lunch table, with bocadillo for dessert arriving from the Guayabera, and the Fiambrería, which also ties each fiambre with the Fiquera's fique twine; the same numbers as the Cacaotal; its person is Don Efraín, the cowhand), 🐜 **Las Hormigas** (v3.4: hormiga culona → cleaned → in brine → toasted on a clay griddle → paper cone → Santander souvenir, with the Fiquera's sacks and espadrilles; the same numbers as the Maizal. The Anthill **only harvests at the start of the rains, ×4** (the whole year's worth) and keeps in its **pantry** (3,000 s of production instead of 15) what the mule drivers take to the chain the rest of the year: in two simulated years it harvests the same as an even source. The zone opens with the pantry full, so it does not start stopped; if it empties out of season, the person and the panels say you have to wait, not raise levels. Its person is Doña Gloria, the ant harvester, who announces each start of the rains) and ⛪ **Barichara** (v3.5, the region's ending: like the Pueblo, it has no source of its own. The plaza's Sweet shop makes typical sweets with the Guayabera's bocadillo boxes; the Park café, the after-meal with a cigar from the Tabacal; the Inn, the stay with a souvenir from the Hormigas; the Box workshop, the assorted box with the Fiquera's bundles; the Walker's baskets, with the Hato's lunch and fiambre; and the Camino Real departure, the tours to Guane. Each route leaves from the zone matching the Pueblo's and the products are worth the same (the bocadillo box, 250, like the bag of coffee), so the balance is the same. It is drawn like the Pueblo but white, of rammed earth, with the plaza of yellow stone; its person is Lucía, the guide). Its person is Doña Inés, the bocadillo maker, and its music, the **Guabina del Chicamocha** (in B minor, 92 quarter notes per minute).
+- **La Costa** (v3.15 onward): opens upon completing Barichara. Its zones: 🌾 **El Arrozal** (v3.15: paddy rice → dried in the sun and in a dryer → husked (brown rice) → polished (white rice) → graded (first-grade rice) → bag → sack; the same numbers as the Guayabera, because the region starts from scratch; its person is Don Abelardo, the rice grower), 🌴 **El Cocal** (v3.16: coconut → peeled with a machete → grated → coconut milk in the press → cocadas in the pan; the same numbers as the Tabacal; the coconut milk and the cocadas are the ones that later travel to the Ciénaga and Cartagena; its person is Doña Eulalia, the cocada maker; it is drawn on sand, with coconut palms everywhere and fallen coconuts), 🛶 **La Ciénaga** (v3.17: bocachico → cleaned fish, which is split like the Fiquera's fiber: salted fish at the Salting house, fillets and fried fish with patacón at the Filleter and the Fritanga, and fish in coconut at the Kitchen, with the Cocal's coconut milk by the **Coconut milk route**; the same numbers as the Fiquera; its person is Don Aníbal, the fisherman; the source is the swamp's water, with water hyacinths, a pier and canoes whose fishermen cast the net), 🧀 **La Quesera** (v3.18: milk from zebu cows → curd → curd ground with salt → queso costeño in the press → mote de queso in the pot; the mote is split between the Fonda costeña, which serves it with the Arrozal's rice (**Rice route**), and the Platter kitchen, which also takes the Ciénaga's cleaned fish (**Fish route**); the same numbers as the Hato; its person is Doña Rosmira, the cheesemaker; it is drawn as a savanna pasture with zebu cows —white or gray, with a hump— and the odd Romosinuano, saman trees and cattle egrets), 👒 **El Sombrero** (v3.19: caña flecha → scraped fiber → fiber dyed with mud and bija → braid → sombrero vueltiao; the Tuchín stop sells the **Costa souvenir**: four hats with the Ciénaga's salted and fried fish, by the **Salted fish route** and the **Fried fish route**; the same numbers as the Hormigas, without their seasonal harvest: caña flecha is cut all year; its person is Don Eliécer, the craftsman; it is drawn with the caña flecha field of plumed spikes, hats hanging from poles by the road, saman trees and palms) and 🏰 **Cartagena** (v3.20, the region's ending: like Barichara, with no source of its own. The Getsemaní stove makes coconut rice with the Arrozal's sacks; the Restaurant on the wall, dinner with the Cocal's cocadas; the Colonial hotel, the night in the walled city with the Sombrero's souvenir; the Bay kitchen, lunch with the Ciénaga's fish in coconut; the Trip lunchboxes, with the Quesera's almuerzo costeño and platter; and the Boat pier, the trip to the Rosario Islands. The same values as Barichara. It is drawn like the Pueblo, with colorful colonial houses, wooden balconies, bougainvilleas and coconut palms, the plaza of coral stone, a stretch of wall with its sentry box and the pier with the boats; since v3.45 it is the walled city by the sea: the Caribbean along the back edges of the map, with a beach, sailboats and boats, the wall with battlements and sentry boxes along the beach and the one closing the historic center on land, with gates where the roads pass and the Clock Tower, and inside the houses side by side; it is drawing only (`walls` in `zone18_cartagena.js`, drawn in `render/Terrain.js`); its person is Doña Dionisia, the palenquera). With Cartagena (v3.20) all its zones arrived and with v3.21 its events, its album and its achievements. While a region is missing zones (`wip` in `src/data/regions.js`) it is not finished: it has no second ending, events, album or achievements, and the zone list shows the upcoming ones as «Coming soon». It is drawn with the flooded rice field (water, ridges and plants that head out with each milestone), ceiba trees, coconut palms, herons and plantain. Its music is the **Cumbia del arrozal** (in A minor, 4/4, 100 quarter notes per minute): gaita on the melody, guacharaca, llamador, tambora, tambor alegre, bass and guitar strokes.
+- **Boyacá** (v3.22 onward): opens upon completing Cartagena. Its first zone, 🥔 **El Papal** (potato → washed → first grade → peeled → fried papitas criollas → bag → box; the same numbers as the Arrozal, because the region starts from scratch; its person is Don Aurelio, the potato grower), 🍺 **La Cervecería** (v3.23: barley → malt in the malt house → wort in the kettle → beer in the tanks → crate at the bottling plant; the same numbers as the Tabacal and the Cocal; the beer is what later travels to Ráquira, for the clay jugs, and the crates to Villa de Leyva; its person is Don Hernando, the brewer; it is drawn with the barley field that turns golden with each milestone, straw bales, eucalyptus and cypress trees), 🏺 **Ráquira** (v3.24: clay → kneaded clay, which is split like the Fiquera's fiber: clay pots, wheel-thrown pieces that the wood kiln turns into painted planters, and clay jugs filled with the Cervecería's beer by the **Beer route**; the same numbers as the Fiquera and the Ciénaga; its person is Doña Lucila, the potter; it is drawn with the clay pit, piles of red clay, cacti, stones and pots for sale), 🧀 **Paipa** (v3.25: milk → curd → molded cheese → Paipa cheese in the cellar → almojábanas; the almojábanas are split between the Piquete table, with the Papal's potatoes (**Potatoes route**), and the Clay oven, which makes the basket of amasijos with the potatoes and Ráquira's clay (**Clay route**); the same numbers as the Hato and the Quesera; its person is Doña Gertrudis, the cheesemaker; it is drawn like the Lechería, with Holstein cows, eucalyptus trees and frailejones), 🧶 **Las Ruanas** (v3.26: wool → washed → carded → yarn on the spinning wheel → ruana on the loom; the Nobsa shop sells the **Boyacá souvenir**: four ruanas with a pot and a planter from Ráquira, by the **Pots route** and the **Planters route**; the same numbers as the Hormigas and the Sombrero; its person is Don Clímaco, the weaver; it is drawn with the páramo and a flock of sheep —white, the odd brown one and the odd black one— walking around the pasture like the cows, frailejones and eucalyptus trees), and 🏛️ **Villa de Leyva** (v3.27, the region's ending: like Barichara and Cartagena, with no source of its own. The Corner shop makes the afternoon snack with the Papal's potato boxes; the Plaza terrace, the afternoon with the beer crates; the Colonial lodging, the night with Las Ruanas' souvenir; the Saturday market, the basket with Ráquira's jugs; the Trip baskets, with Paipa's piquete and amasijos; and the Fossil departure, the tours. It is drawn like the Pueblo, with big white two-story houses with green balconies, the cobbled plaza, cypress and eucalyptus trees; its person is Doña Mercedes, the guide; the order of the zones changed in v3.23 so the routes fit). With Villa de Leyva (v3.27) all its zones arrived and with v3.28 its events, its album and its achievements. It is drawn with the black earth of the high plateau, potato plants with white and purple flowers, eucalyptus and cypress trees, stones and frailejones. Its music is the **Torbellino del altiplano** (in D major moving to B minor, 3/4, 126 quarter notes per minute): the tiple strumming every eighth note, the requinto picking the melody, the guitar, the bass and the chucho.
+- **Los Llanos** (v3.31 onward): open upon completing Villa de Leyva. Their first zone, 🌴 **La Palma** (oil palm bunches → stripped fruit → fruit steamed in the autoclave → crude oil in the press → clarified oil → bottle → box; the same numbers as the Papal, because the region starts from scratch; its person is Don Eusebio, the palm grower; it is drawn with the palm grove of red bunches, moriche palm groves, termite mounds, herons and the odd saman tree, and the extraction plant has zinc-roofed sheds), 🥭 **El Frutal** (v3.32: passion fruit → pulp in the pulper → pulp pasteurized in the kettle → juice in the mixer → box of juices; the same numbers as the Cervecería; the juice is what later travels to the Cachamera, and the boxes to Villavicencio; its person is Doña Edilma, the fruit grower; it is drawn with the passion fruit trellises, mango trees, moriche groves and termite mounds), 🐟 **La Cachamera** (v3.33: cachama from the ponds → cleaned cachama, which is split like Ráquira's clay: pisillo at the Pisillera, fillets that the Smokehouse turns into smoked cachama, and cachama with passion fruit at the Kitchen, with the Frutal's juice by the **Juice route**; the same numbers as the Fiquera, the Ciénaga and Ráquira; its person is Don Arcadio, the fish farmer; the source is the greenish ponds, with their banks and the cachamas peeking out), 🤠 **El Hato llanero** (v3.34: steer → veal at the butcher's → veal seasoned with salt → mamona roasted on a stake → carne a la llanera at the carving board; it is split between the Almuerzo llanero table, with cassava fried in the Palma's oil (**Oil route**), and the Parranda grill, which also grills the Cachamera's cachama (**Cachama route**); the same numbers as Paipa; its person is Don Florentino, the cowhand; it is drawn with the savanna, zebu cattle —white or gray, with a hump— and the odd reddish Sanmartinero, palm-roofed caneyes and the parranda with the harp and a couple dancing joropo), 🐎 **La Talabartería** (v3.35: raw hide → tanned in the pools → pieces at the cutter → tooled leather → saddle at the workshop; the Llanero shop sells the **Llano souvenir**: saddles with the Cachamera's pisillo and smoked cachama, by the **Pisillo route** and the **Smoked cachama route**; the same numbers as Las Ruanas; its person is Don Ramón, the saddler; it is drawn with the hides stretched on their frames, criollo horses —chestnut, dun, gray—, saman trees and moriche groves) and 🏞️ **Villavicencio** (v3.36, the region's ending: like Barichara, Cartagena and Villa de Leyva, with no source of its own. The Empanada shop fries empanadas with the Palma's oil boxes; the Park kiosk, the afternoon with the Frutal's boxes of juices; the Country hotel, the night with the Llano souvenir; the Market square, lunch with the cachama with passion fruit; the Travel backpacks, with the Hato's almuerzo llanero and parranda roast; and the Caño Cristales departure, the tours. It is drawn like the Pueblo, with colorful houses, guayacán trees, moriches and mangoes, the palm kiosk, the hotel with a pool and the river of colors; its person is Doña Graciela, the guide). With Villavicencio (v3.36) all its zones arrived and with v3.37 its events, its album and its achievements. Its music is the **Joropo de la sabana** (in D major moving to B minor, 3/4, 160 quarter notes per minute): the harp on the melody, the cuatro strumming with its muted strokes, the maracas and the bass.
+- **La Costa Pacífica** (v3.38 onward; released as «el Chocó»; since v3.46 its id is `pacifico`): opens upon completing Villavicencio. Its first zone, 🍌 **El Platanal** (plantain bunch → hands at the dehander → plantain washed in the tank → peeled with a knife → patacón at the fryer → bag → box; the same numbers as the Palma, because the region starts from scratch; its person is Don Nicomedes, the plantain grower; it is drawn with the plantation's black wet earth, plants with a bunch and a purple bud, peach palms, borojós and heliconias, and plank houses on stilts, painted in colors, with zinc roofs), 🌿 **La Azotea** (v3.39: rooftop herbs → washed → crushed in the mortar with garlic and onion → seasoning in the sofrito pot → box of jars; the same numbers as the Frutal; the seasoning is what later travels to the Bahía, and the boxes to Buenaventura; its person is Doña Rosalba, the cook; the source is the azoteas, old canoes raised on stilts and full of herbs), 🐟 **La Bahía** (v3.40: red snapper from the boats → cleaned snapper, which is split like the Cachamera's cachama: dried fish at the Drying shed, fillets that the Smokehouse turns into smoked snapper, and fish tapao at the Kitchen, with the Azotea's seasoning by the **Seasoning route**; the same numbers as the Cachamera; its person is Don Cupertino, the fisherman; the source is the sea, with the Ciénaga's canoes), 🐚 **El Manglar** (v3.41: piangua from the mud → washed → cooked → shelled → stewed in coconut milk; it is split between the Rice with piangua table, with the Platanal's patacones (**Patacones route**), and the Cazuela kitchen, which also takes the Bahía's snapper (**Snapper route**); the same numbers as the Hato llanero; its person is Doña Ligia, the piangua gatherer; the source is the mangrove mud at low tide, with the mangroves and the gatherers who take the shells out by hand), 🏺 **El Werregue** (v3.42: werregue palm shoot → fiber → fiber dyed with jagua and achiote → twisted thread → woven vase; the Craft shop sells the **Pacific souvenir**: vases with the Bahía's dried fish and smoked snapper, by the **Dried fish route** and the **Smoked snapper route**; the same numbers as the Talabartería; its person is Doña Aminta, the Wounaan weaver; it is drawn with the spiny palm grove, peach palms, heliconias, borojós and Wounaan stilt houses, and the twister and the weavers work in the stilt houses) and 🐋 **Buenaventura** (v3.43, the region's ending: like Barichara, Cartagena, Villa de Leyva and Villavicencio, with no source of its own. The Port fryer fries marranitas with the Platanal's patacón boxes; the Boardwalk cevichería, ceviche with the Azotea's seasoning boxes; the Bay hotel, the night with the Pacific souvenir; the Pueblo Nuevo market hall, lunch with the Bahía's tapao; the Boat lunchboxes, with the Manglar's rice with piangua and cazuela; and the Whale departure, the boats to see the humpback whales. It is drawn like the Pueblo, with colorful houses and zinc roofs, coconut palms and almond trees, the boardwalk, the market hall with its awnings and the pier with the boats; its person is Doña Libia, the guide). With Buenaventura (v3.43) all its zones arrived and with v3.44 its events (black sigatoka in the Platanal, muddy water in the Azotea, Holy Week in the Bahía, the stranded boat in the Manglar —the patacones do not arrive—, the craft fair in the Werregue and the Pacific Folk Festival in Buenaventura; the same numbers as the Llanos ones), its album (the jungle, the cooking, the sea, the music, the hands and Buenaventura) and its achievements. Its music is the **Chirimía de San Pacho** (Chocó porro in F major moving to D minor, 4/4, 116 quarter notes per minute): two clarinets (the melody and a third below on the long notes), the euphonium on the bass, the tambora, the snare drum and the cymbals.
+- **El Amazonas** (v3.47 onward): opens upon completing Buenaventura. Its first zone, 🌴 **El Asaizal** (açaí bunch → stripped fruit → soaked in warm water → pulp at the pulper → whipped açaí → frozen bag → box; the same numbers as the first zone of each region, because the Amazonas starts from scratch; its person is Don Abel, the harvester; it is drawn with the wet floodplain, açaí palms with thin stems and purple bunches, giant ceiba trees, heliconias, plantain and macaws, and wooden houses on stilts with zinc or palm roofs), 🌶️ **El Ajizal** (v3.48: chili from the chagra → washed → ground → black chili, cooked in tucupí, the juice of bitter cassava → box of jars; the same numbers as the Azotea; the black chili is what later travels to the Lago, and the boxes to Leticia; its person is Doña Remedios, the chili grower; the source is the chagra with red, yellow and purple chili plants), 🐟 **El Lago** (v3.49: pirarucú from the canoes → cleaned → salted, in steaks smoked in the moquén, or with black chili at the Pirarucú kitchen, which receives the Ajizal's black chili by the Black chili route; the same numbers as the Bahía; its person is Don Jacinto, the fisherman; the source is the black water of the Tarapoto lakes, with giant water lilies and canoes), 🫓 **La Casabería** (v3.50: bitter cassava from the chagra → peeled → grated → squeezed in the tipití → casabe on the budare, which is split between the Breakfast table, with the Asaizal's açaí bags, and the Maloca, with the açaí and the Lago's cleaned pirarucú; the same numbers as the Manglar; its person is Grandma Tránsito, the casabe maker; it is drawn with the cassava chagra and the round maloca with a palm roof and a painted front), 🎭 **La Yanchama** (v3.51: yanchama bark → soaked in the stream → beaten until it becomes cloth → painted with jagua and achiote → Ticuna mask; the Yanchama shop sells the Amazon souvenir with the Lago's salted and smoked pirarucú; the same numbers as the Werregue; its person is Don Eliseo, the Ticuna craftsman; the source is the grove of smooth-trunked yanchamas, with buttress roots). 🐬 **Leticia** (v3.52) is the ending: it has no source of its own and each station receives its share from another zone (the Açaí ice cream shop, the açaí boxes; the Riverside restaurant, the black chili ones; the Jungle hotel, the Yanchama's souvenirs; the Port market, the pirarucú with black chili; the Canoe provisions, the Casabería's breakfast and banquet), and the Dolphin departure takes people to see the pink dolphins; the same numbers as Buenaventura; its person is Doña Graciela, the guide; it is drawn like the Pueblo (style 'leticia'), with colorful houses, ceiba trees, açaí palms and macaws. Since v3.53 it has its six events (with the numbers of the Costa Pacífica ones), its six-page album and its achievements, and it is no longer under construction. Its music is the **Cumbia del Amazonas** (in A minor moving to C major, 4/4, 108 quarter notes per minute): the picked electric guitar, with tremolo on long notes, the bass, the keyboard on the offbeat, the maracas and the manguaré.
+- **Tolima Grande** (v4.0): opens upon completing Leticia and arrived complete, with the Amazonas' numbers. 🍪 **Los Achirales** (achira rhizome → grated → starch settled and sun-dried → dough with curd → biscuits in a clay oven → box; Doña Hermelinda, the biscuit maker), ☕ **El Café del Huila** (cherry → the Beneficiadero takes out the parchment and the husk, which goes by channel to the Dryer and comes out as cascara tea toward the Neiva hotel → hulled → roasted, which travels as tinto to the Lechonería → specialty coffee; Don Rubiel), 🐟 **La Represa de Betania** (tilapia from the cages → cleaned → smoked, pickled or fried with patacón; Don Fabio), 🐷 **La Lechonería** (pig → the Butcher's takes out meat and skin; the meat goes to the Stuffing pan and the Tamal stove, the skin to Cleaning, and the Wood oven joins stuffing and clean skin into the lechona; the Breakfast table serves the tamal with biscuits and tinto; Doña Fanny), ⚫ **La Chamba** (clay → trodden → hand-modeled → burnished with a stone → fired and smoked with dung: black pottery; the shop sells the Tolima souvenir with Betania's smoked tilapia and pickled fish; Doña Ofelia) and 🌵 **Neiva** (boardwalk café, river restaurant, San Pedro hotel, market square, lunchbox shop and the Tatacoa departure to see the stars; Doña Marleny). Its music is the **Sanjuanero del San Pedro** (A major moving to F-sharp minor, 3/4, 132 quarter notes per minute): the bambuco with the tambora and the carrasca.
+- **Cundinamarca** (v4.4 onward): opens upon completing Neiva and arrives zone by zone, with Tolima Grande's numbers. Its first zone, 🌹 **Las Flores de la Sabana** (Madrid and Facatativá: rose greenhouse → cutting table → hydration tubs → grader → bunching → cold room → packer; Doña Rocío, the flower grower; it is drawn with the plastic sheds over the rose beds, loose greenhouses, eucalyptus and cypress trees). 🍓 **Los Freseros de Sibaté** (v4.4.1: strawberry field under macro-tunnels → washing station, which also takes out the second-grade strawberries by channel toward the jam kettle → sorter → tray filler → strawberries-and-cream table; the numbers of the Café del Huila; Don Gilberto, the strawberry grower; strawberries-and-cream stands in the decoration). 🐟 **Las Truchas de Guatavita** (v4.4.2: ice-cold ponds → cleaning, which is split among the smokehouse, the filleter with the ceviche table and the lagoon kitchen; Betania's numbers; Don Ernesto, the trout farmer; frailejones in the decoration). 🧂 **Las Salinas de Nemocón** (v4.4.3: mine tunnel → brine wells, which also take out salt blocks by channel toward the carving workshop; the brine is split between the evaporation pans and the clay molds of the salt loaf; gift packing joins the salt with the figures in the chest, and the basket assembler receives the bunches of roses and the strawberry trays by the region's first routes; the Lechonería's numbers; Doña Blanca, the salt worker; piles of salt and mine carts). 🍲 **La Cocina de la Sabana** (v4.4.4, in Chía: potato garden → peeling station → broth pot → ajiaco pot → server; the Santafereño restaurant serves the Sabana lunch with Guatavita's smoked trout and ceviche; La Chamba's numbers; Doña Teresa, the cook). And ⛪ **Zipaquirá** (v4.4.5), the ending: like Neiva, with no source of its own; the plaza's flower shop makes arrangements with the flower boxes, the tea room serves the strawberries and cream, the plaza hotel receives the Sabana lunch and the jam, the market square the trout lunch, the trip backpacks carry the baskets and the salt chests, and everything ends at the entrance to the Salt Cathedral; seven routes; Don Hernán, the mine guide; it is drawn like Villa de Leyva, with big white houses with green balconies. With v4.4.8 it was completed: its events (the frosts, the big strawberry harvest, Holy Week in Guatavita, the landslide that cuts off the roses to the Salinas, ajiaco Sunday and Christmas at the Cathedral; with the numbers of Tolima Grande's), its album (the Sabana, the cooking, the flowers, the salt, the Muisca and the towns) and its achievements. Its music is the **Pasillo de la Sabana** (in E minor moving to G major, 3/4, 120 quarter notes per minute): the bandola in tremolo, the guitar on the «and» of two and on three, and the tiple picking the offbeat. After it, **Bogotá** is a separate region (below).
+- **Bogotá** (v4.5): opens upon completing Cundinamarca. It produces nothing of its own: it is a single zone of 52×52 tiles (four times the area of the others) where everything arrives by **truck** from the other regions. The trucks (`unlimited` in `src/data/routes.js`) bring from their region (`origin`) a load that never runs out, take nothing away from that region and level up like the chivas; they have no source zone (`from: null`). The map follows the city: the Eastern Hills with Monserrate at the top right, Carrera Séptima at the foot of the Hills (the mule road), Avenida Caracas from north to south (the Autopista Norte and the Autopista Sur come in by it) and, from the west, Calle 80, Calle 26 (El Dorado) and Calle 13; the warehouse is at the Central de abastos, to the southwest. Since v4.6 it is **a network**, not a chain per neighborhood (`network: true` in the zone): each station can be built as soon as all the ones that supply it are built (`suppliersOf` in `src/sim/chain.js`), so you start with several at once and cheap (the Chorro Roastery free, the Zona G Pantry, the Weaving stall, the Flower stall and the Fruit stall, from 200 to 4,000 coins) and the downtown ones cost hundreds of millions. Many receive from two or three stations of Bogotá itself besides their truck (for example, the plaza's Fritanga receives the Fish market's basket, the Pantry's sauces and the Starters kitchen's chicharrón; the Paloquemao market, the Fritanga's breakfast, the Grill's rib broth and the Café's tinto), and not all have a truck: only where it makes sense. Three stations also make a by-product through the channel: the Roastery, ground coffee (for the Zona G Restaurant); the Starters kitchen, chicharrón (for the Fritanga), and the Grill, rib broth (for the Paloquemao market). Stations sit where the neighborhoods were on the map; the chain is a single, wide one, browsed sideways and up and down (also by dragging with the mouse). Since there is a single zone, the zone list just says «Bogotá», without a number. The **TransMilenio** goes back and forth, decoration only, along its concrete lane next to the Caracas, the 30 (the NQS, between the Caracas and Paloquemao) and Calle 80 (`transmilenio` in the zone; two articulated buses per lane). On moving to v4.6 the neighborhood Bogotá is erased from saved games (region, medals, stickers and achievements), without refunding coins. In all, 24 stations and 27 trucks (two of food and one of crafts per region); the layout of the whole map is in `src/data/zones/zone55_bogota.js`. It has six events in the same zone (each one with its `key`): the downpour in the Chorro, the Séptima's Christmas lights, the food festival and the license-plate driving ban in the Zona G, the Sunday gale in Usaquén and the truckers' strike in Paloquemao; only the event's stations are on its board (v4.7.1: the rest of the network is not drawn and does not appear in the chain or the suggestions), upgrades cost one eightieth (`costScale`: in the network, the final stations are expensive to raise and, without the discount, playing well barely showed) and the trucks do not run (what comes from outside arrives as on any board). Since v4.7 it has a seventh event, **La Gran Feria**, with the whole network on the board and no slowed station: it only comes out once a medal was won in the other six (`after`), and its three purchases raise the price of everything sold (×1.2, ×1.5 and ×2 of normal, from demand; `zoneValue`); its achievement, «The country's fair», pays 8, 16 and 32 ⭐ for 1, 3 and 6 medals won in it. Its album (La Candelaria, the food, Monserrate and the hills, transport, culture and the neighborhoods), sixteen achievements and the victory upon reaching La Gran Feria. Trucks cost a quarter of what raising their station costs, because each station has two. Its music is the **Danza de La Candelaria** (in A minor moving to C major, 2/4, 72 quarter notes per minute): the guitar with the habanera rhythm, the bass on one and the fifth on two, the tiple on the offbeat and the bandola with the dotted eighth notes. With the simulator's casual player it is completed in about 33 hours (v4.6: costs ×4 and the recommended upgrade that tries raising a whole branch; Cundinamarca, about 22): it is the longest region and the one that asks for the most attention, because everything is in a single zone.
+- **Regions already released (formerly «Upcoming regions»):**
+  - **🌵 Tolima Grande**: arrived complete in **v4.0** (see above).
+  - **🌹 Cundinamarca and 🏔️ Bogotá**: arrived in **v4.4** and **v4.5–v4.7** (Cundinamarca in 6 zones up to Zipaquirá and Bogotá as a separate region in a network of 24 stations and 27 trucks; see above).
+- **Events on demand** (v4.7.3): once a region has gold in all its events, it no longer gets events on its own (`refillSlots`); with 20 ⭐ of Renown per region (`profile.onDemand`, `buyOnDemand`) any of its events can be played again with «🔁 Play again» (`startOnDemand`), without a slot or the 2-year wait, never with more than two boards open.
 - **San Andrés, the special zone** (v5.4, first delivery; in English, like all new documentation). A reward region (`sanandres` in `src/data/regions.js`) with a single 26×26 zone (`src/data/zones/zone56_sanandres.js`) whose eight stations form **one linear chain**: the tour a visitor takes around the island. ✈️ Airport arrivals (the source, travelers) → 🌴 Spratt Bight beach tents → 🚤 boats on the sea of seven colors → Johnny Cay → 🍽️ rondón in San Luis (east shore) → 🌀 Hoyo Soplador (southern tip) → 🌊 snorkeling at La Piscinita (west shore) → ⛰️ La Loma lookout, in the middle of the island, which closes the tour (final goal: five million island tours sold). The mule road runs around the island like the Circunvalar and then climbs inland to La Loma and the warehouse. Its guide is Mister Livingston, a Raizal guide.
   - **Unlock.** `special`: it opens once every other released region has its second ending (everything at level 100) or has been reset at least once (`specialProgress` in `src/sim/regions.js`, also shown on the «⭐ Special zone» card in the region list). `secret`: no list, map, or text names it before it opens (`shownRegions`); the events list only shows regions with events. `offMap`: the country map has no department for the islands, so the zone and its airport are drawn in an inset in the Caribbean (`MAP_GEO` in `src/data/zoneGeo.js`). Until v5.4 (`devOnly`) only the developer option **⭐ Open the special zone** opened it; since v5.5 it opens for real (on the second ending's notice, or on load after the reset that completes the condition), and the developer option stays for testing.
   - **×32 research.** Each station has one research that unlocks with the station and its haulers at level 100 (`stationLevel: 100`) and multiplies by 32 the station, its yard and input (`stationCap`, a new effect read by `capMult`: otherwise a ×32 station fills its 15-second yard in half a second), and the warehouse (`dispatchCapacity`). It does not block the next station, but it is practically needed: without it the first station alone takes over 16 hours instead of about 3.
   - **Second delivery (v5.5).** The zone is an island (`island` in the zone, `markIsland` in `src/render/Terrain.js`): open sea on every side with turquoise shallows, rounded corners and coves, white beaches with palms and umbrellas, coral rock on the west shore, boats out at sea, and a wooden pier where the Willys road reaches the sea; its town is drawn in the `sanandres` style (wooden clapboard houses on stilts, `islandHouse`), and the country map draws the island in its inset. Twenty new icons (the eight products, which also serve their stations, and twelve album stickers). Its album has three pages (the sea of seven colors, Raizal culture, island food), its twelve achievements, its music, the **Calypso of the Green Moon** (`calipso` in `src/audio/compose.js`: steel pan melody over washtub bass, guitar, maracas, and bongos; 4/4 at 112; left out of the public downloads page while secret), and its only event, **the Green Moon Festival** (`luna_verde`): nothing slows the island; the three purchases (150B, 600B, 1.5T, with 150B to start) raise the whole island's production ×1.2, ×1.5, and ×2 (`zoneSpeed`), and the goal is 560 island tours. Calibrated with the event bots so both ways win gold at 20:00: buying them (best 17:49) or none and raising every station to level 50 as fast as possible (best 18:43; evenly, 19:54); someone checking every 30 s gets silver (25:00).
-  - **Balance** (with the even player, `BALANCE_REGION=sanandres npm run balance -- 30 parejo --detalle`: stations and haulers rise together, lowest first; the warehouse only when it can't keep up; research as soon as affordable; the next station as soon as possible). Each station takes about **3 hours of continuous play** (level 100 in about 1 h 45, its ×32 in about 45 min more, and the next station in about 30 min), **24 hours** in all (the eight stages measured between 164 and 201 minutes), with the basic workday of a new region. Because building a station takes almost all of its supplier's output (the surplus that doesn't fit goes to the warehouse the long way and mostly stays in the yard), each stage starts nearly from scratch, so upgrade prices (`SA` in `src/data/stations.js`), research (`SA_RESEARCH` in `src/data/research.js`), and product values (about ×16 per station in value per second) grow alike from station to station. The warehouse upgrades with the same 1.15 growth as stations (most zones use 1.17).
-- **Textos prudentes para la política de Familias (v3.65 ✅).** El Tabacal y La Cervecería se quedan como oficio y tradición, pero ningún texto ni dibujo invita a fumar o a beber: el tabaco torcido sin encender, el chicote sin 🚬, las bebidas del álbum contadas por cómo se hacen, y los uitoto sin la coca. Lo mismo para lo que venga: el alcohol y el tabaco, solo como producción y cultura.
-- **Música por región** (10 piezas sintetizadas en el juego sin archivos, y publicadas también en MP3/MIDI en `web/musica/`):
-  - **Eje Cafetero**: *Bambuco de la finca* (bambuco — tiple, guitarra y bandola)
-  - **Santander**: *Guabina del Chicamocha* (guabina — guitarra punteada y bandola)
-  - **La Costa**: *Cumbia del arrozal* (cumbia — gaita, guacharaca, tambora, llamador, alegre, bajo y guitarra)
-  - **Boyacá**: *Torbellino del altiplano* (torbellino — tiple, requinto, guitarra, bajo y chucho)
-  - **Los Llanos**: *Joropo de la sabana* (joropo — arpa, cuatro, maracas y bajo)
-  - **Costa Pacífica**: *Chirimía de San Pacho* (porro chocoano — dos clarinetes, bombardino, tambora, redoblante y platillos)
-  - **Amazonas**: *Cumbia del Amazonas* (cumbia amazónica — guitarra eléctrica con trémolo, teclado, bajo, maracas y manguaré)
-  - **Tolima Grande**: *Sanjuanero del San Pedro* (sanjuanero — tiple, guitarra, bandola, tambora y carrasca)
-  - **Cundinamarca**: *Pasillo de la Sabana* (pasillo — bandola en trémolo, guitarra y tiple)
-  - **Bogotá**: *Danza de La Candelaria* (danza — bandola, tiple, guitarra con ritmo de habanera y bajo)
+  - **Balance** (with the even player, `BALANCE_REGION=sanandres npm run balance -- 30 even --detail`: stations and haulers rise together, lowest first; the warehouse only when it can't keep up; research as soon as affordable; the next station as soon as possible). Each station takes about **3 hours of continuous play** (level 100 in about 1 h 45, its ×32 in about 45 min more, and the next station in about 30 min), **24 hours** in all (the eight stages measured between 164 and 201 minutes), with the basic workday of a new region. Because building a station takes almost all of its supplier's output (the surplus that doesn't fit goes to the warehouse the long way and mostly stays in the yard), each stage starts nearly from scratch, so upgrade prices (`SA` in `src/data/stations.js`), research (`SA_RESEARCH` in `src/data/research.js`), and product values (about ×16 per station in value per second) grow alike from station to station. The warehouse upgrades with the same 1.15 growth as stations (most zones use 1.17).
+- **Careful texts for the Families policy (v3.65 ✅).** El Tabacal and La Cervecería stay as trade and tradition, but no text or drawing invites smoking or drinking: the hand-rolled tobacco unlit, the chicote without 🚬, the album's drinks told by how they are made, and the Uitoto without coca. The same for whatever comes next: alcohol and tobacco, only as production and culture.
+- **Music per region** (10 pieces synthesized in the game without files, and also published as MP3/MIDI in `web/musica/`):
+  - **Eje Cafetero**: *Bambuco de la finca* (bambuco — tiple, guitar and bandola)
+  - **Santander**: *Guabina del Chicamocha* (guabina — picked guitar and bandola)
+  - **La Costa**: *Cumbia del arrozal* (cumbia — gaita, guacharaca, tambora, llamador, alegre, bass and guitar)
+  - **Boyacá**: *Torbellino del altiplano* (torbellino — tiple, requinto, guitar, bass and chucho)
+  - **Los Llanos**: *Joropo de la sabana* (joropo — harp, cuatro, maracas and bass)
+  - **Costa Pacífica**: *Chirimía de San Pacho* (Chocó porro — two clarinets, euphonium, tambora, snare drum and cymbals)
+  - **Amazonas**: *Cumbia del Amazonas* (Amazonian cumbia — electric guitar with tremolo, keyboard, bass, maracas and manguaré)
+  - **Tolima Grande**: *Sanjuanero del San Pedro* (sanjuanero — tiple, guitar, bandola, tambora and carrasca)
+  - **Cundinamarca**: *Pasillo de la Sabana* (pasillo — bandola in tremolo, guitar and tiple)
+  - **Bogotá**: *Danza de La Candelaria* (danza — bandola, tiple, guitar with a habanera rhythm and bass)
 
 ---
 
-## 11. Fuera de alcance
+## 11. Out of scope
 
-Supervivencia, clima que afecte a una sola zona (las temporadas de la v1.9 afectan a todas por igual), población con necesidades, héroes, combate, gacha, energía, multijugador, tienda con ventajas de juego (solo propinas voluntarias sin recompensa en Play/web) y servidor. (El reinicio con producción al doble llegó en la v1.6, tras el segundo final.)
+Survival, weather that affects a single zone (v1.9's seasons affect all of them equally), a population with needs, heroes, combat, gacha, energy, multiplayer, a store with gameplay advantages (only voluntary tips with no reward on Play/web) and a server. (The restart with doubled production arrived in v1.6, after the second ending.)
 
 ---
 
-## 12. Decisiones iniciales (archivo histórico v0.1 — ya resueltas)
+## 12. Initial decisions (historical archive v0.1 — already resolved)
 
-1. ~~¿Cafetal o prefieres otra cadena (panadería, chocolate, herrería)?~~ → **Cafetal** (Zona 1), expandido luego a **10 regiones y 55 zonas**.
-2. ~~¿Escritorio primero (recomendado) o móvil vertical?~~ → **Escritorio y móvil** (PWA responsiva + app Android con Capacitor 8).
-3. ~~¿Nombre? *Cafetal*, *Del Grano a la Taza*, *Finca*, *Arrieros*.~~ → **Encantos de Mi Tierrita** (`com.frealgagu.mitierrita.encantos`).
-4. ~~¿Interfaz solo en español o también en inglés?~~ → **4 idiomas**: español, inglés, portugués (BR) y francés (`src/i18n/`).
+1. ~~Cafetal, or would you rather have another chain (bakery, chocolate, forge)?~~ → **Cafetal** (Zone 1), later expanded to **10 regions and 55 zones**.
+2. ~~Desktop first (recommended) or portrait mobile?~~ → **Desktop and mobile** (responsive PWA + Android app with Capacitor 8).
+3. ~~Name? *Cafetal*, *Del Grano a la Taza*, *Finca*, *Arrieros*.~~ → **Encantos de Mi Tierrita** (`com.frealgagu.mitierrita.encantos`).
+4. ~~Interface only in Spanish or also in English?~~ → **4 languages**: Spanish, English, Portuguese (BR) and French (`src/i18n/`).

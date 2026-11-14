@@ -10,7 +10,7 @@ const HOUR = DAY_LENGTH / 24; // game s per hour
 // playTime of one day (from 0) to one hour.
 const at = (day, hour) => (day * 24 + hour - 8) * HOUR;
 
-test('la partida empieza el primer día a las 8:00, en verano; el año tiene 16 días', () => {
+test('the game starts on the first day at 8:00, in summer; the year has 16 days', () => {
   assert.equal(hourOf(0), 8);
   assert.equal(dayOf(0), 0);
   assert.equal(seasonOf(0).id, 'verano');
@@ -25,11 +25,11 @@ test('la partida empieza el primer día a las 8:00, en verano; el año tiene 16 
   assert.deepEqual(SEASONS.map((s) => s.mult), [1.2, 1, 0.8, 1]);
 });
 
-test('se trabaja de 6:00 a 12:00 y de 14:00 a 20:00', () => {
+test('work runs from 6:00 to 12:00 and from 14:00 to 20:00', () => {
   assert.equal(isWorkTime(at(1, 5.9)), false);
   assert.equal(isWorkTime(at(1, 6)), true);
   assert.equal(isWorkTime(at(1, 11.9)), true);
-  assert.equal(isWorkTime(at(1, 12)), false, 'la hora del almuerzo');
+  assert.equal(isWorkTime(at(1, 12)), false, 'lunch time');
   assert.ok(isLunch(at(1, 13)));
   assert.equal(nextWorkHour(at(1, 13)), 14);
   assert.equal(isWorkTime(at(1, 14)), true);
@@ -44,7 +44,7 @@ test('se trabaja de 6:00 a 12:00 y de 14:00 a 20:00', () => {
   assert.ok(Math.abs(year - 16 * (DAY_LENGTH / 2) * ((1.2 + 1 + 0.8 + 1) / 4)) < 1e-6, year);
 });
 
-test('con Renombre la jornada crece de a 2 h, cada bloque al doble del anterior, hasta las 24 h', () => {
+test('with Renown the workday grows 2 h at a time, each block at twice the previous one, up to 24 h', () => {
   assert.deepEqual(WORK_COSTS, [2, 4, 8, 16, 32, 64]);
   assert.equal(WORK_COSTS.length, EXTRA_BLOCKS.length);
   assert.deepEqual(EXTRA_BLOCKS, [[20, 22], [4, 6], [22, 24], [2, 4], [12, 14], [0, 2]]);
@@ -54,7 +54,7 @@ test('con Renombre la jornada crece de a 2 h, cada bloque al doble del anterior,
   const other = {};
   assert.ok(buyWork(profile, region));
   assert.equal(profile.renown, 1);
-  assert.equal(workLevel(other), 0, 'la otra región sigue igual');
+  assert.equal(workLevel(other), 0, 'the other region stays the same');
   assert.deepEqual(quoteWork(profile, region), { ok: false, reason: 'renown', cost: 4 });
   profile.renown = 1000;
   while (buyWork(profile, region));
@@ -65,11 +65,11 @@ test('con Renombre la jornada crece de a 2 h, cada bloque al doble del anterior,
   for (let n = 0; n <= 6; n++) {
     texts.push(workText(workBlocks(n)));
     const hours = workSeconds(at(1, 0), at(2, 0), n) / HOUR / seasonOf(at(1, 0)).mult;
-    assert.ok(Math.abs(hours - (12 + 2 * n)) < 1e-6, `${n} bloques: ${hours} h`);
+    assert.ok(Math.abs(hours - (12 + 2 * n)) < 1e-6, `${n} blocks: ${hours} h`);
   }
   assert.equal(isWorkTime(at(1, 21), 1), true);
   assert.equal(nextWorkHour(at(1, 23), 1), 6);
-  assert.equal(isWorkTime(at(1, 13), 5), true, 'el almuerzo es el penúltimo');
+  assert.equal(isWorkTime(at(1, 13), 5), true, 'lunch is the second to last');
   assert.equal(isWorkTime(at(1, 1), 5), false);
   assert.equal(nextWorkHour(at(1, 1), 5), 2);
   assert.deepEqual(texts, [
@@ -83,7 +83,7 @@ test('con Renombre la jornada crece de a 2 h, cada bloque al doble del anterior,
   ]);
 });
 
-test('de noche las estaciones paran y las mulas no salen; al amanecer siguen', () => {
+test('at night stations stop and mules do not leave; at dawn they continue', () => {
   const game = new Game();
   const s = game.state;
   s.playTime = at(0, 19.5);
@@ -93,13 +93,13 @@ test('de noche las estaciones paran y las mulas no salen; al amanecer siguen', (
   for (let t = 0; t < 9 * HOUR; t += 0.1) game.step(0.1); // all night, until 5:30
   assert.equal(s.stations.farm.status, 'resting');
   assert.equal(s.stats.produced.cherry ?? 0, produced);
-  assert.ok(s.mules.length <= mules, 'no sale ninguna recua de noche');
+  assert.ok(s.mules.length <= mules, 'no mule train leaves at night');
   for (let t = 0; t < 2 * HOUR; t += 0.1) game.step(0.1); // until 7:30
   assert.notEqual(s.stations.farm.status, 'resting');
   assert.ok(s.stats.produced.cherry > produced);
 });
 
-test('con el bloque de 20 a 22 comprado se sigue trabajando después de las 20:00', () => {
+test('with the 20–22 block bought, work continues after 20:00', () => {
   const game = new Game();
   const s = game.state;
   s.playTime = at(0, 20.5);
@@ -111,7 +111,7 @@ test('con el bloque de 20 a 22 comprado se sigue trabajando después de las 20:0
   assert.equal(s.stations.farm.status, 'resting');
 });
 
-test('la temporada sube o baja todas las estaciones a la vez', () => {
+test('the season raises or lowers every station at once', () => {
   const game = new Game();
   const s = game.state;
   s.playTime = at(1, 10);
@@ -121,7 +121,7 @@ test('la temporada sube o baja todas las estaciones a la vez', () => {
   assert.ok(Math.abs(summer / winter - 1.5) < 1e-9);
 });
 
-test('sin conexión cuenta las noches y las temporadas al sumar lo que no simula', () => {
+test('offline counts the nights and the seasons when adding what it does not simulate', () => {
   const setup = () => {
     const g = new Game();
     g.state.coins = 1e6;
@@ -137,10 +137,10 @@ test('sin conexión cuenta las noches y las temporadas al sumar lo que no simula
   const offline = setup();
   offline.catchUp(6 * 3600, 6 * 3600);
   const ratio = offline.state.coins / live.state.coins;
-  assert.ok(ratio > 0.95 && ratio < 1.05, `rápida / paso a paso = ${ratio.toFixed(3)}`);
+  assert.ok(ratio > 0.95 && ratio < 1.05, `fast / step by step = ${ratio.toFixed(3)}`);
 });
 
-test('el cálculo sin conexión por partes da lo mismo que de una vez y avisa cuánto va', async () => {
+test('the offline calculation in parts gives the same as all at once and reports its progress', async () => {
   const setup = () => {
     const g = new Game();
     g.state.coins = 1e6;
@@ -157,6 +157,6 @@ test('el cálculo sin conexión por partes da lo mismo que de una vez y avisa cu
   assert.equal(a.coins, b.coins);
   assert.equal(once.state.playTime, parts.state.playTime);
   assert.equal(seen.at(-1), 1);
-  assert.ok(seen.every((f, k) => k === 0 || f >= seen[k - 1]), 'la barra solo avanza');
+  assert.ok(seen.every((f, k) => k === 0 || f >= seen[k - 1]), 'the bar only moves forward');
   assert.equal(parts.bus.muted, false);
 });

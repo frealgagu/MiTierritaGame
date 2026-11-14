@@ -15,19 +15,19 @@ function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-test('en cada zona, cada estación está después de su proveedor sobre el camino', () => {
+test('in every zone, each station comes after its supplier along the road', () => {
   for (const zone of ZONE_LIST) {
     const pos = ROAD_POS[zone.id];
     for (const id of zone.chain) {
-      if (PARENT[id]) assert.ok(pos[id] > pos[PARENT[id]], `${id} antes que ${PARENT[id]}`);
-      assert.ok(pos.warehouse > pos[id], `bodega de ${zone.id} antes que ${id}`);
+      if (PARENT[id]) assert.ok(pos[id] > pos[PARENT[id]], `${id} before ${PARENT[id]}`);
+      assert.ok(pos.warehouse > pos[id], `warehouse of ${zone.id} before ${id}`);
     }
     // Build order respects who feeds whom.
     for (const id of zone.chain) if (PARENT[id]) assert.ok(zone.chain.indexOf(PARENT[id]) < zone.chain.indexOf(id), id);
   }
 });
 
-test('solo se construye en orden y con monedas', () => {
+test('stations are built only in order and with coins', () => {
   const game = new Game();
   game.state.coins = 1e6;
   assert.equal(game.quoteUnlock('dryer').reason, 'order');
@@ -39,16 +39,16 @@ test('solo se construye en orden y con monedas', () => {
   assert.equal(game.quoteUnlock('huller').reason, 'coins');
 });
 
-test('el beneficiadero convierte cerezas en café lavado y se vende', () => {
+test('the beneficiadero turns cherries into washed coffee and it is sold', () => {
   const game = new Game();
   game.state.coins = 50;
   game.unlock('wetmill');
   run(game, 120);
-  assert.ok((game.state.stats.produced.washed ?? 0) > 0, 'produjo café lavado');
-  assert.ok((game.state.stats.sold.washed ?? 0) > 0, 'vendió café lavado');
+  assert.ok((game.state.stats.produced.washed ?? 0) > 0, 'it made washed coffee');
+  assert.ok((game.state.stats.sold.washed ?? 0) > 0, 'it sold washed coffee');
 });
 
-test('si la siguiente estación no da abasto, el sobrante se desvía a la bodega', () => {
+test('if the next station cannot keep up, the surplus is diverted to the warehouse', () => {
   const game = new Game();
   game.state.coins = 50;
   game.unlock('wetmill');
@@ -57,12 +57,12 @@ test('si la siguiente estación no da abasto, el sobrante se desvía a la bodega
   game.state.zones.finca.dispatch.level = 40;
   run(game, 90);
   assert.equal(game.state.stations.wetmill.status, 'working');
-  assert.ok((game.state.stats.sold.cherry ?? 0) > 0, 'se vendieron cerezas desviadas');
+  assert.ok((game.state.stats.sold.cherry ?? 0) > 0, 'diverted cherries were sold');
   assert.ok(game.state.stations.farm.lastDiverted > 0);
   assert.equal(analyzeChain(game.state).bottleneck, 'wetmill');
 });
 
-test('una estación sin entrada espera', () => {
+test('a station without input waits', () => {
   const game = new Game();
   game.state.coins = 50;
   game.unlock('wetmill');
@@ -70,17 +70,17 @@ test('una estación sin entrada espera', () => {
   assert.equal(game.state.stations.wetmill.status, 'starved');
 });
 
-test('la cadena completa produce bolsas de café', () => {
+test('the full chain makes coffee bags', () => {
   const game = new Game();
   game.state.coins = 1e9;
   for (const id of CHAIN.slice(1)) assert.ok(game.unlock(id), id);
   for (const id of CHAIN) game.state.stations[id].level = 30;
   game.state.zones.finca.dispatch.level = 30;
   run(game, 300);
-  assert.ok((game.state.stats.sold.coffee_bag ?? 0) > 0, 'vendió bolsas');
+  assert.ok((game.state.stats.sold.coffee_bag ?? 0) > 0, 'it sold bags');
 });
 
-test('lo desviado nunca llena la bodega: siempre queda sitio para el producto final', async () => {
+test('diverted goods never fill the warehouse: there is always room for the final product', async () => {
   const { warehouseCapacity } = await import('../src/sim/rules.js');
   const { DIVERT_RESERVE } = await import('../src/sim/transport.js');
   const game = new Game();
@@ -92,11 +92,11 @@ test('lo desviado nunca llena la bodega: siempre queda sitio para el producto fi
   run(game, 120);
   const cap = warehouseCapacity(game.state.zones.finca.dispatch.level);
   const cherries = game.state.zones.finca.warehouse.cherry ?? 0;
-  assert.ok(cherries <= cap * (1 - DIVERT_RESERVE) + 1, `cerezas en bodega: ${cherries} de ${cap}`);
-  assert.ok((game.state.stats.sold.washed ?? 0) > 0, 'el café lavado sigue llegando y vendiéndose');
+  assert.ok(cherries <= cap * (1 - DIVERT_RESERVE) + 1, `cherries in the warehouse: ${cherries} of ${cap}`);
+  assert.ok((game.state.stats.sold.washed ?? 0) > 0, 'washed coffee keeps arriving and selling');
 });
 
-test('lo que ya está en el nivel 100 no se señala como cuello de botella', async () => {
+test('what is already at level 100 is not flagged as a bottleneck', async () => {
   const { recommendUpgrade } = await import('../src/sim/analysis.js');
   const game = new Game();
   game.state.coins = 1e15;

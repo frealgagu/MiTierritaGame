@@ -24,7 +24,7 @@ const PLACE = {
   achirales: 'Natagaima', cafe_huila: 'Pitalito', betania: 'Represa de Betania', lechoneria: 'Ibagué', chamba: 'La Chamba (El Guamo)', neiva: 'Neiva',
   flores: 'Madrid', fresas: 'Sibaté', truchas: 'Guatavita', salinas: 'Nemocón', cocina: 'Chía', zipaquira: 'Zipaquirá',
   bogota: 'La Candelaria',
-  sanandres: 'San Andrés (centro; en el mapa, recuadro del Caribe)',
+  sanandres: 'San Andrés (center; on the map, the Caribbean inset)',
 };
 const km = (a, b) => Math.hypot((a[0] - b[0]) * 111, (a[1] - b[1]) * 111 * Math.cos((a[0] * Math.PI) / 180));
 const f2 = (n) => n.toFixed(2);
@@ -43,7 +43,7 @@ function grid(view, step, labelEvery) {
     const x = proj([0, lon])[0];
     const major = Math.abs(lon / labelEvery - Math.round(lon / labelEvery)) < eps;
     out.push(`<line x1="${x}" y1="${view.y}" x2="${x}" y2="${view.y + view.h}" class="${major ? 'gmaj' : 'gmin'}" />`);
-    if (major) out.push(`<text x="${x + fs_ * 0.3}" y="${view.y + fs_ * 1.2}" class="glab" font-size="${fs_}">${Math.abs(lon).toFixed(labelEvery < 1 ? 1 : 0)}°O</text>`);
+    if (major) out.push(`<text x="${x + fs_ * 0.3}" y="${view.y + fs_ * 1.2}" class="glab" font-size="${fs_}">${Math.abs(lon).toFixed(labelEvery < 1 ? 1 : 0)}°W</text>`);
   }
   for (let lat = Math.ceil(latBot / step) * step; lat <= latTop + eps; lat += step) {
     const y = proj([lat, 0])[1];
@@ -79,7 +79,7 @@ function svgCountry() {
     const [ax, ay] = AIRSTRIP[reg.id];
     marks.push(plane(ax, ay, r * 2.6, 'strip'));
   }
-  return `<svg viewBox="${view.x} ${view.y} ${view.w} ${view.h}" role="img" aria-label="Mapa de Colombia con las zonas del juego">${depts(view)}${grid(view, 0.5, 1)}${marks.join('')}</svg>`;
+  return `<svg viewBox="${view.x} ${view.y} ${view.w} ${view.h}" role="img" aria-label="Map of Colombia with the game zones">${depts(view)}${grid(view, 0.5, 1)}${marks.join('')}</svg>`;
 }
 function svgRegion(reg) {
   const real = AIRPORT_GEO[reg.id];
@@ -104,13 +104,13 @@ function svgRegion(reg) {
     const p = ZONE_POS[z];
     const moved = Math.hypot(g[0] - p[0], g[1] - p[1]) > 0.3;
     if (moved) marks.push(`<line x1="${g[0]}" y1="${g[1]}" x2="${p[0]}" y2="${p[1]}" class="shift" />`);
-    marks.push(`<circle cx="${g[0]}" cy="${g[1]}" r="${r * 0.8}" class="real"><title>Guardada: ${f2(ZONE_GEO[z][0])}, ${f2(ZONE_GEO[z][1])}</title></circle>`);
+    marks.push(`<circle cx="${g[0]}" cy="${g[1]}" r="${r * 0.8}" class="real"><title>Stored: ${f2(ZONE_GEO[z][0])}, ${f2(ZONE_GEO[z][1])}</title></circle>`);
     marks.push(`<circle cx="${p[0]}" cy="${p[1]}" r="${r}" class="zone" style="--c:${COLORS[reg.id]}" />`);
     marks.push(`<text x="${p[0] + r * 1.6}" y="${p[1] + fs_ * 0.35}" class="zlab" font-size="${fs_}">${esc(ZONES_BY_ID[z].name)}</text>`);
   }
   const [ax, ay] = AIRSTRIP[reg.id];
   marks.push(plane(ax, ay, r * 2.4, 'strip'));
-  marks.push(`<text x="${ax + r * 2.2}" y="${ay + fs_ * 1.2}" class="alab" font-size="${fs_ * 0.85}">pista (se dibuja aquí)</text>`);
+  marks.push(`<text x="${ax + r * 2.2}" y="${ay + fs_ * 1.2}" class="alab" font-size="${fs_ * 0.85}">airstrip (drawn here)</text>`);
   const [rx, ry] = proj(real);
   const [gx, gy] = AIRSTRIP[reg.id];
   if (Math.hypot(rx - gx, ry - gy) > 0.3) marks.push(`<line x1="${rx}" y1="${ry}" x2="${gx}" y2="${gy}" class="shift air" />`);
@@ -119,21 +119,21 @@ function svgRegion(reg) {
   return `<svg viewBox="${view.x} ${view.y} ${view.w} ${view.h}" role="img" aria-label="${esc(reg.name)}">${depts(view, reg.id)}${grid(view, step, labelEvery)}${marks.join('')}</svg>`;
 }
 
-// --- Tablas ---
+// --- Tables ---
 const zoneRows = [];
 for (const reg of REGIONS) {
   for (const z of reg.zones) {
     const g = ZONE_GEO[z];
     const shown = unproj(ZONE_POS[z]);
     const d = km(g, shown);
-    zoneRows.push(`<tr><td><span class="sw" style="--c:${COLORS[reg.id]}"></span>${esc(reg.name)}</td><td>${esc(ZONES_BY_ID[z].name)}<div class="id">${z}</div></td><td>${esc(PLACE[z])}</td><td class="num">${f2(g[0])}, ${f2(g[1])}</td><td class="num">${d < 1 ? '<span class="same">igual</span>' : `${f2(shown[0])}, ${f2(shown[1])}`}</td><td class="num">${d < 1 ? '–' : `${Math.round(d)} km`}</td></tr>`);
+    zoneRows.push(`<tr><td><span class="sw" style="--c:${COLORS[reg.id]}"></span>${esc(reg.name)}</td><td>${esc(ZONES_BY_ID[z].name)}<div class="id">${z}</div></td><td>${esc(PLACE[z])}</td><td class="num">${f2(g[0])}, ${f2(g[1])}</td><td class="num">${d < 1 ? '<span class="same">same</span>' : `${f2(shown[0])}, ${f2(shown[1])}`}</td><td class="num">${d < 1 ? '–' : `${Math.round(d)} km`}</td></tr>`);
   }
 }
 const airRows = REGIONS.map((reg) => {
   const a = unproj(AIRSTRIP[reg.id]);
   const real = AIRPORT_GEO[reg.id];
   const d = km(a, real);
-  return `<tr><td><span class="sw" style="--c:${COLORS[reg.id]}"></span>${esc(reg.name)}</td><td>${esc(AIRPORT_NAME[reg.id])}</td><td class="num">${f2(real[0])}, ${f2(real[1])}</td><td class="num">${d < 1 ? '<span class="same">igual</span>' : `${f2(a[0])}, ${f2(a[1])}`}</td><td class="num">${d < 1 ? '–' : `${Math.round(d)} km`}</td></tr>`;
+  return `<tr><td><span class="sw" style="--c:${COLORS[reg.id]}"></span>${esc(reg.name)}</td><td>${esc(AIRPORT_NAME[reg.id])}</td><td class="num">${f2(real[0])}, ${f2(real[1])}</td><td class="num">${d < 1 ? '<span class="same">same</span>' : `${f2(a[0])}, ${f2(a[1])}`}</td><td class="num">${d < 1 ? '–' : `${Math.round(d)} km`}</td></tr>`;
 }).join('');
 
 const sections = REGIONS.map((reg) => `<section class="region" id="r-${reg.id}"><h3><span class="sw" style="--c:${COLORS[reg.id]}"></span>${esc(reg.name)}</h3><div class="mapbox">${svgRegion(reg)}</div></section>`).join('');

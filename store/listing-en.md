@@ -52,11 +52,11 @@ Bambuco, guabina, cumbia, torbellino, joropo, chirimía and Amazon cumbia: each 
 
 | Asset | File | Size |
 |---|---|---|
-| Phone screenshots (2 to 8) | `store/capturas-en/1-finca.png` … `6-zonas.png` | 1080 × 1920 |
+| Phone screenshots (2 to 8) | `store/screenshots-en/1-farm.png` … `6-zones.png` | 1080 × 1920 |
 | App icon | `store/icon-512.png` (the same as in Spanish) | 512 × 512 |
 | Feature graphic | `store/feature-graphic-en.png` | 1024 × 500 |
 
-Suggested order: the farm, the station (Roaster), the chain, the Hat Workshop (Caribbean Coast), the map of Colombia and the zone list. They are regenerated with `node tools/capturas-play.mjs store/capturas-en en`.
+Suggested order: the farm, the station (Roaster), the chain, the Hat Workshop (Caribbean Coast), the map of Colombia and the zone list. They are regenerated with `node tools/play-screenshots.mjs store/screenshots-en en`.
 
 ## In-app products (*Monetize → Products → One-time products*, English translation of each)
 

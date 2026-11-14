@@ -6,7 +6,7 @@ import { buySticker, chosenDecor, pageDone, pickDecor, profileOf, quoteSticker }
 import { createInitialState } from '../src/sim/state.js';
 import { restartState } from '../src/sim/legacy.js';
 
-test('cada región tiene su álbum de seis páginas de seis láminas, con ids únicos y textos cortos (v3.10)', () => {
+test('every region has its album of six pages of six stickers, with unique ids and short texts (v3.10)', () => {
   assert.equal(ALBUM.length, 63);
   for (const region of ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima', 'cundinamarca', 'bogota']) assert.equal(ALBUM.filter((pg) => pg.region === region).length, 6, region);
   // (v5.5) The special zone, a single zone, has three pages: the sea, Raizal culture, and the food.
@@ -17,7 +17,7 @@ test('cada región tiene su álbum de seis páginas de seis láminas, con ids ú
   for (const s of Object.values(STICKERS_BY_ID)) assert.ok(s.text.length <= 90, `${s.id}: ${s.text.length}`);
 });
 
-test('las láminas se pagan con Renombre, una vez, y la página llena da premio', () => {
+test('stickers are paid with Renown, once, and the full page gives a prize', () => {
   const state = createInitialState();
   const p = profileOf(state);
   const page = ALBUM[0];
@@ -29,20 +29,20 @@ test('las láminas se pagan con Renombre, una vez, y la página llena da premio'
   assert.equal(last.bonus, PAGE_BONUS);
   assert.equal(p.renown, 100 - cost + PAGE_BONUS);
   assert.ok(pageDone(p, page.id));
-  assert.equal(buySticker(p, page.stickers[0].id), null, 'ya está pegada');
+  assert.equal(buySticker(p, page.stickers[0].id), null, 'it is already stuck in');
 });
 
-test('la decoración: lo de siempre es gratis, lo demás se compra una vez y se puede volver a elegir', () => {
+test('decoration: the default is free, the rest is bought once and can be chosen again', () => {
   const state = createInitialState();
   const p = profileOf(state);
   for (const cat of DECOR) assert.equal(chosenDecor(p)[cat.id].id, cat.options[0].id);
-  assert.equal(pickDecor(p, 'willys', 'rojo'), false, 'sin Renombre');
+  assert.equal(pickDecor(p, 'willys', 'rojo'), false, 'without Renown');
   p.renown = 3;
   assert.ok(pickDecor(p, 'willys', 'rojo'));
   assert.equal(p.renown, 0);
   assert.equal(chosenDecor(p).willys.id, 'rojo');
   assert.ok(pickDecor(p, 'willys', 'verde'));
-  assert.ok(pickDecor(p, 'willys', 'rojo'), 'ya es suyo: no se vuelve a pagar');
+  assert.ok(pickDecor(p, 'willys', 'rojo'), 'it is already owned: it is not paid again');
   assert.equal(p.renown, 0);
   // Carries over to the new playthrough on reset.
   const next = restartState(state);
@@ -50,7 +50,7 @@ test('la decoración: lo de siempre es gratis, lo demás se compra una vez y se 
   assert.deepEqual(next.profile.album, p.album);
 });
 
-test('el Renombre ganado de por vida no baja al gastar, y cada reinicio da 10 ⭐ (v3.11)', async () => {
+test('lifetime Renown earned does not go down on spending, and each restart gives 10 ⭐ (v3.11)', async () => {
   const { gainRenown, RESTART_RENOWN } = await import('../src/sim/renown.js');
   const { restartState } = await import('../src/sim/legacy.js');
   const { openRegions } = await import('../src/sim/regions.js');
@@ -69,7 +69,7 @@ test('el Renombre ganado de por vida no baja al gastar, y cada reinicio da 10 �
   assert.deepEqual([next.profile.renown, next.profile.renownTotal], [22, 25]);
 });
 
-test('una partida de antes de la v3.11 reconstruye su Renombre ganado en total', async () => {
+test('a save from before v3.11 rebuilds its total Renown earned', async () => {
   const { saveGame, loadGame } = await import('../src/core/SaveSystem.js');
   const { ALBUM } = await import('../src/data/album.js');
   const mem = {};
@@ -84,7 +84,7 @@ test('una partida de antes de la v3.11 reconstruye su Renombre ganado en total',
   assert.equal(loadGame().profile.renownTotal, 4 + 1 + 2 + 12 + 3);
 });
 
-test('mascotas por región: gatos a 5 ⭐ (hasta 10) y loros a 8 ⭐ (hasta 5) (v3.12, v3.29, v4.0.2)', async () => {
+test('pets per region: cats at 5 ⭐ (up to 10) and parrots at 8 ⭐ (up to 5) (v3.12, v3.29, v4.0.2)', async () => {
   const { buyPet, petsOf, quotePet } = await import('../src/sim/renown.js');
   const p = { renown: 2000 };
   for (let i = 0; i < 12; i++) buyPet(p, 'cafetero', 'cats');
@@ -92,6 +92,6 @@ test('mascotas por región: gatos a 5 ⭐ (hasta 10) y loros a 8 ⭐ (hasta 5) (
   assert.deepEqual(petsOf(p, 'cafetero'), { cats: 10, parrots: 5 });
   assert.equal(p.renown, 2000 - 10 * 5 - 5 * 8);
   assert.equal(quotePet(p, 'cafetero', 'cats').reason, 'max');
-  assert.deepEqual(petsOf(p, 'santander'), { cats: 0, parrots: 0 }, 'cada región las suyas');
+  assert.deepEqual(petsOf(p, 'santander'), { cats: 0, parrots: 0 }, 'each region its own');
   assert.ok(quotePet(p, 'santander', 'parrots').ok);
 });

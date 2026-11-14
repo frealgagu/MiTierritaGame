@@ -1,13 +1,13 @@
 // Simulates a playthrough with an automated player, zone by zone, and shows when each
-// goal is met and how long each zone takes. Usage: npm run balance -- [hours] [bloque|casual] [--detalle]
-//   bloque: picks the most profitable purchase and can upgrade the entire chain +1 at once (attentive player)
+// goal is met and how long each zone takes. Usage: npm run balance -- [hours] [block|casual|even] [--detail]
+//   block: picks the most profitable purchase and can upgrade the entire chain +1 at once (attentive player)
 //   casual: follows the «recommended upgrade», completes goals, and saves up to build if under 10 min away
-//   parejo: levels evenly (v5.4, for the special zone): always the lowest station or haulers first, the warehouse
+//   even: levels evenly (v5.4, for the special zone): always the lowest station or haulers first, the warehouse
 //           only when it can't keep up, research as soon as affordable, and builds the next station when it can
 //           (saving up for it if under 10 minutes of income away)
 // Env vars: BALANCE_PROGRESS=1 prints progress per game hour; BALANCE_DUMP=minute:file saves the
 // game at that minute (for separate study); BALANCE_LOAD=file resumes a game saved that way;
-// BALANCE_DETAIL=minutes spaces the --detalle lines; BALANCE_RESETS=n starts as after n second-ending resets (production ×2ⁿ); BALANCE_REGION=region plays that
+// BALANCE_DETAIL=minutes spaces the --detail lines; BALANCE_RESETS=n starts as after n second-ending resets (production ×2ⁿ); BALANCE_REGION=region plays that
 // region from scratch (v4.5).
 // After Pueblo, both bots continue to the second ending (all stations at level 100).
 import { Game } from '../src/core/Game.js';
@@ -24,9 +24,9 @@ import { routeActive } from '../src/sim/routes.js';
 import { createInitialState } from '../src/sim/state.js';
 
 const hours = Number(process.argv[2] ?? 8);
-const style = process.argv[3] ?? 'bloque';
-const verbose = process.argv.includes('--detalle');
-// With --detalle, a 📊 line every BALANCE_DETAIL game minutes (30 by default).
+const style = process.argv[3] ?? 'block';
+const verbose = process.argv.includes('--detail');
+// With --detail, a 📊 line every BALANCE_DETAIL game minutes (30 by default).
 const detailSteps = Math.max(1, Math.round(Number(process.env.BALANCE_DETAIL ?? 30) * 600));
 let dumpAt = process.env.BALANCE_DUMP ? { minute: Number(process.env.BALANCE_DUMP.split(':')[0]), file: process.env.BALANCE_DUMP.split(':').slice(1).join(':') } : null;
 const game = new Game(process.env.BALANCE_LOAD ? JSON.parse((await import('node:fs')).readFileSync(process.env.BALANCE_LOAD)) : process.env.BALANCE_REGION ? createInitialState(0, process.env.BALANCE_REGION) : undefined);
@@ -83,7 +83,7 @@ function bestOption() {
     const q = game.quote(id, step);
     if (!q.maxed && q.levels > 0) consider(step > 1 ? 'up10' : 'up', id, q.cost, (t, touched) => { for (let k = 0; k < q.levels; k++) bump(t, id, touched); });
   }
-  if (style === 'bloque') {
+  if (style === 'block') {
     for (const z of openZones()) {
       const all = ids.filter((i) => !i.startsWith('dispatch') && !i.startsWith('route') && zoneOf(i.split(':')[0]) === z);
       const cost = all.reduce((n, id) => n + game.quote(id, 1).cost, 0);
@@ -136,7 +136,7 @@ function completionist() {
 }
 
 // Even player (v5.4): every station and its haulers rise together, lowest first.
-function parejo(zone) {
+function even(zone) {
   for (const r of RESEARCH) if (r.zone === zone && game.quoteResearch(r.id).ok) game.research(r.id);
   const next = nextToUnlock(s, zone);
   if (next && game.quoteUnlock(next).ok) game.unlock(next);
@@ -169,11 +169,11 @@ game.bus.on('research', ({ id }) => events.push(`${mmss(s.playTime)}  🔬 inves
 if (process.env.BALANCE_RESETS) s.legacy.resets = Number(process.env.BALANCE_RESETS);
 game.bus.on('mastered', () => {
   events.push(`${mmss(s.playTime)}  🏅 segundo final: todo al nivel 100`);
-  console.error(`🏅 segundo final: ${mmss(s.playTime - (zoneEnd.pueblo ?? s.playTime))} después del Pueblo (total ${mmss(s.playTime)})`);
+  console.error(`🏅 second ending: ${mmss(s.playTime - (zoneEnd.pueblo ?? s.playTime))} after the Pueblo (total ${mmss(s.playTime)})`);
 });
 game.bus.on('zoneUnlocked', ({ zone }) => {
   zoneStart[zone] = s.playTime;
-  events.push(`${mmss(s.playTime)}  🗺️  se abre ${zone}`);
+  events.push(`${mmss(s.playTime)}  🗺️  ${zone} opens`);
 });
 
 for (let step = 0; step < hours * 36000 && (currentZone() || !s.mastered); step++) {
@@ -213,8 +213,8 @@ for (let step = 0; step < hours * 36000 && (currentZone() || !s.mastered); step+
   // Foreman doesn't raise income: bought when spare coins allow.
   if (RESEARCH.some((r) => r.id === 'capataz') && game.quoteResearch('capataz').ok && s.coins > 3 * 10000) game.research('capataz');
 
-  if (style === 'parejo') {
-    parejo(zone);
+  if (style === 'even') {
+    even(zone);
     continue;
   }
   if (style === 'casual') {
@@ -255,18 +255,18 @@ for (let step = 0; step < hours * 36000 && (currentZone() || !s.mastered); step+
   }
 }
 
-if (s.mastered) console.log(`🏅 Segundo final a las ${mmss(s.playTime)}`);
+if (s.mastered) console.log(`🏅 Second ending at ${mmss(s.playTime)}`);
 console.log(events.join('\n'));
 const zone = currentZone();
 if (zone) {
   const pending = activeGoals(s, zone).map((g) => `${goalText(g)} (${formatNumber(goalProgress(s, g).current)}/${formatNumber(goalProgress(s, g).target)})`);
-  console.log(`\n⏱️  Sin terminar ${zone} a las ${mmss(s.playTime)}. Objetivos pendientes: ${pending.join(' · ')}`);
+  console.log(`\n⏱️  ${zone} unfinished at ${mmss(s.playTime)}. Pending objectives: ${pending.join(' · ')}`);
 }
 console.log('');
 for (const z of ZONE_LIST) {
   if (!s.zones[z.id]?.unlocked) continue;
   const done = s.zones[z.id].complete;
   const took = done ? ` → ${mmss(zoneEnd[z.id] - zoneStart[z.id])} en la zona` : '';
-  console.log(`${z.icon} ${z.name}: ${done ? `🏁 completada (empezó ${mmss(zoneStart[z.id])}, terminó ${mmss(zoneEnd[z.id])}${took})` : 'sin terminar'}`);
+  console.log(`${z.icon} ${z.name}: ${done ? `🏁 completed (started ${mmss(zoneStart[z.id])}, finished ${mmss(zoneEnd[z.id])}${took})` : 'unfinished'}`);
 }
 console.log(`Ingreso total al final: ${formatNumber(totalIncome(s))} 💰/s`);

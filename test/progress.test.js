@@ -18,7 +18,7 @@ function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-test('una investigación pide su estación y se compra una sola vez', () => {
+test('a research needs its station and is bought only once', () => {
   const game = new Game();
   game.state.coins = 1e6;
   assert.equal(game.quoteResearch('herraduras').reason, 'locked');
@@ -28,17 +28,17 @@ test('una investigación pide su estación y se compra una sola vez', () => {
   assert.equal(game.quoteResearch('herraduras').reason, 'owned');
 });
 
-test('las que duplican una estación piden esa estación y sus arrieros al nivel 25', () => {
+test('the ones that double a station need that station and its mule drivers at level 25', () => {
   const game = new Game();
   game.state.coins = 1e12;
   const farm = game.state.stations.farm;
   farm.level = 25;
-  assert.equal(game.quoteResearch('abono').reason, 'locked', 'faltan los arrieros');
+  assert.equal(game.quoteResearch('abono').reason, 'locked', 'the mule drivers are missing');
   farm.transport.level = 25;
   farm.level = 24;
-  assert.equal(game.quoteResearch('abono').reason, 'locked', 'falta la estación');
+  assert.equal(game.quoteResearch('abono').reason, 'locked', 'the station is missing');
   farm.level = 25;
-  assert.ok(game.research('abono'), 'ya no hace falta construir la siguiente');
+  assert.ok(game.research('abono'), 'building the next one is no longer needed');
   // Compostera has no haulers: its level alone suffices.
   game.unlock('wetmill');
   game.unlock('composter');
@@ -48,7 +48,7 @@ test('las que duplican una estación piden esa estación y sus arrieros al nivel
   assert.equal(game.quoteResearch('herraduras').reason, 'locked');
 });
 
-test('una investigación se compra una sola vez', () => {
+test('a research is bought only once', () => {
   const game = new Game();
   game.state.coins = 1e6;
   game.state.stations.farm.level = 25;
@@ -58,7 +58,7 @@ test('una investigación se compra una sola vez', () => {
   assert.equal(game.research('abono'), false);
 });
 
-test('el abono duplica el cafetal en la simulación y en el análisis', () => {
+test('fertilizer doubles the coffee field in the simulation and in the analysis', () => {
   const plain = new Game();
   const boosted = new Game();
   for (const g of [plain, boosted]) g.state.stations.farm.transport.level = 40;
@@ -69,7 +69,7 @@ test('el abono duplica el cafetal en la simulación y en el análisis', () => {
   assert.ok(boosted.state.stats.produced.cherry > 1.8 * plain.state.stats.produced.cherry);
 });
 
-test('el sello de calidad sube el precio de las bolsas', () => {
+test('the quality seal raises the price of the bags', () => {
   const game = new Game();
   game.state.research.push('sello');
   game.state.zones.finca.warehouse.coffee_bag = 2;
@@ -77,15 +77,15 @@ test('el sello de calidad sube el precio de las bolsas', () => {
   assert.equal(game.state.coins, 2 * 250 * 1.5);
 });
 
-test('las horas sin conexión son del jugador: 2 h y +2 h por nivel con Renombre, hasta 24 h (v3.7)', async () => {
+test('offline hours belong to the player: 2 h and +2 h per level with Renown, up to 24 h (v3.7)', async () => {
   const { buyOffline, offlineHours, OFFLINE_COSTS } = await import('../src/sim/renown.js');
   const game = new Game();
   const profile = game.state.profile;
   assert.equal(offlineCapSeconds(game.state), 2 * 3600);
-  assert.equal(buyOffline(profile), false, 'sin Renombre no se compra');
+  assert.equal(buyOffline(profile), false, 'without Renown it cannot be bought');
   profile.renown = 1000;
   for (let k = 0; k < OFFLINE_COSTS.length; k++) assert.ok(buyOffline(profile));
-  assert.equal(buyOffline(profile), false, 'ya está al máximo');
+  assert.equal(buyOffline(profile), false, 'it is already at the maximum');
   assert.equal(offlineHours(profile), 24);
   assert.equal(profile.renown, 1000 - OFFLINE_COSTS.reduce((a, b) => a + b, 0));
   // A region (without its own profile) uses the player's.
@@ -95,19 +95,19 @@ test('las horas sin conexión son del jugador: 2 h y +2 h por nivel con Renombre
   assert.ok(!RESEARCH.some((r) => r.effect.type === 'offlineHours'));
 });
 
-test('todas las investigaciones y objetivos apuntan a cosas que existen', () => {
+test('all research and objectives point to things that exist', () => {
   for (const r of RESEARCH) assert.ok(!r.requires || STATIONS_BY_ID[r.requires], r.id);
   const ids = new Set(RESEARCH.map((r) => r.id));
   for (const g of GOALS) {
     if (g.type === 'research') assert.ok(ids.has(g.research), g.id);
     if (g.type === 'unlock') assert.ok(STATIONS_BY_ID[g.station], g.id);
-    assert.ok(goalText(g).length > 5, `texto de ${g.id}`);
+    assert.ok(goalText(g).length > 5, `text of ${g.id}`);
   }
   assert.equal(new Set(GOALS.map((g) => g.id)).size, GOALS.length);
   assert.ok(GOALS.at(-1).final);
 });
 
-test('los objetivos se cobran en orden y dan su recompensa', () => {
+test('objectives are collected in order and give their reward', () => {
   const game = new Game();
   assert.deepEqual(activeGoals(game.state).map((g) => g.id), ['g01', 'g02', 'g03']);
   assert.equal(game.claimGoal('g01'), false); // not yet met
@@ -121,7 +121,7 @@ test('los objetivos se cobran en orden y dan su recompensa', () => {
   assert.equal(game.claimGoal('g10'), false); // not among the visible ones
 });
 
-test('cobrar el último objetivo completa la zona', () => {
+test('collecting the last objective completes the zone', () => {
   const game = new Game();
   game.state.goals.claimed = GOALS.filter((g) => g.id.startsWith('g')).map((g) => g.id);
   game.state.stats.sold.coffee_bag = GOALS.find((g) => g.id === 'final').amount;
@@ -132,7 +132,7 @@ test('cobrar el último objetivo completa la zona', () => {
   assert.ok(game.state.stations.canefield);
 });
 
-test('las ganancias sin conexión se parecen a las de jugar en vivo', () => {
+test('offline earnings resemble those of playing live', () => {
   const setup = () => {
     const g = new Game();
     const s = g.state;
@@ -151,10 +151,10 @@ test('las ganancias sin conexión se parecen a las de jugar en vivo', () => {
   run(live, 1800);
   offline.catchUp(1800);
   const ratio = offline.state.coins / live.state.coins;
-  assert.ok(ratio > 0.85 && ratio < 1.15, `sin conexión / en vivo = ${ratio.toFixed(2)}`);
+  assert.ok(ratio > 0.85 && ratio < 1.15, `offline / live = ${ratio.toFixed(2)}`);
 });
 
-test('la compostera convierte pulpa en compost que sube el precio de la Finca sin acelerar nada', async () => {
+test(`the compost bin turns pulp into compost that raises the Finca's price without speeding anything up`, async () => {
   const { productionMult } = await import('../src/sim/transport.js');
   const { saleValue, productValue } = await import('../src/sim/modifiers.js');
   const game = new Game();
@@ -167,7 +167,7 @@ test('la compostera convierte pulpa en compost que sube el precio de la Finca si
   game.state.stations.wetmill.transport.level = 60;
   game.state.zones.finca.dispatch.level = 60;
   run(game, 240);
-  assert.ok((game.state.stats.produced.compost ?? 0) > 0, 'produjo compost');
+  assert.ok((game.state.stats.produced.compost ?? 0) > 0, 'it made compost');
 
   // With compost, Finca sells 30 % higher; Trapiche doesn't change.
   game.state.stations.composter.buffer = 10;
@@ -183,12 +183,12 @@ test('la compostera convierte pulpa en compost que sube el precio de la Finca si
   game.state.stations.composter.level = 1;
   game.state.stations.wetmill.byBuffer = 0;
   game.state.stations.composter.input = 0;
-  assert.equal(saleValue(game.state, 'washed'), productValue(game.state, 'washed'), 'sin compost, sin bono');
+  assert.equal(saleValue(game.state, 'washed'), productValue(game.state, 'washed'), 'without compost, no bonus');
   const before2 = game.state.stats.produced.cherry;
   game.state.stations.farm.buffer = 0;
   run(game, 20);
   const without = game.state.stats.produced.cherry - before2;
-  assert.ok(Math.abs(withCompost - without) <= without * 0.1, `con compost ${withCompost}, sin compost ${without}`);
+  assert.ok(Math.abs(withCompost - without) <= without * 0.1, `with compost ${withCompost}, without compost ${without}`);
 
   // Upgrading Cafetal doesn't spend compost faster: it's spent according to the coffee Beneficiadero washes.
   const { expectedCompostValue } = await import('../src/sim/analysis.js');
@@ -197,7 +197,7 @@ test('la compostera convierte pulpa en compost que sube el precio de la Finca si
   game.state.stations.farm.level = 60;
   assert.equal(expectedCompostValue(game.state), sustained);
   game.state.stations.composter.level = 15;
-  assert.ok(Math.abs(expectedCompostValue(game.state) - 1.3) < 1e-9, 'a nivel parecido al Beneficiadero cubre todo');
+  assert.ok(Math.abs(expectedCompostValue(game.state) - 1.3) < 1e-9, 'at a level similar to the Beneficiadero it covers everything');
 
   // Actual sales apply the bonus.
   const g2 = new Game();
@@ -205,10 +205,10 @@ test('la compostera convierte pulpa en compost que sube el precio de la Finca si
   g2.state.zones.finca.warehouse = { cherry: 10 };
   const coins = g2.state.coins;
   run(g2, 60);
-  assert.ok(g2.state.coins - coins >= 10 * 1.3 - 1e-9, `vendió por ${g2.state.coins - coins}`);
+  assert.ok(g2.state.coins - coins >= 10 * 1.3 - 1e-9, `it sold for ${g2.state.coins - coins}`);
 });
 
-test('la compostera no tiene arrieros ni cuenta para «todas las estaciones»', async () => {
+test('the compost bin has no mule drivers and does not count for «all stations»', async () => {
   const { recommendUpgrade } = await import('../src/sim/analysis.js');
   const game = new Game();
   game.state.coins = 1e6;
@@ -218,27 +218,27 @@ test('la compostera no tiene arrieros ni cuenta para «todas las estaciones»', 
   assert.notEqual(rec.id, 'composter:transport');
 });
 
-test('ningún objetivo pide vender un producto intermedio (podría quedar imposible)', () => {
+test('no objective asks to sell an intermediate product (it could become impossible)', () => {
   // Sources always sell at the start of each zone; final products always reach the warehouse.
   const finals = new Set(['cherry', 'coffee_bag', 'cane', 'panela_powder', 'raw_milk', 'butter', 'cheese', 'arequipe', 'cacao_pod', 'table_chocolate', 'milk_chocolate', 'corn_cob', 'arepa', 'cheese_arepa', 'breakfast', 'container', 'guava', 'bocadillo_crate', 'tobacco_leaf', 'cigar', 'fique_leaf', 'tobacco_bale', 'steer', 'almuerzo', 'fiambre', 'ant_queen', 'ant_cone', 'recuerdo', 'estadia', 'excursion', 'paddy', 'rice_sack', 'coconut', 'cocada', 'fish', 'fish_in_coconut', 'ordeno_milk', 'almuerzo_costeno', 'bandeja_costena', 'cana_flecha', 'sombrero_vueltiao', 'recuerdo_costa', 'noche_hotel', 'paseo_islas', 'potato', 'criollas_box', 'barley', 'beer_crate', 'greda', 'jarra_cerveza', 'paipa_milk', 'piquete', 'canasta_amasijos', 'wool', 'ruana', 'recuerdo_boyaca', 'noche_villa', 'excursion_fosil', 'palm_bunch', 'oil_box', 'passion_fruit', 'juice_box', 'cachama', 'cachama_maracuya', 'llanero_steer', 'almuerzo_llanero', 'parranda_llanera', 'raw_hide', 'silla_montar', 'recuerdo_llano', 'noche_villavo', 'excursion_cano', 'plantain_bunch', 'patacon_box', 'herbs', 'alino_box', 'pargo', 'tapao', 'piangua', 'arroz_piangua', 'cazuela_mariscos', 'werregue_leaf', 'werregue_jar', 'recuerdo_pacifico', 'noche_buenaventura', 'excursion_ballenas', 'asai_bunch', 'asai_box', 'aji', 'aji_box', 'pirarucu', 'pirarucu_aji', 'yuca_brava', 'desayuno_amazonico', 'banquete_maloca', 'yanchama_bark', 'ticuna_mask', 'recuerdo_amazonas', 'noche_leticia', 'excursion_delfines', 'achira_root', 'bizcocho_box', 'huila_cherry', 'cafe_especial', 'tilapia', 'almuerzo_represa', 'cerdo', 'lechona', 'desayuno_tolimense', 'arcilla', 'loza_negra', 'recuerdo_tolima', 'noche_sanpedro', 'excursion_tatacoa', 'rosa', 'caja_flores', 'fresa', 'fresas_crema', 'trucha', 'almuerzo_trucha', 'roca_sal', 'cofre_sal', 'canasta_sabanera', 'papa_sabanera', 'plato_ajiaco', 'almuerzo_sabanero', 'noche_zipaquira', 'visita_catedral', 'cafe_capitalino', 'tarde_candelaria', 'cena_zona_g', 'domingo_usaquen', 'manana_paloquemao', 'subida_monserrate', 'feria_mi_tierrita', 'tour_isla']);
-  for (const g of GOALS) if (g.type === 'sold') assert.ok(finals.has(g.product), `${g.id} pide vender ${g.product}`);
+  for (const g of GOALS) if (g.type === 'sold') assert.ok(finals.has(g.product), `${g.id} asks to sell ${g.product}`);
 });
 
-test('cada estación de cada cadena tiene exactamente una investigación que la acelera', async () => {
+test('every station of every chain has exactly one research that speeds it up', async () => {
   const { ZONE_LIST } = await import('../src/data/zones/index.js');
   const boosted = new Set(RESEARCH.filter((r) => r.effect.type === 'stationSpeed').map((r) => r.effect.target));
   for (const zone of ZONE_LIST) {
     for (const id of zone.chain) {
       // Hornilla already has bagazo, but also needs its research upgrade.
-      assert.ok(boosted.has(id), `${zone.id}: ${id} no tiene investigación de velocidad`);
+      assert.ok(boosted.has(id), `${zone.id}: ${id} has no speed research`);
       // And only one: with all of them bought, the chain is just as balanced as with none.
       const speedUps = RESEARCH.filter((r) => r.effect.type === 'stationSpeed' && r.effect.target === id);
-      assert.equal(speedUps.length, 1, `${zone.id}: ${id} tiene ${speedUps.length} investigaciones de velocidad`);
+      assert.equal(speedUps.length, 1, `${zone.id}: ${id} has ${speedUps.length} speed researches`);
     }
   }
 });
 
-test('con el Abono comprado y dinero para la Despulpadora, la recomienda', async () => {
+test('with the Fertilizer bought and money for the Despulpadora, it recommends it', async () => {
   const { recommendUpgrade } = await import('../src/sim/analysis.js');
   const game = new Game();
   game.state.coins = 50;

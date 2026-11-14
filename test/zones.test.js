@@ -22,7 +22,7 @@ function withTrapiche() {
   return game;
 }
 
-test('el Trapiche empieza cerrado y no se puede construir en él', () => {
+test('the Trapiche starts closed and nothing can be built in it', () => {
   const game = new Game();
   game.state.coins = 1e9;
   assert.equal(game.state.zones.trapiche.unlocked, false);
@@ -30,15 +30,15 @@ test('el Trapiche empieza cerrado y no se puede construir en él', () => {
   assert.equal(game.quoteResearch('motor').reason, 'zone');
 });
 
-test('al abrir el Trapiche, el Cañaduzal produce y se vende caña en su propia bodega', () => {
+test('when the Trapiche opens, the Cañaduzal produces and cane is sold in its own warehouse', () => {
   const game = withTrapiche();
   game.state.coins = 0;
   run(game, 90);
-  assert.ok((game.state.stats.sold.cane ?? 0) > 0, 'vendió caña');
-  assert.ok((game.state.stats.sold.cherry ?? 0) > 0, 'la Finca sigue vendiendo a la vez');
+  assert.ok((game.state.stats.sold.cane ?? 0) > 0, 'it sold cane');
+  assert.ok((game.state.stats.sold.cherry ?? 0) > 0, 'the Finca keeps selling at the same time');
 });
 
-test('la cadena del Trapiche produce panela pulverizada', () => {
+test('the Trapiche chain makes powdered panela', () => {
   const game = withTrapiche();
   for (const id of chainOf('trapiche').slice(1)) assert.ok(game.unlock(id), id);
   for (const id of chainOf('trapiche')) {
@@ -50,7 +50,7 @@ test('la cadena del Trapiche produce panela pulverizada', () => {
   assert.ok((game.state.stats.sold.panela_powder ?? 0) > 0);
 });
 
-test('el bagazo de la Molienda alimenta la Hornilla y la acelera ×2', () => {
+test(`the Molienda's bagasse feeds the Hornilla and speeds it up ×2`, () => {
   const setup = (withFuel) => {
     const game = withTrapiche();
     game.unlock('cane_mill');
@@ -71,14 +71,14 @@ test('el bagazo de la Molienda alimenta la Hornilla y la acelera ×2', () => {
   run(none, 200);
   assert.ok(fuel.state.stations.furnace.fuel > 0 || fuel.state.stats.produced.melado > 0);
   const ratio = fuel.state.stats.produced.melado / none.state.stats.produced.melado;
-  assert.ok(ratio > 1.6, `melado con bagazo / sin bagazo = ${ratio.toFixed(2)}`);
+  assert.ok(ratio > 1.6, `syrup with bagasse / without bagasse = ${ratio.toFixed(2)}`);
   // Analysis also counts fuel: with Molienda providing plenty of bagazo, ×2.
   const furnace = analyzeChain(fuel.state, 'trapiche').rows.find((r) => r.id === 'furnace');
   const base = stationRate(STATIONS_BY_ID.furnace, 5) * STATIONS_BY_ID.furnace.in.guarapo;
-  assert.ok(Math.abs(furnace.capacity - 2 * base) < 1e-9, `capacidad ${furnace.capacity} vs base ${base}`);
+  assert.ok(Math.abs(furnace.capacity - 2 * base) < 1e-9, `capacity ${furnace.capacity} vs base ${base}`);
 });
 
-test('cada zona tiene su bodega, su despacho y su recomendación', () => {
+test('every zone has its warehouse, its dispatch and its recommendation', () => {
   const game = withTrapiche();
   assert.ok(game.buy('dispatch:trapiche', 1));
   assert.equal(game.state.zones.trapiche.dispatch.level, 2);
@@ -87,7 +87,7 @@ test('cada zona tiene su bodega, su despacho y su recomendación', () => {
   assert.ok(['canefield', 'canefield:transport', 'dispatch:trapiche'].includes(rec.id), rec.id);
 });
 
-test('una partida de la v1.0 se carga con las zonas y, si la Finca estaba completa, abre el Trapiche', async () => {
+test('a v1.0 save loads with the zones and, if the Finca was complete, opens the Trapiche', async () => {
   const store = new Map();
   globalThis.localStorage = { getItem: (k) => store.get(k) ?? null, setItem: (k, v) => store.set(k, v), removeItem: (k) => store.delete(k) };
   const { loadGame } = await import('../src/core/SaveSystem.js');
@@ -112,7 +112,7 @@ test('una partida de la v1.0 se carga con las zonas y, si la Finca estaba comple
   assert.ok((game.state.stats.sold.cane ?? 0) > 0);
 });
 
-test('«Zona al máximo» solo cuando todo está al máximo: si no, se sugiere lo que falta subir (v3.54)', async () => {
+test('«Zone at the maximum» only when everything is at the maximum: otherwise, what is left to raise is suggested (v3.54)', async () => {
   const { recommendUpgrade, pendingUpgrade } = await import('../src/sim/analysis.js');
   const { createInitialState } = await import('../src/sim/state.js');
   const { RESEARCH } = await import('../src/data/research.js');
@@ -150,20 +150,20 @@ test('«Zona al máximo» solo cuando todo está al máximo: si no, se sugiere l
   assert.equal(advice(game)?.id, 'fish_fryer');
 });
 
-test('la Compostera sin construir: la Finca no está al máximo (v3.58)', async () => {
+test('the Compostera not built: the Finca is not at the maximum (v3.58)', async () => {
   const { nextSideToUnlock, nextToUnlock } = await import('../src/sim/chain.js');
   const game = new Game();
   const s = game.state;
   s.coins = 1e30;
   assert.equal(nextSideToUnlock(s, 'finca'), 'composter');
   for (const id of ['wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer']) game.unlock(id);
-  assert.equal(nextToUnlock(s, 'finca'), null, 'la cadena está completa');
-  assert.equal(nextSideToUnlock(s, 'finca'), 'composter', 'pero falta la Compostera');
+  assert.equal(nextToUnlock(s, 'finca'), null, 'the chain is complete');
+  assert.equal(nextSideToUnlock(s, 'finca'), 'composter', 'but the Compostera is missing');
   game.unlock('composter');
   assert.equal(nextSideToUnlock(s, 'finca'), null);
 });
 
-test('el mapa de Colombia tiene todas las zonas y cada región sus departamentos (v3.60)', async () => {
+test('the map of Colombia has every zone and each region its departments (v3.60)', async () => {
   const { ZONE_LIST } = await import('../src/data/zones/index.js');
   const { ZONE_GEO } = await import('../src/data/zoneGeo.js');
   const { DEPARTMENTS } = await import('../src/data/colombiaMap.js');
@@ -171,18 +171,18 @@ test('el mapa de Colombia tiene todas las zonas y cada región sus departamentos
   const { MAP_GEO, mapGeo } = await import('../src/data/zoneGeo.js');
   const { REGION_OF_ZONE, REGIONS_BY_ID } = await import('../src/data/regions.js');
   for (const zone of ZONE_LIST) {
-    assert.ok(ZONE_GEO[zone.id], `${zone.id} tiene su lugar`);
+    assert.ok(ZONE_GEO[zone.id], `${zone.id} has its place`);
     // (v5.4) The islands, off the country map, are drawn in an inset in the Caribbean, inside the map's frame.
     const offMap = REGIONS_BY_ID[REGION_OF_ZONE[zone.id]].offMap;
     assert.equal(Boolean(MAP_GEO[zone.id]), Boolean(offMap), zone.id);
     const [lat, lon] = mapGeo(zone.id);
-    assert.ok(lat > -5 && lat < 13 && lon > -80 && lon < -66, `${zone.id} en Colombia`);
+    assert.ok(lat > -5 && lat < 13 && lon > -80 && lon < -66, `${zone.id} in Colombia`);
   }
-  for (const r of REGIONS.filter((x) => !x.offMap)) assert.ok(DEPARTMENTS.some((d) => d.region === r.id), `${r.id} tiene departamentos`);
+  for (const r of REGIONS.filter((x) => !x.offMap)) assert.ok(DEPARTMENTS.some((d) => d.region === r.id), `${r.id} has departments`);
   assert.equal(new Set(DEPARTMENTS.map((d) => d.id)).size, DEPARTMENTS.length);
 });
 
-test('los objetivos de vender algo que otra estación consume cuentan lo producido (v3.61)', async () => {
+test('objectives to sell something another station consumes count what is produced (v3.61)', async () => {
   const { goalProgress, goalText, countsProduced } = await import('../src/sim/goals.js');
   const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
   const game = new Game();
@@ -194,7 +194,7 @@ test('los objetivos de vender algo que otra estación consume cuentan lo produci
   // With Beneficiadero built and at the same pace, almost nothing reaches the warehouse, yet the goal progresses.
   game.unlock('wetmill');
   for (let t = 0; t < 120; t += 0.1) game.step(0.1);
-  assert.ok((s.stats.sold.cherry ?? 0) < 20, `vendidas: ${s.stats.sold.cherry}`);
+  assert.ok((s.stats.sold.cherry ?? 0) < 20, `sold: ${s.stats.sold.cherry}`);
   assert.ok(goalProgress(s, g01).done);
   // Goals for products going to the warehouse still count amount sold.
   const last = GOALS_BY_ZONE.finca.find((g) => g.final);

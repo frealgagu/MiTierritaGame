@@ -34,38 +34,38 @@ function buildLecheria(game, ids = chainOf('lecheria').slice(1), level = 20) {
   game.state.routes.panela.level = level;
 }
 
-test('la leche pasteurizada se reparte entre tres ramas', () => {
+test('pasteurized milk is split among three branches', () => {
   assert.deepEqual(CHILDREN.pasteurizer, ['cheesery', 'separator', 'arequipe_pot']);
   assert.deepEqual(CHILDREN.separator, ['churn']);
 });
 
-test('a igual nivel, la Pasteurizadora reparte su leche: un cuarto para cada rama y otro para el Cacaotal', () => {
+test('at the same level, the Pasteurizadora splits its milk: a quarter for each branch and another for the Cacaotal', () => {
   const game = withLecheria();
   buildLecheria(game);
   const a = analyzeChain(game.state, 'lecheria');
   const row = (id) => a.rows.find((r) => r.id === id);
   const milk = row('pasteurizer').output;
   for (const id of ['cheesery', 'separator', 'arequipe_pot']) {
-    assert.ok(Math.abs(row(id).capacity - milk / 4) < 1e-9, `${id} procesa ${row(id).capacity} de ${milk}`);
+    assert.ok(Math.abs(row(id).capacity - milk / 4) < 1e-9, `${id} processes ${row(id).capacity} of ${milk}`);
   }
   // Without Cacaotal, the quarter reserved for the route is sold as milk.
-  assert.ok(Math.abs(row('pasteurizer').diverted - milk / 4) < 1e-9, 'sobra un cuarto');
+  assert.ok(Math.abs(row('pasteurizer').diverted - milk / 4) < 1e-9, 'a quarter is left over');
   // In the simulation, mules carry milk to all three.
   run(game, 300);
-  for (const p of ['cheese', 'cream', 'arequipe']) assert.ok((game.state.stats.produced[p] ?? 0) > 0, `produjo ${p}`);
+  for (const p of ['cheese', 'cream', 'arequipe']) assert.ok((game.state.stats.produced[p] ?? 0) > 0, `it made ${p}`);
 });
 
-test('con una sola rama construida, la leche que sobra se vende sin procesar', () => {
+test('with a single branch built, the leftover milk is sold unprocessed', () => {
   const game = withLecheria();
   buildLecheria(game, ['pasteurizer', 'cheesery']);
   const a = analyzeChain(game.state, 'lecheria');
   const past = a.rows.find((r) => r.id === 'pasteurizer');
-  assert.ok(past.diverted > 0, 'desvía leche a la bodega');
+  assert.ok(past.diverted > 0, 'diverts milk to the warehouse');
   run(game, 120);
-  assert.ok((game.state.stats.sold.milk ?? 0) > 0, 'vendió leche pasteurizada');
+  assert.ok((game.state.stats.sold.milk ?? 0) > 0, 'it sold pasteurized milk');
 });
 
-test('la Paila no trabaja sin la panela del Trapiche', () => {
+test(`the Paila does not work without the Trapiche's panela`, () => {
   const game = withLecheria();
   buildLecheria(game);
   // No panela in Trapiche's warehouse or Paila.
@@ -83,7 +83,7 @@ test('la Paila no trabaja sin la panela del Trapiche', () => {
   assert.equal(game.state.stations.arequipe_pot.status, 'starved');
 });
 
-test('la Chiva lleva la panela de la bodega del Trapiche a la Paila', () => {
+test(`the Chiva takes the panela from the Trapiche's warehouse to the Paila`, () => {
   const game = withLecheria();
   buildLecheria(game);
   const s = game.state;
@@ -94,15 +94,15 @@ test('la Chiva lleva la panela de la bodega del Trapiche a la Paila', () => {
   run(game, 0.2);
   assert.equal(s.routes.panela.phase, 'go');
   const load = s.routes.panela.load;
-  assert.ok(load > 0 && load <= routeCapacity(s, 'panela') + 1e-9, `carga ${load}`);
+  assert.ok(load > 0 && load <= routeCapacity(s, 'panela') + 1e-9, `load ${load}`);
   run(game, 31);
-  assert.ok(s.stats.imported.panela_powder >= load - 1e-9, 'llegó a la Lechería');
+  assert.ok(s.stats.imported.panela_powder >= load - 1e-9, 'it reached the Lechería');
   assert.deepEqual(events.map((e) => e[0]).slice(0, 2), ['salió', 'llegó']);
   run(game, 120);
-  assert.ok((s.stats.produced.arequipe ?? 0) > 0, 'hizo arequipe');
+  assert.ok((s.stats.produced.arequipe ?? 0) > 0, 'it made arequipe');
 });
 
-test('el Willys del Trapiche no vende la panela que espera la Chiva', () => {
+test(`the Trapiche's Willys does not sell the panela the Chiva is waiting for`, () => {
   const game = withLecheria();
   buildLecheria(game);
   const s = game.state;
@@ -110,14 +110,14 @@ test('el Willys del Trapiche no vende la panela que espera la Chiva', () => {
   s.stations.arequipe_pot.imported = {};
   s.zones.trapiche.warehouse = { panela_powder: 3, cane: 50 };
   const sold = s.stats.sold.panela_powder ?? 0;
-  assert.ok(routeReserve(s, 'trapiche').panela_powder > 0, 'reserva para la Chiva');
+  assert.ok(routeReserve(s, 'trapiche').panela_powder > 0, 'reserved for the Chiva');
   run(game, 9);
-  assert.equal(s.routes.panela.phase, 'idle', 'la Chiva sigue esperando');
-  assert.ok((s.stats.sold.cane ?? 0) > 0, 'el Willys vendió la caña');
-  assert.equal(s.stats.sold.panela_powder ?? 0, sold, 'pero no la panela');
+  assert.equal(s.routes.panela.phase, 'idle', 'the Chiva is still waiting');
+  assert.ok((s.stats.sold.cane ?? 0) > 0, 'the Willys sold the cane');
+  assert.equal(s.stats.sold.panela_powder ?? 0, sold, 'but not the panela');
 });
 
-test('la panela que se va por la ruta no se cuenta dos veces en los ingresos', () => {
+test('panela that leaves by the route is not counted twice in income', () => {
   const game = withLecheria();
   buildLecheria(game);
   const s = game.state;
@@ -128,7 +128,7 @@ test('la panela que se va por la ruta no se cuenta dos veces en los ingresos', (
   assert.ok(Math.abs(without - withRoute - flow * 250) < 1e-6, `${without} - ${withRoute} ≠ ${flow * 250}`);
 });
 
-test('la ruta solo se mejora cuando existe la Paila', () => {
+test('the route can only be upgraded when the Paila exists', () => {
   const game = withLecheria();
   assert.equal(game.quote('route:panela', 1).affordable, false);
   assert.equal(game.buy('route:panela', 1), false);
@@ -136,7 +136,7 @@ test('la ruta solo se mejora cuando existe la Paila', () => {
   assert.ok(game.buy('route:panela', 1));
 });
 
-test('si la Paila espera panela, la recomendación puede señalar al Trapiche', () => {
+test('if the Paila is waiting for panela, the recommendation can point to the Trapiche', () => {
   const game = withLecheria(30);
   buildLecheria(game, undefined, 30);
   const s = game.state;
@@ -144,12 +144,12 @@ test('si la Paila espera panela, la recomendación puede señalar al Trapiche', 
   s.stations.pulverizer.level = 5;
   s.stations.pulverizer.transport.level = 5;
   const a = analyzeChain(s, 'lecheria');
-  assert.ok(a.rows.find((r) => r.id === 'arequipe_pot').importLimited, 'la Paila espera panela');
+  assert.ok(a.rows.find((r) => r.id === 'arequipe_pot').importLimited, 'the Paila is waiting for panela');
   const rec = recommendUpgrade(s, (id, mode) => game.quote(id, mode), 'lecheria');
-  assert.ok(rec.id.startsWith('pulverizer') || rec.id.startsWith('molds'), `recomendó ${rec.id}`);
+  assert.ok(rec.id.startsWith('pulverizer') || rec.id.startsWith('molds'), `it recommended ${rec.id}`);
 });
 
-test('una partida de la v1.1 con el Trapiche completo abre la Lechería y la ruta', async () => {
+test('a v1.1 save with the Trapiche complete opens the Lechería and the route', async () => {
   const { loadGame } = await import('../src/core/SaveSystem.js');
   const old = new Game().state;
   old.version = 5;
@@ -162,7 +162,7 @@ test('una partida de la v1.1 con el Trapiche completo abre la Lechería y la rut
   const s = loadGame();
   delete globalThis.localStorage;
   assert.equal(s.zones.lecheria.unlocked, true);
-  assert.ok(s.stations.pasture, 'el Potrero produce');
+  assert.ok(s.stations.pasture, 'the Potrero produces');
   assert.equal(s.routes.panela.level, 1);
   assert.deepEqual(s.stats.imported, {});
 });

@@ -3,7 +3,7 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>Mi Tierrita · vehículos</title>
+    <title>Mi Tierrita · vehicles</title>
     <style>body { margin: 0; background: #7dba4e; }</style>
   </head>
   <body>
@@ -18,7 +18,7 @@
       const world = new Container();
       world.scale.set(3);
       app.stage.addChild(world);
-      // Cuatro direcciones (+x, −x, +y, −y), con la carga a medias, y una vacía.
+      // Four directions (+x, −x, +y, −y), half loaded, and an empty one.
       const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
       const views = [];
       dirs.forEach(([dx, dy], i) => {

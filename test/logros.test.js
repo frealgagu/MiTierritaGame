@@ -5,7 +5,7 @@ import { checkLogros, metric } from '../src/sim/logros.js';
 import { createInitialState } from '../src/sim/state.js';
 import { restartState } from '../src/sim/legacy.js';
 
-test('los logros tienen niveles crecientes y un premio por nivel', () => {
+test('achievements have growing levels and a prize per level', () => {
   for (const l of LOGROS) {
     assert.equal(l.tiers.length, l.reward.length, l.id);
     for (let k = 1; k < l.tiers.length; k++) assert.ok(l.tiers[k] > l.tiers[k - 1], l.id);
@@ -13,7 +13,7 @@ test('los logros tienen niveles crecientes y un premio por nivel', () => {
   }
 });
 
-test('cada nivel se paga una sola vez, y varios a la vez si se alcanzan juntos', () => {
+test('each level pays out only once, and several at once if reached together', () => {
   const s = createInitialState();
   assert.deepEqual(checkLogros(s), []);
   s.stats.sold.coffee_bag = 200000;
@@ -23,7 +23,7 @@ test('cada nivel se paga una sola vez, y varios a la vez si se alcanzan juntos',
   assert.deepEqual(checkLogros(s), []);
 });
 
-test('lo de las partidas anteriores sigue contando al volver a empezar', () => {
+test('what earlier games did still counts on starting over', () => {
   const s = createInitialState();
   s.stats.sold.coffee_bag = 600;
   s.totalEarned = 5e8;
@@ -40,5 +40,5 @@ test('lo de las partidas anteriores sigue contando al volver a empezar', () => {
   assert.ok(Math.abs(metric(next, 'years') - 3) < 1e-9);
   const won = checkLogros(next).map((w) => w.logro.id);
   assert.ok(won.includes('bolsas'));
-  assert.ok(!won.includes('pueblo'), 'ya se había pagado en la partida anterior');
+  assert.ok(!won.includes('pueblo'), 'it had already been paid in the previous game');
 });

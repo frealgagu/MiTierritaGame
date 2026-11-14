@@ -11,7 +11,7 @@ import { writeMidi } from '../tools/midi.mjs';
 // volver a exportarlos: node tools/music-export.mjs && node tools/sfx-export.mjs && node tools/music-page.mjs
 const DIR = new URL('../web/musica/', import.meta.url).pathname;
 
-test('cada pieza tiene su MP3 y su MIDI, y la página la lista (las de regiones ocultas, todavía no)', () => {
+test('every piece has its MP3 and its MIDI, and the page lists it (not yet those of hidden regions)', () => {
   assert.deepEqual([...ORDER].sort(), Object.keys(SONGS).sort());
   const page = readFileSync(`${DIR}index.html`, 'utf8');
   // Regions still hidden (Bogotá, while under construction) are not published yet.
@@ -21,7 +21,7 @@ test('cada pieza tiene su MP3 y su MIDI, y la página la lista (las de regiones 
   }
 });
 
-test('cada efecto tiene su MP3 (y su MIDI si es de notas), y la página lo lista', () => {
+test('every sound effect has its MP3 (and its MIDI if it is made of notes), and the page lists it', () => {
   const page = readFileSync(`${DIR}index.html`, 'utf8');
   for (const [file, , midi] of EFFECTS) {
     assert.ok(existsSync(`${DIR}efectos/${file}.mp3`), file);
@@ -30,7 +30,7 @@ test('cada efecto tiene su MP3 (y su MIDI si es de notas), y la página lo lista
   }
 });
 
-test('anotar las notas para el MIDI no cambia lo que suena', () => {
+test('recording the notes for the MIDI does not change what plays', () => {
   const song = SONGS.costa;
   const plain = renderSong(song, 8000);
   const buf = createSong(song, 8000);
@@ -44,7 +44,7 @@ test('anotar las notas para el MIDI no cambia lo que suena', () => {
   assert.ok(buf.events.every((e) => e.voice));
 });
 
-test('el MIDI: cabecera, pistas y notas que se apagan', () => {
+test('the MIDI: header, tracks and notes that stop', () => {
   const mid = writeMidi({ ppq: 480, tempo: 100, timeSig: [3, 4], tracks: [{ name: 'Bandola', channel: 0, program: 25, notes: [{ tick: 0, dur: 960, note: 64, vel: 100 }, { tick: 480, dur: 480, note: 64, vel: 90 }] }] });
   assert.equal(mid.subarray(0, 4).toString(), 'MThd');
   assert.equal(mid.readUInt16BE(10), 2); // the tempo track and the bandola track

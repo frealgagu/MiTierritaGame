@@ -15,31 +15,31 @@ const vars = (s) => [...String(s).matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort(
 const LANGS = { en: ['inglés', UI], pt: ['portugués', UI_PT], fr: ['francés', UI_FR] };
 
 for (const [lang, [name, dict]] of Object.entries(LANGS)) {
-  test(`cada frase de la interfaz (t y tk) tiene su traducción al ${name}`, () => {
+  test(`every interface phrase (t and tk) has its ${name} translation`, () => {
     const missing = allKeys().filter((k) => !(k in dict));
-    assert.deepEqual(missing, [], `faltan en src/i18n/${lang}/ui: ${missing.slice(0, 10).join(' | ')}`);
+    assert.deepEqual(missing, [], `missing in src/i18n/${lang}/ui: ${missing.slice(0, 10).join(' | ')}`);
   });
 
-  test(`las traducciones de la interfaz al ${name} llevan las mismas variables`, () => {
+  test(`the ${name} interface translations carry the same variables`, () => {
     const bad = Object.entries(dict).filter(([es, tr]) => vars(es) !== vars(tr));
     assert.deepEqual(bad, []);
   });
 
   for (const part of Object.keys(PARTS).filter((p) => p !== 'research')) {
-    test(`contenido en ${name}: ${part} completo`, async () => {
+    test(`${name} content: ${part} complete`, async () => {
       const have = (await import(`../src/i18n/${lang}/content/${part}.js`)).default;
       const missing = Object.keys(PARTS[part]()).filter((id) => !(id in have));
       assert.deepEqual(missing, []);
     });
   }
 
-  test(`las investigaciones en ${name} tienen nombre y descripción`, async () => {
+  test(`research in ${name} has a name and a description`, async () => {
     const { researchTexts } = await import(`../src/i18n/${lang}/researchText.js`);
     const bad = Object.entries(researchTexts()).filter(([, [rname, desc]]) => !rname || !desc);
     assert.deepEqual(bad, []);
   });
 
-  test(`los logros en ${name} conservan {n}`, async () => {
+  test(`achievements in ${name} keep {n}`, async () => {
     const have = (await import(`../src/i18n/${lang}/content/logros.js`)).default;
     const es = PARTS.logros();
     const bad = Object.keys(es).filter((id) => vars(es[id][1]) !== vars(have[id][1]));
@@ -47,7 +47,7 @@ for (const [lang, [name, dict]] of Object.entries(LANGS)) {
   });
 }
 
-test('el idioma: el guardado, si no el del teléfono; el italiano juega en español', () => {
+test(`the language: the saved one, otherwise the phone's; Italian plays in Spanish`, () => {
   assert.equal(chooseLang('en', ['es-CO']), 'en');
   assert.equal(chooseLang('pt', ['es-CO']), 'pt');
   assert.equal(chooseLang(null, ['es-CO']), 'es');
@@ -61,7 +61,7 @@ test('el idioma: el guardado, si no el del teléfono; el italiano juega en espa�
   assert.equal(chooseLang('xx', ['es']), 'es');
 });
 
-test('t() pone las variables y sin diccionario deja el español', () => {
+test('t() fills the variables and without a dictionary leaves the Spanish', () => {
   useDict(null);
   assert.equal(t('Vende {list}', { list: '5 🍒' }), 'Vende 5 🍒');
   assert.equal(listJoin(['a', 'b', 'c']), 'a, b y c');
@@ -71,7 +71,7 @@ test('t() pone las variables y sin diccionario deja el español', () => {
   useDict(null);
 });
 
-test('al poner el inglés, los datos quedan en inglés', async () => {
+test('setting English, the data is in English', async () => {
   const { applyData } = await import('../src/i18n/en/index.js');
   applyData();
   const { STATIONS_BY_ID } = await import('../src/data/stations.js');
@@ -86,7 +86,7 @@ test('al poner el inglés, los datos quedan en inglés', async () => {
   assert.equal(withArticle('Wet Mill'), 'the Wet Mill');
 });
 
-test('al poner el portugués, los datos quedan en portugués, con su artículo', async () => {
+test('setting Portuguese, the data is in Portuguese, with its article', async () => {
   const { applyData } = await import('../src/i18n/pt/index.js');
   applyData();
   const { STATIONS_BY_ID } = await import('../src/data/stations.js');
@@ -108,7 +108,7 @@ test('al poner el portugués, los datos quedan en portugués, con su artículo',
   useDict(null);
 });
 
-test('al poner el francés, los datos quedan en francés, con su artículo y sus espacios', async () => {
+test('setting French, the data is in French, with its article and its spaces', async () => {
   const { applyData, UI: dict } = await import('../src/i18n/fr/index.js');
   applyData();
   const { STATIONS_BY_ID } = await import('../src/data/stations.js');

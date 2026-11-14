@@ -1,6 +1,6 @@
 // Converts dist/index.html into a page publishable as a claude.ai Artifact:
 // without <html>/<head>/<body> (the viewer provides its own skeleton) and with inline CSS.
-// Uso: npm run build && node tools/artifact-page.mjs
+// Usage: npm run build && node tools/artifact-page.mjs
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const html = readFileSync('dist/index.html', 'utf8');
@@ -17,4 +17,4 @@ ${body}
 ${script}
 `;
 writeFileSync('dist/artifact.html', page);
-console.log('dist/artifact.html listo');
+console.log('dist/artifact.html ready');

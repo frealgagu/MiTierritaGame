@@ -1,6 +1,10 @@
-// Release notes for recent versions, extracted from CHANGELOG.md (v3.6.1): used by vite.config.js to
+// One CHANGELOG per game language (v5.6): English in CHANGELOG.md, the others in CHANGELOG.<lang>.md. Every file
+// lists the same versions in the same order.
+export const CHANGELOGS = { en: 'CHANGELOG.md', es: 'CHANGELOG.es.md', pt: 'CHANGELOG.pt.md', fr: 'CHANGELOG.fr.md' };
+
+// Release notes for recent versions, extracted from a CHANGELOG (v3.6.1): used by vite.config.js to
 // publish version.json, which the Android app fetches on startup to notify about new versions.
-//   [{ version: '3.6.0', title: 'Eventos de Santander', items: ['Seis eventos nuevos…', …] }, …]
+//   [{ version: '3.6.0', title: 'Santander events', items: ['Six new events…', …] }, …]
 // Only top-level bullets per version (not nested ones), without bold or code formatting.
 export function releaseNotes(changelog, max = 5) {
   const out = [];

@@ -21,6 +21,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const r = idleTime(def);
     const [g, s] = def.objective.medals;
     const flag = !r.done ? 'NO LLEGA' : r.t <= s ? 'PLATA SOLO' : 'ok';
-    console.log(`${def.id.padEnd(24)} sin hacer nada ${r.done ? mmss(r.t) : `${Math.round(r.progress * 100)} %`} · 🥇 ${mmss(g)} 🥈 ${mmss(s)} · ${flag}`);
+    console.log(`${def.id.padEnd(24)} idle ${r.done ? mmss(r.t) : `${Math.round(r.progress * 100)} %`} · 🥇 ${mmss(g)} 🥈 ${mmss(s)} · ${flag}`);
   }
 }

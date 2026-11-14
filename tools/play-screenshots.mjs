@@ -1,13 +1,13 @@
 // Screenshots for the Google Play Store listing (1080×1920): an advanced save built with dev mode.
-// Usage: `npx vite --port 5199` and, in another terminal, `node tools/capturas-play.mjs store/capturas [lang]`
-// (v3.68: with `en`, English screenshots, e.g. `node tools/capturas-play.mjs store/capturas-en en`;
+// Usage: `npx vite --port 5199` and, in another terminal, `node tools/play-screenshots.mjs store/screenshots-es [lang]`
+// (v3.68: with `en`, English screenshots, e.g. `node tools/play-screenshots.mjs store/screenshots-en en`;
 //  v3.70: also `pt` and `fr`)
 // (requires Playwright; CHROMIUM can specify the browser binary).
 import { chromium } from 'playwright-core';
-const out = process.argv[2] ?? 'store/capturas';
+const out = process.argv[2] ?? 'store/screenshots-es';
 const lang = process.argv[3] ?? 'es';
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM, args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
-// 405×720 a 2,667 = 1080×1920 (9:16)
+// 405×720 at 2.667 = 1080×1920 (9:16)
 const page = await browser.newPage({ viewport: { width: 405, height: 720 }, deviceScaleFactor: 1080 / 405, hasTouch: true });
 const errs = []; page.on('pageerror', (e) => errs.push(e.message));
 await page.addInitScript((l) => localStorage.setItem('mitierrita-lang', l), lang);
@@ -66,23 +66,23 @@ const shot = async (name, wait = 4000) => { await page.waitForTimeout(wait); awa
 
 await go('finca');
 await develop('finca', 'cafetero', 2.47e9);
-await shot('1-finca', 8000);
+await shot('1-farm', 8000);
 await page.evaluate(() => window.__mitierrita.panel.open('roaster'));
-await shot('2-estacion', 1200);
+await shot('2-station', 1200);
 await page.evaluate(() => window.__mitierrita.panel.close());
 await page.click('#chain-btn');
-await shot('3-cadena', 1200);
+await shot('3-chain', 1200);
 await hideModals();
 await go('sombrero');
 for (const z of regions.costa) await develop(z, 'costa', 8.3e7, z === 'sombrero' ? 250 : 0);
-await shot('4-sombrero', 8000);
+await shot('4-hat-workshop', 8000);
 // Since v3.67 the zones button opens the map (or the list, if that was used last).
 await page.evaluate(() => (window.__mitierrita.root.state.settings.zonesView = 'map'));
 await page.click('#zones-btn');
-await shot('5-mapa', 2500);
+await shot('5-map', 2500);
 await hideModals();
 await page.evaluate(() => Object.assign(window.__mitierrita.root.state.settings, { zonesView: 'list', zonesFold: { cafetero: true, santander: true, costa: false } }));
 await page.click('#zones-btn');
-await shot('6-zonas', 1200);
+await shot('6-zones', 1200);
 console.log('errores:', errs.join('; ') || 'ninguno');
 await browser.close();

@@ -83,7 +83,7 @@ npm run android:apk   # builds web bundle, syncs to android/, compiles app-debug
 - **CI Publishing (`.github/workflows/pages.yml`)**: Every push to `main` runs `npm test`, builds the web app + `mitierrita.apk`, publishes the downloadable `/musica/` assets + `.zip` bundle to GitHub Pages, and (when `PLAY_UPLOAD_KEYSTORE_*` secrets are configured) builds a Play-ready `mitierrita.aab` (`PLAY_STORE=1 npm run android:sync && cd android && ./gradlew bundleRelease`) with the self-updater disabled.
 - **Test APK signing**: Uses `ANDROID_KEYSTORE_*` repository secrets when set, falling back to `android/app/mitierrita-pruebas.keystore` so test builds upgrade cleanly without losing save data.
 - **Voluntary Tips (`src/tip.js`)**: Play Store builds include voluntary consumable Google Play Billing tips (`tinto`, `arepa`, `almuerzo`) via `@capgo/native-purchases` behind an age/math gate; web builds support `KOFI_URL` when configured.
-- Store listings, screenshots, and privacy policy live in `store/` (`ficha*.md`, `capturas*/`) and `public/privacidad.html`.
+- Store listings, screenshots, and privacy policy live in `store/` (`listing-*.md`, `screenshots-*/`) and `public/privacidad.html` (and `privacy.html`, `privacidade.html`, `confidentialite.html`).
 
 ### Install on Mobile (PWA)
 Open **https://frealgagu.github.io/MiTierritaGame/** and use *Add to Home Screen* (Safari Share menu, or Chrome ⋮ → *Install app*).
@@ -127,7 +127,7 @@ tools/
 ├─ release-notes.js       extracts version notes from CHANGELOG.md into version.json
 ├─ map-coords.mjs         generates docs/coordenadas.html map & airport coordinate verifier
 ├─ production-page.mjs    generates docs/produccion.html level 1–100 production tables
-├─ capturas-play.mjs      Playwright screenshot generator for Play Store listings
+├─ play-screenshots.mjs      Playwright screenshot generator for Play Store listings
 ├─ artifact-page.mjs      self-contained single-file HTML build helper
 ├─ geo/build_map.py       builds src/data/colombiaMap.js from geographic borders
 └─ icons/build_icons.py   compiles custom SVGs into mitierrita-icons.woff2 & src/data/icons.js

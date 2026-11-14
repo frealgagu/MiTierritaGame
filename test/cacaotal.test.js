@@ -35,7 +35,7 @@ function withCacaotal(level = 30) {
   return game;
 }
 
-test('la pasta de cacao se reparte entre la Mesa y la Chocolatería, la mitad cada una', () => {
+test('cacao paste is split between the Mesa and the Chocolatería, half each', () => {
   assert.deepEqual(CHILDREN.cacao_mill, ['chocolate_table', 'chocolatier']);
   const game = withCacaotal();
   const s = game.state;
@@ -46,10 +46,10 @@ test('la pasta de cacao se reparte entre la Mesa y la Chocolatería, la mitad ca
   const a = analyzeChain(s, 'cacaotal');
   const row = (id) => a.rows.find((r) => r.id === id);
   const paste = row('cacao_mill').output;
-  for (const id of ['chocolate_table', 'chocolatier']) assert.ok(Math.abs(row(id).capacity - paste / 2) < 1e-9, `${id}: ${row(id).capacity} de ${paste}`);
+  for (const id of ['chocolate_table', 'chocolatier']) assert.ok(Math.abs(row(id).capacity - paste / 2) < 1e-9, `${id}: ${row(id).capacity} of ${paste}`);
 });
 
-test('la Chocolatería necesita panela y leche: si falta una, se para', () => {
+test('the Chocolatería needs panela and milk: if one is missing, it stops', () => {
   const game = withCacaotal();
   const s = game.state;
   const st = s.stations.chocolatier;
@@ -60,10 +60,10 @@ test('la Chocolatería necesita panela y leche: si falta una, se para', () => {
   assert.equal(st.status, 'starved');
   st.imported = { panela_powder: 50, milk: 100 };
   run(game, 20);
-  assert.ok((s.stats.produced.milk_chocolate ?? 0) > 0, 'con las dos, trabaja');
+  assert.ok((s.stats.produced.milk_chocolate ?? 0) > 0, 'with both, it works');
 });
 
-test('una ruta que abastece dos estaciones les reparte la carga', () => {
+test('a route that supplies two stations splits the load between them', () => {
   const game = withCacaotal();
   const s = game.state;
   for (const id of ['chocolate_table', 'chocolatier']) s.stations[id].imported = {};
@@ -80,7 +80,7 @@ test('una ruta que abastece dos estaciones les reparte la carga', () => {
   assert.ok(a > 0 && b > 0, `mesa ${a}, chocolatería ${b}`);
 });
 
-test('dos rutas que sacan panela del Trapiche se reparten lo que hay', () => {
+test('two routes taking panela from the Trapiche split what there is', () => {
   const game = withCacaotal();
   const s = game.state;
   // Trapiche falls short: not enough for all three stations demanding panela.
@@ -88,12 +88,12 @@ test('dos rutas que sacan panela del Trapiche se reparten lo que hay', () => {
   s.stations.pulverizer.transport.level = 10;
   const supply = analyzeChain(s, 'trapiche', { exports: false }).rows.at(-1).diverted;
   const both = routeFlow(s, 'panela') + routeFlow(s, 'panela_cacao');
-  assert.ok(Math.abs(both - supply) < 1e-9, `${both} de ${supply}`);
+  assert.ok(Math.abs(both - supply) < 1e-9, `${both} of ${supply}`);
   // The Cacaotal route supplies two stations: carries twice as much as the Lechería route.
   assert.ok(Math.abs(routeFlow(s, 'panela_cacao') - 2 * routeFlow(s, 'panela')) < 1e-9);
 });
 
-test('a igual nivel en todas las zonas, las rutas llevan justo lo que piden las estaciones', async () => {
+test('at the same level in every zone, routes carry just what the stations ask for', async () => {
   const { stationImportRate } = await import('../src/sim/routes.js');
   const { ROUTES_BY_ID } = await import('../src/data/routes.js');
   const game = withCacaotal();
@@ -101,20 +101,20 @@ test('a igual nivel en todas las zonas, las rutas llevan justo lo que piden las 
   // Pasteurizadora reserves a quarter of its milk for Chocolatería: none is bypassed.
   const lech = analyzeChain(s, 'lecheria');
   assert.ok(lech.rows.find((r) => r.id === 'pasteurizer').diverted < 1e-9);
-  assert.ok(Math.abs(routeFlow(s, 'leche') - stationImportRate(s, ROUTES_BY_ID.leche, 'chocolatier')) < 1e-9, 'llega toda la leche');
+  assert.ok(Math.abs(routeFlow(s, 'leche') - stationImportRate(s, ROUTES_BY_ID.leche, 'chocolatier')) < 1e-9, 'all the milk arrives');
   // Panela for Paila, Mesa, and Chocolatería is ¾ of Trapiche's output.
   const panela = routeFlow(s, 'panela') + routeFlow(s, 'panela_cacao');
   const made = analyzeChain(s, 'trapiche', { exports: false }).rows.at(-1).diverted;
-  assert.ok(Math.abs(panela - made * 0.75) < 1e-9, `${panela} de ${made}`);
+  assert.ok(Math.abs(panela - made * 0.75) < 1e-9, `${panela} of ${made}`);
   // And in the simulation nobody stalls waiting for imports.
   run(game, 400);
   for (const id of ['arequipe_pot', 'chocolate_table', 'chocolatier']) {
     const st = s.stations[id];
-    assert.ok(!(st.status === 'starved' && st.idle > 8), `${id} esperando ${st.missing}`);
+    assert.ok(!(st.status === 'starved' && st.idle > 8), `${id} waiting for ${st.missing}`);
   }
 });
 
-test('una partida de la v1.2 se carga: lo importado pasa a ir por producto y se abre el Cacaotal', async () => {
+test('a v1.2 save loads: imports become per product and the Cacaotal opens', async () => {
   const { loadGame } = await import('../src/core/SaveSystem.js');
   const old = new Game().state;
   old.version = 6;
@@ -134,7 +134,7 @@ test('una partida de la v1.2 se carga: lo importado pasa a ir por producto y se 
   assert.equal(s.routes.leche.level, 1);
 });
 
-test('al nivel 100 en todas las zonas, con todas las investigaciones, ningún patio se llena', async () => {
+test('at level 100 in every zone, with all the research, no yard fills up', async () => {
   const { RESEARCH } = await import('../src/data/research.js');
   const game = withCacaotal(100);
   const s = game.state;

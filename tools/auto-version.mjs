@@ -1,11 +1,11 @@
 // Automatic version bump for the publish workflow (.github/workflows/pages.yml).
 //   node tools/auto-version.mjs <published version>
 // When package.json still has the version that is already published (a commit that did not bump it, e.g. one made
-// from AI Studio), bumps the patch number in package.json and package-lock.json and adds a CHANGELOG entry, so the
+// from AI Studio), bumps the patch number in package.json and package-lock.json and adds an entry to each CHANGELOG, so the
 // web, the APK update check and Google Play all see a new version. A version that was already bumped by hand (with its
 // own CHANGELOG notes) is left as is. Prints the new version, or nothing when there was nothing to do.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { isNewer } from './release-notes.js';
+import { CHANGELOGS, isNewer } from './release-notes.js';
 
 const root = new URL('../', import.meta.url);
 const read = (f) => readFileSync(new URL(f, root), 'utf8');
@@ -29,11 +29,14 @@ lock.version = next;
 if (lock.packages?.['']) lock.packages[''].version = next;
 write('package-lock.json', `${JSON.stringify(lock, null, 2)}\n`);
 
-// The release notes shown in the app come from the first CHANGELOG entry (tools/release-notes.js): a title and at
-// least one item. The text is in Spanish, like the rest of the CHANGELOG.
-const changelog = read('CHANGELOG.md');
-const entry = `## v${next} — Ajustes\n- Ajustes y mejoras.\n\n`;
-const at = changelog.indexOf('## v');
-write('CHANGELOG.md', at < 0 ? `${changelog}\n${entry}` : changelog.slice(0, at) + entry + changelog.slice(at));
+// The release notes shown in the app come from the first entry of each CHANGELOG (tools/release-notes.js): a title and
+// at least one item, in the language of that CHANGELOG.
+const TWEAKS = { en: ['Tweaks', 'Tweaks and improvements.'], es: ['Ajustes', 'Ajustes y mejoras.'], pt: ['Ajustes', 'Ajustes e melhorias.'], fr: ['Ajustements', 'Ajustements et améliorations.'] };
+for (const [lang, file] of Object.entries(CHANGELOGS)) {
+  const changelog = read(file);
+  const entry = `## v${next} — ${TWEAKS[lang][0]}\n- ${TWEAKS[lang][1]}\n\n`;
+  const at = changelog.indexOf('## v');
+  write(file, at < 0 ? `${changelog}\n${entry}` : changelog.slice(0, at) + entry + changelog.slice(at));
+}
 
 console.log(next);

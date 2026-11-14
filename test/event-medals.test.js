@@ -9,7 +9,7 @@ import { play } from '../tools/event-bots.js';
 // Medals are calibrated with tools/event-sim.js; if a simulation change puts them out of
 // reach, this test catches it.
 for (const def of EVENTS) {
-  test(`${def.icon} ${def.name}: el oro se puede lograr`, () => {
+  test(`${def.icon} ${def.name}: gold can be achieved`, () => {
     const gold = def.objective.medals[0];
     const times = [];
     for (const [style, save] of [['rec', 120], ['mix', 30]]) {

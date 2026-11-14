@@ -13,7 +13,7 @@ function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-test('una estación nunca usa más mulas de las que tiene', () => {
+test('a station never uses more mules than it has', () => {
   const game = new Game();
   game.state.stations.farm.level = 30;
   for (let t = 0; t < 60; t += 0.1) {
@@ -22,7 +22,7 @@ test('una estación nunca usa más mulas de las que tiene', () => {
   }
 });
 
-test('las mulas vuelven vacías y quedan libres', () => {
+test('the mules come back empty and are freed', () => {
   const game = new Game();
   const arrived = [];
   game.bus.on('muleArrived', (m) => arrived.push(m.id));
@@ -31,7 +31,7 @@ test('las mulas vuelven vacías y quedan libres', () => {
   assert.ok(game.state.mules.every((m) => m.phase === 'go' || m.amount === 0));
 });
 
-test('a igual nivel, los arrieros llevan todo lo que produce su estación (en el análisis)', () => {
+test('at the same level, mule drivers carry everything their station makes (in the analysis)', () => {
   const cases = [
     () => {}, // only the cafetal: long trip to the warehouse
     (g) => ['wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer'].forEach((id) => g.unlock(id)),
@@ -50,13 +50,13 @@ test('a igual nivel, los arrieros llevan todo lo que produce su estación (en el
         st.transport.level = level;
       }
       for (const row of analyzeChain(game.state).rows) {
-        assert.ok(row.transport >= row.output * 1.2, `${row.id} nv ${level}: llevan ${row.transport} de ${row.output}`);
+        assert.ok(row.transport >= row.output * 1.2, `${row.id} lv ${level}: they carry ${row.transport} of ${row.output}`);
       }
     }
   }
 });
 
-test('a igual nivel, el patio del cafetal no se llena por falta de mulas (simulación real)', () => {
+test(`at the same level, the coffee field's yard does not fill for lack of mules (real simulation)`, () => {
   for (const research of [[], ['abono', 'despulpadora']]) {
     const game = new Game();
     game.state.research.push(...research);
@@ -64,14 +64,14 @@ test('a igual nivel, el patio del cafetal no se llena por falta de mulas (simula
     game.state.stations.farm.transport.level = 30;
     game.state.zones.finca.dispatch.level = 80;
     run(game, 300);
-    assert.notEqual(game.state.stations.farm.status, 'blocked', `con ${research.join(', ') || 'nada'}`);
+    assert.notEqual(game.state.stations.farm.status, 'blocked', `with ${research.join(', ') || 'nothing'}`);
     const produced = game.state.stats.produced.cherry ?? 0;
     const sold = game.state.stats.sold.cherry ?? 0;
-    assert.ok(sold > produced * 0.85, `vendidas ${sold} de ${produced} producidas`);
+    assert.ok(sold > produced * 0.85, `sold ${sold} of ${produced} produced`);
   }
 });
 
-test('arrieros por debajo del nivel de la estación son el cuello de botella', () => {
+test(`mule drivers below the station's level are the bottleneck`, () => {
   const game = new Game();
   game.state.stations.farm.level = 30;
   game.state.stations.farm.transport.level = 15;
@@ -79,7 +79,7 @@ test('arrieros por debajo del nivel de la estación son el cuello de botella', (
   assert.equal(analyzeChain(game.state).bottleneck, 'farm:transport');
 });
 
-test('mejorar a los arrieros rezagados aumenta lo que se vende', () => {
+test('upgrading the lagging mule drivers increases what is sold', () => {
   const slow = new Game();
   const fast = new Game();
   for (const g of [slow, fast]) {
@@ -93,7 +93,7 @@ test('mejorar a los arrieros rezagados aumenta lo que se vende', () => {
   assert.ok(fast.state.coins > slow.state.coins * 1.5, `${fast.state.coins} vs ${slow.state.coins}`);
 });
 
-test('si los arrieros no dan abasto, el patio se llena por falta de mulas', () => {
+test('if the mule drivers cannot keep up, the yard fills for lack of mules', () => {
   const game = new Game();
   game.state.stations.farm.level = 50;
   game.state.zones.finca.dispatch.level = 50;
@@ -102,7 +102,7 @@ test('si los arrieros no dan abasto, el patio se llena por falta de mulas', () =
   assert.equal(game.state.stations.farm.waiting, 'mules');
 });
 
-test('si el Beneficiadero va atrasado, el patio lleno del Cafetal es culpa suya, no de las mulas', async () => {
+test(`if the Beneficiadero is behind, the Cafetal's full yard is its fault, not the mules'`, async () => {
   const { slowConsumers } = await import('../src/sim/transport.js');
   const game = new Game();
   const s = game.state;

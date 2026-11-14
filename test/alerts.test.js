@@ -20,7 +20,7 @@ function fake() {
   return { st, run };
 }
 
-test('un patio lleno un momento no es un aviso; si dura, sí', () => {
+test('a yard full for a moment is not a warning; if it lasts, it is', () => {
   const { st, run } = fake();
   run('working', 10);
   run('blocked', 3); // one third of the window: normal with batched mules
@@ -36,7 +36,7 @@ test('un patio lleno un momento no es un aviso; si dura, sí', () => {
   assert.equal(alerts(st).blocked, false);
 });
 
-test('esperar entre tanda y tanda no es un aviso; quedarse sin nada largo rato, sí', () => {
+test('waiting between batches is not a warning; being left with nothing for a long time is', () => {
   const { st, run } = fake();
   // Delivery arrives every 5 s: waits half the time, but never 8 s straight.
   for (let k = 0; k < 12; k++) {
@@ -48,7 +48,7 @@ test('esperar entre tanda y tanda no es un aviso; quedarse sin nada largo rato, 
   assert.equal(alerts(st).starved, true);
 });
 
-test('la Finca nivelada no avisa nada; con los arrieros atrás, avisa que no dan abasto', () => {
+test('a leveled Finca warns nothing; with the mule drivers behind, it warns they cannot keep up', () => {
   const game = new Game();
   const s = game.state;
   s.coins = 1e12;
@@ -60,7 +60,7 @@ test('la Finca nivelada no avisa nada; con los arrieros atrás, avisa que no dan
     game.step(0.1);
     for (const [id, st] of Object.entries(s.stations)) {
       const a = alerts(st);
-      assert.ok(!a.blocked && !a.starved && !a.diverting, `${id} avisa ${JSON.stringify(a)}`);
+      assert.ok(!a.blocked && !a.starved && !a.diverting, `${id} warns ${JSON.stringify(a)}`);
     }
     assert.equal(alerts(s.zones.finca).full, false);
   }

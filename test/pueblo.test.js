@@ -35,7 +35,7 @@ function withPueblo(level = 30) {
 
 const PUEBLO_ROUTES = ROUTES.filter((r) => r.to === 'pueblo').map((r) => r.id);
 
-test('el Pueblo no tiene fuente: la Casa del café reparte su café entre la Greca y el Taller', () => {
+test('the Pueblo has no source: the Casa del café splits its coffee between the Greca and the Taller', () => {
   assert.deepEqual(CHILDREN.coffee_house, ['greca', 'basket_shop']);
   assert.deepEqual(CHILDREN.greca, ['fonda']);
   assert.deepEqual(CHILDREN.basket_shop, ['gift_wrap']);
@@ -43,27 +43,27 @@ test('el Pueblo no tiene fuente: la Casa del café reparte su café entre la Gre
   assert.equal(PUEBLO_ROUTES.length, 6);
 });
 
-test('a igual nivel, cada zona manda justo lo que el Pueblo gasta', () => {
+test('at the same level, every zone sends just what the Pueblo uses', () => {
   const game = withPueblo();
   const s = game.state;
   for (const id of PUEBLO_ROUTES) {
     const r = ROUTES_BY_ID[id];
     const need = r.stations.reduce((n, st) => n + stationImportRate(s, r, st), 0);
-    assert.ok(Math.abs(routeFlow(s, id) - need) < 1e-9, `${id}: ${routeFlow(s, id)} de ${need}`);
+    assert.ok(Math.abs(routeFlow(s, id) - need) < 1e-9, `${id}: ${routeFlow(s, id)} of ${need}`);
   }
   const a = analyzeChain(s, 'pueblo');
   for (const row of a.rows) {
-    if (row.imported) assert.equal(row.importLimited, null, `${row.id} espera ${row.importLimited}`);
+    if (row.imported) assert.equal(row.importLimited, null, `${row.id} waits for ${row.importLimited}`);
     // Nothing is lost or bypassed: each station processes everything that arrives.
-    assert.ok(row.lost < 1e-9 && (row.children.length === 0 || row.diverted < 1e-9), `${row.id} desvía ${row.diverted}`);
+    assert.ok(row.lost < 1e-9 && (row.children.length === 0 || row.diverted < 1e-9), `${row.id} diverts ${row.diverted}`);
   }
   // The panela routes split everything Trapiche makes, leaving nothing to sell.
   const panela = ['panela', 'panela_cacao', 'panela_pueblo'].reduce((n, id) => n + routeFlow(s, id), 0);
   const pulverizer = analyzeChain(s, 'trapiche').rows.find((r) => r.id === 'pulverizer');
-  assert.ok(Math.abs(panela - pulverizer.output) < 1e-9, `${panela} de ${pulverizer.output}`);
+  assert.ok(Math.abs(panela - pulverizer.output) < 1e-9, `${panela} of ${pulverizer.output}`);
 });
 
-test('el Pueblo ingresa más de lo que dejan de vender las zonas que lo abastecen', () => {
+test('the Pueblo earns more than what the zones that supply it stop selling', () => {
   const game = withPueblo();
   const s = game.state;
   const zones = ['finca', 'trapiche', 'lecheria', 'cacaotal', 'maizal'];
@@ -71,21 +71,21 @@ test('el Pueblo ingresa más de lo que dejan de vender las zonas que lo abastece
   // Without Pueblo (its stations off), the exact same amount would be sold in each zone.
   const off = { ...s, zones: { ...s.zones, pueblo: { ...s.zones.pueblo, unlocked: false } } };
   const without = zones.reduce((n, z) => n + analyzeChain(off, z).income, 0);
-  assert.ok(withPueblo_ > 3 * without, `${withPueblo_} frente a ${without}`);
+  assert.ok(withPueblo_ > 3 * without, `${withPueblo_} versus ${without}`);
 });
 
-test('las chivas llegan al Pueblo y sale el primer contenedor', () => {
+test('the chivas reach the Pueblo and the first container leaves', () => {
   const game = withPueblo();
   run(game, 900);
   const s = game.state;
   for (const p of ['coffee_bag', 'panela_powder', 'cheese_arepa', 'arequipe', 'table_chocolate', 'milk_chocolate']) {
-    assert.ok((s.stats.imported[p] ?? 0) > 0, `llegó ${p}`);
+    assert.ok((s.stats.imported[p] ?? 0) > 0, `${p} arrived`);
   }
-  assert.ok((s.stats.sold.breakfast ?? 0) > 0, 'vendió desayunos');
-  assert.ok((s.stats.sold.container ?? 0) > 0, 'exportó contenedores');
+  assert.ok((s.stats.sold.breakfast ?? 0) > 0, 'it sold breakfasts');
+  assert.ok((s.stats.sold.container ?? 0) > 0, 'it exported containers');
 });
 
-test('sin bolsas de café, la Casa del café espera y lo dice', () => {
+test('without coffee bags, the Casa del café waits and says so', () => {
   const game = withPueblo();
   const s = game.state;
   s.stations.coffee_house.imported = {};
@@ -102,10 +102,10 @@ test('sin bolsas de café, la Casa del café espera y lo dice', () => {
   const row = analyzeChain(s, 'pueblo').rows.find((r) => r.id === 'coffee_house');
   assert.equal(row.importLimited, 'cafe');
   const rec = recommendUpgrade(s, (id, mode) => game.quote(id, mode), 'pueblo');
-  assert.ok(rec.id.startsWith('packer') || rec.id.startsWith('route:cafe'), `recomendó ${rec.id}`);
+  assert.ok(rec.id.startsWith('packer') || rec.id.startsWith('route:cafe'), `it recommended ${rec.id}`);
 });
 
-test('un Patio de contenedores recién construido: se recomienda subirlo junto con sus arrieros', () => {
+test('a newly built Container yard: raising it together with its mule drivers is recommended', () => {
   const game = withPueblo(40);
   const s = game.state;
   // Like in a casual test save: Patio at level 5 and its haulers at 1 get nothing out.
@@ -116,7 +116,7 @@ test('un Patio de contenedores recién construido: se recomienda subirlo junto c
   assert.ok(rec.gain > 0);
 });
 
-test('si la Fonda espera arepas y el Maizal espera queso, la recomendación señala la Lechería', () => {
+test('if the Fonda waits for arepas and the Maizal waits for cheese, the recommendation points to the Lechería', () => {
   const game = withPueblo(40);
   const s = game.state;
   // Maizal and Fonda far ahead of Lechería: what is truly missing is cheese.
@@ -126,10 +126,10 @@ test('si la Fonda espera arepas y el Maizal espera queso, la recomendación señ
   s.coins = 0; // with no money for research
   const rec = recommendUpgrade(s, (id, mode) => game.quote(id, mode), 'pueblo');
   const [sid] = rec.id.split(':');
-  assert.ok(['pasture', 'pasteurizer', 'cheesery', 'separator', 'churn'].includes(sid), `recomendó ${rec.id}`);
+  assert.ok(['pasture', 'pasteurizer', 'cheesery', 'separator', 'churn'].includes(sid), `it recommended ${rec.id}`);
 });
 
-test('al nivel 100 en las seis zonas, con todas las investigaciones, ningún patio se llena', async () => {
+test('at level 100 in the six zones, with all the research, no yard fills up', async () => {
   const { RESEARCH } = await import('../src/data/research.js');
   const game = withPueblo(100);
   const s = game.state;
@@ -143,18 +143,18 @@ test('al nivel 100 en las seis zonas, con todas las investigaciones, ningún pat
   assert.deepEqual(blocked, {});
 });
 
-test('la mejora recomendada del Pueblo se calcula rápido aunque mire cinco zonas', () => {
+test(`the Pueblo's recommended upgrade is computed quickly even though it looks at five zones`, () => {
   const game = withPueblo(40);
   const s = game.state;
   s.stations.fonda.level = 20;
   const t0 = performance.now();
   const rec = recommendUpgrade(s, (id, mode) => game.quote(id, mode), 'pueblo');
   const ms = performance.now() - t0;
-  assert.ok(rec, 'recomienda algo');
+  assert.ok(rec, 'it recommends something');
   assert.ok(ms < 400, `${ms.toFixed(0)} ms`);
 });
 
-test('una partida de la v1.4 con el Maizal completo abre el Pueblo', async () => {
+test('a v1.4 save with the Maizal complete opens the Pueblo', async () => {
   const { loadGame } = await import('../src/core/SaveSystem.js');
   const old = new Game().state;
   old.version = 8;
@@ -166,6 +166,6 @@ test('una partida de la v1.4 con el Maizal completo abre el Pueblo', async () =>
   const s = loadGame();
   delete globalThis.localStorage;
   assert.equal(s.zones.pueblo.unlocked, true);
-  assert.ok(s.stations.coffee_house, 'la Casa del café está en la plaza');
+  assert.ok(s.stations.coffee_house, 'the Casa del café is on the plaza');
   assert.equal(s.routes.cafe.level, 1);
 });

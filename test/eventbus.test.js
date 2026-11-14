@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 
-test('si un oyente falla, la compra sigue y los demás oyentes se enteran', () => {
+test('if a listener fails, the purchase goes on and the other listeners hear about it', () => {
   const game = new Game();
   game.state.coins = 1e6;
   const seen = [];

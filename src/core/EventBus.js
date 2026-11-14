@@ -18,7 +18,7 @@ export class EventBus {
       try {
         fn(payload);
       } catch (err) {
-        console.error(`Error en el evento «${type}»:`, err);
+        console.error(`Error in event «${type}»:`, err);
       }
     }
   }

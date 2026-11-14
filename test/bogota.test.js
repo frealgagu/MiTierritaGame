@@ -11,30 +11,30 @@ import { ZONES_BY_ID } from '../src/data/zones/index.js';
 // Bogotá (v4.5): the region with no native source, where everything arrives by tractomula with endless cargo. Since v4.6,
 // a station network instead of neighborhoods.
 
-test('la partida de Bogotá tiene sus tractomulas, y ninguna otra región las tiene', () => {
+test('the Bogotá game has its trucks, and no other region has them', () => {
   const s = createInitialState(0, 'bogota');
   const tractomulas = ROUTES.filter((r) => r.unlimited).map((r) => r.id);
   assert.ok(tractomulas.length >= 7);
-  for (const id of tractomulas) assert.ok(s.routes[id], `${id} falta en Bogotá`);
+  for (const id of tractomulas) assert.ok(s.routes[id], `${id} missing in Bogotá`);
   assert.deepEqual(Object.keys(s.routes).sort(), [...tractomulas].sort());
   for (const r of ROUTES.filter((x) => x.unlimited)) assert.equal(routeRegion(r), 'bogota');
   assert.ok(!createInitialState(0, 'cundinamarca').routes.tm_cafe);
 });
 
-test('la tractomula trae carga sin bodega de origen y el Tostadero produce', () => {
+test('the truck brings cargo without a source warehouse and the Tostadero produces', () => {
   const s = createInitialState(0, 'bogota');
-  assert.ok(s.stations.tostadero_chorro, 'el Tostadero viene construido');
+  assert.ok(s.stations.tostadero_chorro, 'the Tostadero comes built');
   assert.ok(routeActive(s, 'tm_cafe'));
   const game = new Game(s);
   for (let i = 0; i < 1200; i++) game.step(0.1); // 2 minutos
-  assert.ok(s.stats.imported.coffee_bag > 0, 'llegó café');
-  assert.ok(s.stats.produced.cafe_capitalino > 0, 'se tostó café');
-  assert.ok(s.coins > 0, 'se vendió algo');
+  assert.ok(s.stats.imported.coffee_bag > 0, 'coffee arrived');
+  assert.ok(s.stats.produced.cafe_capitalino > 0, 'coffee was roasted');
+  assert.ok(s.coins > 0, 'something was sold');
   // Route doesn't depend on any warehouse: moves what the station requests (up to carry capacity).
   assert.ok(routeFlow(s, 'tm_cafe') > 0);
 });
 
-test('Bogotá se abre al completar Zipaquirá, publicada y sin obra (v4.5)', async () => {
+test('Bogotá opens upon completing Zipaquirá, published and without construction (v4.5)', async () => {
   const { REGIONS_BY_ID } = await import('../src/data/regions.js');
   assert.ok(!REGIONS_BY_ID.bogota.hidden && !REGIONS_BY_ID.bogota.wip);
   const root = createInitialState(0);
@@ -45,7 +45,7 @@ test('Bogotá se abre al completar Zipaquirá, publicada y sin obra (v4.5)', asy
   assert.ok(regionState(root, 'bogota').zones.bogota.unlocked);
 });
 
-test('en red (v4.6): al empezar se pueden construir varias a la vez, baratas, y cada una cuando ya están las que la abastecen', async () => {
+test('networked (v4.6): at the start several can be built at once, cheaply, each one once the ones that supply it are there', async () => {
   const { buildableStations, suppliersOf } = await import('../src/sim/chain.js');
   const { quoteUnlock } = await import('../src/sim/upgrades.js');
   const { STATIONS_BY_ID } = await import('../src/data/stations.js');
@@ -65,18 +65,18 @@ test('en red (v4.6): al empezar se pueden construir varias a la vez, baratas, y 
   assert.ok(STATIONS_BY_ID.gran_feria.unlockCost >= 1e9);
 });
 
-test('la Fritanga junta lo de tres estaciones (con el chicharrón de la Cocina, sin mulas) y trabaja', () => {
+test(`the Fritanga joins what three stations make (with the Cocina's chicharrón, without mules) and works`, () => {
   const s = createInitialState(0, 'bogota');
   s.coins = 1e9;
   const game = new Game(s);
   for (const id of ['despensa_zona_g', 'puesto_frutas', 'cocina_entradas', 'pescaderia_plaza', 'fritanga_plaza']) assert.ok(game.unlock(id), id);
   for (let i = 0; i < 6000; i++) game.step(0.1); // 10 minutos
-  assert.ok(s.stats.produced.chicharron > 0, 'la Cocina sacó chicharrón');
-  assert.ok(s.stats.produced.desayuno_plaza > 0, 'salió algún desayuno');
-  for (const p of ['alino_box', 'criollas_box', 'juice_box', 'trucha_ahumada', 'lechona']) assert.ok(s.stats.imported[p] > 0, `llegó ${p}`);
+  assert.ok(s.stats.produced.chicharron > 0, 'the Cocina made chicharrón');
+  assert.ok(s.stats.produced.desayuno_plaza > 0, 'some breakfast came out');
+  for (const p of ['alino_box', 'criollas_box', 'juice_box', 'trucha_ahumada', 'lechona']) assert.ok(s.stats.imported[p] > 0, `${p} arrived`);
 });
 
-test('con toda la red construida, la Gran Feria junta lo de tres estaciones del centro', () => {
+test('with the whole network built, the Gran Feria joins what three downtown stations make', () => {
   const s = createInitialState(0, 'bogota');
   s.coins = 1e13;
   const game = new Game(s);
@@ -85,7 +85,7 @@ test('con toda la red construida, la Gran Feria junta lo de tres estaciones del 
   for (const id of Object.keys(s.stations)) s.stations[id].level = s.stations[id].transport.level = 50;
   for (const r of Object.values(s.routes)) r.level = 50;
   for (let i = 0; i < 30000; i++) game.step(0.1); // 50 minutos
-  assert.ok(s.stats.produced.subida_monserrate > 0, 'se subió a Monserrate');
-  assert.ok(s.stats.produced.caldo_costilla > 0 && s.stats.produced.cafe_molido > 0, 'salieron los subproductos');
-  assert.ok(s.stats.produced.feria_mi_tierrita > 0, 'hubo Gran Feria');
+  assert.ok(s.stats.produced.subida_monserrate > 0, 'someone went up Monserrate');
+  assert.ok(s.stats.produced.caldo_costilla > 0 && s.stats.produced.cafe_molido > 0, 'the by-products came out');
+  assert.ok(s.stats.produced.feria_mi_tierrita > 0, 'there was a Gran Feria');
 });

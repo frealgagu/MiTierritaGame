@@ -1,22 +1,22 @@
-# Fiche Google Play — Français (fr-FR)
+# Google Play listing — French (fr-FR)
 
-Textes et images pour la Play Console : *Croissance → Présence sur le Store → Fiche Play Store principale → Gérer les traductions → Ajouter votre propre texte traduit → Français (France) – fr-FR*. La langue par défaut reste l’espagnol (es-419). Le même texte peut servir pour le français du Canada (fr-CA).
+Texts and images for Play Console: *Grow → Store presence → Main store listing → Manage translations → Add your own translation text → French (France) – fr-FR*. The default language stays Spanish (es-419).
 
-## Détails de l’application
+## App details
 
-**Nom de l’application** (30 caractères max.) :
+**App name** (max 30 characters):
 
 ```
 Encantos de Mi Tierrita
 ```
 
-**Description courte** (80 caractères max.) :
+**Short description** (max 80 characters):
 
 ```
 Produis, transporte et découvre les charmes des régions de Colombie.
 ```
 
-**Description complète** (4 000 caractères max.) :
+**Full description** (max 4000 characters):
 
 ```
 Du grain de la montagne à un conteneur en route vers le port : bâtis des chaînes de production à travers toute la Colombie et découvre ce qui rend chaque région unique.
@@ -48,25 +48,25 @@ Bambuco, guabina, cumbia, torbellino, joropo, chirimía et cumbia amazonienne : 
 • Si le jeu te plaît, tu peux offrir un tinto à la personne qui le fait (facultatif, sans avantage dans le jeu).
 ```
 
-## Éléments graphiques
+## Graphics
 
-| Élément | Fichier | Taille |
+| Asset | File | Size |
 |---|---|---|
-| Captures d’écran du téléphone (2 à 8) | `store/capturas-fr/1-finca.png` … `6-zonas.png` | 1080 × 1920 |
-| Icône de l’application | `store/icon-512.png` (la même qu’en espagnol) | 512 × 512 |
-| Image de présentation | `store/feature-graphic-fr.png` | 1024 × 500 |
+| Phone screenshots (2 to 8) | `store/screenshots-fr/1-farm.png` … `6-zones.png` | 1080 × 1920 |
+| App icon | `store/icon-512.png` (the same as in Spanish) | 512 × 512 |
+| Feature graphic | `store/feature-graphic-fr.png` | 1024 × 500 |
 
-Ordre suggéré : la ferme, la station (Torréfacteur), la chaîne, le Chapeau (Côte caraïbe), la carte de la Colombie et la liste des zones. On les régénère avec `node tools/capturas-play.mjs store/capturas-fr fr`.
+Suggested order: the farm, the station (Roaster), the chain, the Hat Workshop (Caribbean Coast), the map of Colombia and the zone list. They are regenerated with `node tools/play-screenshots.mjs store/screenshots-fr fr`.
 
-## Produits intégrés (*Monétiser → Produits → Produits ponctuels*, traduction de chacun)
+## In-app products (*Monetize → Products → One-time products*, French translation of each)
 
-| ID | Nom | Description |
+| ID | Name | Description |
 |---|---|---|
 | `tinto` | Un tinto | Offre un tinto (le petit café noir colombien) à la personne qui fait le jeu. Cela ne donne rien dans le jeu. Merci ! |
 | `arepa` | Une arepa | Offre une arepa à la personne qui fait le jeu. Cela ne donne rien dans le jeu. Merci ! |
 | `almuerzo` | Un déjeuner | Offre un déjeuner à la personne qui fait le jeu. Cela ne donne rien dans le jeu. Merci ! |
 
-## Notes de version (v3.70)
+## Release notes (v3.70)
 
 ```
 <fr-FR>

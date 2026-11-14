@@ -25,15 +25,15 @@ function allReady() {
   return root;
 }
 
-test('la zona especial es secreta: ninguna lista la nombra hasta que se abre', () => {
+test('the special zone is secret: no list names it until it opens', () => {
   const root = createInitialState(0);
   assert.ok(!shownRegions(isOpen(root)).some((r) => r.id === 'sanandres'));
   assert.ok(openSpecial(root));
   assert.ok(shownRegions(isOpen(root)).some((r) => r.id === 'sanandres'));
-  assert.equal(openSpecial(root), null, 'solo una vez');
+  assert.equal(openSpecial(root), null, 'only once');
 });
 
-test('se abre cuando todas las demás regiones tienen el segundo final o un reinicio', () => {
+test('it opens when every other region has the second ending or a restart', () => {
   const root = allReady();
   assert.deepEqual(specialProgress(root), { n: SPECIAL_FROM.length, total: SPECIAL_FROM.length, ready: true });
   assert.ok(!SPECIAL.devOnly, 'since v5.5 it opens for real');
@@ -50,7 +50,7 @@ test('se abre cuando todas las demás regiones tienen el segundo final o un rein
   assert.deepEqual(openRegions(other), []);
 });
 
-test('su evento, la Fiesta de la Luna Verde, potencia toda la isla en vez de frenarla', async () => {
+test('its event, the Green Moon Festival, boosts the whole island instead of slowing it down', async () => {
   const { EVENT_OF_ZONE } = await import('../src/data/events.js');
   const def = EVENT_OF_ZONE.sanandres;
   assert.equal(def.id, 'luna_verde');
@@ -61,7 +61,7 @@ test('su evento, la Fiesta de la Luna Verde, potencia toda la isla en vez de fre
   assert.deepEqual(def.objective.medals, [1200, 1500]);
 });
 
-test('ocho estaciones en una sola cadena, cada una con su ×32 al nivel 100', () => {
+test('eight stations in a single chain, each with its ×32 at level 100', () => {
   const chain = chainOf('sanandres');
   assert.equal(chain.length, 8);
   chain.slice(1).forEach((id, k) => assert.equal(PARENT[id], chain[k], id));
@@ -75,13 +75,13 @@ test('ocho estaciones en una sola cadena, cada una con su ×32 al nivel 100', ()
   for (let k = 2; k < chain.length; k++) assert.ok(STATIONS_BY_ID[chain[k]].unlockCost > STATIONS_BY_ID[chain[k - 1]].unlockCost);
 });
 
-test('el ×32 pide la estación y sus arrieros al 100, y multiplica la estación, su patio y la bodega', () => {
+test('the ×32 needs the station and its mule drivers at 100, and multiplies the station, its yard and the warehouse', () => {
   const game = new Game(createInitialState(0, 'sanandres'));
   const s = game.state;
   s.coins = 1e30;
   const st = s.stations.aeropuerto_sai;
   st.level = 100;
-  assert.equal(game.quoteResearch('vuelos_directos').reason, 'locked', 'faltan los arrieros');
+  assert.equal(game.quoteResearch('vuelos_directos').reason, 'locked', 'the mule drivers are missing');
   st.transport.level = 100;
   const before = { speed: speedMult(s, 'aeropuerto_sai'), cap: capMult(s, 'aeropuerto_sai'), dispatch: dispatchMult(s, 'sanandres') };
   assert.ok(game.research('vuelos_directos'));
@@ -94,5 +94,5 @@ test('el ×32 pide la estación y sus arrieros al 100, y multiplica la estación
   const sold0 = s.stats.sold.viajero ?? 0;
   for (let t = 0; t < 60; t += 0.1) game.step(0.1);
   const rate = ((s.stats.sold.viajero ?? 0) - sold0) / 60;
-  assert.ok(rate > 0.9 * 4096 * 32, `${rate} viajeros/s`);
+  assert.ok(rate > 0.9 * 4096 * 32, `${rate} travelers/s`);
 });

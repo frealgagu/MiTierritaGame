@@ -43,7 +43,7 @@ function allClaimed(s) {
   s.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'cafetero').map((r) => r.id);
 }
 
-test('cada reinicio duplica la producción: ×1, ×2, ×4, ×8', () => {
+test('each restart doubles production: ×1, ×2, ×4, ×8', () => {
   const income = [0, 1, 2, 3].map((resets) => {
     const s = everything(30, resets).state;
     assert.equal(legacyMult(s), 2 ** resets);
@@ -52,7 +52,7 @@ test('cada reinicio duplica la producción: ×1, ×2, ×4, ×8', () => {
   for (let k = 1; k < income.length; k++) assert.ok(Math.abs(income[k] / income[k - 1] - 2) < 1e-9, `${income[k]} / ${income[k - 1]}`);
 });
 
-test('con la producción ×8 la cadena sigue cuadrando: al nivel 100 ningún patio se llena', async () => {
+test('with ×8 production the chain still balances: at level 100 no yard fills up', async () => {
   const { RESEARCH } = await import('../src/data/research.js');
   const game = everything(100, 3);
   const s = game.state;
@@ -66,12 +66,12 @@ test('con la producción ×8 la cadena sigue cuadrando: al nivel 100 ningún pat
   assert.deepEqual(blocked, {});
 });
 
-test('el segundo final llega al subir la última estación al nivel 100', () => {
+test('the second ending comes on raising the last station to level 100', () => {
   const game = everything(100);
   const s = game.state;
   allClaimed(s);
   s.zones.pueblo.complete = true;
-  assert.equal(stationsOf(s).length, 38, 'las del Eje Cafetero');
+  assert.equal(stationsOf(s).length, 38, 'the Eje Cafetero ones');
   s.stations.export_dock.level = 99;
   assert.equal(maxedCount(s), 37);
   const events = [];
@@ -86,7 +86,7 @@ test('el segundo final llega al subir la última estación al nivel 100', () => 
   assert.equal(events.length, 1);
 });
 
-test('sin el primer final no hay segundo: llega al cobrar los contenedores del Pueblo', async () => {
+test(`without the first ending there is no second: it comes on collecting the Pueblo's containers`, async () => {
   const game = everything(100);
   const s = game.state;
   allClaimed(s);
@@ -108,7 +108,7 @@ test('sin el primer final no hay segundo: llega al cobrar los contenedores del P
   assert.equal(events.length, 1);
 });
 
-test('volver a empezar: todo desde cero, con la producción al doble y los ajustes de antes', () => {
+test('starting over: everything from scratch, with production doubled and the previous settings', () => {
   const game = everything(100, 1);
   const s = game.state;
   s.mastered = true;
@@ -119,7 +119,7 @@ test('volver a empezar: todo desde cero, con la producción al doble y los ajust
   const next = restartState(s);
   assert.equal(next.legacy.resets, 2);
   assert.equal(legacyMult(next), 4);
-  assert.equal(next.legacy.history, undefined, 'sin registro de partidas (v4.0)');
+  assert.equal(next.legacy.history, undefined, 'no game log (v4.0)');
   assert.equal(next.coins, 0);
   assert.equal(next.playTime, 0);
   assert.equal(next.mastered, false);
@@ -135,7 +135,7 @@ test('volver a empezar: todo desde cero, con la producción al doble y los ajust
   assert.ok(g.state.coins > 0);
 });
 
-test('una partida de la v1.5 se carga sin multiplicador y sin el segundo final', async () => {
+test('a v1.5 save loads without a multiplier and without the second ending', async () => {
   const { loadGame } = await import('../src/core/SaveSystem.js');
   const old = new Game().state;
   delete old.legacy;
@@ -148,7 +148,7 @@ test('una partida de la v1.5 se carga sin multiplicador y sin el segundo final',
   assert.equal(s.mastered, false);
 });
 
-test('Maestría ×4 con toda la zona al 75 y Supremacía ×8 con toda al 100', async () => {
+test('Mastery ×4 with the whole zone at 75 and Supremacy ×8 with all of it at 100', async () => {
   const { speedMult } = await import('../src/sim/modifiers.js');
   const game = everything(74);
   const s = game.state;
@@ -156,14 +156,14 @@ test('Maestría ×4 con toda la zona al 75 y Supremacía ×8 con toda al 100', a
   for (const id of ['farm', 'wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer', 'composter']) s.stations[id].level = 75;
   assert.ok(game.research('maestria_finca'));
   assert.equal(speedMult(s, 'packer'), 4);
-  assert.equal(speedMult(s, 'cane_mill'), 1, 'solo su zona');
+  assert.equal(speedMult(s, 'cane_mill'), 1, 'only its zone');
   assert.equal(game.quoteResearch('supremacia_finca').reason, 'locked');
   for (const id of ['farm', 'wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer', 'composter']) s.stations[id].level = 100;
   assert.ok(game.research('supremacia_finca'));
   assert.equal(speedMult(s, 'farm'), 32);
 });
 
-test('el multiplicador llega hasta ×2⁶⁰: se puede seguir reiniciando, pero ya no se duplica ni se cuenta (v3.56, v3.68.3, v4.0)', async () => {
+test('the multiplier goes up to ×2⁶⁰: you can keep restarting, but it no longer doubles or counts (v3.56, v3.68.3, v4.0)', async () => {
   const { nextLegacyMult } = await import('../src/sim/modifiers.js');
   let state = new Game().state;
   for (let k = 0; k < 59; k++) state = restartState(state);
@@ -171,13 +171,13 @@ test('el multiplicador llega hasta ×2⁶⁰: se puede seguir reiniciando, pero 
   assert.equal(nextLegacyMult(state), 2 ** 60);
   state = restartState(state);
   assert.equal(legacyMult(state), 2 ** 60);
-  assert.equal(nextLegacyMult(state), 2 ** 60, 'ya no se duplica');
+  assert.equal(nextLegacyMult(state), 2 ** 60, 'it no longer doubles');
   for (let k = 0; k < 8; k++) state = restartState(state);
-  assert.equal(state.legacy.resets, 60, 'los reinicios se quedan en el tope (v4.0)');
+  assert.equal(state.legacy.resets, 60, 'restarts stay at the cap (v4.0)');
   assert.equal(legacyMult(state), 2 ** 60);
   const game = new Game(state);
   run(game, 60);
-  assert.ok(Number.isFinite(game.state.coins) && game.state.coins > 0, `monedas: ${game.state.coins}`);
+  assert.ok(Number.isFinite(game.state.coins) && game.state.coins > 0, `coins: ${game.state.coins}`);
   // And with everything built, it still balances (after startup, no yard fills up).
   const big = everything(60, 40);
   run(big, 400);
@@ -190,7 +190,7 @@ test('el multiplicador llega hasta ×2⁶⁰: se puede seguir reiniciando, pero 
   assert.deepEqual(blocked, {});
 });
 
-test('los números enormes se leen: sufijos hasta Dc y luego notación científica', async () => {
+test('huge numbers are readable: suffixes up to Dc and then scientific notation', async () => {
   const { formatMult, formatNumber } = await import('../src/core/format.js');
   assert.equal(formatNumber(2.5e6), '2,50M');
   assert.equal(formatNumber(4.2e33), '4,20Dc');
@@ -204,7 +204,7 @@ test('los números enormes se leen: sufijos hasta Dc y luego notación científi
   assert.equal(formatMult(2 ** 200), '×1,61e60');
 });
 
-test('el segundo final pide también arrieros, rutas, objetivos e investigaciones (v3.12)', () => {
+test('the second ending also asks for mule drivers, routes, objectives and research (v3.12)', () => {
   const game = everything(100);
   const s = game.state;
   allClaimed(s);
@@ -217,15 +217,15 @@ test('el segundo final pide también arrieros, rutas, objetivos e investigacione
     Object.assign(s, backup);
     return ready;
   };
-  assert.equal(missing(() => (s.stations.farm.transport.level = 99)), false, 'los arrieros');
-  assert.equal(missing(() => (s.routes[Object.keys(s.routes)[0]].level = 99)), false, 'las rutas');
-  assert.equal(missing(() => s.goals.claimed.pop()), false, 'los objetivos');
-  assert.equal(missing(() => s.research.pop()), false, 'las investigaciones');
+  assert.equal(missing(() => (s.stations.farm.transport.level = 99)), false, 'the mule drivers');
+  assert.equal(missing(() => (s.routes[Object.keys(s.routes)[0]].level = 99)), false, 'the routes');
+  assert.equal(missing(() => s.goals.claimed.pop()), false, 'the objectives');
+  assert.equal(missing(() => s.research.pop()), false, 'the research');
   assert.ok(masteryReady(s));
   assert.deepEqual(masteryParts(s).map((p) => p.id), ['stations', 'transport', 'routes', 'goals', 'research']);
 });
 
-test('«Cobrar todos» y «Comprar todas» (v3.57)', async () => {
+test('«Collect all» and «Buy all» (v3.57)', async () => {
   const { claimableGoals, activeGoals } = await import('../src/sim/goals.js');
   const { previewAllResearch } = await import('../src/sim/upgrades.js');
   const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
@@ -236,13 +236,13 @@ test('«Cobrar todos» y «Comprar todas» (v3.57)', async () => {
   s.stats.sold = Object.fromEntries(Object.keys(s.stats.sold ?? {}).map((k) => [k, 0]));
   for (const g of GOALS_BY_ZONE.finca) if (g.type === 'sold' || g.type === 'produced') (s.stats[g.type] ??= {})[g.product] = 1e12;
   const ready = claimableGoals(s, 'finca');
-  assert.ok(ready.length > 3, `cumplidos: ${ready.length}`);
-  assert.ok(!ready.some((g) => g.final), 'el final no, mientras no se vea');
+  assert.ok(ready.length > 3, `met: ${ready.length}`);
+  assert.ok(!ready.some((g) => g.final), 'not the ending, while it is not visible');
   const coins = s.coins;
   const { count, reward } = game.claimAllGoals('finca');
   assert.equal(count, ready.length);
   assert.equal(s.coins, coins + reward);
-  assert.ok(!s.zones.finca.complete, 'el final se cobra aparte');
+  assert.ok(!s.zones.finca.complete, 'the ending is collected separately');
   assert.ok(activeGoals(s, 'finca').every((g) => g.final || !claimableGoals(s, 'finca').includes(g)));
   // Research: from cheapest to most expensive as far as coins go, excluding Maestría and Supremacía.
   const fresh = everything(100);
@@ -256,11 +256,11 @@ test('«Cobrar todos» y «Comprar todas» (v3.57)', async () => {
   assert.equal(st.coins, 0);
   st.coins = 1e30;
   fresh.researchAll('finca');
-  assert.ok(cheap.every((r) => st.research.includes(r.id)), 'todas');
-  assert.ok(!st.research.some((id) => RESEARCH.find((r) => r.id === id).minLevel), 'sin Maestría ni Supremacía');
+  assert.ok(cheap.every((r) => st.research.includes(r.id)), 'all of them');
+  assert.ok(!st.research.some((id) => RESEARCH.find((r) => r.id === id).minLevel), 'without Mastery or Supremacy');
 });
 
-test('las monedas tienen un techo de 999Dc (v3.68.3)', async () => {
+test('coins have a ceiling of 999Dc (v3.68.3)', async () => {
   const { MAX_COINS } = await import('../src/sim/modifiers.js');
   const { formatNumber } = await import('../src/core/format.js');
   const game = new Game();
@@ -272,10 +272,10 @@ test('las monedas tienen un techo de 999Dc (v3.68.3)', async () => {
   assert.equal(formatNumber(MAX_COINS), '999Dc');
   game.state.coins = 1e30;
   game.step(0.1);
-  assert.ok(game.state.coins < MAX_COINS, 'por debajo del techo no cambia nada');
+  assert.ok(game.state.coins < MAX_COINS, 'below the ceiling nothing changes');
 });
 
-test('al volver a empezar otra región, el juego abre en ella y no en el Cafetal (v3.72)', async () => {
+test('on starting another region over, the game opens in it and not in the Cafetal (v3.72)', async () => {
   const { startZone } = await import('../src/sim/legacy.js');
   const { createInitialState } = await import('../src/sim/state.js');
   const root = createInitialState(0);
@@ -285,6 +285,6 @@ test('al volver a empezar otra región, el juego abre en ella y no en el Cafetal
   assert.equal(startZone(root, 'barichara'), 'guayabera');
   assert.equal(startZone(root, 'guayabera'), 'guayabera');
   assert.equal(startZone(root, 'trapiche'), 'trapiche');
-  assert.equal(startZone(root, 'lecheria'), 'finca', 'zona cerrada del Eje Cafetero: su primera');
-  assert.equal(startZone(root, 'arrozal'), 'finca', 'región que todavía no se abre: la Finca');
+  assert.equal(startZone(root, 'lecheria'), 'finca', 'closed zone of the Eje Cafetero: its first one');
+  assert.equal(startZone(root, 'arrozal'), 'finca', 'region not opened yet: the Finca');
 });

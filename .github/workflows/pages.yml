@@ -1,4 +1,4 @@
-name: Publicar la web y la app de Android
+name: Publish the web and the Android app
 
 # On each push: run tests and build web (GitHub Pages) on one job, Android APK on another, then publish
 # together: the APK lands on the same site at ./mitierrita.apk (linked from the game menu), and downloadable
@@ -44,18 +44,18 @@ jobs:
           notes=()
           if ! git ls-files -s android/gradlew | grep -q '^100755'; then
             git update-index --chmod=+x android/gradlew
-            notes+=("permiso de ejecución de android/gradlew")
+            notes+=("execute bit of android/gradlew")
           fi
           published=$(curl -fsS "https://frealgagu.github.io/MiTierritaGame/version.json?t=$(date +%s)" | node -e 'let s="";process.stdin.on("data",(d)=>(s+=d)).on("end",()=>{try{console.log(JSON.parse(s).version??"")}catch{console.log("")}})' || true)
           echo "Published version: ${published:-none}; package.json: $(node -p 'require("./package.json").version')"
           next=$(node tools/auto-version.mjs "$published")
           if [ -n "$next" ]; then
-            git add package.json package-lock.json CHANGELOG.md
-            notes+=("versión $next")
+            git add package.json package-lock.json CHANGELOG*.md
+            notes+=("version $next")
           fi
           if [ ${#notes[@]} -gt 0 ]; then
             msg=$(IFS=', '; echo "${notes[*]}")
-            git commit -m "Publicación automática: ${msg}"
+            git commit -m "Automatic publish: ${msg}"
             git push origin HEAD:${GITHUB_REF_NAME}
           fi
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
@@ -133,7 +133,7 @@ jobs:
           MITIERRITA_UPLOAD_KEY_ALIAS: ${{ secrets.PLAY_UPLOAD_KEY_ALIAS }}
           MITIERRITA_UPLOAD_KEY_PASSWORD: ${{ secrets.PLAY_UPLOAD_KEY_PASSWORD }}
         run: |
-          if [ -z "$KEYSTORE_BASE64" ]; then echo "Sin clave de subida: no se genera el AAB."; exit 0; fi
+          if [ -z "$KEYSTORE_BASE64" ]; then echo "No upload key: the AAB is not built."; exit 0; fi
           echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/subida.p12"
           export MITIERRITA_UPLOAD_KEYSTORE="$RUNNER_TEMP/subida.p12"
           PLAY_STORE=1 npm run android:sync

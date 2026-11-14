@@ -5,7 +5,7 @@ import { STATIONS_BY_ID } from '../src/data/stations.js';
 import { PRODUCTS } from '../src/data/products.js';
 import { STATIONS } from '../src/data/stations.js';
 
-test('hitos: nivel 10 ×2, 25 ×2, 50 ×4, 75 ×4 y 100 ×8', () => {
+test('milestones: level 10 ×2, 25 ×2, 50 ×4, 75 ×4 and 100 ×8', () => {
   assert.equal(milestoneMultiplier(9), 1);
   assert.equal(milestoneMultiplier(10), 2);
   assert.equal(milestoneMultiplier(25), 4);
@@ -16,17 +16,17 @@ test('hitos: nivel 10 ×2, 25 ×2, 50 ×4, 75 ×4 y 100 ×8', () => {
   assert.equal(nextMilestone(100), null);
 });
 
-test('el cafetal produce 1 cereza cada 2 s a nivel 1', () => {
+test('the coffee field produces 1 cherry every 2 s at level 1', () => {
   assert.equal(stationRate(STATIONS_BY_ID.farm, 1), 0.5);
   assert.ok(stationRate(STATIONS_BY_ID.farm, 10) > 2 * stationRate(STATIONS_BY_ID.farm, 9));
 });
 
-test('costes crecen 15 % por nivel', () => {
+test('costs grow 15 % per level', () => {
   assert.equal(upgradeCost(5, 1.15, 1), 5);
   assert.equal(upgradeCost(5, 1.15, 2), Math.ceil(5 * 1.15));
 });
 
-test('compra máx se limita a las monedas', () => {
+test('buy max is limited to the coins', () => {
   const q = bulkUpgrade(5, 1.15, 1, Infinity, 20);
   assert.ok(q.cost <= 20);
   assert.ok(q.levels >= 3);
@@ -34,22 +34,22 @@ test('compra máx se limita a las monedas', () => {
   assert.equal(ten.levels, 5); // tope en nivel 100
 });
 
-test('el Willys lleva 10 a nivel 1', () => {
+test('the Willys carries 10 at level 1', () => {
   assert.equal(dispatchCapacity(1), 10);
   assert.equal(dispatchCapacity(10), (10 + 45) * 2);
 });
 
-test('catálogo completo: 381 productos y 368 estaciones con recetas válidas', () => {
+test('full catalog: 381 products and 368 stations with valid recipes', () => {
   assert.equal(Object.keys(PRODUCTS).length, 381);
   assert.equal(STATIONS.length, 368);
   for (const s of STATIONS) {
     for (const id of Object.keys({ ...s.in, ...s.out, ...s.by, ...s.boost })) {
-      assert.ok(PRODUCTS[id], `${s.id} usa un producto desconocido: ${id}`);
+      assert.ok(PRODUCTS[id], `${s.id} uses an unknown product: ${id}`);
     }
   }
 });
 
-test('al nivel 100 cada estación produce una potencia de 2 por segundo', async () => {
+test('at level 100 every station produces a power of 2 per second', async () => {
   const { STATIONS } = await import('../src/data/stations.js');
   const { ZONE_LIST } = await import('../src/data/zones/index.js');
   const { stationOutputRate, MAX_LEVEL } = await import('../src/sim/rules.js');
@@ -60,18 +60,18 @@ test('al nivel 100 cada estación produce una potencia de 2 por segundo', async 
     // of each region) or ×1.25 (the second), so with everything maxed there is enough for all.
     const rate = stationOutputRate(def, 100);
     const ok = [1, 1.5, 1.25].some((k) => Math.abs(Math.log2(rate / k) - Math.round(Math.log2(rate / k))) < 1e-9);
-    assert.ok(ok, `${def.id}: ${rate}/s al nivel 100`);
+    assert.ok(ok, `${def.id}: ${rate}/s at level 100`);
   }
 });
 
-test('las bandas eléctricas llegan en un hito de transporte', async () => {
+test('conveyor belts come at a transport milestone', async () => {
   const { BELT_LEVEL, MILESTONES, hasBelt } = await import('../src/sim/rules.js');
   assert.ok(MILESTONES.includes(BELT_LEVEL));
   assert.equal(hasBelt(BELT_LEVEL - 1), false);
   assert.equal(hasBelt(BELT_LEVEL), true);
 });
 
-test('cada investigación, compra de evento, objetivo, estación, producto y ruta tiene un id único', async () => {
+test('every research, event purchase, objective, station, product and route has a unique id', async () => {
   const { RESEARCH } = await import('../src/data/research.js');
   const { GOALS } = await import('../src/data/goals.js');
   const { ROUTES } = await import('../src/data/routes.js');
@@ -84,11 +84,11 @@ test('cada investigación, compra de evento, objetivo, estación, producto y rut
   };
   for (const [name, ids] of Object.entries(lists)) {
     const repeated = ids.filter((id, i) => ids.indexOf(id) !== i);
-    assert.deepEqual(repeated, [], `${name} repetidas`);
+    assert.deepEqual(repeated, [], `${name} repeated`);
   }
 });
 
-test('la fuente de íconos cubre todos los íconos propios (v3.53)', async () => {
+test(`the icon font covers all the game's own icons (v3.53)`, async () => {
   const { readFileSync } = await import('node:fs');
   const { ICON } = await import('../src/data/icons.js');
   const css = readFileSync(new URL('../src/ui/styles.css', import.meta.url), 'utf8');

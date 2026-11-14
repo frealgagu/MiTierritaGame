@@ -1,16 +1,17 @@
 import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
-import { releaseNotes } from './tools/release-notes.js';
+import { CHANGELOGS, releaseNotes } from './tools/release-notes.js';
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url)));
 
 // version.json (v3.6.1): published version and release notes. The Android app checks it on launch
 // to offer the new APK (see src/update.js); the web version updates automatically.
+// notesByLang (v5.6): the notes in each game language. `notes` stays in Spanish for apps older than v5.6.
 const versionFile = () => ({
   name: 'mitierrita-version',
   generateBundle() {
-    const notes = releaseNotes(readFileSync(new URL('./CHANGELOG.md', import.meta.url), 'utf8'));
-    this.emitFile({ type: 'asset', fileName: 'version.json', source: JSON.stringify({ version: pkg.version, notes }) });
+    const notesByLang = Object.fromEntries(Object.entries(CHANGELOGS).map(([lang, file]) => [lang, releaseNotes(readFileSync(new URL(`./${file}`, import.meta.url), 'utf8'))]));
+    this.emitFile({ type: 'asset', fileName: 'version.json', source: JSON.stringify({ version: pkg.version, notes: notesByLang.es, notesByLang }) });
   },
 });
 

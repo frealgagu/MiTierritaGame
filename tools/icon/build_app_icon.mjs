@@ -2,7 +2,7 @@
 //   assets/icon-only.png, icon-foreground.png, icon-background.png, splash.png, splash-dark.png
 //     (Android assets are generated from there with: npx @capacitor/assets generate --android)
 //   public/icons/icon-192.png, icon-512.png, icon-maskable-512.png, apple-touch-icon.png   (web)
-//   store/icon-512.png, store/feature-graphic.png, feature-graphic-en/pt/fr.png   (Google Play listing)
+//   store/icon-512.png, store/feature-graphic-es.png, feature-graphic-en/pt/fr.png   (Google Play listing)
 // Usage: node tools/icon/build_app_icon.mjs   (requires Playwright with Chromium)
 //      node tools/icon/build_app_icon.mjs --features   (listing feature graphics only)
 import { createRequire } from 'node:module';
@@ -53,7 +53,7 @@ const feature = (subtitle, path) =>
     <div style="font-size:30px;font-weight:600;margin-top:18px;color:#5d4037">${subtitle}</div></div>
   </div>`,
     1024, 500, path);
-await feature('Produce, transporta y descubre<br>los encantos de Colombia', 'store/feature-graphic.png');
+await feature('Produce, transporta y descubre<br>los encantos de Colombia', 'store/feature-graphic-es.png');
 await feature('Produce, transport and discover<br>the charms of Colombia', 'store/feature-graphic-en.png');
 await feature('Produza, transporte e descubra<br>os encantos da Colômbia', 'store/feature-graphic-pt.png');
 await feature('Produis, transporte et découvre<br>les charmes de la Colombie', 'store/feature-graphic-fr.png');

@@ -11,7 +11,7 @@ import { GOALS_BY_ZONE } from '../src/data/goals.js';
 import { RESEARCH } from '../src/data/research.js';
 import { ZONES_BY_ID } from '../src/data/zones/index.js';
 
-test('cada región tiene sus zonas y su partida empieza en la primera, con su fuente', () => {
+test('every region has its zones and its game starts in the first one, with its source', () => {
   for (const r of REGIONS) {
     for (const z of r.zones) assert.equal(ZONES_BY_ID[z].region ?? 'cafetero', r.id, z);
     const s = createInitialState(0, r.id);
@@ -19,16 +19,16 @@ test('cada región tiene sus zonas y su partida empieza en la primera, con su fu
     assert.equal(s.zones[r.zones[0]].unlocked, true);
     assert.ok(s.stations[ZONES_BY_ID[r.zones[0]].farm.stationId]);
   }
-  assert.ok(!createInitialState(0, 'santander').profile, 'el perfil es del jugador: solo en la principal');
+  assert.ok(!createInitialState(0, 'santander').profile, 'the profile belongs to the player: only in the main one');
 });
 
-test('Santander se abre al completar el Pueblo, con el calendario del país', () => {
+test(`Santander opens upon completing the Pueblo, with the country's calendar`, () => {
   const root = createInitialState(0);
   assert.deepEqual(openRegions(root), []);
   root.playTime = 50060; // at 15:00 (mid-shift)
   root.zones.pueblo.complete = true;
   assert.deepEqual(openRegions(root), ['santander']);
-  assert.deepEqual(openRegions(root), [], 'solo una vez');
+  assert.deepEqual(openRegions(root), [], 'only once');
   const s = regionState(root, 'santander');
   assert.equal(s.region, 'santander');
   assert.equal(clockOf(s), 50060);
@@ -40,10 +40,10 @@ test('Santander se abre al completar el Pueblo, con el calendario del país', ()
     b.step(0.1);
   }
   assert.ok(Math.abs(clockOf(root) - clockOf(s)) < 1e-6);
-  assert.ok(b.state.stats.produced.guava > 0, 'la Guayabera produce');
+  assert.ok(b.state.stats.produced.guava > 0, 'the Guayabera produces');
 });
 
-test('cada región tiene su segundo final y su reinicio, sin tocar las demás', () => {
+test('every region has its second ending and its restart, without touching the others', () => {
   const root = createInitialState(0);
   root.zones.pueblo.complete = true;
   openRegions(root);
@@ -53,9 +53,9 @@ test('cada región tiene su segundo final y su reinicio, sin tocar las demás', 
   for (const r of Object.values(s.routes)) r.level = 100;
   s.goals.claimed = Object.keys(s.zones).flatMap((z) => GOALS_BY_ZONE[z].map((g) => g.id));
   s.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'santander').map((r) => r.id);
-  assert.equal(checkMastery(s, { emit() {} }), false, 'sin el primer final de la región');
+  assert.equal(checkMastery(s, { emit() {} }), false, `without the region's first ending`);
   s.zones.guayabera.complete = true;
-  assert.equal(checkMastery(s, { emit() {} }), false, 'el final de la región es su última zona');
+  assert.equal(checkMastery(s, { emit() {} }), false, `the region's ending is its last zone`);
   s.zones.tabacal.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), false);
   s.zones.fiquera.complete = true;
@@ -70,7 +70,7 @@ test('cada región tiene su segundo final y su reinicio, sin tocar las demás', 
   const next = restartState(s);
   assert.equal(next.region, 'santander');
   assert.equal(next.legacy.resets, 1);
-  assert.equal(clockOf(next), clockOf(s), 'el calendario sigue');
+  assert.equal(clockOf(next), clockOf(s), 'the calendar continues');
   assert.ok(!next.profile);
   // Resetting Eje Cafetero preserves Santander.
   root.regions.santander = next;
@@ -79,7 +79,7 @@ test('cada región tiene su segundo final y su reinicio, sin tocar las demás', 
   assert.equal(clockOf(root2), clockOf(root));
 });
 
-test('la partida se guarda y se carga con sus regiones', () => {
+test('the game is saved and loaded with its regions', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
   const root = createInitialState(0);
@@ -94,7 +94,7 @@ test('la partida se guarda y se carga con sus regiones', () => {
   assert.ok(back.profile);
 });
 
-test('una partida con la Guayabera ya completa abre el Tabacal al cargarse (v3.1)', () => {
+test('a save with the Guayabera already complete opens the Tabacal on loading (v3.1)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
   const root = createInitialState(0);
@@ -109,7 +109,7 @@ test('una partida con la Guayabera ya completa abre el Tabacal al cargarse (v3.1
   assert.ok(back.stations.tobacco_field);
 });
 
-test('el Tabacal se abre al completar la Guayabera y su cadena tuerce tabacos sin cuellos de botella', async () => {
+test('the Tabacal opens upon completing the Guayabera and its chain rolls cigars without bottlenecks', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { analyzeChain } = await import('../src/sim/analysis.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
@@ -129,18 +129,18 @@ test('el Tabacal se abre al completar la Guayabera y su cadena tuerce tabacos si
   CALENDAR.on = false;
   for (let t = 0; t < 300; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  assert.ok((game.state.stats.sold.cigar ?? 0) > 0, 'vende tabaco torcido');
+  assert.ok((game.state.stats.sold.cigar ?? 0) > 0, 'it sells rolled cigars');
   // At equal levels the chain balances: no station starves the next. Since v3.67
   // fermented tobacco outputs 25 % more than Torcedora twists: that share belongs to the tobacco route
   // to Fiquera (still closed), and meanwhile it is sold.
   const { rows } = analyzeChain(game.state, 'tabacal');
   for (const row of rows.filter((r) => r.children.length)) {
     const routeShare = row.id === 'tobacco_piles' ? row.output * 0.2 : 0;
-    assert.ok(row.diverted < routeShare + 1e-6, `${row.id} desvía ${row.diverted}/s`);
+    assert.ok(row.diverted < routeShare + 1e-6, `${row.id} diverts ${row.diverted}/s`);
   }
 });
 
-test('la Fiquera se abre con el Tabacal completo y arma tercios con el tabaco que llega por la ruta', async () => {
+test('the Fiquera opens with the Tabacal complete and packs bundles with the tobacco that comes by the route', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
@@ -151,7 +151,7 @@ test('la Fiquera se abre con el Tabacal completo y arma tercios con el tabaco qu
   game.state.stats.sold.cigar = final.amount;
   assert.ok(game.claimGoal(final.id));
   assert.equal(game.state.zones.fiquera.unlocked, true);
-  assert.ok(game.state.routes.tabaco, 'la Ruta del tabaco es de Santander');
+  assert.ok(game.state.routes.tabaco, 'the Tobacco route belongs to Santander');
   game.state.coins = 1e15;
   for (const z of ['tabacal', 'fiquera']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -163,11 +163,11 @@ test('la Fiquera se abre con el Tabacal completo y arma tercios con el tabaco qu
   CALENDAR.on = false;
   for (let t = 0; t < 600; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  assert.ok((game.state.stats.imported.fermented_tobacco ?? 0) > 0, 'llega tabaco del Tabacal');
-  for (const p of ['fique_sack', 'alpargatas', 'tobacco_bale']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  assert.ok((game.state.stats.imported.fermented_tobacco ?? 0) > 0, 'tobacco arrives from the Tabacal');
+  for (const p of ['fique_sack', 'alpargatas', 'tobacco_bale']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
-test('el Hato se abre con la Fiquera completa y hace fiambres con el bocadillo y la cabuya que llegan por las rutas', async () => {
+test('the Hato opens with the Fiquera complete and makes fiambres with the bocadillo and the fique that come by the routes', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
@@ -189,11 +189,11 @@ test('el Hato se abre con la Fiquera completa y hace fiambres con el bocadillo y
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['bocadillo_bijao', 'fique_fiber']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  for (const p of ['almuerzo', 'fiambre']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  for (const p of ['bocadillo_bijao', 'fique_fiber']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  for (const p of ['almuerzo', 'fiambre']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
-test('el Hormiguero solo cosecha en la entrada de aguas (×4) y la despensa abastece la cadena el resto del año', async () => {
+test('the Hormiguero only harvests at the start of the rains (×4) and the pantry supplies the chain the rest of the year', async () => {
   const { CALENDAR, DAY_LENGTH, SEASON_DAYS, START_HOUR } = await import('../src/sim/calendar.js');
   const { stationBufferCap } = await import('../src/sim/rules.js');
   const { STATIONS_BY_ID } = await import('../src/data/stations.js');
@@ -201,8 +201,8 @@ test('el Hormiguero solo cosecha en la entrada de aguas (×4) y la despensa abas
   for (const z of ['tabacal', 'fiquera', 'hato', 'hormigas']) game.unlockZone(z);
   const ant = game.state.stations.anthill;
   const cap = stationBufferCap(STATIONS_BY_ID.anthill, 1);
-  assert.equal(ant.buffer, cap, 'abre con la despensa llena');
-  assert.ok(cap > 1000, 'la despensa guarda mucho más que un patio');
+  assert.equal(ant.buffer, cap, 'it opens with the pantry full');
+  assert.ok(cap > 1000, 'the pantry holds much more than a yard');
   game.state.coins = 1e12;
   game.unlock('ant_cleaner');
   const on = CALENDAR.on;
@@ -211,9 +211,9 @@ test('el Hormiguero solo cosecha en la entrada de aguas (×4) y la despensa abas
   game.state.playTime = DAY_LENGTH * ((14 - START_HOUR) / 24);
   for (let t = 0; t < 60; t += 0.1) game.step(0.1);
   assert.equal(ant.status, 'season');
-  assert.equal(game.state.stats.produced.ant_queen ?? 0, 0, 'nada nuevo');
-  assert.ok(ant.buffer < cap, 'la despensa baja');
-  assert.ok((game.state.stats.produced.ant_clean ?? 0) > 0, 'la cadena sigue trabajando');
+  assert.equal(game.state.stats.produced.ant_queen ?? 0, 0, 'nothing new');
+  assert.ok(ant.buffer < cap, 'the pantry goes down');
+  assert.ok((game.state.stats.produced.ant_clean ?? 0) > 0, 'the chain keeps working');
   // Noon of rainy onset: harvest ×4.
   game.state.playTime = DAY_LENGTH * (SEASON_DAYS + (14 - START_HOUR) / 24);
   ant.buffer = 0;
@@ -221,11 +221,11 @@ test('el Hormiguero solo cosecha en la entrada de aguas (×4) y la despensa abas
   assert.equal(ant.status, 'working');
   const made = game.state.stats.produced.ant_queen;
   // 60 s at level 1 (0.5/s) in a ×1 season, times 4.
-  assert.ok(made > 100 && made < 130, `cosechó ${made}`);
+  assert.ok(made > 100 && made < 130, `it harvested ${made}`);
   CALENDAR.on = on;
 });
 
-test('las Hormigas se abren con el Hato completo y venden recuerdos con los costales y las alpargatas de la Fiquera', async () => {
+test(`the Hormigas open with the Hato complete and sell souvenirs with the Fiquera's sacks and espadrilles`, async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
@@ -247,11 +247,11 @@ test('las Hormigas se abren con el Hato completo y venden recuerdos con los cost
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['fique_sack', 'alpargatas']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.sold.recuerdo ?? 0) > 0, 'vende recuerdos');
+  for (const p of ['fique_sack', 'alpargatas']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.sold.recuerdo ?? 0) > 0, 'it sells souvenirs');
 });
 
-test('una partida de Santander con la Asociación de tejedoras guardada como «tejedoras» se carga con su id nuevo', () => {
+test(`a Santander save with the Weavers' association saved as «tejedoras» loads with its new id`, () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
   const root = createInitialState(0);
@@ -266,7 +266,7 @@ test('una partida de Santander con la Asociación de tejedoras guardada como «t
   assert.deepEqual(back.regions.santander.research, []);
 });
 
-test('al cargar una partida de la v3.6, las horas sin conexión pasan al perfil y se devuelven las monedas (v3.7)', () => {
+test('loading a v3.6 save, offline hours move to the profile and the coins are returned (v3.7)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
   const root = createInitialState(0);
@@ -279,13 +279,13 @@ test('al cargar una partida de la v3.6, las horas sin conexión pasan al perfil 
   s.coins = 0;
   saveGame(root);
   const back = loadGame();
-  assert.equal(back.profile.offlineLevel, 5, 'arranca con las 12 h de Santander');
+  assert.equal(back.profile.offlineLevel, 5, `it starts with Santander's 12 h`);
   assert.deepEqual(back.research, ['abono']);
   assert.deepEqual(back.regions.santander.research, []);
   assert.equal(back.regions.santander.coins, 10000 + 300000 + 3000000);
 });
 
-test('Barichara se abre con las Hormigas completas y arma excursiones con lo de toda la región', async () => {
+test('Barichara opens with the Hormigas complete and puts together tours with what the whole region makes', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
@@ -307,11 +307,11 @@ test('Barichara se abre con las Hormigas completas y arma excursiones con lo de 
   CALENDAR.on = false;
   for (let t = 0; t < 1500; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['bocadillo_crate', 'cigar', 'recuerdo', 'tobacco_bale', 'almuerzo', 'fiambre']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.sold.excursion ?? 0) > 0, 'sale una excursión');
+  for (const p of ['bocadillo_crate', 'cigar', 'recuerdo', 'tobacco_bale', 'almuerzo', 'fiambre']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.sold.excursion ?? 0) > 0, 'a tour leaves');
 });
 
-test('al cargar una partida de la v3.6, los eventos ya jugados pasan al sistema de cupos (v3.7)', async () => {
+test('loading a v3.6 save, the events already played move to the slot system (v3.7)', async () => {
   const { eventStatus } = await import('../src/sim/events.js');
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
@@ -322,12 +322,12 @@ test('al cargar una partida de la v3.6, los eventos ya jugados pasan al sistema 
   const back = loadGame();
   assert.equal(back.events.done, undefined);
   assert.deepEqual(back.events.slots, [null, null]);
-  assert.equal(back.events.count.finca, 2, 'la broca ya se jugó dos veces: sigue el reto 3');
+  assert.equal(back.events.count.finca, 2, 'the borer was already played twice: challenge 3 is next');
   assert.ok(back.events.last.finca >= 0);
   assert.equal(eventStatus(back, 'finca').round, 3);
 });
 
-test('una partida ya reiniciada o con la última zona completa carga con la región terminada (v3.8)', () => {
+test('a save already restarted or with the last zone complete loads with the region finished (v3.8)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
   const root = createInitialState(0);
@@ -339,13 +339,13 @@ test('una partida ya reiniciada o con la última zona completa carga con la regi
   delete old.regions.santander.regionDone;
   saveGame(old);
   const back = loadGame();
-  assert.equal(back.regionDone, true, 'ya se había reiniciado');
-  assert.equal(back.regions.santander.regionDone, true, 'Barichara completa');
+  assert.equal(back.regionDone, true, 'it had already been restarted');
+  assert.equal(back.regions.santander.regionDone, true, 'Barichara complete');
   saveGame(createInitialState(0));
   assert.equal(loadGame().regionDone, false);
 });
 
-test('con el Eje Cafetero ya terminado, Santander se abre aunque tras reiniciar el Pueblo no esté completo (v3.8.1)', () => {
+test('with the Eje Cafetero already finished, Santander opens even if after restarting the Pueblo is not complete (v3.8.1)', () => {
   const root = createInitialState(0);
   root.regionDone = true;
   assert.deepEqual(openRegions(root), ['santander']);
@@ -354,7 +354,7 @@ test('con el Eje Cafetero ya terminado, Santander se abre aunque tras reiniciar 
   assert.deepEqual(openRegions(createInitialState(0)), []);
 });
 
-test('el segundo Willys: con el álbum lleno se compra por región, vende el doble y no se pierde al reiniciar (v3.9)', async () => {
+test('the second Willys: with the album full it is bought per region, sells double and is not lost on restart (v3.9)', async () => {
   const { buyWillys2, quoteWillys2, WILLYS2_COST, profileOf } = await import('../src/sim/renown.js');
   const { ALBUM } = await import('../src/data/album.js');
   const { analyzeChain } = await import('../src/sim/analysis.js');
@@ -367,7 +367,7 @@ test('el segundo Willys: con el álbum lleno se compra por región, vende el dob
   assert.ok(buyWillys2(profile, root));
   assert.equal(profile.renown, 100 - WILLYS2_COST);
   assert.equal(quoteWillys2(profile, root).reason, 'owned');
-  assert.ok(restartState(root).willys2, 'se conserva al reiniciar la región');
+  assert.ok(restartState(root).willys2, 'it is kept when restarting the region');
   // Another region is bought separately.
   root.zones.pueblo.complete = true;
   openRegions(root);
@@ -396,7 +396,7 @@ test('el segundo Willys: con el álbum lleno se compra por región, vende el dob
   }
 });
 
-test('álbum, decoración, logros y jornada son de cada región; el Renombre, del jugador (v3.10)', async () => {
+test('album, decoration, achievements and workday belong to each region; Renown, to the player (v3.10)', async () => {
   const { profileOf, pickDecor, chosenDecor, quoteWillys2, buySticker } = await import('../src/sim/renown.js');
   const { albumOf } = await import('../src/data/album.js');
   const { checkLogros, metric } = await import('../src/sim/logros.js');
@@ -410,7 +410,7 @@ test('álbum, decoración, logros y jornada son de cada región; el Renombre, de
   assert.ok(pickDecor(p, 'willys', 'azul', 'santander'));
   assert.equal(chosenDecor(p, 'santander').willys.id, 'azul');
   assert.equal(chosenDecor(p, 'cafetero').willys.id, 'verde');
-  assert.ok(pickDecor(p, 'willys', 'azul', 'cafetero'), 'en el Eje Cafetero se compra aparte');
+  assert.ok(pickDecor(p, 'willys', 'azul', 'cafetero'), 'in the Eje Cafetero it is bought separately');
   assert.equal(p.renown, 1000 - 3 - 3);
   // Santander's second Willys requires Santander's album.
   for (const pg of albumOf('cafetero')) for (const st of pg.stickers) buySticker(p, st.id);
@@ -423,7 +423,7 @@ test('álbum, decoración, logros y jornada son de cada región; el Renombre, de
   root.stats.sold.coffee_bag = 1000;
   const won = checkLogros(san, p).map((w) => w.logro.id);
   assert.ok(won.includes('s_bocadillo') && won.includes('s_album'), won.join());
-  assert.ok(!won.includes('bolsas'), 'los del Eje Cafetero no se revisan con Santander');
+  assert.ok(!won.includes('bolsas'), 'the Eje Cafetero ones are not checked with Santander');
   assert.equal(metric(san, 'pages', p), 6);
   // Resetting Santander moves its save stats into its lifetime totals.
   const next = restartState(san, 0, p);
@@ -431,7 +431,7 @@ test('álbum, decoración, logros y jornada son de cada región; el Renombre, de
   assert.equal(metric(root, 'sold:bocadillo_crate', p), 0);
 });
 
-test('una partida de la v3.9 pasa la decoración al Eje Cafetero y la jornada a cada región (v3.10)', () => {
+test('a v3.9 save moves the decoration to the Eje Cafetero and the workday to each region (v3.10)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
   const root = createInitialState(0);
@@ -450,7 +450,7 @@ test('una partida de la v3.9 pasa la decoración al Eje Cafetero y la jornada a 
   });
 });
 
-test('La Costa se abre al completar Barichara; con Cartagena completa queda terminada (v3.15, v3.21)', async () => {
+test('La Costa opens upon completing Barichara; with Cartagena complete it is finished (v3.15, v3.21)', async () => {
   const { claimGoal } = await import('../src/sim/goals.js');
   const { regionEvents } = await import('../src/sim/events.js');
   const { albumOf } = await import('../src/data/album.js');
@@ -480,7 +480,7 @@ test('La Costa se abre al completar Barichara; con Cartagena completa queda term
   assert.ok(!REGIONS.find((r) => r.id === 'costa').wip);
 });
 
-test('una Costa guardada con Cartagena completa (cuando estaba en obra) queda terminada al cargarse (v3.21)', () => {
+test('a saved Costa with Cartagena complete (when it was under construction) is finished on loading (v3.21)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
   const root = createInitialState(0);
@@ -495,12 +495,12 @@ test('una Costa guardada con Cartagena completa (cuando estaba en obra) queda te
   assert.equal(loadGame().regions.costa.regionDone, true);
 });
 
-test('La Ciénaga cocina pescado en coco con la leche que llega del Cocal (v3.17)', async () => {
+test('La Ciénaga cooks fish in coconut with the milk that comes from the Cocal (v3.17)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'costa'));
   for (const z of ['cocal', 'cienaga']) game.unlockZone(z);
-  assert.ok(game.state.routes.coco, 'la Ruta de la leche de coco es de la Costa');
+  assert.ok(game.state.routes.coco, 'the Coconut milk route belongs to the Costa');
   game.state.coins = 1e15;
   for (const z of ['cocal', 'cienaga']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -512,16 +512,16 @@ test('La Ciénaga cocina pescado en coco con la leche que llega del Cocal (v3.17
   CALENDAR.on = false;
   for (let t = 0; t < 600; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  assert.ok((game.state.stats.imported.coconut_milk ?? 0) > 0, 'llega leche de coco del Cocal');
-  for (const p of ['salted_fish', 'fried_fish', 'fish_in_coconut']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  assert.ok((game.state.stats.imported.coconut_milk ?? 0) > 0, 'coconut milk arrives from the Cocal');
+  for (const p of ['salted_fish', 'fried_fish', 'fish_in_coconut']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
-test('La Quesera hace almuerzos y bandejas con el arroz del Arrozal y el pescado de la Ciénaga (v3.18)', async () => {
+test(`La Quesera makes lunches and platters with the Arrozal's rice and the Ciénaga's fish (v3.18)`, async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'costa'));
   for (const z of ['cocal', 'cienaga', 'quesera']) game.unlockZone(z);
-  for (const r of ['arroz', 'pescado']) assert.ok(game.state.routes[r], `la ruta ${r} es de la Costa`);
+  for (const r of ['arroz', 'pescado']) assert.ok(game.state.routes[r], `the ${r} route belongs to the Costa`);
   game.state.coins = 1e15;
   for (const z of ['arrozal', 'cienaga', 'quesera']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -533,16 +533,16 @@ test('La Quesera hace almuerzos y bandejas con el arroz del Arrozal y el pescado
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['rice_bag', 'clean_fish']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  for (const p of ['almuerzo_costeno', 'bandeja_costena']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  for (const p of ['rice_bag', 'clean_fish']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  for (const p of ['almuerzo_costeno', 'bandeja_costena']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
-test('El Sombrero arma recuerdos de la Costa con el pescado salado y el frito de la Ciénaga (v3.19)', async () => {
+test(`El Sombrero puts together Costa souvenirs with the Ciénaga's salted and fried fish (v3.19)`, async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'costa'));
   for (const z of ['cocal', 'cienaga', 'quesera', 'sombrero']) game.unlockZone(z);
-  for (const r of ['salado', 'frito']) assert.ok(game.state.routes[r], `la ruta ${r} es de la Costa`);
+  for (const r of ['salado', 'frito']) assert.ok(game.state.routes[r], `the ${r} route belongs to the Costa`);
   game.state.coins = 1e15;
   for (const z of ['cienaga', 'sombrero']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -554,11 +554,11 @@ test('El Sombrero arma recuerdos de la Costa con el pescado salado y el frito de
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['salted_fish', 'fried_fish']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.sold.recuerdo_costa ?? 0) > 0, 'vende recuerdos de la Costa');
+  for (const p of ['salted_fish', 'fried_fish']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.sold.recuerdo_costa ?? 0) > 0, 'it sells Costa souvenirs');
 });
 
-test('Cartagena recibe lo de las cinco zonas de la Costa y despacha paseos a las islas (v3.20)', async () => {
+test('Cartagena receives what the five Costa zones make and dispatches trips to the islands (v3.20)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const { ROUTES } = await import('../src/data/routes.js');
@@ -578,11 +578,11 @@ test('Cartagena recibe lo de las cinco zonas de la Costa y despacha paseos a las
   for (let t = 0; t < 1500; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
   for (const r of toCartagena) assert.ok(game.state.routes[r], r);
-  for (const p of ['rice_sack', 'cocada', 'fish_in_coconut', 'almuerzo_costeno', 'bandeja_costena', 'recuerdo_costa']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.produced.lonchera_paseo ?? 0) > 0, 'arma loncheras');
+  for (const p of ['rice_sack', 'cocada', 'fish_in_coconut', 'almuerzo_costeno', 'bandeja_costena', 'recuerdo_costa']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.produced.lonchera_paseo ?? 0) > 0, 'it packs lunchboxes');
 });
 
-test('Boyacá se abre al completar Cartagena; con Villa de Leyva completa queda terminada (v3.22, v3.28)', async () => {
+test('Boyacá opens upon completing Cartagena; with Villa de Leyva complete it is finished (v3.22, v3.28)', async () => {
   const { claimGoal } = await import('../src/sim/goals.js');
   const { regionEvents } = await import('../src/sim/events.js');
   const { albumOf } = await import('../src/data/album.js');
@@ -613,12 +613,12 @@ test('Boyacá se abre al completar Cartagena; con Villa de Leyva completa queda 
   assert.ok(!REGIONS.find((r) => r.id === 'boyaca').wip);
 });
 
-test('Ráquira llena jarras de barro con la cerveza que llega de la Cervecería (v3.24)', async () => {
+test('Ráquira fills clay jugs with the beer that comes from the Cervecería (v3.24)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'boyaca'));
   for (const z of ['cerveceria', 'raquira']) game.unlockZone(z);
-  assert.ok(game.state.routes.cerveza, 'la Ruta de la cerveza es de Boyacá');
+  assert.ok(game.state.routes.cerveza, 'the Beer route belongs to Boyacá');
   game.state.coins = 1e15;
   for (const z of ['cerveceria', 'raquira']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -630,16 +630,16 @@ test('Ráquira llena jarras de barro con la cerveza que llega de la Cervecería 
   CALENDAR.on = false;
   for (let t = 0; t < 600; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  assert.ok((game.state.stats.imported.beer ?? 0) > 0, 'llega cerveza de la Cervecería');
-  for (const p of ['olla_barro', 'matera', 'jarra_cerveza']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  assert.ok((game.state.stats.imported.beer ?? 0) > 0, 'beer arrives from the Cervecería');
+  for (const p of ['olla_barro', 'matera', 'jarra_cerveza']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
-test('Paipa sirve piquetes y canastas de amasijos con las papitas del Papal y el barro de Ráquira (v3.25), y sus vacas comen el bagazo de la Cervecería (v4.0)', async () => {
+test(`Paipa serves piquetes and baskets of amasijos with the Papal's potatoes and Ráquira's clay (v3.25), and its cows eat the Cervecería's spent grain (v4.0)`, async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'boyaca'));
   for (const z of ['cerveceria', 'raquira', 'paipa']) game.unlockZone(z);
-  for (const r of ['papitas', 'barro', 'bagazo']) assert.ok(game.state.routes[r], `la ruta ${r} es de Boyacá`);
+  for (const r of ['papitas', 'barro', 'bagazo']) assert.ok(game.state.routes[r], `the ${r} route belongs to Boyacá`);
   game.state.coins = 1e15;
   for (const z of ['papal', 'cerveceria', 'raquira', 'paipa']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -651,16 +651,16 @@ test('Paipa sirve piquetes y canastas de amasijos con las papitas del Papal y el
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['criollas_bag', 'barro', 'bagazo_cervecero']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  for (const p of ['piquete', 'canasta_amasijos']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  for (const p of ['criollas_bag', 'barro', 'bagazo_cervecero']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  for (const p of ['piquete', 'canasta_amasijos']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
-test('Las Ruanas arma recuerdos de Boyacá con las ollas y las materas de Ráquira (v3.26)', async () => {
+test(`Las Ruanas puts together Boyacá souvenirs with Ráquira's pots and planters (v3.26)`, async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'boyaca'));
   for (const z of ['cerveceria', 'raquira', 'paipa', 'ruanas']) game.unlockZone(z);
-  for (const r of ['ollas', 'materas']) assert.ok(game.state.routes[r], `la ruta ${r} es de Boyacá`);
+  for (const r of ['ollas', 'materas']) assert.ok(game.state.routes[r], `the ${r} route belongs to Boyacá`);
   game.state.coins = 1e15;
   for (const z of ['raquira', 'ruanas']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -672,11 +672,11 @@ test('Las Ruanas arma recuerdos de Boyacá con las ollas y las materas de Ráqui
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['olla_barro', 'matera']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.sold.recuerdo_boyaca ?? 0) > 0, 'vende recuerdos de Boyacá');
+  for (const p of ['olla_barro', 'matera']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.sold.recuerdo_boyaca ?? 0) > 0, 'it sells Boyacá souvenirs');
 });
 
-test('Villa de Leyva recibe lo de las cinco zonas de Boyacá y despacha excursiones al Fósil (v3.27)', async () => {
+test('Villa de Leyva receives what the five Boyacá zones make and dispatches trips to the Fossil (v3.27)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const { ROUTES } = await import('../src/data/routes.js');
@@ -694,11 +694,11 @@ test('Villa de Leyva recibe lo de las cinco zonas de Boyacá y despacha excursio
   CALENDAR.on = false;
   for (let t = 0; t < 1500; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['criollas_box', 'beer_crate', 'jarra_cerveza', 'piquete', 'canasta_amasijos', 'recuerdo_boyaca']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.produced.fiambre_paseo ?? 0) > 0, 'arma fiambres del paseo');
+  for (const p of ['criollas_box', 'beer_crate', 'jarra_cerveza', 'piquete', 'canasta_amasijos', 'recuerdo_boyaca']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.produced.fiambre_paseo ?? 0) > 0, 'it packs picnic fiambres');
 });
 
-test('La Guayabera con la plaza de Vélez: los viajes de las mulas duran lo mismo que en la Finca (v3.29)', async () => {
+test(`La Guayabera with the Vélez plaza: the mules' trips last the same as in the Finca (v3.29)`, async () => {
   const { legTime } = await import('../src/sim/transport.js');
   const g = ZONES_BY_ID.guayabera.chain;
   const f = ZONES_BY_ID.finca.chain;
@@ -708,7 +708,7 @@ test('La Guayabera con la plaza de Vélez: los viajes de las mulas duran lo mism
   }
 });
 
-test('al cargar una partida de la v3.29, los cupos pasan a ser dos para todo el juego (v3.30)', () => {
+test('loading a v3.29 save, the slots become two for the whole game (v3.30)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
   const root = createInitialState(0);
@@ -722,12 +722,12 @@ test('al cargar una partida de la v3.29, los cupos pasan a ser dos para todo el 
   saveGame(root);
   const back = loadGame();
   assert.ok(back.events.global);
-  assert.deepEqual(back.events.slots, [{ zone: 'guayabera' }, null], 'solo queda el que se está jugando');
+  assert.deepEqual(back.events.slots, [{ zone: 'guayabera' }, null], 'only the one being played remains');
   assert.equal(back.regions.santander.events.slots, undefined);
   assert.ok(back.regions.santander.events.boards.guayabera);
 });
 
-test('Los Llanos se abren al completar Villa de Leyva; con Villavicencio completo quedan terminados (v3.31, v3.37)', async () => {
+test('Los Llanos open upon completing Villa de Leyva; with Villavicencio complete they are finished (v3.31, v3.37)', async () => {
   const { claimGoal } = await import('../src/sim/goals.js');
   const { regionEvents } = await import('../src/sim/events.js');
   const { albumOf } = await import('../src/data/album.js');
@@ -761,12 +761,12 @@ test('Los Llanos se abren al completar Villa de Leyva; con Villavicencio complet
   assert.ok(!REGIONS.find((r) => r.id === 'llanos').wip);
 });
 
-test('La Cachamera sirve la cachama al maracuyá con el jugo que llega del Frutal (v3.33)', async () => {
+test('La Cachamera serves cachama with passion fruit using the juice that comes from the Frutal (v3.33)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'llanos'));
   for (const z of ['frutal', 'cachamera']) game.unlockZone(z);
-  assert.ok(game.state.routes.jugo, 'la Ruta del jugo es de los Llanos');
+  assert.ok(game.state.routes.jugo, 'the Juice route belongs to Los Llanos');
   game.state.coins = 1e15;
   for (const z of ['frutal', 'cachamera']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -778,16 +778,16 @@ test('La Cachamera sirve la cachama al maracuyá con el jugo que llega del Fruta
   CALENDAR.on = false;
   for (let t = 0; t < 600; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  assert.ok((game.state.stats.imported.passion_juice ?? 0) > 0, 'llega jugo del Frutal');
-  for (const p of ['pisillo', 'smoked_cachama', 'cachama_maracuya']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  assert.ok((game.state.stats.imported.passion_juice ?? 0) > 0, 'juice arrives from the Frutal');
+  for (const p of ['pisillo', 'smoked_cachama', 'cachama_maracuya']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
-test('El Hato llanero sirve el almuerzo y la parranda con el aceite de la Palma y la cachama de la Cachamera (v3.34)', async () => {
+test(`El Hato llanero serves lunch and the parranda with the Palma's oil and the Cachamera's cachama (v3.34)`, async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'llanos'));
   for (const z of ['frutal', 'cachamera', 'hato_llanero']) game.unlockZone(z);
-  for (const r of ['aceite', 'cachamas']) assert.ok(game.state.routes[r], `la ruta ${r} es de los Llanos`);
+  for (const r of ['aceite', 'cachamas']) assert.ok(game.state.routes[r], `the ${r} route belongs to Los Llanos`);
   game.state.coins = 1e15;
   for (const z of ['palma', 'cachamera', 'hato_llanero']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -799,16 +799,16 @@ test('El Hato llanero sirve el almuerzo y la parranda con el aceite de la Palma 
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['oil_bottle', 'clean_cachama']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  for (const p of ['almuerzo_llanero', 'parranda_llanera']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  for (const p of ['oil_bottle', 'clean_cachama']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  for (const p of ['almuerzo_llanero', 'parranda_llanera']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
-test('La Talabartería vende el Recuerdo del Llano con el pisillo y la cachama ahumada de la Cachamera (v3.35) y los cueros del Hato llanero (v4.0)', async () => {
+test(`La Talabartería sells the Llano souvenir with the Cachamera's pisillo and smoked cachama (v3.35) and the Hato llanero's hides (v4.0)`, async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'llanos'));
   for (const z of ['frutal', 'cachamera', 'hato_llanero', 'talabarteria']) game.unlockZone(z);
-  for (const r of ['pisillos', 'ahumadas', 'cueros']) assert.ok(game.state.routes[r], `la ruta ${r} es de los Llanos`);
+  for (const r of ['pisillos', 'ahumadas', 'cueros']) assert.ok(game.state.routes[r], `the ${r} route belongs to Los Llanos`);
   game.state.coins = 1e15;
   for (const z of ['cachamera', 'hato_llanero', 'talabarteria']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -820,11 +820,11 @@ test('La Talabartería vende el Recuerdo del Llano con el pisillo y la cachama a
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['pisillo', 'smoked_cachama', 'fresh_hide']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.sold.recuerdo_llano ?? 0) > 0, 'vende recuerdos del Llano');
+  for (const p of ['pisillo', 'smoked_cachama', 'fresh_hide']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.sold.recuerdo_llano ?? 0) > 0, 'it sells Llano souvenirs');
 });
 
-test('Villavicencio recibe lo de las cinco zonas de los Llanos y arma los morrales del viaje (v3.36)', async () => {
+test('Villavicencio receives what the five Llanos zones make and packs the travel backpacks (v3.36)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const { ROUTES } = await import('../src/data/routes.js');
@@ -842,11 +842,11 @@ test('Villavicencio recibe lo de las cinco zonas de los Llanos y arma los morral
   CALENDAR.on = false;
   for (let t = 0; t < 1500; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['oil_box', 'juice_box', 'cachama_maracuya', 'almuerzo_llanero', 'parranda_llanera', 'recuerdo_llano']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.produced.fiambre_viaje ?? 0) > 0, 'arma morrales del viaje');
+  for (const p of ['oil_box', 'juice_box', 'cachama_maracuya', 'almuerzo_llanero', 'parranda_llanera', 'recuerdo_llano']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.produced.fiambre_viaje ?? 0) > 0, 'it packs travel backpacks');
 });
 
-test('La Costa Pacífica se abre al completar Villavicencio; con Buenaventura completa queda terminada (v3.38, v3.44)', async () => {
+test('La Costa Pacífica opens upon completing Villavicencio; with Buenaventura complete it is finished (v3.38, v3.44)', async () => {
   const { claimGoal } = await import('../src/sim/goals.js');
   const { regionEvents } = await import('../src/sim/events.js');
   const { albumOf } = await import('../src/data/album.js');
@@ -882,12 +882,12 @@ test('La Costa Pacífica se abre al completar Villavicencio; con Buenaventura co
   assert.ok(!REGIONS.find((r) => r.id === 'pacifico').wip);
 });
 
-test('La Bahía sirve el tapao de pescado con el aliño que llega de la Azotea (v3.40)', async () => {
+test('La Bahía serves fish tapao with the seasoning that comes from the Azotea (v3.40)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'pacifico'));
   for (const z of ['azotea', 'bahia']) game.unlockZone(z);
-  assert.ok(game.state.routes.alino, 'la Ruta del aliño es de la Costa Pacífica');
+  assert.ok(game.state.routes.alino, 'the Seasoning route belongs to the Costa Pacífica');
   game.state.coins = 1e15;
   for (const z of ['azotea', 'bahia']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -899,16 +899,16 @@ test('La Bahía sirve el tapao de pescado con el aliño que llega de la Azotea (
   CALENDAR.on = false;
   for (let t = 0; t < 600; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  assert.ok((game.state.stats.imported.alino ?? 0) > 0, 'llega aliño de la Azotea');
-  for (const p of ['dried_fish', 'smoked_pargo', 'tapao']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  assert.ok((game.state.stats.imported.alino ?? 0) > 0, 'seasoning arrives from the Azotea');
+  for (const p of ['dried_fish', 'smoked_pargo', 'tapao']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
-test('El Manglar sirve el arroz con piangua y la cazuela con los patacones del Platanal y el pargo de la Bahía (v3.41)', async () => {
+test(`El Manglar serves rice with piangua and the cazuela with the Platanal's patacones and the Bahía's snapper (v3.41)`, async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'pacifico'));
   for (const z of ['azotea', 'bahia', 'manglar']) game.unlockZone(z);
-  for (const r of ['patacones', 'pargos']) assert.ok(game.state.routes[r], `la ruta ${r} es de la Costa Pacífica`);
+  for (const r of ['patacones', 'pargos']) assert.ok(game.state.routes[r], `the ${r} route belongs to the Costa Pacífica`);
   game.state.coins = 1e15;
   for (const z of ['platanal', 'bahia', 'manglar']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -920,17 +920,17 @@ test('El Manglar sirve el arroz con piangua y la cazuela con los patacones del P
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['patacon_bag', 'clean_pargo']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  for (const p of ['arroz_piangua', 'cazuela_mariscos']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  for (const p of ['patacon_bag', 'clean_pargo']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  for (const p of ['arroz_piangua', 'cazuela_mariscos']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
 
-test('El Werregue vende el Recuerdo del Pacífico con el pescado seco y el pargo ahumado de la Bahía (v3.42)', async () => {
+test(`El Werregue sells the Pacific souvenir with the Bahía's dried fish and smoked snapper (v3.42)`, async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'pacifico'));
   for (const z of ['azotea', 'bahia', 'manglar', 'werregue']) game.unlockZone(z);
-  for (const r of ['secos', 'pargos_ahumados']) assert.ok(game.state.routes[r], `la ruta ${r} es de la Costa Pacífica`);
+  for (const r of ['secos', 'pargos_ahumados']) assert.ok(game.state.routes[r], `the ${r} route belongs to the Costa Pacífica`);
   game.state.coins = 1e15;
   for (const z of ['bahia', 'werregue']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -942,11 +942,11 @@ test('El Werregue vende el Recuerdo del Pacífico con el pescado seco y el pargo
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['dried_fish', 'smoked_pargo']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.sold.recuerdo_pacifico ?? 0) > 0, 'vende recuerdos del Pacífico');
+  for (const p of ['dried_fish', 'smoked_pargo']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.sold.recuerdo_pacifico ?? 0) > 0, 'it sells Pacific souvenirs');
 });
 
-test('Buenaventura recibe lo de las cinco zonas de la Costa Pacífica y arma las loncheras de la lancha (v3.43)', async () => {
+test('Buenaventura receives what the five Costa Pacífica zones make and packs the boat lunchboxes (v3.43)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const { ROUTES } = await import('../src/data/routes.js');
@@ -964,11 +964,11 @@ test('Buenaventura recibe lo de las cinco zonas de la Costa Pacífica y arma las
   CALENDAR.on = false;
   for (let t = 0; t < 1500; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['patacon_box', 'alino_box', 'tapao', 'arroz_piangua', 'cazuela_mariscos', 'recuerdo_pacifico']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.produced.lonchera_lancha ?? 0) > 0, 'arma loncheras de la lancha');
+  for (const p of ['patacon_box', 'alino_box', 'tapao', 'arroz_piangua', 'cazuela_mariscos', 'recuerdo_pacifico']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.produced.lonchera_lancha ?? 0) > 0, 'it packs boat lunchboxes');
 });
 
-test('El Amazonas se abre al completar Buenaventura; con Leticia completa queda terminado (v3.47, v3.53)', async () => {
+test('El Amazonas opens upon completing Buenaventura; with Leticia complete it is finished (v3.47, v3.53)', async () => {
   const { claimGoal } = await import('../src/sim/goals.js');
   const { regionEvents } = await import('../src/sim/events.js');
   const { albumOf } = await import('../src/data/album.js');
@@ -1003,12 +1003,12 @@ test('El Amazonas se abre al completar Buenaventura; con Leticia completa queda 
   assert.ok(!REGIONS.find((r) => r.id === 'amazonas').wip);
 });
 
-test('El Lago sirve el pirarucú al ají negro con el ají negro que llega del Ajizal (v3.49)', async () => {
+test('El Lago serves pirarucú with black chili using the black chili that comes from the Ajizal (v3.49)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'amazonas'));
   for (const z of ['ajizal', 'lago']) game.unlockZone(z);
-  assert.ok(game.state.routes.ajinegro, 'la Ruta del ají negro es del Amazonas');
+  assert.ok(game.state.routes.ajinegro, 'the Black chili route belongs to El Amazonas');
   game.state.coins = 1e15;
   for (const z of ['ajizal', 'lago']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -1020,16 +1020,16 @@ test('El Lago sirve el pirarucú al ají negro con el ají negro que llega del A
   CALENDAR.on = false;
   for (let t = 0; t < 600; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  assert.ok((game.state.stats.imported.aji_negro ?? 0) > 0, 'llega ají negro del Ajizal');
-  for (const p of ['salted_pirarucu', 'moqueado', 'pirarucu_aji']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  assert.ok((game.state.stats.imported.aji_negro ?? 0) > 0, 'black chili arrives from the Ajizal');
+  for (const p of ['salted_pirarucu', 'moqueado', 'pirarucu_aji']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
-test('La Casabería sirve el desayuno y el banquete con el asaí del Asaizal y el pirarucú del Lago (v3.50)', async () => {
+test(`La Casabería serves breakfast and the banquet with the Asaizal's açaí and the Lago's pirarucú (v3.50)`, async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'amazonas'));
   for (const z of ['ajizal', 'lago', 'casaberia']) game.unlockZone(z);
-  for (const r of ['bolsas_asai', 'pirarucus']) assert.ok(game.state.routes[r], `la ruta ${r} es del Amazonas`);
+  for (const r of ['bolsas_asai', 'pirarucus']) assert.ok(game.state.routes[r], `the ${r} route belongs to El Amazonas`);
   game.state.coins = 1e15;
   for (const z of ['asaizal', 'lago', 'casaberia']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -1041,16 +1041,16 @@ test('La Casabería sirve el desayuno y el banquete con el asaí del Asaizal y e
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['asai_bag', 'clean_pirarucu']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  for (const p of ['desayuno_amazonico', 'banquete_maloca']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `vende ${p}`);
+  for (const p of ['asai_bag', 'clean_pirarucu']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  for (const p of ['desayuno_amazonico', 'banquete_maloca']) assert.ok((game.state.stats.sold[p] ?? 0) > 0, `it sells ${p}`);
 });
 
-test('La Yanchama vende el Recuerdo del Amazonas con el pirarucú salado y el moqueado del Lago (v3.51)', async () => {
+test(`La Yanchama sells the Amazon souvenir with the Lago's salted and smoked pirarucú (v3.51)`, async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const game = new Game(createInitialState(0, 'amazonas'));
   for (const z of ['ajizal', 'lago', 'casaberia', 'yanchama']) game.unlockZone(z);
-  for (const r of ['pirarucus_salados', 'moqueados']) assert.ok(game.state.routes[r], `la ruta ${r} es del Amazonas`);
+  for (const r of ['pirarucus_salados', 'moqueados']) assert.ok(game.state.routes[r], `the ${r} route belongs to El Amazonas`);
   game.state.coins = 1e15;
   for (const z of ['lago', 'yanchama']) {
     for (const id of chainOf(z).slice(1)) game.unlock(id);
@@ -1062,11 +1062,11 @@ test('La Yanchama vende el Recuerdo del Amazonas con el pirarucú salado y el mo
   CALENDAR.on = false;
   for (let t = 0; t < 900; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['salted_pirarucu', 'moqueado']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.sold.recuerdo_amazonas ?? 0) > 0, 'vende recuerdos del Amazonas');
+  for (const p of ['salted_pirarucu', 'moqueado']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.sold.recuerdo_amazonas ?? 0) > 0, 'it sells Amazon souvenirs');
 });
 
-test('Leticia recibe lo de las cinco zonas del Amazonas y arma las provisiones de la canoa (v3.52)', async () => {
+test('Leticia receives what the five Amazonas zones make and packs the canoe provisions (v3.52)', async () => {
   const { chainOf } = await import('../src/sim/chain.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
   const { ROUTES } = await import('../src/data/routes.js');
@@ -1084,6 +1084,6 @@ test('Leticia recibe lo de las cinco zonas del Amazonas y arma las provisiones d
   CALENDAR.on = false;
   for (let t = 0; t < 1500; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
-  for (const p of ['asai_box', 'aji_box', 'pirarucu_aji', 'desayuno_amazonico', 'banquete_maloca', 'recuerdo_amazonas']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `llega ${p}`);
-  assert.ok((game.state.stats.produced.provision_canoa ?? 0) > 0, 'arma provisiones de la canoa');
+  for (const p of ['asai_box', 'aji_box', 'pirarucu_aji', 'desayuno_amazonico', 'banquete_maloca', 'recuerdo_amazonas']) assert.ok((game.state.stats.imported[p] ?? 0) > 0, `${p} arrives`);
+  assert.ok((game.state.stats.produced.provision_canoa ?? 0) > 0, 'it packs canoe provisions');
 });

@@ -28,26 +28,26 @@ function lecheria(level = 50) {
   return game;
 }
 
-test('a cada rama le toca un cuarto de la leche; el último es para la Ruta de la leche', () => {
+test('each branch gets a quarter of the milk; the last one is for the Milk route', () => {
   for (const id of ['cheesery', 'separator', 'arequipe_pot']) assert.equal(branchShare('pasteurizer', id), 0.25);
   assert.equal(branchShare('farm', 'wetmill'), 1);
   const s = lecheria().state;
   assert.deepEqual(pendingRoutes(s, 'pasteurizer').map((r) => r.id), ['leche']);
 });
 
-test('la leche que se guarda para la ruta que aún no abre no es un desvío', () => {
+test('milk kept for the route that has not opened yet is not a diversion', () => {
   const game = lecheria();
   const s = game.state;
   run(game, 300);
   const row = analyzeChain(s, 'lecheria').rows.find((r) => r.id === 'pasteurizer');
-  assert.ok(Math.abs(row.diverted - row.output / 4) < 1e-6, `se vende ${row.diverted} de ${row.output}`);
+  assert.ok(Math.abs(row.diverted - row.output / 4) < 1e-6, `${row.diverted} of ${row.output} is sold`);
   for (let t = 0; t < 60; t += 0.1) {
     game.step(0.1);
     assert.equal(alerts(s.stations.pasteurizer).diverting, false);
   }
 });
 
-test('una rama por debajo de la anterior recibe lo que le cabe (antes no recibía nada)', () => {
+test('a branch below the previous one receives what fits (before it received nothing)', () => {
   const game = lecheria();
   const s = game.state;
   // At level 45, Quesera's input can't hold a full mule load (level 50).
@@ -57,6 +57,6 @@ test('una rama por debajo de la anterior recibe lo que le cabe (antes no recibí
   const before = s.stats.produced.cheese ?? 0;
   run(game, 120);
   const real = ((s.stats.produced.cheese ?? 0) - before) / 120;
-  assert.ok(real > expected * 0.95, `queso ${real.toFixed(2)}/s de ${expected.toFixed(2)}/s`);
+  assert.ok(real > expected * 0.95, `cheese ${real.toFixed(2)}/s of ${expected.toFixed(2)}/s`);
   assert.equal(alerts(s.stations.cheesery).starved, false);
 });

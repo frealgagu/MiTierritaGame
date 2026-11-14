@@ -27,7 +27,7 @@ function* points(road) {
 }
 
 for (const z of ZONE_LIST) {
-  test(`${z.name}: lo que se mueve se pinta delante o detrás de cada estación según su huella`, () => {
+  test(`${z.name}: what moves is drawn in front of or behind each station according to its footprint`, () => {
     const views = footprints(z).map((f) => ({ foot: f }));
     orderFootprints(views);
     setBlockers(() => views);
@@ -38,11 +38,11 @@ for (const z of ZONE_LIST) {
           for (const v of views) {
             const f = v.foot;
             const inside = gx > f.x + 0.05 && gx < f.x + f.w - 0.05 && gy > f.y + 0.05 && gy < f.y + f.h - 0.05;
-            if (vehicle) assert.ok(!inside, `${name} atraviesa ${f.id} en (${gx.toFixed(1)}, ${gy.toFixed(1)})`);
+            if (vehicle) assert.ok(!inside, `${name} crosses ${f.id} at (${gx.toFixed(1)}, ${gy.toFixed(1)})`);
             if (!overlaps(f, gx, gy)) continue;
             const front = gx >= f.x + f.w || gy >= f.y + f.h;
-            if (front) assert.ok(zIndex > v.zIndex, `${name} en (${gx.toFixed(1)}, ${gy.toFixed(1)}) debería ir delante de ${f.id}`);
-            else assert.ok(zIndex < v.zIndex, `${name} en (${gx.toFixed(1)}, ${gy.toFixed(1)}) debería ir detrás de ${f.id}`);
+            if (front) assert.ok(zIndex > v.zIndex, `${name} at (${gx.toFixed(1)}, ${gy.toFixed(1)}) should be in front of ${f.id}`);
+            else assert.ok(zIndex < v.zIndex, `${name} at (${gx.toFixed(1)}, ${gy.toFixed(1)}) should be behind ${f.id}`);
           }
         }
       }
