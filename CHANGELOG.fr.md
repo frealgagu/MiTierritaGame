@@ -1,1291 +1,1284 @@
-# Registro de cambios
+# Journal des modifications
 
 ## v5.6.0 — Les nouveautés dans ta langue
 - **Les nouveautés de chaque version arrivent dans ta langue :** l’application les affiche en français, espagnol, anglais ou portugais, comme le jeu.
 - **La politique de confidentialité en quatre langues :** ⚙️ › 🔒 Confidentialité et ℹ️ À propos mènent à la page dans ta langue.
 
-## v5.5.1 — Ajustes
-- Ajustes y mejoras.
+## v5.5.1 — Ajustements
+- Ajustements et améliorations.
 
-## v5.5.0 — La zona especial
-- **⭐ La zona especial ya se abre:** cuando todas las regiones tengan el segundo final o un reinicio, se abre la zona de premio, con su recorrido de ocho estaciones en una sola cadena y una mejora ×32 en cada una al llegar al nivel 100.
-- **Su evento:** las compras no quitan un freno, sino que hacen producir más a toda la zona. El oro se gana a los 20 minutos, comprándolas o subiendo todo al nivel 50 a tiempo.
-- **Su álbum, sus logros y su música**, con dibujos propios.
+## v5.5.0 — La zone spéciale
+- **⭐ La zone spéciale s’ouvre enfin :** quand toutes les régions ont la deuxième fin ou un redémarrage, la zone de récompense s’ouvre, avec son circuit de huit stations en une seule chaîne et une amélioration ×32 pour chacune en arrivant au niveau 100.
+- **Son événement :** les achats n’enlèvent pas un frein ; ils font produire davantage toute la zone. L’or se gagne en 20 minutes, en les achetant ou en montant tout au niveau 50 à temps.
+- **Son album, ses succès et sa musique**, avec des dessins originaux.
 
-## v5.4.2 — Ajustes
-- Ajustes y mejoras.
+## v5.4.2 — Ajustements
+- Ajustements et améliorations.
 
-## v5.4.1 — Ajustes
-- Ajustes y mejoras.
+## v5.4.1 — Ajustements
+- Ajustements et améliorations.
 
-## v5.4.0 — Zona especial (primera parte)
-- **La zona especial ya tiene su recorrido:** ocho estaciones en una sola cadena, cada una con una mejora ×32 al llegar al nivel 100. Se abrirá en una próxima versión, con sus dibujos, su evento y su música.
+## v5.4.0 — Zone spéciale (première partie)
+- **La zone spéciale a déjà son circuit :** huit stations en une seule chaîne, chacune avec une amélioration ×32 en arrivant au niveau 100. Elle s’ouvrira dans une prochaine version, avec ses dessins, son événement et sa musique.
 
-## v5.3.0 — Versiones automáticas
-- **Cada publicación trae su versión nueva:** si un cambio llega sin subir la versión, la publicación la sube sola (5.3.0, 5.3.1…) y avisa de la novedad en la app y en Google Play.
-- **El número de compilación vuelve a salir de la versión**, con cinco cifras: la 5.3.0 es la 50300.
+## v5.3.0 — Versions automatiques
+- **Chaque publication apporte sa nouvelle version :** si un changement arrive sans monter la version, la publication la monte toute seule (5.3.0, 5.3.1…) et annonce la nouveauté dans l’application et sur Google Play.
+- **Le numéro de compilation sort de nouveau de la version**, avec cinq chiffres : la 5.3.0 est la 50300.
 
-## v4.7.4 — Copia de seguridad en archivo
-- **💾 Guardar en archivo y 📂 Abrir archivo:** en el menú, la copia de seguridad de la partida ahora se guarda como archivo. En el teléfono se abre el menú Compartir para guardarla en Drive, en Archivos o donde quieras; en otro dispositivo se abre con «Abrir archivo». Copiar el texto largo al portapapeles podía dejarlo vacío.
+## v4.7.4 — Sauvegarde dans un fichier
+- **💾 Enregistrer dans un fichier et 📂 Ouvrir un fichier :** dans le menu, la sauvegarde de la partie s’enregistre maintenant comme fichier. Sur le téléphone, le menu Partager s’ouvre pour l’enregistrer dans Drive, dans Fichiers ou où tu veux ; sur un autre appareil, elle s’ouvre avec « Ouvrir un fichier ». Copier le long texte dans le presse-papiers pouvait le laisser vide.
 
-## v4.7.3 — Eventos a demanda
-- **🔁 Eventos a demanda:** con oro en todos los eventos de una región, ya no salen solos en esa región. Por 20 ⭐ de Renombre (una vez por región) puedes jugar cualquiera otra vez cuando quieras, sin esperar los 2 años; siempre con un máximo de dos tableros abiertos a la vez.
-- **La lista de eventos** muestra el tiempo que lleva cada evento abierto y avisa con «⬆ Todo al 50» cuando ya todo está al nivel máximo.
-- **El número del botón de eventos** ya no cuenta los que ganaste y siguen abiertos.
-- **Un evento ganado** solo dice con qué medalla lo ganaste.
+## v4.7.3 — Événements à la demande
+- **🔁 Événements à la demande :** avec l’or dans tous les événements d’une région, ils n’apparaissent plus tout seuls dans cette région. Pour 20 ⭐ de Renom (une fois par région), tu peux rejouer n’importe lequel quand tu veux, sans attendre les 2 ans ; toujours avec au plus deux plateaux ouverts en même temps.
+- **La liste des événements** montre depuis combien de temps chaque événement est ouvert et signale « ⬆ Tout au 50 » quand tout est déjà au niveau maximum.
+- **Le numéro du bouton des événements** ne compte plus ceux que tu as gagnés et qui restent ouverts.
+- **Un événement gagné** dit seulement avec quelle médaille tu l’as gagné.
 
-## v4.7.2 — Construir desde la cadena
-- **Construir desde la cadena ya no sale en blanco:** las estaciones de Bogotá que solo reciben de tractomula (como la Despensa de la Zona G) dejaban vacío su panel de construir.
-- **La cadena de Bogotá se mueve más suave:** mientras la mueves, las líneas se quedan quietas y el mapa de atrás descansa.
-- **Al completar todas las zonas**, el mensaje ya no dice que vienen más: ahora invita a buscar el segundo final.
+## v4.7.2 — Construire depuis la chaîne
+- **Construire depuis la chaîne ne s’affiche plus vide :** les stations de Bogotá qui ne reçoivent que par semi-remorque (comme le Garde-manger de la Zona G) laissaient vide leur panneau de construction.
+- **La chaîne de Bogotá bouge plus en douceur :** pendant que tu la déplaces, les lignes restent immobiles et la carte derrière se repose.
+- **En terminant toutes les zones**, le message ne dit plus que d’autres arrivent : il invite maintenant à viser la deuxième fin.
 
-## v4.7.1 — Solo lo del evento
-- **En los eventos de Bogotá solo aparecen sus estaciones:** las demás de la red ya no se ven en el mapa ni en la cadena, ni se sugiere construirlas.
-- **Los objetivos de Bogotá que pedían vender café, mañanas, domingos o subidas ahora piden producirlos:** si otra estación los recibía todos, no se cumplían nunca.
-- **⭐ Zona especial:** al final de la lista de regiones se cuenta cuántas llevan el segundo final (o ya se reiniciaron). Cuando sean todas, se abre una zona de premio que llega en una versión próxima.
-- **Volver a empezar** ya no está en el menú: se hace desde los objetivos, en la tarjeta del segundo final.
+## v4.7.1 — Seulement l’événement
+- **Dans les événements de Bogotá n’apparaissent que leurs stations :** les autres du réseau ne se voient plus sur la carte ni dans la chaîne, et on ne propose plus de les construire.
+- **Les objectifs de Bogotá qui demandaient de vendre du café, des matinées, des dimanches ou des montées demandent maintenant de les produire :** si une autre station les recevait tous, ils ne se remplissaient jamais.
+- **⭐ Zone spéciale :** à la fin de la liste des régions, on compte combien ont la deuxième fin (ou ont déjà redémarré). Quand ce seront toutes, une zone de récompense s’ouvrira, dans une prochaine version.
+- **Recommencer** n’est plus dans le menu : cela se fait depuis les objectifs, sur la carte de la deuxième fin.
 
 ## v4.7.0 — La Gran Feria
-- **🎪 Un séptimo evento en Bogotá: la Gran Feria**, con toda la red en el tablero. Sale cuando ya ganaste medalla en los otros seis. No frena nada: sus tres compras suben el precio de todo lo que se vende (×1,2, ×1,5 y ×2) por la demanda. Trae su logro, «La feria del país», que paga bien en Renombre.
-- **Maestría y Supremacía** ya cuentan bien las estaciones que llegaron al nivel (antes, faltando una, decía 9/11).
-- **El número de los objetivos** ya incluye el final de la zona cuando está cumplido, y no se repite al ir cobrando. Un objetivo cumplido se puede cobrar desde afuera aunque no esté entre los primeros.
-- **La cadena de Bogotá:** todas las estaciones del mismo ancho, las líneas que se cruzan van a distinta altura y ya no se traba al recorrerla.
+- **🎪 Un septième événement à Bogotá : la Gran Feria**, avec tout le réseau sur le plateau. Elle apparaît quand tu as déjà gagné une médaille dans les six autres. Elle ne freine rien : ses trois achats montent le prix de tout ce qui se vend (×1,2, ×1,5 et ×2) grâce à la demande. Elle apporte son succès, « La foire du pays », qui paie bien en Renom.
+- **Maîtrise et Suprématie** comptent maintenant correctement les stations arrivées au niveau (avant, s’il en manquait une, cela disait 9/11).
+- **Le numéro des objectifs** inclut maintenant la fin de la zone quand elle est remplie, et ne se répète plus en encaissant. Un objectif rempli peut s’encaisser de l’extérieur même s’il n’est pas parmi les premiers.
+- **La chaîne de Bogotá :** toutes les stations de la même largeur, les lignes qui se croisent passent à des hauteurs différentes et elle ne se bloque plus quand on la parcourt.
 
-## v4.6.0 — Bogotá en red
-- **🏔️ Bogotá ya no va por barrios: es una red.** Una estación se abre apenas estén construidas las que la abastecen, así que se empieza con cinco a la vez y baratas (el Tostadero del Chorro, la Despensa de la Zona G, el Toldo de tejidos, el Puesto de flores y el Puesto de frutas) y las del centro siguen siendo las más caras.
-- **Muchas estaciones reciben de dos o tres de la misma Bogotá**, además de su tractomula (la Fritanga recibe la canasta de la Pescadería, las salsas de la Despensa y el chicharrón de la Cocina de entradas). Las tractomulas llegan solo donde tiene sentido.
-- **Tres subproductos nuevos por la canaleta:** café molido del Tostadero, chicharrón de la Cocina de entradas y caldo de costilla de la Parrilla.
-- **Una sola cadena**, ancha, que se recorre hacia los lados y hacia arriba y abajo (en el computador también arrastrando).
-- **Bogotá dura más, unas 33 horas:** es la región más larga, porque todo está en una sola zona. La mejora recomendada ahora también propone subir una rama entera cuando una sola pieza no alcanza a notarse.
-- **🚌 El TransMilenio** va y viene por su carril en la Caracas, la 30 y la Calle 80 (solo de adorno).
-- **En la lista de zonas dice solo «Bogotá»**, sin «Zona 1», porque es su única zona.
-- **La Bogotá anterior se reinicia:** la región, sus medallas, láminas y logros se borran de la partida, sin devolver monedas. Los eventos se ajustaron a la red nueva: en sus tableros subir las estaciones cuesta menos, para que se note jugar bien.
+## v4.6.0 — Bogotá en réseau
+- **🏔️ Bogotá ne va plus par quartiers : c’est un réseau.** Une station s’ouvre dès que celles qui l’approvisionnent sont construites, donc on commence avec cinq à la fois, et bon marché (la Torréfaction du Chorro, le Garde-manger de la Zona G, l’Étal de tissages, l’Étal de fleurs et l’Étal de fruits), et celles du centre restent les plus chères.
+- **Beaucoup de stations reçoivent de deux ou trois stations de Bogotá même**, en plus de leur semi-remorque (la Fritanga reçoit le panier de la Poissonnerie, les sauces du Garde-manger et le chicharrón de la Cuisine des entrées). Les semi-remorques n’arrivent que là où cela a du sens.
+- **Trois nouveaux sous-produits par la goulotte :** du café moulu de la Torréfaction, du chicharrón de la Cuisine des entrées et du bouillon de côtes du Grill.
+- **Une seule chaîne**, large, qu’on parcourt sur les côtés et de haut en bas (sur ordinateur, aussi en faisant glisser).
+- **Bogotá dure plus longtemps, environ 33 heures :** c’est la région la plus longue, car tout est dans une seule zone. L’amélioration recommandée propose maintenant aussi de monter une branche entière quand une pièce seule ne fait pas de différence visible.
+- **🚌 Le TransMilenio** va et vient sur sa voie de la Caracas, de la 30 et de la Calle 80 (pour le décor).
+- **Dans la liste des zones, il est écrit seulement « Bogotá »**, sans « Zone 1 », car c’est sa seule zone.
+- **L’ancienne Bogotá est réinitialisée :** la région, ses médailles, ses images et ses succès sont effacés de la partie, sans rendre de pièces. Les événements ont été ajustés au nouveau réseau : sur leurs plateaux, monter les stations coûte moins, pour que bien jouer se voie.
 
-## v4.5.1 — Nada pasa por encima de los techos
-- **Las chivas y las tractomulas ya no pasan por encima de los techos:** lo que se mueve (chivas, tractomulas, Willys, mulas, gente y animales) se pinta delante o detrás de cada estación y de la bodega según dónde esté de su huella. Antes las chivas iban siempre encima de todo y, al pasar por detrás de la bodega, se veían sobre la teja.
-- **Las estaciones grandes ya no tapan a las de adelante** (el Tostadero del Chorro, de 6×6, podía pintarse encima de la Chocolatería).
+## v4.5.1 — Plus rien ne passe sur les toits
+- **Les chivas et les semi-remorques ne passent plus sur les toits :** ce qui bouge (chivas, semi-remorques, Willys, mules, gens et animaux) se dessine devant ou derrière chaque station et l’entrepôt selon où il se trouve par rapport à son emprise. Avant, les chivas passaient toujours par-dessus tout et, en passant derrière l’entrepôt, on les voyait sur les tuiles.
+- **Les grandes stations ne cachent plus celles de devant** (la Torréfaction du Chorro, de 6×6, pouvait se dessiner par-dessus la Chocolaterie).
 
 ## v4.5.0 — Bogotá
-- **🏔️ Bogotá, la nueva región**, se abre al completar Zipaquirá. No produce nada propio: es una sola zona cuatro veces más grande que las demás, con los Cerros Orientales y Monserrate, adonde todo llega en **🚛 tractomula** desde las otras regiones, con carga que no se acaba.
-- **Cinco barrios que se construyen a la vez:** La Candelaria (café, chocolate y onces santafereñas), Chapinero y la Zona G (los restaurantes), Usaquén (el mercado de pulgas del domingo), Paloquemao (la plaza de mercado) y el centro, que se abre con los otros cuatro: el Hotel de la capital, el Funicular de Monserrate, el Pabellón de las regiones y la Gran Feria de Mi Tierrita, el final. La cadena tiene una pestaña por barrio. 24 estaciones y 27 tractomulas.
-- **Seis eventos:** el aguacero en el Chorro de Quevedo, el alumbrado de la Séptima, el festival gastronómico, el pico y placa, el ventarrón del domingo en Usaquén y el paro camionero. Cada uno se ve en el mapa y cambia con cada compra.
-- **Su álbum** (La Candelaria, la comida, Monserrate y los cerros, el transporte, la cultura y los barrios), con 36 láminas como el Chorro de Quevedo, la changua, el copetón, el TransMilenio, la ciclovía y el Museo del Oro; **quince logros** y su pantalla de victoria.
-- **Su música, la Danza de La Candelaria:** bandola, tiple y guitarra con el ritmo de habanera. También en la página de descargas.
+- **🏔️ Bogotá, la nouvelle région**, s’ouvre en terminant Zipaquirá. Elle ne produit rien elle-même : c’est une seule zone quatre fois plus grande que les autres, avec les Cerros Orientales et Monserrate, où tout arrive en **🚛 semi-remorque** depuis les autres régions, avec une charge qui ne s’épuise jamais.
+- **Cinq quartiers qui se construisent en même temps :** La Candelaria (café, chocolat et goûter santafereño), Chapinero et la Zona G (les restaurants), Usaquén (le marché aux puces du dimanche), Paloquemao (le marché couvert) et le centre, qui s’ouvre avec les quatre autres : l’Hôtel de la capitale, le Funiculaire de Monserrate, le Pavillon des régions et la Gran Feria de Mi Tierrita, la fin. La chaîne a un onglet par quartier. 24 stations et 27 semi-remorques.
+- **Six événements :** l’averse au Chorro de Quevedo, les illuminations de la Séptima, le festival gastronomique, la circulation alternée, le coup de vent du dimanche à Usaquén et la grève des routiers. Chacun se voit sur la carte et change à chaque achat.
+- **Son album** (La Candelaria, la cuisine, Monserrate et les collines, les transports, la culture et les quartiers), avec 36 images comme le Chorro de Quevedo, la changua, le copetón, le TransMilenio, la ciclovía et le Musée de l’Or ; **quinze succès** et son écran de victoire.
+- **Sa musique, la Danza de La Candelaria :** bandola, tiple et guitare au rythme de habanera. Aussi sur la page de téléchargements.
 
-## v4.4.11 — La avioneta llega a cada región
-- **🔁 Producción ×N** ahora va arriba, debajo de la mejora recomendada, a la derecha (antes iba abajo, encima de los objetivos).
-- **✈️ Al acercarte a otra región** en el mapa de zonas, la avioneta llega volando a su aeropuerto, aterriza y se va. Si eliges una de sus zonas, la pista vuelve a aparecer y el Willys sale de ahí hasta la zona. En la región donde estás, en las bloqueadas y con el viaje «⚡ Directo» no hay vuelo.
+## v4.4.11 — Le petit avion arrive dans chaque région
+- **🔁 Production ×N** se trouve maintenant en haut, sous l’amélioration recommandée, à droite (avant, en bas, au-dessus des objectifs).
+- **✈️ En t’approchant d’une autre région** sur la carte des zones, le petit avion arrive en volant à son aéroport, atterrit et repart. Si tu choisis une de ses zones, la piste réapparaît et la Willys en part jusqu’à la zone. Dans la région où tu es, dans celles qui sont verrouillées et avec le voyage « ⚡ Direct », il n’y a pas de vol.
 
-## v4.4.10 — Aeropuertos en su sitio
-- **✈️ Los aeropuertos del mapa de zonas** están donde están los de verdad: El Edén en Armenia, Palonegro en Bucaramanga, Rafael Núñez en Cartagena, el de Sogamoso, La Vanguardia en Villavicencio, el de Buenaventura, el de Leticia, el de Neiva y El Dorado. Ahí aterriza la avioneta y de ahí sale el Willys.
-- **Ninguna zona ni aeropuerto se sale de su región** en el mapa: si un punto cae afuera o pegado al borde, se corre hacia adentro (el de Cundinamarca queda en la Sabana, junto a Bogotá).
-- **La mejora recomendada** ya no se queda sin sugerencia cuando una estación espera a la vez lo de la anterior y lo que llega por una ruta: también prueba subir los arrieros de la estación que la abastece.
+## v4.4.10 — Les aéroports à leur place
+- **✈️ Les aéroports de la carte des zones** sont là où sont les vrais : El Edén à Armenia, Palonegro à Bucaramanga, Rafael Núñez à Cartagena, celui de Sogamoso, La Vanguardia à Villavicencio, celui de Buenaventura, celui de Leticia, celui de Neiva et El Dorado. C’est là qu’atterrit le petit avion et de là que part la Willys.
+- **Aucune zone ni aucun aéroport ne sort de sa région** sur la carte : si un point tombe dehors ou collé au bord, il est déplacé vers l’intérieur (celui de Cundinamarca reste dans la Sabana, à côté de Bogotá).
+- **L’amélioration recommandée** ne reste plus sans suggestion quand une station attend à la fois ce qui vient de la précédente et ce qui arrive par une route : elle essaie aussi de monter les muletiers de la station qui l’approvisionne.
 
-## v4.4.9 — La flecha de subir de nivel, ahora sí
-- **La flecha verde de subir de nivel** («⬆ Todo al nivel…») ya se ve con su borde y su fondo claro sobre el botón verde. En la v4.4.8 el dibujo estaba listo, pero el juego seguía mostrando la flecha del teléfono.
+## v4.4.9 — La flèche de montée de niveau, pour de bon
+- **La flèche verte de montée de niveau** (« ⬆ Tout au niveau… ») se voit maintenant avec sa bordure et son fond clair sur le bouton vert. Dans la v4.4.8 le dessin était prêt, mais le jeu montrait encore la flèche du téléphone.
 
-## v4.4.8 — Cundinamarca completa
-- **🌹 Cundinamarca queda completa** con sus seis eventos, su álbum y sus logros. Al completar Zipaquirá tiene su segundo final, como las demás regiones.
-- **Seis eventos nuevos:** las heladas en las Flores, la cosecha grande de fresa en Sibaté, la Semana Santa en Guatavita, el derrumbe que deja sin rosas a las Salinas, el domingo de ajiaco en la Cocina y la Navidad en la Catedral de Sal. Cada uno se ve en el mapa y cambia con cada compra.
-- **El álbum de Cundinamarca:** seis páginas (la Sabana, la cocina, las flores, la sal, los muiscas y los pueblos) con 36 láminas: la laguna de Guatavita, el Salto del Tequendama, la balsa de El Dorado, el tren de la Sabana, la bandola y más.
-- **Quince logros de la región** y las pantallas de victoria de sus seis zonas.
-- **El botón de cobrar** de los objetivos ya no queda pegado al borde ni a la barra de avance.
-- **La flecha verde de subir de nivel** («⬆ Todo al nivel…») tiene borde y fondo claro, para que se vea sobre el botón verde. El tren 🚂 también tiene ícono propio.
+## v4.4.8 — Cundinamarca complète
+- **🌹 Cundinamarca est complète** avec ses six événements, son album et ses succès. En terminant Zipaquirá, elle a sa deuxième fin, comme les autres régions.
+- **Six nouveaux événements :** les gelées aux Fleurs, la grande récolte de fraises à Sibaté, la Semaine sainte à Guatavita, le glissement de terrain qui laisse les Salines sans roses, le dimanche d’ajiaco à la Cuisine et Noël à la Cathédrale de sel. Chacun se voit sur la carte et change à chaque achat.
+- **L’album de Cundinamarca :** six pages (la Sabana, la cuisine, les fleurs, le sel, les Muiscas et les villages) avec 36 images : la lagune de Guatavita, le Salto del Tequendama, le radeau d’El Dorado, le train de la Sabana, la bandola et plus encore.
+- **Quinze succès pour la région** et les écrans de victoire de ses six zones.
+- **Le bouton d’encaissement** des objectifs ne colle plus au bord ni à la barre de progression.
+- **La flèche verte de montée de niveau** (« ⬆ Tout au niveau… ») a une bordure et un fond clair, pour se voir sur le bouton vert. Le train 🚂 a aussi son icône.
 
-## v4.4.7 — Tablero del evento recogible
-- **▾ Recoger el tablero del evento:** con el botón junto al reloj, el tablero queda solo con el título, el reloj y la barra de avance, y deja ver y tocar las estaciones en teléfonos pequeños. Con ▴ (o tocando la fila del título) se abre otra vez. El teléfono recuerda cómo lo dejaste.
+## v4.4.7 — Plateau d’événement repliable
+- **▾ Replier le plateau de l’événement :** avec le bouton à côté de l’horloge, le plateau ne garde que le titre, l’horloge et la barre de progression, et laisse voir et toucher les stations sur les petits téléphones. Avec ▴ (ou en touchant la ligne du titre) il s’ouvre de nouveau. Le téléphone se souvient de comment tu l’as laissé.
 
-## v4.4.6 — Borrar partida en dos pasos y botones parejos
-- **🗑️ Borrar partida:** en el menú aparece primero el botón; al tocarlo se muestra la barra para deslizar y confirmar. Si no se desliza en unos segundos, vuelve el botón.
-- **Todos los botones del juego tienen el mismo alto**, con el texto centrado, aunque el texto sea corto o largo.
+## v4.4.6 — Effacer la partie en deux étapes et boutons égaux
+- **🗑️ Effacer la partie :** dans le menu apparaît d’abord le bouton ; en le touchant, la barre à faire glisser pour confirmer s’affiche. Si on ne la fait pas glisser en quelques secondes, le bouton revient.
+- **Tous les boutons du jeu ont la même hauteur**, avec le texte centré, que le texte soit court ou long.
 
-## v4.4.5 — Cundinamarca: Zipaquirá y la Catedral de Sal
-- **⛪ Zona 6 de Cundinamarca: Zipaquirá**, la última de la región, que se abre al completar La Cocina. Como Neiva, no tiene fuente propia: a su plaza colonial de casonas blancas con balcones verdes llega una carretera de cada zona. La **Floristería de la plaza** arma arreglos con las cajas de flores; el **Salón de onces** sirve chocolate con queso y las fresas con crema de Sibaté; el **Hotel de la plaza** recibe el almuerzo sabanero y la mermelada; la **Plaza de mercado**, el almuerzo de trucha; las **Mochilas del paseo** llevan las canastas y los cofres de sal de Nemocón, y todo termina en la **Entrada a la Catedral de Sal**, la mina con la cruz tallada a 180 metros bajo tierra. Don Hernán, el guía de la mina, le da la bienvenida.
-- **Siete rutas nuevas** unen a Zipaquirá con las otras cinco zonas de Cundinamarca.
-- Los eventos, el álbum y los logros de Cundinamarca llegan en la próxima versión; mientras tanto la región no tiene segundo final.
-- Si ya habías completado La Cocina, Zipaquirá se abre sola al actualizar.
+## v4.4.5 — Cundinamarca : Zipaquirá et la Cathédrale de sel
+- **⛪ Zone 6 de Cundinamarca : Zipaquirá**, la dernière de la région, qui s’ouvre en terminant La Cocina. Comme Neiva, elle n’a pas de source propre : une route de chaque zone arrive à sa place coloniale aux grandes maisons blanches à balcons verts. Le **Fleuriste de la place** compose des bouquets avec les caisses de fleurs ; le **Salon de thé** sert du chocolat au fromage et les fraises à la crème de Sibaté ; l’**Hôtel de la place** reçoit le déjeuner de la Sabana et la confiture ; le **Marché**, le déjeuner de truite ; les **Sacs à dos de la promenade** emportent les paniers et les coffrets de sel de Nemocón, et tout se termine à l’**Entrée de la Cathédrale de sel**, la mine avec la croix sculptée à 180 mètres sous terre. Don Hernán, le guide de la mine, te souhaite la bienvenue.
+- **Sept nouvelles routes** relient Zipaquirá aux cinq autres zones de Cundinamarca.
+- Les événements, l’album et les succès de Cundinamarca arrivent dans la prochaine version ; en attendant, la région n’a pas de deuxième fin.
+- Si tu avais déjà terminé La Cocina, Zipaquirá s’ouvre toute seule à la mise à jour.
 
-## v4.4.4 — Cundinamarca: La Cocina de la Sabana
-- **🍲 Zona 5 de Cundinamarca: La Cocina de la Sabana**, en Chía, que se abre al completar Las Salinas. El **ajiaco santafereño** de principio a fin: la **huerta de papa**, el **peladero**, la **olla del caldo** (donde la papa criolla lo espesa), la **olla del ajiaco** (con guascas, mazorca y pollo) y la **servidora**, que le pone crema, alcaparras y aguacate.
-- **Nuevas rutas:** el **Restaurante santafereño** sirve el **almuerzo sabanero** con el ajiaco, la **trucha ahumada** y el **ceviche** que llegan de Guatavita. Doña Teresa, la cocinera, le da la bienvenida.
-- Si ya habías completado Las Salinas, La Cocina se abre sola al actualizar.
+## v4.4.4 — Cundinamarca : La Cocina de la Sabana
+- **🍲 Zone 5 de Cundinamarca : La Cocina de la Sabana**, à Chía, qui s’ouvre en terminant Las Salinas. L’**ajiaco santafereño** du début à la fin : le **potager de pommes de terre**, l’**éplucheuse**, la **marmite du bouillon** (où la papa criolla l’épaissit), la **marmite de l’ajiaco** (avec guascas, maïs et poulet) et la **serveuse**, qui ajoute crème, câpres et avocat.
+- **Nouvelles routes :** le **Restaurant santafereño** sert le **déjeuner de la Sabana** avec l’ajiaco, la **truite fumée** et le **ceviche** qui arrivent de Guatavita. Doña Teresa, la cuisinière, te souhaite la bienvenue.
+- Si tu avais déjà terminé Las Salinas, La Cocina s’ouvre toute seule à la mise à jour.
 
-## v4.4.3 — Cundinamarca: Las Salinas de Nemocón
-- **🧂 Zona 4 de Cundinamarca: Las Salinas de Nemocón**, que se abre al completar Las Truchas. Del **socavón** sale la roca de sal, que en los **Pozos de salmuera** se disuelve y da dos productos: la salmuera y los **bloques de sal**, que pasan por la canaleta al **Taller de tallado**. La salmuera se reparte entre los **Tachos de evaporación** (sal refinada) y las **Gachas de barro**, donde se cuaja el pan de sal como lo hacían los muiscas. El **Empaque de regalo** junta la sal con las figuras talladas en el **cofre de sal**.
-- **Las primeras rutas de Cundinamarca:** la **Armadora de canastas** arma la **canasta sabanera** con el pan de sal, los **ramos de rosas** que llegan de Las Flores y las **bandejas de fresa** de Sibaté.
-- Doña Blanca, la salinera, le da la bienvenida; en el patio de la mina hay montones de sal y vagonetas.
-- Si ya habías completado Las Truchas, Las Salinas se abren solas al actualizar.
+## v4.4.3 — Cundinamarca : Las Salinas de Nemocón
+- **🧂 Zone 4 de Cundinamarca : Las Salinas de Nemocón**, qui s’ouvre en terminant Las Truchas. De la **galerie de la mine** sort la roche de sel, qui se dissout dans les **Puits de saumure** et donne deux produits : la saumure et les **blocs de sel**, qui passent par la goulotte vers l’**Atelier de taille**. La saumure se répartit entre les **Bacs d’évaporation** (sel raffiné) et les **Moules en terre**, où se prend le pain de sel comme le faisaient les Muiscas. L’**Emballage cadeau** réunit le sel et les figures taillées dans le **coffret de sel**.
+- **Les premières routes de Cundinamarca :** l’**Assembleuse de paniers** compose le **panier de la Sabana** avec le pain de sel, les **bouquets de roses** qui arrivent de Las Flores et les **barquettes de fraises** de Sibaté.
+- Doña Blanca, la saunière, te souhaite la bienvenue ; dans la cour de la mine, il y a des tas de sel et des wagonnets.
+- Si tu avais déjà terminé Las Truchas, Las Salinas s’ouvrent toutes seules à la mise à jour.
 
-## v4.4.2 — Cundinamarca: Las Truchas de Guatavita
-- **🐟 Zona 3 de Cundinamarca: Las Truchas de Guatavita**, que se abre al completar Los Freseros. Las truchas arcoíris se crían en estanques de agua helada y, ya limpias, se reparten entre el **Ahumadero**, la **Fileteadora** (que le pasa los filetes a la **Mesa del ceviche**) y la **Cocina de la laguna**, con la trucha frita y la papa salada. Don Ernesto, el truchero, le da la bienvenida, y en los alrededores hay frailejones del páramo.
-- Si ya habías completado Los Freseros, Las Truchas se abren solas al actualizar.
+## v4.4.2 — Cundinamarca : Las Truchas de Guatavita
+- **🐟 Zone 3 de Cundinamarca : Las Truchas de Guatavita**, qui s’ouvre en terminant Los Freseros. Les truites arc-en-ciel sont élevées dans des bassins d’eau glacée et, une fois nettoyées, se répartissent entre le **Fumoir**, la **Fileteuse** (qui passe les filets à la **Table du ceviche**) et la **Cuisine de la lagune**, avec la truite frite et les pommes de terre salées. Don Ernesto, le trutticulteur, te souhaite la bienvenue, et aux alentours il y a des frailejones du páramo.
+- Si tu avais déjà terminé Los Freseros, Las Truchas s’ouvrent toutes seules à la mise à jour.
 
-## v4.4.1 — Cundinamarca: Los Freseros de Sibaté
-- **🍓 Zona 2 de Cundinamarca: Los Freseros de Sibaté**, que se abre al completar Las Flores. Las fresas crecen bajo los macrotúneles de plástico y pasan por el **lavadero**, la **seleccionadora**, la **llenadora de bandejas** y la **mesa de fresas con crema**, como en los puestos de la carretera de Sibaté.
-- **Con dos productos:** el Lavadero saca también la **fresa de segunda** (las pequeñas y las magulladas), que pasa por la canaleta a la **Marmita de mermelada**. Don Gilberto, el fresero, le da la bienvenida.
-- Si ya habías completado Las Flores, Los Freseros se abren solos al actualizar.
+## v4.4.1 — Cundinamarca : Los Freseros de Sibaté
+- **🍓 Zone 2 de Cundinamarca : Los Freseros de Sibaté**, qui s’ouvre en terminant Las Flores. Les fraises poussent sous les grands tunnels en plastique et passent par le **lavoir**, la **trieuse**, la **remplisseuse de barquettes** et la **table des fraises à la crème**, comme sur les étals de la route de Sibaté.
+- **Avec deux produits :** le Lavoir sort aussi les **fraises de second choix** (les petites et les abîmées), qui passent par la goulotte vers la **Marmite à confiture**. Don Gilberto, le producteur de fraises, te souhaite la bienvenue.
+- Si tu avais déjà terminé Las Flores, Los Freseros s’ouvrent tout seuls à la mise à jour.
 
-## v4.4.0 — Cundinamarca: Las Flores de la Sabana
-- **🌹 Nueva región: Cundinamarca**, la Sabana de Bogotá. Se abre al completar Neiva (la última zona del Tolima Grande) y llega zona por zona; la primera es **Las Flores de la Sabana**, en Madrid y Facatativá: del **invernadero de rosas** a la **mesa de corte**, las **tinas de hidratación**, la **clasificadora**, el **boncheo**, el **cuarto frío** y la **empacadora**, que despacha las cajas de flores hacia el aeropuerto. Doña Rocío, la floricultora, le da la bienvenida.
-- Su música es el **Pasillo de la Sabana** (bandola, tiple y guitarra), también para descargar en MP3 y MIDI.
-- En el mapa de Colombia, Cundinamarca ya es una región; Bogotá sigue «Próximamente». Las otras cinco zonas (los Freseros de Sibaté, las Truchas de Guatavita, las Salinas de Nemocón, la Cocina de la Sabana y Zipaquirá) salen como «Llega pronto».
+## v4.4.0 — Cundinamarca : Las Flores de la Sabana
+- **🌹 Nouvelle région : Cundinamarca**, la Sabana de Bogotá. Elle s’ouvre en terminant Neiva (la dernière zone du Tolima Grande) et arrive zone par zone ; la première est **Las Flores de la Sabana**, à Madrid et Facatativá : de la **serre à roses** à la **table de coupe**, aux **bacs d’hydratation**, à la **trieuse**, à la **mise en bouquets**, à la **chambre froide** et à l’**emballeuse**, qui expédie les caisses de fleurs vers l’aéroport. Doña Rocío, la floricultrice, te souhaite la bienvenue.
+- Sa musique est le **Pasillo de la Sabana** (bandola, tiple et guitare), aussi à télécharger en MP3 et MIDI.
+- Sur la carte de la Colombie, Cundinamarca est maintenant une région ; Bogotá reste « Bientôt ». Les cinq autres zones (Los Freseros de Sibaté, Las Truchas de Guatavita, Las Salinas de Nemocón, La Cocina de la Sabana et Zipaquirá) apparaissent comme « Bientôt ».
 
-## v4.3.2 — Borrar deslizando y eventos más justos
-- **🗑️ Borrar la partida ahora se hace deslizando** la perilla hasta el final de la barra; si se suelta antes, vuelve a su sitio y no pasa nada. Antes bastaban dos toques y hubo quien la borró sin querer.
-- **Eventos:** sin hacer nada ya no se gana la plata (en los de la feria y la Semana Santa se llegaba sola); el oro sigue igual. Y en los de la vía tapada (el derrumbe, la creciente, la inundación…) ahora llega siempre un hilito del producto, así que, dejándolo correr, se termina con bronce; las compras del evento siguen siendo lo que lo saca adelante.
-- Los eventos ya no llevan un número en el título.
-- **Viaje a otra región:** la avioneta aterriza en una pista junto a la última zona de la región, y de ahí sale el Willys (antes entraba desde el borde del mapa).
-- La bolsa de dinero 💰 es amarilla y la bandera de cuadros 🏁 tiene el mástil rojo.
+## v4.3.2 — Effacer en glissant et événements plus justes
+- **🗑️ Effacer la partie se fait maintenant en faisant glisser** le curseur jusqu’au bout de la barre ; si on le lâche avant, il revient à sa place et rien ne se passe. Avant, deux touchers suffisaient et quelqu’un l’a effacée sans le vouloir.
+- **Événements :** sans rien faire, on ne gagne plus l’argent (dans ceux de la foire et de la Semaine sainte, il venait tout seul) ; l’or reste pareil. Et dans ceux de la route coupée (le glissement de terrain, la crue, l’inondation…), il arrive maintenant toujours un filet du produit, donc, en le laissant tourner, on termine avec le bronze ; les achats de l’événement restent ce qui le fait avancer.
+- Les événements ne portent plus de numéro dans leur titre.
+- **Voyage vers une autre région :** le petit avion atterrit sur une piste à côté de la dernière zone de la région, et la Willys en part (avant, elle entrait par le bord de la carte).
+- Le sac d’argent 💰 est jaune et le drapeau à damier 🏁 a un mât rouge.
 
-## v4.3.1 — Bandas de colores y chivas por encima
-- **Partida 60:** con los reinicios al tope, la pantalla del segundo final sigue diciendo «Partida 60» (antes decía 61, aunque volver a empezar ya no cambia nada).
-- **La cadena cabe a lo ancho:** en los teléfonos angostos, las zonas con tres ramas ya no cortan la de la derecha ni lo que queda en las orillas.
-- **Las chivas van siempre por encima** de los edificios y la decoración: antes, una estación de adelante podía taparlas y parecía que pasaban por debajo o que la atravesaban.
-- **Dos clases de banda en el mapa** (cuando los arrieros pasan a banda eléctrica, desde el nivel 50): las **bandas por tramos**, cada una del color de su producto —el mismo de su tubo en la cadena 🔗—, que van de una estación a la siguiente (y en carriles aparte si se cruzan), y la **banda general**, plateada, al otro lado del camino, que lleva a la bodega lo que se vende sin procesar. Cada banda **se apaga** (gris y quieta) mientras no tiene nada que llevar.
-- **El segundo Willys, bien explicado:** hace que la bodega despache más seguido, sin esperar a que vuelva el primero; si uno solo ya alcanzaba, se vende lo mismo por minuto. Ya no dice que vende el doble, y el panel 💰 De dónde sale ya no lo cuenta como ×2.
+## v4.3.1 — Tapis de couleur et chivas par-dessus
+- **Partie 60 :** avec les redémarrages au plafond, l’écran de la deuxième fin continue de dire « Partie 60 » (avant, il disait 61, même si recommencer ne change plus rien).
+- **La chaîne tient en largeur :** sur les téléphones étroits, les zones à trois branches ne coupent plus celle de droite ni ce qui reste sur les bords.
+- **Les chivas passent toujours par-dessus** les bâtiments et le décor : avant, une station de devant pouvait les cacher et on aurait dit qu’elles passaient dessous ou la traversaient.
+- **Deux sortes de tapis sur la carte** (quand les muletiers passent au tapis roulant, à partir du niveau 50) : les **tapis par tronçon**, chacun de la couleur de son produit —la même que son tuyau dans la chaîne 🔗—, qui vont d’une station à la suivante (et sur des voies séparées s’ils se croisent), et le **tapis général**, argenté, de l’autre côté du chemin, qui emporte à l’entrepôt ce qui se vend sans transformation. Chaque tapis **s’éteint** (gris et immobile) tant qu’il n’a rien à transporter.
+- **La deuxième Willys, bien expliquée :** elle fait expédier l’entrepôt plus souvent, sans attendre le retour de la première ; si une seule suffisait déjà, on vend la même chose par minute. Elle ne dit plus qu’elle vend le double, et le panneau 💰 D’où ça vient ne la compte plus comme ×2.
 
-## v4.3.0 — Dibujos propios en todo el juego
-- **Adiós a los emojis del teléfono.** Todos los dibujos del juego son ahora propios, con el mismo estilo de las estaciones: las 288 láminas del álbum (cada una con su dibujo: la lechona, el fósil de tortuga, el tiple, la chiva…), y los casi 250 íconos de la interfaz, los objetivos, los eventos y los personajes (medallas, candado, relojes, clima, vehículos, animales, comida, banderas…).
-- **Los personajes**, con su tono de piel y su oficio: la cocinera con su gorro, el campesino con su sombrero y la espiga, la abuela con sus gafas, la de pelo crespo, el piloto…
-- Se ven igual en todos los teléfonos, y ya no dependen de la marca ni de la versión de Android.
+## v4.3.0 — Des dessins originaux dans tout le jeu
+- **Adieu aux emojis du téléphone.** Tous les dessins du jeu sont maintenant originaux, dans le même style que les stations : les 288 images de l’album (chacune avec son dessin : la lechona, le fossile de tortue, le tiple, la chiva…), et les presque 250 icônes de l’interface, des objectifs, des événements et des personnages (médailles, cadenas, horloges, météo, véhicules, animaux, nourriture, drapeaux…).
+- **Les personnages**, avec leur couleur de peau et leur métier : la cuisinière avec sa toque, le paysan avec son chapeau et l’épi, la grand-mère avec ses lunettes, celle aux cheveux bouclés, le pilote…
+- Ils s’affichent pareil sur tous les téléphones, et ne dépendent plus de la marque ni de la version d’Android.
 
-## v4.2.0 — Chivas más seguidas
-- **🚌 Chivas cada 30 s y cada 15 s,** con Renombre, en cada región: primero **cada 30 s por 10 ⭐** y después **cada 15 s por 20 ⭐** (antes, una por minuto). Salen más seguido y cada una lleva su parte (la mitad o un cuarto): llega lo mismo por minuto, pero las estaciones no se quedan esperando la carga. Como el segundo Willys, se compran con el álbum de la región lleno, y además después de reiniciarla una vez; están en ⭐ Renombre › 📖 Álbum y se conservan al reiniciar.
+## v4.2.0 — Des chivas plus fréquentes
+- **🚌 Des chivas toutes les 30 s et toutes les 15 s,** avec du Renom, dans chaque région : d’abord **toutes les 30 s pour 10 ⭐** puis **toutes les 15 s pour 20 ⭐** (avant, une par minute). Elles partent plus souvent et chacune emporte sa part (la moitié ou un quart) : il arrive la même chose par minute, mais les stations n’attendent plus le chargement. Comme la deuxième Willys, elles s’achètent avec l’album de la région complet, et en plus après l’avoir redémarrée une fois ; elles sont dans ⭐ Renom › 📖 Album et se conservent au redémarrage.
 
-## v4.1.3 — Viajes directos
-- **🚙 Viajes entre zonas,** nueva opción en el menú ⚙️: **🗺️ Con el viaje** (lo de siempre: el Willys y la avioneta en el mapa) o **⚡ Directo**, que pasa a la otra zona enseguida, sin el viaje. Vale para todos los viajes: al elegir una zona en la lista o en el mapa, y al pasar a la siguiente cuando se completa una zona. Viene con el viaje.
+## v4.1.3 — Voyages directs
+- **🚙 Voyages entre zones,** nouvelle option dans le menu ⚙️ : **🗺️ Avec le voyage** (comme toujours : la Willys et le petit avion sur la carte) ou **⚡ Direct**, qui passe tout de suite à l’autre zone, sans le voyage. Cela vaut pour tous les voyages : en choisissant une zone dans la liste ou sur la carte, et en passant à la suivante quand une zone est terminée. Par défaut, avec le voyage.
 
-## v4.1.2 — Salento sin puerto
-- **Salento no tiene puerto**, y el juego ya no lo pinta así. El **Patio de contenedores** pasa a ser el **Despacho de exportación**: una bodega donde un montacargas llena el contenedor que se lleva la tractomula, sin la grúa de puerto. El letrero de salida dice **«A Buenaventura ➜»**, porque el café baja por carretera hasta el puerto.
-- El evento del Pueblo ahora es **🚚 La tractomula sale el viernes**: hay que llenar los contenedores antes de que salga la tractomula, pero el montacargas está varado. Sus compras son los repuestos, el montacargas arreglado y el turno extra de los coteros. La investigación **Grúa de contenedores** se llama ahora **Segundo montacargas**, y el logro «Al puerto» lleva una tractomula 🚚 en vez del barco.
-- Nada cambia en la economía: mismos productos, costos y avances.
+## v4.1.2 — Salento sans port
+- **Salento n’a pas de port**, et le jeu ne le dessine plus ainsi. La **Cour à conteneurs** devient l’**Expédition à l’export** : un entrepôt où un chariot élévateur remplit le conteneur qu’emporte la semi-remorque, sans la grue portuaire. Le panneau de sortie dit **« Vers Buenaventura ➜ »**, car le café descend par la route jusqu’au port.
+- L’événement du Pueblo est maintenant **🚚 La semi-remorque part vendredi** : il faut remplir les conteneurs avant que la semi-remorque parte, mais le chariot élévateur est en panne. Ses achats sont les pièces de rechange, le chariot réparé et l’équipe en plus des manutentionnaires. La recherche **Grue à conteneurs** s’appelle maintenant **Deuxième chariot élévateur**, et le succès « Au port » porte une semi-remorque 🚚 au lieu du bateau.
+- Rien ne change dans l’économie : mêmes produits, coûts et progression.
 
-## v4.1.1 — Construir, subir al próximo hito y ver de dónde sale el dinero
-- **Abajo de la cadena 🔗, dos botones** (como «Comprar todas» en las investigaciones):
-  - **🏗️ Construir:** construye, en el orden de la cadena, todas las estaciones que falten y alcance el dinero. Está desde el principio; si no alcanza para ninguna, dice cuánto cuesta la siguiente.
-  - **⬆️ Todo al nivel X:** toma lo más bajo de la zona y lo sube al siguiente hito (10, 25, 50, 75 o 100) junto con todo lo que esté por debajo de ese hito: estaciones, arrieros, bodega y las chivas que traen productos de otras zonas. Lo que ya está más alto se queda igual. Solo se puede si alcanza para todo. Se desbloquea igual que antes (tras el primer reinicio de la región, 10 ⭐) y reemplaza a +1/+10/Máx y a «Recomendada».
-- **💰 De dónde sale:** al tocar el dinero de la barra de arriba se abre un panel con lo que gana cada zona de la región, lo que vende el Willys en la zona que ves (cuánto, a qué precio y lo que se queda sin vender) y lo que lo multiplica (reinicios, temporada, investigaciones, segundo Willys, compost).
-- **Lista de zonas:** «📍 Aquí estás» va en el renglón del nombre de la región, para que la cabecera no pase de dos renglones.
+## v4.1.1 — Construire, monter au prochain palier et voir d’où vient l’argent
+- **Sous la chaîne 🔗, deux boutons** (comme « Tout acheter » dans les recherches) :
+  - **🏗️ Construire :** construit, dans l’ordre de la chaîne, toutes les stations qui manquent et que l’argent permet. Il est là dès le début ; s’il n’y en a assez pour aucune, il dit combien coûte la suivante.
+  - **⬆️ Tout au niveau X :** prend ce qu’il y a de plus bas dans la zone et le monte au palier suivant (10, 25, 50, 75 ou 100) avec tout ce qui est en dessous de ce palier : stations, muletiers, entrepôt et les chivas qui apportent des produits d’autres zones. Ce qui est déjà plus haut reste pareil. Ce n’est possible que si l’argent suffit pour tout. Il se débloque comme avant (après le premier redémarrage de la région, 10 ⭐) et remplace +1/+10/Max et « Recommandée ».
+- **💰 D’où ça vient :** en touchant l’argent dans la barre du haut, un panneau s’ouvre avec ce que gagne chaque zone de la région, ce que vend la Willys dans la zone que tu regardes (combien, à quel prix et ce qui reste invendu) et ce qui le multiplie (redémarrages, saison, recherches, deuxième Willys, compost).
+- **Liste des zones :** « 📍 Tu es ici » va sur la ligne du nom de la région, pour que l’en-tête ne dépasse pas deux lignes.
 
-## v4.1.0 — Toda la zona de una vez, en Willys y en avioneta
-- **⬆️ Mejorar toda la zona,** en la cadena 🔗. Después de reiniciar una región por primera vez, se desbloquea con **10 ⭐ de Renombre** y queda para todas sus zonas. Dos botones:
-  - **⬆️ Toda la zona (+1, +10 o Máx):** sube parejo las estaciones, los arrieros y la bodega, empezando por lo más bajo, y dice antes cuánto cuesta.
-  - **🤖 Recomendada:** compra una y otra vez la mejora recomendada mientras alcance el dinero (aunque sea de otra zona que abastece a esta, o una investigación) y al final dice qué compró.
-  - También funciona en los eventos que ya ganaste con oro.
-- **🗺️ En el mapa, el viaje va en Willys** (del color que le elegiste a la región) por la trocha, y **entre regiones en avioneta**: vuela sobre Colombia hasta la región nueva y el Willys entra desde el lado por donde llegó.
-- **Lista de zonas:** cada región muestra siempre, en su segundo renglón, cuántas zonas lleva completas 🚩, cuántas tiene al máximo 🏁, su dinero y lo que gana por segundo (entre paréntesis). Una zona queda **🏁 Al máximo** cuando sus estaciones, sus arrieros, su bodega y las rutas que le llegan están en el nivel 100 y tiene todas sus investigaciones y objetivos; antes de eso, **🚩 Completada**. El mapa y los objetivos usan las mismas banderas.
-- **⏱ ∞ en los eventos:** pasado 999:59 el reloj del evento dice ∞ (el de arriba seguía a 1000:00).
+## v4.1.0 — Toute la zone d’un coup, en Willys et en petit avion
+- **⬆️ Améliorer toute la zone,** dans la chaîne 🔗. Après avoir redémarré une région pour la première fois, cela se débloque avec **10 ⭐ de Renom** et vaut pour toutes ses zones. Deux boutons :
+  - **⬆️ Toute la zone (+1, +10 ou Max) :** monte de façon égale les stations, les muletiers et l’entrepôt, en commençant par le plus bas, et dit avant combien cela coûte.
+  - **🤖 Recommandée :** achète encore et encore l’amélioration recommandée tant que l’argent suffit (même si elle vient d’une autre zone qui approvisionne celle-ci, ou d’une recherche) et à la fin dit ce qu’elle a acheté.
+  - Cela marche aussi dans les événements que tu as déjà gagnés avec l’or.
+- **🗺️ Sur la carte, le voyage se fait en Willys** (de la couleur que tu as choisie pour la région) par la piste, et **entre régions en petit avion** : il vole au-dessus de la Colombie jusqu’à la nouvelle région et la Willys entre par le côté d’où il est arrivé.
+- **Liste des zones :** chaque région montre toujours, sur sa deuxième ligne, combien de zones sont terminées 🚩, combien sont au maximum 🏁, son argent et ce qu’elle gagne par seconde (entre parenthèses). Une zone est **🏁 Au maximum** quand ses stations, ses muletiers, son entrepôt et les routes qui y arrivent sont au niveau 100 et qu’elle a toutes ses recherches et ses objectifs ; avant cela, **🚩 Terminée**. La carte et les objectifs utilisent les mêmes drapeaux.
+- **⏱ ∞ dans les événements :** passé 999:59, l’horloge de l’événement affiche ∞ (celle du haut continuait jusqu’à 1000:00).
 
-## v4.0.3 — Cadenas de colores y adiós al toque fantasma
-- **🔗 En la cadena, cada producto va en un color bien distinto** (verde, naranja, morado, mostaza, turquesa, rosado…): cuando una estación saca dos productos, cada uno sigue por su tubo de otro color, y cuando un producto se convierte en otro, el tubo cambia de color. La Compostera también recibe la pulpa en su color (antes salía en azul, como si llegara de otra zona).
-- **Corregido de raíz:** al tocar una estación en el mapa, el panel ya no se abre en la pestaña de los arrieros 🐴. Al soltar el dedo, el teléfono mandaba un segundo «clic» que caía en lo que el panel acababa de poner bajo el dedo; ahora ese clic no se produce. Probado tocando cada estación de las 48 zonas.
+## v4.0.3 — Chaînes en couleurs et adieu au toucher fantôme
+- **🔗 Dans la chaîne, chaque produit a une couleur bien distincte** (vert, orange, violet, moutarde, turquoise, rose…) : quand une station sort deux produits, chacun suit son tuyau d’une autre couleur, et quand un produit se transforme en un autre, le tuyau change de couleur. Le Composteur reçoit aussi la pulpe dans sa couleur (avant, elle sortait en bleu, comme si elle venait d’une autre zone).
+- **Corrigé à la racine :** en touchant une station sur la carte, le panneau ne s’ouvre plus sur l’onglet des muletiers 🐴. En levant le doigt, le téléphone envoyait un second « clic » qui tombait sur ce que le panneau venait de placer sous le doigt ; maintenant ce clic n’a plus lieu. Testé en touchant chaque station des 48 zones.
 
-## v4.0.2 — Cada producto con su color en la cadena
-- **🔗 En la cadena, cada producto tiene su propio color de tubo:** se ve cuándo una estación saca dos productos distintos (cada uno sigue con el suyo) y cuándo un producto se convierte en otro (el color cambia al pasar por la estación). Lo que llega de otras zonas sigue en azul, lo que frena en rojo y lo que falta por abrir en gris claro.
-- **🐈 Los gatos cuestan 5 ⭐** (antes 10).
-- **Corregido:** al tocar en el mapa algunas estaciones (como las Moldeadoras de La Chamba), el panel se abría en la pestaña de los arrieros 🐴 en vez de la estación: el mismo toque caía sobre la pestaña al abrirse el panel. Ahora el panel ignora ese toque.
+## v4.0.2 — Chaque produit avec sa couleur dans la chaîne
+- **🔗 Dans la chaîne, chaque produit a sa propre couleur de tuyau :** on voit quand une station sort deux produits différents (chacun garde la sienne) et quand un produit se transforme en un autre (la couleur change en passant la station). Ce qui arrive d’autres zones reste en bleu, ce qui freine en rouge et ce qui reste à ouvrir en gris clair.
+- **🐈 Les chats coûtent 5 ⭐** (avant 10).
+- **Corrigé :** en touchant sur la carte certaines stations (comme les Modeleuses de La Chamba), le panneau s’ouvrait sur l’onglet des muletiers 🐴 au lieu de la station : le même toucher tombait sur l’onglet à l’ouverture du panneau. Maintenant le panneau ignore ce toucher.
 
-## v4.0.1 — Reinicios hasta 60 y un viaje más directo en el mapa
-- **Los reinicios de cada región llegan hasta 60** y ahí se quedan: volver a empezar con el multiplicador al máximo (×2⁶⁰) ya no suma más reinicios. Los logros de las veces que se completó la región cuentan esos reinicios.
-- **Se dejó de guardar un registro de cada partida terminada**, que crecía con cada reinicio y hacía más pesada la copia de seguridad. Las partidas de antes conservan su número de reinicios (hasta 60).
-- **🗺️ Al ir a otra zona, el mapa abre ya en tu región:** si la zona nueva es de la misma región, el muñequito camina sin acercar ni alejar; si es de otra, se aleja a Colombia y se acerca a la región nueva. Al abrir el mapa con 🗺️ se sigue viendo primero el país.
+## v4.0.1 — Redémarrages jusqu’à 60 et un voyage plus direct sur la carte
+- **Les redémarrages de chaque région vont jusqu’à 60** et y restent : recommencer avec le multiplicateur au maximum (×2⁶⁰) n’ajoute plus de redémarrages. Les succès des fois où la région a été terminée comptent ces redémarrages.
+- **On ne garde plus un registre de chaque partie terminée**, qui grandissait à chaque redémarrage et alourdissait la sauvegarde. Les parties d’avant gardent leur nombre de redémarrages (jusqu’à 60).
+- **🗺️ En allant vers une autre zone, la carte s’ouvre déjà sur ta région :** si la nouvelle zone est de la même région, le petit bonhomme marche sans zoomer ni dézoomer ; si elle est d’une autre, la carte s’éloigne vers la Colombie et se rapproche de la nouvelle région. En ouvrant la carte avec 🗺️, on voit toujours d’abord le pays.
 
-## v4.0.0 — El Tolima Grande
-- **🌵 El Tolima Grande, la octava región**, se abre al completar Leticia. Seis zonas: **Los Achirales** (los bizcochos de achira de Natagaima), **El Café del Huila** (café especial), **La Represa de Betania** (tilapia ahumada, en escabeche y frita con patacón), **La Lechonería** (lechona tolimense y desayuno con tamal), **La Chamba** (la loza negra hecha a mano) y **Neiva**, donde todo termina en salidas a ver las estrellas en el desierto de la Tatacoa. Con su sanjuanero, sus seis eventos, su álbum, sus logros y once rutas.
-- **Estaciones con dos productos:** algunas sacan un segundo producto que sigue su propio camino. En el Café del Huila, la cáscara de la cereza va al Secadero y sale como té para Neiva; en la Lechonería, el Desposte saca la carne y el cuero. El Beneficiadero de la Finca hace lo mismo con la pulpa para la Compostera.
-- **Estaciones que juntan dos productos de su zona,** sin chivas: el Horno de leña de la Lechonería junta el relleno con el cuero limpio en la lechona. En la cadena 🔗, lo que se junta baja por su propia columna y entra por arriba.
-- **Las regiones de antes también cambian:** el Horno de almojábanas de Paipa junta cuajada y queso; la Quesera saca suero costeño para la bandeja; la Prensa de la Palma saca almendra de palmiste para el hotel de Villavicencio; el Desposte del Hato llanero saca el cuero que ahora curte la Talabartería; y el bagazo de la Cervecería alimenta las vacas de Paipa. Las rutas nuevas arrancan al nivel de la estación que abastecen, para que nadie se frene.
-- **Con todo al máximo no se escapa nada** en ninguna de las ocho regiones: las zonas que no son la última no le venden nada al Willys.
-- **🗺️ El mapa de Colombia tiene zoom:** con dos dedos, la rueda del ratón o los botones ＋ y －, y se arrastra para moverse. Al alejarse de una región se vuelve al país, y de cerca es más fácil tocar Bogotá o Boyacá.
-- **Corregido:** en un evento de otra región, tocar una ruta en la cadena llevaba a una ruta suelta en nivel 1; ahora lleva a la estación que la recibe.
-- 🎧 El sanjuanero también se puede descargar en MP3 y MIDI.
+## v4.0.0 — Le Tolima Grande
+- **🌵 Le Tolima Grande, la huitième région**, s’ouvre en terminant Leticia. Six zones : **Los Achirales** (les biscuits d’achira de Natagaima), **El Café del Huila** (café de spécialité), **La Represa de Betania** (tilapia fumé, en escabèche et frit avec patacón), **La Lechonería** (lechona du Tolima et petit-déjeuner au tamal), **La Chamba** (la poterie noire faite à la main) et **Neiva**, où tout se termine en sorties pour voir les étoiles dans le désert de la Tatacoa. Avec son sanjuanero, ses six événements, son album, ses succès et onze routes.
+- **Des stations à deux produits :** certaines sortent un second produit qui suit son propre chemin. Au Café del Huila, la peau de la cerise va au Séchoir et ressort en infusion pour Neiva ; à la Lechonería, la Découpe sort la viande et la peau. Le Beneficiadero de la Finca fait de même avec la pulpe pour le Composteur.
+- **Des stations qui réunissent deux produits de leur zone,** sans chivas : le Four à bois de la Lechonería réunit la farce et la peau nettoyée dans la lechona. Dans la chaîne 🔗, ce qui se réunit descend par sa propre colonne et entre par le haut.
+- **Les régions d’avant changent aussi :** le Four à almojábanas de Paipa réunit caillé et fromage ; la Quesera sort du sérum costeño pour le plateau ; la Presse de la Palma sort de l’amande de palmiste pour l’hôtel de Villavicencio ; la Découpe du Hato llanero sort le cuir que tanne maintenant la Talabartería ; et la drêche de la Brasserie nourrit les vaches de Paipa. Les nouvelles routes démarrent au niveau de la station qu’elles approvisionnent, pour que rien ne bloque.
+- **Avec tout au maximum, rien ne fuit** dans aucune des huit régions : les zones qui ne sont pas la dernière ne vendent rien à la Willys.
+- **🗺️ La carte de la Colombie a un zoom :** avec deux doigts, la molette de la souris ou les boutons ＋ et －, et on la fait glisser pour se déplacer. En s’éloignant d’une région, on revient au pays, et de près il est plus facile de toucher Bogotá ou Boyacá.
+- **Corrigé :** dans un événement d’une autre région, toucher une route dans la chaîne menait à une route isolée au niveau 1 ; maintenant cela mène à la station qui la reçoit.
+- 🎧 Le sanjuanero peut aussi se télécharger en MP3 et MIDI.
 
-## v3.72.0 — Un reto por evento
-- **🏅 Cada evento tiene ahora un solo reto**, y los seis de cada región son distintos entre sí: uno pide la cadena completa (vender el producto final), otro un arranque rápido (mucho de un producto temprano), otro una feria de tres ramas, otro dos ramas al tiempo, otro cortar la cadena en un producto intermedio y otro el producto final junto con otra rama. Antes cada evento tenía tres retos que se turnaban y se parecían mucho.
-- **Primero salen los eventos que todavía no tienen oro.** Los que ya lo tienen vuelven a salir cuando todos los demás también lo tengan. Repetir un oro sigue dando su Renombre.
-- Un evento que estaba en juego al actualizar se termina con el reto que tenía. Las medallas ya ganadas se conservan.
-- **Corregido:** al volver a empezar una región (tras el segundo final), el juego abría en el Cafetal; ahora abre en la región que se reinició.
+## v3.72.0 — Un défi par événement
+- **🏅 Chaque événement n’a plus qu’un seul défi**, et les six de chaque région sont tous différents : l’un demande la chaîne complète (vendre le produit final), un autre un démarrage rapide (beaucoup d’un produit du début), un autre une foire à trois branches, un autre deux branches à la fois, un autre couper la chaîne à un produit intermédiaire et un autre le produit final avec une autre branche. Avant, chaque événement avait trois défis qui alternaient et se ressemblaient beaucoup.
+- **Les événements sans or apparaissent d’abord.** Ceux qui l’ont déjà reviennent quand tous les autres l’ont aussi. Refaire un or donne toujours son Renom.
+- Un événement en cours à la mise à jour se termine avec le défi qu’il avait. Les médailles déjà gagnées sont conservées.
+- **Corrigé :** en recommençant une région (après la deuxième fin), le jeu s’ouvrait sur le Cafetal ; maintenant il s’ouvre sur la région redémarrée.
 
-## v3.71.0 — La música para llevar
-- **🎧 La música y los sonidos del juego, para descargar** en frealgagu.github.io/MiTierritaGame/musica: las siete piezas (una por región) en **MP3**, tocadas igual que en el juego, de unos dos minutos y medio, y en **MIDI**, con cada instrumento en su pista para tocarlas o hacer arreglos. También los 31 efectos de sonido en MP3, y en MIDI los que son notas (monedas, subir de nivel, campanas…). Se puede descargar todo en un .zip.
-- La página está en español, inglés, portugués y francés. En ⚙️ › ℹ️ Acerca de está la dirección.
-- Nada de esto va dentro de la app: no la hace más pesada.
+## v3.71.0 — La musique à emporter
+- **🎧 La musique et les sons du jeu, à télécharger** sur frealgagu.github.io/MiTierritaGame/musica : les sept morceaux (un par région) en **MP3**, joués comme dans le jeu, d’environ deux minutes et demie, et en **MIDI**, avec chaque instrument sur sa piste pour les jouer ou faire des arrangements. Aussi les 31 effets sonores en MP3, et en MIDI ceux qui sont des notes (pièces, montée de niveau, cloches…). On peut tout télécharger dans un .zip.
+- La page est en espagnol, anglais, portugais et français. L’adresse est dans ⚙️ › ℹ️ À propos.
+- Rien de tout cela ne va dans l’application : elle ne s’alourdit pas.
 
 ## v3.70.0 — Encantos de Mi Tierrita, en français
-- **🌐 Idioma:** el juego ya se puede jugar en **francés**. Se elige en el menú ⚙️ (**🌐 Idioma**), y quien tiene el teléfono en francés lo ve así desde la primera vez. Con esto quedan español, inglés, portugués y francés; los demás idiomas siguen en inglés (o en español si el teléfono está en italiano, catalán o gallego).
-- Está todo traducido, como en los otros idiomas: ventanas, avisos, paneles, estaciones, productos, zonas, rutas, eventos, álbum, logros, datos curiosos y lo que dicen las personas. Lo propio de Colombia (panela, arequipe, tinto, bocadillo, chiva, budare, ruana…) se deja como allá. Va con la tipografía francesa (espacio antes de ! ? : ;) y coma decimal.
-- Quien juega en otro idioma no descarga nada de más: el francés llega solo si se elige.
+- **🌐 Langue :** le jeu peut maintenant se jouer en **français**. On la choisit dans le menu ⚙️ (**🌐 Langue**), et ceux qui ont leur téléphone en français le voient ainsi dès la première fois. Il y a donc l’espagnol, l’anglais, le portugais et le français ; les autres langues restent en anglais (ou en espagnol si le téléphone est en italien, catalan ou galicien).
+- Tout est traduit, comme dans les autres langues : fenêtres, avis, panneaux, stations, produits, zones, routes, événements, album, succès, anecdotes et ce que disent les gens. Ce qui est propre à la Colombie (panela, arequipe, tinto, bocadillo, chiva, budare, ruana…) reste comme là-bas. Avec la typographie française (espace avant ! ? : ;) et la virgule décimale.
+- Ceux qui jouent dans une autre langue ne téléchargent rien de plus : le français n’arrive que s’il est choisi.
 
 ## v3.69.0 — Encantos de Mi Tierrita, em português
-- **🌐 Idioma:** el juego ya se puede jugar en **portugués de Brasil**. Se elige en el menú ⚙️ (**🌐 Idioma**), y quien tiene el teléfono en portugués lo ve así desde la primera vez.
-- Está todo traducido, como en inglés: ventanas, avisos, paneles, estaciones, productos, zonas, rutas, eventos, álbum, logros, datos curiosos y lo que dicen las personas. Lo que en Brasil tiene su nombre se dice así (rapadura, goiabada, beiju, açaí, tucupi); lo propio de Colombia (arequipe, bocadillo veleño, chiva, budare, ruana…) se deja como allá. Los números van con coma decimal, como en español.
-- Quien juega en español o en inglés no descarga nada de más: el portugués llega solo si se elige.
-- En inglés, el panel de la estación dice a dónde llevan las mulas el producto con su artículo («to the Grinder»).
+- **🌐 Langue :** le jeu peut maintenant se jouer en **portugais du Brésil**. On le choisit dans le menu ⚙️ (**🌐 Langue**), et ceux qui ont leur téléphone en portugais le voient ainsi dès la première fois.
+- Tout est traduit, comme en anglais : fenêtres, avis, panneaux, stations, produits, zones, routes, événements, album, succès, anecdotes et ce que disent les gens. Ce qui a son nom au Brésil est dit ainsi (rapadura, goiabada, beiju, açaí, tucupi) ; ce qui est propre à la Colombie (arequipe, bocadillo veleño, chiva, budare, ruana…) reste comme là-bas. Les nombres ont la virgule décimale, comme en espagnol.
+- Ceux qui jouent en espagnol ou en anglais ne téléchargent rien de plus : le portugais n’arrive que s’il est choisi.
+- En anglais, le panneau de la station dit où les mules emportent le produit avec son article (« to the Grinder »).
 
-## v3.68.3 — Un multiplicador más grande
-- **El multiplicador del segundo final llega ahora hasta ×1,15Qi** (2⁶⁰, con 60 reinicios); antes se quedaba en ×4,29B (32 reinicios). Se puede seguir volviendo a empezar después, pero ya no se duplica.
-- **Las monedas tienen un techo de 999Dc**, el número más grande que se escribe con sufijo: así nunca se ven en notación científica.
+## v3.68.3 — Un multiplicateur plus grand
+- **Le multiplicateur de la deuxième fin va maintenant jusqu’à ×1,15Qi** (2⁶⁰, avec 60 redémarrages) ; avant, il s’arrêtait à ×4,29B (32 redémarrages). On peut continuer à recommencer ensuite, mais il ne double plus.
+- **Les pièces ont un plafond de 999Dc**, le plus grand nombre qui s’écrit avec un suffixe : ainsi elles ne s’affichent jamais en notation scientifique.
 
-## v3.68.2 — El multiplicador al máximo
-- **Con el multiplicador de producción al máximo, la barra de abajo lo dice** («🏆 Multiplicador al máximo») en vez de ofrecer volver a empezar. Se puede seguir reiniciando desde 📋 Objetivos.
+## v3.68.2 — Le multiplicateur au maximum
+- **Avec le multiplicateur de production au maximum, la barre du bas le dit** (« 🏆 Multiplicateur au maximum ») au lieu de proposer de recommencer. On peut continuer à redémarrer depuis 📋 Objectifs.
 
-## v3.68.1 — La chiva del evento, con su nivel
-- **En un evento, la cadena muestra la ruta 🚌 con el nivel de su estación**, que es el que tiene: allí la ruta sube con la estación. Antes mostraba el nivel propio de la ruta, que en el evento no cambia (siempre 1).
-- En inglés, el letrero pintado de la bodega dice «WAREHOUSE».
-- La ficha de Google Play en inglés (textos, capturas e imagen destacada), en `store/ficha-en.md`.
+## v3.68.1 — La chiva de l’événement, avec son niveau
+- **Dans un événement, la chaîne montre la route 🚌 avec le niveau de sa station**, qui est celui qu’elle a : là, la route monte avec la station. Avant, elle montrait le niveau propre de la route, qui ne change pas dans l’événement (toujours 1).
+- En anglais, le panneau peint de l’entrepôt dit « WAREHOUSE ».
+- La fiche Google Play en anglais (textes, captures et image de présentation), dans `store/listing-en.md`.
 
 ## v3.68.0 — Encantos de Mi Tierrita, in English
-- **🌐 Idioma:** el juego ya se puede jugar en **inglés**. Se elige en el menú ⚙️ (**🌐 Idioma**); la primera vez toma el idioma del teléfono (si está en portugués, francés o italiano, sigue en español mientras llegan esas traducciones). Al cambiarlo, la partida se guarda y el juego vuelve a cargar.
-- Está todo traducido: las ventanas, los avisos, los paneles, los nombres de estaciones, productos, zonas y rutas, los eventos, el álbum, los logros, los datos curiosos y lo que dicen las personas de cada zona. Las palabras propias de Colombia (panela, arequipe, tinto, bocadillo, chiva, budare…) y los nombres de las personas se dejan como allá. Los números van con punto decimal (2.50K).
-- Quien juega en español no descarga nada de más: el inglés llega solo si se elige.
+- **🌐 Langue :** le jeu peut maintenant se jouer en **anglais**. On la choisit dans le menu ⚙️ (**🌐 Langue**) ; la première fois, il prend la langue du téléphone (s’il est en portugais, français ou italien, il reste en espagnol en attendant ces traductions). En la changeant, la partie est enregistrée et le jeu se recharge.
+- Tout est traduit : les fenêtres, les avis, les panneaux, les noms des stations, produits, zones et routes, les événements, l’album, les succès, les anecdotes et ce que disent les gens de chaque zone. Les mots propres à la Colombie (panela, arequipe, tinto, bocadillo, chiva, budare…) et les noms des gens restent comme là-bas. Les nombres ont le point décimal (2.50K).
+- Ceux qui jouent en espagnol ne téléchargent rien de plus : l’anglais n’arrive que s’il est choisi.
 
-## v3.67.6 — El letrero manda
-- **Tocar el letrero de una estación abre esa estación**, aunque el letrero quede encima de otra (la de adelante o la de atrás). Antes el toque pasaba a lo que hubiera debajo del letrero, y en algunos puntos no respondía, por ejemplo en la orilla del letrero de la Bodega.
-- **Fuera de los letreros, gana el edificio:** al tocar el techo o las paredes de una estación que tapa el terreno de la de atrás, se abre la del edificio (antes, la del terreno). Si no se toca ningún dibujo, cuenta el terreno.
-- Un toque que caía sobre un adorno (una nube, una mula, las monedas que suben) a veces no abría nada; ahora busca el letrero o la estación de debajo.
+## v3.67.6 — Le panneau d’abord
+- **Toucher le panneau d’une station ouvre cette station**, même si le panneau est par-dessus une autre (celle de devant ou celle de derrière). Avant, le toucher passait à ce qui se trouvait sous le panneau, et à certains endroits il ne répondait pas, par exemple au bord du panneau de l’Entrepôt.
+- **En dehors des panneaux, le bâtiment l’emporte :** en touchant le toit ou les murs d’une station qui cache le terrain de celle de derrière, c’est celle du bâtiment qui s’ouvre (avant, celle du terrain). Si on ne touche aucun dessin, c’est le terrain qui compte.
+- Un toucher qui tombait sur un élément de décor (un nuage, une mule, les pièces qui montent) n’ouvrait parfois rien ; maintenant il cherche le panneau ou la station en dessous.
 
-## v3.67.5 — Ventanas que caben en pantallas pequeñas
-- **🏅 Eventos:** la explicación de arriba se ve en tres renglones, con **Ver más ▾** para leerla completa (y **Ver menos ▴** para recogerla); la presentación de cada evento, en dos. En un teléfono pequeño la explicación ocupaba toda la ventana y no se veían los eventos.
-- **📖 Álbum, 🎨 Decorar, 🏆 Logros y ⏰ Horas** van de a dos en el teléfono: en una sola fila se cortaban los nombres.
-- **🔬 Investigaciones:** lo que falta (🔒 Construye…, 🔒 Nv 25…) pasa debajo de la descripción cuando no cabe al lado; antes la dejaba con una palabra por renglón.
+## v3.67.5 — Des fenêtres qui tiennent sur les petits écrans
+- **🏅 Événements :** l’explication du haut s’affiche sur trois lignes, avec **Voir plus ▾** pour la lire en entier (et **Voir moins ▴** pour la replier) ; la présentation de chaque événement, sur deux. Sur un petit téléphone, l’explication prenait toute la fenêtre et on ne voyait pas les événements.
+- **📖 Album, 🎨 Décorer, 🏆 Succès et ⏰ Heures** vont deux par deux sur le téléphone : sur une seule rangée, les noms étaient coupés.
+- **🔬 Recherches :** ce qui manque (🔒 Construis…, 🔒 Nv 25…) passe sous la description quand il ne tient pas à côté ; avant, il la laissait avec un mot par ligne.
 
-## v3.67.4 — Pausar o salir de un evento
-- **Nueva opción en el menú ⚙️: «Al dejar un evento»**, para todos los eventos:
-  - **⏸️ Pausar** (como hasta ahora): el reloj del evento se detiene hasta que vuelvas.
-  - **🚪 Salir**: vuelves al mapa y el evento sigue corriendo por detrás, también con el juego cerrado (hasta tu tope de horas sin conexión, como la partida). Al volver a entrar se calcula lo que pasó; si el objetivo se cumplió mientras tanto, la medalla queda con el minuto en que se cumplió. Las tres mejoras siguen siendo compra tuya. En la lista de eventos se ve cuánto marcaría su reloj.
-- **El reloj de los eventos llega hasta 999:59 y ahí se queda**; el tablero sigue produciendo.
+## v3.67.4 — Mettre en pause ou quitter un événement
+- **Nouvelle option dans le menu ⚙️ : « En quittant un événement »**, pour tous les événements :
+  - **⏸️ Pause** (comme jusqu’ici) : l’horloge de l’événement s’arrête jusqu’à ton retour.
+  - **🚪 Quitter** : tu reviens à la carte et l’événement continue de tourner en arrière-plan, même avec le jeu fermé (jusqu’à ton plafond d’heures hors ligne, comme la partie). En y revenant, on calcule ce qui s’est passé ; si l’objectif a été rempli entre-temps, la médaille garde la minute où il l’a été. Les trois améliorations restent à toi d’acheter. Dans la liste des événements, on voit ce qu’afficherait son horloge.
+- **L’horloge des événements va jusqu’à 999:59 et y reste** ; le plateau continue de produire.
 
-## v3.67.3 — Los avisos se cierran al tocarlos y las zonas recuerdan cómo las dejaste
-- **Tocar lo que dice una persona, o un aviso de arriba, lo cierra otra vez**, como antes de la v3.67.1. En esa versión dejaban pasar los toques y no había cómo quitarlos de encima de una ventana (los objetivos, los logros, las investigaciones).
-- **🗺️ Zonas abre como lo dejaste:** si la última vez usaste el mapa, abre el mapa; si usaste **📋 Lista**, abre la lista. Al ir a otra zona (al terminar una, o con «Ir» en la lista) se sigue viendo el viaje en el mapa.
+## v3.67.3 — Les avis se ferment au toucher et les zones se souviennent de comment tu les as laissées
+- **Toucher ce que dit une personne, ou un avis du haut, le ferme de nouveau**, comme avant la v3.67.1. Dans cette version, ils laissaient passer les touchers et il n’y avait pas moyen de les enlever de devant une fenêtre (les objectifs, les succès, les recherches).
+- **🗺️ Zones s’ouvre comme tu l’as laissé :** si la dernière fois tu as utilisé la carte, la carte s’ouvre ; si tu as utilisé **📋 Liste**, c’est la liste. En allant vers une autre zone (en en terminant une, ou avec « Aller » dans la liste), on voit toujours le voyage sur la carte.
 
-## v3.67.2 — La mejora recomendada lleva a donde dice
-- **La mejora recomendada, los objetivos y las investigaciones vuelven a abrir la pestaña que piden** (🐴 Arrieros o 🚌 la ruta), como antes de la v3.67.0; en esa versión abrían siempre ⚙️ Estación. Tocar la estación en el mapa sigue abriendo ⚙️ Estación.
+## v3.67.2 — L’amélioration recommandée mène où elle dit
+- **L’amélioration recommandée, les objectifs et les recherches ouvrent de nouveau l’onglet qu’ils demandent** (🐴 Muletiers ou 🚌 la route), comme avant la v3.67.0 ; dans cette version, ils ouvraient toujours ⚙️ Station. Toucher la station sur la carte ouvre toujours ⚙️ Station.
 
-## v3.67.1 — Tocar las estaciones sin fallar
-- **Las estaciones responden al toque** en todo su dibujo: el terreno, el edificio completo (el techo, los tanques, la casa del Cafetal) y su letrero con el nombre. Antes solo respondía el terreno de abajo; en el Cafetal había que tocar las matas. Si un toque cae en dos estaciones, gana la del terreno tocado.
-- **Los globos de lo que dicen las personas y los avisos de arriba ya no tapan los toques**: si una estación queda debajo, se puede tocar igual (antes el toque se perdía y parecía que no respondía). Se cierran solos, como siempre.
-- **Un toque con el dedo un poco movido ya no se toma como arrastre del mapa.**
-- Con el panel de una estación abierto, tocar otra la abre, y tocar el mapa vacío lo cierra.
-- **Desde la cadena, el botón 🐴 Arrieros abre la pestaña de los arrieros** (al tocar la estación en el mapa sigue abriendo ⚙️ Estación).
-- **La segunda zona de cada región ya no vende nada con todo al máximo**, como las del Eje Cafetero: todo lo que produce se lo lleva la ruta a la zona final. Allá, la estación que usa su producto (el Café del parque con los tabacos, el Restaurante de la muralla con las cocadas, la Terraza de la plaza con las canastas de cerveza, el Kiosco del parque con las cajas de jugo, la Cevichería con las cajas de aliño y el Restaurante de la ribera con las cajas de ají) gasta 4 por tanda en vez de 1.
-- **Mejora recomendada:** con todo al mismo nivel, en la primera zona de las regiones nuevas recomendaba subir la última estación (la Cajonera). Ahora, como en el Eje Cafetero, recomienda el cultivo. Lo que se lleva una ruta cuenta primero para la ruta, y la parte de una ruta que todavía no abre no cuenta como atraso.
+## v3.67.1 — Toucher les stations sans rater
+- **Les stations répondent au toucher** sur tout leur dessin : le terrain, le bâtiment entier (le toit, les cuves, la maison du Cafetal) et leur panneau avec le nom. Avant, seul le terrain du bas répondait ; au Cafetal, il fallait toucher les plants. Si un toucher tombe sur deux stations, c’est celle du terrain touché qui l’emporte.
+- **Les bulles de ce que disent les gens et les avis du haut ne bloquent plus les touchers** : si une station est dessous, on peut la toucher quand même (avant, le toucher se perdait et on aurait dit qu’elle ne répondait pas). Ils se ferment tout seuls, comme toujours.
+- **Un toucher avec le doigt un peu en mouvement n’est plus pris pour un glissement de la carte.**
+- Avec le panneau d’une station ouvert, toucher une autre l’ouvre, et toucher la carte vide le ferme.
+- **Depuis la chaîne, le bouton 🐴 Muletiers ouvre l’onglet des muletiers** (en touchant la station sur la carte, cela ouvre toujours ⚙️ Station).
+- **La deuxième zone de chaque région ne vend plus rien avec tout au maximum**, comme celles de l’Eje Cafetero : tout ce qu’elle produit, la route l’emporte vers la zone finale. Là-bas, la station qui utilise son produit (le Café du parc avec les cigares, le Restaurant des remparts avec les cocadas, la Terrasse de la place avec les caisses de bière, le Kiosque du parc avec les caisses de jus, la Cevichería avec les caisses d’assaisonnement et le Restaurant du bord du fleuve avec les caisses de piment) en utilise 4 par fournée au lieu de 1.
+- **Amélioration recommandée :** avec tout au même niveau, dans la première zone des nouvelles régions, elle recommandait de monter la dernière station (la Caisserie). Maintenant, comme dans l’Eje Cafetero, elle recommande la culture. Ce qu’emporte une route compte d’abord pour la route, et la part d’une route qui n’est pas encore ouverte ne compte pas comme un retard.
 
-## v3.67.0 — El mapa primero, ventanas más cómodas y regiones sin fugas
-- **🗺️ El mapa, primero:** el botón de zonas abre el mapa de Colombia con tu región resaltada, que enseguida se ve de cerca con tu zona resaltada. La lista está en **📋 Lista**.
-  - **Al ir a otra zona** (al terminar una, o al elegirla en la lista o en el mapa) se ve el viaje: en la misma región, el muñequito camina hasta allá; a otra región, el mapa se aleja al país, se resalta la región nueva, se acerca y el muñequito llega caminando.
-  - **Gran Tolima 🎺** y **Bogotá y la Sabana 🏛️** aparecen como «Próximamente».
-- **Regiones sin fugas:** en las seis regiones después del Eje Cafetero, con todo al máximo, algunas estaciones mandaban producto a la bodega aunque tuvieran a dónde llevarlo. La primera y la segunda zona de cada región no producían lo suficiente para su propia zona y para las rutas a la vez. Ahora rinden lo justo, ×1,5 la primera (la Cortadora de la Guayabera y sus parecidas sacan 3 de cada 4) y ×1,25 la segunda (toda su cadena va más rápido), y con todo al máximo no se escapa nada, como en el Eje Cafetero.
-- **Ventanas:** tocar fuera de una ventana la cierra, y tocar el mapa fuera del panel de una estación también lo cierra.
-- **Menú ⚙️:**
-  - Una ✕ arriba en vez de «Seguir jugando» y **Borrar partida** solo, al final.
-  - Estadísticas una por renglón: tiempo jugado, ganado en total y **productos vendidos** (de todas las regiones; antes, solo cerezas).
-  - Muestra la versión de verdad (antes decía siempre «v3.7.0»).
-  - Nuevo **ℹ️ Acerca de**: quién hace el juego, contacto, privacidad, créditos de la música de la región donde estás, la letra y el mapa.
-- **Música de Santander:** la guabina ya no lleva tiple y la guitarra va punteada; se parecía mucho al bambuco del Eje Cafetero.
-- **Estaciones:** al tocarlas siempre abren en ⚙️ Estación. Si lo que toca mejorar son sus arrieros o su ruta, esa pestaña parpadea.
-- **📋 Objetivos:** la lista completa de la zona, como las investigaciones: los cobrados en un renglón y todos los que faltan con su avance, para que ninguno cumplido quede escondido.
-- **Eventos:**
-  - El objetivo va un producto por renglón, siempre con alto de tres: ya se ve el tercero.
-  - En la ventana de eventos, el Renombre arriba y sus botones (Álbum, Decorar, Logros, Horas) en un renglón aparte; cada región se pliega, como en la lista de zonas.
-  - En la ventana del Renombre, las regiones en tres columnas y un botón **← Eventos** para volver.
-  - **La ruta en el tablero del evento** es exacta: va al nivel de su estación, dice cuánto llega (lo que gasta la estación y un 25 % más), cuánto cabe y qué parte llega; no se mejora aparte. Si el evento la corta (el derrumbe, la creciente), dice qué comprar.
-- **La cadena** explica el ⛔ de las ramas: lo que una rama no alcanza a procesar va a la bodega, que queda más lejos, y el transporte no da abasto con ese viaje.
-- **Texto:** «Ahora se trabajan las 24 horas».
+## v3.67.0 — La carte d’abord, des fenêtres plus confortables et des régions sans fuites
+- **🗺️ La carte, d’abord :** le bouton des zones ouvre la carte de la Colombie avec ta région en évidence, qui se voit aussitôt de près avec ta zone en évidence. La liste est dans **📋 Liste**.
+  - **En allant vers une autre zone** (en en terminant une, ou en la choisissant dans la liste ou sur la carte), on voit le voyage : dans la même région, le petit bonhomme y marche ; vers une autre région, la carte s’éloigne vers le pays, met en évidence la nouvelle région, s’en rapproche et le petit bonhomme arrive à pied.
+  - **Gran Tolima 🎺** et **Bogotá y la Sabana 🏛️** apparaissent comme « Bientôt ».
+- **Des régions sans fuites :** dans les six régions après l’Eje Cafetero, avec tout au maximum, certaines stations envoyaient du produit à l’entrepôt alors qu’elles avaient où l’emporter. La première et la deuxième zone de chaque région ne produisaient pas assez pour leur propre zone et pour les routes à la fois. Maintenant elles rendent juste ce qu’il faut, ×1,5 la première (la Coupeuse de la Guayabera et ses pareilles en sortent 3 sur 4) et ×1,25 la deuxième (toute sa chaîne va plus vite), et avec tout au maximum rien ne fuit, comme dans l’Eje Cafetero.
+- **Fenêtres :** toucher en dehors d’une fenêtre la ferme, et toucher la carte en dehors du panneau d’une station le ferme aussi.
+- **Menu ⚙️ :**
+  - Une ✕ en haut au lieu de « Continuer à jouer » et **Effacer la partie** seul, à la fin.
+  - Les statistiques une par ligne : temps de jeu, gains totaux et **produits vendus** (de toutes les régions ; avant, seulement les cerises).
+  - Il montre la vraie version (avant, il disait toujours « v3.7.0 »).
+  - Nouveau **ℹ️ À propos** : qui fait le jeu, contact, confidentialité, crédits de la musique de la région où tu es, la police et la carte.
+- **Musique de Santander :** la guabina n’a plus de tiple et la guitare est pincée ; elle ressemblait trop au bambuco de l’Eje Cafetero.
+- **Stations :** en les touchant, elles s’ouvrent toujours sur ⚙️ Station. Si ce qu’il faut améliorer, ce sont leurs muletiers ou leur route, cet onglet clignote.
+- **📋 Objectifs :** la liste complète de la zone, comme les recherches : ceux encaissés sur une ligne et tous ceux qui manquent avec leur progression, pour qu’aucun objectif rempli ne reste caché.
+- **Événements :**
+  - L’objectif a un produit par ligne, toujours sur une hauteur de trois : on voit maintenant le troisième.
+  - Dans la fenêtre des événements, le Renom en haut et ses boutons (Album, Décorer, Succès, Heures) sur une ligne à part ; chaque région se replie, comme dans la liste des zones.
+  - Dans la fenêtre du Renom, les régions sur trois colonnes et un bouton **← Événements** pour revenir.
+  - **La route sur le plateau de l’événement** est exacte : elle va au niveau de sa station, dit combien arrive (ce que consomme la station plus 25 %), combien tient et quelle part arrive ; elle ne s’améliore pas à part. Si l’événement la coupe (le glissement de terrain, la crue), elle dit quoi acheter.
+- **La chaîne** explique le ⛔ des branches : ce qu’une branche n’arrive pas à transformer va à l’entrepôt, qui est plus loin, et le transport ne suit pas ce trajet.
+- **Texte :** « On travaille maintenant 24 heures sur 24 ».
 
-## v3.66.0 — Lo que pidieron los testers
-- **¿Qué es este ícono?** Al tocar un ícono en cualquier texto del juego (el panel de una estación, la cadena, los objetivos, las investigaciones…) aparece su nombre: «Cereza de café», «Bolsas de café», «Monedas».
-- **📦 La bodega por dentro:** el Despacho tiene una pestaña nueva, **Bodega**, con lo que hay de cada producto de la zona, a cuánto se vende cada uno y cuánto vale todo. Lo que espera una ruta se marca con 🚌.
-- **La cadena y la bodega:** cada estación tiene una etiqueta 📦 que dice cuánto manda directo a la bodega para venderlo sin procesar (en naranja si es porque la siguiente no da abasto) y lleva a la bodega al tocarla. El detalle de cada estación lo explica y tiene un botón **📦 Bodega**.
-- **Volumen:** en el menú ⚙️, la música y los sonidos tienen cada uno su control, de 0 (apagado) a 100. La música empieza al **40 %** de lo que sonaba antes, para que no tape los sonidos.
-- **Cómo se juega** cuenta que, después del Eje Cafetero, se van abriendo las otras regiones de Colombia (Santander, La Costa, Boyacá, Los Llanos, la Costa Pacífica y el Amazonas), y que tocar un ícono dice su nombre.
+## v3.66.0 — Ce qu’ont demandé les testeurs
+- **C’est quoi cette icône ?** En touchant une icône dans n’importe quel texte du jeu (le panneau d’une station, la chaîne, les objectifs, les recherches…), son nom apparaît : « Cerise de café », « Sachets de café », « Pièces ».
+- **📦 L’entrepôt de l’intérieur :** l’Expédition a un nouvel onglet, **Entrepôt**, avec ce qu’il y a de chaque produit de la zone, à combien se vend chacun et ce que vaut le tout. Ce qu’attend une route est marqué d’un 🚌.
+- **La chaîne et l’entrepôt :** chaque station a une étiquette 📦 qui dit combien elle envoie directement à l’entrepôt pour le vendre sans transformation (en orange si c’est parce que la suivante ne suit pas) et qui mène à l’entrepôt quand on la touche. Le détail de chaque station l’explique et a un bouton **📦 Entrepôt**.
+- **Volume :** dans le menu ⚙️, la musique et les sons ont chacun leur réglage, de 0 (coupé) à 100. La musique démarre à **40 %** de ce qu’elle était, pour ne pas couvrir les sons.
+- **Comment jouer** raconte qu’après l’Eje Cafetero s’ouvrent les autres régions de Colombie (Santander, La Costa, Boyacá, Los Llanos, la Costa Pacífica et l’Amazonas), et que toucher une icône donne son nom.
 
-## v3.65.1 — Abre más rápido, el tinto funciona y las caras en su sitio
-- **El juego abre mucho más rápido** después de un tiempo cerrado. Con todas las regiones avanzadas y un día fuera, el cálculo de lo producido mientras tanto pasó de unos 25 segundos a unos 4 (en un computador; en el teléfono la diferencia se nota más). Las ganancias son las mismas (menos de 1 % de diferencia):
-  - las mulas en camino se cuentan una sola vez por paso, y no una vez por cada estación;
-  - se simulan de verdad 30 minutos de juego (casi 4 días) en vez de 2 horas, y el resto se calcula al mismo ritmo;
-  - los avisos del mapa no se calculan mientras tanto (nadie los ve).
-- **Las personas de cada zona** (Don Jairo, Doña Inés…) tienen la cabeza dibujada como el resto del juego, con su tono de piel, su pelo, su barba o su sombrero. Antes era un emoji, y en muchos Android (los Samsung, por ejemplo) el emoji traía cuello y hombros y quedaba corrido sobre el cuerpo.
-- **☕ Invítame un tinto** se quedaba en «Cargando…» para siempre en la versión de Google Play: el juego esperaba el complemento de cobros de una forma que nunca terminaba. Ahora muestra los precios en pesos, y si Google Play no responde en 20 segundos, lo dice.
+## v3.65.1 — Ouverture plus rapide, le tinto fonctionne et les visages à leur place
+- **Le jeu s’ouvre beaucoup plus vite** après un moment fermé. Avec toutes les régions avancées et une journée d’absence, le calcul de ce qui a été produit entre-temps est passé d’environ 25 secondes à environ 4 (sur un ordinateur ; sur le téléphone, la différence se sent davantage). Les gains sont les mêmes (moins de 1 % de différence) :
+  - les mules en route ne sont comptées qu’une fois par pas, et non une fois par station ;
+  - on simule vraiment 30 minutes de jeu (presque 4 jours) au lieu de 2 heures, et le reste se calcule au même rythme ;
+  - les avis de la carte ne sont pas calculés entre-temps (personne ne les voit).
+- **Les gens de chaque zone** (Don Jairo, Doña Inés…) ont la tête dessinée comme le reste du jeu, avec leur couleur de peau, leurs cheveux, leur barbe ou leur chapeau. Avant, c’était un emoji, et sur beaucoup d’Android (les Samsung, par exemple) l’emoji avait un cou et des épaules et se retrouvait décalé sur le corps.
+- **☕ Offre-moi un tinto** restait sur « Chargement… » pour toujours dans la version Google Play : le jeu attendait le module de paiement d’une façon qui ne se terminait jamais. Maintenant il affiche les prix en pesos, et si Google Play ne répond pas en 20 secondes, il le dit.
 
-## v3.65.0 — Tradiciones contadas con cuidado
-El juego es también para niños. El Tabacal y La Cervecería se quedan, como oficio y tradición, pero ningún texto ni dibujo invita a fumar o a beber:
-- El ícono del **tabaco torcido** ya no tiene la punta encendida ni el humo.
-- Álbum:
-  - **El chicote**: sin el 🚬, con el manojo de tabaco.
-  - **La chicha**, **el guarapo**, **el viche** y **la chicha de chontaduro**: cuentan cómo se hacen y de dónde vienen, no cuándo se toman.
-  - **Los uitoto**: «Pueblo de la maloca, que guarda sus historias en cantos y relatos».
-- Lo que cuentan las estaciones: los fermentadores de la Cervecería explican cómo se hace la chicha, y las Jarras de Ráquira, cómo se tornean y se hornean.
+## v3.65.0 — Des traditions racontées avec soin
+Le jeu est aussi pour les enfants. El Tabacal et La Cervecería restent, comme métier et tradition, mais aucun texte ni dessin n’invite à fumer ou à boire :
+- L’icône du **cigare roulé** n’a plus le bout allumé ni la fumée.
+- Album :
+  - **Le chicote** : sans le 🚬, avec la botte de tabac.
+  - **La chicha**, **le guarapo**, **le viche** et **la chicha de chontaduro** : ils racontent comment ils se font et d’où ils viennent, pas quand on les boit.
+  - **Les Uitoto** : « Peuple de la maloca, qui garde ses histoires dans des chants et des récits ».
+- Ce que racontent les stations : les fermenteurs de la Brasserie expliquent comment se fait la chicha, et les Cruches de Ráquira, comment on les tourne et les cuit.
 
-## v3.64.1 — «Mi Tierrita» en el teléfono
-- En la pantalla de inicio del teléfono el ícono decía «Encantos de Mi Tierrita», que no cabe; ahora dice **Mi Tierrita**. En Play Store el nombre completo sigue siendo «Encantos de Mi Tierrita».
+## v3.64.1 — « Mi Tierrita » sur le téléphone
+- Sur l’écran d’accueil du téléphone, l’icône disait « Encantos de Mi Tierrita », qui ne tient pas ; maintenant elle dit **Mi Tierrita**. Sur le Play Store, le nom complet reste « Encantos de Mi Tierrita ».
 
-## v3.64.0 — Privacidad y ficha de Google Play
-- **🔒 Privacidad:** la política está en https://frealgagu.github.io/MiTierritaGame/privacidad.html y hay un resumen en el menú ⚙️. El juego no recoge ni comparte datos personales: no tiene cuentas, publicidad ni rastreo, y la partida se guarda solo en el dispositivo.
-- **La letra va dentro del juego:** Fredoka ya no se descarga de Google Fonts. Así la app se ve igual sin internet y el juego no se conecta a ningún servidor de fuentes.
-- **Ficha de Google Play** (`store/`): textos, capturas de 1080 × 1920 y las respuestas para los formularios de la consola.
+## v3.64.0 — Confidentialité et fiche Google Play
+- **🔒 Confidentialité :** la politique est sur https://frealgagu.github.io/MiTierritaGame/privacidad.html et il y a un résumé dans le menu ⚙️. Le jeu ne collecte ni ne partage de données personnelles : il n’a ni comptes, ni publicité, ni pistage, et la partie s’enregistre seulement sur l’appareil.
+- **La police est dans le jeu :** Fredoka ne se télécharge plus depuis Google Fonts. Ainsi l’application s’affiche pareil sans Internet et le jeu ne se connecte à aucun serveur de polices.
+- **Fiche Google Play** (`store/`) : textes, captures de 1080 × 1920 et les réponses pour les formulaires de la console.
 
-## v3.63.0 — Invítame un tinto
-- **☕ Invítame un tinto**, en el menú ⚙️ de la versión de Google Play: una propina voluntaria para quien hace el juego (un tinto, una arepa o un almuerzo), con los cobros de Google. No da nada dentro del juego.
-- Antes de pagar hay una **barrera para adultos**: una multiplicación (como 13 × 7) que un niño pequeño no resuelve de un toque. En las cuentas de niños con control parental, Google además le pide permiso al adulto.
-- Se puede invitar las veces que se quiera. Un pago que quede pendiente (por ejemplo, en efectivo) se completa solo la próxima vez que se abra el juego.
-- En la web saldrá el mismo botón con un enlace a Ko-fi, cuando exista. El APK de prueba no lo trae: los cobros de Google solo funcionan con la app instalada desde la tienda.
+## v3.63.0 — Offre-moi un tinto
+- **☕ Offre-moi un tinto**, dans le menu ⚙️ de la version Google Play : un pourboire volontaire pour celui qui fait le jeu (un tinto, une arepa ou un déjeuner), avec les paiements de Google. Cela ne donne rien dans le jeu.
+- Avant de payer, il y a une **barrière pour adultes** : une multiplication (comme 13 × 7) qu’un jeune enfant ne résout pas d’un seul toucher. Sur les comptes d’enfants avec contrôle parental, Google demande en plus l’autorisation de l’adulte.
+- On peut offrir autant de fois qu’on veut. Un paiement qui reste en attente (par exemple, en espèces) se termine tout seul à la prochaine ouverture du jeu.
+- Sur le web, le même bouton apparaîtra avec un lien vers Ko-fi, quand il existera. L’APK de test ne l’a pas : les paiements de Google ne fonctionnent qu’avec l’application installée depuis la boutique.
 
 ## v3.62.0 — Encantos de Mi Tierrita
-- **El juego cambia de nombre:** ahora se llama **Encantos de Mi Tierrita** (en el teléfono, «Mi Tierrita»). La web se mudó a https://frealgagu.github.io/MiTierritaGame/.
-- **Ícono nuevo:** el mapa de Colombia con los colores de las regiones del juego, un sombrero vueltiao, una palmera, una ramita de café y una mazorca de cacao. Sale en la pantalla de carga, en la app y en la web instalada.
-- **La app de Android es otra:** su identificador ahora es `com.frealgagu.mitierrita.encantos`, así que se instala aparte de la anterior (la vieja se puede desinstalar). Las partidas guardadas empiezan de nuevo.
-- **Versión para Google Play:** además del APK, se genera el AAB para la tienda, firmado con una clave de subida que vive solo en los secretos del repositorio. Esa versión no trae el aviso de actualización propio, porque las actualizaciones llegan por Google Play.
-
-## v3.61.0 — Objetivos que siempre se pueden cumplir
-- Había 42 objetivos de **vender** algo que otra estación de la zona se lleva: la cereza que va al Beneficiadero, la leche al Pasteurizador, el sombrero vueltiao al Parador, la máscara ticuna a la Tienda, etc. Si se construía esa estación antes de cumplir el objetivo, el producto casi nunca llegaba a la bodega (solo lo que se desviaba) y el objetivo podía quedarse quieto para siempre.
-- Ahora esos objetivos dicen **Produce** y cuentan lo producido, que siempre avanza. Los que piden vender algo que va a la bodega siguen igual. En las partidas que ya iban, cuenta todo lo producido desde el comienzo de la partida.
-
-## v3.60.0 — El mapa de Colombia
-- **🗺️ Ver el mapa de Colombia:** en el selector de zonas, un botón abre el mapa en grande. Para volver a la lista, se cierra.
-  - Primero se ve el país, con sus departamentos y cada región del juego de su color. Las que todavía no se abren salen en gris, con 🔒, y un 📍 marca dónde estás.
-  - Al tocar una región, el mapa se acerca y muestra sus zonas, cada una en el pueblo que la inspira (Salento, Barichara, Cartagena, Villa de Leyva, Villavicencio, Buenaventura, Leticia…). Las zonas van unidas por el camino punteado, en orden, con su estado. El botón **⬅ Colombia** vuelve al país.
-  - Al elegir otra zona, **un muñequito camina hasta allá**: por el mapa de la región si es de la misma, o por el mapa del país si es de otra. Al llegar, se va a la zona.
-- El mapa se hizo con el Marco Geoestadístico Nacional 2018 del DANE (sin San Andrés, que queda muy lejos para esta escala).
-
-## v3.59.0 — Las regiones en su panel
-- **🗺️ Zonas:** cada región va en un panel sombreado, con su nombre arriba y sus zonas adentro, un poco más angostas y unidas al panel por una rayita: ya no se confunde a qué región pertenece cada zona.
-
-## v3.58.0 — La Compostera cuenta para «zona al máximo»
-- La Compostera de la Finca no es parte de la cadena y se puede dejar sin construir. Por eso, con todo lo demás al máximo, la Finca decía **🏁 Esta zona está al máximo** aunque faltara la Compostera. Ahora, mientras no esté construida, la sugerencia dice **🏗️ Siguiente: construye Compostera**; ya construida, cuenta como cualquier estación para «Falta subir». Es la única estación de todas las zonas que está fuera de su cadena.
-
-## v3.57.0 — Cobrar todos, comprar todas y el multiplicador abreviado
-- **🔁 Multiplicador:** se muestra con el mismo formato que las monedas: ×512, ×2,05K, ×1,05M, ×4,29B.
-- **📋 Objetivos:**
-  - el número del botón cuenta todos los objetivos de la zona que ya se pueden cobrar, no solo los tres que se ven;
-  - cualquier objetivo cumplido se puede cobrar, aunque todavía no se vea;
-  - abajo, fuera de la lista, **✅ Cobrar todos (N) · +💰** cobra de una vez todos los cumplidos de la zona. El final de la zona no entra: se cobra aparte, cuando le llega el turno, con su pantalla de victoria.
-- **🔬 Investigaciones:**
-  - abajo, fuera de la lista, **🛒 Comprar todas (N) · 💰** compra las de la zona en la que estás, de la más barata a la más cara, hasta donde alcance el dinero;
-  - la Maestría y la Supremacía quedan aparte, para comprarlas a propósito;
-  - al abrir la lista y después de comprar, la lista baja sola hasta la más barata que falta; si ya están todas, hasta la Maestría y la Supremacía.
-
-## v3.57.0 — Cobrar todos, comprar todas y el multiplicador abreviado
-- **🔁 Multiplicador:** se muestra con el mismo formato que las monedas: ×512, ×2,05K, ×1,05M, ×4,29B.
-- **📋 Objetivos:**
-  - el número del botón cuenta todos los objetivos de la zona que ya se pueden cobrar, no solo los tres que se ven;
-  - cualquier objetivo cumplido se puede cobrar, aunque todavía no se vea;
-  - arriba de la lista, **✅ Cobrar todos (N) · +💰** cobra de una vez todos los cumplidos de la zona. El final de la zona no entra: se cobra aparte, cuando le llega el turno, con su pantalla de victoria.
-- **🔬 Investigaciones:**
-  - arriba de la lista, **🛒 Comprar todas (N) · 💰** compra las de la zona en la que estás, de la más barata a la más cara, hasta donde alcance el dinero;
-  - la Maestría y la Supremacía quedan aparte, para comprarlas a propósito;
-  - al abrir la lista y después de comprar, baja sola hasta la más barata que falta; si ya están todas, hasta la Maestría y la Supremacía.
-
-## v3.56.0 — Tope del reinicio: ×2³²
-- El multiplicador de producción del reinicio llega hasta **×2³²** (32 reinicios, unos 4.295 millones). Se puede seguir volviendo a empezar —cada vez sigue dando ⭐ de Renombre y cuenta para los logros—, pero la producción ya no se duplica: se queda en ×2³².
-- La pantalla del segundo final y los botones de volver a empezar dicen la producción que tendrá la partida nueva y, ya en el tope, que es el máximo.
-
-## v3.55.0 — «Zona al máximo» solo cuando lo está
-- El aviso **🏁 Esta zona está al máximo** salía apenas ninguna mejora sumaba ganancia, aunque quedaran cosas sin subir. Ahora solo sale cuando todo está de verdad en el nivel máximo: las estaciones, sus arrieros, la Bodega y Despacho y las rutas que llegan a la zona.
-- Si falta algo, la sugerencia lo dice: **💡 Falta subir: …** con su nivel, señalando lo más bajo. Puede ser una rama que no cambia lo que se vende (la Freidora de la Ciénaga, el Moquén del Lago) o un despacho en el 92 que ya alcanza a llevarlo todo. Tocarla abre esa mejora, como la recomendada.
-- Se revisaron todas las zonas de todas las regiones: había 48 casos en que el aviso salía antes de tiempo; ya no queda ninguno.
-
-## v3.54.0 — Regiones plegables y las ballenas de Buenaventura
-- **🗺️ Zonas:** cada región se pliega y despliega tocando su nombre. Plegada, dice cuántas zonas lleva completadas, cuánto rinde entre todas y si estás en ella. Al abrir la lista solo se ve desplegada la región donde estás; lo que pliegues o despliegues se queda así.
-- **🐋 Buenaventura** ahora tiene el **mar Pacífico** detrás del mapa, con su playa de arena oscura. En el mar, las **ballenas jorobadas** echan el chorro, se sumergen mostrando la cola y a veces saltan fuera del agua y caen con un chapuzón; las lanchas de los turistas las miran desde lejos. Es solo dibujo: las zonas, las estaciones y los caminos no cambian (la Salida a las ballenas sigue siendo la última estación).
-
-## v3.53.0 — El Amazonas completo: eventos, álbum y logros
-- **Seis eventos nuevos**, uno por zona del Amazonas, cada uno con su escena en el tablero que cambia con cada compra:
-  - 🌴 **Las palmas muy altas** (Asaizal): pretinas para trepar, escaleras de guadua y asaí bajito;
-  - ☀️ **Sequía en el Amazonas** (Ajizal): tanques de agua lluvia, motobomba al río y pozo profundo;
-  - 🐟 **Se acabó la veda** (Lago): todo el río quiere pirarucú salado, moqueado y al ají negro;
-  - 🏜️ **Llegó la vaciante** (Casabería): el río bajó y el bote del asaí no pasa;
-  - 🎭 **La fiesta de la Pelazón** (Yanchama): todos quieren máscaras y hay pocas manos;
-  - 🎉 **Festival de la Confraternidad Amazónica** (Leticia): la ciudad se llena de visitantes que quieren ver los delfines rosados.
-- **Álbum del Amazonas:** seis páginas (la selva, la cocina, el río, los pueblos, las manos y Leticia) con 36 láminas, de la ceiba al parque Santander.
-- **Logros del Amazonas:** cosechero de asaí, ajicera, pescador de pirarucú, casabera, mascarero, a ver los delfines y los de siempre.
-- El Amazonas queda terminado: al completar Leticia tiene su segundo final y su reinicio, y sus eventos salen en todas sus zonas y dan el premio de medallas.
-- **Arreglo:** los íconos nuevos de la Yanchama y de Leticia (v3.51 y v3.52) salían como un cuadrito o una letra suelta, porque la fuente de íconos solo cubría hasta U+E0FF. Ya se ven todos.
-
-## v3.52.0 — El Amazonas: Leticia
-- **🐬 Leticia**, la última zona del Amazonas, se abre al completar La Yanchama. Es el puerto de la triple frontera y no tiene fuente propia: cada estación espera lo suyo de otra zona, como en Buenaventura.
-  - la **Heladería de asaí** hace helados con las cajas de asaí del Asaizal;
-  - el **Restaurante de la ribera** sirve la cena con las cajas de ají negro del Ajizal;
-  - el **Hotel de la selva** recibe huéspedes con los recuerdos de la Yanchama;
-  - el **Mercado del puerto** sirve el almuerzo con el pirarucú al ají negro del Lago;
-  - las **Provisiones de la canoa** arman los canastos con el desayuno y el banquete de la Casabería;
-  - la **Salida a los delfines** lleva a los turistas a ver los delfines rosados.
-- **🚌 Seis rutas nuevas**, una desde cada zona del Amazonas, con sus carreteras en los dos mapas. Tiene los mismos números que Buenaventura.
-- Su persona es **Doña Graciela, la guía**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (del helado de asaí a la salida a ver los delfines).
-- **El mapa:** el pueblo de casas de colores con techo de zinc, ceibas, palmas de asaí y guacamayas; la heladería verde agua con el toldo morado, el restaurante con techo de palma, el hotel de madera de tres pisos, el mercado con sus puestos, la bodeguita de las provisiones y el muelle sobre el río negro, donde salta un delfín rosado.
-- El Amazonas ya tiene sus seis zonas; en la próxima versión llegan sus eventos, su álbum y sus logros.
-
-## v3.51.0 — El Amazonas: La Yanchama
-- **🎭 La Yanchama**, la quinta zona del Amazonas, se abre al completar La Casabería: los Árboles de yanchama → el Remojo de corteza → el Golpeadero → los Pintores de yanchama → el Taller de máscaras → la Tienda de la Yanchama. La corteza se remoja en la quebrada, se golpea con el mazo hasta volverse tela, se pinta con jagua y achiote y se vuelve **máscara ticuna**, la de la fiesta de la Pelazón; la tienda vende el **Recuerdo del Amazonas**. Tiene los mismos números que el Werregue.
-- **🚌 Ruta del pirarucú salado** y **🚌 Ruta del moqueado:** salen del Lago hacia la Tienda de la Yanchama.
-- Su persona es **Don Eliseo, el artesano ticuna**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (del árbol de yanchama al recuerdo).
-- **El mapa:** el monte oscuro de yanchamas de tronco liso y claro, con raíces de tabla y la herida de la corteza sacada; en las estaciones, el pozo de la quebrada con las tiras bajo las piedras, la ramada del golpeadero con el tronco y los mazos, los tambos de los pintores y de las máscaras (con las máscaras que miran desde los palos) y la tienda de madera con su letrero pintado.
-
-## v3.50.0 — El Amazonas: La Casabería
-- **🫓 La Casabería**, la cuarta zona del Amazonas, se abre al completar El Lago: la Chagra de yuca → la Peladora de yuca → el Rallador de yuca → el **Tipití** (el tubo tejido de palma que exprime la masa y le saca el jugo venenoso de la yuca brava) → el Budare de casabe. El casabe se reparte entre la **Mesa del desayuno** (el desayuno amazónico) y la **Maloca** (el banquete de la maloca). Tiene los mismos números que el Manglar.
-- **🚌 Ruta del asaí:** las bolsas de asaí del Asaizal llegan a la Mesa del desayuno y a la Maloca. **🚌 Ruta del pirarucú:** el pirarucú limpio del Lago llega a la Maloca.
-- Su persona es la **Abuela Tránsito, la casabera**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 8 íconos nuevos (de la mata de yuca al banquete).
-- **El mapa:** la chagra de tierra café con las matas de yuca de tallos de nudos y hojas palmeadas; en las estaciones, la ramada donde se pela la yuca junto a la batea, la casa del rallador con su artesa, los marcos de palo con los tipitíes que se estiran, la cocina de palma con el budare sobre las tres piedras y los casabes secándose en la estera, la casa verde agua del desayuno y la **maloca**, redonda, con el techo de palma hasta el suelo y el frente de corteza pintado.
-
-## v3.49.0 — El Amazonas: El Lago
-- **🐟 El Lago**, la tercera zona del Amazonas, se abre al completar El Ajizal: las Canoas del lago → la Limpieza de pirarucú, que reparte el pez entre el **Saladero** (pirarucú salado), la **Fileteadora** (postas que pasan al **Moquén**, donde se ahúman a la manera indígena) y la **Cocina del pirarucú**, que sirve el **pirarucú al ají negro**. Tiene los mismos números que la Bahía.
-- **🚌 Ruta del ají negro:** la chiva lleva los frascos de ají negro del Ajizal a la Cocina del pirarucú.
-- Su persona es **Don Jacinto, el pescador**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 6 íconos nuevos (del pirarucú recién sacado al plato con ají negro y casabe).
-- **El mapa:** el agua negra de los lagos de Tarapoto, con hojas de victoria regia y las canoas de los pescadores; en la orilla, la ramada de palma donde se abre el pez gigante (con su garza), los tendales con las mantas de pirarucú salado, la fileteadora verde sobre pilotes, el moquén de palos sobre la candela y la cocina naranja con su sartén.
-
-## v3.48.0 — El Amazonas: El Ajizal
-- **🌶️ El Ajizal**, la segunda zona del Amazonas, se abre al completar El Asaizal: el Ajizal → el Lavadero de ají → el Molino de ají → la Olla del tucupí → la Envasadora de ají negro. El ají de la chagra se lava, se muele y se cocina días enteros en el tucupí (el jugo de la yuca brava) hasta volverse **ají negro**, la sal de la selva. Tiene los mismos números que la Azotea; el ají negro es el que después viajará al Lago, y las cajas, a Leticia.
-- Su persona es **Doña Remedios, la ajicera**, con sus datos curiosos, objetivos, 9 investigaciones, su victoria y 5 íconos nuevos (de la mata de ají a la caja de ají negro).
-- **El mapa:** la chagra de tierra rojiza con las matas cargadas de ajíes rojos, amarillos y morados; en las estaciones, la batea bajo la ramada de palma, la casa azul del molino, la cocina con la olla del tucupí y el tipití colgado, y la envasadora amarilla con sus frascos.
-
-## v3.47.0 — El Amazonas: El Asaizal
-- **🦜 El Amazonas**, la séptima región, se abre al completar Buenaventura. Tiene su propia economía, como las demás, y llegará zona por zona.
-- **🌴 El Asaizal**, su primera zona: el Asaizal → la Desgranadora → el Tanque de remojo → la Despulpadora de asaí → la Batidora → la Empacadora de asaí → la Cajonera de asaí. Va del racimo de asaí a la caja de bolsas congeladas, pasando por el fruto, el asaí remojado, la pulpa y el asaí batido. Tiene los mismos números que la primera zona de cada región, porque el Amazonas empieza de cero.
-- Su persona es **Don Abel, el cosechero**, con sus datos curiosos, objetivos, 15 investigaciones, su victoria y 8 íconos nuevos (de la palma de asaí a la caja).
-- **El mapa:** la vega húmeda con las matas de asaí de tallos delgados, que echan racimos morados con cada hito; alrededor, ceibas gigantes, heliconias, plátano y guacamayas. Las casas son de madera, sobre pilotes, con techo de zinc o de palma:
-  - la ramada donde se sacuden los racimos sobre la lona;
-  - los tanques azules de remojo, con el vapor;
-  - la despulpadora que bota la pulpa morada al balde;
-  - el puesto verde de la batidora, con los vasos de asaí;
-  - la empacadora blanca con la banda de bolsas y el congelador, y la bodega con las cajas de icopor.
-- **Música:** la **Cumbia del Amazonas**, la de Leticia y la triple frontera: guitarra eléctrica punteada, bajo, teclado, maracas y manguaré, el tambor de palo de los pueblos de la selva.
-- Después vendrán El Ajizal, El Lago, La Casabería, La Yanchama y Leticia.
-
-## v3.46.0 — El id de la Costa Pacífica
-- Por dentro, la Costa Pacífica se llama ahora `pacifico` (salió como `choco`). No cambia nada en el juego.
-
-## v3.45.0 — Cartagena amurallada y frente al mar
-- **🏰 Cartagena** se ve ahora como la ciudad amurallada:
-  - el **mar Caribe** por los dos bordes de atrás del mapa, con olas, espuma, playa, veleros y lanchas;
-  - la **muralla** de piedra coralina a lo largo de la playa, con sus almenas y sus **garitas**;
-  - la muralla que cierra el **centro histórico** por tierra, con puertas donde pasan los caminos y la **Torre del Reloj** (amarilla, con sus arcos, el reloj que se ilumina de noche y la cúpula);
-  - adentro, las casas coloniales de colores pegadas unas a otras.
-- Es solo dibujo: las estaciones, los caminos y los tiempos de viaje no cambian.
-
-## v3.44.0 — La Costa Pacífica completa: eventos, álbum y logros
-- **Seis eventos nuevos**, uno por zona de la Costa Pacífica, cada uno con su escena en el tablero que cambia con cada compra:
-  - 🍂 **Sigatoka negra** en el Platanal: las matas manchadas, el que corta las hojas enfermas, las zanjas y los colinos de plátano resistente.
-  - 🌊 **Se enlodó el agua** en la Azotea: los baldes de agua revuelta se amontonan hasta que llegan los tanques de agua lluvia, la bomba y el filtro.
-  - 🎣 **Semana Santa en la Bahía**: todos piden pescado seco, pargo ahumado y tapao; puestos con toldos turquesa, amarillo y rosado.
-  - 🚤 **Se varó la lancha** en el Manglar: con la marea más baja del año no llegan los patacones; potrillos, la lancha de alquiler y la pleamar.
-  - 🏺 **Feria de artesanías** en el Werregue: la fila de compradores que quieren jarrones; las muchachas que aprenden, la fibra de otras comunidades y las abuelas tejedoras.
-  - 🥁 **Festival Folclórico del Pacífico** en Buenaventura: la ciudad llena de visitantes que quieren ver las ballenas, parejas bailando currulao con pañuelos, guías y lanchas.
-- **Álbum de la Costa Pacífica:** seis páginas (la selva, la cocina, el mar, la música, las manos y Buenaventura) con 36 láminas, de la rana dorada a la ballena jorobada.
-- **Logros de la Costa Pacífica:** platanero, cocinera de azotea, pescador, piangüera, tejedora, a ver las ballenas y los de siempre.
-- **La Costa Pacífica queda terminada:** al completar Buenaventura tiene su segundo final y su reinicio, sus eventos salen en todas sus zonas y dan el premio de medallas. Si ya habías completado Buenaventura, al abrir esta versión la región queda terminada.
-
-## v3.43.0 — Costa Pacífica: Buenaventura
-- **🐋 Buenaventura**, el puerto y última zona de la Costa Pacífica, se abre al completar El Werregue. Como Barichara, Cartagena, Villa de Leyva y Villavicencio, no tiene fuente propia: cada estación recibe el producto final de una zona del Pacífico.
-  - La **Fritanga del puerto** fríe marranitas con las cajas de patacones del Platanal.
-  - La **Cevichería del malecón** sirve el ceviche con las cajas de aliño de la Azotea.
-  - El **Hotel de la bahía** da la noche en Buenaventura con el Recuerdo del Pacífico.
-  - La **Galería de Pueblo Nuevo** sirve el almuerzo con el tapao de la Bahía.
-  - Las **Loncheras de la lancha**, con el arroz con piangua y la cazuela del Manglar.
-  - La **Salida a las ballenas**: las lanchas a ver las ballenas jorobadas.
-- **Seis rutas nuevas** hacia Buenaventura, con sus carreteras en los mapas. Tiene los mismos números que Villavicencio.
-- Su persona es **Doña Libia, la guía**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (de las marranitas a las ballenas).
-- **El mapa:** casas de colores con techo de zinc, palmas de coco, almendros y faroles; el malecón gris con la casona turquesa y su toldo naranja, la cevichería, el hotel rosado de tres pisos, la galería con sus toldos de colores, la bodeguita verde con los chalecos salvavidas y el muelle con las lanchas y una ballena que salta de vez en cuando.
-- La Costa Pacífica ya tiene sus seis zonas. Sus eventos, su álbum, sus logros y su segundo final llegan en la próxima versión.
-
-## v3.42.0 — Costa Pacífica: El Werregue
-- **🏺 El Werregue**, la quinta zona de la Costa Pacífica, se abre al completar El Manglar: el Palmar de werregue → la Desfibradora → la Tintorería (negro de jagua y rojo de achiote) → la Torcedora → las Tejedoras → la Tienda de artesanías. La tienda vende el **Recuerdo del Pacífico**: jarrones de werregue con el pescado seco y el pargo ahumado de la Bahía para el camino. Tiene los mismos números que la Talabartería.
-- **Dos rutas nuevas desde la Bahía:** la Ruta del pescado seco y la Ruta del pargo ahumado, con su chiva y sus carreteras.
-- Su persona es **Doña Aminta, la tejedora wounaan**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (de la palma de werregue al Recuerdo del Pacífico).
-- **El mapa:** el palmar de werregue, de troncos espinosos, que echa el cogollo tierno con cada hito; la selva del río San Juan con chontaduros, heliconias, borojós y algún **tambo wounaan** (la casa redonda sobre pilotes con techo de palma). En las estaciones:
-  - la ramada donde se sacan las tiras, con los manojos de fibra colgados;
-  - las ollas de jagua y de achiote, con las madejas negras, rojas y claras secándose;
-  - el tambo de la torcedora, con los rollos de hebra, y el tambo grande de las tejedoras, con los jarrones;
-  - la tienda turquesa con los jarrones en el corredor y los visitantes.
-
-## v3.41.0 — Costa Pacífica: El Manglar
-- **🐚 El Manglar**, la cuarta zona de la Costa Pacífica, se abre al completar La Bahía: el Manglar → el Lavadero de piangua → la Olla de la piangua → la Desconchadora → la Olla del encocado. La piangua encocada (en leche de coco) se reparte entre:
-  - la **Mesa del arroz con piangua**, que la sirve con los patacones del Platanal;
-  - la **Cocina de la cazuela**, que hace la cazuela de mariscos con los patacones y el pargo de la Bahía.
-- **Dos rutas nuevas:** la Ruta de los patacones, desde el Platanal, y la Ruta del pargo, desde la Bahía, cada una con su chiva y su carretera.
-- Tiene los mismos números que el Hato llanero. Su persona es **Doña Ligia, la piangüera**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 7 íconos nuevos (del mangle a la cazuela).
-- **El mapa:** el barro del manglar en marea baja, con sus charcos, los mangles de raíces zancudas y las **piangüeras** que sacan la concha con la mano y la echan a la catanga (más piangüeras con cada hito); garzas, heliconias y palmas de coco. En las estaciones, el potrillo donde se lavan las catangas, la olla grande en el fogón, la casa amarilla con el montón de conchas vacías, la cocina rosada con los cocos, el restaurante azul con sus mesas y la cocina verde con las cazuelas de barro.
-
-## v3.40.0 — Costa Pacífica: La Bahía
-- **🐟 La Bahía**, la tercera zona de la Costa Pacífica, se abre al completar La Azotea: las Lanchas de pesca → la Limpieza de pargo, que reparte el pargo limpio entre:
-  - el **Secadero**, donde el pescado se sala y se tiende al sol (el pescado seco);
-  - la **Fileteadora de pargo**, que le pasa los filetes al **Ahumadero**;
-  - la **Cocina del tapao**, que cocina el pescado con plátano verde y el aliño de la Azotea.
-- **La Ruta del aliño**, la primera de la Costa Pacífica: lleva el aliño de la Azotea a la Cocina del tapao, con su chiva y su carretera.
-- Tiene los mismos números que la Cachamera. Su persona es **Don Cupertino, el pescador**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 6 íconos nuevos (del pargo rojo al tapao).
-- **El mapa:** el mar con las canoas de los pescadores y el muelle; palmas de coco, piedras de playa, redes al sol, heliconias y chontaduros. En las estaciones, la ramada de la limpieza con los alcatraces que esperan, los tendales con el pescado seco, la casa blanca de la fileteadora, los fogones altos del ahumadero y la cocina naranja del tapao.
-
-## v3.39.0 — Costa Pacífica: La Azotea
-- **🐋 La región se llama ahora Costa Pacífica** (salió como «el Chocó»): va del Chocó a Nariño, y su última zona será **Buenaventura**, en vez de Quibdó. Tu partida sigue igual.
-- **🌿 La Azotea**, su segunda zona, se abre al completar El Platanal: las Azoteas → el Lavadero de hierbas → el Pilón → la Olla del refrito → la Envasadora de aliño. Las hierbas de azotea (chillangua, poleo, albahaca y oreganón) se lavan, se machacan con ajo y cebolla, se sofríen y el aliño se envasa en frascos. Tiene los mismos números que el Frutal; el aliño es el que después viajará a la Bahía, y las cajas, a Buenaventura.
-- Su persona es **Doña Rosalba, la cocinera**, con sus datos curiosos, objetivos, 9 investigaciones, su victoria y 6 íconos nuevos (de la azotea a la caja de aliño).
-- **El mapa:** las azoteas, canoas viejas alzadas en pilotes y llenas de hierbas, que florecen con cada hito; en las estaciones:
-  - la ramada con la batea donde se lavan los manojos;
-  - la casa rosada con los pilones y las cocineras que machacan por turnos;
-  - la cocina azul con el fogón de leña y la olla del refrito;
-  - la casa verde con la mesa donde se llenan y se tapan los frascos.
-
-## v3.38.0 — El Chocó: El Platanal
-- **🐋 El Chocó**, la sexta región, se abre al completar Villavicencio. Tiene su propia economía, como las demás, y llegará zona por zona.
-- **🍌 El Platanal**, su primera zona: el Platanal → la Desmanadora → el Tanque de lavado → la Peladora → la Fritanga de patacones → la Empacadora → la Cajonera de patacones. Va del racimo de plátano a la caja de patacones, pasando por la mano, el plátano lavado y pelado, el patacón y la bolsa. Tiene los mismos números que la Palma, porque la región empieza de cero.
-- Su persona es **Don Nicomedes, el platanero**, con sus datos curiosos, objetivos, 15 investigaciones, su victoria y 8 íconos nuevos (de la mata de plátano a la caja de patacones).
-- **El mapa:** la tierra negra y mojada del platanal, con matas que echan racimo y bellota morada con cada hito; alrededor, palmas de chontaduro, borojós, heliconias y plátano suelto. Las casas son de tabla, sobre pilotes, pintadas de colores y con techo de zinc:
-  - la ramada donde cuelgan los racimos y el platanero corta las manos a machete;
-  - los tanques de lavado, con las manos que flotan;
-  - la peladora turquesa, con la mesa y las cáscaras;
-  - la fritanga con la paila de aceite en el fogón de leña y la tabla de aplastar;
-  - la empacadora amarilla, con la banda de bolsas, y la bodega verde con las cajas.
-- **Música:** la **Chirimía de San Pacho**, un porro chocoano con dos clarinetes, el bombardino, la tambora, el redoblante y los platillos.
-- Después vendrán La Azotea, La Bahía, El Manglar, El Werregue y Quibdó.
-
-## v3.37.0 — Los Llanos completos: eventos, álbum y logros
-- **Seis eventos nuevos**, uno por zona de los Llanos, cada uno con su escena en el tablero que cambia con cada compra:
-  - 🦠 **Pudrición del cogollo** en la Palma: las palmas manchadas, el que corta lo podrido, las zanjas de drenaje y las palmitas híbridas recién sembradas.
-  - ⚙️ **Despulpadora varada** en el Frutal: las canastas de maracuyá se amontonan hasta que llegan las aspas, el motor y el tamiz.
-  - 🐟 **Feria del pescado** en la Cachamera: todos piden pisillo, cachama ahumada y cachama al maracuyá; puestos con toldos verde, amarillo y azul.
-  - 🌉 **Se cayó el puente** en el Hato llanero: el río se llevó el puente y no llega el aceite; canoas, el planchón y el puente nuevo.
-  - 🐂 **Torneo de coleo** en la Talabartería: la fila de coleadores que quieren silla nueva; los aprendices, las hormas y los maestros.
-  - 💃 **Torneo del joropo** en Villavicencio: la ciudad llena de visitantes para Caño Cristales, parejas bailando joropo, guías y avionetas.
-- **Álbum de los Llanos:** seis páginas (la palma, las frutas, los ríos, el hato, el caballo y Villavicencio) con 36 láminas, de la corocora a Caño Cristales.
-- **Logros de los Llanos:** palmicultor, frutero, piscicultor, parrandero, talabartero, a Caño Cristales y los de siempre.
-- **Los Llanos quedan terminados:** al completar Villavicencio tienen su segundo final y su reinicio, sus eventos salen en todas sus zonas y dan el premio de medallas. Si ya habías completado Villavicencio, al abrir esta versión la región queda terminada.
-
-## v3.36.0 — Los Llanos: Villavicencio
-- **🏞️ Villavicencio**, la Puerta del Llano y última zona de los Llanos, se abre al completar La Talabartería. Como Barichara, Cartagena y Villa de Leyva, no tiene fuente propia: cada estación recibe el producto final de una zona llanera.
-  - La **Empanadería** fríe empanadas con las cajas de aceite de la Palma.
-  - El **Kiosco del parque** sirve la tarde con las cajas de jugos del Frutal.
-  - El **Hotel campestre** da la noche en Villavicencio con el Recuerdo del Llano.
-  - La **Plaza de mercado** sirve el almuerzo con la cachama al maracuyá.
-  - Los **Morrales del viaje** llevan el almuerzo llanero y el asado de la parranda del Hato.
-  - La **Salida a Caño Cristales** despacha las excursiones al río de los cinco colores.
-- **Seis rutas nuevas** hacia Villavicencio, con sus carreteras en los mapas.
-- Su persona es **Doña Graciela, la guía**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (con Caño Cristales).
-- **El mapa:** casas de colores con techos de teja, guayacanes florecidos, palmas de moriche, mangos y faroles; el kiosco redondo de palma, el hotel con piscina, la plaza de mercado con los puestos de fruta y pescado, y el caño de colores al comienzo del camino.
-- Los Llanos ya tienen sus seis zonas. Sus eventos, su álbum, sus logros y su segundo final llegan en la próxima versión.
-
-## v3.35.0 — Los Llanos: La Talabartería
-- **🐎 La Talabartería**, la quinta zona de los Llanos, se abre al completar El Hato llanero: el Saladero de cueros → la Curtiembre → la Cortadora de cuero → el Repujado → el Taller de sillas → la **Tienda llanera**. La tienda vende el **Recuerdo del Llano**: sillas de montar con el pisillo y la cachama ahumada de la Cachamera para el camino. Tiene los mismos números que Las Ruanas.
-- **Dos rutas nuevas desde la Cachamera:** la **Ruta del pisillo** y la **Ruta de la cachama ahumada**, con su chiva y sus carreteras.
-- Su persona es **Don Ramón, el talabartero**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 6 íconos nuevos (del cuero crudo a la silla de montar).
-- **El mapa:** los cueros templados en sus marcos de palo, secándose con sal; caballos criollos (alazanes, bayos y tordillos), samanes, morichales y comejeneras. En las estaciones:
-  - las pozas de curtido con los cueros escurriendo;
-  - la mesa de cortar;
-  - el artesano golpeando el buril;
-  - las sillas de montar en sus burros de madera;
-  - la tienda con sombreros, cotizas y una silla en la puerta.
-
-## v3.34.0 — Los Llanos: El Hato llanero
-- **🤠 El Hato llanero**, la cuarta zona de los Llanos, se abre al completar La Cachamera: la Sabana del hato → el Desposte → el Adobadero → el Asador de vara (la mamona) → la Trinchadora (la carne a la llanera). Tiene los mismos números que Paipa.
-- La carne a la llanera se reparte entre:
-  - la **Mesa del almuerzo llanero**, que la sirve con la yuca frita en el aceite de la Palma;
-  - el **Asadero de la parranda**, que además asa la cachama de la Cachamera.
-- **Dos rutas nuevas:** la **Ruta del aceite**, desde la Palma, y la **Ruta de la cachama**, desde la Cachamera, cada una con su chiva y su carretera.
-- Su persona es **Don Florentino, el vaquero**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 5 íconos nuevos.
-- **El mapa:** la sabana con ganado cebú (blanco o gris, con su giba) y alguno sanmartinero, rojizo; samanes, morichales, comejeneras y garzas. En las estaciones:
-  - la ramada con las presas colgadas;
-  - las bateas con la carne en sal gruesa;
-  - la candela con la mamona en las varas;
-  - los caneyes con techo de palma;
-  - la parranda con el arpista y una pareja bailando joropo.
-
-## v3.33.0 — Los Llanos: La Cachamera
-- **🐟 La Cachamera**, la tercera zona de los Llanos, se abre al completar El Frutal. Los Estanques crían la cachama y la Limpieza la deja lista. La cachama limpia se reparte entre:
-  - la **Pisillera**, que hace el pisillo de cachama;
-  - la **Fileteadora**, que le pasa los filetes al **Ahumadero**, de donde sale la cachama ahumada;
-  - la **Cocina de la cachama**, que la sirve al maracuyá.
-- Tiene los mismos números que Ráquira.
-- **Primera ruta de los Llanos: la Ruta del jugo**, del Frutal a la Cocina de la cachama, con su chiva y su carretera en los dos mapas.
-- Su persona es **Don Arcadio, el piscicultor**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 6 íconos nuevos.
-- **El mapa:** los estanques de agua verdosa, con sus bordos de tierra y las cachamas que asoman a comer; garzas, morichales, palos de mango y comejeneras. En las estaciones:
-  - la mesa de lavar con las poncheras de cachama;
-  - el caldero del pisillo;
-  - la mesa larga de filetear;
-  - el ahumadero de bahareque con las cachamas colgadas;
-  - la cocina con el asador de leña, la olla de la salsa y las garrafas de jugo.
-
-## v3.32.0 — Los Llanos: El Frutal
-- **🥭 El Frutal**, la segunda zona de los Llanos, se abre al completar La Palma: el Maracuyal → la Despulpadora de maracuyá → la Pasteurizadora de pulpa → la Mezcladora de jugos → la Envasadora de jugos. Va del maracuyá a la caja de jugos, pasando por la pulpa y el jugo. Tiene los mismos números que la Cervecería.
-- El jugo de maracuyá es el que después viajará a la Cachamera, y las cajas de jugos, a Villavicencio.
-- Su persona es **Doña Edilma, la frutera**, con sus datos curiosos, objetivos, 9 investigaciones, su victoria y 6 íconos nuevos (de la enramada a la caja de jugos).
-- **El mapa:** las enramadas de alambre con la enredadera y los maracuyás colgando (más con cada hito), palos de mango cargados, morichales, comejeneras y garzas. En las estaciones:
-  - la máquina que parte el maracuyá, con las canastas al lado;
-  - la marmita de la pulpa, que hierve y echa vapor;
-  - los tanques donde gira el jugo amarillo;
-  - la banda de cajitas verdes.
-
-## v3.31.0 — Los Llanos: La Palma
-- **🐎 Los Llanos**, la quinta región, se abren al completar Villa de Leyva. Tienen su propia economía, como las demás, y llegarán zona por zona.
-- **🌴 La Palma**, su primera zona: el Palmar → la Desgranadora → el Esterilizador → la Prensa de aceite → el Clarificador → la Envasadora → la Cajonera de aceite. Va del racimo de palma a la caja de aceite, pasando por el fruto, el aceite crudo y la botella. Tiene los mismos números que el Papal, porque la región empieza de cero.
-- Su persona es **Don Eusebio, el palmicultor**, con sus datos curiosos, objetivos, 15 investigaciones, su victoria y 7 íconos nuevos (de la palma de aceite a la caja).
-- **El mapa:** el palmar de racimos rojos, morichales, comejeneras, garzas y algún samán. La planta extractora tiene naves de techo de zinc:
-  - el tambor que desgrana los racimos;
-  - el autoclave con la vagoneta de fruto;
-  - la prensa con los tambores de aceite crudo;
-  - los tanques del clarificador, con el aceite que sube;
-  - la banda de botellas que se llenan y se tapan.
-- **Música:** el **Joropo de la sabana**, con el arpa en la melodía, el cuatro rasgueando con sus golpes apagados, las maracas y el bajo.
-- Después vendrán El Frutal, La Cachamera, El Hato llanero, La Talabartería y Villavicencio.
-
-## v3.30.1 — Pausar un evento ganado
-- Con el evento ganado, **⏸️ Pausar** sigue funcionando: vuelves al mapa y el evento ganado te espera en la lista hasta que toques **🏁 Terminar evento**. Solo **🔄 Reiniciar** queda deshabilitado.
-
-## v3.30.0 — Menos eventos
-- **Dos eventos a la vez en todo el juego** (antes, dos por región), **nunca de la misma región**. Al terminar uno, su cupo descansa **2 años del juego** (unas 4 h 16 min; antes 3 años).
-- **Nuevos botones dentro del evento**:
-  - **⏸️ Pausar** (antes «Salir»): vuelves al mapa y el evento te espera.
-  - **🔄 Reiniciar**: el mismo reto desde cero (monedas, niveles, compras, reloj y la medalla asegurada).
-  - **🏁 Terminar**: lo cierras aunque no lo hayas ganado; no da medalla, su cupo descansa 2 años y la próxima vez sale el mismo reto.
-  - Reiniciar y terminar piden confirmación.
-- **Al ganar un evento** se dan la medalla y el Renombre, y puedes **👀 seguir mirando** el tablero. Desde ahí solo se sale con **🏁 Terminar evento**, y si cierras la app, el evento ganado sigue en la lista de eventos hasta que lo termines.
-- Los premios por tener todas las medallas de una región no cambian.
-- **Al actualizar:** los eventos que tenías empezados se quedan; los disponibles sin empezar y las esperas de cada región se borran, y los cupos se vuelven a llenar con las reglas nuevas.
-
-## v3.29.0 — La plaza de Vélez
-- **⛪ La Guayabera tiene en la mitad la plaza de Vélez**, con su iglesia blanca de una torre:
-  - la fachada con el portón de arco, la ventana redonda y la cruz;
-  - la torre con su campanario y la campana;
-  - el atrio de piedra con palomas;
-  - la pila, guayabos, bancas, faroles y las casas blancas del marco de la plaza.
-- **Las mulas le dan la vuelta**: el camino rodea la plaza y los Moldes, la Cortadora y la Envoltura quedaron alrededor de ella. **Los tiempos de los viajes no cambian**: cada estación quedó a la misma distancia del guayabal que antes, y una prueba nueva lo comprueba.
-- Por la plaza pasea la gente; de noche se alumbran el portón, las ventanas y los faroles.
-- **Campanas** a las 6, a las 12 y a las 18, como en el Pueblo.
-- **Mascotas más baratas**: los gatos cuestan 10 ⭐ (antes 50) y los loros 8 ⭐ (antes 40).
-
-## v3.28.0 — Boyacá completa: eventos, álbum y logros
-- **Seis eventos nuevos**, uno por zona de Boyacá, cada uno con su escena en el tablero que cambia con cada compra:
-  - 🍂 **La gota en el papal**: las matas se manchan; la fumigadora con caldo bordelés, los surcos aporcados y la semilla resistente.
-  - 🔥 **Horno de malta dañado** en la Cervecería: los bultos de cebada se acumulan hasta que llegan los ladrillos nuevos, el ventilador y el quemador a gas.
-  - 🏺 **Mercado de artesanías** en Ráquira: todos piden ollas, materas y jarras; puestos con toldos de colores.
-  - 🚧 **Carretera en obras** en Paipa: el derrumbe corta la vía y no llegan las papitas; mulas por la trocha, paso a un carril y la vía nueva.
-  - ❄️ **Las heladas de diciembre** en Las Ruanas: la fila de los que buscan ruana, el telar prestado, las lanzaderas y las tejedoras.
-  - 🪁 **Festival de las cometas** en Villa de Leyva: la fila de visitantes, las cometas en el cielo y los guías.
-- **Álbum de Boyacá**: seis páginas (la papa, la cerveza, el barro, los quesos, la lana y Villa de Leyva) con 36 láminas.
-- **Logros de Boyacá**: papicultor, cervecero, alfarero, amasijos, tejedor, al Fósil y los de siempre.
-- **Boyacá queda terminada**: al completar Villa de Leyva tiene su segundo final y su reinicio, sus eventos salen en todas sus zonas y da el premio de medallas. Si ya habías completado Villa de Leyva, al abrir esta versión la región queda terminada.
-
-## v3.27.0 — Boyacá: Villa de Leyva
-- **🏛️ Villa de Leyva**, la última zona de Boyacá, se abre al completar Las Ruanas. Como Barichara y Cartagena, no tiene fuente propia: cada estación recibe el producto final de una zona boyacense.
-  - La **Tienda de la esquina** sirve las onces con las cajas de papitas del Papal.
-  - La **Terraza de la plaza**, la tarde con las canastas de cerveza.
-  - El **Hospedaje colonial**, la noche en Villa de Leyva con el recuerdo de Las Ruanas.
-  - El **Mercado del sábado**, la canasta con las jarras de Ráquira.
-  - Los **Canastos del paseo** llevan además el piquete y los amasijos de Paipa.
-  - La **Salida al Fósil** despacha las **excursiones al Fósil**.
-- **Seis rutas nuevas** hacia Villa de Leyva, con sus carreteras en los mapas.
-- Su persona es **Doña Mercedes, la guía**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 7 íconos nuevos (con la iglesia de la plaza y el kronosaurio).
-- El mapa: casonas blancas de dos pisos con balcones verdes, la plaza empedrada, cipreses y eucaliptos; la terraza con sus parasoles, el hospedaje con geranios en el balcón, el mercado con toldos de colores y la roca del Fósil al comienzo del camino.
-- Boyacá ya tiene sus seis zonas. Sus eventos, su álbum, sus logros y su segundo final llegan en la próxima versión.
-
-## v3.26.0 — Boyacá: Las Ruanas
-- **🧶 Las Ruanas**, la quinta zona de Boyacá, se abre al completar Paipa: el Rebaño de ovejas → el Lavado de lana → el Cardado → el Hilado en rueca → el Telar de ruanas → la **Tienda de Nobsa**, que vende el Recuerdo de Boyacá: ruanas con ollas y materas de Ráquira.
-- **Dos rutas nuevas desde Ráquira**: la **Ruta de las ollas** y la **Ruta de las materas**, con su chiva y sus carreteras.
-- Su persona es **Don Clímaco, el tejedor**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 7 íconos nuevos (de la oveja a la ruana).
-- El mapa: el páramo con un rebaño de **ovejas** (blancas, alguna café y alguna negra) que pastan y caminan por el potrero, bultos de lana, frailejones, eucaliptos y piedras. En las estaciones: la pila de piedra donde se lava la lana tendida en la cerca, la que carda sentada en el banco, la rueca girando con sus madejas de colores, el telar con la ruana que crece franja por franja y la tienda con las ruanas colgadas.
-
-## v3.25.0 — Boyacá: Paipa
-- **🧀 Paipa**, la cuarta zona de Boyacá, se abre al completar Ráquira: el Hato lechero → la Cuajadera → los Moldes de queso → la Cava de maduración (el queso Paipa) → el Horno de almojábanas. Las almojábanas se reparten entre la **Mesa del piquete** (piquete boyacense) y el **Horno de barro** (canasta de amasijos).
-- **Dos rutas nuevas**: la **Ruta de las papitas**, con las bolsas de papitas criollas del Papal para el piquete y la canasta, y la **Ruta del barro**, con el barro de Ráquira para el horno de barro. Cada una con su chiva y su carretera.
-- Su persona es **Doña Gertrudis, la quesera**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 5 íconos nuevos.
-- El mapa: el hato lechero con vacas holstein, eucaliptos, cipreses, pacas de heno y frailejones. En las estaciones: la tina de cuajar, los aros de madera soltando el suero, la cava con las ruedas de queso que se doran, el horno de almojábanas con su boca encendida, las mesas largas del piquete con la gente comiendo en ruana y el horno de barro en el patio.
-
-## v3.24.0 — Boyacá: Ráquira
-- **🏺 Ráquira**, la tercera zona de Boyacá, se abre al completar La Cervecería. La Mina de greda saca la arcilla y el Amasado del barro la deja lista; el barro se reparte entre las **Ollas de barro**, el **Torno** (que le pasa las piezas al **Horno de leña**, de donde salen las materas pintadas) y las **Jarras**, que se llenan con cerveza.
-- **Primera ruta de Boyacá: la Ruta de la cerveza**, de la Cervecería a las Jarras de Ráquira, con su chiva y su carretera en los dos mapas.
-- Su persona es **Doña Lucila, la alfarera**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 7 íconos nuevos (con el caballito de Ráquira).
-- El mapa: la mina de greda con sus montones de barro rojo y las palas clavadas, lomas secas con cactus y piedras, eucaliptos y ollas puestas a la venta. En las estaciones: alguien pisando el barro en la poza, las ollas negras secándose en fila, el alfarero en el torno con la pieza que sube, el horno de cúpula con su boca encendida y el barril de cerveza junto a las jarras.
-
-## v3.23.0 — Boyacá: La Cervecería
-- **🍺 La Cervecería**, la segunda zona de Boyacá, se abre al completar El Papal: el Cebadal → la Maltería → la Paila de cocción → los Tanques de fermentación → la Embotelladora; de la cebada a la canasta de cerveza, pasando por la malta, el mosto y la cerveza, con íconos propios.
-- Su persona es **Don Hernando, el cervecero**, con sus datos curiosos, objetivos, 9 investigaciones y su victoria.
-- El mapa: el cebadal, que se va dorando con cada hito, pacas de paja, eucaliptos y cipreses. En las estaciones: el piso de la maltería con la cebada que alguien voltea y el horno con su chimenea, la paila de cobre echando vapor, los tanques de acero con sus burbujas y la banda de botellas junto a las canastas rojas.
-- Las zonas que vienen cambian de orden para que las rutas encajen: Ráquira (que hará jarras de barro para la cerveza), Paipa, Las Ruanas y Villa de Leyva.
-
-## v3.22.0 — Boyacá: El Papal
-- **Se abre Boyacá** ⛰️ al completar Cartagena, con su propia economía (empieza de cero y las demás regiones siguen produciendo).
-- Su primera zona, **🥔 El Papal**: el Papal → el Lavadero de papa → la Seleccionadora → la Peladora → la Freidora → la Empacadora de papitas → la Cajonera; de la papa a la caja de papitas criollas fritas, con íconos propios para cada producto.
-- Su persona es **Don Aurelio, el papicultor** («¡Sumercé, bienvenido a Boyacá!»), con sus datos curiosos, objetivos, 15 investigaciones y su victoria.
-- El mapa: la tierra negra del altiplano con matas de papa que echan flores blancas y moradas con cada hito; eucaliptos, cipreses, piedras y frailejones del páramo. En las estaciones: el tanque del lavadero con la banda que saca la papa, la mesa de escoger con la papa gruesa, la pareja y la menuda, el tambor de la peladora, la freidora dorando las papitas, las bolsas amarillas y las cajas arrumadas.
-- **Música nueva: el Torbellino del altiplano**, con tiple, requinto, guitarra, bajo y chucho.
-- En 🗺️ Zonas se ven las cinco que vienen: La Cervecería, Las Ruanas, Paipa, Ráquira y Villa de Leyva.
-
-## v3.21.0 — La Costa completa: eventos, álbum y logros
-- **Seis eventos nuevos**, uno por zona de la Costa, cada uno con su escena en el tablero que cambia con cada compra:
-  - 🐦 **Pájaros en el arrozal**: las bandadas sobre el agua; espantapájaros con sombrero vueltiao, cintas que brillan con el viento y los pajareros aplaudiendo por los camellones.
-  - 🔪 **Machetes sin filo** en el Cocal: el montón de cocos sin pelar se achica con la piedra de amolar (con sus chispas), los machetes nuevos y la peladora.
-  - ✝️ **Semana Santa** en la Ciénaga: todos piden pescado salado, frito y en coco; puestos con toldos morados, blancos y dorados.
-  - 🌧️ **Carretera inundada** en la Quesera: el agua corta la carretera y no llega el arroz; canoas, la chalupa y el terraplén nuevo.
-  - 👒 **Festival del sombrero** en Tuchín: la fila de visitantes, la máquina prestada, los repuestos y las costureras.
-  - 🛳️ **Llegó un crucero** a Cartagena: la fila de turistas en el muelle y los lancheros de Bocachica.
-- **Álbum de la Costa**: seis páginas (el arroz, el coco, la ciénaga, la sabana, el sombrero y Cartagena) con 36 láminas, de la garza blanca a las Islas del Rosario.
-- **Logros de la Costa**: arrocero, cocadero, pescador, bandeja completa, sombrerero, a las islas y los de siempre.
-- **La Costa queda terminada**: al completar Cartagena tiene su segundo final y su reinicio, sus eventos salen en todas sus zonas y da el premio de medallas. Si ya habías completado Cartagena, al abrir esta versión la región queda terminada.
-
-## v3.20.0 — La Costa: Cartagena
-- **🏰 Cartagena**, la última zona de la Costa, se abre al completar El Sombrero. Como Barichara, no tiene fuente propia: cada estación recibe el producto final de una zona costeña.
-  - El **Fogón de Getsemaní** hace arroz con coco con los bultos del Arrozal.
-  - El **Restaurante de la muralla** sirve la cena con las cocadas del Cocal de postre.
-  - El **Hotel colonial** vende la noche en la ciudad amurallada, con el recuerdo del Sombrero.
-  - La **Cocina de la bahía** sirve el almuerzo con el pescado en coco de la Ciénaga.
-  - Las **Loncheras del paseo** llevan además el almuerzo costeño y la bandeja de la Quesera.
-  - El **Muelle de las lanchas** despacha los **paseos a las Islas del Rosario**.
-- **Seis rutas nuevas** hacia Cartagena, una desde cada zona, con sus carreteras en los mapas.
-- Su persona es **Doña Dionisia, la palenquera**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 7 íconos nuevos (con la Torre del Reloj).
-- El mapa: casas coloniales de colores con balcones de madera y bugambilias, palmas de coco, la plaza de piedra coralina, un tramo de muralla con su garita y las mesas con velas encima, y el muelle con las lanchas que salen a las islas.
-- La Costa ya tiene sus seis zonas. Sus eventos, su álbum, sus logros y su segundo final llegan en la próxima versión.
-
-## v3.19.0 — La Costa: El Sombrero
-- **👒 El Sombrero**, la quinta zona de la Costa (Tuchín, tierra zenú), se abre al completar La Quesera: el Cañaflechal → el Raspado de la caña → los Tintes de barro → las Trenzadoras → la Costura del sombrero → el **Parador de Tuchín**, que vende el Recuerdo de la Costa: sombreros vueltiaos con pescado salado para el viaje y pescado frito para el camino.
-- **Dos rutas nuevas desde la Ciénaga**: la **Ruta del pescado salado** y la **Ruta del pescado frito**, con su chiva y sus carreteras.
-- Su persona es **Don Eliécer, el artesano**, con sus datos curiosos, objetivos, 10 investigaciones, su victoria y 7 íconos nuevos (de la mata de caña flecha al sombrero vueltiao).
-- El mapa: el cañaflechal con sus espigas plumosas (más con cada hito), sombreros colgados de varas a la orilla del camino, samanes, palmas y garzas. En las estaciones: la que raspa la hoja, la olla negra del tinte y las fibras blancas y negras al sol, las trenzadoras sentadas en el corredor, la máquina de coser con el sombrero dando vueltas y el kiosco del parador con los sombreros colgados y el pescado en la cuerda.
-
-## v3.18.0 — La Costa: La Quesera
-- **🧀 La Quesera**, la cuarta zona de la Costa, se abre al completar La Ciénaga: el Corral de ordeño → la Cuajadera → el Molino de cuajada → la Prensa de queso → la Olla del mote. El mote de queso se reparte entre la **Fonda costeña** (almuerzo costeño) y la **Cocina de la bandeja** (bandeja costeña).
-- **Dos rutas nuevas**: la **Ruta del arroz**, con las bolsas de arroz del Arrozal para la Fonda y la Cocina, y la **Ruta del pescado**, con el pescado limpio de la Ciénaga para la bandeja. Cada una con su chiva y su carretera.
-- Su persona es **Doña Rosmira, la quesera**, con sus datos curiosos, objetivos, 11 investigaciones, su victoria y 8 íconos nuevos.
-- El mapa: potrero de sabana con **vacas cebú** (blancas o grises, con su giba) y alguna romosinuana rojiza, samanes, garzas bueyeras y palmas. En las estaciones: la batea donde se revuelve la cuajada, el molino de manivela, la prensa de palanca con sus piedras y el suero que escurre, la olla del mote en el fogón de tres piedras con el montón de ñame, la fonda con sus mesas rojas y la mesera, y la cocina de las bandejas.
-
-## v3.17.0 — La Costa: La Ciénaga
-- **🛶 La Ciénaga**, la tercera zona de la Costa, se abre al completar El Cocal. Las Canoas de pesca sacan el bocachico; la Limpieza lo deja listo y el pescado limpio se reparte entre el **Saladero** (pescado salado), la **Fileteadora** y la **Fritanga** (pescado frito con patacón) y la **Cocina del pescado en coco**.
-- **Primera ruta de la Costa: la Ruta de la leche de coco**, del Cocal a la Cocina de la Ciénaga, con su chiva y su carretera en los dos mapas.
-- Su persona es **Don Aníbal, el pescador**, con sus datos curiosos, objetivos, 11 investigaciones y su victoria.
-- El mapa: el agua de la ciénaga con taruyas, un muelle de tablas y canoas que se mecen mientras los pescadores tiran la atarraya (más canoas con cada hito); garzas, redes puestas a secar, ceibas y palmas. En las estaciones: el gallinazo que espera las tripas, los tendales de pescado salado al sol, el caldero de la fritanga y las cazuelas de barro humeando.
-
-## v3.16.0 — La Costa: El Cocal
-- **🌴 El Cocal**, la segunda zona de la Costa, se abre al completar El Arrozal: el Cocal → el Peladero de cocos → la Ralladora → la Prensa de coco → la Paila de cocadas; del coco verde a la cocada, pasando por el coco pelado, el rallado y la leche de coco, con íconos propios.
-- Su persona es **Doña Eulalia, la cocadera**, con sus datos curiosos, objetivos, 9 investigaciones y su victoria.
-- El mapa: arena del golfo de Morrosquillo, palmas de coco que dan más cocos con cada hito, cocos caídos, plátano y alguna ceiba; el que pela a machete bajo la ramada, la ralladora, la prensa que escurre la leche al balde y la paila de cobre humeando junto a las bandejas de cocadas.
-
-## v3.15.0 — La Costa: El Arrozal
-- **Se abre La Costa** 🌴 al completar Barichara, con su propia economía (como Santander, empieza de cero y las demás regiones siguen produciendo).
-- Su primera zona, **🌾 El Arrozal** (Montería y Mompox): el Arrozal → la Secadora de arroz → la Descascaradora → la Pulidora → la Clasificadora → la Empacadora de arroz → la Bultera; del arroz en cáscara al bulto de arroz, con íconos propios para cada producto.
-- Su persona es **Don Abelardo, el arrocero**, con sus datos curiosos, objetivos, 15 investigaciones y su victoria.
-- El mapa: el arrozal inundado, con camellones y matas que espigan con cada hito; ceibas, palmas de coco, garzas blancas y plátano; cada edificio con su gente (el patio de secado con su rastrillo, la cascarilla que vuela, las zarandas, los bultos que se apilan).
-- **Música nueva: la Cumbia del arrozal**, con gaita, guacharaca, llamador, tambora, tambor alegre, bajo y guitarra.
-- En 🗺️ Zonas se ven las cinco zonas que vienen: El Cocal, La Ciénaga, La Quesera, El Sombrero y Cartagena. Hasta que lleguen, La Costa no tiene segundo final, eventos, álbum ni logros.
-
-## v3.14.0 — Los eventos se ven en el mapa
-- Cada evento tiene su escena en el tablero, y **cambia con cada compra**:
-  - 🪲 **La broca**: los cucarroncitos caminan por el cafetal; aparecen las trampas rojas, las nubecitas del hongo y al final los canastos del re-re, sin una broca.
-  - 🔥 **La gran molienda**: el bagazo mojado humea gris y el fuego es flojo; la bagacera, los ladrillos nuevos y el fuelle, con buen fuego.
-  - 🪨 **Derrumbe en la vía**: la tierra y las piedras tapan la carretera de la panela; las mulas pasan por el monte, luego un carro por la trocha y al final la vía queda despejada y pavimentada.
-  - 🎉 **Fiesta del maíz**: el budare rajado y la fila de gente con hambre, que se acorta con el budare prestado, la leña y las vecinas.
-  - 🚢 **El barco**: la grúa torcida con su aviso de peligro; los repuestos, la grúa subiendo contenedores y los estibadores del turno extra.
-  - 🪰 **La mosca de la fruta**: las moscas y la fruta caída; trampas amarillas, guayabas embolsadas y canastos.
-  - 💧 **Humedad en el caney**: llueve de una nube gris y hay neblina; el aire de las ventilas, los fogones de secado y el techo nuevo.
-  - 🌊 **Creciente del río**: el río cruza la carretera y se llevó el puente; mulas por el vado, el planchón y el puente nuevo.
-  - 🎒 **Turistas** y 🥾 **Puente festivo**: la fila de caminantes que se acorta con cada compra, con los guías y sus banderitas.
-  - 🧀 **Feria ganadera** y 🧺 **Feria artesanal**: banderines y un puesto de feria por cada compra.
-- En el derrumbe y la creciente la cámara se corre para que se vea la carretera.
-
-## v3.13.0 — La gente de cada zona, tus medallas y mascotas
-- **La persona de cada zona está en el mapa** (Don Jairo, Doña Inés…), junto al letrero de la zona, y también en los tableros de los eventos. Al tocarla repite lo último que dijo, si todavía aplica; cada toque siguiente pasa a otro aviso que aplique: lo que ya se puede construir, el evento que se puede jugar, la noche o el almuerzo, los problemas de sus estaciones, la temporada o un dato curioso de su zona. En un evento cuenta qué lo frena y qué comprar.
-- **Tus medallas:** en 🏅 Eventos hay un listado con la mejor medalla de cada uno de los 12 eventos. Con todos los eventos de una región en **bronce o mejor** ganas **5 ⭐**; en **plata o mejor**, **10 ⭐**; todos en **oro**, **20 ⭐** (una vez cada uno).
-- **Mascotas:** en 🎨 Decorar se compran **gatos** (50 ⭐, hasta 10) y **loros** (40 ⭐, hasta 5) para cada región. Andan por el mapa: los gatos pasean y se echan a dormir, los loros vuelan de un lado a otro y, de vez en cuando, un gato sale detrás de un loro.
-
-## v3.12.0 — Salento, luces en la carretera y un segundo final más completo
-- **El Pueblo ahora es Salento**, y se parece: casas blancas de dos pisos con puertas y balcones de colores vivos, más palmas de cera y la Casa del café con remates de colores.
-- **Cada zona muestra su nombre** en un letrero junto a la carretera, con la región debajo.
-- **Luces de noche:** los Willys y las chivas prenden los faros (y la luz roja de atrás) cuando van andando.
-- **Eventos:** el panel de la estación afectada dice cuánto rinde y por qué («🪲 El Cafetal produce al 40 % por culpa de la broca», «🪨 A la Mesa de chocolate le llega el 0 % de panela por culpa del derrumbe») y qué comprar; la barra del evento también lo muestra, y sube con cada compra.
-- **Volver a empezar no quita los eventos**: los tableros en juego y sus cupos siguen tal cual.
-- **Segundo final más completo:** además de todas las estaciones en el nivel 100, pide **sus arrieros** y **las rutas** que traen lo de otras zonas en el nivel 100, **todos los objetivos** cobrados y **todas las investigaciones** compradas. La tarjeta del segundo final muestra cuánto va de cada cosa. Si ya lo tenías con la regla de antes y te falta algo, vuelve a llegar al completarlo.
-- **Al terminar Santander** (o cualquier región) la tarjeta del segundo final y su botón para volver a empezar salen en los objetivos, como en el Eje Cafetero; antes solo salían con el Pueblo.
-- **La Compostera sale en la cadena** 🔗, como una rama aparte del Beneficiadero, con lo que suma al valor de lo que vende la Finca.
-- **Investigaciones bloqueadas:** al tocarlas te lleva a lo que les falta (la estación por construir o subir, o sus arrieros).
-- **Opciones de desarrollador:** los reinicios simulados son de la región que estás viendo, no solo del Eje Cafetero.
-- El total de Renombre ganado ahora se llama **Prestigio** 🏆.
-
-## v3.11.0 — Reinicios con Renombre y total ganado
-- **Cada reinicio da 10 ⭐ de Renombre**, el de cualquier región. La pantalla de volver a empezar lo dice.
-- **Renombre ganado en total.** Se guarda todo el Renombre que has ganado, aunque ya lo hayas gastado, y se muestra en la ventana del Renombre («🏆 Ganado en total») y en la de eventos. En las partidas de antes se calcula con las medallas, los logros y las páginas del álbum que ya tenías.
-
-## v3.10.1 — Nivel máximo 50 en los eventos
-- En los tableros de los eventos, las estaciones, los arrieros y el despacho llegan hasta el **nivel 50** (en la partida sigue siendo 100). El panel lo dice («Nivel máximo del evento (50)») y la mejora recomendada ya no sugiere subir más allá.
-
-## v3.10.0 — Cada región con lo suyo
-- **Álbum de Santander.** Seis páginas nuevas (el bocadillo, el tabaco, el fique, el hato, las hormigas y Barichara) con 36 láminas: la hoja de bijao, Vélez, el caney, la torcedora, Curití, la pepitoria, el cañón del Chicamocha, el tiesto, San Gil, la tapia pisada, el Camino Real… El segundo Willys de cada región pide el álbum de esa región.
-- **Decoración por región.** Cada región se pinta aparte: el color de los Willys, la enjalma, la chiva y los banderines se compran y se eligen en cada una. Lo que ya tenías queda en el Eje Cafetero.
-- **Logros por región.** Santander tiene los suyos, con sus productos (cajas de bocadillo, tabacos, alpargatas, fiambres, recuerdos y excursiones a Guane), y en cada región las medallas, el álbum y las investigaciones cuentan solo las de esa región.
-- **Jornada por región.** Las horas de trabajo extra se compran aparte para cada región. Si ya habías comprado bloques, cada región arranca con ellos.
-- El Renombre ⭐ y las horas sin conexión siguen siendo tuyos, para todas las regiones. En la ventana del Renombre se elige arriba la región (empieza en la que estás jugando).
-- **Reloj del evento.** Al tocar el reloj dentro de un evento ya no salen la jornada ni las temporadas: el tablero tiene su propio reloj y trabaja todo el tiempo.
-
-## v3.9.0 — El segundo Willys
-- **Con el álbum lleno, un segundo Willys.** En 🏅 Eventos › 📖 Álbum se compra para cada región (⭐ 20 el Eje Cafetero y ⭐ 20 Santander). Desde entonces cada zona de esa región tiene **dos Willys** que salen cada uno por su cuenta con la misma carga por viaje: **el despacho vende el doble**.
-- La **carretera se amplía a dos carriles** y cada Willys va por el suyo, así que no se chocan. El letrero de salida pasa al otro lado de la carretera.
-- El segundo Willys **se pinta aparte**: en 🎨 Decoración aparece «Color del segundo Willys» (sale rojo, para distinguirlo).
-- Es de la región: no se pierde al volver a empezarla. En los tableros de los eventos sigue habiendo un solo Willys.
-
-## v3.8.2 — La recomendación de los eventos sugiere sus compras
-- En el tablero de un evento, la **mejora recomendada** ya no sugiere investigaciones de la zona (como las Herraduras), que ahí no se pueden comprar.
-- Ahora recomienda las **compras del evento**: la siguiente en cuanto alcance el dinero y, con la medalla ya asegurada, la que falta aunque todavía no alcance. Al tocar la recomendación se señala su botón en la barra del evento y se dice qué hace.
-
-## v3.8.1 — Logros y Santander siempre a mano
-- **Los logros, el álbum, la decoración y las horas se ven después de reiniciar.** El botón 🏅 Eventos (donde están) solo aparecía si había algún evento abierto, y al volver a empezar no lo había. Ahora aparece siempre que tengas Renombre, medallas o logros, o ya hayas reiniciado.
-- **Santander no se pierde.** Si ya terminaste el Eje Cafetero alguna vez, Santander queda abierto aunque reinicies, sin tener que completar de nuevo el Pueblo.
-- Al completar de nuevo el Pueblo, la pantalla del final también ofrece **Ir a Santander**. Si eliges quedarte, te recuerda que puedes ir cuando quieras con el botón 🗺️ de zonas.
-
-## v3.8.0 — Nueva jornada y eventos de la región terminada
-- **Nueva jornada: de 6:00 a 12:00 y de 14:00 a 20:00**, con la hora del almuerzo en medio (siguen siendo 12 h de trabajo al día, así que el ritmo del juego no cambia). Los paneles y la gente avisan cuando es la hora del almuerzo y a qué hora sigue el trabajo.
-- **Más horas de trabajo con Renombre ⭐.** En 🏅 Eventos › ⏰ Horas se compran bloques de 2 h, cada uno al doble del anterior: 20–22 (2 ⭐), 4–6 (4 ⭐), 22–24 (8 ⭐), 2–4 (16 ⭐), el almuerzo 12–14 (32 ⭐) y 0–2 (64 ⭐), hasta trabajar las 24 horas. Son tuyas: valen en todas las regiones y no se pierden al volver a empezar. Van aparte de las horas sin conexión.
-- **Eventos de la región terminada.** Cuando completas la última zona de una región (el Pueblo o Barichara), sus eventos siguen saliendo en **todas sus zonas** para siempre, aunque vuelvas a empezar y solo tengas abierta la primera. Si ya la habías terminado o reiniciado, queda así al actualizar.
-- Volver a empezar el Eje Cafetero sigue dejando Santander abierto, como estaba.
-
-## v3.7.0 — Eventos por cupos y horas sin conexión del jugador
-- **Eventos más espaciados.** Cada región tiene **2 cupos** de eventos (el Eje Cafetero y Santander, cada uno los suyos).
-  - Al terminar un evento, su cupo queda **vacío 3 años del juego** (unas 6 h 24 min); los dos cupos van cada uno por su lado.
-  - Al llenarse un cupo sale primero una zona cuyo evento **nunca has jugado**; si no hay, la que lleva más tiempo sin jugarse.
-  - Los eventos que ya salieron **no se vencen**: esperan hasta que los juegues. Cada zona avanza su reto (1, 2, 3 y otra vez el 1) al terminarlo, así ninguno se pierde.
-  - La ventana de eventos muestra primero los que se pueden jugar, y de los demás cuánto falta para que se libere un cupo.
-- **Cómo se gana un evento.** Al cumplir el objetivo, la **medalla queda asegurada** con el tiempo de ese momento. Para terminar el evento hay que haber comprado además **sus tres mejoras**: el tablero sigue abierto y produciendo para pagarlas, y al comprar la última llegan la medalla y el Renombre.
-- **Las horas sin conexión son tuyas.** Valen igual para todas las regiones y no se pierden al volver a empezar ninguna (antes, reiniciar el Eje Cafetero lo dejaba en 2 h aunque Santander tuviera más, y el calendario se descuadraba entre regiones). Se empieza en 2 h y se suben de 2 en 2 hasta 24 h con Renombre ⭐ (de 2 a 12 ⭐ por nivel), en 🏅 Eventos › ⏰ Horas.
-  - Las 12 investigaciones que sumaban horas (Capataz, Trapichero, Mayordomo…) ya no existen: si las tenías, se te devuelven sus monedas y tu perfil arranca con las horas más altas que tenías en cualquier región.
-
-## v3.6.2 — La web funciona sin internet
-- La versión web **se puede abrir sin internet**: el service worker que lo permite nunca se activaba (quedaba en un «else if» detrás del enlace al APK, que siempre se cumplía antes). La web sigue cargando sola la última versión publicada cada vez que hay internet.
-
-## v3.6.1 — La app avisa cuando hay una versión nueva
-- La **app de Android** revisa al abrirse (y al volver a ella, cada pocas horas) si hay una versión más nueva publicada. Si la hay, muestra sus novedades con dos botones: **Actualizar** (descarga el APK nuevo y Android pide instalarlo; la partida se conserva) o **Más tarde**.
-- En el menú de la app, **Buscar actualización** revisa en el momento.
-- La web no cambia: siempre carga la última versión publicada.
-
-## v3.6.0 — Eventos de Santander
-- **Seis eventos nuevos**, uno por zona de Santander, cada uno con la mecánica del de su par del Eje Cafetero:
-  - 🪰 **La mosca de la fruta** (Guayabera): el Guayabal al 40 %; trampas con cebo, embolsar las guayabas y recoger la fruta caída.
-  - 💧 **Humedad en el caney** (Tabacal): con tanta lluvia la hoja no cura; ventilas, fogones de secado y techo nuevo.
-  - 🧺 **Feria artesanal** (Fiquera): costales, alpargatas y tercios a la vez.
-  - 🌊 **Creciente del río** (Hato): se cayó el puente y no llega el bocadillo; mulas por el vado, planchón y puente nuevo.
-  - 🎒 **Temporada de turistas** (Hormigas): se acabó el papel de los cucuruchos.
-  - 🥾 **Puente festivo** (Barichara): el pueblo lleno de caminantes y pocos guías para el Camino Real.
-- Las medallas y el Renombre que se ganan en Santander van al mismo perfil de siempre; la ventana de eventos los muestra por región.
-- Medallas calibradas como las demás (el oro, el mejor jugador automático más un 9 %); la prueba que vigila que el oro se pueda lograr cubre los doce eventos.
-- Los logros «De todas partes» y «De oro» tienen un nivel más: medalla y oro en 12 eventos distintos.
-
-## v3.5.0 — Santander completo: Barichara
-- **Barichara**, la sexta y última zona de Santander, se abre al completar las Hormigas. Como el Pueblo, no tiene fuente propia: vive de lo que le llega de las otras cinco zonas por **seis rutas nuevas**, y todo termina en **excursiones por el Camino Real a Guane**.
-  - Dulcería de la plaza (dulces típicos con el bocadillo de la Guayabera) → Café del parque (la sobremesa, con un tabaco del Tabacal) → Posada (la estadía, con un recuerdo de las Hormigas).
-  - Taller de cajas (con los tercios de la Fiquera) → Canastas del caminante (con el almuerzo y el fiambre del Hato) → Salida al Camino Real.
-  - Mismos números, objetivos e investigaciones que el Pueblo, con su Maestría y su Supremacía. Cada producto que llega vale lo mismo que su par del Pueblo, así que el balance es el mismo.
-- Se ve como el Pueblo, pero **blanca, de tapia pisada, con la plaza de piedra amarilla**; caminantes con su canasta salen por el portón del Camino Real. Lucía, la guía, avisa lo importante.
-- El segundo final de Santander es ahora el de Barichara: completarla cierra la región.
-- Íconos propios para los dulces típicos, la sobremesa, la estadía, la caja surtida, la canasta del caminante y la excursión; las estaciones nuevas tienen su sonido.
-- **Arreglo:** la Asociación de tejedoras de la Fiquera (v3.2) tenía el mismo identificador que las Tejedoras de fique del Pueblo, y una tapaba a la otra: en el Eje Cafetero, comprar las Tejedoras de fique daba 4 h sin conexión en vez de duplicar el Taller de canastas. Ahora cada una tiene el suyo (las partidas guardadas se corrigen solas) y una prueba vigila que no se repitan.
-
-## v3.4.0 — Santander: Las Hormigas
-- **Las Hormigas**, la quinta zona de Santander, se abre al completar el Hato: la **hormiga culona**. Hormiguero → Mesa de limpieza (sin alas ni patas) → Ollas de salmuera → Tiesto de barro → Mesa de cucuruchos → **Tienda de recuerdos**, que arma el recuerdo de Santander con los costales y las alpargatas de la Fiquera (dos rutas nuevas).
-- **Solo se cosechan en la entrada de aguas** 🌦️, como en la realidad: el Hormiguero produce entonces ×4 (lo de todo el año) y el resto del año no produce nada. Lo que no alcanza a salir se guarda en la **despensa**, y los arrieros la van llevando a la cadena todo el año: en promedio rinde lo mismo que las demás zonas.
-  - La zona abre con la despensa llena (la última cosecha), para no arrancar parada si se abre fuera de temporada.
-  - Doña Gloria, la hormiguera, anuncia cada entrada de aguas, y en el mapa las reinas salen volando de los hormigueros mientras dura la cosecha.
-  - Si la despensa se vacía antes de tiempo, la persona y los paneles dicen que hay que esperar la entrada de aguas, no subir niveles.
-- Mismos números, objetivos e investigaciones que el Maizal (Hormigueros cuidados, Ollas grandes, Tiestos nuevos, Cuidandera del hormiguero +4 h sin conexión, Hormiga culona de origen…), con su Maestría y su Supremacía.
-- Íconos propios para la hormiga culona, la limpia, la salmuera, las tostadas, el cucurucho y el recuerdo; las estaciones nuevas tienen su sonido.
-- El segundo final de Santander pasa a las Hormigas (falta Barichara). Una partida con el Hato completo abre las Hormigas al cargarse.
-
-## v3.3.2 — Cada estación suena a su oficio; los comentarios se alcanzan a leer
-- **Al entrar a una estación suena lo que hace** (sintetizado, como el resto de los sonidos): hojas y pájaros en los cultivos, mugidos en el potrero y el hato, agua en el beneficiadero, motor en los molinos y desfibradoras, pailas y grecas que hierven, fuego que crepita en tostadoras y el asadero, viento en marquesinas, caney y tendedero, burbujas graves en la fermentación, cuchillo en la fama y la cortadora, clac-clac en telares y talleres, cajas que se apilan en las empacadoras, chisporroteo en budares y fondas, pocillos en las mesas, sal que cae en el saladero, la sirena del barco en el patio de contenedores y el Willys que arranca en la bodega.
-- **Los comentarios de las personas duran según lo largo del texto** (unos 75 ms por letra, más 3 s): los largos ya no se van antes de terminar de leerlos.
-  - Un aviso corto que llega encima (un objetivo cumplido, una zona nueva) ya no los borra: se muestra y luego vuelve el comentario con el tiempo que le quedaba.
-  - Si llega otro comentario, espera su turno.
-  - Tocar el aviso lo cierra.
-
-## v3.3.1 — La mejora recomendada del evento se queda en el evento
-- Tocar la mejora recomendada (o «Ir al edificio» en la cadena) dentro de un evento llevaba a la partida principal cuando se había entrado al evento desde otra zona: se comparaba la zona de la estación con la del mapa de la partida, no con la del tablero. Ahora abre la estación del tablero, y en el tablero nunca se sale a otra zona.
-
-## v3.3.0 — Santander: El Hato
-- **El Hato**, la cuarta zona de Santander, se abre al completar la Fiquera: la **carne oreada**. Hato ganadero → Fama (la carnicería) → Saladero → **Tendedero de oreo** (la carne cuelga al sol y se mece con el viento) → Asadero. La carne asada se reparte en dos ramas:
-  - la **Mesa del almuerzo**, con el bocadillo de postre que llega de la Guayabera;
-  - la **Fiambrería**, que envuelve el almuerzo en hoja de bijao y lo amarra con la cabuya de la Fiquera.
-- Dos rutas nuevas: la **del bocadillo** (de la Guayabera, que ahora tiene carretera de salida) y la **de la cabuya** (de la Fiquera).
-- Mismos números, objetivos e investigaciones que el Cacaotal (Pasto mejorado, Sierra eléctrica, Tendedero techado, Parrilla grande, Vaquero de confianza +4 h sin conexión, Carne oreada de origen…), con su Maestría y su Supremacía. Don Efraín, el vaquero, avisa lo importante.
-- En el potrero pastan **novillos** pardos, rojizos y grises (sin ubre) junto al saladero del ganado; samanes de sombra alrededor.
-- Íconos propios para la carne adobada, la oreada, la asada, el almuerzo santandereano y el fiambre.
-- El segundo final de Santander pasa al Hato (su última zona por ahora). Una partida con la Fiquera completa abre el Hato al cargarse.
-
-## v3.2.0 — Santander: La Fiquera
-- **La Fiquera**, la tercera zona de Santander, se abre al completar el Tabacal. Del Cultivo de fique salen las pencas; la **Desfibradora** las raspa y deja la fibra, que se seca en el tendal y se reparte en tres ramas:
-  - el **Telar de costales**;
-  - la **Hiladora** y la **Alpargatería** (suela de fique, capellada de colores);
-  - la **Empacadora de tercios**, que forra en tela de fique el tabaco fermentado del Tabacal.
-- **Ruta del tabaco**, la primera de Santander: una chiva lleva el tabaco fermentado del Tabacal a la Empacadora de tercios. El Tabacal tiene ahora su carretera de salida.
-- Mismos números, objetivos e investigaciones que la Lechería (Abono para el fique, Desfibradora de motor, Hiladora mecánica, Camión de estacas, Asociación de tejedoras +4 h sin conexión, Costal cafetero, Tercios de exportación…), con su Maestría y su Supremacía. Doña Carmen, la tejedora, avisa lo importante.
-- Íconos propios para la mata de fique, la penca, la fibra, el ovillo de cabuya, las alpargatas, el costal y el tercio de tabaco.
-- El segundo final de Santander pasa a la Fiquera (su última zona por ahora). Una partida con el Tabacal completo abre la Fiquera al cargarse.
-
-## v3.1.1 — Eventos: el oro, difícil pero posible
-- Los tableros de los eventos **empiezan con dinero**: lo que cuesta su primera compra (400 en La broca, 2.400 en La gran molienda… 20 M en El barco). Antes se empezaba en 0 y el primer minuto no había nada que hacer mientras el primer producto recorría la cadena.
-- En el tablero, la **mejora recomendada busca cumplir el objetivo**, no ganar más monedas: solo sugiere las estaciones que hacen lo que todavía falta (y las anteriores), sus arrieros y, si hay que vender, la bodega. En el Derrumbe sugería la Chocolatería, que se quedaba con la pasta y la panela del chocolate de mesa del objetivo.
-- **Medallas recalibradas.** Con las anteriores, ni jugando perfecto se llegaba al oro en 5 de los 18 objetivos. Ahora el oro es el tiempo del mejor jugador automático más un 9 % (de 8:15 a 14:00 según el objetivo) y la plata, 5 minutos más. Lo que más cuenta es la estrategia: ahorrar a tiempo para la siguiente compra del evento.
-- Una prueba nueva vigila que el oro de cada objetivo siga siendo alcanzable.
-
-## v3.1.0 — Santander: El Tabacal
-- **El Tabacal**, la segunda zona de Santander, se abre al completar la Guayabera: Tabacal → Caney de curado → Despalilladora → Pilones de fermentación → Torcedores. La hoja verde cuelga en las varas del caney hasta quedar dorada, se le quita la vena, se fermenta en pilones (con su termómetro) y se tuerce a mano. Don Ramiro, el veguero, avisa lo importante.
-  - Mismos números que el Trapiche, con sus objetivos y sus investigaciones (Caney grande, Abono para el tabaco, Chiva, Veguero de confianza, Tabaco negro de origen…).
-  - Íconos propios para la mata de tabaco, la hoja verde, la curada, la despalillada, el manojo fermentado y el tabaco torcido.
-- La Guayabera y el Tabacal tienen su **Maestría** (×4) y su **Supremacía** (×8), como las zonas del Eje Cafetero.
-- El segundo final de Santander pasa a ser el del Tabacal (su última zona por ahora).
-- Una partida con la Guayabera ya completa abre el Tabacal al cargarse.
-- La pantalla de fin dice «Ir al Tabacal» (antes «Ir a El…»).
-
-## v3.0.1 — La cadena, en un solo diagrama
-- La ventana de la cadena (🔗) ya no tiene pestañas: queda **un solo diagrama** con scroll.
-  - Las estaciones se unen con **eslabones de cadena** que corren hacia abajo (en rojo donde se frena, en azul lo que llega de otras zonas).
-  - Sobre cada eslabón va **lo que pasa por segundo**, solo con el ícono y el número («🍒 12»). Lo que llega de otras zonas también («🧂 0,05»).
-  - Las tarjetas muestran solo el ícono, el nombre y el nivel.
-- **Al tocar una estación** ya no se va a ella: abajo aparece **su detalle** (lo que recibe y procesa, lo que llega de otras zonas, sus arrieros, lo que se desvía o se pierde y si es la que frena), con botones para **ir al edificio** o a **sus arrieros**. También la bodega y lo que llega por las rutas tienen su detalle.
-
-## v3.0.0 — Santander: La Guayabera
-- **Regiones.** Al completar el Pueblo se abre **Santander**, una región nueva que empieza de cero con **su propia economía**: monedas, niveles, investigaciones, objetivos, segundo final y reinicio ×2. El Eje Cafetero sigue produciendo, y **todas las regiones producen a la vez** (también sin conexión).
-  - Se comparten el Renombre ⭐, el álbum, la decoración, los logros y el **calendario del país** (la misma hora y la misma temporada en todas).
-  - El selector de zonas 🗺️ las muestra por región, con las zonas de Santander que vienen en camino.
-  - Reiniciar una región en su segundo final no toca las demás.
-- **La Guayabera**, la primera zona de Santander: el **bocadillo veleño**. Guayabal → Despulpadora de guayaba → Paila de bocadillo → Moldes de madera → Cortadora → Envoltura en bijao → Cajonera. Tierra roja, matas de fique, guayabos y cactus del cañón; Doña Inés, la bocadillera, avisa lo importante. Íconos propios para la guayaba, la pulpa, el melado, el bocadillo y la caja.
-- **Música de Santander:** la «Guabina del Chicamocha», más lenta y nostálgica, compuesta para el juego como el bambuco. Cambia sola al pasar de una región a otra.
-- La pantalla de fin del Pueblo anuncia Santander y lleva allá.
-
-## v2.3.3 — Investigaciones de otras zonas a la vista
-- Como las ×2 ahora se habilitan al nivel 25, muchas llegan cuando ya estás en la zona siguiente y quedaban olvidadas (en la simulación, la Batidora de la Lechería nunca se compraba y faltaba mantequilla para las arepas de queso: el Maizal tardaba más del doble).
-  - La ventana de 🔬 investigaciones muestra, aparte, las que ya puedes investigar **en otras zonas**, y el número del botón las cuenta todas.
-  - La **mejora recomendada** también tiene en cuenta las ×2 de las zonas que abastecen a la que estás viendo, y dice de qué zona son.
-- El objetivo «Investiga: Catadores expertos» da 1.500 M (antes 750 M): ahora alcanza para pagarla.
-
-## v2.3.2 — Investigaciones ×2 al nivel 25
-- Las investigaciones que **duplican una estación** (Abono orgánico, Despulpadora eléctrica, Secador mecánico, Trapiche con motor, Ordeño mecánico…) se habilitan cuando **esa misma estación y sus arrieros 🐴 llegan al nivel 25**. Antes aparecían al construir la estación siguiente. La Compostera, que no tiene arrieros, solo pide su nivel.
-- En la ventana de investigaciones, las que faltan dicen cuánto llevan: «🔒 Nv 25 y 🐴 25 · va en 18 y 🐴 12».
-- Los objetivos que pedían una de esas investigaciones al comienzo de cada zona (Abono orgánico, Trapiche con motor, Ordeño mecánico, Injertos, Maíz híbrido y Catadores) pasaron a ir después del de «todo al nivel 25», con un premio acorde, para que no trancaran la lista.
-
-## v2.3.1 — Pantalla de carga
-- Al abrir el juego aparece de una vez una **pantalla de carga** («Preparando la finca…») en vez de la pantalla quieta.
-- Si estuviste fuera, dice cuánto tiempo pasó y muestra una **barra de avance** mientras calcula lo que se produjo sin conexión («Pasaron 10 h 0 min desde la última vez…»). Con una partida avanzada y 24 h fuera, en un teléfono puede tardar varios segundos: ya no parece que el juego se trabó.
-- Lo mismo al volver a la app después de un rato (mientras calcula, el juego espera).
-- El cálculo ahora va por partes (cede el turno cada 40 ms) y da exactamente lo mismo que antes.
-
-## v2.3.0 — Logros
-- **🏆 Logros generales**: 15 logros, de uno a tres niveles, que **suman entre partidas** (lo de antes de volver a empezar sigue contando) y que nunca son de velocidad: vender bolsas de café, producir panela, queso, chocolate y arepas, exportar contenedores, ganar monedas, vivir años de juego, completar el Pueblo, llegar al segundo final, ganar medallas (y oros) en los eventos, llenar páginas del álbum e investigar.
-- Cada nivel da **Renombre ⭐** para el álbum y la decoración. Se ven en la ventana del Renombre, con su avance; al lograr uno sale el aviso.
-- Una partida de antes recibe de una vez los logros que ya tenía.
-- Con esto queda completa la fase 3 (eventos, medallas, Renombre, álbum, decoración y logros).
-
-## v2.2.0 — Álbum de láminas y decoración
-- El **Renombre ⭐** ya se puede gastar (desde la ventana de 🏅 Eventos):
-  - **📖 Álbum de láminas**, como el de las chocolatinas pero sin sobres al azar: seis páginas (café, panela, leche, cacao, maíz y pueblo) con 36 láminas de lo que rodea a cada producto en Colombia: el arriero, la chapolera, el carriel, el yipao, la melcocha, la cuajada con melao, el molinillo, el chocolate santafereño, la mazamorra, la chiva, el tinto… Tú eliges cuál pegar (1 a 3 ⭐) y cada página llena da 3 ⭐ de premio.
-  - **🎨 Decoración**: color del Willys, enjalma de las mulas, pintura de la chiva y banderines frente a la bodega. Lo de siempre es gratis; lo demás se compra una vez y se puede cambiar cuando quieras. Se ve también en los tableros de los eventos.
-- Todo (el álbum y la decoración) se conserva al volver a empezar, como el Renombre y las medallas.
-
-## v2.1.0 — Un evento en cada zona
-- Cinco eventos nuevos, uno por zona (cada uno se abre cuando ya construiste todas las estaciones de su zona, y su persona lo anuncia):
-  - 🔥 **La gran molienda** (Trapiche): se acabó la leña y la Hornilla cocina al 40 %. Bagacera, hornilla reparada y fuelle.
-  - 🐮 **Feria ganadera** (Lechería): piden queso, mantequilla y arequipe a la vez. Moldes nuevos, batidora y paila de cobre aceleran cada rama.
-  - 🪨 **Derrumbe en la vía** (Cacaotal): no llega la panela, solo la guardada. Mulas por el monte, una trocha y despejar la vía.
-  - 🎉 **Fiesta del maíz** (Maizal): se rajó el budare grande. Budare prestado, leña seca y las vecinas que ayudan.
-  - 🚢 **El barco sale el viernes** (Pueblo): la grúa del puerto está varada. Repuestos, grúa arreglada y turno extra.
-- En los tableros, lo que la zona importa llega «de afuera» (no hay rutas que mejorar) y un objetivo puede pedir varios productos: la barra muestra cuánto llevas de cada uno.
-- Todos los objetivos calibrados para 10–12 min con un jugador atento (🥇) y 5 min más para 🥈.
-
-## v2.0.0 — Eventos: La broca
-- **Eventos** 🏅 (botón nuevo a la izquierda): una vez al año cada zona tiene su evento, que se juega en un **tablero aparte** con las piezas de la zona, sus propias monedas y niveles y **su propio reloj**, que solo corre mientras juegas en él (la partida sigue mientras tanto). Se puede salir y volver; si se empezó, se puede terminar aunque pase el año.
-- Según lo rápido que se cumpla el objetivo, **medalla** 🥇 de oro, 🥈 de plata o 🥉 de bronce, que dan **Renombre ⭐** (4, 2 y 1). El Renombre y las medallas **no se pierden al volver a empezar**; pronto se gastarán en decoración y en el álbum de láminas.
-- El primer evento: **🪲 La broca**, en la Finca. Un cucarroncito tiene el Cafetal produciendo al 40 %: contrólalo con 🪤 trampas, 🍄 el hongo Beauveria y 🧺 el re-re mientras sacas la cosecha. Cada año cambia el objetivo (bolsas de café, café tostado, café verde).
-- El evento se abre cuando ya construiste todas las estaciones de la zona, y Don Jairo avisa.
-- En el tablero, la barra de abajo muestra el objetivo, el reloj con la medalla que llevas, los tiempos de cada medalla y las compras del evento.
-
-## v1.9.0 — Jornada y temporadas
-- **Jornada de trabajo de 6:00 a 18:00.** De noche las estaciones descansan del todo (lo que iba a medias sigue al amanecer) y los arrieros no salen; los que van de camino terminan el viaje. El Willys y las chivas siguen. No se compensa: el juego se hace más largo a propósito.
-- **Temporadas del país**, secas y de lluvias, que cambian la producción de **todas las estaciones a la vez** (arrieros y rutas se ajustan solos, así que la cadena sigue cuadrando):
-  - ☀️ **Verano** ×1,2 · 🌦️ **Entrada de aguas** ×1 · 🌧️ **Invierno** ×0,8 · 🌤️ **Veranillo** ×1.
-  - Cada temporada dura 4 días (un día son 8 minutos) y el año tiene 16 días. Una partida nueva empieza en verano.
-- **Calendario**: la temporada va debajo del reloj; tocar el reloj muestra la hora, la temporada, el día y el año y lo que rinde cada temporada. Ahí y en el panel del Cafetal está el dato curioso de la **mitaca**, la cosecha chica del Eje Cafetero.
-- **Lluvia** en el mapa: aguaceros de vez en cuando en la entrada de aguas y casi todo el tiempo en invierno.
-- La persona de la zona anuncia cada temporada nueva y, la primera vez, que de noche no se trabaja. De noche los paneles lo dicen y el mapa no muestra avisos.
-- **Sin conexión** cuenta las noches y las temporadas: lo simulado ya las tiene y lo que se suma más allá se reparte según cuánto se trabaja en cada tramo.
-- Balance medido (horas con el juego abierto): primer final 27 h 07 min (casual) y 33 h 45 min (atento), antes 13 h 31 min y 14 h 50 min; segundo final 72 h 41 min y 51 h 37 min, antes 27 h 36 min y 25 h 07 min.
-
-## v1.8.7 — Música propia
-- La música de fondo ahora es **propia**: «Bambuco de la finca», un bambuco en 3/4 compuesto para el juego (mi menor, y la segunda parte en sol mayor). No es un archivo: el juego la toca con cuerdas sintetizadas (Karplus-Strong):
-  - **guitarra**: bajo en el primer tiempo y rasgueo en el segundo y el tercero;
-  - **tiple**: golpes cortos y apagados en el contratiempo, con sus cuerdas de a tres (dos al unísono y una octava abajo);
-  - **bandola**: la melodía, en trémolo en las notas largas.
-- Suena con un poco de eco de sala, en bucle (53 s) y sin corte entre vuelta y vuelta.
-- Se quitó «Apple Cider» (CC0): el juego pesa 2,4 MB menos y todo (código, gráficos y música) queda bajo la licencia MIT.
-- Cada región tendrá su pieza (bambuco y pasillo aquí; guabina, cumbia, joropo y torbellino para las regiones futuras).
-
-## v1.8.6 — El Willys se toma un tinto
-- Cuando todo lo que produce una zona se lo lleva la chiva a otra zona, el **Willys se queda parqueado** y el conductor **se toma un tinto** (con su vaporcito). El panel del despacho lo explica: «Todo lo que produce la Finca se lo lleva la chiva al Pueblo; el Willys solo sale con lo que sobra».
-- En el Pueblo, la **gente pasea por la plaza** y la grama de al lado, sin pisar las calles por donde pasan las mulas y los carros. Antes caminaba por las calles y la de la plaza estaba pintada (quieta); ahora toda camina, y hay más con cada hito de la Casa del café.
-- El **perro** ya no persigue al Willys en todas las salidas: solo en una de cada 5 a 15.
-- Plan a futuro en el GDD: **otras regiones** (Santander, Costa Caribe, Llanos, Altiplano), cada una con su economía y su reinicio.
-
-## v1.8.5 — Sonidos de cada zona
-- Sonidos de ambiente sintetizados (sin archivos, como los demás), según la zona y la hora:
-  - En las fincas, el **gallo** canta al amanecer y las **gallinas** cacarean de vez en cuando.
-  - Un **perro** ladra de vez en cuando, en todas las zonas.
-  - En la Lechería, las **vacas** mugen.
-  - En el Trapiche, el **trapiche** retumba mientras muele y la **miel hierve** en las pailas de la Hornilla (solo si están trabajando).
-  - En el Cacaotal, **loros y guacamayas**.
-  - En el Pueblo, las **campanas** de la iglesia a las 6, a las 12 y a las 18.
-- Con esto queda completa la fase de ambiente (v1.8): datos reales, la gente de cada zona, vida en el mapa, la cadena como diagrama y los sonidos.
-
-## v1.8.4 — Diagrama de la cadena
-- La ventana de la cadena (🔗) tiene dos pestañas: **🗺️ Diagrama** y **📋 Detalle** (la lista de antes, con todos los números). Se recuerda la última que se usó.
-- El **diagrama** es como un plano de producción: cada estación es una tarjeta (con su nivel y lo que produce), de arriba hacia abajo en el orden de la cadena, y las ramas van en columnas, una al lado de la otra. Tubos con el producto corriendo unen cada estación con la siguiente y todas terminan en la Bodega y Willys.
-  - Lo que llega de **otras zonas** son etiquetas azules encima de la estación que lo usa («🧂 🎋 Trapiche»), con su tubo azul.
-  - En **rojo**, lo que frena la cadena (la estación, sus arrieros o la ruta); en **gris con candado**, la siguiente por construir.
-  - Cada tarjeta ocupa el ancho de las ramas que tiene debajo, para que tres ramas quepan en el teléfono. Tocar una tarjeta o una etiqueta abre su panel.
-
-## v1.8.3 — Vida en el mapa
-- **Gallinas** que picotean junto a la casa de cada finca.
-- Un **perro** en el patio de la bodega que corre detrás del Willys cuando sale y luego vuelve.
-- En la Lechería, las **vacas** caminan y pastan por el potrero (antes estaban quietas); con cada hito hay más.
-- En el Pueblo, **gente** caminando por las calles (con o sin sombrero aguadeño) y **palomas** alrededor de la fuente.
-- De noche, las gallinas, las palomas y la gente se recogen; el perro y las vacas se quedan.
-
-## v1.8.2 — La cadena, más clara
-- La vista de la cadena (🔗) ahora es un árbol:
-  - Las estaciones se unen con **eslabones**, en línea recta (antes, una raya punteada que se corría de lado en las ramas).
-  - Cuando una estación reparte entre varias, cada **rama** va en su propio bloque, de su color, con su nombre: «Rama A · Greca de tintos → Fonda», «Rama B · Taller de canastas → Empaque de regalos → Patio de contenedores». Antes las ramas iban una detrás de otra y parecía que la Fonda le pasaba su producto al Taller.
-  - Lo que llega de **otras zonas** va en una caja azul aparte, que entra a la estación: qué producto, desde qué zona, por qué ruta y cuánto llega («Panela pulverizada desde 🎋 El Trapiche · Ruta de la panela al Pueblo · llegan 0,67/s»).
-  - La siguiente estación por construir aparece en su lugar del árbol, en su rama.
-
-## v1.8.1 — Horas sin conexión por zona
-- **Horas sin conexión**: cada zona tiene ahora su investigación que suma horas a las ganancias sin conexión, y se suman entre sí: Capataz (Finca) +3 h, Trapichero de confianza (Trapiche) +3 h, Ordeño programado (Lechería) +4 h, Vigilante del cacaotal +4 h, Vecina que cuida el budare (Maizal) +4 h y Administrador del Pueblo +4 h. Con la base de 2 h, **24 h** con las seis. (El Capataz daba 6 h; ahora da 5 h hasta comprar la del Trapiche.)
-- **Opciones de desarrollador**: el tiempo acelerado ya no multiplica el tiempo fuera; sin conexión cuenta a velocidad normal (multiplicarlo hacía que volver tardara mucho en calcularse).
-- **Arreglo**: con bandas eléctricas, la banda llegaba hasta la puerta de la bodega por el patio, y el Willys le pasaba por encima. Ahora termina antes del patio, junto a la pared de la bodega.
-
-## v1.8.0 — Datos reales y la gente de cada zona
-- **Datos reales**: el subtítulo del panel de cada estación alterna, cada 7 segundos, entre lo que hace y uno o varios datos reales («En Colombia el café se cultiva entre 1.200 y 2.000 metros de altura», «El cacao fermenta de 5 a 7 días en cajones de madera»…). Hay al menos uno por cada una de las 38 estaciones.
-- **La gente de cada zona**: Don Jairo (el mayordomo de la Finca), Don Aurelio (el trapichero), Doña Marina (la ordeñadora), Don Eliécer (el cacaotero), Doña Rosa (la arepera) y Mateo (el exportador del Pueblo). Dan la bienvenida la primera vez que se ve su zona, avisan cuando ya alcanza para construir la siguiente estación y cuando aparece un problema que dura (las mulas no dan abasto, la siguiente estación no alcanza, la bodega se llenó, una estación esperando producto…). Sin cansar: cada estación avisa como mucho una vez cada 5 minutos y entre aviso y aviso pasan al menos 45 segundos; con una ventana abierta, esperan.
-- El plan de las próximas versiones (ambiente, jornada y temporadas, eventos e insignias) quedó en el documento de diseño.
-
-## v1.7.16 — Un ícono para cada producto
-- Ningún producto comparte ícono y todos se parecen a lo que son. 19 íconos propios nuevos:
-  - **Finca**: café lavado (granos claros mojados, antes 💧), pulpa (las cáscaras rojas abiertas, antes 🟥), café pergamino (con su cascarilla, antes 🟫 como la pasta de cacao), café verde (antes 🟢), café tostado (antes 🟤 como el compost), café molido (antes ☕ como el tinto), bolsa de café (paquete kraft con su etiqueta, antes 🛍️), compost (tierra con lombriz y un brote) y el Cafetal como una mata de café con cerezas.
-  - **Trapiche**: bagazo (las fibras de la caña, antes 🌾 como el maíz desgranado).
-  - **Lechería**: leche cruda en la cantina de aluminio.
-  - **Cacaotal**: mazorca de cacao (antes un mango 🥭) y pasta de cacao en una totuma.
-  - **Maizal**: maíz desgranado (granos amarillos), maíz pilado (granos blancos en el pilón, antes ⚪) y masa de maíz (antes 🥣).
-  - **Pueblo**: café de origen (costal de fique con granos tostados y la franja de Colombia, antes 🫘 como el cacao fermentado), desayuno campesino (arepa, huevo y chocolate; también para la Fonda) y contenedor de exportación (también para el Patio de contenedores).
-- Investigaciones: Beneficio ecológico 🪱 (acelera la Compostera), Tueste de origen 🏅 (sube el precio, como las demás), Chiva para el Trapiche 🚚 (mejora el despacho, no una ruta) y Secador mecánico ☀️.
-
-## v1.7.15 — Subir una ruta
-- **Arreglo**: al subir de nivel una ruta (por ejemplo, ×10 en la de la mantequilla, desde su panel o desde la pestaña 🚌 de la estación) se cobraba, pero el panel seguía mostrando el nivel de antes hasta cerrarlo y volverlo a abrir o cambiar de pestaña. El efecto del mapa para «subió de nivel» buscaba la zona de la ruta como si fuera una estación, fallaba y cortaba la compra a medias (tampoco se recalculaba la mejora recomendada). Ahora la subida de una ruta se celebra en la estación que abastece, si está en la zona que se ve.
-- Más resistente: si algo falla al avisar un evento o al dibujar un cuadro, el resto sigue (antes un error en un cuadro podía detener el juego hasta recargar).
+- **Le jeu change de nom :** il s’appelle maintenant **Encantos de Mi Tierrita** (sur le téléphone, « Mi Tierrita »). Le site a déménagé sur https://frealgagu.github.io/MiTierritaGame/.
+- **Nouvelle icône :** la carte de la Colombie aux couleurs des régions du jeu, un sombrero vueltiao, un palmier, un brin de café et une cabosse de cacao. Elle apparaît sur l’écran de chargement, dans l’application et sur le site installé.
+- **L’application Android est une autre :** son identifiant est maintenant `com.frealgagu.mitierrita.encantos`, donc elle s’installe à part de la précédente (l’ancienne peut être désinstallée). Les parties enregistrées recommencent à zéro.
+- **Version pour Google Play :** en plus de l’APK, on génère l’AAB pour la boutique, signé avec une clé d’importation qui n’existe que dans les secrets du dépôt. Cette version n’a pas son propre avis de mise à jour, car les mises à jour arrivent par Google Play.
+
+## v3.61.0 — Des objectifs toujours atteignables
+- Il y avait 42 objectifs de **vendre** quelque chose qu’une autre station de la zone emporte : la cerise qui va au Beneficiadero, le lait au Pasteurisateur, le sombrero vueltiao à l’Halte, le masque ticuna à la Boutique, etc. Si cette station était construite avant de remplir l’objectif, le produit n’arrivait presque jamais à l’entrepôt (seulement ce qui était dévié) et l’objectif pouvait rester bloqué pour toujours.
+- Maintenant ces objectifs disent **Produis** et comptent ce qui est produit, qui avance toujours. Ceux qui demandent de vendre quelque chose qui va à l’entrepôt restent pareils. Dans les parties en cours, tout ce qui a été produit depuis le début de la partie compte.
+
+## v3.60.0 — La carte de la Colombie
+- **🗺️ Voir la carte de la Colombie :** dans le sélecteur de zones, un bouton ouvre la carte en grand. Pour revenir à la liste, on la ferme.
+  - On voit d’abord le pays, avec ses départements et chaque région du jeu dans sa couleur. Celles qui ne sont pas encore ouvertes apparaissent en gris, avec 🔒, et un 📍 marque où tu es.
+  - En touchant une région, la carte se rapproche et montre ses zones, chacune dans le village qui l’inspire (Salento, Barichara, Cartagena, Villa de Leyva, Villavicencio, Buenaventura, Leticia…). Les zones sont reliées par le chemin en pointillé, dans l’ordre, avec leur état. Le bouton **⬅ Colombie** revient au pays.
+  - En choisissant une autre zone, **un petit bonhomme y marche** : sur la carte de la région si elle est la même, ou sur la carte du pays si c’en est une autre. En arrivant, il va à la zone.
+- La carte a été faite avec le Cadre géostatistique national 2018 du DANE (sans San Andrés, trop loin pour cette échelle).
+
+## v3.59.0 — Les régions dans leur panneau
+- **🗺️ Zones :** chaque région va dans un panneau ombré, avec son nom en haut et ses zones dedans, un peu plus étroites et reliées au panneau par un petit trait : on ne confond plus à quelle région appartient chaque zone.
+
+## v3.58.0 — Le Composteur compte pour « zone au maximum »
+- Le Composteur de la Finca ne fait pas partie de la chaîne et peut rester non construit. C’est pourquoi, avec tout le reste au maximum, la Finca disait **🏁 Cette zone est au maximum** même s’il manquait le Composteur. Maintenant, tant qu’il n’est pas construit, la suggestion dit **🏗️ Suivant : construis le Composteur** ; une fois construit, il compte comme n’importe quelle station pour « Reste à monter ». C’est la seule station de toutes les zones qui est hors de sa chaîne.
+
+## v3.57.0 — Tout encaisser, tout acheter et le multiplicateur abrégé
+- **🔁 Multiplicateur :** il s’affiche au même format que les pièces : ×512, ×2,05K, ×1,05M, ×4,29B.
+- **📋 Objectifs :**
+  - le numéro du bouton compte tous les objectifs de la zone qu’on peut déjà encaisser, pas seulement les trois visibles ;
+  - n’importe quel objectif rempli peut s’encaisser, même s’il n’est pas encore visible ;
+  - en bas, hors de la liste, **✅ Tout encaisser (N) · +💰** encaisse d’un coup tous ceux de la zone qui sont remplis. La fin de la zone n’y entre pas : elle s’encaisse à part, quand vient son tour, avec son écran de victoire.
+- **🔬 Recherches :**
+  - en bas, hors de la liste, **🛒 Tout acheter (N) · 💰** achète celles de la zone où tu es, de la moins chère à la plus chère, tant que l’argent suffit ;
+  - la Maîtrise et la Suprématie restent à part, pour les acheter exprès ;
+  - en ouvrant la liste et après un achat, la liste descend toute seule jusqu’à la moins chère qui manque ; si elles y sont toutes, jusqu’à la Maîtrise et la Suprématie.
+
+## v3.57.0 — Tout encaisser, tout acheter et le multiplicateur abrégé
+- **🔁 Multiplicateur :** il s’affiche au même format que les pièces : ×512, ×2,05K, ×1,05M, ×4,29B.
+- **📋 Objectifs :**
+  - le numéro du bouton compte tous les objectifs de la zone qu’on peut déjà encaisser, pas seulement les trois visibles ;
+  - n’importe quel objectif rempli peut s’encaisser, même s’il n’est pas encore visible ;
+  - au-dessus de la liste, **✅ Tout encaisser (N) · +💰** encaisse d’un coup tous ceux de la zone qui sont remplis. La fin de la zone n’y entre pas : elle s’encaisse à part, quand vient son tour, avec son écran de victoire.
+- **🔬 Recherches :**
+  - au-dessus de la liste, **🛒 Tout acheter (N) · 💰** achète celles de la zone où tu es, de la moins chère à la plus chère, tant que l’argent suffit ;
+  - la Maîtrise et la Suprématie restent à part, pour les acheter exprès ;
+  - en ouvrant la liste et après un achat, elle descend toute seule jusqu’à la moins chère qui manque ; si elles y sont toutes, jusqu’à la Maîtrise et la Suprématie.
+
+## v3.56.0 — Plafond du redémarrage : ×2³²
+- Le multiplicateur de production du redémarrage va jusqu’à **×2³²** (32 redémarrages, environ 4 295 millions). On peut continuer à recommencer —chaque fois cela donne encore des ⭐ de Renom et compte pour les succès—, mais la production ne double plus : elle reste à ×2³².
+- L’écran de la deuxième fin et les boutons pour recommencer disent la production qu’aura la nouvelle partie et, une fois au plafond, que c’est le maximum.
+
+## v3.55.0 — « Zone au maximum » seulement quand c’est le cas
+- L’avis **🏁 Cette zone est au maximum** apparaissait dès qu’aucune amélioration n’ajoutait de gain, même s’il restait des choses à monter. Maintenant il n’apparaît que quand tout est vraiment au niveau maximum : les stations, leurs muletiers, l’Entrepôt et Expédition et les routes qui arrivent à la zone.
+- S’il manque quelque chose, la suggestion le dit : **💡 Reste à monter : …** avec son niveau, en indiquant le plus bas. Ce peut être une branche qui ne change pas ce qui se vend (la Friteuse de la Ciénaga, le Moquén du Lago) ou une expédition au 92 qui arrive déjà à tout emporter. La toucher ouvre cette amélioration, comme la recommandée.
+- Toutes les zones de toutes les régions ont été revues : il y avait 48 cas où l’avis apparaissait trop tôt ; il n’en reste aucun.
+
+## v3.54.0 — Régions repliables et les baleines de Buenaventura
+- **🗺️ Zones :** chaque région se replie et se déplie en touchant son nom. Repliée, elle dit combien de zones sont terminées, combien elles rapportent ensemble et si tu y es. En ouvrant la liste, seule la région où tu es est dépliée ; ce que tu replies ou déplies reste ainsi.
+- **🐋 Buenaventura** a maintenant l’**océan Pacifique** derrière la carte, avec sa plage de sable sombre. Dans la mer, les **baleines à bosse** soufflent leur jet, plongent en montrant la queue et parfois sautent hors de l’eau et retombent dans une gerbe ; les bateaux des touristes les regardent de loin. C’est seulement du dessin : les zones, les stations et les chemins ne changent pas (la Sortie aux baleines reste la dernière station).
+
+## v3.53.0 — L’Amazonas complet : événements, album et succès
+- **Six nouveaux événements**, un par zone de l’Amazonas, chacun avec sa scène sur le plateau qui change à chaque achat :
+  - 🌴 **Les palmiers très hauts** (Asaizal) : des ceintures pour grimper, des échelles en guadua et de l’açaí bas ;
+  - ☀️ **Sécheresse en Amazonie** (Ajizal) : des réservoirs d’eau de pluie, une motopompe au fleuve et un puits profond ;
+  - 🐟 **La fermeture de la pêche est finie** (Lago) : tout le fleuve veut du pirarucú salé, fumé et au piment noir ;
+  - 🏜️ **L’étiage est arrivé** (Casabería) : le fleuve a baissé et le bateau de l’açaí ne passe pas ;
+  - 🎭 **La fête de la Pelazón** (Yanchama) : tout le monde veut des masques et il y a peu de mains ;
+  - 🎉 **Festival de la Confraternité amazonienne** (Leticia) : la ville se remplit de visiteurs qui veulent voir les dauphins roses.
+- **Album de l’Amazonas :** six pages (la forêt, la cuisine, le fleuve, les peuples, les mains et Leticia) avec 36 images, du fromager au parc Santander.
+- **Succès de l’Amazonas :** cueilleur d’açaí, productrice de piment, pêcheur de pirarucú, casabière, faiseur de masques, voir les dauphins et les habituels.
+- L’Amazonas est terminé : en terminant Leticia, il a sa deuxième fin et son redémarrage, et ses événements apparaissent dans toutes ses zones et donnent la prime de médailles.
+- **Correction :** les nouvelles icônes de la Yanchama et de Leticia (v3.51 et v3.52) s’affichaient comme un petit carré ou une lettre isolée, car la police d’icônes ne couvrait que jusqu’à U+E0FF. Elles s’affichent toutes maintenant.
+
+## v3.52.0 — L’Amazonas : Leticia
+- **🐬 Leticia**, la dernière zone de l’Amazonas, s’ouvre en terminant La Yanchama. C’est le port de la triple frontière et elle n’a pas de source propre : chaque station attend sa part d’une autre zone, comme à Buenaventura.
+  - le **Glacier à l’açaí** fait des glaces avec les caisses d’açaí de l’Asaizal ;
+  - le **Restaurant du bord du fleuve** sert le dîner avec les caisses de piment noir de l’Ajizal ;
+  - l’**Hôtel de la forêt** reçoit les clients avec les souvenirs de la Yanchama ;
+  - le **Marché du port** sert le déjeuner avec le pirarucú au piment noir du Lago ;
+  - les **Provisions de la pirogue** préparent les paniers avec le petit-déjeuner et le banquet de la Casabería ;
+  - la **Sortie aux dauphins** emmène les touristes voir les dauphins roses.
+- **🚌 Six nouvelles routes**, une depuis chaque zone de l’Amazonas, avec leurs routes sur les deux cartes. Elle a les mêmes chiffres que Buenaventura.
+- Sa personne est **Doña Graciela, la guide**, avec ses anecdotes, objectifs, 10 recherches, sa victoire et 6 nouvelles icônes (de la glace à l’açaí à la sortie pour voir les dauphins).
+- **La carte :** le village aux maisons colorées à toit de zinc, des fromagers, des palmiers açaí et des aras ; le glacier vert d’eau à l’auvent violet, le restaurant au toit de palme, l’hôtel en bois de trois étages, le marché avec ses étals, le petit entrepôt des provisions et le quai sur le fleuve noir, où saute un dauphin rose.
+- L’Amazonas a maintenant ses six zones ; dans la prochaine version arrivent ses événements, son album et ses succès.
+
+## v3.51.0 — L’Amazonas : La Yanchama
+- **🎭 La Yanchama**, la cinquième zone de l’Amazonas, s’ouvre en terminant La Casabería : les Arbres à yanchama → le Trempage de l’écorce → le Battoir → les Peintres de yanchama → l’Atelier de masques → la Boutique de la Yanchama. L’écorce trempe dans le ruisseau, se bat au maillet jusqu’à devenir tissu, se peint au genipa et au rocou et devient un **masque ticuna**, celui de la fête de la Pelazón ; la boutique vend le **Souvenir de l’Amazonas**. Elle a les mêmes chiffres que le Werregue.
+- **🚌 Route du pirarucú salé** et **🚌 Route du pirarucú fumé :** elles partent du Lago vers la Boutique de la Yanchama.
+- Sa personne est **Don Eliseo, l’artisan ticuna**, avec ses anecdotes, objectifs, 10 recherches, sa victoire et 6 nouvelles icônes (de l’arbre à yanchama au souvenir).
+- **La carte :** le bois sombre de yanchamas au tronc lisse et clair, aux racines en contreforts et à la blessure de l’écorce prélevée ; dans les stations, le trou d’eau du ruisseau avec les bandes sous les pierres, l’abri du battoir avec le tronc et les maillets, les maisons sur pilotis des peintres et des masques (avec les masques qui regardent depuis les poteaux) et la boutique en bois avec son enseigne peinte.
+
+## v3.50.0 — L’Amazonas : La Casabería
+- **🫓 La Casabería**, la quatrième zone de l’Amazonas, s’ouvre en terminant El Lago : la Chagra de manioc → l’Éplucheuse de manioc → la Râpe à manioc → le **Tipití** (le tube tressé en palme qui presse la pâte et en retire le jus toxique du manioc amer) → le Budare à cassave. La cassave se répartit entre la **Table du petit-déjeuner** (le petit-déjeuner amazonien) et la **Maloca** (le banquet de la maloca). Elle a les mêmes chiffres que le Manglar.
+- **🚌 Route de l’açaí :** les sachets d’açaí de l’Asaizal arrivent à la Table du petit-déjeuner et à la Maloca. **🚌 Route du pirarucú :** le pirarucú nettoyé du Lago arrive à la Maloca.
+- Sa personne est **Grand-mère Tránsito, la casabière**, avec ses anecdotes, objectifs, 11 recherches, sa victoire et 8 nouvelles icônes (du plant de manioc au banquet).
+- **La carte :** la chagra de terre brune avec les plants de manioc aux tiges noueuses et aux feuilles palmées ; dans les stations, l’abri où l’on épluche le manioc à côté de la bassine, la maison de la râpe avec son pétrin, les cadres en bois avec les tipitís qu’on étire, la cuisine en palme avec le budare sur les trois pierres et les cassaves qui sèchent sur la natte, la maison vert d’eau du petit-déjeuner et la **maloca**, ronde, avec le toit de palme jusqu’au sol et la façade d’écorce peinte.
+
+## v3.49.0 — L’Amazonas : El Lago
+- **🐟 El Lago**, la troisième zone de l’Amazonas, s’ouvre en terminant El Ajizal : les Pirogues du lac → le Nettoyage du pirarucú, qui répartit le poisson entre le **Saloir** (pirarucú salé), la **Fileteuse** (des darnes qui passent au **Moquén**, où elles sont fumées à la manière indigène) et la **Cuisine du pirarucú**, qui sert le **pirarucú au piment noir**. Elle a les mêmes chiffres que la Bahía.
+- **🚌 Route du piment noir :** la chiva emporte les bocaux de piment noir de l’Ajizal à la Cuisine du pirarucú.
+- Sa personne est **Don Jacinto, le pêcheur**, avec ses anecdotes, objectifs, 11 recherches, sa victoire et 6 nouvelles icônes (du pirarucú tout juste pêché à l’assiette au piment noir et à la cassave).
+- **La carte :** l’eau noire des lacs de Tarapoto, avec des feuilles de victoria regia et les pirogues des pêcheurs ; sur la rive, l’abri en palme où l’on ouvre le poisson géant (avec son héron), les séchoirs avec les pièces de pirarucú salé, la fileteuse verte sur pilotis, le moquén de branches sur le feu et la cuisine orange avec sa poêle.
+
+## v3.48.0 — L’Amazonas : El Ajizal
+- **🌶️ El Ajizal**, la deuxième zone de l’Amazonas, s’ouvre en terminant El Asaizal : le Champ de piments → le Lavoir à piments → le Moulin à piments → la Marmite du tucupí → l’Embouteilleuse de piment noir. Le piment de la chagra se lave, se moud et cuit des journées entières dans le tucupí (le jus du manioc amer) jusqu’à devenir le **piment noir**, le sel de la forêt. Elle a les mêmes chiffres que l’Azotea ; le piment noir est celui qui voyagera ensuite au Lago, et les caisses, à Leticia.
+- Sa personne est **Doña Remedios, la productrice de piment**, avec ses anecdotes, objectifs, 9 recherches, sa victoire et 5 nouvelles icônes (du plant de piment à la caisse de piment noir).
+- **La carte :** la chagra de terre rougeâtre avec les plants chargés de piments rouges, jaunes et violets ; dans les stations, la bassine sous l’abri de palme, la maison bleue du moulin, la cuisine avec la marmite du tucupí et le tipití suspendu, et l’embouteilleuse jaune avec ses bocaux.
+
+## v3.47.0 — L’Amazonas : El Asaizal
+- **🦜 L’Amazonas**, la septième région, s’ouvre en terminant Buenaventura. Elle a sa propre économie, comme les autres, et arrivera zone par zone.
+- **🌴 El Asaizal**, sa première zone : la Palmeraie d’açaí → l’Égreneuse → la Cuve de trempage → la Dépulpeuse d’açaí → le Mixeur → l’Emballeuse d’açaí → la Caisserie d’açaí. Elle va de la grappe d’açaí à la caisse de sachets congelés, en passant par le fruit, l’açaí trempé, la pulpe et l’açaí mixé. Elle a les mêmes chiffres que la première zone de chaque région, car l’Amazonas part de zéro.
+- Sa personne est **Don Abel, le cueilleur**, avec ses anecdotes, objectifs, 15 recherches, sa victoire et 8 nouvelles icônes (du palmier açaí à la caisse).
+- **La carte :** la plaine inondable humide avec les palmiers açaí aux tiges fines, qui donnent des grappes violettes à chaque palier ; autour, des fromagers géants, des héliconias, des bananiers et des aras. Les maisons sont en bois, sur pilotis, avec un toit de zinc ou de palme :
+  - l’abri où l’on secoue les grappes sur la bâche ;
+  - les cuves bleues de trempage, avec la vapeur ;
+  - la dépulpeuse qui fait tomber la pulpe violette dans le seau ;
+  - l’étal vert du mixeur, avec les verres d’açaí ;
+  - l’emballeuse blanche avec le tapis de sachets et le congélateur, et l’entrepôt avec les caisses en polystyrène.
+- **Musique :** la **Cumbia del Amazonas**, celle de Leticia et de la triple frontière : guitare électrique en arpèges, basse, clavier, maracas et manguaré, le tambour de bois des peuples de la forêt.
+- Ensuite viendront El Ajizal, El Lago, La Casabería, La Yanchama et Leticia.
+
+## v3.46.0 — L’id de la Costa Pacífica
+- En interne, la Costa Pacífica s’appelle maintenant `pacifico` (elle est sortie comme `choco`). Rien ne change dans le jeu.
+
+## v3.45.0 — Cartagena fortifiée et face à la mer
+- **🏰 Cartagena** a maintenant l’air de la ville fortifiée :
+  - la **mer des Caraïbes** sur les deux bords arrière de la carte, avec des vagues, de l’écume, une plage, des voiliers et des bateaux ;
+  - le **rempart** en pierre de corail le long de la plage, avec ses créneaux et ses **échauguettes** ;
+  - le rempart qui ferme le **centre historique** côté terre, avec des portes où passent les chemins et la **Tour de l’Horloge** (jaune, avec ses arcs, l’horloge qui s’illumine la nuit et la coupole) ;
+  - à l’intérieur, les maisons coloniales colorées serrées les unes contre les autres.
+- C’est seulement du dessin : les stations, les chemins et les temps de trajet ne changent pas.
+
+## v3.44.0 — La Costa Pacífica complète : événements, album et succès
+- **Six nouveaux événements**, un par zone de la Costa Pacífica, chacun avec sa scène sur le plateau qui change à chaque achat :
+  - 🍂 **Cercosporiose noire** au Platanal : les plants tachés, celui qui coupe les feuilles malades, les fossés et les rejets de bananier résistant.
+  - 🌊 **L’eau est devenue boueuse** à l’Azotea : les seaux d’eau trouble s’entassent jusqu’à l’arrivée des réservoirs d’eau de pluie, de la pompe et du filtre.
+  - 🎣 **Semaine sainte à la Bahía** : tout le monde demande du poisson séché, du vivaneau fumé et du tapao ; des étals aux auvents turquoise, jaunes et roses.
+  - 🚤 **Le bateau s’est échoué** au Manglar : avec la marée la plus basse de l’année, les patacones n’arrivent pas ; des pirogues, le bateau de location et la marée haute.
+  - 🏺 **Foire artisanale** au Werregue : la file d’acheteurs qui veulent des vases ; les jeunes filles qui apprennent, la fibre d’autres communautés et les grands-mères tisserandes.
+  - 🥁 **Festival folklorique du Pacifique** à Buenaventura : la ville pleine de visiteurs qui veulent voir les baleines, des couples qui dansent le currulao avec des foulards, des guides et des bateaux.
+- **Album de la Costa Pacífica :** six pages (la forêt, la cuisine, la mer, la musique, les mains et Buenaventura) avec 36 images, de la grenouille dorée à la baleine à bosse.
+- **Succès de la Costa Pacífica :** producteur de bananes plantain, cuisinière d’azotea, pêcheur, ramasseuse de piangua, tisserande, voir les baleines et les habituels.
+- **La Costa Pacífica est terminée :** en terminant Buenaventura, elle a sa deuxième fin et son redémarrage, ses événements apparaissent dans toutes ses zones et donnent la prime de médailles. Si tu avais déjà terminé Buenaventura, en ouvrant cette version la région est terminée.
+
+## v3.43.0 — Costa Pacífica : Buenaventura
+- **🐋 Buenaventura**, le port et dernière zone de la Costa Pacífica, s’ouvre en terminant El Werregue. Comme Barichara, Cartagena, Villa de Leyva et Villavicencio, elle n’a pas de source propre : chaque station reçoit le produit final d’une zone du Pacifique.
+  - La **Fritanga du port** fait frire des marranitas avec les caisses de patacones du Platanal.
+  - La **Cevichería du front de mer** sert le ceviche avec les caisses d’assaisonnement de l’Azotea.
+  - L’**Hôtel de la baie** offre la nuit à Buenaventura avec le Souvenir du Pacifique.
+  - La **Halle de Pueblo Nuevo** sert le déjeuner avec le tapao de la Bahía.
+  - Les **Gamelles du bateau**, avec le riz à la piangua et la cazuela du Manglar.
+  - La **Sortie aux baleines** : les bateaux pour voir les baleines à bosse.
+- **Six nouvelles routes** vers Buenaventura, avec leurs routes sur les cartes. Elle a les mêmes chiffres que Villavicencio.
+- Sa personne est **Doña Libia, la guide**, avec ses anecdotes, objectifs, 10 recherches, sa victoire et 6 nouvelles icônes (des marranitas aux baleines).
+- **La carte :** des maisons colorées à toit de zinc, des cocotiers, des badamiers et des lampadaires ; le front de mer gris avec la grande maison turquoise et son auvent orange, la cevichería, l’hôtel rose de trois étages, la halle avec ses auvents colorés, le petit entrepôt vert avec les gilets de sauvetage et le quai avec les bateaux et une baleine qui saute de temps en temps.
+- La Costa Pacífica a maintenant ses six zones. Ses événements, son album, ses succès et sa deuxième fin arrivent dans la prochaine version.
+
+## v3.42.0 — Costa Pacífica : El Werregue
+- **🏺 El Werregue**, la cinquième zone de la Costa Pacífica, s’ouvre en terminant El Manglar : la Palmeraie de werregue → la Défibreuse → la Teinturerie (noir de genipa et rouge de rocou) → la Retordeuse → les Tisserandes → la Boutique d’artisanat. La boutique vend le **Souvenir du Pacifique** : des vases en werregue avec le poisson séché et le vivaneau fumé de la Bahía pour la route. Elle a les mêmes chiffres que la Talabartería.
+- **Deux nouvelles routes depuis la Bahía :** la Route du poisson séché et la Route du vivaneau fumé, avec leur chiva et leurs routes.
+- Sa personne est **Doña Aminta, la tisserande wounaan**, avec ses anecdotes, objectifs, 10 recherches, sa victoire et 6 nouvelles icônes (du palmier werregue au Souvenir du Pacifique).
+- **La carte :** la palmeraie de werregue, aux troncs épineux, qui donne la jeune pousse à chaque palier ; la forêt du fleuve San Juan avec des palmiers pêches, des héliconias, des borojós et quelques **tambos wounaan** (la maison ronde sur pilotis à toit de palme). Dans les stations :
+  - l’abri où l’on sort les bandes, avec les bottes de fibre suspendues ;
+  - les marmites de genipa et de rocou, avec les écheveaux noirs, rouges et clairs qui sèchent ;
+  - le tambo de la retordeuse, avec les rouleaux de fil, et le grand tambo des tisserandes, avec les vases ;
+  - la boutique turquoise avec les vases dans la galerie et les visiteurs.
+
+## v3.41.0 — Costa Pacífica : El Manglar
+- **🐚 El Manglar**, la quatrième zone de la Costa Pacífica, s’ouvre en terminant La Bahía : la Mangrove → le Lavoir à piangua → la Marmite de la piangua → la Décortiqueuse → la Marmite de l’encocado. La piangua encocada (au lait de coco) se répartit entre :
+  - la **Table du riz à la piangua**, qui la sert avec les patacones du Platanal ;
+  - la **Cuisine de la cazuela**, qui fait la cazuela de fruits de mer avec les patacones et le vivaneau de la Bahía.
+- **Deux nouvelles routes :** la Route des patacones, depuis le Platanal, et la Route du vivaneau, depuis la Bahía, chacune avec sa chiva et sa route.
+- Elle a les mêmes chiffres que le Hato llanero. Sa personne est **Doña Ligia, la ramasseuse de piangua**, avec ses anecdotes, objectifs, 11 recherches, sa victoire et 7 nouvelles icônes (du palétuvier à la cazuela).
+- **La carte :** la vase de la mangrove à marée basse, avec ses flaques, les palétuviers aux racines-échasses et les **ramasseuses de piangua** qui sortent le coquillage à la main et le jettent dans le panier (plus de ramasseuses à chaque palier) ; des hérons, des héliconias et des cocotiers. Dans les stations, la pirogue où l’on lave les paniers, la grande marmite sur le feu, la maison jaune avec le tas de coquilles vides, la cuisine rose avec les noix de coco, le restaurant bleu avec ses tables et la cuisine verte avec les cazuelas en terre.
+
+## v3.40.0 — Costa Pacífica : La Bahía
+- **🐟 La Bahía**, la troisième zone de la Costa Pacífica, s’ouvre en terminant La Azotea : les Bateaux de pêche → le Nettoyage du vivaneau, qui répartit le vivaneau nettoyé entre :
+  - le **Séchoir**, où le poisson est salé et étendu au soleil (le poisson séché) ;
+  - la **Fileteuse de vivaneau**, qui passe les filets au **Fumoir** ;
+  - la **Cuisine du tapao**, qui cuit le poisson avec la banane plantain verte et l’assaisonnement de l’Azotea.
+- **La Route de l’assaisonnement**, la première de la Costa Pacífica : elle emporte l’assaisonnement de l’Azotea à la Cuisine du tapao, avec sa chiva et sa route.
+- Elle a les mêmes chiffres que la Cachamera. Sa personne est **Don Cupertino, le pêcheur**, avec ses anecdotes, objectifs, 11 recherches, sa victoire et 6 nouvelles icônes (du vivaneau rouge au tapao).
+- **La carte :** la mer avec les pirogues des pêcheurs et le quai ; des cocotiers, des galets, des filets au soleil, des héliconias et des palmiers pêches. Dans les stations, l’abri du nettoyage avec les pélicans qui attendent, les séchoirs avec le poisson séché, la maison blanche de la fileteuse, les foyers hauts du fumoir et la cuisine orange du tapao.
+
+## v3.39.0 — Costa Pacífica : La Azotea
+- **🐋 La région s’appelle maintenant Costa Pacífica** (elle est sortie comme « le Chocó ») : elle va du Chocó à Nariño, et sa dernière zone sera **Buenaventura**, au lieu de Quibdó. Ta partie reste pareille.
+- **🌿 La Azotea**, sa deuxième zone, s’ouvre en terminant El Platanal : les Azoteas → le Lavoir à herbes → le Pilon → la Marmite du refrito → l’Embouteilleuse d’assaisonnement. Les herbes d’azotea (chillangua, menthe pouliot, basilic et oreganón) se lavent, se pilent avec ail et oignon, se font revenir et l’assaisonnement se met en bocaux. Elle a les mêmes chiffres que le Frutal ; l’assaisonnement est celui qui voyagera ensuite à la Bahía, et les caisses, à Buenaventura.
+- Sa personne est **Doña Rosalba, la cuisinière**, avec ses anecdotes, objectifs, 9 recherches, sa victoire et 6 nouvelles icônes (de l’azotea à la caisse d’assaisonnement).
+- **La carte :** les azoteas, de vieilles pirogues surélevées sur pilotis et pleines d’herbes, qui fleurissent à chaque palier ; dans les stations :
+  - l’abri avec la bassine où l’on lave les bottes ;
+  - la maison rose avec les pilons et les cuisinières qui pilent à tour de rôle ;
+  - la cuisine bleue avec le feu de bois et la marmite du refrito ;
+  - la maison verte avec la table où l’on remplit et bouche les bocaux.
+
+## v3.38.0 — Le Chocó : El Platanal
+- **🐋 Le Chocó**, la sixième région, s’ouvre en terminant Villavicencio. Il a sa propre économie, comme les autres, et arrivera zone par zone.
+- **🍌 El Platanal**, sa première zone : la Bananeraie → la Dépateuse → le Bac de lavage → l’Éplucheuse → la Fritanga de patacones → l’Emballeuse → la Caisserie de patacones. Elle va du régime de bananes plantains à la caisse de patacones, en passant par la main, la banane lavée et épluchée, le patacón et le sachet. Elle a les mêmes chiffres que la Palma, car la région part de zéro.
+- Sa personne est **Don Nicomedes, le producteur de bananes plantains**, avec ses anecdotes, objectifs, 15 recherches, sa victoire et 8 nouvelles icônes (du bananier à la caisse de patacones).
+- **La carte :** la terre noire et mouillée de la bananeraie, avec des plants qui donnent un régime et un bourgeon violet à chaque palier ; autour, des palmiers pêches, des borojós, des héliconias et des bananiers isolés. Les maisons sont en planches, sur pilotis, peintes de couleurs et à toit de zinc :
+  - l’abri où pendent les régimes et où le producteur coupe les mains à la machette ;
+  - les bacs de lavage, avec les mains qui flottent ;
+  - l’éplucheuse turquoise, avec la table et les épluchures ;
+  - la fritanga avec la bassine d’huile sur le feu de bois et la planche pour écraser ;
+  - l’emballeuse jaune, avec le tapis de sachets, et l’entrepôt vert avec les caisses.
+- **Musique :** la **Chirimía de San Pacho**, un porro du Chocó avec deux clarinettes, l’euphonium, la tambora, la caisse claire et les cymbales.
+- Ensuite viendront La Azotea, La Bahía, El Manglar, El Werregue et Quibdó.
+
+## v3.37.0 — Los Llanos complets : événements, album et succès
+- **Six nouveaux événements**, un par zone des Llanos, chacun avec sa scène sur le plateau qui change à chaque achat :
+  - 🦠 **Pourriture du cœur** à la Palma : les palmiers tachés, celui qui coupe ce qui est pourri, les fossés de drainage et les jeunes palmiers hybrides fraîchement plantés.
+  - ⚙️ **Dépulpeuse en panne** au Frutal : les paniers de fruits de la passion s’entassent jusqu’à l’arrivée des pales, du moteur et du tamis.
+  - 🐟 **Foire au poisson** à la Cachamera : tout le monde demande du pisillo, de la cachama fumée et de la cachama au fruit de la passion ; des étals aux auvents vert, jaune et bleu.
+  - 🌉 **Le pont est tombé** au Hato llanero : le fleuve a emporté le pont et l’huile n’arrive pas ; des pirogues, le bac et le nouveau pont.
+  - 🐂 **Tournoi de coleo** à la Talabartería : la file de cavaliers qui veulent une nouvelle selle ; les apprentis, les formes et les maîtres.
+  - 💃 **Tournoi de joropo** à Villavicencio : la ville pleine de visiteurs pour Caño Cristales, des couples qui dansent le joropo, des guides et des petits avions.
+- **Album des Llanos :** six pages (le palmier, les fruits, les fleuves, le hato, le cheval et Villavicencio) avec 36 images, de l’ibis rouge à Caño Cristales.
+- **Succès des Llanos :** producteur de palmiers, arboricultrice, pisciculteur, fêtard, sellier, à Caño Cristales et les habituels.
+- **Los Llanos sont terminés :** en terminant Villavicencio, ils ont leur deuxième fin et leur redémarrage, leurs événements apparaissent dans toutes leurs zones et donnent la prime de médailles. Si tu avais déjà terminé Villavicencio, en ouvrant cette version la région est terminée.
+
+## v3.36.0 — Los Llanos : Villavicencio
+- **🏞️ Villavicencio**, la Porte du Llano et dernière zone des Llanos, s’ouvre en terminant La Talabartería. Comme Barichara, Cartagena et Villa de Leyva, elle n’a pas de source propre : chaque station reçoit le produit final d’une zone des Llanos.
+  - L’**Empanadería** fait frire des empanadas avec les caisses d’huile de la Palma.
+  - Le **Kiosque du parc** sert l’après-midi avec les caisses de jus du Frutal.
+  - L’**Hôtel champêtre** offre la nuit à Villavicencio avec le Souvenir du Llano.
+  - Le **Marché** sert le déjeuner avec la cachama au fruit de la passion.
+  - Les **Sacs à dos du voyage** emportent le déjeuner llanero et le rôti de la parranda du Hato.
+  - La **Sortie à Caño Cristales** expédie les excursions vers la rivière aux cinq couleurs.
+- **Six nouvelles routes** vers Villavicencio, avec leurs routes sur les cartes.
+- Sa personne est **Doña Graciela, la guide**, avec ses anecdotes, objectifs, 10 recherches, sa victoire et 6 nouvelles icônes (avec Caño Cristales).
+- **La carte :** des maisons colorées à toit de tuiles, des guayacanes en fleur, des palmiers moriche, des manguiers et des lampadaires ; le kiosque rond en palme, l’hôtel avec piscine, le marché avec les étals de fruits et de poisson, et la rivière colorée au début du chemin.
+- Los Llanos ont maintenant leurs six zones. Leurs événements, leur album, leurs succès et leur deuxième fin arrivent dans la prochaine version.
+
+## v3.35.0 — Los Llanos : La Talabartería
+- **🐎 La Talabartería**, la cinquième zone des Llanos, s’ouvre en terminant El Hato llanero : le Saloir à cuirs → la Tannerie → la Coupeuse de cuir → le Repoussage → l’Atelier de selles → la **Boutique llanera**. La boutique vend le **Souvenir du Llano** : des selles avec le pisillo et la cachama fumée de la Cachamera pour la route. Elle a les mêmes chiffres que Las Ruanas.
+- **Deux nouvelles routes depuis la Cachamera :** la **Route du pisillo** et la **Route de la cachama fumée**, avec leur chiva et leurs routes.
+- Sa personne est **Don Ramón, le sellier**, avec ses anecdotes, objectifs, 10 recherches, sa victoire et 6 nouvelles icônes (du cuir brut à la selle).
+- **La carte :** les cuirs tendus sur leurs cadres en bois, qui sèchent avec du sel ; des chevaux créoles (alezans, bais et gris), des samans, des marais à moriches et des termitières. Dans les stations :
+  - les fosses de tannage avec les cuirs qui égouttent ;
+  - la table de coupe ;
+  - l’artisan qui frappe le burin ;
+  - les selles sur leurs chevalets en bois ;
+  - la boutique avec des chapeaux, des cotizas et une selle à la porte.
+
+## v3.34.0 — Los Llanos : El Hato llanero
+- **🤠 El Hato llanero**, la quatrième zone des Llanos, s’ouvre en terminant La Cachamera : la Savane du hato → la Découpe → la Salaison → la Broche (la mamona) → la Table à trancher (la carne a la llanera). Elle a les mêmes chiffres que Paipa.
+- La carne a la llanera se répartit entre :
+  - la **Table du déjeuner llanero**, qui la sert avec le manioc frit dans l’huile de la Palma ;
+  - le **Grill de la parranda**, qui grille aussi la cachama de la Cachamera.
+- **Deux nouvelles routes :** la **Route de l’huile**, depuis la Palma, et la **Route de la cachama**, depuis la Cachamera, chacune avec sa chiva et sa route.
+- Sa personne est **Don Florentino, le vacher**, avec ses anecdotes, objectifs, 11 recherches, sa victoire et 5 nouvelles icônes.
+- **La carte :** la savane avec du bétail zébu (blanc ou gris, avec sa bosse) et quelques sanmartineros, roux ; des samans, des marais à moriches, des termitières et des hérons. Dans les stations :
+  - l’abri avec les morceaux suspendus ;
+  - les bassines avec la viande au gros sel ;
+  - le feu avec la mamona sur les broches ;
+  - les caneyes au toit de palme ;
+  - la parranda avec le harpiste et un couple qui danse le joropo.
+
+## v3.33.0 — Los Llanos : La Cachamera
+- **🐟 La Cachamera**, la troisième zone des Llanos, s’ouvre en terminant El Frutal. Les Bassins élèvent la cachama et le Nettoyage la prépare. La cachama nettoyée se répartit entre :
+  - la **Pisillera**, qui fait le pisillo de cachama ;
+  - la **Fileteuse**, qui passe les filets au **Fumoir**, d’où sort la cachama fumée ;
+  - la **Cuisine de la cachama**, qui la sert au fruit de la passion.
+- Elle a les mêmes chiffres que Ráquira.
+- **Première route des Llanos : la Route du jus**, du Frutal à la Cuisine de la cachama, avec sa chiva et sa route sur les deux cartes.
+- Sa personne est **Don Arcadio, le pisciculteur**, avec ses anecdotes, objectifs, 11 recherches, sa victoire et 6 nouvelles icônes.
+- **La carte :** les bassins d’eau verdâtre, avec leurs berges de terre et les cachamas qui remontent manger ; des hérons, des marais à moriches, des manguiers et des termitières. Dans les stations :
+  - la table de lavage avec les bassines de cachama ;
+  - le chaudron du pisillo ;
+  - la longue table à fileter ;
+  - le fumoir en torchis avec les cachamas suspendues ;
+  - la cuisine avec le gril à bois, la marmite de sauce et les bonbonnes de jus.
+
+## v3.32.0 — Los Llanos : El Frutal
+- **🥭 El Frutal**, la deuxième zone des Llanos, s’ouvre en terminant La Palma : le Verger de fruits de la passion → la Dépulpeuse de fruits de la passion → la Pasteurisatrice de pulpe → le Mélangeur de jus → l’Embouteilleuse de jus. Elle va du fruit de la passion à la caisse de jus, en passant par la pulpe et le jus. Elle a les mêmes chiffres que la Brasserie.
+- Le jus de fruit de la passion est celui qui voyagera ensuite à la Cachamera, et les caisses de jus, à Villavicencio.
+- Sa personne est **Doña Edilma, l’arboricultrice**, avec ses anecdotes, objectifs, 9 recherches, sa victoire et 6 nouvelles icônes (de la treille à la caisse de jus).
+- **La carte :** les treilles en fil de fer avec la liane et les fruits de la passion suspendus (plus à chaque palier), des manguiers chargés, des marais à moriches, des termitières et des hérons. Dans les stations :
+  - la machine qui ouvre les fruits de la passion, avec les paniers à côté ;
+  - la marmite de la pulpe, qui bout et fume ;
+  - les cuves où tourne le jus jaune ;
+  - le tapis de petites boîtes vertes.
+
+## v3.31.0 — Los Llanos : La Palma
+- **🐎 Los Llanos**, la cinquième région, s’ouvrent en terminant Villa de Leyva. Ils ont leur propre économie, comme les autres, et arriveront zone par zone.
+- **🌴 La Palma**, leur première zone : la Palmeraie → l’Égreneuse → le Stérilisateur → la Presse à huile → le Clarificateur → l’Embouteilleuse → la Caisserie d’huile. Elle va du régime de palme à la caisse d’huile, en passant par le fruit, l’huile brute et la bouteille. Elle a les mêmes chiffres que le Papal, car la région part de zéro.
+- Sa personne est **Don Eusebio, le producteur de palmiers**, avec ses anecdotes, objectifs, 15 recherches, sa victoire et 7 nouvelles icônes (du palmier à huile à la caisse).
+- **La carte :** la palmeraie aux régimes rouges, des marais à moriches, des termitières, des hérons et quelques samans. L’usine d’extraction a des hangars à toit de zinc :
+  - le tambour qui égrène les régimes ;
+  - l’autoclave avec le wagonnet de fruits ;
+  - la presse avec les fûts d’huile brute ;
+  - les cuves du clarificateur, avec l’huile qui monte ;
+  - le tapis de bouteilles qu’on remplit et qu’on bouche.
+- **Musique :** le **Joropo de la sabana**, avec la harpe à la mélodie, le cuatro en strumming avec ses coups étouffés, les maracas et la basse.
+- Ensuite viendront El Frutal, La Cachamera, El Hato llanero, La Talabartería et Villavicencio.
+
+## v3.30.1 — Mettre en pause un événement gagné
+- Avec l’événement gagné, **⏸️ Pause** continue de marcher : tu reviens à la carte et l’événement gagné t’attend dans la liste jusqu’à ce que tu touches **🏁 Terminer l’événement**. Seul **🔄 Recommencer** est désactivé.
+
+## v3.30.0 — Moins d’événements
+- **Deux événements à la fois dans tout le jeu** (avant, deux par région), **jamais de la même région**. En en terminant un, son emplacement se repose **2 ans de jeu** (environ 4 h 16 min ; avant, 3 ans).
+- **Nouveaux boutons dans l’événement** :
+  - **⏸️ Pause** (avant « Quitter ») : tu reviens à la carte et l’événement t’attend.
+  - **🔄 Recommencer** : le même défi depuis zéro (pièces, niveaux, achats, horloge et la médaille assurée).
+  - **🏁 Terminer** : tu le fermes même si tu ne l’as pas gagné ; il ne donne pas de médaille, son emplacement se repose 2 ans et la prochaine fois revient le même défi.
+  - Recommencer et terminer demandent une confirmation.
+- **En gagnant un événement**, tu reçois la médaille et le Renom, et tu peux **👀 continuer à regarder** le plateau. De là, on ne sort qu’avec **🏁 Terminer l’événement**, et si tu fermes l’application, l’événement gagné reste dans la liste des événements jusqu’à ce que tu le termines.
+- Les primes pour avoir toutes les médailles d’une région ne changent pas.
+- **À la mise à jour :** les événements que tu avais commencés restent ; ceux disponibles non commencés et les attentes de chaque région sont effacés, et les emplacements se remplissent de nouveau avec les nouvelles règles.
+
+## v3.29.0 — La place de Vélez
+- **⛪ La Guayabera a en son milieu la place de Vélez**, avec son église blanche à une tour :
+  - la façade avec le portail en arc, la fenêtre ronde et la croix ;
+  - la tour avec son clocher et la cloche ;
+  - le parvis en pierre avec des pigeons ;
+  - la fontaine, des goyaviers, des bancs, des lampadaires et les maisons blanches autour de la place.
+- **Les mules en font le tour** : le chemin entoure la place et les Moules, la Coupeuse et l’Emballage se retrouvent autour d’elle. **Les temps de trajet ne changent pas** : chaque station est restée à la même distance de la goyaveraie qu’avant, et un nouveau test le vérifie.
+- Les gens se promènent sur la place ; la nuit, le portail, les fenêtres et les lampadaires s’allument.
+- **Des cloches** à 6 h, à 12 h et à 18 h, comme au Pueblo.
+- **Des animaux moins chers** : les chats coûtent 10 ⭐ (avant 50) et les perroquets 8 ⭐ (avant 40).
+
+## v3.28.0 — Boyacá complète : événements, album et succès
+- **Six nouveaux événements**, un par zone de Boyacá, chacun avec sa scène sur le plateau qui change à chaque achat :
+  - 🍂 **Le mildiou dans le champ de pommes de terre** : les plants se tachent ; le pulvérisateur avec bouillie bordelaise, les sillons buttés et la semence résistante.
+  - 🔥 **Four à malt en panne** à la Brasserie : les sacs d’orge s’accumulent jusqu’à l’arrivée des briques neuves, du ventilateur et du brûleur à gaz.
+  - 🏺 **Marché artisanal** à Ráquira : tout le monde demande des marmites, des jardinières et des cruches ; des étals aux auvents colorés.
+  - 🚧 **Route en travaux** à Paipa : le glissement de terrain coupe la route et les petites pommes de terre n’arrivent pas ; des mules par la piste, passage sur une voie et la nouvelle route.
+  - ❄️ **Les gelées de décembre** à Las Ruanas : la file de ceux qui cherchent une ruana, le métier prêté, les navettes et les tisserandes.
+  - 🪁 **Festival des cerfs-volants** à Villa de Leyva : la file de visiteurs, les cerfs-volants dans le ciel et les guides.
+- **Album de Boyacá** : six pages (la pomme de terre, la bière, l’argile, les fromages, la laine et Villa de Leyva) avec 36 images.
+- **Succès de Boyacá** : producteur de pommes de terre, brasseur, potier, amasijos, tisserand, au Fossile et les habituels.
+- **Boyacá est terminée** : en terminant Villa de Leyva, elle a sa deuxième fin et son redémarrage, ses événements apparaissent dans toutes ses zones et elle donne la prime de médailles. Si tu avais déjà terminé Villa de Leyva, en ouvrant cette version la région est terminée.
+
+## v3.27.0 — Boyacá : Villa de Leyva
+- **🏛️ Villa de Leyva**, la dernière zone de Boyacá, s’ouvre en terminant Las Ruanas. Comme Barichara et Cartagena, elle n’a pas de source propre : chaque station reçoit le produit final d’une zone de Boyacá.
+  - L’**Épicerie du coin** sert le goûter avec les caisses de petites pommes de terre du Papal.
+  - La **Terrasse de la place**, l’après-midi avec les caisses de bière.
+  - L’**Hébergement colonial**, la nuit à Villa de Leyva avec le souvenir de Las Ruanas.
+  - Le **Marché du samedi**, le panier avec les cruches de Ráquira.
+  - Les **Paniers de la promenade** emportent en plus le piquete et les amasijos de Paipa.
+  - La **Sortie au Fossile** expédie les **excursions au Fossile**.
+- **Six nouvelles routes** vers Villa de Leyva, avec leurs routes sur les cartes.
+- Sa personne est **Doña Mercedes, la guide**, avec ses anecdotes, objectifs, 10 recherches, sa victoire et 7 nouvelles icônes (avec l’église de la place et le kronosaure).
+- La carte : de grandes maisons blanches de deux étages à balcons verts, la place pavée, des cyprès et des eucalyptus ; la terrasse avec ses parasols, l’hébergement avec des géraniums au balcon, le marché aux auvents colorés et le rocher du Fossile au début du chemin.
+- Boyacá a maintenant ses six zones. Ses événements, son album, ses succès et sa deuxième fin arrivent dans la prochaine version.
+
+## v3.26.0 — Boyacá : Las Ruanas
+- **🧶 Las Ruanas**, la cinquième zone de Boyacá, s’ouvre en terminant Paipa : le Troupeau de moutons → le Lavage de la laine → le Cardage → le Filage au rouet → le Métier à ruanas → la **Boutique de Nobsa**, qui vend le Souvenir de Boyacá : des ruanas avec des marmites et des jardinières de Ráquira.
+- **Deux nouvelles routes depuis Ráquira** : la **Route des marmites** et la **Route des jardinières**, avec leur chiva et leurs routes.
+- Sa personne est **Don Clímaco, le tisserand**, avec ses anecdotes, objectifs, 10 recherches, sa victoire et 7 nouvelles icônes (du mouton à la ruana).
+- La carte : le páramo avec un troupeau de **moutons** (blancs, quelques bruns et quelques noirs) qui paissent et marchent dans le pâturage, des ballots de laine, des frailejones, des eucalyptus et des pierres. Dans les stations : le bassin de pierre où l’on lave la laine étendue sur la clôture, celle qui carde assise sur le banc, le rouet qui tourne avec ses écheveaux colorés, le métier avec la ruana qui grandit bande par bande et la boutique avec les ruanas suspendues.
+
+## v3.25.0 — Boyacá : Paipa
+- **🧀 Paipa**, la quatrième zone de Boyacá, s’ouvre en terminant Ráquira : la Ferme laitière → la Cuve à caillé → les Moules à fromage → la Cave d’affinage (le fromage Paipa) → le Four à almojábanas. Les almojábanas se répartissent entre la **Table du piquete** (piquete boyacense) et le **Four en terre** (panier d’amasijos).
+- **Deux nouvelles routes** : la **Route des petites pommes de terre**, avec les sachets de papitas criollas du Papal pour le piquete et le panier, et la **Route de l’argile**, avec l’argile de Ráquira pour le four en terre. Chacune avec sa chiva et sa route.
+- Sa personne est **Doña Gertrudis, la fromagère**, avec ses anecdotes, objectifs, 11 recherches, sa victoire et 5 nouvelles icônes.
+- La carte : la ferme laitière avec des vaches holstein, des eucalyptus, des cyprès, des balles de foin et des frailejones. Dans les stations : la cuve à cailler, les cercles en bois qui laissent couler le petit-lait, la cave avec les meules de fromage qui dorent, le four à almojábanas à la bouche allumée, les longues tables du piquete avec les gens qui mangent en ruana et le four en terre dans la cour.
+
+## v3.24.0 — Boyacá : Ráquira
+- **🏺 Ráquira**, la troisième zone de Boyacá, s’ouvre en terminant La Cervecería. La Mine d’argile extrait l’argile et le Pétrissage la prépare ; l’argile se répartit entre les **Marmites en terre**, le **Tour** (qui passe les pièces au **Four à bois**, d’où sortent les jardinières peintes) et les **Cruches**, qui se remplissent de bière.
+- **Première route de Boyacá : la Route de la bière**, de la Brasserie aux Cruches de Ráquira, avec sa chiva et sa route sur les deux cartes.
+- Sa personne est **Doña Lucila, la potière**, avec ses anecdotes, objectifs, 11 recherches, sa victoire et 7 nouvelles icônes (avec le petit cheval de Ráquira).
+- La carte : la mine d’argile avec ses tas de terre rouge et les pelles plantées, des collines sèches avec des cactus et des pierres, des eucalyptus et des marmites mises en vente. Dans les stations : quelqu’un qui foule l’argile dans le bassin, les marmites noires qui sèchent en rang, le potier au tour avec la pièce qui monte, le four en coupole à la bouche allumée et le tonneau de bière à côté des cruches.
+
+## v3.23.0 — Boyacá : La Cervecería
+- **🍺 La Cervecería**, la deuxième zone de Boyacá, s’ouvre en terminant El Papal : le Champ d’orge → la Malterie → la Cuve de brassage → les Cuves de fermentation → l’Embouteilleuse ; de l’orge à la caisse de bière, en passant par le malt, le moût et la bière, avec des icônes originales.
+- Sa personne est **Don Hernando, le brasseur**, avec ses anecdotes, objectifs, 9 recherches et sa victoire.
+- La carte : le champ d’orge, qui se dore à chaque palier, des balles de paille, des eucalyptus et des cyprès. Dans les stations : le sol de la malterie avec l’orge que quelqu’un retourne et le four avec sa cheminée, la cuve en cuivre qui fume, les cuves en acier avec leurs bulles et le tapis de bouteilles à côté des caisses rouges.
+- Les zones à venir changent d’ordre pour que les routes s’emboîtent : Ráquira (qui fera des cruches en terre pour la bière), Paipa, Las Ruanas et Villa de Leyva.
+
+## v3.22.0 — Boyacá : El Papal
+- **Boyacá s’ouvre** ⛰️ en terminant Cartagena, avec sa propre économie (elle part de zéro et les autres régions continuent de produire).
+- Sa première zone, **🥔 El Papal** : le Champ de pommes de terre → le Lavoir à pommes de terre → la Trieuse → l’Éplucheuse → la Friteuse → l’Emballeuse de papitas → la Caisserie ; de la pomme de terre à la caisse de papitas criollas frites, avec des icônes originales pour chaque produit.
+- Sa personne est **Don Aurelio, le producteur de pommes de terre** (« Sumercé, bienvenue à Boyacá ! »), avec ses anecdotes, objectifs, 15 recherches et sa victoire.
+- La carte : la terre noire du haut plateau avec des plants de pommes de terre qui donnent des fleurs blanches et violettes à chaque palier ; des eucalyptus, des cyprès, des pierres et des frailejones du páramo. Dans les stations : la cuve du lavoir avec le tapis qui sort les pommes de terre, la table de tri avec les grosses, les moyennes et les petites, le tambour de l’éplucheuse, la friteuse qui dore les papitas, les sachets jaunes et les caisses empilées.
+- **Nouvelle musique : le Torbellino del altiplano**, avec tiple, requinto, guitare, basse et chucho.
+- Dans 🗺️ Zones, on voit les cinq à venir : La Cervecería, Las Ruanas, Paipa, Ráquira et Villa de Leyva.
+
+## v3.21.0 — La Costa complète : événements, album et succès
+- **Six nouveaux événements**, un par zone de la Costa, chacun avec sa scène sur le plateau qui change à chaque achat :
+  - 🐦 **Des oiseaux dans la rizière** : les volées au-dessus de l’eau ; des épouvantails avec un sombrero vueltiao, des rubans qui brillent au vent et les gardiens d’oiseaux qui applaudissent sur les diguettes.
+  - 🔪 **Machettes émoussées** au Cocal : le tas de noix de coco non épluchées diminue avec la pierre à aiguiser (et ses étincelles), les machettes neuves et l’éplucheuse.
+  - ✝️ **Semaine sainte** à la Ciénaga : tout le monde demande du poisson salé, frit et au coco ; des étals aux auvents violets, blancs et dorés.
+  - 🌧️ **Route inondée** à la Quesera : l’eau coupe la route et le riz n’arrive pas ; des pirogues, la chaloupe et le nouveau remblai.
+  - 👒 **Festival du chapeau** à Tuchín : la file de visiteurs, la machine prêtée, les pièces de rechange et les couturières.
+  - 🛳️ **Un paquebot est arrivé** à Cartagena : la file de touristes sur le quai et les bateliers de Bocachica.
+- **Album de la Costa** : six pages (le riz, la noix de coco, la ciénaga, la savane, le chapeau et Cartagena) avec 36 images, de l’aigrette blanche aux îles du Rosaire.
+- **Succès de la Costa** : riziculteur, cocadera, pêcheur, plateau complet, chapelier, aux îles et les habituels.
+- **La Costa est terminée** : en terminant Cartagena, elle a sa deuxième fin et son redémarrage, ses événements apparaissent dans toutes ses zones et elle donne la prime de médailles. Si tu avais déjà terminé Cartagena, en ouvrant cette version la région est terminée.
+
+## v3.20.0 — La Costa : Cartagena
+- **🏰 Cartagena**, la dernière zone de la Costa, s’ouvre en terminant El Sombrero. Comme Barichara, elle n’a pas de source propre : chaque station reçoit le produit final d’une zone côtière.
+  - Le **Foyer de Getsemaní** fait du riz au coco avec les sacs de la Rizière.
+  - Le **Restaurant de la muraille** sert le dîner avec les cocadas du Cocal en dessert.
+  - L’**Hôtel colonial** vend la nuit dans la ville fortifiée, avec le souvenir du Sombrero.
+  - La **Cuisine de la baie** sert le déjeuner avec le poisson au coco de la Ciénaga.
+  - Les **Paniers de la promenade** emportent en plus le déjeuner côtier et le plateau de la Quesera.
+  - Le **Quai des vedettes** expédie les **excursions aux îles du Rosaire**.
+- **Six nouvelles routes** vers Cartagena, une depuis chaque zone, avec leurs routes sur les cartes.
+- Sa personne est **Doña Dionisia, la palenquera**, avec ses anecdotes, objectifs, 10 recherches, sa victoire et 7 nouvelles icônes (avec la Tour de l’Horloge).
+- La carte : des maisons coloniales colorées aux balcons en bois et aux bougainvilliers, des cocotiers, la place en pierre corallienne, un pan de muraille avec sa guérite et les tables aux bougies dessus, et le quai avec les vedettes qui partent vers les îles.
+- La Costa a maintenant ses six zones. Ses événements, son album, ses succès et sa deuxième fin arrivent dans la prochaine version.
+
+## v3.19.0 — La Costa : El Sombrero
+- **👒 El Sombrero**, la cinquième zone de la Costa (Tuchín, terre zenú), s’ouvre en terminant La Quesera : le Champ de caña flecha → le Raclage de la canne → les Teintures à la boue → les Tresseuses → la Couture du chapeau → le **Relais de Tuchín**, qui vend le Souvenir de la Costa : des sombreros vueltiaos avec du poisson salé pour le voyage et du poisson frit pour la route.
+- **Deux nouvelles routes depuis la Ciénaga** : la **Route du poisson salé** et la **Route du poisson frit**, avec leur chiva et leurs routes.
+- Sa personne est **Don Eliécer, l’artisan**, avec ses anecdotes, objectifs, 10 recherches, sa victoire et 7 nouvelles icônes (du plant de caña flecha au sombrero vueltiao).
+- La carte : le champ de caña flecha avec ses épis plumeux (plus à chaque palier), des chapeaux suspendus à des perches au bord du chemin, des samans, des palmiers et des hérons. Dans les stations : celle qui racle la feuille, la marmite noire de la teinture et les fibres blanches et noires au soleil, les tresseuses assises dans la galerie, la machine à coudre avec le chapeau qui tourne et le kiosque du relais avec les chapeaux suspendus et le poisson sur la corde.
+
+## v3.18.0 — La Costa : La Quesera
+- **🧀 La Quesera**, la quatrième zone de la Costa, s’ouvre en terminant La Ciénaga : l’Enclos de traite → la Cuve à caillé → le Moulin à caillé → la Presse à fromage → la Marmite du mote. Le mote de fromage se répartit entre la **Fonda côtière** (déjeuner côtier) et la **Cuisine du plateau** (plateau côtier).
+- **Deux nouvelles routes** : la **Route du riz**, avec les sachets de riz de la Rizière pour la Fonda et la Cuisine, et la **Route du poisson**, avec le poisson nettoyé de la Ciénaga pour le plateau. Chacune avec sa chiva et sa route.
+- Sa personne est **Doña Rosmira, la fromagère**, avec ses anecdotes, objectifs, 11 recherches, sa victoire et 8 nouvelles icônes.
+- La carte : pâturage de savane avec des **vaches zébu** (blanches ou grises, avec leur bosse) et quelque romosinuana rousse, des samans, des hérons garde-bœufs et des palmiers. Dans les stations : la bassine où l’on remue le caillé, le moulin à manivelle, la presse à levier avec ses pierres et le petit-lait qui coule, la marmite du mote sur le foyer à trois pierres avec le tas d’igname, la fonda avec ses tables rouges et la serveuse, et la cuisine des plateaux.
+
+## v3.17.0 — La Costa : La Ciénaga
+- **🛶 La Ciénaga**, la troisième zone de la Costa, s’ouvre en terminant El Cocal. Les Pirogues de pêche sortent le bocachico ; le Nettoyage le prépare et le poisson nettoyé se répartit entre le **Saloir** (poisson salé), la **Fileteuse** et la **Fritanga** (poisson frit avec patacón) et la **Cuisine du poisson au coco**.
+- **Première route de la Costa : la Route du lait de coco**, du Cocal à la Cuisine de la Ciénaga, avec sa chiva et sa route sur les deux cartes.
+- Sa personne est **Don Aníbal, le pêcheur**, avec ses anecdotes, objectifs, 11 recherches et sa victoire.
+- La carte : l’eau de la ciénaga avec des jacinthes d’eau, un quai en planches et des pirogues qui se balancent pendant que les pêcheurs lancent l’épervier (plus de pirogues à chaque palier) ; des hérons, des filets mis à sécher, des fromagers et des palmiers. Dans les stations : l’urubu qui attend les tripes, les séchoirs de poisson salé au soleil, le chaudron de la fritanga et les marmites en terre qui fument.
+
+## v3.16.0 — La Costa : El Cocal
+- **🌴 El Cocal**, la deuxième zone de la Costa, s’ouvre en terminant El Arrozal : la Cocoteraie → l’Éplucheuse de noix de coco → la Râpe → la Presse à coco → la Bassine à cocadas ; de la noix de coco verte à la cocada, en passant par la noix de coco épluchée, la râpée et le lait de coco, avec des icônes originales.
+- Sa personne est **Doña Eulalia, la cocadera**, avec ses anecdotes, objectifs, 9 recherches et sa victoire.
+- La carte : le sable du golfe de Morrosquillo, des cocotiers qui donnent plus de noix à chaque palier, des noix tombées, des bananiers et quelque fromager ; celui qui épluche à la machette sous l’abri, la râpe, la presse qui fait couler le lait dans le seau et la bassine en cuivre qui fume à côté des plateaux de cocadas.
+
+## v3.15.0 — La Costa : El Arrozal
+- **La Costa s’ouvre** 🌴 en terminant Barichara, avec sa propre économie (comme Santander, elle part de zéro et les autres régions continuent de produire).
+- Sa première zone, **🌾 El Arrozal** (Montería et Mompox) : la Rizière → le Séchoir à riz → la Décortiqueuse → la Polisseuse → la Trieuse → l’Emballeuse de riz → la Sacherie ; du riz paddy au sac de riz, avec des icônes originales pour chaque produit.
+- Sa personne est **Don Abelardo, le riziculteur**, avec ses anecdotes, objectifs, 15 recherches et sa victoire.
+- La carte : la rizière inondée, avec des diguettes et des plants qui montent en épi à chaque palier ; des fromagers, des cocotiers, des aigrettes blanches et des bananiers ; chaque bâtiment avec ses gens (l’aire de séchage avec son râteau, la balle de riz qui vole, les tamis, les sacs qui s’empilent).
+- **Nouvelle musique : la Cumbia de la rizière**, avec gaita, guacharaca, llamador, tambora, tambour alegre, basse et guitare.
+- Dans 🗺️ Zones, on voit les cinq zones à venir : El Cocal, La Ciénaga, La Quesera, El Sombrero et Cartagena. En attendant, La Costa n’a pas de deuxième fin, ni d’événements, d’album ou de succès.
+
+## v3.14.0 — Les événements se voient sur la carte
+- Chaque événement a sa scène sur le plateau, et **elle change à chaque achat** :
+  - 🪲 **Le scolyte** : les petits coléoptères marchent dans la caféière ; apparaissent les pièges rouges, les petits nuages du champignon et à la fin les paniers du re-re, sans un scolyte.
+  - 🔥 **La grande moulure** : la bagasse mouillée fume gris et le feu est faible ; le séchoir à bagasse, les briques neuves et le soufflet, avec un bon feu.
+  - 🪨 **Glissement de terrain sur la route** : la terre et les pierres bouchent la route de la panela ; les mules passent par la montagne, puis une voiture par la piste et à la fin la route est dégagée et goudronnée.
+  - 🎉 **Fête du maïs** : la plaque fendue et la file de gens affamés, qui raccourcit avec la plaque prêtée, le bois et les voisines.
+  - 🚢 **Le bateau** : la grue tordue avec son panneau de danger ; les pièces de rechange, la grue qui monte les conteneurs et les dockers de l’équipe en plus.
+  - 🪰 **La mouche des fruits** : les mouches et les fruits tombés ; des pièges jaunes, des goyaves ensachées et des paniers.
+  - 💧 **Humidité dans le séchoir** : il pleut d’un nuage gris et il y a de la brume ; l’air des aérations, les foyers de séchage et le nouveau toit.
+  - 🌊 **Crue du fleuve** : le fleuve traverse la route et a emporté le pont ; des mules par le gué, le bac et le nouveau pont.
+  - 🎒 **Touristes** et 🥾 **Week-end férié** : la file de randonneurs qui raccourcit à chaque achat, avec les guides et leurs petits drapeaux.
+  - 🧀 **Foire au bétail** et 🧺 **Foire artisanale** : des fanions et un étal de foire par achat.
+- Pour le glissement de terrain et la crue, la caméra se décale pour qu’on voie la route.
+
+## v3.13.0 — Les gens de chaque zone, tes médailles et des animaux
+- **La personne de chaque zone est sur la carte** (Don Jairo, Doña Inés…), à côté du panneau de la zone, et aussi sur les plateaux des événements. En la touchant, elle répète la dernière chose qu’elle a dite, si elle s’applique encore ; chaque toucher suivant passe à un autre message qui s’applique : ce qu’on peut déjà construire, l’événement qu’on peut jouer, la nuit ou le déjeuner, les problèmes de ses stations, la saison ou une anecdote de sa zone. Dans un événement, elle dit ce qui le freine et quoi acheter.
+- **Tes médailles :** dans 🏅 Événements, il y a une liste avec la meilleure médaille de chacun des 12 événements. Avec tous les événements d’une région en **bronze ou mieux**, tu gagnes **5 ⭐** ; en **argent ou mieux**, **10 ⭐** ; tous en **or**, **20 ⭐** (une fois chacun).
+- **Des animaux :** dans 🎨 Décorer, on achète des **chats** (50 ⭐, jusqu’à 10) et des **perroquets** (40 ⭐, jusqu’à 5) pour chaque région. Ils se promènent sur la carte : les chats flânent et se couchent pour dormir, les perroquets volent d’un côté à l’autre et, de temps en temps, un chat court après un perroquet.
+## v3.12.0 — Salento, des lumières sur la route et une deuxième fin plus complète
+- **Le Village est maintenant Salento**, et il lui ressemble : des maisons blanches à deux étages avec des portes et des balcons de couleurs vives, plus de palmiers à cire et la Maison du café avec des finitions colorées.
+- **Chaque zone affiche son nom** sur un panneau au bord de la route, avec la région en dessous.
+- **Des lumières la nuit :** les Willys et les chivas allument leurs phares (et le feu rouge arrière) quand ils roulent.
+- **Événements :** le panneau de la station touchée dit combien elle rend et pourquoi (« 🪲 La Caféière produit à 40 % à cause du scolyte », « 🪨 La Table du chocolat reçoit 0 % de panela à cause du glissement de terrain ») et quoi acheter ; la barre de l’événement le montre aussi, et elle monte à chaque achat.
+- **Recommencer n’enlève pas les événements** : les plateaux en cours et leurs emplacements restent tels quels.
+- **Une deuxième fin plus complète :** en plus de toutes les stations au niveau 100, elle demande **leurs muletiers** et **les routes** qui apportent ce qui vient d’autres zones au niveau 100, **tous les objectifs** encaissés et **toutes les recherches** achetées. La carte de la deuxième fin montre où en est chaque chose. Si tu l’avais déjà avec l’ancienne règle et qu’il te manque quelque chose, elle revient quand tu la complètes.
+- **En terminant Santander** (ou n’importe quelle région), la carte de la deuxième fin et son bouton pour recommencer apparaissent dans les objectifs, comme dans l’Eje Cafetero ; avant, ils n’apparaissaient qu’avec le Village.
+- **Le Composteur apparaît dans la chaîne** 🔗, comme une branche à part du Beneficiadero, avec ce qu’il ajoute à la valeur de ce que vend la Finca.
+- **Recherches bloquées :** en les touchant, tu vas à ce qui leur manque (la station à construire ou à améliorer, ou ses muletiers).
+- **Options de développeur :** les redémarrages simulés concernent la région que tu regardes, pas seulement l’Eje Cafetero.
+- Le total de Renom gagné s’appelle maintenant **Prestige** 🏆.
+
+## v3.11.0 — Redémarrages avec Renom et total gagné
+- **Chaque redémarrage donne 10 ⭐ de Renom**, celui de n’importe quelle région. L’écran pour recommencer le dit.
+- **Renom gagné au total.** Tout le Renom que tu as gagné est gardé, même si tu l’as déjà dépensé, et il s’affiche dans la fenêtre du Renom (« 🏆 Gagné au total ») et dans celle des événements. Pour les anciennes parties, il est calculé avec les médailles, les succès et les pages de l’album que tu avais déjà.
+
+## v3.10.1 — Niveau maximum 50 dans les événements
+- Sur les plateaux des événements, les stations, les muletiers et l’expédition montent jusqu’au **niveau 50** (dans la partie, c’est toujours 100). Le panneau le dit (« Niveau maximum de l’événement (50) ») et l’amélioration recommandée ne propose plus de monter au-delà.
+
+## v3.10.0 — Chaque région avec ce qui lui est propre
+- **Album de Santander.** Six nouvelles pages (le bocadillo, le tabac, le fique, le hato, les fourmis et Barichara) avec 36 images : la feuille de bijao, Vélez, le séchoir à tabac, la rouleuse, Curití, la pepitoria, le canyon du Chicamocha, le tiesto, San Gil, le pisé, le Camino Real… Le deuxième Willys de chaque région demande l’album de cette région.
+- **Décoration par région.** Chaque région se peint à part : la couleur des Willys, le bât, la chiva et les fanions s’achètent et se choisissent dans chacune. Ce que tu avais déjà reste dans l’Eje Cafetero.
+- **Succès par région.** Santander a les siens, avec ses produits (caisses de bocadillo, cigares, espadrilles, fiambres, souvenirs et excursions à Guane), et dans chaque région les médailles, l’album et les recherches ne comptent que celles de cette région.
+- **Journée par région.** Les heures de travail en plus s’achètent à part pour chaque région. Si tu avais déjà acheté des tranches, chaque région démarre avec elles.
+- Le Renom ⭐ et les heures hors ligne restent à toi, pour toutes les régions. Dans la fenêtre du Renom, on choisit la région en haut (elle commence sur celle où tu joues).
+- **Horloge de l’événement.** En touchant l’horloge dans un événement, la journée et les saisons n’apparaissent plus : le plateau a sa propre horloge et travaille tout le temps.
+
+## v3.9.0 — Le deuxième Willys
+- **Avec l’album complet, un deuxième Willys.** Dans 🏅 Événements › 📖 Album, il s’achète pour chaque région (⭐ 20 l’Eje Cafetero et ⭐ 20 Santander). Dès lors, chaque zone de cette région a **deux Willys** qui partent chacun de leur côté avec la même charge par trajet : **l’expédition vend le double**.
+- La **route s’élargit à deux voies** et chaque Willys roule sur la sienne, donc ils ne se heurtent pas. Le panneau de départ passe de l’autre côté de la route.
+- Le deuxième Willys **se peint à part** : dans 🎨 Décoration apparaît « Couleur du deuxième Willys » (il sort rouge, pour le distinguer).
+- Il appartient à la région : on ne le perd pas en la recommençant. Sur les plateaux des événements, il n’y a toujours qu’un seul Willys.
+
+## v3.8.2 — La recommandation des événements propose leurs achats
+- Sur le plateau d’un événement, l’**amélioration recommandée** ne propose plus de recherches de la zone (comme les Fers à cheval), qu’on ne peut pas acheter là.
+- Elle recommande maintenant les **achats de l’événement** : le suivant dès que l’argent suffit et, avec la médaille déjà assurée, celui qui manque même si l’argent ne suffit pas encore. En touchant la recommandation, son bouton est signalé dans la barre de l’événement et elle dit ce qu’il fait.
+
+## v3.8.1 — Les succès et Santander toujours sous la main
+- **Les succès, l’album, la décoration et les heures se voient après un redémarrage.** Le bouton 🏅 Événements (où ils se trouvent) n’apparaissait que s’il y avait un événement ouvert, et en recommençant il n’y en avait pas. Maintenant il apparaît dès que tu as du Renom, des médailles ou des succès, ou que tu as déjà redémarré.
+- **Santander ne se perd pas.** Si tu as déjà terminé l’Eje Cafetero une fois, Santander reste ouvert même si tu redémarres, sans avoir à terminer de nouveau le Village.
+- En terminant de nouveau le Village, l’écran de fin propose aussi **Aller à Santander**. Si tu choisis de rester, il te rappelle que tu peux y aller quand tu veux avec le bouton 🗺️ des zones.
+
+## v3.8.0 — Nouvelle journée et événements de la région terminée
+- **Nouvelle journée : de 6 h à 12 h et de 14 h à 20 h**, avec l’heure du déjeuner au milieu (ce sont toujours 12 h de travail par jour, donc le rythme du jeu ne change pas). Les panneaux et les gens préviennent quand c’est l’heure du déjeuner et à quelle heure le travail reprend.
+- **Plus d’heures de travail avec le Renom ⭐.** Dans 🏅 Événements › ⏰ Heures, on achète des tranches de 2 h, chacune au double de la précédente : 20–22 (2 ⭐), 4–6 (4 ⭐), 22–24 (8 ⭐), 2–4 (16 ⭐), le déjeuner 12–14 (32 ⭐) et 0–2 (64 ⭐), jusqu’à travailler 24 heures. Elles sont à toi : elles valent dans toutes les régions et ne se perdent pas en recommençant. Elles sont à part des heures hors ligne.
+- **Événements de la région terminée.** Quand tu termines la dernière zone d’une région (le Village ou Barichara), ses événements continuent d’apparaître dans **toutes ses zones** pour toujours, même si tu recommences et que seule la première est ouverte. Si tu l’avais déjà terminée ou redémarrée, c’est ainsi après la mise à jour.
+- Recommencer l’Eje Cafetero laisse toujours Santander ouvert, comme avant.
+
+## v3.7.0 — Événements par emplacements et heures hors ligne du joueur
+- **Des événements plus espacés.** Chaque région a **2 emplacements** d’événements (l’Eje Cafetero et Santander, chacun les siens).
+  - En terminant un événement, son emplacement reste **vide 3 ans de jeu** (environ 6 h 24 min) ; les deux emplacements vont chacun de leur côté.
+  - Quand un emplacement se remplit, sort d’abord une zone dont tu **n’as jamais joué** l’événement ; s’il n’y en a pas, celle qui n’a pas été jouée depuis le plus longtemps.
+  - Les événements déjà sortis **n’expirent pas** : ils attendent que tu les joues. Chaque zone fait avancer son défi (1, 2, 3 et de nouveau le 1) quand tu le termines, ainsi aucun ne se perd.
+  - La fenêtre des événements montre d’abord ceux qu’on peut jouer, et pour les autres combien de temps il reste avant qu’un emplacement se libère.
+- **Comment on gagne un événement.** En atteignant l’objectif, la **médaille est assurée** avec le temps de ce moment-là. Pour terminer l’événement, il faut en plus avoir acheté **ses trois améliorations** : le plateau reste ouvert et produit pour les payer, et en achetant la dernière arrivent la médaille et le Renom.
+- **Les heures hors ligne sont à toi.** Elles valent pareil pour toutes les régions et ne se perdent pas en recommençant aucune d’elles (avant, redémarrer l’Eje Cafetero les ramenait à 2 h même si Santander en avait plus, et le calendrier se décalait entre les régions). On commence à 2 h et on monte de 2 en 2 jusqu’à 24 h avec le Renom ⭐ (de 2 à 12 ⭐ par niveau), dans 🏅 Événements › ⏰ Heures.
+  - Les 12 recherches qui ajoutaient des heures (Contremaître, Trapichero, Intendant…) n’existent plus : si tu les avais, leurs pièces te sont rendues et ton profil démarre avec le plus grand nombre d’heures que tu avais dans n’importe quelle région.
+
+## v3.6.2 — La version web marche sans internet
+- La version web **s’ouvre sans internet** : le service worker qui le permet ne s’activait jamais (il était dans un « else if » derrière le lien vers l’APK, qui était toujours vrai avant). La version web continue de charger toute seule la dernière version publiée chaque fois qu’il y a internet.
+
+## v3.6.1 — L’application prévient quand il y a une nouvelle version
+- L’**application Android** vérifie à l’ouverture (et quand tu y reviens, toutes les quelques heures) s’il y a une version plus récente publiée. S’il y en a une, elle montre ses nouveautés avec deux boutons : **Mettre à jour** (télécharge le nouvel APK et Android demande de l’installer ; la partie est conservée) ou **Plus tard**.
+- Dans le menu de l’application, **Rechercher une mise à jour** vérifie sur le moment.
+- La version web ne change pas : elle charge toujours la dernière version publiée.
+
+## v3.6.0 — Événements de Santander
+- **Six nouveaux événements**, un par zone de Santander, chacun avec la mécanique de son équivalent de l’Eje Cafetero :
+  - 🪰 **La mouche des fruits** (Guayabera) : la Goyaveraie à 40 % ; des pièges avec appât, ensacher les goyaves et ramasser les fruits tombés.
+  - 💧 **Humidité dans le séchoir** (Tabacal) : avec tant de pluie, la feuille ne sèche pas ; des aérations, des foyers de séchage et un nouveau toit.
+  - 🧺 **Foire artisanale** (Fiquera) : des sacs, des espadrilles et des ballots à la fois.
+  - 🌊 **Crue du fleuve** (Hato) : le pont est tombé et le bocadillo n’arrive pas ; des mules par le gué, un bac et un nouveau pont.
+  - 🎒 **Saison des touristes** (Fourmis) : le papier des cornets est épuisé.
+  - 🥾 **Week-end férié** (Barichara) : le village plein de randonneurs et peu de guides pour le Camino Real.
+- Les médailles et le Renom gagnés à Santander vont au même profil que d’habitude ; la fenêtre des événements les montre par région.
+- Médailles calibrées comme les autres (l’or, le meilleur joueur automatique plus 9 %) ; le test qui vérifie que l’or est atteignable couvre les douze événements.
+- Les succès « De partout » et « En or » ont un niveau de plus : médaille et or dans 12 événements différents.
+## v3.5.0 — Santander complet : Barichara
+- **Barichara**, la sixième et dernière zone de Santander, s’ouvre en terminant les Fourmis. Comme le Village, elle n’a pas de source propre : elle vit de ce qui lui arrive des cinq autres zones par **six nouvelles routes**, et tout finit en **excursions par le Camino Real jusqu’à Guane**.
+  - Confiserie de la place (douceurs typiques avec le bocadillo de la Guayabera) → Café du parc (la fin de repas, avec un cigare du Tabacal) → Auberge (le séjour, avec un souvenir des Fourmis).
+  - Atelier de caisses (avec les ballots de la Fiquera) → Paniers du randonneur (avec le déjeuner et le fiambre du Hato) → Départ vers le Camino Real.
+  - Mêmes chiffres, objectifs et recherches que le Village, avec sa Maîtrise et sa Suprématie. Chaque produit qui arrive vaut autant que son équivalent du Village, donc l’équilibre est le même.
+- Elle ressemble au Village, mais **blanche, en pisé, avec la place en pierre jaune** ; des randonneurs avec leur panier sortent par le portail du Camino Real. Lucía, la guide, prévient de ce qui est important.
+- La deuxième fin de Santander est maintenant celle de Barichara : la terminer clôt la région.
+- Des icônes originales pour les douceurs typiques, la fin de repas, le séjour, la caisse assortie, le panier du randonneur et l’excursion ; les nouvelles stations ont leur son.
+- **Correction :** l’Association des tisserandes de la Fiquera (v3.2) avait le même identifiant que les Tisserandes de fique du Village, et l’une cachait l’autre : dans l’Eje Cafetero, acheter les Tisserandes de fique donnait 4 h hors ligne au lieu de doubler l’Atelier de paniers. Maintenant chacune a le sien (les parties sauvegardées se corrigent toutes seules) et un test vérifie qu’ils ne se répètent pas.
+
+## v3.4.0 — Santander : Las Hormigas
+- **Las Hormigas**, la cinquième zone de Santander, s’ouvre en terminant le Hato : la **hormiga culona**. Fourmilière → Table de nettoyage (sans ailes ni pattes) → Marmites de saumure → Tiesto en terre → Table des cornets → **Boutique de souvenirs**, qui compose le souvenir de Santander avec les sacs et les espadrilles de la Fiquera (deux nouvelles routes).
+- **On ne les récolte qu’à l’arrivée des pluies** 🌦️, comme en vrai : la Fourmilière produit alors ×4 (ce de toute l’année) et le reste de l’année elle ne produit rien. Ce qui n’a pas le temps de sortir est gardé dans le **garde-manger**, et les muletiers l’emportent vers la chaîne toute l’année : en moyenne, elle rend autant que les autres zones.
+  - La zone ouvre avec le garde-manger plein (la dernière récolte), pour ne pas démarrer à l’arrêt si elle s’ouvre hors saison.
+  - Doña Gloria, la fourmilière, annonce chaque arrivée des pluies, et sur la carte les reines s’envolent des fourmilières pendant la récolte.
+  - Si le garde-manger se vide avant l’heure, la personne et les panneaux disent qu’il faut attendre l’arrivée des pluies, et non monter de niveau.
+- Mêmes chiffres, objectifs et recherches que le Champ de maïs (Fourmilières soignées, Grandes marmites, Tiestos neufs, Gardienne de la fourmilière +4 h hors ligne, Hormiga culona d’origine…), avec sa Maîtrise et sa Suprématie.
+- Des icônes originales pour la hormiga culona, la nettoyée, la saumure, les grillées, le cornet et le souvenir ; les nouvelles stations ont leur son.
+- La deuxième fin de Santander passe aux Fourmis (il reste Barichara). Une partie avec le Hato terminé ouvre les Fourmis au chargement.
+
+## v3.3.2 — Chaque station sonne comme son métier ; on a le temps de lire les commentaires
+- **En entrant dans une station, on entend ce qu’elle fait** (synthétisé, comme le reste des sons) : des feuilles et des oiseaux dans les cultures, des meuglements dans le pâturage et le hato, de l’eau au beneficiadero, un moteur dans les moulins et les défibreuses, des bassines et des cafetières qui bouillent, du feu qui crépite dans les torréfacteurs et le grill, du vent sous les marquises, dans le séchoir à tabac et l’étendoir, des bulles graves dans la fermentation, un couteau à la boucherie et à la coupeuse, un clac-clac dans les métiers et les ateliers, des caisses qui s’empilent dans les emballeuses, un grésillement sur les plaques et dans les fondas, des tasses sur les tables, du sel qui tombe au saloir, la sirène du bateau au parc à conteneurs et le Willys qui démarre à l’entrepôt.
+- **Les commentaires des personnes durent selon la longueur du texte** (environ 75 ms par lettre, plus 3 s) : les longs ne disparaissent plus avant qu’on ait fini de les lire.
+  - Un message court qui arrive par-dessus (un objectif atteint, une nouvelle zone) ne les efface plus : il s’affiche puis le commentaire revient avec le temps qu’il lui restait.
+  - Si un autre commentaire arrive, il attend son tour.
+  - Toucher le message le ferme.
+
+## v3.3.1 — L’amélioration recommandée de l’événement reste dans l’événement
+- Toucher l’amélioration recommandée (ou « Aller au bâtiment » dans la chaîne) dans un événement menait à la partie principale quand on était entré dans l’événement depuis une autre zone : on comparait la zone de la station avec celle de la carte de la partie, et non avec celle du plateau. Maintenant elle ouvre la station du plateau, et sur le plateau on ne sort jamais vers une autre zone.
+
+## v3.3.0 — Santander : El Hato
+- **El Hato**, la quatrième zone de Santander, s’ouvre en terminant la Fiquera : la **carne oreada**. Élevage → Boucherie → Saloir → **Étendoir à séchage** (la viande pend au soleil et se balance au vent) → Grill. La viande grillée se répartit en deux branches :
+  - la **Table du déjeuner**, avec le bocadillo en dessert qui arrive de la Guayabera ;
+  - la **Charcuterie à fiambres**, qui enveloppe le déjeuner dans une feuille de bijao et l’attache avec la cabuya de la Fiquera.
+- Deux nouvelles routes : celle **du bocadillo** (depuis la Guayabera, qui a maintenant une route de sortie) et celle **de la cabuya** (depuis la Fiquera).
+- Mêmes chiffres, objectifs et recherches que la Cacaoyère (Pâturage amélioré, Scie électrique, Étendoir couvert, Grand gril, Vacher de confiance +4 h hors ligne, Carne oreada d’origine…), avec sa Maîtrise et sa Suprématie. Don Efraín, le vacher, prévient de ce qui est important.
+- Dans le pâturage paissent des **bouvillons** bruns, roux et gris (sans pis) près de la pierre à sel du bétail ; des samans d’ombre autour.
+- Des icônes originales pour la viande marinée, la séchée, la grillée, le déjeuner santandereano et le fiambre.
+- La deuxième fin de Santander passe au Hato (sa dernière zone pour l’instant). Une partie avec la Fiquera terminée ouvre le Hato au chargement.
+
+## v3.2.0 — Santander : La Fiquera
+- **La Fiquera**, la troisième zone de Santander, s’ouvre en terminant le Tabacal. Du Champ de fique sortent les feuilles ; la **Défibreuse** les racle et laisse la fibre, qui sèche sur l’étendoir et se répartit en trois branches :
+  - le **Métier à sacs** ;
+  - la **Fileuse** et l’**Espadrillerie** (semelle en fique, empeigne colorée) ;
+  - l’**Emballeuse de ballots**, qui enveloppe dans une toile de fique le tabac fermenté du Tabacal.
+- **Route du tabac**, la première de Santander : une chiva emporte le tabac fermenté du Tabacal à l’Emballeuse de ballots. Le Tabacal a maintenant sa route de sortie.
+- Mêmes chiffres, objectifs et recherches que la Laiterie (Engrais pour le fique, Défibreuse à moteur, Fileuse mécanique, Camion de piquets, Association des tisserandes +4 h hors ligne, Sac à café, Ballots d’exportation…), avec sa Maîtrise et sa Suprématie. Doña Carmen, la tisserande, prévient de ce qui est important.
+- Des icônes originales pour le plant de fique, la feuille, la fibre, la pelote de cabuya, les espadrilles, le sac et le ballot de tabac.
+- La deuxième fin de Santander passe à la Fiquera (sa dernière zone pour l’instant). Une partie avec le Tabacal terminé ouvre la Fiquera au chargement.
+
+## v3.1.1 — Événements : l’or, difficile mais possible
+- Les plateaux des événements **commencent avec de l’argent** : ce que coûte leur premier achat (400 dans Le scolyte, 2 400 dans La grande moulure… 20 M dans Le bateau). Avant, on commençait à 0 et pendant la première minute il n’y avait rien à faire pendant que le premier produit parcourait la chaîne.
+- Sur le plateau, l’**amélioration recommandée cherche à atteindre l’objectif**, pas à gagner plus de pièces : elle ne propose que les stations qui font ce qui manque encore (et les précédentes), leurs muletiers et, s’il faut vendre, l’entrepôt. Dans le Glissement de terrain, elle proposait la Chocolaterie, qui gardait la pâte et la panela du chocolat de table de l’objectif.
+- **Médailles recalibrées.** Avec les anciennes, même en jouant parfaitement on n’atteignait pas l’or dans 5 des 18 objectifs. Maintenant l’or est le temps du meilleur joueur automatique plus 9 % (de 8:15 à 14:00 selon l’objectif) et l’argent, 5 minutes de plus. Ce qui compte le plus, c’est la stratégie : économiser à temps pour le prochain achat de l’événement.
+- Un nouveau test vérifie que l’or de chaque objectif reste atteignable.
+
+## v3.1.0 — Santander : El Tabacal
+- **El Tabacal**, la deuxième zone de Santander, s’ouvre en terminant la Guayabera : Champ de tabac → Séchoir à tabac → Écôteuse → Piles de fermentation → Rouleurs. La feuille verte pend aux perches du séchoir jusqu’à devenir dorée, on lui enlève la nervure, elle fermente en piles (avec son thermomètre) et se roule à la main. Don Ramiro, le planteur de tabac, prévient de ce qui est important.
+  - Mêmes chiffres que le Trapiche, avec ses objectifs et ses recherches (Grand séchoir, Engrais pour le tabac, Chiva, Planteur de confiance, Tabac noir d’origine…).
+  - Des icônes originales pour le plant de tabac, la feuille verte, la séchée, l’écôtée, la manoque fermentée et le cigare roulé.
+- La Guayabera et le Tabacal ont leur **Maîtrise** (×4) et leur **Suprématie** (×8), comme les zones de l’Eje Cafetero.
+- La deuxième fin de Santander devient celle du Tabacal (sa dernière zone pour l’instant).
+- Une partie avec la Guayabera déjà terminée ouvre le Tabacal au chargement.
+- L’écran de fin dit « Aller au Tabacal » (avant « Aller à El… »).
+
+## v3.0.1 — La chaîne, en un seul diagramme
+- La fenêtre de la chaîne (🔗) n’a plus d’onglets : il reste **un seul diagramme** avec défilement.
+  - Les stations sont reliées par des **maillons de chaîne** qui descendent (en rouge là où ça freine, en bleu ce qui arrive d’autres zones).
+  - Sur chaque maillon figure **ce qui passe par seconde**, avec seulement l’icône et le nombre (« 🍒 12 »). Ce qui arrive d’autres zones aussi (« 🧂 0,05 »).
+  - Les cartes ne montrent que l’icône, le nom et le niveau.
+- **En touchant une station**, on n’y va plus : en bas apparaît **son détail** (ce qu’elle reçoit et transforme, ce qui arrive d’autres zones, ses muletiers, ce qui est dévié ou perdu et si c’est elle qui freine), avec des boutons pour **aller au bâtiment** ou à **ses muletiers**. L’entrepôt et ce qui arrive par les routes ont aussi leur détail.
+
+## v3.0.0 — Santander : La Guayabera
+- **Régions.** En terminant le Village s’ouvre **Santander**, une nouvelle région qui part de zéro avec **sa propre économie** : pièces, niveaux, recherches, objectifs, deuxième fin et redémarrage ×2. L’Eje Cafetero continue de produire, et **toutes les régions produisent en même temps** (hors ligne aussi).
+  - Sont partagés le Renom ⭐, l’album, la décoration, les succès et le **calendrier du pays** (la même heure et la même saison partout).
+  - Le sélecteur de zones 🗺️ les montre par région, avec les zones de Santander qui arrivent.
+  - Redémarrer une région à sa deuxième fin ne touche pas les autres.
+- **La Guayabera**, la première zone de Santander : le **bocadillo veleño**. Goyaveraie → Dépulpeuse de goyave → Bassine à bocadillo → Moules en bois → Coupeuse → Emballage en bijao → Caisserie. Terre rouge, plants de fique, goyaviers et cactus du canyon ; Doña Inés, la bocadillera, prévient de ce qui est important. Des icônes originales pour la goyave, la pulpe, le sirop, le bocadillo et la caisse.
+- **Musique de Santander :** la « Guabina du Chicamocha », plus lente et nostalgique, composée pour le jeu comme le bambuco. Elle change toute seule en passant d’une région à l’autre.
+- L’écran de fin du Village annonce Santander et y emmène.
+## v2.3.3 — Les recherches des autres zones en vue
+- Comme les ×2 se débloquent maintenant au niveau 25, beaucoup arrivent quand tu es déjà dans la zone suivante et restaient oubliées (dans la simulation, la Baratte de la Laiterie n’était jamais achetée et il manquait du beurre pour les arepas au fromage : le Champ de maïs prenait plus du double de temps).
+  - La fenêtre des 🔬 recherches montre, à part, celles que tu peux déjà rechercher **dans d’autres zones**, et le nombre du bouton les compte toutes.
+  - L’**amélioration recommandée** tient aussi compte des ×2 des zones qui approvisionnent celle que tu regardes, et dit de quelle zone elles sont.
+- L’objectif « Recherche : Dégustateurs experts » donne 1 500 M (avant 750 M) : maintenant il suffit pour la payer.
+
+## v2.3.2 — Recherches ×2 au niveau 25
+- Les recherches qui **doublent une station** (Engrais organique, Dépulpeuse électrique, Séchoir mécanique, Trapiche à moteur, Traite mécanique…) se débloquent quand **cette même station et ses muletiers 🐴 atteignent le niveau 25**. Avant, elles apparaissaient en construisant la station suivante. Le Composteur, qui n’a pas de muletiers, ne demande que son niveau.
+- Dans la fenêtre des recherches, celles qui manquent disent où elles en sont : « 🔒 Nv 25 et 🐴 25 · en est à 18 et 🐴 12 ».
+- Les objectifs qui demandaient une de ces recherches au début de chaque zone (Engrais organique, Trapiche à moteur, Traite mécanique, Greffes, Maïs hybride et Dégustateurs) passent après celui de « tout au niveau 25 », avec une récompense en conséquence, pour qu’ils ne bloquent pas la liste.
+
+## v2.3.1 — Écran de chargement
+- À l’ouverture du jeu apparaît tout de suite un **écran de chargement** (« Préparation de la finca… ») au lieu de l’écran figé.
+- Si tu étais absent, il dit combien de temps s’est écoulé et montre une **barre de progression** pendant qu’il calcule ce qui a été produit hors ligne (« 10 h 0 min se sont écoulées depuis la dernière fois… »). Avec une partie avancée et 24 h d’absence, sur un téléphone cela peut prendre plusieurs secondes : on n’a plus l’impression que le jeu est bloqué.
+- Pareil en revenant à l’application après un moment (pendant le calcul, le jeu attend).
+- Le calcul se fait maintenant par morceaux (il cède la main toutes les 40 ms) et donne exactement le même résultat qu’avant.
+
+## v2.3.0 — Succès
+- **🏆 Succès généraux** : 15 succès, de un à trois niveaux, qui **s’additionnent entre les parties** (ce qui précède un redémarrage continue de compter) et qui ne sont jamais de vitesse : vendre des sachets de café, produire de la panela, du fromage, du chocolat et des arepas, exporter des conteneurs, gagner des pièces, vivre des années de jeu, terminer le Village, atteindre la deuxième fin, gagner des médailles (et des ors) dans les événements, remplir des pages de l’album et faire des recherches.
+- Chaque niveau donne du **Renom ⭐** pour l’album et la décoration. On les voit dans la fenêtre du Renom, avec leur progression ; en obtenir un affiche le message.
+- Une ancienne partie reçoit d’un coup les succès qu’elle avait déjà.
+- Avec cela, la phase 3 est complète (événements, médailles, Renom, album, décoration et succès).
+
+## v2.2.0 — Album d’images et décoration
+- Le **Renom ⭐** peut maintenant se dépenser (depuis la fenêtre 🏅 Événements) :
+  - **📖 Album d’images**, comme celui des barres chocolatées mais sans pochettes au hasard : six pages (café, panela, lait, cacao, maïs et village) avec 36 images de ce qui entoure chaque produit en Colombie : le muletier, la cueilleuse, le carriel, le yipao, la melcocha, la cuajada au melao, le molinillo, le chocolat santafereño, la mazamorra, la chiva, le tinto… Tu choisis laquelle coller (1 à 3 ⭐) et chaque page complète donne 3 ⭐ de prime.
+  - **🎨 Décoration** : couleur du Willys, bât des mules, peinture de la chiva et fanions devant l’entrepôt. Le classique est gratuit ; le reste s’achète une fois et peut se changer quand tu veux. On le voit aussi sur les plateaux des événements.
+- Tout (l’album et la décoration) est conservé en recommençant, comme le Renom et les médailles.
+
+## v2.1.0 — Un événement dans chaque zone
+- Cinq nouveaux événements, un par zone (chacun s’ouvre quand tu as construit toutes les stations de sa zone, et sa personne l’annonce) :
+  - 🔥 **La grande moulure** (Trapiche) : le bois est épuisé et le Four cuit à 40 %. Séchoir à bagasse, four réparé et soufflet.
+  - 🐮 **Foire au bétail** (Laiterie) : on demande du fromage, du beurre et de l’arequipe à la fois. Moules neufs, baratte et bassine en cuivre accélèrent chaque branche.
+  - 🪨 **Glissement de terrain sur la route** (Cacaoyère) : la panela n’arrive pas, seulement celle en réserve. Des mules par la montagne, une piste et dégager la route.
+  - 🎉 **Fête du maïs** (Champ de maïs) : la grande plaque s’est fendue. Plaque prêtée, bois sec et les voisines qui aident.
+  - 🚢 **Le bateau part vendredi** (Village) : la grue du port est en panne. Pièces de rechange, grue réparée et équipe en plus.
+- Sur les plateaux, ce que la zone importe arrive « de l’extérieur » (il n’y a pas de routes à améliorer) et un objectif peut demander plusieurs produits : la barre montre où tu en es pour chacun.
+- Tous les objectifs calibrés pour 10–12 min avec un joueur attentif (🥇) et 5 min de plus pour 🥈.
+
+## v2.0.0 — Événements : Le scolyte
+- **Événements** 🏅 (nouveau bouton à gauche) : une fois par an, chaque zone a son événement, qui se joue sur un **plateau à part** avec les pièces de la zone, ses propres pièces de monnaie et niveaux et **sa propre horloge**, qui ne tourne que pendant que tu y joues (la partie continue pendant ce temps). On peut sortir et revenir ; s’il a été commencé, on peut le terminer même si l’année passe.
+- Selon la rapidité à atteindre l’objectif, **médaille** 🥇 d’or, 🥈 d’argent ou 🥉 de bronze, qui donnent du **Renom ⭐** (4, 2 et 1). Le Renom et les médailles **ne se perdent pas en recommençant** ; bientôt ils se dépenseront en décoration et dans l’album d’images.
+- Le premier événement : **🪲 Le scolyte**, à la Finca. Un petit coléoptère fait produire la Caféière à 40 % : contrôle-le avec 🪤 des pièges, 🍄 le champignon Beauveria et 🧺 le re-re pendant que tu sors la récolte. Chaque année l’objectif change (sachets de café, café torréfié, café vert).
+- L’événement s’ouvre quand tu as construit toutes les stations de la zone, et Don Jairo prévient.
+- Sur le plateau, la barre du bas montre l’objectif, l’horloge avec la médaille en cours, les temps de chaque médaille et les achats de l’événement.
+
+## v1.9.0 — Journée et saisons
+- **Journée de travail de 6 h à 18 h.** La nuit, les stations se reposent complètement (ce qui était à moitié fait reprend à l’aube) et les muletiers ne partent pas ; ceux qui sont en route terminent le trajet. Le Willys et les chivas continuent. Ce n’est pas compensé : le jeu devient plus long exprès.
+- **Saisons du pays**, sèches et des pluies, qui changent la production de **toutes les stations à la fois** (muletiers et routes s’ajustent tout seuls, donc la chaîne reste équilibrée) :
+  - ☀️ **Été** ×1,2 · 🌦️ **Arrivée des pluies** ×1 · 🌧️ **Hiver** ×0,8 · 🌤️ **Petit été** ×1.
+  - Chaque saison dure 4 jours (un jour, c’est 8 minutes) et l’année a 16 jours. Une nouvelle partie commence en été.
+- **Calendrier** : la saison est sous l’horloge ; toucher l’horloge montre l’heure, la saison, le jour et l’année et ce que rend chaque saison. Là et dans le panneau de la Caféière se trouve l’anecdote de la **mitaca**, la petite récolte de l’Eje Cafetero.
+- **Pluie** sur la carte : des averses de temps en temps à l’arrivée des pluies et presque tout le temps en hiver.
+- La personne de la zone annonce chaque nouvelle saison et, la première fois, que la nuit on ne travaille pas. La nuit, les panneaux le disent et la carte n’affiche pas de messages.
+- **Hors ligne** compte les nuits et les saisons : ce qui est simulé les inclut déjà et ce qui s’ajoute au-delà se répartit selon combien on travaille dans chaque tranche.
+- Équilibre mesuré (heures avec le jeu ouvert) : première fin 27 h 07 min (occasionnel) et 33 h 45 min (attentif), avant 13 h 31 min et 14 h 50 min ; deuxième fin 72 h 41 min et 51 h 37 min, avant 27 h 36 min et 25 h 07 min.
+
+## v1.8.7 — Une musique originale
+- La musique de fond est maintenant **originale** : « Bambuco de la finca », un bambuco en 3/4 composé pour le jeu (mi mineur, et la deuxième partie en sol majeur). Ce n’est pas un fichier : le jeu la joue avec des cordes synthétisées (Karplus-Strong) :
+  - **guitare** : basse au premier temps et grattage au deuxième et au troisième ;
+  - **tiple** : des coups courts et étouffés à contretemps, avec ses cordes par trois (deux à l’unisson et une à l’octave inférieure) ;
+  - **bandola** : la mélodie, en trémolo sur les notes longues.
+- Elle sonne avec un peu d’écho de salle, en boucle (53 s) et sans coupure entre deux tours.
+- « Apple Cider » (CC0) a été retiré : le jeu pèse 2,4 Mo de moins et tout (code, graphismes et musique) est sous licence MIT.
+- Chaque région aura son morceau (bambuco et pasillo ici ; guabina, cumbia, joropo et torbellino pour les régions futures).
+
+## v1.8.6 — Le Willys prend un tinto
+- Quand tout ce que produit une zone est emporté par la chiva vers une autre zone, le **Willys reste garé** et le chauffeur **prend un tinto** (avec sa petite vapeur). Le panneau de l’expédition l’explique : « Tout ce que produit la Finca est emporté par la chiva au Village ; le Willys ne part qu’avec ce qui reste ».
+- Au Village, les **gens se promènent sur la place** et la pelouse d’à côté, sans marcher dans les rues où passent les mules et les voitures. Avant, ils marchaient dans les rues et ceux de la place étaient dessinés (immobiles) ; maintenant tous marchent, et il y en a plus à chaque palier de la Maison du café.
+- Le **chien** ne poursuit plus le Willys à chaque départ : seulement une fois sur 5 à 15.
+- Plan futur dans le GDD : **d’autres régions** (Santander, Costa Caribe, Llanos, Altiplano), chacune avec son économie et son redémarrage.
+
+## v1.8.5 — Les sons de chaque zone
+- Des sons d’ambiance synthétisés (sans fichiers, comme les autres), selon la zone et l’heure :
+  - Dans les fincas, le **coq** chante à l’aube et les **poules** caquettent de temps en temps.
+  - Un **chien** aboie de temps en temps, dans toutes les zones.
+  - À la Laiterie, les **vaches** meuglent.
+  - Au Trapiche, le **trapiche** gronde pendant qu’il broie et le **miel bout** dans les bassines du Four (seulement s’ils travaillent).
+  - À la Cacaoyère, des **perroquets et des aras**.
+  - Au Village, les **cloches** de l’église à 6 h, à 12 h et à 18 h.
+- Avec cela, la phase d’ambiance est complète (v1.8) : des données réelles, les gens de chaque zone, la vie sur la carte, la chaîne en diagramme et les sons.
+
+## v1.8.4 — Diagramme de la chaîne
+- La fenêtre de la chaîne (🔗) a deux onglets : **🗺️ Diagramme** et **📋 Détail** (la liste d’avant, avec tous les chiffres). Le dernier utilisé est mémorisé.
+- Le **diagramme** est comme un plan de production : chaque station est une carte (avec son niveau et ce qu’elle produit), de haut en bas dans l’ordre de la chaîne, et les branches vont en colonnes, côte à côte. Des tuyaux où circule le produit relient chaque station à la suivante et toutes finissent à l’Entrepôt et Willys.
+  - Ce qui arrive d’**autres zones**, ce sont des étiquettes bleues au-dessus de la station qui l’utilise (« 🧂 🎋 Trapiche »), avec leur tuyau bleu.
+  - En **rouge**, ce qui freine la chaîne (la station, ses muletiers ou la route) ; en **gris avec cadenas**, la prochaine à construire.
+  - Chaque carte occupe la largeur des branches qu’elle a en dessous, pour que trois branches tiennent sur le téléphone. Toucher une carte ou une étiquette ouvre son panneau.
+
+## v1.8.3 — La vie sur la carte
+- Des **poules** qui picorent près de la maison de chaque finca.
+- Un **chien** dans la cour de l’entrepôt qui court après le Willys quand il part puis revient.
+- À la Laiterie, les **vaches** marchent et paissent dans le pâturage (avant, elles étaient immobiles) ; à chaque palier, il y en a plus.
+- Au Village, des **gens** qui marchent dans les rues (avec ou sans sombrero aguadeño) et des **pigeons** autour de la fontaine.
+- La nuit, les poules, les pigeons et les gens rentrent ; le chien et les vaches restent.
+## v1.8.2 — La chaîne, plus claire
+- La vue de la chaîne (🔗) est maintenant un arbre :
+  - Les stations sont reliées par des **maillons**, en ligne droite (avant, un trait pointillé qui se décalait sur le côté dans les branches).
+  - Quand une station répartit entre plusieurs, chaque **branche** va dans son propre bloc, de sa couleur, avec son nom : « Branche A · Cafetière à tintos → Fonda », « Branche B · Atelier de paniers → Emballage cadeau → Parc à conteneurs ». Avant, les branches se suivaient et on aurait dit que la Fonda passait son produit à l’Atelier.
+  - Ce qui arrive d’**autres zones** va dans une boîte bleue à part, qui entre dans la station : quel produit, depuis quelle zone, par quelle route et combien arrive (« Panela en poudre depuis 🎋 El Trapiche · Route de la panela vers le Village · arrivent 0,67/s »).
+  - La prochaine station à construire apparaît à sa place dans l’arbre, dans sa branche.
+
+## v1.8.1 — Heures hors ligne par zone
+- **Heures hors ligne** : chaque zone a maintenant sa recherche qui ajoute des heures aux gains hors ligne, et elles s’additionnent : Contremaître (Finca) +3 h, Trapichero de confiance (Trapiche) +3 h, Traite programmée (Laiterie) +4 h, Gardien de la cacaoyère +4 h, Voisine qui surveille la plaque (Champ de maïs) +4 h et Administrateur du Village +4 h. Avec la base de 2 h, **24 h** avec les six. (Le Contremaître donnait 6 h ; maintenant il donne 5 h jusqu’à l’achat de celle du Trapiche.)
+- **Options de développeur** : le temps accéléré ne multiplie plus le temps d’absence ; hors ligne compte à vitesse normale (le multiplier rendait le calcul du retour très long).
+- **Correction** : avec des tapis électriques, le tapis allait jusqu’à la porte de l’entrepôt en traversant la cour, et le Willys lui passait dessus. Maintenant il s’arrête avant la cour, contre le mur de l’entrepôt.
+
+## v1.8.0 — Des données réelles et les gens de chaque zone
+- **Données réelles** : le sous-titre du panneau de chaque station alterne, toutes les 7 secondes, entre ce qu’elle fait et une ou plusieurs données réelles (« En Colombie, le café se cultive entre 1 200 et 2 000 mètres d’altitude », « Le cacao fermente de 5 à 7 jours dans des caisses en bois »…). Il y en a au moins une pour chacune des 38 stations.
+- **Les gens de chaque zone** : Don Jairo (l’intendant de la Finca), Don Aurelio (le trapichero), Doña Marina (la trayeuse), Don Eliécer (le cacaoculteur), Doña Rosa (l’arepera) et Mateo (l’exportateur du Village). Ils souhaitent la bienvenue la première fois qu’on voit leur zone, préviennent quand l’argent suffit pour construire la station suivante et quand apparaît un problème qui dure (les mules ne suivent pas, la station suivante n’y arrive pas, l’entrepôt est plein, une station attend du produit…). Sans lasser : chaque station prévient au plus une fois toutes les 5 minutes et entre deux messages il passe au moins 45 secondes ; avec une fenêtre ouverte, ils attendent.
+- Le plan des prochaines versions (ambiance, journée et saisons, événements et insignes) est dans le document de conception.
+
+## v1.7.16 — Une icône pour chaque produit
+- Aucun produit ne partage d’icône et tous ressemblent à ce qu’ils sont. 19 nouvelles icônes originales :
+  - **Finca** : café lavé (grains clairs mouillés, avant 💧), pulpe (les peaux rouges ouvertes, avant 🟥), café parche (avec sa parche, avant 🟫 comme la pâte de cacao), café vert (avant 🟢), café torréfié (avant 🟤 comme le compost), café moulu (avant ☕ comme le tinto), sachet de café (paquet kraft avec son étiquette, avant 🛍️), compost (terre avec un ver et une pousse) et la Caféière comme un plant de café avec des cerises.
+  - **Trapiche** : bagasse (les fibres de la canne, avant 🌾 comme le maïs égrené).
+  - **Laiterie** : lait cru dans le bidon en aluminium.
+  - **Cacaoyère** : cabosse de cacao (avant une mangue 🥭) et pâte de cacao dans une calebasse.
+  - **Champ de maïs** : maïs égrené (grains jaunes), maïs pilé (grains blancs dans le pilon, avant ⚪) et pâte de maïs (avant 🥣).
+  - **Village** : café d’origine (sac en fique avec des grains torréfiés et la bande de la Colombie, avant 🫘 comme le cacao fermenté), petit-déjeuner paysan (arepa, œuf et chocolat ; aussi pour la Fonda) et conteneur d’exportation (aussi pour le Parc à conteneurs).
+- Recherches : Traitement écologique 🪱 (accélère le Composteur), Torréfaction d’origine 🏅 (augmente le prix, comme les autres), Chiva pour le Trapiche 🚚 (améliore l’expédition, pas une route) et Séchoir mécanique ☀️.
+
+## v1.7.15 — Améliorer une route
+- **Correction** : en montant de niveau une route (par exemple, ×10 sur celle du beurre, depuis son panneau ou depuis l’onglet 🚌 de la station), le coût était prélevé, mais le panneau continuait d’afficher l’ancien niveau jusqu’à ce qu’on le ferme et le rouvre ou qu’on change d’onglet. L’effet de la carte pour « a monté de niveau » cherchait la zone de la route comme si c’était une station, échouait et coupait l’achat en plein milieu (l’amélioration recommandée n’était pas recalculée non plus). Maintenant, la montée de niveau d’une route se fête sur la station qu’elle approvisionne, si elle est dans la zone affichée.
+- Plus robuste : si quelque chose échoue en signalant un événement ou en dessinant une image, le reste continue (avant, une erreur dans une image pouvait arrêter le jeu jusqu’au rechargement).
 
 ## v1.7.14 — Arepas
-- **Arepa** sola con ícono propio: una arepa grande, dorada y tostada en el budare, en vez del pan plano (🫓).
-- **Arepas de queso**: el queso blanco derretido ahora rebasa el borde de la arepa y chorrea por el canto.
-- `src/data/icons.js` lo genera ahora `tools/icons/build_icons.py` junto con la fuente.
+- **Arepa** seule avec une icône originale : une grande arepa, dorée et grillée sur la plaque, au lieu du pain plat (🫓).
+- **Arepas au fromage** : le fromage blanc fondu dépasse maintenant le bord de l’arepa et coule sur la tranche.
+- `src/data/icons.js` est maintenant généré par `tools/icons/build_icons.py` avec la police.
 
-## v1.7.13 — Más íconos propios
-- **Cacao seco**: granos color canela secándose en una estera, para distinguirlo del fermentado (🫘). El **cacao tostado** también tiene el suyo: granos oscuros en el tiesto, con humo. Así los tres pasos del cacao se ven distintos.
-- **Chocolatina con leche**: una barra de chocolate con leche, medio desenvuelta en su papel azul, en vez del dulce (🍬). También para la Chocolatería y la Temperadora.
-- **Arepas de queso**: dos arepas doradas, tostadas en el budare, con el queso blanco derretido, en vez del sándwich (🥪). También para el Puesto de arepas y la Plancha doble.
+## v1.7.13 — Plus d’icônes originales
+- **Cacao sec** : des grains couleur cannelle qui sèchent sur une natte, pour le distinguer du fermenté (🫘). Le **cacao torréfié** a aussi la sienne : des grains foncés dans le tiesto, avec de la fumée. Ainsi les trois étapes du cacao se voient différentes.
+- **Barre au chocolat au lait** : une barre de chocolat au lait, à moitié déballée dans son papier bleu, au lieu du bonbon (🍬). Aussi pour la Chocolaterie et la Tempéreuse.
+- **Arepas au fromage** : deux arepas dorées, grillées sur la plaque, avec le fromage blanc fondu, au lieu du sandwich (🥪). Aussi pour l’Étal d’arepas et la Double plaque.
 
-## v1.7.12 — El segundo final, después del primero
-- Para el segundo final (todas las estaciones al nivel 100) ahora también hace falta el primero: el Pueblo completo, con los 7.000 contenedores exportados y cobrados. Antes se podía llegar al segundo final teniendo todo al 100 sin haber terminado el Pueblo.
-- Si ya está todo al 100 cuando se cobra el final del Pueblo, primero sale su pantalla y, al cerrarla, la del segundo final.
+## v1.7.12 — La deuxième fin, après la première
+- Pour la deuxième fin (toutes les stations au niveau 100), il faut maintenant aussi la première : le Village terminé, avec les 7 000 conteneurs exportés et encaissés. Avant, on pouvait atteindre la deuxième fin avec tout à 100 sans avoir terminé le Village.
+- Si tout est déjà à 100 quand on encaisse la fin du Village, son écran apparaît d’abord et, en le fermant, celui de la deuxième fin.
 
-## v1.7.11 — La Quesera no se queda atrás
-- **Arreglo**: una estación por debajo del nivel de la anterior no recibía nada si su entrada no alcanzaba para una carga entera de las mulas (por ejemplo, la Quesera en 45 con la Pasteurizadora en 50: las mulas llevan 270 de leche y a la Quesera le caben 58). Se quedaba parada con ⏸️ y la leche se vendía. Ahora se le lleva lo que quepa en cuanto tiene media entrada libre, y procesa todo lo que puede.
-- La Pasteurizadora reparte su leche en cuatro cuartos: uno para la Quesera, uno para la Descremadora, uno para la Paila y el último para la **Ruta de la leche** del Cacaotal. Mientras el Cacaotal no abre, ese cuarto se vende como leche, y el juego lo mostraba como un problema: ↪️ en la Pasteurizadora todo el tiempo y «reparte más de lo que procesan sus ramas… mejórala» en la Quesera y las otras ramas, aun con todo al mismo nivel. Ahora no:
-  - La Pasteurizadora no se marca con ↪️ y su panel dice que su parte para la Ruta de la leche se vende hasta que abra el Cacaotal.
-  - Una rama solo se marca como atrasada si procesa menos que lo que le toca («A esta rama le tocan 33,7/s y procesa 6,9/s»).
-  - En la cadena (🔗), esa leche aparece aparte («🚌 … a la bodega: se venden hasta que abra la Ruta de la leche») y en rojo solo lo que pase de ahí.
+## v1.7.11 — La Fromagerie ne reste pas à la traîne
+- **Correction** : une station en dessous du niveau de la précédente ne recevait rien si son entrée ne suffisait pas pour une charge entière des mules (par exemple, la Fromagerie au 45 avec la Pasteurisatrice au 50 : les mules portent 270 de lait et la Fromagerie peut en prendre 58). Elle restait arrêtée avec ⏸️ et le lait était vendu. Maintenant on lui apporte ce qui rentre dès qu’elle a la moitié de son entrée libre, et elle transforme tout ce qu’elle peut.
+- La Pasteurisatrice répartit son lait en quatre quarts : un pour la Fromagerie, un pour l’Écrémeuse, un pour la Bassine et le dernier pour la **Route du lait** de la Cacaoyère. Tant que la Cacaoyère n’est pas ouverte, ce quart est vendu comme lait, et le jeu le montrait comme un problème : ↪️ sur la Pasteurisatrice tout le temps et « répartit plus que ce que transforment ses branches… améliore-la » sur la Fromagerie et les autres branches, même avec tout au même niveau. Plus maintenant :
+  - La Pasteurisatrice n’est pas marquée ↪️ et son panneau dit que sa part pour la Route du lait est vendue jusqu’à l’ouverture de la Cacaoyère.
+  - Une branche n’est marquée en retard que si elle transforme moins que ce qui lui revient (« À cette branche reviennent 33,7/s et elle transforme 6,9/s »).
+  - Dans la chaîne (🔗), ce lait apparaît à part (« 🚌 … vers l’entrepôt : vendu jusqu’à l’ouverture de la Route du lait ») et en rouge seulement ce qui dépasse.
 
-## v1.7.10 — Ventanas más altas
-- Las ventanas de investigaciones, objetivos, zonas y cadena siguen teniendo alto fijo, pero ahora usan todo el alto de la pantalla (hasta 900 px) en vez de 640 px. En la v1.7.6 se habían quedado más bajas que antes y, en el teléfono, investigaciones como «Cuajo de calidad» (la ×2 de la Quesera, la sexta de la Lechería) quedaban más abajo, sin verse a menos que se bajara en la lista.
-- Cualquier ventana más alta que la pantalla (el menú ⚙️ con las opciones abiertas, en un teléfono pequeño) se puede bajar con el dedo.
+## v1.7.10 — Des fenêtres plus hautes
+- Les fenêtres des recherches, des objectifs, des zones et de la chaîne ont toujours une hauteur fixe, mais elles utilisent maintenant toute la hauteur de l’écran (jusqu’à 900 px) au lieu de 640 px. Dans la v1.7.6, elles étaient devenues plus basses qu’avant et, sur le téléphone, des recherches comme « Présure de qualité » (le ×2 de la Fromagerie, la sixième de la Laiterie) se retrouvaient plus bas, invisibles à moins de faire défiler la liste.
+- Toute fenêtre plus haute que l’écran (le menu ⚙️ avec les options ouvertes, sur un petit téléphone) peut défiler avec le doigt.
 
-## v1.7.9 — Íconos propios, mulas y Willys nuevos
-- **Íconos propios** para los productos que no tenían un emoji parecido, dibujados para el juego:
-  - Cereza de café: un racimo de granos ovalados rojos con su «ombligo» (y uno todavía verde) en la rama con hojas, en vez de la cereza común.
-  - Guarapo: vaso de jugo de caña verde amarillento con espuma, hielo, limón y un trozo de caña, en vez del vaso de agua.
-  - Panela: bloque de molde, café dorado, sobre hoja seca de plátano.
-  - Panela pulverizada: dorada y amarilla, en una totuma, en vez del salero (parecía azúcar).
-  - Lechería: queso campesino **blanco** sobre hoja de plátano (en vez del queso amarillo), botella de leche (en vez del tetero) y pote de crema de leche con cuchara (en vez del cono de helado). También para la Quesera, la Descremadora y sus investigaciones. La mantequilla sigue igual.
-  - Son una fuente de color hecha con `tools/icons/build_icons.py`, así que se ven en todos lados: paneles, objetivos, cadena y textos del mapa.
-- **Willys** redibujado: ahora mira hacia donde va (antes, en dos de las cuatro direcciones iba en reversa), con capó, parrilla y faros adelante, parabrisas bajo, el conductor de sombrero, el platón abierto con los bultos y la llanta de repuesto atrás. Ya no parece una volqueta.
-- **Mulas** redibujadas: cabeza larga de hocico oscuro y orejas de mula, crin, cola, cascos, enjalma de colores y costales de fique amarrados con la franja del color del producto. El arriero lleva pantalón blanco, alpargatas, ruana a rayas, carriel, vara y sombrero aguadeño.
-- Los avisos de las estaciones miran ahora los últimos **10 s** (antes 30): salen si el problema ocupa al menos la mitad de ese tiempo.
+## v1.7.9 — Icônes originales, nouvelles mules et nouveau Willys
+- **Des icônes originales** pour les produits qui n’avaient pas d’emoji ressemblant, dessinées pour le jeu :
+  - Cerise de café : une grappe de grains ovales rouges avec leur « nombril » (et un encore vert) sur la branche avec des feuilles, au lieu de la cerise ordinaire.
+  - Guarapo : verre de jus de canne vert-jaune avec de la mousse, de la glace, du citron vert et un morceau de canne, au lieu du verre d’eau.
+  - Panela : bloc moulé, brun doré, sur une feuille sèche de bananier.
+  - Panela en poudre : dorée et jaune, dans une calebasse, au lieu de la salière (on aurait dit du sucre).
+  - Laiterie : fromage paysan **blanc** sur une feuille de bananier (au lieu du fromage jaune), bouteille de lait (au lieu du biberon) et pot de crème avec une cuillère (au lieu du cornet de glace). Aussi pour la Fromagerie, l’Écrémeuse et leurs recherches. Le beurre reste pareil.
+  - Ce sont une police couleur faite avec `tools/icons/build_icons.py`, donc elles se voient partout : panneaux, objectifs, chaîne et textes de la carte.
+- **Willys** redessiné : il regarde maintenant vers où il va (avant, dans deux des quatre directions, il roulait en marche arrière), avec capot, calandre et phares à l’avant, pare-brise bas, le chauffeur au chapeau, la benne ouverte avec les sacs et la roue de secours à l’arrière. Il ne ressemble plus à un camion-benne.
+- **Mules** redessinées : longue tête au museau foncé et oreilles de mule, crinière, queue, sabots, bât coloré et sacs en fique attachés avec la bande de la couleur du produit. Le muletier porte un pantalon blanc, des espadrilles, une ruana rayée, un carriel, un bâton et un sombrero aguadeño.
+- Les messages des stations regardent maintenant les **10 dernières s** (avant 30) : ils apparaissent si le problème occupe au moins la moitié de ce temps.
 
-## v1.7.8 — Avisos solo si el problema dura
-- Los íconos sobre las estaciones (⛔ patio lleno, ↪️ desviando, ⏸️ esperando) salían apenas pasaba algo, aunque fuera un instante. Con todo nivelado el producto viaja por tandas, así que es normal que un patio se llene un momento, que una estación espere la siguiente mula o que un viaje se desvíe a la bodega, y parecía un problema sin serlo.
-- Ahora un aviso sale solo si el problema ocupa al menos la mitad de los últimos 30 s de juego, y se quita cuando baja de la quinta parte (así no parpadea). «Esperando» cuenta solo en las rachas de 8 s o más sin que llegue nada: la Hornilla con bagazo, más rápida que el Trapiche, ya no se marca siempre con ⏸️.
-- El aviso del panel de la estación usa el mismo criterio que el ícono, igual que «Bodega llena» en el Despacho.
-- La Compostera llena ya no se marca con ⛔: es compost de sobra (su panel ya lo decía con ✅).
-- Al abrir el juego, los avisos tardan unos 15 s en aparecer (se mide desde ese momento).
+## v1.7.8 — Messages seulement si le problème dure
+- Les icônes au-dessus des stations (⛔ cour pleine, ↪️ déviation, ⏸️ en attente) apparaissaient dès qu’il se passait quelque chose, même un instant. Avec tout équilibré, le produit voyage par lots, donc il est normal qu’une cour se remplisse un moment, qu’une station attende la prochaine mule ou qu’un trajet soit dévié vers l’entrepôt, et cela ressemblait à un problème sans en être un.
+- Maintenant un message n’apparaît que si le problème occupe au moins la moitié des 30 dernières s de jeu, et disparaît quand il descend sous le cinquième (ainsi il ne clignote pas). « En attente » ne compte que les séries de 8 s ou plus sans que rien n’arrive : le Four avec la bagasse, plus rapide que le Trapiche, n’est plus toujours marqué ⏸️.
+- Le message du panneau de la station suit le même critère que l’icône, comme « Entrepôt plein » dans l’Expédition.
+- Le Composteur plein n’est plus marqué ⛔ : c’est du compost en trop (son panneau le disait déjà avec ✅).
+- À l’ouverture du jeu, les messages mettent environ 15 s à apparaître (on mesure à partir de ce moment).
 
-## v1.7.7 — Cómo se juega
-- Al abrir el juego aparece una pantalla con **la idea** (la cadena del café: estaciones, arrieros y el Willys), **cómo se juega** (mejorar, subir los arrieros, la mejora recomendada, la cadena 🔗, los hitos, objetivos e investigaciones, lo que se gana con el juego cerrado) y **el objetivo** (las seis zonas, las rutas entre ellas y el segundo final).
-- Sale cada vez que se abre el juego, salvo que se marque «No mostrar de nuevo» (se guarda con la partida y se conserva al volver a empezar). Se puede ver otra vez desde el menú ⚙️ con «❓ Cómo se juega», donde también se puede desmarcar la casilla.
+## v1.7.7 — Comment jouer
+- À l’ouverture du jeu apparaît un écran avec **l’idée** (la chaîne du café : stations, muletiers et le Willys), **comment jouer** (améliorer, monter les muletiers, l’amélioration recommandée, la chaîne 🔗, les paliers, objectifs et recherches, ce qu’on gagne avec le jeu fermé) et **le but** (les six zones, les routes entre elles et la deuxième fin).
+- Il apparaît à chaque ouverture du jeu, sauf si on coche « Ne plus afficher » (c’est enregistré avec la partie et conservé en recommençant). On peut le revoir depuis le menu ⚙️ avec « ❓ Comment jouer », où l’on peut aussi décocher la case.
+## v1.7.6 — Des panneaux de taille fixe
+- Le panneau de chaque station a maintenant une hauteur fixe (celle de la vue la plus remplie : onglets, recette et six lignes de données). En changeant d’onglet ou quand les textes changent, il ne grandit ni ne rétrécit plus : le message, la barre du palier, les boutons ×1/×10/Max et « Améliorer » restent toujours au même endroit.
+- L’en-tête est celui de la station dans tous ses onglets (avant, il passait à « Muletiers · … » ou au nom de la route) ; le sous-titre dit de quel onglet il s’agit. Le niveau est passé à côté de la barre du prochain palier.
+- La bande de la recette apparaît dans toutes les vues : chez les muletiers, ce qu’ils portent et où (« 🍒 ➜ 🐴 ➜ Beneficiadero ») ; dans les routes, d’où à où ; dans l’Expédition, de l’entrepôt au village.
+- Chaque texte a sa boîte calculée pour le plus long possible (mesurée avec tous les noms de stations et de routes et des nombres comme « -8,88e40 »). Si sur un écran très étroit il ne tient toujours pas, la police rétrécit un peu au lieu de déborder ou de déplacer le reste. Plusieurs textes ont été raccourcis (p. ex. « Aller-retour » au lieu de « Trajet (aller-retour) »).
+- Avec quatre onglets (Emballage cadeau, Chocolaterie, Areperie), ceux de la station et du transport ne montrent que l’icône.
+- La barre du haut a des largeurs fixes pour les pièces, le revenu et l’horloge (qui a maintenant toujours deux chiffres) : elle ne s’élargit plus quand le nombre grandit et ne déplace plus les boutons 🔗 et ⚙️. Sur mobile, le revenu va sous les pièces, pour que tout tienne en 360 px.
+- Le compteur d’objectifs (en bas à gauche) et les fenêtres des objectifs, des recherches, des zones et de la chaîne ont une hauteur fixe : en encaissant un objectif, la fenêtre ne rétrécit pas et ne déplace pas le ✕. La recommandation du haut ne sort jamais de l’écran.
+- **Correction** : avec un panneau ouvert, toucher une recommandation d’une autre zone faisait planter le jeu en changeant de zone.
 
-## v1.7.6 — Paneles de tamaño fijo
-- El panel de cada estación tiene ahora un alto fijo (el de la vista más llena: pestañas, receta y seis filas de datos). Al pasar de pestaña o cuando cambian los textos ya no crece ni se encoge: el aviso, la barra del hito, los botones ×1/×10/Máx y «Mejorar» quedan siempre en el mismo lugar.
-- La cabecera es la de la estación en todas sus pestañas (antes cambiaba a «Arrieros · …» o al nombre de la ruta); el subtítulo dice qué pestaña es. El nivel pasó junto a la barra del próximo hito.
-- La franja de la receta aparece en todas las vistas: en los arrieros, qué llevan y adónde («🍒 ➜ 🐴 ➜ Beneficiadero»); en las rutas, de dónde a dónde; en el Despacho, de la bodega al pueblo.
-- Cada texto tiene su caja calculada para el más largo posible (medido con todos los nombres de estaciones y rutas y números como «-8,88e40»). Si en una pantalla muy angosta aun así no cabe, la letra se achica un poco en vez de salirse o mover lo demás. Varios textos se acortaron (p. ej. «Ida y vuelta» en vez de «Viaje (ida y vuelta)»).
-- Con cuatro pestañas (Empaque de regalos, Chocolatería, Arepería) las de la estación y el transporte muestran solo el ícono.
-- La barra superior tiene anchos fijos para las monedas, el ingreso y el reloj (que ahora siempre lleva dos dígitos): ya no se ensancha al crecer el número ni mueve los botones 🔗 y ⚙️. En el móvil el ingreso va debajo de las monedas, para que todo quepa en 360 px.
-- El marcador de objetivos (abajo a la izquierda) y las ventanas de objetivos, investigaciones, zonas y cadena tienen alto fijo: al cobrar un objetivo la ventana no se encoge ni mueve el ✕. La recomendación de arriba nunca se sale de la pantalla.
-- **Arreglo**: con un panel abierto, tocar una recomendación de otra zona hacía fallar el juego al cambiar de zona.
+## v1.7.5 — La cour pleine accuse le bon coupable
+- **Correction** : avec la Caféière et ses muletiers au 25 et le Beneficiadero au 10, la Caféière disait « ⛔ Cour pleine : les mules ne suivent pas », mais le problème était le Beneficiadero, qui transforme beaucoup moins : le surplus va à l’entrepôt par le long chemin et n’a pas le temps de tout sortir. Maintenant, si les stations suivantes sont plus lentes, la Caféière affiche ↪️ (elle dévie) et son panneau dit qu’il faut améliorer la station suivante, qui de son côté continue de montrer combien lui arrive et combien elle transforme. Cela vaut pour n’importe quelle station de n’importe quelle zone.
 
-## v1.7.5 — El patio lleno culpa a quien es
-- **Arreglo**: con el Cafetal y sus arrieros en 25 y el Beneficiadero en 10, el Cafetal decía «⛔ Patio lleno: las mulas no dan abasto», pero el problema era el Beneficiadero, que procesa mucho menos: lo que sobra va a la bodega por el camino largo y no alcanza a salir todo. Ahora, si las estaciones siguientes van más lentas, el Cafetal muestra ↪️ (está desviando) y su panel dice que hay que subir la estación siguiente, que a su vez sigue mostrando cuánto le llega y cuánto procesa. Vale para cualquier estación de cualquier zona.
+## v1.7.4 — Corrections
+- **Correction** : en baissant les redémarrages dans les options de développeur (de 41 à 4, par exemple), le jeu se bloquait : le Willys et la Chiva étaient chargés de ce qu’il y avait à ×2⁴¹ et on essayait de dessiner des milliards de sacs. Maintenant ils sont dessinés au plus pleins.
+- **Correction** : la légende « 🔁 Production ×… » restait au-dessus des fenêtres (réglages, objectifs…). Maintenant elle reste derrière, et elle est plus petite et un peu transparente.
+- L’APK est de nouveau publié à chaque push avec la clé de test (temporairement dans le dépôt ; si les secrets GitHub sont créés, ce sont eux qui sont utilisés).
 
-## v1.7.4 — Arreglos
-- **Arreglo**: al bajar los reinicios en las opciones de desarrollador (de 41 a 4, por ejemplo) el juego se colgaba: el Willys y la Chiva iban cargados con lo de ×2⁴¹ y se intentaban dibujar miles de millones de bultos. Ahora se dibujan como mucho llenos.
-- **Arreglo**: la leyenda «🔁 Producción ×…» quedaba encima de las ventanas (configuración, objetivos…). Ahora queda detrás, y es más pequeña y algo transparente.
-- El APK vuelve a publicarse en cada push con la clave de pruebas (temporalmente en el repositorio; si se crean los secretos de GitHub, se usan esos).
+## v1.7.3 — Web et APK dans le même flux
+- GitHub Actions publie à chaque push la version web et l’APK en même temps : l’APK est sur https://frealgagu.github.io/Game/cafetal.apk et le menu ⚙️ de la version web a « 📱 Application Android ».
+- Tous les APK de test sont signés avec la même clé, que GitHub Actions prend dans les secrets du dépôt (elle ne reste pas dans le code) : ils s’installent par-dessus le précédent sans perdre la partie. La version de l’application vient de `package.json`.
 
-## v1.7.3 — Web y APK en el mismo flujo
-- GitHub Actions publica en cada push la web y el APK a la vez: el APK queda en https://frealgagu.github.io/Game/cafetal.apk y el menú ⚙️ de la web tiene «📱 App de Android».
-- Todos los APK de prueba se firman con la misma clave, que GitHub Actions toma de los secretos del repositorio (no queda en el código): se instalan encima del anterior sin perder la partida. La versión de la app sale de `package.json`.
+## v1.7.2 — Application Android
+- **Application Android** avec Capacitor 8 (comme Melvor Idle) : le jeu est dans l’application (il marche sans internet), avec une icône adaptative et un écran de démarrage. « Retour » ferme la fenêtre ou le panneau ouvert et, s’il n’y en a aucun, passe l’application en arrière-plan sans la fermer. En sortant, la partie est sauvegardée et en revenant, ce qui a été produit entre-temps est ajouté. `npm run android:apk` génère l’APK.
 
-## v1.7.2 — App de Android
-- **App de Android** con Capacitor 8 (como Melvor Idle): el juego va dentro de la app (funciona sin internet), con ícono adaptable y pantalla de inicio. «Atrás» cierra la ventana o el panel abierto y, si no hay ninguno, pasa la app a segundo plano sin cerrarla. Al salir se guarda la partida y al volver se suma lo producido mientras tanto. `npm run android:apk` genera el APK.
+## v1.7.1 — Redémarrages sans limite
+- Les redémarrages de la deuxième fin n’ont jamais eu de plafond, mais les grands nombres s’affichaient mal. Maintenant, au-delà de Dc (10³³), les chiffres passent en notation scientifique (4,20e40) et le multiplicateur s’affiche exact tant qu’il reste lisible (×2 048, ×1 048 576) et abrégé ensuite (×1,10T, ×1,43e45). Nouveaux suffixes : Sp, Oc, No et Dc.
+- **Options de développeur** : « Redémarrages » est maintenant un nombre libre (avant, une liste jusqu’à ×1 024) qui affiche le multiplicateur et s’applique pendant la saisie. Il va jusqu’à 900 redémarrages : au-delà, les pièces ne tiendraient plus dans les nombres de JavaScript.
+- Tests : 40 redémarrages d’affilée (×2⁴⁰) et la chaîne reste équilibrée.
 
-## v1.7.1 — Reinicios sin límite
-- Los reinicios del segundo final nunca tuvieron tope, pero los números grandes se veían mal. Ahora, más allá de Dc (10³³), las cifras pasan a notación científica (4,20e40) y el multiplicador se muestra exacto mientras se pueda leer (×2.048, ×1.048.576) y abreviado después (×1,10T, ×1,43e45). Nuevos sufijos: Sp, Oc, No y Dc.
-- **Opciones de desarrollador**: «Reinicios» es ahora un número libre (antes, una lista hasta ×1.024) que muestra el multiplicador y se aplica mientras se escribe. Llega hasta 900 reinicios: más allá, las monedas dejarían de caber en los números de JavaScript.
-- Pruebas: 40 reinicios seguidos (×2⁴⁰) y la cadena sigue cuadrando.
+## v1.7 — Des paliers plus forts, Maîtrise et Suprématie
+- **Nouveaux paliers** : niveau 10 ×2, 25 ×2, 50 ×4, 75 ×4 et 100 ×8 (avant ×2 chacun). Au niveau 100, une station produit 16 fois plus qu’avant, et cela reste une puissance de 2 par seconde : 4 096, 2 048, 1 024, 512 ou 256. Le panneau et le message du palier disent combien multiplie chacun.
+- **Maîtrise** (⭐, une par zone) : avec tous les bâtiments de la zone au niveau 75, on peut la rechercher et toute la zone produit ×4 (son Willys porte ×4 aussi). **Suprématie** (👑) : avec tous au 100, ×8 de plus. Dans 🔬, on voit combien de bâtiments sont au niveau demandé. Elles servent à atteindre la deuxième fin.
+- **Objectifs finaux plus longs**, pour que la première fin dure à peu près pareil avec les paliers plus forts : Finca 2 000 sachets, Trapiche 6 000 panelas, Laiterie 6 000 arequipes, Cacaoyère 4 000 barres de chocolat, Champ de maïs 6 000 arepas au fromage et Village 7 000 conteneurs.
+- Les cours, les entrées et les entrepôts grandissent avec la Maîtrise et la Suprématie de leur zone : à niveau égal, tout reste équilibré (au niveau 100 avec tout, aucune cour ne se remplit).
 
-## v1.7 — Hitos más fuertes, Maestría y Supremacía
-- **Hitos nuevos**: nivel 10 ×2, 25 ×2, 50 ×4, 75 ×4 y 100 ×8 (antes ×2 cada uno). Al nivel 100 una estación produce 16 veces más que antes, y sigue siendo una potencia de 2 por segundo: 4.096, 2.048, 1.024, 512 o 256. El panel y el aviso del hito dicen cuánto multiplica cada uno.
-- **Maestría** (⭐, una por zona): con todos los edificios de la zona en el nivel 75 se puede investigar y toda la zona produce ×4 (su Willys lleva ×4 también). **Supremacía** (👑): con todos en el 100, ×8 más. En 🔬 se ve cuántos edificios van en el nivel pedido. Sirven para llegar al segundo final.
-- **Objetivos finales más largos**, para que el primer final dure parecido con los hitos más fuertes: Finca 2.000 bolsas, Trapiche 6.000 panelas, Lechería 6.000 arequipes, Cacaotal 4.000 chocolatinas, Maizal 6.000 arepas de queso y Pueblo 7.000 contenedores.
-- Patios, entradas y bodegas crecen con la Maestría y la Supremacía de su zona: a igual nivel todo sigue cuadrando (al nivel 100 con todo, ningún patio se llena).
+## v1.6.1 — Entrepôts pleins dans d’autres zones
+- **Correction de l’amélioration recommandée** : si une zone qui en approvisionne une autre a l’entrepôt plein (le surplus n’a pas le temps d’être vendu), toute la zone ralentit, y compris ce qu’elle envoie par ses routes ; l’analyse ne le voyait pas et la recommandation continuait d’améliorer des choses qui ne servaient à rien (dans un test, le lait en trop à la Laiterie privait de fromage le Champ de maïs et d’arepas le Village). Maintenant elle en tient compte et peut recommander l’expédition de cette zone.
+- **Correction** : en testant l’expédition d’une autre zone, la recommandation améliorait par erreur celle de la zone actuelle.
 
-## v1.6.1 — Bodegas llenas en otras zonas
-- **Arreglo de la mejora recomendada**: si una zona que abastece a otra tiene la bodega llena (lo que sobra no alcanza a venderse), toda la zona se frena, también lo que manda por sus rutas; el análisis no lo veía y la recomendación se quedaba subiendo cosas que no servían (en una prueba, la leche que sobraba en la Lechería dejaba sin queso al Maizal y sin arepas al Pueblo). Ahora lo tiene en cuenta y puede recomendar el despacho de esa zona.
-- **Arreglo**: al probar el despacho de otra zona, la recomendación subía por error el de la zona actual.
+## v1.6 — Deuxième fin et recommencer ×2
+- **Deuxième fin, « Maître caféier ! »** : amener les 38 stations des six zones au niveau 100. Après le Village, le compteur d’objectifs compte combien sont faites. En y arrivant apparaît un écran de félicitations avec les statistiques de la partie.
+- **Recommencer avec la production doublée** : depuis cet écran (ou plus tard depuis ⚙️), on recommence de zéro à la Finca, mais tout produit ×2 ; au redémarrage suivant ×4, puis ×8… Les réglages et le registre des parties sont conservés. Le multiplicateur s’affiche en bas à droite (« 🔁 Production ×2 »).
+- Le ×2 double la vitesse de toutes les stations et ce que porte le Willys ; les muletiers, les routes, les cours et les entrées s’ajustent tout seuls, donc à niveau égal tout reste équilibré (il y a des tests à ×8 et ×32 : aucune cour ne se remplit au niveau 100).
+- **Options de développeur** : sélecteur « Production » (×1, ×2, ×4… ×1024) pour simuler des redémarrages ; le bouton d’accélération change pendant qu’on tape la vitesse (et, s’il est déjà accéléré, s’applique tout de suite).
+- **Correction** : certains boutons cachés restaient visibles (celui de « Aller à… » de l’écran de zone terminée, par exemple).
+- Simulateur d’équilibre : `BALANCE_RESETS=n` commence avec la production ×2ⁿ, et après le Village les bots continuent jusqu’à la deuxième fin en améliorant toujours ce qui est le plus en retard.
+- Durée mesurée de la première fin (Village) avec le bot occasionnel : 10 h 16 min à ×1, 5 h 58 min à ×2, 2 h 44 min à ×4 et 1 h 39 min à ×8. De la deuxième fin, depuis le début : environ 143 h, 72 h, 36 h et 18 h.
 
-## v1.6 — Segundo final y volver a empezar ×2
-- **Segundo final, «¡Maestro cafetero!»**: llevar las 38 estaciones de las seis zonas al nivel 100. Tras el Pueblo, el marcador de objetivos cuenta cuántas van. Al lograrlo aparece una pantalla de felicitación con las estadísticas de la partida.
-- **Volver a empezar con la producción al doble**: desde esa pantalla (o luego desde ⚙️) se empieza de cero en la Finca, pero todo produce ×2; en el siguiente reinicio ×4, luego ×8… Se conservan los ajustes y el registro de partidas. El multiplicador se ve abajo a la derecha («🔁 Producción ×2»).
-- El ×2 duplica la velocidad de todas las estaciones y lo que lleva el Willys; los arrieros, las rutas, los patios y las entradas se ajustan solos, así que a igual nivel todo sigue cuadrando (hay pruebas a ×8 y ×32: ningún patio se llena al nivel 100).
-- **Opciones de desarrollador**: selector «Producción» (×1, ×2, ×4… ×1024) para simular reinicios; el botón de acelerar cambia mientras se escribe la velocidad (y, si ya está acelerado, se aplica al momento).
-- **Arreglo**: algunos botones ocultos se veían igual (el de «Ir a…» de la pantalla de zona completada, por ejemplo).
-- Simulador de balance: `BALANCE_RESETS=n` empieza con la producción ×2ⁿ, y tras el Pueblo los bots siguen hasta el segundo final subiendo siempre lo más atrasado.
-- Duración medida del primer final (Pueblo) con el bot casual: 10 h 16 min a ×1, 5 h 58 min a ×2, 2 h 44 min a ×4 y 1 h 39 min a ×8. Del segundo final, desde el inicio: unas 143 h, 72 h, 36 h y 18 h.
+## v1.5 — Zone 6 : El Pueblo (fin du jeu)
+- **La dernière zone**, qui s’ouvre en terminant le Champ de maïs. C’est la seule **sans source propre** : tout arrive par **six routes**, une depuis chaque zone. Sur la place, la **Maison du café** reçoit les sachets de la Finca et répartit le café d’origine entre la **Cafetière à tintos** (avec la panela du Trapiche) → **Fonda** (petits-déjeuners paysans avec les arepas au fromage du Champ de maïs) et l’**Atelier de paniers** (avec l’arequipe de la Laiterie) → **Emballage cadeau** (avec le chocolat de table et les barres de chocolat de la Cacaoyère) → **Parc à conteneurs**.
+- **Fin du jeu** : exporter 1 000 conteneurs de paniers cadeaux. 17 objectifs et 8 nouvelles recherches.
+- **Équilibré à niveau égal** : chaque zone avait un produit final que personne n’emportait (les sachets de café, le quart de panela en trop, l’arequipe, les deux chocolats et les arepas au fromage) ; à niveau égal dans les six zones, le Village les consomme exactement, et la panela du Trapiche se répartit entièrement entre ses trois routes (il y a un test). Cela change par rapport au premier brouillon, qui utilisait du café moulu, du lait et de la crème : ils sont déjà entièrement consommés dans leurs zones.
+- **Nouvelle carte** : place pavée avec fontaine, guayacanes jaunes et roses, tables avec parasol, des gens qui se promènent et la Maison du café (elle grandit avec les paliers) ; des maisonnettes colorées et des réverbères autour ; cinq nouveaux bâtiments (la cafetière fumante, la fonda avec des tables à nappe à carreaux, l’abri des tisserandes de fique, la boutique de cadeaux avec des nœuds et le parc à conteneurs avec une grue qui va et vient). Chaque zone fournisseuse a sa route « Vers le Village ».
+- **L’amélioration recommandée, plus rapide** : les analyses d’un même test sont partagées entre les zones, chaque test ne recalcule que les zones qu’il peut changer et, pour une zone fournisseuse, on ne teste que ce qui freine la route. Au Village (qui regarde cinq zones), elle est passée d’environ 200 ms à environ 10 ms ; dans les autres zones, à la moitié. Sur un mobile lent, elle est recalculée moins souvent.
+- **L’amélioration recommandée suit ce qui manque** : si ce qui freine la zone est une station qui attend un produit importé, l’améliorer ne sert à rien ; maintenant elle indique la route, ou ce qui est le plus en retard dans la zone qui envoie ce produit, et si là-bas aussi on attend un produit importé, elle continue jusqu’à cette zone (la Fonda attend des arepas, le Champ de maïs attend du fromage : on recommande la Laiterie). En plus, elle teste l’amélioration conjointe d’une station et de ses muletiers (un Parc à conteneurs fraîchement construit ne sortait rien avec ses muletiers au niveau 1) et le gain minimum se mesure par rapport au revenu de la zone, pas à celui des cinq qui l’approvisionnent.
+- Constructions du Village : 300 M, 700 M, 1 500 M, 1 200 M et 2 000 M (les deux dernières, moins chères : avec le revenu de ce moment-là, on attendait une heure pour chacune). Durée mesurée du Village : 2 h (attentif) et 1 h 47 min (occasionnel) ; le jeu complet, environ 11 h et 10 h 15 min. Le bot attentif du simulateur, quand le meilleur achat isolé ne rapporte presque rien au Village, suit l’amélioration recommandée (avant, il restait à acheter des miettes), et simuler le Village est beaucoup plus rapide.
+- Partie v9 (les anciennes se chargent toutes seules ; si le Champ de maïs était terminé, le Village s’ouvre).
 
-## v1.5 — Zona 6: El Pueblo (final del juego)
-- **La última zona**, que se abre al completar el Maizal. Es la única **sin fuente propia**: todo llega por **seis rutas**, una desde cada zona. En la plaza, la **Casa del café** recibe las bolsas de la Finca y reparte café de origen entre la **Greca de tintos** (con panela del Trapiche) → **Fonda** (desayunos campesinos con las arepas de queso del Maizal) y el **Taller de canastas** (con arequipe de la Lechería) → **Empaque de regalos** (con el chocolate de mesa y las chocolatinas del Cacaotal) → **Patio de contenedores**.
-- **Final del juego**: exportar 1.000 contenedores de canastas de regalo. 17 objetivos y 8 investigaciones nuevas.
-- **Cuadra a igual nivel**: cada zona tenía un producto final que no se llevaba nadie (las bolsas de café, el cuarto de panela que sobraba, el arequipe, los dos chocolates y las arepas de queso); a igual nivel en las seis zonas, el Pueblo los gasta justo, y la panela del Trapiche se reparte entera entre sus tres rutas (hay una prueba). Cambia respecto al primer borrador, que usaba café molido, leche y crema: ya se gastan del todo en sus zonas.
-- **Mapa nuevo**: plaza empedrada con fuente, guayacanes amarillos y rosados, mesas con parasol, gente paseando y la Casa del café (crece con los hitos); casitas de colores y faroles alrededor; cinco edificios nuevos (la greca humeante, la fonda con mesas de mantel a cuadros, el cobertizo de las tejedoras de fique, la tienda de regalos con moños y el patio de contenedores con una grúa que va y viene). Cada zona proveedora tiene su carretera «Al Pueblo».
-- **La mejora recomendada, más rápida**: los análisis de una misma prueba se comparten entre zonas, cada prueba solo vuelve a calcular las zonas que puede cambiar y, de una zona proveedora, solo se prueba lo que frena la ruta. En el Pueblo (que mira cinco zonas) pasó de unos 200 ms a unos 10 ms; en las demás zonas, a la mitad. En un móvil lento se recalcula con menos frecuencia.
-- **La mejora recomendada sigue el faltante**: si lo que frena la zona es una estación que espera un importado, subirla no sirve; ahora señala la ruta, o lo más atrasado de la zona que manda ese producto, y si allá también se espera un importado, sigue hasta esa zona (la Fonda espera arepas, el Maizal espera queso: se recomienda la Lechería). Además prueba subir juntas una estación y sus arrieros (un Patio de contenedores recién construido no sacaba nada con sus arrieros en nivel 1) y la ganancia mínima se mide contra el ingreso de la zona, no contra el de las cinco que la abastecen.
-- Construcciones del Pueblo: 300 M, 700 M, 1.500 M, 1.200 M y 2.000 M (las dos últimas, más baratas: con el ingreso de ese momento se esperaba una hora por cada una). Duración medida del Pueblo: 2 h (atento) y 1 h 47 min (casual); el juego completo, unas 11 h y 10 h 15 min. El bot atento del simulador, cuando la mejor compra suelta casi no rinde en el Pueblo, sigue la mejora recomendada (antes se quedaba comprando migajas), y simular el Pueblo es mucho más rápido.
-- Partida v9 (las de antes se cargan solas; si el Maizal estaba completo, se abre el Pueblo).
+## v1.4.1 — Solde négatif pour les tests et licence MIT
+- **Options de développeur** : nouvelle case « Autoriser le solde négatif ». Avec elle, tout peut s’acheter (construire, rechercher, monter de niveau ; « max » monte jusqu’au niveau 100) et ce qui manque devient une dette : le solde passe sous zéro, s’affiche en rouge et ce qu’on gagne ensuite la rembourse. En la décochant, la dette reste et rien ne s’achète jusqu’à revenir en positif. En cachant les options, elle se désactive.
+- **Licence MIT** pour le code et les graphismes (fichier `LICENSE`). La musique reste en CC0. Le README explique d’où vient l’idée et ce qui est original.
+## v1.4 — Zone 5 : El Maizal, et de la musique
+- **Nouvelle zone** qui s’ouvre en terminant la Cacaoyère : Champ de maïs ♾️ → Égreneuse → Pileuse → Moulin à pâte → Plaque → **Étal d’arepas**, qui fait des plateaux d’arepas au fromage avec le fromage et le beurre de la Laiterie. Carte avec un champ d’épis, des tournesols et des épouvantails, et cinq nouveaux bâtiments (des pilons qui montent et descendent, une plaque avec des arepas, un étal avec un parasol coloré).
+- **Routes du fromage et du beurre** : elles partent de l’entrepôt de la Laiterie par la route du bas. À niveau égal, l’Étal consomme exactement ce que font la Fromagerie et la Baratte.
+- **Musique de fond** : « Apple Cider », de Zane Little (CC0, domaine public, d’OpenGameArt) : guitare acoustique et flûte, tranquille, pour la finca. Elle joue en boucle et doucement après le premier toucher, se met en pause en arrière-plan et se coupe dans ⚙️ (« 🎵 Musique »). Elle pèse 2,4 Mo.
+- **Correction importante (venue de la v1.3)** : ce que l’entrepôt garde pour une route (une charge et demie) pouvait le remplir entièrement ; avec la Route du lait à un niveau élevé, l’entrepôt de la Laiterie se remplissait de lait, toutes ses stations s’arrêtaient et il ne sortait ni fromage ni beurre. Maintenant, ce qui attend une route va sur le **quai** et ne prend pas de place à l’entrepôt (le panneau de l’expédition le montre à part).
+- **L’amélioration recommandée teste des groupes** : l’Étal d’arepas peut être freiné à la fois par son niveau, ses muletiers et les deux routes ; en améliorer un seul (ou deux) ne servait à rien et la Pileuse était recommandée pour toujours (dans une partie de test, le Champ de maïs prenait plus de 10 h). Maintenant on teste l’amélioration conjointe d’une station et de ce qui vient derrière elle, et on recommande ce qui est le plus en retard.
+- Simulateur d’équilibre : le joueur attentif, quand aucun achat isolé ne rapporte, suit l’amélioration recommandée. Durée mesurée du Champ de maïs : 1 h 45 min (attentif) et 1 h 10 min (occasionnel) ; environ 8 h 30 min de jeu au total. Pour cela, l’Étal d’arepas se construit pour 600 M (l’attentif attendait une heure et demie pour le payer).
+- 16 objectifs et 8 nouvelles recherches. Partie v8 (les anciennes se chargent toutes seules ; si la Cacaoyère était terminée, le Champ de maïs s’ouvre).
 
-## v1.4.1 — Saldo negativo para pruebas y licencia MIT
-- **Opciones de desarrollador**: nueva casilla «Permitir saldo negativo». Con ella todo se puede comprar (construir, investigar, subir niveles; «máx» sube hasta el nivel 100) y lo que falta queda como deuda: el saldo baja de cero, se ve en rojo y lo que se gana después la va pagando. Al quitarla, la deuda se queda y no se compra nada hasta volver a positivo. Al ocultar las opciones se apaga.
-- **Licencia MIT** para el código y los gráficos (archivo `LICENSE`). La música sigue siendo CC0. El README explica de dónde sale la idea y qué es propio.
+## v1.3.2 — Le temps accéléré compte aussi hors ligne
+- Si tu fermes le jeu avec le temps accéléré (options de développeur, ×10, ×100…), en revenant **il reste accéléré** et le temps d’absence compte à cette vitesse, avec le plafond (2 h, ou 6 h avec le Contremaître) multiplié aussi. Le message de bienvenue le dit : « …en travaillant 5 h (à ⏩ ×10) ».
+- Le retour est rapide même s’il s’agit de centaines d’heures de jeu : les 2 premières h sont vraiment simulées et le reste s’ajoute au rythme de la dernière heure simulée (pièces, ventes, production et produits importés, pour que les objectifs avancent aussi). Comparé à une simulation de 6 h pas à pas, la différence est inférieure à 5 % (il y a un test).
 
-## v1.4 — Zona 5: El Maizal, y música
-- **Nueva zona** que se abre al completar el Cacaotal: Maizal ♾️ → Desgranadora → Piladora → Molino de masa → Budare → **Puesto de arepas**, que hace bandejas de arepas de queso con el queso y la mantequilla de la Lechería. Mapa con milpa de espigas, girasoles y espantapájaros, y cinco edificios nuevos (pilones que suben y bajan, budare con arepas, puesto con parasol de colores).
-- **Rutas del queso y de la mantequilla**: salen de la bodega de la Lechería por la carretera de abajo. A igual nivel, el Puesto gasta justo lo que hacen la Quesera y la Batidora.
-- **Música de fondo**: «Apple Cider», de Zane Little (CC0, dominio público, de OpenGameArt): guitarra acústica y flauta, tranquila, para la finca. Suena en bucle y bajito tras el primer toque, se pausa en segundo plano y se quita en ⚙️ («🎵 Música»). Pesa 2,4 MB.
-- **Arreglo importante (venía de la v1.3)**: lo que la bodega guarda para una ruta (carga y media) podía llenarla entera; con la Ruta de la leche en nivel alto, la bodega de la Lechería se llenaba de leche, todas sus estaciones se paraban y no salía queso ni mantequilla. Ahora lo que espera una ruta va en el **andén** y no le quita sitio a la bodega (el panel del despacho lo muestra aparte).
-- **La mejora recomendada prueba grupos**: el Puesto de arepas puede quedar frenado a la vez por su nivel, sus arrieros y las dos rutas; subir uno solo (o dos) no servía de nada y se recomendaba la Piladora para siempre (en una partida de prueba, el Maizal tardaba más de 10 h). Ahora se prueba subir juntos una estación y lo que va detrás de ella, y se recomienda lo más atrasado.
-- Simulador de balance: el jugador atento, cuando ninguna compra suelta rinde, sigue la mejora recomendada. Duración medida del Maizal: 1 h 45 min (atento) y 1 h 10 min (casual); unas 8 h 30 min de juego en total. Para eso, el Puesto de arepas se construye por 600 M (el atento esperaba hora y media para pagarlo).
-- 16 objetivos y 8 investigaciones nuevas. Partida v8 (las de antes se cargan solas; si el Cacaotal estaba completo, se abre el Maizal).
+## v1.3.1 — Pas de rouge sur ce qui est déjà au maximum
+- « La chaîne » ne marque plus en rouge un bâtiment, des muletiers, une route ou une expédition qui sont au niveau 100 : on ne peut plus les améliorer. Si ce qui freine la zone est déjà au maximum, rien n’est marqué.
+- L’amélioration recommandée en tient compte : s’il ne reste rien à améliorer, elle dit « 🏗️ Ensuite : construis… » ou « 🏁 Cette zone est au maximum ».
 
-## v1.3.2 — El tiempo acelerado también cuenta sin conexión
-- Si cierras el juego con el tiempo acelerado (opciones de desarrollador, ×10, ×100…), al volver **sigue acelerado** y el tiempo que estuviste fuera cuenta a esa velocidad, con el tope (2 h, o 6 h con el Capataz) también multiplicado. El mensaje de bienvenida lo dice: «…trabajando 5 h (a ⏩ ×10)».
-- La vuelta es rápida aunque sean cientos de horas de juego: se simulan de verdad las primeras 2 h y el resto se suma al ritmo de la última hora simulada (monedas, ventas, producción e importados, para que los objetivos también avancen). Comparado con simular 6 h paso a paso, la diferencia es menor al 5 % (hay una prueba).
+## v1.3 — Zone 4 : El Cacaotal
+- **Nouvelle zone** qui s’ouvre en terminant la Laiterie : Cacaoyère ♾️ → Caisses de fermentation → Séchoir → Torréfacteur de cacao → Moulin à cacao → **Table du chocolat** et **Chocolaterie** (la pâte se répartit entre les deux). Carte originale avec des cacaoyers chargés de cabosses, des guamos d’ombre, des bananiers et des héliconias, et six nouveaux bâtiments.
+- **Deux importations à la fois** : la Chocolaterie a besoin de panela du Trapiche et de lait de la Laiterie ; s’il manque l’une ou l’autre, elle s’arrête et te dit laquelle.
+- **Nouvelles routes** : la Route de la panela vers la Cacaoyère approvisionne deux stations et répartit chaque charge ; la Route du lait part de l’entrepôt de la Laiterie. Les deux routes de la panela se partagent ce que produit le Trapiche. Pour exporter du lait, la Laiterie doit en produire plus qu’elle n’en utilise.
+- La station a un onglet 🚌 pour chaque route qui l’approvisionne (« 🚌 Panela », « 🚌 Lait »).
+- **Les routes sont équilibrées à niveau égal**, aussi au niveau 100 : la Pasteurisatrice répartit son lait en quarts (Fromagerie, Écrémeuse, Bassine et la Route du lait) et la Bassine, la Table et la Chocolaterie demandent à elles trois les ¾ de la panela du Trapiche. Recettes ajustées : Bassine toutes les 32 s ; Table et Chocolaterie avec 2 pâtes toutes les 32 s (la Chocolaterie, 4 laits), et leurs prix doublés.
+- **Correction des alertes ⛔ et ↪️ dans des chaînes saines** : quand la station suivante avait peu de place, les mules partaient avec des miettes, toutes restaient en route et la cour se remplissait (« le tapis ne suit pas ») même si le transport suffisait. Maintenant elles attendent que la charge entière tienne et ne partent avec une demi-charge ou ne dévient que quand la cour est presque pleine. Au niveau 100 dans les quatre zones, la Pasteurisatrice est passée d’un blocage 30 % du temps à jamais (il y a un test).
+- **Correction** : pendant que la Chiva était en route, le Willys vendait la panela qu’elle attendait et au retour elle partait à moitié vide (la Bassine restait arrêtée). Maintenant l’entrepôt lui garde une charge et demie.
+- **L’amélioration recommandée teste des paires** : si aucune amélioration isolée ne rapporte, elle teste muletiers et routes deux par deux. Avant, la Chocolaterie pouvait rester avec la Route du lait au niveau 4 et ses muletiers au niveau 1 pour toujours, parce qu’améliorer un seul des deux ne servait à rien. Et s’il manque deux produits importés à une station, on signale celui qui manque le plus.
+- Simulateur d’équilibre : le joueur attentif mesure le revenu de la fin de chaque chaîne (comme l’amélioration recommandée) et les deux bots décident toutes les 5 s de jeu ; l’occasionnel économise pour construire s’il lui manque moins de 10 minutes. Durée mesurée : La Finca 2 h 20 min / 2 h 35 min, El Trapiche 35 min, La Lechería 2 h 20 min, El Cacaotal 1 h 45 min / 1 h 55 min (attentif / occasionnel) ; environ 7 h 15 min au total.
+- La recommandation est recalculée au plus une fois par seconde (et tout de suite après chaque achat) : avec quatre zones et leurs routes, la calculer cinq fois par seconde se sentait sur mobile.
+- **Correction** : en calculant combien une zone peut envoyer, on n’oublie plus ce qu’elle reçoit elle-même par une autre route (la Bassine semblait ne pas consommer de lait et la Route du lait paraissait avoir plus de lait qu’il n’y en avait).
+- 18 objectifs et 9 nouvelles recherches. Partie v7 (les anciennes se chargent toutes seules ; si la Laiterie était terminée, la Cacaoyère s’ouvre).
 
-## v1.3.1 — Sin rojo en lo que ya está al máximo
-- «La cadena» ya no marca en rojo un edificio, unos arrieros, una ruta o un despacho que estén en el nivel 100: no se pueden mejorar más. Si lo que frena la zona ya está al máximo, no se marca nada.
-- La mejora recomendada lo tiene en cuenta: si no queda nada que subir, dice «🏗️ Siguiente: construye…» o «🏁 Esta zona está al máximo».
+## v1.2.3 — Tapis électriques
+- **À partir du niveau 50 de transport** (un palier), les mules d’une station sont remplacées par un **tapis électrique** : le tronçon du chemin est couvert par un tapis et ce qui est en route se voit comme des caisses de la couleur du produit. Il transporte exactement la même chose ; seul le dessin change.
+- Avec beaucoup de stations avancées, il n’y a plus des dizaines de mules avec muletier à l’écran : les tapis et leurs caisses se dessinent d’un coup, ce qui allège l’animation (surtout sur mobile).
+- Le panneau de transport s’appelle maintenant « ⚡ Tapis » et prévient du changement avant d’arriver au niveau 50.
 
-## v1.3 — Zona 4: El Cacaotal
-- **Nueva zona** que se abre al completar la Lechería: Cacaotal ♾️ → Cajones de fermentación → Secadero → Tostador de cacao → Molino de cacao → **Mesa de chocolate** y **Chocolatería** (la pasta se reparte entre las dos). Mapa propio con cacaos cargados de mazorcas, guamos de sombra, plátano y heliconias, y seis edificios nuevos.
-- **Dos importaciones a la vez**: la Chocolatería necesita panela del Trapiche y leche de la Lechería; si falta cualquiera, se para y te dice cuál.
-- **Rutas nuevas**: la Ruta de la panela al Cacaotal abastece dos estaciones y reparte cada carga; la Ruta de la leche sale de la bodega de la Lechería. Las dos rutas de panela se reparten lo que produce el Trapiche. Para exportar leche, la Lechería tiene que producir más de la que usa.
-- La estación tiene una pestaña 🚌 por cada ruta que la abastece («🚌 Panela», «🚌 Leche»).
-- **Las rutas cuadran a igual nivel**, también al nivel 100: la Pasteurizadora reparte su leche en cuartos (Quesera, Descremadora, Paila y la Ruta de la leche) y la Paila, la Mesa y la Chocolatería piden entre las tres ¾ de la panela del Trapiche. Recetas ajustadas: Paila cada 32 s; Mesa y Chocolatería con 2 pastas cada 32 s (la Chocolatería, 4 leches), y sus precios al doble.
-- **Arreglo de las alertas ⛔ y ↪️ en cadenas sanas**: cuando la siguiente estación tenía poco sitio, las mulas salían con migajas, todas quedaban en camino y el patio se llenaba («la banda no da abasto») aunque el transporte alcanzara. Ahora esperan a que quepa la carga entera y solo con el patio casi lleno salen con media carga o desvían. Al nivel 100 en las cuatro zonas, la Pasteurizadora pasó de estar bloqueada un 30 % del tiempo a nunca (hay una prueba).
-- **Arreglo**: mientras la Chiva iba de viaje, el Willys vendía la panela que ella esperaba y al volver salía medio vacía (la Paila se quedaba parada). Ahora la bodega le guarda carga y media.
-- **La mejora recomendada prueba pares**: si ninguna mejora suelta rinde, prueba arrieros y rutas de dos en dos. Antes, la Chocolatería podía quedarse con la Ruta de la leche en nivel 4 y sus arrieros en nivel 1 para siempre, porque subir solo uno de los dos no servía de nada. Y si a una estación le faltan dos importados, se avisa del que más escasea.
-- Simulador de balance: el jugador atento mide el ingreso del final de cada cadena (como la mejora recomendada) y los dos bots deciden cada 5 s de juego; el casual ahorra para construir si le faltan menos de 10 minutos. Duración medida: La Finca 2 h 20 min / 2 h 35 min, El Trapiche 35 min, La Lechería 2 h 20 min, El Cacaotal 1 h 45 min / 1 h 55 min (atento / casual); unas 7 h 15 min en total.
-- La recomendación se recalcula como mucho una vez por segundo (y enseguida tras cada compra): con cuatro zonas y sus rutas, calcularla cinco veces por segundo se notaba en el móvil.
-- **Arreglo**: al calcular cuánto puede enviar una zona, ya no se olvida de lo que ella misma recibe por otra ruta (la Paila parecía no gastar leche y la Ruta de la leche se veía con más leche de la que había).
-- 18 objetivos y 9 investigaciones nuevas. Partida v7 (las de antes se cargan solas; si la Lechería estaba completa, se abre el Cacaotal).
+## v1.2.2 — Production en puissances de 2
+- **Formule de niveau ajustée** : chaque niveau ajoute 15/99 (≈ 0,1515) au lieu de 0,15, ainsi le niveau 100 (le maximum) multiplie exactement par ×512. Avec des cycles qui sont des puissances de 2, au niveau 100 chaque station produit 256, 128, 64, 32 ou 16 unités par seconde (le double avec sa recherche). Un test le vérifie.
+- **Composteur** : 4 pulpes par compost en 16 s (avant 5 en 20 s) ; on consomme 1 compost pour 8 cafés lavés.
+- **Laiterie** : la Bassine transforme la moitié du lait et la Fromagerie et l’Écrémeuse un quart chacune. Fromagerie : 4 laits en 32 s ; Écrémeuse : 2 laits en 16 s ; Baratte : 32 s ; Bassine : 16 s. Prix ajustés pour que chaque litre rapporte autant qu’avant : crème 800, beurre 2 000, fromage 2 400, arequipe 4 000.
 
-## v1.2.3 — Bandas eléctricas
-- **Desde el nivel 50 de transporte** (un hito), las mulas de una estación se cambian por una **banda eléctrica**: el tramo del camino se cubre con una banda y lo que va en camino se ve como cajas del color del producto. Lleva exactamente lo mismo; solo cambia el dibujo.
-- Con muchas estaciones avanzadas ya no hay decenas de mulas con arriero en pantalla: las bandas y sus cajas se dibujan de una vez, lo que alivia la animación (sobre todo en el móvil).
-- El panel de transporte pasa a llamarse «⚡ Banda» y avisa del cambio antes de llegar al nivel 50.
+## v1.2.1 — Variété Castillo sans déséquilibrer la chaîne
+- La **Variété Castillo** ne double plus de nouveau la Caféière : maintenant **tout ce que vend la Finca vaut 50 % de plus**. C’était un deuxième ×2 pour la Caféière (et le Traitement écologique, un autre pour le Beneficiadero), alors que le reste de la Finca n’en avait qu’un : avec tout acheté, de la Marquise en avant la chaîne restait toujours à moitié.
+- Le **Traitement écologique** accélère maintenant le **Composteur** ×2 (il coûte 20 000 et apparaît avec lui) : avec moins de niveaux, il couvre le bonus du compost.
+- Nouvelle règle, avec test : chaque station de chaque chaîne a **exactement une** recherche de vitesse, donc avec toutes achetées la chaîne est aussi équilibrée que sans aucune.
 
-## v1.2.2 — Producción en potencias de 2
-- **Fórmula de nivel ajustada**: cada nivel suma 15/99 (≈ 0,1515) en vez de 0,15, así el nivel 100 (el máximo) multiplica exactamente ×512. Con ciclos que son potencias de 2, al nivel 100 cada estación produce 256, 128, 64, 32 o 16 unidades por segundo (el doble con su investigación). Una prueba lo comprueba.
-- **Compostera**: 4 pulpas por compost en 16 s (antes 5 en 20 s); se gasta 1 compost por cada 8 cafés lavados.
-- **Lechería**: la Paila procesa la mitad de la leche y la Quesera y la Descremadora un cuarto cada una. Quesera: 4 leches en 32 s; Descremadora: 2 leches en 16 s; Batidora: 32 s; Paila: 16 s. Precios ajustados para que cada litro rinda lo mismo que antes: crema 800, mantequilla 2.000, queso 2.400, arequipe 4.000.
+## v1.2 — Zone 3 : La Lechería
+- **Nouvelle zone** qui s’ouvre en terminant le Trapiche : Pâturage et étable ♾️ → Pasteurisatrice → trois branches : **Fromagerie**, **Écrémeuse → Baratte** et **Bassine à arequipe**. Carte originale avec des vaches, des eucalyptus, des cyprès et des balles de foin, et cinq nouveaux bâtiments.
+- **Branches** : le lait pasteurisé se répartit tout seul entre les stations qui l’utilisent (les mules vont à celle dont l’entrée est la plus vide). À niveau égal, chaque branche transforme un tiers ; tant qu’il en manque une, le lait en trop est vendu.
+- **Première route entre zones** : la **Chiva** de la Route de la panela emporte la panela en poudre de l’entrepôt du Trapiche à la Bassine. Elle a son propre niveau (onglet 🚌 de la Bassine, ou en touchant la chiva ou son panneau) et on la voit partir du Trapiche et arriver à la Laiterie. Le Willys du Trapiche ne vend pas la panela que la Chiva attend.
+- **L’amélioration recommandée regarde la zone qui t’approvisionne** : si la Bassine attend de la panela parce que le Trapiche ne suit pas, elle peut recommander quelque chose du Trapiche ; la toucher t’y emmène.
+- L’amélioration recommandée mesure les muletiers et les routes de 10 en 10 quand un niveau isolé ajoute très peu (avant, elle pouvait laisser des muletiers au niveau 1 sans jamais les recommander), et le goulot d’étranglement signale d’abord une station dont la cour se remplit.
+- « La chaîne » montre les branches en retrait et la route avec ce qui arrive par elle. 17 objectifs et 9 nouvelles recherches. Partie v6 (les anciennes se chargent toutes seules ; si le Trapiche était terminé, la Laiterie s’ouvre).
 
-## v1.2.1 — Variedad Castillo sin descompensar la cadena
-- **Variedad Castillo** ya no vuelve a duplicar el Cafetal: ahora **todo lo que vende la Finca vale un 50 % más**. Era un segundo ×2 para el Cafetal (y Beneficio ecológico, otro para el Beneficiadero), mientras el resto de la Finca solo tenía uno: con todo comprado, de la Marquesina en adelante la cadena quedaba siempre a la mitad.
-- **Beneficio ecológico** ahora acelera la **Compostera** ×2 (cuesta 20.000 y aparece con ella): con menos niveles cubre el bono del compost.
-- Regla nueva, con prueba: cada estación de cada cadena tiene **exactamente una** investigación de velocidad, así que con todas compradas la cadena queda tan equilibrada como sin ninguna.
+## v1.1.3 — Options de développeur
+- **Options de développeur cachées** dans ⚙️ : touche 7 fois la version du menu pour les afficher. Elles permettent d’**accélérer le temps** (×10 par défaut, de ×1 à ×100). Pendant l’accélération, un indicateur ⏩ dans la barre du haut le rappelle ; le toucher revient à ×1. L’accélération démarre désactivée à l’ouverture du jeu et n’affecte pas les gains hors ligne.
 
-## v1.2 — Zona 3: La Lechería
-- **Nueva zona** que se abre al completar el Trapiche: Potrero y establo ♾️ → Pasteurizadora → tres ramas: **Quesera**, **Descremadora → Batidora** y **Paila de arequipe**. Mapa propio con vacas, eucaliptos, cipreses y pacas de heno, y cinco edificios nuevos.
-- **Ramas**: la leche pasteurizada se reparte sola entre las estaciones que la usan (las mulas van a la de la entrada más vacía). A igual nivel, cada rama procesa un tercio; mientras falta alguna, la leche que sobra se vende.
-- **Primera ruta entre zonas**: la **Chiva** de la Ruta de la panela lleva panela pulverizada de la bodega del Trapiche a la Paila. Tiene su propio nivel (pestaña 🚌 de la Paila, o tocando la chiva o su letrero) y se ve salir del Trapiche y llegar a la Lechería. El Willys del Trapiche no vende la panela que la Chiva está esperando.
-- **La mejora recomendada mira la zona que te abastece**: si la Paila espera panela porque el Trapiche no da abasto, puede recomendar algo del Trapiche; tocarla lleva allá.
-- La mejora recomendada mide los arrieros y las rutas de 10 en 10 cuando un nivel suelto suma muy poco (antes podía dejar unos arrieros en nivel 1 sin recomendarlos nunca), y el cuello de botella señala primero una estación cuyo patio se llena.
-- «La cadena» muestra las ramas sangradas y la ruta con lo que llega por ella. 17 objetivos y 9 investigaciones nuevas. Partida v6 (las de antes se cargan solas; si el Trapiche estaba completo, se abre la Lechería).
+## v1.1.2 — Le compost augmente le prix, pas la vitesse
+- **Le compost n’accélère plus la Caféière.** Tant qu’il y a du compost, **tout ce que vend la Finca vaut 30 % de plus** (y compris les cerises et le café dévié). Avant, la Caféière ×1,5 produisait plus que ce que le Beneficiadero arrivait à transformer, et en plus elle s’allumait et s’éteignait selon qu’il y avait du compost.
+- **Le compost se consomme selon le café que lave le Beneficiadero** (1 pour 10), et non selon ce que récolte la Caféière : améliorer la Caféière ne laisse plus sans compost. Un Composteur à un niveau proche de celui du Beneficiadero couvre tout le bonus.
+- Le panneau du Composteur montre le bonus actuel et celui qu’il peut maintenir ; le « Prix de vente » de chaque station inclut les recherches et le compost (🪱).
+- L’amélioration recommandée mesure le Composteur de 10 en 10 niveaux, donc maintenant elle le propose bien.
+## v1.1.1 — Des recherches pour toute la chaîne
+- **Chaque station a sa recherche ×2.** Nouvelles : Dépulpeuse électrique et Traitement écologique (Beneficiadero), Décortiqueuse à rouleaux, Grand torréfacteur à tambour, Moulin électrique, Emballeuse automatique, Four à plus de bassines et Pulvérisateur électrique. Elles apparaissent à côté de celle qui accélère la station précédente (la Dépulpeuse, à côté de l’Engrais organique).
+- **L’amélioration recommandée peut proposer une recherche** quand l’argent suffit déjà et qu’elle rapporte plus que monter d’un niveau. La toucher ouvre la liste des recherches.
+- **L’amélioration recommandée regarde la fin de la chaîne**, et non ce qui est vendu en déviation : avant, elle pouvait recommander d’améliorer des muletiers pour vendre des cerises isolées pendant que la chaîne restait à la traîne.
 
-## v1.1.3 — Opciones de desarrollador
-- **Opciones de desarrollador ocultas** en ⚙️: toca 7 veces la versión del menú para mostrarlas. Permiten **acelerar el tiempo** (×10 por defecto, de ×1 a ×100). Mientras está acelerado, un indicador ⏩ en la barra de arriba lo recuerda; tocarlo vuelve a ×1. La aceleración arranca apagada al abrir el juego y no afecta las ganancias sin conexión.
+## v1.1 — Zone 2 : El Trapiche
+- **Nouvelle zone** qui s’ouvre en terminant la Finca : Champ de canne ♾️ → Broyage → Four → Moules → Pulvérisateur, avec sa carte de bambous guadua et de samans et des bâtiments originaux.
+- **Bagasse** : le Broyage la produit et le Four la brûle comme combustible (×2 tant qu’il y en a).
+- **Plusieurs zones à la fois** : toutes les zones ouvertes produisent, même si on n’en voit qu’une. Chaque zone a son entrepôt, son Willys, ses objectifs et ses recherches ; les pièces sont partagées.
+- **Sélecteur de zones (🗺️)** avec ce que rapporte chacune ; l’écran de zone terminée mène directement à la suivante.
+- 15 objectifs et 5 nouvelles recherches ; fin : « Premier chargement de panela ».
+- Corrigé : les objectifs de recherche étaient sauvegardés sous un mauvais nom (cela n’affectait pas le jeu) ; les parties sauvegardées se corrigent toutes seules.
+- La « première route entre zones » passe à la v1.2, quand la Laiterie aura besoin de la panela du Trapiche.
 
-## v1.1.2 — El compost sube el precio, no la velocidad
-- **El compost ya no acelera el Cafetal.** Mientras haya compost, **todo lo que vende la Finca vale un 30 % más** (también las cerezas y el café desviado). Antes el Cafetal ×1,5 producía más de lo que el Beneficiadero alcanzaba a procesar, y además se encendía y apagaba según hubiera compost.
-- **El compost se gasta según el café que lava el Beneficiadero** (1 por cada 10), no según lo que cosecha el Cafetal: subir el Cafetal ya no deja sin compost. Una Compostera a un nivel parecido al del Beneficiadero cubre todo el bono.
-- El panel de la Compostera muestra el bono de ahora y el que puede sostener; el «Precio de venta» de cada estación incluye investigaciones y compost (🪱).
-- La mejora recomendada mide la Compostera de 10 en 10 niveles, así que ahora sí la sugiere.
+## v1.0.1 — Des muletiers équilibrés
+- **Des muletiers au même niveau que leur station emportent tout ce qu’elle produit** (25 % de plus), quels que soient la distance ou les recherches. Avant, la charge était calculée pour un trajet fixe et sans compter l’Engrais ni le compost : sur les longs tronçons ou avec des recherches, il fallait des muletiers de plus haut niveau, et sur les tronçons courts il y en avait trop.
+- La charge par mule peut avoir des décimales : chaque niveau de muletiers ajoute de la capacité (avant, plusieurs niveaux d’affilée ne changeaient rien).
+- L’onglet Muletiers compare ce qu’ils emportent avec ce que produit la station et dit à quel niveau les monter.
+- La « Production » de chaque station inclut maintenant les recherches et le compost.
+- Corrigé : les objectifs « Vends du café lavé / torréfié / moulu » pouvaient devenir impossibles (ils ne se vendent que s’ils sont déviés) et bloquer la liste. Maintenant ils comptent ce qui est produit.
+- La zone dure maintenant environ 3 h 20 min – 3 h 30 min (avant 1 h 30 min – 3 h).
 
-## v1.1.1 — Investigaciones para toda la cadena
-- **Cada estación tiene su investigación ×2.** Nuevas: Despulpadora eléctrica y Beneficio ecológico (Beneficiadero), Trilladora de rodillos, Tostador de tambor grande, Molino eléctrico, Empacadora automática, Hornilla de más pailas y Pulverizadora eléctrica. Aparecen junto a la que acelera la estación anterior (la Despulpadora, junto al Abono orgánico).
-- **La mejora recomendada puede sugerir una investigación** cuando ya alcanza el dinero y rinde más que subir un nivel. Tocarla abre la lista de investigaciones.
-- **La mejora recomendada mira el final de la cadena**, no lo que se vende desviado: antes podía recomendar subir arrieros para vender cerezas sueltas mientras la cadena se quedaba atrás.
+## v1.0 — Zone 1 complète
+- **Composteur** (branche facultative) : la pulpe du Beneficiadero arrive par une goulotte et se transforme en compost, qui accélère la Caféière ×1,5 tant qu’il y en a. On consomme 1 compost pour 20 cerises.
+- **Flèche guide** sur la carte : elle indique la construction ou l’amélioration qui convient, seulement quand l’argent suffit déjà.
+- **Application installable** (PWA) : icône originale, plein écran et elle s’ouvre sans internet.
+- Pièces dans l’onglet du navigateur, Échap ferme les fenêtres et moins de particules si le système demande de réduire les animations.
+- Corrigé : le message « la station précédente produit plus que ce que celle-ci transforme » n’apparaissait presque jamais.
+- 30 objectifs (nouveau : construire le Composteur).
 
-## v1.1 — Zona 2: El Trapiche
-- **Nueva zona** que se abre al completar la Finca: Cañaduzal ♾️ → Molienda → Hornilla → Gaveras → Pulverizadora, con su mapa de guaduales y samanes y edificios propios.
-- **Bagazo**: la Molienda lo produce y la Hornilla lo quema como combustible (×2 mientras haya).
-- **Varias zonas a la vez**: todas las zonas abiertas producen, aunque solo se vea una. Cada zona tiene su bodega, su Willys, sus objetivos y sus investigaciones; las monedas se comparten.
-- **Selector de zonas (🗺️)** con lo que rinde cada una; la pantalla de zona completada lleva directo a la siguiente.
-- 15 objetivos y 5 investigaciones nuevas; final: «Primer cargamento de panela».
-- Corregido: los objetivos de investigación se guardaban con un nombre equivocado (no afectaba al juego); las partidas guardadas se corrigen solas.
-- La «primera ruta entre zonas» pasa a la v1.2, cuando la Lechería necesite la panela del Trapiche.
+## v0.5 — Guide
+- Objectifs avec récompense, recherches, amélioration recommandée, bienvenue avec les gains hors ligne, copie de sauvegarde.
+- Outil d’équilibrage (`npm run balance`).
+- Corrigé : ce qui était dévié pouvait remplir l’entrepôt et ne plus laisser de place au produit final.
 
-## v1.0.1 — Arrieros parejos
-- **Arrieros al mismo nivel que su estación llevan todo lo que produce** (un 25 % más), sin importar la distancia ni las investigaciones. Antes la carga se calculaba para un viaje fijo y sin contar el Abono ni el compost: en tramos largos o con investigaciones hacían falta arrieros de más nivel, y en tramos cortos sobraban.
-- La carga por mula puede tener decimales: cada nivel de arrieros suma capacidad (antes varios niveles seguidos no cambiaban nada).
-- La pestaña Arrieros compara lo que llevan con lo que produce la estación y dice a qué nivel subirlos.
-- La «Producción» de cada estación ya incluye investigaciones y compost.
-- Corregido: los objetivos «Vende café lavado / tostado / molido» podían quedar imposibles (solo se venden si se desvían) y bloquear la lista. Ahora cuentan lo producido.
-- La zona dura ahora unas 3 h 20 min – 3 h 30 min (antes 1 h 30 min – 3 h).
+## v0.4 — Vie
+- Des bâtiments qui évoluent à chaque palier, jour et nuit décoratifs, oiseaux, lucioles, pièces et son synthétisé.
 
-## v1.0 — Zona 1 completa
-- **Compostera** (rama opcional): la pulpa del Beneficiadero llega por una canaleta y se convierte en compost, que acelera el Cafetal ×1,5 mientras haya. Se gasta 1 compost por cada 20 cerezas.
-- **Flecha guía** en el mapa: señala la construcción o mejora que conviene, solo cuando ya te alcanza.
-- **App instalable** (PWA): icono propio, pantalla completa y se puede abrir sin internet.
-- Monedas en la pestaña del navegador, Esc cierra ventanas y menos partículas si el sistema pide reducir el movimiento.
-- Corregido: el aviso «la estación anterior produce más de lo que esta procesa» casi nunca aparecía.
-- 30 objetivos (nuevo: construir la Compostera).
+## v0.3 — Muletiers
+- Des mules par station qui vont et viennent, avec leur propre niveau ; vue « La chaîne ».
 
-## v0.5 — Guía
-- Objetivos con recompensa, investigaciones, mejora recomendada, bienvenida con ganancias sin conexión, copia de seguridad.
-- Herramienta de balance (`npm run balance`).
-- Corregido: lo desviado podía llenar la bodega y dejar sin sitio al producto final.
+## v0.2 — Chaîne
+- Les six stations de transformation, déviation vers l’entrepôt et indicateurs d’état.
 
-## v0.4 — Vida
-- Edificios que evolucionan en cada hito, día y noche decorativo, aves, luciérnagas, monedas y sonido sintetizado.
-
-## v0.3 — Arrieros
-- Mulas por estación que van y vuelven, con nivel propio; vista «La cadena».
-
-## v0.2 — Cadena
-- Las seis estaciones de procesamiento, desvío a la bodega e indicadores de estado.
-
-## v0.1 — Prototipo
-- Mapa isométrico, Cafetal, mulas, bodega y Willys, mejoras y guardado.
+## v0.1 — Prototype
+- Carte isométrique, Caféière, mules, entrepôt et Willys, améliorations et sauvegarde.
