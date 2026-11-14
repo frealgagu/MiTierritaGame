@@ -1,5 +1,11 @@
 # Registro de cambios
 
+## v4.7.3 — Eventos a demanda
+- **🔁 Eventos a demanda:** con oro en todos los eventos de una región, ya no salen solos en esa región. Por 20 ⭐ de Renombre (una vez por región) puedes jugar cualquiera otra vez cuando quieras, sin esperar los 2 años; siempre con un máximo de dos tableros abiertos a la vez.
+- **La lista de eventos** muestra el tiempo que lleva cada evento abierto y avisa con «⬆ Todo al 50» cuando ya todo está al nivel máximo.
+- **El número del botón de eventos** ya no cuenta los que ganaste y siguen abiertos.
+- **Un evento ganado** solo dice con qué medalla lo ganaste.
+
 ## v4.7.2 — Construir desde la cadena
 - **Construir desde la cadena ya no sale en blanco:** las estaciones de Bogotá que solo reciben de tractomula (como la Despensa de la Zona G) dejaban vacío su panel de construir.
 - **La cadena de Bogotá se mueve más suave:** mientras la mueves, las líneas se quedan quietas y el mapa de atrás descansa.

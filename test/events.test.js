@@ -382,3 +382,25 @@ test('primero salen los eventos sin oro y al final los de oro (v3.72)', () => {
   game.step(0.1);
   assert.equal(s.events.slots[0].zone, 'finca');
 });
+
+// Eventos a demanda (v4.7.3): con oro en todos los de una región ya no salen solos; con 20 ⭐ se juegan cuando se quiera,
+// sin cupo ni espera, pero nunca más de dos tableros abiertos.
+test('con oro en toda la región los eventos ya no salen solos y, comprados a demanda, se juegan otra vez (v4.7.3)', async () => {
+  const { eventsOf, regionEvents, quoteOnDemand, buyOnDemand, startOnDemand, refillSlots } = await import('../src/sim/events.js');
+  const game = new Game();
+  const s = game.state;
+  s.regionDone = true;
+  for (const z of Object.keys(s.zones)) s.zones[z].unlocked = true;
+  s.profile.medals = Object.fromEntries(regionEvents('cafetero').map((e) => [e.id, { best: 'gold', count: { gold: 1 } }]));
+  refillSlots(s);
+  assert.deepEqual(eventsOf(s).slots, [null, null], 'ya no salen solos');
+  assert.equal(startOnDemand(s, 'finca'), null, 'sin comprar no se juega');
+  s.profile.renown = 19;
+  assert.equal(quoteOnDemand(s.profile, 'cafetero').reason, 'renown');
+  s.profile.renown = 20;
+  assert.ok(buyOnDemand(s.profile, 'cafetero'));
+  assert.equal(s.profile.renown, 0);
+  assert.ok(startOnDemand(s, 'finca'));
+  assert.ok(startOnDemand(s, 'trapiche'));
+  assert.equal(startOnDemand(s, 'lecheria'), null, 'como mucho dos abiertos');
+});

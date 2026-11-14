@@ -17,7 +17,7 @@ import { EVENTS, EVENTS_BY_ID, EVENT_ACTIONS_BY_ID, EVENT_OF_ZONE, MEDALS, event
 import { createInitialState, createZoneState } from './state.js';
 import { createStationState } from './production.js';
 import { DAY_LENGTH, YEAR_DAYS, clockOf } from './calendar.js';
-import { canPay } from './upgrades.js';
+import { canPay, canPayRenown } from './upgrades.js';
 import { stationImportCap, stationRate } from './rules.js';
 import { effectsOf, speedMult } from './modifiers.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
@@ -101,7 +101,8 @@ export function refillSlots(root) {
     // oro (v3.72); entre iguales, la que lleva más tiempo sin jugarse.
     const medals = root.profile?.medals ?? {};
     const tier = (def, last) => (last === -Infinity ? 0 : medals[def.id]?.best === 'gold' ? 2 : 1);
-    const next = EVENTS.filter((def) => !busy.has(eventKey(def)) && !regions.has(REGION_OF_ZONE[def.zone]))
+    // (v4.7.3) Una región con oro en todos sus eventos ya no recibe eventos solos: se juegan a demanda (ver startOnDemand).
+    const next = EVENTS.filter((def) => !busy.has(eventKey(def)) && !regions.has(REGION_OF_ZONE[def.zone]) && !regionAllGold(root.profile, REGION_OF_ZONE[def.zone]))
       .map((def) => ({ def, owner: ownerOf(root, eventKey(def)) }))
       .filter(({ def, owner }) => owner && ready(owner, def) && afterDone(root, def))
       .map(({ def, owner }, k) => ({ def, k, last: eventsOf(owner).last[eventKey(def)] ?? -Infinity }))
@@ -110,6 +111,40 @@ export function refillSlots(root) {
     if (!next) return;
     slots[i] = { zone: eventKey(next.def) };
   }
+}
+
+// --- Eventos a demanda (v4.7.3) ---
+// Con oro en todos los eventos de una región, ya no salen solos: con 20 ⭐ de Renombre (una vez por región) cualquiera se
+// juega otra vez cuando se quiera, sin esperar cupo ni los 2 años; solo nunca más de 2 tableros abiertos a la vez.
+export const ON_DEMAND_COST = 20;
+export const regionAllGold = (profile, regionId) => regionEvents(regionId).length > 0 && regionEvents(regionId).every((e) => profile?.medals?.[e.id]?.best === 'gold');
+export const hasOnDemand = (profile, regionId) => Boolean(profile?.onDemand?.includes(regionId));
+export function quoteOnDemand(profile, regionId) {
+  if (hasOnDemand(profile, regionId)) return { ok: false, reason: 'owned', cost: ON_DEMAND_COST };
+  if (!regionAllGold(profile, regionId)) return { ok: false, reason: 'gold', cost: ON_DEMAND_COST };
+  if (!canPayRenown(profile, ON_DEMAND_COST)) return { ok: false, reason: 'renown', cost: ON_DEMAND_COST };
+  return { ok: true, cost: ON_DEMAND_COST };
+}
+export function buyOnDemand(profile, regionId) {
+  if (!quoteOnDemand(profile, regionId).ok) return false;
+  profile.renown -= ON_DEMAND_COST;
+  (profile.onDemand ??= []).push(regionId);
+  return true;
+}
+// Los tableros abiertos sin terminar de toda la partida.
+export const openBoards = (root) => statesOf(root).flatMap((st) => Object.values(eventsOf(st).boards)).filter((b) => !b.event.done).length;
+// Si un evento se puede jugar otra vez ya: región con oro en todo y comprada, sin tablero abierto y con lugar.
+export function canPlayOnDemand(root, key) {
+  const def = EVENT_OF_ZONE[key];
+  const owner = def && ownerOf(root, key);
+  if (!owner || eventsOf(owner).boards[key]) return false;
+  const region = REGION_OF_ZONE[def.zone];
+  return hasOnDemand(root.profile, region) && regionAllGold(root.profile, region) && openBoards(root) < EVENT_SLOTS;
+}
+export function startOnDemand(root, key) {
+  if (!canPlayOnDemand(root, key)) return null;
+  const owner = ownerOf(root, key);
+  return (eventsOf(owner).boards[key] = createEventState(EVENT_OF_ZONE[key], nextRound(owner, key)));
 }
 
 // Cuándo se libera el próximo cupo que está esperando sus 2 años (reloj del país), o null.

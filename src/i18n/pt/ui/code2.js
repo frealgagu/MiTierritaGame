@@ -165,4 +165,10 @@ export default {
   'Se abre cuando logres el segundo final (todo al nivel 100) en cada región, o la hayas reiniciado: {n} de {total}.': 'Abre quando você alcançar o segundo final (tudo no nível 100) em cada região, ou já a tiver reiniciado: {n} de {total}.',
   '🏁 ¡Ganado con {medal}!': '🏁 Ganho com {medal}!',
   '⬆ Todo al {n}': '⬆ Tudo no {n}',
+  '🔁 Ya puedes jugar los eventos de {region} cuando quieras.': '🔁 Agora você pode jogar os eventos de {region} quando quiser.',
+  '⏳ Hay {n} eventos abiertos: termina uno para jugar otro.': '⏳ Há {n} eventos abertos: termine um para jogar outro.',
+  '🔁 Jugar otra vez': '🔁 Jogar de novo',
+  'Eventos a demanda': 'Eventos sob demanda',
+  'Tienes oro en todos los eventos de {region}: ya no salen solos. Compra esta opción y juega cualquiera otra vez cuando quieras, sin esperar.': 'Você tem ouro em todos os eventos de {region}: eles não aparecem mais sozinhos. Compre esta opção e jogue qualquer um de novo quando quiser, sem esperar.',
+  'Comprar · {n} ⭐': 'Comprar · {n} ⭐',
 };
