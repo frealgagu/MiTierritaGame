@@ -39,6 +39,7 @@ import { STATIONS_BY_ID } from './data/stations.js';
 import { ICON, ICON_FONT } from './data/icons.js';
 import { RESEARCH_BY_ID } from './data/research.js';
 import { offlineCapSeconds } from './sim/modifiers.js';
+import { OFFLINE_COSTS, offlineLevel } from './sim/renown.js';
 import { toast } from './ui/toast.js';
 import { bindDevOptions, savedSpeed } from './ui/DevOptions.js';
 import { bindIconTips } from './ui/iconTips.js';
@@ -631,7 +632,7 @@ async function applyOffline(game, seconds, region = null, profile = game.state.p
   splashOffline(seconds, cap, region);
   const r = await game.catchUpAsync(seconds, cap, setSplashProgress);
   splashWait(t('¡Listo! Preparando el mapa…'));
-  return r.coins > 0 ? { ...r, cap, capped: seconds > cap } : null;
+  return r.coins > 0 ? { ...r, cap, capped: seconds > cap, maxed: offlineLevel(profile) >= OFFLINE_COSTS.length } : null;
 }
 
 // getActive: currently viewed region state (its second ending and restart).

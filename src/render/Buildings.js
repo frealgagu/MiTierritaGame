@@ -352,7 +352,235 @@ function tamboHouse(view, g, gx, gy, r, ctx, lift = 12) {
   return floor;
 }
 
+// --- Special zone (v5.5) helpers ---
+const TENT_COLORS = [[0xe63946, 0xffffff], [0x2a9d8f, 0xf4d35e], [0xf4a261, 0x264653], [0x8e44ad, 0xffffff]];
+// White beach sand over the whole lot, with a few shells.
+function sandLot(g, x, y) {
+  g.poly(isoPoly([[x + 0.1, y + 0.1], [x + 2.9, y + 0.1], [x + 2.9, y + 2.9], [x + 0.1, y + 2.9]])).fill(0xf3e6c0);
+  for (let k = 0; k < 8; k++) {
+    const p = iso(x + 0.3 + ((k * 41) % 25) / 10, y + 0.3 + ((k * 29) % 23) / 9.5);
+    g.ellipse(p.x, p.y, 1.6, 0.9).fill(k % 2 ? 0xffffff : 0xf4b6a0);
+  }
+}
+// Sea of seven colors over the whole lot: bands from turquoise to blue.
+function seaLot(g, x, y) {
+  const bands = [0x80deea, 0x4dd0e1, 0x26c6da, 0x00acc1];
+  bands.forEach((c, k) => {
+    const a = 0.1 + k * 0.35;
+    g.poly(isoPoly([[x + a, y + a], [x + 2.9, y + a], [x + 2.9, y + 2.9], [x + a, y + 2.9]])).fill(c);
+  });
+}
+// Striped beach tent (cone canopy on a pole) with a lounge chair, at tile (gx, gy).
+function beachTent(g, gx, gy, [a, b]) {
+  const p = iso(gx, gy);
+  g.ellipse(p.x + 3, p.y + 1, 13, 5).fill({ color: 0x000000, alpha: 0.15 });
+  g.poly([p.x - 9, p.y + 2, p.x + 3, p.y - 2, p.x + 6, p.y + 2, p.x - 6, p.y + 6]).fill(0x4cc9f0).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+  g.rect(p.x - 0.8, p.y - 22, 1.6, 22).fill(0x6d4c41);
+  for (let k = 0; k < 6; k++) {
+    const a0 = Math.PI + (k / 6) * Math.PI;
+    const a1 = Math.PI + ((k + 1) / 6) * Math.PI;
+    g.poly([p.x, p.y - 27, p.x + Math.cos(a0) * 15, p.y - 19 + Math.sin(a0) * 2.6, p.x + Math.cos(a1) * 15, p.y - 19 + Math.sin(a1) * 2.6]).fill(k % 2 ? b : a);
+  }
+  g.ellipse(p.x, p.y - 19, 15, 2.8).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+}
+// Coconut palm rooted at screen point (x, y), h px tall.
+function palmAt(g, x, y, h) {
+  g.ellipse(x + 4, y + 1, 9, 3).fill({ color: 0x000000, alpha: 0.15 });
+  g.moveTo(x - 1.6, y).quadraticCurveTo(x + 2, y - h * 0.5, x + 4, y - h).lineTo(x + 6, y - h).quadraticCurveTo(x + 4, y - h * 0.5, x + 1.6, y).closePath().fill(0x8d6e4a);
+  for (const [dx, dy] of [[-14, 6], [-10, -6], [4, -10], [14, -2], [13, 8]]) {
+    g.moveTo(x + 5, y - h).quadraticCurveTo(x + 5 + dx * 0.5, y - h + dy * 0.5 - 6, x + 5 + dx, y - h + dy).stroke({ width: 3.2, color: 0x2e7d32 });
+  }
+  g.circle(x + 4, y - h + 2, 1.8).fill(0x6d4c41).circle(x + 7, y - h + 2.4, 1.8).fill(0x6d4c41);
+}
+// Passenger launch on the water at screen point (px, py) with `people` aboard.
+function launch(b, px, py, people, color) {
+  b.ellipse(px, py + 2, 14, 3.4).fill({ color: 0x1f8aa6, alpha: 0.6 });
+  b.moveTo(px - 13, py - 3).lineTo(px + 11, py - 3).lineTo(px + 14, py - 6).lineTo(px + 9, py + 1).lineTo(px - 11, py + 1).closePath().fill(0xffffff).stroke(OUTLINE);
+  b.rect(px - 11, py - 1.5, 20, 1.6).fill(color);
+  for (let i = 0; i < people; i++) {
+    b.circle(px - 9 + i * 4, py - 6, 1.8).fill(0x8d5524);
+    b.rect(px - 10.5 + i * 4, py - 4.5, 3, 2).fill([0xf6d860, 0xe76f51, 0x4cc9f0, 0xffffff][i % 4]);
+  }
+}
+// Golf cart («mulita») parked at screen point p, with a striped canopy.
+function mulitaAt(g, p, color) {
+  const c = parseInt(color.slice(1), 16);
+  g.ellipse(p.x, p.y + 1, 12, 4).fill({ color: 0x000000, alpha: 0.18 });
+  g.roundRect(p.x - 10, p.y - 9, 20, 8, 2).fill(c).stroke(OUTLINE);
+  g.rect(p.x - 9, p.y - 19, 1.4, 10).fill(0x546e7a).rect(p.x + 7.6, p.y - 19, 1.4, 10).fill(0x546e7a);
+  g.roundRect(p.x - 11, p.y - 21, 22, 3, 1).fill(0xf4a261).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+  g.circle(p.x - 6, p.y, 2.6).fill(0x263238).circle(p.x + 6, p.y, 2.6).fill(0x263238);
+}
+
 const DRAW = {
+
+  // --- Special zone · San Andrés (v5.5): the island tour ---
+
+  // Spratt Bight beach tents: white sand, striped tent canopies over lounge chairs, and a palm-thatch kiosk.
+  carpas_spratt(g, x, y, ctx) {
+    sandLot(g, x, y);
+    ramada(this, g, x + 0.25, y + 0.25, 1.1, 0.9, 18 + ctx.up, 0xc9a96b);
+    box(g, x + 0.35, y + 0.5, 0.9, 0.35, 8, 0x8d6e4a);
+    const n = 3 + Math.min(ctx.tier, 3);
+    const spots = [[1.9, 0.6], [2.5, 1.3], [1.8, 1.6], [0.7, 1.9], [1.4, 2.4], [2.4, 2.3]];
+    for (let k = 0; k < n; k++) beachTent(g, x + spots[k][0], y + spots[k][1], TENT_COLORS[k % TENT_COLORS.length]);
+  },
+
+  // Boats on the sea of seven colors: turquoise water bands, a wooden pier, and launches heading out full.
+  lanchas_siete_colores(g, x, y, ctx) {
+    seaLot(g, x, y);
+    for (let k = 0; k < 5; k++) box(g, x + 0.3, y + 0.9 + k * 0.28, 1.4, 0.24, 3, k % 2 ? PAL.wood : PAL.woodDark);
+    for (const [px, py] of [[0.3, 0.9], [1.65, 0.9], [0.3, 2.25], [1.65, 2.25]]) box(g, x + px, y + py, 0.07, 0.07, 6, PAL.woodDark);
+    const boats = new Graphics();
+    this.anim.addChild(boats);
+    this.animate = (time) => {
+      boats.clear();
+      const bob = Math.sin(time * 1.6) * 0.8;
+      const a = iso(x + 2.2, y + 0.7);
+      launch(boats, a.x, a.y + bob, 0, 0x1e88e5);
+      if (ctx.tier >= 2) {
+        const c = iso(x + 2.3, y + 2.5);
+        launch(boats, c.x, c.y - bob, 2, 0xf4a261);
+      }
+      if (!this.working) return;
+      const f = (time * 0.12) % 1;
+      const b = iso(x + 1.9 + f * 0.8, y + 1.6 - f * 1.4);
+      launch(boats, b.x, b.y + Math.sin(time * 2) * 0.8, 4, 0xd7263d);
+      boats.moveTo(b.x - 14, b.y + 1).lineTo(b.x - 24, b.y + 3).stroke({ width: 1.2, color: 0xffffff, alpha: 0.7 });
+    };
+    this.animate(0);
+  },
+
+  // Trip to Johnny Cay: a small white-sand cay with coconut palms out in the sea, and the launch going back and forth.
+  paseo_johnny_cay(g, x, y, ctx) {
+    seaLot(g, x, y);
+    const c = iso(x + 1.6, y + 1.2);
+    g.ellipse(c.x, c.y + 2, 46, 20).fill({ color: 0x80deea, alpha: 0.8 });
+    g.ellipse(c.x, c.y, 38, 15).fill(0xf3e6c0).stroke(OUTLINE);
+    g.ellipse(c.x - 4, c.y - 2, 22, 8).fill(0x7cb342);
+    const palms = 2 + Math.min(ctx.tier, 3);
+    for (let k = 0; k < palms; k++) palmAt(g, c.x - 22 + k * 11, c.y - 1 + (k % 2) * 4, 30 + (k % 3) * 6 + ctx.up * 0.5);
+    this.roofTop = { x: c.x, y: c.y - 40 };
+    const boats = new Graphics();
+    this.anim.addChild(boats);
+    this.animate = (time) => {
+      boats.clear();
+      const f = this.working ? (Math.sin(time * 0.5) + 1) / 2 : 0;
+      const b = iso(x + 0.6 + f * 0.4, y + 2.6 - f * 0.3);
+      launch(boats, b.x, b.y + Math.sin(time * 2) * 0.8, this.working ? 3 : 0, 0x26a69a);
+    };
+    this.animate(0);
+  },
+
+  // San Luis rondón kitchen: island house on stilts with a fire under the big pot, smoke rising.
+  rondon_san_luis(g, x, y, ctx) {
+    const z = stiltHouse(this, g, x + 0.3, y + 0.25, 1.7, 1.2, 20, ctx, { wall: 0xfdd835, trim: 0xffffff, roofColor: 0x2e7d32, lift: 8 });
+    windowOnFront(this, g, x + 0.3, y + 0.25, 1.2, 1.3, z + 6, 0xffe0b2);
+    // Fogón: three stones, firewood, and the black pot of rondón.
+    const p = iso(x + 2.3, y + 2.2);
+    g.ellipse(p.x, p.y, 13, 6).fill({ color: 0x000000, alpha: 0.2 });
+    for (const [dx, dy] of [[-8, 0], [8, 0], [0, 4]]) g.ellipse(p.x + dx, p.y + dy, 4, 3).fill(0x8d8478).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    g.poly([p.x - 6, p.y - 2, p.x + 6, p.y - 2, p.x + 4, p.y + 2, p.x - 4, p.y + 2]).fill(0xff7043);
+    g.moveTo(p.x - 11, p.y - 6).quadraticCurveTo(p.x - 12, p.y - 22, p.x, p.y - 22).quadraticCurveTo(p.x + 12, p.y - 22, p.x + 11, p.y - 6).closePath().fill(0x37474f).stroke(OUTLINE);
+    g.ellipse(p.x, p.y - 21, 11, 3.5).fill(0xf3e3c3).stroke(OUTLINE);
+    this.smokePoints.push({ x: p.x, y: p.y - 26 });
+    // Coconuts waiting to be grated.
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 3); k++) {
+      const q = iso(x + 0.4 + k * 0.25, y + 2.6);
+      g.circle(q.x, q.y - 3, 3.2).fill(0x6d4c41).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    }
+  },
+
+  // Hoyo Soplador: coral rock shore with the blowhole spouting sea water, a railing, and golf carts (mulitas) parked.
+  hoyo_soplador(g, x, y, ctx) {
+    g.poly(isoPoly([[x + 0.1, y + 0.1], [x + 2.9, y + 0.1], [x + 2.9, y + 2.9], [x + 0.1, y + 2.9]])).fill(0xa89c88);
+    for (let k = 0; k < 14; k++) {
+      const p = iso(x + 0.3 + ((k * 37) % 23) / 9, y + 0.3 + ((k * 53) % 19) / 8);
+      g.ellipse(p.x, p.y, 4 + (k % 3), 2 + (k % 2)).fill(k % 2 ? 0x6f6658 : 0x7d7362);
+    }
+    const h = iso(x + 1.8, y + 1.0);
+    g.ellipse(h.x, h.y, 10, 4.5).fill(0x263238).stroke(OUTLINE);
+    // Railing around the blowhole.
+    for (let k = 0; k <= 6; k++) {
+      const a = (k / 6) * Math.PI;
+      const q = { x: h.x + Math.cos(a) * 18, y: h.y + 6 + Math.sin(a) * 6 };
+      g.rect(q.x - 0.8, q.y - 8, 1.6, 8).fill(0xffffff);
+    }
+    const carts = 1 + Math.min(ctx.tier, 2);
+    for (let k = 0; k < carts; k++) mulitaAt(g, iso(x + 0.6 + k * 0.7, y + 2.4), ['#ffffff', '#4dd0e1', '#fdd835'][k]);
+    this.roofTop = { x: h.x, y: h.y - 40 };
+    const spout = new Graphics();
+    this.anim.addChild(spout);
+    this.animate = (time) => {
+      spout.clear();
+      if (!this.working) return;
+      const f = (time * 0.6) % 1;
+      const height = f < 0.35 ? (f / 0.35) * 38 : Math.max(0, 38 - ((f - 0.35) / 0.65) * 50);
+      if (height <= 0) return;
+      spout.moveTo(h.x - 3, h.y).quadraticCurveTo(h.x, h.y - height * 1.2, h.x + 3, h.y).fill({ color: 0xe1f5fe, alpha: 0.85 });
+      for (let k = 0; k < 5; k++) spout.circle(h.x + (k - 2) * 4, h.y - height + Math.abs(k - 2) * 4, 2.2).fill({ color: 0xffffff, alpha: 0.8 });
+    };
+    this.animate(0);
+  },
+
+  // Snorkeling at La Piscinita: coral ledge with a ladder into a natural turquoise pool, a gear kiosk, and swimmers.
+  snorkel_piscinita(g, x, y, ctx) {
+    g.poly(isoPoly([[x + 0.1, y + 0.1], [x + 2.9, y + 0.1], [x + 2.9, y + 2.9], [x + 0.1, y + 2.9]])).fill(0xa89c88);
+    g.poly(isoPoly([[x + 1.0, y + 0.9], [x + 2.8, y + 0.9], [x + 2.8, y + 2.8], [x + 1.0, y + 2.8]])).fill(0x26c6da).stroke(OUTLINE);
+    g.poly(isoPoly([[x + 1.3, y + 1.2], [x + 2.6, y + 1.2], [x + 2.6, y + 2.6], [x + 1.3, y + 2.6]])).fill(0x4dd0e1);
+    for (const [px, py] of [[1.6, 1.6], [2.3, 2.2], [1.9, 2.4]]) {
+      const c = iso(x + px, y + py);
+      g.ellipse(c.x, c.y, 5, 2).fill({ color: 0xff8a65, alpha: 0.8 });
+    }
+    const l = iso(x + 1.0, y + 1.5);
+    g.moveTo(l.x - 3, l.y - 10).lineTo(l.x - 3, l.y + 4).moveTo(l.x + 3, l.y - 10).lineTo(l.x + 3, l.y + 4).stroke({ width: 1.2, color: 0xb0bec5 });
+    for (let k = 0; k < 3; k++) g.moveTo(l.x - 3, l.y - 7 + k * 4).lineTo(l.x + 3, l.y - 7 + k * 4).stroke({ width: 1, color: 0xb0bec5 });
+    ramada(this, g, x + 0.2, y + 0.2, 0.8, 0.7, 16 + ctx.up, 0x26a69a);
+    box(g, x + 0.25, y + 0.55, 0.7, 0.3, 7, 0xffb74d);
+    const swim = new Graphics();
+    this.anim.addChild(swim);
+    const n = 1 + Math.min(ctx.tier, 3);
+    this.animate = (time) => {
+      swim.clear();
+      if (!this.working) return;
+      for (let k = 0; k < n; k++) {
+        const f = (time * 0.08 + k / n) % 1;
+        const c = iso(x + 1.4 + f * 1.1, y + 1.4 + ((k * 0.37) % 1));
+        swim.ellipse(c.x, c.y, 6, 2).fill({ color: 0x00838f, alpha: 0.5 });
+        swim.circle(c.x - 4, c.y - 1, 2.2).fill(0x8d5524);
+        swim.rect(c.x - 2, c.y - 6, 1.2, 5).fill(0xffd54f);
+      }
+    };
+    this.animate(0);
+  },
+
+  // La Loma lookout: the white wooden Baptist church with its red roof and bell tower, on the hilltop.
+  mirador_la_loma(g, x, y, ctx) {
+    g.poly(isoPoly([[x + 0.1, y + 0.1], [x + 2.9, y + 0.1], [x + 2.9, y + 2.9], [x + 0.1, y + 2.9]])).fill(0x7cb342);
+    const H = 24 + ctx.up;
+    box(g, x + 0.3, y + 0.5, 1.7, 1.2, H, 0xfafafa);
+    for (let k = 1; k < 5; k++) {
+      const a = iso(x + 0.3, y + 1.7, (H * k) / 5);
+      const b = iso(x + 2.0, y + 1.7, (H * k) / 5);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 0.7, color: 0xcfd8dc });
+    }
+    gableRoof(g, x + 0.3, y + 0.5, 1.7, 1.2, H, 14, 0xc62828, 0xfafafa);
+    door(g, x + 0.3, y + 0.5, 1.2, 0.85, 15, 0x5d4037);
+    windowOnRight(this, g, x + 0.3, y + 0.5, 1.7, 0.6, 10, 0x4fc3f7);
+    // Bell tower at the front corner.
+    const T = H + 22;
+    box(g, x + 2.0, y + 1.2, 0.55, 0.55, T, 0xfafafa);
+    windowOnFront(this, g, x + 2.0, y + 1.2, 0.55, 0.27, T - 12, 0x5d4037);
+    const top = iso(x + 2.275, y + 1.475, T);
+    const left = iso(x + 2.0, y + 1.75, T);
+    const right = iso(x + 2.55, y + 1.2, T);
+    const front = iso(x + 2.55, y + 1.75, T);
+    g.poly([left.x, left.y, front.x, front.y, top.x, top.y - 22]).fill(0xb71c1c).stroke(OUTLINE);
+    g.poly([front.x, front.y, right.x, right.y, top.x, top.y - 22]).fill(0xc62828).stroke(OUTLINE);
+    g.moveTo(top.x, top.y - 22).lineTo(top.x, top.y - 30).moveTo(top.x - 3, top.y - 27).lineTo(top.x + 3, top.y - 27).stroke({ width: 1.4, color: 0x5d4037 });
+    this.roofTop = { x: top.x, y: top.y - 30 };
+    palmAt(g, iso(x + 0.3, y + 2.5).x, iso(x + 0.3, y + 2.5).y, 34);
+  },
   // Beneficiadero: house with receiving hopper and washing tanks.
   wetmill(g, x, y, ctx) {
     const hx = x + 0.3;

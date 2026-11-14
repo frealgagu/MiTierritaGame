@@ -6,10 +6,13 @@ import { VICTORY } from '../data/victory.js';
 import { LANG, t } from '../i18n/index.js';
 
 // Welcome-back modal with earnings while the game was closed.
-export function showWelcome({ seconds, coins, capped, cap, scale = 1 }, onCollect) {
+// maxed: offline hours are already at their top level, so the Renown hint is left out.
+export function showWelcome({ seconds, coins, capped, cap, maxed = false, scale = 1 }, onCollect) {
   const modal = document.getElementById('welcome');
   const fast = scale > 1 ? ` (${t('a')} ⏩ ×${scale})` : '';
-  document.getElementById('welcome-text').textContent = capped
+  document.getElementById('welcome-text').textContent = capped && maxed
+    ? t('Estuviste fuera más de {cap}. Tu finca trabajó {time}, el máximo, y ganó:', { cap: formatDuration(cap / scale), time: formatDuration(seconds) + fast })
+    : capped
     ? t('Estuviste fuera más de {cap}. Tu finca trabajó {time}, el máximo, y ganó (con Renombre ⭐ puedes subir ese máximo, en 🏅 Eventos › ⏰ Sin conexión):', { cap: formatDuration(cap / scale), time: formatDuration(seconds) + fast })
     : t('Mientras no estabas, tu finca siguió trabajando {time} y ganó:', { time: formatDuration(seconds) + fast });
   document.getElementById('welcome-coins').textContent = `💰 ${formatNumber(coins)}`;
