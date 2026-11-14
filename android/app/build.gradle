@@ -13,7 +13,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         // (v4.7.3) En GitHub, el flujo de publicación da el código (50000 + número de la publicación): siempre sube, aunque
         // la versión de package.json no cambie (Google Play no acepta dos veces el mismo código).
-        versionCode (System.getenv('MITIERRITA_VERSION_CODE') ?: (major * 10000 + minor * 100 + patch)) as int
+        // (Con «=» y entre paréntesis: sin ellos Groovy lo leía como versionCode(…) y luego `as int` del resultado, nulo.)
+        versionCode = (System.getenv('MITIERRITA_VERSION_CODE') ?: "${major * 10000 + minor * 100 + patch}").toInteger()
         versionName pkg.version
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
