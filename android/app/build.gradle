@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-// La versión sale de package.json: versionName "1.7.2", versionCode 10702 (mayor·10000 + menor·100 + parche).
+// Version comes from package.json: versionName "1.7.2", versionCode 10702 (major*10000 + minor*100 + patch).
 def pkg = new groovy.json.JsonSlurper().parse(rootProject.file('../package.json'))
 def (major, minor, patch) = pkg.version.tokenize('.').collect { it as int }
 
@@ -11,9 +11,9 @@ android {
         applicationId "com.frealgagu.mitierrita.encantos"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        // (v4.7.3) En GitHub, el flujo de publicación da el código (50000 + número de la publicación): siempre sube, aunque
-        // la versión de package.json no cambie (Google Play no acepta dos veces el mismo código).
-        // (Con «=» y entre paréntesis: sin ellos Groovy lo leía como versionCode(…) y luego `as int` del resultado, nulo.)
+        // (v4.7.3) In GitHub Actions, the publish workflow supplies the code (50000 + run number): always increments even if
+        // package.json version hasn't changed (Google Play rejects duplicate version codes).
+        // (With «=» and parentheses: without them Groovy parsed versionCode(...) and then `as int` of null.)
         versionCode = (System.getenv('MITIERRITA_VERSION_CODE') ?: "${major * 10000 + minor * 100 + patch}").toInteger()
         versionName pkg.version
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -23,10 +23,9 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-    // Clave de las versiones de prueba: todos los APK tienen la misma firma y se instalan encima del
-    // anterior sin perder la partida. Llega por variables de entorno (en GitHub Actions, desde los
-    // secretos del repositorio; ver .github/workflows/pages.yml). Mientras no existan, se usa la de
-    // pruebas guardada en el repositorio (temporal: se cambiará por los secretos con Google Play).
+    // Debug signing key: every APK shares the same signature so updates install over previous ones
+    // without losing save data. Supplied via env vars (from repo secrets in GitHub Actions; see
+    // .github/workflows/pages.yml). Until secrets exist, falls back to the repo's debug keystore (temporary).
     def keystore = System.getenv('MITIERRITA_KEYSTORE') ?: (file('mitierrita-pruebas.keystore').exists() ? 'mitierrita-pruebas.keystore' : null)
     def fromEnv = System.getenv('MITIERRITA_KEYSTORE') != null
     if (keystore) {
@@ -39,8 +38,8 @@ android {
             }
         }
     }
-    // Clave de subida a Google Play (el AAB de la tienda): solo llega por variables de entorno, desde los
-    // secretos PLAY_UPLOAD_* del repositorio. Google firma después con su propia clave (Play App Signing).
+    // Google Play upload key (for store AAB): supplied only via env vars from PLAY_UPLOAD_* repo
+    // secrets. Google re-signs with its own key afterward (Play App Signing).
     def uploadKeystore = System.getenv('MITIERRITA_UPLOAD_KEYSTORE')
     if (uploadKeystore) {
         signingConfigs {

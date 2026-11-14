@@ -1,6 +1,6 @@
-// 💰 De dónde sale (v4.1.1): al tocar el dinero de la barra de arriba, lo que gana por segundo la región que se
-// ve, zona por zona; lo que vende el Willys en la zona de ahora (cuánto, a qué precio y lo que se queda sin
-// vender) y lo que lo multiplica. En un evento, lo del tablero.
+// 💰 Income breakdown (v4.1.1): tapping top-bar coins shows what the viewed region earns per second,
+// zone by zone; what the Willys sells in the current zone (rate, price, and what goes unsold)
+// and its multipliers. In an event, shows board breakdown.
 import { formatNumber, formatRate } from '../core/format.js';
 import { PRODUCTS } from '../data/products.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
@@ -10,7 +10,7 @@ import { COMPOST_VALUE, compostValueBoost, legacyMult, researchMult } from '../s
 import { clockOf, seasonOf } from '../sim/calendar.js';
 import { t } from '../i18n/index.js';
 
-const SHOW = 0.0005; // por debajo de esto (u/s) no se lista
+const SHOW = 0.0005; // below this (u/s) omitted from list
 
 const row = (left, right, cls = '') => `<div class="money-row ${cls}"><span>${left}</span><b>${right}</b></div>`;
 const mult = (x) => `×${formatNumber(x)}`;
@@ -44,7 +44,7 @@ export class MoneyView {
     const parts = [];
     parts.push(`<p class="money-note">${t('La barra marca <b>+{n} 💰/s</b>: lo que se vendió en promedio el último minuto.', { n: formatRate(this.game.incomePerSecond()) })}</p>`);
 
-    // Zona por zona (en un evento, solo el tablero).
+    // Zone by zone (in an event, board only).
     const region = REGIONS_BY_ID[REGION_OF_ZONE[zone]];
     const zones = s.event ? [zone] : region.zones.filter((z) => s.zones[z]?.unlocked);
     const per = zones.map((z) => ({ z, a: analyzeChain(s, z) }));
@@ -58,7 +58,7 @@ export class MoneyView {
       parts.push(row(t('Total estimado'), `${formatRate(total)} 💰/s`, 'total'));
     }
 
-    // Lo que vende el Willys en la zona que se ve.
+    // What the Willys sells in the currently viewed zone.
     const here = per.find((x) => x.z === zone)?.a ?? analyzeChain(s, zone);
     parts.push(`<h3 class="research-other">${t('Lo que vende el Willys en {zone}', { zone: `${ZONES_BY_ID[zone].icon} ${ZONES_BY_ID[zone].name}` })}</h3>`);
     const sold = here.sold.filter((x) => x.units > SHOW).sort((a, b) => b.units * b.value - a.units * a.value);
@@ -73,7 +73,7 @@ export class MoneyView {
       parts.push(row(`⚠️ ${t('Sin vender: {p}', { p: `${p.icon} ${p.name}` })}<br><small>${t('El Willys no da abasto: sube la bodega.')}</small>`, `${formatRate(x.unsold)}/s`, 'lost'));
     }
 
-    // Lo que lo multiplica.
+    // What multiplies it.
     const mults = [];
     const resets = s.legacy?.resets ?? 0;
     if (resets) mults.push(row(t('🔁 Reinicios ({n}): producción y Willys', { n: resets }), mult(legacyMult(s))));
@@ -88,8 +88,8 @@ export class MoneyView {
     if (sold.some((x) => researchMult(s, 'productValue', x.product) !== 1)) mults.push(row(t('🔬 Investigaciones: precio de algunos productos'), t('ver arriba')));
     const carry = researchMult(s, 'dispatchCapacity', zone);
     if (carry !== 1) mults.push(row(t('🔬 Investigaciones: lo que lleva el Willys'), mult(carry)));
-    // El segundo Willys no multiplica el dinero (v4.3.1): despacha más seguido, pero si uno solo ya alcanzaba
-    // se vende lo mismo. Por eso ya no sale aquí (decía ×2).
+    // Second Willys doesn't multiply coin rate (v4.3.1): dispatches more often, but if one already kept up
+    // total sold stays the same. Removed from here (used to say ×2).
     if (zone === 'finca' && compostValueBoost(s) > 1) mults.push(row(t('🪱 Compost: lo que vende la Finca'), `+${Math.round((COMPOST_VALUE - 1) * 100)} %`));
     parts.push(`<h3 class="research-other">${t('Lo que lo multiplica')}</h3>`);
     parts.push(mults.length ? mults.join('') : `<p class="money-note">${t('Nada todavía: llega con las investigaciones, los reinicios y el verano.')}</p>`);

@@ -5,16 +5,16 @@ import { bulkResearch, previewAllResearch, researchBlocker } from '../sim/upgrad
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 
-// Investigaciones: compras únicas que mejoran toda la finca.
+// Research: one-time purchases improving the whole estate.
 export class ResearchView {
-  // onGo(id): ir a una estación (v3.12: la que le falta a una investigación bloqueada).
+  // onGo(id): jump to a station (v3.12: station missing for a locked research upgrade).
   constructor(game, getZone, onGo = () => {}) {
     this.game = game;
     this.getZone = getZone;
     this.onGo = onGo;
     this.modal = document.getElementById('research');
     this.body = document.getElementById('research-body');
-    this.foot = document.getElementById('research-foot'); // «Comprar todas», abajo y fuera de la lista (v3.57)
+    this.foot = document.getElementById('research-foot'); // «Buy all», pinned below outside the scroll list (v3.57)
     this.badge = document.getElementById('research-badge');
     document.getElementById('research-btn').addEventListener('click', () => this.open());
     document.getElementById('research-close').addEventListener('click', () => this.close());
@@ -27,7 +27,7 @@ export class ResearchView {
         this.scrollPending = true;
         return void this.update();
       }
-      // Una bloqueada: a la estación que le falta.
+      // Locked one: jumps to its missing station.
       const row = e.target.closest('[data-blocked]');
       if (!row) return;
       const target = researchBlocker(this.game.state, RESEARCH_BY_ID[row.dataset.blocked]);
@@ -44,8 +44,8 @@ export class ResearchView {
     this.update();
   }
 
-  // Al abrir y tras «Comprar todas» (v3.57): la lista baja hasta la más barata que falta de esta zona o, si ya
-  // están todas, hasta la Maestría y la Supremacía (que quedan aparte), para que se vean.
+  // On open and after «Buy all» (v3.57): scrolls to cheapest unbought research in this zone or, if
+  // all done, to Mastery and Supremacy (listed separately), keeping them in view.
   scrollToPending() {
     const zone = this.getZone();
     const left = bulkResearch(this.game.state, zone).filter((r) => !this.game.state.research.includes(r.id));
@@ -59,9 +59,9 @@ export class ResearchView {
   }
 
   update() {
-    // Todas las de la zona que se está viendo y, aparte, las que ya se pueden investigar en las demás
-    // (las ×2 se habilitan al nivel 25, muchas veces cuando ya se está en otra zona). El número del
-    // botón cuenta las que alcanza el dinero, de todas las zonas.
+    // All upgrades in viewed zone plus currently researchable ones in other zones
+    // (×2 ones unlock at level 25, often when already playing in another zone). Badge count
+    // includes affordable ones across all zones.
     const zone = this.getZone();
     const all = RESEARCH.map((r) => [r, this.game.quoteResearch(r.id)]);
     const affordable = all.filter(([, q]) => q.ok).length;
@@ -71,8 +71,8 @@ export class ResearchView {
 
     const here = all.filter(([r]) => r.zone === zone);
     const elsewhere = all.filter(([r, q]) => r.zone !== zone && (q.ok || q.reason === 'coins'));
-    // «Comprar todas» (v3.57): las de esta zona que alcanza el dinero, de la más barata a la más cara
-    // (sin la Maestría ni la Supremacía).
+    // «Buy all» (v3.57): affordable ones in this zone, cheapest to costliest
+    // (excluding Mastery and Supremacy).
     const preview = previewAllResearch(this.game.state, zone);
     const buyAll = preview.count > 0 ? `<button class="btn buy bulk" data-research-all>${t('🛒 Comprar todas ({n})', { n: preview.count })} · 💰 ${formatNumber(preview.cost)}</button>` : '';
     if (buyAll !== this.footHtml) this.foot.innerHTML = this.footHtml = buyAll;
@@ -86,7 +86,7 @@ export class ResearchView {
     }
   }
 
-  // withZone: con la zona en el nombre (las de otras zonas).
+  // withZone: include zone name (upgrades in other zones).
   rows(quotes, withZone = false) {
     return quotes
       .map(([r, q]) => {
@@ -107,8 +107,8 @@ export class ResearchView {
   }
 }
 
-// «🔒 Nv 25 y 🐴 25 · va en 12 y 🐴 8»: lo que le falta a una de las que duplican una estación (la
-// estación misma y sus arrieros; la Compostera no tiene arrieros).
+// «🔒 Lv 25 and 🐴 25 · at 12 and 🐴 8»: requirements for station-doubling research (the
+// station itself and its haulers; Compostera has no haulers).
 function stationLevelText(state, r) {
   const st = state.stations[r.requires];
   const n = r.stationLevel;
@@ -116,10 +116,10 @@ function stationLevelText(state, r) {
   return `🔒 ${t('Nv')} ${n} ${t('y')} 🐴 ${n}<br><small>${t('va en {n}', { n: st.level })} ${t('y')} 🐴 ${st.transport.level}</small>`;
 }
 
-// Cuántos edificios de la zona ya llegaron al nivel que pide la Maestría o la Supremacía: «5/7».
+// How many zone buildings already meet Mastery or Supremacy level requirement: «5/7».
 function atLevel(state, r) {
   const z = ZONES_BY_ID[r.zone];
-  // (Sin repetir: las de la cadena también están en los lotes; contadas dos veces, faltando una decía 9/11.)
+  // (Deduplicated: chain stations also sit on lots; counting both showed 9/11 with one missing.)
   const ids = [...new Set([...z.chain, ...z.plots.map((p) => p.stationId)])];
   return `${ids.filter((id) => (state.stations[id]?.level ?? 0) >= r.minLevel).length}/${ids.length}`;
 }

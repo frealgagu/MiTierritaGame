@@ -6,8 +6,8 @@ import { WORK_COSTS, buyWork, quoteWork, workLevel } from '../src/sim/renown.js'
 import { workText } from '../src/ui/calendar.js';
 import { speedMult } from '../src/sim/modifiers.js';
 
-const HOUR = DAY_LENGTH / 24; // s de juego por hora
-// playTime de un día (desde 0) a una hora.
+const HOUR = DAY_LENGTH / 24; // game s per hour
+// playTime of one day (from 0) to one hour.
 const at = (day, hour) => (day * 24 + hour - 8) * HOUR;
 
 test('la partida empieza el primer día a las 8:00, en verano; el año tiene 16 días', () => {
@@ -39,7 +39,7 @@ test('se trabaja de 6:00 a 12:00 y de 14:00 a 20:00', () => {
   assert.ok(Math.abs(untilWork(at(1, 21)) - 9 * HOUR) < 1e-9);
   assert.ok(Math.abs(untilWork(at(1, 12.5)) - 1.5 * HOUR) < 1e-9);
   assert.equal(untilWork(at(1, 9)), 0);
-  // Un año entero de trabajo: la mitad de cada día, con las cuatro temporadas.
+  // A full work year: half of each day, across all four seasons.
   const year = workSeconds(at(0, 0), at(16, 0));
   assert.ok(Math.abs(year - 16 * (DAY_LENGTH / 2) * ((1.2 + 1 + 0.8 + 1) / 4)) < 1e-6, year);
 });
@@ -48,7 +48,7 @@ test('con Renombre la jornada crece de a 2 h, cada bloque al doble del anterior,
   assert.deepEqual(WORK_COSTS, [2, 4, 8, 16, 32, 64]);
   assert.equal(WORK_COSTS.length, EXTRA_BLOCKS.length);
   assert.deepEqual(EXTRA_BLOCKS, [[20, 22], [4, 6], [22, 24], [2, 4], [12, 14], [0, 2]]);
-  // Cada región tiene su jornada (v3.10); se paga con el Renombre del jugador.
+  // Each region has its own work shift (v3.10); paid with the player's Renown.
   const profile = { renown: 3 };
   const region = {};
   const other = {};
@@ -87,14 +87,14 @@ test('de noche las estaciones paran y las mulas no salen; al amanecer siguen', (
   const game = new Game();
   const s = game.state;
   s.playTime = at(0, 19.5);
-  for (let t = 0; t < HOUR; t += 0.1) game.step(0.1); // hasta las 20:30
+  for (let t = 0; t < HOUR; t += 0.1) game.step(0.1); // until 20:30
   const produced = s.stats.produced.cherry ?? 0;
   const mules = s.mules.length;
-  for (let t = 0; t < 9 * HOUR; t += 0.1) game.step(0.1); // toda la noche, hasta las 5:30
+  for (let t = 0; t < 9 * HOUR; t += 0.1) game.step(0.1); // all night, until 5:30
   assert.equal(s.stations.farm.status, 'resting');
   assert.equal(s.stats.produced.cherry ?? 0, produced);
   assert.ok(s.mules.length <= mules, 'no sale ninguna recua de noche');
-  for (let t = 0; t < 2 * HOUR; t += 0.1) game.step(0.1); // hasta las 7:30
+  for (let t = 0; t < 2 * HOUR; t += 0.1) game.step(0.1); // until 7:30
   assert.notEqual(s.stations.farm.status, 'resting');
   assert.ok(s.stats.produced.cherry > produced);
 });
@@ -103,7 +103,7 @@ test('con el bloque de 20 a 22 comprado se sigue trabajando después de las 20:0
   const game = new Game();
   const s = game.state;
   s.playTime = at(0, 20.5);
-  s.workLevel = 1; // la jornada es de la región (v3.10)
+  s.workLevel = 1; // work shift belongs to the region (v3.10)
   game.step(0.1);
   assert.notEqual(s.stations.farm.status, 'resting');
   s.workLevel = 0;
@@ -131,7 +131,7 @@ test('sin conexión cuenta las noches y las temporadas al sumar lo que no simula
     g.state.coins = 0;
     return g;
   };
-  // 6 h de juego (45 días): paso a paso frente a la vuelta rápida (2 h simuladas + 4 h sumadas).
+  // 6 h of play (45 days): step-by-step vs. fast-forward (2 h simulated + 4 h summed).
   const live = setup();
   for (let t = 0; t < 6 * 3600; t += 1) live.step(1);
   const offline = setup();

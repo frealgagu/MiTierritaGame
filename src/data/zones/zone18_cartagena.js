@@ -1,7 +1,7 @@
-// Mapa de la Costa · Zona 6: Cartagena (v3.20). Mismo trazado que Barichara (zone12_barichara.js): no tiene
-// fuente propia; en la plaza está el Fogón de Getsemaní, que recibe los bultos de arroz del Arrozal, y cada
-// estación espera junto a la carretera por la que le llega lo suyo de otra zona de la Costa. Se dibuja como
-// el Pueblo (tema 'town'), con casas coloniales de colores, balcones de madera y bugambilias (style).
+// Caribbean Coast Map · Zone 6: Cartagena (v3.20). Same layout as Barichara (zone12_barichara.js): no
+// source of its own; in the square sits the Getsemaní Hearth, which receives rice sacks from El Arrozal, and each
+// station waits next to the road bringing its supply from another Coast zone. Drawn like
+// El Pueblo ('town' theme), with colorful colonial houses, wooden balconies, and bougainvillea (style).
 import { ICON } from '../icons.js';
 
 export const ZONE18 = {
@@ -26,7 +26,7 @@ export const ZONE18 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Bocagrande ➜',
   muleSpeed: 4,
@@ -39,9 +39,9 @@ export const ZONE18 = {
     recuerdos_costa: { road: [[6.5, 25.9], [6.5, 11.2]], sign: [5.3, 23.6], text: 'Sombreros de Tuchín ⬆' },
     cazuelas: { road: [[12.5, 25.9], [12.5, 15.2]], sign: [11.3, 23.6], text: 'Pescado en coco ⬆' },
   },
-  // La ciudad amurallada (v3.45): el mar Caribe detrás del mapa, la playa, la muralla que lo bordea y la que
-  // cierra el centro histórico por tierra, con sus garitas y sus puertas por donde pasan los caminos; la del
-  // camino de los sombreros es la Torre del Reloj. Solo es dibujo: las estaciones y los caminos no se mueven.
+  // The walled city (v3.45): the Caribbean Sea behind the map, the beach, the sea wall bordering it, and the land wall
+  // enclosing the historic center, with its sentry boxes and gates where roads pass through; the gate on the
+  // hat road is the Clock Tower. Purely visual: stations and paths do not move.
   walls: {
     sea: true,
     lines: [
@@ -57,5 +57,5 @@ export const ZONE18 = {
     garitas: [[0.35, 0.35], [0.35, 6.2], [0.35, 18], [7.5, 0.35], [15, 0.35], [22.6, 0.35], [0.35, 24.6], [0.35, 11.85], [11.7, 11.85], [12.55, 10.7], [12.55, 0.35]],
   },
   unlockedBy: 'sombrero',
-  next: null, // la última de la Costa
+  next: null, // the last zone of the Coast
 };

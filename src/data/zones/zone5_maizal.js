@@ -1,6 +1,6 @@
-// Mapa de la Zona 5: El Maizal. Mismas convenciones que la Zona 1 (ver zone1_finca.js).
-// Cadena lineal hasta el Puesto de arepas, que espera junto a las dos carreteras por las que llegan
-// el queso y la mantequilla de la Lechería.
+// Zone 5 Map: El Maizal. Same conventions as Zone 1 (see zone1_finca.js).
+// Linear chain up to the Arepa Stand, which waits next to the two roads bringing
+// cheese and butter from La Lechería.
 export const ZONE5 = {
   id: 'maizal',
   name: 'El Maizal',
@@ -21,15 +21,15 @@ export const ZONE5 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys (v3.9), inside the first one
   exitSign: [21.5, 24.2],
   muleSpeed: 4,
   dispatchCost: { base: 40000, growth: 1.17 },
-  // Carreteras por las que llegan el queso y la mantequilla, hasta el Puesto de arepas.
+  // Roads bringing cheese and butter, up to the Arepa Stand.
   routes: {
     queso: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Queso de la Lechería' },
     mantequilla: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Mantequilla' },
-    // Las arepas de queso salen de la bodega hacia el Pueblo.
+    // Cheese arepas leave the warehouse toward El Pueblo.
     arepas: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'A Salento ➜' },
   },
   unlockedBy: 'cacaotal',

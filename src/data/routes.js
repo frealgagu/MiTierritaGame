@@ -1,9 +1,9 @@
-// Rutas entre zonas (GDD §4b «Cómo viajan los productos entre zonas»): un vehículo lleva un producto
-// de la bodega de una zona a las estaciones que lo necesitan en otra. Tiene su propio nivel, como los
-// arrieros: a igual nivel que las estaciones que abastece, lleva todo lo que consumen (un 25 % más).
-//   stations: estaciones que reciben el producto (sus recetas lo declaran en `imports`)
-//   tripTime: segundos de ida y vuelta entre las dos zonas
-//   costBase: precio del nivel 2 (luego ×growth por nivel)
+// Inter-zone routes (GDD §4b): vehicle carries a product from origin warehouse to consuming
+// stations in another zone. Has its own level like haulers: matching target stations' level
+// moves full consumption plus 25 %.
+//   stations: target stations receiving product (declared in their `imports`)
+//   tripTime: round-trip seconds between the two zones
+//   costBase: level 2 price (scales by ×growth per level thereafter)
 export const ROUTES = [
   {
     id: 'panela',
@@ -16,7 +16,7 @@ export const ROUTES = [
     stations: ['arequipe_pot'],
     tab: 'Panela',
     tripTime: 60,
-    maxWait: 10, // s que espera con carga parcial antes de salir
+    maxWait: 10, // s waiting with partial load before departing
     costBase: 1000,
     growth: 1.15,
     release: '1.2',
@@ -85,7 +85,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '1.4',
   },
-  // Al Pueblo (v1.5): cada zona le manda el producto final que no se lleva nadie más.
+  // To Pueblo (v1.5): each zone sends its unexported final product.
   {
     id: 'cafe',
     name: 'Ruta del café',
@@ -182,7 +182,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '1.5',
   },
-  // Santander (v3.2): el tabaco fermentado del Tabacal, para los tercios de la Fiquera.
+  // Santander (v3.2): Tabacal fermented tobacco, for Fiquera bales.
   {
     id: 'tabaco',
     name: 'Ruta del tabaco',
@@ -199,7 +199,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.2',
   },
-  // La Costa (v3.17): la leche de coco del Cocal, para el pescado en coco de la Ciénaga.
+  // Coast (v3.17): Cocal coconut milk, for Ciénaga coconut fish.
   {
     id: 'coco',
     name: 'Ruta de la leche de coco',
@@ -216,8 +216,8 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.17',
   },
-  // A la Quesera (v3.18): el arroz del Arrozal (para el almuerzo y la bandeja) y el pescado limpio de la
-  // Ciénaga (para la bandeja).
+  // To Quesera (v3.18): Arrozal rice (for lunch & platter) and Ciénaga cleaned fish
+  // (for platter).
   {
     id: 'arroz',
     name: 'Ruta del arroz',
@@ -250,7 +250,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.18',
   },
-  // Al Sombrero (v3.19): el pescado salado y el frito de la Ciénaga, para el Parador de Tuchín.
+  // To Sombrero (v3.19): Ciénaga salted & fried fish, for Parador de Tuchín.
   {
     id: 'salado',
     name: 'Ruta del pescado salado',
@@ -283,7 +283,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.19',
   },
-  // A Cartagena (v3.20): cada zona de la Costa le manda su producto final (como a Barichara).
+  // To Cartagena (v3.20): every Coast zone sends its final product (like Barichara).
   {
     id: 'bultos',
     name: 'Ruta de los bultos de arroz',
@@ -380,7 +380,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.20',
   },
-  // Boyacá (v3.24): la cerveza de la Cervecería, para las jarras de Ráquira.
+  // Boyacá (v3.24): Cervecería beer, for Ráquira mugs.
   {
     id: 'cerveza',
     name: 'Ruta de la cerveza',
@@ -397,8 +397,8 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.24',
   },
-  // A Paipa (v3.25): las papitas del Papal (para el piquete y la canasta) y el barro de Ráquira (para el
-  // Horno de barro).
+  // To Paipa (v3.25): Papal chips (for piquete & hamper) and Ráquira clay (for
+  // mud oven).
   {
     id: 'papitas',
     name: 'Ruta de las papitas',
@@ -431,7 +431,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.25',
   },
-  // A Las Ruanas (v3.26): las ollas y las materas de Ráquira, para la Tienda de Nobsa.
+  // To Las Ruanas (v3.26): Ráquira pots and planters, for Tienda de Nobsa.
   {
     id: 'ollas',
     name: 'Ruta de las ollas',
@@ -464,7 +464,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.26',
   },
-  // A Villa de Leyva (v3.27): cada zona de Boyacá le manda su producto final (como a Barichara y Cartagena).
+  // To Villa de Leyva (v3.27): every Boyacá zone sends its final product (like Barichara and Cartagena).
   {
     id: 'cajas_papitas',
     name: 'Ruta de las cajas de papitas',
@@ -561,8 +561,8 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.27',
   },
-  // Al Hato (v3.3): el bocadillo veleño de la Guayabera (el postre) y la fibra de la Fiquera (la cabuya
-  // con que se amarra el fiambre).
+  // To Hato (v3.3): Guayabera bocadillo (dessert) and Fiquera twine (tying
+  // leaf-wrapped fiambres).
   {
     id: 'bocadillo',
     name: 'Ruta del bocadillo',
@@ -595,7 +595,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.3',
   },
-  // A las Hormigas (v3.4): los costales y las alpargatas de la Fiquera, para la Tienda de recuerdos.
+  // To Hormigas (v3.4): Fiquera sacks and espadrilles, for souvenir shop.
   {
     id: 'costales',
     name: 'Ruta de los costales',
@@ -628,7 +628,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.4',
   },
-  // A Barichara (v3.5): cada zona de Santander le manda su producto final (como al Pueblo).
+  // To Barichara (v3.5): every Santander zone sends its final product (like Pueblo).
   {
     id: 'dulces',
     name: 'Ruta de los dulces',
@@ -725,7 +725,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.5',
   },
-  // Los Llanos (v3.33): el jugo de maracuyá del Frutal, para la Cocina de la cachama.
+  // Llanos (v3.33): Frutal passionfruit juice, for Cachamera kitchen.
   {
     id: 'jugo',
     name: 'Ruta del jugo',
@@ -742,8 +742,8 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.33',
   },
-  // Al Hato llanero (v3.34): el aceite de la Palma (para la yuca frita del almuerzo y de la parranda) y la
-  // cachama limpia de la Cachamera (para el Asadero de la parranda).
+  // To Hato llanero (v3.34): La Palma oil (for fried cassava at lunch and parranda) and
+  // Cachamera cleaned cachama (for parranda roast).
   {
     id: 'aceite',
     name: 'Ruta del aceite',
@@ -776,7 +776,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.34',
   },
-  // A La Talabartería (v3.35): el pisillo y la cachama ahumada de la Cachamera, para el Recuerdo del Llano.
+  // To Talabartería (v3.35): Cachamera pisillo and smoked cachama, for Plains Souvenir.
   {
     id: 'pisillos',
     name: 'Ruta del pisillo',
@@ -809,7 +809,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.35',
   },
-  // A Villavicencio (v3.36): el producto final de cada zona de los Llanos, como a Villa de Leyva.
+  // To Villavicencio (v3.36): final product from every Llanos zone (like Villa de Leyva).
   {
     id: 'cajas_aceite',
     name: 'Ruta de las cajas de aceite',
@@ -906,7 +906,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.36',
   },
-  // Costa Pacífica (v3.40): el aliño de la Azotea, para la Cocina del tapao de la Bahía.
+  // Pacific Coast (v3.40): Azotea seasoning, for Bahía tapao kitchen.
   {
     id: 'alino',
     name: 'Ruta del aliño',
@@ -923,8 +923,8 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.40',
   },
-  // Al Manglar (v3.41): los patacones del Platanal (para el arroz con piangua y la cazuela) y el pargo limpio de
-  // la Bahía (para la Cocina de la cazuela).
+  // To Manglar (v3.41): Platanal patacones (for rice & casserole) and Bahía cleaned snapper
+  // (for casserole kitchen).
   {
     id: 'patacones',
     name: 'Ruta de los patacones',
@@ -957,7 +957,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.41',
   },
-  // Al Werregue (v3.42): el pescado seco y el pargo ahumado de la Bahía, para el Recuerdo del Pacífico.
+  // To Werregue (v3.42): Bahía dried fish and smoked snapper, for Pacific Souvenir.
   {
     id: 'secos',
     name: 'Ruta del pescado seco',
@@ -990,7 +990,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.42',
   },
-  // A Buenaventura (v3.43): el producto final de cada zona de la Costa Pacífica, como a Villavicencio.
+  // To Buenaventura (v3.43): final product from every Pacific zone (like Villavicencio).
   {
     id: 'cajas_patacones',
     name: 'Ruta de las cajas de patacones',
@@ -1087,7 +1087,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.43',
   },
-  // Amazonas (v3.49): el ají negro del Ajizal, para la Cocina del pirarucú del Lago.
+  // Amazon (v3.49): Ajizal black chili, for Lago pirarucu kitchen.
   {
     id: 'ajinegro',
     name: 'Ruta del ají negro',
@@ -1104,7 +1104,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.49',
   },
-  // Amazonas (v3.50): las bolsas de asaí del Asaizal y el pirarucú limpio del Lago, para la Casabería.
+  // Amazon (v3.50): Asaizal açaí bags and Lago cleaned pirarucu, for Casabería.
   {
     id: 'bolsas_asai',
     name: 'Ruta del asaí',
@@ -1137,7 +1137,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.50',
   },
-  // Amazonas (v3.51): el pirarucú salado y el moqueado del Lago, para la Tienda de la Yanchama.
+  // Amazon (v3.51): Lago salted and smoked pirarucu, for Yanchama shop.
   {
     id: 'pirarucus_salados',
     name: 'Ruta del pirarucú salado',
@@ -1170,7 +1170,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '3.51',
   },
-  // A Leticia (v3.52): el producto final de cada zona del Amazonas, como a Buenaventura.
+  // To Leticia (v3.52): final product from every Amazon zone (like Buenaventura).
   {
     id: 'cajas_asai',
     name: 'Ruta de las cajas de asaí',
@@ -1266,7 +1266,7 @@ export const ROUTES = [
     costBase: 1000000,
     growth: 1.15,
     release: '3.52',
-  },  // v4.0: un subproducto que viaja (sale de la bodega, adonde llega por la canaleta).
+  },  // v4.0: traveling byproduct (leaves warehouse via chute).
   {
     id: 'bagazo',
     name: 'Ruta del bagazo',
@@ -1283,7 +1283,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '4.0',
   },
-  // v4.0: un subproducto que viaja (sale de la bodega, adonde llega por la canaleta).
+  // v4.0: traveling byproduct (leaves warehouse via chute).
   {
     id: 'palmiste',
     name: 'Ruta del palmiste',
@@ -1300,7 +1300,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '4.0',
   },
-  // v4.0: un subproducto que viaja (sale de la bodega, adonde llega por la canaleta).
+  // v4.0: traveling byproduct (leaves warehouse via chute).
   {
     id: 'cueros',
     name: 'Ruta de los cueros',
@@ -1317,7 +1317,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '4.0',
   },
-  // Tolima Grande (v4.0): las mismas rutas que el Amazonas, más la del té de cáscara (un subproducto que viaja).
+  // Tolima Grande (v4.0): same routes as Amazon, plus cascara tea (a traveling byproduct).
   {
     id: 'bizcochos',
     name: 'Ruta de los bizcochos',
@@ -1494,7 +1494,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '4.0',
   },
-  // Cundinamarca (v4.4): las mismas rutas que el Tolima Grande, llegando zona por zona.
+  // Cundinamarca (v4.4): same routes as Tolima Grande, unlocking zone by zone.
   {
     id: 'ramos_rosas',
     name: 'Ruta de los ramos',
@@ -1671,9 +1671,9 @@ export const ROUTES = [
     growth: 1.15,
     release: '4.4',
   },
-  // Bogotá (v4.5): las tractomulas. Traen de otra región (`origin`) una carga que no se acaba (`unlimited`): no le
-  // quitan nada a esa región y solo las frena su nivel, como a las chivas. No tienen zona de origen (`from`). Cada
-  // estación tiene dos: cuestan la cuarta parte de lo que cuesta subir la estación.
+  // Bogotá (v4.5): tractomulas. Haul endless load (`unlimited`) from another region (`origin`)
+  // without draining it; only level limits capacity like chivas. No origin zone (`from`). Two
+  // per station: each costs 1/4th of leveling that station.
   {
     id: 'tm_cafe',
     name: 'Tractomula del café',
@@ -1800,7 +1800,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '4.5',
   },
-  // Chapinero y la Zona G (v4.5). Lo del Amazonas llega en avión a El Dorado y de ahí sale en tractomula.
+  // Chapinero y la Zona G (v4.5): Amazon cargo flies to El Dorado then rides tractomula.
   {
     id: 'tm_alino',
     name: 'Tractomula del aliño',
@@ -1945,7 +1945,7 @@ export const ROUTES = [
     growth: 1.15,
     release: '4.5',
   },
-  // Usaquén (v4.5): una tractomula de artesanía por región.
+  // Usaquén (v4.5): one craft tractomula per region.
   {
     id: 'tm_ruanas',
     name: 'Tractomula de las ruanas',

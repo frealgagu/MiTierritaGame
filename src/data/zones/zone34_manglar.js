@@ -1,6 +1,6 @@
-// Mapa de la Costa Pacífica · Zona 4: El Manglar (v3.41). Mismo trazado que el Hato, la Quesera, Paipa y el
-// Hato llanero: la piangua encocada se reparte entre la Mesa del arroz con piangua y la Cocina de la cazuela,
-// que esperan junto a las dos carreteras por las que llegan los patacones del Platanal y el pargo de la Bahía.
+// Pacific Coast Map · Zone 4: El Manglar (v3.41). Same layout as El Hato, La Quesera, Paipa, and El
+// Hato Llanero: coconut piangua is split between the Piangua Rice Table and the Cazuela Kitchen,
+// which wait next to the two roads bringing patacones from El Platanal and snapper from La Bahía.
 import { ICON } from '../icons.js';
 
 export const ZONE34 = {
@@ -25,7 +25,7 @@ export const ZONE34 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Guapi ➜',
   muleSpeed: 4,
@@ -33,7 +33,7 @@ export const ZONE34 = {
   routes: {
     patacones: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Patacones del Platanal' },
     pargos: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Pargo de la Bahía' },
-    // Las cazuelas y el arroz con piangua salen hacia Buenaventura (v3.43).
+    // Cazuelas and piangua rice leave toward Buenaventura (v3.43).
     cazuelas_mariscos: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Cazuelas a Buenaventura ➜' },
     arroces_piangua: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [23.7, 23.6], text: 'Arroz con piangua ⬇' },
   },

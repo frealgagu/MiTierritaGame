@@ -1,12 +1,12 @@
-// Simula una partida con un jugador automático, zona por zona, y muestra cuándo se cumple cada
-// objetivo y cuánto tarda cada zona. Uso: npm run balance -- [horas] [bloque|casual] [--detalle]
-//   bloque: elige la compra más rentable y puede subir toda la cadena +1 de una vez (jugador atento)
-//   casual: hace caso a la «mejora recomendada», cumple objetivos y ahorra para construir si le faltan menos de 10 min
-// Variables: BALANCE_PROGRESS=1 muestra el avance cada hora de juego; BALANCE_DUMP=minuto:archivo guarda la
-// partida en ese minuto (para estudiarla aparte); BALANCE_LOAD=archivo sigue una partida guardada así;
-// BALANCE_RESETS=n empieza como tras n reinicios del segundo final (producción ×2ⁿ); BALANCE_REGION=región juega esa
-// región desde cero (v4.5).
-// Tras el Pueblo, los dos bots siguen hasta el segundo final (todas las estaciones al nivel 100).
+// Simulates a playthrough with an automated player, zone by zone, and shows when each
+// goal is met and how long each zone takes. Usage: npm run balance -- [hours] [bloque|casual] [--detalle]
+//   bloque: picks the most profitable purchase and can upgrade the entire chain +1 at once (attentive player)
+//   casual: follows the «recommended upgrade», completes goals, and saves up to build if under 10 min away
+// Env vars: BALANCE_PROGRESS=1 prints progress per game hour; BALANCE_DUMP=minute:file saves the
+// game at that minute (for separate study); BALANCE_LOAD=file resumes a game saved that way;
+// BALANCE_RESETS=n starts as after n second-ending resets (production ×2ⁿ); BALANCE_REGION=region plays that
+// region from scratch (v4.5).
+// After Pueblo, both bots continue to the second ending (all stations at level 100).
 import { Game } from '../src/core/Game.js';
 import { analyzeChain, recommendUpgrade, reusable } from '../src/sim/analysis.js';
 import { nextToUnlock, sourceOf, zoneOf } from '../src/sim/chain.js';
@@ -28,14 +28,14 @@ const game = new Game(process.env.BALANCE_LOAD ? JSON.parse((await import('node:
 const s = game.state;
 const mmss = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
 const openZones = () => ZONE_LIST.filter((z) => s.zones[z.id]?.unlocked).map((z) => z.id);
-// La zona en juego: la primera abierta sin completar.
+// The active zone in play: the first opened zone not yet completed.
 const currentZone = () => openZones().find((z) => !s.zones[z].complete) ?? null;
-// Ingreso del final de cada cadena (sin los desvíos, como la mejora recomendada): si contara lo que
-// se vende desviado, el bot subiría las fuentes al máximo para vender materia prima.
-// `memo`: análisis ya hechos para este estado (las zonas comparten los de las rutas entre ellas).
+// Income at the end of each chain (without diversions, like the recommended upgrade): if bypassed
+// sales were counted, the bot would max out sources just to sell raw material.
+// `memo`: analyses already computed for this state (zones share those for inter-zone routes).
 const totalIncome = (st, memo = new Map()) => openZones().reduce((n, z) => n + analyzeChain(st, z, { memo }).mainIncome, 0);
-// Sube un nivel en una copia ligera del estado (copia solo lo que toca) y anota qué cambió, para
-// reutilizar los análisis de lo demás (ver sim/analysis.js: reusable).
+// Levels up by one in a lightweight copy of state (copies only what is touched) and tracks what changed, to
+// reuse analyses for everything else (see sim/analysis.js: reusable).
 const bump = (t, id, touched) => {
   const [sid, part] = id.split(':');
   if (sid === 'dispatch') {
@@ -54,7 +54,7 @@ const bump = (t, id, touched) => {
 };
 const lightCopy = (st) => ({ ...st, stations: { ...st.stations }, zones: { ...st.zones }, routes: { ...st.routes } });
 
-// La compra que más 💰/s añade por moneda gastada (sumando todas las zonas), entre las que puede pagar.
+// The purchase adding the most 💰/s per coin spent (across all zones), among those affordable.
 function bestOption() {
   const baseMemo = new Map();
   const base = totalIncome(s, baseMemo);
@@ -73,7 +73,7 @@ function bestOption() {
     opts.push({ kind, id, cost, gain: totalIncome(t, reusable(baseMemo, touched)) - base });
   };
   for (const id of ids) {
-    // La Compostera se mide de 10 en 10, como en la mejora recomendada.
+    // Compostera is measured in steps of 10, as in the recommended upgrade.
     const step = STATIONS_BY_ID[id]?.side ? 10 : 1;
     const q = game.quote(id, step);
     if (!q.maxed && q.levels > 0) consider(step > 1 ? 'up10' : 'up', id, q.cost, (t, touched) => { for (let k = 0; k < q.levels; k++) bump(t, id, touched); });
@@ -87,7 +87,7 @@ function bestOption() {
   }
   for (const z of openZones()) {
     const next = nextToUnlock(s, z);
-    // Una estación nueva puede abrir una ruta: cambia lo que piden las rutas que la abastecen.
+    // A new station can open a route: changes what upstream supplying routes demand.
     if (next) {
       consider('unlock', next, game.quoteUnlock(next).cost, (t, touched) => {
         t.stations[next] = createStationState();
@@ -101,7 +101,7 @@ function bestOption() {
     if (q.reason === 'owned' || q.reason === 'locked' || q.reason === 'zone') continue;
     consider('research', r.id, r.cost, (t, touched) => {
       t.research = [...t.research, r.id];
-      // Una investigación cambia su zona entera (y lo que piden las rutas si acelera una estación).
+      // A research upgrade changes its entire zone (and route demands if it speeds up a station).
       touched.zones.add(r.zone);
       touched.all = !r.effect.target;
       for (const x of ROUTES) if (x.stations.includes(r.effect.target) || (r.effect.type === 'zoneSpeed' && x.to === r.effect.target)) touched.demand.add(x.id);
@@ -110,8 +110,8 @@ function bestOption() {
   return opts.filter((o) => o.gain > 0).sort((a, b) => b.gain / b.cost - a.gain / a.cost)[0];
 }
 
-// Tras completar las seis zonas, como un completista: compra las investigaciones que falten y sube
-// siempre lo más atrasado (estaciones, arrieros, rutas y despachos parejos: a igual nivel todo cuadra).
+// After completing all six zones, like a completionist: buys any missing research and always
+// upgrades whatever lags behind (stations, haulers, routes, and dispatches even: at equal levels everything balances).
 function completionist() {
   for (const r of RESEARCH) if (game.quoteResearch(r.id).ok) game.research(r.id);
   const ids = [...openZones().map((z) => `dispatch:${z}`), ...ROUTES.filter((r) => routeActive(s, r.id)).map((r) => `route:${r.id}`)];
@@ -154,18 +154,18 @@ game.bus.on('zoneUnlocked', ({ zone }) => {
 
 for (let step = 0; step < hours * 36000 && (currentZone() || !s.mastered); step++) {
   game.step(0.1);
-  // Guarda la partida en ese minuto (BALANCE_DUMP=minuto:archivo) para estudiarla aparte.
+  // Saves the playthrough at that minute (BALANCE_DUMP=minute:file) to study separately.
   if (dumpAt && s.playTime >= dumpAt.minute * 60) {
     (await import('node:fs')).writeFileSync(dumpAt.file, JSON.stringify(s));
     dumpAt = null;
   }
-  // Progreso cada hora de juego (a stderr), para seguir una simulación larga.
+  // Progress every game hour (to stderr), to follow a long simulation.
   if (process.env.BALANCE_PROGRESS && step % 36000 === 0) console.error(`⏱️ ${mmss(s.playTime)} · ${currentZone()} · ${formatNumber(totalIncome(s))} 💰/s`);
   if (verbose && step % 18000 === 0) {
     const lv = Object.entries(s.stations).map(([k, v]) => `${k}:${v.level}/${v.transport.level}`).join(' ');
     events.push(`${mmss(s.playTime)}  📊 ${formatNumber(totalIncome(s))} 💰/s · ${lv} · 💰${formatNumber(s.coins)}`);
   }
-  // Decide cada 5 s de juego (más rápido que una persona; con cuatro zonas, cada decisión cuesta).
+  // Decides every 5 s of game time (faster than a person; with four zones, every decision matters).
   if (step % 50) continue;
   const zone = currentZone();
   if (!zone) {
@@ -173,7 +173,7 @@ for (let step = 0; step < hours * 36000 && (currentZone() || !s.mastered); step+
     continue;
   }
   for (const g of activeGoals(s, zone)) if (goalProgress(s, g).done) game.claimGoal(g.id);
-  // Como una persona: lo que piden los objetivos visibles, en cuanto puede.
+  // Like a person: whatever visible goals ask for, as soon as affordable.
   for (const g of activeGoals(s, zone)) {
     if (goalProgress(s, g).done) continue;
     if (g.type === 'research' && game.quoteResearch(g.research).ok) game.research(g.research);
@@ -186,13 +186,13 @@ for (let step = 0; step < hours * 36000 && (currentZone() || !s.mastered); step+
       game.buy(lowest, 1);
     }
   }
-  // El capataz no sube el ingreso: se compra cuando sobra.
+  // Foreman doesn't raise income: bought when spare coins allow.
   if (RESEARCH.some((r) => r.id === 'capataz') && game.quoteResearch('capataz').ok && s.coins > 3 * 10000) game.research('capataz');
 
   if (style === 'casual') {
     const next = nextToUnlock(s, zone);
     if (next && game.quoteUnlock(next).ok) game.unlock(next);
-    // Ahorra si la siguiente estación cuesta menos de 10 minutos de ingresos (como quien sigue los objetivos).
+    // Saves up if the next station costs less than 10 minutes of income (like someone following goals).
     const saving = next && game.quoteUnlock(next).cost < 600 * Math.max(totalIncome(s), 0.5);
     if (!saving) {
       for (let k = 0; k < 30; k++) {
@@ -204,16 +204,16 @@ for (let step = 0; step < hours * 36000 && (currentZone() || !s.mastered); step+
     }
     continue;
   }
-  // También ahorra para construir si le falta menos de 5 minutos de ingresos.
+  // Also saves up to build if under 5 minutes of income away.
   const nextUnlock = nextToUnlock(s, zone);
   const unlockCost = nextUnlock ? game.quoteUnlock(nextUnlock).cost : Infinity;
   if (nextUnlock && game.quoteUnlock(nextUnlock).ok) game.unlock(nextUnlock);
   else if (unlockCost - s.coins < 300 * totalIncome(s)) continue;
   for (let k = 0; k < 30; k++) {
     const o = bestOption();
-    // Ninguna compra suelta rinde (hay que subir varias a la vez): como una persona, sigue la recomendada.
-    // En el Pueblo, que depende de cinco zonas, también si la mejor rinde menos del 1 %: si no, se quedaba
-    // comprando migajas en las otras zonas. (En las demás zonas, esa regla lo trababa en el Maizal.)
+    // No single purchase pays off (several must be upgraded together): like a person, follows the recommendation.
+    // In Pueblo, which depends on five zones, also if best gain is under 1 %: otherwise it got stuck
+    // buying crumbs in the other zones. (In other zones, that rule stalled it in Maizal.)
     if (!o || (!STATIONS_BY_ID[sourceOf(zone)].infinite && o.gain < totalIncome(s) * 0.01)) {
       const rec = recommendUpgrade(s, (id, mode) => game.quote(id, mode), zone);
       if (!rec || !(rec.id.startsWith('research:') ? game.research(rec.id.split(':')[1]) : game.buy(rec.id, 1))) break;

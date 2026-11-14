@@ -1,5 +1,5 @@
-// Mapa de la Costa Pacífica · Zona 2: La Azotea (v3.39). Mismo trazado que el Tabacal (zone8_tabacal.js), el Cocal,
-// la Cervecería y el Frutal.
+// Pacific Coast Map · Zone 2: La Azotea (v3.39). Same layout as El Tabacal (zone8_tabacal.js), El Cocal,
+// La Cervecería, and El Frutal.
 import { ICON } from '../icons.js';
 
 export const ZONE32 = {
@@ -22,16 +22,16 @@ export const ZONE32 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Istmina ➜',
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
-  unlockedBy: 'platanal', // se abre al completar El Platanal
-  // Carretera de la Ruta del aliño (v3.40): sale de la bodega hacia la Bahía.
+  unlockedBy: 'platanal', // opens upon completing El Platanal
+  // Road for the Seasoning Route (v3.40): leaves the warehouse toward La Bahía.
   routes: {
     alino: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Bahía ➜' },
-    // Las cajas de aliño salen hacia Buenaventura (v3.43).
+    // Crates of seasoning leave toward Buenaventura (v3.43).
     cajas_alino: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Buenaventura ➜' },
   },
   next: 'bahia',

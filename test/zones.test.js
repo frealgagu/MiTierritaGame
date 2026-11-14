@@ -7,14 +7,14 @@ import { stationRate } from '../src/sim/rules.js';
 import { STATIONS_BY_ID } from '../src/data/stations.js';
 import { CALENDAR } from '../src/sim/calendar.js';
 
-// Pruebas de la cadena: siempre de día y sin temporada (el calendario se prueba en calendar.test.js).
+// Chain tests: always daytime and no season (calendar is tested in calendar.test.js).
 CALENDAR.on = false;
 
 function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-// Partida con el Trapiche abierto.
+// Save with Trapiche open.
 function withTrapiche() {
   const game = new Game();
   game.unlockZone('trapiche');
@@ -62,7 +62,7 @@ test('el bagazo de la Molienda alimenta la Hornilla y la acelera ×2', () => {
     game.state.stations.furnace.level = 5;
     game.state.stations.furnace.transport.level = 40;
     game.state.zones.trapiche.dispatch.level = 40;
-    if (!withFuel) game.state.stations.cane_mill.byBuffer = -1e9; // nunca llega bagazo
+    if (!withFuel) game.state.stations.cane_mill.byBuffer = -1e9; // bagasse never arrives
     return game;
   };
   const fuel = setup(true);
@@ -72,7 +72,7 @@ test('el bagazo de la Molienda alimenta la Hornilla y la acelera ×2', () => {
   assert.ok(fuel.state.stations.furnace.fuel > 0 || fuel.state.stats.produced.melado > 0);
   const ratio = fuel.state.stats.produced.melado / none.state.stats.produced.melado;
   assert.ok(ratio > 1.6, `melado con bagazo / sin bagazo = ${ratio.toFixed(2)}`);
-  // El análisis también cuenta el combustible: con la Molienda dando bagazo de sobra, ×2.
+  // Analysis also counts fuel: with Molienda providing plenty of bagazo, ×2.
   const furnace = analyzeChain(fuel.state, 'trapiche').rows.find((r) => r.id === 'furnace');
   const base = stationRate(STATIONS_BY_ID.furnace, 5) * STATIONS_BY_ID.furnace.in.guarapo;
   assert.ok(Math.abs(furnace.capacity - 2 * base) < 1e-9, `capacidad ${furnace.capacity} vs base ${base}`);
@@ -139,9 +139,9 @@ test('«Zona al máximo» solo cuando todo está al máximo: si no, se sugiere l
     for (let t = 0; t < 30; t += 0.25) game.step(0.25);
     return recommendUpgrade(game.state, q, 'cienaga') ?? pendingUpgrade(game.state, q, 'cienaga');
   };
-  // Todo al 100: de verdad está al máximo.
+  // Everything at 100: truly maxed out.
   assert.equal(advice(make()), null);
-  // Un despacho en el 92 ya lleva todo, y la Freidora en el 1 no cambia lo que se vende: igual se sugieren.
+  // A dispatch at 92 already carries everything, and Freidora at 1 doesn't change what's sold: still suggested.
   let game = make();
   game.state.zones.cienaga.dispatch.level = 92;
   assert.equal(advice(game)?.id, 'dispatch:cienaga');
@@ -182,15 +182,15 @@ test('los objetivos de vender algo que otra estación consume cuentan lo produci
   const game = new Game();
   const s = game.state;
   s.coins = 1e12;
-  const g01 = GOALS_BY_ZONE.finca[0]; // vender 20 cerezas, que se lleva el Beneficiadero
+  const g01 = GOALS_BY_ZONE.finca[0]; // sell 20 cherries, which Beneficiadero takes
   assert.ok(countsProduced(g01));
   assert.match(goalText(g01), /^Produce 20/);
-  // Con el Beneficiadero construido y al mismo ritmo, casi nada llega a la bodega, pero el objetivo avanza.
+  // With Beneficiadero built and at the same pace, almost nothing reaches the warehouse, yet the goal progresses.
   game.unlock('wetmill');
   for (let t = 0; t < 120; t += 0.1) game.step(0.1);
   assert.ok((s.stats.sold.cherry ?? 0) < 20, `vendidas: ${s.stats.sold.cherry}`);
   assert.ok(goalProgress(s, g01).done);
-  // Los de productos que van a la bodega siguen contando lo vendido.
+  // Goals for products going to the warehouse still count amount sold.
   const last = GOALS_BY_ZONE.finca.find((g) => g.final);
   assert.ok(!countsProduced(last));
 });

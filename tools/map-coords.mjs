@@ -1,6 +1,6 @@
-// La página de coordenadas (v4.4.10): el mapa de Colombia con cada zona y cada aeropuerto, en su lugar real y donde los
-// dibuja el juego (ui/mapLayout.js), con una cuadrícula de latitud y longitud y las tablas.
-//   node tools/map-coords.mjs [salida]   (por defecto docs/coordenadas.html; la plantilla es tools/map-coords.html)
+// Coordinates page (v4.4.10): map of Colombia with each zone and airport, at their real location and where
+// the game draws them (ui/mapLayout.js), with a latitude/longitude grid and reference tables.
+//   node tools/map-coords.mjs [output]   (default docs/coordenadas.html; template is tools/map-coords.html)
 import fs from 'fs';
 import { DEPARTMENTS, MAP_SCALE } from '../src/data/colombiaMap.js';
 import { AIRPORT_GEO, AIRPORT_NAME, ZONE_GEO } from '../src/data/zoneGeo.js';
@@ -9,7 +9,7 @@ import { ZONES_BY_ID } from '../src/data/zones/index.js';
 import { AIRSTRIP, ZONE_POS, proj, unproj } from '../src/ui/mapLayout.js';
 import pkg from '../package.json' with { type: 'json' };
 
-// Encabezado para abrir la página como archivo suelto (al publicarla como artefacto se quita la primera línea).
+// Banner for opening the page as a standalone file (when published as an artifact the first line is stripped).
 const HEAD = '<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n';
 const OUT = process.argv[2] ?? new URL('../docs/coordenadas.html', import.meta.url).pathname;
 const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a', tolima: '#e39b6a', cundinamarca: '#d98fb5', bogota: '#b39ddb' };
@@ -60,7 +60,7 @@ function depts(view, focus) {
   }).join('');
 }
 function plane(x, y, s, cls) {
-  // Avioncito visto desde arriba.
+  // Top-down little airplane.
   return `<g class="${cls}" transform="translate(${x} ${y}) scale(${s / 10})"><path d="M0,-9 L1.4,-3 L9,1.5 L9,3.2 L1.4,1.2 L1,6 L3.5,8 L3.5,9.4 L0,8.4 L-3.5,9.4 L-3.5,8 L-1,6 L-1.4,1.2 L-9,3.2 L-9,1.5 L-1.4,-3 Z" /></g>`;
 }
 function svgCountry() {
@@ -87,9 +87,9 @@ function svgRegion(reg) {
   const size = Math.max(b.x1 - b.x0, b.y1 - b.y0, 40);
   const pad = size * 0.18;
   const view = { x: b.x0 - pad, y: b.y0 - pad, w: b.x1 - b.x0 + pad * 2, h: b.y1 - b.y0 + pad * 2 };
-  // Lugar a la derecha para los nombres.
+  // Space on the right for names.
   view.w += size * 0.35;
-  // Que no quede muy angosta.
+  // Prevent it from getting too narrow.
   if (view.w < view.h * 0.8) { const d = view.h * 0.8 - view.w; view.x -= d / 2; view.w += d; }
   if (view.h < view.w * 0.6) { const d = view.w * 0.6 - view.h; view.y -= d / 2; view.h += d; }
   const spanDeg = Math.max(view.w, view.h) / MAP_SCALE;

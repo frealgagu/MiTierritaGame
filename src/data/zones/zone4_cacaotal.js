@@ -1,6 +1,6 @@
-// Mapa de la Zona 4: El Cacaotal. Mismas convenciones que la Zona 1 (ver zone1_finca.js).
-// La pasta de cacao se reparte entre la Mesa de chocolate y la Chocolatería, que esperan junto a las
-// dos carreteras por las que llegan la panela del Trapiche y la leche de la Lechería.
+// Zone 4 Map: El Cacaotal. Same conventions as Zone 1 (see zone1_finca.js).
+// Cocoa paste is split between the Chocolate Table and the Chocolatería, waiting next to the
+// two roads bringing panela from El Trapiche and milk from La Lechería.
 export const ZONE4 = {
   id: 'cacaotal',
   name: 'El Cacaotal',
@@ -22,15 +22,15 @@ export const ZONE4 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys (v3.9), inside the first one
   exitSign: [21.5, 24.2],
   muleSpeed: 4,
   dispatchCost: { base: 4000, growth: 1.17 },
-  // Carreteras por las que llegan las rutas, hasta la Mesa y la Chocolatería.
+  // Roads along which the routes arrive, up to the Table and the Chocolatería.
   routes: {
     panela_cacao: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Panela del Trapiche' },
     leche: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Leche de la Lechería' },
-    // Los dos chocolates salen de la bodega hacia el Pueblo (v1.5).
+    // Both chocolates leave the warehouse toward El Pueblo (v1.5).
     chocolatinas: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Chocolatinas a Salento ➜' },
     chocolate_mesa: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [23.7, 23.6], text: 'Chocolate a Salento ⬇' },
   },

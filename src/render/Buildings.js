@@ -7,25 +7,25 @@ import { milestoneTier } from '../sim/rules.js';
 import { PRODUCTS } from '../data/products.js';
 import { t } from '../i18n/index.js';
 
-// Color de remates (zócalo, puertas, balcones) según los hitos alcanzados.
+// Trim colors (plinth, doors, balconies) based on reached milestones.
 export const TRIMS = [PAL.balconyGreen, PAL.balconyBlue, PAL.balconyRed, PAL.balconyYellow, 0x8e44ad, 0xffd700];
 
-// Lo que gana cada edificio en cada hito (GDD §8, evolución visual):
-//   hito 1 (nv 10): macetas con flores y remates de otro color
-//   hito 2 (nv 25): segundo piso con balcón
-//   hito 3 (nv 50): faroles que se encienden de noche
+// Visual additions per milestone (GDD §8, visual evolution):
+//   milestone 1 (lv 10): flower pots and accent trim color
+//   milestone 2 (lv 25): second story with balcony
+//   milestone 3 (lv 50): night-lit streetlamps
 //   hito 4 (nv 75): patio empedrado
-//   hito 5 (nv 100): bandera de Colombia en el tejado y remates dorados
-export const UPPER_FLOOR = 12; // px extra de pared desde el hito 2
+//   milestone 5 (lv 100): rooftop Colombian flag and gold trim
+export const UPPER_FLOOR = 12; // extra wall px from milestone 2 upward
 
-// Edificio de una estación de procesamiento sobre su parcela de 3×3.
-// Cada estación tiene su propio dibujo y, si aplica, una animación mientras trabaja.
+// Processing station building on its 3×3 tile lot.
+// Each station has bespoke artwork plus optional work animation.
 export class BuildingView extends StationView {
   constructor(plot, def) {
     super(plot.x, plot.y, 3, 3);
     this.plot = plot;
     this.def = def;
-    // El cuerpo se escala desde el suelo para los rebotes al construir y mejorar.
+    // Body scales from ground level for build and upgrade bounces.
     const base = iso(plot.x + 1.5, plot.y + 1.5);
     this.body = new Container();
     this.body.pivot.set(base.x, base.y);
@@ -72,7 +72,7 @@ export class BuildingView extends StationView {
     decorate.call(this, g, x, y, ctx);
   }
 
-  // Rebote: 'pop' al construir (brota del suelo), 'bump' al subir de nivel.
+  // Bounce: 'pop' when built (springs from ground), 'bump' on level up.
   bounce(kind = 'bump') {
     this.bounceT = 0;
     this.bounceSize = kind === 'pop' ? 1 : 0.08;
@@ -87,7 +87,7 @@ export class BuildingView extends StationView {
       this.bounceT = Math.min(1, this.bounceT + dt / (this.bounceSize === 1 ? 0.6 : 0.35));
       const k = this.bounceT;
       if (this.bounceSize === 1) {
-        // De 0 a 1 con un pequeño rebote al final (easeOutBack).
+        // 0 to 1 with slight overshoot at the end (easeOutBack).
         const c = 1.7;
         const e = 1 + (c + 1) * (k - 1) ** 3 + c * (k - 1) ** 2;
         this.body.scale.set(1, Math.max(0.01, e));
@@ -98,7 +98,7 @@ export class BuildingView extends StationView {
   }
 }
 
-// Detalles comunes según los hitos.
+// Shared milestone details.
 function decorate(g, x, y, { tier }) {
   if (tier >= 1) {
     for (const [px, py] of [[0.14, 2.25], [0.14, 2.62]]) flowerPot(g, x + px, y + py, tier);
@@ -130,7 +130,7 @@ function flowerPot(g, gx, gy, tier) {
   for (let i = 0; i < 3; i++) g.circle(p.x - 2.5 + i * 2.5, p.y - 11 - (i % 2) * 2, 1.6).fill(colors[(tier + i) % colors.length]);
 }
 
-// Farol de poste; devuelve el punto de la lámpara.
+// Pole lantern; returns lamp light anchor point.
 function lantern(g, gx, gy) {
   const p = iso(gx, gy);
   g.ellipse(p.x, p.y, 4, 2).fill({ color: 0x000000, alpha: 0.25 });
@@ -150,7 +150,7 @@ function cobblestones(g, x, y) {
   }
 }
 
-// Bandera de Colombia (amarillo, azul, rojo) ondeando.
+// Waving Colombian flag (yellow, blue, red).
 function drawFlag(g, x, y, t) {
   g.clear();
   const pole = 18;
@@ -173,26 +173,26 @@ function drawFlag(g, x, y, t) {
   }
 }
 
-// Fachada con puerta en la cara delantera (eje gy+).
+// Front facade doorway (+gy face).
 function door(g, x, y, d, at, h, color) {
   g.poly(isoPoly([[x + at - 0.15, y + d, 0], [x + at + 0.15, y + d, 0], [x + at + 0.15, y + d, h], [x + at - 0.15, y + d, h]])).fill(shade(color, 0.75)).stroke(OUTLINE);
 }
 
-// Ventana en la cara derecha (eje gx+); se ilumina de noche.
+// Right-side window (+gx face); glows at night.
 function windowOnRight(view, g, x, y, w, at, z, color) {
   g.poly(isoPoly([[x + w, y + at - 0.13, z], [x + w, y + at + 0.13, z], [x + w, y + at + 0.13, z + 10], [x + w, y + at - 0.13, z + 10]])).fill(color).stroke(OUTLINE);
   const c = iso(x + w, y + at, z + 5);
   view.lights.push({ x: c.x, y: c.y, r: 18 });
 }
 
-// Ventana en la fachada delantera (eje gy+).
+// Front facade window (+gy face).
 function windowOnFront(view, g, x, y, d, at, z, color) {
   g.poly(isoPoly([[x + at - 0.13, y + d, z], [x + at + 0.13, y + d, z], [x + at + 0.13, y + d, z + 10], [x + at - 0.13, y + d, z + 10]])).fill(color).stroke(OUTLINE);
   const c = iso(x + at, y + d, z + 5);
   view.lights.push({ x: c.x, y: c.y, r: 18 });
 }
 
-// Barandilla de balcón en la fachada delantera, a la altura z.
+// Balcony railing across front facade at height z.
 function balcony(g, x, y, w, d, z, color) {
   const a = iso(x + 0.15, y + d + 0.08, z);
   const b = iso(x + w - 0.15, y + d + 0.08, z);
@@ -204,8 +204,8 @@ function balcony(g, x, y, w, d, z, color) {
   }
 }
 
-// Toldo del mercado de pulgas (Usaquén, v4.5): la carpa blanca de cuatro palos con una franja de color y, en la
-// mesa, las cosas a la venta (`goods`: sus colores). w: el ancho en casillas.
+// Flea-market awning stall (Usaquén, v4.5): four-pole white canopy with colored stripe and
+// display table with wares (`goods`: colors). w: width in tiles.
 function fleaStall(view, g, x0, y0, ctx, stripe, goods, w = 2.2) {
   const d = 1.4;
   const H = 22 + Math.min(ctx.tier, 2) * 2;
@@ -223,7 +223,7 @@ function fleaStall(view, g, x0, y0, ctx, stripe, goods, w = 2.2) {
   view.roofTop = view.roofTop ?? iso(x0 + w / 2, y0 + d / 2, H + 9);
 }
 
-// Ladrillo a la vista de Bogotá (v4.5) y el toldo sobre la fachada delantera, a la altura z.
+// Bogotá exposed brick (v4.5) and front awning at height z.
 const BRICK = 0xb35a33;
 function awningFront(g, x, y, w, d, z, color) {
   const a = iso(x, y + d, z);
@@ -233,7 +233,7 @@ function awningFront(g, x, y, w, d, z, color) {
   g.poly([a.x, a.y, b.x, b.y, c.x, c.y, e.x, e.y]).fill(color).stroke(OUTLINE);
 }
 
-// Casa básica: zócalo de color, paredes encaladas, tejado de barro. Devuelve la altura de la pared.
+// Basic house: colored plinth, whitewashed walls, clay tile roof. Returns wall height.
 function house(view, g, hx, hy, w, d, wallH, ctx, { wall = PAL.wall, plinth = true, roofColor = PAL.roof, roofH = 16 } = {}) {
   const H = wallH + ctx.up;
   if (plinth) {
@@ -251,7 +251,7 @@ function house(view, g, hx, hy, w, d, wallH, ctx, { wall = PAL.wall, plinth = tr
   return H;
 }
 
-// Canasta de fique: cesta tejida con asa (de color si es de regalo).
+// Fique basket: woven hamper with handle (colored for gift baskets).
 function basketShape(g, gx, gy, z, scale = 1, color = PRODUCTS.basket.color) {
   const p = iso(gx, gy, z);
   const w = 7 * scale;
@@ -260,7 +260,7 @@ function basketShape(g, gx, gy, z, scale = 1, color = PRODUCTS.basket.color) {
   g.moveTo(p.x - w * 0.7, p.y - 7 * scale).quadraticCurveTo(p.x, p.y - 15 * scale, p.x + w * 0.7, p.y - 7 * scale).stroke({ width: 1.5, color: shade(color, 0.75) });
 }
 
-// Contenedor de exportación sobre la huella (gx, gy), de 1,1 × 0,6 casillas, a la altura z.
+// Shipping container on footprint (gx, gy), 1.1 × 0.6 tiles at elevation z.
 function container(g, gx, gy, z, color, scale = 1) {
   const w = 1.1 * scale;
   const d = 0.6 * scale;
@@ -278,14 +278,14 @@ function sack(g, gx, gy, z, color) {
   g.ellipse(p.x, p.y - 8, 3.5, 1.8).fill(color);
 }
 
-// Un pescadito de perfil (en mesas, ponches y calderos de la Ciénaga, v3.17).
+// Small fish in profile (on tables, tubs, and cauldrons in Ciénaga, v3.17).
 function fishOn(g, x, y, len, color) {
   g.ellipse(x, y, len, len * 0.42).fill(color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
   g.poly([x + len * 0.8, y, x + len * 1.4, y - len * 0.4, x + len * 1.4, y + len * 0.4]).fill(shade(color, 0.8)).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
   g.circle(x - len * 0.55, y - len * 0.08, 0.7).fill(0x263238);
 }
 
-// Una persona de pie, de frente (para las animaciones de las estaciones).
+// Standing front-facing worker (for station animations).
 function worker(g, x, y, shirt) {
   g.rect(x - 2.2, y - 9, 1.8, 9).fill(0x3d3d5c);
   g.rect(x + 0.4, y - 9, 1.8, 9).fill(0x3d3d5c);
@@ -294,8 +294,8 @@ function worker(g, x, y, shirt) {
   g.ellipse(x, y - 22.5, 5.5, 1.5).fill(0xf4e3b5);
 }
 
-// Casa de tablas sobre pilotes, como las del Pacífico (v3.38): los pilotes, el piso alzado, las paredes de color, la
-// escalera al frente y el techo de zinc. Devuelve la altura del piso (z donde empiezan las paredes).
+// Stilt plank house, Pacific style (v3.38): stilts, raised deck, painted plank walls,
+// front stairs, and zinc roof. Returns deck height (z where walls begin).
 function stiltHouse(view, g, hx, hy, w, d, wallH, ctx, { wall = 0x4fb3bf, trim = 0xf7f4ee, roofColor = 0x9aa3a8, roofH = 12, lift = 10 } = {}) {
   for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d], [w / 2, d]]) box(g, hx + px - 0.05, hy + py - 0.05, 0.1, 0.1, lift, 0x6b4a2e);
   box(g, hx - 0.05, hy - 0.05, w + 0.1, d + 0.1, 2, 0x8d6e4a, { z: lift });
@@ -307,7 +307,7 @@ function stiltHouse(view, g, hx, hy, w, d, wallH, ctx, { wall = 0x4fb3bf, trim =
     const b = iso(hx + w, hy + d, z + (H * k) / 4);
     g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 0.8, color: shade(wall, 0.7), alpha: 0.6 });
   }
-  // Escalera de tablas hasta el piso.
+  // Plank staircase up to deck.
   const s0 = iso(hx + w * 0.3, hy + d + 0.55, 0);
   const s1 = iso(hx + w * 0.3, hy + d + 0.05, lift + 2);
   g.moveTo(s0.x - 3, s0.y).lineTo(s1.x - 3, s1.y).moveTo(s0.x + 3, s0.y).lineTo(s1.x + 3, s1.y).stroke({ width: 1.2, color: 0x6b4a2e });
@@ -321,15 +321,15 @@ function stiltHouse(view, g, hx, hy, w, d, wallH, ctx, { wall = 0x4fb3bf, trim =
   return z;
 }
 
-// Ramada: cuatro horcones y el techo de zinc a dos aguas, abierta por los lados.
+// Open shed (ramada): four corner posts and gable zinc roof, open sides.
 function ramada(view, g, x0, y0, w, d, H, roofColor = 0x9aa3a8) {
   for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, 0x6b4a2e);
   gableRoof(g, x0, y0, w, d, H, 10, roofColor, 0x8d6e4a);
   view.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 10);
 }
 
-// Tambo wounaan (v3.42): la casa redonda sobre pilotes, abierta, con el techo cónico de palma. (gx, gy): el
-// centro, en casillas; r: el radio en casillas. Devuelve el centro del piso, en píxeles.
+// Wounaan tambo (v3.42): open round stilt hut with conical palm roof. (gx, gy): tile
+// center; r: radius in tiles. Returns floor center in pixels.
 function tamboHouse(view, g, gx, gy, r, ctx, lift = 12) {
   const c = iso(gx, gy, 0);
   const rx = r * 32;
@@ -353,19 +353,19 @@ function tamboHouse(view, g, gx, gy, r, ctx, lift = 12) {
 }
 
 const DRAW = {
-  // Beneficiadero: casa con tolva y tanques de lavado.
+  // Beneficiadero: house with receiving hopper and washing tanks.
   wetmill(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 1.8, 1.5, 29, ctx);
     door(g, hx, hy, 1.5, 0.9, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 1.8, 0.75, 14, PAL.balconyYellow);
-    // Tolva (embudo) de recibo.
+    // Receiving hopper (funnel).
     const t = iso(x + 2.5, y + 0.8, 28);
     g.poly([t.x - 14, t.y - 6, t.x + 14, t.y - 6, t.x + 5, t.y + 12, t.x - 5, t.y + 12]).fill(0x9aa3a8).stroke(OUTLINE);
     g.ellipse(t.x, t.y - 6, 14, 5).fill(PAL.cherry).stroke(OUTLINE);
     box(g, x + 2.35, y + 0.65, 0.3, 0.3, 18, 0x6c757d);
-    // Tanques de lavado.
+    // Washing tanks.
     for (const ty of [2.05, 2.45]) {
       box(g, x + 0.3, y + ty, 2.4, 0.32, 8, 0xc7beb0);
       g.poly(isoPoly([[x + 0.38, y + ty + 0.05, 8], [x + 2.62, y + ty + 0.05, 8], [x + 2.62, y + ty + 0.27, 8], [x + 0.38, y + ty + 0.27, 8]])).fill(0x6ec6d9);
@@ -382,14 +382,14 @@ const DRAW = {
     };
   },
 
-  // Marquesina: techo de plástico translúcido sobre camas de café secándose.
+  // Marquesina: translucent plastic roof over drying coffee beds.
   dryer(g, x, y, ctx) {
     const x0 = x + 0.25;
     const y0 = y + 0.3;
     const w = 2.5;
     const d = 2.3;
     const H = 26 + ctx.up;
-    // Camas elevadas con café pergamino (una más con el segundo hito).
+    // Raised parchment coffee drying beds (one more at second milestone).
     const beds = ctx.tier >= 2 ? [0.3, 0.95, 1.6] : [0.45, 1.25];
     for (const by of beds) {
       box(g, x0 + 0.2, y0 + by, w - 0.4, 0.5, 7, PAL.wood);
@@ -401,7 +401,7 @@ const DRAW = {
     }
     // Postes.
     for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
-    // Techo curvo de plástico (aproximado con un tejado a dos aguas translúcido).
+    // Arched plastic roof (approximated with translucent gable roof).
     const ym = y0 + d / 2;
     g.poly(isoPoly([[x0, y0, H], [x0 + w, y0, H], [x0 + w, ym, H + 14], [x0, ym, H + 14]])).fill({ color: 0xffffff, alpha: 0.35 }).stroke({ width: 1, color: 0xffffff, alpha: 0.7 });
     g.poly(isoPoly([[x0 + w, y0, H], [x0 + w, y0 + d, H], [x0 + w, ym, H + 14]])).fill({ color: 0xe8f4f8, alpha: 0.45 }).stroke({ width: 1, color: 0xffffff, alpha: 0.7 });
@@ -412,11 +412,11 @@ const DRAW = {
       g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: ctx.trim, alpha: 0.6 });
     }
     this.roofTop = iso(x0 + w / 2, ym, H + 14);
-    // Bombillo colgado bajo el techo.
+    // Hanging light bulb under roof.
     const bulb = iso(x0 + w / 2, ym, H - 4);
     g.circle(bulb.x, bulb.y, 2.5).fill(0xffe9a8);
     this.lights.push({ x: bulb.x, y: bulb.y, r: 30 });
-    // Brillo del sol sobre el plástico.
+    // Sun glint across plastic roof.
     const shine = new Graphics();
     this.anim.addChild(shine);
     this.animate = (time) => {
@@ -426,7 +426,7 @@ const DRAW = {
     };
   },
 
-  // Trilladora: galpón con techo de zinc y máquina.
+  // Trilladora: zinc-roofed shed housing hulling mill.
   huller(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -437,7 +437,7 @@ const DRAW = {
       const b = iso(hx + (2.3 * i) / 8, hy + 1.8, ctx.up ? 26 : H);
       g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x7a5a3a, alpha: 0.6 });
     }
-    // Portón abierto con la máquina adentro.
+    // Open doorway revealing mill inside.
     g.poly(isoPoly([[hx + 0.4, hy + 1.8, 0], [hx + 1.3, hy + 1.8, 0], [hx + 1.3, hy + 1.8, 20], [hx + 0.4, hy + 1.8, 20]])).fill(0x3a2a1c).stroke(OUTLINE);
     box(g, hx + 0.55, hy + 1.85, 0.55, 0.4, 14, ctx.trim);
     const f = iso(hx + 0.83, hy + 2.05, 14);
@@ -451,7 +451,7 @@ const DRAW = {
     const pipe = iso(hx + 2, hy + 0.5, pipeTop);
     box(g, hx + 1.9, hy + 0.4, 0.2, 0.2, pipeTop, 0x6c757d);
     this.smokePoints.push({ x: pipe.x, y: pipe.y - 4 });
-    // Vibración de la máquina.
+    // Running machine vibration.
     const shaker = new Graphics();
     this.anim.addChild(shaker);
     this.animate = (time) => {
@@ -462,7 +462,7 @@ const DRAW = {
     };
   },
 
-  // Tostadora: edificio de ladrillo con chimenea alta y tambor.
+  // Tostadora: brick building with tall chimney and roasting drum.
   roaster(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -489,7 +489,7 @@ const DRAW = {
     box(g, hx + 1.4, hy + 0.3, 0.35, 0.35, chimneyH, shade(brick, 0.9));
     const top = iso(hx + 1.57, hy + 0.47, chimneyH);
     this.smokePoints.push({ x: top.x, y: top.y - 4 }, { x: top.x + 2, y: top.y - 6 });
-    // Tambor tostador en el patio.
+    // Yard roasting drum.
     const dp = iso(x + 2.45, y + 2.4, 10);
     g.ellipse(dp.x, dp.y + 10, 16, 6).fill({ color: 0x000000, alpha: 0.2 });
     g.rect(dp.x - 14, dp.y - 8, 28, 16).fill(0x3b3b3b).stroke(OUTLINE);
@@ -507,14 +507,14 @@ const DRAW = {
     };
   },
 
-  // Molino: casa con rueda hidráulica que gira.
+  // Molino: house with spinning waterwheel.
   grinder(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
     house(this, g, hx, hy, 1.8, 1.8, 34, ctx, { roofH: 18 });
     door(g, hx, hy, 1.8, 0.8, 16, ctx.trim);
     windowOnFront(this, g, hx, hy, 1.8, 1.4, 14, PAL.balconyYellow);
-    // Canal de agua junto a la rueda.
+    // Millrace water channel beside wheel.
     g.poly(isoPoly([[x + 2.2, y + 0.2], [x + 2.6, y + 0.2], [x + 2.6, y + 2.8], [x + 2.2, y + 2.8]])).fill(0x6ec6d9).stroke({ width: 1, color: 0x3a7ca5, alpha: 0.6 });
     const c = iso(hx + 1.95, hy + 1.0, 20);
     const holder = new Container();
@@ -537,9 +537,9 @@ const DRAW = {
     };
   },
 
-  // Compostera: tres cajones de madera con compost y una canaleta que trae la pulpa.
+  // Compostera: three wooden compost bins fed by pulp chute.
   composter(g, x, y, ctx) {
-    // Canaleta desde el Beneficiadero (a la izquierda).
+    // Chute incoming from Beneficiadero (left).
     const a = iso(x - 0.6, y + 1.5, 4);
     const b = iso(x + 0.4, y + 1.5, 4);
     g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 5, color: PAL.wood });
@@ -547,17 +547,17 @@ const DRAW = {
     const bins = [[0.35, 0.3], [0.35, 1.15], [0.35, 2.0]];
     for (const [bx, by] of bins) {
       box(g, x + bx, y + by, 2.2, 0.7, 12 + ctx.up / 2, PAL.wood);
-      // Compost asomando por encima.
+      // Compost mounding over tops.
       const c = iso(x + bx + 1.1, y + by + 0.35, 12 + ctx.up / 2);
       g.ellipse(c.x, c.y, 34, 10).fill(0x4a3424).stroke(OUTLINE);
       g.ellipse(c.x - 8, c.y - 2, 10, 3).fill(0x5e4430);
     }
-    // Pala clavada en el compost.
+    // Shovel stuck in compost.
     const sh = iso(x + 1.6, y + 1.5, 20 + ctx.up / 2);
     g.moveTo(sh.x, sh.y).lineTo(sh.x + 6, sh.y - 22).stroke({ width: 2.5, color: PAL.woodDark });
     g.poly([sh.x - 4, sh.y, sh.x + 4, sh.y, sh.x + 2, sh.y + 8, sh.x - 2, sh.y + 8]).fill(0x9aa3a8).stroke(OUTLINE);
     this.roofTop = iso(x + 1.45, y + 0.65, 22);
-    // Lombrices que asoman mientras trabaja (es compost de verdad).
+    // Earthworms peeking out while active (real organic compost).
     const worms = new Graphics();
     this.anim.addChild(worms);
     this.animate = (time) => {
@@ -570,16 +570,16 @@ const DRAW = {
     };
   },
 
-  // Molienda: ramada con techo de zinc sobre el trapiche de tres mazas, caña y pila de bagazo.
+  // Molienda: zinc-roofed shed over three-roller cane press, cane bundles, and bagazo pile.
   cane_mill(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const w = 2.0;
     const d = 1.8;
     const H = 24 + ctx.up;
-    // Piso de cemento.
+    // Concrete slab.
     g.poly(isoPoly([[x0, y0], [x0 + w, y0], [x0 + w, y0 + d], [x0, y0 + d]])).fill(0xc7beb0).stroke(OUTLINE);
-    // Trapiche: base y tres mazas (cilindros).
+    // Cane crusher: frame and three rollers (cylinders).
     box(g, x0 + 0.6, y0 + 0.6, 0.8, 0.6, 8, 0x5a5a5a);
     const rollers = [];
     for (const k of [0, 1, 2]) {
@@ -588,11 +588,11 @@ const DRAW = {
       g.ellipse(c.x, c.y - 10, 5, 2.5).fill(0xb0b5ba).stroke(OUTLINE);
       rollers.push(c);
     }
-    // Postes y techo de zinc a dos aguas.
+    // Posts and gable zinc roof.
     for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
     gableRoof(g, x0, y0, w, d, H, 12, 0x9aa3a8, 0xb08a5a);
     this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
-    // Atados de caña a la izquierda y pila de bagazo a la derecha (hacia la Hornilla).
+    // Cane bundles on left and bagazo pile on right (toward Hornilla).
     for (let i = 0; i < 3; i++) {
       const p = iso(x + 0.25 + i * 0.12, y + 2.5, i * 3);
       g.roundRect(p.x - 14, p.y - 5, 28, 6, 3).fill(0x9cc65b).stroke(OUTLINE);
@@ -600,7 +600,7 @@ const DRAW = {
     const b = iso(x + 2.5, y + 2.4);
     g.ellipse(b.x, b.y - 6, 18, 9).fill(PRODUCTS.bagasse.color).stroke(OUTLINE);
     g.ellipse(b.x - 4, b.y - 10, 8, 3).fill(0xe8d6a8);
-    // Las mazas giran mientras trabaja.
+    // Rollers spin while active.
     const spin = new Graphics();
     this.anim.addChild(spin);
     this.animate = (time) => {
@@ -612,7 +612,7 @@ const DRAW = {
     };
   },
 
-  // Hornilla: horno largo de ladrillo con pailas de melado hirviendo y chimenea.
+  // Hornilla: long brick furnace with boiling syrup pans and chimney.
   furnace(g, x, y, ctx) {
     const brick = 0xb5653a;
     const x0 = x + 0.25;
@@ -623,11 +623,11 @@ const DRAW = {
       const b2 = iso(x0 + 2.5, y0 + 1.0, r * 4);
       g.moveTo(a.x, a.y).lineTo(b2.x, b2.y).stroke({ width: 1, color: shade(brick, 0.7), alpha: 0.5 });
     }
-    // Boca del horno con fuego (de frente).
+    // Glowing furnace firebox door (front).
     const mouth = iso(x0 + 0.3, y0 + 1.0, 4);
     g.ellipse(mouth.x, mouth.y, 7, 5).fill(0x2b1a10).stroke(OUTLINE);
     this.lights.push({ x: mouth.x, y: mouth.y, r: 26, color: 0xff7a1a });
-    // Pailas: con el segundo hito, una más.
+    // Syrup pans: second milestone adds an extra pan.
     const pans = ctx.tier >= 2 ? [0.35, 0.95, 1.55, 2.15] : [0.5, 1.25, 2.0];
     const tops = [];
     for (const px of pans) {
@@ -636,16 +636,16 @@ const DRAW = {
       g.ellipse(c.x, c.y, 11, 5).fill(PRODUCTS.melado.color);
       tops.push(c);
     }
-    // Chimenea alta al fondo.
+    // Tall back chimney.
     const chimneyH = 56 + ctx.up;
     box(g, x0 + 2.2, y0 - 0.45, 0.35, 0.35, chimneyH, shade(brick, 0.9));
     const top = iso(x0 + 2.37, y0 - 0.28, chimneyH);
     this.smokePoints.push({ x: top.x, y: top.y - 4 }, { x: top.x + 2, y: top.y - 6 });
     this.roofTop = iso(x0 + 0.4, y0 - 0.3, 26);
-    // Montón de bagazo (combustible) junto a la boca.
+    // Bagazo fuel pile beside firebox.
     const pile = iso(x + 0.3, y + 2.8);
     g.ellipse(pile.x, pile.y - 4, 13, 6).fill(PRODUCTS.bagasse.color).stroke(OUTLINE);
-    // El melado burbujea y la boca parpadea mientras trabaja.
+    // Syrup bubbles and firebox flickers while active.
     const boil = new Graphics();
     this.anim.addChild(boil);
     this.animate = (time) => {
@@ -660,7 +660,7 @@ const DRAW = {
     };
   },
 
-  // Gaveras: mesas de madera con moldes llenos de panela, bajo una ramada de teja.
+  // Gaveras: wooden tables of panela molds under a clay-tile shed.
   molds(g, x, y, ctx) {
     const x0 = x + 0.25;
     const y0 = y + 0.3;
@@ -670,7 +670,7 @@ const DRAW = {
     const tables = ctx.tier >= 2 ? [0.25, 0.95, 1.6] : [0.4, 1.3];
     for (const ty of tables) {
       box(g, x0 + 0.2, y0 + ty, w - 0.4, 0.5, 9, PAL.wood);
-      // Cuadrícula de moldes con panelas.
+      // Grid of panela mold trays.
       for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 2; j++) {
           const p = iso(x0 + 0.38 + i * 0.32, y0 + ty + 0.13 + j * 0.24, 9);
@@ -683,7 +683,7 @@ const DRAW = {
     this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 14);
     const bulb = iso(x0 + w / 2, y0 + d / 2, H - 4);
     this.lights.push({ x: bulb.x, y: bulb.y, r: 30 });
-    // Vapor de la panela recién vertida.
+    // Steam rising off freshly poured panela.
     const steam = new Graphics();
     this.anim.addChild(steam);
     this.animate = (time) => {
@@ -696,24 +696,24 @@ const DRAW = {
     };
   },
 
-  // Pulverizadora: casita con la máquina, bultos de panela pulverizada y polvillo.
+  // Pulverizadora: cottage with grinding machine, pulverized panela sacks, and golden dust.
   pulverizer(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
     house(this, g, hx, hy, 2.0, 1.6, 28, ctx, { wall: 0xe9d8b4, roofH: 14 });
     door(g, hx, hy, 1.6, 0.6, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 2.0, 0.8, 14, PAL.balconyYellow);
-    // Máquina en el patio: tolva y salida.
+    // Yard grinder: hopper and discharge chute.
     const m = iso(x + 1.6, y + 2.35, 0);
     box(g, x + 1.3, y + 2.1, 0.6, 0.5, 12, 0xd7263d);
     g.poly([m.x - 10, m.y - 22, m.x + 10, m.y - 22, m.x + 4, m.y - 12, m.x - 4, m.y - 12]).fill(0x9aa3a8).stroke(OUTLINE);
-    // Bultos de panela pulverizada.
+    // Sacks of pulverized panela.
     for (const [bx, by, z] of [[2.45, 2.2, 0], [2.7, 2.45, 0], [2.55, 2.3, 10]]) {
       const p = iso(x + bx, y + by, z);
       g.roundRect(p.x - 7, p.y - 13, 14, 13, 3).fill(0xf4efe6).stroke(OUTLINE);
       g.rect(p.x - 5, p.y - 9, 10, 4).fill(PRODUCTS.panela_powder.color);
     }
-    // Polvillo dorado que sale de la máquina.
+    // Golden dust puffing out of grinder.
     const dust = new Graphics();
     this.anim.addChild(dust);
     this.animate = (time) => {
@@ -725,14 +725,14 @@ const DRAW = {
     };
   },
 
-  // Pasteurizadora: nave blanca con dos tanques de acero, tubería y vapor.
+  // Pasteurizadora: white hall with twin stainless tanks, piping, and steam.
   pasteurizer(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
     house(this, g, hx, hy, 1.7, 1.5, 26, ctx, { wall: 0xf7f7f2, roofColor: 0x8fa3ad, roofH: 12 });
     door(g, hx, hy, 1.5, 0.6, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 1.7, 0.75, 13, 0xd6ecff);
-    // Tanques de acero inoxidable (cilindros) a la derecha.
+    // Stainless steel cylindrical tanks on right.
     const tanks = ctx.tier >= 2 ? [[2.35, 0.7], [2.35, 1.5], [2.35, 2.3]] : [[2.35, 0.9], [2.35, 1.9]];
     const tops = [];
     for (const [tx, ty] of tanks) {
@@ -744,12 +744,12 @@ const DRAW = {
       g.ellipse(b.x, b.y, 9, 4.5).stroke({ width: 1, color: 0x3a2418, alpha: 0.3 });
       tops.push({ x: b.x, y: b.y - H });
     }
-    // Tubería que une la nave con los tanques.
+    // Piping linking building to tanks.
     const a = iso(hx + 1.7, hy + 0.75, 12);
     const b2 = iso(x + 2.35, y + 0.9, 12);
     g.moveTo(a.x, a.y).lineTo(b2.x, b2.y).stroke({ width: 3, color: 0x9aa3a8 });
     this.roofTop = iso(hx + 0.85, hy + 0.75, 26 + ctx.up + 12);
-    // Vapor de la pasteurización.
+    // Pasteurization steam.
     const steam = new Graphics();
     this.anim.addChild(steam);
     this.animate = (time) => {
@@ -761,19 +761,19 @@ const DRAW = {
     };
   },
 
-  // Descremadora: casita con la centrífuga (gira mientras trabaja) y cantinas de crema.
+  // Descremadora: cottage with spinning cream separator and cream cans.
   separator(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 1.6, 1.4, 24, ctx, { wall: 0xfff3d6, roofH: 13 });
     door(g, hx, hy, 1.4, 0.55, 15, ctx.trim);
     windowOnRight(this, g, hx, hy, 1.6, 0.7, 12, PAL.balconyYellow);
-    // Centrífuga en el patio: base, tazón y la manivela.
+    // Yard centrifuge: stand, bowl, and hand crank.
     const c = iso(x + 2.35, y + 1.2);
     g.rect(c.x - 4, c.y - 14, 8, 14).fill(0x9aa3a8).stroke(OUTLINE);
     g.ellipse(c.x, c.y - 18, 11, 6).fill(0xd8dde2).stroke(OUTLINE);
     g.ellipse(c.x, c.y - 19, 7, 3.5).fill(PRODUCTS.cream.color);
-    // Cantinas de crema.
+    // Cream cans.
     for (const [bx, by] of [[1.0, 2.5], [1.35, 2.62], [1.7, 2.5]]) {
       const p = iso(x + bx, y + by);
       g.roundRect(p.x - 4, p.y - 13, 8, 13, 2).fill(0xc7ccd1).stroke(OUTLINE);
@@ -789,7 +789,7 @@ const DRAW = {
     };
   },
 
-  // Batidora: mantequera de madera (barril que gira) bajo una ramada, con bloques de mantequilla.
+  // Batidora: rotating wooden butter churn barrel under shed with butter blocks.
   churn(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -803,7 +803,7 @@ const DRAW = {
     g.rect(c.x + 13, c.y - 2, 3, 16).fill(PAL.woodDark);
     const barrel = new Graphics();
     this.anim.addChild(barrel);
-    // Mesa con bloques de mantequilla.
+    // Table with butter blocks.
     box(g, x0 + 1.5, y0 + 1.5, 0.7, 0.4, 8, PAL.wood);
     for (const k of [0, 1, 2]) {
       const p = iso(x0 + 1.6 + k * 0.2, y0 + 1.7, 8);
@@ -814,7 +814,7 @@ const DRAW = {
     this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
     const bulb = iso(x0 + w / 2, y0 + d / 2, H - 4);
     this.lights.push({ x: bulb.x, y: bulb.y, r: 28 });
-    // El barril da vueltas mientras trabaja (se dibuja encogido según el ángulo).
+    // Barrel spins while active (foreshortened by rotation angle).
     this.animate = (time) => {
       const k = Math.abs(Math.cos(time * 3));
       barrel.clear();
@@ -824,21 +824,21 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Quesera: casa con zócalo verde, repisas con ruedas de queso y una prensa de madera.
+  // Quesera: green-plinth house with cheese curing shelves and wooden screw press.
   cheesery(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
     house(this, g, hx, hy, 2.0, 1.5, 26, ctx, { wall: 0xf9f2df, roofH: 14 });
     door(g, hx, hy, 1.5, 0.6, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 2.0, 0.75, 13, PAL.balconyYellow);
-    // Repisa con quesos frente a la casa.
+    // Outdoor shelf lined with cheese wheels.
     box(g, x + 0.4, y + 2.15, 1.5, 0.35, 10, PAL.wood);
     for (let i = 0; i < 4; i++) {
       const p = iso(x + 0.55 + i * 0.35, y + 2.3, 10);
       g.ellipse(p.x, p.y - 3, 6, 3).fill(PRODUCTS.cheese.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
       g.ellipse(p.x, p.y - 5, 6, 3).fill(shade(PRODUCTS.cheese.color, 1.05)).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
     }
-    // Prensa de queso (tornillo de madera) que baja y sube.
+    // Wooden screw cheese press moving up and down.
     const pr = iso(x + 2.45, y + 2.3);
     g.rect(pr.x - 9, pr.y - 6, 18, 6).fill(PAL.woodDark).stroke(OUTLINE);
     g.rect(pr.x - 8, pr.y - 30, 3, 26).fill(PAL.wood);
@@ -857,14 +857,14 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Paila de arequipe: gran paila de cobre sobre un fogón, con mecedor y frascos de arequipe.
+  // Paila de arequipe: huge copper kettle over hearth, stirring paddle, and arequipe jars.
   arequipe_pot(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const w = 2.4;
     const d = 2.1;
     const H = 26 + ctx.up;
-    // Fogón de ladrillo con la paila encima.
+    // Brick hearth holding copper kettle.
     box(g, x0 + 0.5, y0 + 0.5, 1.3, 1.1, 10, 0xb5653a);
     const c = iso(x0 + 1.15, y0 + 1.05, 10);
     g.ellipse(c.x, c.y, 26, 13).fill(0xb87333).stroke(OUTLINE);
@@ -872,12 +872,12 @@ const DRAW = {
     const mouth = iso(x0 + 0.8, y0 + 1.6, 4);
     g.ellipse(mouth.x, mouth.y, 6, 4).fill(0x2b1a10).stroke(OUTLINE);
     this.lights.push({ x: mouth.x, y: mouth.y, r: 24, color: 0xff7a1a });
-    // Leña.
+    // Firewood.
     for (let i = 0; i < 3; i++) {
       const p = iso(x + 0.3 + i * 0.12, y + 2.65, i * 2);
       g.roundRect(p.x - 10, p.y - 4, 20, 4, 2).fill(0x8b5a2b).stroke(OUTLINE);
     }
-    // Frascos de arequipe y bultos de panela pulverizada (lo que trae la Chiva).
+    // Arequipe jars and pulverized panela sacks (brought by Chiva).
     for (const [bx, by] of [[2.2, 2.5], [2.45, 2.62], [2.7, 2.5]]) {
       const p = iso(x + bx, y + by);
       g.roundRect(p.x - 4, p.y - 10, 8, 10, 2).fill(PRODUCTS.arequipe.color).stroke(OUTLINE);
@@ -889,7 +889,7 @@ const DRAW = {
     for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
     gableRoof(g, x0, y0, w, d, H, 13, PAL.roof, PAL.wall);
     this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
-    // El mecedor da vueltas en la paila y el arequipe burbujea.
+    // Stirring paddle circles inside kettle while arequipe bubbles.
     const stir = new Graphics();
     this.anim.addChild(stir);
     this.animate = (time) => {
@@ -907,7 +907,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cajones de fermentación: tres cajones de madera en escalera, tapados con hojas de plátano.
+  // Fermentation boxes: three stepped wooden boxes covered with plantain leaves.
   fermenter(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -917,7 +917,7 @@ const DRAW = {
     const boxes = [[0.2, 0.3, 14], [0.95, 0.75, 9], [1.7, 1.2, 4]];
     for (const [bx, by, z] of boxes) {
       box(g, x0 + bx, y0 + by, 0.7, 0.7, 10, 0x8b5a2b, { z });
-      // Hojas de plátano encima.
+      // Plantain leaves laid on top.
       const c = iso(x0 + bx + 0.35, y0 + by + 0.35, z + 10);
       g.ellipse(c.x - 3, c.y, 11, 4).fill(0x5e9a3c).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
       g.ellipse(c.x + 4, c.y - 1, 9, 3).fill(0x74b14a);
@@ -925,7 +925,7 @@ const DRAW = {
     for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, ctx.trim);
     gableRoof(g, x0, y0, w, d, H, 12, 0x9aa3a8, 0xb08a5a);
     this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
-    // Baba de cacao que escurre y vapor tibio de la fermentación.
+    // Draining cacao sweatings and warm fermentation vapor.
     const steam = new Graphics();
     this.anim.addChild(steam);
     this.animate = (time) => {
@@ -938,7 +938,7 @@ const DRAW = {
     };
   },
 
-  // Secadero: tarima de madera elevada con el cacao extendido y un techo corredizo sobre rieles.
+  // Secadero: raised wooden drying deck for cacao with rolling rail roof.
   cacao_dryer(g, x, y, ctx) {
     const x0 = x + 0.25;
     const y0 = y + 0.3;
@@ -947,13 +947,13 @@ const DRAW = {
     // Patas y tarima.
     for (const [px, py] of [[0.1, 0.1], [w - 0.1, 0.1], [0.1, d - 0.1], [w - 0.1, d - 0.1]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, 10, PAL.woodDark);
     box(g, x0, y0, w, d, 3, PAL.wood, { z: 10 });
-    // Granos extendidos (más con cada hito).
+    // Spread cacao beans (more at milestones).
     const rng = (k) => ((Math.sin(k * 12.9898) * 43758.5453) % 1 + 1) % 1;
     for (let k = 0; k < 40 + ctx.tier * 10; k++) {
       const p = iso(x0 + 0.15 + rng(k) * (w - 0.3), y0 + 0.15 + rng(k + 99) * (d - 0.3), 13);
       g.ellipse(p.x, p.y, 1.6, 1).fill(k % 3 ? PRODUCTS.cacao_dry.color : PRODUCTS.cacao_fermented.color);
     }
-    // Rieles y techo corredizo (abierto de día, se mueve mientras trabaja).
+    // Rails and sliding roof (open by day, slides while active).
     const rail = iso(x0 + w, y0 + 0.1, 13);
     const rail2 = iso(x0 + w + 0.6, y0 + 0.1, 13);
     g.moveTo(rail.x, rail.y).lineTo(rail2.x, rail2.y).stroke({ width: 2, color: 0x555555 });
@@ -970,7 +970,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tostador de cacao: tambor que gira sobre un fogón de ladrillo, con chimenea.
+  // Cacao roaster: rotating drum over brick firebox with chimney.
   cacao_roaster(g, x, y, ctx) {
     const brick = 0xb5653a;
     const x0 = x + 0.4;
@@ -979,7 +979,7 @@ const DRAW = {
     const mouth = iso(x0 + 0.4, y0 + 1.2, 4);
     g.ellipse(mouth.x, mouth.y, 6, 4).fill(0x2b1a10).stroke(OUTLINE);
     this.lights.push({ x: mouth.x, y: mouth.y, r: 24, color: 0xff7a1a });
-    // Soportes del tambor.
+    // Drum support brackets.
     const c = iso(x0 + 0.9, y0 + 0.6, 24);
     g.rect(c.x - 20, c.y - 2, 3, 14).fill(0x555555);
     g.rect(c.x + 17, c.y - 2, 3, 14).fill(0x555555);
@@ -990,7 +990,7 @@ const DRAW = {
     const top = iso(x0 + 1.65, y0 - 0.15, chimneyH);
     this.smokePoints.push({ x: top.x, y: top.y - 4 });
     this.roofTop = iso(x0 + 0.3, y0 - 0.2, 28);
-    // Costales de cacao seco esperando.
+    // Waiting sacks of dried cacao.
     for (const [bx, by] of [[0.35, 2.55], [0.7, 2.7]]) {
       const p = iso(x + bx, y + by);
       g.ellipse(p.x, p.y - 5, 7, 5.5).fill(PAL.sack).stroke(OUTLINE);
@@ -1008,14 +1008,14 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Molino de cacao: casa con una piedra de moler que gira y escurre la pasta.
+  // Cacao grinder: cottage with turning grindstone dripping cacao paste.
   cacao_mill(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 1.7, 1.4, 26, ctx, { wall: 0xf1e3cf, roofH: 13 });
     door(g, hx, hy, 1.4, 0.55, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 1.7, 0.7, 13, PAL.balconyYellow);
-    // Piedra de moler en el patio.
+    // Yard grindstone.
     const c = iso(x + 2.3, y + 2.2);
     g.ellipse(c.x, c.y - 4, 16, 8).fill(0x9a948a).stroke(OUTLINE);
     g.ellipse(c.x, c.y - 6, 11, 5).fill(PRODUCTS.cacao_paste.color);
@@ -1032,7 +1032,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Mesa de chocolate: ramada con una mesa larga y las pastillas de chocolate en sus moldes.
+  // Chocolate table: open shed with long molding table and chocolate tablets.
   chocolate_table(g, x, y, ctx) {
     const x0 = x + 0.25;
     const y0 = y + 0.3;
@@ -1064,7 +1064,7 @@ const DRAW = {
     };
   },
 
-  // Chocolatería: tienda con toldo a rayas, vitrina y una pila de chocolatinas.
+  // Chocolatería: shop with striped awning, display case, and stacked chocolate bars.
   chocolatier(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -1078,13 +1078,13 @@ const DRAW = {
     }
     const win = iso(hx + 0.8, hy + 1.5, 12);
     this.lights.push({ x: win.x, y: win.y, r: 26 });
-    // Toldo a rayas sobre la vitrina.
+    // Striped awning over display window.
     for (let i = 0; i < 6; i++) {
       const a = hx + 0.2 + i * 0.2;
       g.poly(isoPoly([[a, hy + 1.5, 21], [a + 0.2, hy + 1.5, 21], [a + 0.2, hy + 1.85, 16], [a, hy + 1.85, 16]])).fill(i % 2 ? 0xffffff : 0xd7263d).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
     }
     windowOnRight(this, g, hx, hy, 2.3, 0.75, 14, PAL.balconyYellow);
-    // Pila de cajas de chocolatinas.
+    // Stacked boxes of chocolate bars.
     const stack = [[2.4, 2.4, 0], [2.7, 2.4, 0], [2.55, 2.4, 9]];
     for (const [bx, by, z] of stack.slice(0, 2 + Math.min(ctx.tier, 1))) {
       const p = iso(x + bx, y + by, z);
@@ -1093,19 +1093,19 @@ const DRAW = {
     }
   },
 
-  // Desgranadora: casita con la máquina de manivela, un montón de mazorcas y el grano que cae.
+  // Desgranadora: cottage with hand-cranked sheller, cob heap, and falling corn kernels.
   sheller(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 1.6, 1.4, 24, ctx, { wall: 0xf3e6c4, roofH: 13 });
     door(g, hx, hy, 1.4, 0.55, 15, ctx.trim);
     windowOnRight(this, g, hx, hy, 1.6, 0.7, 12, PAL.balconyYellow);
-    // Montón de mazorcas.
+    // Pile of corn cobs.
     for (let k = 0; k < 7; k++) {
       const p = iso(x + 0.5 + (k % 4) * 0.2, y + 2.45 + Math.floor(k / 4) * 0.15, Math.floor(k / 4) * 4);
       g.ellipse(p.x, p.y - 3, 5, 2.5).fill(PRODUCTS.corn_cob.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
     }
-    // Máquina: tolva roja y manivela que gira.
+    // Machine: red hopper and spinning crank.
     const m = iso(x + 2.35, y + 1.6);
     box(g, x + 2.1, y + 1.4, 0.5, 0.45, 12, 0xd7263d);
     g.poly([m.x - 9, m.y - 22, m.x + 9, m.y - 22, m.x + 4, m.y - 12, m.x - 4, m.y - 12]).fill(0x9aa3a8).stroke(OUTLINE);
@@ -1123,7 +1123,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Piladora: dos pilones de madera con sus manos (mazos) que suben y bajan, bajo una ramada.
+  // Piladora: twin wooden mortars with pestles pounding up and down under open shed.
   corn_huller(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -1153,20 +1153,20 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Molino de masa: casa con el molino de corona en la puerta y bolas de masa en una batea.
+  // Mass mill: cottage with corona grinder at door and masa balls in wooden trough.
   dough_mill(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 1.8, 1.4, 25, ctx, { wall: 0xf9f2df, roofH: 13 });
     door(g, hx, hy, 1.4, 0.55, 15, ctx.trim);
     windowOnRight(this, g, hx, hy, 1.8, 0.7, 12, PAL.balconyYellow);
-    // Batea con bolas de masa.
+    // Trough filled with masa dough balls.
     box(g, x + 0.4, y + 2.15, 1.2, 0.45, 5, PAL.wood);
     for (let k = 0; k < 4; k++) {
       const p = iso(x + 0.55 + k * 0.28, y + 2.37, 5);
       g.circle(p.x, p.y - 3, 3.5).fill(PRODUCTS.corn_dough.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
     }
-    // Molino de corona sobre una mesa, con la manivela que gira.
+    // Corona mill bolted to table with spinning crank.
     const m = iso(x + 2.4, y + 2.2);
     box(g, x + 2.15, y + 1.95, 0.5, 0.5, 10, PAL.woodDark);
     g.rect(m.x - 5, m.y - 22, 10, 10).fill(0x6b6f73).stroke(OUTLINE);
@@ -1181,7 +1181,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Budare: fogón de barro con el budare redondo lleno de arepas y una chimenea.
+  // Budare: clay hearth with round griddle full of arepas and chimney.
   budare(g, x, y, ctx) {
     const clay = 0xb5653a;
     const x0 = x + 0.4;
@@ -1202,7 +1202,7 @@ const DRAW = {
     const top = iso(x0 + 1.65, y0 - 0.05, chimneyH);
     this.smokePoints.push({ x: top.x, y: top.y - 4 });
     this.roofTop = iso(x0 + 0.3, y0 - 0.2, 26);
-    // Leña.
+    // Firewood.
     for (let i = 0; i < 3; i++) {
       const p = iso(x + 0.3 + i * 0.12, y + 2.7, i * 2);
       g.roundRect(p.x - 10, p.y - 4, 20, 4, 2).fill(0x8b5a2b).stroke(OUTLINE);
@@ -1220,20 +1220,20 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Puesto de arepas: kiosco de colores con parasol, mostrador y bandejas de arepas de queso.
+  // Arepa stand: colorful kiosk with beach umbrella, counter, and cheese-arepa trays.
   arepa_stand(g, x, y, ctx) {
     const x0 = x + 0.5;
     const y0 = y + 0.5;
     box(g, x0, y0, 2.0, 0.9, 16, PAL.balconyYellow);
     box(g, x0, y0 + 0.9, 2.0, 0.1, 16, PAL.balconyRed);
-    // Bandejas sobre el mostrador.
+    // Trays arranged along counter.
     for (let k = 0; k < 4; k++) {
       const p = iso(x0 + 0.3 + k * 0.45, y0 + 0.45, 16);
       g.ellipse(p.x, p.y, 7, 3.5).fill(0xffffff).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
       g.ellipse(p.x, p.y - 1.5, 5, 2.5).fill(PRODUCTS.cheese_arepa.color);
       g.ellipse(p.x, p.y - 2.5, 3, 1.2).fill(0xfff3d6);
     }
-    // Parasol a gajos de colores.
+    // Multi-colored umbrella.
     const pole = iso(x0 + 1.0, y0 + 1.6);
     g.rect(pole.x - 1, pole.y - 52 - ctx.up, 2, 52 + ctx.up).fill(0x555555);
     const top = { x: pole.x, y: pole.y - 52 - ctx.up };
@@ -1245,9 +1245,9 @@ const DRAW = {
     }
     this.roofTop = { x: top.x, y: top.y - 6 };
     this.lights.push({ x: top.x, y: top.y + 10, r: 34 });
-    // Bancos de madera para los clientes.
+    // Wooden customer stools.
     for (const [bx, by] of [[0.4, 2.5], [1.9, 2.5]]) box(g, x + bx, y + by, 0.6, 0.25, 6, PAL.wood);
-    // Vapor de las arepas calientes.
+    // Steam rising from hot arepas.
     const steam = new Graphics();
     this.anim.addChild(steam);
     this.animate = (time) => {
@@ -1260,27 +1260,27 @@ const DRAW = {
     };
   },
 
-  // Greca de tintos: cafetería de esquina con la greca plateada en el mostrador y vapor.
+  // Coffee urn shop: corner café with silver greca urn on counter and steam.
   greca(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
     const H = house(this, g, hx, hy, 1.9, 1.3, 26, ctx, { wall: 0xf2a7a0 });
     door(g, hx, hy, 1.3, 0.5, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 1.9, 0.65, 10, 0xffffff);
-    // Mostrador al frente con la greca.
+    // Front counter holding coffee urn.
     box(g, x + 0.9, y + 1.85, 1.3, 0.45, 12, PAL.wood);
     const base = iso(x + 1.55, y + 2.07, 12);
     g.roundRect(base.x - 7, base.y - 22, 14, 22, 4).fill(0xc7ccd1).stroke(OUTLINE);
     g.ellipse(base.x, base.y - 22, 7, 3).fill(0xe3e6e9).stroke(OUTLINE);
     g.circle(base.x, base.y - 28, 4).fill(0xd8b07a).stroke(OUTLINE);
     g.rect(base.x + 6, base.y - 10, 6, 2).fill(0x555555);
-    // Tacitas de tinto.
+    // Tiny tinto cups.
     for (let k = 0; k < 3; k++) {
       const c = iso(x + 1.05 + k * 0.18, y + 2.05, 12);
       g.roundRect(c.x - 2.5, c.y - 4, 5, 4, 1).fill(0xffffff).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
       g.ellipse(c.x, c.y - 4, 2.5, 1).fill(PRODUCTS.tinto.color);
     }
-    // Banca para los clientes.
+    // Customer bench.
     box(g, x + 0.3, y + 2.6, 0.8, 0.22, 6, PAL.wood);
     this.roofTop = iso(hx + 0.95, hy + 0.65, H + 16);
     const steam = new Graphics();
@@ -1295,7 +1295,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Fonda: casa larga con corredor, mesas con mantel de cuadros y el fogón humeando.
+  // Fonda: long porch house, checkered-cloth dining tables, smoking hearth.
   fonda(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -1303,11 +1303,11 @@ const DRAW = {
     door(g, hx, hy, 1.3, 1.2, 16, ctx.trim);
     windowOnFront(this, g, hx, hy, 1.3, 0.5, 8, 0xffffff);
     windowOnFront(this, g, hx, hy, 1.3, 1.9, 8, 0xffffff);
-    // Chimenea del fogón de leña.
+    // Wood-stove chimney.
     box(g, hx + 2.0, hy + 0.2, 0.25, 0.25, H + 18, 0xb5653a);
     const top = iso(hx + 2.12, hy + 0.32, H + 18);
     this.smokePoints.push({ x: top.x, y: top.y - 4 });
-    // Mesas con mantel a cuadros y desayunos.
+    // Checkered-cloth tables set with breakfast.
     for (const [mx, my] of [[0.6, 2.35], [1.6, 2.35], [2.5, 2.0]].slice(0, 2 + Math.min(ctx.tier, 1))) {
       const p = iso(x + mx, y + my, 8);
       g.rect(p.x - 1, p.y, 2, 8).fill(PAL.woodDark);
@@ -1319,19 +1319,19 @@ const DRAW = {
     this.roofTop = iso(hx + 1.2, hy + 0.65, H + 16);
   },
 
-  // Taller de canastas: cobertizo abierto con atados de fique, canastas apiladas y una tejedora.
+  // Basket workshop: open shed with fique bundles, stacked baskets, and weaver.
   basket_shop(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
-    // Postes y techo de teja sobre el cobertizo.
+    // Posts and tiled shed roof.
     for (const [px, py] of [[0, 0], [2.1, 0], [0, 1.4], [2.1, 1.4]]) box(g, x0 + px, y0 + py, 0.12, 0.12, 24 + ctx.up, PAL.wood);
-    // Fique colgado secándose.
+    // Hanging fique strands drying.
     for (let k = 0; k < 5; k++) {
       const p = iso(x0 + 0.3 + k * 0.4, y0 + 0.1, 22 + ctx.up);
       g.moveTo(p.x, p.y).lineTo(p.x - 2, p.y + 14).lineTo(p.x + 2, p.y + 14).closePath().fill(0xe8d9a8).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.4 });
     }
     gableRoof(g, x0, y0, 2.22, 1.52, 24 + ctx.up, 12, PAL.roof, PAL.wood);
-    // Canastas apiladas (más con cada hito).
+    // Stacked baskets (more at milestones).
     const spots = [[0.5, 0.9, 0], [0.95, 0.9, 0], [1.4, 0.9, 0], [0.72, 0.9, 9], [1.17, 0.9, 9], [0.95, 0.9, 18]];
     for (const [bx, by, z] of spots.slice(0, 3 + Math.min(ctx.tier, 3))) basketShape(g, x0 + bx, y0 + by, z);
     // Tejedora sentada.
@@ -1352,22 +1352,22 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Empaque de regalos: tienda con vitrina, cajas de colores con moño y canastas de regalo.
+  // Gift wrapping shop: storefront with window, ribboned colored boxes, and gift hampers.
   gift_wrap(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
     const H = house(this, g, hx, hy, 2.1, 1.4, 27, ctx, { wall: 0xf4efe6 });
-    // Vitrina en la fachada.
+    // Storefront display window.
     g.poly(isoPoly([[hx + 0.2, hy + 1.4, 6], [hx + 1.2, hy + 1.4, 6], [hx + 1.2, hy + 1.4, 18], [hx + 0.2, hy + 1.4, 18]])).fill(0xbfe3f5).stroke(OUTLINE);
     door(g, hx, hy, 1.4, 1.65, 16, ctx.trim);
     const v = iso(hx + 0.7, hy + 1.4, 12);
     this.lights.push({ x: v.x, y: v.y, r: 26 });
-    // Toldo de rayas.
+    // Striped awning.
     for (let i = 0; i < 6; i++) {
       const a = hx + 0.1 + i * 0.32;
       g.poly(isoPoly([[a, hy + 1.4, 22], [a + 0.32, hy + 1.4, 22], [a + 0.32, hy + 1.72, 17], [a, hy + 1.72, 17]])).fill(i % 2 ? 0xffffff : 0x8e44ad).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
     }
-    // Cajas de regalo con moño.
+    // Ribboned gift boxes.
     const boxes = [[0.4, 2.4, PAL.balconyRed], [0.85, 2.5, PAL.balconyBlue], [1.3, 2.45, PAL.balconyYellow], [0.62, 2.45, PAL.balconyGreen], [2.6, 1.0, 0x8e44ad]];
     boxes.slice(0, 3 + Math.min(ctx.tier, 2)).forEach(([bx, by, color], k) => {
       const z = k === 3 ? 9 : 0;
@@ -1381,9 +1381,9 @@ const DRAW = {
     this.roofTop = iso(hx + 1.05, hy + 0.7, H + 16);
   },
 
-  // Despacho de exportación (v4.1.2; antes, un patio de contenedores con grúa de puerto, pero Salento no tiene
-  // puerto): la bodega, contenedores esperando turno y la tractomula con su contenedor, que sale para
-  // Buenaventura. Un montacargas va y viene de la bodega al camión con las canastas.
+  // Export dispatch (v4.1.2; formerly port crane container yard though Salento is landlocked):
+  // warehouse, queued containers, and container tractomula bound for Buenaventura.
+  // Forklift shuttles crates between warehouse door and trailer.
   export_dock(g, x, y, ctx) {
     g.poly(isoPoly([[x + 0.1, y + 0.1], [x + 2.9, y + 0.1], [x + 2.9, y + 2.9], [x + 0.1, y + 2.9]])).fill({ color: 0x8f8f8f, alpha: 0.5 });
     const hx = x + 0.2;
@@ -1392,12 +1392,12 @@ const DRAW = {
     door(g, hx, hy, 1.25, 0.75, 18, 0x7a5230);
     windowOnRight(this, g, hx, hy, 1.5, 0.6, 12, 0xffffff);
     const roof = this.roofTop;
-    // Los contenedores que esperan: más con cada hito.
+    // Queued containers: more at milestones.
     const colors = [0x2e6fd1, PAL.balconyRed, PAL.balconyGreen, 0xe67e22];
     const levels = 1 + Math.min(ctx.tier, 2);
     for (let k = 0; k < levels; k++) container(g, x + 1.85, y + 0.3, k * 11, colors[k % colors.length]);
     for (let k = 0; k < Math.max(1, levels - 1); k++) container(g, x + 1.85, y + 1.0, k * 11, colors[(k + 2) % colors.length]);
-    // La tractomula: la cabina roja a un lado (a la vista, lejos del letrero de la bodega) y el remolque con su
+    // Tractomula: red cab to side (clear of warehouse signboard) with container trailer.
     // contenedor.
     const ty = y + 2.2;
     box(g, x + 0.2, ty, 0.55, 0.6, 15, 0xc0392b, { z: 3 });
@@ -1410,7 +1410,7 @@ const DRAW = {
       g.ellipse(w.x, w.y, 4.2, 3.2).fill(0x222222).stroke(OUTLINE);
       g.ellipse(w.x, w.y, 1.6, 1.2).fill(0xbbbbbb);
     }
-    // El montacargas, de la puerta de la bodega a la cola del camión.
+    // Forklift shuttling from warehouse doorway to trailer tail.
     const lift = new Graphics();
     this.anim.addChild(lift);
     this.roofTop = roof;
@@ -1430,7 +1430,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Empacadora: bodega amarilla con banda transportadora y bolsas.
+  // Empacadora: yellow warehouse with conveyor belt and coffee bags.
   packer(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -1439,7 +1439,7 @@ const DRAW = {
     windowOnRight(this, g, hx, hy, 2.4, 0.8, 14, 0xffffff);
     // Banda transportadora.
     box(g, x + 0.4, y + 2.15, 1.6, 0.35, 8, 0x555555);
-    // Pila de bolsas (más alta con cada hito).
+    // Stacked bags (taller at milestones).
     const stack = [[2.35, 2.2, 0], [2.65, 2.2, 0], [2.5, 2.5, 0], [2.5, 2.3, 10], [2.35, 2.2, 10], [2.5, 2.3, 20]];
     for (const [bx, by, z] of stack.slice(0, 4 + Math.min(ctx.tier, 2))) {
       const p = iso(x + bx, y + by, z);
@@ -1460,20 +1460,20 @@ const DRAW = {
 
   // --- Santander · La Guayabera (v3.0) ---
 
-  // Despulpadora de guayaba: casa con la máquina en el patio, guayabas en la tolva y pulpa en la tina.
+  // Guava pulper: cottage with yard pulper machine, guavas in hopper, pink pulp tub.
   guava_pulper(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 1.8, 1.5, 28, ctx, { wall: 0xf6e7c8 });
     door(g, hx, hy, 1.5, 0.9, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 1.8, 0.75, 14, PAL.balconyYellow);
-    // Tolva con guayabas.
+    // Hopper filled with guavas.
     const t = iso(x + 2.5, y + 0.8, 28);
     box(g, x + 2.35, y + 0.65, 0.3, 0.3, 18, 0x6c757d);
     g.poly([t.x - 14, t.y - 6, t.x + 14, t.y - 6, t.x + 5, t.y + 12, t.x - 5, t.y + 12]).fill(0x9aa3a8).stroke(OUTLINE);
     g.ellipse(t.x, t.y - 6, 14, 5).fill(PRODUCTS.guava.color).stroke(OUTLINE);
     for (const [dx, dy] of [[-6, -7], [0, -9], [6, -7], [-2, -5]]) g.circle(t.x + dx, t.y + dy, 2.6).fill(0xd4e157).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
-    // Tinas de pulpa rosada.
+    // Pink pulp tubs.
     for (const tx of [0.5, 1.4]) {
       box(g, x + tx, y + 2.1, 0.7, 0.55, 9, 0xc7beb0);
       g.poly(isoPoly([[x + tx + 0.06, y + 2.16, 9], [x + tx + 0.64, y + 2.16, 9], [x + tx + 0.64, y + 2.59, 9], [x + tx + 0.06, y + 2.59, 9]])).fill(PRODUCTS.guava_pulp.color);
@@ -1488,7 +1488,7 @@ const DRAW = {
     };
   },
 
-  // Paila de bocadillo: ramada con el fogón y la paila de cobre; el bocadillo se revuelve sin parar.
+  // Bocadillo kettle: shed with hearth and copper kettle continuously stirred.
   guava_pot(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -1506,7 +1506,7 @@ const DRAW = {
       const p = iso(x + 0.3 + i * 0.12, y + 2.65, i * 2);
       g.roundRect(p.x - 10, p.y - 4, 20, 4, 2).fill(0x8b5a2b).stroke(OUTLINE);
     }
-    // Canastos de guayaba madura junto al fogón.
+    // Baskets of ripe guavas beside hearth.
     for (const [bx, by] of [[2.3, 2.4], [2.65, 2.55]]) {
       const p = iso(x + bx, y + by);
       g.poly([p.x - 8, p.y - 10, p.x + 8, p.y - 10, p.x + 6, p.y, p.x - 6, p.y]).fill(0xc8a26b).stroke(OUTLINE);
@@ -1532,7 +1532,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Moldes de madera: mesas largas con los moldes llenos de bocadillo cuajando, bajo un techo.
+  // Wooden molds: long tables of trays filled with setting bocadillo under roof.
   guava_molds(g, x, y, ctx) {
     const x0 = x + 0.25;
     const y0 = y + 0.3;
@@ -1564,14 +1564,14 @@ const DRAW = {
     };
   },
 
-  // Cortadora: casa con una mesa donde los bloques se cortan en barritas.
+  // Cutter: house with yard table slicing blocks into bars.
   bocadillo_cutter(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
     house(this, g, hx, hy, 2.0, 1.6, 28, ctx, { wall: 0xf4efe6, roofH: 14 });
     door(g, hx, hy, 1.6, 0.6, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 2.0, 0.8, 14, PAL.balconyYellow);
-    // Mesa de corte en el patio, con el bloque y las barritas.
+    // Yard cutting table with slab and sliced bars.
     box(g, x + 0.4, y + 2.1, 1.9, 0.5, 9, PAL.wood);
     box(g, x + 0.5, y + 2.18, 0.7, 0.34, 5, PRODUCTS.bocadillo_block.color, { z: 9 });
     for (let i = 0; i < 5; i++) box(g, x + 1.35 + i * 0.17, y + 2.2, 0.11, 0.3, 4, PRODUCTS.bocadillo.color, { z: 9 });
@@ -1587,14 +1587,14 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Envoltura en bijao: casa con mesa de envolver y atados de hojas de bijao secándose.
+  // Bijao wrapping: house with wrapping table and drying bijao leaf bundles.
   bijao_wrapper(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
     house(this, g, hx, hy, 1.9, 1.6, 28, ctx, { wall: 0xe9d8b4, roofH: 14 });
     door(g, hx, hy, 1.6, 0.7, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 1.9, 0.8, 14, PAL.balconyYellow);
-    // Cuerda con hojas de bijao colgadas.
+    // Drying line of hung bijao leaves.
     const a = iso(x + 2.45, y + 0.4, 24);
     const b = iso(x + 2.45, y + 1.9, 24);
     g.rect(a.x - 1, a.y, 2, 24).fill(PAL.wood);
@@ -1605,7 +1605,7 @@ const DRAW = {
       const py = a.y + ((b.y - a.y) * i) / 6;
       g.ellipse(px, py + 8, 3, 8).fill(i % 2 ? 0x8d9f3c : 0xa5b84a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
     }
-    // Mesa con bocadillos envueltos.
+    // Table with wrapped bocadillos.
     box(g, x + 0.4, y + 2.15, 1.7, 0.45, 9, PAL.wood);
     for (let i = 0; i < 6; i++) {
       const p = iso(x + 0.55 + i * 0.26, y + 2.37, 9);
@@ -1614,7 +1614,7 @@ const DRAW = {
     }
   },
 
-  // Cajonera: bodega de cajitas de madera llenas de bocadillos, apiladas para despachar.
+  // Crate warehouse: storage shed of wooden bocadillo boxes stacked for dispatch.
   crate_packer(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -1637,14 +1637,14 @@ const DRAW = {
     };
   },
 
-  // --- Costa · El Arrozal (v3.15) ---
+  // --- Coast · El Arrozal (v3.15) ---
 
-  // Secadora de arroz: patio de cemento con el arroz extendido al sol, un rastrillo que lo voltea y la
-  // secadora de gas (un cilindro con su chimenea) bajo un techo de zinc.
+  // Rice dryer: concrete patio with sun-spread rice, worker turning with rake, and
+  // gas grain dryer (cylinder with chimney) under zinc roof.
   rice_dryer(g, x, y, ctx) {
     const px = x + 0.25;
     const py = y + 0.9;
-    // El patio de cemento con el arroz dorado.
+    // Concrete slab covered in golden paddy rice.
     g.poly(isoPoly([[px, py], [px + 2.5, py], [px + 2.5, py + 1.85], [px, py + 1.85]])).fill(0xc9c4b8).stroke(OUTLINE);
     g.poly(isoPoly([[px + 0.15, py + 0.15], [px + 2.35, py + 0.15], [px + 2.35, py + 1.7], [px + 0.15, py + 1.7]])).fill(PRODUCTS.dry_paddy.color);
     for (let k = 0; k < 7; k++) {
@@ -1652,7 +1652,7 @@ const DRAW = {
       const b = iso(px + 2.3, py + 0.25 + k * 0.21);
       g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: shade(PRODUCTS.dry_paddy.color, 0.8) });
     }
-    // La secadora: cilindro sobre patas, con chimenea, bajo un techito de zinc.
+    // Gas dryer: cylinder on legs with chimney under small zinc roof.
     const sx = x + 0.3;
     const sy = y + 0.15;
     box(g, sx, sy, 1.2, 0.6, 18, 0x9aa3a8);
@@ -1668,7 +1668,7 @@ const DRAW = {
       rake.clear();
       const f = (Math.sin(time * 1.2) + 1) / 2;
       const p = iso(px + 0.6 + f * 1.4, py + 1.1);
-      // El que voltea el arroz con el rastrillo.
+      // Worker turning rice with wooden rake.
       rake.rect(p.x - 2.2, p.y - 9, 1.8, 9).fill(0x3d3d5c);
       rake.rect(p.x + 0.4, p.y - 9, 1.8, 9).fill(0x3d3d5c);
       rake.roundRect(p.x - 3.2, p.y - 18, 6.4, 9.5, 2).fill(0xf4efe6).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.6 });
@@ -1681,20 +1681,20 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Descascaradora: molino de techo de zinc, con la tolva arriba y la cascarilla que sale volando por un
-  // tubo hacia un montón.
+  // Rice huller: zinc-roofed mill with top hopper and chaff blowing out pipe onto heap.
+  // pipe onto heap.
   rice_huller(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
     house(this, g, hx, hy, 2.0, 1.6, 30, ctx, { wall: 0xe8e2d0, roofColor: 0x9aa3a8, roofH: 12 });
     door(g, hx, hy, 1.6, 0.6, 18, ctx.trim);
     windowOnRight(this, g, hx, hy, 2.0, 0.8, 15, PAL.balconyBlue);
-    // La tolva con arroz en cáscara.
+    // Hopper filled with paddy rice.
     const t = iso(x + 2.55, y + 0.6, 30 + ctx.up);
     box(g, x + 2.4, y + 0.45, 0.3, 0.3, 22 + ctx.up, 0x6c757d);
     g.poly([t.x - 13, t.y - 6, t.x + 13, t.y - 6, t.x + 4, t.y + 10, t.x - 4, t.y + 10]).fill(0x9aa3a8).stroke(OUTLINE);
     g.ellipse(t.x, t.y - 6, 13, 4.5).fill(PRODUCTS.paddy.color).stroke(OUTLINE);
-    // El montón de cascarilla.
+    // Chaff mound.
     const h = iso(x + 2.45, y + 2.4);
     g.ellipse(h.x, h.y, 22, 9).fill(0xc9a45a).stroke(OUTLINE);
     g.ellipse(h.x - 4, h.y - 5, 14, 6).fill(0xd8b46a);
@@ -1712,17 +1712,17 @@ const DRAW = {
     };
   },
 
-  // Pulidora: casa con la máquina pulidora en el patio, que bota un polvillo blanco (el salvado).
+  // Rice polisher: house with yard polishing machine puffing white bran dust.
   rice_polisher(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 1.9, 1.5, 28, ctx, { wall: 0xf4efe6, roofH: 14 });
     door(g, hx, hy, 1.5, 0.7, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, PAL.balconyYellow);
-    // La pulidora: un cuerpo vertical con su motor.
+    // Polisher: upright body with motor.
     box(g, x + 2.35, y + 0.6, 0.45, 0.45, 26, 0xd0d4d8);
     box(g, x + 2.35, y + 1.15, 0.4, 0.3, 8, 0x2e6fd1);
-    // Costales de arroz blanco.
+    // Sacks of white rice.
     for (const [bx, by] of [[0.5, 2.3], [0.85, 2.45], [1.2, 2.3]]) {
       const p = iso(x + bx, y + by);
       g.ellipse(p.x, p.y - 5, 7, 5.5).fill(PRODUCTS.white_rice.color).stroke(OUTLINE);
@@ -1740,15 +1740,15 @@ const DRAW = {
     };
   },
 
-  // Clasificadora: ramada abierta con la zaranda (bandejas que se sacuden) y los granos enteros cayendo
-  // a un costal; los partidos, aparte.
+  // Sorter: open shed with shaking tiered sieve trays pouring whole grains into sack
+  // and broken grains separately.
   rice_sorter(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const w = 2.4;
     const d = 2.1;
     const H = 28 + ctx.up;
-    // Los costales del arroz clasificado.
+    // Sacks of graded rice.
     for (const [bx, by, c] of [[0.5, 1.75, PRODUCTS.premium_rice.color], [0.85, 1.85, PRODUCTS.premium_rice.color], [2.0, 1.85, 0xe9e4d8]]) {
       const p = iso(x0 + bx, y0 + by);
       g.ellipse(p.x, p.y - 5, 7, 5.5).fill(c).stroke(OUTLINE);
@@ -1763,7 +1763,7 @@ const DRAW = {
     this.animate = (time) => {
       sieve.clear();
       const shake = Math.sin(time * 14) * 0.04;
-      // Patas de la zaranda y sus tres bandejas, que se sacuden.
+      // Sieve frame legs and three shaking trays.
       for (const lx of [0.5, 1.9]) box(sieve, x0 + lx, y0 + 0.8, 0.08, 0.08, 14, PAL.woodDark);
       for (let k = 0; k < 3; k++) {
         const z = 8 + k * 4;
@@ -1778,7 +1778,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Empacadora de arroz: casa con la mesa donde se llenan y se sellan las bolsas de una libra.
+  // Rice packer: house with table filling and sealing one-pound bags.
   rice_bagger(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -1799,7 +1799,7 @@ const DRAW = {
     };
   },
 
-  // Bultera: bodega grande con los bultos de arroz arrumados en el patio (más arrumes con los hitos).
+  // Rice warehouse: large depot stacked with rice bales in yard (more stacks at milestones).
   rice_stacker(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -1836,9 +1836,9 @@ const DRAW = {
     };
   },
 
-  // --- Costa · El Cocal (v3.16) ---
+  // --- Coast · El Cocal (v3.16) ---
 
-  // Peladero de cocos: ramada de palma con el montón de cocos verdes, las cáscaras a un lado y el que pela
+  // Coconut husker: palm shed with green coconut heap, empty husks aside, worker husking.
   // a machete.
   coconut_peeler(g, x, y, ctx) {
     const x0 = x + 0.3;
@@ -1846,13 +1846,13 @@ const DRAW = {
     const w = 2.4;
     const d = 1.4;
     const H = 26 + ctx.up;
-    // Montón de cocos verdes, adelante.
+    // Green coconut pile in front.
     const pile = iso(x0 + 2.0, y0 + 1.95);
     for (let i = 0; i < 9; i++) {
       const row = Math.floor(i / 4);
       g.circle(pile.x + ((i % 4) - 1.5) * 7 + row * 3, pile.y - row * 5, 4.5).fill(PRODUCTS.coconut.color).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
     }
-    // Cáscaras (la estopa) y un canasto de cocos pelados.
+    // Fibrous husks and basket of husked coconuts.
     const husks = iso(x0 + 2.6, y0 + 0.9);
     for (let i = 0; i < 6; i++) g.ellipse(husks.x + (i % 3) * 6 - 6, husks.y - Math.floor(i / 3) * 4, 5, 2.5).fill(i % 2 ? 0xb08a4a : 0x9ccc65).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.4 });
     const basket = iso(x0 + 1.55, y0 + 2.3);
@@ -1871,7 +1871,7 @@ const DRAW = {
       man.roundRect(p.x - 3.2, p.y - 18, 6.4, 9.5, 2).fill(0x2e6fd1);
       man.circle(p.x, p.y - 20.5, 2.8).fill(0x6d4c32);
       man.ellipse(p.x, p.y - 22.5, 5.5, 1.5).fill(0xe9d8a6);
-      // El coco en la mano y el machete que sube y baja.
+      // Coconut in hand and rising/falling machete.
       man.circle(p.x - 6, p.y - 13, 3.6).fill(PRODUCTS.coconut.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
       const a = this.working ? -0.6 + Math.abs(Math.sin(time * 4)) * 1.6 : 0.6;
       const hx = p.x + 3;
@@ -1881,7 +1881,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Ralladora: casita de colores con la mesa donde se ralla el coco; el coco rallado se junta en una ponchera.
+  // Grater: colorful cottage with grating bench feeding grated coconut into bowl.
   coconut_grater(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -1915,20 +1915,20 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Prensa de coco: casa con la prensa de tornillo en el corredor; la leche escurre del trapo a un balde.
+  // Coconut press: cottage with porch screw press dripping milk through cloth into bucket.
   coconut_press(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 2.0, 1.6, 28, ctx, { wall: 0xf2a7a0, roofColor: 0xc9a35a, roofH: 14 });
     door(g, hx, hy, 1.6, 0.6, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 2.0, 0.8, 14, PAL.balconyBlue);
-    // La prensa: dos postes, el travesaño y el tornillo.
+    // Press: twin posts, crossbar, and screw.
     const px = x + 0.7;
     const py = y + 2.3;
     for (const dx of [0, 0.7]) box(g, px + dx, py, 0.1, 0.1, 22, PAL.woodDark);
     box(g, px - 0.05, py - 0.02, 0.85, 0.14, 3, PAL.wood, { z: 22 });
     box(g, px + 0.12, py - 0.05, 0.5, 0.2, 4, PAL.wood, { z: 4 });
-    // Botellas de leche de coco.
+    // Bottles of coconut milk.
     for (let i = 0; i < 2 + Math.min(ctx.tier, 3); i++) {
       const p = iso(x + 1.9 + (i % 3) * 0.2, y + 2.25 + Math.floor(i / 3) * 0.25);
       g.roundRect(p.x - 2, p.y - 10, 4, 10, 1.5).fill(PRODUCTS.coconut_milk.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
@@ -1939,7 +1939,7 @@ const DRAW = {
     this.animate = (time) => {
       press.clear();
       const down = this.working ? (Math.sin(time * 1.5) + 1) * 2.5 : 0;
-      // El tornillo baja y aprieta el trapo con el coco rallado.
+      // Screw lowers to squeeze cloth bundle of grated coconut.
       const top = iso(px + 0.4, py + 0.05, 22);
       press.rect(top.x - 1.2, top.y - 6, 2.4, 10 + down).fill(0x6c757d);
       press.moveTo(top.x - 6, top.y - 6).lineTo(top.x + 6, top.y - 6).stroke({ width: 2, color: PAL.woodDark });
@@ -1957,20 +1957,20 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Paila de cocadas: kiosco de palma con la paila de cobre sobre el fogón, la pala que revuelve y la mesa
-  // con las cocadas de colores (más bandejas con cada hito).
+  // Cocada kettle: palm kiosk with copper kettle over hearth, stirring paddle, and
+  // table of colorful cocadas (more trays at milestones).
   cocada_kitchen(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
     house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xf6d860, roofColor: 0xc9a35a, roofH: 16 });
     door(g, hx, hy, 1.6, 1.8, 18, ctx.trim);
     windowOnRight(this, g, hx, hy, 2.4, 0.8, 14, PAL.balconyGreen);
-    // Fogón de ladrillo con la paila.
+    // Brick hearth holding kettle.
     box(g, x + 0.4, y + 2.1, 0.8, 0.6, 8, 0xa0522d);
     const pan = iso(x + 0.8, y + 2.4, 8);
     g.ellipse(pan.x, pan.y - 2, 13, 5.5).fill(0xb87333).stroke(OUTLINE);
     g.ellipse(pan.x, pan.y - 3, 10.5, 4).fill(0xc68a4a);
-    // La mesa con las bandejas de cocadas.
+    // Table with cocada trays.
     box(g, x + 1.6, y + 2.15, 1.1, 0.5, 9, PAL.wood);
     const colors = [0xfbfaf6, PRODUCTS.cocada.color, 0xe57373, 0xf6d860];
     for (let i = 0; i < 2 + Math.min(ctx.tier, 2); i++) {
@@ -1983,7 +1983,7 @@ const DRAW = {
     this.animate = (time) => {
       stir.clear();
       const a = this.working ? time * 2.5 : 0;
-      // La melcocha de coco que hierve y la pala que da vueltas.
+      // Boiling coconut syrup and circling paddle.
       stir.ellipse(pan.x, pan.y - 3, 9, 3.5).fill(0xd9a066);
       if (this.working) for (let i = 0; i < 3; i++) stir.circle(pan.x + Math.sin(time * 3 + i * 2) * 6, pan.y - 3 + Math.cos(time * 2 + i) * 1.5, 1.2).fill({ color: 0xffffff, alpha: 0.6 });
       stir.moveTo(pan.x + Math.cos(a) * 6, pan.y - 3 + Math.sin(a) * 2).lineTo(pan.x + Math.cos(a) * 3 + 8, pan.y - 18).stroke({ width: 2, color: PAL.wood });
@@ -1996,10 +1996,10 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Costa · La Ciénaga (v3.17) ---
+  // --- Coast · La Ciénaga (v3.17) ---
 
-  // Limpieza de pescado: ramada de palma con la mesa donde se le quitan las escamas; adelante, la ponchera
-  // con los bocachicos recién llegados y un gallinazo esperando las tripas.
+  // Fish cleaning: palm shed with scaling table; front tub of fresh bocachicos and
+  // vulture waiting for scraps.
   fish_cleaner(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -2011,12 +2011,12 @@ const DRAW = {
       const p = iso(x0 + 0.7 + i * 0.45, y0 + 0.75, 9);
       fishOn(g, p.x, p.y - 1, 6, PRODUCTS.clean_fish.color);
     }
-    // La ponchera con agua y bocachicos.
+    // Tub of water and bocachicos.
     const tub = iso(x0 + 1.9, y0 + 2.0);
     g.ellipse(tub.x, tub.y - 3, 13, 6).fill(0x2e6fd1).stroke(OUTLINE);
     g.ellipse(tub.x, tub.y - 4.5, 11, 4.5).fill(0x6fa8dc);
     for (const [dx, dy] of [[-4, -5], [3, -4], [0, -6]]) fishOn(g, tub.x + dx, tub.y + dy, 5, PRODUCTS.fish.color);
-    // El gallinazo.
+    // Black vulture.
     const v = iso(x0 + 0.6, y0 + 2.2);
     g.ellipse(v.x, v.y - 6, 4.5, 6).fill(0x263238).stroke({ width: 0.6, color: 0x000000, alpha: 0.5 });
     g.circle(v.x - 2, v.y - 13, 2).fill(0x8d6e63);
@@ -2033,7 +2033,7 @@ const DRAW = {
       const k = this.working ? Math.sin(time * 10) * 3 : 0;
       work.moveTo(p.x + 3, p.y - 14).lineTo(p.x + 9 + k, p.y - 12).stroke({ width: 1.6, color: 0xb0bec5 });
       if (!this.working) return;
-      // Las escamas que saltan.
+      // Flying fish scales.
       for (let i = 0; i < 4; i++) {
         const f = (time * 1.6 + i / 4) % 1;
         work.circle(p.x + 10 + i * 2, p.y - 13 - Math.sin(f * Math.PI) * 8, 0.9).fill({ color: 0xeceff1, alpha: 1 - f });
@@ -2042,13 +2042,13 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Saladero: el patio con los tendales de pescado salado colgado al sol, el cajón de sal y un rancho atrás.
+  // Salting yard: drying racks hung with salted fish in sun, salt bin, and rear shack.
   fish_salter(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
     house(this, g, hx, hy, 1.8, 1.0, 22, ctx, { wall: 0xb8e0a8, roofColor: 0xc9a35a, roofH: 12 });
     door(g, hx, hy, 1.0, 0.6, 15, ctx.trim);
-    // El cajón de sal.
+    // Wooden salt bin.
     box(g, x + 2.25, y + 0.4, 0.6, 0.5, 7, PAL.wood);
     g.poly(isoPoly([[x + 2.3, y + 0.45, 7], [x + 2.8, y + 0.45, 7], [x + 2.8, y + 0.85, 7], [x + 2.3, y + 0.85, 7]])).fill(0xffffff);
     const lines = ctx.tier >= 2 ? [1.6, 2.2, 2.75] : [1.8, 2.55];
@@ -2074,7 +2074,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Fileteadora: casa con la mesa de filetear en el corredor; el cuchillo saca los filetes uno a uno.
+  // Filleter: cottage with porch filleting table slicing out fillets one by one.
   fish_filleter(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -2086,7 +2086,7 @@ const DRAW = {
       const p = iso(x + 1.3 + i * 0.25, y + 2.35, 9);
       g.ellipse(p.x, p.y - 1, 4.5, 2).fill(PRODUCTS.fish_fillet.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
     }
-    // Las espinas, en un balde, para el caldo.
+    // Fish bones in bucket for broth.
     const bucket = iso(x + 2.6, y + 2.4);
     g.rect(bucket.x - 5, bucket.y - 8, 10, 8).fill(0xf6d860).stroke(OUTLINE);
     g.ellipse(bucket.x, bucket.y - 8, 5, 1.6).fill(0xe0e0e0);
@@ -2102,20 +2102,20 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Fritanga: kiosco de palma con el caldero de aceite en el fogón, el pescado dorándose y la mesa con los
-  // platos de pescado frito con patacón.
+  // Fish fry stall: palm kiosk with oil cauldron on hearth, frying fish, and plated
+  // fried fish with patacones.
   fish_fryer(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const w = 2.2;
     const d = 1.6;
     const H = 24 + ctx.up;
-    // Fogón y caldero.
+    // Hearth and frying cauldron.
     box(g, x0 + 0.3, y0 + 0.4, 0.7, 0.6, 7, 0xa0522d);
     const pot = iso(x0 + 0.65, y0 + 0.7, 7);
     g.ellipse(pot.x, pot.y - 3, 11, 5).fill(0x263238).stroke(OUTLINE);
     g.ellipse(pot.x, pot.y - 4, 9, 3.6).fill(0xe0b84a);
-    // La mesa con platos.
+    // Table set with plates.
     box(g, x0 + 1.2, y0 + 0.5, 0.8, 0.9, 8, 0xd7263d);
     for (const [px, py] of [[1.4, 0.75], [1.75, 0.75], [1.4, 1.15], [1.75, 1.15]].slice(0, 2 + Math.min(ctx.tier, 2))) {
       const p = iso(x0 + px, y0 + py, 8);
@@ -2143,8 +2143,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cocina del pescado en coco: casa grande con el fogón de leña y las cazuelas de barro humeando; junto a
-  // la puerta, las botellas de leche de coco que llegan del Cocal.
+  // Coconut-fish kitchen: large house with wood stove and steaming clay casseroles;
+  // bottles of coconut milk from Cocal stacked by door.
   coconut_fish_kitchen(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -2164,7 +2164,7 @@ const DRAW = {
       g.roundRect(p.x - 2, p.y - 10, 4, 10, 1.5).fill(PRODUCTS.coconut_milk.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
       g.rect(p.x - 2, p.y - 6.5, 4, 2.5).fill(0x7cb342);
     }
-    // Medios cocos vacíos.
+    // Empty coconut half-shells.
     const shell = iso(x + 2.7, y + 2.6);
     g.ellipse(shell.x, shell.y - 2, 4.5, 2.6).fill(0x6d4c32).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
     g.ellipse(shell.x, shell.y - 3, 3.6, 1.4).fill(0xfbfaf6);
@@ -2185,10 +2185,10 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Costa · La Quesera (v3.18) ---
+  // --- Coast · La Quesera (v3.18) ---
 
-  // Cuajadera: casa blanca con la batea de madera donde la leche se vuelve cuajada; la quesera la revuelve.
-  // Al lado, las cantinas de la leche del ordeño.
+  // Curdling house: white house with wooden curd trough; cheesemaker stirs while
+  // fresh milk cans wait beside it.
   curdler(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -2200,7 +2200,7 @@ const DRAW = {
       g.roundRect(p.x - 4, p.y - 13, 8, 13, 2).fill(0xc7ccd1).stroke(OUTLINE);
       g.ellipse(p.x, p.y - 13, 3, 1.4).fill(0x9aa3a8);
     }
-    // La batea.
+    // Wooden trough.
     box(g, x + 0.45, y + 2.05, 1.4, 0.55, 7, PAL.wood);
     const tub = iso(x + 1.15, y + 2.32, 7);
     g.ellipse(tub.x, tub.y - 0.5, 15, 4.5).fill(0xfbfaf6);
@@ -2208,7 +2208,7 @@ const DRAW = {
     this.anim.addChild(stir);
     this.animate = (time) => {
       stir.clear();
-      // Grumos de cuajada que se forman y la pala que revuelve.
+      // Forming curd clumps and stirring paddle.
       for (let i = 0; i < 5; i++) stir.circle(tub.x - 10 + i * 5, tub.y - 0.5 + Math.sin(i * 2) * 1.5, 1.8).fill(0xece6d6);
       const a = this.working ? time * 2 : 0;
       stir.moveTo(tub.x + Math.cos(a) * 8, tub.y + Math.sin(a) * 2).lineTo(tub.x + 6 + Math.cos(a) * 4, tub.y - 16).stroke({ width: 2, color: PAL.wood });
@@ -2216,8 +2216,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Molino de cuajada: ramada con el molino de manivela atornillado a la mesa; la cuajada molida cae a la
-  // batea y al lado esperan los bultos de sal.
+  // Curd grinder: shed with table-bolted crank mill pouring ground curds into trough
+  // beside waiting salt sacks.
   curd_mill(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -2227,7 +2227,7 @@ const DRAW = {
     box(g, x0 + 0.5, y0 + 0.4, 1.4, 0.6, 9, PAL.wood);
     const tray = iso(x0 + 1.4, y0 + 0.7, 9);
     g.ellipse(tray.x, tray.y - 1, 8, 3).fill(PRODUCTS.salted_curd.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
-    // Los bultos de sal, adelante.
+    // Salt sacks in front.
     for (const [bx, by] of [[1.9, 1.95], [2.25, 2.1], [2.05, 2.35]]) {
       const p = iso(x0 + bx, y0 + by);
       g.ellipse(p.x, p.y - 5, 7, 5.5).fill(0xf4f1e8).stroke(OUTLINE);
@@ -2255,21 +2255,21 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Prensa de queso: casa con la prensa de palanca en el patio: los moldes de madera apilados, la viga
-  // larga con piedras colgadas en la punta, y el suero que escurre.
+  // Lever cheese press: house with yard beam press—stacked wooden molds, weighted
+  // lever beam hung with stones, draining whey.
   cheese_press(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
     house(this, g, hx, hy, 1.9, 1.3, 26, ctx, { wall: 0xf6d860, roofColor: 0xc9a35a, roofH: 13 });
     door(g, hx, hy, 1.3, 0.6, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, PAL.balconyRed);
-    // Moldes apilados bajo la viga.
+    // Molds stacked under beam.
     const mx = x + 0.7;
     const my = y + 2.15;
     box(g, mx - 0.1, my - 0.05, 0.75, 0.55, 3, 0x8d6e4a);
     for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) box(g, mx, my, 0.55, 0.42, 5, k % 2 ? 0xa1785a : 0x8d5a32, { z: 3 + k * 5 });
     const top = 3 + (2 + Math.min(ctx.tier, 2)) * 5;
-    // El poste y la viga, con las piedras.
+    // Fulcrum post and weighted beam with stones.
     box(g, mx - 0.35, my + 0.15, 0.1, 0.1, top + 10, PAL.woodDark);
     const a = iso(mx - 0.3, my + 0.2, top + 6);
     const b = iso(mx + 1.6, my + 0.2, top - 2);
@@ -2277,7 +2277,7 @@ const DRAW = {
     g.moveTo(b.x, b.y).lineTo(b.x, b.y + 8).stroke({ width: 1, color: 0x5d4037 });
     g.ellipse(b.x, b.y + 11, 6, 4.5).fill(0x9e9e9e).stroke(OUTLINE);
     g.ellipse(b.x + 2, b.y + 16, 5, 4).fill(0x8a8a8a).stroke(OUTLINE);
-    // Los quesos ya prensados, en una tabla.
+    // Pressed cheese wheels resting on plank.
     for (let i = 0; i < 3; i++) box(g, x + 2.3 + (i % 2) * 0.28, y + 1.85 + Math.floor(i / 2) * 0.35, 0.22, 0.22, 4, PRODUCTS.queso_costeno.color);
     const whey = new Graphics();
     this.anim.addChild(whey);
@@ -2294,20 +2294,20 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Olla del mote: kiosco de palma con la olla grande en el fogón de tres piedras, el montón de ñame y el
-  // humo; la cocinera revuelve el mote.
+  // Mote pot: palm kiosk with giant pot on three-stone hearth, yam heap, and smoke;
+  // cook stirs the mote stew.
   mote_pot(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const w = 2.2;
     const d = 1.1;
     const H = 24 + ctx.up;
-    // Fogón de tres piedras con la olla.
+    // Three-stone hearth holding pot.
     const pot = iso(x0 + 0.9, y0 + 1.75);
     for (const [dx, dy] of [[-8, 1], [8, 1], [0, 4]]) g.ellipse(pot.x + dx, pot.y + dy, 4, 2.6).fill(0x8a8a8a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
     g.moveTo(pot.x - 11, pot.y - 2).lineTo(pot.x - 12, pot.y - 16).quadraticCurveTo(pot.x, pot.y - 20, pot.x + 12, pot.y - 16).lineTo(pot.x + 11, pot.y - 2).quadraticCurveTo(pot.x, pot.y + 2, pot.x - 11, pot.y - 2).closePath().fill(0x37474f).stroke(OUTLINE);
     g.ellipse(pot.x, pot.y - 16, 12, 4).fill(PRODUCTS.mote_queso.color).stroke({ width: 0.8, color: 0x263238 });
-    // El ñame.
+    // Heap of yams.
     for (const [bx, by] of [[1.8, 1.55], [2.05, 1.7], [1.9, 1.85]]) {
       const p = iso(x0 + bx, y0 + by);
       g.ellipse(p.x, p.y - 3, 7, 3.4).fill(0x8d6e4a).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
@@ -2319,7 +2319,7 @@ const DRAW = {
     this.anim.addChild(cook);
     this.animate = (time) => {
       cook.clear();
-      // El fuego.
+      // Fire.
       if (this.working) for (let i = 0; i < 3; i++) cook.poly([pot.x - 6 + i * 6, pot.y + 1, pot.x - 3 + i * 6, pot.y - 5 - Math.abs(Math.sin(time * 9 + i)) * 4, pot.x + i * 6, pot.y + 1]).fill(i % 2 ? 0xffb300 : 0xf4511e);
       for (let i = 0; i < 4; i++) cook.rect(pot.x - 9 + i * 5, pot.y - 17 + Math.sin(i * 1.7) * 1.5, 2.6, 1.8).fill(0xfbfaf6);
       const a = this.working ? time * 2.2 : 0;
@@ -2333,8 +2333,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Fonda costeña: casa de colores con su letrero, mesas rojas en el corredor con platos de almuerzo y la
-  // mesera que va y viene.
+  // Coastal fonda: colorful house with signboard, red porch tables set with lunch plates,
+  // and bustling waitress.
   costeno_fonda(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -2363,7 +2363,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cocina de la bandeja: casa larga con el mostrador donde se arman las bandejas y la parrilla humeando.
+  // Tray kitchen: long house with assembly counter and smoking grill.
   bandeja_kitchen(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -2390,20 +2390,20 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Costa · El Sombrero (v3.19) ---
+  // --- Coast · El Sombrero (v3.19) ---
 
-  // Raspado de la caña: ramada de palma donde se raspa cada hoja; el montón de hojas verdes y la fibra
-  // blanca colgada en una vara.
+  // Cane scraping: palm shed where each leaf is scraped clean; green leaf pile and
+  // white caña flecha fiber draped over pole.
   fiber_scraper(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const w = 2.4;
     const d = 1.4;
     const H = 24 + ctx.up;
-    // Hojas verdes, adelante a la derecha.
+    // Green leaves, front right.
     const pile = iso(x0 + 2.0, y0 + 1.95);
     for (let i = 0; i < 8; i++) g.moveTo(pile.x - 12 + i * 2, pile.y - (i % 3)).lineTo(pile.x + 6 + i * 2, pile.y - 6 - (i % 3)).stroke({ width: 2, color: i % 2 ? 0x4e8f34 : 0x6fae44 });
-    // La vara con la fibra blanca.
+    // Pole hung with bleached fiber.
     for (const lx of [0.3, 1.3]) box(g, x0 + lx, y0 + 2.0, 0.06, 0.06, 18, PAL.woodDark);
     const a = iso(x0 + 0.33, y0 + 2.03, 17);
     const b = iso(x0 + 1.33, y0 + 2.03, 17);
@@ -2422,7 +2422,7 @@ const DRAW = {
       work.clear();
       const p = iso(x0 + 1.2, y0 + 1.0);
       worker(work, p.x, p.y, 0x8e44ad);
-      // La hoja en las manos y el cuchillo que la raspa.
+      // Leaf held in hand with scraping knife.
       work.moveTo(p.x - 10, p.y - 13).lineTo(p.x + 2, p.y - 15).stroke({ width: 2, color: 0x6fae44 });
       const k = this.working ? (Math.sin(time * 6) + 1) / 2 : 0.5;
       work.moveTo(p.x - 8 + k * 8, p.y - 18).lineTo(p.x - 7 + k * 8, p.y - 13).stroke({ width: 1.4, color: 0xb0bec5 });
@@ -2430,7 +2430,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tintes de barro: la olla negra hirviendo en el fogón y la fibra teñida colgada a secar en un tendal.
+  // Mud dyeing: boiling black dye pot on hearth and dyed fiber hanging on drying line.
   fiber_dyer(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
@@ -2463,8 +2463,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Trenzadoras: casa con el corredor donde las trenzadoras, sentadas, sacan la trenza; los rollos de
-  // trenza se apilan en una mesa.
+  // Braiding porch: house where seated weavers plait strips; finished braid coils stack
+  // on a table.
   braiders(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -2483,7 +2483,7 @@ const DRAW = {
       work.clear();
       for (const [k, [bx, shirt]] of [[0.7, 0xf6d860], [1.5, 0x2e6fd1]].entries()) {
         const p = iso(x + bx, y + 2.2);
-        // Sentada en un taburete, con la trenza que le cae sobre las piernas.
+        // Seated on stool with long braid draped across lap.
         work.rect(p.x - 4, p.y - 6, 8, 6).fill(PAL.wood);
         work.roundRect(p.x - 3.2, p.y - 15, 6.4, 9.5, 2).fill(shirt);
         work.circle(p.x, p.y - 17.5, 2.8).fill(0x8d5524);
@@ -2496,8 +2496,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Costura del sombrero: casa con la máquina de coser en el corredor; la trenza entra en vueltas y los
-  // sombreros terminados se apilan.
+  // Hat sewing: house with porch sewing machine; braid spirals under needle as finished
+  // hats stack up.
   hat_sewer(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -2521,7 +2521,7 @@ const DRAW = {
     this.anim.addChild(sew);
     this.animate = (time) => {
       sew.clear();
-      // El sombrero que se va cosiendo da vueltas bajo la aguja.
+      // Hat spinning under sewing needle.
       const a = this.working ? time * 2 : 0;
       sew.ellipse(m.x - 2, m.y - 1, 7, 2.6).fill(0xefe3c2).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
       sew.moveTo(m.x - 2 + Math.cos(a) * 5, m.y - 1 + Math.sin(a) * 1.8).lineTo(m.x - 2 + Math.cos(a + Math.PI) * 5, m.y - 1 + Math.sin(a + Math.PI) * 1.8).stroke({ width: 1, color: 0x2b2b2b });
@@ -2531,15 +2531,15 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Parador de Tuchín: kiosco de palma a la orilla de la carretera, con los sombreros colgados a la venta,
-  // el pescado salado en una cuerda y la mesa del pescado frito para los viajeros.
+  // Tuchín roadside stall: palm kiosk beside highway with hats hung for sale, salted fish
+  // on line, and fried-fish table for travelers.
   parador(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const w = 2.4;
     const d = 1.4;
     const H = 26 + ctx.up;
-    // Mesa del pescado frito.
+    // Fried-fish dining table.
     box(g, x0 + 1.4, y0 + 0.4, 0.8, 0.6, 8, 0xd7263d);
     for (const [px, py] of [[1.6, 0.6], [1.95, 0.75]]) {
       const p = iso(x0 + px, y0 + py, 8);
@@ -2549,7 +2549,7 @@ const DRAW = {
     for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
     gableRoof(g, x0, y0, w, d, H, 13, 0xc9a35a, 0x9c7b3a);
     this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
-    // Los sombreros colgados en el frente del kiosco (más con cada hito).
+    // Hats hung across kiosk front (more at milestones).
     const front = (k, n, z) => iso(x0 + 0.2 + (k * (w - 0.4)) / (n - 1), y0 + d + 0.05, z);
     const n = 3 + Math.min(ctx.tier, 3);
     for (let k = 0; k < n; k++) {
@@ -2559,7 +2559,7 @@ const DRAW = {
       g.moveTo(p.x - 3.2, p.y).quadraticCurveTo(p.x, p.y - 7, p.x + 3.2, p.y).closePath().fill(0xefe3c2).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
       g.moveTo(p.x - 2.6, p.y - 2.5).lineTo(p.x + 2.6, p.y - 2.5).stroke({ width: 1, color: 0x2b2b2b });
     }
-    // El letrero.
+    // Signboard.
     const sign = iso(x0 + 0.5, y0 + 2.2);
     g.rect(sign.x - 1, sign.y - 22, 2, 22).fill(PAL.woodDark);
     g.roundRect(sign.x - 13, sign.y - 30, 26, 9, 2).fill(0xf6d860).stroke(OUTLINE);
@@ -2567,7 +2567,7 @@ const DRAW = {
     this.anim.addChild(salt);
     this.animate = (time) => {
       salt.clear();
-      // El pescado salado en la cuerda, entre el kiosco y el letrero.
+      // Salted fish hung on line between kiosk and signboard.
       const a = iso(x0 + 0.6, y0 + 2.2, 18);
       const b = iso(x0 + 2.3, y0 + 2.2, 18);
       salt.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x5d4037 });
@@ -2582,10 +2582,10 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Costa · Cartagena (v3.20): casas coloniales de colores, murallas de piedra coralina y el mar ---
+  // --- Coast · Cartagena (v3.20): colorful colonial houses, coral-stone walls, and sea ---
 
-  // Restaurante de la muralla: un tramo de la muralla con sus garitas y, encima, las mesas con mantel y
-  // velas para la cena (más mesas con cada hito).
+  // Rampart restaurant: wall section with corner sentry boxes and candlelit tablecloth
+  // dinner tables on top (more tables at milestones).
   restaurante_muralla(g, x, y, ctx) {
     const x0 = x + 0.2;
     const y0 = y + 0.5;
@@ -2598,13 +2598,13 @@ const DRAW = {
       const b = iso(x0 + w, y0 + d, (H * k) / 4);
       g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0xbfae8a });
     }
-    // Las almenas del borde de adelante.
+    // Front battlements.
     for (let k = 0; k < 6; k++) box(g, x0 + 0.1 + k * 0.45, y0 + d - 0.15, 0.25, 0.15, 4, 0xcdbb94, { z: H });
-    // La garita de la esquina.
+    // Corner garita turret.
     box(g, x0 + w - 0.45, y0 - 0.1, 0.45, 0.45, 12, 0xd9c9a8, { z: H });
     const cap = iso(x0 + w - 0.22, y0 + 0.12, H + 12);
     g.moveTo(cap.x - 9, cap.y).quadraticCurveTo(cap.x, cap.y - 14, cap.x + 9, cap.y).closePath().fill(0xcdbb94).stroke(OUTLINE);
-    // Escalera de subida.
+    // Stone access stairs.
     for (let k = 0; k < 5; k++) box(g, x0 - 0.35, y0 + 0.2 + k * 0.22, 0.35, 0.22, H - k * 3.6, 0xcdbb94);
     this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 10);
     const tables = [[0.5, 0.5], [1.3, 0.7], [0.8, 1.05], [1.75, 1.1]].slice(0, 2 + Math.min(ctx.tier, 2));
@@ -2628,7 +2628,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Hotel colonial: casona de dos pisos, rosada, con el balcón de madera corrido y bugambilias que cuelgan.
+  // Colonial hotel: two-story pink mansion with full-length wooden balcony and hanging
   hotel_colonial(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -2637,7 +2637,7 @@ const DRAW = {
     door(g, hx, hy, 1.6, 0.7, 17, 0x2f7d4f);
     door(g, hx, hy, 1.6, 1.6, 17, 0x2f7d4f);
     windowOnRight(this, g, hx, hy, 2.3, 0.8, 14, 0x7a4a22);
-    // El balcón de madera del segundo piso, por todo el frente.
+    // bougainvillea.
     const z = 22 + up / 2;
     g.poly(isoPoly([[hx, hy + 1.6, z], [hx + 2.3, hy + 1.6, z], [hx + 2.3, hy + 1.85, z], [hx, hy + 1.85, z]])).fill(0x5d3a1e).stroke(OUTLINE);
     g.poly(isoPoly([[hx, hy + 1.85, z], [hx + 2.3, hy + 1.85, z], [hx + 2.3, hy + 1.85, z + 7], [hx, hy + 1.85, z + 7]])).fill({ color: 0x7a4a22, alpha: 0.35 }).stroke(OUTLINE);
@@ -2654,7 +2654,7 @@ const DRAW = {
     }
   },
 
-  // Cocina de la bahía: casa azul frente al mar con la cazuela en el fogón y la mesa de los platos.
+  // Second-story wooden balcony across whole front.
   cocina_bahia(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -2675,7 +2675,7 @@ const DRAW = {
     this.smokePoints = [iso(x + 0.75, y + 2.37, 12)];
   },
 
-  // Loncheras del paseo: casa amarilla con las neveras de icopor apiladas y la que se está llenando.
+  // Waterfront kitchen: blue seaside house with hearth casserole and plated counter.
   loncheras(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -2691,7 +2691,7 @@ const DRAW = {
     this.anim.addChild(fill);
     this.animate = (time) => {
       fill.clear();
-      // Los hielos y las gaseosas que caen en la nevera abierta.
+      // Picnic coolers: yellow house with stacked foam coolers and one being packed.
       const p = iso(x + 0.75, y + 2.4);
       fill.rect(p.x - 7, p.y - 7, 14, 7).fill(0xfbfaf6).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
       fill.ellipse(p.x, p.y - 7, 7, 2.2).fill(0x81d4fa);
@@ -2702,8 +2702,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Muelle de las lanchas: el agua de la bahía, el muelle de madera y las lanchas que salen con los turistas
-  // hacia las islas.
+  // Ice cubes and sodas dropping into open cooler.
+  // Tour boat dock: bay water, wooden pier, and boats departing full of island-bound tourists.
   muelle(g, x, y, ctx) {
     g.poly(isoPoly([[x + 0.1, y + 0.1], [x + 2.9, y + 0.1], [x + 2.9, y + 2.9], [x + 0.1, y + 2.9]])).fill(0x26a6c4);
     g.poly(isoPoly([[x + 0.3, y + 0.3], [x + 2.7, y + 0.3], [x + 2.7, y + 2.7], [x + 0.3, y + 2.7]])).fill(0x3cc0d6);
@@ -2726,7 +2726,7 @@ const DRAW = {
     };
     this.animate = (time) => {
       boats.clear();
-      // Una amarrada al muelle y otra que sale.
+      // One moored at pier and one heading out.
       const bob = Math.sin(time * 1.6) * 0.8;
       const a = iso(x + 2.2, y + 0.75);
       lancha(boats, a.x, a.y + bob, 0);
@@ -2739,20 +2739,20 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Boyacá · El Papal (v3.22): casas blancas de tapia con zócalo verde y teja de barro ---
+  // --- Boyacá · El Papal (v3.22): white rammed-earth houses with green plinth and clay tile ---
 
-  // Lavadero de papa: el tanque de agua donde se lava la papa, la banda que la saca y los bultos de tierra.
+  // Potato washer: wash tank, inclined exit conveyor, and muddy potato sacks.
   potato_washer(g, x, y, ctx) {
     const tx = x + 0.3;
     const ty = y + 0.4;
     box(g, tx, ty, 1.5, 1.1, 10, 0x9aa3a8);
     g.poly(isoPoly([[tx + 0.1, ty + 0.1, 10], [tx + 1.4, ty + 0.1, 10], [tx + 1.4, ty + 1.0, 10], [tx + 0.1, ty + 1.0, 10]])).fill(0x6fa8dc);
-    // La banda inclinada que saca la papa lavada.
+    // Inclined belt lifting washed potatoes.
     const a = iso(tx + 1.5, ty + 0.55, 8);
     const b = iso(tx + 2.6, ty + 0.55, 18);
     g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 7, color: 0x37474f });
     box(g, tx + 2.4, ty + 0.3, 0.1, 0.1, 18, PAL.woodDark);
-    // Bultos de papa con tierra esperando.
+    // Dirty potato sacks waiting.
     for (const [bx, by] of [[0.5, 2.3], [0.85, 2.45], [1.2, 2.3]]) {
       const p = iso(x + bx, y + by);
       g.ellipse(p.x, p.y - 5, 7, 5.5).fill(0xc8a26a).stroke(OUTLINE);
@@ -2762,7 +2762,7 @@ const DRAW = {
     this.anim.addChild(water);
     this.animate = (time) => {
       water.clear();
-      // Papas que suben por la banda y gotas que salpican.
+      // Potatoes riding belt up with splashing water drops.
       for (let i = 0; i < 4; i++) {
         const f = (time * 0.5 + i / 4) % 1;
         water.circle(a.x + (b.x - a.x) * f, a.y + (b.y - a.y) * f - 4, 2.6).fill(PRODUCTS.washed_potato.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
@@ -2777,7 +2777,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Seleccionadora: ramada con la mesa de escoger; la papa gruesa, la pareja y la menuda en tres bultos.
+  // Potato grader: shed with sorting table; large, medium, and small tubers sorted into 3 sacks.
   potato_grader(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -2803,7 +2803,7 @@ const DRAW = {
       }
       const p = iso(x0 + 1.2, y0 + 1.15);
       worker(work, p.x, p.y, 0x8e44ad);
-      // La ruana sobre los hombros.
+      // Wool ruana draped over shoulders.
       work.poly([p.x - 5, p.y - 17, p.x + 5, p.y - 17, p.x + 6, p.y - 11, p.x - 6, p.y - 11]).fill(0x8d6e63);
       if (!this.working) return;
       const f = (time * 1.2) % 1;
@@ -2812,8 +2812,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Peladora de papa: casa blanca con zócalo verde; en el corredor, el tambor de la peladora que gira y
-  // bota las cáscaras.
+  // Potato peeler: white green-plinth house; rotating porch peeler drum ejecting peels.
+  // ejecting peels.
   potato_peeler(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -2841,7 +2841,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Freidora: casa con la freidora grande en el corredor; las papitas criollas se doran en el aceite.
+  // Chip fryer: house with large porch fryer crisping golden yellow native potato chips.
   criollas_fryer(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -2851,7 +2851,7 @@ const DRAW = {
     box(g, x0 + 0.4, y0 + 0.5, 1.2, 0.8, 12, 0x9aa3a8);
     const vat = iso(x0 + 1.0, y0 + 0.9, 12);
     g.ellipse(vat.x, vat.y, 14, 6).fill(0xd9a30a).stroke(OUTLINE);
-    // Canastos con las papitas listas.
+    // Baskets of freshly fried chips.
     for (const [bx, by] of [[1.9, 1.7], [0.6, 1.8]]) {
       const p = iso(x0 + bx, y0 + by);
       g.poly([p.x - 7, p.y - 8, p.x + 7, p.y - 8, p.x + 5, p.y, p.x - 5, p.y]).fill(0xb08850).stroke(OUTLINE);
@@ -2875,7 +2875,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Empacadora de papitas: casa con la mesa donde las bolsas amarillas se llenan y se sellan.
+  // Chip bagger: house with table filling and sealing yellow snack bags.
   criollas_bagger(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -2896,7 +2896,7 @@ const DRAW = {
     };
   },
 
-  // Cajonera: bodega con las cajas de papitas arrumadas en el patio (más arrumes con los hitos).
+  // Chip depot: warehouse stacked with chip cartons in yard (more stacks at milestones).
   criollas_boxer(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -2923,8 +2923,8 @@ const DRAW = {
 
   // --- Boyacá · La Cervecería (v3.23) ---
 
-  // Maltería: el piso de germinación con la cebada extendida que alguien voltea, y el horno de secado con
-  // su chimenea.
+  // Maltings: malting floor of spread barley being turned plus kiln house with chimney.
+  // its chimney.
   maltings(g, x, y, ctx) {
     const px = x + 0.25;
     const py = y + 1.1;
@@ -2935,7 +2935,7 @@ const DRAW = {
       const b = iso(px + 2.3, py + 0.25 + k * 0.21);
       g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0xb08a4a });
     }
-    // El horno: una casita de ladrillo con chimenea.
+    // Drying kiln: small brick house with chimney.
     box(g, x + 0.3, y + 0.15, 1.3, 0.8, 18, 0xb5562e);
     gableRoof(g, x + 0.3, y + 0.15, 1.3, 0.8, 18, 8, PAL.roof, 0xb5562e);
     box(g, x + 1.3, y + 0.3, 0.2, 0.2, 32 + ctx.up, 0x8a3b1f);
@@ -2955,7 +2955,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Paila de cocción: casa con la olla grande de cobre en el corredor, echando vapor, y los costales de malta.
+  // Brew kettle: house with big steaming copper kettle on porch and malt sacks.
   brew_kettle(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -2984,7 +2984,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tanques de fermentación: los tanques de acero en fila, con sus escaleras y las burbujas del termómetro.
+  // Fermentation tanks: row of steel tanks with catwalk ladders and airlock bubbles.
   fermenters(g, x, y, ctx) {
     const tanks = ctx.tier >= 2 ? [[0.5, 0.6], [1.3, 0.6], [2.1, 0.6], [0.9, 1.6], [1.7, 1.6]] : [[0.6, 0.7], [1.6, 0.7], [1.1, 1.7]];
     this.tanks = [];
@@ -3013,7 +3013,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Embotelladora: casa con la banda de botellas que se llenan y, al lado, las canastas rojas apiladas.
+  // Bottling line: house with filling bottle conveyor beside stacked red crates.
   bottler(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -3036,16 +3036,16 @@ const DRAW = {
     };
   },
 
-  // --- Boyacá · Ráquira (v3.24): casas de colores vivos, con ollas y caballitos en las puertas ---
+  // --- Boyacá · Ráquira (v3.24): bright houses hung with pots and clay horses ---
 
-  // Amasado del barro: ramada de teja donde alguien pisa el barro en la poza; el barro listo en bolas.
+  // Clay wedging: tiled shed where worker treads clay pit by foot; wedged clay balls aside.
   clay_kneader(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const w = 2.4;
     const d = 1.4;
     const H = 24 + ctx.up;
-    // Las bolas de barro, adelante a la derecha.
+    // Wedged clay balls, front right.
     for (const [bx, by] of [[1.9, 1.9], [2.2, 2.05], [2.05, 2.25], [1.75, 2.2]]) {
       const p = iso(x0 + bx, y0 + by);
       g.ellipse(p.x, p.y - 3, 5, 4).fill(PRODUCTS.barro.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
@@ -3060,7 +3060,7 @@ const DRAW = {
       work.clear();
       work.ellipse(pool.x, pool.y, 18, 7).fill(0x8a5a46).stroke(OUTLINE);
       work.ellipse(pool.x, pool.y - 1, 15, 5.5).fill(PRODUCTS.barro.color);
-      // La persona pisando: sube un pie y luego el otro.
+      // Worker treading clay: alternating feet up and down.
       const step = this.working ? Math.sin(time * 6) * 2 : 0;
       work.rect(pool.x - 2.2, pool.y - 9 - Math.max(0, step), 1.8, 9).fill(0x8d5524);
       work.rect(pool.x + 0.4, pool.y - 9 - Math.max(0, -step), 1.8, 9).fill(0x8d5524);
@@ -3071,7 +3071,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Ollas de barro: casa amarilla con las ollas negras secándose en fila sobre una tabla (más con los hitos).
+  // Pottery shelf: yellow house with black clay pots drying in rows on plank (more at milestones).
   pot_maker(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
@@ -3089,14 +3089,14 @@ const DRAW = {
     }
   },
 
-  // Torno: casa azul con el alfarero en el torno; la pieza sube mientras la rueda gira.
+  // Potter's wheel: blue house with potter at wheel; vessel rises as wheel spins.
   potter_wheel(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0x9ad0ec, roofH: 14 });
     door(g, hx, hy, 1.5, 0.7, 16, 0xd7263d);
     windowOnRight(this, g, hx, hy, 1.9, 0.75, 14, 0xd7263d);
-    // Piezas crudas secándose.
+    // Unfired greenware drying.
     for (const [bx, by] of [[2.3, 2.1], [2.6, 2.25], [2.4, 2.5]]) {
       const p = iso(x + bx, y + by);
       g.poly([p.x - 3, p.y, p.x - 4, p.y - 7, p.x - 2, p.y - 11, p.x + 2, p.y - 11, p.x + 4, p.y - 7, p.x + 3, p.y]).fill(PRODUCTS.pieza_torneada.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
@@ -3113,7 +3113,7 @@ const DRAW = {
       spin.poly([wheel.x - 4, wheel.y - 7, wheel.x - 5, wheel.y - 7 - h * 0.6, wheel.x - 2.5, wheel.y - 7 - h, wheel.x + 2.5, wheel.y - 7 - h, wheel.x + 5, wheel.y - 7 - h * 0.6, wheel.x + 4, wheel.y - 7]).fill(PRODUCTS.pieza_torneada.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
       const a = this.working ? time * 10 : 0;
       spin.moveTo(wheel.x + Math.cos(a) * 9, wheel.y - 6 + Math.sin(a) * 3).lineTo(wheel.x + Math.cos(a) * 6, wheel.y - 6 + Math.sin(a) * 2).stroke({ width: 1, color: 0x3e2723 });
-      // El alfarero, sentado detrás.
+      // Potter seated behind wheel.
       spin.roundRect(wheel.x + 8, wheel.y - 18, 6.4, 9, 2).fill(0x2fa36b);
       spin.circle(wheel.x + 11.2, wheel.y - 21, 2.8).fill(0x8d5524);
       spin.moveTo(wheel.x + 8, wheel.y - 14).lineTo(wheel.x + 3, wheel.y - 11 - grow * 4).stroke({ width: 1.4, color: 0x8d5524 });
@@ -3121,8 +3121,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Horno de leña: el horno de ladrillo en forma de cúpula con la boca encendida y el humo; al lado, las
-  // materas ya pintadas.
+  // Wood kiln: dome-shaped brick kiln with glowing firemouth and smoke beside painted planters.
+  // planters already painted.
   pottery_kiln(g, x, y, ctx) {
     const k = iso(x + 1.1, y + 1.2);
     shadow(g, k.x + 4, k.y + 2, 30, 11);
@@ -3149,8 +3149,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Jarras: casa rosada con la mesa de las jarras de barro y el barril de la cerveza que llega de la
-  // Cervecería; la jarra que se llena echa espuma.
+  // Beer mugs: pink house with table of clay mugs and beer barrel arriving from Cervecería;
+  // filling mug foams over.
   jarras(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -3163,7 +3163,7 @@ const DRAW = {
       g.roundRect(p.x - 2.6, p.y - 7, 5.2, 7, 1.2).fill(PRODUCTS.jarra_cerveza.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
       g.ellipse(p.x, p.y - 7.5, 2.6, 1.2).fill(0xffffff);
     }
-    // El barril.
+    // Beer barrel.
     const b = iso(x + 0.75, y + 2.35);
     g.ellipse(b.x, b.y - 1, 8, 3).fill(0x6d4c32);
     g.rect(b.x - 8, b.y - 16, 16, 15).fill(0x8b5a2b).stroke(OUTLINE);
@@ -3185,7 +3185,7 @@ const DRAW = {
 
   // --- Boyacá · Paipa (v3.25) ---
 
-  // Cuajadera de Paipa: casa blanca con zócalo verde y la tina de cuajar en el corredor, con las cantinas.
+  // Paipa curdler: white green-plinth house with porch curd vat and milk cans.
   paipa_curdler(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -3211,7 +3211,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Moldes de queso: ramada con la mesa de los aros de madera y las tablas que prensan, y el suero.
+  // Cheese molds: shed with wooden hoop molds, weighted pressing boards, draining whey.
   cheese_molds(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -3247,7 +3247,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cava de maduración: casa de piedra con las ruedas de queso en repisas, que se doran con los hitos.
+  // Aging cellar: stone house with cheese wheels ripening deeper gold on shelves at milestones.
   cheese_cave(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
@@ -3265,7 +3265,7 @@ const DRAW = {
     for (const lx of [0.4, 2.6]) box(g, x + lx, y + 2.0, 0.06, 0.35, 21, PAL.woodDark);
   },
 
-  // Horno de almojábanas: casa amarilla con el horno de ladrillo en el corredor y las latas de almojábanas.
+  // Almojábana oven: yellow house with porch brick oven and baking trays of almojábanas.
   almojabana_oven(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -3290,7 +3290,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Mesa del piquete: casa con las mesas largas afuera y las bandejas del piquete; la gente come.
+  // Piquete feast: house with long outdoor tables laden with platters and dining crowd.
   piquete_table(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -3318,8 +3318,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Horno de barro: el horno de cúpula de barro en el patio, con la boca encendida, la mesa de amasar y las
-  // canastas de amasijos.
+  // Mud oven: yard dome clay oven with glowing mouth, kneading table, and baked-goods baskets.
+  // pastry baskets.
   clay_oven(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -3347,13 +3347,13 @@ const DRAW = {
 
   // --- Boyacá · Las Ruanas (v3.26) ---
 
-  // Lavado de lana: la pila de piedra con agua de la quebrada; la lana se lava y se tiende en la cerca.
+  // Wool washing: stone creek-water basin where wool washes and drapes over fence to dry.
   wool_washer(g, x, y, ctx) {
     const tx = x + 0.3;
     const ty = y + 0.4;
     box(g, tx, ty, 1.5, 1.0, 9, 0xa39b8c);
     g.poly(isoPoly([[tx + 0.1, ty + 0.1, 9], [tx + 1.4, ty + 0.1, 9], [tx + 1.4, ty + 0.9, 9], [tx + 0.1, ty + 0.9, 9]])).fill(0x6fa8dc);
-    // La cerca con la lana tendida.
+    // Fence draped with drying fleece.
     const a = iso(x + 0.4, y + 2.4, 12);
     const b = iso(x + 2.6, y + 2.4, 12);
     for (const p of [a, b]) g.rect(p.x - 1, p.y, 2, 12).fill(PAL.woodDark);
@@ -3381,7 +3381,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cardado: casa con el corredor donde se peina la lana con las cardas; los copos se juntan en un canasto.
+  // Carding: house porch where worker combs wool with hand carders into fluffy rovings basket.
   carder(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
@@ -3395,7 +3395,7 @@ const DRAW = {
     this.animate = (time) => {
       work.clear();
       const p = iso(x + 1.1, y + 2.2);
-      // Sentada en un banco, con una carda en cada mano.
+      // Seated on bench holding a carder in each hand.
       work.rect(p.x - 5, p.y - 6, 10, 6).fill(PAL.wood);
       work.roundRect(p.x - 3.2, p.y - 15, 6.4, 9.5, 2).fill(0xd7263d);
       work.poly([p.x - 5, p.y - 14, p.x + 5, p.y - 14, p.x + 6, p.y - 8, p.x - 6, p.y - 8]).fill(0x6d4c41);
@@ -3408,7 +3408,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Hilado en rueca: casa azul con la rueca de madera girando en el corredor y las madejas colgadas.
+  // Spinning wheel: blue house with spinning wooden wheel on porch and hanging yarn skeins.
   spinning_wheel(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -3433,7 +3433,7 @@ const DRAW = {
       }
       spin.moveTo(wheel.x - 2, wheel.y - 14).lineTo(wheel.x + 10, wheel.y - 10).stroke({ width: 0.8, color: 0xece4cf });
       spin.circle(wheel.x + 10, wheel.y - 10, 2).fill(0xece4cf);
-      // La hilandera, sentada.
+      // Seated spinner.
       spin.roundRect(wheel.x + 10, wheel.y - 14, 6.4, 9, 2).fill(0x2fa36b);
       spin.circle(wheel.x + 13.2, wheel.y - 17, 2.8).fill(0x8d5524);
       spin.ellipse(wheel.x + 13.2, wheel.y - 19.5, 5, 1.4).fill(0x3e2723);
@@ -3441,7 +3441,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Telar de ruanas: ramada con el telar grande de madera; la ruana crece con franjas de colores.
+  // Ruana loom: shed with large wooden loom where colorful striped ruana grows.
   ruana_loom(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -3451,7 +3451,7 @@ const DRAW = {
     for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
     gableRoof(g, x0, y0, w, d, H, 13, PAL.roof, PAL.wall);
     this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 13);
-    // Ruanas dobladas en una mesa, adelante.
+    // Folded ruanas stacked on front table.
     for (let i = 0; i < 2 + Math.min(ctx.tier, 2); i++) box(g, x0 + 1.6, y0 + 2.2, 0.6, 0.4, 2.5, [0x6d4c41, 0x37474f, 0x8d6e63, 0x5d4037][i], { z: i * 2.5 });
     const loom = new Graphics();
     this.anim.addChild(loom);
@@ -3472,8 +3472,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tienda de Nobsa: el puesto a la orilla de la carretera con las ruanas colgadas y las ollas y materas de
-  // Ráquira en el mostrador.
+  // Nobsa shop: roadside storefront hung with ruanas plus Ráquira pots and planters on counter.
+  // on counter.
   tienda_nobsa(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -3500,9 +3500,9 @@ const DRAW = {
     g.roundRect(sign.x - 13, sign.y - 30, 26, 9, 2).fill(0x6d4c41).stroke(OUTLINE);
   },
 
-  // --- Boyacá · Villa de Leyva (v3.27): casonas blancas de balcones verdes y calles empedradas ---
+  // --- Boyacá · Villa de Leyva (v3.27): white mansions, green balconies, cobblestone streets ---
 
-  // Terraza de la plaza: casona blanca con parasoles rojos afuera; en las mesas, cervezas y papitas.
+  // Plaza terrace: white mansion with red outdoor umbrellas; tables served beer and chips.
   terraza_plaza(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -3521,7 +3521,7 @@ const DRAW = {
     }
   },
 
-  // Hospedaje colonial: casona blanca de dos pisos, con el balcón corrido de madera verde y geranios.
+  // Colonial inn: two-story whitewashed mansion with continuous green wooden balcony and geraniums.
   hospedaje_colonial(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -3548,7 +3548,7 @@ const DRAW = {
     }
   },
 
-  // Mercado del sábado: toldos de lona con frutas, verduras, ollas y jarras; la gente comprando.
+  // Saturday market: canvas stalls stocked with fruit, produce, pots, and mugs; shoppers.
   mercado_sabado(g, x, y, ctx) {
     const stalls = [[0.5, 0.6, 0xd7263d], [1.7, 0.6, 0x2e6fd1], [0.5, 1.7, 0xf2b705], [1.7, 1.7, 0x2fa36b]].slice(0, 2 + Math.min(ctx.tier, 2));
     for (const [sx, sy, col] of stalls) {
@@ -3575,7 +3575,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Canastos del paseo: casa con los canastos y fiambres envueltos en hoja, listos para el paseo.
+  // Picnic baskets: house with leaf-wrapped travel lunches and hampers ready to go.
   canastos_paseo(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -3590,14 +3590,14 @@ const DRAW = {
     }
   },
 
-  // Salida al Fósil: el camino de piedra hacia el campo, con el letrero y la roca con el kronosaurio; salen
+  // Fossil trailhead: stone path to countryside with sign and Kronosaurus rock; hikers depart.
   // caminantes en ruana.
   salida_fosil(g, x, y, ctx) {
     for (let k = 0; k < 9; k++) {
       const p = iso(x + 0.6 + k * 0.28, y + 1.5 + Math.sin(k) * 0.15);
       g.ellipse(p.x, p.y, 8, 4).fill(k % 2 ? 0x9a948a : 0xb9b2a5).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.3 });
     }
-    // La roca con el fósil.
+    // Fossilized rock slab.
     const r = iso(x + 1.2, y + 0.6);
     g.poly([r.x - 22, r.y + 2, r.x - 16, r.y - 10, r.x + 14, r.y - 12, r.x + 24, r.y, r.x + 12, r.y + 8, r.x - 14, r.y + 8]).fill(0xc9b48a).stroke(OUTLINE);
     g.moveTo(r.x - 16, r.y - 1).lineTo(r.x + 16, r.y - 3).stroke({ width: 2, color: 0xfbf8f1 });
@@ -3624,17 +3624,17 @@ const DRAW = {
     };
   },
 
-  // --- Los Llanos · La Palma (v3.31): la planta extractora, con naves de techo de zinc ---
+  // --- Llanos · La Palma (v3.31): extraction plant with zinc-roofed halls ---
 
-  // Desgranadora: la ramada de zinc con el tambor que gira y suelta el fruto de los racimos; al lado, el
-  // montón de racimos que llegan y el de tusas (los racimos vacíos).
+  // Fruit thresher: zinc shed with spinning drum stripping palm fruit from bunches beside
+  // fresh bunch pile and empty bunch waste pile.
   bunch_thresher(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const w = 2.4;
     const d = 1.5;
     const H = 26 + ctx.up;
-    // Montón de racimos rojos y el de tusas.
+    // Red fruit bunch pile and empty stalk pile.
     for (const [bx, by, col] of [[0.55, 2.3, PRODUCTS.palm_bunch.color], [0.95, 2.45, PRODUCTS.palm_bunch.color], [2.35, 2.3, 0x8d6e4a]]) {
       const p = iso(x + bx, y + by);
       g.ellipse(p.x, p.y - 4, 8, 5.5).fill(col).stroke(OUTLINE);
@@ -3665,8 +3665,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Esterilizador: el autoclave, un cilindro de acero acostado, con la vagoneta de fruto sobre los rieles y el
-  // vapor que se escapa.
+  // Sterilizer: horizontal steel autoclave cylinder with rail cart of fruit and escaping steam.
+  // escaping steam.
   fruit_sterilizer(g, x, y, ctx) {
     const a = iso(x + 0.45, y + 1.0, 14);
     const b = iso(x + 2.3, y + 1.0, 14);
@@ -3678,7 +3678,7 @@ const DRAW = {
     g.moveTo(a.x, a.y - 6).lineTo(b.x, b.y - 6).stroke({ width: 4, color: 0xcfd8dc, cap: 'round' });
     g.circle(b.x + 4, b.y + 2, 10).fill(0xb0bec5).stroke(OUTLINE);
     g.circle(b.x + 4, b.y + 2, 6).stroke({ width: 1.5, color: 0x607d8b });
-    // Rieles hacia la boca del autoclave.
+    // Tracks leading into autoclave mouth.
     const r0 = iso(x + 2.4, y + 1.6);
     const r1 = iso(x + 2.9, y + 2.9);
     g.moveTo(r0.x, r0.y).lineTo(r1.x, r1.y).stroke({ width: 1.5, color: 0x5d4037 }).moveTo(r0.x + 8, r0.y).lineTo(r1.x + 8, r1.y).stroke({ width: 1.5, color: 0x5d4037 });
@@ -3698,15 +3698,15 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Prensa de aceite: la nave de zinc con la prensa de tornillo; el aceite crudo, rojo, corre por la canal a
-  // los tambores.
+  // Oil press: zinc hall with screw press draining crimson crude palm oil down trough to drums.
+  // drums.
   palm_press(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 1.9, 1.5, 26, ctx, { wall: 0xe8e2d0, roofColor: 0x9aa3a8, roofH: 12 });
     door(g, hx, hy, 1.5, 0.7, 16, 0x8d6e4a);
     windowOnRight(this, g, hx, hy, 1.9, 0.75, 13, 0xffe0b2);
-    // La canal y los tambores de aceite crudo.
+    // Oil trough and crude oil drums.
     const c0 = iso(x + 1.6, y + 2.2, 4);
     const c1 = iso(x + 2.4, y + 2.2, 2);
     g.moveTo(c0.x, c0.y).lineTo(c1.x, c1.y).stroke({ width: 4, color: 0x8a8f94 });
@@ -3735,7 +3735,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Clarificador: los tanques donde el aceite se asienta; por la mirilla se ve el aceite anaranjado que sube.
+  // Clarifier: settling tanks with sight glass showing golden-orange oil rising.
   oil_clarifier(g, x, y, ctx) {
     const tanks = ctx.tier >= 2 ? [[0.6, 0.7], [1.5, 0.7], [2.4, 0.7], [1.0, 1.8], [1.9, 1.8]] : [[0.7, 0.8], [1.7, 0.8], [1.2, 1.9]];
     this.tanks = [];
@@ -3765,7 +3765,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Envasadora: la nave con la banda donde las botellas se llenan de aceite y se tapan.
+  // Bottling hall: hall with conveyor filling and capping oil bottles.
   oil_bottler(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -3792,7 +3792,7 @@ const DRAW = {
     };
   },
 
-  // Cajonera de aceite: la bodega con las cajas de aceite arrumadas en el patio (más arrumes con los hitos).
+  // Oil depot: warehouse with stacked oil cartons in yard (more stacks at milestones).
   oil_boxer(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -3817,10 +3817,10 @@ const DRAW = {
     };
   },
 
-  // --- Los Llanos · El Frutal (v3.32): casas de bahareque blanco con techo de zinc ---
+  // --- Llanos · El Frutal (v3.32): white bahareque houses with zinc roofs ---
 
-  // Despulpadora de maracuyá: la ramada con la máquina que parte la fruta y bota las cáscaras; las canastas de
-  // maracuyá esperan al lado.
+  // Passionfruit pulper: shed with fruit-halving machine ejecting rinds beside fruit baskets.
+  // waiting baskets.
   passion_pulper(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -3854,7 +3854,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Pasteurizadora de pulpa: la casa con la marmita de acero donde la pulpa se calienta, echando vapor.
+  // Pulp pasteurizer: house with steaming stainless steel jacketed kettle.
   pulp_pasteurizer(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -3865,7 +3865,7 @@ const DRAW = {
     g.rect(k.x - 11, k.y - 16, 22, 16).fill(0xc7ccd1).stroke(OUTLINE);
     g.ellipse(k.x, k.y - 16, 11, 4.5).fill(PRODUCTS.past_pulp.color).stroke(OUTLINE);
     g.rect(k.x - 3, k.y - 5, 6, 5).fill(0x37474f);
-    // Las bolsas de pulpa en la nevera de icopor.
+    // Pulp bags packed in foam cooler.
     box(g, x + 2.0, y + 2.3, 0.6, 0.4, 7, 0xffffff);
     this.smokePoints = [iso(x + 2.45, y + 1.4, 20)];
     const fire = new Graphics();
@@ -3879,7 +3879,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Mezcladora de jugos: los tanques de acero con el jugo amarillo que gira, y las jarras listas en la mesa.
+  // Juice blender: stainless tanks swirling yellow juice beside pitcher-lined table.
   juice_mixer(g, x, y, ctx) {
     const tanks = ctx.tier >= 2 ? [[0.6, 0.6], [1.5, 0.6], [2.4, 0.6], [1.0, 1.6], [1.9, 1.6]] : [[0.7, 0.7], [1.7, 0.7], [1.2, 1.7]];
     this.tanks = [];
@@ -3911,7 +3911,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Envasadora de jugos: la nave con la banda de cajitas verdes y, al lado, las cajas arrumadas.
+  // Juice carton line: hall with green-carton conveyor beside stacked cases.
   juice_packer(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -3934,9 +3934,9 @@ const DRAW = {
     };
   },
 
-  // --- Los Llanos · La Cachamera (v3.33) ---
+  // --- Llanos · La Cachamera (v3.33) ---
 
-  // Limpieza de cachama: la ramada con la mesa de lavar, la manguera y las cachamas que se escaman.
+  // Cachama cleaning: shed with washing table, hose, and worker scaling fish.
   cachama_cleaner(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -3973,7 +3973,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Pisillera: la casa con el fogón y el caldero donde la cachama se desmecha y se sofríe.
+  // Fish flaking kitchen: cottage with hearth and cauldron shredding and sautéing cachama.
   pisillo_kitchen(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -3997,7 +3997,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Fileteadora de cachama: la ramada con la mesa larga donde se sacan los filetes.
+  // Cachama filleter: shed with long filleting table.
   cachama_filleter(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -4024,13 +4024,13 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Ahumadero: la casita de bahareque con las cachamas colgadas y el humo que sale por el techo.
+  // Smokehouse: bahareque smokehouse hung with fish and smoke rising through roof.
   cachama_smoker(g, x, y, ctx) {
     const hx = x + 0.4;
     const hy = y + 0.4;
     house(this, g, hx, hy, 1.6, 1.3, 22, ctx, { wall: 0xc9a77a, plinth: false, roofColor: 0x8d6e4a, roofH: 12 });
     door(g, hx, hy, 1.3, 0.6, 14, 0x5d4037);
-    // La vara con cachamas al aire, al lado.
+    // Outdoor airing rack of fish beside smokehouse.
     const a = iso(x + 2.3, y + 0.6, 18);
     const b = iso(x + 2.3, y + 2.2, 18);
     for (const p of [a, b]) g.rect(p.x - 1, p.y, 2, 18).fill(PAL.woodDark);
@@ -4042,8 +4042,8 @@ const DRAW = {
     this.smokePoints = [iso(hx + 0.8, hy + 0.65, 34 + ctx.up), iso(hx + 0.4, hy + 0.65, 34 + ctx.up)];
   },
 
-  // Cocina de la cachama: la cocina con el asador de leña, las cachamas en la parrilla y la olla de la salsa de
-  // maracuyá; el jugo llega del Frutal en garrafas.
+  // Cachama kitchen: wood grill roasting cachama alongside passionfruit-sauce pot fed by
+  // juice jugs from El Frutal.
   cachama_kitchen(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -4073,9 +4073,9 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Los Llanos · El Hato llanero (v3.34): caneyes con techo de palma y casas de zinc ---
+  // --- Llanos · El Hato llanero (v3.34): palm-thatched caneyes and zinc houses ---
 
-  // Desposte: la casa blanca de techo de zinc y, al lado, la ramada con las presas de ternera colgadas.
+  // Butchery: white zinc house beside open shed hung with beef cuts.
   llanero_butcher(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -4095,7 +4095,7 @@ const DRAW = {
     }
   },
 
-  // Adobadero: la ramada con las bateas de madera donde la carne se cubre de sal gruesa, y los bultos de sal.
+  // Curing shed: shed with wooden salting troughs rubbing coarse salt into meat, salt sacks.
   adobadero(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -4133,12 +4133,12 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Asador de vara: la candela en el suelo y las varas clavadas alrededor con la mamona; el asador la cuida.
+  // Stake roast: open ground fire ringed by skewered mamona veal stakes tended by griller.
   vara_grill(g, x, y, ctx) {
     const c = iso(x + 1.5, y + 1.5);
     g.ellipse(c.x, c.y, 26, 12).fill(0x5d4632).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
     g.ellipse(c.x, c.y, 16, 7).fill(0x3a2a1e);
-    // Bancos de troncos.
+    // Log benches.
     for (const [bx, by] of [[0.5, 2.5], [2.6, 0.6]]) box(g, x + bx, y + by, 0.6, 0.18, 4, PAL.woodDark);
     this.stakes = [];
     const n = 5 + Math.min(ctx.tier, 3);
@@ -4165,7 +4165,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Trinchadora: el caney con techo de palma, la mesa grande y el que trincha la carne a la llanera.
+  // Carving pavilion: palm-thatched caney with large table and carver slicing llanero style.
   carving_table(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -4193,8 +4193,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Mesa del almuerzo llanero: el caney grande con la mesa larga y la gente almorzando; la olla de la yuca
-  // frita en el aceite de la Palma.
+  // Llanero feast table: grand caney with long table full of diners and cassava frying in
+  // La Palma oil.
   lunch_llanero(g, x, y, ctx) {
     const x0 = x + 0.25;
     const y0 = y + 0.3;
@@ -4228,7 +4228,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Asadero de la parranda: el asado grande con la carne y la cachama en las varas; el arpista toca y una pareja
+  // Parranda roast: huge feast roast with beef and cachama stakes, harpist playing, and
   // baila joropo zapateando.
   parranda_grill(g, x, y, ctx) {
     const c = iso(x + 1.1, y + 1.2);
@@ -4240,7 +4240,7 @@ const DRAW = {
       if (k % 2) g.ellipse(p.x - Math.cos(a) * 3, p.y - 18, 4, 5).fill(PRODUCTS.mamona.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
       else fishOn(g, p.x - Math.cos(a) * 3, p.y - 18, 4, PRODUCTS.smoked_cachama.color);
     }
-    // El arpa.
+    // Harp.
     const h = iso(x + 2.5, y + 0.7);
     g.moveTo(h.x - 6, h.y).lineTo(h.x - 6, h.y - 30).quadraticCurveTo(h.x + 2, h.y - 34, h.x + 8, h.y - 22).lineTo(h.x + 7, h.y).closePath().fill(0xa1785a).stroke(OUTLINE);
     for (let k = 0; k < 5; k++) g.moveTo(h.x - 4 + k * 2.4, h.y - 28 + k * 1.2).lineTo(h.x - 4 + k * 2.4, h.y - 2).stroke({ width: 0.6, color: 0xfff8e1 });
@@ -4255,7 +4255,7 @@ const DRAW = {
       const harpist = iso(x + 2.85, y + 0.9);
       worker(fiesta, harpist.x, harpist.y, 0xffffff);
       fiesta.ellipse(harpist.x, harpist.y - 22.5, 7, 1.8).fill(0x3a2a1e);
-      // La pareja del joropo: zapatean y giran.
+      // Joropo dancing couple: stomping and spinning.
       for (const [k, [bx, by, shirt]] of [[1.9, 2.5, 0xd7263d], [2.4, 2.6, 0xf4c430]].entries()) {
         const p = iso(x + bx, y + by);
         const step = this.working ? Math.abs(Math.sin(time * 8 + k * Math.PI)) * 3 : 0;
@@ -4268,9 +4268,9 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Los Llanos · La Talabartería (v3.35) ---
+  // --- Llanos · La Talabartería (v3.35) ---
 
-  // Curtiembre: las pozas de curtido con el agua de tanino y los cueros que se escurren colgados.
+  // Tannery: tanning vats steeped in bark liquor and hanging hides dripping dry.
   tannery(g, x, y, ctx) {
     for (const [px, py] of [[0.4, 0.4], [1.5, 0.4], [0.4, 1.4]]) {
       box(g, x + px, y + py, 0.9, 0.8, 5, 0x9e9e9e);
@@ -4300,7 +4300,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cortadora de cuero: la ramada con la mesa grande, el cuero extendido y las piezas que salen del molde.
+  // Leather cutter: shed with broad cutting bench, stretched hide, and die-cut pieces.
   leather_cutter(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -4325,7 +4325,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Repujado: la casa del artesano; en el corredor, el banco donde golpea el buril sobre el cuero.
+  // Leather tooling: artisan cottage porch workbench where craftsman stamps patterns with mallet.
   leather_tooler(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -4347,7 +4347,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Taller de sillas: la casa del talabartero con las sillas de montar en el burro de madera, afuera.
+  // Saddle workshop: saddler's house with finished saddles perched on outdoor wooden horses.
   saddler(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -4364,15 +4364,15 @@ const DRAW = {
     }
   },
 
-  // Tienda llanera: la tienda de la carretera con las sillas, los sombreros y las cotizas colgadas, el pisillo
-  // y la cachama ahumada en el mostrador.
+  // Llanero outfitter: roadside shop hung with saddles, hats, and espadrilles, plus pisillo
+  // and smoked cachama on counter.
   tienda_llanera(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
     house(this, g, hx, hy, 2.3, 1.5, 28, ctx, { wall: 0xf7f4ee, roofColor: PAL.roof, roofH: 14 });
     door(g, hx, hy, 1.5, 1.6, 18, 0xd7263d);
     windowOnRight(this, g, hx, hy, 2.3, 0.75, 14, 0xfff8e1);
-    // Alero con lo que se vende colgado.
+    // Overhang displaying hung wares.
     for (let k = 0; k < 4; k++) {
       const p = iso(hx + 0.3 + k * 0.5, hy + 1.5, 20);
       if (k % 2) {
@@ -4391,9 +4391,9 @@ const DRAW = {
     g.moveTo(p3.x - 8, p3.y - 11).quadraticCurveTo(p3.x - 2, p3.y - 16, p3.x + 2, p3.y - 13).quadraticCurveTo(p3.x + 6, p3.y - 22, p3.x + 8, p3.y - 18).lineTo(p3.x + 8, p3.y - 8).lineTo(p3.x - 8, p3.y - 8).closePath().fill(PRODUCTS.silla_montar.color).stroke(OUTLINE);
   },
 
-  // --- Los Llanos · Villavicencio (v3.36): casas de colores, kioscos de palma y el camino a Caño Cristales ---
+  // --- Llanos · Villavicencio (v3.36): colorful houses, palm kiosks, Caño Cristales trailhead ---
 
-  // Kiosco del parque: el kiosco redondo con techo de palma; en las mesas, jugos y empanadas.
+  // Park kiosk: round palm-thatched kiosk with tables serving juice and empanadas.
   kiosco_parque(g, x, y, ctx) {
     const c = iso(x + 1.3, y + 1.1);
     shadow(g, c.x + 4, c.y + 3, 34, 14);
@@ -4413,7 +4413,7 @@ const DRAW = {
     this.lights.push({ x: c.x, y: c.y - 20, r: 26 });
   },
 
-  // Hotel campestre: la casa larga de un piso, techo de teja, la piscina y las palmas.
+  // Country hotel: long single-story tiled house with swimming pool and palms.
   hotel_campestre(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -4437,7 +4437,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Plaza de mercado: la nave abierta con techo de zinc, los puestos de frutas y de pescado, y la gente.
+  // Market plaza: open zinc-roofed market hall with produce and fish stalls plus shoppers.
   plaza_mercado(g, x, y, ctx) {
     const x0 = x + 0.25;
     const y0 = y + 0.25;
@@ -4470,7 +4470,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Morrales del viaje: la casa de colores con los morrales, los sombreros y los termos listos en el corredor.
+  // Trip packs: colorful house with backpacks, hats, and thermoses packed on porch.
   morrales_viaje(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -4486,8 +4486,8 @@ const DRAW = {
     }
   },
 
-  // Salida a Caño Cristales: el caño de colores (rojo, amarillo y verde) entre las piedras, el letrero y los
-  // viajeros que salen con morral y sombrero.
+  // Caño Cristales trailhead: rainbow river (red, yellow, green) between boulders, signpost,
+  // and hikers setting out with packs and hats.
   salida_cano(g, x, y, ctx) {
     const pts = [[0.3, 0.5], [0.9, 0.9], [1.5, 0.7], [2.1, 1.1], [2.7, 0.9]];
     for (let i = 1; i < pts.length; i++) {
@@ -4531,25 +4531,25 @@ const DRAW = {
     };
   },
 
-  // --- Costa Pacífica · El Platanal (v3.38): casas de tabla sobre pilotes, pintadas de colores, con techo de zinc ---
+  // --- Pacific Coast · El Platanal (v3.38): painted plank stilt houses with zinc roofs ---
 
-  // Desmanadora: la ramada donde cuelgan los racimos del cable; el platanero corta las manos con el machete y
-  // caen a la tina de agua.
+  // Debunching shed: shed with overhead cableway; worker machetes hands off bunches into
+  // water tub.
   plantain_dehander(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.35;
     const w = 2.3;
     const d = 1.5;
     const H = 30 + ctx.up;
-    // El cable de donde cuelgan los racimos.
+    // Overhead banana cableway.
     const c0 = iso(x0 - 0.2, y0 + d / 2, H - 4);
     const c1 = iso(x0 + w + 0.2, y0 + d / 2, H - 4);
-    // La tina con agua y las manos de plátano.
+    // Water tub holding cut plantain hands.
     box(g, x0 + 1.2, y0 + 0.9, 1.0, 0.55, 7, 0x8d6e4a);
     const tub = iso(x0 + 1.7, y0 + 1.17, 7);
     g.ellipse(tub.x, tub.y, 13, 4).fill(0x4fa3c7);
     for (let k = 0; k < 3; k++) g.ellipse(tub.x - 6 + k * 6, tub.y - 1, 3.5, 1.8).fill(PRODUCTS.plantain_hand.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
-    // Racimos que esperan en el suelo.
+    // Bunches stacked on ground.
     for (const [bx, by] of [[0.45, 2.35], [0.9, 2.5]]) {
       const p = iso(x + bx, y + by);
       g.ellipse(p.x, p.y - 5, 5, 7).fill(PRODUCTS.plantain_bunch.color).stroke(OUTLINE);
@@ -4578,8 +4578,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tanque de lavado: los tanques largos de cemento, bajo el zinc, donde las manos de plátano flotan y se les
-  // va la leche; al final, la canastilla donde salen lavadas.
+  // Washing tank: long concrete troughs under zinc roof washing sap off floating hands
+  // into exit basket.
   plantain_washer(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -4620,8 +4620,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Peladora: la casa de tablas sobre pilotes (azul turquesa); al lado, la mesa donde pelan el plátano a
-  // cuchillo, el montón de cáscaras verdes y el balde de plátano pelado.
+  // Peeling house: turquoise plank stilt house; beside it, table peeling plantains with knife,
+  // green peel heap, and bucket of peeled fruit.
   plantain_peeler(g, x, y, ctx) {
     const hx = x + 0.2;
     const hy = y + 0.2;
@@ -4649,24 +4649,24 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Fritanga de patacones: la cocina abierta con el fogón de leña y la paila de aceite; la tabla donde se aplasta
-  // el plátano y la batea con los patacones dorados.
+  // Patacón fryer: open kitchen with wood stove and oil kettle, smashing board, and
+  // tray of golden fried patacones.
   patacon_fryer(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.3;
-    // Fogón de barro con la paila.
+    // Mud stove holding oil kettle.
     box(g, x0 + 0.3, y0 + 0.6, 1.2, 0.8, 10, 0xa1887f);
     const pan = iso(x0 + 0.9, y0 + 1.0, 10);
     g.ellipse(pan.x, pan.y, 15, 6).fill(0x37474f).stroke(OUTLINE);
     g.ellipse(pan.x, pan.y, 12, 4.5).fill(0xc98a24);
     const fire = iso(x0 + 0.9, y0 + 1.42, 3);
     g.ellipse(fire.x, fire.y, 5, 2.5).fill(0x212121);
-    // La tabla de aplastar y la batea de patacones.
+    // Smashing board and tray of patacones.
     box(g, x0 + 1.75, y0 + 0.75, 0.75, 0.6, 9, 0x8d6e4a);
     const tray = iso(x0 + 2.12, y0 + 1.05, 9);
     g.ellipse(tray.x, tray.y, 10, 4).fill(0x6d4c41);
     for (let k = 0; k < 2 + Math.min(ctx.tier, 3); k++) g.ellipse(tray.x - 6 + (k % 3) * 6, tray.y - 1 - Math.floor(k / 3) * 2, 3.2, 1.6).fill(PRODUCTS.patacon.color).stroke({ width: 0.4, color: 0x3a2418, alpha: 0.5 });
-    // Leña.
+    // Firewood.
     for (let k = 0; k < 3; k++) box(g, x + 0.3 + k * 0.08, y + 2.6 - k * 0.05, 0.9, 0.1, 3, 0x6b4a2e, { z: k * 3 });
     ramada(this, g, x0, y0 + 0.1, 2.6, 1.6, 28 + ctx.up);
     this.smokePoints = [iso(x0 + 0.9, y0 + 1.0, 40 + ctx.up)];
@@ -4688,8 +4688,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Empacadora: la casa de tablas sobre pilotes (amarilla); abajo, la banda donde los patacones caen en las
-  // bolsas y las bolsas se sellan.
+  // Bagger: yellow plank stilt house; beneath, conveyor dropping patacones into sealed bags.
+  // sealed bags.
   patacon_bagger(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
@@ -4715,8 +4715,8 @@ const DRAW = {
     };
   },
 
-  // Cajonera de patacones: la bodega grande sobre pilotes (verde), con las cajas arrumadas y el cargador que las
-  // lleva al patio.
+  // Patacón depot: large green stilt warehouse with stacked boxes and porter carrying loads.
+  // porter carrying loads.
   patacon_boxer(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -4739,10 +4739,10 @@ const DRAW = {
     };
   },
 
-  // --- Costa Pacífica · La Azotea (v3.39): la cocina del Pacífico, en casas de tabla sobre pilotes ---
+  // --- Pacific Coast · La Azotea (v3.39): Pacific kitchen in plank stilt houses ---
 
-  // Lavadero de hierbas: la ramada con la batea de madera llena de agua; la cocinera lava los manojos y los
-  // pone a escurrir en la canasta.
+  // Herb wash: shed with water-filled wooden trough; cook washes herb bunches and drains
+  // them in basket.
   herb_washer(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -4775,8 +4775,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Pilón: el pilón de madera bajo el alero de la casa (rosada), con dos cocineras que machacan por turnos con
-  // la mano de pilón; al lado, el ajo y la cebolla.
+  // Mortar house: pink stilt house eaves with wooden pilón mortar pounded alternately by
+  // two cooks beside garlic and onion.
   herb_pestle(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
@@ -4808,8 +4808,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Olla del refrito: la cocina de tablas sobre pilotes (azul), con su fogón de leña en el corredor; la olla
-  // grande sofríe el aliño y el humo sale por el techo.
+  // Sofrito kitchen: blue stilt house with porch wood hearth simmering seasoning pot,
+  // smoke rising through roof.
   refrito_pot(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -4836,8 +4836,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Envasadora de aliño: la casa grande sobre pilotes (verde y amarilla); abajo, la mesa donde el aliño cae en
-  // los frascos, se tapan y se guardan en las cajas.
+  // Seasoning jar line: green-and-yellow grand stilt house with lower table filling,
+  // capping, and crating jars.
   alino_packer(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
@@ -4863,10 +4863,10 @@ const DRAW = {
     };
   },
 
-  // --- Costa Pacífica · La Bahía (v3.40): la playa de los pescadores ---
+  // --- Pacific Coast · La Bahía (v3.40): fishermen's beach ---
 
-  // Limpieza de pargo: la ramada en la playa con la mesa de tablas; el pescador escama el pargo, los
-  // baldes con agua de mar y los alcatraces que esperan su parte.
+  // Snapper cleaning: beach shed with plank table; fisherman scales red snapper, buckets
+  // of seawater, and pelicans waiting for scraps.
   pargo_cleaner(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -4899,8 +4899,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Secadero: los tendales al sol, con los pescados abiertos y salados colgando de las cuerdas, y los costales
-  // de sal.
+  // Drying racks: sunny lines hung with split salted fish beside salt sacks.
+  // salt sacks.
   fish_drier(g, x, y, ctx) {
     const rows = ctx.tier >= 2 ? [0.5, 1.3, 2.1] : [0.7, 1.7];
     this.lines = [];
@@ -4930,8 +4930,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Fileteadora de pargo: la casa de tablas sobre pilotes (blanca y azul), con la mesa del corredor donde se
-  // sacan los filetes; los filetes pasan al Ahumadero de al lado.
+  // Snapper filleter: white-and-blue stilt house with porch table slicing fillets that move
+  // to neighboring Smokehouse.
   pargo_filleter(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -4953,8 +4953,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Ahumadero de pargo: el fogón alto de barro con la parrilla de varas, los pargos abiertos encima y el humo
-  // de leña; al lado, la leña.
+  // Snapper smokehouse: tall mud firebox with pole grill smoking split snappers over wood
+  // embers beside firewood stack.
   pargo_smoker(g, x, y, ctx) {
     const x0 = x + 0.5;
     const y0 = y + 0.5;
@@ -4986,8 +4986,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cocina del tapao: la cocina de tablas sobre pilotes (naranja), con el fogón en el corredor y la olla del
-  // tapao tapada con hojas de plátano; el aliño llega de la Azotea.
+  // Tapao kitchen: orange stilt kitchen with porch stove simmering plantain-leaf-covered
+  // tapao stew using seasoning from La Azotea.
   tapao_kitchen(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -4997,7 +4997,7 @@ const DRAW = {
     g.moveTo(pot.x - 10, pot.y - 12).lineTo(pot.x - 9, pot.y).quadraticCurveTo(pot.x, pot.y + 4, pot.x + 9, pot.y).lineTo(pot.x + 10, pot.y - 12).closePath().fill(0x546e7a).stroke(OUTLINE);
     g.ellipse(pot.x, pot.y - 13, 12, 4).fill(0x2e7d32).stroke(OUTLINE);
     g.moveTo(pot.x - 10, pot.y - 13).lineTo(pot.x + 10, pot.y - 13).stroke({ width: 0.8, color: 0x66bb6a });
-    // Racimo de plátano verde y los frascos de aliño en la mesa.
+    // Green plantain bunch and seasoning jars on table.
     box(g, x + 0.45, y + 2.2, 0.9, 0.45, 8, 0x8d6e4a);
     const t = iso(x + 0.9, y + 2.42, 8);
     g.ellipse(t.x - 5, t.y - 3, 5, 3).fill(PRODUCTS.washed_plantain?.color ?? 0x9ccc65).stroke({ width: 0.5, color: 0x3a2418 });
@@ -5018,10 +5018,10 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Costa Pacífica · El Manglar (v3.41): la cocina de la piangua, a la orilla del estero ---
+  // --- Pacific Coast · El Manglar (v3.41): piangua cockle kitchen by the estuary ---
 
-  // Lavadero de piangua: la ramada con el potrillo (la canoa vieja) lleno de agua, donde se lavan las catangas de
-  // piangua; al lado, las catangas que esperan.
+  // Cockle wash: shed with water-filled dugout canoe rinsing full catanga baskets beside
+  // queued baskets.
   piangua_washer(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -5053,8 +5053,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Olla de la piangua: el fogón de leña bajo la ramada con la olla grande donde hierve la piangua hasta que se
-  // abre; el vapor sube y la leña espera al lado.
+  // Cockle boiling pot: open shed wood stove boiling pianguas until shells pop open,
+  // steaming beside firewood.
   piangua_cooker(g, x, y, ctx) {
     const x0 = x + 0.4;
     const y0 = y + 0.4;
@@ -5087,8 +5087,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Desconchadora: la casa de tablas sobre pilotes (amarilla), con la mesa del corredor donde se abren las
-  // pianguas con la cuchara; el montón de conchas vacías crece con los hitos.
+  // Shucker: yellow stilt house with porch table shucking cockles by spoon; empty shell
+  // heap grows at milestones.
   piangua_sheller(g, x, y, ctx) {
     const hx = x + 0.2;
     const hy = y + 0.2;
@@ -5115,8 +5115,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Olla del encocado: la cocina sobre pilotes (rosada), con el montón de cocos, el rallo y la olla donde la
-  // piangua se cocina en leche de coco.
+  // Coconut stew pot: pink stilt kitchen with coconut pile, grater, and pot simmering
+  // cockles in coconut milk.
   encocado_pot(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -5143,8 +5143,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Mesa del arroz con piangua: el restaurante de tablas sobre pilotes (azul), con las mesas del corredor bajo
-  // el alero, los platos servidos y la mesera que va y viene.
+  // Rice-and-piangua diner: blue stilt restaurant with porch tables under eaves, plated
+  // rice dishes, and bustling waitress.
   piangua_lunch(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -5173,8 +5173,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cocina de la cazuela: la cocina grande sobre pilotes (verde), con las cazuelas de barro hirviendo en el fogón
-  // del corredor y las servidas en la mesa.
+  // Casserole kitchen: grand green stilt kitchen with clay seafood casseroles bubbling on
+  // hearth and served at table.
   cazuela_kitchen(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -5204,10 +5204,10 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Costa Pacífica · El Werregue (v3.42): los tambos wounaan del río San Juan ---
+  // --- Pacific Coast · El Werregue (v3.42): Wounaan stilt huts of the San Juan river ---
 
-  // Desfibradora de werregue: la ramada donde se abren los cogollos y se sacan las tiras; los manojos de fibra
-  // cuelgan de la vara.
+  // Fiber stripper: shed stripping palm heart shoots into white strips hung in bundles.
+  // hung in bundles.
   werregue_stripper(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -5239,8 +5239,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tintorería: el fogón con las dos ollas (la negra de jagua y la roja de achiote) y las madejas de fibra
-  // teñida colgadas a secar.
+  // Dyeing hearth: stove with twin pots (black jagua and red achiote) and dyed skeins
+  // hanging to dry.
   werregue_dyer(g, x, y, ctx) {
     const x0 = x + 0.4;
     const y0 = y + 0.4;
@@ -5252,7 +5252,7 @@ const DRAW = {
       g.ellipse(q.x, q.y - 10, 8, 3).fill(col).stroke(OUTLINE);
       this.pots.push(q);
     }
-    // Las cuerdas con las madejas.
+    // Ropes of dyed skeins.
     const a = iso(x + 0.3, y + 2.4, 0);
     const b = iso(x + 2.7, y + 2.4, 0);
     for (const p of [a, b]) g.rect(p.x - 1.2, p.y - 24, 2.4, 24).fill(0x6b4a2e);
@@ -5279,7 +5279,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Torcedora: el tambo pequeño donde la tejedora tuerce la fibra sobre el muslo; los rollos de hebra se apilan.
+  // Twister hut: small tambo where weaver rolls fiber into cord on thigh beside cord coils.
   werregue_twister(g, x, y, ctx) {
     const floor = tamboHouse(this, g, x + 1.4, y + 1.2, 1.0, ctx);
     const rolls = 2 + Math.min(ctx.tier, 3);
@@ -5300,8 +5300,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tejedoras: el tambo grande donde las tejedoras wounaan tejen los jarrones; los jarrones terminados
-  // esperan en el piso.
+  // Weavers hall: grand tambo where Wounaan women weave fine werregue vases resting on floor.
+  // vases resting on floor.
   werregue_weaver(g, x, y, ctx) {
     const floor = tamboHouse(this, g, x + 1.5, y + 1.3, 1.25, ctx);
     const jars = 2 + Math.min(ctx.tier, 3);
@@ -5329,8 +5329,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tienda de artesanías: la casa de tablas sobre pilotes (turquesa) con los jarrones en los estantes del
-  // corredor, el letrero y los visitantes que compran.
+  // Craft shop: turquoise plank stilt house with vases displayed on porch shelves, sign,
+  // and browsing visitors.
   tienda_pacifico(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -5357,10 +5357,10 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Costa Pacífica · Buenaventura (v3.43): el puerto, con sus casas de colores y techos de zinc ---
+  // --- Pacific Coast · Buenaventura (v3.43): port with colorful houses and zinc roofs ---
 
-  // Cevichería del malecón: el kiosco con techo de zinc y la nevera de icopor; las copas de ceviche en el
-  // mostrador y los clientes en las butacas.
+  // Boardwalk cevichería: zinc-roofed kiosk with foam cooler, ceviche goblets on counter,
+  // and seated customers.
   cevicheria(g, x, y, ctx) {
     const x0 = x + 0.5;
     const y0 = y + 0.5;
@@ -5399,8 +5399,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Hotel de la bahía: el hotel de tres pisos, de ladrillo pintado de rosado, con balcones y techo de zinc; de
-  // noche se prenden las ventanas.
+  // Bay hotel: three-story pink-painted brick hotel with balconies and zinc roof; windows
+  // glow at night.
   hotel_bahia(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -5414,14 +5414,14 @@ const DRAW = {
     g.rect(sign.x - 12, sign.y - 2.5, 24, 2).fill(0xffffff);
   },
 
-  // Galería de Pueblo Nuevo: la plaza de mercado techada, con los puestos de pescado, piangua, plátano y
-  // chontaduro, y las vendedoras bajo los toldos.
+  // Pueblo Nuevo market: roofed market plaza with fish, piangua, plantain, and chontaduro
+  // stalls with vendors beneath awnings.
   galeria_pueblo_nuevo(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const stalls = [[0.2, 0.3, 0x5c8dd6], [1.3, 0.3, 0xe5737f], [0.2, 1.4, 0x6cbf6c], [1.3, 1.4, 0xf2c14e]];
     const goods = [PRODUCTS.pargo.color, PRODUCTS.piangua.color, 0x7cb342, 0xe65100];
-    // Cada puesto con su vendedora (de atrás hacia adelante, para que los toldos de adelante tapen a las de atrás).
+    // Each stall with vendor (ordered back-to-front so front awnings overlap rear ones).
     for (const [k, [sx, sy, col]] of stalls.entries()) {
       const v = iso(x0 + sx + 0.5, y0 + sy - 0.05);
       worker(g, v.x, v.y, [0xf7f4ee, 0xf2c14e, 0xe5737f, 0x4fb3bf][k]);
@@ -5446,8 +5446,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Loncheras de la lancha: la bodeguita del muelle donde se arman las loncheras, con los chalecos salvavidas
-  // colgados y las neveras listas.
+  // Boat lunches: pier shed packing excursion lunch coolers beside hanging life jackets.
+  // hanging life jackets and packed coolers.
   loncheras_lancha(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -5474,16 +5474,16 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Salida a las ballenas: el muelle de tablas sobre el mar, con las lanchas que salen llenas de turistas con
-  // chaleco naranja; a lo lejos, una ballena salta.
+  // Whale-watching pier: plank dock over sea with launches departing full of tourists in
+  // orange life vests; whale breaches in distance.
   salida_ballenas(g, x, y, ctx) {
-    // El mar.
+    // The sea.
     g.poly(isoPoly([[x + 0.1, y + 0.1], [x + 2.9, y + 0.1], [x + 2.9, y + 2.9], [x + 0.1, y + 2.9]])).fill(0x2f86a8);
     for (let k = 0; k < 8; k++) {
       const q = iso(x + 0.3 + (k % 4) * 0.7, y + 0.4 + Math.floor(k / 4) * 1.6);
       g.moveTo(q.x - 6, q.y).quadraticCurveTo(q.x, q.y - 2, q.x + 6, q.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.6 });
     }
-    // El muelle.
+    // The pier.
     for (let k = 0; k < 7; k++) box(g, x + 0.2 + k * 0.32, y + 1.25, 0.28, 0.5, 3, k % 2 ? PAL.wood : PAL.woodDark, { z: 3 });
     for (const px of [0.2, 1.2, 2.2]) for (const py of [1.25, 1.7]) box(g, x + px, y + py, 0.06, 0.06, 6, PAL.woodDark);
     const sign = iso(x + 0.3, y + 1.5);
@@ -5509,7 +5509,7 @@ const DRAW = {
         const q = iso(x + 0.4 + f * 2.4, y + 0.6 + f * 0.2);
         boat({ x: q.x, y: q.y + Math.sin(time * 2) }, true, 0.9);
       }
-      // La ballena que salta, de vez en cuando.
+      // Leaping humpback whale, occasionally surfacing.
       const k = (time * 0.08) % 1;
       if (k < 0.2) {
         const t = k / 0.2;
@@ -5523,10 +5523,10 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Amazonas · El Asaizal (v3.47): casas de madera sobre pilotes, con techo de palma o de zinc ---
+  // --- Amazon · El Asaizal (v3.47): wooden stilt houses with palm or zinc roofs ---
 
-  // Desgranadora: la ramada de palma donde se sacuden los racimos sobre la lona y las bolitas caen; al lado,
-  // los racimos que llegan y los ramilletes vacíos.
+  // Berry threshing: palm shed shaking bunches over tarp so berries drop beside piled
+  // fresh bunches and stripped panicles.
   asai_thresher(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -5559,8 +5559,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tanque de remojo: los tanques azules llenos de agua tibia, que se tiñe de morado, con el vapor; las
-  // canastillas con el fruto remojado.
+  // Soaking tanks: blue tanks of warm purple-stained water steaming beside baskets of
+  // softened fruit.
   asai_soaker(g, x, y, ctx) {
     const tanks = ctx.tier >= 2 ? [[0.6, 0.7], [1.5, 0.7], [2.4, 0.7], [1.0, 1.7]] : [[0.8, 0.8], [1.8, 0.8], [1.3, 1.8]];
     this.tanks = [];
@@ -5590,8 +5590,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Despulpadora de asaí: la casa de madera sobre pilotes con techo de zinc; en el corredor, la máquina de acero
-  // que bota la pulpa morada al balde.
+  // Açaí pulper: zinc-roofed wooden stilt house; porch steel pulper pours purple pulp into bucket.
+  // into bucket.
   asai_pulper(g, x, y, ctx) {
     const hx = x + 0.2;
     const hy = y + 0.2;
@@ -5618,8 +5618,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Batidora: el puesto de madera sobre pilotes (verde claro), con la licuadora en el mostrador, los vasos
-  // de asaí batido y el que lo toma.
+  // Blender stand: light-green stilt booth with counter blender, bowls of whipped açaí,
+  // and drinking customer.
   asai_blender(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
@@ -5647,8 +5647,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Empacadora de asaí: la casa grande sobre pilotes (blanca), con la banda donde la pulpa cae en las bolsas
-  // moradas y el congelador al lado.
+  // Açaí packer: large white stilt house with belt filling purple pulp bags beside freezer.
+  // beside freezer.
   asai_bagger(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
@@ -5674,8 +5674,8 @@ const DRAW = {
     };
   },
 
-  // Cajonera de asaí: la bodega sobre pilotes con techo de zinc, las cajas de icopor arrumadas y el cargador
-  // que las lleva al patio.
+  // Açaí depot: zinc-roofed stilt warehouse stacked with foam coolers and porter hauling boxes.
+  // carrying boxes to yard.
   asai_boxer(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -5698,10 +5698,10 @@ const DRAW = {
     };
   },
 
-  // --- Amazonas · El Ajizal (v3.48): la cocina del ají negro, en casas de madera sobre pilotes ---
+  // --- Amazon · El Ajizal (v3.48): black chili kitchen in wooden stilt houses ---
 
-  // Lavadero de ají: la ramada de palma con la batea de agua; la ajicera lava los ajíes con guantes y los
-  // pone a escurrir en el canasto.
+  // Chili wash: palm shed with water trough; worker rinses chilies wearing gloves and drains
+  // them in basket.
   aji_washer(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -5729,8 +5729,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Molino de ají: la casa de madera sobre pilotes (azul) con el molino de mano en el corredor y la pasta roja
-  // que cae en la ponchera.
+  // Chili mill: blue wooden stilt house with hand grinder on porch dripping red paste into bowl.
+  // bowl.
   aji_grinder(g, x, y, ctx) {
     const hx = x + 0.2;
     const hy = y + 0.2;
@@ -5758,8 +5758,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Olla del tucupí: la cocina de madera sobre pilotes con techo de palma; en el corredor, la olla grande donde
-  // el ají se cocina días enteros en el jugo de la yuca brava, que se pone negro.
+  // Tucupí pot: palm-roofed stilt kitchen boiling chilies for days in cassava juice turning black.
+  // turns black.
   tucupi_pot(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -5768,7 +5768,7 @@ const DRAW = {
     const pot = iso(x + 2.1, y + 2.35, 10);
     g.moveTo(pot.x - 10, pot.y - 12).lineTo(pot.x - 9, pot.y).quadraticCurveTo(pot.x, pot.y + 4, pot.x + 9, pot.y).lineTo(pot.x + 10, pot.y - 12).closePath().fill(0x37474f).stroke(OUTLINE);
     g.ellipse(pot.x, pot.y - 12, 10, 3.5).fill(PRODUCTS.aji_negro.color).stroke(OUTLINE);
-    // El tipití colgado (para sacar el jugo de la yuca) y la leña.
+    // Hanging tipití squeezer (for extracting cassava juice) and firewood.
     const tp = iso(x + 0.6, y + 2.4, 0);
     g.moveTo(tp.x, tp.y - 30).lineTo(tp.x, tp.y - 26).stroke({ width: 1, color: 0x6d4c41 });
     g.roundRect(tp.x - 2.5, tp.y - 26, 5, 22, 2).fill(0xc9a96b).stroke(OUTLINE);
@@ -5791,8 +5791,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Envasadora de ají negro: la casa grande sobre pilotes (amarilla), con la mesa donde el ají negro cae en los
-  // frascos y se tapan con la tapa de madera.
+  // Black-chili jar line: large yellow stilt house capping wooden-lidded jars at porch table.
+  // capped with wooden lids.
   aji_packer(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.2;
@@ -5818,10 +5818,10 @@ const DRAW = {
     };
   },
 
-  // --- Amazonas · El Lago (v3.49): el puerto de los pescadores de pirarucú, en el lago de Tarapoto ---
+  // --- Amazon · El Lago (v3.49): pirarucu fishermen port on Lake Tarapoto ---
 
-  // Limpieza de pirarucú: la ramada de palma a la orilla, con la mesa larga donde cabe el pez gigante; el
-  // pescador lo abre con el machete, los baldes de agua del lago y la garza que espera su parte.
+  // Pirarucu cleaning: lakeside palm shed with long table holding giant fish; fisherman
+  // cuts with machete beside lake buckets and waiting heron.
   pirarucu_cleaner(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -5840,7 +5840,7 @@ const DRAW = {
       anim.clear();
       const wp = iso(x0 + 1.2, y0 + 1.55);
       worker(anim, wp.x, wp.y, 0xf2c14e);
-      // El pirarucú entero, largo y con la cola roja.
+      // Whole pirarucu, long body and red tail.
       anim.ellipse(top.x + 8, top.y - 3, 13, 3.6).fill(PRODUCTS.pirarucu.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.7 });
       anim.ellipse(top.x + 15, top.y - 3, 5, 3).fill(0xc62828);
       anim.poly([top.x + 20, top.y - 3, top.x + 25, top.y - 7, top.x + 25, top.y + 1]).fill(0xc62828);
@@ -5857,8 +5857,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Saladero de pirarucú: los tendales de varas al sol, con las mantas de pirarucú abiertas y saladas, y los
-  // costales de sal.
+  // Salting racks: sunny poles draped with butterflied salted pirarucu beside salt sacks.
+  // salt sacks.
   pirarucu_salter(g, x, y, ctx) {
     const rows = ctx.tier >= 2 ? [0.5, 1.3, 2.1] : [0.7, 1.7];
     this.lines = [];
@@ -5889,8 +5889,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Fileteadora de pirarucú: la casa de madera sobre pilotes con techo de palma, con la mesa del corredor
-  // donde se cortan las postas; las postas pasan al Moquén de al lado.
+  // Pirarucu filleter: palm-roofed stilt house slicing steaks on porch table to pass next door
+  // to the Moquén grill.
   pirarucu_filleter(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -5912,8 +5912,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Moquén: la parrilla alta de palos amarrados con bejuco sobre la candela, a la manera indígena, con las
-  // postas de pirarucú que se ahúman despacio; al lado, la leña.
+  // Moquén smoker: tall vine-lashed wooden grid over embers slow-smoking pirarucu steaks
+  // Indigenous-style beside firewood.
   moquen(g, x, y, ctx) {
     const x0 = x + 0.5;
     const y0 = y + 0.5;
@@ -5945,8 +5945,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cocina del pirarucú: la cocina de madera sobre pilotes con techo de palma, con el fogón en el corredor, la
-  // olla y el plato del pirarucú al ají negro; el ají negro llega del Ajizal.
+  // Pirarucu kitchen: palm-roofed stilt kitchen cooking steaks in black chili from El Ajizal.
+  // from El Ajizal.
   pirarucu_kitchen(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -5956,7 +5956,7 @@ const DRAW = {
     g.ellipse(pan.x, pan.y - 2, 12, 4.5).fill(0x37474f).stroke(OUTLINE);
     g.ellipse(pan.x, pan.y - 2.5, 10, 3.4).fill(0x5d4037);
     g.moveTo(pan.x + 12, pan.y - 2).lineTo(pan.x + 20, pan.y - 5).stroke({ width: 1.8, color: 0x37474f });
-    // Los frascos de ají negro y el casabe en la mesa.
+    // Jars of black chili and cassava flatbread on table.
     box(g, x + 0.45, y + 2.2, 0.9, 0.45, 8, 0x8d6e4a);
     const t = iso(x + 0.9, y + 2.42, 8);
     g.ellipse(t.x - 5, t.y - 2, 5, 2).fill(0xf3e3b8).stroke({ width: 0.5, color: 0x3a2418 });
@@ -5976,10 +5976,10 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Amazonas · La Casabería (v3.50): de la yuca brava al casabe, en la chagra y la maloca ---
+  // --- Amazon · La Casabería (v3.50): bitter cassava to casabe in chagra and maloca ---
 
-  // Peladora de yuca: la ramada de palma con la batea de agua; la casabera pela la yuca con cuchillo y las
-  // cáscaras se amontonan al lado. El montón de yuca sin pelar crece con los hitos.
+  // Cassava peeler: palm shed with water basin; worker peels roots by knife beside peel heap
+  // (unpeeled root heap grows at milestones).
   yuca_peeler(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -6013,8 +6013,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Rallador de yuca: la casa de madera sobre pilotes con techo de palma; en el corredor, la artesa (la canoa
-  // de madera) con el rallador de lata, donde la yuca pelada se vuelve masa.
+  // Cassava grater: palm-roofed stilt house with wooden canoe trough holding tin grater turning
+  // roots into mash.
   yuca_grater(g, x, y, ctx) {
     const hx = x + 0.2;
     const hy = y + 0.2;
@@ -6039,8 +6039,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tipití: el marco de palos donde cuelga el tipití, el tubo tejido de palma lleno de masa; la casabera se sienta
-  // en el palo de abajo y lo estira, y el jugo (el que se vuelve tucupí) cae en la totuma. Con los hitos, dos.
+  // Tipití press: timber frame hanging woven palm squeeze-tube full of mash; worker sits on
+  // lever pole draining juice (which boils into tucupí) into gourd. Second press at milestones.
   tipiti_press(g, x, y, ctx) {
     const n = ctx.tier >= 2 ? 2 : 1;
     this.frames = [];
@@ -6075,8 +6075,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Budare de casabe: la cocina abierta con techo de palma y el budare (el plato redondo de barro) sobre las
-  // tres piedras y la candela; la casabera extiende la masa y voltea la torta, y al lado se secan los casabes.
+  // Casabe griddle: open palm kitchen with clay budare plate over three stones and fire;
+  // worker spreads mash, flips flatcakes, and dries rounds beside it on mat.
   casabe_budare(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -6084,7 +6084,7 @@ const DRAW = {
     for (const [dx, dy] of [[-12, 2], [12, 2], [0, 7]]) g.ellipse(c.x + dx, c.y + dy - 2, 4, 3).fill(0x78716c).stroke({ width: 0.6, color: 0x3a2418 });
     g.ellipse(c.x, c.y - 8, 22, 9).fill(0x8d4a2f).stroke(OUTLINE);
     g.ellipse(c.x, c.y - 9, 19, 7.5).fill(0x5d3a28);
-    // Los casabes que se secan sobre la estera.
+    // Casabe flatcakes drying on woven mat.
     const mat = iso(x + 2.5, y + 2.5, 0);
     g.poly([mat.x - 16, mat.y, mat.x, mat.y - 8, mat.x + 16, mat.y, mat.x, mat.y + 8]).fill(0xc9a96b).stroke({ width: 0.6, color: 0x3a2418 });
     for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) g.ellipse(mat.x - 6 + (k % 2) * 10, mat.y - 2 + Math.floor(k / 2) * 3 - (k % 2) * 2, 6, 2.6).fill(PRODUCTS.casabe.color).stroke({ width: 0.5, color: 0x8d6e4a });
@@ -6104,8 +6104,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Mesa del desayuno: la casa de madera sobre pilotes (verde agua) con las mesas del corredor; en cada mesa, el
-  // casabe y el vaso de asaí que llega del Asaizal, y la mesera que va y viene.
+  // Breakfast diner: seafoam-green stilt house with porch tables serving casabe alongside
+  // açaí from Asaizal and moving waitress.
   desayuno_table(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -6132,8 +6132,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Maloca: la casa grande y redonda de la comunidad, con el techo de palma que baja casi hasta el suelo y el
-  // frente de corteza pintado; afuera, la candela y la gente que llega al banquete con el pirarucú del Lago.
+  // Maloca: grand circular communal longhouse with palm thatch reaching nearly to ground and
+  // painted bark facade; outside, fire and crowd gathering for pirarucu feast.
   maloca(g, x, y, ctx) {
     const c = iso(x + 1.4, y + 1.2, 0);
     const rx = 52;
@@ -6141,12 +6141,12 @@ const DRAW = {
     g.ellipse(c.x, c.y, rx, ry).fill(0x8d6e4a).stroke(OUTLINE);
     const wallH = 10;
     g.moveTo(c.x - rx * 0.92, c.y).lineTo(c.x - rx * 0.92, c.y - wallH).quadraticCurveTo(c.x, c.y + ry * 0.9 - wallH, c.x + rx * 0.92, c.y - wallH).lineTo(c.x + rx * 0.92, c.y).quadraticCurveTo(c.x, c.y + ry * 0.9, c.x - rx * 0.92, c.y).fill(0x6b4a2e).stroke(OUTLINE);
-    // El techo cónico de palma, que baja casi hasta el suelo.
+    // Conical palm roof swooping nearly to ground.
     const H = 46 + ctx.up;
     const eave = c.y - wallH + 2;
     g.moveTo(c.x - rx * 1.05, eave).lineTo(c.x, eave - H).lineTo(c.x + rx * 1.05, eave).quadraticCurveTo(c.x, eave + ry * 0.95, c.x - rx * 1.05, eave).fill(0xc9a96b).stroke(OUTLINE);
     for (let k = 1; k < 5; k++) g.moveTo(c.x - rx * 1.05 * (1 - k / 5), eave - H * k / 5).quadraticCurveTo(c.x, eave - H * k / 5 + ry * 0.95 * (1 - k / 5), c.x + rx * 1.05 * (1 - k / 5), eave - H * k / 5).stroke({ width: 0.8, color: 0xa1854f });
-    // El frente de corteza pintado, con la puerta.
+    // Painted bark-cloth front wall with doorway.
     const fy = c.y + ry * 0.55;
     g.poly([c.x - 14, fy - 2, c.x + 14, fy - 2, c.x + 12, fy - 26, c.x, fy - 34, c.x - 12, fy - 26]).fill(0xe8d9b5).stroke(OUTLINE);
     for (const [ox, col] of [[-8, 0x3e2723], [8, 0x3e2723], [0, 0xc62828]]) g.poly([c.x + ox - 3, fy - 22, c.x + ox, fy - 27, c.x + ox + 3, fy - 22, c.x + ox, fy - 17]).fill(col);
@@ -6172,10 +6172,10 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Amazonas · La Yanchama (v3.51): la tela de corteza y las máscaras ticuna ---
+  // --- Amazon · La Yanchama (v3.51): bark cloth and Ticuna masks ---
 
-  // Remojo de corteza: el pozo de agua de quebrada, encerrado con palos, donde las tiras de corteza se ablandan
-  // bajo las piedras; el artesano saca una y la pone a escurrir en la vara.
+  // Bark soaking: spring-fed log pit where bark strips soften weighted under stones; artisan
+  // lifts a strip onto drying pole.
   bark_soaker(g, x, y, ctx) {
     const c = iso(x + 1.3, y + 1.2, 0);
     g.ellipse(c.x, c.y, 36, 17).fill(0x6d4c41).stroke(OUTLINE);
@@ -6215,8 +6215,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Golpeadero: la ramada de palma con el tronco tendido donde la corteza se golpea con el mazo de palo hasta
-  // volverse tela; la tela clara cuelga de la vara.
+  // Beating shed: palm shed with prone log anvil where wooden mallet beats bark into pale
+  // flexible cloth hung over pole.
   bark_beater(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -6253,8 +6253,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Pintores de yanchama: el tambo pequeño donde se pinta la tela con jagua y achiote; las telas pintadas se
-  // secan colgadas de la cuerda.
+  // Bark painters: small tambo painting cloth with jagua and achiote; painted cloths dry on line.
+  // dry hung on rope.
   cloth_painter(g, x, y, ctx) {
     const floor = tamboHouse(this, g, x + 1.2, y + 1.1, 0.95, ctx);
     const a = iso(x + 0.4, y + 2.6, 0);
@@ -6288,8 +6288,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Taller de máscaras: el tambo grande donde se arman las máscaras de la Pelazón; las terminadas miran desde
-  // los palos de la entrada.
+  // Mask workshop: grand tambo crafting Pelazón ritual masks watching from entry poles.
+  // poles by entrance.
   mask_maker(g, x, y, ctx) {
     const floor = tamboHouse(this, g, x + 1.5, y + 1.3, 1.2, ctx);
     const mask = (mx, my) => {
@@ -6324,8 +6324,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tienda de la Yanchama: la casa de madera sobre pilotes con techo de palma, con las máscaras y las telas
-  // pintadas en el corredor, el letrero y los visitantes que compran.
+  // Yanchama shop: palm-roofed stilt house displaying masks and painted bark cloths on
+  // porch with signboard and browsing visitors.
   tienda_yanchama(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -6358,10 +6358,10 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Amazonas · Leticia (v3.52): el puerto de la triple frontera, con casas de colores y techos de zinc o palma ---
+  // --- Amazon · Leticia (v3.52): triple-border river port with colorful zinc/palm houses ---
 
-  // Restaurante de la ribera: el kiosco con techo de palma frente al río, la nevera de icopor y los platos de
-  // pescado con ají negro en el mostrador; los clientes en las butacas.
+  // Riverside diner: riverside palm kiosk with foam cooler and black-chili fish plates on
+  // counter for seated customers.
   restaurante_ribera(g, x, y, ctx) {
     const x0 = x + 0.5;
     const y0 = y + 0.5;
@@ -6399,8 +6399,8 @@ const DRAW = {
     };
     this.animate(0);
   },
-  // Hotel de la selva: el hotel de madera de tres pisos, con balcones y techo de palma, entre los árboles; de
-  // noche se prenden las ventanas.
+  // Jungle hotel: three-story wooden hotel with balconies and palm roof nestled in trees;
+  // windows glow at night.
   hotel_selva(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -6413,14 +6413,14 @@ const DRAW = {
     g.rect(sign.x - 16, sign.y - 5, 32, 8).fill(0x2e7d32).stroke(OUTLINE);
     g.rect(sign.x - 12, sign.y - 2.5, 24, 2).fill(0xffffff);
   },
-  // Mercado del puerto: los puestos techados de la orilla, con el pirarucú, el asaí, el plátano y la fariña, y
-  // las vendedoras bajo los toldos.
+  // Port market: riverside roofed stalls selling pirarucu, açaí, plantain, and fariña with
+  // awning-shaded vendors.
   mercado_puerto(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const stalls = [[0.2, 0.3, 0xc9a96b], [1.3, 0.3, 0x9aa3a8], [0.2, 1.4, 0x9aa3a8], [1.3, 1.4, 0xc9a96b]];
     const goods = [PRODUCTS.pirarucu.color, PRODUCTS.asai_bag.color, 0x7cb342, 0xe8d9a0];
-    // Cada puesto con su vendedora (de atrás hacia adelante, para que los toldos de adelante tapen a las de atrás).
+    // Each stall with vendor (ordered back-to-front so front awnings overlap rear ones).
     for (const [k, [sx, sy, col]] of stalls.entries()) {
       const v = iso(x0 + sx + 0.5, y0 + sy - 0.05);
       worker(g, v.x, v.y, [0xf7f4ee, 0xf2c14e, 0xe5737f, 0x4fb3bf][k]);
@@ -6444,8 +6444,8 @@ const DRAW = {
     };
     this.animate(0);
   },
-  // Provisiones de la canoa: la bodeguita del puerto donde se arman los canastos para el viaje por el río, con
-  // los chalecos salvavidas colgados y los canastos listos.
+  // Canoe provisions: port shed packing river-trip hampers beside hanging life vests.
+  // ready baskets.
   provisiones_canoa(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -6471,16 +6471,16 @@ const DRAW = {
     };
     this.animate(0);
   },
-  // Salida a los delfines: el muelle de tablas sobre el río, con las canoas que salen llenas de turistas con
-  // chaleco naranja; a lo lejos, un delfín rosado salta.
+  // Pink dolphin dock: plank jetty over river with canoes departing full of vested tourists;
+  // pink river dolphin leaps in distance.
   salida_delfines(g, x, y, ctx) {
-    // El río.
+    // The river.
     g.poly(isoPoly([[x + 0.1, y + 0.1], [x + 2.9, y + 0.1], [x + 2.9, y + 2.9], [x + 0.1, y + 2.9]])).fill(0x3e5a50);
     for (let k = 0; k < 8; k++) {
       const q = iso(x + 0.3 + (k % 4) * 0.7, y + 0.4 + Math.floor(k / 4) * 1.6);
       g.moveTo(q.x - 6, q.y).quadraticCurveTo(q.x, q.y - 2, q.x + 6, q.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.6 });
     }
-    // El muelle.
+    // The dock.
     for (let k = 0; k < 7; k++) box(g, x + 0.2 + k * 0.32, y + 1.25, 0.28, 0.5, 3, k % 2 ? PAL.wood : PAL.woodDark, { z: 3 });
     for (const px of [0.2, 1.2, 2.2]) for (const py of [1.25, 1.7]) box(g, x + px, y + py, 0.06, 0.06, 6, PAL.woodDark);
     const sign = iso(x + 0.3, y + 1.5);
@@ -6506,7 +6506,7 @@ const DRAW = {
         const q = iso(x + 0.4 + f * 2.4, y + 0.6 + f * 0.2);
         boat({ x: q.x, y: q.y + Math.sin(time * 2) }, true, 0.9);
       }
-      // El delfín rosado que salta, de vez en cuando.
+      // Leaping pink river dolphin surfacing now and then.
       const k = (time * 0.08) % 1;
       if (k < 0.2) {
         const t = k / 0.2;
@@ -6522,7 +6522,7 @@ const DRAW = {
   },
   // --- Santander · El Tabacal (v3.1) ---
 
-  // Caney de curado: rancho alto y abierto donde la hoja cuelga en varas; abajo, verde, y arriba, ya dorada.
+  // Curing barn (caney): tall open barn hung with tobacco poles—green below, golden above.
   caney(g, x, y, ctx) {
     const x0 = x + 0.25;
     const y0 = y + 0.25;
@@ -6530,7 +6530,7 @@ const DRAW = {
     const d = 2.3;
     const H = 40 + ctx.up;
     for (const [px, py] of [[0, 0], [w, 0], [0, d]]) box(g, x0 + px - 0.06, y0 + py - 0.06, 0.12, 0.12, H, PAL.wood);
-    // Varas con las hojas colgadas, de atrás hacia adelante (las de adelante se mecen, ver animate).
+    // Hung tobacco leaf poles back-to-front (front ones sway, see animate).
     const rows = [0.35, 0.95, 1.55];
     const leafColors = [0xc8913b, 0xa8a040, 0x7cb342];
     const hang = (gr, ty, i, sway) => {
@@ -6546,7 +6546,7 @@ const DRAW = {
     };
     rows.slice(0, 2).forEach((ty, i) => hang(g, ty, i, 0));
     box(g, x0 + w - 0.06, y0 + d - 0.06, 0.12, 0.12, H, PAL.wood);
-    // Atados de hoja verde esperando en el piso.
+    // Bundles of green leaves waiting on ground.
     for (const [bx, by] of [[0.5, 2.55], [0.85, 2.7]]) {
       const p = iso(x0 + bx, y0 + by);
       g.ellipse(p.x, p.y - 4, 9, 5).fill(PRODUCTS.tobacco_leaf.color).stroke(OUTLINE);
@@ -6563,14 +6563,14 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Despalilladora: casa con una mesa en el corredor donde se le quita la vena a cada hoja curada.
+  // Stemmer: house with porch table stripping central vein off each cured leaf.
   stripper(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 2.0, 1.6, 28, ctx, { wall: 0xf4efe6, roofH: 14 });
     door(g, hx, hy, 1.6, 0.6, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 2.0, 0.8, 14, PAL.balconyYellow);
-    // Mesa con hojas curadas y, al lado, el montón de palillos (las venas).
+    // Table of cured leaves beside pile of stripped stems.
     box(g, x + 0.4, y + 2.1, 1.7, 0.5, 9, PAL.wood);
     for (let i = 0; i < 4; i++) {
       const p = iso(x + 0.6 + i * 0.4, y + 2.35, 9);
@@ -6586,7 +6586,7 @@ const DRAW = {
     this.anim.addChild(hands);
     this.animate = (time) => {
       hands.clear();
-      // La vena sale de la hoja y vuela al montón.
+      // Stripped vein flicks from leaf onto pile.
       const f = (time * 0.9) % 1;
       const a = iso(x + 1.6, y + 2.35, 12);
       const px = a.x + (pile.x - a.x) * f;
@@ -6596,7 +6596,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Pilones de fermentación: bodega abierta con las hojas apiladas en montones que se calientan solos.
+  // Fermentation piles: open shed stacking leaves into self-heating fermentation bulks.
   tobacco_piles(g, x, y, ctx) {
     const x0 = x + 0.25;
     const y0 = y + 0.3;
@@ -6611,7 +6611,7 @@ const DRAW = {
         const b = iso(x0 + px + 0.9, y0 + py + 0.75, k * 3.5);
         g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x8a5a2b, alpha: 0.7 });
       }
-      // Termómetro clavado en el pilón.
+      // Thermometer probe stuck in leaf bulk.
       const t = iso(x0 + px + 0.45, y0 + py + 0.37, 14);
       g.rect(t.x - 1, t.y - 9, 2, 9).fill(0xd0d4d8).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
       g.circle(t.x, t.y - 1, 1.6).fill(0xd7263d);
@@ -6634,7 +6634,7 @@ const DRAW = {
     };
   },
 
-  // Torcedores: casa del pueblo con la mesa de torcer en el corredor, tabacos en fila y cajas de cedro.
+  // Cigar rollers: town house with rolling bench on porch, lined-up cigars, and cedar boxes.
   cigar_roller(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -6647,7 +6647,7 @@ const DRAW = {
       g.roundRect(p.x - 1.5, p.y - 8, 3, 9, 1.5).fill(PRODUCTS.cigar.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
       g.rect(p.x - 1.5, p.y - 6, 3, 1.2).fill(0xd7263d);
     }
-    // Cajas de cedro apiladas, listas para la bodega.
+    // Stacked cedar boxes ready for warehouse.
     const stack = [[2.3, 2.2, 0], [2.65, 2.2, 0], [2.48, 2.2, 6], [2.48, 2.55, 0]];
     for (const [bx, by, z] of stack.slice(0, 2 + Math.min(ctx.tier, 2))) {
       box(g, x + bx - 0.15, y + by - 0.12, 0.3, 0.24, 6, 0xa0522d, { z });
@@ -6656,7 +6656,7 @@ const DRAW = {
     this.anim.addChild(roll);
     this.animate = (time) => {
       roll.clear();
-      // El tabaco que se está torciendo rueda sobre la mesa; un hilito de humo sale del de muestra.
+      // Cigar under hand rolls on bench; wisp of smoke drifts from sample cigar.
       const k = Math.sin(time * 4) * 0.12;
       const p = iso(x + 0.7 + k, y + 2.35, 9);
       roll.roundRect(p.x - 6, p.y - 3, 12, 3.5, 1.7).fill(PRODUCTS.fermented_tobacco.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
@@ -6671,29 +6671,29 @@ const DRAW = {
 
   // --- Santander · La Fiquera (v3.2) ---
 
-  // Desfibradora: ramada con la máquina que raspa las pencas, el montón de pencas y el tendal donde
-  // se seca la fibra al sol.
+  // Fiber decorticator: shed with stripping machine, fresh fique leaf pile, and sun-drying rack.
+  // drying in sun.
   decorticator(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
     const w = 1.5;
     const d = 1.4;
     const H = 24 + ctx.up;
-    // Pencas recién cortadas.
+    // Freshly cut fique leaves.
     const pile = iso(x + 0.5, y + 2.0);
     for (let i = 0; i < 7; i++) {
       const dx = (i % 4) * 4 - 6;
       const dy = -Math.floor(i / 4) * 3;
       g.poly([pile.x + dx - 9, pile.y + dy, pile.x + dx + 9, pile.y + dy - 4, pile.x + dx + 9, pile.y + dy - 1, pile.x + dx - 9, pile.y + dy + 3]).fill(i % 2 ? 0x6f9a7a : 0x5d8a6a).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
     }
-    // La máquina bajo la ramada.
+    // Machine under shed.
     box(g, x0 + 0.35, y0 + 0.4, 0.8, 0.6, 12, 0x6c757d);
     const wheel = iso(x0 + 1.15, y0 + 0.7, 12);
     for (const [px, py] of [[0, 0], [w, 0], [0, d], [w, d]]) box(g, x0 + px - 0.05, y0 + py - 0.05, 0.1, 0.1, H, PAL.wood);
     gableRoof(g, x0, y0, w, d, H, 12, PAL.roof, PAL.wall);
     this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
-    // Tendal: dos varas con la fibra colgada, clara y brillante.
-    // (al frente: atrás y a la derecha lo taparían la Hiladora y la Alpargatería)
+    // Drying rack: twin poles draped with bright white fiber.
+    // (in front: back-right position would be blocked by Spinner and Alpargatería)
     const lines = [[1.0, 2.3, 2.7, 2.3]];
     for (const [ax, ay, bx, by] of lines) {
       const a = iso(x + ax, y + ay, 22);
@@ -6727,14 +6727,14 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Telar de costales: casa con el telar en el corredor (la tela de cabuya crece) y costales apilados.
+  // Sack loom: house with porch loom weaving burlap fabric beside stacked sacks.
   sack_loom(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 2.2, 1.6, 28, ctx, { wall: 0xf4efe6, roofH: 14 });
     door(g, hx, hy, 1.6, 0.6, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 2.2, 0.8, 14, PAL.balconyYellow);
-    // Telar: marco de madera con la tela.
+    // Loom: wooden frame holding woven fabric.
     box(g, x + 0.9, y + 2.15, 1.2, 0.08, 18, PAL.woodDark);
     g.poly(isoPoly([[x + 0.95, y + 2.2, 4], [x + 2.05, y + 2.2, 4], [x + 2.05, y + 2.2, 16], [x + 0.95, y + 2.2, 16]])).fill(0xd9c08c).stroke(OUTLINE);
     for (let k = 1; k < 6; k++) {
@@ -6758,7 +6758,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Hiladora: casa con una rueda de hilar en el corredor; el hilo va a un ovillo de cabuya.
+  // Twine spinner: house with porch spinning wheel winding yarn onto cabuya spool.
   spinner(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -6785,7 +6785,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Alpargatería: taller con la mesa de coser y pares de alpargatas colgados a la venta.
+  // Alpargata workshop: stitching bench and pairs of espadrilles hung out for sale.
   alpargata_shop(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -6798,7 +6798,7 @@ const DRAW = {
       g.ellipse(p.x, p.y - 1, 5, 2.2).fill(0xd9c08c).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
       g.ellipse(p.x + 1, p.y - 2.5, 3, 1.6).fill(PRODUCTS.alpargatas.color);
     }
-    // Pares colgados de una cuerda frente a la casa.
+    // Pairs hung from rope outside house.
     const a = iso(x + 2.5, y + 0.5, 22);
     const b = iso(x + 2.5, y + 1.9, 22);
     g.rect(a.x - 1, a.y, 2, 22).fill(PAL.wood);
@@ -6822,14 +6822,14 @@ const DRAW = {
     };
   },
 
-  // Empacadora de tercios: bodega con la prensa que arma las pacas y los tercios apilados.
+  // Bale press: warehouse with beam press bundling fique bales beside stacked bales.
   tercio_packer(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
     house(this, g, hx, hy, 2.4, 1.5, 30, ctx, { wall: 0xf6e7c8, roofH: 14 });
     door(g, hx, hy, 1.5, 1.8, 18, ctx.trim);
     windowOnRight(this, g, hx, hy, 2.4, 0.75, 14, 0xffffff);
-    // Prensa: dos postes y una viga.
+    // Press: two uprights and crossbar.
     for (const px of [0.45, 1.25]) box(g, x + px, y + 2.2, 0.08, 0.08, 24, PAL.woodDark);
     box(g, x + 0.45, y + 2.2, 0.88, 0.08, 3, PAL.woodDark, { z: 24 });
     box(g, x + 0.6, y + 2.15, 0.55, 0.3, 8, PRODUCTS.tobacco_bale.color);
@@ -6855,14 +6855,14 @@ const DRAW = {
 
   // --- Santander · El Hato (v3.3) ---
 
-  // Fama (carnicería): casa con toldo de rayas y la carne colgada de los ganchos en la ventana.
+  // Butcher shop (fama): house with striped awning and meat cuts hung from window hooks.
   butcher(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
     house(this, g, hx, hy, 2.0, 1.6, 28, ctx, { wall: 0xf4efe6, roofH: 14 });
     door(g, hx, hy, 1.6, 0.6, 16, ctx.trim);
     windowOnRight(this, g, hx, hy, 2.0, 0.8, 14, PAL.balconyYellow);
-    // Toldo de rayas rojas y blancas sobre el mostrador.
+    // Red-and-white striped awning over counter.
     for (let i = 0; i < 6; i++) {
       const a = iso(hx + 0.9 + i * 0.18, hy + 1.6, 20);
       const b = iso(hx + 1.08 + i * 0.18, hy + 1.6, 20);
@@ -6884,7 +6884,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Saladero: ramada con bateas de madera donde se adoba la carne y bultos de sal.
+  // Salting shed: shed with wooden troughs curing meat beside salt sacks.
   salter(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -6899,7 +6899,7 @@ const DRAW = {
         g.circle(p.x, p.y, 1.1).fill(0xffffff);
       }
     }
-    // Bultos de sal junto a la ramada.
+    // Salt sacks beside shed.
     for (const [bx, by] of [[2.55, 2.4], [2.75, 2.65]]) {
       const p = iso(x + bx, y + by);
       g.roundRect(p.x - 6, p.y - 11, 12, 11, 3).fill(0xf4f1e8).stroke(OUTLINE);
@@ -6912,7 +6912,7 @@ const DRAW = {
     this.lights.push({ x: bulb.x, y: bulb.y, r: 26 });
   },
 
-  // Tendedero de oreo: varas altas al sol con las tiras de carne colgadas, meciéndose con el viento.
+  // Air-drying rack: tall sunny poles strung with meat strips swaying in breeze.
   airing_rack(g, x, y, ctx) {
     const rows = ctx.tier >= 2 ? [0.5, 1.2, 1.9] : [0.7, 1.6];
     const H = 26;
@@ -6924,7 +6924,7 @@ const DRAW = {
       g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.6, color: PAL.woodDark });
       for (let k = 1; k < 10; k++) strips.push({ x: a.x + ((b.x - a.x) * k) / 10, y: a.y + ((b.y - a.y) * k) / 10, k });
     }
-    // Una batea con más carne adobada esperando.
+    // Trough of marinated strips waiting.
     box(g, x + 0.4, y + 2.45, 0.9, 0.35, 6, PAL.wood);
     g.poly(isoPoly([[x + 0.45, y + 2.5, 6], [x + 1.25, y + 2.5, 6], [x + 1.25, y + 2.75, 6], [x + 0.45, y + 2.75, 6]])).fill(PRODUCTS.salted_beef.color);
     const hang = new Graphics();
@@ -6940,7 +6940,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Asadero: parrilla de ladrillo con la carne sobre las brasas, el humo y una ramada para el asador.
+  // Grill house: brick charcoal grill with meat sizzling over embers under griller's shed.
   grill(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -6983,7 +6983,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Mesa del almuerzo: fonda del camino con mesas de mantel a cuadros en el corredor.
+  // Lunch diner: roadside fonda with checkered-cloth tables along porch.
   lunch_table(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -7013,7 +7013,7 @@ const DRAW = {
     };
   },
 
-  // Fiambrería: casa con la mesa donde se envuelven los fiambres en hoja de bijao y se amarran con cabuya.
+  // Trail lunch shop: house wrapping fiambres in bijao leaves and tying with twine.
   fiambre_maker(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -7026,14 +7026,14 @@ const DRAW = {
       g.ellipse(p.x, p.y - 2.5, 4.5, 3.2).fill(PRODUCTS.fiambre.color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
       g.rect(p.x - 4.5, p.y - 3, 9, 1).fill(0xd9c08c);
     }
-    // Hojas de bijao frescas, en un atado junto a la puerta.
+    // Fresh bijao leaf bundle by doorway.
     const bundle = iso(x + 2.5, y + 2.5);
     for (let k = 0; k < 4; k++) g.ellipse(bundle.x + (k - 1.5) * 2.5, bundle.y - 9, 3, 9).fill(k % 2 ? 0x8db33a : 0x6b8e23).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
   },
 
   // --- Santander · Las Hormigas (v3.4) ---
 
-  // Mesa de limpieza: ramada con una mesa larga donde se les quitan las alas y las patas a las hormigas.
+  // Cleaning bench: long open shed table pulling wings and legs off culona ants.
   ant_cleaner(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -7044,7 +7044,7 @@ const DRAW = {
     const ants = [];
     for (let i = 0; i < 9; i++) ants.push(iso(x0 + 0.4 + (i % 5) * 0.36, y0 + 0.75 + Math.floor(i / 5) * 0.25, 8));
     for (const a of ants) g.ellipse(a.x, a.y, 2.2, 1.4).fill(PRODUCTS.ant_queen.color);
-    // Canastos: uno con las hormigas que llegan y otro con las limpias.
+    // Baskets: one holding incoming ants, another for cleaned ones.
     for (const [bx, by] of [[0.5, 2.5], [2.4, 2.5]]) {
       const b = iso(x + bx, y + by);
       g.poly([b.x - 7, b.y - 9, b.x + 7, b.y - 9, b.x + 5, b.y, b.x - 5, b.y]).fill(0xc8a26b).stroke(OUTLINE);
@@ -7058,7 +7058,7 @@ const DRAW = {
     this.animate = (time) => {
       wings.clear();
       if (!this.working) return;
-      // Las alas que se quitan, volando al piso.
+      // Plucked wings fluttering to floor.
       for (let i = 0; i < 4; i++) {
         const f = (time * 0.7 + i / 4) % 1;
         const a = ants[(i * 2) % ants.length];
@@ -7067,7 +7067,7 @@ const DRAW = {
     };
   },
 
-  // Ollas de salmuera: ollas de barro con agua de sal en un corredor techado.
+  // Brine pots: clay pots of salted water set along roofed porch.
   brine_pot(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -7084,7 +7084,7 @@ const DRAW = {
       g.ellipse(c.x - 3, c.y, 2, 1.2).fill(PRODUCTS.ant_clean.color);
       g.ellipse(c.x + 3, c.y + 1, 2, 1.2).fill(PRODUCTS.ant_clean.color);
     }
-    // Bulto de sal.
+    // Salt sack.
     const salt = iso(x + 2.6, y + 2.5);
     g.roundRect(salt.x - 6, salt.y - 11, 12, 11, 3).fill(0xf4f1e8).stroke(OUTLINE);
     g.rect(salt.x - 6, salt.y - 7, 12, 2).fill(0x2e6fd1);
@@ -7093,7 +7093,7 @@ const DRAW = {
     this.roofTop = iso(x0 + w / 2, y0 + d / 2, H + 12);
   },
 
-  // Tiesto de barro: fogón de leña con los tiestos donde se tuestan las hormigas, revolviendo.
+  // Clay griddle: wood hearth with shallow clay pans stirring roasting ants.
   ant_toaster(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.3;
@@ -7109,7 +7109,7 @@ const DRAW = {
     const mouth = iso(x0 + 1.15, y0 + 1.25, 4);
     g.ellipse(mouth.x, mouth.y, 6, 4).fill(0x2b1a10).stroke(OUTLINE);
     this.lights.push({ x: mouth.x, y: mouth.y, r: 24, color: 0xff7a1a });
-    // Leña.
+    // Firewood.
     for (let i = 0; i < 3; i++) {
       const p = iso(x + 2.3 + i * 0.1, y + 2.6, i * 2);
       g.roundRect(p.x - 9, p.y - 4, 18, 4, 2).fill(0x8b5a2b).stroke(OUTLINE);
@@ -7132,7 +7132,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Mesa de cucuruchos: puesto con toldo donde se llenan los cucuruchos de papel.
+  // Paper-cone stall: awning booth filling paper cones of toasted ants.
   cone_table(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -7145,7 +7145,7 @@ const DRAW = {
       g.poly([p.x - 2.5, p.y - 9, p.x + 2.5, p.y - 9, p.x, p.y]).fill(0xf4efe6).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
       g.ellipse(p.x, p.y - 9.5, 2.5, 1.2).fill(PRODUCTS.toasted_ants.color);
     }
-    // Toldo de rayas.
+    // Striped awning.
     for (let i = 0; i < 6; i++) {
       const a = iso(x + 0.9 + i * 0.24, y + 2.1, 22);
       const b = iso(x + 1.14 + i * 0.24, y + 2.1, 22);
@@ -7153,20 +7153,20 @@ const DRAW = {
     }
   },
 
-  // Tienda de recuerdos: tienda de la plaza con costales, alpargatas colgadas y cucuruchos de hormigas.
+  // Souvenir shop: plaza storefront with full sacks, hung alpargatas, and ant cones.
   souvenir_shop(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
     house(this, g, hx, hy, 2.4, 1.6, 30, ctx, { wall: 0xf4efe6, roofH: 14 });
     door(g, hx, hy, 1.6, 1.8, 18, ctx.trim);
     windowOnRight(this, g, hx, hy, 2.4, 0.8, 14, PAL.balconyYellow);
-    // Costales de fique llenos frente a la tienda.
+    // Full fique sacks outside shop.
     for (const [bx, by] of [[0.45, 2.35], [0.7, 2.6]]) {
       const p = iso(x + bx, y + by);
       g.roundRect(p.x - 6, p.y - 13, 12, 13, 3).fill(PRODUCTS.fique_sack.color).stroke(OUTLINE);
       g.rect(p.x - 2, p.y - 16, 4, 4).fill(0x8b5a2b);
     }
-    // Alpargatas colgadas en la puerta.
+    // Alpargatas hanging in doorway.
     const a = iso(hx + 1.2, hy + 1.6, 22);
     const b = iso(hx + 1.2 + 0.9, hy + 1.6, 22);
     g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1, color: 0x3a2418 });
@@ -7177,7 +7177,7 @@ const DRAW = {
       g.roundRect(px - 2.5, py + 2, 5, 8, 2).fill(colors[k - 1]).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
       g.rect(px - 2.5, py + 8, 5, 2).fill(0xd9c08c);
     }
-    // Mostrador con cucuruchos.
+    // Counter topped with ant cones.
     box(g, x + 1.4, y + 2.25, 1.1, 0.35, 8, PAL.wood);
     for (let i = 0; i < 4; i++) {
       const p = iso(x + 1.5 + i * 0.25, y + 2.42, 8);
@@ -7186,9 +7186,9 @@ const DRAW = {
     }
   },
 
-  // --- Santander · Barichara (v3.5): casas de tapia blanca, puertas verdes y piedra amarilla ---
+  // --- Santander · Barichara (v3.5): white rammed-earth houses, green doors, yellow stone ---
 
-  // Café del parque: mesas con parasol delante de la casa; de los tabacos sale un hilito de humo.
+  // Park café: umbrella tables outside house; wisps of smoke rise from cigars.
   park_cafe(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -7216,7 +7216,7 @@ const DRAW = {
     };
   },
 
-  // Posada: casona de dos pisos con balcón de madera y matas de flores, y el patio para los huéspedes.
+  // Country inn: two-story mansion with wooden balcony, flower pots, and guest courtyard.
   posada(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -7224,7 +7224,7 @@ const DRAW = {
     door(g, hx, hy, 1.6, 0.7, 17, 0x2f7d4f);
     door(g, hx, hy, 1.6, 1.6, 17, 0x2f7d4f);
     windowOnRight(this, g, hx, hy, 2.3, 0.8, 14, PAL.balconyYellow);
-    // Bugambilias sobre la tapia.
+    // Bougainvillea draping over courtyard wall.
     for (const [bx, by] of [[0.25, 2.2], [0.25, 2.6], [2.6, 0.3]]) {
       const p = iso(x + bx, y + by, 10);
       for (const [dx, dy] of [[-3, 0], [3, -1], [0, -4]]) g.circle(p.x + dx, p.y + dy, 3.2).fill(0xd63384);
@@ -7234,14 +7234,14 @@ const DRAW = {
     g.moveTo(hammock.x - 12, hammock.y - 6).quadraticCurveTo(hammock.x, hammock.y + 4, hammock.x + 12, hammock.y - 6).stroke({ width: 3, color: 0xd7263d });
   },
 
-  // Taller de cajas: casa donde se arman las cajas, con el papel de fique hecho a mano secándose al sol.
+  // Box workshop: house making gift boxes with sheets of handmade fique paper drying outdoors.
   box_shop(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
     house(this, g, hx, hy, 2.0, 1.5, 28, ctx, { wall: 0xf7f4ee, roofH: 14 });
     door(g, hx, hy, 1.5, 0.6, 16, 0x2e6fd1);
     windowOnRight(this, g, hx, hy, 2.0, 0.75, 14, PAL.balconyYellow);
-    // Tendedero con las hojas de papel de fique.
+    // Drying rack with fique paper sheets.
     const a = iso(x + 0.5, y + 2.4, 20);
     const b = iso(x + 2.6, y + 2.4, 20);
     for (const p of [a, b]) g.rect(p.x - 1, p.y, 2, 20).fill(PAL.wood);
@@ -7254,7 +7254,7 @@ const DRAW = {
     for (const [bx, by, z] of [[2.55, 2.75, 0], [2.85, 2.75, 0], [2.7, 2.75, 7]].slice(0, 2 + Math.min(ctx.tier, 1))) box(g, x + bx - 0.12, y + by - 0.1, 0.24, 0.2, 7, PRODUCTS.caja_surtida.color, { z });
   },
 
-  // Canastas del caminante: casa con canastos apilados y el que se está llenando en la puerta.
+  // Hiker baskets: house with stacked trail hampers and one being packed at doorway.
   hamper(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -7269,21 +7269,21 @@ const DRAW = {
     }
   },
 
-  // Salida al Camino Real: el portón de piedra donde empieza el camino empedrado a Guane; salen caminantes.
+  // Camino Real trailhead: stone archway starting cobblestone trail to Guane; hikers depart.
   camino_real(g, x, y, ctx) {
-    // El camino de piedra amarilla que baja hacia el borde de la parcela.
+    // Yellow cobblestone path descending toward lot edge.
     for (let k = 0; k < 9; k++) {
       const p = iso(x + 0.6 + k * 0.28, y + 1.5 + Math.sin(k) * 0.15);
       g.ellipse(p.x, p.y, 8, 4).fill(k % 2 ? 0xc9a96b : 0xe0c890).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.3 });
     }
-    // Portón: dos pilares y un arco de piedra.
+    // Archway: twin stone piers and arch.
     const H = 34 + ctx.up / 2;
     for (const py of [1.05, 1.95]) box(g, x + 0.6, y + py, 0.3, 0.3, H, 0xd9b56a);
     box(g, x + 0.6, y + 1.05, 0.3, 1.2, 8, 0xc9a96b, { z: H });
     const top = iso(x + 0.75, y + 1.65, H + 8);
     g.roundRect(top.x - 12, top.y - 10, 24, 10, 3).fill(0xa1672c).stroke(OUTLINE);
     g.rect(top.x - 8, top.y - 6, 16, 2).fill(0xfff8ec);
-    // Letrero «Guane» y un banco para el que espera.
+    // «Guane» signpost and waiting bench.
     const sign = iso(x + 2.6, y + 0.6);
     g.rect(sign.x - 1.2, sign.y - 22, 2.4, 22).fill(PAL.wood);
     g.poly([sign.x - 12, sign.y - 22, sign.x + 8, sign.y - 22, sign.x + 13, sign.y - 18, sign.x + 8, sign.y - 14, sign.x - 12, sign.y - 14]).fill(0xa1672c).stroke(OUTLINE);
@@ -7308,8 +7308,8 @@ const DRAW = {
   },
 
   // ---------- Tolima Grande (v4.0) ----------
-  // Los Achirales. Rallador de achira: la ramada con la batea y la rueda de rallar que se mueve a manivela; al
-  // lado, el montón de rizomas.
+  // Los Achirales. Grater: open shed with wooden trough and cranked grater beside rhizome pile.
+  // pile.
   achira_grater(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -7335,8 +7335,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tanques de asiento: los tanques de cemento donde se lava la achira rallada y se asienta el almidón; el agua
-  // lechosa corre por la canal.
+  // Settling tanks: concrete basins washing grated achira to settle starch; milky water runs down.
+  // trough.
   starch_tanks(g, x, y, ctx) {
     const tanks = ctx.tier >= 2 ? [[0.3, 0.4], [1.4, 0.4], [0.3, 1.5], [1.4, 1.5]] : [[0.4, 0.5], [1.5, 0.5], [0.9, 1.6]];
     this.tanks = [];
@@ -7363,7 +7363,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Patio de secado: las esteras con el almidón blanco al sol, y la secadora que lo voltea con el rastrillo.
+  // Drying yard: mats of white starch in sun turned by raker.
   starch_patio(g, x, y, ctx) {
     const mats = ctx.tier >= 2 ? [[0.3, 0.3], [1.5, 0.3], [0.3, 1.5], [1.5, 1.5]] : [[0.4, 0.4], [1.5, 0.6], [0.7, 1.6]];
     for (const [mx, my] of mats) {
@@ -7388,7 +7388,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Amasadero: la casa de bahareque blanca con zócalo rojo y la mesa larga donde se amasa con la cuajada.
+  // Kneading house: white red-plinth bahareque house with long table kneading dough with curds.
   achira_kneader(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -7412,7 +7412,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Horno de bizcochos: el horno de barro en cúpula, con la boca encendida, la pala y las latas de bizcochos.
+  // Bizcocho oven: domed clay oven with lit firebox, wooden peel, and baking sheets.
   bizcocho_oven(g, x, y, ctx) {
     const k = iso(x + 1.2, y + 1.2);
     shadow(g, k.x + 4, k.y + 2, 32, 12);
@@ -7437,7 +7437,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Empacadora de bizcochos: la casa con el letrero de la achira roja; en el corredor, las cajas apiladas.
+  // Bizcocho packer: shop with red achira sign and stacked cartons along porch.
   bizcocho_packer(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -7452,8 +7452,8 @@ const DRAW = {
   },
 
   // ---------- Cundinamarca (v4.4) ----------
-  // Las Flores de la Sabana. Mesa de corte: la ramada con la mesa larga llena de rosas recién cortadas; la cortadora
-  // con sus tijeras, y los baldes de rosas al lado.
+  // Flores de la Sabana. Cutting bench: shed table covered in fresh-cut roses with clipper
+  // and rose buckets alongside.
   mesa_corte(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -7483,8 +7483,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tinas de hidratación: las tinas azules llenas de agua con la solución, con las rosas paradas adentro; el agua
-  // se mece.
+  // Hydration tubs: blue tubs of preservative water holding standing roses; water ripples.
+  // ripples.
   tinas_hidratacion(g, x, y, ctx) {
     const tubs = ctx.tier >= 2 ? [[0.3, 0.4], [1.4, 0.4], [0.3, 1.5], [1.4, 1.5]] : [[0.4, 0.5], [1.5, 0.5], [0.9, 1.6]];
     this.tubs = [];
@@ -7511,7 +7511,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Clasificadora: la nave con la banda donde pasan las rosas y la regla para medirles el tallo.
+  // Rose grader: shed with conveyor sorting stems against length gauge.
   clasificadora_flores(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.4;
@@ -7535,7 +7535,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Boncheo: la casa blanca con la mesa larga donde se arman los bonches en su cartón; los bonches listos al lado.
+  // Bunching hall: white packing house bundling wrapped bouquets beside cardboard sleeves.
   boncheo(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -7560,8 +7560,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cuarto frío: la bodega blanca de paredes gruesas, con la puerta de cámara, el equipo de frío en el techo (el
-  // ventilador da vueltas) y la escarcha en la puerta.
+  // Cold room: thick-walled white vault with freezer door, rooftop condenser fan spinning,
+  // and frost at threshold.
   cuarto_frio(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -7584,8 +7584,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Empacadora de flores: la casa con el letrero de la rosa y el avión; en el corredor, las cajas largas apiladas
-  // para el aeropuerto.
+  // Flower exporter: shop with rose-and-plane sign and long export boxes stacked for airport.
+  // airport.
   empacadora_flores(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -7599,8 +7599,8 @@ const DRAW = {
     for (let i = 0; i < 2 + Math.min(ctx.tier, 4); i++) box(g, x + 1.5 + (i % 2) * 0.55, y + 2.1 + Math.floor(i / 2) * 0.3, 0.5, 0.25, 6, PRODUCTS.caja_flores.color, { z: 0 });
   },
 
-  // Los Freseros de Sibaté. Lavadero de fresas: las canastillas en la pila de agua corriente con la ducha; por la
-  // canaleta de atrás, la fresa de segunda se amontona para la Marmita.
+  // Freseros de Sibaté. Strawberry wash: baskets under flowing rinse shower; seconds drop
+  // down back chute toward Marmita.
   lavadero_fresas(g, x, y, ctx) {
     const x0 = x + 0.3;
     const y0 = y + 0.35;
@@ -7632,7 +7632,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Seleccionadora: la mesa larga bajo la ramada donde se escogen las fresas, con las canastillas verdes llenas.
+  // Sorter: long shed table sorting strawberries into full green punnets.
   seleccionadora_fresas(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.35;
@@ -7661,7 +7661,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Llenadora de bandejas: la nave blanca con la banda que lleva las bandejas tapadas; las cajas de cartón afuera.
+  // Tray packer: white hall with belt moving lidded punnets out to stacked cartons.
   llenadora_bandejas(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -7684,7 +7684,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Mesa de fresas con crema: el puesto de la carretera, con el toldo rojo y blanco, los vasos y el letrero.
+  // Strawberries-and-cream stand: roadside stall with red-and-white awning, cups, and sign.
   mesa_fresas_crema(g, x, y, ctx) {
     const x0 = x + 0.4;
     const y0 = y + 0.5;
@@ -7718,7 +7718,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Marmita de mermelada: la marmita de cobre al fuego, con el cucharón que revuelve, y los frascos tapados en fila.
+  // Jam kettle: copper kettle over fire with stirring ladle beside lined sealed jars.
   marmita_mermelada(g, x, y, ctx) {
     const x0 = x + 0.5;
     const y0 = y + 0.5;
@@ -7746,8 +7746,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Las Truchas de Guatavita. Mesa del ceviche: la mesa de acero con las copas, el tazón donde se marinan los filetes
-  // en limón y el canasto de limones.
+  // Truchas de Guatavita. Ceviche bench: steel counter with goblets, lemon-curing bowl, and lime basket.
+  // lime basket.
   mesa_ceviche(g, x, y, ctx) {
     const x0 = x + 0.4;
     const y0 = y + 0.45;
@@ -7778,7 +7778,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cocina de la laguna: el restaurante de tejas con el fogón de las truchas fritas y las mesas con mantel de cuadros.
+  // Lakeside kitchen: tiled restaurant frying trout over hearth beside checkered tables.
   cocina_laguna(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -7804,8 +7804,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Las Salinas de Nemocón. Pozos de salmuera: las albercas donde la roca se disuelve en agua; por la canaleta de atrás,
-  // los bloques de sal se apilan para el Taller de tallado.
+  // Salinas de Nemocón. Brine wells: rock salt dissolving pools feeding salt blocks down rear chute
+  // to Carving workshop.
   pozos_salmuera(g, x, y, ctx) {
     const pools = ctx.tier >= 2 ? [[0.3, 0.4], [1.3, 0.4], [0.3, 1.4], [1.3, 1.4]] : [[0.4, 0.5], [1.4, 0.5], [0.8, 1.5]];
     this.pools = [];
@@ -7832,7 +7832,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Taller de tallado: la ramada donde el tallador le saca a cincel una cruz al bloque de sal; las figuras listas en la
+  // Carving workshop: shed where sculptor chisels cross from salt block beside finished pieces.
   // repisa.
   taller_tallado(g, x, y, ctx) {
     const x0 = x + 0.35;
@@ -7859,8 +7859,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tachos de evaporación: los tachos de lata sobre el horno de ladrillo, con la sal blanca que se va cuajando y el
-  // vapor que sube.
+  // Evaporation pans: tin pans over brick furnace crystallizing white salt beneath rising steam.
+  // rising steam.
   tachos_evaporacion(g, x, y, ctx) {
     const x0 = x + 0.35;
     const y0 = y + 0.4;
@@ -7890,8 +7890,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Gachas de barro: la fila de ollas de barro en forma de cono sobre las brasas, como las de los muiscas, y los panes
-  // de sal ya cuajados.
+  // Clay brine pots (gachas): row of Muisca-style conical clay pots over embers beside
+  // crystallized salt loaves.
   gachas_barro(g, x, y, ctx) {
     const x0 = x + 0.4;
     const y0 = y + 0.6;
@@ -7919,7 +7919,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Empaque de regalo: la casa blanca de la mina con los cofres de madera apilados en el corredor.
+  // Gift packer: white mine shop with wooden gift chests stacked along porch.
   empaque_regalo(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -7933,7 +7933,7 @@ const DRAW = {
     for (let i = 0; i < 2 + Math.min(ctx.tier, 4); i++) box(g, x + 1.6 + (i % 3) * 0.4, y + 2.1 + Math.floor(i / 3) * 0.4, 0.34, 0.3, 7, PRODUCTS.cofre_sal.color, { z: 0 });
   },
 
-  // Armadora de canastas: la mesa bajo el toldo donde se arman las canastas con el pan de sal, las rosas y las fresas.
+  // Gift hamper table: awning workbench assembling hampers with salt loaves, roses, and berries.
   armadora_canastas(g, x, y, ctx) {
     const x0 = x + 0.4;
     const y0 = y + 0.4;
@@ -7961,8 +7961,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // La Cocina de la Sabana. Olla del caldo: el fogón de leña con la olla grande donde se deshacen las tres papas; el
-  // vapor sube y la cocinera revuelve.
+  // Cocina de la Sabana. Broth pot: wood hearth with giant pot dissolving three potato types;
+  // steam rises as cook stirs.
   olla_caldo(g, x, y, ctx) {
     const x0 = x + 0.45;
     const y0 = y + 0.45;
@@ -7995,7 +7995,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Olla del ajiaco: la cocina de bahareque con el fogón de las ollas de barro y las ramas de guascas colgadas.
+  // Ajiaco kitchen: bahareque kitchen with clay-pot hearth and hanging guascas herb bundles.
   olla_ajiaco(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -8022,7 +8022,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Servidora: el mostrador donde se sirven los platos con la crema, las alcaparras y el aguacate.
+  // Serving counter: station plating ajiaco with cream, capers, and avocado.
   servidora_ajiaco(g, x, y, ctx) {
     const x0 = x + 0.4;
     const y0 = y + 0.45;
@@ -8046,7 +8046,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Restaurante santafereño: la casona de balcón con el letrero del ajiaco y las mesas de mantel de cuadros en el patio.
+  // Santafereño restaurant: balconied mansion with ajiaco sign and courtyard checkered tables.
   restaurante_santafereno(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -8067,8 +8067,8 @@ const DRAW = {
     }
   },
 
-  // Zipaquirá. Entrada a la Catedral de Sal: la boca de la mina en la montaña, con la cruz blanca encima, la luz azul
-  // que sale del túnel y la fila de visitantes con su casco; de noche brilla la cruz.
+  // Zipaquirá. Salt Cathedral entrance: mountain mine portal topped with white cross, blue
+  // tunnel glow, and helmeted tourist line; cross lights up at night.
   entrada_catedral(g, x, y, ctx) {
     const c = iso(x + 1.3, y + 1.0);
     shadow(g, c.x + 4, c.y + 6, 60, 22);
@@ -8102,16 +8102,16 @@ const DRAW = {
     this.animate(0);
   },
 
-  // --- Bogotá · La Candelaria (v4.5): casas coloniales de colores, balcones de madera y tejas de barro ---
+  // --- Bogotá · La Candelaria (v4.5): colorful colonial houses, wood balconies, clay tile ---
 
-  // Cafetería de la Séptima: casa naranja de esquina con el toldo a rayas, las mesitas afuera y el letrero del tinto.
+  // Seventh Ave café: corner orange house with striped awning, sidewalk tables, tinto sign.
   cafeteria_septima(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
     house(this, g, hx, hy, 2.1, 1.4, 28, ctx, { wall: 0xf0a04b, roofH: 14 });
     door(g, hx, hy, 1.4, 0.6, 16, 0x1e5aa8);
     windowOnRight(this, g, hx, hy, 2.1, 0.7, 14, 0x1e5aa8);
-    // El toldo a rayas sobre la puerta.
+    // Striped awning over doorway.
     const a = iso(hx + 0.2, hy + 1.4, 20);
     const b = iso(hx + 1.4, hy + 1.4, 20);
     const c = iso(hx + 1.4, hy + 1.85, 15);
@@ -8137,7 +8137,7 @@ const DRAW = {
     g.circle(s.x + 6, s.y - 5, 2.6).fill(0xfafafa);
   },
 
-  // Chocolatería santafereña: casona azul de dos pisos con balcón de madera; adentro hierve la chocolatera.
+  // Santafereña chocolatería: two-story blue mansion with wood balcony; chocolate pot boils inside.
   chocolateria_candelaria(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -8153,20 +8153,20 @@ const DRAW = {
       const b = iso(hx + (2.3 * k) / 10, hy + 1.85, z + 7);
       g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.2, color: 0x6d4c41 });
     }
-    // El letrero: un pocillo de chocolate.
+    // Signboard: hot chocolate cup.
     const s = iso(hx + 1.05, hy + 1.6, 18);
     g.roundRect(s.x - 9, s.y - 8, 18, 9, 2).fill(0xfff3d6).stroke(OUTLINE);
     g.ellipse(s.x, s.y - 3.5, 4, 2.4).fill(PRODUCTS.chocolate_completo.color);
     this.smokePoints.push(iso(hx + 1.8, hy + 0.5, 30 + up + 15));
   },
 
-  // Dulcería de la Calle 11: local rosado con la vitrina llena de dulces de colores y el toldo verde.
+  // Calle 11 candy shop: pink storefront with display case full of sweets and green awning.
   dulceria_calle11(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
     house(this, g, hx, hy, 2.2, 1.4, 27, ctx, { wall: 0xf3a6c0, roofH: 13 });
     door(g, hx, hy, 1.4, 1.7, 16, 0x2f7d4f);
-    // La vitrina: el mueble de vidrio con los frascos y las bandejas.
+    // Glass showcase filled with jars and trays.
     box(g, hx + 0.25, hy + 1.5, 1.05, 0.45, 9, 0xdff3fb);
     const colors = [PRODUCTS.cocada.color, PRODUCTS.bocadillo_crate.color, 0xfafafa, 0xe57373, PRODUCTS.onces_bogotanas.color];
     for (let k = 0; k < 3 + Math.min(ctx.tier, 2); k++) {
@@ -8181,7 +8181,7 @@ const DRAW = {
     windowOnRight(this, g, hx, hy, 2.2, 0.7, 14, 0x2f7d4f);
   },
 
-  // Casa colonial: la casona amarilla de dos pisos con balcón corrido de madera, geranios y el farol en la esquina.
+  // Colonial house: two-story yellow mansion with full wood balcony, geraniums, corner lantern.
   casa_colonial(g, x, y, ctx) {
     const hx = x + 0.2;
     const hy = y + 0.2;
@@ -8208,9 +8208,9 @@ const DRAW = {
     this.lights.push({ x: l.x + 6, y: l.y - 4, r: 22 });
   },
 
-  // --- Bogotá · Chapinero y la Zona G (v4.5): casas de ladrillo a la vista, de tejado inclinado, con restaurantes ---
+  // --- Bogotá · Chapinero & Zona G (v4.5): exposed brick houses, pitched roofs, restaurants ---
 
-  // Despensa de la Zona G: casa de ladrillo con toldo verde y la vitrina llena de frascos de salsas de colores.
+  // Zona G pantry: brick house with green awning and window stacked with colorful sauce jars.
   despensa_zona_g(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -8226,7 +8226,7 @@ const DRAW = {
     awningFront(g, hx + 0.1, hy, 2.0, 1.4, 22, 0x2f7d4f);
   },
 
-  // Cocina de entradas: casa de ladrillo con la chimenea humeando y una mesita afuera con la picada.
+  // Appetizer kitchen: brick house with smoking chimney and outdoor picada table.
   cocina_entradas(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -8242,14 +8242,14 @@ const DRAW = {
     for (const [dx, col] of [[-3, PRODUCTS.criollas_box.color], [1, 0xe6c26a], [4, 0x3e2723]]) g.circle(p.x + dx, p.y - 10, 1.6).fill(col);
   },
 
-  // Parrilla: la casa de ladrillo con la parrilla grande al aire libre, las varas de carne y el humo.
+  // Steakhouse grill: brick house with large outdoor grill, meat skewers, and rising smoke.
   parrilla_zona_g(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
     house(this, g, hx, hy, 1.8, 1.4, 26, ctx, { wall: BRICK, roofH: 14, roofColor: 0x5d4037 });
     door(g, hx, hy, 1.4, 0.6, 16, 0x5d4037);
     windowOnRight(this, g, hx, hy, 1.8, 0.7, 14, 0xffe082);
-    // La parrilla: el fogón de ladrillo con la reja y la carne.
+    // Brick grill firebox with grate and roasting cuts.
     box(g, x + 1.9, y + 1.8, 0.9, 0.6, 10, 0x8a3b22);
     const r = iso(x + 2.35, y + 2.1, 10);
     g.ellipse(r.x, r.y, 14, 6).fill(0x2b2b2b);
@@ -8258,7 +8258,7 @@ const DRAW = {
     this.smokePoints.push(iso(x + 2.35, y + 2.1, 16));
   },
 
-  // Repostería y jugos: casita de ladrillo pintada de rosado, con el dispensador de jugos y las tortas en la vitrina.
+  // Bakery & juices: pink-painted brick cottage with counter juice dispensers and pastry case.
   reposteria_zona_g(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -8270,7 +8270,7 @@ const DRAW = {
       const p = iso(hx + 0.32 + k * 0.24, hy + 1.62, 10);
       g.ellipse(p.x, p.y - 2, 3, 2).fill(col).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
     }
-    // El dispensador de jugos en la esquina.
+    // Corner juice dispenser.
     const d = iso(hx + 2.1, hy + 1.6, 0);
     g.rect(d.x - 4, d.y - 16, 8, 16).fill(0xeceff1).stroke(OUTLINE);
     g.rect(d.x - 3, d.y - 15, 6, 6).fill(0xfbc02d);
@@ -8278,7 +8278,7 @@ const DRAW = {
     awningFront(g, hx + 0.1, hy, 1.9, 1.4, 22, 0x6a1b9a);
   },
 
-  // Restaurante de la Zona G: la casa de ladrillo de dos pisos con la terraza, las matas y las bombillas encendidas.
+  // Zona G restaurant: two-story brick house with terrace greenery and warm string bulbs.
   restaurante_zona_g(g, x, y, ctx) {
     const hx = x + 0.2;
     const hy = y + 0.2;
@@ -8287,7 +8287,7 @@ const DRAW = {
     door(g, hx, hy, 1.6, 0.8, 18, 0x2b2b2b);
     windowOnRight(this, g, hx, hy, 2.5, 0.8, 14, 0xffe082);
     windowOnRight(this, g, hx, hy, 2.5, 0.8, 30, 0xffe082);
-    // Las bombillas colgadas sobre la terraza.
+    // Lit string bulbs hung over terrace.
     const a = iso(hx, hy + 2.6, 22);
     const b = iso(hx + 2.5, hy + 2.6, 22);
     g.moveTo(a.x, a.y).quadraticCurveTo((a.x + b.x) / 2, (a.y + b.y) / 2 + 6, b.x, b.y).stroke({ width: 1, color: 0x3a2418 });
@@ -8308,7 +8308,7 @@ const DRAW = {
     }
   },
 
-  // --- Bogotá · Usaquén (v4.5): los toldos blancos del mercado de pulgas del domingo ---
+  // --- Bogotá · Usaquén (v4.5): Sunday flea-market white awnings ---
 
   toldo_tejidos(g, x, y, ctx) {
     fleaStall(this, g, x + 0.4, y + 0.5, ctx, 0x2e4fa8, [0x5d4037, 0x3e2723, 0x2e4fa8, 0xf4f1ea, 0x8d6e63]);
@@ -8323,7 +8323,7 @@ const DRAW = {
     fleaStall(this, g, x + 0.4, y + 0.5, ctx, 0xf2b705, [0xe0c08a, 0xe8b04c, 0xd7263d, 0xe8b04c, 0x3e2723]);
   },
 
-  // Mercado de las pulgas: la iglesia blanca de Usaquén y, delante, dos toldos con de todo un poco.
+  // Flea market: white Usaquén church fronted by twin market tents full of eclectic wares.
   mercado_pulgas(g, x, y, ctx) {
     const cx = x + 1.7;
     const cy = y + 0.2;
@@ -8338,9 +8338,9 @@ const DRAW = {
     fleaStall(this, g, x + 0.2, y + 1.5, ctx, 0xd7263d, [0x2e4fa8, 0xe8b04c, 0x2b2b2b, 0xd7263d, 0x8d5a32], 1.3);
   },
 
-  // --- Bogotá · Paloquemao (v4.5): los puestos de la plaza de mercado y su nave de techo azul ---
+  // --- Bogotá · Paloquemao (v4.5): market stalls and blue-roofed central hall ---
 
-  // Puesto de flores: el toldo con los baldes de flores de colores al frente.
+  // Flower stall: tent fronted by buckets of colorful cut blooms.
   puesto_flores(g, x, y, ctx) {
     fleaStall(this, g, x + 0.4, y + 0.3, ctx, 0x2f7d4f, [0xd81b3c, 0xfbc02d, 0xf06292, 0xfafafa, 0x8e24aa]);
     for (let k = 0; k < 3 + Math.min(ctx.tier, 2); k++) {
@@ -8350,7 +8350,7 @@ const DRAW = {
     }
   },
 
-  // Puesto de frutas: el toldo con las pirámides de frutas.
+  // Fruit stall: tent stacked with pyramids of fruit.
   puesto_frutas(g, x, y, ctx) {
     fleaStall(this, g, x + 0.4, y + 0.3, ctx, 0xf2b705, [0xfbc02d, 0x6a1b9a, 0xe53935, 0x8bc34a, 0xff9800]);
     for (const [k, c] of [[0, 0xfbc02d], [1, 0xe53935], [2, 0x8bc34a]].slice(0, 2 + Math.min(ctx.tier, 1))) {
@@ -8359,7 +8359,7 @@ const DRAW = {
     }
   },
 
-  // Pescadería: el puesto de baldosa blanca con el toldo azul, el hielo y los pescados colgados.
+  // Fishmonger: white-tiled stall under blue awning with ice bed and hanging fish.
   pescaderia_plaza(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -8373,7 +8373,7 @@ const DRAW = {
     windowOnRight(this, g, hx, hy, 2.2, 0.65, 13, 0xcfe3ee);
   },
 
-  // Fritanga de la plaza: el puesto con la paila grande hirviendo, la lechona y el humo.
+  // Market fritanga: stall with bubbling frying cauldron, whole lechona, and smoke.
   fritanga_plaza(g, x, y, ctx) {
     fleaStall(this, g, x + 0.4, y + 0.3, ctx, 0xd7263d, [0xd9a066, 0xfdd835, 0x5d2f17, 0xd9a066]);
     const p = iso(x + 1.6, y + 2.4);
@@ -8385,7 +8385,7 @@ const DRAW = {
     this.smokePoints.push(iso(x + 1.6, y + 2.4, 16));
   },
 
-  // Plaza de Paloquemao: la nave grande del mercado, de paredes claras y techo azul, con la entrada en arco.
+  // Paloquemao plaza: grand pale-walled blue-roofed market hall with arched entrance.
   plaza_paloquemao(g, x, y, ctx) {
     const hx = x + 0.15;
     const hy = y + 0.2;
@@ -8405,9 +8405,9 @@ const DRAW = {
     windowOnRight(this, g, hx, hy, w, 1.4, 14, 0xfff8e1);
   },
 
-  // --- Bogotá · El centro (v4.5) ---
+  // --- Bogotá · Downtown (v4.5) ---
 
-  // Hotel de la capital: el edificio blanco de cuatro pisos con las ventanas encendidas y las banderas en la entrada.
+  // Capital hotel: four-story white building with glowing windows and entry flags.
   hotel_capital(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -8432,13 +8432,13 @@ const DRAW = {
     }
   },
 
-  // Funicular de Monserrate: la estación de abajo, con la vía que sube hacia los Cerros y el vagón rojo.
+  // Monserrate funicular: lower station with track ascending toward Eastern Hills and red railcar.
   funicular_monserrate(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 1.2;
     house(this, g, hx, hy, 1.8, 1.4, 24, ctx, { wall: 0xfbf8f1, roofH: 12 });
     door(g, hx, hy, 1.4, 0.9, 15, 0x5d4037);
-    // La vía: dos rieles que suben hacia el oriente (gy menor), donde está el cerro.
+    // Track: twin rails climbing east (smaller gy) up toward the mountain.
     const a = iso(x + 1.2, y + 1.2, 6);
     const b = iso(x + 2.2, y - 0.6, 40);
     for (const off of [-3, 3]) g.moveTo(a.x + off, a.y).lineTo(b.x + off, b.y).stroke({ width: 1.6, color: 0x37474f });
@@ -8452,7 +8452,7 @@ const DRAW = {
     g.rect(c.x + 1, c.y - 7, 4, 3).fill(0xcfe3ee);
   },
 
-  // Pabellón de las regiones: la carpa grande amarilla, azul y roja, con banderitas de los colores de cada región.
+  // Regions pavilion: grand yellow, blue, and red marquee flying regional color pennants.
   pabellon_regiones(g, x, y, ctx) {
     const hx = x + 0.2;
     const hy = y + 0.3;
@@ -8471,7 +8471,7 @@ const DRAW = {
     g.poly(door0).fill(0xa1693f).stroke(OUTLINE);
   },
 
-  // Recinto de la Gran Feria: el arco amarillo de la entrada con la franja azul y roja, los globos y la estrella.
+  // Gran Feria grounds: yellow entry arch striped blue and red, balloons, and star.
   gran_feria(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -8495,8 +8495,8 @@ const DRAW = {
     }
   },
 
-  // El Café del Huila. Beneficiadero: la tolva, el tanque de lavado y, por la canaleta de atrás, la cáscara roja
-  // que se amontona para el Secadero.
+  // Café del Huila. Beneficiadero: hopper, washing tank, rear chute piling red coffee husks
+  // bound for husk dryer.
   huila_wetmill(g, x, y, ctx) {
     DRAW.wetmill.call(this, g, x, y, ctx);
     const c0 = iso(x + 2.3, y + 0.5, 10);
@@ -8507,15 +8507,15 @@ const DRAW = {
     for (let k = 0; k < 5; k++) g.circle(pile.x - 7 + k * 3.5, pile.y - 5 - (k % 2) * 2, 1.4).fill(0xc0392b);
   },
 
-  // Secadero de cáscara: las zarandas con la cascarilla roja al sol, bajo el techo corredizo de los secaderos del
-  // Huila; al lado, los costalitos del té.
+  // Husk dryer: trays of drying red cascara under sliding zinc roof typical of Huila;
+  // beside it, small sacks of cascara tea.
   cascara_dryer(g, x, y, ctx) {
     const beds = ctx.tier >= 2 ? [[0.3, 0.4], [0.3, 1.2], [1.5, 0.4], [1.5, 1.2]] : [[0.4, 0.5], [0.4, 1.4], [1.6, 0.9]];
     for (const [bx, by] of beds) {
       box(g, x + bx, y + by, 1.0, 0.7, 6, PAL.wood);
       g.poly(isoPoly([[x + bx + 0.06, y + by + 0.06, 6], [x + bx + 0.94, y + by + 0.06, 6], [x + bx + 0.94, y + by + 0.64, 6], [x + bx + 0.06, y + by + 0.64, 6]])).fill(PRODUCTS.cascara.color);
     }
-    // El techo corredizo de zinc, sobre rieles.
+    // Sliding zinc roof on rails.
     const roofZ = 22 + ctx.up;
     for (const [px, py] of [[0.2, 0.3], [2.6, 0.3], [0.2, 2.1], [2.6, 2.1]]) box(g, x + px, y + py, 0.08, 0.08, roofZ, 0x6b4a2e);
     g.poly(isoPoly([[x + 0.2, y + 0.3, roofZ], [x + 1.6, y + 0.3, roofZ + 6], [x + 1.6, y + 2.1, roofZ + 6], [x + 0.2, y + 2.1, roofZ]])).fill({ color: 0x9aa3a8, alpha: 0.95 }).stroke(OUTLINE);
@@ -8535,7 +8535,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // La Represa de Betania. Olla del escabeche: el fogón con la olla grande, la mesa de los frascos y la cebolla.
+  // Betania Dam. Escabeche kettle: hearth with large pot, jar packing bench, and onions.
   escabeche_pot(g, x, y, ctx) {
     const x0 = x + 0.4;
     const y0 = y + 0.4;
@@ -8565,8 +8565,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Cocina de la represa: el restaurante de la orilla con su kiosco de palma, las mesas con la tilapia frita y la
-  // paila del aceite.
+  // Reservoir kitchen: waterside palm kiosk serving fried tilapia with frying kettle.
+  // and oil kettle.
   represa_kitchen(g, x, y, ctx) {
     const c = iso(x + 1.1, y + 1.0, 0);
     for (const a of [0, 1.57, 3.14, 4.71]) g.rect(c.x + Math.cos(a + 0.78) * 30 - 1.2, c.y + Math.sin(a + 0.78) * 15 - 26 - ctx.up, 2.4, 26 + ctx.up).fill(0x6b4a2e);
@@ -8597,8 +8597,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // La Lechonería. Desposte de cerdo: la casa con la mesa de desposte, los ganchos con la carne y, por la canaleta,
-  // los cueros que van a la Limpieza.
+  // Lechonería. Pork butchery: cottage with cutting bench, hanging cuts, and chute feeding
+  // pigskins to Skin Cleaning.
   pork_butcher(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -8628,7 +8628,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Limpieza del cuero: los cueros extendidos en el bastidor, la artesa del agua caliente y quien los raspa.
+  // Skin cleaning: hides stretched on frame beside hot water trough and scraper worker.
   skin_cleaner(g, x, y, ctx) {
     for (const [fx, fy] of ctx.tier >= 2 ? [[0.3, 0.4], [1.3, 0.4], [2.2, 0.4]] : [[0.5, 0.4], [1.6, 0.4]]) {
       box(g, x + fx, y + fy, 0.08, 0.08, 24, 0x6b4a2e);
@@ -8657,7 +8657,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Paila del relleno: el fogón de leña con la paila grande donde se cocina el arroz con arveja y la carne adobada.
+  // Filling cauldron: wood hearth boiling rice, peas, and seasoned pork.
   relleno_pot(g, x, y, ctx) {
     const x0 = x + 0.5;
     const y0 = y + 0.5;
@@ -8690,7 +8690,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Fogón del tamal: la cocina abierta con la olla grande donde se cuecen los tamales y las hojas de plátano.
+  // Tamal hearth: open kitchen boiling huge tamal pot wrapped in plantain leaves.
   tamal_stove(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.3;
@@ -8721,8 +8721,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Horno de leña: el horno grande de ladrillo donde se asa la lechona envuelta en su cuero; afuera, la lechona
-  // dorada en la batea.
+  // Wood brick oven: large oven roasting whole stuffed lechona; golden pig displayed outdoors
+  // in wooden trough.
   lechona_oven(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -8756,8 +8756,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Mesa del desayuno tolimense: el corredor de la casa con las mesas: el tamal, la taza de tinto del Huila y los
-  // bizcochos de los Achirales.
+  // Tolimense breakfast porch: tables served with tamal, Huila tinto cup, and Achirales bizcochos.
+  // from Los Achirales.
   desayuno_tolimense_table(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.2;
@@ -8787,7 +8787,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // La Chamba. Pisadero de barro: el barro en el suelo, que se pisa descalzo, con la arena fina al lado.
+  // La Chamba. Clay treading yard: wet clay pit trodden barefoot beside fine tempering sand.
   clay_treader(g, x, y, ctx) {
     const c = iso(x + 1.2, y + 1.3);
     g.ellipse(c.x, c.y, 38, 18).fill(0x6d4c41).stroke(OUTLINE);
@@ -8809,8 +8809,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Moldeadoras: las mujeres sentadas frente a sus piezas, que modelan a mano las cazuelas (sin torno, como en La
-  // Chamba), bajo la ramada.
+  // Potters: seated women hand-coiling casseroles without wheel (La Chamba style) under shed.
+  // shed.
   pot_modelers(g, x, y, ctx) {
     ramada(this, g, x + 0.25, y + 0.25, 2.5, 2.2, 30 + ctx.up, 0xc9a96b);
     const spots = ctx.tier >= 2 ? [[0.8, 1.0], [1.9, 1.0], [0.8, 2.0], [1.9, 2.0]] : [[0.9, 1.1], [1.9, 1.6]];
@@ -8837,8 +8837,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Bruñidoras: las piezas puestas a orear sobre la mesa y las mujeres que las pulen con la piedra de río hasta que
-  // brillan; los brillos van y vienen.
+  // Burnishers: leather-hard pots rubbed by women with smooth river stones until gleaming;
+  // highlights shimmer.
   pot_burnishers(g, x, y, ctx) {
     const hx = x + 0.3;
     const hy = y + 0.25;
@@ -8864,8 +8864,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Horno de quema: el horno abierto donde las piezas se queman con leña y luego se ahúman con boñiga para que salgan
-  // negras; el humo es oscuro y espeso.
+  // Smoking kiln: open kiln firing clay with wood then smothering in dung so pots emerge
+  // jet black; thick dark smoke.
   black_kiln(g, x, y, ctx) {
     const k = iso(x + 1.3, y + 1.2);
     shadow(g, k.x + 4, k.y + 2, 32, 12);
@@ -8895,8 +8895,8 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Tienda de La Chamba: la casa con las cazuelas negras colgadas y en el suelo, la tilapia ahumada y los frascos de
-  // escabeche que llegan de Betania.
+  // La Chamba shop: cottage hung with black clay casseroles alongside smoked tilapia and
+  // pickled fish jars from Betania.
   tienda_chamba(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -8914,7 +8914,7 @@ const DRAW = {
     fishOn(g, s.x + 2, s.y - 12, 4, PRODUCTS.tilapia_ahumada.color);
   },
 
-  // Neiva. Restaurante del río: la casona sobre el malecón del Magdalena, con la terraza y sus faroles.
+  // Neiva. Riverside restaurant: mansion overlooking Magdalena boardwalk with lantern terrace.
   restaurante_rio(g, x, y, ctx) {
     const hx = x + 0.25;
     const hy = y + 0.25;
@@ -8931,8 +8931,8 @@ const DRAW = {
     }
   },
 
-  // Hotel del San Pedro: el hotel de dos pisos con balcones, adornado con las banderitas rojas y amarillas del
-  // festival; en la puerta, la pareja que baila el sanjuanero.
+  // San Pedro hotel: two-story balconied hotel decked in red-and-yellow festival bunting;
+  // couple dancing sanjuanero at doorway.
   hotel_sanpedro(g, x, y, ctx) {
     const hx = x + 0.2;
     const hy = y + 0.2;
@@ -8964,7 +8964,7 @@ const DRAW = {
     this.animate(0, 0);
   },
 
-  // Plaza de mercado de Neiva: la galería de techo alto con los puestos de frutas, el asado y la tilapia de Betania.
+  // Neiva market plaza: high-ceiling hall with fruit stalls, roast pork, and Betania tilapia.
   plaza_neiva(g, x, y, ctx) {
     const H = 30 + ctx.up;
     for (const [px, py] of [[0.2, 0.3], [2.7, 0.3], [0.2, 2.4], [2.7, 2.4], [1.45, 0.3], [1.45, 2.4]]) box(g, x + px, y + py, 0.12, 0.12, H, 0x9e9e9e);
@@ -8989,7 +8989,7 @@ const DRAW = {
     this.animate(0);
   },
 
-  // Fiambrera del paseo: la casa donde se arman los fiambres en hoja de bijao, con la mesa y los canastos para la
+  // Picnic lunch shop: wrapping leaf-tied fiambres at counter beside stacked outing baskets.
   // Tatacoa.
   fiambrera_tatacoa(g, x, y, ctx) {
     const hx = x + 0.25;
@@ -9004,8 +9004,8 @@ const DRAW = {
     basketShape(g, x + 2.6, y + 2.6, 0, 0.9);
   },
 
-  // Salida a la Tatacoa: el campero de los paseos, el telescopio y la carpa, en la tierra roja con un cactus; de
-  // noche el telescopio mira al cielo.
+  // Tatacoa trailhead: safari jeep, telescope, and tent on red earth with cactus; at night
+  // telescope points up at stars.
   salida_tatacoa(g, x, y, ctx) {
     g.poly(isoPoly([[x + 0.2, y + 0.2], [x + 2.8, y + 0.2], [x + 2.8, y + 2.8], [x + 0.2, y + 2.8]])).fill({ color: 0xc0582b, alpha: 0.75 });
     for (const [cx, cy] of [[0.5, 0.6], [2.5, 2.4]]) {
@@ -9039,15 +9039,15 @@ const DRAW = {
   },
 };
 
-// Tolima Grande (v4.0): las máquinas que se ven igual en otras zonas.
+// Tolima Grande (v4.0): stations sharing artwork from other regions.
 DRAW.huila_huller = DRAW.huller;
-// Las Truchas de Guatavita (v4.4): la limpieza, el ahumadero y la fileteadora, como en Betania.
+// Truchas de Guatavita (v4.4): cleaning, smokehouse, and filleter shared with Betania.
 DRAW.limpieza_trucha = DRAW.fish_cleaner;
 DRAW.ahumadero_trucha = DRAW.cachama_smoker;
 DRAW.fileteadora_trucha = DRAW.fish_filleter;
-// La Cocina de la Sabana (v4.4): el Peladero, como la Peladora de papa de Boyacá.
+// Cocina de la Sabana (v4.4): Peeler shared with Boyacá potato peeler.
 DRAW.peladero = DRAW.potato_peeler;
-// Zipaquirá (v4.4): la plaza colonial, con los edificios de Villa de Leyva.
+// Zipaquirá (v4.4): colonial plaza sharing Villa de Leyva buildings.
 DRAW.salon_onces = DRAW.terraza_plaza;
 DRAW.hotel_plaza_zipa = DRAW.hospedaje_colonial;
 DRAW.plaza_mercado_zipa = DRAW.mercado_sabado;

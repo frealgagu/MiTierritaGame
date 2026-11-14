@@ -1,30 +1,30 @@
 import { warehouseSpace } from './transport.js';
 
-// Avisos que duran: con todo nivelado, el producto viaja por tandas y es normal que un patio se
-// llene un momento, que una estación espere la siguiente mula o que un viaje se desvíe a la
-// bodega. Eso no es un problema. Un aviso (el ícono del mapa y el texto del panel) sale solo si
-// el problema ocupa al menos la mitad de los últimos 10 s de juego, y se quita cuando baja de la
-// quinta parte (para que no parpadee).
-export const ALERT_WINDOW = 10; // s de juego
-const BUCKET = 1; // s por casilla de la ventana
+// Persistent alerts: when balanced, goods travel in batches so a yard briefly filling up,
+// a station waiting for the next mule, or a trip diverting to the warehouse is normal.
+// That isn't a fault. A warning (map icon and panel text) only shows if
+// the issue lasts at least half of the last 10 game s, and clears below a
+// fifth (to prevent flicker).
+export const ALERT_WINDOW = 10; // game s
+const BUCKET = 1; // s per window bucket
 const ON = 0.5;
 const OFF = 0.2;
-export const DIVERT_TIME = 3; // s que cuenta como «desviando» tras un viaje desviado a la bodega
-// «Esperando» cuenta solo en las rachas largas sin que llegue nada: una estación más rápida que la
-// anterior (la Hornilla con bagazo) espera un poco entre tanda y tanda, y eso no es un problema.
-export const STARVED_IDLE = 8; // s seguidos sin entrada
+export const DIVERT_TIME = 3; // s counted as «diverting» after a diverted trip to warehouse
+// «Waiting» only counts long streaks without arrivals: a station faster than the
+// previous one (Hornilla with bagazo) waits briefly between batches, which is fine.
+export const STARVED_IDLE = 8; // consecutive s without input
 
 const KINDS = ['blocked', 'starved', 'diverting', 'full'];
 const empty = () => ({ time: 0, blocked: 0, starved: 0, diverting: 0, full: 0 });
-// Por estación y por zona (el objeto de la partida): no se guarda con la partida.
+// Per station and per zone (the save's object): not persisted with the save.
 const tracks = new WeakMap();
-// La bodega llena se mira dos veces por segundo (calcular su espacio cuesta más).
+// Full warehouse checks twice per second (computing its space is costlier).
 const ZONE_SAMPLE = 0.5;
 const zoneTime = new WeakMap();
 
 function track(obj, dt, flags) {
   let t = tracks.get(obj);
-  // sum: lo que suman las casillas de la ventana (se lleva la cuenta al entrar y salir cada una).
+  // sum: running total of window buckets (updated as each enters and leaves).
   if (!t) tracks.set(obj, (t = { buckets: [], cur: empty(), sum: empty(), on: {}, waiting: null }));
   const c = t.cur;
   c.time += dt;
@@ -38,7 +38,7 @@ function track(obj, dt, flags) {
   add(c, 1);
   t.cur = empty();
   while (t.buckets.length > 1 && t.sum.time - t.buckets[0].time >= ALERT_WINDOW) add(t.buckets.shift(), -1);
-  // Al empezar (o tras cargar la partida) la ventana aún no está llena: cuenta como sin problemas.
+  // On startup (or after load) window isn't full yet: treated as clear.
   const time = Math.max(ALERT_WINDOW, t.sum.time);
   for (const kind of KINDS) {
     const frac = t.sum[kind] / time;
@@ -55,7 +55,7 @@ export function stepAlerts(state, dt) {
       starved: st.status === 'starved' && st.idle > STARVED_IDLE,
       diverting: st.lastDiverted !== undefined && state.playTime - st.lastDiverted < DIVERT_TIME,
     });
-    // Por qué se llena el patio (mulas o bodega): lo último que se vio.
+    // Why yard is filling up (mules or warehouse): last observed cause.
     if (st.status === 'blocked') t.waiting = st.waiting;
   }
   const since = (zoneTime.get(state) ?? 0) + dt;
@@ -66,7 +66,7 @@ export function stepAlerts(state, dt) {
   }
 }
 
-// { blocked, starved, diverting, full, waiting }: los avisos que duran de una estación o una zona.
+// { blocked, starved, diverting, full, waiting }: persistent warnings of a station or zone.
 export function alerts(obj) {
   const t = obj && tracks.get(obj);
   return { blocked: false, starved: false, diverting: false, full: false, ...t?.on, waiting: t?.waiting ?? null };

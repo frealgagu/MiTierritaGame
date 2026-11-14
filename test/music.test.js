@@ -36,7 +36,7 @@ for (const id of ['cafetero', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas
     sum += buf.left[i] ** 2;
   }
   assert.ok(peak <= 0.851, `pico ${peak}`);
-  // Sin silencios: cada compás tiene sonido.
+  // No silences: every bar has sound.
   const bar = buf.length / song.chords.length;
   for (let k = 0; k < song.chords.length; k++) {
     let e = 0;

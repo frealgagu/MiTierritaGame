@@ -1,20 +1,20 @@
-// Catálogo completo de estaciones (38), ver docs/GDD.md §4b.
-// `release`: versión del juego en la que se vuelve jugable.
+// Complete station catalog, see docs/GDD.md §4b.
+// `release`: game version when it became playable.
 //
-//   in:     productos consumidos por ciclo
-//   out:    productos generados por ciclo
-//   by:     subproductos generados por ciclo
-//   cycle:  segundos por ciclo a nivel 1
-//   infinite: fuente ilimitada (no consume nada)
-//   side:     rama secundaria fuera de la cadena principal; requires = estación que la habilita
-//   fuel:     combustible opcional que llega directo de otra estación (subproducto) y la acelera
-//   harvest:  cosecha de temporada (v3.4, el Hormiguero): solo produce en `season`, `mult` veces más (lo
-//             de todo el año), y guarda en su patio (la despensa) `store` segundos de producción
+//   in:     products consumed per cycle
+//   out:    products produced per cycle
+//   by:     byproducts produced per cycle
+//   cycle:  seconds per cycle at level 1
+//   infinite: unlimited source (consumes nothing)
+//   side:     optional branch outside main chain; requires = enabling station
+//   fuel:     optional fuel arriving directly from another station (byproduct) speeding it up
+//   harvest:  seasonal harvest (v3.4, Hormiguero): produces only in `season`, `mult`× normal
+//             (a full year's yield), storing `store` s of output in pantry yard
 
 import { ICON } from './icons.js';
 
 export const STATIONS = [
-  // Zona 1 · La Finca
+  // Zone 1 · La Finca
   { id: 'farm', zone: 'finca', name: 'Cafetal', icon: ICON.coffeePlant, infinite: true, out: { cherry: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '0.1' },
   { id: 'wetmill', zone: 'finca', name: 'Beneficiadero', icon: '💧', in: { cherry: 2 }, out: { washed: 1 }, by: { pulp: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '0.2' },
   { id: 'dryer', zone: 'finca', name: 'Marquesina de secado', icon: '☀️', in: { washed: 1 }, out: { parchment: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '0.2' },
@@ -22,33 +22,33 @@ export const STATIONS = [
   { id: 'roaster', zone: 'finca', name: 'Tostadora', icon: '🔥', in: { green: 2 }, out: { roasted: 1 }, cycle: 8, unlockCost: 4000, upgradeBase: 35, growth: 1.15, release: '0.2' },
   { id: 'grinder', zone: 'finca', name: 'Molino', icon: '🌀', in: { roasted: 1 }, out: { ground: 1 }, cycle: 8, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '0.2' },
   { id: 'packer', zone: 'finca', name: 'Empacadora', icon: '📦', in: { ground: 4 }, out: { coffee_bag: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '0.2' },
-  // Rama secundaria: la pulpa del Beneficiadero pasa directo por una canaleta (sin mulas) y el
-  // compost hace que todo lo que vende la Finca valga más mientras haya (ver sim/modifiers.js).
+  // Side branch: Beneficiadero pulp travels directly via chute (no mules) and compost
+  // increases sale value of everything Finca sells while stocked (see sim/modifiers.js).
   { id: 'composter', zone: 'finca', name: 'Compostera', icon: '🪱', in: { pulp: 4 }, out: { compost: 1 }, cycle: 16, unlockCost: 1500, upgradeBase: 10, growth: 1.15, release: '1.0', side: true, requires: 'wetmill' },
 
-  // Zona 2 · El Trapiche
+  // Zone 2 · El Trapiche
   { id: 'canefield', zone: 'trapiche', name: 'Cañaduzal', icon: '🎋', infinite: true, out: { cane: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '1.1' },
   { id: 'cane_mill', zone: 'trapiche', name: 'Molienda', icon: '⚙️', in: { cane: 1 }, out: { guarapo: 1 }, by: { bagasse: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '1.1' },
-  // El bagazo de la Molienda pasa directo a la Hornilla como combustible: mientras haya, trabaja ×2.
+  // Molienda bagazo travels straight to Hornilla as fuel: while stocked, runs ×2.
   { id: 'furnace', zone: 'trapiche', name: 'Hornilla', icon: '🔥', in: { guarapo: 2 }, out: { melado: 1 }, fuel: { product: 'bagasse', from: 'cane_mill', perCycle: 1, boost: 2 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '1.1' },
   { id: 'molds', zone: 'trapiche', name: 'Gaveras', icon: '🧱', in: { melado: 2 }, out: { panela: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '1.1' },
   { id: 'pulverizer', zone: 'trapiche', name: 'Pulverizadora', icon: '🌀', in: { panela: 1 }, out: { panela_powder: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '1.1' },
 
-  // Zona 3 · La Lechería (v1.2). La leche pasteurizada se reparte: a igual nivel, un cuarto para la
-  // Quesera, la Descremadora, la Paila y la Ruta de la leche al Cacaotal (ver sim/transport.js: exportsOf).
+  // Zone 3 · La Lechería (v1.2). Pasteurized milk splits equally at matching level: a quarter each
+  // to Quesera, Descremadora, Paila, and milk route to Cacaotal (see sim/transport.js: exportsOf).
   { id: 'pasture', zone: 'lecheria', name: 'Potrero y establo', icon: '🐄', infinite: true, out: { raw_milk: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '1.2' },
   { id: 'pasteurizer', zone: 'lecheria', name: 'Pasteurizadora', icon: '🌡️', in: { raw_milk: 1 }, out: { milk: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '1.2' },
   { id: 'cheesery', zone: 'lecheria', name: 'Quesera', icon: ICON.cheese, in: { milk: 4 }, out: { cheese: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '1.2' },
   { id: 'separator', zone: 'lecheria', name: 'Descremadora', icon: ICON.cream, in: { milk: 2 }, out: { cream: 1 }, cycle: 16, unlockCost: 1000000, upgradeBase: 600, growth: 1.15, release: '1.2' },
   { id: 'churn', zone: 'lecheria', name: 'Batidora', icon: '🧈', in: { cream: 2 }, out: { butter: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '1.2' },
-  // La panela pulverizada llega del Trapiche por la ruta (ver data/routes.js): sin ella, la Paila espera.
+  // Pulverized panela arrives from Trapiche via route (see data/routes.js): without it, Paila waits.
   { id: 'arequipe_pot', zone: 'lecheria', name: 'Paila de arequipe', icon: '🍮', in: { milk: 4 }, imports: [{ product: 'panela_powder', perCycle: 1, route: 'panela' }], out: { arequipe: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '1.2' },
 
-  // Zona 4 · El Cacaotal (v1.3). La pasta de cacao se reparte entre la Mesa de chocolate y la
-  // Chocolatería (la mitad cada una a igual nivel). Las dos necesitan panela del Trapiche y la
-  // Chocolatería, además, leche pasteurizada de la Lechería (ver data/routes.js). A igual nivel en
-  // todas las zonas, la panela que piden la Paila, la Mesa y la Chocolatería es ¾ de lo que da el
-  // Trapiche, y la leche de la Chocolatería es el cuarto que la Pasteurizadora guarda para la ruta.
+  // Zone 4 · El Cacaotal (v1.3). Cacao paste splits half each between Mesa de chocolate and
+  // Chocolatería at equal level. Both need Trapiche panela and Chocolatería also needs
+  // Lechería pasteurized milk (see data/routes.js). Across equal-level zones, Paila, Mesa, and
+  // Chocolatería take ¾ of Trapiche's panela, and Chocolatería takes Pasteurizadora's reserved 1/4.
+  // reserve.
   { id: 'cacao_grove', zone: 'cacaotal', name: 'Cacaotal', icon: '🌳', infinite: true, out: { cacao_pod: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '1.3' },
   { id: 'fermenter', zone: 'cacaotal', name: 'Cajones de fermentación', icon: '📦', in: { cacao_pod: 2 }, out: { cacao_fermented: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '1.3' },
   { id: 'cacao_dryer', zone: 'cacaotal', name: 'Secadero', icon: '☀️', in: { cacao_fermented: 1 }, out: { cacao_dry: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '1.3' },
@@ -57,8 +57,8 @@ export const STATIONS = [
   { id: 'chocolate_table', zone: 'cacaotal', name: 'Mesa de chocolate', icon: '🍫', in: { cacao_paste: 2 }, imports: [{ product: 'panela_powder', perCycle: 1, route: 'panela_cacao' }], out: { table_chocolate: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '1.3' },
   { id: 'chocolatier', zone: 'cacaotal', name: 'Chocolatería', icon: ICON.milkChocolate, in: { cacao_paste: 2 }, imports: [{ product: 'panela_powder', perCycle: 1, route: 'panela_cacao' }, { product: 'milk', perCycle: 4, route: 'leche' }], out: { milk_chocolate: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '1.3' },
 
-  // Zona 5 · El Maizal (v1.4). Cadena lineal; el Puesto de arepas necesita queso y mantequilla de la
-  // Lechería: a igual nivel, todo lo que hacen la Quesera y la Batidora (ver data/routes.js).
+  // Zone 5 · El Maizal (v1.4). Linear chain; Puesto de arepas needs cheese and butter from
+  // Lechería: at equal level, all output of Quesera and Batidora (see data/routes.js).
   { id: 'cornfield', zone: 'maizal', name: 'Maizal', icon: '🌽', infinite: true, out: { corn_cob: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '1.4' },
   { id: 'sheller', zone: 'maizal', name: 'Desgranadora', icon: '⚙️', in: { corn_cob: 1 }, out: { corn_kernels: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '1.4' },
   { id: 'corn_huller', zone: 'maizal', name: 'Piladora', icon: '🪵', in: { corn_kernels: 2 }, out: { corn_hulled: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '1.4' },
@@ -66,10 +66,10 @@ export const STATIONS = [
   { id: 'budare', zone: 'maizal', name: 'Budare', icon: '🔥', in: { corn_dough: 1 }, out: { arepa: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '1.4' },
   { id: 'arepa_stand', zone: 'maizal', name: 'Puesto de arepas', icon: ICON.cheeseArepa, in: { arepa: 4 }, imports: [{ product: 'cheese', perCycle: 1, route: 'queso' }, { product: 'butter', perCycle: 1, route: 'mantequilla' }], out: { cheese_arepa: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '1.4' },
 
-  // Zona 6 · El Pueblo (v1.5). Sin fuente propia: todo llega por rutas. A igual nivel en todas las
-  // zonas, cada proveedora tiene un producto final que no se lleva nadie más (1 cada 32 s): las bolsas
-  // de café, el cuarto de panela que sobra, el arequipe, los dos chocolates y las arepas de queso. El
-  // Pueblo los gasta justo. La Casa del café reparte su café de origen entre la Greca y el Taller.
+  // Zone 6 · El Pueblo (v1.5). No native source: everything arrives by routes. At equal levels across
+  // all zones, each supplier sends an unexported final product (1 per 32 s): coffee bags,
+  // remaining quarter panela, arequipe, both chocolates, and cheese arepas. Pueblo consumes
+  // them evenly. Casa del café splits origin coffee between Greca and Taller.
   { id: 'coffee_house', zone: 'pueblo', name: 'Casa del café', icon: '🏛️', imports: [{ product: 'coffee_bag', perCycle: 1, route: 'cafe' }], out: { cafe_origen: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '1.5' },
   { id: 'greca', zone: 'pueblo', name: 'Greca de tintos', icon: '☕', in: { cafe_origen: 1 }, imports: [{ product: 'panela_powder', perCycle: 1, route: 'panela_pueblo' }], out: { tinto: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '1.5' },
   { id: 'fonda', zone: 'pueblo', name: 'Fonda', icon: ICON.breakfast, in: { tinto: 2 }, imports: [{ product: 'cheese_arepa', perCycle: 1, route: 'arepas' }], out: { breakfast: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '1.5' },
@@ -77,8 +77,8 @@ export const STATIONS = [
   { id: 'gift_wrap', zone: 'pueblo', name: 'Empaque de regalos', icon: '🎁', in: { basket: 1 }, imports: [{ product: 'table_chocolate', perCycle: 1, route: 'chocolate_mesa' }, { product: 'milk_chocolate', perCycle: 1, route: 'chocolatinas' }], out: { gift_basket: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '1.5' },
   { id: 'export_dock', zone: 'pueblo', name: 'Despacho de exportación', icon: ICON.container, in: { gift_basket: 4 }, out: { container: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '1.5' },
 
-  // Santander · La Guayabera (v3.0). La guayaba se vuelve bocadillo veleño: misma estructura y mismos
-  // números que la Finca (la región empieza de cero, con su propia economía).
+  // Santander · La Guayabera (v3.0). Guava turns into bocadillo veleño: identical layout and
+  // numbers as Finca (new region starts fresh with its own economy).
   { id: 'guava_grove', zone: 'guayabera', name: 'Guayabal', icon: ICON.guavaTree, infinite: true, out: { guava: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.0' },
   { id: 'guava_pulper', zone: 'guayabera', name: 'Despulpadora de guayaba', icon: '⚙️', in: { guava: 2 }, out: { guava_pulp: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.0' },
   { id: 'guava_pot', zone: 'guayabera', name: 'Paila de bocadillo', icon: '🔥', in: { guava_pulp: 1 }, out: { guava_jelly: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.0' },
@@ -87,9 +87,9 @@ export const STATIONS = [
   { id: 'bijao_wrapper', zone: 'guayabera', name: 'Envoltura en bijao', icon: '🍃', in: { bocadillo: 1 }, out: { bocadillo_bijao: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.0' },
   { id: 'crate_packer', zone: 'guayabera', name: 'Cajonera', icon: '📦', in: { bocadillo_bijao: 4 }, out: { bocadillo_crate: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.0' },
 
-  // Costa · El Arrozal (v3.15), en las vegas del Sinú y del Magdalena: el arroz en cáscara se seca, se
-  // descascara, se pule, se clasifica, se empaca y sale en bultos. Misma estructura y mismos números que
-  // la Finca y la Guayabera: la región empieza de cero.
+  // Coast · El Arrozal (v3.15), in Sinú & Magdalena valleys: paddy rice is dried, hulled,
+  // polished, sorted, bagged, and baled. Identical structure and numbers to Finca and Guayabera.
+  // Guayabera: region starts from zero.
   { id: 'rice_field', zone: 'arrozal', name: 'Arrozal', icon: ICON.ricePlant, infinite: true, out: { paddy: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.15' },
   { id: 'rice_dryer', zone: 'arrozal', name: 'Secadora de arroz', icon: '☀️', in: { paddy: 2 }, out: { dry_paddy: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.15' },
   { id: 'rice_huller', zone: 'arrozal', name: 'Descascaradora', icon: '⚙️', in: { dry_paddy: 1 }, out: { brown_rice: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.15' },
@@ -98,17 +98,17 @@ export const STATIONS = [
   { id: 'rice_bagger', zone: 'arrozal', name: 'Empacadora de arroz', icon: ICON.riceBag, in: { premium_rice: 1 }, out: { rice_bag: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.15' },
   { id: 'rice_stacker', zone: 'arrozal', name: 'Bultera', icon: ICON.riceSack, in: { rice_bag: 4 }, out: { rice_sack: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.15' },
 
-  // Costa · El Cocal (v3.16), en el golfo de Morrosquillo: el coco se pela, se ralla, se exprime y su
-  // leche se cocina en paila con panela hasta volverse cocada. Mismos números que el Tabacal.
+  // Coast · El Cocal (v3.16), Gulf of Morrosquillo: coconut is husked, grated, pressed, and
+  // its milk boiled with panela into cocada. Same numbers as Tabacal.
   { id: 'coconut_grove', zone: 'cocal', name: 'Cocal', icon: ICON.coconutPalm, infinite: true, out: { coconut: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.16' },
   { id: 'coconut_peeler', zone: 'cocal', name: 'Peladero de cocos', icon: ICON.peeledCoconut, in: { coconut: 1 }, out: { peeled_coconut: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.16' },
   { id: 'coconut_grater', zone: 'cocal', name: 'Ralladora', icon: ICON.gratedCoconut, in: { peeled_coconut: 2 }, out: { grated_coconut: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.16' },
   { id: 'coconut_press', zone: 'cocal', name: 'Prensa de coco', icon: ICON.coconutMilk, in: { grated_coconut: 2 }, out: { coconut_milk: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.16' },
   { id: 'cocada_kitchen', zone: 'cocal', name: 'Paila de cocadas', icon: ICON.cocada, in: { coconut_milk: 1 }, out: { cocada: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.16' },
 
-  // Costa · La Ciénaga (v3.17), en la Ciénaga Grande: los pescadores sacan el bocachico en canoa; se limpia
-  // y se reparte entre el Saladero, la Fileteadora (que le pasa los filetes a la Fritanga) y la Cocina, que
-  // lo cocina en la leche de coco que llega del Cocal. Mismos números que la Fiquera.
+  // Coast · La Ciénaga (v3.17), Ciénaga Grande: fishermen catch bocachico by canoe; cleaned
+  // and split across Saladero, Fileteadora (feeding Fritanga), and Cocina cooking with
+  // Cocal coconut milk. Same numbers as Fiquera.
   { id: 'fishing_canoes', zone: 'cienaga', name: 'Canoas de pesca', icon: ICON.canoe, infinite: true, out: { fish: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.17' },
   { id: 'fish_cleaner', zone: 'cienaga', name: 'Limpieza de pescado', icon: ICON.cleanFish, in: { fish: 1 }, out: { clean_fish: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.17' },
   { id: 'fish_salter', zone: 'cienaga', name: 'Saladero', icon: ICON.saltedFish, in: { clean_fish: 4 }, out: { salted_fish: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.17' },
@@ -116,10 +116,10 @@ export const STATIONS = [
   { id: 'fish_fryer', zone: 'cienaga', name: 'Fritanga', icon: ICON.friedFish, in: { fish_fillet: 2 }, out: { fried_fish: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.17' },
   { id: 'coconut_fish_kitchen', zone: 'cienaga', name: 'Cocina del pescado en coco', icon: ICON.fishInCoconut, in: { clean_fish: 4 }, imports: [{ product: 'coconut_milk', perCycle: 1, route: 'coco' }], out: { fish_in_coconut: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.17' },
 
-  // Costa · La Quesera (v3.18), en las sabanas de Córdoba y Sucre: la leche de las vacas cebú se cuaja, la
-  // cuajada se muele con sal y se prensa (queso costeño), y con el queso se hace el mote. El mote se reparte
-  // entre la Fonda costeña, que lo sirve con el arroz del Arrozal, y la Cocina de la bandeja, que además
-  // lleva el pescado de la Ciénaga. Mismos números que el Hato.
+  // Coast · La Quesera (v3.18), Córdoba & Sucre savannas: zebu milk curdles, mills with salt,
+  // and presses into queso costeño, then makes mote stew. Mote feeds Fonda costeña (with Arrozal rice)
+  // and Cocina de la bandeja (also taking Ciénaga fish). Same numbers as Hato.
+  // Ciénaga fish too. Same numbers as Hato.
   { id: 'milking_corral', zone: 'quesera', name: 'Corral de ordeño', icon: ICON.cebu, infinite: true, out: { ordeno_milk: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.18' },
   { id: 'curdler', zone: 'quesera', name: 'Cuajadera', icon: ICON.cuajada, in: { ordeno_milk: 2 }, out: { cuajada: 1 }, by: { suero_costeno: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.18' },
   { id: 'curd_mill', zone: 'quesera', name: 'Molino de cuajada', icon: ICON.saltedCurd, in: { cuajada: 1 }, out: { salted_curd: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.18' },
@@ -128,10 +128,10 @@ export const STATIONS = [
   { id: 'costeno_fonda', zone: 'quesera', name: 'Fonda costeña', icon: ICON.almuerzoCosteno, in: { mote_queso: 2 }, imports: [{ product: 'rice_bag', perCycle: 1, route: 'arroz' }], out: { almuerzo_costeno: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.18' },
   { id: 'bandeja_kitchen', zone: 'quesera', name: 'Cocina de la bandeja', icon: ICON.bandejaCostena, in: { mote_queso: 2 }, joins: [{ product: 'suero_costeno', perCycle: 8, from: 'curdler' }], imports: [{ product: 'rice_bag', perCycle: 1, route: 'arroz' }, { product: 'clean_fish', perCycle: 4, route: 'pescado' }], out: { bandeja_costena: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.18' },
 
-  // Costa · El Sombrero (v3.19), en Tuchín y San Andrés de Sotavento, tierra zenú: la caña flecha se raspa,
-  // la fibra se tiñe de negro con barro y bija, se trenza y la trenza se cose en vueltas hasta el sombrero
-  // vueltiao. El Parador de Tuchín lo vende con el pescado salado y el frito de la Ciénaga. Mismos números
-  // que las Hormigas (sin su cosecha de temporada: la caña flecha se corta todo el año).
+  // Coast · El Sombrero (v3.19), Tuchín & San Andrés de Sotavento: caña flecha is scraped,
+  // mud-dyed black, braided, and sewn in coils into sombrero vueltiao. Parador de Tuchín sells
+  // it with Ciénaga salted & fried fish. Same numbers as Hormigas (without seasonal harvest:
+  // caña flecha cuts year-round).
   { id: 'canaflechal', zone: 'sombrero', name: 'Cañaflechal', icon: ICON.canaFlechaPlant, infinite: true, out: { cana_flecha: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.19' },
   { id: 'fiber_scraper', zone: 'sombrero', name: 'Raspado de la caña', icon: ICON.canaFiber, in: { cana_flecha: 1 }, out: { cana_fiber: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.19' },
   { id: 'fiber_dyer', zone: 'sombrero', name: 'Tintes de barro', icon: ICON.dyedFiber, in: { cana_fiber: 2 }, out: { dyed_fiber: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.19' },
@@ -139,8 +139,8 @@ export const STATIONS = [
   { id: 'hat_sewer', zone: 'sombrero', name: 'Costura del sombrero', icon: ICON.sombreroVueltiao, in: { trenza: 1 }, out: { sombrero_vueltiao: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.19' },
   { id: 'parador', zone: 'sombrero', name: 'Parador de Tuchín', icon: ICON.recuerdoCosta, in: { sombrero_vueltiao: 4 }, imports: [{ product: 'salted_fish', perCycle: 1, route: 'salado' }, { product: 'fried_fish', perCycle: 1, route: 'frito' }], out: { recuerdo_costa: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.19' },
 
-  // Costa · Cartagena (v3.20), el final de la región: como Barichara, sin fuente propia. Cada estación recibe
-  // el producto final de una zona de la Costa; todo termina en el paseo en lancha a las Islas del Rosario.
+  // Coast · Cartagena (v3.20), region finale: like Barichara, no native source. Each station
+  // receives final output from one Coast zone; ends at boat tour to Rosario Islands.
   { id: 'fogon_getsemani', zone: 'cartagena', name: 'Fogón de Getsemaní', icon: ICON.arrozConCoco, imports: [{ product: 'rice_sack', perCycle: 1, route: 'bultos' }], out: { arroz_con_coco: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.20' },
   { id: 'restaurante_muralla', zone: 'cartagena', name: 'Restaurante de la muralla', icon: ICON.cenaMuralla, in: { arroz_con_coco: 1 }, imports: [{ product: 'cocada', perCycle: 4, route: 'cocadas' }], out: { cena_muralla: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.20' },
   { id: 'hotel_colonial', zone: 'cartagena', name: 'Hotel colonial', icon: ICON.nocheHotel, in: { cena_muralla: 2 }, imports: [{ product: 'recuerdo_costa', perCycle: 1, route: 'recuerdos_costa' }], out: { noche_hotel: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.20' },
@@ -148,9 +148,9 @@ export const STATIONS = [
   { id: 'loncheras', zone: 'cartagena', name: 'Loncheras del paseo', icon: ICON.loncheraPaseo, in: { almuerzo_bahia: 1 }, imports: [{ product: 'almuerzo_costeno', perCycle: 1, route: 'almuerzos_costenos' }, { product: 'bandeja_costena', perCycle: 1, route: 'bandejas' }], out: { lonchera_paseo: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.20' },
   { id: 'muelle', zone: 'cartagena', name: 'Muelle de las lanchas', icon: ICON.paseoIslas, in: { lonchera_paseo: 4 }, out: { paseo_islas: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.20' },
 
-  // Boyacá · El Papal (v3.22), en la tierra fría del altiplano: la papa se lava, se selecciona, se pela, se
-  // fríe (las papitas criollas), se empaca en bolsas y las bolsas en cajas. Mismos números que la Finca, la
-  // Guayabera y el Arrozal: la región empieza de cero.
+  // Boyacá · El Papal (v3.22), cool highland altiplano: potatoes are washed, graded, peeled,
+  // fried (criolla chips), bagged, and boxed. Same numbers as Finca, Guayabera, and Arrozal:
+  // region starts fresh.
   { id: 'potato_field', zone: 'papal', name: 'Papal', icon: ICON.potatoPlant, infinite: true, out: { potato: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.22' },
   { id: 'potato_washer', zone: 'papal', name: 'Lavadero de papa', icon: ICON.washedPotato, in: { potato: 2 }, out: { washed_potato: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.22' },
   { id: 'potato_grader', zone: 'papal', name: 'Seleccionadora', icon: ICON.gradedPotato, in: { washed_potato: 1 }, out: { graded_potato: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.22' },
@@ -159,18 +159,18 @@ export const STATIONS = [
   { id: 'criollas_bagger', zone: 'papal', name: 'Empacadora de papitas', icon: ICON.criollasBag, in: { criollas: 1 }, out: { criollas_bag: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.22' },
   { id: 'criollas_boxer', zone: 'papal', name: 'Cajonera', icon: ICON.criollasBox, in: { criollas_bag: 4 }, out: { criollas_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.22' },
 
-  // Boyacá · La Cervecería (v3.23), en el altiplano de Tibasosa y Duitama: la cebada se maltea, la malta se
-  // muele y se cocina en la paila (el mosto), el mosto fermenta en los tanques y la cerveza se embotella.
-  // Mismos números que el Tabacal y el Cocal.
+  // Boyacá · La Cervecería (v3.23), Tibasosa & Duitama: barley malts, mashes and boils in
+  // kettle (wort), ferments in tanks, bottles beer. Same numbers as Tabacal and Cocal.
+  // Cocal.
   { id: 'barley_field', zone: 'cerveceria', name: 'Cebadal', icon: ICON.barleyPlant, infinite: true, out: { barley: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.23' },
   { id: 'maltings', zone: 'cerveceria', name: 'Maltería', icon: ICON.malt, in: { barley: 1 }, out: { malt: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.23' },
   { id: 'brew_kettle', zone: 'cerveceria', name: 'Paila de cocción', icon: ICON.wort, in: { malt: 2 }, out: { wort: 1 }, by: { bagazo_cervecero: 8 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.23' },
   { id: 'fermenters', zone: 'cerveceria', name: 'Tanques de fermentación', icon: ICON.beer, in: { wort: 2 }, out: { beer: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.23' },
   { id: 'bottler', zone: 'cerveceria', name: 'Embotelladora', icon: ICON.beerCrate, in: { beer: 1 }, out: { beer_crate: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.23' },
 
-  // Boyacá · Ráquira (v3.24), el pueblo de los alfareros: la greda se amasa y el barro se reparte entre las
-  // Ollas de barro, el Torno (que le pasa las piezas al Horno de leña, donde salen las materas pintadas) y las
-  // Jarras, que se llenan con la cerveza que llega de la Cervecería. Mismos números que la Fiquera y la Ciénaga.
+  // Boyacá · Ráquira (v3.24), potters town: clay wedges and splits across Ollas de barro,
+  // Torno (feeding wood kiln for painted planters), and Jarras filled with Cervecería beer.
+  // Same numbers as Fiquera and Ciénaga.
   { id: 'clay_pit', zone: 'raquira', name: 'Mina de greda', icon: ICON.greda, infinite: true, out: { greda: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.24' },
   { id: 'clay_kneader', zone: 'raquira', name: 'Amasado del barro', icon: ICON.barro, in: { greda: 1 }, out: { barro: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.24' },
   { id: 'pot_maker', zone: 'raquira', name: 'Ollas de barro', icon: ICON.ollaBarro, in: { barro: 4 }, out: { olla_barro: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.24' },
@@ -178,10 +178,10 @@ export const STATIONS = [
   { id: 'pottery_kiln', zone: 'raquira', name: 'Horno de leña', icon: ICON.matera, in: { pieza_torneada: 2 }, out: { matera: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.24' },
   { id: 'jarras', zone: 'raquira', name: 'Jarras', icon: ICON.jarraCerveza, in: { barro: 4 }, imports: [{ product: 'beer', perCycle: 1, route: 'cerveza' }], out: { jarra_cerveza: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.24' },
 
-  // Boyacá · Paipa (v3.25), tierra de quesos y de amasijos: la leche se cuaja, la cuajada se prensa en moldes y
-  // madura en la cava (el queso Paipa), y con el queso se hacen almojábanas. Las almojábanas se reparten entre
-  // la Mesa del piquete, que las sirve con las papitas del Papal, y el Horno de barro, que hace la canasta de
-  // amasijos y se mantiene con el barro de Ráquira. Mismos números que el Hato y la Quesera.
+  // Boyacá · Paipa (v3.25), cheese and pastries: milk curdles, presses, and ages in cellar
+  // (Paipa cheese), then bakes almojábanas. Splits between Mesa del piquete (with Papal chips)
+  // and Horno de barro (making pastry hampers using Ráquira clay). Same numbers as Hato and Quesera.
+  // clay. Same numbers as Hato and Quesera.
   { id: 'paipa_herd', zone: 'paipa', name: 'Hato lechero', icon: ICON.rawMilk, imports: [{ product: 'bagazo_cervecero', perCycle: 5, route: 'bagazo' }], out: { paipa_milk: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.25' },
   { id: 'paipa_curdler', zone: 'paipa', name: 'Cuajadera de Paipa', icon: ICON.cuajada, in: { paipa_milk: 2 }, out: { paipa_curd: 2 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.25' },
   { id: 'cheese_molds', zone: 'paipa', name: 'Moldes de queso', icon: ICON.moldedCheese, in: { paipa_curd: 1 }, out: { molded_cheese: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.25' },
@@ -190,9 +190,9 @@ export const STATIONS = [
   { id: 'piquete_table', zone: 'paipa', name: 'Mesa del piquete', icon: ICON.piquete, in: { almojabana: 2 }, imports: [{ product: 'criollas_bag', perCycle: 1, route: 'papitas' }], out: { piquete: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.25' },
   { id: 'clay_oven', zone: 'paipa', name: 'Horno de barro', icon: ICON.amasijos, in: { almojabana: 2 }, imports: [{ product: 'criollas_bag', perCycle: 1, route: 'papitas' }, { product: 'barro', perCycle: 4, route: 'barro' }], out: { canasta_amasijos: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.25' },
 
-  // Boyacá · Las Ruanas (v3.26), en Nobsa, la tierra de las ruanas: la lana se trasquila, se lava, se carda,
-  // se hila en la rueca y se teje en el telar. La Tienda de Nobsa vende el recuerdo de Boyacá: ruanas con las
-  // ollas y las materas de Ráquira. Mismos números que las Hormigas y el Sombrero.
+  // Boyacá · Las Ruanas (v3.26), Nobsa ruana weavers: wool shears, washes, cards, spins,
+  // and weaves on loom. Tienda de Nobsa sells Boyacá souvenir: ruanas with Ráquira pots
+  // and planters. Same numbers as Hormigas and Sombrero.
   { id: 'sheep_pasture', zone: 'ruanas', name: 'Rebaño de ovejas', icon: ICON.sheep, infinite: true, out: { wool: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.26' },
   { id: 'wool_washer', zone: 'ruanas', name: 'Lavado de lana', icon: ICON.cleanWool, in: { wool: 1 }, out: { clean_wool: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.26' },
   { id: 'carder', zone: 'ruanas', name: 'Cardado', icon: ICON.cardedWool, in: { clean_wool: 2 }, out: { carded_wool: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.26' },
@@ -200,8 +200,8 @@ export const STATIONS = [
   { id: 'ruana_loom', zone: 'ruanas', name: 'Telar de ruanas', icon: ICON.ruana, in: { wool_yarn: 1 }, out: { ruana: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.26' },
   { id: 'tienda_nobsa', zone: 'ruanas', name: 'Tienda de Nobsa', icon: ICON.recuerdoBoyaca, in: { ruana: 4 }, imports: [{ product: 'olla_barro', perCycle: 1, route: 'ollas' }, { product: 'matera', perCycle: 1, route: 'materas' }], out: { recuerdo_boyaca: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.26' },
 
-  // Boyacá · Villa de Leyva (v3.27), el final de la región: como Barichara y Cartagena, sin fuente propia.
-  // Cada estación recibe el producto final de una zona de Boyacá; todo termina en la excursión al Fósil.
+  // Boyacá · Villa de Leyva (v3.27), region finale: like Barichara and Cartagena, no native source.
+  // Each station takes a Boyacá zone's final product; ends at Kronosaurus Fossil excursion.
   { id: 'tienda_esquina', zone: 'villa_leyva', name: 'Tienda de la esquina', icon: ICON.onces, imports: [{ product: 'criollas_box', perCycle: 1, route: 'cajas_papitas' }], out: { onces: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.27' },
   { id: 'terraza_plaza', zone: 'villa_leyva', name: 'Terraza de la plaza', icon: ICON.tardePlaza, in: { onces: 1 }, imports: [{ product: 'beer_crate', perCycle: 4, route: 'canastas_cerveza' }], out: { tarde_plaza: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.27' },
   { id: 'hospedaje_colonial', zone: 'villa_leyva', name: 'Hospedaje colonial', icon: ICON.nocheVilla, in: { tarde_plaza: 2 }, imports: [{ product: 'recuerdo_boyaca', perCycle: 1, route: 'recuerdos_boyaca' }], out: { noche_villa: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.27' },
@@ -209,9 +209,9 @@ export const STATIONS = [
   { id: 'canastos_paseo', zone: 'villa_leyva', name: 'Canastos del paseo', icon: ICON.fiambrePaseo, in: { canasta_mercado: 1 }, imports: [{ product: 'piquete', perCycle: 1, route: 'piquetes' }, { product: 'canasta_amasijos', perCycle: 1, route: 'amasijos' }], out: { fiambre_paseo: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.27' },
   { id: 'salida_fosil', zone: 'villa_leyva', name: 'Salida al Fósil', icon: ICON.excursionFosil, in: { fiambre_paseo: 4 }, out: { excursion_fosil: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.27' },
 
-  // Los Llanos · La Palma (v3.31), en las sabanas del Meta: los racimos de la palma de aceite se desgranan, el
-  // fruto se cocina al vapor, se prensa (el aceite crudo), se clarifica, se envasa en botellas y las botellas en
-  // cajas. Mismos números que la Finca, la Guayabera, el Arrozal y el Papal: la región empieza de cero.
+  // Llanos · La Palma (v3.31), Meta savannas: oil palm fruit bunches thresh, steam-sterilize,
+  // press (crude oil), clarify, bottle, and box. Same numbers as Finca, Guayabera, Arrozal,
+  // and Papal: region starts fresh.
   { id: 'palm_grove', zone: 'palma', name: 'Palmar', icon: ICON.oilPalm, infinite: true, out: { palm_bunch: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.31' },
   { id: 'bunch_thresher', zone: 'palma', name: 'Desgranadora', icon: ICON.palmFruit, in: { palm_bunch: 2 }, out: { palm_fruit: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.31' },
   { id: 'fruit_sterilizer', zone: 'palma', name: 'Esterilizador', icon: ICON.cookedFruit, in: { palm_fruit: 1 }, out: { cooked_fruit: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.31' },
@@ -220,18 +220,18 @@ export const STATIONS = [
   { id: 'oil_bottler', zone: 'palma', name: 'Envasadora', icon: ICON.oilBottle, in: { palm_oil: 1 }, out: { oil_bottle: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.31' },
   { id: 'oil_boxer', zone: 'palma', name: 'Cajonera de aceite', icon: ICON.oilBox, in: { oil_bottle: 4 }, out: { oil_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.31' },
 
-  // Los Llanos · El Frutal (v3.32), en las vegas del Meta: el maracuyá se despulpa, la pulpa se pasteuriza, se
-  // vuelve jugo en la mezcladora y el jugo se envasa en cajitas. Mismos números que el Tabacal, el Cocal y la
-  // Cervecería; el jugo es el que después viajará a la Cachamera, y las cajas, a Villavicencio.
+  // Llanos · El Frutal (v3.32), Meta lowlands: passionfruit pulps, pasteurizes, blends into
+  // juice, and cartons. Same numbers as Tabacal, Cocal, and Cervecería; juice flows to
+  // Cachamera, boxes to Villavicencio.
   { id: 'passion_vines', zone: 'frutal', name: 'Maracuyal', icon: ICON.passionVine, infinite: true, out: { passion_fruit: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.32' },
   { id: 'passion_pulper', zone: 'frutal', name: 'Despulpadora de maracuyá', icon: ICON.passionPulp, in: { passion_fruit: 1 }, out: { passion_pulp: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.32' },
   { id: 'pulp_pasteurizer', zone: 'frutal', name: 'Pasteurizadora de pulpa', icon: ICON.pastPulp, in: { passion_pulp: 2 }, out: { past_pulp: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.32' },
   { id: 'juice_mixer', zone: 'frutal', name: 'Mezcladora de jugos', icon: ICON.passionJuice, in: { past_pulp: 2 }, out: { passion_juice: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.32' },
   { id: 'juice_packer', zone: 'frutal', name: 'Envasadora de jugos', icon: ICON.juiceBox, in: { passion_juice: 1 }, out: { juice_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.32' },
 
-  // Los Llanos · La Cachamera (v3.33): la cachama se cría en estanques, se limpia y se reparte entre la Pisillera
-  // (el pisillo, desmechado y sofrito), la Fileteadora (que le pasa los filetes al Ahumadero) y la Cocina de la
-  // cachama, que la sirve con salsa de maracuyá con el jugo del Frutal. Mismos números que la Fiquera, la Ciénaga y Ráquira.
+  // Llanos · La Cachamera (v3.33): pond-raised cachama cleans and splits across Pisillera
+  // (flaked sautéed pisillo), Fileteadora (feeding Smokehouse), and Cocina de la cachama
+  // (passionfruit sauce from El Frutal). Same numbers as Fiquera, Ciénaga, and Ráquira.
   { id: 'fish_ponds', zone: 'cachamera', name: 'Estanques', icon: ICON.cachama, infinite: true, out: { cachama: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.33' },
   { id: 'cachama_cleaner', zone: 'cachamera', name: 'Limpieza de cachama', icon: ICON.cleanCachama, in: { cachama: 1 }, out: { clean_cachama: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.33' },
   { id: 'pisillo_kitchen', zone: 'cachamera', name: 'Pisillera', icon: ICON.pisillo, in: { clean_cachama: 4 }, out: { pisillo: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.33' },
@@ -239,10 +239,10 @@ export const STATIONS = [
   { id: 'cachama_smoker', zone: 'cachamera', name: 'Ahumadero', icon: ICON.smokedCachama, in: { cachama_fillet: 2 }, out: { smoked_cachama: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.33' },
   { id: 'cachama_kitchen', zone: 'cachamera', name: 'Cocina de la cachama', icon: ICON.cachamaMaracuya, in: { clean_cachama: 4 }, imports: [{ product: 'passion_juice', perCycle: 1, route: 'jugo' }], out: { cachama_maracuya: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.33' },
 
-  // Los Llanos · El Hato llanero (v3.34): la ternera se despresa, se adoba con sal, se asa en vara (la mamona) y se
-  // trincha: la carne a la llanera. Se reparte entre la Mesa del almuerzo llanero, que la sirve con yuca frita en
-  // el aceite de la Palma, y el Asadero de la parranda, que además asa la cachama de la Cachamera. Mismos números
-  // que el Hato, la Quesera y Paipa.
+  // Llanos · El Hato llanero (v3.34): beef butchers, salts, stake-roasts (mamona), and
+  // carves llanero style. Splits between Mesa del almuerzo (fried cassava in La Palma oil)
+  // and Asadero de la parranda (also grilling Cachamera fish). Same numbers as Hato, Quesera,
+  // and Paipa.
   { id: 'llanero_herd', zone: 'hato_llanero', name: 'Sabana del hato', icon: ICON.cebu, infinite: true, out: { llanero_steer: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.34' },
   { id: 'llanero_butcher', zone: 'hato_llanero', name: 'Desposte', icon: '🥩', in: { llanero_steer: 2 }, out: { ternera: 1 }, by: { fresh_hide: 2 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.34' },
   { id: 'adobadero', zone: 'hato_llanero', name: 'Adobadero', icon: ICON.adobada, in: { ternera: 1 }, out: { ternera_adobada: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.34' },
@@ -251,9 +251,9 @@ export const STATIONS = [
   { id: 'lunch_llanero', zone: 'hato_llanero', name: 'Mesa del almuerzo llanero', icon: ICON.almuerzoLlanero, in: { carne_llanera: 2 }, imports: [{ product: 'oil_bottle', perCycle: 1, route: 'aceite' }], out: { almuerzo_llanero: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.34' },
   { id: 'parranda_grill', zone: 'hato_llanero', name: 'Asadero de la parranda', icon: ICON.parranda, in: { carne_llanera: 2 }, imports: [{ product: 'oil_bottle', perCycle: 1, route: 'aceite' }, { product: 'clean_cachama', perCycle: 4, route: 'cachamas' }], out: { parranda_llanera: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.34' },
 
-  // Los Llanos · La Talabartería (v3.35): el cuero crudo se curte, se corta, se repuja y se vuelve silla de montar.
-  // La Tienda llanera vende el Recuerdo del Llano: sillas con el pisillo y la cachama ahumada de la Cachamera para
-  // el camino. Mismos números que las Hormigas, el Sombrero y Las Ruanas.
+  // Llanos · La Talabartería (v3.35): raw cowhide tans, cuts, tools, and becomes saddles.
+  // Tienda llanera sells Plains Souvenir: saddles plus Cachamera pisillo and smoked cachama
+  // for the trail. Same numbers as Hormigas, Sombrero, and Las Ruanas.
   { id: 'hide_yard', zone: 'talabarteria', name: 'Saladero de cueros', icon: ICON.rawHide, imports: [{ product: 'fresh_hide', perCycle: 1, route: 'cueros' }], out: { raw_hide: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.35' },
   { id: 'tannery', zone: 'talabarteria', name: 'Curtiembre', icon: ICON.leather, in: { raw_hide: 1 }, out: { tanned_leather: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.35' },
   { id: 'leather_cutter', zone: 'talabarteria', name: 'Cortadora de cuero', icon: ICON.leatherPieces, in: { tanned_leather: 2 }, out: { leather_pieces: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.35' },
@@ -261,9 +261,9 @@ export const STATIONS = [
   { id: 'saddler', zone: 'talabarteria', name: 'Taller de sillas', icon: ICON.saddle, in: { tooled_leather: 1 }, out: { silla_montar: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.35' },
   { id: 'tienda_llanera', zone: 'talabarteria', name: 'Tienda llanera', icon: ICON.recuerdoLlano, in: { silla_montar: 4 }, imports: [{ product: 'pisillo', perCycle: 1, route: 'pisillos' }, { product: 'smoked_cachama', perCycle: 1, route: 'ahumadas' }], out: { recuerdo_llano: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.35' },
 
-  // Los Llanos · Villavicencio (v3.36), la Puerta del Llano y el final de la región: como Barichara, Cartagena y
-  // Villa de Leyva, sin fuente propia. Cada estación recibe el producto final de una zona llanera; todo termina en
-  // la excursión a Caño Cristales.
+  // Llanos · Villavicencio (v3.36), Gateway to Llanos and region finale: like Barichara, Cartagena,
+  // and Villa de Leyva, no native source. Each station takes a Llanos zone's output; ends at
+  // Caño Cristales excursion.
   { id: 'empanaderia', zone: 'villavicencio', name: 'Empanadería', icon: ICON.empanadas, imports: [{ product: 'oil_box', perCycle: 1, route: 'cajas_aceite' }], out: { empanadas: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.36' },
   { id: 'kiosco_parque', zone: 'villavicencio', name: 'Kiosco del parque', icon: ICON.tardeParque, in: { empanadas: 1 }, imports: [{ product: 'juice_box', perCycle: 4, route: 'cajas_jugos' }], out: { tarde_parque: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.36' },
   { id: 'hotel_campestre', zone: 'villavicencio', name: 'Hotel campestre', icon: ICON.nocheVillavo, in: { tarde_parque: 2 }, imports: [{ product: 'recuerdo_llano', perCycle: 1, route: 'recuerdos_llano' }, { product: 'palmiste', perCycle: 8, route: 'palmiste' }], out: { noche_villavo: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.36' },
@@ -271,9 +271,9 @@ export const STATIONS = [
   { id: 'morrales_viaje', zone: 'villavicencio', name: 'Morrales del viaje', icon: ICON.fiambreViaje, in: { almuerzo_plaza: 1 }, imports: [{ product: 'almuerzo_llanero', perCycle: 1, route: 'almuerzos_llaneros' }, { product: 'parranda_llanera', perCycle: 1, route: 'parrandas' }], out: { fiambre_viaje: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.36' },
   { id: 'salida_cano', zone: 'villavicencio', name: 'Salida a Caño Cristales', icon: ICON.canoCristales, in: { fiambre_viaje: 4 }, out: { excursion_cano: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.36' },
 
-  // Costa Pacífica · El Platanal (v3.38), en las vegas del Atrato: los racimos de plátano se desmanan, las manos se
-  // lavan en el tanque, se pelan, se fríen en patacones y los patacones se empacan en bolsas y las bolsas en
-  // cajas. Mismos números que la Finca, la Guayabera, el Arrozal, el Papal y la Palma: la región empieza de cero.
+  // Pacific Coast · El Platanal (v3.38), Atrato riverbanks: plantain bunches debunch, wash,
+  // peel, fry into patacones, bag, and box. Same numbers as Finca, Guayabera, Arrozal,
+  // Papal, and La Palma: region starts fresh.
   { id: 'plantain_grove', zone: 'platanal', name: 'Platanal', icon: ICON.plantainPlant, infinite: true, out: { plantain_bunch: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.38' },
   { id: 'plantain_dehander', zone: 'platanal', name: 'Desmanadora', icon: ICON.plantainHand, in: { plantain_bunch: 2 }, out: { plantain_hand: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.38' },
   { id: 'plantain_washer', zone: 'platanal', name: 'Tanque de lavado', icon: ICON.washedPlantain, in: { plantain_hand: 1 }, out: { washed_plantain: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.38' },
@@ -282,18 +282,18 @@ export const STATIONS = [
   { id: 'patacon_bagger', zone: 'platanal', name: 'Empacadora', icon: ICON.pataconBag, in: { patacon: 1 }, out: { patacon_bag: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.38' },
   { id: 'patacon_boxer', zone: 'platanal', name: 'Cajonera de patacones', icon: ICON.pataconBox, in: { patacon_bag: 4 }, out: { patacon_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.38' },
 
-  // Costa Pacífica · La Azotea (v3.39): las hierbas de las azoteas (huertas alzadas sobre pilotes) se lavan, se machacan
-  // en el pilón con ajo y cebolla, se sofríen en el refrito y el aliño se envasa en frascos. Mismos números que el
-  // Tabacal, el Cocal, la Cervecería y el Frutal; el aliño es el que después viajará a la Bahía, y las cajas, a Quibdó.
+  // Pacific Coast · La Azotea (v3.39): raised-canoe azotea herbs wash, pound in mortar
+  // with garlic & onion, sauté into sofrito, and jar. Same numbers as Tabacal, Cocal,
+  // Cervecería, and Frutal; seasoning travels to Bahía, boxes to Buenaventura.
   { id: 'azotea_beds', zone: 'azotea', name: 'Azoteas', icon: ICON.azotea, infinite: true, out: { herbs: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.39' },
   { id: 'herb_washer', zone: 'azotea', name: 'Lavadero de hierbas', icon: ICON.washedHerbs, in: { herbs: 1 }, out: { washed_herbs: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.39' },
   { id: 'herb_pestle', zone: 'azotea', name: 'Pilón', icon: ICON.poundedHerbs, in: { washed_herbs: 2 }, out: { pounded_herbs: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.39' },
   { id: 'refrito_pot', zone: 'azotea', name: 'Olla del refrito', icon: ICON.alino, in: { pounded_herbs: 2 }, out: { alino: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.39' },
   { id: 'alino_packer', zone: 'azotea', name: 'Envasadora de aliño', icon: ICON.alinoBox, in: { alino: 1 }, out: { alino_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.39' },
 
-  // Costa Pacífica · La Bahía (v3.40): el pargo rojo se pesca en lancha, se limpia en la playa y se reparte entre el
-  // Secadero (el pescado seco, salado y tendido al sol), la Fileteadora (que le pasa los filetes al Ahumadero) y la
-  // Cocina del tapao, que lo cocina con plátano y el aliño de la Azotea. Mismos números que la Fiquera, la Ciénaga, Ráquira y la Cachamera.
+  // Pacific Coast · La Bahía (v3.40): red snapper is boat-caught, cleaned on shore, split
+  // to Drying racks (dried fish), Filleter (feeding Smokehouse), and Tapao kitchen cooking
+  // with plantain & Azotea seasoning. Same numbers as Fiquera, Ciénaga, Ráquira, Cachamera.
   { id: 'pargo_boats', zone: 'bahia', name: 'Lanchas de pesca', icon: ICON.pargo, infinite: true, out: { pargo: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.40' },
   { id: 'pargo_cleaner', zone: 'bahia', name: 'Limpieza de pargo', icon: ICON.cleanPargo, in: { pargo: 1 }, out: { clean_pargo: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.40' },
   { id: 'fish_drier', zone: 'bahia', name: 'Secadero', icon: ICON.driedFish, in: { clean_pargo: 4 }, out: { dried_fish: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.40' },
@@ -301,10 +301,10 @@ export const STATIONS = [
   { id: 'pargo_smoker', zone: 'bahia', name: 'Ahumadero de pargo', icon: ICON.smokedPargo, in: { pargo_fillet: 2 }, out: { smoked_pargo: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.40' },
   { id: 'tapao_kitchen', zone: 'bahia', name: 'Cocina del tapao', icon: ICON.tapao, in: { clean_pargo: 4 }, imports: [{ product: 'alino', perCycle: 1, route: 'alino' }], out: { tapao: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.40' },
 
-  // Costa Pacífica · El Manglar (v3.41): las piangüeras sacan la piangua del barro del manglar; se lava, se cocina,
-  // se desconcha y se encoca en leche de coco. La piangua encocada se reparte entre la Mesa del arroz con piangua, que
-  // la sirve con los patacones del Platanal, y la Cocina de la cazuela, que además lleva el pargo de la Bahía. Mismos
-  // números que el Hato, la Quesera, Paipa y el Hato llanero.
+  // Pacific Coast · El Manglar (v3.41): piangüeras dig cockles from mangrove mud; wash, boil,
+  // shuck, and simmer in coconut milk. Splits between rice-and-piangua diner (with Platanal
+  // patacones) and Casserole kitchen (adding Bahía snapper). Same numbers as Hato, Quesera,
+  // Paipa, and Hato llanero.
   { id: 'mangrove_flats', zone: 'manglar', name: 'Manglar', icon: ICON.mangrove, infinite: true, out: { piangua: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.41' },
   { id: 'piangua_washer', zone: 'manglar', name: 'Lavadero de piangua', icon: ICON.piangua, in: { piangua: 2 }, out: { washed_piangua: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.41' },
   { id: 'piangua_cooker', zone: 'manglar', name: 'Olla de la piangua', icon: ICON.cookedPiangua, in: { washed_piangua: 1 }, out: { cooked_piangua: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.41' },
@@ -313,10 +313,10 @@ export const STATIONS = [
   { id: 'piangua_lunch', zone: 'manglar', name: 'Mesa del arroz con piangua', icon: ICON.arrozPiangua, in: { encocado: 2 }, imports: [{ product: 'patacon_bag', perCycle: 1, route: 'patacones' }], out: { arroz_piangua: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.41' },
   { id: 'cazuela_kitchen', zone: 'manglar', name: 'Cocina de la cazuela', icon: ICON.cazuela, in: { encocado: 2 }, imports: [{ product: 'patacon_bag', perCycle: 1, route: 'patacones' }, { product: 'clean_pargo', perCycle: 4, route: 'pargos' }], out: { cazuela_mariscos: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.41' },
 
-  // Costa Pacífica · El Werregue (v3.42): el cogollo de la palma de werregue se desfibra, la fibra se tiñe con jagua
-  // y achiote, se tuerce en hebra y las tejedoras wounaan la vuelven jarrón. La Tienda de artesanías vende el Recuerdo
-  // del Pacífico: jarrones con el pescado seco y el pargo ahumado de la Bahía para el camino. Mismos números que las
-  // Hormigas, el Sombrero, Las Ruanas y la Talabartería.
+  // Pacific Coast · El Werregue (v3.42): werregue palm shoots strip to fiber, dye with jagua
+  // and achiote, twist into cord, and weave into Wounaan vases. Craft shop sells Pacific
+  // Souvenir: vases with Bahía dried & smoked fish. Same numbers as Hormigas, Sombrero,
+  // Las Ruanas, and Talabartería.
   { id: 'werregue_palms', zone: 'werregue', name: 'Palmar de werregue', icon: ICON.werreguePalm, infinite: true, out: { werregue_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.42' },
   { id: 'werregue_stripper', zone: 'werregue', name: 'Desfibradora de werregue', icon: ICON.werregueFiber, in: { werregue_leaf: 1 }, out: { werregue_fiber: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.42' },
   { id: 'werregue_dyer', zone: 'werregue', name: 'Tintorería', icon: ICON.dyedWerregue, in: { werregue_fiber: 2 }, out: { dyed_werregue: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.42' },
@@ -324,9 +324,9 @@ export const STATIONS = [
   { id: 'werregue_weaver', zone: 'werregue', name: 'Tejedoras', icon: ICON.werregueJar, in: { werregue_thread: 1 }, out: { werregue_jar: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.42' },
   { id: 'tienda_pacifico', zone: 'werregue', name: 'Tienda de artesanías', icon: ICON.recuerdoPacifico, in: { werregue_jar: 4 }, imports: [{ product: 'dried_fish', perCycle: 1, route: 'secos' }, { product: 'smoked_pargo', perCycle: 1, route: 'pargos_ahumados' }], out: { recuerdo_pacifico: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.42' },
 
-  // Costa Pacífica · Buenaventura (v3.43), el puerto y el final de la región: como Barichara, Cartagena, Villa de
-  // Leyva y Villavicencio, sin fuente propia. Cada estación recibe el producto final de una zona del Pacífico; todo
-  // termina en las salidas a ver las ballenas.
+  // Pacific Coast · Buenaventura (v3.43), port finale: like Barichara, Cartagena, Villa de
+  // Leyva, and Villavicencio, no native source. Takes each Pacific zone's final product;
+  // ends at whale-watching excursions.
   { id: 'fritanga_puerto', zone: 'buenaventura', name: 'Fritanga del puerto', icon: ICON.marranitas, imports: [{ product: 'patacon_box', perCycle: 1, route: 'cajas_patacones' }], out: { marranitas: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.43' },
   { id: 'cevicheria', zone: 'buenaventura', name: 'Cevichería del malecón', icon: ICON.ceviche, in: { marranitas: 1 }, imports: [{ product: 'alino_box', perCycle: 4, route: 'cajas_alino' }], out: { ceviche: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.43' },
   { id: 'hotel_bahia', zone: 'buenaventura', name: 'Hotel de la bahía', icon: ICON.nocheBuenaventura, in: { ceviche: 2 }, imports: [{ product: 'recuerdo_pacifico', perCycle: 1, route: 'recuerdos_pacifico' }], out: { noche_buenaventura: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.43' },
@@ -334,9 +334,9 @@ export const STATIONS = [
   { id: 'loncheras_lancha', zone: 'buenaventura', name: 'Loncheras de la lancha', icon: ICON.loncheraLancha, in: { almuerzo_galeria: 1 }, imports: [{ product: 'arroz_piangua', perCycle: 1, route: 'arroces_piangua' }, { product: 'cazuela_mariscos', perCycle: 1, route: 'cazuelas_mariscos' }], out: { lonchera_lancha: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.43' },
   { id: 'salida_ballenas', zone: 'buenaventura', name: 'Salida a las ballenas', icon: ICON.ballenas, in: { lonchera_lancha: 4 }, out: { excursion_ballenas: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.43' },
 
-  // Amazonas · El Asaizal (v3.47), a la orilla del río: los racimos de asaí se desgranan, el fruto se remoja en
-  // agua tibia, se despulpa, se bate y el asaí se empaca en bolsas congeladas y las bolsas en cajas. Mismos
-  // números que la primera zona de cada región: el Amazonas empieza de cero.
+  // Amazon · El Asaizal (v3.47), riverside: açaí bunches thresh, warm-soak, pulp, whip,
+  // freeze-bag, and box. Same numbers as every first regional zone: Amazon starts fresh.
+  // Amazon stars fresh.
   { id: 'asai_grove', zone: 'asaizal', name: 'Asaizal', icon: ICON.asaiPalm, infinite: true, out: { asai_bunch: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '3.47' },
   { id: 'asai_thresher', zone: 'asaizal', name: 'Desgranadora', icon: ICON.asaiFruit, in: { asai_bunch: 2 }, out: { asai_fruit: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '3.47' },
   { id: 'asai_soaker', zone: 'asaizal', name: 'Tanque de remojo', icon: ICON.soakedAsai, in: { asai_fruit: 1 }, out: { soaked_asai: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '3.47' },
@@ -345,18 +345,18 @@ export const STATIONS = [
   { id: 'asai_bagger', zone: 'asaizal', name: 'Empacadora de asaí', icon: ICON.asaiBag, in: { asai_shake: 1 }, out: { asai_bag: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '3.47' },
   { id: 'asai_boxer', zone: 'asaizal', name: 'Cajonera de asaí', icon: ICON.asaiBox, in: { asai_bag: 4 }, out: { asai_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '3.47' },
 
-  // Amazonas · El Ajizal (v3.48): el ají de la chagra se lava, se muele y se cocina en el tucupí (el jugo de la
-  // yuca brava) hasta volverse ají negro, que se envasa en frascos. Mismos números que el Tabacal, el Cocal, la
-  // Cervecería, el Frutal y la Azotea; el ají negro es el que después viajará al Lago, y las cajas, a Leticia.
+  // Amazon · El Ajizal (v3.48): chagra chili washes, mills, and simmers days in cassava juice
+  // (tucupí) into black chili sauce, then jars. Same numbers as Tabacal, Cocal, Cervecería,
+  // Frutal, and Azotea; black chili travels to Lago, boxes to Leticia.
   { id: 'aji_field', zone: 'ajizal', name: 'Ajizal', icon: ICON.ajiPlant, infinite: true, out: { aji: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.48' },
   { id: 'aji_washer', zone: 'ajizal', name: 'Lavadero de ají', icon: ICON.ajiPeppers, in: { aji: 1 }, out: { washed_aji: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.48' },
   { id: 'aji_grinder', zone: 'ajizal', name: 'Molino de ají', icon: ICON.groundAji, in: { washed_aji: 2 }, out: { ground_aji: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.48' },
   { id: 'tucupi_pot', zone: 'ajizal', name: 'Olla del tucupí', icon: ICON.ajiNegro, in: { ground_aji: 2 }, out: { aji_negro: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.48' },
   { id: 'aji_packer', zone: 'ajizal', name: 'Envasadora de ají negro', icon: ICON.ajiBox, in: { aji_negro: 1 }, out: { aji_box: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.48' },
 
-  // Amazonas · El Lago (v3.49): el pirarucú se pesca en canoa en los lagos de Tarapoto, se limpia y se reparte entre
-  // el Saladero (el pirarucú salado y seco al sol), la Fileteadora (que le pasa las postas al Moquén, la parrilla de
-  // palos donde se ahúma) y la Cocina, que lo sirve con el ají negro del Ajizal. Mismos números que la Bahía.
+  // Amazon · El Lago (v3.49): pirarucu caught by canoe in Tarapoto lakes, cleaned, split
+  // across Salting racks (sun-dried), Filleter (feeding Moquén smoker grill), and Kitchen
+  // serving with Ajizal black chili. Same numbers as Bahía.
   { id: 'pirarucu_canoes', zone: 'lago', name: 'Canoas del lago', icon: ICON.pirarucu, infinite: true, out: { pirarucu: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.49' },
   { id: 'pirarucu_cleaner', zone: 'lago', name: 'Limpieza de pirarucú', icon: ICON.cleanPirarucu, in: { pirarucu: 1 }, out: { clean_pirarucu: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.49' },
   { id: 'pirarucu_salter', zone: 'lago', name: 'Saladero de pirarucú', icon: ICON.saltedPirarucu, in: { clean_pirarucu: 4 }, out: { salted_pirarucu: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.49' },
@@ -364,9 +364,9 @@ export const STATIONS = [
   { id: 'moquen', zone: 'lago', name: 'Moquén', icon: ICON.moqueado, in: { pirarucu_fillet: 2 }, out: { moqueado: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.49' },
   { id: 'pirarucu_kitchen', zone: 'lago', name: 'Cocina del pirarucú', icon: ICON.pirarucuAji, in: { clean_pirarucu: 4 }, imports: [{ product: 'aji_negro', perCycle: 1, route: 'ajinegro' }], out: { pirarucu_aji: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.49' },
 
-  // Amazonas · La Casabería (v3.50): la yuca brava de la chagra se pela, se ralla, se exprime en el tipití (para
-  // sacarle el jugo venenoso, que se vuelve tucupí) y se asa en el budare: es el casabe. Con el asaí del Asaizal
-  // se sirve el desayuno amazónico, y con el pirarucú del Lago, el banquete de la maloca. Mismos números que el Manglar.
+  // Amazon · La Casabería (v3.50): bitter cassava peels, grates, squeezes in tipití (poisonous
+  // juice boils into tucupí), and bakes on budare into casabe. With Asaizal açaí serves
+  // Amazon breakfast; with Lago pirarucu, Maloca feast. Same numbers as Manglar.
   { id: 'yuca_chagra', zone: 'casaberia', name: 'Chagra de yuca', icon: ICON.yucaPlant, infinite: true, out: { yuca_brava: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.50' },
   { id: 'yuca_peeler', zone: 'casaberia', name: 'Peladora de yuca', icon: ICON.yucaBrava, in: { yuca_brava: 2 }, out: { peeled_yuca: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.50' },
   { id: 'yuca_grater', zone: 'casaberia', name: 'Rallador de yuca', icon: ICON.peeledYuca, in: { peeled_yuca: 1 }, out: { grated_yuca: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.50' },
@@ -375,9 +375,9 @@ export const STATIONS = [
   { id: 'desayuno_table', zone: 'casaberia', name: 'Mesa del desayuno', icon: ICON.desayunoAmazonico, in: { casabe: 2 }, imports: [{ product: 'asai_bag', perCycle: 1, route: 'bolsas_asai' }], out: { desayuno_amazonico: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.50' },
   { id: 'maloca', zone: 'casaberia', name: 'Maloca', icon: ICON.banqueteMaloca, in: { casabe: 2 }, imports: [{ product: 'asai_bag', perCycle: 1, route: 'bolsas_asai' }, { product: 'clean_pirarucu', perCycle: 4, route: 'pirarucus' }], out: { banquete_maloca: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.50' },
 
-  // Amazonas · La Yanchama (v3.51): los ticuna sacan la corteza del árbol de yanchama, la remojan en el río, la
-  // golpean con el mazo hasta volverla tela, la pintan con tintes de la selva y tallan las máscaras del ritual de la
-  // Pelazón. La Tienda las vende con el pirarucú salado y moqueado del Lago. Mismos números que el Werregue.
+  // Amazon · La Yanchama (v3.51): Ticuna harvest yanchama tree bark, river-soak, beat into
+  // bark cloth, paint with forest dyes, and craft Pelazón ritual masks. Sold with Lago
+  // salted and smoked pirarucu. Same numbers as Werregue.
   { id: 'yanchama_trees', zone: 'yanchama', name: 'Árboles de yanchama', icon: ICON.yanchamaTree, infinite: true, out: { yanchama_bark: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.51' },
   { id: 'bark_soaker', zone: 'yanchama', name: 'Remojo de corteza', icon: ICON.yanchamaBark, in: { yanchama_bark: 1 }, out: { soaked_bark: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.51' },
   { id: 'bark_beater', zone: 'yanchama', name: 'Golpeadero', icon: ICON.barkCloth, in: { soaked_bark: 2 }, out: { bark_cloth: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.51' },
@@ -385,10 +385,10 @@ export const STATIONS = [
   { id: 'mask_maker', zone: 'yanchama', name: 'Taller de máscaras', icon: ICON.ticunaMask, in: { painted_cloth: 1 }, out: { ticuna_mask: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.51' },
   { id: 'tienda_yanchama', zone: 'yanchama', name: 'Tienda de la Yanchama', icon: ICON.recuerdoAmazonas, in: { ticuna_mask: 4 }, imports: [{ product: 'salted_pirarucu', perCycle: 1, route: 'pirarucus_salados' }, { product: 'moqueado', perCycle: 1, route: 'moqueados' }], out: { recuerdo_amazonas: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.51' },
 
-  // Amazonas · Leticia (v3.52): el puerto de la triple frontera, donde todo termina. La Heladería de asaí recibe
-  // las cajas del Asaizal; el Restaurante de la ribera, el ají negro del Ajizal; el Hotel de la selva, los
-  // recuerdos de la Yanchama; el Mercado del puerto, el pirarucú al ají negro del Lago, y las Provisiones de la
-  // canoa, el desayuno y el banquete de la Casabería. Mismos números que Buenaventura.
+  // Amazon · Leticia (v3.52): triple-border port finale. Açaí shop gets Asaizal boxes;
+  // riverside diner, Ajizal black chili; jungle hotel, Yanchama souvenirs; port market,
+  // Lago black-chili pirarucu; canoe provisions, Casabería breakfast & feast. Same as Buenaventura.
+  // same as Buenaventura.
   { id: 'heladeria_asai', zone: 'leticia', name: 'Heladería de asaí', icon: ICON.heladoAsai, imports: [{ product: 'asai_box', perCycle: 1, route: 'cajas_asai' }], out: { helado_asai: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.52' },
   { id: 'restaurante_ribera', zone: 'leticia', name: 'Restaurante de la ribera', icon: ICON.cenaRibera, in: { helado_asai: 1 }, imports: [{ product: 'aji_box', perCycle: 4, route: 'cajas_aji' }], out: { cena_ribera: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.52' },
   { id: 'hotel_selva', zone: 'leticia', name: 'Hotel de la selva', icon: ICON.nocheLeticia, in: { cena_ribera: 2 }, imports: [{ product: 'recuerdo_amazonas', perCycle: 1, route: 'recuerdos_amazonas' }], out: { noche_leticia: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.52' },
@@ -396,10 +396,10 @@ export const STATIONS = [
   { id: 'provisiones_canoa', zone: 'leticia', name: 'Provisiones de la canoa', icon: ICON.provisionCanoa, in: { almuerzo_mercado: 1 }, imports: [{ product: 'desayuno_amazonico', perCycle: 1, route: 'desayunos_amazonicos' }, { product: 'banquete_maloca', perCycle: 1, route: 'banquetes_maloca' }], out: { provision_canoa: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.52' },
   { id: 'salida_delfines', zone: 'leticia', name: 'Salida a los delfines', icon: ICON.delfines, in: { provision_canoa: 4 }, out: { excursion_delfines: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.52' },
 
-  // Tolima Grande (v4.0), la octava región: se abre al completar Leticia. Mismos números que el Amazonas, con
-  // las dos mecánicas de la v4.0: en el Café del Huila el Beneficiadero saca también la cáscara (que el Secadero
-  // vuelve té); en la Lechonería el Desposte saca carne y cuero, y el Horno de leña los junta en la lechona.
-  // Los Achirales (sur del Tolima: Natagaima y Coyaima): del rizoma de achira a los bizcochos.
+  // Tolima Grande (v4.0), eighth region: opens after Leticia. Same numbers as Amazon, with
+  // v4.0's twin mechanics: Café del Huila Beneficiadero also outputs cascara (husk dryer makes tea);
+  // Lechonería Butchery outputs meat and skin, combined by Wood oven into lechona.
+  // Los Achirales (southern Tolima: Natagaima & Coyaima): from achira rhizome to bizcochos.
   { id: 'achiral', zone: 'achirales', name: 'Achiral', icon: ICON.achiraPlant, infinite: true, out: { achira_root: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '4.0' },
   { id: 'achira_grater', zone: 'achirales', name: 'Rallador de achira', icon: ICON.achiraMash, in: { achira_root: 2 }, out: { achira_mash: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '4.0' },
   { id: 'starch_tanks', zone: 'achirales', name: 'Tanques de asiento', icon: ICON.wetStarch, in: { achira_mash: 1 }, out: { wet_starch: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '4.0' },
@@ -408,8 +408,8 @@ export const STATIONS = [
   { id: 'bizcocho_oven', zone: 'achirales', name: 'Horno de bizcochos', icon: ICON.bizcochos, in: { bizcocho_dough: 1 }, out: { bizcochos: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '4.0' },
   { id: 'bizcocho_packer', zone: 'achirales', name: 'Empacadora de bizcochos', icon: ICON.bizcochoBox, in: { bizcochos: 4 }, out: { bizcocho_box: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '4.0' },
 
-  // El Café del Huila (Pitalito): el Beneficiadero saca el café pergamino y la cáscara de la cereza (la
-  // cascarilla), que pasa por la canaleta al Secadero de cáscara y sale como té hacia Neiva.
+  // Café del Huila (Pitalito): Beneficiadero outputs parchment coffee plus cherry cascara,
+  // sent via chute to Cascara dryer making tea for Neiva.
   { id: 'cafetal_huila', zone: 'cafe_huila', name: 'Cafetal de montaña', icon: ICON.cherry, infinite: true, out: { huila_cherry: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '4.0' },
   { id: 'huila_wetmill', zone: 'cafe_huila', name: 'Beneficiadero del Huila', icon: ICON.parchment, in: { huila_cherry: 1 }, out: { huila_parchment: 1 }, by: { cascara: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '4.0' },
   { id: 'huila_huller', zone: 'cafe_huila', name: 'Trilladora', icon: ICON.cafeExcelso, in: { huila_parchment: 2 }, out: { cafe_excelso: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '4.0' },
@@ -417,8 +417,8 @@ export const STATIONS = [
   { id: 'huila_packer', zone: 'cafe_huila', name: 'Empacadora de café especial', icon: ICON.cafeEspecial, in: { huila_roasted: 1 }, out: { cafe_especial: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '4.0' },
   { id: 'cascara_dryer', zone: 'cafe_huila', name: 'Secadero de cáscara', icon: ICON.teCascara, in: { cascara: 4 }, out: { te_cascara: 1 }, cycle: 6.4, unlockCost: 400000, upgradeBase: 500, growth: 1.15, release: '4.0' },
 
-  // La Represa de Betania: la tilapia de las jaulas se reparte entre el Ahumadero, la Fileteadora (que le pasa los
-  // filetes a la Olla del escabeche) y la Cocina de la represa (tilapia frita con patacón).
+  // Betania Dam: cage tilapia splits across Smokehouse, Filleter (feeding Escabeche pot),
+  // and Reservoir kitchen (fried tilapia with patacón).
   { id: 'tilapia_cages', zone: 'betania', name: 'Jaulas de tilapia', icon: ICON.tilapia, infinite: true, out: { tilapia: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '4.0' },
   { id: 'tilapia_cleaner', zone: 'betania', name: 'Limpieza de tilapia', icon: ICON.cleanTilapia, in: { tilapia: 1 }, out: { clean_tilapia: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '4.0' },
   { id: 'tilapia_smoker', zone: 'betania', name: 'Ahumadero', icon: ICON.tilapiaAhumada, in: { clean_tilapia: 8 }, out: { tilapia_ahumada: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '4.0' },
@@ -426,9 +426,9 @@ export const STATIONS = [
   { id: 'escabeche_pot', zone: 'betania', name: 'Olla del escabeche', icon: ICON.escabeche, in: { tilapia_fillet: 2 }, out: { escabeche: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '4.0' },
   { id: 'represa_kitchen', zone: 'betania', name: 'Cocina de la represa', icon: ICON.almuerzoRepresa, in: { clean_tilapia: 4 }, out: { almuerzo_represa: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '4.0' },
 
-  // La Lechonería (Ibagué): el Desposte saca la carne y el cuero. La carne se reparte entre la Paila del relleno y el
-  // Fogón del tamal; el cuero pasa por la canaleta a la Limpieza del cuero, y el Horno de leña junta el relleno con
-  // el cuero limpio en la lechona. La Mesa del desayuno sirve el tamal con bizcochos de achira y café del Huila.
+  // Lechonería (Ibagué): Butchery outputs meat & skin. Meat feeds Filling cauldron & Tamal
+  // hearth; skin runs via chute to Skin cleaning, and Wood oven combines filling + clean skin
+  // into lechona. Breakfast porch serves tamal with achira bizcochos & Huila coffee.
   { id: 'pigsty', zone: 'lechoneria', name: 'Chiquero', icon: ICON.cerdo, infinite: true, out: { cerdo: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '4.0' },
   { id: 'pork_butcher', zone: 'lechoneria', name: 'Desposte de cerdo', icon: ICON.carneCerdo, in: { cerdo: 2 }, out: { carne_cerdo: 1 }, by: { cuero_cerdo: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '4.0' },
   { id: 'skin_cleaner', zone: 'lechoneria', name: 'Limpieza del cuero', icon: ICON.cueroLimpio, in: { cuero_cerdo: 2 }, out: { cuero_limpio: 1 }, cycle: 8, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '4.0' },
@@ -437,8 +437,8 @@ export const STATIONS = [
   { id: 'lechona_oven', zone: 'lechoneria', name: 'Horno de leña', icon: ICON.lechona, in: { relleno: 4 }, joins: [{ product: 'cuero_limpio', perCycle: 4, from: 'skin_cleaner' }], out: { lechona: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '4.0' },
   { id: 'desayuno_tolimense_table', zone: 'lechoneria', name: 'Mesa del desayuno tolimense', icon: ICON.desayunoTolimense, in: { tamal: 4 }, imports: [{ product: 'bizcochos', perCycle: 2, route: 'bizcochos' }, { product: 'huila_roasted', perCycle: 1, route: 'tinto' }], out: { desayuno_tolimense: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '4.0' },
 
-  // La Chamba (El Guamo): la loza negra. El barro se pisa, se modela a mano, se bruñe con piedras y se quema con
-  // boñiga para que salga negro. La tienda la vende con la tilapia ahumada y el escabeche de Betania.
+  // La Chamba (El Guamo): black clay pottery. Clay is trodden, hand-molded, burnished with
+  // river stones, and dung-smoked jet black. Shop sells it with Betania smoked tilapia & escabeche.
   { id: 'clay_bank', zone: 'chamba', name: 'Barranco de arcilla', icon: ICON.arcilla, infinite: true, out: { arcilla: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '4.0' },
   { id: 'clay_treader', zone: 'chamba', name: 'Pisadero de barro', icon: ICON.barroPisado, in: { arcilla: 1 }, out: { barro_pisado: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '4.0' },
   { id: 'pot_modelers', zone: 'chamba', name: 'Moldeadoras', icon: ICON.piezaCruda, in: { barro_pisado: 2 }, out: { pieza_cruda: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '4.0' },
@@ -446,9 +446,9 @@ export const STATIONS = [
   { id: 'black_kiln', zone: 'chamba', name: 'Horno de quema', icon: ICON.lozaNegra, in: { pieza_brunida: 1 }, out: { loza_negra: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '4.0' },
   { id: 'tienda_chamba', zone: 'chamba', name: 'Tienda de La Chamba', icon: ICON.recuerdoTolima, in: { loza_negra: 4 }, imports: [{ product: 'tilapia_ahumada', perCycle: 1, route: 'ahumadas_tilapia' }, { product: 'escabeche', perCycle: 1, route: 'escabeches' }], out: { recuerdo_tolima: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '4.0' },
 
-  // Neiva, la última del Tolima Grande: como Leticia, sin fuente propia. Cada estación recibe lo suyo de una zona
-  // de la región; en el Hotel del San Pedro se juntan los recuerdos de La Chamba y el té de cáscara del Huila, y
-  // todo termina en la salida a ver las estrellas en el desierto de la Tatacoa.
+  // Neiva, Tolima Grande finale: like Leticia, no native source. Each station receives a zone's
+  // goods; San Pedro hotel combines La Chamba souvenirs with Huila cascara tea, ending at
+  // Tatacoa Desert stargazing.
   { id: 'cafeteria_malecon', zone: 'neiva', name: 'Cafetería del malecón', icon: ICON.meriendaMalecon, imports: [{ product: 'bizcocho_box', perCycle: 1, route: 'cajas_bizcochos' }], out: { merienda_malecon: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '4.0' },
   { id: 'restaurante_rio', zone: 'neiva', name: 'Restaurante del río', icon: ICON.cenaOpita, in: { merienda_malecon: 1 }, imports: [{ product: 'cafe_especial', perCycle: 4, route: 'cafe_especial' }], out: { cena_opita: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '4.0' },
   { id: 'hotel_sanpedro', zone: 'neiva', name: 'Hotel del San Pedro', icon: ICON.nocheSanpedro, in: { cena_opita: 2 }, imports: [{ product: 'recuerdo_tolima', perCycle: 1, route: 'recuerdos_tolima' }, { product: 'te_cascara', perCycle: 5, route: 'te_cascara' }], out: { noche_sanpedro: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '4.0' },
@@ -456,8 +456,8 @@ export const STATIONS = [
   { id: 'fiambrera_tatacoa', zone: 'neiva', name: 'Fiambrera del paseo', icon: ICON.fiambreTatacoa, in: { almuerzo_opita: 1 }, imports: [{ product: 'desayuno_tolimense', perCycle: 1, route: 'desayunos_tolimenses' }, { product: 'lechona', perCycle: 1, route: 'lechonas' }], out: { fiambre_tatacoa: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '4.0' },
   { id: 'salida_tatacoa', zone: 'neiva', name: 'Salida a la Tatacoa', icon: ICON.tatacoa, in: { fiambre_tatacoa: 4 }, out: { excursion_tatacoa: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '4.0' },
 
-  // Cundinamarca (v4.4), la novena región: se abre al completar Neiva. Mismos números que el Tolima Grande.
-  // Las Flores de la Sabana (Madrid y Facatativá): la rosa de exportación, del invernadero a la caja que se va en avión.
+  // Cundinamarca (v4.4), ninth region: opens after Neiva. Same numbers as Tolima Grande.
+  // Flores de la Sabana (Madrid & Facatativá): export roses, greenhouse to air-cargo box.
   { id: 'invernadero_rosas', zone: 'flores', name: 'Invernadero de rosas', icon: ICON.rosal, infinite: true, out: { rosa: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '4.4' },
   { id: 'mesa_corte', zone: 'flores', name: 'Mesa de corte', icon: ICON.rosasCortadas, in: { rosa: 2 }, out: { rosas_cortadas: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, growth: 1.15, release: '4.4' },
   { id: 'tinas_hidratacion', zone: 'flores', name: 'Tinas de hidratación', icon: ICON.rosaHidratada, in: { rosas_cortadas: 1 }, out: { rosa_hidratada: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, growth: 1.15, release: '4.4' },
@@ -466,8 +466,8 @@ export const STATIONS = [
   { id: 'cuarto_frio', zone: 'flores', name: 'Cuarto frío', icon: ICON.ramoRosas, in: { bonche_rosas: 1 }, out: { ramo_rosas: 1 }, cycle: 16 / 3, unlockCost: 8000, upgradeBase: 60, growth: 1.15, release: '4.4' },
   { id: 'empacadora_flores', zone: 'flores', name: 'Empacadora de flores', icon: ICON.cajaFlores, in: { ramo_rosas: 4 }, out: { caja_flores: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '4.4' },
 
-  // Los Freseros de Sibaté: el Lavadero saca la fresa buena y la de segunda (las pequeñas y las magulladas), que pasa
-  // por la canaleta a la Marmita y sale como mermelada hacia Zipaquirá.
+  // Freseros de Sibaté: Washer separates prime berries from seconds (small/bruised), routed
+  // down chute to Marmita kettle for jam bound for Zipaquirá.
   { id: 'fresal', zone: 'fresas', name: 'Fresal', icon: ICON.fresal, infinite: true, out: { fresa: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '4.4' },
   { id: 'lavadero_fresas', zone: 'fresas', name: 'Lavadero de fresas', icon: ICON.fresaLavada, in: { fresa: 1 }, out: { fresa_lavada: 1 }, by: { fresa_segunda: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '4.4' },
   { id: 'seleccionadora_fresas', zone: 'fresas', name: 'Seleccionadora', icon: ICON.fresaSeleccionada, in: { fresa_lavada: 2 }, out: { fresa_seleccionada: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '4.4' },
@@ -475,8 +475,8 @@ export const STATIONS = [
   { id: 'mesa_fresas_crema', zone: 'fresas', name: 'Mesa de fresas con crema', icon: ICON.fresasCrema, in: { bandeja_fresas: 1 }, out: { fresas_crema: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '4.4' },
   { id: 'marmita_mermelada', zone: 'fresas', name: 'Marmita de mermelada', icon: ICON.mermeladaFresa, in: { fresa_segunda: 4 }, out: { mermelada_fresa: 1 }, cycle: 6.4, unlockCost: 400000, upgradeBase: 500, growth: 1.15, release: '4.4' },
 
-  // Las Truchas de Guatavita: la trucha limpia se reparte entre el Ahumadero, la Fileteadora (que le pasa los filetes a
-  // la Mesa del ceviche) y la Cocina de la laguna (trucha frita con papa salada).
+  // Truchas de Guatavita: cleaned trout splits across Smokehouse, Filleter (feeding Ceviche
+  // bench), and Lakeside kitchen (fried trout with salted potato).
   { id: 'estanques_trucha', zone: 'truchas', name: 'Estanques de trucha', icon: ICON.estanquesTrucha, infinite: true, out: { trucha: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '4.4' },
   { id: 'limpieza_trucha', zone: 'truchas', name: 'Limpieza de trucha', icon: ICON.truchaLimpia, in: { trucha: 1 }, out: { trucha_limpia: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '4.4' },
   { id: 'ahumadero_trucha', zone: 'truchas', name: 'Ahumadero de trucha', icon: ICON.truchaAhumada, in: { trucha_limpia: 8 }, out: { trucha_ahumada: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '4.4' },
@@ -484,10 +484,10 @@ export const STATIONS = [
   { id: 'mesa_ceviche', zone: 'truchas', name: 'Mesa del ceviche', icon: ICON.cevicheTrucha, in: { filete_trucha: 2 }, out: { ceviche_trucha: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '4.4' },
   { id: 'cocina_laguna', zone: 'truchas', name: 'Cocina de la laguna', icon: ICON.almuerzoTrucha, in: { trucha_limpia: 4 }, out: { almuerzo_trucha: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '4.4' },
 
-  // Las Salinas de Nemocón: los Pozos disuelven la roca en salmuera y sacan también bloques de sal, que pasan por la
-  // canaleta al Taller de tallado. La salmuera se reparte entre los Tachos (sal refinada) y las Gachas de barro (el pan de
-  // sal de los muiscas); el Empaque de regalo junta la sal con las figuras en el cofre. La Armadora de canastas arma la
-  // canasta sabanera con el pan de sal, los ramos de rosas de las Flores y las bandejas de fresa de Sibaté.
+  // Salinas de Nemocón: Brine wells dissolve rock and yield salt blocks via chute to Carving
+  // workshop. Brine splits between Evaporation pans (refined salt) and Clay pots (Muisca salt loaves);
+  // Gift packer combines salt with carvings. Hamper bench packs salt loaves, Flores roses,
+  // and Sibaté berry trays.
   { id: 'socavon_sal', zone: 'salinas', name: 'Socavón de sal', icon: ICON.socavonSal, infinite: true, out: { roca_sal: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '4.4' },
   { id: 'pozos_salmuera', zone: 'salinas', name: 'Pozos de salmuera', icon: ICON.salmuera, in: { roca_sal: 2 }, out: { salmuera: 1 }, by: { bloque_sal: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '4.4' },
   { id: 'taller_tallado', zone: 'salinas', name: 'Taller de tallado', icon: ICON.figuraSal, in: { bloque_sal: 2 }, out: { figura_sal: 1 }, cycle: 8, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '4.4' },
@@ -496,8 +496,8 @@ export const STATIONS = [
   { id: 'empaque_regalo', zone: 'salinas', name: 'Empaque de regalo', icon: ICON.cofreSal, in: { sal_refinada: 4 }, joins: [{ product: 'figura_sal', perCycle: 4, from: 'taller_tallado' }], out: { cofre_sal: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '4.4' },
   { id: 'armadora_canastas', zone: 'salinas', name: 'Armadora de canastas', icon: ICON.canastaSabanera, in: { pan_sal: 4 }, imports: [{ product: 'ramo_rosas', perCycle: 2, route: 'ramos_rosas' }, { product: 'bandeja_fresas', perCycle: 1, route: 'bandejas_fresa' }], out: { canasta_sabanera: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '4.4' },
 
-  // La Cocina de la Sabana (Chía): el ajiaco santafereño, de la papa al plato servido con crema y alcaparras. El
-  // Restaurante santafereño lo sirve con la trucha ahumada y el ceviche de Guatavita.
+  // Cocina de la Sabana (Chía): authentic ajiaco santafereño from potato to cream-and-caper bowl.
+  // Santafereño restaurant serves it alongside Guatavita smoked trout and ceviche.
   { id: 'huerta_papa', zone: 'cocina', name: 'Huerta de papa', icon: ICON.potatoPlant, infinite: true, out: { papa_sabanera: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '4.4' },
   { id: 'peladero', zone: 'cocina', name: 'Peladero', icon: ICON.peeledPotato, in: { papa_sabanera: 1 }, out: { papa_pelada_sabana: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '4.4' },
   { id: 'olla_caldo', zone: 'cocina', name: 'Olla del caldo', icon: ICON.caldoPapas, in: { papa_pelada_sabana: 2 }, out: { caldo_papas: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '4.4' },
@@ -505,9 +505,9 @@ export const STATIONS = [
   { id: 'servidora_ajiaco', zone: 'cocina', name: 'Servidora', icon: ICON.platoAjiaco, in: { ajiaco: 1 }, out: { plato_ajiaco: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '4.4' },
   { id: 'restaurante_santafereno', zone: 'cocina', name: 'Restaurante santafereño', icon: ICON.almuerzoSabanero, in: { plato_ajiaco: 4 }, imports: [{ product: 'trucha_ahumada', perCycle: 1, route: 'ahumadas_trucha' }, { product: 'ceviche_trucha', perCycle: 1, route: 'ceviches' }], out: { almuerzo_sabanero: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '4.4' },
 
-  // Zipaquirá, la última de Cundinamarca: como Neiva, sin fuente propia. Cada estación recibe lo suyo de una zona de la
-  // región; en el Hotel de la plaza se juntan el almuerzo sabanero y la mermelada de Sibaté, y todo termina en la
-  // visita a la Catedral de Sal.
+  // Zipaquirá, Cundinamarca finale: like Neiva, no native source. Takes each zone's output;
+  // Plaza hotel pairs Sabana lunch with Sibaté jam, ending at Salt Cathedral tour.
+  // Salt Cathedral tour.
   { id: 'floristeria_plaza', zone: 'zipaquira', name: 'Floristería de la plaza', icon: ICON.arregloFloral, imports: [{ product: 'caja_flores', perCycle: 1, route: 'cajas_flores' }], out: { arreglo_floral: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '4.4' },
   { id: 'salon_onces', zone: 'zipaquira', name: 'Salón de onces', icon: ICON.onces, in: { arreglo_floral: 1 }, imports: [{ product: 'fresas_crema', perCycle: 4, route: 'fresas_crema' }], out: { onces_santafereñas: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '4.4' },
   { id: 'hotel_plaza_zipa', zone: 'zipaquira', name: 'Hotel de la plaza', icon: ICON.nocheZipaquira, in: { onces_santafereñas: 2 }, imports: [{ product: 'almuerzo_sabanero', perCycle: 1, route: 'almuerzos_sabaneros' }, { product: 'mermelada_fresa', perCycle: 5, route: 'mermeladas' }], out: { noche_zipaquira: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '4.4' },
@@ -515,12 +515,12 @@ export const STATIONS = [
   { id: 'mochilas_paseo', zone: 'zipaquira', name: 'Mochilas del paseo', icon: ICON.mochilaPaseo, in: { almuerzo_plaza_zipa: 1 }, imports: [{ product: 'canasta_sabanera', perCycle: 1, route: 'canastas' }, { product: 'cofre_sal', perCycle: 1, route: 'cofres_sal' }], out: { mochila_paseo: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '4.4' },
   { id: 'entrada_catedral', zone: 'zipaquira', name: 'Entrada a la Catedral de Sal', icon: ICON.catedralSal, in: { mochila_paseo: 4 }, out: { visita_catedral: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '4.4' },
 
-  // Bogotá (v4.5; en red desde la v4.6): no produce nada propio y no tiene barrios en la cadena. Una red de 24 estaciones
-  // en seis niveles: las del primero se construyen desde el comienzo y son baratas; cada una de las demás se puede
-  // construir cuando ya están todas las de Bogotá que la abastecen. Muchas juntan lo de dos o tres estaciones (`joins`)
-  // y tres sacan un subproducto (`by`) que va sin mulas a otra. Las tractomulas traen lo de afuera solo donde tiene
-  // sentido. A igual nivel, cada estación da justo lo que piden las que la usan (o un poco más, que se vende).
-  // Nivel 1: lo de afuera, desde el comienzo.
+  // Bogotá (v4.5; network since v4.6): produces nothing native, no chain neighborhoods. 24-station
+  // network in 6 tiers: tier 1 builds cheap from start; every later station unlocks once all its
+  // Bogotá suppliers are built. Many combine 2–3 stations (`joins`), 3 output chute byproducts (`by`).
+  // Tractomulas bring external cargo only where sensible. Equal levels supply exact (or slightly surplus) demand.
+  // demand.
+  // Tier 1: external goods, buildable from start.
   { id: 'tostadero_chorro', zone: 'bogota', name: 'Tostadero del Chorro', icon: ICON.cafeCapitalino, imports: [{ product: 'coffee_bag', perCycle: 1, route: 'tm_cafe' }], out: { cafe_capitalino: 1 }, by: { cafe_molido: 5 }, cycle: 2, unlockCost: 0, upgradeBase: 20, growth: 1.15, release: '4.5' },
   { id: 'despensa_zona_g', zone: 'bogota', name: 'Despensa de la Zona G', icon: ICON.salsasCasa, imports: [{ product: 'alino_box', perCycle: 1, route: 'tm_alino' }, { product: 'aji_box', perCycle: 1, route: 'tm_aji' }], out: { salsas_casa: 2 }, cycle: 1.6, unlockCost: 200, upgradeBase: 32, growth: 1.15, release: '4.5' },
   { id: 'toldo_tejidos', zone: 'bogota', name: 'Toldo de tejidos', icon: ICON.surtidoTejidos, imports: [{ product: 'ruana', perCycle: 1, route: 'tm_ruanas' }, { product: 'alpargatas', perCycle: 1, route: 'tm_alpargatas' }], out: { surtido_tejidos: 1 }, cycle: 2, unlockCost: 600, upgradeBase: 48, growth: 1.15, release: '4.5' },
@@ -531,7 +531,7 @@ export const STATIONS = [
   { id: 'cocina_entradas', zone: 'bogota', name: 'Cocina de entradas', icon: ICON.picadaCasa, in: { salsas_casa: 1 }, imports: [{ product: 'criollas_box', perCycle: 1, route: 'tm_papitas' }, { product: 'ant_cone', perCycle: 1, route: 'tm_hormigas' }], out: { picada_casa: 1 }, by: { chicharron: 1 }, cycle: 1.6, unlockCost: 20000, upgradeBase: 220, growth: 1.15, release: '4.5' },
   { id: 'toldo_sombreros', zone: 'bogota', name: 'Toldo de sombreros', icon: ICON.surtidoFeria, in: { surtido_tejidos: 1 }, imports: [{ product: 'sombrero_vueltiao', perCycle: 1, route: 'tm_sombreros' }, { product: 'silla_montar', perCycle: 1, route: 'tm_sillas' }], out: { surtido_feria: 1 }, cycle: 2, unlockCost: 32000, upgradeBase: 300, growth: 1.15, release: '4.5' },
   { id: 'pescaderia_plaza', zone: 'bogota', name: 'Pescadería', icon: ICON.canastaPaloquemao, in: { canasta_frutas: 2 }, imports: [{ product: 'trucha_ahumada', perCycle: 1, route: 'tm_trucha' }, { product: 'smoked_pargo', perCycle: 1, route: 'tm_pargo' }], out: { canasta_plaza: 1 }, cycle: 4, unlockCost: 48000, upgradeBase: 400, growth: 1.15, release: '4.5' },
-  // Nivel 3: aquí empiezan los cruces.
+  // Tier 3: network intersections begin here.
   { id: 'chocolateria_candelaria', zone: 'bogota', name: 'Chocolatería santafereña', icon: ICON.santafereno, in: { tinto_bizcochos: 1 }, imports: [{ product: 'table_chocolate', perCycle: 1, route: 'tm_chocolate' }, { product: 'canasta_amasijos', perCycle: 1, route: 'tm_amasijos' }], out: { chocolate_completo: 1 }, cycle: 4, unlockCost: 160000, upgradeBase: 600, growth: 1.15, release: '4.5' },
   { id: 'parrilla_zona_g', zone: 'bogota', name: 'Parrilla', icon: ICON.platoFuerte, in: { picada_casa: 2 }, joins: [{ product: 'salsas_casa', perCycle: 1, from: 'despensa_zona_g' }], imports: [{ product: 'parranda_llanera', perCycle: 1, route: 'tm_asado' }, { product: 'rice_sack', perCycle: 1, route: 'tm_arroz' }], out: { plato_fuerte: 1 }, by: { caldo_costilla: 1 }, cycle: 3.2, unlockCost: 240000, upgradeBase: 800, growth: 1.15, release: '4.5' },
   { id: 'toldo_loza', zone: 'bogota', name: 'Toldo de loza y canastas', icon: ICON.surtidoLoza, in: { surtido_feria: 2 }, joins: [{ product: 'canasta_flores', perCycle: 1, from: 'puesto_flores' }], imports: [{ product: 'loza_negra', perCycle: 1, route: 'tm_loza' }, { product: 'gift_basket', perCycle: 1, route: 'tm_canastas' }], out: { surtido_loza: 1 }, cycle: 4, unlockCost: 400000, upgradeBase: 1120, growth: 1.15, release: '4.5' },
@@ -545,23 +545,23 @@ export const STATIONS = [
   { id: 'casa_colonial', zone: 'bogota', name: 'Casa colonial', icon: ICON.tardeCandelaria, in: { onces_bogotanas: 6 }, joins: [{ product: 'canasta_flores', perCycle: 8, from: 'puesto_flores' }], out: { tarde_candelaria: 2 }, cycle: 32, unlockCost: 60000000, upgradeBase: 14000, growth: 1.15, release: '4.5' },
   { id: 'restaurante_zona_g', zone: 'bogota', name: 'Restaurante de la Zona G', icon: ICON.cenaZonaG, in: { menu_completo: 1 }, joins: [{ product: 'cafe_molido', perCycle: 16, from: 'tostadero_chorro' }], out: { cena_zona_g: 1 }, cycle: 6.4, unlockCost: 120000000, upgradeBase: 20000, growth: 1.15, release: '4.5' },
   { id: 'mercado_pulgas', zone: 'bogota', name: 'Mercado de las pulgas', icon: ICON.domingoUsaquen, in: { gran_surtido: 2 }, joins: [{ product: 'desayuno_plaza', perCycle: 2, from: 'fritanga_plaza' }], imports: [{ product: 'cofre_sal', perCycle: 1, route: 'tm_cofres' }], out: { domingo_usaquen: 1 }, cycle: 16, unlockCost: 240000000, upgradeBase: 28000, growth: 1.15, release: '4.5' },
-  // Nivel 6, el centro: junta lo de toda la ciudad. La Casa colonial reparte sus tardes entre el Hotel y el Funicular.
+  // Tier 6, downtown: unites whole city. Casa colonial splits cakes between Hotel and Funicular.
   { id: 'hotel_capital', zone: 'bogota', name: 'Hotel de la capital', icon: ICON.nocheBogota, in: { tarde_candelaria: 1 }, joins: [{ product: 'cena_zona_g', perCycle: 5, from: 'restaurante_zona_g' }], out: { noche_bogota: 1 }, cycle: 32, unlockCost: 800000000, upgradeBase: 40000, growth: 1.15, release: '4.5' },
   { id: 'funicular_monserrate', zone: 'bogota', name: 'Funicular de Monserrate', icon: ICON.monserrate, in: { tarde_candelaria: 1 }, out: { subida_monserrate: 1 }, cycle: 32, unlockCost: 1600000000, upgradeBase: 60000, growth: 1.15, release: '4.5' },
   { id: 'pabellon_regiones', zone: 'bogota', name: 'Pabellón de las regiones', icon: ICON.pabellonColombia, in: { domingo_usaquen: 2 }, joins: [{ product: 'manana_paloquemao', perCycle: 2, from: 'plaza_paloquemao' }], out: { pabellon_colombia: 1 }, cycle: 32, unlockCost: 3600000000, upgradeBase: 88000, growth: 1.15, release: '4.5' },
   { id: 'gran_feria', zone: 'bogota', name: 'Recinto de la Gran Feria', icon: ICON.feriaMiTierrita, in: { pabellon_colombia: 2 }, joins: [{ product: 'noche_bogota', perCycle: 2, from: 'hotel_capital' }, { product: 'subida_monserrate', perCycle: 2, from: 'funicular_monserrate' }], out: { feria_mi_tierrita: 1 }, cycle: 64, unlockCost: 8000000000, upgradeBase: 140000, growth: 1.15, release: '4.5' },
 
-  // Santander · El Tabacal (v3.1). La hoja de tabaco se cura, se despalilla, se fermenta y se tuerce:
-  // mismos números que el Trapiche (sin el combustible de la Hornilla: la cadena cuadra igual sin él).
+  // Santander · El Tabacal (v3.1). Tobacco leaf cures, stems, ferments, and twists:
+  // same numbers as Trapiche (without Hornilla fuel boost: chain still balances).
   { id: 'tobacco_field', zone: 'tabacal', name: 'Tabacal', icon: ICON.tobaccoPlant, infinite: true, out: { tobacco_leaf: 1 }, cycle: 1.6, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '3.1' },
   { id: 'caney', zone: 'tabacal', name: 'Caney de curado', icon: '🛖', in: { tobacco_leaf: 1 }, out: { cured_leaf: 1 }, cycle: 1.6, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '3.1' },
   { id: 'stripper', zone: 'tabacal', name: 'Despalilladora', icon: '✂️', in: { cured_leaf: 2 }, out: { stripped_leaf: 1 }, cycle: 3.2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '3.1' },
   { id: 'tobacco_piles', zone: 'tabacal', name: 'Pilones de fermentación', icon: '♨️', in: { stripped_leaf: 2 }, out: { fermented_tobacco: 1 }, cycle: 6.4, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '3.1' },
   { id: 'cigar_roller', zone: 'tabacal', name: 'Torcedores', icon: '🤲', in: { fermented_tobacco: 1 }, out: { cigar: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '3.1' },
 
-  // Santander · La Fiquera (v3.2). De la penca sale la fibra, que se reparte como la leche de la
-  // Lechería (mismos números): costales, hilo para alpargatas y tela para los tercios del tabaco, que
-  // llega del Tabacal por la Ruta del tabaco.
+  // Santander · La Fiquera (v3.2). Agave leaf yields fiber splitting like Lechería milk (same
+  // numbers): burlap sacks, espadrille twine, and bale cloth for Tabacal fermented tobacco
+  // arriving via tobacco route.
   { id: 'fique_field', zone: 'fiquera', name: 'Cultivo de fique', icon: ICON.fiquePlant, infinite: true, out: { fique_leaf: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 250, growth: 1.15, release: '3.2' },
   { id: 'decorticator', zone: 'fiquera', name: 'Desfibradora', icon: '⚙️', in: { fique_leaf: 1 }, out: { fique_fiber: 1 }, cycle: 2, unlockCost: 200000, upgradeBase: 400, growth: 1.15, release: '3.2' },
   { id: 'sack_loom', zone: 'fiquera', name: 'Telar de costales', icon: ICON.fiqueSack, in: { fique_fiber: 4 }, out: { fique_sack: 1 }, cycle: 32, unlockCost: 400000, upgradeBase: 1300, growth: 1.15, release: '3.2' },
@@ -569,9 +569,9 @@ export const STATIONS = [
   { id: 'alpargata_shop', zone: 'fiquera', name: 'Alpargatería', icon: ICON.alpargatas, in: { fique_yarn: 2 }, out: { alpargatas: 1 }, cycle: 32, unlockCost: 2000000, upgradeBase: 900, growth: 1.15, release: '3.2' },
   { id: 'tercio_packer', zone: 'fiquera', name: 'Empacadora de tercios', icon: ICON.tobaccoBale, in: { fique_fiber: 4 }, imports: [{ product: 'fermented_tobacco', perCycle: 1, route: 'tabaco' }], out: { tobacco_bale: 1 }, cycle: 32, unlockCost: 4000000, upgradeBase: 2000, growth: 1.15, release: '3.2' },
 
-  // Santander · El Hato (v3.3). La carne oreada: se corta, se adoba con sal, se orea al sol y se asa.
-  // Mismos números que el Cacaotal: la carne asada se reparte entre la Mesa del almuerzo y la
-  // Fiambrería, que esperan el bocadillo de la Guayabera y la cabuya de la Fiquera.
+  // Santander · El Hato (v3.3). Sun-cured beef: cuts, salt-cures, air-dries, grills.
+  // Same numbers as Cacaotal: grilled beef splits between Lunch diner and Fiambre shop,
+  // awaiting Guayabera bocadillo and Fiquera twine.
   { id: 'cattle_ranch', zone: 'hato', name: 'Hato ganadero', icon: '🐂', infinite: true, out: { steer: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '3.3' },
   { id: 'butcher', zone: 'hato', name: 'Fama', icon: '🥩', in: { steer: 2 }, out: { beef: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '3.3' },
   { id: 'salter', zone: 'hato', name: 'Saladero', icon: ICON.saltedBeef, in: { beef: 1 }, out: { salted_beef: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '3.3' },
@@ -580,10 +580,10 @@ export const STATIONS = [
   { id: 'lunch_table', zone: 'hato', name: 'Mesa del almuerzo', icon: ICON.almuerzo, in: { grilled_oreada: 2 }, imports: [{ product: 'bocadillo_bijao', perCycle: 1, route: 'bocadillo' }], out: { almuerzo: 1 }, cycle: 32, unlockCost: 40000000, upgradeBase: 10000, growth: 1.15, release: '3.3' },
   { id: 'fiambre_maker', zone: 'hato', name: 'Fiambrería', icon: ICON.fiambre, in: { grilled_oreada: 2 }, imports: [{ product: 'bocadillo_bijao', perCycle: 1, route: 'bocadillo' }, { product: 'fique_fiber', perCycle: 4, route: 'cabuya' }], out: { fiambre: 1 }, cycle: 32, unlockCost: 80000000, upgradeBase: 16000, growth: 1.15, release: '3.3' },
 
-  // Santander · Las Hormigas (v3.4). La hormiga culona sale del hormiguero solo en la entrada de aguas:
-  // se cosecha entonces lo de todo el año (×4) y se guarda en la despensa, que los arrieros van llevando
-  // a la cadena el resto del año. Mismos números que el Maizal; la Tienda de recuerdos espera los
-  // costales y las alpargatas de la Fiquera.
+  // Santander · Las Hormigas (v3.4). Culona ants emerge only at rainy onset: full year's catch
+  // (×4) harvests into pantry for haulers to carry year-round. Same numbers as Maizal;
+  // Souvenir shop awaits Fiquera sacks and espadrilles.
+  // Fiquera espadrilles.
   { id: 'anthill', zone: 'hormigas', name: 'Hormiguero', icon: ICON.antQueen, infinite: true, out: { ant_queen: 1 }, harvest: { season: 'entrada', mult: 4, store: 3000 }, cycle: 2, unlockCost: 0, upgradeBase: 20000, growth: 1.15, release: '3.4' },
   { id: 'ant_cleaner', zone: 'hormigas', name: 'Mesa de limpieza', icon: ICON.antClean, in: { ant_queen: 1 }, out: { ant_clean: 1 }, cycle: 2, unlockCost: 30000000, upgradeBase: 25000, growth: 1.15, release: '3.4' },
   { id: 'brine_pot', zone: 'hormigas', name: 'Ollas de salmuera', icon: ICON.antBrine, in: { ant_clean: 2 }, out: { ant_brine: 1 }, cycle: 4, unlockCost: 80000000, upgradeBase: 40000, growth: 1.15, release: '3.4' },
@@ -591,10 +591,10 @@ export const STATIONS = [
   { id: 'cone_table', zone: 'hormigas', name: 'Mesa de cucuruchos', icon: ICON.antCone, in: { toasted_ants: 1 }, out: { ant_cone: 1 }, cycle: 8, unlockCost: 500000000, upgradeBase: 90000, growth: 1.15, release: '3.4' },
   { id: 'souvenir_shop', zone: 'hormigas', name: 'Tienda de recuerdos', icon: ICON.recuerdo, in: { ant_cone: 4 }, imports: [{ product: 'fique_sack', perCycle: 1, route: 'costales' }, { product: 'alpargatas', perCycle: 1, route: 'alpargatas' }], out: { recuerdo: 1 }, cycle: 32, unlockCost: 600000000, upgradeBase: 150000, growth: 1.15, release: '3.4' },
 
-  // Santander · Barichara (v3.5), la última zona de la región: como el Pueblo, no tiene fuente propia.
-  // La Dulcería de la plaza hace dulces con el bocadillo de la Guayabera, y cada estación recibe lo suyo
-  // de una zona de Santander (las mismas, en el mismo orden y con los mismos números que el Pueblo).
-  // Todo termina en excursiones por el Camino Real a Guane.
+  // Santander · Barichara (v3.5), final zone: like Pueblo, no native source. Plaza candy shop
+  // makes sweets using Guayabera bocadillo; every station takes a Santander zone's final product
+  // (exact same layout, order, and numbers as Pueblo).
+  // Ends with Camino Real hikes to Guane.
   { id: 'dulceria', zone: 'barichara', name: 'Dulcería de la plaza', icon: ICON.dulcesTipicos, imports: [{ product: 'bocadillo_crate', perCycle: 1, route: 'dulces' }], out: { dulces_tipicos: 2 }, cycle: 32, unlockCost: 0, upgradeBase: 300000, growth: 1.15, release: '3.5' },
   { id: 'park_cafe', zone: 'barichara', name: 'Café del parque', icon: ICON.sobremesa, in: { dulces_tipicos: 1 }, imports: [{ product: 'cigar', perCycle: 4, route: 'tabacos' }], out: { sobremesa: 2 }, cycle: 32, unlockCost: 300000000, upgradeBase: 400000, growth: 1.15, release: '3.5' },
   { id: 'posada', zone: 'barichara', name: 'Posada', icon: ICON.estadia, in: { sobremesa: 2 }, imports: [{ product: 'recuerdo', perCycle: 1, route: 'recuerdos' }], out: { estadia: 1 }, cycle: 32, unlockCost: 700000000, upgradeBase: 600000, growth: 1.15, release: '3.5' },
@@ -605,14 +605,14 @@ export const STATIONS = [
 
 export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));
 
-// Bodega + Despacho (Willys). Uno por zona; el precio de sus mejoras está en los datos de cada zona.
+// Warehouse + Dispatch (Willys). One per zone; upgrade prices defined in zone data.
 export const DISPATCH = {
   id: 'dispatch',
   name: 'Bodega y Despacho',
   icon: '🚙',
-  capacityBase: 10, // unidades por viaje a nivel 1
-  capacityPerLevel: 5, // unidades extra por nivel
+  capacityBase: 10, // units per trip at level 1
+  capacityPerLevel: 5, // extra units per level
   tripTime: 10, // segundos ida y vuelta
-  maxWait: 3, // segundos que espera el Willys con carga parcial antes de salir
-  warehouseTrips: 5, // la bodega guarda lo equivalente a N viajes
+  maxWait: 3, // seconds Willys waits with partial load before departing
+  warehouseTrips: 5, // warehouse holds N trips worth
 };

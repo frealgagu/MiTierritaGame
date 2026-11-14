@@ -1,4 +1,4 @@
-// Efectos de las investigaciones compradas. Todas las cuentas de la simulación pasan por aquí.
+// Effects of purchased research upgrades. All simulation math flows through here.
 import { RESEARCH_BY_ID } from '../data/research.js';
 import { PRODUCTS } from '../data/products.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
@@ -6,12 +6,12 @@ import { seasonMult } from './calendar.js';
 import { EVENTS_BY_ID, EVENT_ACTIONS_BY_ID } from '../data/events.js';
 import { offlineHours } from './renown.js';
 
-// Una compra puede tener un efecto (effect) o varios (effects: las de los eventos).
+// A purchase can carry one effect (`effect`) or several (`effects`: event upgrades).
 export const effectsOf = (def) => def?.effects ?? (def?.effect ? [def.effect] : []);
 
-// Producto de los efectos de un tipo (y objetivo). Se calcula una vez por lista de investigaciones:
-// la simulación lo pregunta miles de veces por segundo y la lista solo crece al comprar.
-const cache = new WeakMap(); // lista de investigaciones -> { n, mults: tipo -> objetivo -> producto }
+// Product of effects matching type (and target). Memoized per upgrades list:
+// simulation queries thousands of times per second while list only grows on buy.
+const cache = new WeakMap(); // upgrade list -> { n, mults: type -> target -> product }
 function product(state, type, target) {
   const list = state.research ?? [];
   let entry = cache.get(list);
@@ -34,50 +34,50 @@ function product(state, type, target) {
   return mult;
 }
 
-// Segundo final (v1.6): cada vez que se reinicia el juego tras llevar todo al nivel 100, la producción
-// se duplica (×2, ×4, ×8…). Multiplica la velocidad de las estaciones y lo que lleva el Willys; los
-// arrieros y las rutas se calculan con la velocidad de su estación, así que todo sigue cuadrando.
-// El multiplicador tiene un tope: se puede seguir reiniciando (cuenta para el Renombre y los logros), pero
-// la producción ya no se duplica más. v3.56: ×2³² (32 reinicios, ×4,29B); v3.68.3: ×2⁶⁰ (60, ×1,15Qi).
+// Second ending (v1.6): each reset after maxing everything at level 100 doubles
+// production (×2, ×4, ×8…). Scales station speed and Willys capacity; haulers and
+// routes derive from station speed, keeping everything balanced.
+// Multiplier has a cap: resets still count for Renown and achievements, though
+// production stops doubling. v3.56: ×2³² (32 resets, ×4.29B); v3.68.3: ×2⁶⁰ (60, ×1.15Qi).
 export const MAX_LEGACY_RESETS = 60;
-// Techo de las monedas (v3.68.3): 999Dc, el número más grande que se escribe con sufijo. Con ×2⁶⁰ y una
-// región al máximo se llega en unos 90 días reales sin parar; así nunca se ve en notación científica.
+// Coin cap (v3.68.3): 999Dc, largest suffix-formatted number. At ×2⁶⁰ with a
+// maxed region it takes ~90 real nonstop days; avoids scientific notation.
 export const MAX_COINS = 999e33;
 export function capCoins(state) {
   if (state.coins > MAX_COINS) state.coins = MAX_COINS;
   if (state.totalEarned > MAX_COINS) state.totalEarned = MAX_COINS;
 }
-// El producto de un tipo de efecto de las investigaciones (v4.1.1: el panel del dinero lo muestra).
+// Product of a single research effect type (v4.1.1: displayed in income breakdown).
 export const researchMult = (state, type, target) => product(state, type, target);
 export const legacyMult = (state) => 2 ** Math.min(state.legacy?.resets ?? 0, MAX_LEGACY_RESETS);
-// El multiplicador que tendrá la partida después de reiniciar.
+// Multiplier the save will have after next reset.
 export const nextLegacyMult = (state) => 2 ** Math.min((state.legacy?.resets ?? 0) + 1, MAX_LEGACY_RESETS);
 
-// La temporada (v1.9) sube o baja todas las estaciones a la vez; arrieros y rutas se calculan con esta
-// velocidad, así que la cadena sigue cuadrando. En el tablero de un evento (v2.0), lo que el evento le
-// hace a cada estación (la broca deja el Cafetal al 40 %).
+// Season (v1.9) scales all stations up or down; haulers and routes scale with this
+// speed so chain stays balanced. On event board (v2.0), event penalty per station
+// (borer drops Cafetal to 40 %).
 const eventSpeed = (state, stationId) => (state.event ? EVENTS_BY_ID[state.event.id].speed?.[stationId] ?? 1 : 1);
 export const speedMult = (state, stationId) =>
   product(state, 'stationSpeed', stationId) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone) * legacyMult(state) * seasonMult(state) * eventSpeed(state, stationId);
-// Patios y entradas: crecen con el reinicio y con la Maestría y la Supremacía de su zona.
+// Yards and inputs: scale with resets plus zone Mastery and Supremacy.
 export const capMult = (state, stationId) => legacyMult(state) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone);
 export const muleSpeedMult = (state) => product(state, 'muleSpeed');
-// El Willys de una zona con Maestría o Supremacía también lleva ×4 o ×8 (si no, la bodega se llenaría).
+// Willys in a zone with Mastery or Supremacy also carries ×4 or ×8 (else warehouse fills).
 export const dispatchMult = (state, zoneId = 'finca') => product(state, 'dispatchCapacity', zoneId) * product(state, 'zoneSpeed', zoneId) * legacyMult(state);
-// Cuántos Willys tiene cada zona (v3.9): el segundo, comprado con Renombre para la región, sale por su
-// cuenta y vende lo mismo por viaje. En los tableros de los eventos, uno solo.
+// How many Willys a zone has (v3.9): second one, bought with Renown per region, runs
+// independently selling same load per trip. On event boards, only one.
 export const jeepCount = (state) => (state.willys2 && !state.event ? 2 : 1);
 export const productValue = (state, productId) =>
   PRODUCTS[productId].value * product(state, 'productValue', productId) * product(state, 'zoneValue', PRODUCTS[productId].zone);
 
-// Lo que se produce sin conexión, en s (v3.7): las horas del perfil del jugador, iguales para todas las
-// regiones. Las regiones no guardan perfil: se les pasa el de la partida principal.
+// Offline cap in s (v3.7): from player profile, shared across regions. Non-root
+// regions don't store profile: passed from main save.
 export const offlineCapSeconds = (state, profile = state.profile) => offlineHours(profile) * 3600;
 
-// Compost (Compostera): mientras haya compost guardado, todo lo que vende la Finca vale más.
-// No acelera ninguna estación, así que no descompensa la cadena.
-// Se gasta 1 compost por cada 8 cafés lavados del Beneficiadero, que da la pulpa para 2: una
-// Compostera a la mitad del nivel del Beneficiadero ya alcanza, y subir el Cafetal no lo gasta más rápido.
+// Compost (Compostera): while stored compost remains, everything Finca sells fetches more.
+// Speeds up no station, so chain stays balanced.
+// Consumes 1 compost per 8 coffees washed by Beneficiadero, which supplies pulp for 2:
+// Compostera at half Beneficiadero level already suffices; raising Cafetal won't burn faster.
 export const COMPOST_VALUE = 1.3;
 export const WASHED_PER_COMPOST = 8;
 
@@ -85,13 +85,13 @@ export function compostValueBoost(state) {
   return (state.stations.composter?.buffer ?? 0) > 0 ? COMPOST_VALUE : 1;
 }
 
-// Precio al que se vende de verdad: con investigaciones y, en la Finca, con el bono del compost.
+// Actual sale price: research multipliers plus Finca compost bonus.
 export function saleValue(state, productId) {
   const bonus = PRODUCTS[productId].zone === 'finca' ? compostValueBoost(state) : 1;
   return productValue(state, productId) * bonus;
 }
 
-// El compost se gasta según el café que lava el Beneficiadero.
+// Compost burns proportional to coffee washed by Beneficiadero.
 export function consumeCompost(state, washed) {
   const c = state.stations.composter;
   if (!c || c.buffer <= 0) return;

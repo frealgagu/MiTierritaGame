@@ -1,7 +1,7 @@
-// Escritor de archivos MIDI (formato 1) sin dependencias (v3.71). Lo usan tools/music-export.mjs y
+// Zero-dependency MIDI file writer (format 1) (v3.71). Used by tools/music-export.mjs and
 // tools/sfx-export.mjs.
 //   writeMidi({ ppq, tempo, timeSig: [num, den], tracks: [{ name, channel, program, notes: [{ tick, dur, note, vel }] }] })
-// devuelve un Buffer con el archivo .mid. El canal 9 es el de percusión (General MIDI), sin cambio de programa.
+// returns a Buffer with the .mid file. Channel 9 is percussion (General MIDI), no program change.
 
 const vlq = (n) => {
   const out = [n & 0x7f];
@@ -16,8 +16,8 @@ const chunk = (id, bytes) => {
   return Buffer.concat([head, Buffer.from(bytes)]);
 };
 
-// Los eventos de una pista, ya con el tiempo delta. Las notas iguales que se pisan se cortan donde empieza
-// la siguiente, y en un mismo instante van primero los apagados.
+// Track events, already with delta time. Overlapping identical notes are cut where the next
+// one begins, and at the same instant note-offs come before note-ons.
 function trackBytes(events) {
   events.sort((a, b) => a.tick - b.tick || a.order - b.order);
   const bytes = [];
@@ -47,7 +47,7 @@ export function writeMidi({ ppq = 480, tempo = 120, timeSig = [4, 4], tracks }) 
     const events = [{ tick: 0, order: 0, data: [0xff, 0x03, ...vlq(name.length), ...name] }];
     if (ch !== 9) events.push({ tick: 0, order: 0, data: [0xc0 | ch, t.program] });
     const notes = [...t.notes].sort((a, b) => a.tick - b.tick);
-    // Cada nota termina antes de que vuelva a sonar la misma (si no, el reproductor la apagaría antes).
+    // Each note ends before the same pitch sounds again (otherwise players would cut it off early).
     const nextOn = new Map();
     for (let i = notes.length - 1; i >= 0; i--) {
       const n = notes[i];
@@ -64,7 +64,7 @@ export function writeMidi({ ppq = 480, tempo = 120, timeSig = [4, 4], tracks }) 
   return Buffer.concat(chunks);
 }
 
-// Un WAV estéreo de 32 bits en coma flotante (para pasarlo a ffmpeg sin perder nada).
+// A 32-bit floating-point stereo WAV (to pipe into ffmpeg losslessly).
 export function writeWav(left, right, sr) {
   const n = left.length;
   const data = Buffer.alloc(n * 8);

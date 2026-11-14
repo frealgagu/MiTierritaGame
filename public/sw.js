@@ -1,6 +1,6 @@
-// Service worker: permite abrir el juego sin internet.
-// - La página (index.html) se pide primero a la red, para recibir las versiones nuevas.
-// - El resto (JS, CSS, iconos) se sirve desde la caché y se guarda la primera vez que se pide.
+// Service worker: allows opening the game offline.
+// - The page (index.html) is fetched from the network first so new versions arrive immediately.
+// - Everything else (JS, CSS, icons) is served from cache and cached on first request.
 const CACHE = 'mitierrita-v177';
 
 self.addEventListener('install', () => self.skipWaiting());
@@ -17,10 +17,10 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
-  // El APK y el AAB de Android (8 MB) se descargan de la red, sin guardarlo en la caché del juego; igual la
-  // música y los sonidos para descargar (v3.71, ./musica/).
+  // Android APK and AAB (8 MB) are downloaded from the network without storing them in the game cache; same
+  // for downloadable music and sound effects (v3.71, ./musica/).
   if (new URL(req.url).pathname.match(/\.(apk|aab|mp3|mid|zip)$/)) return;
-  // La música se pide por trozos (Range): eso no se puede guardar en la caché, que lo sirva la red.
+  // Audio files use byte-range requests (Range), which cannot be cached cleanly, so let the network serve them.
   if (req.headers.has('range')) return;
 
   if (req.mode === 'navigate') {

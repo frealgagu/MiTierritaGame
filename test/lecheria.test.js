@@ -9,7 +9,7 @@ function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-// Partida con el Trapiche completo (Pulverizadora construida) y la Lechería abierta.
+// Save with full Trapiche (Pulverizadora built) and Lechería open.
 function withLecheria(level = 20) {
   const game = new Game();
   const s = game.state;
@@ -48,9 +48,9 @@ test('a igual nivel, la Pasteurizadora reparte su leche: un cuarto para cada ram
   for (const id of ['cheesery', 'separator', 'arequipe_pot']) {
     assert.ok(Math.abs(row(id).capacity - milk / 4) < 1e-9, `${id} procesa ${row(id).capacity} de ${milk}`);
   }
-  // Sin el Cacaotal, el cuarto que sería para la ruta se vende como leche.
+  // Without Cacaotal, the quarter reserved for the route is sold as milk.
   assert.ok(Math.abs(row('pasteurizer').diverted - milk / 4) < 1e-9, 'sobra un cuarto');
-  // En la simulación, las mulas llevan leche a las tres.
+  // In the simulation, mules carry milk to all three.
   run(game, 300);
   for (const p of ['cheese', 'cream', 'arequipe']) assert.ok((game.state.stats.produced[p] ?? 0) > 0, `produjo ${p}`);
 });
@@ -68,7 +68,7 @@ test('con una sola rama construida, la leche que sobra se vende sin procesar', (
 test('la Paila no trabaja sin la panela del Trapiche', () => {
   const game = withLecheria();
   buildLecheria(game);
-  // Sin panela en la bodega del Trapiche ni en la Paila.
+  // No panela in Trapiche's warehouse or Paila.
   game.state.stations.pulverizer.level = 1;
   game.state.stations.molds.level = 1;
   game.state.stations.arequipe_pot.input = 100;
@@ -106,7 +106,7 @@ test('el Willys del Trapiche no vende la panela que espera la Chiva', () => {
   const game = withLecheria();
   buildLecheria(game);
   const s = game.state;
-  // Poca panela: la Chiva espera a llenarse (hasta 10 s) y el Willys sale antes con lo demás.
+  // Little panela: Chiva waits to fill up (up to 10 s) while Willys leaves earlier with the rest.
   s.stations.arequipe_pot.imported = {};
   s.zones.trapiche.warehouse = { panela_powder: 3, cane: 50 };
   const sold = s.stats.sold.panela_powder ?? 0;
@@ -140,7 +140,7 @@ test('si la Paila espera panela, la recomendación puede señalar al Trapiche', 
   const game = withLecheria(30);
   buildLecheria(game, undefined, 30);
   const s = game.state;
-  // La Pulverizadora del Trapiche se queda muy atrás: no alcanza para la Paila.
+  // Trapiche's Pulverizadora lags far behind: not enough for Paila.
   s.stations.pulverizer.level = 5;
   s.stations.pulverizer.transport.level = 5;
   const a = analyzeChain(s, 'lecheria');

@@ -1,7 +1,7 @@
-/* Íconos propios del juego (src/data/icons.js): solo tiene letras de uso privado, así que va primero
-   en la lista de fuentes y el resto del texto sigue en Fredoka. */
-/* Fredoka (fuente variable, licencia OFL: public/licencias/Fredoka-OFL.txt) va dentro del juego desde la v3.64:
-   así funciona sin internet y el juego no se conecta a ningún servidor de fuentes. */
+/* Custom game icons (src/data/icons.js): Private Use Area glyphs only, so it comes first
+   in the font stack and remaining text renders in Fredoka. */
+/* Fredoka (variable font, OFL license: public/licencias/Fredoka-OFL.txt) bundled since v3.64:
+   works offline and the game connects to no external font server. */
 @font-face {
   font-family: 'Fredoka';
   src: url('../assets/fredoka-latin.woff2') format('woff2');
@@ -19,13 +19,13 @@
 @font-face {
   font-family: 'MiTierrita Icons';
   src: url('../assets/mitierrita-icons.woff2') format('woff2');
-  /* (v4.3) Los íconos propios y los emojis que el juego dibuja a su manera, con su mismo carácter. */
+  /* (v4.3) Custom icons and emojis rendered with the game's own glyphs using their native character. */
   unicode-range: U+E000-E3FF, U+00A9, U+00AE, U+200D, U+203C, U+2049, U+2122, U+2139, U+231A-23FF, U+24C2, U+25AA-25FE, U+2600-27BF, U+2B06, U+2B1B-2B55, U+3030, U+303D, U+3297, U+3299, U+FE0F, U+1F000-1FAFF;
   font-display: block;
 }
 
 :root {
-  --btn-h: 50px; /* alto de todos los botones (v4.4.6) */
+  --btn-h: 50px; /* height of all buttons (v4.4.6) */
   --ink: #3a2418;
   --paper: #fff8ec;
   --paper-2: #f3e6cf;
@@ -60,7 +60,7 @@ html, body {
 
 button { font: inherit; color: inherit; cursor: pointer; }
 
-/* Barra superior */
+/* Top bar */
 #hud {
   position: fixed;
   top: calc(12px + env(safe-area-inset-top, 0px));
@@ -87,9 +87,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-weight: 700;
   font-size: 1.25rem;
 }
-/* Anchos fijos, para el número más largo («-8,88e40»): la barra no cambia de tamaño al crecer. */
+/* Fixed widths for the longest number («-8.88e40»): top bar doesn't resize as numbers grow. */
 #coins-btn { cursor: pointer; }
-/* 💰 De dónde sale (v4.1.1) */
+/* 💰 Where it comes from (v4.1.1) */
 .money-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 6px 10px; border-bottom: 1px solid rgba(58, 36, 24, 0.15); font-size: 0.9rem; }
 .money-row b { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .money-row small { color: var(--muted); }
@@ -135,7 +135,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   cursor: pointer;
 }
 
-/* Panel de estación */
+/* Station panel */
 .panel {
   position: fixed;
   left: 50%;
@@ -148,7 +148,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   box-shadow: var(--shadow);
   padding: 14px 16px 16px;
   animation: pop 0.18s ease-out;
-  /* Alto fijo: el de la estación más llena (pestañas, receta y seis filas de datos). */
+  /* Fixed height: matches the tallest station view (tabs, recipe, and six stat rows). */
   height: 35.5rem;
   max-height: calc(100vh - 96px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
   display: flex;
@@ -167,7 +167,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .panel-title { flex: 1; min-width: 0; }
 .panel-title h3 { margin: 0; font-size: 1.2rem; line-height: 1.5rem; height: 1.5rem; white-space: nowrap; overflow: hidden; }
-/* Dos renglones siempre, aunque el subtítulo quepa en uno. */
+/* Always two lines, even if the subtitle fits on one. */
 .panel-title p { margin: 0; font-size: 0.85rem; line-height: 1.1rem; height: 2.2rem; overflow: hidden; color: var(--muted); }
 .level-badge {
   font-weight: 700;
@@ -179,8 +179,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .close-btn { border: none; background: none; font-size: 1.3rem; padding: 4px; }
 
-/* Cada parte tiene su alto; los datos ocupan lo que queda (hasta seis filas, el máximo de una
-   estación) y el aviso tiene espacio para el más largo. */
+/* Each section has its own height; stats take leftover space (up to six rows, max per
+   station) and notices have room for the longest one. */
 .panel > .stats { flex: 1 1 auto; min-height: 0; overflow: hidden; margin: 10px 0 8px; display: grid; grid-auto-rows: 1.3rem; align-content: start; gap: 5px; }
 .stat { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 0.95rem; white-space: nowrap; overflow: hidden; }
 .stat > * { flex: none; }
@@ -215,7 +215,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-weight: 700;
   box-shadow: 0 3px 0 var(--ink);
   transition: transform 0.06s;
-  /* Todos los botones del mismo alto (v4.4.6): el de un botón con el texto en dos renglones, y el texto centrado. */
+  /* Equal height for all buttons (v4.4.6): tall enough for two-line label, centered text. */
   box-sizing: border-box;
   min-height: var(--btn-h);
   display: inline-flex;
@@ -255,12 +255,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .recipe.small:empty { background: none; }
 .soon { text-align: center; font-size: 0.9rem; color: var(--muted); margin: 0; }
 
-/* Modal y avisos */
+/* Modal and notices */
 .modal { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(58, 36, 24, 0.45); padding: 16px; }
 .modal[hidden], .panel[hidden], .toast[hidden], .chip[hidden], .btn[hidden] { display: none; }
 .modal-card { background: var(--paper); border: 3px solid var(--ink); border-radius: 20px; padding: 20px; width: min(380px, 100%); box-shadow: var(--shadow); max-height: calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); overflow-y: auto; }
-/* El juego bloquea los gestos táctiles (para que el mapa no se mueva solo): dentro de las ventanas
-   hay que volver a permitir el desplazamiento vertical con el dedo, o las listas largas no bajan. */
+/* Game disables touch panning (so map doesn't drag under panels): re-enable vertical scroll
+   inside modals so long lists can scroll. */
 .modal-card, .list-body, .chain-body { touch-action: pan-y; overscroll-behavior: contain; }
 .modal-card h2 { margin: 0 0 8px; }
 .modal-card small { color: var(--muted); font-size: 0.9rem; }
@@ -280,14 +280,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
   max-width: calc(100vw - 32px);
   text-align: center;
   animation: pop2 0.2s ease-out;
-  cursor: pointer; /* tocarlo lo cierra */
+  cursor: pointer; /* tap to dismiss */
 }
 @keyframes pop2 { from { transform: translateX(-50%) translateY(-10px); opacity: 0; } }
 
 @media (max-width: 520px) {
   .brand { display: none; }
   #hud { gap: 8px; }
-  /* En el móvil, el ingreso va debajo de las monedas: así la barra cabe en 360 px. */
+  /* On mobile, income goes below coins so the bar fits within 360 px. */
   .coins { font-size: 1.1rem; display: grid; grid-template-columns: auto auto; align-items: center; column-gap: 6px; row-gap: 0; padding: 2px 12px; line-height: 1.1; }
   .coin-icon { grid-row: span 2; }
   .rate { font-size: 0.75rem; }
@@ -308,30 +308,30 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .tab.active { background: var(--yellow); }
 .tab.short { flex: 0 0 44px; }
-/* Los barrios de Bogotá en la cadena (v4.5): cinco pestañas en un teléfono. */
+/* Bogotá neighborhoods in the chain (v4.5): five tabs on a phone screen. */
 .chain-groups { flex: none; margin: 0 0 8px; }
 .chain-groups[hidden] { display: none; }
 .chain-groups .tab { font-size: 0.78rem; padding: 6px 2px; }
 .tab.short .tab-name { display: none; }
 
-/* Vista de la cadena */
+/* Chain view */
 .chain-modal { width: min(480px, 100%); height: min(900px, calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))); display: flex; flex-direction: column; }
 .chain-head { display: flex; align-items: center; justify-content: space-between; }
 .chain-head h2 { margin: 0; }
 .chain-help { margin: 4px 0 10px; font-size: 0.85rem; color: var(--muted); }
-/* Los botones de abajo de la cadena (v4.1.1): 🏗️ Construir y ⬆ Al nivel X, uno al lado del otro */
+/* Bottom buttons in the chain (v4.1.1): 🏗️ Build and ⬆ To level X, side by side */
 .chain-foot { display: flex; gap: 6px; flex: none; }
 .chain-foot .btn.bulk { flex: 1; min-width: 0; padding: 8px 6px; font-size: 0.88rem; line-height: 1.2; }
 .chain-body { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding-right: 2px; }
 
-/* Diagrama: tarjetas con posición fija y eslabones en SVG. */
-.dg-scroll { overflow-x: auto; touch-action: pan-x pan-y; padding: 0 6px 6px; /* 6px a los lados: DG_PAD en ChainView.js */ }
+/* Diagram: fixed-position cards and SVG links. */
+.dg-scroll { overflow-x: auto; touch-action: pan-x pan-y; padding: 0 6px 6px; /* 6px each side: DG_PAD in ChainView.js */ }
 @media (pointer: fine) { .dg-scroll { cursor: grab; } .dg-scroll:active { cursor: grabbing; } }
-/* En un teléfono angosto la cadena aprovecha más el ancho (v4.3.1). */
+/* On narrow phones the chain uses more horizontal width (v4.3.1). */
 @media (max-width: 440px) { .chain-modal { padding: 14px 10px; } }
 .dg { position: relative; margin: 0 auto; }
 .dg-pipes { position: absolute; inset: 0; pointer-events: none; }
-/* Eslabones (v3.0.1): cada trazo es un eslabón (el borde y su hueco) y la cadena corre hacia abajo. */
+/* Links (v3.0.1): each stroke is a link (border and gap) moving downward along the chain. */
 .dg-link, .dg-hole { fill: none; stroke-linejoin: round; stroke-dasharray: 9 4; stroke-linecap: round; animation: dg-flow 0.9s linear infinite; }
 .dg-link { stroke-width: 7; stroke: #8b5a2b; }
 .dg-hole { stroke-width: 2.6; stroke: var(--paper); }
@@ -340,14 +340,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .dg-link.hot, .dg-hole.hot { animation-duration: 1.8s; }
 .dg-link.locked { stroke: #b9ad9a; }
 .dg-link.locked, .dg-hole.locked { animation: none; }
-/* Mientras se mueve la cadena (v4.7.2), las líneas quietas: pintar su animación en cada cuadro la trababa. */
+/* While scrolling the chain (v4.7.2), freeze lines: animating every frame caused stutter. */
 .dg-moving .dg-link, .dg-moving .dg-hole { animation-play-state: paused; }
-/* Lo que pasa por cada eslabón: ícono y número, sobre la cadena. */
-.dg-flow { position: absolute; transform: translate(-50%, -50%); padding: 0 6px; height: 18px; line-height: 16px; border: 1.5px solid #8b5a2b; border-radius: 999px; background: #fffaf0; font-size: 0.68rem; font-weight: 700; white-space: nowrap; /* se puede tocar para ver el nombre del producto (v3.66) */ font-variant-numeric: tabular-nums; }
+/* Flow label along each link: icon and rate, above the chain. */
+.dg-flow { position: absolute; transform: translate(-50%, -50%); padding: 0 6px; height: 18px; line-height: 16px; border: 1.5px solid #8b5a2b; border-radius: 999px; background: #fffaf0; font-size: 0.68rem; font-weight: 700; white-space: nowrap; /* tappable to inspect product name (v3.66) */ font-variant-numeric: tabular-nums; }
 .dg-flow.hot { border-color: var(--red); color: #8f1d2c; background: #fde2e4; }
 .dg-node.selected, .dg-tag.selected { outline: 3px solid #e8b90f; outline-offset: 1px; }
 .dg-node.hot-link { box-shadow: 0 3px 0 var(--red); }
-/* Detalle de lo que se tocó, abajo de la ventana. */
+/* Detail card for tapped item at bottom of modal. */
 .chain-detail { flex: none; max-height: 46%; overflow-y: auto; margin-top: 8px; padding: 8px 10px; border: 2px solid var(--ink); border-radius: 14px; background: #fffaf0; font-size: 0.86rem; line-height: 1.35; }
 .chain-detail[hidden] { display: none; }
 .chain-detail p { margin: 4px 0; }
@@ -382,7 +382,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .dg-name { font-size: 0.78rem; font-weight: 700; line-height: 1.05; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .dg-meta { font-size: 0.72rem; color: var(--muted); font-weight: 600; white-space: nowrap; overflow: hidden; }
 .dg-bodega { background: #fff3d6; }
-/* Angosta (tres ramas en un teléfono): ícono arriba, nombre y datos abajo, centrados. */
+/* Narrow layout (three branches on phone): icon above, name and stats centered below. */
 .dg-node.narrow { grid-template-columns: 1fr; grid-template-rows: auto auto auto; row-gap: 1px; padding: 3px 4px; text-align: center; justify-items: center; }
 .dg-node.narrow .dg-icon { grid-row: auto; font-size: 1.15rem; line-height: 1.1; }
 .dg-node.narrow .dg-name { font-size: 0.72rem; }
@@ -405,7 +405,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .dg-tag span { overflow: hidden; text-overflow: ellipsis; }
 .dg-tag.hot { border-color: var(--red); background: #fde2e4; }
 
-/* Botones laterales y marcador de objetivo */
+/* Side buttons and goal tracker */
 .side {
   position: fixed;
   left: max(16px, env(safe-area-inset-left, 0px));
@@ -456,7 +456,7 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .goal.final:not(.compact) { border-width: 3px; border-color: var(--yellow); background: #fff7d1; }
 .goal-text { font-weight: 600; font-size: 0.95rem; }
 .goal.compact .goal-text { font-size: 0.85rem; line-height: 1.1rem; height: 2.2rem; overflow: hidden; }
-/* (v4.4.8) El botón mide lo de todos (--btn-h): el pie toma su alto y se separa de la barra, para no pegar en los bordes. */
+/* (v4.4.8) Button uses standard --btn-h height; footer matches it and sits clear of bar edges. */
 .goal.compact .goal-foot { height: var(--btn-h); margin-top: 4px; align-items: center; }
 .goal.compact .goal-row { height: 1.1rem; }
 .goal-row { display: flex; align-items: center; gap: 8px; }
@@ -472,8 +472,8 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .goal.compact .btn.claim { width: 100%; }
 .goals-count { margin: 0 0 4px; color: var(--muted); font-size: 0.85rem; }
 
-/* Alto fijo (todo el alto de la pantalla, hasta 900 px): al cobrar un objetivo o comprar una
-   investigación la ventana no se encoge ni mueve el ✕, y caben tantas filas como antes de fijarlo. */
+/* Fixed height (full viewport height, up to 900 px): claiming a goal or buying research
+   doesn't shrink the modal or shift ✕, while fitting as many rows as before. */
 .list-modal { width: min(460px, 100%); height: min(900px, calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))); display: flex; flex-direction: column; }
 .list-body { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
 
@@ -486,8 +486,8 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .research-text { flex: 1; min-width: 0; font-size: 0.9rem; }
 .research-text small { color: var(--muted); }
 .research .owned, .research .locked { font-size: 0.8rem; font-weight: 600; text-align: right; flex: none; white-space: nowrap; }
-/* Lo que falta (🔒 Construye Beneficiadero, 🔒 Nv 25 y 🐴 25) pasa debajo si no cabe al lado (v3.67.5): en
-   una pantalla angosta dejaba la descripción con una palabra por renglón. */
+/* Lock reasons (🔒 Build Wet Mill, 🔒 Lv 25 and 🐴 25) wrap below when narrow (v3.67.5):
+   kept description from wrapping to one word per line on narrow screens. */
 .research { flex-wrap: wrap; }
 .research-text { flex: 1 1 130px; }
 .research > :last-child { margin-left: auto; }
@@ -499,7 +499,7 @@ a.btn { text-decoration: none; color: inherit; display: inline-flex; align-items
 .big-number { font-size: 2rem; font-weight: 700; margin: 4px 0; }
 .victory { border-color: #b8860b; background: linear-gradient(180deg, #fff7d1, var(--paper)); }
 .victory-icon { font-size: 3.5rem; animation: pop 0.5s ease-out; }
-/* Cómo se juega (pantalla de inicio). */
+/* How to play (welcome screen). */
 .intro-body { gap: 4px; padding-right: 4px; }
 .intro-body h3 { margin: 6px 0 4px; font-size: 1.05rem; }
 .intro-body p, .intro-body li { margin: 0 0 6px; font-size: 0.92rem; line-height: 1.35; }
@@ -509,8 +509,8 @@ a.btn { text-decoration: none; color: inherit; display: inline-flex; align-items
 .intro-check input { width: 20px; height: 20px; accent-color: var(--ink); }
 .intro-foot .btn.buy { width: auto; flex: none; white-space: nowrap; padding: 10px 22px; }
 
-/* Multiplicador de producción tras reiniciar (segundo final): arriba a la derecha, debajo de la mejora recomendada
-   (v4.4.11; antes iba abajo, encima del marcador de objetivos). */
+/* Post-reset production multiplier (second ending): top right, below recommended upgrade
+   (v4.4.11; previously at bottom above goal tracker). */
 .legacy-chip {
   position: fixed;
   right: max(16px, env(safe-area-inset-right, 0px));
@@ -553,7 +553,7 @@ body.panel-open .legacy-chip { display: none; }
 }
 button:focus-visible, .tracker:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
 
-/* Eventos (v2.0) */
+/* Events (v2.0) */
 .events-renown { margin: 4px 0 8px; font-weight: 700; font-size: 1.05rem; }
 .renown-total { margin: -4px 0 6px; font-weight: 700; color: var(--ink-soft, #7a5a44); }
 .event-card { border: 2px solid var(--ink); border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; background: var(--paper); }
@@ -580,7 +580,7 @@ button:focus-visible, .tracker:focus-visible { outline: 3px solid var(--yellow);
   gap: 5px;
 }
 .event-bar[hidden] { display: none; }
-/* Tablero recogido (v4.4.7): solo el título, el reloj y la barra de avance. */
+/* Collapsed board (v4.4.7): title, clock, and progress bar only. */
 .event-fold { flex: none; width: 34px; height: 30px; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); color: var(--ink); font: inherit; font-size: 1rem; font-weight: 700; line-height: 1; padding: 0; cursor: pointer; }
 .event-bar.folded > :not(.event-top):not(.bar) { display: none; }
 .event-bar.folded .event-top { cursor: pointer; }
@@ -604,7 +604,7 @@ body.panel-open .event-bar { display: none; }
 .event-action b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .event-action.flash { animation: event-flash 0.5s ease-in-out 3; }
 @keyframes event-flash { 50% { transform: scale(1.08); box-shadow: 0 0 0 3px var(--gold, #f2c14e); } }
-/* En el tablero no se ven los objetivos, las investigaciones ni las zonas de la partida. */
+/* Event board hides goals, research, and main save zones. */
 body.event-mode #goals-btn, body.event-mode #research-btn, body.event-mode #zones-btn, body.event-mode #events-btn,
 body.event-mode .tracker, body.event-mode .legacy-chip { display: none !important; }
 .event-result { width: min(360px, 100%); text-align: center; }
@@ -612,11 +612,11 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .event-result h2 { margin: 4px 0 8px; }
 .event-result p { white-space: pre-line; line-height: 1.4; }
 
-/* Álbum y decoración (v2.2) */
+/* Album and decoration (v2.2) */
 .events-renown-row { display: flex; align-items: center; gap: 8px; margin: 4px 0 10px; flex-wrap: wrap; }
 .events-renown-row .events-renown { flex: 1; margin: 0; }
 .events-renown-row .btn { width: auto; padding: 6px 10px; font-size: 0.85rem; }
-/* Las regiones en tres columnas (v3.67): con todas abiertas ya no caben en una fila. */
+/* Regions in three columns (v3.67): once all open, they no longer fit on one row. */
 .renown-regions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 6px 0 2px; }
 .renown-regions[hidden] { display: none; }
 .renown-regions button { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 6px 4px; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); color: var(--ink); font: inherit; font-weight: 700; font-size: 0.85rem; }
@@ -651,7 +651,7 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .logro-stars { color: #d4a017; letter-spacing: 2px; font-size: 1.05rem; }
 .logro p { margin: 4px 0 0; font-size: 0.85rem; }
 
-/* Pantalla de carga (v2.3.1) */
+/* Loading screen (v2.3.1) */
 .splash {
   position: fixed; inset: 0; z-index: 1000;
   display: flex; align-items: center; justify-content: center;
@@ -680,27 +680,27 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 @keyframes splash-slide { from { transform: translateX(-100%); } to { transform: translateX(290%); } }
 .splash-note { margin: 10px 0 0; font-size: 0.82rem; opacity: 0.75; min-height: 1em; }
 .research-other { margin: 12px 0 6px; font-size: 1rem; }
-/* Cabecera de región del selector de zonas (v3.54): un botón que la pliega o despliega. */
+/* Region header in zone selector (v3.54): collapsible toggle button. */
 .zones-region { margin: 6px 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; width: 100%; padding: 8px 10px; border: 2px solid var(--ink); border-radius: 10px; background: rgba(255, 255, 255, 0.55); color: inherit; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
-.zones-region small { flex-basis: 100%; text-align: right; font-weight: 500; opacity: 0.8; } /* siempre en su renglón (v4.1) */
+.zones-region small { flex-basis: 100%; text-align: right; font-weight: 500; opacity: 0.8; } /* stay on a single line (v4.1) */
 .zones-fold { display: inline-block; width: 1em; }
 .zones-here { margin-left: auto; font-size: 0.8rem; font-weight: 500; opacity: 0.8; white-space: nowrap; }
-/* Cada región en un panel sombreado, con sus zonas adentro y un poco más angostas (v3.59). */
+/* Each region in a shaded panel with its zones slightly narrower inside (v3.59). */
 .zones-group { display: flex; flex-direction: column; gap: 6px; margin: 2px 0 6px; padding: 6px 8px 8px; border: 2px solid rgba(58, 36, 24, 0.18); border-radius: 14px; background: rgba(58, 36, 24, 0.08); }
 .zones-group > .zones-region, .zones-group > .research-other { margin: 0; }
 .zones-group > .zones-region { background: #fffaf0; }
 .zones-group > .research { position: relative; margin-left: 14px; }
 .zones-group > .research::before { content: ''; position: absolute; left: -10px; top: 50%; width: 8px; border-top: 2px solid rgba(58, 36, 24, 0.25); }
 
-/* Versión nueva de la app (v3.6.1) */
+/* App update banner (v3.6.1) */
 .update-notes { max-height: 45vh; overflow-y: auto; text-align: left; margin: 8px 0 12px; }
 .update-notes h3 { margin: 10px 0 4px; font-size: 1rem; }
 .update-notes ul { margin: 0; padding-left: 20px; }
 .update-notes li { margin: 3px 0; font-size: 0.92rem; }
 
-/* Ventana del Renombre: cuatro pestañas (v3.7) en el ancho de un teléfono. */
+/* Renown modal: four tabs (v3.7) fitting phone width. */
 #renown .tab { font-size: 0.76rem; padding-left: 3px; padding-right: 3px; white-space: nowrap; }
-/* Tus medallas (v3.12) */
+/* Your medals (v3.12) */
 .medals-box { margin-top: 10px; border: 2px solid var(--ink); border-radius: 12px; padding: 6px 10px; background: var(--paper-2); }
 .medals-box summary { font-weight: 700; cursor: pointer; }
 .medals-box h4 { margin: 8px 0 4px; }
@@ -712,13 +712,13 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .pet-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 4px 0; }
 .pet-row .btn { width: auto; }
 
-/* «Cobrar todos» y «Comprar todas» (v3.57): abajo, fuera de la lista que se desplaza, a todo el ancho. */
+/* «Claim all» and «Buy all» (v3.57): pinned full-width below the scrolling list. */
 .list-modal .list-body { flex: 1 1 auto; }
 .list-foot { margin-top: 10px; }
 .list-foot:empty { display: none; }
 .btn.bulk { display: flex; width: 100%; padding: 6px 12px; font-size: 0.95rem; }
 
-/* El mapa de Colombia del selector de zonas (v3.60): en su propia ventana, casi a pantalla completa. */
+/* Colombia map in zone selector (v3.60): in its own nearly full-screen modal. */
 .zones-map-open { width: 100%; justify-content: center; margin-top: 6px; }
 .map-card { width: min(980px, 100%); height: calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); max-height: none; display: flex; flex-direction: column; padding: 14px; }
 .zones-map { position: relative; flex: 1 1 auto; min-height: 0; margin-top: 4px; border: 2px solid rgba(58, 36, 24, 0.18); border-radius: 14px; background: #bfe3ef; overflow: hidden; }
@@ -743,23 +743,23 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 @keyframes zones-ring { 50% { opacity: 0.2; } }
 .list-body[hidden] { display: none; }
 
-/* ☕ Invítame un tinto (v3.63) */
+/* ☕ Buy me a coffee (v3.63) */
 #tip-question { display: block; font-weight: 700; font-size: 1.15rem; margin-top: 4px; }
 #tip-answer { flex: 1; min-width: 0; font: inherit; font-size: 1.1rem; padding: 8px 10px; border: 2px solid var(--ink); border-radius: 12px; background: #fff; }
 .tip-options { display: flex; flex-direction: column; gap: 8px; }
 
-/* Volumen de los sonidos y de la música (v3.66) */
+/* SFX and music volume sliders (v3.66) */
 .volume-box { margin: 10px 0 4px; display: grid; gap: 6px; }
 .volume-row { display: grid; grid-template-columns: 1.6em 4.6em 1fr 3.2em; align-items: center; gap: 8px; font-weight: 600; }
 .volume-icon { font-size: 1.15rem; text-align: center; }
 .volume-row input[type='range'] { width: 100%; accent-color: var(--ink); }
 .volume-row b { text-align: right; font-variant-numeric: tabular-nums; }
-/* ⏸️ Pausar o 🚪 Salir de los eventos (v3.67.4). */
+/* ⏸️ Pause or 🚪 Exit events (v3.67.4). */
 .option-row { display: grid; grid-template-columns: 1.6em auto 1fr; align-items: center; gap: 8px; font-weight: 600; }
 .option-hint { margin: -2px 0 0 calc(1.6em + 8px); font-size: 0.85rem; color: var(--muted); }
 .option-row select { min-width: 0; font: inherit; font-weight: 500; color: var(--ink); background: var(--paper); border: 2px solid var(--paper-2); border-radius: 10px; padding: 4px 6px; }
 
-/* La bodega por dentro (v3.66): una fila por producto con lo que hay y su precio. */
+/* Inside the warehouse (v3.66): one row per product with current stock and unit price. */
 .stock-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; margin: 10px 0 8px; display: grid; align-content: start; gap: 4px; }
 .stock-row { display: grid; grid-template-columns: 1.6em 1fr auto 6.5em; align-items: center; gap: 8px; font-size: 0.92rem; padding: 2px 4px; border-radius: 8px; }
 .stock-row:nth-child(odd) { background: var(--paper-2); }
@@ -769,18 +769,18 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .stock-row b { font-variant-numeric: tabular-nums; }
 .stock-price { text-align: right; color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
 
-/* La cadena (v3.66): la etiqueta 📦 de cada estación lleva a la bodega y dice cuánto se vende directo. */
+/* Chain view (v3.66): 📦 badge on each station opens warehouse and shows direct-sale amount. */
 .dg-sell { position: absolute; transform: translate(-70%, -60%); z-index: 2; height: 20px; padding: 0 6px; border: 1.5px solid #8b5a2b; border-radius: 999px; background: #fff3d6; font-size: 0.66rem; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; line-height: 16px; box-shadow: 0 1px 0 rgba(58, 36, 24, 0.25); }
 .dg-sell.none { padding: 0 4px; opacity: 0.8; }
 .dg-sell.warn { border-color: #e67e22; background: #ffe0b2; color: #8a4b08; }
 
-/* El nombre de un ícono al tocarlo (v3.66). */
+/* Tooltip name when tapping an icon (v3.66). */
 #icon-tip { position: fixed; z-index: 1000; max-width: min(260px, calc(100vw - 12px)); padding: 5px 10px; border-radius: 10px; background: var(--ink); color: #fff8ec; font-size: 0.85rem; font-weight: 600; line-height: 1.2; pointer-events: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25); }
 
-/* Menú (v3.67): estadísticas una por renglón, «Borrar partida» solo abajo, y la ventana «Acerca de». */
+/* Menu (v3.67): stats one per line, standalone «Delete save» at bottom, and «About» dialog. */
 .menu-stats { list-style: none; margin: 6px 0 10px; padding: 0; display: grid; gap: 3px; font-size: 0.95rem; }
 .menu-reset { margin-top: 14px; padding-top: 12px; border-top: 2px dashed var(--paper-2); }
-/* Borrar la partida deslizando (v4.3.2). */
+/* Slide-to-delete confirmation (v4.3.2). */
 .slide-confirm[hidden] { display: none; }
 .menu-reset .btn.danger { width: 100%; }
 .slide-confirm { --slide: 0; position: relative; width: 100%; height: 48px; border: 2px solid var(--ink); border-radius: 999px; background: linear-gradient(90deg, rgba(200, 40, 50, calc(0.15 + 0.6 * var(--slide))) 0 100%), #fff3d6; overflow: hidden; touch-action: none; user-select: none; }
@@ -791,30 +791,30 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .about-head { display: flex; align-items: center; gap: 12px; margin: 4px 0 8px; }
 .about-head img { border-radius: 14px; flex: none; }
 .about-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; font-size: 0.92rem; line-height: 1.35; }
-/* Objetivo ya cobrado (v3.67): un renglón tenue, sin barra. */
+/* Already claimed goal (v3.67): dimmed single row without progress bar. */
 .goal.claimed { grid-template-columns: 1fr auto; align-items: center; padding: 6px 10px; border-width: 1px; border-color: #cbbfa8; background: none; opacity: 0.7; }
 .goal.claimed .goal-text { font-size: 0.85rem; font-weight: 500; }
 .goal.claimed .goal-reward { font-size: 0.78rem; }
 
-/* El objetivo del evento (v3.67): un producto por renglón, siempre tres renglones de alto. */
+/* Event goal (v3.67): one product per row, always three rows tall. */
 .event-items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-rows: repeat(3, 1.2rem); font-size: 0.85rem; }
 .event-items li { display: flex; justify-content: space-between; gap: 8px; align-items: center; white-space: nowrap; overflow: hidden; }
 .event-items li span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .event-items li b { font-weight: 600; font-variant-numeric: tabular-nums; }
 .event-items li.ok b { color: var(--green-dark); }
 
-/* Ventana de eventos (v3.67): el Renombre arriba y sus botones en un renglón aparte, como pestañas. */
+/* Events modal (v3.67): Renown header and its buttons on a separate tab row. */
 .events-renown-tabs { margin: 0 0 10px; }
 .events-renown-tabs .tab { flex: 1; }
-/* Álbum, Decorar, Logros y Horas (v3.67.5): en un teléfono no caben los cuatro en una fila (se cortaban
-   los nombres); van de a dos. */
+/* Album, Decor, Achievements, and Hours (v3.67.5): four don't fit on one phone row (labels
+   clipped); laid out two per row. */
 @media (max-width: 440px) {
   .tabs.four-tabs { display: grid; grid-template-columns: 1fr 1fr; height: auto; }
   .tabs.four-tabs .tab { height: 34px; }
 }
 .renown-back { width: auto; flex: none; padding: 4px 10px; font-size: 0.85rem; margin-right: 6px; }
 
-/* El mapa (v3.67): la región resaltada en el país, las que vienen («Próximamente») y la zona de destino. */
+/* Map (v3.67): highlighted active region, upcoming («Coming soon»), and destination zone. */
 .zones-map-dept.lit { stroke: #3a2418; stroke-width: 2px; }
 .zones-map-dept.soft { opacity: 0.55; }
 .zones-map-dept.soon { stroke-dasharray: 3 2; }
@@ -824,11 +824,11 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 @keyframes map-target { 50% { opacity: 0.55; } }
 .zones-list-btn { width: auto; flex: none; margin-left: auto; margin-right: 6px; padding: 4px 10px; font-size: 0.85rem; }
 
-/* «Ver más» (v3.67.5, ui/more.js): un texto largo en pocas líneas, con un botón para verlo completo. */
-/* Con alto fijo además del recorte por líneas: los emojis hacen algunos renglones más altos y se asomaba
-   un pedazo del siguiente. */
+/* «See more» (v3.67.5, ui/more.js): truncates long text to a few lines with an expand button. */
+/* Fixed max-height alongside line-clamp: emojis make some lines taller and peeked from
+   the next line. */
 .clamp { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: var(--lines, 3); line-clamp: var(--lines, 3); overflow: hidden; line-height: 1.4; max-height: calc(var(--lines, 3) * 1.4em); }
-.clamp.open { flex: none; max-height: 45vh; overflow-y: auto; } /* abierto, con su propio desplazamiento si es muy largo */
+.clamp.open { flex: none; max-height: 45vh; overflow-y: auto; } /* expanded, with its own scroll if very tall */
 .clamp.open { display: block; -webkit-line-clamp: unset; line-clamp: none; }
 .more-btn { flex: none; align-self: flex-start; margin: -2px 0 6px; padding: 2px 0; border: none; background: none; color: var(--wood); font-weight: 700; font-size: 0.85rem; cursor: pointer; }
 .more-btn[hidden] { display: none; }

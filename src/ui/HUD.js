@@ -15,11 +15,11 @@ import { say } from './Chatter.js';
 import { withArticle } from '../data/lore.js';
 import { t } from '../i18n/index.js';
 
-// Nombre legible de lo que se mejora: 'farm', 'farm:transport', 'dispatch:<zona>' o 'route:<ruta>'.
+// Readable name of upgrade target: 'farm', 'farm:transport', 'dispatch:<zone>', or 'route:<route>'.
 export function upgradeName(id) {
   const [sid, part] = id.split(':');
-  if (sid === 'research') return `🔬 ${RESEARCH_BY_ID[part].name}`; // (de otra zona: lo dice HUD.update)
-  if (sid === 'action') return `${EVENT_ACTIONS_BY_ID[part].icon} ${EVENT_ACTIONS_BY_ID[part].name}`; // compra de un evento
+  if (sid === 'research') return `🔬 ${RESEARCH_BY_ID[part].name}`; // (in another zone: HUD.update labels it)
+  if (sid === 'action') return `${EVENT_ACTIONS_BY_ID[part].icon} ${EVENT_ACTIONS_BY_ID[part].name}`; // event purchase
   if (sid === 'dispatch') return DISPATCH.name;
   if (sid === 'route') return `${ROUTES_BY_ID[part].icon} ${ROUTES_BY_ID[part].name}`;
   return part === 'transport' ? t('Arrieros del {station}', { station: STATIONS_BY_ID[sid].name }) : STATIONS_BY_ID[sid].name;
@@ -27,11 +27,11 @@ export function upgradeName(id) {
 
 const REC_INTERVAL_MS = 1000;
 
-// Cambia el texto solo si cambió (sin tocar el DOM en cada cuadro).
+// Updates text only when changed (avoid touching DOM on every frame).
 const setText = (el, text) => el.textContent !== text && (el.textContent = text);
 
 export class HUD {
-  // getZone: zona que se está viendo.
+  // getZone: currently viewed zone.
   constructor(game, onOpen, getHour, getZone) {
     this.game = game;
     this.getZone = getZone;
@@ -41,31 +41,31 @@ export class HUD {
     this.coins = document.getElementById('coins');
     this.income = document.getElementById('income');
     this.chip = document.getElementById('bottleneck');
-    this.recCost = 0; // ms que tardó la última recomendación
+    this.recCost = 0; // ms taken by last recommendation calculation
     this.legacy = document.getElementById('legacy-chip');
-    // Tras una compra, la recomendación se recalcula enseguida.
+    // After a purchase, recommendation recalculates immediately.
     for (const type of ['levelUp', 'unlocked', 'research', 'zoneUnlocked']) game.bus.on(type, () => (this.recDirty = true));
-    // Tocar el aviso abre la mejora recomendada.
+    // Tapping the hint opens the recommended upgrade.
     this.chip.addEventListener('click', () => this.recommended && onOpen(this.recommended));
   }
 
   update() {
     const s = this.game.state;
     this.coins.textContent = formatNumber(s.coins);
-    // Multiplicador de producción de esta partida (tras reiniciar en el segundo final).
+    // Production multiplier for this playthrough (after second-ending reset).
     const mult = legacyMult(s);
     this.legacy.hidden = mult <= 1 || Boolean(s.event);
     const legacyText = t('🔁 Producción {mult}', { mult: formatMult(mult) });
     if (this.legacy.textContent !== legacyText) this.legacy.textContent = legacyText;
-    // En rojo si hay deuda (saldo negativo de las opciones de desarrollador).
+    // Red when in debt (negative balance from dev options).
     this.coins.classList.toggle('debt', s.coins < 0);
-    // Las monedas también en la pestaña del navegador.
+    // Coins also shown in the browser tab title.
     const title = `💰 ${formatNumber(s.coins)} · Mi Tierrita`;
     if (document.title !== title) document.title = title;
     this.income.textContent = `+${formatRate(this.game.incomePerSecond())}/s`;
     const hour = this.getHour();
     if (s.event) {
-      // En el tablero de un evento, su propio reloj.
+      // On an event board, uses its own clock.
       setText(this.clock, `⏱ ${formatClock(s.playTime)}`);
       setText(this.season, `${EVENTS_BY_ID[s.event.id].icon} ${t('Evento')}`);
     } else {
@@ -74,9 +74,9 @@ export class HUD {
       setText(this.season, `${season.icon} ${season.short}`);
     }
     const zone = this.getZone();
-    // La recomendación mira varias zonas (rutas) y cuesta calcularla: como mucho una vez por segundo.
+    // Recommendation checks multiple zones (routes) and is costly: run at most once per second.
     const now = performance.now();
-    // En un móvil lento, si calcularla tarda, se espera más (diez veces lo que tardó).
+    // On slow mobile devices, if calculation takes long, throttle further (ten times compute duration).
     if (zone !== this.recZone || this.recDirty || !(now - this.recAt <= Math.max(REC_INTERVAL_MS, this.recCost * 10))) {
       this.rec = recommendUpgrade(s, (id, mode) => this.game.quote(id, mode), zone);
       this.recCost = performance.now() - now;
@@ -88,8 +88,8 @@ export class HUD {
     this.recommended = rec?.id ?? null;
     this.guide = this.guideTarget(s, rec, zone);
     if (!rec) {
-      // Ninguna mejora suma: o falta construir algo, o falta subir algo que ya no cambia lo que se vende
-      // (v3.54: se dice igual, para no hacer creer que todo está al máximo), o la zona está al máximo.
+      // No upgrade increases income: either something remains unbuilt, something maxed doesn't raise sales
+      // (v3.54: still named, so players don't assume everything is maxed), or zone is maxed.
       const next = nextToUnlock(s, zone) ?? nextSideToUnlock(s, zone);
       const pending = next ? null : pendingUpgrade(s, (id, mode) => this.game.quote(id, mode), zone);
       this.chip.hidden = false;
@@ -101,7 +101,7 @@ export class HUD {
       return;
     }
     this.chip.hidden = false;
-    // Puede ser de la zona que la abastece por una ruta: se dice de cuál.
+    // Might belong to an upstream zone feeding this one via route: name which one.
     const [sid] = rec.id.split(':');
     const otherZone = sid === 'research' ? RESEARCH_BY_ID[rec.id.split(':')[1]].zone : STATIONS_BY_ID[sid] ? zoneOf(sid) : zone;
     const elsewhere = otherZone !== zone ? ` (${ZONES_BY_ID[otherZone].icon} ${ZONES_BY_ID[otherZone].name})` : '';
@@ -109,21 +109,21 @@ export class HUD {
     this.hintUnlock(s, zone);
   }
 
-  // Qué señalar con la flecha del mapa: algo que ya se puede pagar (construir primero, luego mejorar).
+  // What map arrow points at: something currently affordable (build first, then upgrade).
   guideTarget(s, rec, zone) {
     for (const { stationId: id } of ZONES_BY_ID[zone].plots) {
       if (!s.stations[id] && this.game.quoteUnlock(id).ok) return id;
     }
-    if (!rec || rec.id.startsWith('research:') || rec.id.startsWith('action:')) return null; // la flecha solo señala edificios
+    if (!rec || rec.id.startsWith('research:') || rec.id.startsWith('action:')) return null; // arrow only points to buildings
     const sid = rec.id.split(':')[0];
-    if (STATIONS_BY_ID[sid] && zoneOf(sid) !== zone) return null; // está en otra zona
+    if (STATIONS_BY_ID[sid] && zoneOf(sid) !== zone) return null; // is in another zone
     if (!this.game.quote(rec.id, 1).affordable) return null;
-    // La ruta se mejora desde la estación que abastece.
+    // Route upgrades from the supplying station.
     if (!rec.id.startsWith('route:')) return rec.id.split(':')[0];
     return ROUTES_BY_ID[rec.id.split(':')[1]].stations.find((id) => s.stations[id]) ?? null;
   }
 
-  // Avisa una sola vez cuando alcanza para construir la siguiente estación.
+  // Notifies once when funds first cover building the next station.
   hintUnlock(s, zone) {
     const id = nextToUnlock(s, zone);
     if (!id || s.hints.includes(id)) return;

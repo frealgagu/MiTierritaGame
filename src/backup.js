@@ -1,16 +1,16 @@
-// Copia de seguridad en un archivo (v4.7.4). El texto de la partida es largo: en el teléfono, copiarlo al
-// portapapeles podía dejarlo vacío. En la web se descarga como archivo; en la app se escribe en la carpeta temporal
-// y se abre el menú «Compartir» del teléfono (Drive, Archivos, WhatsApp…), sin pedir permisos de almacenamiento.
+// File-based backup (v4.7.4). Save text is large: on mobile, copying it to the clipboard could leave it
+// empty. On web it downloads as a file; on the app it writes to cache and opens the OS Share sheet
+// (Drive, Files, WhatsApp...) without requesting storage permissions.
 import { isNativeApp } from './native.js';
 
 export const backupName = () => `mitierrita-${new Date().toISOString().slice(0, 10)}.txt`;
 
-// Guarda el texto. Devuelve 'shared' (app), 'downloaded' (web) o 'cancelled' (se cerró «Compartir» sin elegir).
+// Saves the text. Returns 'shared' (app), 'downloaded' (web), or 'cancelled' (Share sheet dismissed without choosing).
 export async function saveBackupFile(text) {
   const name = backupName();
   if (isNativeApp()) {
-    // Se guardan los módulos y no los complementos: Capacitor responde a cualquier método, también a `then`
-    // (ver tip.js), y una promesa que devolviera el complemento no terminaría nunca.
+    // Cache the imported module, not the plugin proxy: Capacitor intercepts any property access including `then`
+    // (see tip.js), so an async function returning the plugin would never resolve.
     const fs = await import('@capacitor/filesystem');
     const share = await import('@capacitor/share');
     const { uri } = await fs.Filesystem.writeFile({ path: name, data: text, directory: fs.Directory.Cache, encoding: fs.Encoding.UTF8 });
@@ -33,7 +33,7 @@ export async function saveBackupFile(text) {
   return 'downloaded';
 }
 
-// Abre el selector de archivos del sistema y devuelve el texto del que se elija (o null si no se elige ninguno).
+// Opens the system file picker and returns the chosen file text (or null if cancelled).
 export function pickBackupFile() {
   return new Promise((resolve) => {
     const input = document.createElement('input');

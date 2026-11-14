@@ -1,4 +1,4 @@
-// Mapa de Santander · Zona 2: El Tabacal (v3.1). Mismo trazado que el Trapiche (zone2_trapiche.js).
+// Santander Map · Zone 2: El Tabacal (v3.1). Same layout as El Trapiche (zone2_trapiche.js).
 import { ICON } from '../icons.js';
 
 export const ZONE8 = {
@@ -21,17 +21,17 @@ export const ZONE8 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys (v3.9), inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Piedecuesta ➜',
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
-  // Carretera de la Ruta del tabaco: sale de la bodega hacia la Fiquera.
+  // Road for the Tobacco Route: leaves the warehouse toward La Fiquera.
   routes: {
     tabaco: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Fiquera ➜' },
-    // Los tabacos torcidos salen hacia Barichara (v3.5).
+    // Rolled cigars leave toward Barichara (v3.5).
     tabacos: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Barichara ➜' },
   },
-  unlockedBy: 'guayabera', // se abre al completar la Guayabera
+  unlockedBy: 'guayabera', // opens upon completing La Guayabera
   next: 'fiquera',
 };

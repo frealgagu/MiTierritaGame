@@ -1,13 +1,13 @@
-// Proyección isométrica 2:1. Casilla de 64×32 px.
+// 2:1 isometric projection. 64×32 px tile.
 export const TILE_W = 64;
 export const TILE_H = 32;
 
-// Punto de la cuadrícula (gx, gy) a altura h (px) → pantalla.
+// Grid coordinate (gx, gy) at elevation h (px) → screen.
 export function iso(gx, gy, h = 0) {
   return { x: ((gx - gy) * TILE_W) / 2, y: ((gx + gy) * TILE_H) / 2 - h };
 }
 
-// Lista plana [x, y, x, y, ...] para Graphics.poly a partir de puntos [gx, gy, h].
+// Flat vertex list [x, y, x, y, ...] for Graphics.poly from [gx, gy, h] points.
 export function isoPoly(points) {
   const out = [];
   for (const [gx, gy, h = 0] of points) {
@@ -17,14 +17,14 @@ export function isoPoly(points) {
   return out;
 }
 
-// Inverso (a altura 0): pantalla → cuadrícula.
+// Inverse (at elevation 0): screen → grid.
 export function screenToGrid(x, y) {
   const a = x / (TILE_W / 2);
   const b = y / (TILE_H / 2);
   return { gx: (a + b) / 2, gy: (b - a) / 2 };
 }
 
-// Orden de dibujo: lo que está más «abajo» en el mapa se dibuja encima.
+// Draw depth order: objects lower on screen draw on top.
 export function depth(gx, gy) {
   return gx + gy;
 }

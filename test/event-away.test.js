@@ -4,9 +4,9 @@ import { Game } from '../src/core/Game.js';
 import { EVENTS_BY_ID } from '../src/data/events.js';
 import { EVENT_CLOCK_MAX, awaySeconds, boardClockNow, createEventState, eventClock, secureMedal } from '../src/sim/events.js';
 
-// «🚪 Salir» (v3.67.4): el tablero sigue corriendo por detrás y al volver se calcula lo que pasó.
+// «🚪 Exit» (v3.67.4): the board keeps running in the background and offline progress is calculated on return.
 
-// Un tablero (la broca, si no se dice otro) con sus estaciones subidas `levels` niveles (y sin monedas).
+// A board (la broca, unless specified) with its stations upgraded `levels` levels (and no coins).
 function board(levels, id = 'broca') {
   const def = EVENTS_BY_ID[id];
   const g = new Game(createEventState(def, 1));
@@ -16,7 +16,7 @@ function board(levels, id = 'broca') {
   return g;
 }
 
-// Paso a paso, el segundo en que se cumple el objetivo.
+// Step by step, the second when the goal is completed.
 function exactMedalTime(g) {
   g.bus.muted = true;
   g.offline = true;
@@ -68,7 +68,7 @@ test('al volver, la medalla queda con el segundo en que se cumplió (sumado al r
   const g = board(0, 'turistas');
   const r = g.catchUpBoard(30000);
   assert.equal(r.secured, true);
-  // Lo que va después de lo simulado se suma al ritmo medido: una estimación (hasta medio por ciento).
+  // Whatever falls after the simulated window is added at the measured rate: an estimate (within half a percent).
   assert.ok(Math.abs(g.state.event.time - exact) <= Math.max(5, exact * 0.005), `${g.state.event.time} frente a ${exact}`);
   assert.equal(g.state.playTime, 30000);
 });

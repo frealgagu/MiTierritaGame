@@ -8,9 +8,9 @@ import { ZoneMap } from './ZoneMap.js';
 import { toast } from './toast.js';
 import { t } from '../i18n/index.js';
 
-// Selector de zonas (v3.0: por regiones): cuáles están abiertas, cuánto rinde cada una y a cuál ir.
-// El botón 🗺️ aparece cuando hay más de una zona abierta (en cualquier región).
-//   root: la partida principal   games: el Game de cada región abierta (se agregan al abrirse)
+// Zone selector (v3.0: by region): which are open, income of each, and where to travel.
+// 🗺️ button appears once more than one zone is open (in any region).
+//   root: main save   games: Game instance per open region (appended on unlock)
 export class ZonesView {
   constructor(root, games, getZone, onGo) {
     this.root = root;
@@ -21,8 +21,8 @@ export class ZonesView {
     this.body = document.getElementById('zones-body');
     this.button = document.getElementById('zones-btn');
     this.badge = document.getElementById('zones-badge');
-    // El mapa de Colombia (v3.60): en grande, en su propia ventana. Desde la v3.67 es lo que abre el botón 🗺️;
-    // la lista se ve con «📋 Lista».
+    // Colombia map (v3.60): fullscreen in its own modal. Since v3.67 this is what 🗺️ opens;
+    // the list opens via «📋 List».
     this.mapModal = document.getElementById('zones-map-modal');
     this.map = new ZoneMap(document.getElementById('zones-map'), {
       root,
@@ -41,12 +41,12 @@ export class ZonesView {
       this.mapModal.hidden = true;
       this.open();
     });
-    // Abre como se dejó la última vez (v3.67.3): el mapa (lo de siempre) o la lista.
+    // Opens in last-used view (v3.67.3): map (default) or list.
     this.button.addEventListener('click', () => (this.root.state.settings.zonesView === 'list' ? this.open() : this.openMap()));
     document.getElementById('zones-close').addEventListener('click', () => this.close());
     this.modal.addEventListener('click', (e) => {
       if (e.target === this.modal) this.close();
-      // Plegar o desplegar una región (v3.54).
+      // Collapse or expand a region (v3.54).
       const fold = e.target.closest('[data-fold]');
       if (fold) {
         const folds = (this.root.state.settings.zonesFold ??= {});
@@ -73,8 +73,8 @@ export class ZonesView {
     this.map.show();
   }
 
-  // Ir a otra zona mostrando el viaje en el mapa (v3.67): al elegirla en la lista o al terminar una zona.
-  // Con la opción «⚡ Directo» del menú (v4.1.3), sin el viaje: se pasa enseguida.
+  // Travel to another zone with map animation (v3.67): when picked in list or on zone clear.
+  // With «⚡ Direct» menu toggle (v4.1.3), skip trip and switch right away.
   travel(zoneId) {
     if (this.map.busy) return;
     this.close();
@@ -91,8 +91,8 @@ export class ZonesView {
     this.modal.hidden = true;
   }
 
-  // Una región está plegada si así la dejó el jugador; si no la ha tocado, solo se ve abierta la de la zona
-  // donde está (v3.54).
+  // Region stays collapsed if player left it so; untouched defaults to only active region
+  // expanded (v3.54).
   folded(regionId) {
     const fold = this.root.state.settings.zonesFold?.[regionId];
     if (fold !== undefined) return fold;
@@ -121,16 +121,16 @@ export class ZonesView {
         const from = ZONES_BY_ID[region.unlock.zone];
         return group(`${head}<div class="research locked"><span class="research-icon">🔒</span><span class="research-text"><b>${region.name}</b><br><small>${region.hidden ? t('Próximamente') : t('Se abre al completar {zone}.', { zone: from.name })}</small></span></div>`);
       }
-      // La cabecera pliega la región; plegada, dice cuántas zonas lleva y cuánto rinde.
+      // Header toggles collapse; when collapsed, shows zone count and region income.
       const folded = this.folded(region.id);
       const opened = region.zones.filter((z) => state.zones[z]?.unlocked);
       const done = region.zones.filter((z) => state.zones[z]?.complete).length;
-      // Al máximo (v4.1): 🏁; completada, 🚩. El de al máximo no se dice mientras no haya ninguna.
+      // Maxed (v4.1): 🏁; completed, 🚩. Maxed count hidden while none are maxed.
       const maxed = new Set(region.zones.filter((z) => state.zones[z]?.complete && zoneMaxed(state, z)));
       const income = opened.reduce((sum, z) => sum + analyzeChain(state, z).income, 0);
-      // «Aquí estás» en el primer renglón, a la derecha del nombre (v4.1.1: así no hace un tercero).
+      // «You are here» on first line right of name (v4.1.1: avoids wrapping to a third line).
       const here = region.zones.includes(this.getZone()) ? `<span class="zones-here">${t('📍 Aquí estás')}</span>` : '';
-      // Siempre en dos renglones (v4.1): el nombre arriba; abajo, cómo va y el dinero de la región.
+      // Always two lines (v4.1): name above; below, status and region coin rate.
       const counts = `${done}/${region.zones.length} 🚩${maxed.size ? ` · ${maxed.size}/${region.zones.length} 🏁` : ''}`;
       const head = `<button class="zones-region research-other" data-fold="${region.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${region.icon} ${region.name}${here}<small>${counts} · 💰 ${formatNumber(state.coins)} (${formatRate(income)} 💰/s)</small></button>`;
       if (folded) return group(head);
@@ -153,14 +153,14 @@ export class ZonesView {
             ${action}
           </div>`;
       });
-      // Las que todavía no existen (llegan en las próximas versiones).
+      // Upcoming ones (arriving in future versions).
       const soon = (region.soon ?? []).map(
         (name, k) => `<div class="research locked"><span class="research-icon">🚧</span><span class="research-text"><b>${t('Zona {n}', { n: region.zones.length + k + 1 })} · ${t(name)}</b><br><small>${t('Llega pronto')}</small></span></div>`,
       );
       return group(head + rows.join('') + soon.join(''));
     }).join('');
-    // La zona especial (v4.7.1): un premio que llega más adelante. Se abre con el segundo final (todo al nivel 100) en
-    // cada región, o con la región ya reiniciada; aquí se dice cuántas van.
+    // Special zone (v4.7.1): future reward. Unlocks with second ending (all at level 100) in
+    // each region, or already reset once; shows progress toward it.
     const regions = REGIONS.filter((r) => !r.hidden && !r.wip);
     const ready = regions.filter((r) => {
       const st = regionState(root, r.id);
@@ -174,6 +174,6 @@ export class ZonesView {
   }
 }
 
-// Cada región en su panel sombreado (v3.59): la cabecera arriba y sus zonas adentro, un poco más angostas, para
-// que se vea a qué región pertenece cada una.
+// Each region inside its shaded card (v3.59): header above and zones indented inside so
+// each zone clearly belongs to its region.
 const group = (html) => `<div class="zones-group">${html}</div>`;

@@ -10,26 +10,26 @@ import { capMult, dispatchMult, muleSpeedMult, speedMult } from './modifiers.js'
 import { resting } from './calendar.js';
 import { addMule, countFleet, endFleet, fleetOf } from './fleet.js';
 
-const MAX_IDLE = 6; // s: si hay algo en el patio y no sale una mula en este tiempo, sale con lo que haya
-// Si la carga no cabe entera en la siguiente estación, las mulas esperan a que haya sitio; solo con el
-// patio casi lleno salen con carga parcial (si cabe al menos un cuarto) o desvían a la bodega. Antes
-// salían con migajas, todas quedaban en camino y el patio se llenaba aunque el transporte alcanzara.
+const MAX_IDLE = 6; // s: if anything waits in yard and no mule departs within this time, depart with partial load
+// If full load doesn't fit downstream, mules wait for space; only when yard is near full
+// do they leave partially (if at least a quarter fits) or divert to warehouse. Previously
+// they left with crumbs, saturating roads while transport actually had capacity.
 const PATIO_ALMOST_FULL = 0.8;
 const MIN_PARTIAL = 0.25;
-const MIN_LEG = 1; // s por trayecto
-// Los desvíos solo usan la bodega mientras quede más de esta fracción libre: así el producto
-// barato que sobra nunca deja sin sitio al producto final de la cadena.
+const MIN_LEG = 1; // s per trip segment
+// Diversions only use warehouse while more than this fraction stays free: so cheap
+// overflowing items never crowd out final-chain products.
 export const DIVERT_RESERVE = 0.3;
 
-// Segundos de un trayecto (solo ida) entre dos puntos de la cadena de una zona.
-// `to` puede ser otra estación o 'warehouse' (la bodega de la zona de `from`).
+// One-way trip seconds between two points on a zone chain.
+// `to` may be another station or 'warehouse' (`from`'s zone warehouse).
 export function legTime(from, to, speedMult = 1) {
   const zone = zoneOf(from);
   const pos = ROAD_POS[zone];
   return Math.max(MIN_LEG, Math.abs(pos[to] - pos[from]) / (ZONES_BY_ID[zone].muleSpeed * speedMult));
 }
 
-// Unidades en camino hacia una estación, o hacia la bodega de una zona.
+// Units currently en route to a station, or to a zone warehouse.
 export function inTransit(state, to = 'warehouse', zoneId = 'finca') {
   const f = fleetOf(state);
   if (f) return (to === 'warehouse' ? f.toWarehouse[zoneId] : f.incoming[to]) ?? 0;
@@ -40,26 +40,26 @@ export function inTransit(state, to = 'warehouse', zoneId = 'finca') {
   }, 0);
 }
 
-// Cuánto acelera la producción de una estación (para dimensionar la carga de sus mulas).
+// How much a station's output is boosted (to size its mule loads).
 export function productionMult(state, id) {
   return speedMult(state, id);
 }
 
-// Destino normal de las mulas de una estación: la siguiente construida o la bodega. Si reparte entre
-// varias (una rama), la más lejana: así la carga alcanza para cualquiera de ellas.
+// Normal destination for a station's mules: next built station or warehouse. When splitting
+// across branches, farthest destination: ensures load covers any of them.
 export function normalDest(state, id) {
   const targets = consumers(state, id);
   if (!targets.length || exportsOf(state, id).length) return 'warehouse';
   return targets.reduce((far, c) => (legTime(id, c) > legTime(id, far) ? c : far));
 }
 
-// Rutas que se llevan a otra zona un producto intermedio de esta estación (la leche pasteurizada): la
-// estación les guarda una parte, como a una rama más. Sus mulas lo dejan en la bodega, de donde sale la ruta.
+// Routes carrying an intermediate output of this station elsewhere (pasteurized milk): station
+// reserves a share for them like an extra branch. Mules drop it at warehouse for the route.
 export function exportsOf(state, id) {
   return (ROUTES_OF[id] ?? []).filter((r) => routeActive(state, r.id));
 }
 
-// Rutas que pueden llevarse el producto de cada estación (de su zona y con su producto), calculadas una vez.
+// Routes eligible to carry each station's output (same zone and product), precomputed.
 const ROUTES_OF = Object.fromEntries(
   Object.values(STATIONS_BY_ID)
     .filter((def) => CHILDREN[def.id]?.length)
@@ -69,15 +69,15 @@ const ROUTES_OF = Object.fromEntries(
     }),
 );
 
-// Rutas que se llevarán el producto de esta estación pero aún no abren (la Ruta de la leche, antes
-// de abrir el Cacaotal): la parte que les toca se vende mientras tanto, y eso no es un problema.
+// Routes that will take this station's product but aren't open yet (milk route before
+// Cacaotal opens): their reserved share sells meanwhile, which isn't a fault.
 export function pendingRoutes(state, id) {
   return (ROUTES_OF[id] ?? []).filter((r) => !routeActive(state, r.id));
 }
 
-// ¿Las estaciones siguientes procesan menos de lo que esta produce? (Más las rutas que se llevan su
-// producto.) Entonces lo que sobra va a la bodega por el camino largo y, si los arrieros no alcanzan,
-// el patio se llena: la culpa es de las siguientes, no de las mulas. Devuelve las que van más lentas.
+// Do downstream stations process less than this outputs? (Plus outbound routes taking its
+// product.) Then surplus goes to warehouse the long way and, if haulers fall short,
+// yard fills up: downstream is at fault, not mules. Returns lagging destinations.
 export function slowConsumers(state, id) {
   const children = consumers(state, id);
   if (!children.length) return [];
@@ -90,7 +90,7 @@ export function slowConsumers(state, id) {
   return children.filter((c) => state.stations[c].level === Math.min(...children.map((x) => state.stations[x].level)));
 }
 
-// Lo que falta por dejar en la bodega para una ruta (carga y media, menos lo que ya hay o va en camino).
+// Remaining units to stockpile in warehouse for a route (1.5 loads minus stocked and en-route).
 export function exportSpace(state, routeId) {
   const r = ROUTES_BY_ID[routeId];
   const cap = ROUTE_STOCK * routeCapacity(state, routeId);
@@ -102,26 +102,26 @@ export function exportSpace(state, routeId) {
   return { space: cap - stock - coming, cap };
 }
 
-// Destinos de las mulas de una estación: estaciones construidas y rutas ('export:<ruta>'). `product`: lo que
-// llevan (en una estación que junta dos, cada producto tiene su propio espacio; v4.0).
+// Destinations for a station's mules: built stations and routes ('export:<route>'). `product`:
+// cargo carried (on a combiner station, each input has its own buffer; v4.0).
 const targetSpace = (state, t, product) => (t.startsWith('export:') ? exportSpace(state, t.slice(7)).space : inputSpace(state, t, joinOf(t, product) ? product : undefined));
 const targetCap = (state, t) => (t.startsWith('export:') ? exportSpace(state, t.slice(7)).cap : stationInputCap(STATIONS_BY_ID[t], state.stations[t].level, capMult(state, t)));
 const targetDest = (t) => (t.startsWith('export:') ? 'warehouse' : t);
 
-// Carga de cada mula del equipo de una estación (a su nivel de arrieros o al indicado).
+// Per-mule capacity for a station's team (at current or given transport level).
 export function teamLoad(state, id, level = state.stations[id].transport.level) {
   const def = STATIONS_BY_ID[id];
   return muleLoad(def, level, 2 * legTime(id, normalDest(state, id)), productionMult(state, id));
 }
 
-// Unidades por segundo que mueven los arrieros de una estación hasta `dest`.
-// Hacia su destino normal: un 25 % más de lo que produce la estación al mismo nivel
-// (más con Herraduras o Cable aéreo). Hacia la bodega en un desvío: menos, el viaje es más largo.
+// Units/s hauled by a station's haulers to `dest`.
+// To normal destination: 25 % above same-level station output
+// (more with Horseshoes or Cableway). To warehouse on diversion: less, longer trip.
 export function teamCapacity(state, id, dest = normalDest(state, id), level = state.stations[id].transport.level) {
   return (muleCount(level) * teamLoad(state, id, level)) / (2 * legTime(id, dest, muleSpeedMult(state)));
 }
 
-// Mulas de una estación que están en camino (ida o vuelta).
+// Station mules currently out on a trip (outbound or returning).
 export function busyMules(state, id) {
   const f = fleetOf(state);
   if (f) return f.busy[id] ?? 0;
@@ -132,9 +132,9 @@ export function warehouseCap(state, zoneId) {
   return warehouseCapacity(state.zones[zoneId].dispatch.level, dispatchMult(state, zoneId));
 }
 
-// Espacio libre en la bodega de una zona contando lo que ya viene en camino.
-// Lo que espera una ruta va en el andén de la bodega: no le quita sitio al resto (antes, la leche
-// guardada para el Cacaotal podía llenar la bodega de la Lechería y parar toda la zona).
+// Free space in zone warehouse factoring in en-route cargo.
+// Route reserve sits on warehouse loading dock without crowding others (previously
+// milk queued for Cacaotal could fill Lechería warehouse and stall the whole zone).
 export function dockStock(state, zoneId) {
   const wh = state.zones[zoneId].warehouse;
   return Object.entries(routeReserve(state, zoneId)).reduce((n, [p, r]) => n + Math.min(wh[p] ?? 0, r), 0);
@@ -145,9 +145,9 @@ export function warehouseSpace(state, zoneId) {
   return warehouseCap(state, zoneId) - (sumValues(wh) - dockStock(state, zoneId)) - inTransit(state, 'warehouse', zoneId);
 }
 
-// Arrieros (v0.3): cada estación tiene sus mulas. Van a la siguiente estación (o a la bodega si
-// la siguiente no existe o no tiene sitio), entregan y vuelven. Si todas están en camino, el
-// producto se acumula en el patio.
+// Haulers (v0.3): each station has mules. Travel to next station (or warehouse if
+// next doesn't exist or lacks room), unload, return. If all out, goods stack in yard.
+// At night no new pack departs (en-route mules finish their trip).
 export function stepMules(state, dt, bus) {
   let finished = false;
   for (const m of state.mules) {
@@ -167,7 +167,7 @@ export function stepMules(state, dt, bus) {
   }
   if (finished) state.mules = state.mules.filter((m) => !m.done);
 
-  // De noche no sale ninguna recua (las que van de camino terminan su viaje).
+  // Empty yard or all mules busy: nobody leaves (skip load math).
   if (resting(state)) return;
   countFleet(state);
   try {
@@ -196,7 +196,7 @@ function dispatchFrom(state, id, dt, bus) {
   const level = s.transport.level;
   s.sinceDeparture += dt;
   s.waiting = null;
-  // Sin producto en el patio, o con todas las mulas fuera, no sale nadie: no hace falta calcular la carga.
+  // Empty yard or all mules busy: nobody leaves (skip load math).
   if (s.buffer <= 0) return;
   if (busyMules(state, id) >= muleCount(level)) {
     s.waiting = 'mules';
@@ -206,7 +206,7 @@ function dispatchFrom(state, id, dt, bus) {
   const product = Object.keys(def.out)[0];
   const targets = [...consumers(state, id), ...exportsOf(state, id).map((r) => `export:${r.id}`)];
 
-  // Pueden salir varias mulas en el mismo instante si hay producto y mulas libres.
+  // Multiple mules can depart simultaneously when cargo and free mules allow.
   while (s.buffer > 0) {
     if (busyMules(state, id) >= muleCount(level)) {
       s.waiting = 'mules';
@@ -225,7 +225,7 @@ function dispatchFrom(state, id, dt, bus) {
       sendMule(state, id, targetDest(partial), Math.min(amount, targetSpace(state, partial, product)), bus);
       continue;
     }
-    // Hay sitio, pero no para una carga entera: mejor esperar que salir con migajas.
+    // Some room available, less than full load: better wait than haul crumbs.
     if (!almostFull && targets.some((c) => targetSpace(state, c, product) > 0)) return;
     const zoneId = zoneOf(id);
     const reserve = targets.length ? DIVERT_RESERVE * warehouseCap(state, zoneId) : 0;
@@ -236,19 +236,19 @@ function dispatchFrom(state, id, dt, bus) {
     }
     const diverted = Math.min(amount, room);
     sendMule(state, id, 'warehouse', diverted, bus);
-    // El aviso ↪ solo para desvíos de verdad (al menos media carga), no por un sobrante suelto ni cuando
-    // la bodega es también donde espera la ruta (lo que llega de más ahí se lo lleva la siguiente carga),
-    // ni cuando es la parte de una ruta que aún no abre (se vende mientras tanto).
+    // Flag ↪ only on real diversions (at least half a load), not tiny leftovers or when
+    // warehouse also feeds route (surplus goes on next route load), nor for
+    // unopened route shares (sold meanwhile).
     const exporting = targets.some((t) => t.startsWith('export:')) || pendingRoutes(state, id).length > 0;
     if (targets.length && !exporting && diverted >= load * 0.5) s.lastDiverted = state.playTime;
   }
 }
 
-// Entre las estaciones que reciben el producto y tienen sitio para `amount`, la de la entrada más vacía
-// (contando lo que ya va en camino). Así la que trabaja más rápido recibe más, sin repartir a mano.
-// A una estación cuya entrada no alcanza para una carga entera (una rama por debajo del nivel de la
-// anterior) le basta con tener media entrada libre: se le lleva lo que quepa. Si no, nunca recibiría
-// nada y se quedaría parada.
+// Among target stations with room for `amount`, pick one with emptiest input
+// (counting en-route cargo). Automatically feeds faster station more without manual split.
+// A station whose input buffer holds less than a full load (branch lagging below
+// parent) settles for half input free: delivers what fits, else it would starve forever.
+// anything and would stall.
 function pickConsumer(state, targets, amount, product) {
   let best = null;
   let bestFill = Infinity;
@@ -276,11 +276,11 @@ function sendMule(state, from, to, amount, bus) {
   bus.emit('muleDeparted', mule);
 }
 
-// Subproductos (v4.0): lo que una estación saca además de su producto (la pulpa del Beneficiadero) pasa por
-// una canaleta, sin mulas. Primero a la bodega, lo que guarda para las rutas que se lo llevan (como las
-// estaciones con su producto, v3.67); luego a las estaciones de su zona que lo usan (de entrada o para
-// juntarlo), primero a la de entrada más vacía; y si sobra y tiene ruta (abierta o no), a la bodega a
-// venderse. Lo que nadie usa se queda en su patio de subproductos y, lleno, se desecha.
+// Byproducts (v4.0): extra output alongside main product (Beneficiadero pulp) travels
+// via chute, no mules. First to warehouse reserved for its routes (like
+// primary outputs, v3.67); next to local consuming stations (primary or combined),
+// emptiest first; leftovers with a route (open or not) sell at warehouse. Unused stocks fill yard then overflow.
+// Unusable surpluses stack in byproduct yard and overflow when full.
 export function stepByproducts(state) {
   for (const [id, src] of Object.entries(state.stations)) {
     if (!(src.byBuffer > 1e-9)) continue;

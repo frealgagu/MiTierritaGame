@@ -1,7 +1,7 @@
-// Los efectos de sonido que se publican para descargar (v3.71), con su nombre en cada idioma. Los usan
-// tools/sfx-export.mjs (que los graba) y tools/music-page.mjs (que arma la página de descargas).
-//   [archivo, cómo se toca en Sound.js, si va también en MIDI, { es, en, pt, fr }]
-// Los de las estaciones (`kind`) suenan con la primera estación de ese oficio.
+// Sound effects published for download (v3.71), with their names in each language. Used by
+// tools/sfx-export.mjs (which records them) and tools/music-page.mjs (which builds the download page).
+//   [file, how it is played in Sound.js, whether also exported to MIDI, { es, en, pt, fr }]
+// Station sounds (`kind`) are played using the first station of that craft.
 export const EFFECTS = [
   ['monedas', 'coin', true, { es: 'Monedas', en: 'Coins', pt: 'Moedas', fr: 'Pièces' }],
   ['subir-de-nivel', 'levelUp', true, { es: 'Subir de nivel', en: 'Level up', pt: 'Subir de nível', fr: 'Niveau supérieur' }],

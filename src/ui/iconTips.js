@@ -1,12 +1,12 @@
-// Nombres de los íconos (v3.66): al tocar un ícono en cualquier texto del juego (el panel, la cadena, los
-// objetivos, las investigaciones…) aparece encima su nombre: «Cereza de café», «Bolsas de café», «Monedas».
-// No hace falta marcar cada ícono: se mira qué letra quedó bajo el dedo y se busca en la lista. Los botones
-// siguen funcionando como siempre (ahí no sale el nombre).
+// Icon tooltips (v3.66): tapping an icon inside any game text (panel, chain,
+// goals, research…) shows its name above: «Coffee cherry», «Coffee bags», «Coins».
+// No per-icon markup needed: hit-tests glyph under pointer and looks up name. Buttons
+// still work as usual (tooltips skipped there).
 import { PRODUCTS } from '../data/products.js';
 import { STATIONS } from '../data/stations.js';
 import { t } from '../i18n/index.js';
 
-// Los íconos de la interfaz que no son productos.
+// UI icons that aren't products.
 const GENERAL = {
   '💰': t('Monedas'),
   '🐴': t('Arrieros (mulas)'),
@@ -37,8 +37,8 @@ const GENERAL = {
 
 const clean = (s) => s.replace(/️/g, '');
 
-// ícono -> nombre. Primero los productos (si dos comparten ícono, los dos nombres), luego las estaciones
-// y al final los de la interfaz.
+// icon -> name. Products first (shared icons show both names), then stations,
+// and UI icons last.
 export const ICON_NAMES = (() => {
   const names = {};
   const add = (icon, name) => {
@@ -58,7 +58,7 @@ export const iconName = (text) => ICON_NAMES[clean(text)] ?? null;
 const segmenter = typeof Intl !== 'undefined' && Intl.Segmenter ? new Intl.Segmenter('es', { granularity: 'grapheme' }) : null;
 const graphemes = (text) => (segmenter ? [...segmenter.segment(text)].map((s) => ({ text: s.segment, index: s.index })) : [...text].reduce((out, ch) => (out.push({ text: ch, index: (out.at(-1)?.index ?? 0) + (out.at(-1)?.text.length ?? 0) }), out), []));
 
-// El ícono que quedó bajo el punto (x, y) de la pantalla: { name, rect } o null.
+// Icon located under screen coordinates (x, y): { name, rect } or null.
 function iconAt(x, y) {
   let node;
   let offset;
@@ -73,7 +73,7 @@ function iconAt(x, y) {
   } else return null;
   if (node?.nodeType !== Node.TEXT_NODE) return null;
   const parts = graphemes(node.data);
-  // El cursor queda entre dos letras: se mira la de antes y la de después.
+  // Caret sits between two glyphs: inspect character before and after.
   const near = parts.filter((g) => g.index <= offset && offset <= g.index + g.text.length);
   for (const g of near) {
     const name = iconName(g.text);
@@ -106,7 +106,7 @@ export function bindIconTips() {
       if (!hit) return hide();
       tip.textContent = hit.name;
       tip.hidden = false;
-      // Encima del ícono (o debajo si no cabe), sin salirse de la pantalla.
+      // Above icon (or below if clipped), keeping within screen bounds.
       const w = tip.offsetWidth;
       const h = tip.offsetHeight;
       const left = Math.min(Math.max(6, hit.rect.left + hit.rect.width / 2 - w / 2), window.innerWidth - w - 6);

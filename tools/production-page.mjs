@@ -1,7 +1,7 @@
-// La página de producción (v4.4.10): cuánto produce cada estación de cada zona, del nivel 1 al 100, con y sin su
-// investigación ×2, lo que cuesta y lo que vale su producto. Sirve para ajustar el balance.
-//   node tools/production-page.mjs [salida]   (por defecto docs/produccion.html; la plantilla es tools/production-page.html)
-// Lleva la fuente de íconos del juego dentro de la página, para que se vean los íconos propios.
+// Production page (v4.4.10): output of every station in every zone from level 1 to 100, with and without
+// its ×2 research, its cost, and its product value. Useful for balance tuning.
+//   node tools/production-page.mjs [output]   (default docs/produccion.html; template is tools/production-page.html)
+// Embeds the game icon font in the page so custom icons render properly.
 import fs from 'node:fs';
 import { STATIONS } from '../src/data/stations.js';
 import { PRODUCTS } from '../src/data/products.js';
@@ -12,13 +12,13 @@ import { ROUTES_BY_ID } from '../src/data/routes.js';
 import { LEVEL_SPEED_BONUS, MILESTONES, MILESTONE_MULTS } from '../src/sim/rules.js';
 import pkg from '../package.json' with { type: 'json' };
 
-// Encabezado para abrir la página como archivo suelto (al publicarla como artefacto se quita la primera línea).
+// Banner for opening the page as a standalone file (when published as an artifact the first line is stripped).
 const HEAD = '<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n';
 const OUT = process.argv[2] ?? new URL('../docs/produccion.html', import.meta.url).pathname;
 const name = (p) => PRODUCTS[p]?.name ?? p;
 const icon = (p) => PRODUCTS[p]?.icon ?? '';
 
-// La investigación que acelera cada estación (la ×2 de esa estación).
+// The research upgrade speeding up each station (that station's ×2).
 const speedUp = {};
 for (const r of RESEARCH) if (r.effect?.type === 'stationSpeed') (speedUp[r.effect.target] ??= []).push({ name: r.name, mult: r.effect.mult, cost: r.cost });
 
@@ -55,7 +55,7 @@ const regions = REGIONS.map((r) => ({
   name: r.name,
   icon: r.icon,
   hidden: Boolean(r.hidden || r.wip),
-  // En Bogotá (v4.5), una tabla por barrio.
+  // In Bogotá (v4.5), one table per neighborhood.
   zones: r.zones.flatMap((z) => {
     const zone = ZONES_BY_ID[z];
     const ids = [zone.farm.stationId, ...zone.plots.map((p) => p.stationId)];

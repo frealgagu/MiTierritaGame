@@ -1,5 +1,5 @@
-// Los tres retos que tenía cada evento hasta la v3.71 (desde la v3.72 tiene uno solo). Solo sirven para que
-// un tablero que estaba en juego al actualizar termine con el reto que tenía (sim/events.js, boardObjective).
+// The three challenges each event had until v3.71 (since v3.72 only one). Kept solely so
+// a board already running at update time can finish with its assigned challenge (sim/events.js, boardObjective).
 export const LEGACY_OBJECTIVES = {
   broca: [{kind: 'sold', items: {coffee_bag: 100}, medals: [720, 1020]}, {kind: 'produced', items: {roasted: 500}, medals: [735, 1035]}, {kind: 'produced', items: {green: 1000}, medals: [630, 930]}],
   molienda: [{kind: 'produced', items: {panela_powder: 500}, medals: [675, 975]}, {kind: 'produced', items: {panela: 550}, medals: [720, 1020]}, {kind: 'produced', items: {melado: 1100}, medals: [675, 975]}],

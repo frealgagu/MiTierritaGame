@@ -1,7 +1,7 @@
-// Mapa de Santander · Zona 6: Barichara (v3.5). Mismo trazado que el Pueblo (zone6_pueblo.js): no tiene
-// fuente propia; en la plaza está la Dulcería, que recibe el bocadillo de la Guayabera, y cada estación
-// espera junto a la carretera por la que le llega lo suyo de otra zona de Santander. Se dibuja como el
-// Pueblo (tema 'town'), pero blanca y con calles de piedra amarilla (style).
+// Santander Map · Zone 6: Barichara (v3.5). Same layout as El Pueblo (zone6_pueblo.js): it has no
+// source of its own; in the square sits the Candy Shop, which receives bocadillo from La Guayabera, and each station
+// waits next to the road bringing its supply from another Santander zone. Drawn like El
+// Pueblo ('town' theme), but whitewashed with yellow stone streets (style).
 import { ICON } from '../icons.js';
 
 export const ZONE12 = {
@@ -26,7 +26,7 @@ export const ZONE12 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys (v3.9), inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Guane ➜',
   muleSpeed: 4,
@@ -40,5 +40,5 @@ export const ZONE12 = {
     tercios: { road: [[12.5, 25.9], [12.5, 15.2]], sign: [11.3, 23.6], text: 'Tercios de la Fiquera ⬆' },
   },
   unlockedBy: 'hormigas',
-  next: null, // la última de Santander
+  next: null, // the last zone of Santander
 };

@@ -1,10 +1,10 @@
-// Objetivos de la Zona 1 (GDD §6): una lista en orden; se ven 3 a la vez y dan monedas al cobrarlos.
-// Ojo: los productos intermedios usan 'produced', no 'sold': solo se venden si se desvían, y un
-// objetivo que dependa de eso puede quedar imposible y bloquear la lista.
+// Zone 1 Goals (GDD §6): ordered queue; 3 show at once and award coins when claimed.
+// Note: intermediate products use 'produced', not 'sold': they only sell via diversion, so a
+// sell goal could become uncompletable and deadlock the queue.
 //   sold / produced: { product, amount }   level: { target, level }   unlock: { station }
 //   research: { research }   researchCount: { count }   income: { perSecond, zone }   allLevels: { level, zone }
-//   imported: { product, amount } (lo que llegó por una ruta entre zonas)
-// Cada zona tiene su lista; el último objetivo (final: true) completa la zona y abre la siguiente.
+//   imported: { product, amount } (arrived via inter-zone route)
+// Each zone has its list; last goal (final: true) completes zone and unlocks next.
 const FINCA = [
   { id: 'g01', type: 'sold', product: 'cherry', amount: 20, reward: 15 },
   { id: 'g02', type: 'level', target: 'farm', level: 5, reward: 20 },
@@ -35,7 +35,7 @@ const FINCA = [
   { id: 'g27', type: 'allLevels', zone: 'finca', level: 25, reward: 100000 },
   { id: 'g05', type: 'research', research: 'abono', reward: 50000 },
   { id: 'g28', type: 'sold', product: 'coffee_bag', amount: 500, reward: 150000 },
-  // Final de la Zona 1.
+  // Zone 1 finale.
   { id: 'final', type: 'sold', product: 'coffee_bag', amount: 2000, reward: 0, final: true },
 ];
 
@@ -54,7 +54,7 @@ const TRAPICHE = [
   { id: 't07', type: 'research', research: 'motor', reward: 50000 },
   { id: 't13', type: 'income', zone: 'trapiche', perSecond: 500, reward: 150000 },
   { id: 't14', type: 'sold', product: 'panela_powder', amount: 1000, reward: 300000 },
-  // Final de la Zona 2.
+  // Zone 2 finale.
   { id: 'tfinal', type: 'sold', product: 'panela_powder', amount: 6000, reward: 0, final: true },
 ];
 
@@ -75,7 +75,7 @@ const LECHERIA = [
   { id: 'l15', type: 'allLevels', zone: 'lecheria', level: 25, reward: 3000000 },
   { id: 'l07', type: 'research', research: 'ordeno', reward: 1500000 },
   { id: 'l16', type: 'sold', product: 'arequipe', amount: 1000, reward: 5000000 },
-  // Final de la Zona 3.
+  // Zone 3 finale.
   { id: 'lfinal', type: 'sold', product: 'arequipe', amount: 6000, reward: 0, final: true },
 ];
 
@@ -97,7 +97,7 @@ const CACAOTAL = [
   { id: 'c16', type: 'allLevels', zone: 'cacaotal', level: 25, reward: 20000000 },
   { id: 'c07', type: 'research', research: 'injertos', reward: 10000000 },
   { id: 'c17', type: 'sold', product: 'milk_chocolate', amount: 1000, reward: 30000000 },
-  // Final de la Zona 4.
+  // Zone 4 finale.
   { id: 'cfinal', type: 'sold', product: 'milk_chocolate', amount: 4000, reward: 0, final: true },
 ];
 
@@ -117,7 +117,7 @@ const MAIZAL = [
   { id: 'm14', type: 'allLevels', zone: 'maizal', level: 25, reward: 200000000 },
   { id: 'm07', type: 'research', research: 'maiz_hibrido', reward: 100000000 },
   { id: 'm15', type: 'sold', product: 'cheese_arepa', amount: 1000, reward: 300000000 },
-  // Final de la Zona 5.
+  // Zone 5 finale.
   { id: 'mfinal', type: 'sold', product: 'cheese_arepa', amount: 6000, reward: 0, final: true },
 ];
 
@@ -138,11 +138,11 @@ const PUEBLO = [
   { id: 'p15', type: 'allLevels', zone: 'pueblo', level: 25, reward: 1500000000 },
   { id: 'p06', type: 'research', research: 'catadores', reward: 1500000000 },
   { id: 'p16', type: 'sold', product: 'container', amount: 100, reward: 2500000000 },
-  // Final de la Zona 6 y del juego.
+  // Zone 6 and Eje Cafetero finale.
   { id: 'pfinal', type: 'sold', product: 'container', amount: 7000, reward: 0, final: true },
 ];
 
-// Santander · La Guayabera (v3.0): la misma lista que la Finca, con el bocadillo.
+// Santander · La Guayabera (v3.0): same goal list as Finca, with bocadillo.
 const GUAYABERA = [
   { id: 's01', type: 'sold', product: 'guava', amount: 20, reward: 15 },
   { id: 's02', type: 'level', target: 'guava_grove', level: 5, reward: 20 },
@@ -175,7 +175,7 @@ const GUAYABERA = [
   { id: 's_final', type: 'sold', product: 'bocadillo_crate', amount: 2000, reward: 0, final: true },
 ];
 
-// Santander · El Tabacal (v3.1): la misma lista que el Trapiche, con el tabaco.
+// Santander · El Tabacal (v3.1): same list as Trapiche, with tobacco.
 const TABACAL = [
   { id: 'k01', type: 'sold', product: 'tobacco_leaf', amount: 50, reward: 500 },
   { id: 'k02', type: 'level', target: 'tobacco_field', level: 10, reward: 1000 },
@@ -194,7 +194,7 @@ const TABACAL = [
   { id: 'k_final', type: 'sold', product: 'cigar', amount: 6000, reward: 0, final: true },
 ];
 
-// Santander · La Fiquera (v3.2): la misma lista que la Lechería.
+// Santander · La Fiquera (v3.2): same list as Lechería.
 const FIQUERA = [
   { id: 'q01', type: 'sold', product: 'fique_leaf', amount: 50, reward: 10000 },
   { id: 'q02', type: 'level', target: 'fique_field', level: 10, reward: 20000 },
@@ -215,7 +215,7 @@ const FIQUERA = [
   { id: 'q_final', type: 'sold', product: 'tobacco_bale', amount: 6000, reward: 0, final: true },
 ];
 
-// Santander · El Hato (v3.3): la misma lista que el Cacaotal.
+// Santander · El Hato (v3.3): same list as Cacaotal.
 const HATO = [
   { id: 'h01', type: 'sold', product: 'steer', amount: 50, reward: 75000 },
   { id: 'h02', type: 'level', target: 'cattle_ranch', level: 10, reward: 125000 },
@@ -237,7 +237,7 @@ const HATO = [
   { id: 'h_final', type: 'sold', product: 'fiambre', amount: 4000, reward: 0, final: true },
 ];
 
-// Santander · Las Hormigas (v3.4): la misma lista que el Maizal.
+// Santander · Las Hormigas (v3.4): same list as Maizal.
 const HORMIGAS = [
   { id: 'a01', type: 'sold', product: 'ant_queen', amount: 50, reward: 1000000 },
   { id: 'a02', type: 'level', target: 'anthill', level: 10, reward: 2000000 },
@@ -257,7 +257,7 @@ const HORMIGAS = [
   { id: 'a_final', type: 'sold', product: 'recuerdo', amount: 6000, reward: 0, final: true },
 ];
 
-// Santander · Barichara (v3.5): la misma lista que el Pueblo. Su final es el de Santander.
+// Santander · Barichara (v3.5): same list as Pueblo. Finale completes Santander.
 const BARICHARA = [
   { id: 'b01', type: 'imported', product: 'bocadillo_crate', amount: 50, reward: 5000000 },
   { id: 'b02', type: 'level', target: 'dulceria', level: 10, reward: 10000000 },
@@ -278,7 +278,7 @@ const BARICHARA = [
   { id: 'b_final', type: 'sold', product: 'excursion', amount: 7000, reward: 0, final: true },
 ];
 
-// Costa · El Arrozal (v3.15): la misma lista que la Finca y la Guayabera, con el arroz.
+// Coast · El Arrozal (v3.15): same list as Finca and Guayabera, with rice.
 const ARROZAL = [
   { id: 'z01', type: 'sold', product: 'paddy', amount: 20, reward: 15 },
   { id: 'z02', type: 'level', target: 'rice_field', level: 5, reward: 20 },
@@ -311,7 +311,7 @@ const ARROZAL = [
   { id: 'z_final', type: 'sold', product: 'rice_sack', amount: 2000, reward: 0, final: true },
 ];
 
-// Costa · El Cocal (v3.16): la misma lista que el Tabacal.
+// Coast · El Cocal (v3.16): same list as Tabacal.
 const COCAL = [
   { id: 'v01', type: 'sold', product: 'coconut', amount: 50, reward: 500 },
   { id: 'v02', type: 'level', target: 'coconut_grove', level: 10, reward: 1000 },
@@ -330,7 +330,7 @@ const COCAL = [
   { id: 'v_final', type: 'sold', product: 'cocada', amount: 6000, reward: 0, final: true },
 ];
 
-// Costa · La Ciénaga (v3.17): la misma lista que la Fiquera.
+// Coast · La Ciénaga (v3.17): same list as Fiquera.
 const CIENAGA = [
   { id: 'n01', type: 'sold', product: 'fish', amount: 50, reward: 10000 },
   { id: 'n02', type: 'level', target: 'fishing_canoes', level: 10, reward: 20000 },
@@ -351,7 +351,7 @@ const CIENAGA = [
   { id: 'n_final', type: 'sold', product: 'fish_in_coconut', amount: 6000, reward: 0, final: true },
 ];
 
-// Costa · La Quesera (v3.18): la misma lista que el Hato.
+// Coast · La Quesera (v3.18): same list as Hato.
 const QUESERA = [
   { id: 'e01', type: 'sold', product: 'ordeno_milk', amount: 50, reward: 75000 },
   { id: 'e02', type: 'level', target: 'milking_corral', level: 10, reward: 125000 },
@@ -373,7 +373,7 @@ const QUESERA = [
   { id: 'e_final', type: 'sold', product: 'bandeja_costena', amount: 4000, reward: 0, final: true },
 ];
 
-// Costa · El Sombrero (v3.19): la misma lista que las Hormigas.
+// Coast · El Sombrero (v3.19): same list as Hormigas.
 const SOMBRERO = [
   { id: 'w01', type: 'sold', product: 'cana_flecha', amount: 50, reward: 1000000 },
   { id: 'w02', type: 'level', target: 'canaflechal', level: 10, reward: 2000000 },
@@ -393,7 +393,7 @@ const SOMBRERO = [
   { id: 'w_final', type: 'sold', product: 'recuerdo_costa', amount: 6000, reward: 0, final: true },
 ];
 
-// Costa · Cartagena (v3.20): la misma lista que Barichara. Su final es el de la Costa.
+// Coast · Cartagena (v3.20): same list as Barichara. Finale completes Coast.
 const CARTAGENA = [
   { id: 'r01', type: 'imported', product: 'rice_sack', amount: 50, reward: 5000000 },
   { id: 'r02', type: 'level', target: 'fogon_getsemani', level: 10, reward: 10000000 },
@@ -414,7 +414,7 @@ const CARTAGENA = [
   { id: 'r_final', type: 'sold', product: 'paseo_islas', amount: 7000, reward: 0, final: true },
 ];
 
-// Boyacá · El Papal (v3.22): la misma lista que el Arrozal, con la papa.
+// Boyacá · El Papal (v3.22): same list as Arrozal, with potato.
 const PAPAL = [
   { id: 'd01', type: 'sold', product: 'potato', amount: 20, reward: 15 },
   { id: 'd02', type: 'level', target: 'potato_field', level: 5, reward: 20 },
@@ -447,7 +447,7 @@ const PAPAL = [
   { id: 'd_final', type: 'sold', product: 'criollas_box', amount: 2000, reward: 0, final: true },
 ];
 
-// Boyacá · La Cervecería (v3.23): la misma lista que el Tabacal y el Cocal.
+// Boyacá · La Cervecería (v3.23): same list as Tabacal and Cocal.
 const CERVECERIA = [
   { id: 'f01', type: 'sold', product: 'barley', amount: 50, reward: 500 },
   { id: 'f02', type: 'level', target: 'barley_field', level: 10, reward: 1000 },
@@ -466,7 +466,7 @@ const CERVECERIA = [
   { id: 'f_final', type: 'sold', product: 'beer_crate', amount: 6000, reward: 0, final: true },
 ];
 
-// Boyacá · Ráquira (v3.24): la misma lista que la Fiquera y la Ciénaga.
+// Boyacá · Ráquira (v3.24): same list as Fiquera and Ciénaga.
 const RAQUIRA = [
   { id: 'i01', type: 'sold', product: 'greda', amount: 50, reward: 10000 },
   { id: 'i02', type: 'level', target: 'clay_pit', level: 10, reward: 20000 },
@@ -487,7 +487,7 @@ const RAQUIRA = [
   { id: 'i_final', type: 'sold', product: 'jarra_cerveza', amount: 6000, reward: 0, final: true },
 ];
 
-// Boyacá · Paipa (v3.25): la misma lista que el Hato y la Quesera.
+// Boyacá · Paipa (v3.25): same list as Hato and Quesera.
 const PAIPA = [
   { id: 'j01', type: 'sold', product: 'paipa_milk', amount: 50, reward: 75000 },
   { id: 'j02', type: 'level', target: 'paipa_herd', level: 10, reward: 125000 },
@@ -509,7 +509,7 @@ const PAIPA = [
   { id: 'j_final', type: 'sold', product: 'canasta_amasijos', amount: 4000, reward: 0, final: true },
 ];
 
-// Boyacá · Las Ruanas (v3.26): la misma lista que las Hormigas y el Sombrero.
+// Boyacá · Las Ruanas (v3.26): same list as Hormigas and Sombrero.
 const RUANAS = [
   { id: 'o01', type: 'sold', product: 'wool', amount: 50, reward: 1000000 },
   { id: 'o02', type: 'level', target: 'sheep_pasture', level: 10, reward: 2000000 },
@@ -529,7 +529,7 @@ const RUANAS = [
   { id: 'o_final', type: 'sold', product: 'recuerdo_boyaca', amount: 6000, reward: 0, final: true },
 ];
 
-// Boyacá · Villa de Leyva (v3.27): la misma lista que Barichara y Cartagena. Su final es el de Boyacá.
+// Boyacá · Villa de Leyva (v3.27): same list as Barichara and Cartagena. Finale completes Boyacá.
 const VILLA_LEYVA = [
   { id: 'u01', type: 'imported', product: 'criollas_box', amount: 50, reward: 5000000 },
   { id: 'u02', type: 'level', target: 'tienda_esquina', level: 10, reward: 10000000 },
@@ -550,7 +550,7 @@ const VILLA_LEYVA = [
   { id: 'u_final', type: 'sold', product: 'excursion_fosil', amount: 7000, reward: 0, final: true },
 ];
 
-// Los Llanos · La Palma (v3.31): la misma lista que el Papal.
+// Llanos · La Palma (v3.31): same list as Papal.
 const PALMA = [
   { id: 'lp01', type: 'sold', product: 'palm_bunch', amount: 20, reward: 15 },
   { id: 'lp02', type: 'level', target: 'palm_grove', level: 5, reward: 20 },
@@ -583,7 +583,7 @@ const PALMA = [
   { id: 'lp_final', type: 'sold', product: 'oil_box', amount: 2000, reward: 0, final: true },
 ];
 
-// Los Llanos · El Frutal (v3.32): la misma lista que el Tabacal, el Cocal y la Cervecería.
+// Llanos · El Frutal (v3.32): same list as Tabacal, Cocal, and Cervecería.
 const FRUTAL = [
   { id: 'lf01', type: 'sold', product: 'passion_fruit', amount: 50, reward: 500 },
   { id: 'lf02', type: 'level', target: 'passion_vines', level: 10, reward: 1000 },
@@ -602,7 +602,7 @@ const FRUTAL = [
   { id: 'lf_final', type: 'sold', product: 'juice_box', amount: 6000, reward: 0, final: true },
 ];
 
-// Los Llanos · La Cachamera (v3.33): la misma lista que la Fiquera, la Ciénaga y Ráquira.
+// Llanos · La Cachamera (v3.33): same list as Fiquera, Ciénaga, and Ráquira.
 const CACHAMERA = [
   { id: 'lc01', type: 'sold', product: 'cachama', amount: 50, reward: 10000 },
   { id: 'lc02', type: 'level', target: 'fish_ponds', level: 10, reward: 20000 },
@@ -623,7 +623,7 @@ const CACHAMERA = [
   { id: 'lc_final', type: 'sold', product: 'cachama_maracuya', amount: 6000, reward: 0, final: true },
 ];
 
-// Los Llanos · El Hato llanero (v3.34): la misma lista que el Hato, la Quesera y Paipa.
+// Llanos · El Hato llanero (v3.34): same list as Hato, Quesera, and Paipa.
 const HATO_LLANERO = [
   { id: 'lh01', type: 'sold', product: 'llanero_steer', amount: 50, reward: 75000 },
   { id: 'lh02', type: 'level', target: 'llanero_herd', level: 10, reward: 125000 },
@@ -645,7 +645,7 @@ const HATO_LLANERO = [
   { id: 'lh_final', type: 'sold', product: 'parranda_llanera', amount: 4000, reward: 0, final: true },
 ];
 
-// Los Llanos · La Talabartería (v3.35): la misma lista que las Hormigas, el Sombrero y Las Ruanas.
+// Llanos · La Talabartería (v3.35): same list as Hormigas, Sombrero, and Las Ruanas.
 const TALABARTERIA = [
   { id: 'lt01', type: 'sold', product: 'raw_hide', amount: 50, reward: 1000000 },
   { id: 'lt02', type: 'level', target: 'hide_yard', level: 10, reward: 2000000 },
@@ -665,7 +665,7 @@ const TALABARTERIA = [
   { id: 'lt_final', type: 'sold', product: 'recuerdo_llano', amount: 6000, reward: 0, final: true },
 ];
 
-// Los Llanos · Villavicencio (v3.36): la misma lista que Barichara, Cartagena y Villa de Leyva. Su final es el de los Llanos.
+// Llanos · Villavicencio (v3.36): same list as Barichara, Cartagena, and Villa de Leyva. Finale completes Llanos.
 const VILLAVICENCIO = [
   { id: 'lv01', type: 'imported', product: 'oil_box', amount: 50, reward: 5000000 },
   { id: 'lv02', type: 'level', target: 'empanaderia', level: 10, reward: 10000000 },
@@ -686,7 +686,7 @@ const VILLAVICENCIO = [
   { id: 'lv_final', type: 'sold', product: 'excursion_cano', amount: 7000, reward: 0, final: true },
 ];
 
-// Costa Pacífica · El Platanal (v3.38): la misma lista que la Palma.
+// Pacific Coast · El Platanal (v3.38): same list as La Palma.
 const PLATANAL = [
   { id: 'cp01', type: 'sold', product: 'plantain_bunch', amount: 20, reward: 15 },
   { id: 'cp02', type: 'level', target: 'plantain_grove', level: 5, reward: 20 },
@@ -719,7 +719,7 @@ const PLATANAL = [
   { id: 'cp_final', type: 'sold', product: 'patacon_box', amount: 2000, reward: 0, final: true },
 ];
 
-// Costa Pacífica · La Azotea (v3.39): la misma lista que el Frutal.
+// Pacific Coast · La Azotea (v3.39): same list as El Frutal.
 const AZOTEA = [
   { id: 'ca01', type: 'sold', product: 'herbs', amount: 50, reward: 500 },
   { id: 'ca02', type: 'level', target: 'azotea_beds', level: 10, reward: 1000 },
@@ -738,7 +738,7 @@ const AZOTEA = [
   { id: 'ca_final', type: 'sold', product: 'alino_box', amount: 6000, reward: 0, final: true },
 ];
 
-// Costa Pacífica · La Bahía (v3.40): la misma lista que la Cachamera.
+// Pacific Coast · La Bahía (v3.40): same list as La Cachamera.
 const BAHIA = [
   { id: 'cb01', type: 'sold', product: 'pargo', amount: 50, reward: 10000 },
   { id: 'cb02', type: 'level', target: 'pargo_boats', level: 10, reward: 20000 },
@@ -759,7 +759,7 @@ const BAHIA = [
   { id: 'cb_final', type: 'sold', product: 'tapao', amount: 6000, reward: 0, final: true },
 ];
 
-// Costa Pacífica · El Manglar (v3.41): la misma lista que el Hato llanero.
+// Pacific Coast · El Manglar (v3.41): same list as El Hato llanero.
 const MANGLAR = [
   { id: 'cm01', type: 'sold', product: 'piangua', amount: 50, reward: 75000 },
   { id: 'cm02', type: 'level', target: 'mangrove_flats', level: 10, reward: 125000 },
@@ -781,7 +781,7 @@ const MANGLAR = [
   { id: 'cm_final', type: 'sold', product: 'cazuela_mariscos', amount: 4000, reward: 0, final: true },
 ];
 
-// Costa Pacífica · El Werregue (v3.42): la misma lista que la Talabartería.
+// Pacific Coast · El Werregue (v3.42): same list as La Talabartería.
 const WERREGUE = [
   { id: 'cw01', type: 'sold', product: 'werregue_leaf', amount: 50, reward: 1000000 },
   { id: 'cw02', type: 'level', target: 'werregue_palms', level: 10, reward: 2000000 },
@@ -801,7 +801,7 @@ const WERREGUE = [
   { id: 'cw_final', type: 'sold', product: 'recuerdo_pacifico', amount: 6000, reward: 0, final: true },
 ];
 
-// Costa Pacífica · Buenaventura (v3.43): la misma lista que Villavicencio. Su final es el de la Costa Pacífica.
+// Pacific Coast · Buenaventura (v3.43): same list as Villavicencio. Finale completes Pacific Coast.
 const BUENAVENTURA = [
   { id: 'cv01', type: 'imported', product: 'patacon_box', amount: 50, reward: 5000000 },
   { id: 'cv02', type: 'level', target: 'fritanga_puerto', level: 10, reward: 10000000 },
@@ -822,7 +822,7 @@ const BUENAVENTURA = [
   { id: 'cv_final', type: 'sold', product: 'excursion_ballenas', amount: 7000, reward: 0, final: true },
 ];
 
-// Amazonas · El Asaizal (v3.47): la misma lista que el Platanal.
+// Amazon · El Asaizal (v3.47): same list as El Platanal.
 const ASAIZAL = [
   { id: 'aa01', type: 'sold', product: 'asai_bunch', amount: 20, reward: 15 },
   { id: 'aa02', type: 'level', target: 'asai_grove', level: 5, reward: 20 },
@@ -855,7 +855,7 @@ const ASAIZAL = [
   { id: 'aa_final', type: 'sold', product: 'asai_box', amount: 2000, reward: 0, final: true },
 ];
 
-// Amazonas · El Ajizal (v3.48): la misma lista que la Azotea.
+// Amazon · El Ajizal (v3.48): same list as La Azotea.
 const AJIZAL = [
   { id: 'aj01', type: 'sold', product: 'aji', amount: 50, reward: 500 },
   { id: 'aj02', type: 'level', target: 'aji_field', level: 10, reward: 1000 },
@@ -874,7 +874,7 @@ const AJIZAL = [
   { id: 'aj_final', type: 'sold', product: 'aji_box', amount: 6000, reward: 0, final: true },
 ];
 
-// Amazonas · El Lago (v3.49): la misma lista que la Bahía.
+// Amazon · El Lago (v3.49): same list as La Bahía.
 const LAGO = [
   { id: 'al01', type: 'sold', product: 'pirarucu', amount: 50, reward: 10000 },
   { id: 'al02', type: 'level', target: 'pirarucu_canoes', level: 10, reward: 20000 },
@@ -895,7 +895,7 @@ const LAGO = [
   { id: 'al_final', type: 'sold', product: 'pirarucu_aji', amount: 6000, reward: 0, final: true },
 ];
 
-// Amazonas · La Casabería (v3.50): la misma lista que el Manglar.
+// Amazon · La Casabería (v3.50): same list as El Manglar.
 const CASABERIA = [
   { id: 'ac01', type: 'sold', product: 'yuca_brava', amount: 50, reward: 75000 },
   { id: 'ac02', type: 'level', target: 'yuca_chagra', level: 10, reward: 125000 },
@@ -917,7 +917,7 @@ const CASABERIA = [
   { id: 'ac_final', type: 'sold', product: 'banquete_maloca', amount: 4000, reward: 0, final: true },
 ];
 
-// Amazonas · La Yanchama (v3.51): la misma lista que el Werregue.
+// Amazon · La Yanchama (v3.51): same list as El Werregue.
 const YANCHAMA = [
   { id: 'ay01', type: 'sold', product: 'yanchama_bark', amount: 50, reward: 1000000 },
   { id: 'ay02', type: 'level', target: 'yanchama_trees', level: 10, reward: 2000000 },
@@ -937,7 +937,7 @@ const YANCHAMA = [
   { id: 'ay_final', type: 'sold', product: 'recuerdo_amazonas', amount: 6000, reward: 0, final: true },
 ];
 
-// Amazonas · Leticia (v3.52): la misma lista que Buenaventura.
+// Amazon · Leticia (v3.52): same list as Buenaventura.
 const LETICIA = [
   { id: 'av01', type: 'imported', product: 'asai_box', amount: 50, reward: 5000000 },
   { id: 'av02', type: 'level', target: 'heladeria_asai', level: 10, reward: 10000000 },
@@ -958,7 +958,7 @@ const LETICIA = [
   { id: 'av_final', type: 'sold', product: 'excursion_delfines', amount: 7000, reward: 0, final: true },
 ];
 
-// Tolima Grande (v4.0): las mismas listas que el Amazonas.
+// Tolima Grande (v4.0): same lists as Amazon.
 const ACHIRALES = [
   { id: 'ta01', type: 'sold', product: 'achira_root', amount: 20, reward: 15 },
   { id: 'ta02', type: 'level', target: 'achiral', level: 5, reward: 20 },
@@ -991,7 +991,7 @@ const ACHIRALES = [
   { id: 'ta_final', type: 'sold', product: 'bizcocho_box', amount: 2000, reward: 0, final: true },
 ];
 
-// El Café del Huila: la del Ajizal, con su Secadero de cáscara.
+// Café del Huila: same as Ajizal, with its Secadero de cáscara.
 const CAFE_HUILA = [
   { id: 'tc01', type: 'sold', product: 'huila_cherry', amount: 50, reward: 500 },
   { id: 'tc02', type: 'level', target: 'cafetal_huila', level: 10, reward: 1000 },
@@ -1032,7 +1032,7 @@ const BETANIA = [
   { id: 'tb_final', type: 'sold', product: 'almuerzo_represa', amount: 6000, reward: 0, final: true },
 ];
 
-// La Lechonería: la de la Casabería, con el cuero que se junta en el Horno de leña.
+// Lechonería: same as Casabería, with pigskin cured into Horno de leña.
 const LECHONERIA = [
   { id: 'tl01', type: 'sold', product: 'cerdo', amount: 50, reward: 75000 },
   { id: 'tl02', type: 'level', target: 'pigsty', level: 10, reward: 125000 },
@@ -1093,7 +1093,7 @@ const NEIVA = [
   { id: 'tn_final', type: 'sold', product: 'excursion_tatacoa', amount: 7000, reward: 0, final: true },
 ];
 
-// Cundinamarca (v4.4) · Las Flores de la Sabana: la de los Achirales.
+// Cundinamarca (v4.4) · Flores de la Sabana: same as Achirales.
 const FLORES = [
   { id: 'cf01', type: 'sold', product: 'rosa', amount: 20, reward: 15 },
   { id: 'cf02', type: 'level', target: 'invernadero_rosas', level: 5, reward: 20 },
@@ -1126,7 +1126,7 @@ const FLORES = [
   { id: 'cf_final', type: 'sold', product: 'caja_flores', amount: 2000, reward: 0, final: true },
 ];
 
-// Los Freseros de Sibaté: la del Café del Huila.
+// Freseros de Sibaté: same as Café del Huila.
 const FRESAS = [
   { id: 'cs01', type: 'sold', product: 'fresa', amount: 50, reward: 500 },
   { id: 'cs02', type: 'level', target: 'fresal', level: 10, reward: 1000 },
@@ -1147,7 +1147,7 @@ const FRESAS = [
   { id: 'cs_final', type: 'sold', product: 'fresas_crema', amount: 6000, reward: 0, final: true },
 ];
 
-// Las Truchas de Guatavita: la de Betania.
+// Truchas de Guatavita: same as Betania.
 const TRUCHAS = [
   { id: 'ct01', type: 'sold', product: 'trucha', amount: 50, reward: 10000 },
   { id: 'ct02', type: 'level', target: 'estanques_trucha', level: 10, reward: 20000 },
@@ -1168,7 +1168,7 @@ const TRUCHAS = [
   { id: 'ct_final', type: 'sold', product: 'almuerzo_trucha', amount: 6000, reward: 0, final: true },
 ];
 
-// Las Salinas de Nemocón: la de la Lechonería.
+// Salinas de Nemocón: same as Lechonería.
 const SALINAS = [
   { id: 'cn01', type: 'sold', product: 'roca_sal', amount: 50, reward: 75000 },
   { id: 'cn02', type: 'level', target: 'socavon_sal', level: 10, reward: 125000 },
@@ -1190,7 +1190,7 @@ const SALINAS = [
   { id: 'cn_final', type: 'sold', product: 'cofre_sal', amount: 4000, reward: 0, final: true },
 ];
 
-// La Cocina de la Sabana: la de La Chamba.
+// Cocina de la Sabana: same as La Chamba.
 const COCINA = [
   { id: 'cc01', type: 'sold', product: 'papa_sabanera', amount: 50, reward: 1000000 },
   { id: 'cc02', type: 'level', target: 'huerta_papa', level: 10, reward: 2000000 },
@@ -1210,7 +1210,7 @@ const COCINA = [
   { id: 'cc_final', type: 'sold', product: 'almuerzo_sabanero', amount: 6000, reward: 0, final: true },
 ];
 
-// Zipaquirá: la de Neiva.
+// Zipaquirá: same as Neiva.
 const ZIPAQUIRA = [
   { id: 'cz01', type: 'imported', product: 'caja_flores', amount: 50, reward: 5000000 },
   { id: 'cz02', type: 'level', target: 'floristeria_plaza', level: 10, reward: 10000000 },
@@ -1231,12 +1231,12 @@ const ZIPAQUIRA = [
   { id: 'cz_final', type: 'sold', product: 'visita_catedral', amount: 7000, reward: 0, final: true },
 ];
 
-// Bogotá (v4.5; en red desde la v4.6): una sola zona grande cuyas estaciones se construyen cuando ya están las que las
-// abastecen. La lista va por los niveles de la red, del primero (lo barato, desde el comienzo) al centro, y termina en
-// la Gran Feria.
+// Bogotá (v4.5; network since v4.6): single giant zone whose stations build once suppliers
+// exist. List walks network tiers from tier 1 (cheap, from start) to downtown, ending at Gran Feria.
+// Gran Feria.
 const BOGOTA = [
-  // (v4.7.1) Lo que otra estación de la red puede recibir se pide producido, no vendido: si una estación lo consume
-  // todo, venderlo no se cumpliría nunca (el café, las mañanas, los domingos, las subidas).
+  // (v4.7.1) Goods another network station can consume count produced, not sold: if a station burns
+  // it all, selling would never complete (coffee, mornings, Sundays, hikes).
   { id: 'bg01', type: 'produced', product: 'cafe_capitalino', amount: 20, reward: 60 },
   { id: 'bg02', type: 'unlock', station: 'despensa_zona_g', reward: 80 },
   { id: 'bg03', type: 'level', target: 'tostadero_chorro', level: 5, reward: 100 },
@@ -1293,4 +1293,4 @@ const BOGOTA = [
 ];
 
 export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS, salinas: SALINAS, cocina: COCINA, zipaquira: ZIPAQUIRA, bogota: BOGOTA };
-export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // en el orden de las zonas
+export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // in zone order

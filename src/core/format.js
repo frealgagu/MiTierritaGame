@@ -1,12 +1,12 @@
 const SUFFIXES = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc'];
 
-// La coma decimal: en español «2,50M»; en inglés «2.50M» (v3.68, la pone el idioma).
+// 950 -> "950", 12345 -> "12,3K", 2.5e6 -> "2,50M". Beyond defined suffixes (with many
 let DECIMAL = ',';
 export const setDecimal = (d) => (DECIMAL = d);
 export const decimal = (s) => String(s).replace('.', DECIMAL);
 
-// 950 → "950", 12345 → "12,3K", 2.5e6 → "2,50M". Más allá de los sufijos (con muchos reinicios del
-// segundo final los números no tienen techo), notación científica: 4.2e40 → "4,20e40".
+// restarts numbers have no ceiling), fall back to scientific notation: 4.2e40 -> "4,20e40".
+// Production multiplier using the same suffix formatting as coins (v3.57): x512, x2.05K, x4.29B.
 export function formatNumber(n) {
   if (!Number.isFinite(n)) return '∞';
   const sign = n < 0 ? '-' : '';
@@ -25,12 +25,12 @@ export function formatNumber(n) {
   return sign + decimal(n.toFixed(digits)) + SUFFIXES[i];
 }
 
-// Multiplicador de producción, con el mismo formato que las monedas (v3.57): ×512, ×2,05K, ×4,29B.
+// Rates per second: show decimals when small.
 export function formatMult(m) {
   return `×${m < 1000 ? Math.round(m) : formatNumber(m)}`;
 }
 
-// Tasas por segundo: muestra decimales cuando son pequeñas.
+// Quantities that can be fractional (mule loads): 0.8, 3.5, 12, 1.2K
 export function formatRate(n) {
   if (n < 10) return decimal(n.toFixed(n < 1 ? 2 : 1));
   return formatNumber(n);
@@ -45,7 +45,7 @@ export function formatDuration(seconds) {
   return `${s} s`;
 }
 
-// Cantidades que pueden tener decimales (carga de las mulas): 0,8 · 3,5 · 12 · 1,2K
+// Path utilities for routes defined as arrays of [gx, gy] grid points.
 export function formatAmount(n) {
   if (n < 10 && Math.abs(n - Math.round(n)) > 0.05) return decimal(n.toFixed(1));
   return formatNumber(Math.round(n));

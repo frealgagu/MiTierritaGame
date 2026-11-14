@@ -1,17 +1,17 @@
-// Cámara: arrastrar para mover, rueda o pellizco para zoom.
+// Camera: drag to pan, wheel or pinch to zoom.
 const MIN_ZOOM = 0.45;
 const MAX_ZOOM = 2.2;
-const DRAG_THRESHOLD = 12; // px antes de considerar que es arrastre y no toque (v3.67: eran 6, y en un
-// teléfono el dedo se mueve un poco al tocar: el toque se tomaba como arrastre y la estación no respondía)
+const DRAG_THRESHOLD = 12; // px before counting as drag rather than tap (v3.67: was 6, and on a phone a finger
+// wobbles slightly on tap, causing touches to read as drags and ignore the station)
 
 export class Camera {
   constructor(world, canvas, bounds) {
     this.world = world;
     this.canvas = canvas;
-    this.bounds = bounds; // { minX, maxX, minY, maxY } del mundo en px
-    this.minZoom = bounds.minZoom ?? MIN_ZOOM; // en el mapa grande de Bogotá (v4.5) se aleja más
+    this.bounds = bounds; // world bounds { minX, maxX, minY, maxY } in px
+    this.minZoom = bounds.minZoom ?? MIN_ZOOM; // on Bogotá's large map (v4.5) allows zooming farther out
     this.zoom = 1;
-    this.x = 0; // centro de la vista en coordenadas del mundo
+    this.x = 0; // view center in world coordinates
     this.y = 0;
     this.viewW = canvas.clientWidth;
     this.viewH = canvas.clientHeight;
@@ -34,7 +34,7 @@ export class Camera {
     this.apply();
   }
 
-  // Encuadra un rectángulo del mundo dejando espacio arriba para la barra superior.
+  // Frames a world rectangle leaving headroom for the top bar.
   fit(rect = this.bounds, topPad = 90) {
     const zx = this.viewW / (rect.maxX - rect.minX);
     const zy = (this.viewH - topPad) / (rect.maxY - rect.minY);
@@ -72,7 +72,7 @@ export class Camera {
     return { x: (sx - this.world.position.x) / this.zoom, y: (sy - this.world.position.y) / this.zoom };
   }
 
-  // Suelta los eventos del canvas (al cambiar de zona se crea otra cámara).
+  // Detaches canvas listeners (zone switch creates a fresh camera).
   destroy() {
     for (const [type, fn, opts] of this.listeners) this.canvas.removeEventListener(type, fn, opts);
     this.listeners = [];
@@ -116,9 +116,9 @@ export class Camera {
     const up = (e) => this.pointers.delete(e.pointerId);
     listen('pointerup', up);
     listen('pointercancel', up);
-    // Sin clic fantasma (v4.0.2): al soltar el dedo el navegador emula un «click» un rato después, donde quedó
-    // el dedo. Como el toque ya abrió el panel, ese clic caía en lo que el panel puso ahí (la pestaña 🐴 de los
-    // arrieros, «Mejorar»…). El mapa usa solo eventos de puntero: el clic emulado no le sirve de nada.
+    // No ghost clicks (v4.0.2): after finger lift the browser synthesizes a delayed «click» where
+    // the finger landed. Since pointerup already opened the panel, that click hit panel controls
+    // (🐴 haulers tab, «Upgrade»…). Map uses pointer events exclusively: emulated clicks do nothing.
     listen('touchend', (e) => e.cancelable && e.preventDefault(), { passive: false });
     listen(
       'wheel',

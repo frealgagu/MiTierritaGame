@@ -1,6 +1,6 @@
-// Las frases que el código pasa por t('…') (src/**/*.js) y que un idioma todavía no tiene.
-//   node tools/i18n-code.mjs <idioma>        lista las que faltan (una por renglón, como JSON)
-//   node tools/i18n-code.mjs <idioma> --all  todas
+// Phrases passed through t('…') in code (src/**/*.js) that a language is still missing.
+//   node tools/i18n-code.mjs <lang>        lists missing ones (one per line, as JSON)
+//   node tools/i18n-code.mjs <lang> --all  all
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -10,7 +10,7 @@ const files = (dir) => readdirSync(dir).flatMap((f) => {
   return p.endsWith('.js') ? [p] : [];
 });
 
-// t('…'), t("…") o t(`…`) sin ${} (o tk('…'), que solo la marca): la clave es el texto tal cual.
+// t('…'), t("…") or t(`…`) without ${} (or tk('…'), which only marks it): the key is the exact text.
 export function keysIn(src) {
   const out = [];
   const re = /\btk?\(\s*(['"`])((?:\\.|(?!\1)[^\\])*)\1/g;

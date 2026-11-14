@@ -3,7 +3,7 @@
 > Juego educativo e incremental de **cadena de suministros** ambientado en Colombia (antes se llamó «Cafetal»): un recurso inicial ilimitado pero lento alimenta a una estación, esa estación alimenta a la siguiente, y todo se mejora para producir cada vez más.
 > Del género se toman solo la cadena de producción visible y el estilo gráfico isométrico «de juguete», con personajes que llevan cargas.
 > No hay supervivencia, ni clima hostil, ni población que alimentar, ni héroes.
-> Una sola zona que se puede terminar y que se ampliará con actualizaciones. JavaScript (Vite + PixiJS).
+> **Estado actual (v4.7.4):** juego completo con **10 regiones**, **55 zonas jugables**, **360 estaciones**, **373 productos**, **129 rutas**, **4 idiomas** (`es`, `en`, `pt`, `fr`), **10 piezas musicales** y empaquetado en web (PWA) y Android (**Capacitor 8**). Escrito en JavaScript (Vite + PixiJS).
 
 ---
 
@@ -87,9 +87,9 @@ Se buscó un tema en el que una cadena larga de transformación sea **natural y 
 
 ## 4b. Mapa completo de la cadena (todas las zonas)
 
-Esto es el **techo del juego**: todo lo que existirá cuando estén las 6 zonas. Se construye por partes (la v1.0 solo trae la Zona 1), pero el diseño, los datos y el balance se piensan desde el principio para que todo encaje.
+> **Nota histórica:** el desglose siguiente corresponde al diseño fundacional de las **6 primeras zonas** (el Eje Cafetero, completado en la v1.5). Con las expansiones regionales (§10.3) el juego alcanzó **10 regiones** y **55 zonas jugables**.
 
-### Resumen en números
+### Resumen en números (Eje Cafetero / diseño inicial v1.5)
 
 | Concepto | Cantidad |
 |----------|----------|
@@ -101,6 +101,23 @@ Esto es el **techo del juego**: todo lo que existirá cuando estén las 6 zonas.
 | Productos que combinan varias zonas | 10 |
 | Producto final del juego | **Contenedor de exportación** |
 | Profundidad máxima (pasos desde una fuente hasta el final) | 10 (de la cereza al contenedor) |
+
+### Resumen actual del país (v4.7.4)
+
+| Concepto | Cantidad |
+|----------|----------|
+| Regiones jugables | **10** (Eje Cafetero, Santander, La Costa, Boyacá, Los Llanos, Costa Pacífica, Amazonas, Tolima Grande, Cundinamarca y Bogotá) + San Andrés anunciada como zona especial |
+| Zonas jugables | **55** (9 regiones × 6 zonas + Bogotá como red de 52×52 casillas) |
+| Estaciones | **360** |
+| Productos | **373** |
+| Rutas entre zonas | **129** (incluidas **27 tractomulas** ilimitadas hacia Bogotá) |
+| Investigaciones | **633** |
+| Eventos | **61** (6 por región en las 9 primeras + 7 en Bogotá con *La Gran Feria*) |
+| Álbum de láminas | **60 páginas** (**360 láminas** ilustradas por código) |
+| Logros | **151** |
+| Íconos propios (`mitierrita-icons.woff2`) | **602** glifos COLR |
+| Piezas musicales y efectos | **10** composiciones regionales + **17** tipos de sonido de estación |
+| Idiomas | **4** (`es`, `en`, `pt`, `fr`) |
 
 ### Vista general
 
@@ -340,7 +357,7 @@ Una lista de **29 objetivos en orden** (`src/data/goals.js`). Se ven 3 a la vez,
 (Medido en la v1.0.1, después de que los arrieros pasaran a ir al ritmo de su estación.)
 
 ### Segundo final: maestro cafetero (v1.6)
-Tras el Pueblo, el marcador de objetivos muestra el segundo final: **llevar las 38 estaciones de las seis zonas al nivel 100** (cuenta cuántas van). Hace falta haber logrado el primer final (desde la v1.7.12): se puede tener todo al 100 sin haber exportado los 7.000 contenedores, y entonces el segundo final llega al cobrarlos, después de la pantalla del Pueblo. Al lograrlo aparece la pantalla «¡Maestro cafetero!» con las estadísticas de la partida y la opción de **volver a empezar** desde la Finca (monedas, niveles, investigaciones y objetivos desde cero) con **toda la producción al doble**: ×2 tras el primer reinicio, ×4 tras el segundo, ×8 tras el tercero… (también se puede hacer luego desde ⚙️). El multiplicador se ve abajo a la derecha; desde la v3.56 llega hasta **×2³²** (32 reinicios): se puede seguir reiniciando (cada reinicio sigue dando Renombre y contando para los logros), pero la producción ya no se duplica más. Duplica la velocidad de todas las estaciones y lo que lleva el Willys; los arrieros, las rutas, los patios y las entradas se calculan con eso, así que a igual nivel todo sigue cuadrando (hay una prueba a ×8 y otra a ×32). Se conservan los ajustes, los avisos vistos y el registro de partidas.
+Tras el Pueblo (o la última zona de cada región), el marcador de objetivos muestra el segundo final: **llevar todas las estaciones, arrieros y rutas de la región al nivel 100, cobrar todos sus objetivos y comprar todas sus investigaciones** (`masteryParts` en `src/sim/legacy.js`; originalmente eran las 38 estaciones de las seis primeras zonas). Hace falta haber logrado el primer final (desde la v1.7.12): se puede tener todo al 100 sin haber exportado los 7.000 contenedores, y entonces el segundo final llega al cobrarlos, después de la pantalla del Pueblo. Al lograrlo aparece la pantalla del segundo final («¡Maestro cafetero!» o su equivalente regional) con las estadísticas de la partida y la opción de **volver a empezar** la región (monedas, niveles, investigaciones y objetivos desde cero) con **toda la producción al doble**: ×2 tras el primer reinicio, ×4 tras el segundo, ×8 tras el tercero… (desde la v4.7.1, volver a empezar se hace desde la tarjeta del segundo final en Objetivos, ya no desde el menú). El multiplicador se ve arriba debajo de la mejora recomendada (v4.4.11); en la v3.56 llegaba hasta ×2³² y desde la **v3.68.3** llega hasta **×2⁶⁰ (60 reinicios, ×1,15Qi)**: se puede seguir reiniciando (cada reinicio sigue dando Renombre y contando para los logros), pero la producción ya no se duplica más. Duplica la velocidad de todas las estaciones y lo que lleva el Willys; los arrieros, las rutas, los patios y las entradas se calculan con eso, así que a igual nivel todo sigue cuadrando. Se conservan los ajustes, los avisos vistos, las compras de Renombre y el contador de reinicios.
 
 Duración medida (`npm run balance`, v1.6; casual = sigue la mejora recomendada, atento = elige la compra más rentable; tras el Pueblo, los dos suben siempre lo más atrasado):
 
@@ -411,9 +428,9 @@ La casa del Cafetal evoluciona aparte (de rancho de madera a casa de dos pisos c
 ### Sonido (v0.4)
 Sintetizado con Web Audio, sin archivos: clic de botones, monedas al vender, arpegio al subir de nivel y al cruzar un hito, martillazos al construir, pájaros de día y grillos de noche. Se apaga desde el menú y la preferencia se guarda con la partida.
 
-**Al entrar a una estación (v3.3.2)** suena su oficio: las 63 estaciones y la bodega se agrupan en 17 sonidos (`STATION_SOUNDS` en `src/audio/Sound.js`): cultivo, mugido, agua, motor, giro, fuego, hervor, viento, fermentación, cuchillo, telar, cajas, sirena del barco, chisporroteo, pocillos, sal y el Willys.
+**Al entrar a una estación (v3.3.2)** suena su oficio: las **360 estaciones** y la bodega se agrupan en **17 sonidos** (`STATION_SOUNDS` en `src/audio/Sound.js`): cultivo, mugido, agua, motor, giro, fuego, hervor, viento, fermentación, cuchillo, telar, cajas, sirena del barco, chisporroteo, pocillos, sal y el Willys. Desde la v3.66 el menú tiene controles independientes de volumen para música (por defecto 40 %) y efectos.
 
-**Música (v1.8.7, propia):** cada región tiene su pieza (`src/audio/songs.js`); el Eje Cafetero, un **bambuco** en 3/4 (mi menor y sol mayor, 32 compases, 108 negras por minuto). El juego la arma al empezar (`src/audio/compose.js`, unos 0,3 s, compás por compás para no trabarse) con cuerdas Karplus-Strong: bajo y rasgueo de guitarra en el primer, segundo y tercer tiempo, golpes apagados de tiple en el contratiempo y la melodía de bandola, con trémolo en las notas largas. Suena en bucle tras el primer toque, con eco de sala, fundido de entrada y salida, se pausa con la pestaña oculta y tiene su propio botón en el menú. Reemplaza a «Apple Cider» (CC0), que pesaba 2,4 MB.
+**Música (v1.8.7, propia):** cada una de las **10 regiones** tiene su pieza (`src/audio/songs.js`); la del Eje Cafetero es un **bambuco** en 3/4 (mi menor y sol mayor, 32 compases, 108 negras por minuto). El juego la arma al empezar (`src/audio/compose.js`, unos 0,3 s, compás por compás para no trabarse) con cuerdas Karplus-Strong: bajo y rasgueo de guitarra en el primer, segundo y tercer tiempo, golpes apagados de tiple en el contratiempo y la melodía de bandola, con trémolo en las notas largas. Suena en bucle tras el primer toque, con eco de sala, fundido de entrada y salida, se pausa con la pestaña oculta y tiene su propio botón en el menú. Además, desde la v3.71 las 10 piezas (MP3 y MIDI por pistas) y los efectos están disponibles para descargar en `web/musica/` (`/musica/` en la web, fuera del APK/AAB).
 
 ### Paleta
 
@@ -444,77 +461,64 @@ Sintetizado con Web Audio, sin archivos: clic de botones, monedas al vender, arp
   - Humo en la tostadora, vapor en el beneficiadero y granos esparcidos en la marquesina.
   - Destello y pequeño rebote al subir de nivel; confeti y cambio de modelo en cada hito.
   - **Indicadores de estado sobre cada estación:** ⏸️ esperando entrada · ⛔ salida llena · ↪️ desviando a bodega. Desde la v1.7.8 solo salen si el problema dura: ocupa al menos la mitad de los últimos 10 s de juego (30 s en la v1.7.8) (esperar cuenta solo en rachas de 8 s o más sin entrada), y se quitan cuando baja de la quinta parte. Con todo nivelado, el producto viaja por tandas y los momentos sueltos de patio lleno o de espera son normales. El aviso del panel usa el mismo criterio. La Compostera llena no se marca (es compost de sobra).
-- **UI:**
-  - Barra superior: 💰 y 💰/s.
-  - Panel inferior de la estación seleccionada: nivel, velocidad, buffers, arrieros, botones de mejora ×1/×10/máx.
-  - Lateral: objetivos.
-  - Botón «Ver cadena»: un diagrama compacto con el flujo/s de cada tramo y el cuello de botella resaltado en rojo.
-  - Fuente: **Fredoka** o **Baloo 2**.
+- **UI e interacciones (actualizado a v4.7.4):**
+  - Barra superior: 💰 (al tocarlo abre **💰 De dónde sale**, `MoneyView.js`, con el desglose por zona y multiplicadores) y 💰/s, reloj/temporada y accesos a Mapa/Zonas, Cadena, Investigaciones, Eventos/Renombre y Menú.
+  - Panel inferior de la estación seleccionada: pestañas ⚙️ Estación, 🐴 Arrieros y 🚌 Rutas / Bodega; botones ×1 / ×10 / máx.
+  - Lateral: objetivos y marcador del primer objetivo cobrable.
+  - Botón «Ver cadena» (`ChainView.js`): diagrama de flujo con tubos de **color propio por producto** (`pipeColors.js`), canales para subproductos y entradas múltiples, etiquetas 📦 por estación, cuello de botella en rojo y botones abajo de **🏗️ Construir** (construye en orden lo que alcance) y **⬆️ Todo al nivel X** (sube todo hasta el próximo hito tras el primer reinicio por 10 ⭐).
+  - Mapa de Colombia (`ZoneMap.js`): zoom, aeropuertos reales por región, viaje animado en Willys y avioneta o modo **⚡ Directo**.
+  - Fuente empaquetada **Fredoka** + fuente de íconos COLR propia **MiTierrita Icons** (**602 glifos** en `src/data/icons.js`, sin dependencias externas ni emojis variables del sistema) y **360 láminas** del álbum dibujadas con código, con tooltips descriptivos (`iconTips.js`).
   - Botones (v4.4.6): todos del mismo alto (50 px, el de un botón con el texto en dos renglones), con el texto centrado.
   - Tablero del evento (v4.4.7): se recoge con ▾ a la fila del título, el reloj y la barra de avance (se recuerda en el teléfono); se abre con ▴ o tocando el título, y solo al señalar la mejora recomendada.
   - Borrar partida (v4.3.2, v4.4.6): primero el botón rojo; al tocarlo aparece la barra que se desliza hasta el final para confirmar, y si no se desliza en 8 s vuelve el botón.
 
 ### Producción del arte sin artista
-1. **v0.1–0.3:** todo se dibuja por código (cajas isométricas, techos de dos aguas, arbustos redondos con puntos rojos para los cafetos). Rápido y coherente.
-2. **v0.4+:** sustituir por sprites PNG estación a estación. Cada estación declara su `sprite` por hito en los datos, así que la lógica no cambia.
+1. **v0.1–0.3:** todo se dibujaba por código básico (cajas isométricas, techos de dos aguas, arbustos).
+2. **v0.4–v4.3+:** arquitectura modular por código (`Buildings.js`, `Terrain.js`, `EventArt.js`, `Album`, `tools/icons/build_icons.py`) con ilustraciones propias para las 360 láminas del álbum y 602 íconos COLR uniformes en cualquier dispositivo.
 
 ---
 
 ## 9. Arquitectura técnica
 
-- **Stack:** JavaScript (ES modules), Vite y PixiJS v8.
-- **Sin servidor:** se guarda en `localStorage` como JSON versionado, con exportar e importar en texto.
+- **Stack:** JavaScript (ES modules), Vite, PixiJS v8 y **Capacitor 8** para Android (`android/`).
+- **Sin servidor:** se guarda en `localStorage` como JSON versionado, con **copia de seguridad en archivo** (`src/backup.js`: descargar/abrir `.json` en web y hoja nativa de Compartir/Archivos en móvil vía `@capacitor/filesystem` y `@capacitor/share`).
 - **La simulación y el dibujo van separados:**
-  - La simulación avanza a tick fijo (10/s), es pura y se puede probar con Node.
-  - El dibujo solo lee el estado.
-- **Todo el contenido son datos:** recursos, estaciones, mejoras, investigaciones, objetivos y zonas están en `src/data/`. Una zona nueva = un archivo nuevo.
-- **Números grandes:** con `Number` alcanza hasta unos 1e15 en la Zona 1. El formato es 1,2K · 3,4M · 5,6B. Si las zonas futuras lo exigen, se cambiará a `break_infinity.js`.
+  - La simulación avanza a tick fijo (10/s), es pura y se prueba con Node (`npm test`).
+  - El dibujo (`src/render/`) solo lee el estado.
+- **Todo el contenido son datos:** regiones, zonas, estaciones, productos, rutas, mejoras, investigaciones, objetivos, eventos, álbum y logros viven en `src/data/`.
+- **Idiomas (`src/i18n/`):** base en español con traducciones dinámicas a **inglés (`en`), portugués (`pt`) y francés (`fr`)**, artículos y reglas tipográficas por idioma, y scripts de verificación (`tools/i18n-*.mjs`, `test/i18n.test.js`).
+- **Números grandes:** con `Number` hasta el techo de monedas **`999Dc`** (`MAX_COINS = 999e33`, v3.68.3) y multiplicadores de reinicio hasta **`×2⁶⁰` (`×1,15Qi`)**. Formato con coma o punto decimal según idioma (`1,23K · 3,45M · 5,67B … Dc`).
 
 ### Carpetas
 
 ```
 /
 ├─ index.html
-├─ package.json
+├─ package.json                # scripts dev (puerto 3000), build, test, balance, android
 ├─ vite.config.js
-├─ docs/GDD.md
-├─ tools/
-│  └─ balance-sim.js        # simula N horas con una estrategia "codiciosa" e imprime tiempos de cada hito
+├─ capacitor.config.json
+├─ .github/workflows/pages.yml # publica web, mitierrita.apk, mitierrita.aab y /musica/
+├─ docs/GDD.md                 # documento de diseño
+├─ public/                     # manifest, sw.js, íconos PWA, privacidad.html, licencia Fredoka
+├─ store/                      # fichas de Google Play, capturas e imágenes en es/en/pt/fr
+├─ web/musica/                 # MP3 y MIDI descargables de las 10 regiones y 31 efectos
+├─ tools/                      # balance-sim, event-bots/sim/idle, i18n-*, music/sfx-export, geo, icons
 └─ src/
-   ├─ main.js
-   ├─ core/
-   │  ├─ Game.js            # estado + bucle de tick fijo
-   │  ├─ EventBus.js
-   │  ├─ SaveSystem.js
-   │  └─ format.js          # 1,2K / 3,4M
-   ├─ sim/                  # lógica pura (sin DOM ni Pixi)
-   │  ├─ stations.js        # ciclos, buffers, recetas, desvío
-   │  ├─ transport.js       # arrieros por tramo
-   │  ├─ dispatch.js        # bodega + Willys → monedas
-   │  ├─ upgrades.js        # costes, hitos, investigaciones
-   │  ├─ goals.js
-   │  └─ offline.js         # flujo estable × tiempo
-   ├─ data/
-   │  ├─ products.js
-   │  ├─ stations.js
-   │  ├─ research.js
-   │  ├─ goals.js
-   │  └─ zones/zone1_finca.js   # posiciones de estaciones y camino
-   ├─ render/
-   │  ├─ iso.js
-   │  ├─ Camera.js
-   │  ├─ TerrainRenderer.js
-   │  ├─ StationRenderer.js
-   │  ├─ CarrierRenderer.js     # mulas y Willys siguiendo el camino
-   │  ├─ Effects.js             # números flotantes, humo, confeti
-   │  ├─ DayNight.js
-   │  └─ procedural/
-   └─ ui/
-      ├─ HUD.js
-      ├─ StationPanel.js
-      ├─ ChainView.js           # diagrama del flujo y cuello de botella
-      ├─ GoalsPanel.js
-      └─ styles.css
+   ├─ main.js, boot.js         # arranque, carga de idioma, escena y HUD
+   ├─ backup.js, native.js     # archivo/Share de copias de seguridad y ciclo de vida Capacitor
+   ├─ tip.js, update.js        # propinas Play/Ko-fi y aviso de actualización APK
+   ├─ core/                    # Game, EventBus, SaveSystem, format, path, rng
+   ├─ sim/                     # simulación pura (stations, transport, dispatch, chain, routes,
+   │                           # upgrades, goals, events, calendar, regions, legacy, logros, renown...)
+   ├─ data/                    # 10 regiones, zones/zone1..55, stations, products, routes,
+   │                           # research, goals, events, album, logros, icons, colombiaMap, zoneGeo
+   ├─ render/                  # PixiJS v8 (Scene, Buildings, Stations, Terrain, Belts, Carriers,
+   │                           # Keeper, Pets, Critters, Weather, DayNight, Effects, EventArt, occlusion)
+   ├─ ui/                      # HUD, StationPanel, ChainView, ZoneMap, ZonesView, MoneyView,
+   │                           # GoalsView, EventsView, EventBar, RenownView, iconTips, calendar...
+   ├─ audio/                   # compose.js, Music.js, Sound.js, songs.js (10 piezas regionales)
+   ├─ i18n/                    # apply.js, index.js, en/, pt/, fr/
+   └─ assets/                  # fuentes Fredoka y mitierrita-icons.woff2
 ```
 
 ### Ejemplo de datos
@@ -627,7 +631,15 @@ export const COST_GROWTH = 1.15;
 | v3.70 ✅ | Francés (`src/i18n/fr`, mismas partes que el portugués). Artículo con `frArticle` («le Dépulpeur», «l’Écrémeuse», «les Tisserandes»; las palabras en -age, masculinas, y unas pocas excepciones en listas); zonas y regiones sin artículo; lo que frena en un evento ya trae su contracción («à cause du scolyte»). En `fr/index.js` los espacios antes de ! ? : ; y dentro de « » se vuelven insecables. Italiano, catalán y gallego siguen en español | Idiomas |
 | v3.71 ✅ | Música y efectos para descargar (`web/musica`, publicada en ./musica/ solo en la web, no en el APK/AAB). `tools/music-export.mjs`: cada pieza en Node con `compose.js` (que ahora anota cada nota con su voz, sin cambiar el sonido) y el eco de sala de Music.js por ffmpeg (`afir`, con la normalización de un ConvolverNode) → MP3; y MIDI formato 1 (`tools/midi.mjs`): una pista por instrumento, percusión en el canal 10, rejilla de 1/24 de tiempo. `tools/sfx-export.mjs`: los efectos de Sound.js grabados en Chromium con OfflineAudioContext → MP3, y en MIDI los de notas. `tools/music-page.mjs` arma la página en los cuatro idiomas; el .zip lo arma pages.yml | Descargas |
 | v3.72 ✅ | Un reto por evento (`objective`, con `type`): los seis de cada región, por el lugar de su zona, son `cadena`, `arranque`, `feria`, `ramas`, `corte` y `final` (`OBJECTIVE_TYPES`); se quedó el reto ya calibrado de ese tipo entre los tres que tenía cada evento. Los tableros en juego de antes (sin `event.single`) terminan con su reto de antes (`sim/legacyObjectives.js`). Cupos: nunca jugados → sin oro → con oro; entre iguales, el que lleva más tiempo sin jugarse. Al reiniciar una región se abre en ella (`startZone`) | Eventos |
-| v3.57 ✅ | Multiplicador con K, M, B; objetivos: el número real de los que se pueden cobrar y «Cobrar todos» (sin el final); investigaciones: «Comprar todas» de la zona, de la más barata a la más cara (sin Maestría ni Supremacía) | Comodidad |
+| v4.0 ✅ | **El Tolima Grande** completo (seis zonas, sanjuanero, eventos, álbum y logros); estaciones con dos productos (`by`, por la canaleta a otra estación, a una que lo junta o a una ruta) y estaciones que juntan dos productos de su zona (`joins`); los cambios en Paipa, la Quesera, la Palma, el Hato llanero y la Cervecería; prueba de cero fugas al máximo en todas las regiones (`test/maxflow.test.js`); zoom en el mapa de Colombia | Más país y cadenas más ricas |
+| v4.0.1–v4.0.3 ✅ | Tope de reinicios a 60 (`×2⁶⁰`), apertura del mapa directo en la región, tubos de color propio por producto en la cadena, gatos a 5 ⭐ y corrección de toque en mapa | Balance y fluidez |
+| v4.1 ✅ | **Construir y subir en cadena** (**🏗️ Construir**, **⬆️ Todo al nivel X**), **💰 De dónde sale** (`MoneyView.js`), viaje en **Willys y avioneta** por el mapa de Colombia, Salento con **Despacho de exportación** (en tractomula hacia Buenaventura) y opción de viaje **⚡ Directo** | Comodidad y mapa vivo |
+| v4.2 ✅ | **Chivas más seguidas** (cada 30 s por 10 ⭐ y cada 15 s por 20 ⭐ por región tras llenar álbum y reiniciar una vez) | Ritmo |
+| v4.3 ✅ | **Dibujos propios en todo el juego** (360 láminas del álbum y 602 íconos COLR propios sin emojis del teléfono), bandas por tramos de colores, segundo Willys aclarado, **borrar partida deslizando** y eventos calibrados con mínimo garantizado | Identidad visual y seguridad |
+| v4.4 ✅ | **Cundinamarca** completa (Las Flores de la Sabana, Los Freseros de Sibaté, Las Truchas de Guatavita, Las Salinas de Nemocón, La Cocina de la Sabana y Zipaquirá con su Catedral de Sal), su **Pasillo de la Sabana**, sus 6 eventos, su álbum y sus logros; tablero de eventos recogible (`v4.4.7`), botones parejos, aeropuertos reales y avioneta al acercarse | Más país y móvil |
+| v4.5–v4.7.2 ✅ | **Bogotá** (`zone55_bogota.js`): zona única de 52×52 en **red** (`network: true`) con 24 estaciones, **27 tractomulas** (`unlimited`) desde las otras nueve regiones, tres subproductos, **TransMilenio**, **Danza de La Candelaria**, 6 eventos de barrio + **🎪 La Gran Feria** (`v4.7`), orden de profundidad de techos/vehículos, anuncio de **⭐ Zona especial** (San Andrés) y reinicio desde Objetivos | Gran final del continente |
+| v4.7.3 ✅ | **🔁 Eventos a demanda** (20 ⭐ por región al tener oro en todos sus eventos para jugar cualquiera sin cupo ni espera de 2 años), reloj en botones de evento e indicador `⬆ Todo al 50` en ganados | Rejugabilidad |
+| v4.7.4 ✅ | **💾 Copia de seguridad en archivo** (`src/backup.js` con `@capacitor/filesystem` y `@capacitor/share` para guardar en archivos/Drive y abrir en otro dispositivo) | Respaldo seguro |
 
 **Cómo se conectan las zonas:** ver §4b.
 
@@ -671,8 +683,8 @@ export const COST_GROWTH = 1.15;
   - **v3.10.1, nivel máximo.** En los tableros de los eventos las estaciones, los arrieros y el despacho llegan hasta el **nivel 50** (en la partida, 100): `EVENT_MAX_LEVEL` y `maxLevel(state)` en `src/sim/rules.js`. Las medallas calibradas se siguen pudiendo lograr (la prueba de los jugadores automáticos lo vigila).
   - **v3.11, Renombre de por vida.** Cada reinicio (segundo final) de cualquier región da 10 ⭐ (`RESTART_RENOWN`). Todo lo que da Renombre pasa por `gainRenown`, que suma también `profile.renownTotal`: el total ganado, que no baja al gastar (para clasificar jugadores más adelante). Las partidas viejas lo reconstruyen con las medallas, los logros y las páginas llenas.
   - **v3.12.** El total ganado se llama **Prestigio**. El segundo final pide estaciones, arrieros y rutas en el nivel 100, todos los objetivos y todas las investigaciones de la región (`masteryParts` en `src/sim/legacy.js`); los que lo tenían con la regla de antes lo pierden si les falta algo. Reiniciar ya no quita los tableros de los eventos ni sus cupos. En los eventos, `eventHandicaps`/`handicapText` (y `blame` en cada evento) dicen cuánto rinde la estación frenada y por qué. El Pueblo se llama **Salento** (`style: 'salento'`: casas blancas con balcones de colores, más palmas de cera). Cada zona tiene su letrero con el nombre; los Willys y las chivas tienen faros de noche; la Compostera sale en la cadena; las investigaciones bloqueadas llevan a lo que les falta (`researchBlocker`).
-  - **v3.30, menos eventos.** Los cupos ya no son por región: hay **2 para todo el juego**, en la partida principal, y nunca de la misma región a la vez; al terminar un evento su cupo descansa **2 años** del juego (4 h 16 min; antes 3). En el tablero hay tres botones: **⏸️ Pausar** (vuelve al mapa, como el «Salir» de antes), **🔄 Reiniciar** (el mismo reto desde cero, también sin la medalla asegurada) y **🏁 Terminar** (sin ganarlo: sin medalla, el cupo descansa 2 años y el reto no avanza). Al ganarlo se dan la medalla y el Renombre y empieza la espera del cupo, pero el tablero sigue abierto para mirarlo (`event.done`), también tras pausarlo o cerrar la app, hasta tocar «Terminar evento»; ganado, el botón de reiniciar queda deshabilitado (v3.30.1). Los premios por región no cambian. Las partidas viejas conservan sus tableros en juego (los dos primeros ocupan los cupos); los disponibles sin empezar y las esperas por región se borran (`refillSlots`, `restartEvent`, `endEvent` en `src/sim/events.js`).
-  - **v3.13.** La persona de cada zona está en el mapa (`render/Keeper.js`) y en los tableros; al tocarla habla (`talk` en `ui/Chatter.js`: repite lo último si aún aplica y luego recorre los avisos vigentes). Listado de medallas por evento y premio por región: todos en bronce o mejor 5 ⭐, plata 10 ⭐, oro 20 ⭐ (`checkMedalBonus`, `profile.medalBonus`). Mascotas por región, solo de adorno: gatos (50 ⭐, hasta 10; 10 ⭐ desde la v3.29) y loros (40 ⭐, hasta 5; 8 ⭐ desde la v3.29) (`PETS`, `profile.pets[región]`, `render/Pets.js`); los gatos persiguen a los loros cada medio minuto o un minuto, al azar.
+  - **v3.30, menos eventos.** Los cupos ya no son por región: hay **2 para todo el juego**, en la partida principal, y nunca de la misma región a la vez; al terminar un evento su cupo descansa **2 años** del juego (4 h 16 min; antes 3). En el tablero hay tres botones: **⏸️ Pausar** (o **🚪 Salir** según la configuración de «Al dejar un evento» de la v3.67.4), **🔄 Reiniciar** y **🏁 Terminar**. Al ganarlo se dan la medalla y el Renombre y empieza la espera del cupo, pero el tablero sigue abierto para mirarlo (`event.done`), también tras pausarlo o cerrar la app, hasta tocar «Terminar evento»; ganado, el botón de reiniciar queda deshabilitado (v3.30.1). Desde la **v4.4.7**, el tablero superior es recogible en pantallas pequeñas, y desde la **v4.7.3**, al tener **oro en todos los eventos de una región**, esa región deja de recibir eventos solos y por **20 ⭐** desbloquea **🔁 Eventos a demanda** (`profile.onDemand`) para jugar cualquiera cuando quiera (máx. 2 tableros abiertos a la vez); la lista muestra el reloj y avisa con `⬆ Todo al 50` cuando ya todo está al máximo.
+  - **v3.13.** La persona de cada zona está en el mapa (`render/Keeper.js`) y en los tableros; al tocarla habla (`talk` en `ui/Chatter.js`: repite lo último si aún aplica y luego recorre los avisos vigentes). Listado de medallas por evento y premio por región: todos en bronce o mejor 5 ⭐, plata 10 ⭐, oro 20 ⭐ (`checkMedalBonus`, `profile.medalBonus`). Mascotas por región, solo de adorno: gatos (5 ⭐ desde la v4.0.2, hasta 10) y loros (8 ⭐ desde la v3.29, hasta 5) (`PETS`, `profile.pets[región]`, `render/Pets.js`); los gatos persiguen a los loros cada medio minuto o un minuto, al azar.
   - **v3.14.** Los eventos se ven en el mapa del tablero (`render/EventArt.js`): cada uno tiene su escena en cuatro etapas (cuántas compras van), con lo que se mueve (bichos, lluvia, humo, mulas, el carro, la balsa, la gente). Quita los árboles que le estorban (`grid` en la decoración del terreno).
   - **v3.6, eventos de Santander**: uno por zona, con la mecánica del de su par del Eje Cafetero (la mosca de la fruta en la Guayabera, humedad en el caney del Tabacal, feria artesanal en la Fiquera, creciente del río en el Hato, temporada de turistas en las Hormigas y puente festivo en Barichara). El tablero se arma con las zonas de la región del evento y se guarda en su partida; las medallas y el Renombre van al perfil de la partida principal. Medallas calibradas igual que las demás.
   - **v3.21, eventos de la Costa**: uno por zona, con los mismos números que su par de Santander (pájaros en el arrozal, machetes sin filo en el Cocal, Semana Santa en la Ciénaga, carretera inundada en la Quesera —no llega el arroz—, festival del sombrero en el Sombrero y un crucero en Cartagena). Medallas confirmadas con `tools/event-sim.js`. Con ellos llegan el álbum de la Costa (el arroz, el coco, la ciénaga, la sabana, el sombrero y Cartagena) y sus logros, y la región deja de estar en obra: tiene segundo final, sus eventos salen en todas sus zonas y da el premio de medallas.
@@ -704,30 +716,35 @@ export const COST_GROWTH = 1.15;
 - **El Tolima Grande** (v4.0): se abre al completar Leticia y llegó completo, con los números del Amazonas. 🍪 **Los Achirales** (rizoma de achira → rallado → almidón asentado y secado al sol → masa con cuajada → bizcochos en horno de barro → caja; Doña Hermelinda, la bizcochera), ☕ **El Café del Huila** (cereza → el Beneficiadero saca el pergamino y la cáscara, que pasa por la canaleta al Secadero y sale como té de cáscara hacia el Hotel de Neiva → trillado → tostado, que viaja como tinto a la Lechonería → café especial; Don Rubiel), 🐟 **La Represa de Betania** (tilapia de las jaulas → limpia → ahumada, en escabeche o frita con patacón; Don Fabio), 🐷 **La Lechonería** (cerdo → el Desposte saca carne y cuero; la carne va a la Paila del relleno y al Fogón del tamal, el cuero a la Limpieza, y el Horno de leña junta relleno y cuero limpio en la lechona; la Mesa del desayuno sirve el tamal con bizcochos y tinto; Doña Fanny), ⚫ **La Chamba** (arcilla → pisada → modelada a mano → bruñida con piedra → quemada y ahumada con boñiga: loza negra; la tienda vende el Recuerdo del Tolima con la tilapia ahumada y el escabeche de Betania; Doña Ofelia) y 🌵 **Neiva** (cafetería del malecón, restaurante del río, Hotel del San Pedro, plaza de mercado, fiambrera y la Salida a la Tatacoa a ver las estrellas; Doña Marleny). Su música es el **Sanjuanero del San Pedro** (la mayor que pasa a fa sostenido menor, 3/4, 132 negras por minuto): el bambuco con la tambora y la carrasca.
 - **Cundinamarca** (v4.4 en adelante): se abre al completar Neiva y llega zona por zona, con los números del Tolima Grande. Su primera zona, 🌹 **Las Flores de la Sabana** (Madrid y Facatativá: invernadero de rosas → mesa de corte → tinas de hidratación → clasificadora → boncheo → cuarto frío → empacadora; Doña Rocío, la floricultora; se dibuja con las naves de plástico sobre los rosales, invernaderos sueltos, eucaliptos y cipreses). 🍓 **Los Freseros de Sibaté** (v4.4.1: fresal bajo macrotúneles → lavadero, que saca también la fresa de segunda por la canaleta hacia la marmita de mermelada → seleccionadora → llenadora de bandejas → mesa de fresas con crema; los números del Café del Huila; Don Gilberto, el fresero; puestos de fresas con crema en la decoración). 🐟 **Las Truchas de Guatavita** (v4.4.2: estanques de agua helada → limpieza, que se reparte entre el ahumadero, la fileteadora con la mesa del ceviche y la cocina de la laguna; los números de Betania; Don Ernesto, el truchero; frailejones en la decoración). 🧂 **Las Salinas de Nemocón** (v4.4.3: socavón → pozos de salmuera, que sacan también bloques de sal por la canaleta hacia el taller de tallado; la salmuera se reparte entre los tachos de evaporación y las gachas de barro del pan de sal; el empaque de regalo junta la sal con las figuras en el cofre, y la armadora de canastas recibe los ramos de rosas y las bandejas de fresa por las primeras rutas de la región; los números de la Lechonería; Doña Blanca, la salinera; montones de sal y vagonetas). 🍲 **La Cocina de la Sabana** (v4.4.4, en Chía: huerta de papa → peladero → olla del caldo → olla del ajiaco → servidora; el restaurante santafereño sirve el almuerzo sabanero con la trucha ahumada y el ceviche de Guatavita; los números de La Chamba; Doña Teresa, la cocinera). Y ⛪ **Zipaquirá** (v4.4.5), el final: como Neiva, sin fuente propia; la floristería de la plaza arma arreglos con las cajas de flores, el salón de onces sirve las fresas con crema, el hotel de la plaza recibe el almuerzo sabanero y la mermelada, la plaza de mercado el almuerzo de trucha, las mochilas del paseo llevan las canastas y los cofres de sal, y todo termina en la entrada a la Catedral de Sal; siete rutas; Don Hernán, el guía de la mina; se dibuja como Villa de Leyva, con casonas blancas de balcones verdes. Con la v4.4.8 quedó completa: sus eventos (las heladas, la cosecha grande de fresa, la Semana Santa en Guatavita, el derrumbe que corta las rosas a las Salinas, el domingo de ajiaco y la Navidad en la Catedral; con los números de los del Tolima Grande), su álbum (la Sabana, la cocina, las flores, la sal, los muiscas y los pueblos) y sus logros. Su música es el **Pasillo de la Sabana** (en mi menor que pasa a sol mayor, 3/4, 120 negras por minuto): la bandola en trémolo, la guitarra en el «y» del dos y en el tres, y el tiple picando en el contratiempo. Después, **Bogotá** es una región aparte (abajo).
 - **Bogotá** (v4.5): se abre al completar Cundinamarca. No produce nada propio: es una sola zona de 52×52 casillas (cuatro veces el área de las demás) a la que todo llega en **tractomula** desde las otras regiones. Las tractomulas (`unlimited` en `src/data/routes.js`) traen de su región (`origin`) una carga que no se acaba, no le quitan nada a esa región y se suben de nivel como las chivas; no tienen zona de origen (`from: null`). El mapa sigue la ciudad: los Cerros Orientales con Monserrate arriba a la derecha, la Carrera Séptima al pie de los Cerros (el camino de las mulas), la Avenida Caracas de norte a sur (por ella entran la Autopista Norte y la Autopista Sur) y, del occidente, la Calle 80, la Calle 26 (El Dorado) y la Calle 13; la bodega queda en la Central de abastos, al suroccidente. Desde la v4.6 es **una red**, no una cadena por barrio (`network: true` en la zona): cada estación se puede construir apenas estén construidas todas las que la abastecen (`suppliersOf` en `src/sim/chain.js`), así que se empieza con varias a la vez y baratas (el Tostadero del Chorro gratis, la Despensa de la Zona G, el Toldo de tejidos, el Puesto de flores y el Puesto de frutas, de 200 a 4000 monedas) y las del centro cuestan cientos de millones. Muchas reciben de dos o tres estaciones de la misma Bogotá además de su tractomula (por ejemplo, la Fritanga de la plaza recibe la canasta de la Pescadería, las salsas de la Despensa y el chicharrón de la Cocina de entradas; la Plaza de Paloquemao, el desayuno de la Fritanga, el caldo de costilla de la Parrilla y el tinto de la Cafetería), y no todas tienen tractomula: solo donde tiene sentido. Tres estaciones sacan también un subproducto por la canaleta: el Tostadero, café molido (para el Restaurante de la Zona G); la Cocina de entradas, chicharrón (para la Fritanga), y la Parrilla, caldo de costilla (para la Plaza de Paloquemao). Las estaciones quedan donde estaban los barrios en el mapa; la cadena es una sola, ancha, que se recorre hacia los lados y hacia arriba y abajo (también arrastrando con el mouse). Como hay una sola zona, la lista de zonas dice solo «Bogotá», sin número. El **TransMilenio** va y viene, solo de adorno, por su carril de concreto junto a la Caracas, la 30 (la NQS, entre la Caracas y Paloquemao) y la Calle 80 (`transmilenio` en la zona; dos buses articulados por carril). Al pasar a la v4.6 la Bogotá de barrios se borra de las partidas guardadas (región, medallas, láminas y logros), sin devolver monedas. En total 24 estaciones y 27 tractomulas (dos de comida y una de artesanía por región); el trazado de todo el mapa está en `src/data/zones/zone55_bogota.js`. Tiene seis eventos en la misma zona (cada uno con su `key`): el aguacero en el Chorro, el alumbrado de la Séptima, el festival gastronómico y el pico y placa en la Zona G, el ventarrón del domingo en Usaquén y el paro camionero en Paloquemao; en su tablero solo están las estaciones del evento (v4.7.1: las demás de la red no se dibujan ni salen en la cadena ni en las sugerencias), las mejoras cuestan la ochentava parte (`costScale`: en la red, las estaciones del final son caras de subir y, sin el descuento, jugar bien casi no se notaba) y las tractomulas no corren (lo de afuera llega como en cualquier tablero). Desde la v4.7 tiene un séptimo evento, **la Gran Feria**, con toda la red en el tablero y sin estación frenada: sale solo cuando ya se ganó medalla en los otros seis (`after`), y sus tres compras suben el precio de todo lo que se vende (×1,2, ×1,5 y ×2 de lo normal, por la demanda; `zoneValue`); su logro, «La feria del país», paga 8, 16 y 32 ⭐ por 1, 3 y 6 medallas ganadas en ella. Su álbum (La Candelaria, la comida, Monserrate y los cerros, el transporte, la cultura y los barrios), dieciséis logros y la victoria al llegar a la Gran Feria. Las tractomulas cuestan la cuarta parte de lo que cuesta subir su estación, porque cada estación tiene dos. Su música es la **Danza de La Candelaria** (en la menor que pasa a do mayor, 2/4, 72 negras por minuto): la guitarra con el ritmo de habanera, el bajo en el uno y la quinta en el dos, el tiple en el contratiempo y la bandola con las corcheas con puntillo. Con el jugador casual del simulador se completa en unas 33 horas (v4.6: costos ×4 y la mejora recomendada que prueba subir una rama entera; Cundinamarca, unas 22): es la región más larga y la que pide más atención, porque todo está en una sola zona.
-- **Próximas regiones (aprobadas, para más adelante)**: completan el mapa de Colombia. Llegarían zona por zona, como las demás.
-  - **🌵 Tolima Grande**: llegó completo en la v4.0 (ver arriba).
-  - **🏛️ Bogotá y la Sabana** (Cundinamarca y Bogotá), el gran final del país: **Las Flores de la Sabana** (rosas y claveles de exportación), **Las Salinas de Zipaquirá** (sal, con la Catedral de Sal), **Los Freseros de Sibaté** (fresas con crema), **La Quesería de Ubaté** (la capital lechera), **La Cocina santafereña** (ajiaco y chocolate con queso) y **Bogotá**, el final (La Candelaria, Monserrate y los museos), que podría recibir algo de todas las regiones del país.
+- **Regiones ya publicadas (antes «Próximas regiones»):**
+  - **🌵 Tolima Grande**: llegó completo en la **v4.0** (ver arriba).
+  - **🌹 Cundinamarca y 🏔️ Bogotá**: llegaron en la **v4.4** y la **v4.5–v4.7** (Cundinamarca en 6 zonas hasta Zipaquirá y Bogotá como región aparte en red de 24 estaciones y 27 tractomulas; ver arriba).
 - **Eventos a demanda** (v4.7.3): cuando una región tiene oro en todos sus eventos, ya no recibe eventos solos (`refillSlots`); con 20 ⭐ de Renombre por región (`profile.onDemand`, `buyOnDemand`) cualquiera de sus eventos se juega otra vez con «🔁 Jugar otra vez» (`startOnDemand`), sin cupo ni los 2 años de espera, nunca con más de dos tableros abiertos.
 - **San Andrés** (planeado, sin construir; está desactivado hasta una versión posterior; desde la v4.7.1 la lista de regiones la anuncia como «⭐ Zona especial» con cuántas regiones llevan el segundo final o un reinicio): una **zona de premio** que se abre cuando todas las zonas de todas las regiones están al nivel 100 (o tras un reinicio). Como Bogotá, una sola zona, pero del tamaño de las demás (26×26), con **seis estaciones de turismo** y **un evento**.
 - **Textos prudentes para la política de Familias (v3.65 ✅).** El Tabacal y La Cervecería se quedan como oficio y tradición, pero ningún texto ni dibujo invita a fumar o a beber: el tabaco torcido sin encender, el chicote sin 🚬, las bebidas del álbum contadas por cómo se hacen, y los uitoto sin la coca. Lo mismo para lo que venga: el alcohol y el tabaco, solo como producción y cultura.
-- Ideas de productos:
-  - **Santander**: bocadillo veleño (guayaba), tabaco, hormigas culonas, fique (costales y alpargatas).
-  - **Costa Caribe**: coco y cocadas, plátano y patacones, yuca y enyucado, queso costeño, caña flecha y sombrero vueltiao.
-  - **Llanos**: ganado y carne a la llanera, cuero, arroz, palma de aceite.
-  - **Altiplano**: papa, lana y ruanas, trucha, almojábanas.
-- **Música por región** (sintetizada en el juego, sin archivos): bambuco y pasillo para el Eje Cafetero; guabina para Santander; cumbia y porro para la Costa; joropo para los Llanos; torbellino para el Altiplano; chirimía para la Costa Pacífica; cumbia amazónica para el Amazonas.
+- **Música por región** (10 piezas sintetizadas en el juego sin archivos, y publicadas también en MP3/MIDI en `web/musica/`):
+  - **Eje Cafetero**: *Bambuco de la finca* (bambuco — tiple, guitarra y bandola)
+  - **Santander**: *Guabina del Chicamocha* (guabina — guitarra punteada y bandola)
+  - **La Costa**: *Cumbia del arrozal* (cumbia — gaita, guacharaca, tambora, llamador, alegre, bajo y guitarra)
+  - **Boyacá**: *Torbellino del altiplano* (torbellino — tiple, requinto, guitarra, bajo y chucho)
+  - **Los Llanos**: *Joropo de la sabana* (joropo — arpa, cuatro, maracas y bajo)
+  - **Costa Pacífica**: *Chirimía de San Pacho* (porro chocoano — dos clarinetes, bombardino, tambora, redoblante y platillos)
+  - **Amazonas**: *Cumbia del Amazonas* (cumbia amazónica — guitarra eléctrica con trémolo, teclado, bajo, maracas y manguaré)
+  - **Tolima Grande**: *Sanjuanero del San Pedro* (sanjuanero — tiple, guitarra, bandola, tambora y carrasca)
+  - **Cundinamarca**: *Pasillo de la Sabana* (pasillo — bandola en trémolo, guitarra y tiple)
+  - **Bogotá**: *Danza de La Candelaria* (danza — bandola, tiple, guitarra con ritmo de habanera y bajo)
 
 ---
 
 ## 11. Fuera de alcance
 
-Supervivencia, clima que afecte a una sola zona (las temporadas de la v1.9 afectan a todas por igual), población con necesidades, héroes, combate, gacha, energía, multijugador, tienda con dinero real y servidor. (El reinicio con producción al doble llegó en la v1.6, tras el segundo final.)
+Supervivencia, clima que afecte a una sola zona (las temporadas de la v1.9 afectan a todas por igual), población con necesidades, héroes, combate, gacha, energía, multijugador, tienda con ventajas de juego (solo propinas voluntarias sin recompensa en Play/web) y servidor. (El reinicio con producción al doble llegó en la v1.6, tras el segundo final.)
 
 ---
 
-## 12. Decisiones abiertas
+## 12. Decisiones iniciales (archivo histórico v0.1 — ya resueltas)
 
-1. ¿Cafetal o prefieres otra cadena (panadería, chocolate, herrería)?
-2. ¿Escritorio primero (recomendado) o móvil vertical?
-3. ¿Nombre? *Cafetal*, *Del Grano a la Taza*, *Finca*, *Arrieros*.
-4. ¿Interfaz solo en español o también en inglés?
+1. ~~¿Cafetal o prefieres otra cadena (panadería, chocolate, herrería)?~~ → **Cafetal** (Zona 1), expandido luego a **10 regiones y 55 zonas**.
+2. ~~¿Escritorio primero (recomendado) o móvil vertical?~~ → **Escritorio y móvil** (PWA responsiva + app Android con Capacitor 8).
+3. ~~¿Nombre? *Cafetal*, *Del Grano a la Taza*, *Finca*, *Arrieros*.~~ → **Encantos de Mi Tierrita** (`com.frealgagu.mitierrita.encantos`).
+4. ~~¿Interfaz solo en español o también en inglés?~~ → **4 idiomas**: español, inglés, portugués (BR) y francés (`src/i18n/`).

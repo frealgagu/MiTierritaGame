@@ -26,7 +26,7 @@ test('los eventos están bien armados', () => {
   assert.deepEqual(Object.values(MEDALS).map((m) => m.renown), [4, 2, 1]);
 });
 
-// Cumple el objetivo del tablero (y, si buy, compra las tres mejoras del evento).
+// Completes the board goal (and, if buy, purchases all three event upgrades).
 function complete(board, buy) {
   const obj = boardObjective(board);
   for (const [p, n] of Object.entries(obj.items)) board.stats[obj.kind][p] = n;
@@ -35,8 +35,8 @@ function complete(board, buy) {
   for (const a of eventDef(board).actions) buyAction(board, a.id);
 }
 
-// La partida principal con Santander abierta: en el Eje Cafetero, la Finca, el Trapiche y la Lechería con
-// las estaciones de sus eventos; en Santander, la Guayabera con las del suyo.
+// Main save with Santander open: in Eje Cafetero, Finca, Trapiche, and Lechería have
+// their event stations; in Santander, Guayabera has its own.
 function twoRegions() {
   const game = new Game();
   const s = game.state;
@@ -79,14 +79,14 @@ test('al ganar, el tablero sigue abierto hasta terminarlo; su cupo queda vacío 
   assert.ok(r.done);
   assert.equal(r.medal, 'gold');
   assert.equal(s.profile.medals.broca.best, 'gold');
-  // Ganado: se sigue mirando (y no se gana dos veces) hasta tocar «Terminar».
+  // Won: stays open for viewing (and isn't won twice) until tapping «Finish».
   assert.equal(eventStatus(s, 'finca').kind, 'won');
   assert.equal(startEvent(s, 'finca'), board);
   assert.equal(finishEvent(s, 'finca'), null);
   assert.equal(restartEvent(s, 'finca'), null, 'ganado ya no se reinicia');
   assert.ok(endEvent(s, 'finca'));
   assert.equal(s.profile.renown, 4, 'terminar no da nada más');
-  // Su cupo espera 2 años: no sale nada del Eje Cafetero todavía.
+  // Its slot waits 2 years: nothing from Eje Cafetero spawns yet.
   game.step(0.1);
   assert.equal(eventStatus(s, 'finca').kind, 'waiting');
   assert.equal(eventStatus(s, 'trapiche').kind, 'waiting');
@@ -97,11 +97,11 @@ test('al ganar, el tablero sigue abierto hasta terminarlo; su cupo queda vacío 
   assert.equal(eventStatus(s, 'trapiche').kind, 'waiting', 'aún no pasan los 2 años');
   s.playTime += 20;
   game.step(0.1);
-  // Pasaron: sale el Trapiche, que nunca se ha jugado, antes que la Finca; la Guayabera sigue en el suyo.
+  // Time elapsed: Trapiche, never played yet, spawns before Finca; Guayabera stays on its own.
   assert.equal(eventStatus(s, 'trapiche').kind, 'available');
   assert.equal(eventStatus(s, 'finca').kind, 'waiting');
   assert.equal(eventStatus(s, 'guayabera').kind, 'available', 'el otro cupo siguió con lo suyo');
-  // La próxima vez de la Finca es la segunda, con el mismo reto (v3.72: uno por evento).
+  // Next time Finca spawns it's the second playthrough, with the same challenge (v3.72: one per event).
   assert.equal(eventStatus(s, 'finca').round, 2);
   assert.deepEqual(eventObjective(EVENTS[0]), first);
 });
@@ -140,7 +140,7 @@ test('cumplir el objetivo asegura la medalla; el evento se gana al tener las tre
   assert.ok(r.secured);
   assert.equal(r.medal, 'gold');
   assert.equal(s.profile.renown, 0, 'el Renombre llega al ganarlo');
-  // Pasa el tiempo comprando las mejoras: la medalla ya no cambia.
+  // Time passes while buying upgrades: medal no longer changes.
   board.playTime = 5000;
   assert.equal(finishEvent(s, 'finca'), null);
   board.coins = 1e9;
@@ -169,7 +169,7 @@ test('el tablero tiene su propio reloj, sin noches ni temporadas, y la broca fre
   const game = new Game(board);
   assert.ok(Math.abs(speedMult(board, 'farm') - 0.4) < 1e-9);
   assert.equal(speedMult(board, 'wetmill'), 1);
-  // 20 min de tablero: pasan noches en el reloj del juego, pero el tablero no para.
+  // 20 min of board time: nights pass on the main game clock, but the board never stops.
   for (let t = 0; t < 1200; t += 0.1) game.step(0.1);
   assert.notEqual(board.stations.farm.status, 'resting');
   assert.ok(board.stats.produced.cherry > 1200 * 0.5 * 0.4 * 0.8, `cerezas: ${board.stats.produced.cherry}`);
@@ -190,7 +190,7 @@ test('las compras del evento van en orden, se pagan con las monedas del tablero 
   assert.ok(Math.abs(speedMult(board, 'farm') - 1) < 1e-9);
   assert.equal(quoteAction(board, a).reason, 'owned');
   assert.ok(EVENT_ACTIONS_BY_ID[a]);
-  // Las investigaciones del juego no valen en el tablero.
+  // Main game research upgrades do not apply on the event board.
   assert.equal(main.quoteResearch && new Game(board).quoteResearch('abono').reason, 'event');
 });
 
@@ -241,7 +241,7 @@ test('feria: el objetivo pide varios productos y cuenta cada uno hasta lo pedido
   const board = startEvent(main.state, 'lecheria');
   const obj = boardObjective(board);
   const [a, b] = Object.keys(obj.items);
-  board.stats.sold[a] = obj.items[a] * 5; // de más no cuenta
+  board.stats.sold[a] = obj.items[a] * 5; // extra doesn't count
   assert.ok(Math.abs(eventProgress(board) - obj.items[a] / Object.values(obj.items).reduce((x, y) => x + y)) < 1e-9);
   assert.equal(finishEvent(main.state, 'lecheria'), null);
   for (const [p, n] of Object.entries(obj.items)) board.stats.sold[p] = n;
@@ -258,7 +258,7 @@ test('con la región terminada, tras reiniciar salen los eventos de todas sus zo
   const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
   const game = new Game();
   const s = game.state;
-  // Cobrar el objetivo final del Pueblo deja la región terminada.
+  // Claiming Pueblo's final goal marks the region completed.
   const final = GOALS_BY_ZONE.pueblo.at(-1);
   assert.ok(final.final);
   s.zones.pueblo.unlocked = true;
@@ -273,7 +273,7 @@ test('con la región terminada, tras reiniciar salen los eventos de todas sus zo
   assert.deepEqual(Object.keys(next.zones).filter((z) => next.zones[z].unlocked), ['finca']);
   refillSlots(next);
   assert.deepEqual(next.events.slots.map((x) => x?.zone), [EVENTS[0].zone, undefined], 'el otro cupo, para otra región');
-  // Terminado el de la Finca, el otro cupo toma el de una zona que todavía no se abre.
+  // Once Finca's is finished, the other slot picks one from an unopened zone.
   startEvent(next, EVENTS[0].zone);
   endEvent(next, EVENTS[0].zone);
   refillSlots(next);
@@ -281,7 +281,7 @@ test('con la región terminada, tras reiniciar salen los eventos de todas sus zo
   assert.equal(eventStatus(next, EVENTS[1].zone).kind, 'available', 'aunque la zona no esté abierta');
   assert.equal(eventStatus(next, 'pueblo').kind, 'waiting');
   assert.ok(startEvent(next, EVENTS[1].zone), 'se puede jugar');
-  // Sin la región terminada, solo la zona abierta y con sus estaciones.
+  // Without the region completed, only opened zones with their stations.
   const fresh = new Game().state;
   refillSlots(fresh);
   assert.equal(eventStatus(fresh, 'trapiche'), null);
@@ -295,12 +295,12 @@ test('en el tablero se recomiendan las compras del evento, no las investigacione
   const quote = (id, mode) => game.quote(id, mode);
   b.coins = def.actions[0].cost;
   assert.equal(recommendUpgrade(b, quote, def.zone).id, `action:${def.actions[0].id}`);
-  // Con mucho dinero tampoco salen investigaciones de la zona (como las herraduras).
+  // Even with plenty of coins, zone research (like horseshoes) does not appear.
   b.coins = 1e12;
   for (const a of def.actions) b.research.push(a.id);
   const rec = recommendUpgrade(b, quote, def.zone);
   assert.ok(!rec?.id.startsWith('research:'), rec?.id);
-  // Con la medalla asegurada, la compra que falta aunque no alcance el dinero.
+  // With medal secured, the remaining purchase even without enough coins.
   b.research = [def.actions[0].id];
   b.coins = 0;
   b.event.medal = 'gold';
@@ -317,7 +317,7 @@ test('en el tablero de un evento el nivel máximo es 50 (v3.10.1)', () => {
   assert.equal(b.stations[id].level, 50);
   assert.ok(game.quote(id, 1).maxed);
   assert.ok(game.quote(`${id}:transport`, 'max').levels <= 50 - b.stations[id].transport.level);
-  // En la partida, hasta 100.
+  // In main save, up to 100.
   const g = new Game();
   g.state.coins = 1e30;
   assert.ok(g.buy('farm', 'max'));
@@ -343,14 +343,14 @@ test('premio por región: todos sus eventos en bronce, plata u oro dan 5, 10 y 2
 test('cada evento tiene un reto, y los seis de cada región son de tipos distintos (v3.72)', async () => {
   const { REGIONS } = await import('../src/data/regions.js');
   const { OBJECTIVE_TYPES } = await import('../src/data/events.js');
-  // Las regiones en obra (`wip`) aún no tienen eventos; Bogotá, con una sola zona, va aparte (abajo).
+  // WIP regions (`wip`) don't have events yet; Bogotá, with a single zone, is handled separately (below).
   for (const r of REGIONS.filter((x) => !x.wip && x.id !== 'bogota')) {
     const types = r.zones.map((z) => EVENT_OF_ZONE[z].objective.type);
     assert.deepEqual(types, OBJECTIVE_TYPES, r.id);
   }
-  // Bogotá (v4.5), una sola zona con seis eventos: también uno de cada tipo.
+  // Bogotá (v4.5), a single zone with six events: also one of each type.
   const { regionEvents } = await import('../src/sim/events.js');
-  // (La Gran Feria, v4.6.1, es el séptimo: sale después de los otros seis, que son uno de cada tipo.)
+  // (La Gran Feria, v4.6.1, is the seventh: spawns after the other six, which are one of each type.)
   assert.deepEqual(regionEvents('bogota').filter((e) => !e.after).map((e) => e.objective.type).sort(), [...OBJECTIVE_TYPES].sort());
   for (const e of EVENTS) assert.equal(e.objectives, undefined, e.id);
 });
@@ -359,7 +359,7 @@ test('un tablero que estaba en juego antes de la v3.72 termina con el reto que t
   const { LEGACY_OBJECTIVES } = await import('../src/sim/legacyObjectives.js');
   const board = createEventState(EVENT_OF_ZONE.finca, 2);
   assert.deepEqual(boardObjective(board), EVENT_OF_ZONE.finca.objective);
-  delete board.event.single; // como los guardados antes
+  delete board.event.single; // as previously saved
   assert.deepEqual(boardObjective(board), LEGACY_OBJECTIVES.broca[1]);
   board.event.round = 4;
   assert.deepEqual(boardObjective(board), LEGACY_OBJECTIVES.broca[0]);
@@ -368,7 +368,7 @@ test('un tablero que estaba en juego antes de la v3.72 termina con el reto que t
 test('primero salen los eventos sin oro y al final los de oro (v3.72)', () => {
   const { game, s } = twoRegions();
   game.step(0.1);
-  // La Finca y el Trapiche ya se jugaron: la Finca con oro, el Trapiche con plata, y la Finca hace más.
+  // Finca and Trapiche already played: Finca with gold, Trapiche with silver, and Finca longer ago.
   for (const id of ['broca', 'molienda', 'feria']) s.profile.medals[id] = { best: 'gold', count: { gold: 1 } };
   s.profile.medals.molienda.best = 'silver';
   s.events.last = { finca: 10, trapiche: 20, lecheria: 30 };
@@ -376,15 +376,15 @@ test('primero salen los eventos sin oro y al final los de oro (v3.72)', () => {
   s.events.slots = [null, { zone: 'guayabera' }];
   game.step(0.1);
   assert.equal(s.events.slots[0].zone, 'trapiche', 'el que no tiene oro, aunque la Finca lleve más tiempo sin jugarse');
-  // Con todos en oro, sale el que lleva más tiempo sin jugarse.
+  // With all at gold, the one unplayed the longest spawns.
   s.profile.medals.molienda.best = 'gold';
   s.events.slots = [null, { zone: 'guayabera' }];
   game.step(0.1);
   assert.equal(s.events.slots[0].zone, 'finca');
 });
 
-// Eventos a demanda (v4.7.3): con oro en todos los de una región ya no salen solos; con 20 ⭐ se juegan cuando se quiera,
-// sin cupo ni espera, pero nunca más de dos tableros abiertos.
+// Events on demand (v4.7.3): with gold on all events in a region they no longer auto-spawn; for 20 ⭐ any can be played at will,
+// with no slot or cooldown, though never more than two open boards.
 test('con oro en toda la región los eventos ya no salen solos y, comprados a demanda, se juegan otra vez (v4.7.3)', async () => {
   const { eventsOf, regionEvents, quoteOnDemand, buyOnDemand, startOnDemand, refillSlots } = await import('../src/sim/events.js');
   const game = new Game();

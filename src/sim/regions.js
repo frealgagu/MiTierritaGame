@@ -1,23 +1,23 @@
-// Regiones (v3.0): la partida del Eje Cafetero es la principal y guarda las demás en `regions`, cada
-// una como una partida completa (con su `region`). Todas producen a la vez, cada una con su Game.
+// Regions (v3.0): Eje Cafetero is root save holding others under `regions`, each as a
+// full save (with its `region`). All run concurrently, each with its own Game.
 import { REGIONS, REGIONS_BY_ID } from '../data/regions.js';
 import { createInitialState } from './state.js';
 import { clockOf } from './calendar.js';
 
-// La partida de una región (la principal para el Eje Cafetero), o null si no se ha abierto.
+// Save for a region (root for Eje Cafetero), or null if not yet unlocked.
 export function regionState(root, regionId) {
   if (regionId === 'cafetero') return root;
   return root.regions?.[regionId] ?? null;
 }
 
-// Abre las regiones cuya condición ya se cumplió (completar una zona de otra región). Devuelve las
-// que abrió. La región nueva sigue el calendario del país desde el día en que se abre.
-// La condición no se pierde al reiniciar (v3.8.1): si la región de origen ya se terminó alguna vez
-// (`regionDone`, su última zona), vale aunque en la partida de ahora esa zona no esté completa.
+// Unlocks regions whose condition is met (completing a zone in another region). Returns
+// unlocked list. New region follows country calendar from unlock day onward.
+// Unlock condition isn't lost on reset (v3.8.1): if origin region finished once
+// (`regionDone`, its final zone), still counts even if not yet cleared in current run.
 export function openRegions(root, now = Date.now()) {
   const opened = [];
   for (const region of REGIONS) {
-    if (!region.unlock || region.hidden || regionState(root, region.id)) continue; // (v4.4.8) la que aún no se publica
+    if (!region.unlock || region.hidden || regionState(root, region.id)) continue; // (v4.4.8) unreleased hidden regions
     const from = regionState(root, region.unlock.region);
     const done = from?.regionDone && REGIONS_BY_ID[from.region ?? 'cafetero'].zones.at(-1) === region.unlock.zone;
     if (!from?.zones[region.unlock.zone]?.complete && !done) continue;
@@ -31,5 +31,5 @@ export function openRegions(root, now = Date.now()) {
   return opened;
 }
 
-// Las regiones abiertas, en orden: [{ region, state }].
+// Opened regions in order: [{ region, state }].
 export const openRegionStates = (root) => REGIONS.map((region) => ({ region, state: regionState(root, region.id) })).filter((r) => r.state);

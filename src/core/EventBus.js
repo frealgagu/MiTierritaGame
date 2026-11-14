@@ -10,8 +10,8 @@ export class EventBus {
     return () => this.handlers.get(type).delete(fn);
   }
 
-  // Si un oyente falla (un efecto del mapa, por ejemplo), los demás se avisan igual y quien emitió
-  // sigue: una compra ya cobrada no puede quedar a medias por un efecto visual.
+  // If one listener throws (e.g. a map visual effect), still notify the rest and let the emitter continue:
+  // an already-charged purchase must never be left half-applied by a UI glitch.
   emit(type, payload) {
     if (this.muted) return;
     for (const fn of this.handlers.get(type) ?? []) {

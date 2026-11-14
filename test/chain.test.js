@@ -6,7 +6,7 @@ import { PARENT, ROAD_POS, chainOf } from '../src/sim/chain.js';
 import { ZONE_LIST } from '../src/data/zones/index.js';
 import { CALENDAR } from '../src/sim/calendar.js';
 
-// Siempre de día y sin temporada: se mira la cadena, no el reloj.
+// Always daytime and no season: tests the chain, not the clock.
 CALENDAR.on = false;
 
 const CHAIN = chainOf('finca');
@@ -22,7 +22,7 @@ test('en cada zona, cada estación está después de su proveedor sobre el camin
       if (PARENT[id]) assert.ok(pos[id] > pos[PARENT[id]], `${id} antes que ${PARENT[id]}`);
       assert.ok(pos.warehouse > pos[id], `bodega de ${zone.id} antes que ${id}`);
     }
-    // El orden de construcción respeta quién alimenta a quién.
+    // Build order respects who feeds whom.
     for (const id of zone.chain) if (PARENT[id]) assert.ok(zone.chain.indexOf(PARENT[id]) < zone.chain.indexOf(id), id);
   }
 });
@@ -52,7 +52,7 @@ test('si la siguiente estación no da abasto, el sobrante se desvía a la bodega
   const game = new Game();
   game.state.coins = 50;
   game.unlock('wetmill');
-  game.state.stations.farm.level = 40; // muchas más cerezas de las que procesa un beneficiadero nivel 1
+  game.state.stations.farm.level = 40; // far more cherries than a level 1 beneficiadero can process
   game.state.stations.farm.transport.level = 40;
   game.state.zones.finca.dispatch.level = 40;
   run(game, 90);
@@ -86,7 +86,7 @@ test('lo desviado nunca llena la bodega: siempre queda sitio para el producto fi
   const game = new Game();
   game.state.coins = 50;
   game.unlock('wetmill');
-  game.state.stations.farm.level = 60; // muchísimas cerezas desviadas
+  game.state.stations.farm.level = 60; // tons of bypassed cherries
   game.state.stations.farm.transport.level = 60;
   game.state.stations.wetmill.transport.level = 30;
   run(game, 120);
@@ -106,8 +106,8 @@ test('lo que ya está en el nivel 100 no se señala como cuello de botella', asy
     st.transport.level = 100;
   }
   game.state.zones.finca.dispatch.level = 100;
-  // Todo al máximo y equilibrado: el cuello sería el Cafetal, que ya no se puede subir.
+  // Everything maxed and balanced: the bottleneck would be Cafetal, which cannot be upgraded further.
   assert.equal(analyzeChain(game.state).bottleneck, null);
-  game.state.coins = 0; // sin dinero para investigaciones
+  game.state.coins = 0; // with no money for research
   assert.equal(recommendUpgrade(game.state, (id, mode) => game.quote(id, mode)), null);
 });

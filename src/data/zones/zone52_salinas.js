@@ -1,7 +1,7 @@
-// Mapa de Cundinamarca · Zona 4: Las Salinas de Nemocón (v4.4). Mismo trazado que la cuarta zona de cada región. Los
-// Pozos (junto al socavón) sacan salmuera y bloques de sal: los bloques pasan por la canaleta al Taller de tallado, al
-// lado, y el Empaque de regalo junta las figuras con la sal de los Tachos. La Armadora de canastas espera junto a las
-// carreteras por las que llegan los ramos de rosas de las Flores y las bandejas de fresa de Sibaté.
+// Cundinamarca Map · Zone 4: Las Salinas de Nemocón (v4.4). Same layout as the fourth zone of each region. The
+// Brine Wells (next to the mine drift) produce brine and salt blocks: blocks go down the chute to the Carving Workshop
+// next door, and Gift Packing combines carvings with salt from the Evaporators. The Basket Assembler waits next to the
+// roads bringing rose bouquets from Las Flores and strawberry trays from Sibaté.
 import { ICON } from '../icons.js';
 
 export const ZONE52 = {
@@ -26,7 +26,7 @@ export const ZONE52 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Nemocón ➜',
   muleSpeed: 4,
@@ -34,7 +34,7 @@ export const ZONE52 = {
   routes: {
     ramos_rosas: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Ramos de las Flores' },
     bandejas_fresa: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Fresas de Sibaté' },
-    // El cofre y la canasta salen hacia Zipaquirá.
+    // The chest and the basket leave toward Zipaquirá.
     cofres_sal: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Cofres a Zipaquirá ➜' },
     canastas: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [23.7, 23.6], text: 'Canastas ⬇' },
   },

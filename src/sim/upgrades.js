@@ -8,18 +8,18 @@ import { ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive } from './routes.js';
 import { EVENTS_BY_ID } from '../data/events.js';
 
-// Los arrieros cuestan la mitad que la estación a la que sirven.
+// Haulers cost half their station's price.
 const TRANSPORT_COST_FACTOR = 0.5;
 
-// Opciones de desarrollador: con saldo negativo permitido, todo se puede comprar y lo que falta queda
-// como deuda (el saldo baja de cero y lo que se gana después la va pagando).
+// Dev option: with negative balance allowed, anything is affordable and shortfall becomes
+// debt (coins drop below zero and subsequent earnings pay it down).
 let credit = false;
 export const setCredit = (on) => (credit = Boolean(on));
 export const canPay = (state, cost) => credit || state.coins >= cost;
-// Lo mismo con el Renombre (v3.68.2): con saldo negativo, también se compra sin estrellas.
+// Same for Renown (v3.68.2): negative balance allows buying without enough stars.
 export const canPayRenown = (profile, cost) => credit || profile.renown >= cost;
 
-// Lo que se puede mejorar: 'dispatch:<zona>', 'route:<ruta>', el id de una estación o 'id:transport' (sus arrieros).
+// Upgradeable target ids: 'dispatch:<zone>', 'route:<route>', station id, or 'id:transport' (haulers).
 function target(state, id) {
   const [stationId, part] = id.split(':');
   if (stationId === 'dispatch') {
@@ -33,20 +33,20 @@ function target(state, id) {
   }
   const def = STATIONS_BY_ID[stationId];
   const st = state.stations[stationId];
-  // En el tablero de un evento de Bogotá (v4.6) las mejoras cuestan menos (`costScale`): en la red, las estaciones del
-  // final cuestan mucho de subir y, sin el descuento, jugar bien casi no se notaba frente a no hacer nada.
+  // On Bogotá event boards (v4.6) upgrades cost less (`costScale`): late-network stations are
+  // very costly and without discount active play barely outperformed idling.
   const scale = (state.event && EVENTS_BY_ID[state.event.id]?.costScale) || 1;
   if (part === 'transport') return { base: def.upgradeBase * TRANSPORT_COST_FACTOR * scale, growth: def.growth, holder: st.transport };
   return { base: def.upgradeBase * scale, growth: def.growth, holder: st };
 }
-export const upgradeTarget = target; // (v4.1: para mejorar toda la zona)
+export const upgradeTarget = target; // (v4.1: for upgrading entire zone)
 
 // mode: 1 | 10 | 'max'
 export function quoteUpgrade(state, id, mode) {
   const { base, growth, holder } = target(state, id);
   const level = holder.level;
   const max = maxLevel(state); // en un evento, 50 (v3.10.1)
-  // Una ruta se mejora cuando existe la estación que abastece.
+  // Route unlocks for upgrading once any station it supplies is built.
   if (id.startsWith('route:') && !routeActive(state, id.split(':')[1])) return { ...bulkUpgrade(base, growth, level, 1), affordable: false, maxed: false, locked: true };
   if (level >= max) return { levels: 0, cost: 0, affordable: false, maxed: true };
   if (mode === 'max') {
@@ -65,23 +65,23 @@ export function buyUpgrade(state, id, mode, bus) {
   const from = holder.level;
   state.coins -= q.cost;
   holder.level += q.levels;
-  // Hito más alto alcanzado con esta compra (o null).
+  // Highest milestone reached by this purchase (or null).
   const milestone = MILESTONES.filter((m) => m > from && m <= holder.level).at(-1) ?? null;
   bus.emit('levelUp', { id, from, to: holder.level, milestone });
   return true;
 }
 
-// En el tablero de un evento de Bogotá (v4.5) solo cuenta lo del evento: lo demás no se construye.
+// On Bogotá event board (v4.5) only event stations apply: rest stay unbuilt.
 function outsideEvent(state, id) {
   const zone = ZONES_BY_ID[zoneOf(id)];
   if (!state.event || !(zone.groups || zone.network)) return false;
   const stations = EVENTS_BY_ID[state.event.id]?.stations ?? [];
-  // En red (v4.6), solo las del evento.
+  // In network (v4.6), event stations only.
   if (zone.network) return !stations.includes(id);
   return !groupOf(id)?.stations.some((s) => stations.includes(s));
 }
 
-// ¿Se puede construir esta estación? Hay que seguir el orden de la cadena.
+// Can this station be built next? Must follow chain order.
 export function quoteUnlock(state, id) {
   const def = STATIONS_BY_ID[id];
   if (state.stations[id]) return { ok: false, reason: 'built', cost: 0 };
@@ -89,11 +89,11 @@ export function quoteUnlock(state, id) {
   if (!zoneUnlocked(state, zoneOf(id))) return { ok: false, reason: 'zone', cost };
   if (outsideEvent(state, id)) return { ok: false, reason: 'event', cost };
   if (def.side) {
-    // Rama secundaria: solo pide la estación que la habilita.
+    // Side branch: only requires enabling station.
     if (!state.stations[def.requires]) return { ok: false, reason: 'order', previous: def.requires, cost };
   } else if (!buildableStations(state, zoneOf(id)).includes(id)) {
-    // La anterior de su barrio (v4.5) o, si es la primera de un barrio que espera otros, la que les falta a esos.
-    // En red (v4.6, Bogotá): la primera de las que la abastecen que falta.
+    // Previous in neighborhood (v4.5) or, if first of gated neighborhood, missing prerequisites.
+    // In network (v4.6, Bogotá): first unbuilt station among direct suppliers.
     let previous;
     if (ZONES_BY_ID[zoneOf(id)].network) previous = suppliersOf(id).find((s) => !state.stations[s]);
     else {
@@ -117,14 +117,14 @@ export function unlockStation(state, id, bus) {
   return true;
 }
 
-// Todos los edificios de la zona (construidos todos) en el nivel `level` o más.
+// Every zone building (all must be built) at `level` or above.
 export function zoneAtLevel(state, zoneId, level) {
   const z = ZONES_BY_ID[zoneId];
   return [...new Set([...z.chain, ...z.plots.map((p) => p.stationId)])].every((id) => (state.stations[id]?.level ?? 0) >= level);
 }
 
-// Si todavía falta algo para poder investigarla: su estación construida, la estación y sus arrieros al
-// nivel que pide (las que duplican una estación) o toda la zona a un nivel (Maestría y Supremacía).
+// Missing prerequisite preventing research: station unbuilt, station/haulers below
+// required level (for ×2), or whole zone below threshold (Mastery and Supremacy).
 export function researchLocked(state, r) {
   const st = r.requires && state.stations[r.requires];
   if (r.requires && !st) return true;
@@ -132,9 +132,9 @@ export function researchLocked(state, r) {
   return Boolean(r.minLevel && !zoneAtLevel(state, r.zone, r.minLevel));
 }
 
-// Lo primero que le falta a una investigación bloqueada (v3.12), para ir allá: la estación por construir
-// o por subir ('id'), sus arrieros ('id:transport') o, en la Maestría y la Supremacía, la primera
-// estación de la zona que no llega al nivel. null si no le falta nada de eso.
+// First missing prerequisite for locked research (v3.12), to jump there: station to
+// build or upgrade ('id'), haulers ('id:transport'), or for Mastery/Supremacy, first
+// zone station below threshold. null if none missing.
 export function researchBlocker(state, r) {
   const st = r.requires && state.stations[r.requires];
   if (r.requires && !st) return r.requires;
@@ -147,10 +147,10 @@ export function researchBlocker(state, r) {
   return null;
 }
 
-// Investigaciones: aparecen cuando su estación está construida y se compran una vez.
+// Research: unlock once their station is built, bought once each.
 export function quoteResearch(state, id) {
   const r = RESEARCH_BY_ID[id];
-  // En el tablero de un evento solo valen las compras del evento (sim/events.js).
+  // On an event board only event purchases apply (sim/events.js).
   if (state.event) return { ok: false, reason: 'event', cost: r.cost };
   if (state.research.includes(id)) return { ok: false, reason: 'owned', cost: r.cost };
   if (!zoneUnlocked(state, r.zone)) return { ok: false, reason: 'zone', cost: r.cost };
@@ -168,9 +168,9 @@ export function buyResearch(state, id, bus) {
   return true;
 }
 
-// «Comprar todas» (v3.57): las investigaciones de una zona que alcanza el dinero, de la más barata a la
-// más cara, hasta que no alcance para ninguna más. La Maestría y la Supremacía quedan aparte: se compran a
-// propósito. Devuelve las que compró.
+// «Buy all» (v3.57): affordable research in zone from cheapest to costliest until
+// funds run out. Mastery and Supremacy stay separate: must be bought deliberately.
+// Returns list of purchased upgrades.
 export const bulkResearch = (state, zoneId) => RESEARCH.filter((r) => r.zone === zoneId && !r.minLevel).sort((a, b) => a.cost - b.cost);
 export function buyAllResearch(state, zoneId, bus) {
   const bought = [];
@@ -186,7 +186,7 @@ export function buyAllResearch(state, zoneId, bus) {
   return bought;
 }
 
-// Cuántas compraría «Comprar todas» con el dinero de ahora, y cuánto costarían.
+// How many «Buy all» would purchase right now and total cost.
 export function previewAllResearch(state, zoneId) {
   let coins = state.coins;
   let count = 0;

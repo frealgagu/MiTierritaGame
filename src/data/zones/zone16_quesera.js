@@ -1,6 +1,6 @@
-// Mapa de la Costa · Zona 4: La Quesera (v3.18). Mismo trazado que el Hato (zone10_hato.js): el mote de
-// queso se reparte entre la Fonda costeña y la Cocina de la bandeja, que esperan junto a las dos carreteras
-// por las que llegan el arroz del Arrozal y el pescado de la Ciénaga.
+// Caribbean Coast Map · Zone 4: La Quesera (v3.18). Same layout as El Hato (zone10_hato.js): the cheese
+// mote soup is split between the Coastal Inn and the Bandeja Kitchen, which wait next to the two roads
+// bringing rice from El Arrozal and fish from La Ciénaga.
 import { ICON } from '../icons.js';
 
 export const ZONE16 = {
@@ -25,7 +25,7 @@ export const ZONE16 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Sahagún ➜',
   muleSpeed: 4,
@@ -33,7 +33,7 @@ export const ZONE16 = {
   routes: {
     arroz: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Arroz del Arrozal' },
     pescado: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Pescado de la Ciénaga' },
-    // Las bandejas y los almuerzos salen hacia Cartagena (v3.20).
+    // Bandejas and lunches leave toward Cartagena (v3.20).
     bandejas: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Bandejas a Cartagena ➜' },
     almuerzos_costenos: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [23.7, 23.6], text: 'Almuerzos ⬇' },
   },

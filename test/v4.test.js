@@ -9,10 +9,10 @@ import { loadGame } from '../src/core/SaveSystem.js';
 import { objectiveUpgrades, createEventState } from '../src/sim/events.js';
 import { EVENTS_BY_ID } from '../src/data/events.js';
 
-// Las dos mecánicas de la v4.0: la estación con dos productos (el subproducto sigue su camino por la
-// canaleta: a otra estación, a una que lo junta o a una ruta) y la estación que junta dos de su zona.
+// Both v4.0 mechanics: station with two outputs (the byproduct continues along its
+// chute: to another station, to a combiner station, or to a route) and station combining two in its zone.
 
-// Una región con estas zonas construidas a un nivel parejo, sin calendario, corrida `secs` segundos.
+// A region with these zones built to an even level, no calendar, run for `secs` seconds.
 function run(region, zones, level, secs, routes = []) {
   const game = new Game(createInitialState(0, region));
   for (const z of zones.slice(1)) game.unlockZone(z);
@@ -43,7 +43,7 @@ test('Paipa: el Horno de almojábanas junta la cuajada de la Cuajadera con el qu
   const game = run('boyaca', ['papal', 'cerveceria', 'raquira', 'paipa'], 20, 600, ['papitas', 'barro', 'bagazo']);
   const s = game.state;
   assert.ok(s.stats.produced.almojabana > 400, `almojábanas: ${s.stats.produced.almojabana}`);
-  // La mitad de la cuajada va a los Moldes y la otra mitad al Horno.
+  // Half of the curds go to Moldes and the other half to Horno.
   assert.ok(Math.abs(s.stats.produced.queso_paipa / s.stats.produced.paipa_curd - 0.5) < 0.05);
   const row = analyzeChain(s, 'paipa').rows.find((r) => r.id === 'almojabana_oven');
   assert.ok(row.joined.paipa_curd > 0 && !row.joinLimited);
@@ -54,7 +54,7 @@ test('Paipa: sin cuajada, el Horno espera y lo dice', () => {
   const st = game.state.stations.almojabana_oven;
   st.joined = {};
   st.input = 100;
-  game.state.stations.paipa_curdler.level = 1; // casi no llega cuajada
+  game.state.stations.paipa_curdler.level = 1; // almost no curds arrive
   game.state.stations.paipa_curdler.buffer = 0;
   game.state.mules = game.state.mules.filter((m) => m.to !== 'almojabana_oven');
   for (let t = 0; t < 1; t += 0.1) game.step(0.1);
@@ -85,11 +85,11 @@ test('La Finca: la pulpa sigue llegando a la Compostera como antes', () => {
 });
 
 test('un subproducto con ruta se guarda en la bodega para ella; si la ruta aún no abre, se vende', () => {
-  // Los cueros del Desposte: con la Talabartería abierta los lleva la Ruta de los cueros...
+  // Hides from Desposte: with Talabartería open, the hides route carries them...
   const open = run('llanos', ['palma', 'frutal', 'cachamera', 'hato_llanero', 'talabarteria'], 20, 600, ['aceite', 'cachamas', 'cueros']);
   assert.ok((open.state.stats.imported.fresh_hide ?? 0) > 0, 'llegan cueros a la Talabartería');
   assert.ok(!(open.state.stats.sold.fresh_hide > 0), 'no se venden en el Hato');
-  // ...y con la Talabartería cerrada se venden en el Hato.
+  // ...and with Talabartería closed they are sold at the Hato.
   const closed = run('llanos', ['palma', 'frutal', 'cachamera', 'hato_llanero'], 20, 600, ['aceite', 'cachamas']);
   assert.ok((closed.state.stats.sold.fresh_hide ?? 0) > 0, 'se venden los cueros');
   const row = analyzeChain(closed.state, 'hato_llanero').rows.find((r) => r.id === 'llanero_butcher');

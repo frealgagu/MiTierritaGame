@@ -8,15 +8,15 @@ import { regionOf } from '../data/regions.js';
 import { MAX_LEGACY_RESETS, legacyMult, nextLegacyMult } from '../sim/modifiers.js';
 import { fit } from './fit.js';
 
-// Objetivos: un marcador abajo a la izquierda con el objetivo actual y la lista de todos los de la zona
-// (v3.67; antes, solo los tres visibles).
+// Goals: bottom-left pill showing current goal plus modal listing all zone goals
+// (v3.67; previously only the three visible ones).
 export class GoalsView {
   constructor(game, getZone) {
     this.game = game;
     this.getZone = getZone;
     this.modal = document.getElementById('goals');
     this.body = document.getElementById('goals-body');
-    this.foot = document.getElementById('goals-foot'); // «Cobrar todos», abajo y fuera de la lista (v3.57)
+    this.foot = document.getElementById('goals-foot'); // «Claim all», pinned below outside the scroll list (v3.57)
     this.tracker = document.getElementById('tracker');
     this.badge = document.getElementById('goals-badge');
     document.getElementById('goals-btn').addEventListener('click', () => this.open());
@@ -34,7 +34,7 @@ export class GoalsView {
       else if (e.target.closest('[data-mastery]')) this.onMastery?.();
       else this.open();
     });
-    this.onMastery = null; // main.js: abre la pantalla del segundo final
+    this.onMastery = null; // main.js: opens the second-ending screen
   }
 
   open() {
@@ -53,25 +53,25 @@ export class GoalsView {
     const zone = this.getZone();
     const goals = activeGoals(state, zone);
     const progress = goals.map((g) => goalProgress(state, g));
-    // El número cuenta todos los que ya se pueden cobrar en la zona, no solo los tres que se ven (v3.57).
+    // Badge counts all claimable goals in the zone, not just the first three (v3.57).
     const ready = claimableGoals(state, zone);
-    // (v4.7) También el final ya cumplido, aunque todavía no le toque: sin él, el número decía uno menos de los
-    // ganados y, al ir cobrando, se repetía cuando el final aparecía entre los primeros.
+    // (v4.7) Also the already-met finale even if not yet first in queue: otherwise badge read one too low
+    // and collecting earlier goals caused it to repeat when the finale reached the front.
     const won = state.zones[zone]?.unlocked ? GOALS_BY_ZONE[zone].filter((x) => !state.goals.claimed.includes(x.id) && goalProgress(state, x).done) : [];
     this.badge.hidden = won.length === 0;
     this.badge.textContent = won.length;
 
-    // Marcador: el primero que ya se puede cobrar (v4.7: aunque no esté entre los primeros de la lista, para
-    // cobrarlo desde afuera sin entrar al panel) o, si no hay, el primer objetivo. Con todas las zonas completas y sin
-    // objetivos aquí, el segundo final: todas las estaciones al nivel 100.
+    // Pill: first claimable goal (v4.7: even if deeper in the list, so it can be claimed
+    // directly from outside) or, if none, first pending goal. With all zones completed and no
+    // goals left here, the second ending: all stations at level 100.
     const first = ready.find((x) => !x.final) ?? ready[0];
     const i = Math.max(0, progress.findIndex((p) => p.done));
     const g = first ?? goals[i];
     const gProgress = first ? goalProgress(state, first) : progress[i];
-    // (v3.12: con la última zona de la región, no solo el Pueblo: en Santander no salía.)
+    // (v3.12: with the region's final zone, not just Pueblo: Santander's didn't show.)
     const finished = Boolean(state.zones[finalZone(state)]?.complete) && !regionOf(state).wip;
-    // Con el multiplicador al máximo (v3.68.2) la barra ya no ofrece volver a empezar: solo lo dice; se
-    // puede seguir reiniciando desde la ventana de objetivos.
+    // Once multiplier hits cap (v3.68.2) the bar no longer offers reset: just says so; resetting
+    // remains accessible from inside the goals modal.
     const atMax = (state.legacy?.resets ?? 0) >= MAX_LEGACY_RESETS;
     const master = !g && finished ? (atMax ? maxCard(state) : masteryCard(state, true)) : null;
     this.tracker.hidden = !g && !master;
@@ -80,7 +80,7 @@ export class GoalsView {
       this.tracker.innerHTML = this.trackerHtml = trackerHtml;
       this.trackerFit = false;
     }
-    // El marcador tiene alto fijo: un texto largo se achica (cuando se ve; oculto no se puede medir).
+    // Pill has fixed height: long text shrinks (when visible; hidden can't be measured).
     if (!this.trackerFit && this.tracker.clientWidth) {
       fit(this.tracker.querySelector('.goal-text'));
       this.trackerFit = true;
@@ -89,13 +89,13 @@ export class GoalsView {
     if (this.modal.hidden) return;
     const list = GOALS_BY_ZONE[zone];
     const done = list.filter((g) => state.goals.claimed.includes(g.id)).length;
-    // «Cobrar todos» (v3.57): los cumplidos de la zona, también los que no se ven; el final, aparte.
+    // «Claim all» (v3.57): all completed zone goals, even unshown ones; finale handled separately.
     const bulk = ready.filter((g) => !g.final);
     const bulkReward = bulk.reduce((n, g) => n + g.reward, 0);
     const claimAll = bulk.length > 0 ? `<button class="btn claim bulk" data-claim-all>${t('✅ Cobrar todos ({n})', { n: bulk.length })} · +${formatNumber(bulkReward)} 💰</button>` : '';
     if (claimAll !== this.footHtml) this.foot.innerHTML = this.footHtml = claimAll;
-    // La lista completa (v3.67, como las investigaciones): los cobrados arriba, en pequeño, y todos los
-    // que faltan con su avance (antes solo se veían tres y un cumplido podía quedar escondido).
+    // Full list (v3.67, like research): claimed ones compact at top, and all pending ones
+    // with progress below (previously only three showed so completed ones could hide).
     const claimed = new Set(state.goals.claimed);
     const html = `
       <p class="goals-count">${ZONES_BY_ID[zone].icon} ${ZONES_BY_ID[zone].name} · ${t('{done} de {total} cobrados', { done, total: list.length })}</p>
@@ -104,7 +104,7 @@ export class GoalsView {
       ${finished ? masteryCard(state, false) : ''}`;
     if (html !== this.html) {
       this.body.innerHTML = this.html = html;
-      // Al abrir, la lista baja hasta el primero que falta.
+      // On open, scroll list to the first incomplete goal.
       if (this.scroll) {
         this.scroll = false;
         this.body.querySelector('.goal:not(.claimed)')?.scrollIntoView({ block: 'start' });
@@ -113,9 +113,9 @@ export class GoalsView {
   }
 }
 
-// Segundo final: lo que pide (v3.12: estaciones, arrieros y rutas en el nivel 100, todos los objetivos
-// y todas las investigaciones), cuánto va de cada cosa y, al lograrlo, el botón para volver a empezar.
-// «🏆 Multiplicador al máximo (×1,15Qi)», en la barra de abajo.
+// Second ending: requirements (v3.12: stations, haulers, and routes at level 100, all goals
+// and all research), progress on each, and once met, the reset button.
+// «🏆 Max multiplier (×1.15Qi)», in bottom bar.
 const maxCard = (state) =>
   `<div class="goal final done compact"><div class="goal-text">${t('🏆 Multiplicador al máximo ({mult})', { mult: formatMult(legacyMult(state)) })}</div></div>`;
 
@@ -156,7 +156,7 @@ function goalCard(goal, p, compact) {
     </div>`;
 }
 
-// Un objetivo ya cobrado: un renglón, sin barra.
+// Already claimed goal: single row, no progress bar.
 function claimedCard(goal) {
   return `<div class="goal claimed"><div class="goal-text">✅ ${goalText(goal)}</div><span class="goal-reward">${goal.final ? t('🚩 Zona completada') : t('Cobrado')}</span></div>`;
 }

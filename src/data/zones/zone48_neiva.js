@@ -1,7 +1,7 @@
-// Mapa del Tolima Grande · Zona 6: Neiva (v4.0). Mismo trazado que la última zona de cada región: no tiene fuente
-// propia; en el malecón del río Magdalena está la Cafetería, que recibe las cajas de bizcochos de los Achirales, y cada
-// estación espera junto a la carretera por la que le llega lo suyo. Se dibuja como el Pueblo (tema 'town'), con
-// casas de colores, ceibas, guayacanes y palmas (style), y las banderitas del San Pedro.
+// Tolima Grande Map · Zone 6: Neiva (v4.0). Same layout as the last zone of each region: no source
+// of its own; on the Magdalena River boardwalk sits the Café, receiving crates of biscuits from Los Achirales, and each
+// station waits next to the road bringing its supply. Drawn like El Pueblo ('town' theme), with
+// colorful houses, ceibas, guayacanes, palms (style), and San Pedro festival bunting.
 import { ICON } from '../icons.js';
 
 export const ZONE48 = {
@@ -26,7 +26,7 @@ export const ZONE48 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Villavieja ➜',
   muleSpeed: 4,
@@ -41,5 +41,5 @@ export const ZONE48 = {
     almuerzos_represa: { road: [[12.5, 25.9], [12.5, 15.2]], sign: [11.3, 23.6], text: 'Tilapia ⬆' },
   },
   unlockedBy: 'chamba',
-  next: null, // la última del Tolima Grande
+  next: null, // the last zone of Tolima Grande
 };

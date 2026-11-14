@@ -1,5 +1,5 @@
-// Mapa de Boyacá · Zona 1: El Papal (v3.22). Mismo trazado que la Finca (zone1_finca.js) y la
-// Guayabera: la región empieza de cero y su primera zona se juega igual que la primera del Eje Cafetero.
+// Boyacá Map · Zone 1: El Papal (v3.22). Same layout as La Finca (zone1_finca.js) and La
+// Guayabera: the region starts from scratch and its first zone plays like the first one of Eje Cafetero.
 import { ICON } from '../icons.js';
 
 export const ZONE19 = {
@@ -24,16 +24,16 @@ export const ZONE19 = {
   muleRoad: [[8.5, 4.5], [8.5, 10.5], [14.5, 10.5], [14.5, 16.5], [20.5, 16.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys (v3.9), inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Ventaquemada ➜',
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
-  unlockedBy: null, // la primera de Boyacá: se abre con la región
-  // Carretera de la Ruta de las papitas (v3.25): sale de la bodega hacia Paipa.
+  unlockedBy: null, // the first zone of Boyacá: opens with the region
+  // Road for the Baby Potatoes Route (v3.25): leaves the warehouse toward Paipa.
   routes: {
     papitas: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Papitas a Paipa ➜' },
-    // Las cajas de papitas salen hacia Villa de Leyva (v3.27).
+    // Crates of baby potatoes leave toward Villa de Leyva (v3.27).
     cajas_papitas: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'A Villa de Leyva ➜' },
   },
   next: 'cerveceria',

@@ -1,8 +1,8 @@
-// Regiones (v3.0, GDD §10.3): cada una es una partida aparte con su economía (monedas, niveles,
-// investigaciones, objetivos, segundo final y reinicio ×2), seis zonas y su música. Se comparten
-// solo el Renombre, el álbum, la decoración, los logros y el calendario del país.
-//   zones: en orden (la primera se abre con la región; cada una abre la siguiente)
-//   unlock: lo que abre la región ({ region, zone }: completar esa zona de esa región)
+// Regions (v3.0, GDD §10.3): each is an independent save with own economy (coins, levels,
+// research, goals, second ending, ×2 resets), zones, and soundtrack. Only Renown,
+// album, decoration, achievements, and country calendar are shared.
+//   zones: ordered (first opens with region; each unlocks the next)
+//   unlock: unlock condition ({ region, zone }: completing that zone in that region)
 import { ICON } from './icons.js';
 
 export const REGIONS = [
@@ -15,9 +15,9 @@ export const REGIONS = [
     music: 'santander',
     unlock: { region: 'cafetero', zone: 'pueblo' },
   },
-  // La Costa (v3.15): se abre al completar Barichara. Llegó zona por zona (v3.15 a v3.20) y mientras estuvo
-  // en obra (`wip`) no tenía final; desde la v3.21 tiene sus eventos, su álbum y sus logros. Una región en
-  // obra anuncia las zonas que le faltan (`soon`).
+  // Coast (v3.15): unlocks upon completing Barichara. Released zone-by-zone (v3.15–v3.20) while
+  // `wip` lacked finale; since v3.21 has events, album, and achievements. WIP regions advertise
+  // missing upcoming zones (`soon`).
   {
     id: 'costa',
     name: 'La Costa',
@@ -26,8 +26,8 @@ export const REGIONS = [
     music: 'costa',
     unlock: { region: 'santander', zone: 'barichara' },
   },
-  // Boyacá (v3.22): se abre al completar Cartagena. Llegó zona por zona, como la Costa (v3.22 a v3.27), y
-  // desde la v3.28 tiene sus eventos, su álbum y sus logros.
+  // Boyacá (v3.22): unlocks upon completing Cartagena. Released zone-by-zone like Coast (v3.22–v3.27),
+  // and since v3.28 has events, album, and achievements.
   {
     id: 'boyaca',
     name: 'Boyacá',
@@ -36,8 +36,8 @@ export const REGIONS = [
     music: 'boyaca',
     unlock: { region: 'costa', zone: 'cartagena' },
   },
-  // Los Llanos (v3.31): se abren al completar Villa de Leyva. Llegaron zona por zona, como la Costa y Boyacá
-  // (v3.31 a v3.36), y desde la v3.37 tienen sus eventos, su álbum y sus logros.
+  // Llanos (v3.31): unlocks upon completing Villa de Leyva. Released zone-by-zone like Coast and Boyacá
+  // (v3.31–v3.36), and since v3.37 has events, album, and achievements.
   {
     id: 'llanos',
     name: 'Los Llanos',
@@ -46,9 +46,9 @@ export const REGIONS = [
     music: 'llanos',
     unlock: { region: 'boyaca', zone: 'villa_leyva' },
   },
-  // La Costa Pacífica (v3.38): se abre al completar Villavicencio. Llegó zona por zona, como los Llanos (v3.38 a
-  // v3.43), y desde la v3.44 tiene sus eventos, su álbum y sus logros. Salió como «el Chocó» (id 'choco') y
-  // desde la v3.46 su id es 'pacifico'.
+  // Pacific Coast (v3.38): unlocks upon completing Villavicencio. Zone-by-zone like Llanos (v3.38–v3.43),
+  // since v3.44 has events, album, and achievements. Originally «Chocó» (`choco`), renamed
+  // `'pacifico'` in v3.46.
   {
     id: 'pacifico',
     name: 'Costa Pacífica',
@@ -57,8 +57,8 @@ export const REGIONS = [
     music: 'pacifico',
     unlock: { region: 'llanos', zone: 'villavicencio' },
   },
-  // El Amazonas (v3.47): se abre al completar Buenaventura. Llegó zona por zona, como la Costa Pacífica (v3.47 a
-  // v3.52), y desde la v3.53 tiene sus eventos, su álbum y sus logros.
+  // Amazon (v3.47): unlocks upon completing Buenaventura. Zone-by-zone like Pacific Coast (v3.47–v3.52),
+  // since v3.53 has events, album, and achievements.
   {
     id: 'amazonas',
     name: 'Amazonas',
@@ -67,8 +67,8 @@ export const REGIONS = [
     music: 'amazonas',
     unlock: { region: 'pacifico', zone: 'buenaventura' },
   },
-  // El Tolima Grande (v4.0): el Tolima y el Huila, con su música de sanjuanero. Se abre al completar Leticia y
-  // llegó completo, con las dos mecánicas nuevas (estación con dos productos y estación que junta dos).
+  // Tolima Grande (v4.0): Tolima & Huila, with sanjuanero music. Unlocks upon completing Leticia,
+  // released whole with v4.0's twin mechanics (dual-output and combiner stations).
   {
     id: 'tolima',
     name: 'Tolima Grande',
@@ -77,9 +77,9 @@ export const REGIONS = [
     music: 'tolima',
     unlock: { region: 'amazonas', zone: 'leticia' },
   },
-  // Cundinamarca (v4.4): la Sabana de Bogotá y sus pueblos (las flores, las fresas, las truchas, la sal y el ajiaco),
-  // con su música de pasillo. Se abre al completar Neiva y llegó zona por zona (v4.4.0 a v4.4.5); con sus eventos, su
-  // álbum y sus logros (v4.4.8) quedó completa. Termina en Zipaquirá, con la Catedral de Sal.
+  // Cundinamarca (v4.4): Bogotá Sabana and towns (flowers, strawberries, trout, salt, ajiaco),
+  // with pasillo music. Unlocks after Neiva, zone-by-zone (v4.4.0–v4.4.5); finished with events,
+  // album, and achievements (v4.4.8). Ends in Zipaquirá at Salt Cathedral.
   {
     id: 'cundinamarca',
     name: 'Cundinamarca',
@@ -88,10 +88,10 @@ export const REGIONS = [
     music: 'cundinamarca',
     unlock: { region: 'tolima', zone: 'neiva' },
   },
-  // Bogotá (v4.5): la región que no produce nada propio. Una sola zona del doble de lado, con cinco barrios que se
-  // construyen a la vez, adonde todo llega en tractomula desde las otras regiones. Se abre al completar Cundinamarca.
-  // Su música es la Danza de La Candelaria. (De la v4.4.8 a la v4.4.11 estuvo en obra y oculta, con `wip` y `hidden`:
-  // en el mapa salía «Próximamente».)
+  // Bogotá (v4.5): produces nothing native. Single double-sized zone where all goods arrive by
+  // tractomula from other regions. Unlocks upon completing Cundinamarca.
+  // Music is Danza de La Candelaria. (From v4.4.8–v4.4.11 hidden WIP via `wip`/`hidden`:
+  // map showed «Coming soon».)
   {
     id: 'bogota',
     name: 'Bogotá',

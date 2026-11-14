@@ -10,8 +10,8 @@ export function createStationState() {
   return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, imported: {}, joined: {}, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
 }
 
-// La fuente de una zona al abrirla. Una cosecha de temporada (el Hormiguero, v3.4) empieza con la despensa
-// llena (la última cosecha): así la zona arranca aunque se abra fuera de temporada.
+// Starting source when opening a zone. Seasonal crops (Hormiguero, v3.4) start with
+// full pantry (prior harvest) so zone runs even if unlocked off-season.
 export function createSourceState(id) {
   const s = createStationState();
   const def = STATIONS_BY_ID[id];
@@ -19,32 +19,32 @@ export function createSourceState(id) {
   return s;
 }
 
-// ¿La zona espera la próxima cosecha? Su fuente es de temporada, está fuera de ella y la despensa se
-// vació: lo que falta en la cadena no se arregla subiendo niveles (v3.4).
+// Is zone waiting for next harvest? Seasonal source off-season with empty pantry:
+// chain shortage can't be fixed by leveling up (v3.4).
 export function waitingHarvest(state, zoneId) {
   const id = ZONES_BY_ID[zoneId]?.farm.stationId;
   const s = state.stations[id];
   return Boolean(STATIONS_BY_ID[id]?.harvest && s?.status === 'season' && s.buffer < 1);
 }
 
-// Cosecha de temporada (v3.4): fuera de su temporada no produce nada y en ella, `mult` veces más (lo de
-// todo el año). Los arrieros sí trabajan todo el año: van llevando lo guardado en la despensa. Sin
-// calendario (las pruebas de la cadena) o en el tablero de un evento, produce parejo.
+// Seasonal harvest (v3.4): produces nothing off-season and `mult`× in season (a full
+// year's share). Haulers still work year-round carrying pantry stock. Without calendar
+// (chain tests) or on event board, produces steadily.
 export function harvestFactor(state, def) {
   if (!def.harvest || !CALENDAR.on || state.event) return 1;
   return seasonOf(clockOf(state)).id === def.harvest.season ? def.harvest.mult : 0;
 }
 
-// Avanza una estación: consume su entrada (si tiene receta) y deja el producto en su patio.
-//   status: 'working' | 'starved' (falta entrada) | 'blocked' (patio lleno) | 'resting' (de noche)
-//           | 'season' (cosecha fuera de su temporada)
-//   idle:   segundos seguidos sin entrada
-//   waiting: por qué no sale el producto del patio: 'mules' (arrieros ocupados) | 'space' (bodega llena) | null
-//   missing: producto que falta de los que llegan por una ruta entre zonas (o null)
+// Steps a station: consumes input (if it has recipe) and places output in its yard.
+//   status: 'working' | 'starved' (missing input) | 'blocked' (yard full) | 'resting' (night)
+//           | 'season' (off-season harvest)
+//   idle:   consecutive seconds without input
+//   waiting: why yard output stalls: 'mules' (haulers busy) | 'space' (warehouse full) | null
+//   missing: missing imported product arriving via inter-zone route (or null)
 export function stepStation(state, id, dt, bus) {
   const def = STATIONS_BY_ID[id];
   const s = state.stations[id];
-  // De noche no se trabaja: lo que iba a medias sigue al amanecer.
+  // No work at night: in-progress cycles finish at dawn.
   if (resting(state)) {
     s.status = 'resting';
     s.missing = null;
@@ -68,7 +68,7 @@ export function stepStation(state, id, dt, bus) {
     if (n < byInput) byInput = n;
     if (n <= 0 && !s.missing) s.missing = imp.product;
   }
-  // Lo que junta de otra estación de su zona (v4.0): sin eso tampoco trabaja (`lacking`: cuál le falta).
+  // Combined input from another zone station (v4.0): also halts without it (`lacking`: missing item).
   s.lacking = null;
   for (const j of def.joins ?? []) {
     const n = Math.floor(((s.joined ??= {})[j.product] ?? 0) / j.perCycle + 1e-9);
@@ -90,22 +90,22 @@ export function stepStation(state, id, dt, bus) {
   }
   s.status = 'working';
   s.idle = 0;
-  // Combustible (bagazo) en la Hornilla.
+  // Fuel (bagazo) in Hornilla.
   const boost = def.fuel && s.fuel > 0 ? def.fuel.boost : 1;
   s.progress += dt * stationRate(def, s.level) * speedMult(state, id) * boost * harvest;
   const cycles = Math.min(Math.floor(s.progress), byInput, byOutput);
   if (cycles <= 0) return;
   s.progress -= cycles;
-  // Si faltó entrada, no se acumula tiempo de más.
+  // If starved of input, don't bank excess cycle progress.
   if (cycles === byInput) s.progress = Math.min(s.progress, 1);
   s.input -= cycles * need;
   s.buffer += cycles * outAmt;
   state.stats.produced[outId] = (state.stats.produced[outId] ?? 0) + cycles * outAmt;
   if (def.by) {
-    // Subproducto (pulpa): se guarda aparte; si no hay quien lo use, se desecha al llenarse.
+    // Byproduct (pulp): stored separately; if unused, overflows when full.
     const [[byId, byAmt]] = Object.entries(def.by);
     s.byBuffer = Math.min(stationBufferCap(def, s.level, capMult(state, id)), (s.byBuffer ?? 0) + cycles * byAmt);
-    // (v4.6) También cuenta como producido: hay objetivos de subproductos (el chicharrón de Bogotá).
+    // (v4.6) Also counts toward produced totals: byproduct goals exist (Bogotá chicharrón).
     state.stats.produced[byId] = (state.stats.produced[byId] ?? 0) + cycles * byAmt;
   }
   if (id === 'wetmill') consumeCompost(state, cycles * outAmt);
@@ -115,8 +115,8 @@ export function stepStation(state, id, dt, bus) {
   bus.emit('produced', { stationId: id, productId: outId, amount: cycles * outAmt });
 }
 
-// Espacio de entrada libre, contando lo que ya viene en camino. `product`: lo que se le lleva (su entrada o,
-// en una estación que junta dos, lo que junta; v4.0): cada uno tiene su propio espacio.
+// Free input space, including en-route cargo. `product`: cargo being delivered (primary
+// or combined input on combiner stations; v4.0): each has independent capacity.
 export function inputSpace(state, id, product = mainInput(id)) {
   const def = STATIONS_BY_ID[id];
   const s = state.stations[id];
@@ -127,11 +127,11 @@ export function inputSpace(state, id, product = mainInput(id)) {
   return stationInputCap(def, s.level, capMult(state, id)) - have - incoming;
 }
 export const mainInput = (id) => Object.keys(STATIONS_BY_ID[id].in ?? {})[0];
-// La entrada principal se cuenta como siempre (la estación); lo que junta, aparte.
+// Primary input tracks normally on station; combined input tracks separately.
 export const incomingKey = (id, product) => (STATIONS_BY_ID[id] && joinOf(id, product) ? `${id}|${product}` : id);
 
-// Combustible: el subproducto de una estación (bagazo de la Molienda) pasa directo a la que lo
-// quema (Hornilla). Si nadie lo usa, se desecha al llenarse el patio de subproductos.
+// Fuel: station byproduct (Molienda bagazo) feeds burner (Hornilla) directly.
+// If unused, overflows once byproduct yard fills.
 export function stepFuel(state, id) {
   const def = STATIONS_BY_ID[id];
   const s = state.stations[id];
@@ -143,8 +143,8 @@ export function stepFuel(state, id) {
   src.byBuffer -= move;
 }
 
-// Compostera: recibe la pulpa del Beneficiadero por la canaleta (stepByproducts) y produce compost, que se
-// queda en su patio y que el Cafetal va gastando.
+// Compostera: receives Beneficiadero pulp via chute (stepByproducts) and makes compost,
+// kept in its yard and spent by Cafetal.
 export function stepComposter(state, dt, bus) {
   if (!state.stations.composter) return;
   stepStation(state, 'composter', dt, bus);

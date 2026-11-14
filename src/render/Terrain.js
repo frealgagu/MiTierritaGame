@@ -4,13 +4,13 @@ import { PAL, OUTLINE } from './palette.js';
 import { createRng } from '../core/rng.js';
 import { box, gableRoof, shadow } from './procedural/shapes.js';
 
-const CLIFF = 46; // px de alto del borde del mapa
-// El letrero con el nombre de la zona (v3.12), junto a la carretera; ahí no se pone decoración.
-export const ZONE_SIGN = [18.9, 21.7]; // (en Bogotá, v4.5, corrido `zone.signShift` casillas)
-const SIGN_CELLS = new Set(['18,20', '19,20', '18,21', '19,21', '18,22', '19,22', '17,21', '17,22', '16,22', '16,23', '17,23']); // y la persona de la zona
+const CLIFF = 46; // px height of diorama map skirt edge
+// Zone welcome signboard (v3.12) beside highway; no decoration placed there.
+export const ZONE_SIGN = [18.9, 21.7]; // (in Bogotá, v4.5, shifted `zone.signShift` tiles)
+const SIGN_CELLS = new Set(['18,20', '19,20', '18,21', '19,21', '18,22', '19,22', '17,21', '17,22', '16,22', '16,23', '17,23']); // and the zone keeper character
 
-// Tipo de cada casilla del mapa a partir de los datos de la zona. jeeps: cuántos Willys tiene (v3.9: con
-// dos, la carretera se amplía con el carril del segundo).
+// Tile terrain type from zone data. jeeps: Willys count (v3.9: with two,
+// highway widens by second lane).
 export function buildTileMap(zone, jeeps = 1) {
   const n = zone.size;
   const tiles = Array.from({ length: n }, () => Array(n).fill('grass'));
@@ -32,7 +32,7 @@ export function buildTileMap(zone, jeeps = 1) {
   fill(zone.farm.x, zone.farm.y, zone.farm.w, zone.farm.h, 'farm');
   for (const p of zone.plots) fill(p.x, p.y, 3, 3, 'plot');
   fill(zone.warehouse.x, zone.warehouse.y, zone.warehouse.w, zone.warehouse.h, 'building');
-  // El carril del TransMilenio (v4.6, Bogotá): de concreto, junto a la avenida; las calles que lo cruzan van encima.
+  // TransMilenio lane (v4.6, Bogotá): concrete median beside avenue; cross streets layer on top.
   for (const lane of zone.transmilenio ?? []) road(lane, 'busway');
   road(zone.muleRoad);
   road(zone.jeepRoad);
@@ -40,7 +40,7 @@ export function buildTileMap(zone, jeeps = 1) {
   for (const r of Object.values(zone.routes ?? {})) road(r.road);
   fill(zone.yard.x, zone.yard.y, zone.yard.w, zone.yard.h, 'road');
   if (zone.plaza) {
-    // La plaza de Vélez (v3.29): piedra, sus calles y las casas del marco, donde no va decoración.
+    // Vélez plaza (v3.29): stone paving, surrounding streets, and framing houses (kept clear of props).
     const pz = zone.plaza;
     fill(pz.x, pz.y, pz.w, pz.h, 'plaza');
     road(pz.street);
@@ -54,10 +54,10 @@ export class Terrain {
     this.zone = zone;
     this.tiles = buildTileMap(zone, jeeps);
     this.ground = new Graphics();
-    this.decor = []; // objetos altos que se ordenan por profundidad junto al resto
-    this.occupied = new Set(); // casillas con decoración (`gx,gy`): la gente no las atraviesa
-    this.glows = []; // luces de noche de lo que no es una estación: { x, y, r, color } (v3.29)
-    this.animated = []; // lo que se mueve en la decoración: { update(t) } (v3.54: las ballenas y sus lanchas)
+    this.decor = []; // tall props depth-sorted alongside buildings and sprites
+    this.occupied = new Set(); // tiles containing props (`gx,gy`): pedestrians steer around them
+    this.glows = []; // non-station night lights: { x, y, r, color } (v3.29)
+    this.animated = []; // animated decorative props: { update(t) } (v3.54: whales and tour boats)
     this.drawGround();
     if (zone.plaza) drawAtrium(this.ground, zone.plaza);
     if (zone.plaza) this.buildPlaza();
@@ -67,8 +67,8 @@ export class Terrain {
     this.buildDecor();
   }
 
-  // Monserrate (Bogotá, v4.5): el cerro que se levanta sobre La Candelaria, con la iglesia blanca en la cumbre y la
-  // línea del funicular que sube.
+  // Monserrate (Bogotá, v4.5): mountain rising behind La Candelaria with white hilltop church and
+  // climbing funicular railway.
   buildMonserrate() {
     const c = new Container();
     const g = new Graphics();
@@ -78,24 +78,24 @@ export class Terrain {
     g.poly([base.x - 120, base.y + 30, base.x - 40, top.y + 30, top.x - 14, top.y, top.x + 16, top.y, base.x + 60, top.y + 40, base.x + 140, base.y + 10, base.x + 40, base.y + 70]).fill(0x4e8a34).stroke(OUTLINE);
     g.poly([top.x + 16, top.y, base.x + 60, top.y + 40, base.x + 140, base.y + 10, base.x + 40, base.y + 70, base.x + 10, top.y + 30]).fill(0x3d6e29);
     for (const [dx, dy] of [[-70, 10], [-40, -30], [-20, -70], [30, -50], [60, -10], [-90, 30], [20, 20]]) g.circle(base.x + dx, base.y + dy, 7).fill(0x2e5a20);
-    // La línea del funicular, del pie del cerro a la cumbre.
+    // Funicular track from mountain foot to summit.
     g.moveTo(base.x - 60, base.y + 40).lineTo(top.x - 4, top.y + 12).stroke({ width: 2, color: 0x37474f });
     const cab = { x: base.x - 34, y: base.y - 2 };
     g.roundRect(cab.x - 6, cab.y - 5, 12, 8, 2).fill(0xd7263d).stroke(OUTLINE);
-    // La iglesia blanca.
+    // White sanctuary church.
     const ch = new Graphics();
     box(ch, -0.45, -0.3, 0.9, 0.6, 18, 0xfafafa);
     gableRoof(ch, -0.45, -0.3, 0.9, 0.6, 18, 8, PAL.roof, 0xfafafa);
     box(ch, -0.2, 0.15, 0.4, 0.3, 30, 0xfafafa);
     ch.position.set(top.x, top.y + 6);
     c.addChild(g, ch);
-    c.zIndex = depth(mx - 3, my - 3); // detrás de todo lo que está en el mapa
+    c.zIndex = depth(mx - 3, my - 3); // behind everything else on map
     c.grid = [mx, my];
     this.decor.push(c);
   }
 
-  // La plaza de Vélez (v3.29): la iglesia de una torre con su atrio, la pila, árboles, bancas y faroles,
-  // y las casas blancas del marco de la plaza.
+  // Vélez plaza (v3.29): single-tower church with stone forecourt, fountain, trees, benches,
+  // streetlamps, and framing whitewashed houses.
   buildPlaza() {
     const pz = this.zone.plaza;
     const rng = createRng(this.zone.seed * 13 + 5);
@@ -128,9 +128,9 @@ export class Terrain {
     const n = this.zone.size;
     const rng = createRng(this.zone.seed);
 
-    const sea = this.zone.walls?.sea || this.zone.sea; // el mar detrás del mapa: Cartagena (v3.45) y Buenaventura (v3.54)
+    const sea = this.zone.walls?.sea || this.zone.sea; // sea behind map edge: Cartagena (v3.45) and Buenaventura (v3.54)
     if (sea) this.drawSea(g, n, rng);
-    // Bordes del «diorama».
+    // Diorama cutaway edges.
     g.poly(isoPoly([[0, n, 0], [n, n, 0], [n, n, -CLIFF], [0, n, -CLIFF]])).fill(PAL.cliffTop);
     g.poly(isoPoly([[n, 0, 0], [n, n, 0], [n, n, -CLIFF], [n, 0, -CLIFF]])).fill(PAL.cliffSide);
     for (let i = 0; i < 3; i++) {
@@ -139,7 +139,7 @@ export class Terrain {
       g.moveTo(...Object.values(iso(0, n, h))).lineTo(...Object.values(iso(n, n, h))).stroke({ width: 2, color: col, alpha: 0.6 });
       g.moveTo(...Object.values(iso(n, 0, h))).lineTo(...Object.values(iso(n, n, h))).stroke({ width: 2, color: shade(col, 0.85), alpha: 0.6 });
     }
-    // Césped que cuelga por el borde.
+    // Grass overhang tufting down edge.
     g.poly(isoPoly([[0, n, 0], [n, n, 0], [n, n, -6], [0, n, -6]])).fill(PAL.grassDark);
     g.poly(isoPoly([[n, 0, 0], [n, n, 0], [n, n, -6], [n, 0, -6]])).fill(shade(PAL.grassDark, 0.8));
 
@@ -153,13 +153,13 @@ export class Terrain {
         else if (type === 'farm') color = (FARM_SOIL[this.zone.style] ?? FARM_SOIL[this.zone.theme])?.(v) ?? mix(PAL.soil, 0x6e4529, v * 0.35);
         else if (type === 'plaza') color = mix(0xd9c9a8, 0xc4b08a, v * 0.5);
         else if (type === 'plot' || type === 'building') color = mix(PAL.plot, 0xc9a06c, v * 0.4);
-        else if (sea && (gx === 0 || gy === 0)) color = mix(this.zone.sea ? 0xb8a27a : 0xe9d8a6, this.zone.sea ? 0xa8926a : 0xdcc78e, v * 0.6); // la playa (en el Pacífico, de arena oscura)
-        else if (this.zone.style === 'bogota' && gy <= 3) color = mix(0x4e8a34, 0x3d7a2a, v * 0.6); // los Cerros (v4.5)
+        else if (sea && (gx === 0 || gy === 0)) color = mix(this.zone.sea ? 0xb8a27a : 0xe9d8a6, this.zone.sea ? 0xa8926a : 0xdcc78e, v * 0.6); // beach (dark volcanic sand on Pacific coast)
+        else if (this.zone.style === 'bogota' && gy <= 3) color = mix(0x4e8a34, 0x3d7a2a, v * 0.6); // Eastern Hills (v4.5)
         else color = mix(PAL.grass, (gx + gy) % 2 ? 0x8cc65a : 0x6fae44, 0.35 + v * 0.3);
         g.poly(isoPoly([[gx, gy], [gx + 1, gy], [gx + 1, gy + 1], [gx, gy + 1]])).fill(color);
 
         if (type === 'grass' && rng() < 0.35) {
-          // Matas de pasto.
+          // Grass tufts.
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
           const c = shade(PAL.grass, 0.75);
           g.moveTo(p.x - 3, p.y).lineTo(p.x - 1, p.y - 5).moveTo(p.x, p.y).lineTo(p.x + 1, p.y - 6).moveTo(p.x + 3, p.y).lineTo(p.x + 4, p.y - 4).stroke({ width: 1.2, color: c });
@@ -175,7 +175,7 @@ export class Terrain {
           g.ellipse(p.x, p.y, 2.5, 1.2).fill({ color: 0x8a6a45, alpha: 0.5 });
         }
         if (type === 'plaza') {
-          // Piedra de la plaza de Vélez, como la de Barichara pero más gris.
+          // Vélez plaza stonework, similar to Barichara but grayer.
           for (let k = 0; k < 4; k++) {
             const p = iso(gx + 0.25 + (k % 2) * 0.5, gy + 0.25 + Math.floor(k / 2) * 0.5);
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? 0xb9a57e : 0xe3d6b8, alpha: 0.8 });
@@ -188,13 +188,13 @@ export class Terrain {
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
         } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea' || this.zone.theme === 'werregue' || this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'chagra' || this.zone.theme === 'yanchama')) {
-          // Hojarasca bajo los cacaos (y bajo el platanal del Pacífico, v3.38).
+          // Leaf litter under cacao trees (and Pacific plantains, v3.38).
           for (let k = 0; k < 2; k++) {
             const p = iso(gx + rng(), gy + rng());
             g.ellipse(p.x, p.y, 3, 1.5).fill({ color: rng() < 0.5 ? 0x8a6a3a : 0x6e8f3a, alpha: 0.7 });
           }
         } else if (type === 'farm' && this.zone.theme === 'rice') {
-          // Arrozal inundado (v3.15): brillos del agua y el camellón (el borde de tierra) entre pozas.
+          // Flooded rice paddy (v3.15): water glints and raised earth bunds between basins.
           const a = iso(gx, gy + 1);
           const b = iso(gx + 1, gy + 1);
           const c2 = iso(gx + 1, gy);
@@ -202,14 +202,14 @@ export class Terrain {
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
           g.moveTo(p.x - 5, p.y).lineTo(p.x + 5, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.55 });
         } else if (type === 'farm' && this.zone.theme === 'mangrove') {
-          // El Manglar (v3.41): el barro de la marea baja, con charcos que brillan.
+          // Manglar (v3.41): low-tide mudflat with glinting tide pools.
           if (rng() < 0.5) {
             const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
             g.ellipse(p.x, p.y, 6 + rng() * 5, 2.4 + rng() * 1.5).fill({ color: 0x5a8f9a, alpha: 0.7 });
             g.moveTo(p.x - 3, p.y - 0.5).lineTo(p.x + 2, p.y - 0.5).stroke({ width: 1, color: 0xe8f6ff, alpha: 0.6 });
           }
         } else if (type === 'farm' && this.zone.theme === 'lake') {
-          // El Lago (v3.49): el agua negra del lago de Tarapoto, con brillos y hojas de victoria regia flotando.
+          // Lago (v3.49): dark blackwater of Lake Tarapoto with glints and floating Victoria regia pads.
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
           g.moveTo(p.x - 6, p.y).quadraticCurveTo(p.x, p.y - 2, p.x + 6, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.45 });
           if (rng() < 0.3) {
@@ -221,12 +221,12 @@ export class Terrain {
             if (rng() < 0.3) g.circle(q.x - r * 0.4, q.y - 2.5, 2).fill(0xf8f0f4).circle(q.x - r * 0.4, q.y - 2.5, 0.9).fill(0xf48fb1);
           }
         } else if (type === 'farm' && this.zone.theme === 'bay') {
-          // La Bahía (v3.40): el mar, con olas que brillan y alguna espuma.
+          // Bahía (v3.40): ocean with sparkling waves and sea foam.
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
           g.moveTo(p.x - 7, p.y).quadraticCurveTo(p.x, p.y - 3, p.x + 7, p.y).stroke({ width: 1.3, color: 0xe8f6ff, alpha: 0.55 });
           if (rng() < 0.15) g.ellipse(p.x + 3, p.y + 4, 4, 1.2).fill({ color: 0xffffff, alpha: 0.5 });
         } else if (type === 'farm' && this.zone.theme === 'cienaga') {
-          // Ciénaga (v3.17): brillos del agua y taruyas (el buchón de flores moradas) flotando.
+          // Ciénaga (v3.17): water glints and floating water hyacinth (purple blooms).
           const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
           g.moveTo(p.x - 6, p.y).lineTo(p.x + 6, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.5 });
           if (rng() < 0.3) {
@@ -235,14 +235,14 @@ export class Terrain {
             g.circle(q.x, q.y - 2.5, 1.6).fill(0xb39ddb);
           }
         } else if (type === 'farm' && this.zone.theme === 'coconut') {
-          // Cocal (v3.16): arena con hojas secas de palma caídas.
+          // Cocal (v3.16): sand scattered with fallen dry palm fronds.
           if (rng() < 0.4) {
             const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
             const d = rng() < 0.5 ? -1 : 1;
             g.moveTo(p.x - 7 * d, p.y - 2).quadraticCurveTo(p.x, p.y - 4, p.x + 7 * d, p.y + 1).stroke({ width: 1.6, color: 0xb08a4a, alpha: 0.7 });
           }
         } else if (type === 'farm' && this.zone.theme === 'pigs') {
-          // El corral de los cerdos (v4.0): pasto ralo y charcos de barro donde se revuelcan.
+          // Pig pen (v4.0): sparse grass and wallowing mud puddles.
           if (rng() < 0.35) {
             const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
             g.ellipse(p.x, p.y, 8 + rng() * 6, 3 + rng() * 2).fill({ color: 0x6b4a2e, alpha: 0.75 });
@@ -250,7 +250,7 @@ export class Terrain {
           const q = iso(gx + rng(), gy + rng());
           g.moveTo(q.x - 2, q.y).lineTo(q.x - 1, q.y - 4).moveTo(q.x + 1, q.y).lineTo(q.x + 2, q.y - 5).stroke({ width: 1.2, color: 0x5a7a2a });
         } else if (type === 'farm' && (this.zone.theme === 'dairy' || this.zone.theme === 'ranch' || this.zone.theme === 'savanna' || this.zone.theme === 'sheep')) {
-          // Potrero: pasto más alto y tupido, sin surcos.
+          // Pasture: taller, denser grass without furrow lines.
           for (let k = 0; k < 3; k++) {
             const p = iso(gx + rng(), gy + rng());
             g.moveTo(p.x - 2, p.y).lineTo(p.x - 1, p.y - 5).moveTo(p.x + 1, p.y).lineTo(p.x + 2, p.y - 6).stroke({ width: 1.2, color: 0x3f7a2a });
@@ -265,8 +265,8 @@ export class Terrain {
     }
   }
 
-  // El mar (v3.45): una franja de agua detrás de los bordes de atrás del mapa, con olas, la espuma en la orilla
-  // y el corte del agua en los extremos, como el borde del «diorama».
+  // Open sea (v3.45): strip of water behind rear map edges with waves, shoreline foam,
+  // and vertical cutaway edges matching the diorama look.
   drawSea(g, n, rng) {
     const S = 8;
     g.poly(isoPoly([[-S, -S], [n, -S], [n, 0], [0, 0], [0, n], [-S, n]])).fill(0x2f86a8);
@@ -280,7 +280,7 @@ export class Terrain {
       const p = side ? iso(along, out) : iso(out, along);
       g.moveTo(p.x - 7, p.y).quadraticCurveTo(p.x, p.y - 2.5, p.x + 7, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.5 });
     }
-    // La espuma de la orilla.
+    // Shoreline foam.
     for (let t = 0; t < n; t += 0.5) {
       const a = iso(t, -0.12);
       const b = iso(-0.12, t);
@@ -289,9 +289,9 @@ export class Terrain {
     }
   }
 
-  // La ciudad amurallada (v3.45): la muralla de piedra coralina por tramos de una casilla (para que se ordene
-  // con lo demás), con su paseo y sus almenas, las puertas donde pasan los caminos, las garitas y la Torre
-  // del Reloj; en el mar, unos veleros y lanchas.
+  // Walled city (v3.45): coral-stone ramparts in 1-tile segments (for clean depth sorting),
+  // walkway and battlements, road gates, sentry boxes (garitas), and Clock Tower;
+  // sailboats and launches out at sea.
   buildWalls() {
     const W = this.zone.walls;
     this.wallCells = new Set();
@@ -339,8 +339,8 @@ export class Terrain {
     }
   }
 
-  // El mar de Buenaventura (v3.54): las ballenas jorobadas que llegan a la bahía, y las lanchas de los turistas
-  // que las miran desde lejos. Se mueven solas (update), por fuera del mapa.
+  // Buenaventura sea (v3.54): humpback whales visiting the bay and whale-watching
+  // boats watching from afar. Self-animated (update) outside map edge.
   buildWhales() {
     const S = this.zone.sea;
     const put = (obj, gx, gy, update) => {
@@ -355,7 +355,7 @@ export class Terrain {
       const c = new Container();
       const g = new Graphics();
       c.addChild(g);
-      c.scale.set(1.5); // grandes, para que se vean desde el mapa entero
+      c.scale.set(1.5); // oversized so they read across whole map
       put(c, gx, gy, (t) => drawWhale(g, t + k * 5.3, dir, k % 2 === 0));
     }
     for (const [k, [gx, gy]] of S.boats.entries()) {
@@ -382,36 +382,36 @@ export class Terrain {
   buildDecor() {
     const rng = createRng(this.zone.seed * 31 + 1);
     const n = this.zone.size;
-    // Se reparte sobre el mapa de un solo carril, para que con el segundo Willys (v3.9) todo quede donde
-    // estaba: solo se quita lo que cae junto al carril nuevo.
+    // Scatters props over single-lane map layout so second Willys (v3.9) shifts nothing:
+    // only props colliding with new second lane are removed.
     const base = buildTileMap(this.zone);
     for (let gx = 0; gx < n; gx++) {
       for (let gy = 0; gy < n; gy++) {
-        // Dentro de la muralla de Cartagena (v3.45) las casas van pegadas, como en el centro histórico.
+        // Inside Cartagena walls (v3.45) houses sit flush side by side like historic downtown.
         const walled = this.zone.walls && gx > 0 && gy > 0 && gx < 12 && gy < 11;
-        // En Bogotá (v4.5), los Cerros Orientales: el borde de arriba a la derecha, tupido de eucaliptos.
+        // In Bogotá (v4.5), Eastern Hills: upper-right border packed with eucalyptus trees.
         const cerros = this.zone.style === 'bogota' && gy <= 3;
         if (!this.isFree(gx, gy, walled || cerros ? 0 : 1, base)) continue;
         const r = rng();
         let obj = null;
         if (this.zone.style === 'bogota') {
-          // Bogotá (v4.5): al pie de los Cerros, La Candelaria, de casas coloniales de colores; el resto de la ciudad,
-          // edificios de ladrillo, eucaliptos y faroles.
+          // Bogotá (v4.5): at mountain foot, La Candelaria's colorful colonial houses; rest of city,
+          // brick apartment blocks, eucalyptus, and streetlamps.
           const centro = gx >= 24 && gx <= 42 && gy <= 24;
           if (cerros) obj = MONSERRATE_CELLS(gx, gy) ? null : r < 0.5 ? eucalyptus(rng) : r < 0.6 ? rock(rng) : null;
           else if (r < 0.1) obj = centro && r < 0.075 ? townHouse(rng, 'bogota') : brickBuilding(rng);
           else if (r < 0.13) obj = eucalyptus(rng);
           else if (r < 0.145) obj = streetLamp();
         } else if (this.zone.theme === 'town') {
-          // Pueblo: casitas de colores, guayacanes florecidos, faroles y alguna palma de cera. En Salento
-          // (v3.12), más palmas de cera, las del valle de Cocora (los mismos números de rng: el resto del
-          // mapa no se mueve).
+          // Pueblo: colorful cottages, blooming guayacanes, lamps, occasional wax palm. In Salento
+          // (v3.12), more Cocora valley wax palms (keeps same RNG sequence so rest of map stays put).
+          // stays put).
           const salento = this.zone.style === 'salento';
           const cartagena = this.zone.style === 'cartagena';
           const villa = this.zone.style === 'villa';
           const villavo = this.zone.style === 'villavo'; // Villavicencio (v3.36): moriches y mangos
-          const puerto = this.zone.style === 'buenaventura'; // Buenaventura (v3.43): palmas de coco y almendros
-          const leticia = this.zone.style === 'leticia'; // Leticia (v3.52): ceibas, palmas de asaí y guacamayas
+          const puerto = this.zone.style === 'buenaventura'; // Buenaventura (v3.43): coconut palms and almond trees
+          const leticia = this.zone.style === 'leticia'; // Leticia (v3.52): ceiba trees, açaí palms, and macaws
           const neiva = this.zone.style === 'neiva'; // Neiva (v4.0): guayacanes, ceibas y palmas
           if (r < 0.06 || (walled && r < 0.4)) obj = townHouse(rng, this.zone.style);
           else if (villavo && r < 0.135) obj = r < 0.085 ? mangoTree(rng) : r < 0.1 ? streetLamp() : morichePalm(rng);
@@ -422,8 +422,8 @@ export class Terrain {
           else if (r < 0.105) obj = streetLamp();
           else if (r < (salento || cartagena || villa ? 0.135 : 0.12)) obj = cartagena ? coconutPalm(rng) : villa ? eucalyptus(rng) : palm(rng);
         } else if (this.zone.region === 'cundinamarca') {
-          // Cundinamarca (v4.4): la Sabana de Bogotá, fría y verde, con eucaliptos, cipreses de las cercas, piedras y,
-          // en las Flores, invernaderos sueltos de plástico.
+          // Cundinamarca (v4.4): cool green Bogotá Sabana with eucalyptus, fenceline cypresses,
+          // boulders, and stray plastic greenhouses around Flores.
           const z = this.zone.id;
           if (r < 0.04) obj = eucalyptus(rng);
           else if (r < 0.07) obj = cypress(rng);
@@ -434,9 +434,9 @@ export class Terrain {
           else if (z === 'salinas' && r < 0.1) obj = saltCart(rng);
           else if (z === 'cocina' && r < 0.1) obj = r < 0.093 ? hayBale(rng) : potStand(rng);
         } else if (this.zone.region === 'tolima') {
-          // El Tolima Grande (v4.0): tierra caliente del valle del Magdalena, con samanes, guayacanes amarillos,
-          // palos de mango y garzas; en el Huila, cafetos sueltos y guamos de sombra; en los Achirales y La Chamba,
-          // más seco, con algún cactus, y en La Chamba, ollas de loza negra puestas a la venta.
+          // Tolima Grande (v4.0): hot Magdalena valley with samanes, yellow guayacanes, mango trees,
+          // and herons; in Huila, stray coffee and shade guamo trees; in Achirales and La Chamba,
+          // drier with cactus and roadside blackware pottery stalls.
           const z = this.zone.id;
           if (z === 'cafe_huila') {
             if (r < 0.04) obj = guamo(rng);
@@ -449,177 +449,177 @@ export class Terrain {
           else if (r < 0.09) obj = z === 'lechoneria' ? banana(rng) : z === 'betania' ? rock(rng) : cactus(rng);
           else if (r < 0.1) obj = palm(rng);
         } else if (this.zone.theme === 'guava') {
-          // Santander: matas de fique, guayabos sueltos, piedras y algún cactus del cañón.
+          // Santander: fique plants, stray guayabos, boulders, and canyon cactus.
           if (r < 0.05) obj = fique(rng);
           else if (r < 0.08) obj = guavaTree(rng);
           else if (r < 0.11) obj = rock(rng);
           else if (r < 0.125) obj = cactus(rng);
         } else if (this.zone.theme === 'tobacco') {
-          // Tabacal: el mismo Santander seco, con matas de tabaco sueltas en vez de guayabos.
+          // Tabacal: same dry Santander terrain, stray tobacco plants instead of guayabos.
           if (r < 0.05) obj = fique(rng);
           else if (r < 0.08) obj = tobaccoPlant(rng);
           else if (r < 0.11) obj = rock(rng);
           else if (r < 0.13) obj = cactus(rng);
         } else if (this.zone.theme === 'fique') {
-          // Fiquera: más fique suelto, piedras, cactus y algún guayabo.
+          // Fiquera: extra wild fique, rocks, cactus, and occasional guayabo.
           if (r < 0.07) obj = fique(rng);
           else if (r < 0.09) obj = guavaTree(rng);
           else if (r < 0.12) obj = rock(rng);
           else if (r < 0.135) obj = cactus(rng);
         } else if (this.zone.theme === 'ants') {
-          // Hormigas: tierra seca de cañón, fique, cactus, piedras y algún hormiguero suelto.
+          // Hormigas: dry canyon dirt, fique, cactus, rocks, and stray ant nests.
           if (r < 0.05) obj = fique(rng);
           else if (r < 0.065) obj = anthill(rng);
           else if (r < 0.1) obj = rock(rng);
           else if (r < 0.125) obj = cactus(rng);
         } else if (this.zone.theme === 'hides') {
-          // La Talabartería (v3.35): caballos criollos, samanes, morichales y comejeneras.
+          // Talabartería (v3.35): creole horses, samanes, moriche palms, and termite mounds.
           if (r < 0.02) obj = horse(rng);
           else if (r < 0.045) obj = saman(rng);
           else if (r < 0.07) obj = morichePalm(rng);
           else if (r < 0.09) obj = termiteMound(rng);
         } else if (this.zone.style === 'llanos') {
-          // El Hato llanero (v3.34): la sabana con samanes, morichales, comejeneras y garzas.
+          // Hato llanero (v3.34): savanna with samanes, moriche groves, termite mounds, and herons.
           if (r < 0.03) obj = saman(rng);
           else if (r < 0.055) obj = morichePalm(rng);
           else if (r < 0.08) obj = termiteMound(rng);
           else if (r < 0.1) obj = egret(rng);
         } else if (this.zone.theme === 'ranch') {
-          // Hato: samanes de sombra para el ganado, fique, piedras y cactus.
+          // Hato: shade samanes for cattle, fique, boulders, and cactus.
           if (r < 0.035) obj = saman(rng);
           else if (r < 0.07) obj = fique(rng);
           else if (r < 0.1) obj = rock(rng);
           else if (r < 0.115) obj = cactus(rng);
         } else if (this.zone.theme === 'corn') {
-          // Maizal: girasoles, matas de maíz sueltas, algún espantapájaros y piedras.
+          // Maizal: sunflowers, stray corn stalks, occasional scarecrow, and boulders.
           if (r < 0.04) obj = sunflower(rng);
           else if (r < 0.08) obj = cornClump(rng);
           else if (r < 0.09) obj = scarecrow(rng);
           else if (r < 0.11) obj = rock(rng);
         } else if (this.zone.theme === 'cacao') {
-          // Cacaotal: guamos de sombra, plátano, heliconias y algún cacao suelto.
+          // Cacaotal: shade guamo trees, plantains, heliconias, and stray cacao trees.
           if (r < 0.04) obj = guamo(rng);
           else if (r < 0.08) obj = banana(rng);
           else if (r < 0.11) obj = heliconia(rng);
           else if (r < 0.13) obj = cacaoTree(rng);
         } else if (this.zone.theme === 'dairy') {
-          // Lechería: eucaliptos, cipreses, pacas de heno y piedras de la sabana.
+          // Lechería: eucalyptus, cypresses, hay bales, and highland boulders.
           if (r < 0.04) obj = eucalyptus(rng);
           else if (r < 0.07) obj = cypress(rng);
           else if (r < 0.09) obj = hayBale(rng);
-          // En Paipa (v3.25), frailejones del páramo donde la Lechería tiene piedras.
+          // In Paipa (v3.25), páramo frailejones where Lechería has boulders.
           else if (r < 0.11) obj = this.zone.style === 'paipa' && r < 0.1 ? frailejon(rng) : rock(rng);
         } else if (this.zone.theme === 'rice') {
-          // Arrozal (v3.15): ceibas grandes, palmas de coco, garzas blancas y plátano.
+          // Arrozal (v3.15): giant ceibas, coconut palms, snowy egrets, and plantains.
           if (r < 0.025) obj = ceiba(rng);
           else if (r < 0.06) obj = coconutPalm(rng);
           else if (r < 0.085) obj = egret(rng);
           else if (r < 0.11) obj = banana(rng);
         } else if (this.zone.theme === 'sheep') {
-          // Las Ruanas (v3.26): el páramo, con frailejones, piedras, eucaliptos y algún ciprés.
+          // Las Ruanas (v3.26): highland páramo with frailejones, rocks, eucalyptus, and cypress.
           if (r < 0.04) obj = frailejon(rng);
           else if (r < 0.065) obj = eucalyptus(rng);
           else if (r < 0.09) obj = rock(rng);
           else if (r < 0.1) obj = cypress(rng);
         } else if (this.zone.theme === 'clay') {
-          // Ráquira (v3.24): lomas secas con cactus y piedras, eucaliptos y ollas de barro puestas a la venta.
+          // Ráquira (v3.24): dry hills with cactus and boulders, eucalyptus, and roadside clay pots.
           if (r < 0.03) obj = eucalyptus(rng);
           else if (r < 0.055) obj = cactus(rng);
           else if (r < 0.08) obj = rock(rng);
           else if (r < 0.095) obj = potStand(rng);
         } else if (this.zone.theme === 'barley') {
-          // Cebadales (v3.23): eucaliptos, cipreses, pacas de paja y piedras.
+          // Cebadales (v3.23): eucalyptus, cypresses, straw bales, and rocks.
           if (r < 0.04) obj = eucalyptus(rng);
           else if (r < 0.065) obj = cypress(rng);
           else if (r < 0.085) obj = hayBale(rng);
           else if (r < 0.105) obj = rock(rng);
         } else if (this.zone.theme === 'ponds') {
-          // La Cachamera (v3.33): garzas, morichales, palos de mango y comejeneras.
+          // La Cachamera (v3.33): herons, moriche groves, mango trees, and termite mounds.
           if (r < 0.03) obj = egret(rng);
           else if (r < 0.055) obj = morichePalm(rng);
           else if (r < 0.075) obj = mangoTree(rng);
           else if (r < 0.09) obj = termiteMound(rng);
         } else if (this.zone.theme === 'fruit') {
-          // El Frutal (v3.32): palos de mango, morichales, comejeneras y garzas.
+          // El Frutal (v3.32): mango trees, moriche groves, termite mounds, and herons.
           if (r < 0.035) obj = mangoTree(rng);
           else if (r < 0.055) obj = morichePalm(rng);
           else if (r < 0.075) obj = termiteMound(rng);
           else if (r < 0.09) obj = egret(rng);
         } else if (this.zone.theme === 'plantain' || this.zone.theme === 'azotea') {
-          // La Costa Pacífica (v3.38): la selva húmeda, con palmas de chontaduro, borojós, heliconias y plátano suelto.
+          // Pacific Coast (v3.38): wet rainforest with chontaduro palms, borojós, heliconias, wild plantain.
           if (r < 0.03) obj = chontaduroPalm(rng);
           else if (r < 0.055) obj = borojoTree(rng);
           else if (r < 0.085) obj = heliconia(rng);
           else if (r < 0.11) obj = banana(rng);
         } else if (this.zone.theme === 'palm') {
-          // Los Llanos (v3.31): morichales, comejeneras, garzas y alguna palma de aceite suelta.
+          // Llanos (v3.31): moriche palms, termite mounds, herons, and occasional oil palm.
           if (r < 0.03) obj = morichePalm(rng);
           else if (r < 0.055) obj = termiteMound(rng);
           else if (r < 0.075) obj = egret(rng);
           else if (r < 0.095) obj = oilPalm(rng);
           else if (r < 0.105) obj = saman(rng);
         } else if (this.zone.theme === 'potato') {
-          // Altiplano (v3.22): eucaliptos, frailejones del páramo, piedras y algún ciprés.
+          // Altiplano (v3.22): eucalyptus, páramo frailejones, boulders, and occasional cypress.
           if (r < 0.04) obj = eucalyptus(rng);
           else if (r < 0.07) obj = frailejon(rng);
           else if (r < 0.1) obj = rock(rng);
           else if (r < 0.115) obj = cypress(rng);
         } else if (this.zone.theme === 'canaflecha') {
-          // Tierra zenú (v3.19): matas de caña flecha, sombreros a la venta en una vara, samanes y palmas.
+          // Tierra zenú (v3.19): caña flecha clumps, hats hanging for sale, samanes, and palms.
           if (r < 0.05) obj = canaFlechaClump(rng);
           else if (r < 0.062) obj = hatPole(rng);
           else if (r < 0.085) obj = saman(rng);
           else if (r < 0.1) obj = coconutPalm(rng);
           else if (r < 0.115) obj = egret(rng);
         } else if (this.zone.theme === 'savanna') {
-          // Sabana (v3.18): samanes de sombra, garzas bueyeras, palmas de coco y alguna ceiba.
+          // Sabana (v3.18): cattle-shade samanes, cattle egrets, coconut palms, occasional ceiba.
           if (r < 0.03) obj = saman(rng);
           else if (r < 0.055) obj = egret(rng);
           else if (r < 0.075) obj = coconutPalm(rng);
           else if (r < 0.088) obj = ceiba(rng);
         } else if (this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'lake' || this.zone.theme === 'chagra' || this.zone.theme === 'yanchama') {
-          // El Amazonas (v3.47): la selva de la orilla, con ceibas gigantes, heliconias, plátano, asaí suelto y alguna
-          // guacamaya en su palo.
+          // Amazon (v3.47): riverbank jungle with giant ceibas, heliconias, plantains, stray açaí,
+          // and perched macaws.
           if (r < 0.025) obj = ceiba(rng);
           else if (r < 0.05) obj = asaiPalm(rng);
           else if (r < 0.075) obj = heliconia(rng);
           else if (r < 0.095) obj = banana(rng);
           else if (r < 0.105) obj = macaw(rng);
         } else if (this.zone.theme === 'werregue') {
-          // El Werregue (v3.42): la selva del río San Juan, con algún tambo wounaan, chontaduros, heliconias y borojós.
+          // Werregue (v3.42): San Juan river jungle with Wounaan tambo huts, chontaduro, heliconias, borojó.
           if (r < 0.012) obj = tambo(rng);
           else if (r < 0.04) obj = chontaduroPalm(rng);
           else if (r < 0.065) obj = heliconia(rng);
           else if (r < 0.085) obj = borojoTree(rng);
           else if (r < 0.1) obj = banana(rng);
         } else if (this.zone.theme === 'mangrove') {
-          // El Manglar (v3.41): mangles sueltos, garzas, heliconias y palmas de coco.
+          // Manglar (v3.41): stray mangroves, herons, heliconias, and coconut palms.
           if (r < 0.04) obj = mangroveTree(rng);
           else if (r < 0.065) obj = egret(rng);
           else if (r < 0.085) obj = heliconia(rng);
           else if (r < 0.1) obj = coconutPalm(rng);
         } else if (this.zone.theme === 'bay') {
-          // La Bahía (v3.40): palmas de coco, piedras de la playa, redes al sol, heliconias y chontaduros.
+          // Bahía (v3.40): coconut palms, beach rocks, drying nets, heliconias, chontaduro.
           if (r < 0.04) obj = coconutPalm(rng);
           else if (r < 0.06) obj = rock(rng);
           else if (r < 0.075) obj = netRack(rng);
           else if (r < 0.095) obj = heliconia(rng);
           else if (r < 0.11) obj = chontaduroPalm(rng);
         } else if (this.zone.theme === 'cienaga') {
-          // Ciénaga (v3.17): garzas, redes puestas a secar, ceibas, plátano y palmas de coco.
+          // Ciénaga (v3.17): herons, drying fishing nets, ceibas, plantains, coconut palms.
           if (r < 0.03) obj = egret(rng);
           else if (r < 0.045) obj = netRack(rng);
           else if (r < 0.058) obj = ceiba(rng);
           else if (r < 0.08) obj = banana(rng);
           else if (r < 0.1) obj = coconutPalm(rng);
         } else if (this.zone.theme === 'coconut') {
-          // Cocal (v3.16): palmas de coco por todas partes, cocos caídos, plátano y alguna ceiba.
+          // Cocal (v3.16): coconut palms everywhere, fallen coconuts, plantains, occasional ceiba.
           if (r < 0.06) obj = coconutPalm(rng);
           else if (r < 0.08) obj = coconutPile(rng);
           else if (r < 0.1) obj = banana(rng);
           else if (r < 0.112) obj = ceiba(rng);
         } else if (this.zone.theme === 'cane') {
-          // Trapiche: guaduales, matas de caña sueltas y algún samán.
+          // Trapiche: bamboo groves, stray sugar cane, occasional samán.
           if (r < 0.05) obj = guadua(rng);
           else if (r < 0.1) obj = caneClump(rng);
           else if (r < 0.12) obj = saman(rng);
@@ -637,16 +637,16 @@ export class Terrain {
         const p = iso(gx + ox, gy + oy);
         obj.position.set(p.x, p.y);
         obj.zIndex = depth(gx + ox, gy + oy);
-        obj.grid = [gx + ox, gy + oy]; // (v3.14: los eventos quitan lo que les estorba)
+        obj.grid = [gx + ox, gy + oy]; // (v3.14: events clear props intersecting event spots)
         this.decor.push(obj);
       }
     }
   }
 }
 
-// ---------- La plaza de Vélez (v3.29) ----------
-// Medidas dentro de la plaza (en casillas, desde su esquina). La nave va a lo largo de gy, con la fachada
-// mirando a la pila (hacia +gy, de frente a quien mira el mapa) y la torre a su derecha, sin taparla.
+// ---------- Vélez plaza (v3.29) ----------
+// Dimensions inside plaza (in tiles from corner). Nave runs along gy with front facade
+// facing fountain (+gy, facing viewer) and bell tower to its right without hiding facade.
 export const CHURCH = {
   nave: { x: 0.7, y: 0.3, w: 1.7, d: 2.15, h: 40, roof: 20 },
   tower: { x: 2.35, y: 1.6, w: 0.95, d: 0.85, h: 104 },
@@ -655,15 +655,15 @@ export const CHURCH = {
 const CHURCH_WALL = 0xf7f4ee;
 const CHURCH_STONE = 0xcdbb94;
 
-// El atrio de piedra, un escalón sobre la plaza, con su grada frente al portón. Va en el suelo: así la
-// gente y las mulas siempre se dibujan encima.
+// Stone forecourt step raised above plaza, steps facing main gate. Drawn in ground
+// layer so people and mules always render on top.
 export function drawAtrium(g, pz) {
   const { atrium: at, nave } = CHURCH;
   box(g, pz.x + at.x, pz.y + at.y, at.w, at.d, at.h, CHURCH_STONE);
   box(g, pz.x + nave.x + nave.w / 2 - 0.4, pz.y + at.y + at.d, 0.8, 0.3, 1.5, shade(CHURCH_STONE, 0.95));
 }
 
-// Un hueco con arco en una pared que mira a +gx (plano gx = at) o a +gy (plano gy = at), de a a b.
+// Arched recess on wall facing +gx (plane gx = at) or +gy (plane gy = at), from a to b.
 function archOn(g, face, at, a, b, z0, z1, color) {
   const mid = (a + b) / 2;
   const r = (b - a) / 2;
@@ -677,7 +677,7 @@ function archOn(g, face, at, a, b, z0, z1, color) {
   g.poly(isoPoly(pts)).fill(color).stroke(OUTLINE);
 }
 
-// Tejado a dos aguas con la cumbrera paralela a gy: el hastial (la fachada) queda en la cara +gy.
+// Gable roof with ridge parallel to gy: front gable sits on +gy facade.
 function gableRoofY(g, x, y, w, d, wallH, roofH, color, wallColor, overhang = 0.12) {
   const x0 = x - overhang, x1 = x + w + overhang;
   const y0 = y - overhang, y1 = y + d + overhang;
@@ -700,8 +700,8 @@ function cross(g, x, y, h = 11) {
   g.rect(x - 3, y - h * 0.72, 6, 1.6).fill(0x3a2418);
 }
 
-// La iglesia de una torre: nave blanca con zócalo, tejado de barro, portón con arco, ventana redonda y
-// cruz en la fachada; la torre con su campanario (campana y arcos), la cúpula de teja y la cruz.
+// Single-tower church: white nave with plinth, clay tile roof, arched gate, rose window,
+// and facade cross; belfry tower (bell and arches), tiled dome, and cross.
 function velezChurch(pz, glows) {
   const c = new Container();
   const g = new Graphics();
@@ -713,10 +713,10 @@ function velezChurch(pz, glows) {
   box(g, nx, ny, N.w, N.d, 5, 0xd8c7a3, { z });
   box(g, nx, ny, N.w, N.d, N.h - 5, CHURCH_WALL, { z: z + 5 });
   gableRoofY(g, nx, ny, N.w, N.d, top, N.roof, PAL.roof, CHURCH_WALL);
-  // El costado: ventanas altas y contrafuertes.
+  // Side nave: tall windows and buttresses.
   for (const wy of [0.35, 1.1]) archOn(g, 'x', nx + N.w, ny + wy, ny + wy + 0.28, z + 16, z + 25, 0x6f8fb0);
   for (const by of [0.15, 0.85, 1.55]) box(g, nx + N.w, ny + by, 0.12, 0.15, 24, shade(CHURCH_WALL, 0.97), { z });
-  // La fachada: pilastras, portón con arco, la ventana redonda y la cruz en lo alto.
+  // Front facade: pilasters, arched gate, round window, and rooftop cross.
   const fy = ny + N.d;
   const fm = nx + N.w / 2;
   for (const px of [0.12, N.w - 0.26]) box(g, nx + px, fy, 0.14, 0.08, N.h - 2, shade(CHURCH_WALL, 1.02), { z });
@@ -729,7 +729,7 @@ function velezChurch(pz, glows) {
   g.circle(rose.x, rose.y, 4).fill(0x6f8fb0).stroke(OUTLINE);
   const apex = iso(fm, fy, top + N.roof);
   cross(g, apex.x, apex.y);
-  // La torre.
+  // Bell tower.
   const tx = pz.x + T.x;
   const ty = pz.y + T.y;
   const tz = z + T.h;
@@ -749,14 +749,14 @@ function velezChurch(pz, glows) {
   const tip = iso(...peak);
   cross(g, tip.x, tip.y, 12);
   c.addChild(g);
-  // De noche se alumbran el portón, la ventana redonda y la del costado que no tapa la torre.
+  // Night lighting illuminates gate, rose window, and visible side window clear of tower.
   const door = iso(fm, fy, z + 9);
   const win = iso(nx + N.w, ny + 0.49, z + 21);
   glows.push({ x: door.x, y: door.y, r: 20 }, { x: rose.x, y: rose.y, r: 10 }, { x: win.x, y: win.y, r: 9 });
   return c;
 }
 
-// La pila de la plaza, con su chorro.
+// Plaza fountain with splashing water jet.
 function fountain() {
   const c = new Container();
   const g = new Graphics();
@@ -771,13 +771,13 @@ function fountain() {
   return c;
 }
 
-// ---------- La ciudad amurallada de Cartagena (v3.45) ----------
+// ---------- Cartagena walled city (v3.45) ----------
 const WALL_STONE = 0xcdb88e; // piedra coralina
 const WALL_H = 16;
-const WALL_T = 0.34; // grueso de la muralla, en casillas
+const WALL_T = 0.34; // wall thickness in tiles
 
-// Un tramo de muralla de (x0, y0) a (x1, y1), recto en gx o en gy: el muro con su zócalo más oscuro, el paseo
-// de arriba y las almenas por el lado del mar.
+// Rampart stretch from (x0, y0) to (x1, y1) along gx or gy: wall with darker plinth,
+// parapet walk, and battlements along ocean side.
 function wallChunk(x0, y0, x1, y1) {
   const c = new Container();
   const g = new Graphics();
@@ -788,13 +788,13 @@ function wallChunk(x0, y0, x1, y1) {
   const d = alongX ? WALL_T : Math.abs(y1 - y0);
   box(g, x, y, w, d, 4, shade(WALL_STONE, 0.8));
   box(g, x, y, w, d, WALL_H - 4, WALL_STONE, { z: 4 });
-  // Hiladas de piedra en la cara que se ve.
+  // Stone courses on visible face.
   for (const z of [8, 12]) {
     const a = alongX ? iso(x, y + d, z) : iso(x + w, y, z);
     const b = alongX ? iso(x + w, y + d, z) : iso(x + w, y + d, z);
     g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 0.8, color: shade(WALL_STONE, 0.65), alpha: 0.6 });
   }
-  // Almenas por el lado de afuera (el del mar, hacia gx o gy menor).
+  // Battlements along outer sea-facing edge (smaller gx or gy side).
   const k = Math.max(1, Math.round((alongX ? w : d) / 0.25));
   for (let i = 0; i < k; i += 2) {
     const f = i / k;
@@ -805,7 +805,7 @@ function wallChunk(x0, y0, x1, y1) {
   return c;
 }
 
-// Una puerta en la muralla: los dos estribos más altos y el arco por donde pasa el camino.
+// City gate through rampart: taller flanking piers and arched opening over road.
 function wallGate(gx, gy, alongX) {
   const c = new Container();
   const g = new Graphics();
@@ -827,8 +827,8 @@ function wallGate(gx, gy, alongX) {
   return c;
 }
 
-// La Torre del Reloj: la puerta principal, amarilla, con sus tres arcos, el reloj y la cúpula con la veleta.
-// glows: las luces de noche (el reloj se ilumina).
+// Clock Tower: main yellow gateway with three arches, clock face, dome, and weathervane.
+// glows: night lights (clock face glows).
 function clockTower(gx, gy, alongX, glows) {
   const c = new Container();
   const g = new Graphics();
@@ -841,17 +841,17 @@ function clockTower(gx, gy, alongX, glows) {
   box(g, x - 0.1, y - 0.1, w + 0.2, d + 0.2, 26, shade(color, 0.95));
   box(g, x, y, w, d, H - 26, color, { z: 26 });
   box(g, x + w * 0.2, y + d * 0.2, w * 0.6, d * 0.6, 12, shade(color, 1.05), { z: H });
-  // Los arcos (en la cara que mira al frente).
+  // Three arches (on front-facing wall).
   for (const f of alongX ? [0.2, 0.5, 0.8] : [0.5]) {
     const p = alongX ? iso(x + w * f, y + d + 0.1, 0) : iso(x + w + 0.1, y + d * f, 0);
     g.moveTo(p.x - 5, p.y).lineTo(p.x - 5, p.y - 12).quadraticCurveTo(p.x, p.y - 20, p.x + 5, p.y - 12).lineTo(p.x + 5, p.y).closePath().fill(0x4a3a2a);
   }
-  // El reloj.
+  // Clock dial.
   const ck = alongX ? iso(gx, y + d, 37) : iso(x + w, gy, 37);
   g.circle(ck.x, ck.y, 6).fill(0xffffff).stroke(OUTLINE);
   g.moveTo(ck.x, ck.y).lineTo(ck.x, ck.y - 4).moveTo(ck.x, ck.y).lineTo(ck.x + 3, ck.y + 1).stroke({ width: 1, color: 0x263238 });
   glows.push({ x: ck.x, y: ck.y, r: 14, color: 0xfff3c4 });
-  // La cúpula y la veleta.
+  // Dome and weathervane.
   const top = iso(gx, gy, H + 12);
   g.moveTo(top.x - 9, top.y).quadraticCurveTo(top.x, top.y - 16, top.x + 9, top.y).closePath().fill(0xe0e0e0).stroke(OUTLINE);
   g.moveTo(top.x, top.y - 12).lineTo(top.x, top.y - 22).stroke({ width: 1.2, color: 0x37474f });
@@ -860,7 +860,7 @@ function clockTower(gx, gy, alongX, glows) {
   return c;
 }
 
-// Garita: la casilla de vigía redonda sobre la muralla, con su cúpula y la ranura para mirar el mar.
+// Garita: cylindrical stone sentry turret perched on rampart with dome and ocean slit.
 function garita(gx, gy) {
   const c = new Container();
   const g = new Graphics();
@@ -874,9 +874,9 @@ function garita(gx, gy) {
   return c;
 }
 
-// Ballena jorobada (v3.54), en un ciclo de 16 s: nada asomando el lomo y echa el chorro, se sumerge
-// mostrando la cola y, si salta (breach), sale casi entera del agua y cae con un chapuzón. dir: 1 o -1 (hacia
-// dónde nada).
+// Humpback whale (v3.54) on 16 s loop: surfaces back and blows spout, dives flashing
+// tail fluke, and if breaching leaps nearly clear before splashing down. dir: 1 or -1
+// (swim direction).
 const WHALE = 0x37474f;
 function drawWhale(g, t, dir, breach) {
   g.clear();
@@ -885,7 +885,7 @@ function drawWhale(g, t, dir, breach) {
   const x = (u - 0.5) * 36 * dir;
   const ripple = (cx, r, a) => g.ellipse(cx, 2, r, r * 0.3).stroke({ width: 1, color: 0xffffff, alpha: a });
   if (u < 0.36) {
-    // El lomo, que sube y baja, con la aleta dorsal; al principio, el chorro.
+    // Surfacing back rising and dipping with dorsal fin; spout at start.
     const up = Math.sin((u / 0.36) * Math.PI);
     const h = 3 + up * 4;
     g.ellipse(x, 2, 24, 4).fill({ color: 0x1f5f80, alpha: 0.6 });
@@ -901,7 +901,7 @@ function drawWhale(g, t, dir, breach) {
       }
     }
   } else if (u < 0.5) {
-    // Se sumerge: la cola sale del agua, con la cara de abajo blanca, y se va hundiendo.
+    // Dive: tail fluke rises above waves (white underside) then slips beneath.
     const f = (u - 0.36) / 0.14;
     const h = Math.sin(f * Math.PI) * 18;
     const cx = x + 10 * dir;
@@ -911,7 +911,7 @@ function drawWhale(g, t, dir, breach) {
     for (let i = 0; i < 4; i++) g.circle(cx - 9 + i * 6, 2 - h - 2 + Math.sin(i * 2 + f * 6) * 2 + f * 6, 1).fill({ color: 0xffffff, alpha: 0.8 * (1 - f) });
     ripple(cx, 10 + f * 10, 0.6 * (1 - f));
   } else if (breach && u > 0.7 && u < 0.84) {
-    // El salto: sale de lado, con la aleta larga blanca, y cae.
+    // Breach: emerges sideways showing long white pectoral fin, then drops.
     const f = (u - 0.7) / 0.14;
     const h = Math.sin(f * Math.PI) * 30;
     const rot = (-0.9 + f * 1.6) * dir;
@@ -929,7 +929,7 @@ function drawWhale(g, t, dir, breach) {
     g.poly([...at(-6 * dir, 2), ...at(-2 * dir, 18), ...at(2 * dir, 3)]).fill(0xeceff1).stroke({ width: 0.6, color: 0x263238 });
     for (let i = 0; i < 8; i++) g.circle(x - 16 + i * 4.5, 2 - Math.abs(Math.sin(i * 1.7)) * 6 * (1 - f), 1.4).fill({ color: 0xffffff, alpha: 0.85 });
   } else if (breach && u >= 0.84 && u < 0.92) {
-    // El chapuzón.
+    // Splash ring.
     const f = (u - 0.84) / 0.08;
     for (let i = 0; i < 12; i++) {
       const a = (i / 11) * Math.PI;
@@ -941,7 +941,7 @@ function drawWhale(g, t, dir, breach) {
   }
 }
 
-// Velero en la bahía, con la vela blanca.
+// Bay sailboat with white sail.
 function sailboat() {
   const c = new Container();
   const g = new Graphics();
@@ -954,7 +954,7 @@ function sailboat() {
   return c;
 }
 
-// Lancha de pasajeros, con su toldo azul.
+// Passenger motor launch with blue awning.
 function motorBoat() {
   const c = new Container();
   const g = new Graphics();
@@ -968,7 +968,7 @@ function motorBoat() {
   return c;
 }
 
-// Banca de madera de la plaza.
+// Wooden plaza bench.
 function bench() {
   const c = new Container();
   const g = new Graphics();
@@ -983,84 +983,84 @@ function bench() {
   return c;
 }
 
-// Color de la tierra de la fuente ilimitada según el tema de la zona.
+// Soil tint for unlimited source matching zone theme.
 const FARM_SOIL = {
   cane: (v) => mix(0x9c7a4a, 0x7f6038, v * 0.35),
   dairy: (v) => mix(0x5e9a3c, 0x6fae44, v * 0.5),
   ranch: (v) => mix(0x7fa04a, 0x93ad55, v * 0.5),
-  savanna: (v) => mix(0x8fae4e, 0xa3b85a, v * 0.5), // la sabana de Córdoba y Sucre // potrero de tierra caliente, más seco
+  savanna: (v) => mix(0x8fae4e, 0xa3b85a, v * 0.5), // Córdoba & Sucre savanna // drier hot-country pasture
   cacao: (v) => mix(0x5e4630, 0x4a3726, v * 0.5),
   corn: (v) => mix(0xa47c48, 0x8a6a3a, v * 0.4),
-  guava: (v) => mix(0xb8754a, 0x9c5e3a, v * 0.4), // la tierra roja de Santander
+  guava: (v) => mix(0xb8754a, 0x9c5e3a, v * 0.4), // Santander red earth
   tobacco: (v) => mix(0xb07048, 0x94583a, v * 0.4),
   fique: (v) => mix(0xb8805a, 0x9c6a48, v * 0.4),
   ants: (v) => mix(0xc0784a, 0xa86438, v * 0.4),
   town: (v) => mix(0xc9bfae, 0xb3a893, v * 0.6),
-  palm: (v) => mix(0x6a9a3e, 0x7aa848, v * 0.5), // el palmar sobre pasto (v3.31)
-  fruit: (v) => mix(0x8a6a44, 0x7a5c3a, v * 0.4), // la tierra de las enramadas (v3.32)
-  ponds: (v) => mix(0x4f8f9a, 0x5a9aa0, v * 0.6), // el agua verdosa de los estanques (v3.33)
-  llanos: (v) => mix(0x9ab44e, 0xa8bc58, v * 0.5), // la sabana del Hato llanero (v3.34)
-  hides: (v) => mix(0xb89a6a, 0xa8885a, v * 0.4), // el patio de tierra del saladero (v3.35)
-  plantain: (v) => mix(0x5a4a30, 0x4a3d28, v * 0.5), // la tierra negra y mojada del platanal (v3.38)
-  azotea: (v) => mix(0x6a5a3a, 0x5a4a30, v * 0.5), // el patio de las azoteas (v3.39)
-  bay: (v) => mix(0x2f86a8, 0x3a94b4, v * 0.6), // el mar de la Bahía (v3.40)
-  mangrove: (v) => mix(0x5d5040, 0x6a5c48, v * 0.5), // el barro del manglar (v3.41)
-  werregue: (v) => mix(0x4f5a30, 0x5a6638, v * 0.5), // el suelo del palmar de werregue (v3.42)
-  asai: (v) => mix(0x4a5236, 0x56603e, v * 0.5), // la vega húmeda del asaizal (v3.47)
-  aji: (v) => mix(0x7a5236, 0x6a462e, v * 0.5), // la tierra de la chagra (v3.48)
-  lake: (v) => mix(0x2e5048, 0x365a50, v * 0.6), // el agua negra del lago (v3.49)
-  chagra: (v) => mix(0x6e4a30, 0x7a5638, v * 0.5), // la tierra de la chagra de yuca (v3.50)
-  yanchama: (v) => mix(0x3f4a2e, 0x4a5636, v * 0.5), // el suelo oscuro del monte de yanchamas (v3.51)
+  palm: (v) => mix(0x6a9a3e, 0x7aa848, v * 0.5), // palm grove over grass (v3.31)
+  fruit: (v) => mix(0x8a6a44, 0x7a5c3a, v * 0.4), // trellis soil (v3.32)
+  ponds: (v) => mix(0x4f8f9a, 0x5a9aa0, v * 0.6), // greenish pond water (v3.33)
+  llanos: (v) => mix(0x9ab44e, 0xa8bc58, v * 0.5), // Hato llanero savanna (v3.34)
+  hides: (v) => mix(0xb89a6a, 0xa8885a, v * 0.4), // tannery dirt yard (v3.35)
+  plantain: (v) => mix(0x5a4a30, 0x4a3d28, v * 0.5), // wet black soil of plantain grove (v3.38)
+  azotea: (v) => mix(0x6a5a3a, 0x5a4a30, v * 0.5), // azotea herb yard (v3.39)
+  bay: (v) => mix(0x2f86a8, 0x3a94b4, v * 0.6), // Bahía seawater (v3.40)
+  mangrove: (v) => mix(0x5d5040, 0x6a5c48, v * 0.5), // mangrove mudflat (v3.41)
+  werregue: (v) => mix(0x4f5a30, 0x5a6638, v * 0.5), // werregue palm forest floor (v3.42)
+  asai: (v) => mix(0x4a5236, 0x56603e, v * 0.5), // wet açaí floodplain (v3.47)
+  aji: (v) => mix(0x7a5236, 0x6a462e, v * 0.5), // chagra garden plot (v3.48)
+  lake: (v) => mix(0x2e5048, 0x365a50, v * 0.6), // dark lake blackwater (v3.49)
+  chagra: (v) => mix(0x6e4a30, 0x7a5638, v * 0.5), // cassava chagra soil (v3.50)
+  yanchama: (v) => mix(0x3f4a2e, 0x4a5636, v * 0.5), // dark yanchama forest floor (v3.51)
   rice: (v) => mix(0x6fa38a, 0x5c9480, v * 0.5),
   coconut: (v) => mix(0xe6d39e, 0xd6c08a, v * 0.5),
   cienaga: (v) => mix(0x4f9aa6, 0x5aa7a8, v * 0.6),
   potato: (v) => mix(0x4a3526, 0x3a291d, v * 0.5),
-  sheep: (v) => mix(0x8fa86a, 0x7f9a5c, v * 0.5), // el pasto del páramo
-  clay: (v) => mix(0xc0784a, 0xa8653c, v * 0.45), // la greda roja de Ráquira
+  sheep: (v) => mix(0x8fa86a, 0x7f9a5c, v * 0.5), // páramo highland grass
+  clay: (v) => mix(0xc0784a, 0xa8653c, v * 0.45), // Ráquira red potter's clay
   // Tolima Grande (v4.0)
-  achira: (v) => mix(0x7a5a3a, 0x6a4e30, v * 0.45), // la tierra del achiral
+  achira: (v) => mix(0x7a5a3a, 0x6a4e30, v * 0.45), // achiral soil
   // Cundinamarca (v4.4)
-  roses: (v) => mix(0x5a4a36, 0x4e402e, v * 0.45), // la tierra negra de la Sabana, bajo los invernaderos
-  strawberry: (v) => mix(0x5a4a36, 0x4e402e, v * 0.45), // la misma tierra negra, para los fresales
-  salt: (v) => mix(0xb8ab98, 0xa8998a, v * 0.45), // el patio de la mina, gris claro de sal y polvo
-  pigs: (v) => mix(0x8a8a4a, 0x7a7a42, v * 0.5), // el corral de los cerdos, con barro
-  betania: (v) => mix(0x3f7f78, 0x4a8a80, v * 0.6), // el agua verde de la represa
-  chamba: (v) => mix(0x8d6e5a, 0x7a5c4a, v * 0.45), // el barranco de arcilla gris del Magdalena
-  barley: (v) => mix(0x8a6a3a, 0x7a5c30, v * 0.5), // la tierra negra del altiplano
-  canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // la tierra seca de la sabana zenú // el agua de la ciénaga // la arena del golfo de Morrosquillo // el agua del arrozal, verde azulada
+  roses: (v) => mix(0x5a4a36, 0x4e402e, v * 0.45), // dark Sabana soil beneath greenhouses
+  strawberry: (v) => mix(0x5a4a36, 0x4e402e, v * 0.45), // same dark soil for strawberry rows
+  salt: (v) => mix(0xb8ab98, 0xa8998a, v * 0.45), // salt mine yard, pale salty gray dust
+  pigs: (v) => mix(0x8a8a4a, 0x7a7a42, v * 0.5), // muddy pig pen
+  betania: (v) => mix(0x3f7f78, 0x4a8a80, v * 0.6), // green reservoir water
+  chamba: (v) => mix(0x8d6e5a, 0x7a5c4a, v * 0.45), // gray Magdalena clay bluff
+  barley: (v) => mix(0x8a6a3a, 0x7a5c30, v * 0.5), // rich dark altiplano topsoil
+  canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // dry Zenú savanna dirt // ciénaga water // Morrosquillo beach sand // teal rice paddy water
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6),
   cartagena: (v) => mix(0xe2d2ae, 0xcfbd94, v * 0.6),
-  villavo: (v) => mix(0xd9c4a0, 0xc9b088, v * 0.6), // el parque de Villavicencio (v3.36)
-  buenaventura: (v) => mix(0xc4c8c8, 0xb0b6b8, v * 0.6), // el malecón de Buenaventura (v3.43)
-  bogota: (v) => mix(0xb0a493, 0x9a8e7d, v * 0.6), // la plazoleta empedrada del Chorro de Quevedo (v4.5)
-  villa: (v) => mix(0xb9b2a5, 0xa39b8c, v * 0.6), // la plaza empedrada de Villa de Leyva // la plaza de piedra coralina // la plaza de piedra amarilla
+  villavo: (v) => mix(0xd9c4a0, 0xc9b088, v * 0.6), // Villavicencio park (v3.36)
+  buenaventura: (v) => mix(0xc4c8c8, 0xb0b6b8, v * 0.6), // Buenaventura boardwalk (v3.43)
+  bogota: (v) => mix(0xb0a493, 0x9a8e7d, v * 0.6), // cobblestone Chorro de Quevedo square (v4.5)
+  villa: (v) => mix(0xb9b2a5, 0xa39b8c, v * 0.6), // cobblestone Villa de Leyva plaza // coral-stone plaza // yellow stone plaza
 };
 
-// Casita del pueblo: paredes de color, zócalo, tejas de barro, puerta y ventana.
+// Town cottage: colored walls, plinth, clay roof tiles, door, and window.
 const HOUSE_WALLS = [0xf4efe6, 0xf6d860, 0x9ad0ec, 0xf2a7a0, 0xb8e0a8, 0xf4efe6];
-// Barichara (v3.5): casi todas blancas, de tapia pisada.
+// Barichara (v3.5): mostly whitewashed rammed earth.
 const BARICHARA_WALLS = [0xf7f4ee, 0xf7f4ee, 0xf7f4ee, 0xf1e6cf];
 const HOUSE_TRIMS = [PAL.balconyRed, PAL.balconyBlue, PAL.balconyGreen, PAL.balconyYellow];
-// Salento (v3.12): casas blancas de bahareque, de dos pisos, con puertas, ventanas y balcones de colores
+// Salento (v3.12): two-story whitewashed bahareque houses with colorful doors, windows, and balconies
 // vivos (rojo, azul, verde, amarillo, naranja, morado).
 const SALENTO_WALLS = [0xfbf8f1, 0xfbf8f1, 0xf7f4ee];
 const SALENTO_TRIMS = [0xd7263d, 0x2e6fd1, 0x2fa36b, 0xf2b705, 0xf07f1d, 0x8e44ad];
-// Cartagena (v3.20): casas coloniales de colores fuertes, con balcones de madera y bugambilias.
+// Cartagena (v3.20): bold-colored colonial houses with wooden balconies and bougainvillea.
 const CARTAGENA_WALLS = [0xf6c244, 0xf28c9a, 0x6fc3e0, 0xf4a261, 0xb8e0a8, 0xfbf8f1];
 const CARTAGENA_TRIMS = [0x7a4a22, 0x7a4a22, 0x2f7d4f, 0x5d3a1e];
-// Villa de Leyva (v3.27): casonas blancas de dos pisos con balcones y puertas verdes.
+// Villa de Leyva (v3.27): two-story whitewashed townhouses with green doors and balconies.
 const VILLA_WALLS = [0xfbf8f1, 0xfbf8f1, 0xf7f4ee];
-// Monserrate (v4.5): dónde va el cerro, en los Cerros de Bogotá, y las casillas que deja libres de eucaliptos.
+// Monserrate (v4.5): hill placement in Bogotá Eastern Hills and tiles cleared of eucalyptus.
 const MONSERRATE = [38.5, 1.2];
 const MONSERRATE_CELLS = (gx, gy) => gx >= 35 && gx <= 42 && gy <= 3;
-// La Candelaria (v4.5): fachadas de colores y balcones de madera.
+// La Candelaria (v4.5): colorful facades and wooden balconies.
 const CANDELARIA_WALLS = [0xf2c94c, 0x5b8fd6, 0xf0a04b, 0xe57373, 0x8ec5e8, 0x81c784, 0xf3a6c0];
 const CANDELARIA_TRIMS = [0x5d4037, 0x6d4c41, 0x2f7d4f, 0x1e5aa8];
 const VILLA_TRIMS = [0x2f7d4f, 0x2f7d4f, 0x1f5a38, 0x5d3a1e];
-// Villavicencio (v3.36): casas de colores vivos, de un piso, con remates de otro color.
+// Villavicencio (v3.36): bright single-story houses with contrasting trim.
 const VILLAVO_WALLS = [0xf6d860, 0xf28c9a, 0x6fc3e0, 0xb8e0a8, 0xf4a261, 0xfbf8f1];
 const VILLAVO_TRIMS = [0x2e6fd1, 0xd7263d, 0x2f7d4f, 0x8e44ad];
-// Buenaventura (v3.43): casas de tabla y de ladrillo pintadas de colores vivos, con techo de zinc.
+// Buenaventura (v3.43): brightly painted wood-plank and brick houses with zinc roofs.
 const PUERTO_WALLS = [0x4fb3bf, 0xf2c14e, 0xe5737f, 0x6cbf6c, 0xf08a3c, 0x5c8dd6];
 const PUERTO_TRIMS = [0xf7f4ee, 0xf2c14e, 0x2e6fd1, 0xd7263d];
 function townHouse(rng, style) {
@@ -1068,8 +1068,8 @@ function townHouse(rng, style) {
   const g = new Graphics();
   const cartagena = style === 'cartagena';
   const villa = style === 'villa';
-  const bogota = style === 'bogota'; // La Candelaria (v4.5): de colores, con balcón de madera
-  const salento = style === 'salento' || cartagena || villa || bogota; // de dos pisos con balcón
+  const bogota = style === 'bogota'; // La Candelaria (v4.5): colorful, with wooden balcony
+  const salento = style === 'salento' || cartagena || villa || bogota; // two-story with balcony
   const villavo = style === 'villavo';
   const puerto = style === 'buenaventura' || style === 'leticia';
   const walls = style === 'barichara' ? BARICHARA_WALLS : bogota ? CANDELARIA_WALLS : cartagena ? CARTAGENA_WALLS : villa ? VILLA_WALLS : villavo ? VILLAVO_WALLS : puerto ? PUERTO_WALLS : salento ? SALENTO_WALLS : HOUSE_WALLS;
@@ -1087,7 +1087,7 @@ function townHouse(rng, style) {
   const win = isoPoly([[w / 2, -0.2, 9], [w / 2, 0.05, 9], [w / 2, 0.05, 16], [w / 2, -0.2, 16]]);
   g.poly(win).fill(salento ? trim : 0x6fa8dc).stroke(OUTLINE);
   if (salento) {
-    // El balcón de madera del segundo piso, de otro color, con sus barandas.
+    // Contrasting second-floor wooden balcony with railings.
     const rail = trims[(trims.indexOf(trim) + 1 + Math.floor(rng() * (trims.length - 1))) % trims.length];
     const z = h - 12;
     g.poly(isoPoly([[-w / 2, 0.45, z], [w / 2, 0.45, z], [w / 2, 0.62, z], [-w / 2, 0.62, z]])).fill(shade(rail, 0.8)).stroke(OUTLINE);
@@ -1102,7 +1102,7 @@ function townHouse(rng, style) {
     g.poly(win2).fill(shade(trim, 0.85)).stroke(OUTLINE);
   }
   if (cartagena && rng() < 0.6) {
-    // Bugambilias que cuelgan del balcón.
+    // Bougainvillea draping over balcony.
     for (const [dx, dy] of [[-0.35, 0], [-0.2, 3], [0.3, 1]]) {
       const p = iso(dx * w, 0.62, h - 8 - dy);
       g.circle(p.x, p.y, 3).fill(0xd63384);
@@ -1113,8 +1113,8 @@ function townHouse(rng, style) {
   return c;
 }
 
-// Edificio de ladrillo (Bogotá, v4.5): el ladrillo rojo a la vista, de tres a seis pisos, con ventanas en hileras y,
-// a veces, el tanque del agua en la terraza.
+// Brick apartment building (Bogotá, v4.5): exposed red brick, 3 to 6 stories, rows of windows
+// and occasional rooftop water tank.
 function brickBuilding(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1125,7 +1125,7 @@ function brickBuilding(rng) {
   const brick = [0xa5492a, 0xb35a33, 0x9c4426][Math.floor(rng() * 3)];
   shadow(g, 8, 6, 34, 13);
   box(g, -w / 2, -d / 2, w, d, h, brick);
-  // Hileras de ventanas en las dos caras que se ven.
+  // Rows of windows on both visible street faces.
   for (let f = 0; f < floors; f++) {
     const z = 6 + f * 11;
     for (const at of [0.25, 0.75]) {
@@ -1133,14 +1133,14 @@ function brickBuilding(rng) {
       g.poly(isoPoly([[w / 2, -d / 2 + d * at - 0.11, z], [w / 2, -d / 2 + d * at + 0.11, z], [w / 2, -d / 2 + d * at + 0.11, z + 6], [w / 2, -d / 2 + d * at - 0.11, z + 6]])).fill(0xb5ccd8).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
     }
   }
-  // El remate de la terraza y, a veces, el tanque.
+  // Rooftop parapet trim and occasional water tank.
   box(g, -w / 2 - 0.03, -d / 2 - 0.03, w + 0.06, d + 0.06, 2, shade(brick, 0.85), { z: h });
   if (rng() < 0.5) box(g, -0.15, -0.15, 0.3, 0.3, 7, 0x9aa3a8, { z: h + 2 });
   c.addChild(g);
   return c;
 }
 
-// Guayacán florecido: copa redonda amarilla o rosada.
+// Blooming guayacán: round yellow or pink canopy.
 function guayacan(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1156,7 +1156,7 @@ function guayacan(rng) {
   return c;
 }
 
-// Farol de la calle.
+// Streetlamp.
 function streetLamp() {
   const c = new Container();
   const g = new Graphics();
@@ -1168,7 +1168,7 @@ function streetLamp() {
   return c;
 }
 
-// Girasol: tallo alto, hojas y flor amarilla mirando al frente.
+// Sunflower: tall stem, leaves, and yellow flower facing forward.
 function sunflower(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1194,7 +1194,7 @@ function cornClump(rng) {
   return c;
 }
 
-// Espantapájaros con sombrero vueltiao y ruana.
+// Scarecrow wearing sombrero vueltiao and ruana.
 function scarecrow() {
   const c = new Container();
   const g = new Graphics();
@@ -1210,7 +1210,7 @@ function scarecrow() {
   return c;
 }
 
-// Mata de maíz: caña alta con hojas largas, espiga arriba y mazorcas. La usa también el Maizal.
+// Corn stalk: tall cane with long leaves, tassel on top, and cobs. Also used by Maizal.
 export function drawCornStalk(g, x, y, scale, rng, cobs) {
   const s = scale;
   const h = (30 + rng() * 8) * s;
@@ -1230,7 +1230,7 @@ export function drawCornStalk(g, x, y, scale, rng, cobs) {
   }
 }
 
-// Guamo: árbol de sombra del cacaotal, tronco alto y copa ancha y aplanada.
+// Guamo: cacao shade tree with tall trunk and wide flat crown.
 function guamo(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1272,7 +1272,7 @@ function cacaoTree(rng) {
   return c;
 }
 
-// Árbol de cacao: tronco corto, copa redonda y mazorcas que cuelgan del tronco. Lo usa el Cacaotal.
+// Cacao tree: short trunk, round crown, pods growing straight from trunk. Also used by Cacaotal.
 // Guayabo: tronco liso y claro, copa redonda y guayabas amarillas.
 export function drawGuavaTree(g, x, y, scale, rng, fruits) {
   const s = scale;
@@ -1289,13 +1289,13 @@ export function drawGuavaTree(g, x, y, scale, rng, fruits) {
   }
 }
 
-// Mata de tabaco: tallo derecho con hojas anchas en pisos y, arriba, el ramillete de flores rosadas.
+// Tobacco plant: upright stalk with tiered broad leaves and pink flower cluster on top.
 export function drawTobaccoPlant(g, x, y, scale, rng, flowers) {
   const s = scale;
   const h = (20 + rng() * 6) * s;
   shadow(g, x + 2, y + 1, 11 * s, 4 * s);
   g.moveTo(x, y).lineTo(x, y - h).stroke({ width: 1.6 * s, color: 0x7cb342 });
-  // Hojas anchas y caídas, más grandes abajo; se alternan a cada lado.
+  // Broad drooping leaves, largest at base; alternate sides.
   for (let k = 0; k < 3; k++) {
     const ly = y - h * (0.2 + k * 0.27);
     const len = (12 - k * 2.5) * s;
@@ -1329,8 +1329,8 @@ function guavaTree(rng) {
   return c;
 }
 
-// Fique: una roseta de hojas largas, gruesas y en punta, verde azulada.
-// Hormiguero de hormiga culona: un montículo de tierra roja con sus bocas (v3.4).
+// Fique agave: rosette of long, thick pointed blue-green leaves.
+// Leafcutter ant nest: mound of red earth with entrance holes (v3.4).
 export function drawAnthill(g, x, y, scale, rng) {
   const s = scale * (0.9 + rng() * 0.25);
   shadow(g, x + 2, y + 1, 13 * s, 4.5 * s);
@@ -1367,7 +1367,7 @@ function fique(rng) {
   return c;
 }
 
-// Cactus del cañón del Chicamocha: un tallo con dos brazos.
+// Chicamocha canyon cactus: tall stem with twin arms.
 function cactus(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1390,7 +1390,7 @@ export function drawCacaoTree(g, x, y, scale, rng, pods) {
   g.circle(x + 6 * s, y - 20 * s, 7 * s).fill(0x2f6b2a);
   g.circle(x, y - 25 * s, 8 * s).fill(0x3f7a2a).stroke({ width: 1, color: 0x3a2418, alpha: 0.3 });
   g.circle(x - 3 * s, y - 28 * s, 3 * s).fill({ color: 0x8cc65a, alpha: 0.6 });
-  // Mazorcas colgando del tronco y de las ramas bajas.
+  // Cacao pods hanging from trunk and lower boughs.
   for (let i = 0; i < pods; i++) {
     const px = x + (rng() - 0.5) * 8 * s;
     const py = y - (5 + rng() * 10) * s;
@@ -1399,7 +1399,7 @@ export function drawCacaoTree(g, x, y, scale, rng, pods) {
   }
 }
 
-// Eucalipto: tronco claro y alto con copa alargada verde azulada.
+// Eucalyptus: tall pale trunk with elongated blue-green crown.
 function eucalyptus(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1414,7 +1414,7 @@ function eucalyptus(rng) {
   return c;
 }
 
-// Invernadero suelto de la Sabana (v4.4): la nave de plástico blanco sobre sus palos, con las rosas adentro.
+// Standalone Sabana greenhouse (v4.4): white plastic hoop house over poles with roses inside.
 function smallGreenhouse(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1432,7 +1432,7 @@ function smallGreenhouse(rng) {
   return c;
 }
 
-// Puesto de fresas con crema de la carretera de Sibaté (v4.4): la mesa con el toldo rojo y los vasos.
+// Sibaté roadside strawberries-and-cream stand (v4.4): red-awning table with cups.
 function strawberryStand(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1445,8 +1445,8 @@ function strawberryStand(rng) {
   return c;
 }
 
-// Mata de fresa (v4.4): hojas de a tres, redondas y dentadas, sobre el lomo de plástico negro, con las fresas
-// colgando a un lado (más fresas con los hitos).
+// Strawberry plant (v4.4): trefoil toothed leaves over black mulch ridge with berries
+// hanging along side (more berries at milestones).
 export function drawStrawberryPlant(g, x, y, scale, rng, fruits = 2) {
   const s = scale;
   g.ellipse(x, y, 11 * s, 4 * s).fill(0x37474f);
@@ -1458,7 +1458,7 @@ export function drawStrawberryPlant(g, x, y, scale, rng, fruits = 2) {
   }
 }
 
-// Vagoneta de la mina de sal (v4.4): sobre su tramo de rieles, cargada de roca de sal.
+// Salt mine rail cart (v4.4): loaded with rock salt on short track.
 function saltCart(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1473,7 +1473,7 @@ function saltCart(rng) {
   return c;
 }
 
-// Montón de sal de la mina (v4.4): un cono blanco grisáceo con sus vetas (más altos con los hitos).
+// Salt mine heap (v4.4): grayish-white veined cone (taller at milestones).
 export function drawSaltPile(g, x, y, scale, rng) {
   const s = scale;
   shadow(g, x + 2, y + 1, 12 * s, 4 * s);
@@ -1483,8 +1483,8 @@ export function drawSaltPile(g, x, y, scale, rng) {
   g.moveTo(x - 6 * s, y - 3 * s).lineTo(x - 1 * s, y - h * 0.6).stroke({ width: 0.8, color: 0xb0a898 });
 }
 
-// Rosal de exportación (v4.4): la mata de hojas oscuras con los tallos largos y las rosas rojas en botón (más
-// rosas con los hitos).
+// Export rose bush (v4.4): dark-leaved shrub with tall stems and red rosebuds (more
+// roses at milestones).
 export function drawRoseBush(g, x, y, scale, rng, flowers = 2) {
   const s = scale;
   shadow(g, x + 2, y + 1, 9 * s, 3 * s);
@@ -1497,7 +1497,7 @@ export function drawRoseBush(g, x, y, scale, rng, flowers = 2) {
   }
 }
 
-// Ciprés: cono oscuro y estrecho, típico de las cercas de las fincas lecheras.
+// Cypress: narrow dark cone common along dairy pasture fencelines.
 function cypress(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1510,7 +1510,7 @@ function cypress(rng) {
   return c;
 }
 
-// Paca de heno redonda.
+// Round hay bale.
 function hayBale(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1523,8 +1523,8 @@ function hayBale(rng) {
   return c;
 }
 
-// Vaca holstein (blanca con manchas negras), de lado. La usa también el Potrero.
-// coat (v3.3): pelaje { body, spots, udder }; sin él, la Holstein de la Lechería.
+// Holstein cow (white with black patches), side view. Also used by Potrero.
+// coat (v3.3): pattern { body, spots, udder }; defaults to Lechería Holstein.
 const HOLSTEIN = { body: 0xfbf8f1, legs: 0xf4f1e8, spots: 0x2b2b2b, udder: true };
 export function drawCow(g, x, y, scale, rng, flip = false, coat = HOLSTEIN) {
   if (coat.sheep) return drawSheep(g, x, y, scale * 0.85, rng, flip, coat);
@@ -1534,10 +1534,10 @@ export function drawCow(g, x, y, scale, rng, flip = false, coat = HOLSTEIN) {
   shadow(g, x, y + 1, 13 * s, 4 * s);
   // Patas.
   for (const lx of [-7, -3, 4, 8]) g.rect(x + lx * s * f - 1, y - 7 * s, 2 * s, 7 * s).fill(coat.legs).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
-  // Cuerpo con manchas.
+  // Spotted torso.
   g.roundRect(x - 10 * s, y - 15 * s, 20 * s, 9 * s, 4 * s).fill(coat.body).stroke({ width: 1.2, color: 0x3a2418, alpha: 0.6 });
   for (let i = 0; i < 3; i++) g.ellipse(x + (-5 + i * 5 + rng() * 2) * s * f, y - (10 + rng() * 3) * s, (2 + rng() * 2) * s, (1.5 + rng()) * s).fill(coat.spots);
-  // La giba del cebú (v3.18), sobre los hombros.
+  // Zebu hump (v3.18) over shoulders.
   if (coat.hump) g.ellipse(x + 5 * s * f, y - 15 * s, 3.6 * s, 2.8 * s).fill(coat.body).stroke({ width: 1, color: 0x3a2418, alpha: 0.5 });
   // Ubre rosada.
   if (coat.udder) g.ellipse(x + 3 * s * f, y - 6 * s, 2.5 * s, 1.5 * s).fill(0xf2a7b5);
@@ -1551,8 +1551,8 @@ export function drawCow(g, x, y, scale, rng, flip = false, coat = HOLSTEIN) {
   g.moveTo(x - 10 * s * f, y - 14 * s).quadraticCurveTo(x - 13 * s * f, y - 10 * s, x - 12 * s * f, y - 6 * s).stroke({ width: 1, color: 0x3a2418 });
 }
 
-// Cerdo (v4.0): rosado, con manchas o negro (el zungo criollo), con el hocico y la colita enroscada. Lo usa la
-// Lechonería en vez de vacas.
+// Pig (v4.0): pink, spotted, or black (Creole zungo) with snout and curly tail. Used by
+// Lechonería instead of cows.
 function drawPig(g, x, y, s, rng, flip, coat) {
   const f = flip ? -1 : 1;
   shadow(g, x, y + 1, 11 * s, 3.5 * s);
@@ -1566,8 +1566,8 @@ function drawPig(g, x, y, s, rng, flip, coat) {
   g.moveTo(x - 10 * s * f, y - 10 * s).quadraticCurveTo(x - 13 * s * f, y - 13 * s, x - 11 * s * f, y - 14 * s).stroke({ width: 1, color: shade(coat.body, 0.7) });
 }
 
-// Mata de achira (v4.0): hojas anchas y erguidas, verdes con el borde morado, y las flores rojas en lo alto (más
-// matas florecidas con los hitos).
+// Achira plant (v4.0): broad upright purple-edged green leaves with red blooms at top
+// (more blooming stalks at milestones).
 export function drawAchiraPlant(g, x, y, scale, rng, flowers = 1) {
   const s = scale;
   shadow(g, x + 2, y + 1, 12 * s, 4 * s);
@@ -1585,7 +1585,7 @@ export function drawAchiraPlant(g, x, y, scale, rng, flowers = 1) {
   }
 }
 
-// Oveja (v3.26): cuerpo de lana en bolitas, cara y patas oscuras. La usan las Ruanas en vez de vacas.
+// Sheep (v3.26): puffy wool body, dark face and legs. Used by Ruanas instead of cows.
 function drawSheep(g, x, y, s, rng, flip, coat) {
   const f = flip ? -1 : 1;
   shadow(g, x, y + 1, 11 * s, 3.5 * s);
@@ -1598,7 +1598,7 @@ function drawSheep(g, x, y, s, rng, flip, coat) {
   g.circle(x + 12 * s * f, y - 13 * s, 0.7 * s).fill(0xffffff);
 }
 
-// Guadual: varias cañas de guadua altas y algo inclinadas, con hojitas en lo alto.
+// Guadua bamboo grove: tall slightly arched culms topped with feathery leaves.
 function guadua(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1621,7 +1621,7 @@ function guadua(rng) {
   return c;
 }
 
-// Mata de caña suelta.
+// Standalone sugarcane clump.
 function caneClump(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1630,7 +1630,7 @@ function caneClump(rng) {
   return c;
 }
 
-// Samán: árbol de copa ancha y plana.
+// Samán: broad umbrella-canopy shade tree.
 function saman(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1644,7 +1644,7 @@ function saman(rng) {
   return c;
 }
 
-// Mata de caña de azúcar: tallos rectos con nudos y hojas largas. La usa también el Cañaduzal.
+// Sugarcane stalk: segmented straight stems with long leaves. Also used by Cañaduzal.
 export function drawCaneClump(g, x, y, scale, rng) {
   shadow(g, x + 2, y + 1, 10 * scale, 4 * scale);
   const stalks = 4;
@@ -1659,7 +1659,7 @@ export function drawCaneClump(g, x, y, scale, rng) {
   }
 }
 
-// Palma de cera: tronco alto y fino con copa pequeña.
+// Wax palm: tall slender trunk with compact crown.
 function palm(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1680,7 +1680,7 @@ function palm(rng) {
   return c;
 }
 
-// Mata de arroz (v3.15): un macollo de hojas delgadas que salen del agua; con más hitos, espigas doradas.
+// Rice clump (v3.15): tuft of thin blades rising from water; golden panicles at higher milestones.
 export function drawRicePlant(g, x, y, scale, rng, ears) {
   const s = scale;
   g.ellipse(x, y, 7 * s, 2.2 * s).fill({ color: 0x3f6f5e, alpha: 0.45 });
@@ -1692,7 +1692,7 @@ export function drawRicePlant(g, x, y, scale, rng, ears) {
     const ty = y + Math.sin(a) * len;
     g.moveTo(x + (i - 3) * 0.5 * s, y).quadraticCurveTo(x + (tx - x) * 0.3, y - len * 0.6, tx, ty).stroke({ width: 1.3 * s, color: i % 2 ? 0x7cb342 : 0x9ccc65, cap: 'round' });
   }
-  // Espigas: se doblan con el peso del grano.
+  // Seed heads droop under grain weight.
   for (let i = 0; i < ears; i++) {
     const ex = x + (i - (ears - 1) / 2) * 3.2 * s;
     const ey = y - (14 + (i % 2) * 2) * s;
@@ -1700,7 +1700,7 @@ export function drawRicePlant(g, x, y, scale, rng, ears) {
   }
 }
 
-// Ceiba: tronco grueso con bambas (raíces de tabla) y una copa ancha y plana, la sombra de la Costa.
+// Ceiba: massive buttressed trunk and flat wide canopy, classic Coast shade tree.
 function ceiba(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1716,8 +1716,8 @@ function ceiba(rng) {
   return c;
 }
 
-// Palma de coco: tronco curvo y anillado, hojas largas que cuelgan y un racimo de cocos. La usa también
-// el Cocal (v3.16), más bajita, con más cocos verdes en cada hito.
+// Coconut palm: curved ringed trunk, drooping fronds, coconut cluster. Also used by
+// Cocal (v3.16), shorter with more green coconuts at each milestone.
 export function drawCoconutPalm(g, x, y, scale, rng, nuts = 3, green = false) {
   const s = scale;
   const h = (55 + rng() * 25) * s;
@@ -1741,8 +1741,8 @@ export function drawCoconutPalm(g, x, y, scale, rng, nuts = 3, green = false) {
   for (const [dx, dy] of spots.slice(0, nuts)) g.circle(cx + dx * s * 1.2, cy + dy * s * 1.2, 2.4 * Math.max(s, 0.8)).fill(green ? 0x8bc34a : 0x7a5a2e).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
 }
 
-// Mata de plátano (v3.38): el tallo verde amarillento, las hojas grandes (alguna rasgada por el viento) y,
-// con cada hito, el racimo que cuelga con su bellota morada.
+// Plantain plant (v3.38): yellow-green pseudostem, broad wind-torn leaves, and hanging
+// fruit bunch with purple flower bud at milestones.
 export function drawPlantainPlant(g, x, y, scale, rng, bunch = 1) {
   const s = scale * (0.9 + rng() * 0.2);
   const h = (24 + rng() * 6) * s;
@@ -1769,8 +1769,8 @@ export function drawPlantainPlant(g, x, y, scale, rng, bunch = 1) {
   g.ellipse(bx + 2 * s, top + (11 + Math.min(bunch, 3) * 3) * s, 1.8 * s, 2.6 * s).fill(0x7b1f4b);
 }
 
-// Azotea (v3.39): la canoa vieja alzada en cuatro pilotes, llena de tierra, con las hierbas de cocina; con
-// cada hito, más matas y las flores moradas de la albahaca.
+// Azotea planter (v3.39): old canoe raised on four stilts, soil-filled with culinary herbs;
+// denser growth and purple basil blooms at milestones.
 export function drawAzoteaBed(g, x, y, scale, rng, tier = 0) {
   const s = scale;
   const lift = 12 * s;
@@ -1794,7 +1794,7 @@ export function drawAzoteaBed(g, x, y, scale, rng, tier = 0) {
   }
 }
 
-// Mangle (v3.41): la copa verde oscura sobre el tronco y las raíces zancudas que se abren hasta el barro.
+// Mangrove (v3.41): dark green crown perched on arching stilt roots in mud.
 export function drawMangroveTree(g, x, y, scale, rng) {
   const s = scale * (0.9 + rng() * 0.2);
   shadow(g, x + 3, y + 2, 18 * s, 6 * s);
@@ -1811,8 +1811,8 @@ function mangroveTree(rng) {
   return c;
 }
 
-// Palma de werregue (v3.42): el tronco erizado de espinas negras y la corona de hojas; con cada hito, el
-// cogollo tierno, claro, que se corta para sacar la fibra.
+// Werregue palm (v3.42): black-spined trunk and feather crown; pale tender heart shoot
+// harvested for fiber at milestones.
 export function drawWerreguePalm(g, x, y, scale, rng, tier = 0) {
   const s = scale * (0.9 + rng() * 0.2);
   const h = (22 + rng() * 6) * s;
@@ -1830,7 +1830,7 @@ export function drawWerreguePalm(g, x, y, scale, rng, tier = 0) {
   if (tier >= 1) g.moveTo(x, top).lineTo(x + 1, top - (8 + Math.min(tier, 3) * 2) * s).stroke({ width: 2.4, color: 0xc5e1a5, cap: 'round' });
 }
 
-// Tambo wounaan (v3.42): la casa redonda sobre pilotes, abierta, con el techo cónico de palma.
+// Wounaan tambo (v3.42): open circular stilt house with conical palm thatch roof.
 function tambo(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1846,7 +1846,7 @@ function tambo(rng) {
   return c;
 }
 
-// Mata de ají (v3.48): el arbusto de hojas verdes con los ajíes rojos, amarillos y morados; más con cada hito.
+// Chili pepper shrub (v3.48): green foliage dotted with red, yellow, and purple peppers (more at milestones).
 export function drawAjiPlant(g, x, y, scale, rng, peppers = 3) {
   const s = scale * (0.9 + rng() * 0.2);
   shadow(g, x + 2, y + 1, 9 * s, 3.5 * s);
@@ -1860,8 +1860,8 @@ export function drawAjiPlant(g, x, y, scale, rng, peppers = 3) {
   }
 }
 
-// Árbol de yanchama (v3.51): el tronco liso y claro con las raíces de tabla y la copa ancha; con cada hito
-// crece, y a algunos ya se les sacó una tira de corteza (la herida clara en el tronco).
+// Yanchama tree (v3.51): smooth pale buttressed trunk and broad crown; grows at milestones
+// with stripped pale bark scars on harvested trunks.
 export function drawYanchamaTree(g, x, y, scale, rng, peeled = false) {
   const s = scale * (0.9 + rng() * 0.2);
   shadow(g, x + 4, y + 2, 16 * s, 6 * s);
@@ -1874,8 +1874,8 @@ export function drawYanchamaTree(g, x, y, scale, rng, peeled = false) {
   for (const [dx, dy, r, c] of [[-7, -h / s - 2, 9, 0x2e6b22], [7, -h / s - 3, 9, 0x2e6b22], [0, -h / s - 8, 10, 0x43a047], [-3, -h / s - 1, 7, 0x388e3c]]) g.circle(x + dx * s, y + dy * s, r * s).fill(c);
 }
 
-// Mata de yuca (v3.50): el tallo de nudos, delgado y alto, con las hojas palmeadas de dedos largos arriba; con
-// cada hito, más tallos y alguna raíz que asoma en la tierra.
+// Cassava plant (v3.50): tall knotted stem topped with palmate leaves; extra stems and
+// peeking root tubers at milestones.
 export function drawYucaPlant(g, x, y, scale, rng, stems = 1) {
   const s = scale * (0.9 + rng() * 0.2);
   shadow(g, x + 2, y + 1, 10 * s, 4 * s);
@@ -1896,8 +1896,8 @@ export function drawYucaPlant(g, x, y, scale, rng, stems = 1) {
   if (stems > 2) g.ellipse(x + 6 * s, y + 1, 4 * s, 1.4 * s).fill(0x8d5a32);
 }
 
-// Palma de asaí (v3.47): la mata de dos o tres tallos delgados y altos, con las hojas de plumas que cuelgan y,
-// con cada hito, más racimos morados bajo la corona.
+// Açaí palm (v3.47): cluster of 2–3 slender stems with feathery fronds and purple fruit
+// clusters beneath crown at milestones.
 export function drawAsaiPalm(g, x, y, scale, rng, bunches = 1) {
   const s = scale * (0.9 + rng() * 0.2);
   shadow(g, x + 3, y + 2, 14 * s, 5 * s);
@@ -1924,7 +1924,7 @@ function asaiPalm(rng) {
   return c;
 }
 
-// Guacamaya (v3.47): la roja, amarilla y azul, parada en un palo seco.
+// Macaw (v3.47): scarlet, yellow, and blue parrot perched on a dry snag.
 function macaw(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1943,8 +1943,8 @@ function macaw(rng) {
   return c;
 }
 
-// Palma de chontaduro (v3.38): el tronco delgado con sus anillos de espinas, las hojas de plumas y los racimos
-// de chontaduro rojo y anaranjado.
+// Chontaduro palm (v3.38): slender spiny-ringed trunk, feather fronds, red/orange fruit bunches.
+// and orange fruit clusters.
 function chontaduroPalm(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1966,7 +1966,7 @@ function chontaduroPalm(rng) {
   return c;
 }
 
-// Borojó (v3.38): arbolito de hojas grandes y redondas con los borojós, pardos y redondos, pegados a las ramas.
+// Borojó tree (v3.38): small broad-leaved tree with round brown borojó fruits along branches.
 function borojoTree(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -1979,8 +1979,8 @@ function borojoTree(rng) {
   return c;
 }
 
-// Palma de aceite (v3.31): tronco grueso y corto con las bases de las hojas, la corona de hojas largas
-// que se arquean y los racimos rojos pegados al tronco (más con cada hito).
+// Oil palm (v3.31): stout trunk patterned with frond bases, arching crown, red fruit
+// bunches nestled at crown (more at milestones).
 export function drawOilPalm(g, x, y, scale, rng, bunches = 2) {
   const s = scale * (0.9 + rng() * 0.2);
   const h = (26 + rng() * 8) * s;
@@ -2013,7 +2013,7 @@ function oilPalm(rng) {
   return c;
 }
 
-// Palma de moriche (v3.31): la del morichal llanero, alta y derecha, con la corona de hojas en abanico.
+// Moriche palm (v3.31): tall straight savanna palm with fan-leaf crown.
 function morichePalm(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -2034,7 +2034,7 @@ function morichePalm(rng) {
   return c;
 }
 
-// Comejenera (v3.31): el montículo de tierra roja de los comejenes, en la sabana.
+// Termite mound (v3.31): tall red earth savanna mound.
 function termiteMound(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -2046,8 +2046,8 @@ function termiteMound(rng) {
   return c;
 }
 
-// Enramada de maracuyá (v3.32): dos postes con el alambre, la enredadera encima y los maracuyás amarillos
-// que cuelgan (más con cada hito).
+// Passionfruit arbor (v3.32): twin posts with wire, leafy vine canopy, hanging yellow fruits
+// (more at milestones).
 export function drawPassionVine(g, x, y, scale, rng, fruits = 2) {
   const s = scale;
   const a = { x: x - 12 * s, y: y - 4 * s };
@@ -2071,7 +2071,7 @@ export function drawPassionVine(g, x, y, scale, rng, fruits = 2) {
   if (fruits > 2) g.circle(x, y - 24 * s, 1.6).fill(0x7e57c2);
 }
 
-// Palo de mango (v3.32): copa grande y redonda, de un verde oscuro, con mangos amarillos y rojizos.
+// Mango tree (v3.32): dense dark-green rounded crown with yellow and blushed mangoes.
 function mangoTree(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -2084,8 +2084,8 @@ function mangoTree(rng) {
   return c;
 }
 
-// Estanques de cachama (v3.33): cada casilla del agua, con los bordos de tierra cada dos casillas, ondas y,
-// de vez en cuando, el lomo de una cachama que sale a comer.
+// Cachama fishponds (v3.33): water tiles with earthen dikes every two tiles, ripples,
+// and occasional fish rising to feed.
 export function drawPondTile(g, gx, gy, x0, y0, rng, tier) {
   const dike = { width: 3, color: 0x7a9a4a };
   if ((gx - x0) % 2 === 0) {
@@ -2107,7 +2107,7 @@ export function drawPondTile(g, gx, gy, x0, y0, rng, tier) {
   }
 }
 
-// Cuero templado en su marco (v3.35): cuatro palos, el cuero de res amarrado con cabuya, secándose con sal.
+// Stretched cowhide frame (v3.35): four poles with hide lashed by rope, curing in salt.
 export function drawHideFrame(g, x, y, scale, rng, salted = true) {
   const s = scale * (0.9 + rng() * 0.15);
   shadow(g, x + 2, y + 2, 14 * s, 5 * s);
@@ -2122,7 +2122,7 @@ export function drawHideFrame(g, x, y, scale, rng, salted = true) {
   if (salted) for (let k = 0; k < 4; k++) g.circle(c.x - 4 * s + rng() * 8 * s, c.y - 3 * s + rng() * 6 * s, 0.8).fill(0xffffff);
 }
 
-// Caballo criollo (v3.35): de lado, pastando o parado, alazán, bayo o tordillo.
+// Creole horse (v3.35): side view grazing or standing, chestnut, buckskin, or gray.
 function horse(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -2149,7 +2149,7 @@ function coconutPalm(rng) {
   return c;
 }
 
-// Montón de greda (v3.24): la arcilla roja recién sacada, con su pala clavada (más alto con cada hito).
+// Clay heap (v3.24): freshly dug red pottery clay with shovel stuck in it (grows at milestones).
 export function drawClayMound(g, x, y, scale, rng, shovel = false) {
   const s = scale * (0.9 + rng() * 0.2);
   shadow(g, x + 2, y + 1, 14 * s, 5 * s);
@@ -2161,8 +2161,8 @@ export function drawClayMound(g, x, y, scale, rng, shovel = false) {
   }
 }
 
-// Ollas de barro puestas a la venta en una tabla, a la orilla del camino (v3.24).
-// Ollas a la venta en una tabla: de barro rojo en Ráquira; en La Chamba (v4.0, `black`), de loza negra.
+// Clay pots displayed on a roadside plank bench for sale (v3.24).
+// Pots displayed on plank: red clay in Ráquira; blackware in La Chamba (v4.0, `black`).
 function potStand(rng, black = false) {
   const c = new Container();
   const g = new Graphics();
@@ -2179,7 +2179,7 @@ function potStand(rng, black = false) {
   return c;
 }
 
-// Mata de cebada (v3.23): tallos delgados con las espigas doradas y sus barbas (más doradas con los hitos).
+// Barley clump (v3.23): slender stems with bearded golden ears (more golden at milestones).
 export function drawBarley(g, x, y, scale, rng, ripe = 0) {
   const s = scale;
   shadow(g, x + 2, y + 1, 8 * s, 3 * s);
@@ -2194,7 +2194,7 @@ export function drawBarley(g, x, y, scale, rng, ripe = 0) {
   }
 }
 
-// Mata de papa (v3.22): ramillete de hojas verdes con flores blancas y moradas (más con cada hito).
+// Potato plant (v3.22): green leafy cluster with white and purple blossoms (more at milestones).
 export function drawPotatoPlant(g, x, y, scale, rng, flowers = 1) {
   const s = scale;
   shadow(g, x + 2, y + 1, 9 * s, 3.5 * s);
@@ -2207,7 +2207,7 @@ export function drawPotatoPlant(g, x, y, scale, rng, flowers = 1) {
   }
 }
 
-// Frailejón (v3.22): tronco grueso y peludo con la roseta de hojas plateadas, la planta del páramo.
+// Frailejón (v3.22): thick furry stem with silvery leaf rosette, iconic páramo plant.
 function frailejon(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -2226,7 +2226,7 @@ function frailejon(rng) {
   return c;
 }
 
-// Mata de caña flecha (v3.19): hojas largas en abanico, con alguna espiga plumosa.
+// Caña flecha plant (v3.19): long fan-arranged leaves with occasional feathery plume.
 export function drawCanaFlecha(g, x, y, scale, rng, plumes = 1) {
   const s = scale;
   shadow(g, x + 2, y + 1, 10 * s, 3.5 * s);
@@ -2254,7 +2254,7 @@ function canaFlechaClump(rng) {
   return c;
 }
 
-// Sombreros vueltiaos colgados de una vara, como los venden a la orilla de la carretera.
+// Sombreros vueltiaos hung along a pole for roadside sale.
 function hatPole(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -2271,7 +2271,7 @@ function hatPole(rng) {
   return c;
 }
 
-// Atarraya puesta a secar entre dos varas.
+// Cast net hung to dry between two poles.
 function netRack(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -2285,7 +2285,7 @@ function netRack(rng) {
   return c;
 }
 
-// Montoncito de cocos verdes recién bajados, al pie de las palmas.
+// Little pile of freshly harvested green coconuts beside palms.
 function coconutPile(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -2297,7 +2297,7 @@ function coconutPile(rng) {
   return c;
 }
 
-// Garza blanca: patas largas, cuerpo blanco y el cuello en S, como las que andan por los arrozales.
+// Snowy egret: long legs, white plumage, S-curved neck common in rice paddies.
 function egret(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -2312,7 +2312,7 @@ function egret(rng) {
   return c;
 }
 
-// Mata de plátano.
+// Plantain clump.
 function banana(rng) {
   const c = new Container();
   const g = new Graphics();
@@ -2346,7 +2346,7 @@ function rock(rng) {
   return c;
 }
 
-// Cafeto: arbusto redondo con cerezas rojas. Lo usa también el Cafetal.
+// Coffee bush: round green shrub dotted with red cherries. Also used by Cafetal.
 export function drawCoffeeBush(g, x, y, scale, rng, cherries) {
   const r = 9 * scale;
   shadow(g, x + 2, y + 1, r * 1.1, r * 0.45);

@@ -1,10 +1,10 @@
-// Los textos de index.html que hay que traducir, como los busca translateDom (src/i18n/index.js): el
-// contenido de los elementos con <b>, <br>… adentro, y si no, cada texto suelto; también los atributos.
-//   node tools/i18n-html.mjs [idioma]   (con idioma, solo lo que ese idioma todavía no tiene)
+// Texts in index.html that need translating, matching what translateDom looks for (src/i18n/index.js): the
+// content of elements with <b>, <br>… inside, otherwise each standalone text node; plus attributes.
+//   node tools/i18n-html.mjs [lang]   (with lang, only what that language is still missing)
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 
-// Playwright viene instalado aparte (no es dependencia del juego).
+// Playwright is installed separately (not a game dependency).
 const { chromium } = createRequire(import.meta.url)('playwright');
 
 const INLINE = ['B', 'I', 'BR', 'STRONG', 'EM', 'SMALL', 'A', 'SPAN', 'CODE'];

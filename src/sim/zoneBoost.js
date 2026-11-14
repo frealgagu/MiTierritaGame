@@ -1,10 +1,10 @@
-// Los botones de abajo de la cadena 🔗 (v4.1.1):
-//   🏗️ Construir: construye, en el orden de la cadena, todas las estaciones que falten y alcance el dinero.
-//      Está desde el principio.
-//   ⬆ Al nivel X: lleva lo más bajo de la zona al siguiente hito (10, 25, 50, 75, 100) junto con todo lo que
-//      esté por debajo de ese hito: las estaciones, sus arrieros, la bodega y las chivas que traen productos de
-//      otras zonas. Solo si alcanza para todo. Se ve después de reiniciar la región una vez, se desbloquea con
-//      10 ⭐ por región y en un evento funciona si ese evento ya se ganó con oro.
+// Bottom buttons in chain 🔗 (v4.1.1):
+//   🏗️ Build: builds all remaining zone stations in chain order as funds allow.
+//      Available from the start.
+//   ⬆ To level X: brings lowest items in zone up to next milestone (10, 25, 50, 75, 100)
+//      alongside anything below it: stations, haulers, warehouse, and incoming chivas from
+//      other zones. All-or-nothing. Visible after one region reset, unlocked with 10 ⭐ per
+//      region, and works in events already won with gold.
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
@@ -16,14 +16,14 @@ import { createStationState } from './production.js';
 import { routeActive } from './routes.js';
 import { regionState } from './regions.js';
 
-export const ZONE_BOOST_COST = 10; // ⭐, una vez por región
+export const ZONE_BOOST_COST = 10; // ⭐, once per region
 
 // --- 🏗️ Construir ---
 
 const nextToBuild = (state, zoneId) => nextToUnlock(state, zoneId) ?? nextSideToUnlock(state, zoneId);
 
-// Cuántas se construirían con el dinero de ahora y cuánto costarían: { count, cost, next } (next: lo que
-// cuesta la siguiente, para decirlo cuando no alcanza para ninguna). null si ya no falta nada.
+// How many build right now and total cost: { count, cost, next } (`next`: price of next
+// station when none are affordable). null when nothing left to build.
 export function previewBuild(state, zoneId) {
   const sim = { ...state, stations: { ...state.stations } };
   let { coins } = state;
@@ -42,14 +42,14 @@ export function previewBuild(state, zoneId) {
   return next === null ? null : { count, cost, next };
 }
 
-// Las construye; devuelve los ids construidos.
+// Builds them; returns built ids.
 export function buildAll(state, zoneId, bus) {
   const built = [];
   for (let id = nextToBuild(state, zoneId); id && unlockStation(state, id, bus); id = nextToBuild(state, zoneId)) built.push(id);
   return built;
 }
 
-// --- ⬆ Al nivel X: el desbloqueo (en el perfil del jugador: profile.zoneBoost = [regiones]) ---
+// --- ⬆ To level X: unlock state (on player profile: profile.zoneBoost = [regions]) ---
 
 export const hasZoneBoost = (profile, regionId) => Boolean(profile?.zoneBoost?.includes(regionId));
 
@@ -66,9 +66,9 @@ export function buyZoneBoostUnlock(profile, regionId) {
   return true;
 }
 
-// Qué se muestra: 'hidden' (aún no se ha reiniciado la región; en un evento, si no se puede usar), 'locked'
-// (se puede comprar) o 'ready'.
-//   root: la partida (con el perfil y las regiones); state: lo que se ve (la región o el tablero del evento).
+// Display state: 'hidden' (region not yet reset; in events, unavailable), 'locked'
+// (purchasable), or 'ready'.
+//   root: main save (profile and regions); state: viewed save (region or event board).
 export function zoneBoostStatus(root, state, zoneId) {
   const regionId = REGION_OF_ZONE[zoneId];
   const resets = regionState(root, regionId)?.legacy?.resets ?? 0;
@@ -78,10 +78,10 @@ export function zoneBoostStatus(root, state, zoneId) {
   return owned ? 'ready' : 'locked';
 }
 
-// --- ⬆ Al nivel X: la compra ---
+// --- ⬆ To level X: purchase execution ---
 
-// Lo que sube: las estaciones construidas de la zona (también la Compostera), sus arrieros, la bodega y las
-// chivas que le traen productos de otras zonas (en un evento no: allí la ruta va con su estación).
+// Targets: built zone stations (including Compostera), haulers, warehouse, and incoming
+// chivas from other zones (not in events: routes tie to stations there).
 export function zoneBoostTargets(state, zoneId) {
   const zone = ZONES_BY_ID[zoneId];
   const ids = [];
@@ -96,7 +96,7 @@ export function zoneBoostTargets(state, zoneId) {
   return ids;
 }
 
-// El plan: { level (el hito), items: [[id, niveles]], cost, affordable } o null si todo está en el tope.
+// Plan: { level (milestone), items: [[id, levels]], cost, affordable } or null if all maxed.
 export function planZoneBoost(state, zoneId) {
   const max = maxLevel(state); // en un evento, 50
   const targets = zoneBoostTargets(state, zoneId).map((id) => ({ id, ...upgradeTarget(state, id) }));
@@ -115,7 +115,7 @@ export function planZoneBoost(state, zoneId) {
   return plan;
 }
 
-// Compra el plan (todo o nada). Cada mejora avisa marcada `bulk` (un solo sonido) y devuelve el plan, o null.
+// Executes plan (all or nothing). Each upgrade emits with `bulk` (single chime) and returns plan, or null.
 export function buyZoneBoost(state, zoneId, bus) {
   const plan = planZoneBoost(state, zoneId);
   if (!plan?.affordable) return null;

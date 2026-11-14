@@ -6,12 +6,12 @@ import { sourceOf } from './chain.js';
 
 export const SAVE_VERSION = 9;
 
-// Bodega, Willys y nivel del despacho de una zona.
+// Warehouse, Willys, and dispatch level of a zone.
 export function createZoneState(unlocked = false) {
   return { unlocked, complete: false, dispatch: { level: 1 }, warehouse: {}, jeep: { phase: 'idle', t: 0, waited: 0, load: {} } };
 }
 
-// Partida nueva de una región (v3.0): sus zonas (la primera abierta, con su fuente) y sus rutas.
+// Fresh region save (v3.0): its zones (first open with its source) and routes.
 export function createInitialState(now = Date.now(), regionId = 'cafetero') {
   const region = REGIONS_BY_ID[regionId];
   const first = region.zones[0];
@@ -23,29 +23,29 @@ export function createInitialState(now = Date.now(), regionId = 'cafetero') {
     playTime: 0,
     savedAt: now,
     nextId: 1,
-    // Estaciones de todas las zonas (los ids son únicos); aparecen al construirlas.
+    // Stations across all zones (ids are unique); added when built.
     stations: {
       [sourceOf(first)]: createStationState(),
     },
-    // Por zona: desbloqueada, completada, despacho, bodega (productId -> unidades) y Willys.
+    // Per zone: unlocked, completed, dispatch, warehouse (productId -> units), Willys.
     zones: Object.fromEntries(region.zones.map((z) => [z, createZoneState(z === first)])),
-    // Rutas entre zonas de la región: nivel y vehículo (ver sim/routes.js).
+    // Inter-zone routes in region: level and vehicle state (see sim/routes.js).
     routes: Object.fromEntries(ROUTES.filter((r) => routeRegion(r) === regionId).map((r) => [r.id, createRouteState()])),
     mules: [], // { id, productId, amount, from, to, phase: 'go' | 'back', t, duration }
     stats: { produced: {}, sold: {}, imported: {} },
-    hints: [], // avisos ya mostrados
+    hints: [], // already shown notices
     settings: { sound: true, music: true },
-    research: [], // ids de investigaciones compradas
+    research: [], // purchased research ids
     goals: { claimed: [] }, // objetivos cobrados
-    regionDone: false, // la última zona de la región ya se completó alguna vez (v3.8: no se pierde al reiniciar)
-    mastered: false, // segundo final: todas las estaciones en el nivel 100
-    legacy: { resets: 0 }, // reinicios con producción ×2 (hasta 60, v4.0)
-    // Eventos (v2.0): el tablero de cada zona que está en juego y el último año en que se terminó.
-    // Los cupos (v3.30: dos para todo el juego, en la partida principal), lo último jugado de cada zona y
-    // cuántas veces (ver sim/events.js).
+    regionDone: false, // region's final zone completed at least once (v3.8: preserved on reset)
+    mastered: false, // second ending: all stations at level 100
+    legacy: { resets: 0 }, // resets with ×2 production (up to 60, v4.0)
+    // Events (v2.0): active zone boards and last completion timestamp.
+    // Slots (v3.30: two game-wide, in root save), last played per zone, and
+    // play count (see sim/events.js).
     events: { boards: {}, slots: [null, null], last: {}, count: {}, global: true },
-    // Lo que no se pierde al reiniciar (v2.0): Renombre ⭐, medallas y eventos terminados. Es del
-    // jugador, no de la región: lo guarda solo la partida del Eje Cafetero.
+    // Preserved across reset (v2.0): Renown ⭐, medals, finished events. Belongs to
+    // player, not region: stored only in Eje Cafetero save.
     ...(regionId === 'cafetero' && { profile: { renown: 0, renownTotal: 0, medals: {}, history: [] } }),
   };
 }

@@ -4,7 +4,7 @@ import { EVENTS } from '../src/data/events.js';
 import { Game } from '../src/core/Game.js';
 import { createEventState, eventProgress, EVENT_CLOCK_MAX } from '../src/sim/events.js';
 
-// Sin tocar nada, el tablero corre solo hasta `limit` segundos; devuelve en cuánto terminó (o null).
+// Without touching anything, the board runs on its own up to `limit` seconds; returns completion time (or null).
 function idle(def, limit) {
   const board = createEventState(def, 1);
   const game = new Game(board);
@@ -15,21 +15,21 @@ function idle(def, limit) {
   return null;
 }
 
-// Los seis tipos de evento (los del Tolima Grande, uno por zona): sin hacer nada no se llega a la plata (v4.3.2).
+// All six event types (Tolima Grande's, one per zone): idle doesn't reach silver (v4.3.2).
 test('sin hacer nada no se gana la plata en un evento (v4.3.2)', () => {
   for (const def of EVENTS.filter((e) => e.zone && ['achirales', 'cafe_huila', 'betania', 'lechoneria', 'chamba', 'neiva'].includes(e.zone))) {
     assert.equal(idle(def, def.objective.medals[1]), null, `${def.id}: llega a la plata solo`);
   }
 });
 
-// Aunque la vía esté tapada llega un hilito: dejándolo correr se termina, con bronce (v4.3.2).
+// Even when the road is blocked a trickle arrives: letting it run finishes with bronze (v4.3.2).
 test('sin hacer nada el evento de la vía tapada se termina, con bronce (v4.3.2)', () => {
   const def = EVENTS.find((e) => e.id === 'derrumbe_tolima');
   const t = idle(def, EVENT_CLOCK_MAX);
   assert.ok(t !== null && t > def.objective.medals[1], `terminó en ${t}`);
 });
 
-// Los de Cundinamarca (v4.4.8), con los números de los del Tolima Grande: lo mismo.
+// Cundinamarca's (v4.4.8), with Tolima Grande's numbers: same behavior.
 test('Cundinamarca: sin hacer nada no se gana la plata, y el derrumbe se termina con bronce (v4.4.8)', () => {
   for (const def of EVENTS.filter((e) => ['flores', 'fresas', 'truchas', 'salinas', 'cocina', 'zipaquira'].includes(e.zone))) {
     assert.equal(idle(def, def.objective.medals[1]), null, `${def.id}: llega a la plata solo`);
@@ -39,8 +39,8 @@ test('Cundinamarca: sin hacer nada no se gana la plata, y el derrumbe se termina
   assert.ok(t !== null && t > def.objective.medals[1], `terminó en ${t}`);
 });
 
-// Los de Bogotá (v4.5), varios en la misma zona: sin hacer nada no se gana la plata, y en los de la tractomula que no
-// llega (pico y placa, paro) sigue llegando un hilito, así que dejándolos correr se terminan con bronce.
+// Bogotá's (v4.5), several in the same zone: idle doesn't earn silver, and in ones where the tractomula doesn't
+// arrive (pico y placa, strike) a trickle still arrives, so letting them run finishes with bronze.
 test('Bogotá: sin hacer nada no se gana la plata, y los de la tractomula se terminan con bronce (v4.5)', () => {
   for (const def of EVENTS.filter((e) => e.zone === 'bogota')) {
     assert.equal(idle(def, def.objective.medals[1]), null, `${def.id}: llega a la plata solo`);

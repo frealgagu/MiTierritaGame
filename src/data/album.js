@@ -1,12 +1,12 @@
-// Álbum de láminas (v2.2, GDD §10.2): como el de las chocolatinas, pero sin sobres al azar: cada lámina
-// se compra con Renombre ⭐ y se pega la que uno quiera. Una página llena da Renombre de premio.
-// Seis páginas, una por zona, con seis láminas de lo que rodea a cada producto en Colombia.
-// Desde la v3.10 cada región tiene su álbum (`region` de cada página): el de Santander, con su bocadillo,
-// su tabaco, su fique, su hato, sus hormigas y Barichara (y desde la v3.21 el de la Costa). El Renombre
-// con que se pagan es el mismo.
+// Sticker album (v2.2, GDD §10.2): like chocolate-bar albums, without random packs: each sticker
+// is bought with Renown ⭐ and placed wherever chosen. Completing a page awards bonus Renown.
+// Six pages, one per zone, with six stickers depicting culture around each Colombian product.
+// Since v3.10 each region has its own album (`region` per page): Santander with bocadillo,
+// tobacco, fique, hato, ants, and Barichara (and since v3.21 the Coast). Paid with same
+// shared Renown pool.
 import { ICON } from './icons.js';
 
-export const PAGE_BONUS = 3; // ⭐ al llenar una página
+export const PAGE_BONUS = 3; // ⭐ upon completing a page
 
 const CAFETERO = [
   {
@@ -170,7 +170,7 @@ const SANTANDER = [
   },
 ];
 
-// El de la Costa (v3.21): su arroz, su coco, su ciénaga, su queso, su sombrero y Cartagena.
+// Coast (v3.21): rice, coconut, ciénaga, cheese, sombrero, and Cartagena.
 const COSTA = [
   {
     id: 'arroz',
@@ -252,7 +252,7 @@ const COSTA = [
   },
 ];
 
-// El de Boyacá (v3.28): su papa, su cerveza, su barro, sus quesos, su lana y Villa de Leyva.
+// Boyacá (v3.28): potato, beer, pottery, cheeses, wool, and Villa de Leyva.
 const BOYACA = [
   {
     id: 'papa',
@@ -334,7 +334,7 @@ const BOYACA = [
   },
 ];
 
-// Los Llanos (v3.37).
+// Llanos (v3.37).
 const LLANOS = [
   {
     id: 'palma',
@@ -416,7 +416,7 @@ const LLANOS = [
   },
 ];
 
-// La Costa Pacífica (v3.44).
+// Pacific Coast (v3.44).
 const PACIFICO = [
   {
     id: 'selva_pacifico',
@@ -498,7 +498,7 @@ const PACIFICO = [
   },
 ];
 
-// El Amazonas (v3.53).
+// Amazon (v3.53).
 const AMAZONAS = [
   {
     id: 'selva_amazonas',
@@ -581,7 +581,7 @@ const AMAZONAS = [
 ];
 
 
-// El Tolima Grande (v4.0).
+// Tolima Grande (v4.0).
 const TOLIMA = [
   {
     id: 'tierra_tolima',
@@ -746,7 +746,7 @@ const CUNDINAMARCA = [
   },
 ];
 
-// Bogotá (v4.5): La Candelaria, la comida, Monserrate y los cerros, el transporte, la cultura y los barrios.
+// Bogotá (v4.5): La Candelaria, food, Monserrate and hills, transit, culture, and neighborhoods.
 const BOGOTA = [
   {
     id: 'candelaria_bog',
@@ -829,7 +829,7 @@ const BOGOTA = [
 ];
 
 export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' })), ...AMAZONAS.map((pg) => ({ ...pg, region: 'amazonas' })), ...TOLIMA.map((pg) => ({ ...pg, region: 'tolima' })), ...CUNDINAMARCA.map((pg) => ({ ...pg, region: 'cundinamarca' })), ...BOGOTA.map((pg) => ({ ...pg, region: 'bogota' }))];
-// Las páginas del álbum de una región.
+// Album pages belonging to a region.
 export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 
 export const STICKERS_BY_ID = Object.fromEntries(ALBUM.flatMap((page) => page.stickers.map((s) => [s.id, { ...s, page: page.id }])));

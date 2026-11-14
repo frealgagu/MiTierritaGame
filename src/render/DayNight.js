@@ -1,12 +1,12 @@
-// Día y noche (GDD §8): 1 día = 8 minutos de juego. El horario de trabajo está en sim/calendar.js;
-// aquí solo se pinta.
+// Day and night (GDD §8): 1 day = 8 game minutes. Work hours live in sim/calendar.js;
+// this module handles visuals only.
 import { mix } from './iso.js';
 import { hourOf } from '../sim/calendar.js';
 
 export { DAY_LENGTH, hourOf } from '../sim/calendar.js';
 
 const WHITE = 0xffffff;
-// Tinte del mundo a lo largo del día (hora → color que multiplica).
+// World tint across day (hour → multiplicative color).
 const TINT = [
   [0, 0x5560a0],
   [4.5, 0x5560a0],
@@ -20,7 +20,7 @@ const TINT = [
   [20.8, 0x5560a0],
   [24, 0x5560a0],
 ];
-// Intensidad de las luces (ventanas, faroles, luciérnagas).
+// Artificial light intensity (windows, streetlamps, fireflies).
 const LIGHTS = [
   [0, 1],
   [5.2, 1],
@@ -29,7 +29,7 @@ const LIGHTS = [
   [19.6, 1],
   [24, 1],
 ];
-// Cielo (arriba, abajo).
+// Sky (top, bottom).
 const SKY = [
   [0, [0x0e1433, 0x2b2d5b]],
   [4.5, [0x0e1433, 0x2b2d5b]],
@@ -76,7 +76,7 @@ export function clockLabel(h) {
 
 const hex = (c) => `#${c.toString(16).padStart(6, '0')}`;
 
-// Aplica el momento del día a la escena: tinte del mundo y del fondo, luces y cielo CSS.
+// Applies time of day to scene: world and background tint, lights, and CSS sky.
 export class DayNight {
   constructor(scene) {
     this.scene = scene;

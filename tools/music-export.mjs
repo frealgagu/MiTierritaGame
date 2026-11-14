@@ -1,8 +1,8 @@
-// La música del juego para descargar (v3.71): cada pieza de src/audio/songs.js en MP3 (tocada igual que en
-// el juego, con el mismo eco de sala) y en MIDI (las notas de cada instrumento en su pista).
-//   node tools/music-export.mjs [carpeta]   (por defecto web/musica; necesita ffmpeg con libmp3lame)
-// El MP3 repite la pieza hasta unos dos minutos y medio y cierra en el acorde del comienzo, con un fundido.
-// El MIDI es una vuelta de la pieza y el acorde final, con el tempo y el compás de la pieza.
+// Game music for download (v3.71): each track from src/audio/songs.js as MP3 (played just like in
+// the game, with the same room reverb) and as MIDI (each instrument's notes on its own track).
+//   node tools/music-export.mjs [folder]   (default web/musica; requires ffmpeg with libmp3lame)
+// The MP3 repeats the piece to about two and a half minutes and closes on the opening chord, with a fade-out.
+// The MIDI is one loop plus the final chord, with the piece's tempo and time signature.
 import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -15,19 +15,19 @@ import { writeMidi, writeWav } from './midi.mjs';
 
 const OUT = process.argv[2] ?? new URL('../web/musica', import.meta.url).pathname;
 const SR = 44100;
-const REVERB = 0.22; // como en src/audio/Music.js
-const TARGET_S = 140; // cuánto dura el MP3, más o menos
-const TAIL_S = 3.5; // lo que suena después del último golpe
+const REVERB = 0.22; // same as in src/audio/Music.js
+const TARGET_S = 140; // rough target duration of the MP3
+const TAIL_S = 3.5; // trailing sound after the last beat
 const ARTIST = 'Encantos de Mi Tierrita';
 
-// El orden de las regiones en el juego y el nombre de cada archivo.
+// Region order in the game and each file name.
 export const ORDER = ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima', 'cundinamarca', 'bogota'];
-// Lo que va en la página de descargas: sin las regiones que todavía están ocultas en el juego (v4.4.10: Bogotá).
+// Included on the downloads page: excludes regions still hidden in the game (v4.4.10: Bogotá).
 export const PUBLIC = ORDER.filter((region) => !REGIONS_BY_ID[region].hidden);
 const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export const fileOf = (region) => `${ORDER.indexOf(region) + 1}-${slug(SONGS[region].name)}`;
 
-// Cada voz de compose.js: nombre de la pista, programa General MIDI y, si es percusión, la nota del canal 10.
+// Each voice in compose.js: track name, General MIDI program, and if percussion, the channel 10 note.
 const MELODY = { bambuco: ['Bandola', 25], cumbia: ['Gaita', 73], torbellino: ['Requinto', 25], joropo: ['Arpa llanera', 46], chirimia: ['Clarinete', 71], amazonica: ['Guitarra eléctrica', 27], sanjuanero: ['Bandola', 25], pasillo: ['Bandola', 25], danza: ['Bandola', 25] };
 function voiceOf(style, voice, ev) {
   switch (voice) {
@@ -54,8 +54,8 @@ function voiceOf(style, voice, ev) {
   }
 }
 
-// La pieza repetida `loops` veces y, al final, un compás del acorde del comienzo (sin melodía), con espacio
-// para que suene lo último sin volver al principio.
+// The piece repeated `loops` times and, at the end, one bar of the opening chord (no melody), with room
+// for the tail to ring out without looping back to the start.
 function extended(song, loops) {
   const chords = [...Array(loops)].flatMap(() => song.chords).concat(song.chords[0]);
   const melody = [...Array(loops)].flatMap(() => song.chords.map((_, i) => song.melody[i] ?? [])).concat([[]]);
@@ -70,8 +70,8 @@ function render(song, events) {
   return buf;
 }
 
-// El eco de sala de Music.js: ruido que se apaga en segundo y medio, con la normalización de un ConvolverNode
-// de Web Audio (para que suene igual de fuerte que en el juego).
+// Music.js room reverb: noise decaying over 1.5 s, with ConvolverNode normalization
+// from Web Audio (so it sounds just as loud as in the game).
 function impulse() {
   const rng = createRng(2024);
   const len = Math.round(SR * 1.5);
@@ -106,7 +106,7 @@ function mp3(region, dir) {
   execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', wav, '-i', ir, '-filter_complex',
     `[0:a]asplit[d][x];[x][1:a]afir=gtype=none:dry=1:wet=1[w];[d][w]amix=inputs=2:weights='1 ${REVERB}':normalize=0,afade=t=out:st=${lastBar.toFixed(3)}:d=${fadeLen.toFixed(3)}`,
     '-c:a', 'pcm_f32le', mixed]);
-  // El pico a −1 dB.
+  // Peak at −1 dB.
   const info = spawnSync('ffmpeg', ['-v', 'info', '-i', mixed, '-af', 'volumedetect', '-f', 'null', '-'], { encoding: 'utf8' }).stderr;
   return { mixed, loops, seconds: buf.length / SR, info };
 }
@@ -120,8 +120,8 @@ function encode(region, mixed, peakDb, out) {
     out]);
 }
 
-// El MIDI: una vuelta y el acorde final. Las notas van a la rejilla de 1/24 de tiempo (quita el «swing»
-// pequeñito con que el juego las toca) y las cuerdas repetidas de un mismo golpe quedan una sola vez.
+// The MIDI: one loop plus final chord. Notes quantize to a 1/24-beat grid (removes the slight «swing»
+// used in game playback) and repeated strings on the same beat are deduplicated.
 function midiFile(region) {
   const song = SONGS[region];
   const style = song.style ?? 'bambuco';

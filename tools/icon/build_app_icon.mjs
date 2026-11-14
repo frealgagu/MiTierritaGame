@@ -1,10 +1,10 @@
-// Genera el ícono de Encantos de Mi Tierrita en todos sus tamaños (v3.62), a partir de tools/icon/app_icon.mjs:
+// Generates the Encantos de Mi Tierrita icon in all sizes (v3.62), from tools/icon/app_icon.mjs:
 //   assets/icon-only.png, icon-foreground.png, icon-background.png, splash.png, splash-dark.png
-//     (de ahí salen los de Android con: npx @capacitor/assets generate --android)
-//   public/icons/icon-192.png, icon-512.png, icon-maskable-512.png, apple-touch-icon.png   (la web)
-//   store/icon-512.png, store/feature-graphic.png, feature-graphic-en/pt/fr.png   (la ficha de Google Play)
-// Uso: node tools/icon/build_app_icon.mjs   (necesita Playwright con Chromium)
-//      node tools/icon/build_app_icon.mjs --features   (solo las imágenes destacadas de la ficha)
+//     (Android assets are generated from there with: npx @capacitor/assets generate --android)
+//   public/icons/icon-192.png, icon-512.png, icon-maskable-512.png, apple-touch-icon.png   (web)
+//   store/icon-512.png, store/feature-graphic.png, feature-graphic-en/pt/fr.png   (Google Play listing)
+// Usage: node tools/icon/build_app_icon.mjs   (requires Playwright with Chromium)
+//      node tools/icon/build_app_icon.mjs --features   (listing feature graphics only)
 import { createRequire } from 'node:module';
 import { appIconSvg, backgroundSvg } from './app_icon.mjs';
 
@@ -12,7 +12,7 @@ const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 const ROOT = new URL('../../', import.meta.url).pathname;
 const sized = (svg, w, h = w) => svg.replace('width="512" height="512"', `width="${w}" height="${h}"`);
-const BG = '#e7eee6'; // el color del splash, entre el cielo y el crema del ícono
+const BG = '#e7eee6'; // splash background color, between the sky and cream of the icon
 
 const browser = await chromium.launch();
 async function shot(html, w, h, path, transparent = false) {
@@ -28,23 +28,23 @@ async function shot(html, w, h, path, transparent = false) {
 const full = appIconSvg();
 const onlyFeatures = process.argv.includes('--features');
 if (!onlyFeatures) {
-// Android: la figura más pequeña sobre el fondo aparte (el sistema recorta el ícono adaptable).
+// Android: smaller figure over the separate background (the OS crops the adaptive icon).
 await shot(sized(full, 1024), 1024, 1024, 'assets/icon-only.png');
 await shot(sized(appIconSvg({ withBackground: false, scale: 0.62 }), 1024), 1024, 1024, 'assets/icon-foreground.png', true);
 await shot(sized(backgroundSvg(), 1024), 1024, 1024, 'assets/icon-background.png');
-// Splash: el ícono redondeado en el centro.
+// Splash: rounded icon centered.
 const splash = (bg) => `<div style="width:2732px;height:2732px;background:${bg};display:flex;align-items:center;justify-content:center"><div style="width:720px;height:720px;border-radius:160px;overflow:hidden;box-shadow:0 20px 60px rgba(58,36,24,.25)">${sized(full, 720)}</div></div>`;
 await shot(splash(BG), 2732, 2732, 'assets/splash.png');
 await shot(splash('#22313a'), 2732, 2732, 'assets/splash-dark.png');
-// La web.
+// Web.
 await shot(sized(full, 192), 192, 192, 'public/icons/icon-192.png');
 await shot(sized(full, 512), 512, 512, 'public/icons/icon-512.png');
 await shot(sized(appIconSvg({ scale: 0.8 }), 512), 512, 512, 'public/icons/icon-maskable-512.png');
 await shot(sized(full, 180), 180, 180, 'public/icons/apple-touch-icon.png');
-// Google Play: el ícono (512 × 512) y la imagen destacada (1024 × 500).
+// Google Play: icon (512 × 512) and feature graphic (1024 × 500).
 await shot(sized(full, 512), 512, 512, 'store/icon-512.png');
 }
-// La imagen destacada en cada idioma de la ficha (v3.68: también en inglés; v3.70: portugués y francés).
+// Feature graphic in each listing language (v3.68: also English; v3.70: Portuguese and French).
 const feature = (subtitle, path) =>
   shot(
     `<div style="width:1024px;height:500px;background:linear-gradient(180deg,#bfe6f2,#fdf3dc);display:flex;align-items:center;gap:36px;padding:0 56px;box-sizing:border-box;font-family:Fredoka,sans-serif;color:#3a2418">

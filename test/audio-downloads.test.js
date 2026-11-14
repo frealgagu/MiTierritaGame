@@ -7,14 +7,14 @@ import { EFFECTS } from '../tools/audio-list.mjs';
 import { ORDER, PUBLIC, fileOf } from '../tools/music-export.mjs';
 import { writeMidi } from '../tools/midi.mjs';
 
-// La música y los sonidos para descargar (v3.71, web/musica). Si cambia una pieza o un efecto, hay que
+// Downloadable music and sounds (v3.71, web/musica). If a track or sound effect changes,
 // volver a exportarlos: node tools/music-export.mjs && node tools/sfx-export.mjs && node tools/music-page.mjs
 const DIR = new URL('../web/musica/', import.meta.url).pathname;
 
 test('cada pieza tiene su MP3 y su MIDI, y la página la lista (las de regiones ocultas, todavía no)', () => {
   assert.deepEqual([...ORDER].sort(), Object.keys(SONGS).sort());
   const page = readFileSync(`${DIR}index.html`, 'utf8');
-  // Las de las regiones ocultas (Bogotá, mientras se construye) no se publican todavía.
+  // Regions still hidden (Bogotá, while under construction) are not published yet.
   for (const region of PUBLIC) {
     for (const ext of ['mp3', 'mid']) assert.ok(existsSync(`${DIR}${fileOf(region)}.${ext}`), `${fileOf(region)}.${ext}`);
     assert.ok(page.includes(`"file":"${fileOf(region)}"`), fileOf(region));
@@ -47,7 +47,7 @@ test('anotar las notas para el MIDI no cambia lo que suena', () => {
 test('el MIDI: cabecera, pistas y notas que se apagan', () => {
   const mid = writeMidi({ ppq: 480, tempo: 100, timeSig: [3, 4], tracks: [{ name: 'Bandola', channel: 0, program: 25, notes: [{ tick: 0, dur: 960, note: 64, vel: 100 }, { tick: 480, dur: 480, note: 64, vel: 90 }] }] });
   assert.equal(mid.subarray(0, 4).toString(), 'MThd');
-  assert.equal(mid.readUInt16BE(10), 2); // la pista del tempo y la de la bandola
+  assert.equal(mid.readUInt16BE(10), 2); // the tempo track and the bandola track
   const ons = [...mid].filter((b, i) => b === 0x90 && mid[i + 1] === 64).length;
   const offs = [...mid].filter((b, i) => b === 0x80 && mid[i + 1] === 64).length;
   assert.equal(ons, 2);

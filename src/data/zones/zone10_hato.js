@@ -1,6 +1,6 @@
-// Mapa de Santander · Zona 4: El Hato (v3.3). Mismo trazado que el Cacaotal (zone4_cacaotal.js): la
-// carne asada se reparte entre la Mesa del almuerzo y la Fiambrería, que esperan junto a las dos
-// carreteras por las que llegan el bocadillo de la Guayabera y la cabuya de la Fiquera.
+// Santander Map · Zone 4: El Hato (v3.3). Same layout as El Cacaotal (zone4_cacaotal.js): the
+// roasted meat is split between the Lunch Table and the Cold Cuts Shop, which wait next to the two
+// roads bringing bocadillo from La Guayabera and sisal rope from La Fiquera.
 export const ZONE10 = {
   id: 'hato',
   region: 'santander',
@@ -23,7 +23,7 @@ export const ZONE10 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys (v3.9), inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Los Santos ➜',
   muleSpeed: 4,
@@ -31,7 +31,7 @@ export const ZONE10 = {
   routes: {
     bocadillo: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Bocadillo de la Guayabera' },
     cabuya: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Cabuya de la Fiquera' },
-    // Los fiambres y los almuerzos salen hacia Barichara (v3.5).
+    // The cold cuts and lunches leave toward Barichara (v3.5).
     fiambres: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Fiambres a Barichara ➜' },
     almuerzos: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [23.7, 23.6], text: 'Almuerzos ⬇' },
   },

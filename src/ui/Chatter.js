@@ -13,18 +13,18 @@ import { clockOf, hourLabel, isLunch, isWorkTime, nextWorkHour, seasonOf, workOf
 import { EVENTS, eventKey } from '../data/events.js';
 import { eventDef, eventHandicaps, eventStatus, handicapText } from '../sim/events.js';
 
-// La persona de cada zona avisa lo importante (v1.8): la bienvenida la primera vez que se ve su zona
-// y los problemas que duran (los mismos de los íconos del mapa) en cuanto aparecen. Sin cansar: cada
-// estación avisa como mucho una vez cada 5 minutos, y entre un aviso y otro pasan al menos 45 s.
-// También anuncia cada temporada nueva y, la primera vez, que de noche no se trabaja (v1.9).
+// Zone character announces key moments (v1.8): a welcome the first time the zone is viewed
+// and persistent bottlenecks (same as map warning icons) as soon as they appear. Not spammy: each
+// station speaks at most once every 5 minutes, and notices wait at least 45 s between messages.
+// Also announces each new season and, the first time, that work pauses at night (v1.9).
 const PER_STATION_MS = 5 * 60 * 1000;
 const BETWEEN_MS = 45 * 1000;
 
 const capital = (s) => s[0].toUpperCase() + s.slice(1);
 
-// Lo último que dijo cada persona (v3.12: al tocarla en el mapa lo repite, si aún aplica).
+// Last remark per character (v3.12: tapping them on the map repeats it if still relevant).
 const lastLine = new Map();
-let cursor = null; // { zone, i }: por dónde va al tocarla varias veces seguidas
+let cursor = null; // { zone, i }: index tracked when tapping them repeatedly
 
 export const say = (zone, text, ms = 6000) => {
   const p = PEOPLE[zone];
@@ -33,8 +33,8 @@ export const say = (zone, text, ms = 6000) => {
   toast(`${p.icon} ${p.name}: ${text}`, ms, { speech: true });
 };
 
-// Hablar al tocar a la persona de la zona (v3.12): la primera vez repite lo último que dijo, si todavía
-// aplica; cada toque siguiente pasa al siguiente aviso que aplique (y vuelve a empezar).
+// Speak when tapping the zone character on the map (v3.12): first tap repeats last remark if still
+// relevant; each subsequent tap cycles to the next applicable notice (wrapping around).
 export function talk(zone, lines) {
   const p = PEOPLE[zone];
   if (!lines.length) return;
@@ -50,23 +50,23 @@ export function talk(zone, lines) {
 }
 
 export class Chatter {
-  // root: la partida principal, con los cupos de los eventos (v3.30).
+  // root: main save, with event slots (v3.30).
   constructor(game, getZone, root = () => game.state) {
     this.game = game;
     this.getZone = getZone;
     this.root = root;
-    this.seen = new Map(); // estación → avisos que ya estaban puestos
-    this.lastSaid = new Map(); // estación → cuándo avisó
+    this.seen = new Map(); // station → notices already shown
+    this.lastSaid = new Map(); // station → last notice timestamp
     this.lastAny = -Infinity;
     this.season = seasonOf(clockOf(game.state));
   }
 
   update() {
-    // Con una ventana abierta (la de inicio, objetivos…) espera: el aviso se perdería detrás.
+    // With a modal open (intro, goals…) wait: notice would be lost behind it.
     if (document.querySelector('.modal:not([hidden])')) return;
     const state = this.game.state;
     const zone = this.getZone();
-    // Bienvenida, una vez por zona.
+    // Welcome line, once per zone.
     const key = `welcome:${zone}`;
     if (!state.hints.includes(key)) {
       state.hints.push(key);
@@ -80,7 +80,7 @@ export class Chatter {
       this.season = season;
       this.lastAny = now;
       const mult = season.mult === 1 ? '' : ` (×${decimal(season.mult)})`;
-      // Con las Hormigas abiertas, la entrada de aguas la anuncia Doña Gloria (v3.4).
+      // With Hormigas open, rainy onset is announced by Doña Gloria (v3.4).
       if (season.id === 'entrada' && state.zones.hormigas?.unlocked) {
         say('hormigas', t('🌦️ ¡Llegó la entrada de aguas y salieron las hormigas culonas! Es la cosecha de todo el año: suba el Hormiguero y sus arrieros.'), 7000);
         return;
@@ -88,19 +88,19 @@ export class Chatter {
       say(zone, `${season.icon} ${t('¡Llegó {season}! {text}.', { season: withArticle(season.name.toLowerCase()), text: capital(season.text) + mult })}`, 7000);
       return;
     }
-    // Un evento que se abre (una vez al año), dicho por la persona de su zona.
+    // An event opening (once a year), spoken by its zone character.
     for (const def of EVENTS) {
-      if (!(def.zone in state.zones)) continue; // (los de las otras regiones los dice su gente)
+      if (!(def.zone in state.zones)) continue; // (other regions' lines are spoken by their own people)
       const st = eventStatus(this.root(), eventKey(def));
-      const hint = `evento:${def.id}:${st?.round}`; // (v3.7: por reto; antes, `event:` por año)
+      const hint = `evento:${def.id}:${st?.round}`; // (v3.7: per challenge; previously `event:` per year)
       if (st?.kind !== 'available' || state.hints.includes(hint)) continue;
       state.hints.push(hint);
       this.lastAny = now;
       say(def.zone, `${def.icon} ${def.announce}`, 7000);
       return;
     }
-    // De noche no hay problemas que avisar: todo descansa.
-    // (v3.8: también a la hora del almuerzo, de 12 a 14, mientras no se compre ese bloque).
+    // No bottleneck chatter at night: everything rests.
+    // (v3.8: also at lunch, 12 to 14, until that shift block is bought).
     const clock = clockOf(state);
     const extra = workOf(state);
     if (!isWorkTime(clock, extra)) {
@@ -129,7 +129,7 @@ export class Chatter {
         this.seen.set(id, on);
         continue;
       }
-      // Si hay que esperar, queda pendiente (sin marcarlo como visto) y avisa cuando se pueda.
+      // If deferred, keep pending (don't mark seen) and announce when clear.
       if (now - this.lastAny < BETWEEN_MS) continue;
       this.seen.set(id, on);
       if (now - (this.lastSaid.get(id) ?? -Infinity) < PER_STATION_MS) continue;
@@ -139,9 +139,9 @@ export class Chatter {
     }
   }
 
-  // Lo que la persona de la zona tiene para decir ahora (v3.12), lo más urgente primero: en un evento,
-  // lo que lo frena y qué comprar; en la partida, el evento que se puede jugar, la noche o el almuerzo, los
-  // problemas de sus estaciones, la temporada y, para que nunca se quede callada, un dato de su zona.
+  // What the zone character has to say right now (v3.12), most urgent first: in an event,
+  // what blocks it and what to buy; in main save, playable event, night or lunch break,
+  // station issues, season, and a zone factoid so they are never speechless.
   lines(zone) {
     const state = this.game.state;
     const out = [];
@@ -158,7 +158,7 @@ export class Chatter {
     for (const def of EVENTS) {
       if (def.zone === zone && eventStatus(this.root(), eventKey(def))?.kind === 'available') out.push(`${def.icon} ${def.announce}`);
     }
-    // Lo que ya se puede construir.
+    // What can already be built.
     const build = nextToUnlock(state, zone);
     if (build && quoteUnlock(state, build).ok) out.push(t('¡Ya alcanza para construir {station}! Toque su parcela en el mapa.', { station: withArticle(STATIONS_BY_ID[build].name) }));
     const clock = clockOf(state);
@@ -185,7 +185,7 @@ export class Chatter {
     return out;
   }
 
-  // Tocaron a la persona de la zona en el mapa.
+  // Zone character was tapped on the map.
   talk(zone) {
     talk(zone, this.lines(zone));
   }

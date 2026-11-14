@@ -1,5 +1,5 @@
-// Barra del tablero de un evento (v2.0): el objetivo, el reloj del evento, las medallas y las compras
-// del evento (cada una pide la anterior).
+// Event board HUD bar (v2.0): goal, event clock, medals, and event upgrades
+// (each requires the previous).
 import { formatNumber } from '../core/format.js';
 import { allActionsBought, buyAction, boardObjective, EVENT_CLOCK_MAX, eventClock, eventDef, eventHandicaps, eventItems, eventProgress, handicapText, medalFor, quoteAction } from '../sim/events.js';
 import { EVENT_ACTIONS_BY_ID, MEDALS } from '../data/events.js';
@@ -8,7 +8,7 @@ import { setFitted } from './fit.js';
 import { toast } from './toast.js';
 import { listJoin, t } from '../i18n/index.js';
 
-// Pasado 999:59, el reloj del evento dice ∞ (v4.1; antes el de arriba seguía a 1000:00).
+// Past 999:59, the event clock displays ∞ (v4.1; previously header kept counting at 1000:00).
 export const formatClock = (s) => (s >= EVENT_CLOCK_MAX ? '∞' : `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`);
 
 // «Vende 120 🧀 queso, 60 🧈 mantequilla y 40 🍮 arequipe».
@@ -20,7 +20,7 @@ export function objectiveText(obj) {
 const FOLD_KEY = 'mitierrita-eventbar-folded';
 
 export class EventBar {
-  // onPause: volver al mapa, con el evento en pausa o corriendo por detrás según el menú (v3.67.4).
+  // onPause: return to map, leaving event paused or running in background per menu setting (v3.67.4).
   // onRestart / onEnd: reiniciarlo o terminarlo (v3.30).   exitMode(): 'pause' o 'leave'
   constructor(onPause, onRestart, onEnd, exitMode = () => 'pause') {
     this.exitMode = exitMode;
@@ -33,20 +33,20 @@ export class EventBar {
     this.pauseBtn.addEventListener('click', () => onPause());
     this.restartBtn.addEventListener('click', () => onRestart());
     this.endBtn.addEventListener('click', () => onEnd());
-    // Recoger y abrir el tablero (v4.4.7): en teléfonos pequeños tapaba las estaciones. Se recuerda en el teléfono.
+    // Collapse and expand the bar (v4.4.7): on small phones it covered stations. Persisted locally.
     this.foldBtn = document.getElementById('event-fold');
     let folded = false;
     try {
       folded = localStorage.getItem(FOLD_KEY) === '1';
     } catch {
-      /* sin almacenamiento: abierto */
+      /* storage unavailable: expanded */
     }
     this.setFolded(folded);
     this.foldBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       this.setFolded(!this.folded);
     });
-    // Recogido, toda la fila del título lo abre (un blanco más grande que el botón).
+    // When collapsed, the whole title row toggles it open (larger tap target than the button).
     this.el.querySelector('.event-top').addEventListener('click', () => {
       if (this.folded) this.setFolded(false);
     });
@@ -75,23 +75,23 @@ export class EventBar {
     try {
       localStorage.setItem(FOLD_KEY, folded ? '1' : '0');
     } catch {
-      /* sin almacenamiento */
+      /* storage unavailable */
     }
   }
 
-  // Señala una compra (la mejora recomendada del tablero) y dice qué hace.
+  // Highlights an upgrade (recommended board upgrade) and explains its effect.
   highlight(id) {
     const a = EVENT_ACTIONS_BY_ID[id];
     const btn = this.actions.querySelector(`[data-action="${id}"]`);
     if (!a || !btn) return;
-    if (this.folded) this.setFolded(false); // recogido, la compra señalada no se vería
+    if (this.folded) this.setFolded(false); // collapsed, highlighted purchase wouldn't be visible
     btn.classList.remove('flash');
-    void btn.offsetWidth; // para que la animación vuelva a empezar
+    void btn.offsetWidth; // so the animation restarts cleanly
     btn.classList.add('flash');
     toast(`${a.icon} ${a.name} (💰 ${formatNumber(a.cost)}): ${a.desc}`, 4500);
   }
 
-  // game: el Game del tablero, o null para esconder la barra.
+  // game: board Game instance, or null to hide the bar.
   show(game) {
     this.game = game;
     this.el.hidden = !game;
@@ -101,7 +101,7 @@ export class EventBar {
     if (game) this.paint();
   }
 
-  // ⏸️ Pausar o 🚪 Salir, según la opción del menú.
+  // ⏸️ Pause or 🚪 Exit, depending on the menu toggle.
   paintExit() {
     this.pauseBtn.textContent = this.exitMode() === 'leave' ? t('🚪 Salir') : t('⏸️ Pausar');
   }
@@ -112,12 +112,12 @@ export class EventBar {
     const obj = boardObjective(board);
     const items = eventItems(board);
     setFitted(document.getElementById('event-title'), `${def.icon} ${def.name}`);
-    // Con el objetivo cumplido, la medalla queda fija con su tiempo (v3.7): falta comprar las mejoras.
+    // Once goal is met, medal locks in at its timestamp (v3.7): remaining upgrades still needed.
     const secured = board.event.medal;
-    // El reloj llega hasta 999:59 y ahí se queda (v3.67.4); desde ahí dice ∞ (v4.1).
+    // Clock caps at 999:59 and stops there (v3.67.4); beyond that shows ∞ (v4.1).
     const medal = MEDALS[secured ?? medalFor(obj, eventClock(board))];
     document.getElementById('event-clock').textContent = `${medal.icon} ⏱ ${formatClock(secured ? board.event.time : eventClock(board))}`;
-    // Ganado (v3.30): se sigue mirando (y se puede pausar); ya no se reinicia. Se cierra con «Terminar».
+    // Won (v3.30): stays inspectable (and can be paused); no longer auto-resets. Closed with «Finish».
     const done = Boolean(board.event.done);
     this.restartBtn.disabled = done;
     this.endBtn.textContent = done ? t('🏁 Terminar evento') : t('🏁 Terminar');
@@ -126,8 +126,8 @@ export class EventBar {
       ? t('🏁 ¡Ganado con {medal}!', { medal: `${medal.icon} ${medal.name}` })
       : secured && !allActionsBought(board) ? t('✅ {icon} asegurada. Para terminar, compra: {list}', { icon: medal.icon, list: missing.join(', ') }) : obj.kind === 'sold' ? t('Vende:') : t('Produce:');
     setFitted(document.getElementById('event-goal'), goal, 0.6);
-    // Un producto por renglón, con cuánto lleva (v3.67: antes en una sola línea y el tercero no se veía).
-    // Siempre tres renglones, para que la barra no cambie de alto.
+    // One product per line, with progress (v3.67: previously single-line clipping the third item).
+    // Always three lines, so bar height stays fixed.
     const rows = items.map((i) => {
       const p = PRODUCTS[i.product];
       const ok = i.have >= i.need;
@@ -137,13 +137,13 @@ export class EventBar {
     const list = rows.join('');
     if (list !== this.itemsHtml) document.getElementById('event-items').innerHTML = this.itemsHtml = list;
     document.getElementById('event-fill').style.width = `${100 * eventProgress(board)}%`;
-    // Lo que frena el evento (v3.12): «🪲 Cafetal al 40 % por la broca».
+    // What slows the event (v3.12): «🪲 Cafetal at 40 % due to borer».
     const hs = eventHandicaps(board).filter((h) => h.pct < 1);
     const hEl = document.getElementById('event-handicap');
     hEl.hidden = !hs.length;
     if (hs.length) setFitted(hEl, `${def.icon} ${[...new Set(hs.map((h) => handicapText(board, h, true)))].join(' · ')}${def.blame ? ` ${t('por {what}', { what: def.blame })}` : ''}`);
     setFitted(document.getElementById('event-medals'), t('🥇 hasta {gold} · 🥈 hasta {silver} · 🥉 después', { gold: formatClock(obj.medals[0]), silver: formatClock(obj.medals[1]) }));
-    // Las compras: se redibujan solo si cambió algo (para no perder el toque a mitad de un clic).
+    // Upgrades: only re-rendered if changed (avoid losing taps mid-click).
     const states = def.actions.map((a) => {
       const q = quoteAction(board, a.id);
       return q.ok ? 'ready' : q.reason === 'owned' ? 'owned' : q.reason === 'locked' ? 'locked' : 'wait';

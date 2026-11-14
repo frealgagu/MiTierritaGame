@@ -1,14 +1,14 @@
 import { Graphics } from 'pixi.js';
 import { seasonOf } from '../sim/calendar.js';
 
-// Lluvia (v1.9): en la entrada de aguas caen aguaceros de vez en cuando y en invierno llueve casi todo
-// el tiempo; en verano y veranillo no. Es solo de ver: la temporada ya cambia la producción por su
-// cuenta. Va encima del mapa, en coordenadas de pantalla.
+// Rain (v1.9): intermittent downpours in rainy onset and steady rain in wet season;
+// clear in dry seasons. Visual only: season already adjusts output independently.
+// Drawn above map in screen coordinates.
 const RAIN = { entrada: { base: 0.6, from: 0.35 }, invierno: { base: 1, from: -0.35 } };
 const MAX_DROPS = 160;
 
-// Qué tanto llueve ahora (0..1): aguaceros que van y vienen con el tiempo de juego.
-// playTime null: sin lluvia (el tablero de un evento).
+// Current rain intensity (0..1): showers wax and wane with game time.
+// playTime null: no rain (event boards).
 export function rainAt(playTime) {
   if (playTime === null) return 0;
   const r = RAIN[seasonOf(playTime).id];
@@ -26,7 +26,7 @@ export class Weather {
   }
 
   update(dt, playTime, w, h) {
-    // Sube y baja poco a poco, aunque el tiempo vaya acelerado.
+    // Transitions smoothly even when time is fast-forwarded.
     const target = rainAt(playTime);
     this.amount += (target - this.amount) * Math.min(1, dt * 0.8);
     const g = this.view.clear();

@@ -1,8 +1,8 @@
-// La persona de cada zona en el mapa (v3.12): Don Jairo, Doña Inés… paran junto al letrero de la zona.
-// Tocarla la hace hablar (ver ui/Chatter.js: talk). Encima lleva su nombre, y se mece un poco para que se
-// note que se puede tocar. La cabeza se dibuja (v3.65.1) a partir de su emoji de PEOPLE (piel, pelo, barba,
-// sombrero): antes era el emoji mismo, y en muchos Android (los Samsung, por ejemplo) el emoji trae cuello y
-// hombros y quedaba corrido sobre el cuerpo.
+// Zone keeper standing on map (v3.12): Don Jairo, Doña Inés… stand beside the zone sign.
+// Tapping makes them speak (see ui/Chatter.js: talk). Name label floats above; gentle bob
+// hints interactivity. Head drawn procedurally (v3.65.1) from PEOPLE emoji (skin, hair,
+// beard, hat): raw emoji had necks/shoulders on Samsung/Android, misaligning with torso.
+// torso.
 import { moverDepth } from './occlusion.js';
 import { Container, Graphics, Text } from 'pixi.js';
 import { iso } from './iso.js';
@@ -11,9 +11,9 @@ import { shadow } from './procedural/shapes.js';
 import { PEOPLE } from '../data/lore.js';
 
 const THIN = { width: 1, color: 0x3a2418, alpha: 0.7 };
-// Camisa de cada uno (por zona), para que no se vean todos iguales.
+// Distinct shirt color per zone so everyone doesn't look alike.
 const SHIRTS = [0xd7263d, 0x2e6fd1, 0x2fa36b, 0xf2b705, 0x8e44ad, 0xf07f1d];
-// Dónde se para: al lado izquierdo del letrero de la zona (ver Terrain: ZONE_SIGN).
+// Standing spot: left of zone sign (see Terrain: ZONE_SIGN).
 export const KEEPER_SPOT = [16.5, 22.8];
 
 export class KeeperView extends Container {
@@ -31,14 +31,14 @@ export class KeeperView extends Container {
     this.face = new Graphics();
     drawHead(this.face, headOf(p.icon));
     this.face.position.set(0, -36);
-    // El nombre, en una etiqueta.
+    // Name tag badge.
     const name = new Text({ text: p.name, style: { fontFamily: FONT, fontSize: 9, fontWeight: '700', fill: 0xfff3d6 }, resolution: 3 });
     name.anchor.set(0.5);
     const tag = new Graphics();
     const w = name.width + 10;
     tag.roundRect(-w / 2, -60, w, 13, 6).fill({ color: 0x3a2418, alpha: 0.85 });
     name.position.set(0, -53.5);
-    // Burbuja de «tengo algo que decir».
+    // «Something to say» speech bubble.
     this.bubble = new Text({ text: '💬', style: { fontSize: 14 }, resolution: 3 });
     this.bubble.anchor.set(0.5);
     this.bubble.position.set(13, -46);
@@ -54,7 +54,7 @@ export class KeeperView extends Container {
     this.zIndex = moverDepth(gx, gy, 0.3);
   }
 
-  // talk: si tiene algo que decir (se mece la burbuja).
+  // talk: whether they have something to say (bobs bubble).
   update(t, talk = true) {
     this.bubble.visible = talk;
     this.bubble.y = -46 - Math.abs(Math.sin(t * 3)) * 3;
@@ -62,8 +62,8 @@ export class KeeperView extends Container {
   }
 }
 
-// Cómo es la cabeza según el emoji: piel (el modificador de tono), quién es (mujer, hombre, con barba,
-// abuela, abuelo, vaquero) y el oficio o el pelo que lleva unido (🌾 campesino, 🍳 cocinera, 🦱 rizado, 🦳 canoso).
+// Head traits parsed from emoji: skin tone modifier, base (woman, man, bearded,
+// grandma, grandpa, cowboy) and profession/hair suffix (🌾 farmer, 🍳 cook, 🦱 curly, 🦳 gray).
 const SKINS = { '🏻': 0xf3d0b0, '🏼': 0xe2b48a, '🏽': 0xc68642, '🏾': 0x8d5524, '🏿': 0x5c3a21 };
 export function headOf(icon) {
   const parts = [...icon];
@@ -84,16 +84,16 @@ export function headOf(icon) {
   };
 }
 
-// La cabeza, centrada en (0, 0): unos 15 px de alto, como la del emoji que reemplaza.
+// Head centered at (0, 0): ~15 px tall, matching the emoji it replaces.
 function drawHead(g, h) {
   const LINE = { width: 1, color: 0x3a2418, alpha: 0.7 };
-  // Pelo largo (detrás de la cabeza) o rizado.
+  // Long hair (behind head) or curly.
   if (h.woman && !h.old) g.roundRect(-8, -6, 16, 13, 5).fill(h.hair).stroke(LINE);
   if (h.curly) for (const [x, y] of [[-6.5, -4], [6.5, -4], [-7, 1], [7, 1], [-4, -7.5], [0, -8.5], [4, -7.5]]) g.circle(x, y, 3.2).fill(h.hair);
   // Cuello y cara.
   g.rect(-2, 5, 4, 3).fill(h.skin);
   g.circle(0, 0, 7).fill(h.skin).stroke(LINE);
-  // Pelo de arriba: el abuelo, solo a los lados (calvo arriba); los demás, un casquete.
+  // Top hair: grandpa gets sides only (bald crown); others get full cap.
   if (h.old && !h.woman) {
     g.ellipse(-6.2, -1, 2.2, 3.4).fill(h.hair);
     g.ellipse(6.2, -1, 2.2, 3.4).fill(h.hair);

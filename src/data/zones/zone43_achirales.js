@@ -1,5 +1,5 @@
-// Mapa del Tolima Grande · Zona 1: Los Achirales (v4.0), en el sur del Tolima (Natagaima y Coyaima). Mismo trazado
-// que la primera zona de cada región: el Tolima empieza de cero.
+// Tolima Grande Map · Zone 1: Los Achirales (v4.0), in southern Tolima (Natagaima and Coyaima). Same layout
+// as the first zone of each region: Tolima starts from scratch.
 import { ICON } from '../icons.js';
 
 export const ZONE43 = {
@@ -24,16 +24,16 @@ export const ZONE43 = {
   muleRoad: [[8.5, 4.5], [8.5, 10.5], [14.5, 10.5], [14.5, 16.5], [20.5, 16.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Natagaima ➜',
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
-  // Los bizcochos salen hacia la Lechonería y las cajas hacia Neiva.
+  // Biscuits leave toward La Lechonería and crates toward Neiva.
   routes: {
     bizcochos: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Bizcochos a la Lechonería ➜' },
     cajas_bizcochos: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'A Neiva ➜' },
   },
-  unlockedBy: null, // la primera del Tolima Grande: se abre con la región
+  unlockedBy: null, // the first zone of Tolima Grande: opens with the region
   next: 'cafe_huila',
 };

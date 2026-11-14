@@ -1,13 +1,13 @@
-// Calendario del juego (v1.9): un día son 8 minutos; fuera de la jornada las estaciones paran del todo
-// (los arrieros terminan su viaje; el Willys y las chivas siguen). El año
-// tiene 16 días en 4 temporadas de 4 días, las del país (secas y de lluvias), que suben o bajan la
-// producción de todas las estaciones a la vez.
-export const DAY_LENGTH = 480; // s de juego
-export const START_HOUR = 8; // una partida nueva empieza por la mañana
-// La jornada (v3.8): de 6 a 12 y de 14 a 20, con el almuerzo en medio. Con Renombre ⭐ se le suman
-// bloques de 2 horas, en este orden (cada uno cuesta el doble del anterior; ver sim/renown.js), hasta
-// trabajar las 24 horas. Desde la v3.10 es de cada región (`workLevel` en su partida): las funciones de
-// abajo reciben cuántos bloques hay (`extra`); con la partida, `workOf`.
+// Game calendar (v1.9): a day is 8 minutes; outside work hours stations pause completely
+// (haulers finish active trip; Willys and chivas keep running). A year has
+// 16 days in 4 seasons of 4 days (Colombian dry and rainy seasons), raising or
+// lowering production of all stations simultaneously.
+export const DAY_LENGTH = 480; // game s
+export const START_HOUR = 8; // a new save starts in the morning
+// Work shift (v3.8): 6 to 12 and 14 to 20, with lunch break in between. Renown ⭐ adds
+// 2-hour blocks in this order (each doubles prior cost; see sim/renown.js) up to
+// 24-hour work. Since v3.10 stored per region (`workLevel` in region state): functions
+// below take block count (`extra`), or save via `workOf`.
 export const BASE_WORK = [
   [6, 12],
   [14, 20],
@@ -29,27 +29,27 @@ export const SEASONS = [
 ];
 export const YEAR_DAYS = SEASON_DAYS * SEASONS.length;
 
-// Las pruebas de la cadena (que todo cuadre, que ningún patio se llene) apagan el calendario: siempre
-// de día y sin temporada. Las del calendario lo prenden.
+// Chain tests (balancing, no full yards) disable calendar: always daytime
+// without seasons. Calendar tests enable it.
 export const CALENDAR = { on: true };
 const NO_SEASON = { id: 'none', icon: '', name: '', mult: 1, text: '' };
 
-// Horas transcurridas desde la medianoche del primer día.
+// Hours elapsed since midnight on day zero.
 const hoursAt = (playTime) => START_HOUR + (playTime / DAY_LENGTH) * 24;
 
 export const hourOf = (playTime) => hoursAt(playTime) % 24;
-// Día desde 0 (el primero es el 0).
+// Zero-based day (first is 0).
 export const dayOf = (playTime) => Math.floor(hoursAt(playTime) / 24);
 export const yearOf = (playTime) => Math.floor(dayOf(playTime) / YEAR_DAYS) + 1;
 export const seasonOf = (playTime) => (!CALENDAR.on ? NO_SEASON : SEASONS[Math.floor(dayOf(playTime) / SEASON_DAYS) % SEASONS.length]);
-// Día dentro de la temporada (1 a 4).
+// Day within current season (1 to 4).
 export const seasonDay = (playTime) => (dayOf(playTime) % SEASON_DAYS) + 1;
 
-// Los bloques de la jornada con `extra` bloques comprados.
+// Active schedule blocks given `extra` purchased blocks.
 export const workBlocks = (extra = 0) => [...BASE_WORK, ...EXTRA_BLOCKS.slice(0, extra)];
-// Cuántos bloques tiene la región de una partida (v3.10).
+// How many schedule blocks a save's region has (v3.10).
 export const workOf = (state) => state?.workLevel ?? 0;
-// Qué horas (de 0 a 23) son de trabajo, por cuántos bloques hay (los bloques empiezan en horas exactas).
+// Which hours (0 to 23) are active work hours for block count (blocks align to whole hours).
 const HOURS = EXTRA_BLOCKS.map((_, n) => n)
   .concat(EXTRA_BLOCKS.length)
   .map((n) => Array.from({ length: 24 }, (_, h) => workBlocks(n).some(([a, b]) => h >= a && h < b)));
@@ -60,7 +60,7 @@ export function isWorkTime(playTime, extra = 0) {
   return workHours(extra)[Math.floor(hourOf(playTime))];
 }
 
-// La hora (de 0 a 23) en que vuelve a empezar el trabajo (la de ahora si ya se está trabajando).
+// Hour (0 to 23) when work resumes next (current hour if already working).
 export function nextWorkHour(playTime, extra = 0) {
   const now = Math.floor(hourOf(playTime));
   const hours = workHours(extra);
@@ -68,20 +68,20 @@ export function nextWorkHour(playTime, extra = 0) {
   return now;
 }
 
-// Para una partida: de noche se descansa y cada temporada rinde lo suyo, salvo en el tablero de un
-// evento (v2.0), que tiene su propio reloj: ahí siempre es de día y no hay temporada.
-// El reloj del país (v3.0): el tiempo de juego de la partida más lo que ya había pasado cuando empezó
-// (una región que se abre después, o la partida nueva tras un reinicio, siguen el mismo calendario).
+// For a save: rests at night and seasons scale production, except on event board
+// (v2.0), which uses its own clock: always daytime and no seasons.
+// Country-wide clock (v3.0): save play time plus elapsed country time at start
+// (newly opened region, or new save after reset, stays synced to same calendar).
 export const clockOf = (state) => (state.playTime ?? 0) + (state.clockOffset ?? 0);
 export const resting = (state) => !state.event && !isWorkTime(clockOf(state), workOf(state));
 export const seasonMult = (state) => (state.event ? 1 : seasonOf(clockOf(state)).mult);
 
-// Qué tanto se produce en este instante: 0 de noche; de día, lo de la temporada.
+// Instantaneous production multiplier: 0 at night; seasonal multiplier by day.
 export const workFactor = (playTime, extra = 0) => (isWorkTime(playTime, extra) ? seasonOf(playTime).mult : 0);
 
-// Producción de un tramo (de `from` a `to`, en s de juego), en segundos «de día normal»: para sumar lo
-// que pasa sin conexión más allá de lo que se simula. Se cuenta en pasos de 5 s (las horas de la
-// jornada y los días caen justo en pasos de 5 s).
+// Effective output across span (`from` to `to` in game s), in equivalent normal-day seconds:
+// integrates offline time beyond direct simulation in 5 s steps (shift hours and
+// day boundaries align cleanly to 5 s multiples).
 const STEP = 5;
 export function workSeconds(from, to, extra = 0) {
   let total = 0;
@@ -89,7 +89,7 @@ export function workSeconds(from, to, extra = 0) {
   return total;
 }
 
-// Segundos de juego hasta que vuelve a empezar la jornada (0 si ya se está trabajando).
+// Game seconds until work resumes (0 if currently working).
 export function untilWork(playTime, extra = 0) {
   if (isWorkTime(playTime, extra)) return 0;
   const h = hourOf(playTime);
@@ -97,10 +97,10 @@ export function untilWork(playTime, extra = 0) {
   return (hours / 24) * DAY_LENGTH;
 }
 
-// Si la hora es la del almuerzo (de 12 a 14, mientras no se compre ese bloque), para los textos.
+// Whether current hour is lunch break (12 to 14 while unbought), for UI copy.
 export const isLunch = (playTime, extra = 0) => {
   const h = hourOf(playTime);
   return h >= 12 && h < 14 && !isWorkTime(playTime, extra);
 };
-// «6:00», para los textos.
+// «6:00», for UI copy.
 export const hourLabel = (h) => `${h}:00`;

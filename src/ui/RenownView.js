@@ -1,6 +1,6 @@
-// Ventana del Renombre ⭐ (v2.2): el álbum de láminas (se pega la que uno elija) y la decoración.
-// Desde la v3.10 el álbum, la decoración, los logros y la jornada son de cada región: arriba se elige
-// cuál se ve (empieza en la que se está jugando). El Renombre y las horas sin conexión son del jugador.
+// Renown modal ⭐ (v2.2): sticker album (stick whichever you choose) and decoration.
+// Since v3.10 album, decoration, achievements, and shift belong to each region: header selects which
+// is viewed (starts on active region). Renown and offline hours belong to player.
 import { PAGE_BONUS, albumOf } from '../data/album.js';
 import { DECOR } from '../data/decor.js';
 import { OFFLINE_COSTS, OFFLINE_STEP_HOURS, PETS, WORK_COSTS, albumDone, buyChivas, buyPet, chivaEvery, CHIVA_STEPS, quoteChivas, decorOf, petsOf, quotePet, buyOffline, buyWillys2, buyWork, quoteWillys2, quoteWork, workLevel, buySticker, offlineHours, offlineLevel, ownsDecor, pageDone, pickDecor, profileOf, quoteDecor, quoteOffline, quoteSticker } from '../sim/renown.js';
@@ -17,7 +17,7 @@ import { t } from '../i18n/index.js';
 const hex = (c) => `#${c.toString(16).padStart(6, '0')}`;
 
 export class RenownView {
-  // onDecor: la decoración cambió (hay que redibujar el mapa).
+  // onDecor: decoration changed (map must redraw).
   constructor(game, onDecor) {
     this.game = game;
     this.onDecor = onDecor;
@@ -74,12 +74,12 @@ export class RenownView {
     });
   }
 
-  // La partida de la región que se ve en la ventana.
+  // Save of the region currently viewed in the modal.
   regionState() {
     return regionState(this.game.state, this.region) ?? this.game.state;
   }
 
-  // region: la que se está jugando (con la que abre la ventana).
+  // region: currently active region (modal opens to it).
   open(tab, region = this.region) {
     this.tab = tab;
     if (regionState(this.game.state, region)) this.region = region;
@@ -95,7 +95,7 @@ export class RenownView {
     this.render();
   }
 
-  // El segundo Willys de una región (v3.9): la carretera se amplía, así que se vuelve a dibujar el mapa.
+  // Region's second Willys (v3.9): road widens, so map redraws.
   buyJeep(regionId) {
     const profile = profileOf(this.game.state);
     if (!buyWillys2(profile, regionState(this.game.state, regionId))) return;
@@ -104,7 +104,7 @@ export class RenownView {
     this.render();
   }
 
-  // Arriba del álbum: el segundo Willys de la región, que se compra con su álbum lleno.
+  // Above album: region's second Willys, unlocked once its album is full.
   willysHtml(profile) {
     const region = REGIONS_BY_ID[this.region];
     const pages = albumOf(this.region);
@@ -131,10 +131,10 @@ export class RenownView {
   render() {
     const profile = profileOf(this.game.state);
     document.getElementById('renown-title').textContent = t('⭐ Renombre: {n}', { n: profile.renown });
-    // El Prestigio (v3.11): todo el Renombre ganado, aunque ya se haya gastado.
+    // Prestige (v3.11): lifetime Renown earned, even if already spent.
     document.getElementById('renown-total').textContent = t('🏆 Prestigio: {n} ⭐ (todo el Renombre que has ganado)', { n: formatNumber(profile.renownTotal ?? profile.renown) });
     for (const btn of this.modal.querySelectorAll('[data-renown-tab]')) btn.classList.toggle('active', btn.dataset.renownTab === this.tab);
-    // La región que se ve (con más de una abierta).
+    // Viewed region selector (when more than one is open).
     const open = openRegionStates(this.game.state);
     this.regions.hidden = open.length < 2;
     this.regions.innerHTML = open.map(({ region }) => `<button class="${region.id === this.region ? 'on' : ''}" data-renown-region="${region.id}">${region.icon} ${region.name}</button>`).join('');
@@ -156,7 +156,7 @@ export class RenownView {
 
   albumHtml(profile) {
     const album = albumOf(this.region);
-    // Una región nueva (v3.15) trae su álbum después de sus zonas.
+    // A newly opened region (v3.15) includes its album after its zones.
     if (!album.length) return `<p class="event-soon">${t('El álbum de {region} llega pronto.', { region: REGIONS_BY_ID[this.region].name })}</p>`;
     if (!album.some((pg) => pg.id === this.page)) this.page = album[0].id;
     const pages = album.map((pg) => `<button data-page="${pg.id}" class="${pg.id === this.page ? 'on' : ''} ${pageDone(profile, pg.id) ? 'full' : ''}" title="${pg.name}">${pg.icon}</button>`).join('');
@@ -189,7 +189,7 @@ export class RenownView {
     }).join('');
   }
 
-  // La jornada (v3.8): de 12 h a 24 h, con bloques de 2 h que cuestan cada uno el doble del anterior.
+  // Work shift (v3.8): from 12 h to 24 h, in 2 h blocks each costing double the previous.
   workHtml(profile) {
     const level = workLevel(this.regionState());
     const hours = 12 + 2 * level;
@@ -204,7 +204,7 @@ export class RenownView {
       <div class="bar"><div style="width:${(100 * hours) / 24}%"></div></div>${next}</div>`;
   }
 
-  // Chivas más seguidas (v4.2): cada 30 s y luego cada 15 s, por región; cada una lleva su parte.
+  // Faster chivas (v4.2): every 30 s then every 15 s, per region; each carries its share.
   chivasHtml(profile) {
     const every = chivaEvery(this.regionState());
     const steps = CHIVA_STEPS.map((s) => (every <= s.every ? '★' : '☆')).join('');
@@ -216,7 +216,7 @@ export class RenownView {
       <p>${t('Salen más seguido y cada una lleva su parte: llega lo mismo por minuto, pero las estaciones no se quedan esperando.')}${q.reason === 'album' ? ` ${t('Se compran con el álbum de la región lleno.')}` : q.reason === 'restart' ? ` ${t('Se compran después de reiniciar la región una vez.')}` : ''}</p>${next}</div>`;
   }
 
-  // Horas sin conexión (v3.7): de 2 h a 24 h, 2 h por nivel.
+  // Offline hours (v3.7): from 2 h to 24 h, 2 h per level.
   offlineHtml(profile) {
     const level = offlineLevel(profile);
     const hours = offlineHours(profile);
@@ -231,7 +231,7 @@ export class RenownView {
       <div class="bar"><div style="width:${(100 * hours) / max}%"></div></div>${next}</div>`;
   }
 
-  // Las mascotas de la región (v3.12): cuántas hay y el botón para comprar otra.
+  // Region pets (v3.12): count and button to adopt another.
   petsHtml(profile) {
     const have = petsOf(profile, this.region);
     const rows = Object.entries(PETS)
@@ -246,7 +246,7 @@ export class RenownView {
 
   decorHtml(profile) {
     const chosen = decorOf(profile, this.region).chosen;
-    // El color del segundo Willys, solo si la región ya lo tiene.
+    // Second Willys paint color, shown only if region owns it.
     const has = { willys2: Boolean(this.regionState().willys2) };
     return DECOR.filter((cat) => !cat.requires || has[cat.requires]).map((cat) => {
       const opts = cat.options

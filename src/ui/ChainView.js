@@ -20,19 +20,19 @@ const outIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].out)[0]].icon;
 const outOf = (id) => Object.keys(STATIONS_BY_ID[id].out)[0];
 const byOf = (id) => Object.keys(STATIONS_BY_ID[id].by)[0];
 const byIcon = (id) => PRODUCTS[Object.keys(STATIONS_BY_ID[id].by)[0]].icon;
-// «la Mesa de chocolate y la Chocolatería»
+// «Mesa de chocolate and Chocolatería»
 const listNames = (ids) => {
   const names = ids.map((id) => withArticle(STATIONS_BY_ID[id].name));
   return listJoin(names);
 };
-// La cadena (v3.0.1): un diagrama con las estaciones unidas por eslabones y, sobre cada eslabón, cuánto
-// pasa por segundo. Al tocar una estación aparece abajo su detalle (lo que recibe y procesa, sus
-// arrieros, lo que se desvía o se pierde, lo que llega de otras zonas) con botones para ir a ella.
-// Los barrios de Bogotá (v4.5), para las pestañas de la cadena.
+// The chain (v3.0.1): a diagram with stations linked by connectors showing throughput
+// per second above each link. Tapping a station opens its breakdown below (what it receives and processes,
+// haulers, bypassed/lost output, imports from other zones) with buttons to jump to it.
+// Bogotá neighborhoods (v4.5), for the chain tabs.
 const GROUP_NAMES = { candelaria: t('Candelaria'), zona_g: t('Zona G'), usaquen: t('Usaquén'), paloquemao: t('Paloquemao'), centro: t('Centro') };
 
 export class ChainView {
-  // getRoot: la partida (el perfil con el Renombre y las regiones), para mejorar toda la zona (v4.1).
+  // getRoot: root save (profile with Renown and regions), for upgrading the whole zone (v4.1).
   constructor(game, onOpen, getZone, getRoot) {
     this.game = game;
     this.getZone = getZone;
@@ -42,12 +42,12 @@ export class ChainView {
     this.el = document.getElementById('chain');
     this.body = document.getElementById('chain-body');
     this.groupsEl = document.getElementById('chain-groups');
-    this.group = null; // el barrio que se ve (v4.5, Bogotá)
+    this.group = null; // visible neighborhood (v4.5, Bogotá)
     this.detail = document.getElementById('chain-detail');
     this.selected = null;
     document.getElementById('chain-btn').addEventListener('click', () => this.open());
     document.getElementById('chain-close').addEventListener('click', () => this.close());
-    // Con el ratón (v4.6), la cadena se arrastra en las cuatro direcciones (en el teléfono, con el dedo, ya se podía).
+    // With mouse (v4.6), the chain drags in all four directions (on mobile, finger scrolling already worked).
     this.body.addEventListener('pointerdown', (e) => {
       if (e.pointerType !== 'mouse' || e.button !== 0) return;
       const sc = this.body.querySelector('.dg-scroll');
@@ -65,18 +65,18 @@ export class ChainView {
       this.body.scrollTop = d.top - dy;
     });
     window.addEventListener('pointerup', () => {
-      // Lo que se suelta después de arrastrar no cuenta como toque.
+      // Releasing after a drag does not count as a tap.
       this.dragged = Boolean(this.drag?.moved);
       this.drag = null;
       if (this.dragged) setTimeout(() => !this.drag && !this.touching && this.setMoving(false), 600);
       setTimeout(() => (this.dragged = false), 0);
     });
-    // Mientras se desliza con el dedo (v4.7) no se redibuja: en Bogotá, rehacer la cadena entera a cada cuadro trababa
-    // el desplazamiento (la caja de lado no avisa con burbuja: se escucha en la fase de captura).
-    // (v4.7.2) Y mientras se mueve, las líneas se quedan quietas: en Bogotá son un centenar, y dibujar su animación en cada
-    // cuadro era lo que trababa el desplazamiento. Vuelven a moverse un momento después de soltar.
+    // While dragging with a finger (v4.7), don't redraw: in Bogotá, rebuilding the whole chain every frame
+    // stalled scrolling (the scroll box doesn't bubble scroll: listen during capture phase).
+    // (v4.7.2) And while scrolling, lines stay still: Bogotá has about a hundred, and animating their dashes every
+    // frame was what stalled scrolling. They resume moving shortly after release.
     this.scrolledAt = 0;
-    this.onMoving = null; // main.js: mientras se mueve, el mapa de atrás se dibuja menos veces por segundo
+    this.onMoving = null; // main.js: while dragging, the background map renders at a lower framerate
     this.setMoving = (on) => {
       if (on === this.body.classList.contains('dg-moving')) return;
       this.body.classList.toggle('dg-moving', on);
@@ -114,13 +114,13 @@ export class ChainView {
         this.body.scrollLeft = 0;
         return;
       }
-      // Tocar una estación muestra su detalle (tocarla otra vez lo cierra).
+      // Tapping a station opens its breakdown (tapping again closes it).
       const pick = e.target.closest('[data-pick]');
       if (pick) {
         this.selected = pick.dataset.pick === this.selected ? null : pick.dataset.pick;
         this.html = this.detailHtml = null;
         this.update();
-        // Con el detalle abierto queda menos espacio: que la estación elegida siga a la vista.
+        // With breakdown open there is less room: keep the selected station in view.
         this.body.querySelector('.selected')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
         return;
       }
@@ -149,8 +149,8 @@ export class ChainView {
     if (this.el.hidden) return;
     const state = this.game.state;
     const zone = this.getZone();
-    // En red (v4.7, Bogotá) la cadena es grande: se rehace como mucho dos veces por segundo y nunca mientras se
-    // desliza (lo que se toca, `this.html = null`, se rehace enseguida).
+    // In a network (v4.7, Bogotá) the chain is large: rebuild at most twice per second and never while
+    // scrolling (tapping sets `this.html = null` so it rebuilds right away).
     const now = performance.now();
     if (ZONES_BY_ID[zone].network && this.html && this.zoneDrawn === zone) {
       if (this.touching || now - this.scrolledAt < 400 || now - this.drawnAt < 500) return;
@@ -159,10 +159,10 @@ export class ChainView {
     this.zoneDrawn = zone;
     const a = analyzeChain(state, zone);
     const rows = Object.fromEntries(a.rows.map((r) => [r.id, r]));
-    let locked = buildableStations(state, zone); // las que siguen (con barrios, v4.5, una por barrio)
+    let locked = buildableStations(state, zone); // upcoming ones (with neighborhoods, v4.5, one per neighborhood)
     this.updateFoot(state, zone);
-    // Con barrios (v4.5, Bogotá): una pestaña por barrio, y en el diagrama solo las estaciones del que se ve (las que
-    // le faltan, en gris, aunque todavía no se puedan construir).
+    // With neighborhoods (v4.5, Bogotá): one tab per neighborhood, and diagram only shows its stations (unbuilt
+    // ones in gray, even if not buildable yet).
     const groups = ZONES_BY_ID[zone].groups;
     let only = null;
     if (groups) {
@@ -174,11 +174,11 @@ export class ChainView {
       locked = group.stations.filter((id) => !state.stations[id]);
     }
     this.groupsEl.hidden = !groups;
-    // Solo se reescribe si algo cambió, para no perder toques a medio hacer.
-    // Menos el margen de la caja que se desliza (v4.3.1), para que lo de las orillas no quede cortado.
+    // Only rewrite if something changed, to preserve mid-tap interactions.
+    // Minus the scroll container padding (v4.3.1), so edge cards aren't clipped.
     const html = diagram(state, a, rows, locked, zone, (this.body.clientWidth || 320) - 2 * DG_PAD, this.selected, only);
-    // Se redibuja en cada cuadro: lo que se corrió de lado se conserva (v4.6: en Bogotá la red es ancha). Mientras se
-    // arrastra no se redibuja.
+    // Redraws every frame: horizontal scroll is preserved (v4.6: in Bogotá the network is wide). While
+    // dragging it skips redrawing.
     if (html !== this.html && !this.drag?.moved) {
       const left = this.body.querySelector('.dg-scroll')?.scrollLeft ?? 0;
       const top = this.body.scrollTop;
@@ -192,8 +192,8 @@ export class ChainView {
     if (detail !== this.detailHtml) this.detail.innerHTML = this.detailHtml = detail;
   }
 
-  // Los botones de abajo (v4.1.1): 🏗️ Construir, mientras falten estaciones, y ⬆ Al nivel X, que no se ve hasta
-  // reiniciar la región; luego se compra con Renombre y queda para todas sus zonas (y sus eventos ganados con oro).
+  // Bottom buttons (v4.1.1): 🏗️ Build while stations remain, and ⬆ To level X, hidden until
+  // resetting the region; then bought with Renown and unlocked for all its zones (and gold-won events).
   updateFoot(state, zone) {
     const root = this.getRoot();
     const buttons = [];
@@ -214,7 +214,7 @@ export class ChainView {
     if (html !== this.footHtml) this.foot.innerHTML = this.footHtml = html;
   }
 
-  // Los toques en esos botones. Devuelve true si era de ellos.
+  // Taps on those buttons. Returns true if handled.
   footClick(e) {
     const zone = this.getZone();
     if (e.target.closest('[data-build-all]')) {
@@ -234,15 +234,15 @@ export class ChainView {
   }
 }
 
-// El nivel de una ruta. En el tablero de un evento (v3.68.1) la ruta va con su estación (ver StationPanel:
-// eventRouteInfo): se muestra el de la estación, no el de la ruta, que ahí no cambia.
+// Route level. On an event board (v3.68.1) the route follows its station (see StationPanel:
+// eventRouteInfo): shows the station's level, not the route's, which doesn't change there.
 function routeLevel(state, r) {
   if (!state.event) return state.routes[r.id].level;
   const id = r.stations.find((sid) => state.stations[sid]);
   return id ? state.stations[id].level : state.routes[r.id].level;
 }
 
-// El detalle de lo que se tocó: una estación (construida o por construir), una ruta o la bodega.
+// Detail panel for whatever was tapped: a station (built or unbuilt), a route, or the warehouse.
 function detailOf(state, a, rows, sel, zone) {
   const [kind, part] = sel.split(':');
   if (kind === 'dispatch') {
@@ -268,7 +268,7 @@ function detailOf(state, a, rows, sel, zone) {
   const id = kind;
   const def = STATIONS_BY_ID[id];
   const row = rows[id];
-  // Una rama aparte (v3.12: la Compostera), que no lleva nada a la bodega.
+  // A side branch (v3.12: Compostera), which sends nothing to the warehouse.
   if (def.side && state.stations[id]) {
     return `
       <div class="cd-head"><span class="cd-icon">${def.icon}</span><b>${def.name}</b> <small>${t('Nv')} ${state.stations[id].level}</small></div>
@@ -287,24 +287,24 @@ function detailOf(state, a, rows, sel, zone) {
   lines.push(row.incoming === null
     ? t('Produce <b>{n}</b>.', { n: `${formatRate(row.output)} ${icon}/s` })
     : t('Recibe {in}/s y procesa hasta {cap}/s → <b>{out}</b>.', { in: formatRate(row.incoming), cap: formatRate(row.capacity), out: `${formatRate(row.output)} ${icon}/s` }));
-  // Lo que llega de otras zonas.
+  // What arrives from other zones.
   for (const imp of def.imports ?? []) {
     const r = ROUTES_BY_ID[imp.route];
     const from = routeOrigin(r);
     lines.push(`${t('{p} desde {zone}: llegan {n}/s ({route}).', { p: `${PRODUCTS[imp.product].icon} ${PRODUCTS[imp.product].name}`, zone: `${from.icon} ${from.name}`, n: formatRate(row.imported[imp.product]), route: `${r.icon} ${t('Nv')} ${routeLevel(state, r)}` })}${row.importLimited === r.id ? ` <span class="lost">${t('⏸️ No alcanza: la estación espera.')}</span>` : ''}`);
   }
-  // Lo que junta de otra estación de su zona (v4.0).
+  // What it combines from another station in its zone (v4.0).
   for (const [product, from] of Object.entries(JOIN_FROM[id] ?? {})) {
     lines.push(`${t('{p} de {station}: llegan {n}/s.', { p: `${PRODUCTS[product].icon} ${PRODUCTS[product].name}`, station: withArticle(STATIONS_BY_ID[from].name), n: formatRate(row.joined?.[product] ?? 0) })}${row.joinLimited === product ? ` <span class="lost">${t('⏸️ No alcanza: la estación espera.')}</span>` : ''}`);
   }
-  // Su subproducto, por la canaleta (v4.0).
+  // Its byproduct, via the chute (v4.0).
   if (row.byOutput !== undefined) {
     const by = PRODUCTS[Object.keys(def.by)[0]];
     const kidsBy = BY_CHILDREN[id].filter((c) => rows[c]);
     lines.push(t('Además saca {n} de {p}, que pasan por la canaleta a {stations}.', { n: `${formatRate(row.byOutput)} ${by.icon}/s`, p: by.name.toLowerCase(), stations: listNames(kidsBy) }));
     if (row.byLost > 0.005) lines.push(`<span class="lost">${t('🗑️ {n} se desechan: {stations} no da abasto.', { n: `${formatRate(row.byLost)} ${by.icon}/s`, stations: listNames(kidsBy) })}</span>`);
   }
-  // Los arrieros: cuánto llevan y a dónde.
+  // Haulers: how much they carry and where.
   const kids = [...row.children, ...buildableStations(state, zone).filter((l) => PARENT[l] === id)];
   const route = row.exports?.length ? ` ${t('y {route}', { route: withArticle(ROUTES_BY_ID[row.exports[0]].name) })}` : '';
   const carries = kids.length > 1 || (kids.length && row.exports?.length)
@@ -318,8 +318,8 @@ function detailOf(state, a, rows, sel, zone) {
     if (row.children.length) lines.push(divertNote(state, row, icon));
   }
   if (row.lost > 0.005) {
-    // Por qué (v3.67): lo que las siguientes no alcanzan a procesar va a la bodega, más lejos que ellas, y en
-    // ese viaje largo el transporte lleva menos.
+    // Why (v3.67): whatever downstream stations can't process goes to the warehouse, farther than them, and on
+    // that longer trip transport carries less.
     const slow = row.children.length && row.diverted > 0.005 ? slowConsumers(state, id) : [];
     const belt = hasBelt(st.transport.level);
     const v = { n: `${formatRate(row.lost)} ${icon}/s`, stations: listNames(slow) };
@@ -342,8 +342,8 @@ function detailOf(state, a, rows, sel, zone) {
     </div>`;
 }
 
-// Lo que se vende sin procesar. La parte de una ruta que aún no abre (lo que no les toca a las ramas)
-// no es un problema; lo que pase de ahí, sí.
+// What is sold unprocessed. Any share reserved for an unopened route (not belonging to active branches)
+// isn't a problem; anything beyond that is.
 function divertSplit(state, row) {
   const pending = pendingRoutes(state, row.id);
   const reserved = pending.length ? row.output * Math.max(0, 1 - CHILDREN[row.id].reduce((n, c) => n + branchShare(row.id, c), 0)) : 0;
@@ -358,21 +358,21 @@ function divertNote(state, row, icon) {
   return notes.join('');
 }
 
-// ---------- Diagrama (como un plano de producción) ----------
-// Cada estación es una tarjeta; las del mismo paso van en la misma fila y las ramas en columnas. Los
-// tubos bajan de una a la siguiente (con el producto corriendo, o en rojo donde se frena), lo que
-// llega de otras zonas entra como etiquetas azules encima de la estación, y todo termina en la bodega.
+// ---------- Diagram (like a production blueprint) ----------
+// Each station is a card; stations at the same step sit on the same row and branches in columns.
+// Pipes drop from one to the next (with product flowing, or red at a bottleneck), imports
+// enter as blue tags above the station, and everything ends at the warehouse.
 const NODE_H = 62;
-const DG_PAD = 6; // margen a cada lado del diagrama (lo mismo que .dg-scroll en styles.css)
-const GAP = 46; // espacio vertical para los eslabones (y lo que pasa por ellos)
-const TAG_H = 26; // alto de cada etiqueta de importación
-const JOIN_W = 22; // lo que se angostan esas etiquetas si además le llega algo que junta (v4.0)
-const NET_COL = 152; // en red (v4.7), el ancho de cada columna: las tarjetas, todas iguales, de 140
-const MIN_COL = 80; // (v4.3.1: antes 98; con tres columnas no cabía en un teléfono angosto y se cortaba la de la derecha)
-const NARROW = 118; // más angostas que esto, la tarjeta pone el ícono arriba y el nombre abajo
+const DG_PAD = 6; // padding on each side of the diagram (matches .dg-scroll in styles.css)
+const GAP = 46; // vertical space for links (and throughput flowing along them)
+const TAG_H = 26; // height of each import tag
+const JOIN_W = 22; // how much those tags narrow if a combiner input also enters from above (v4.0)
+const NET_COL = 152; // in a network (v4.7), width of each column: uniform 140px cards
+const MIN_COL = 80; // (v4.3.1: previously 98; with three columns it didn't fit on a narrow phone and clipped the right one)
+const NARROW = 118; // narrower than this, card stacks icon on top and name below
 
-// Lo que hace una rama aparte: la Compostera vuelve abono la pulpa del Beneficiadero y todo lo que
-// vende la Finca vale más.
+// What a side branch does: Compostera turns Beneficiadero pulp into fertilizer and everything
+// Finca sells fetches more.
 const sideText = (state, id) => {
   const def = STATIONS_BY_ID[id];
   const from = STATIONS_BY_ID[def.requires];
@@ -380,14 +380,14 @@ const sideText = (state, id) => {
   return t('Recibe {in} de {from} y la vuelve {out}: todo lo que vende la zona vale <b>+{n} %</b>.', { in: Object.keys(def.in).map((p) => `${PRODUCTS[p].icon} ${PRODUCTS[p].name.toLowerCase()}`).join(', '), from: withArticle(from.name), out: PRODUCTS[Object.keys(def.out)[0]].name.toLowerCase(), n: bonus });
 };
 
-// only: con barrios (v4.5), las estaciones del que se ve; las demás no se dibujan.
+// only: with neighborhoods (v4.5), stations of the visible one; the rest are omitted.
 function diagram(state, a, rows, locked, zone, width, selected, only = null) {
   const inSet = (id) => !only || only.has(id);
-  // Las ramas aparte (v3.12: la Compostera) cuelgan de la estación que las habilita.
+  // Side branches (v3.12: Compostera) hang off the station that enables them.
   const sides = ZONES_BY_ID[zone].plots.map((p) => p.stationId).filter((id) => STATIONS_BY_ID[id].side);
-  // En el árbol, cada estación cuelga de la que le da su entrada principal o su subproducto (v4.0). Lo que una
-  // estación junta de otra (v4.0) baja por su propia columna, un carril (`lane:<la que junta>:<la que lo hace>`; desde
-  // la v4.6 una estación puede juntar de dos o tres) que cuelga de la que lo hace, y entra por arriba.
+  // In the tree, each station hangs from the one providing its primary input or byproduct (v4.0). What a
+  // station combines from another (v4.0) drops down its own column, a lane (`lane:<combiner>:<source>`; since
+  // v4.6 a station can combine two or three) hanging from the source and entering from the top.
   const byKids = (id) => (BY_CHILDREN[id] ?? []).filter((c) => rows[c] && PARENT[c] === id && chainOf(zone).includes(c) && inSet(c));
   const lanes = (id) => (rows[id] ? Object.keys(JOIN_FROM).filter((j) => rows[j] && inSet(j) && Object.values(JOIN_FROM[j]).includes(id)).map((j) => `lane:${j}:${id}`) : []);
   const rawKids = (id) =>
@@ -401,8 +401,8 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
           ...lanes(id),
         ];
   const under = (id) => [id, ...rawKids(id).flatMap(under)];
-  // La rama que lleva lo que se junta va justo a la derecha de la rama donde está la que lo junta: así el carril
-  // queda al lado y no cruza otras ramas.
+  // The branch carrying the combined input goes right next to the combiner's branch: so the lane
+  // stays adjacent and doesn't cross other branches.
   const kidsOf = (id) => {
     const kids = rawKids(id);
     for (const k of [...kids]) {
@@ -414,7 +414,7 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
     }
     return kids;
   };
-  // Columnas: cada hoja una, cada estación centrada sobre sus ramas.
+  // Columns: each leaf gets one, each parent centers over its branches.
   const pos = {};
   let leaf = 0;
   const place = (id, depth) => {
@@ -422,20 +422,20 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
     const first = leaf;
     for (const k of kids) place(k, depth + 1);
     const x = kids.length ? (pos[kids[0]].x + pos[kids.at(-1)].x) / 2 : leaf++;
-    // span: cuántas columnas tiene debajo (la tarjeta puede ser así de ancha).
+    // span: how many columns sit underneath (the card can span that width).
     pos[id] = { x, depth, span: Math.max(1, leaf - first) };
   };
-  // Las raíces: la fuente y, con barrios (v4.5, Bogotá), la primera de cada uno, construida o la que sigue.
+  // Roots: the source and, with neighborhoods (v4.5, Bogotá), the first of each, built or next up.
   for (const root of chainOf(zone).filter((id) => inSet(id) && (!PARENT[id] || !inSet(PARENT[id])) && (rows[id] || locked.includes(id)))) place(root, 0);
   const cols = Math.max(1, leaf);
-  // En red (v4.7, Bogotá) todas las tarjetas tienen el mismo ancho: con tantas ramas, las de una sola columna quedaban
-  // muy angostas al lado de las que tienen varias debajo.
+  // In a network (v4.7, Bogotá) all cards share the same width: with so many branches, single-column ones looked
+  // too narrow next to wide multi-column stations.
   const net = Boolean(ZONES_BY_ID[zone].network);
   const colW = net ? NET_COL : Math.max(MIN_COL, Math.floor((width - 4) / cols));
   const total = colW * cols;
   const widthOf = (id) => (net ? colW - 12 : Math.min(pos[id].span * colW - 12, 210));
-  // Los tramos que cruzan de lado (v4.7): cada uno a su propia altura dentro del espacio entre filas, para que en la red
-  // no corran unos encima de otros y se vea de dónde viene cada uno.
+  // Horizontal crossover segments (v4.7): each sits at its own height in the row gap, so in a network
+  // they don't overlap and each origin stays clear.
   const slots = {};
   const slotY = (key, base) => {
     if (!net) return base;
@@ -444,7 +444,7 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
   };
   const ids = Object.keys(pos).filter((id) => !id.startsWith('lane:'));
   const depthMax = Math.max(...ids.map((id) => pos[id].depth));
-  // Cada fila deja arriba el alto de las etiquetas de importación que tenga.
+  // Each row reserves top space for the tallest stack of import tags it has.
   const tagsOf = (id) => STATIONS_BY_ID[id].imports ?? [];
   const rowTop = [];
   let y = 4;
@@ -463,17 +463,17 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
   bodega.left = (total - bodega.w) / 2;
   const height = bodega.top + NODE_H + 6;
 
-  // Eslabones: el camino dibujado dos veces (el eslabón y su hueco) en trazos que se mueven.
+  // Links: path drawn twice (tube outline and inner core) with animated dashes.
   const pipes = [];
-  // Lo que corre por el tubo lleva el color de su producto; lo que frena va en rojo y lo que falta construir, en gris.
-  // Los mismos colores que las bandas del mapa (v4.3.1).
+  // What flows through a pipe uses its product's color; bottlenecks turn red and unbuilt stations gray.
+  // Same colors as the map terrain bands (v4.3.1).
   const colorOf = productColors(zone);
   const pipe = (d, kind, product = null) => {
     const color = kind === 'flow' && colorOf[product] ? ` style="stroke:${colorOf[product]}"` : '';
     pipes.push(`<path d="${d}" class="dg-link ${kind}"${color}/><path d="${d}" class="dg-hole ${kind}"/>`);
   };
   const nodes = [];
-  // Lo que pasa por un eslabón: solo el ícono y el número.
+  // Flowing label on a link: icon and rate only.
   const flow = (x, y, product, rate, hot) =>
     nodes.push(`<span class="dg-flow ${hot ? 'hot' : ''}" style="left:${x}px;top:${y}px">${product} ${formatRate(rate)}</span>`);
   const sel = (key) => (selected === key ? 'selected' : '');
@@ -482,8 +482,8 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
     const def = STATIONS_BY_ID[id];
     const row = rows[id];
     const parent = PARENT[id] ?? (def.side ? def.requires : undefined);
-    // Una rama aparte: tubo punteado desde la estación que la abastece y, sin seguir a la bodega, lo que
-    // suma al valor de lo que se vende.
+    // Side branch: dashed pipe from supplying station and, without going to the warehouse, the
+    // bonus added to sales value.
     if (def.side) {
       const p = box(parent);
       const built = Boolean(state.stations[id]);
@@ -498,7 +498,7 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
       );
       continue;
     }
-    // Tubo desde la anterior: baja, cruza y entra por la izquierda de la tarjeta (a la derecha van las etiquetas).
+    // Pipe from previous: drops, crosses horizontally, enters left edge of card (tags sit on the right).
     if (parent && pos[parent]) {
       const p = box(parent);
       const ex = tagsOf(id).length ? b.left + (b.w < NARROW ? 12 : 18) : b.cx;
@@ -509,15 +509,15 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
       const icon = isBy ? byIcon(parent) : outIcon(parent);
       if (row) flow(ex, (mid + b.top) / 2 + (pos[parent].x === pos[id].x ? -GAP / 4 : 0), icon, row.incoming, kind === 'hot');
     }
-    // Lo que junta de otra estación de su zona (v4.0): baja por su carril, a la derecha, y entra por arriba.
+    // Combined input from another station in its zone (v4.0): drops along its lane on the right, enters top.
     Object.entries(JOIN_FROM[id] ?? {}).forEach(([product, from], k) => {
       const lane = pos[`lane:${id}:${from}`];
       if (!pos[from] || !lane) return;
       const p = box(from);
       const lx = (lane.x + 0.5) * colW;
-      // Con etiquetas de importados encima, entra por la orilla derecha, al lado de ellas (que se angostan).
+      // With import tags above, enters on the right edge beside them (which narrow).
       const tags = tagsOf(id).length;
-      // Con varias (v4.6), cada una entra un poco más a la izquierda que la anterior.
+      // With multiple combiners (v4.6), each enters slightly further left than the previous one.
       const ex = (tags ? b.left + b.w - JOIN_W / 2 : b.left + b.w * 0.78) - k * 9;
       const mid = slotY(`mid:${pos[from].depth}`, p.bottom + GAP / 2);
       const turn = slotY(`turn:${pos[id].depth}`, b.top - tags * TAG_H - GAP / 2 + 9);
@@ -525,7 +525,7 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
       pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${lx} V ${turn} H ${ex} V ${b.top}`, kind, product);
       if (row) flow(lx, (mid + turn) / 2, PRODUCTS[product].icon, row.joined?.[product] ?? 0, kind === 'hot');
     });
-    // Etiquetas de lo que llega de otras zonas, apiladas encima de la estación, a la derecha.
+    // Import tags arriving from other zones, stacked above the top-right of the station.
     tagsOf(id).forEach((imp, i) => {
       const r = ROUTES_BY_ID[imp.route];
       const from = routeOrigin(r);
@@ -547,15 +547,15 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
     nodes.push(`<button class="dg-node ${a.bottleneck === id ? 'hot' : ''} ${hotLink ? 'hot-link' : ''} ${b.w < NARROW ? 'narrow' : ''} ${sel(id)}" data-pick="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">
       <span class="dg-icon">${def.icon}</span><span class="dg-name">${def.name}</span>
       <span class="dg-meta">${t('Nv')} ${state.stations[id].level}</span></button>`);
-    // Las que siguen a otra estación (v3.66): una etiqueta 📦 lleva a la bodega y dice cuánto se manda a
-    // vender directo (en naranja si es porque la siguiente no da abasto).
+    // Stations feeding another station (v3.66): a 📦 tag leads to the warehouse and shows direct sales
+    // (in orange if caused by the next station not keeping up).
     if (kidsOf(id).length || row.children.length) {
       const sells = row.diverted > 0.005 ? row.diverted : 0;
       const warn = sells && row.children.length && divertSplit(state, row).extra > 0.005 + row.diverted * 0.02;
       const what = sells ? t('{n} por segundo van directo a la bodega', { n: formatRate(sells) }) : t('Nada va directo a la bodega');
       nodes.push(`<button class="dg-sell ${warn ? 'warn' : ''} ${sells ? '' : 'none'}" data-open="dispatch:${zone}:stock" title="${what}" style="left:${b.left + b.w}px;top:${b.bottom}px">📦${sells ? ` ${formatRate(sells)}` : ''}</button>`);
     }
-    // Las que no siguen a otra estación terminan en la bodega.
+    // direct sales (in orange if caused by the next station lagging behind).
     if (!kidsOf(id).length && !row.children.length) {
       const busY = bodega.top - GAP / 2;
       pipe(`M ${b.cx} ${b.bottom} V ${busY} H ${total / 2} V ${bodega.top}`, hotLink ? 'hot' : 'flow', outOf(id));

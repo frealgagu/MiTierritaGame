@@ -1,5 +1,5 @@
-// Mapa de Cundinamarca · Zona 2: Los Freseros de Sibaté (v4.4). Mismo trazado que la segunda zona de cada región,
-// con la Marmita de mermelada en la parcela que queda libre: le llega la fresa de segunda del Lavadero por la canaleta.
+// Cundinamarca Map · Zone 2: Los Freseros de Sibaté (v4.4). Same layout as the second zone of each region,
+// with the Jam Kettle on the free plot: second-grade strawberries arrive from the Washhouse along the chute.
 import { ICON } from '../icons.js';
 
 export const ZONE50 = {
@@ -23,13 +23,13 @@ export const ZONE50 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Sibaté ➜',
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
   unlockedBy: 'flores',
-  // Las bandejas salen hacia las Salinas; las fresas con crema y la mermelada, hacia Zipaquirá.
+  // Trays leave toward Las Salinas; strawberries & cream and jam leave toward Zipaquirá.
   routes: {
     bandejas_fresa: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Bandejas a las Salinas ➜' },
     mermeladas: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'Mermelada a Zipaquirá ➜' },

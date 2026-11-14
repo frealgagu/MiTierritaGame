@@ -1,20 +1,20 @@
-// Toca una pieza de songs.js y la deja en dos arreglos (izquierda y derecha) que se repiten sin
-// corte. Las cuerdas son Karplus-Strong: un golpe de ruido que da vueltas por una línea de retardo del
-// largo de la nota, y en cada vuelta se suaviza un poco (así suena a cuerda pulsada y se apaga sola).
-// Sin Web Audio: se puede probar en Node.
+// Renders a piece from songs.js into seamless stereo buffers (left and right). Strings use
+// Karplus-Strong synthesis: a noise burst circulates through a pitch-length delay line and is
+// low-pass filtered each pass (sounding like a plucked string that decays naturally).
+// Pure JS without Web Audio: testable in Node.
 import { createRng } from '../core/rng.js';
 import { midi, parseChord } from './songs.js';
 
-const RELEASE = 0.03; // s que tarda en callarse una cuerda que se apaga con la mano
+const RELEASE = 0.03; // s damping time for a palm-muted string
 
 const freqOf = (m) => 440 * 2 ** ((m - 69) / 12);
 
-// Para exportar a MIDI (v3.71, tools/music-export.mjs): si la pieza trae `events`, cada nota y cada golpe
-// quedan anotados con la voz que los toca (`buf.voice`). El juego no los pide y suena igual.
+// For MIDI export (v3.71, tools/music-export.mjs): if `events` is passed, every note and hit is
+// recorded with its voice (`buf.voice`). Gameplay skips this and sounds identical.
 const logNote = (buf, at, freq, dur, amp) => buf.events?.push({ voice: buf.voice, at: buf.strumAt ?? at, midi: 69 + 12 * Math.log2(freq / 440), dur, amp });
 const hit = (buf, at, dur, amp) => buf.events?.push({ voice: buf.voice, at, dur, amp, perc: true });
 
-// La nota más baja con esa clase de altura desde `from` (MIDI).
+// Lowest MIDI note with that pitch class at or above `from`.
 const above = (pc, from) => from + ((pc - from) % 12 + 12) % 12;
 
 export function createSong(song, sr) {
@@ -24,16 +24,16 @@ export function createSong(song, sr) {
   return { song, sr, beat, bar, length, left: new Float32Array(length), right: new Float32Array(length), rng: createRng(1907) };
 }
 
-// Una cuerda pulsada. at: s desde el inicio de la pieza (lo que sobra al final suena al empezar la vuelta).
-// t60: s en que se apaga sola; bright: 0..1 qué tan metálica; pos: dónde se pulsa (0..0.5).
+// Plucked string. at: seconds from start (tail wraps around to loop start seamlessly).
+// t60: decay time (s); bright: 0..1 brightness; pos: pluck position (0..0.5).
 function pluck(buf, at, freq, dur, { amp = 0.3, t60 = 1.5, bright = 0.5, pan = 0, pos = 0.2 } = {}) {
   logNote(buf, at, freq, dur, amp);
   const { sr, length, left, right, rng } = buf;
-  const delay = sr / freq - 0.5; // el filtro de dos puntos suma media muestra
+  const delay = sr / freq - 0.5; // two-point averaging filter adds half a sample of delay
   const n0 = Math.ceil(delay) + 2;
   const len = Math.ceil((dur + RELEASE) * sr);
   const y = new Float32Array(Math.max(len, n0 + 1));
-  // Golpe: ruido suavizado según el brillo y sin la parte que cancela el punto donde se pulsa.
+  // Pluck excitation: brightness-smoothed noise notched at the pluck harmonic.
   let v = 0;
   let peak = 0;
   for (let i = 0; i < n0; i++) {
@@ -46,7 +46,7 @@ function pluck(buf, at, freq, dur, { amp = 0.3, t60 = 1.5, bright = 0.5, pan = 0
   for (let i = 0; i < n0; i++) mean += y[i] / n0;
   for (let i = 0; i < n0; i++) peak = Math.max(peak, Math.abs((y[i] -= mean)));
   for (let i = 0; i < n0; i++) y[i] /= peak || 1;
-  // Cada vuelta pierde lo justo para apagarse en t60.
+  // Per-pass feedback gain for exact t60 decay.
   const g = 10 ** (-3 / (t60 * freq));
   for (let n = n0; n < y.length; n++) {
     const m = n - delay;
@@ -68,15 +68,15 @@ function pluck(buf, at, freq, dur, { amp = 0.3, t60 = 1.5, bright = 0.5, pan = 0
   }
 }
 
-// Rasgueo: las cuerdas una tras otra, hacia abajo (de la grave a la aguda) o hacia arriba.
+// Strum: strings sounded sequentially downward (bass to treble) or upward.
 function strum(buf, at, notes, dur, opts, up = false) {
   const list = up ? [...notes].reverse() : notes;
-  buf.strumAt = at; // en el MIDI, el acorde entero en el golpe
+  buf.strumAt = at; // in MIDI, emit full chord on the downbeat
   list.forEach((m, k) => pluck(buf, at + k * 0.012, freqOf(m), dur, opts));
   delete buf.strumAt;
 }
 
-// Suma un sonido hecho muestra a muestra (fn(s desde el golpe) → valor) desde `at`, con paneo.
+// Renders a procedural sample-by-sample voice (`fn(tSinceHit) -> sample`) at `at` with stereo pan.
 function add(buf, at, dur, pan, fn) {
   const { sr, length, left, right } = buf;
   const start = Math.round(at * sr);
@@ -91,7 +91,7 @@ function add(buf, at, dur, pan, fn) {
   }
 }
 
-// Tambor: un tono que cae de f0 a f1 y se apaga en `decay` s, con un poco de golpe de cuero (ruido).
+// Drum: pitch sweep from f0 to f1 decaying over `decay` s, plus skin transient noise.
 function drum(buf, at, f0, f1, decay, amp, pan, slap = 0.2) {
   hit(buf, at, decay, amp);
   const { rng } = buf;
@@ -104,14 +104,14 @@ function drum(buf, at, f0, f1, decay, amp, pan, slap = 0.2) {
   });
 }
 
-// Guacharaca: el raspado de la caña con el trinche, ruido agudo que vibra con las estrías.
+// Guacharaca: scraping ribbed cane with fork, bright noise modulated by ridges.
 function scrape(buf, at, dur, amp, pan) {
   hit(buf, at, dur, amp);
   const { rng } = buf;
   let last = 0;
   add(buf, at, dur, pan, (t) => {
     const noise = rng() * 2 - 1;
-    const hi = noise - last; // quita los graves
+    const hi = noise - last; // high-pass filter removes lows
     last = noise;
     const ridges = 0.55 + 0.45 * Math.sin(2 * Math.PI * 90 * t);
     const env = Math.min(1, t / 0.008) * (1 - t / dur);
@@ -119,7 +119,7 @@ function scrape(buf, at, dur, amp, pan) {
   });
 }
 
-// Gaita (o millo): un tono soplado, con armónicos suaves, vibrato y algo de aire.
+// Gaita (or millo flute): blown tone with soft harmonics, vibrato, and breath noise.
 function blow(buf, at, freq, dur, amp, pan) {
   logNote(buf, at, freq, dur, amp);
   const { rng } = buf;
@@ -134,7 +134,7 @@ function blow(buf, at, freq, dur, amp, pan) {
   });
 }
 
-// Compás de cumbia (4/4, corcheas 0 a 7): bajo, golpes de guitarra en el contratiempo, gaita,
+// Cumbia measure (4/4, eighth notes 0..7): bass, off-beat guitar chops, gaita,
 // guacharaca, llamador, tambora y tambor alegre.
 function renderCumbia(buf, index) {
   const { song, beat, rng } = buf;
@@ -144,26 +144,26 @@ function renderCumbia(buf, index) {
   const { root, tones } = parseChord(song.chords[index]);
   const at = (e) => t0 + e * eighth + jitter();
 
-  // Bajo: tónica, tónica, quinta y tónica, a saltos.
+  // Bass: root, root, fifth, root leaping pattern.
   buf.voice = 'bass';
   const low = above(root, 36);
   const fifth = above((root + 7) % 12, 36);
   for (const [e, m, n] of [[0, low, 1.6], [3, low, 0.9], [4, fifth, 1.6], [6, low, 0.9]]) {
     pluck(buf, at(e), freqOf(m), eighth * n, { amp: 0.42, t60: 1.5, bright: 0.2, pan: -0.1, pos: 0.3 });
   }
-  // Guitarra: golpes cortos en cada contratiempo.
+  // Guitar: short muted off-beat chops.
   buf.voice = 'guitar';
   const chord = tones.map((pc) => above(pc, 57)).sort((a, b) => a - b);
   for (const e of [1, 3, 5, 7]) strum(buf, at(e), chord, eighth * 0.55, { amp: 0.08, t60: 0.6, bright: 0.6, pan: -0.35 }, e % 4 === 3);
-  // Guacharaca: largo en el tiempo, corto en el contratiempo («chu-ku, chu-ku»).
+  // Guacharaca: long on the beat, short on the off-beat (chu-ku, chu-ku).
   buf.voice = 'guacharaca';
   for (let e = 0; e < 8; e++) scrape(buf, at(e), eighth * (e % 2 ? 0.45 : 0.85), e % 2 ? 0.05 : 0.08, 0.45);
-  // Llamador en el dos y el cuatro; tambora en el uno y el tres.
+  // Llamador on beats 2 and 4; tambora on 1 and 3.
   buf.voice = 'llamador';
   for (const e of [2, 6]) drum(buf, at(e), 260, 190, 0.07, 0.22, 0.25, 0.35);
   buf.voice = 'tambora';
   for (const e of [0, 4]) drum(buf, at(e), 120, 70, 0.14, 0.38, -0.2, 0.15);
-  // Tambor alegre: repica a su gusto.
+  // Tambor alegre: improvisational syncopated fills.
   buf.voice = 'alegre';
   for (const e of [1, 3, 5, 7]) if (rng() < 0.55) drum(buf, at(e) + (rng() < 0.3 ? eighth / 2 : 0), 330, 280, 0.05, 0.16 + rng() * 0.08, 0.3, 0.5);
   // Gaita.
@@ -171,8 +171,8 @@ function renderCumbia(buf, index) {
   for (const [e, n, note] of song.melody[index] ?? []) blow(buf, at(e), freqOf(midi(note)), n * eighth * 0.92, 0.2, 0.05);
 }
 
-// Compás de torbellino (3/4, corcheas 0 a 5): bajo, guitarra en el dos y el tres, el tiple rasgueando cada
-// corchea, el requinto punteando la melodía y el chucho marcando el pulso.
+// Torbellino measure (3/4, eighth notes 0..5): bass, guitar on 2 and 3, tiple strumming every
+// eighth, requinto picking the melody, and chucho shaker keeping the pulse.
 function renderTorbellino(buf, index) {
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
@@ -187,24 +187,24 @@ function renderTorbellino(buf, index) {
   buf.voice = 'guitar';
   const guitar = tones.map((pc) => above(pc, 55)).sort((a, b) => a - b);
   for (const e of [2, 4]) strum(buf, at(e), guitar, beat * 0.7, { amp: 0.13, t60: 1, bright: 0.45, pan: -0.35 });
-  // El tiple: tres cuerdas por orden, rasgueo de abajo arriba y de arriba abajo en cada corchea.
+  // Tiple: three triple-courses, down-up strumming on every eighth note.
   buf.voice = 'tiple';
   const tiple = tones.slice(0, 4).map((pc) => above(pc, 64)).sort((a, b) => a - b);
   const courses = tiple.flatMap((m, k) => (k < 3 ? [m - 12, m, m + 0.04] : [m, m + 0.04]));
   for (let e = 0; e < 6; e++) strum(buf, at(e), courses, eighth * 0.7, { amp: e % 2 ? 0.045 : 0.065, t60: 0.7, bright: 0.8, pan: 0.35, pos: 0.12 }, e % 2 === 1);
-  // El chucho (maraca de guadua): largo en el tiempo, corto en el contratiempo.
+  // Chucho (bamboo shaker): long on the beat, short on the off-beat.
   buf.voice = 'chucho';
   for (let e = 0; e < 6; e++) scrape(buf, at(e), eighth * (e % 2 ? 0.35 : 0.7), e % 2 ? 0.035 : 0.06, 0.5);
-  // El requinto: notas punteadas, brillantes.
+  // Requinto: bright picked melody notes.
   buf.voice = 'melody';
   for (const [e, n, note] of song.melody[index] ?? []) {
     pluck(buf, at(e), freqOf(midi(note)), n * eighth * 0.92, { amp: 0.3, t60: 0.9, bright: 0.85, pan: 0.1, pos: 0.13 });
   }
 }
 
-// Compás de joropo (3/4 rápido, corcheas 0 a 5): el bajo con sus bordones, el cuatro rasgueando cada corchea
-// con los golpes apagados (el «chasquido»), las maracas sin parar y el arpa en la melodía, con la mano
-// izquierda doblando una octava abajo.
+// Joropo measure (fast 3/4, eighth notes 0..5): bassline, cuatro strumming every eighth
+// with muted hits (chasquido), steady maracas, and harp melody with left-hand octave doubling.
+// Left-hand octave doubling.
 function renderJoropo(buf, index) {
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
@@ -219,18 +219,18 @@ function renderJoropo(buf, index) {
   for (const [e, m, n] of [[0, low, 1.6], [3, fifth, 0.9], [4, low + 12, 0.9]]) {
     pluck(buf, at(e), freqOf(m), eighth * n, { amp: 0.4, t60: 1.4, bright: 0.3, pan: -0.15, pos: 0.25 });
   }
-  // El cuatro: cuatro cuerdas en el registro medio; abierto en el uno y en el «y» del dos, apagado en el dos y
-  // en el «y» del tres.
+  // Cuatro: four mid-register strings; open on beat 1 and and-of-2, muted on beat 2 and
+  // and-of-3.
   buf.voice = 'cuatro';
   const cuatro = tones.slice(0, 4).map((pc) => above(pc, 59)).sort((a, b) => a - b);
   for (let e = 0; e < 6; e++) {
     const muted = e === 2 || e === 5;
     strum(buf, at(e), cuatro, eighth * (muted ? 0.25 : 0.75), { amp: muted ? 0.05 : e === 0 || e === 3 ? 0.085 : 0.06, t60: muted ? 0.15 : 0.7, bright: 0.7, pan: 0.3, pos: 0.15 }, e % 2 === 1);
   }
-  // Las maracas: semicorcheas, más fuertes en el uno y en el «y» del dos.
+  // Maracas: sixteenth-note shake, accented on 1 and and-of-2.
   buf.voice = 'maracas';
   for (let k = 0; k < 12; k++) scrape(buf, at(k / 2), eighth * 0.4, k === 0 || k === 6 ? 0.07 : k % 2 ? 0.025 : 0.045, k % 2 ? -0.45 : 0.45);
-  // El arpa.
+  // Harp.
   buf.voice = 'melody';
   for (const [e, n, note] of song.melody[index] ?? []) {
     const f = freqOf(midi(note));
@@ -239,7 +239,7 @@ function renderJoropo(buf, index) {
   }
 }
 
-// Clarinete (v3.38): caña, con los armónicos impares más fuertes, un ataque corto y un vibrato leve.
+// Clarinet (v3.38): reed timbre with strong odd harmonics, crisp attack, and light vibrato.
 function reed(buf, at, freq, dur, amp, pan) {
   logNote(buf, at, freq, dur, amp);
   const { rng } = buf;
@@ -254,7 +254,7 @@ function reed(buf, at, freq, dur, amp, pan) {
   });
 }
 
-// Bombardino (v3.38): metal grave y redondo, con los armónicos pares, que se infla al entrar.
+// Bombardino / euphonium (v3.38): warm low brass with even harmonics and gentle swell.
 function brass(buf, at, freq, dur, amp, pan) {
   logNote(buf, at, freq, dur, amp);
   const sr = buf.sr;
@@ -267,7 +267,7 @@ function brass(buf, at, freq, dur, amp, pan) {
   });
 }
 
-// Redoblante: el golpe del parche con el ruido de los bordones.
+// Snare drum (redoblante): head transient with snare wire buzz.
 function snare(buf, at, amp, pan) {
   hit(buf, at, 0.16, amp);
   const { rng } = buf;
@@ -283,7 +283,7 @@ function snare(buf, at, amp, pan) {
   });
 }
 
-// Platillos: el choque de los dos, ruido muy agudo que se apaga despacio.
+// Cymbals: brass crash, bright high-passed noise with slow decay.
 function cymbal(buf, at, amp, pan, decay = 0.25) {
   hit(buf, at, decay, amp);
   const { rng } = buf;
@@ -291,16 +291,16 @@ function cymbal(buf, at, amp, pan, decay = 0.25) {
   let b = 0;
   add(buf, at, decay * 3, pan, (t) => {
     const noise = rng() * 2 - 1;
-    const hi = noise - 2 * a + b; // segunda diferencia: solo lo agudo
+    const hi = noise - 2 * a + b; // second difference: keep only highs
     b = a;
     a = noise;
     return amp * 0.35 * hi * Math.exp(-t / decay) * (1 + 0.3 * Math.sin(2 * Math.PI * 6100 * t));
   });
 }
 
-// Compás de chirimía (v3.38; 4/4, corcheas 0 a 7): el porro chocoano. El bombardino salta con el bajo y
-// camina al acorde siguiente, la tambora en el uno y el tres, el redoblante repicando en el contratiempo,
-// los platillos en el dos y el cuatro, y dos clarinetes: la melodía y, en las notas largas, una tercera abajo.
+// Chirimia measure (v3.38; 4/4, eighths 0..7): Choco porro. Bombardino leaps on bass and walks
+// into next chord, tambora on 1 and 3, snare rolling off-beats, cymbals on 2 and 4,
+// and two clarinets: melody plus harmony a third below on long notes.
 function renderChirimia(buf, index) {
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
@@ -336,10 +336,10 @@ function renderChirimia(buf, index) {
   }
 }
 
-// Compás de cumbia amazónica (v3.47; 4/4, corcheas 0 a 7): la de la triple frontera. El bajo salta con su
-// síncopa, el teclado marca el contratiempo, las maracas no paran, el manguaré (el tambor de palo de los
-// pueblos de la selva) da el golpe grave y el seco, y la guitarra eléctrica puntea la melodía, con el trémolo en
-// las notas largas.
+// Amazonian cumbia measure (v3.47; 4/4, eighths 0..7): triple-border style. Syncopated bass,
+// keyboard on off-beats, continuous maracas, manguare (indigenous slit log drum) low and dry hits,
+// and electric guitar picking the melody with tremolo on sustained notes.
+// Sustained notes.
 function renderAmazonica(buf, index) {
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
@@ -359,14 +359,14 @@ function renderAmazonica(buf, index) {
   for (const e of [1, 3, 5, 7]) strum(buf, at(e), chord, eighth * 0.4, { amp: 0.06, t60: 0.4, bright: 0.5, pan: -0.35 }, false);
   buf.voice = 'maracas';
   for (let k = 0; k < 16; k++) scrape(buf, at(k / 2), eighth * 0.35, k % 4 === 0 ? 0.06 : 0.03, k % 2 ? -0.4 : 0.4);
-  // El manguaré: dos tonos de madera.
+  // Manguare: two hollow wooden pitches.
   buf.voice = 'manguareLow';
   for (const e of [0, 4]) drum(buf, at(e), 150, 115, 0.11, 0.2, -0.1, 0.35);
   buf.voice = 'manguareHigh';
   for (const e of [2, 5, 7]) drum(buf, at(e), 230, 205, 0.06, 0.12, 0.2, 0.4);
   buf.voice = 'manguareRoll';
   if (index % 4 === 3) for (const e of [6, 6.5, 7, 7.5]) drum(buf, at(e), 380, 330, 0.05, 0.1, 0.3, 0.3);
-  // La guitarra eléctrica, con un segundo pulso apenas desafinado.
+  // Electric guitar with subtle detuned chorus pulse.
   buf.voice = 'melody';
   for (const [e, n, note] of song.melody[index] ?? []) {
     const f = freqOf(midi(note));
@@ -383,7 +383,7 @@ function renderAmazonica(buf, index) {
   }
 }
 
-// Toca el compás `index`: bajo, guitarra, tiple y melodía.
+// Renders measure `index`: bass, guitar, tiple, and melody.
 export function renderBar(buf, index) {
   if (buf.song.style === 'cumbia') return renderCumbia(buf, index);
   if (buf.song.style === 'torbellino') return renderTorbellino(buf, index);
@@ -396,8 +396,8 @@ export function renderBar(buf, index) {
   return renderBambuco(buf, index);
 }
 
-// Compás de sanjuanero (v4.0, 3/4 rápido): el bambuco de siempre (bajo, guitarra, tiple y bandola) con la tambora
-// del San Pedro (el golpe en el uno, el aro en el «y» del dos y el parche en el tres) y la carrasca raspando cada
+// Sanjuanero measure (v4.0, fast 3/4): classic bambuco ensemble plus San Pedro tambora
+// (head hit on 1, rim on and-of-2, head on 3) and carrasca scraper on every eighth.
 // corchea.
 function renderSanjuanero(buf, index) {
   renderBambuco(buf, index);
@@ -413,8 +413,8 @@ function renderSanjuanero(buf, index) {
   for (let e = 0; e < 6; e++) scrape(buf, at(e), eighth * (e % 2 ? 0.35 : 0.6), e % 2 ? 0.03 : 0.055, 0.45);
 }
 
-// Compás de pasillo (v4.4, 3/4): el bajo en el uno, la guitarra en el «y» del dos (con acento) y en el tres, y el
-// tiple que pica corto en el dos y en el «y» del tres. La melodía, en la bandola, como en el bambuco.
+// Pasillo measure (v4.4, 3/4): bass on 1, guitar accented on and-of-2 and beat 3,
+// muted tiple chops on 2 and and-of-3, and bandola melody.
 function renderPasillo(buf, index) {
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
@@ -446,9 +446,9 @@ function renderPasillo(buf, index) {
   }
 }
 
-// Compás de danza (v4.5, 2/4 lento, corcheas 0 a 3): el bajo en el uno y la quinta en el dos, la guitarra con el ritmo
-// de habanera (el «y» partido del uno y el dos), el tiple corto en el contratiempo y la bandola, como en el pasillo, con
-// las notas largas en trémolo.
+// Danza measure (v4.5, slow 2/4, eighths 0..3): bass on 1 and fifth on 2, habanera-rhythm
+// guitar, muted off-beat tiple, and bandola with dotted-eighth phrasing and tremolo.
+// Long notes in tremolo.
 function renderDanza(buf, index) {
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
@@ -482,7 +482,7 @@ function renderDanza(buf, index) {
   }
 }
 
-// Compás de bambuco (3/4): el de todas las regiones andinas.
+// Bambuco measure (3/4): shared Andean pattern.
 function renderBambuco(buf, index) {
   const { song, beat, rng } = buf;
   const eighth = beat / 2;
@@ -491,13 +491,13 @@ function renderBambuco(buf, index) {
   const { root, tones } = parseChord(song.chords[index]);
   const at = (e) => t0 + e * eighth + jitter();
 
-  // Bajo de la guitarra: la tónica en el primer tiempo y la quinta en el tercero.
+  // Guitar bassline: root on beat 1, fifth on beat 3.
   buf.voice = 'bass';
   pluck(buf, at(0), freqOf(above(root, 40)), beat * 2.2, { amp: 0.5, t60: 2.5, bright: 0.25, pan: -0.15, pos: 0.3 });
   pluck(buf, at(4), freqOf(above((root + 7) % 12, 40)), beat * 1.1, { amp: 0.3, t60: 2, bright: 0.25, pan: -0.15, pos: 0.3 });
 
-  // Guitarra: rasgueo en el segundo y el tercer tiempo; en la guabina (v3.67, `arpeggio`), punteada: las
-  // notas del acorde una por una, en cada corchea, para que no suene igual al bambuco.
+  // Guitar: strum on beats 2 and 3; in guabina (v3.67, `arpeggio`), arpeggiated eighth-note
+  // plucking so it differs cleanly from the bambuco.
   buf.voice = 'guitar';
   const guitar = tones.map((pc) => above(pc, 55)).sort((a, b) => a - b);
   if (song.arpeggio) {
@@ -508,9 +508,9 @@ function renderBambuco(buf, index) {
     strum(buf, at(4), guitar, beat * 0.8, { amp: 0.12, t60: 1.2, bright: 0.45, pan: -0.35 });
   }
 
-  // Tiple: golpes cortos y apagados en el contratiempo («y» del dos y del tres). Sus cuerdas van de a
-  // tres: dos al unísono (un poco desafinadas entre sí) y la de en medio una octava abajo. La guabina
-  // (v3.67, `tiple: false`) va sin él.
+  // Tiple: short muted off-beat hits (and-of-2 and and-of-3). Triple-course strings:
+  // two unison slightly detuned, middle string an octave lower. Guabina (`tiple: false`, v3.67)
+  // omits it.
   buf.voice = 'tiple';
   if (song.tiple !== false) {
     const tiple = tones.slice(0, 4).map((pc) => above(pc, 64)).sort((a, b) => a - b);
@@ -518,7 +518,7 @@ function renderBambuco(buf, index) {
     for (const e of [3, 5]) strum(buf, at(e), courses, 0.13, { amp: 0.07, t60: 0.8, bright: 0.8, pan: 0.35, pos: 0.12 }, true);
   }
 
-  // Melodía de bandola: las notas largas, en trémolo.
+  // Bandola melody: long notes played with tremolo.
   buf.voice = 'melody';
   for (const [e, n, note] of song.melody[index] ?? []) {
     const f = freqOf(midi(note));
@@ -534,7 +534,7 @@ function renderBambuco(buf, index) {
   }
 }
 
-// Toda la pieza de una vez (para las pruebas; el juego la va armando compás por compás).
+// Renders the entire piece at once (used in tests; gameplay builds bar by bar).
 export function renderSong(song, sr) {
   const buf = createSong(song, sr);
   for (let i = 0; i < song.chords.length; i++) renderBar(buf, i);
@@ -542,7 +542,7 @@ export function renderSong(song, sr) {
   return buf;
 }
 
-// Deja el pico en `peak` para que no sature.
+// Normalize peak to `peak` to prevent clipping.
 export function normalize(buf, peak = 0.85) {
   let max = 0;
   for (let i = 0; i < buf.length; i++) max = Math.max(max, Math.abs(buf.left[i]), Math.abs(buf.right[i]));

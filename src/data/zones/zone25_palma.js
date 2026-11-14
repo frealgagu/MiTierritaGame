@@ -1,5 +1,5 @@
-// Mapa de los Llanos · Zona 1: La Palma (v3.31). Mismo trazado que la Finca (zone1_finca.js), el
-// Arrozal y el Papal: la región empieza de cero y su primera zona se juega igual que la primera del Eje Cafetero.
+// Los Llanos Map · Zone 1: La Palma (v3.31). Same layout as La Finca (zone1_finca.js), El
+// Arrozal, and El Papal: the region starts from scratch and its first zone plays like the first one of Eje Cafetero.
 import { ICON } from '../icons.js';
 
 export const ZONE25 = {
@@ -24,19 +24,19 @@ export const ZONE25 = {
   muleRoad: [[8.5, 4.5], [8.5, 10.5], [14.5, 10.5], [14.5, 16.5], [20.5, 16.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys (v3.9), inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Puerto López ➜',
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
-  // Carretera de la Ruta del aceite (v3.34): sale de la bodega hacia el Hato llanero.
+  // Road for the Oil Route (v3.34): leaves the warehouse toward El Hato Llanero.
   routes: {
     aceite: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Aceite al Hato ➜' },
-    // Las cajas de aceite salen hacia Villavicencio (v3.36).
+    // Crates of oil leave toward Villavicencio (v3.36).
     cajas_aceite: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'A Villavicencio ➜' },
-    // La almendra de palmiste de la Prensa sale hacia Villavicencio (v4.0).
+    // Palm kernel from the Press leaves toward Villavicencio (v4.0).
     palmiste: { road: [[22.5, 15.6], [22.5, 10.5], [25.9, 10.5]], sign: [21.4, 9.4], text: 'Palmiste a Villavicencio ➜' },
   },
-  unlockedBy: null, // la primera de los Llanos: se abre con la región
+  unlockedBy: null, // the first zone of Los Llanos: opens with the region
   next: 'frutal',
 };

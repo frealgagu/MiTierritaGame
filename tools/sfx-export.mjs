@@ -1,7 +1,7 @@
-// Los efectos de sonido del juego para descargar (v3.71): cada sonido de src/audio/Sound.js grabado en MP3
-// con el mismo Web Audio del juego (Chromium, sin tiempo real), y en MIDI los que son notas (monedas,
-// subir de nivel, campanas…). Los que son ruido (fuego, viento, el Willys) no tienen notas: solo MP3.
-//   node tools/sfx-export.mjs [carpeta]   (por defecto web/musica/efectos; necesita Playwright y ffmpeg)
+// Game sound effects for download (v3.71): each sound in src/audio/Sound.js recorded to MP3
+// with the same Web Audio engine as the game (Chromium, offline), and to MIDI for pitched ones (coins,
+// level up, bells…). Noise-based ones (fire, wind, Willys) have no notes: MP3 only.
+//   node tools/sfx-export.mjs [folder]   (default web/musica/efectos; requires Playwright and ffmpeg)
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -16,11 +16,11 @@ const { chromium } = createRequire(import.meta.url)('playwright');
 const OUT = process.argv[2] ?? new URL('../web/musica/efectos', import.meta.url).pathname;
 const SR = 44100;
 
-// Los de las estaciones suenan con la primera estación de ese oficio (la bodega, para el Willys).
+// Station sounds play using the first station of that craft (warehouse for the Willys).
 const firstOf = (kind) => (kind === 'engine' ? 'dispatch' : STATIONS.find((st) => stationSound(st.id) === kind).id);
 const howOf = (how) => (typeof how === 'string' ? how : `station:${firstOf(how.kind)}`);
 
-// Graba uno: un OfflineAudioContext en lugar del del juego; se anotan las notas de tone() (y las campanas).
+// Record one: an OfflineAudioContext instead of the game's; logs tone() notes (and bells).
 async function record(page, src, how) {
   return page.evaluate(
     async ({ src, how, SR }) => {
@@ -45,7 +45,7 @@ async function record(page, src, how) {
       const out = await ctx.startRendering();
       const L = out.getChannelData(0);
       const R = out.getChannelData(1);
-      // Hasta donde suena (y un poquito más).
+      // As far as it rings out (plus a little extra).
       let end = L.length - 1;
       while (end > 0 && Math.abs(L[end]) < 1e-4 && Math.abs(R[end]) < 1e-4) end--;
       end = Math.min(L.length, end + Math.round(SR * 0.08));
@@ -66,11 +66,11 @@ const unpack = (parts) => {
   return new Float32Array(all.buffer, all.byteOffset, all.length / 4);
 };
 
-// Las notas de tone() a MIDI: cada forma de onda en su pista (cuadrada, triangular, sinusoidal) y las
-// campanas tubulares.
+// tone() notes to MIDI: each waveform on its own track (square, triangle, sine) and
+// tubular bells.
 function sfxMidi(notes) {
   const ppq = 480;
-  const tempo = 120; // un tiempo = medio segundo
+  const tempo = 120; // one beat = half a second
   const tick = (s) => Math.round((s / 0.5) * ppq);
   const PROGRAM = { square: ['Onda cuadrada', 80], triangle: ['Onda triangular', 79], sine: ['Onda senoidal', 79], sawtooth: ['Onda de sierra', 81], bell: ['Campanas', 14] };
   const tracks = new Map();
@@ -100,7 +100,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       for (let i = 0; i < L.length; i++) peak = Math.max(peak, Math.abs(L[i]), Math.abs(R[i]));
       const wav = join(tmp, `${file}.wav`);
       writeFileSync(wav, writeWav(L, R, SR));
-      // El pico a −3 dB (los efectos del juego son bajitos; así se oyen bien sueltos).
+      // Peak to −3 dB (game SFX are quiet; this makes them clear when played standalone).
       const gainDb = 20 * Math.log10(10 ** (-3 / 20) / (peak || 1));
       execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', wav, '-af', `volume=${gainDb.toFixed(2)}dB`, '-c:a', 'libmp3lame', '-b:a', '160k',
         '-metadata', `title=${file}`, '-metadata', 'artist=Encantos de Mi Tierrita', '-metadata', 'album=Encantos de Mi Tierrita (efectos)', join(OUT, `${file}.mp3`)]);

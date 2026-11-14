@@ -1,5 +1,5 @@
-// Ambiente (v1.8): un dato real de cada estación (rotan en el subtítulo de su panel) y una persona por
-// zona que avisa lo importante. Los datos son cortos para caber en dos renglones del panel.
+// Flavor & ambience (v1.8): a real factoid per station (rotates in panel subtitle) plus one
+// keeper character per zone. Factoids stay brief to fit two lines in panel.
 
 export const FACTS = {
   // La Finca
@@ -89,7 +89,7 @@ export const FACTS = {
   box_shop: ['En Barichara se hace papel a mano con fibra de fique.'],
   hamper: ['Los caminantes llevan fiambre para el camino, como los arrieros.'],
   camino_real: ['El Camino Real a Guane lo empedró Geo von Lengerke en el siglo XIX.', 'De Barichara a Guane se baja a pie en unas dos horas, entre piedras.'],
-  // Costa · El Arrozal (v3.15)
+  // Coast · El Arrozal (v3.15)
   rice_field: ['Córdoba y el Tolima son de los que más arroz siembran en Colombia.', 'El arroz crece en terrenos inundados, con los pies en el agua.', 'Las garzas siguen al tractor en el arrozal buscando comida.'],
   rice_dryer: ['El arroz se cosecha húmedo: hay que secarlo para guardarlo.'],
   rice_huller: ['La cascarilla del arroz sirve de abono y de combustible.'],
@@ -147,14 +147,14 @@ export const FACTS = {
   cocina_bahia: ['Cartagena es Patrimonio de la Humanidad desde 1984.'],
   loncheras: ['Las palenqueras venden frutas con su ponchera en la cabeza.'],
   muelle: ['Las Islas del Rosario son un parque nacional de corales.', 'De la ciudad a las islas se llega en lancha en una hora.'],
-  // Costa · El Sombrero (v3.19)
+  // Coast · El Sombrero (v3.19)
   canaflechal: ['La caña flecha es una palma de hojas largas que crece en la sabana.', 'El sombrero vueltiao viene del pueblo zenú, de Córdoba y Sucre.'],
   fiber_scraper: ['De cada hoja se raspa la fibra blanca con un cuchillo.'],
   fiber_dyer: ['La fibra negra se tiñe con barro y hojas, y se pone a hervir.'],
   braiders: ['Cuantas más pares tenga la trenza, más fino es el sombrero.', 'Las figuras de la trenza se llaman pintas y cada una tiene nombre.'],
   hat_sewer: ['El sombrero se arma cosiendo la trenza en vueltas: de ahí, vueltiao.'],
   parador: ['El sombrero vueltiao es símbolo cultural de Colombia desde 2004.', 'En Tuchín se venden sombreros a la orilla de la carretera.'],
-  // Costa · La Quesera (v3.18)
+  // Coast · La Quesera (v3.18)
   milking_corral: ['La vaca cebú tiene una giba en el lomo y aguanta bien el calor.', 'En la sabana se ordeña a mano, de madrugada, con el ternero al lado.'],
   curdler: ['La leche se cuaja con cuajo: en unas horas queda la cuajada.'],
   curd_mill: ['La cuajada se muele con bastante sal: por eso el costeño es salado.'],
@@ -162,20 +162,20 @@ export const FACTS = {
   mote_pot: ['El mote de queso es una sopa de ñame con queso costeño.', 'El mote de queso es el plato de Córdoba y Sucre.'],
   costeno_fonda: ['En la Costa no hay almuerzo sin arroz, y el mote se come con él.'],
   bandeja_kitchen: ['Pescado frito, arroz, patacón, queso y limón: bandeja completa.'],
-  // Costa · La Ciénaga (v3.17)
+  // Coast · La Ciénaga (v3.17)
   fishing_canoes: ['En la Ciénaga Grande hay pueblos de casas sobre el agua: palafitos.', 'El pescador tira la atarraya, una red redonda que se abre en el aire.'],
   fish_cleaner: ['El bocachico es el pescado más comido en los ríos y ciénagas.'],
   fish_salter: ['Salar el pescado y secarlo al sol era la forma de guardarlo.', 'El pescado salado llega a los pueblos para la Semana Santa.'],
   fish_filleter: ['El bocachico tiene muchas espinas: hay que saberlo filetear.'],
   fish_fryer: ['Pescado frito, patacón, arroz con coco y limón: el almuerzo costeño.'],
   coconut_fish_kitchen: ['El pescado se cocina en leche de coco con ají, cebolla y tomate.'],
-  // Costa · El Cocal (v3.16)
+  // Coast · El Cocal (v3.16)
   coconut_grove: ['La palma de coco da cocos todo el año, en racimos.', 'Un coco verde tiene agua dulce por dentro: se toma frío.'],
   coconut_peeler: ['El coco se pela a machete: la cáscara verde sirve de fibra.'],
   coconut_grater: ['El coco se ralla a mano, en un rallador de lata con huequitos.'],
   coconut_press: ['La leche de coco sale de exprimir el coco rallado en un trapo.', 'El arroz con coco se hace con leche de coco y panela.'],
   cocada_kitchen: ['Las palenqueras venden cocadas en las calles de Cartagena.', 'Hay cocadas blancas, de panela, de piña y de guayaba.'],
-  // Los Llanos · La Palma (v3.31)
+  // Llanos · La Palma (v3.31)
   palm_grove: ['El Meta es de los departamentos que más palma de aceite siembran.', 'La palma de aceite vino de África y da racimos todo el año.'],
   bunch_thresher: ['Un racimo de palma puede pesar más de 20 kilos.'],
   fruit_sterilizer: ['El fruto se cocina al vapor para que el aceite no se dañe.'],
@@ -183,20 +183,20 @@ export const FACTS = {
   oil_clarifier: ['El aceite se clarifica: se le quitan el agua y la arenilla.'],
   oil_bottler: ['Colombia es el país de América que más aceite de palma produce.'],
   oil_boxer: ['Con aceite se fríen la yuca y el plátano del almuerzo llanero.'],
-  // Los Llanos · El Frutal (v3.32)
+  // Llanos · El Frutal (v3.32)
   passion_vines: ['El maracuyá crece en enramadas, como una enredadera.', 'La flor del maracuyá es morada y blanca, con muchos hilitos.'],
   passion_pulper: ['El maracuyá tiene la pulpa amarilla, ácida y llena de semillas.'],
   pulp_pasteurizer: ['La pulpa se calienta un ratico para que dure más sin dañarse.'],
   juice_mixer: ['El jugo de maracuyá se hace en agua o en leche, con azúcar.'],
   juice_packer: ['En el Meta se dan mango, maracuyá, piña, cítricos y patilla.'],
-  // Los Llanos · La Cachamera (v3.33)
+  // Llanos · La Cachamera (v3.33)
   fish_ponds: ['La cachama es un pez de los ríos del Llano que se cría en estanques.', 'La cachama come frutas y semillas que caen al agua.'],
   cachama_cleaner: ['La cachama se escama y se lava con agua limpia.'],
   pisillo_kitchen: ['El pisillo es carne o pescado desmechado y sofrito.'],
   cachama_filleter: ['La cachama se puede asar entera o en filetes.'],
   cachama_smoker: ['El pescado ahumado dura más: se lleva de viaje.'],
   cachama_kitchen: ['La cachama asada se sirve con yuca, plátano y ensalada.'],
-  // Los Llanos · El Hato llanero (v3.34)
+  // Llanos · El Hato llanero (v3.34)
   llanero_herd: ['En los Llanos el ganado anda por sabanas grandísimas.', 'El vaquero llanero arrea el ganado a caballo, cantando.'],
   llanero_butcher: ['Para la carne a la llanera se despresa la ternera entera.'],
   adobadero: ['La mamona se adoba con sal gruesa, y casi nada más.'],
@@ -204,21 +204,21 @@ export const FACTS = {
   carving_table: ['Cada corte de la mamona tiene nombre: tembladores, raya, osobuco.'],
   lunch_llanero: ['La carne a la llanera se sirve con yuca, papa y plátano.'],
   parranda_grill: ['En una parranda llanera se baila joropo hasta el amanecer.'],
-  // Los Llanos · La Talabartería (v3.35)
+  // Llanos · La Talabartería (v3.35)
   hide_yard: ['El cuero de res se sala para que no se dañe antes de curtirlo.'],
   tannery: ['Curtir es volver el cuero crudo un cuero blando que no se pudre.'],
   leather_cutter: ['De un cuero salen las piezas de una silla, de unas cotizas o un zamarro.'],
   leather_tooler: ['El cuero repujado lleva flores y figuras hechas a golpe de buril.'],
   saddler: ['La silla llanera tiene la cabeza alta, para enlazar el ganado.', 'El zamarro es el delantal de cuero del vaquero llanero.'],
   tienda_llanera: ['Las cotizas son las alpargatas del llanero, de cuero y suela.'],
-  // Los Llanos · Villavicencio (v3.36)
+  // Llanos · Villavicencio (v3.36)
   empanaderia: ['A Villavicencio le dicen la Puerta del Llano.'],
   kiosco_parque: ['En Villavicencio hace calor todo el año, y llueve mucho en invierno.'],
   hotel_campestre: ['En Villavicencio se baila el Torneo Internacional del Joropo.'],
   plaza_mercado: ['En la plaza venden cachama, mamona, frutas y pan de arroz.'],
   morrales_viaje: ['Para el viaje al Llano adentro se lleva sombrero, agua y fiambre.'],
   salida_cano: ['Caño Cristales, en La Macarena, se pinta de rojo, amarillo y verde.', 'Al río de los cinco colores lo pintan unas plantas que viven en el agua.'],
-  // Costa Pacífica · El Platanal (v3.38)
+  // Pacific Coast · El Platanal (v3.38)
   plantain_grove: ['El Chocó es de las tierras más lluviosas del mundo: llueve casi a diario.', 'Cada mata de plátano da un solo racimo; luego el hijo toma su lugar.'],
   plantain_dehander: ['Cada racimo trae varias manos, y cada mano, varios dedos de plátano.'],
   plantain_washer: ['El plátano se lava para quitarle la leche, que mancha la cáscara.'],
@@ -226,20 +226,20 @@ export const FACTS = {
   patacon_fryer: ['El patacón se fríe, se aplasta con la tabla y se vuelve a freír.'],
   patacon_bagger: ['En el Pacífico el patacón acompaña el pescado, el sancocho y el tapao.'],
   patacon_boxer: ['Por el río Atrato llegan a Quibdó las lanchas cargadas de plátano.'],
-  // Costa Pacífica · La Azotea (v3.39)
+  // Pacific Coast · La Azotea (v3.39)
   azotea_beds: ['La azotea es una huerta alzada: a veces, una canoa vieja sobre pilotes.', 'En lo alto las hierbas no se inundan y las gallinas no las alcanzan.'],
   herb_washer: ['La chillangua es el cilantro cimarrón: de hoja larga y olor fuerte.'],
   herb_pestle: ['En el pilón se machacan las hierbas con ajo, cebolla y sal.'],
   refrito_pot: ['El refrito con hierbas de azotea es la base de la cocina del Pacífico.'],
   alino_packer: ['Poleo, albahaca negra, oreganón y chillangua: las hierbas de la abuela.'],
-  // Costa Pacífica · La Bahía (v3.40)
+  // Pacific Coast · La Bahía (v3.40)
   pargo_boats: ['En Bahía Solano y Nuquí se pesca con anzuelo, en lanchas pequeñas.', 'El pargo rojo vive entre las rocas del mar Pacífico.'],
   pargo_cleaner: ['El pescado se limpia en la playa, con agua de mar.'],
   fish_drier: ['El pescado seco se sala y se tiende al sol: dura semanas sin hielo.'],
   pargo_filleter: ['Del pargo se aprovecha todo: la cabeza va para el sancocho.'],
   pargo_smoker: ['El pescado ahumado en el fogón alto se guarda para el invierno.'],
   tapao_kitchen: ['El tapao es pescado con plátano verde, cocinado en olla tapada.'],
-  // Costa Pacífica · El Manglar (v3.41)
+  // Pacific Coast · El Manglar (v3.41)
   mangrove_flats: ['La piangua es una concha negra que vive en el barro del manglar.', 'Las piangüeras salen con la marea baja a sacarla del barro, a mano.'],
   piangua_washer: ['La piangua se lava bien para quitarle el barro antes de cocinarla.'],
   piangua_cooker: ['Al hervirla, la piangua se abre sola y suelta su carne.'],
@@ -247,21 +247,21 @@ export const FACTS = {
   encocado_pot: ['El encocado se cocina en leche de coco, con aliño de azotea.'],
   piangua_lunch: ['El arroz con piangua se sirve con patacón y una tajada de limón.'],
   cazuela_kitchen: ['La cazuela lleva piangua, pescado, leche de coco y patacón.'],
-  // Costa Pacífica · El Werregue (v3.42)
+  // Pacific Coast · El Werregue (v3.42)
   werregue_palms: ['El werregue es una palma espinosa de la selva del Pacífico.', 'Los wounaan tejen el werregue desde hace siglos, en el río San Juan.'],
   werregue_stripper: ['Del cogollo tierno se sacan las tiras de fibra, finas como hilo.'],
   werregue_dyer: ['La fibra se tiñe de negro con jagua y de rojo con achiote.'],
   werregue_twister: ['La fibra se tuerce sobre el muslo hasta volverse una hebra fuerte.'],
   werregue_weaver: ['Un jarrón de werregue puede tardar meses en tejerse.', 'El tejido es tan apretado que algunos jarrones aguantan agua.'],
   tienda_pacifico: ['Cada jarrón lleva dibujos de animales, ríos y caminos de la selva.'],
-  // Costa Pacífica · Buenaventura (v3.43)
+  // Pacific Coast · Buenaventura (v3.43)
   fritanga_puerto: ['Buenaventura es el puerto más grande de Colombia sobre el Pacífico.'],
   cevicheria: ['En el malecón se come ceviche de camarón y de piangua, con galletas.'],
   hotel_bahia: ['En Buenaventura se celebra el Festival Folclórico del Pacífico.'],
   galeria_pueblo_nuevo: ['En la galería de Pueblo Nuevo se vende pescado, piangua y chontaduro.'],
   loncheras_lancha: ['De Buenaventura salen las lanchas a Juanchaco y Ladrilleros.'],
   salida_ballenas: ['Las ballenas jorobadas llegan de julio a octubre a tener sus crías.', 'Vienen desde la Antártida: nadan más de 8.000 kilómetros.'],
-  // Amazonas · El Asaizal (v3.47)
+  // Amazon · El Asaizal (v3.47)
   asai_grove: ['El asaí es una palma delgada que crece a la orilla de los ríos.', 'Sus racimos dan bolitas moradas, casi negras, como uvas.'],
   asai_thresher: ['Los racimos se bajan trepando la palma, con un lazo en los pies.'],
   asai_soaker: ['El fruto se remoja en agua tibia para que suelte la pulpa.'],
@@ -269,20 +269,20 @@ export const FACTS = {
   asai_blender: ['En el Amazonas el asaí se toma con fariña o con azúcar.'],
   asai_bagger: ['La pulpa se congela enseguida para que no se dañe.'],
   asai_boxer: ['Por el río Amazonas viajan las cajas de asaí hasta Leticia.'],
-  // Amazonas · El Ajizal (v3.48)
+  // Amazon · El Ajizal (v3.48)
   aji_field: ['En la chagra se siembran muchos ajíes: rojos, amarillos y morados.', 'La chagra es la huerta que se abre en la selva y se deja descansar.'],
   aji_washer: ['Al lavar el ají, mejor con guantes: pica hasta en las manos.'],
   aji_grinder: ['El ají se muele con piedra o en el molino, con semillas y todo.'],
   tucupi_pot: ['El ají negro se cocina días enteros en el jugo de la yuca brava.', 'Al jugo de la yuca brava, cocinado, lo llaman tucupí.'],
   aji_packer: ['El ají negro es la sal de la selva: va con el pescado y el casabe.'],
-  // Amazonas · El Lago (v3.49)
+  // Amazon · El Lago (v3.49)
   pirarucu_canoes: ['El pirarucú es uno de los peces de río más grandes del mundo.', 'Sube a respirar aire cada rato: así lo ven los pescadores.'],
   pirarucu_cleaner: ['Las escamas del pirarucú son tan duras que sirven de lima de uñas.'],
   pirarucu_salter: ['El pirarucú salado y seco aguanta semanas sin nevera.'],
   pirarucu_filleter: ['Del pirarucú se sacan postas grandes, sin espinas.'],
   moquen: ['El moquén es una parrilla de palos sobre fuego lento: así se ahúma.'],
   pirarucu_kitchen: ['El pirarucú con ají negro y casabe es comida de fiesta en la selva.'],
-  // Amazonas · La Casabería (v3.50)
+  // Amazon · La Casabería (v3.50)
   yuca_chagra: ['La chagra es la huerta de la selva: yuca, piña, plátano y ají juntos.', 'La yuca brava es venenosa cruda: hay que sacarle el jugo.'],
   yuca_peeler: ['La yuca brava se pela a mano, con cuchillo, en el río.'],
   yuca_grater: ['Antes se rallaba con tablas de espinas de palma; hoy, con lata.'],
@@ -290,7 +290,7 @@ export const FACTS = {
   casabe_budare: ['El budare es el plato de barro caliente donde se asa el casabe.'],
   desayuno_table: ['En el Amazonas se desayuna casabe con asaí o con ají negro.'],
   maloca: ['La maloca es la casa grande y comunitaria de los pueblos de la selva.'],
-  // Amazonas · La Yanchama (v3.51)
+  // Amazon · La Yanchama (v3.51)
   yanchama_trees: ['La yanchama es la corteza interna de árboles como el ojé y el caucho.', 'Se saca una tira de corteza sin tumbar el árbol.'],
   bark_soaker: ['La corteza se deja remojando en el río varios días, hasta ablandarse.'],
   bark_beater: ['Con el mazo de palo la corteza se golpea hasta volverse tela.'],
@@ -417,14 +417,14 @@ export const FACTS = {
   pescaderia_plaza: ['La trucha llega de las lagunas frías y el pargo, del mar Pacífico.', 'El pescado ahumado aguanta el viaje largo hasta la capital.'],
   fritanga_plaza: ['En la plaza se desayuna lechona, tamal y caldo de costilla.', 'La fritanga lleva chorizo, morcilla, papa criolla y plátano.'],
   plaza_paloquemao: ['Paloquemao es una de las plazas de mercado más grandes de Bogotá.', 'La plaza abre de madrugada para los restaurantes y las tiendas.'],
-  // Bogotá · El centro (v4.5)
+  // Bogotá · Downtown (v4.5)
   hotel_capital: ['A Bogotá llega gente de todas las regiones a quedarse unos días.', 'En la noche, Bogotá es fría: se sale con abrigo y paraguas.'],
   funicular_monserrate: ['Monserrate está a más de 3.100 metros, sobre la ciudad.', 'Al cerro se sube en funicular, en teleférico o a pie.'],
   pabellon_regiones: ['En las ferias de Bogotá cada región arma su pabellón.', 'En un solo pabellón cabe el país: su comida, su música y su artesanía.'],
   gran_feria: ['La Gran Feria junta lo mejor de las diez regiones del juego.', 'Aquí termina el viaje: todo el país en una sola feria.'],
 };
 
-// Quién avisa en cada zona (en los avisos importantes, no en todos).
+// Speaker announcing milestones per zone (key events, not every toast).
 export const PEOPLE = {
   finca: { icon: '🧔', name: 'Don Jairo', role: 'el mayordomo' },
   trapiche: { icon: '👴', name: 'Don Aurelio', role: 'el trapichero' },
@@ -485,7 +485,7 @@ export const PEOPLE = {
   bogota: { icon: '👩🏻', name: 'Doña Clemencia', role: 'la del café de La Candelaria' },
 };
 
-// Lo que dicen al abrir su zona por primera vez.
+// Opening line when entering a zone for the first time.
 export const WELCOME = {
   finca: '¡Bienvenido a la finca, patrón! Toque el Cafetal y mejórelo cuando tenga monedas.',
   trapiche: '¡Llegó a la molienda! Aquí la caña se vuelve panela.',
@@ -553,7 +553,7 @@ function spanishArticle(name) {
   const article = first.endsWith('as') ? 'las' : first.endsWith('es') ? 'los' : first.endsWith('a') ? 'la' : 'el';
   return `${article} ${name}`;
 }
-// Cada idioma pone su regla (v3.68: en inglés, «the Wet Mill»).
+// Each language applies its own article rules (v3.68: in English, «the Wet Mill»).
 let articleRule = spanishArticle;
 export const setArticleRule = (rule) => (articleRule = rule);
 export const withArticle = (name) => articleRule(name);

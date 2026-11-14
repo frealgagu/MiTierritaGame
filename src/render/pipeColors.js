@@ -1,10 +1,10 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 
-// Cada producto de una zona con su color (v4.0.2): colores bien distintos entre sí (no el del producto, que
-// casi siempre es café o crema), en el orden de la cadena, para que dos seguidos nunca se parezcan. Fuera
-// quedan el azul (lo importado), el rojo (lo que frena) y el gris (lo que falta construir).
-// Desde la v4.3.1 lo usan los tubos de la cadena y las bandas del mapa, para que se correspondan.
+// Distinct color per zone product (v4.0.2): high-contrast hues along chain order (not literal
+// product color which is usually brown or cream), keeping neighbors distinct. Excludes blue
+// (imports), red (bottleneck), and gray (unbuilt).
+// Since v4.3.1 shared by chain pipes and map terrain bands so both match.
 export const PIPE_COLORS = ['#2f9e44', '#e8590c', '#7b3fb5', '#c99a06', '#0c8599', '#d6338a', '#8b5a2b', '#495057', '#82c91e'];
 
 const cache = {};

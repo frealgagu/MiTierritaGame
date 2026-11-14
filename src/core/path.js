@@ -1,4 +1,4 @@
-// Utilidades para caminos definidos como lista de puntos [gx, gy].
+// Point at fraction t (0..1) along the path. Also returns the segment direction.
 
 export function pathLength(points) {
   let len = 0;
@@ -8,7 +8,7 @@ export function pathLength(points) {
   return len;
 }
 
-// Punto a una fracción t (0..1) del recorrido. Devuelve también la dirección del tramo.
+// Point at distance `s` (in grid tiles) from the start of the path.
 export function pointAt(points, t) {
   const total = pathLength(points);
   let target = Math.min(Math.max(t, 0), 1) * total;
@@ -26,13 +26,13 @@ export function pointAt(points, t) {
   return { gx: x, gy: y, dx: 0, dy: 0 };
 }
 
-// Punto a una distancia `s` (en casillas) desde el inicio del recorrido.
+// Distance along the path from start to the point nearest to (x, y).
 export function pointAtDistance(points, s) {
   const total = pathLength(points);
   return pointAt(points, total === 0 ? 0 : s / total);
 }
 
-// Distancia desde el inicio del recorrido hasta el punto del camino más cercano a (x, y).
+// Seeded PRNG (mulberry32): identical terrain layout every run.
 export function projectOnPath(points, x, y) {
   let best = Infinity;
   let bestS = 0;

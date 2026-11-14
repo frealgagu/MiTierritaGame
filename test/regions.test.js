@@ -25,14 +25,14 @@ test('cada región tiene sus zonas y su partida empieza en la primera, con su fu
 test('Santander se abre al completar el Pueblo, con el calendario del país', () => {
   const root = createInitialState(0);
   assert.deepEqual(openRegions(root), []);
-  root.playTime = 50060; // a las 15:00 (en plena jornada)
+  root.playTime = 50060; // at 15:00 (mid-shift)
   root.zones.pueblo.complete = true;
   assert.deepEqual(openRegions(root), ['santander']);
   assert.deepEqual(openRegions(root), [], 'solo una vez');
   const s = regionState(root, 'santander');
   assert.equal(s.region, 'santander');
   assert.equal(clockOf(s), 50060);
-  // Avanza a la par: las dos partidas siguen en la misma fecha.
+  // Advances in lockstep: both saves remain on the same date.
   const a = new Game(root);
   const b = new Game(s);
   for (let t = 0; t < 30; t += 0.1) {
@@ -49,7 +49,7 @@ test('cada región tiene su segundo final y su reinicio, sin tocar las demás', 
   openRegions(root);
   const s = regionState(root, 'santander');
   for (const id of stationsOf(s)) s.stations[id] = { ...(s.stations[id] ?? {}), level: 100, transport: { level: 100 } };
-  // (v3.12: también las rutas, los objetivos y las investigaciones de la región.)
+  // (v3.12: also the region's routes, goals, and research.)
   for (const r of Object.values(s.routes)) r.level = 100;
   s.goals.claimed = Object.keys(s.zones).flatMap((z) => GOALS_BY_ZONE[z].map((g) => g.id));
   s.research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === 'santander').map((r) => r.id);
@@ -72,7 +72,7 @@ test('cada región tiene su segundo final y su reinicio, sin tocar las demás', 
   assert.equal(next.legacy.resets, 1);
   assert.equal(clockOf(next), clockOf(s), 'el calendario sigue');
   assert.ok(!next.profile);
-  // Reiniciar el Eje Cafetero conserva Santander.
+  // Resetting Eje Cafetero preserves Santander.
   root.regions.santander = next;
   const root2 = restartState(root);
   assert.equal(root2.regions.santander, next);
@@ -102,7 +102,7 @@ test('una partida con la Guayabera ya completa abre el Tabacal al cargarse (v3.1
   openRegions(root);
   const s = root.regions.santander;
   s.zones.guayabera.complete = true;
-  delete s.zones.tabacal; // como se guardaba en la v3.0
+  delete s.zones.tabacal; // as saved in v3.0
   saveGame(root);
   const back = loadGame().regions.santander;
   assert.equal(back.zones.tabacal.unlocked, true);
@@ -130,9 +130,9 @@ test('el Tabacal se abre al completar la Guayabera y su cadena tuerce tabacos si
   for (let t = 0; t < 300; t += 0.1) game.step(0.1);
   CALENDAR.on = on;
   assert.ok((game.state.stats.sold.cigar ?? 0) > 0, 'vende tabaco torcido');
-  // A igual nivel la cadena cuadra: ninguna estación le quita el paso a la siguiente. Desde la v3.67 el
-  // tabaco fermentado sale un 25 % más que lo que tuerce la Torcedora: esa parte es la de la Ruta del tabaco
-  // a la Fiquera (todavía cerrada), y mientras tanto se vende.
+  // At equal levels the chain balances: no station starves the next. Since v3.67
+  // fermented tobacco outputs 25 % more than Torcedora twists: that share belongs to the tobacco route
+  // to Fiquera (still closed), and meanwhile it is sold.
   const { rows } = analyzeChain(game.state, 'tabacal');
   for (const row of rows.filter((r) => r.children.length)) {
     const routeShare = row.id === 'tobacco_piles' ? row.output * 0.2 : 0;
@@ -207,20 +207,20 @@ test('el Hormiguero solo cosecha en la entrada de aguas (×4) y la despensa abas
   game.unlock('ant_cleaner');
   const on = CALENDAR.on;
   CALENDAR.on = true;
-  // Mediodía del primer día (verano): fuera de temporada no se cosecha, pero los arrieros llevan lo guardado.
+  // Noon of day one (dry season): out of season nothing is harvested, though haulers carry stored stock.
   game.state.playTime = DAY_LENGTH * ((14 - START_HOUR) / 24);
   for (let t = 0; t < 60; t += 0.1) game.step(0.1);
   assert.equal(ant.status, 'season');
   assert.equal(game.state.stats.produced.ant_queen ?? 0, 0, 'nada nuevo');
   assert.ok(ant.buffer < cap, 'la despensa baja');
   assert.ok((game.state.stats.produced.ant_clean ?? 0) > 0, 'la cadena sigue trabajando');
-  // Mediodía de la entrada de aguas: cosecha ×4.
+  // Noon of rainy onset: harvest ×4.
   game.state.playTime = DAY_LENGTH * (SEASON_DAYS + (14 - START_HOUR) / 24);
   ant.buffer = 0;
   for (let t = 0; t < 60; t += 0.1) game.step(0.1);
   assert.equal(ant.status, 'working');
   const made = game.state.stats.produced.ant_queen;
-  // 60 s a nivel 1 (0,5/s) en una temporada ×1, por 4.
+  // 60 s at level 1 (0.5/s) in a ×1 season, times 4.
   assert.ok(made > 100 && made < 130, `cosechó ${made}`);
   CALENDAR.on = on;
 });
@@ -257,12 +257,12 @@ test('una partida de Santander con la Asociación de tejedoras guardada como «t
   const root = createInitialState(0);
   root.zones.pueblo.complete = true;
   openRegions(root);
-  root.research.push('tejedoras'); // las Tejedoras de fique del Pueblo: se quedan
+  root.research.push('tejedoras'); // Pueblo's Tejedoras de fique: they remain
   root.regions.santander.research.push('tejedoras');
   saveGame(root);
   const back = loadGame();
   assert.ok(back.research.includes('tejedoras'));
-  // (v3.7: la Asociación de tejedoras ya no existe: sus horas pasaron al perfil y se devolvieron sus monedas.)
+  // (v3.7: Asociación de tejedoras no longer exists: its hours moved to profile and coins were refunded.)
   assert.deepEqual(back.regions.santander.research, []);
 });
 
@@ -350,7 +350,7 @@ test('con el Eje Cafetero ya terminado, Santander se abre aunque tras reiniciar 
   root.regionDone = true;
   assert.deepEqual(openRegions(root), ['santander']);
   assert.ok(regionState(root, 'santander'));
-  // Sin terminarla nunca, no.
+  // Without ever finishing it, no.
   assert.deepEqual(openRegions(createInitialState(0)), []);
 });
 
@@ -368,12 +368,12 @@ test('el segundo Willys: con el álbum lleno se compra por región, vende el dob
   assert.equal(profile.renown, 100 - WILLYS2_COST);
   assert.equal(quoteWillys2(profile, root).reason, 'owned');
   assert.ok(restartState(root).willys2, 'se conserva al reiniciar la región');
-  // Otra región se compra aparte.
+  // Another region is bought separately.
   root.zones.pueblo.complete = true;
   openRegions(root);
   assert.ok(!root.regions.santander.willys2);
   assert.ok(quoteWillys2(profile, root.regions.santander).ok);
-  // Vende el doble: con la bodega llena salen los dos Willys.
+  // Sells double: with a full warehouse both Willys depart.
   const on = CALENDAR.on;
   CALENDAR.on = false;
   try {
@@ -406,26 +406,26 @@ test('álbum, decoración, logros y jornada son de cada región; el Renombre, de
   const san = root.regions.santander;
   const p = profileOf(root);
   p.renown = 1000;
-  // Decoración aparte.
+  // Separate decoration.
   assert.ok(pickDecor(p, 'willys', 'azul', 'santander'));
   assert.equal(chosenDecor(p, 'santander').willys.id, 'azul');
   assert.equal(chosenDecor(p, 'cafetero').willys.id, 'verde');
   assert.ok(pickDecor(p, 'willys', 'azul', 'cafetero'), 'en el Eje Cafetero se compra aparte');
   assert.equal(p.renown, 1000 - 3 - 3);
-  // El segundo Willys de Santander pide el álbum de Santander.
+  // Santander's second Willys requires Santander's album.
   for (const pg of albumOf('cafetero')) for (const st of pg.stickers) buySticker(p, st.id);
   assert.ok(quoteWillys2(p, root).ok);
   assert.equal(quoteWillys2(p, san).reason, 'album');
   for (const pg of albumOf('santander')) for (const st of pg.stickers) buySticker(p, st.id);
   assert.ok(quoteWillys2(p, san).ok);
-  // Logros: cada región los suyos, con lo de su partida.
+  // Achievements: each region has its own, using its save's progress.
   san.stats.sold.bocadillo_crate = 1000;
   root.stats.sold.coffee_bag = 1000;
   const won = checkLogros(san, p).map((w) => w.logro.id);
   assert.ok(won.includes('s_bocadillo') && won.includes('s_album'), won.join());
   assert.ok(!won.includes('bolsas'), 'los del Eje Cafetero no se revisan con Santander');
   assert.equal(metric(san, 'pages', p), 6);
-  // Al reiniciar Santander, lo de su partida pasa a su acumulado.
+  // Resetting Santander moves its save stats into its lifetime totals.
   const next = restartState(san, 0, p);
   assert.equal(metric(next, 'sold:bocadillo_crate', p), 1000);
   assert.equal(metric(root, 'sold:bocadillo_crate', p), 0);
@@ -464,7 +464,7 @@ test('La Costa se abre al completar Barichara; con Cartagena completa queda term
   assert.deepEqual(openRegions(root), ['costa']);
   const c = regionState(root, 'costa');
   assert.deepEqual(Object.keys(c.zones), ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero', 'cartagena']);
-  // Cada zona abre la siguiente (v3.16 a v3.20) y Cartagena, la última, termina la región.
+  // Each zone opens the next (v3.16 to v3.20) and Cartagena, the last one, finishes the region.
   c.stats.sold = { rice_sack: 1e9, cocada: 1e9, fish_in_coconut: 1e9, bandeja_costena: 1e9, recuerdo_costa: 1e9, paseo_islas: 1e9 };
   for (const zone of ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero', 'cartagena']) {
     assert.ok(!c.regionDone, zone);
@@ -473,7 +473,7 @@ test('La Costa se abre al completar Barichara; con Cartagena completa queda term
     assert.equal(c.zones[zone].complete, true);
   }
   assert.ok(c.regionDone);
-  // Con todo lo suyo (v3.21): seis eventos, seis páginas de álbum y sus logros.
+  // With all its content (v3.21): six events, six album pages, and its achievements.
   assert.equal(regionEvents('costa').length, 6);
   assert.equal(albumOf('costa').length, 6);
   assert.ok(logrosOf('costa').length >= 10);
@@ -597,7 +597,7 @@ test('Boyacá se abre al completar Cartagena; con Villa de Leyva completa queda 
   assert.deepEqual(openRegions(root), ['boyaca']);
   const b = regionState(root, 'boyaca');
   assert.deepEqual(Object.keys(b.zones), ['papal', 'cerveceria', 'raquira', 'paipa', 'ruanas', 'villa_leyva']);
-  // Cada zona abre la siguiente (v3.23 a v3.27) y Villa de Leyva, la última, termina la región.
+  // Each zone opens the next (v3.23 to v3.27) and Villa de Leyva, the last one, finishes the region.
   b.stats.sold = { criollas_box: 1e9, beer_crate: 1e9, jarra_cerveza: 1e9, canasta_amasijos: 1e9, recuerdo_boyaca: 1e9, excursion_fosil: 1e9 };
   for (const zone of ['papal', 'cerveceria', 'raquira', 'paipa', 'ruanas', 'villa_leyva']) {
     assert.ok(!b.regionDone, zone);
@@ -606,7 +606,7 @@ test('Boyacá se abre al completar Cartagena; con Villa de Leyva completa queda 
     assert.equal(b.zones[zone].complete, true);
   }
   assert.ok(b.regionDone);
-  // Con todo lo suyo (v3.28): seis eventos, seis páginas de álbum y sus logros.
+  // With all its content (v3.28): six events, six album pages, and its achievements.
   assert.equal(regionEvents('boyaca').length, 6);
   assert.equal(albumOf('boyaca').length, 6);
   assert.ok(logrosOf('boyaca').length >= 10);
@@ -745,7 +745,7 @@ test('Los Llanos se abren al completar Villa de Leyva; con Villavicencio complet
   const l = regionState(root, 'llanos');
   const zones = ['palma', 'frutal', 'cachamera', 'hato_llanero', 'talabarteria', 'villavicencio'];
   assert.deepEqual(Object.keys(l.zones), zones);
-  // Cada zona abre la siguiente (v3.32 a v3.36) y Villavicencio, la última, termina la región.
+  // Each zone opens the next (v3.32 to v3.36) and Villavicencio, the last one, finishes the region.
   l.stats.sold = { oil_box: 1e9, juice_box: 1e9, cachama_maracuya: 1e9, parranda_llanera: 1e9, recuerdo_llano: 1e9, excursion_cano: 1e9 };
   for (const zone of zones) {
     assert.ok(!l.regionDone, zone);
@@ -754,7 +754,7 @@ test('Los Llanos se abren al completar Villa de Leyva; con Villavicencio complet
     assert.equal(l.zones[zone].complete, true);
   }
   assert.ok(l.regionDone);
-  // Con todo lo suyo (v3.37): seis eventos, seis páginas de álbum y sus logros.
+  // With all its content (v3.37): six events, six album pages, and its achievements.
   assert.equal(regionEvents('llanos').length, 6);
   assert.equal(albumOf('llanos').length, 6);
   assert.ok(logrosOf('llanos').length >= 10);
@@ -866,7 +866,7 @@ test('La Costa Pacífica se abre al completar Villavicencio; con Buenaventura co
   const c = regionState(root, 'pacifico');
   const zones = ['platanal', 'azotea', 'bahia', 'manglar', 'werregue', 'buenaventura'];
   assert.deepEqual(Object.keys(c.zones), zones);
-  // Cada zona abre la siguiente (v3.39 a v3.43) y Buenaventura, la última, termina la región.
+  // Each zone opens the next (v3.39 to v3.43) and Buenaventura, the last one, finishes the region.
   c.stats.sold = { patacon_box: 1e9, alino_box: 1e9, tapao: 1e9, cazuela_mariscos: 1e9, recuerdo_pacifico: 1e9, excursion_ballenas: 1e9 };
   for (const zone of zones) {
     assert.ok(!c.regionDone, zone);
@@ -875,7 +875,7 @@ test('La Costa Pacífica se abre al completar Villavicencio; con Buenaventura co
     assert.equal(c.zones[zone].complete, true);
   }
   assert.ok(c.regionDone);
-  // Con todo lo suyo (v3.44): seis eventos, seis páginas de álbum y sus logros.
+  // With all its content (v3.44): six events, six album pages, and its achievements.
   assert.equal(regionEvents('pacifico').length, 6);
   assert.equal(albumOf('pacifico').length, 6);
   assert.ok(logrosOf('pacifico').length >= 10);
@@ -987,7 +987,7 @@ test('El Amazonas se abre al completar Buenaventura; con Leticia completa queda 
   const zones = ['asaizal', 'ajizal', 'lago', 'casaberia', 'yanchama', 'leticia'];
   assert.deepEqual(Object.keys(a.zones), zones);
   assert.ok(a.zones.asaizal.unlocked);
-  // Cada zona abre la siguiente (v3.48 a v3.52) y Leticia, la última, termina la región.
+  // Each zone opens the next (v3.48 to v3.52) and Leticia, the last one, finishes the region.
   a.stats.sold = { asai_box: 1e9, aji_box: 1e9, pirarucu_aji: 1e9, banquete_maloca: 1e9, recuerdo_amazonas: 1e9, excursion_delfines: 1e9 };
   for (const zone of zones) {
     assert.ok(!a.regionDone, zone);
@@ -996,7 +996,7 @@ test('El Amazonas se abre al completar Buenaventura; con Leticia completa queda 
     assert.equal(a.zones[zone].complete, true);
   }
   assert.ok(a.regionDone);
-  // Con todo lo suyo (v3.53): seis eventos, seis páginas de álbum y sus logros.
+  // With all its content (v3.53): six events, six album pages, and its achievements.
   assert.equal(regionEvents('amazonas').length, 6);
   assert.equal(albumOf('amazonas').length, 6);
   assert.ok(logrosOf('amazonas').length >= 10);

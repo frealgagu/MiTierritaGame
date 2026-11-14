@@ -1,8 +1,8 @@
-// Mapa de la Zona 6: Salento (hasta la v3.11, «El Pueblo»; el id sigue siendo 'pueblo'). Mismas
-// convenciones que la Zona 1 (ver zone1_finca.js). Se parece a Salento (style): casas blancas con puertas y
-// balcones de colores, la Calle Real y palmas de cera del valle de Cocora.
-// No tiene fuente propia: en la plaza está la Casa del café, que recibe las bolsas de la Finca, y cada
-// estación espera junto a la carretera por la que le llega lo suyo de otra zona.
+// Zone 6 Map: Salento (until v3.11, 'El Pueblo'; id remains 'pueblo'). Same
+// conventions as Zone 1 (see zone1_finca.js). Styled like Salento: whitewashed houses with colorful doors
+// and balconies, Calle Real, and wax palms from the Cocora Valley.
+// No source of its own: in the square sits the Coffee House, receiving coffee bags from La Finca, and each
+// station waits next to the road bringing its item from another zone.
 export const ZONE6 = {
   id: 'pueblo',
   name: 'Salento',
@@ -12,7 +12,7 @@ export const ZONE6 = {
   theme: 'town',
   style: 'salento',
   chain: ['coffee_house', 'greca', 'fonda', 'basket_shop', 'gift_wrap', 'export_dock'],
-  // La plaza, con la Casa del café en una esquina.
+  // The square, with the Coffee House in one corner.
   farm: { stationId: 'coffee_house', x: 2, y: 2, w: 6, h: 6 },
   plots: [
     { stationId: 'greca', x: 9, y: 5 },
@@ -25,14 +25,14 @@ export const ZONE6 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys (v3.9), inside the first one
   exitSign: [21.5, 24.2],
-  // El Willys del Pueblo lleva lo que se vende hasta la carretera a Buenaventura.
-  exitText: 'A Buenaventura ➜', // (v4.1.2: Salento no tiene puerto; el café baja en tractomula)
+  // El Pueblo's Willys carries sold goods to the road to Buenaventura.
+  exitText: 'A Buenaventura ➜', // (v4.1.2: Salento has no port; coffee goes down by semi-truck)
   muleSpeed: 4,
   dispatchCost: { base: 400000, growth: 1.17 },
-  // Seis carreteras: por la derecha llegan el café, la panela y los chocolates; por abajo, las arepas
-  // y el arequipe.
+  // Six roads: from the right arrive coffee, panela, and chocolates; from below, arepas
+  // and arequipe.
   routes: {
     cafe: { road: [[25.9, 1.5], [7.6, 1.5]], sign: [24.2, 0.4], text: '⬅ Café de la Finca' },
     panela_pueblo: { road: [[25.9, 4.5], [10.5, 4.5]], sign: [24.2, 3.4], text: '⬅ Panela del Trapiche' },

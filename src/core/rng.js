@@ -1,4 +1,4 @@
-// Aleatorio con semilla (mulberry32): el mismo mapa en cada partida.
+// Deterministic PRNG helper.
 export function createRng(seed) {
   let a = seed >>> 0;
   return function rng() {

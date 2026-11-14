@@ -1,6 +1,6 @@
-// Rutas entre zonas (v1.2): un vehículo lleva un producto de la bodega de una zona a las estaciones que
-// lo necesitan en otra. Espera en la bodega de origen, sale con lo que piden las estaciones (o con lo que
-// haya tras `maxWait` s), lo reparte a mitad del viaje y vuelve.
+// Inter-zone routes (v1.2): a vehicle carries a product from origin zone warehouse to
+// stations needing it elsewhere. Waits at origin warehouse, departs with station demand (or
+// available stock after `maxWait` s), delivers at midpoint, returns.
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { stationImportCap, stationRate, TRANSPORT_MARGIN } from './rules.js';
@@ -8,62 +8,62 @@ import { speedMult } from './modifiers.js';
 import { REGION_OF_ZONE, REGIONS_BY_ID } from '../data/regions.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 
-// Lo que la bodega de origen guarda para una ruta, en cargas del vehículo.
+// How much origin warehouse reserves for a route, in vehicle loads.
 export const ROUTE_STOCK = 1.5;
 
 export function createRouteState() {
   return { level: 1, phase: 'idle', t: 0, waited: 0, load: 0 };
 }
 
-// Lo que la estación `id` importa por la ruta `r` (su entrada de def.imports).
+// Import amount station `id` draws from route `r` (its entry in def.imports).
 export const routeImport = (r, id) => STATIONS_BY_ID[id].imports.find((imp) => imp.route === r.id);
 
-// Estaciones construidas que abastece la ruta.
+// Built stations supplied by the route.
 export function routeStations(state, routeId) {
   return ROUTES_BY_ID[routeId].stations.filter((id) => state.stations[id]);
 }
 
-// Tractomulas (v4.5, Bogotá): rutas sin zona de origen en la partida (`unlimited`), que traen de otra región
-// (`origin`) una carga que no se acaba y no le quitan nada a esa región. Solo las frena su nivel.
-// La región de una ruta: la de su zona de origen o, en las tractomulas, la de su destino.
+// Tractomulas (v4.5, Bogotá): routes with no in-save origin zone (`unlimited`), hauling endless
+// cargo from another region without draining it. Only capped by route level.
+// Route's owning region: origin zone's region or, for tractomulas, destination's.
 export const routeRegion = (r) => REGION_OF_ZONE[r.from ?? r.to];
-// De dónde viene una ruta, para los textos: la zona de origen o, en las tractomulas, la región ({ name, icon }).
+// Route origin label: origin zone or, for tractomulas, origin region ({ name, icon }).
 export const routeOrigin = (r) => (r.unlimited ? REGIONS_BY_ID[r.origin] : ZONES_BY_ID[r.from]);
 
-// La ruta funciona cuando existe alguna estación que abastece (y la zona de origen está abierta).
+// Route operates once at least one target station is built (and origin zone is open).
 export function routeActive(state, routeId) {
   const r = ROUTES_BY_ID[routeId];
-  // Las tractomulas (v4.5) no van en el tablero de un evento: allí lo de afuera llega como a cualquier tablero
-  // (sim/events.js, stepSupply), y así el pico y placa o el paro sí la cortan.
+  // Tractomulas (v4.5) don't run on event boards: external supply arrives like other boards
+  // (sim/events.js, stepSupply), so pico y placa or strike still blocks them.
   if (r.unlimited) return !state.event && routeStations(state, routeId).length > 0;
   return routeStations(state, routeId).length > 0 && Boolean(state.zones[r.from]?.unlocked);
 }
 
-// Unidades por segundo del producto que gasta una estación a toda marcha (a `level`, o a su nivel).
+// Units/s of imported product consumed by station at full speed (at `level`, or current level).
 export function stationImportRate(state, r, id, level = state.stations[id].level) {
   return stationRate(STATIONS_BY_ID[id], level) * speedMult(state, id) * routeImport(r, id).perCycle;
 }
 
-// Chivas más seguidas (v4.2): con Renombre, por región, cada 30 s y luego cada 15 s (en vez de cada 60 s).
-// Cada una lleva la parte que le toca (la mitad o un cuarto): llega lo mismo por minuto, pero más seguido.
-// En el tablero de un evento no cambia nada (allí las rutas van con su estación).
+// Faster chivas (v4.2): with Renown per region, every 30 s then every 15 s (instead of 60 s).
+// Each carries its fraction (half or quarter): same throughput per minute, arriving more often.
+// Unchanged on event boards (there routes track station level).
 export const chivaSpeed = (state) => (state.event ? 1 : state.chivas === 15 ? 4 : state.chivas === 30 ? 2 : 1);
 export const tripTimeOf = (state, r) => r.tripTime / chivaSpeed(state);
 
-// Unidades por viaje: a igual nivel que las estaciones que abastece, un 25 % más de lo que estas
-// consumen en un viaje de ida y vuelta (contando sus investigaciones, como la carga de las mulas).
+// Units per trip: at equal level to supplied stations, 25 % more than what they consume
+// across a round trip (including research multipliers, matching mule loads).
 export function routeCapacity(state, routeId, level = state.routes[routeId].level) {
   const r = ROUTES_BY_ID[routeId];
   const perSecond = routeStations(state, routeId).reduce((n, id) => n + stationImportRate(state, r, id, level), 0);
   return perSecond * tripTimeOf(state, r) * TRANSPORT_MARGIN;
 }
 
-// Unidades por segundo que puede mover la ruta.
+// Units per second capacity of the route.
 export function routeRate(state, routeId, level) {
   return routeCapacity(state, routeId, level) / tripTimeOf(state, ROUTES_BY_ID[routeId]);
 }
 
-// Cuánto le cabe todavía a una estación de destino.
+// Remaining input capacity at a destination station.
 function stationSpace(state, r, id) {
   const def = STATIONS_BY_ID[id];
   const imp = routeImport(r, id);
@@ -71,7 +71,7 @@ function stationSpace(state, r, id) {
   return Math.max(0, cap - (state.stations[id].imported[r.product] ?? 0));
 }
 
-// Cuánto les cabe todavía a las estaciones de destino, contando lo que ya va en camino.
+// Combined remaining input capacity across destination stations, counting en-route cargo.
 export function routeDemand(state, routeId) {
   const r = ROUTES_BY_ID[routeId];
   const route = state.routes[routeId];
@@ -79,19 +79,19 @@ export function routeDemand(state, routeId) {
   return space - (route.phase === 'go' ? route.load : 0);
 }
 
-// Lo que el Willys de una zona debe dejar en la bodega para las rutas que salen de ella: una carga,
-// también mientras la Chiva va de viaje (si no, al volver solo encontraba lo de los últimos segundos).
+// What a zone's Willys must leave in warehouse for outbound routes: one full load,
+// including while Chiva is away (otherwise returning Chiva only saw the last few seconds).
 export function routeReserve(state, zoneId) {
   const reserve = {};
   for (const r of ROUTES) {
     if (r.from !== zoneId || !routeActive(state, r.id)) continue;
-    // Carga y media, aunque ahora pidan menos: lo que se junta mientras la Chiva va y viene.
+    // 1.5 loads even if demand is currently lower: stock built up while Chiva makes a round trip.
     reserve[r.product] = (reserve[r.product] ?? 0) + ROUTE_STOCK * routeCapacity(state, r.id);
   }
   return reserve;
 }
 
-// Reparte la carga entre las estaciones de destino según el sitio que le queda a cada una.
+// Distributes load across destination stations weighted by remaining space.
 function deliver(state, r, load) {
   const ids = routeStations(state, r.id);
   const spaces = ids.map((id) => stationSpace(state, r, id));
@@ -110,7 +110,7 @@ export function stepRoute(state, routeId, dt, bus) {
   const half = tripTimeOf(state, r) / 2;
 
   if (route.phase === 'idle') {
-    // La tractomula siempre encuentra carga (v4.5).
+    // Tractomula always finds cargo (v4.5).
     const wh = r.unlimited ? null : state.zones[r.from].warehouse;
     const stock = r.unlimited ? Infinity : wh[r.product] ?? 0;
     const want = Math.min(routeCapacity(state, routeId), routeDemand(state, routeId));

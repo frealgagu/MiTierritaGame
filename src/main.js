@@ -49,16 +49,16 @@ import { Music } from './audio/Music.js';
 
 const AUTOSAVE_MS = 10_000;
 const MIN_OFFLINE_S = 30;
-const DEFAULT_MUSIC_VOLUME = 40; // % (v3.66: al 100 % tapaba los sonidos)
+const DEFAULT_MUSIC_VOLUME = 40; // % (v3.66: at 100% it drowned out sound effects)
 let resetting = false;
 
 async function start() {
   splashWait(t('Preparando la finca…'));
   try {
-    // La fuente de los íconos propios también: el mapa los dibuja en textos de Pixi.
+    // Custom icon font too: Pixi map labels draw with it.
     await Promise.all([document.fonts.load('600 16px Fredoka'), document.fonts.load(`16px "${ICON_FONT}"`, Object.values(ICON).join(''))]);
   } catch {
-    // sin fuente web: se usa la del sistema
+    // no web font: fall back to system font
   }
 
   const app = new Application();
@@ -73,20 +73,20 @@ async function start() {
 
   const saved = loadGame();
   const game = new Game(saved ?? undefined);
-  // Regiones (v3.0): la partida principal (el Eje Cafetero) guarda las demás, cada una con su Game, y
-  // todas producen a la vez.
+  // Regions (v3.0): the main save (Eje Cafetero) stores the others, each with its own Game, and
+  // all produce simultaneously.
   const root = game.state;
-  openRegions(root); // una partida que ya tenía el Pueblo completo antes de la v3.0
+  openRegions(root); // save that already completed Pueblo before v3.0
   const games = { cafetero: game };
   for (const id of Object.keys(root.regions ?? {})) games[id] = new Game(root.regions[id]);
   const gameOf = (zoneId) => games[REGION_OF_ZONE[zoneId]];
-  // La decoración elegida, antes de dibujar nada.
+  // Selected decor, applied before rendering anything.
   setLook(root.profile);
-  // La velocidad de las opciones de desarrollador sigue puesta al volver, también para el tiempo fuera.
+  // Dev speed multiplier persists on resume, including for away time calculations.
   game.timeScale = savedSpeed();
   const away = saved ? (Date.now() - saved.savedAt) / 1000 : 0;
   const offline = saved ? await applyOffline(game, away) : null;
-  // Las otras regiones también (cada una con sus monedas: se avisa aparte).
+  // Other regions too (each has its own coins: notified separately).
   const regionOffline = [];
   for (const [id, g] of Object.entries(games)) {
     if (id === 'cafetero' || !saved) continue;
@@ -94,8 +94,8 @@ async function start() {
     if (r) regionOffline.push([id, r]);
   }
 
-  // Volumen de 0 a 100 (v3.66). Las partidas de antes solo tenían sí o no: la música, si sonaba, queda
-  // al 40 % (sonaba muy fuerte frente a los sonidos) y los sonidos al 100 %.
+  // Volume from 0 to 100 (v3.66). Legacy saves only stored on/off: music, if enabled, defaults
+  // to 40% (it was too loud compared to SFX) and SFX to 100%.
   const settings = game.state.settings;
   settings.soundVolume ??= settings.sound === false ? 0 : 100;
   settings.musicVolume ??= settings.music === false ? 0 : DEFAULT_MUSIC_VOLUME;
@@ -103,34 +103,34 @@ async function start() {
   sound.setVolume(settings.soundVolume / 100);
   const music = new Music(settings.musicVolume > 0);
   music.setVolume(settings.musicVolume / 100);
-  // Un clic suave en cada botón de la interfaz.
+  // Soft click on every UI button.
   document.addEventListener('click', (e) => {
     if (e.target.closest('button')) sound.click();
   });
 
-  // Zona que se está viendo (las demás siguen produciendo). Se recuerda con la partida.
+  // Currently viewed zone (others keep producing). Persisted with the save.
   const view = { zone: startZone(root, root.settings.zone) };
-  // La partida de la región que se está viendo (la del Eje Cafetero o la de otra región).
+  // Game instance of the currently viewed region (Eje Cafetero or another region).
   let active = gameOf(view.zone);
-  // Tablero de un evento en juego (v2.0): { zone, game } con su propio Game, o null.
+  // Active event board (v2.0): { zone, game } with its own Game instance, or null.
   let board = null;
   const getZone = () => board?.zone ?? view.zone;
   let scene = null;
   const panel = new StationPanel(active, () => scene?.select(null));
-  // Lo que muestra la interfaz: la región que se está viendo o el tablero de un evento.
+  // Target shown by UI: the active region or an open event board.
   let hud, chain, chatter, goals, research, zones, money;
   const useGame = (g) => {
     for (const v of [hud, panel, chain, chatter, goals, research, money]) if (v) v.game = g;
     if (hud) hud.recDirty = true;
   };
-  // id puede ser 'farm', 'farm:transport' (pestaña de arrieros), 'dispatch:<zona>', 'route:<ruta>'
-  // (pestaña 🚌 de la estación que abastece, o un panel suelto si se ve otra zona) o 'research:<id>'.
-  // Lo que pide una pestaña ('farm:transport', 'route:…': la mejora recomendada, la cadena, un objetivo o una
-  // investigación) abre esa pestaña; tocar la estación en el mapa abre la de la estación.
+  // id can be 'farm', 'farm:transport' (carriers tab), 'dispatch:<zone>', 'route:<route>'
+  // (route tab of the supplied station, or a standalone panel if viewing another zone), or research:<id>.
+  // Targets requesting a tab ('farm:transport', 'route:...': recommended upgrade, chain, goal, or
+  // research) open that tab; tapping the station on the map opens the station tab.
   const select = (id) => {
     const [stationId, part] = id.split(':');
-    if (stationId === 'research' && board) return; // en el tablero no hay investigaciones
-    // Una compra del evento (v3.8.2): se señala su botón en la barra del evento.
+    if (stationId === 'research' && board) return; // event boards have no research upgrades
+    // An event purchase (v3.8.2): highlight its button on the event bar.
     if (stationId === 'action') {
       if (board) eventBar.highlight(part);
       return;
@@ -139,7 +139,7 @@ async function start() {
       research.open();
       return;
     }
-    // 'dispatch:<zona>:stock' (v3.66): la pestaña 📦 de la bodega, con lo que hay de cada producto.
+    // 'dispatch:<zone>:stock' (v3.66): warehouse stock tab showing inventory per product.
     if (stationId === 'dispatch') {
       const [, zone, tab] = id.split(':');
       scene.select('dispatch');
@@ -148,8 +148,8 @@ async function start() {
       return;
     }
     if (stationId === 'route') {
-      // La estación que la recibe, en lo que se ve: en un evento, la del tablero (antes se buscaba en la partida y,
-      // si allá no estaba construida, se abría un panel suelto de la ruta, en nivel 1).
+      // Receiving station on the active map: on an event, the board station (previously looked up main save
+      // and, if unbuilt there, opened a standalone Lv.1 route panel).
       const here = (board ? board.game : active).state;
       const station = ROUTES_BY_ID[part].stations.find((sid) => scene.stations[sid] && here.stations[sid]);
       if (station) {
@@ -162,25 +162,25 @@ async function start() {
       }
       return;
     }
-    // Una estación de otra zona (la recomendación puede señalar la que abastece una ruta): ir allá.
-    // Se compara con la zona que se está viendo: en un evento, la del tablero (antes se comparaba con
-    // la del mapa de la partida y, si el evento era de otra zona, se salía del tablero).
+    // Station in another zone (recommendation can point to a route supplier): travel there.
+    // Compare against currently viewed zone: on an event, use the board zone (previously checked
+    // main map zone and exited the event board if the event belonged to another zone).
     if (STATIONS_BY_ID[stationId] && STATIONS_BY_ID[stationId].zone !== getZone()) {
-      if (board) return; // en el tablero solo están sus estaciones
+      if (board) return; // only event-relevant stations appear on the board
       showZone(STATIONS_BY_ID[stationId].zone);
       toast(`${ZONES_BY_ID[view.zone].icon} ${ZONES_BY_ID[view.zone].name}`, 2000);
     }
     scene.select(stationId);
-    // Siempre en la pestaña de la estación (v3.67); si lo que toca mejorar son sus arrieros, esa pestaña
-    // se señala (parpadea) en vez de abrirse sola.
+    // Always open on the station tab (v3.67); if carriers need upgrading, pulse that tab
+    // instead of switching straight into it.
     panel.open(stationId, part === 'transport' ? 'transport' : 'station');
-    // Al entrar a una estación suena su oficio (v3.3.2).
+    // Entering a station plays its craft sound (v3.3.2).
     sound.station(stationId);
   };
   const showZone = (zoneId) => {
-    // Primero el panel: al cerrarse quita la selección de la escena, que aún debe existir.
+    // Close panel first: closing clears the scene selection, which must still exist.
     if (panel.id) panel.close();
-    // Ir a una zona de la partida sale del tablero del evento (que queda guardado tal cual).
+    // Traveling to a main-game zone leaves the event board (saved as-is).
     if (board) leaveBoard();
     if (scene) scene.destroy();
     view.zone = zoneId;
@@ -188,7 +188,7 @@ async function start() {
     active = gameOf(zoneId);
     useGame(active);
     music.setRegion(REGIONS_BY_ID[active.state.region ?? 'cafetero'].music);
-    // Cada región con su decoración (v3.10).
+    // Each region has its own decor (v3.10).
     setLook(root.profile, REGION_OF_ZONE[zoneId]);
     scene = new Scene(app, active, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
@@ -199,8 +199,8 @@ async function start() {
   showZone(view.zone);
   hud = new HUD(active, select, () => scene.dayNight.hour, getZone);
   chain = new ChainView(active, select, getZone, () => game.state);
-  // Mientras se mueve la cadena (v4.7.2), el mapa de atrás (casi tapado) y la simulación van a 10 cuadros por segundo:
-  // así el desplazamiento no se traba en los teléfonos.
+  // While dragging the chain (v4.7.2), throttle background map (mostly covered) and simulation to 10 fps
+  // so scrolling stays smooth on phones.
   chain.onMoving = (on) => (app.ticker.maxFPS = on ? 10 : 0);
   money = new MoneyView(active, getZone);
   chatter = new Chatter(active, getZone, () => game.state);
@@ -211,9 +211,9 @@ async function start() {
     toast(`${ZONES_BY_ID[z].icon} ${ZONES_BY_ID[z].name}`, 2000);
   });
 
-  // Eventos: entrar y salir del tablero. La partida sigue corriendo; el reloj del tablero solo cuando se
-  // está en él. Mientras tanto, el HUD, el panel y la cadena muestran el tablero.
-  // Pausar vuelve al mapa; reiniciar y terminar piden confirmación, salvo terminar uno ya ganado (v3.30).
+  // Events: enter and leave a board. Main game keeps running; board clock ticks only while
+  // inside it. Meanwhile HUD, panel, and chain bind to the board.
+  // Pause returns to the map; restart and finish ask confirmation unless already won (v3.30).
   const confirmEvent = (icon, title, text, yes, onYes) => {
     const modal = document.getElementById('event-confirm');
     document.getElementById('event-confirm-icon').textContent = icon;
@@ -251,7 +251,7 @@ async function start() {
       toast(t('🏁 Evento terminado sin medalla.'), 3000);
     });
   };
-  // ⏸️ Pausar o 🚪 Salir (v3.67.4): lo elige el jugador en el menú, para todos los eventos.
+  // Pause or Leave (v3.67.4): chosen by the player in Settings for all events.
   const exitMode = () => (game.state.settings.eventExit === 'leave' ? 'leave' : 'pause');
   const eventBar = new EventBar(() => exitEvent(), restartBoard, endBoard, exitMode);
   const exitSelect = document.getElementById('event-exit-mode');
@@ -266,7 +266,7 @@ async function start() {
     eventBar.paintExit();
     exitHint();
   });
-  // Viajes entre zonas (v4.1.3): con el viaje en el mapa (lo de siempre) o directo, sin animación.
+  // Zone travel (v4.1.3): animated trip on the map (default) or instant direct switch.
   const travelSelect = document.getElementById('travel-mode');
   const travelHint = () => {
     document.getElementById('travel-hint').textContent =
@@ -278,13 +278,13 @@ async function start() {
     game.state.settings.travel = travelSelect.value;
     travelHint();
   });
-  // El evento de una zona se guarda en la partida de su región (v3.6: Santander también tiene eventos);
-  // los cupos, en la principal (v3.30).
+  // A zone event is stored in its own region save (v3.6: Santander also has events);
+  // global slots live on the main save (v3.30).
   const enterEvent = (zoneId) => {
-    // (v4.7.3) O, en una región con oro en todo y los eventos a demanda comprados, «Jugar otra vez».
+    // (v4.7.3) Or, on a region with gold on all events and on-demand unlocked, Play again.
     const state = startEvent(game.state, zoneId) ?? startOnDemand(game.state, zoneId);
     if (!state) return;
-    // zoneId es la clave del evento (v4.5: en Bogotá, varios eventos en la misma zona); el mapa es el de su zona.
+    // zoneId acts as the event key (v4.5: Bogota has multiple events in the same zone); map uses its zone.
     const key = zoneId;
     zoneId = state.event.zone;
     if (panel.id) panel.close();
@@ -305,15 +305,15 @@ async function start() {
     if (import.meta.env.DEV) window.__mitierrita = { ...window.__mitierrita, scene, board };
   };
   if (import.meta.env.DEV) window.__mitierritaEvent = enterEvent;
-  // Si se salió con 🚪, lo que el tablero hizo mientras tanto (v3.67.4), con el reloj del país: también
-  // cuenta el tiempo con el juego cerrado (hasta el tope de horas sin conexión, como la partida).
+  // If left with Leave mode, catch up background progress (v3.67.4) using the country clock: also
+  // counts time while the app was closed (up to the offline hours cap).
   const catchUpBoard = (eg) => {
     const state = eg.state;
     const away = awaySeconds(state, game.state);
     delete state.event.away;
     if (away < 1) return;
     const r = eg.catchUpBoard(away);
-    // Con las tres mejoras ya compradas, el evento se gana en el siguiente cuadro (y sale su ventana).
+    // With all three event upgrades bought, victory triggers on the next frame and shows its modal.
     if (r.secured && !allActionsBought(state)) {
       const m = MEDALS[state.event.medal];
       toast(t('🚪 El evento siguió {time} sin ti: ¡{icon} medalla de {medal} asegurada! Para terminarlo, compra las mejoras que faltan.', { time: formatDuration(r.seconds), icon: m.icon, medal: m.name }), 6000);
@@ -321,8 +321,8 @@ async function start() {
     } else toast(t('🚪 El evento siguió {time} sin ti.', { time: formatDuration(r.seconds) }), 4000);
   };
   const leaveBoard = () => {
-    // 🚪 Salir (con el botón o yendo a una zona): el tablero sigue corriendo desde ahora, con el reloj del
-    // país; ⏸️ Pausar: se queda quieto (v3.67.4).
+    // Leave mode (via button or switching zones): board keeps running from now using the country
+    // clock; Pause mode freezes it (v3.67.4).
     if (exitMode() === 'leave') board.game.state.event.away = clockOf(game.state);
     board = null;
     useGame(active);
@@ -336,7 +336,7 @@ async function start() {
     showZone(view.zone);
   };
   const events = new EventsView(game, enterEvent);
-  // Al cambiar la decoración se vuelve a dibujar el mapa (el de la zona o el del tablero).
+  // Changing decor redraws the map (main zone or event board).
   const renown = new RenownView(game, (profile) => {
     if (!board) return showZone(view.zone);
     setLook(profile, REGION_OF_ZONE[board.zone]);
@@ -350,11 +350,11 @@ async function start() {
   for (const [id, tab] of [['album-btn', 'album'], ['decor-btn', 'decor'], ['logros-btn', 'logros'], ['offline-btn', 'offline']]) {
     document.getElementById(id).addEventListener('click', () => {
       events.close();
-      // Con la región que se está jugando (v3.10: cada una tiene su álbum, decoración, logros y jornada).
+      // Opens on the currently played region (v3.10: each has its own album, decor, achievements, and workday).
       renown.open(tab, REGION_OF_ZONE[board ? board.zone : view.zone]);
     });
   }
-  // Volver a la ventana de eventos desde el Renombre (v3.67), sin cerrar y volver a abrir.
+  // Return to Events window from Renown (v3.67) without closing and reopening.
   document.getElementById('renown-back').addEventListener('click', () => {
     document.getElementById('renown').hidden = true;
     events.open();
@@ -366,7 +366,7 @@ async function start() {
     document.getElementById('event-result-text').textContent =
       t('{event}: cumpliste el objetivo en {time} y compraste las tres mejoras.\n+{renown} ⭐ de Renombre (tienes {total}).\nEste cupo de eventos queda libre en 2 años del juego (unas {cooldown}).', { event: `${r.def.icon} ${r.def.name}`, time: formatClock(r.time), renown: m.renown, total: game.state.profile.renown, cooldown: formatDuration(EVENT_COOLDOWN) });
     const modal = document.getElementById('event-result');
-    // Terminar, o quedarse mirando el tablero (v3.30): se puede pausar, pero se cierra con «Terminar».
+    // End event or keep inspecting the board (v3.30): can pause, closes on End event.
     document.getElementById('event-result-ok').onclick = () => {
       modal.hidden = true;
       endBoard();
@@ -376,45 +376,45 @@ async function start() {
     sound.milestone();
   };
 
-  // Segundo final: todas las estaciones de la región en el nivel 100. Se puede volver a empezar la
-  // región con producción ×2 (las demás siguen como están).
+  // Second ending: all stations in the region at level 100. Player can restart the
+  // region with x2 production (other regions stay untouched).
   const restart = (g) => {
     resetting = true;
     if (g === game) saveGame(restartState(root));
     else {
       root.regions[g.state.region] = restartState(g.state, Date.now(), root.profile);
-      // Que abra en la región que se reinició (v3.72), en su primera zona.
+      // Open in the restarted region (v3.72), on its first zone.
       root.settings.zone = root.regions[g.state.region].settings.zone;
       saveGame(root);
     }
     location.reload();
   };
   const mastery = (g = active) => showMastery(g.state, () => restart(g));
-  // Lo que avisa cada región: objetivos, finales e investigaciones.
+  // Per-region notifications: goals, endings, and research.
   const wire = (g) => {
     g.bus.on('goalClaimed', ({ goal, zone, bulk }) => {
-      if (bulk) return; // «Cobrar todos»: un solo aviso al final (goalsClaimed)
+      if (bulk) return; // Claim all: single summary toast at the end (goalsClaimed)
       if (!goal.final) {
         sound.coin();
         toast(t('🎯 ¡Objetivo cumplido! +{coins} 💰', { coins: formatNumber(goal.reward) }), 3000);
         return;
       }
       sound.milestone();
-      // El Pueblo abre Santander (v3.0): su partida empieza a producir de una vez.
+      // Pueblo unlocks Santander (v3.0): its region starts producing right away.
       const opened = openRegions(root);
       for (const id of opened) {
         games[id] = new Game(root.regions[id]);
         games[id].timeScale = game.timeScale;
         wire(games[id]);
       }
-      // La región que sigue, si ya estaba abierta (al completar de nuevo la última zona tras reiniciar).
+      // Next region, if already unlocked (e.g. completing the final zone again after restarting).
       const after = !ZONES_BY_ID[zone].next && REGIONS.find((r) => r.unlock?.zone === zone && regionState(root, r.id));
-      // Ir a la zona que sigue (v3.67): con el viaje en el mapa.
+      // Move to next zone (v3.67): animated trip on the map.
       showVictory(g.state, zone, (next) => zones.travel(next), opened, after?.id);
     });
     g.bus.on('mastered', () => {
-      // Si llega al cobrar el primer final (ya estaba todo al 100), primero la pantalla del final de
-      // la zona y, al cerrarla, la del segundo final.
+      // If triggered when claiming the first ending (everything already at 100), show zone ending first
+      // and then the second ending modal once closed.
       const victory = document.getElementById('victory');
       const show = () => {
         sound.milestone();
@@ -437,18 +437,18 @@ async function start() {
       toast(ids.length === 1 ? `🔬 ${RESEARCH_BY_ID[ids[0]].name}: ${RESEARCH_BY_ID[ids[0]].desc}` : t('🔬 ¡{n} investigaciones compradas! {names}', { n: ids.length, names: ids.map((id) => RESEARCH_BY_ID[id].name).join(', ') }), 4000);
     });
     g.bus.on('research', ({ id, bulk }) => {
-      if (bulk) return; // «Comprar todas»: un solo aviso al final (researchAll)
+      if (bulk) return; // Buy all: single summary toast at the end (researchAll)
       sound.milestone();
       toast(`🔬 ${RESEARCH_BY_ID[id].name}: ${RESEARCH_BY_ID[id].desc}`, 4000);
     });
-    checkMastery(g.state, g.bus); // una partida que ya lo tenía todo al 100 antes de la v1.6
+    checkMastery(g.state, g.bus); // save that already had everything at 100 before v1.6
   };
   for (const g of Object.values(games)) wire(g);
   goals.onMastery = () => mastery(active);
-  // (v4.7.1) Volver a empezar ya no está en el menú: se hace desde los objetivos (la tarjeta del segundo final).
+  // (v4.7.1) Restarting moved out of Settings: now triggered from Goals (the second ending card).
   window.addEventListener('resize', () => scene.resize(app.screen.width, app.screen.height));
-  // Esc (o «atrás» en Android) cierra la ventana abierta o, si no hay ninguna, el panel de la estación.
-  // Devuelve si cerró algo.
+  // Esc (or Android back button) closes the open modal or, if none, the station panel.
+  // Returns whether something was closed.
   const closeTop = () => {
     const open = [...document.querySelectorAll('.modal')].filter((m) => !m.hidden);
     if (open.length) open.forEach((m) => (m.hidden = true));
@@ -459,9 +459,9 @@ async function start() {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeTop();
   });
-  // Tocar fuera de una ventana la cierra (v3.67), como su ✕. No las que piden decidir algo (cobrar lo
-  // ganado sin conexión, la victoria, el segundo final, el resultado o la confirmación de un evento, la
-  // actualización). El panel de la estación tampoco: ese se cierra solo con su ✕.
+  // Tapping outside a modal closes it (v3.67), just like X. Excludes modals requiring an action (claim
+  // offline earnings, victory, second ending, event result/confirmation, or update
+  // prompt). Station panel also closes only via X or empty map tap.
   const STICKY = new Set(['welcome', 'victory', 'mastery', 'event-result', 'event-confirm', 'update']);
   document.addEventListener('click', (e) => {
     const m = e.target;
@@ -474,10 +474,10 @@ async function start() {
   hideSplash();
   if (offline) showWelcome(offline, () => sound.coin());
   for (const [id, r] of regionOffline) toast(t('{region} también siguió trabajando: +💰 {coins}', { region: `${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name}`, coins: formatNumber(r.coins) }), 5000);
-  // Cómo se juega, encima de todo (la bienvenida queda debajo, para después).
+  // How to play stays on top (welcome modal stays beneath for afterwards).
   if (introOnStart(game.state)) showIntro(game.state);
-  // En un evento, el reloj de su tablero (v3.9.1).
-  // La región que se ve (v3.10: cada una con su jornada) o, en un evento, el reloj de su tablero (v3.9.1).
+  // During an event, use its board clock (v3.9.1).
+  // Currently viewed region (v3.10: each has its own workday) or, during an event, its board clock (v3.9.1).
   document.getElementById('clock').addEventListener('click', () => showCalendar(board ? board.game.state : active.state));
   document.getElementById('intro-btn').addEventListener('click', () => {
     document.getElementById('menu').hidden = true;
@@ -485,9 +485,9 @@ async function start() {
   });
 
   let uiTimer = 0;
-  let catching = false; // calculando lo de sin conexión al volver a la app
-  // Cada parte por separado: si una falla, las demás siguen (y el bucle no se detiene: un error en un
-  // cuadro detiene el ticker de Pixi para siempre).
+  let catching = false; // currently catching up offline progress on resume
+  // Isolate each module: if one throws, the rest keep running (never let a per-frame
+  // exception permanently halt the Pixi ticker).
   const safely = (fn) => {
     try {
       fn();
@@ -498,7 +498,7 @@ async function start() {
   app.ticker.add((ticker) => {
     if (catching) return;
     const dt = ticker.deltaMS / 1000;
-    // Todas las regiones producen a la vez (a la velocidad de las opciones de desarrollador).
+    // All regions produce simultaneously (at dev options speed).
     for (const g of Object.values(games)) {
       g.timeScale = game.timeScale;
       safely(() => g.update(dt));
@@ -508,7 +508,7 @@ async function start() {
       board.game.timeScale = game.timeScale;
       board.game.update(dt);
       const r = finishEvent(game.state, board.key);
-      // v3.7: cumplir el objetivo asegura la medalla; el evento termina al tener las tres mejoras.
+      // v3.7: reaching the goal secures the medal; event completes once all three upgrades are bought.
       if (r?.secured) {
         const m = MEDALS[r.medal];
         toast(t('{icon} ¡Medalla de {medal} asegurada! Para terminar el evento, compra las mejoras que faltan.', { icon: m.icon, medal: m.name }), 6000);
@@ -525,11 +525,11 @@ async function start() {
       uiTimer = 0.2;
       safely(() => hud.update());
       safely(() => scene.setGuide(panel.id ? null : hud.guide));
-      // Logros (v2.3): se pagan al llegar a cada nivel.
+      // Achievements (v2.3): pay Renown as each tier is reached.
       safely(() => {
-        // Los de cada región (v3.10), con el Renombre del jugador.
+        // Per-region achievements (v3.10) alongside global player Renown.
         const won = Object.values(games).flatMap((g) => checkLogros(g.state, root.profile));
-        // Premio por las medallas de toda una región (v3.12).
+        // Region-wide medal tier bonus (v3.12).
         for (const b of checkMedalBonus(root.profile)) {
           toast(t('🏅 ¡Todos los eventos de {region} con {medal} o mejor! +{renown} ⭐ de Renombre', { region: REGIONS_BY_ID[b.region].name, medal: `${MEDALS[b.medal].icon} ${MEDALS[b.medal].name}`, renown: b.renown }), 5000);
           sound.milestone();
@@ -537,16 +537,16 @@ async function start() {
         if (!won.length) return;
         const stars = won.reduce((n, w) => n + w.reward, 0);
         const [w] = won;
-        // Varios a la vez (una partida de antes de la v2.3), en un solo aviso.
+        // Multiple tiers at once (pre-v2.3 save), collapsed into a single toast.
         toast(won.length > 1 ? t('🏆 {n} logros: +{stars} ⭐ de Renombre', { n: won.length, stars }) : t('🏆 {logro} (nivel {tier}): +{stars} ⭐ de Renombre', { logro: `${w.logro.icon} ${w.logro.name}`, tier: w.tier, stars }), 4000);
         sound.milestone();
       });
-      // En el tablero de un evento, la persona de la zona no avisa lo de la partida.
+      // Inside an event board, the keeper does not show main-game hints.
       for (const view of [panel, chain, money, goals, research, zones, events, eventBar, ...(board ? [] : [chatter])]) safely(() => view.update());
     }
   });
 
-  // Guardado automático y recuperación al volver a la pestaña.
+  // Auto-save and resume catch-up when returning to the tab.
   const persist = () => {
     if (!resetting) saveGame(game.state);
   };
@@ -554,12 +554,12 @@ async function start() {
   let hiddenAt = null;
   const onHide = () => {
     hiddenAt ??= Date.now();
-    // Con 🚪 Salir, el tablero abierto también sigue con el juego cerrado (v3.67.4).
+    // With Leave mode, open boards also tick while the app is closed (v3.67.4).
     if (board && exitMode() === 'leave') board.game.state.event.away ??= clockOf(game.state);
     persist();
   };
-  // Al volver, lo producido mientras tanto (una sola vez, aunque avisen la página y la app). Mientras
-  // se calcula, el juego no avanza (catching) y se ve la pantalla de carga.
+  // On resume, catch up elapsed progress once (even if both page and native hooks fire). While
+  // calculating, main loop pauses (catching) and the splash progress bar is shown.
   const onShow = async () => {
     if (!hiddenAt || catching) return;
     const away = (Date.now() - hiddenAt) / 1000;
@@ -585,12 +585,12 @@ async function start() {
   bindMenu(game, sound, music, () => active);
   bindDevOptions(game, () => active);
   bindIconTips();
-  bindMore(); // «Ver más» en los textos largos (v3.67.5)
+  bindMore(); // Show more toggle on long descriptions (v3.67.5)
   bindTip(tipMode({ native: isNativeApp(), playStore: typeof __PLAY_STORE__ !== 'undefined' && __PLAY_STORE__ }));
-  // En la app de Android el juego ya va dentro del paquete: sin service worker, con el botón «atrás».
+  // On Android app, assets are bundled locally: no service worker, hardware Back button enabled.
   if (isNativeApp()) {
-    // ¿Hay un APK más nuevo? Al abrir, al volver a la app (cada pocas horas) y desde el menú (v3.6.1). La de
-    // Google Play (v3.62) no: se actualiza solo desde la tienda, como lo piden sus reglas.
+    // Newer APK available? Check on launch, resume (every few hours), and from Settings (v3.6.1). Google Play
+    // builds (v3.62) skip this and rely solely on Play Store updates per store policy.
     const selfUpdate = typeof __PLAY_STORE__ === 'undefined' || !__PLAY_STORE__;
     bindNative({ closeTop, onHide, onShow: () => (onShow(), selfUpdate && checkForUpdate()) });
     if (selfUpdate) {
@@ -601,19 +601,19 @@ async function start() {
     }
   }
   else if (import.meta.env.PROD) {
-    // En la web publicada, el menú ofrece el APK (lo publica el mismo flujo de GitHub Actions).
+    // On published web build, Settings links to the APK (built by the same GitHub Actions workflow).
     document.getElementById('apk-link').hidden = false;
-    // Jugable sin internet e instalable en el móvil. (Hasta la v3.6.1 nunca se registraba: estaba en un
-    // «else if» detrás del del APK, que siempre se cumplía antes.)
+    // Offline-playable and mobile-installable PWA. (Before v3.6.1 this never registered: it sat in an
+    // else-if branch behind the APK check, which always matched first.)
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 }
 
-// Simula el tiempo que el juego estuvo cerrado; devuelve el resumen si hubo ganancias.
-// Siempre a velocidad normal: el tiempo acelerado de las opciones de desarrollador solo cuenta con el
-// juego abierto (multiplicar el tiempo fuera hacía que volver tardara mucho en calcularse).
-// Por partes, con la pantalla de carga y su barra (en un teléfono, 24 h pueden tardar varios segundos).
-// profile: el del jugador (v3.7: sus horas sin conexión valen para todas las regiones).
+// Simulates time elapsed while closed; returns summary if any progress occurred.
+// Always at 1x speed: dev time multiplier applies only while the game is open
+// (multiplying away time made startup catch-up take far too long).
+// Chunked with splash progress bar (on a phone, 24 h catch-up can take several seconds).
+// profile: player profile (v3.7: offline hours apply across all regions).
 async function applyOffline(game, seconds, region = null, profile = game.state.profile) {
   if (seconds < MIN_OFFLINE_S) return null;
   const cap = offlineCapSeconds(game.state, profile);
@@ -623,10 +623,10 @@ async function applyOffline(game, seconds, region = null, profile = game.state.p
   return r.coins > 0 ? { ...r, cap, capped: seconds > cap } : null;
 }
 
-// getActive: la partida de la región que se está viendo (su segundo final y su reinicio).
+// getActive: currently viewed region state (its second ending and restart).
 function bindMenu(game, sound, music, getActive) {
   const menu = document.getElementById('menu');
-  // Volumen de los sonidos y de la música (v3.66), de 0 (apagado) a 100.
+  // SFX and music volume (v3.66), from 0 (muted) to 100.
   const slider = (key, flag, icons, apply) => {
     const input = document.getElementById(`${key}-vol`);
     const label = document.getElementById(`${key}-vol-val`);
@@ -649,7 +649,7 @@ function bindMenu(game, sound, music, getActive) {
   slider('sound', 'sound', ['🔊', '🔇'], (v) => (sound.setVolume(v), sound.click()));
   slider('music', 'music', ['🎵', '🔕'], (v) => music.setVolume(v));
   document.getElementById('menu-version').textContent = `v${APP_VERSION}`;
-  // Idioma (v3.68): se guarda y el juego vuelve a cargar (la partida se guarda antes).
+  // Language (v3.68): save and reload the game (save occurs beforehand).
   const langSelect = document.getElementById('lang-select');
   langSelect.innerHTML = LANGS.map((l) => `<option value="${l.id}">${l.flag} ${l.name}</option>`).join('');
   langSelect.value = LANG;
@@ -658,17 +658,17 @@ function bindMenu(game, sound, music, getActive) {
     saveGame(game.state);
     location.reload();
   });
-  // La música que suena ahora (la de la región que se está viendo), para los créditos (v3.67).
+  // Currently playing music (for the viewed region), used in About credits (v3.67).
   const musicCredit = () => {
     const song = SONGS[music.region] ?? SONGS.cafetero;
     return t('🎵 Música: «{song}», compuesta para el juego y tocada por él ({instruments}, sintetizados).', { song: song.name, instruments: song.instruments });
   };
   document.getElementById('menu-btn').addEventListener('click', () => {
-    // Al abrir el menú, borrar empieza otra vez por el botón (v4.4.6).
+    // Reopening Settings resets delete-save back to the button step (v4.4.6).
     document.getElementById('reset-slide').hidden = true;
     document.getElementById('reset-btn').hidden = false;
     const s = game.state;
-    // De todas las regiones (v3.67: antes solo las cerezas del Eje Cafetero).
+    // Across all regions (v3.67: previously counted only Eje Cafetero coffee cherries).
     const all = [s, ...Object.values(s.regions ?? {})];
     const sold = all.reduce((n, st) => n + sumValues(st.stats.sold), 0);
     const earned = all.reduce((n, st) => n + (st.totalEarned ?? 0), 0);
@@ -689,7 +689,7 @@ function bindMenu(game, sound, music, getActive) {
   });
   document.getElementById('about-close').addEventListener('click', () => (about.hidden = true));
 
-  // Copia de seguridad en texto.
+  // Text-based save backup.
   const text = document.getElementById('save-text');
   const msg = document.getElementById('save-msg');
   document.getElementById('export-btn').addEventListener('click', async () => {
@@ -702,7 +702,7 @@ function bindMenu(game, sound, music, getActive) {
       msg.textContent = t('Selecciona el texto y cópialo.');
     }
   });
-  // En un archivo (v4.7.4): el texto es largo y en el teléfono copiarlo podía dejar el portapapeles vacío.
+  // File backup (v4.7.4): save strings are long and clipboard copy on phones could produce empty text.
   document.getElementById('save-file-btn').addEventListener('click', async () => {
     try {
       const how = await saveBackupFile(exportSave(game.state));
@@ -734,11 +734,11 @@ function bindMenu(game, sound, music, getActive) {
     saveGame(state);
     location.reload();
   });
-  // Borrar la partida (v4.3.2): hay que deslizar la perilla hasta el final de la barra; si se suelta antes,
-  // vuelve a su sitio. Antes bastaban dos toques y hubo quien la borró sin querer.
+  // Delete save (v4.3.2): requires sliding the knob all the way across the bar; releasing early
+  // snaps it back with no effect. Two taps used to be enough and players deleted saves by accident.
   const slide = document.getElementById('reset-slide');
   const knob = document.getElementById('reset-knob');
-  // (v4.4.6) Primero el botón; al tocarlo aparece la barra. Si no se desliza en unos segundos, vuelve el botón.
+  // (v4.4.6) Two-step button first; tapping reveals the slider. Resets after a few seconds if unused.
   const resetBtn = document.getElementById('reset-btn');
   let back = null;
   const showButton = () => {

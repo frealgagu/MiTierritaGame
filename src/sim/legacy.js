@@ -1,9 +1,9 @@
-// Segundo final (v1.6): todas las estaciones de todas las zonas de la región en el nivel 100, con el
-// primer final ya logrado (la última zona completa: el Pueblo en el Eje Cafetero, desde la v1.7.12).
-// Desde la v3.12 pide además los arrieros y las rutas entre zonas en el nivel 100, todos los objetivos
-// cobrados y todas las investigaciones compradas (ver masteryParts).
-// Al lograrlo se puede volver a empezar la región con la producción multiplicada (ver modifiers.js:
-// legacyMult). Desde la v3.0, cada región tiene el suyo.
+// Second ending (v1.6): all stations across all region zones at level 100, with first ending
+// complete (final zone complete: Pueblo in Eje Cafetero, since v1.7.12).
+// Since v3.12 also requires haulers and routes at level 100, all goals claimed,
+// and all research bought (see masteryParts).
+// Completing it allows resetting region with doubled production (see modifiers.js:
+// legacyMult). Since v3.0, each region tracks its own.
 import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS, REGIONS_BY_ID, regionOf } from '../data/regions.js';
 import { clockOf } from './calendar.js';
@@ -17,26 +17,26 @@ import { MAX_LEGACY_RESETS, legacyMult } from './modifiers.js';
 import { bankRun } from './logros.js';
 import { RESTART_RENOWN, gainRenown, profileOf } from './renown.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
-import { tk } from '../i18n/index.js'; // las etiquetas se traducen donde se muestran (GoalsView)
+import { tk } from '../i18n/index.js'; // labels translated where displayed (GoalsView)
 
 const zoneStations = (z) => [...z.chain, ...z.plots.map((p) => p.stationId)];
-// Estaciones jugables de todas las regiones: las cadenas y sus ramas (la Compostera).
+// Playable stations across all regions: chains and branches (Compostera).
 export const ALL_STATIONS = [...new Set(ZONE_LIST.flatMap(zoneStations))];
-// Las de una región (las que cuentan para su segundo final).
+// Stations within one region (count toward its second ending).
 export const regionStations = (regionId) => [...new Set(REGIONS_BY_ID[regionId].zones.flatMap((z) => zoneStations(ZONES_BY_ID[z])))];
 export const stationsOf = (state) => regionStations(regionOf(state).id);
 
-// Cuántas estaciones de la región ya están en el nivel 100 (para el progreso del segundo final).
+// How many region stations are already at level 100 (for second-ending progress).
 export const maxedCount = (state) => stationsOf(state).filter((id) => (state.stations[id]?.level ?? 0) >= MAX_LEVEL).length;
-// La última zona de la región (su primer final).
+// Final zone of region (its first ending).
 export const finalZone = (state) => regionOf(state).zones.at(-1);
 
-// Lo que pide el segundo final (v3.12), con cuánto lleva de cada cosa: [{ id, icon, label, have, need }].
+// Second-ending requirements (v3.12), with current vs. target: [{ id, icon, label, have, need }].
 export function masteryParts(state) {
   const region = regionOf(state);
   const at100 = (level) => (level ?? 0) >= MAX_LEVEL;
   const stations = stationsOf(state);
-  const carried = stations.filter((id) => !STATIONS_BY_ID[id].side); // la Compostera no tiene arrieros
+  const carried = stations.filter((id) => !STATIONS_BY_ID[id].side); // Compostera has no haulers
   const routes = Object.keys(state.routes ?? {});
   const goals = region.zones.flatMap((z) => GOALS_BY_ZONE[z] ?? []);
   const research = RESEARCH.filter((r) => REGION_OF_ZONE[r.zone] === region.id);
@@ -48,8 +48,8 @@ export function masteryParts(state) {
     { id: 'research', icon: '🔬', label: tk('Investigaciones compradas'), have: research.filter((r) => state.research.includes(r.id)).length, need: research.length },
   ];
 }
-// Una zona «al máximo» (v4.1, en la lista de zonas): sus estaciones, sus arrieros, su bodega y las rutas que
-// le llegan en el nivel 100, y sus investigaciones y objetivos completos.
+// «Maxed» zone (v4.1, in zone list): its stations, haulers, warehouse, and inbound routes
+// at level 100, plus all research and goals completed.
 export function zoneMaxed(state, zoneId) {
   const at100 = (level) => (level ?? 0) >= MAX_LEVEL;
   for (const id of new Set(zoneStations(ZONES_BY_ID[zoneId]))) {
@@ -63,43 +63,43 @@ export function zoneMaxed(state, zoneId) {
 }
 export const masteryReady = (state) => masteryParts(state).every((p) => p.have >= p.need);
 
-// Marca el segundo final la primera vez que se cumple todo con la última zona ya completa (y avisa).
-// Se mira al comprar una mejora o una investigación y al cobrar un objetivo.
+// Marks second ending first time all requirements complete with final zone done (and notifies).
+// Checked upon purchasing upgrade or research, or claiming a goal.
 export function checkMastery(state, bus) {
-  // (Una región a la que todavía le faltan zonas, wip, no tiene segundo final.)
+  // (Region still missing zones, wip, has no second ending.)
   if (state.mastered || regionOf(state).wip || !state.zones[finalZone(state)]?.complete || !masteryReady(state)) return false;
   state.mastered = true;
   bus.emit('mastered', { playTime: state.playTime });
   return true;
 }
 
-// Partida nueva con la producción al doble de la anterior. Se conservan los ajustes, los avisos ya
-// vistos, el registro de las partidas terminadas y el Renombre con las medallas.
-// Desde la v3.0 reinicia solo su región: las demás siguen como estaban, y el calendario del país sigue
-// corriendo (la partida nueva empieza en la fecha en que terminó la anterior).
-// profile: el del jugador, para la partida de otra región (v3.10: lo de la partida que termina pasa al
-// acumulado de los logros de esa región).
+// Fresh save with production doubled from previous. Keeps settings, seen notices,
+// completed runs record, and Renown with medals.
+// Since v3.0 resets only its own region: others stay untouched, country calendar keeps
+// running (new run starts at the date previous run ended).
+// profile: player's, for another region's save (v3.10: finished run counters merge into
+// that region's achievement totals).
 export function restartState(state, now = Date.now(), profile = null) {
   const region = regionOf(state);
   const next = createInitialState(now, region.id);
-  // Los reinicios llegan hasta el tope del multiplicador (v4.0: ahí se quedan; antes se seguían sumando y se
-  // guardaba un registro de cada partida, que crecía sin fin).
+  // Resets cap at multiplier limit (v4.0: stay there; previously kept incrementing and
+  // appended to an unbounded completed runs log).
   next.legacy = { resets: Math.min(MAX_LEGACY_RESETS, (state.legacy?.resets ?? 0) + 1) };
   next.clockOffset = clockOf(state);
   next.settings = { ...state.settings, zone: region.zones[0] };
   next.hints = [...(state.hints ?? [])];
-  // Las otras regiones (solo la partida del Eje Cafetero las guarda) siguen igual.
+  // Other regions (stored only in Eje Cafetero root save) stay intact.
   if (state.regions) next.regions = state.regions;
-  // El segundo Willys de la región (v3.9) y su jornada (v3.10) se quedan.
+  // Region's second Willys (v3.9) and work shift (v3.10) persist.
   if (state.willys2) next.willys2 = true;
-  if (state.chivas) next.chivas = state.chivas; // las chivas más seguidas (v4.2)
+  if (state.chivas) next.chivas = state.chivas; // faster chivas (v4.2)
   if (state.workLevel) next.workLevel = state.workLevel;
-  // La región ya se terminó (v3.8): sus eventos siguen saliendo en todas sus zonas.
+  // Region already cleared once (v3.8): its events keep spawning across all zones.
   next.regionDone = Boolean(state.regionDone || state.zones[region.zones.at(-1)]?.complete);
-  // Lo que no se pierde (v2.0): Renombre, medallas, álbum, decoración y logros; y lo de esta partida
-  // pasa al acumulado de los logros (v2.3). Solo la partida del Eje Cafetero guarda el perfil.
-  // Los eventos siguen tal cual (v3.12): los tableros en juego, los cupos (con su evento o esperando sus
-  // 2 años) y lo ya jugado. (Hasta la v3.11 el tablero en juego se perdía.)
+  // Persistent across reset (v2.0): Renown, medals, album, decoration, achievements; current run
+  // stats fold into achievements (v2.3). Only Eje Cafetero save holds profile.
+  // Events stay untouched (v3.12): active boards, slots (with event or 2-year cooldown),
+  // and history. (Until v3.11 active board was lost.)
   const ev = state.events ?? {};
   next.events = {
     boards: structuredClone(ev.boards ?? {}),
@@ -108,7 +108,7 @@ export function restartState(state, now = Date.now(), profile = null) {
     count: { ...ev.count },
     ...(ev.global ? { global: true } : {}),
   };
-  // Cada reinicio da Renombre (v3.11).
+  // Each reset awards Renown (v3.11).
   if (state.profile) {
     next.profile = structuredClone(state.profile);
     bankRun(state, profileOf(next));
@@ -123,10 +123,10 @@ export function restartState(state, now = Date.now(), profile = null) {
   return next;
 }
 
-// La zona con que abre el juego (v3.72): la que se estaba viendo, si sigue abierta; si no (al volver a
-// empezar una región se cierran sus zonas), la primera de su región; y si tampoco, la Finca. Hasta la v3.71
-// volvía siempre a la Finca: al reiniciar otra región se terminaba en el Cafetal.
-//   root: la partida principal (la del Eje Cafetero, con las otras regiones en root.regions)
+// Opening zone on load (v3.72): currently viewed zone if still open; otherwise (resetting
+// closes region zones) first zone of that region; else Finca. Before v3.71 always
+// returned to Finca: resetting another region dumped player back in Cafetal.
+//   root: root save (Eje Cafetero, with other regions in root.regions)
 export function startZone(root, zone) {
   const regionOfZone = (z) => REGIONS.find((r) => r.zones.includes(z));
   const stateOf = (r) => (r.id === (root.region ?? 'cafetero') ? root : root.regions?.[r.id]);

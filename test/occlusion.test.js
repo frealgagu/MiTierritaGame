@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { ZONE_LIST } from '../src/data/zones/index.js';
 import { moverDepth, orderFootprints, overlaps, setBlockers } from '../src/render/occlusion.js';
 
-// Orden de pintado (v4.5.1): en todos los caminos de todas las zonas (rutas, tractomulas, Willys y mulas), lo que se
-// mueve queda detrás de cada estación de la que no ha pasado el borde de adelante y delante de las demás, sin que
-// dos estaciones pidan cosas contrarias. Ningún camino de vehículo atraviesa una estación.
+// Draw order (v4.5.1): across every path in every zone (routes, tractomulas, Willys, and mules), moving
+// sprites sit behind any station whose front edge they haven't passed and in front of the rest, without
+// two stations imposing conflicting constraints. No vehicle path crosses through a station.
 const footprints = (z) => [
   { id: 'farm', ...z.farm },
   { id: 'bodega', ...z.warehouse },

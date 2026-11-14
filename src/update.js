@@ -1,7 +1,7 @@
-// Versión nueva de la app de Android (v3.6.1). El APK lleva el juego dentro y no se actualiza solo: al
-// abrirse (y al volver a la app, si ya pasaron unas horas) consulta version.json en la página publicada
-// y, si hay una versión más nueva, muestra sus novedades y ofrece descargar el APK. La web no lo necesita:
-// siempre carga la versión publicada.
+// In-app Android APK update check (v3.6.1). The APK bundles the game and does not self-update: on launch
+// (and on resume after a few hours) it fetches version.json from the published GitHub Pages site
+// and, if a newer version exists, shows release notes and offers the APK download. Web needs none of this:
+// it always loads the live site.
 import { isNewer } from '../tools/release-notes.js';
 import { t } from './i18n/index.js';
 
@@ -11,7 +11,7 @@ export const APP_VERSION = typeof __APP_VERSION__ === 'undefined' ? '0.0.0' : __
 
 let lastCheck = 0;
 
-// Lo publicado ({ version, notes }) o null si no hay internet o no responde a tiempo.
+// Latest published release ({ version, notes }) or null if offline or timed out.
 async function published() {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 8000);
@@ -31,12 +31,12 @@ function show(info) {
   const modal = document.getElementById('update');
   document.getElementById('update-title').textContent = t('Hay una versión nueva: v{v}', { v: info.version });
   document.getElementById('update-text').textContent = t('Tienes la v{v}. Tu partida se conserva al actualizar.', { v: APP_VERSION });
-  // Las novedades de las versiones que te faltan (hasta tres).
+  // Release notes for the versions missed since current (up to three).
   const missing = (info.notes ?? []).filter((n) => isNewer(n.version, APP_VERSION)).slice(0, 3);
   document.getElementById('update-notes').innerHTML = missing
     .map((n) => `<h3>v${n.version} · ${escape(n.title)}</h3><ul>${n.items.slice(0, 4).map((i) => `<li>${escape(i)}</li>`).join('')}</ul>`)
     .join('');
-  // Descarga el APK nuevo: la app pasa el enlace al navegador del teléfono, y Android pide instalarlo.
+  // Download the new APK: opens the URL in the phone browser, and Android prompts to install it.
   document.getElementById('update-go').onclick = () => {
     modal.hidden = true;
     window.location.href = `${SITE}/mitierrita.apk`;
@@ -45,7 +45,7 @@ function show(info) {
   modal.hidden = false;
 }
 
-// manual: desde el menú (avisa también si ya está al día o si no hay internet).
+// manual: triggered from Settings (also notifies if already up to date or offline).
 export async function checkForUpdate({ manual = false, toast } = {}) {
   if (!manual && Date.now() - lastCheck < RECHECK_MS) return;
   lastCheck = Date.now();

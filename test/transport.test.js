@@ -6,7 +6,7 @@ import { muleCount } from '../src/sim/rules.js';
 import { busyMules } from '../src/sim/transport.js';
 import { CALENDAR } from '../src/sim/calendar.js';
 
-// Pruebas de la cadena: siempre de día y sin temporada (el calendario se prueba en calendar.test.js).
+// Chain tests: always daytime and no season (calendar is tested in calendar.test.js).
 CALENDAR.on = false;
 
 function run(game, seconds) {
@@ -33,7 +33,7 @@ test('las mulas vuelven vacías y quedan libres', () => {
 
 test('a igual nivel, los arrieros llevan todo lo que produce su estación (en el análisis)', () => {
   const cases = [
-    () => {}, // solo el cafetal: viaje largo hasta la bodega
+    () => {}, // only the cafetal: long trip to the warehouse
     (g) => ['wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer'].forEach((id) => g.unlock(id)),
     (g) => {
       ['wetmill', 'dryer', 'huller', 'roaster', 'grinder', 'packer', 'composter'].forEach((id) => g.unlock(id));
@@ -114,7 +114,7 @@ test('si el Beneficiadero va atrasado, el patio lleno del Cafetal es culpa suya,
   for (let i = 0; i < 3000; i++) game.step(0.1);
   assert.equal(s.stations.farm.status, 'blocked');
   assert.deepEqual(slowConsumers(s, 'farm'), ['wetmill']);
-  // Con el Beneficiadero a la altura del Cafetal ya no es culpa de nadie más abajo.
+  // With Beneficiadero matching Cafetal, nobody downstream is at fault anymore.
   s.stations.wetmill.level = 25;
   assert.deepEqual(slowConsumers(s, 'farm'), []);
 });

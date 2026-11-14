@@ -1,8 +1,8 @@
-// Cuenta de las mulas en camino mientras se despachan (v3.65.1). Cada estación preguntaba varias veces
-// por segundo cuántas mulas tiene fuera y cuánto viene hacia ella o hacia la bodega, y cada pregunta
-// recorría todas las mulas del juego: con todo nivelado eso era lo que más tardaba al calcular el tiempo
-// fuera. Ahora se cuentan una vez al empezar el despacho y se suma cada mula que sale. Se suma en el
-// mismo orden que antes (el de la lista), así que los resultados son idénticos.
+// En-route mule tally cache during dispatch (v3.65.1). Stations queried several times per
+// second how many mules were out and inbound to self or warehouse, scanning all mules every
+// time: with everything leveled that dominated offline catch-up cost. Now counted once per
+// dispatch pass and updated per departing mule. Preserves exact list iteration order.
+// Active count during dispatch pass; otherwise null (falls back to scanning list).
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { incomingKey } from './production.js';
 
@@ -32,5 +32,5 @@ export function endFleet() {
   fleet = null;
 }
 
-// La cuenta, si se está despachando en esta partida; si no, null (y se recorre la lista como antes).
+// «Upgrade Cafetal to level 5», «Upgrade Cafetal haulers to 5», «Upgrade Ruta de la panela to 10».
 export const fleetOf = (state) => (fleet?.state === state ? fleet : null);

@@ -1,7 +1,7 @@
-// Logros generales (v2.3): lo que se cuenta suma lo de las partidas anteriores (lo que se guarda en el
-// perfil al reiniciar) y lo de esta. Al llegar a un nivel se gana su Renombre, una sola vez.
-// Desde la v3.10 cada región tiene sus logros (ver data/logros.js), que miran la partida de esa región;
-// el Renombre es el mismo del jugador.
+// General achievements (v2.3): counters sum prior runs (stored in profile on reset)
+// and current run. Reaching a tier awards Renown once.
+// Since v3.10 each region has its own achievements (see data/logros.js) reading that
+// region's save; Renown goes to shared player profile.
 import { logrosOf } from '../data/logros.js';
 import { albumOf } from '../data/album.js';
 import { EVENTS_BY_ID } from '../data/events.js';
@@ -11,7 +11,7 @@ import { gainRenown, pageDone, profileOf } from './renown.js';
 
 const YEAR = YEAR_DAYS * DAY_LENGTH;
 
-// Lo acumulado de las partidas terminadas de una región (el del Eje Cafetero es el de antes de la v3.10).
+// Cumulative totals from finished runs of a region (Eje Cafetero's predates v3.10).
 function lifetimeOf(profile, region = 'cafetero') {
   const empty = () => ({ sold: {}, produced: {}, earned: 0, playTime: 0 });
   if (region === 'cafetero') return (profile.lifetime ??= empty());
@@ -19,7 +19,7 @@ function lifetimeOf(profile, region = 'cafetero') {
   return (profile.lifetimes[region] ??= empty());
 }
 
-// Al reiniciar (segundo final): lo de la partida que termina pasa al acumulado de su región.
+// On reset (second ending): finishing run counters fold into region totals.
 export function bankRun(state, profile) {
   const life = lifetimeOf(profile, state.region);
   for (const kind of ['sold', 'produced']) {
@@ -29,14 +29,14 @@ export function bankRun(state, profile) {
   life.playTime += state.playTime ?? 0;
 }
 
-// state: la partida de la región   profile: el del jugador (lo guarda la del Eje Cafetero)
+// state: region save   profile: player's (held by Eje Cafetero save)
 export function metric(state, name, profile = profileOf(state)) {
   const region = state.region ?? 'cafetero';
   const life = lifetimeOf(profile, region);
   const [kind, product] = name.split(':');
-  // Las partidas terminadas: los reinicios de la región (v4.0; hasta 60, como el multiplicador).
+  // Finished runs: region resets (v4.0; up to 60, matching multiplier cap).
   const runs = state.legacy?.resets ?? 0;
-  // Las medallas de los eventos de esta región.
+  // Event medals earned in this region.
   const medals = Object.entries(profile.medals)
     .filter(([id]) => REGION_OF_ZONE[EVENTS_BY_ID[id]?.zone] === region)
     .map(([, m]) => m);
@@ -48,7 +48,7 @@ export function metric(state, name, profile = profileOf(state)) {
       return life.earned + state.totalEarned;
     case 'years':
       return (life.playTime + state.playTime) / YEAR;
-    // Cada partida que se reinició llegó al segundo final, y antes al primero (su última zona).
+    // Every reset run reached second ending, and earlier the first ending (final zone).
     case 'endings':
       return runs + (state.zones[REGIONS_BY_ID[region].zones.at(-1)]?.complete ? 1 : 0);
     case 'masteries':
@@ -59,7 +59,7 @@ export function metric(state, name, profile = profileOf(state)) {
       return medals.filter((m) => m.best).length;
     case 'eventsGold':
       return medals.filter((m) => m.best === 'gold').length;
-    // Las medallas ganadas en un evento (v4.7: la Gran Feria de Bogotá).
+    // Medals earned in one event (v4.7: Gran Feria de Bogotá).
     case 'eventMedals':
       return Object.values(profile.medals[product]?.count ?? {}).reduce((a, b) => a + b, 0);
     case 'pages':
@@ -71,10 +71,10 @@ export function metric(state, name, profile = profileOf(state)) {
   }
 }
 
-// Niveles alcanzados de un logro según lo que lleva (0 a tiers.length).
+// Tiers reached for an achievement given current count (0 to tiers.length).
 export const tierOf = (logro, value) => logro.tiers.filter((t) => value >= t).length;
 
-// Revisa los logros de la región de `state` y paga los niveles nuevos. Devuelve la lista de lo ganado:
+// Evaluates achievements for `state`'s region and pays new tiers. Returns newly earned list:
 // [{ logro, tier, reward }].
 export function checkLogros(state, profile = profileOf(state)) {
   profile.logros ??= {};

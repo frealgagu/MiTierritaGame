@@ -16,7 +16,7 @@ import { ChivaView, JeepView, MuleView, TractomulaView, TransmilenioView } from 
 import { Belts, GENERAL_SIDE, SEG_LANE, SEG_SIDE } from './Belts.js';
 import { productColors } from './pipeColors.js';
 
-const BELT_HOLD = 1.5; // s que una banda sigue encendida después de llevar algo (para que no parpadee)
+const BELT_HOLD = 1.5; // s a belt stays lit after carrying cargo (prevents flicker)
 import { Critters } from './Critters.js';
 import { iso } from './iso.js';
 import { pathLength, pointAt, pointAtDistance } from '../core/path.js';
@@ -41,20 +41,20 @@ import { Weather } from './Weather.js';
 import { t } from '../i18n/index.js';
 
 
-// Altura (px) de la etiqueta sobre cada tipo de edificio.
+// Label height (px) above each building type.
 const LABEL_HEIGHT = { farm: 70, dispatch: 100, plot: 62, building: 96 };
 
-// Arma el mundo de una zona y lo mantiene sincronizado con el estado de la simulación.
-// Al cambiar de zona se destruye (destroy) y se crea otra.
-const EVENT_DAYTIME = 40; // s de juego: las 10:00 del primer día
+// Builds a zone's isometric world and keeps it synced to simulation state.
+// Destroyed (`destroy`) and recreated when switching zones.
+const EVENT_DAYTIME = 40; // game s: 10:00 on day one
 
 export class Scene {
   constructor(app, game, sound, zone) {
     this.app = app;
     this.game = game;
     this.sound = sound;
-    // En el tablero de un evento de Bogotá (v4.7.1) solo están las estaciones del evento: los lotes de las demás no se
-    // dibujan (no se pueden construir ahí).
+    // On Bogotá event boards (v4.7.1) only event stations exist: other lots aren't
+    // drawn (unbuildable there).
     const ev = game.state.event && EVENTS_BY_ID[game.state.event.id];
     if (ev && (zone.network || zone.groups)) zone = { ...zone, plots: zone.plots.filter((p) => ev.stations.includes(p.stationId)) };
     this.zone = zone;
@@ -64,13 +64,13 @@ export class Scene {
     this.restSince = [null, null];
     this.jeepPhase = 'idle';
     this.onSelect = () => {};
-    // Tocar el mapa donde no hay nada (v3.67): main.js cierra el panel de la estación.
+    // Tapping open ground (v3.67): main.js closes station panel.
     this.onBackground = () => {};
     this.app.stage.eventMode = 'static';
     this.app.stage.hitArea = this.app.screen;
-    // Pixi da el toque a lo primero que esté dibujado bajo el dedo, aunque sea adorno (una nube, una mula,
-    // las monedas que suben): entonces llega aquí, al fondo, y no al letrero o la estación de debajo. Por
-    // eso aquí se busca primero el letrero y luego la estación (v3.67.6); si no hay ninguno, es el fondo.
+    // Pixi delivers tap to topmost drawn display object even if decorative (cloud, mule,
+    // floating coins): when it reaches stage background here, check signs first then
+    // stations (v3.67.6); if neither matches, count as empty terrain tap.
     this.bgTap = (e) => {
       if (e.target !== this.app.stage || this.camera?.dragged) return;
       const id = this.pickAt(e.global);
@@ -85,23 +85,23 @@ export class Scene {
     this.objects.sortableChildren = true;
     this.labels = new Container();
     this.effects = new Effects();
-    // El suelo y los objetos se tiñen según la hora; luces, etiquetas y efectos van encima sin teñir.
+    // Ground and objects tint with time of day; lights, labels, and particles sit above untinted.
     this.tinted = new Container();
     this.lights = new Container();
     this.lightTexture = createGlowTexture();
-    this.carLights = new Map(); // faros de los Willys y las chivas (v3.12)
+    this.carLights = new Map(); // Willys and chiva headlights (v3.12)
     this.weather = new Weather();
     app.stage.addChild(this.background.stars, this.background.view, this.world, this.weather.view);
 
-    // Con el segundo Willys (v3.9), la carretera tiene dos carriles: cada Willys va por el suyo.
+    // With second Willys (v3.9), highway has two lanes: each Willys keeps its lane.
     this.jeepCount = jeepCount(game.state);
     this.terrain = new Terrain(this.zone, this.jeepCount);
-    // Bandas eléctricas: sobre el suelo, debajo de edificios y mulas.
+    // Electric belts: above ground, beneath buildings and mules.
     this.belts = new Belts(this.zone.muleRoad);
     this.tinted.addChild(this.terrain.ground, this.belts, this.objects);
     this.world.addChild(this.tinted, this.lights, this.labels, this.effects.view);
     for (const d of this.terrain.decor) this.objects.addChild(d);
-    // Luces de noche de la decoración (v3.29: el portón y las ventanas de la iglesia, los faroles).
+    // Night lights for decoration (v3.29: church gate/windows, streetlamps).
     for (const l of this.terrain.glows) {
       const s = new Sprite(this.lightTexture);
       s.anchor.set(0.5);
@@ -113,12 +113,12 @@ export class Scene {
     }
 
     this.stations = {};
-    // Lo que se mueve se pinta delante o detrás de cada estación según su huella (v4.5.1).
+    // Moving sprites depth-sort in front or behind buildings by footprint (v4.5.1).
     setBlockers(() => Object.values(this.stations));
     this.farm = new FarmView(this.zone, STATIONS_BY_ID[this.sourceId]);
     this.warehouse = new WarehouseView(this.zone);
     this.addStationView(this.sourceId, this.farm, LABEL_HEIGHT.farm);
-    // (Si el Tostadero no es del evento, la plazoleta queda sin su letrero ni su estación.)
+    // (If Tostadero isn't part of event, plaza lacks its sign and station.)
     if (this.hideFarm) this.farm.label.visible = this.farm.status.visible = false;
     this.addStationView('dispatch', this.warehouse, LABEL_HEIGHT.dispatch);
     for (const plot of this.zone.plots) this.buildStation(plot.stationId);
@@ -127,22 +127,22 @@ export class Scene {
     this.jeeps = Array.from({ length: this.jeepCount }, (_, k) => new JeepView(k));
     for (const jeep of this.jeeps) this.objects.addChild(jeep);
     this.critters = new Critters(this.zone, this.terrain, this.objects);
-    this.pets = new Pets(this.zone, this.terrain, this.objects); // gatos y loros de la región (v3.12)
-    // En el tablero de un evento, lo que pasa se ve (v3.14).
+    this.pets = new Pets(this.zone, this.terrain, this.objects); // region cats and parrots (v3.12)
+    // On an event board, hazard props are visible (v3.14).
     this.eventArt = game.state.event ? new EventArt(this, game.state) : null;
     this.mules = new Map();
     this.drawExitSign();
     this.drawZoneSign();
-    // La persona de la zona, junto al letrero (v3.12): al tocarla habla (main.js: onTalk).
+    // Zone keeper beside sign (v3.12): tapping speaks (main.js: onTalk).
     this.onTalk = () => {};
     this.keeper = new KeeperView(this.zone.id, ZONE_LIST.findIndex((z) => z.id === this.zone.id));
-    const [sx, sy] = this.zone.signShift ?? [0, 0]; // el mapa grande de Bogotá (v4.5)
+    const [sx, sy] = this.zone.signShift ?? [0, 0]; // Bogotá's large map (v4.5)
     this.keeper.place(KEEPER_SPOT[0] + sx, KEEPER_SPOT[1] + sy);
     this.keeper.on('pointertap', () => {
       if (!this.camera?.dragged) this.onTalk(this.zone.id);
     });
     this.objects.addChild(this.keeper);
-    // Rutas que salen de esta zona o llegan a ella: carretera, letrero y la Chiva.
+    // Routes leaving or entering this zone: side road, signpost, and Chiva.
     this.routes = ROUTES.filter((r) => this.zone.routes?.[r.id]).map((r) => {
       const view = r.vehicle === 'Tractomula' ? new TractomulaView(r.product) : new ChivaView(r.product);
       const open = () => {
@@ -164,7 +164,7 @@ export class Scene {
       this.objects.addChild(sign);
       return { def: r, road: info.road, outgoing: r.from === this.zone.id, view, sign };
     });
-    // El TransMilenio de Bogotá (v4.6), solo de adorno: dos buses por carril, que van y vienen (ver syncBuses).
+    // Bogotá TransMilenio (v4.6), purely decorative: two buses per lane shuttling back and forth (see syncBuses).
     this.buses = (this.zone.transmilenio ?? []).flatMap((road, i) =>
       [0, 0.5].map((phase) => {
         const view = new TransmilenioView();
@@ -179,9 +179,9 @@ export class Scene {
     const bottom = iso(n, n);
     this.camera = new Camera(this.world, app.canvas, { minX: left.x, maxX: right.x, minY: -200, maxY: bottom.y, minZoom: n > 26 ? 0.25 : undefined });
     this.resize(app.screen.width, app.screen.height);
-    // Vista inicial: del cafetal a la bodega (en Bogotá, v4.5, el barrio de `zone.view`: el mapa entero se ve muy lejos).
+    // Initial framing: from cafetal to warehouse (in Bogotá, v4.5, `zone.view` neighborhood: full map looks tiny).
     if (this.zone.view) {
-      // En el tablero de un evento, el barrio del evento: sus estaciones y un poco alrededor.
+      // On event board, event neighborhood: its stations plus tight margin.
       const v = (game.state.event && this.eventView(game.state.event.id)) || this.zone.view;
       this.camera.fit({ minX: iso(v.x0, v.y1).x, maxX: iso(v.x1, v.y0).x, minY: iso(v.x0, v.y0, 60).y, maxY: iso(v.x1, v.y1).y });
     } else {
@@ -193,7 +193,7 @@ export class Scene {
     }
 
     this.dayNight = new DayNight(this);
-    // Flecha que señala qué tocar (ver HUD.guideTarget).
+    // Pointer arrow showing what to tap (see HUD.guideTarget).
     this.guide = new Graphics();
     this.guide.poly([-12, -18, 12, -18, 0, 0]).fill(0xffe066).stroke({ width: 3, color: 0x3a2418 });
     this.guide.rect(-5, -32, 10, 15).fill(0xffe066).stroke({ width: 3, color: 0x3a2418 });
@@ -205,8 +205,8 @@ export class Scene {
     this.ambientTimer = 0;
   }
 
-  // El encuadre del barrio de un evento (Bogotá, v4.5): las casillas de sus estaciones con dos de margen y la calle
-  // de abajo. null si no hay cómo.
+  // Event neighborhood bounds (Bogotá, v4.5): its station tiles plus 2-tile margin and lower
+  // street. null if unusable.
   eventView(eventId) {
     const def = EVENTS_BY_ID[eventId];
     const z = this.zone;
@@ -222,7 +222,7 @@ export class Scene {
     return { x0: Math.max(0, x0), y0: Math.max(0, y0), x1: Math.min(z.size, x1), y1: Math.min(z.size, y1) };
   }
 
-  // El letrero bajo el punto (global), el de más arriba si hay varios (v3.67.6).
+  // Sign under screen point, topmost if overlapping (v3.67.6).
   labelAt(global) {
     const hits = Object.entries(this.stations).filter(([, v]) => {
       const l = v.label;
@@ -233,7 +233,7 @@ export class Scene {
     return hits.sort((a, b) => this.labels.getChildIndex(b[1].label) - this.labels.getChildIndex(a[1].label))[0]?.[0] ?? null;
   }
 
-  // Lo que abre un toque: el letrero primero, luego la estación (stationAt).
+  // Tap hit-test: sign first, then station (stationAt).
   pickAt(global) {
     const id = this.labelAt(global) ?? this.stationAt(global);
     return this.hideFarm && id === this.sourceId ? null : id;
@@ -243,10 +243,10 @@ export class Scene {
     this.onSelect(id === 'dispatch' ? `dispatch:${this.zone.id}` : id);
   }
 
-  // La estación de un toque (v3.67.6). El letrero tiene su propio toque y gana siempre (va encima de todo).
-  // Si no: la de adelante cuyo dibujo (el edificio, los árboles) se tocó; si ninguno, la de adelante cuyo
-  // terreno se tocó; y si tampoco, la de adelante en cuyo espacio hasta el letrero cayó el toque. (En la
-  // v3.67 ganaba el terreno: el techo de una estación que tapaba el terreno de la de atrás abría la de atrás.)
+  // Station hit-test (v3.67.6). Signs handle their own taps and always win (drawn on top).
+  // Otherwise: frontmost station whose artwork (building, trees) was hit; else frontmost
+  // whose footprint terrain was hit; else frontmost whose sign column covers tap. (In
+  // v3.67 terrain won: tall roof covering back station's lot opened the back one.)
   stationAt(global) {
     const p = this.objects.toLocal(global);
     const front = (list) => list.sort((a, b) => b[1].zIndex - a[1].zIndex)[0]?.[0] ?? null;
@@ -262,8 +262,8 @@ export class Scene {
     this.stations[id] = view;
     this.objects.addChild(view);
     const select = (sid) => this.selectStation(sid);
-    // Se toca todo el edificio, hasta donde va su letrero, y también el letrero (v3.67). Si el toque cae en
-    // dos estaciones, decide stationAt: el letrero primero, luego el edificio (v3.67.6).
+    // Whole building clickable up to its label, plus label itself (v3.67). If tap hits two
+    // stations, stationAt decides: label first, then artwork (v3.67.6).
     view.on('pointertap', (e) => {
       if (this.camera.dragged) return;
       const sid = this.pickAt(e.global) ?? (this.hideFarm && id === this.sourceId ? null : id);
@@ -282,7 +282,7 @@ export class Scene {
     this.lights.addChild(view.lightLayer);
   }
 
-  // Parcela (si no está construida) o edificio de una estación de la cadena.
+  // Lot (if unbuilt) or building for each chain station.
   buildStation(id) {
     const old = this.stations[id];
     if (old) {
@@ -305,7 +305,7 @@ export class Scene {
     }
   }
 
-  // El nombre de la zona (v3.12): un letrero grande junto a la carretera, con la región debajo.
+  // Zone welcome sign (v3.12): large signboard beside road with region underneath.
   drawZoneSign() {
     const region = REGIONS_BY_ID[REGION_OF_ZONE[this.zone.id]];
     const view = new ZoneSign(`${this.zone.icon} ${this.zone.name}`, `${region.icon} ${region.name}`);
@@ -319,7 +319,7 @@ export class Scene {
 
   drawExitSign() {
     const view = new WoodSign(this.zone.exitText ?? t('Al pueblo ➜'));
-    // Con dos carriles (v3.9) el letrero quedaría en el del segundo Willys: pasa al otro lado de la carretera.
+    // With two lanes (v3.9) signboard would sit in second Willys lane: move across road.
     const [sx, sy] = this.zone.exitSign;
     const [gx, gy] = this.jeepCount > 1 ? [sx - 2.1, sy] : [sx, sy];
     const p = iso(gx, gy);
@@ -334,7 +334,7 @@ export class Scene {
     this.camera?.resize(w, h);
   }
 
-  // Solo reacciona a lo que pasa en su zona (las demás siguen produciendo sin efectos visuales).
+  // Reacts only to active zone events (background zones produce without visuals).
   bindEvents() {
     const bus = this.game.bus;
     const zone = this.zone.id;
@@ -375,7 +375,7 @@ export class Scene {
     });
     on('levelUp', ({ id, to, milestone, bulk }) => {
       let [sid, part] = id.split(':');
-      // Una ruta se celebra en la estación de esta zona que abastece (si se está viendo esa zona).
+      // Route celebration plays over the station it supplies here (when viewing that zone).
       const route = sid === 'route' ? ROUTES_BY_ID[part] : null;
       if (route) sid = route.stations.find((s) => this.stations[s] && STATIONS_BY_ID[s].zone === zone) ?? null;
       if (!sid || (sid === 'dispatch' ? part !== zone : !STATIONS_BY_ID[sid] || zoneOf(sid) !== zone)) return;
@@ -384,7 +384,7 @@ export class Scene {
       const p = view.anchorPoint(30);
       view.bounce?.('bump');
       this.effects.sparkle(p.x, p.y);
-      // Al mejorar toda la zona (v4.1) llegan muchas juntas: un solo sonido por tanda.
+      // Whole-zone upgrade (v4.1) fires many together: single sound per batch.
       const quiet = bulk && performance.now() - (this.bulkSoundAt ?? -Infinity) < 250;
       if (bulk && !quiet) this.bulkSoundAt = performance.now();
       if (!quiet) {
@@ -413,7 +413,7 @@ export class Scene {
     });
   }
 
-  // Quita la escena del escenario y suelta sus eventos (al cambiar de zona).
+  // Removes scene from stage and detaches listeners (on zone switch).
   destroy() {
     this.app.stage.off('pointertap', this.bgTap);
     for (const off of this.unsubs) off();
@@ -421,7 +421,7 @@ export class Scene {
     for (const child of this.app.stage.removeChildren()) child.destroy({ children: true });
   }
 
-  // id de estación o null.
+  // station id or null.
   setGuide(id) {
     this.guideId = id;
     this.guide.visible = Boolean(id) && Boolean(this.stations[id]);
@@ -439,7 +439,7 @@ export class Scene {
   update(dt) {
     this.time += dt;
     const state = this.game.state;
-    // En el tablero de un evento siempre es media mañana (su reloj es otro).
+    // Event board stays at mid-morning (independent clock).
     this.dayNight.update(state.event ? EVENT_DAYTIME : clockOf(state));
     this.background.update(dt, this.camera);
     this.terrain.update(this.time);
@@ -487,7 +487,7 @@ export class Scene {
     this.weather.update(dt, state.event ? null : clockOf(state), this.app.screen.width, this.app.screen.height);
   }
 
-  // Luciérnagas y sonidos de ambiente según la hora.
+  // Fireflies and ambient audio based on time of day.
   updateAmbient(dt) {
     const night = this.dayNight.light;
     this.ambientTimer -= dt;
@@ -509,8 +509,8 @@ export class Scene {
     this.zoneSounds(night);
   }
 
-  // Sonidos de cada zona (v1.8): animales, el trapiche y las campanas del Pueblo. Los que dependen de
-  // una estación suenan solo si está trabajando.
+  // Zone soundscapes (v1.8): animals, trapiche, Pueblo bells. Station-linked
+  // ones only sound while station is running.
   zoneSounds(night) {
     const hour = this.dayNight.hour;
     const crossed = (h) => this.lastHour !== undefined && this.lastHour < h && hour >= h;
@@ -518,10 +518,10 @@ export class Scene {
     const theme = this.zone.theme;
     const r = Math.random();
     if (theme === 'town' || this.zone.plaza) {
-      // Campanas a las 6, a las 12 y a las 18 (en el Pueblo y, desde la v3.29, en la iglesia de Vélez).
+      // Bells at 6, 12, and 18 (Pueblo and, since v3.29, Vélez church).
       for (const h of [6, 12, 18]) if (crossed(h)) this.sound.bells(h === 12 ? 4 : 3);
     }
-    if (theme !== 'town' && crossed(5.8)) this.sound.rooster(); // el gallo al amanecer
+    if (theme !== 'town' && crossed(5.8)) this.sound.rooster(); // rooster at dawn
     this.lastHour = hour;
     if (night) return;
     if (r < 0.006) this.sound.bark();
@@ -535,9 +535,9 @@ export class Scene {
   syncMules(state) {
     const alive = new Set();
     const pos = ROAD_POS[this.zone.id];
-    // Bandas (v4.3.1, solo dibujo): las de tramo, de cada estación con banda a donde manda (la siguiente, la que
-    // junta o la bodega si es la última), y la general, que lleva a la bodega lo que se vende sin procesar.
-    // Cada una se enciende mientras lleva algo (y un momento después, para que no parpadee).
+    // Belts (v4.3.1, visual only): segmented ones from belted station to target (next,
+    // combiner, or warehouse if last), plus general belt carrying unsold goods to warehouse.
+    // Each lights up while carrying cargo (and briefly after to avoid flicker).
     const segs = (this.beltSegs ??= new Map());
     const lastGeneral = (this.beltGeneral ??= new Map());
     const belted = this.stationIds.filter((id) => state.stations[id] && pos[id] !== undefined && hasBelt(state.stations[id].transport.level));
@@ -551,7 +551,7 @@ export class Scene {
     for (const m of state.mules) {
       if (zoneOf(m.from) !== this.zone.id) continue;
       if (hasBelt(state.stations[m.from].transport.level)) {
-        // Sobre la banda solo se ve lo que va; la «vuelta» no existe.
+        // Only outbound cargo appears on belt; return trip isn't drawn.
         if (m.phase !== 'go') continue;
         const general = m.to === 'warehouse' && normalDest(state, m.from) !== 'warehouse';
         const key = general ? null : `${m.from}>${m.to}`;
@@ -573,7 +573,7 @@ export class Scene {
         this.mules.set(m.id, view);
         this.objects.addChild(view);
       }
-      // Ida: de la estación al destino con carga. Vuelta: vacía, en sentido contrario.
+      // Outbound: station to target loaded. Return: empty, opposite direction.
       const a = pos[m.from];
       const b = pos[m.to];
       const f = Math.min(m.t / m.duration, 1);
@@ -583,10 +583,10 @@ export class Scene {
       view.setLoaded(going);
       view.place(p.gx, p.gy, p.dx * dir, p.dy * dir, this.time);
     }
-    // Carriles: las bandas de tramo que se cruzan van una más afuera que la otra.
+    // Lanes: crossing segmented belts step farther outward from road.
     const colors = productColors(this.zone.id);
-    // Se quedan las de las estaciones con banda: la de su destino normal y las que llevaron algo hace poco (si
-    // se construye una estación nueva en medio, la vieja desaparece).
+    // Keep belted stations' lines: normal target and recently active ones (building an
+    // intermediate station retires old segment).
     const normal = new Set(belted.map((id) => `${id}>${normalDest(state, id)}`));
     const live = [...segs.entries()].filter(([key, x]) => belted.includes(x.from) && (normal.has(key) || this.time - x.last < 30)).sort((x, y) => Math.min(x[1].a, x[1].b) - Math.min(y[1].a, y[1].b));
     const laneEnd = [];
@@ -600,8 +600,8 @@ export class Scene {
       sideOf[key] = SEG_SIDE + lane * SEG_LANE;
       belts.push({ a: x.a, b: x.b, side: sideOf[key], color: parseInt((colors[x.product] ?? '#6f777e').slice(1), 16), on: this.time - x.last < BELT_HOLD });
     }
-    // La general: de cada estación con banda que no es la última hasta la bodega.
-    // Es una sola banda (desde la primera de esas estaciones), encendida desde la primera que esté mandando algo.
+    // General belt: from each belted non-final station to warehouse.
+    // Single shared belt starting at earliest station, lit from earliest active sender.
     const feeders = belted.filter((id) => normalDest(state, id) !== 'warehouse');
     if (feeders.length) {
       belts.push({ a: Math.min(...feeders.map((id) => pos[id])), b: pos.warehouse, side: GENERAL_SIDE, color: null, on: false });
@@ -639,14 +639,14 @@ export class Scene {
         const p = pointAt(road, eased);
         const load = Object.values(j.load).reduce((a, b) => a + b, 0) / cap;
         const waiting = j.phase === 'idle' ? Math.min(1, j.waited / DISPATCH.maxWait) * 0.3 : 0;
-        // El tinto, solo si lleva un rato parqueado sin nada que vender (no entre viaje y viaje).
+        // Tinto mug only after parked idle a moment without selling (not between rapid trips).
         if (!(j.phase === 'idle' && idleEmpty)) this.restSince[k] = null;
         else this.restSince[k] ??= this.time;
         const resting = this.restSince[k] !== null && this.time - this.restSince[k] > 2;
         this.jeeps[k].place(p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, j.phase === 'out' ? load : waiting, resting, this.time);
         this.vehicleLight(`jeep${k}`, p.gx, p.gy, reverse ? -p.dx : p.dx, reverse ? -p.dy : p.dy, j.phase !== 'idle');
         if (k) return;
-        // El perro persigue al primero en una salida de cada 5 a 15, no en todas.
+        // Dog chases first Willys roughly once every 5 to 15 departures.
         if (j.phase !== 'idle' && this.jeepPhase === 'idle') {
           this.trips = (this.trips ?? 0) + 1;
           this.chaseAt ??= 5 + Math.floor(Math.random() * 11);
@@ -658,15 +658,15 @@ export class Scene {
         }
         if (j.phase === 'idle') this.chasing = false;
         this.jeepPhase = j.phase;
-        // Para el perro: dónde va y hacia dónde.
+        // For dog chase: current location and destination.
         const len = Math.hypot(p.dx, p.dy) || 1;
         const sign = reverse ? -1 : 1;
         this.jeepPos = { gx: p.gx, gy: p.gy, dx: (sign * p.dx) / len, dy: (sign * p.dy) / len, moving: Boolean(this.chasing) };
       });
   }
 
-  // La Chiva solo se ve en el tramo de carretera de esta zona: al salir de la bodega de origen y al
-  // llegar a la estación de destino; el resto del viaje va por fuera del mapa.
+  // Chiva only shows along this zone's highway spur: leaving origin warehouse and
+  // arriving at target station; rest of trip happens off-map.
   syncRoutes(state) {
     for (const rv of this.routes) {
       const r = rv.def;
@@ -703,11 +703,11 @@ export class Scene {
     }
   }
 
-  // El TransMilenio (v4.6): cada bus va de un extremo al otro de su carril a velocidad pareja, frena al llegar, espera un
-  // poco y vuelve. No tiene que ver con la producción.
+  // TransMilenio (v4.6): each bus runs steadily end to end on its lane, brakes, waits
+  // briefly, and reverses. Unrelated to production.
   syncBuses() {
-    const SPEED = 2.4; // casillas por segundo
-    const WAIT = 3; // segundos en cada extremo
+    const SPEED = 2.4; // tiles per second
+    const WAIT = 3; // seconds paused at each end
     this.buses.forEach((b, k) => {
       const leg = b.len / SPEED + WAIT;
       const f = (this.time / (2 * leg) + b.phase) % 1;
@@ -721,8 +721,8 @@ export class Scene {
     });
   }
 
-  // Faros de un vehículo (v3.12): un halo cálido adelante, el que alumbra la carretera y una luz roja
-  // atrás. Van en la capa de las luces, que se ve más cuanto más de noche. on: si va andando.
+  // Vehicle headlights (v3.12): warm forward cone lighting road plus rear red taillight.
+  // Live in lighting layer, fading in deeper at night. on: moving.
   vehicleLight(key, gx, gy, dx, dy, on, half = 0.5) {
     let l = this.carLights.get(key);
     if (!l) {
@@ -750,30 +750,30 @@ export class Scene {
     l.tail.position.set(tail.x, tail.y);
   }
 
-  // Posición en pantalla (px) de una estación, para centrar la cámara.
+  // Screen coordinates (px) of a station, for camera centering.
   stationWorldPoint(id) {
     return this.stations[id].anchorPoint(0);
   }
 }
 
-// Icono sobre la estación: ⛔ patio lleno, ⏸️ esperando entrada, ↪ desviando a la bodega.
-// Solo si el problema dura (ver alerts.js): los momentos sueltos con todo nivelado no se avisan.
+// Status icon over station: ⛔ yard full, ⏸️ waiting input, ↪ diverting to warehouse.
+// Only for persistent faults (see alerts.js): brief balanced waits aren't flagged.
 export function statusIcon(state, id) {
   const st = state.stations[id];
-  if (!st || resting(state)) return null; // de noche todo descansa: nada que avisar
-  // En el tablero de un evento, la plaga sobre la estación mientras no esté controlada (v2.0).
+  if (!st || resting(state)) return null; // at night all stations rest: nothing to warn
+  // On event board, pest icon over afflicted station until controlled (v2.0).
   if (state.event && eventPenalty(state, id) < 0.999) return EVENTS_BY_ID[state.event.id].icon;
   const a = alerts(st);
-  // La Compostera llena es compost de sobra (bueno): no se avisa.
+  // Full Compostera means spare compost (healthy): never flagged as warning.
   if (STATIONS_BY_ID[id].side && a.blocked) return null;
-  // Patio lleno porque las siguientes no dan abasto: está desviando, la que hay que subir es la siguiente.
+  // Full yard caused by lagging downstream: diverting, so downstream needs upgrading.
   if (a.blocked) return a.waiting === 'mules' && slowConsumers(state, id).length ? '↪' : '⛔';
   if (a.starved) return '⏸️';
   if (a.diverting) return '↪';
   return null;
 }
 
-// Halo suave (degradado radial) para luces, faroles y luciérnagas.
+// Soft radial glow sprite for lights, lamps, and fireflies.
 function createGlowTexture() {
   const size = 64;
   const canvas = document.createElement('canvas');
@@ -788,8 +788,8 @@ function createGlowTexture() {
   return Texture.from(canvas);
 }
 
-// Letrero de madera simple.
-// Letrero de la zona: dos postes y una tabla ancha con el nombre y, más pequeña, la región.
+// Simple wooden signpost.
+// Zone signboard: twin posts and wide plank with zone name and smaller region below.
 class ZoneSign extends Container {
   constructor(name, region) {
     super();

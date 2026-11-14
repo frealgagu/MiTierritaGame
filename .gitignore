@@ -1,8 +1,8 @@
 node_modules/
 dist/
 
-# Claves de firma: nunca en el repositorio (van en los secretos de GitHub). Excepción temporal: la
-# clave de pruebas, hasta configurar los secretos (ver android/app/build.gradle).
+# Signing keys: never commit to repo (stored in GitHub Secrets). Temporary exception: the
+# debug keystore until secrets are configured (see android/app/build.gradle).
 *.keystore
 *.jks
 !android/app/mitierrita-pruebas.keystore

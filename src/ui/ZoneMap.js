@@ -8,30 +8,30 @@ import { chosenDecor } from '../sim/renown.js';
 import { zoneMaxed } from '../sim/legacy.js';
 import { FONT } from '../render/palette.js';
 
-// El mapa de Colombia del selector de zonas (v3.60): primero el país, con cada región del juego de su color;
-// al tocar una región se acerca y muestra sus zonas, cada una en el pueblo que la inspira. Desde la v3.67 es lo
-// primero que se ve en 🗺️ Zonas: el país con la región de ahora resaltada, que enseguida se ve de cerca con la
-// zona de ahora resaltada. Al ir a otra zona, el Willys va hasta allá; a otra región, primero la avioneta (ver travel).
-//   root: la partida principal   getZone: la zona que se ve   onGo(zona): ir a la zona   say(texto): un aviso
+// Colombia map in zone selector (v3.60): country first, each game region in its color;
+// tapping a region zooms in to show its zones, each at its real-world town. Since v3.67 it opens
+// first in 🗺️ Zones: country with current region highlighted, zooming straight to current zone.
+// Traveling to another zone moves the Willys there; to another region, plane flies first (see travel).
+//   root: main save   getZone: viewed zone   onGo(zone): switch zone   say(text): toast notice
 import { t } from '../i18n/index.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a', tolima: '#e39b6a', cundinamarca: '#d98fb5', bogota: '#b39ddb' };
-const LAND = '#e8dcc3'; // los departamentos que no son de ninguna región del juego
-const LOCKED = '#cfc6b4'; // las regiones que todavía no se abren
+const LAND = '#e8dcc3'; // departments not belonging to any game region
+const LOCKED = '#cfc6b4'; // regions not yet released
 const ZOOM_MS = 650;
-// Zoom a mano (v4.0): con dos dedos o la rueda del ratón, y arrastrando se mueve. MIN_W: lo más cerca (el ancho de
-// lo que se ve, en unidades del mapa). Al alejarse lo suficiente de una región se vuelve al país.
+// Manual zoom (v4.0): pinch or wheel, drag to pan. MIN_W: closest zoom (visible width
+// in map units). Zooming far enough out of a region returns to country view.
 const MIN_W = 24;
-const DRAG_PX = 6; // lo que se mueve el dedo antes de que cuente como arrastrar (y no como toque)
-const PEEK_MS = 800; // al abrir el mapa, cuánto se ve el país antes de acercarse a la región donde se está
-// Las regiones que vienen (v3.67), en los departamentos que todavía no son de ninguna: «Próximamente».
-// (v4.4.8) Las que están en obra y ocultas (`hidden`): Bogotá, en sus departamentos.
+const DRAG_PX = 6; // finger travel before gesture counts as drag (rather than tap)
+const PEEK_MS = 800; // on map open, pause showing full country before zooming into current region
+// Upcoming regions (v3.67), in unassigned departments: «Coming soon».
+// (v4.4.8) Work-in-progress hidden regions (`hidden`): Bogotá, in its departments.
 const SOON = REGIONS.filter((r) => r.hidden).map((r) => ({ id: r.id, name: t(r.name), icon: r.icon, depts: DEPARTMENTS.filter((d) => d.region === r.id).map((d) => d.name), color: '#e3d6ea' }));
 const SOON_OF = Object.fromEntries(SOON.flatMap((r) => r.depts.map((d) => [d, r])));
 
 
-// Caja de un camino SVG hecho solo de M, L y Z con coordenadas absolutas (así los escribe tools/geo).
+// Bounding box of an SVG path built solely from absolute M, L, and Z commands (as written by tools/geo).
 function pathBox(d) {
   const n = d.match(/-?\d+(\.\d+)?/g).map(Number);
   const box = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
@@ -45,7 +45,7 @@ function grow(box, x, y) {
   box.y1 = Math.max(box.y1, y);
 }
 const union = (boxes) => boxes.reduce((u, b) => (grow(u, b.x0, b.y0), grow(u, b.x1, b.y1), u), { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity });
-// La vista (viewBox) que muestra una caja con un margen.
+// ViewBox showing a box with padding.
 const viewOf = (b, pad) => ({ x: b.x0 - pad, y: b.y0 - pad, w: b.x1 - b.x0 + pad * 2, h: b.y1 - b.y0 + pad * 2 });
 
 const DEPT_BOX = Object.fromEntries(DEPARTMENTS.map((d) => [d.id, pathBox(d.d)]));
@@ -54,7 +54,7 @@ const COUNTRY_VIEW = viewOf(COUNTRY, 12);
 const REGION_BOX = Object.fromEntries(REGIONS.map((r) => [r.id, union(DEPARTMENTS.filter((d) => d.region === r.id).map((d) => DEPT_BOX[d.id]))]));
 const SOON_BOX = Object.fromEntries(SOON.map((r) => [r.id, union(DEPARTMENTS.filter((d) => r.depts.includes(d.name)).map((d) => DEPT_BOX[d.id]))]));
 
-// Dónde va cada zona y cada aeropuerto en el mapa de su región, y qué se ve de cerca: ui/mapLayout.js (v4.4.10).
+// Layout of zones and airports on each region map, and close-up framing: ui/mapLayout.js (v4.4.10).
 
 const el = (tag, attrs = {}, parent = null) => {
   const e = document.createElementNS(NS, tag);
@@ -72,15 +72,15 @@ export class ZoneMap {
     this.onGo = onGo;
     this.say = say;
     this.container = container;
-    this.region = null; // la región que se ve de cerca (null: el país)
-    this.busy = false; // mientras va el Willys (o vuela la avioneta)
+    this.region = null; // region currently zoomed in (null: country)
+    this.busy = false; // while Willys drives (or plane flies)
     this.back = document.createElement('button');
     this.back.className = 'btn small zones-map-back';
     this.back.textContent = t('⬅ Colombia');
     this.back.hidden = true;
     this.back.addEventListener('click', () => !this.busy && this.zoomTo(null));
     this.svg = el('svg', { class: 'zones-map-svg', preserveAspectRatio: 'xMidYMid meet' });
-    // ＋ y －, para acercarse sin dos dedos ni rueda.
+    // ＋ and －, to zoom without pinch or wheel.
     this.zoomBtns = document.createElement('div');
     this.zoomBtns.className = 'zones-map-zoom';
     for (const [label, k, title] of [['＋', 0.6, t('Acercar')], ['－', 1 / 0.6, t('Alejar')]]) {
@@ -98,7 +98,7 @@ export class ZoneMap {
     window.addEventListener('pointermove', (e) => this.move(e));
     for (const ev of ['pointerup', 'pointercancel']) window.addEventListener(ev, (e) => this.up(e));
     this.svg.addEventListener('wheel', (e) => this.wheel(e), { passive: false });
-    // Tras arrastrar o pellizcar, el toque no elige nada.
+    // After drag or pinch, tap releases don't select anything.
     this.svg.addEventListener('click', (e) => this.dragged && (e.stopPropagation(), e.preventDefault()), true);
     this.depts = el('g', {}, this.svg);
     this.paths = DEPARTMENTS.map((d) => {
@@ -106,15 +106,15 @@ export class ZoneMap {
       p.addEventListener('click', () => (SOON_OF[d.name] ? this.soon(SOON_OF[d.name]) : this.pickRegion(d.region)));
       return p;
     });
-    this.highlight = null; // la región resaltada en el país (la de ahora, o la de destino en un viaje)
-    this.peek = null; // el acercamiento automático pendiente al abrir
+    this.highlight = null; // highlighted region at country level (current one, or destination during trip)
+    this.peek = null; // pending auto-zoom on open
     this.overlay = el('g', { style: `font-family: ${FONT}` }, this.svg);
     this.vb = viewOf(COUNTRY, 12);
     this.applyView();
   }
 
-  // Al abrir el mapa (v3.67): el país con la región de ahora resaltada y, enseguida, de cerca, con la zona de
-  // ahora resaltada.
+  // On map open (v3.67): country with current region highlighted, then zooms in with current zone
+  // highlighted.
   show() {
     if (this.busy) return;
     clearTimeout(this.peek);
@@ -129,8 +129,8 @@ export class ZoneMap {
     }, PEEK_MS);
   }
 
-  // Al cambiar de zona (v4.0): el mapa abre ya de cerca, en la región de ahora, sin pasar por el país. Si la zona
-  // nueva es de la misma región, el muñequito solo camina; si es de otra, se aleja al país y se acerca a la nueva.
+  // On zone switch (v4.0): map opens zoomed straight into current region, skipping country. If new zone
+  // is in same region, sprite just travels there; if another region, zooms out to country then into target.
   showHere() {
     if (this.busy) return;
     clearTimeout(this.peek);
@@ -158,7 +158,7 @@ export class ZoneMap {
       this.paths[i].setAttribute('fill', color);
       this.paths[i].classList.toggle('dim', Boolean(this.region && d.region !== this.region));
       this.paths[i].classList.toggle('pick', Boolean(d.region && !this.region));
-      // En el país, la región resaltada (la de ahora o la de destino) se marca y las demás se apagan un poco.
+      // At country level, highlighted region (current or destination) is emphasized while others dim slightly.
       const lit = !this.region && this.highlight;
       this.paths[i].classList.toggle('lit', Boolean(lit && d.region === this.highlight));
       this.paths[i].classList.toggle('soft', Boolean(lit && d.region !== this.highlight));
@@ -172,7 +172,7 @@ export class ZoneMap {
   }
 
   // ---------- Zoom a mano (v4.0) ----------
-  // Un punto de la pantalla en unidades del mapa.
+  // Screen point to map units.
   toMap(x, y) {
     const m = this.svg.getScreenCTM();
     if (!m) return [this.vb.x + this.vb.w / 2, this.vb.y + this.vb.h / 2];
@@ -180,13 +180,13 @@ export class ZoneMap {
     return [p.x, p.y];
   }
 
-  // Unidades del mapa por pixel de pantalla.
+  // Map units per screen pixel.
   unitsPerPx() {
     const m = this.svg.getScreenCTM();
     return m ? 1 / m.a : this.vb.w / (this.svg.clientWidth || 1);
   }
 
-  // Acerca (k < 1) o aleja (k > 1) alrededor del punto (cx, cy) del mapa, sin pasar de lo más cerca ni de todo el país.
+  // Zoom in (k < 1) or out (k > 1) around map point (cx, cy), clamped between closest and full country.
   zoomAt(cx, cy, k) {
     const v = this.vb;
     const w = Math.min(COUNTRY_VIEW.w, Math.max(MIN_W, v.w * k));
@@ -195,7 +195,7 @@ export class ZoneMap {
     this.clampView();
     this.applyView();
     this.redraw();
-    // Desde una región, alejarse lo suficiente vuelve al país (como «⬅ Colombia»).
+    // From a region, zooming far enough out returns to country view (same as «⬅ Colombia»).
     if (this.region && k > 1) {
       const out = Math.min(COUNTRY_VIEW.w, Math.max(ZONES_VIEW[this.region].w * 1.35, COUNTRY_VIEW.w * 0.6));
       if (this.vb.w >= out - 1e-6) {
@@ -205,7 +205,7 @@ export class ZoneMap {
     }
   }
 
-  // Mover lo que se ve (en unidades del mapa), sin que el país se salga del todo.
+  // Pan viewport (in map units), keeping country within bounds.
   panBy(dx, dy) {
     this.vb = { ...this.vb, x: this.vb.x + dx, y: this.vb.y + dy };
     this.clampView();
@@ -219,7 +219,7 @@ export class ZoneMap {
     this.vb = { ...v, x: cx - v.w / 2, y: cy - v.h / 2 };
   }
 
-  // Las marcas y los nombres se vuelven a dibujar del tamaño de siempre (una vez por cuadro).
+  // Redraw markers and labels at constant screen size (once per frame).
   redraw() {
     if (this.redrawing) return;
     this.redrawing = true;
@@ -233,7 +233,7 @@ export class ZoneMap {
     return !this.busy && !this.animating;
   }
 
-  // Los botones ＋ y －: alrededor del centro, con un movimiento suave.
+  // ＋ and － buttons: centered smoothly around view center.
   async zoomBy(k) {
     if (!this.canTouch()) return;
     clearTimeout(this.peek);
@@ -269,7 +269,7 @@ export class ZoneMap {
     if (!p || !this.canTouch()) return;
     const pts = [...this.pointers.values()];
     if (pts.length >= 2) {
-      // Dos dedos: acerca o aleja según se juntan o se separan, alrededor del punto medio, y lo arrastra.
+      // Two fingers: pinch zoom around midpoint while panning.
       const [a, b] = pts;
       const before = { mid: [(a.x + b.x) / 2, (a.y + b.y) / 2], dist: Math.hypot(a.x - b.x, a.y - b.y) };
       p.x = e.clientX;
@@ -294,7 +294,7 @@ export class ZoneMap {
 
   up(e) {
     this.pointers.delete(e.pointerId);
-    // El toque que sigue a un arrastre se ignora; después, se vuelve a poder tocar.
+    // Tap immediately following a drag is ignored; subsequent taps work normally.
     if (!this.pointers.size && this.dragged) setTimeout(() => (this.dragged = false), 0);
   }
 
@@ -305,7 +305,7 @@ export class ZoneMap {
     this.zoomAt(...this.toMap(e.clientX, e.clientY), Math.exp(Math.max(-60, Math.min(60, e.deltaY)) * 0.004));
   }
 
-  // De lo que se ve ahora a `to`, en un movimiento suave.
+  // Smoothly transition viewBox from current to `to`.
   async animate(to) {
     const from = { ...this.vb };
     this.animating = true;
@@ -323,7 +323,7 @@ export class ZoneMap {
     this.animating = false;
   }
 
-  // Se acerca a una región (o se aleja al país) en un movimiento suave.
+  // Smoothly zoom into a region (or back out to country).
   async zoomTo(regionId) {
     const from = { ...this.vb };
     const to = regionId ? ZONES_VIEW[regionId] : viewOf(COUNTRY, 12);
@@ -345,12 +345,12 @@ export class ZoneMap {
     });
     this.animating = false;
     this.drawOverlay();
-    // Acercarse a otra región (v4.4.11): la avioneta llega a su aeropuerto. Dentro de un viaje (busy) no, que ya voló.
+    // Zooming into another region (v4.4.11): plane lands at its airport. Skip during travel (busy), it already flew.
     if (regionId && !this.busy && regionId !== REGION_OF_ZONE[this.getZone()] && this.root.state.settings.travel !== 'direct') await this.arrive(regionId);
   }
 
-  // La avioneta llega volando al aeropuerto de la región que se mira, desde el lado de la región donde se está,
-  // aterriza y se va con la pista. Si después se elige una zona de aquí, la pista vuelve y el Willys sale de ella.
+  // Plane flies to target region's airport from the direction of current region,
+  // lands, and fades out with runway. Choosing a zone here brings runway back and Willys drives out of it.
   async arrive(regionId) {
     this.busy = true;
     const strip = AIRSTRIP[regionId];
@@ -380,8 +380,8 @@ export class ZoneMap {
     this.zoomTo(regionId);
   }
 
-  // Los nombres de las regiones (en el país) o las zonas con su camino (en una región). El tamaño de las letras
-  // va con lo que se ve, para que se lean igual de cerca y de lejos.
+  // Region names (country) or zone markers and trail (region). Label font size scales
+  // with viewBox so text reads uniformly zoomed in or out.
   drawOverlay() {
     const g = this.overlay;
     g.replaceChildren();
@@ -389,7 +389,7 @@ export class ZoneMap {
     const here = this.getZone();
     if (!this.region) {
       for (const r of REGIONS) {
-        if (r.hidden) continue; // va con las que vienen (v4.4.8)
+        if (r.hidden) continue; // goes with upcoming regions (v4.4.8)
         const b = REGION_BOX[r.id];
         const open = this.open(r.id);
         const cx = (b.x0 + b.x1) / 2;
@@ -399,7 +399,7 @@ export class ZoneMap {
         el('text', { 'font-size': 4.4 * u, 'text-anchor': 'middle', y: 4 * u, class: 'name', 'stroke-width': 1.2 * u }, label).textContent = r.name;
         label.addEventListener('click', () => this.pickRegion(r.id));
       }
-      // Las que vienen: su nombre y «Próximamente».
+      // Upcoming regions: name and «Coming soon».
       for (const r of SOON) {
         const b = SOON_BOX[r.id];
         const label = el('g', { class: 'zones-map-label soon', transform: `translate(${(b.x0 + b.x1) / 2} ${(b.y0 + b.y1) / 2})` }, g);
@@ -408,14 +408,14 @@ export class ZoneMap {
         el('text', { 'font-size': 2.5 * u, 'text-anchor': 'middle', y: 5.6 * u, class: 'name soon-tag', 'stroke-width': 0.8 * u }, label).textContent = t('Próximamente');
         label.addEventListener('click', () => this.soon(r));
       }
-      // Dónde se está: el alfiler en la zona de ahora.
+      // Current location: pin on current zone.
       const [x, y] = proj(ZONE_GEO[here]);
       el('text', { x, y, 'font-size': 6.5 * u, 'text-anchor': 'middle', class: 'zones-map-pin' }, g).textContent = '📍';
       return;
     }
     const r = REGIONS_BY_ID[this.region];
     const state = regionState(this.root.state, r.id);
-    // El camino de una zona a la siguiente, punteado.
+    // Dotted trail from each zone to the next.
     const pts = r.zones.map((z) => ZONE_POS[z]);
     el('polyline', { points: pts.map((p) => p.join(',')).join(' '), class: 'zones-map-road', 'stroke-width': 0.8 * u, 'stroke-dasharray': `${1.6 * u} ${1.2 * u}` }, g);
     r.zones.forEach((z, i) => {
@@ -428,7 +428,7 @@ export class ZoneMap {
       el('circle', { r: 4.6 * u, class: 'dot', 'stroke-width': 0.6 * u }, m);
       el('text', { 'font-size': 4.6 * u, 'text-anchor': 'middle', y: 1.6 * u }, m).textContent = st?.unlocked ? zone.icon : '🔒';
       const name = el('text', { 'font-size': 2.8 * u, 'text-anchor': 'middle', y: 8.4 * u, class: 'name', 'stroke-width': 0.8 * u }, m);
-      // Con una sola zona (Bogotá, v4.6) va sin número.
+      // Single-zone region (Bogotá, v4.6) omits zone number.
       name.textContent = `${r.zones.length > 1 ? `${i + 1} · ` : ''}${zone.name}${st?.complete ? (zoneMaxed(state, z) ? ' 🏁' : ' 🚩') : ''}`;
       m.addEventListener('click', () => this.pickZone(z));
     });
@@ -445,13 +445,13 @@ export class ZoneMap {
     this.travel(z);
   }
 
-  // El viaje a otra zona (v3.67, también al terminar una zona o al elegirla en la lista; v4.4.11: si ya se mira la
-  // región de destino, la avioneta ya llegó al acercarse, y el Willys sale de la pista). En la misma región,
-  // el Willys va por el mapa de la región. A otra región (v4.1): se aleja al país, la avioneta vuela hasta la
-  // región nueva, se acerca a ella y el Willys entra desde el borde, del lado por donde llegó el avión.
+  // Trip to another zone (v3.67, also on zone clear or list pick; v4.4.11: if already viewing target
+  // region, plane already landed on zoom, so Willys exits runway). Within same region,
+  // Willys drives across region map. To another region (v4.1): zooms out to country, plane flies to
+  // new region, zooms in, and Willys enters from border on the plane's arrival side.
   async travel(target) {
     clearTimeout(this.peek);
-    // «⚡ Directo» (v4.1.3, en el menú): sin el viaje.
+    // «⚡ Direct» (v4.1.3, in menu): skip travel animation.
     if (this.root.state.settings.travel === 'direct') return this.onGo(target);
     this.busy = true;
     const from = this.getZone();
@@ -461,7 +461,7 @@ export class ZoneMap {
       if (this.region !== here) await this.zoomTo(here);
       await this.drive(ZONE_POS[from], ZONE_POS[target], target);
     } else {
-      // Si ya se está mirando la región de destino (se eligió la zona ahí), no hace falta el recorrido.
+      // If already viewing destination zone's region (zone picked right there), skip full trip.
       if (this.region !== there) {
         if (this.region !== here) {
           this.highlight = here;
@@ -473,13 +473,13 @@ export class ZoneMap {
         await wait(250);
         this.highlight = there;
         this.paint();
-        // Aterriza en la pista de la región, junto a su última zona (v4.3.2: antes, en el centro, y el Willys
-        // entraba desde el borde del mapa).
+        // Lands on region's runway near its final zone (v4.3.2: previously in center, with Willys
+        // entering from map edge).
         await this.fly(ZONE_POS[from], AIRSTRIP[there]);
         await wait(200);
         await this.zoomTo(there);
       }
-      // El Willys sale de la pista.
+      // Willys drives off the runway.
       this.runway(AIRSTRIP[there]);
       await this.drive(AIRSTRIP[there], ZONE_POS[target], target);
     }
@@ -488,7 +488,7 @@ export class ZoneMap {
     this.onGo(target);
   }
 
-  // La pista de aterrizaje (v4.3.2), con la avioneta parqueada al lado.
+  // Landing runway (v4.3.2), with plane parked beside it.
   runway([x, y]) {
     const u = this.vb.w / 100;
     const g = el('g', { transform: `translate(${x} ${y}) rotate(-28)` }, this.overlay);
@@ -499,8 +499,8 @@ export class ZoneMap {
     return g;
   }
 
-  // El Willys va de a a b (en lo que se ve), por el camino punteado; la zona de destino se resalta (v4.1: antes
-  // caminaba un muñequito). Sale del color que se eligió para el Willys en la región de destino.
+  // Willys drives from a to b (in current view) along dotted trail; destination highlights (v4.1: previously
+  // walked a stick figure). Uses destination region's Willys paint color.
   async drive(a, b, target) {
     const u = this.vb.w / 100;
     this.overlay.querySelector(`[data-zone="${target}"]`)?.classList.add('target');
@@ -509,12 +509,12 @@ export class ZoneMap {
     const car = el('g', { class: 'zones-map-walker' }, this.overlay);
     el('ellipse', { rx: 4.6 * u, ry: 0.9 * u, class: 'shadow' }, car);
     const body = willys(car, `#${color.toString(16).padStart(6, '0')}`);
-    // El dibujo mira a la derecha: hacia la izquierda se voltea.
+    // Sprite faces right: flip horizontally when heading left.
     const flip = b[0] < a[0] ? -1 : 1;
     const ms = 900 + Math.min(1200, (Math.hypot(b[0] - a[0], b[1] - a[1]) / u) * 22);
     await animate(ms, (t) => {
       const k = ease(t);
-      // Brinca por la trocha: saltitos cortos y un cabeceo.
+      // Bounces along dirt road: short hops and pitch tilt.
       const bump = Math.abs(Math.sin((t * ms) / 90)) * 0.5 * u;
       const tilt = Math.sin((t * ms) / 130) * 3;
       car.setAttribute('transform', `translate(${a[0] + (b[0] - a[0]) * k} ${a[1] + (b[1] - a[1]) * k})`);
@@ -522,13 +522,13 @@ export class ZoneMap {
     });
   }
 
-  // La avioneta vuela de a a b sobre el país (v4.1): en arco, con su sombra en el suelo, que se aleja mientras
-  // sube y se acerca al aterrizar.
+  // Plane flies from a to b over country (v4.1): parabolic arc with ground shadow shrinking on climb
+  // and approaching on landing.
   async fly(a, b) {
     const u = this.vb.w / 100;
     const [dx, dy] = [b[0] - a[0], b[1] - a[1]];
     const dist = Math.hypot(dx, dy) || 1;
-    // El arco se curva hacia arriba de la pantalla.
+    // Arc curves toward top of screen.
     const side = dx >= 0 ? -1 : 1;
     const c = [(a[0] + b[0]) / 2 + (side * -dy / dist) * dist * 0.25, (a[1] + b[1]) / 2 + (side * dx / dist) * dist * 0.25];
     const at = (t) => [(1 - t) ** 2 * a[0] + 2 * (1 - t) * t * c[0] + t * t * b[0], (1 - t) ** 2 * a[1] + 2 * (1 - t) * t * c[1] + t * t * b[1]];
@@ -543,7 +543,7 @@ export class ZoneMap {
       const [x, y] = at(k);
       const [x2, y2] = at(Math.min(1, k + 0.01));
       const angle = (Math.atan2(y2 - y, x2 - x) * 180) / Math.PI;
-      const lift = Math.sin(Math.PI * k); // 0 en tierra, 1 en lo más alto
+      const lift = Math.sin(Math.PI * k); // 0 on ground, 1 at peak altitude
       const size = (0.42 + 0.16 * lift) * u;
       g.setAttribute('transform', `translate(${x} ${y - lift * 2.5 * u}) rotate(${angle}) scale(${size})`);
       shadow.setAttribute('transform', `translate(${x + lift * 2 * u} ${y + lift * 1.5 * u}) rotate(${angle}) scale(${0.42 * u})`);
@@ -552,11 +552,11 @@ export class ZoneMap {
   }
 }
 
-// Una animación de `ms` milisegundos: `frame(t)` con t de 0 a 1.
+// Run `frame(t)` animation for `ms` milliseconds with t from 0 to 1.
 const animate = (ms, frame) =>
   new Promise((ok) => {
     const t0 = performance.now();
-    frame(0); // ya en su sitio y a su tamaño desde el primer cuadro
+    frame(0); // in position and scaled from the first frame
     const step = (now) => {
       const t = Math.min(1, (now - t0) / ms);
       frame(t);
@@ -566,8 +566,8 @@ const animate = (ms, frame) =>
     requestAnimationFrame(step);
   });
 
-// El Willys de lado, mirando a la derecha, con las ruedas en el suelo (0, 0): carrocería del color dado,
-// capó, parabrisas, carpa de lona, la llanta de repuesto atrás y el farol.
+// Side-profile Willys facing right, wheels on ground (0, 0): colored body,
+// hood, windshield, canvas top, rear spare tire, and headlight.
 function willys(parent, color) {
   const g = el('g', {}, parent);
   const ink = '#3a2418';
@@ -585,8 +585,8 @@ function willys(parent, color) {
   return g;
 }
 
-// La avioneta vista desde arriba, con la nariz a la derecha: alas amarillas, fuselaje blanco y la cola con
-// azul y rojo. `flat`: solo la silueta (para la sombra). Devuelve la hélice, que gira.
+// Top-down plane, nose right: yellow wings, white fuselage, tail in
+// blue and red. `flat`: silhouette only (for shadow). Returns spinning propeller.
 function plane(parent, flat = false) {
   const ink = flat ? 'none' : '#3a2418';
   const paint = (c) => (flat ? '#000' : c);
@@ -599,7 +599,7 @@ function plane(parent, flat = false) {
     el('ellipse', { cx: 4.8, cy: 0, rx: 1.6, ry: 0.9, fill: '#7fb3d5', stroke: ink, 'stroke-width': 0.35 }, parent);
   }
   const prop = el('g', {}, parent);
-  // La hélice, en la nariz: gira achicándose de alto (está centrada en y = 0).
+  // Propeller at nose: spins by scaling vertical height (centered at y = 0).
   el('path', { d: 'M 10.1 -3 V 3', stroke: flat ? '#000' : '#6b6b6b', 'stroke-width': 0.8, 'stroke-linecap': 'round' }, prop);
   return prop;
 }

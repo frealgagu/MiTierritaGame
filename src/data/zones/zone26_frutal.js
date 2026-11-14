@@ -1,5 +1,5 @@
-// Mapa de los Llanos · Zona 2: El Frutal (v3.32). Mismo trazado que el Tabacal (zone8_tabacal.js), el Cocal
-// y la Cervecería.
+// Los Llanos Map · Zone 2: El Frutal (v3.32). Same layout as El Tabacal (zone8_tabacal.js), El Cocal,
+// and La Cervecería.
 import { ICON } from '../icons.js';
 
 export const ZONE26 = {
@@ -22,16 +22,16 @@ export const ZONE26 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Granada ➜',
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
-  unlockedBy: 'palma', // se abre al completar La Palma
-  // Carretera de la Ruta del jugo (v3.33): sale de la bodega hacia la Cachamera.
+  unlockedBy: 'palma', // opens upon completing La Palma
+  // Road for the Juice Route (v3.33): leaves the warehouse toward La Cachamera.
   routes: {
     jugo: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A la Cachamera ➜' },
-    // Las cajas de jugos salen hacia Villavicencio (v3.36).
+    // Crates of juice leave toward Villavicencio (v3.36).
     cajas_jugos: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Villavicencio ➜' },
   },
   next: 'cachamera',

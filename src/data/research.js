@@ -1,13 +1,13 @@
-// Investigaciones (GDD §5.4): compras únicas. Cada estación tiene al menos una ×2, y las que
-// aceleran una estación aparecen junto a la de la siguiente, para no descompensar la cadena.
-//   requires: estación que tiene que estar construida para que aparezca
-//   stationLevel: nivel que piden esa estación y sus arrieros (las que la duplican, ver abajo)
+// Research (GDD §5.4): one-time purchases. Every station has at least one ×2, and
+// speed-ups appear paired alongside next tier so chain stays balanced.
+//   requires: station that must be built to appear
+//   stationLevel: required level for station and haulers (doubling upgrades, see below)
 //   effect:   { type, target?, mult }
-//     stationSpeed (target = estación) · productValue (target = producto) · zoneValue (target = zona)
+//     stationSpeed (target = station) · productValue (target = product) · zoneValue (target = zone)
 //     muleSpeed · dispatchCapacity (target = zona)
-// (Hasta la v3.6 había una por zona que sumaba horas sin conexión; desde la v3.7 esas horas son del
-// jugador y se compran con Renombre: ver sim/renown.js.)
-//   zone: zona en la que aparece
+// (Until v3.6 each zone had offline-hours research; from v3.7 offline hours moved to
+// player Renown upgrades: see sim/renown.js.)
+//   zone: zone where it appears
 import { ICON } from './icons.js';
 
 export const RESEARCH = [
@@ -19,8 +19,8 @@ export const RESEARCH = [
   { zone: 'finca', id: 'trilla', name: 'Trilladora de rodillos', icon: '🌀', desc: 'La Trilladora procesa el doble.', cost: 8000, requires: 'roaster', effect: { type: 'stationSpeed', target: 'huller', mult: 2 } },
   { zone: 'finca', id: 'tueste', name: 'Tueste de origen', icon: '🏅', desc: 'El café tostado vale un 50 % más.', cost: 20000, requires: 'roaster', effect: { type: 'productValue', target: 'roasted', mult: 1.5 } },
   { zone: 'finca', id: 'tostador', name: 'Tostador de tambor grande', icon: '🔥', desc: 'La Tostadora tuesta el doble.', cost: 25000, requires: 'grinder', effect: { type: 'stationSpeed', target: 'roaster', mult: 2 } },
-  // La segunda mejora del Cafetal sube el precio de todo el café, no la velocidad: un segundo ×2 en el
-  // Cafetal (y en el Beneficiadero) dejaba al resto de la cadena, con un solo ×2, siempre atrás.
+  // Cafetal's second upgrade raises value of all coffee, not speed: a second ×2 on
+  // Cafetal (and Beneficiadero) left the rest of the single-×2 chain permanently behind.
   { zone: 'finca', id: 'castillo', name: 'Variedad Castillo', icon: '🌳', desc: 'Café de mejor calidad: todo lo que vende la Finca vale un 50 % más.', cost: 50000, requires: 'grinder', effect: { type: 'zoneValue', target: 'finca', mult: 1.5 } },
   { zone: 'finca', id: 'beneficio_eco', name: 'Beneficio ecológico', icon: '🪱', desc: 'La Compostera trabaja el doble de rápido: con menos niveles cubre el bono del compost.', cost: 20000, requires: 'composter', effect: { type: 'stationSpeed', target: 'composter', mult: 2 } },
   { zone: 'finca', id: 'molino_electrico', name: 'Molino eléctrico', icon: '⚙️', desc: 'El Molino muele el doble.', cost: 60000, requires: 'packer', effect: { type: 'stationSpeed', target: 'grinder', mult: 2 } },
@@ -28,7 +28,7 @@ export const RESEARCH = [
   { zone: 'finca', id: 'cable', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000, requires: 'packer', effect: { type: 'muleSpeed', mult: 2 } },
   { zone: 'finca', id: 'sello', name: 'Sello de calidad', icon: '🏅', desc: 'Las bolsas de café valen un 50 % más.', cost: 300000, requires: 'packer', effect: { type: 'productValue', target: 'coffee_bag', mult: 1.5 } },
 
-  // Zona 2 · El Trapiche
+  // Zone 2 · El Trapiche
   { zone: 'trapiche', id: 'motor', name: 'Trapiche con motor', icon: '⚙️', desc: 'La Molienda muele el doble.', cost: 20000, requires: 'cane_mill', effect: { type: 'stationSpeed', target: 'cane_mill', mult: 2 } },
   { zone: 'trapiche', id: 'abono_cana', name: 'Abono para la caña', icon: '🌱', desc: 'El Cañaduzal produce el doble.', cost: 50000, requires: 'furnace', effect: { type: 'stationSpeed', target: 'canefield', mult: 2 } },
   { zone: 'trapiche', id: 'pailas', name: 'Hornilla de más pailas', icon: '🍯', desc: 'La Hornilla cocina el doble (para seguirle el paso al Abono para la caña).', cost: 40000, requires: 'furnace', effect: { type: 'stationSpeed', target: 'furnace', mult: 2 } },
@@ -37,7 +37,7 @@ export const RESEARCH = [
   { zone: 'trapiche', id: 'pulverizador', name: 'Pulverizadora eléctrica', icon: '🌀', desc: 'La Pulverizadora muele el doble.', cost: 600000, requires: 'pulverizer', effect: { type: 'stationSpeed', target: 'pulverizer', mult: 2 } },
   { zone: 'trapiche', id: 'panela_organica', name: 'Panela orgánica', icon: '🏅', desc: 'La panela pulverizada vale un 50 % más.', cost: 1500000, requires: 'pulverizer', effect: { type: 'productValue', target: 'panela_powder', mult: 1.5 } },
 
-  // Zona 3 · La Lechería
+  // Zone 3 · La Lechería
   { zone: 'lecheria', id: 'ordeno', name: 'Ordeño mecánico', icon: '🐄', desc: 'El Potrero da el doble de leche.', cost: 300000, requires: 'pasteurizer', effect: { type: 'stationSpeed', target: 'pasture', mult: 2 } },
   { zone: 'lecheria', id: 'placas', name: 'Pasteurizadora de placas', icon: '🌡️', desc: 'La Pasteurizadora procesa el doble (para seguirle el paso al Ordeño mecánico).', cost: 400000, requires: 'pasteurizer', effect: { type: 'stationSpeed', target: 'pasteurizer', mult: 2 } },
   { zone: 'lecheria', id: 'centrifuga', name: 'Descremadora centrífuga', icon: ICON.cream, desc: 'La Descremadora saca el doble de crema.', cost: 1200000, requires: 'separator', effect: { type: 'stationSpeed', target: 'separator', mult: 2 } },
@@ -48,7 +48,7 @@ export const RESEARCH = [
   { zone: 'lecheria', id: 'paila_cobre', name: 'Paila de cobre', icon: '🍮', desc: 'La Paila cocina el doble de arequipe (la Chiva de la ruta se ajusta sola).', cost: 25000000, requires: 'arequipe_pot', effect: { type: 'stationSpeed', target: 'arequipe_pot', mult: 2 } },
   { zone: 'lecheria', id: 'arequipe_export', name: 'Arequipe de exportación', icon: '🏅', desc: 'El arequipe vale un 50 % más.', cost: 50000000, requires: 'arequipe_pot', effect: { type: 'productValue', target: 'arequipe', mult: 1.5 } },
 
-  // Zona 4 · El Cacaotal
+  // Zone 4 · El Cacaotal
   { zone: 'cacaotal', id: 'injertos', name: 'Injertos de clones finos', icon: '🌳', desc: 'El Cacaotal da el doble de mazorcas.', cost: 1000000, requires: 'fermenter', effect: { type: 'stationSpeed', target: 'cacao_grove', mult: 2 } },
   { zone: 'cacaotal', id: 'cajones_escalera', name: 'Cajones en escalera', icon: '📦', desc: 'Los Cajones fermentan el doble (para seguirle el paso a los Injertos).', cost: 1200000, requires: 'fermenter', effect: { type: 'stationSpeed', target: 'fermenter', mult: 2 } },
   { zone: 'cacaotal', id: 'marquesina_cacao', name: 'Secadero con techo corredizo', icon: '☀️', desc: 'El Secadero seca el doble de rápido.', cost: 3000000, requires: 'cacao_roaster', effect: { type: 'stationSpeed', target: 'cacao_dryer', mult: 2 } },
@@ -59,7 +59,7 @@ export const RESEARCH = [
   { zone: 'cacaotal', id: 'temperadora', name: 'Temperadora', icon: ICON.milkChocolate, desc: 'La Chocolatería hace el doble de chocolatinas (las rutas se ajustan solas).', cost: 80000000, requires: 'chocolatier', effect: { type: 'stationSpeed', target: 'chocolatier', mult: 2 } },
   { zone: 'cacaotal', id: 'cacao_fino', name: 'Cacao fino de aroma', icon: '🏅', desc: 'Todo lo que vende el Cacaotal vale un 50 % más.', cost: 60000000, requires: 'chocolate_table', effect: { type: 'zoneValue', target: 'cacaotal', mult: 1.5 } },
 
-  // Zona 5 · El Maizal
+  // Zone 5 · El Maizal
   { zone: 'maizal', id: 'maiz_hibrido', name: 'Maíz híbrido', icon: '🌽', desc: 'El Maizal da el doble de mazorcas.', cost: 15000000, requires: 'sheller', effect: { type: 'stationSpeed', target: 'cornfield', mult: 2 } },
   { zone: 'maizal', id: 'desgranadora_motor', name: 'Desgranadora con motor', icon: '⚙️', desc: 'La Desgranadora desgrana el doble (para seguirle el paso al Maíz híbrido).', cost: 18000000, requires: 'sheller', effect: { type: 'stationSpeed', target: 'sheller', mult: 2 } },
   { zone: 'maizal', id: 'piladora_electrica', name: 'Piladora eléctrica', icon: '🪵', desc: 'La Piladora pila el doble.', cost: 45000000, requires: 'dough_mill', effect: { type: 'stationSpeed', target: 'corn_huller', mult: 2 } },
@@ -68,8 +68,8 @@ export const RESEARCH = [
   { zone: 'maizal', id: 'budare_grande', name: 'Budare grande', icon: '🔥', desc: 'El Budare asa el doble de arepas.', cost: 300000000, requires: 'arepa_stand', effect: { type: 'stationSpeed', target: 'budare', mult: 2 } },
   { zone: 'maizal', id: 'plancha_doble', name: 'Plancha doble', icon: ICON.cheeseArepa, desc: 'El Puesto de arepas atiende el doble (las rutas se ajustan solas).', cost: 500000000, requires: 'arepa_stand', effect: { type: 'stationSpeed', target: 'arepa_stand', mult: 2 } },
   { zone: 'maizal', id: 'receta_abuela', name: 'Receta de la abuela', icon: '🏅', desc: 'Todo lo que vende el Maizal vale un 50 % más.', cost: 400000000, requires: 'budare', effect: { type: 'zoneValue', target: 'maizal', mult: 1.5 } },
-  // Zona 6 · El Pueblo: cada estación al doble (lo que gasta de más llega de las otras zonas, que también
-  // tienen sus investigaciones), un camión para el despacho y la denominación de origen.
+  // Zone 6 · El Pueblo: doubles every station (extra input comes from other zones' own
+  // research), truck dispatch speed, and designation of origin.
   { zone: 'pueblo', id: 'catadores', name: 'Catadores expertos', icon: '👃', desc: 'La Casa del café selecciona el doble de café de origen (pide el doble de bolsas a la Finca).', cost: 1000000000, requires: 'greca', effect: { type: 'stationSpeed', target: 'coffee_house', mult: 2 } },
   { zone: 'pueblo', id: 'greca_doble', name: 'Greca de dos llaves', icon: '☕', desc: 'La Greca prepara el doble de tintos.', cost: 1500000000, requires: 'greca', effect: { type: 'stationSpeed', target: 'greca', mult: 2 } },
   { zone: 'pueblo', id: 'tractomula', name: 'Tractomula', icon: '🚛', desc: 'El despacho de Salento lleva el doble por viaje.', cost: 2500000000, requires: 'fonda', effect: { type: 'dispatchCapacity', target: 'pueblo', mult: 2 } },
@@ -78,8 +78,8 @@ export const RESEARCH = [
   { zone: 'pueblo', id: 'monos', name: 'Cintas y moños', icon: '🎀', desc: 'El Empaque de regalos arma el doble de canastas.', cost: 15000000000, requires: 'gift_wrap', effect: { type: 'stationSpeed', target: 'gift_wrap', mult: 2 } },
   { zone: 'pueblo', id: 'grua', name: 'Segundo montacargas', icon: '📦', desc: 'El Despacho de exportación llena el doble.', cost: 40000000000, requires: 'export_dock', effect: { type: 'stationSpeed', target: 'export_dock', mult: 2 } },
   { zone: 'pueblo', id: 'denominacion', name: 'Denominación de origen', icon: '🏅', desc: 'Todo lo que vende Salento vale un 50 % más.', cost: 25000000000, requires: 'gift_wrap', effect: { type: 'zoneValue', target: 'pueblo', mult: 1.5 } },
-  // Maestría (v1.7): con todos los edificios de una zona en el nivel 75, toda la zona produce ×4; y
-  // Supremacía, en el nivel 100, ×8 más. Ayudan a llegar al segundo final (todo al nivel 100).
+  // Mastery (v1.7): with every building in zone at level 75, whole zone outputs ×4; and
+  // Supremacy at level 100 adds another ×8. Helps reach second ending (all level 100).
   { zone: 'finca', id: 'maestria_finca', name: 'Maestría: Finca', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'finca', mult: 4 } },
   { zone: 'trapiche', id: 'maestria_trapiche', name: 'Maestría: Trapiche', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'trapiche', mult: 4 } },
   { zone: 'lecheria', id: 'maestria_lecheria', name: 'Maestría: Lechería', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'lecheria', mult: 4 } },
@@ -93,7 +93,7 @@ export const RESEARCH = [
   { zone: 'maizal', id: 'supremacia_maizal', name: 'Supremacía: Maizal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'maizal', mult: 8 } },
   { zone: 'pueblo', id: 'supremacia_pueblo', name: 'Supremacía: Salento', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'pueblo', mult: 8 } },
 
-  // Santander · La Guayabera (v3.0): las mismas de la Finca, con su propio sabor.
+  // Santander · La Guayabera (v3.0): same as Finca, with own regional flavor.
   { zone: 'guayabera', id: 'injerto_guayabo', name: 'Guayabos injertados', icon: '🌳', desc: 'El Guayabal produce el doble.', cost: 300, requires: 'guava_pulper', effect: { type: 'stationSpeed', target: 'guava_grove', mult: 2 } },
   { zone: 'guayabera', id: 'despulpadora_motor', name: 'Despulpadora con motor', icon: '⚡', desc: 'La Despulpadora de guayaba procesa el doble.', cost: 400, requires: 'guava_pulper', effect: { type: 'stationSpeed', target: 'guava_pulper', mult: 2 } },
   { zone: 'guayabera', id: 'herraduras_s', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'guava_pot', effect: { type: 'muleSpeed', mult: 1.5 } },
@@ -110,7 +110,7 @@ export const RESEARCH = [
   { zone: 'guayabera', id: 'maestria_guayabera', name: 'Maestría: Guayabera', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'guayabera', mult: 4 } },
   { zone: 'guayabera', id: 'supremacia_guayabera', name: 'Supremacía: Guayabera', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'guayabera', mult: 8 } },
 
-  // Santander · El Tabacal (v3.1): las mismas del Trapiche.
+  // Santander · El Tabacal (v3.1): same as Trapiche.
   { zone: 'tabacal', id: 'caney_grande', name: 'Caney grande', icon: '🛖', desc: 'El Caney de curado cura el doble.', cost: 20000, requires: 'caney', effect: { type: 'stationSpeed', target: 'caney', mult: 2 } },
   { zone: 'tabacal', id: 'abono_tabaco', name: 'Abono para el tabaco', icon: '🌱', desc: 'El Tabacal produce el doble.', cost: 50000, requires: 'stripper', effect: { type: 'stationSpeed', target: 'tobacco_field', mult: 2 } },
   { zone: 'tabacal', id: 'mesas_despalillar', name: 'Mesas de despalillar', icon: '✂️', desc: 'La Despalilladora trabaja el doble.', cost: 40000, requires: 'stripper', effect: { type: 'stationSpeed', target: 'stripper', mult: 2 } },
@@ -121,7 +121,7 @@ export const RESEARCH = [
   { zone: 'tabacal', id: 'maestria_tabacal', name: 'Maestría: Tabacal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'tabacal', mult: 4 } },
   { zone: 'tabacal', id: 'supremacia_tabacal', name: 'Supremacía: Tabacal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'tabacal', mult: 8 } },
 
-  // Santander · La Fiquera (v3.2): las mismas de la Lechería.
+  // Santander · La Fiquera (v3.2): same as Lechería.
   { zone: 'fiquera', id: 'abono_fique', name: 'Abono para el fique', icon: '🌱', desc: 'El Cultivo de fique da el doble de pencas.', cost: 300000, requires: 'decorticator', effect: { type: 'stationSpeed', target: 'fique_field', mult: 2 } },
   { zone: 'fiquera', id: 'desfibradora_motor', name: 'Desfibradora de motor', icon: '⚙️', desc: 'La Desfibradora saca el doble de fibra.', cost: 400000, requires: 'decorticator', effect: { type: 'stationSpeed', target: 'decorticator', mult: 2 } },
   { zone: 'fiquera', id: 'hiladora_mecanica', name: 'Hiladora mecánica', icon: ICON.fiqueYarn, desc: 'La Hiladora hila el doble.', cost: 1200000, requires: 'spinner', effect: { type: 'stationSpeed', target: 'spinner', mult: 2 } },
@@ -134,7 +134,7 @@ export const RESEARCH = [
   { zone: 'fiquera', id: 'maestria_fiquera', name: 'Maestría: Fiquera', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'fiquera', mult: 4 } },
   { zone: 'fiquera', id: 'supremacia_fiquera', name: 'Supremacía: Fiquera', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'fiquera', mult: 8 } },
 
-  // Santander · El Hato (v3.3): las mismas del Cacaotal.
+  // Santander · El Hato (v3.3): same as Cacaotal.
   { zone: 'hato', id: 'pasto_mejorado', name: 'Pasto mejorado', icon: '🌱', desc: 'El Hato da el doble de novillos.', cost: 1000000, requires: 'butcher', effect: { type: 'stationSpeed', target: 'cattle_ranch', mult: 2 } },
   { zone: 'hato', id: 'sierra', name: 'Sierra eléctrica', icon: '🥩', desc: 'La Fama despresa el doble.', cost: 1200000, requires: 'butcher', effect: { type: 'stationSpeed', target: 'butcher', mult: 2 } },
   { zone: 'hato', id: 'saladero_grande', name: 'Saladero grande', icon: ICON.saltedBeef, desc: 'El Saladero adoba el doble.', cost: 3000000, requires: 'airing_rack', effect: { type: 'stationSpeed', target: 'salter', mult: 2 } },
@@ -147,7 +147,7 @@ export const RESEARCH = [
   { zone: 'hato', id: 'maestria_hato', name: 'Maestría: Hato', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'hato', mult: 4 } },
   { zone: 'hato', id: 'supremacia_hato', name: 'Supremacía: Hato', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'hato', mult: 8 } },
 
-  // Santander · Las Hormigas (v3.4): las mismas del Maizal.
+  // Santander · Las Hormigas (v3.4): same as Maizal.
   { zone: 'hormigas', id: 'reinas_grandes', name: 'Hormigueros cuidados', icon: ICON.antQueen, desc: 'El Hormiguero da el doble de hormigas en cada cosecha.', cost: 15000000, requires: 'ant_cleaner', effect: { type: 'stationSpeed', target: 'anthill', mult: 2 } },
   { zone: 'hormigas', id: 'manos_limpieza', name: 'Más manos en la limpieza', icon: ICON.antClean, desc: 'La Mesa de limpieza limpia el doble.', cost: 18000000, requires: 'ant_cleaner', effect: { type: 'stationSpeed', target: 'ant_cleaner', mult: 2 } },
   { zone: 'hormigas', id: 'ollas_grandes', name: 'Ollas grandes', icon: ICON.antBrine, desc: 'Las Ollas de salmuera remojan el doble.', cost: 45000000, requires: 'ant_toaster', effect: { type: 'stationSpeed', target: 'brine_pot', mult: 2 } },
@@ -159,7 +159,7 @@ export const RESEARCH = [
   { zone: 'hormigas', id: 'maestria_hormigas', name: 'Maestría: Hormigas', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'hormigas', mult: 4 } },
   { zone: 'hormigas', id: 'supremacia_hormigas', name: 'Supremacía: Hormigas', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'hormigas', mult: 8 } },
 
-  // Santander · Barichara (v3.5): las mismas del Pueblo.
+  // Santander · Barichara (v3.5): same as Pueblo.
   { zone: 'barichara', id: 'reposteras', name: 'Reposteras de la plaza', icon: '👩‍🍳', desc: 'La Dulcería hace el doble de dulces (pide el doble de cajas a la Guayabera).', cost: 1000000000, requires: 'park_cafe', effect: { type: 'stationSpeed', target: 'dulceria', mult: 2 } },
   { zone: 'barichara', id: 'cafetera_grande', name: 'Cafetera grande', icon: '☕', desc: 'El Café del parque sirve el doble de sobremesas.', cost: 1500000000, requires: 'park_cafe', effect: { type: 'stationSpeed', target: 'park_cafe', mult: 2 } },
   { zone: 'barichara', id: 'bus_turismo', name: 'Bus de turismo', icon: '🚌', desc: 'El despacho de Barichara lleva el doble por viaje.', cost: 2500000000, requires: 'posada', effect: { type: 'dispatchCapacity', target: 'barichara', mult: 2 } },
@@ -171,7 +171,7 @@ export const RESEARCH = [
   { zone: 'barichara', id: 'maestria_barichara', name: 'Maestría: Barichara', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'barichara', mult: 4 } },
   { zone: 'barichara', id: 'supremacia_barichara', name: 'Supremacía: Barichara', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'barichara', mult: 8 } },
 
-  // Costa · El Arrozal (v3.15): las mismas de la Finca y la Guayabera, con el arroz.
+  // Coast · El Arrozal (v3.15): same as Finca and Guayabera, with rice.
   { zone: 'arrozal', id: 'semilla_certificada', name: 'Semilla certificada', icon: '🌾', desc: 'El Arrozal produce el doble.', cost: 300, requires: 'rice_dryer', effect: { type: 'stationSpeed', target: 'rice_field', mult: 2 } },
   { zone: 'arrozal', id: 'secadora_gas', name: 'Secadora a gas', icon: '🔥', desc: 'La Secadora de arroz seca el doble.', cost: 400, requires: 'rice_dryer', effect: { type: 'stationSpeed', target: 'rice_dryer', mult: 2 } },
   { zone: 'arrozal', id: 'herraduras_c', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'rice_huller', effect: { type: 'muleSpeed', mult: 1.5 } },
@@ -188,7 +188,7 @@ export const RESEARCH = [
   { zone: 'arrozal', id: 'maestria_arrozal', name: 'Maestría: Arrozal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'arrozal', mult: 4 } },
   { zone: 'arrozal', id: 'supremacia_arrozal', name: 'Supremacía: Arrozal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'arrozal', mult: 8 } },
 
-  // Costa · El Cocal (v3.16): las mismas del Tabacal, con el coco.
+  // Coast · El Cocal (v3.16): same as Tabacal, with coconut.
   { zone: 'cocal', id: 'machetes_afilados', name: 'Machetes afilados', icon: '🔪', desc: 'El Peladero de cocos pela el doble.', cost: 20000, requires: 'coconut_peeler', effect: { type: 'stationSpeed', target: 'coconut_peeler', mult: 2 } },
   { zone: 'cocal', id: 'palma_enana', name: 'Palma enana', icon: '🌴', desc: 'El Cocal produce el doble.', cost: 50000, requires: 'coconut_grater', effect: { type: 'stationSpeed', target: 'coconut_grove', mult: 2 } },
   { zone: 'cocal', id: 'ralladora_electrica', name: 'Ralladora eléctrica', icon: '⚡', desc: 'La Ralladora ralla el doble.', cost: 40000, requires: 'coconut_grater', effect: { type: 'stationSpeed', target: 'coconut_grater', mult: 2 } },
@@ -199,7 +199,7 @@ export const RESEARCH = [
   { zone: 'cocal', id: 'maestria_cocal', name: 'Maestría: Cocal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cocal', mult: 4 } },
   { zone: 'cocal', id: 'supremacia_cocal', name: 'Supremacía: Cocal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cocal', mult: 8 } },
 
-  // Costa · La Ciénaga (v3.17): las mismas de la Fiquera, con el pescado.
+  // Coast · La Ciénaga (v3.17): same as Fiquera, with fish.
   { zone: 'cienaga', id: 'chinchorro', name: 'Chinchorro', icon: ICON.canoe, desc: 'Las Canoas de pesca sacan el doble de pescado.', cost: 300000, requires: 'fish_cleaner', effect: { type: 'stationSpeed', target: 'fishing_canoes', mult: 2 } },
   { zone: 'cienaga', id: 'mesas_lavado', name: 'Mesas de lavado', icon: '🚿', desc: 'La Limpieza de pescado limpia el doble.', cost: 400000, requires: 'fish_cleaner', effect: { type: 'stationSpeed', target: 'fish_cleaner', mult: 2 } },
   { zone: 'cienaga', id: 'cuchillos_filetear', name: 'Cuchillos de filetear', icon: '🔪', desc: 'La Fileteadora filetea el doble.', cost: 1200000, requires: 'fish_filleter', effect: { type: 'stationSpeed', target: 'fish_filleter', mult: 2 } },
@@ -212,7 +212,7 @@ export const RESEARCH = [
   { zone: 'cienaga', id: 'maestria_cienaga', name: 'Maestría: Ciénaga', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cienaga', mult: 4 } },
   { zone: 'cienaga', id: 'supremacia_cienaga', name: 'Supremacía: Ciénaga', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cienaga', mult: 8 } },
 
-  // Costa · La Quesera (v3.18): las mismas del Hato, con el queso.
+  // Coast · La Quesera (v3.18): same as Hato, with cheese.
   { zone: 'quesera', id: 'pasto_sabana', name: 'Pasto de sabana', icon: '🌱', desc: 'El Corral de ordeño da el doble de leche.', cost: 1000000, requires: 'curdler', effect: { type: 'stationSpeed', target: 'milking_corral', mult: 2 } },
   { zone: 'quesera', id: 'cuajo_casero', name: 'Cuajo casero', icon: ICON.cuajada, desc: 'La Cuajadera cuaja el doble.', cost: 1200000, requires: 'curdler', effect: { type: 'stationSpeed', target: 'curdler', mult: 2 } },
   { zone: 'quesera', id: 'molino_manivela', name: 'Molino de manivela', icon: ICON.saltedCurd, desc: 'El Molino de cuajada muele el doble.', cost: 3000000, requires: 'cheese_press', effect: { type: 'stationSpeed', target: 'curd_mill', mult: 2 } },
@@ -225,7 +225,7 @@ export const RESEARCH = [
   { zone: 'quesera', id: 'maestria_quesera', name: 'Maestría: Quesera', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'quesera', mult: 4 } },
   { zone: 'quesera', id: 'supremacia_quesera', name: 'Supremacía: Quesera', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'quesera', mult: 8 } },
 
-  // Costa · El Sombrero (v3.19): las mismas de las Hormigas, con la caña flecha.
+  // Coast · El Sombrero (v3.19): same as Hormigas, with caña flecha.
   { zone: 'sombrero', id: 'cana_abonada', name: 'Caña flecha abonada', icon: ICON.canaFlechaPlant, desc: 'El Cañaflechal da el doble de caña.', cost: 15000000, requires: 'fiber_scraper', effect: { type: 'stationSpeed', target: 'canaflechal', mult: 2 } },
   { zone: 'sombrero', id: 'raspadoras', name: 'Más raspadoras', icon: ICON.canaFiber, desc: 'El Raspado de la caña raspa el doble.', cost: 18000000, requires: 'fiber_scraper', effect: { type: 'stationSpeed', target: 'fiber_scraper', mult: 2 } },
   { zone: 'sombrero', id: 'bija', name: 'Bija y barro negro', icon: ICON.dyedFiber, desc: 'Los Tintes de barro tiñen el doble.', cost: 45000000, requires: 'braiders', effect: { type: 'stationSpeed', target: 'fiber_dyer', mult: 2 } },
@@ -237,7 +237,7 @@ export const RESEARCH = [
   { zone: 'sombrero', id: 'maestria_sombrero', name: 'Maestría: Sombrero', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'sombrero', mult: 4 } },
   { zone: 'sombrero', id: 'supremacia_sombrero', name: 'Supremacía: Sombrero', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'sombrero', mult: 8 } },
 
-  // Costa · Cartagena (v3.20): las mismas de Barichara.
+  // Coast · Cartagena (v3.20): same as Barichara.
   { zone: 'cartagena', id: 'cocineras_getsemani', name: 'Cocineras de Getsemaní', icon: '👩‍🍳', desc: 'El Fogón de Getsemaní hace el doble de arroz con coco (pide el doble de bultos al Arrozal).', cost: 1000000000, requires: 'restaurante_muralla', effect: { type: 'stationSpeed', target: 'fogon_getsemani', mult: 2 } },
   { zone: 'cartagena', id: 'mesas_muralla', name: 'Más mesas en la muralla', icon: ICON.cenaMuralla, desc: 'El Restaurante de la muralla sirve el doble de cenas.', cost: 1500000000, requires: 'restaurante_muralla', effect: { type: 'stationSpeed', target: 'restaurante_muralla', mult: 2 } },
   { zone: 'cartagena', id: 'chiva_rumbera', name: 'Chiva rumbera', icon: '🚌', desc: 'El despacho de Cartagena lleva el doble por viaje.', cost: 2500000000, requires: 'hotel_colonial', effect: { type: 'dispatchCapacity', target: 'cartagena', mult: 2 } },
@@ -249,7 +249,7 @@ export const RESEARCH = [
   { zone: 'cartagena', id: 'maestria_cartagena', name: 'Maestría: Cartagena', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cartagena', mult: 4 } },
   { zone: 'cartagena', id: 'supremacia_cartagena', name: 'Supremacía: Cartagena', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cartagena', mult: 8 } },
 
-  // Boyacá · El Papal (v3.22): las mismas del Arrozal, con la papa.
+  // Boyacá · El Papal (v3.22): same as Arrozal, with potato.
   { zone: 'papal', id: 'semilla_papa', name: 'Semilla de papa certificada', icon: ICON.potatoPlant, desc: 'El Papal produce el doble.', cost: 300, requires: 'potato_washer', effect: { type: 'stationSpeed', target: 'potato_field', mult: 2 } },
   { zone: 'papal', id: 'lavadora_tambor', name: 'Lavadora de tambor', icon: '💧', desc: 'El Lavadero lava el doble.', cost: 400, requires: 'potato_washer', effect: { type: 'stationSpeed', target: 'potato_washer', mult: 2 } },
   { zone: 'papal', id: 'herraduras_b', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'potato_grader', effect: { type: 'muleSpeed', mult: 1.5 } },
@@ -266,7 +266,7 @@ export const RESEARCH = [
   { zone: 'papal', id: 'maestria_papal', name: 'Maestría: Papal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'papal', mult: 4 } },
   { zone: 'papal', id: 'supremacia_papal', name: 'Supremacía: Papal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'papal', mult: 8 } },
 
-  // Boyacá · La Cervecería (v3.23): las mismas del Tabacal y el Cocal, con la cerveza.
+  // Boyacá · La Cervecería (v3.23): same as Tabacal and Cocal, with beer.
   { zone: 'cerveceria', id: 'malteria_neumatica', name: 'Maltería neumática', icon: ICON.malt, desc: 'La Maltería maltea el doble.', cost: 20000, requires: 'maltings', effect: { type: 'stationSpeed', target: 'maltings', mult: 2 } },
   { zone: 'cerveceria', id: 'cebada_cervecera', name: 'Cebada cervecera', icon: ICON.barleyPlant, desc: 'El Cebadal produce el doble.', cost: 50000, requires: 'brew_kettle', effect: { type: 'stationSpeed', target: 'barley_field', mult: 2 } },
   { zone: 'cerveceria', id: 'paila_cervecera', name: 'Paila de cobre grande', icon: ICON.wort, desc: 'La Paila de cocción cocina el doble.', cost: 40000, requires: 'brew_kettle', effect: { type: 'stationSpeed', target: 'brew_kettle', mult: 2 } },
@@ -277,7 +277,7 @@ export const RESEARCH = [
   { zone: 'cerveceria', id: 'maestria_cerveceria', name: 'Maestría: Cervecería', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cerveceria', mult: 4 } },
   { zone: 'cerveceria', id: 'supremacia_cerveceria', name: 'Supremacía: Cervecería', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cerveceria', mult: 8 } },
 
-  // Boyacá · Ráquira (v3.24): las mismas de la Fiquera y la Ciénaga, con el barro.
+  // Boyacá · Ráquira (v3.24): same as Fiquera and Ciénaga, with clay.
   { zone: 'raquira', id: 'greda_fina', name: 'Greda fina', icon: ICON.greda, desc: 'La Mina de greda saca el doble.', cost: 300000, requires: 'clay_kneader', effect: { type: 'stationSpeed', target: 'clay_pit', mult: 2 } },
   { zone: 'raquira', id: 'amasadora', name: 'Amasadora', icon: ICON.barro, desc: 'El Amasado del barro amasa el doble.', cost: 400000, requires: 'clay_kneader', effect: { type: 'stationSpeed', target: 'clay_kneader', mult: 2 } },
   { zone: 'raquira', id: 'torno_pedal', name: 'Torno de pedal', icon: ICON.piezaTorneada, desc: 'El Torno tornea el doble.', cost: 1200000, requires: 'potter_wheel', effect: { type: 'stationSpeed', target: 'potter_wheel', mult: 2 } },
@@ -290,7 +290,7 @@ export const RESEARCH = [
   { zone: 'raquira', id: 'maestria_raquira', name: 'Maestría: Ráquira', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'raquira', mult: 4 } },
   { zone: 'raquira', id: 'supremacia_raquira', name: 'Supremacía: Ráquira', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'raquira', mult: 8 } },
 
-  // Boyacá · Paipa (v3.25): las mismas del Hato y la Quesera, con el queso.
+  // Boyacá · Paipa (v3.25): same as Hato and Quesera, with cheese.
   { zone: 'paipa', id: 'pasto_kikuyo', name: 'Pasto kikuyo', icon: '🌱', desc: 'El Hato lechero da el doble de leche.', cost: 1000000, requires: 'paipa_curdler', effect: { type: 'stationSpeed', target: 'paipa_herd', mult: 2 } },
   { zone: 'paipa', id: 'tinas_cuajar', name: 'Tinas de cuajar', icon: ICON.cuajada, desc: 'La Cuajadera de Paipa cuaja el doble.', cost: 1200000, requires: 'paipa_curdler', effect: { type: 'stationSpeed', target: 'paipa_curdler', mult: 2 } },
   { zone: 'paipa', id: 'aros_madera', name: 'Aros de madera', icon: ICON.moldedCheese, desc: 'Los Moldes de queso moldean el doble.', cost: 3000000, requires: 'cheese_cave', effect: { type: 'stationSpeed', target: 'cheese_molds', mult: 2 } },
@@ -303,7 +303,7 @@ export const RESEARCH = [
   { zone: 'paipa', id: 'maestria_paipa', name: 'Maestría: Paipa', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'paipa', mult: 4 } },
   { zone: 'paipa', id: 'supremacia_paipa', name: 'Supremacía: Paipa', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'paipa', mult: 8 } },
 
-  // Boyacá · Las Ruanas (v3.26): las mismas de las Hormigas y el Sombrero, con la lana.
+  // Boyacá · Las Ruanas (v3.26): same as Hormigas and Sombrero, with wool.
   { zone: 'ruanas', id: 'ovejas_merino', name: 'Ovejas merino', icon: ICON.sheep, desc: 'El Rebaño de ovejas da el doble de lana.', cost: 15000000, requires: 'wool_washer', effect: { type: 'stationSpeed', target: 'sheep_pasture', mult: 2 } },
   { zone: 'ruanas', id: 'lavadero_lana', name: 'Lavadero de quebrada', icon: ICON.cleanWool, desc: 'El Lavado de lana lava el doble.', cost: 18000000, requires: 'wool_washer', effect: { type: 'stationSpeed', target: 'wool_washer', mult: 2 } },
   { zone: 'ruanas', id: 'cardas_nuevas', name: 'Cardas nuevas', icon: ICON.cardedWool, desc: 'El Cardado carda el doble.', cost: 45000000, requires: 'spinning_wheel', effect: { type: 'stationSpeed', target: 'carder', mult: 2 } },
@@ -315,7 +315,7 @@ export const RESEARCH = [
   { zone: 'ruanas', id: 'maestria_ruanas', name: 'Maestría: Ruanas', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'ruanas', mult: 4 } },
   { zone: 'ruanas', id: 'supremacia_ruanas', name: 'Supremacía: Ruanas', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'ruanas', mult: 8 } },
 
-  // Boyacá · Villa de Leyva (v3.27): las mismas de Barichara y Cartagena.
+  // Boyacá · Villa de Leyva (v3.27): same as Barichara and Cartagena.
   { zone: 'villa_leyva', id: 'tenderos', name: 'Tenderos de la esquina', icon: ICON.onces, desc: 'La Tienda de la esquina sirve el doble de onces (pide el doble de cajas al Papal).', cost: 1000000000, requires: 'terraza_plaza', effect: { type: 'stationSpeed', target: 'tienda_esquina', mult: 2 } },
   { zone: 'villa_leyva', id: 'mas_parasoles', name: 'Más parasoles', icon: ICON.tardePlaza, desc: 'La Terraza de la plaza atiende el doble.', cost: 1500000000, requires: 'terraza_plaza', effect: { type: 'stationSpeed', target: 'terraza_plaza', mult: 2 } },
   { zone: 'villa_leyva', id: 'bus_villa', name: 'Bus de turismo', icon: '🚌', desc: 'El despacho de Villa de Leyva lleva el doble por viaje.', cost: 2500000000, requires: 'hospedaje_colonial', effect: { type: 'dispatchCapacity', target: 'villa_leyva', mult: 2 } },
@@ -327,7 +327,7 @@ export const RESEARCH = [
   { zone: 'villa_leyva', id: 'maestria_villa', name: 'Maestría: Villa de Leyva', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'villa_leyva', mult: 4 } },
   { zone: 'villa_leyva', id: 'supremacia_villa', name: 'Supremacía: Villa de Leyva', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'villa_leyva', mult: 8 } },
 
-  // Los Llanos · La Palma (v3.31): las mismas del Papal, con la palma de aceite.
+  // Llanos · La Palma (v3.31): same as Papal, with oil palm.
   { zone: 'palma', id: 'palma_hibrida', name: 'Palma híbrida', icon: ICON.oilPalm, desc: 'El Palmar produce el doble.', cost: 300, requires: 'bunch_thresher', effect: { type: 'stationSpeed', target: 'palm_grove', mult: 2 } },
   { zone: 'palma', id: 'tambor_desgranador', name: 'Tambor desgranador', icon: '⚙️', desc: 'La Desgranadora desgrana el doble.', cost: 400, requires: 'bunch_thresher', effect: { type: 'stationSpeed', target: 'bunch_thresher', mult: 2 } },
   { zone: 'palma', id: 'herraduras_ll', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'fruit_sterilizer', effect: { type: 'muleSpeed', mult: 1.5 } },
@@ -344,7 +344,7 @@ export const RESEARCH = [
   { zone: 'palma', id: 'maestria_palma', name: 'Maestría: Palma', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'palma', mult: 4 } },
   { zone: 'palma', id: 'supremacia_palma', name: 'Supremacía: Palma', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'palma', mult: 8 } },
 
-  // Los Llanos · El Frutal (v3.32): las mismas de la Cervecería, con el maracuyá.
+  // Llanos · El Frutal (v3.32): same as Cervecería, with passionfruit.
   { zone: 'frutal', id: 'despulpadora_aspas', name: 'Despulpadora de aspas', icon: ICON.passionPulp, desc: 'La Despulpadora de maracuyá despulpa el doble.', cost: 20000, requires: 'passion_pulper', effect: { type: 'stationSpeed', target: 'passion_pulper', mult: 2 } },
   { zone: 'frutal', id: 'maracuya_amarillo', name: 'Maracuyá amarillo', icon: ICON.passionVine, desc: 'El Maracuyal produce el doble.', cost: 50000, requires: 'pulp_pasteurizer', effect: { type: 'stationSpeed', target: 'passion_vines', mult: 2 } },
   { zone: 'frutal', id: 'pasteurizadora_placas', name: 'Pasteurizadora de placas', icon: ICON.pastPulp, desc: 'La Pasteurizadora de pulpa pasteuriza el doble.', cost: 40000, requires: 'pulp_pasteurizer', effect: { type: 'stationSpeed', target: 'pulp_pasteurizer', mult: 2 } },
@@ -355,7 +355,7 @@ export const RESEARCH = [
   { zone: 'frutal', id: 'maestria_frutal', name: 'Maestría: Frutal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'frutal', mult: 4 } },
   { zone: 'frutal', id: 'supremacia_frutal', name: 'Supremacía: Frutal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'frutal', mult: 8 } },
 
-  // Los Llanos · La Cachamera (v3.33): las mismas de Ráquira, con la cachama.
+  // Llanos · La Cachamera (v3.33): same as Ráquira, with cachama.
   { zone: 'cachamera', id: 'alevinos', name: 'Alevinos de cachama', icon: ICON.cachama, desc: 'Los Estanques dan el doble.', cost: 300000, requires: 'cachama_cleaner', effect: { type: 'stationSpeed', target: 'fish_ponds', mult: 2 } },
   { zone: 'cachamera', id: 'mesa_limpieza', name: 'Mesa de limpieza', icon: ICON.cleanCachama, desc: 'La Limpieza de cachama limpia el doble.', cost: 400000, requires: 'cachama_cleaner', effect: { type: 'stationSpeed', target: 'cachama_cleaner', mult: 2 } },
   { zone: 'cachamera', id: 'cuchillos_fileteros', name: 'Cuchillos fileteros', icon: ICON.cachamaFillet, desc: 'La Fileteadora de cachama filetea el doble.', cost: 1200000, requires: 'cachama_filleter', effect: { type: 'stationSpeed', target: 'cachama_filleter', mult: 2 } },
@@ -368,7 +368,7 @@ export const RESEARCH = [
   { zone: 'cachamera', id: 'maestria_cachamera', name: 'Maestría: Cachamera', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'cachamera', mult: 4 } },
   { zone: 'cachamera', id: 'supremacia_cachamera', name: 'Supremacía: Cachamera', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'cachamera', mult: 8 } },
 
-  // Los Llanos · El Hato llanero (v3.34): las mismas de Paipa, con la ternera.
+  // Llanos · El Hato llanero (v3.34): same as Paipa, with beef.
   { zone: 'hato_llanero', id: 'pasto_braquiaria', name: 'Pasto braquiaria', icon: '🌱', desc: 'La Sabana del hato da el doble de novillos.', cost: 1000000, requires: 'llanero_butcher', effect: { type: 'stationSpeed', target: 'llanero_herd', mult: 2 } },
   { zone: 'hato_llanero', id: 'desposte_tecnico', name: 'Desposte técnico', icon: '🥩', desc: 'El Desposte despresa el doble.', cost: 1200000, requires: 'llanero_butcher', effect: { type: 'stationSpeed', target: 'llanero_butcher', mult: 2 } },
   { zone: 'hato_llanero', id: 'adobo_casa', name: 'Adobo de la casa', icon: ICON.adobada, desc: 'El Adobadero adoba el doble.', cost: 3000000, requires: 'vara_grill', effect: { type: 'stationSpeed', target: 'adobadero', mult: 2 } },
@@ -381,7 +381,7 @@ export const RESEARCH = [
   { zone: 'hato_llanero', id: 'maestria_hato_llanero', name: 'Maestría: Hato llanero', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'hato_llanero', mult: 4 } },
   { zone: 'hato_llanero', id: 'supremacia_hato_llanero', name: 'Supremacía: Hato llanero', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'hato_llanero', mult: 8 } },
 
-  // Los Llanos · La Talabartería (v3.35): las mismas de Las Ruanas, con el cuero.
+  // Llanos · La Talabartería (v3.35): same as Las Ruanas, with leather.
   { zone: 'talabarteria', id: 'cueros_hato', name: 'Cueros del hato', icon: ICON.rawHide, desc: 'El Saladero de cueros da el doble.', cost: 15000000, requires: 'tannery', effect: { type: 'stationSpeed', target: 'hide_yard', mult: 2 } },
   { zone: 'talabarteria', id: 'curtido_vegetal', name: 'Curtido vegetal', icon: ICON.leather, desc: 'La Curtiembre curte el doble.', cost: 18000000, requires: 'tannery', effect: { type: 'stationSpeed', target: 'tannery', mult: 2 } },
   { zone: 'talabarteria', id: 'moldes_corte', name: 'Moldes de corte', icon: ICON.leatherPieces, desc: 'La Cortadora de cuero corta el doble.', cost: 45000000, requires: 'leather_tooler', effect: { type: 'stationSpeed', target: 'leather_cutter', mult: 2 } },
@@ -393,7 +393,7 @@ export const RESEARCH = [
   { zone: 'talabarteria', id: 'maestria_talabarteria', name: 'Maestría: Talabartería', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'talabarteria', mult: 4 } },
   { zone: 'talabarteria', id: 'supremacia_talabarteria', name: 'Supremacía: Talabartería', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'talabarteria', mult: 8 } },
 
-  // Los Llanos · Villavicencio (v3.36): las mismas de Villa de Leyva.
+  // Llanos · Villavicencio (v3.36): same as Villa de Leyva.
   { zone: 'villavicencio', id: 'empanaderas', name: 'Empanaderas', icon: ICON.empanadas, desc: 'La Empanadería fríe el doble de empanadas (pide el doble de cajas a la Palma).', cost: 1000000000, requires: 'kiosco_parque', effect: { type: 'stationSpeed', target: 'empanaderia', mult: 2 } },
   { zone: 'villavicencio', id: 'mas_bancas', name: 'Más bancas', icon: ICON.tardeParque, desc: 'El Kiosco del parque atiende el doble.', cost: 1500000000, requires: 'kiosco_parque', effect: { type: 'stationSpeed', target: 'kiosco_parque', mult: 2 } },
   { zone: 'villavicencio', id: 'bus_villavo', name: 'Bus de turismo', icon: '🚌', desc: 'El despacho de Villavicencio lleva el doble por viaje.', cost: 2500000000, requires: 'hotel_campestre', effect: { type: 'dispatchCapacity', target: 'villavicencio', mult: 2 } },
@@ -405,7 +405,7 @@ export const RESEARCH = [
   { zone: 'villavicencio', id: 'maestria_villavicencio', name: 'Maestría: Villavicencio', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'villavicencio', mult: 4 } },
   { zone: 'villavicencio', id: 'supremacia_villavicencio', name: 'Supremacía: Villavicencio', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'villavicencio', mult: 8 } },
 
-  // Costa Pacífica · El Platanal (v3.38): las mismas de la Palma, con el plátano.
+  // Pacific Coast · El Platanal (v3.38): same as La Palma, with plantain.
   { zone: 'platanal', id: 'platano_harton', name: 'Plátano hartón', icon: ICON.plantainPlant, desc: 'El Platanal produce el doble.', cost: 300, requires: 'plantain_dehander', effect: { type: 'stationSpeed', target: 'plantain_grove', mult: 2 } },
   { zone: 'platanal', id: 'machete_curvo', name: 'Machete curvo', icon: '🔪', desc: 'La Desmanadora desmana el doble.', cost: 400, requires: 'plantain_dehander', effect: { type: 'stationSpeed', target: 'plantain_dehander', mult: 2 } },
   { zone: 'platanal', id: 'herraduras_ch', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'plantain_washer', effect: { type: 'muleSpeed', mult: 1.5 } },
@@ -422,7 +422,7 @@ export const RESEARCH = [
   { zone: 'platanal', id: 'maestria_platanal', name: 'Maestría: Platanal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'platanal', mult: 4 } },
   { zone: 'platanal', id: 'supremacia_platanal', name: 'Supremacía: Platanal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'platanal', mult: 8 } },
 
-  // Costa Pacífica · La Azotea (v3.39): las mismas del Frutal, con las hierbas de azotea.
+  // Pacific Coast · La Azotea (v3.39): same as El Frutal, with azotea herbs.
   { zone: 'azotea', id: 'lavadero_doble', name: 'Lavadero doble', icon: ICON.washedHerbs, desc: 'El Lavadero de hierbas lava el doble.', cost: 20000, requires: 'herb_washer', effect: { type: 'stationSpeed', target: 'herb_washer', mult: 2 } },
   { zone: 'azotea', id: 'chillangua', name: 'Semilla de chillangua', icon: ICON.azotea, desc: 'Las Azoteas producen el doble.', cost: 50000, requires: 'herb_pestle', effect: { type: 'stationSpeed', target: 'azotea_beds', mult: 2 } },
   { zone: 'azotea', id: 'pilon_grande', name: 'Pilón grande', icon: ICON.poundedHerbs, desc: 'El Pilón machaca el doble.', cost: 40000, requires: 'herb_pestle', effect: { type: 'stationSpeed', target: 'herb_pestle', mult: 2 } },
@@ -433,7 +433,7 @@ export const RESEARCH = [
   { zone: 'azotea', id: 'maestria_azotea', name: 'Maestría: Azotea', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'azotea', mult: 4 } },
   { zone: 'azotea', id: 'supremacia_azotea', name: 'Supremacía: Azotea', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'azotea', mult: 8 } },
 
-  // Costa Pacífica · La Bahía (v3.40): las mismas de la Cachamera, con el pargo.
+  // Pacific Coast · La Bahía (v3.40): same as La Cachamera, with snapper.
   { zone: 'bahia', id: 'motor_fuera_borda', name: 'Motor fuera de borda', icon: ICON.pargo, desc: 'Las Lanchas de pesca pescan el doble.', cost: 300000, requires: 'pargo_cleaner', effect: { type: 'stationSpeed', target: 'pargo_boats', mult: 2 } },
   { zone: 'bahia', id: 'mesa_pargo', name: 'Mesa de limpieza', icon: ICON.cleanPargo, desc: 'La Limpieza de pargo limpia el doble.', cost: 400000, requires: 'pargo_cleaner', effect: { type: 'stationSpeed', target: 'pargo_cleaner', mult: 2 } },
   { zone: 'bahia', id: 'cuchillo_pargo', name: 'Cuchillo de filetear', icon: ICON.pargoFillet, desc: 'La Fileteadora de pargo filetea el doble.', cost: 1200000, requires: 'pargo_filleter', effect: { type: 'stationSpeed', target: 'pargo_filleter', mult: 2 } },
@@ -446,7 +446,7 @@ export const RESEARCH = [
   { zone: 'bahia', id: 'maestria_bahia', name: 'Maestría: Bahía', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'bahia', mult: 4 } },
   { zone: 'bahia', id: 'supremacia_bahia', name: 'Supremacía: Bahía', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'bahia', mult: 8 } },
 
-  // Costa Pacífica · El Manglar (v3.41): las mismas del Hato llanero, con la piangua.
+  // Pacific Coast · El Manglar (v3.41): same as El Hato llanero, with piangua.
   { zone: 'manglar', id: 'asociacion_pianguera', name: 'Asociación de piangüeras', icon: '🤝', desc: 'El Manglar da el doble de pianguas.', cost: 1000000, requires: 'piangua_washer', effect: { type: 'stationSpeed', target: 'mangrove_flats', mult: 2 } },
   { zone: 'manglar', id: 'canastos_lavar', name: 'Canastos de lavar', icon: ICON.piangua, desc: 'El Lavadero de piangua lava el doble.', cost: 1200000, requires: 'piangua_washer', effect: { type: 'stationSpeed', target: 'piangua_washer', mult: 2 } },
   { zone: 'manglar', id: 'olla_piangua', name: 'Olla grande', icon: ICON.cookedPiangua, desc: 'La Olla de la piangua cocina el doble.', cost: 3000000, requires: 'piangua_sheller', effect: { type: 'stationSpeed', target: 'piangua_cooker', mult: 2 } },
@@ -459,7 +459,7 @@ export const RESEARCH = [
   { zone: 'manglar', id: 'maestria_manglar', name: 'Maestría: Manglar', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'manglar', mult: 4 } },
   { zone: 'manglar', id: 'supremacia_manglar', name: 'Supremacía: Manglar', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'manglar', mult: 8 } },
 
-  // Costa Pacífica · El Werregue (v3.42): las mismas de la Talabartería, con el werregue.
+  // Pacific Coast · El Werregue (v3.42): same as La Talabartería, with werregue.
   { zone: 'werregue', id: 'palmar_sembrado', name: 'Palmar sembrado', icon: ICON.werreguePalm, desc: 'El Palmar de werregue da el doble.', cost: 15000000, requires: 'werregue_stripper', effect: { type: 'stationSpeed', target: 'werregue_palms', mult: 2 } },
   { zone: 'werregue', id: 'desfibrado_fino', name: 'Desfibrado fino', icon: ICON.werregueFiber, desc: 'La Desfibradora de werregue desfibra el doble.', cost: 18000000, requires: 'werregue_stripper', effect: { type: 'stationSpeed', target: 'werregue_stripper', mult: 2 } },
   { zone: 'werregue', id: 'tintes_jagua', name: 'Tintes de jagua y achiote', icon: ICON.dyedWerregue, desc: 'La Tintorería tiñe el doble.', cost: 45000000, requires: 'werregue_twister', effect: { type: 'stationSpeed', target: 'werregue_dyer', mult: 2 } },
@@ -471,7 +471,7 @@ export const RESEARCH = [
   { zone: 'werregue', id: 'maestria_werregue', name: 'Maestría: Werregue', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'werregue', mult: 4 } },
   { zone: 'werregue', id: 'supremacia_werregue', name: 'Supremacía: Werregue', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'werregue', mult: 8 } },
 
-  // Costa Pacífica · Buenaventura (v3.43): las mismas de Villavicencio.
+  // Pacific Coast · Buenaventura (v3.43): same as Villavicencio.
   { zone: 'buenaventura', id: 'fritangueras', name: 'Fritangueras', icon: ICON.marranitas, desc: 'La Fritanga del puerto fríe el doble de marranitas (pide el doble de cajas al Platanal).', cost: 1000000000, requires: 'cevicheria', effect: { type: 'stationSpeed', target: 'fritanga_puerto', mult: 2 } },
   { zone: 'buenaventura', id: 'mesas_malecon', name: 'Mesas en el malecón', icon: ICON.ceviche, desc: 'La Cevichería del malecón atiende el doble.', cost: 1500000000, requires: 'cevicheria', effect: { type: 'stationSpeed', target: 'cevicheria', mult: 2 } },
   { zone: 'buenaventura', id: 'lancha_turismo', name: 'Lancha de turismo', icon: '🚤', desc: 'El despacho de Buenaventura lleva el doble por viaje.', cost: 2500000000, requires: 'hotel_bahia', effect: { type: 'dispatchCapacity', target: 'buenaventura', mult: 2 } },
@@ -483,7 +483,7 @@ export const RESEARCH = [
   { zone: 'buenaventura', id: 'maestria_buenaventura', name: 'Maestría: Buenaventura', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'buenaventura', mult: 4 } },
   { zone: 'buenaventura', id: 'supremacia_buenaventura', name: 'Supremacía: Buenaventura', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'buenaventura', mult: 8 } },
 
-  // Amazonas · El Asaizal (v3.47): las mismas del Platanal, con el asaí.
+  // Amazon · El Asaizal (v3.47): same as El Platanal, with açaí.
   { zone: 'asaizal', id: 'asai_seleccionado', name: 'Asaí seleccionado', icon: ICON.asaiPalm, desc: 'El Asaizal produce el doble.', cost: 300, requires: 'asai_thresher', effect: { type: 'stationSpeed', target: 'asai_grove', mult: 2 } },
   { zone: 'asaizal', id: 'mesa_desgrane', name: 'Mesa de desgrane', icon: '⚙️', desc: 'La Desgranadora desgrana el doble.', cost: 400, requires: 'asai_thresher', effect: { type: 'stationSpeed', target: 'asai_thresher', mult: 2 } },
   { zone: 'asaizal', id: 'herraduras_am', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'asai_soaker', effect: { type: 'muleSpeed', mult: 1.5 } },
@@ -500,7 +500,7 @@ export const RESEARCH = [
   { zone: 'asaizal', id: 'maestria_asaizal', name: 'Maestría: Asaizal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 50000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'asaizal', mult: 4 } },
   { zone: 'asaizal', id: 'supremacia_asaizal', name: 'Supremacía: Asaizal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 500000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'asaizal', mult: 8 } },
 
-  // Amazonas · El Ajizal (v3.48): las mismas de la Azotea, con el ají.
+  // Amazon · El Ajizal (v3.48): same as La Azotea, with chili.
   { zone: 'ajizal', id: 'lavadero_aji', name: 'Lavadero doble', icon: ICON.ajiPeppers, desc: 'El Lavadero de ají lava el doble.', cost: 20000, requires: 'aji_washer', effect: { type: 'stationSpeed', target: 'aji_washer', mult: 2 } },
   { zone: 'ajizal', id: 'aji_de_chagra', name: 'Semilla de la chagra', icon: ICON.ajiPlant, desc: 'El Ajizal produce el doble.', cost: 50000, requires: 'aji_grinder', effect: { type: 'stationSpeed', target: 'aji_field', mult: 2 } },
   { zone: 'ajizal', id: 'molino_aji', name: 'Molino de piedra', icon: ICON.groundAji, desc: 'El Molino de ají muele el doble.', cost: 40000, requires: 'aji_grinder', effect: { type: 'stationSpeed', target: 'aji_grinder', mult: 2 } },
@@ -511,7 +511,7 @@ export const RESEARCH = [
   { zone: 'ajizal', id: 'maestria_ajizal', name: 'Maestría: Ajizal', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 200000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'ajizal', mult: 4 } },
   { zone: 'ajizal', id: 'supremacia_ajizal', name: 'Supremacía: Ajizal', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 2000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'ajizal', mult: 8 } },
 
-  // Amazonas · El Lago (v3.49): las mismas de la Bahía, con el pirarucú.
+  // Amazon · El Lago (v3.49): same as La Bahía, with pirarucu.
   { zone: 'lago', id: 'peque_peque', name: 'Motor peque-peque', icon: ICON.pirarucu, desc: 'Las Canoas del lago pescan el doble.', cost: 300000, requires: 'pirarucu_cleaner', effect: { type: 'stationSpeed', target: 'pirarucu_canoes', mult: 2 } },
   { zone: 'lago', id: 'mesa_pirarucu', name: 'Mesa de limpieza', icon: ICON.cleanPirarucu, desc: 'La Limpieza de pirarucú limpia el doble.', cost: 400000, requires: 'pirarucu_cleaner', effect: { type: 'stationSpeed', target: 'pirarucu_cleaner', mult: 2 } },
   { zone: 'lago', id: 'machete_postas', name: 'Machete de postas', icon: ICON.pirarucuFillet, desc: 'La Fileteadora de pirarucú corta el doble.', cost: 1200000, requires: 'pirarucu_filleter', effect: { type: 'stationSpeed', target: 'pirarucu_filleter', mult: 2 } },
@@ -524,7 +524,7 @@ export const RESEARCH = [
   { zone: 'lago', id: 'maestria_lago', name: 'Maestría: Lago', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 1000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'lago', mult: 4 } },
   { zone: 'lago', id: 'supremacia_lago', name: 'Supremacía: Lago', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 10000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'lago', mult: 8 } },
 
-  // Amazonas · La Casabería (v3.50): las mismas del Manglar, con la yuca.
+  // Amazon · La Casabería (v3.50): same as El Manglar, with cassava.
   { zone: 'casaberia', id: 'chagra_nueva', name: 'Chagra nueva', icon: ICON.yucaPlant, desc: 'La Chagra de yuca da el doble.', cost: 1000000, requires: 'yuca_peeler', effect: { type: 'stationSpeed', target: 'yuca_chagra', mult: 2 } },
   { zone: 'casaberia', id: 'cuchillo_pelar', name: 'Cuchillo de pelar', icon: ICON.yucaBrava, desc: 'La Peladora de yuca pela el doble.', cost: 1200000, requires: 'yuca_peeler', effect: { type: 'stationSpeed', target: 'yuca_peeler', mult: 2 } },
   { zone: 'casaberia', id: 'rallador_lata', name: 'Rallador de lata', icon: ICON.peeledYuca, desc: 'El Rallador de yuca ralla el doble.', cost: 3000000, requires: 'tipiti_press', effect: { type: 'stationSpeed', target: 'yuca_grater', mult: 2 } },
@@ -537,7 +537,7 @@ export const RESEARCH = [
   { zone: 'casaberia', id: 'maestria_casaberia', name: 'Maestría: Casabería', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 5000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'casaberia', mult: 4 } },
   { zone: 'casaberia', id: 'supremacia_casaberia', name: 'Supremacía: Casabería', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 50000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'casaberia', mult: 8 } },
 
-  // Amazonas · La Yanchama (v3.51): las mismas del Werregue, con la yanchama.
+  // Amazon · La Yanchama (v3.51): same as El Werregue, with yanchama.
   { zone: 'yanchama', id: 'yanchama_sembrada', name: 'Yanchamas sembradas', icon: ICON.yanchamaTree, desc: 'Los Árboles de yanchama dan el doble.', cost: 15000000, requires: 'bark_soaker', effect: { type: 'stationSpeed', target: 'yanchama_trees', mult: 2 } },
   { zone: 'yanchama', id: 'remojo_rio', name: 'Remojo en el río', icon: ICON.yanchamaBark, desc: 'El Remojo de corteza remoja el doble.', cost: 18000000, requires: 'bark_soaker', effect: { type: 'stationSpeed', target: 'bark_soaker', mult: 2 } },
   { zone: 'yanchama', id: 'mazo_palo', name: 'Mazo de palo', icon: ICON.barkCloth, desc: 'El Golpeadero golpea el doble.', cost: 45000000, requires: 'cloth_painter', effect: { type: 'stationSpeed', target: 'bark_beater', mult: 2 } },
@@ -549,7 +549,7 @@ export const RESEARCH = [
   { zone: 'yanchama', id: 'maestria_yanchama', name: 'Maestría: Yanchama', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 20000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'yanchama', mult: 4 } },
   { zone: 'yanchama', id: 'supremacia_yanchama', name: 'Supremacía: Yanchama', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 200000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'yanchama', mult: 8 } },
 
-  // Amazonas · Leticia (v3.52): las mismas de Buenaventura, en la triple frontera.
+  // Amazon · Leticia (v3.52): same as Buenaventura, on the triple border.
   { zone: 'leticia', id: 'heladeros', name: 'Heladeros', icon: ICON.heladoAsai, desc: 'La Heladería de asaí hace el doble de helados (pide el doble de cajas al Asaizal).', cost: 1000000000, requires: 'restaurante_ribera', effect: { type: 'stationSpeed', target: 'heladeria_asai', mult: 2 } },
   { zone: 'leticia', id: 'mesas_ribera', name: 'Mesas en la ribera', icon: ICON.cenaRibera, desc: 'El Restaurante de la ribera atiende el doble.', cost: 1500000000, requires: 'restaurante_ribera', effect: { type: 'stationSpeed', target: 'restaurante_ribera', mult: 2 } },
   { zone: 'leticia', id: 'bote_turismo', name: 'Bote de turismo', icon: '🚤', desc: 'El despacho de Leticia lleva el doble por viaje.', cost: 2500000000, requires: 'hotel_selva', effect: { type: 'dispatchCapacity', target: 'leticia', mult: 2 } },
@@ -561,7 +561,7 @@ export const RESEARCH = [
   { zone: 'leticia', id: 'maestria_leticia', name: 'Maestría: Leticia', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'leticia', mult: 4 } },
   { zone: 'leticia', id: 'supremacia_leticia', name: 'Supremacía: Leticia', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'leticia', mult: 8 } },
 
-  // Tolima Grande (v4.0): las mismas que el Amazonas, con una más en el Café del Huila (su Secadero de cáscara).
+  // Tolima Grande (v4.0): same as Amazon, plus one extra in Café del Huila (its husk dryer).
   { zone: 'achirales', id: 'achira_seleccionada', name: 'Achira seleccionada', icon: ICON.achiraPlant, desc: 'El Achiral produce el doble.', cost: 300, requires: 'achira_grater', effect: { type: 'stationSpeed', target: 'achiral', mult: 2 } },
   { zone: 'achirales', id: 'rallador_motor', name: 'Rallador de motor', icon: '⚙️', desc: 'El Rallador de achira ralla el doble.', cost: 400, requires: 'achira_grater', effect: { type: 'stationSpeed', target: 'achira_grater', mult: 2 } },
   { zone: 'achirales', id: 'herraduras_tol', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'starch_tanks', effect: { type: 'muleSpeed', mult: 1.5 } },
@@ -630,7 +630,7 @@ export const RESEARCH = [
   { zone: 'neiva', id: 'maestria_neiva', name: 'Maestría: Neiva', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'neiva', mult: 4 } },
   { zone: 'neiva', id: 'supremacia_neiva', name: 'Supremacía: Neiva', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'neiva', mult: 8 } },
 
-  // Cundinamarca (v4.4): las mismas que el Tolima Grande.
+  // Cundinamarca (v4.4): same as Tolima Grande.
   { zone: 'flores', id: 'rosal_injertado', name: 'Rosal injertado', icon: ICON.rosal, desc: 'El Invernadero de rosas produce el doble.', cost: 300, requires: 'mesa_corte', effect: { type: 'stationSpeed', target: 'invernadero_rosas', mult: 2 } },
   { zone: 'flores', id: 'tijeras_podar', name: 'Tijeras de podar', icon: '✂️', desc: 'La Mesa de corte corta el doble.', cost: 400, requires: 'mesa_corte', effect: { type: 'stationSpeed', target: 'mesa_corte', mult: 2 } },
   { zone: 'flores', id: 'herraduras_cund', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 900, requires: 'tinas_hidratacion', effect: { type: 'muleSpeed', mult: 1.5 } },
@@ -698,7 +698,7 @@ export const RESEARCH = [
   { zone: 'zipaquira', id: 'maravilla_colombia', name: 'Maravilla de Colombia', icon: '🏅', desc: 'Todo lo que vende Zipaquirá vale un 50 % más.', cost: 25000000000, requires: 'mochilas_paseo', effect: { type: 'zoneValue', target: 'zipaquira', mult: 1.5 } },
   { zone: 'zipaquira', id: 'maestria_zipaquira', name: 'Maestría: Zipaquirá', icon: '⭐', desc: 'Todos los edificios de la zona producen ×4.', cost: 100000000000, minLevel: 75, effect: { type: 'zoneSpeed', target: 'zipaquira', mult: 4 } },
   { zone: 'zipaquira', id: 'supremacia_zipaquira', name: 'Supremacía: Zipaquirá', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 1000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'zipaquira', mult: 8 } },
-  // Bogotá · La Candelaria (v4.5): los precios de una primera zona. Al acelerar una estación, pide más a su tractomula.
+  // Bogotá · La Candelaria (v4.5): first-zone pricing. Speeding up a station demands more from its tractomula.
   { zone: 'bogota', id: 'tostador_tambor', name: 'Tostador de tambor', icon: ICON.cafeCapitalino, desc: 'El Tostadero del Chorro tuesta el doble (pide el doble de café a la tractomula).', cost: 1200, requires: 'cafeteria_septima', effect: { type: 'stationSpeed', target: 'tostadero_chorro', mult: 2 } },
   { zone: 'bogota', id: 'greca_grande', name: 'Greca grande', icon: ICON.tinto, desc: 'La Cafetería de la Séptima sirve el doble.', cost: 32000, requires: 'cafeteria_septima', effect: { type: 'stationSpeed', target: 'cafeteria_septima', mult: 2 } },
   { zone: 'bogota', id: 'herraduras_bog', name: 'Herraduras', icon: '🐴', desc: 'Las mulas caminan un 50 % más rápido.', cost: 120000, requires: 'chocolateria_candelaria', effect: { type: 'muleSpeed', mult: 1.5 } },
@@ -709,7 +709,7 @@ export const RESEARCH = [
   { zone: 'bogota', id: 'cable_bog', name: 'Cable aéreo', icon: '🚡', desc: 'Las mulas caminan el doble de rápido.', cost: 120000000, requires: 'casa_colonial', effect: { type: 'muleSpeed', mult: 2 } },
   { zone: 'bogota', id: 'casona_restaurada', name: 'Casona restaurada', icon: ICON.tardeCandelaria, desc: 'La Casa colonial recibe el doble de visitas.', cost: 160000000, requires: 'casa_colonial', effect: { type: 'stationSpeed', target: 'casa_colonial', mult: 2 } },
   { zone: 'bogota', id: 'barrio_patrimonio', name: 'Barrio patrimonio', icon: '🏅', desc: 'La tarde en La Candelaria vale un 50 % más.', cost: 320000000, requires: 'casa_colonial', effect: { type: 'productValue', target: 'tarde_candelaria', mult: 1.5 } },
-  // Bogotá · Chapinero y la Zona G (v4.5): los precios del Café del Huila.
+  // Bogotá · Chapinero y la Zona G (v4.5): Café del Huila pricing.
   { zone: 'bogota', id: 'despensa_grande', name: 'Despensa grande', icon: ICON.salsasCasa, desc: 'La Despensa de la Zona G prepara el doble (pide el doble a sus dos tractomulas).', cost: 1600, requires: 'cocina_entradas', effect: { type: 'stationSpeed', target: 'despensa_zona_g', mult: 2 } },
   { zone: 'bogota', id: 'freidora_doble', name: 'Freidora doble', icon: ICON.picadaCasa, desc: 'La Cocina de entradas fríe el doble.', cost: 48000, requires: 'parrilla_zona_g', effect: { type: 'stationSpeed', target: 'cocina_entradas', mult: 2 } },
   { zone: 'bogota', id: 'camion_reparto', name: 'Camión de reparto', icon: '🚚', desc: 'El Willys de Bogotá lleva el doble por viaje.', cost: 800000, requires: 'parrilla_zona_g', effect: { type: 'dispatchCapacity', target: 'bogota', mult: 2 } },
@@ -731,7 +731,7 @@ export const RESEARCH = [
   { zone: 'bogota', id: 'paila_fritanga', name: 'Paila de la fritanga', icon: ICON.desayunoPlaza, desc: 'La Fritanga de la plaza fríe el doble.', cost: 1600000, requires: 'plaza_paloquemao', effect: { type: 'stationSpeed', target: 'fritanga_plaza', mult: 2 } },
   { zone: 'bogota', id: 'nave_nueva', name: 'Nave nueva', icon: ICON.mananaPaloquemao, desc: 'La Plaza de Paloquemao recibe el doble de gente.', cost: 20000000, requires: 'plaza_paloquemao', effect: { type: 'stationSpeed', target: 'plaza_paloquemao', mult: 2 } },
   { zone: 'bogota', id: 'mercado_madrugada', name: 'Mercado de madrugada', icon: '🏅', desc: 'La mañana en Paloquemao vale un 50 % más.', cost: 32000000, requires: 'plaza_paloquemao', effect: { type: 'productValue', target: 'manana_paloquemao', mult: 1.5 } },
-  // Bogotá · El centro (v4.5), y la maestría y la supremacía de la zona (una sola, la más grande).
+  // Bogotá · Downtown (v4.5), plus zone Mastery and Supremacy (one giant set).
   { zone: 'bogota', id: 'suite_presidencial', name: 'Suite presidencial', icon: ICON.nocheBogota, desc: 'El Hotel de la capital recibe el doble de huéspedes.', cost: 4000000000, requires: 'funicular_monserrate', effect: { type: 'stationSpeed', target: 'hotel_capital', mult: 2 } },
   { zone: 'bogota', id: 'vagones_nuevos', name: 'Vagones nuevos', icon: ICON.monserrate, desc: 'El Funicular de Monserrate sube el doble de gente.', cost: 8000000000, requires: 'pabellon_regiones', effect: { type: 'stationSpeed', target: 'funicular_monserrate', mult: 2 } },
   { zone: 'bogota', id: 'carpa_grande', name: 'Carpa grande', icon: ICON.pabellonColombia, desc: 'El Pabellón de las regiones arma el doble.', cost: 16000000000, requires: 'gran_feria', effect: { type: 'stationSpeed', target: 'pabellon_regiones', mult: 2 } },
@@ -741,8 +741,8 @@ export const RESEARCH = [
   { zone: 'bogota', id: 'supremacia_bogota', name: 'Supremacía: Bogotá', icon: '👑', desc: 'Todos los edificios de la zona producen ×8.', cost: 8000000000000, minLevel: 100, effect: { type: 'zoneSpeed', target: 'bogota', mult: 8 } },
 ];
 
-// Las que duplican una estación (v2.3.2) se habilitan cuando esa misma estación y sus arrieros llegan al
-// nivel 25 (antes, al construir la siguiente). La Compostera no tiene arrieros: le basta su nivel.
+// Station-doubling upgrades (v2.3.2) unlock when that station and its haulers reach
+// level 25 (previously upon building next station). Compostera has no haulers: level alone suffices.
 export const DOUBLE_LEVEL = 25;
 for (const r of RESEARCH) {
   if (r.effect.type !== 'stationSpeed' || r.effect.mult !== 2) continue;

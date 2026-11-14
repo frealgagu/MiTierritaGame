@@ -11,14 +11,14 @@ import { legacyMult } from '../src/sim/modifiers.js';
 import { ZONE_LIST } from '../src/data/zones/index.js';
 import { CALENDAR } from '../src/sim/calendar.js';
 
-// Pruebas de la cadena: siempre de día y sin temporada (el calendario se prueba en calendar.test.js).
+// Chain tests: always daytime and no season (calendar is tested in calendar.test.js).
 CALENDAR.on = false;
 
 function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-// Las seis zonas abiertas, todo construido al mismo nivel.
+// All six zones open, everything built at the same level.
 function everything(level, resets = 0) {
   const game = new Game();
   const s = game.state;
@@ -36,7 +36,7 @@ function everything(level, resets = 0) {
   return game;
 }
 
-// Lo demás que pide el segundo final (v3.12): todos los objetivos y todas las investigaciones del Eje
+// Everything else the second ending requires (v3.12): all goals and all Eje research
 // Cafetero.
 function allClaimed(s) {
   s.goals.claimed = Object.keys(s.zones).flatMap((z) => GOALS_BY_ZONE[z].map((g) => g.id));
@@ -76,12 +76,12 @@ test('el segundo final llega al subir la última estación al nivel 100', () => 
   assert.equal(maxedCount(s), 37);
   const events = [];
   game.bus.on('mastered', (e) => events.push(e));
-  assert.ok(game.buy('farm:transport', 1) || true); // otras compras no lo disparan
+  assert.ok(game.buy('farm:transport', 1) || true); // other purchases don't trigger it
   assert.equal(events.length, 0);
   assert.ok(game.buy('export_dock', 1));
   assert.equal(events.length, 1);
   assert.equal(s.mastered, true);
-  // Solo una vez.
+  // Only once.
   game.buy('dispatch:pueblo', 1);
   assert.equal(events.length, 1);
 });
@@ -92,13 +92,13 @@ test('sin el primer final no hay segundo: llega al cobrar los contenedores del P
   allClaimed(s);
   const events = [];
   game.bus.on('mastered', (e) => events.push(e));
-  // Todo al nivel 100, pero el Pueblo sin completar: no cuenta.
+  // Everything at level 100, but Pueblo incomplete: doesn't count.
   s.stations.export_dock.level = 99;
   assert.ok(game.buy('export_dock', 1));
   assert.equal(maxedCount(s), stationsOf(s).length);
   assert.equal(s.mastered, false);
   assert.equal(events.length, 0);
-  // Se cobra el último objetivo del Pueblo (exportar los contenedores), el primer final.
+  // Claims Pueblo's final goal (exporting containers), the first ending.
   s.goals.claimed = s.goals.claimed.filter((id) => id !== GOALS_BY_ZONE.pueblo.at(-1).id);
   const final = GOALS_BY_ZONE.pueblo.at(-1);
   s.stats.sold[final.product] = final.amount;
@@ -129,7 +129,7 @@ test('volver a empezar: todo desde cero, con la producción al doble y los ajust
   assert.equal(next.settings.music, false);
   assert.equal(next.settings.zone, 'finca');
   assert.ok(next.hints.includes('wetmill'));
-  // Y la Finca produce el doble... del doble.
+  // And Finca produces double... of double.
   const g = new Game(next);
   run(g, 60);
   assert.ok(g.state.coins > 0);
@@ -178,7 +178,7 @@ test('el multiplicador llega hasta ×2⁶⁰: se puede seguir reiniciando, pero 
   const game = new Game(state);
   run(game, 60);
   assert.ok(Number.isFinite(game.state.coins) && game.state.coins > 0, `monedas: ${game.state.coins}`);
-  // Y con todo construido, sigue cuadrando (después de arrancar, ningún patio se llena).
+  // And with everything built, it still balances (after startup, no yard fills up).
   const big = everything(60, 40);
   run(big, 400);
   const blocked = {};
@@ -230,7 +230,7 @@ test('«Cobrar todos» y «Comprar todas» (v3.57)', async () => {
   const { previewAllResearch } = await import('../src/sim/upgrades.js');
   const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
   const { RESEARCH } = await import('../src/data/research.js');
-  // Objetivos: cuenta todos los cumplidos (no solo los tres que se ven) y los cobra, menos el final.
+  // Goals: counts all completed ones (not only the three visible) and claims them, except the finale.
   const game = everything(100);
   const s = game.state;
   s.stats.sold = Object.fromEntries(Object.keys(s.stats.sold ?? {}).map((k) => [k, 0]));
@@ -244,7 +244,7 @@ test('«Cobrar todos» y «Comprar todas» (v3.57)', async () => {
   assert.equal(s.coins, coins + reward);
   assert.ok(!s.zones.finca.complete, 'el final se cobra aparte');
   assert.ok(activeGoals(s, 'finca').every((g) => g.final || !claimableGoals(s, 'finca').includes(g)));
-  // Investigaciones: de la más barata a la más cara hasta donde alcance, sin Maestría ni Supremacía.
+  // Research: from cheapest to most expensive as far as coins go, excluding Maestría and Supremacía.
   const fresh = everything(100);
   const st = fresh.state;
   st.research = [];
@@ -281,7 +281,7 @@ test('al volver a empezar otra región, el juego abre en ella y no en el Cafetal
   const root = createInitialState(0);
   root.zones.trapiche.unlocked = true;
   root.regions = { santander: createInitialState(0, 'santander') };
-  // Santander recién reiniciada: solo su primera zona abierta; se estaba viendo Barichara.
+  // Santander freshly reset: only its first zone open; Barichara was being viewed.
   assert.equal(startZone(root, 'barichara'), 'guayabera');
   assert.equal(startZone(root, 'guayabera'), 'guayabera');
   assert.equal(startZone(root, 'trapiche'), 'trapiche');

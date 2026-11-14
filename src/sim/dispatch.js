@@ -4,17 +4,17 @@ import { sumValues } from './state.js';
 import { dispatchMult, jeepCount, productValue, saleValue } from './modifiers.js';
 import { routeReserve } from './routes.js';
 
-// Lo que el Willys puede vender: la bodega menos lo que espera una ruta hacia otra zona.
+// What Willys can sell: warehouse stock minus reserve waiting for outbound routes.
 export function sellableStock(state, zoneId, reserve = routeReserve(state, zoneId)) {
   return sumValues(state.zones[zoneId].warehouse) - sumValues(reserve);
 }
 
-// Parqueado sin nada que vender (todo se lo lleva la Chiva): el conductor se toma un tinto.
+// Parked with nothing to sell (Chiva takes everything): driver grabs a coffee.
 export function jeepResting(state, zoneId) {
   return state.zones[zoneId].jeep.phase === 'idle' && sellableStock(state, zoneId) <= 1e-9;
 }
 
-// Los Willys de una zona (v3.9: el segundo, si la región lo tiene; se crea al usarlo).
+// Zone Willys fleet (v3.9: second one if region owns it; lazily initialized).
 export function jeepsOf(state, zoneId) {
   const zone = state.zones[zoneId];
   if (jeepCount(state) < 2) return [zone.jeep];
@@ -22,9 +22,9 @@ export function jeepsOf(state, zoneId) {
   return [zone.jeep, zone.jeep2];
 }
 
-// El Willys de cada zona espera en su bodega; sale lleno, o con carga parcial tras `maxWait` s.
-// Vende al llegar al pueblo (mitad del viaje) y vuelve. Con dos (v3.9), cada uno por su lado: el
-// primero que esté en la bodega carga primero.
+// Each zone's Willys waits at warehouse; departs full, or partially loaded after `maxWait` s.
+// Sells upon reaching town (midpoint) and returns. With two (v3.9), independent trips:
+// whichever waits at warehouse first loads first.
 export function stepJeep(state, zoneId, dt, bus) {
   jeepsOf(state, zoneId).forEach((j, k) => stepOne(state, zoneId, j, k, dt, bus));
 }
@@ -34,7 +34,7 @@ function stepOne(state, zoneId, j, k, dt, bus) {
   const half = DISPATCH.tripTime / 2;
 
   if (j.phase === 'idle') {
-    // Lo que espera una ruta hacia otra zona no se vende.
+    // Stock reserved for outbound route isn't sold.
     const reserve = routeReserve(state, zoneId);
     const stock = sellableStock(state, zoneId, reserve);
     const cap = dispatchCapacity(zone.dispatch.level, dispatchMult(state, zoneId));
@@ -69,7 +69,7 @@ function stepOne(state, zoneId, j, k, dt, bus) {
   }
 }
 
-// Carga primero lo más valioso.
+// Loads highest-value product first.
 function loadJeep(state, warehouse, cap, reserve) {
   const load = {};
   let room = cap;

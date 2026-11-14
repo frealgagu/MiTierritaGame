@@ -43,7 +43,7 @@ test('mejorar toda la zona: se ve tras reiniciar la región, cuesta 10 ⭐ y val
   assert.equal(zoneBoostStatus(s, s, 'finca'), 'ready');
   assert.equal(zoneBoostStatus(s, s, 'trapiche'), 'ready', 'toda la región');
   assert.equal(buyZoneBoostUnlock(s.profile, 'cafetero'), false, 'una sola vez');
-  // En un evento, solo si ese evento ya se ganó con oro.
+  // In an event, only if that event was already won with gold.
   const board = { ...s, event: { id: 'broca' } };
   assert.equal(zoneBoostStatus(s, board, 'finca'), 'hidden');
   s.profile.medals = { broca: { best: 'silver' } };
@@ -55,7 +55,7 @@ test('mejorar toda la zona: se ve tras reiniciar la región, cuesta 10 ⭐ y val
 test('⬆️ al próximo hito: lo más bajo y todo lo que esté por debajo de ese hito, solo si alcanza para todo (v4.1.1)', () => {
   const s = finca(0);
   const chain = ZONES_BY_ID.finca.chain;
-  // Los niveles del ejemplo: 2, 15, 28, 88, 3, 8 (y lo demás —arrieros, bodega y el Empaque— en 100).
+  // Levels from the example: 2, 15, 28, 88, 3, 8 (and the rest —haulers, warehouse, and Empaque— at 100).
   [2, 15, 28, 88, 3, 8].forEach((n, i) => (s.stations[chain[i]].level = n));
   s.stations[chain[6]].level = 100;
   for (const id of chain) s.stations[id].transport.level = 100;
@@ -79,13 +79,13 @@ test('⬆️ también sube los arrieros, la bodega y las chivas que traen produc
   const s = finca(0);
   const targets = zoneBoostTargets(s, 'finca');
   assert.ok(targets.includes('farm:transport') && targets.includes('dispatch:finca'));
-  // La Lechería recibe la panela del Trapiche (la chiva de la ruta, cuando ya está su Paila).
+  // Lechería receives panela from Trapiche (the route's chiva, once its Paila is built).
   for (const z of ['trapiche', 'lecheria']) {
     s.zones[z].unlocked = true;
     for (const id of ZONES_BY_ID[z].chain) s.stations[id] = createStationState();
   }
   assert.ok(zoneBoostTargets(s, 'lecheria').includes('route:panela'), 'la chiva del Trapiche a la Lechería');
-  // En un evento la ruta va con su estación: no se cuenta.
+  // In an event the route goes with its station: not counted.
   assert.equal(zoneBoostTargets({ ...s, event: { id: 'broca' } }, 'lecheria').includes('route:panela'), false);
 });
 
@@ -151,9 +151,9 @@ test('🚌 chivas más seguidas: con el álbum lleno y un reinicio, cada 30 s y 
   assert.equal(tripTimeOf(s, ROUTES_BY_ID.panela), 15);
   assert.ok(Math.abs(routeCapacity(s, 'panela') - cap / 4) < 1e-9, 'un cuarto por viaje');
   assert.equal(quoteChivas(p, s).reason, 'max');
-  // En un evento no cambia.
+  // In an event it doesn't change.
   assert.equal(tripTimeOf({ ...s, event: { id: 'broca' } }, ROUTES_BY_ID.panela), 60);
-  // Se conserva al reiniciar la región.
+  // Preserved when resetting the region.
   assert.equal(restartState(s).chivas, 15);
   void stepRoute;
 });

@@ -1,5 +1,5 @@
-// Mapa del Amazonas · Zona 2: El Ajizal (v3.48). Mismo trazado que el Tabacal (zone8_tabacal.js), el Cocal,
-// la Cervecería, el Frutal y la Azotea.
+// Amazonas Map · Zone 2: El Ajizal (v3.48). Same layout as El Tabacal (zone8_tabacal.js), El Cocal,
+// La Cervecería, El Frutal, and La Azotea.
 import { ICON } from '../icons.js';
 
 export const ZONE38 = {
@@ -22,16 +22,16 @@ export const ZONE38 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Tarapacá ➜',
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
-  unlockedBy: 'asaizal', // se abre al completar El Asaizal
-  // El ají negro sale hacia El Lago por la Ruta del ají negro (v3.49).
+  unlockedBy: 'asaizal', // opens upon completing El Asaizal
+  // Black chili leaves toward El Lago along the Black Chili Route (v3.49).
   routes: {
     ajinegro: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Al Lago ➜' },
-    // Las cajas de ají negro salen hacia Leticia (v3.52).
+    // Crates of black chili leave toward Leticia (v3.52).
     cajas_aji: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Leticia ➜' },
   },
   next: 'lago',

@@ -5,7 +5,7 @@ import { analyzeChain, routeFlow } from '../src/sim/analysis.js';
 import { CHILDREN, chainOf } from '../src/sim/chain.js';
 import { routeCapacity } from '../src/sim/routes.js';
 
-// Sube una zona entera (estaciones y arrieros) a un nivel.
+// Upgrades an entire zone (stations and haulers) to a target level.
 function levelZone(game, zone, level) {
   for (const id of chainOf(zone)) {
     game.state.stations[id].level = level;
@@ -17,7 +17,7 @@ function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-// Partida con las cuatro zonas abiertas y todo construido al mismo nivel.
+// Save with all four zones open and everything built at the same level.
 function withCacaotal(level = 30) {
   const game = new Game();
   const s = game.state;
@@ -39,7 +39,7 @@ test('la pasta de cacao se reparte entre la Mesa y la Chocolatería, la mitad ca
   assert.deepEqual(CHILDREN.cacao_mill, ['chocolate_table', 'chocolatier']);
   const game = withCacaotal();
   const s = game.state;
-  // Con panela y leche de sobra, solo cuenta el reparto de la pasta.
+  // With panela and milk to spare, only pasta distribution matters.
   levelZone(game, 'trapiche', 60);
   levelZone(game, 'lecheria', 60);
   for (const id of ['pasture', 'pasteurizer']) s.stations[id].level = 75;
@@ -68,7 +68,7 @@ test('una ruta que abastece dos estaciones les reparte la carga', () => {
   const s = game.state;
   for (const id of ['chocolate_table', 'chocolatier']) s.stations[id].imported = {};
   s.zones.trapiche.warehouse = { panela_powder: 1000 };
-  // La otra ruta de panela ya va en camino: esta se lleva lo que necesita.
+  // The other panela route is already en route: this one takes what it needs.
   s.routes.panela.phase = 'back';
   run(game, 0.2);
   assert.equal(s.routes.panela_cacao.phase, 'go');
@@ -83,13 +83,13 @@ test('una ruta que abastece dos estaciones les reparte la carga', () => {
 test('dos rutas que sacan panela del Trapiche se reparten lo que hay', () => {
   const game = withCacaotal();
   const s = game.state;
-  // El Trapiche se queda corto: no alcanza para las tres estaciones que piden panela.
+  // Trapiche falls short: not enough for all three stations demanding panela.
   s.stations.pulverizer.level = 10;
   s.stations.pulverizer.transport.level = 10;
   const supply = analyzeChain(s, 'trapiche', { exports: false }).rows.at(-1).diverted;
   const both = routeFlow(s, 'panela') + routeFlow(s, 'panela_cacao');
   assert.ok(Math.abs(both - supply) < 1e-9, `${both} de ${supply}`);
-  // La ruta del Cacaotal abastece dos estaciones: se lleva el doble que la de la Lechería.
+  // The Cacaotal route supplies two stations: carries twice as much as the Lechería route.
   assert.ok(Math.abs(routeFlow(s, 'panela_cacao') - 2 * routeFlow(s, 'panela')) < 1e-9);
 });
 
@@ -98,15 +98,15 @@ test('a igual nivel en todas las zonas, las rutas llevan justo lo que piden las 
   const { ROUTES_BY_ID } = await import('../src/data/routes.js');
   const game = withCacaotal();
   const s = game.state;
-  // La Pasteurizadora guarda un cuarto de su leche para la Chocolatería: no se desvía nada.
+  // Pasteurizadora reserves a quarter of its milk for Chocolatería: none is bypassed.
   const lech = analyzeChain(s, 'lecheria');
   assert.ok(lech.rows.find((r) => r.id === 'pasteurizer').diverted < 1e-9);
   assert.ok(Math.abs(routeFlow(s, 'leche') - stationImportRate(s, ROUTES_BY_ID.leche, 'chocolatier')) < 1e-9, 'llega toda la leche');
-  // La panela de la Paila, la Mesa y la Chocolatería es ¾ de lo que da el Trapiche.
+  // Panela for Paila, Mesa, and Chocolatería is ¾ of Trapiche's output.
   const panela = routeFlow(s, 'panela') + routeFlow(s, 'panela_cacao');
   const made = analyzeChain(s, 'trapiche', { exports: false }).rows.at(-1).diverted;
   assert.ok(Math.abs(panela - made * 0.75) < 1e-9, `${panela} de ${made}`);
-  // Y en la simulación nadie se queda esperando lo importado.
+  // And in the simulation nobody stalls waiting for imports.
   run(game, 400);
   for (const id of ['arequipe_pot', 'chocolate_table', 'chocolatier']) {
     const st = s.stations[id];
@@ -140,7 +140,7 @@ test('al nivel 100 en todas las zonas, con todas las investigaciones, ningún pa
   const s = game.state;
   for (const r of RESEARCH) s.research.push(r.id);
   for (const z of Object.values(s.zones)) z.dispatch.level = 100;
-  run(game, 400); // las rutas tardan unos viajes en llenar las estaciones
+  run(game, 400); // routes take a few trips to fill the stations
   const blocked = {};
   for (let i = 0; i < 1000; i++) {
     game.step(0.1);

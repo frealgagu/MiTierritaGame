@@ -1,10 +1,10 @@
 name: Publicar la web y la app de Android
 
-# En cada push: pruebas y web (GitHub Pages) por un lado, APK de Android por otro, y al final se
-# publican juntos: el APK queda en la misma página, en ./mitierrita.apk (el menú del juego lo enlaza), y la
-# música y los sonidos para descargar (web/musica) en ./musica/.
-# Si existen los secretos de la clave de subida (PLAY_UPLOAD_*, ver el README), también se genera el
-# AAB para Google Play (./mitierrita.aab): sin el aviso de actualización propio, porque Play actualiza solo.
+# On each push: run tests and build web (GitHub Pages) on one job, Android APK on another, then publish
+# together: the APK lands on the same site at ./mitierrita.apk (linked from the game menu), and downloadable
+# music/SFX (web/musica) at ./musica/.
+# If upload key secrets exist (PLAY_UPLOAD_*, see README), also builds the Google Play AAB (./mitierrita.aab)
+# without the built-in update prompt, since Google Play handles updates.
 on:
   push:
     branches: [main]
@@ -27,13 +27,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          # (v4.7.3) Con o sin package-lock.json: los cambios que llegan de AI Studio a veces no lo traen.
+          # (v4.7.3) With or without package-lock.json: changes synced from AI Studio sometimes omit it.
           cache: ${{ hashFiles('package-lock.json') != '' && 'npm' || '' }}
       - run: if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
       - run: npm test
       - run: npm run build
-      # (v4.7.3) Cada publicación con su propio caché: el nombre lleva el commit, así la web y la app se actualizan
-      # aunque no se haya subido la versión ni el CACHE de public/sw.js.
+      # (v4.7.3) Give each publish its own cache key: includes commit SHA so web and app update
+      # even when package.json version or public/sw.js CACHE weren't bumped.
       - run: sed -i -E "s/const CACHE = '([^']+)';/const CACHE = '\1-${GITHUB_SHA::7}';/" dist/sw.js && grep -m1 "const CACHE" dist/sw.js
       - uses: actions/upload-artifact@v4
         with:
@@ -57,14 +57,14 @@ jobs:
         with:
           packages: platform-tools platforms;android-36 build-tools;36.0.0 build-tools;35.0.0
       - run: if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
-      # (v4.7.3) gradlew siempre ejecutable (desde AI Studio llegó sin el permiso y el APK no se armaba), y el código de
-      # versión de Android sale del número de esta publicación: siempre sube, así Google Play acepta el AAB aunque la
-      # versión de package.json no haya cambiado (ver android/app/build.gradle).
+      # (v4.7.3) Keep gradlew executable (AI Studio drops execute permission, breaking APK builds), and derive
+      # Android versionCode from the run number so it always increments and Google Play accepts the AAB even
+      # if package.json version didn't change (see android/app/build.gradle).
       - run: |
           chmod +x android/gradlew
           echo "MITIERRITA_VERSION_CODE=$((50000 + GITHUB_RUN_NUMBER))" >> "$GITHUB_ENV"
-      # Clave de pruebas: de los secretos del repositorio (ANDROID_KEYSTORE_BASE64, …) si existen; si no,
-      # la que está temporalmente en android/app (ver build.gradle).
+      # Debug signing key: from repo secrets (ANDROID_KEYSTORE_BASE64, ...) if set; otherwise
+      # uses the temporary keystore checked into android/app (see build.gradle).
       - env:
           KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -80,11 +80,11 @@ jobs:
               echo "MITIERRITA_KEY_PASSWORD=$KEY_PASSWORD"
             } >> "$GITHUB_ENV"
           fi
-      # Compila el juego, lo copia a android/ y genera el APK firmado con la clave de pruebas.
+      # Build game, copy assets into android/, and generate APK signed with the debug key.
       - run: |
           npm run android:apk
           cp android/app/build/outputs/apk/debug/app-debug.apk mitierrita.apk
-      # AAB para Google Play, firmado con la clave de subida (solo si están los secretos).
+      # AAB for Google Play, signed with upload key (only when secrets exist).
       - env:
           KEYSTORE_BASE64: ${{ secrets.PLAY_UPLOAD_KEYSTORE_BASE64 }}
           MITIERRITA_UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.PLAY_UPLOAD_KEYSTORE_PASSWORD }}
@@ -110,8 +110,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      # Lo que va solo en la página y no en la app (v3.71): la música y los sonidos para descargar (web/musica),
-      # con un .zip de todo.
+      # Web-only downloads excluded from the mobile app (v3.71): music and SFX (web/musica),
+      # bundled into a single .zip archive.
       - uses: actions/checkout@v4
         with:
           sparse-checkout: web

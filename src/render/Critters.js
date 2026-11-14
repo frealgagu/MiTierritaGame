@@ -6,12 +6,12 @@ import { shadow } from './procedural/shapes.js';
 import { drawCow } from './Terrain.js';
 import { createRng } from '../core/rng.js';
 
-// Vida en el mapa (v1.8): gallinas junto a la casa, un perro que a veces persigue al Willys, vacas que
-// pastan en el potrero y, en el Pueblo, gente que pasea por la plaza y las aceras (sin pisar las calles,
-// por donde pasan las mulas y los carros) y palomas alrededor de la fuente. Es solo decoración: no tiene
-// que ver con la economía. De noche, las gallinas, las palomas y la gente se recogen.
+// Ambient wildlife (v1.8): chickens by farmhouse, dog that sometimes chases Willys, cows
+// grazing in pasture, and in Pueblo townspeople strolling plaza and sidewalks (never stepping
+// onto mule/vehicle roads) plus pigeons around fountain. Purely cosmetic. At night
+// chickens, pigeons, and townspeople go indoors.
 const SPEED = { chicken: 0.55, pigeon: 0.45, dog: 1.1, person: 0.6, cow: 0.12 };
-// Hasta dónde va de un tirón y cuánto se queda quieto al llegar (s).
+// Max wander step distance and pause duration on arrival (s).
 const REACH = { person: 4.5, cow: 3 };
 const PAUSE = { person: [0.4, 1.6], cow: [1, 9] };
 const THIN = { width: 0.8, color: 0x3a2418, alpha: 0.6 };
@@ -24,7 +24,7 @@ const RANCH_COATS = [
   { body: 0xd8d2c6, legs: 0xc4bdb0, spots: 0xb0a898, udder: false },
 ];
 
-// Ganado del Hato llanero (v3.34): cebú blanco o gris, con giba, y alguno sanmartinero, rojizo; novillos sin ubre.
+// Hato llanero cattle (v3.34): white/gray humped zebu, plus reddish Sanmartinero; steers without udders.
 const LLANO_COATS = [
   { body: 0xeceae4, legs: 0xdedad2, spots: 0xd6d2c8, udder: false, hump: true },
   { body: 0xeceae4, legs: 0xdedad2, spots: 0xd6d2c8, udder: false, hump: true },
@@ -39,7 +39,7 @@ const CEBU_COATS = [
   { body: 0xa0522d, legs: 0x8a4526, spots: 0x8a4526, udder: true, hump: false },
 ];
 
-// Ovejas de las Ruanas (v3.26): blancas, alguna café y alguna negra.
+// Ruanas sheep (v3.26): white, some brown and some black.
 const SHEEP_COATS = [
   { sheep: true, body: 0xf4f1e8, spots: 0xe0d8c4, face: 0x263238 },
   { sheep: true, body: 0xf4f1e8, spots: 0xe0d8c4, face: 0x263238 },
@@ -48,7 +48,7 @@ const SHEEP_COATS = [
   { sheep: true, body: 0x37474f, spots: 0x263238, face: 0x1a1a1a },
 ];
 
-// Cerdos de la Lechonería (v4.0): rosados, alguno manchado y alguno negro (el zungo criollo).
+// Lechonería pigs (v4.0): pink, some spotted and some black (Creole zungo).
 const PIG_COATS = [
   { pig: true, body: 0xf4a7b0, snout: 0xf48fb1 },
   { pig: true, body: 0xf4a7b0, snout: 0xf48fb1 },
@@ -57,11 +57,11 @@ const PIG_COATS = [
 ];
 
 class Critter extends Container {
-  // walk(ax, ay, bx, by): si puede ir en línea recta de un punto al otro (sin walk, a cualquier lado).
+  // walk(ax, ay, bx, by): whether straight line between points is clear (if omitted, unrestricted).
   constructor(kind, area, rng, walk = null) {
     super();
     this.kind = kind;
-    this.area = area; // puntos [gx, gy] por donde anda
+    this.area = area; // valid [gx, gy] wander points
     this.rng = rng;
     this.walk = walk;
     this.g = new Graphics();
@@ -80,7 +80,7 @@ class Critter extends Container {
     this.moving = false;
   }
 
-  // Siguiente lugar: uno cercano del área (para no cruzar el mapa de un tirón).
+  // Next target: nearby point within area (avoid crossing map in one hop).
   pick() {
     const reach = REACH[this.kind] ?? 3;
     const near = this.area.filter(([x, y]) => Math.hypot(x - this.pos.gx, y - this.pos.gy) < reach);
@@ -91,10 +91,10 @@ class Critter extends Container {
       this.target = { gx, gy };
       return;
     }
-    this.wait = 0.5; // nada a la mano: lo intenta otra vez en un rato
+    this.wait = 0.5; // nothing nearby: retry shortly
   }
 
-  // follow: punto que perseguir (el perro detrás del Willys), o null.
+  // follow: target to chase (dog behind Willys), or null.
   update(dt, t, follow) {
     let speed = SPEED[this.kind];
     if (follow) {
@@ -172,14 +172,14 @@ class Critter extends Container {
         g.rect(-2.4, -21.6, 4.8, 1).fill(0x222222);
       } else g.ellipse(0, -20.4, 2.8, 1.6).fill(0x2b1d14);
     } else if (this.kind === 'cow') {
-      // Pastando: baja un poco la cabeza de vez en cuando (todo el cuerpo se mece).
+      // Grazing: dips head occasionally (whole body sways slightly).
       const graze = this.moving ? Math.abs(walk) * 0.6 : Math.max(0, Math.sin(t * 0.8)) * 1.2;
       drawCow(g, 0, graze, 0.95, createRng(this.cowSeed), f < 0, this.coat);
     }
   }
 }
 
-// Puntos dentro de las casillas de la lista (al azar dentro de cada casilla).
+// Points inside tile list (random offset within each tile).
 function spots(tiles, rng, per = 2) {
   const out = [];
   for (const [gx, gy] of tiles) for (let k = 0; k < per; k++) out.push([gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6]);
@@ -187,7 +187,7 @@ function spots(tiles, rng, per = 2) {
 }
 
 export class Critters {
-  // farmView: para saber cuántas vacas hay en el potrero (crecen con los hitos).
+  // farmView: checks how many cows pasture shows (grows with milestones).
   constructor(zone, terrain, parent) {
     this.zone = zone;
     this.parent = parent;
@@ -209,11 +209,11 @@ export class Critters {
         parent.addChild(c);
       }
     };
-    // El perro, por el patio de la bodega (y detrás del Willys cuando sale).
+    // Farm dog around warehouse yard (and chasing Willys on departure).
     const yard = spots(near(grass, w.x, w.y, w.x + w.w, w.y + w.h, 2), this.rng);
     add('dog', yard, 1);
     if (zone.theme === 'town') {
-      // Gente por la plaza y las aceras de alrededor, sin cruzar calles, casas ni la fuente.
+      // Strollers in plaza and surrounding sidewalks without crossing roads, houses, or fountain.
       const walkable = townWalkable(zone, tiles, terrain.occupied);
       this.walk = (ax, ay, bx, by) => {
         const steps = Math.ceil(Math.hypot(bx - ax, by - ay) * 4);
@@ -221,7 +221,7 @@ export class Critters {
         return true;
       };
       this.sidewalks = [];
-      // La plaza y la grama a su izquierda (al sur quedarían tapados por la Fonda).
+      // Plaza and lawn to its left (south side would be occluded by Fonda).
       for (let gx = f.x - 2; gx < f.x + f.w; gx += 0.5) {
         for (let gy = f.y; gy < f.y + f.h; gy += 0.5) {
           const px = gx + 0.1 + this.rng() * 0.3;
@@ -230,7 +230,7 @@ export class Critters {
         }
       }
       this.people = [];
-      // La plaza se dibuja entera de una vez (casa, mesas, fuente): la gente que anda por ella va encima.
+      // Whole plaza renders together (house, tables, fountain): strolling people layer above it.
       this.plaza = { ...f, z: depth(f.x + f.w, f.y + f.h) };
       const cx = f.x + f.w * 0.62;
       const cy = f.y + f.h * 0.62;
@@ -244,7 +244,7 @@ export class Critters {
       return;
     }
     if (zone.plaza) {
-      // La plaza de Vélez (v3.29): gente que pasea por delante de la iglesia y palomas en el atrio.
+      // Vélez plaza (v3.29): townspeople strolling in front of church and pigeons on forecourt.
       const pz = zone.plaza;
       const free = (x, y) => x > pz.x + 0.15 && x < pz.x + pz.w - 0.15 && y > pz.y + 3.15 && y < pz.y + pz.h - 0.1
         && Math.hypot(x - (pz.x + 2.85), y - (pz.y + 3.45)) > 0.6;
@@ -267,10 +267,10 @@ export class Critters {
       for (let i = 0; i < 12; i++) atrium.push([pz.x + 0.9 + this.rng() * 1.3, pz.y + 2.65 + this.rng() * 0.25]);
       add('pigeon', atrium, 4);
     }
-    // Gallinas junto a la casa de la finca (afuera del cultivo).
+    // Chickens near farmhouse (outside crop rows).
     add('chicken', spots(near(grass, f.x, f.y, f.x + 2, f.y + 2, 2), this.rng), 4);
     if (zone.theme === 'dairy' || zone.theme === 'ranch' || zone.theme === 'savanna' || zone.theme === 'sheep' || zone.theme === 'pigs') {
-      // Vacas en el potrero, lejos de la casa.
+      // Cows in pasture, clear of house.
       const pasture = [];
       for (let i = 0; i < 80; i++) {
         const gx = f.x + 0.6 + this.rng() * (f.w - 1.2);
@@ -279,14 +279,14 @@ export class Critters {
         pasture.push([gx, gy]);
       }
       this.pasture = pasture;
-      // Novillos del Hato (v3.3): pardos, rojizos o grises, sin ubre.
-      // Vacas cebú de la Quesera (v3.18): blancas o grises, con giba y ubre; alguna romosinuana, rojiza.
+      // Hato steers (v3.3): brown, reddish, or gray, no udders.
+      // Quesera zebu cows (v3.18): white or gray with hump and udder; some reddish Romosinuano.
       this.coats = zone.style === 'llanos' ? LLANO_COATS : zone.theme === 'ranch' ? RANCH_COATS : zone.theme === 'savanna' ? CEBU_COATS : zone.theme === 'sheep' ? SHEEP_COATS : zone.theme === 'pigs' ? PIG_COATS : null;
       this.cows = [];
     }
   }
 
-  // Tantas vacas como dibuja el potrero para su nivel.
+  // Match count shown in pasture for its level.
   setCows(count) {
     if (this.pasture) {
       this.resize(this.cows, count, () => {
@@ -297,7 +297,7 @@ export class Critters {
     }
   }
 
-  // Tanta gente en la plaza como pide la Casa del café para su nivel.
+  // Match crowd count shown by Casa del café for its level.
   setPeople(count) {
     if (this.people && this.sidewalks.length > 1) this.resize(this.people, count, () => new Critter('person', this.sidewalks, this.rng, this.walk));
   }
@@ -316,15 +316,15 @@ export class Critters {
     }
   }
 
-  // night: de noche las gallinas, las palomas y la gente se recogen. jeep: dónde va el Willys (moving
-  // solo en las salidas en que el perro lo persigue).
+  // night: at night chickens, pigeons, and townspeople shelter indoors. jeep: Willys position
+  // (moving only on departures where dog gives chase).
   update(dt, t, night, jeep) {
     for (const c of this.list) {
       const asleep = night && (c.kind === 'chicken' || c.kind === 'pigeon' || c.kind === 'person');
       c.visible = !asleep;
       if (asleep) continue;
       let follow = null;
-      // El perro corre detrás del Willys mientras va cerca de la bodega (en algunas salidas).
+      // Dog runs behind Willys while near warehouse (on random departures).
       if (c.kind === 'dog' && jeep?.moving) {
         const d = Math.hypot(jeep.gx - c.pos.gx, jeep.gy - c.pos.gy);
         if (d < 5 && d > 0.8) follow = { gx: jeep.gx - jeep.dx * 0.9, gy: jeep.gy - jeep.dy * 0.9 };
@@ -336,8 +336,8 @@ export class Critters {
   }
 }
 
-// Dónde puede pararse la gente del Pueblo: la plaza (menos la esquina de la casa y las mesas, la fuente,
-// los guayacanes y los faroles) y la grama sin casitas ni árboles. Nunca las calles ni los edificios.
+// Valid Pueblo pedestrian spots: plaza (excluding house corner, tables, fountain,
+// guayacán trees, and lamps) and clear lawn patches. Never streets or buildings.
 function townWalkable(zone, tiles, occupied) {
   const { x, y, w, h } = zone.farm;
   const fountain = [w * 0.62, h * 0.62];
@@ -348,12 +348,12 @@ function townWalkable(zone, tiles, occupied) {
     const t = tiles[tx]?.[ty];
     const lx = gx - x;
     const ly = gy - y;
-    // Ni detrás de la casa del café (quedaría tapado por el tejado).
+    // Nor behind Casa del café (hidden behind its roof).
     if (lx < 3.3 && ly < 3.3) return false;
     if (t === 'grass') return !occupied.has(`${tx},${ty}`);
     if (t !== 'farm') return false;
     if (lx < 0.25 || ly < 0.25 || lx > w - 0.25 || ly > h - 0.25) return false;
-    if (lx + ly < 4.6) return false; // las mesas de la casa
+    if (lx + ly < 4.6) return false; // café outdoor tables
     if (Math.hypot(lx - fountain[0], ly - fountain[1]) < 1.5) return false;
     return posts.every(([px, py]) => Math.hypot(lx - px, ly - py) > 0.6);
   };

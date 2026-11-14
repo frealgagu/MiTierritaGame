@@ -1,8 +1,8 @@
-// Mapa del Amazonas · Zona 6: Leticia (v3.52). Mismo trazado que Barichara, Cartagena, Villa de Leyva,
-// Villavicencio y Buenaventura: no tiene fuente propia; en la ribera está la Heladería de asaí, que recibe las
-// cajas de asaí del Asaizal, y cada estación espera junto a la carretera por la que le llega lo suyo de otra
-// zona del Amazonas. Se dibuja como el Pueblo (tema 'town'), con casas de colores, techos de zinc, ceibas,
-// palmas de asaí y guacamayas (style).
+// Amazonas Map · Zone 6: Leticia (v3.52). Same layout as Barichara, Cartagena, Villa de Leyva,
+// Villavicencio, and Buenaventura: no source of its own; on the riverbank sits the Açaí Ice Cream Parlor, receiving
+// crates of açaí from El Asaizal, and each station waits next to the road bringing its supply from another
+// Amazonas zone. Drawn like El Pueblo ('town' theme), with colorful houses, zinc roofs, ceibas,
+// açaí palms, and macaws (style).
 import { ICON } from '../icons.js';
 
 export const ZONE42 = {
@@ -27,7 +27,7 @@ export const ZONE42 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Puerto Nariño ➜',
   muleSpeed: 4,
@@ -41,5 +41,5 @@ export const ZONE42 = {
     platos_pirarucu: { road: [[12.5, 25.9], [12.5, 15.2]], sign: [11.3, 23.6], text: 'Pirarucú ⬆' },
   },
   unlockedBy: 'yanchama',
-  next: null, // la última del Amazonas
+  next: null, // the last zone of Amazonas
 };

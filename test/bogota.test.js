@@ -8,8 +8,8 @@ import { routeActive, routeRegion } from '../src/sim/routes.js';
 import { routeFlow } from '../src/sim/analysis.js';
 import { ZONES_BY_ID } from '../src/data/zones/index.js';
 
-// Bogotá (v4.5): la región sin fuente propia, donde todo llega en tractomula con carga que no se acaba. Desde la v4.6,
-// una red de estaciones en vez de barrios.
+// Bogotá (v4.5): the region with no native source, where everything arrives by tractomula with endless cargo. Since v4.6,
+// a station network instead of neighborhoods.
 
 test('la partida de Bogotá tiene sus tractomulas, y ninguna otra región las tiene', () => {
   const s = createInitialState(0, 'bogota');
@@ -30,7 +30,7 @@ test('la tractomula trae carga sin bodega de origen y el Tostadero produce', () 
   assert.ok(s.stats.imported.coffee_bag > 0, 'llegó café');
   assert.ok(s.stats.produced.cafe_capitalino > 0, 'se tostó café');
   assert.ok(s.coins > 0, 'se vendió algo');
-  // La ruta no depende de ninguna bodega: lo que mueve es lo que pide la estación (hasta lo que lleva).
+  // Route doesn't depend on any warehouse: moves what the station requests (up to carry capacity).
   assert.ok(routeFlow(s, 'tm_cafe') > 0);
 });
 
@@ -54,14 +54,14 @@ test('en red (v4.6): al empezar se pueden construir varias a la vez, baratas, y 
   assert.deepEqual(start, ['despensa_zona_g', 'toldo_tejidos', 'puesto_flores', 'puesto_frutas', 'cafeteria_septima']);
   for (const id of start) assert.ok(STATIONS_BY_ID[id].unlockCost <= 12000, id);
   s.coins = 1e9;
-  // La Fritanga junta lo de tres estaciones: pide las tres (y la de su entrada).
+  // Fritanga combines goods from three stations: requests all three (plus its input's).
   assert.deepEqual(suppliersOf('fritanga_plaza').sort(), ['cocina_entradas', 'despensa_zona_g', 'pescaderia_plaza']);
   const q = quoteUnlock(s, 'fritanga_plaza');
   assert.equal(q.reason, 'order');
   const game = new Game(s);
   for (const id of ['despensa_zona_g', 'puesto_frutas', 'cocina_entradas', 'pescaderia_plaza']) assert.ok(game.unlock(id), id);
   assert.ok(buildableStations(s, 'bogota').includes('fritanga_plaza'));
-  // Lo del centro es lo más caro.
+  // Downtown goods are the most expensive.
   assert.ok(STATIONS_BY_ID.gran_feria.unlockCost >= 1e9);
 });
 

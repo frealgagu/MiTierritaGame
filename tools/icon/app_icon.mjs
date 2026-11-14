@@ -1,12 +1,12 @@
-// Ícono de Encantos de Mi Tierrita (v3.62): el mapa de Colombia con las regiones del juego de su color y, a su
-// alrededor, el sombrero vueltiao, la palmera, la mata de café y la mazorca de cacao. Devuelve el SVG
-// (512 × 512). Lo usa tools/icon/build_app_icon.mjs para sacar todos los tamaños (web, Android y Play Store).
+// App icon for Encantos de Mi Tierrita (v3.62): Colombia map with game regions in their colors and,
+// around it, the sombrero vueltiao, palm tree, coffee plant, and cacao pod. Returns the SVG
+// (512 × 512). Used by tools/icon/build_app_icon.mjs to generate all sizes (web, Android, Play Store).
 import { DEPARTMENTS } from '../../src/data/colombiaMap.js';
 
 const INK = '#3a2418';
 const REGION_COLOR = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a' };
 
-// Caja de todos los departamentos (en las unidades del mapa).
+// Bounding box of all departments (in map units).
 const box = (() => {
   const b = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
   for (const d of DEPARTMENTS) {
@@ -32,7 +32,7 @@ const map = (t) => `<g transform="${t}">
 
 const cherry = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r + 3}" fill="${INK}"/><circle cx="${x}" cy="${y}" r="${r}" fill="#d7263d"/><circle cx="${x - r * 0.35}" cy="${y - r * 0.35}" r="${r * 0.3}" fill="#ff8a8a"/>`;
 
-// Sombrero vueltiao: el ala ancha y la copa, con las franjas negras y beige de la caña flecha.
+// Sombrero vueltiao: wide brim and crown, with the black and beige stripes of caña flecha.
 const sombrero = (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k})">
   <ellipse cx="0" cy="12" rx="62" ry="20" fill="${INK}"/>
   <ellipse cx="0" cy="10" rx="57" ry="16" fill="#efe0b4"/>
@@ -43,7 +43,7 @@ const sombrero = (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k})">
   <path d="M-22 -14 Q0 -8 22 -14" fill="none" stroke="#2b2018" stroke-width="3"/>
 </g>`;
 
-// Palmera de coco: el tronco curvo con sus anillos y las hojas abiertas, con dos cocos.
+// Coconut palm: curved trunk with rings, open fronds, and two coconuts.
 const palm = (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k})">
   <path d="M6 0 Q-6 -50 10 -100" fill="none" stroke="${INK}" stroke-width="16" stroke-linecap="round"/>
   <path d="M6 0 Q-6 -50 10 -100" fill="none" stroke="#a1887f" stroke-width="10" stroke-linecap="round"/>
@@ -52,7 +52,7 @@ const palm = (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k})">
   <circle cx="2" cy="-96" r="9" fill="#6d4c41" stroke="${INK}" stroke-width="4"/><circle cx="18" cy="-94" r="9" fill="#7a5a2e" stroke="${INK}" stroke-width="4"/>
 </g>`;
 
-// Rama de café: el tallo, dos hojas y las cerezas rojas.
+// Coffee branch: stem, two leaves, and red cherries.
 const coffee = (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k})">
   <path d="M0 70 Q-4 20 8 -40" fill="none" stroke="#6b4a2e" stroke-width="9" stroke-linecap="round"/>
   <path d="M4 10 Q-46 -6 -56 -46 Q-8 -40 4 10 Z" fill="#43a047" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
@@ -60,7 +60,7 @@ const coffee = (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k})">
   ${cherry(-12, 40, 11)}${cherry(10, 50, 11)}${cherry(-2, 62, 10)}
 </g>`;
 
-// Mazorca de cacao: alargada, con sus surcos, de color naranja rojizo, con una hoja.
+// Cacao pod: elongated, grooved, reddish-orange, with one leaf.
 const cacao = (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k}) rotate(-30)">
   <path d="M-10 -38 Q30 -62 52 -40 Q30 -28 -10 -38 Z" fill="#2e7d32" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>
   <ellipse cx="0" cy="0" rx="50" ry="30" fill="${INK}"/>
@@ -71,11 +71,11 @@ const cacao = (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k}) rotat
   <ellipse cx="-14" cy="-12" rx="14" ry="5" fill="#f2b05a" opacity=".8"/>
 </g>`;
 
-// El fondo: cielo claro que baja a un crema cálido.
+// Background: light sky fading to warm cream.
 const background = `<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe6f2"/><stop offset="1" stop-color="#fdf3dc"/></linearGradient></defs>
 <rect width="512" height="512" fill="url(#bg)"/>`;
 
-// La figura: el mapa en el centro y lo demás alrededor, más pequeño.
+// Foreground figure: map centered and the other elements around it, smaller.
 export const figure = () => `
   ${map(fit(150, 58, 212, 396))}
   ${sombrero(118, 132, 0.95)}
@@ -83,8 +83,8 @@ export const figure = () => `
   ${coffee(404, 232, 0.95)}
   ${cacao(392, 392, 0.85)}`;
 
-// Ícono completo; withBackground false: solo la figura (la capa de adelante del ícono adaptable de Android).
-// scale: la figura más pequeña, centrada (Android recorta el ícono adaptable en círculo o gota).
+// Full icon; withBackground false: foreground only (Android adaptive icon foreground layer).
+// scale: smaller figure, centered (Android crops the adaptive icon into a circle or teardrop).
 export function appIconSvg({ withBackground = true, scale = 1 } = {}) {
   const off = (512 - 512 * scale) / 2;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">

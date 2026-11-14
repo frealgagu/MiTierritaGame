@@ -10,7 +10,7 @@ function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-// Partida con las cinco zonas abiertas y todo construido al mismo nivel.
+// Save with all five zones open and everything built at the same level.
 function withMaizal(level = 30) {
   const game = new Game();
   const s = game.state;
@@ -38,7 +38,7 @@ test('a igual nivel, el queso y la mantequilla de la Lechería alcanzan justo pa
   }
   const stand = analyzeChain(s, 'maizal').rows.find((r) => r.id === 'arepa_stand');
   assert.equal(stand.importLimited, null);
-  // Las arepas que hace el Budare son las que gasta el Puesto.
+  // The arepas Budare makes are what Puesto consumes.
   const budare = analyzeChain(s, 'maizal').rows.find((r) => r.id === 'budare');
   assert.ok(Math.abs(stand.capacity - budare.output) < 1e-9);
 });
@@ -46,7 +46,7 @@ test('a igual nivel, el queso y la mantequilla de la Lechería alcanzan justo pa
 test('si el Puesto de arepas, sus arrieros y las dos rutas se frenan entre sí, se recomienda lo más atrasado', () => {
   const game = withMaizal(40);
   const s = game.state;
-  // Así quedó una partida casual de prueba: nada suelto (ni de dos en dos) rendía y se recomendaba la Piladora.
+  // How a casual test playthrough ended up: nothing standalone (nor in pairs) paid off and Piladora was recommended.
   s.stations.arepa_stand.level = 4;
   s.stations.arepa_stand.transport.level = 1;
   s.routes.queso.level = 2;
@@ -100,7 +100,7 @@ test('lo que espera una ruta va en el andén: no llena la bodega ni para la zona
   const { routeReserve } = await import('../src/sim/routes.js');
   const game = withMaizal();
   const s = game.state;
-  // La Ruta de la leche a un nivel alto: carga y media de leche es más de lo que cabe en la bodega.
+  // Milk route at a high level: a load and a half of milk exceeds warehouse capacity.
   s.routes.leche.level = 80;
   s.zones.lecheria.dispatch.level = 5;
   const milk = routeReserve(s, 'lecheria').milk;
@@ -108,7 +108,7 @@ test('lo que espera una ruta va en el andén: no llena la bodega ni para la zona
   s.zones.lecheria.warehouse = { milk };
   s.mules = [];
   assert.equal(warehouseSpace(s, 'lecheria'), warehouseCap(s, 'lecheria'));
-  // Y la Quesera sigue mandando queso a la bodega para la Ruta del queso.
+  // And Quesera keeps sending cheese to the warehouse for the cheese route.
   run(game, 300);
   assert.ok((s.stats.imported.cheese ?? 0) > 0, 'llegó queso al Maizal');
 });

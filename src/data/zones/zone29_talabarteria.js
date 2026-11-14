@@ -1,6 +1,6 @@
-// Mapa de los Llanos · Zona 5: La Talabartería (v3.35). Mismo trazado que las Hormigas, el Sombrero y Las
-// Ruanas: cadena lineal hasta la Tienda llanera, que espera junto a las dos carreteras por las que llegan el
-// pisillo y la cachama ahumada de la Cachamera.
+// Los Llanos Map · Zone 5: La Talabartería (v3.35). Same layout as Las Hormigas, El Sombrero, and Las
+// Ruanas: linear chain up to the Llanero Shop, which waits next to the two roads bringing
+// pisillo and smoked cachama from La Cachamera.
 import { ICON } from '../icons.js';
 
 export const ZONE29 = {
@@ -24,7 +24,7 @@ export const ZONE29 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Acacías ➜',
   muleSpeed: 4,
@@ -32,9 +32,9 @@ export const ZONE29 = {
   routes: {
     pisillos: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Pisillo de la Cachamera' },
     ahumadas: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Cachama ahumada' },
-    // Los recuerdos salen hacia Villavicencio (v3.36).
+    // Souvenirs leave toward Villavicencio (v3.36).
     recuerdos_llano: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'A Villavicencio ➜' },
-    // Los cueros del Hato llanero, para el Saladero (v4.0).
+    // Hides from El Hato Llanero, for the Tannery (v4.0).
     cueros: { road: [[25.9, 1.5], [7.6, 1.5]], sign: [24.2, 0.4], text: '⬅ Cueros del Hato' },
   },
   unlockedBy: 'hato_llanero',

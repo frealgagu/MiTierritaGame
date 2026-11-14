@@ -7,9 +7,9 @@ import UI from '../src/i18n/en/ui.js';
 import UI_PT from '../src/i18n/pt/ui.js';
 import UI_FR from '../src/i18n/fr/ui.js';
 
-// Idiomas (v3.68: inglés; v3.69: portugués de Brasil; v3.70: francés). Cada frase de la interfaz y cada texto del contenido
-// tienen su traducción en cada idioma, con las mismas variables; si alguien agrega una frase y no la
-// traduce, esta prueba lo dice.
+// Languages (v3.68: English; v3.69: Brazilian Portuguese; v3.70: French). Every UI phrase and every content text
+// has its translation in each language, with the same placeholders; if someone adds a phrase and forgets
+// to translate it, this test reports it.
 
 const vars = (s) => [...String(s).matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort().join(',');
 const LANGS = { en: ['inglés', UI], pt: ['portugués', UI_PT], fr: ['francés', UI_FR] };

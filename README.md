@@ -1,90 +1,143 @@
 # Encantos de Mi Tierrita
 
-Juego educativo de cadena de producción ambientado en Colombia: produce, transporta y descubre los encantos de cada región, del café del Eje Cafetero al asaí del Amazonas y la lechona del Tolima. En cada zona, una fuente ilimitada pero lenta alimenta una cadena de estaciones que se mejoran para producir cada vez más, y las zonas se ayudan unas a otras por rutas. Escrito en JavaScript (Vite + PixiJS); también es una app de Android.
+An educational supply-chain idle game set in Colombia: produce, transport, and discover the charms of every region — from Eje Cafetero coffee to Amazonian asaí, Tolima lechona, Sabana roses, and Bogotá's city-wide network. In each zone, an unlimited but slow source feeds a chain of upgradeable stations, and zones supply one another along routes. Written in JavaScript (Vite + PixiJS) and packaged as an Android app with Capacitor.
 
-El diseño completo está en [`docs/GDD.md`](docs/GDD.md).
+The full design document is in [`docs/GDD.md`](docs/GDD.md).
 
-## Jugar
+## Play Online
 
-Versión publicada: **https://frealgagu.github.io/MiTierritaGame/** (se actualiza sola con cada push gracias a `.github/workflows/pages.yml`).
+Live build: **https://frealgagu.github.io/MiTierritaGame/** (automatically deployed on every push via `.github/workflows/pages.yml`).
 
-## Jugar en local
+## Run Locally
 
 ```bash
 npm install
-npm run dev      # abre http://localhost:5173
-npm test         # pruebas de la simulación
-npm run balance  # simula una partida entera (npm run balance -- 6 casual)
-npm run build    # versión para publicar en dist/
+npm run dev           # starts Vite dev server on http://localhost:3000
+npm test              # runs the Node.js simulation & UI test suite
+npm run balance       # simulates a full playthrough (e.g. npm run balance -- 6 casual)
+npm run build         # builds production bundle into dist/
+npm run build:artifact
 ```
 
-## Estado: v1.5 — Zona 6: El Pueblo (juego completo)
+## Current State: v4.7.4 — 10 Regions, 55 Zones
 
-Las seis zonas del juego, cada una se abre al completar la anterior: **La Finca** (café), **El Trapiche** (panela), **La Lechería** (leche, queso, mantequilla y arequipe), **El Cacaotal** (chocolate), **El Maizal** (arepas) y **Salento** (antes «El Pueblo»), el final, donde todo llega de las demás zonas. Al nivel 100 (el máximo) cada estación produce una potencia de 2 por segundo (4.096, 2.048, 1.024, 512 o 256). Todas las zonas abiertas producen a la vez (`npm run balance` simula la partida completa). Novedades de cada versión en [`CHANGELOG.md`](CHANGELOG.md).
+The game covers **10 Colombian regions**, **55 playable zones**, **360 stations**, **373 products**, **129 routes** (including **27 unlimited tractomulas**), **633 research upgrades**, **61 events**, **60 album pages (360 custom stickers)**, and **151 achievements**. All unlocked regions produce simultaneously, even offline (`npm run balance` simulates full runs). Full release history is in [`CHANGELOG.md`](CHANGELOG.md).
 
-- **La Finca**: Cafetal ♾️ → Beneficiadero → Marquesina → Trilladora → Tostadora → Molino → Empacadora → Bodega, más la **Compostera** como rama opcional (la pulpa se vuelve compost y, mientras haya, todo lo que vende la Finca vale un 30 % más).
-- **El Trapiche**: Cañaduzal ♾️ → Molienda → Hornilla → Gaveras → Pulverizadora; el **bagazo** de la Molienda alimenta el fuego de la Hornilla (×2).
-- **La Lechería**: Potrero ♾️ → Pasteurizadora, que **reparte la leche en tres ramas**: Quesera, Descremadora → Batidora y Paila de arequipe. La Paila necesita **panela pulverizada del Trapiche**, que llega por la **Ruta de la panela** (una chiva con su propio nivel).
-- **El Cacaotal**: Cacaotal ♾️ → Cajones de fermentación → Secadero → Tostador → Molino de cacao, que reparte la pasta entre la **Mesa de chocolate** y la **Chocolatería**. Las dos necesitan panela del Trapiche y la Chocolatería además leche de la Lechería: tres zonas trabajando para una.
-- **El Maizal**: Maizal ♾️ → Desgranadora → Piladora → Molino de masa → Budare → **Puesto de arepas**, que hace arepas de queso con el queso y la mantequilla de la Lechería.
-- **Salento** (final): sin fuente propia; seis rutas traen lo que sobra en cada zona. En la plaza, la **Casa del café** recibe las bolsas de la Finca y reparte café de origen entre la **Greca de tintos** (con panela) → **Fonda** (desayunos con arepas de queso) y el **Taller de canastas** (con arequipe) → **Empaque de regalos** (con los dos chocolates) → **Patio de contenedores**. Exportar 7.000 contenedores termina el juego.
-- **Selector de zonas** 🗺️: cada zona con su bodega, su Willys, sus objetivos e investigaciones; las monedas se comparten.
-- **Arrieros** por estación (mulas que van y vuelven; al mismo nivel que su estación llevan todo) y **Willys** que vende en el pueblo; desvío a la bodega cuando una estación no da abasto.
-- **Mejoras** de nivel 1–100 con hitos (nivel 10 ×2, 25 ×2, 50 ×4, 75 ×4, 100 ×8), **investigaciones** únicas, **objetivos** con recompensa y un final por zona (el del juego: 7.000 contenedores de exportación). **Maestría** (toda una zona al nivel 75: ×4) y **Supremacía** (toda al 100: ×8 más). **Segundo final**: tras el primero, todas las estaciones al nivel 100; entonces se puede volver a empezar con la producción ×2 (×4, ×8… en cada reinicio, hasta ×2³² a los 32 reinicios; se ve abajo a la derecha).
-- **Guía**: mejora recomendada, flecha en el mapa, vista «La cadena» con el cuello de botella en rojo.
-- **Eventos** 🏅: cada zona tiene su evento (la broca, la gran molienda, la feria ganadera… y los seis de Santander) en un tablero aparte, con su propio reloj. Hay dos a la vez en todo el juego, nunca de la misma región; al terminar uno, su cupo descansa 2 años del juego. Dentro del evento se puede pausar, reiniciar o terminar, y al ganarlo quedarse mirando (o pausarlo) hasta tocar «Terminar»; ganado, ya no se reinicia. Según lo rápido que se cumpla el objetivo, medalla de oro, plata o bronce (para ganarlo, además, hay que comprar las tres mejoras del evento) y Renombre ⭐, que no se pierde al reiniciar y se gasta en el álbum, la decoración y las horas sin conexión. Cada región tiene su álbum, su decoración, sus logros y su jornada; con el álbum de una región lleno se compra un segundo Willys para ella, que vende el doble.
-- **Jornada y temporadas**: se trabaja de 6:00 a 12:00 y de 14:00 a 20:00 (con Renombre ⭐ se compran más horas, de 2 en 2, hasta las 24 h); el año tiene verano, entrada de aguas, invierno y veranillo, que suben o bajan la producción (toca el reloj para ver el calendario).
-- **Vida**: edificios que evolucionan con los hitos, día y noche, lluvia, aves, luciérnagas, efectos y sonido sintetizado.
-- **Guardado** automático, ganancias sin conexión (2 h, hasta 24 h con Renombre; valen para todas las regiones), copia de seguridad exportable.
-- **Instalable en el móvil** (PWA) y jugable sin internet.
-- **Regiones**: al completar Salento se abre **Santander** con sus seis zonas: La Guayabera y su bocadillo veleño, El Tabacal y su tabaco torcido a mano, La Fiquera con sus costales, alpargatas y tercios de tabaco, El Hato con su carne oreada, Las Hormigas, que solo se cosechan en la entrada de aguas, y Barichara, donde todo termina en excursiones por el Camino Real, con su propia economía; todas las regiones producen a la vez. Al completar Barichara se abre **La Costa**, con El Arrozal (arroz de Montería y Mompox), El Cocal (leche de coco y cocadas), La Ciénaga (pescado salado, frito y en coco), La Quesera (queso costeño, mote y bandeja costeña), El Sombrero (sombrero vueltiao) y Cartagena, donde todo termina en paseos a las Islas del Rosario, con su cumbia, sus seis eventos, su álbum y sus logros. Al completar Cartagena se abre **Boyacá**, con El Papal (papitas criollas), La Cervecería, Ráquira (ollas y jarras de barro), Paipa (queso Paipa y amasijos), Las Ruanas (lana y ruanas de Nobsa) y Villa de Leyva, donde todo termina en excursiones al Fósil, con su torbellino, sus seis eventos, su álbum y sus logros. Al completar Villa de Leyva se abren **Los Llanos**, con La Palma (aceite de palma), El Frutal (jugo de maracuyá), La Cachamera (cachama al maracuyá), El Hato llanero (carne a la llanera), La Talabartería (sillas de montar) y Villavicencio, donde todo termina en excursiones a Caño Cristales, con su joropo, sus seis eventos, su álbum y sus logros. Al completar Villavicencio se abre **la Costa Pacífica**, con El Platanal (patacones), La Azotea (el aliño de las hierbas de azotea), La Bahía (pescado seco, pargo ahumado y tapao), El Manglar (arroz con piangua y cazuela de mariscos), El Werregue (los jarrones tejidos por los wounaan) y Buenaventura, donde todo termina en salidas a ver las ballenas, con su chirimía, sus seis eventos, su álbum y sus logros. Al completar Buenaventura se abre **el Amazonas**, con El Asaizal (asaí), El Ajizal (el ají negro), El Lago (pirarucú salado, moqueado y al ají negro), La Casabería (el casabe de yuca brava, el desayuno amazónico y el banquete de la maloca), La Yanchama (la tela de corteza y las máscaras ticuna) y Leticia, donde todo termina en salidas a ver los delfines rosados, con su cumbia amazónica, sus seis eventos, su álbum y sus logros. Al completar Leticia se abre **el Tolima Grande** (v4.0), con Los Achirales (bizcochos de achira), El Café del Huila (café especial y té de cáscara), La Represa de Betania (tilapia), La Lechonería (lechona y desayuno tolimense), La Chamba (loza negra) y Neiva, donde todo termina en salidas a ver las estrellas en la Tatacoa, con su sanjuanero, sus seis eventos, su álbum y sus logros. Desde la v4.0 hay estaciones con dos productos (el segundo sigue su propio camino) y estaciones que juntan dos productos de su misma zona.
-- **Música propia**: un bambuco para el Eje Cafetero y una guabina para Santander, compuestos para el juego y tocados por él mismo, sin archivos (tiple, guitarra y bandola sintetizados con Karplus-Strong).
+### Regions & Progression
+1. **Eje Cafetero** (Zones 1–6): **La Finca** (coffee + optional compost branch), **El Trapiche** (*panela* + bagasse fuel), **La Lechería** (milk branching into cheese, butter, and *arequipe* with *panela* from El Trapiche), **El Cacaotal** (table chocolate and milk chocolate), **El Maizal** (corn and *arepas de queso*), and **Salento** (receives final products from the other five zones up to *Export Containers*).
+2. **Santander** (Zones 7–12, unlocks after Salento): **La Guayabera** (*bocadillo veleño* around Vélez's plaza), **El Tabacal** (cured and hand-rolled tobacco), **La Fiquera** (fique sacks, *alpargatas*, and tobacco bundles), **El Hato** (*carne oreada*, lunches, and *fiambres*), **Las Hormigas** (*hormiga culona*, harvested only during the rainy onset with a large pantry), and **Barichara** (Camino Real excursions to Guane).
+3. **La Costa** (Zones 13–18, unlocks after Barichara): **El Arrozal**, **El Cocal** (coconut milk & *cocadas*), **La Ciénaga** (salted fish, fried fish with *patacón*, and fish in coconut), **La Quesera** (*queso costeño*, *mote de queso*, and *bandeja costeña*), **El Sombrero** (*sombrero vueltiao*), and **Cartagena** (walled city by the Caribbean Sea with boat tours to the Rosario Islands).
+4. **Boyacá** (Zones 19–24, unlocks after Cartagena): **El Papal** (*papitas criollas*), **La Cervecería** (barley to bottled beer, plus spent grain for Paipa), **Ráquira** (clay pots, painted planters, and clay beer mugs), **Paipa** (Paipa cheese and *almojábanas*), **Las Ruanas** (sheep wool and Nobsa *ruanas*), and **Villa de Leyva** (El Fósil excursions).
+5. **Los Llanos** (Zones 25–30, unlocks after Villa de Leyva): **La Palma** (palm oil and palm kernel), **El Frutal** (passion fruit juice), **La Cachamera** (*pisillo*, smoked *cachama*, and *cachama* in passion fruit sauce), **El Hato llanero** (*mamona* / *carne a la llanera*), **La Talabartería** (tooled leather saddles), and **Villavicencio** (Caño Cristales excursions).
+6. **Costa Pacífica** (Zones 31–36, unlocks after Villavicencio): **El Platanal** (*patacones*), **La Azotea** (*hierbas de azotea* seasoning), **La Bahía** (red snapper: dried, smoked, and *tapao*), **El Manglar** (*piangua* rice and seafood casserole), **El Werregue** (Wounaan woven jars), and **Buenaventura** (humpback whale-watching boats).
+7. **Amazonas** (Zones 37–42, unlocks after Buenaventura): **El Asaizal** (*asaí*), **El Ajizal** (*ají negro* cooked in *tucupí*), **El Lago** (*pirarucú*: salted, smoked in *moquén*, and with *ají negro*), **La Casabería** (bitter cassava *casabe*), **La Yanchama** (bark cloth and Ticuna masks), and **Leticia** (pink dolphin river tours).
+8. **Tolima Grande** (Zones 43–48, unlocks after Leticia): **Los Achirales** (*bizcochos de achira*), **El Café del Huila** (specialty coffee + cascara tea byproduct), **La Represa de Betania** (tilapia), **La Lechonería** (pork butcher splitting meat & skin, rejoined into *lechona*, plus *tamal* breakfast), **La Chamba** (hand-burnished black pottery), and **Neiva** (Tatacoa Desert stargazing tours). Introduces **dual-output stations** (sending a second product through a chute) and **joining stations** (combining two local products within the same zone).
+9. **Cundinamarca** (Zones 49–54, unlocks after Neiva): **Las Flores de la Sabana**, **Los Freseros de Sibaté** (strawberries & cream + jam from second-grade berries), **Las Truchas de Guatavita** (rainbow trout), **Las Salinas de Nemocón** (salt pans, carved salt figures, and gift baskets), **La Cocina de la Sabana** (*ajiaco santafereño*), and **Zipaquirá** (Salt Cathedral entrance).
+10. **Bogotá** (Zone 55, unlocks after Zipaquirá): A single large 52×52 tile **supply network** (`network: true`) with **24 stations**, **27 unlimited tractomulas** bringing iconic food and crafts from the other nine regions, three chute byproducts (*café molido*, *chicharrón*, *caldo de costilla*), decorative **TransMilenio** articulated buses running along Caracas, NQS, and Calle 80, six neighborhood events plus a seventh city-wide **La Gran Feria** event.
+11. **San Andrés (Upcoming Special Zone)**: Shown at the bottom of the region list (`⭐ Special zone`) tracking how many regions have reached the second ending or restarted.
 
-### App de Android
-El mismo juego empaquetado con [Capacitor](https://capacitorjs.com) (como Melvor Idle): va dentro de la app, funciona sin internet y el botón «atrás» cierra ventanas o pasa la app a segundo plano. Para generar el APK hace falta Java 21 y el Android SDK (plataforma 36):
+### Core Systems & Recent Features
+- **Interactive Colombia Map & Travel (`src/ui/ZoneMap.js`)**: Zoomable vector map with regional focus, real airport locations, animated Willys & bush-plane travel between regions, or instant **⚡ Direct** switching (configurable in ⚙️ Settings).
+- **Upgrades, Milestones & Endgame**:
+  - Station levels 1–100 with milestone speed multipliers (Lv. 10 ×2, 25 ×2, 50 ×4, 75 ×4, 100 ×8) so maxed stations output clean powers of 2 per second; **Mastery** (all Lv. 75: ×4) and **Supremacy** (all Lv. 100: ×8).
+  - **Carriers** per station (mules that upgrade visually to **color-coded electric conveyor belts** at Lv. 50), **Willys** dispatch (with **Second Willys** unlockable per region), **Chivas** between zones (upgradeable to 30 s and 15 s intervals with Renown after completing the album and restarting once), and automatic overflow detour to the warehouse (reserving 30% space for final goods).
+  - **Second Ending & Prestige Resets**: Completing all stations, carriers, routes (Lv. 100), goals, and research in a region unlocks restarting that region with doubled production, stacking up to **×2⁶⁰ (×1.15Qi, 60 restarts)**; coin cap is **999Dc** (`999e33`) to avoid scientific notation.
+- **Chain Diagram & Guidance (`src/ui/ChainView.js`, `src/ui/MoneyView.js`)**:
+  - Color-coded product pipes, bottleneck highlighting, **🏗️ Build** bulk station construction, **⬆️ All to level X** milestone bulk upgrade (unlocked with 10 ⭐ after first restart), smart **Recommended Upgrade**, and **💰 Where the money comes from** breakdown modal.
+- **Events & Renown (`src/sim/events.js`, `src/sim/renown.js`)**:
+  - Separate event boards (Lv. 50 cap, independent clock up to `999:59` / `∞`, foldable header on mobile) with **2 global slots** (never two from the same region, 2-year cooldown).
+  - Configurable leave behavior (**⏸️ Pause** or **🚪 Leave** so events continue ticking in the background up to your offline cap); winning grants Bronze/Silver/Gold medals, **Renown ⭐**, and **Prestige** (lifetime Renown earned).
+  - **🔁 Events on demand (v4.7.3)**: Once every event in a region has Gold, automatic random spawns stop there; spending **20 ⭐** per region unlocks replaying any event on demand at any time (max 2 open boards at once).
+  - **Album, Decor & Pets**: 60-page regional sticker album (360 stickers), customizable Willys/chiva/mule/bunting colors, plus regional **cats** (5 ⭐) and **parrots** (8 ⭐).
+- **Workday & Seasons (`src/sim/calendar.js`)**: Work runs 06:00–12:00 and 14:00–20:00 (expandable to 24 h in 2-hour blocks with Renown); 16-day years cycle through *Verano* (×1.2), *Entrada de aguas* (×1.0), *Invierno* (×0.8), and *Veranillo* (×1.0).
+- **Custom Artwork & Icons (`src/data/icons.js`)**: Procedural isometric buildings that evolve per milestone, day/night cycles, rain/fireflies, zone keepers, and **602 custom COLR icons** (`mitierrita-icons.woff2`) plus custom illustrations for all 360 stickers — zero reliance on OS emoji rendering, with tap/hover tooltips (`src/ui/iconTips.js`).
+- **Four Languages (`src/i18n/`)**: Full UI, station, product, lore, album, and event translations in **Spanish, English, Brazilian Portuguese, and French**, with language-aware grammar/articles and decimal formatting.
+- **Saves, File Backup & PWA (`src/backup.js`, `public/sw.js`)**: Auto-save, offline progress (2 h base, expandable to 24 h with Renown across all regions), two-step slide-to-delete confirmation, **Save to file / Open file** backup (with native OS Share sheet on mobile via `@capacitor/filesystem` and `@capacitor/share`), and offline-capable PWA support.
+
+## Original Music & Synthesized Audio
+
+Every region has its own original piece composed in code (`src/audio/songs.js`, synthesized via Karplus-Strong plucked strings and Web Audio in `src/audio/compose.js`, no audio assets bundled inside the app):
+1. Eje Cafetero — *Bambuco de la finca*
+2. Santander — *Guabina del Chicamocha*
+3. La Costa — *Cumbia del arrozal*
+4. Boyacá — *Torbellino del altiplano*
+5. Los Llanos — *Joropo de la sabana*
+6. Costa Pacífica — *Chirimía de San Pacho*
+7. Amazonas — *Cumbia del Amazonas*
+8. Tolima Grande — *Sanjuanero del San Pedro*
+9. Cundinamarca — *Pasillo de la Sabana*
+10. Bogotá — *Danza de La Candelaria*
+
+Stations trigger 17 craft-specific procedural sound effects (`src/audio/Sound.js`), with separate Music and SFX volume sliders in Settings. All 10 regional pieces (MP3 + multi-track MIDI) and 31 sound effects (31 MP3 + 7 MIDI) are published for download in `web/musica/` (at `/musica/` on GitHub Pages, outside the Android package).
+
+## Android App & Google Play
+
+The game is bundled for Android with [Capacitor 8](https://capacitorjs.com) (`android/`): it runs completely offline, handles the hardware Back button to close modals or background the app, supports native file sharing for backups, and checks `version.json` for in-app APK updates (`src/update.js`) when distributed outside Play Store.
+
+Building locally requires Java 21 and Android SDK (platform 36):
 
 ```bash
-npm run android:apk   # compila el juego, lo copia a android/ y genera android/app/build/outputs/apk/debug/app-debug.apk
+npm run android:apk   # builds web bundle, syncs to android/, compiles app-debug.apk
 ```
 
-El APK de depuración se instala directamente en el teléfono (hay que permitir «instalar apps desconocidas»). Para Google Play se genera un AAB (`PLAY_STORE=1 npm run android:sync && cd android && ./gradlew bundleRelease`) firmado con la clave de subida; esa versión no trae el aviso de actualización propio, porque las actualizaciones llegan por la tienda.
+- **CI Publishing (`.github/workflows/pages.yml`)**: Every push to `main` runs `npm test`, builds the web app + `mitierrita.apk`, publishes the downloadable `/musica/` assets + `.zip` bundle to GitHub Pages, and (when `PLAY_UPLOAD_KEYSTORE_*` secrets are configured) builds a Play-ready `mitierrita.aab` (`PLAY_STORE=1 npm run android:sync && cd android && ./gradlew bundleRelease`) with the self-updater disabled.
+- **Test APK signing**: Uses `ANDROID_KEYSTORE_*` repository secrets when set, falling back to `android/app/mitierrita-pruebas.keystore` so test builds upgrade cleanly without losing save data.
+- **Voluntary Tips (`src/tip.js`)**: Play Store builds include voluntary consumable Google Play Billing tips (`tinto`, `arepa`, `almuerzo`) via `@capgo/native-purchases` behind an age/math gate; web builds support `KOFI_URL` when configured.
+- Store listings, screenshots, and privacy policy live in `store/` (`ficha*.md`, `capturas*/`) and `public/privacidad.html`.
 
-**Cada push publica las dos cosas a la vez** (`.github/workflows/pages.yml`): la web en GitHub Pages y el APK en https://frealgagu.github.io/MiTierritaGame/mitierrita.apk (el menú ⚙️ de la web lo enlaza). Los APK de prueba se firman siempre con la misma clave, así que cada versión se instala encima de la anterior sin perder la partida. Si existen los secretos del repositorio (`ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`), se usa esa clave; mientras tanto, temporalmente, la de pruebas guardada en `android/app/mitierrita-pruebas.keystore`. La versión de la app sale de `package.json`. Con cada publicación también sale `version.json` (la versión y sus novedades, del CHANGELOG): la app lo consulta al abrirse y, si hay una más nueva, ofrece descargar el APK (`src/update.js`).
+### Install on Mobile (PWA)
+Open **https://frealgagu.github.io/MiTierritaGame/** and use *Add to Home Screen* (Safari Share menu, or Chrome ⋮ → *Install app*).
 
-**Google Play.** La clave de subida no está en el código: se genera en un computador con `keytool` y se guarda en los secretos del repositorio `PLAY_UPLOAD_KEYSTORE_BASE64` (el archivo .p12 en base64), `PLAY_UPLOAD_KEYSTORE_PASSWORD`, `PLAY_UPLOAD_KEY_ALIAS` y `PLAY_UPLOAD_KEY_PASSWORD`. Con esos secretos, cada push publica también el AAB en https://frealgagu.github.io/MiTierritaGame/mitierrita.aab, listo para subirlo a Play Console. Google firma la app final con su propia clave (Play App Signing), así que si la clave de subida se pierde se puede pedir otra.
+## Origin & Originality
 
-**☕ Invítame un tinto** (`src/tip.js`): solo en la versión de Play, con los cobros de Google (complemento `@capgo/native-purchases`). En Play Console van tres productos de una sola compra con los identificadores `tinto`, `arepa` y `almuerzo` (US$0,99, US$2,99 y US$4,99); el juego los consume al comprarlos, así que se pueden repetir. En la web, el botón aparece cuando `KOFI_URL` tenga el enlace.
+Inspired broadly by visible supply-chain incremental games with isometric toy-like worlds and cargo carriers. All Colombian regional themes, 55 zones, recipes, economy math, code, procedural artwork, custom icon font, album illustrations, writing, and music are original to this project.
 
-La ficha de la tienda (textos, capturas y respuestas de los formularios) está en `store/ficha.md`, y la política de privacidad en `public/privacidad.html`.
+## License
 
-### Instalar en el móvil
-Abre https://frealgagu.github.io/MiTierritaGame/ y usa «Añadir a pantalla de inicio» (Safari: botón Compartir; Chrome: menú ⋮ → «Instalar app»).
+Code, graphics, and music are licensed under [MIT](LICENSE).
 
-## Origen y originalidad
-La idea parte del género de los juegos incrementales de **cadena de producción** (un recurso ilimitado pero lento que alimenta estaciones que se mejoran); del género se tomaron solo ideas generales: la cadena visible y un aspecto isométrico «de juguete» con personajes que llevan cargas. El tema (los productos y las regiones de Colombia), las zonas, las recetas, los números, el código, los dibujos (hechos con código, sin imágenes de otros juegos) y los textos son propios. La música también es propia.
-
-## Licencia
-El código, los gráficos y la música son [MIT](LICENSE).
-
-## Estructura
+## Project Structure
 
 ```
 src/
-├─ core/     bucle de juego, guardado, formato de números
-├─ sim/      simulación pura (se prueba con Node, sin navegador)
-├─ data/     productos, estaciones (las 6 zonas), rutas entre zonas y mapas de las zonas jugables
-├─ render/   dibujo isométrico procedural con PixiJS
-├─ ui/       barra superior, panel de estación, avisos
-└─ assets/   fuente de íconos propios (mitierrita-icons.woff2)
+├─ main.js, boot.js       app startup, locale loading, HUD & scene wiring
+├─ backup.js              file-based save export/import (web & Capacitor Filesystem/Share)
+├─ native.js              Capacitor lifecycle, back button & pause/resume saves
+├─ tip.js, update.js      Play Store / Ko-fi tips & APK version update check
+├─ core/                  Game loop, EventBus, SaveSystem, number formatting, paths, RNG
+├─ sim/                   pure headless simulation (tested in Node without DOM/Pixi)
+├─ data/                  10 regions, 55 zones (zones/zone1..zone55), stations, products,
+│                         routes, research, goals, events, album, logros, icons, Colombia geo map
+├─ render/                procedural isometric rendering with PixiJS v8 (buildings, belts,
+│                         carriers, keepers, pets, weather, day/night, event art, occlusion)
+├─ ui/                    HUD, station panel, chain diagram, Colombia map, money breakdown,
+│                         events, renown/album/logros, icon tooltips, calendar, settings
+├─ audio/                 Web Audio synthesizer (compose.js, Music.js, Sound.js, 10 SONGS)
+├─ i18n/                  Spanish base + English, Portuguese (BR), and French localizations
+└─ assets/                bundled Fredoka font & MiTierrita custom COLR icon font
 tools/
-├─ icons/build_icons.py   genera la fuente de íconos (cereza de café, guarapo, panela, queso campesino…)
-├─ event-bots.js          jugadores automáticos de los eventos
-├─ release-notes.js       novedades del CHANGELOG para version.json (aviso de versión nueva en la app)
-├─ event-sim.js           juega cada objetivo de los eventos con esos bots y propone las medallas
-└─ sprites.html           los vehículos del mapa en grande (npm run dev → /tools/sprites.html)
+├─ balance-sim.js         automated full-run economy & pacing simulator
+├─ event-bots.js          automated event-board player bots
+├─ event-sim.js           calibrates Gold/Silver/Bronze medal targets across all events
+├─ event-idle.js          verifies idle/unassisted event completion times
+├─ i18n-*.mjs             extracts missing code, HTML, and content strings per locale
+├─ music-export.mjs       renders all 10 regional songs to MP3 & multi-track MIDI
+├─ sfx-export.mjs         records Web Audio SFX to MP3 & MIDI
+├─ music-page.mjs         generates the multilingual /musica/ download page
+├─ release-notes.js       extracts version notes from CHANGELOG.md into version.json
+├─ map-coords.mjs         generates docs/coordenadas.html map & airport coordinate verifier
+├─ production-page.mjs    generates docs/produccion.html level 1–100 production tables
+├─ capturas-play.mjs      Playwright screenshot generator for Play Store listings
+├─ artifact-page.mjs      self-contained single-file HTML build helper
+├─ geo/build_map.py       builds src/data/colombiaMap.js from geographic borders
+└─ icons/build_icons.py   compiles custom SVGs into mitierrita-icons.woff2 & src/data/icons.js
+web/musica/               downloadable MP3 & MIDI music and SFX published to GitHub Pages
+public/                   manifest.webmanifest, sw.js, PWA icons, privacy policy, font license
+store/                    Google Play Store metadata & screenshots (es, en, pt, fr)
 ```
 
-Los productos que no tienen un emoji parecido usan íconos propios: una fuente de color (COLR) con
-letras de uso privado, para que sirvan en cualquier texto igual que un emoji. Para cambiarlos o
-agregar uno: `pip install fonttools brotli && python3 tools/icons/build_icons.py` (genera la fuente y
-`src/data/icons.js`).
+For products without a fitting Unicode emoji (or to guarantee uniform visuals across devices), icons live in a custom COLR color font (`src/assets/mitierrita-icons.woff2`) mapped to Private Use Area codepoints. To add or rebuild icons:
+
+```bash
+pip install fonttools brotli && python3 tools/icons/build_icons.py
+```

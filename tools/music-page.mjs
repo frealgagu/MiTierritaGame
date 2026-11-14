@@ -1,8 +1,8 @@
-// La página de descargas de la música y los sonidos (v3.71): web/musica/index.html, en los cuatro idiomas del
-// juego (toma el que se eligió en el juego, si no el del navegador). Lista lo que dejaron
-// tools/music-export.mjs y tools/sfx-export.mjs, con su duración.
+// Music and sound effects download page (v3.71): web/musica/index.html, in the game's four
+// languages (uses the language chosen in the game, falling back to browser locale). Lists outputs from
+// tools/music-export.mjs and tools/sfx-export.mjs, with their duration.
 //   node tools/music-page.mjs
-// El .zip con todo lo arma el flujo de publicación (.github/workflows/pages.yml).
+// The combined .zip is built by the publish workflow (.github/workflows/pages.yml).
 import { execFileSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
 import { SONGS } from '../src/audio/songs.js';
@@ -28,7 +28,7 @@ for (const region of PUBLIC) {
     instruments[lang] = s?.[region]?.[1] ?? SONGS[region].instruments;
     regionName[lang] = r?.[region] ?? REGIONS.find((x) => x.id === region).name;
   }
-  // Los íconos propios del juego (de su fuente, en la zona privada de Unicode) no se ven aquí: un emoji.
+  // Custom game icons (from its font, in the Unicode Private Use Area) don't render here: use an emoji.
   const icon = REGIONS.find((x) => x.id === region).icon;
   songs.push({ file, names, instruments, region: regionName, icon: /[\uE000-\uF8FF]/.test(icon) ? '🐜' : icon, seconds: seconds(`${DIR}${file}.mp3`) });
 }

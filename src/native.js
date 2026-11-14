@@ -1,20 +1,20 @@
-// App de Android (Capacitor, ver capacitor.config.json): el mismo juego dentro de un WebView.
+// Android app (Capacitor, see capacitor.config.json): runs the same game inside a WebView.
 import { Capacitor } from '@capacitor/core';
 import { App } from '@capacitor/app';
 import { t } from './i18n/index.js';
 
 export const isNativeApp = () => Capacitor.isNativePlatform();
 
-//   closeTop: cierra la ventana o el panel abierto y dice si había alguno
-//   onHide / onShow: la app pasa a segundo plano (se guarda) o vuelve (se suma lo producido fuera)
+//   closeTop: closes the topmost open modal or panel and returns whether one was open
+//   onHide / onShow: app moves to background (save) or returns to foreground (catch up offline progress)
 export function bindNative({ closeTop, onHide, onShow }) {
   document.getElementById('save-where').textContent = t('Tu partida se guarda sola en este teléfono.');
-  // «Atrás» cierra lo que esté abierto; si no hay nada, la app pasa a segundo plano (como en un juego,
-  // sin cerrarse ni perder lo que esté produciendo).
+  // Back button closes whatever is open; if nothing is open, sends the app to the background (like a game,
+  // without closing it or losing active production).
   App.addListener('backButton', () => {
     if (!closeTop()) App.minimizeApp();
   });
-  // Al salir de la app se guarda (Android puede cerrarla sin avisar estando en segundo plano).
+  // Save when leaving the app (Android can kill backgrounded apps without warning).
   App.addListener('pause', onHide);
   App.addListener('resume', onShow);
 }

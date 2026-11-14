@@ -1,16 +1,16 @@
-// Pone los textos de un idioma sobre los datos del juego (v3.68), por id: así no hay que tocar cada lugar
-// que usa `.name`. Se llama una vez al arrancar, antes de que el juego lea los datos.
-//   content: lo que trae el idioma, cada parte con su forma corta (ver en/content/*.js):
-//     stations { id: nombre } · products { id: nombre } · productZones { id: nombre }
-//     research { id: [nombre, descripción] } · events { id: [nombre, presentación, aviso, lo que frena] }
-//     eventActions { id: [nombre, descripción] } · medals { gold: 'gold' }
-//     albumPages { id: nombre } · stickers { id: [nombre, texto] } · logros { id: [nombre, texto] }
-//     routes { id: [nombre, vehículo, pestaña] } · zones { id: [nombre, letrero de salida, { ruta: letrero }] }
-//     facts { id: [dato, …] } · people { zona: [nombre, oficio] } · welcome { zona: saludo }
-//     decor { id: [nombre, { opción: nombre }] } · regions { id: nombre } · songs { región: [nombre, instrumentos] }
-//     dispatch: nombre de la bodega · seasons { id: [nombre, corto, texto] }
-//     victory { zona: [título, texto, lo que se cuenta] } · pets { id: [nombre, plural] }
-// Lo que falte se queda en español.
+// Overlay a language's texts onto game data (v3.68), by id: avoids touching every place
+// reading `.name`. Called once at startup before the game reads data.
+//   content: language payload, each section in short form (see en/content/*.js):
+//     stations { id: name } · products { id: name } · productZones { id: name }
+//     research { id: [name, description] } · events { id: [name, intro, notice, blame] }
+//     eventActions { id: [name, description] } · medals { gold: 'gold' }
+//     albumPages { id: name } · stickers { id: [name, text] } · logros { id: [name, text] }
+//     routes { id: [name, vehicle, tab] } · zones { id: [name, exit sign, { route: sign }] }
+//     facts { id: [fact, ...] } · people { zone: [name, role] } · welcome { zone: greeting }
+//     decor { id: [name, { option: name }] } · regions { id: name } · songs { region: [name, instruments] }
+//     dispatch: warehouse name · seasons { id: [name, short, text] }
+//     victory { zone: [title, text, stat] } · pets { id: [name, plural] }
+// Anything missing remains in Spanish.
 import { DISPATCH, STATIONS } from '../data/stations.js';
 import { SEASONS } from '../sim/calendar.js';
 import { PRODUCTS, ZONES as PRODUCT_ZONES } from '../data/products.js';
@@ -27,8 +27,8 @@ import { SONGS } from '../audio/songs.js';
 import { VICTORY } from '../data/victory.js';
 import { PETS } from '../sim/renown.js';
 
-// Pone los campos `fields` de cada objeto de `items` (por su id) con lo que diga `texts[id]`: un texto
-// (el primer campo) o una lista (en orden; null deja el de español).
+// Sets `fields` on each item in `items` (by id) from `texts[id]`: a single string
+// (the first field) or an array (in order; null keeps the Spanish original).
 function patch(items, texts, fields) {
   if (!texts) return;
   for (const item of items) {
@@ -41,7 +41,7 @@ function patch(items, texts, fields) {
   }
 }
 
-// Lo mismo para un objeto con los ids como claves (PRODUCTS, MEDALS).
+// Same helper for an object keyed by ids (PRODUCTS, MEDALS).
 function applyKeyed(obj, texts, fields) {
   for (const [id, v] of Object.entries(texts ?? {})) {
     const item = obj[id];
@@ -59,7 +59,7 @@ export function applyContent(c) {
   patch(PRODUCT_ZONES, c.productZones, ['name']);
   patch(RESEARCH, c.research, ['name', 'desc']);
   patch(EVENTS, c.events, ['name', 'intro', 'announce', 'blame']);
-  // Las compras de los eventos están dos veces: en su evento y en EVENT_ACTIONS_BY_ID (una copia).
+  // Event actions appear twice: inside their event and in EVENT_ACTIONS_BY_ID (a copy).
   patch([...EVENTS.flatMap((e) => e.actions), ...Object.values(EVENT_ACTIONS_BY_ID)], c.eventActions, ['name', 'desc']);
   applyKeyed(MEDALS, c.medals, ['name']);
   patch(ALBUM, c.albumPages, ['name']);

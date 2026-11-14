@@ -11,7 +11,7 @@ import { formatNumber } from '../core/format.js';
 import { t } from '../i18n/index.js';
 
 
-// Etiqueta flotante con nombre y nivel, al estilo de los juegos de gestión.
+// Floating tag with name and level, management-game style.
 export class Label extends Container {
   constructor(text) {
     super();
@@ -32,13 +32,13 @@ export class Label extends Container {
     this.text.text = text;
     const w = this.text.width + 18;
     this.bg.clear().roundRect(-w / 2, -11, w, 22, 11).fill({ color: 0x3a2418, alpha: 0.78 }).stroke({ width: 1.5, color: 0xffffff, alpha: 0.35 });
-    // Todo el letrero se puede tocar (v3.67.6): sin esto el toque pasaba al dibujo de abajo, y un letrero
-    // encima de otra estación abría esa otra. Como los letreros van encima de todo, el letrero gana.
+    // Whole tag clickable (v3.67.6): otherwise taps fell through to artwork below, and a tag
+    // overlapping another station opened that station. Since tags sit on top, tag wins.
     this.hitArea = new Rectangle(-w / 2 - 2, -13, w + 4, 26);
   }
 }
 
-// Base común: contenedor clicable sobre una huella de casillas, con etiqueta e icono de estado.
+// Shared base: clickable container over tile footprint, with label and status icon.
 export class StationView extends Container {
   constructor(x, y, w, h) {
     super();
@@ -47,20 +47,20 @@ export class StationView extends Container {
     this.eventMode = 'static';
     this.cursor = 'pointer';
     this.hitArea = new Polygon(isoPoly([[x, y, 0], [x + w, y, 0], [x + w, y + h, 0], [x, y + h, 0]]));
-    this.footArea = this.hitArea; // solo el terreno (ver Scene.stationAt)
+    this.footArea = this.hitArea; // footprint terrain only (see Scene.stationAt)
     this.highlight = new Graphics();
     this.addChild(this.highlight);
     this.selected = false;
     this.status = new Text({ text: '', style: { fontSize: 22 }, resolution: 3 });
     this.status.anchor.set(0.5);
     this.status.visible = false;
-    // Luces nocturnas (ventanas, faroles): la escena pone esta capa sobre el tinte de la noche.
+    // Night lights (windows, lamps): scene places this layer over night tint.
     this.lightLayer = new Container();
     this.lights = [];
     this.lightsDirty = true;
   }
 
-  // Reconstruye los puntos de luz con una textura de halo suave.
+  // Rebuilds glow sprites using soft radial texture.
   buildLights(texture) {
     this.lightsDirty = false;
     this.lightLayer.removeChildren().forEach((c) => c.destroy());
@@ -81,9 +81,9 @@ export class StationView extends Container {
     if (icon && this.status.text !== icon) this.status.text = icon;
   }
 
-  // Zona que se puede tocar (v3.67): la huella y todo lo que se levanta sobre ella hasta `h` (el edificio, los
-  // árboles), no solo el terreno. Antes había que tocar el piso de la estación (en el Cafetal, las matas de
-  // abajo) y un toque en el techo no hacía nada.
+  // Hit area (v3.67): footprint plus everything rising above it up to height `h` (building,
+  // trees), not floor alone. Previously clicking Cafetal's roof did nothing unless lower tiles were tapped.
+  // lower bushes were tapped.
   setHitHeight(h) {
     const { x, y, w, h: d } = this.foot;
     const pts = [];
@@ -94,8 +94,8 @@ export class StationView extends Container {
     this.hitArea = new Polygon(hull(pts).flat());
   }
 
-  // ¿El punto (global) cae en algo dibujado de la estación (el edificio, los árboles, el letrero de la
-  // parcela)? Sin contar el resaltado de la selección (v3.67.6).
+  // Does global point hit any drawn station art (building, trees, lot sign)? Excludes
+  // selection highlight (v3.67.6).
   drawnAt(global) {
     const hit = (node) => {
       if (!node.visible || node === this.highlight) return false;
@@ -105,7 +105,7 @@ export class StationView extends Container {
     return this.children.some(hit);
   }
 
-  // Punto de anclaje para etiquetas y efectos.
+  // Anchor point for labels and floating effects.
   anchorPoint(h = 60) {
     const { x, y, w, h: d } = this.foot;
     return iso(x + w / 2, y + d / 2, h);
@@ -125,14 +125,14 @@ export class StationView extends Container {
   }
 }
 
-// Fuente ilimitada de la zona: Cafetal (cafetos), Cañaduzal (caña) o Potrero (vacas), con la casa que crece.
+// Zone unlimited source: Cafetal (bushes), Cañaduzal (cane), or Potrero (cows), with growing house.
 export class FarmView extends StationView {
   constructor(zone, def) {
     const f = zone.farm;
     super(f.x, f.y, f.w, f.h);
     this.zoneFarm = f;
     this.theme = zone.theme;
-    this.zoneStyle = zone.style; // 'barichara': el Pueblo, pero blanco y de piedra (v3.5)
+    this.zoneStyle = zone.style; // 'barichara': Pueblo style, whitewashed stone instead (v3.5)
     this.def = def;
     this.art = new Graphics();
     this.addChild(this.art);
@@ -143,13 +143,13 @@ export class FarmView extends StationView {
 
   sync(state) {
     const farm = state.stations[this.def.id];
-    // En el tablero de un evento de otro barrio de Bogotá (v4.5) el Tostadero no está: no se dibuja.
+    // On Bogotá event board for another neighborhood (v4.5) Tostadero isn't present: skip drawing.
     this.visible = this.label.visible = Boolean(farm);
     if (!farm) return;
     const tier = milestoneTier(farm.level);
     if (tier !== this.tier) this.draw(tier);
     this.label.set(`${this.def.icon} ${this.def.name} · ${t('Nv')} ${farm.level}`);
-    // Cosecha de temporada (v3.4): mientras se cosecha, las reinas vuelan sobre los hormigueros.
+    // Seasonal harvest (v3.4): while harvesting, queens swarm above ant nests.
     this.swarming = Boolean(this.def.harvest) && farm.status === 'working';
   }
 
@@ -191,21 +191,21 @@ export class FarmView extends StationView {
       this.drawMangrove(g, tier, rng);
       return;
     }
-    // La Bahía (v3.40) y El Lago (v3.49): el agua, con las mismas canoas de pescadores de la Ciénaga.
+    // Bahía (v3.40) and Lago (v3.49): water using same fishing canoes as Ciénaga.
     if (this.theme === 'cienaga' || this.theme === 'bay' || this.theme === 'lake') {
       this.drawLagoon(g, tier, rng);
       return;
     }
-    // Cafetos (o caña) en filas; con cada hito son más grandes.
+    // Coffee bushes (or cane) in rows; grow taller at milestones.
     const scale = 0.75 + tier * 0.1;
     for (let gx = x; gx < x + w; gx++) {
       for (let gy = y; gy < y + h; gy++) {
-        if (gx < x + 2 && gy < y + 2) continue; // sitio de la casa
+        if (gx < x + 2 && gy < y + 2) continue; // house plot
         if (this.theme === 'ponds') {
           drawPondTile(g, gx, gy, x, y, rng, tier);
           continue;
         }
-        // Los cacaos son más grandes: uno por casilla.
+        // Cacao trees are larger: one per tile.
         for (const ox of this.theme === 'cacao' || this.theme === 'guava' || this.theme === 'ants' || this.theme === 'coconut' || this.theme === 'clay' || this.theme === 'palm' || this.theme === 'plantain' || this.theme === 'azotea' || this.theme === 'werregue' || this.theme === 'asai' || this.theme === 'chagra' || this.theme === 'yanchama' || this.theme === 'fruit' || this.theme === 'hides' || this.theme === 'achira' || this.theme === 'salt' ? [0.5] : [0.28, 0.75]) {
           const p = iso(gx + ox, gy + 0.5);
           this.bushes.push(p);
@@ -243,8 +243,8 @@ export class FarmView extends StationView {
     if (this.theme === 'roses' || this.theme === 'strawberry') this.drawGreenhouses(g, tier, this.theme === 'strawberry' ? 22 : 34);
   }
 
-  // Las Flores de la Sabana (v4.4): naves de plástico a lo largo de las filas de rosales, de dos casillas de ancho;
-  // con los hitos se cubren más filas. Transparentes, para que se vean las rosas adentro.
+  // Flores de la Sabana (v4.4): clear greenhouses spanning rose rows, two tiles wide;
+  // more rows covered at milestones. Translucent so roses stay visible inside.
   drawGreenhouses(g, tier, H = 34) {
     const { x, y, w, h } = this.zoneFarm;
     const naves = [];
@@ -268,20 +268,20 @@ export class FarmView extends StationView {
     }
   }
 
-  // Ciénaga (v3.17): el agua, un muelle de tablas junto a la casa y las canoas de los pescadores (con cada
-  // hito, más canoas). Las canoas se mecen y los pescadores tiran la atarraya (ver drawBoats).
+  // Ciénaga (v3.17): water, plank dock by house, and fishing canoes (more at milestones).
+  // Canoes rock gently while fishermen cast nets (see drawBoats).
   drawLagoon(g, tier, rng) {
     const { x, y, w, h } = this.zoneFarm;
-    // Muelle de tablas.
+    // Wooden plank dock.
     for (let k = 0; k < 6; k++) box(g, x + 2.1 + k * 0.32, y + 0.9, 0.28, 0.6, 2, k % 2 ? PAL.wood : PAL.woodDark);
     for (const [px, py] of [[2.1, 0.9], [3.95, 0.9], [2.1, 1.45], [3.95, 1.45]]) box(g, x + px, y + py, 0.06, 0.06, 3, PAL.woodDark);
-    // Una canoa amarrada al muelle.
+    // Moored canoe by dock.
     this.boats = [{ gx: x + 3.4, gy: y + 1.85, flip: 1, phase: 0, moored: true }];
     const n = 3 + Math.min(tier, 4);
     for (let i = 0; i < 60 && this.boats.length < n + 1; i++) {
       const gx = x + 0.8 + rng() * (w - 1.6);
       const gy = y + 0.8 + rng() * (h - 1.6);
-      if (gx < x + 4.4 && gy < y + 2.6) continue; // la casa y el muelle
+      if (gx < x + 4.4 && gy < y + 2.6) continue; // house and dock
       if (this.boats.some((b) => Math.hypot(b.gx - gx, b.gy - gy) < 1.3)) continue;
       this.boats.push({ gx, gy, flip: rng() < 0.5 ? -1 : 1, phase: rng() * 6 });
     }
@@ -289,7 +289,7 @@ export class FarmView extends StationView {
       const p = iso(b.gx, b.gy);
       this.bushes.push({ x: p.x, y: p.y - 6 });
     }
-    // En Betania (v4.0), las jaulas flotantes de la tilapia: marcos de tubo con su malla y sus boyas (más con los hitos).
+    // In Betania (v4.0), floating tilapia cages: pipe frames with net and floats (more at milestones).
     if (this.zoneStyle === 'betania') {
       const cages = [[3.2, 3.4], [4.6, 3.4], [3.2, 4.8], [4.6, 4.8], [1.8, 4.8], [1.8, 3.4]].slice(0, 2 + Math.min(tier, 4));
       for (const [cx, cy] of cages) {
@@ -306,7 +306,7 @@ export class FarmView extends StationView {
     }
   }
 
-  // Las canoas: se mecen en el agua; el pescador lanza la atarraya y la recoge.
+  // Canoes rock on water; fisherman throws cast net and hauls it back.
   drawBoats(t) {
     if (!this.boatLayer) this.addChild((this.boatLayer = new Graphics()));
     const g = this.boatLayer.clear();
@@ -320,14 +320,14 @@ export class FarmView extends StationView {
       g.moveTo(cx - 16 * f, cy - 4).quadraticCurveTo(cx, cy + 5, cx + 16 * f, cy - 4).lineTo(cx + 13 * f, cy).quadraticCurveTo(cx, cy + 7, cx - 13 * f, cy).closePath().fill(0x8d5a32).stroke(OUTLINE);
       g.moveTo(cx - 14 * f, cy - 3).quadraticCurveTo(cx, cy + 3, cx + 14 * f, cy - 3).stroke({ width: 1, color: 0x5d3a1e });
       if (b.moored) continue;
-      // El pescador, de pie, con su sombrero.
+      // Standing fisherman with hat.
       const mx = cx - 4 * f;
       g.rect(mx - 2, cy - 11, 1.6, 9).fill(0x37474f);
       g.rect(mx + 0.6, cy - 11, 1.6, 9).fill(0x37474f);
       g.roundRect(mx - 3, cy - 19, 6, 9, 2).fill(0xf4efe6);
       g.circle(mx, cy - 21.5, 2.6).fill(0x8d5524);
       g.ellipse(mx, cy - 23.5, 5, 1.4).fill(0xf4e3b5);
-      // La atarraya: se abre en el aire y cae al agua; luego la recoge.
+      // Cast net: spreads mid-air, splashes down, then reels in.
       const k = ((t * 0.35 + b.phase) % 1);
       if (k < 0.5) {
         const open = Math.sin(k * 2 * Math.PI) * 0.5 + 0.5;
@@ -346,14 +346,14 @@ export class FarmView extends StationView {
     }
   }
 
-  // El Manglar (v3.41): los mangles al fondo y las orillas, el barro de la marea baja y las piangüeras que
-  // sacan la concha con la mano y la echan al canasto (con cada hito, más piangüeras; ver drawPickers).
+  // Manglar (v3.41): mangroves along background and shores, low-tide mudflats, and piangüeras
+  // digging cockles by hand into back baskets (more workers at milestones; see drawPickers).
   drawMangrove(g, tier, rng) {
     const { x, y, w, h } = this.zoneFarm;
     for (let gx = x; gx < x + w; gx++) {
       for (let gy = y; gy < y + h; gy++) {
-        if (gx < x + 2 && gy < y + 2) continue; // la casa
-        const edge = gx === x || gy === y; // los bordes del fondo, para no tapar a las piangüeras
+        if (gx < x + 2 && gy < y + 2) continue; // house
+        const edge = gx === x || gy === y; // back edges first so pickers render cleanly in front
         if (edge ? rng() < 0.7 : rng() < 0.12) {
           const p = iso(gx + 0.5, gy + 0.5);
           this.bushes.push(p);
@@ -375,7 +375,7 @@ export class FarmView extends StationView {
     }
   }
 
-  // Las piangüeras: agachadas en el barro, con el canasto a la espalda; meten la mano y echan la concha.
+  // Piangüeras crouched in mud with basket on back; reach down and toss shell behind.
   drawPickers(t) {
     if (!this.pickerLayer) this.addChild((this.pickerLayer = new Graphics()));
     const g = this.pickerLayer.clear();
@@ -392,36 +392,36 @@ export class FarmView extends StationView {
       g.moveTo(p.x, p.y - 8).lineTo(hx, hy).stroke({ width: 5, color: b.shirt, cap: 'round' });
       g.circle(hx + 2 * f, hy - 1, 2.6).fill(0x4e342e);
       g.ellipse(hx + 2 * f, hy - 3, 2.8, 1.4).fill(0xf7f4ee);
-      // El canasto (la catanga) a la espalda.
+      // Back basket (catanga).
       g.poly([p.x - 6 * f, p.y - 16, p.x - 1 * f, p.y - 16, p.x - 2 * f, p.y - 9, p.x - 5 * f, p.y - 9]).fill(0xc8a26a).stroke({ width: 0.6, color: 0x3a2418 });
       if (k < 0.6) g.moveTo(hx, hy + 1).lineTo(hx + 3 * f, p.y - 1).stroke({ width: 1.2, color: 0x4e342e });
       else g.circle(p.x - 3.5 * f, p.y - 17 - (k - 0.6) * 8, 1.3).fill(0x2b2622);
     }
   }
 
-  // Potrero: cerca de madera, bebedero, cantinas de leche y vacas; con cada hito, más vacas.
+  // Potrero: wooden fence, water trough, milk cans, and cows; more cows at milestones.
   drawPasture(g, tier, rng) {
     const { x, y, w, h } = this.zoneFarm;
-    // Bebedero y cantinas junto a la casa.
+    // Water trough and cans by house.
     box(g, x + 2.2, y + 0.3, 1.2, 0.35, 6, 0x9aa3a8);
     const water = iso(x + 2.8, y + 0.47, 6);
     g.ellipse(water.x, water.y, 12, 3).fill(0x6fa8dc);
     if (this.theme === 'sheep') {
-      // En las Ruanas (v3.26), en vez de cantinas, los bultos de lana trasquilada.
+      // In Ruanas (v3.26), wool sacks instead of milk cans.
       for (const [cx, cy] of [[0.45, 2.3], [0.85, 2.45], [1.2, 2.3]]) {
         const p = iso(x + cx, y + cy);
         g.ellipse(p.x, p.y - 5, 7, 5.5).fill(0xece4cf).stroke(OUTLINE);
         for (const [dx, dy] of [[-3, -7], [2, -8], [0, -4]]) g.circle(p.x + dx, p.y + dy, 2).fill(0xfbfaf6);
       }
     } else if (this.theme === 'pigs') {
-      // En la Lechonería (v4.0), la canoa de madera con la comida de los cerdos y un charco grande de barro.
+      // In Lechonería (v4.0), wooden pig trough and big mud puddle.
       box(g, x + 0.3, y + 2.2, 1.1, 0.3, 5, PAL.wood);
       g.poly(isoPoly([[x + 0.35, y + 2.25, 5], [x + 1.35, y + 2.25, 5], [x + 1.35, y + 2.45, 5], [x + 0.35, y + 2.45, 5]])).fill(0xd9b65a);
       const mud = iso(x + w * 0.6, y + h * 0.55);
       g.ellipse(mud.x, mud.y, 40, 16).fill({ color: 0x6b4a2e, alpha: 0.85 });
       g.ellipse(mud.x - 6, mud.y - 2, 14, 4).fill({ color: 0x8d6e4a, alpha: 0.6 });
     } else if (this.theme === 'ranch') {
-      // En el Hato, en vez de cantinas, el saladero del ganado: una canoa de madera con sal.
+      // In Hato, wooden cattle salt trough instead of cans.
       box(g, x + 0.3, y + 2.2, 1.0, 0.3, 5, PAL.wood);
       g.poly(isoPoly([[x + 0.35, y + 2.25, 5], [x + 1.25, y + 2.25, 5], [x + 1.25, y + 2.45, 5], [x + 0.35, y + 2.45, 5]])).fill(0xf4f1e8);
     } else {
@@ -436,17 +436,17 @@ export class FarmView extends StationView {
     for (let i = 0; i < 60 && cows.length < n; i++) {
       const gx = x + 0.6 + rng() * (w - 1.2);
       const gy = y + 0.6 + rng() * (h - 1.2);
-      if (gx < x + 2.6 && gy < y + 2.8) continue; // sitio de la casa
+      if (gx < x + 2.6 && gy < y + 2.8) continue; // house plot
       if (cows.some(([cx, cy]) => Math.hypot(cx - gx, cy - gy) < 0.9)) continue;
       cows.push([gx, gy]);
     }
-    // Las vacas se mueven por el potrero (ver Critters.js); aquí solo cuántas son y dónde salta la leche.
+    // Cows roam pasture (see Critters.js); here tracks count and milk jump origin.
     this.cowCount = cows.length;
     for (const [gx, gy] of cows) {
       const p = iso(gx, gy);
       this.bushes.push({ x: p.x, y: p.y - 4 });
     }
-    // Cerca alrededor del potrero (delante de las vacas).
+    // Fence around pasture (in front of cows).
     const fence = [[x, y + h], [x + w, y + h], [x + w, y]];
     for (let i = 1; i < fence.length; i++) {
       const [ax, ay] = fence[i - 1];
@@ -464,12 +464,12 @@ export class FarmView extends StationView {
     }
   }
 
-  // Plaza del Pueblo: la Casa del café en la esquina, con mesas afuera, una fuente en el centro,
-  // guayacanes, bancas, faroles y gente. Con cada hito, más mesas y la casa más alta.
+  // Pueblo plaza: corner Casa del café with outdoor tables, central fountain,
+  // guayacán trees, benches, streetlamps, and crowd. Milestones add tables and floors.
   drawPlaza(g, tier, rng) {
     const { x, y, w, h } = this.zoneFarm;
     this.lights = drawCoffeeHouse(g, x, y, tier, PLAZA_HOUSE[this.zoneStyle ?? 'pueblo']);
-    // Mesas con parasol delante de la casa: de ahí salta el café de origen.
+    // Umbrella tables outside café: origin of popping single-origin coffee.
     const tables = [[0.6, 2.6], [1.5, 2.7], [2.6, 0.6], [2.7, 1.5], [2.5, 2.5], [0.6, 3.5], [3.5, 0.6]].slice(0, 3 + Math.min(tier, 4));
     for (const [tx, ty] of tables) {
       const p = iso(x + tx, y + ty);
@@ -506,37 +506,37 @@ export class FarmView extends StationView {
       g.rect(p.x - 4, p.y - 38, 8, 8).fill(0xffd27a).stroke({ width: 1.5, color: 0x2b2b2b });
       if (tier >= 1) this.lights.push({ x: p.x, y: p.y - 34, r: 26 });
     }
-    // La gente que pasea por la plaza la pone Critters (más con cada hito).
+    // Strolling townsfolk placed by Critters (more at milestones).
     this.peopleCount = 4 + tier * 2;
   }
 
-  // Un punto al azar sobre un cafeto (para las cerezas que saltan).
+  // Random point above a coffee bush (for popping cherries).
   randomBushTop(rng = Math.random) {
     const p = this.bushes[Math.floor(rng() * this.bushes.length)];
     return p ? { x: p.x, y: p.y - 14 } : this.anchorPoint(20);
   }
 }
 
-// Casa del café del Pueblo: casona de esquina con toldo y letrero; con los hitos, segundo piso con
-// balcón, remates de colores y, al final, un tercer piso. Devuelve las luces de la noche.
+// Pueblo Casa del café: corner mansion with awning and sign; milestones add second floor
+// with balcony, colorful trim, and finally third floor. Returns night lights.
 const PLAZA_HOUSE = {
   pueblo: { wall: 0xf6d860, trims: [PAL.balconyGreen, PAL.balconyBlue, PAL.balconyRed, PAL.balconyYellow, 0x8e44ad, 0xffd700], awning: PAL.balconyRed, sign: 'cup' },
   // Barichara (v3.5): tapia blanca, puertas y balcones verdes o azules, toldo verde.
   barichara: { wall: 0xf7f4ee, trims: [0x2f7d4f, 0x2f7d4f, 0x2e6fd1, 0x2f7d4f, 0x8e44ad, 0xffd700], awning: 0x2f7d4f, sign: 'sweet' },
-  // Salento (v3.12): casona blanca con remates de colores vivos, como las de la Calle Real.
-  // Cartagena (v3.20): casona amarilla con balcones de madera y toldo verde.
+  // Salento (v3.12): white facade with vibrant colorful trim, Calle Real style.
+  // Cartagena (v3.20): yellow colonial house with wooden balconies and green awning.
   cartagena: { wall: 0xf6c244, trims: [0x7a4a22, 0x7a4a22, 0x2f7d4f, 0x7a4a22, 0xd63384, 0xffd700], awning: 0x2f7d4f, sign: 'cup' },
-  // Villa de Leyva (v3.27): casona blanca con balcones verdes.
+  // Villa de Leyva (v3.27): whitewashed house with green balconies.
   villa: { wall: 0xfbf8f1, trims: [0x2f7d4f, 0x2f7d4f, 0x1f5a38, 0x2f7d4f, 0x8e44ad, 0xffd700], awning: 0x2f7d4f, sign: 'cup' },
-  // Villavicencio (v3.36): casona amarilla con remates de colores y toldo verde.
+  // Villavicencio (v3.36): yellow house with colorful trim and green awning.
   villavo: { wall: 0xf6d860, trims: [0x2e6fd1, 0xd7263d, 0x2f7d4f, 0x2e6fd1, 0x8e44ad, 0xffd700], awning: 0x2f7d4f, sign: 'cup' },
   salento: { wall: 0xfbf8f1, trims: [0xd7263d, 0x2e6fd1, 0x2fa36b, 0xf07f1d, 0x8e44ad, 0xf2b705], awning: 0xd7263d, sign: 'cup' },
-  // Buenaventura (v3.43): casona turquesa con remates de colores y toldo naranja.
+  // Buenaventura (v3.43): turquoise house with colorful trim and orange awning.
   buenaventura: { wall: 0x4fb3bf, trims: [0xf2c14e, 0xe5737f, 0xf7f4ee, 0xf2c14e, 0x8e44ad, 0xffd700], awning: 0xf08a3c, sign: 'cup' },
-  // Leticia (v3.52): la heladería de asaí, verde agua con remates morados, toldo morado y letrero de helado.
-  // Neiva (v4.0): la cafetería del malecón, blanca con remates rojos y amarillos (los colores del San Pedro).
+  // Leticia (v3.52): açaí ice cream shop, seafoam green with purple trim, awning, and cone sign.
+  // Neiva (v4.0): riverfront café, white with red and yellow San Pedro trim.
   neiva: { wall: 0xfbf8f1, trims: [0xd7263d, 0xf2c14e, 0x2f7d4f, 0xd7263d, 0x8e44ad, 0xffd700], awning: 0xd7263d, sign: 'cup' },
-  // Bogotá (v4.5): el Tostadero del Chorro de Quevedo, casona azul cielo con remates rojos y verdes.
+  // Bogotá (v4.5): Chorro de Quevedo coffee roastery, sky blue house with red and green trim.
   bogota: { wall: 0x8ec5e8, trims: [0xd7263d, 0x2f7d4f, 0xf2c94c, 0xd7263d, 0x8e44ad, 0xffd700], awning: 0xd7263d, sign: 'cup' },
   leticia: { wall: 0x8fd3c4, trims: [0x7b1fa2, 0xf2c14e, 0x2e7d32, 0x7b1fa2, 0xe5737f, 0xffd700], awning: 0x7b1fa2, sign: 'icecream' },
 };
@@ -554,7 +554,7 @@ function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
   box(g, ox, oy, w, d, height - 8, look.wall, { z: 8 });
   gableRoof(g, ox, oy, w, d, height, 18, PAL.roof, look.wall);
   const lights = [];
-  // Puertas en las dos fachadas y un toldo de rayas sobre la delantera.
+  // Doors on both street facades and striped awning over front.
   for (const at of [0.5, 1.3]) {
     g.poly(isoPoly([[ox + at - 0.17, oy + d, 0], [ox + at + 0.17, oy + d, 0], [ox + at + 0.17, oy + d, 17], [ox + at - 0.17, oy + d, 17]])).fill(shade(trim, 0.7)).stroke(OUTLINE);
     const l = iso(ox + at, oy + d, 9);
@@ -566,7 +566,7 @@ function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
     const b = a + (w - 0.2) / 6;
     g.poly(isoPoly([[a, oy + d, 21], [b, oy + d, 21], [b, oy + d + 0.35, 15], [a, oy + d + 0.35, 15]])).fill(i % 2 ? 0xffffff : look.awning).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
   }
-  // Letrero con una taza (o con un bocadillo, o con un helado).
+  // Signboard with cup icon (or bocadillo, or ice cream).
   const s = iso(ox + w / 2, oy + d, 26);
   g.roundRect(s.x - 15, s.y - 7, 30, 13, 3).fill(PAL.woodDark).stroke(OUTLINE);
   if (look.sign === 'icecream') {
@@ -595,7 +595,7 @@ function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
     }
   }
   if (tier >= 1) {
-    // Macetas con flores colgadas de la fachada.
+    // Hanging flower pots along facade.
     for (const at of [0.15, 0.9, 1.65]) {
       const q = iso(ox + at, oy + d + 0.05, 20);
       g.circle(q.x, q.y, 3.5).fill(0x4e8a33);
@@ -606,7 +606,7 @@ function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
   return lights;
 }
 
-// Casa del caficultor; crece con los hitos (GDD §8: evolución visual).
+// Coffee farmer house; expands at milestones (GDD §8: visual evolution).
 function drawHut(g, x, y, tier) {
   const ox = x + 0.3;
   const oy = y + 0.3;
@@ -632,7 +632,7 @@ function drawHut(g, x, y, tier) {
   gableRoof(g, ox, oy, size, size, height, 16, PAL.roof, wall);
   door(g, ox, oy, size, size, balcony);
   if (tier >= 2) {
-    // Balcón en el segundo piso.
+    // Second-floor balcony.
     const a = iso(ox + 0.2, oy + size, height - 6);
     const b = iso(ox + size - 0.2, oy + size, height - 6);
     g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 3, color: balcony });
@@ -687,13 +687,13 @@ export class WarehouseView extends StationView {
     // Chimenea.
     box(g, x + 2.2, y + 0.7, 0.3, 0.3, 64, 0xc7beb0);
     gableRoof(g, ox, oy, W, D, 42, 22, PAL.roof, PAL.wall);
-    // Portón de madera grande en la fachada delantera.
+    // Wide wooden gate on front facade.
     const f = 0.55;
     g.poly(isoPoly([[ox + f, oy + D, 0], [ox + f + 0.8, oy + D, 0], [ox + f + 0.8, oy + D, 26], [ox + f, oy + D, 26]])).fill(PAL.wood).stroke(OUTLINE);
     const m1 = iso(ox + f + 0.4, oy + D, 0);
     const m2 = iso(ox + f + 0.4, oy + D, 26);
     g.moveTo(m1.x, m1.y).lineTo(m2.x, m2.y).stroke({ width: 1.5, color: PAL.woodDark });
-    // Ventanas con balcón amarillo.
+    // Windows with yellow balcony.
     for (const wx of [1.75, 2.15]) {
       g.poly(isoPoly([[ox + wx - 0.13, oy + D, 20], [ox + wx + 0.13, oy + D, 20], [ox + wx + 0.13, oy + D, 32], [ox + wx - 0.13, oy + D, 32]])).fill(PAL.balconyYellow).stroke(OUTLINE);
       const c = iso(ox + wx, oy + D, 26);
@@ -704,12 +704,12 @@ export class WarehouseView extends StationView {
       const c = iso(ox + W, oy + wy, 25);
       this.lights.push({ x: c.x, y: c.y, r: 18 });
     }
-    // Farol en la puerta del patio.
+    // Lantern over yard door.
     const lamp = iso(ox + 0.4, oy + D + 0.15, 30);
     g.rect(lamp.x - 1, lamp.y, 2, 30).fill(0x2b2b2b);
     g.rect(lamp.x - 3.5, lamp.y - 7, 7, 7).fill(0xffd27a).stroke({ width: 1, color: 0x2b2b2b });
     this.lights.push({ x: lamp.x, y: lamp.y - 3, r: 28 });
-    // Banderines (decoración comprada con Renombre, v2.2): del farol a un palo en la otra esquina.
+    // Bunting banners (Renown decoration, v2.2): strung from lantern to opposite corner pole.
     const flags = LOOK.banderines.colors;
     if (flags.length) {
       const a = iso(ox + 0.4, oy + D + 0.15, 30);
@@ -734,11 +734,11 @@ export class WarehouseView extends StationView {
     sign.anchor.set(0.5);
     sign.position.set(s.x, s.y - 0.5);
     sign.skew.set(0, 0.46);
-    if (sign.width > 40) sign.scale.x = 40 / sign.width; // «WAREHOUSE» es más largo que «BODEGA»
+    if (sign.width > 40) sign.scale.x = 40 / sign.width; // «WAREHOUSE» is wider than «BODEGA»
     this.addChild(sign);
   }
 
-  // Costales apilados en el patio según lo que hay en bodega. `zone` es el estado de la zona.
+  // Sacks stacked in yard reflecting warehouse stock. `zone` is zone state.
   sync(zone, capacity) {
     const stock = Object.values(zone.warehouse).reduce((a, b) => a + b, 0);
     const n = stock <= 0 ? 0 : Math.min(9, Math.ceil((stock / capacity) * 9));
@@ -760,7 +760,7 @@ export class WarehouseView extends StationView {
   }
 }
 
-// Parcela de una estación aún sin construir: cerca, letrero y precio.
+// Unbuilt station lot: fence, signpost, and price.
 export class PlotView extends StationView {
   constructor(plot, def) {
     super(plot.x, plot.y, 3, 3);
@@ -770,7 +770,7 @@ export class PlotView extends StationView {
     this.glow = new Graphics();
     this.addChild(this.glow, g);
     const { x, y } = plot;
-    // Postes de cerca.
+    // Fence posts.
     const posts = [];
     for (let i = 0; i <= 3; i += 0.5) posts.push([x + i, y], [x + 3, y + i], [x, y + i], [x + i, y + 3]);
     posts.sort((a, b) => a[0] + a[1] - (b[0] + b[1]));
@@ -783,7 +783,7 @@ export class PlotView extends StationView {
       const b = iso(bx, by, 7);
       g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.5, color: PAL.woodDark, alpha: 0.8 });
     }
-    // Letrero con icono y precio.
+    // Signpost with icon and price.
     const s = iso(x + 1.5, y + 1.5);
     this.post = new Graphics();
     this.post.rect(s.x - 1.5, s.y - 26, 3, 26).fill(PAL.woodDark);
@@ -803,9 +803,9 @@ export class PlotView extends StationView {
     this.available = false;
   }
 
-  // quote: resultado de quoteUnlock.
+  // quote: result of quoteUnlock.
   sync(quote) {
-    // En el tablero de un evento de Bogotá, las parcelas de los otros barrios quedan sin letrero (v4.5).
+    // On Bogotá event boards, lots from other neighborhoods appear unlabelled (v4.5).
     this.label.visible = this.post.visible = this.sign.visible = quote.reason !== 'event';
     const text = `${this.def.icon} ${formatNumber(quote.cost)}💰`;
     if (this.sign.text !== text) this.sign.text = text;
@@ -825,7 +825,7 @@ export class PlotView extends StationView {
   }
 }
 
-// Envolvente convexa de unos puntos [x, y] (cadena monótona).
+// Convex hull of 2D points [x, y] (monotone chain).
 function hull(points) {
   const p = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
   const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);

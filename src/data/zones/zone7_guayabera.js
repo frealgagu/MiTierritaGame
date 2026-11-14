@@ -1,8 +1,8 @@
-// Mapa de Santander · Zona 1: La Guayabera (v3.0). Se juega igual que la Finca (zone1_finca.js): la
-// región empieza de cero. Desde la v3.29 tiene en la mitad la plaza de Vélez con su iglesia, y el camino
-// de las mulas la rodea. Cada estación queda a la misma distancia del guayabal que en la Finca (2, 5, 9,
-// 14, 17 y 21 casillas; la bodega a 27,9): el camino sigue bajando en escalera, así que mide lo mismo, y
-// `door` dice en qué punto del camino queda la puerta de cada estación.
+// Santander Map · Zone 1: La Guayabera (v3.0). Plays the same as La Finca (zone1_finca.js): the
+// region starts from scratch. Since v3.29 it has the Vélez square with its church in the middle, and the mule
+// path goes around it. Each station stays the same distance from the guava grove as in La Finca (2, 5, 9,
+// 14, 17, and 21 tiles; warehouse at 27, 9): the path keeps descending in steps so it measures the same, and
+// `door` tells at which point along the path each station's door sits.
 import { ICON } from '../icons.js';
 
 export const ZONE7 = {
@@ -25,8 +25,8 @@ export const ZONE7 = {
   ],
   warehouse: { x: 21, y: 16, w: 3, h: 3 },
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 16.5], [20.5, 16.5], [20.5, 19.5], [21.4, 19.5]],
-  // La plaza de Vélez (v3.29): la iglesia en la mitad, las calles de los otros dos costados (por donde
-  // anda la gente; las mulas van por el camino) y las casas del marco de la plaza.
+  // Vélez square (v3.29): the church in the middle, streets on the other two sides (where
+  // people walk; mules take the path), and the houses framing the square.
   plaza: {
     x: 12, y: 12, w: 4, h: 4,
     street: [[11.5, 11.5], [11.5, 16.5], [16.5, 16.5]],
@@ -34,17 +34,17 @@ export const ZONE7 = {
   },
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys (v3.9), inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Vélez ➜',
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
-  // Carretera de la Ruta del bocadillo: sale de la bodega hacia el Hato (v3.3).
+  // Road for the Bocadillo Route: leaves the warehouse toward El Hato (v3.3).
   routes: {
     bocadillo: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Bocadillo al Hato ➜' },
-    // Las cajas de bocadillos salen hacia Barichara (v3.5).
+    // Boxes of bocadillo leave toward Barichara (v3.5).
     dulces: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'A Barichara ➜' },
   },
-  unlockedBy: null, // la primera de Santander: se abre con la región
+  unlockedBy: null, // the first zone of Santander: opens with the region
   next: 'tabacal',
 };

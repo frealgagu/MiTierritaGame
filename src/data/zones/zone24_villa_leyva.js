@@ -1,7 +1,7 @@
-// Mapa de Boyacá · Zona 6: Villa de Leyva (v3.27). Mismo trazado que Barichara y Cartagena: no tiene fuente
-// propia; en la plaza está la Tienda de la esquina, que recibe las cajas de papitas del Papal, y cada
-// estación espera junto a la carretera por la que le llega lo suyo de otra zona de Boyacá. Se dibuja como el
-// Pueblo (tema 'town'), con casonas blancas de balcones verdes y la plaza empedrada más grande (style).
+// Boyacá Map · Zone 6: Villa de Leyva (v3.27). Same layout as Barichara and Cartagena: no source
+// of its own; in the square sits the Corner Shop, which receives crates of baby potatoes from El Papal, and each
+// station waits next to the road bringing its supply from another Boyacá zone. Drawn like
+// El Pueblo ('town' theme), with whitewashed mansions, green balconies, and the largest cobbled square (style).
 import { ICON } from '../icons.js';
 
 export const ZONE24 = {
@@ -26,7 +26,7 @@ export const ZONE24 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'Al Fósil ➜',
   muleSpeed: 4,
@@ -40,5 +40,5 @@ export const ZONE24 = {
     jarras_cerveza: { road: [[12.5, 25.9], [12.5, 15.2]], sign: [11.3, 23.6], text: 'Jarras de Ráquira ⬆' },
   },
   unlockedBy: 'ruanas',
-  next: null, // la última de Boyacá
+  next: null, // the last zone of Boyacá
 };

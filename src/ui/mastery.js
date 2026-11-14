@@ -5,14 +5,14 @@ import { regionOf } from '../data/regions.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { t } from '../i18n/index.js';
 
-// Pantalla del segundo final: felicitación y reinicio con la producción al doble.
-// onRestart: empieza la partida nueva (main.js guarda y recarga).
+// Second ending modal: congratulations and reset with double production.
+// onRestart: starts new playthrough (main.js saves and reloads).
 export function showMastery(state, onRestart) {
   const mult = legacyMult(state);
   const next = nextLegacyMult(state);
-  // Con el tope (×2⁶⁰), reiniciar ya no duplica: se dice.
+  // Once capped (×2⁶⁰), resetting no longer doubles: explain this.
   const capped = next === mult;
-  // La partida se cuenta hasta el tope (v4.3.1): en el reinicio 60 sigue diciendo 60, porque reiniciar ya no cambia nada.
+  // Reset count caps at limit (v4.3.1): reset 60 keeps showing 60, since resetting changes nothing more.
   const runs = Math.min((state.legacy?.resets ?? 0) + 1, MAX_LEGACY_RESETS);
   document.getElementById('mastery-text').innerHTML =
     t('Llevaste todas las estaciones de {region}, sus <b>arrieros</b> y sus <b>rutas</b> al <b>nivel 100</b>, con todos los objetivos y todas las investigaciones. Todo trabaja a toda marcha.', { region: regionOf(state).name });

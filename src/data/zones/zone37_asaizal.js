@@ -1,5 +1,5 @@
-// Mapa del Amazonas · Zona 1: El Asaizal (v3.47). Mismo trazado que la Finca (zone1_finca.js) y que la
-// primera zona de cada región: el Amazonas empieza de cero y su primera zona se juega igual que la primera del Eje Cafetero.
+// Amazonas Map · Zone 1: El Asaizal (v3.47). Same layout as La Finca (zone1_finca.js) and the
+// first zone of each region: Amazonas starts from scratch and its first zone plays like the first one of Eje Cafetero.
 import { ICON } from '../icons.js';
 
 export const ZONE37 = {
@@ -24,17 +24,17 @@ export const ZONE37 = {
   muleRoad: [[8.5, 4.5], [8.5, 10.5], [14.5, 10.5], [14.5, 16.5], [20.5, 16.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys (v3.9), inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Puerto Nariño ➜',
   muleSpeed: 4,
   dispatchCost: { base: 10, growth: 1.17 },
-  // Las bolsas de asaí salen hacia la Casabería por la Ruta del asaí (v3.50).
+  // Açaí bags leave toward La Casabería along the Açaí Route (v3.50).
   routes: {
     bolsas_asai: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Asaí a la Casabería ➜' },
-    // Las cajas de asaí salen hacia Leticia (v3.52).
+    // Crates of açaí leave toward Leticia (v3.52).
     cajas_asai: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'A Leticia ➜' },
   },
-  unlockedBy: null, // la primera del Amazonas: se abre con la región
+  unlockedBy: null, // the first zone of Amazonas: opens with the region
   next: 'ajizal',
 };

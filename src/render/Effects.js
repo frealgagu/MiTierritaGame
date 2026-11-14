@@ -1,15 +1,15 @@
 import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import { FONT } from './palette.js';
 
-// Números flotantes, humo, cerezas que saltan y confeti.
-// Con «reducir movimiento» activado en el sistema, menos partículas.
+// Floating numbers, smoke, popping cherries, and confetti.
+// Respects OS «reduce motion» setting with fewer particles.
 const REDUCED = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 const amount = (n) => (REDUCED ? Math.ceil(n * 0.2) : n);
 
 export class Effects {
   constructor() {
     this.view = new Container();
-    this.view.zIndex = 100000; // siempre encima del mundo
+    this.view.zIndex = 100000; // always drawn above world layer
     this.items = [];
   }
 
@@ -40,7 +40,7 @@ export class Effects {
     });
   }
 
-  // Cereza que salta desde un cafeto.
+  // Cherry popping up from a coffee bush.
   hop(x, y, color) {
     const g = new Graphics().circle(0, 0, 2.5).fill(color);
     g.position.set(x, y);
@@ -63,7 +63,7 @@ export class Effects {
     });
   }
 
-  // Monedas que saltan (al vender en el pueblo).
+  // Coins popping (upon selling in town).
   coins(x, y, count = 8) {
     for (let i = 0; i < amount(count); i++) {
       const g = new Graphics().circle(0, 0, 4).fill(0xffd700).stroke({ width: 1.5, color: 0xb8860b });
@@ -80,7 +80,7 @@ export class Effects {
     }
   }
 
-  // Estrellitas al subir de nivel.
+  // Little stars on level-up.
   sparkle(x, y, count = 6) {
     for (let i = 0; i < amount(count); i++) {
       const g = new Graphics().star(0, 0, 4, 5, 2).fill(0xfff3b0);
@@ -95,7 +95,7 @@ export class Effects {
     }
   }
 
-  // Luciérnaga: punto de luz que flota un rato (solo de noche).
+  // Firefly: drifting glowing speck (night only).
   firefly(x, y, texture) {
     const s = new Sprite(texture);
     s.anchor.set(0.5);

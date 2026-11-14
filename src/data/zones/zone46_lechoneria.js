@@ -1,7 +1,7 @@
-// Mapa del Tolima Grande · Zona 4: La Lechonería (v4.0), cerca de Ibagué. Mismo trazado que la cuarta zona de cada
-// región. El Desposte (junto al chiquero) saca carne y cuero: el cuero pasa por la canaleta a la Limpieza del cuero, al
-// lado, y el Horno de leña junta el cuero limpio con el relleno de la Paila. La Mesa del desayuno espera junto a las
-// carreteras por las que llegan los bizcochos de los Achirales y el tinto del Huila.
+// Tolima Grande Map · Zone 4: La Lechonería (v4.0), near Ibagué. Same layout as the fourth zone of each
+// region. Butchery (next to the pigsty) outputs meat and skin: skin goes down the chute to Skin Cleaning
+// next door, and the Wood Oven combines clean skin with filling from the Kettle. The Breakfast Table waits next to the
+// roads bringing biscuits from Los Achirales and tinto from Huila.
 import { ICON } from '../icons.js';
 
 export const ZONE46 = {
@@ -26,7 +26,7 @@ export const ZONE46 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Ibagué ➜',
   muleSpeed: 4,
@@ -34,7 +34,7 @@ export const ZONE46 = {
   routes: {
     bizcochos: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Bizcochos de los Achirales' },
     tinto: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Tinto del Huila' },
-    // La lechona y el desayuno salen hacia Neiva.
+    // Lechona and breakfasts leave toward Neiva.
     lechonas: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Lechonas a Neiva ➜' },
     desayunos_tolimenses: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [23.7, 23.6], text: 'Desayunos ⬇' },
   },

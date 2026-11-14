@@ -1,8 +1,8 @@
-// Logros generales (v2.3, GDD §10.2): suman entre partidas (no se pierden al reiniciar) y ninguno es de
-// velocidad (con cada reinicio todo va más rápido). Cada uno tiene niveles; cada nivel da Renombre ⭐.
-// (v3.10: cada región tiene sus logros, con lo suyo: sus productos, sus eventos, su álbum, sus
-// investigaciones. El Renombre que dan es el mismo. Las medallas cuentan las de los eventos de la región.)
-//   metric: qué se cuenta (ver sim/logros.js)   tiers: cuánto pide cada nivel   reward: ⭐ por nivel
+// General achievements (v2.3, GDD §10.2): accumulate across runs (preserved on reset) and none
+// are speed-based (resets make everything faster). Tiered; each tier awards Renown ⭐.
+// (v3.10: each region has its own achievements covering its products, events, album, and
+// research. Renown reward stays identical. Medals count region events only.)
+//   metric: tracked stat (see sim/logros.js)   tiers: threshold per tier   reward: ⭐ per tier
 import { ICON } from './icons.js';
 import { RESEARCH } from './research.js';
 import { REGION_OF_ZONE } from './regions.js';
@@ -27,7 +27,7 @@ const CAFETERO = [
   { id: 'ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('cafetero')], reward: [1, 2, 4] },
 ];
 
-// Los de Santander (v3.10): sus productos y lo general de la región.
+// Santander (v3.10): its products plus general region counters.
 const SANTANDER = [
   { id: 's_bocadillo', icon: ICON.bocadilloCrate, name: 'Bocadillo veleño', text: 'Vende {n} cajas de bocadillo', metric: 'sold:bocadillo_crate', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
   { id: 's_tabaco', icon: ICON.cigar, name: 'Torcedor', text: 'Tuerce {n} tabacos', metric: 'produced:cigar', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
@@ -46,7 +46,7 @@ const SANTANDER = [
   { id: 's_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('santander')], reward: [1, 2, 4] },
 ];
 
-// Los de la Costa (v3.21).
+// Coast (v3.21).
 const COSTA = [
   { id: 'c_arroz', icon: ICON.riceSack, name: 'Arrocero', text: 'Vende {n} bultos de arroz', metric: 'sold:rice_sack', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
   { id: 'c_cocadas', icon: ICON.cocada, name: 'Cocadero', text: 'Haz {n} cocadas', metric: 'produced:cocada', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
@@ -65,7 +65,7 @@ const COSTA = [
   { id: 'c_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('costa')], reward: [1, 2, 4] },
 ];
 
-// Los de Boyacá (v3.28).
+// Boyacá (v3.28).
 const BOYACA = [
   { id: 'b_papitas', icon: ICON.criollasBox, name: 'Papicultor', text: 'Vende {n} cajas de papitas', metric: 'sold:criollas_box', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
   { id: 'b_cerveza', icon: ICON.beer, name: 'Cervecero', text: 'Fermenta {n} cervezas', metric: 'produced:beer', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
@@ -84,7 +84,7 @@ const BOYACA = [
   { id: 'b_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('boyaca')], reward: [1, 2, 4] },
 ];
 
-// Los de los Llanos (v3.37).
+// Llanos (v3.37).
 const LLANOS = [
   { id: 'll_aceite', icon: ICON.oilBox, name: 'Palmicultor', text: 'Vende {n} cajas de aceite', metric: 'sold:oil_box', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
   { id: 'll_jugo', icon: ICON.passionJuice, name: 'Frutero', text: 'Mezcla {n} jugos de maracuyá', metric: 'produced:passion_juice', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
@@ -103,7 +103,7 @@ const LLANOS = [
   { id: 'll_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('llanos')], reward: [1, 2, 4] },
 ];
 
-// Los de la Costa Pacífica (v3.44).
+// Pacific Coast (v3.44).
 const PACIFICO = [
   { id: 'pa_patacones', icon: ICON.pataconBox, name: 'Platanero', text: 'Vende {n} cajas de patacones', metric: 'sold:patacon_box', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
   { id: 'pa_alino', icon: ICON.alino, name: 'Cocinera de azotea', text: 'Prepara {n} frascos de aliño', metric: 'produced:alino', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
@@ -122,7 +122,7 @@ const PACIFICO = [
   { id: 'pa_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('pacifico')], reward: [1, 2, 4] },
 ];
 
-// Los del Amazonas (v3.53).
+// Amazon (v3.53).
 const AMAZONAS = [
   { id: 'am_asai', icon: ICON.asaiBox, name: 'Cosechero de asaí', text: 'Vende {n} cajas de asaí', metric: 'sold:asai_box', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
   { id: 'am_aji', icon: ICON.ajiNegro, name: 'Ajicera', text: 'Cocina {n} frascos de ají negro', metric: 'produced:aji_negro', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
@@ -141,7 +141,7 @@ const AMAZONAS = [
   { id: 'am_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('amazonas')], reward: [1, 2, 4] },
 ];
 
-// Los del Tolima Grande (v4.0).
+// Tolima Grande (v4.0).
 const TOLIMA = [
   { id: 'to_bizcochos', icon: ICON.bizcochoBox, name: 'Bizcochera', text: 'Vende {n} cajas de bizcochos de achira', metric: 'sold:bizcocho_box', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
   { id: 'to_te', icon: ICON.teCascara, name: 'Nada se pierde', text: 'Seca {n} bolsas de té de cáscara', metric: 'produced:te_cascara', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
@@ -160,7 +160,7 @@ const TOLIMA = [
   { id: 'to_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [20, 50, researchOf('tolima')], reward: [1, 2, 4] },
 ];
 
-// Los de Cundinamarca (v4.4.8).
+// Cundinamarca (v4.4.8).
 const CUNDINAMARCA = [
   { id: 'cu_flores', icon: ICON.cajaFlores, name: 'Floricultora', text: 'Vende {n} cajas de flores', metric: 'sold:caja_flores', tiers: [1000, 100000, 10000000], reward: [1, 2, 4] },
   { id: 'cu_mermelada', icon: ICON.mermeladaFresa, name: 'Nada se pierde', text: 'Cocina {n} frascos de mermelada', metric: 'produced:mermelada_fresa', tiers: [10000, 1000000, 100000000], reward: [1, 2, 4] },
@@ -194,7 +194,7 @@ const BOGOTA = [
   { id: 'bg_medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [6, 24, 60], reward: [1, 2, 4] },
   { id: 'bg_todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
   { id: 'bg_oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
-  // La Gran Feria (v4.7), el séptimo evento: sale cuando ya se ganó medalla en los otros seis, y paga bien.
+  // Gran Feria (v4.7), seventh event: spawns once medals earned in other six, pays well.
   { id: 'bg_gran_feria', icon: ICON.feriaMiTierrita, name: 'La feria del país', text: 'Gana {n} medallas en la Gran Feria', metric: 'eventMedals:gran_feria_bog', tiers: [1, 3, 6], reward: [8, 16, 32] },
   { id: 'bg_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
   { id: 'bg_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [12, 24, researchOf('bogota')], reward: [1, 2, 4] },

@@ -1,26 +1,26 @@
-// En qué se gasta el Renombre ⭐ (v2.2): láminas del álbum y decoración. Todo vive en state.profile,
-// que no se pierde al reiniciar. Nada de esto cambia la economía.
+// What Renown ⭐ buys (v2.2): album stickers and decoration. Lives in state.profile,
+// preserved on reset. None of it alters economy.
 import { ALBUM, PAGE_BONUS, STICKERS_BY_ID, albumOf } from '../data/album.js';
 import { canPayRenown } from './upgrades.js';
 import { DECOR_BY_ID, DEFAULT_DECOR } from '../data/decor.js';
 
-// El perfil de la partida, con lo que le falte (partidas de antes de la v2.2).
+// Player profile with missing defaults filled in (pre-v2.2 saves).
 export function profileOf(state) {
   const p = (state.profile ??= { renown: 0, medals: {}, history: [] });
   p.album ??= [];
-  // La decoración es de cada región (v3.10): { región: { owned, chosen } }. La de antes era del Eje Cafetero.
+  // Decoration belongs per region (v3.10): { region: { owned, chosen } }. Legacy belonged to Eje Cafetero.
   if (Array.isArray(p.decor?.owned)) p.decor = { cafetero: p.decor };
   p.decor ??= {};
   return p;
 }
 
-// Renombre ganado (v3.11): se suma al saldo y al total ganado de por vida (`renownTotal`), que no baja al
-// gastar. Todo lo que da Renombre pasa por aquí.
+// Earned Renown (v3.11): adds to balance and lifetime total (`renownTotal`), never decreases
+// when spent. All Renown awards go through here.
 export function gainRenown(profile, n) {
   profile.renown += n;
   profile.renownTotal = (profile.renownTotal ?? 0) + n;
 }
-// Lo que da cada reinicio (segundo final) de cualquier región.
+// Renown granted per second-ending reset in any region.
 export const RESTART_RENOWN = 10;
 
 export const pageDone = (profile, pageId) => ALBUM.find((pg) => pg.id === pageId).stickers.every((s) => profile.album.includes(s.id));
@@ -32,7 +32,7 @@ export function quoteSticker(profile, id) {
   return { ok: true, cost: s.cost };
 }
 
-// Pega una lámina. Devuelve null si no se pudo o { page, bonus } (bonus: ⭐ de premio si llenó la página).
+// Places a sticker. Returns null on failure or { page, bonus } (bonus: ⭐ reward if page filled).
 export function buySticker(profile, id) {
   const q = quoteSticker(profile, id);
   if (!q.ok) return null;
@@ -45,7 +45,7 @@ export function buySticker(profile, id) {
 }
 
 const optionOf = (cat, opt) => DECOR_BY_ID[cat]?.options.find((o) => o.id === opt);
-// La decoración de una región (v3.10): lo comprado y lo elegido, aparte en cada una.
+// Decoration state for a region (v3.10): owned and chosen, isolated per region.
 export const decorOf = (profile, region = 'cafetero') => (profileOf({ profile }).decor[region] ??= { owned: [], chosen: {} });
 export const ownsDecor = (profile, cat, opt, region = 'cafetero') => optionOf(cat, opt)?.cost === 0 || decorOf(profile, region).owned.includes(`${cat}:${opt}`);
 
@@ -56,7 +56,7 @@ export function quoteDecor(profile, cat, opt, region = 'cafetero') {
   return { ok: true, cost: o.cost };
 }
 
-// Compra (si hace falta) y elige una opción de decoración en una región. Devuelve si quedó elegida.
+// Buys (if needed) and equips a decoration option in a region. Returns whether equipped.
 export function pickDecor(profile, cat, opt, region = 'cafetero') {
   const decor = decorOf(profile, region);
   if (!ownsDecor(profile, cat, opt, region)) {
@@ -69,7 +69,7 @@ export function pickDecor(profile, cat, opt, region = 'cafetero') {
   return true;
 }
 
-// La opción elegida de cada categoría en una región (la de siempre si no se ha elegido otra).
+// Equipped option per category in a region (default if none selected).
 export function chosenDecor(profile, region = 'cafetero') {
   const out = {};
   for (const [cat, def] of Object.entries(DEFAULT_DECOR)) {
@@ -79,12 +79,12 @@ export function chosenDecor(profile, region = 'cafetero') {
   return out;
 }
 
-// Horas sin conexión (v3.7): son del jugador, no de una región. Valen igual para todas las regiones (así
-// el calendario del país avanza lo mismo en todas) y no se pierden al reiniciar. Se empieza con 2 h y
-// cada nivel, comprado con Renombre, suma 2 h más, hasta 24 h.
+// Offline hours (v3.7): belong to player, not region. Apply equally across all regions (so
+// country clock advances uniformly everywhere) and persist across resets. Starts at 2 h,
+// each Renown level adds 2 h up to 24 h.
 export const OFFLINE_BASE_HOURS = 2;
 export const OFFLINE_STEP_HOURS = 2;
-export const OFFLINE_COSTS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // ⭐ de cada nivel
+export const OFFLINE_COSTS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // ⭐ per level
 export const offlineLevel = (profile) => profile?.offlineLevel ?? 0;
 export const offlineHours = (profile) => OFFLINE_BASE_HOURS + OFFLINE_STEP_HOURS * offlineLevel(profile);
 
@@ -103,10 +103,10 @@ export function buyOffline(profile) {
   return true;
 }
 
-// La jornada (v3.8): bloques de 2 horas que se suman a la de 6 a 12 y de 14 a 20 (ver sim/calendar.js:
-// EXTRA_BLOCKS). Cada uno cuesta el doble del anterior. Desde la v3.10 son de cada región (`workLevel` en
-// su partida, que no se pierde al reiniciarla); se pagan con el Renombre del jugador.
-export const WORK_COSTS = [2, 4, 8, 16, 32, 64]; // ⭐ de cada bloque
+// Work shift (v3.8): 2-hour blocks added to 6–12 and 14–20 (see sim/calendar.js:
+// EXTRA_BLOCKS). Each doubles prior cost. Since v3.10 stored per region (`workLevel`
+// in region save, preserved on reset); paid using player Renown.
+export const WORK_COSTS = [2, 4, 8, 16, 32, 64]; // ⭐ per block
 export const workLevel = (region) => region?.workLevel ?? 0;
 
 export function quoteWork(profile, region) {
@@ -124,11 +124,11 @@ export function buyWork(profile, region) {
   return true;
 }
 
-// El segundo Willys (v3.9): con el álbum de la región lleno (v3.10) se compra con Renombre, por región. Cada zona de la región
-// tiene desde entonces dos Willys que venden por su cuenta (el despacho vende el doble). Es de la
-// región: se guarda en su partida (`willys2`) y no se pierde al reiniciarla.
+// Second Willys (v3.9): with region album complete (v3.10) bought with Renown per region. Every
+// zone gets two independent Willys (doubles dispatch throughput). Belongs to region
+// (`willys2`) and persists across resets.
 export const WILLYS2_COST = 20;
-// El álbum de una región (v3.10: cada una tiene el suyo) completo.
+// Whether a region's album (v3.10: per region) is complete.
 export const albumDone = (profile, region = 'cafetero') => albumOf(region).length > 0 && albumOf(region).every((pg) => pageDone(profile, pg.id));
 
 export function quoteWillys2(profile, region) {
@@ -147,9 +147,9 @@ export function buyWillys2(profile, region) {
   return true;
 }
 
-// Chivas más seguidas (v4.2): por región, con Renombre. Primero cada 30 s (10 ⭐) y después cada 15 s (20 ⭐).
-// Como el segundo Willys, pide el álbum de la región lleno; además, haberla reiniciado al menos una vez.
-// Se guarda en la partida de la región (`chivas`: 30 o 15) y no se pierde al reiniciarla.
+// Faster chivas (v4.2): per region with Renown. First every 30 s (10 ⭐), then every 15 s (20 ⭐).
+// Like second Willys, requires completed region album plus at least one region reset.
+// Stored in region state (`chivas`: 30 or 15) and preserved on reset.
 export const CHIVA_STEPS = [
   { every: 30, cost: 10 },
   { every: 15, cost: 20 },
@@ -174,10 +174,10 @@ export function buyChivas(profile, region) {
   return true;
 }
 
-// Mascotas (v3.12): gatos y loros que andan por el mapa de cada región, solo de adorno. Se compran con
-// Renombre en cada región, hasta un máximo. Los gatos, de vez en cuando, persiguen a los loros.
+// Pets (v3.12): cats and parrots roaming each region map, purely cosmetic. Bought with
+// Renown per region up to cap. Cats occasionally chase parrots.
 export const PETS = {
-  cats: { icon: '🐈', name: 'Gato', plural: 'Gatos', cost: 5, max: 10 }, // v4.0.2: antes, 10 ⭐
+  cats: { icon: '🐈', name: 'Gato', plural: 'Gatos', cost: 5, max: 10 }, // v4.0.2: previously 10 ⭐
   parrots: { icon: '🦜', name: 'Loro', plural: 'Loros', cost: 8, max: 5 },
 };
 export const petsOf = (profile, region = 'cafetero') => {

@@ -1,15 +1,15 @@
-// «Ver más» (v3.67.5): en una pantalla pequeña, un texto largo (la explicación de los eventos, la
-// presentación de cada uno) tapaba lo de abajo. Se muestra en pocas líneas, con «Ver más ▾» para leerlo
-// completo y «Ver menos ▴» para recogerlo. El botón solo aparece si el texto no cabe.
-//   <p class="clamp" style="--lines: 3">…</p><button class="more-btn" type="button" hidden>Ver más ▾</button>
+// «See more» (v3.67.5): on small screens, long text (event rules, event
+// intros) covered content below. Clamps to a few lines with «See more ▾» to expand
+// and «See less ▴» to collapse. Button appears only if text overflows.
+//   <p class="clamp" style="--lines: 3">…</p><button class="more-btn" type="button" hidden>See more ▾</button>
 import { t } from '../i18n/index.js';
 
 const LABEL = { more: t('Ver más ▾'), less: t('Ver menos ▴') };
 
 export const moreButton = () => `<button class="more-btn" type="button" hidden>${LABEL.more}</button>`;
 
-// Muestra u oculta los botones de los textos que hay dentro de `root`, según quepan o no. El texto tiene
-// que estar a la vista (escondido no se puede medir).
+// Shows or hides toggle buttons for clamped texts inside `root`, depending on overflow. Text must
+// be visible (hidden elements can't be measured).
 export function refreshMore(root) {
   for (const el of root.querySelectorAll('.clamp')) {
     const btn = el.nextElementSibling;
@@ -25,10 +25,10 @@ export function bindMore() {
     const open = btn.previousElementSibling.classList.toggle('open');
     btn.textContent = open ? LABEL.less : LABEL.more;
   });
-  // Los que vienen en la página: se revisan cuando cambian de tamaño (al abrirse su ventana, al girar el
-  // teléfono).
+  // Static ones on page: recheck on resize (opening modal, rotating phone).
+  // Defer to next frame so layout isn't mutated inside the same ResizeObserver pass.
   if (typeof ResizeObserver === 'undefined') return;
-  // Se difiere al siguiente cuadro para no cambiar el diseño dentro del mismo paso del ResizeObserver.
+  // Defer to next frame so layout isn't mutated inside the same ResizeObserver pass.
   let raf = 0;
   const pending = new Set();
   const watch = new ResizeObserver((entries) => {

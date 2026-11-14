@@ -1,5 +1,5 @@
-// Pantalla de inicio: la idea del juego, cómo se juega y el objetivo. Sale cada vez que se abre el
-// juego, salvo que se marque «No mostrar de nuevo» (se guarda con la partida); el menú ⚙️ la vuelve a abrir.
+// Intro screen: game premise, how to play, and goal. Shows on every
+// launch unless «Don't show again» is checked (saved with progress); ⚙️ menu reopens it.
 export function showIntro(state, onClose) {
   const modal = document.getElementById('intro');
   const hide = document.getElementById('intro-hide');
@@ -12,7 +12,7 @@ export function showIntro(state, onClose) {
   };
   document.getElementById('intro-ok').onclick = close;
   document.getElementById('intro-close').onclick = close;
-  // La casilla vale aunque se cierre con Esc o con «atrás».
+  // Checkbox persists even when closed with Esc or «back».
   hide.onchange = () => (state.settings.hideIntro = hide.checked);
   modal.hidden = false;
 }

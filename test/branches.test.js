@@ -7,14 +7,14 @@ import { pendingRoutes } from '../src/sim/transport.js';
 import { alerts } from '../src/sim/alerts.js';
 import { CALENDAR } from '../src/sim/calendar.js';
 
-// Pruebas de la cadena: siempre de día y sin temporada (el calendario se prueba en calendar.test.js).
+// Chain tests: always daytime and no season (calendar is tested in calendar.test.js).
 CALENDAR.on = false;
 
 function run(game, seconds) {
   for (let t = 0; t < seconds; t += 0.1) game.step(0.1);
 }
 
-// La Lechería (con la Finca y el Trapiche) toda al mismo nivel, sin abrir el Cacaotal.
+// Lechería (with Finca and Trapiche) all at the same level, without opening Cacaotal.
 function lecheria(level = 50) {
   const game = new Game();
   const s = game.state;
@@ -50,7 +50,7 @@ test('la leche que se guarda para la ruta que aún no abre no es un desvío', ()
 test('una rama por debajo de la anterior recibe lo que le cabe (antes no recibía nada)', () => {
   const game = lecheria();
   const s = game.state;
-  // En el nivel 45, la entrada de la Quesera no alcanza para una carga entera de las mulas (nivel 50).
+  // At level 45, Quesera's input can't hold a full mule load (level 50).
   s.stations.cheesery.level = 45;
   run(game, 300);
   const expected = analyzeChain(s, 'lecheria').rows.find((r) => r.id === 'cheesery').output;

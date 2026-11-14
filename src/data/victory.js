@@ -1,6 +1,6 @@
-// Textos de la pantalla final de cada zona (v3.68: salieron de ui/dialogs.js para poder traducirlos
-// por id, como el resto del contenido).
-//   title · text (con <b>) · stat: [lo que se cuenta, el producto vendido que se cuenta]
+// Zone completion screen copy (v3.68: extracted from ui/dialogs.js so it translates by
+// id like other content).
+//   title · text (with <b>) · stat: [metric counted, sold product counted]
 export const VICTORY = {
   finca: { title: '¡Primer gran pedido entregado!', text: 'Completaste la <b>Zona 1 · La Finca</b>. Dos mil bolsas de tu café ya van camino al pueblo.', stat: ['Bolsas vendidas', 'coffee_bag'] },
   trapiche: { title: '¡Primer cargamento de panela!', text: 'Completaste la <b>Zona 2 · El Trapiche</b>. Seis mil panelas pulverizadas endulzan el pueblo.', stat: ['Panela pulverizada vendida', 'panela_powder'] },
@@ -56,7 +56,7 @@ export const VICTORY = {
   salinas: { title: '¡Sal para toda la Sabana!', text: 'Completaste <b>Las Salinas de Nemocón</b>. Cuatro mil canastas sabaneras con el pan de sal, los ramos de rosas y las fresas.', stat: ['Canastas vendidas', 'canasta_sabanera'] },
   cocina: { title: '¡Ajiaco para todo Bogotá!', text: 'Completaste <b>La Cocina de la Sabana</b>. Seis mil almuerzos sabaneros: el ajiaco con la trucha ahumada y el ceviche de Guatavita.', stat: ['Almuerzos sabaneros vendidos', 'almuerzo_sabanero'] },
   zipaquira: { title: '¡Cundinamarca, de punta a punta!', text: 'Completaste <b>Zipaquirá</b> y Cundinamarca. Siete mil visitas a la Catedral de Sal, con las flores, las fresas, la trucha, la sal y el ajiaco de todas tus zonas.', stat: ['Visitas a la Catedral', 'visita_catedral'] },
-  // Bogotá (v4.5): una sola zona, el final de la región.
+  // Bogotá (v4.5): single zone, region finale.
   bogota: { title: '¡Todo el país en Bogotá!', text: 'Completaste <b>Bogotá</b>. Quinientas entradas a la Gran Feria de Mi Tierrita, con el café de La Candelaria, las cenas de la Zona G, los domingos de Usaquén, las mañanas de Paloquemao y lo que llegó en tractomula de todas las regiones.', stat: ['Entradas a la Gran Feria vendidas', 'feria_mi_tierrita'] },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: ['Arequipe vendido', 'arequipe'] },
 };

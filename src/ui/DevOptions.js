@@ -6,16 +6,16 @@ import { REGIONS_BY_ID } from '../data/regions.js';
 import { MAX_LEGACY_RESETS } from '../sim/modifiers.js';
 import { t } from '../i18n/index.js';
 
-// Opciones de desarrollador, ocultas en el menú: se muestran tocando 7 veces la versión.
-// Acelerar el tiempo, permitir saldo negativo y simular reinicios del segundo final (multiplicador de
-// producción en potencias de 2). Los dos primeros viven en este navegador; el multiplicador, en la partida. Si se cierra
-// el juego acelerado, al volver sigue acelerado y el tiempo fuera cuenta a esa velocidad (el ⏩ de
-// arriba lo recuerda).
+// Developer options, hidden in the menu: revealed by tapping the version 7 times.
+// Time scale, allow negative balance, and simulate second-ending resets (power-of-2 production
+// multiplier). First two live in this browser; multiplier lives in the save. Closing while
+// sped up keeps the speed on reopen and offline time counts at that speed (the ⏩ badge
+// on top serves as reminder).
 const KEY = 'mitierrita-dev';
 const TAPS = 7;
 const MAX_SPEED = 100;
-const MIN_SPEED = 0.01; // v3.68.2: también más despacio que lo normal, en centésimas (×0.25, ×0.01)
-// Como en el juego: el multiplicador llega hasta ×2^MAX_LEGACY_RESETS.
+const MIN_SPEED = 0.01; // v3.68.2: also slower than normal, in hundredths (×0.25, ×0.01)
+// Same as the game: multiplier caps at ×2^MAX_LEGACY_RESETS.
 const MAX_RESETS = MAX_LEGACY_RESETS;
 
 function load() {
@@ -26,7 +26,7 @@ function load() {
   }
 }
 
-// Velocidad con la que se cerró el juego (1 si no estaba acelerado).
+// Speed when the game closed (1 if not accelerated).
 export function savedSpeed() {
   const prefs = load();
   return prefs.visible && prefs.active ? clampSpeed(prefs.speed) : 1;
@@ -38,11 +38,11 @@ function store(prefs) {
   try {
     localStorage.setItem(KEY, JSON.stringify(prefs));
   } catch {
-    // sin almacenamiento: se olvida al cerrar
+    // storage unavailable: forgotten on close
   }
 }
 
-// getActive: el Game de la región que se ve (v3.12: los reinicios simulados son de esa región).
+// getActive: Game of the currently viewed region (v3.12: simulated resets apply to that region).
 export function bindDevOptions(game, getActive = () => game) {
   const prefs = load();
   const box = document.getElementById('dev-box');
@@ -63,7 +63,7 @@ export function bindDevOptions(game, getActive = () => game) {
     toast(prefs.credit ? t('💸 Saldo negativo permitido: compra lo que quieras') : t('💰 Solo se compra con lo que hay'));
   });
 
-  // Eventos seguidos (v4.7.2): para probarlos todos sin esperar los 2 años de cada cupo.
+  // Consecutive events (v4.7.2): test all events without waiting 2 years per slot.
   const events = document.getElementById('dev-events');
   events.checked = prefs.visible && Boolean(prefs.events);
   setFastEvents(events.checked, game.state);
@@ -89,7 +89,7 @@ export function bindDevOptions(game, getActive = () => game) {
   };
 
   toggle.addEventListener('click', () => setScale(game.timeScale !== 1 ? 1 : speed()));
-  // Mientras se escribe, el botón ya dice la velocidad nueva (y, si está acelerado, se aplica).
+  // While typing, button immediately previews new speed (and applies if currently sped up).
   input.addEventListener('input', () => {
     if (!input.value) return;
     prefs.speed = speed();
@@ -99,7 +99,7 @@ export function bindDevOptions(game, getActive = () => game) {
   });
   input.addEventListener('change', () => (input.value = prefs.speed = speed()));
 
-  // Multiplicador de producción: como si ya se hubiera reiniciado n veces (×2ⁿ), hasta el tope del juego.
+  // Production multiplier: as if already reset n times (×2ⁿ), up to game cap.
   const legacy = document.getElementById('dev-legacy');
   const legacyMultText = document.getElementById('dev-legacy-mult');
   legacy.max = MAX_RESETS;
@@ -112,7 +112,7 @@ export function bindDevOptions(game, getActive = () => game) {
   };
   syncLegacy();
   document.getElementById('menu-btn').addEventListener('click', syncLegacy);
-  // Como la velocidad: se aplica mientras se escribe.
+  // Same as time scale: applies while typing.
   legacy.addEventListener('input', () => {
     if (legacy.value === '') return;
     const s = region();
@@ -125,7 +125,7 @@ export function bindDevOptions(game, getActive = () => game) {
   });
   chip.addEventListener('click', () => setScale(1));
 
-  // Gesto secreto: 7 toques seguidos a la versión del menú.
+  // Secret gesture: 7 consecutive taps on the menu version.
   let taps = 0;
   let timer = null;
   document.getElementById('menu-version').addEventListener('click', () => {

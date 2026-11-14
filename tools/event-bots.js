@@ -1,12 +1,12 @@
-// Jugadores automáticos de los eventos (los usan tools/event-sim.js para calibrar las medallas y
-// test/events.test.js para comprobar que el oro se puede lograr).
-//   estilo  obj: sube lo más barato del camino que lleva al objetivo (estaciones, arrieros y, si hay
-//                que vender, el despacho)
-//           rec: sigue la «mejora recomendada» (que en el tablero mira solo el camino del objetivo)
-//           mix: sigue la recomendada si ya le alcanza; si no, como obj (no ahorra para la recomendada)
-//   ahorro  compra la siguiente mejora del evento apenas puede; si no le alcanza pero le falta menos que
-//           `save` segundos de ingresos, espera a juntar (0 = nunca espera)
-//   every   cada cuántos segundos decide (1 = alguien muy atento; 30 = alguien que mira de vez en cuando)
+// Automated event players (used by tools/event-sim.js to calibrate medals and
+// test/events.test.js to verify that gold is achievable).
+//   estilo  obj: upgrades the cheapest item on the path to the goal (stations, haulers, and if
+//                selling is needed, dispatch)
+//           rec: follows the «recommended upgrade» (which on the board looks only at the goal path)
+//           mix: follows the recommendation if already affordable; otherwise like obj (doesn't save for rec)
+//   ahorro  buys the next event upgrade as soon as affordable; if not enough yet but within
+//           `save` seconds of income, waits to save up (0 = never waits)
+//   every   how many seconds between decisions (1 = very attentive player; 30 = occasional checker)
 import { Game } from '../src/core/Game.js';
 import { createEventState, eventProgress, quoteAction, buyAction, objectiveUpgrades } from '../src/sim/events.js';
 import { recommendUpgrade } from '../src/sim/analysis.js';
@@ -14,14 +14,14 @@ import { recommendUpgrade } from '../src/sim/analysis.js';
 export const STYLES = ['obj', 'rec', 'mix'];
 export const SAVES = [0, 30, 60, 120];
 
-// Juega el objetivo de ese año y devuelve { t (segundos), bought (compras del evento con su hora), board }.
+// Plays that year's goal and returns { t (seconds), bought (event purchases with timestamp), board }.
 export function play(def, year, { style = 'rec', save = 30, every = 1, limit = 2 * 3600 } = {}) {
   const board = createEventState(def, year);
   const game = new Game(board);
   const cheapest = () => objectiveUpgrades(board).map((x) => [x, game.quote(x, 1)]).filter(([, q]) => q.affordable).sort((a, b) => a[1].cost - b[1].cost)[0]?.[0];
   const bought = [];
   let t = 0;
-  // Decide también en el segundo cero: el tablero arranca con monedas.
+  // Decides at second zero too: the board starts with coins.
   for (;;) {
     for (let n = 0; n < 60; n++) {
       const next = def.actions.find((a) => !board.research.includes(a.id));
@@ -47,7 +47,7 @@ export function play(def, year, { style = 'rec', save = 30, every = 1, limit = 2
   return { t, bought, board };
 }
 
-// El más rápido de todos los estilos y ahorros, decidiendo cada segundo: { t, style, save }.
+// The fastest across all styles and saving thresholds, deciding every second: { t, style, save }.
 export function bestRun(def, year, opts = {}) {
   let best = null;
   for (const style of STYLES) {

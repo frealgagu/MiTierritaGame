@@ -4,9 +4,9 @@ import { REGIONS } from '../src/data/regions.js';
 import { analyzeChain } from '../src/sim/analysis.js';
 import { maxedRegion } from './helpers/maxed.js';
 
-// Sin fugas (v3.67 en seis regiones; v4.0 en todas, con los subproductos y lo que se junta): con todo al
-// máximo, todo lo que hacen las zonas que no son la última de su región se lo llevan sus rutas, y el Willys
-// de esas zonas no vende nada. Tampoco se desecha ningún subproducto.
+// Zero leaks (v3.67 in six regions; v4.0 in all, with byproducts and multi-input stations): with everything
+// maxed, everything made by non-final zones of a region is taken by their routes, and those zones' Willys
+// sell nothing. Nor is any byproduct discarded.
 for (const region of REGIONS.filter((r) => !r.wip)) {
   test(`${region.name}: con todo al máximo, solo la última zona vende y nada se desecha`, () => {
     const s = maxedRegion(region.id);

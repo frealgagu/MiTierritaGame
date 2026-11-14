@@ -4,7 +4,7 @@ import { Game } from '../src/core/Game.js';
 import { chainOf } from '../src/sim/chain.js';
 import { alerts, stepAlerts } from '../src/sim/alerts.js';
 
-// Una estación de mentira: solo lo que mira stepAlerts.
+// Stub station: only what stepAlerts inspects.
 function fake() {
   const st = { status: 'working', idle: 0 };
   const state = { playTime: 0, stations: { a: st }, zones: {} };
@@ -23,22 +23,22 @@ function fake() {
 test('un patio lleno un momento no es un aviso; si dura, sí', () => {
   const { st, run } = fake();
   run('working', 10);
-  run('blocked', 3); // un tercio de la ventana: normal con las mulas por tandas
+  run('blocked', 3); // one third of the window: normal with batched mules
   assert.equal(alerts(st).blocked, false);
   run('working', 10);
-  run('blocked', 7); // más de la mitad de los últimos 10 s
+  run('blocked', 7); // more than half of the last 10 s
   assert.equal(alerts(st).blocked, true);
-  // No parpadea: un respiro corto no lo quita.
+  // No flicker: a brief breather doesn't clear it.
   run('working', 3);
   assert.equal(alerts(st).blocked, true);
-  // Se quita cuando ya casi no pasa.
+  // Clears once waiting nearly stops.
   run('working', 9);
   assert.equal(alerts(st).blocked, false);
 });
 
 test('esperar entre tanda y tanda no es un aviso; quedarse sin nada largo rato, sí', () => {
   const { st, run } = fake();
-  // Llega algo cada 5 s: espera la mitad del tiempo, pero nunca 8 s seguidos.
+  // Delivery arrives every 5 s: waits half the time, but never 8 s straight.
   for (let k = 0; k < 12; k++) {
     run('starved', 4);
     run('working', 1);

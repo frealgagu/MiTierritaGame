@@ -1,4 +1,4 @@
-// Cuánto tarda cada evento si no se hace nada (v4.3.2): no debería llegar a la plata solo, pero sí al bronce.
+// How long each event takes if nothing is done (v4.3.2): should not reach silver idle, but should reach bronze.
 // Uso: node tools/event-idle.js
 import { EVENTS } from '../src/data/events.js';
 import { Game } from '../src/core/Game.js';

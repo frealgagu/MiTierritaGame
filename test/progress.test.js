@@ -11,7 +11,7 @@ import { offlineCapSeconds } from '../src/sim/modifiers.js';
 import { STATIONS_BY_ID } from '../src/data/stations.js';
 import { CALENDAR } from '../src/sim/calendar.js';
 
-// Pruebas de la cadena: siempre de día y sin temporada (el calendario se prueba en calendar.test.js).
+// Chain tests: always daytime and no season (calendar is tested in calendar.test.js).
 CALENDAR.on = false;
 
 function run(game, seconds) {
@@ -39,12 +39,12 @@ test('las que duplican una estación piden esa estación y sus arrieros al nivel
   assert.equal(game.quoteResearch('abono').reason, 'locked', 'falta la estación');
   farm.level = 25;
   assert.ok(game.research('abono'), 'ya no hace falta construir la siguiente');
-  // La Compostera no tiene arrieros: le basta su nivel.
+  // Compostera has no haulers: its level alone suffices.
   game.unlock('wetmill');
   game.unlock('composter');
   game.state.stations.composter.level = 25;
   assert.ok(game.quoteResearch('beneficio_eco').ok);
-  // Las demás siguen igual: la Herradura pide construir la Marquesina.
+  // The others remain the same: Herradura requires building Marquesina.
   assert.equal(game.quoteResearch('herraduras').reason, 'locked');
 });
 
@@ -88,10 +88,10 @@ test('las horas sin conexión son del jugador: 2 h y +2 h por nivel con Renombre
   assert.equal(buyOffline(profile), false, 'ya está al máximo');
   assert.equal(offlineHours(profile), 24);
   assert.equal(profile.renown, 1000 - OFFLINE_COSTS.reduce((a, b) => a + b, 0));
-  // Una región (sin perfil propio) usa el del jugador.
+  // A region (without its own profile) uses the player's.
   const santander = createInitialState(0, 'santander');
   assert.equal(offlineCapSeconds(santander, profile), 24 * 3600);
-  // Ya no hay investigaciones que sumen horas.
+  // There are no longer research upgrades adding hours.
   assert.ok(!RESEARCH.some((r) => r.effect.type === 'offlineHours'));
 });
 
@@ -110,15 +110,15 @@ test('todas las investigaciones y objetivos apuntan a cosas que existen', () => 
 test('los objetivos se cobran en orden y dan su recompensa', () => {
   const game = new Game();
   assert.deepEqual(activeGoals(game.state).map((g) => g.id), ['g01', 'g02', 'g03']);
-  assert.equal(game.claimGoal('g01'), false); // aún no se cumple
-  game.state.stats.produced.cherry = 25; // (v3.61: la cereza se la lleva el Beneficiadero: cuenta lo producido)
+  assert.equal(game.claimGoal('g01'), false); // not yet met
+  game.state.stats.produced.cherry = 25; // (v3.61: Beneficiadero takes the cherries: counts amount produced)
   assert.ok(goalProgress(game.state, GOALS[0]).done);
   const before = game.state.coins;
   assert.ok(game.claimGoal('g01'));
   assert.equal(game.state.coins, before + 15);
   assert.equal(game.claimGoal('g01'), false);
   assert.deepEqual(activeGoals(game.state).map((g) => g.id), ['g02', 'g03', 'g04']);
-  assert.equal(game.claimGoal('g10'), false); // no está entre los visibles
+  assert.equal(game.claimGoal('g10'), false); // not among the visible ones
 });
 
 test('cobrar el último objetivo completa la zona', () => {
@@ -127,7 +127,7 @@ test('cobrar el último objetivo completa la zona', () => {
   game.state.stats.sold.coffee_bag = GOALS.find((g) => g.id === 'final').amount;
   assert.ok(game.claimGoal('final'));
   assert.equal(game.state.zones.finca.complete, true);
-  // …y abre el Trapiche con su Cañaduzal.
+  // …and opens Trapiche with its Cañaduzal.
   assert.equal(game.state.zones.trapiche.unlocked, true);
   assert.ok(game.state.stations.canefield);
 });
@@ -159,7 +159,7 @@ test('la compostera convierte pulpa en compost que sube el precio de la Finca si
   const { saleValue, productValue } = await import('../src/sim/modifiers.js');
   const game = new Game();
   game.state.coins = 1e6;
-  assert.equal(game.quoteUnlock('composter').reason, 'order'); // pide el Beneficiadero
+  assert.equal(game.quoteUnlock('composter').reason, 'order'); // requires Beneficiadero
   game.unlock('wetmill');
   assert.ok(game.unlock('composter'));
   for (const id of ['farm', 'wetmill', 'composter']) game.state.stations[id].level = 15;
@@ -169,11 +169,11 @@ test('la compostera convierte pulpa en compost que sube el precio de la Finca si
   run(game, 240);
   assert.ok((game.state.stats.produced.compost ?? 0) > 0, 'produjo compost');
 
-  // Con compost, la Finca vende un 30 % más caro; el Trapiche no cambia.
+  // With compost, Finca sells 30 % higher; Trapiche doesn't change.
   game.state.stations.composter.buffer = 10;
   assert.equal(saleValue(game.state, 'washed'), productValue(game.state, 'washed') * 1.3);
   assert.equal(saleValue(game.state, 'cane'), productValue(game.state, 'cane'));
-  // Y no acelera el Cafetal: la cadena sigue igual de equilibrada.
+  // And doesn't speed up Cafetal: the chain stays equally balanced.
   assert.equal(productionMult(game.state, 'farm'), 1);
   const before = game.state.stats.produced.cherry;
   game.state.stations.farm.buffer = 0;
@@ -190,7 +190,7 @@ test('la compostera convierte pulpa en compost que sube el precio de la Finca si
   const without = game.state.stats.produced.cherry - before2;
   assert.ok(Math.abs(withCompost - without) <= without * 0.1, `con compost ${withCompost}, sin compost ${without}`);
 
-  // Subir el Cafetal no gasta el compost más rápido: se gasta según el café que lava el Beneficiadero.
+  // Upgrading Cafetal doesn't spend compost faster: it's spent according to the coffee Beneficiadero washes.
   const { expectedCompostValue } = await import('../src/sim/analysis.js');
   game.state.stations.composter.level = 8;
   const sustained = expectedCompostValue(game.state);
@@ -199,7 +199,7 @@ test('la compostera convierte pulpa en compost que sube el precio de la Finca si
   game.state.stations.composter.level = 15;
   assert.ok(Math.abs(expectedCompostValue(game.state) - 1.3) < 1e-9, 'a nivel parecido al Beneficiadero cubre todo');
 
-  // Las ventas reales usan el bono.
+  // Actual sales apply the bonus.
   const g2 = new Game();
   g2.state.stations.composter = { ...g2.state.stations.farm, buffer: 1000 };
   g2.state.zones.finca.warehouse = { cherry: 10 };
@@ -219,7 +219,7 @@ test('la compostera no tiene arrieros ni cuenta para «todas las estaciones»', 
 });
 
 test('ningún objetivo pide vender un producto intermedio (podría quedar imposible)', () => {
-  // Las fuentes se venden sí o sí al empezar cada zona; los productos finales siempre llegan a la bodega.
+  // Sources always sell at the start of each zone; final products always reach the warehouse.
   const finals = new Set(['cherry', 'coffee_bag', 'cane', 'panela_powder', 'raw_milk', 'butter', 'cheese', 'arequipe', 'cacao_pod', 'table_chocolate', 'milk_chocolate', 'corn_cob', 'arepa', 'cheese_arepa', 'breakfast', 'container', 'guava', 'bocadillo_crate', 'tobacco_leaf', 'cigar', 'fique_leaf', 'tobacco_bale', 'steer', 'almuerzo', 'fiambre', 'ant_queen', 'ant_cone', 'recuerdo', 'estadia', 'excursion', 'paddy', 'rice_sack', 'coconut', 'cocada', 'fish', 'fish_in_coconut', 'ordeno_milk', 'almuerzo_costeno', 'bandeja_costena', 'cana_flecha', 'sombrero_vueltiao', 'recuerdo_costa', 'noche_hotel', 'paseo_islas', 'potato', 'criollas_box', 'barley', 'beer_crate', 'greda', 'jarra_cerveza', 'paipa_milk', 'piquete', 'canasta_amasijos', 'wool', 'ruana', 'recuerdo_boyaca', 'noche_villa', 'excursion_fosil', 'palm_bunch', 'oil_box', 'passion_fruit', 'juice_box', 'cachama', 'cachama_maracuya', 'llanero_steer', 'almuerzo_llanero', 'parranda_llanera', 'raw_hide', 'silla_montar', 'recuerdo_llano', 'noche_villavo', 'excursion_cano', 'plantain_bunch', 'patacon_box', 'herbs', 'alino_box', 'pargo', 'tapao', 'piangua', 'arroz_piangua', 'cazuela_mariscos', 'werregue_leaf', 'werregue_jar', 'recuerdo_pacifico', 'noche_buenaventura', 'excursion_ballenas', 'asai_bunch', 'asai_box', 'aji', 'aji_box', 'pirarucu', 'pirarucu_aji', 'yuca_brava', 'desayuno_amazonico', 'banquete_maloca', 'yanchama_bark', 'ticuna_mask', 'recuerdo_amazonas', 'noche_leticia', 'excursion_delfines', 'achira_root', 'bizcocho_box', 'huila_cherry', 'cafe_especial', 'tilapia', 'almuerzo_represa', 'cerdo', 'lechona', 'desayuno_tolimense', 'arcilla', 'loza_negra', 'recuerdo_tolima', 'noche_sanpedro', 'excursion_tatacoa', 'rosa', 'caja_flores', 'fresa', 'fresas_crema', 'trucha', 'almuerzo_trucha', 'roca_sal', 'cofre_sal', 'canasta_sabanera', 'papa_sabanera', 'plato_ajiaco', 'almuerzo_sabanero', 'noche_zipaquira', 'visita_catedral', 'cafe_capitalino', 'tarde_candelaria', 'cena_zona_g', 'domingo_usaquen', 'manana_paloquemao', 'subida_monserrate', 'feria_mi_tierrita']);
   for (const g of GOALS) if (g.type === 'sold') assert.ok(finals.has(g.product), `${g.id} pide vender ${g.product}`);
 });
@@ -229,9 +229,9 @@ test('cada estación de cada cadena tiene exactamente una investigación que la 
   const boosted = new Set(RESEARCH.filter((r) => r.effect.type === 'stationSpeed').map((r) => r.effect.target));
   for (const zone of ZONE_LIST) {
     for (const id of zone.chain) {
-      // La Hornilla ya tiene el bagazo, pero también debe tener su investigación.
+      // Hornilla already has bagazo, but also needs its research upgrade.
       assert.ok(boosted.has(id), `${zone.id}: ${id} no tiene investigación de velocidad`);
-      // Y solo una: con todas compradas, la cadena queda tan equilibrada como sin ninguna.
+      // And only one: with all of them bought, the chain is just as balanced as with none.
       const speedUps = RESEARCH.filter((r) => r.effect.type === 'stationSpeed' && r.effect.target === id);
       assert.equal(speedUps.length, 1, `${zone.id}: ${id} tiene ${speedUps.length} investigaciones de velocidad`);
     }
@@ -252,7 +252,7 @@ test('con el Abono comprado y dinero para la Despulpadora, la recomienda', async
   game.state.coins = 500;
   const rec = recommendUpgrade(game.state, (id, mode) => game.quote(id, mode), 'finca');
   assert.equal(rec.id, 'research:despulpadora');
-  // Sin dinero para ella, recomienda subir el Beneficiadero (no deja al jugador ahorrando).
+  // Without coins for it, recommends upgrading Beneficiadero (doesn't leave player waiting to save).
   game.state.coins = 50;
   assert.equal(recommendUpgrade(game.state, (id, mode) => game.quote(id, mode), 'finca').id, 'wetmill');
 });

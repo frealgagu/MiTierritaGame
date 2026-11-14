@@ -1,7 +1,7 @@
-// Los eventos en el mapa del tablero (v3.14): lo que pasa se ve, y cambia con cada compra. La broca
-// camina por el cafetal hasta que llegan las trampas, el hongo y el re-re; el derrumbe tapa la vía, las
-// mulas pasan por el monte, luego un carro por la trocha y al final la vía queda nueva… Cada evento
-// tiene su escena (ART) en tres etapas más la del comienzo (cuántas compras van). Solo es dibujo.
+// Event art on board map (v3.14): what's happening is visible, changing with each purchase. Borer
+// crawls through cafetal until traps, fungus, and re-re arrive; landslide blocks road, mules detour
+// over brush, then a truck on dirt trail, finally paved road… Each event has an ART scene with three
+// purchase stages plus start state. Purely visual.
 import { moverDepth } from './occlusion.js';
 import { Container, Graphics } from 'pixi.js';
 import { iso, depth, shade } from './iso.js';
@@ -16,9 +16,9 @@ const THIN = { width: 0.8, color: 0x3a2418, alpha: 0.6 };
 const SHIRTS = [0xd7263d, 0x2e6fd1, 0xe8b90f, 0x2fa36b, 0x8e44ad, 0xf07f1d, 0xf4efe6];
 const SKIN = [0xc68642, 0x8d5524, 0xe0ac69, 0xa86b3c];
 
-// Una persona parada en (x, y) de pantalla. o: { shirt, skin, hat, s (escala), arm (brazo levantado), pack }
+// Person standing at screen (x, y). o: { shirt, skin, hat, s (scale), arm (raised), pack }
 function person(g, x, y, o = {}) {
-  const s = o.s ?? 1.35; // un poco más grandes que la gente del pueblo: son los protagonistas
+  const s = o.s ?? 1.35; // slightly larger than townspeople: they are the stars
   const shirt = o.shirt ?? 0xd7263d;
   const skin = o.skin ?? 0xc68642;
   g.ellipse(x, y, 5 * s, 2 * s).fill({ color: 0x000000, alpha: 0.2 });
@@ -37,7 +37,7 @@ function person(g, x, y, o = {}) {
   } else g.ellipse(x, y - 20.4 * s, 2.8 * s, 1.6 * s).fill(0x2b1d14);
 }
 
-// Un canasto con lo recogido.
+// Basket filled with harvested goods.
 function basket(g, x, y, fill, k = 1.8) {
   g.ellipse(x, y, 7 * k, 2.5 * k).fill({ color: 0x000000, alpha: 0.2 });
   g.poly([x - 6 * k, y - 7 * k, x + 6 * k, y - 7 * k, x + 4.5 * k, y, x - 4.5 * k, y]).fill(0xb08850).stroke(OUTLINE);
@@ -46,20 +46,20 @@ function basket(g, x, y, fill, k = 1.8) {
   for (let i = -2; i <= 2; i++) g.circle(x + i * 2.4 * k, y - 7.6 * k - (i % 2) * 0.8 * k, 1.4 * k).fill(shade(fill, 0.8));
 }
 
-// Un letrero de madera con un texto corto (sin texto: solo la tabla con una flecha).
+// Wooden sign with short text (blank text: plank with arrow only).
 function post(g, x, y, color = 0x8b5a2b) {
   g.rect(x - 1, y - 16, 2, 16).fill(0x5e3b1c);
   g.poly([x - 8, y - 20, x + 6, y - 20, x + 10, y - 16, x + 6, y - 12, x - 8, y - 12]).fill(color).stroke(OUTLINE);
 }
 
-// ---------- Lo común: dónde queda cada cosa del mapa ----------
+// ---------- Shared helpers: map prop placement ----------
 function areaOf(zone, stationId) {
   if (zone.farm.stationId === stationId) return { ...zone.farm };
   const p = zone.plots.find((q) => q.stationId === stationId);
   return p ? { x: p.x, y: p.y, w: 3, h: 3 } : null;
 }
 
-// La carretera por donde llega un producto de otra zona (la de la ruta que lo trae).
+// Road where an imported product arrives from another zone (its route's road).
 function importRoad(zone, product) {
   for (const [id, r] of Object.entries(zone.routes ?? {})) if (ROUTE_PRODUCT[id] === product) return r.road;
   return null;
@@ -67,7 +67,7 @@ function importRoad(zone, product) {
 const ROUTE_PRODUCT = { panela_cacao: 'panela_powder', bocadillo: 'bocadillo_bijao', arroz: 'rice_bag', papitas: 'criollas_bag', aceite: 'oil_bottle', patacones: 'patacon_bag', bolsas_asai: 'asai_bag', bizcochos: 'bizcochos', ramos_rosas: 'ramo_rosas', tm_asado: 'parranda_llanera', tm_trucha: 'trucha_ahumada' };
 
 export class EventArt {
-  // scene: la escena del tablero (para el mapa y sus objetos).
+  // scene: event board Scene (for map and props).
   constructor(scene, board) {
     this.scene = scene;
     this.zone = scene.zone;
@@ -75,13 +75,13 @@ export class EventArt {
     this.spec = ART[this.def.id];
     this.rng = createRng(this.zone.seed * 17 + 11);
     this.stage = -1;
-    this.props = []; // lo dibujado de la etapa (se rehace al cambiar)
-    this.movers = []; // lo que se mueve: mulas, carros…
-    this.anims = []; // capas que se redibujan en cada cuadro
+    this.props = []; // artwork drawn for current stage (rebuilt on switch)
+    this.movers = []; // moving props: mules, trucks…
+    this.anims = []; // layers redrawn every frame
     this.hidden = [];
   }
 
-  // Un dibujo fijo en el mapa, a la profundidad de (gx, gy).
+  // Static prop on map depth-sorted at (gx, gy).
   prop(gx, gy, draw, dz = 0.3) {
     const g = new Graphics();
     draw(g, iso(gx, gy));
@@ -91,7 +91,7 @@ export class EventArt {
     return g;
   }
 
-  // Una capa que se redibuja en cada cuadro: fn(g, t, dt).
+  // Per-frame animated layer: fn(g, t, dt).
   anim(gx, gy, fn, dz = 0.4) {
     const g = new Graphics();
     g.zIndex = depth(gx, gy) + dz;
@@ -101,7 +101,7 @@ export class EventArt {
     return g;
   }
 
-  // Quita los árboles y piedras que quedan donde va el dibujo del evento.
+  // Clears trees and rocks colliding with event artwork.
   clear(gx, gy, r = 1.2) {
     for (const d of this.scene.terrain.decor) {
       if (!d.grid || !d.visible) continue;
@@ -128,7 +128,7 @@ export class EventArt {
     for (const m of this.movers) m.step(dt, t);
   }
 
-  // Algo que va y viene por un camino (gx, gy): una mula, un carro…
+  // Prop moving back and forth along a path (gx, gy): mule, truck…
   mover(view, path, speed, offset = 0) {
     this.scene.objects.addChild(view);
     let s = offset;
@@ -155,7 +155,7 @@ export class EventArt {
   }
 }
 
-// Bichos que caminan o vuelan sobre un área: n puntos que se mueven en círculos pequeños.
+// Pests crawling or flying over an area: n dots circling gently.
 function swarm(art, area, n, draw, fly = false) {
   const pts = Array.from({ length: n }, () => ({ gx: area.x + 0.5 + art.rng() * (area.w - 1), gy: area.y + 0.5 + art.rng() * (area.h - 1), ph: art.rng() * 10, r: 0.15 + art.rng() * 0.3 }));
   art.anim(area.x + area.w, area.y + area.h, (g, t) => {
@@ -167,12 +167,12 @@ function swarm(art, area, n, draw, fly = false) {
   });
 }
 
-// El asaí que se pasa y cae (v3.53): un puñado de bolitas moradas en el suelo.
+// Overripe fallen açaí (v3.53): scatter of purple berries on the ground.
 const fallenAsai = (g, x, y) => {
   for (const [dx, dy] of [[-2, 0], [1.5, -1], [0, 1.2], [2.5, 1]]) g.circle(x + dx, y + dy, 1.4).fill(0x311b4e);
 };
 
-// La broca: cucarroncito negro brillante, con sus patitas (dibujada grande para que se vea en el mapa).
+// Coffee borer beetle: shiny black bug with little legs (drawn oversized to read on map).
 const beetle = (g, x, y, a) => {
   const leg = Math.sin(a * 12) * 1.2;
   for (const s of [-1, 1]) for (const k of [-2, 0, 2]) g.moveTo(x + k, y).lineTo(x + k + leg * s, y + 3.4 * s).stroke({ width: 0.9, color: 0x1a1a1a });
@@ -189,14 +189,14 @@ const fly = (g, x, y, a) => {
 };
 
 
-// Pájaro que vuela (los del arrozal): cuerpo oscuro y alas que aletean.
+// Flying bird (rice paddy birds): dark body and flapping wings.
 const bird = (g, x, y, a) => {
   const w = Math.sin(a * 10) * 3.5;
   g.moveTo(x - 6, y - 1 - w).quadraticCurveTo(x - 3, y - 3, x, y).quadraticCurveTo(x + 3, y - 3, x + 6, y - 1 - w).stroke({ width: 1.8, color: 0x2b1d14 });
   g.ellipse(x, y, 2.2, 1.4).fill(0x3a2a1a);
 };
 
-// Espantapájaros con sombrero vueltiao y los brazos abiertos.
+// Scarecrow wearing sombrero vueltiao with outstretched arms.
 function scarecrow(g, x, y) {
   g.rect(x - 1.2, y - 26, 2.4, 26).fill(0x5e3b1c);
   g.moveTo(x - 12, y - 20).lineTo(x + 12, y - 20).stroke({ width: 2, color: 0x5e3b1c });
@@ -208,14 +208,14 @@ function scarecrow(g, x, y) {
 }
 
 
-// Mancha de la gota en una hoja de papa: hoja verde con la mancha café que crece.
+// Late blight spot on potato leaf: green leaf with spreading brown lesion.
 const blight = (g, x, y, a) => {
   g.ellipse(x, y, 5, 3).fill(0x4e8f34).stroke({ width: 0.6, color: 0x2a4a1a });
   g.circle(x + 1, y, 1.8 + Math.sin(a) * 0.4).fill(0x5d4037);
   g.circle(x - 2, y - 0.5, 1).fill(0x3e2723);
 };
 
-// Una cometa de colores que se mece con el viento, con su cola.
+// Colorful kite swaying in breeze with trailing tail.
 function kite(g, x, y, t, k) {
   const sway = Math.sin(t * 1.3 + k) * 6;
   const cx = x + sway;
@@ -226,7 +226,7 @@ function kite(g, x, y, t, k) {
   g.moveTo(cx, cy + 10).quadraticCurveTo(cx + 6, cy + 18, cx - 2 + Math.sin(t * 3 + k) * 4, cy + 26).stroke({ width: 1, color: cols[(k + 2) % cols.length] });
 }
 
-// Gente esperando en fila (de a uno, en diagonal), n personas desde (gx, gy).
+// Queue of waiting people (single-file, diagonal), n people starting at (gx, gy).
 function queue(art, gx, gy, n, o = {}) {
   for (let i = 0; i < n; i++) {
     const x = gx + i * 0.45;
@@ -237,7 +237,7 @@ function queue(art, gx, gy, n, o = {}) {
   }
 }
 
-// Fuego en un fogón, que se mueve; strong: con fuelle (más alto y más claro).
+// Stove fire, flickering; strong: bellows-fanned (taller and brighter).
 function fire(art, gx, gy, strong) {
   art.anim(gx, gy, (g, t) => {
     const p = iso(gx, gy);
@@ -248,7 +248,7 @@ function fire(art, gx, gy, strong) {
   });
 }
 
-// Humo que sube; gray: el del bagazo húmedo, espeso y gris.
+// Rising smoke; gray: damp bagazo smoke, thick and gray.
 function smoke(art, gx, gy, gray) {
   art.anim(gx, gy, (g, t) => {
     const p = iso(gx, gy, 10);
@@ -259,10 +259,10 @@ function smoke(art, gx, gy, gray) {
   }, 0.9);
 }
 
-// ---------- Cada evento ----------
+// ---------- Per-event scenes ----------
 const ART = {
-  // La broca: los cucarroncitos en el cafetal; trampas rojas en las esquinas, el hongo (nubecitas blancas)
-  // y al final los canastos del re-re.
+  // Coffee borer: beetles in cafetal; red traps at corners, white fungus clouds,
+  // and finally re-re harvest baskets.
   broca(art, stage, zone) {
     const a = areaOf(zone, 'farm');
     if (stage < 3) swarm(art, a, [22, 13, 6][stage], beetle);
@@ -286,7 +286,7 @@ const ART = {
       });
     }
     if (stage >= 3) {
-      // Los canastos del re-re, a la orilla del cafetal (abajo a la izquierda, donde no hay edificios).
+      // Re-re baskets along cafetal edge (lower-left, clear of buildings).
       art.clear(a.x + 0.4, a.y + a.h + 0.6, 1.4);
       art.prop(a.x - 0.5, a.y + a.h - 1.2, (g, p) => basket(g, p.x, p.y, 0xd7263d));
       art.prop(a.x + 0.4, a.y + a.h + 0.6, (g, p) => {
@@ -296,12 +296,12 @@ const ART = {
     }
   },
 
-  // La mosca de la fruta: lo mismo en el guayabal, con trampas amarillas, bolsitas y la fruta recogida.
+  // Fruit fly: same in guava grove, with yellow traps, protective bags, and picked fruit.
   mosca(art, stage, zone) {
     const a = areaOf(zone, zone.farm.stationId);
     if (stage < 3) swarm(art, a, [22, 13, 6][stage], fly, true);
     if (stage < 3) {
-      // Fruta caída y podrida en el suelo.
+      // Fallen rotting fruit on ground.
       art.prop(a.x + a.w, a.y + a.h, (g) => {
         for (let k = 0; k < 9; k++) {
           const q = iso(a.x + 0.7 + ((k * 2.1) % (a.w - 1)), a.y + 0.6 + ((k * 1.3) % (a.h - 1)));
@@ -336,8 +336,8 @@ const ART = {
     }
   },
 
-  // La gran molienda: el bagazo mojado humea gris y el fuego es flojo; la bagacera (un techito con el
-  // bagazo secándose), ladrillos nuevos y el fuelle, con buen fuego.
+  // Big milling: damp bagazo smokes gray with weak fire; bagacera (roofed drying
+  // shed), new firebricks, and bellows with roaring fire.
   molienda(art, stage, zone) {
     const a = areaOf(zone, 'furnace');
     const fx = a.x + a.w + 0.3;
@@ -376,7 +376,7 @@ const ART = {
     }
   },
 
-  // Fiesta del maíz: el budare rajado y la fila de gente con hambre; el budare prestado, leña seca y las
+  // Corn festival: cracked budare and hungry queue; borrowed budare, dry firewood, and helpers.
   // vecinas volteando arepas.
   fiesta(art, stage, zone) {
     const a = areaOf(zone, 'budare');
@@ -408,9 +408,9 @@ const ART = {
     }
   },
 
-  // La tractomula sale el viernes (v4.1.2; antes, la grúa de un puerto que Salento no tiene): el montacargas
-  // varado, con la uña abajo, humo y su aviso; los repuestos; arreglado, va y viene subiendo la estiba al
-  // camión, y el turno extra con sus coteros.
+  // Tractomula leaves Friday (v4.1.2; formerly port crane Salento lacks): broken forklift
+  // with lowered forks, smoke, sign; spare parts; repaired, shuttling pallet up onto truck,
+  // plus extra night-shift loaders.
   barco(art, stage, zone) {
     const a = areaOf(zone, 'export_dock');
     const cx = a.x + a.w + 0.6;
@@ -421,7 +421,7 @@ const ART = {
       const k = fixed ? Math.sin(t * 0.9) * 0.5 + 0.5 : 0;
       const p = iso(cx + k * 0.6, cy);
       const lift = fixed ? 4 + (1 - Math.abs(k - 0.5) * 2) * 12 : 0;
-      // Cuerpo amarillo, cabina con techo y el mástil adelante.
+      // Yellow body, overhead cab cage, and front mast.
       g.rect(p.x - 12, p.y - 12, 18, 10).fill(0xe8b90f).stroke(OUTLINE);
       g.rect(p.x - 10, p.y - 24, 1.6, 12).fill(0x333333);
       g.rect(p.x - 1, p.y - 24, 1.6, 12).fill(0x333333);
@@ -430,7 +430,7 @@ const ART = {
       g.circle(p.x + 3, p.y - 1, 3.2).fill(0x222222).stroke(OUTLINE);
       g.rect(p.x + 7, p.y - 28, 2, 26).fill(0x555555).stroke(OUTLINE);
       g.rect(p.x + 9, p.y - 3 - lift, 9, 1.6).fill(0x555555);
-      // La estiba de canastas sobre la uña.
+      // Crate pallet resting on forks.
       g.rect(p.x + 9, p.y - 11 - lift, 9, 8).fill(0xb07a3a).stroke(OUTLINE);
       if (!fixed) {
         for (let j = 0; j < 3; j++) {
@@ -457,8 +457,8 @@ const ART = {
     }
   },
 
-  // Humedad en el caney: llueve encima y hay neblina; ventilas (el aire que entra), fogones de secado
-  // y el techo nuevo (ya no gotea).
+  // Tobacco shed humidity: rain overhead and mist; air vents, drying braziers,
+  // and new drip-free roof.
   humedad(art, stage, zone) {
     const a = areaOf(zone, 'caney');
     const c = { gx: a.x + 1.5, gy: a.y + 1.5 };
@@ -472,7 +472,7 @@ const ART = {
         }
         const m = iso(c.gx, c.gy, 18);
         g.ellipse(m.x, m.y, 60, 20).fill({ color: 0xffffff, alpha: [0.45, 0.32, 0.15][stage] });
-        // La nube gris de la que llueve, encima del caney.
+        // Rainy gray cloud hanging over tobacco barn.
         const cl = iso(c.gx, c.gy, 80);
         const dark = [0x6b7380, 0x8a929e, 0xa9b0ba][stage];
         for (const [dx, dy, r] of [[-26, 4, 16], [-8, -4, 20], [12, 0, 18], [28, 6, 13]]) g.circle(cl.x + dx + Math.sin(t * 0.3) * 3, cl.y + dy, r).fill(dark);
@@ -505,8 +505,8 @@ const ART = {
     }
   },
 
-  // Temporada de turistas: la fila de turistas frente a la mesa de cucuruchos, y cómo se acorta con el
-  // papel prestado, la resma y las vecinas.
+  // Tourist season: tourist queue outside cone shop, shortening with
+  // borrowed paper, full ream, and neighbor helpers.
   turistas(art, stage, zone) {
     const a = areaOf(zone, 'cone_table');
     queue(art, a.x + 0.2, a.y + a.h + 0.6, [7, 5, 3, 1][stage], { hats: true, packs: true });
@@ -533,8 +533,8 @@ const ART = {
     }
   },
 
-  // Puente festivo: la multitud de caminantes esperando para salir al Camino Real; los guías de Guane
-  // con su banderita, los letreros por el camino y los guías del pueblo.
+  // Long holiday weekend: hikers waiting to start Camino Real; Guane guides
+  // with flags, trail signs, and town guides.
   puente_festivo(art, stage, zone) {
     const a = areaOf(zone, 'camino_real');
     queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
@@ -558,19 +558,19 @@ const ART = {
     }
   },
 
-  // Derrumbe en la vía: la tierra y las piedras tapan la carretera de la panela. Primero pasan mulas por
-  // el monte, luego un carro por una trocha y al final la vía queda despejada y pavimentada.
+  // Road landslide: dirt and boulders block panela highway. First mules detour
+  // over brush, then a truck on dirt track, finally cleared and paved.
   derrumbe(art, stage, zone) {
     landslideScene(art, stage, zone, 'panela_powder', 'derrumbe');
   },
 
-  // Creciente del río: el río crecido se llevó el puente; mulas por el vado, el planchón y el puente nuevo.
+  // River flood: swollen river washed out bridge; mules ford river, ferry raft, new bridge.
   creciente(art, stage, zone) {
     landslideScene(art, stage, zone, 'bocadillo_bijao', 'creciente');
   },
 
-  // Feria ganadera y feria artesanal: no hay nada dañado; se arman puestos de feria con banderines, uno
-  // por cada compra, y llega gente.
+  // Livestock & craft fairs: nothing broken; stalls with banners pop up one per
+  // purchase while visitors arrive.
   feria(art, stage, zone) {
     fairScene(art, stage, [0xf4efe6, 0xf2d22e, 0xc8641e]);
   },
@@ -578,10 +578,10 @@ const ART = {
     fairScene(art, stage, [0xd9c08c, 0x2e4fa8, 0xb0905a]);
   },
 
-  // --- La Costa (v3.21) ---
+  // --- Coast (v3.21) ---
 
-  // Pájaros en el arrozal: las bandadas sobre el agua; espantapájaros con vueltiao, cintas plateadas que
-  // brillan con el viento y al final los pajareros aplaudiendo por los camellones.
+  // Birds in rice paddy: flocks over water; scarecrow in vueltiao hat, shiny wind
+  // ribbons, and bird-scarers clapping along levees.
   pajaros(art, stage, zone) {
     const a = areaOf(zone, zone.farm.stationId);
     if (stage < 3) swarm(art, a, [24, 14, 7][stage], bird, true);
@@ -617,8 +617,8 @@ const ART = {
     }
   },
 
-  // Machetes sin filo: el montón de cocos sin pelar junto al Peladero (se achica con cada compra), la
-  // piedra de amolar echando chispas, los machetes nuevos colgados y la peladora.
+  // Dull machetes: pile of unpeeled coconuts by Peladero (shrinks each upgrade),
+  // sparking grindstone, new hanging machetes, and peeling machine.
   machetes(art, stage, zone) {
     const a = areaOf(zone, 'coconut_peeler');
     const px = a.x + a.w + 0.5;
@@ -663,18 +663,18 @@ const ART = {
     }
   },
 
-  // Semana Santa: puestos de pescado con toldos morados, blancos y dorados, uno por compra, y la gente.
+  // Holy Week: fish stalls with purple, white, and gold awnings, one per purchase, plus crowd.
   semana_santa(art, stage) {
     fairScene(art, stage, [0x6a1b9a, 0xf4efe6, 0xc9a227]);
   },
 
-  // Carretera inundada: el agua cruza la carretera del arroz; canoas, la chalupa y el terraplén nuevo.
+  // Flooded road: water crosses rice highway; canoes, motor launch, new embankment.
   inundacion(art, stage, zone) {
     landslideScene(art, stage, zone, 'rice_bag', 'creciente');
   },
 
-  // Festival del sombrero: la fila de visitantes frente a la Costura; la máquina prestada, la caja de
-  // repuestos y las costureras.
+  // Hat festival: visitors queued at Costura; borrowed sewing machine, parts
+  // box, and extra seamstresses.
   festival_sombrero(art, stage, zone) {
     const a = areaOf(zone, 'hat_sewer');
     queue(art, a.x + 0.2, a.y + a.h + 0.6, [7, 5, 3, 1][stage], { hats: true, packs: true });
@@ -703,12 +703,12 @@ const ART = {
     }
   },
 
-  // Llegó un crucero: la fila de turistas en el muelle; los lancheros de Bocachica con sus gorras, los
-  // letreros de turnos y más lancheros.
+  // Cruise ship arrived: tourists queued at pier; Bocachica boatmen in caps,
+  // turn signs, and extra boatmen.
   // --- Boyacá (v3.28) ---
 
-  // La gota en el papal: las hojas manchadas por todo el cultivo; el que fumiga con la bomba de espalda, las
-  // matas aporcadas y al final los canastos de papa sana.
+  // Potato late blight: spotted leaves across field; backpack sprayer,
+  // hilled rows, and healthy potato baskets.
   gota(art, stage, zone) {
     const a = areaOf(zone, zone.farm.stationId);
     if (stage < 3) swarm(art, a, [26, 15, 7][stage], blight);
@@ -742,8 +742,8 @@ const ART = {
     }
   },
 
-  // Horno de malta dañado: los costales de cebada germinada que se amontonan junto a la Maltería (menos con
-  // cada compra), los ladrillos nuevos, el ventilador que gira y el quemador encendido.
+  // Broken malt kiln: sprouted barley sacks piling by Maltería (fewer with
+  // each upgrade), new bricks, spinning fan, and lit burner.
   horno_malta(art, stage, zone) {
     const a = areaOf(zone, 'maltings');
     const px = a.x + a.w + 0.5;
@@ -779,19 +779,19 @@ const ART = {
     if (stage >= 3) fire(art, px + 1.3, py + 1.5, true);
   },
 
-  // Mercado de artesanías: puestos con toldos de tierra, ocre y verde, uno por compra, y la gente.
+  // Craft market: stalls with terracotta, ochre, and green awnings, one per purchase, plus crowd.
   mercado_artesanias(art, stage) {
     fairScene(art, stage, [0xb5653a, 0xd9a330, 0x2f7d4f]);
   },
 
-  // Carretera en obras: la vía de las papitas cerrada con conos; mulas por la trocha, el carro por un carril
-  // y al final la vía nueva pavimentada.
+  // Road construction: chips highway closed with cones; mules on trail, single-lane car,
+  // and finally freshly paved highway.
   obras(art, stage, zone) {
     landslideScene(art, stage, zone, 'criollas_bag', 'derrumbe');
   },
 
-  // Las heladas de diciembre: la fila de gente con frío frente al Telar; el telar prestado, la caja de las
-  // lanzaderas y las tejedoras; escarcha blanca en el pasto.
+  // December frosts: shivering queue outside Telar; borrowed loom, shuttle
+  // box, and weavers; white frost on grass.
   heladas(art, stage, zone) {
     const a = areaOf(zone, 'ruana_loom');
     queue(art, a.x + 0.2, a.y + a.h + 0.6, [7, 5, 3, 1][stage], { hats: true, packs: true });
@@ -829,8 +829,8 @@ const ART = {
     }
   },
 
-  // Festival de las cometas: la fila de visitantes en la Salida al Fósil, cometas de colores en el cielo,
-  // los guías de Sáchica con sus banderitas, los letreros y los jóvenes del pueblo.
+  // Kite festival: visitors queued at Salida al Fósil, colorful kites in sky,
+  // Sáchica guides with flags, signs, and local youths.
   cometas(art, stage, zone) {
     const a = areaOf(zone, 'salida_fosil');
     queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
@@ -860,10 +860,10 @@ const ART = {
     }
   },
 
-  // --- Los Llanos (v3.37) ---
+  // --- Llanos (v3.37) ---
 
-  // Pudrición del cogollo: las palmas con manchas pardas (menos con cada compra); el que corta lo podrido con
-  // el hacha, las zanjas de drenaje y, al final, las palmitas híbridas recién sembradas.
+  // Bud rot: palms with brown spots (fewer per upgrade); worker cutting rot with
+  // axe, drainage ditches, and newly planted hybrid palms.
   pudricion(art, stage, zone) {
     const a = areaOf(zone, zone.farm.stationId);
     if (stage < 3) swarm(art, a, [26, 15, 7][stage], blight);
@@ -896,8 +896,8 @@ const ART = {
     }
   },
 
-  // Despulpadora varada: las canastas de maracuyá que se amontonan junto a la Despulpadora (menos con cada
-  // compra), las aspas nuevas, el motor que zumba y el tamiz.
+  // Jammed pulper: passionfruit baskets piling by Despulpadora (fewer per
+  // upgrade), new blades, humming motor, and sieve.
   despulpadora(art, stage, zone) {
     const a = areaOf(zone, 'passion_pulper');
     const px = a.x + a.w + 0.5;
@@ -935,19 +935,19 @@ const ART = {
     }
   },
 
-  // Feria del pescado: puestos con toldos verde, amarillo y azul, uno por compra, y la gente.
+  // Fish fair: stalls with green, yellow, and blue awnings, one per purchase, plus crowd.
   feria_pescado(art, stage) {
     fairScene(art, stage, [0x2f7d4f, 0xf4c430, 0x2e6fd1]);
   },
 
-  // Se cayó el puente: el río cruza la carretera del aceite y se llevó el puente; canoas, el planchón y al
-  // final el puente nuevo.
+  // Bridge collapsed: river crosses oil highway and took bridge; canoes, barge,
+  // and new bridge.
   puente_caido(art, stage, zone) {
     landslideScene(art, stage, zone, 'oil_bottle', 'creciente');
   },
 
-  // Torneo de coleo: la fila de coleadores frente al Taller de sillas; los aprendices, las hormas y los
-  // maestros; un toro en el corral.
+  // Coleo tournament: riders queued at Taller de sillas; apprentices, saddle
+  // trees, master saddlers, and bull in corral.
   coleo(art, stage, zone) {
     const a = areaOf(zone, 'saddler');
     queue(art, a.x + 0.2, a.y + a.h + 0.6, [7, 5, 3, 1][stage], { hats: true });
@@ -978,8 +978,8 @@ const ART = {
     }
   },
 
-  // Torneo del joropo: la fila de visitantes en la Salida a Caño Cristales, las parejas bailando joropo en el
-  // parque, los guías con banderitas, las avionetas que pasan y los letreros.
+  // Joropo tournament: visitors queued at Caño Cristales exit, couples dancing joropo in
+  // park, flagged guides, passing planes, and signs.
   torneo_joropo(art, stage, zone) {
     const a = areaOf(zone, 'salida_cano');
     queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
@@ -1018,10 +1018,10 @@ const ART = {
     }
   },
 
-  // --- La Costa Pacífica (v3.44) ---
+  // --- Pacific Coast (v3.44) ---
 
-  // Sigatoka negra: las matas con las hojas manchadas (menos con cada compra); el que corta las hojas
-  // enfermas con el machete, las zanjas de drenaje y, al final, los colinos de plátano resistente.
+  // Black sigatoka: plantains with spotted leaves (fewer per upgrade); worker cutting
+  // diseased leaves with machete, drainage ditches, and resistant plantain shoots.
   sigatoka(art, stage, zone) {
     const a = areaOf(zone, zone.farm.stationId);
     if (stage < 3) swarm(art, a, [26, 15, 7][stage], blight);
@@ -1054,8 +1054,8 @@ const ART = {
     }
   },
 
-  // Se enlodó el agua: los baldes de agua revuelta junto al Lavadero (menos con cada compra), los tanques de
-  // agua lluvia, la bomba que zumba y el filtro.
+  // Muddy water: buckets of murky water by Lavadero (fewer per upgrade), rainwater
+  // tanks, humming pump, and filter.
   agua_sucia(art, stage, zone) {
     const a = areaOf(zone, 'herb_washer');
     const px = a.x + a.w + 0.5;
@@ -1097,19 +1097,19 @@ const ART = {
     }
   },
 
-  // Semana Santa en la Bahía: puestos con toldos turquesa, amarillo y rosado, uno por compra, y la gente.
+  // Holy Week at Bay: stalls with turquoise, yellow, and pink awnings, one per purchase, plus crowd.
   semana_santa_pacifico(art, stage) {
     fairScene(art, stage, [0x4fb3bf, 0xf2c14e, 0xe5737f]);
   },
 
-  // Se varó la lancha: el estero cruza la carretera de los patacones; potrillos, la lancha de alquiler y al
-  // final la pleamar.
+  // Grounded launch: estuary crosses patacones highway; dugout canoes, rental boat,
+  // and high tide.
   lancha_varada(art, stage, zone) {
     landslideScene(art, stage, zone, 'patacon_bag', 'creciente');
   },
 
-  // Feria de artesanías: la fila de compradores frente a las Tejedoras; las muchachas que aprenden, los
-  // manojos de fibra que llegan y las abuelas tejedoras.
+  // Craft fair: buyers queued at Tejedoras; young apprentices, fiber
+  // bundles arriving, and grandmother weavers.
   feria_artesanias(art, stage, zone) {
     const a = areaOf(zone, 'werregue_weaver');
     queue(art, a.x + 0.2, a.y + a.h + 0.6, [7, 5, 3, 1][stage], { packs: true });
@@ -1140,8 +1140,8 @@ const ART = {
     }
   },
 
-  // Festival Folclórico del Pacífico: la fila de visitantes en el muelle, las parejas bailando currulao con
-  // pañuelos, los guías con banderitas, las lanchas que pasan y los letreros.
+  // Pacific Folk Festival: visitors queued at dock, couples dancing currulao with
+  // handkerchiefs, flagged guides, passing launches, and signs.
   festival_pacifico(art, stage, zone) {
     const a = areaOf(zone, 'salida_ballenas');
     queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
@@ -1180,10 +1180,10 @@ const ART = {
     }
   },
 
-  // --- El Amazonas (v3.53) ---
+  // --- Amazon (v3.53) ---
 
-  // Las palmas muy altas: los racimos que se pasan y caen al suelo (menos con cada compra); el cosechero que
-  // trepa con la pretina, las escaleras de guadua amarradas y, al final, las palmitas de asaí bajito.
+  // Too-tall palms: overripe bunches dropping to ground (fewer per upgrade); climber
+  // ascending with belt, lashed guadua ladders, and dwarf açaí palms.
   palmas_altas(art, stage, zone) {
     const a = areaOf(zone, zone.farm.stationId);
     if (stage < 3) swarm(art, a, [26, 15, 7][stage], fallenAsai);
@@ -1221,8 +1221,8 @@ const ART = {
     }
   },
 
-  // Sequía en el Amazonas: los baldes vacíos junto al Lavadero de ají (menos con cada compra), los tanques de
-  // agua lluvia, la motobomba que zumba y el pozo.
+  // Amazon drought: empty buckets by Lavadero de ají (fewer per upgrade), rainwater
+  // tanks, humming motor-pump, and well.
   sequia_amazonas(art, stage, zone) {
     const a = areaOf(zone, 'aji_washer');
     const px = a.x + a.w + 0.5;
@@ -1264,19 +1264,19 @@ const ART = {
     }
   },
 
-  // Se acabó la veda: puestos con toldos verde, de palma y morado, uno por compra, y la gente.
+  // Ban lifted: stalls with green, palm, and purple awnings, one per purchase, plus crowd.
   fin_veda(art, stage) {
     fairScene(art, stage, [0x2e7d32, 0xc9a96b, 0x7b1fa2]);
   },
 
-  // Llegó la vaciante: el caño que cruza la carretera del asaí, sin bote que pase; las canoas peque-peque, el
-  // motocarro por la trocha y al final las lluvias que dejan pasar otra vez.
+  // Low-water season: creek crosses açaí route with no boat passing; peque-peque canoes,
+  // motocarro on trail, and rains restoring passage.
   vaciante(art, stage, zone) {
     landslideScene(art, stage, zone, 'asai_bag', 'creciente');
   },
 
-  // La Pelazón: la fila de los que esperan máscaras frente al Taller; los jóvenes que aprenden, las tiras de
-  // corteza que llegan y los abuelos sabedores.
+  // La Pelazón: people waiting for masks outside Taller; young apprentices, bark
+  // strips arriving, and elder wisdom-keepers.
   pelazon(art, stage, zone) {
     const a = areaOf(zone, 'mask_maker');
     queue(art, a.x + 0.2, a.y + a.h + 0.6, [7, 5, 3, 1][stage], { packs: true });
@@ -1307,8 +1307,8 @@ const ART = {
     }
   },
 
-  // Festival de la Confraternidad Amazónica: la fila de visitantes en el muelle, las parejas bailando con
-  // pañuelos, los guías con banderitas, las canoas que pasan y los letreros.
+  // Amazonian Confraternity Festival: visitors queued at dock, dancing couples with
+  // handkerchiefs, flagged guides, passing canoes, and signs.
   confraternidad(art, stage, zone) {
     const a = areaOf(zone, 'salida_delfines');
     queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
@@ -1347,10 +1347,10 @@ const ART = {
     }
   },
 
-  // --- El Tolima Grande (v4.0) ---
+  // --- Tolima Grande (v4.0) ---
 
-  // El verano en el achiral: las matas secas, de hojas cafés, en el achiral (menos con cada compra); las mangueras
-  // que bajan de la quebrada, el jagüey lleno de agua y las matas nuevas que aguantan.
+  // Summer in achiral: dry brown-leafed plants in field (fewer per upgrade); hoses
+  // down from creek, filled reservoir pond, and hardy new plants.
   verano_achiral(art, stage, zone) {
     const a = areaOf(zone, zone.farm.stationId);
     if (stage < 3) {
@@ -1386,8 +1386,8 @@ const ART = {
     }
   },
 
-  // La traviesa: las cajas de cereza que esperan junto al Beneficiadero (menos con cada compra), la despulpadora
-  // prestada, los tanques nuevos y el letrero del beneficio ecológico.
+  // Off-season harvest: cherry crates waiting by Beneficiadero (fewer per upgrade), borrowed
+  // pulper, new tanks, and eco-mill sign.
   traviesa(art, stage, zone) {
     const a = areaOf(zone, 'huila_wetmill');
     const px = a.x + a.w + 0.5;
@@ -1422,19 +1422,19 @@ const ART = {
     if (stage >= 3) art.prop(px - 0.8, py + 2.4, (g, p) => post(g, p.x, p.y, 0x2e7d32));
   },
 
-  // Semana Santa en la represa: puestos con toldos morado, blanco y verde, uno por compra, y la gente.
+  // Holy Week at dam: stalls with purple, white, and green awnings, one per purchase, plus crowd.
   semana_santa_betania(art, stage) {
     fairScene(art, stage, [0x7b1fa2, 0xf5f5f5, 0x2e7d32]);
   },
 
-  // Derrumbe en la vía: las piedras en la carretera de los bizcochos; las mulas por la trocha, el paso a un
-  // carril y la vía despejada.
+  // Highway landslide: rocks on bizcochos road; mules over trail, single-lane
+  // pass, and cleared highway.
   derrumbe_tolima(art, stage, zone) {
     landslideScene(art, stage, zone, 'bizcochos', 'derrumbe');
   },
 
-  // La leña mojada: la lluvia sobre el Horno de quema y la leña empapada (menos con cada compra); la ramada con la
-  // leña seca, los costales de boñiga seca y el horno con techo.
+  // Wet firewood: rain over Horno de quema and soaked wood (fewer per upgrade); shed
+  // with dry wood, sacks of dried dung, and roofed kiln.
   lena_mojada(art, stage, zone) {
     const a = areaOf(zone, 'black_kiln');
     if (stage < 3) {
@@ -1462,8 +1462,8 @@ const ART = {
     }
   },
 
-  // Festival del Bambuco: la fila de visitantes frente a la Salida, las parejas bailando el sanjuanero, los guías con
-  // banderitas, el campero que sale al desierto y los letreros.
+  // Bambuco Festival: visitors queued at Salida, couples dancing sanjuanero, guides
+  // with flags, jeep heading to desert, and signs.
   festival_bambuco(art, stage, zone) {
     const a = areaOf(zone, 'salida_tatacoa');
     queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
@@ -1504,8 +1504,8 @@ const ART = {
 
   // --- Cundinamarca (v4.4.8) ---
 
-  // Las heladas: la escarcha blanca sobre los rosales (menos con cada compra); el riego que la deshace, las mallas
-  // térmicas sobre una parte del invernadero y el rosalero con los rosales nuevos.
+  // Frost: white frost over rose bushes (fewer per upgrade); sprinklers melting it, thermal
+  // mesh over greenhouse bay, and rosarian with hardy new roses.
   heladas_sabana(art, stage, zone) {
     const a = areaOf(zone, zone.farm.stationId);
     if (stage < 3) {
@@ -1548,8 +1548,8 @@ const ART = {
     }
   },
 
-  // La cosecha grande: las canastillas de fresa que esperan junto al Lavadero (menos con cada compra), las tinas nuevas
-  // y la lavadora de banda.
+  // Bumper harvest: strawberry crates waiting by Lavadero (fewer per upgrade), new tubs,
+  // and conveyor washer.
   cosecha_fresa(art, stage, zone) {
     const a = areaOf(zone, 'lavadero_fresas');
     const px = a.x + a.w + 0.5;
@@ -1585,19 +1585,19 @@ const ART = {
     if (stage >= 3) art.prop(px - 0.8, py + 2.4, (g, p) => post(g, p.x, p.y, 0xe53935));
   },
 
-  // Semana Santa en Guatavita: puestos con toldos morado, blanco y azul, uno por compra, y la gente.
+  // Holy Week in Guatavita: stalls with purple, white, and blue awnings, one per purchase, plus crowd.
   semana_santa_guatavita(art, stage) {
     fairScene(art, stage, [0x7b1fa2, 0xf5f5f5, 0x1e88e5]);
   },
 
-  // Derrumbe en la vía: las piedras en la carretera de las rosas; las mulas por la trocha, el paso a un carril y la vía
+  // Highway landslide: boulders on rose highway; mules on trail, single-lane pass, cleared.
   // despejada.
   derrumbe_sabana(art, stage, zone) {
     landslideScene(art, stage, zone, 'ramo_rosas', 'derrumbe');
   },
 
-  // Domingo de ajiaco: la fila de comensales frente a la Servidora (más corta con cada compra), las vecinas que ayudan,
-  // las pilas de platos de barro y la barra de servicio.
+  // Sunday ajiaco: diners queued at Servidora (shorter each purchase), helpful neighbors,
+  // stacks of clay bowls, and serving counter.
   domingo_ajiaco(art, stage, zone) {
     const a = areaOf(zone, 'servidora_ajiaco');
     queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: false });
@@ -1625,8 +1625,8 @@ const ART = {
     }
   },
 
-  // Navidad en la Catedral: la fila de visitantes frente a la Entrada, los guías mineros con casco, las luces de
-  // colores y el tren de la Sabana que llega con más gente.
+  // Christmas at Cathedral: visitors queued at Entrada, hard-hat miner guides, colorful
+  // lights, and Sabana train bringing more visitors.
   navidad_catedral(art, stage, zone) {
     const a = areaOf(zone, 'entrada_catedral');
     queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });
@@ -1666,8 +1666,8 @@ const ART = {
   },
 
   // --- Bogotá (v4.5) ---
-  // El aguacero de la tarde: la lluvia sobre el Chorro (menos fuerte con cada compra) y los charcos frente al Tostadero;
-  // las carpas en la plazoleta, las canaletas que bajan el agua y el tostador bajo un techo de lata.
+  // Afternoon downpour: rain over Chorro (lighter each purchase) and puddles outside Tostadero;
+  // plaza canopies, downspouts draining water, and tin-roofed roaster.
   aguacero_chorro(art, stage, zone) {
     const a = areaOf(zone, 'tostadero_chorro');
     const drops = [70, 50, 30, 14][stage];
@@ -1702,7 +1702,7 @@ const ART = {
       }
     }
     if (stage >= 2) {
-      // Las canaletas: dos bajantes en las esquinas y el agua que se va por la cuneta.
+      // Downspouts: twin corner pipes and water running down gutter.
       art.prop(a.x + a.w, a.y + a.h, (g) => {
         for (const [gx, gy] of [[a.x + a.w, a.y + a.h], [a.x, a.y + a.h]]) {
           const p = iso(gx, gy);
@@ -1730,8 +1730,8 @@ const ART = {
     }
   },
 
-  // El alumbrado de la Séptima: guirnaldas de luces sobre la calle de La Candelaria (una más con cada compra) y la gente
-  // que bajó a pasear, más con cada compra.
+  // Seventh Ave lights: string lights over La Candelaria street (one more per purchase)
+  // and strolling crowd growing with each purchase.
   navidad_septima(art, stage, zone) {
     const c = areaOf(zone, 'casa_colonial');
     const e = areaOf(zone, 'cafeteria_septima');
@@ -1762,20 +1762,20 @@ const ART = {
     queue(art, c.x + 0.6, gy + 0.6, 3 + stage * 2, { hats: false, packs: true });
   },
 
-  // El festival gastronómico: los puestos con toldo (uno por compra), las banderitas y la fila de comensales.
+  // Food festival: awning stalls (one per purchase), flags, and diner queue.
   festival_zona_g(art, stage, zone) {
     const a = areaOf(zone, 'reposteria_zona_g');
     fairScene(art, stage, [0xf07f1d, 0x2fa36b, 0x8e44ad], [a.x - 0.5, a.y - 2.5]);
   },
 
-  // Pico y placa: la tractomula del asado parada a la entrada, con la señal; la camioneta de otra placa, las entregas
-  // de noche (otra camioneta) y, con el permiso, la tractomula que vuelve a andar.
+  // Pico y placa: roast tractomula halted at entry with traffic sign; odd-plate pickup, night
+  // deliveries (second pickup), and with permit, tractomula rolling again.
   pico_placa(art, stage, zone) {
     truckScene(art, stage, zone, 'parranda_llanera', 'pico');
   },
 
-  // El ventarrón del domingo: el viento que sopla sobre Usaquén (menos con cada compra) y los toldos caídos junto al
-  // Toldo de tejidos; los amarres, los toldos nuevos y la carpa de lona.
+  // Sunday gale: wind blowing over Usaquén (calmer each purchase) and blown-over stalls by
+  // Toldo de tejidos; guy-lines, sturdy new stalls, and canvas tent.
   ventarron_usaquen(art, stage, zone) {
     const a = areaOf(zone, 'toldo_tejidos');
     const gusts = [10, 7, 4, 2][stage];
@@ -1797,7 +1797,7 @@ const ART = {
       art.prop(x, gy, (g, p) => {
         g.position.set(p.x, p.y);
         if (k < fallen) {
-          // Caído: el toldo de lado en el suelo y los palos tirados.
+          // Blown over: stall tipped sideways on ground with scattered poles.
           g.poly([-18, -2, 14, -10, 18, -2, -12, 6]).fill(color).stroke(OUTLINE);
           g.moveTo(-14, 6).lineTo(10, 10).moveTo(-6, -4).lineTo(16, 2).stroke({ width: 2, color: 0x5e3b1c });
         } else {
@@ -1821,14 +1821,14 @@ const ART = {
     }
   },
 
-  // El paro camionero: la tractomula de las truchas parada en la vía, con los del paro y su bandera; las camionetas por
-  // la vía alterna, el paso por turnos y, al final, la tractomula que vuelve a andar.
+  // Truckers strike: trout tractomula halted on highway with strikers and banner; pickups on
+  // bypass road, escorted convoy, and finally tractomula rolling again.
   paro_camionero(art, stage, zone) {
     truckScene(art, stage, zone, 'trucha_ahumada', 'paro');
   },
 
-  // La Gran Feria (v4.7): junto al Recinto, los puestos con toldo de los colores de la bandera (uno por compra), las
-  // banderitas y la fila de gente que crece con la demanda.
+  // La Gran Feria (v4.7): beside Recinto, flag-colored awning stalls (one per purchase),
+  // pennant strings, and growing queue.
   gran_feria_bog(art, stage, zone) {
     const a = areaOf(zone, 'gran_feria');
     fairScene(art, stage, [0xfcd116, 0x003893, 0xce1126], [a.x - 7, a.y + 1.5]);
@@ -1855,13 +1855,13 @@ const ART = {
   },
 };
 
-// La carretera de un importado, tapada (derrumbe) o cortada por el río (creciente), y lo que se hace.
+// Imported product highway, blocked (landslide) or cut by river (flood), and detours.
 function landslideScene(art, stage, zone, product, kind) {
   const road = importRoad(zone, product);
   if (!road) return;
   const mid = pointAt(road, 0.5);
   const river = kind === 'creciente';
-  // La carretera llega por el borde del mapa: la cámara se corre un poco para que se vea (una vez).
+  // Highway enters from map edge: pan camera slightly on start so it's visible (once).
   const cam = art.scene.camera;
   if (cam && !art.framed) {
     art.framed = true;
@@ -1869,11 +1869,11 @@ function landslideScene(art, stage, zone, product, kind) {
     cam.centerOn(Math.max(cam.x, m.x - 110), Math.max(cam.y, m.y - 60));
   }
   art.clear(mid.gx, mid.gy, 2.2);
-  // El paso por el monte (o el vado), al lado de la carretera.
+  // Bypass path through brush (or ford) beside highway.
   const by = mid.gy + 0.9;
   const bypass = [[mid.gx + 1.8, mid.gy], [mid.gx + 1.2, by], [mid.gx - 1.2, by], [mid.gx - 1.8, mid.gy]];
   if (river) {
-    // El río cruza la carretera de lado a lado.
+    // River cuts clean across highway.
     art.anim(mid.gx, mid.gy, (g, t) => {
       const pts = [[mid.gx - 0.6, mid.gy - 3], [mid.gx + 0.6, mid.gy - 3], [mid.gx + 0.6, mid.gy + 3], [mid.gx - 0.6, mid.gy + 3]].map(([x, y]) => iso(x, y));
       g.poly(pts.flatMap((p) => [p.x, p.y])).fill(stage >= 3 ? 0x5b9bd5 : 0x6f8fa8);
@@ -1886,7 +1886,7 @@ function landslideScene(art, stage, zone, product, kind) {
   }
   if (stage < 3) {
     if (river) {
-      // El puente caído: dos pedazos de tablas a la orilla.
+      // Collapsed bridge: two splintered deck stubs on banks.
       art.prop(mid.gx, mid.gy, (g) => {
         for (const s of [-1, 1]) {
           const p = iso(mid.gx + s * 0.9, mid.gy);
@@ -1901,7 +1901,7 @@ function landslideScene(art, stage, zone, product, kind) {
         for (const [dx, dy, r] of [[-14, -4, 5], [6, -10, 6], [18, -2, 4], [-4, -12, 3.5]]) g.circle(p.x + dx, p.y + dy, r).fill(0x9a948a).stroke(THIN);
         g.poly([p.x - 6, p.y - 22, p.x - 2, p.y - 32, p.x + 2, p.y - 22]).fill(0x4e7f33);
       });
-      // Conos y cinta de peligro.
+      // Traffic cones and hazard tape.
       for (const s of [-1, 1]) {
         art.prop(mid.gx + s * 1.6, mid.gy - 0.5, (g, p) => {
           g.poly([p.x - 3, p.y, p.x, p.y - 9, p.x + 3, p.y]).fill(0xf07f1d).stroke(THIN);
@@ -1911,7 +1911,7 @@ function landslideScene(art, stage, zone, product, kind) {
     }
   }
   if (stage >= 1 && stage < 3) {
-    // Las mulas (por el monte o por el vado), y desde la trocha o el planchón, también el carro.
+    // Mules (via brush or ford), and from trail/barge stage onward, truck too.
     if (!river) {
       art.prop(mid.gx, by, (g) => {
         const pts = bypass.map(([x, y]) => iso(x, y));
@@ -1945,7 +1945,7 @@ function landslideScene(art, stage, zone, product, kind) {
         for (const s of [-4, 4]) g.moveTo(a.x, a.y - 10 + s).lineTo(b.x, b.y - 10 + s).stroke({ width: 1.5, color: 0x5e3b1c });
       }, 0.1);
     } else {
-      // La vía pavimentada, con su línea amarilla.
+      // Newly paved highway with yellow center line.
       art.prop(mid.gx, mid.gy, (g) => {
         const a = iso(road[0][0], road[0][1]);
         const b = iso(road.at(-1)[0], road.at(-1)[1]);
@@ -1962,12 +1962,12 @@ function landslideScene(art, stage, zone, product, kind) {
   }
 }
 
-// La tractomula de un importado de Bogotá (v4.5) que no puede entrar: parada en su vía con la señal del pico y placa o
-// con los del paro; luego camionetas y, con la última compra, la tractomula andando.
+// Bogotá imported tractomula (v4.5) barred from entering: parked with pico y placa sign or
+// strikers; later pickups and, on final purchase, tractomula rolling.
 function truckScene(art, stage, zone, product, kind) {
   const road = importRoad(zone, product);
   if (!road) return;
-  // El último tramo, el que llega a la estación: allí se para la tractomula.
+  // Final stretch approaching station: tractomula halts there.
   const end = road.at(-1);
   const prev = road.at(-2);
   const last = [prev, end];
@@ -2005,7 +2005,7 @@ function truckScene(art, stage, zone, product, kind) {
   if (stage >= 3) art.mover(new TractomulaView(product), road.slice(-3), 1.4, 0.3);
 }
 
-// Puestos de feria con toldo de color (uno por compra) y gente mirando.
+// Fair stalls with colored awnings (one per purchase) and browsing crowd.
 function fairScene(art, stage, colors, [gx, gy] = [8.5, 20.5]) {
   art.prop(gx + 2, gy - 0.6, (g) => {
     const a = iso(gx - 1, gy - 1, 26);

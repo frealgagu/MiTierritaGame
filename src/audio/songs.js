@@ -1,19 +1,19 @@
-// Música propia, una pieza por región (v1.8.7). Cada compás de 3/4 (salvo la cumbia, en 4/4) se cuenta en corcheas (0 a 5) y cada
-// nota de la melodía es [corchea donde empieza, cuántas corcheas dura, nota]. Las notas largas se tocan
-// en trémolo, como la bandola andina; el acompañamiento (bajo y rasgueo de guitarra y tiple) sale de
-// los acordes.
+// Original music, one piece per region (v1.8.7). Each 3/4 bar (except 4/4 cumbia) counts in eighths (0..5);
+// each melody note is [startEighth, durationEighths, pitch]. Long notes play with
+// Andean bandola tremolo; accompaniment derives from chord progression.
+// Chords.
 
-// Eje Cafetero: un bambuco en mi menor que pasa a sol mayor. La melodía entra después del tiempo
-// fuerte y se amarra al compás siguiente, como canta el bambuco.
+// Eje Cafetero: bambuco in E minor shifting to G major. Melody enters after beat 1
+// and ties across barlines in classic bambuco syncopation.
 const BAMBUCO = {
   name: 'Bambuco de la finca',
-  instruments: 'tiple, guitarra y bandola', // para los créditos (v3.67)
+  instruments: 'tiple, guitarra y bandola', // for About credits (v3.67)
   bpm: 108,
   chords: [
     // A, en mi menor
     'Em', 'Em', 'B7', 'B7', 'B7', 'B7', 'Em', 'Em',
     'E7', 'E7', 'Am', 'Am', 'Em', 'B7', 'Em', 'Em',
-    // B, en sol mayor (y de vuelta a mi menor por el si siete)
+    // B section in G major (returning to E minor via B7)
     'G', 'G', 'D7', 'D7', 'D7', 'D7', 'G', 'G',
     'G7', 'G7', 'C', 'C', 'G', 'D7', 'G', 'B7',
   ],
@@ -53,11 +53,11 @@ const BAMBUCO = {
   ],
 };
 
-// Santander: una guabina, más lenta y nostálgica, en si menor que pasa a re mayor (v3.0). Desde la v3.67, sin
-// tiple y con la guitarra punteada: sonaba casi igual al bambuco del Eje Cafetero.
+// Santander: slower, nostalgic guabina in B minor shifting to D major (v3.0). From v3.67,
+// omits tiple and arpeggiates guitar so it stands apart from the Eje Cafetero bambuco.
 const GUABINA = {
   name: 'Guabina del Chicamocha',
-  instruments: 'guitarra punteada y bandola', // para los créditos (v3.67)
+  instruments: 'guitarra punteada y bandola', // for About credits (v3.67)
   tiple: false,
   arpeggio: true,
   bpm: 92,
@@ -103,11 +103,11 @@ const GUABINA = {
   ],
 };
 
-// La Costa: una cumbia en la menor que pasa a do mayor (v3.15). El compás es de 4/4 (corcheas 0 a 7) y
-// suena distinto: gaita en la melodía, guacharaca, llamador, tambora y tambor alegre (ver compose.js).
+// La Costa: cumbia in A minor shifting to C major (v3.15). 4/4 meter (eighths 0..7) with
+// gaita melody, guacharaca, llamador, tambora, and tambor alegre (see compose.js).
 const CUMBIA = {
   name: 'Cumbia del arrozal',
-  instruments: 'gaita, guacharaca, llamador, tambora y tambor alegre', // para los créditos (v3.67)
+  instruments: 'gaita, guacharaca, llamador, tambora y tambor alegre', // for About credits (v3.67)
   bpm: 100,
   beats: 4,
   style: 'cumbia',
@@ -153,11 +153,11 @@ const CUMBIA = {
   ],
 };
 
-// Boyacá: un torbellino en re mayor que pasa a si menor (v3.22). En 3/4, con el tiple rasgueando todo el
-// compás, el requinto en la melodía (punteada, sin trémolo) y el chucho (ver compose.js).
+// Boyaca: torbellino in D major shifting to B minor (v3.22). 3/4 meter with full-bar tiple strums,
+// plucked requinto melody (no tremolo), and chucho shaker (see compose.js).
 const TORBELLINO = {
   name: 'Torbellino del altiplano',
-  instruments: 'tiple, requinto, guitarra y chucho', // para los créditos (v3.67)
+  instruments: 'tiple, requinto, guitarra y chucho', // for About credits (v3.67)
   bpm: 126,
   style: 'torbellino',
   chords: [
@@ -202,11 +202,11 @@ const TORBELLINO = {
   ],
 };
 
-// Los Llanos: un joropo en re mayor que pasa a si menor (v3.31). En 3/4 rápido, con el arpa en la
-// melodía, el cuatro rasgueando con sus golpes apagados, las maracas y el bajo (ver compose.js).
+// Los Llanos: joropo in D major shifting to B minor (v3.31). Fast 3/4 with harp melody,
+// cuatro muted strums, maracas, and bass (see compose.js).
 const JOROPO = {
   name: 'Joropo de la sabana',
-  instruments: 'arpa, cuatro, maracas y bajo', // para los créditos (v3.67)
+  instruments: 'arpa, cuatro, maracas y bajo', // for About credits (v3.67)
   bpm: 160,
   style: 'joropo',
   chords: [
@@ -251,12 +251,12 @@ const JOROPO = {
   ],
 };
 
-// La Costa Pacífica (v3.38): una chirimía, el porro chocoano de las fiestas de San Pacho en Quibdó, en fa mayor que
-// pasa a re menor. El clarinete lleva la melodía, el bombardino el bajo, y la tambora, el redoblante y los
-// platillos el ritmo (4/4, corcheas 0 a 7).
+// Costa Pacifica (v3.38): chirimia, Choco porro from Quibdo San Pacho festivities, in F major
+// shifting to D minor. Clarinet melody, bombardino bass, tambora, snare, and cymbals (4/4).
+// 4/4 rhythm (eighths 0..7).
 const CHIRIMIA = {
   name: 'Chirimía de San Pacho',
-  instruments: 'clarinete, bombardino, tambora, redoblante y platillos', // para los créditos (v3.67)
+  instruments: 'clarinete, bombardino, tambora, redoblante y platillos', // for About credits (v3.67)
   bpm: 116,
   beats: 4,
   style: 'chirimia',
@@ -302,12 +302,12 @@ const CHIRIMIA = {
   ],
 };
 
-// El Amazonas (v3.47): una cumbia amazónica, la de Leticia y la triple frontera, en la menor que pasa a do mayor.
-// La guitarra eléctrica puntea la melodía; el bajo, el teclado, las maracas y el manguaré llevan el ritmo
+// Amazonas (v3.47): Amazonian cumbia (Leticia & triple border) in A minor shifting to C major.
+// Electric guitar picks the melody; bass, keyboard, maracas, and manguare carry the groove.
 // (4/4, corcheas 0 a 7).
 const AMAZONICA = {
   name: 'Cumbia del Amazonas',
-  instruments: 'guitarra eléctrica, bajo, teclado, maracas y manguaré', // para los créditos (v3.67)
+  instruments: 'guitarra eléctrica, bajo, teclado, maracas y manguaré', // for About credits (v3.67)
   bpm: 108,
   beats: 4,
   style: 'amazonica',
@@ -353,11 +353,11 @@ const AMAZONICA = {
   ],
 };
 
-// El Tolima Grande (v4.0): un sanjuanero, el bambuco fiestero del San Pedro, en re mayor que pasa a si menor. Más
-// rápido que el bambuco del Eje Cafetero: la bandola en trémolo, el tiple, la guitarra, la tambora y la carrasca.
+// Tolima Grande (v4.0): sanjuanero, festive San Pedro bambuco in D major shifting to B minor.
+// Faster than Eje Cafetero bambuco: bandola tremolo, tiple, guitar, tambora, and carrasca.
 const SANJUANERO = {
   name: 'Sanjuanero del San Pedro',
-  instruments: 'tiple, guitarra, bandola, tambora y carrasca', // para los créditos
+  instruments: 'tiple, guitarra, bandola, tambora y carrasca', // for credits
   bpm: 132,
   style: 'sanjuanero',
   chords: [
@@ -402,11 +402,11 @@ const SANJUANERO = {
   ],
 };
 
-// Cundinamarca (v4.4): un pasillo, el de las serenatas de la Sabana y los cafés de Bogotá, en mi menor que pasa a sol
-// mayor. La bandola canta en trémolo, la guitarra marca el «y» del dos y el tres, y el tiple pica en el contratiempo.
+// Cundinamarca (v4.4): pasillo of Sabana serenades and Bogota cafes, in E minor shifting to G
+// major. Tremolo bandola sings, guitar marks and-of-2 and 3, tiple chops off-beats.
 const PASILLO = {
   name: 'Pasillo de la Sabana',
-  instruments: 'bandola, tiple y guitarra', // para los créditos
+  instruments: 'bandola, tiple y guitarra', // for credits
   bpm: 120,
   style: 'pasillo',
   chords: [
@@ -451,12 +451,12 @@ const PASILLO = {
   ],
 };
 
-// Bogotá (v4.5): una danza, la de los salones santafereños de antes, en la menor que pasa a do mayor, en 2/4 y lenta.
-// La guitarra lleva el ritmo de habanera (el bajo en el uno, el acorde en el «y» del uno partido y en el dos), el tiple
-// pica en el contratiempo y la bandola canta con las corcheas con puntillo de la danza.
+// Bogota (v4.5): danza of old Santafe salons, slow 2/4 in A minor shifting to C major.
+// Guitar carries habanera rhythm, tiple chops off-beats, bandola plays dotted-eighth melody.
+// dotted eighths characteristic of the danza.
 const DANZA = {
   name: 'Danza de La Candelaria',
-  instruments: 'bandola, tiple y guitarra', // para los créditos
+  instruments: 'bandola, tiple y guitarra', // for credits
   bpm: 72,
   beats: 2,
   style: 'danza',
@@ -502,10 +502,10 @@ const DANZA = {
   ],
 };
 
-// Por región.
+// Per region.
 export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA };
 
-// Acordes: tónica y notas (en semitonos sobre la tónica).
+// Chords: root pitch class and intervals (semitones above root).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };
 const QUALITY = { '': [0, 4, 7], m: [0, 3, 7], 7: [0, 4, 7, 10], m7: [0, 3, 7, 10] };
 

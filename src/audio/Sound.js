@@ -1,8 +1,8 @@
-// Sonidos sintetizados con Web Audio (sin archivos). El navegador solo deja sonar tras un toque.
+// Synthesized Web Audio sound effects (no external files). Browsers unlock audio on first tap.
 
-const MASTER = 0.35; // volumen de los sonidos al 100 % del control del menú
+const MASTER = 0.35; // SFX gain at 100% slider setting
 
-// Lo que suena al abrir cada estación (v3.3.2): su oficio, en pocos tipos de sonido.
+// Sound played when opening each station (v3.3.2): grouped by craft into a few sound types.
 const STATION_SOUNDS = {
   field: ['farm', 'canefield', 'cacao_grove', 'cornfield', 'guava_grove', 'tobacco_field', 'fique_field', 'rice_field', 'coconut_grove', 'fishing_canoes', 'canaflechal', 'potato_field', 'palm_grove', 'plantain_grove', 'asai_grove', 'barley_field', 'passion_vines', 'azotea_beds', 'aji_field', 'clay_pit', 'fish_ponds', 'mangrove_flats', 'yuca_chagra', 'pargo_boats', 'pirarucu_canoes', 'sheep_pasture', 'hide_yard', 'werregue_palms', 'yanchama_trees', 'composter', 'anthill', 'camino_real', 'achiral', 'cafetal_huila', 'tilapia_cages', 'clay_bank', 'pigsty', 'invernadero_rosas', 'fresal', 'estanques_trucha', 'huerta_papa'],
   moo: ['pasture', 'cattle_ranch', 'milking_corral', 'paipa_herd', 'llanero_herd'],
@@ -31,9 +31,9 @@ export class Sound {
   constructor() {
     this.ctx = null;
     this.enabled = true;
-    this.volume = 1; // del control del menú (v3.66), de 0 a 1
+    this.volume = 1; // slider value (v3.66), from 0 to 1
     this.lastPlayed = {};
-    // El contexto de audio se crea con el primer toque del jugador.
+    // AudioContext is created on the player first tap.
     const unlock = () => {
       this.ensure();
       window.removeEventListener('pointerdown', unlock);
@@ -56,14 +56,14 @@ export class Sound {
     this.enabled = on;
   }
 
-  // Volumen de 0 a 1; en 0 no suena nada.
+  // Volume from 0 to 1; 0 silences everything.
   setVolume(v) {
     this.volume = v;
     this.enabled = v > 0;
     if (this.master) this.master.gain.value = MASTER * v;
   }
 
-  // Una nota con ataque y caída cortos.
+  // Single note with short attack and decay.
   tone(freq, start, duration, { type = 'sine', gain = 0.5, slide = 0 } = {}) {
     const ctx = this.ctx;
     const t = ctx.currentTime + start;
@@ -80,7 +80,7 @@ export class Sound {
     osc.stop(t + duration + 0.02);
   }
 
-  // No repite el mismo sonido más seguido que `gap` segundos.
+  // Throttle identical sounds within `gap` seconds.
   ready(name, gap) {
     if (!this.enabled || !this.ctx || this.ctx.state !== 'running') return false;
     const now = this.ctx.currentTime;
@@ -112,27 +112,27 @@ export class Sound {
 
   build() {
     if (!this.ready('build', 0.5)) return;
-    // Tres golpes de martillo y un acorde.
+    // Three hammer hits and a chord.
     for (let i = 0; i < 3; i++) this.tone(180, i * 0.12, 0.08, { type: 'square', gain: 0.2, slide: 0.5 });
     [NOTES.G4, NOTES.C5, NOTES.E5, NOTES.G5].forEach((f) => this.tone(f, 0.4, 0.6, { type: 'triangle', gain: 0.22 }));
   }
 
-  // Trino de pájaro (ambiente de día).
+  // Bird chirp (daytime ambiance).
   chirp() {
     if (!this.ready('chirp', 3)) return;
     const base = 2200 + Math.random() * 1200;
     for (let i = 0; i < 2 + Math.floor(Math.random() * 3); i++) this.tone(base, i * 0.09, 0.07, { gain: 0.05, slide: 1.4 });
   }
 
-  // Grillo (ambiente de noche).
+  // Cricket (nighttime ambiance).
   cricket() {
     if (!this.ready('cricket', 1.5)) return;
     for (let i = 0; i < 4; i++) this.tone(4200, i * 0.05, 0.03, { type: 'square', gain: 0.015 });
   }
 
-  // ---------- Ambiente de cada zona (v1.8): voces de animales, el trapiche y las campanas ----------
+  // ---------- Per-zone ambiance (v1.8): animal voices, cane mill, and church bells ----------
 
-  // Un oscilador que pasa de f0 a f1 por un filtro: sirve para las voces de los animales.
+  // Filtered oscillator sweeping from f0 to f1: used for animal calls.
   voice(f0, f1, start, duration, { type = 'sawtooth', gain = 0.08, filter = 900, q = 1, vibrato = 0 } = {}) {
     const ctx = this.ctx;
     const t = ctx.currentTime + start;
@@ -185,7 +185,7 @@ export class Sound {
     env.gain.exponentialRampToValueAtTime(gain, t + 0.05);
     env.gain.setValueAtTime(gain, t + duration * 0.8);
     env.gain.exponentialRampToValueAtTime(0.0001, t + duration);
-    // Golpeteo (el trapiche que da vueltas): el volumen sube y baja.
+    // Periodic thumping (rotating cane mill): modulated gain.
     if (pulse) {
       const lfo = ctx.createOscillator();
       const depth = ctx.createGain();
@@ -200,14 +200,14 @@ export class Sound {
     src.stop(t + duration + 0.05);
   }
 
-  // Vaca: un mugido largo que baja.
+  // Cow: low descending moo.
   moo() {
     if (!this.ready('moo', 6)) return;
     const f = 130 + Math.random() * 30;
     this.voice(f, f * 0.78, 0, 1.3, { gain: 0.06, filter: 500, q: 0.8, vibrato: 5 });
   }
 
-  // Gallo al amanecer: «ki-ki-ri-kí».
+  // Rooster at dawn: cock-a-doodle-doo.
   rooster() {
     if (!this.ready('rooster', 20)) return;
     const parts = [[620, 700, 0.12], [700, 780, 0.12], [760, 900, 0.18], [900, 620, 0.55]];
@@ -227,7 +227,7 @@ export class Sound {
     }
   }
 
-  // Perro: dos ladridos.
+  // Dog: two barks.
   bark() {
     if (!this.ready('bark', 10)) return;
     for (let i = 0; i < 2; i++) {
@@ -236,32 +236,32 @@ export class Sound {
     }
   }
 
-  // Trapiche moliendo: un retumbe que va y viene.
+  // Grinding cane mill: rhythmic low rumble.
   grind() {
     if (!this.ready('grind', 6)) return;
     this.noise(0, 2.2, { gain: 0.11, freq: 160, q: 0.7, type: 'lowpass', pulse: 3 });
   }
 
-  // Miel hirviendo en las pailas.
+  // Boiling syrup in kettles.
   bubble() {
     if (!this.ready('bubble', 3)) return;
     for (let i = 0; i < 4; i++) this.tone(260 + Math.random() * 200, i * 0.11 + Math.random() * 0.05, 0.06, { gain: 0.04, slide: 1.8 });
   }
 
-  // Loro o guacamaya del cacaotal.
+  // Parrot or macaw in cacao grove.
   parrot() {
     if (!this.ready('parrot', 8)) return;
     this.voice(900, 1300, 0, 0.22, { gain: 0.09, filter: 1800, q: 2 });
     this.voice(1250, 950, 0.28, 0.18, { gain: 0.08, filter: 1800, q: 2 });
   }
 
-  // Campanas de la iglesia del Pueblo: `strokes` campanadas.
+  // Pueblo church bells: `strokes` chimes.
   bells(strokes = 3) {
     if (!this.ready('bells', 10)) return;
     const ctx = this.ctx;
     for (let i = 0; i < strokes; i++) {
       const t = ctx.currentTime + i * 1.1;
-      // Parciales de campana (no armónicos), con caída larga.
+      // Inharmonic bell partials with long decay.
       for (const [ratio, g] of [[1, 0.038], [2.0, 0.019], [2.4, 0.015], [3.0, 0.009], [4.2, 0.006]]) {
         const osc = ctx.createOscillator();
         const env = ctx.createGain();
@@ -276,9 +276,9 @@ export class Sound {
     }
   }
 
-  // ---------- Al abrir una estación (v3.3.2): un sonido de su oficio ----------
+  // ---------- On opening a station (v3.3.2): sound matching its craft ----------
 
-  // `id`: la estación (o 'dispatch' para la bodega). No se repite más seguido que cada 0,3 s.
+  // `id`: station ID (or 'dispatch' for warehouse). Throttled to at most once every 0.3 s.
   station(id) {
     if (!this.ready('station', 0.3)) return;
     const kind = stationSound(id);
@@ -287,35 +287,35 @@ export class Sound {
   }
 }
 
-// Cada tipo de sonido (con `this` = Sound).
+// Sound generators (`this` = Sound instance).
 const STATION_PLAY = {
-  // Hojas que se mecen y un pájaro.
+  // Rustling leaves and a bird.
   field() {
     this.noise(0, 0.5, { gain: 0.05, freq: 3200, q: 0.6 });
     this.noise(0.35, 0.45, { gain: 0.04, freq: 2600, q: 0.6 });
     const base = 2400 + Math.random() * 800;
     for (let i = 0; i < 3; i++) this.tone(base, 0.25 + i * 0.09, 0.07, { gain: 0.05, slide: 1.4 });
   },
-  // Mugido (más grave el de los novillos del Hato).
+  // Moo (deeper for Hato steers).
   moo(id) {
     const f = id === 'cattle_ranch' || id === 'milking_corral' ? 105 : 140;
     this.voice(f, f * 0.78, 0, 1.1, { gain: 0.07, filter: 500, q: 0.8, vibrato: 5 });
   },
-  // Agua que corre y gotea.
+  // Running and dripping water.
   water() {
     this.noise(0, 0.7, { gain: 0.05, freq: 1400, q: 0.8 });
     for (let i = 0; i < 4; i++) this.tone(500 + Math.random() * 600, 0.05 + i * 0.13, 0.07, { gain: 0.05, slide: 1.8 });
   },
-  // Motor con su traqueteo.
+  // Clattering motor.
   machine() {
     this.noise(0, 0.9, { gain: 0.1, freq: 220, q: 0.7, type: 'lowpass', pulse: 9 });
     this.tone(70, 0, 0.9, { type: 'square', gain: 0.04 });
   },
-  // Algo que gira cada vez más rápido (la descremadora, la rueda de hilar).
+  // Accelerating spin (cream separator, spinning wheel).
   whir() {
     this.voice(180, 520, 0, 0.7, { gain: 0.06, filter: 700, q: 1 });
   },
-  // Fuego que crepita.
+  // Crackling fire.
   fire() {
     this.noise(0, 0.8, { gain: 0.03, freq: 500, q: 0.6, type: 'lowpass' });
     for (let i = 0; i < 9; i++) this.noise(Math.random() * 0.75, 0.03, { gain: 0.08, freq: 2500 + Math.random() * 2000, q: 2 });
@@ -325,39 +325,39 @@ const STATION_PLAY = {
     for (let i = 0; i < 7; i++) this.tone(220 + Math.random() * 260, i * 0.09 + Math.random() * 0.04, 0.07, { gain: 0.05, slide: 1.9 });
     this.noise(0, 0.6, { gain: 0.025, freq: 3000, q: 0.5 });
   },
-  // Viento que seca (marquesinas, caney, tendedero).
+  // Drying wind (drying racks, caney, clotheslines).
   wind() {
     this.noise(0, 1.2, { gain: 0.06, freq: 500, q: 0.5, type: 'lowpass' });
     this.noise(0.2, 0.8, { gain: 0.03, freq: 1200, q: 1.5 });
   },
-  // Fermentación: burbujas graves y lentas.
+  // Fermentation: slow low bubbles.
   ferment() {
     for (let i = 0; i < 4; i++) this.tone(110 + Math.random() * 60, i * 0.2, 0.12, { gain: 0.07, slide: 1.6 });
   },
-  // Cuchillo sobre la tabla.
+  // Knife chopping on wooden board.
   chop() {
     for (let i = 0; i < 3; i++) {
       this.tone(240, i * 0.16, 0.05, { type: 'square', gain: 0.12, slide: 0.5 });
       this.noise(i * 0.16, 0.04, { gain: 0.06, freq: 3000, q: 1 });
     }
   },
-  // Telar o mesa de trabajo: clac-clac de madera.
+  // Loom or workbench: wooden clack-clack.
   loom() {
     [620, 460, 620, 460].forEach((f, i) => this.tone(f, i * 0.14, 0.04, { type: 'triangle', gain: 0.18 }));
   },
-  // Cajas y bultos que se apilan.
+  // Heavy boxes and sacks stacking.
   thud() {
     for (let i = 0; i < 2; i++) {
       this.tone(120, i * 0.22, 0.16, { gain: 0.3, slide: 0.5 });
       this.noise(i * 0.22, 0.08, { gain: 0.04, freq: 400, q: 1 });
     }
   },
-  // La sirena del barco en el puerto.
+  // Ship horn at the dock.
   horn() {
     this.voice(118, 112, 0, 1.2, { gain: 0.1, filter: 380, q: 0.9 });
     this.voice(148, 140, 0, 1.2, { gain: 0.05, filter: 450, q: 0.9 });
   },
-  // Algo que se asa en el budare o la plancha.
+  // Sizzling on griddle or budare.
   sizzle() {
     this.noise(0, 0.9, { gain: 0.05, freq: 5000, q: 0.4, type: 'highpass', pulse: 13 });
   },
@@ -366,11 +366,11 @@ const STATION_PLAY = {
     this.tone(2100, 0, 0.18, { type: 'triangle', gain: 0.1 });
     this.tone(2650, 0.12, 0.22, { type: 'triangle', gain: 0.08 });
   },
-  // Sal que cae.
+  // Pouring salt.
   pour() {
     this.noise(0, 0.6, { gain: 0.05, freq: 6000, q: 0.8 });
   },
-  // El Willys que arranca y pita.
+  // Willys jeep starting and honking.
   engine() {
     this.noise(0, 0.8, { gain: 0.09, freq: 180, q: 0.7, type: 'lowpass', pulse: 18 });
     this.tone(440, 0.55, 0.12, { type: 'square', gain: 0.06 });

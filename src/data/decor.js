@@ -1,5 +1,5 @@
-// Decoración (v2.2, GDD §10.2): se compra con Renombre ⭐ y no cambia nada de la economía. Cada
-// categoría tiene su opción de siempre (gratis) y otras para comprar; se elige una a la vez.
+// Decoration (v2.2, GDD §10.2): bought with Renown ⭐ and does not alter economy. Each
+// category has a default (free) option plus purchasable ones; one active at a time.
 export const DECOR = [
   {
     id: 'willys',
@@ -13,12 +13,12 @@ export const DECOR = [
       { id: 'blanco', name: 'Blanco', cost: 3, color: 0xe9e4d8 },
     ],
   },
-  // El segundo Willys (v3.9): se pinta aparte. Sale rojo, para distinguirlo del primero.
+  // Second Willys (v3.9): painted separately. Defaults red to stand apart from the first.
   {
     id: 'willys2',
     icon: '🚙',
     name: 'Color del segundo Willys',
-    requires: 'willys2', // se ve al comprar el segundo Willys en alguna región
+    requires: 'willys2', // shown once second Willys is purchased in any region
     options: [
       { id: 'rojo', name: 'Rojo', cost: 0, color: 0xc0392b },
       { id: 'verde', name: 'Verde monte', cost: 3, color: 0x4f7a3a },
@@ -62,5 +62,5 @@ export const DECOR = [
 ];
 
 export const DECOR_BY_ID = Object.fromEntries(DECOR.map((d) => [d.id, d]));
-// La opción gratis de cada categoría (la de siempre).
+// Free default option for each category (classic look).
 export const DEFAULT_DECOR = Object.fromEntries(DECOR.map((d) => [d.id, d.options[0].id]));

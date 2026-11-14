@@ -1,8 +1,8 @@
-// Avisos en lo alto de la pantalla. Lo que dice la persona de una zona (`speech`, v3.3.2) dura según lo
-// largo del texto; un aviso corto que llega encima se muestra y después vuelve el comentario con lo que
-// le quedaba; otro comentario espera su turno (como mucho tres en fila). Tocar el aviso lo cierra (en la
-// v3.67.1 dejaba pasar los toques, pero entonces no se podía quitar de encima de una ventana).
-const MS_PER_CHAR = 75; // unas 13 letras por segundo, más 3 s para empezar a leer
+// Top-of-screen toasts. Zone character speech (`speech`, v3.3.2) lasts proportional to
+// text length; a brief notice interrupts on top and resumes the remaining speech duration
+// afterward; queued speech waits its turn (up to three queued). Tapping toast closes it (in
+// v3.67.1 taps passed through, making it impossible to dismiss over a modal).
+const MS_PER_CHAR = 75; // roughly 13 chars per second, plus 3 s lead-in to start reading
 const MAX_QUEUE = 3;
 
 export const readingTime = (text, ms = 0) => Math.max(ms, 3000 + text.length * MS_PER_CHAR);
@@ -30,7 +30,7 @@ function show(item) {
   timer = setTimeout(next, item.ms);
 }
 
-// Lo siguiente: el comentario que tapó un aviso corto o, si no, el próximo en fila.
+// Next up: speech interrupted by a brief notice, or next in queue.
 function next() {
   const item = current?.resume ?? queue.shift();
   current = null;
@@ -39,7 +39,7 @@ function next() {
   else element().hidden = true;
 }
 
-// now (v3.12): se muestra ya, sin esperar turno (lo que dice una persona al tocarla en el mapa).
+// now (v3.12): show immediately without waiting in queue (line spoken when tapping someone on map).
 export function toast(text, ms = 3500, { speech = false, now = false } = {}) {
   if (speech && now) {
     show({ text, ms: readingTime(text, ms), speech: true });

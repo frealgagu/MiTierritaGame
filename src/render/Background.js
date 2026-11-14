@@ -1,8 +1,8 @@
 import { Container, Graphics } from 'pixi.js';
 import { createRng } from '../core/rng.js';
 
-// Fondo en coordenadas de pantalla: cordilleras en capas con niebla y nubes.
-// El cielo es un degradado CSS detrás del canvas.
+// Screen-space background: layered mountain ranges with mist and clouds.
+// Sky is a CSS gradient behind the canvas.
 export class Background {
   constructor() {
     this.view = new Container();
@@ -10,7 +10,7 @@ export class Background {
     this.clouds = new Container();
     this.birds = new Graphics();
     this.view.addChild(this.mountains, this.clouds, this.birds);
-    // Estrellas: van aparte para que el tinte de la noche no las apague.
+    // Stars stay separate so night tint doesn't dim them.
     this.stars = new Graphics();
     this.night = 0;
     this.flock = [];
@@ -37,7 +37,7 @@ export class Background {
     }
   }
 
-  // 0 = día, 1 = noche cerrada.
+  // 0 = day, 1 = full night.
   setNight(n) {
     this.night = n;
     this.stars.alpha = n;
@@ -62,7 +62,7 @@ export class Background {
       }
       pts.push(w + 200, h);
       g.poly(pts).fill(layer.color);
-      // Niebla entre capas.
+      // Mist between layers.
       g.rect(-100, h * (layer.base - 0.02), w + 300, h * 0.09).fill({ color: 0xffffff, alpha: 0.22 });
     }
   }
@@ -85,12 +85,12 @@ export class Background {
       c.x += c.speed * dt;
       if (c.x > this.width + 120) c.x = -160;
     }
-    // Paralaje leve: las montañas se mueven un poco con la cámara.
+    // Gentle parallax: mountains shift slightly with camera.
     this.mountains.position.set(camera.offsetX * 0.03, camera.offsetY * 0.03);
     this.updateBirds(dt);
   }
 
-  // Bandadas de pájaros que cruzan el cielo de día.
+  // Flocks of birds crossing the daytime sky.
   updateBirds(dt) {
     this.nextFlock -= dt;
     if (this.nextFlock <= 0 && this.night < 0.3) {

@@ -37,22 +37,22 @@ import { eventDef, eventHandicaps, handicapText, supplyFraction } from '../sim/e
 import { harvestFactor, waitingHarvest } from '../sim/production.js';
 import { LANG, listJoin, t } from '../i18n/index.js';
 
-const SUBTITLE_MS = 7000; // cada cuánto cambia el subtítulo (descripción y datos reales)
+const SUBTITLE_MS = 7000; // how often subtitle cycles (description vs. live stats)
 
 const MODES = [
   { key: 1, label: '×1' },
   { key: 10, label: '×10' },
-  { key: 'max', label: 'Máx' }, // (se traduce al dibujar)
+  { key: 'max', label: 'Máx' }, // (translated at render time)
 ];
 
 const recipe = (obj) => Object.entries(obj).map(([id, n]) => `${n} ${PRODUCTS[id].icon}`).join(' + ');
 const nameOf = (id) => (id.startsWith('dispatch') ? DISPATCH.name : id === 'warehouse' ? t('la bodega') : STATIONS_BY_ID[id].name);
-// «la Descremadora, la Quesera y la Paila de arequipe»
+// «Descremadora, Quesera, and Paila de arequipe»
 const listNames = (ids, article = false) => {
   const names = ids.map((id) => (article ? withArticle(STATIONS_BY_ID[id].name) : STATIONS_BY_ID[id].name));
   return listJoin(names);
 };
-// Con cuatro pestañas, las de la estación y el transporte muestran solo el ícono.
+// With four tabs, station and transport tabs show icon only.
 const tabButtons = (tabs, active) =>
   tabs
     .map(([key, icon, name]) => {
@@ -61,20 +61,20 @@ const tabButtons = (tabs, active) =>
     })
     .join('');
 const isBuilt = (state, id) => id.startsWith('dispatch') || id.startsWith('route:') || Boolean(state.stations[id]);
-// Pestañas de una estación: la estación, su transporte y una por cada ruta que la abastece.
-// [clave, ícono, nombre]
+// Tabs of a station: station, its transport, and one per route supplying it.
+// [key, icon, label]
 function tabsOf(state, id) {
   if (id.startsWith('dispatch')) return [['station', DISPATCH.icon, t('Despacho')], ['stock', '📦', t('Bodega')]];
   const tabs = [
     ['station', '⚙️', t('Estación')],
     ['transport', ...(hasBelt(state.stations[id]?.transport.level ?? 0) ? ['⚡', t('Banda')] : ['🐴', t('Arrieros')])],
   ];
-  for (const imp of STATIONS_BY_ID[id]?.imports ?? []) tabs.push([`route:${imp.route}`, ROUTES_BY_ID[imp.route].icon, ROUTES_BY_ID[imp.route].tab]); // 🚌, o 🚛 la tractomula (v4.5)
+  for (const imp of STATIONS_BY_ID[id]?.imports ?? []) tabs.push([`route:${imp.route}`, ROUTES_BY_ID[imp.route].icon, ROUTES_BY_ID[imp.route].tab]); // 🚌, or 🚛 tractomula (v4.5)
   return tabs;
 }
 
-// Panel inferior con la información y las mejoras de la estación seleccionada.
-// Se construye al abrir y luego solo se actualizan los textos (para no perder clics).
+// Bottom panel with stats and upgrades for the selected station.
+// Built once on open, then only text updates (to preserve button clicks).
 export class StationPanel {
   constructor(game, onClose) {
     this.game = game;
@@ -84,11 +84,11 @@ export class StationPanel {
     this.mode = 1;
     this.refs = {};
     this.built = null;
-    // Al girar el teléfono cambia el ancho: los textos se vuelven a ajustar.
+    // On phone rotation width changes: refit texts.
     window.addEventListener('resize', () => this.id && this.fitAll());
   }
 
-  // tab: 'station' | 'transport' | 'route:<ruta>' (estaciones que reciben un producto de otra zona)
+  // tab: 'station' | 'transport' | 'route:<route>' (stations receiving a product from another zone)
   open(id, tab = 'station') {
     this.id = id;
     this.tab = tab;
@@ -118,9 +118,9 @@ export class StationPanel {
     this.onClose();
   }
 
-  // El panel tiene un alto fijo (el de la vista más llena) y cada parte el suyo: lo que sobra queda
-  // debajo de los datos, y el aviso y los botones van siempre abajo. Así no cambia de tamaño al
-  // pasar de pestaña ni cuando cambian los textos.
+  // Panel has fixed height (tallest view) and each block its own height: leftover space stays
+  // below stats, with notice and buttons pinned at bottom. Prevents jumping when
+  // switching tabs or updating text.
   frame({ icon, title, subtitle, tabs = '', recipe, rows, milestone = '', modes = '', button }) {
     return `
       <div class="panel-head">
@@ -141,7 +141,7 @@ export class StationPanel {
     this.info = info;
     this.variant = info.variant?.(this.game.state);
     const look = info.look?.(this.game.state) ?? info;
-    // En la pestaña de la estación, el subtítulo va alternando con datos reales de lo que hace.
+    // On station tab, subtitle alternates with live stats of its activity.
     this.subtitles = look === info && info.facts?.length ? [look.subtitle, ...info.facts.map((f) => `💡 ${f}`)] : null;
     this.el.innerHTML = this.frame({
       icon: look.icon,
@@ -179,8 +179,8 @@ export class StationPanel {
     this.info = null;
     this.variant = undefined;
     const [outId] = Object.keys(def.out);
-    // (v4.7.2) Una estación sin entrada de otra estación (en Bogotá, las que solo reciben de tractomula) no tiene `in`:
-    // sin esto el panel quedaba en blanco.
+    // (v4.7.2) Station with no preceding station (in Bogotá, tractomula-only ones) lacks `in`:
+    // without this the panel was blank.
     const [inId] = Object.keys(def.in ?? {});
     const gain = PRODUCTS[outId].value * def.out[outId] - (inId ? PRODUCTS[inId].value * def.in[inId] : 0);
     const rows = def.side
@@ -205,8 +205,8 @@ export class StationPanel {
     });
   }
 
-  // La bodega por dentro (v3.66): cuánto hay de cada producto de la zona y a cuánto se vende. Lo de las
-  // estaciones que todavía no se construyen no sale; lo que espera una ruta se marca 🚌.
+  // Warehouse breakdown (v3.66): stock per zone product and sale price. Unbuilt
+  // stations are hidden; goods awaiting a route are marked 🚌.
   renderStock(zoneId) {
     this.info = null;
     this.variant = undefined;
@@ -256,7 +256,7 @@ export class StationPanel {
     for (const el of this.el.querySelectorAll('[data-fit], .stat, .tab, .status-line, .milestone-top > span:last-child')) fit(el);
   }
 
-  // Textos que cambian solos: se ajustan a su caja cuando cambian.
+  // Dynamic texts: refit to container when changed.
   setStatus(status) {
     setFitted(this.refs.status, status.text);
     this.refs.status.classList.toggle('bad', status.bad);
@@ -267,9 +267,9 @@ export class StationPanel {
     if (this.stock) return this.updateStock();
     const state = this.game.state;
     const r = this.refs;
-    // Si la estación se construyó por otra vía, rehacer el panel.
+    // If station was built via another path, rebuild panel.
     const built = isBuilt(state, this.id);
-    // Si cambió algo que se ve en la cabecera (los arrieros pasaron a banda eléctrica), rehacer el panel.
+    // If header visual changed (haulers switched to electric belt), rebuild panel.
     if (built !== this.built || this.info?.variant?.(state) !== this.variant) this.render();
 
     if (!this.info) {
@@ -286,7 +286,7 @@ export class StationPanel {
     const info = this.info;
     if (this.subtitles) setFitted(this.refs.subtitle, this.subtitles[Math.floor(performance.now() / SUBTITLE_MS) % this.subtitles.length]);
     const level = info.level(state);
-    // Lo que no se mejora aparte (v3.67: la ruta en un evento, que va con su estación).
+    // Things not upgraded separately (v3.67: route in an event, tied to its station).
     const q = info.fixed ? { levels: 0, cost: 0, affordable: false, maxed: false } : this.game.quote(info.upgradeId, this.mode);
     const after = level + Math.max(q.levels, 1);
 
@@ -301,7 +301,7 @@ export class StationPanel {
     }
     this.setStatus(info.status(state));
 
-    // En un evento no hay hitos más allá del nivel 50 (v3.10.1).
+    // In an event there are no milestones beyond level 50 (v3.10.1).
     const next = nextMilestone(level);
     if (next && next <= maxLevel(state)) {
       const prev = [...MILESTONES].reverse().find((m) => m <= level) ?? 1;
@@ -345,12 +345,12 @@ function stationInfo(id) {
   if (inId) {
     rows.push({ key: 'input', label: t('Entrada'), value: (s, l) => `${formatNumber(s.stations[id].input)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${PRODUCTS[inId].icon}` });
   }
-  // Lo que junta de otra estación de su zona (v4.0), con su propio espacio.
+  // Combined input from another station in its zone (v4.0), with dedicated line.
   for (const j of def.joins ?? []) {
     const product = PRODUCTS[j.product];
     rows.push({ key: `join_${j.product}`, label: `🔗 ${product.name}`, value: (s, l) => `${formatAmount(s.stations[id].joined?.[j.product] ?? 0)} / ${formatNumber(stationInputCap(def, l, capMult(s, id)))} ${product.icon}` });
   }
-  // Su subproducto, que pasa por la canaleta a las que lo usan (v4.0; la pulpa del Beneficiadero).
+  // Byproduct flowing down chute to consumers (v4.0; Beneficiadero pulp).
   const byId = def.by && BY_CHILDREN[id]?.length ? Object.keys(def.by)[0] : null;
   if (byId) {
     rows.push({ key: 'by', label: t('{p} (subproducto)', { p: PRODUCTS[byId].name }), value: (s, l) => `${formatNumber(s.stations[id].byBuffer ?? 0)} / ${formatNumber(stationBufferCap(def, l, capMult(s, id)))} ${PRODUCTS[byId].icon}` });
@@ -417,16 +417,16 @@ function transportInfo(id) {
   const def = STATIONS_BY_ID[id];
   const out = PRODUCTS[Object.keys(def.out)[0]];
   const produce = (s) => stationOutputRate(def, s.stations[id].level) * productionMult(s, id);
-  // Desde el nivel 50, las mulas se cambian por una banda eléctrica (lleva lo mismo).
+  // From level 50 onward, mules swap to electric conveyor belt (carries same share).
   const belt = (s) => hasBelt(s.stations[id].transport.level);
-  // La cabecera es la de la estación (no cambia al pasar de pestaña); el subtítulo dice qué se ve.
+  // Header belongs to station (doesn't change across tabs); subtitle describes view.
   return {
     icon: def.icon,
     title: def.name,
     subtitle: t('🐴 Arrieros: al nivel de la estación, llevan todo lo que produce'),
     variant: belt,
     look: (s) => (belt(s) ? { icon: def.icon, title: def.name, subtitle: t('⚡ Banda eléctrica: reemplaza a las mulas y deja libre el camino') } : null),
-    // Qué lleva y adónde: «🍒 ➜ 🐴 ➜ Beneficiadero».
+    // What it carries and where: «🍒 ➜ 🐴 ➜ Beneficiadero».
     recipe: (s) => `${out.icon} <span>➜</span> ${belt(s) ? '⚡' : '🐴'} <span>➜</span> ${nameOf(normalDest(s, id))}`,
     milestoneWhat: (next) => (next === BELT_LEVEL ? t('carga y banda eléctrica') : t('carga')),
     upgradeId: `${id}:transport`,
@@ -457,23 +457,23 @@ function transportInfo(id) {
   };
 }
 
-// Fuera de la jornada (v3.8: también a la hora del almuerzo).
+// Outside work hours (v3.8: also during lunch break).
 const pause = (state) => (isLunch(clockOf(state), workOf(state)) ? t('🍲 A la hora del almuerzo') : t('🌙 De noche'));
 const restText = (state) => t('{when} no se trabaja: la jornada sigue a las {hour}.', { when: pause(state), hour: hourLabel(nextWorkHour(clockOf(state), workOf(state))) });
 
-// Explica en una línea qué le pasa a la estación y qué hacer.
+// Explains in one line what affects the station and what to do.
 function stationStatus(state, id) {
   const st = state.stations[id];
   const def = STATIONS_BY_ID[id];
   if (resting(state)) return { text: restText(state), bad: false };
-  // En un evento (v3.12), lo que lo frena y cuánto rinde, con la compra que sigue.
+  // In an event (v3.12), what slows it down and output rate, with next upgrade.
   const h = eventHandicaps(state).find((x) => x.station === id && x.pct < 1);
   if (h) {
     const next = eventDef(state).actions.find((a) => !state.research.includes(a.id));
     return { text: `${handicapText(state, h)}${next ? ` ${t('Compra {action} en la barra del evento.', { action: `${next.icon} ${next.name}` })}` : ''}`, bad: true };
   }
   if (def.side) return composterStatus(state, st);
-  // Cosecha de temporada (v3.4): fuera de ella no produce, y no es un problema.
+  // Seasonal harvest (v3.4): off-season doesn't produce, not a fault.
   if (!def.harvest && st.status === 'starved' && waitingHarvest(state, def.zone)) {
     return { text: t('🐜 Se acabó lo de la despensa del Hormiguero: la cadena sigue cuando salgan las hormigas, en la entrada de aguas 🌦️.'), bad: false };
   }
@@ -487,13 +487,13 @@ function stationStatus(state, id) {
   const analysis = analyzeChain(state, zoneOf(id));
   const row = analysis.rows.find((r) => r.id === id);
   const parent = analysis.rows.find((r) => r.id === PARENT[id]);
-  // Solo los problemas que duran (ver alerts.js), como el ícono del mapa.
+  // Persistent issues only (see alerts.js), matching map icon.
   const a = alerts(st);
   if (a.blocked) {
-    // Lo que sobra porque las siguientes no dan abasto: es a ellas a las que hay que subir.
+    // Surplus sent because downstream can't keep up: upgrade downstream.
     const slow = a.waiting === 'mules' ? slowConsumers(state, id) : [];
     if (slow.length) {
-      // Lo que sobra va a la bodega, más lejos: en ese viaje el transporte lleva menos (v3.67: se explica).
+      // Surplus goes to warehouse, farther away: haulers carry less on that trip (v3.67: explained).
       const text = slow.length > 1
         ? t('↪ Patio lleno: {stations} no alcanzan a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbelas de nivel.', { stations: listNames(slow, true) })
         : t('↪ Patio lleno: {stations} no alcanza a procesar todo lo que produce esta; lo que sobra va a la bodega, que queda lejos, y el transporte no da abasto. Súbela de nivel.', { stations: listNames(slow, true) });
@@ -502,7 +502,7 @@ function stationStatus(state, id) {
     if (a.waiting === 'mules') return { text: hasBelt(st.transport.level) ? t('⛔ Patio lleno: la banda no da abasto. Mejórala (pestaña ⚡).') : t('⛔ Patio lleno: las mulas no dan abasto. Mejora a los arrieros (pestaña 🐴).'), bad: true };
     return { text: t('⛔ Patio lleno: la bodega no tiene espacio. Mejora el Despacho.'), bad: true };
   }
-  // Falta el producto que llega de otra zona.
+  // Missing product arriving from another zone.
   const lacking = row?.importLimited ?? (a.starved ? def.imports?.find((imp) => imp.product === st.missing)?.route : null);
   if (lacking) {
     const r = ROUTES_BY_ID[lacking];
@@ -515,15 +515,15 @@ function stationStatus(state, id) {
       bad: true,
     };
   }
-  // Espera lo que junta de otra estación de su zona (v4.0): es esa la que hay que subir (o construir).
+  // Waiting for input combined from another zone station (v4.0): upgrade (or build) that station.
   const joinLack = row?.joinLimited ?? (a.starved ? st.lacking : null);
   if (joinLack) {
     const from = JOIN_FROM[id][joinLack];
     const p = PRODUCTS[joinLack].name.toLowerCase();
     return { text: state.stations[from] ? t('⏸️ Falta {p}: {station} no produce suficiente. Mejórala.', { p, station: nameOf(from) }) : t('⏸️ Falta {p}: construye {station}.', { p, station: nameOf(from) }), bad: true };
   }
-  // Le llega más de lo que puede procesar: procesa menos de lo que le toca de la anterior (en una rama,
-  // su parte; lo que la anterior guarda para una ruta que aún no abre se vende y no es culpa de esta).
+  // Receives more than it can process: processes less than its share from upstream (on a branch,
+  // its share; reserve held for unopened route is sold and not this station's fault).
   const share = parent ? parent.output * branchShare(parent.id, id) : 0;
   if (row && parent && parent.diverted > 0.005 && row.incoming >= row.capacity * 0.98 && row.capacity < share * 0.98) {
     const inIcon = PRODUCTS[Object.keys(def.in)[0]].icon;
@@ -537,19 +537,19 @@ function stationStatus(state, id) {
   }
   const targets = consumers(state, id);
   const routes = exportsOf(state, id);
-  // En español sin artículo («a Molino», no «a el Molino»); en los otros, con él («para o Moinho», «to the Grinder»).
+  // In Spanish no article («a Molino», not «a el Molino»); in others, with article («para o Moinho», «to the Grinder»).
   const where = [...(targets.length ? [listNames(targets, LANG !== 'es')] : []), ...(routes.length || !targets.length ? [t('la bodega')] : [])].join(` ${t('y a')} `);
   const why = routes.length > 1 ? ` ${t('(para {n} rutas)', { n: routes.length })}` : routes.length ? ` ${t('(para {route})', { route: withArticle(routes[0].name) })}` : '';
-  // La parte de una ruta que aún no abre va a la bodega y se vende.
+  // Share reserved for an unopened route goes to warehouse and is sold.
   const pending = pendingRoutes(state, id);
   const later = pending.length ? ` ${t('Su parte para {route} se vende hasta que abra {zone}.', { route: withArticle(pending[0].name), zone: ZONES_BY_ID[pending[0].to].name })}` : '';
   return { text: `${t('✅ Trabajando. Las mulas llevan el producto a {where}', { where: where + why })}.${later}`, bad: false };
 }
 
-// «bolsas de café y panela pulverizada»: los importados de una estación, en minúsculas.
+// «coffee bags and pulverized panela»: station imports in lowercase.
 const listProducts = (imports) => listJoin(imports.map((imp) => PRODUCTS[imp.product].name.toLowerCase()));
 
-// Bono como porcentaje: 1,3 → «30 %».
+// Bonus as percentage: 1.3 → «30 %».
 const pct = (mult) => `${Math.round((mult - 1) * 100)} %`;
 
 function composterStatus(state, st) {
@@ -565,12 +565,12 @@ function composterStatus(state, st) {
   return { text: t('✅ Produciendo compost: todo lo que vende la Finca vale +{pct}.', { pct: pct(COMPOST_VALUE) }), bad: false };
 }
 
-// Ruta entre zonas: la Chiva que trae el producto importado. `station`: la estación de cuyo panel es
-// una pestaña (o null si se abre sola).
+// Inter-zone route: Chiva bringing imported product. `station`: station whose panel owns this
+// tab (or null if opened standalone).
 function routeInfo(routeId, station) {
   const r = ROUTES_BY_ID[routeId];
   const imp = PRODUCTS[r.product];
-  // Estaciones que abastece (las construidas) y lo que gastan entre todas.
+  // Supplied stations (built ones) and total consumption across all of them.
   const names = (s) => listNames(routeStations(s, routeId).length ? routeStations(s, routeId) : r.stations);
   const need = (s) => routeStations(s, routeId).reduce((n, id) => n + stationImportRate(s, r, id), 0);
   const top = (s) => Math.max(0, ...routeStations(s, routeId).map((id) => s.stations[id].level));
@@ -587,7 +587,7 @@ function routeInfo(routeId, station) {
       { key: 'cap', label: t('Carga por viaje'), value: (s, l) => `${formatAmount(routeCapacity(s, routeId, l))} ${imp.icon}`, next: (l, s) => formatAmount(routeCapacity(s, routeId, l)) },
       { key: 'rate', label: t('Lleva'), value: (s, l) => `${formatRate(routeRate(s, routeId, l))} ${imp.icon}/s`, next: (l, s) => formatRate(routeRate(s, routeId, l)) },
       { key: 'need', label: t('Gastan'), value: (s) => `${formatRate(need(s))} ${imp.icon}/s (${routeStations(s, routeId).length > 1 ? t('{n} estaciones', { n: routeStations(s, routeId).length }) : names(s)})` },
-      // La tractomula trae sin fin (v4.5): no hay bodega de origen que mirar.
+      // Tractomula carries endlessly (v4.5): no source warehouse to inspect.
       r.unlimited
         ? { key: 'stock', label: t('Carga en {zone}', { zone: routeOrigin(r).name }), value: () => t('sin límite') }
         : { key: 'stock', label: t('Bodega de {zone}', { zone: routeOrigin(r).name }), value: (s) => `${formatAmount(s.zones[r.from].warehouse[r.product] ?? 0)} ${imp.icon}` },
@@ -619,7 +619,7 @@ function dispatchInfo(zoneId) {
     level: (s) => z(s).dispatch.level,
     rows: [
       { key: 'cap', label: t('Carga por viaje'), value: (s, l) => `${formatNumber(dispatchCapacity(l, mult(s)))}`, next: (l, s) => formatNumber(dispatchCapacity(l, mult(s))) },
-      // Con el segundo Willys (v3.9), cada uno lleva su carga: se vende el doble.
+      // With second Willys (v3.9), each carries a load: double sales capacity.
       { key: 'rate', label: t('Ritmo de venta'), value: (s, l) => `${formatRate(dispatchRate(l, mult(s)) * jeepCount(s))} u/s${jeepCount(s) > 1 ? ' · 🚙🚙' : ''}`, next: (l, s) => formatRate(dispatchRate(l, mult(s)) * jeepCount(s)) },
       {
         key: 'stock',
@@ -637,7 +637,7 @@ function dispatchInfo(zoneId) {
       if (jeepResting(s, zoneId)) {
         const routes = ROUTES.filter((r) => r.from === zoneId && routeActive(s, r.id));
         if (routes.length) {
-          // «al Pueblo», «a Barichara» (si todas van a la misma) o «a las otras zonas».
+          // «to Pueblo», «to Barichara» (if all go to the same zone), or «to other zones».
           const to = ZONES_BY_ID[routes[0].to].name;
           const same = routes.every((r) => r.to === routes[0].to);
           const name = ZONES_BY_ID[zoneId].name.replace(/^(El|La|The) /, (a) => a.toLowerCase());
@@ -652,8 +652,8 @@ function dispatchInfo(zoneId) {
   };
 }
 
-// Una fila por producto: el de cada estación construida de la zona (en el orden de la cadena) y cualquier
-// otro que haya en la bodega.
+// One row per product: each built zone station (in chain order) plus any
+// other product present in the warehouse.
 function stockRows(state, zoneId) {
   const zone = ZONES_BY_ID[zoneId];
   const wh = state.zones[zoneId].warehouse;
@@ -670,10 +670,10 @@ function stockRows(state, zoneId) {
     .join('');
 }
 
-// La ruta en el tablero de un evento (v3.67). Ahí no hay otras zonas ni chivas: lo de afuera llega solo, a
-// cada estación lo que gasta a toda marcha y un 25 % más (sim/events.js: stepSupply). Por eso la ruta va
-// al nivel de su estación y no se mejora aparte; lo que se ve es exacto. Con un derrumbe o una creciente,
-// llega solo una parte, hasta comprar lo de la barra del evento.
+// Route on an event board (v3.67). No other zones or chivas: external input arrives directly, to
+// each station what it consumes at full tilt plus 25 % (sim/events.js: stepSupply). Route level
+// tracks its station and isn't upgraded separately; displayed value is exact. During landslide or
+// flood only a fraction arrives until event upgrade is bought.
 function eventRouteInfo(routeId, station) {
   const r = ROUTES_BY_ID[routeId];
   const product = PRODUCTS[r.product];

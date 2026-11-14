@@ -1,6 +1,6 @@
-// Los textos en español de una parte del contenido, con la forma que lleva cada idioma en
-// src/i18n/<idioma>/content/<parte>.js (ver src/i18n/apply.js). Sirve para traducir y para saber qué falta.
-//   node tools/i18n-skeleton.mjs <parte> [idioma]   (con idioma, solo lo que ese idioma todavía no tiene)
+// Spanish source texts for a content section, matching each language's structure in
+// src/i18n/<lang>/content/<part>.js (see src/i18n/apply.js). Used for translating and checking gaps.
+//   node tools/i18n-skeleton.mjs <part> [lang]   (with lang, only what that language is still missing)
 //   partes: stations products productZones research events eventActions medals albumPages stickers logros
 //           routes zones facts people welcome decor regions songs victory
 import { STATIONS } from '../src/data/stations.js';

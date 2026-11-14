@@ -1,9 +1,9 @@
-// Juega el reto de cada evento con jugadores automáticos (tools/event-bots.js) y propone las
+// Plays each event's challenge with automated players (tools/event-bots.js) and proposes the
 // medallas. Uso: node tools/event-sim.js [evento] [--detalle]
-//   mejor:  el más rápido de todos los estilos y ahorros, decidiendo cada segundo
-//   atento: sigue la mejora recomendada y decide cada 5 s
-//   lento:  sube lo del camino del objetivo y decide cada 30 s (alguien que mira de vez en cuando)
-// Oro propuesto: el mejor más un 9 %, redondeado a 15 s hacia arriba; plata, 5 minutos más.
+//   mejor:  fastest across all styles and saving thresholds, deciding every second
+//   atento: follows recommended upgrade and decides every 5 s
+//   lento:  upgrades along goal path and decides every 30 s (occasional checker)
+// Proposed gold: best plus 9 %, rounded up to 15 s; silver, 5 minutes more.
 import { EVENTS, EVENTS_BY_ID } from '../src/data/events.js';
 import { bestRun, play } from './event-bots.js';
 
@@ -14,7 +14,7 @@ const mmss = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart
 
 for (const def of defs) {
   console.log(`== ${def.icon} ${def.name}`);
-  // Un reto por evento (v3.72); `year` es solo la vez que se juega.
+  // One challenge per event (v3.72); `year` is just the playthrough count.
   for (let year = 1; year <= 1; year++) {
     const obj = def.objective;
     const best = bestRun(def, year);

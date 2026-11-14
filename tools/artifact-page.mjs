@@ -1,5 +1,5 @@
-// Convierte dist/index.html en una página publicable como Artifact de claude.ai:
-// sin <html>/<head>/<body> (el visor pone su propio esqueleto) y con el CSS en línea.
+// Converts dist/index.html into a page publishable as a claude.ai Artifact:
+// without <html>/<head>/<body> (the viewer provides its own skeleton) and with inline CSS.
 // Uso: npm run build && node tools/artifact-page.mjs
 import { readFileSync, writeFileSync } from 'node:fs';
 

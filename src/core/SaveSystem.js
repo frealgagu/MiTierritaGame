@@ -44,22 +44,22 @@ export function clearSave() {
   try {
     localStorage.removeItem(KEY);
   } catch {
-    // sin almacenamiento: nada que borrar
+    // no storage available: nothing to delete
   }
 }
 
-// Completa campos que falten con los valores por defecto (partidas de versiones anteriores).
+// Backfill missing fields with defaults when loading saves from older versions.
 function migrate(data) {
   if (typeof data !== 'object' || data === null) return null;
   if ((data.version ?? 0) > SAVE_VERSION) return null;
-  // Cada región se guarda como una partida aparte dentro de la del Eje Cafetero (v3.0).
+  // Each region is stored as a separate sub-state inside the Eje Cafetero save (v3.0).
   const region = data.region ?? 'cafetero';
   const base = createInitialState(data.savedAt, region);
-  // v1/v2 → v3: estaciones con entrada, estado y arrieros; mulas con origen, destino y fase.
+  // v1/v2 -> v3: stations gain input buffer, status, and carriers; mules gain origin, destination, and phase.
   const stations = {};
   for (const [id, st] of Object.entries(data.stations ?? {})) stations[id] = { ...createStationState(), ...st };
   delete stations.farm?.blocked;
-  // v6 → v7: lo importado por ruta se guarda por producto (una estación puede recibir varios).
+  // v6 -> v7: route imports stored per product (a station can import multiple goods).
   for (const [id, st] of Object.entries(stations)) {
     if (typeof st.imported === 'number') {
       const imp = STATIONS_BY_ID[id]?.imports?.[0];
@@ -67,21 +67,21 @@ function migrate(data) {
     }
   }
   const mules = (data.mules ?? []).map(({ s0, s1, ...m }) => ({ from: 'farm', to: 'warehouse', phase: 'go', ...m }));
-  // v4 → v5: despacho, bodega y Willys pasan a ser por zona; la Finca completa abre el Trapiche.
+  // v4 -> v5: dispatch, warehouse, and Willys become per-zone; completing Finca unlocks Trapiche.
   const zones = {};
   for (const [id, z] of Object.entries(base.zones)) zones[id] = { ...z, ...data.zones?.[id] };
   if (region !== 'cafetero') {
-    // v3.2–v3.4: la Asociación de tejedoras de la Fiquera se guardaba como 'tejedoras', el mismo id de
-    // las Tejedoras de fique del Pueblo (v3.5: ids únicos).
+    // v3.2-v3.4: La Fiquera's weavers guild used id 'tejedoras', colliding with
+    // Pueblo's fique weavers (v3.5: distinct IDs).
     if (region === 'santander' && data.research?.includes('tejedoras')) data.research = data.research.map((id) => (id === 'tejedoras' ? 'asociacion_tejedoras' : id));
-    // v3.1: una zona ya completa abre la siguiente de su región si esta llegó en una versión nueva.
+    // v3.1: an already-completed zone unlocks the next one in its region if added in a newer update.
     for (const [id, z] of Object.entries(zones)) {
       const next = ZONES_BY_ID[id].next;
       if (!z.complete || !next || zones[next].unlocked) continue;
       zones[next].unlocked = true;
       stations[ZONES_BY_ID[next].farm.stationId] ??= createSourceState(ZONES_BY_ID[next].farm.stationId);
     }
-    // v3.21: una región que estaba en obra (la Costa) queda terminada si ya tenía su última zona completa.
+    // v3.21: an in-progress region (La Costa) is marked complete if its final zone was already finished.
     const def = REGIONS_BY_ID[region];
     if (def && !def.wip && zones[def.zones.at(-1)]?.complete) data.regionDone = true;
     return finish(data, base, stations, zones, mules);
@@ -99,22 +99,22 @@ function migrate(data) {
     zones.trapiche.unlocked = true;
     stations.canefield ??= createStationState();
   }
-  // v5 → v6: la Lechería y las rutas entre zonas; el Trapiche completo abre la Lechería.
+  // v5 -> v6: Lecheria and inter-zone routes; completing Trapiche unlocks Lecheria.
   if (zones.trapiche.complete && !zones.lecheria.unlocked) {
     zones.lecheria.unlocked = true;
     stations.pasture ??= createStationState();
   }
-  // v6 → v7: el Cacaotal; la Lechería completa lo abre.
+  // v6 -> v7: Cacaotal; completing Lecheria unlocks it.
   if (zones.lecheria.complete && !zones.cacaotal.unlocked) {
     zones.cacaotal.unlocked = true;
     stations.cacao_grove ??= createStationState();
   }
-  // v7 → v8: el Maizal; el Cacaotal completo lo abre.
+  // v7 -> v8: Maizal; completing Cacaotal unlocks it.
   if (zones.cacaotal.complete && !zones.maizal.unlocked) {
     zones.maizal.unlocked = true;
     stations.cornfield ??= createStationState();
   }
-  // v8 → v9: el Pueblo; el Maizal completo lo abre.
+  // v8 -> v9: Pueblo; completing Maizal unlocks it.
   if (zones.maizal.complete && !zones.pueblo.unlocked) {
     zones.pueblo.unlocked = true;
     stations.coffee_house ??= createStationState();
@@ -122,15 +122,15 @@ function migrate(data) {
   return migrateProfile(finish(data, base, stations, zones, mules));
 }
 
-// Investigaciones que sumaban horas sin conexión (hasta la v3.6), con lo que costaban y sus horas.
+// Legacy research items that added offline hours (before v3.7), with their costs and hours.
 const OLD_OFFLINE_RESEARCH = {
   capataz: [10000, 3], trapichero: [300000, 3], ordeno_programado: [3000000, 4], vigilante: [8000000, 4], vecina: [60000000, 4], administrador: [2500000000, 4],
   mayordomo_s: [10000, 3], veguero: [300000, 3], asociacion_tejedoras: [3000000, 4], vaquero: [8000000, 4], cuidandera: [60000000, 4], administradora: [2500000000, 4],
 };
 
-// v4.5 → v4.6: Bogotá pasó de barrios a una red, con otras recetas. Lo jugado en la de antes se borra como si nunca
-// hubiera existido (sin devolver nada): su partida, sus eventos, medallas, láminas y logros. Quien estaba allá vuelve a
-// Zipaquirá. Se hace una vez (`bogotaNet`).
+// v4.5 -> v4.6: Bogota changed from neighborhoods to a connected network with new recipes. Prior Bogota progress is
+// wiped as if never started (no refund): its state, events, medals, stickers, and logros. Anyone viewing Bogota returns to
+// Zipaquira. Runs once (`bogotaNet`).
 const OLD_BOGOTA_EVENTS = ['aguacero_chorro', 'navidad_septima', 'festival_zona_g', 'pico_placa', 'ventarron_usaquen', 'paro_camionero'];
 function resetOldBogota(root) {
   if (root.bogotaNet) return;
@@ -150,12 +150,12 @@ function resetOldBogota(root) {
   if (ev?.slots) ev.slots = ev.slots.map((x) => (x?.zone && OLD_BOGOTA_EVENTS.includes(x.zone) ? null : x));
 }
 
-// Lo del jugador que cambió de forma (sobre la partida principal ya migrada, con sus regiones).
+// Player profile migrations (applied on the main save after migrating all regions).
 function migrateProfile(root) {
   resetOldBogota(root);
   const all = [root, ...Object.values(root.regions ?? {})];
-  // v3.6 → v3.7: las horas sin conexión pasan al perfil. Nadie pierde horas: el perfil arranca con las
-  // de la región que más tenía, y se devuelven las monedas de esas investigaciones (ya no existen).
+  // v3.6 -> v3.7: offline hours move to the profile. Nobody loses hours: profile starts with the
+  // highest regional total, and coins spent on those removed research items are refunded.
   if (root.profile && root.profile.offlineLevel === undefined) {
     let best = OFFLINE_BASE_HOURS;
     for (const st of all) {
@@ -166,26 +166,26 @@ function migrateProfile(root) {
     }
     root.profile.offlineLevel = Math.min(OFFLINE_COSTS.length, Math.ceil((best - OFFLINE_BASE_HOURS) / OFFLINE_STEP_HOURS));
   }
-  // v3.10 → v3.11: el total de Renombre ganado (aunque ya se haya gastado). Se reconstruye con lo que
-  // quedó registrado: las medallas de los eventos, los niveles de los logros y las páginas llenas del
-  // álbum (los reinicios de antes no daban Renombre).
+  // v3.10 -> v3.11: lifetime Renown earned (never decreases on spend). Reconstructed from recorded
+  // progress: event medals, achievement levels, and completed album pages
+  // (earlier restarts did not grant Renown).
   if (root.profile && root.profile.renownTotal === undefined) {
     const p = root.profile;
     const medals = (p.history ?? []).reduce((n, h) => n + (MEDALS[h.medal]?.renown ?? 0), 0);
     const logros = Object.entries(p.logros ?? {}).reduce((n, [id, tier]) => n + (LOGROS_BY_ID[id]?.reward.slice(0, tier).reduce((a, b) => a + b, 0) ?? 0), 0);
     const pages = ALBUM.filter((pg) => pg.stickers.every((s) => (p.album ?? []).includes(s.id))).length * PAGE_BONUS;
-    // Nunca menos de lo que se tiene ahora.
+    // Never less than currently held Renown.
     p.renownTotal = Math.max(p.renown ?? 0, medals + logros + pages);
   }
-  // v3.9 → v3.10: la jornada pasa a ser de cada región. Nadie pierde horas: cada región arranca con los
-  // bloques que tenía el jugador. (La decoración por región la arregla profileOf.)
+  // v3.9 -> v3.10: workday length becomes per-region. Nobody loses hours: each region starts with the
+  // blocks the player owned. (Per-region decor is handled by profileOf.)
   if (root.profile?.workLevel) {
     for (const st of all) st.workLevel = Math.max(st.workLevel ?? 0, root.profile.workLevel);
     delete root.profile.workLevel;
   }
-  // v3.6 → v3.7: los eventos ya no van por año sino por cupos. Lo ya jugado (`done`: zona → año) pasa a
-  // `last` (el comienzo de ese año) y `count` (cuántas veces, del registro del perfil); los tableros en
-  // juego ocupan los cupos.
+  // v3.6 -> v3.7: events switch from yearly triggers to global slots. Completed years (`done`: zone -> year) map to
+  // `last` (start of that year) and `count` (from profile records); active boards occupy slots.
+  // v3.7 -> v3.8: permanently mark a region as completed once its final zone is finished or restarted.
   const history = root.profile?.history ?? [];
   for (const st of all) {
     const ev = (st.events ??= {});
@@ -201,16 +201,16 @@ function migrateProfile(root) {
       ev.count[zone] ??= Math.max(1, history.filter((h) => h.event === EVENT_OF_ZONE[zone]?.id).length);
     }
     delete ev.done;
-    // v3.7 → v3.8: la región terminada alguna vez (su última zona completa, o ya reiniciada).
+    // v3.12: second ending now requires carriers, routes, goals, and research as well. Previously awarded
     const last = REGIONS_BY_ID[st.region ?? 'cafetero'].zones.at(-1);
     st.regionDone = Boolean(st.regionDone || st.zones?.[last]?.complete || st.legacy?.resets > 0);
-    // v3.12: el segundo final pide más (arrieros, rutas, objetivos e investigaciones). Uno logrado con la
-    // regla de antes se quita si todavía falta algo; vuelve a llegar al completarlo.
+    // mastery is revoked if incomplete and re-granted once finished.
+    // v3.29 -> v3.30: two global event slots for the entire game on main save (previously two per
     if (st.mastered && !masteryReady(st)) st.mastered = false;
   }
-  // v3.29 → v3.30: dos cupos de eventos para todo el juego, en la partida principal (antes, dos por
-  // región). Los tableros en juego se quedan (los dos primeros ocupan los cupos; los demás no llenan cupo
-  // hasta que se terminen); los disponibles sin empezar y las esperas de cada región se borran.
+  // region). Active boards remain (first two occupy slots; extras do not refill slots until
+  // finished); unstarted queued events and per-region cooldowns are cleared.
+  // Common fields across all regions: routes, goals, and remaining state.
   if (!root.events.global) {
     root.events.global = true;
     const playing = all.flatMap((st) => Object.keys(st.events.boards));
@@ -221,17 +221,17 @@ function migrateProfile(root) {
   return root;
 }
 
-// Lo común a todas las regiones: rutas, objetivos y el resto de los campos.
+// v4.0: new routes added to earlier regions (bagasse, palm kernel, hides) supply an existing
 function finish(data, base, stations, zones, mules) {
   const routes = {};
   for (const id of Object.keys(base.routes)) routes[id] = { ...createRouteState(), ...data.routes?.[id] };
-  // v4.0: las rutas nuevas de las regiones de antes (el bagazo, el palmiste y los cueros) llevan algo que
-  // ahora necesita una estación que ya se jugaba. Para no frenarla, arrancan al nivel de esa estación.
+  // station; start them at that station level so existing saves do not stall.
+  // Before v1.0.1 research goals stored the research ID directly.
   for (const r of ROUTES) {
     if (r.release !== '4.0' || !routes[r.id] || !data.routes || data.routes[r.id]) continue;
     routes[r.id].level = Math.max(1, ...r.stations.map((id) => stations[id]?.level ?? 0));
   }
-  // Hasta la v1.0.1 los objetivos de investigación se guardaban con el id de la investigación.
+  // v4.0: cap restarts at 60 and drop the per-run history log.
   const OLD_GOAL_IDS = { abono: 'g05', herraduras: 'g12', sello: 'g26' };
   const claimed = (data.goals?.claimed ?? []).map((id) => OLD_GOAL_IDS[id] ?? id);
   const { dispatch, warehouse, jeep, zoneComplete, ...rest } = data;
@@ -243,22 +243,22 @@ function finish(data, base, stations, zones, mules) {
     routes,
     mules,
     stats: { ...base.stats, ...data.stats },
-    // v4.0: los reinicios hasta el tope (60) y sin el registro de cada partida.
+    // Other regions, each with its own independent game state.
     legacy: { resets: Math.min(MAX_LEGACY_RESETS, data.legacy?.resets ?? 0) },
     goals: { ...base.goals, ...data.goals, claimed },
-    // Las otras regiones, cada una con lo suyo.
+    // Text backup (for transferring a save to another device).
     ...(data.regions && { regions: Object.fromEntries(Object.entries(data.regions).map(([id, st]) => [id, migrate(st)])) }),
     version: SAVE_VERSION,
   };
 }
 
-// Copia de seguridad en texto (para llevar la partida a otro dispositivo).
+// Returns parsed state or null if the text is invalid.
 export function exportSave(state) {
   state.savedAt = Date.now();
   return btoa(unescape(encodeURIComponent(JSON.stringify(state))));
 }
 
-// Devuelve la partida o null si el texto no es válido.
+// Decimal separator: Spanish uses comma (2,50M); English uses dot (2.50M) (v3.68, set per language).
 export function importSave(text) {
   try {
     const data = JSON.parse(decodeURIComponent(escape(atob(text.trim()))));

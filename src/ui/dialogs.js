@@ -5,7 +5,7 @@ import { toast } from './toast.js';
 import { VICTORY } from '../data/victory.js';
 import { LANG, t } from '../i18n/index.js';
 
-// Ventana de bienvenida con lo ganado mientras el juego estuvo cerrado.
+// Welcome-back modal with earnings while the game was closed.
 export function showWelcome({ seconds, coins, capped, cap, scale = 1 }, onCollect) {
   const modal = document.getElementById('welcome');
   const fast = scale > 1 ? ` (${t('a')} ⏩ ×${scale})` : '';
@@ -22,12 +22,12 @@ export function showWelcome({ seconds, coins, capped, cap, scale = 1 }, onCollec
 }
 
 
-// «al Tabacal», «a La Lechería»: el artículo «el» se contrae con la preposición.
+// «al Tabacal», «a La Lechería»: contract Spanish «el» with preposition.
 const toZone = (name) => (name.startsWith('El ') ? `al ${name.slice(3)}` : `a ${name}`);
 
-// onGo(zona): ir a la zona que se acaba de abrir. opened: regiones que se abrieron al completarla
-// (v3.0: el Pueblo abre Santander). open: la región que sigue, si ya estaba abierta (v3.8.1: al
-// completar de nuevo el Pueblo tras reiniciar, también se ofrece ir a Santander).
+// onGo(zone): travel to newly unlocked zone. opened: regions unlocked upon finishing
+// (v3.0: Pueblo unlocks Santander). open: next region if already open (v3.8.1: upon
+// finishing Pueblo again after reset, also offers jumping to Santander).
 export function showVictory(state, zoneId, onGo, opened = [], open = null) {
   const v = VICTORY[zoneId];
   const fresh = Boolean(opened[0]);
@@ -66,10 +66,10 @@ export function showVictory(state, zoneId, onGo, opened = [], open = null) {
   modal.hidden = false;
   stay.onclick = () => {
     modal.hidden = true;
-    // Para que no se pierda el camino: se va a otra región (o zona) con el botón 🗺️.
+    // Helpful navigation reminder: switch regions (or zones) via the 🗺️ button.
     if (region) toast(t('🗺️ Puedes ir a {region} cuando quieras con el botón de zonas.', { region: `${region.name} ${region.icon}` }), 5000);
   };
 }
 
-// Número de la zona dentro de su región.
+// Zone number within its region.
 const zoneIndex = (id) => REGIONS_BY_ID[REGION_OF_ZONE[id]].zones.indexOf(id) + 1;

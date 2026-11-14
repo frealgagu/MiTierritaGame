@@ -1,12 +1,12 @@
-// Pantalla de carga (v2.3.1): al abrir el juego, mientras se prepara el mapa, y cada vez que hay que
-// calcular lo que se produjo sin conexión (al abrir o al volver a la app), con su barra de avance. Así
-// no parece que el juego se trabó.
+// Loading screen (v2.3.1): on startup while map builds, and whenever offline earnings
+// must be simulated (on launch or returning to app), with progress bar. Prevents
+// appearing frozen.
 import { formatDuration } from '../core/format.js';
 import { t } from '../i18n/index.js';
 
 const el = () => document.getElementById('splash');
 
-// Sin barra: algo que no se sabe cuánto tarda (cargar las fuentes, preparar el mapa).
+// Without bar: indeterminate work (loading fonts, preparing map).
 export function splashWait(text) {
   const s = el();
   s.hidden = false;
@@ -16,8 +16,8 @@ export function splashWait(text) {
   document.getElementById('splash-note').textContent = '';
 }
 
-// Con barra: el cálculo de lo que se produjo mientras no estabas.
-// region: la región que se calcula (las que no son el Eje Cafetero lo dicen).
+// With bar: offline progress simulation.
+// region: region being computed (non-Eje Cafetero regions display their name).
 export function splashOffline(seconds, cap, region = null) {
   splashWait(region
     ? t('Pasaron {time} desde la última vez. Calculando lo que se produjo en {region} mientras no estabas…', { time: formatDuration(seconds), region: `${region.icon} ${region.name}` })

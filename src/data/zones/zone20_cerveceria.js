@@ -1,4 +1,4 @@
-// Mapa de Boyacá · Zona 2: La Cervecería (v3.23). Mismo trazado que el Tabacal (zone8_tabacal.js).
+// Boyacá Map · Zone 2: La Cervecería (v3.23). Same layout as El Tabacal (zone8_tabacal.js).
 import { ICON } from '../icons.js';
 
 export const ZONE20 = {
@@ -21,18 +21,18 @@ export const ZONE20 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Tibasosa ➜',
   muleSpeed: 4,
   dispatchCost: { base: 100, growth: 1.17 },
-  unlockedBy: 'papal', // se abre al completar el Papal
-  // Carretera de la Ruta de la cerveza (v3.24): sale de la bodega hacia Ráquira.
+  unlockedBy: 'papal', // opens upon completing El Papal
+  // Road for the Beer Route (v3.24): leaves the warehouse toward Ráquira.
   routes: {
     cerveza: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'A Ráquira ➜' },
-    // Las canastas de cerveza salen hacia Villa de Leyva (v3.27).
+    // Crates of beer leave toward Villa de Leyva (v3.27).
     canastas_cerveza: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'A Villa de Leyva ➜' },
-    // El bagazo de la Paila sale hacia las vacas de Paipa (v4.0).
+    // Spent grain from the Kettle leaves toward the cows in Paipa (v4.0).
     bagazo: { road: [[23.5, 15.6], [23.5, 12.5], [25.9, 12.5]], sign: [22.4, 11.4], text: 'Bagazo a Paipa ➜' },
   },
   next: 'raquira',

@@ -4,8 +4,8 @@ import { releaseNotes } from './tools/release-notes.js';
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url)));
 
-// version.json (v3.6.1): la versión publicada y sus novedades. La app de Android lo consulta al abrirse
-// para ofrecer el APK nuevo (ver src/update.js); la web se actualiza sola.
+// version.json (v3.6.1): published version and release notes. The Android app checks it on launch
+// to offer the new APK (see src/update.js); the web version updates automatically.
 const versionFile = () => ({
   name: 'mitierrita-version',
   generateBundle() {
@@ -17,7 +17,7 @@ const versionFile = () => ({
 export default defineConfig({
   base: './',
   server: { host: '0.0.0.0', port: 3000, allowedHosts: true },
-  // PLAY_STORE=1 (v3.62): la versión para Google Play, que se actualiza solo desde la tienda (sin buscar APK nuevos).
+  // PLAY_STORE=1 (v3.62): Google Play build, updated only via the store (without checking for new APKs).
   define: { __APP_VERSION__: JSON.stringify(pkg.version), __PLAY_STORE__: JSON.stringify(process.env.PLAY_STORE === '1') },
   plugins: [versionFile()],
 });

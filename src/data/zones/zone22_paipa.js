@@ -1,6 +1,6 @@
-// Mapa de Boyacá · Zona 4: Paipa (v3.25). Mismo trazado que el Hato y la Quesera: las almojábanas se
-// reparten entre la Mesa del piquete y el Horno de barro, que esperan junto a las dos carreteras por las
-// que llegan las papitas del Papal y el barro de Ráquira.
+// Boyacá Map · Zone 4: Paipa (v3.25). Same layout as El Hato and La Quesera: the almojábanas are
+// split between the Piquete Table and the Clay Oven, which wait next to the two roads
+// bringing baby potatoes from El Papal and clay from Ráquira.
 import { ICON } from '../icons.js';
 
 export const ZONE22 = {
@@ -26,7 +26,7 @@ export const ZONE22 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Duitama ➜',
   muleSpeed: 4,
@@ -34,10 +34,10 @@ export const ZONE22 = {
   routes: {
     papitas: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Papitas del Papal' },
     barro: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Barro de Ráquira' },
-    // Los amasijos y los piquetes salen hacia Villa de Leyva (v3.27).
+    // Baked goods and piquetes leave toward Villa de Leyva (v3.27).
     amasijos: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Amasijos a Villa de Leyva ➜' },
     piquetes: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [23.7, 23.6], text: 'Piquetes ⬇' },
-    // El bagazo de la Cervecería, para el Hato lechero (v4.0).
+    // Spent grain from La Cervecería, for the Dairy Farm (v4.0).
     bagazo: { road: [[25.9, 1.5], [7.6, 1.5]], sign: [24.2, 0.4], text: '⬅ Bagazo de la Cervecería' },
   },
   unlockedBy: 'raquira',

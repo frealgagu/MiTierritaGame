@@ -1,5 +1,5 @@
-// Mapa de la Costa · Zona 3: La Ciénaga (v3.17). Mismo trazado que la Fiquera (zone9_fiquera.js): el
-// pescado limpio se reparte entre el Saladero, la Fileteadora y la Cocina del pescado en coco.
+// Caribbean Coast Map · Zone 3: La Ciénaga (v3.17). Same layout as La Fiquera (zone9_fiquera.js): the
+// cleaned fish is split between the Salting Shed, the Filleting Table, and the Coconut Fish Kitchen.
 import { ICON } from '../icons.js';
 
 export const ZONE15 = {
@@ -15,30 +15,30 @@ export const ZONE15 = {
   plots: [
     { stationId: 'fish_cleaner', x: 9, y: 5 },
     { stationId: 'fish_filleter', x: 9, y: 8 },
-    // La Fritanga va junto a la Fileteadora: los filetes pasan de una a otra.
+    // The Frying Stall sits next to the Filleting Table: fillets pass from one to the other.
     { stationId: 'fish_fryer', x: 12, y: 7 },
     { stationId: 'fish_salter', x: 11, y: 12 },
-    // La Cocina espera la leche de coco del Cocal junto a la carretera de la ruta.
+    // The Kitchen waits for coconut milk from El Cocal next to the route road.
     { stationId: 'coconut_fish_kitchen', x: 17, y: 13 },
   ],
   warehouse: { x: 21, y: 16, w: 3, h: 3 },
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Ciénaga de Oro ➜',
   muleSpeed: 4,
   dispatchCost: { base: 500, growth: 1.17 },
-  // Carretera por la que llega la Ruta de la leche de coco, hasta la Cocina.
+  // Road along which the Coconut Milk Route arrives, up to the Kitchen.
   routes: {
     coco: { road: [[25.9, 14.5], [20.3, 14.5]], sign: [24.2, 13.3], text: '⬅ Del Cocal' },
-    // La Ruta del pescado sale de la bodega hacia la Quesera (v3.18).
+    // The Fish Route leaves the warehouse toward La Quesera (v3.18).
     pescado: { road: [[24.5, 17.2], [24.5, 16.5], [25.9, 16.5]], sign: [25.3, 15.6], text: 'Pescado a la Quesera ➜' },
-    // El pescado salado y el frito salen hacia el Sombrero (v3.19).
+    // Salted and fried fish leave toward El Sombrero (v3.19).
     salado: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [25.5, 18.6], text: 'Pescado salado al Sombrero ⬇' },
     frito: { road: [[23.5, 19.6], [23.5, 25.9]], sign: [25.5, 20.6], text: 'Pescado frito ⬇' },
-    // El pescado en coco sale hacia Cartagena (v3.20).
+    // Coconut fish leaves toward Cartagena (v3.20).
     cazuelas: { road: [[24.2, 18.5], [25.9, 18.5]], sign: [25.3, 17.6], text: 'Pescado en coco a Cartagena ➜' },
   },
   unlockedBy: 'cocal',

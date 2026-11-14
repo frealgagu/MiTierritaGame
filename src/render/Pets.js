@@ -1,7 +1,7 @@
-// Mascotas (v3.12): los gatos y los loros que el jugador compra con Renombre para cada región. Solo
-// adorno. Los gatos pasean por la grama y se echan a dormir un rato; los loros van y vienen volando entre
-// los árboles y la grama. De vez en cuando (al azar, cada medio minuto o un minuto) un gato ve a un loro
-// posado y sale corriendo detrás; el loro alza el vuelo y se posa lejos, y el gato se queda mirando.
+// Pets (v3.12): cats and parrots bought with Renown per region. Purely
+// cosmetic. Cats stroll grass and curl up to nap; parrots fly between trees
+// and lawn. Occasionally (every 30–60 s) a cat spots a perched parrot and dashes
+// after it; parrot takes off to a far perch, leaving the cat staring.
 import { moverDepth } from './occlusion.js';
 import { Container, Graphics } from 'pixi.js';
 import { iso } from './iso.js';
@@ -16,13 +16,13 @@ const CAT_COATS = [
   { body: 0xf4efe6, stripes: 0xd8d2c6 }, // blanco
   { body: 0xc8a27a, stripes: 0x8a6a4a }, // carey
 ];
-// Loros: la guacamaya roja, la azul y amarilla, y el loro verde.
+// Parrots: scarlet macaw, blue-and-yellow macaw, and green parrot.
 const PARROTS = [
   { body: 0xd7263d, wing: 0x2e6fd1, tail: 0xf2b705 },
   { body: 0x2e86c1, wing: 0x1b4f8a, tail: 0xf2b705, belly: 0xf2b705 },
   { body: 0x2fa36b, wing: 0x1f7a4d, tail: 0xd7263d },
 ];
-const CHASE_EVERY = [25, 60]; // s entre una persecución y otra
+const CHASE_EVERY = [25, 60]; // s between chases
 
 class Cat extends Container {
   constructor(area, rng) {
@@ -37,7 +37,7 @@ class Cat extends Container {
     this.target = null;
     this.wait = rng() * 4;
     this.dir = 1;
-    this.chasing = null; // el loro que persigue
+    this.chasing = null; // parrot currently targeted
     this.sleep = 0;
     this.phase = rng() * 10;
   }
@@ -51,7 +51,7 @@ class Cat extends Container {
     } else if (this.wait > 0) {
       this.wait -= dt;
     } else if (!this.target) {
-      // A veces se echa a dormir; si no, va a otro lugar cercano.
+      // Occasionally curls up to sleep; otherwise wanders nearby.
       if (this.rng() < 0.25) {
         this.sleep = 6 + this.rng() * 10;
         this.wait = this.sleep;
@@ -103,7 +103,7 @@ class Cat extends Container {
     for (const [lx, k] of [[-3.5, 1], [-2, -1], [2.5, -1], [4, 1]]) g.moveTo(lx * f, -4).lineTo((lx + run * 1.6 * k) * f, 0).stroke({ width: 1.4, color: stripes });
     g.ellipse(0, -5, 5.5, 2.8).fill(body).stroke(THIN);
     for (const x of [-2, 0, 2]) g.moveTo(x * f, -7.5).lineTo((x + 0.5) * f, -3).stroke({ width: 0.8, color: stripes, alpha: 0.7 });
-    // La cola levantada, que se mueve.
+    // Raised swaying tail.
     const wag = Math.sin(t * 3) * 2;
     g.moveTo(-5 * f, -5).quadraticCurveTo(-8 * f, -9, -7 * f + wag, -13).stroke({ width: 1.6, color: body });
     // Cabeza y orejas.
@@ -136,7 +136,7 @@ class Parrot extends Container {
     return !this.flight;
   }
 
-  // Vuela a un lugar (far: lejos, cuando lo persigue un gato).
+  // Flies to spot (`far`: distant perch when chased by cat).
   fly(far = false) {
     const list = far ? this.area.filter(([x, y]) => Math.hypot(x - this.gx, y - this.gy) > 6) : this.area;
     const [gx, gy] = (list.length ? list : this.area)[Math.floor(this.rng() * (list.length || this.area.length))];
@@ -175,7 +175,7 @@ class Parrot extends Container {
     g.poly([-2 * f, y - 5, -9 * f, y - 1, -8 * f, y + 0.5, -2 * f, y - 3.5]).fill(tail).stroke(THIN);
     g.ellipse(0, y - 6, 3.6, 2.6).fill(body).stroke(THIN);
     if (belly) g.ellipse(0.5 * f, y - 5, 2.2, 1.4).fill(belly);
-    // Alas: abiertas y batiendo al volar; recogidas al estar posado.
+    // Wings: spread and flapping in flight; folded when perched.
     if (this.flight) {
       const flap = Math.sin(t * 22) * 5;
       g.poly([-1 * f, y - 7, -4 * f, y - 12 - flap, 2 * f, y - 8]).fill(wing).stroke(THIN);
@@ -190,13 +190,13 @@ class Parrot extends Container {
 }
 
 export class Pets {
-  // area: puntos de grama libres por donde andan (los mismos para gatos y loros).
+  // area: clear grass points for roaming (shared by cats and parrots).
   constructor(zone, terrain, parent) {
     this.parent = parent;
     this.rng = createRng(zone.seed * 13 + 5);
     const tiles = terrain.tiles;
     const area = [];
-    // En la parte del mapa que se ve al entrar (no en los bordes).
+    // Within initial camera region of map (not along far edges).
     for (let gx = 3; gx < zone.size - 4; gx++) {
       for (let gy = 3; gy < zone.size - 3; gy++) {
         if (tiles[gx][gy] !== 'grass' || terrain.occupied.has(`${gx},${gy}`)) continue;
@@ -209,7 +209,7 @@ export class Pets {
     this.nextChase = CHASE_EVERY[0] / 2 + this.rng() * 10;
   }
 
-  // Cuántos de cada uno (los de la región: LOOK.pets).
+  // Counts per species (from region look: LOOK.pets).
   setCounts(cats, parrots) {
     if (this.area.length < 4) return;
     const resize = (list, n, Kind) => {
@@ -225,7 +225,7 @@ export class Pets {
   }
 
   update(dt, t) {
-    // Una persecución de vez en cuando: un gato despierto detrás de un loro posado.
+    // Occasional chase: an awake cat stalks a perched parrot.
     this.nextChase -= dt;
     if (this.nextChase <= 0) {
       this.nextChase = CHASE_EVERY[0] + this.rng() * (CHASE_EVERY[1] - CHASE_EVERY[0]);
@@ -237,7 +237,7 @@ export class Pets {
       const bird = cat.chasing;
       if (bird) {
         const d = Math.hypot(bird.gx - cat.gx, bird.gy - cat.gy);
-        // Cuando se le acerca, el loro alza el vuelo y el gato se queda mirando.
+        // Once cat closes in, parrot takes flight while cat watches.
         if (d < 1.2 || !bird.perched) {
           if (bird.perched) bird.fly(true);
           cat.chasing = null;

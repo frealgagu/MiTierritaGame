@@ -1,9 +1,9 @@
-// «Invítame un tinto» (v3.63): una propina voluntaria, sin ningún premio en el juego. Va detrás de una
-// barrera para adultos (una multiplicación), porque el juego también es para niños.
-//   - Versión de Google Play: con los cobros de Google (productos de una sola compra, consumibles, así que
-//     se pueden repetir). Los productos se crean en Play Console con estos mismos identificadores.
-//   - Web: un enlace a Ko-fi, cuando exista (KOFI_URL).
-//   - APK de prueba: sin botón (los cobros de Google solo funcionan con la app instalada desde la tienda).
+// "Buy me a coffee / Invitame un tinto" (v3.63): voluntary tip with no in-game reward. Placed behind
+// an adult gate (a multiplication problem) because the game is also for children.
+//   - Google Play build: uses Google Play Billing (one-time consumable products so they can be bought
+//     again). Products are configured in Play Console with these exact IDs.
+//   - Web: link to Ko-fi, when configured (KOFI_URL).
+//   - Debug APK: hidden (Google Play Billing only works when installed from the Play Store).
 import { toast } from './ui/toast.js';
 import { t, tk } from './i18n/index.js';
 
@@ -13,12 +13,12 @@ export const TIPS = [
   { id: 'almuerzo', icon: '🍲', name: tk('Un almuerzo'), thanks: tk('el almuerzo') },
 ];
 export const KOFI_URL = '';
-const PRODUCTS_TIMEOUT_MS = 20000; // si Google Play no responde, se avisa en vez de quedarse en «Cargando…»
+const PRODUCTS_TIMEOUT_MS = 20000; // if Google Play fails to respond, show an error instead of staying stuck on Loading
 
 export const withTimeout = (promise, ms) =>
   Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))]);
 
-// La barrera: un número de dos cifras por uno de una (13 × 7), que un niño pequeño no resuelve de un toque.
+// Adult gate: a two-digit number times a one-digit number (13 x 7), not trivially solved in one tap by a young child.
 export function gateQuestion(random = Math.random) {
   const a = 12 + Math.floor(random() * 8);
   const b = 6 + Math.floor(random() * 4);
@@ -27,7 +27,7 @@ export function gateQuestion(random = Math.random) {
 
 export const gatePasses = (question, input) => Number(String(input).trim()) === question.answer;
 
-// mode: 'play' (cobros de Google), 'web' (Ko-fi) o null (sin botón).
+// mode: 'play' (Google Play Billing), 'web' (Ko-fi), or null (hidden).
 export function tipMode({ native, playStore, kofi = KOFI_URL }) {
   if (native) return playStore ? 'play' : null;
   return kofi ? 'web' : null;
@@ -43,7 +43,7 @@ export function bindTip(mode) {
   const options = document.getElementById('tip-options');
   const msg = document.getElementById('tip-msg');
   let q = null;
-  let billing = null; // el módulo del complemento de cobros, se carga solo en la versión de Play
+  let billing = null; // billing plugin module, loaded only in the Play Store build
 
   const ask = () => {
     q = gateQuestion();
@@ -75,9 +75,9 @@ export function bindTip(mode) {
     else await showProducts();
   });
 
-  // Se guarda el módulo y no el complemento: una función async no puede devolver el complemento, porque
-  // Capacitor responde a cualquier método, también a `then`, y la promesa se queda esperándolo para siempre
-  // (v3.65.1: por eso «Cargando…» no terminaba).
+  // Return the module rather than the plugin object: an async function cannot return a Capacitor plugin
+  // because Capacitor proxies respond to `then`, causing the promise to hang forever
+  // (v3.65.1: this was why Loading never finished).
   async function loadStore() {
     billing ??= await import('@capgo/native-purchases');
     return billing;
@@ -92,7 +92,7 @@ export function bindTip(mode) {
       const { products } = await withTimeout(query, PRODUCTS_TIMEOUT_MS);
       prices = Object.fromEntries(products.map((p) => [p.identifier, p.priceString]));
     } catch {
-      // sin conexión o sin Google Play: se dice abajo
+      // offline or without Google Play: message shown below
     }
     const available = TIPS.filter((tip) => prices[tip.id]);
     if (!available.length) {
@@ -126,8 +126,8 @@ export function bindTip(mode) {
     b.disabled = false;
   }
 
-  // Un pago que quedó pendiente (por ejemplo, en efectivo) se confirma después, con el juego cerrado: si no
-  // se consume, Google lo devuelve a los 3 días y no deja volver a comprar ese producto.
+  // A pending payment (e.g. cash) settles later while closed: if not consumed, Google refunds it
+  // after 3 days and blocks repurchasing that product.
   if (mode === 'play') settlePending();
   async function settlePending() {
     try {
@@ -135,7 +135,7 @@ export function bindTip(mode) {
       const { purchases } = await s.getPurchases({ productType: 'inapp' });
       for (const p of purchases) if (p.purchaseState === '1' && p.purchaseToken) await s.consumePurchase({ purchaseToken: p.purchaseToken });
     } catch {
-      // se intenta de nuevo la próxima vez que se abra el juego
+      // retry consuming on the next app launch
     }
   }
 }

@@ -23,7 +23,7 @@ function levelOf(state, target) {
   return part === 'transport' ? st.transport.level : st.level;
 }
 
-// «Sube el nivel de Cafetal a 5», «Sube a los arrieros del Cafetal a 5», «Sube la Ruta de la panela a 10».
+// Products consumed by another station (cherries -> Beneficiadero; sombrero vueltiao -> Parador).
 function levelText(target, n) {
   const [id, part] = target.split(':');
   if (id === 'dispatch') return t('Sube {name} a {n}', { name: `${DISPATCH.name} (${ZONES_BY_ID[part ?? 'finca'].name})`, n });
@@ -32,13 +32,13 @@ function levelText(target, n) {
   return t('Sube el nivel de {station} a {n}', { station: STATIONS_BY_ID[id].name, n });
 }
 
-// Productos que otra estación consume (la cereza, que va al Beneficiadero; el sombrero vueltiao, al Parador).
-// Un objetivo de «vender» uno de estos (v3.61) cuenta lo producido: con la estación siguiente construida casi
-// nunca llega a la bodega (solo lo que se desvía) y el objetivo podía quedarse sin avanzar.
+// A «sell» goal for one of these (v3.61) counts produced amount: once downstream is built
+// almost none reaches warehouse (only diversions), which stalled the goal.
+// Goal progress: { current, target, done }.
 const CONSUMED = new Set(STATIONS.flatMap((s) => Object.keys(s.in ?? {})));
 export const countsProduced = (goal) => goal.type === 'sold' && CONSUMED.has(goal.product);
 
-// Progreso de un objetivo: { current, target, done }.
+// Main chain only (Compostera is optional).
 export function goalProgress(state, goal) {
   let current = 0;
   let target = 1;
@@ -74,13 +74,13 @@ export function goalProgress(state, goal) {
       target = goal.perSecond;
       break;
     case 'allLevels': {
-      // Solo la cadena principal (la Compostera es opcional).
+      // In Bogotá (v4.5), with parallel neighborhoods (and since v4.6 a network), counts built
       const zone = goal.zone ?? 'finca';
       const levels = Object.entries(state.stations)
         .filter(([id]) => STATIONS_BY_ID[id].zone === zone && !STATIONS_BY_ID[id].side)
         .map(([, s]) => s.level);
-      // En Bogotá (v4.5), con sus barrios que se construyen a la vez (y desde la v4.6 en red), cuentan las que ya están
-      // (al menos cinco).
+      // stations (at least five).
+      // (at least five).
       const needed = ZONES_BY_ID[zone].groups || ZONES_BY_ID[zone].network ? 5 : ZONES_BY_ID[zone].chain.length - 1;
       current = levels.length >= needed ? Math.min(...levels) : 0;
       target = goal.level;
@@ -93,7 +93,7 @@ export function goalProgress(state, goal) {
 // «120 🧀 queso campesino».
 const amountOf = (goal) => `${formatNumber(goal.amount)} ${PRODUCTS[goal.product].icon} ${PRODUCTS[goal.product].name.toLowerCase()}`;
 
-// Texto del objetivo para la interfaz.
+// Goal copy for UI.
 export function goalText(goal) {
   switch (goal.type) {
     case 'sold':
@@ -119,22 +119,22 @@ export function goalText(goal) {
   return '';
 }
 
-// Los primeros objetivos sin cobrar de una zona, en orden.
+// First uncollected goals in a zone, in order.
 export function activeGoals(state, zoneId = 'finca') {
   if (!state.zones[zoneId]?.unlocked) return [];
   return GOALS_BY_ZONE[zoneId].filter((g) => !state.goals.claimed.includes(g.id)).slice(0, VISIBLE_GOALS);
 }
 
-// Lo que ya se puede cobrar (v3.57): cumplido y sin cobrar; el final de la zona, solo si ya se ve.
+// Claimable goals (v3.57): met and unclaimed; zone finale only once visible at front.
 function claimable(state, goal, zoneId) {
   if (state.goals.claimed.includes(goal.id) || !goalProgress(state, goal).done) return false;
   return !goal.final || activeGoals(state, zoneId).includes(goal);
 }
 export const claimableGoals = (state, zoneId) => (state.zones[zoneId]?.unlocked ? GOALS_BY_ZONE[zoneId].filter((g) => claimable(state, g, zoneId)) : []);
 
-// «Cobrar todos» (v3.57): todos los cumplidos de la zona menos el final (ese se cobra aparte, con su
-// pantalla). Cobrar uno puede cumplir otro (los que piden monedas): se repite hasta que no quede ninguno.
-// Devuelve cuántos cobró y cuánto ganó.
+// «Claim all» (v3.57): all met zone goals except finale (claimed separately with modal).
+// Claiming one can satisfy another (coin goals): loops until none remain.
+// Returns count claimed and total coins awarded.
 export function claimAllGoals(state, zoneId, bus) {
   let count = 0;
   let reward = 0;
@@ -151,7 +151,7 @@ export function claimAllGoals(state, zoneId, bus) {
 
 export const goalZone = (goal) => Object.keys(GOALS_BY_ZONE).find((z) => GOALS_BY_ZONE[z].includes(goal));
 
-// Abre una zona: su fuente ilimitada empieza a producir.
+// Unlocks a zone: its unlimited source begins producing.
 export function unlockZone(state, zoneId, bus) {
   const z = state.zones[zoneId];
   if (!z || z.unlocked) return false;
@@ -166,8 +166,8 @@ export function claimGoal(state, id, bus) {
   const goal = GOALS.find((g) => g.id === id);
   if (!goal || state.goals.claimed.includes(id)) return false;
   const zoneId = goalZone(goal);
-  // Desde la v3.57 se cobra cualquiera ya cumplido, aunque no esté entre los tres que se ven; el final de
-  // la zona, solo cuando le llega el turno (es el último de la lista).
+  // Since v3.57 any met goal claims regardless of front-3 visibility; zone finale still
+  // waits its turn at end of list.
   if (!claimable(state, goal, zoneId)) return false;
   state.goals.claimed.push(id);
   state.coins += goal.reward;
@@ -176,8 +176,8 @@ export function claimGoal(state, id, bus) {
     state.zones[zoneId].complete = true;
     const next = ZONES_BY_ID[zoneId].next;
     if (next) unlockZone(state, next, bus);
-    // La última zona (v3.8): la región queda terminada para siempre (sus eventos salen en todas sus zonas).
-    // Una región a la que todavía le faltan zonas (wip, v3.15) no se termina.
+    // Final zone (v3.8): region marked permanently completed (its events spawn in all its zones).
+    // A region still missing zones (wip, v3.15) doesn't mark completed.
     else if (!REGIONS_BY_ID[state.region ?? 'cafetero'].wip) state.regionDone = true;
   }
   bus.emit('goalClaimed', { goal, zone: zoneId });

@@ -4,8 +4,8 @@ import { REGIONS } from '../../src/data/regions.js';
 import { ZONES_BY_ID } from '../../src/data/zones/index.js';
 import { RESEARCH } from '../../src/data/research.js';
 
-// Una región con todo al máximo: sus zonas, estaciones, arrieros, despachos y rutas en el nivel 100 y todas
-// sus investigaciones.
+// A region with everything maxed: its zones, stations, haulers, dispatches, and routes at level 100 and all
+// its research.
 export function maxedRegion(regionId) {
   const region = REGIONS.find((r) => r.id === regionId);
   const s = createInitialState(0, regionId);

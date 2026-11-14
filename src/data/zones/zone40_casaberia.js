@@ -1,6 +1,6 @@
-// Mapa del Amazonas · Zona 4: La Casabería (v3.50). Mismo trazado que el Hato, la Quesera, Paipa, el Hato llanero
-// y el Manglar: el casabe se reparte entre la Mesa del desayuno y la Maloca, que esperan junto a las dos carreteras
-// por las que llegan las bolsas de asaí del Asaizal y el pirarucú limpio del Lago.
+// Amazonas Map · Zone 4: La Casabería (v3.50). Same layout as El Hato, La Quesera, Paipa, El Hato Llanero,
+// and El Manglar: casabe is split between the Breakfast Table and the Maloca, waiting next to the two roads
+// bringing açaí bags from El Asaizal and cleaned pirarucu from El Lago.
 import { ICON } from '../icons.js';
 
 export const ZONE40 = {
@@ -25,16 +25,16 @@ export const ZONE40 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Puerto Nariño ➜',
   muleSpeed: 4,
   dispatchCost: { base: 4000, growth: 1.17 },
-  // Las dos carreteras por las que llegan el asaí del Asaizal y el pirarucú del Lago.
+  // The two roads bringing açaí from El Asaizal and pirarucu from El Lago.
   routes: {
     bolsas_asai: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Asaí del Asaizal' },
     pirarucus: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Pirarucú del Lago' },
-    // El banquete y el desayuno salen hacia Leticia (v3.52).
+    // Banquets and breakfasts leave toward Leticia (v3.52).
     banquetes_maloca: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Banquetes a Leticia ➜' },
     desayunos_amazonicos: { road: [[22.5, 19.6], [22.5, 25.9]], sign: [23.7, 23.6], text: 'Desayunos ⬇' },
   },

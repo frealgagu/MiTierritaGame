@@ -1,19 +1,19 @@
-// Música de fondo propia (v1.8.7): la pieza de la región (songs.js) se arma en el juego, sin archivos,
-// con cuerdas sintetizadas (compose.js), y suena en bucle y bajito con un poco de eco de sala. Como el
-// navegador no deja sonar nada antes de un toque, arranca con el primer toque.
+// Original background music (v1.8.7): each region piece (songs.js) is synthesized in-game without
+// audio files via Karplus-Strong strings (compose.js), looping softly with subtle room reverb.
+// Browsers block audio before user gesture, so playback begins on first tap.
 import { SONGS } from './songs.js';
 import { createSong, normalize, renderBar } from './compose.js';
 
-const VOLUME = 0.5; // la música al 100 % del control del menú (por defecto va al 40 %: ver main.js)
+const VOLUME = 0.5; // music gain at 100% slider setting (defaults to 40%: see main.js)
 const FADE_S = 2.5;
-const RATE = 32000; // muestras por segundo de la pieza (sobra para cuerdas de fondo y se arma más rápido)
-const REVERB = 0.22; // cuánto eco de sala se mezcla
+const RATE = 32000; // sample rate for rendered song (plenty for soft background strings and faster to synthesize)
+const REVERB = 0.22; // wet room reverb mix ratio
 
 export class Music {
-  // region: qué pieza toca (por ahora solo el Eje Cafetero).
+  // region: which piece to play.
   constructor(enabled, region = 'cafetero') {
     this.enabled = enabled;
-    this.volume = 1; // del control del menú (v3.66), de 0 a 1
+    this.volume = 1; // slider value (v3.66), from 0 to 1
     this.region = region;
     this.ctx = null;
     this.source = null;
@@ -24,7 +24,7 @@ export class Music {
       if (this.enabled) this.play();
     };
     window.addEventListener('pointerdown', start);
-    // En segundo plano (otra pestaña, el móvil bloqueado) se pausa.
+    // Pause when backgrounded (other tab or locked phone).
     document.addEventListener('visibilitychange', () => {
       if (!this.ctx) return;
       if (document.hidden) this.ctx.suspend();
@@ -40,7 +40,7 @@ export class Music {
     this.gain = ctx.createGain();
     this.gain.gain.value = 0;
     this.gain.connect(ctx.destination);
-    // Eco de sala: una respuesta de ruido que se apaga en segundo y medio.
+    // Room reverb: decaying noise impulse response over 1.5 seconds.
     const reverb = ctx.createConvolver();
     const len = Math.round(ctx.sampleRate * 1.5);
     const ir = ctx.createBuffer(2, len, ctx.sampleRate);
@@ -57,7 +57,7 @@ export class Music {
     return ctx;
   }
 
-  // Arma la pieza compás por compás, cediendo el turno entre uno y otro para no trabar el juego.
+  // Builds the track measure by measure, yielding between bars so the main thread never stutters.
   async build(region) {
     if (this.buffers[region]) return this.buffers[region];
     const song = SONGS[region] ?? SONGS.cafetero;
@@ -90,7 +90,7 @@ export class Music {
     this.source.start();
   }
 
-  // Al pasar a otra región, su pieza: baja la que suena y sube la otra.
+  // Crossfade to the new region piece when switching regions.
   setRegion(region) {
     if (region === this.region) return;
     this.region = region;
@@ -104,7 +104,7 @@ export class Music {
     }, FADE_S * 1000);
   }
 
-  // Volumen de 0 a 1: en 0 se apaga (y deja de gastar); al moverlo se oye enseguida el cambio.
+  // Volume from 0 to 1: at 0 mutes and suspends; adjusting takes effect immediately.
   setVolume(v) {
     const was = this.enabled;
     this.volume = v;
@@ -118,7 +118,7 @@ export class Music {
     if (on) this.play();
     else {
       this.fadeTo(0);
-      // Callada no gasta: se suspende al terminar de bajar.
+      // Stay suspended at zero volume to save CPU: suspend after fade-out finishes.
       setTimeout(() => !this.enabled && this.ctx?.suspend(), FADE_S * 1000 + 100);
     }
   }

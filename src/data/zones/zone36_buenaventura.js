@@ -1,7 +1,7 @@
-// Mapa de la Costa Pacífica · Zona 6: Buenaventura (v3.43). Mismo trazado que Barichara, Cartagena, Villa de
-// Leyva y Villavicencio: no tiene fuente propia; en el malecón está la Fritanga del puerto, que recibe las cajas de
-// patacones del Platanal, y cada estación espera junto a la carretera por la que le llega lo suyo de otra zona
-// del Pacífico. Se dibuja como el Pueblo (tema 'town'), con casas de colores, techos de zinc y palmas de coco (style).
+// Pacific Coast Map · Zone 6: Buenaventura (v3.43). Same layout as Barichara, Cartagena, Villa de
+// Leyva, and Villavicencio: no source of its own; on the boardwalk sits the Port Fritanga, receiving crates of
+// patacones from El Platanal, and each station waits next to the road bringing its supply from another Pacific
+// zone. Drawn like El Pueblo ('town' theme), with colorful houses, zinc roofs, and coconut palms (style).
 import { ICON } from '../icons.js';
 
 export const ZONE36 = {
@@ -26,7 +26,7 @@ export const ZONE36 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Juanchaco ➜',
   muleSpeed: 4,
@@ -39,12 +39,12 @@ export const ZONE36 = {
     recuerdos_pacifico: { road: [[6.5, 25.9], [6.5, 11.2]], sign: [5.3, 23.6], text: 'Werregue ⬆' },
     platos_tapao: { road: [[12.5, 25.9], [12.5, 15.2]], sign: [11.3, 23.6], text: 'Tapao ⬆' },
   },
-  // El Pacífico detrás del mapa (v3.54): las ballenas jorobadas que llegan a la bahía de julio a octubre, y las
-  // lanchas de los turistas que salen a verlas. [gx, gy, hacia dónde nada]; las lanchas, [gx, gy].
+  // The Pacific Ocean behind the map (v3.54): humpback whales arriving in the bay from July to October, and
+  // tourist boats heading out to watch them. [gx, gy, swim direction]; boats, [gx, gy].
   sea: {
     whales: [[-3.2, 6, 1], [8, -3.4, -1], [-4.6, 16, -1], [17, -4.2, 1], [-2.6, 23, 1]],
     boats: [[-2, 9.5], [11.5, -2.2], [21, -2.6]],
   },
   unlockedBy: 'werregue',
-  next: null, // la última de la Costa Pacífica
+  next: null, // the last zone of the Pacific Coast
 };

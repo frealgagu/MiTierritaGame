@@ -1,32 +1,32 @@
-// Eventos (v2.0, GDD §10.2): cada zona tiene un evento al año, que se juega en un tablero aparte con
-// las piezas de esa zona, sus propias monedas y niveles y su propio reloj (que solo corre mientras se
-// juega). Tiene un reto; según lo rápido que se cumpla se gana una medalla.
-//   announce: lo que dice la persona de la zona cuando el evento se abre (una vez al año)
-//   stations: estaciones que ya están construidas al empezar (en el nivel `level`)
-//   coins:    con cuánto se empieza (v3.1.1: lo que cuesta la primera compra del evento, para que desde el
-//             primer segundo haya algo que decidir: esa compra o subir estaciones)
-//   blame:    qué frena la producción, para decir «el Cafetal produce al 40 % por culpa de la broca»
-//   speed:    lo que el evento le hace a la velocidad de cada estación (la broca: el Cafetal al 40 %)
-//   supply:   lo que llega de afuera por cada importado, de 0 (nada) a 1 (todo lo que piden): en el
-//             tablero no hay otras zonas; stock: lo que ya tienen guardado las estaciones al empezar
-//   actions:  compras del evento (como las investigaciones, solo en el tablero); cada una pide la anterior.
-//             Efecto (effect, o varios en effects): los de las investigaciones o { type: 'supply', product, fraction }
-//   objective: el reto del evento (v3.72: uno solo; hasta la v3.71 eran tres que se turnaban, ver
+// Events (v2.0, GDD §10.2): each zone has a yearly event played on a separate board with
+// that zone's stations, its own coins and levels, and its own clock (running only while
+// played). Has a challenge; faster completion earns a better medal.
+//   announce: what the zone keeper says when the event opens (once per year)
+//   stations: stations prebuilt at start (at level `level`)
+//   coins:    starting coins (v3.1.1: equals first event purchase cost so players decide
+//             from second one between that purchase or upgrading stations)
+//   blame:    what slows production, for «Cafetal produces at 40 % due to borer»
+//   speed:    event speed multiplier per station (borer: Cafetal at 40 %)
+//   supply:   external arrival fraction per import, from 0 (none) to 1 (full demand): boards
+//             have no other zones; stock: initial reserve already inside stations at start
+//   actions:  event upgrades (like research, board-only); each requires the prior one.
+//             Effect (`effect`, or array `effects`): standard research effect or { type: 'supply', product, fraction }
+//   objective: event challenge (v3.72: single one; until v3.71 three rotating challenges), with
 //             sim/legacyObjectives.js): type, kind ('sold' o 'produced'), items (producto → cantidad) y
-//             medals = [s para el oro, s para la plata]. Los seis eventos de cada región son de tipos distintos,
-//             según el lugar de la zona en la región (OBJECTIVE_TYPES).
-// Las medallas se calibran con tools/event-sim.js (v3.1.1): el oro es el tiempo del mejor jugador
-// automático que decide cada segundo, más un 9 % (difícil, pero posible para alguien atento); la plata,
-// 5 minutos más.
+//             medals = [s for gold, s for silver]. The six region events use distinct
+//             types matching zone order in region (OBJECTIVE_TYPES).
+// Medals calibrated with tools/event-sim.js (v3.1.1): gold is fastest bot deciding every
+// second plus 9 % (challenging, achievable for attentive player); silver is 5 minutes more.
+// 5 minutes more.
 import { ICON } from './icons.js';
 
-// Los seis tipos de reto (v3.72), uno por zona de cada región, en su orden:
-//   cadena: vender el producto final (toda la cadena, hasta el despacho)
-//   arranque: mucho de un producto temprano (apurar el comienzo y las compras del evento)
-//   feria: tres ramas en una proporción
-//   ramas: dos ramas al tiempo
-//   corte: un producto intermedio (las últimas estaciones no hacen falta)
-//   final: pocos del producto final y muchos de otra rama
+// Six challenge types (v3.72), one per zone in each region, in order:
+//   cadena: sell final product (whole chain down to dispatch)
+//   arranque: lots of an early product (rush start and event purchases)
+//   feria: three branches in fixed ratio
+//   ramas: two branches simultaneously
+//   corte: intermediate product (later stations unneeded)
+//   final: few final product and many of another branch
 export const OBJECTIVE_TYPES = ['cadena', 'arranque', 'feria', 'ramas', 'corte', 'final'];
 
 export const MEDALS = {
@@ -38,7 +38,7 @@ export const MEDALS = {
 export const EVENTS = [
   {
     id: 'broca',
-    blame: 'la broca', // lo que frena (v3.12: «al 40 % por culpa de …»)
+    blame: 'la broca', // slowdown label (v3.12: «at 40 % due to …»)
     zone: 'finca',
     icon: '🪲',
     name: 'La broca',
@@ -58,7 +58,7 @@ export const EVENTS = [
   },
   {
     id: 'molienda',
-    blame: 'el bagazo húmedo', // lo que frena (v3.12: «al 40 % por culpa de …»)
+    blame: 'el bagazo húmedo', // slowdown label (v3.12: «at 40 % due to …»)
     zone: 'trapiche',
     icon: '🔥',
     name: 'La gran molienda',
@@ -97,7 +97,7 @@ export const EVENTS = [
   },
   {
     id: 'derrumbe',
-    blame: 'el derrumbe', // lo que frena (v3.12: «al 40 % por culpa de …»)
+    blame: 'el derrumbe', // slowdown label (v3.12: «at 40 % due to …»)
     zone: 'cacaotal',
     icon: '🪨',
     name: 'Derrumbe en la vía',
@@ -118,7 +118,7 @@ export const EVENTS = [
   },
   {
     id: 'fiesta',
-    blame: 'el budare rajado', // lo que frena (v3.12: «al 40 % por culpa de …»)
+    blame: 'el budare rajado', // slowdown label (v3.12: «at 40 % due to …»)
     zone: 'maizal',
     icon: '🎉',
     name: 'Fiesta del maíz',
@@ -139,10 +139,10 @@ export const EVENTS = [
   },
   {
     id: 'barco',
-    blame: 'el montacargas varado', // lo que frena (v3.12: «al 40 % por culpa de …»)
+    blame: 'el montacargas varado', // slowdown label (v3.12: «at 40 % due to …»)
     zone: 'pueblo',
     icon: '🚚',
-    name: 'La tractomula sale el viernes', // (v4.1.2: era «El barco…»; Salento no tiene puerto)
+    name: 'La tractomula sale el viernes', // (v4.1.2: was «Ship…»; Salento has no seaport)
     intro:
       'La tractomula sale el viernes para Buenaventura y hay que llenar los contenedores, pero el montacargas está varado: se carga al 40 %. Consigue repuestos, arregla el montacargas y pon un turno extra.',
     announce: '¡La tractomula sale el viernes y el montacargas está varado! Toque 🏅 Eventos y llenemos esos contenedores.',
@@ -158,10 +158,10 @@ export const EVENTS = [
     ],
     objective: { type: 'final', kind: 'sold', items: { container: 6, breakfast: 180 }, medals: [840, 1140] },
   },
-  // ---------- Santander (v3.6): uno por zona, con la misma mecánica que el de su par del Eje Cafetero ----------
+  // ---------- Santander (v3.6): one per zone, matching mechanics of its Eje Cafetero counterpart ----------
   {
     id: 'mosca',
-    blame: 'la mosca de la fruta', // lo que frena (v3.12: «al 40 % por culpa de …»)
+    blame: 'la mosca de la fruta', // slowdown label (v3.12: «at 40 % due to …»)
     zone: 'guayabera',
     icon: '🪰',
     name: 'La mosca de la fruta',
@@ -181,7 +181,7 @@ export const EVENTS = [
   },
   {
     id: 'humedad',
-    blame: 'la humedad', // lo que frena (v3.12: «al 40 % por culpa de …»)
+    blame: 'la humedad', // slowdown label (v3.12: «at 40 % due to …»)
     zone: 'tabacal',
     icon: '💧',
     name: 'Humedad en el caney',
@@ -220,7 +220,7 @@ export const EVENTS = [
   },
   {
     id: 'creciente',
-    blame: 'la creciente del río', // lo que frena (v3.12: «al 40 % por culpa de …»)
+    blame: 'la creciente del río', // slowdown label (v3.12: «at 40 % due to …»)
     zone: 'hato',
     icon: '🌊',
     name: 'Creciente del río',
@@ -241,7 +241,7 @@ export const EVENTS = [
   },
   {
     id: 'turistas',
-    blame: 'la falta de papel', // lo que frena (v3.12: «al 40 % por culpa de …»)
+    blame: 'la falta de papel', // slowdown label (v3.12: «at 40 % due to …»)
     zone: 'hormigas',
     icon: '🎒',
     name: 'Temporada de turistas',
@@ -262,7 +262,7 @@ export const EVENTS = [
   },
   {
     id: 'puente_festivo',
-    blame: 'la falta de guías', // lo que frena (v3.12: «al 40 % por culpa de …»)
+    blame: 'la falta de guías', // slowdown label (v3.12: «at 40 % due to …»)
     zone: 'barichara',
     icon: '🥾',
     name: 'Puente festivo',
@@ -282,7 +282,7 @@ export const EVENTS = [
     objective: { type: 'final', kind: 'sold', items: { excursion: 6, estadia: 180 }, medals: [840, 1140] },
   },
 
-  // La Costa (v3.21): los mismos números que los de Santander, zona por zona.
+  // Coast (v3.21): same numbers as Santander, zone for zone.
   {
     id: 'pajaros',
     blame: 'los pájaros',
@@ -406,7 +406,7 @@ export const EVENTS = [
     objective: { type: 'final', kind: 'sold', items: { paseo_islas: 6, noche_hotel: 180 }, medals: [840, 1140] },
   },
 
-  // Boyacá (v3.28): los mismos números que los de la Costa y Santander, zona por zona.
+  // Boyacá (v3.28): same numbers as Coast and Santander, zone for zone.
   {
     id: 'gota',
     blame: 'la gota',
@@ -529,7 +529,7 @@ export const EVENTS = [
     ],
     objective: { type: 'final', kind: 'sold', items: { excursion_fosil: 6, noche_villa: 180 }, medals: [840, 1140] },
   },
-  // Los Llanos (v3.37): los mismos números que los de Boyacá, la Costa y Santander, zona por zona.
+  // Llanos (v3.37): same numbers as Boyacá, Coast, and Santander, zone for zone.
   {
     id: 'pudricion',
     blame: 'la pudrición del cogollo',
@@ -652,7 +652,7 @@ export const EVENTS = [
     ],
     objective: { type: 'final', kind: 'sold', items: { excursion_cano: 6, noche_villavo: 180 }, medals: [840, 1140] },
   },
-  // La Costa Pacífica (v3.44): los mismos números que los de los Llanos, Boyacá, la Costa y Santander, zona por zona.
+  // Pacific Coast (v3.44): same numbers as Llanos, Boyacá, Coast, and Santander, zone for zone.
   {
     id: 'sigatoka',
     blame: 'la sigatoka negra',
@@ -775,7 +775,7 @@ export const EVENTS = [
     ],
     objective: { type: 'final', kind: 'sold', items: { excursion_ballenas: 6, noche_buenaventura: 180 }, medals: [840, 1140] },
   },
-  // El Amazonas (v3.53): los mismos números que los de la Costa Pacífica, los Llanos, Boyacá, la Costa y Santander, zona por zona.
+  // Amazon (v3.53): same numbers as Pacific Coast, Llanos, Boyacá, Coast, and Santander, zone for zone.
   {
     id: 'palmas_altas',
     blame: 'las palmas tan altas',
@@ -898,7 +898,7 @@ export const EVENTS = [
     ],
     objective: { type: 'final', kind: 'sold', items: { excursion_delfines: 6, noche_leticia: 180 }, medals: [840, 1140] },
   },
-  // --- Tolima Grande (v4.0): los números de los del Amazonas ---
+  // --- Tolima Grande (v4.0): same numbers as Amazon ---
   {
     id: 'verano_achiral',
     blame: 'el verano',
@@ -1020,7 +1020,7 @@ export const EVENTS = [
     ],
     objective: { type: 'final', kind: 'sold', items: { excursion_tatacoa: 6, noche_sanpedro: 180 }, medals: [840, 1140] },
   },
-  // --- Cundinamarca (v4.4.8): los números de los del Tolima Grande ---
+  // --- Cundinamarca (v4.4.8): same numbers as Tolima Grande ---
   {
     id: 'heladas_sabana',
     blame: 'las heladas',
@@ -1142,11 +1142,11 @@ export const EVENTS = [
     ],
     objective: { type: 'final', kind: 'sold', items: { visita_catedral: 6, noche_zipaquira: 180 }, medals: [840, 1140] },
   },
-  // --- Bogotá (v4.5): una sola zona con varios eventos (cada uno con su `key`), cada uno sobre unas estaciones de la red ---
+  // --- Bogotá (v4.5): single zone with several events (each with its `key`), each over a network slice ---
   {
     id: 'aguacero_chorro',
     key: 'aguacero_chorro',
-    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
+    costScale: 0.0125, // upgrades cost 1/80th (see sim/upgrades.js)
     blame: 'el aguacero',
     zone: 'bogota',
     icon: '🌧️',
@@ -1169,7 +1169,7 @@ export const EVENTS = [
   {
     id: 'navidad_septima',
     key: 'navidad_septima',
-    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
+    costScale: 0.0125, // upgrades cost 1/80th (see sim/upgrades.js)
     zone: 'bogota',
     icon: '✨',
     name: 'El alumbrado de la Séptima',
@@ -1190,7 +1190,7 @@ export const EVENTS = [
   {
     id: 'festival_zona_g',
     key: 'festival_zona_g',
-    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
+    costScale: 0.0125, // upgrades cost 1/80th (see sim/upgrades.js)
     zone: 'bogota',
     icon: ICON.cenaZonaG,
     name: 'El festival gastronómico',
@@ -1211,7 +1211,7 @@ export const EVENTS = [
   {
     id: 'pico_placa',
     key: 'pico_placa',
-    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
+    costScale: 0.0125, // upgrades cost 1/80th (see sim/upgrades.js)
     blame: 'el pico y placa',
     zone: 'bogota',
     icon: '🚦',
@@ -1234,7 +1234,7 @@ export const EVENTS = [
   {
     id: 'ventarron_usaquen',
     key: 'ventarron_usaquen',
-    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
+    costScale: 0.0125, // upgrades cost 1/80th (see sim/upgrades.js)
     blame: 'el ventarrón',
     zone: 'bogota',
     icon: '🌬️',
@@ -1257,7 +1257,7 @@ export const EVENTS = [
   {
     id: 'paro_camionero',
     key: 'paro_camionero',
-    costScale: 0.0125, // las mejoras cuestan la ochentava parte (ver sim/upgrades.js)
+    costScale: 0.0125, // upgrades cost 1/80th (see sim/upgrades.js)
     blame: 'el paro',
     zone: 'bogota',
     icon: '🚛',
@@ -1277,8 +1277,8 @@ export const EVENTS = [
     ],
     objective: { type: 'ramas', kind: 'produced', items: { canasta_plaza: 1200, desayuno_plaza: 450 }, medals: [945, 1245] },
   },
-  // El séptimo de Bogotá (v4.7): la Gran Feria, con toda la red. Solo se abre cuando ya se ganó medalla en los otros
-  // seis (`after`). No frena nada: sus compras suben el precio de todo lo que se vende en el tablero, por la demanda.
+  // Seventh Bogotá event (v4.7): Gran Feria across full network. Only spawns once medals are earned
+  // in all other six (`after`). Penalizes nothing: purchases boost board sale prices via fair demand.
   {
     id: 'gran_feria_bog',
     key: 'gran_feria_bog',
@@ -1293,7 +1293,7 @@ export const EVENTS = [
     level: 10,
     coins: 20000000,
     supply: { coffee_bag: 1, alino_box: 1, aji_box: 1, ruana: 1, alpargatas: 1, caja_flores: 1, juice_box: 1, asai_box: 1, bizcocho_box: 1, criollas_box: 1, ant_cone: 1, sombrero_vueltiao: 1, silla_montar: 1, trucha_ahumada: 1, smoked_pargo: 1, table_chocolate: 1, canasta_amasijos: 1, parranda_llanera: 1, rice_sack: 1, loza_negra: 1, gift_basket: 1, lechona: 1, bocadillo_crate: 1, cocada: 1, ticuna_mask: 1, werregue_jar: 1, cofre_sal: 1 },
-    // Cada compra deja los precios en ×1,2, ×1,5 y ×2 de lo normal (se multiplican: 1,2 · 1,25 · 4/3).
+    // Each purchase puts prices at ×1.2, ×1.5, and ×2 normal (multiplying: 1.2 · 1.25 · 4/3).
     actions: [
       { id: 'gran_feria_carteles', icon: '📣', name: 'Carteles por toda la ciudad', desc: 'Llega más gente a la feria: todo se vende un 20 % más caro.', cost: 20000000, effect: { type: 'zoneValue', target: 'bogota', mult: 1.2 } },
       { id: 'gran_feria_radio', icon: '📻', name: 'La feria en la radio', desc: 'La anuncian en todo el país: todo se vende un 50 % más caro que al empezar.', cost: 100000000, effect: { type: 'zoneValue', target: 'bogota', mult: 1.25 } },
@@ -1304,8 +1304,8 @@ export const EVENTS = [
 ];
 
 export const EVENTS_BY_ID = Object.fromEntries(EVENTS.map((e) => [e.id, e]));
-// La clave de un evento (v4.5): su zona o, en una zona con varios eventos (Bogotá), su `key`. Los cupos, los tableros y
-// las veces jugadas se guardan con ella; como es la zona en todos los de antes, las partidas guardadas no cambian.
+// Event key (v4.5): zone id, or in multi-event zone (Bogotá) event `key`. Slots, boards, and
+// play counts store by this key; matching zone id elsewhere keeps legacy saves compatible.
 export const eventKey = (def) => def.key ?? def.zone;
 export const EVENT_OF_ZONE = Object.fromEntries(EVENTS.map((e) => [eventKey(e), e]));
 export const EVENT_ACTIONS_BY_ID = Object.fromEntries(EVENTS.flatMap((e) => e.actions.map((a, k) => [a.id, { ...a, event: e.id, requires: e.actions[k - 1]?.id ?? null }])));

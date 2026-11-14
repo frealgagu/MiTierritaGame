@@ -1,7 +1,7 @@
 import { test, mock } from 'node:test';
 import assert from 'node:assert/strict';
 
-// Un #toast de mentiras y un reloj que se adelanta a mano.
+// A mock #toast and a manually stepped clock.
 const el = { hidden: true, textContent: '', dataset: {}, addEventListener(type, fn) { this.onclick = fn; } };
 globalThis.document = { getElementById: () => el };
 mock.timers.enable({ apis: ['setTimeout', 'Date'] });

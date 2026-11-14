@@ -1,16 +1,16 @@
-// Orden de pintado de lo que se mueve (v4.5.1): chivas, tractomulas, Willys, mulas, gente, animales y lo de los
-// eventos. Lo de más abajo en el mapa (más cerca de quien mira) se pinta de último, pero contra cada estación y la
-// bodega no basta un punto: se mira su huella entera. Si lo que se mueve ya pasó el borde de adelante de la huella en
-// cualquiera de los dos ejes (gx ≥ x + w o gy ≥ y + h), va delante de ella; si no, detrás. Así una chiva que pasa
-// por detrás de la bodega no se pinta sobre la teja, y una estación de adelante no la «atraviesa».
-// (Hasta la v4.5.0 las chivas y las tractomulas iban siempre encima de todo.)
+// Moving sprite draw sorting (v4.5.1): chivas, tractomulas, Willys, mules, people, animals,
+// and event props. Lower-screen sprites sort later, though buildings and warehouse require
+// full footprint bounds rather than a single point. If sprite passed a footprint's front
+// edge on either axis (gx ≥ x + w or gy ≥ y + h) it draws in front; else behind. Keeps
+// passing chivas behind warehouse roofs and foreground stations from clipping vehicles.
+// (Until v4.5.0 chivas and tractomulas always drew on top of everything.)
 import { depth } from './iso.js';
 
-let blockers = null; // () => las vistas con huella (`foot`) de la escena que se ve
+let blockers = null; // () => active scene views with footprint (`foot`)
 export const setBlockers = (fn) => (blockers = fn);
 
-// Solo cuentan las huellas que se cruzan en pantalla con lo que se mueve: de lado (gx − gy, con media casilla y algo
-// de ancho para una tractomula) y de alto (gx + gy: un edificio alto tapa hasta unas seis casillas detrás de él).
+// Only footprints overlapping sprite on screen matter: horizontally (gx − gy, with half-tile
+// plus width margin for tractomulas) and vertically (gx + gy: tall roof covers ~6 tiles behind).
 const HALF_WIDTH = 0.8;
 const TALL = 6;
 export function overlaps(f, gx, gy) {
@@ -20,7 +20,7 @@ export function overlaps(f, gx, gy) {
   return d >= f.x + f.y - TALL && d <= f.x + f.w + f.y + f.h + 1;
 }
 
-// Profundidad para algo en (gx, gy); `bias` lo adelanta un poco entre cosas del mismo punto.
+// Depth key for sprite at (gx, gy); `bias` orders layers sharing the same spot.
 export function moverDepth(gx, gy, bias = 0) {
   const base = depth(gx, gy) + bias;
   const views = blockers?.();
@@ -36,21 +36,21 @@ export function moverDepth(gx, gy, bias = 0) {
     if (gx >= x1 || gy >= y1) lo = Math.max(lo, v.zIndex + 0.05);
     else hi = Math.min(hi, v.zIndex - 0.05);
   }
-  // Si dos huellas piden cosas contrarias (rarísimo), gana quedar tapado: es lo que se nota menos.
+  // On rare contradictory footprint constraints, prefer tucked behind (least noticeable).
   return Math.min(Math.max(base, lo), hi);
 }
 
-// El orden entre las estaciones (v4.5.1): cada una empieza en la profundidad de su esquina de adelante, pero una huella
-// grande (el Tostadero, de 6×6) podía quedar después de una más chica que está delante de ella. Si una está toda detrás
-// de otra (a la izquierda o arriba en la cuadrícula) y se cruzan en pantalla, se baja hasta quedar antes.
+// Inter-station sorting (v4.5.1): each starts at front-corner depth, though large footprints
+// (6×6 Tostadero) could sort after smaller foreground stations. Whenever station A lies
+// wholly behind B (left or above on grid) and screen-overlaps, drop A before B.
 const GAP = 0.2;
 const apart = (a, b) => a.x + a.w <= b.x || a.y + a.h <= b.y;
-// En diagonal (una arriba a la derecha de la otra) cada una queda «detrás» por un eje: ahí no hay orden que cuidar.
+// Diagonally offset stations (one upper-right of other) each sit behind on one axis: unconstrained.
 const behind = (a, b) => apart(a, b) && !apart(b, a);
 const crossOnScreen = (a, b) => {
   const ax = [a.x - (a.y + a.h), a.x + a.w - a.y];
   const bx = [b.x - (b.y + b.h), b.x + b.w - b.y];
-  // (Con el ancho de lo que se mueve: si algo puede quedar entre las dos, también cuentan.)
+  // (Including sprite width: if something passes between both, sort order matters too.)
   return ax[0] < bx[1] + 2 * HALF_WIDTH && bx[0] < ax[1] + 2 * HALF_WIDTH && b.x + b.y - TALL <= a.x + a.w + a.y + a.h;
 };
 export function orderFootprints(views) {

@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="./src/ui/styles.css" />
   </head>
   <body>
-    <!-- Pantalla de carga: se ve apenas abre la página, mientras se prepara el mapa y se calcula lo que
-         se produjo sin conexión (main.js la quita). -->
+    <!-- Loading screen: shown right as the page opens while the map initializes and offline
+         production is computed (removed by main.js). -->
     <div id="splash" class="splash">
       <div class="splash-card">
         <img class="splash-logo" src="./icons/icon-192.png" alt="" width="96" height="96" />
@@ -51,12 +51,12 @@
       <button id="zones-btn" class="side-btn" aria-label="Zonas" title="Zonas" hidden>🗺️<span id="zones-badge" class="badge" hidden></span></button>
     </div>
     <div id="tracker" class="tracker" role="button" tabindex="0" hidden></div>
-    <!-- Tablero de un evento: objetivo, reloj, medallas y compras del evento. -->
+    <!-- Event board: goal, clock, medals, and event upgrades. -->
     <div id="event-bar" class="event-bar" hidden>
       <div class="event-top">
         <span id="event-title" class="event-title"></span>
         <span id="event-clock" class="event-clock"></span>
-        <!-- (v4.4.7) Recoge el tablero a la fila del título y la barra, para ver el mapa en pantallas pequeñas. -->
+        <!-- (v4.4.7) Collapses the board to the title bar and progress bar to view the map on small screens. -->
         <button id="event-fold" class="event-fold" type="button" aria-expanded="true" aria-label="Recoger el tablero">▾</button>
       </div>
       <div class="event-buttons">
@@ -71,7 +71,7 @@
       <div id="event-handicap" class="event-handicap" hidden></div>
       <div id="event-actions" class="event-actions"></div>
     </div>
-    <!-- Antes de las ventanas: estas la tapan al abrirse. -->
+    <!-- Before modals: opened modals cover it. -->
     <div id="legacy-chip" class="legacy-chip" title="Producción de esta partida" hidden></div>
 
     <div id="goals" class="modal" hidden>
@@ -85,7 +85,7 @@
       </div>
     </div>
 
-    <!-- 💰 De dónde sale (v4.1.1): al tocar el dinero de la barra de arriba. -->
+    <!-- 💰 Income breakdown (v4.1.1): opened by tapping money in the top bar. -->
     <div id="money" class="modal" hidden>
       <div class="modal-card list-modal">
         <div class="chain-head">
@@ -154,7 +154,7 @@
       </div>
     </div>
 
-    <!-- El mapa de Colombia (v3.60): en grande, aparte de la lista. Desde la v3.67 es lo primero que se ve en 🗺️ Zonas. -->
+    <!-- Colombia map (v3.60): full-size view separate from the list. Since v3.67 it opens first in 🗺️ Zones. -->
     <div id="zones-map-modal" class="modal" hidden>
       <div class="modal-card map-card">
         <div class="chain-head">
@@ -247,8 +247,8 @@
           <button id="update-btn" class="btn" hidden>🔄 Buscar actualización</button>
         </div>
         <div class="modal-actions menu-reset">
-          <!-- (v4.3.2) Se borra deslizando la perilla hasta el final: un toque suelto ya no borra. (v4.4.6) Primero el
-               botón; al tocarlo aparece la barra para confirmar. -->
+          <!-- (v4.3.2) Delete by sliding the thumb to the end: a single tap no longer deletes. (v4.4.6) Button
+               first; tapping it reveals the slider bar to confirm. -->
           <button id="reset-btn" class="btn danger">Borrar partida</button>
           <div id="reset-slide" class="slide-confirm" role="group" aria-label="Borrar partida" hidden>
             <span class="slide-label">Desliza para borrar la partida</span>
@@ -312,7 +312,7 @@
           <button id="chain-close" class="close-btn" aria-label="Cerrar">✕</button>
         </div>
         <p class="chain-help" id="chain-help">Lo que pasa por segundo de una estación a otra. En azul, lo que llega de otras zonas; en rojo, lo que frena. Toca una estación para ver su detalle.</p>
-        <!-- (v4.5) Con barrios (Bogotá), una pestaña por barrio: la cadena entera no cabe. -->
+        <!-- (v4.5) With neighborhoods (Bogotá), one tab per neighborhood: the full chain doesn't fit. -->
         <div id="chain-groups" class="tabs chain-tabs chain-groups" hidden></div>
         <div id="chain-body" class="chain-body"></div>
         <div id="chain-detail" class="chain-detail" hidden></div>
@@ -320,7 +320,7 @@
       </div>
     </div>
 
-    <!-- Cómo se juega: al abrir el juego (salvo que se marque «No mostrar de nuevo») y desde el menú ⚙️. -->
+    <!-- How to play: shown on startup (unless "Don't show again" is checked) and from ⚙️ menu. -->
     <div id="intro" class="modal" hidden>
       <div class="modal-card list-modal intro">
         <div class="chain-head">
@@ -427,7 +427,7 @@
       </div>
     </div>
 
-    <!-- Confirmar reiniciar o terminar un evento (v3.30). -->
+    <!-- Confirm restarting or ending an event (v3.30). -->
     <div id="event-confirm" class="modal" hidden>
       <div class="modal-card center event-result">
         <div id="event-confirm-icon" class="event-result-medal"></div>

@@ -1,6 +1,6 @@
-// Mapa de Santander · Zona 5: Las Hormigas (v3.4). Mismo trazado que el Maizal (zone5_maizal.js):
-// cadena lineal hasta la Tienda de recuerdos, que espera junto a las dos carreteras por las que llegan
-// los costales y las alpargatas de la Fiquera.
+// Santander Map · Zone 5: Las Hormigas (v3.4). Same layout as El Maizal (zone5_maizal.js):
+// linear chain up to the Souvenir Shop, which waits next to the two roads bringing
+// the sacks and espadrilles from La Fiquera.
 import { ICON } from '../icons.js';
 
 export const ZONE11 = {
@@ -24,7 +24,7 @@ export const ZONE11 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys (v3.9), por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys (v3.9), inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Barichara ➜',
   muleSpeed: 4,
@@ -32,7 +32,7 @@ export const ZONE11 = {
   routes: {
     costales: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Costales de la Fiquera' },
     alpargatas: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Alpargatas' },
-    // Los recuerdos salen hacia Barichara (v3.5).
+    // The souvenirs leave toward Barichara (v3.5).
     recuerdos: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'A Barichara ➜' },
   },
   unlockedBy: 'hato',

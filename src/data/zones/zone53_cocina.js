@@ -1,6 +1,6 @@
-// Mapa de Cundinamarca · Zona 5: La Cocina de la Sabana (v4.4), en Chía. Mismo trazado que la quinta zona de cada
-// región: el Restaurante santafereño espera junto a las carreteras por las que llegan la trucha ahumada y el ceviche
-// de Guatavita.
+// Cundinamarca Map · Zone 5: La Cocina de la Sabana (v4.4), in Chía. Same layout as the fifth zone of each
+// region: the Santafereño Restaurant waits next to the roads bringing smoked trout and ceviche
+// from Guatavita.
 import { ICON } from '../icons.js';
 
 export const ZONE53 = {
@@ -24,7 +24,7 @@ export const ZONE53 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A Chía ➜',
   muleSpeed: 4,

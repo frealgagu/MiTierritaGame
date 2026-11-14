@@ -1,5 +1,5 @@
-// Arranque (v3.68): primero el idioma (sus textos se ponen sobre los datos antes de que el juego los use),
-// luego el juego.
+// Boot sequence (v3.68): load the language first (its strings are applied onto data before the game uses it),
+// then start the game.
 import { chooseLang, loadLang, translateDom } from './i18n/index.js';
 
 (async () => {
@@ -7,7 +7,7 @@ import { chooseLang, loadLang, translateDom } from './i18n/index.js';
     await loadLang(chooseLang());
     translateDom(document.body);
   } catch (err) {
-    console.error(err); // si el idioma no carga, el juego sale en español
+    console.error(err); // if the language fails to load, the game falls back to Spanish
   }
   await import('./main.js');
 })();

@@ -1,4 +1,4 @@
-// Zonas jugables, en orden. Las de docs/GDD.md §4b que aún no existen se añaden aquí al llegar.
+// Playable zones, in order. Those from docs/GDD.md §4b that don't exist yet are added here as they arrive.
 import { ZONE1 } from './zone1_finca.js';
 import { ZONE2 } from './zone2_trapiche.js';
 import { ZONE3 } from './zone3_lecheria.js';
@@ -55,6 +55,6 @@ import { ZONE53 } from './zone53_cocina.js';
 import { ZONE54 } from './zone54_zipaquira.js';
 import { ZONE55 } from './zone55_bogota.js';
 
-// Todas las regiones (cada zona dice la suya; sin `region`, es del Eje Cafetero).
+// All regions (each zone states its own; without `region`, it belongs to Eje Cafetero).
 export const ZONE_LIST = [ZONE1, ZONE2, ZONE3, ZONE4, ZONE5, ZONE6, ZONE7, ZONE8, ZONE9, ZONE10, ZONE11, ZONE12, ZONE13, ZONE14, ZONE15, ZONE16, ZONE17, ZONE18, ZONE19, ZONE20, ZONE21, ZONE22, ZONE23, ZONE24, ZONE25, ZONE26, ZONE27, ZONE28, ZONE29, ZONE30, ZONE31, ZONE32, ZONE33, ZONE34, ZONE35, ZONE36, ZONE37, ZONE38, ZONE39, ZONE40, ZONE41, ZONE42, ZONE43, ZONE44, ZONE45, ZONE46, ZONE47, ZONE48, ZONE49, ZONE50, ZONE51, ZONE52, ZONE53, ZONE54, ZONE55];
 export const ZONES_BY_ID = Object.fromEntries(ZONE_LIST.map((z) => [z.id, z]));

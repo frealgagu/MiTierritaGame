@@ -1,6 +1,6 @@
-// Mapa del Tolima Grande · Zona 5: La Chamba (v4.0), en El Guamo. Mismo trazado que la quinta zona de cada región:
-// cadena lineal hasta la Tienda de La Chamba, que espera junto a las dos carreteras por las que llegan la tilapia
-// ahumada y el escabeche de Betania.
+// Tolima Grande Map · Zone 5: La Chamba (v4.0), in El Guamo. Same layout as the fifth zone of each region:
+// linear chain up to the La Chamba Shop, waiting next to the two roads bringing smoked tilapia
+// and escabeche from Betania.
 import { ICON } from '../icons.js';
 
 export const ZONE47 = {
@@ -25,7 +25,7 @@ export const ZONE47 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'Al Guamo ➜',
   muleSpeed: 4,

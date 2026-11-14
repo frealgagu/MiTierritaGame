@@ -16,15 +16,15 @@ import { clockOf, workOf, workSeconds } from '../sim/calendar.js';
 import { boardObjective, eventItems, refillSlots, secureMedal, stepSupply } from '../sim/events.js';
 import { buildAll, buyZoneBoost } from '../sim/zoneBoost.js';
 
-export const TICK = 0.1; // s, la simulación avanza a 10 ticks/s
-// s de juego que se simulan de verdad al volver; el resto se extrapola. Hasta la v3.65 eran 2 h: con la
-// partida ya andando, 30 min (casi 4 días del juego) dan lo mismo (menos de 1 % de diferencia) y el juego
-// abre 4 veces más rápido.
+export const TICK = 0.1; // s, simulation advances at 10 ticks/s
+// s of game time actually simulated on resume; the rest is extrapolated. Until v3.65 this was 2 h: with a
+// save already running, 30 min (nearly 4 game days) produces virtually the same (<1% diff) and opens
+// 4x faster.
 const MAX_SIMULATED = 30 * 60;
 
-// Lo que se extrapola del tiempo sin conexión.
+// Extrapolated portion of offline time.
 const snapshot = (s) => ({ coins: s.coins, totalEarned: s.totalEarned, sold: { ...s.stats.sold }, produced: { ...s.stats.produced }, imported: { ...s.stats.imported } });
-const INCOME_WINDOW = 60; // s para calcular 💰/s
+const INCOME_WINDOW = 60; // s window used to compute coins/s
 
 export class Game {
   constructor(state = createInitialState()) {
@@ -32,11 +32,11 @@ export class Game {
     this.bus = new EventBus();
     this.accumulator = 0;
     this.incomeLog = [];
-    this.timeScale = 1; // opciones de desarrollador: acelera el tiempo de juego
+    this.timeScale = 1; // dev options: accelerates game time
     this.bus.on('sold', ({ coins }) => this.incomeLog.push({ t: this.state.playTime, coins }));
   }
 
-  // Avanza el tiempo real transcurrido en pasos fijos (multiplicado por `timeScale`).
+  // Advances real elapsed time in fixed steps (multiplied by `timeScale`).
   update(dtSeconds) {
     this.accumulator += Math.min(dtSeconds, 1) * this.timeScale;
     while (this.accumulator >= TICK) {
@@ -47,8 +47,8 @@ export class Game {
 
   step(dt) {
     this.state.playTime += dt;
-    // Los subproductos pasan por su canaleta (v4.0); luego todas las zonas abiertas producen a la vez,
-    // aunque solo se vea una.
+    // Byproducts travel down their chute (v4.0); then all unlocked zones produce simultaneously,
+    // even though only one is visible.
     stepByproducts(this.state);
     for (const zone of ZONE_LIST) {
       if (!this.state.zones[zone.id]?.unlocked) continue;
@@ -63,18 +63,18 @@ export class Game {
     for (const zone of ZONE_LIST) if (this.state.zones[zone.id]?.unlocked) stepJeep(this.state, zone.id, dt, this.bus);
     for (const route of ROUTES) stepRoute(this.state, route.id, dt, this.bus);
     if (this.state.event) stepSupply(this.state, dt);
-    else if ((this.state.region ?? 'cafetero') === 'cafetero') refillSlots(this.state); // los cupos de eventos (v3.30: de todo el juego)
-    // Los avisos del mapa (⏸️, bodega llena…) son para quien mira: mientras se calcula el tiempo fuera no
-    // hacen falta (no cambian la producción) y se ahorra tiempo al abrir el juego (v3.65.1).
+    else if ((this.state.region ?? 'cafetero') === 'cafetero') refillSlots(this.state); // event slots (v3.30: global across the whole game)
+    // Map status alerts (waiting, full warehouse...) are only for visual display: during offline catch-up they are
+    // unnecessary (they do not affect production) and skipping them speeds up launch (v3.65.1).
     if (!this.offline) stepAlerts(this.state, dt);
     capCoins(this.state);
   }
 
-  // Ganancias mientras el juego estuvo cerrado: se simula en pasos de 1 s, sin efectos visuales (y con
-  // las noches y las temporadas, como al jugar).   seconds: segundos de juego   cap: tope en segundos
-  // Se simulan de verdad hasta MAX_SIMULATED s; el resto se suma al ritmo de la segunda mitad de lo
-  // simulado (monedas, ventas, producción e importados), contando cuánto se trabaja en cada tramo: las
-  // noches no producen y cada temporada rinde lo suyo.
+  // Offline earnings while closed: simulated in 1 s steps without visual effects (respecting
+  // nights and seasons just like live play).   seconds: game seconds   cap: limit in seconds
+  // Actually simulate up to MAX_SIMULATED s; the remainder is extrapolated from the second half of the
+  // simulated run (coins, sales, production, imports), weighted by active work time in each stretch:
+  // nights pause work and each season yields its multiplier.
   catchUp(seconds, cap = offlineCapSeconds(this.state)) {
     const run = this.catchUpSteps(seconds, cap);
     let r = run.next();
@@ -82,14 +82,14 @@ export class Game {
     return r.value;
   }
 
-  // Lo mismo, cediendo el turno cada tanto (para que la pantalla de carga se mueva y diga cuánto va).
-  //   onProgress(fracción de 0 a 1)
+  // Same catch-up, yielding periodically so the splash screen stays responsive and reports progress.
+  //   onProgress(fraction from 0 to 1)
   async catchUpAsync(seconds, cap = offlineCapSeconds(this.state), onProgress = () => {}) {
     const run = this.catchUpSteps(seconds, cap);
     let r = run.next();
     let last = performance.now();
     while (!r.done) {
-      // Unos 40 ms de cálculo entre cuadro y cuadro.
+      // About 40 ms of computation per frame.
       if (performance.now() - last > 40) {
         onProgress(r.value);
         await new Promise((ok) => setTimeout(ok, 0));
@@ -101,7 +101,7 @@ export class Game {
     return r.value;
   }
 
-  // El cálculo, por partes: cada 60 pasos dice cuánto lleva (de 0 a 1); al final devuelve el resumen.
+  // Chunked catch-up: reports progress (0 to 1) every 60 steps and returns the summary at the end.
   *catchUpSteps(seconds, cap) {
     const total = Math.min(Math.max(seconds, 0), cap);
     const s = this.state;
@@ -137,12 +137,12 @@ export class Game {
     return { seconds: total, coins: s.coins - before };
   }
 
-  // El tablero de un evento que siguió corriendo por detrás (v3.67.4, «🚪 Salir»): como el tiempo sin
-  // conexión, se simulan de verdad hasta MAX_SIMULATED s y el resto se suma al ritmo de la segunda mitad
-  // (en el tablero siempre es de día). Sin tope: el tablero no para de producir; solo su reloj se queda
-  // en 999:59. Si el objetivo se cumple en lo que se suma, la medalla queda con el momento en que se
-  // cumple al ritmo medido de cada producto que falta.
-  // Devuelve { seconds, secured } (secured: si se aseguró la medalla mientras tanto).
+  // Event board that kept running in the background (v3.67.4, Leave mode): just like offline
+  // progress, simulate up to MAX_SIMULATED s and extrapolate the rest from the second half rate
+  // (event boards are always daytime). Uncapped: the board keeps producing; only its display clock stops
+  // at 999:59. If the goal completes in the extrapolated window, the medal timestamp records that moment
+  // based on the measured rate of each remaining product.
+  // Returns { seconds, secured } (secured: whether the medal was earned while away).
   catchUpBoard(seconds) {
     const s = this.state;
     const total = Math.max(seconds, 0);
@@ -167,7 +167,7 @@ export class Game {
       const start = s.playTime;
       const after = snapshot(s);
       const kind = boardObjective(s).kind;
-      // Cuándo se cumple lo que falta, cada producto a su ritmo (Infinity si alguno no avanza).
+      // Time until remaining goal requirements finish at current rates (Infinity if any is stalled).
       let when = 0;
       for (const { product, have, need } of eventItems(s)) {
         if (have >= need) continue;
@@ -204,7 +204,7 @@ export class Game {
     return bought;
   }
 
-  // Los botones de abajo de la cadena (v4.1.1): 🏗️ construir lo que alcance y ⬆ subir todo al próximo hito.
+  // Bottom chain buttons (v4.1.1): build affordable stations in order and upgrade all to next milestone.
   buildAll(zoneId) {
     return buildAll(this.state, zoneId, this.bus);
   }
@@ -229,12 +229,12 @@ export class Game {
 
   research(id) {
     const bought = buyResearch(this.state, id, this.bus);
-    if (bought) checkMastery(this.state, this.bus); // (v3.12: el segundo final pide todas)
+    if (bought) checkMastery(this.state, this.bus); // (v3.12: second ending requires all of them)
     return bought;
   }
 
-  // «Comprar todas» y «Cobrar todos» (v3.57): cada compra o cobro avisa marcado `bulk` (para no llenar la
-  // pantalla de avisos) y al final va un solo aviso con el resumen.
+  // Buy all and Claim all (v3.57): each item emits with `bulk: true` to avoid flooding
+  // notifications, followed by one summary toast at the end.
   researchAll(zoneId) {
     const bulk = { emit: (type, data) => this.bus.emit(type, { ...data, bulk: true }) };
     const bought = buyAllResearch(this.state, zoneId, bulk);

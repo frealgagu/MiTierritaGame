@@ -1,5 +1,5 @@
-// Mapa de Cundinamarca · Zona 6: Zipaquirá (v4.4), la última de la región. Como Neiva y Villa de Leyva, sin fuente
-// propia: la plaza colonial de casonas blancas con balcones verdes, adonde llega una carretera de cada zona de la región.
+// Cundinamarca Map · Zone 6: Zipaquirá (v4.4), the last zone of the region. Like Neiva and Villa de Leyva, no source
+// of its own: the colonial square of whitewashed mansions with green balconies, receiving one road from each zone in the region.
 import { ICON } from '../icons.js';
 
 export const ZONE54 = {
@@ -24,7 +24,7 @@ export const ZONE54 = {
   muleRoad: [[8.5, 4.5], [8.5, 11.5], [16.5, 11.5], [16.5, 18.5], [20.5, 18.5], [20.5, 19.5], [21.4, 19.5]],
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],
-  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // carril del segundo Willys, por dentro del primero
+  jeepRoad2: [[22.7, 20.5], [21.5, 20.5], [21.5, 25.9]], // lane of the second Willys, inside the first one
   exitSign: [21.5, 24.2],
   exitText: 'A la mina ➜',
   muleSpeed: 4,
@@ -39,5 +39,5 @@ export const ZONE54 = {
     almuerzos_trucha: { road: [[12.5, 25.9], [12.5, 15.2]], sign: [11.3, 23.6], text: 'Trucha ⬆' },
   },
   unlockedBy: 'cocina',
-  next: null, // la última de Cundinamarca
+  next: null, // the last zone of Cundinamarca
 };

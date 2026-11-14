@@ -4,7 +4,7 @@ import { Game } from '../src/core/Game.js';
 import { setCredit } from '../src/sim/upgrades.js';
 import { CALENDAR } from '../src/sim/calendar.js';
 
-// Pruebas de la cadena: siempre de día y sin temporada (el calendario se prueba en calendar.test.js).
+// Chain tests: always daytime and no season (calendar is tested in calendar.test.js).
 CALENDAR.on = false;
 
 function run(game, seconds) {
@@ -18,7 +18,7 @@ test('las cerezas viajan a la bodega y el Willys las vende', () => {
   run(game, 60);
   assert.ok(events.length > 0, 'debió haber ventas');
   assert.ok(game.state.coins > 0);
-  // Al principio limitan los arrieros: una mula hasta la bodega, el viaje más largo del mapa.
+  // At the start haulers bottleneck: one mule to the warehouse, the longest trip on the map.
   assert.ok(game.state.coins >= 5 && game.state.coins <= 30, `monedas: ${game.state.coins}`);
 });
 
@@ -44,7 +44,7 @@ test('con saldo negativo permitido se compra sin monedas y el saldo queda en deu
   } finally {
     setCredit(false);
   }
-  // Sin el ajuste, la deuda se queda pero no se puede comprar más hasta pagarla.
+  // Without capping, the debt remains but nothing more can be bought until it's repaid.
   assert.equal(game.buy('wetmill', 1), false);
 });
 
@@ -60,7 +60,7 @@ test('mejorar el cafetal cuesta monedas y sube el nivel', () => {
 
 test('si el despacho no da abasto, la bodega se llena y el cafetal se detiene', () => {
   const game = new Game();
-  game.state.stations.farm.level = 60; // produce mucho más de lo que el Willys nivel 1 vende
+  game.state.stations.farm.level = 60; // produces much more than a level 1 Willys can sell
   run(game, 120);
   assert.equal(game.state.stations.farm.status, 'blocked');
 });
@@ -133,7 +133,7 @@ test('mucho tiempo sin conexión (p. ej. acelerado) se extrapola sin perder gana
     g.state.coins = 0;
     return g;
   };
-  // 6 h de juego: simuladas paso a paso frente a la vuelta rápida (2 h simuladas + 4 h extrapoladas).
+  // 6 h of play: simulated step by step vs. fast loop (2 h simulated + 4 h extrapolated).
   const live = setup();
   for (let t = 0; t < 6 * 3600; t += 1) live.step(1);
   const offline = setup();
