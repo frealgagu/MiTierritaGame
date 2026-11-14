@@ -46,7 +46,61 @@ export function buildTileMap(zone, jeeps = 1) {
     road(pz.street);
     for (const [hx, hy] of pz.houses) fill(Math.floor(hx), Math.floor(hy), 1, 1, 'building');
   }
+  if (zone.island) markIsland(tiles, zone);
   return tiles;
+}
+
+// Tiles a road path crosses (same stepping as the tile map).
+function roadTiles(pts) {
+  const out = [];
+  for (let i = 1; i < (pts?.length ?? 0); i++) {
+    const [ax, ay] = pts[i - 1];
+    const [bx, by] = pts[i];
+    const steps = Math.ceil(Math.hypot(bx - ax, by - ay) * 2);
+    for (let s = 0; s <= steps; s++) out.push(`${Math.floor(ax + ((bx - ax) * s) / steps)},${Math.floor(ay + ((by - ay) * s) / steps)}`);
+  }
+  return out;
+}
+
+// Island zones (v5.4, the special zone: `zone.island`): open sea on every side. Tiles outside a square with
+// rounded corners (`corner`, in tiles) are sea, and so are a few border tiles away from roads and buildings
+// (coves). Land along the sea is beach, or coral rock on the shore `rocky` names ('west': the gx = 0 side, where
+// La Piscinita is). The second Willys lane counts as built even with one Willys, so the coast never changes.
+function markIsland(tiles, zone) {
+  const n = zone.size;
+  const R = zone.island.corner ?? 5;
+  const rng = createRng(zone.seed * 7 + 3);
+  const lane2 = new Set(roadTiles(zone.jeepRoad2));
+  const built = (x, y) => lane2.has(`${x},${y}`) || (tiles[x]?.[y] && tiles[x][y] !== 'grass');
+  const inside = (gx, gy) => {
+    const dx = Math.max(R - (gx + 0.5), 0, gx + 0.5 - (n - R));
+    const dy = Math.max(R - (gy + 0.5), 0, gy + 0.5 - (n - R));
+    return Math.hypot(dx, dy) <= R;
+  };
+  const clear = (gx, gy) => {
+    for (let x = gx - 1; x <= gx + 1; x++) for (let y = gy - 1; y <= gy + 1; y++) if (built(x, y)) return false;
+    return true;
+  };
+  const border = (gx, gy) => gx === 0 || gy === 0 || gx === n - 1 || gy === n - 1;
+  const sea = [];
+  for (let gx = 0; gx < n; gx++) {
+    for (let gy = 0; gy < n; gy++) {
+      const r = rng();
+      if (built(gx, gy)) continue;
+      if (!inside(gx, gy) || (border(gx, gy) && clear(gx, gy) && r < 0.3)) sea.push([gx, gy]);
+    }
+  }
+  for (const [x, y] of sea) tiles[x][y] = 'sea';
+  const shore = [];
+  for (let gx = 0; gx < n; gx++) {
+    for (let gy = 0; gy < n; gy++) {
+      if (tiles[gx][gy] !== 'grass') continue;
+      let wet = border(gx, gy);
+      for (let x = gx - 1; x <= gx + 1 && !wet; x++) for (let y = gy - 1; y <= gy + 1; y++) if (tiles[x]?.[y] === 'sea') wet = true;
+      if (wet) shore.push([gx, gy]);
+    }
+  }
+  for (const [x, y] of shore) tiles[x][y] = zone.island.rocky === 'west' && x <= 2 ? 'rocks' : 'beach';
 }
 
 export class Terrain {
@@ -130,7 +184,10 @@ export class Terrain {
 
     const sea = this.zone.walls?.sea || this.zone.sea; // sea behind map edge: Cartagena (v3.45) and Buenaventura (v3.54)
     if (sea) this.drawSea(g, n, rng);
+    // An island (v5.4) floats in open sea on every side, with no earth skirt.
+    if (this.zone.island) this.drawIslandSea(g, n, createRng(this.zone.seed * 3 + 11));
     // Diorama cutaway edges.
+    if (!this.zone.island) {
     g.poly(isoPoly([[0, n, 0], [n, n, 0], [n, n, -CLIFF], [0, n, -CLIFF]])).fill(PAL.cliffTop);
     g.poly(isoPoly([[n, 0, 0], [n, n, 0], [n, n, -CLIFF], [n, 0, -CLIFF]])).fill(PAL.cliffSide);
     for (let i = 0; i < 3; i++) {
@@ -142,6 +199,7 @@ export class Terrain {
     // Grass overhang tufting down edge.
     g.poly(isoPoly([[0, n, 0], [n, n, 0], [n, n, -6], [0, n, -6]])).fill(PAL.grassDark);
     g.poly(isoPoly([[n, 0, 0], [n, n, 0], [n, n, -6], [n, 0, -6]])).fill(shade(PAL.grassDark, 0.8));
+    }
 
     for (let gx = 0; gx < n; gx++) {
       for (let gy = 0; gy < n; gy++) {
@@ -153,6 +211,9 @@ export class Terrain {
         else if (type === 'farm') color = (FARM_SOIL[this.zone.style] ?? FARM_SOIL[this.zone.theme])?.(v) ?? mix(PAL.soil, 0x6e4529, v * 0.35);
         else if (type === 'plaza') color = mix(0xd9c9a8, 0xc4b08a, v * 0.5);
         else if (type === 'plot' || type === 'building') color = mix(PAL.plot, 0xc9a06c, v * 0.4);
+        else if (type === 'sea') color = mix(0x35b8c8, 0x2aa6bd, v * 0.6); // turquoise shallows (v5.4)
+        else if (type === 'beach') color = mix(0xf3e6c0, 0xe8d6a6, v * 0.6); // white coral sand
+        else if (type === 'rocks') color = mix(0xa89c88, 0x8f846f, v * 0.6); // coral rock shore
         else if (sea && (gx === 0 || gy === 0)) color = mix(this.zone.sea ? 0xb8a27a : 0xe9d8a6, this.zone.sea ? 0xa8926a : 0xdcc78e, v * 0.6); // beach (dark volcanic sand on Pacific coast)
         else if (this.zone.style === 'bogota' && gy <= 3) color = mix(0x4e8a34, 0x3d7a2a, v * 0.6); // Eastern Hills (v4.5)
         else color = mix(PAL.grass, (gx + gy) % 2 ? 0x8cc65a : 0x6fae44, 0.35 + v * 0.3);
@@ -169,6 +230,18 @@ export class Terrain {
           const flower = [0xffffff, 0xf6d860, 0xe07a5f, 0xc77dff][Math.floor(rng() * 4)];
           g.circle(p.x, p.y, 2).fill(flower);
           g.circle(p.x + 5, p.y + 2, 1.6).fill(flower);
+        }
+        if (type === 'sea') {
+          const p = iso(gx + 0.2 + rng() * 0.6, gy + 0.2 + rng() * 0.6);
+          g.moveTo(p.x - 6, p.y).quadraticCurveTo(p.x, p.y - 2, p.x + 6, p.y).stroke({ width: 1.1, color: 0xe8f6ff, alpha: 0.5 });
+        } else if (type === 'beach' && rng() < 0.3) {
+          const p = iso(gx + rng(), gy + rng());
+          g.ellipse(p.x, p.y, 1.6, 0.9).fill({ color: rng() < 0.5 ? 0xffffff : 0xf4b6a0, alpha: 0.8 }); // shells
+        } else if (type === 'rocks') {
+          for (let k = 0; k < 3; k++) {
+            const p = iso(gx + 0.15 + rng() * 0.7, gy + 0.15 + rng() * 0.7);
+            g.ellipse(p.x, p.y, 4 + rng() * 3, 2 + rng() * 1.2).fill({ color: rng() < 0.5 ? 0x6f6658 : 0x7d7362, alpha: 0.85 });
+          }
         }
         if (type === 'road' && rng() < 0.25) {
           const p = iso(gx + rng(), gy + rng());
@@ -262,6 +335,54 @@ export class Terrain {
           g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 2, color: 0x5c3a22, alpha: 0.35 });
         }
       }
+    }
+    if (this.zone.island) this.drawIslandShore(g, n);
+  }
+
+  // Island sea (v5.4): open water on every side with turquoise shallows near the coast, waves, sea-blue cutaway
+  // faces at the front, and a wooden pier where the Willys road reaches the sea.
+  drawIslandSea(g, n, rng) {
+    const S = 9;
+    g.poly(isoPoly([[-S, -S], [n + S, -S], [n + S, n + S], [-S, n + S]])).fill(0x2484ab);
+    g.poly(isoPoly([[-2.5, -2.5], [n + 2.5, -2.5], [n + 2.5, n + 2.5], [-2.5, n + 2.5]])).fill({ color: 0x2fa9c2, alpha: 0.75 });
+    g.poly(isoPoly([[-1, -1], [n + 1, -1], [n + 1, n + 1], [-1, n + 1]])).fill({ color: 0x3fc4cc, alpha: 0.7 });
+    g.poly(isoPoly([[n + S, -S, 0], [n + S, n + S, 0], [n + S, n + S, -CLIFF], [n + S, -S, -CLIFF]])).fill(0x1b5f80);
+    g.poly(isoPoly([[-S, n + S, 0], [n + S, n + S, 0], [n + S, n + S, -CLIFF], [-S, n + S, -CLIFF]])).fill(0x226c90);
+    for (let k = 0; k < 160; k++) {
+      const x = -S + rng() * (n + 2 * S);
+      const y = -S + rng() * (n + 2 * S);
+      if (x > -0.5 && x < n + 0.5 && y > -0.5 && y < n + 0.5) continue;
+      const p = iso(x, y);
+      g.moveTo(p.x - 7, p.y).quadraticCurveTo(p.x, p.y - 2.5, p.x + 7, p.y).stroke({ width: 1.2, color: 0xe8f6ff, alpha: 0.5 });
+    }
+  }
+
+  // Island coast (v5.4): foam along every edge between land and sea, and the pier at the end of the Willys road.
+  drawIslandShore(g, n) {
+    const water = (x, y) => x < 0 || y < 0 || x >= n || y >= n || this.tiles[x][y] === 'sea';
+    for (let gx = 0; gx < n; gx++) {
+      for (let gy = 0; gy < n; gy++) {
+        if (this.tiles[gx][gy] === 'sea') continue;
+        for (const [dx, dy, mx, my] of [[-1, 0, 0, 0.5], [1, 0, 1, 0.5], [0, -1, 0.5, 0], [0, 1, 0.5, 1]]) {
+          if (!water(gx + dx, gy + dy)) continue;
+          const p = iso(gx + mx + dx * 0.1, gy + my + dy * 0.1);
+          g.ellipse(p.x, p.y, 8, 1.8).fill({ color: 0xffffff, alpha: 0.6 });
+        }
+      }
+    }
+    const end = this.zone.jeepRoad.at(-1);
+    if (end[0] < n - 0.5) return;
+    const y0 = Math.floor(end[1]) - 0.2;
+    const y1 = Math.floor(this.zone.jeepRoad2?.at(-1)?.[1] ?? end[1]) + 1.2;
+    g.poly(isoPoly([[n, y0], [n + 3.5, y0], [n + 3.5, y1], [n, y1]])).fill(0x9c6b3e).stroke({ width: 1, color: 0x5d3a1e, alpha: 0.7 });
+    for (let x = n + 0.25; x < n + 3.5; x += 0.35) {
+      const a = iso(x, y0);
+      const b = iso(x, y1);
+      g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 0.8, color: 0x6e4526, alpha: 0.6 });
+    }
+    for (const [x, y] of [[n + 3.5, y0], [n + 3.5, y1], [n + 1.75, y0], [n + 1.75, y1]]) {
+      const p = iso(x, y);
+      g.rect(p.x - 1.2, p.y - 2, 2.4, 9).fill(0x5d3a1e);
     }
   }
 
@@ -641,7 +762,59 @@ export class Terrain {
         this.decor.push(obj);
       }
     }
+    if (this.zone.island) this.buildIslandDecor(base, rng);
   }
+
+  // Island (v5.4): coconut palms and beach umbrellas on the sand, boulders on the coral shore, and boats out at
+  // sea (a launch moored at the pier).
+  buildIslandDecor(base, rng) {
+    const n = this.zone.size;
+    const put = (obj, gx, gy) => {
+      const p = iso(gx, gy);
+      obj.position.set(p.x, p.y);
+      obj.zIndex = depth(gx, gy);
+      obj.grid = [gx, gy];
+      this.decor.push(obj);
+    };
+    for (let gx = 0; gx < n; gx++) {
+      for (let gy = 0; gy < n; gy++) {
+        const t = base[gx][gy];
+        const r = rng();
+        const x = gx + 0.3 + rng() * 0.4;
+        const y = gy + 0.3 + rng() * 0.4;
+        if (SIGN_CELLS.has(`${gx},${gy}`)) continue;
+        if (t === 'beach' && r < 0.16) put(coconutPalm(rng), x, y);
+        else if (t === 'beach' && r < 0.24) put(parasol(rng), x, y);
+        else if (t === 'rocks' && r < 0.3) put(rock(rng), x, y);
+        else if (t === 'sea' && r < 0.03) put(rng() < 0.5 ? sailboat() : motorBoat(), x, y);
+        else continue;
+        this.occupied.add(`${gx},${gy}`);
+      }
+    }
+    for (const [gx, gy, kind] of [[-3, 6, 'sail'], [8, -4, 'boat'], [-5, 18, 'sail'], [17, -2.5, 'sail'], [n + 4, 5, 'boat'], [n + 3, 22, 'sail'], [12, n + 4, 'boat'], [-2.5, n + 2, 'sail']]) {
+      put(kind === 'sail' ? sailboat() : motorBoat(), gx, gy);
+    }
+    const end = this.zone.jeepRoad.at(-1);
+    if (end[0] >= n - 0.5) put(motorBoat(), n + 4.3, Math.floor(end[1]) + 0.2);
+  }
+}
+
+// Beach umbrella (v5.4) in bright island colors, with a towel.
+function parasol(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const colors = [[0xe63946, 0xffffff], [0x2a9d8f, 0xf4d35e], [0xf4a261, 0x264653], [0x8e44ad, 0xffffff]][Math.floor(rng() * 4)];
+  shadow(g, 3, 1, 12, 4);
+  g.roundRect(-9, -1, 10, 4, 1.5).fill(colors[0] === 0xe63946 ? 0x4cc9f0 : 0xf28482);
+  g.moveTo(0, 0).lineTo(1, -22).stroke({ width: 1.3, color: 0x6d4c41 });
+  for (let k = 0; k < 6; k++) {
+    const a0 = Math.PI + (k / 6) * Math.PI;
+    const a1 = Math.PI + ((k + 1) / 6) * Math.PI;
+    g.poly([1, -26, 1 + Math.cos(a0) * 14, -20 + Math.sin(a0) * 2.5, 1 + Math.cos(a1) * 14, -20 + Math.sin(a1) * 2.5]).fill(colors[k % 2]);
+  }
+  g.ellipse(1, -20, 14, 2.6).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.5 });
+  c.addChild(g);
+  return c;
 }
 
 // ---------- Vélez plaza (v3.29) ----------

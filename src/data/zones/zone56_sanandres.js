@@ -4,7 +4,7 @@
 // Soplador at the southern tip, snorkeling at La Piscinita on the west coast, and La Loma in the middle of the
 // island, which closes the tour. The mule road runs around the island like the Circunvalar and then climbs to
 // La Loma; the warehouse sits beside it, inland.
-// (Placeholder look until its own art arrives: Cartagena's town, with the arrival plaza as its source.)
+// (Its buildings borrow Cartagena's town look, with the arrival plaza as its source, until their own art arrives.)
 import { ICON } from '../icons.js';
 
 export const ZONE56 = {
@@ -16,6 +16,9 @@ export const ZONE56 = {
   style: 'cartagena',
   size: 26,
   seed: 241,
+  // Open sea on every side (render/Terrain.js: markIsland): rounded corners, white beaches, and the coral shore on
+  // the west, where La Piscinita is.
+  island: { corner: 5, rocky: 'west' },
   chain: ['aeropuerto_sai', 'carpas_spratt', 'lanchas_siete_colores', 'paseo_johnny_cay', 'rondon_san_luis', 'hoyo_soplador', 'snorkel_piscinita', 'mirador_la_loma'],
   farm: { stationId: 'aeropuerto_sai', x: 2, y: 2, w: 6, h: 6 },
   plots: [
