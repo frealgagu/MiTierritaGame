@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.5.1 — Ajustes
+- Ajustes y mejoras.
+
 ## v5.5.0 — La zona especial
 - **⭐ La zona especial ya se abre:** cuando todas las regiones tengan el segundo final o un reinicio, se abre la zona de premio, con su recorrido de ocho estaciones en una sola cadena y una mejora ×32 en cada una al llegar al nivel 100.
 - **Su evento:** las compras no quitan un freno, sino que hacen producir más a toda la zona. El oro se gana a los 20 minutos, comprándolas o subiendo todo al nivel 50 a tiempo.
