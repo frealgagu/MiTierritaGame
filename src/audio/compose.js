@@ -383,8 +383,67 @@ function renderAmazonica(buf, index) {
   }
 }
 
+// Steel pan note (v5.5): bright metallic tone, fundamental with octave and twelfth partials that fade faster,
+// struck with a soft mallet.
+function steel(buf, at, freq, dur, amp, pan) {
+  logNote(buf, at, freq, dur, amp);
+  const { sr } = buf;
+  const tail = 0.25;
+  let p1 = 0;
+  let p2 = 0;
+  let p3 = 0;
+  add(buf, at, dur + tail, pan, (t) => {
+    p1 += (2 * Math.PI * freq) / sr;
+    p2 += (2 * Math.PI * freq * 2) / sr;
+    p3 += (2 * Math.PI * freq * 3) / sr;
+    const env = Math.min(1, t / 0.004) * Math.exp(-t / 0.5) * (t < dur ? 1 : Math.max(0, 1 - (t - dur) / tail));
+    return amp * env * (Math.sin(p1) + 0.45 * Math.sin(p2) * Math.exp(-t * 3) + 0.18 * Math.sin(p3) * Math.exp(-t * 9));
+  });
+}
+
+// Calypso measure (v5.5, special zone; 4/4, eighths 0..7): washtub bass (tináfono) on the roots and fifths,
+// muted guitar strumming the island off-beat pattern, maracas on every eighth, bongos answering on the
+// off-beats, and the steel pan carrying the melody (rolled on long notes).
+function renderCalipso(buf, index) {
+  const { song, beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const { root, tones } = parseChord(song.chords[index]);
+  const at = (e) => t0 + e * eighth + (rng() - 0.5) * 0.008;
+  const low = above(root, 40);
+  const fifth = above((root + 7) % 12, 40);
+  buf.voice = 'bass';
+  for (const [e, m, n] of [[0, low, 1.5], [3, low, 0.8], [4, fifth, 1.5], [7, fifth, 0.8]]) {
+    pluck(buf, at(e), freqOf(m), eighth * n, { amp: 0.36, t60: 0.9, bright: 0.2, pan: -0.15, pos: 0.35 });
+  }
+  buf.voice = 'guitar';
+  const chord = tones.map((pc) => above(pc, 55)).sort((a, b) => a - b);
+  for (const [e, up, amp] of [[0, false, 0.12], [2, false, 0.1], [3, true, 0.08], [5, true, 0.08], [6, false, 0.1], [7, true, 0.07]]) {
+    strum(buf, at(e), chord, eighth * 0.45, { amp, t60: 0.5, bright: 0.55, pan: -0.35 }, up);
+  }
+  buf.voice = 'maracas';
+  for (let e = 0; e < 8; e++) scrape(buf, at(e), eighth * 0.4, e % 2 ? 0.03 : 0.05, 0.4);
+  buf.voice = 'bongoHigh';
+  for (const e of [1, 3, 5]) drum(buf, at(e), 420, 380, 0.05, 0.12, 0.3, 0.35);
+  buf.voice = 'bongoLow';
+  for (const e of [3.5, 7]) drum(buf, at(e), 300, 250, 0.07, 0.14, 0.25, 0.3);
+  buf.voice = 'melody';
+  for (const [e, n, note] of song.melody[index] ?? []) {
+    const f = freqOf(midi(note));
+    if (n < 3) {
+      steel(buf, at(e), f, n * eighth * 0.95, 0.2, 0.1);
+      continue;
+    }
+    const start = t0 + e * eighth;
+    const step = eighth / 2;
+    const count = Math.floor((n * eighth - 0.03) / step);
+    for (let k = 0; k < count; k++) steel(buf, start + k * step, f, step * 0.95, k ? 0.13 : 0.2, 0.1);
+  }
+}
+
 // Renders measure `index`: bass, guitar, tiple, and melody.
 export function renderBar(buf, index) {
+  if (buf.song.style === 'calipso') return renderCalipso(buf, index);
   if (buf.song.style === 'cumbia') return renderCumbia(buf, index);
   if (buf.song.style === 'torbellino') return renderTorbellino(buf, index);
   if (buf.song.style === 'joropo') return renderJoropo(buf, index);

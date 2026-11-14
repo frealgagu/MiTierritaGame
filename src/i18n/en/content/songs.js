@@ -10,4 +10,5 @@ export default {
   tolima: ['San Pedro Sanjuanero', 'tiple, guitar, bandola, tambora and carrasca'],
   cundinamarca: ['Pasillo of the Savanna', 'bandola, tiple and guitar'],
   bogota: ['La Candelaria Danza', 'bandola, tiple and guitar'],
+  "sanandres": ["Green Moon Calypso", "steel pan, guitar, washtub bass, maracas and bongos"],
 };

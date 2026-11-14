@@ -1834,6 +1834,12 @@ const ART = {
     fairScene(art, stage, [0xfcd116, 0x003893, 0xce1126], [a.x - 7, a.y + 1.5]);
   },
 
+  // Green Moon Festival (v5.5, special zone): in the middle of the island, festival stalls in the Raizal colors
+  // (one per purchase) under pennant strings, and the line of visitors growing.
+  luna_verde(art, stage) {
+    fairScene(art, stage, [0x2e7d32, 0xfdd835, 0xd7263d], [6.5, 17.5]);
+  },
+
   crucero(art, stage, zone) {
     const a = areaOf(zone, 'muelle');
     queue(art, a.x - 0.4, a.y + a.h + 0.5, [8, 6, 4, 2][stage], { hats: true, packs: true });

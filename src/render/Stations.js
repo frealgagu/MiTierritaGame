@@ -538,6 +538,8 @@ const PLAZA_HOUSE = {
   neiva: { wall: 0xfbf8f1, trims: [0xd7263d, 0xf2c14e, 0x2f7d4f, 0xd7263d, 0x8e44ad, 0xffd700], awning: 0xd7263d, sign: 'cup' },
   // Bogotá (v4.5): Chorro de Quevedo coffee roastery, sky blue house with red and green trim.
   bogota: { wall: 0x8ec5e8, trims: [0xd7263d, 0x2f7d4f, 0xf2c94c, 0xd7263d, 0x8e44ad, 0xffd700], awning: 0xd7263d, sign: 'cup' },
+  // Special zone (v5.5): turquoise island house with white gingerbread trim and a mango awning.
+  sanandres: { wall: 0x4dd0e1, trims: [0xffffff, 0xfdd835, 0xf48fb1, 0xffffff, 0x8e44ad, 0xffd700], awning: 0xf4a261, sign: 'cup' },
   leticia: { wall: 0x8fd3c4, trims: [0x7b1fa2, 0xf2c14e, 0x2e7d32, 0x7b1fa2, 0xe5737f, 0xffd700], awning: 0x7b1fa2, sign: 'icecream' },
 };
 

@@ -828,7 +828,50 @@ const BOGOTA = [
   },
 ];
 
-export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' })), ...AMAZONAS.map((pg) => ({ ...pg, region: 'amazonas' })), ...TOLIMA.map((pg) => ({ ...pg, region: 'tolima' })), ...CUNDINAMARCA.map((pg) => ({ ...pg, region: 'cundinamarca' })), ...BOGOTA.map((pg) => ({ ...pg, region: 'bogota' }))];
+// Special zone · San Andrés (v5.5): the sea, the Raizal culture, and the island's food.
+const SANANDRES = [
+  {
+    id: 'mar_sai',
+    icon: ICON.sieteColores,
+    name: 'El mar de siete colores',
+    stickers: [
+      { id: 'siete_colores_sai', icon: ICON.sieteColores, name: 'El mar de siete colores', cost: 1, text: 'Los fondos de arena, coral y pasto marino pintan el agua de siete azules.' },
+      { id: 'johnny_cay_sai', icon: ICON.johnnyCay, name: 'Johnny Cay', cost: 1, text: 'Un cayo de arena blanca y palmeras a quince minutos en lancha del centro.' },
+      { id: 'coral_sai', icon: ICON.coral, name: 'Los corales', cost: 2, text: 'La isla está en la reserva Seaflower, uno de los arrecifes más grandes del Caribe.' },
+      { id: 'manta_sai', icon: ICON.mantaRaya, name: 'La raya pintada', cost: 2, text: 'Una raya de puntos blancos que vuela despacio sobre el fondo de arena.' },
+      { id: 'tortuga_sai', icon: ICON.tortuga, name: 'La tortuga carey', cost: 2, text: 'Tortuga marina de caparazón pintado que come esponjas en el arrecife.' },
+      { id: 'estrella_sai', icon: ICON.estrellaMar, name: 'La estrella de mar', cost: 3, text: 'Descansa en el fondo de arena de los bajitos, donde el agua es clara.' },
+    ],
+  },
+  {
+    id: 'raizal_sai',
+    icon: ICON.casaIslena,
+    name: 'La cultura raizal',
+    stickers: [
+      { id: 'casa_islena', icon: ICON.casaIslena, name: 'La casa isleña', cost: 1, text: 'Casa de madera de colores, sobre pilotes y con balcón, para que corra la brisa.' },
+      { id: 'iglesia_bautista', icon: ICON.iglesiaLoma, name: 'La Iglesia Bautista', cost: 1, text: 'En La Loma, de 1844: la primera iglesia bautista de Colombia.' },
+      { id: 'luna_verde_sai', icon: ICON.lunaVerde, name: 'La Luna Verde', cost: 2, text: 'El festival de la cultura raizal, con música, comida y bailes de la isla.' },
+      { id: 'tinafono', icon: ICON.tinafono, name: 'El tináfono', cost: 2, text: 'Una tina con un palo y una cuerda: el bajo de la música isleña.' },
+      { id: 'goleta_sai', icon: ICON.goleta, name: 'La goleta', cost: 2, text: 'Los barcos de vela que unían las islas con el continente y con Jamaica.' },
+      { id: 'cangrejo_negro', icon: ICON.cangrejoNegro, name: 'El cangrejo negro', cost: 3, text: 'Cada año baja del monte al mar a poner sus huevos, y la isla le abre paso.' },
+    ],
+  },
+  {
+    id: 'comida_sai',
+    icon: ICON.rondon,
+    name: 'La comida isleña',
+    stickers: [
+      { id: 'rondon_album', icon: ICON.rondon, name: 'El rondón', cost: 1, text: 'Pescado, caracol, plátano y yuca cocinados en leche de coco.' },
+      { id: 'pan_coco', icon: ICON.panCoco, name: 'El pan de coco', cost: 1, text: 'Pan dulce y suave, hecho con leche de coco, que se vende en la calle.' },
+      { id: 'empanada_cangrejo', icon: ICON.empanadaCangrejo, name: 'Las empanadas de cangrejo', cost: 2, text: 'Masa dorada rellena de cangrejo guisado, para comer en la playa.' },
+      { id: 'cocada_sai', icon: ICON.cocada, name: 'Las cocadas', cost: 2, text: 'Dulces de coco rallado con panela, de los puestos de Spratt Bight.' },
+      { id: 'agua_coco_sai', icon: ICON.coconut, name: 'El agua de coco', cost: 2, text: 'Coco verde recién abierto con machete, para tomar con pitillo.' },
+      { id: 'pescado_frito_sai', icon: ICON.friedFish, name: 'El pescado frito', cost: 3, text: 'Pescado del día frito entero, con patacón y arroz con coco.' },
+    ],
+  },
+];
+
+export const ALBUM = [...CAFETERO.map((pg) => ({ ...pg, region: 'cafetero' })), ...SANTANDER.map((pg) => ({ ...pg, region: 'santander' })), ...COSTA.map((pg) => ({ ...pg, region: 'costa' })), ...BOYACA.map((pg) => ({ ...pg, region: 'boyaca' })), ...LLANOS.map((pg) => ({ ...pg, region: 'llanos' })), ...PACIFICO.map((pg) => ({ ...pg, region: 'pacifico' })), ...AMAZONAS.map((pg) => ({ ...pg, region: 'amazonas' })), ...TOLIMA.map((pg) => ({ ...pg, region: 'tolima' })), ...CUNDINAMARCA.map((pg) => ({ ...pg, region: 'cundinamarca' })), ...BOGOTA.map((pg) => ({ ...pg, region: 'bogota' })), ...SANANDRES.map((pg) => ({ ...pg, region: 'sanandres' }))];
 // Album pages belonging to a region.
 export const albumOf = (regionId) => ALBUM.filter((pg) => pg.region === regionId);
 

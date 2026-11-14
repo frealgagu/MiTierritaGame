@@ -257,7 +257,7 @@ export class Terrain {
           // Plaza empedrada.
           for (let k = 0; k < 4; k++) {
             const p = iso(gx + 0.25 + (k % 2) * 0.5, gy + 0.25 + Math.floor(k / 2) * 0.5);
-            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : this.zone.style === 'buenaventura' ? [0xb8bcc0, 0xd0d4d6] : this.zone.style === 'leticia' ? [0xb89a7a, 0xd0b896] : this.zone.style === 'neiva' ? [0xc9a882, 0xe0c9a6] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
+            const stones = this.zone.style === 'barichara' ? [0xc9a96b, 0xe0c890] : this.zone.style === 'cartagena' || this.zone.style === 'sanandres' ? [0xc9b48a, 0xe2d2ae] : this.zone.style === 'villa' ? [0x9a948a, 0xb9b2a5] : this.zone.style === 'villavo' ? [0xc9a77a, 0xe0c8a0] : this.zone.style === 'buenaventura' ? [0xb8bcc0, 0xd0d4d6] : this.zone.style === 'leticia' ? [0xb89a7a, 0xd0b896] : this.zone.style === 'neiva' ? [0xc9a882, 0xe0c9a6] : [0xa39b8c, 0xd2cbbd]; // piedra amarilla en Barichara; coralina en Cartagena
             g.ellipse(p.x, p.y, 7, 3.5).fill({ color: rng() < 0.5 ? stones[0] : stones[1], alpha: 0.8 });
           }
         } else if (type === 'farm' && (this.zone.theme === 'cacao' || this.zone.theme === 'plantain' || this.zone.theme === 'azotea' || this.zone.theme === 'werregue' || this.zone.theme === 'asai' || this.zone.theme === 'aji' || this.zone.theme === 'chagra' || this.zone.theme === 'yanchama')) {
@@ -528,7 +528,7 @@ export class Terrain {
           // (v3.12), more Cocora valley wax palms (keeps same RNG sequence so rest of map stays put).
           // stays put).
           const salento = this.zone.style === 'salento';
-          const cartagena = this.zone.style === 'cartagena';
+          const cartagena = this.zone.style === 'cartagena' || this.zone.style === 'sanandres'; // (v5.5) the island too: coconut palms
           const villa = this.zone.style === 'villa';
           const villavo = this.zone.style === 'villavo'; // Villavicencio (v3.36): moriches y mangos
           const puerto = this.zone.style === 'buenaventura'; // Buenaventura (v3.43): coconut palms and almond trees
@@ -1203,6 +1203,7 @@ const FARM_SOIL = {
   canaflecha: (v) => mix(0xb59a5c, 0xa58a4e, v * 0.4), // dry Zenú savanna dirt // ciénaga water // Morrosquillo beach sand // teal rice paddy water
   barichara: (v) => mix(0xd9c08c, 0xc4a870, v * 0.6),
   cartagena: (v) => mix(0xe2d2ae, 0xcfbd94, v * 0.6),
+  sanandres: (v) => mix(0xece0c2, 0xdccfae, v * 0.6), // coral-sand plaza at the airport (v5.5)
   villavo: (v) => mix(0xd9c4a0, 0xc9b088, v * 0.6), // Villavicencio park (v3.36)
   buenaventura: (v) => mix(0xc4c8c8, 0xb0b6b8, v * 0.6), // Buenaventura boardwalk (v3.43)
   bogota: (v) => mix(0xb0a493, 0x9a8e7d, v * 0.6), // cobblestone Chorro de Quevedo square (v4.5)
@@ -1237,6 +1238,7 @@ const VILLAVO_TRIMS = [0x2e6fd1, 0xd7263d, 0x2f7d4f, 0x8e44ad];
 const PUERTO_WALLS = [0x4fb3bf, 0xf2c14e, 0xe5737f, 0x6cbf6c, 0xf08a3c, 0x5c8dd6];
 const PUERTO_TRIMS = [0xf7f4ee, 0xf2c14e, 0x2e6fd1, 0xd7263d];
 function townHouse(rng, style) {
+  if (style === 'sanandres') return islandHouse(rng);
   const c = new Container();
   const g = new Graphics();
   const cartagena = style === 'cartagena';
@@ -1281,6 +1283,52 @@ function townHouse(rng, style) {
       g.circle(p.x, p.y, 3).fill(0xd63384);
       g.circle(p.x + 2, p.y + 2, 1.6).fill(0x4e8a33);
     }
+  }
+  c.addChild(g);
+  return c;
+}
+
+// Island house (v5.5, special zone): bright wooden clapboard house raised on stilts, with a white-railed front
+// porch, white gingerbread trim under the eaves, and a red, green, or blue tin roof.
+const ISLAND_WALLS = [0x4dd0e1, 0xfdd835, 0xf48fb1, 0x81c784, 0xffb74d, 0x90caf9, 0xce93d8];
+const ISLAND_ROOFS = [0xc62828, 0x2e7d32, 0x1565c0, 0xc62828];
+function islandHouse(rng) {
+  const c = new Container();
+  const g = new Graphics();
+  const wall = ISLAND_WALLS[Math.floor(rng() * ISLAND_WALLS.length)];
+  const roof = ISLAND_ROOFS[Math.floor(rng() * ISLAND_ROOFS.length)];
+  const w = 0.75 + rng() * 0.2;
+  const lift = 6;
+  const h = 20 + rng() * 6;
+  shadow(g, 6, 6, 30, 12);
+  for (const [x, y] of [[-w / 2, -0.4], [w / 2 - 0.08, -0.4], [-w / 2, 0.32], [w / 2 - 0.08, 0.32], [-w / 2, 0.62], [w / 2 - 0.08, 0.62]]) box(g, x, y, 0.08, 0.08, lift, 0x6d4c41);
+  box(g, -w / 2 - 0.02, -0.42, w + 0.04, 1.12, 2, 0xa1887f, { z: lift });
+  box(g, -w / 2, -0.4, w, 0.8, h - lift, wall, { z: lift + 2 });
+  // Clapboard lines on both visible walls.
+  for (let z = lift + 5; z < h; z += 3.5) {
+    const a = iso(-w / 2, 0.4, z);
+    const b = iso(w / 2, 0.4, z);
+    const e = iso(w / 2, -0.4, z);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).lineTo(e.x, e.y).stroke({ width: 0.7, color: shade(wall, 0.8), alpha: 0.8 });
+  }
+  gableRoof(g, -w / 2 - 0.04, -0.44, w + 0.08, 0.88, h + 2, 9, roof, wall);
+  // Door and shuttered windows with white frames.
+  g.poly(isoPoly([[-0.1, 0.4, lift + 2], [0.1, 0.4, lift + 2], [0.1, 0.4, lift + 13], [-0.1, 0.4, lift + 13]])).fill(0xffffff).stroke(OUTLINE);
+  g.poly(isoPoly([[-0.07, 0.4, lift + 3], [0.07, 0.4, lift + 3], [0.07, 0.4, lift + 12], [-0.07, 0.4, lift + 12]])).fill(shade(wall, 0.6));
+  g.poly(isoPoly([[w / 2, -0.22, lift + 7], [w / 2, 0.08, lift + 7], [w / 2, 0.08, lift + 13], [w / 2, -0.22, lift + 13]])).fill(0xffffff).stroke(OUTLINE);
+  // Front porch railing.
+  g.poly(isoPoly([[-w / 2, 0.68, lift + 2], [w / 2, 0.68, lift + 2], [w / 2, 0.68, lift + 7], [-w / 2, 0.68, lift + 7]])).fill({ color: 0xffffff, alpha: 0.25 }).stroke({ width: 1, color: 0xffffff });
+  for (let k = 0; k <= 5; k++) {
+    const x = -w / 2 + (w * k) / 5;
+    const a = iso(x, 0.68, lift + 2);
+    const b = iso(x, 0.68, lift + 7);
+    g.moveTo(a.x, a.y).lineTo(b.x, b.y).stroke({ width: 1.1, color: 0xffffff });
+  }
+  // Gingerbread trim under the front eave.
+  for (let k = 0; k < 6; k++) {
+    const x = -w / 2 + (w * (k + 0.5)) / 6;
+    const p = iso(x, 0.4, h - 1);
+    g.poly([p.x - 2.4, p.y - 1, p.x + 2.4, p.y - 1, p.x, p.y + 2.6]).fill(0xffffff);
   }
   c.addChild(g);
   return c;

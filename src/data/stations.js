@@ -616,13 +616,13 @@ export const STATIONS = [
   // supplier makes), and every station has a ×32 research at level 100 (data/research.js) that also multiplies the
   // warehouse: without it, the next station takes far longer to afford. Prices: SA, above.
   { id: 'aeropuerto_sai', zone: 'sanandres', name: 'Llegada al aeropuerto', icon: '✈️', infinite: true, out: { viajero: 1 }, cycle: 2, unlockCost: 0, upgradeBase: SA.base[0], growth: 1.15, release: '5.4' },
-  { id: 'carpas_spratt', zone: 'sanandres', name: 'Carpas de Spratt Bight', icon: '🌴', in: { viajero: 2 }, out: { dia_playa: 1 }, cycle: 4, unlockCost: SA.unlock[1], upgradeBase: SA.base[1], growth: 1.15, release: '5.4' },
-  { id: 'lanchas_siete_colores', zone: 'sanandres', name: 'Lanchas del mar de siete colores', icon: '🚤', in: { dia_playa: 2 }, out: { paseo_lancha: 1 }, cycle: 8, unlockCost: SA.unlock[2], upgradeBase: SA.base[2], growth: 1.15, release: '5.4' },
-  { id: 'paseo_johnny_cay', zone: 'sanandres', name: 'Paseo a Johnny Cay', icon: ICON.paseoIslas, in: { paseo_lancha: 2 }, out: { visita_cayo: 1 }, cycle: 16, unlockCost: SA.unlock[3], upgradeBase: SA.base[3], growth: 1.15, release: '5.4' },
-  { id: 'rondon_san_luis', zone: 'sanandres', name: 'Fogón del rondón en San Luis', icon: '🍽️', in: { visita_cayo: 1 }, out: { almuerzo_rondon: 1 }, cycle: 16, unlockCost: SA.unlock[4], upgradeBase: SA.base[4], growth: 1.15, release: '5.4' },
-  { id: 'hoyo_soplador', zone: 'sanandres', name: 'Hoyo Soplador', icon: '🌀', in: { almuerzo_rondon: 2 }, out: { vuelta_isla: 1 }, cycle: 32, unlockCost: SA.unlock[5], upgradeBase: SA.base[5], growth: 1.15, release: '5.4' },
-  { id: 'snorkel_piscinita', zone: 'sanandres', name: 'Snorkel en La Piscinita', icon: '🌊', in: { vuelta_isla: 1 }, out: { buceo: 1 }, cycle: 32, unlockCost: SA.unlock[6], upgradeBase: SA.base[6], growth: 1.15, release: '5.4' },
-  { id: 'mirador_la_loma', zone: 'sanandres', name: 'Mirador de La Loma', icon: '⛰️', in: { buceo: 2 }, out: { tour_isla: 1 }, cycle: 64, unlockCost: SA.unlock[7], upgradeBase: SA.base[7], growth: 1.15, release: '5.4' },
+  { id: 'carpas_spratt', zone: 'sanandres', name: 'Carpas de Spratt Bight', icon: ICON.diaPlaya, in: { viajero: 2 }, out: { dia_playa: 1 }, cycle: 4, unlockCost: SA.unlock[1], upgradeBase: SA.base[1], growth: 1.15, release: '5.4' },
+  { id: 'lanchas_siete_colores', zone: 'sanandres', name: 'Lanchas del mar de siete colores', icon: ICON.lanchaSiete, in: { dia_playa: 2 }, out: { paseo_lancha: 1 }, cycle: 8, unlockCost: SA.unlock[2], upgradeBase: SA.base[2], growth: 1.15, release: '5.4' },
+  { id: 'paseo_johnny_cay', zone: 'sanandres', name: 'Paseo a Johnny Cay', icon: ICON.johnnyCay, in: { paseo_lancha: 2 }, out: { visita_cayo: 1 }, cycle: 16, unlockCost: SA.unlock[3], upgradeBase: SA.base[3], growth: 1.15, release: '5.4' },
+  { id: 'rondon_san_luis', zone: 'sanandres', name: 'Fogón del rondón en San Luis', icon: ICON.rondon, in: { visita_cayo: 1 }, out: { almuerzo_rondon: 1 }, cycle: 16, unlockCost: SA.unlock[4], upgradeBase: SA.base[4], growth: 1.15, release: '5.4' },
+  { id: 'hoyo_soplador', zone: 'sanandres', name: 'Hoyo Soplador', icon: ICON.mulita, in: { almuerzo_rondon: 2 }, out: { vuelta_isla: 1 }, cycle: 32, unlockCost: SA.unlock[5], upgradeBase: SA.base[5], growth: 1.15, release: '5.4' },
+  { id: 'snorkel_piscinita', zone: 'sanandres', name: 'Snorkel en La Piscinita', icon: ICON.snorkel, in: { vuelta_isla: 1 }, out: { buceo: 1 }, cycle: 32, unlockCost: SA.unlock[6], upgradeBase: SA.base[6], growth: 1.15, release: '5.4' },
+  { id: 'mirador_la_loma', zone: 'sanandres', name: 'Mirador de La Loma', icon: ICON.iglesiaLoma, in: { buceo: 2 }, out: { tour_isla: 1 }, cycle: 64, unlockCost: SA.unlock[7], upgradeBase: SA.base[7], growth: 1.15, release: '5.4' },
 ];
 
 export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));

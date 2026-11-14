@@ -10,4 +10,5 @@ export default {
   tolima: ['Sanjuanero do San Pedro', 'tiple, violão, bandola, tambora e carrasca'],
   cundinamarca: ['Pasillo da Savana', 'bandola, tiple e violão'],
   bogota: ['Dança da Candelaria', 'bandola, tiple e violão'],
+  "sanandres": ["Calipso da Lua Verde", "steel pan, violão, tináfono, maracas e bongôs"],
 };

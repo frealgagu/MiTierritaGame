@@ -4,16 +4,17 @@
 // Soplador at the southern tip, snorkeling at La Piscinita on the west coast, and La Loma in the middle of the
 // island, which closes the tour. The mule road runs around the island like the Circunvalar and then climbs to
 // La Loma; the warehouse sits beside it, inland.
-// (Its buildings borrow Cartagena's town look, with the arrival plaza as its source, until their own art arrives.)
+// It is drawn as a town (theme 'town', the arrival plaza as its source) in the island style: wooden clapboard
+// houses on stilts, coconut palms, and open sea all around.
 import { ICON } from '../icons.js';
 
 export const ZONE56 = {
   id: 'sanandres',
   region: 'sanandres',
   name: 'San Andrés',
-  icon: ICON.paseoIslas,
+  icon: ICON.johnnyCay,
   theme: 'town',
-  style: 'cartagena',
+  style: 'sanandres',
   size: 26,
   seed: 241,
   // Open sea on every side (render/Terrain.js: markIsland): rounded corners, white beaches, and the coral shore on

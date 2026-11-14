@@ -104,19 +104,18 @@ export const REGIONS = [
   // tour of the island). `special`: opens once every other region has its second ending or a reset (see
   // sim/regions.js: specialProgress). `secret`: no list, map, or text shows its name until it opens; before that
   // the region list only shows a «⭐ Special zone» card. `offMap`: it has no department on the country map,
-  // which draws it in an inset instead (data/zoneGeo.js: MAP_GEO). `devOnly`: while its art, event, and music
-  // are still missing, only the developer option opens it.
+  // which draws it in an inset instead (data/zoneGeo.js: MAP_GEO). (Until v5.4, `devOnly`: only the developer
+  // option opened it, while its art, event, and music were missing; v5.5 opens it for real.)
   {
     id: 'sanandres',
     name: 'San Andrés',
-    icon: ICON.paseoIslas,
+    icon: ICON.johnnyCay,
     zones: ['sanandres'],
-    music: 'costa',
+    music: 'sanandres',
     unlock: { special: true },
     special: true,
     secret: true,
     offMap: true,
-    devOnly: true,
   },
 ];
 

@@ -21,14 +21,15 @@ const TAIL_S = 3.5; // trailing sound after the last beat
 const ARTIST = 'Encantos de Mi Tierrita';
 
 // Region order in the game and each file name.
-export const ORDER = ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima', 'cundinamarca', 'bogota'];
-// Included on the downloads page: excludes regions still hidden in the game (v4.4.10: Bogotá).
-export const PUBLIC = ORDER.filter((region) => !REGIONS_BY_ID[region].hidden);
+export const ORDER = ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima', 'cundinamarca', 'bogota', 'sanandres'];
+// Included on the downloads page: excludes regions still hidden in the game (v4.4.10: Bogotá) and secret ones
+// (v5.5: the special zone, which must not be named outside the game before it opens).
+export const PUBLIC = ORDER.filter((region) => !REGIONS_BY_ID[region].hidden && !REGIONS_BY_ID[region].secret);
 const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export const fileOf = (region) => `${ORDER.indexOf(region) + 1}-${slug(SONGS[region].name)}`;
 
 // Each voice in compose.js: track name, General MIDI program, and if percussion, the channel 10 note.
-const MELODY = { bambuco: ['Bandola', 25], cumbia: ['Gaita', 73], torbellino: ['Requinto', 25], joropo: ['Arpa llanera', 46], chirimia: ['Clarinete', 71], amazonica: ['Guitarra eléctrica', 27], sanjuanero: ['Bandola', 25], pasillo: ['Bandola', 25], danza: ['Bandola', 25] };
+const MELODY = { bambuco: ['Bandola', 25], cumbia: ['Gaita', 73], torbellino: ['Requinto', 25], joropo: ['Arpa llanera', 46], chirimia: ['Clarinete', 71], amazonica: ['Guitarra eléctrica', 27], sanjuanero: ['Bandola', 25], pasillo: ['Bandola', 25], danza: ['Bandola', 25], calipso: ['Tambor metálico', 114] };
 function voiceOf(style, voice, ev) {
   switch (voice) {
     case 'melody': return { name: MELODY[style][0], program: MELODY[style][1] };
@@ -50,6 +51,8 @@ function voiceOf(style, voice, ev) {
     case 'manguareLow': return { name: 'Manguaré', perc: 77 };
     case 'manguareHigh':
     case 'manguareRoll': return { name: 'Manguaré', perc: 76 };
+    case 'bongoHigh': return { name: 'Bongó', perc: 60 };
+    case 'bongoLow': return { name: 'Bongó', perc: 61 };
     default: throw new Error(`voz sin pista: ${voice}`);
   }
 }

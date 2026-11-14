@@ -185,4 +185,7 @@ export default {
   gran_feria_carteles: ['Posters all over the city', 'More people come to the fair: everything sells for 20 % more.'],
   gran_feria_radio: ['The fair on the radio', 'They announce it all over the country: everything sells for 50 % more than at the start.'],
   gran_feria_tele: ['The fair on television', 'The whole country wants to come: everything sells for twice the usual price.'],
+  "luna_carteles": ["Posters all over the island", "More visitors hear about the festival: the whole island produces 20 % more."],
+  "luna_musica": ["Live music", "Calypso and reggae on the beach: the whole island produces 50 % more than at the start."],
+  "luna_cruceros": ["The cruise ships arrive", "Ships bring people from everywhere: the whole island produces twice as much as at the start."],
 };

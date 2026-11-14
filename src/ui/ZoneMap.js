@@ -394,6 +394,15 @@ export class ZoneMap {
     g.replaceChildren();
     const u = this.vb.w / 100;
     const here = this.getZone();
+    // (v5.5) Off-map islands, once open: a small sand-ringed island under each zone in the Caribbean inset.
+    for (const r of shownRegions(isOpen(this.root.state))) {
+      if (!r.offMap) continue;
+      for (const z of r.zones) {
+        const [x, y] = ZONE_POS[z];
+        el('ellipse', { cx: x + 0.6, cy: y + 1, rx: 5.2, ry: 9.5, fill: '#f3e6c0', stroke: '#e0cfa0', 'stroke-width': 0.4, transform: `rotate(12 ${x} ${y})` }, g);
+        el('ellipse', { cx: x + 0.6, cy: y + 1, rx: 4, ry: 8.2, fill: '#7cb342', transform: `rotate(12 ${x} ${y})` }, g);
+      }
+    }
     if (!this.region) {
       // (v5.4) A secret region shows up only once it has opened.
       for (const r of shownRegions(isOpen(this.root.state))) {

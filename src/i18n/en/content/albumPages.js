@@ -62,4 +62,7 @@ export default {
   transporte_bog: 'Getting around',
   cultura_bog: 'Culture',
   barrios_bog: 'The neighborhoods',
+  "mar_sai": "The sea of seven colors",
+  "raizal_sai": "Raizal culture",
+  "comida_sai": "Island food",
 };

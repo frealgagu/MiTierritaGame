@@ -185,4 +185,7 @@ export default {
   gran_feria_carteles: ['Cartazes por toda a cidade', 'Vem mais gente à feira: tudo se vende 20 % mais caro.'],
   gran_feria_radio: ['A feira no rádio', 'Anunciam no país inteiro: tudo se vende 50 % mais caro que no começo.'],
   gran_feria_tele: ['A feira na televisão', 'O país inteiro quer vir: tudo se vende pelo dobro do normal.'],
+  "luna_carteles": ["Cartazes pela ilha toda", "Mais visitantes ficam sabendo da festa: a ilha toda produz 20 % a mais."],
+  "luna_musica": ["Música ao vivo", "Calipso e reggae na praia: a ilha toda produz 50 % a mais que no começo."],
+  "luna_cruceros": ["Chegam os cruzeiros", "Os navios trazem gente de todo lado: a ilha toda produz o dobro do começo."],
 };

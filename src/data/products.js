@@ -496,12 +496,12 @@ export const PRODUCTS = {
 
   // Special zone · San Andrés (v5.4): a visitor's day around the island, each step worth about ×16 the last
   // per unit of flow.
-  viajero: { name: 'Viajero', zone: 'sanandres', value: 1, icon: '🎒', color: 0xf4a261 },
-  dia_playa: { name: 'Día de playa', zone: 'sanandres', value: 32, icon: '☀️', color: 0xf2d16b },
-  paseo_lancha: { name: 'Paseo en lancha', zone: 'sanandres', value: 1024, icon: ICON.loncheraPaseo, color: 0x2ec4b6 },
-  visita_cayo: { name: 'Visita a Johnny Cay', zone: 'sanandres', value: 32768, icon: '🌴', color: 0x3fa34d },
-  almuerzo_rondon: { name: 'Almuerzo de rondón', zone: 'sanandres', value: 524288, icon: ICON.fishInCoconut, color: 0xe9c46a },
-  vuelta_isla: { name: 'Vuelta a la isla', zone: 'sanandres', value: 16777216, icon: '🛺', color: 0xe76f51 },
-  buceo: { name: 'Buceo con los peces', zone: 'sanandres', value: 268435456, icon: '🐟', color: 0x118ab2 },
-  tour_isla: { name: 'Tour de la isla', zone: 'sanandres', value: 8589934592, icon: '🎫', color: 0x06d6a0 },
+  viajero: { name: 'Viajero', zone: 'sanandres', value: 1, icon: ICON.viajeroMaleta, color: 0xf4a261 },
+  dia_playa: { name: 'Día de playa', zone: 'sanandres', value: 32, icon: ICON.diaPlaya, color: 0xf2d16b },
+  paseo_lancha: { name: 'Paseo en lancha', zone: 'sanandres', value: 1024, icon: ICON.lanchaSiete, color: 0x2ec4b6 },
+  visita_cayo: { name: 'Visita a Johnny Cay', zone: 'sanandres', value: 32768, icon: ICON.johnnyCay, color: 0x3fa34d },
+  almuerzo_rondon: { name: 'Almuerzo de rondón', zone: 'sanandres', value: 524288, icon: ICON.rondon, color: 0xe9c46a },
+  vuelta_isla: { name: 'Vuelta a la isla', zone: 'sanandres', value: 16777216, icon: ICON.mulita, color: 0xe76f51 },
+  buceo: { name: 'Buceo con los peces', zone: 'sanandres', value: 268435456, icon: ICON.snorkel, color: 0x118ab2 },
+  tour_isla: { name: 'Tour de la isla', zone: 'sanandres', value: 8589934592, icon: ICON.iglesiaLoma, color: 0x06d6a0 },
 };

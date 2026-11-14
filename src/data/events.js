@@ -1301,6 +1301,29 @@ export const EVENTS = [
     ],
     objective: { type: 'cadena', kind: 'sold', items: { feria_mi_tierrita: 60 }, medals: [690, 990] },
   },
+  // Special zone (v5.5): its only event, the Green Moon Festival. Nothing slows the island: its three purchases
+  // raise what the whole island makes (×1.2, ×1.5, and ×2 normal; `zoneSpeed`). Calibrated with the event bots
+  // so both ways win gold near minute 20: buying them, or none and raising every station to level 50 as fast as
+  // possible (the purchases cost what those levels would; even leveling without them wins with seconds to spare).
+  {
+    id: 'luna_verde',
+    zone: 'sanandres',
+    icon: '🌙',
+    name: 'Fiesta de la Luna Verde',
+    intro:
+      'Llegó la Fiesta de la Luna Verde, el festival raizal de la isla: calipso, comida y baile en cada esquina. Media isla quiere hacer el tour; atiende a todos y llena La Loma.',
+    announce: '¡Welcome a la Fiesta de la Luna Verde! Toque 🏅 Eventos y llenemos la isla de visitantes.',
+    stations: ['aeropuerto_sai', 'carpas_spratt', 'lanchas_siete_colores', 'paseo_johnny_cay', 'rondon_san_luis', 'hoyo_soplador', 'snorkel_piscinita', 'mirador_la_loma'],
+    level: 10,
+    coins: 150000000000,
+    // Each purchase puts the island at ×1.2, ×1.5, and ×2 normal (multiplying: 1.2 · 1.25 · 4/3).
+    actions: [
+      { id: 'luna_carteles', icon: '🪧', name: 'Carteles por toda la isla', desc: 'Más visitantes se enteran de la fiesta: toda la isla produce un 20 % más.', cost: 150000000000, effect: { type: 'zoneSpeed', target: 'sanandres', mult: 1.2 } },
+      { id: 'luna_musica', icon: '🎵', name: 'Música en vivo', desc: 'Calipso y reggae en la playa: toda la isla produce un 50 % más que al empezar.', cost: 600000000000, effect: { type: 'zoneSpeed', target: 'sanandres', mult: 1.25 } },
+      { id: 'luna_cruceros', icon: '🛥️', name: 'Llegan los cruceros', desc: 'Los barcos traen gente de todas partes: toda la isla produce el doble que al empezar.', cost: 1500000000000, effect: { type: 'zoneSpeed', target: 'sanandres', mult: 4 / 3 } },
+    ],
+    objective: { type: 'cadena', kind: 'sold', items: { tour_isla: 560 }, medals: [1200, 1500] },
+  },
 ];
 
 export const EVENTS_BY_ID = Object.fromEntries(EVENTS.map((e) => [e.id, e]));

@@ -62,4 +62,7 @@ export default {
   transporte_bog: 'Les transports',
   cultura_bog: 'La culture',
   barrios_bog: 'Les quartiers',
+  "mar_sai": "La mer aux sept couleurs",
+  "raizal_sai": "La culture raizal",
+  "comida_sai": "La cuisine de l’île",
 };

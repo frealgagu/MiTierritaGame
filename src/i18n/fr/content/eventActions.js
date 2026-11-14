@@ -185,4 +185,7 @@ export default {
   gran_feria_carteles: ['Des affiches dans toute la ville', 'Plus de monde vient à la foire : tout se vend 20 % plus cher.'],
   gran_feria_radio: ['La foire à la radio', 'On l’annonce dans tout le pays : tout se vend 50 % plus cher qu’au début.'],
   gran_feria_tele: ['La foire à la télévision', 'Tout le pays veut venir : tout se vend le double du prix normal.'],
+  "luna_carteles": ["Des affiches dans toute l’île", "Plus de visiteurs entendent parler de la fête : toute l’île produit 20 % de plus."],
+  "luna_musica": ["Musique live", "Calypso et reggae sur la plage : toute l’île produit 50 % de plus qu’au départ."],
+  "luna_cruceros": ["Les croisières arrivent", "Les bateaux amènent des gens de partout : toute l’île produit deux fois plus qu’au départ."],
 };

@@ -76,7 +76,11 @@ async function start() {
   // Regions (v3.0): the main save (Eje Cafetero) stores the others, each with its own Game, and
   // all produce simultaneously.
   const root = game.state;
-  openRegions(root); // save that already completed Pueblo before v3.0
+  // A save that already completed Pueblo before v3.0, or (v5.5) one whose reset just completed the special
+  // zone's condition: it opens on load, with a notice once the game is on screen.
+  for (const id of openRegions(root)) {
+    if (REGIONS_BY_ID[id].special) setTimeout(() => toast(t('⭐ ¡Se abrió la zona especial: {region}!', { region: `${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name}` }), 6000), 2500);
+  }
   const games = { cafetero: game };
   for (const id of Object.keys(root.regions ?? {})) games[id] = new Game(root.regions[id]);
   const gameOf = (zoneId) => games[REGION_OF_ZONE[zoneId]];

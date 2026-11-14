@@ -9631,6 +9631,264 @@ def casa_ladrillo():
     return layers
 
 
+
+# ---------- Special zone · San Andrés (v5.5): the island tour and its album ----------
+
+def sea_bands(y0=58):
+    """Sea of seven colors: horizontal bands from turquoise to deep blue, below y0."""
+    cols = ['#b2ebf2', '#80deea', '#4dd0e1', '#26c6da', '#00acc1', '#0288d1', '#1565c0']
+    h = (100 - y0) / len(cols)
+    return [(c, [rect(0, y0 + k * h, 100, h + 0.4)]) for k, c in enumerate(cols)]
+
+
+def palm_tree(x, y, h=34, lean=6):
+    """Coconut palm rooted at (x, y): curved trunk, five fronds, and coconuts."""
+    tx, ty = x + lean, y - h
+    layers = [(OUTLINE, [f'M {x - 3.6} {y} Q {x + lean * 0.2 - 2} {y - h * 0.5} {tx - 2.4} {ty} L {tx + 2.4} {ty} Q {x + lean * 0.2 + 2} {y - h * 0.5} {x + 3.6} {y} Z']),
+              ('#8d6e4a', [f'M {x - 1.8} {y - 1} Q {x + lean * 0.2 - 0.6} {y - h * 0.5} {tx - 1} {ty + 1} L {tx + 1} {ty + 1} Q {x + lean * 0.2 + 0.6} {y - h * 0.5} {x + 1.8} {y - 1} Z'])]
+    for dx, dy in ((-18, 6), (-12, -8), (4, -12), (16, -4), (18, 10)):
+        layers += [(OUTLINE, [leaf(tx, ty, tx + dx * 1.05, ty + dy * 1.05, 4.6)]), ('#2e7d32', [leaf(tx, ty, tx + dx, ty + dy, 3.4)])]
+    layers.append(('#6d4c41', [circle(tx - 2, ty + 3, 2.4), circle(tx + 2.4, ty + 3.4, 2.4)]))
+    return layers
+
+
+def viajero_maleta():
+    """Traveler: hard-shell suitcase with travel stickers and a straw hat on top."""
+    layers = [(OUTLINE, [rect(14, 36, 72, 54)]), ('#e76f51', [rect(16.6, 38.6, 66.8, 48.8)])]
+    layers += [('#c4553b', [rect(16.6, 60, 66.8, 3), rect(30, 38.6, 3, 48.8), rect(67, 38.6, 3, 48.8)])]
+    layers += [(OUTLINE, ['M 38 36 L 38 26 Q 38 22 42 22 L 58 22 Q 62 22 62 26 L 62 36 L 57 36 L 57 27 L 43 27 L 43 36 Z'])]
+    layers += oval(46, 72, 8, 6, '#26c6da') + oval(70, 50, 6, 6, '#f6d860')
+    layers.append(('#2e7d32', [leaf(66, 50, 74, 46, 2)]))
+    layers += [(OUTLINE, [ellipse(52, 30, 32, 7)]), ('#e9cf8c', [ellipse(52, 30, 29.6, 5)])]
+    layers += [(OUTLINE, ['M 38 30 Q 38 14 52 14 Q 66 14 66 30 Z']), ('#f2dc9c', ['M 40.4 29 Q 40.4 16.4 52 16.4 Q 63.6 16.4 63.6 29 Z']), ('#d7263d', [rect(40.4, 24, 23.2, 4)])]
+    layers += [(OUTLINE, [rect(20, 90, 8, 6), rect(72, 90, 8, 6)])]
+    return layers
+
+
+def dia_playa():
+    """Beach day: striped umbrella and towel on white sand by the turquoise sea."""
+    layers = sea_bands(44)[:4] + [('#f3e6c0', ['M 0 66 Q 50 56 100 64 L 100 100 L 0 100 Z'])]
+    layers += [(OUTLINE, [rib(50, 30, 44, 92, 3.6)]), ('#6d4c41', [rib(50, 30, 44, 92, 1.8)])]
+    layers += [(OUTLINE, ['M 12 34 Q 50 2 88 34 Z'])]
+    for k, c in enumerate(['#e63946', '#ffffff', '#e63946', '#ffffff', '#e63946']):
+        x0 = 15 + k * 14.2
+        layers.append((c, [f'M 50 9 L {x0} 32 L {x0 + 14.2} 32 Z']))
+    layers += [(OUTLINE, [poly(58, 80, 92, 74, 96, 88, 62, 94)]), ('#4cc9f0', [poly(60.4, 81.6, 90.6, 76.4, 93.8, 86.4, 63.4, 91.6)]), ('#ffffff', [rib(62, 86, 92, 81, 2)])]
+    layers.append(('#ffffff', [ellipse(20, 84, 3, 1.8), ellipse(30, 92, 2.4, 1.4)]))
+    layers.append(('#ffd54f', [circle(84, 14, 7)]))
+    return layers
+
+
+def lancha_siete():
+    """Boat trip: white speedboat with a blue stripe crossing the sea of seven colors."""
+    layers = sea_bands(46)
+    layers.append(('#ffffff', [rib(8, 76, 36, 74, 1.6), rib(60, 92, 92, 90, 1.6)]))
+    layers += [(OUTLINE, ['M 6 52 L 86 52 L 96 46 L 88 70 Q 50 76 14 70 Z']), ('#ffffff', ['M 9.6 54.4 L 85.6 54.4 L 91.6 51 L 86 68 Q 50 73.6 15.6 68 Z'])]
+    layers.append(('#1e88e5', ['M 12 60 L 90 58 L 89 62 L 13 64 Z']))
+    layers += [(OUTLINE, [rect(34, 32, 30, 21)]), ('#e3f2fd', [rect(36.4, 34.4, 25.2, 16.2)]), ('#26c6da', [rect(38.6, 36.6, 9, 9), rect(50.4, 36.6, 9, 9)])]
+    layers += [(OUTLINE, [rect(30, 28, 38, 5)]), ('#f4a261', [rect(32, 29.4, 34, 2.2)])]
+    layers.append(('#ffffff', ['M 90 66 Q 98 62 100 66 Q 96 70 90 69 Z']))
+    return layers
+
+
+def johnny_cay():
+    """Johnny Cay: small white-sand cay with palm trees in a turquoise sea."""
+    layers = [('#4dd0e1', [rect(0, 50, 100, 50)]), ('#26c6da', [rect(0, 76, 100, 24)]), ('#80deea', [ellipse(50, 74, 46, 12)])]
+    layers += [(OUTLINE, [ellipse(50, 72, 38, 10)]), ('#f3e6c0', [ellipse(50, 71, 35.6, 7.8)]), ('#7cb342', [ellipse(50, 68, 24, 5)])]
+    layers += palm_tree(38, 70, 40, -4) + palm_tree(60, 70, 34, 6)
+    layers.append(('#ffffff', [rib(6, 88, 30, 86, 1.6), rib(70, 94, 96, 92, 1.6)]))
+    layers.append(('#ffd54f', [circle(86, 16, 8)]))
+    return layers
+
+
+def rondon():
+    """Rondón: black pot of Raizal stew with fish, conch, plantain, and yuca in coconut milk."""
+    layers = [(OUTLINE, ['M 8 46 L 92 46 Q 92 92 50 94 Q 8 92 8 46 Z']), ('#37474f', ['M 11 48.4 L 89 48.4 Q 89 89.4 50 91.4 Q 11 89.4 11 48.4 Z'])]
+    layers += [(OUTLINE, [rect(2, 48, 10, 6), rect(88, 48, 10, 6)])]
+    layers += [(OUTLINE, [ellipse(50, 46, 42, 11)]), ('#f3e3c3', [ellipse(50, 46, 39.6, 8.8)])]
+    layers += oval(34, 42, 10, 4, '#fbc02d', rot=-10) + oval(64, 44, 9, 3.6, '#efe7d4', rot=8)
+    layers += [(OUTLINE, ['M 44 50 L 60 38 L 68 40 L 72 34 L 74 44 L 66 46 L 52 54 Z']), ('#90a4ae', ['M 46 49.6 L 60 40 L 67 41.6 L 71 37 L 72 43 L 65.6 44.6 L 52.4 52.4 Z'])]
+    layers += [(OUTLINE, [circle(24, 50, 6)]), ('#f48fb1', [circle(24, 50, 4.2)]), ('#ffffff', [circle(23, 49, 1.6)])]
+    layers.append(('#2e7d32', [leaf(76, 40, 84, 34, 2), leaf(78, 44, 86, 42, 1.8)]))
+    layers.append(('#eceff1', [f'M {x} 30 Q {x - 4} 22 {x} 14 Q {x + 3} 22 {x + 1.4} 30 Z' for x in (36, 52, 66)]))
+    return layers
+
+
+def mulita():
+    """Island ride: white golf cart ('mulita') with a striped canopy."""
+    layers = [(OUTLINE, [rect(12, 50, 76, 26)]), ('#ffffff', [rect(14.4, 52.4, 71.2, 21.2)]), ('#26c6da', [rect(14.4, 64, 71.2, 4)])]
+    layers += [(OUTLINE, [rect(16, 22, 4, 30), rect(78, 22, 4, 30)])]
+    layers += [(OUTLINE, [rect(10, 14, 80, 10)])]
+    for k, c in enumerate(['#f4a261', '#ffffff', '#f4a261', '#ffffff', '#f4a261', '#ffffff', '#f4a261', '#ffffff']):
+        layers.append((c, [rect(12 + k * 9.5, 16.4, 9.5, 5.2)]))
+    layers += [(OUTLINE, [rect(26, 40, 26, 12)]), ('#e76f51', [rect(28.4, 42.4, 21.2, 7.2)])]
+    layers += [(OUTLINE, [rib(62, 50, 70, 36, 3.2)]), ('#37474f', [rib(62, 50, 70, 36, 1.6)])]
+    for x in (28, 72):
+        layers += [(OUTLINE, [circle(x, 78, 11)]), ('#263238', [circle(x, 78, 8.6)]), ('#b0bec5', [circle(x, 78, 3.6)])]
+    return layers
+
+
+def snorkel():
+    """Snorkeling: diving mask and snorkel with a yellow striped fish and bubbles."""
+    layers = [('#4dd0e1', [rect(0, 0, 100, 100)]), ('#26c6da', ['M 0 70 Q 50 60 100 72 L 100 100 L 0 100 Z'])]
+    layers += [(OUTLINE, ['M 8 34 Q 8 18 30 18 L 62 18 Q 84 18 84 34 Q 84 52 64 52 Q 50 44 36 52 Q 8 52 8 34 Z']), ('#ff7043', ['M 11 34 Q 11 21 30 21 L 62 21 Q 81 21 81 34 Q 81 49 64 49 Q 50 41 36 49 Q 11 49 11 34 Z'])]
+    layers.append(('#b3e5fc', ['M 16 34 Q 16 25 30 25 L 44 25 L 44 44 Q 38 46 34 46 Q 16 46 16 34 Z', 'M 76 34 Q 76 25 62 25 L 50 25 L 50 41 Q 56 42 62 46 Q 76 46 76 34 Z']))
+    layers += [(OUTLINE, ['M 86 30 L 92 30 L 92 64 Q 92 70 86 70 L 76 70 L 76 64 L 86 64 Z']), ('#ffd54f', ['M 87.6 31.6 L 90.4 31.6 L 90.4 64 Q 90.4 68.4 86 68.4 L 77.6 68.4 L 77.6 65.6 L 87.6 65.6 Z'])]
+    layers += [(OUTLINE, ['M 18 78 Q 30 64 46 76 L 54 68 L 54 88 L 46 80 Q 30 92 18 78 Z']), ('#fdd835', ['M 21 78 Q 31 67.4 45.6 78.6 L 51.6 73 L 51.6 83 L 45.6 79 Q 31 89 21 78 Z']), ('#263238', [circle(26, 76, 1.6), rib(34, 70, 34, 86, 1.8), rib(40, 72, 40, 84, 1.8)])]
+    layers.append(('#e0f7fa', [circle(62, 80, 2.6), circle(66, 72, 2), circle(70, 64, 1.6)]))
+    return layers
+
+
+def iglesia_loma():
+    """La Loma: the white wooden Baptist church with red roof and bell tower on a green hill."""
+    layers = [('#81d4fa', [rect(0, 0, 100, 70)]), (OUTLINE, ['M 0 100 L 0 74 Q 50 52 100 74 L 100 100 Z']), ('#7cb342', ['M 0 100 L 0 76.6 Q 50 55 100 76.6 L 100 100 Z'])]
+    layers += [(OUTLINE, [rect(22, 46, 50, 30)]), ('#fafafa', [rect(24.4, 48.4, 45.2, 25.2)])]
+    layers += [(OUTLINE, [poly(18, 48, 47, 32, 76, 48)]), ('#c62828', [poly(22, 46.4, 47, 34.6, 72, 46.4)])]
+    layers += [(OUTLINE, [rect(62, 22, 16, 54)]), ('#fafafa', [rect(64.4, 24.4, 11.2, 49.2)])]
+    layers += [(OUTLINE, [poly(60, 24, 70, 6, 80, 24)]), ('#c62828', [poly(63, 22.6, 70, 10, 77, 22.6)])]
+    layers.append(('#5d4037', [rect(66.6, 30, 6.8, 8), rect(42, 58, 10, 16)]))
+    layers.append(('#4fc3f7', [rect(30, 54, 6, 8), rect(56, 54, 6, 8), rect(66.6, 44, 6.8, 8)]))
+    layers.append(('#90a4ae', [rib(28, 52, 58, 52, 0.8), rib(28, 66, 58, 66, 0.8)]))
+    layers += palm_tree(10, 80, 30, 4)
+    return layers
+
+
+def siete_colores():
+    """The sea of seven colors: seven bands from turquoise to deep blue, with a sailboat."""
+    layers = [('#bbdefb', [rect(0, 0, 100, 30)])] + sea_bands(30)
+    layers += [(OUTLINE, ['M 40 52 L 70 52 L 64 60 L 46 60 Z']), ('#ffffff', ['M 43 53.6 L 67 53.6 L 63 58.4 L 47 58.4 Z'])]
+    layers += [(OUTLINE, [rib(55, 52, 55, 18, 2.4)]), (OUTLINE, [poly(57, 20, 57, 48, 76, 48)]), ('#ffffff', [poly(58.6, 24, 58.6, 46.6, 72.6, 46.6)]), (OUTLINE, [poly(53, 24, 53, 48, 40, 48)]), ('#f6d860', [poly(51.6, 28, 51.6, 46.6, 43, 46.6)])]
+    layers.append(('#ffd54f', [circle(16, 14, 8)]))
+    return layers
+
+
+def cangrejo_negro():
+    """Black crab: the island's black land crab with raised claws and orange-tipped legs."""
+    layers = [('#f3e6c0', [rect(0, 70, 100, 30)])]
+    for s in (-1, 1):
+        for k in range(3):
+            x0 = 50 + s * 18
+            layers += [(OUTLINE, [rib(x0, 60 + k * 5, x0 + s * 22, 74 + k * 7, 4.4)]), ('#e65100', [rib(x0 + s * 14, 69 + k * 6, x0 + s * 21, 73.6 + k * 7, 2.4)])]
+        layers += [(OUTLINE, [rib(50 + s * 20, 52, 50 + s * 30, 34, 5)]), (OUTLINE, [ellipse(50 + s * 32, 26, 10, 8, s * 20)]), ('#3e2723', [ellipse(50 + s * 32, 26, 7.8, 5.8, s * 20)])]
+        layers.append(('#f4511e', [ellipse(50 + s * 34, 22, 3, 2, s * 20)]))
+    layers += [(OUTLINE, [ellipse(50, 58, 26, 16)]), ('#263238', [ellipse(50, 58, 23.6, 13.6)]), ('#455a64', [ellipse(46, 53, 10, 4)])]
+    for s in (-1, 1):
+        layers += [(OUTLINE, [rib(50 + s * 6, 46, 50 + s * 8, 38, 2.8)]), ('#ffffff', [circle(50 + s * 8, 37, 3)]), ('#000000', [circle(50 + s * 8, 37, 1.4)])]
+    return layers
+
+
+def manta_raya():
+    """Spotted eagle ray gliding over the reef, with bubbles."""
+    layers = [('#4fc3f7', [rect(0, 0, 100, 100)]), ('#29b6f6', ['M 0 78 Q 50 70 100 80 L 100 100 L 0 100 Z'])]
+    layers += [(OUTLINE, ['M 50 26 Q 70 30 96 50 Q 70 52 56 62 L 50 80 L 44 62 Q 30 52 4 50 Q 30 30 50 26 Z']), ('#37474f', ['M 50 29 Q 69 33 91 49 Q 68 51 54.6 60 L 50 74 L 45.4 60 Q 32 51 9 49 Q 31 33 50 29 Z'])]
+    layers.append(('#eceff1', [circle(x, y, 1.8) for x, y in ((30, 42), (38, 38), (62, 38), (70, 42), (44, 46), (56, 46), (24, 46), (76, 46))]))
+    layers += [(OUTLINE, [rib(50, 76, 50, 98, 2.4)])]
+    layers.append(('#e1f5fe', [circle(80, 22, 2.6), circle(86, 14, 2), circle(90, 6, 1.4)]))
+    return layers
+
+
+def coral():
+    """Coral reef: brain coral, branching orange coral, and a purple sea fan."""
+    layers = [('#4fc3f7', [rect(0, 0, 100, 100)]), ('#f3e6c0', ['M 0 84 Q 50 76 100 86 L 100 100 L 0 100 Z'])]
+    layers += [(OUTLINE, ['M 62 84 Q 64 30 80 20 Q 96 30 96 84 Z']), ('#8e44ad', ['M 65 82 Q 67 34 80 24 Q 93 34 93 82 Z'])]
+    layers.append(('#b07cc6', [rib(80, 26, 80, 82, 1.2), rib(72, 40, 80, 82, 1), rib(88, 40, 80, 82, 1)]))
+    for x0, y0, x1, y1 in ((30, 84, 30, 40), (30, 62, 16, 46), (30, 56, 44, 38), (16, 46, 10, 34), (44, 38, 50, 28)):
+        layers += [(OUTLINE, [rib(x0, y0, x1, y1, 7.6)]), ('#ff7043', [rib(x0, y0, x1, y1, 5)])]
+    layers += [(OUTLINE, [ellipse(52, 82, 16, 11)]), ('#c0ca33', [ellipse(52, 82, 13.6, 8.6)]), ('#9e9d24', ['M 42 82 Q 46 76 50 82 Q 54 88 58 82 Q 62 76 64 80'])]
+    layers.append(('#fdd835', ['M 6 18 Q 14 10 22 18 L 26 14 L 26 24 L 22 20 Q 14 26 6 18 Z']))
+    return layers
+
+
+def estrella_mar():
+    """Starfish: orange five-armed sea star resting on white sand."""
+    layers = [('#f3e6c0', [rect(0, 0, 100, 100)]), ('#e8d6a6', [ellipse(24, 80, 10, 4), ellipse(80, 22, 8, 3)])]
+    star = []
+    for k in range(10):
+        a = math.radians(-90 + k * 36)
+        r = 44 if k % 2 == 0 else 17
+        star.append((50 + r * math.cos(a), 54 + r * math.sin(a)))
+    layers += shape(star, '#ff8a65', d=2.6)
+    layers.append(('#f4511e', [circle(50 + 22 * math.cos(math.radians(-90 + k * 72)), 54 + 22 * math.sin(math.radians(-90 + k * 72)), 2.4) for k in range(5)] + [circle(50, 54, 4)]))
+    return layers
+
+
+def tortuga():
+    """Sea turtle: hawksbill turtle swimming with its patterned shell."""
+    layers = [('#4dd0e1', [rect(0, 0, 100, 100)])]
+    for x, y, rot in ((24, 36, -40), (76, 36, 40), (30, 76, 30), (70, 76, -30)):
+        layers += oval(x, y, 15 if y < 50 else 10, 6, '#8d6e63', rot=rot)
+    layers += [(OUTLINE, [ellipse(50, 22, 9, 10)]), ('#a1887f', [ellipse(50, 22, 7, 8)]), ('#000000', [circle(46, 20, 1.4), circle(54, 20, 1.4)])]
+    layers += [(OUTLINE, [ellipse(50, 56, 26, 30)]), ('#6d4c41', [ellipse(50, 56, 23.6, 27.6)])]
+    layers.append(('#a1887f', [poly(50, 34, 60, 44, 56, 58, 44, 58, 40, 44), poly(50, 62, 58, 70, 50, 80, 42, 70), poly(32, 48, 38, 58, 32, 70, 28, 58), poly(68, 48, 72, 58, 68, 70, 62, 58)]))
+    return layers
+
+
+def casa_islena():
+    """Island house: wooden clapboard house on stilts, with a veranda and gingerbread trim."""
+    layers = [('#81d4fa', [rect(0, 0, 100, 76)]), ('#7cb342', [rect(0, 76, 100, 24)])]
+    layers += [(OUTLINE, [rect(10, 40, 80, 34)]), ('#4dd0e1', [rect(12.4, 42.4, 75.2, 29.2)])]
+    layers.append(('#26a6b8', [rib(12.4, 48 + k * 6, 87.6, 48 + k * 6, 0.9) for k in range(4)]))
+    layers += [(OUTLINE, [poly(4, 42, 50, 14, 96, 42)]), ('#e53935', [poly(9, 40.4, 50, 17, 91, 40.4)])]
+    layers += [(OUTLINE, [rect(42, 50, 16, 24)]), ('#fdd835', [rect(44.4, 52.4, 11.2, 21.6)])]
+    layers += [(OUTLINE, [rect(18, 50, 16, 12), rect(66, 50, 16, 12)]), ('#ffffff', [rect(20, 52, 12, 8), rect(68, 52, 12, 8)])]
+    layers += [(OUTLINE, [rect(6, 72, 88, 5)]), ('#ffffff', [rect(8, 73.4, 84, 2.2)])]
+    layers.append((OUTLINE, [rect(12 + k * 18, 77, 3.4, 12) for k in range(5)]))
+    layers.append(('#ffffff', [poly(10 + k * 8, 42, 14 + k * 8, 46, 18 + k * 8, 42) for k in range(10)]))
+    return layers
+
+
+def luna_verde():
+    """Green Moon: big green-glowing full moon rising over a palm at night."""
+    layers = [('#1a237e', [rect(0, 0, 100, 100)]), ('#283593', ['M 0 70 Q 50 60 100 72 L 100 100 L 0 100 Z'])]
+    layers += [('#a5d6a7', [circle(56, 40, 30)]), (OUTLINE, [circle(56, 40, 24)]), ('#66bb6a', [circle(56, 40, 22)]), ('#81c784', [circle(48, 32, 5), circle(64, 50, 4), circle(66, 30, 3)])]
+    layers.append(('#fff59d', [circle(14, 14, 1.4), circle(24, 30, 1.2), circle(90, 12, 1.4), circle(86, 76, 1.2), circle(30, 8, 1)]))
+    layers += palm_tree(18, 96, 46, 8)
+    return layers
+
+
+def tinafono():
+    """Tináfono: the washtub bass of island music—tub, broom-handle neck, and one string."""
+    layers = [(OUTLINE, ['M 14 66 L 86 66 L 78 94 L 22 94 Z']), ('#90a4ae', ['M 17.4 68.4 L 82.6 68.4 L 76.2 91.6 L 23.8 91.6 Z']), ('#b0bec5', [rect(20, 72, 60, 3), rect(24, 84, 52, 3)])]
+    layers += [(OUTLINE, [ellipse(50, 66, 38, 7)]), ('#78909c', [ellipse(50, 66, 35.6, 5)])]
+    layers += [(OUTLINE, [rib(36, 64, 60, 6, 6.4)]), ('#a1887f', [rib(36, 64, 60, 6, 3.8)])]
+    layers.append(('#fafafa', [rib(50, 64, 59.4, 9, 1)]))
+    layers += oval(60, 6, 3, 3, '#5d4037', d=1.4)
+    layers.append(('#fdd835', ['M 76 20 L 80 20 L 80 36 Q 80 40 76 40 Q 72 40 72 36 Q 72 32 76 33 Z', 'M 86 12 L 90 12 L 90 26 Q 90 30 86 30 Q 82 30 82 26 Q 82 22 86 23 Z']))
+    return layers
+
+
+def goleta():
+    """Schooner: wooden two-masted sailing ship that once linked the islands and the coast."""
+    layers = sea_bands(70)[3:]
+    layers += [(OUTLINE, ['M 4 66 L 96 64 L 86 82 L 14 82 Z']), ('#8d6e4a', ['M 7.6 68.2 L 92.4 66.4 L 84.4 79.6 L 15.6 79.6 Z']), ('#5d4037', [rect(10, 70, 80, 2.4)])]
+    for x, top in ((34, 10), (64, 16)):
+        layers += [(OUTLINE, [rib(x, 66, x, top, 3.4)])]
+        layers += [(OUTLINE, [poly(x + 2, top + 2, x + 2, 62, x + 24, 62)]), ('#fff8e1', [poly(x + 3.6, top + 6, x + 3.6, 60.6, x + 20.6, 60.6)])]
+        layers += [(OUTLINE, [poly(x - 2, top + 6, x - 2, 60, x - 18, 60)]), ('#fff8e1', [poly(x - 3.4, top + 10, x - 3.4, 58.6, x - 14.6, 58.6)])]
+    layers.append(('#d7263d', [poly(64, 16, 64, 22, 72, 19)]))
+    return layers
+
+
+def pan_coco():
+    """Coconut bread: round golden island loaves with a split coconut beside them."""
+    layers = [(OUTLINE, [ellipse(50, 80, 46, 12)]), ('#a1693f', [ellipse(50, 80, 43.6, 9.6)])]
+    for x, y in ((30, 62), (58, 60), (44, 48)):
+        layers += [(OUTLINE, [ellipse(x, y, 18, 13)]), ('#e0a54f', [ellipse(x, y, 15.6, 10.6)]), ('#f3c97a', [ellipse(x - 4, y - 4, 7, 3)])]
+    layers += [(OUTLINE, ['M 66 82 Q 66 64 82 64 Q 98 64 98 82 Z']), ('#6d4c41', ['M 68.4 80.6 Q 68.4 66.4 82 66.4 Q 95.6 66.4 95.6 80.6 Z']), ('#fafafa', ['M 72 80 Q 72 70 82 70 Q 92 70 92 80 Z'])]
+    return layers
+
+
+def empanada_cangrejo():
+    """Crab patty: half-moon golden crab empanadas with a lime wedge and a crab claw."""
+    layers = [(OUTLINE, [ellipse(50, 78, 46, 14)]), ('#eceff1', [ellipse(50, 78, 43.6, 11.6)])]
+    for x, y in ((34, 62), (64, 66)):
+        layers += [(OUTLINE, [f'M {x - 22} {y + 6} Q {x} {y - 26} {x + 22} {y + 6} Z']), ('#f2b84b', [f'M {x - 19} {y + 4} Q {x} {y - 22} {x + 19} {y + 4} Z'])]
+        layers.append(('#c98a2e', [circle(x - 14 + k * 7, y + 3, 1.6) for k in range(5)]))
+    layers += oval(84, 50, 7, 5, '#c0ca33', rot=-30)
+    layers += [(OUTLINE, ['M 10 36 Q 14 22 28 24 L 24 30 Q 18 30 18 38 Z']), ('#e64a19', ['M 12.6 35 Q 15.6 25 25 26 L 23 28.6 Q 16.6 28.6 16 36 Z'])]
+    return layers
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -10254,6 +10512,27 @@ ICONS = [
     (0xE258, 'poporo', poporo),
     (0xE259, 'guitarra_rock', guitarra_rock),
     (0xE25A, 'casa_ladrillo', casa_ladrillo),
+    # Special zone · San Andrés (v5.5): the island tour and its album
+    (0xE25B, 'viajero_maleta', viajero_maleta),
+    (0xE25C, 'dia_playa', dia_playa),
+    (0xE25D, 'lancha_siete', lancha_siete),
+    (0xE25E, 'johnny_cay', johnny_cay),
+    (0xE25F, 'rondon', rondon),
+    (0xE260, 'mulita', mulita),
+    (0xE261, 'snorkel', snorkel),
+    (0xE262, 'iglesia_loma', iglesia_loma),
+    (0xE263, 'siete_colores', siete_colores),
+    (0xE264, 'cangrejo_negro', cangrejo_negro),
+    (0xE265, 'manta_raya', manta_raya),
+    (0xE266, 'coral', coral),
+    (0xE267, 'estrella_mar', estrella_mar),
+    (0xE268, 'tortuga', tortuga),
+    (0xE269, 'casa_islena', casa_islena),
+    (0xE26A, 'luna_verde', luna_verde),
+    (0xE26B, 'tinafono', tinafono),
+    (0xE26C, 'goleta', goleta),
+    (0xE26D, 'pan_coco', pan_coco),
+    (0xE26E, 'empanada_cangrejo', empanada_cangrejo),
 ]
 
 

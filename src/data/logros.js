@@ -200,7 +200,23 @@ const BOGOTA = [
   { id: 'bg_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [12, 24, researchOf('bogota')], reward: [1, 2, 4] },
 ];
 
-export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'pacifico' })), ...AMAZONAS.map((l) => ({ ...l, region: 'amazonas' })), ...TOLIMA.map((l) => ({ ...l, region: 'tolima' })), ...CUNDINAMARCA.map((l) => ({ ...l, region: 'cundinamarca' })), ...BOGOTA.map((l) => ({ ...l, region: 'bogota' }))];
+// Special zone · San Andrés (v5.5).
+const SANANDRES = [
+  { id: 'sa_viajeros', icon: ICON.viajeroMaleta, name: 'Bienvenidos a la isla', text: 'Recibe {n} viajeros en el aeropuerto', metric: 'produced:viajero', tiers: [1000000, 1000000000, 1000000000000], reward: [1, 2, 4] },
+  { id: 'sa_playa', icon: ICON.diaPlaya, name: 'Carpero de Spratt Bight', text: 'Atiende {n} días de playa', metric: 'produced:dia_playa', tiers: [100000, 100000000, 100000000000], reward: [1, 2, 4] },
+  { id: 'sa_cayo', icon: ICON.johnnyCay, name: 'Lanchero de Johnny Cay', text: 'Lleva {n} visitas a Johnny Cay', metric: 'produced:visita_cayo', tiers: [10000, 10000000, 10000000000], reward: [1, 2, 4] },
+  { id: 'sa_rondon', icon: ICON.rondon, name: 'Cocinero de rondón', text: 'Sirve {n} almuerzos de rondón', metric: 'produced:almuerzo_rondon', tiers: [10000, 10000000, 10000000000], reward: [1, 2, 4] },
+  { id: 'sa_tours', icon: ICON.iglesiaLoma, name: 'Guía de la isla', text: 'Vende {n} tours de la isla', metric: 'sold:tour_isla', tiers: [1000000, 100000000, 10000000000], reward: [2, 4, 8] },
+  { id: 'sa_monedas', icon: '💰', name: 'Patrón de la isla', text: 'Gana {n} monedas en total', metric: 'earned', tiers: [1e12, 1e17, 1e22], reward: [1, 2, 4] },
+  { id: 'sa_anos', icon: '📅', name: 'Isleño de corazón', text: 'Vive {n} años de juego en la isla', metric: 'years', tiers: [4, 16, 64], reward: [1, 2, 4] },
+  { id: 'sa_final', icon: ICON.iglesiaLoma, name: 'El tour completo', text: 'Completa el tour de la isla {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
+  { id: 'sa_maestro', icon: '🏅', name: 'Maestro de la isla', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
+  { id: 'sa_luna', icon: ICON.lunaVerde, name: 'Bajo la Luna Verde', text: 'Gana {n} medallas en la Fiesta de la Luna Verde', metric: 'eventMedals:luna_verde', tiers: [1, 3, 6], reward: [4, 8, 16] },
+  { id: 'sa_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 2, 3], reward: [1, 2, 4] },
+  { id: 'sa_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [2, 4, researchOf('sanandres')], reward: [1, 2, 4] },
+];
+
+export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), ...SANTANDER.map((l) => ({ ...l, region: 'santander' })), ...COSTA.map((l) => ({ ...l, region: 'costa' })), ...BOYACA.map((l) => ({ ...l, region: 'boyaca' })), ...LLANOS.map((l) => ({ ...l, region: 'llanos' })), ...PACIFICO.map((l) => ({ ...l, region: 'pacifico' })), ...AMAZONAS.map((l) => ({ ...l, region: 'amazonas' })), ...TOLIMA.map((l) => ({ ...l, region: 'tolima' })), ...CUNDINAMARCA.map((l) => ({ ...l, region: 'cundinamarca' })), ...BOGOTA.map((l) => ({ ...l, region: 'bogota' })), ...SANANDRES.map((l) => ({ ...l, region: 'sanandres' }))];
 export const logrosOf = (region) => LOGROS.filter((l) => l.region === region);
 
 export const LOGROS_BY_ID = Object.fromEntries(LOGROS.map((l) => [l.id, l]));

@@ -36,24 +36,29 @@ test('la zona especial es secreta: ninguna lista la nombra hasta que se abre', (
 test('se abre cuando todas las demás regiones tienen el segundo final o un reinicio', () => {
   const root = allReady();
   assert.deepEqual(specialProgress(root), { n: SPECIAL_FROM.length, total: SPECIAL_FROM.length, ready: true });
-  // While its art is missing, only the developer option opens it.
-  assert.equal(SPECIAL.devOnly, true);
-  assert.deepEqual(openRegions(root), []);
-  SPECIAL.devOnly = false;
-  try {
-    // A reset counts as much as the second ending.
-    root.regions.bogota.mastered = false;
-    root.regions.bogota.legacy.resets = 1;
-    assert.deepEqual(openRegions(root), ['sanandres']);
-    assert.equal(regionState(root, 'sanandres').settings.zone, 'sanandres');
-    // Missing one region, it waits.
-    const other = allReady();
-    other.regions.costa.mastered = false;
-    assert.equal(specialProgress(other).n, SPECIAL_FROM.length - 1);
-    assert.deepEqual(openRegions(other), []);
-  } finally {
-    SPECIAL.devOnly = true;
-  }
+  assert.ok(!SPECIAL.devOnly, 'since v5.5 it opens for real');
+  // A reset counts as much as the second ending.
+  root.regions.bogota.mastered = false;
+  root.regions.bogota.legacy.resets = 1;
+  assert.deepEqual(openRegions(root), ['sanandres']);
+  assert.equal(regionState(root, 'sanandres').settings.zone, 'sanandres');
+  assert.deepEqual(openRegions(root), [], 'only once');
+  // Missing one region, it waits.
+  const other = allReady();
+  other.regions.costa.mastered = false;
+  assert.equal(specialProgress(other).n, SPECIAL_FROM.length - 1);
+  assert.deepEqual(openRegions(other), []);
+});
+
+test('su evento, la Fiesta de la Luna Verde, potencia toda la isla en vez de frenarla', async () => {
+  const { EVENT_OF_ZONE } = await import('../src/data/events.js');
+  const def = EVENT_OF_ZONE.sanandres;
+  assert.equal(def.id, 'luna_verde');
+  assert.equal(def.speed, undefined);
+  assert.equal(def.coins, def.actions[0].cost);
+  const mult = def.actions.reduce((n, a) => (assert.equal(a.effect.type, 'zoneSpeed'), n * a.effect.mult), 1);
+  assert.ok(Math.abs(mult - 2) < 1e-9, `×${mult}`);
+  assert.deepEqual(def.objective.medals, [1200, 1500]);
 });
 
 test('ocho estaciones en una sola cadena, cada una con su ×32 al nivel 100', () => {

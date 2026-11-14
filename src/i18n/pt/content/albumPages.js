@@ -62,4 +62,7 @@ export default {
   transporte_bog: 'O transporte',
   cultura_bog: 'A cultura',
   barrios_bog: 'Os bairros',
+  "mar_sai": "O mar de sete cores",
+  "raizal_sai": "A cultura raizal",
+  "comida_sai": "A comida da ilha",
 };

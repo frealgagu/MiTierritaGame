@@ -2,7 +2,6 @@
 // Custom icons ('MiTierrita Icons' font, src/assets/mitierrita-icons.woff2) for products without a matching
 // emoji. They are Private Use Area glyphs, so they work in any text (panels, goals, map labels) just like
 // an emoji, as long as the font is in the font list (see styles.css and FONT).
-// (see styles.css and FONT).
 export const ICON = {
   cherry: '\uE001', // Coffee cherry: cluster of oval red berries with their 'navel', on a branch with leaves
   guarapo: '\uE002', // Guarapo: glass with yellowish-green cane juice, foam, ice, lime, and a piece of sugarcane
@@ -606,6 +605,26 @@ export const ICON = {
   poporo: '\uE258', // Quimbaya Poporo at the Gold Museum: long-necked round-bellied golden lime vessel
   guitarraRock: '\uE259', // Rock al Parque: red electric guitar with pickups and long neck
   casaLadrillo: '\uE25A', // Teusaquillo brick houses: Tudor-style brick house with steep roof and white-framed windows
+  viajeroMaleta: '\uE25B', // Traveler: hard-shell suitcase with travel stickers and a straw hat on top
+  diaPlaya: '\uE25C', // Beach day: striped umbrella and towel on white sand by the turquoise sea
+  lanchaSiete: '\uE25D', // Boat trip: white speedboat with a blue stripe crossing the sea of seven colors
+  johnnyCay: '\uE25E', // Johnny Cay: small white-sand cay with palm trees in a turquoise sea
+  rondon: '\uE25F', // Rondón: black pot of Raizal stew with fish, conch, plantain, and yuca in coconut milk
+  mulita: '\uE260', // Island ride: white golf cart ('mulita') with a striped canopy
+  snorkel: '\uE261', // Snorkeling: diving mask and snorkel with a yellow striped fish and bubbles
+  iglesiaLoma: '\uE262', // La Loma: the white wooden Baptist church with red roof and bell tower on a green hill
+  sieteColores: '\uE263', // The sea of seven colors: seven bands from turquoise to deep blue, with a sailboat
+  cangrejoNegro: '\uE264', // Black crab: the island's black land crab with raised claws and orange-tipped legs
+  mantaRaya: '\uE265', // Spotted eagle ray gliding over the reef, with bubbles
+  coral: '\uE266', // Coral reef: brain coral, branching orange coral, and a purple sea fan
+  estrellaMar: '\uE267', // Starfish: orange five-armed sea star resting on white sand
+  tortuga: '\uE268', // Sea turtle: hawksbill turtle swimming with its patterned shell
+  casaIslena: '\uE269', // Island house: wooden clapboard house on stilts, with a veranda and gingerbread trim
+  lunaVerde: '\uE26A', // Green Moon: big green-glowing full moon rising over a palm at night
+  tinafono: '\uE26B', // Tináfono: the washtub bass of island music—tub, broom-handle neck, and one string
+  goleta: '\uE26C', // Schooner: wooden two-masted sailing ship that once linked the islands and the coast
+  panCoco: '\uE26D', // Coconut bread: round golden island loaves with a split coconut beside them
+  empanadaCangrejo: '\uE26E', // Crab patty: half-moon golden crab empanadas with a lime wedge and a crab claw
 };
 
 export const ICON_FONT = 'MiTierrita Icons';
