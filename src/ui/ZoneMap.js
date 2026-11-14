@@ -16,7 +16,7 @@ import { FONT } from '../render/palette.js';
 import { t } from '../i18n/index.js';
 
 const NS = 'http://www.w3.org/2000/svg';
-const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a', tolima: '#e39b6a', cundinamarca: '#d98fb5', bogota: '#b39ddb' };
+const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a', tolima: '#e39b6a', cundinamarca: '#d98fb5', bogota: '#b39ddb', sanandres: '#26c6da' };
 const LAND = '#e8dcc3'; // departments not belonging to any game region
 const LOCKED = '#cfc6b4'; // regions not yet released
 const ZOOM_MS = 650;

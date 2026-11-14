@@ -12,7 +12,7 @@ import pkg from '../package.json' with { type: 'json' };
 // Banner for opening the page as a standalone file (when published as an artifact the first line is stripped).
 const HEAD = '<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n';
 const OUT = process.argv[2] ?? new URL('../docs/coordenadas.html', import.meta.url).pathname;
-const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a', tolima: '#e39b6a', cundinamarca: '#d98fb5', bogota: '#b39ddb' };
+const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a', tolima: '#e39b6a', cundinamarca: '#d98fb5', bogota: '#b39ddb', sanandres: '#26c6da' };
 const PLACE = {
   finca: 'Chinchiná', trapiche: 'Supía', lecheria: 'San Pedro de los Milagros', cacaotal: 'Maceo', maizal: 'Jericó', pueblo: 'Salento',
   guayabera: 'Vélez', tabacal: 'Ocaña', fiquera: 'Mogotes', hato: 'Málaga', hormigas: 'San Gil', barichara: 'Barichara',
@@ -24,6 +24,7 @@ const PLACE = {
   achirales: 'Natagaima', cafe_huila: 'Pitalito', betania: 'Represa de Betania', lechoneria: 'Ibagué', chamba: 'La Chamba (El Guamo)', neiva: 'Neiva',
   flores: 'Madrid', fresas: 'Sibaté', truchas: 'Guatavita', salinas: 'Nemocón', cocina: 'Chía', zipaquira: 'Zipaquirá',
   bogota: 'La Candelaria',
+  sanandres: 'San Andrés (centro; en el mapa, recuadro del Caribe)',
 };
 const km = (a, b) => Math.hypot((a[0] - b[0]) * 111, (a[1] - b[1]) * 111 * Math.cos((a[0] * Math.PI) / 180));
 const f2 = (n) => n.toFixed(2);
