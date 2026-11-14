@@ -26,6 +26,7 @@ import { MEDALS } from './data/events.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
 import { openRegions, regionState } from './sim/regions.js';
 import { bindNative, isNativeApp } from './native.js';
+import { backupName, pickBackupFile, saveBackupFile } from './backup.js';
 import { APP_VERSION, checkForUpdate } from './update.js';
 import { SONGS } from './audio/songs.js';
 import { sumValues } from './sim/state.js';
@@ -700,6 +701,28 @@ function bindMenu(game, sound, music, getActive) {
     } catch {
       msg.textContent = t('Selecciona el texto y cópialo.');
     }
+  });
+  // En un archivo (v4.7.4): el texto es largo y en el teléfono copiarlo podía dejar el portapapeles vacío.
+  document.getElementById('save-file-btn').addEventListener('click', async () => {
+    try {
+      const how = await saveBackupFile(exportSave(game.state));
+      msg.textContent = how === 'downloaded' ? t('💾 Copia guardada: {name}', { name: backupName() }) : how === 'shared' ? t('💾 Copia lista: guárdala donde la elegiste.') : '';
+    } catch (err) {
+      console.error(err);
+      msg.textContent = t('⛔ No se pudo guardar la copia.');
+    }
+  });
+  document.getElementById('open-file-btn').addEventListener('click', async () => {
+    const content = await pickBackupFile();
+    if (content === null) return;
+    const state = importSave(content);
+    if (!state) {
+      msg.textContent = t('⛔ Ese archivo no es una partida válida de Encantos de Mi Tierrita.');
+      return;
+    }
+    resetting = true;
+    saveGame(state);
+    location.reload();
   });
   document.getElementById('import-btn').addEventListener('click', () => {
     const state = importSave(text.value);

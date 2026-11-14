@@ -171,4 +171,8 @@ export default {
   'Eventos a demanda': 'Events on demand',
   'Tienes oro en todos los eventos de {region}: ya no salen solos. Compra esta opción y juega cualquiera otra vez cuando quieras, sin esperar.': 'You have gold in every event of {region}: they no longer come up on their own. Buy this option and play any of them again whenever you want, with no wait.',
   'Comprar · {n} ⭐': 'Buy · {n} ⭐',
+  '💾 Copia guardada: {name}': '💾 Backup saved: {name}',
+  '💾 Copia lista: guárdala donde la elegiste.': '💾 Backup ready: save it where you chose.',
+  '⛔ No se pudo guardar la copia.': '⛔ The backup could not be saved.',
+  '⛔ Ese archivo no es una partida válida de Encantos de Mi Tierrita.': '⛔ That file is not a valid Encantos de Mi Tierrita game.',
 };

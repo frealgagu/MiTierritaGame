@@ -29,7 +29,6 @@ export default {
   '📋 Lista': '📋 Lista',
   'Tu partida se guarda sola en este navegador.': 'Sua partida é salva automaticamente neste navegador.',
   'Copia de seguridad de la partida': 'Cópia de segurança da partida',
-  'Exporta para llevar tu partida a otro dispositivo; pega aquí el texto para importarla.': 'Exporte para levar sua partida a outro dispositivo; cole o texto aqui para importá-la.',
   'Texto de la partida': 'Texto da partida',
   Exportar: 'Exportar',
   Importar: 'Importar',
@@ -117,4 +116,7 @@ export default {
   '🗺️ Con el viaje': '🗺️ Com a viagem',
   '⚡ Directo': '⚡ Direto',
   'Eventos seguidos: al terminar uno, su cupo se libera al segundo (no a los 2 años)': 'Eventos seguidos: ao terminar um, a vaga se libera em um segundo (não em 2 anos)',
+  'Guarda tu partida en un archivo (en el teléfono, elige Drive, Archivos o donde quieras) y ábrelo en otro dispositivo para seguir allí. También puedes exportarla como texto y pegarla aquí.': 'Salve sua partida em um arquivo (no celular, escolha Drive, Arquivos ou onde quiser) e abra-o em outro dispositivo para continuar lá. Você também pode exportá-la como texto e colá-la aqui.',
+  '💾 Guardar en archivo': '💾 Salvar em arquivo',
+  '📂 Abrir archivo': '📂 Abrir arquivo',
 };

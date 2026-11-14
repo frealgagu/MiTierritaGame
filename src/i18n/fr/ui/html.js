@@ -30,7 +30,6 @@ export default {
   '📋 Lista': '📋 Liste',
   'Tu partida se guarda sola en este navegador.': 'Ta partie s’enregistre toute seule dans ce navigateur.',
   'Copia de seguridad de la partida': 'Sauvegarde de la partie',
-  'Exporta para llevar tu partida a otro dispositivo; pega aquí el texto para importarla.': 'Exporte pour emmener ta partie sur un autre appareil ; colle ici le texte pour l’importer.',
   'Texto de la partida': 'Texte de la partie',
   Exportar: 'Exporter',
   Importar: 'Importer',
@@ -118,4 +117,7 @@ export default {
   '🗺️ Con el viaje': '🗺️ Avec le voyage',
   '⚡ Directo': '⚡ Direct',
   'Eventos seguidos: al terminar uno, su cupo se libera al segundo (no a los 2 años)': 'Événements à la suite : quand un se termine, sa place se libère au bout d’une seconde (pas de 2 ans)',
+  'Guarda tu partida en un archivo (en el teléfono, elige Drive, Archivos o donde quieras) y ábrelo en otro dispositivo para seguir allí. También puedes exportarla como texto y pegarla aquí.': 'Enregistre ta partie dans un fichier (sur le téléphone, choisis Drive, Fichiers ou ailleurs) et ouvre-le sur un autre appareil pour continuer. Tu peux aussi l’exporter en texte et la coller ici.',
+  '💾 Guardar en archivo': '💾 Enregistrer dans un fichier',
+  '📂 Abrir archivo': '📂 Ouvrir un fichier',
 };

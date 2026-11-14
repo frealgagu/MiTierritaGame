@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v4.7.4 — Copia de seguridad en archivo
+- **💾 Guardar en archivo y 📂 Abrir archivo:** en el menú, la copia de seguridad de la partida ahora se guarda como archivo. En el teléfono se abre el menú Compartir para guardarla en Drive, en Archivos o donde quieras; en otro dispositivo se abre con «Abrir archivo». Copiar el texto largo al portapapeles podía dejarlo vacío.
+
 ## v4.7.3 — Eventos a demanda
 - **🔁 Eventos a demanda:** con oro en todos los eventos de una región, ya no salen solos en esa región. Por 20 ⭐ de Renombre (una vez por región) puedes jugar cualquiera otra vez cuando quieras, sin esperar los 2 años; siempre con un máximo de dos tableros abiertos a la vez.
 - **La lista de eventos** muestra el tiempo que lleva cada evento abierto y avisa con «⬆ Todo al 50» cuando ya todo está al nivel máximo.
