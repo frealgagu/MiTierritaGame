@@ -3,7 +3,7 @@
 import { EVENTS, MEDALS, eventKey } from '../data/events.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
-import { EVENT_SLOTS, MEDAL_BONUS, ON_DEMAND_COST, awaySeconds, boardClockNow, boardObjective, buyOnDemand, canPlayOnDemand, eventObjective, eventStatus, hasOnDemand, medalCount, quoteOnDemand, regionAllGold, regionEvents } from '../sim/events.js';
+import { EVENT_SLOTS, MEDAL_BONUS, ON_DEMAND_COST, boardClockNow, boardObjective, buyOnDemand, canPlayOnDemand, eventObjective, eventStatus, hasOnDemand, medalCount, quoteOnDemand, regionAllGold, regionEvents } from '../sim/events.js';
 import { toast } from './toast.js';
 import { clockOf } from '../sim/calendar.js';
 import { formatDuration } from '../core/format.js';
@@ -110,18 +110,21 @@ export class EventsView {
         return `<div class="event-card locked">${title}<p>${t('⏳ Espera turno: {when}.', { when })}</p></div>`;
       }
       let foot;
-      // (v4.7.3) En los que están abiertos, el tiempo que llevan y, si ya está todo al nivel máximo del tablero (50), ⬆ Todo al 50.
-      const clock = st.board ? `⏱ ${formatClock(boardClockNow(st.board, s))}${boardMaxed(st.board, def.zone) ? ` · ${t('⬆ Todo al {n}', { n: maxLevel(st.board) })}` : ''}` : '';
+      // (v4.7.3) En los que están abiertos, el tiempo que llevan, si ya está todo al nivel máximo del tablero (50) y si
+      // cada tablero quedó corriendo (🚪 Salir) o pausado (⏸️ Pausar).
+      const maxed = st.board && boardMaxed(st.board, def.zone);
+      const maxedLabel = maxed ? ` · ${t('⬆ Todo al {n}', { n: maxLevel(st.board) })}` : '';
+      const clock = st.board ? `⏱ ${formatClock(boardClockNow(st.board, s))}` : '';
+      const running = st.board ? ` · ${st.board.event.away !== undefined ? t('🚪 corriendo') : t('⏸️ pausado')}` : '';
+      const maxTip = maxed ? ` title="${t('Todo al nivel máximo')}"` : '';
       if (st.kind === 'won') {
         const m = MEDALS[st.board.event.medal];
-        foot = `<p>${t('🏁 ¡Ganado con {medal}!', { medal: `${m.icon} ${m.name}` })} · ${clock}</p><button class="btn buy" data-play="${eventKey(def)}">${t('Ver y terminar')}</button>`;
+        foot = `<p>${t('🏁 ¡Ganado con {medal}!', { medal: `${m.icon} ${m.name}` })}${maxedLabel}</p><button class="btn buy" data-play="${eventKey(def)}">${t('Ver y terminar')} · ${clock}${running}</button>`;
       } else if (st.kind === 'active') {
         const secured = st.board.event.medal;
-        // 🚪 Si se salió de él, sigue corriendo (v3.67.4): el reloj que marcaría ahora.
-        const running = awaySeconds(st.board, s) > 0 ? ` · ${t('🚪 corriendo')}` : '';
         foot = secured
-          ? `<p>${t('✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.', { icon: MEDALS[secured].icon })}</p><button class="btn buy" data-play="${eventKey(def)}">${t('Seguir')} · ${clock}${running}</button>`
-          : `<button class="btn buy" data-play="${eventKey(def)}">${t('Seguir')} · ${clock}${running}</button>`;
+          ? `<p>${t('✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.', { icon: MEDALS[secured].icon })}</p><button class="btn buy" data-play="${eventKey(def)}"${maxTip}>${t('Seguir')} · ${clock}${maxedLabel}${running}</button>`
+          : `<button class="btn buy" data-play="${eventKey(def)}"${maxTip}>${t('Seguir')} · ${clock}${maxedLabel}${running}</button>`;
       } else foot = `<button class="btn buy" data-play="${eventKey(def)}">${t('Jugar')}</button>`;
       return `<div class="event-card">
         ${title}

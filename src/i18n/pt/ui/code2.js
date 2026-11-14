@@ -19,6 +19,7 @@ export default {
   '🏁 ¡Ganado con {medal}! Entra a verlo y toca 🏁 Terminar evento para cerrarlo.': '🏁 Ganho com {medal}! Entre para vê-lo e toque em 🏁 Encerrar evento para fechá-lo.',
   'Ver y terminar': 'Ver e encerrar',
   '🚪 corriendo': '🚪 correndo',
+  '⏸️ pausado': '⏸️ pausado',
   '✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.': '✅ {icon} Medalha garantida. Para encerrar, compre as melhorias que faltam.',
   Jugar: 'Jogar',
   '{n} para jugar': '{n} para jogar',

@@ -15,6 +15,7 @@ const GENERAL = {
   '📦': t('Bodega'),
   '🚙': t('Willys'),
   '⭐': t('Renombre'),
+  '🏆': t('Prestigio: todo el Renombre ganado'),
   '🏅': t('Eventos y medallas'),
   '🥇': t('Medalla de oro'),
   '🥈': t('Medalla de plata'),
@@ -30,6 +31,8 @@ const GENERAL = {
   '🔒': t('Por abrir'),
   '🚩': t('Zona completa'),
   '🏁': t('Zona al máximo'),
+  '⬆': t('Todo al nivel máximo'),
+  '⏱': t('Reloj del evento'),
 };
 
 const clean = (s) => s.replace(/️/g, '');

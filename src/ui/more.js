@@ -28,8 +28,18 @@ export function bindMore() {
   // Los que vienen en la página: se revisan cuando cambian de tamaño (al abrirse su ventana, al girar el
   // teléfono).
   if (typeof ResizeObserver === 'undefined') return;
+  // Se difiere al siguiente cuadro para no cambiar el diseño dentro del mismo paso del ResizeObserver.
+  let raf = 0;
+  const pending = new Set();
   const watch = new ResizeObserver((entries) => {
-    for (const entry of entries) refreshMore(entry.target.parentElement);
+    for (const entry of entries) if (entry.target.parentElement) pending.add(entry.target.parentElement);
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      const roots = [...pending];
+      pending.clear();
+      for (const root of roots) refreshMore(root);
+    });
   });
   for (const el of document.querySelectorAll('.clamp')) watch.observe(el);
 }
