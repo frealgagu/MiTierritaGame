@@ -9,6 +9,9 @@ import { formatDuration } from '../core/format.js';
 import { formatClock, objectiveText } from './EventBar.js';
 import { moreButton, refreshMore } from './more.js';
 import { t } from '../i18n/index.js';
+import { maxLevel } from '../sim/rules.js';
+import { upgradeTarget } from '../sim/upgrades.js';
+import { zoneBoostTargets } from '../sim/zoneBoost.js';
 
 export const medalLine = (obj) => t('🥇 hasta {gold} · 🥈 hasta {silver} · 🥉 después', { gold: formatClock(obj.medals[0]), silver: formatClock(obj.medals[1]) });
 
@@ -76,16 +79,18 @@ export class EventsView {
         return `<div class="event-card locked">${title}<p>${t('⏳ Espera turno: {when}.', { when })}</p></div>`;
       }
       let foot;
+      // (v4.7.3) En los que están abiertos, el tiempo que llevan y, si ya está todo al nivel máximo del tablero (50), ⬆ Todo al 50.
+      const clock = st.board ? `⏱ ${formatClock(boardClockNow(st.board, s))}${boardMaxed(st.board, def.zone) ? ` · ${t('⬆ Todo al {n}', { n: maxLevel(st.board) })}` : ''}` : '';
       if (st.kind === 'won') {
         const m = MEDALS[st.board.event.medal];
-        foot = `<p>${t('🏁 ¡Ganado con {medal}! Entra a verlo y toca 🏁 Terminar evento para cerrarlo.', { medal: `${m.icon} ${m.name}` })}</p><button class="btn buy" data-play="${eventKey(def)}">${t('Ver y terminar')}</button>`;
+        foot = `<p>${t('🏁 ¡Ganado con {medal}!', { medal: `${m.icon} ${m.name}` })} · ${clock}</p><button class="btn buy" data-play="${eventKey(def)}">${t('Ver y terminar')}</button>`;
       } else if (st.kind === 'active') {
         const secured = st.board.event.medal;
         // 🚪 Si se salió de él, sigue corriendo (v3.67.4): el reloj que marcaría ahora.
         const running = awaySeconds(st.board, s) > 0 ? ` · ${t('🚪 corriendo')}` : '';
         foot = secured
-          ? `<p>${t('✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.', { icon: MEDALS[secured].icon })}</p><button class="btn buy" data-play="${eventKey(def)}">${t('Seguir')}</button>`
-          : `<button class="btn buy" data-play="${eventKey(def)}">${t('Seguir')} · ⏱ ${formatClock(boardClockNow(st.board, s))}${running}</button>`;
+          ? `<p>${t('✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.', { icon: MEDALS[secured].icon })}</p><button class="btn buy" data-play="${eventKey(def)}">${t('Seguir')} · ${clock}${running}</button>`
+          : `<button class="btn buy" data-play="${eventKey(def)}">${t('Seguir')} · ${clock}${running}</button>`;
       } else foot = `<button class="btn buy" data-play="${eventKey(def)}">${t('Jugar')}</button>`;
       return `<div class="event-card">
         ${title}
@@ -106,7 +111,8 @@ export class EventsView {
       .map((g) => {
         if (groups.length < 2) return g.cards.join('');
         const folded = this.folded(g.r.id);
-        const ready = EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === g.r.id && ['active', 'won', 'available'].includes(eventStatus(s, eventKey(def))?.kind)).length;
+        // (v4.7.3) Los ganados que siguen abiertos ya no cuentan como «para jugar».
+        const ready = EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === g.r.id && ['active', 'available'].includes(eventStatus(s, eventKey(def))?.kind)).length;
         const head = `<button class="zones-region research-other" data-efold="${g.r.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${g.r.icon} ${g.r.name}<small>${ready ? t('{n} para jugar', { n: ready }) : t('nada por ahora')}</small></button>`;
         return `<div class="zones-group events-group">${head}${folded ? '' : g.cards.join('')}</div>`;
       })
@@ -123,10 +129,19 @@ export class EventsView {
     const p = this.game.state.profile ?? {};
     const progress = p.renown > 0 || p.history?.length > 0 || Object.keys(p.logros ?? {}).length > 0 || (this.game.state.legacy?.resets ?? 0) > 0;
     this.btn.hidden = !progress && !statuses.some((st) => st.kind !== 'locked');
-    const ready = statuses.filter((st) => st.kind === 'available' || st.kind === 'won').length;
+    // (v4.7.3) Solo los que se pueden empezar: un evento ganado que sigue abierto (objetivo cumplido y las tres compras) ya
+    // no cuenta.
+    const ready = statuses.filter((st) => st.kind === 'available').length;
     this.badge.hidden = ready === 0;
     this.badge.textContent = ready;
   }
+}
+
+// Si en el tablero ya está todo al nivel máximo (v4.7.3): estaciones, arrieros y bodega.
+function boardMaxed(board, zoneId) {
+  const max = maxLevel(board);
+  const ids = zoneBoostTargets(board, zoneId);
+  return ids.length > 0 && ids.every((id) => upgradeTarget(board, id).holder.level >= max);
 }
 
 // Todas tus medallas (v3.12): la mejor de cada evento, por región, y el premio por tenerlas todas.

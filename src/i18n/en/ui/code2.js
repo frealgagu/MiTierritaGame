@@ -163,4 +163,6 @@ export default {
   '🔒 Sale cuando ganes medalla en los otros eventos de {zone}.': '🔒 It comes up when you win a medal in the other events of {zone}.',
   'Zona especial': 'Special zone',
   'Se abre cuando logres el segundo final (todo al nivel 100) en cada región, o la hayas reiniciado: {n} de {total}.': 'It opens when you reach the second ending (everything at level 100) in every region, or have restarted it: {n} of {total}.',
+  '🏁 ¡Ganado con {medal}!': '🏁 Won with {medal}!',
+  '⬆ Todo al {n}': '⬆ All at {n}',
 };
