@@ -16,7 +16,7 @@ const versionFile = () => ({
 
 export default defineConfig({
   base: './',
-  server: { host: true },
+  server: { host: '0.0.0.0', port: 3000, allowedHosts: true },
   // PLAY_STORE=1 (v3.62): la versión para Google Play, que se actualiza solo desde la tienda (sin buscar APK nuevos).
   define: { __APP_VERSION__: JSON.stringify(pkg.version), __PLAY_STORE__: JSON.stringify(process.env.PLAY_STORE === '1') },
   plugins: [versionFile()],
