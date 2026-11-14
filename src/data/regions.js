@@ -100,8 +100,28 @@ export const REGIONS = [
     music: 'bogota',
     unlock: { region: 'cundinamarca', zone: 'zipaquira' },
   },
+  // Special zone (v5.4): a reward region, a single 26×26 zone whose eight stations form one linear chain (the
+  // tour of the island). `special`: opens once every other region has its second ending or a reset (see
+  // sim/regions.js: specialProgress). `secret`: no list, map, or text shows its name until it opens; before that
+  // the region list only shows a «⭐ Special zone» card. `offMap`: it has no department on the country map,
+  // which draws it in an inset instead (data/zoneGeo.js: MAP_GEO). `devOnly`: while its art, event, and music
+  // are still missing, only the developer option opens it.
+  {
+    id: 'sanandres',
+    name: 'San Andrés',
+    icon: ICON.paseoIslas,
+    zones: ['sanandres'],
+    music: 'costa',
+    unlock: { special: true },
+    special: true,
+    secret: true,
+    offMap: true,
+    devOnly: true,
+  },
 ];
 
 export const REGIONS_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]));
 export const REGION_OF_ZONE = Object.fromEntries(REGIONS.flatMap((r) => r.zones.map((z) => [z, r.id])));
 export const regionOf = (state) => REGIONS_BY_ID[state.region ?? 'cafetero'];
+// Regions a list may name (v5.4): a secret region only once it has opened in this save.
+export const shownRegions = (opened) => REGIONS.filter((r) => !r.secret || opened(r.id));

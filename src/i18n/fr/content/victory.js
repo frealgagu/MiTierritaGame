@@ -57,4 +57,5 @@ export default {
   zipaquira: ['Le Cundinamarca d’un bout à l’autre !', 'Tu as terminé <b>Zipaquirá</b> et le Cundinamarca. Sept mille visites de la Cathédrale de sel, avec les fleurs, les fraises, la truite, le sel et l’ajiaco de toutes tes zones.', 'Visites de la Cathédrale'],
   // Bogotá (v4.5)
   bogota: ['Tout le pays à Bogotá !', 'Tu as terminé <b>Bogotá</b>. Cinq cents entrées pour la Grande Foire de Mi Tierrita, avec le café de La Candelaria, les dîners de la Zona G, les dimanches d’Usaquén, les matinées de Paloquemao et tout ce qui est arrivé en semi-remorque de toutes les régions.', 'Entrées de la Grande Foire vendues'],
+  "sanandres": ["Le tour de l’île !", "Tu as terminé le <b>circuit de San Andrés</b>. Cinq millions de visiteurs sont arrivés à l’aéroport, sont passés par la plage, la mer aux sept couleurs, Johnny Cay, le rondón, le Hoyo Soplador et La Piscinita, et sont montés à La Loma.", "Circuits de l’île vendus"],
 };

@@ -56,4 +56,6 @@ export default {
   zipaquira: ['Dom Hernán', 'o guia da mina'],
   // Bogotá (v4.5)
   bogota: ['Doña Clemencia', 'a do café de La Candelaria'],
+  // Special zone (v5.4)
+  sanandres: ["Mister Livingston", "o guia raizal da ilha"],
 };

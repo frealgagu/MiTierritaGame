@@ -379,4 +379,13 @@ export default {
   cafe_molido: 'Ground coffee',
   chicharron: 'Chicharrón (pork crackling)',
   caldo_costilla: 'Rib broth',
+  // Special zone (v5.4)
+  viajero: "Traveler",
+  dia_playa: "Beach day",
+  paseo_lancha: "Boat ride",
+  visita_cayo: "Visit to Johnny Cay",
+  almuerzo_rondon: "Rondón lunch",
+  vuelta_isla: "Ride around the island",
+  buceo: "Swim with the fish",
+  tour_isla: "Island tour",
 };

@@ -78,6 +78,15 @@ export const NOTES = {
   despensa_grande: 'Le Garde-manger de la Zona G prépare deux fois plus (il en demande deux fois plus à ses deux camions).',
   telar_grande: 'Le Stand des tissus en propose deux fois plus (il en demande deux fois plus à ses deux camions).',
   cuarto_frio_plaza: 'L’Étal de fleurs en prépare deux fois plus (il demande deux fois plus de fleurs au camion).',
+  // Special zone (v5.4)
+  vuelos_directos: "L’Arrivée à l’aéroport reçoit ×32 voyageurs et l’entrepôt expédie ×32.",
+  carpas_playa: "Les Tentes de Spratt Bight servent ×32 et l’entrepôt expédie ×32.",
+  flota_lanchas: "Les Bateaux transportent ×32 et l’entrepôt expédie ×32.",
+  muelle_cayo: "L’Excursion à Johnny Cay transporte ×32 et l’entrepôt expédie ×32.",
+  fogones_lena: "Le Fourneau du rondón cuisine ×32 et l’entrepôt expédie ×32.",
+  sendero_soplador: "Le Hoyo Soplador reçoit ×32 et l’entrepôt expédie ×32.",
+  equipos_snorkel: "Le Snorkeling à La Piscinita sert ×32 et l’entrepôt expédie ×32.",
+  torre_iglesia: "Le Belvédère de La Loma reçoit ×32 et l’entrepôt expédie ×32.",
 };
 
 export default {
@@ -569,4 +578,13 @@ export default {
   capital_del_pais: 'Capitale de tout le pays',
   maestria_bogota: 'Maîtrise : Bogotá',
   supremacia_bogota: 'Suprématie : Bogotá',
+  // Special zone (v5.4)
+  vuelos_directos: "Vols directs",
+  carpas_playa: "Tentes sur toute la plage",
+  flota_lanchas: "Flotte de bateaux",
+  muelle_cayo: "Nouveau quai sur l’îlot",
+  fogones_lena: "Fourneaux à bois",
+  sendero_soplador: "Sentier du Hoyo Soplador",
+  equipos_snorkel: "Équipement de snorkeling",
+  torre_iglesia: "Belvédère dans le clocher",
 };

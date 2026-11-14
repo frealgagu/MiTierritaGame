@@ -4,6 +4,8 @@ import { setFastEvents } from '../sim/events.js';
 import { decimal, formatMult } from '../core/format.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
 import { MAX_LEGACY_RESETS } from '../sim/modifiers.js';
+import { openSpecial } from '../sim/regions.js';
+import { saveGame } from '../core/SaveSystem.js';
 import { t } from '../i18n/index.js';
 
 // Developer options, hidden in the menu: revealed by tapping the version 7 times.
@@ -124,6 +126,14 @@ export function bindDevOptions(game, getActive = () => game) {
     toast(t('🔁 {region}: producción {mult}', { region: REGIONS_BY_ID[region().region ?? 'cafetero'].name, mult: formatMult(2 ** resets()) }));
   });
   chip.addEventListener('click', () => setScale(1));
+
+  // Special zone (v5.4): opens it without its condition, saves, and reloads (it starts like any new region).
+  document.getElementById('dev-special').addEventListener('click', () => {
+    if (!openSpecial(game.state)) return toast(t('⭐ La zona especial ya está abierta'));
+    saveGame(game.state);
+    toast(t('⭐ Se abrió la zona especial'));
+    setTimeout(() => location.reload(), 600);
+  });
 
   // Secret gesture: 7 consecutive taps on the menu version.
   let taps = 0;

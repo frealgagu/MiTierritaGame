@@ -168,11 +168,17 @@ test('el mapa de Colombia tiene todas las zonas y cada región sus departamentos
   const { ZONE_GEO } = await import('../src/data/zoneGeo.js');
   const { DEPARTMENTS } = await import('../src/data/colombiaMap.js');
   const { REGIONS } = await import('../src/data/regions.js');
+  const { MAP_GEO, mapGeo } = await import('../src/data/zoneGeo.js');
+  const { REGION_OF_ZONE, REGIONS_BY_ID } = await import('../src/data/regions.js');
   for (const zone of ZONE_LIST) {
-    const [lat, lon] = ZONE_GEO[zone.id] ?? [];
+    assert.ok(ZONE_GEO[zone.id], `${zone.id} tiene su lugar`);
+    // (v5.4) The islands, off the country map, are drawn in an inset in the Caribbean, inside the map's frame.
+    const offMap = REGIONS_BY_ID[REGION_OF_ZONE[zone.id]].offMap;
+    assert.equal(Boolean(MAP_GEO[zone.id]), Boolean(offMap), zone.id);
+    const [lat, lon] = mapGeo(zone.id);
     assert.ok(lat > -5 && lat < 13 && lon > -80 && lon < -66, `${zone.id} en Colombia`);
   }
-  for (const r of REGIONS) assert.ok(DEPARTMENTS.some((d) => d.region === r.id), `${r.id} tiene departamentos`);
+  for (const r of REGIONS.filter((x) => !x.offMap)) assert.ok(DEPARTMENTS.some((d) => d.region === r.id), `${r.id} tiene departamentos`);
   assert.equal(new Set(DEPARTMENTS.map((d) => d.id)).size, DEPARTMENTS.length);
 });
 

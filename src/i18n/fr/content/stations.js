@@ -366,4 +366,13 @@ export default {
   funicular_monserrate: 'Funiculaire de Monserrate',
   pabellon_regiones: 'Pavillon des régions',
   gran_feria: 'Parc de la Grande Foire',
+  // Special zone (v5.4)
+  aeropuerto_sai: "Arrivée à l’aéroport",
+  carpas_spratt: "Tentes de Spratt Bight",
+  lanchas_siete_colores: "Bateaux de la mer aux sept couleurs",
+  paseo_johnny_cay: "Excursion à Johnny Cay",
+  rondon_san_luis: "Fourneau du rondón à San Luis",
+  hoyo_soplador: "Hoyo Soplador",
+  snorkel_piscinita: "Snorkeling à La Piscinita",
+  mirador_la_loma: "Belvédère de La Loma",
 };

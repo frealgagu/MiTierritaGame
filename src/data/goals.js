@@ -1292,5 +1292,30 @@ const BOGOTA = [
   { id: 'bg_final', type: 'sold', product: 'feria_mi_tierrita', amount: 500, reward: 0, final: true },
 ];
 
-export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS, salinas: SALINAS, cocina: COCINA, zipaquira: ZIPAQUIRA, bogota: BOGOTA };
+// Special zone · San Andrés (v5.4): a few first steps, then for every station its ×32 and the next station; the
+// tour ends with tours of the whole island sold.
+const SANANDRES = [
+  { id: 'sa01', type: 'level', target: 'aeropuerto_sai', level: 10, reward: 100 },
+  { id: 'sa02', type: 'level', target: 'aeropuerto_sai:transport', level: 10, reward: 200 },
+  { id: 'sa03', type: 'level', target: 'dispatch:sanandres', level: 10, reward: 400 },
+  { id: 'sa04', type: 'level', target: 'aeropuerto_sai', level: 50, reward: 20000 },
+  { id: 'sa05', type: 'research', research: 'vuelos_directos', reward: 2000000 },
+  { id: 'sa06', type: 'unlock', station: 'carpas_spratt', reward: 400000 },
+  { id: 'sa07', type: 'research', research: 'carpas_playa', reward: 32000000 },
+  { id: 'sa08', type: 'unlock', station: 'lanchas_siete_colores', reward: 6400000 },
+  { id: 'sa09', type: 'research', research: 'flota_lanchas', reward: 500000000 },
+  { id: 'sa10', type: 'unlock', station: 'paseo_johnny_cay', reward: 100000000 },
+  { id: 'sa11', type: 'research', research: 'muelle_cayo', reward: 8000000000 },
+  { id: 'sa12', type: 'unlock', station: 'rondon_san_luis', reward: 1600000000 },
+  { id: 'sa13', type: 'research', research: 'fogones_lena', reward: 130000000000 },
+  { id: 'sa14', type: 'unlock', station: 'hoyo_soplador', reward: 26000000000 },
+  { id: 'sa15', type: 'research', research: 'sendero_soplador', reward: 2000000000000 },
+  { id: 'sa16', type: 'unlock', station: 'snorkel_piscinita', reward: 420000000000 },
+  { id: 'sa17', type: 'research', research: 'equipos_snorkel', reward: 33000000000000 },
+  { id: 'sa18', type: 'unlock', station: 'mirador_la_loma', reward: 6700000000000 },
+  { id: 'sa19', type: 'research', research: 'torre_iglesia', reward: 0 },
+  { id: 'sa_final', type: 'sold', product: 'tour_isla', amount: 5000000, reward: 0, final: true },
+];
+
+export const GOALS_BY_ZONE = { finca: FINCA, trapiche: TRAPICHE, lecheria: LECHERIA, cacaotal: CACAOTAL, maizal: MAIZAL, pueblo: PUEBLO, guayabera: GUAYABERA, tabacal: TABACAL, fiquera: FIQUERA, hato: HATO, hormigas: HORMIGAS, barichara: BARICHARA, arrozal: ARROZAL, cocal: COCAL, cienaga: CIENAGA, quesera: QUESERA, sombrero: SOMBRERO, cartagena: CARTAGENA, papal: PAPAL, cerveceria: CERVECERIA, raquira: RAQUIRA, paipa: PAIPA, ruanas: RUANAS, villa_leyva: VILLA_LEYVA, palma: PALMA, frutal: FRUTAL, cachamera: CACHAMERA, hato_llanero: HATO_LLANERO, talabarteria: TALABARTERIA, villavicencio: VILLAVICENCIO, platanal: PLATANAL, azotea: AZOTEA, bahia: BAHIA, manglar: MANGLAR, werregue: WERREGUE, buenaventura: BUENAVENTURA, asaizal: ASAIZAL, ajizal: AJIZAL, lago: LAGO, casaberia: CASABERIA, yanchama: YANCHAMA, leticia: LETICIA, achirales: ACHIRALES, cafe_huila: CAFE_HUILA, betania: BETANIA, lechoneria: LECHONERIA, chamba: CHAMBA, neiva: NEIVA, flores: FLORES, fresas: FRESAS, truchas: TRUCHAS, salinas: SALINAS, cocina: COCINA, zipaquira: ZIPAQUIRA, bogota: BOGOTA, sanandres: SANANDRES };
 export const GOALS = Object.values(GOALS_BY_ZONE).flat(); // in zone order

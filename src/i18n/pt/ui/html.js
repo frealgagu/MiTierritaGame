@@ -119,4 +119,5 @@ export default {
   'Guarda tu partida en un archivo (en el teléfono, elige Drive, Archivos o donde quieras) y ábrelo en otro dispositivo para seguir allí. También puedes exportarla como texto y pegarla aquí.': 'Salve sua partida em um arquivo (no celular, escolha Drive, Arquivos ou onde quiser) e abra-o em outro dispositivo para continuar lá. Você também pode exportá-la como texto e colá-la aqui.',
   '💾 Guardar en archivo': '💾 Salvar em arquivo',
   '📂 Abrir archivo': '📂 Abrir arquivo',
+  "⭐ Abrir la zona especial": "⭐ Abrir a zona especial",
 };

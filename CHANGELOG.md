@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.4.0 — Zona especial (primera parte)
+- **La zona especial ya tiene su recorrido:** ocho estaciones en una sola cadena, cada una con una mejora ×32 al llegar al nivel 100. Se abrirá en una próxima versión, con sus dibujos, su evento y su música.
+
 ## v5.3.0 — Versiones automáticas
 - **Cada publicación trae su versión nueva:** si un cambio llega sin subir la versión, la publicación la sube sola (5.3.0, 5.3.1…) y avisa de la novedad en la app y en Google Play.
 - **El número de compilación vuelve a salir de la versión**, con cinco cifras: la 5.3.0 es la 50300.

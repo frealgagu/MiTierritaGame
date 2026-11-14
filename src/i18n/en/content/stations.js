@@ -366,4 +366,13 @@ export default {
   funicular_monserrate: 'Monserrate Funicular',
   pabellon_regiones: 'Regions Pavilion',
   gran_feria: 'Grand Fair Grounds',
+  // Special zone (v5.4)
+  aeropuerto_sai: "Airport arrivals",
+  carpas_spratt: "Spratt Bight beach tents",
+  lanchas_siete_colores: "Boats on the sea of seven colors",
+  paseo_johnny_cay: "Trip to Johnny Cay",
+  rondon_san_luis: "San Luis rondón kitchen",
+  hoyo_soplador: "Hoyo Soplador blowhole",
+  snorkel_piscinita: "Snorkeling at La Piscinita",
+  mirador_la_loma: "La Loma lookout",
 };

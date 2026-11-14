@@ -2,9 +2,12 @@
 // goal is met and how long each zone takes. Usage: npm run balance -- [hours] [bloque|casual] [--detalle]
 //   bloque: picks the most profitable purchase and can upgrade the entire chain +1 at once (attentive player)
 //   casual: follows the «recommended upgrade», completes goals, and saves up to build if under 10 min away
+//   parejo: levels evenly (v5.4, for the special zone): always the lowest station or haulers first, the warehouse
+//           only when it can't keep up, research as soon as affordable, and builds the next station when it can
+//           (saving up for it if under 10 minutes of income away)
 // Env vars: BALANCE_PROGRESS=1 prints progress per game hour; BALANCE_DUMP=minute:file saves the
 // game at that minute (for separate study); BALANCE_LOAD=file resumes a game saved that way;
-// BALANCE_RESETS=n starts as after n second-ending resets (production ×2ⁿ); BALANCE_REGION=region plays that
+// BALANCE_DETAIL=minutes spaces the --detalle lines; BALANCE_RESETS=n starts as after n second-ending resets (production ×2ⁿ); BALANCE_REGION=region plays that
 // region from scratch (v4.5).
 // After Pueblo, both bots continue to the second ending (all stations at level 100).
 import { Game } from '../src/core/Game.js';
@@ -23,6 +26,8 @@ import { createInitialState } from '../src/sim/state.js';
 const hours = Number(process.argv[2] ?? 8);
 const style = process.argv[3] ?? 'bloque';
 const verbose = process.argv.includes('--detalle');
+// With --detalle, a 📊 line every BALANCE_DETAIL game minutes (30 by default).
+const detailSteps = Math.max(1, Math.round(Number(process.env.BALANCE_DETAIL ?? 30) * 600));
 let dumpAt = process.env.BALANCE_DUMP ? { minute: Number(process.env.BALANCE_DUMP.split(':')[0]), file: process.env.BALANCE_DUMP.split(':').slice(1).join(':') } : null;
 const game = new Game(process.env.BALANCE_LOAD ? JSON.parse((await import('node:fs')).readFileSync(process.env.BALANCE_LOAD)) : process.env.BALANCE_REGION ? createInitialState(0, process.env.BALANCE_REGION) : undefined);
 const s = game.state;
@@ -130,6 +135,25 @@ function completionist() {
   }
 }
 
+// Even player (v5.4): every station and its haulers rise together, lowest first.
+function parejo(zone) {
+  for (const r of RESEARCH) if (r.zone === zone && game.quoteResearch(r.id).ok) game.research(r.id);
+  const next = nextToUnlock(s, zone);
+  if (next && game.quoteUnlock(next).ok) game.unlock(next);
+  if (next && game.quoteUnlock(next).cost < 600 * Math.max(totalIncome(s), 0.5)) return;
+  const ids = Object.keys(s.stations).filter((id) => zoneOf(id) === zone).flatMap((id) => [id, `${id}:transport`]);
+  const level = (id) => (id.endsWith(':transport') ? s.stations[id.split(':')[0]].transport.level : s.stations[id].level);
+  for (let k = 0; k < 50; k++) {
+    // The warehouse first if it can't carry what reaches it.
+    const a = analyzeChain(s, zone);
+    if (a.dispatch < a.toWarehouse * 1.02 && game.buy(`dispatch:${zone}`, 1)) continue;
+    const open = ids.filter((id) => !game.quote(id, 1).maxed);
+    if (!open.length) break;
+    const pick = open.reduce((x, y) => (level(y) < level(x) || (level(y) === level(x) && game.quote(y, 1).cost < game.quote(x, 1).cost) ? y : x));
+    if (!game.buy(pick, 1)) break;
+  }
+}
+
 const events = [];
 const zoneStart = { finca: 0, [currentZone()]: s.playTime };
 const zoneEnd = {};
@@ -161,7 +185,7 @@ for (let step = 0; step < hours * 36000 && (currentZone() || !s.mastered); step+
   }
   // Progress every game hour (to stderr), to follow a long simulation.
   if (process.env.BALANCE_PROGRESS && step % 36000 === 0) console.error(`⏱️ ${mmss(s.playTime)} · ${currentZone()} · ${formatNumber(totalIncome(s))} 💰/s`);
-  if (verbose && step % 18000 === 0) {
+  if (verbose && step % detailSteps === 0) {
     const lv = Object.entries(s.stations).map(([k, v]) => `${k}:${v.level}/${v.transport.level}`).join(' ');
     events.push(`${mmss(s.playTime)}  📊 ${formatNumber(totalIncome(s))} 💰/s · ${lv} · 💰${formatNumber(s.coins)}`);
   }
@@ -189,6 +213,10 @@ for (let step = 0; step < hours * 36000 && (currentZone() || !s.mastered); step+
   // Foreman doesn't raise income: bought when spare coins allow.
   if (RESEARCH.some((r) => r.id === 'capataz') && game.quoteResearch('capataz').ok && s.coins > 3 * 10000) game.research('capataz');
 
+  if (style === 'parejo') {
+    parejo(zone);
+    continue;
+  }
   if (style === 'casual') {
     const next = nextToUnlock(s, zone);
     if (next && game.quoteUnlock(next).ok) game.unlock(next);

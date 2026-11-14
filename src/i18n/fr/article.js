@@ -1,9 +1,9 @@
 // L’article en français (v3.70) : «le Dépulpeur», «la Fromagerie», «l’Écrémeuse», «les Tisserandes».
 // Par la fin du premier mot ; les quelques exceptions vont dans les listes.
-const MASC = new Set(['budare', 'kiosque', 'grill', 'café', 'quai', 'ranch']);
+const MASC = new Set(['budare', 'kiosque', 'grill', 'café', 'quai', 'ranch', 'belvédère']);
 const FEM = new Set(['maison', 'saison', 'mangrove']);
 const SINGULAR_S = new Set(['enclos', 'relais', 'bras', 'pays']);
-const H_ASPIRE = new Set(['halle', 'hangar']);
+const H_ASPIRE = new Set(['halle', 'hangar', 'hoyo']);
 
 export function frArticle(name) {
   if (/^(le|la|les) /i.test(name) || /^l[’']/i.test(name)) return name.replace(/^(Le|La|Les|L)(?=[ ’'])/, (a) => a.toLowerCase());

@@ -59,8 +59,9 @@ export const nextLegacyMult = (state) => 2 ** Math.min((state.legacy?.resets ?? 
 const eventSpeed = (state, stationId) => (state.event ? EVENTS_BY_ID[state.event.id].speed?.[stationId] ?? 1 : 1);
 export const speedMult = (state, stationId) =>
   product(state, 'stationSpeed', stationId) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone) * legacyMult(state) * seasonMult(state) * eventSpeed(state, stationId);
-// Yards and inputs: scale with resets plus zone Mastery and Supremacy.
-export const capMult = (state, stationId) => legacyMult(state) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone);
+// Yards and inputs: scale with resets plus zone Mastery and Supremacy, and (v5.4) with `stationCap` research: the
+// special zone's ×32 speed-ups also grow their station's yard and input, or they would fill in half a second.
+export const capMult = (state, stationId) => legacyMult(state) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone) * product(state, 'stationCap', stationId);
 export const muleSpeedMult = (state) => product(state, 'muleSpeed');
 // Willys in a zone with Mastery or Supremacy also carries ×4 or ×8 (else warehouse fills).
 export const dispatchMult = (state, zoneId = 'finca') => product(state, 'dispatchCapacity', zoneId) * product(state, 'zoneSpeed', zoneId) * legacyMult(state);

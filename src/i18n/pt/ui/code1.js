@@ -146,4 +146,7 @@ export default {
   'Recoger el tablero': 'Recolher o painel',
   '⏱️ Eventos seguidos: cada cupo se libera al segundo': '⏱️ Eventos seguidos: cada vaga se libera em um segundo',
   '📅 Eventos con su espera normal de 2 años': '📅 Eventos com a espera normal de 2 anos',
+  "⭐ La zona especial ya está abierta": "⭐ A zona especial já está aberta",
+  "⭐ Se abrió la zona especial": "⭐ A zona especial foi aberta",
+  "⭐ ¡Se abrió la zona especial: {region}!": "⭐ A zona especial foi aberta: {region}!",
 };

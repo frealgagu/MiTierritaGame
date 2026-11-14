@@ -57,4 +57,5 @@ export default {
   zipaquira: ['Cundinamarca, from end to end!', 'You completed <b>Zipaquirá</b> and Cundinamarca. Seven thousand visits to the Salt Cathedral, with the flowers, strawberries, trout, salt and ajiaco from all your zones.', 'Visits to the Cathedral'],
   // Bogotá (v4.5)
   bogota: ['The whole country in Bogotá!', 'You completed <b>Bogotá</b>. Five hundred tickets to the Great Mi Tierrita Fair, with the coffee from La Candelaria, the dinners from the Zona G, the Sundays in Usaquén, the mornings at Paloquemao and everything that came by truck from every region.', 'Great Fair tickets sold'],
+  "sanandres": ["The island tour!", "You completed the <b>San Andrés tour</b>. Five million visitors landed at the airport, went through the beach, the sea of seven colors, Johnny Cay, the rondón, the Hoyo Soplador and La Piscinita, and climbed up to La Loma.", "Island tours sold"],
 };

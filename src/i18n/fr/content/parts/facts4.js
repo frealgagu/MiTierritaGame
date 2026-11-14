@@ -105,4 +105,13 @@ export default {
   funicular_monserrate: ['Monserrate culmine à plus de 3 100 mètres, au-dessus de la ville.', 'On monte la colline en funiculaire, en téléphérique ou à pied.'],
   pabellon_regiones: ['Aux foires de Bogotá, chaque région monte son pavillon.', 'Un seul pavillon contient tout le pays : cuisine, musique, artisanat.'],
   gran_feria: ['La Grande Foire réunit le meilleur des dix régions du jeu.', 'Le voyage s’achève ici : tout le pays dans une seule foire.'],
+  // Special zone (v5.4)
+  aeropuerto_sai: ["L’aéroport Gustavo Rojas Pinilla est à deux pas du centre."],
+  carpas_spratt: ["Spratt Bight est la plage du centre, face à la promenade."],
+  lanchas_siete_colores: ["La mer de l’île a sept tons de bleu grâce à son fond de corail."],
+  paseo_johnny_cay: ["Johnny Cay est un îlot de sable blanc et de palmiers face au centre."],
+  rondon_san_luis: ["Le rondón est un ragoût raizal de poisson, de lambi et de coco."],
+  hoyo_soplador: ["Au Hoyo Soplador, la mer jaillit par un trou dans le corail."],
+  snorkel_piscinita: ["À La Piscinita, à West View, les poissons nagent près des baigneurs."],
+  mirador_la_loma: ["L’église baptiste de La Loma, de 1844, est la plus ancienne de l’île."],
 };

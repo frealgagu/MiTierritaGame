@@ -11,4 +11,6 @@ export default {
   cundinamarca: 'Cundinamarca',
   // Bogotá (v4.5)
   bogota: 'Bogotá',
+  // Special zone (v5.4)
+  sanandres: "San Andrés",
 };

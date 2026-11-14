@@ -105,4 +105,13 @@ export default {
   funicular_monserrate: ['Monserrate fica a mais de 3.100 metros, acima da cidade.', 'Sobe-se o morro de funicular, de teleférico ou a pé.'],
   pabellon_regiones: ['Nas feiras de Bogotá cada região monta o seu pavilhão.', 'Num só pavilhão cabe o país: comida, música e artesanato.'],
   gran_feria: ['A Grande Feira junta o melhor das dez regiões do jogo.', 'Aqui termina a viagem: o país inteiro numa só feira.'],
+  // Special zone (v5.4)
+  aeropuerto_sai: ["O aeroporto Gustavo Rojas Pinilla fica a poucos passos do centro."],
+  carpas_spratt: ["Spratt Bight é a praia do centro, em frente ao calçadão."],
+  lanchas_siete_colores: ["O mar da ilha tem sete tons de azul por causa do fundo de coral."],
+  paseo_johnny_cay: ["Johnny Cay é uma ilhota de areia branca e coqueiros diante do centro."],
+  rondon_san_luis: ["O rondón é um ensopado raizal de peixe, caramujo e leite de coco."],
+  hoyo_soplador: ["No Hoyo Soplador o mar sai disparado por um buraco no coral."],
+  snorkel_piscinita: ["Em La Piscinita, em West View, os peixes nadam junto aos banhistas."],
+  mirador_la_loma: ["A Igreja Batista de La Loma, de 1844, é a mais antiga da ilha."],
 };

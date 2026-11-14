@@ -4,6 +4,7 @@
 // still work as usual (tooltips skipped there).
 import { PRODUCTS } from '../data/products.js';
 import { STATIONS } from '../data/stations.js';
+import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { t } from '../i18n/index.js';
 
 // UI icons that aren't products.
@@ -46,9 +47,11 @@ export const ICON_NAMES = (() => {
     if (!key || /^[\p{L}\p{N}\s]+$/u.test(key)) return;
     (names[key] ??= new Set()).add(name);
   };
-  for (const p of Object.values(PRODUCTS)) add(p.icon, p.name);
+  // (v5.4) Nothing from a secret region: its names would give it away (its icons are shared with other regions).
+  const secret = (zone) => REGIONS_BY_ID[REGION_OF_ZONE[zone]]?.secret;
+  for (const p of Object.values(PRODUCTS)) if (!secret(p.zone)) add(p.icon, p.name);
   const fromProducts = new Set(Object.keys(names));
-  for (const s of STATIONS) if (!fromProducts.has(clean(s.icon))) add(s.icon, s.name);
+  for (const s of STATIONS) if (!fromProducts.has(clean(s.icon)) && !secret(s.zone)) add(s.icon, s.name);
   for (const [icon, name] of Object.entries(GENERAL)) if (!names[clean(icon)]) add(icon, name);
   return Object.fromEntries(Object.entries(names).map(([k, v]) => [k, [...v].join(' / ')]));
 })();

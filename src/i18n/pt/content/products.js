@@ -379,4 +379,13 @@ export default {
   cafe_molido: 'Café moído',
   chicharron: 'Torresmo',
   caldo_costilla: 'Caldo de costela',
+  // Special zone (v5.4)
+  viajero: "Viajante",
+  dia_playa: "Dia de praia",
+  paseo_lancha: "Passeio de lancha",
+  visita_cayo: "Visita a Johnny Cay",
+  almuerzo_rondon: "Almoço de rondón",
+  vuelta_isla: "Volta pela ilha",
+  buceo: "Mergulho com os peixes",
+  tour_isla: "Tour da ilha",
 };

@@ -78,6 +78,15 @@ export const NOTES = {
   despensa_grande: 'The Zona G Pantry makes twice as much (it asks both its trucks for twice as much).',
   telar_grande: 'The Textiles Stall stocks twice as much (it asks both its trucks for twice as much).',
   cuarto_frio_plaza: 'The Flower Stall arranges twice as much (it asks the truck for twice as many flowers).',
+  // Special zone (v5.4)
+  vuelos_directos: "Airport arrivals receives ×32 travelers and the warehouse ships ×32.",
+  carpas_playa: "The Spratt Bight beach tents serve ×32 and the warehouse ships ×32.",
+  flota_lanchas: "The Boats carry ×32 and the warehouse ships ×32.",
+  muelle_cayo: "The Trip to Johnny Cay carries ×32 and the warehouse ships ×32.",
+  fogones_lena: "The rondón kitchen cooks ×32 and the warehouse ships ×32.",
+  sendero_soplador: "The Hoyo Soplador receives ×32 and the warehouse ships ×32.",
+  equipos_snorkel: "Snorkeling at La Piscinita serves ×32 and the warehouse ships ×32.",
+  torre_iglesia: "The La Loma lookout receives ×32 and the warehouse ships ×32.",
 };
 
 export default {
@@ -291,4 +300,13 @@ export default {
   capital_del_pais: 'Capital of the whole country',
   maestria_bogota: 'Mastery: Bogotá',
   supremacia_bogota: 'Supremacy: Bogotá',
+  // Special zone (v5.4)
+  vuelos_directos: "Direct flights",
+  carpas_playa: "Tents along the whole beach",
+  flota_lanchas: "Boat fleet",
+  muelle_cayo: "New pier on the cay",
+  fogones_lena: "Wood-fired stoves",
+  sendero_soplador: "Hoyo Soplador trail",
+  equipos_snorkel: "Snorkel gear",
+  torre_iglesia: "Lookout in the church tower",
 };

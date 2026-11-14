@@ -1,12 +1,13 @@
 // Where each zone and airport is drawn on its region map, and close-up framing (v4.4.10; previously in ZoneMap.js).
 // DOM-free: shared by game map and tools/map-coords.mjs, which generates the coordinates page.
-//   1. Each zone sits at its town and each airport at its real coords (data/zoneGeo.js), in map units (1/40 degree).
+//   1. Each zone sits at its town and each airport at its real coords (data/zoneGeo.js), in map units (1/40 degree);
+//      an off-map region (v5.4: the islands), in its inset.
 //   2. If two points sit too close (Barichara and San Gil, Leticia and its airport), push them apart until labels
 //      clear.
 //   3. No point falls outside its region or hugs the border: if outside, snap to nearest region point slightly
 //      inward (El Dorado sits in Bogotá, and for Cundinamarca it shifts into the Sabana).
 import { DEPARTMENTS, MAP_ORIGIN, MAP_SCALE } from '../data/colombiaMap.js';
-import { AIRPORT_GEO, ZONE_GEO } from '../data/zoneGeo.js';
+import { mapAirportGeo, mapGeo } from '../data/zoneGeo.js';
 import { REGIONS } from '../data/regions.js';
 
 export const proj = ([lat, lon]) => [(lon - MAP_ORIGIN[0]) * MAP_SCALE, (MAP_ORIGIN[1] - lat) * MAP_SCALE];
@@ -88,7 +89,7 @@ const viewOf = (b, pad) => ({ x: b.x0 - pad, y: b.y0 - pad, w: b.x1 - b.x0 + pad
 for (const r of REGIONS) {
   const polys = REGION_POLYS[r.id];
   // Zones first, airport last.
-  const pts = [...r.zones.map((z) => proj(ZONE_GEO[z])), proj(AIRPORT_GEO[r.id])];
+  const pts = [...r.zones.map((z) => proj(mapGeo(z))), proj(mapAirportGeo(r.id))];
   const b0 = box(pts);
   const size = Math.max(b0.x1 - b0.x0, b0.y1 - b0.y0, 90);
   const min = size * 0.24;

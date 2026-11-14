@@ -1,8 +1,8 @@
 import { formatNumber, formatRate } from '../core/format.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
-import { REGIONS } from '../data/regions.js';
+import { REGIONS, shownRegions } from '../data/regions.js';
 import { analyzeChain } from '../sim/analysis.js';
-import { regionState } from '../sim/regions.js';
+import { isOpen, regionState, specialProgress } from '../sim/regions.js';
 import { zoneMaxed } from '../sim/legacy.js';
 import { ZoneMap } from './ZoneMap.js';
 import { toast } from './toast.js';
@@ -114,7 +114,7 @@ export class ZonesView {
     this.badge.textContent = fresh;
     if (this.modal.hidden) return;
 
-    const html = REGIONS.map((region) => {
+    const html = shownRegions(isOpen(root)).map((region) => {
       const state = regionState(root, region.id);
       if (!state) {
         const head = `<h3 class="research-other">${region.icon} ${region.name}</h3>`;
@@ -161,14 +161,11 @@ export class ZonesView {
     }).join('');
     // Special zone (v4.7.1): future reward. Unlocks with second ending (all at level 100) in
     // each region, or already reset once; shows progress toward it.
-    const regions = REGIONS.filter((r) => !r.hidden && !r.wip);
-    const ready = regions.filter((r) => {
-      const st = regionState(root, r.id);
-      return st && (st.mastered || (st.legacy?.resets ?? 0) > 0);
-    }).length;
-    const special = group(
-      `<div class="research locked"><span class="research-icon">⭐</span><span class="research-text"><b>${t('Zona especial')}</b><br><small>${t('Se abre cuando logres el segundo final (todo al nivel 100) en cada región, o la hayas reiniciado: {n} de {total}.', { n: ready, total: regions.length })}</small></span></div>`,
-    );
+    // (v5.4) Once open, it is listed above like any other region.
+    const { n, total } = specialProgress(root);
+    const special = REGIONS.some((r) => r.special && !regionState(root, r.id))
+      ? group(`<div class="research locked"><span class="research-icon">⭐</span><span class="research-text"><b>${t('Zona especial')}</b><br><small>${t('Se abre cuando logres el segundo final (todo al nivel 100) en cada región, o la hayas reiniciado: {n} de {total}.', { n, total })}</small></span></div>`)
+      : '';
     const all = html + special;
     if (all !== this.html) this.body.innerHTML = this.html = all;
   }

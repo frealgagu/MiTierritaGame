@@ -31,7 +31,21 @@ export const ZONE_GEO = {
   zipaquira: [5.02, -74.0],
   // Bogotá (v4.5): La Candelaria.
   bogota: [4.6, -74.07],
+  // Special zone (v5.4): the town of San Andrés, on its island in the Caribbean.
+  sanandres: [12.58, -81.7],
 };
+
+// Off-map regions (v5.4, `offMap` in data/regions.js): the country map leaves out the islands, so their zones and
+// airport are drawn in an inset in the Caribbean, near the top-left corner of the map.
+export const MAP_GEO = {
+  sanandres: [11.75, -78.4],
+};
+export const MAP_AIRPORT_GEO = {
+  sanandres: [11.95, -78.15],
+};
+// Where a zone or a region's airport sits on the map: its real place, or its spot in the inset.
+export const mapGeo = (zoneId) => MAP_GEO[zoneId] ?? ZONE_GEO[zoneId];
+export const mapAirportGeo = (regionId) => MAP_AIRPORT_GEO[regionId] ?? AIRPORT_GEO[regionId];
 
 // Each region's airport (v4.4.10): [latitude, longitude] of real airport nearest its final zone.
 // Plane lands here and Willys drives out. If outside region (El Dorado for Cundinamarca) or
@@ -47,6 +61,7 @@ export const AIRPORT_GEO = {
   tolima: [2.95, -75.294], // Benito Salas, Neiva
   cundinamarca: [4.702, -74.147], // El Dorado (sits in Bogotá: shifts into Sabana)
   bogota: [4.702, -74.147], // El Dorado, Bogotá
+  sanandres: [12.584, -81.711], // Gustavo Rojas Pinilla, San Andrés
 };
 export const AIRPORT_NAME = {
   cafetero: 'El Edén, Armenia',
@@ -59,4 +74,5 @@ export const AIRPORT_NAME = {
   tolima: 'Benito Salas, Neiva',
   cundinamarca: 'El Dorado, Bogotá',
   bogota: 'El Dorado, Bogotá',
+  sanandres: 'Gustavo Rojas Pinilla, San Andrés',
 };

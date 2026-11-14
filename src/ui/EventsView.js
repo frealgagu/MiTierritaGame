@@ -187,7 +187,8 @@ function boardMaxed(board, zoneId) {
 
 // All your medals (v3.12): best per event by region, and the reward for earning all of them.
 function medalsHtml(profile) {
-  const regions = REGIONS.map((r) => {
+  // (v5.4) Only regions with events: a region without any (the special zone, for now) has nothing to list.
+  const regions = REGIONS.filter((r) => regionEvents(r.id).length).map((r) => {
     const rows = regionEvents(r.id)
       .map((def) => {
         const best = profile.medals?.[def.id]?.best;

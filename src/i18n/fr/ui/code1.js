@@ -146,4 +146,7 @@ export default {
   'Recoger el tablero': 'Replier le tableau',
   '⏱️ Eventos seguidos: cada cupo se libera al segundo': '⏱️ Événements à la suite : chaque place se libère au bout d’une seconde',
   '📅 Eventos con su espera normal de 2 años': '📅 Événements avec leur attente normale de 2 ans',
+  "⭐ La zona especial ya está abierta": "⭐ La zone spéciale est déjà ouverte",
+  "⭐ Se abrió la zona especial": "⭐ La zone spéciale est ouverte",
+  "⭐ ¡Se abrió la zona especial: {region}!": "⭐ La zone spéciale est ouverte : {region} !",
 };

@@ -1,9 +1,9 @@
 import { DEPARTMENTS } from '../data/colombiaMap.js';
 import { AIRSTRIP, ZONE_POS, ZONES_VIEW, proj } from './mapLayout.js';
-import { ZONE_GEO } from '../data/zoneGeo.js';
-import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
+import { mapGeo } from '../data/zoneGeo.js';
+import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE, shownRegions } from '../data/regions.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
-import { regionState } from '../sim/regions.js';
+import { isOpen, regionState } from '../sim/regions.js';
 import { chosenDecor } from '../sim/renown.js';
 import { zoneMaxed } from '../sim/legacy.js';
 import { FONT } from '../render/palette.js';
@@ -51,7 +51,14 @@ const viewOf = (b, pad) => ({ x: b.x0 - pad, y: b.y0 - pad, w: b.x1 - b.x0 + pad
 const DEPT_BOX = Object.fromEntries(DEPARTMENTS.map((d) => [d.id, pathBox(d.d)]));
 const COUNTRY = union(Object.values(DEPT_BOX));
 const COUNTRY_VIEW = viewOf(COUNTRY, 12);
-const REGION_BOX = Object.fromEntries(REGIONS.map((r) => [r.id, union(DEPARTMENTS.filter((d) => d.region === r.id).map((d) => DEPT_BOX[d.id]))]));
+// An off-map region (v5.4) has no departments: its box is the one around its zones and airport in the inset.
+const REGION_BOX = Object.fromEntries(
+  REGIONS.map((r) => {
+    if (!r.offMap) return [r.id, union(DEPARTMENTS.filter((d) => d.region === r.id).map((d) => DEPT_BOX[d.id]))];
+    const pts = [...r.zones.map((z) => ZONE_POS[z]), AIRSTRIP[r.id]];
+    return [r.id, union(pts.map(([x, y]) => ({ x0: x, y0: y, x1: x, y1: y })))];
+  }),
+);
 const SOON_BOX = Object.fromEntries(SOON.map((r) => [r.id, union(DEPARTMENTS.filter((d) => r.depts.includes(d.name)).map((d) => DEPT_BOX[d.id]))]));
 
 // Layout of zones and airports on each region map, and close-up framing: ui/mapLayout.js (v4.4.10).
@@ -388,7 +395,8 @@ export class ZoneMap {
     const u = this.vb.w / 100;
     const here = this.getZone();
     if (!this.region) {
-      for (const r of REGIONS) {
+      // (v5.4) A secret region shows up only once it has opened.
+      for (const r of shownRegions(isOpen(this.root.state))) {
         if (r.hidden) continue; // goes with upcoming regions (v4.4.8)
         const b = REGION_BOX[r.id];
         const open = this.open(r.id);
@@ -409,7 +417,7 @@ export class ZoneMap {
         label.addEventListener('click', () => this.soon(r));
       }
       // Current location: pin on current zone.
-      const [x, y] = proj(ZONE_GEO[here]);
+      const [x, y] = proj(mapGeo(here));
       el('text', { x, y, 'font-size': 6.5 * u, 'text-anchor': 'middle', class: 'zones-map-pin' }, g).textContent = '📍';
       return;
     }

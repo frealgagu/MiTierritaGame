@@ -78,6 +78,15 @@ export const NOTES = {
   despensa_grande: 'A Despensa da Zona G prepara o dobro (pede o dobro às suas duas carretas).',
   telar_grande: 'A Barraca de tecidos abastece o dobro (pede o dobro às suas duas carretas).',
   cuarto_frio_plaza: 'A Banca de flores monta o dobro (pede o dobro de flores à carreta).',
+  // Special zone (v5.4)
+  vuelos_directos: "A Chegada ao aeroporto recebe ×32 viajantes e o armazém despacha ×32.",
+  carpas_playa: "As Barracas de Spratt Bight atendem ×32 e o armazém despacha ×32.",
+  flota_lanchas: "As Lanchas levam ×32 e o armazém despacha ×32.",
+  muelle_cayo: "O Passeio a Johnny Cay leva ×32 e o armazém despacha ×32.",
+  fogones_lena: "O Fogão do rondón cozinha ×32 e o armazém despacha ×32.",
+  sendero_soplador: "O Hoyo Soplador recebe ×32 e o armazém despacha ×32.",
+  equipos_snorkel: "O Snorkel em La Piscinita atende ×32 e o armazém despacha ×32.",
+  torre_iglesia: "O Mirante de La Loma recebe ×32 e o armazém despacha ×32.",
 };
 
 export default {
@@ -569,4 +578,13 @@ export default {
   capital_del_pais: 'Capital do país inteiro',
   maestria_bogota: 'Maestria: Bogotá',
   supremacia_bogota: 'Supremacia: Bogotá',
+  // Special zone (v5.4)
+  vuelos_directos: "Voos diretos",
+  carpas_playa: "Barracas em toda a praia",
+  flota_lanchas: "Frota de lanchas",
+  muelle_cayo: "Cais novo na ilhota",
+  fogones_lena: "Fogões a lenha",
+  sendero_soplador: "Trilha do Hoyo Soplador",
+  equipos_snorkel: "Equipamento de snorkel",
+  torre_iglesia: "Mirante na torre da igreja",
 };

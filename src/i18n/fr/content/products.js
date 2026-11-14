@@ -379,4 +379,13 @@ export default {
   cafe_molido: 'Café moulu',
   chicharron: 'Chicharrón (couenne grillée)',
   caldo_costilla: 'Bouillon de côtes',
+  // Special zone (v5.4)
+  viajero: "Voyageur",
+  dia_playa: "Journée à la plage",
+  paseo_lancha: "Balade en bateau",
+  visita_cayo: "Visite de Johnny Cay",
+  almuerzo_rondon: "Déjeuner de rondón",
+  vuelta_isla: "Balade autour de l’île",
+  buceo: "Plongée avec les poissons",
+  tour_isla: "Circuit de l’île",
 };

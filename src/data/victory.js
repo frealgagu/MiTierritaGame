@@ -59,4 +59,6 @@ export const VICTORY = {
   // Bogotá (v4.5): single zone, region finale.
   bogota: { title: '¡Todo el país en Bogotá!', text: 'Completaste <b>Bogotá</b>. Quinientas entradas a la Gran Feria de Mi Tierrita, con el café de La Candelaria, las cenas de la Zona G, los domingos de Usaquén, las mañanas de Paloquemao y lo que llegó en tractomula de todas las regiones.', stat: ['Entradas a la Gran Feria vendidas', 'feria_mi_tierrita'] },
   lecheria: { title: '¡Arequipe para todo el pueblo!', text: 'Completaste la <b>Zona 3 · La Lechería</b>. Seis mil arequipes hechos con tu leche y la panela del Trapiche.', stat: ['Arequipe vendido', 'arequipe'] },
+  // Special zone (v5.4): the island tour, end to end.
+  sanandres: { title: '¡El tour de la isla!', text: 'Completaste el <b>tour de San Andrés</b>. Cinco millones de visitantes llegaron al aeropuerto, pasaron por la playa, el mar de siete colores, Johnny Cay, el rondón, el Hoyo Soplador y La Piscinita, y subieron a La Loma.', stat: ['Tours de la isla vendidos', 'tour_isla'] },
 };

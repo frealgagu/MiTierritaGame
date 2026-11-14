@@ -390,6 +390,16 @@ async function start() {
     location.reload();
   };
   const mastery = (g = active) => showMastery(g.state, () => restart(g));
+  // Regions whose condition was just met start producing right away, each with its own Game.
+  const openNew = () => {
+    const opened = openRegions(root);
+    for (const id of opened) {
+      games[id] = new Game(root.regions[id]);
+      games[id].timeScale = game.timeScale;
+      wire(games[id]);
+    }
+    return opened;
+  };
   // Per-region notifications: goals, endings, and research.
   const wire = (g) => {
     g.bus.on('goalClaimed', ({ goal, zone, bulk }) => {
@@ -401,18 +411,15 @@ async function start() {
       }
       sound.milestone();
       // Pueblo unlocks Santander (v3.0): its region starts producing right away.
-      const opened = openRegions(root);
-      for (const id of opened) {
-        games[id] = new Game(root.regions[id]);
-        games[id].timeScale = game.timeScale;
-        wire(games[id]);
-      }
+      const opened = openNew();
       // Next region, if already unlocked (e.g. completing the final zone again after restarting).
       const after = !ZONES_BY_ID[zone].next && REGIONS.find((r) => r.unlock?.zone === zone && regionState(root, r.id));
       // Move to next zone (v3.67): animated trip on the map.
       showVictory(g.state, zone, (next) => zones.travel(next), opened, after?.id);
     });
     g.bus.on('mastered', () => {
+      // (v5.4) The second ending may be the last one the special zone was waiting for.
+      for (const id of openNew()) toast(t('⭐ ¡Se abrió la zona especial: {region}!', { region: `${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name}` }), 5000);
       // If triggered when claiming the first ending (everything already at 100), show zone ending first
       // and then the second ending modal once closed.
       const victory = document.getElementById('victory');

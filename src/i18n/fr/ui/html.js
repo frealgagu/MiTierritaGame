@@ -120,4 +120,5 @@ export default {
   'Guarda tu partida en un archivo (en el teléfono, elige Drive, Archivos o donde quieras) y ábrelo en otro dispositivo para seguir allí. También puedes exportarla como texto y pegarla aquí.': 'Enregistre ta partie dans un fichier (sur le téléphone, choisis Drive, Fichiers ou ailleurs) et ouvre-le sur un autre appareil pour continuer. Tu peux aussi l’exporter en texte et la coller ici.',
   '💾 Guardar en archivo': '💾 Enregistrer dans un fichier',
   '📂 Abrir archivo': '📂 Ouvrir un fichier',
+  "⭐ Abrir la zona especial": "⭐ Ouvrir la zone spéciale",
 };

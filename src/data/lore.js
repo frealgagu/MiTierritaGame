@@ -422,6 +422,15 @@ export const FACTS = {
   funicular_monserrate: ['Monserrate está a más de 3.100 metros, sobre la ciudad.', 'Al cerro se sube en funicular, en teleférico o a pie.'],
   pabellon_regiones: ['En las ferias de Bogotá cada región arma su pabellón.', 'En un solo pabellón cabe el país: su comida, su música y su artesanía.'],
   gran_feria: ['La Gran Feria junta lo mejor de las diez regiones del juego.', 'Aquí termina el viaje: todo el país en una sola feria.'],
+  // Special zone · San Andrés (v5.4).
+  aeropuerto_sai: ['El aeropuerto Gustavo Rojas Pinilla queda a pasos del centro.'],
+  carpas_spratt: ['Spratt Bight es la playa del centro, frente al paseo peatonal.'],
+  lanchas_siete_colores: ['El mar de la isla tiene siete tonos de azul por su fondo de coral.'],
+  paseo_johnny_cay: ['Johnny Cay es un cayo de arena blanca y palmeras frente al centro.'],
+  rondon_san_luis: ['El rondón es un guiso raizal de pescado, caracol y leche de coco.'],
+  hoyo_soplador: ['En el Hoyo Soplador el mar sale disparado por un hueco en el coral.'],
+  snorkel_piscinita: ['En La Piscinita, en West View, los peces nadan junto a los bañistas.'],
+  mirador_la_loma: ['La Iglesia Bautista de La Loma, de 1844, es la más antigua de la isla.'],
 };
 
 // Speaker announcing milestones per zone (key events, not every toast).
@@ -483,6 +492,7 @@ export const PEOPLE = {
   cocina: { icon: '👩🏽‍🍳', name: 'Doña Teresa', role: 'la cocinera' },
   zipaquira: { icon: '🧑🏽', name: 'Don Hernán', role: 'el guía de la mina' },
   bogota: { icon: '👩🏻', name: 'Doña Clemencia', role: 'la del café de La Candelaria' },
+  sanandres: { icon: '👨🏿', name: 'Mister Livingston', role: 'el guía raizal de la isla' },
 };
 
 // Opening line when entering a zone for the first time.
@@ -545,6 +555,7 @@ export const WELCOME = {
   zipaquira: '¡Llegó a Zipaquirá, sumercé! Aquí termina el viaje por la Sabana: bajemos a la Catedral de Sal.',
   // Bogotá (v4.5)
   bogota: '¡Bienvenido a Bogotá, sumercé! Aquí no se cultiva nada: todo llega del país en tractomula. Arranquemos con un tinto en La Candelaria.',
+  sanandres: '¡Welcome, amigo, bienvenido a San Andrés! Aquí el mar tiene siete colores, y el tour de la isla empieza en el aeropuerto.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

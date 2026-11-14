@@ -146,4 +146,7 @@ export default {
   'Recoger el tablero': 'Collapse the board',
   '⏱️ Eventos seguidos: cada cupo se libera al segundo': '⏱️ Back-to-back events: each slot frees up after one second',
   '📅 Eventos con su espera normal de 2 años': '📅 Events with their normal 2-year wait',
+  "⭐ La zona especial ya está abierta": "⭐ The special zone is already open",
+  "⭐ Se abrió la zona especial": "⭐ The special zone is open",
+  "⭐ ¡Se abrió la zona especial: {region}!": "⭐ The special zone is open: {region}!",
 };

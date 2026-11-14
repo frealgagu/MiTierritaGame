@@ -13,6 +13,15 @@
 
 import { ICON } from './icons.js';
 
+// Special zone prices (v5.4), per station in chain order: upgrade base (haulers cost half) and build cost. Calibrated
+// with the even player (`npm run balance -- 30 parejo` with BALANCE_REGION=sanandres): each station takes about
+// 3 hours (level 100 in ~1h45, its ×32 in ~45 min more, and the next station in ~30 min), 24 hours in all. Without
+// the ×32 the first station alone takes over 16 hours (see docs/GDD.md).
+const SA = {
+  base: [0.125, 5.2, 101, 1720, 53700, 819000, 26000000, 430000000],
+  unlock: [0, 1e8, 1.9e9, 3.3e10, 4.1e11, 6.55e12, 1.1e14, 2.2e15],
+};
+
 export const STATIONS = [
   // Zone 1 · La Finca
   { id: 'farm', zone: 'finca', name: 'Cafetal', icon: ICON.coffeePlant, infinite: true, out: { cherry: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, growth: 1.15, release: '0.1' },
@@ -601,6 +610,19 @@ export const STATIONS = [
   { id: 'box_shop', zone: 'barichara', name: 'Taller de cajas', icon: ICON.cajaSurtida, in: { dulces_tipicos: 1 }, imports: [{ product: 'tobacco_bale', perCycle: 1, route: 'tercios' }], out: { caja_surtida: 1 }, cycle: 32, unlockCost: 1500000000, upgradeBase: 800000, growth: 1.15, release: '3.5' },
   { id: 'hamper', zone: 'barichara', name: 'Canastas del caminante', icon: ICON.canastaCaminante, in: { caja_surtida: 1 }, imports: [{ product: 'almuerzo', perCycle: 1, route: 'almuerzos' }, { product: 'fiambre', perCycle: 1, route: 'fiambres' }], out: { canasta_caminante: 1 }, cycle: 32, unlockCost: 1200000000, upgradeBase: 1000000, growth: 1.15, release: '3.5' },
   { id: 'camino_real', zone: 'barichara', name: 'Salida al Camino Real', icon: ICON.excursion, in: { canasta_caminante: 4 }, out: { excursion: 1 }, cycle: 128, unlockCost: 2000000000, upgradeBase: 1500000, growth: 1.15, release: '3.5' },
+
+  // Special zone · San Andrés (v5.4): the tour of the island, one linear chain. Visitors arrive at the airport and
+  // each station adds an experience to their day. Rates are balanced at equal levels (each station takes all its
+  // supplier makes), and every station has a ×32 research at level 100 (data/research.js) that also multiplies the
+  // warehouse: without it, the next station takes far longer to afford. Prices: SA, above.
+  { id: 'aeropuerto_sai', zone: 'sanandres', name: 'Llegada al aeropuerto', icon: '✈️', infinite: true, out: { viajero: 1 }, cycle: 2, unlockCost: 0, upgradeBase: SA.base[0], growth: 1.15, release: '5.4' },
+  { id: 'carpas_spratt', zone: 'sanandres', name: 'Carpas de Spratt Bight', icon: '🌴', in: { viajero: 2 }, out: { dia_playa: 1 }, cycle: 4, unlockCost: SA.unlock[1], upgradeBase: SA.base[1], growth: 1.15, release: '5.4' },
+  { id: 'lanchas_siete_colores', zone: 'sanandres', name: 'Lanchas del mar de siete colores', icon: '🚤', in: { dia_playa: 2 }, out: { paseo_lancha: 1 }, cycle: 8, unlockCost: SA.unlock[2], upgradeBase: SA.base[2], growth: 1.15, release: '5.4' },
+  { id: 'paseo_johnny_cay', zone: 'sanandres', name: 'Paseo a Johnny Cay', icon: ICON.paseoIslas, in: { paseo_lancha: 2 }, out: { visita_cayo: 1 }, cycle: 16, unlockCost: SA.unlock[3], upgradeBase: SA.base[3], growth: 1.15, release: '5.4' },
+  { id: 'rondon_san_luis', zone: 'sanandres', name: 'Fogón del rondón en San Luis', icon: '🍽️', in: { visita_cayo: 1 }, out: { almuerzo_rondon: 1 }, cycle: 16, unlockCost: SA.unlock[4], upgradeBase: SA.base[4], growth: 1.15, release: '5.4' },
+  { id: 'hoyo_soplador', zone: 'sanandres', name: 'Hoyo Soplador', icon: '🌀', in: { almuerzo_rondon: 2 }, out: { vuelta_isla: 1 }, cycle: 32, unlockCost: SA.unlock[5], upgradeBase: SA.base[5], growth: 1.15, release: '5.4' },
+  { id: 'snorkel_piscinita', zone: 'sanandres', name: 'Snorkel en La Piscinita', icon: '🌊', in: { vuelta_isla: 1 }, out: { buceo: 1 }, cycle: 32, unlockCost: SA.unlock[6], upgradeBase: SA.base[6], growth: 1.15, release: '5.4' },
+  { id: 'mirador_la_loma', zone: 'sanandres', name: 'Mirador de La Loma', icon: '⛰️', in: { buceo: 2 }, out: { tour_isla: 1 }, cycle: 64, unlockCost: SA.unlock[7], upgradeBase: SA.base[7], growth: 1.15, release: '5.4' },
 ];
 
 export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));

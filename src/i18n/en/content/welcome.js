@@ -57,4 +57,6 @@ export default {
   zipaquira: 'You made it to Zipaquirá, sumercé! The journey across the Savanna ends here: let’s go down to the Salt Cathedral.',
   // Bogotá (v4.5)
   bogota: 'Welcome to Bogotá, sumercé! Nothing is grown here: everything comes from across the country by truck. Let’s start with a tinto in La Candelaria.',
+  // Special zone (v5.4)
+  sanandres: "Welcome, my friend, welcome to San Andrés! The sea here has seven colors, and the island tour starts at the airport.",
 };
