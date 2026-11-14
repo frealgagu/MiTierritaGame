@@ -21,7 +21,7 @@ import { checkLogros } from './sim/logros.js';
 import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/splash.js';
 import { EventBar, formatClock } from './ui/EventBar.js';
 import { MoneyView } from './ui/MoneyView.js';
-import { EVENT_COOLDOWN, allActionsBought, awaySeconds, checkMedalBonus, endEvent, finishEvent, restartEvent, startEvent } from './sim/events.js';
+import { EVENT_COOLDOWN, allActionsBought, awaySeconds, checkMedalBonus, endEvent, finishEvent, restartEvent, startEvent, startOnDemand } from './sim/events.js';
 import { MEDALS } from './data/events.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
 import { openRegions, regionState } from './sim/regions.js';
@@ -280,7 +280,8 @@ async function start() {
   // El evento de una zona se guarda en la partida de su región (v3.6: Santander también tiene eventos);
   // los cupos, en la principal (v3.30).
   const enterEvent = (zoneId) => {
-    const state = startEvent(game.state, zoneId);
+    // (v4.7.3) O, en una región con oro en todo y los eventos a demanda comprados, «Jugar otra vez».
+    const state = startEvent(game.state, zoneId) ?? startOnDemand(game.state, zoneId);
     if (!state) return;
     // zoneId es la clave del evento (v4.5: en Bogotá, varios eventos en la misma zona); el mapa es el de su zona.
     const key = zoneId;

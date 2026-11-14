@@ -2,8 +2,9 @@
 // «Jugar» o «Seguir» lleva al tablero del evento (main.js).
 import { EVENTS, MEDALS, eventKey } from '../data/events.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
-import { REGIONS, REGION_OF_ZONE } from '../data/regions.js';
-import { MEDAL_BONUS, awaySeconds, boardClockNow, boardObjective, eventObjective, eventStatus, medalCount, regionEvents } from '../sim/events.js';
+import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
+import { EVENT_SLOTS, MEDAL_BONUS, ON_DEMAND_COST, awaySeconds, boardClockNow, boardObjective, buyOnDemand, canPlayOnDemand, eventObjective, eventStatus, hasOnDemand, medalCount, quoteOnDemand, regionAllGold, regionEvents } from '../sim/events.js';
+import { toast } from './toast.js';
 import { clockOf } from '../sim/calendar.js';
 import { formatDuration } from '../core/format.js';
 import { formatClock, objectiveText } from './EventBar.js';
@@ -36,8 +37,15 @@ export class EventsView {
         settings.eventsFold = { ...settings.eventsFold, [fold.dataset.efold]: !this.folded(fold.dataset.efold) };
         return this.render();
       }
+      // Comprar los eventos a demanda de una región (v4.7.3).
+      const od = e.target.closest('[data-ondemand]');
+      if (od) {
+        const region = od.dataset.ondemand;
+        if (buyOnDemand(this.game.state.profile, region)) toast(t('🔁 Ya puedes jugar los eventos de {region} cuando quieras.', { region: REGIONS_BY_ID[region].name }), 4000);
+        return this.render();
+      }
       const play = e.target.closest('[data-play]');
-      if (!play) return;
+      if (!play || play.disabled) return;
       this.close();
       this.onPlay(play.dataset.play);
     });
@@ -53,7 +61,23 @@ export class EventsView {
   folded(regionId) {
     const saved = this.game.state.settings.eventsFold?.[regionId];
     if (saved !== undefined) return saved;
-    return !EVENTS.some((def) => REGION_OF_ZONE[def.zone] === regionId && ['active', 'won', 'available'].includes(eventStatus(this.game.state, eventKey(def))?.kind));
+    return this.playable(regionId) === 0 && !this.offerOnDemand(regionId) && !EVENTS.some((def) => REGION_OF_ZONE[def.zone] === regionId && eventStatus(this.game.state, eventKey(def))?.kind === 'won');
+  }
+
+  // Cuántos de la región se pueden jugar ahora: los abiertos, los que tienen cupo y (v4.7.3) los que se juegan a demanda.
+  playable(regionId) {
+    const s = this.game.state;
+    return EVENTS.filter((def) => {
+      if (REGION_OF_ZONE[def.zone] !== regionId) return false;
+      const kind = eventStatus(s, eventKey(def))?.kind;
+      return kind === 'active' || kind === 'available' || ((kind === 'waiting' || kind === 'available') && canPlayOnDemand(s, eventKey(def)));
+    }).length;
+  }
+
+  // Si la región ya tiene oro en todos y todavía no tiene los eventos a demanda (v4.7.3).
+  offerOnDemand(regionId) {
+    const p = this.game.state.profile;
+    return regionAllGold(p, regionId) && !hasOnDemand(p, regionId);
   }
 
   close() {
@@ -74,6 +98,13 @@ export class EventsView {
       // Los que esperan (sin cupo o sin todas sus estaciones), en una línea (v3.7).
       if (st.kind === 'locked' && st.after) return `<div class="event-card locked">${title}<p>${t('🔒 Sale cuando ganes medalla en los otros eventos de {zone}.', { zone: zone.name })}</p></div>`;
       if (st.kind === 'locked') return `<div class="event-card locked">${title}<p>${t('🔒 Sale cuando construyas todas las estaciones de {zone}.', { zone: zone.name })}</p></div>`;
+      // A demanda (v4.7.3): con oro en todos los de la región y la compra hecha, se juega otra vez cuando se quiera.
+      const region = REGION_OF_ZONE[def.zone];
+      if ((st.kind === 'waiting' || st.kind === 'available') && hasOnDemand(profile, region) && regionAllGold(profile, region)) {
+        const can = canPlayOnDemand(s, eventKey(def));
+        const note = can ? '' : `<p>${t('⏳ Hay {n} eventos abiertos: termina uno para jugar otro.', { n: EVENT_SLOTS })}</p>`;
+        return `<div class="event-card">${title}${note}<button class="btn buy" data-play="${eventKey(def)}" ${can ? '' : 'disabled'}>${t('🔁 Jugar otra vez')}</button></div>`;
+      }
       if (st.kind === 'waiting') {
         const when = st.nextAt === null ? t('cuando termines uno de los dos eventos y pasen 2 años') : t('en {time} se libera un cupo (los dos eventos nunca son de la misma región)', { time: formatDuration(st.nextAt - clockOf(s)) });
         return `<div class="event-card locked">${title}<p>${t('⏳ Espera turno: {when}.', { when })}</p></div>`;
@@ -105,15 +136,22 @@ export class EventsView {
       const kind = eventStatus(s, eventKey(def))?.kind;
       return kind === 'active' || kind === 'won' || kind === 'available' ? 0 : 1;
     };
-    const groups = REGIONS.map((r) => ({ r, cards: EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === r.id).sort((a, b) => rank(a) - rank(b)).map(card).filter(Boolean) })).filter((g) => g.cards.length);
+    // Con oro en todos los de la región (v4.7.3) ya no salen solos: arriba, la compra de los eventos a demanda.
+    const onDemandCard = (r) => {
+      if (!regionAllGold(profile, r.id) || hasOnDemand(profile, r.id)) return [];
+      const q = quoteOnDemand(profile, r.id);
+      return [`<div class="event-card"><h3><span>🔁 ${t('Eventos a demanda')}</span></h3><p>${t('Tienes oro en todos los eventos de {region}: ya no salen solos. Compra esta opción y juega cualquiera otra vez cuando quieras, sin esperar.', { region: r.name })}</p><button class="btn buy" data-ondemand="${r.id}" ${q.ok ? '' : 'disabled'}>${t('Comprar · {n} ⭐', { n: ON_DEMAND_COST })}</button></div>`];
+    };
+    const groups = REGIONS.map((r) => ({ r, cards: [...onDemandCard(r), ...EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === r.id).sort((a, b) => rank(a) - rank(b)).map(card).filter(Boolean)] })).filter((g) => g.cards.length);
     // Cada región se pliega (v3.67): su título dice cuántos se pueden jugar.
     const html = groups
       .map((g) => {
         if (groups.length < 2) return g.cards.join('');
         const folded = this.folded(g.r.id);
         // (v4.7.3) Los ganados que siguen abiertos ya no cuentan como «para jugar».
-        const ready = EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === g.r.id && ['active', 'available'].includes(eventStatus(s, eventKey(def))?.kind)).length;
-        const head = `<button class="zones-region research-other" data-efold="${g.r.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${g.r.icon} ${g.r.name}<small>${ready ? t('{n} para jugar', { n: ready }) : t('nada por ahora')}</small></button>`;
+        const ready = this.playable(g.r.id);
+        const sub = ready ? t('{n} para jugar', { n: ready }) : this.offerOnDemand(g.r.id) ? `🔁 ${t('Eventos a demanda')}` : t('nada por ahora');
+        const head = `<button class="zones-region research-other" data-efold="${g.r.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${g.r.icon} ${g.r.name}<small>${sub}</small></button>`;
         return `<div class="zones-group events-group">${head}${folded ? '' : g.cards.join('')}</div>`;
       })
       .join('');
