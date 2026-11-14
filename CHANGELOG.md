@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v5.3.0 — Versiones automáticas
+- **Cada publicación trae su versión nueva:** si un cambio llega sin subir la versión, la publicación la sube sola (5.3.0, 5.3.1…) y avisa de la novedad en la app y en Google Play.
+- **El número de compilación vuelve a salir de la versión**, con cinco cifras: la 5.3.0 es la 50300.
+
 ## v4.7.4 — Copia de seguridad en archivo
 - **💾 Guardar en archivo y 📂 Abrir archivo:** en el menú, la copia de seguridad de la partida ahora se guarda como archivo. En el teléfono se abre el menú Compartir para guardarla en Drive, en Archivos o donde quieras; en otro dispositivo se abre con «Abrir archivo». Copiar el texto largo al portapapeles podía dejarlo vacío.
 

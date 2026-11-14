@@ -8,3 +8,4 @@
 - Trabajar directo en `main` (sin rama `development`): correr todas las pruebas antes de cada push. Antes de empezar, traer `main` (AI Studio y el bot del flujo también suben commits).
 - Comentarios del código y documentación en inglés; mensajes de commit en español.
 - Los textos del juego se escriben en español y se traducen en `src/i18n/{en,pt,fr}`.
+- Versiones: el flujo de publicación sube solo el parche (y agrega una entrada «Ajustes» al CHANGELOG) cuando un commit llega sin subir la versión, y hace un commit en `main`; por eso, traer `main` después de cada push. Una versión con novedades se sube a mano en `package.json` con su entrada en el CHANGELOG. El versionCode de Android es mayor·10.000 + menor·100 + parche (5 cifras).

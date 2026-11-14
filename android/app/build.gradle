@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-// Version comes from package.json: versionName "1.7.2", versionCode 10702 (major*10000 + minor*100 + patch).
+// Version comes from package.json: versionName "5.3.0", versionCode 50300 (see defaultConfig).
 def pkg = new groovy.json.JsonSlurper().parse(rootProject.file('../package.json'))
 def (major, minor, patch) = pkg.version.tokenize('.').collect { it as int }
 
@@ -11,10 +11,10 @@ android {
         applicationId "com.frealgagu.mitierrita.encantos"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        // (v4.7.3) In GitHub Actions, the publish workflow supplies the code (50000 + run number): always increments even if
-        // package.json version hasn't changed (Google Play rejects duplicate version codes).
-        // (With «=» and parentheses: without them Groovy parsed versionCode(...) and then `as int` of null.)
-        versionCode = (System.getenv('MITIERRITA_VERSION_CODE') ?: "${major * 10000 + minor * 100 + patch}").toInteger()
+        // versionCode from the version, five digits like before v4.7.3: major·10,000 + minor·100 + patch (5.3.0 → 50300).
+        // The publish workflow bumps the version when a commit did not (tools/auto-version.mjs), so every AAB gets a
+        // higher code. (In v4.7.3–v4.7.4 it was 50000 + the workflow run number, up to 502xx: 5.3.0 starts above them.)
+        versionCode major * 10000 + minor * 100 + patch
         versionName pkg.version
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {

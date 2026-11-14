@@ -20,25 +20,53 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Restores the execute bit of android/gradlew in the repository itself when a commit drops it (AI Studio does). The
-  # build jobs below also chmod it, so they never depend on this. Pushes made with GITHUB_TOKEN do not start a new run.
-  gradlew-mode:
+  # Prepares the commit to publish and pushes it to main when something had to change (pushes made with GITHUB_TOKEN do
+  # not start a new run). The build jobs below check out that commit.
+  #   - Restores the execute bit of android/gradlew when a commit drops it (AI Studio does).
+  #   - Bumps the patch version when the commit did not bump it (tools/auto-version.mjs), so every publish is a new
+  #     version for the web, the APK update check and Google Play (versionCode comes from the version, see
+  #     android/app/build.gradle).
+  prepare:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      sha: ${{ steps.commit.outputs.sha }}
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          if git ls-files -s android/gradlew | grep -q '^100755'; then echo "android/gradlew is already executable."; exit 0; fi
-          git update-index --chmod=+x android/gradlew
-          git -c user.name='github-actions[bot]' -c user.email='41898299+github-actions[bot]@users.noreply.github.com' \
-            commit -m "Restaura el permiso de ejecución de android/gradlew"
-          git push origin HEAD:${GITHUB_REF_NAME} || echo "::warning::Could not push the gradlew fix (main moved); the next run will retry."
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - id: commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898299+github-actions[bot]@users.noreply.github.com'
+          notes=()
+          if ! git ls-files -s android/gradlew | grep -q '^100755'; then
+            git update-index --chmod=+x android/gradlew
+            notes+=("permiso de ejecución de android/gradlew")
+          fi
+          published=$(curl -fsS "https://frealgagu.github.io/MiTierritaGame/version.json?t=$(date +%s)" | node -e 'let s="";process.stdin.on("data",(d)=>(s+=d)).on("end",()=>{try{console.log(JSON.parse(s).version??"")}catch{console.log("")}})' || true)
+          echo "Published version: ${published:-none}; package.json: $(node -p 'require("./package.json").version')"
+          next=$(node tools/auto-version.mjs "$published")
+          if [ -n "$next" ]; then
+            git add package.json package-lock.json CHANGELOG.md
+            notes+=("versión $next")
+          fi
+          if [ ${#notes[@]} -gt 0 ]; then
+            msg=$(IFS=', '; echo "${notes[*]}")
+            git commit -m "Publicación automática: ${msg}"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   web:
+    needs: prepare
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -49,16 +77,19 @@ jobs:
       - run: npm run build
       # (v4.7.3) Give each publish its own cache key: includes commit SHA so web and app update
       # even when package.json version or public/sw.js CACHE weren't bumped.
-      - run: sed -i -E "s/const CACHE = '([^']+)';/const CACHE = '\1-${GITHUB_SHA::7}';/" dist/sw.js && grep -m1 "const CACHE" dist/sw.js
+      - run: sha="${{ needs.prepare.outputs.sha }}"; sed -i -E "s/const CACHE = '([^']+)';/const CACHE = '\1-${sha::7}';/" dist/sw.js && grep -m1 "const CACHE" dist/sw.js
       - uses: actions/upload-artifact@v4
         with:
           name: web
           path: dist
 
   android:
+    needs: prepare
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -72,12 +103,8 @@ jobs:
         with:
           packages: platform-tools platforms;android-36 build-tools;36.0.0 build-tools;35.0.0
       - run: if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
-      # (v4.7.3) Keep gradlew executable (AI Studio drops execute permission, breaking APK builds), and derive
-      # Android versionCode from the run number so it always increments and Google Play accepts the AAB even
-      # if package.json version didn't change (see android/app/build.gradle).
-      - run: |
-          chmod +x android/gradlew
-          echo "MITIERRITA_VERSION_CODE=$((50000 + GITHUB_RUN_NUMBER))" >> "$GITHUB_ENV"
+      # Keep gradlew executable even if the prepare job could not push its fix (AI Studio drops the execute bit).
+      - run: chmod +x android/gradlew
       # Debug signing key: from repo secrets (ANDROID_KEYSTORE_BASE64, ...) if set; otherwise
       # uses the temporary keystore checked into android/app (see build.gradle).
       - env:
@@ -119,7 +146,7 @@ jobs:
           path: mitierrita.a*
 
   deploy:
-    needs: [web, android]
+    needs: [prepare, web, android]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -129,6 +156,7 @@ jobs:
       # bundled into a single .zip archive.
       - uses: actions/checkout@v4
         with:
+          ref: ${{ needs.prepare.outputs.sha }}
           sparse-checkout: web
       - uses: actions/download-artifact@v4
         with:
