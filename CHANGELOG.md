@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.4.2 — Ajustes
+- Ajustes y mejoras.
+
 ## v5.4.1 — Ajustes
 - Ajustes y mejoras.
 
