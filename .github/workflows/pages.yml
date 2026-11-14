@@ -20,6 +20,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Restores the execute bit of android/gradlew in the repository itself when a commit drops it (AI Studio does). The
+  # build jobs below also chmod it, so they never depend on this. Pushes made with GITHUB_TOKEN do not start a new run.
+  gradlew-mode:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          if git ls-files -s android/gradlew | grep -q '^100755'; then echo "android/gradlew is already executable."; exit 0; fi
+          git update-index --chmod=+x android/gradlew
+          git -c user.name='github-actions[bot]' -c user.email='41898299+github-actions[bot]@users.noreply.github.com' \
+            commit -m "Restaura el permiso de ejecución de android/gradlew"
+          git push origin HEAD:${GITHUB_REF_NAME} || echo "::warning::Could not push the gradlew fix (main moved); the next run will retry."
+
   web:
     runs-on: ubuntu-latest
     steps:
