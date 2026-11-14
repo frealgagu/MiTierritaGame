@@ -27,10 +27,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-      - run: npm ci
+          # (v4.7.3) Con o sin package-lock.json: los cambios que llegan de AI Studio a veces no lo traen.
+          cache: ${{ hashFiles('package-lock.json') != '' && 'npm' || '' }}
+      - run: if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
       - run: npm test
       - run: npm run build
+      # (v4.7.3) Cada publicación con su propio caché: el nombre lleva el commit, así la web y la app se actualizan
+      # aunque no se haya subido la versión ni el CACHE de public/sw.js.
+      - run: sed -i -E "s/const CACHE = '([^']+)';/const CACHE = '\1-${GITHUB_SHA::7}';/" dist/sw.js && grep -m1 "const CACHE" dist/sw.js
       - uses: actions/upload-artifact@v4
         with:
           name: web
@@ -43,7 +47,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: ${{ hashFiles('package-lock.json') != '' && 'npm' || '' }}
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -52,7 +56,13 @@ jobs:
       - uses: android-actions/setup-android@v3
         with:
           packages: platform-tools platforms;android-36 build-tools;36.0.0 build-tools;35.0.0
-      - run: npm ci
+      - run: if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+      # (v4.7.3) gradlew siempre ejecutable (desde AI Studio llegó sin el permiso y el APK no se armaba), y el código de
+      # versión de Android sale del número de esta publicación: siempre sube, así Google Play acepta el AAB aunque la
+      # versión de package.json no haya cambiado (ver android/app/build.gradle).
+      - run: |
+          chmod +x android/gradlew
+          echo "MITIERRITA_VERSION_CODE=$((50000 + GITHUB_RUN_NUMBER))" >> "$GITHUB_ENV"
       # Clave de pruebas: de los secretos del repositorio (ANDROID_KEYSTORE_BASE64, …) si existen; si no,
       # la que está temporalmente en android/app (ver build.gradle).
       - env:
