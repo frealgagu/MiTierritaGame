@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.4.1 — Ajustes
+- Ajustes y mejoras.
+
 ## v5.4.0 — Zona especial (primera parte)
 - **La zona especial ya tiene su recorrido:** ocho estaciones en una sola cadena, cada una con una mejora ×32 al llegar al nivel 100. Se abrirá en una próxima versión, con sus dibujos, su evento y su música.
 
