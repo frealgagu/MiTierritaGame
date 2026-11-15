@@ -25,6 +25,13 @@ export function formatNumber(n) {
   return sign + decimal(n.toFixed(digits)) + SUFFIXES[i];
 }
 
+// Counts (v5.9): whole numbers with thousands separators up to a million (9999 -> "9.999" in Spanish,
+// "9,999" in English), then like formatNumber.
+export function formatCount(n) {
+  if (Math.abs(n) >= 1e6) return formatNumber(n);
+  return Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, DECIMAL === ',' ? '.' : ',');
+}
+
 // Rates per second: show decimals when small.
 export function formatMult(m) {
   return `×${m < 1000 ? Math.round(m) : formatNumber(m)}`;

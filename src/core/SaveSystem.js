@@ -12,7 +12,6 @@ import { LOGROS_BY_ID } from '../data/logros.js';
 import { ALBUM, PAGE_BONUS } from '../data/album.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
 import { masteryReady } from '../sim/legacy.js';
-import { MAX_LEGACY_RESETS } from '../sim/modifiers.js';
 
 const KEY = 'mitierrita.save';
 
@@ -260,7 +259,7 @@ function finish(data, base, stations, zones, mules) {
     mules,
     stats: { ...base.stats, ...data.stats },
     // Other regions, each with its own independent game state.
-    legacy: { resets: Math.min(MAX_LEGACY_RESETS, data.legacy?.resets ?? 0) },
+    legacy: { resets: Math.min(CAPS.resets, data.legacy?.resets ?? 0) },
     goals: { ...base.goals, ...data.goals, claimed },
     // Text backup (for transferring a save to another device).
     ...(data.regions && { regions: Object.fromEntries(Object.entries(data.regions).map(([id, st]) => [id, migrate(st)])) }),

@@ -13,14 +13,14 @@ import { cappedPlayTime, cappedRenown } from '../src/ui/capped.js';
 
 test('a capped counter reads as its maximum followed by ++ (v5.9)', () => {
   assert.equal(capped(5, 10), '5');
-  assert.equal(capped(10, 10), '10++');
-  assert.equal(capped(12, 10), '10++');
+  assert.equal(capped(10, 10), '9++');
+  assert.equal(capped(12, 10), '9++');
   assert.equal(capAdd(8, 5, 10), 10);
   assert.equal(capAdd(undefined, 3, 10), 3);
   assert.ok(cappedRenown(CAPS.renown).endsWith('++'));
   assert.ok(!cappedRenown(5).endsWith('++'));
-  assert.ok(cappedPlayTime(CAPS.playHours * 3600).endsWith('h++'));
-  assert.ok(!cappedPlayTime(3600).endsWith('++'));
+  assert.equal(cappedPlayTime(CAPS.playHours * 3600), '∞');
+  assert.notEqual(cappedPlayTime(3600), '∞');
 });
 
 test('Renown, Prestige and per-product counters stop at their caps (v5.9)', () => {
@@ -85,4 +85,31 @@ test('loading a save trims the history and brings counters down to their caps (v
   assert.equal(loaded.profile.medals.broca.count.gold, CAPS.medalsPerKind);
   assert.equal(loaded.profile.lifetime.sold.coffee_bag, CAPS.stat);
   assert.equal(loaded.profile.lifetime.earned, CAPS.lifetimeEarned);
+});
+
+test('a capped counter shows the number just below its cap followed by ++ (v5.9)', async () => {
+  const { cappedCoins, cappedCount, cappedPrestige, cappedRenown } = await import('../src/ui/capped.js');
+  assert.equal(cappedCoins(CAPS.coins), '999Dc++');
+  assert.equal(cappedCount(CAPS.medalsPerKind, CAPS.medalsPerKind), '99++');
+  assert.equal(cappedRenown(CAPS.renown), '9.999++');
+  assert.equal(cappedPrestige(CAPS.prestige), '99.999++');
+  assert.equal(cappedRenown(150), '150');
+});
+
+test('restarts, the run number and the completed / second-ending counts stop at 60 (v5.9)', async () => {
+  const { restartState } = await import('../src/sim/legacy.js');
+  const { legacyMult, MAX_LEGACY_RESETS } = await import('../src/sim/modifiers.js');
+  let s = new Game().state;
+  s.legacy = { resets: CAPS.resets - 1 };
+  s = restartState(s);
+  assert.equal(s.legacy.resets, 60);
+  s = restartState(s);
+  assert.equal(s.legacy.resets, 60, 'stays at 60');
+  assert.equal(legacyMult(s), 2 ** MAX_LEGACY_RESETS);
+  s.mastered = true;
+  const { REGIONS_BY_ID } = await import('../src/data/regions.js');
+  const last = REGIONS_BY_ID.cafetero.zones.at(-1);
+  s.zones[last] = { ...s.zones[last], complete: true };
+  assert.equal(metric(s, 'masteries'), 60, 'not 61');
+  assert.equal(metric(s, 'endings'), 60, 'not 61');
 });

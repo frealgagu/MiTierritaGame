@@ -13,11 +13,12 @@ import { GOALS_BY_ZONE } from '../data/goals.js';
 import { RESEARCH } from '../data/research.js';
 import { REGION_OF_ZONE } from '../data/regions.js';
 import { createInitialState } from './state.js';
-import { MAX_LEGACY_RESETS, legacyMult } from './modifiers.js';
+import { legacyMult } from './modifiers.js';
 import { bankRun } from './logros.js';
 import { RESTART_RENOWN, gainRenown, profileOf } from './renown.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { tk } from '../i18n/index.js'; // labels translated where displayed (GoalsView)
+import { CAPS } from '../data/caps.js';
 
 const zoneStations = (z) => [...z.chain, ...z.plots.map((p) => p.stationId)];
 // Playable stations across all regions: chains and branches (Compostera).
@@ -84,7 +85,7 @@ export function restartState(state, now = Date.now(), profile = null) {
   const next = createInitialState(now, region.id);
   // Resets cap at multiplier limit (v4.0: stay there; previously kept incrementing and
   // appended to an unbounded completed runs log).
-  next.legacy = { resets: Math.min(MAX_LEGACY_RESETS, (state.legacy?.resets ?? 0) + 1) };
+  next.legacy = { resets: Math.min(CAPS.resets, (state.legacy?.resets ?? 0) + 1) };
   next.clockOffset = clockOf(state);
   next.settings = { ...state.settings, zone: region.zones[0] };
   next.hints = [...(state.hints ?? [])];

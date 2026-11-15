@@ -7,6 +7,7 @@ import { zoneMaxed } from '../sim/legacy.js';
 import { ZoneMap } from './ZoneMap.js';
 import { toast } from './toast.js';
 import { t } from '../i18n/index.js';
+import { cappedCoins } from './capped.js';
 
 // Zone selector (v3.0: by region): which are open, income of each, and where to travel.
 // 🗺️ button appears once more than one zone is open (in any region).
@@ -132,7 +133,7 @@ export class ZonesView {
       const here = region.zones.includes(this.getZone()) ? `<span class="zones-here">${t('📍 Aquí estás')}</span>` : '';
       // Always two lines (v4.1): name above; below, status and region coin rate.
       const counts = `${done}/${region.zones.length} 🚩${maxed.size ? ` · ${maxed.size}/${region.zones.length} 🏁` : ''}`;
-      const head = `<button class="zones-region research-other" data-fold="${region.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${region.icon} ${region.name}${here}<small>${counts} · 💰 ${formatNumber(state.coins)} (${formatRate(income)} 💰/s)</small></button>`;
+      const head = `<button class="zones-region research-other" data-fold="${region.id}" aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${region.icon} ${region.name}${here}<small>${counts} · 💰 ${cappedCoins(state.coins)} (${formatRate(income)} 💰/s)</small></button>`;
       if (folded) return group(head);
       const rows = region.zones.map((id, i) => {
         const zone = ZONES_BY_ID[id];

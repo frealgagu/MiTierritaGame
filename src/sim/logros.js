@@ -50,10 +50,11 @@ export function metric(state, name, profile = profileOf(state)) {
     case 'years':
       return Math.min(CAPS.years, (life.playTime + state.playTime) / YEAR);
     // Every reset run reached second ending, and earlier the first ending (final zone).
+    // (v5.9) Both stop at 60, like the restarts and the run number.
     case 'endings':
-      return runs + (state.zones[REGIONS_BY_ID[region].zones.at(-1)]?.complete ? 1 : 0);
+      return Math.min(CAPS.resets, runs + (state.zones[REGIONS_BY_ID[region].zones.at(-1)]?.complete ? 1 : 0));
     case 'masteries':
-      return runs + (state.mastered ? 1 : 0);
+      return Math.min(CAPS.resets, runs + (state.mastered ? 1 : 0));
     case 'medals':
       return medals.reduce((n, m) => n + Object.values(m.count ?? {}).reduce((a, b) => a + b, 0), 0);
     case 'eventsMedaled':

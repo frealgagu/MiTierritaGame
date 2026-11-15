@@ -1,4 +1,4 @@
-import { formatMult, formatNumber, formatRate } from '../core/format.js';
+import { formatMult, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { pendingUpgrade, recommendUpgrade, upgradeLevel } from '../sim/analysis.js';
 import { legacyMult } from '../sim/modifiers.js';
@@ -61,7 +61,7 @@ export class HUD {
     // Red when in debt (negative balance from dev options).
     this.coins.classList.toggle('debt', s.coins < 0);
     // Coins also shown in the browser tab title.
-    const title = `💰 ${formatNumber(s.coins)} · Mi Tierrita`;
+    const title = `💰 ${cappedCoins(s.coins)} · Mi Tierrita`;
     if (document.title !== title) document.title = title;
     this.income.textContent = `+${formatRate(this.game.incomePerSecond())}/s`;
     const hour = this.getHour();

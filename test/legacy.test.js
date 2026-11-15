@@ -260,16 +260,16 @@ test('«Collect all» and «Buy all» (v3.57)', async () => {
   assert.ok(!st.research.some((id) => RESEARCH.find((r) => r.id === id).minLevel), 'without Mastery or Supremacy');
 });
 
-test('coins have a ceiling of 999Dc (v3.68.3)', async () => {
+test('coins have a ceiling of 1000 Dc, shown as 999Dc++ (v3.68.3, v5.9)', async () => {
   const { MAX_COINS } = await import('../src/sim/modifiers.js');
-  const { formatNumber } = await import('../src/core/format.js');
+  const { cappedCoins } = await import('../src/ui/capped.js');
   const game = new Game();
   game.state.coins = 5e40;
   game.state.totalEarned = 5e40;
   game.step(0.1);
   assert.equal(game.state.coins, MAX_COINS);
   assert.equal(game.state.totalEarned, MAX_COINS);
-  assert.equal(formatNumber(MAX_COINS), '999Dc');
+  assert.equal(cappedCoins(MAX_COINS), '999Dc++');
   game.state.coins = 1e30;
   game.step(0.1);
   assert.ok(game.state.coins < MAX_COINS, 'below the ceiling nothing changes');
