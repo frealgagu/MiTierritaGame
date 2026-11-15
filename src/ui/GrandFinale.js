@@ -5,7 +5,7 @@
 //   playGrandFinale({ t, onClose, volume, beforeMusic, afterMusic })
 //     t: translator for texts (identity by default); volume: 0..1 music volume;
 //     beforeMusic / afterMusic: called to quiet the game's own music and bring it back.
-// Tap anywhere: next keeper. ⏭: next region. ✕: close.
+// Tap anywhere: next keeper. ⏩: next region. ✕: close.
 import { Application, Container, Graphics } from 'pixi.js';
 import { KeeperView } from '../render/Keeper.js';
 import { PEOPLE } from '../data/lore.js';
@@ -191,7 +191,7 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
   const root = document.createElement('div');
   root.className = 'gf';
   root.innerHTML = `<canvas class="gf-confetti"></canvas>
-    <div class="gf-top"><span class="gf-title">${t(FINALE_TEXT.title)}</span><button class="gf-btn" data-skip type="button">⏭</button><button class="gf-btn" data-close type="button" aria-label="✕">✕</button></div>
+    <div class="gf-top"><span class="gf-title">${t(FINALE_TEXT.title)}</span><button class="gf-btn" data-skip type="button">⏩</button><button class="gf-btn" data-close type="button" aria-label="✕">✕</button></div>
     <div class="gf-region" hidden></div>
     <div class="gf-bubble"><span>${t(FINALE_TEXT.intro)}</span></div>
     <div class="gf-stage"></div>

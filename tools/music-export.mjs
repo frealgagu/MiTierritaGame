@@ -1,13 +1,14 @@
 // Game music for download (v3.71): each track from src/audio/songs.js as MP3 (played just like in
 // the game, with the same room reverb) and as MIDI (each instrument's notes on its own track).
 //   node tools/music-export.mjs [folder]   (default web/musica; requires ffmpeg with libmp3lame)
+//   ONLY=sanandres,granfinal node tools/music-export.mjs   exports just those tracks
 // The MP3 repeats the piece to about two and a half minutes and closes on the opening chord, with a fade-out.
 // The MIDI is one loop plus the final chord, with the piece's tempo and time signature.
 import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { SONGS } from '../src/audio/songs.js';
+import { GRAN_FINAL, SONGS as REGION_SONGS } from '../src/audio/songs.js';
 import { REGIONS_BY_ID } from '../src/data/regions.js';
 import { createSong, renderBar } from '../src/audio/compose.js';
 import { createRng } from '../src/core/rng.js';
@@ -20,21 +21,30 @@ const TARGET_S = 140; // rough target duration of the MP3
 const TAIL_S = 3.5; // trailing sound after the last beat
 const ARTIST = 'Encantos de Mi Tierrita';
 
-// Region order in the game and each file name.
-export const ORDER = ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima', 'cundinamarca', 'bogota', 'sanandres'];
-// Included on the downloads page: excludes regions still hidden in the game (v4.4.10: Bogotá) and secret ones
-// (v5.5: the special zone, which must not be named outside the game before it opens).
-export const PUBLIC = ORDER.filter((region) => !REGIONS_BY_ID[region].hidden && !REGIONS_BY_ID[region].secret);
+// Every track: one per region, plus the grand finale's (v5.9).
+export const SONGS = { ...REGION_SONGS, granfinal: GRAN_FINAL };
+// Order in the game and each file name.
+export const ORDER = ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima', 'cundinamarca', 'bogota', 'sanandres', 'granfinal'];
+// Included on the downloads page: excludes regions still hidden in the game (v4.4.10: Bogotá). Since v5.9 the
+// special zone and the grand finale are included too, but as spoilers (see SPOILERS).
+export const PUBLIC = ORDER.filter((id) => !REGIONS_BY_ID[id]?.hidden);
+// Tracks that give away the end of the game: the page keeps them in a folded section with a warning, and the
+// special zone is not named.
+export const SPOILERS = ['sanandres', 'granfinal'];
 const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export const fileOf = (region) => `${ORDER.indexOf(region) + 1}-${slug(SONGS[region].name)}`;
 
 // Each voice in compose.js: track name, General MIDI program, and if percussion, the channel 10 note.
-const MELODY = { bambuco: ['Bandola', 25], cumbia: ['Gaita', 73], torbellino: ['Requinto', 25], joropo: ['Arpa llanera', 46], chirimia: ['Clarinete', 71], amazonica: ['Guitarra eléctrica', 27], sanjuanero: ['Bandola', 25], pasillo: ['Bandola', 25], danza: ['Bandola', 25], calipso: ['Tambor metálico', 114] };
+const MELODY = { granfinal: ['Clarinete', 71], bambuco: ['Bandola', 25], cumbia: ['Gaita', 73], torbellino: ['Requinto', 25], joropo: ['Arpa llanera', 46], chirimia: ['Clarinete', 71], amazonica: ['Guitarra eléctrica', 27], sanjuanero: ['Bandola', 25], pasillo: ['Bandola', 25], danza: ['Bandola', 25], calipso: ['Tambor metálico', 114] };
 function voiceOf(style, voice, ev) {
   switch (voice) {
     case 'melody': return { name: MELODY[style][0], program: MELODY[style][1] };
     case 'second': return { name: 'Clarinete 2', program: 71 };
-    case 'bass': return style === 'chirimia' ? { name: 'Bombardino', program: 58 } : style === 'amazonica' ? { name: 'Bajo', program: 33 } : { name: 'Bajo', program: 32 };
+    case 'harp': return { name: 'Arpa llanera', program: 46 };
+    case 'fanfare': return { name: 'Bombardino 2', program: 58 };
+    case 'steel': return { name: 'Tambor metálico', program: 114 };
+    case 'gaita': return { name: 'Gaita', program: 73 };
+    case 'bass': return style === 'chirimia' || style === 'granfinal' ? { name: 'Bombardino', program: 58 } : style === 'amazonica' ? { name: 'Bajo', program: 33 } : { name: 'Bajo', program: 32 };
     case 'guitar': return { name: 'Guitarra', program: 24 };
     case 'tiple': return { name: 'Tiple', program: 25 };
     case 'cuatro': return { name: 'Cuatro', program: 24 };
@@ -171,7 +181,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   mkdirSync(OUT, { recursive: true });
   const tmp = mkdtempSync(join(tmpdir(), 'musica-'));
   try {
-    for (const region of PUBLIC) {
+    const only = process.env.ONLY?.split(',');
+    for (const region of PUBLIC.filter((id) => !only || only.includes(id))) {
       const name = fileOf(region);
       writeFileSync(join(OUT, `${name}.mid`), midiFile(region));
       const { mixed, loops, seconds, info } = mp3(region, tmp);

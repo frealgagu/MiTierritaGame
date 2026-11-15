@@ -5,15 +5,45 @@
 // The combined .zip is built by the publish workflow (.github/workflows/pages.yml).
 import { execFileSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
-import { SONGS } from '../src/audio/songs.js';
 import { REGIONS } from '../src/data/regions.js';
 import { EFFECTS } from './audio-list.mjs';
-import { PUBLIC, fileOf } from './music-export.mjs';
+import { PUBLIC, SONGS, SPOILERS, fileOf } from './music-export.mjs';
 
 const DIR = new URL('../web/musica/', import.meta.url).pathname;
 const LANGS = ['es', 'en', 'pt', 'fr'];
 const content = async (lang, part) => (lang === 'es' ? null : (await import(`../src/i18n/${lang}/content/${part}.js`)).default);
 const seconds = (path) => Math.round(Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', path], { encoding: 'utf8' })) * 10) / 10;
+
+const T = {
+  es: {
+    spoilers: '⚠️ Spoilers', spoilerNote: 'La música del final del juego: la zona especial y el gran final. No la abras hasta terminar el juego.', spoilerOpen: 'Mostrar la música del final', special: 'Zona especial', finale: 'Gran final',
+    title: 'Música y sonidos', lead: 'La música y los efectos de sonido de <b>Encantos de Mi Tierrita</b>, compuestos para el juego y tocados por él con instrumentos sintetizados. En <b>MP3</b> para escuchar y en <b>MIDI</b> para tocarlos o hacer arreglos.',
+    midiNote: 'El MIDI trae cada instrumento en su pista, con el tempo y el compás de la pieza; suena con los instrumentos del programa que lo abra, así que no es igual al del juego.',
+    music: '🎶 Música', effects: '🔔 Efectos de sonido', all: '⬇️ Descargar todo (.zip)', back: '← Volver al juego', play: 'Escuchar', stop: 'Parar',
+    credit: 'Música y sonidos hechos con código por frealgagu para el juego.', effectsNote: 'Los que son notas (monedas, campanas…) también van en MIDI; los demás son ruido (fuego, viento, el Willys) y solo están en MP3.',
+  },
+  en: {
+    spoilers: '⚠️ Spoilers', spoilerNote: 'The music of the end of the game: the special zone and the grand finale. Do not open it until you finish the game.', spoilerOpen: 'Show the music of the end', special: 'Special zone', finale: 'Grand finale',
+    title: 'Music and sounds', lead: 'The music and sound effects of <b>Encantos de Mi Tierrita</b>, composed for the game and played by it with synthesized instruments. In <b>MP3</b> to listen to and in <b>MIDI</b> to play them or make arrangements.',
+    midiNote: 'Each MIDI file has every instrument on its own track, with the tempo and time signature of the piece; it plays with the instruments of the program you open it with, so it does not sound exactly like the game.',
+    music: '🎶 Music', effects: '🔔 Sound effects', all: '⬇️ Download everything (.zip)', back: '← Back to the game', play: 'Play', stop: 'Stop',
+    credit: 'Music and sounds made with code by frealgagu for the game.', effectsNote: 'The ones made of notes (coins, bells…) also come in MIDI; the rest are noise (fire, wind, the Willys) and are only in MP3.',
+  },
+  pt: {
+    spoilers: '⚠️ Spoilers', spoilerNote: 'A música do final do jogo: a zona especial e o grande final. Não abra antes de terminar o jogo.', spoilerOpen: 'Mostrar a música do final', special: 'Zona especial', finale: 'Grande final',
+    title: 'Música e sons', lead: 'A música e os efeitos sonoros de <b>Encantos de Mi Tierrita</b>, compostos para o jogo e tocados por ele com instrumentos sintetizados. Em <b>MP3</b> para ouvir e em <b>MIDI</b> para tocar ou fazer arranjos.',
+    midiNote: 'O MIDI traz cada instrumento na sua faixa, com o andamento e o compasso da peça; ele soa com os instrumentos do programa que o abrir, então não é igual ao do jogo.',
+    music: '🎶 Música', effects: '🔔 Efeitos sonoros', all: '⬇️ Baixar tudo (.zip)', back: '← Voltar ao jogo', play: 'Ouvir', stop: 'Parar',
+    credit: 'Música e sons feitos com código por frealgagu para o jogo.', effectsNote: 'Os que são notas (moedas, sinos…) também vêm em MIDI; os outros são ruído (fogo, vento, o Willys) e estão só em MP3.',
+  },
+  fr: {
+    spoilers: '⚠️ Spoilers', spoilerNote: 'La musique de la fin du jeu : la zone spéciale et le grand final. Ne l’ouvre pas avant d’avoir fini le jeu.', spoilerOpen: 'Afficher la musique de la fin', special: 'Zone spéciale', finale: 'Grand final',
+    title: 'Musique et sons', lead: 'La musique et les effets sonores d’<b>Encantos de Mi Tierrita</b>, composés pour le jeu et joués par lui avec des instruments synthétisés. En <b>MP3</b> pour les écouter et en <b>MIDI</b> pour les jouer ou les arranger.',
+    midiNote: 'Le MIDI contient chaque instrument sur sa piste, avec le tempo et la mesure du morceau ; il sonne avec les instruments du programme qui l’ouvre, donc pas exactement comme dans le jeu.',
+    music: '🎶 Musique', effects: '🔔 Effets sonores', all: '⬇️ Tout télécharger (.zip)', back: '← Revenir au jeu', play: 'Écouter', stop: 'Arrêter',
+    credit: 'Musique et sons faits avec du code par frealgagu pour le jeu.', effectsNote: 'Ceux qui sont des notes (pièces, cloches…) existent aussi en MIDI ; les autres sont du bruit (feu, vent, la Willys) et n’existent qu’en MP3.',
+  },
+};
 
 const songs = [];
 for (const region of PUBLIC) {
@@ -26,43 +56,18 @@ for (const region of PUBLIC) {
     const r = await content(lang, 'regions');
     names[lang] = s?.[region]?.[0] ?? SONGS[region].name;
     instruments[lang] = s?.[region]?.[1] ?? SONGS[region].instruments;
-    regionName[lang] = r?.[region] ?? REGIONS.find((x) => x.id === region).name;
+    // (v5.9) Spoilers: the special zone is not named, and the grand finale is not a region.
+    regionName[lang] = region === 'granfinal' ? T[lang].finale : region === 'sanandres' ? T[lang].special : r?.[region] ?? REGIONS.find((x) => x.id === region).name;
   }
   // Custom game icons (from its font, in the Unicode Private Use Area) don't render here: use an emoji.
-  const icon = REGIONS.find((x) => x.id === region).icon;
-  songs.push({ file, names, instruments, region: regionName, icon: /[\uE000-\uF8FF]/.test(icon) ? '🐜' : icon, seconds: seconds(`${DIR}${file}.mp3`) });
+  const icon = region === 'granfinal' ? '🎉' : region === 'sanandres' ? '⭐' : REGIONS.find((x) => x.id === region).icon;
+  songs.push({ file, names, instruments, region: regionName, icon: /[\uE000-\uF8FF]/.test(icon) ? '🐜' : icon, seconds: seconds(`${DIR}${file}.mp3`), spoiler: SPOILERS.includes(region) });
 }
 const effects = EFFECTS.map(([file, , midi, names]) => {
   if (midi && !existsSync(`${DIR}efectos/${file}.mid`)) throw new Error(`falta efectos/${file}.mid`);
   return { file, midi, names, seconds: seconds(`${DIR}efectos/${file}.mp3`) };
 });
 
-const T = {
-  es: {
-    title: 'Música y sonidos', lead: 'La música y los efectos de sonido de <b>Encantos de Mi Tierrita</b>, compuestos para el juego y tocados por él con instrumentos sintetizados. En <b>MP3</b> para escuchar y en <b>MIDI</b> para tocarlos o hacer arreglos.',
-    midiNote: 'El MIDI trae cada instrumento en su pista, con el tempo y el compás de la pieza; suena con los instrumentos del programa que lo abra, así que no es igual al del juego.',
-    music: '🎶 Música', effects: '🔔 Efectos de sonido', all: '⬇️ Descargar todo (.zip)', back: '← Volver al juego', play: 'Escuchar', stop: 'Parar',
-    credit: 'Música y sonidos hechos con código por frealgagu para el juego.', effectsNote: 'Los que son notas (monedas, campanas…) también van en MIDI; los demás son ruido (fuego, viento, el Willys) y solo están en MP3.',
-  },
-  en: {
-    title: 'Music and sounds', lead: 'The music and sound effects of <b>Encantos de Mi Tierrita</b>, composed for the game and played by it with synthesized instruments. In <b>MP3</b> to listen to and in <b>MIDI</b> to play them or make arrangements.',
-    midiNote: 'Each MIDI file has every instrument on its own track, with the tempo and time signature of the piece; it plays with the instruments of the program you open it with, so it does not sound exactly like the game.',
-    music: '🎶 Music', effects: '🔔 Sound effects', all: '⬇️ Download everything (.zip)', back: '← Back to the game', play: 'Play', stop: 'Stop',
-    credit: 'Music and sounds made with code by frealgagu for the game.', effectsNote: 'The ones made of notes (coins, bells…) also come in MIDI; the rest are noise (fire, wind, the Willys) and are only in MP3.',
-  },
-  pt: {
-    title: 'Música e sons', lead: 'A música e os efeitos sonoros de <b>Encantos de Mi Tierrita</b>, compostos para o jogo e tocados por ele com instrumentos sintetizados. Em <b>MP3</b> para ouvir e em <b>MIDI</b> para tocar ou fazer arranjos.',
-    midiNote: 'O MIDI traz cada instrumento na sua faixa, com o andamento e o compasso da peça; ele soa com os instrumentos do programa que o abrir, então não é igual ao do jogo.',
-    music: '🎶 Música', effects: '🔔 Efeitos sonoros', all: '⬇️ Baixar tudo (.zip)', back: '← Voltar ao jogo', play: 'Ouvir', stop: 'Parar',
-    credit: 'Música e sons feitos com código por frealgagu para o jogo.', effectsNote: 'Os que são notas (moedas, sinos…) também vêm em MIDI; os outros são ruído (fogo, vento, o Willys) e estão só em MP3.',
-  },
-  fr: {
-    title: 'Musique et sons', lead: 'La musique et les effets sonores d’<b>Encantos de Mi Tierrita</b>, composés pour le jeu et joués par lui avec des instruments synthétisés. En <b>MP3</b> pour les écouter et en <b>MIDI</b> pour les jouer ou les arranger.',
-    midiNote: 'Le MIDI contient chaque instrument sur sa piste, avec le tempo et la mesure du morceau ; il sonne avec les instruments du programme qui l’ouvre, donc pas exactement comme dans le jeu.',
-    music: '🎶 Musique', effects: '🔔 Effets sonores', all: '⬇️ Tout télécharger (.zip)', back: '← Revenir au jeu', play: 'Écouter', stop: 'Arrêter',
-    credit: 'Musique et sons faits avec du code par frealgagu pour le jeu.', effectsNote: 'Ceux qui sont des notes (pièces, cloches…) existent aussi en MIDI ; les autres sont du bruit (feu, vent, la Willys) et n’existent qu’en MP3.',
-  },
-};
 
 const html = `<!doctype html>
 <html lang="es">
@@ -92,6 +97,8 @@ const html = `<!doctype html>
       .note { color: var(--muted); font-size: 0.95rem; }
       .btn { display: inline-flex; align-items: center; gap: 6px; font: inherit; font-weight: 600; text-decoration: none; color: inherit; border: 2px solid var(--ink); border-radius: 12px; padding: 6px 12px; background: var(--chip); cursor: pointer; }
       .btn.main { background: var(--accent); border-color: var(--accent); color: #fff; }
+      .spoiler { border: 2px dashed var(--line); border-radius: 16px; padding: 10px 14px; margin: 14px 0; }
+      .spoiler summary { cursor: pointer; }
       .song { border: 2px solid var(--line); border-radius: 16px; padding: 12px 14px; margin: 10px 0; }
       .song h3 { margin: 0; font-size: 1.05rem; }
       .song p { margin: 2px 0 8px; color: var(--muted); font-size: 0.92rem; }
@@ -118,6 +125,7 @@ const html = `<!doctype html>
       <h2 data-t="music"></h2>
       <p class="note" data-t="midiNote"></p>
       <div id="songs"></div>
+      <details class="spoiler" id="spoilers"><summary><b data-t="spoilers"></b> <span data-t="spoilerOpen"></span></summary><p class="note" data-t="spoilerNote"></p><div id="spoiler-songs"></div></details>
       <h2 data-t="effects"></h2>
       <p class="note" data-t="effectsNote"></p>
       <div class="fx" id="fx"></div>
@@ -139,10 +147,14 @@ const html = `<!doctype html>
         document.title = t.title + ' · Encantos de Mi Tierrita';
         for (const el of document.querySelectorAll('[data-t]')) el.innerHTML = t[el.dataset.t];
         document.getElementById('langs').innerHTML = Object.keys(T).map((l) => '<button type="button" data-lang="' + l + '" aria-pressed="' + (l === lang) + '">' + NAMES[l] + '</button>').join('');
-        document.getElementById('songs').innerHTML = SONGS.map((s) =>
+        const card = (s) =>
           '<div class="song"><h3>' + s.icon + ' ' + s.names[lang] + '</h3><p>' + s.region[lang] + ' · ' + s.instruments[lang] + ' · ' + mmss(s.seconds) + '</p>' +
           '<audio controls preload="none" src="./' + s.file + '.mp3"></audio>' +
-          '<div class="row"><a class="btn" href="./' + s.file + '.mp3" download>⬇️ MP3</a><a class="btn" href="./' + s.file + '.mid" download>🎹 MIDI</a></div></div>').join('');
+          '<div class="row"><a class="btn" href="./' + s.file + '.mp3" download>⬇️ MP3</a><a class="btn" href="./' + s.file + '.mid" download>🎹 MIDI</a></div></div>';
+        document.getElementById('songs').innerHTML = SONGS.filter((s) => !s.spoiler).map(card).join('');
+        // (v5.9) The end of the game, folded behind a spoiler warning.
+        document.getElementById('spoiler-songs').innerHTML = SONGS.filter((s) => s.spoiler).map(card).join('');
+        document.getElementById('spoilers').hidden = !SONGS.some((s) => s.spoiler);
         document.getElementById('fx').innerHTML = FX.map((f) =>
           '<div><button class="btn" type="button" data-play="' + f.file + '" aria-label="' + t.play + '">▶</button><b>' + f.names[lang] + ' <span class="note">' + short(f.seconds) + '</span></b>' +
           '<a class="btn" href="./efectos/' + f.file + '.mp3" download>MP3</a>' + (f.midi ? '<a class="btn" href="./efectos/' + f.file + '.mid" download>MIDI</a>' : '') + '</div>').join('');

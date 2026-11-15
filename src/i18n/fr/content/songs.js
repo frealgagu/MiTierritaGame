@@ -11,4 +11,5 @@ export default {
   cundinamarca: ['Pasillo de la Savane', 'bandola, tiple et guitare'],
   bogota: ['Danza de La Candelaria', 'bandola, tiple et guitare'],
   "sanandres": ["Calypso de la Lune verte", "steel drum, guitare, contrebassine, maracas et bongos"],
+  granfinal: ["Fête de toute la Colombie", "euphonium, clarinettes, gaita, harpe, tiple, steel pan, tambora, llamador et guacharaca"],
 };

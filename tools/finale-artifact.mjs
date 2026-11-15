@@ -47,8 +47,8 @@ q { quotes: '«' '»'; }
   <section class="card">
     <p class="song">🎵 <span id="song"></span></p>
     <p class="small" id="instruments"></p>
-    <p class="small">Toca la pantalla para pasar al siguiente, ⏭ salta a la próxima región y ✕ cierra. La música tarda un par de segundos en prepararse.</p>
-    <button id="play" type="button">▶ Ver el gran final</button>
+    <p class="small">Toca la pantalla para pasar al siguiente, ⏩ salta a la próxima región y ✕ cierra. La música tarda un par de segundos en prepararse.</p>
+    <button id="play" type="button">🎉 Ver el gran final</button>
   </section>
   <section><h2>Lo que dice cada uno</h2><p class="small">Dime qué cambiar: el texto, el acento, el orden o la duración.</p><div id="lines"></div></section>
 </main>

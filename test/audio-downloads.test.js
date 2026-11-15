@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { SONGS } from '../src/audio/songs.js';
 import { createSong, renderBar, renderSong } from '../src/audio/compose.js';
 import { EFFECTS } from '../tools/audio-list.mjs';
-import { ORDER, PUBLIC, fileOf } from '../tools/music-export.mjs';
+import { ORDER, PUBLIC, SONGS as TRACKS, fileOf } from '../tools/music-export.mjs';
 import { writeMidi } from '../tools/midi.mjs';
 
 // Downloadable music and sounds (v3.71, web/musica). If a track or sound effect changes,
@@ -12,7 +12,7 @@ import { writeMidi } from '../tools/midi.mjs';
 const DIR = new URL('../web/musica/', import.meta.url).pathname;
 
 test('every piece has its MP3 and its MIDI, and the page lists it (not yet those of hidden regions)', () => {
-  assert.deepEqual([...ORDER].sort(), Object.keys(SONGS).sort());
+  assert.deepEqual([...ORDER].sort(), Object.keys(TRACKS).sort(), 'every region track plus the grand finale (v5.9)');
   const page = readFileSync(`${DIR}index.html`, 'utf8');
   // Regions still hidden (Bogotá, while under construction) are not published yet.
   for (const region of PUBLIC) {
