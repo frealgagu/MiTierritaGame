@@ -1,5 +1,8 @@
 # Journal des modifications
 
+## v5.6.1 — Ajustements
+- Ajustements et améliorations.
+
 ## v5.6.0 — Les nouveautés dans ta langue
 - **Les nouveautés de chaque version arrivent dans ta langue :** l’application les affiche en français, espagnol, anglais ou portugais, comme le jeu.
 - **La politique de confidentialité en quatre langues :** ⚙️ › 🔒 Confidentialité et ℹ️ À propos mènent à la page dans ta langue.

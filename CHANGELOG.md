@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.6.1 — Tweaks
+- Tweaks and improvements.
+
 ## v5.6.0 — News in your language
 - **The update notes come in your language:** the app shows what's new in English, Spanish, Portuguese or French, the same as the game.
 - **The privacy policy in four languages:** ⚙️ › 🔒 Privacy and ℹ️ About point to the page in your language.

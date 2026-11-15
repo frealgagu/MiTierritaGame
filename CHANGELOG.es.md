@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.6.1 — Ajustes
+- Ajustes y mejoras.
+
 ## v5.6.0 — Novedades en tu idioma
 - **Las novedades de cada versión llegan en tu idioma:** la app las muestra en español, inglés, portugués o francés, igual que el juego.
 - **La política de privacidad en cuatro idiomas:** ⚙️ › 🔒 Privacidad y ℹ️ Acerca de llevan a la página en tu idioma.
