@@ -22,13 +22,14 @@ import regions from './content/regions.js';
 import songs from './content/songs.js';
 import { dispatch, pets, seasons } from './content/misc.js';
 import victory from './content/victory.js';
+import finale from './content/finale.js';
 import { ptArticle } from './article.js';
 
 export { UI };
 export const DECIMAL = ',';
 
 export function applyData() {
-  applyContent({ stations, products, productZones, events, eventActions, medals, albumPages, stickers, logros, routes, zones, facts, people, welcome, decor, regions, songs, dispatch, seasons, victory, pets });
+  applyContent({ stations, products, productZones, events, eventActions, medals, albumPages, stickers, logros, routes, zones, facts, people, welcome, decor, regions, songs, dispatch, seasons, victory, pets, finale });
   // As pesquisas depois: a descrição usa os nomes de estações e produtos já em português.
   applyContent({ research: researchTexts() });
   setArticleRule(ptArticle);

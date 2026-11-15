@@ -202,4 +202,7 @@ export default {
   'Juega cualquier evento listo cuando quieras: sin los 2 años de espera y sin el límite de 2 eventos abiertos a la vez.': 'Joue n’importe quel événement prêt quand tu veux : sans les 2 ans d’attente et sans la limite de 2 événements ouverts à la fois.',
   'Región anterior': 'Région précédente',
   'Región siguiente': 'Région suivante',
+  "🎉 Ver el gran final": "🎉 Voir le grand final",
+  "🎉 ¡Tienes todos los logros! El gran final te espera.": "🎉 Tu as tous les succès ! Le grand final t’attend.",
+  "🎉 Aún falta el gran final: se abre cuando tengas todos los logros de todas las regiones ({have} de {total}).": "🎉 Il reste le grand final : il s’ouvre quand tu as tous les succès de toutes les régions ({have} sur {total}).",
 };

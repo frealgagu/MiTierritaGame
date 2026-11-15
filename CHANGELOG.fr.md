@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## v5.9.0 — Le grand final
+- **🎉 Le grand final :** avec tous les succès de toutes les régions, les responsables de chaque zone te félicitent, région par région et chacun avec sa façon de parler, sur une musique composée rien que pour ce moment. À la fin, ils s’écartent et la carte de la Colombie s’illumine de feux d’artifice au-dessus de chaque capitale. Il se lance tout seul la première fois, puis quand tu veux depuis ⚙️ ou Renom › 🏆 Succès. Touche un responsable pour entendre ce qu’il dit ; ⏪ et ⏩ changent de région.
+- **Un succès de plus :** le grand final apparaît dans 🏆 Succès (une fois la zone spéciale ouverte) avec le nombre de succès obtenus, et il rapporte 32 ⭐ de Renom.
+- **⚡ Événements sans attente :** un achat de 100 ⭐ de Renom supprime les 2 ans d’attente entre les événements et la limite de 2 événements à la fois : joue autant que tu veux, quand tu veux.
+- **Compteurs plafonnés :** les pièces, le vendu et le produit, le Renom, le Prestige, les médailles, les heures jouées et les autres compteurs ne grandissent plus sans fin. À leur maximum, ils s’affichent « 999Dc++ », « 99++ » ou « ∞ ». Les redémarrages et le numéro de partie vont jusqu’à 60.
+- **Sauvegarde plus légère :** l’historique des événements ne garde que le dernier.
+- **Icônes maison :** enregistrer et ouvrir un fichier et deux améliorations de la Grande Foire n’utilisent plus les emojis du téléphone.
+- **Carte :** la zone spéciale est plus près de sa vraie place.
+- **Musique à télécharger :** celle de la zone spéciale et celle du grand final sont sur la page de téléchargements, derrière un avertissement pour ne pas gâcher la surprise.
+
 ## v5.8.0 — Tout tient sur n’importe quel écran
 - **Boutons réguliers :** deux hauteurs fixes dans tout le jeu, une pour les actions et une plus basse pour les onglets, ×1/×10/Max et les boutons d’en-tête. Les textes sur deux lignes n’agrandissent plus le bouton, et dans les rangées de boutons des fenêtres, tous ont la même largeur.
 - **Recherches et zones :** l’icône, le texte et le bouton sont toujours dans les mêmes colonnes ; sur les téléphones de moins de 360 px, le bouton passe sous le texte sur toutes les lignes. « Dans d’autres zones » peut se replier.

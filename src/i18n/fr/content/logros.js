@@ -165,4 +165,5 @@ export default {
   "sa_luna": ["Sous la Lune verte", "Gagne {n} médailles à la Fête de la Lune verte"],
   "sa_album": ["Album complet", "Remplis {n} pages de l’album"],
   "sa_ciencia": ["Ingénieur", "Achète {n} recherches dans une partie"],
+  "gran_final": ["Grand final", "Obtiens tous les succès de toutes les régions"],
 };

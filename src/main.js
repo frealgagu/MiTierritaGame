@@ -47,6 +47,8 @@ import { bindMore } from './ui/more.js';
 import { LANG, LANGS, saveLang, t } from './i18n/index.js';
 import { Sound } from './audio/Sound.js';
 import { Music } from './audio/Music.js';
+import { playGrandFinale } from './ui/GrandFinale.js';
+import { checkFinaleLogro, finaleDue, finaleUnlocked } from './sim/finale.js';
 import { cappedCoins, cappedPlayTime, cappedStat } from './ui/capped.js';
 
 const AUTOSAVE_MS = 10_000;
@@ -395,7 +397,28 @@ async function start() {
     }
     location.reload();
   };
-  const mastery = (g = active) => showMastery(g.state, () => restart(g));
+  // Grand finale (v5.9): over the whole game, with the game's music quiet while it plays.
+  let finaleOn = false;
+  const grandFinale = () => {
+    if (finaleOn) return;
+    finaleOn = true;
+    for (const id of ['menu', 'renown']) document.getElementById(id).hidden = true;
+    // The finale covers the screen: the map is not drawn meanwhile (the game keeps running).
+    app.stage.visible = false;
+    playGrandFinale({
+      t,
+      volume: settings.musicVolume / 100,
+      beforeMusic: () => music.setEnabled(false),
+      afterMusic: () => music.setEnabled(settings.musicVolume > 0),
+      onClose: () => {
+        finaleOn = false;
+        app.stage.visible = true;
+      },
+      renderer: app.renderer,
+    });
+  };
+  renown.onFinale = grandFinale;
+  const mastery = (g = active) => showMastery(g.state, () => restart(g), { profile: root.profile, onFinale: grandFinale });
   // Regions whose condition was just met start producing right away, each with its own Game.
   const openNew = () => {
     const opened = openRegions(root);
@@ -543,10 +566,18 @@ async function start() {
       safely(() => {
         // Per-region achievements (v3.10) alongside global player Renown.
         const won = Object.values(games).flatMap((g) => checkLogros(g.state, root.profile));
+        // The grand finale is one more achievement (v5.9), paid once all the others are complete.
+        won.push(...checkFinaleLogro(root.profile));
         // Region-wide medal tier bonus (v3.12).
         for (const b of checkMedalBonus(root.profile)) {
           toast(t('🏅 ¡Todos los eventos de {region} con {medal} o mejor! +{renown} ⭐ de Renombre', { region: REGIONS_BY_ID[b.region].name, medal: `${MEDALS[b.medal].icon} ${MEDALS[b.medal].name}`, renown: b.renown }), 5000);
           sound.milestone();
+        }
+        // The last achievement opens the grand finale (v5.9): it plays by itself once, when no window is open.
+        if (finaleDue(root.profile) && !board && !document.querySelector('.modal:not([hidden])')) {
+          root.profile.grandFinaleSeen = true;
+          saveGame(root);
+          grandFinale();
         }
         if (!won.length) return;
         const stars = won.reduce((n, w) => n + w.reward, 0);
@@ -598,7 +629,7 @@ async function start() {
   document.addEventListener('visibilitychange', () => (document.hidden ? onHide() : onShow()));
   window.addEventListener('pagehide', persist);
 
-  bindMenu(game, sound, music, () => active);
+  bindMenu(game, sound, music, () => active, grandFinale);
   bindDevOptions(game, () => active);
   bindIconTips();
   bindMore(); // Show more toggle on long descriptions (v3.67.5)
@@ -640,7 +671,7 @@ async function applyOffline(game, seconds, region = null, profile = game.state.p
 }
 
 // getActive: currently viewed region state (its second ending and restart).
-function bindMenu(game, sound, music, getActive) {
+function bindMenu(game, sound, music, getActive, grandFinale) {
   const menu = document.getElementById('menu');
   // SFX and music volume (v3.66), from 0 (muted) to 100.
   const slider = (key, flag, icons, apply) => {
@@ -693,8 +724,11 @@ function bindMenu(game, sound, music, getActive) {
       t('💰 Ganado en total: <b>{coins}</b>', { coins: cappedCoins(earned) }),
       t('📦 Productos vendidos: <b>{n}</b>', { n: cappedStat(sold) }),
     ].map((li) => `<li>${li}</li>`).join('');
+    // The grand finale (v5.9), once every achievement is complete.
+    document.getElementById('finale-btn').hidden = !finaleUnlocked(s.profile);
     menu.hidden = false;
   });
+  document.getElementById('finale-btn').addEventListener('click', grandFinale);
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));
   const about = document.getElementById('about');
   document.getElementById('about-btn').addEventListener('click', () => {

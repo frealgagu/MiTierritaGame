@@ -22,6 +22,7 @@ import regions from './content/regions.js';
 import songs from './content/songs.js';
 import { dispatch, pets, seasons } from './content/misc.js';
 import victory from './content/victory.js';
+import finale from './content/finale.js';
 import { frArticle } from './article.js';
 
 // La typographie française : une espace insécable avant ! ? : ; et à l’intérieur des « ». Los textos se
@@ -33,7 +34,7 @@ export const UI = deep(ui);
 export const DECIMAL = ',';
 
 export function applyData() {
-  applyContent(deep({ stations, products, productZones, events, eventActions, medals, albumPages, stickers, logros, routes, zones, facts, people, welcome, decor, regions, songs, dispatch, seasons, victory, pets }));
+  applyContent(deep({ stations, products, productZones, events, eventActions, medals, albumPages, stickers, logros, routes, zones, facts, people, welcome, decor, regions, songs, dispatch, seasons, victory, pets, finale }));
   // Les recherches ensuite : leur description utilise les noms des stations et des produits déjà en français.
   applyContent({ research: deep(researchTexts()) });
   setArticleRule(frArticle);

@@ -220,3 +220,8 @@ export const LOGROS = [...CAFETERO.map((l) => ({ ...l, region: 'cafetero' })), .
 export const logrosOf = (region) => LOGROS.filter((l) => l.region === region);
 
 export const LOGROS_BY_ID = Object.fromEntries(LOGROS.map((l) => [l.id, l]));
+
+// The grand finale (v5.9): one more achievement, over every region, like each region's second ending. It is
+// earned with every achievement above at its last tier, so it stays out of LOGROS (it does not count toward
+// itself) and is paid by sim/finale.js.
+export const GRAN_FINAL_LOGRO = { id: 'gran_final', icon: '🎉', name: 'Gran final', text: 'Consigue todos los logros de todas las regiones', metric: 'finale', tiers: [1], reward: [32] };

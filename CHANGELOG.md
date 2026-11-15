@@ -1,5 +1,15 @@
 # Changelog
 
+## v5.9.0 — The grand finale
+- **🎉 The grand finale:** with every achievement of every region, the keepers of every zone congratulate you, region by region and each in their own way of speaking, with music composed just for that moment. At the end they step back and the map of Colombia fills with fireworks over each capital. It plays by itself the first time, and then whenever you want from ⚙️ or from Renown › 🏆 Achievements. Tap any keeper to hear what they say; ⏪ and ⏩ change region.
+- **One more achievement:** the grand finale shows up in 🏆 Achievements (once the special zone is open) with how many achievements you have, and earning it gives 32 ⭐ Renown.
+- **⚡ Events without waiting:** a 100 ⭐ Renown purchase removes the 2-year wait between events and the limit of 2 events at once: play as many as you want, whenever you want.
+- **Capped counters:** coins, sold and produced, Renown, Prestige, medals, hours played and the other counters no longer grow forever. At their maximum they show as «999Dc++», «99++» or «∞». Restarts and the run number go up to 60.
+- **Lighter save:** the event history keeps only the last one.
+- **Own icons:** save and open file and two Great Fair upgrades no longer use phone emojis.
+- **Map:** the special zone sits closer to where it really is.
+- **Music to download:** the special zone's and the grand finale's are on the downloads page, behind a warning so the surprise is not spoiled.
+
 ## v5.8.0 — Everything fits on any screen
 - **Even buttons:** two fixed heights across the game, one for actions and a lower one for tabs, ×1/×10/Max and header buttons. Two-line labels no longer make a button taller, and every button in a window's row of buttons has the same width.
 - **Research and zones:** the icon, the text and the button always sit in the same columns; on phones under 360 px the button goes below the text on every row. «In other zones» can be folded.

@@ -165,4 +165,5 @@ export default {
   "sa_luna": ["Sob a Lua Verde", "Ganhe {n} medalhas na Festa da Lua Verde"],
   "sa_album": ["Álbum completo", "Complete {n} páginas do álbum"],
   "sa_ciencia": ["Engenheiro", "Compre {n} pesquisas em uma partida"],
+  "gran_final": ["Grande final", "Consiga todas as conquistas de todas as regiões"],
 };

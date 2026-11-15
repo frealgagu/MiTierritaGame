@@ -202,4 +202,7 @@ export default {
   'Juega cualquier evento listo cuando quieras: sin los 2 años de espera y sin el límite de 2 eventos abiertos a la vez.': 'Play any ready event whenever you want: no 2-year wait and no limit of 2 events open at once.',
   'Región anterior': 'Previous region',
   'Región siguiente': 'Next region',
+  "🎉 Ver el gran final": "🎉 Watch the grand finale",
+  "🎉 ¡Tienes todos los logros! El gran final te espera.": "🎉 You have every achievement! The grand finale awaits you.",
+  "🎉 Aún falta el gran final: se abre cuando tengas todos los logros de todas las regiones ({have} de {total}).": "🎉 The grand finale is still ahead: it opens when you have every achievement of every region ({have} of {total}).",
 };

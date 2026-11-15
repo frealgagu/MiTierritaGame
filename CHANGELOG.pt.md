@@ -1,5 +1,15 @@
 # Registro de alterações
 
+## v5.9.0 — O grande final
+- **🎉 O grande final:** com todas as conquistas de todas as regiões, os responsáveis de cada zona te parabenizam, região por região e cada um com seu jeito de falar, com música composta só para esse momento. No fim eles se afastam e o mapa da Colômbia se enche de fogos de artifício sobre cada capital. Aparece sozinho na primeira vez e depois quando você quiser, em ⚙️ ou em Renome › 🏆 Conquistas. Toque em qualquer responsável para ouvir o que ele diz; ⏪ e ⏩ mudam de região.
+- **Mais uma conquista:** o grande final aparece em 🏆 Conquistas (quando a zona especial se abre) com quantas conquistas você tem, e ao consegui-lo dá 32 ⭐ de Renome.
+- **⚡ Eventos sem espera:** uma compra de 100 ⭐ de Renome tira os 2 anos de espera entre eventos e o limite de 2 eventos ao mesmo tempo: jogue quantos quiser, quando quiser.
+- **Contadores com teto:** as moedas, o vendido e produzido, o Renome, o Prestígio, as medalhas, as horas jogadas e os outros contadores não crescem mais sem fim. No máximo aparecem como «999Dc++», «99++» ou «∞». Os reinícios e a partida vão até 60.
+- **Jogo salvo mais leve:** o histórico de eventos guarda só o último.
+- **Ícones próprios:** salvar e abrir arquivo e duas melhorias da Grande Feira não usam mais emojis do celular.
+- **Mapa:** a zona especial ficou mais perto de onde fica de verdade.
+- **Música para baixar:** a da zona especial e a do grande final estão na página de downloads, atrás de um aviso para não estragar a surpresa.
+
 ## v5.8.0 — Tudo cabe em qualquer tela
 - **Botões iguais:** duas alturas fixas em todo o jogo, uma para as ações e outra mais baixa para abas, ×1/×10/Máx e botões de cabeçalho. Textos de duas linhas não aumentam mais o botão, e nas fileiras de botões das janelas todos têm a mesma largura.
 - **Pesquisas e zonas:** o ícone, o texto e o botão ficam sempre nas mesmas colunas; em celulares com menos de 360 px o botão fica embaixo do texto em todas as linhas. «Em outras zonas» pode ser recolhido.

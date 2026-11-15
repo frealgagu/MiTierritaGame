@@ -9,11 +9,13 @@ import { workSentence } from './calendar.js';
 import { openRegionStates, regionState } from '../sim/regions.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
 import { toast } from './toast.js';
-import { logrosOf } from '../data/logros.js';
+import { GRAN_FINAL_LOGRO, logrosOf } from '../data/logros.js';
 import { metric, tierOf } from '../sim/logros.js';
 import { formatNumber } from '../core/format.js';
 import { t } from '../i18n/index.js';
 import { cappedPrestige, cappedRenown } from './capped.js';
+import { finaleProgress } from '../sim/finale.js';
+import { REGIONS } from '../data/regions.js';
 
 const hex = (c) => `#${c.toString(16).padStart(6, '0')}`;
 
@@ -42,6 +44,7 @@ export class RenownView {
     });
     this.modal.addEventListener('click', (e) => {
       if (e.target === this.modal) return void (this.modal.hidden = true);
+      if (e.target.closest('[data-finale]')) return void this.onFinale?.();
       const page = e.target.closest('[data-page]');
       if (page) {
         this.page = page.dataset.page;
@@ -195,6 +198,24 @@ export class RenownView {
     const profile = profileOf(this.game.state);
     const s = this.regionState();
     const done = profile.logros ?? {};
+    return this.finaleHtml(profile) + this.regionLogrosHtml(profile, s, done);
+  }
+
+  // The grand finale (v5.9): an achievement over every region, like each region's second ending. Shown once
+  // the special zone is open (it is the last region), with how many achievements are complete; once earned, a
+  // button to watch it again.
+  finaleHtml(profile) {
+    const special = REGIONS.find((r) => r.special);
+    if (!special || !regionState(this.game.state, special.id)) return '';
+    const l = GRAN_FINAL_LOGRO;
+    const { have, total } = finaleProgress(profile);
+    const done = (profile.logros?.[l.id] ?? 0) >= l.tiers.length;
+    const line = done ? t('✅ Completo') : `${l.text} · ${have} / ${total} · +${l.reward[0]} ⭐`;
+    const watch = done ? `<button class="btn buy" data-finale type="button">${t('🎉 Ver el gran final')}</button>` : '';
+    return `<div class="logro"><div class="logro-head"><b>${l.icon} ${l.name}</b><span class="logro-stars">${done ? '★' : '☆'}</span></div><p>${line}</p><div class="bar"><div style="width:${done ? 100 : (100 * have) / total}%"></div></div>${watch}</div>`;
+  }
+
+  regionLogrosHtml(profile, s, done) {
     if (!logrosOf(this.region).length) return `<p class="event-soon">${t('Los logros de {region} llegan pronto.', { region: REGIONS_BY_ID[this.region].name })}</p>`;
     return logrosOf(this.region).map((l) => {
       const value = metric(s, l.metric, profile);

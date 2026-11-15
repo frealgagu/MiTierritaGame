@@ -22,6 +22,7 @@ import regions from './content/regions.js';
 import songs from './content/songs.js';
 import { dispatch, pets, seasons } from './content/misc.js';
 import victory from './content/victory.js';
+import finale from './content/finale.js';
 
 export { UI };
 export const DECIMAL = '.';
@@ -30,7 +31,7 @@ export const DECIMAL = '.';
 const article = (name) => (/^(the|a|an) /i.test(name) ? name.replace(/^The /, 'the ') : `the ${name}`);
 
 export function applyData() {
-  applyContent({ stations, products, productZones, events, eventActions, medals, albumPages, stickers, logros, routes, zones, facts, people, welcome, decor, regions, songs, dispatch, seasons, victory, pets });
+  applyContent({ stations, products, productZones, events, eventActions, medals, albumPages, stickers, logros, routes, zones, facts, people, welcome, decor, regions, songs, dispatch, seasons, victory, pets, finale });
   // Las investigaciones después: su descripción usa los nombres de estaciones y productos ya en inglés.
   applyContent({ research: researchTexts() });
   setArticleRule(article);

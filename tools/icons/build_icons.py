@@ -8353,6 +8353,44 @@ def e_briefcase():
 
 
 
+def e_floppy():
+    """Floppy disk (save to file)."""
+    layers = shape([(10, 10), (80, 10), (90, 20), (90, 90), (10, 90)], '#1e5aa8')
+    layers += [('#cfd8dc', [rect(28, 10, 40, 26)]), ('#1e5aa8', [rect(54, 14, 8, 18)])]
+    layers += [(OUTLINE, [rect(20, 50, 60, 40)]), ('#fff8ec', [rect(23, 53, 54, 37)])]
+    layers.append(('#90a4ae', [rect(30, 62, 40, 3), rect(30, 72, 40, 3)]))
+    return layers
+
+
+def e_folder_open():
+    """Open folder (open a file)."""
+    layers = shape([(8, 22), (36, 22), (44, 30), (84, 30), (84, 86), (8, 86)], '#c8902e')
+    layers.append(('#fff8ec', [poly(18, 38, 76, 38, 76, 70, 18, 70)]))
+    layers += shape([(20, 46), (96, 46), (84, 86), (8, 86)], '#f4b942')
+    return layers
+
+
+def e_bullhorn():
+    """Megaphone (announcement)."""
+    layers = bar(32, 56, 38, 84, 7, "#546e7a")
+    layers += shape([(14, 40), (34, 40), (82, 14), (82, 86), (34, 60), (14, 60)], '#e53935')
+    layers += [('#ffffff', [poly(34, 44, 76, 22, 76, 30, 34, 50)])]
+    layers += oval(84, 50, 8, 36, '#f5f5f5')
+    layers.append(('#bdbdbd', [ellipse(84, 50, 4, 28)]))
+    return layers
+
+
+def e_radio():
+    """Old radio (on the radio)."""
+    layers = bar(64, 30, 88, 6, 3, '#90a4ae')
+    layers += shape([(6, 30), (94, 30), (94, 88), (6, 88)], '#8d5a32')
+    layers += oval(32, 59, 18, 18, '#3e2723')
+    layers.append(('#6d4c41', [rib(18, 52, 46, 52, 2), rib(16, 59, 48, 59, 2), rib(18, 66, 46, 66, 2)]))
+    layers += [(OUTLINE, [rect(58, 40, 28, 18)]), ('#fff3c4', [rect(60, 42, 24, 14)]), ('#e53935', [rect(70, 42, 2, 14)])]
+    layers += oval(64, 72, 5, 5, '#fbc02d') + oval(80, 72, 5, 5, '#fbc02d')
+    return layers
+
+
 # ---------- Custom emojis: people (with all five skin tones) and flags (v4.3) ----------
 
 SKIN = {None: '#efbd85', 1: '#f3d0b0', 2: '#e2b48a', 3: '#c68642', 4: '#8d5524', 5: '#5c3a21'}
@@ -10726,7 +10764,7 @@ for _seq, _make in [
     ('🏚️', e_old_house), ('🌉', e_bridge), ('🌇', e_city_sunset), ('⛰️', e_mountain), ('🌄', e_sunrise_mtn), ('🧈', e_butter), ('🍯', e_honey), ('🍮', e_flan),
     ('🍳', e_egg_pan), ('🫓', e_arepa), ('🫘', e_beans), ('🥩', e_meat), ('🍽️', e_dinner), ('🛏️', e_bed), ('🛢️', e_barrel), ('🥾', e_boot),
     ('🎵', e_music), ('🎣', e_fishing), ('🚿', e_shower), ('🧊', e_ice), ('🪟', e_window), ('✝️', e_cross), ('🎨', e_palette), ('🎏', e_windsock),
-    ('💼', e_briefcase), ('🤠', e_cowboy), ('🧍', standing), ('🦳', e_hair_white), ('🦱', e_hair_curly),
+    ('💼', e_briefcase), ('💾', e_floppy), ('📂', e_folder_open), ('📣', e_bullhorn), ('📻', e_radio), ('🤠', e_cowboy), ('🧍', standing), ('🦳', e_hair_white), ('🦱', e_hair_curly),
     ('🇨🇴', e_flag_co), ('🇬🇧', e_flag_gb), ('🇧🇷', e_flag_br), ('🇫🇷', e_flag_fr),
 ]:
     emoji(_seq, _make)

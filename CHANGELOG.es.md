@@ -1,5 +1,15 @@
 # Registro de cambios
 
+## v5.9.0 — El gran final
+- **🎉 El gran final:** con todos los logros de todas las regiones, los encargados de cada zona te felicitan, región por región y cada uno con su forma de hablar, con música compuesta solo para ese momento. Al final se alejan y el mapa de Colombia se llena de fuegos artificiales sobre cada capital. Se ve solo la primera vez y luego cuando quieras desde ⚙️ o desde Renombre › 🏆 Logros. Toca a cualquier encargado para oír lo que dice; ⏪ y ⏩ cambian de región.
+- **Un logro más:** el gran final aparece en 🏆 Logros (cuando se abre la zona especial) con cuántos logros llevas, y al conseguirlo da 32 ⭐ de Renombre.
+- **⚡ Eventos sin espera:** una compra de 100 ⭐ de Renombre quita los 2 años de espera entre eventos y el límite de 2 eventos a la vez: juegas los que quieras, cuando quieras.
+- **Contadores con tope:** las monedas, lo vendido y producido, el Renombre, el Prestigio, las medallas, las horas jugadas y los demás contadores ya no crecen sin fin. Al llegar a su máximo se ven como «999Dc++», «99++» o «∞». Los reinicios y la partida llegan hasta 60.
+- **Partida más liviana:** el historial de eventos guarda solo el último.
+- **Íconos propios:** guardar y abrir archivo y dos mejoras de la Gran Feria ya no usan emojis del teléfono.
+- **Mapa:** la zona especial quedó más cerca de donde está en realidad.
+- **Música para descargar:** la de la zona especial y la del gran final están en la página de descargas, detrás de un aviso para no dañar la sorpresa.
+
 ## v5.8.0 — Todo cabe en cualquier pantalla
 - **Botones parejos:** dos alturas fijas en todo el juego, una para las acciones y otra más baja para pestañas, ×1/×10/Máx y botones de encabezado. Los textos de dos líneas ya no agrandan el botón, y en las filas de botones de las ventanas todos tienen el mismo ancho.
 - **Investigaciones y zonas:** el ícono, el texto y el botón van siempre en las mismas columnas; en teléfonos de menos de 360 px el botón va debajo del texto en todas las filas. «En otras zonas» se puede recoger.

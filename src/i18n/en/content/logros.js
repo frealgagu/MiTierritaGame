@@ -129,4 +129,5 @@ export default {
   "sa_luna": ["Under the Green Moon", "Win {n} medals at the Green Moon Festival"],
   "sa_album": ["Full album", "Fill {n} album pages"],
   "sa_ciencia": ["Engineer", "Buy {n} research upgrades in one game"],
+  "gran_final": ["Grand finale", "Get every achievement of every region"],
 };

@@ -66,7 +66,7 @@ const CSS = `
 .gf-bubble span { display: block; animation: gf-fade 0.35s ease-out; }
 .gf-stage { position: relative; flex: 1; width: min(720px, 100%); display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 4px 10px; padding: 18px 10px calc(70px + env(safe-area-inset-bottom, 0px)); }
 .gf-person { display: flex; flex-direction: column; align-items: center; width: clamp(72px, 27vw, 108px); transition: transform 0.3s, opacity 0.3s; opacity: 0.85; animation: gf-in 0.5s ease-out backwards; }
-.gf-person img { width: 100%; height: auto; image-rendering: auto; filter: drop-shadow(0 3px 0 #0003); }
+.gf-person img { width: 100%; height: auto; aspect-ratio: 30 / 56; object-fit: contain; image-rendering: auto; filter: drop-shadow(0 3px 0 #0003); }
 .gf-person b { font-size: 0.8rem; text-align: center; line-height: 1.1; margin-top: 2px; }
 .gf-person small { font-size: 0.7rem; font-weight: 600; text-align: center; line-height: 1.1; opacity: 0.85; }
 .gf-person.talk { opacity: 1; transform: scale(1.18); animation: gf-hop 0.5s ease-in-out infinite alternate; z-index: 1; }
@@ -96,35 +96,42 @@ const CSS = `
 @media (prefers-reduced-motion: reduce) { .gf-person.talk, .gf-crowd .gf-person { animation: none; } }
 `;
 
+// A transparent pixel, until a keeper's portrait is drawn.
+const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+
 // Keeper portraits: each zone's keeper as drawn on the map (render/Keeper.js), rendered once to an image.
-async function portraits(zones) {
-  const app = new Application();
-  await app.init({ width: 8, height: 8, backgroundAlpha: 0, antialias: true });
-  const out = {};
+// In the game, the game's own renderer is used (`renderer`): a second WebGL context is slow to start.
+// Drawn one by one, in the order they appear, handing each to `onFace` (the first region shows without
+// waiting for the rest). Stops early once `stopped()` says the finale was closed.
+async function portraits(zones, renderer, onFace, stopped) {
+  const app = renderer ? null : new Application();
+  await app?.init({ width: 8, height: 8, backgroundAlpha: 0, antialias: true });
+  const extract = (renderer ?? app.renderer).extract;
   for (const [i, zone] of zones.entries()) {
+    if (stopped()) break;
     const view = new KeeperView(zone, i);
     // Only the figure: the name goes below it in the page. A fixed, invisible frame gives every portrait
     // the same size and baseline (hats and names no longer change the crop).
     for (const child of view.children) if (child !== view.body && child !== view.face) child.visible = false;
     const frame = new Container();
     frame.addChild(new Graphics().rect(-15, -50, 30, 56).fill({ color: 0xffffff, alpha: 0.004 }), view);
-    out[zone] = await app.renderer.extract.base64({ target: frame, resolution: 4 });
+    onFace(zone, await extract.base64({ target: frame, resolution: 4 }));
     frame.destroy({ children: true });
   }
-  app.destroy(true);
-  return out;
+  app?.destroy(true);
 }
 
 // The finale's own music: rendered bar by bar without blocking, then looped.
-async function startMusic(volume) {
+// `player` is filled right away ({ ctx, gain }), so closing never waits for the song to be rendered.
+async function startMusic(volume, player) {
   const AC = window.AudioContext || window.webkitAudioContext;
-  if (!AC || volume <= 0) return null;
+  if (!AC || volume <= 0) return player;
   const ctx = new AC();
   ctx.resume();
   const gain = ctx.createGain();
   gain.gain.value = 0;
   gain.connect(ctx.destination);
-  const player = { ctx, gain, stopped: false };
+  Object.assign(player, { ctx, gain });
   const buf = createSong(GRAN_FINAL, RATE);
   for (let i = 0; i < GRAN_FINAL.chords.length; i++) {
     renderBar(buf, i);
@@ -146,9 +153,9 @@ async function startMusic(volume) {
 }
 
 function stopMusic(player) {
-  if (!player) return;
   player.stopped = true;
   const { ctx, gain } = player;
+  if (!ctx) return;
   const now = ctx.currentTime;
   gain.gain.cancelScheduledValues(now);
   gain.gain.setValueAtTime(gain.gain.value, now);
@@ -319,7 +326,7 @@ export const finaleRegions = () => REGIONS.filter((r) => !r.hidden).map((r) => (
 // How long a keeper's line stays up: long enough to read it.
 const readTime = (text) => Math.max(2600, 900 + text.length * 48);
 
-export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume = 0.8, beforeMusic, afterMusic } = {}) {
+export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume = 0.8, beforeMusic, afterMusic, renderer } = {}) {
   if (!document.getElementById('gf-style')) {
     const style = document.createElement('style');
     style.id = 'gf-style';
@@ -345,8 +352,8 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
   sky('cafetero');
 
   beforeMusic?.();
-  const music = startMusic(volume);
-  const faces = await portraits(scenes.flatMap((s) => s.zones));
+  const music = { stopped: false };
+  startMusic(volume, music);
 
   // Steps: one per keeper, then the closing crowd and the map.
   let scene = -1;
@@ -354,18 +361,35 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
   let timer = 0;
   let done = false;
   let stopFireworks = null;
-  const close = async () => {
+  const close = () => {
     if (done) return;
     done = true;
     clearTimeout(timer);
     fx.stop();
     stopFireworks?.();
-    stopMusic(await music);
+    stopMusic(music);
     root.remove();
     afterMusic?.();
     onClose();
   };
-  const person = (zone, k) => `<div class="gf-person" data-zone="${zone}" style="animation-delay:${k * 0.08}s"><img src="${faces[zone]}" alt=""><b>${t(PEOPLE[zone].name)}</b><small>${t(PEOPLE[zone].role)}</small></div>`;
+  // Portraits arrive one by one; a keeper already on stage gets theirs as soon as it is drawn.
+  const faces = {};
+  const firstRegion = new Promise((resolve) => {
+    const first = new Set(scenes[0].zones);
+    portraits(scenes.flatMap((s) => s.zones), renderer, (zone, url) => {
+      faces[zone] = url;
+      root.querySelectorAll(`img[data-face="${zone}"]`).forEach((img) => (img.src = url));
+      first.delete(zone);
+      if (!first.size) resolve();
+    }, () => done).then(resolve, resolve);
+  });
+  // ✕ already works while the first region is drawn.
+  const quit = (e) => e.target.closest('[data-close]') && close();
+  root.addEventListener('click', quit);
+  await firstRegion;
+  root.removeEventListener('click', quit);
+  if (done) return;
+  const person = (zone, k) => `<div class="gf-person" data-zone="${zone}" style="animation-delay:${k * 0.08}s"><img data-face="${zone}" src="${faces[zone] ?? BLANK}" alt=""><b>${t(PEOPLE[zone].name)}</b><small>${t(PEOPLE[zone].role)}</small></div>`;
   // Leaves the ending (crowd, map, fireworks) to go back to the regions.
   const leaveEnding = () => {
     stopFireworks?.();

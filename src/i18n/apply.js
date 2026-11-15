@@ -10,6 +10,7 @@
 //     decor { id: [name, { option: name }] } · regions { id: name } · songs { region: [name, instruments] }
 //     dispatch: warehouse name · seasons { id: [name, short, text] }
 //     victory { zone: [title, text, stat] } · pets { id: [name, plural] }
+//     finale { lines: { zone: line }, text: { title, intro, outro, thanks } }
 // Anything missing remains in Spanish.
 import { DISPATCH, STATIONS } from '../data/stations.js';
 import { SEASONS } from '../sim/calendar.js';
@@ -17,7 +18,7 @@ import { PRODUCTS, ZONES as PRODUCT_ZONES } from '../data/products.js';
 import { RESEARCH } from '../data/research.js';
 import { EVENTS, EVENT_ACTIONS_BY_ID, MEDALS } from '../data/events.js';
 import { ALBUM, STICKERS_BY_ID } from '../data/album.js';
-import { LOGROS } from '../data/logros.js';
+import { GRAN_FINAL_LOGRO, LOGROS } from '../data/logros.js';
 import { ROUTES } from '../data/routes.js';
 import { ZONE_LIST } from '../data/zones/index.js';
 import { FACTS, PEOPLE, WELCOME } from '../data/lore.js';
@@ -26,6 +27,7 @@ import { REGIONS } from '../data/regions.js';
 import { SONGS } from '../audio/songs.js';
 import { VICTORY } from '../data/victory.js';
 import { PETS } from '../sim/renown.js';
+import { FINALE_LINES, FINALE_TEXT } from '../data/finale.js';
 
 // Sets `fields` on each item in `items` (by id) from `texts[id]`: a single string
 // (the first field) or an array (in order; null keeps the Spanish original).
@@ -64,7 +66,7 @@ export function applyContent(c) {
   applyKeyed(MEDALS, c.medals, ['name']);
   patch(ALBUM, c.albumPages, ['name']);
   patch([...ALBUM.flatMap((p) => p.stickers), ...Object.values(STICKERS_BY_ID)], c.stickers, ['name', 'text']);
-  patch(LOGROS, c.logros, ['name', 'text']);
+  patch([...LOGROS, GRAN_FINAL_LOGRO], c.logros, ['name', 'text']);
   patch(ROUTES, c.routes, ['name', 'vehicle', 'tab']);
   patch(ZONE_LIST, c.zones, ['name', 'exitText']);
   for (const z of ZONE_LIST) {
@@ -82,4 +84,6 @@ export function applyContent(c) {
   patch(SEASONS, c.seasons, ['name', 'short', 'text']);
   applyKeyed(PETS, c.pets, ['name', 'plural']);
   for (const [id, [title, text, stat]] of Object.entries(c.victory ?? {})) if (VICTORY[id]) Object.assign(VICTORY[id], { title, text, stat: [stat, VICTORY[id].stat[1]] });
+  for (const [id, line] of Object.entries(c.finale?.lines ?? {})) if (id in FINALE_LINES) FINALE_LINES[id] = line;
+  Object.assign(FINALE_TEXT, c.finale?.text);
 }
