@@ -3,7 +3,7 @@
 import { EVENTS, MEDALS, eventKey } from '../data/events.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
-import { EVENT_SLOTS, MEDAL_BONUS, ON_DEMAND_COST, boardClockNow, boardObjective, buyOnDemand, canPlayOnDemand, eventObjective, eventStatus, hasOnDemand, medalCount, quoteOnDemand, regionAllGold, regionEvents } from '../sim/events.js';
+import { EVENT_SLOTS, FREE_EVENTS_COST, MEDAL_BONUS, ON_DEMAND_COST, boardClockNow, boardObjective, buyFreeEvents, buyOnDemand, canPlayOnDemand, eventObjective, eventStatus, hasFreeEvents, hasOnDemand, medalCount, quoteFreeEvents, quoteOnDemand, regionAllGold, regionEvents } from '../sim/events.js';
 import { toast } from './toast.js';
 import { clockOf } from '../sim/calendar.js';
 import { formatDuration } from '../core/format.js';
@@ -36,6 +36,11 @@ export class EventsView {
       if (fold) {
         const settings = this.game.state.settings;
         settings.eventsFold = { ...settings.eventsFold, [fold.dataset.efold]: !this.folded(fold.dataset.efold) };
+        return this.render();
+      }
+      // Events without waiting (v5.9): every ready event, any time, as many at once as wanted.
+      if (e.target.closest('[data-free-events]')) {
+        if (buyFreeEvents(this.game.state.profile)) toast(t('⚡ Ya puedes jugar cualquier evento cuando quieras, y los que quieras a la vez.'), 4000);
         return this.render();
       }
       // Purchase events on demand for a region (v4.7.3).
@@ -80,7 +85,7 @@ export class EventsView {
   // If region has gold in all events and doesn't yet have events on demand (v4.7.3).
   offerOnDemand(regionId) {
     const p = this.game.state.profile;
-    return regionAllGold(p, regionId) && !hasOnDemand(p, regionId);
+    return regionAllGold(p, regionId) && !hasOnDemand(p, regionId) && !hasFreeEvents(p);
   }
 
   close() {
@@ -146,7 +151,7 @@ export class EventsView {
     };
     // With gold on all in the region (v4.7.3) they no longer auto-spawn: on-demand purchase sits at top.
     const onDemandCard = (r) => {
-      if (!regionAllGold(profile, r.id) || hasOnDemand(profile, r.id)) return [];
+      if (!regionAllGold(profile, r.id) || hasOnDemand(profile, r.id) || hasFreeEvents(profile)) return [];
       const q = quoteOnDemand(profile, r.id);
       return [`<div class="event-card"><h3><span>🔁 ${t('Eventos a demanda')}</span></h3><p>${t('Tienes oro en todos los eventos de {region}: ya no salen solos. Compra esta opción y juega cualquiera otra vez cuando quieras, sin esperar.', { region: r.name })}</p><button class="btn buy" data-ondemand="${r.id}" ${q.ok ? '' : 'disabled'}>${t('Comprar · {n} ⭐', { n: ON_DEMAND_COST })}</button></div>`];
     };
@@ -163,7 +168,7 @@ export class EventsView {
         return `<div class="zones-group events-group">${head}${folded ? '' : g.cards.join('')}</div>`;
       })
       .join('');
-    this.paint(`${html}<p class="event-soon">${t('Cada zona que abras trae su evento.')}</p>${medalsHtml(profile)}`);
+    this.paint(`${freeEventsHtml(profile)}${html}<p class="event-soon">${t('Cada zona que abras trae su evento.')}</p>${medalsHtml(profile)}`);
   }
 
   // Redraws only what changed (v5.7): when only the clocks and countdowns moved, it rewrites
@@ -207,7 +212,9 @@ export class EventsView {
     this.btn.hidden = !progress && !statuses.some((st) => st.kind !== 'locked');
     // (v4.7.3) Only startable ones: a won event still open (goal met and all 3 upgrades) no
     // longer counts.
-    const ready = statuses.filter((st) => st.kind === 'available').length;
+    // (v5.9) With events without waiting every ready event is available: only those still without gold count.
+    const free = hasFreeEvents(p);
+    const ready = statuses.filter((st) => st.kind === 'available' && (!free || p.medals?.[st.def.id]?.best !== 'gold')).length;
     this.badge.hidden = ready === 0;
     this.badge.textContent = ready;
     // Open (v5.7): clocks, countdowns and newly available events refresh on their own.
@@ -218,6 +225,13 @@ export class EventsView {
 // Texts that change every second (board clocks, time until a slot frees up).
 const LIVE = /<span data-live>([^<]*)<\/span>/g;
 const live = (text) => `<span data-live>${text}</span>`;
+
+// Events without waiting (v5.9): the purchase card on top of the list, or a short line once owned.
+function freeEventsHtml(profile) {
+  if (hasFreeEvents(profile)) return `<p class="event-soon">${t('⚡ Eventos sin espera: juegas cualquiera cuando quieras, y los que quieras a la vez.')}</p>`;
+  const q = quoteFreeEvents(profile);
+  return `<div class="event-card"><h3><span>⚡ ${t('Eventos sin espera')}</span></h3><p>${t('Juega cualquier evento listo cuando quieras: sin los 2 años de espera y sin el límite de 2 eventos abiertos a la vez.')}</p><button class="btn buy" data-free-events ${q.ok ? '' : 'disabled'}>${t('Comprar · {n} ⭐', { n: FREE_EVENTS_COST })}</button></div>`;
+}
 
 // Whether everything on the board is at max level (v4.7.3): stations, haulers, and warehouse.
 function boardMaxed(board, zoneId) {

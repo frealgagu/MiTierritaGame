@@ -405,3 +405,28 @@ test('with gold in the whole region events no longer come out on their own and, 
   assert.ok(startOnDemand(s, 'trapiche'));
   assert.equal(startOnDemand(s, 'lecheria'), null, 'at most two open');
 });
+
+test('events without waiting (v5.9): 100 ⭐ once; any ready event at any time, as many open at once as wanted', async () => {
+  const { FREE_EVENTS_COST, buyFreeEvents, quoteFreeEvents } = await import('../src/sim/events.js');
+  const { game, s } = twoRegions();
+  game.step(0.1);
+  s.profile.renown = FREE_EVENTS_COST - 1;
+  assert.equal(quoteFreeEvents(s.profile).reason, 'renown');
+  s.profile.renown = FREE_EVENTS_COST;
+  assert.ok(buyFreeEvents(s.profile));
+  assert.equal(s.profile.renown, 0);
+  assert.equal(quoteFreeEvents(s.profile).reason, 'owned', 'bought once');
+  // Three events of the same region and one of Santander, all open at once.
+  for (const zone of ['finca', 'trapiche', 'lecheria', 'guayabera']) assert.equal(eventStatus(s, zone).kind, 'available', zone);
+  const boards = ['finca', 'trapiche', 'lecheria', 'guayabera'].map((zone) => startEvent(s, zone));
+  assert.ok(boards.every(Boolean), 'more than 2 open, and two of the same region');
+  // Finishing one does not make it wait 2 years: it can be played again right away.
+  const board = boards[0];
+  complete(board, true);
+  board.playTime = 60;
+  assert.ok(finishEvent(s, 'finca').done);
+  assert.ok(endEvent(s, 'finca'));
+  game.step(0.1);
+  assert.equal(eventStatus(s, 'finca').kind, 'available');
+  assert.ok(startEvent(s, 'finca'));
+});

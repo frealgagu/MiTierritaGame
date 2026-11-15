@@ -196,4 +196,8 @@ export default {
   'Centro': 'Centro',
   'Estuviste fuera más de {cap}. Tu finca trabajó {time}, el máximo, y ganó:': 'Você ficou fora mais de {cap}. Sua fazenda trabalhou {time}, o máximo, e ganhou:',
   'Región': 'Região',
+  '⚡ Ya puedes jugar cualquier evento cuando quieras, y los que quieras a la vez.': '⚡ Agora você pode jogar qualquer evento quando quiser, e quantos quiser ao mesmo tempo.',
+  '⚡ Eventos sin espera: juegas cualquiera cuando quieras, y los que quieras a la vez.': '⚡ Eventos sem espera: jogue qualquer um quando quiser, quantos quiser ao mesmo tempo.',
+  'Eventos sin espera': 'Eventos sem espera',
+  'Juega cualquier evento listo cuando quieras: sin los 2 años de espera y sin el límite de 2 eventos abiertos a la vez.': 'Jogue qualquer evento pronto quando quiser: sem os 2 anos de espera e sem o limite de 2 eventos abertos ao mesmo tempo.',
 };

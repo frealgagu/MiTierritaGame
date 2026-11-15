@@ -83,7 +83,7 @@ const statesOf = (root) => [root, ...Object.values(root.regions ?? {})];
 // Fills open slots and clears expired 2-year cooldowns. Called by root save each tick.
 // paso (core/Game.js).
 export function refillSlots(root) {
-  if (root.event) return;
+  if (root.event || hasFreeEvents(root.profile)) return;
   const slots = eventsOf(root).slots;
   const now = clockOf(root);
   for (let i = 0; i < slots.length; i++) if (slots[i]?.until !== undefined && now >= slots[i].until) slots[i] = null;
@@ -140,7 +140,25 @@ export function canPlayOnDemand(root, key) {
   const owner = def && ownerOf(root, key);
   if (!owner || eventsOf(owner).boards[key]) return false;
   const region = REGION_OF_ZONE[def.zone];
-  return hasOnDemand(root.profile, region) && regionAllGold(root.profile, region) && openBoards(root) < EVENT_SLOTS;
+  return hasOnDemand(root.profile, region) && regionAllGold(root.profile, region) && (hasFreeEvents(root.profile) || openBoards(root) < EVENT_SLOTS);
+}
+
+// --- Events without waiting (v5.9) ---
+// For 100 ⭐ Renown, once for the whole game: every ready event (all its stations built) can be played at
+// any time, with no 2-year wait and no limit of 2 open at once (nor of one per region). Regions with gold in
+// every event are included, so on-demand events are no longer needed.
+export const FREE_EVENTS_COST = 100;
+export const hasFreeEvents = (profile) => Boolean(profile?.freeEvents);
+export function quoteFreeEvents(profile) {
+  if (hasFreeEvents(profile)) return { ok: false, reason: 'owned', cost: FREE_EVENTS_COST };
+  if (!canPayRenown(profile, FREE_EVENTS_COST)) return { ok: false, reason: 'renown', cost: FREE_EVENTS_COST };
+  return { ok: true, cost: FREE_EVENTS_COST };
+}
+export function buyFreeEvents(profile) {
+  if (!quoteFreeEvents(profile).ok) return false;
+  profile.renown -= FREE_EVENTS_COST;
+  profile.freeEvents = true;
+  return true;
 }
 export function startOnDemand(root, key) {
   if (!canPlayOnDemand(root, key)) return null;
@@ -167,7 +185,8 @@ export function eventStatus(root, zoneId) {
   if (board) return { kind: board.event.done ? 'won' : 'active', def, round: boardRound(board), board };
   if (!afterDone(root, def)) return { kind: 'locked', def, round: nextRound(state, zoneId), after: true };
   if (!ready(state, def)) return { kind: 'locked', def, round: nextRound(state, zoneId) };
-  if (eventsOf(root).slots.some((x) => x?.zone === zoneId)) return { kind: 'available', def, round: nextRound(state, zoneId) };
+  // (v5.9) Events without waiting: any ready event, at any time.
+  if (hasFreeEvents(root.profile) || eventsOf(root).slots.some((x) => x?.zone === zoneId)) return { kind: 'available', def, round: nextRound(state, zoneId) };
   return { kind: 'waiting', def, round: nextRound(state, zoneId), nextAt: nextSlotAt(root) };
 }
 

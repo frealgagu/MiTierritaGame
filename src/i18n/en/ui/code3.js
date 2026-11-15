@@ -196,4 +196,8 @@ export default {
   'Centro': 'Downtown',
   'Estuviste fuera más de {cap}. Tu finca trabajó {time}, el máximo, y ganó:': 'You were away for more than {cap}. Your farm worked {time}, the maximum, and earned:',
   'Región': 'Region',
+  '⚡ Ya puedes jugar cualquier evento cuando quieras, y los que quieras a la vez.': '⚡ You can now play any event whenever you want, and as many as you want at once.',
+  '⚡ Eventos sin espera: juegas cualquiera cuando quieras, y los que quieras a la vez.': '⚡ Events without waiting: play any of them whenever you want, as many as you want at once.',
+  'Eventos sin espera': 'Events without waiting',
+  'Juega cualquier evento listo cuando quieras: sin los 2 años de espera y sin el límite de 2 eventos abiertos a la vez.': 'Play any ready event whenever you want: no 2-year wait and no limit of 2 events open at once.',
 };
