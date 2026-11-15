@@ -1,5 +1,12 @@
 # Journal des modifications
 
+## v5.8.0 — Tout tient sur n’importe quel écran
+- **Boutons réguliers :** deux hauteurs fixes dans tout le jeu, une pour les actions et une plus basse pour les onglets, ×1/×10/Max et les boutons d’en-tête. Les textes sur deux lignes n’agrandissent plus le bouton, et dans les rangées de boutons des fenêtres, tous ont la même largeur.
+- **Recherches et zones :** l’icône, le texte et le bouton sont toujours dans les mêmes colonnes ; sur les téléphones de moins de 360 px, le bouton passe sous le texte sur toutes les lignes. « Dans d’autres zones » peut se replier.
+- **Téléphone couché :** le panneau de la station et le plateau de l’événement se placent à droite avec défilement, donc « Améliorer » et les achats de l’événement sont toujours accessibles ; les fenêtres à liste défilent en entier.
+- **Renom :** la région se choisit dans une liste déroulante et l’en-tête tient sur une ligne.
+- **Corrections :** « À propos » et la barre du haut ne débordent plus sur les écrans de 320 px ; le texte des Événements n’est plus écrasé ; le menu, les succès, les heures et les boutons de l’événement ne sont plus coupés.
+
 ## v5.7.1 — Des boutons d’événement bien rangés
 - **🏅 Événements :** les boutons « Continuer » et « Voir et terminer » ont des colonnes fixes pour l’action, le chronomètre et si l’événement tourne ou est en pause, donc ils ne se dérangent plus selon la largeur de l’écran ou la langue. Sur les écrans étroits, l’action va en haut et le temps et l’état en dessous. « Tout au niveau maximum » est passé sur la ligne au-dessus du bouton.
 

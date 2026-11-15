@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v5.8.0 — Todo cabe en cualquier pantalla
+- **Botones parejos:** dos alturas fijas en todo el juego, una para las acciones y otra más baja para pestañas, ×1/×10/Máx y botones de encabezado. Los textos de dos líneas ya no agrandan el botón, y en las filas de botones de las ventanas todos tienen el mismo ancho.
+- **Investigaciones y zonas:** el ícono, el texto y el botón van siempre en las mismas columnas; en teléfonos de menos de 360 px el botón va debajo del texto en todas las filas. «En otras zonas» se puede recoger.
+- **Teléfono de lado:** el panel de la estación y el tablero del evento se acomodan a la derecha con desplazamiento, así «Mejorar» y las compras del evento siempre se alcanzan; las ventanas con lista se desplazan completas.
+- **Renombre:** la región se elige en una lista desplegable y el encabezado cabe en una línea.
+- **Arreglos:** «Acerca de» y la barra de arriba ya no se salen en pantallas de 320 px; el texto de Eventos ya no queda aplastado; el menú, los logros, las horas y los botones del evento ya no se cortan.
+
 ## v5.7.1 — Botones de los eventos ordenados
 - **🏅 Eventos:** los botones «Seguir» y «Ver y terminar» tienen columnas fijas para la acción, el cronómetro y si el evento sigue corriendo o está en pausa, así que ya no se desacomodan con el ancho de la pantalla ni con el idioma. En pantallas angostas, la acción va arriba y el tiempo y el estado debajo. «Todo al nivel máximo» pasó a la línea de encima del botón.
 

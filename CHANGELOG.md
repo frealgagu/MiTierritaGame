@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.8.0 — Everything fits on any screen
+- **Even buttons:** two fixed heights across the game, one for actions and a lower one for tabs, ×1/×10/Max and header buttons. Two-line labels no longer make a button taller, and every button in a window's row of buttons has the same width.
+- **Research and zones:** the icon, the text and the button always sit in the same columns; on phones under 360 px the button goes below the text on every row. «In other zones» can be folded.
+- **Phone on its side:** the station panel and the event board dock to the right and scroll, so «Upgrade» and the event purchases are always within reach; list windows scroll as a whole.
+- **Renown:** the region is picked from a drop-down list and the header fits on one line.
+- **Fixes:** «About» and the top bar no longer stick out on 320 px screens; the Events text is no longer squashed; the menu, achievements, hours and event buttons are no longer cut off.
+
 ## v5.7.1 — Tidy event buttons
 - **🏅 Events:** the «Continue» and «See and end» buttons have fixed columns for the action, the clock and whether the event is running or paused, so they no longer get jumbled with the screen width or the language. On narrow screens, the action goes on top with the time and the state below. «All at max level» moved to the line above the button.
 

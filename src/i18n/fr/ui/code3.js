@@ -195,4 +195,5 @@ export default {
   'Paloquemao': 'Paloquemao',
   'Centro': 'Centre',
   'Estuviste fuera más de {cap}. Tu finca trabajó {time}, el máximo, y ganó:': 'Tu es parti plus de {cap}. Ta ferme a travaillé {time}, le maximum, et a gagné :',
+  'Región': 'Région',
 };

@@ -20,6 +20,12 @@ export class ResearchView {
     document.getElementById('research-close').addEventListener('click', () => this.close());
     this.modal.addEventListener('click', (e) => {
       if (e.target === this.modal) this.close();
+      // (v5.8) «In other zones» folds and unfolds; the choice is kept.
+      if (e.target.closest('[data-rfold]')) {
+        const settings = this.game.state.settings;
+        settings.researchOtherFolded = !settings.researchOtherFolded;
+        return void this.update();
+      }
       const btn = e.target.closest('[data-research]');
       if (btn) return void this.game.research(btn.dataset.research);
       if (e.target.closest('[data-research-all]')) {
@@ -78,12 +84,19 @@ export class ResearchView {
     if (buyAll !== this.footHtml) this.foot.innerHTML = this.footHtml = buyAll;
     const html =
       this.rows(here) +
-      (elsewhere.length ? `<h3 class="research-other">${t('En otras zonas')}</h3>${this.rows(elsewhere, true)}` : '');
+      (elsewhere.length ? this.otherZones(elsewhere) : '');
     if (html !== this.html) this.body.innerHTML = this.html = html;
     if (this.scrollPending) {
       this.scrollPending = false;
       this.scrollToPending();
     }
+  }
+
+  // Research in other zones (v5.8): a header that folds the list, with how many there are.
+  otherZones(quotes) {
+    const folded = Boolean(this.game.state.settings.researchOtherFolded);
+    const head = `<button class="zones-region research-other" data-rfold aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${t('En otras zonas')} (${quotes.length})</button>`;
+    return head + (folded ? '' : this.rows(quotes, true));
   }
 
   // withZone: include zone name (upgrades in other zones).

@@ -1,5 +1,12 @@
 # Registro de alterações
 
+## v5.8.0 — Tudo cabe em qualquer tela
+- **Botões iguais:** duas alturas fixas em todo o jogo, uma para as ações e outra mais baixa para abas, ×1/×10/Máx e botões de cabeçalho. Textos de duas linhas não aumentam mais o botão, e nas fileiras de botões das janelas todos têm a mesma largura.
+- **Pesquisas e zonas:** o ícone, o texto e o botão ficam sempre nas mesmas colunas; em celulares com menos de 360 px o botão fica embaixo do texto em todas as linhas. «Em outras zonas» pode ser recolhido.
+- **Celular deitado:** o painel da estação e o tabuleiro do evento ficam à direita com rolagem, então «Melhorar» e as compras do evento estão sempre ao alcance; as janelas com lista rolam inteiras.
+- **Renome:** a região é escolhida numa lista suspensa e o cabeçalho cabe numa linha.
+- **Correções:** «Sobre» e a barra de cima não saem mais da tela em 320 px; o texto de Eventos não fica mais espremido; o menu, as conquistas, as horas e os botões do evento não são mais cortados.
+
 ## v5.7.1 — Botões dos eventos arrumados
 - **🏅 Eventos:** os botões «Continuar» e «Ver e encerrar» têm colunas fixas para a ação, o cronômetro e se o evento continua rodando ou está pausado, então não se desarrumam mais com a largura da tela nem com o idioma. Em telas estreitas, a ação fica em cima e o tempo e o estado embaixo. «Tudo no nível máximo» passou para a linha acima do botão.
 

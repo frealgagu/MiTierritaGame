@@ -34,13 +34,13 @@ export class RenownView {
         this.render();
       });
     }
+    this.regions.addEventListener('change', (e) => {
+      if (!e.target.matches('[data-renown-select]')) return;
+      this.region = e.target.value;
+      this.render();
+    });
     this.modal.addEventListener('click', (e) => {
       if (e.target === this.modal) return void (this.modal.hidden = true);
-      const reg = e.target.closest('[data-renown-region]');
-      if (reg) {
-        this.region = reg.dataset.renownRegion;
-        return this.render();
-      }
       const page = e.target.closest('[data-page]');
       if (page) {
         this.page = page.dataset.page;
@@ -137,7 +137,10 @@ export class RenownView {
     // Viewed region selector (when more than one is open).
     const open = openRegionStates(this.game.state);
     this.regions.hidden = open.length < 2;
-    const regions = open.map(({ region }) => `<button class="${region.id === this.region ? 'on' : ''}" data-renown-region="${region.id}">${region.icon} ${region.name}</button>`).join('');
+    // (v5.8) A drop-down instead of a 3×3 grid of buttons with cut names. Options carry only the name:
+    // the phone's own list may not draw the game's icon font; the chosen region's icon goes beside it.
+    const current = open.find(({ region }) => region.id === this.region)?.region;
+    const regions = `<span>${current?.icon ?? ''}</span><select data-renown-select aria-label="${t('Región')}">${open.map(({ region }) => `<option value="${region.id}" ${region.id === this.region ? 'selected' : ''}>${region.name}</option>`).join('')}</select>`;
     if (regions !== this.regionsHtml) this.regions.innerHTML = this.regionsHtml = regions;
     const help = document.getElementById('renown-help');
     if (this.tab === 'album') {

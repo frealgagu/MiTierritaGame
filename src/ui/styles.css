@@ -26,6 +26,8 @@
 
 :root {
   --btn-h: 50px; /* height of all buttons (v4.4.6) */
+  /* (v5.8) Second standard height: tabs, toggles (×1 / ×10 / Max) and buttons inside window headers. */
+  --btn-h-sm: 36px;
   --ink: #3a2418;
   --paper: #fff8ec;
   --paper-2: #f3e6cf;
@@ -196,7 +198,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .bar { height: 10px; border-radius: 999px; background: var(--paper-2); border: 2px solid var(--ink); overflow: hidden; margin-top: 4px; }
 .bar > div { height: 100%; background: linear-gradient(90deg, #f6b26b, var(--yellow)); width: 0%; transition: width 0.2s; }
 
-.modes { display: flex; gap: 6px; margin-bottom: 8px; height: 32px; }
+.modes { display: flex; gap: 6px; margin-bottom: 8px; height: var(--btn-h-sm); }
 .mode {
   flex: 1;
   padding: 4px 0;
@@ -223,7 +225,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
   justify-content: center;
   gap: 6px;
   text-align: center;
-  line-height: 1.15;
+  /* (v5.8) Tight padding and line height so a two-line label still fits in --btn-h. */
+  padding-top: 3px;
+  padding-bottom: 3px;
+  line-height: 1.1;
 }
 .btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--ink); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -264,7 +269,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .modal-card, .list-body, .chain-body { touch-action: pan-y; overscroll-behavior: contain; }
 .modal-card h2 { margin: 0 0 8px; }
 .modal-card small { color: var(--muted); font-size: 0.9rem; }
-.modal-actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+/* (v5.8) Rows of window buttons in equal columns (two side by side when they fit, else stacked), so no
+   button ends up narrower, shifted to one side or alone on a line at another width. */
+.modal-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.modal-actions > .btn { width: 100%; justify-content: center; }
+.modal-actions > [hidden] { display: none; }
 
 .toast {
   position: fixed;
@@ -293,8 +302,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .rate { font-size: 0.75rem; }
   .clock { font-size: 0.8rem; width: 5em; }
 }
+/* (v5.8) Smallest phones (≤ 340 px): the top bar stays inside the screen (the ⚙️ button stuck out). */
+@media (max-width: 340px) {
+  #hud { gap: 5px; padding: 5px 6px 5px 8px; max-width: calc(100vw - 16px); }
+  .coins { padding: 2px 8px; }
+}
 
-.tabs { display: flex; gap: 6px; margin-top: 10px; height: 36px; }
+.tabs { display: flex; gap: 6px; margin-top: 10px; height: var(--btn-h-sm); }
 .tab {
   flex: 1;
   min-width: 0;
@@ -378,6 +392,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .dg-node.hot { border-color: var(--red); background: #fde2e4; }
 .dg-node.locked { border-style: dashed; opacity: 0.75; background: #ece6da; }
 .dg-node.dg-side { border-style: dashed; background: #eef6e6; }
+/* (v5.8) Side branches are narrower: their level and bonus may take two lines instead of being cut. */
+.dg-node.dg-side .dg-meta { white-space: normal; line-height: 1.15; }
 .dg-icon { grid-row: span 2; font-size: 1.45rem; text-align: center; }
 .dg-name { font-size: 0.78rem; font-weight: 700; line-height: 1.05; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .dg-meta { font-size: 0.72rem; color: var(--muted); font-weight: 600; white-space: nowrap; overflow: hidden; }
@@ -477,7 +493,7 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .list-modal { width: min(460px, 100%); height: min(900px, calc(100vh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))); display: flex; flex-direction: column; }
 .list-body { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
 
-.research { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 2px solid var(--ink); border-radius: 14px; background: var(--paper-2); }
+.research { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; align-items: center; column-gap: 10px; padding: 8px 10px; border: 2px solid var(--ink); border-radius: 14px; background: var(--paper-2); }
 .research.owned { background: #e3f6e9; }
 .research.locked { opacity: 0.7; border-style: dashed; }
 .research.goto { cursor: pointer; }
@@ -485,13 +501,11 @@ body.panel-open .side, body.panel-open .tracker { display: none; }
 .research-icon { font-size: 1.6rem; width: 36px; text-align: center; }
 .research-text { flex: 1; min-width: 0; font-size: 0.9rem; }
 .research-text small { color: var(--muted); }
-.research .owned, .research .locked { font-size: 0.8rem; font-weight: 600; text-align: right; flex: none; white-space: nowrap; }
-/* Lock reasons (🔒 Build Wet Mill, 🔒 Lv 25 and 🐴 25) wrap below when narrow (v3.67.5):
-   kept description from wrapping to one word per line on narrow screens. */
-.research { flex-wrap: wrap; }
-.research-text { flex: 1 1 130px; }
-.research > :last-child { margin-left: auto; }
-.btn.small { width: auto; padding: 6px 10px; font-size: 0.9rem; white-space: nowrap; }
+.research .owned, .research .locked { font-size: 0.8rem; font-weight: 600; text-align: right; max-width: 8.5em; }
+/* (v5.8) Icon, text and action always in the same three columns: the price or «Go» button no longer
+   drops below the text on some rows and not on others. Buttons share a minimum width so prices line up. */
+.research > .btn { min-width: 5.6em; justify-content: center; }
+.btn.small { width: auto; padding: 3px 10px; font-size: 0.9rem; white-space: nowrap; }
 
 .modal-card.center { text-align: center; display: grid; gap: 8px; justify-items: center; }
 .modal-card.center .btn { width: 100%; justify-content: center; }
@@ -555,7 +569,7 @@ button:focus-visible, .tracker:focus-visible { outline: 3px solid var(--yellow);
 
 /* Events (v2.0) */
 .events-renown { margin: 4px 0 8px; font-weight: 700; font-size: 1.05rem; }
-.renown-total { margin: -4px 0 6px; font-weight: 700; color: var(--ink-soft, #7a5a44); }
+.renown-total { margin: 4px 0 6px; font-weight: 700; color: var(--ink-soft, #7a5a44); }
 .event-card { border: 2px solid var(--ink); border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; background: var(--paper); }
 .event-card h3 { margin: 0 0 4px; font-size: 1.1rem; display: flex; justify-content: space-between; gap: 8px; }
 .event-card p { margin: 0 0 6px; font-size: 0.9rem; line-height: 1.35; }
@@ -591,6 +605,8 @@ body.panel-open .event-bar { display: none; }
 .event-buttons { display: flex; gap: 6px; margin-top: 6px; }
 .event-buttons .btn { flex: 1; justify-content: center; padding: 5px 4px; font-size: 0.85rem; white-space: nowrap; }
 .event-result .btn + .btn { margin-top: 8px; }
+/* (v5.8) Both buttons the same full width (the second one was narrower). */
+.event-result .btn { width: 100%; justify-content: center; }
 .event-goal { display: flex; justify-content: space-between; gap: 8px; font-size: 0.9rem; font-weight: 600; }
 #event-goal { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .event-goal span:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -601,7 +617,7 @@ body.panel-open .event-bar { display: none; }
 .event-action.ready { background: var(--green); color: #fff; }
 .event-action.owned { opacity: 0.55; }
 .event-action.locked { opacity: 0.45; }
-.event-action b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.event-action b { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
 .event-action.flash { animation: event-flash 0.5s ease-in-out 3; }
 @keyframes event-flash { 50% { transform: scale(1.08); box-shadow: 0 0 0 3px var(--gold, #f2c14e); } }
 /* Event board hides goals, research, and main save zones. */
@@ -617,7 +633,8 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .events-renown-row .events-renown { flex: 1; margin: 0; }
 .events-renown-row .btn { width: auto; padding: 6px 10px; font-size: 0.85rem; }
 /* Regions in three columns (v3.67): once all open, they no longer fit on one row. */
-.renown-regions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 6px 0 2px; }
+.renown-regions { display: flex; align-items: center; gap: 8px; margin: 6px 0 2px; font-weight: 700; }
+.renown-regions select { flex: 1; min-width: 0; height: 40px; font: inherit; font-weight: 700; color: var(--ink); background: var(--paper-2); border: 2px solid var(--ink); border-radius: 10px; padding: 4px 8px; }
 .renown-regions[hidden] { display: none; }
 .renown-regions button { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 6px 4px; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); color: var(--ink); font: inherit; font-weight: 700; font-size: 0.85rem; }
 .renown-regions button.on { background: var(--yellow); }
@@ -647,7 +664,7 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .logro { border: 2px solid var(--ink); border-radius: 12px; padding: 8px 10px; margin-bottom: 8px; }
 .willys2-btns { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
 .willys2-btns .btn { flex: 1; min-width: 0; font-size: 0.8rem; padding: 6px 4px; }
-.logro-head { display: flex; justify-content: space-between; gap: 8px; }
+.logro-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 8px; }
 .logro-stars { color: #d4a017; letter-spacing: 2px; font-size: 1.05rem; }
 .logro p { margin: 4px 0 0; font-size: 0.85rem; }
 
@@ -725,7 +742,7 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .zones-map-svg { display: block; width: 100%; height: 100%; touch-action: none; user-select: none; -webkit-user-select: none; }
 .zones-map-zoom { position: absolute; right: 8px; bottom: 8px; z-index: 1; display: flex; flex-direction: column; gap: 6px; }
 .zones-map-zoom .btn { min-width: 38px; font-size: 18px; line-height: 1; }
-.zones-map-back { position: absolute; top: 8px; left: 8px; z-index: 1; }
+.zones-map-back { position: absolute; top: 8px; left: 8px; z-index: 1; min-height: var(--btn-h-sm); }
 .zones-map-dept { stroke: #fffaf0; stroke-width: 1px; vector-effect: non-scaling-stroke; transition: opacity 0.4s; }
 .zones-map-dept.pick { cursor: pointer; }
 .zones-map-dept.dim { opacity: 0.35; }
@@ -755,9 +772,9 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .volume-row input[type='range'] { width: 100%; accent-color: var(--ink); }
 .volume-row b { text-align: right; font-variant-numeric: tabular-nums; }
 /* ⏸️ Pause or 🚪 Exit events (v3.67.4). */
-.option-row { display: grid; grid-template-columns: 1.6em auto 1fr; align-items: center; gap: 8px; font-weight: 600; }
+.option-row { display: grid; grid-template-columns: 1.6em minmax(0, 1fr) auto; align-items: center; gap: 8px; font-weight: 600; }
 .option-hint { margin: -2px 0 0 calc(1.6em + 8px); font-size: 0.85rem; color: var(--muted); }
-.option-row select { min-width: 0; font: inherit; font-weight: 500; color: var(--ink); background: var(--paper); border: 2px solid var(--paper-2); border-radius: 10px; padding: 4px 6px; }
+.option-row select { min-width: 0; max-width: 62vw; font: inherit; font-weight: 500; color: var(--ink); background: var(--paper); border: 2px solid var(--paper-2); border-radius: 10px; padding: 4px 6px; }
 
 /* Inside the warehouse (v3.66): one row per product with current stock and unit price. */
 .stock-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; margin: 10px 0 8px; display: grid; align-content: start; gap: 4px; }
@@ -810,9 +827,12 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
    clipped); laid out two per row. */
 @media (max-width: 440px) {
   .tabs.four-tabs { display: grid; grid-template-columns: 1fr 1fr; height: auto; }
-  .tabs.four-tabs .tab { height: 34px; }
+  .tabs.four-tabs .tab { height: var(--btn-h-sm); }
 }
-.renown-back { width: auto; flex: none; padding: 4px 10px; font-size: 0.85rem; margin-right: 6px; }
+.renown-back { width: auto; flex: none; padding: 4px 10px; font-size: 0.85rem; margin-right: 8px; min-height: var(--btn-h-sm); }
+/* (v5.8) Renown header on one line: compact back button (same height as the tabs) and a title that
+   scales down with the screen instead of wrapping to three lines. */
+#renown .chain-head h2 { flex: 1; min-width: 0; font-size: clamp(1.05rem, 5vw, 1.5rem); line-height: 1.15; }
 
 /* Map (v3.67): highlighted active region, upcoming («Coming soon»), and destination zone. */
 .zones-map-dept.lit { stroke: #3a2418; stroke-width: 2px; }
@@ -822,7 +842,7 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .zones-map-label .soon-tag { fill: #8a6d3b; font-style: italic; }
 .zones-map-zone.target .dot { fill: #ffe082; animation: map-target 0.8s ease-in-out infinite; }
 @keyframes map-target { 50% { opacity: 0.55; } }
-.zones-list-btn { width: auto; flex: none; margin-left: auto; margin-right: 6px; padding: 4px 10px; font-size: 0.85rem; }
+.zones-list-btn { width: auto; flex: none; margin-left: auto; margin-right: 6px; padding: 4px 10px; font-size: 0.85rem; min-height: var(--btn-h-sm); }
 
 /* «See more» (v3.67.5, ui/more.js): truncates long text to a few lines with an expand button. */
 /* Fixed max-height alongside line-clamp: emojis make some lines taller and peeked from
@@ -852,4 +872,66 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .event-play-state { grid-area: state; white-space: nowrap; text-align: right; }
 @container (max-width: 280px) {
   .event-play-row { grid-template-columns: auto 1fr; grid-template-areas: 'label label' 'clock state'; }
+}
+
+/* (v5.8) Long words (links, e-mail) break instead of widening a window. */
+.modal-card p, .modal-card li { overflow-wrap: break-word; }
+.about-list { overflow-wrap: anywhere; grid-template-columns: minmax(0, 1fr); }
+/* (v5.8) In list windows only the list shrinks: the intro text and the tabs above keep their height
+   (on short screens the events intro was squeezed under the title). */
+.list-modal > :not(.list-body) { flex-shrink: 0; }
+/* (v5.8) Zone rows: a compact «Go» button leaves room for the zone name. */
+.zones-group > .research > .btn { min-width: 3.4em; }
+/* (v5.8) Decoration options: one column on narrow phones so names and prices fit. */
+@media (max-width: 380px) { .decor-opts { grid-template-columns: minmax(0, 1fr); } }
+
+/* (v5.8) Short screens (a phone turned sideways): nothing important falls off the bottom.
+   - The station panel and the event board dock to the right, below the top bar, full height, and
+     scroll inside, so «Upgrade» and the event purchases are always reachable.
+   - List windows scroll as a whole instead of leaving a two-row hole for the list.
+   - Tighter paddings and smaller titles and pictures in every window. */
+@keyframes pop-side { from { transform: scale(0.96); opacity: 0; } }
+@media (max-height: 500px) and (orientation: landscape) {
+  .panel {
+    left: auto;
+    right: max(8px, env(safe-area-inset-right, 0px));
+    top: calc(64px + env(safe-area-inset-top, 0px));
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    transform: none;
+    width: min(400px, 50vw);
+    height: auto;
+    max-height: none;
+    overflow-y: auto;
+    padding: 10px 12px 12px;
+    animation-name: pop-side;
+  }
+  .event-bar {
+    left: auto;
+    right: max(8px, env(safe-area-inset-right, 0px));
+    top: calc(64px + env(safe-area-inset-top, 0px));
+    width: min(400px, 50vw);
+    max-height: calc(100vh - 72px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    margin: 0;
+  }
+  .event-bar.folded { bottom: auto; }
+  .modal { padding: 8px; }
+  .modal-card { padding: 12px 14px; border-radius: 16px; max-height: calc(100vh - 16px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); }
+  .modal-card h2 { font-size: 1.25rem; }
+  .list-modal { height: auto; max-height: calc(100vh - 16px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); display: block; overflow-y: auto; }
+  .list-modal .list-body { overflow: visible; }
+  .modal-card.center { gap: 4px; }
+  .victory-icon, .event-result-medal { font-size: 2.2rem; }
+}
+
+/* (v5.8) Phones under 360 px: rows put their action below the text, the same on every row, instead of
+   squeezing names to one word per line; menu drop-downs go under their label; the three event-board
+   buttons may use two lines. */
+@media (max-width: 359px) {
+  .research { grid-template-columns: 36px minmax(0, 1fr); row-gap: 6px; }
+  .research > :nth-child(3) { grid-column: 2; justify-self: end; }
+  .research-text { overflow-wrap: break-word; }
+  .option-row { grid-template-columns: 1.6em minmax(0, 1fr); row-gap: 4px; }
+  .option-row select { grid-column: 2; max-width: none; }
+  .event-buttons .btn { white-space: normal; font-size: 0.8rem; line-height: 1.05; padding-left: 2px; padding-right: 2px; }
 }
