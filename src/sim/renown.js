@@ -1,5 +1,6 @@
 // What Renown ⭐ buys (v2.2): album stickers and decoration. Lives in state.profile,
 // preserved on reset. None of it alters economy.
+import { CAPS, capAdd } from '../data/caps.js';
 import { ALBUM, PAGE_BONUS, STICKERS_BY_ID, albumOf } from '../data/album.js';
 import { canPayRenown } from './upgrades.js';
 import { DECOR_BY_ID, DEFAULT_DECOR } from '../data/decor.js';
@@ -16,9 +17,10 @@ export function profileOf(state) {
 
 // Earned Renown (v3.11): adds to balance and lifetime total (`renownTotal`), never decreases
 // when spent. All Renown awards go through here.
+// (v5.9) Both stop at their caps.
 export function gainRenown(profile, n) {
-  profile.renown += n;
-  profile.renownTotal = (profile.renownTotal ?? 0) + n;
+  profile.renown = capAdd(profile.renown, n, CAPS.renown);
+  profile.renownTotal = capAdd(profile.renownTotal, n, CAPS.prestige);
 }
 // Renown granted per second-ending reset in any region.
 export const RESTART_RENOWN = 10;

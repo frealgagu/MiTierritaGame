@@ -1,3 +1,4 @@
+import { CAPS } from '../data/caps.js';
 import { createInitialState, SAVE_VERSION } from '../sim/state.js';
 import { createSourceState, createStationState } from '../sim/production.js';
 import { createRouteState } from '../sim/routes.js';
@@ -218,6 +219,21 @@ function migrateProfile(root) {
     playing.slice(0, 2).forEach((zone, i) => (root.events.slots[i] = { zone }));
   }
   for (const st of all) if (st !== root) delete st.events.slots;
+  // v5.9: counters stop at their caps (data/caps.js), and the event history keeps only the last event.
+  // Runs after the older migrations above, which still read the whole history.
+  const p = root.profile;
+  if (p) {
+    p.history = (p.history ?? []).slice(-CAPS.history);
+    p.renown = Math.min(CAPS.renown, p.renown ?? 0);
+    p.renownTotal = Math.min(CAPS.prestige, p.renownTotal ?? 0);
+    for (const rec of Object.values(p.medals ?? {})) for (const k in rec.count ?? {}) rec.count[k] = Math.min(CAPS.medalsPerKind, rec.count[k]);
+    for (const life of [p.lifetime, ...Object.values(p.lifetimes ?? {})]) {
+      if (!life) continue;
+      for (const kind of ['sold', 'produced']) for (const id in life[kind] ?? {}) life[kind][id] = Math.min(CAPS.stat, life[kind][id]);
+      life.earned = Math.min(CAPS.lifetimeEarned, life.earned ?? 0);
+    }
+  }
+  for (const st of all) for (const z in st.events?.count ?? {}) st.events.count[z] = Math.min(CAPS.eventRound, st.events.count[z]);
   return root;
 }
 

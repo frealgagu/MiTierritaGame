@@ -1,4 +1,5 @@
 // Effects of purchased research upgrades. All simulation math flows through here.
+import { CAPS } from '../data/caps.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
 import { PRODUCTS } from '../data/products.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
@@ -39,13 +40,18 @@ function product(state, type, target) {
 // routes derive from station speed, keeping everything balanced.
 // Multiplier has a cap: resets still count for Renown and achievements, though
 // production stops doubling. v3.56: ×2³² (32 resets, ×4.29B); v3.68.3: ×2⁶⁰ (60, ×1.15Qi).
-export const MAX_LEGACY_RESETS = 60;
+export const MAX_LEGACY_RESETS = CAPS.resets;
 // Coin cap (v3.68.3): 999Dc, largest suffix-formatted number. At ×2⁶⁰ with a
 // maxed region it takes ~90 real nonstop days; avoids scientific notation.
-export const MAX_COINS = 999e33;
+export const MAX_COINS = CAPS.coins;
+// Called every tick: coins, coins earned and (v5.9) every per-product counter stop at their caps.
 export function capCoins(state) {
   if (state.coins > MAX_COINS) state.coins = MAX_COINS;
   if (state.totalEarned > MAX_COINS) state.totalEarned = MAX_COINS;
+  for (const kind of ['sold', 'produced', 'imported']) {
+    const stats = state.stats?.[kind];
+    if (stats) for (const id in stats) if (stats[id] > CAPS.stat) stats[id] = CAPS.stat;
+  }
 }
 // Product of a single research effect type (v4.1.1: displayed in income breakdown).
 export const researchMult = (state, type, target) => product(state, type, target);

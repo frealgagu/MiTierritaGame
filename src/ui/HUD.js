@@ -14,6 +14,7 @@ import { setFitted } from './fit.js';
 import { say } from './Chatter.js';
 import { withArticle } from '../data/lore.js';
 import { t } from '../i18n/index.js';
+import { cappedCoins } from './capped.js';
 
 // Readable name of upgrade target: 'farm', 'farm:transport', 'dispatch:<zone>', or 'route:<route>'.
 export function upgradeName(id) {
@@ -51,7 +52,7 @@ export class HUD {
 
   update() {
     const s = this.game.state;
-    this.coins.textContent = formatNumber(s.coins);
+    this.coins.textContent = cappedCoins(s.coins);
     // Production multiplier for this playthrough (after second-ending reset).
     const mult = legacyMult(s);
     this.legacy.hidden = mult <= 1 || Boolean(s.event);

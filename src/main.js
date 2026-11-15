@@ -47,6 +47,7 @@ import { bindMore } from './ui/more.js';
 import { LANG, LANGS, saveLang, t } from './i18n/index.js';
 import { Sound } from './audio/Sound.js';
 import { Music } from './audio/Music.js';
+import { cappedCoins, cappedPlayTime, cappedStat } from './ui/capped.js';
 
 const AUTOSAVE_MS = 10_000;
 const MIN_OFFLINE_S = 30;
@@ -688,9 +689,9 @@ function bindMenu(game, sound, music, getActive) {
     const sold = all.reduce((n, st) => n + sumValues(st.stats.sold), 0);
     const earned = all.reduce((n, st) => n + (st.totalEarned ?? 0), 0);
     document.getElementById('menu-stats').innerHTML = [
-      t('⏱️ Tiempo jugado: <b>{time}</b>', { time: formatDuration(s.playTime) }),
-      t('💰 Ganado en total: <b>{coins}</b>', { coins: formatNumber(earned) }),
-      t('📦 Productos vendidos: <b>{n}</b>', { n: formatNumber(sold) }),
+      t('⏱️ Tiempo jugado: <b>{time}</b>', { time: cappedPlayTime(s.playTime) }),
+      t('💰 Ganado en total: <b>{coins}</b>', { coins: cappedCoins(earned) }),
+      t('📦 Productos vendidos: <b>{n}</b>', { n: cappedStat(sold) }),
     ].map((li) => `<li>${li}</li>`).join('');
     menu.hidden = false;
   });

@@ -13,6 +13,7 @@
 // After win, board remains open for inspection (`event.done`) until «Finish» is tapped.
 //   principal: state.events = { boards, slots: [ { zone } | { until } | null ], last, count, global }
 //   each region: state.events = { boards: { zone: board }, last: { zone: clock }, count: { zone: count } }
+import { CAPS, capAdd } from '../data/caps.js';
 import { EVENTS, EVENTS_BY_ID, EVENT_ACTIONS_BY_ID, EVENT_OF_ZONE, MEDALS, eventKey } from '../data/events.js';
 import { createInitialState, createZoneState } from './state.js';
 import { createStationState } from './production.js';
@@ -59,7 +60,7 @@ export function eventsOf(state) {
 }
 
 // Next challenge for zone (1, 2, 3…).
-export const nextRound = (state, zoneId) => (eventsOf(state).count[zoneId] ?? 0) + 1;
+export const nextRound = (state, zoneId) => Math.min(CAPS.eventRound, (eventsOf(state).count[zoneId] ?? 0) + 1);
 // Zone has event if open; once region completed at least once (v3.8), all its zones,
 // even if not reopened yet after reset: already played.
 const open = (state, zoneId) => zoneId in state.zones && (state.regionDone || Boolean(state.zones[zoneId].unlocked));
@@ -346,10 +347,11 @@ export function finishEvent(root, zoneId) {
   gainRenown(profile, renown);
   const rec = (profile.medals[def.id] ??= { best: null, count: {} });
   if (ORDER.indexOf(medal) > ORDER.indexOf(rec.best)) rec.best = medal;
-  rec.count[medal] = (rec.count[medal] ?? 0) + 1;
-  profile.history.push({ event: def.id, round, medal, time });
+  rec.count[medal] = capAdd(rec.count[medal], 1, CAPS.medalsPerKind);
+  // (v5.9) Only the last finished events are kept, so the save does not keep growing.
+  profile.history = [...(profile.history ?? []), { event: def.id, round, medal, time }].slice(-CAPS.history);
   ev.last[zoneId] = clockOf(state);
-  ev.count[zoneId] = round;
+  ev.count[zoneId] = Math.min(round, CAPS.eventRound);
   coolDown(root, zoneId);
   board.event.done = true;
   return { done: true, def, medal, time, renown, round };

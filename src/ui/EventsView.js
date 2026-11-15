@@ -13,6 +13,7 @@ import { t } from '../i18n/index.js';
 import { maxLevel } from '../sim/rules.js';
 import { upgradeTarget } from '../sim/upgrades.js';
 import { zoneBoostTargets } from '../sim/zoneBoost.js';
+import { cappedPrestige, cappedRenown } from './capped.js';
 
 export const medalLine = (obj) => t('🥇 hasta {gold} · 🥈 hasta {silver} · 🥉 después', { gold: formatClock(obj.medals[0]), silver: formatClock(obj.medals[1]) });
 
@@ -89,7 +90,7 @@ export class EventsView {
   render() {
     const s = this.game.state;
     const profile = s.profile ?? { renown: 0, medals: {} };
-    document.getElementById('events-renown').textContent = t('⭐ Renombre: {n} · 🏆 Prestigio: {total}', { n: profile.renown, total: profile.renownTotal ?? profile.renown });
+    document.getElementById('events-renown').textContent = t('⭐ Renombre: {n} · 🏆 Prestigio: {total}', { n: cappedRenown(profile.renown), total: cappedPrestige(profile.renownTotal ?? profile.renown) });
     const card = (def) => {
       const st = eventStatus(s, eventKey(def));
       if (!st) return '';

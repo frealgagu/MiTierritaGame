@@ -13,6 +13,7 @@ import { logrosOf } from '../data/logros.js';
 import { metric, tierOf } from '../sim/logros.js';
 import { formatNumber } from '../core/format.js';
 import { t } from '../i18n/index.js';
+import { cappedPrestige, cappedRenown } from './capped.js';
 
 const hex = (c) => `#${c.toString(16).padStart(6, '0')}`;
 
@@ -130,9 +131,9 @@ export class RenownView {
 
   render() {
     const profile = profileOf(this.game.state);
-    document.getElementById('renown-title').textContent = t('⭐ Renombre: {n}', { n: profile.renown });
+    document.getElementById('renown-title').textContent = t('⭐ Renombre: {n}', { n: cappedRenown(profile.renown) });
     // Prestige (v3.11): lifetime Renown earned, even if already spent.
-    document.getElementById('renown-total').textContent = t('🏆 Prestigio: {n} ⭐ (todo el Renombre que has ganado)', { n: formatNumber(profile.renownTotal ?? profile.renown) });
+    document.getElementById('renown-total').textContent = t('🏆 Prestigio: {n} ⭐ (todo el Renombre que has ganado)', { n: cappedPrestige(profile.renownTotal ?? profile.renown) });
     for (const btn of this.modal.querySelectorAll('[data-renown-tab]')) btn.classList.toggle('active', btn.dataset.renownTab === this.tab);
     // Viewed region selector (when more than one is open).
     const open = openRegionStates(this.game.state);
