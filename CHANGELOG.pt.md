@@ -6,7 +6,8 @@
 - **⚡ Eventos sem espera:** uma compra de 100 ⭐ de Renome tira os 2 anos de espera entre eventos e o limite de 2 eventos ao mesmo tempo: jogue quantos quiser, quando quiser.
 - **Contadores com teto:** as moedas, o vendido e produzido, o Renome, o Prestígio, as medalhas, as horas jogadas e os outros contadores não crescem mais sem fim. No máximo aparecem como «999Dc++», «99++» ou «∞». Os reinícios e a partida vão até 60.
 - **Jogo salvo mais leve:** o histórico de eventos guarda só o último.
-- **Ícones próprios:** salvar e abrir arquivo e duas melhorias da Grande Feira não usam mais emojis do celular.
+- **Cópia de segurança:** os botões agora dizem «💾 Exportar para arquivo» e «📂 Importar de arquivo».
+- **Ícones próprios:** exportar e importar arquivo e duas melhorias da Grande Feira não usam mais emojis do celular.
 - **Mapa:** a zona especial ficou mais perto de onde fica de verdade.
 - **Música para baixar:** a da zona especial e a do grande final estão na página de downloads, atrás de um aviso para não estragar a surpresa.
 

@@ -6,7 +6,8 @@
 - **⚡ Événements sans attente :** un achat de 100 ⭐ de Renom supprime les 2 ans d’attente entre les événements et la limite de 2 événements à la fois : joue autant que tu veux, quand tu veux.
 - **Compteurs plafonnés :** les pièces, le vendu et le produit, le Renom, le Prestige, les médailles, les heures jouées et les autres compteurs ne grandissent plus sans fin. À leur maximum, ils s’affichent « 999Dc++ », « 99++ » ou « ∞ ». Les redémarrages et le numéro de partie vont jusqu’à 60.
 - **Sauvegarde plus légère :** l’historique des événements ne garde que le dernier.
-- **Icônes maison :** enregistrer et ouvrir un fichier et deux améliorations de la Grande Foire n’utilisent plus les emojis du téléphone.
+- **Sauvegarde :** les boutons s’appellent maintenant « 💾 Exporter vers un fichier » et « 📂 Importer depuis un fichier ».
+- **Icônes maison :** exporter et importer un fichier et deux améliorations de la Grande Foire n’utilisent plus les emojis du téléphone.
 - **Carte :** la zone spéciale est plus près de sa vraie place.
 - **Musique à télécharger :** celle de la zone spéciale et celle du grand final sont sur la page de téléchargements, derrière un avertissement pour ne pas gâcher la surprise.
 

@@ -117,7 +117,7 @@ export default {
   '⚡ Directo': '⚡ Direct',
   'Eventos seguidos: al terminar uno, su cupo se libera al segundo (no a los 2 años)': 'Back-to-back events: when one ends, its slot frees up after one second (not after 2 years)',
   'Guarda tu partida en un archivo (en el teléfono, elige Drive, Archivos o donde quieras) y ábrelo en otro dispositivo para seguir allí. También puedes exportarla como texto y pegarla aquí.': 'Save your game to a file (on your phone, choose Drive, Files or wherever you like) and open it on another device to continue there. You can also export it as text and paste it here.',
-  '💾 Guardar en archivo': '💾 Save to file',
-  '📂 Abrir archivo': '📂 Open file',
+  '💾 Exportar a archivo': '💾 Export to file',
+  '📂 Importar desde archivo': '📂 Import from file',
   "⭐ Abrir la zona especial": "⭐ Open the special zone",
 };

@@ -6,7 +6,8 @@
 - **⚡ Events without waiting:** a 100 ⭐ Renown purchase removes the 2-year wait between events and the limit of 2 events at once: play as many as you want, whenever you want.
 - **Capped counters:** coins, sold and produced, Renown, Prestige, medals, hours played and the other counters no longer grow forever. At their maximum they show as «999Dc++», «99++» or «∞». Restarts and the run number go up to 60.
 - **Lighter save:** the event history keeps only the last one.
-- **Own icons:** save and open file and two Great Fair upgrades no longer use phone emojis.
+- **Backup:** the buttons now read «💾 Export to file» and «📂 Import from file».
+- **Own icons:** export and import file and two Great Fair upgrades no longer use phone emojis.
 - **Map:** the special zone sits closer to where it really is.
 - **Music to download:** the special zone's and the grand finale's are on the downloads page, behind a warning so the surprise is not spoiled.
 
