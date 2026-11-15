@@ -45,8 +45,23 @@ const CSS = `
 .gf-title { flex: 1; font-size: 1.1rem; font-weight: 700; text-shadow: 0 1px 0 #fff8; }
 .gf-btn { border: 2px solid #3a2418; border-radius: 12px; background: #fff3d6; color: #3a2418; font: inherit; font-weight: 700; min-height: 36px; padding: 2px 12px; cursor: pointer; }
 .gf-region { position: relative; margin-top: 6px; padding: 4px 18px; border: 3px solid #3a2418; border-radius: 999px; background: #fffaf0; font-size: clamp(1.1rem, 4.5vw, 1.6rem); font-weight: 700; box-shadow: 0 3px 0 #3a2418; animation: gf-pop 0.45s ease-out; }
-.gf-bubble { position: relative; width: min(560px, calc(100% - 28px)); min-height: 6.2em; margin-top: 12px; padding: 10px 14px; border: 3px solid #3a2418; border-radius: 18px; background: #fffaf0; box-shadow: 0 3px 0 #3a2418; font-size: clamp(0.95rem, 3.6vw, 1.2rem); line-height: 1.3; }
+.gf-bubble { position: relative; box-sizing: border-box; width: min(560px, calc(100% - 28px)); min-height: 6.2em; margin-top: 12px; padding: 10px 14px; border: 3px solid #3a2418; border-radius: 18px; background: #fffaf0; box-shadow: 0 3px 0 #3a2418; font-size: clamp(0.95rem, 3.6vw, 1.2rem); line-height: 1.3; }
 .gf-bubble::after { content: ''; position: absolute; left: var(--tail, 50%); bottom: -14px; width: 18px; height: 18px; background: #fffaf0; border-right: 3px solid #3a2418; border-bottom: 3px solid #3a2418; transform: translateX(-50%) rotate(45deg); transition: left 0.3s; }
+.gf-bubble.gf-off { visibility: hidden; }
+/* The intro is a cloud: nobody says it, so it has no tail. Puffs are circles drawn behind the text and
+   outlined together by the stacked drop shadows. */
+.gf-bubble.gf-cloud { isolation: isolate; border-color: transparent; background: none; box-shadow: none; text-align: center; display: flex; align-items: center; justify-content: center; margin-top: 34px; padding: 14px 44px; }
+.gf-bubble.gf-cloud::after { display: none; }
+.gf-bubble.gf-cloud::before { content: ''; position: absolute; inset: -12px 12px -8px; z-index: -1; --c: #fffaf0;
+  background: radial-gradient(ellipse 47% 40% at 50% 56%, var(--c) 99%, transparent),
+    radial-gradient(circle 38px at 20% 36%, var(--c) 98%, transparent), radial-gradient(circle 50px at 40% 26%, var(--c) 98%, transparent),
+    radial-gradient(circle 46px at 61% 28%, var(--c) 98%, transparent), radial-gradient(circle 36px at 80% 40%, var(--c) 98%, transparent),
+    radial-gradient(circle 32px at 9% 58%, var(--c) 98%, transparent), radial-gradient(circle 32px at 91% 60%, var(--c) 98%, transparent),
+    radial-gradient(circle 34px at 27% 76%, var(--c) 98%, transparent), radial-gradient(circle 38px at 50% 80%, var(--c) 98%, transparent),
+    radial-gradient(circle 32px at 72% 76%, var(--c) 98%, transparent);
+  filter: drop-shadow(2.5px 0 0 #3a2418) drop-shadow(-2.5px 0 0 #3a2418) drop-shadow(0 2.5px 0 #3a2418) drop-shadow(0 -2.5px 0 #3a2418) drop-shadow(0 3px 0 rgba(58, 36, 24, 0.6));
+  animation: gf-float 4s ease-in-out infinite alternate; }
+@keyframes gf-float { to { transform: translateY(-4px); } }
 .gf-bubble b { display: block; font-size: 0.85em; opacity: 0.8; }
 .gf-bubble span { display: block; animation: gf-fade 0.35s ease-out; }
 .gf-stage { position: relative; flex: 1; width: min(720px, 100%); display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 4px 10px; padding: 18px 10px calc(70px + env(safe-area-inset-bottom, 0px)); }
@@ -316,7 +331,7 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
   root.innerHTML = `<canvas class="gf-confetti"></canvas>
     <div class="gf-top"><span class="gf-title">${t(FINALE_TEXT.title)}</span><button class="gf-btn" data-prev type="button" aria-label="${t('Región anterior')}"><span class="gf-flip">⏩</span></button><button class="gf-btn" data-skip type="button" aria-label="${t('Región siguiente')}">⏩</button><button class="gf-btn" data-close type="button" aria-label="${t('Cerrar')}">✕</button></div>
     <div class="gf-region" hidden></div>
-    <div class="gf-bubble"><span>${t(FINALE_TEXT.intro)}</span></div>
+    <div class="gf-bubble gf-cloud"><span>${t(FINALE_TEXT.intro)}</span></div>
     <div class="gf-stage"></div>
     <div class="gf-bottom" hidden><button class="gf-btn" data-close type="button">${t('Cerrar')}</button><button class="gf-btn" data-again type="button">🔁</button></div>`;
   document.body.append(root);
@@ -360,6 +375,7 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
     root.classList.remove('gf-night');
     $('.gf-stage').classList.remove('gf-crowd', 'gf-away');
     $('.gf-bubble').hidden = false;
+    $('.gf-bubble').classList.add('gf-off');
     $('[data-skip]').hidden = false;
     $('.gf-bottom').hidden = true;
   };
@@ -375,7 +391,8 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
     banner.style.animation = 'none';
     void banner.offsetWidth;
     banner.style.animation = '';
-    $('.gf-bubble').innerHTML = `<span>${t(FINALE_TEXT.intro)}</span>`;
+    // Between regions nobody is talking: the bubble keeps its place but stays empty.
+    $('.gf-bubble').classList.replace('gf-cloud', 'gf-off') || $('.gf-bubble').classList.add('gf-off');
     $('.gf-stage').innerHTML = zones.map(person).join('');
     fx.burst();
   };
@@ -386,6 +403,7 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
     root.querySelectorAll('.gf-person').forEach((el) => el.classList.toggle('talk', el.dataset.zone === zone));
     const bubble = $('.gf-bubble');
     bubble.hidden = false;
+    bubble.classList.remove('gf-off', 'gf-cloud');
     bubble.innerHTML = `<b>${t(p.name)} · ${t(p.role)}</b><span>${line}</span>`;
     const el = root.querySelector(`.gf-person[data-zone="${zone}"]`);
     const bub = bubble.getBoundingClientRect();
