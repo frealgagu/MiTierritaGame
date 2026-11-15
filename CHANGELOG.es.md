@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.7.1 — Botones de los eventos ordenados
+- **🏅 Eventos:** los botones «Seguir» y «Ver y terminar» tienen columnas fijas para la acción, el cronómetro y si el evento sigue corriendo o está en pausa, así que ya no se desacomodan con el ancho de la pantalla ni con el idioma. En pantallas angostas, la acción va arriba y el tiempo y el estado debajo. «Todo al nivel máximo» pasó a la línea de encima del botón.
+
 ## v5.7.0 — Ventanas que se actualizan solas
 - **🏅 Eventos:** con la ventana abierta, los cronómetros de los eventos en curso y el tiempo que falta para que se libere un cupo avanzan solos, y un evento nuevo aparece sin tener que cerrarla y volverla a abrir. Los botones no se redibujan, así que ningún toque se pierde, y se conservan el desplazamiento, los textos abiertos con «Ver más» y la lista de medallas.
 - **⭐ Renombre:** el avance de los logros, el Renombre ganado y lo que alcanza para comprar se actualizan mientras la ventana está abierta.

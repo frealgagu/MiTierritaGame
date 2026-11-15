@@ -113,20 +113,22 @@ export class EventsView {
       }
       let foot;
       // (v4.7.3) On open events, elapsed time, whether everything is at max board level (50), and whether
-      // each board was left running (🚪 Exit) or paused (⏸️ Pause).
+      // each board was left running (🚪 Exit) or paused (⏸️ Pause). (v5.7.1) The button has three fixed
+      // columns (action, clock and state) so it looks the same at any width; «everything at max» moved
+      // to the line above it.
       const maxed = st.board && boardMaxed(st.board, def.zone);
-      const maxedLabel = maxed ? ` · ${t('⬆ Todo al {n}', { n: maxLevel(st.board) })}` : '';
-      const clock = st.board ? `⏱ ${live(formatClock(boardClockNow(st.board, s)))}` : '';
-      const running = st.board ? ` · ${st.board.event.away !== undefined ? t('🚪 corriendo') : t('⏸️ pausado')}` : '';
-      const maxTip = maxed ? ` title="${t('Todo al nivel máximo')}"` : '';
+      const maxedText = maxed ? t('⬆ Todo al {n}', { n: maxLevel(st.board) }) : '';
+      const playBtn = (label) => {
+        const away = st.board.event.away !== undefined;
+        return `<button class="btn buy event-play" data-play="${eventKey(def)}"><span class="event-play-row"><span class="event-play-label">${label}</span><span class="event-play-clock">⏱ ${live(formatClock(boardClockNow(st.board, s)))}</span><span class="event-play-state">${away ? t('🚪 corriendo') : t('⏸️ pausado')}</span></span></button>`;
+      };
       if (st.kind === 'won') {
         const m = MEDALS[st.board.event.medal];
-        foot = `<p>${t('🏁 ¡Ganado con {medal}!', { medal: `${m.icon} ${m.name}` })}${maxedLabel}</p><button class="btn buy" data-play="${eventKey(def)}">${t('Ver y terminar')} · ${clock}${running}</button>`;
+        foot = `<p>${t('🏁 ¡Ganado con {medal}!', { medal: `${m.icon} ${m.name}` })}${maxed ? ` · ${maxedText}` : ''}</p>${playBtn(t('Ver y terminar'))}`;
       } else if (st.kind === 'active') {
         const secured = st.board.event.medal;
-        foot = secured
-          ? `<p>${t('✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.', { icon: MEDALS[secured].icon })}</p><button class="btn buy" data-play="${eventKey(def)}"${maxTip}>${t('Seguir')} · ${clock}${maxedLabel}${running}</button>`
-          : `<button class="btn buy" data-play="${eventKey(def)}"${maxTip}>${t('Seguir')} · ${clock}${maxedLabel}${running}</button>`;
+        const note = [secured ? t('✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.', { icon: MEDALS[secured].icon }) : '', maxedText].filter(Boolean).join(' · ');
+        foot = `${note ? `<p>${note}</p>` : ''}${playBtn(t('Seguir'))}`;
       } else foot = `<button class="btn buy" data-play="${eventKey(def)}">${t('Jugar')}</button>`;
       return `<div class="event-card" data-ekey="${eventKey(def)}">
         ${title}

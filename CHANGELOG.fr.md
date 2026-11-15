@@ -1,5 +1,8 @@
 # Journal des modifications
 
+## v5.7.1 — Des boutons d’événement bien rangés
+- **🏅 Événements :** les boutons « Continuer » et « Voir et terminer » ont des colonnes fixes pour l’action, le chronomètre et si l’événement tourne ou est en pause, donc ils ne se dérangent plus selon la largeur de l’écran ou la langue. Sur les écrans étroits, l’action va en haut et le temps et l’état en dessous. « Tout au niveau maximum » est passé sur la ligne au-dessus du bouton.
+
 ## v5.7.0 — Des fenêtres qui se mettent à jour toutes seules
 - **🏅 Événements :** avec la fenêtre ouverte, les chronomètres des événements en cours et le temps restant avant qu’un emplacement se libère avancent tout seuls, et un nouvel événement apparaît sans devoir la fermer et la rouvrir. Les boutons ne sont pas redessinés, donc aucun toucher ne se perd, et le défilement, les textes ouverts avec « Voir plus » et la liste des médailles restent comme ils étaient.
 - **⭐ Renom :** la progression des succès, le Renom gagné et ce que tu peux acheter se mettent à jour pendant que la fenêtre est ouverte.

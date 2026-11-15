@@ -1,5 +1,8 @@
 # Registro de alterações
 
+## v5.7.1 — Botões dos eventos arrumados
+- **🏅 Eventos:** os botões «Continuar» e «Ver e encerrar» têm colunas fixas para a ação, o cronômetro e se o evento continua rodando ou está pausado, então não se desarrumam mais com a largura da tela nem com o idioma. Em telas estreitas, a ação fica em cima e o tempo e o estado embaixo. «Tudo no nível máximo» passou para a linha acima do botão.
+
 ## v5.7.0 — Janelas que se atualizam sozinhas
 - **🏅 Eventos:** com a janela aberta, os cronômetros dos eventos em andamento e o tempo que falta para liberar uma vaga avançam sozinhos, e um evento novo aparece sem precisar fechá-la e abri-la de novo. Os botões não são redesenhados, então nenhum toque se perde, e a rolagem, os textos abertos com «Ver mais» e a lista de medalhas continuam como estavam.
 - **⭐ Renome:** o progresso das conquistas, o Renome ganho e o que dá para comprar se atualizam enquanto a janela está aberta.
