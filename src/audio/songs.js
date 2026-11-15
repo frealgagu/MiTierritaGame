@@ -553,6 +553,75 @@ const CALIPSO = {
   ],
 };
 
+// Grand finale (v5.9): played only in the grand finale, once every achievement is earned. Not in the downloads
+// page (it would spoil the ending). A national fiesta in D major, 4/4: one instrument from each corner of the
+// country joins section by section — Pacific euphonium and clarinets, Caribbean gaita, tambora, llamador and
+// guacharaca, Llanos harp, Andean tiple and the island's steel pan — up to the climax and a held final chord.
+//   Intro (fanfare, 4 bars) · A (8) · A' with harp (8) · B in B minor with steel pan (8) · C, all together (8) · Coda (4)
+export const GRAN_FINAL = {
+  name: 'Fiesta de toda Colombia',
+  instruments: 'bombardino, clarinetes, gaita, arpa, tiple, steel pan, tambora, llamador y guacharaca',
+  bpm: 116,
+  beats: 4,
+  style: 'granfinal',
+  chords: [
+    'D', 'D', 'A7', 'A7',
+    'D', 'D', 'G', 'G', 'A7', 'A7', 'D', 'D',
+    'D', 'D', 'G', 'G', 'A7', 'A7', 'D', 'D',
+    'Bm', 'Bm', 'F#7', 'F#7', 'G', 'G', 'A7', 'A7',
+    'D', 'F#7', 'Bm', 'D7', 'G', 'A7', 'D', 'D',
+    'G', 'A7', 'D', 'D',
+  ],
+  melody: [
+    // Intro: fanfare
+    [[0, 1, 'A4'], [1, 1, 'D5'], [2, 2, 'F#5'], [4, 1, 'A5'], [5, 1, 'F#5'], [6, 2, 'A5']],
+    [[0, 3, 'D6'], [4, 1, 'A5'], [5, 1, 'B5'], [6, 2, 'A5']],
+    [[0, 1, 'G5'], [1, 1, 'F#5'], [2, 2, 'E5'], [4, 1, 'C#5'], [5, 1, 'E5'], [6, 2, 'G5']],
+    [[0, 4, 'A5'], [4, 1, 'E5'], [5, 1, 'F#5'], [6, 1, 'G5'], [7, 1, 'A5']],
+    // A
+    [[0, 2, 'F#5'], [2, 1, 'A5'], [3, 1, 'F#5'], [4, 2, 'D5'], [6, 1, 'E5'], [7, 1, 'F#5']],
+    [[0, 3, 'A5'], [3, 1, 'G5'], [4, 2, 'F#5'], [6, 2, 'E5']],
+    [[0, 2, 'D5'], [2, 1, 'G5'], [3, 1, 'B5'], [4, 2, 'D6'], [6, 1, 'B5'], [7, 1, 'G5']],
+    [[0, 3, 'B5'], [3, 1, 'A5'], [4, 4, 'G5']],
+    [[0, 2, 'E5'], [2, 1, 'C#5'], [3, 1, 'E5'], [4, 2, 'G5'], [6, 1, 'F#5'], [7, 1, 'E5']],
+    [[0, 3, 'A5'], [3, 1, 'G5'], [4, 2, 'E5'], [6, 2, 'C#5']],
+    [[0, 2, 'D5'], [2, 1, 'F#5'], [3, 1, 'A5'], [4, 2, 'D6'], [6, 1, 'C#6'], [7, 1, 'B5']],
+    [[0, 4, 'A5'], [4, 2, 'F#5'], [6, 1, 'E5'], [7, 1, 'F#5']],
+    // A': the same tune an octave up in places, with the harp
+    [[0, 1, 'A5'], [1, 1, 'F#5'], [2, 1, 'A5'], [3, 1, 'D6'], [4, 2, 'F#6'], [6, 2, 'E6']],
+    [[0, 2, 'D6'], [2, 1, 'A5'], [3, 1, 'F#5'], [4, 4, 'A5']],
+    [[0, 1, 'B5'], [1, 1, 'G5'], [2, 1, 'B5'], [3, 1, 'D6'], [4, 2, 'G6'], [6, 2, 'F#6']],
+    [[0, 2, 'E6'], [2, 2, 'D6'], [4, 4, 'B5']],
+    [[0, 1, 'C#6'], [1, 1, 'A5'], [2, 1, 'C#6'], [3, 1, 'E6'], [4, 2, 'G6'], [6, 2, 'F#6']],
+    [[0, 2, 'E6'], [2, 2, 'C#6'], [4, 2, 'A5'], [6, 2, 'G5']],
+    [[0, 2, 'F#5'], [2, 2, 'A5'], [4, 2, 'D6'], [6, 2, 'F#6']],
+    [[0, 6, 'D6'], [6, 1, 'C#6'], [7, 1, 'B5']],
+    // B: B minor, with the island's steel pan
+    [[0, 3, 'B4'], [3, 1, 'F#4'], [4, 2, 'D5'], [6, 2, 'F#5']],
+    [[0, 2, 'B5'], [2, 2, 'A5'], [4, 4, 'F#5']],
+    [[0, 3, 'C#5'], [3, 1, 'A#4'], [4, 2, 'F#5'], [6, 2, 'A#5']],
+    [[0, 2, 'C#6'], [2, 2, 'A#5'], [4, 4, 'F#5']],
+    [[0, 2, 'G5'], [2, 1, 'A5'], [3, 1, 'B5'], [4, 2, 'D6'], [6, 2, 'B5']],
+    [[0, 2, 'A5'], [2, 2, 'G5'], [4, 4, 'E5']],
+    [[0, 2, 'E5'], [2, 1, 'F#5'], [3, 1, 'G5'], [4, 2, 'A5'], [6, 2, 'C#6']],
+    [[0, 4, 'E6'], [4, 1, 'D6'], [5, 1, 'C#6'], [6, 1, 'B5'], [7, 1, 'A5']],
+    // C: everybody
+    [[0, 2, 'D6'], [2, 1, 'A5'], [3, 1, 'D6'], [4, 2, 'F#6'], [6, 2, 'D6']],
+    [[0, 2, 'C#6'], [2, 1, 'A#5'], [3, 1, 'C#6'], [4, 2, 'E6'], [6, 2, 'C#6']],
+    [[0, 2, 'B5'], [2, 1, 'F#5'], [3, 1, 'B5'], [4, 2, 'D6'], [6, 2, 'B5']],
+    [[0, 2, 'A5'], [2, 1, 'F#5'], [3, 1, 'A5'], [4, 2, 'C6'], [6, 2, 'A5']],
+    [[0, 3, 'B5'], [3, 1, 'C#6'], [4, 2, 'D6'], [6, 2, 'G6']],
+    [[0, 3, 'E6'], [3, 1, 'D6'], [4, 2, 'C#6'], [6, 2, 'A5']],
+    [[0, 2, 'F#6'], [2, 2, 'E6'], [4, 2, 'D6'], [6, 2, 'A5']],
+    [[0, 4, 'D6'], [4, 1, 'A5'], [5, 1, 'B5'], [6, 1, 'C#6'], [7, 1, 'D6']],
+    // Coda
+    [[0, 2, 'D6'], [2, 2, 'B5'], [4, 2, 'G5'], [6, 2, 'B5']],
+    [[0, 2, 'C#6'], [2, 2, 'E6'], [4, 2, 'G6'], [6, 2, 'E6']],
+    [[0, 8, 'F#6']],
+    [[0, 1, 'D6'], [2, 1, 'D6'], [4, 4, 'D6']],
+  ],
+};
+
 export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO };
 
 // Chords: root pitch class and intervals (semitones above root).

@@ -443,6 +443,7 @@ function renderCalipso(buf, index) {
 
 // Renders measure `index`: bass, guitar, tiple, and melody.
 export function renderBar(buf, index) {
+  if (buf.song.style === 'granfinal') return renderGranFinal(buf, index);
   if (buf.song.style === 'calipso') return renderCalipso(buf, index);
   if (buf.song.style === 'cumbia') return renderCumbia(buf, index);
   if (buf.song.style === 'torbellino') return renderTorbellino(buf, index);
@@ -609,5 +610,90 @@ export function normalize(buf, peak = 0.85) {
   for (let i = 0; i < buf.length; i++) {
     buf.left[i] *= k;
     buf.right[i] *= k;
+  }
+}
+
+// Grand finale measure (v5.9; 4/4, eighths 0..7). Sections by bar: intro 0-3, A 4-11, A' 12-19, B 20-27,
+// C 28-35, coda 36-39. Always: euphonium bass (Pacific), tambora and llamador (Caribbean). Then, by section:
+// guacharaca and off-beat guitar from A on; Llanos harp arpeggios in A' and C; Andean tiple strums in A and C;
+// steel pan doubling the tune in B and C; snare and cymbals building up; clarinets on the tune (with a second
+// voice a third below on long notes) and the gaita joining in C and the coda; a crash at each section start.
+function renderGranFinal(buf, index) {
+  const { song, beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const jitter = () => (rng() - 0.5) * 0.008;
+  const at = (e) => t0 + e * eighth + jitter();
+  const { root, tones } = parseChord(song.chords[index]);
+  const next = parseChord(song.chords[(index + 1) % song.chords.length]).root;
+  const part = index < 4 ? 'intro' : index < 12 ? 'a' : index < 20 ? 'a2' : index < 28 ? 'b' : index < 36 ? 'c' : 'coda';
+  const full = part === 'c' || part === 'coda';
+  const last = index === song.chords.length - 2; // held final chord
+
+  // Euphonium bass: leaps, walking into the next chord.
+  buf.voice = 'bass';
+  const low = above(root, 41);
+  const fifth = above((root + 7) % 12, 41);
+  const third = above(tones[1], 41);
+  const lead = above(next, 41) + (rng() < 0.5 ? -1 : 2);
+  const bassLine = last ? [[0, low, 7.5]] : [[0, low, 1.6], [3, fifth, 0.9], [4, low, 1.4], [6, third, 0.9], [7, lead, 0.8]];
+  for (const [e, m, n] of bassLine) brass(buf, at(e), freqOf(m), eighth * n, 0.14, -0.2);
+  // Tambora on 1 and 3; llamador on 2 and 4.
+  buf.voice = 'tambora';
+  for (const e of [0, 4]) drum(buf, at(e), 115, 60, 0.15, part === 'intro' ? 0.3 : 0.34, -0.15, 0.2);
+  if (part !== 'intro' && !last) {
+    buf.voice = 'llamador';
+    for (const e of [2, 6]) drum(buf, at(e), 260, 190, 0.07, 0.2, 0.25, 0.35);
+    // Guacharaca: chu-ku, chu-ku.
+    buf.voice = 'guacharaca';
+    for (let e = 0; e < 8; e++) scrape(buf, at(e), eighth * (e % 2 ? 0.45 : 0.85), e % 2 ? 0.04 : 0.065, 0.45);
+    // Guitar: off-beat chops.
+    buf.voice = 'guitar';
+    const chord = tones.map((pc) => above(pc, 57)).sort((a, b) => a - b);
+    for (const e of [1, 3, 5, 7]) strum(buf, at(e), chord, eighth * 0.55, { amp: 0.07, t60: 0.6, bright: 0.6, pan: -0.35 }, e % 4 === 3);
+  }
+  // Andean tiple: bright strums on the beat in A and C.
+  if (part === 'a' || part === 'c') {
+    buf.voice = 'tiple';
+    const tiple = tones.map((pc) => above(pc, 64)).sort((a, b) => a - b);
+    for (const e of [0, 2, 4, 6]) strum(buf, at(e) + 0.01, tiple, eighth * 0.7, { amp: 0.05, t60: 0.8, bright: 0.8, pan: 0.35 }, e === 2 || e === 6);
+  }
+  // Llanos harp: running arpeggios up the chord in A' and C.
+  if (part === 'a2' || part === 'c') {
+    buf.voice = 'harp';
+    const arp = [...tones, tones[0] + 12, ...tones.map((pc) => pc + 12)].map((pc) => above(pc % 12, 62) + (pc >= 12 ? 12 : 0));
+    for (let e = 0; e < 8; e++) pluck(buf, at(e), freqOf(arp[e % arp.length]), eighth * 1.6, { amp: 0.07, t60: 1.2, bright: 0.85, pan: 0.45, pos: 0.15 });
+  }
+  // Snare and cymbals build up.
+  if (part === 'a2' || part === 'b' || full) {
+    buf.voice = 'snare';
+    for (const e of [1, 3, 5, 7]) snare(buf, at(e), part === 'b' ? 0.06 : 0.1, 0.3);
+  }
+  buf.voice = 'cymbal';
+  if ([0, 4, 12, 20, 28, 36].includes(index) || last) cymbal(buf, at(0), 0.18, 0.4, 0.6);
+  if (full && !last) for (const e of [2, 6]) cymbal(buf, at(e), 0.08, 0.45);
+  // The tune: clarinets (euphonium too in the fanfare), steel pan in B and C, gaita in C and the coda.
+  for (const [e, n, nt] of song.melody[index] ?? []) {
+    const m = midi(nt);
+    const dur = n * eighth * 0.92;
+    buf.voice = 'melody';
+    reed(buf, at(e), freqOf(m), dur, 0.18, 0.1);
+    if (n >= 2) {
+      const below = tones.map((pc) => m - (((m - pc) % 12) + 12) % 12).filter((x) => m - x >= 3 && m - x <= 5);
+      buf.voice = 'second';
+      if (below.length) reed(buf, at(e) + 0.006, freqOf(below[0]), dur, 0.08, -0.1);
+    }
+    if (part === 'intro') {
+      buf.voice = 'fanfare';
+      brass(buf, at(e), freqOf(m - 12), dur, 0.08, 0);
+    }
+    if (part === 'b' || part === 'c') {
+      buf.voice = 'steel';
+      steel(buf, at(e), freqOf(m), dur, 0.1, -0.3);
+    }
+    if (full) {
+      buf.voice = 'gaita';
+      blow(buf, at(e), freqOf(m), dur, 0.1, 0.25);
+    }
   }
 }
