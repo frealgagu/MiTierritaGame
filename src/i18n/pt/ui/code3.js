@@ -200,4 +200,6 @@ export default {
   '⚡ Eventos sin espera: juegas cualquiera cuando quieras, y los que quieras a la vez.': '⚡ Eventos sem espera: jogue qualquer um quando quiser, quantos quiser ao mesmo tempo.',
   'Eventos sin espera': 'Eventos sem espera',
   'Juega cualquier evento listo cuando quieras: sin los 2 años de espera y sin el límite de 2 eventos abiertos a la vez.': 'Jogue qualquer evento pronto quando quiser: sem os 2 anos de espera e sem o limite de 2 eventos abertos ao mesmo tempo.',
+  'Región anterior': 'Região anterior',
+  'Región siguiente': 'Próxima região',
 };

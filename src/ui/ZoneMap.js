@@ -1,5 +1,5 @@
 import { DEPARTMENTS } from '../data/colombiaMap.js';
-import { AIRSTRIP, ZONE_POS, ZONES_VIEW, proj } from './mapLayout.js';
+import { AIRSTRIP, REGION_COLORS, ZONE_POS, ZONES_VIEW, proj } from './mapLayout.js';
 import { mapGeo } from '../data/zoneGeo.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE, shownRegions } from '../data/regions.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
@@ -16,7 +16,7 @@ import { FONT } from '../render/palette.js';
 import { t } from '../i18n/index.js';
 
 const NS = 'http://www.w3.org/2000/svg';
-const COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a', tolima: '#e39b6a', cundinamarca: '#d98fb5', bogota: '#b39ddb', sanandres: '#26c6da' };
+const COLORS = REGION_COLORS;
 const LAND = '#e8dcc3'; // departments not belonging to any game region
 const LOCKED = '#cfc6b4'; // regions not yet released
 const ZOOM_MS = 650;
@@ -50,7 +50,6 @@ const viewOf = (b, pad) => ({ x: b.x0 - pad, y: b.y0 - pad, w: b.x1 - b.x0 + pad
 
 const DEPT_BOX = Object.fromEntries(DEPARTMENTS.map((d) => [d.id, pathBox(d.d)]));
 const COUNTRY = union(Object.values(DEPT_BOX));
-const COUNTRY_VIEW = viewOf(COUNTRY, 12);
 // An off-map region (v5.4) has no departments: its box is the one around its zones and airport in the inset.
 const REGION_BOX = Object.fromEntries(
   REGIONS.map((r) => {
@@ -59,6 +58,9 @@ const REGION_BOX = Object.fromEntries(
     return [r.id, union(pts.map(([x, y]) => ({ x0: x, y0: y, x1: x, y1: y })))];
   }),
 );
+// (v5.9) Off-map islands, once open, widen the country view so they and their label (written to their right,
+// over the sea) are always in sight, also on a narrow phone.
+const ISLE_VIEW = Object.fromEntries(REGIONS.filter((r) => r.offMap).map((r) => [r.id, { x0: REGION_BOX[r.id].x0 - 10, y0: REGION_BOX[r.id].y0 - 10, x1: REGION_BOX[r.id].x1 + 10, y1: REGION_BOX[r.id].y1 + 12 }]));
 const SOON_BOX = Object.fromEntries(SOON.map((r) => [r.id, union(DEPARTMENTS.filter((d) => r.depts.includes(d.name)).map((d) => DEPT_BOX[d.id]))]));
 
 // Layout of zones and airports on each region map, and close-up framing: ui/mapLayout.js (v4.4.10).
@@ -116,8 +118,17 @@ export class ZoneMap {
     this.highlight = null; // highlighted region at country level (current one, or destination during trip)
     this.peek = null; // pending auto-zoom on open
     this.overlay = el('g', { style: `font-family: ${FONT}` }, this.svg);
-    this.vb = viewOf(COUNTRY, 12);
+    this.vb = viewOf(this.country(), 12);
     this.applyView();
+  }
+
+  // The whole country, plus the off-map islands that are open (v5.9).
+  country() {
+    const isles = shownRegions(isOpen(this.root.state)).filter((r) => r.offMap);
+    return isles.length ? union([COUNTRY, ...isles.map((r) => ISLE_VIEW[r.id])]) : COUNTRY;
+  }
+  countryView() {
+    return viewOf(this.country(), 12);
   }
 
   // On map open (v3.67): country with current region highlighted, then zooms in with current zone
@@ -127,7 +138,7 @@ export class ZoneMap {
     clearTimeout(this.peek);
     this.region = null;
     this.highlight = REGION_OF_ZONE[this.getZone()];
-    this.vb = viewOf(COUNTRY, 12);
+    this.vb = this.countryView();
     this.applyView();
     this.paint();
     this.drawOverlay();
@@ -196,7 +207,7 @@ export class ZoneMap {
   // Zoom in (k < 1) or out (k > 1) around map point (cx, cy), clamped between closest and full country.
   zoomAt(cx, cy, k) {
     const v = this.vb;
-    const w = Math.min(COUNTRY_VIEW.w, Math.max(MIN_W, v.w * k));
+    const w = Math.min(this.countryView().w, Math.max(MIN_W, v.w * k));
     const f = w / v.w;
     this.vb = { x: cx - (cx - v.x) * f, y: cy - (cy - v.y) * f, w, h: v.h * f };
     this.clampView();
@@ -204,7 +215,7 @@ export class ZoneMap {
     this.redraw();
     // From a region, zooming far enough out returns to country view (same as «⬅ Colombia»).
     if (this.region && k > 1) {
-      const out = Math.min(COUNTRY_VIEW.w, Math.max(ZONES_VIEW[this.region].w * 1.35, COUNTRY_VIEW.w * 0.6));
+      const out = Math.min(this.countryView().w, Math.max(ZONES_VIEW[this.region].w * 1.35, this.countryView().w * 0.6));
       if (this.vb.w >= out - 1e-6) {
         this.highlight = this.region;
         this.zoomTo(null);
@@ -221,8 +232,9 @@ export class ZoneMap {
 
   clampView() {
     const v = this.vb;
-    const cx = Math.min(COUNTRY.x1, Math.max(COUNTRY.x0, v.x + v.w / 2));
-    const cy = Math.min(COUNTRY.y1, Math.max(COUNTRY.y0, v.y + v.h / 2));
+    const c = this.country();
+    const cx = Math.min(c.x1, Math.max(c.x0, v.x + v.w / 2));
+    const cy = Math.min(c.y1, Math.max(c.y0, v.y + v.h / 2));
     this.vb = { ...v, x: cx - v.w / 2, y: cy - v.h / 2 };
   }
 
@@ -245,9 +257,9 @@ export class ZoneMap {
     if (!this.canTouch()) return;
     clearTimeout(this.peek);
     const v = this.vb;
-    const w = Math.min(COUNTRY_VIEW.w, Math.max(MIN_W, v.w * k));
+    const w = Math.min(this.countryView().w, Math.max(MIN_W, v.w * k));
     if (Math.abs(w - v.w) < 1e-6) return;
-    const out = this.region && k > 1 ? Math.min(COUNTRY_VIEW.w, Math.max(ZONES_VIEW[this.region].w * 1.35, COUNTRY_VIEW.w * 0.6)) : Infinity;
+    const out = this.region && k > 1 ? Math.min(this.countryView().w, Math.max(ZONES_VIEW[this.region].w * 1.35, this.countryView().w * 0.6)) : Infinity;
     if (w >= out - 1e-6) {
       this.highlight = this.region;
       return this.zoomTo(null);
@@ -333,7 +345,7 @@ export class ZoneMap {
   // Smoothly zoom into a region (or back out to country).
   async zoomTo(regionId) {
     const from = { ...this.vb };
-    const to = regionId ? ZONES_VIEW[regionId] : viewOf(COUNTRY, 12);
+    const to = regionId ? ZONES_VIEW[regionId] : this.countryView();
     this.region = regionId;
     this.overlay.replaceChildren();
     this.paint();
@@ -409,11 +421,18 @@ export class ZoneMap {
         if (r.hidden) continue; // goes with upcoming regions (v4.4.8)
         const b = REGION_BOX[r.id];
         const open = this.open(r.id);
-        const cx = (b.x0 + b.x1) / 2;
+        // (v5.9) An off-map island's name goes to its right, over the sea, instead of centered on it.
+        const anchor = r.offMap ? 'start' : 'middle';
+        const cx = r.offMap ? b.x1 + 2 * u : (b.x0 + b.x1) / 2;
         const cy = (b.y0 + b.y1) / 2;
         const label = el('g', { class: 'zones-map-label' + (open ? '' : ' locked'), transform: `translate(${cx} ${cy})` }, g);
-        el('text', { 'font-size': 6.5 * u, 'text-anchor': 'middle', y: -1.5 * u }, label).textContent = open ? r.icon : '🔒';
-        el('text', { 'font-size': 4.4 * u, 'text-anchor': 'middle', y: 4 * u, class: 'name', 'stroke-width': 1.2 * u }, label).textContent = r.name;
+        if (r.offMap) {
+          // Icon and name on one line beside the island.
+          el('text', { 'font-size': 4.4 * u, 'text-anchor': anchor, y: 1.5 * u, class: 'name', 'stroke-width': 1.2 * u }, label).textContent = `${open ? r.icon : '🔒'} ${r.name}`;
+        } else {
+          el('text', { 'font-size': 6.5 * u, 'text-anchor': anchor, y: -1.5 * u }, label).textContent = open ? r.icon : '🔒';
+          el('text', { 'font-size': 4.4 * u, 'text-anchor': anchor, y: 4 * u, class: 'name', 'stroke-width': 1.2 * u }, label).textContent = r.name;
+        }
         label.addEventListener('click', () => this.pickRegion(r.id));
       }
       // Upcoming regions: name and «Coming soon».

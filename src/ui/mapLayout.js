@@ -10,6 +10,9 @@ import { DEPARTMENTS, MAP_ORIGIN, MAP_SCALE } from '../data/colombiaMap.js';
 import { mapAirportGeo, mapGeo } from '../data/zoneGeo.js';
 import { REGIONS } from '../data/regions.js';
 
+// Each game region's color on the Colombia map (zone selector, v3.60; grand finale, v5.9).
+export const REGION_COLORS = { cafetero: '#8bc34a', santander: '#e5a15a', costa: '#f2c14e', boyaca: '#9fb4d8', llanos: '#c8d66a', pacifico: '#4fb3bf', amazonas: '#3f9a5a', tolima: '#e39b6a', cundinamarca: '#d98fb5', bogota: '#b39ddb', sanandres: '#26c6da' };
+
 export const proj = ([lat, lon]) => [(lon - MAP_ORIGIN[0]) * MAP_SCALE, (MAP_ORIGIN[1] - lat) * MAP_SCALE];
 export const unproj = ([x, y]) => [MAP_ORIGIN[1] - y / MAP_SCALE, x / MAP_SCALE + MAP_ORIGIN[0]];
 

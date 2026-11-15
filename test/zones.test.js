@@ -176,7 +176,11 @@ test('the map of Colombia has every zone and each region its departments (v3.60)
     const offMap = REGIONS_BY_ID[REGION_OF_ZONE[zone.id]].offMap;
     assert.equal(Boolean(MAP_GEO[zone.id]), Boolean(offMap), zone.id);
     const [lat, lon] = mapGeo(zone.id);
-    assert.ok(lat > -5 && lat < 13 && lon > -80 && lon < -66, `${zone.id} in Colombia`);
+    // (v5.9) The islands' inset sits northwest, toward their real place off Nicaragua (12.58° N, 81.7° W); the
+    // country view widens to show it once they are open.
+    const west = offMap ? -82 : -80;
+    assert.ok(lat > -5 && lat < 13 && lon > west && lon < -66, `${zone.id} in Colombia`);
+    if (offMap) assert.ok(lon < -79.5 && lat > 12, `${zone.id}: northwest of the mainland`);
   }
   for (const r of REGIONS.filter((x) => !x.offMap)) assert.ok(DEPARTMENTS.some((d) => d.region === r.id), `${r.id} has departments`);
   assert.equal(new Set(DEPARTMENTS.map((d) => d.id)).size, DEPARTMENTS.length);

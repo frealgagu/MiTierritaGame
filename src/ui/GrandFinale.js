@@ -5,7 +5,9 @@
 //   playGrandFinale({ t, onClose, volume, beforeMusic, afterMusic })
 //     t: translator for texts (identity by default); volume: 0..1 music volume;
 //     beforeMusic / afterMusic: called to quiet the game's own music and bring it back.
-// Tap anywhere: next keeper. ⏩: next region. ✕: close.
+// Tap a keeper: what they say. Tap elsewhere: next keeper. Flipped ⏩: previous region. ⏩: next region. ✕: close.
+// At the end everyone gathers, the crowd moves away and the map of Colombia shows fireworks over every region's
+// capital (its last zone).
 import { Application, Container, Graphics } from 'pixi.js';
 import { KeeperView } from '../render/Keeper.js';
 import { PEOPLE } from '../data/lore.js';
@@ -13,6 +15,9 @@ import { REGIONS } from '../data/regions.js';
 import { FINALE_LINES, FINALE_TEXT } from '../data/finale.js';
 import { GRAN_FINAL } from '../audio/songs.js';
 import { createSong, normalize, renderBar } from '../audio/compose.js';
+import { DEPARTMENTS } from '../data/colombiaMap.js';
+import { ZONES_BY_ID } from '../data/zones/index.js';
+import { REGION_COLORS, ZONE_POS } from './mapLayout.js';
 
 // Background of each region's scene: sky on top, land at the bottom.
 const SKIES = {
@@ -58,6 +63,17 @@ const CSS = `
 .gf-end p { margin: 4px 0 0; font-weight: 700; }
 .gf-bottom { position: absolute; left: 0; right: 0; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); display: flex; justify-content: center; gap: 10px; }
 .gf-bottom .gf-btn { min-height: 50px; padding: 4px 22px; box-shadow: 0 3px 0 #3a2418; }
+.gf-flip { display: inline-block; transform: scaleX(-1); }
+.gf-person { cursor: pointer; }
+.gf-crowd.gf-away { transition: transform 1.6s ease-in, opacity 1.4s ease-in; transform: scale(0.15); opacity: 0; pointer-events: none; }
+.gf-map { position: absolute; left: 0; right: 0; top: calc(150px + env(safe-area-inset-top, 0px)); bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+.gf-map.in { animation: gf-zoomout 1.8s ease-out both; }
+.gf-map svg, .gf-map canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.gf-map canvas { pointer-events: none; }
+.gf-map text { font-family: inherit; font-weight: 700; paint-order: stroke; stroke: #fffaf0; stroke-linejoin: round; fill: #3a2418; }
+.gf.gf-night .gf-end { color: #fff8e6; text-shadow: 0 2px 6px #0008; }
+.gf.gf-night .gf-title { color: #fff8e6; text-shadow: none; }
+@keyframes gf-zoomout { from { transform: scale(2.4); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes gf-hop { from { translate: 0 0; } to { translate: 0 -8px; } }
 @keyframes gf-in { from { opacity: 0; translate: 0 30px; } }
 @keyframes gf-pop { from { transform: scale(0.6); opacity: 0; } }
@@ -175,6 +191,113 @@ function confetti(canvas) {
   return { burst: () => add(70, true), stop: () => (cancelAnimationFrame(raf), removeEventListener('resize', resize)) };
 }
 
+// Map of Colombia for the ending: departments in their region's color (as in the zone selector), the islands in
+// their inset, and every region's capital (its last zone) with its name. Returns the SVG and the capitals.
+const NS = 'http://www.w3.org/2000/svg';
+// Where each capital's name goes ([dx, dy, anchor]); to the right of its dot unless listed.
+const LABEL_SIDE = {
+  bogota: [-8, 12, 'end'],
+  zipaquira: [-8, -4, 'end'],
+  pueblo: [-8, 5, 'end'],
+  buenaventura: [-8, 5, 'end'],
+  villa_leyva: [8, -2, 'start'],
+  villavicencio: [8, 12, 'start'],
+};
+const FIRE = ['#ffd84d', '#ff6b6b', '#7cf2ff', '#c792ff', '#7dff8a', '#ffffff', '#ffa94d'];
+function countryMap(t) {
+  const svg = document.createElementNS(NS, 'svg');
+  const capitals = REGIONS.filter((r) => !r.hidden).map((r) => ({ zone: r.zones.at(-1), pos: ZONE_POS[r.zones.at(-1)], isle: Boolean(r.offMap) }));
+  const xs = [];
+  const ys = [];
+  for (const d of DEPARTMENTS) {
+    const n = d.d.match(/-?\d+(\.\d+)?/g).map(Number);
+    for (let i = 0; i < n.length; i += 2) xs.push(n[i]), ys.push(n[i + 1]);
+  }
+  for (const c of capitals) xs.push(c.pos[0] - 14, c.pos[0] + 40), ys.push(c.pos[1] - 14, c.pos[1] + 14);
+  const x0 = Math.min(...xs) - 10;
+  const y0 = Math.min(...ys) - 10;
+  svg.setAttribute('viewBox', `${x0} ${y0} ${Math.max(...xs) + 10 - x0} ${Math.max(...ys) + 10 - y0}`);
+  svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  let html = DEPARTMENTS.map((d) => `<path d="${d.d}" fill="${REGION_COLORS[d.region] ?? '#e8dcc3'}" stroke="#fffaf0" stroke-width="0.8" stroke-linejoin="round"/>`).join('');
+  for (const c of capitals.filter((x) => x.isle)) {
+    const [x, y] = c.pos;
+    html += `<ellipse cx="${x + 0.6}" cy="${y + 1}" rx="5.2" ry="9.5" fill="#f3e6c0" transform="rotate(12 ${x} ${y})"/><ellipse cx="${x + 0.6}" cy="${y + 1}" rx="4" ry="8.2" fill="#7cb342" transform="rotate(12 ${x} ${y})"/>`;
+  }
+  for (const c of capitals) {
+    const [x, y] = c.pos;
+    // Names to the left where the middle of the country is crowded (Bogotá, Zipaquirá, Salento…).
+    const [dx, dy, anchor] = LABEL_SIDE[c.zone] ?? [8, 5, 'start'];
+    html += `<circle cx="${x}" cy="${y}" r="5" fill="#fff3b0" stroke="#3a2418" stroke-width="1.6"/><text x="${x + dx}" y="${y + dy}" font-size="17" stroke-width="4" text-anchor="${anchor}">${t(ZONES_BY_ID[c.zone].name)}</text>`;
+  }
+  svg.innerHTML = html;
+  return { svg, capitals };
+}
+
+// Fireworks over the capitals: a rocket rises from below to each capital in turn and bursts there.
+function fireworks(canvas, points) {
+  const ctx = canvas.getContext('2d');
+  const rockets = [];
+  const sparks = [];
+  let raf = 0;
+  let k = 0;
+  let last = 0;
+  const size = () => {
+    canvas.width = canvas.clientWidth * devicePixelRatio;
+    canvas.height = canvas.clientHeight * devicePixelRatio;
+  };
+  size();
+  addEventListener('resize', size);
+  const tick = (now) => {
+    if (now - last > 420) {
+      last = now;
+      const [tx, ty] = points()[k++ % points().length];
+      rockets.push({ x: tx + (Math.random() - 0.5) * 30 * devicePixelRatio, y: canvas.height, tx, ty, c: FIRE[Math.floor(Math.random() * FIRE.length)] });
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = rockets.length - 1; i >= 0; i--) {
+      const r = rockets[i];
+      r.x += (r.tx - r.x) * 0.08;
+      r.y += (r.ty - r.y) * 0.08;
+      ctx.fillStyle = '#fff3c4';
+      ctx.beginPath();
+      ctx.arc(r.x, r.y, 2 * devicePixelRatio, 0, Math.PI * 2);
+      ctx.fill();
+      if (Math.abs(r.y - r.ty) < 4 * devicePixelRatio) {
+        rockets.splice(i, 1);
+        for (let j = 0; j < 64; j++) {
+          const a = (j / 64) * Math.PI * 2;
+          const v = (1.8 + Math.random() * 2.2) * devicePixelRatio;
+          sparks.push({ x: r.x, y: r.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, c: Math.random() < 0.3 ? '#fffbe6' : r.c });
+        }
+      }
+    }
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const s = sparks[i];
+      s.vy += 0.035 * devicePixelRatio;
+      s.vx *= 0.985;
+      s.vy *= 0.985;
+      s.x += s.vx;
+      s.y += s.vy;
+      s.life -= 0.012;
+      if (s.life <= 0) {
+        sparks.splice(i, 1);
+        continue;
+      }
+      ctx.globalAlpha = s.life;
+      ctx.fillStyle = s.c;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, 2.6 * devicePixelRatio, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+  return () => (cancelAnimationFrame(raf), removeEventListener('resize', size));
+}
+
 // Regions with keepers, in the game's order, with the zones whose keeper has a line.
 export const finaleRegions = () => REGIONS.filter((r) => !r.hidden).map((r) => ({ region: r, zones: r.zones.filter((z) => PEOPLE[z] && FINALE_LINES[z]) })).filter((x) => x.zones.length);
 
@@ -191,7 +314,7 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
   const root = document.createElement('div');
   root.className = 'gf';
   root.innerHTML = `<canvas class="gf-confetti"></canvas>
-    <div class="gf-top"><span class="gf-title">${t(FINALE_TEXT.title)}</span><button class="gf-btn" data-skip type="button">⏩</button><button class="gf-btn" data-close type="button" aria-label="✕">✕</button></div>
+    <div class="gf-top"><span class="gf-title">${t(FINALE_TEXT.title)}</span><button class="gf-btn" data-prev type="button" aria-label="${t('Región anterior')}"><span class="gf-flip">⏩</span></button><button class="gf-btn" data-skip type="button" aria-label="${t('Región siguiente')}">⏩</button><button class="gf-btn" data-close type="button" aria-label="${t('Cerrar')}">✕</button></div>
     <div class="gf-region" hidden></div>
     <div class="gf-bubble"><span>${t(FINALE_TEXT.intro)}</span></div>
     <div class="gf-stage"></div>
@@ -210,23 +333,38 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
   const music = startMusic(volume);
   const faces = await portraits(scenes.flatMap((s) => s.zones));
 
-  // Steps: one per keeper, then the closing crowd.
+  // Steps: one per keeper, then the closing crowd and the map.
   let scene = -1;
   let speaker = -1;
   let timer = 0;
   let done = false;
+  let stopFireworks = null;
   const close = async () => {
     if (done) return;
     done = true;
     clearTimeout(timer);
     fx.stop();
+    stopFireworks?.();
     stopMusic(await music);
     root.remove();
     afterMusic?.();
     onClose();
   };
   const person = (zone, k) => `<div class="gf-person" data-zone="${zone}" style="animation-delay:${k * 0.08}s"><img src="${faces[zone]}" alt=""><b>${t(PEOPLE[zone].name)}</b><small>${t(PEOPLE[zone].role)}</small></div>`;
+  // Leaves the ending (crowd, map, fireworks) to go back to the regions.
+  const leaveEnding = () => {
+    stopFireworks?.();
+    stopFireworks = null;
+    root.querySelector('.gf-end')?.remove();
+    root.querySelector('.gf-map')?.remove();
+    root.classList.remove('gf-night');
+    $('.gf-stage').classList.remove('gf-crowd', 'gf-away');
+    $('.gf-bubble').hidden = false;
+    $('[data-skip]').hidden = false;
+    $('.gf-bottom').hidden = true;
+  };
   const showScene = (i) => {
+    if (scene >= scenes.length) leaveEnding();
     scene = i;
     speaker = -1;
     const { region, zones } = scenes[i];
@@ -237,26 +375,29 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
     banner.style.animation = 'none';
     void banner.offsetWidth;
     banner.style.animation = '';
-    $('.gf-stage').classList.remove('gf-crowd');
+    $('.gf-bubble').innerHTML = `<span>${t(FINALE_TEXT.intro)}</span>`;
     $('.gf-stage').innerHTML = zones.map(person).join('');
     fx.burst();
   };
-  const say = () => {
-    const { zones } = scenes[scene];
-    const zone = zones[speaker];
+  // A keeper says their line (and the bubble points at them).
+  const sayZone = (zone) => {
     const p = PEOPLE[zone];
     const line = t(FINALE_LINES[zone]);
     root.querySelectorAll('.gf-person').forEach((el) => el.classList.toggle('talk', el.dataset.zone === zone));
-    $('.gf-bubble').innerHTML = `<b>${t(p.name)} · ${t(p.role)}</b><span>${line}</span>`;
-    // Bubble tail points at the one talking.
+    const bubble = $('.gf-bubble');
+    bubble.hidden = false;
+    bubble.innerHTML = `<b>${t(p.name)} · ${t(p.role)}</b><span>${line}</span>`;
     const el = root.querySelector(`.gf-person[data-zone="${zone}"]`);
-    const bub = $('.gf-bubble').getBoundingClientRect();
+    const bub = bubble.getBoundingClientRect();
     const r = el?.getBoundingClientRect();
-    if (r) $('.gf-bubble').style.setProperty('--tail', `${Math.min(Math.max(r.left + r.width / 2 - bub.left, 24), bub.width - 24)}px`);
+    if (r) bubble.style.setProperty('--tail', `${Math.min(Math.max(r.left + r.width / 2 - bub.left, 24), bub.width - 24)}px`);
     return readTime(line);
   };
+  const say = () => sayZone(scenes[scene].zones[speaker]);
+  // The ending: everyone together, then they move away and the map of Colombia lights up.
   const ending = () => {
     scene = scenes.length;
+    speaker = -1;
     sky('sanandres');
     $('.gf-region').hidden = true;
     $('.gf-bubble').hidden = true;
@@ -267,7 +408,29 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
     stage.insertAdjacentHTML('beforebegin', `<div class="gf-end"><h2>${t(FINALE_TEXT.outro)}</h2><p>${t(FINALE_TEXT.thanks)}</p></div>`);
     $('.gf-bottom').hidden = false;
     fx.burst();
-    setTimeout(() => !done && fx.burst(), 900);
+    timer = setTimeout(() => !done && fx.burst(), 900);
+    setTimeout(() => {
+      if (done || scene !== scenes.length) return;
+      $('.gf-bubble').hidden = true;
+      stage.classList.add('gf-away');
+      root.classList.add('gf-night');
+      root.style.background = 'linear-gradient(#141e3c, #27407a 60%, #3d5aa0)';
+      const box = document.createElement('div');
+      box.className = 'gf-map in';
+      const { svg, capitals } = countryMap(t);
+      const canvas = document.createElement('canvas');
+      box.append(svg, canvas);
+      root.insertBefore(box, $('.gf-bottom'));
+      // Capitals in canvas pixels (the map scales with the window).
+      const points = () => {
+        const m = svg.getScreenCTM();
+        const c = canvas.getBoundingClientRect();
+        return capitals.map(({ pos: [x, y] }) => [(m.a * x + m.c * y + m.e - c.left) * devicePixelRatio, (m.b * x + m.d * y + m.f - c.top) * devicePixelRatio]);
+      };
+      setTimeout(() => {
+        if (!done && scene === scenes.length) stopFireworks = fireworks(canvas, points);
+      }, 1500);
+    }, 4200);
   };
   // Advances to the next keeper (or region, or the ending) and schedules the one after.
   const next = (skipRegion = false) => {
@@ -283,16 +446,33 @@ export async function playGrandFinale({ t = (s) => s, onClose = () => {}, volume
     }
     timer = setTimeout(() => next(), wait);
   };
+  // Back to the previous region (from the ending, to the last one).
+  const prev = () => {
+    if (done) return;
+    clearTimeout(timer);
+    showScene(Math.max(0, Math.min(scene, scenes.length) - 1));
+    timer = setTimeout(() => next(), 900);
+  };
   root.addEventListener('click', (e) => {
     if (e.target.closest('[data-close]')) return void close();
     if (e.target.closest('[data-skip]')) return void next(true);
+    if (e.target.closest('[data-prev]')) return void prev();
     if (e.target.closest('[data-again]')) {
-      root.querySelector('.gf-end')?.remove();
-      $('.gf-bubble').hidden = false;
-      $('[data-skip]').hidden = false;
-      $('.gf-bottom').hidden = true;
+      leaveEnding();
+      clearTimeout(timer);
       scene = -1;
       return void next();
+    }
+    // A keeper tapped: what they say; the round goes on from them.
+    const who = e.target.closest('.gf-person');
+    if (who) {
+      clearTimeout(timer);
+      const wait = sayZone(who.dataset.zone);
+      if (scene >= 0 && scene < scenes.length) {
+        speaker = scenes[scene].zones.indexOf(who.dataset.zone);
+        timer = setTimeout(() => next(), wait);
+      }
+      return;
     }
     next();
   });

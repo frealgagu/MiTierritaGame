@@ -36,12 +36,13 @@ export const ZONE_GEO = {
 };
 
 // Off-map regions (v5.4, `offMap` in data/regions.js): the country map leaves out the islands, so their zones and
-// airport are drawn in an inset in the Caribbean, near the top-left corner of the map.
+// airport are drawn in an inset in the Caribbean, near the top-left corner of the map. (v5.9) Moved northwest,
+// toward where the island really is (12.58° N, 81.7° W, off Nicaragua), as far as the map allows.
 export const MAP_GEO = {
-  sanandres: [11.75, -78.4],
+  sanandres: [12.3, -80.1],
 };
 export const MAP_AIRPORT_GEO = {
-  sanandres: [11.95, -78.15],
+  sanandres: [12.45, -79.85],
 };
 // Where a zone or a region's airport sits on the map: its real place, or its spot in the inset.
 export const mapGeo = (zoneId) => MAP_GEO[zoneId] ?? ZONE_GEO[zoneId];
