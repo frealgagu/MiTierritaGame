@@ -137,21 +137,36 @@ export class RenownView {
     // Viewed region selector (when more than one is open).
     const open = openRegionStates(this.game.state);
     this.regions.hidden = open.length < 2;
-    this.regions.innerHTML = open.map(({ region }) => `<button class="${region.id === this.region ? 'on' : ''}" data-renown-region="${region.id}">${region.icon} ${region.name}</button>`).join('');
+    const regions = open.map(({ region }) => `<button class="${region.id === this.region ? 'on' : ''}" data-renown-region="${region.id}">${region.icon} ${region.name}</button>`).join('');
+    if (regions !== this.regionsHtml) this.regions.innerHTML = this.regionsHtml = regions;
     const help = document.getElementById('renown-help');
     if (this.tab === 'album') {
       help.textContent = t('Cada región tiene su álbum. Cada lámina cuesta Renombre y tú eliges cuál pegar; al llenar una página ganas {n} ⭐.', { n: PAGE_BONUS });
-      this.body.innerHTML = this.albumHtml(profile);
+      this.setBody(this.albumHtml(profile));
     } else if (this.tab === 'offline') {
       help.textContent = t('La jornada es de cada región; las horas sin conexión valen para todas. Nada de esto se pierde al volver a empezar.');
-      this.body.innerHTML = this.workHtml(profile) + this.offlineHtml(profile);
+      this.setBody(this.workHtml(profile) + this.offlineHtml(profile));
     } else if (this.tab === 'logros') {
       help.textContent = t('Cada región tiene sus logros. Suman entre partidas: lo de antes de volver a empezar también cuenta. Cada nivel da Renombre.');
-      this.body.innerHTML = this.logrosHtml();
+      this.setBody(this.logrosHtml());
     } else {
       help.textContent = t('Cada región se decora aparte. Lo de siempre es gratis; lo demás se compra una vez con Renombre y se puede cambiar cuando quieras.');
-      this.body.innerHTML = this.petsHtml(profile) + this.decorHtml(profile);
+      this.setBody(this.petsHtml(profile) + this.decorHtml(profile));
     }
+  }
+
+  // Rewrites the list only when something changed, so periodic refreshes (v5.7) don't
+  // interrupt a tap or move the scroll.
+  setBody(html) {
+    if (html === this.bodyHtml) return;
+    const top = this.body.scrollTop;
+    this.body.innerHTML = this.bodyHtml = html;
+    this.body.scrollTop = top;
+  }
+
+  // While open (v5.7): Renown earned, achievement progress and what can be bought refresh on their own.
+  update() {
+    if (!this.modal.hidden) this.render();
   }
 
   albumHtml(profile) {

@@ -491,6 +491,7 @@ async function start() {
   // During an event, use its board clock (v3.9.1).
   // Currently viewed region (v3.10: each has its own workday) or, during an event, its board clock (v3.9.1).
   document.getElementById('clock').addEventListener('click', () => showCalendar(board ? board.game.state : active.state));
+  const calendar = document.getElementById('calendar');
   document.getElementById('intro-btn').addEventListener('click', () => {
     document.getElementById('menu').hidden = true;
     showIntro(game.state);
@@ -554,7 +555,9 @@ async function start() {
         sound.milestone();
       });
       // Inside an event board, the keeper does not show main-game hints.
-      for (const view of [panel, chain, money, goals, research, zones, events, eventBar, ...(board ? [] : [chatter])]) safely(() => view.update());
+      for (const view of [panel, chain, money, goals, research, zones, events, renown, eventBar, ...(board ? [] : [chatter])]) safely(() => view.update());
+      // The calendar, while open (v5.7), follows the clock: time of day, season and the event clock.
+      if (!calendar.hidden) safely(() => showCalendar(board ? board.game.state : active.state));
     }
   });
 

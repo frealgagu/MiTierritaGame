@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v5.7.0 — Ventanas que se actualizan solas
+- **🏅 Eventos:** con la ventana abierta, los cronómetros de los eventos en curso y el tiempo que falta para que se libere un cupo avanzan solos, y un evento nuevo aparece sin tener que cerrarla y volverla a abrir. Los botones no se redibujan, así que ningún toque se pierde, y se conservan el desplazamiento, los textos abiertos con «Ver más» y la lista de medallas.
+- **⭐ Renombre:** el avance de los logros, el Renombre ganado y lo que alcanza para comprar se actualizan mientras la ventana está abierta.
+- **📅 Calendario:** la hora, la temporada y el reloj del evento siguen al reloj del juego.
+
 ## v5.6.1 — Ajustes
 - Ajustes y mejoras.
 

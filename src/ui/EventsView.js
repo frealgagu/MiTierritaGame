@@ -54,6 +54,8 @@ export class EventsView {
   open() {
     // Attach to DOM first: so overflowing texts can be measured for «See more» (v3.67.5).
     this.modal.hidden = false;
+    this.html = this.shape = null;
+    this.body.scrollTop = 0;
     this.render();
   }
 
@@ -106,7 +108,7 @@ export class EventsView {
         return `<div class="event-card">${title}${note}<button class="btn buy" data-play="${eventKey(def)}" ${can ? '' : 'disabled'}>${t('🔁 Jugar otra vez')}</button></div>`;
       }
       if (st.kind === 'waiting') {
-        const when = st.nextAt === null ? t('cuando termines uno de los dos eventos y pasen 2 años') : t('en {time} se libera un cupo (los dos eventos nunca son de la misma región)', { time: formatDuration(st.nextAt - clockOf(s)) });
+        const when = st.nextAt === null ? t('cuando termines uno de los dos eventos y pasen 2 años') : t('en {time} se libera un cupo (los dos eventos nunca son de la misma región)', { time: live(formatDuration(st.nextAt - clockOf(s))) });
         return `<div class="event-card locked">${title}<p>${t('⏳ Espera turno: {when}.', { when })}</p></div>`;
       }
       let foot;
@@ -114,7 +116,7 @@ export class EventsView {
       // each board was left running (🚪 Exit) or paused (⏸️ Pause).
       const maxed = st.board && boardMaxed(st.board, def.zone);
       const maxedLabel = maxed ? ` · ${t('⬆ Todo al {n}', { n: maxLevel(st.board) })}` : '';
-      const clock = st.board ? `⏱ ${formatClock(boardClockNow(st.board, s))}` : '';
+      const clock = st.board ? `⏱ ${live(formatClock(boardClockNow(st.board, s)))}` : '';
       const running = st.board ? ` · ${st.board.event.away !== undefined ? t('🚪 corriendo') : t('⏸️ pausado')}` : '';
       const maxTip = maxed ? ` title="${t('Todo al nivel máximo')}"` : '';
       if (st.kind === 'won') {
@@ -126,7 +128,7 @@ export class EventsView {
           ? `<p>${t('✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.', { icon: MEDALS[secured].icon })}</p><button class="btn buy" data-play="${eventKey(def)}"${maxTip}>${t('Seguir')} · ${clock}${maxedLabel}${running}</button>`
           : `<button class="btn buy" data-play="${eventKey(def)}"${maxTip}>${t('Seguir')} · ${clock}${maxedLabel}${running}</button>`;
       } else foot = `<button class="btn buy" data-play="${eventKey(def)}">${t('Jugar')}</button>`;
-      return `<div class="event-card">
+      return `<div class="event-card" data-ekey="${eventKey(def)}">
         ${title}
         <p class="clamp" style="--lines: 2">${def.intro}</p>${moreButton()}
         <p class="event-year">${objectiveText(obj)}.<br>${medalLine(obj)}</p>
@@ -158,8 +160,38 @@ export class EventsView {
         return `<div class="zones-group events-group">${head}${folded ? '' : g.cards.join('')}</div>`;
       })
       .join('');
-    this.body.innerHTML = `${html}<p class="event-soon">${t('Cada zona que abras trae su evento.')}</p>${medalsHtml(profile)}`;
-    refreshMore(this.body);
+    this.paint(`${html}<p class="event-soon">${t('Cada zona que abras trae su evento.')}</p>${medalsHtml(profile)}`);
+  }
+
+  // Redraws only what changed (v5.7): when only the clocks and countdowns moved, it rewrites
+  // just those texts; otherwise it rebuilds the list keeping the scroll, the open «See more»
+  // texts and the medals box as they were.
+  paint(html) {
+    if (html === this.html) return;
+    const shape = html.replace(LIVE, '');
+    if (shape === this.shape) {
+      const values = [...html.matchAll(LIVE)].map((m) => m[1]);
+      this.body.querySelectorAll('[data-live]').forEach((el, i) => {
+        if (el.textContent !== values[i]) el.textContent = values[i];
+      });
+    } else {
+      const top = this.body.scrollTop;
+      const medals = this.body.querySelector('.medals-box')?.open;
+      const more = new Set([...this.body.querySelectorAll('.event-card[data-ekey]')].filter((c) => c.querySelector('.clamp.open')).map((c) => c.dataset.ekey));
+      this.body.innerHTML = html;
+      for (const key of more) {
+        const card = this.body.querySelector(`.event-card[data-ekey="${key}"]`);
+        const clamp = card?.querySelector('.clamp');
+        if (!clamp) continue;
+        clamp.classList.add('open');
+        clamp.nextElementSibling.textContent = t('Ver menos ▴');
+      }
+      if (medals) this.body.querySelector('.medals-box').open = true;
+      this.body.scrollTop = top;
+      refreshMore(this.body);
+    }
+    this.html = html;
+    this.shape = shape;
   }
 
   update() {
@@ -175,8 +207,14 @@ export class EventsView {
     const ready = statuses.filter((st) => st.kind === 'available').length;
     this.badge.hidden = ready === 0;
     this.badge.textContent = ready;
+    // Open (v5.7): clocks, countdowns and newly available events refresh on their own.
+    if (!this.modal.hidden) this.render();
   }
 }
+
+// Texts that change every second (board clocks, time until a slot frees up).
+const LIVE = /<span data-live>([^<]*)<\/span>/g;
+const live = (text) => `<span data-live>${text}</span>`;
 
 // Whether everything on the board is at max level (v4.7.3): stations, haulers, and warehouse.
 function boardMaxed(board, zoneId) {

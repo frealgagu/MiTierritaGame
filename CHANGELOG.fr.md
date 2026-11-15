@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## v5.7.0 — Des fenêtres qui se mettent à jour toutes seules
+- **🏅 Événements :** avec la fenêtre ouverte, les chronomètres des événements en cours et le temps restant avant qu’un emplacement se libère avancent tout seuls, et un nouvel événement apparaît sans devoir la fermer et la rouvrir. Les boutons ne sont pas redessinés, donc aucun toucher ne se perd, et le défilement, les textes ouverts avec « Voir plus » et la liste des médailles restent comme ils étaient.
+- **⭐ Renom :** la progression des succès, le Renom gagné et ce que tu peux acheter se mettent à jour pendant que la fenêtre est ouverte.
+- **📅 Calendrier :** l’heure, la saison et l’horloge de l’événement suivent l’horloge du jeu.
+
 ## v5.6.1 — Ajustements
 - Ajustements et améliorations.
 

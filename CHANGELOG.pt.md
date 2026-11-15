@@ -1,5 +1,10 @@
 # Registro de alterações
 
+## v5.7.0 — Janelas que se atualizam sozinhas
+- **🏅 Eventos:** com a janela aberta, os cronômetros dos eventos em andamento e o tempo que falta para liberar uma vaga avançam sozinhos, e um evento novo aparece sem precisar fechá-la e abri-la de novo. Os botões não são redesenhados, então nenhum toque se perde, e a rolagem, os textos abertos com «Ver mais» e a lista de medalhas continuam como estavam.
+- **⭐ Renome:** o progresso das conquistas, o Renome ganho e o que dá para comprar se atualizam enquanto a janela está aberta.
+- **📅 Calendário:** a hora, a estação e o relógio do evento acompanham o relógio do jogo.
+
 ## v5.6.1 — Ajustes
 - Ajustes e melhorias.
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.7.0 — Windows that update themselves
+- **🏅 Events:** with the window open, the clocks of running events and the time until a slot frees up move on their own, and a new event shows up without closing and reopening it. Buttons are not redrawn, so no tap is lost, and the scroll, the texts opened with «See more» and the medal list stay as they were.
+- **⭐ Renown:** achievement progress, Renown earned and what you can afford update while the window is open.
+- **📅 Calendar:** the time of day, the season and the event clock follow the game clock.
+
 ## v5.6.1 — Tweaks
 - Tweaks and improvements.
 
