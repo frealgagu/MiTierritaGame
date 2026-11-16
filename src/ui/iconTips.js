@@ -39,30 +39,33 @@ const GENERAL = {
 const clean = (s) => s.replace(/️/g, '');
 
 // icon -> name. Products first (shared icons show both names), then stations,
-// and UI icons last.
-export const ICON_NAMES = (() => {
+// and UI icons last. (v5.4) A secret region's names are left out until it opens: they would give it away (its
+// icons are shared with other regions). (v5.9.1) Once open, they are included (`withSecret`).
+function buildNames(withSecret) {
   const names = {};
   const add = (icon, name) => {
     const key = clean(icon);
     if (!key || /^[\p{L}\p{N}\s]+$/u.test(key)) return;
     (names[key] ??= new Set()).add(name);
   };
-  // (v5.4) Nothing from a secret region: its names would give it away (its icons are shared with other regions).
-  const secret = (zone) => REGIONS_BY_ID[REGION_OF_ZONE[zone]]?.secret;
-  for (const p of Object.values(PRODUCTS)) if (!secret(p.zone)) add(p.icon, p.name);
+  const shown = (zone) => withSecret || !REGIONS_BY_ID[REGION_OF_ZONE[zone]]?.secret;
+  for (const p of Object.values(PRODUCTS)) if (shown(p.zone)) add(p.icon, p.name);
   const fromProducts = new Set(Object.keys(names));
-  for (const s of STATIONS) if (!fromProducts.has(clean(s.icon)) && !secret(s.zone)) add(s.icon, s.name);
+  for (const s of STATIONS) if (!fromProducts.has(clean(s.icon)) && shown(s.zone)) add(s.icon, s.name);
   for (const [icon, name] of Object.entries(GENERAL)) if (!names[clean(icon)]) add(icon, name);
   return Object.fromEntries(Object.entries(names).map(([k, v]) => [k, [...v].join(' / ')]));
-})();
+}
+export const ICON_NAMES = buildNames(false);
+let withSecret = null; // built the first time it is needed
 
-export const iconName = (text) => ICON_NAMES[clean(text)] ?? null;
+// Name of an icon; `secretOpen`: the secret region has opened in this save, so its names count too.
+export const iconName = (text, secretOpen = false) => (secretOpen ? (withSecret ??= buildNames(true)) : ICON_NAMES)[clean(text)] ?? null;
 
 const segmenter = typeof Intl !== 'undefined' && Intl.Segmenter ? new Intl.Segmenter('es', { granularity: 'grapheme' }) : null;
 const graphemes = (text) => (segmenter ? [...segmenter.segment(text)].map((s) => ({ text: s.segment, index: s.index })) : [...text].reduce((out, ch) => (out.push({ text: ch, index: (out.at(-1)?.index ?? 0) + (out.at(-1)?.text.length ?? 0) }), out), []));
 
 // Icon located under screen coordinates (x, y): { name, rect } or null.
-function iconAt(x, y) {
+function iconAt(x, y, secretOpen) {
   let node;
   let offset;
   if (document.caretPositionFromPoint) {
@@ -79,7 +82,7 @@ function iconAt(x, y) {
   // Caret sits between two glyphs: inspect character before and after.
   const near = parts.filter((g) => g.index <= offset && offset <= g.index + g.text.length);
   for (const g of near) {
-    const name = iconName(g.text);
+    const name = iconName(g.text, secretOpen);
     if (!name) continue;
     const range = document.createRange();
     range.setStart(node, g.index);
@@ -91,7 +94,8 @@ function iconAt(x, y) {
   return null;
 }
 
-export function bindIconTips() {
+// secretOpen(): whether the secret region has opened in this save (its names are shown from then on).
+export function bindIconTips(secretOpen = () => false) {
   const tip = document.createElement('div');
   tip.id = 'icon-tip';
   tip.hidden = true;
@@ -105,7 +109,7 @@ export function bindIconTips() {
     'click',
     (e) => {
       if (e.target.closest?.('button, a, input, select, textarea, canvas')) return hide();
-      const hit = iconAt(e.clientX, e.clientY);
+      const hit = iconAt(e.clientX, e.clientY, secretOpen());
       if (!hit) return hide();
       tip.textContent = hit.name;
       tip.hidden = false;

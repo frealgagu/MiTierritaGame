@@ -1,5 +1,8 @@
 # Journal des modifications
 
+## v5.9.1 — Noms des icônes dans la zone spéciale
+- **Correctif :** dans la zone spéciale, toucher une icône de la chaîne ou du panneau d’une station affiche de nouveau son nom.
+
 ## v5.9.0 — Le grand final
 - **🎉 Le grand final :** avec tous les succès de toutes les régions, les responsables de chaque zone te félicitent, région par région et chacun avec sa façon de parler, sur une musique composée rien que pour ce moment. À la fin, ils s’écartent et la carte de la Colombie s’illumine de feux d’artifice au-dessus de chaque capitale. Il se lance tout seul la première fois, puis quand tu veux depuis ⚙️ ou Renom › 🏆 Succès. Touche un responsable pour entendre ce qu’il dit ; ⏪ et ⏩ changent de région.
 - **Un succès de plus :** le grand final apparaît dans 🏆 Succès (une fois la zone spéciale ouverte) avec le nombre de succès obtenus, et il rapporte 32 ⭐ de Renom.

@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.9.1 — Nombres de los íconos en la zona especial
+- **Arreglo:** en la zona especial, tocar un ícono de la cadena o del panel de una estación vuelve a mostrar su nombre.
+
 ## v5.9.0 — El gran final
 - **🎉 El gran final:** con todos los logros de todas las regiones, los encargados de cada zona te felicitan, región por región y cada uno con su forma de hablar, con música compuesta solo para ese momento. Al final se alejan y el mapa de Colombia se llena de fuegos artificiales sobre cada capital. Se ve solo la primera vez y luego cuando quieras desde ⚙️ o desde Renombre › 🏆 Logros. Toca a cualquier encargado para oír lo que dice; ⏪ y ⏩ cambian de región.
 - **Un logro más:** el gran final aparece en 🏆 Logros (cuando se abre la zona especial) con cuántos logros llevas, y al conseguirlo da 32 ⭐ de Renombre.

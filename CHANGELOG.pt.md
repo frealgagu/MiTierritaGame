@@ -1,5 +1,8 @@
 # Registro de alterações
 
+## v5.9.1 — Nomes dos ícones na zona especial
+- **Correção:** na zona especial, tocar em um ícone da cadeia ou do painel de uma estação volta a mostrar o nome dele.
+
 ## v5.9.0 — O grande final
 - **🎉 O grande final:** com todas as conquistas de todas as regiões, os responsáveis de cada zona te parabenizam, região por região e cada um com seu jeito de falar, com música composta só para esse momento. No fim eles se afastam e o mapa da Colômbia se enche de fogos de artifício sobre cada capital. Aparece sozinho na primeira vez e depois quando você quiser, em ⚙️ ou em Renome › 🏆 Conquistas. Toque em qualquer responsável para ouvir o que ele diz; ⏪ e ⏩ mudam de região.
 - **Mais uma conquista:** o grande final aparece em 🏆 Conquistas (quando a zona especial se abre) com quantas conquistas você tem, e ao consegui-lo dá 32 ⭐ de Renome.

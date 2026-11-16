@@ -631,7 +631,8 @@ async function start() {
 
   bindMenu(game, sound, music, () => active, grandFinale);
   bindDevOptions(game, () => active);
-  bindIconTips();
+  // (v5.9.1) The secret region's names show up in the icon tooltips once it has opened.
+  bindIconTips(() => REGIONS.some((r) => r.secret && regionState(game.state, r.id)));
   bindMore(); // Show more toggle on long descriptions (v3.67.5)
   bindTip(tipMode({ native: isNativeApp(), playStore: typeof __PLAY_STORE__ !== 'undefined' && __PLAY_STORE__ }));
   // On Android app, assets are bundled locally: no service worker, hardware Back button enabled.

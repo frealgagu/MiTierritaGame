@@ -22,3 +22,10 @@ test('icon names: the interface ones, with or without a variant selector', () =>
   assert.equal(iconName('⏱'), 'Reloj del evento');
   assert.equal(iconName('a'), null);
 });
+
+test('icon names: once the special zone has opened, its products and stations have names too (v5.9.1)', () => {
+  for (const p of Object.values(PRODUCTS)) if (p.zone === 'sanandres') assert.ok(iconName(p.icon, true)?.includes(p.name), `${p.name} (${p.icon})`);
+  const products = new Set(Object.values(PRODUCTS).map((p) => p.icon.replace(/️/g, '')));
+  for (const s of STATIONS) if (s.zone === 'sanandres' && !products.has(s.icon.replace(/️/g, ''))) assert.ok(iconName(s.icon, true)?.includes(s.name), `${s.name} (${s.icon})`);
+  assert.equal(iconName('💰', true), 'Monedas');
+});

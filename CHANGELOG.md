@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.9.1 — Icon names in the special zone
+- **Fix:** in the special zone, tapping an icon in the chain or in a station's panel shows its name again.
+
 ## v5.9.0 — The grand finale
 - **🎉 The grand finale:** with every achievement of every region, the keepers of every zone congratulate you, region by region and each in their own way of speaking, with music composed just for that moment. At the end they step back and the map of Colombia fills with fireworks over each capital. It plays by itself the first time, and then whenever you want from ⚙️ or from Renown › 🏆 Achievements. Tap any keeper to hear what they say; ⏪ and ⏩ change region.
 - **One more achievement:** the grand finale shows up in 🏆 Achievements (once the special zone is open) with how many achievements you have, and earning it gives 32 ⭐ Renown.
