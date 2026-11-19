@@ -12,11 +12,13 @@ export const reload = (root) => importSave(exportSave(root));
 // other regions (`regions`, here with Santander open), to check that older saves still load.
 import { createInitialState } from '../../src/sim/state.js';
 export function format9(now = 0, regions = ['santander']) {
-  const root = { ...createInitialState(now, 'cafetero'), version: 9 };
+  // Until v5.12 every region had its own clock (clockOffset) and its own events.
+  const old = (id) => ({ ...createInitialState(now, id), clockOffset: 0, events: { boards: {}, last: {}, count: {} } });
+  const root = { ...old('cafetero'), version: 9 };
   root.profile = { renown: 0, renownTotal: 0, medals: {}, history: [] };
   root.settings = { sound: true, music: true, zone: 'finca' };
   root.events = { boards: {}, slots: [null, null], last: {}, count: {}, global: true };
-  root.regions = Object.fromEntries(regions.map((id) => [id, createInitialState(now, id)]));
+  root.regions = Object.fromEntries(regions.map((id) => [id, old(id)]));
   return root;
 }
 

@@ -6,7 +6,7 @@ import { ROUTES } from '../data/routes.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { OFFLINE_BASE_HOURS, OFFLINE_COSTS, OFFLINE_STEP_HOURS } from '../sim/renown.js';
-import { DAY_LENGTH, YEAR_DAYS, clockOf } from '../sim/calendar.js';
+import { DAY_LENGTH, YEAR_DAYS } from '../sim/calendar.js';
 import { EVENT_OF_ZONE, MEDALS } from '../data/events.js';
 import { LOGROS_BY_ID } from '../data/logros.js';
 import { ALBUM, PAGE_BONUS } from '../data/album.js';
@@ -68,8 +68,8 @@ export function clearSave() {
 //   up to 9: the save was Eje Cafetero's own, holding the whole game's data and the other regions (v3.0 to v5.12).
 //            Each region is brought up to date (migrateRegion), then the player's data (migrateProfile), then
 //   9 -> 10: Eje Cafetero moves into `regions` like the others and the save becomes the whole game's (toFormat10),
-//            what each region keeps on restart moves to the profile, nothing of the whole game is left in a region
-//            and every region's clock shows the country's date (normalize).
+//            what each region keeps on restart moves to the profile, every event's data joins the whole game's, and
+//            a region keeps only its own run: no clock but its run's time, nothing of the whole game (normalize).
 //   10: each region and the player's data are brought up to date the same way.
 // A save from a newer format (a backup from an updated phone) is refused: null, see saveTooNew.
 function migrate(data) {
@@ -80,9 +80,8 @@ function migrate(data) {
   if (isGameSave(data)) {
     game = { ...data, regions };
     game.playTime ??= 0;
-    game.clockOffset ??= 0;
     game.settings ??= { sound: true, music: true, zone: 'finca' };
-    game.events = { slots: data.events?.slots ?? [null, null], global: true };
+    game.events = { ...data.events, slots: data.events?.slots ?? [null, null], global: true };
     game = migrateProfile(game);
   } else {
     const old = migrateRegion(data);
@@ -93,16 +92,24 @@ function migrate(data) {
 }
 
 // Every region save holds only its own run (sim/state.js: REGION_KEYS). What it keeps on restart (resets, finished,
-// second Willys, chivas, workday) goes to its profile entry (profile.keep), the whole game's data it used to carry
-// (format, saved time, settings, the Bogotá flag) is dropped, and its clock is aligned with the country's: before
-// v5.13 some regions' dates had drifted by hours.
+// second Willys, chivas, workday) goes to its profile entry (profile.keep); its events (open boards, last played,
+// rounds) join the whole game's; the whole game's data it used to carry (format, saved time, settings, the Bogotá
+// flag) is dropped, and so is its clock: the country clock is the whole game's playTime alone, and every region reads
+// its date from it (before v5.13 each region had its own, and some had drifted by hours).
 function normalize(game) {
   game.profile.album ??= [];
   if (Array.isArray(game.profile.decor?.owned)) game.profile.decor = { cafetero: game.profile.decor }; // v3.10
   game.profile.decor ??= {};
   const keeps = (game.profile.keep ??= {});
-  const country = clockOf(game);
+  game.playTime = (game.playTime ?? 0) + (game.clockOffset ?? 0);
+  delete game.clockOffset;
+  const ev = game.events;
+  for (const key of ['boards', 'last', 'count']) ev[key] ??= {};
   for (const [id, st] of Object.entries(game.regions)) {
+    const own = st.events ?? {};
+    Object.assign(ev.boards, own.boards);
+    for (const [key, at] of Object.entries(own.last ?? {})) ev.last[key] = Math.max(ev.last[key] ?? -Infinity, at);
+    for (const [key, n] of Object.entries(own.count ?? {})) ev.count[key] = Math.max(ev.count[key] ?? 0, n);
     const keep = (keeps[id] ??= newKeep());
     if (st.legacy) keep.resets = Math.max(keep.resets, st.legacy.resets ?? 0);
     keep.resets = Math.min(CAPS.resets, keep.resets);
@@ -112,8 +119,8 @@ function normalize(game) {
     if (st.workLevel) keep.workLevel = Math.max(keep.workLevel ?? 0, st.workLevel);
     for (const key of Object.keys(st)) if (!REGION_KEYS.includes(key)) delete st[key];
     st.region = id;
-    st.clockOffset = country - st.playTime;
   }
+  for (const key in ev.count) ev.count[key] = Math.min(CAPS.eventRound, ev.count[key]);
   return game;
 }
 
@@ -124,16 +131,15 @@ const isGameSave = (data) => (data.version ?? 0) >= 10 && !data.stations && Bool
 const regionSaves = (save) => (save.stations ? [save, ...Object.values(save.regions ?? {})] : Object.values(save.regions ?? {}));
 
 // 9 -> 10 (v5.13): what belongs to the whole game stays in the save; everything else was Eje Cafetero's own and
-// becomes its region save, like any other region. The country clock carries on: the save and Eje Cafetero keep
-// the same playTime and clockOffset, so every clock still shows the same date.
+// becomes its region save, like any other region. The country clock carries on: it was Eje Cafetero's (its run's
+// time plus the country's time when the run began).
 function toFormat10(old) {
   const { version, savedAt, profile, settings = {}, events = {}, regions = {}, bogotaNet, ...cafetero } = old;
   const { slots, global, ...regionEvents } = events;
   return {
     version: SAVE_VERSION,
     savedAt,
-    playTime: cafetero.playTime ?? 0,
-    clockOffset: cafetero.clockOffset ?? 0,
+    playTime: (cafetero.playTime ?? 0) + (cafetero.clockOffset ?? 0),
     // Saves from before v2.0 had no profile yet.
     profile: profile ?? { renown: 0, renownTotal: 0, medals: {}, history: [] },
     settings: { sound: true, music: true, ...settings },

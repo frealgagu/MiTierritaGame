@@ -322,10 +322,11 @@ test('loading a v3.6 save, the events already played move to the slot system (v3
   root.profile.history = [{ event: 'broca', year: 1, medal: 'gold', time: 600 }, { event: 'broca', year: 2, medal: 'silver', time: 900 }];
   saveGame(root);
   const back = loadGame();
-  assert.equal(cafeOf(back).events.done, undefined);
+  assert.equal(back.events.done, undefined);
+  assert.equal(cafeOf(back).events, undefined);
   assert.deepEqual(back.events.slots, [null, null]);
-  assert.equal(cafeOf(back).events.count.finca, 2, 'the borer was already played twice: challenge 3 is next');
-  assert.ok(cafeOf(back).events.last.finca >= 0);
+  assert.equal(back.events.count.finca, 2, 'the borer was already played twice: challenge 3 is next');
+  assert.ok(back.events.last.finca >= 0);
   assert.equal(eventStatus(back, 'finca').round, 3);
 });
 
@@ -721,8 +722,8 @@ test('loading a v3.29 save, the slots become two for the whole game (v3.30)', ()
   const back = loadGame();
   assert.ok(back.events.global);
   assert.deepEqual(back.events.slots, [{ zone: 'guayabera' }, null], 'only the one being played remains');
-  assert.equal(back.regions.santander.events.slots, undefined);
-  assert.ok(back.regions.santander.events.boards.guayabera);
+  assert.equal(back.regions.santander.events, undefined);
+  assert.ok(back.events.boards.guayabera, 'the board in play joins the whole game\'s events (v5.13)');
 });
 
 test('Los Llanos open upon completing Villa de Leyva; with Villavicencio complete they are finished (v3.31, v3.37)', async () => {

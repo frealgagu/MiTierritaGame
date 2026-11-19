@@ -70,9 +70,10 @@ export function nextWorkHour(playTime, extra = 0) {
 
 // For a save: rests at night and seasons scale production, except on event board
 // (v2.0), which uses its own clock: always daytime and no seasons.
-// Country-wide clock (v3.0): save play time plus elapsed country time at start
-// (newly opened region, or new save after reset, stays synced to same calendar).
-export const clockOf = (state) => (state.playTime ?? 0) + (state.clockOffset ?? 0);
+// Country-wide clock (v3.0): one clock for the whole game (v5.13: the whole game's playTime), which never restarts.
+// A region reads it through its link to the whole game (sim/state.js: linkRegion), minus what it still has to
+// catch up; an event board, or a region on its own (tests, tools), runs on its own playTime.
+export const clockOf = (state) => (state.country ? state.country.playTime - state.behind : (state.playTime ?? 0));
 export const resting = (state) => !state.event && !isWorkTime(clockOf(state), workOf(state));
 export const seasonMult = (state) => (state.event ? 1 : seasonOf(clockOf(state)).mult);
 

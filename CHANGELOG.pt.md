@@ -1,8 +1,8 @@
 # Registro de alterações
 
 ## v5.13.0 — O Eixo Cafeeiro, uma região como as outras
-- **Novo formato de jogo salvo (10):** o jogo salvo agora é o do jogo inteiro e o Eixo Cafeeiro é mais uma região, igual às outras. Recomeçá-lo só muda o que é dele; seu perfil, os ajustes, as vagas de eventos, o relógio do país e as outras regiões não são tocados. Os jogos salvos anteriores se convertem sozinhos ao abrir.
-- **O relógio do país** tem seu próprio contador e nunca volta a zero, e todas as regiões mostram a mesma data.
+- **Novo formato de jogo salvo (10):** o jogo salvo agora é o do jogo inteiro e o Eixo Cafeeiro é mais uma região, igual às outras. Recomeçá-lo só muda o que é dele; seu perfil, os ajustes, os eventos (vagas, tabuleiros em jogo e rodadas), o relógio do país e as outras regiões não são tocados. Os jogos salvos anteriores se convertem sozinhos ao abrir.
+- **O relógio do país** tem seu próprio contador e nunca volta a zero: é o único, e todas as regiões tiram dele a sua data.
 - **O que uma região guarda ao recomeçar** (seus recomeços, seu final cumprido, o segundo Willys, as chivas e a jornada) agora fica salvo com seu perfil.
 - **Cópias de segurança:** uma cópia feita com uma versão mais nova do jogo avisa que é preciso atualizar, em vez de abrir pela metade, e um jogo salvo mais novo nunca é sobrescrito.
 

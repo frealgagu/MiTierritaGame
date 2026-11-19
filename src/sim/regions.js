@@ -2,7 +2,6 @@
 // full save (with its `region`). All run concurrently, each with its own Game.
 import { REGIONS, REGIONS_BY_ID } from '../data/regions.js';
 import { createInitialState, linkRegion } from './state.js';
-import { clockOf } from './calendar.js';
 
 // Save for a region, or null if not yet unlocked. (v5.13) root is always the whole game's save; Eje Cafetero is a
 // region in root.regions like the others.
@@ -34,7 +33,6 @@ export function openRegions(root, now = Date.now()) {
 
 function addRegion(root, region, now) {
   const state = createInitialState(now, region.id);
-  state.clockOffset = clockOf(root);
   root.regions[region.id] = state;
   linkRegion(root, region.id);
 }

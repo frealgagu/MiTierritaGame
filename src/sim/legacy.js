@@ -6,7 +6,6 @@
 // legacyMult). Since v3.0, each region tracks its own.
 import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS, REGIONS_BY_ID, regionOf } from '../data/regions.js';
-import { clockOf } from './calendar.js';
 import { MAX_LEVEL } from './rules.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { GOALS_BY_ZONE } from '../data/goals.js';
@@ -78,8 +77,8 @@ export function checkMastery(state, bus) {
 // is replaced: the whole game's save (profile, settings, slots, country clock, the other regions) is not touched,
 // and what the region keeps lives in its profile entry (`keep`: resets, done, second Willys, chivas, workday),
 // which needs no copying. The finished run is banked into the profile (achievements and totals) and gives Renown
-// (v3.11). The new run starts at the country's date, with the region's notices already seen and its events as they
-// were (open boards, last played and rounds; v3.12).
+// (v3.11). The new run reads the country's date like every region, with the region's notices already seen; its
+// events are the whole game's and stay as they were (open boards, last played and rounds).
 //   root: the whole game's save   regionId: the region to restart   Returns the new region save.
 export function restartRegion(root, regionId, now = Date.now()) {
   const state = root.regions[regionId];
@@ -91,10 +90,7 @@ export function restartRegion(root, regionId, now = Date.now()) {
   bankRun(state, root.profile);
   gainRenown(root.profile, RESTART_RENOWN);
   const next = createInitialState(now, regionId);
-  next.clockOffset = clockOf(root);
   next.hints = [...(state.hints ?? [])];
-  const ev = state.events ?? {};
-  next.events = { boards: structuredClone(ev.boards ?? {}), last: { ...ev.last }, count: { ...ev.count } };
   root.regions[regionId] = next;
   return linkRegion(root, regionId);
 }

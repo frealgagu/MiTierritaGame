@@ -21,11 +21,18 @@ export const newKeep = () => ({ resets: 0, done: false });
 // A region save reaches its entry through `keep`, a link that is not saved (not enumerable): the data is saved once,
 // in the profile. A region that is not in a whole game's save (an event board, a region built alone in a test) has
 // its own empty entry.
-const setKeep = (state, keep) => Object.defineProperty(state, 'keep', { value: keep, writable: true, configurable: true, enumerable: false });
+// Likewise `country` links a region to the whole game, whose playTime is the country clock (sim/calendar.js:
+// clockOf): a region has no clock of its own, only its run's time. `behind` is how far its clock trails the
+// country's while it catches up on time away (core/Game.js), 0 the rest of the time.
+const link = (state, key, value) => Object.defineProperty(state, key, { value, writable: true, configurable: true, enumerable: false });
+const setKeep = (state, keep) => link(state, 'keep', keep);
 export function linkRegion(root, regionId) {
   const keep = ((root.profile.keep ??= {})[regionId] ??= newKeep());
-  setKeep(root.regions[regionId], keep);
-  return root.regions[regionId];
+  const state = root.regions[regionId];
+  setKeep(state, keep);
+  link(state, 'country', root);
+  link(state, 'behind', 0);
+  return state;
 }
 export function linkRegions(root) {
   for (const id of Object.keys(root.regions)) linkRegion(root, id);
@@ -41,8 +48,7 @@ export function createInitialState(now = Date.now(), regionId = 'cafetero') {
     region: regionId,
     coins: 0,
     totalEarned: 0,
-    playTime: 0, // this run's time; clockOffset aligns its clock with the country's (clockOf)
-    clockOffset: 0,
+    playTime: 0, // this run's time (the date is the country's: clockOf)
     nextId: 1,
     // Stations across all zones (ids are unique); added when built.
     stations: {
@@ -60,9 +66,6 @@ export function createInitialState(now = Date.now(), regionId = 'cafetero') {
     research: [], // purchased research ids
     goals: { claimed: [] }, // objetivos cobrados
     mastered: false, // second ending: all stations at level 100
-    // Events (v2.0): the region's open boards, last played and rounds per event (see sim/events.js). The two
-    // game-wide slots live in the whole game's save.
-    events: { boards: {}, last: {}, count: {} },
   };
   setKeep(state, newKeep());
   return state;
@@ -70,26 +73,26 @@ export function createInitialState(now = Date.now(), regionId = 'cafetero') {
 
 // The whole game's save (format 10, v5.13). Everything that belongs to the player and not to a region lives here,
 // so restarting a region (Eje Cafetero included) never touches it:
-//   playTime + clockOffset: the country clock (clockOf), which never restarts; every region's clock matches it.
+//   playTime: the country clock (clockOf), which never restarts; every region reads its date from it.
 //   profile: Renown, Prestige, medals, achievements, album, decor, purchases, banked runs, the game's totals and what
 //            each region keeps on restart (profile.keep).
 //   settings: volumes, language, travel and event options, the zone being viewed.
-//   events.slots: the two game-wide event slots.   regions: every open region's save, Eje Cafetero first.
+//   events: the two game-wide slots and every event's open board, last time played and rounds (sim/events.js).
+//   regions: every open region's save, Eje Cafetero first.
 //   bogotaNet: the v4.6 Bogotá migration is not needed (core/SaveSystem.js: resetOldBogota).
-export const GLOBAL_KEYS = ['version', 'savedAt', 'playTime', 'clockOffset', 'profile', 'settings', 'events', 'regions', 'bogotaNet'];
+export const GLOBAL_KEYS = ['version', 'savedAt', 'playTime', 'profile', 'settings', 'events', 'regions', 'bogotaNet'];
 // What a region save may hold (and nothing that belongs to the whole game).
 // (A fixed list: computing it from createInitialState at load time would run before the modules it needs are ready.
 // test/format10.test.js checks that both match.)
-export const REGION_KEYS = ['region', 'coins', 'totalEarned', 'playTime', 'clockOffset', 'nextId', 'stations', 'zones', 'routes', 'mules', 'stats', 'counted', 'hints', 'research', 'goals', 'mastered', 'events'];
+export const REGION_KEYS = ['region', 'coins', 'totalEarned', 'playTime', 'nextId', 'stations', 'zones', 'routes', 'mules', 'stats', 'counted', 'hints', 'research', 'goals', 'mastered'];
 export function createGameState(now = Date.now()) {
   return linkRegions({
     version: SAVE_VERSION,
     savedAt: now,
     playTime: 0,
-    clockOffset: 0,
     profile: { renown: 0, renownTotal: 0, medals: {}, history: [], album: [], decor: {}, keep: {} },
     settings: { sound: true, music: true, zone: 'finca' },
-    events: { slots: [null, null], global: true },
+    events: { slots: [null, null], global: true, boards: {}, last: {}, count: {} },
     regions: { cafetero: createInitialState(now, 'cafetero') },
     bogotaNet: true,
   });

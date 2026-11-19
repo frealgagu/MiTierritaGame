@@ -24,7 +24,6 @@ function fullGame() {
   root.settings = { ...root.settings, musicVolume: 30, travel: 'direct', eventExit: 'leave', zone: 'trapiche' };
   root.events.slots = [{ zone: 'guayabera' }, { until: 999999 }];
   root.playTime = 50000;
-  for (const st of Object.values(root.regions)) st.clockOffset = 50000;
   return reload(root);
 }
 
@@ -86,9 +85,10 @@ test('a format 9 save becomes format 10 without losing anything (v5.13)', () => 
   assert.equal(cafe.keep.resets, 5);
   assert.equal(g.profile.keep.cafetero.resets, 5);
   assert.deepEqual(cafe.hints, ['wetmill']);
-  assert.deepEqual(cafe.events.count, { finca: 2 });
-  assert.deepEqual(cafe.events.last, { finca: 5 });
-  assert.equal(cafe.events.slots, undefined, 'the slots belong to the whole game');
+  assert.deepEqual(g.events.count, { finca: 2 });
+  assert.deepEqual(g.events.last, { finca: 5 });
+  assert.equal(cafe.events, undefined, 'the events belong to the whole game');
+  assert.equal(cafe.clockOffset, undefined, 'and the clock too');
   assert.deepEqual(g.events.slots, [{ zone: 'finca' }, null]);
   assert.equal(g.profile.renown, 99);
   assert.ok(g.profile.medals.festival_zona_g, 'Bogotá medals stay');
@@ -134,7 +134,7 @@ test('the game-wide event slots fill from the whole game, not from Eje Cafetero 
   const world = new World(root);
   world.step(0.1);
   assert.ok(root.events.slots.every((x) => x === null || x.zone || x.until !== undefined));
-  assert.equal(cafeOf(root).events.slots, undefined);
+  assert.equal(cafeOf(root).events, undefined);
   assert.equal(typeof startEvent, 'function');
   assert.ok(Number.isFinite(gameTotals(root).sold));
 });
@@ -152,4 +152,57 @@ test('a save written by a newer version is never overwritten (v5.13)', async () 
   assert.equal(saveGame(newGame()), true);
   assert.equal(loadGame().version, SAVE_VERSION);
   delete globalThis.localStorage;
+});
+
+test('a region has no clock of its own: it reads the country clock, also while it catches up on time away (v5.13)', () => {
+  const setup = () => {
+    const root = newGame();
+    const g = new Game(cafeOf(root));
+    g.state.coins = 1e6;
+    for (const id of ['wetmill', 'dryer']) g.unlock(id);
+    for (const st of Object.values(g.state.stations)) st.level = st.transport.level = 20;
+    g.state.zones.finca.dispatch.level = 20;
+    g.state.coins = 0;
+    root.playTime = 5 * 3600; // a country clock ahead of the region's run: nights and seasons are the country's
+    return { root, g, world: new World(root) };
+  };
+  // Half an hour away is simulated second by second: exactly as if it had been played, at the country's hours.
+  const away = 30 * 60;
+  const live = setup();
+  for (let t = 0; t < away; t += 1) {
+    live.world.step(1);
+    live.g.step(1);
+  }
+  const back = setup();
+  back.world.catchUp(away, away);
+  back.g.catchUp(away, away);
+  assert.ok(live.g.state.coins > 0);
+  assert.ok(Math.abs(back.g.state.coins / live.g.state.coins - 1) < 1e-9, `${back.g.state.coins} vs ${live.g.state.coins}`);
+  assert.equal(clockOf(back.g.state), clockOf(back.root), 'the region meets the country clock again');
+  assert.equal(back.g.state.behind, 0);
+  assert.equal(back.g.state.playTime, away, "the run's time");
+  assert.equal(clockOf(back.root), 5 * 3600 + away);
+  const loaded = reload(back.root);
+  assert.equal(loaded.clockOffset, undefined);
+  for (const st of Object.values(loaded.regions)) {
+    assert.equal(st.clockOffset, undefined);
+    assert.equal(clockOf(st), clockOf(loaded));
+  }
+});
+
+test('every event board, last time played and round count is the whole game\'s, also from a format 9 save (v5.13)', () => {
+  const old = format9(0, ['santander']);
+  old.events.boards.finca = { event: { id: 'broca', zone: 'finca', round: 1 } };
+  old.events.last = { finca: 7 };
+  old.events.count = { finca: 2 };
+  old.regions.santander.events = { boards: { guayabera: { event: { id: 'mosca', zone: 'guayabera', round: 1 } } }, last: { guayabera: 9 }, count: { guayabera: 99 } };
+  const g = reload(old);
+  assert.deepEqual(Object.keys(g.events.boards).sort(), ['finca', 'guayabera']);
+  assert.deepEqual(g.events.last, { finca: 7, guayabera: 9 });
+  assert.deepEqual(g.events.count, { finca: 2, guayabera: 30 }, 'rounds stop at their cap');
+  for (const st of Object.values(g.regions)) assert.equal(st.events, undefined, st.region);
+  // Restarting a region leaves them all as they were.
+  restartRegion(g, 'santander');
+  assert.ok(g.events.boards.guayabera);
+  assert.equal(g.events.count.guayabera, 30);
 });

@@ -1,8 +1,8 @@
 # Journal des modifications
 
 ## v5.13.0 — L’Axe du café, une région comme les autres
-- **Nouveau format de sauvegarde (10) :** la sauvegarde est maintenant celle du jeu entier et l’Axe du café est une région de plus, comme les autres. Le recommencer ne change que ce qui lui appartient ; ton profil, les réglages, les créneaux d’événements, l’horloge du pays et les autres régions ne sont pas touchés. Les anciennes sauvegardes se convertissent toutes seules à l’ouverture.
-- **L’horloge du pays** a son propre compteur et ne revient jamais à zéro, et toutes les régions affichent la même date.
+- **Nouveau format de sauvegarde (10) :** la sauvegarde est maintenant celle du jeu entier et l’Axe du café est une région de plus, comme les autres. Le recommencer ne change que ce qui lui appartient ; ton profil, les réglages, les événements (créneaux, plateaux en cours et manches), l’horloge du pays et les autres régions ne sont pas touchés. Les anciennes sauvegardes se convertissent toutes seules à l’ouverture.
+- **L’horloge du pays** a son propre compteur et ne revient jamais à zéro : c’est la seule, et toutes les régions y prennent leur date.
 - **Ce qu’une région garde quand on la recommence** (ses recommencements, sa fin atteinte, la deuxième Willys, les chivas et la journée de travail) est maintenant enregistré avec ton profil.
 - **Sauvegardes :** une copie faite avec une version plus récente du jeu demande de mettre à jour au lieu de s’ouvrir à moitié, et une sauvegarde plus récente n’est jamais écrasée.
 

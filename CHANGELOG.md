@@ -1,8 +1,8 @@
 # Changelog
 
 ## v5.13.0 — The Coffee Region, a region like the others
-- **New save format (10):** the save is now the whole game's and the Coffee Region is one more region, like the others. Restarting it only changes its own data; your profile, settings, event slots, the country clock and the other regions are left alone. Older saves convert by themselves when opened.
-- **The country clock** has its own counter and never goes back to zero, and every region shows the same date.
+- **New save format (10):** the save is now the whole game's and the Coffee Region is one more region, like the others. Restarting it only changes its own data; your profile, settings, events (slots, boards in play and rounds), the country clock and the other regions are left alone. Older saves convert by themselves when opened.
+- **The country clock** has its own counter and never goes back to zero: it is the only one, and every region reads its date from it.
 - **What a region keeps when it restarts** (its restarts, its completed ending, the second Willys, the chivas and the working hours) is now saved with your profile.
 - **Backups:** a backup made with a newer version of the game says to update instead of opening half-way, and a newer save is never overwritten.
 

@@ -76,6 +76,8 @@ export class Game {
   // Actually simulate up to MAX_SIMULATED s; the remainder is extrapolated from the second half of the
   // simulated run (coins, sales, production, imports), weighted by active work time in each stretch:
   // nights pause work and each season yields its multiplier.
+  // (v5.13) The country clock (core/World.js) has already moved on by the time away; a region's clock trails it by
+  // what the region still has to catch up (`behind`, see sim/state.js: linkRegion) and meets it at the end.
   catchUp(seconds, cap) {
     const run = this.catchUpSteps(seconds, cap);
     let r = run.next();
@@ -108,16 +110,20 @@ export class Game {
     const s = this.state;
     const before = s.coins;
     const simulated = Math.min(total, MAX_SIMULATED);
+    // Only a region linked to the whole game reads the country clock (a region on its own keeps its own playTime).
+    const trail = (k) => s.country && (s.behind = k);
     this.bus.muted = true;
     this.offline = true;
     let mark = null;
     try {
       for (let t = 0; t < simulated; t += 1) {
+        trail(total - t - 1);
         if (!mark && t >= simulated / 2) mark = { t: clockOf(s), ...snapshot(s) };
         this.step(1);
         if (t % 60 === 59) yield t / simulated;
       }
     } finally {
+      trail(total - simulated);
       this.bus.muted = false;
       this.offline = false;
     }
@@ -137,6 +143,7 @@ export class Game {
       s.playTime += rest;
       capCoins(s);
     }
+    trail(0);
     return { seconds: total, coins: s.coins - before };
   }
 

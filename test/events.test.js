@@ -5,7 +5,7 @@ import { World } from '../src/core/World.js';
 import { newGame, cafeOf } from './helpers/game.js';
 import { EVENTS, EVENT_ACTIONS_BY_ID, EVENT_OF_ZONE, MEDALS } from '../src/data/events.js';
 import { EVENT_COOLDOWN, boardObjective, buyAction, createEventState, endEvent, eventDef, eventObjective, eventProgress, eventStatus, finishEvent, medalFor, quoteAction, restartEvent, startEvent, supplyFraction, SUPPLY_TRICKLE } from '../src/sim/events.js';
-import { createInitialState } from '../src/sim/state.js';
+import { createInitialState, linkRegion } from '../src/sim/state.js';
 import { speedMult } from '../src/sim/modifiers.js';
 import { restartRegion } from '../src/sim/legacy.js';
 import { DAY_LENGTH } from '../src/sim/calendar.js';
@@ -56,9 +56,9 @@ function twoRegions() {
   for (const z of ['trapiche', 'lecheria']) cafeGame.unlockZone(z);
   for (const def of EVENTS.filter((d) => ['finca', 'trapiche', 'lecheria'].includes(d.zone))) for (const id of def.stations) cafe.stations[id] ??= createStationState();
   const san = createInitialState(undefined, 'santander');
-  san.clockOffset = 0;
   for (const id of EVENT_OF_ZONE.guayabera.stations) san.stations[id] ??= createStationState();
   s.regions.santander = san;
+  linkRegion(s, 'santander');
   return { game, s, cafe, san };
 }
 
@@ -73,9 +73,10 @@ test('two slots for the whole game, never from the same region (v3.30)', () => {
   assert.equal(eventStatus(two.s, 'guayabera').kind, 'available');
   assert.equal(eventStatus(two.s, 'trapiche').kind, 'waiting', 'the other slot cannot be from the Eje Cafetero');
   assert.equal(startEvent(two.s, 'trapiche'), null);
-  assert.equal(two.san.events.boards.guayabera, undefined);
+  assert.equal(two.s.events.boards.guayabera, undefined);
   assert.ok(startEvent(two.s, 'guayabera'));
-  assert.ok(two.san.events.boards.guayabera, `the board goes in its region's game`);
+  assert.ok(two.s.events.boards.guayabera, 'the board goes in the whole game (v5.13)');
+  assert.equal(two.san.events, undefined, 'not in its region');
 });
 
 test('on winning, the board stays open until finished; its slot stays empty for 2 years (v3.30)', () => {
@@ -215,7 +216,8 @@ test('Renown, medals and the board in play are not lost on restart, which adds 1
   const next = restartRegion(root, 'cafetero');
   assert.equal(root.profile.renown, 7 + 10);
   assert.deepEqual(root.profile.medals.broca, { best: 'silver', count: { silver: 1 } });
-  assert.deepEqual(Object.keys(next.events.boards), ['finca']);
+  assert.deepEqual(Object.keys(root.events.boards), ['finca']);
+  assert.equal(next.events, undefined, 'the board is the whole game\'s (v5.13)');
   assert.deepEqual(root.events.slots.map((x) => x?.zone), slots);
 });
 
@@ -383,8 +385,8 @@ test('events without gold come out first and those with gold at the end (v3.72)'
   // Finca and Trapiche already played: Finca with gold, Trapiche with silver, and Finca longer ago.
   for (const id of ['broca', 'molienda', 'feria']) s.profile.medals[id] = { best: 'gold', count: { gold: 1 } };
   s.profile.medals.molienda.best = 'silver';
-  cafe.events.last = { finca: 10, trapiche: 20, lecheria: 30 };
-  cafe.events.count = { finca: 1, trapiche: 1, lecheria: 1 };
+  s.events.last = { finca: 10, trapiche: 20, lecheria: 30 };
+  s.events.count = { finca: 1, trapiche: 1, lecheria: 1 };
   s.events.slots = [null, { zone: 'guayabera' }];
   game.step(0.1);
   assert.equal(s.events.slots[0].zone, 'trapiche', 'the one without gold, even if the Finca has gone unplayed longer');

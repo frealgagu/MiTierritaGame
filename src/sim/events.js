@@ -1,7 +1,8 @@
 // Events (v2.0, GDD §10.2). Each board is a separate save (like main state, containing only
 // event zone) played with its own Game: coins, levels, and clock (`playTime`), which advances
 // while on board (and in background after «🚪 Exit», v3.67.4). Persisted inside save under
-// state.events.boards[zone]. On boards it is always daytime with no seasons.
+// the whole game's events.boards[key] (v5.13; until then in its region's save). On boards it is always daytime
+// with no seasons.
 //
 // When events spawn (v3.30): 2 slots game-wide (until v3.29, 2 per region), stored in root
 // save. Open slot picks an event from a ready zone (all stations built) in a region not
@@ -11,8 +12,8 @@
 // Each event has one challenge (v3.72; until v3.71, three rotating ones). `round` tracks attempt count.
 // After win, board remains open for inspection (`event.done`) until «Finish» is tapped.
 // After win, board remains open for inspection (`event.done`) until «Finish» is tapped.
-//   principal: state.events = { boards, slots: [ { zone } | { until } | null ], last, count, global }
-//   each region: state.events = { boards: { zone: board }, last: { zone: clock }, count: { zone: count } }
+//   the whole game (v5.13): events = { slots: [ { zone } | { until } | null ], global, boards: { key: board },
+//                                      last: { key: country clock }, count: { key: rounds } }
 import { CAPS, capAdd } from '../data/caps.js';
 import { EVENTS, EVENTS_BY_ID, EVENT_ACTIONS_BY_ID, EVENT_OF_ZONE, MEDALS, eventKey } from '../data/events.js';
 import { createInitialState, createZoneState } from './state.js';
@@ -29,7 +30,7 @@ import { WithArticle, withArticle } from '../data/lore.js';
 import { gainRenown, profileOf } from './renown.js';
 import { LEGACY_OBJECTIVES } from './legacyObjectives.js';
 import { LANG, t } from '../i18n/index.js';
-import { regionState, regionStates } from './regions.js';
+import { regionState } from './regions.js';
 
 export const EVENT_SLOTS = 2;
 export const EVENT_COOLDOWN = 2 * YEAR_DAYS * DAY_LENGTH; // 2 game years (4 h 16 min; until v3.29, 3)
@@ -50,9 +51,9 @@ export function boardObjective(board) {
   return old ? old[(boardRound(board) - 1) % old.length] : def.objective;
 }
 
-// A region save's events, filling missing defaults: open boards, last played and rounds per event.
-export function eventsOf(state) {
-  const ev = (state.events ??= {});
+// The whole game's events, filling missing defaults: open boards, last played and rounds per event.
+export function eventsOf(root) {
+  const ev = root.events;
   ev.boards ??= {};
   ev.last ??= {};
   ev.count ??= {};
@@ -62,7 +63,7 @@ export function eventsOf(state) {
 export const slotsOf = (root) => root.events.slots;
 
 // Next challenge for zone (1, 2, 3…).
-export const nextRound = (state, zoneId) => Math.min(CAPS.eventRound, (eventsOf(state).count[zoneId] ?? 0) + 1);
+export const nextRound = (root, zoneId) => Math.min(CAPS.eventRound, (eventsOf(root).count[zoneId] ?? 0) + 1);
 // Zone has event if open; once region completed at least once (v3.8), all its zones,
 // even if not reopened yet after reset: already played.
 const open = (state, zoneId) => zoneId in state.zones && (state.keep.done || Boolean(state.zones[zoneId].unlocked));
@@ -78,7 +79,6 @@ const regionOfKey = (key) => REGION_OF_ZONE[zoneOfKey(key)];
 export function ownerOf(root, zoneId) {
   return regionState(root, regionOfKey(zoneId));
 }
-const statesOf = regionStates;
 
 // Fills open slots and clears expired 2-year cooldowns. Called by root save each tick.
 // paso (core/Game.js).
@@ -88,7 +88,7 @@ export function refillSlots(root) {
   const now = clockOf(root);
   for (let i = 0; i < slots.length; i++) if (slots[i]?.until !== undefined && now >= slots[i].until) slots[i] = null;
   if (!slots.includes(null)) return;
-  const boards = statesOf(root).flatMap((st) => Object.entries(eventsOf(st).boards));
+  const boards = Object.entries(eventsOf(root).boards);
   const playing = boards.filter(([, b]) => !b.event.done).map(([zone]) => zone);
   for (let i = 0; i < slots.length; i++) {
     if (slots[i]) continue;
@@ -106,7 +106,7 @@ export function refillSlots(root) {
     const next = EVENTS.filter((def) => !busy.has(eventKey(def)) && !regions.has(REGION_OF_ZONE[def.zone]) && !regionAllGold(root.profile, REGION_OF_ZONE[def.zone]))
       .map((def) => ({ def, owner: ownerOf(root, eventKey(def)) }))
       .filter(({ def, owner }) => owner && ready(owner, def) && afterDone(root, def))
-      .map(({ def, owner }, k) => ({ def, k, last: eventsOf(owner).last[eventKey(def)] ?? -Infinity }))
+      .map(({ def }, k) => ({ def, k, last: eventsOf(root).last[eventKey(def)] ?? -Infinity }))
       .map((x) => ({ ...x, tier: tier(x.def, x.last) }))
       .sort((x, y) => x.tier - y.tier || x.last - y.last || x.k - y.k)[0];
     if (!next) return;
@@ -133,12 +133,12 @@ export function buyOnDemand(profile, regionId) {
   return true;
 }
 // Currently open unfinished boards across whole save.
-export const openBoards = (root) => statesOf(root).flatMap((st) => Object.values(eventsOf(st).boards)).filter((b) => !b.event.done).length;
+export const openBoards = (root) => Object.values(eventsOf(root).boards).filter((b) => !b.event.done).length;
 // Whether event can replay right now: gold on all + unlocked, not already open, slot cap available.
 export function canPlayOnDemand(root, key) {
   const def = EVENT_OF_ZONE[key];
   const owner = def && ownerOf(root, key);
-  if (!owner || eventsOf(owner).boards[key]) return false;
+  if (!owner || eventsOf(root).boards[key]) return false;
   const region = REGION_OF_ZONE[def.zone];
   return hasOnDemand(root.profile, region) && regionAllGold(root.profile, region) && (hasFreeEvents(root.profile) || openBoards(root) < EVENT_SLOTS);
 }
@@ -162,8 +162,7 @@ export function buyFreeEvents(profile) {
 }
 export function startOnDemand(root, key) {
   if (!canPlayOnDemand(root, key)) return null;
-  const owner = ownerOf(root, key);
-  return (eventsOf(owner).boards[key] = createEventState(EVENT_OF_ZONE[key], nextRound(owner, key)));
+  return (eventsOf(root).boards[key] = createEventState(EVENT_OF_ZONE[key], nextRound(root, key)));
 }
 
 // When next 2-year cooldown expires (country clock), or null.
@@ -181,19 +180,18 @@ export function eventStatus(root, zoneId) {
   const def = EVENT_OF_ZONE[zoneId];
   const state = def && ownerOf(root, zoneId);
   if (!state || !open(state, def.zone)) return null;
-  const board = eventsOf(state).boards[zoneId];
+  const board = eventsOf(root).boards[zoneId];
   if (board) return { kind: board.event.done ? 'won' : 'active', def, round: boardRound(board), board };
-  if (!afterDone(root, def)) return { kind: 'locked', def, round: nextRound(state, zoneId), after: true };
-  if (!ready(state, def)) return { kind: 'locked', def, round: nextRound(state, zoneId) };
+  if (!afterDone(root, def)) return { kind: 'locked', def, round: nextRound(root, zoneId), after: true };
+  if (!ready(state, def)) return { kind: 'locked', def, round: nextRound(root, zoneId) };
   // (v5.9) Events without waiting: any ready event, at any time.
-  if (hasFreeEvents(root.profile) || slotsOf(root).some((x) => x?.zone === zoneId)) return { kind: 'available', def, round: nextRound(state, zoneId) };
-  return { kind: 'waiting', def, round: nextRound(state, zoneId), nextAt: nextSlotAt(root) };
+  if (hasFreeEvents(root.profile) || slotsOf(root).some((x) => x?.zone === zoneId)) return { kind: 'available', def, round: nextRound(root, zoneId) };
+  return { kind: 'waiting', def, round: nextRound(root, zoneId), nextAt: nextSlotAt(root) };
 }
 
 export function createEventState(def, round) {
   // With zones of event's region (v3.6: also Santander ones).
   const s = createInitialState(undefined, REGION_OF_ZONE[def.zone]);
-  delete s.events;
   s.event = { id: def.id, zone: def.zone, key: eventKey(def), round, single: true };
   for (const z of Object.keys(s.zones)) s.zones[z] = createZoneState(z === def.zone);
   s.zones[def.zone].dispatch.level = def.level;
@@ -216,7 +214,7 @@ export function startEvent(root, zoneId) {
   if (!st) return null;
   if (st.kind === 'active' || st.kind === 'won') return st.board;
   if (st.kind !== 'available') return null;
-  return (eventsOf(ownerOf(root, zoneId)).boards[zoneId] = createEventState(st.def, st.round));
+  return (eventsOf(root).boards[zoneId] = createEventState(st.def, st.round));
 }
 
 // Dev option (v4.7.2): «instant events», cooldown frees in 1 s instead of 2 years.
@@ -236,7 +234,7 @@ function coolDown(root, zoneId) {
 
 // 🔄 Restart (v3.30): same challenge from scratch (coins, levels, upgrades, clock, locked medal).
 export function restartEvent(root, zoneId) {
-  const ev = eventsOf(ownerOf(root, zoneId));
+  const ev = eventsOf(root);
   const board = ev.boards[zoneId];
   if (!board || board.event.done) return null;
   return (ev.boards[zoneId] = createEventState(eventDef(board), boardRound(board)));
@@ -245,12 +243,11 @@ export function restartEvent(root, zoneId) {
 // 🏁 Finish (v3.30). Before winning: closes without medal, slot waits 2 years, round stays
 // unchanged. After winning: simply closes (medal and slot already awarded on win).
 export function endEvent(root, zoneId) {
-  const owner = ownerOf(root, zoneId);
-  const ev = eventsOf(owner);
+  const ev = eventsOf(root);
   const board = ev.boards[zoneId];
   if (!board) return false;
   if (!board.event.done) {
-    ev.last[zoneId] = clockOf(owner);
+    ev.last[zoneId] = clockOf(root);
     coolDown(root, zoneId);
   }
   delete ev.boards[zoneId];
@@ -348,8 +345,7 @@ export const allActionsBought = (board) => eventDef(board).actions.every((a) => 
 // Returns null (nothing new), { secured } (medal just locked; upgrades remain), or { done }.
 //   root: main save storing profile and slots
 export function finishEvent(root, zoneId) {
-  const state = ownerOf(root, zoneId);
-  const ev = eventsOf(state);
+  const ev = eventsOf(root);
   const board = ev.boards[zoneId];
   if (!board || board.event.done) return null;
   const def = eventDef(board);
@@ -368,7 +364,7 @@ export function finishEvent(root, zoneId) {
   rec.count[medal] = capAdd(rec.count[medal], 1, CAPS.medalsPerKind);
   // (v5.9) Only the last finished events are kept, so the save does not keep growing.
   profile.history = [...(profile.history ?? []), { event: def.id, round, medal, time }].slice(-CAPS.history);
-  ev.last[zoneId] = clockOf(state);
+  ev.last[zoneId] = clockOf(root);
   ev.count[zoneId] = Math.min(round, CAPS.eventRound);
   coolDown(root, zoneId);
   board.event.done = true;

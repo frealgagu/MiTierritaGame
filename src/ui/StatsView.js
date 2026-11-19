@@ -116,7 +116,7 @@ export class StatsView {
     const events = EVENTS.filter((def) => REGION_OF_ZONE[def.zone] === region.id);
     const eventRows = events.map((def) => {
       const rec = profile.medals?.[def.id];
-      const rounds = state.events?.count?.[eventKey(def)] ?? 0;
+      const rounds = root.events.count[eventKey(def)] ?? 0;
       const medals = KINDS.map((k) => `${MEDALS[k].icon} ${cappedCount(rec?.count?.[k] ?? 0, CAPS.medalsPerKind)}`).join(' ');
       return `<div class="stats-event"><span>${def.icon} ${def.name}</span><small>${t('{n} rondas', { n: cappedCount(rounds, CAPS.eventRound) })} · ${medals}</small></div>`;
     }).join('');

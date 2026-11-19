@@ -1,8 +1,8 @@
 # Registro de cambios
 
 ## v5.13.0 — El Eje Cafetero, una región como las demás
-- **Partida guardada nueva (formato 10):** la partida es ahora la del juego completo y el Eje Cafetero es una región más, igual que las otras. Volver a empezarlo solo cambia lo suyo; tu perfil, los ajustes, los cupos de eventos, el reloj del país y las demás regiones no se tocan. Las partidas anteriores se convierten solas al abrirlas.
-- **El reloj del país** tiene su propio contador y nunca vuelve a cero, y todas las regiones muestran la misma fecha.
+- **Partida guardada nueva (formato 10):** la partida es ahora la del juego completo y el Eje Cafetero es una región más, igual que las otras. Volver a empezarlo solo cambia lo suyo; tu perfil, los ajustes, los eventos (cupos, tableros en juego y rondas), el reloj del país y las demás regiones no se tocan. Las partidas anteriores se convierten solas al abrirlas.
+- **El reloj del país** tiene su propio contador y nunca vuelve a cero: es el único, y todas las regiones toman de él su fecha.
 - **Lo que una región conserva al volver a empezar** (sus reinicios, su final cumplido, el segundo Willys, las chivas y la jornada) se guarda ahora con tu perfil.
 - **Copias de seguridad:** una copia hecha con una versión más nueva del juego avisa que hay que actualizar, en vez de abrirse a medias, y una partida más nueva nunca se sobrescribe.
 
