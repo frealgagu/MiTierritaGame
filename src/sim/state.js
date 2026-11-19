@@ -47,6 +47,9 @@ export function createInitialState(now = Date.now(), regionId = 'cafetero') {
     // Preserved across reset (v2.0): Renown ⭐, medals, finished events. Belongs to
     // player, not region: stored only in Eje Cafetero save.
     ...(regionId === 'cafetero' && { profile: { renown: 0, renownTotal: 0, medals: {}, history: [] } }),
+    // (v5.11) The root save never needs the v4.6 wipe of the old Bogotá (core/SaveSystem.js: resetOldBogota). Before,
+    // a restart of Eje Cafetero lost this flag and the next load wiped the current Bogotá.
+    ...(regionId === 'cafetero' && { bogotaNet: true }),
   };
 }
 

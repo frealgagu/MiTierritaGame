@@ -135,7 +135,8 @@ export class EventsView {
         const secured = st.board.event.medal;
         const note = [secured ? t('✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.', { icon: MEDALS[secured].icon }) : '', maxedText].filter(Boolean).join(' · ');
         foot = `${note ? `<p>${note}</p>` : ''}${playBtn(t('Seguir'))}`;
-      } else foot = `<button class="btn buy" data-play="${eventKey(def)}">${t('Jugar')}</button>`;
+      // (v5.11) An event already won says «Play again», whatever made it available (its slot, Events without waiting).
+      } else foot = `<button class="btn buy" data-play="${eventKey(def)}">${best ? t('🔁 Jugar otra vez') : t('Jugar')}</button>`;
       return `<div class="event-card" data-ekey="${eventKey(def)}">
         ${title}
         <p class="clamp" style="--lines: 2">${def.intro}</p>${moreButton()}

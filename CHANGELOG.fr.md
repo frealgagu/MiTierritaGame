@@ -4,6 +4,8 @@
 - **📊 Statistiques :** nouveaux plafonds. Pour tout le jeu, les produits vendus et fabriqués additionnent toutes les parties de toutes les régions jusqu’à 999Oc++ ; le Prestige atteint 9.999++ et les médailles de chaque type 99++. Dans chaque région, les années vécues atteignent 99++, le temps de la partie en cours affiche ∞ à partir de 100 h, les recherches s’affichent « faites / total », chaque événement compte jusqu’à 29++ manches et 9++ médailles de chaque type, et les produits montrent la partie en cours jusqu’à 999Sp++. Le menu ⚙️ affiche les mêmes totaux.
 - **🎖️ Succès de médailles :** ils demandent 1, 4 et 10 médailles par événement de la région (Bogotá : 7, 28 et 70 ; ceux d’un seul événement : 1, 4 et 10).
 - **⛪ La Guayabera :** un panneau en bois près de l’église indique « Vélez ».
+- **Correctif important :** recommencer l’Axe du café n’efface plus Bogotá ni les médailles de six de ses événements à la réouverture du jeu.
+- **🏅 Événements :** un événement déjà gagné affiche « 🔁 Rejouer » dans toutes les régions, pas seulement dans celles qui avaient l’achat pour jouer quand on veut.
 
 ## v5.10.0 — Statistiques et prix de la zone spéciale
 - **📊 Statistiques :** un nouveau bouton dans ⚙️ affiche tous les compteurs du jeu : temps de jeu, pièces gagnées, produits vendus et fabriqués, Renom, Prestige, succès, médailles et vignettes ; et par région, la partie, les redémarrages, les fois terminée, les années vécues, les pièces, chaque événement avec ses manches et médailles, et le vendu et le fabriqué de chaque produit. Ceux qui ont atteint leur plafond s’affichent « ++ » ou « ∞ ».

@@ -4,6 +4,8 @@
 - **📊 Estatísticas:** novos tetos. No jogo todo, os produtos vendidos e produzidos somam todas as partidas de todas as regiões até 999Oc++; o Prestígio chega a 9.999++ e as medalhas de cada tipo a 99++. Em cada região, os anos vividos chegam a 99++, o tempo da partida atual mostra ∞ a partir de 100 h, as pesquisas aparecem como «feitas / total», cada evento conta até 29++ rodadas e 9++ medalhas de cada tipo, e os produtos mostram a partida atual até 999Sp++. O menu ⚙️ mostra os mesmos totais.
 - **🎖️ Conquistas de medalhas:** pedem 1, 4 e 10 medalhas por evento da região (Bogotá: 7, 28 e 70; as de um só evento: 1, 4 e 10).
 - **⛪ La Guayabera:** uma placa de madeira ao lado da igreja diz «Vélez».
+- **Correção importante:** recomeçar o Eixo Cafeeiro não apaga mais Bogotá nem as medalhas de seis dos seus eventos ao abrir o jogo de novo.
+- **🏅 Eventos:** um evento que você já ganhou diz «🔁 Jogar de novo» em todas as regiões, não só nas que tinham a compra de jogar quando quiser.
 
 ## v5.10.0 — Estatísticas e preços da zona especial
 - **📊 Estatísticas:** um botão novo em ⚙️ mostra todas as contagens do jogo: tempo jogado, moedas ganhas, produtos vendidos e produzidos, Renome, Prestígio, conquistas, medalhas e figurinhas; e por região, a partida, os reinícios, as vezes concluída, os anos vividos, as moedas, cada evento com suas rodadas e medalhas, e o vendido e produzido de cada produto. Os que chegaram ao teto aparecem com «++» ou «∞».

@@ -4,6 +4,8 @@
 - **📊 Statistics:** new caps. For the whole game, products sold and produced add up every run of every region up to 999Oc++; Prestige reaches 9.999++ and medals of each kind 99++. In each region, years lived reach 99++, the current run's time shows ∞ from 100 h, research reads «done / total», each event counts up to 29++ rounds and 9++ medals of each kind, and products show the current run up to 999Sp++. The ⚙️ menu shows the same totals.
 - **🎖️ Medal achievements:** they ask for 1, 4 and 10 medals per event of the region (Bogotá: 7, 28 and 70; single-event ones: 1, 4 and 10).
 - **⛪ La Guayabera:** a wooden sign by the church reads «Vélez».
+- **Important fix:** restarting the Coffee Region no longer wipes Bogotá and the medals of six of its events the next time the game opens.
+- **🏅 Events:** an event you already won says «🔁 Play again» in every region, not only in those with the play-anytime purchase.
 
 ## v5.10.0 — Statistics and special zone prices
 - **📊 Statistics:** a new button in ⚙️ shows every count in the game: time played, coins earned, products sold and produced, Renown, Prestige, achievements, medals and stickers; and per region, the run, restarts, times completed, years lived, coins, each event with its rounds and medals, and what was sold and produced of each product. Those at their cap show «++» or «∞».

@@ -11,6 +11,8 @@ import { EVENT_OF_ZONE, MEDALS } from '../data/events.js';
 import { LOGROS_BY_ID } from '../data/logros.js';
 import { ALBUM, PAGE_BONUS } from '../data/album.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
+import { GOALS_BY_ID } from '../data/goals.js';
+import { PRODUCTS } from '../data/products.js';
 import { masteryReady } from '../sim/legacy.js';
 
 const KEY = 'mitierrita.save';
@@ -131,11 +133,17 @@ const OLD_OFFLINE_RESEARCH = {
 // v4.5 -> v4.6: Bogota changed from neighborhoods to a connected network with new recipes. Prior Bogota progress is
 // wiped as if never started (no refund): its state, events, medals, stickers, and logros. Anyone viewing Bogota returns to
 // Zipaquira. Runs once (`bogotaNet`).
+// (v5.11) Restarting Eje Cafetero used to drop the `bogotaNet` flag (a fresh root save), so the next load wiped a
+// current Bogota and the medals of six of its events. The flag is now part of every new root save, and a Bogota is only
+// wiped when it really is the old one: a claimed goal or a product that no longer exists (the old goals were bz01…).
 const OLD_BOGOTA_EVENTS = ['aguacero_chorro', 'navidad_septima', 'festival_zona_g', 'pico_placa', 'ventarron_usaquen', 'paro_camionero'];
+const isOldBogota = (st) =>
+  (st.goals?.claimed ?? []).some((id) => !GOALS_BY_ID[id]) ||
+  ['sold', 'produced'].some((kind) => Object.keys(st.stats?.[kind] ?? {}).some((id) => !PRODUCTS[id]));
 function resetOldBogota(root) {
   if (root.bogotaNet) return;
   root.bogotaNet = true;
-  if (!root.regions?.bogota) return;
+  if (!root.regions?.bogota || !isOldBogota(root.regions.bogota)) return;
   delete root.regions.bogota;
   if (root.settings?.zone === 'bogota') root.settings.zone = 'zipaquira';
   const p = root.profile;
@@ -261,6 +269,8 @@ function finish(data, base, stations, zones, mules) {
     // Other regions, each with its own independent game state.
     legacy: { resets: Math.min(CAPS.resets, data.legacy?.resets ?? 0) },
     goals: { ...base.goals, ...data.goals, claimed },
+    // (v5.11) Only what the save says: a new save has it from the start, an old one gets it from resetOldBogota.
+    bogotaNet: data.bogotaNet,
     // Text backup (for transferring a save to another device).
     ...(data.regions && { regions: Object.fromEntries(Object.entries(data.regions).map(([id, st]) => [id, migrate(st)])) }),
     version: SAVE_VERSION,
