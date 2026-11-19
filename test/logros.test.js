@@ -42,3 +42,17 @@ test('what earlier games did still counts on starting over', () => {
   assert.ok(won.includes('bolsas'));
   assert.ok(!won.includes('pueblo'), 'it had already been paid in the previous game');
 });
+
+test('the medal achievements ask for 10 medals per event of their region at the last tier (v5.10)', async () => {
+  const { LOGROS } = await import('../src/data/logros.js');
+  const { EVENTS, EVENTS_BY_ID } = await import('../src/data/events.js');
+  const { REGION_OF_ZONE } = await import('../src/data/regions.js');
+  const { CAPS } = await import('../src/data/caps.js');
+  for (const l of LOGROS) {
+    const [kind, id] = l.metric.split(':');
+    const events = kind === 'medals' ? EVENTS.filter((e) => REGION_OF_ZONE[e.zone] === l.region).length : kind === 'eventMedals' && EVENTS_BY_ID[id] ? 1 : 0;
+    if (!events) continue;
+    assert.deepEqual(l.tiers, [1 * events, 4 * events, 10 * events].map((n, i) => (kind === 'medals' ? n : [1, 4, 10][i])), l.id);
+    assert.ok(l.tiers.at(-1) <= events * CAPS.medalsPerKind, `${l.id}: reachable with gold only`);
+  }
+});

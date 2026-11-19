@@ -4,7 +4,7 @@ import { legacyMult, nextLegacyMult } from '../sim/modifiers.js';
 import { regionOf } from '../data/regions.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { t } from '../i18n/index.js';
-import { cappedCoins, cappedPlayTime } from './capped.js';
+import { cappedCoins, cappedRunTime } from './capped.js';
 import { CAPS } from '../data/caps.js';
 import { finaleProgress } from '../sim/finale.js';
 
@@ -21,7 +21,7 @@ export function showMastery(state, onRestart, finale = {}) {
   document.getElementById('mastery-text').innerHTML =
     t('Llevaste todas las estaciones de {region}, sus <b>arrieros</b> y sus <b>rutas</b> al <b>nivel 100</b>, con todos los objetivos y todas las investigaciones. Todo trabaja a toda marcha.', { region: regionOf(state).name });
   document.getElementById('mastery-stats').textContent =
-    `${t('Partida {n}', { n: runs })}${mult > 1 ? ` ${t('(producción {mult})', { mult: formatMult(mult) })}` : ''} · ${t('Tiempo jugado: {time} · Ganado en total: 💰 {coins}', { time: cappedPlayTime(state.playTime), coins: cappedCoins(state.totalEarned) })}`;
+    `${t('Partida {n}', { n: runs })}${mult > 1 ? ` ${t('(producción {mult})', { mult: formatMult(mult) })}` : ''} · ${t('Tiempo jugado: {time} · Ganado en total: 💰 {coins}', { time: cappedRunTime(state.playTime), coins: cappedCoins(state.totalEarned) })}`;
   document.getElementById('mastery-note').textContent =
     (capped
       ? t('Puedes volver a empezar {region} desde {zone} (monedas, niveles, investigaciones y objetivos desde cero), con la producción en {mult}, el máximo (ya no se duplica más). Las otras regiones siguen como están. Se conservan los ajustes. Volver a empezar te da {renown} ⭐ de Renombre.', { region: regionOf(state).name, zone: ZONES_BY_ID[regionOf(state).zones[0]].name, mult: formatMult(next), renown: RESTART_RENOWN })

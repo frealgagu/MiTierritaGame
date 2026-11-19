@@ -16,7 +16,7 @@ import { showCalendar } from './ui/calendar.js';
 import { Chatter } from './ui/Chatter.js';
 import { EventsView } from './ui/EventsView.js';
 import { RenownView } from './ui/RenownView.js';
-import { StatsView } from './ui/StatsView.js';
+import { StatsView, gameTotals } from './ui/StatsView.js';
 import { setLook } from './render/look.js';
 import { checkLogros } from './sim/logros.js';
 import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/splash.js';
@@ -30,7 +30,6 @@ import { bindNative, isNativeApp } from './native.js';
 import { backupName, pickBackupFile, saveBackupFile } from './backup.js';
 import { APP_VERSION, checkForUpdate } from './update.js';
 import { SONGS } from './audio/songs.js';
-import { sumValues } from './sim/state.js';
 import { bindTip, tipMode } from './tip.js';
 import { checkMastery, restartState, startZone } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
@@ -50,7 +49,7 @@ import { Sound } from './audio/Sound.js';
 import { Music } from './audio/Music.js';
 import { playGrandFinale } from './ui/GrandFinale.js';
 import { checkFinaleLogro, finaleDue, finaleUnlocked } from './sim/finale.js';
-import { cappedCoins, cappedPlayTime, cappedStat } from './ui/capped.js';
+import { cappedCoins, cappedPlayTime, cappedStatTotal } from './ui/capped.js';
 
 const AUTOSAVE_MS = 10_000;
 const MIN_OFFLINE_S = 30;
@@ -718,14 +717,12 @@ function bindMenu(game, sound, music, getActive, grandFinale, stats) {
     document.getElementById('reset-slide').hidden = true;
     document.getElementById('reset-btn').hidden = false;
     const s = game.state;
-    // Across all regions (v3.67: previously counted only Eje Cafetero coffee cherries).
-    const all = [s, ...Object.values(s.regions ?? {})];
-    const sold = all.reduce((n, st) => n + sumValues(st.stats.sold), 0);
-    const earned = all.reduce((n, st) => n + (st.totalEarned ?? 0), 0);
+    // Across all regions and (v5.10) every run, the same numbers as 📊 Statistics › The whole game.
+    const { sold, earned } = gameTotals(s);
     document.getElementById('menu-stats').innerHTML = [
       t('⏱️ Tiempo jugado: <b>{time}</b>', { time: cappedPlayTime(s.playTime) }),
       t('💰 Ganado en total: <b>{coins}</b>', { coins: cappedCoins(earned) }),
-      t('📦 Productos vendidos: <b>{n}</b>', { n: cappedStat(sold) }),
+      t('📦 Productos vendidos: <b>{n}</b>', { n: cappedStatTotal(sold) }),
     ].map((li) => `<li>${li}</li>`).join('');
     // The grand finale (v5.9), once every achievement is complete.
     document.getElementById('finale-btn').hidden = !finaleUnlocked(s.profile);

@@ -8,7 +8,11 @@ export const cappedNumber = (value, max) => capped(value, max, formatNumber);
 export const cappedCount = (value, max) => capped(value, max, formatCount);
 export const cappedCoins = (value) => cappedNumber(value, CAPS.coins);
 export const cappedStat = (value) => cappedNumber(value, CAPS.stat);
+// (v5.10) A product over every run, or the whole game's products.
+export const cappedStatTotal = (value) => cappedNumber(value, CAPS.statTotal);
 export const cappedRenown = (value) => cappedCount(value, CAPS.renown);
 export const cappedPrestige = (value) => cappedCount(value, CAPS.prestige);
 // Time played: the usual duration, or «∞» from the cap on.
 export const cappedPlayTime = (seconds) => (seconds / 3600 >= CAPS.playHours ? '∞' : formatDuration(seconds));
+// (v5.10) Time of the current run of a region (Statistics and the ending screens): «∞» from 100 h.
+export const cappedRunTime = (seconds) => (seconds / 3600 >= CAPS.runHours ? '∞' : formatDuration(seconds));

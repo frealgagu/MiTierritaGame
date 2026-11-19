@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.11.0 — Statistics caps and the Vélez sign
+- **📊 Statistics:** new caps. For the whole game, products sold and produced add up every run of every region up to 999Oc++; Prestige reaches 9.999++ and medals of each kind 99++. In each region, years lived reach 99++, the current run's time shows ∞ from 100 h, research reads «done / total», each event counts up to 29++ rounds and 9++ medals of each kind, and products show the current run up to 999Sp++. The ⚙️ menu shows the same totals.
+- **🎖️ Medal achievements:** they ask for 1, 4 and 10 medals per event of the region (Bogotá: 7, 28 and 70; single-event ones: 1, 4 and 10).
+- **⛪ La Guayabera:** a wooden sign by the church reads «Vélez».
+
 ## v5.10.0 — Statistics and special zone prices
 - **📊 Statistics:** a new button in ⚙️ shows every count in the game: time played, coins earned, products sold and produced, Renown, Prestige, achievements, medals and stickers; and per region, the run, restarts, times completed, years lived, coins, each event with its rounds and medals, and what was sold and produced of each product. Those at their cap show «++» or «∞».
 - **⭐ Special zone:** sale prices follow the series 2⁰, 2⁵, 2¹⁰ … 2³⁵ (×32 from one station to the next). The last four sell for ×2, ×2, ×4 and ×4 more, and their upgrade cost and the cost of building the next station go up in the same proportion. The whole zone now takes about 25 hours of play.

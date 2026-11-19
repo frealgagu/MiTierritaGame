@@ -191,11 +191,11 @@ const BOGOTA = [
   { id: 'bg_anos', icon: '📅', name: 'Rolo de corazón', text: 'Vive {n} años de juego en Bogotá', metric: 'years', tiers: [4, 16, 64], reward: [1, 2, 4] },
   { id: 'bg_final', icon: ICON.plazaBolivar, name: 'Hasta la Gran Feria', text: 'Completa Bogotá {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
   { id: 'bg_maestro', icon: '🏅', name: 'Maestro de la capital', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
-  { id: 'bg_medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [6, 24, 60], reward: [1, 2, 4] },
+  { id: 'bg_medallas', icon: '🎖️', name: 'Coleccionista', text: 'Gana {n} medallas', metric: 'medals', tiers: [7, 28, 70], reward: [1, 2, 4] },
   { id: 'bg_todas', icon: '🗺️', name: 'De todas partes', text: 'Gana una medalla en {n} eventos distintos', metric: 'eventsMedaled', tiers: [3, 6], reward: [2, 4] },
   { id: 'bg_oro', icon: '🥇', name: 'De oro', text: 'Gana el oro en {n} eventos distintos', metric: 'eventsGold', tiers: [1, 3, 6], reward: [1, 3, 6] },
   // Gran Feria (v4.7), seventh event: spawns once medals earned in other six, pays well.
-  { id: 'bg_gran_feria', icon: ICON.feriaMiTierrita, name: 'La feria del país', text: 'Gana {n} medallas en la Gran Feria', metric: 'eventMedals:gran_feria_bog', tiers: [1, 3, 6], reward: [8, 16, 32] },
+  { id: 'bg_gran_feria', icon: ICON.feriaMiTierrita, name: 'La feria del país', text: 'Gana {n} medallas en la Gran Feria', metric: 'eventMedals:gran_feria_bog', tiers: [1, 4, 10], reward: [8, 16, 32] },
   { id: 'bg_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 3, 6], reward: [1, 2, 4] },
   { id: 'bg_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [12, 24, researchOf('bogota')], reward: [1, 2, 4] },
 ];
@@ -211,7 +211,7 @@ const SANANDRES = [
   { id: 'sa_anos', icon: '📅', name: 'Isleño de corazón', text: 'Vive {n} años de juego en la isla', metric: 'years', tiers: [4, 16, 64], reward: [1, 2, 4] },
   { id: 'sa_final', icon: ICON.iglesiaLoma, name: 'El tour completo', text: 'Completa el tour de la isla {n} veces', metric: 'endings', tiers: [1, 3, 10], reward: [2, 4, 8] },
   { id: 'sa_maestro', icon: '🏅', name: 'Maestro de la isla', text: 'Lleva todo al nivel 100 {n} veces', metric: 'masteries', tiers: [1, 3, 10], reward: [4, 8, 16] },
-  { id: 'sa_luna', icon: ICON.lunaVerde, name: 'Bajo la Luna Verde', text: 'Gana {n} medallas en la Fiesta de la Luna Verde', metric: 'eventMedals:luna_verde', tiers: [1, 3, 6], reward: [4, 8, 16] },
+  { id: 'sa_luna', icon: ICON.lunaVerde, name: 'Bajo la Luna Verde', text: 'Gana {n} medallas en la Fiesta de la Luna Verde', metric: 'eventMedals:luna_verde', tiers: [1, 4, 10], reward: [4, 8, 16] },
   { id: 'sa_album', icon: '📖', name: 'Álbum lleno', text: 'Llena {n} páginas del álbum', metric: 'pages', tiers: [1, 2, 3], reward: [1, 2, 4] },
   { id: 'sa_ciencia', icon: '🔬', name: 'Ingeniero', text: 'Compra {n} investigaciones en una partida', metric: 'research', tiers: [2, 4, researchOf('sanandres')], reward: [1, 2, 4] },
 ];

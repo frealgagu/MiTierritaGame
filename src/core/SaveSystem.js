@@ -228,7 +228,7 @@ function migrateProfile(root) {
     for (const rec of Object.values(p.medals ?? {})) for (const k in rec.count ?? {}) rec.count[k] = Math.min(CAPS.medalsPerKind, rec.count[k]);
     for (const life of [p.lifetime, ...Object.values(p.lifetimes ?? {})]) {
       if (!life) continue;
-      for (const kind of ['sold', 'produced']) for (const id in life[kind] ?? {}) life[kind][id] = Math.min(CAPS.stat, life[kind][id]);
+      for (const kind of ['sold', 'produced']) for (const id in life[kind] ?? {}) life[kind][id] = Math.min(CAPS.statTotal, life[kind][id]);
       life.earned = Math.min(CAPS.lifetimeEarned, life.earned ?? 0);
     }
   }

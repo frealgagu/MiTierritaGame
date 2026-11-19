@@ -132,6 +132,7 @@ export class Scene {
     this.eventArt = game.state.event ? new EventArt(this, game.state) : null;
     this.mules = new Map();
     this.drawExitSign();
+    this.drawPlazaSign();
     this.drawZoneSign();
     // Zone keeper beside sign (v3.12): tapping speaks (main.js: onTalk).
     this.onTalk = () => {};
@@ -311,6 +312,18 @@ export class Scene {
     const view = new ZoneSign(`${this.zone.icon} ${this.zone.name}`, `${region.icon} ${region.name}`);
     const [sx, sy] = this.zone.signShift ?? [0, 0];
     const [gx, gy] = [ZONE_SIGN[0] + sx, ZONE_SIGN[1] + sy];
+    const p = iso(gx, gy);
+    view.position.set(p.x, p.y);
+    view.zIndex = gx + gy;
+    this.objects.addChild(view);
+  }
+
+  // A small wooden sign naming a square (v5.10: «⛪ Vélez» by the church of La Guayabera).
+  drawPlazaSign() {
+    const sign = this.zone.plaza?.sign;
+    if (!sign) return;
+    const view = new WoodSign(sign.text);
+    const [gx, gy] = sign.at;
     const p = iso(gx, gy);
     view.position.set(p.x, p.y);
     view.zIndex = gx + gy;

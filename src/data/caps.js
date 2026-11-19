@@ -9,27 +9,35 @@ const BIG = 1e36;
 export const CAPS = {
   // Coins: balance and coins earned in the current run of a region.
   coins: BIG,
-  // Sold, produced and imported per product, in the current run and summed over finished runs.
-  stat: BIG,
+  // (v5.10) Sold, produced and imported per product in the current run of a region: 1 Oc, shown «999Sp++».
+  stat: 1e27,
+  // (v5.10) Each product summed over every run of a region, and the whole game's products sold or produced
+  // (Statistics, ⚙️): 1 No, shown «999Oc++». Restarts keep adding up to it.
+  statTotal: 1e30,
   // Coins earned summed over finished runs of a region.
   lifetimeEarned: BIG,
   // Game years lived in a region (achievement «A whole life»). The calendar keeps running; only the
-  // counter stops.
-  years: 1000,
+  // counter stops. (v5.10) 100, shown «99++».
+  years: 100,
   // Time played shown in the menu and on the ending screens, in hours (the clock keeps running). From
   // the cap on it reads «∞» instead of «999 h++».
   playHours: 1000,
+  // (v5.10) Time played in the current run of a region (Statistics and the ending screens), in hours: «∞».
+  runHours: 100,
   // Restarts of a region after its second ending, the run number («Game 60») and the times the region
   // was completed or brought to its second ending. A fixed limit, shown without «++»: production stops
   // doubling at the same 60 (×2⁶⁰, MAX_LEGACY_RESETS in sim/modifiers.js); restarting is still allowed.
   resets: 60,
   // Medals of each kind (bronze, silver, gold) won in one event.
-  medalsPerKind: 100,
-  // Attempts at one event (its round).
-  eventRound: 100,
+  // (v5.10) 10, shown «9++»; the region medal achievements ask for 10 per event at their last tier.
+  medalsPerKind: 10,
+  // Medals of each kind summed over every event (Statistics), shown «99++».
+  medalsShown: 100,
+  // Attempts at one event (its round). (v5.10) 30, shown «29++». The round does not change the challenge.
+  eventRound: 30,
   // Renown balance and Prestige (all Renown ever earned).
   renown: 10000,
-  prestige: 100000,
+  prestige: 10000, // (v5.10) like the Renown balance
   // Finished events kept in the history: only the last one.
   history: 1,
 };

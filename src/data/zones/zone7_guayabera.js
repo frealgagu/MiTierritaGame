@@ -31,6 +31,8 @@ export const ZONE7 = {
     x: 12, y: 12, w: 4, h: 4,
     street: [[11.5, 11.5], [11.5, 16.5], [16.5, 16.5]],
     houses: [[9.5, 13.3], [9.6, 15.2], [12.4, 18.4], [14.3, 18.3]],
+    // (v5.10) A small wooden sign naming the church's town; the zone is still La Guayabera.
+    sign: { text: '⛪ Vélez', at: [17.1, 14.6] },
   },
   yard: { x: 20, y: 19, w: 4, h: 1 },
   jeepRoad: [[22.7, 19.5], [20.5, 19.5], [20.5, 25.9]],

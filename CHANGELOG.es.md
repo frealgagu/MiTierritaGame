@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v5.11.0 — Topes de las estadísticas y letrero de Vélez
+- **📊 Estadísticas:** nuevos topes. En todo el juego, los productos vendidos y producidos suman todas las partidas de todas las regiones hasta 999Oc++; el Prestigio llega a 9.999++ y las medallas de cada tipo a 99++. En cada región, los años vividos llegan a 99++, el tiempo de la partida actual a ∞ desde 100 h, las investigaciones se ven como «hechas / total», cada evento cuenta hasta 29++ rondas y 9++ medallas de cada tipo, y los productos muestran la partida actual hasta 999Sp++. El menú ⚙️ muestra los mismos totales.
+- **🎖️ Logros de medallas:** piden 1, 4 y 10 medallas por cada evento de la región (Bogotá: 7, 28 y 70; los de un solo evento: 1, 4 y 10).
+- **⛪ La Guayabera:** un letrero de madera junto a la iglesia dice «Vélez».
+
 ## v5.10.0 — Estadísticas y precios de la zona especial
 - **📊 Estadísticas:** un botón nuevo en ⚙️ muestra todos los conteos del juego: tiempo jugado, monedas ganadas, productos vendidos y producidos, Renombre, Prestigio, logros, medallas y láminas; y por región, la partida, los reinicios, las veces completada, los años vividos, las monedas, cada evento con sus rondas y medallas, y lo vendido y producido de cada producto. Los que llegaron a su tope se ven con «++» o «∞».
 - **⭐ Zona especial:** los precios de venta siguen la serie 2⁰, 2⁵, 2¹⁰ … 2³⁵ (×32 de una estación a la siguiente). Las cuatro últimas venden ×2, ×2, ×4 y ×4 más caro, y su costo de mejora y el de construir la estación siguiente suben en la misma proporción. La zona completa toma ahora unas 25 horas de juego.

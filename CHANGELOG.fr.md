@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## v5.11.0 — Plafonds des statistiques et panneau de Vélez
+- **📊 Statistiques :** nouveaux plafonds. Pour tout le jeu, les produits vendus et fabriqués additionnent toutes les parties de toutes les régions jusqu’à 999Oc++ ; le Prestige atteint 9.999++ et les médailles de chaque type 99++. Dans chaque région, les années vécues atteignent 99++, le temps de la partie en cours affiche ∞ à partir de 100 h, les recherches s’affichent « faites / total », chaque événement compte jusqu’à 29++ manches et 9++ médailles de chaque type, et les produits montrent la partie en cours jusqu’à 999Sp++. Le menu ⚙️ affiche les mêmes totaux.
+- **🎖️ Succès de médailles :** ils demandent 1, 4 et 10 médailles par événement de la région (Bogotá : 7, 28 et 70 ; ceux d’un seul événement : 1, 4 et 10).
+- **⛪ La Guayabera :** un panneau en bois près de l’église indique « Vélez ».
+
 ## v5.10.0 — Statistiques et prix de la zone spéciale
 - **📊 Statistiques :** un nouveau bouton dans ⚙️ affiche tous les compteurs du jeu : temps de jeu, pièces gagnées, produits vendus et fabriqués, Renom, Prestige, succès, médailles et vignettes ; et par région, la partie, les redémarrages, les fois terminée, les années vécues, les pièces, chaque événement avec ses manches et médailles, et le vendu et le fabriqué de chaque produit. Ceux qui ont atteint leur plafond s’affichent « ++ » ou « ∞ ».
 - **⭐ Zone spéciale :** les prix de vente suivent la série 2⁰, 2⁵, 2¹⁰ … 2³⁵ (×32 d’une station à la suivante). Les quatre dernières vendent ×2, ×2, ×4 et ×4 plus cher, et leur coût d’amélioration et celui de construire la station suivante augmentent dans la même proportion. La zone complète prend maintenant environ 25 heures de jeu.
