@@ -29,7 +29,9 @@ const verbose = process.argv.includes('--detail');
 // With --detail, a 📊 line every BALANCE_DETAIL game minutes (30 by default).
 const detailSteps = Math.max(1, Math.round(Number(process.env.BALANCE_DETAIL ?? 30) * 600));
 let dumpAt = process.env.BALANCE_DUMP ? { minute: Number(process.env.BALANCE_DUMP.split(':')[0]), file: process.env.BALANCE_DUMP.split(':').slice(1).join(':') } : null;
-const game = new Game(process.env.BALANCE_LOAD ? JSON.parse((await import('node:fs')).readFileSync(process.env.BALANCE_LOAD)) : process.env.BALANCE_REGION ? createInitialState(0, process.env.BALANCE_REGION) : undefined);
+// A dump (BALANCE_DUMP) is a region's state: laid over a fresh one, so it carries the region's kept data (keep).
+const loaded = process.env.BALANCE_LOAD && JSON.parse((await import('node:fs')).readFileSync(process.env.BALANCE_LOAD));
+const game = new Game(loaded ? Object.assign(createInitialState(0, loaded.region), loaded) : createInitialState(0, process.env.BALANCE_REGION ?? 'cafetero'));
 const s = game.state;
 const mmss = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
 const openZones = () => ZONE_LIST.filter((z) => s.zones[z.id]?.unlocked).map((z) => z.id);
@@ -166,7 +168,7 @@ game.bus.on('goalClaimed', ({ goal, zone }) => {
 });
 game.bus.on('unlocked', ({ id }) => events.push(`${mmss(s.playTime)}  🏗️  construye ${id}`));
 game.bus.on('research', ({ id }) => events.push(`${mmss(s.playTime)}  🔬 investiga ${id}`));
-if (process.env.BALANCE_RESETS) s.legacy.resets = Number(process.env.BALANCE_RESETS);
+if (process.env.BALANCE_RESETS) s.keep.resets = Number(process.env.BALANCE_RESETS);
 game.bus.on('mastered', () => {
   events.push(`${mmss(s.playTime)}  🏅 segundo final: todo al nivel 100`);
   console.error(`🏅 second ending: ${mmss(s.playTime - (zoneEnd.pueblo ?? s.playTime))} after the Pueblo (total ${mmss(s.playTime)})`);

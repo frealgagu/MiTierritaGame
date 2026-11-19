@@ -178,7 +178,7 @@ export function claimGoal(state, id, bus) {
     if (next) unlockZone(state, next, bus);
     // Final zone (v3.8): region marked permanently completed (its events spawn in all its zones).
     // A region still missing zones (wip, v3.15) doesn't mark completed.
-    else if (!REGIONS_BY_ID[state.region ?? 'cafetero'].wip) state.regionDone = true;
+    else if (!REGIONS_BY_ID[state.region].wip) state.keep.done = true;
   }
   bus.emit('goalClaimed', { goal, zone: zoneId });
   return true;

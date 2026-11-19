@@ -75,7 +75,7 @@ export class MoneyView {
 
     // What multiplies it.
     const mults = [];
-    const resets = s.legacy?.resets ?? 0;
+    const resets = s.keep?.resets ?? 0;
     if (resets) mults.push(row(t('🔁 Reinicios ({n}): producción y Willys', { n: resets }), mult(legacyMult(s))));
     if (!s.event) {
       const season = seasonOf(clockOf(s));

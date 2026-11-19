@@ -25,7 +25,7 @@ function allReady() {
 }
 
 test('the special zone is secret: no list names it until it opens', () => {
-  const root = createInitialState(0);
+  const root = createGameState(0);
   assert.ok(!shownRegions(isOpen(root)).some((r) => r.id === 'sanandres'));
   assert.ok(openSpecial(root));
   assert.ok(shownRegions(isOpen(root)).some((r) => r.id === 'sanandres'));
@@ -38,9 +38,9 @@ test('it opens when every other region has the second ending or a restart', () =
   assert.ok(!SPECIAL.devOnly, 'since v5.5 it opens for real');
   // A reset counts as much as the second ending.
   root.regions.bogota.mastered = false;
-  root.regions.bogota.legacy.resets = 1;
+  root.regions.bogota.keep.resets = 1;
   assert.deepEqual(openRegions(root), ['sanandres']);
-  assert.equal(regionState(root, 'sanandres').settings.zone, 'sanandres');
+  assert.equal(regionState(root, 'sanandres').zones.sanandres.unlocked, true);
   assert.deepEqual(openRegions(root), [], 'only once');
   // Missing one region, it waits.
   const other = allReady();

@@ -19,3 +19,12 @@ export function format9(now = 0, regions = ['santander']) {
   root.regions = Object.fromEntries(regions.map((id) => [id, createInitialState(now, id)]));
   return root;
 }
+
+// A whole game's save holding the given region saves (each replaces its region) linked to their profile entries:
+// for tests that build a region on its own and then need the whole game (restart, events, achievements).
+import { linkRegions } from '../../src/sim/state.js';
+export function gameWith(...states) {
+  const root = newGame();
+  for (const st of states) root.regions[st.region] = st;
+  return linkRegions(root);
+}

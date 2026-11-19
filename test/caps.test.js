@@ -1,11 +1,13 @@
 import { test } from 'node:test';
+import { World } from '../src/core/World.js';
+import { newGame, format9 } from './helpers/game.js';
 import assert from 'node:assert/strict';
 import { CAPS, capAdd, capped } from '../src/data/caps.js';
 import { Game } from '../src/core/Game.js';
 import { exportSave, importSave } from '../src/core/SaveSystem.js';
 import { EVENTS, EVENT_OF_ZONE } from '../src/data/events.js';
 import { boardObjective, buyAction, eventDef, finishEvent, endEvent, startEvent } from '../src/sim/events.js';
-import { gainRenown, profileOf } from '../src/sim/renown.js';
+import { gainRenown } from '../src/sim/renown.js';
 import { bankRun, metric } from '../src/sim/logros.js';
 import { capCoins } from '../src/sim/modifiers.js';
 import { createStationState } from '../src/sim/production.js';
@@ -39,46 +41,46 @@ test('Renown, Prestige and per-product counters stop at their caps (v5.9)', () =
 });
 
 test('finished runs keep adding past the run cap up to the all-runs cap, and the years counter stops at its cap (v5.10)', () => {
-  const s = new Game().state;
-  s.profile = profileOf(s); // a lone region save carrying the player's profile (v5.13: it lives in the whole game's save)
+  const root = newGame();
+  const s = root.regions.cafetero;
+  const p = root.profile;
   s.stats.sold.coffee_bag = CAPS.run.sold;
-  bankRun(s, s.profile);
-  bankRun(s, s.profile);
-  assert.equal(s.profile.lifetime.sold.coffee_bag, 2 * CAPS.run.sold, 'restarts count');
-  assert.equal(metric(s, 'sold:coffee_bag'), 3 * CAPS.run.sold);
-  s.profile.lifetime.sold.coffee_bag = CAPS.total.sold - 1;
-  bankRun(s, s.profile);
-  assert.equal(s.profile.lifetime.sold.coffee_bag, CAPS.total.sold);
-  assert.equal(metric(s, 'sold:coffee_bag'), CAPS.total.sold);
+  bankRun(s, p);
+  bankRun(s, p);
+  assert.equal(p.lifetime.sold.coffee_bag, 2 * CAPS.run.sold, 'restarts count');
+  assert.equal(metric(s, 'sold:coffee_bag', p), 3 * CAPS.run.sold);
+  p.lifetime.sold.coffee_bag = CAPS.total.sold - 1;
+  bankRun(s, p);
+  assert.equal(p.lifetime.sold.coffee_bag, CAPS.total.sold);
+  assert.equal(metric(s, 'sold:coffee_bag', p), CAPS.total.sold);
   s.playTime = 1e12;
-  assert.equal(metric(s, 'years'), CAPS.years);
+  assert.equal(metric(s, 'years', p), CAPS.years);
 });
 
 test('the event history keeps only the last finished event, and medals per kind stop at their cap (v5.9)', () => {
-  const game = new Game();
-  const s = game.state;
-  profileOf(s);
-  for (const id of EVENT_OF_ZONE.finca.stations) s.stations[id] ??= createStationState();
+  const root = newGame();
+  const game = new World(root);
+  const cafe = root.regions.cafetero;
+  for (const id of EVENT_OF_ZONE.finca.stations) cafe.stations[id] ??= createStationState();
   const def = EVENTS.find((d) => d.zone === 'finca');
-  s.profile.medals[def.id] = { best: 'gold', count: { gold: CAPS.medalsPerKind } };
-  s.profile.history = [{ event: 'old', round: 1, medal: 'bronze', time: 1 }];
+  root.profile.medals[def.id] = { best: 'gold', count: { gold: CAPS.medalsPerKind } };
+  root.profile.history = [{ event: 'old', round: 1, medal: 'bronze', time: 1 }];
   game.step(0.1);
-  const board = startEvent(s, 'finca');
+  const board = startEvent(root, 'finca');
   const obj = boardObjective(board);
   for (const [p, n] of Object.entries(obj.items)) board.stats[obj.kind][p] = n;
   board.coins = 1e15;
   for (const a of eventDef(board).actions) buyAction(board, a.id);
   board.playTime = 60;
-  assert.ok(finishEvent(s, 'finca').done);
-  endEvent(s, 'finca');
-  assert.equal(s.profile.history.length, CAPS.history);
-  assert.equal(s.profile.history.at(-1).event, def.id);
-  assert.equal(s.profile.medals[def.id].count.gold, CAPS.medalsPerKind);
+  assert.ok(finishEvent(root, 'finca').done);
+  endEvent(root, 'finca');
+  assert.equal(root.profile.history.length, CAPS.history);
+  assert.equal(root.profile.history.at(-1).event, def.id);
+  assert.equal(root.profile.medals[def.id].count.gold, CAPS.medalsPerKind);
 });
 
 test('loading a save trims the history and brings counters down to their caps (v5.9)', () => {
-  const s = new Game().state;
-  profileOf(s);
+  const s = format9(0, []);
   s.profile.history = Array.from({ length: 50 }, (_, i) => ({ event: 'broca', round: i + 1, medal: 'gold', time: 60 }));
   s.profile.renown = CAPS.renown * 5;
   s.profile.renownTotal = CAPS.prestige * 5;
@@ -106,21 +108,22 @@ test('a capped counter shows the number just below its cap followed by ++ (v5.9)
 });
 
 test('restarts, the run number and the completed / second-ending counts stop at 60 (v5.9)', async () => {
-  const { restartState } = await import('../src/sim/legacy.js');
+  const { restartRegion } = await import('../src/sim/legacy.js');
   const { legacyMult, MAX_LEGACY_RESETS } = await import('../src/sim/modifiers.js');
-  let s = new Game().state;
-  s.legacy = { resets: CAPS.resets - 1 };
-  s = restartState(s);
-  assert.equal(s.legacy.resets, 60);
-  s = restartState(s);
-  assert.equal(s.legacy.resets, 60, 'stays at 60');
+  const { newGame } = await import('./helpers/game.js');
+  const root = newGame();
+  root.regions.cafetero.keep.resets = CAPS.resets - 1;
+  let s = restartRegion(root, 'cafetero');
+  assert.equal(s.keep.resets, 60);
+  s = restartRegion(root, 'cafetero');
+  assert.equal(s.keep.resets, 60, 'stays at 60');
   assert.equal(legacyMult(s), 2 ** MAX_LEGACY_RESETS);
   s.mastered = true;
   const { REGIONS_BY_ID } = await import('../src/data/regions.js');
   const last = REGIONS_BY_ID.cafetero.zones.at(-1);
   s.zones[last] = { ...s.zones[last], complete: true };
-  assert.equal(metric(s, 'masteries'), 60, 'not 61');
-  assert.equal(metric(s, 'endings'), 60, 'not 61');
+  assert.equal(metric(s, 'masteries', root.profile), 60, 'not 61');
+  assert.equal(metric(s, 'endings', root.profile), 60, 'not 61');
 });
 
 test('the v5.12 product caps read as agreed, and run time ∞ from 100 h', async () => {

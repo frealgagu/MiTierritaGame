@@ -96,7 +96,7 @@ export class StatsView {
     const open = openRegionStates(root);
     const current = open.find((r) => r.region.id === this.region) ?? open[0];
     const { region, state } = current;
-    const resets = state.legacy?.resets ?? 0;
+    const resets = state.keep.resets;
     // Options carry only the name (the phone's own list may not draw the icon font), like in Renown.
     const select = `<div class="renown-regions stats-regions"><span>${region.icon}</span><select data-stats-region aria-label="${t('Región')}">${open.map((r) => `<option value="${r.region.id}" ${r.region.id === region.id ? 'selected' : ''}>${r.region.name}</option>`).join('')}</select></div>`;
     const general = card(`${region.icon} ${region.name}`, [

@@ -1,5 +1,5 @@
 import { test } from 'node:test';
-import { profileOf } from '../src/sim/renown.js';
+import { newGame, cafeOf } from './helpers/game.js';
 import assert from 'node:assert/strict';
 import { createInitialState } from '../src/sim/state.js';
 import { unlockStation } from '../src/sim/upgrades.js';
@@ -15,8 +15,7 @@ import { maxedRegion } from './helpers/maxed.js';
 const bus = { emit: () => {} };
 
 function finca(coins) {
-  const s = createInitialState(0);
-  profileOf(s); // a lone region save carrying the player's profile
+  const s = cafeOf(newGame(0));
   s.coins = 1e12;
   for (const id of ZONES_BY_ID.finca.chain) unlockStation(s, id, bus);
   s.coins = coins;
@@ -33,25 +32,26 @@ test('the event clock shows ∞ past 999:59 (v4.1)', async () => {
 });
 
 test('upgrade the whole zone: it shows after restarting the region, costs 10 ⭐ and applies to the region (v4.1)', () => {
-  const s = finca(0);
-  assert.equal(zoneBoostStatus(s, s, 'finca'), 'hidden', 'without restarting it is not shown');
-  s.legacy = { resets: 1 };
-  assert.equal(zoneBoostStatus(s, s, 'finca'), 'locked');
-  s.profile.renown = ZONE_BOOST_COST - 1;
-  assert.equal(buyZoneBoostUnlock(s.profile, 'cafetero'), false, 'not enough Renown');
-  s.profile.renown = ZONE_BOOST_COST + 2;
-  assert.ok(buyZoneBoostUnlock(s.profile, 'cafetero'));
-  assert.equal(s.profile.renown, 2);
-  assert.equal(zoneBoostStatus(s, s, 'finca'), 'ready');
-  assert.equal(zoneBoostStatus(s, s, 'trapiche'), 'ready', 'the whole region');
-  assert.equal(buyZoneBoostUnlock(s.profile, 'cafetero'), false, 'only once');
+  const root = newGame(0);
+  const s = cafeOf(root);
+  assert.equal(zoneBoostStatus(root, s, 'finca'), 'hidden', 'without restarting it is not shown');
+  s.keep.resets = 1;
+  assert.equal(zoneBoostStatus(root, s, 'finca'), 'locked');
+  root.profile.renown = ZONE_BOOST_COST - 1;
+  assert.equal(buyZoneBoostUnlock(root.profile, 'cafetero'), false, 'not enough Renown');
+  root.profile.renown = ZONE_BOOST_COST + 2;
+  assert.ok(buyZoneBoostUnlock(root.profile, 'cafetero'));
+  assert.equal(root.profile.renown, 2);
+  assert.equal(zoneBoostStatus(root, s, 'finca'), 'ready');
+  assert.equal(zoneBoostStatus(root, s, 'trapiche'), 'ready', 'the whole region');
+  assert.equal(buyZoneBoostUnlock(root.profile, 'cafetero'), false, 'only once');
   // In an event, only if that event was already won with gold.
   const board = { ...s, event: { id: 'broca' } };
-  assert.equal(zoneBoostStatus(s, board, 'finca'), 'hidden');
-  s.profile.medals = { broca: { best: 'silver' } };
-  assert.equal(zoneBoostStatus(s, board, 'finca'), 'hidden');
-  s.profile.medals.broca.best = 'gold';
-  assert.equal(zoneBoostStatus(s, board, 'finca'), 'ready');
+  assert.equal(zoneBoostStatus(root, board, 'finca'), 'hidden');
+  root.profile.medals = { broca: { best: 'silver' } };
+  assert.equal(zoneBoostStatus(root, board, 'finca'), 'hidden');
+  root.profile.medals.broca.best = 'gold';
+  assert.equal(zoneBoostStatus(root, board, 'finca'), 'ready');
 });
 
 test('⬆️ to the next milestone: the lowest and everything below that milestone, only if there is enough for all (v4.1.1)', () => {
@@ -121,24 +121,25 @@ test('a zone «at the maximum»: everything at 100, its research and its objecti
 });
 
 test('🚌 more frequent chivas: with the album full and a restart, every 30 s and then 15 s, with the same flow (v4.2)', async () => {
-  const { buyChivas, profileOf, quoteChivas } = await import('../src/sim/renown.js');
+  const { buyChivas, quoteChivas } = await import('../src/sim/renown.js');
   const { routeCapacity, routeRate, stepRoute, tripTimeOf } = await import('../src/sim/routes.js');
   const { ROUTES_BY_ID } = await import('../src/data/routes.js');
   const { ALBUM } = await import('../src/data/album.js');
-  const { restartState } = await import('../src/sim/legacy.js');
-  const s = createInitialState(0);
+  const { restartRegion } = await import('../src/sim/legacy.js');
+  const root = newGame(0);
+  const s = cafeOf(root);
   s.coins = 1e15;
   for (const z of ['trapiche', 'lecheria']) {
     s.zones[z].unlocked = true;
     for (const id of ZONES_BY_ID[z].chain) s.stations[id] = createStationState();
   }
   for (const id of ZONES_BY_ID.finca.chain) unlockStation(s, id, bus);
-  const p = profileOf(s);
+  const p = root.profile;
   p.renown = 100;
   assert.equal(quoteChivas(p, s).reason, 'album');
   p.album = ALBUM.filter((pg) => pg.region === 'cafetero').flatMap((pg) => pg.stickers.map((x) => x.id));
   assert.equal(quoteChivas(p, s).reason, 'restart');
-  s.legacy = { resets: 1 };
+  s.keep.resets = 1;
   const rate = routeRate(s, 'panela');
   const cap = routeCapacity(s, 'panela');
   assert.equal(tripTimeOf(s, ROUTES_BY_ID.panela), 60);
@@ -156,6 +157,7 @@ test('🚌 more frequent chivas: with the album full and a restart, every 30 s a
   // In an event it doesn't change.
   assert.equal(tripTimeOf({ ...s, event: { id: 'broca' } }, ROUTES_BY_ID.panela), 60);
   // Preserved when resetting the region.
-  assert.equal(restartState(s).chivas, 15);
+  assert.equal(restartRegion(root, 'cafetero').keep.chivas, 15);
+  assert.equal(root.profile.keep.cafetero.chivas, 15);
   void stepRoute;
 });

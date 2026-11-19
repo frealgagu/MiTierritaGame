@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { restartState } from '../src/sim/legacy.js';
+import { restartRegion } from '../src/sim/legacy.js';
 import { exportSave, importSave } from '../src/core/SaveSystem.js';
 import { createInitialState } from '../src/sim/state.js';
 import { newGame, cafeOf, reload } from './helpers/game.js';
@@ -22,7 +22,7 @@ function format9(bogota = createInitialState(Date.now(), 'bogota')) {
 
 test('restarting Eje Cafetero keeps Bogotá and its medals after reloading (v5.11 bug fix)', () => {
   const root = withBogota();
-  root.regions.cafetero = restartState(cafeOf(root), Date.now(), root.profile);
+  restartRegion(root, 'cafetero');
   const back = reload(root);
   assert.ok(back.regions?.bogota, 'Bogotá is still there');
   assert.ok(back.profile.medals.festival_zona_g?.best, 'its medals too');

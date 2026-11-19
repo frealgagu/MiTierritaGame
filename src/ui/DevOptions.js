@@ -109,7 +109,7 @@ export function bindDevOptions(game, getActive = () => game) {
   const showMult = () => (legacyMultText.textContent = `= ${formatMult(2 ** resets())}`);
   const region = () => getActive().state;
   const syncLegacy = () => {
-    legacy.value = String(region().legacy?.resets ?? 0);
+    legacy.value = String(region().keep.resets);
     showMult();
   };
   syncLegacy();
@@ -118,12 +118,12 @@ export function bindDevOptions(game, getActive = () => game) {
   legacy.addEventListener('input', () => {
     if (legacy.value === '') return;
     const s = region();
-    s.legacy = { resets: resets() };
+    s.keep.resets = resets();
     showMult();
   });
   legacy.addEventListener('change', () => {
     legacy.value = String(resets());
-    toast(t('🔁 {region}: producción {mult}', { region: REGIONS_BY_ID[region().region ?? 'cafetero'].name, mult: formatMult(2 ** resets()) }));
+    toast(t('🔁 {region}: producción {mult}', { region: REGIONS_BY_ID[region().region].name, mult: formatMult(2 ** resets()) }));
   });
   chip.addEventListener('click', () => setScale(1));
 

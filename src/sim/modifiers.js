@@ -56,9 +56,9 @@ export function capCoins(state) {
 }
 // Product of a single research effect type (v4.1.1: displayed in income breakdown).
 export const researchMult = (state, type, target) => product(state, type, target);
-export const legacyMult = (state) => 2 ** Math.min(state.legacy?.resets ?? 0, MAX_LEGACY_RESETS);
+export const legacyMult = (state) => 2 ** Math.min(state.keep?.resets ?? 0, MAX_LEGACY_RESETS);
 // Multiplier the save will have after next reset.
-export const nextLegacyMult = (state) => 2 ** Math.min((state.legacy?.resets ?? 0) + 1, MAX_LEGACY_RESETS);
+export const nextLegacyMult = (state) => 2 ** Math.min((state.keep?.resets ?? 0) + 1, MAX_LEGACY_RESETS);
 
 // Season (v1.9) scales all stations up or down; haulers and routes scale with this
 // speed so chain stays balanced. On event board (v2.0), event penalty per station
@@ -74,13 +74,13 @@ export const muleSpeedMult = (state) => product(state, 'muleSpeed');
 export const dispatchMult = (state, zoneId = 'finca') => product(state, 'dispatchCapacity', zoneId) * product(state, 'zoneSpeed', zoneId) * legacyMult(state);
 // How many Willys a zone has (v3.9): second one, bought with Renown per region, runs
 // independently selling same load per trip. On event boards, only one.
-export const jeepCount = (state) => (state.willys2 && !state.event ? 2 : 1);
+export const jeepCount = (state) => (state.keep?.willys2 && !state.event ? 2 : 1);
 export const productValue = (state, productId) =>
   PRODUCTS[productId].value * product(state, 'productValue', productId) * product(state, 'zoneValue', PRODUCTS[productId].zone);
 
 // Offline cap in s (v3.7): from player profile, shared across regions. Non-root
 // regions don't store profile: passed from main save.
-export const offlineCapSeconds = (state, profile = state.profile) => offlineHours(profile) * 3600;
+export const offlineCapSeconds = (profile) => offlineHours(profile) * 3600;
 
 // Compost (Compostera): while stored compost remains, everything Finca sells fetches more.
 // Speeds up no station, so chain stays balanced.

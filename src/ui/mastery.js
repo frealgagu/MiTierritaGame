@@ -17,7 +17,7 @@ export function showMastery(state, onRestart, finale = {}) {
   // Once capped (×2⁶⁰), resetting no longer doubles: explain this.
   const capped = next === mult;
   // Reset count caps at limit (v4.3.1): reset 60 keeps showing 60, since resetting changes nothing more.
-  const runs = Math.min((state.legacy?.resets ?? 0) + 1, CAPS.resets);
+  const runs = Math.min(state.keep.resets + 1, CAPS.resets);
   document.getElementById('mastery-text').innerHTML =
     t('Llevaste todas las estaciones de {region}, sus <b>arrieros</b> y sus <b>rutas</b> al <b>nivel 100</b>, con todos los objetivos y todas las investigaciones. Todo trabaja a toda marcha.', { region: regionOf(state).name });
   document.getElementById('mastery-stats').textContent =

@@ -71,7 +71,7 @@ export function buyZoneBoostUnlock(profile, regionId) {
 //   root: main save (profile and regions); state: viewed save (region or event board).
 export function zoneBoostStatus(root, state, zoneId) {
   const regionId = REGION_OF_ZONE[zoneId];
-  const resets = regionState(root, regionId)?.legacy?.resets ?? 0;
+  const resets = regionState(root, regionId)?.keep.resets ?? 0;
   if (resets < 1) return 'hidden';
   const owned = hasZoneBoost(root.profile, regionId);
   if (state.event) return owned && root.profile?.medals?.[state.event.id]?.best === 'gold' ? 'ready' : 'hidden';

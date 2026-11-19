@@ -1,12 +1,12 @@
 import { CAPS } from '../data/caps.js';
-import { createInitialState, SAVE_VERSION } from '../sim/state.js';
+import { REGION_KEYS, SAVE_VERSION, createInitialState, linkRegions, newKeep } from '../sim/state.js';
 import { createSourceState, createStationState } from '../sim/production.js';
 import { createRouteState } from '../sim/routes.js';
 import { ROUTES } from '../data/routes.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { OFFLINE_BASE_HOURS, OFFLINE_COSTS, OFFLINE_STEP_HOURS } from '../sim/renown.js';
-import { DAY_LENGTH, YEAR_DAYS } from '../sim/calendar.js';
+import { DAY_LENGTH, YEAR_DAYS, clockOf } from '../sim/calendar.js';
 import { EVENT_OF_ZONE, MEDALS } from '../data/events.js';
 import { LOGROS_BY_ID } from '../data/logros.js';
 import { ALBUM, PAGE_BONUS } from '../data/album.js';
@@ -67,24 +67,54 @@ export function clearSave() {
 // Brings any save up to the current format (sim/state.js: SAVE_VERSION), step by step:
 //   up to 9: the save was Eje Cafetero's own, holding the whole game's data and the other regions (v3.0 to v5.12).
 //            Each region is brought up to date (migrateRegion), then the player's data (migrateProfile), then
-//   9 -> 10: Eje Cafetero moves into `regions` like the others and the save becomes the whole game's (toFormat10).
-//   10: each region and the player's data are brought up to date.
+//   9 -> 10: Eje Cafetero moves into `regions` like the others and the save becomes the whole game's (toFormat10),
+//            what each region keeps on restart moves to the profile, nothing of the whole game is left in a region
+//            and every region's clock shows the country's date (normalize).
+//   10: each region and the player's data are brought up to date the same way.
 // A save from a newer format (a backup from an updated phone) is refused: null, see saveTooNew.
 function migrate(data) {
   if (typeof data !== 'object' || data === null) return null;
   if ((data.version ?? 0) > SAVE_VERSION) return null;
   const regions = Object.fromEntries(Object.entries(data.regions ?? {}).map(([id, st]) => [id, migrateRegion(st)]));
+  let game;
   if (isGameSave(data)) {
-    const game = { ...data, regions };
+    game = { ...data, regions };
     game.playTime ??= 0;
     game.clockOffset ??= 0;
     game.settings ??= { sound: true, music: true, zone: 'finca' };
     game.events = { slots: data.events?.slots ?? [null, null], global: true };
-    return migrateProfile(game);
+    game = migrateProfile(game);
+  } else {
+    const old = migrateRegion(data);
+    old.regions = regions;
+    game = toFormat10(migrateProfile(old));
   }
-  const old = migrateRegion(data);
-  old.regions = regions;
-  return toFormat10(migrateProfile(old));
+  return linkRegions(normalize(game));
+}
+
+// Every region save holds only its own run (sim/state.js: REGION_KEYS). What it keeps on restart (resets, finished,
+// second Willys, chivas, workday) goes to its profile entry (profile.keep), the whole game's data it used to carry
+// (format, saved time, settings, the Bogotá flag) is dropped, and its clock is aligned with the country's: before
+// v5.13 some regions' dates had drifted by hours.
+function normalize(game) {
+  game.profile.album ??= [];
+  if (Array.isArray(game.profile.decor?.owned)) game.profile.decor = { cafetero: game.profile.decor }; // v3.10
+  game.profile.decor ??= {};
+  const keeps = (game.profile.keep ??= {});
+  const country = clockOf(game);
+  for (const [id, st] of Object.entries(game.regions)) {
+    const keep = (keeps[id] ??= newKeep());
+    if (st.legacy) keep.resets = Math.max(keep.resets, st.legacy.resets ?? 0);
+    keep.resets = Math.min(CAPS.resets, keep.resets);
+    if (st.regionDone) keep.done = true;
+    if (st.willys2) keep.willys2 = true;
+    if (st.chivas) keep.chivas = Math.min(keep.chivas ?? st.chivas, st.chivas);
+    if (st.workLevel) keep.workLevel = Math.max(keep.workLevel ?? 0, st.workLevel);
+    for (const key of Object.keys(st)) if (!REGION_KEYS.includes(key)) delete st[key];
+    st.region = id;
+    st.clockOffset = country - st.playTime;
+  }
+  return game;
 }
 
 // Format 10 and later: the whole game's save (no stations of its own, regions inside).
@@ -99,16 +129,16 @@ const regionSaves = (save) => (save.stations ? [save, ...Object.values(save.regi
 function toFormat10(old) {
   const { version, savedAt, profile, settings = {}, events = {}, regions = {}, bogotaNet, ...cafetero } = old;
   const { slots, global, ...regionEvents } = events;
-  const zone = REGIONS_BY_ID.cafetero.zones.includes(settings.zone) ? settings.zone : REGIONS_BY_ID.cafetero.zones[0];
   return {
     version: SAVE_VERSION,
     savedAt,
     playTime: cafetero.playTime ?? 0,
     clockOffset: cafetero.clockOffset ?? 0,
-    profile,
-    settings,
+    // Saves from before v2.0 had no profile yet.
+    profile: profile ?? { renown: 0, renownTotal: 0, medals: {}, history: [] },
+    settings: { sound: true, music: true, ...settings },
     events: { slots: slots ?? [null, null], global: true },
-    regions: { cafetero: { version: SAVE_VERSION, savedAt, ...cafetero, region: 'cafetero', clockOffset: cafetero.clockOffset ?? 0, events: regionEvents, settings: { zone } }, ...regions },
+    regions: { cafetero: { ...cafetero, region: 'cafetero', events: regionEvents }, ...regions },
     bogotaNet: bogotaNet ?? true,
   };
 }
@@ -346,12 +376,9 @@ function finish(data, base, stations, zones, mules) {
     stats: { ...base.stats, ...data.stats },
     // (v5.12) A run saved before its own count starts from what its products add up to.
     counted: data.counted ?? { sold: sumOf(data.stats?.sold), produced: sumOf(data.stats?.produced) },
-    // Other regions, each with its own independent game state.
-    legacy: { resets: Math.min(CAPS.resets, data.legacy?.resets ?? 0) },
+    // Restarts (normalize moves them to the profile, v5.13; capped at 60 since v4.0).
+    ...(data.legacy && { legacy: { resets: Math.min(CAPS.resets, data.legacy.resets ?? 0) } }),
     goals: { ...base.goals, ...data.goals, claimed },
-    // (v5.11) Only what the save says: a new save has it from the start, an old one gets it from resetOldBogota.
-    bogotaNet: data.bogotaNet,
-    version: SAVE_VERSION,
   };
 }
 

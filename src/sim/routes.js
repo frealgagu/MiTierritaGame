@@ -47,7 +47,7 @@ export function stationImportRate(state, r, id, level = state.stations[id].level
 // Faster chivas (v4.2): with Renown per region, every 30 s then every 15 s (instead of 60 s).
 // Each carries its fraction (half or quarter): same throughput per minute, arriving more often.
 // Unchanged on event boards (there routes track station level).
-export const chivaSpeed = (state) => (state.event ? 1 : state.chivas === 15 ? 4 : state.chivas === 30 ? 2 : 1);
+export const chivaSpeed = (state) => (state.event ? 1 : state.keep?.chivas === 15 ? 4 : state.keep?.chivas === 30 ? 2 : 1);
 export const tripTimeOf = (state, r) => r.tripTime / chivaSpeed(state);
 
 // Units per trip: at equal level to supplied stations, 25 % more than what they consume

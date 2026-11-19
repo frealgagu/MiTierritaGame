@@ -95,7 +95,7 @@ export class EventsView {
 
   render() {
     const s = this.game.state;
-    const profile = s.profile ?? { renown: 0, medals: {} };
+    const profile = s.profile;
     document.getElementById('events-renown').textContent = t('⭐ Renombre: {n} · 🏆 Prestigio: {total}', { n: cappedRenown(profile.renown), total: cappedPrestige(profile.renownTotal ?? profile.renown) });
     const card = (def) => {
       const st = eventStatus(s, eventKey(def));
@@ -209,8 +209,8 @@ export class EventsView {
     // Button appears when any event is open or player has some Renown stuff (v3.8.1:
     // after reset album, achievements, and hours remained even without an active event); badge count
     // shows those ready to start.
-    const p = this.game.state.profile ?? {};
-    const progress = p.renown > 0 || p.history?.length > 0 || Object.keys(p.logros ?? {}).length > 0 || regionStates(this.game.state).some((st) => (st.legacy?.resets ?? 0) > 0);
+    const p = this.game.state.profile;
+    const progress = p.renown > 0 || p.history?.length > 0 || Object.keys(p.logros ?? {}).length > 0 || regionStates(this.game.state).some((st) => st.keep.resets > 0);
     this.btn.hidden = !progress && !statuses.some((st) => st.kind !== 'locked');
     // (v4.7.3) Only startable ones: a won event still open (goal met and all 3 upgrades) no
     // longer counts.

@@ -1,22 +1,19 @@
 // Regions (v3.0): Eje Cafetero is root save holding others under `regions`, each as a
 // full save (with its `region`). All run concurrently, each with its own Game.
 import { REGIONS, REGIONS_BY_ID } from '../data/regions.js';
-import { createInitialState } from './state.js';
+import { createInitialState, linkRegion } from './state.js';
 import { clockOf } from './calendar.js';
 
-// Save for a region, or null if not yet unlocked. (v5.13) Eje Cafetero is a region like the others, in
-// root.regions; a lone region save (no `regions`, as in some tests) answers for itself.
-export function regionState(root, regionId) {
-  if (!root.regions) return (root.region ?? 'cafetero') === regionId ? root : null;
-  return root.regions[regionId] ?? null;
-}
-// Every region save in the game (v5.13: Eje Cafetero is one of them, not the root).
-export const regionStates = (root) => (root.regions ? Object.values(root.regions) : [root]);
+// Save for a region, or null if not yet unlocked. (v5.13) root is always the whole game's save; Eje Cafetero is a
+// region in root.regions like the others.
+export const regionState = (root, regionId) => root.regions[regionId] ?? null;
+// Every region save in the game.
+export const regionStates = (root) => Object.values(root.regions);
 
 // Unlocks regions whose condition is met (completing a zone in another region). Returns
 // unlocked list. New region follows country calendar from unlock day onward.
 // Unlock condition isn't lost on reset (v3.8.1): if origin region finished once
-// (`regionDone`, its final zone), still counts even if not yet cleared in current run.
+// (`keep.done`, its final zone; v5.13: kept in the profile), still counts even if not yet cleared in current run.
 export function openRegions(root, now = Date.now()) {
   const opened = [];
   for (const region of REGIONS) {
@@ -26,7 +23,7 @@ export function openRegions(root, now = Date.now()) {
       if (region.devOnly || !specialProgress(root).ready) continue;
     } else {
       const from = regionState(root, region.unlock.region);
-      const done = from?.regionDone && REGIONS_BY_ID[from.region ?? 'cafetero'].zones.at(-1) === region.unlock.zone;
+      const done = from?.keep.done && REGIONS_BY_ID[from.region].zones.at(-1) === region.unlock.zone;
       if (!from?.zones[region.unlock.zone]?.complete && !done) continue;
     }
     addRegion(root, region, now);
@@ -38,9 +35,8 @@ export function openRegions(root, now = Date.now()) {
 function addRegion(root, region, now) {
   const state = createInitialState(now, region.id);
   state.clockOffset = clockOf(root);
-  state.settings = { zone: region.zones[0] };
-  root.regions ??= {};
   root.regions[region.id] = state;
+  linkRegion(root, region.id);
 }
 
 // Regions that count toward the special zone (v4.7.1; v5.4 moved here from ui/ZonesView.js): every released
@@ -50,7 +46,7 @@ export const SPECIAL_FROM = REGIONS.filter((r) => !r.hidden && !r.wip && !r.spec
 export function specialProgress(root) {
   const n = SPECIAL_FROM.filter((r) => {
     const st = regionState(root, r.id);
-    return st && (st.mastered || (st.legacy?.resets ?? 0) > 0);
+    return st && (st.mastered || st.keep.resets > 0);
   }).length;
   return { n, total: SPECIAL_FROM.length, ready: n === SPECIAL_FROM.length };
 }

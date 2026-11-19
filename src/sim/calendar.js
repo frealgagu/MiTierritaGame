@@ -48,7 +48,7 @@ export const seasonDay = (playTime) => (dayOf(playTime) % SEASON_DAYS) + 1;
 // Active schedule blocks given `extra` purchased blocks.
 export const workBlocks = (extra = 0) => [...BASE_WORK, ...EXTRA_BLOCKS.slice(0, extra)];
 // How many schedule blocks a save's region has (v3.10).
-export const workOf = (state) => state?.workLevel ?? 0;
+export const workOf = (state) => state?.keep?.workLevel ?? 0;
 // Which hours (0 to 23) are active work hours for block count (blocks align to whole hours).
 const HOURS = EXTRA_BLOCKS.map((_, n) => n)
   .concat(EXTRA_BLOCKS.length)

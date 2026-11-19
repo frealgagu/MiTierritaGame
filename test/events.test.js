@@ -2,13 +2,12 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { World } from '../src/core/World.js';
-import { profileOf } from '../src/sim/renown.js';
 import { newGame, cafeOf } from './helpers/game.js';
 import { EVENTS, EVENT_ACTIONS_BY_ID, EVENT_OF_ZONE, MEDALS } from '../src/data/events.js';
 import { EVENT_COOLDOWN, boardObjective, buyAction, createEventState, endEvent, eventDef, eventObjective, eventProgress, eventStatus, finishEvent, medalFor, quoteAction, restartEvent, startEvent, supplyFraction, SUPPLY_TRICKLE } from '../src/sim/events.js';
 import { createInitialState } from '../src/sim/state.js';
 import { speedMult } from '../src/sim/modifiers.js';
-import { restartState } from '../src/sim/legacy.js';
+import { restartRegion } from '../src/sim/legacy.js';
 import { DAY_LENGTH } from '../src/sim/calendar.js';
 import { STATIONS_BY_ID } from '../src/data/stations.js';
 import { PRODUCTS } from '../src/data/products.js';
@@ -38,6 +37,14 @@ function complete(board, buy) {
   for (const a of eventDef(board).actions) buyAction(board, a.id);
 }
 
+// The whole game with only Eje Cafetero: `root` is the whole game's save, `game` Eje Cafetero's Game and `s` its
+// save, `world` the country clock and the slots (v5.13).
+function alone() {
+  const root = newGame();
+  const game = new Game(cafeOf(root));
+  return { root, world: new World(root), game, s: game.state };
+}
+
 // The whole game's save with Santander open: in Eje Cafetero, Finca, Trapiche, and Lechería have their event stations;
 // in Santander, Guayabera has its own. `game` keeps the country clock and the slots (core/World.js), `s` is the whole
 // game's save (profile and slots) and `cafe` Eje Cafetero's (v5.13).
@@ -56,11 +63,9 @@ function twoRegions() {
 }
 
 test('two slots for the whole game, never from the same region (v3.30)', () => {
-  const game = new Game();
-  const s = game.state;
-  profileOf(s);
-  assert.equal(eventStatus(s, 'finca').kind, 'locked', 'until their stations are built');
-  assert.equal(eventStatus(s, 'trapiche'), null, 'closed zone');
+  const { root } = alone();
+  assert.equal(eventStatus(root, 'finca').kind, 'locked', 'until their stations are built');
+  assert.equal(eventStatus(root, 'trapiche'), null, 'closed zone');
   const two = twoRegions();
   two.game.step(0.1);
   assert.deepEqual(two.s.events.slots.map((x) => x?.zone), ['finca', 'guayabera']);
@@ -137,30 +142,28 @@ test('restarting begins the same challenge from scratch; finishing without winni
 });
 
 test('meeting the objective secures the medal; the event is won by having the three upgrades (v3.7)', () => {
-  const game = new Game();
-  const s = game.state;
-  profileOf(s);
+  const { root, s } = alone();
   buildAll(s);
-  const board = startEvent(s, 'finca');
+  const board = startEvent(root, 'finca');
   complete(board, false);
   board.playTime = 100;
-  const r = finishEvent(s, 'finca');
+  const r = finishEvent(root, 'finca');
   assert.ok(r.secured);
   assert.equal(r.medal, 'gold');
-  assert.equal(s.profile.renown, 0, 'Renown arrives when it is won');
+  assert.equal(root.profile.renown, 0, 'Renown arrives when it is won');
   // Time passes while buying upgrades: medal no longer changes.
   board.playTime = 5000;
-  assert.equal(finishEvent(s, 'finca'), null);
+  assert.equal(finishEvent(root, 'finca'), null);
   board.coins = 1e9;
   for (const a of EVENTS[0].actions) buyAction(board, a.id);
-  const done = finishEvent(s, 'finca');
+  const done = finishEvent(root, 'finca');
   assert.ok(done.done);
   assert.equal(done.medal, 'gold');
   assert.equal(done.time, 100);
-  assert.equal(s.profile.renown, 4);
-  assert.equal(eventStatus(s, 'finca').kind, 'won');
-  endEvent(s, 'finca');
-  assert.equal(eventStatus(s, 'finca').kind, 'waiting');
+  assert.equal(root.profile.renown, 4);
+  assert.equal(eventStatus(root, 'finca').kind, 'won');
+  endEvent(root, 'finca');
+  assert.equal(eventStatus(root, 'finca').kind, 'waiting');
 });
 
 test('the medal depends on the board time', () => {
@@ -171,9 +174,9 @@ test('the medal depends on the board time', () => {
 });
 
 test('the board has its own clock, without nights or seasons, and the borer slows the Cafetal', () => {
-  const main = new Game();
+  const { root, game: main } = alone();
   buildAll(main.state);
-  const board = startEvent(main.state, 'finca');
+  const board = startEvent(root, 'finca');
   const game = new Game(board);
   assert.ok(Math.abs(speedMult(board, 'farm') - 0.4) < 1e-9);
   assert.equal(speedMult(board, 'wetmill'), 1);
@@ -186,9 +189,9 @@ test('the board has its own clock, without nights or seasons, and the borer slow
 });
 
 test(`the event purchases go in order, are paid with the board's coins and remove the borer`, () => {
-  const main = new Game();
+  const { root, game: main } = alone();
   buildAll(main.state);
-  const board = startEvent(main.state, 'finca');
+  const board = startEvent(root, 'finca');
   const [a, b, c] = EVENTS[0].actions.map((x) => x.id);
   board.coins = 1e9;
   assert.equal(quoteAction(board, b).reason, 'locked');
@@ -203,18 +206,17 @@ test(`the event purchases go in order, are paid with the board's coins and remov
 });
 
 test('Renown, medals and the board in play are not lost on restart, which adds 10 ⭐ (v3.12)', () => {
-  const main = new Game();
-  const s = main.state;
-  profileOf(s); // a lone region save carrying the player's profile
-  s.profile.renown = 7;
-  s.profile.medals.broca = { best: 'silver', count: { silver: 1 } };
+  const { root, s } = alone();
+  root.profile.renown = 7;
+  root.profile.medals.broca = { best: 'silver', count: { silver: 1 } };
   buildAll(s);
-  assert.ok(startEvent(s, 'finca'));
-  const next = restartState(s);
-  assert.equal(next.profile.renown, 7 + 10);
-  assert.deepEqual(next.profile.medals.broca, { best: 'silver', count: { silver: 1 } });
+  assert.ok(startEvent(root, 'finca'));
+  const slots = root.events.slots.map((x) => x?.zone);
+  const next = restartRegion(root, 'cafetero');
+  assert.equal(root.profile.renown, 7 + 10);
+  assert.deepEqual(root.profile.medals.broca, { best: 'silver', count: { silver: 1 } });
   assert.deepEqual(Object.keys(next.events.boards), ['finca']);
-  assert.deepEqual(next.events.slots.map((x) => x?.zone), s.events.slots.map((x) => x?.zone));
+  assert.deepEqual(root.events.slots.map((x) => x?.zone), slots);
 });
 
 test('the six boards start and advance toward their objective', () => {
@@ -244,54 +246,54 @@ test('landslide: without the road only a trickle of panela arrives (v4.3.2) and 
 
 test('fair: the objective asks for several products and counts each one up to what is asked', () => {
   const def = EVENTS.find((e) => e.id === 'feria');
-  const main = new Game();
+  const { root, game: main } = alone();
   main.state.zones.lecheria.unlocked = true;
   for (const id of def.stations) main.state.stations[id] = createStationState();
-  const board = startEvent(main.state, 'lecheria');
+  const board = startEvent(root, 'lecheria');
   const obj = boardObjective(board);
   const [a, b] = Object.keys(obj.items);
   board.stats.sold[a] = obj.items[a] * 5; // extra doesn't count
   assert.ok(Math.abs(eventProgress(board) - obj.items[a] / Object.values(obj.items).reduce((x, y) => x + y)) < 1e-9);
-  assert.equal(finishEvent(main.state, 'lecheria'), null);
+  assert.equal(finishEvent(root, 'lecheria'), null);
   for (const [p, n] of Object.entries(obj.items)) board.stats.sold[p] = n;
   assert.ok(b);
-  assert.ok(finishEvent(main.state, 'lecheria').secured);
+  assert.ok(finishEvent(root, 'lecheria').secured);
   board.coins = 1e15;
   for (const a of def.actions) buyAction(board, a.id);
-  assert.ok(finishEvent(main.state, 'lecheria').done);
+  assert.ok(finishEvent(root, 'lecheria').done);
 });
 
 test('with the region finished, after restarting the events of all its zones come out (v3.8)', async () => {
   const { refillSlots } = await import('../src/sim/events.js');
   const { claimGoal } = await import('../src/sim/goals.js');
   const { GOALS_BY_ZONE } = await import('../src/data/goals.js');
-  const game = new Game();
-  const s = game.state;
+  const { root, game, s } = alone();
   // Claiming Pueblo's final goal marks the region completed.
   const final = GOALS_BY_ZONE.pueblo.at(-1);
   assert.ok(final.final);
   s.zones.pueblo.unlocked = true;
   s.goals.claimed = GOALS_BY_ZONE.pueblo.slice(0, -1).map((g) => g.id);
   s.stats[final.type][final.product] = final.amount;
-  assert.equal(s.regionDone, false);
+  assert.equal(s.keep.done, false);
   assert.ok(claimGoal(s, final.id, game.bus));
-  assert.ok(s.regionDone && s.zones.pueblo.complete);
-  const next = restartState(s);
-  assert.ok(next.regionDone, 'it is kept on restart');
-  assert.ok(restartState(next).regionDone, 'and in the following restarts');
-  assert.deepEqual(Object.keys(next.zones).filter((z) => next.zones[z].unlocked), ['finca']);
-  refillSlots(next);
-  assert.deepEqual(next.events.slots.map((x) => x?.zone), [EVENTS[0].zone, undefined], 'the other slot, for another region');
+  assert.ok(s.keep.done && s.zones.pueblo.complete);
+  const next = restartRegion(root, 'cafetero');
+  assert.ok(next.keep.done, 'it is kept on restart');
+  assert.ok(restartRegion(root, 'cafetero').keep.done, 'and in the following restarts');
+  const now = cafeOf(root);
+  assert.deepEqual(Object.keys(now.zones).filter((z) => now.zones[z].unlocked), ['finca']);
+  refillSlots(root);
+  assert.deepEqual(root.events.slots.map((x) => x?.zone), [EVENTS[0].zone, undefined], 'the other slot, for another region');
   // Once Finca's is finished, the other slot picks one from an unopened zone.
-  startEvent(next, EVENTS[0].zone);
-  endEvent(next, EVENTS[0].zone);
-  refillSlots(next);
-  assert.equal(next.events.slots[1]?.zone, EVENTS[1].zone);
-  assert.equal(eventStatus(next, EVENTS[1].zone).kind, 'available', 'even if the zone is not open');
-  assert.equal(eventStatus(next, 'pueblo').kind, 'waiting');
-  assert.ok(startEvent(next, EVENTS[1].zone), 'it can be played');
+  startEvent(root, EVENTS[0].zone);
+  endEvent(root, EVENTS[0].zone);
+  refillSlots(root);
+  assert.equal(root.events.slots[1]?.zone, EVENTS[1].zone);
+  assert.equal(eventStatus(root, EVENTS[1].zone).kind, 'available', 'even if the zone is not open');
+  assert.equal(eventStatus(root, 'pueblo').kind, 'waiting');
+  assert.ok(startEvent(root, EVENTS[1].zone), 'it can be played');
   // Without the region completed, only opened zones with their stations.
-  const fresh = new Game().state;
+  const fresh = newGame();
   refillSlots(fresh);
   assert.equal(eventStatus(fresh, 'trapiche'), null);
 });
@@ -397,11 +399,9 @@ test('events without gold come out first and those with gold at the end (v3.72)'
 // with no slot or cooldown, though never more than two open boards.
 test('with gold in the whole region events no longer come out on their own and, bought on demand, are played again (v4.7.3)', async () => {
   const { eventsOf, regionEvents, quoteOnDemand, buyOnDemand, startOnDemand, refillSlots } = await import('../src/sim/events.js');
-  const game = new Game();
-  const s = game.state;
-  profileOf(s);
-  s.regionDone = true;
-  for (const z of Object.keys(s.zones)) s.zones[z].unlocked = true;
+  const { root: s, s: cafe } = alone();
+  cafe.keep.done = true;
+  for (const z of Object.keys(cafe.zones)) cafe.zones[z].unlocked = true;
   s.profile.medals = Object.fromEntries(regionEvents('cafetero').map((e) => [e.id, { best: 'gold', count: { gold: 1 } }]));
   refillSlots(s);
   assert.deepEqual(eventsOf(s).slots, [null, null], 'they no longer come out on their own');

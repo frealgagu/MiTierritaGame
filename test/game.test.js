@@ -1,4 +1,6 @@
 import { test } from 'node:test';
+import { offlineCapSeconds } from '../src/sim/modifiers.js';
+import { newGame } from './helpers/game.js';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { setCredit } from '../src/sim/upgrades.js';
@@ -67,7 +69,7 @@ test('if dispatch cannot keep up, the warehouse fills and the coffee field stops
 
 test('offline progress makes coins and respects the cap', () => {
   const game = new Game();
-  const { seconds, coins } = game.catchUp(10 * 3600);
+  const { seconds, coins } = game.catchUp(10 * 3600, offlineCapSeconds(newGame().profile));
   assert.equal(seconds, 2 * 3600);
   assert.ok(coins > 0);
 });

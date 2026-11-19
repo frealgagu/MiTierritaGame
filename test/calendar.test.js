@@ -1,4 +1,5 @@
 import { test } from 'node:test';
+import { createInitialState } from '../src/sim/state.js';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { DAY_LENGTH, EXTRA_BLOCKS, SEASONS, dayOf, hourOf, isLunch, isWorkTime, nextWorkHour, seasonDay, workBlocks, seasonOf, untilWork, workSeconds, yearOf } from '../src/sim/calendar.js';
@@ -50,8 +51,8 @@ test('with Renown the workday grows 2 h at a time, each block at twice the previ
   assert.deepEqual(EXTRA_BLOCKS, [[20, 22], [4, 6], [22, 24], [2, 4], [12, 14], [0, 2]]);
   // Each region has its own work shift (v3.10); paid with the player's Renown.
   const profile = { renown: 3 };
-  const region = {};
-  const other = {};
+  const region = createInitialState(0, 'santander');
+  const other = createInitialState(0, 'costa');
   assert.ok(buyWork(profile, region));
   assert.equal(profile.renown, 1);
   assert.equal(workLevel(other), 0, 'the other region stays the same');
@@ -103,10 +104,10 @@ test('with the 20–22 block bought, work continues after 20:00', () => {
   const game = new Game();
   const s = game.state;
   s.playTime = at(0, 20.5);
-  s.workLevel = 1; // work shift belongs to the region (v3.10)
+  s.keep.workLevel = 1; // work shift belongs to the region (v3.10; kept in its profile entry, v5.13)
   game.step(0.1);
   assert.notEqual(s.stations.farm.status, 'resting');
-  s.workLevel = 0;
+  s.keep.workLevel = 0;
   game.step(0.1);
   assert.equal(s.stations.farm.status, 'resting');
 });

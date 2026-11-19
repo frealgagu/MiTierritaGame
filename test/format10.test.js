@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { World } from '../src/core/World.js';
 import { exportSave, importSave, saveTooNew } from '../src/core/SaveSystem.js';
-import { GLOBAL_KEYS, SAVE_VERSION, createInitialState } from '../src/sim/state.js';
-import { restartState } from '../src/sim/legacy.js';
+import { GLOBAL_KEYS, REGION_KEYS, SAVE_VERSION, createInitialState } from '../src/sim/state.js';
+import { restartRegion } from '../src/sim/legacy.js';
 import { clockOf } from '../src/sim/calendar.js';
 import { openSpecial } from '../src/sim/regions.js';
 import { eventStatus, startEvent } from '../src/sim/events.js';
@@ -36,6 +36,7 @@ test('the save is the whole game (format 10): Eje Cafetero is a region like the 
   assert.equal(cafeOf(root).region, 'cafetero');
   assert.equal(cafeOf(root).profile, undefined, 'the profile is not in a region');
   assert.deepEqual(Object.keys(root).sort(), [...GLOBAL_KEYS].sort());
+  assert.deepEqual(Object.keys(cafeOf(root)), REGION_KEYS, 'a region save holds exactly the region keys');
 });
 
 test('restarting Eje Cafetero (or any region) leaves everything that belongs to the whole game as it was (v5.13)', () => {
@@ -43,19 +44,23 @@ test('restarting Eje Cafetero (or any region) leaves everything that belongs to 
     const root = fullGame();
     const before = Object.fromEntries(GLOBAL_KEYS.filter((k) => k !== 'regions' && k !== 'savedAt').map((k) => [k, structuredClone(root[k])]));
     const others = Object.keys(root.regions).filter((id) => id !== region).map((id) => [id, JSON.stringify(root.regions[id])]);
-    root.regions[region] = restartState(root.regions[region], Date.now(), root.profile);
+    restartRegion(root, region);
     const back = reload(root);
     for (const [k, v] of Object.entries(before)) {
       if (k === 'profile') {
-        // Only what a restart adds: Renown for restarting and the run banked into the totals.
-        const { renown, renownTotal, lifetime, lifetimes, totals, ...rest } = back.profile;
-        const { renown: r0, renownTotal: t0, lifetime: l0, lifetimes: ls0, totals: tt0, ...rest0 } = v;
+        // Only what a restart adds: Renown for restarting, the run banked into the totals and the region's restart
+        // count in its own profile entry; every other region's entry stays as it was.
+        const { renown, renownTotal, lifetime, lifetimes, totals, keep, ...rest } = back.profile;
+        const { renown: r0, renownTotal: t0, lifetime: l0, lifetimes: ls0, totals: tt0, keep: k0, ...rest0 } = v;
         assert.deepEqual(rest, rest0, `${region}: profile`);
         assert.equal(renown, r0 + 10, `${region}: +10 Renown`);
+        assert.deepEqual({ ...keep, [region]: undefined }, { ...k0, [region]: undefined }, `${region}: the other regions' entries`);
+        assert.deepEqual({ ...keep[region], resets: 0 }, { ...k0[region], resets: 0 }, `${region}: its entry, but the count`);
       } else assert.deepEqual(back[k], v, `${region}: ${k}`);
     }
     for (const [id, json] of others) assert.equal(JSON.stringify(back.regions[id]), json, `${region}: ${id} untouched`);
-    assert.equal(back.regions[region].legacy.resets, 1);
+    assert.equal(back.regions[region].keep.resets, 1);
+    assert.equal(back.profile.keep[region].resets, 1);
   }
 });
 
@@ -78,7 +83,8 @@ test('a format 9 save becomes format 10 without losing anything (v5.13)', () => 
   const cafe = cafeOf(g);
   assert.equal(cafe.coins, 4321);
   assert.equal(cafe.stations.farm.level, 77);
-  assert.equal(cafe.legacy.resets, 5);
+  assert.equal(cafe.keep.resets, 5);
+  assert.equal(g.profile.keep.cafetero.resets, 5);
   assert.deepEqual(cafe.hints, ['wetmill']);
   assert.deepEqual(cafe.events.count, { finca: 2 });
   assert.deepEqual(cafe.events.last, { finca: 5 });
@@ -116,7 +122,7 @@ test('the country clock runs on its own and every region keeps the same date (v5
   assert.ok(Math.abs(clockOf(root) - 50) < 1e-9);
   for (const st of Object.values(root.regions)) assert.ok(Math.abs(clockOf(st) - clockOf(root)) < 1e-9, st.region);
   // Restarting Eje Cafetero does not move the clock back.
-  root.regions.cafetero = restartState(cafeOf(root), 0, root.profile);
+  restartRegion(root, 'cafetero', 0);
   assert.ok(Math.abs(clockOf(cafeOf(root)) - clockOf(root)) < 1e-9);
   assert.ok(Math.abs(clockOf(root) - 50) < 1e-9);
 });

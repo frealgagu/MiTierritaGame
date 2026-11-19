@@ -129,6 +129,7 @@ test('an older save: restarts stay at the cap (60) and without the log of each g
   globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
   const s = loadGame();
   delete globalThis.localStorage;
-  assert.deepEqual(s.regions.cafetero.legacy, { resets: 60 });
-  assert.deepEqual(s.regions.llanos.legacy, { resets: 3 });
+  assert.deepEqual(s.profile.keep.cafetero, { resets: 60, done: true });
+  assert.deepEqual(s.profile.keep.llanos, { resets: 3, done: true });
+  assert.equal(s.regions.llanos.legacy, undefined, 'no log of each game, nor the field (v5.13)');
 });

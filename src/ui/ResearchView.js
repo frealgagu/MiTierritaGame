@@ -8,7 +8,9 @@ import { ZONES_BY_ID } from '../data/zones/index.js';
 // Research: one-time purchases improving the whole estate.
 export class ResearchView {
   // onGo(id): jump to a station (v3.12: station missing for a locked research upgrade).
-  constructor(game, getZone, onGo = () => {}) {
+  // settings: the whole game's settings (v5.13: the «In other zones» fold is the player's choice, not a region's).
+  constructor(game, getZone, onGo = () => {}, settings = {}) {
+    this.settings = settings;
     this.game = game;
     this.getZone = getZone;
     this.onGo = onGo;
@@ -22,8 +24,7 @@ export class ResearchView {
       if (e.target === this.modal) this.close();
       // (v5.8) «In other zones» folds and unfolds; the choice is kept.
       if (e.target.closest('[data-rfold]')) {
-        const settings = this.game.state.settings;
-        settings.researchOtherFolded = !settings.researchOtherFolded;
+        this.settings.researchOtherFolded = !this.settings.researchOtherFolded;
         return void this.update();
       }
       const btn = e.target.closest('[data-research]');
@@ -94,7 +95,7 @@ export class ResearchView {
 
   // Research in other zones (v5.8): a header that folds the list, with how many there are.
   otherZones(quotes) {
-    const folded = Boolean(this.game.state.settings.researchOtherFolded);
+    const folded = Boolean(this.settings.researchOtherFolded);
     const head = `<button class="zones-region research-other" data-rfold aria-expanded="${!folded}"><span class="zones-fold">${folded ? '▸' : '▾'}</span> ${t('En otras zonas')} (${quotes.length})</button>`;
     return head + (folded ? '' : this.rows(quotes, true));
   }

@@ -72,7 +72,7 @@ export class GoalsView {
     const finished = Boolean(state.zones[finalZone(state)]?.complete) && !regionOf(state).wip;
     // Once multiplier hits cap (v3.68.2) the bar no longer offers reset: just says so; resetting
     // remains accessible from inside the goals modal.
-    const atMax = (state.legacy?.resets ?? 0) >= MAX_LEGACY_RESETS;
+    const atMax = (state.keep?.resets ?? 0) >= MAX_LEGACY_RESETS;
     const master = !g && finished ? (atMax ? maxCard(state) : masteryCard(state, true)) : null;
     this.tracker.hidden = !g && !master;
     const trackerHtml = g ? goalCard(g, gProgress, true) : master;

@@ -58,15 +58,15 @@ export function eventsOf(state) {
   ev.count ??= {};
   return ev;
 }
-// The two game-wide slots (v3.30), in the whole game's save (v5.13; a lone region save keeps its own, in tests).
-export const slotsOf = (root) => ((root.events ??= {}).slots ??= Array(EVENT_SLOTS).fill(null));
+// The two game-wide slots (v3.30), in the whole game's save (v5.13).
+export const slotsOf = (root) => root.events.slots;
 
 // Next challenge for zone (1, 2, 3…).
 export const nextRound = (state, zoneId) => Math.min(CAPS.eventRound, (eventsOf(state).count[zoneId] ?? 0) + 1);
 // Zone has event if open; once region completed at least once (v3.8), all its zones,
 // even if not reopened yet after reset: already played.
-const open = (state, zoneId) => zoneId in state.zones && (state.regionDone || Boolean(state.zones[zoneId].unlocked));
-const ready = (state, def) => open(state, def.zone) && (state.regionDone || def.stations.every((id) => state.stations[id]));
+const open = (state, zoneId) => zoneId in state.zones && (state.keep.done || Boolean(state.zones[zoneId].unlocked));
+const ready = (state, def) => open(state, def.zone) && (state.keep.done || def.stations.every((id) => state.stations[id]));
 // Event with `after` (v4.7: Gran Feria de Bogotá) spawns only after winning medals in prerequisites.
 export const afterDone = (root, def) => !def.after || def.after.every((id) => root.profile?.medals?.[id]?.best);
 
@@ -194,7 +194,6 @@ export function createEventState(def, round) {
   // With zones of event's region (v3.6: also Santander ones).
   const s = createInitialState(undefined, REGION_OF_ZONE[def.zone]);
   delete s.events;
-  delete s.profile;
   s.event = { id: def.id, zone: def.zone, key: eventKey(def), round, single: true };
   for (const z of Object.keys(s.zones)) s.zones[z] = createZoneState(z === def.zone);
   s.zones[def.zone].dispatch.level = def.level;
@@ -237,7 +236,7 @@ function coolDown(root, zoneId) {
 
 // 🔄 Restart (v3.30): same challenge from scratch (coins, levels, upgrades, clock, locked medal).
 export function restartEvent(root, zoneId) {
-  const ev = eventsOf(ownerOf(root, zoneId) ?? root);
+  const ev = eventsOf(ownerOf(root, zoneId));
   const board = ev.boards[zoneId];
   if (!board || board.event.done) return null;
   return (ev.boards[zoneId] = createEventState(eventDef(board), boardRound(board)));
@@ -246,7 +245,7 @@ export function restartEvent(root, zoneId) {
 // 🏁 Finish (v3.30). Before winning: closes without medal, slot waits 2 years, round stays
 // unchanged. After winning: simply closes (medal and slot already awarded on win).
 export function endEvent(root, zoneId) {
-  const owner = ownerOf(root, zoneId) ?? root;
+  const owner = ownerOf(root, zoneId);
   const ev = eventsOf(owner);
   const board = ev.boards[zoneId];
   if (!board) return false;
@@ -349,7 +348,7 @@ export const allActionsBought = (board) => eventDef(board).actions.every((a) => 
 // Returns null (nothing new), { secured } (medal just locked; upgrades remain), or { done }.
 //   root: main save storing profile and slots
 export function finishEvent(root, zoneId) {
-  const state = ownerOf(root, zoneId) ?? root;
+  const state = ownerOf(root, zoneId);
   const ev = eventsOf(state);
   const board = ev.boards[zoneId];
   if (!board || board.event.done) return null;

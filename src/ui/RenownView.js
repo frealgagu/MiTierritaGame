@@ -287,7 +287,7 @@ export class RenownView {
   decorHtml(profile) {
     const chosen = decorOf(profile, this.region).chosen;
     // Second Willys paint color, shown only if region owns it.
-    const has = { willys2: Boolean(this.regionState().willys2) };
+    const has = { willys2: Boolean(this.regionState().keep.willys2) };
     return DECOR.filter((cat) => !cat.requires || has[cat.requires]).map((cat) => {
       const opts = cat.options
         .map((o) => {

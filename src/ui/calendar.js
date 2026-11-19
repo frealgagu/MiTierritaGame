@@ -33,7 +33,7 @@ export function showCalendar(state) {
     `${clockLabel(hourOf(clock))} · ${isWorkTime(clock, extra) ? t('jornada de trabajo') : isLunch(clock, extra) ? t('hora del almuerzo, todo descansa') : t('de noche, todo descansa')}\n${season.icon} ${t('{season}, día {day} de {days} · año {year}', { season: season.name, day: seasonDay(clock), days: SEASON_DAYS, year: yearOf(clock) })}`;
   document.getElementById('calendar-work').textContent = workSentence(workBlocks(extra), true);
   // Mitaca belongs to Eje Cafetero.
-  document.querySelector('#calendar .calendar-fact').hidden = (state.region ?? 'cafetero') !== 'cafetero';
+  document.querySelector('#calendar .calendar-fact').hidden = state.region !== 'cafetero';
   const list = document.getElementById('calendar-seasons');
   list.replaceChildren(
     ...SEASONS.map((s) => {

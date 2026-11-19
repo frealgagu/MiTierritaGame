@@ -34,7 +34,7 @@ import { backupName, pickBackupFile, saveBackupFile } from './backup.js';
 import { APP_VERSION, checkForUpdate } from './update.js';
 import { SONGS } from './audio/songs.js';
 import { bindTip, tipMode } from './tip.js';
-import { checkMastery, restartState, startZone } from './sim/legacy.js';
+import { checkMastery, restartRegion, startZone } from './sim/legacy.js';
 import { ZonesView } from './ui/ZonesView.js';
 import { ZONES_BY_ID } from './data/zones/index.js';
 import { ROUTES_BY_ID } from './data/routes.js';
@@ -98,7 +98,8 @@ async function start() {
   const away = saved ? (Date.now() - saved.savedAt) / 1000 : 0;
   // Time away: the country clock, then every region (Eje Cafetero's summary in the welcome window, the others
   // notified separately).
-  if (saved) game.catchUp(away, offlineCapSeconds(root, root.profile));
+  // (The same 30 s floor as the regions, so a quick reload leaves every clock on the same date.)
+  if (saved && away >= MIN_OFFLINE_S) game.catchUp(away, offlineCapSeconds(root.profile));
   const offline = saved ? await applyOffline(games.cafetero, away, null, root.profile) : null;
   const regionOffline = [];
   for (const [id, g] of Object.entries(games)) {
@@ -200,7 +201,7 @@ async function start() {
     root.settings.zone = zoneId;
     active = gameOf(zoneId);
     useGame(active);
-    music.setRegion(REGIONS_BY_ID[active.state.region ?? 'cafetero'].music);
+    music.setRegion(REGIONS_BY_ID[active.state.region].music);
     // Each region has its own decor (v3.10).
     setLook(root.profile, REGION_OF_ZONE[zoneId]);
     scene = new Scene(app, active, sound, ZONES_BY_ID[zoneId]);
@@ -218,7 +219,7 @@ async function start() {
   money = new MoneyView(active, getZone);
   chatter = new Chatter(active, getZone, () => game.state);
   goals = new GoalsView(active, getZone);
-  research = new ResearchView(active, getZone, (id) => select(id));
+  research = new ResearchView(active, getZone, (id) => select(id), root.settings);
   zones = new ZonesView(game, games, getZone, (z) => {
     showZone(z);
     toast(`${ZONES_BY_ID[z].icon} ${ZONES_BY_ID[z].name}`, 2000);
@@ -395,10 +396,10 @@ async function start() {
   const restart = (g) => {
     resetting = true;
     // (v5.13) Every region, Eje Cafetero included, restarts the same way: only its own save is replaced.
-    const region = g.state.region ?? 'cafetero';
-    root.regions[region] = restartState(g.state, Date.now(), root.profile);
+    const region = g.state.region;
+    restartRegion(root, region);
     // Open in the restarted region (v3.72), on its first zone.
-    root.settings.zone = root.regions[region].settings.zone;
+    root.settings.zone = REGIONS_BY_ID[region].zones[0];
     saveGame(root);
     location.reload();
   };
@@ -621,7 +622,7 @@ async function start() {
     hiddenAt = null;
     catching = true;
     try {
-      game.catchUp(away, offlineCapSeconds(root, root.profile));
+      if (away >= MIN_OFFLINE_S) game.catchUp(away, offlineCapSeconds(root.profile));
       const r = await applyOffline(games.cafetero, away, null, root.profile);
       for (const [id, g] of Object.entries(games)) {
         if (id === 'cafetero') continue;
@@ -673,7 +674,7 @@ async function start() {
 // profile: player profile (v3.7: offline hours apply across all regions).
 async function applyOffline(game, seconds, region, profile) {
   if (seconds < MIN_OFFLINE_S) return null;
-  const cap = offlineCapSeconds(game.state, profile);
+  const cap = offlineCapSeconds(profile);
   splashOffline(seconds, cap, region);
   const r = await game.catchUpAsync(seconds, cap, setSplashProgress);
   splashWait(t('¡Listo! Preparando el mapa…'));
@@ -740,7 +741,7 @@ function bindMenu(game, sound, music, getActive, grandFinale, stats) {
   // Statistics (v5.10), opened on the region being viewed.
   document.getElementById('stats-btn').addEventListener('click', () => {
     menu.hidden = true;
-    stats.open(getActive().state.region ?? 'cafetero');
+    stats.open(getActive().state.region);
   });
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));
   const about = document.getElementById('about');

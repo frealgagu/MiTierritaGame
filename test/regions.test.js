@@ -1,10 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
+import { World } from '../src/core/World.js';
 import { newGame, cafeOf, format9 } from './helpers/game.js';
 import { createInitialState } from '../src/sim/state.js';
 import { openRegions, regionState } from '../src/sim/regions.js';
-import { restartState, stationsOf, checkMastery } from '../src/sim/legacy.js';
+import { restartRegion, stationsOf, checkMastery } from '../src/sim/legacy.js';
 import { clockOf } from '../src/sim/calendar.js';
 import { loadGame, saveGame } from '../src/core/SaveSystem.js';
 import { REGIONS, REGION_OF_ZONE } from '../src/data/regions.js';
@@ -20,27 +21,32 @@ test('every region has its zones and its game starts in the first one, with its 
     assert.equal(s.zones[r.zones[0]].unlocked, true);
     assert.ok(s.stations[ZONES_BY_ID[r.zones[0]].farm.stationId]);
   }
-  assert.ok(!createInitialState(0, 'santander').profile, 'the profile belongs to the player: only in the main one');
+  assert.ok(!createInitialState(0, 'santander').profile, 'the profile belongs to the player: only in the whole game');
+  assert.ok(!createInitialState(0, 'cafetero').profile, 'Eje Cafetero too (v5.13)');
 });
 
 test(`Santander opens upon completing the Pueblo, with the country's calendar`, () => {
-  const root = createInitialState(0);
+  const root = newGame();
+  const cafe = cafeOf(root);
   assert.deepEqual(openRegions(root), []);
-  root.playTime = 50060; // at 15:00 (mid-shift)
-  root.zones.pueblo.complete = true;
+  root.playTime = cafe.playTime = 50060; // at 15:00 (mid-shift)
+  cafe.zones.pueblo.complete = true;
   assert.deepEqual(openRegions(root), ['santander']);
   assert.deepEqual(openRegions(root), [], 'only once');
   const s = regionState(root, 'santander');
   assert.equal(s.region, 'santander');
   assert.equal(clockOf(s), 50060);
   // Advances in lockstep: both saves remain on the same date.
-  const a = new Game(root);
+  const w = new World(root);
+  const a = new Game(cafe);
   const b = new Game(s);
   for (let t = 0; t < 30; t += 0.1) {
+    w.step(0.1);
     a.step(0.1);
     b.step(0.1);
   }
   assert.ok(Math.abs(clockOf(root) - clockOf(s)) < 1e-6);
+  assert.ok(Math.abs(clockOf(root) - clockOf(cafe)) < 1e-6);
   assert.ok(b.state.stats.produced.guava > 0, 'the Guayabera produces');
 });
 
@@ -67,16 +73,14 @@ test('every region has its second ending and its restart, without touching the o
   assert.equal(checkMastery(s, { emit() {} }), false);
   s.zones.barichara.complete = true;
   assert.equal(checkMastery(s, { emit() {} }), true);
-  s.playTime = 9000;
-  const next = restartState(s);
+  const next = restartRegion(root, 'santander');
   assert.equal(next.region, 'santander');
-  assert.equal(next.legacy.resets, 1);
-  assert.equal(clockOf(next), clockOf(s), 'the calendar continues');
+  assert.equal(next.keep.resets, 1);
+  assert.equal(clockOf(next), clockOf(root), 'the calendar continues');
   assert.ok(!next.profile);
   // Resetting Eje Cafetero preserves Santander, the profile and the country clock (v5.13: only its own save changes).
-  root.regions.santander = next;
   const profile = root.profile;
-  root.regions.cafetero = restartState(cafeOf(root), 0, root.profile);
+  restartRegion(root, 'cafetero');
   assert.equal(root.regions.santander, next);
   assert.equal(root.profile, profile);
   assert.equal(clockOf(cafeOf(root)), clockOf(root));
@@ -100,8 +104,8 @@ test('the game is saved and loaded with its regions', () => {
 test('a save with the Guayabera already complete opens the Tabacal on loading (v3.1)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
+  const root = newGame();
+  cafeOf(root).zones.pueblo.complete = true;
   openRegions(root);
   const s = root.regions.santander;
   s.zones.guayabera.complete = true;
@@ -335,19 +339,20 @@ test('a save already restarted or with the last zone complete loads with the reg
   delete old.regions.santander.regionDone;
   saveGame(old);
   const back = loadGame();
-  assert.equal(cafeOf(back).regionDone, true, 'it had already been restarted');
-  assert.equal(back.regions.santander.regionDone, true, 'Barichara complete');
+  assert.equal(cafeOf(back).keep.done, true, 'it had already been restarted');
+  assert.equal(back.regions.santander.keep.done, true, 'Barichara complete');
+  assert.equal(back.profile.keep.santander.done, true, 'kept in the profile (v5.13)');
   saveGame(newGame());
-  assert.equal(cafeOf(loadGame()).regionDone, false);
+  assert.equal(cafeOf(loadGame()).keep.done, false);
 });
 
 test('with the Eje Cafetero already finished, Santander opens even if after restarting the Pueblo is not complete (v3.8.1)', () => {
-  const root = createInitialState(0);
-  root.regionDone = true;
+  const root = newGame();
+  cafeOf(root).keep.done = true;
   assert.deepEqual(openRegions(root), ['santander']);
   assert.ok(regionState(root, 'santander'));
   // Without ever finishing it, no.
-  assert.deepEqual(openRegions(createInitialState(0)), []);
+  assert.deepEqual(openRegions(newGame()), []);
 });
 
 test('the second Willys: with the album full it is bought per region, sells double and is not lost on restart (v3.9)', async () => {
@@ -355,19 +360,20 @@ test('the second Willys: with the album full it is bought per region, sells doub
   const { ALBUM } = await import('../src/data/album.js');
   const { analyzeChain } = await import('../src/sim/analysis.js');
   const { CALENDAR } = await import('../src/sim/calendar.js');
-  const root = createInitialState(0);
-  const profile = profileOf(root);
+  const root = newGame();
+  const profile = root.profile;
   profile.renown = 100;
-  assert.equal(quoteWillys2(profile, root).reason, 'album');
+  assert.equal(quoteWillys2(profile, cafeOf(root)).reason, 'album');
   profile.album = ALBUM.flatMap((pg) => pg.stickers.map((s) => s.id));
-  assert.ok(buyWillys2(profile, root));
+  assert.ok(buyWillys2(profile, cafeOf(root)));
   assert.equal(profile.renown, 100 - WILLYS2_COST);
-  assert.equal(quoteWillys2(profile, root).reason, 'owned');
-  assert.ok(restartState(root).willys2, 'it is kept when restarting the region');
+  assert.equal(quoteWillys2(profile, cafeOf(root)).reason, 'owned');
+  assert.ok(restartRegion(root, 'cafetero').keep.willys2, 'it is kept when restarting the region');
+  assert.ok(profile.keep.cafetero.willys2, 'in the profile (v5.13)');
   // Another region is bought separately.
-  root.zones.pueblo.complete = true;
+  cafeOf(root).zones.pueblo.complete = true;
   openRegions(root);
-  assert.ok(!root.regions.santander.willys2);
+  assert.ok(!root.regions.santander.keep.willys2);
   assert.ok(quoteWillys2(profile, root.regions.santander).ok);
   // Sells double: with a full warehouse both Willys depart.
   const on = CALENDAR.on;
@@ -375,7 +381,7 @@ test('the second Willys: with the album full it is bought per region, sells doub
   try {
     const sell = (two) => {
       const g = new Game(createInitialState(0));
-      g.state.willys2 = two;
+      g.state.keep.willys2 = two;
       g.state.zones.finca.warehouse = { cherry: 1e6 };
       for (let t = 0; t < 120; t += 0.1) g.step(0.1);
       return g.state.stats.sold.cherry;
@@ -385,7 +391,7 @@ test('the second Willys: with the album full it is bought per region, sells doub
     assert.ok(Math.abs(two / one - 2) < 0.05, `${one} → ${two}`);
     const s = createInitialState(0);
     const before = analyzeChain(s, 'finca').dispatch;
-    s.willys2 = true;
+    s.keep.willys2 = true;
     assert.ok(Math.abs(analyzeChain(s, 'finca').dispatch / before - 2) < 1e-9);
   } finally {
     CALENDAR.on = on;
@@ -396,8 +402,8 @@ test('album, decoration, achievements and workday belong to each region; Renown,
   const { profileOf, pickDecor, chosenDecor, quoteWillys2, buySticker } = await import('../src/sim/renown.js');
   const { albumOf } = await import('../src/data/album.js');
   const { checkLogros, metric } = await import('../src/sim/logros.js');
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
+  const root = newGame();
+  cafeOf(root).zones.pueblo.complete = true;
   openRegions(root);
   const san = root.regions.santander;
   const p = profileOf(root);
@@ -410,21 +416,21 @@ test('album, decoration, achievements and workday belong to each region; Renown,
   assert.equal(p.renown, 1000 - 3 - 3);
   // Santander's second Willys requires Santander's album.
   for (const pg of albumOf('cafetero')) for (const st of pg.stickers) buySticker(p, st.id);
-  assert.ok(quoteWillys2(p, root).ok);
+  assert.ok(quoteWillys2(p, cafeOf(root)).ok);
   assert.equal(quoteWillys2(p, san).reason, 'album');
   for (const pg of albumOf('santander')) for (const st of pg.stickers) buySticker(p, st.id);
   assert.ok(quoteWillys2(p, san).ok);
   // Achievements: each region has its own, using its save's progress.
   san.stats.sold.bocadillo_crate = 1000;
-  root.stats.sold.coffee_bag = 1000;
+  cafeOf(root).stats.sold.coffee_bag = 1000;
   const won = checkLogros(san, p).map((w) => w.logro.id);
   assert.ok(won.includes('s_bocadillo') && won.includes('s_album'), won.join());
   assert.ok(!won.includes('bolsas'), 'the Eje Cafetero ones are not checked with Santander');
   assert.equal(metric(san, 'pages', p), 6);
   // Resetting Santander moves its save stats into its lifetime totals.
-  const next = restartState(san, 0, p);
+  const next = restartRegion(root, 'santander');
   assert.equal(metric(next, 'sold:bocadillo_crate', p), 1000);
-  assert.equal(metric(root, 'sold:bocadillo_crate', p), 0);
+  assert.equal(metric(cafeOf(root), 'sold:bocadillo_crate', p), 0);
 });
 
 test('a v3.9 save moves the decoration to the Eje Cafetero and the workday to each region (v3.10)', () => {
@@ -435,8 +441,8 @@ test('a v3.9 save moves the decoration to the Eje Cafetero and the workday to ea
   root.profile.workLevel = 2;
   saveGame(root);
   const back = loadGame();
-  assert.equal(cafeOf(back).workLevel, 2);
-  assert.equal(back.regions.santander.workLevel, 2);
+  assert.equal(cafeOf(back).keep.workLevel, 2);
+  assert.equal(back.regions.santander.keep.workLevel, 2);
   assert.equal(back.profile.workLevel, undefined);
   return import('../src/sim/renown.js').then(({ chosenDecor }) => {
     assert.equal(chosenDecor(back.profile, 'cafetero').willys.id, 'rojo');
@@ -449,8 +455,8 @@ test('La Costa opens upon completing Barichara; with Cartagena complete it is fi
   const { regionEvents } = await import('../src/sim/events.js');
   const { albumOf } = await import('../src/data/album.js');
   const { logrosOf } = await import('../src/data/logros.js');
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
+  const root = newGame();
+  cafeOf(root).zones.pueblo.complete = true;
   openRegions(root);
   const s = regionState(root, 'santander');
   assert.deepEqual(openRegions(root), []);
@@ -461,12 +467,12 @@ test('La Costa opens upon completing Barichara; with Cartagena complete it is fi
   // Each zone opens the next (v3.16 to v3.20) and Cartagena, the last one, finishes the region.
   c.stats.sold = { rice_sack: 1e9, cocada: 1e9, fish_in_coconut: 1e9, bandeja_costena: 1e9, recuerdo_costa: 1e9, paseo_islas: 1e9 };
   for (const zone of ['arrozal', 'cocal', 'cienaga', 'quesera', 'sombrero', 'cartagena']) {
-    assert.ok(!c.regionDone, zone);
+    assert.ok(!c.keep.done, zone);
     c.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
     claimGoal(c, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
     assert.equal(c.zones[zone].complete, true);
   }
-  assert.ok(c.regionDone);
+  assert.ok(c.keep.done);
   // With all its content (v3.21): six events, six album pages, and its achievements.
   assert.equal(regionEvents('costa').length, 6);
   assert.equal(albumOf('costa').length, 6);
@@ -477,16 +483,16 @@ test('La Costa opens upon completing Barichara; with Cartagena complete it is fi
 test('a saved Costa with Cartagena complete (when it was under construction) is finished on loading (v3.21)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
+  const root = newGame();
+  cafeOf(root).zones.pueblo.complete = true;
   openRegions(root);
   root.regions.santander.zones.barichara.complete = true;
   openRegions(root);
   const c = root.regions.costa;
   for (const z of Object.keys(c.zones)) c.zones[z] = { ...c.zones[z], unlocked: true, complete: true };
-  c.regionDone = false;
+  c.keep.done = false;
   saveGame(root);
-  assert.equal(loadGame().regions.costa.regionDone, true);
+  assert.equal(loadGame().regions.costa.keep.done, true);
 });
 
 test('La Ciénaga cooks fish in coconut with the milk that comes from the Cocal (v3.17)', async () => {
@@ -581,8 +587,8 @@ test('Boyacá opens upon completing Cartagena; with Villa de Leyva complete it i
   const { regionEvents } = await import('../src/sim/events.js');
   const { albumOf } = await import('../src/data/album.js');
   const { logrosOf } = await import('../src/data/logros.js');
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
+  const root = newGame();
+  cafeOf(root).zones.pueblo.complete = true;
   openRegions(root);
   root.regions.santander.zones.barichara.complete = true;
   openRegions(root);
@@ -594,12 +600,12 @@ test('Boyacá opens upon completing Cartagena; with Villa de Leyva complete it i
   // Each zone opens the next (v3.23 to v3.27) and Villa de Leyva, the last one, finishes the region.
   b.stats.sold = { criollas_box: 1e9, beer_crate: 1e9, jarra_cerveza: 1e9, canasta_amasijos: 1e9, recuerdo_boyaca: 1e9, excursion_fosil: 1e9 };
   for (const zone of ['papal', 'cerveceria', 'raquira', 'paipa', 'ruanas', 'villa_leyva']) {
-    assert.ok(!b.regionDone, zone);
+    assert.ok(!b.keep.done, zone);
     b.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
     claimGoal(b, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
     assert.equal(b.zones[zone].complete, true);
   }
-  assert.ok(b.regionDone);
+  assert.ok(b.keep.done);
   // With all its content (v3.28): six events, six album pages, and its achievements.
   assert.equal(regionEvents('boyaca').length, 6);
   assert.equal(albumOf('boyaca').length, 6);
@@ -705,9 +711,7 @@ test(`La Guayabera with the Vélez plaza: the mules' trips last the same as in t
 test('loading a v3.29 save, the slots become two for the whole game (v3.30)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
-  openRegions(root);
+  const root = format9();
   delete root.events.global;
   root.events.slots = [{ zone: 'finca' }, { until: 5000 }];
   const san = root.regions.santander;
@@ -726,8 +730,8 @@ test('Los Llanos open upon completing Villa de Leyva; with Villavicencio complet
   const { regionEvents } = await import('../src/sim/events.js');
   const { albumOf } = await import('../src/data/album.js');
   const { logrosOf } = await import('../src/data/logros.js');
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
+  const root = newGame();
+  cafeOf(root).zones.pueblo.complete = true;
   openRegions(root);
   root.regions.santander.zones.barichara.complete = true;
   openRegions(root);
@@ -742,12 +746,12 @@ test('Los Llanos open upon completing Villa de Leyva; with Villavicencio complet
   // Each zone opens the next (v3.32 to v3.36) and Villavicencio, the last one, finishes the region.
   l.stats.sold = { oil_box: 1e9, juice_box: 1e9, cachama_maracuya: 1e9, parranda_llanera: 1e9, recuerdo_llano: 1e9, excursion_cano: 1e9 };
   for (const zone of zones) {
-    assert.ok(!l.regionDone, zone);
+    assert.ok(!l.keep.done, zone);
     l.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
     claimGoal(l, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
     assert.equal(l.zones[zone].complete, true);
   }
-  assert.ok(l.regionDone);
+  assert.ok(l.keep.done);
   // With all its content (v3.37): six events, six album pages, and its achievements.
   assert.equal(regionEvents('llanos').length, 6);
   assert.equal(albumOf('llanos').length, 6);
@@ -845,8 +849,8 @@ test('La Costa Pacífica opens upon completing Villavicencio; with Buenaventura 
   const { regionEvents } = await import('../src/sim/events.js');
   const { albumOf } = await import('../src/data/album.js');
   const { logrosOf } = await import('../src/data/logros.js');
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
+  const root = newGame();
+  cafeOf(root).zones.pueblo.complete = true;
   openRegions(root);
   root.regions.santander.zones.barichara.complete = true;
   openRegions(root);
@@ -863,12 +867,12 @@ test('La Costa Pacífica opens upon completing Villavicencio; with Buenaventura 
   // Each zone opens the next (v3.39 to v3.43) and Buenaventura, the last one, finishes the region.
   c.stats.sold = { patacon_box: 1e9, alino_box: 1e9, tapao: 1e9, cazuela_mariscos: 1e9, recuerdo_pacifico: 1e9, excursion_ballenas: 1e9 };
   for (const zone of zones) {
-    assert.ok(!c.regionDone, zone);
+    assert.ok(!c.keep.done, zone);
     c.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
     claimGoal(c, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
     assert.equal(c.zones[zone].complete, true);
   }
-  assert.ok(c.regionDone);
+  assert.ok(c.keep.done);
   // With all its content (v3.44): six events, six album pages, and its achievements.
   assert.equal(regionEvents('pacifico').length, 6);
   assert.equal(albumOf('pacifico').length, 6);
@@ -967,8 +971,8 @@ test('El Amazonas opens upon completing Buenaventura; with Leticia complete it i
   const { regionEvents } = await import('../src/sim/events.js');
   const { albumOf } = await import('../src/data/album.js');
   const { logrosOf } = await import('../src/data/logros.js');
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
+  const root = newGame();
+  cafeOf(root).zones.pueblo.complete = true;
   openRegions(root);
   for (const [region, zone] of [['santander', 'barichara'], ['costa', 'cartagena'], ['boyaca', 'villa_leyva'], ['llanos', 'villavicencio']]) {
     root.regions[region].zones[zone].complete = true;
@@ -984,12 +988,12 @@ test('El Amazonas opens upon completing Buenaventura; with Leticia complete it i
   // Each zone opens the next (v3.48 to v3.52) and Leticia, the last one, finishes the region.
   a.stats.sold = { asai_box: 1e9, aji_box: 1e9, pirarucu_aji: 1e9, banquete_maloca: 1e9, recuerdo_amazonas: 1e9, excursion_delfines: 1e9 };
   for (const zone of zones) {
-    assert.ok(!a.regionDone, zone);
+    assert.ok(!a.keep.done, zone);
     a.goals.claimed.push(...GOALS_BY_ZONE[zone].filter((g) => !g.final).map((g) => g.id));
     claimGoal(a, GOALS_BY_ZONE[zone].find((g) => g.final).id, { emit() {} });
     assert.equal(a.zones[zone].complete, true);
   }
-  assert.ok(a.regionDone);
+  assert.ok(a.keep.done);
   // With all its content (v3.53): six events, six album pages, and its achievements.
   assert.equal(regionEvents('amazonas').length, 6);
   assert.equal(albumOf('amazonas').length, 6);

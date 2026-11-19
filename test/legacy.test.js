@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { analyzeChain } from '../src/sim/analysis.js';
 import { chainOf } from '../src/sim/chain.js';
-import { masteryParts, masteryReady, maxedCount, restartState, stationsOf } from '../src/sim/legacy.js';
+import { masteryParts, masteryReady, maxedCount, restartRegion, stationsOf } from '../src/sim/legacy.js';
+import { gameWith, newGame } from './helpers/game.js';
 import { GOALS_BY_ZONE } from '../src/data/goals.js';
 import { RESEARCH } from '../src/data/research.js';
 import { REGION_OF_ZONE } from '../src/data/regions.js';
@@ -22,7 +23,7 @@ function run(game, seconds) {
 function everything(level, resets = 0) {
   const game = new Game();
   const s = game.state;
-  s.legacy.resets = resets;
+  s.keep.resets = resets;
   s.coins = 1e30;
   for (const z of ZONE_LIST.slice(1)) game.unlockZone(z.id);
   for (const z of ZONE_LIST) for (const id of chainOf(z.id).slice(1)) game.unlock(id);
@@ -111,21 +112,23 @@ test(`without the first ending there is no second: it comes on collecting the Pu
 test('starting over: everything from scratch, with production doubled and the previous settings', () => {
   const game = everything(100, 1);
   const s = game.state;
+  const root = gameWith(s);
+  s.keep.resets = 1;
   s.mastered = true;
   s.playTime = 36000;
   s.totalEarned = 1e20;
   s.hints.push('wetmill');
-  const next = restartState(s);
-  assert.equal(next.legacy.resets, 2);
+  const next = restartRegion(root, 'cafetero');
+  assert.equal(next.keep.resets, 2);
   assert.equal(legacyMult(next), 4);
-  assert.equal(next.legacy.history, undefined, 'no game log (v4.0)');
+  assert.deepEqual(Object.keys(root.profile.keep.cafetero).sort(), ['done', 'resets'], 'no game log (v4.0)');
   assert.equal(next.coins, 0);
   assert.equal(next.playTime, 0);
   assert.equal(next.mastered, false);
   assert.deepEqual(Object.keys(next.stations), ['farm']);
   assert.equal(next.zones.trapiche.unlocked, false);
   assert.deepEqual(next.research, []);
-  assert.equal(next.settings.zone, 'finca', 'the settings belong to the whole game (v5.13): the region keeps only its zone');
+  assert.equal(next.settings, undefined, 'the settings belong to the whole game (v5.13)');
   assert.ok(next.hints.includes('wetmill'));
   // And Finca produces double... of double.
   const g = new Game(next);
@@ -163,15 +166,16 @@ test('Mastery ×4 with the whole zone at 75 and Supremacy ×8 with all of it at 
 
 test('the multiplier goes up to ×2⁶⁰: you can keep restarting, but it no longer doubles or counts (v3.56, v3.68.3, v4.0)', async () => {
   const { nextLegacyMult } = await import('../src/sim/modifiers.js');
-  let state = new Game().state;
-  for (let k = 0; k < 59; k++) state = restartState(state);
+  const root = newGame();
+  let state;
+  for (let k = 0; k < 59; k++) state = restartRegion(root, 'cafetero');
   assert.equal(legacyMult(state), 2 ** 59);
   assert.equal(nextLegacyMult(state), 2 ** 60);
-  state = restartState(state);
+  state = restartRegion(root, 'cafetero');
   assert.equal(legacyMult(state), 2 ** 60);
   assert.equal(nextLegacyMult(state), 2 ** 60, 'it no longer doubles');
-  for (let k = 0; k < 8; k++) state = restartState(state);
-  assert.equal(state.legacy.resets, 60, 'restarts stay at the cap (v4.0)');
+  for (let k = 0; k < 8; k++) state = restartRegion(root, 'cafetero');
+  assert.equal(state.keep.resets, 60, 'restarts stay at the cap (v4.0)');
   assert.equal(legacyMult(state), 2 ** 60);
   const game = new Game(state);
   run(game, 60);

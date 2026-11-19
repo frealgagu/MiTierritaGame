@@ -121,6 +121,6 @@ export const REGIONS = [
 
 export const REGIONS_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]));
 export const REGION_OF_ZONE = Object.fromEntries(REGIONS.flatMap((r) => r.zones.map((z) => [z, r.id])));
-export const regionOf = (state) => REGIONS_BY_ID[state.region ?? 'cafetero'];
+export const regionOf = (state) => REGIONS_BY_ID[state.region];
 // Regions a list may name (v5.4): a secret region only once it has opened in this save.
 export const shownRegions = (opened) => REGIONS.filter((r) => !r.secret || opened(r.id));

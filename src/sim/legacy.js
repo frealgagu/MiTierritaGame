@@ -12,10 +12,9 @@ import { STATIONS_BY_ID } from '../data/stations.js';
 import { GOALS_BY_ZONE } from '../data/goals.js';
 import { RESEARCH } from '../data/research.js';
 import { REGION_OF_ZONE } from '../data/regions.js';
-import { createInitialState } from './state.js';
-import { legacyMult } from './modifiers.js';
+import { createInitialState, linkRegion } from './state.js';
 import { bankRun } from './logros.js';
-import { RESTART_RENOWN, gainRenown, profileOf } from './renown.js';
+import { RESTART_RENOWN, gainRenown } from './renown.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { tk } from '../i18n/index.js'; // labels translated where displayed (GoalsView)
 import { CAPS } from '../data/caps.js';
@@ -75,54 +74,29 @@ export function checkMastery(state, bus) {
   return true;
 }
 
-// Fresh save with production doubled from previous. Keeps settings, seen notices,
-// completed runs record, and Renown with medals.
-// Since v3.0 resets only its own region: others stay untouched, country calendar keeps
-// running (new run starts at the date previous run ended).
-// profile: player's, for another region's save (v3.10: finished run counters merge into
-// that region's achievement totals).
-export function restartState(state, now = Date.now(), profile = null) {
-  const region = regionOf(state);
-  const next = createInitialState(now, region.id);
-  // Resets cap at multiplier limit (v4.0: stay there; previously kept incrementing and
-  // appended to an unbounded completed runs log).
-  next.legacy = { resets: Math.min(CAPS.resets, (state.legacy?.resets ?? 0) + 1) };
-  next.clockOffset = clockOf(state);
-  next.settings = { zone: region.zones[0] };
+// Restarts a region with doubled production (v1.6; since v3.0 only that region). (v5.13) Only the region's own save
+// is replaced: the whole game's save (profile, settings, slots, country clock, the other regions) is not touched,
+// and what the region keeps lives in its profile entry (`keep`: resets, done, second Willys, chivas, workday),
+// which needs no copying. The finished run is banked into the profile (achievements and totals) and gives Renown
+// (v3.11). The new run starts at the country's date, with the region's notices already seen and its events as they
+// were (open boards, last played and rounds; v3.12).
+//   root: the whole game's save   regionId: the region to restart   Returns the new region save.
+export function restartRegion(root, regionId, now = Date.now()) {
+  const state = root.regions[regionId];
+  const region = REGIONS_BY_ID[regionId];
+  const keep = state.keep;
+  // Resets stop at the multiplier cap (v4.0); the region counts as finished from its first ending on (v3.8).
+  keep.resets = Math.min(CAPS.resets, keep.resets + 1);
+  keep.done = Boolean(keep.done || state.zones[region.zones.at(-1)]?.complete);
+  bankRun(state, root.profile);
+  gainRenown(root.profile, RESTART_RENOWN);
+  const next = createInitialState(now, regionId);
+  next.clockOffset = clockOf(root);
   next.hints = [...(state.hints ?? [])];
-  // (v5.13) A region save never holds the others: they live in the whole game's save (sim/state.js:
-  // createGameState), which a restart does not touch. A lone region save restarts on its own (tests).
-  // Region's second Willys (v3.9) and work shift (v3.10) persist.
-  if (state.willys2) next.willys2 = true;
-  if (state.chivas) next.chivas = state.chivas; // faster chivas (v4.2)
-  if (state.workLevel) next.workLevel = state.workLevel;
-  // Region already cleared once (v3.8): its events keep spawning across all zones.
-  next.regionDone = Boolean(state.regionDone || state.zones[region.zones.at(-1)]?.complete);
-  // Persistent across reset (v2.0): Renown, medals, album, decoration, achievements (the player's profile, in the
-  // whole game's save, v5.13); current run stats fold into achievements (v2.3).
-  // Events stay untouched (v3.12): active boards, last played and rounds. (Until v3.11 active board was lost.) The
-  // game-wide slots are in the whole game's save; a lone region save keeps its own (tests).
   const ev = state.events ?? {};
-  next.events = {
-    boards: structuredClone(ev.boards ?? {}),
-    last: { ...ev.last },
-    count: { ...ev.count },
-    ...(ev.slots && { slots: [0, 1].map((i) => ev.slots[i] ?? null), global: true }),
-  };
-  // Each reset awards Renown (v3.11). The profile comes from the whole game's save; a lone region save that carries
-  // its own (tests) keeps it.
-  if (state.profile) {
-    next.profile = structuredClone(state.profile);
-    bankRun(state, profileOf(next));
-    gainRenown(profileOf(next), RESTART_RENOWN);
-  } else {
-    delete next.profile;
-    if (profile) {
-      bankRun(state, profile);
-      gainRenown(profile, RESTART_RENOWN);
-    }
-  }
-  return next;
+  next.events = { boards: structuredClone(ev.boards ?? {}), last: { ...ev.last }, count: { ...ev.count } };
+  root.regions[regionId] = next;
+  return linkRegion(root, regionId);
 }
 
 // Opening zone on load (v3.72): currently viewed zone if still open; otherwise (resetting

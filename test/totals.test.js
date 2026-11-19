@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
 import { CAPS } from '../src/data/caps.js';
 import { exportSave, importSave } from '../src/core/SaveSystem.js';
-import { restartState } from '../src/sim/legacy.js';
+import { restartRegion } from '../src/sim/legacy.js';
 import { createInitialState } from '../src/sim/state.js';
 import { clockOf } from '../src/sim/calendar.js';
 import { count, gameTotals } from '../src/sim/totals.js';
@@ -12,13 +12,14 @@ import { capCoins } from '../src/sim/modifiers.js';
 import { newGame, cafeOf, reload, format9 } from './helpers/game.js';
 
 test('the whole game counts what is produced, as it is produced (v5.12)', () => {
-  const game = new Game();
+  const root = newGame();
+  const game = new Game(cafeOf(root));
   for (let i = 0; i < 600; i++) game.step(0.5);
   const s = game.state;
   const produced = Object.values(s.stats.produced).reduce((a, b) => a + b, 0);
   assert.ok(produced > 0);
   assert.equal(s.counted.produced, produced);
-  assert.equal(gameTotals(s).produced, produced);
+  assert.equal(gameTotals(root).produced, produced);
 });
 
 test('the whole game keeps counting while a product sits at its run cap (v5.12)', () => {
@@ -41,11 +42,11 @@ test('restarting Eje Cafetero or another region keeps the totals and the time pl
   root = reload(root);
   const before = gameTotals(root);
   const time = clockOf(root);
-  root.regions.cafetero = restartState(cafeOf(root), Date.now(), root.profile);
+  restartRegion(root, 'cafetero');
   root = reload(root);
   assert.deepEqual(gameTotals(root), before, 'after restarting Eje Cafetero');
   assert.equal(clockOf(root), time, 'the time played does not go back to 0');
-  root.regions.santander = restartState(root.regions.santander, Date.now(), root.profile);
+  restartRegion(root, 'santander');
   root = reload(root);
   assert.deepEqual(gameTotals(root), before, 'after restarting Santander');
 });

@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
-import { createInitialState } from '../src/sim/state.js';
+import { createInitialState, linkRegion } from '../src/sim/state.js';
+import { newGame } from './helpers/game.js';
 import { openRegions, regionState } from '../src/sim/regions.js';
 import { ROUTES } from '../src/data/routes.js';
 import { routeActive, routeRegion } from '../src/sim/routes.js';
@@ -37,8 +38,9 @@ test('the truck brings cargo without a source warehouse and the Tostadero produc
 test('Bogotá opens upon completing Zipaquirá, published and without construction (v4.5)', async () => {
   const { REGIONS_BY_ID } = await import('../src/data/regions.js');
   assert.ok(!REGIONS_BY_ID.bogota.hidden && !REGIONS_BY_ID.bogota.wip);
-  const root = createInitialState(0);
-  root.regions = { cundinamarca: createInitialState(0, 'cundinamarca') };
+  const root = newGame(0);
+  root.regions.cundinamarca = createInitialState(0, 'cundinamarca');
+  linkRegion(root, 'cundinamarca');
   assert.deepEqual(openRegions(root), []);
   root.regions.cundinamarca.zones.zipaquira.complete = true;
   assert.ok(openRegions(root).includes('bogota'));

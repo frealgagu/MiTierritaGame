@@ -78,19 +78,18 @@ test('the quality seal raises the price of the bags', () => {
 });
 
 test('offline hours belong to the player: 2 h and +2 h per level with Renown, up to 24 h (v3.7)', async () => {
-  const { buyOffline, offlineHours, OFFLINE_COSTS, profileOf } = await import('../src/sim/renown.js');
-  const game = new Game();
-  const profile = profileOf(game.state); // a lone region save carrying the player's profile
-  assert.equal(offlineCapSeconds(game.state), 2 * 3600);
+  const { buyOffline, offlineHours, OFFLINE_COSTS } = await import('../src/sim/renown.js');
+  const { newGame } = await import('./helpers/game.js');
+  const profile = newGame().profile;
+  assert.equal(offlineCapSeconds(profile), 2 * 3600);
   assert.equal(buyOffline(profile), false, 'without Renown it cannot be bought');
   profile.renown = 1000;
   for (let k = 0; k < OFFLINE_COSTS.length; k++) assert.ok(buyOffline(profile));
   assert.equal(buyOffline(profile), false, 'it is already at the maximum');
   assert.equal(offlineHours(profile), 24);
   assert.equal(profile.renown, 1000 - OFFLINE_COSTS.reduce((a, b) => a + b, 0));
-  // A region (without its own profile) uses the player's.
-  const santander = createInitialState(0, 'santander');
-  assert.equal(offlineCapSeconds(santander, profile), 24 * 3600);
+  // Every region uses the player's (v5.13: the profile is the whole game's).
+  assert.equal(offlineCapSeconds(profile), 24 * 3600);
   // There are no longer research upgrades adding hours.
   assert.ok(!RESEARCH.some((r) => r.effect.type === 'offlineHours'));
 });
@@ -149,7 +148,7 @@ test('offline earnings resemble those of playing live', () => {
   const live = setup();
   const offline = setup();
   run(live, 1800);
-  offline.catchUp(1800);
+  offline.catchUp(1800, 2 * 3600);
   const ratio = offline.state.coins / live.state.coins;
   assert.ok(ratio > 0.85 && ratio < 1.15, `offline / live = ${ratio.toFixed(2)}`);
 });

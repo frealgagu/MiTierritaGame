@@ -7,7 +7,7 @@ import { albumOf } from '../data/album.js';
 import { EVENTS_BY_ID } from '../data/events.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { YEAR_DAYS, DAY_LENGTH } from './calendar.js';
-import { gainRenown, pageDone, profileOf } from './renown.js';
+import { gainRenown, pageDone } from './renown.js';
 import { CAPS, capAdd } from '../data/caps.js';
 import { bankTotals } from './totals.js';
 
@@ -33,12 +33,12 @@ export function bankRun(state, profile) {
 }
 
 // state: region save   profile: player's (held by Eje Cafetero save)
-export function metric(state, name, profile = profileOf(state)) {
-  const region = state.region ?? 'cafetero';
+export function metric(state, name, profile) {
+  const region = state.region;
   const life = lifetimeOf(profile, region);
   const [kind, product] = name.split(':');
   // Finished runs: region resets (v4.0; up to 60, matching multiplier cap).
-  const runs = state.legacy?.resets ?? 0;
+  const runs = state.keep?.resets ?? 0;
   // Event medals earned in this region.
   const medals = Object.entries(profile.medals)
     .filter(([id]) => REGION_OF_ZONE[EVENTS_BY_ID[id]?.zone] === region)
@@ -80,10 +80,10 @@ export const tierOf = (logro, value) => logro.tiers.filter((t) => value >= t).le
 
 // Evaluates achievements for `state`'s region and pays new tiers. Returns newly earned list:
 // [{ logro, tier, reward }].
-export function checkLogros(state, profile = profileOf(state)) {
+export function checkLogros(state, profile) {
   profile.logros ??= {};
   const won = [];
-  for (const logro of logrosOf(state.region ?? 'cafetero')) {
+  for (const logro of logrosOf(state.region)) {
     const have = profile.logros[logro.id] ?? 0;
     const tier = tierOf(logro, metric(state, logro.metric, profile));
     for (let k = have; k < tier; k++) {

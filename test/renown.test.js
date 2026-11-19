@@ -2,9 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { ALBUM, PAGE_BONUS, STICKERS_BY_ID } from '../src/data/album.js';
 import { DECOR } from '../src/data/decor.js';
-import { buySticker, chosenDecor, pageDone, pickDecor, profileOf, quoteSticker } from '../src/sim/renown.js';
+import { buySticker, chosenDecor, pageDone, pickDecor, quoteSticker } from '../src/sim/renown.js';
 import { createInitialState } from '../src/sim/state.js';
-import { restartState } from '../src/sim/legacy.js';
+import { restartRegion } from '../src/sim/legacy.js';
+import { newGame } from './helpers/game.js';
 
 test('every region has its album of six pages of six stickers, with unique ids and short texts (v3.10)', () => {
   assert.equal(ALBUM.length, 63);
@@ -18,8 +19,7 @@ test('every region has its album of six pages of six stickers, with unique ids a
 });
 
 test('stickers are paid with Renown, once, and the full page gives a prize', () => {
-  const state = createInitialState();
-  const p = profileOf(state);
+  const p = newGame().profile;
   const page = ALBUM[0];
   assert.equal(quoteSticker(p, page.stickers[0].id).reason, 'renown');
   p.renown = 100;
@@ -33,8 +33,8 @@ test('stickers are paid with Renown, once, and the full page gives a prize', () 
 });
 
 test('decoration: the default is free, the rest is bought once and can be chosen again', () => {
-  const state = createInitialState();
-  const p = profileOf(state);
+  const root = newGame();
+  const p = root.profile;
   for (const cat of DECOR) assert.equal(chosenDecor(p)[cat.id].id, cat.options[0].id);
   assert.equal(pickDecor(p, 'willys', 'rojo'), false, 'without Renown');
   p.renown = 3;
@@ -44,29 +44,29 @@ test('decoration: the default is free, the rest is bought once and can be chosen
   assert.ok(pickDecor(p, 'willys', 'verde'));
   assert.ok(pickDecor(p, 'willys', 'rojo'), 'it is already owned: it is not paid again');
   assert.equal(p.renown, 0);
-  // Carries over to the new playthrough on reset.
-  const next = restartState(state);
-  assert.equal(chosenDecor(next.profile).willys.id, 'rojo');
-  assert.deepEqual(next.profile.album, p.album);
+  // Carries over to the new playthrough on reset (the profile is the whole game's, v5.13).
+  const album = [...p.album];
+  restartRegion(root, 'cafetero');
+  assert.equal(chosenDecor(root.profile).willys.id, 'rojo');
+  assert.deepEqual(root.profile.album, album);
 });
 
 test('lifetime Renown earned does not go down on spending, and each restart gives 10 ⭐ (v3.11)', async () => {
   const { gainRenown, RESTART_RENOWN } = await import('../src/sim/renown.js');
-  const { restartState } = await import('../src/sim/legacy.js');
   const { openRegions } = await import('../src/sim/regions.js');
-  const root = createInitialState(0);
-  const p = profileOf(root);
+  const root = newGame();
+  const p = root.profile;
   gainRenown(p, 5);
   p.renown -= 3; // gets spent
   assert.deepEqual([p.renown, p.renownTotal], [2, 5]);
-  const next = restartState(root);
+  const next = restartRegion(root, 'cafetero');
   assert.equal(RESTART_RENOWN, 10);
-  assert.deepEqual([next.profile.renown, next.profile.renownTotal], [12, 15]);
+  assert.deepEqual([p.renown, p.renownTotal], [12, 15]);
   // Renown from another region adds to the player's profile.
   next.zones.pueblo.complete = true;
-  openRegions(next);
-  restartState(next.regions.santander, 0, next.profile);
-  assert.deepEqual([next.profile.renown, next.profile.renownTotal], [22, 25]);
+  openRegions(root);
+  restartRegion(root, 'santander');
+  assert.deepEqual([p.renown, p.renownTotal], [22, 25]);
 });
 
 test('a save from before v3.11 rebuilds its total Renown earned', async () => {

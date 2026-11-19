@@ -109,7 +109,7 @@ export function buyOffline(profile) {
 // EXTRA_BLOCKS). Each doubles prior cost. Since v3.10 stored per region (`workLevel`
 // in region save, preserved on reset); paid using player Renown.
 export const WORK_COSTS = [2, 4, 8, 16, 32, 64]; // ⭐ per block
-export const workLevel = (region) => region?.workLevel ?? 0;
+export const workLevel = (region) => region?.keep?.workLevel ?? 0;
 
 export function quoteWork(profile, region) {
   const cost = WORK_COSTS[workLevel(region)];
@@ -122,7 +122,7 @@ export function buyWork(profile, region) {
   const q = quoteWork(profile, region);
   if (!q.ok) return false;
   profile.renown -= q.cost;
-  region.workLevel = workLevel(region) + 1;
+  region.keep.workLevel = workLevel(region) + 1;
   return true;
 }
 
@@ -135,8 +135,8 @@ export const albumDone = (profile, region = 'cafetero') => albumOf(region).lengt
 
 export function quoteWillys2(profile, region) {
   if (!region) return { ok: false, reason: 'region', cost: WILLYS2_COST };
-  if (region.willys2) return { ok: false, reason: 'owned', cost: WILLYS2_COST };
-  if (!albumDone(profile, region.region ?? 'cafetero')) return { ok: false, reason: 'album', cost: WILLYS2_COST };
+  if (region.keep.willys2) return { ok: false, reason: 'owned', cost: WILLYS2_COST };
+  if (!albumDone(profile, region.region)) return { ok: false, reason: 'album', cost: WILLYS2_COST };
   if (!canPayRenown(profile, WILLYS2_COST)) return { ok: false, reason: 'renown', cost: WILLYS2_COST };
   return { ok: true, cost: WILLYS2_COST };
 }
@@ -145,7 +145,7 @@ export function buyWillys2(profile, region) {
   const q = quoteWillys2(profile, region);
   if (!q.ok) return false;
   profile.renown -= q.cost;
-  region.willys2 = true;
+  region.keep.willys2 = true;
   return true;
 }
 
@@ -156,14 +156,14 @@ export const CHIVA_STEPS = [
   { every: 30, cost: 10 },
   { every: 15, cost: 20 },
 ];
-export const chivaEvery = (region) => region?.chivas ?? 60;
+export const chivaEvery = (region) => region?.keep?.chivas ?? 60;
 
 export function quoteChivas(profile, region) {
   const step = CHIVA_STEPS.find((s) => s.every < chivaEvery(region));
   if (!region) return { ok: false, reason: 'region' };
   if (!step) return { ok: false, reason: 'max' };
-  if (!albumDone(profile, region.region ?? 'cafetero')) return { ok: false, reason: 'album', ...step };
-  if (!(region.legacy?.resets >= 1)) return { ok: false, reason: 'restart', ...step };
+  if (!albumDone(profile, region.region)) return { ok: false, reason: 'album', ...step };
+  if (!(region.keep.resets >= 1)) return { ok: false, reason: 'restart', ...step };
   if (!canPayRenown(profile, step.cost)) return { ok: false, reason: 'renown', ...step };
   return { ok: true, ...step };
 }
@@ -172,7 +172,7 @@ export function buyChivas(profile, region) {
   const q = quoteChivas(profile, region);
   if (!q.ok) return false;
   profile.renown -= q.cost;
-  region.chivas = q.every;
+  region.keep.chivas = q.every;
   return true;
 }
 

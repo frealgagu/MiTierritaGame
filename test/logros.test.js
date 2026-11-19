@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { LOGROS } from '../src/data/logros.js';
 import { checkLogros, metric } from '../src/sim/logros.js';
 import { createInitialState } from '../src/sim/state.js';
-import { restartState } from '../src/sim/legacy.js';
+import { restartRegion } from '../src/sim/legacy.js';
+import { newGame } from './helpers/game.js';
 
 test('achievements have growing levels and a prize per level', () => {
   for (const l of LOGROS) {
@@ -14,31 +15,34 @@ test('achievements have growing levels and a prize per level', () => {
 });
 
 test('each level pays out only once, and several at once if reached together', () => {
-  const s = createInitialState();
-  assert.deepEqual(checkLogros(s), []);
+  const root = newGame();
+  const s = root.regions.cafetero;
+  assert.deepEqual(checkLogros(s, root.profile), []);
   s.stats.sold.coffee_bag = 200000;
-  const won = checkLogros(s);
+  const won = checkLogros(s, root.profile);
   assert.deepEqual(won.map((w) => [w.logro.id, w.tier]), [['bolsas', 1], ['bolsas', 2]]);
-  assert.equal(s.profile.renown, 3);
-  assert.deepEqual(checkLogros(s), []);
+  assert.equal(root.profile.renown, 3);
+  assert.deepEqual(checkLogros(s, root.profile), []);
 });
 
 test('what earlier games did still counts on starting over', () => {
-  const s = createInitialState();
+  const root = newGame();
+  const p = root.profile;
+  const s = root.regions.cafetero;
   s.stats.sold.coffee_bag = 600;
   s.totalEarned = 5e8;
   s.playTime = 3 * 16 * 480;
   s.zones.pueblo.complete = true;
   s.mastered = true;
-  checkLogros(s);
-  const next = restartState(s);
+  checkLogros(s, p);
+  const next = restartRegion(root, 'cafetero');
   next.stats.sold.coffee_bag = 500;
-  assert.equal(metric(next, 'sold:coffee_bag'), 1100);
-  assert.equal(metric(next, 'earned'), 5e8);
-  assert.equal(metric(next, 'endings'), 1);
-  assert.equal(metric(next, 'masteries'), 1);
-  assert.ok(Math.abs(metric(next, 'years') - 3) < 1e-9);
-  const won = checkLogros(next).map((w) => w.logro.id);
+  assert.equal(metric(next, 'sold:coffee_bag', p), 1100);
+  assert.equal(metric(next, 'earned', p), 5e8);
+  assert.equal(metric(next, 'endings', p), 1);
+  assert.equal(metric(next, 'masteries', p), 1);
+  assert.ok(Math.abs(metric(next, 'years', p) - 3) < 1e-9);
+  const won = checkLogros(next, p).map((w) => w.logro.id);
   assert.ok(won.includes('bolsas'));
   assert.ok(!won.includes('pueblo'), 'it had already been paid in the previous game');
 });

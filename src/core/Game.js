@@ -7,13 +7,13 @@ import { stepByproducts, stepMules } from '../sim/transport.js';
 import { stepJeep } from '../sim/dispatch.js';
 import { stepRoute } from '../sim/routes.js';
 import { ROUTES } from '../data/routes.js';
-import { capCoins, offlineCapSeconds } from '../sim/modifiers.js';
+import { capCoins } from '../sim/modifiers.js';
 import { buyAllResearch, buyResearch, buyUpgrade, quoteResearch, quoteUnlock, quoteUpgrade, unlockStation } from '../sim/upgrades.js';
 import { claimAllGoals, claimGoal, unlockZone } from '../sim/goals.js';
 import { checkMastery } from '../sim/legacy.js';
 import { stepAlerts } from '../sim/alerts.js';
 import { clockOf, workOf, workSeconds } from '../sim/calendar.js';
-import { boardObjective, eventItems, refillSlots, secureMedal, stepSupply } from '../sim/events.js';
+import { boardObjective, eventItems, secureMedal, stepSupply } from '../sim/events.js';
 import { buildAll, buyZoneBoost } from '../sim/zoneBoost.js';
 import { count } from '../sim/totals.js';
 
@@ -63,10 +63,8 @@ export class Game {
     stepMules(this.state, dt, this.bus);
     for (const zone of ZONE_LIST) if (this.state.zones[zone.id]?.unlocked) stepJeep(this.state, zone.id, dt, this.bus);
     for (const route of ROUTES) stepRoute(this.state, route.id, dt, this.bus);
+    // An event board's supplies. (The game-wide event slots belong to the whole game: core/World.js, v5.13.)
     if (this.state.event) stepSupply(this.state, dt);
-    // A lone region save (no whole-game save around it, as in tests) still fills its own event slots; in the game
-    // the slots belong to the whole game and core/World.js fills them (v5.13).
-    else if (!this.world && this.state.events?.slots) refillSlots(this.state);
     // Map status alerts (waiting, full warehouse...) are only for visual display: during offline catch-up they are
     // unnecessary (they do not affect production) and skipping them speeds up launch (v3.65.1).
     if (!this.offline) stepAlerts(this.state, dt);
@@ -78,7 +76,7 @@ export class Game {
   // Actually simulate up to MAX_SIMULATED s; the remainder is extrapolated from the second half of the
   // simulated run (coins, sales, production, imports), weighted by active work time in each stretch:
   // nights pause work and each season yields its multiplier.
-  catchUp(seconds, cap = offlineCapSeconds(this.state)) {
+  catchUp(seconds, cap) {
     const run = this.catchUpSteps(seconds, cap);
     let r = run.next();
     while (!r.done) r = run.next();
@@ -87,7 +85,7 @@ export class Game {
 
   // Same catch-up, yielding periodically so the splash screen stays responsive and reports progress.
   //   onProgress(fraction from 0 to 1)
-  async catchUpAsync(seconds, cap = offlineCapSeconds(this.state), onProgress = () => {}) {
+  async catchUpAsync(seconds, cap, onProgress = () => {}) {
     const run = this.catchUpSteps(seconds, cap);
     let r = run.next();
     let last = performance.now();
