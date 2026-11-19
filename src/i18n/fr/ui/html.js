@@ -121,4 +121,5 @@ export default {
   '💾 Exportar a archivo': '💾 Exporter vers un fichier',
   '📂 Importar desde archivo': '📂 Importer depuis un fichier',
   "⭐ Abrir la zona especial": "⭐ Ouvrir la zone spéciale",
+  "📊 Estadísticas": "📊 Statistiques",
 };

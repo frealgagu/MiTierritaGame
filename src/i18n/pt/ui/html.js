@@ -120,4 +120,5 @@ export default {
   '💾 Exportar a archivo': '💾 Exportar para arquivo',
   '📂 Importar desde archivo': '📂 Importar de arquivo',
   "⭐ Abrir la zona especial": "⭐ Abrir a zona especial",
+  "📊 Estadísticas": "📊 Estatísticas",
 };

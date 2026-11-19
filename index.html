@@ -244,6 +244,7 @@
           </label>
         </div>
         <div class="modal-actions">
+          <button id="stats-btn" class="btn">📊 Estadísticas</button>
           <button id="finale-btn" class="btn" hidden>🎉 Ver el gran final</button>
           <button id="intro-btn" class="btn">❓ Cómo se juega</button>
           <button id="about-btn" class="btn">ℹ️ Acerca de</button>
@@ -399,6 +400,17 @@
           <button id="offline-btn" class="tab">⏰ Horas</button>
         </div>
         <div id="events-body" class="list-body"></div>
+      </div>
+    </div>
+
+    <!-- Statistics (v5.10): every counter the game keeps, from ⚙️ (src/ui/StatsView.js). -->
+    <div id="stats" class="modal" hidden>
+      <div class="modal-card list-modal">
+        <div class="chain-head">
+          <h2>📊 Estadísticas</h2>
+          <button id="stats-close" class="close-btn" aria-label="Cerrar">✕</button>
+        </div>
+        <div id="stats-body" class="list-body"></div>
       </div>
     </div>
 

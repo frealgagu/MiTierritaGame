@@ -8353,6 +8353,16 @@ def e_briefcase():
 
 
 
+def e_bar_chart():
+    """Bar chart (statistics)."""
+    layers = shape([(8, 8), (92, 8), (92, 92), (8, 92)], '#fff8ec')
+    layers.append(('#cfd8dc', [rect(16, 30, 68, 1.6), rect(16, 50, 68, 1.6), rect(16, 70, 68, 1.6)]))
+    for x, top, color in [(20, 56, '#43a047'), (42, 34, '#1e88e5'), (64, 18, '#e53935')]:
+        layers += [(OUTLINE, [rect(x - 2, top - 2, 20, 86 - top + 2)]), (color, [rect(x, top, 16, 86 - top)])]
+    layers.append((OUTLINE, [rect(14, 84, 72, 4)]))
+    return layers
+
+
 def e_floppy():
     """Floppy disk (save to file)."""
     layers = shape([(10, 10), (80, 10), (90, 20), (90, 90), (10, 90)], '#1e5aa8')
@@ -10764,7 +10774,7 @@ for _seq, _make in [
     ('🏚️', e_old_house), ('🌉', e_bridge), ('🌇', e_city_sunset), ('⛰️', e_mountain), ('🌄', e_sunrise_mtn), ('🧈', e_butter), ('🍯', e_honey), ('🍮', e_flan),
     ('🍳', e_egg_pan), ('🫓', e_arepa), ('🫘', e_beans), ('🥩', e_meat), ('🍽️', e_dinner), ('🛏️', e_bed), ('🛢️', e_barrel), ('🥾', e_boot),
     ('🎵', e_music), ('🎣', e_fishing), ('🚿', e_shower), ('🧊', e_ice), ('🪟', e_window), ('✝️', e_cross), ('🎨', e_palette), ('🎏', e_windsock),
-    ('💼', e_briefcase), ('💾', e_floppy), ('📂', e_folder_open), ('📣', e_bullhorn), ('📻', e_radio), ('🤠', e_cowboy), ('🧍', standing), ('🦳', e_hair_white), ('🦱', e_hair_curly),
+    ('💼', e_briefcase), ('📊', e_bar_chart), ('💾', e_floppy), ('📂', e_folder_open), ('📣', e_bullhorn), ('📻', e_radio), ('🤠', e_cowboy), ('🧍', standing), ('🦳', e_hair_white), ('🦱', e_hair_curly),
     ('🇨🇴', e_flag_co), ('🇬🇧', e_flag_gb), ('🇧🇷', e_flag_br), ('🇫🇷', e_flag_fr),
 ]:
     emoji(_seq, _make)

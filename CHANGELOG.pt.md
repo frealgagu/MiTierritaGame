@@ -1,6 +1,7 @@
 # Registro de alterações
 
-## v5.10.0 — Preços da zona especial
+## v5.10.0 — Estatísticas e preços da zona especial
+- **📊 Estatísticas:** um botão novo em ⚙️ mostra todas as contagens do jogo: tempo jogado, moedas ganhas, produtos vendidos e produzidos, Renome, Prestígio, conquistas, medalhas e figurinhas; e por região, a partida, os reinícios, as vezes concluída, os anos vividos, as moedas, cada evento com suas rodadas e medalhas, e o vendido e produzido de cada produto. Os que chegaram ao teto aparecem com «++» ou «∞».
 - **⭐ Zona especial:** os preços de venda seguem a série 2⁰, 2⁵, 2¹⁰ … 2³⁵ (×32 de uma estação para a seguinte). As quatro últimas vendem ×2, ×2, ×4 e ×4 mais caro, e o custo de melhoria delas e o de construir a estação seguinte sobem na mesma proporção. A zona completa agora leva umas 25 horas de jogo.
 
 ## v5.9.1 — Nomes dos ícones na zona especial

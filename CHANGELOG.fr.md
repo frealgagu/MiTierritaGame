@@ -1,6 +1,7 @@
 # Journal des modifications
 
-## v5.10.0 — Prix de la zone spéciale
+## v5.10.0 — Statistiques et prix de la zone spéciale
+- **📊 Statistiques :** un nouveau bouton dans ⚙️ affiche tous les compteurs du jeu : temps de jeu, pièces gagnées, produits vendus et fabriqués, Renom, Prestige, succès, médailles et vignettes ; et par région, la partie, les redémarrages, les fois terminée, les années vécues, les pièces, chaque événement avec ses manches et médailles, et le vendu et le fabriqué de chaque produit. Ceux qui ont atteint leur plafond s’affichent « ++ » ou « ∞ ».
 - **⭐ Zone spéciale :** les prix de vente suivent la série 2⁰, 2⁵, 2¹⁰ … 2³⁵ (×32 d’une station à la suivante). Les quatre dernières vendent ×2, ×2, ×4 et ×4 plus cher, et leur coût d’amélioration et celui de construire la station suivante augmentent dans la même proportion. La zone complète prend maintenant environ 25 heures de jeu.
 
 ## v5.9.1 — Noms des icônes dans la zone spéciale

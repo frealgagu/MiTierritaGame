@@ -13,7 +13,7 @@ import { CAPS, capAdd } from '../data/caps.js';
 const YEAR = YEAR_DAYS * DAY_LENGTH;
 
 // Cumulative totals from finished runs of a region (Eje Cafetero's predates v3.10).
-function lifetimeOf(profile, region = 'cafetero') {
+export function lifetimeOf(profile, region = 'cafetero') {
   const empty = () => ({ sold: {}, produced: {}, earned: 0, playTime: 0 });
   if (region === 'cafetero') return (profile.lifetime ??= empty());
   profile.lifetimes ??= {};

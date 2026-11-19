@@ -16,6 +16,7 @@ import { showCalendar } from './ui/calendar.js';
 import { Chatter } from './ui/Chatter.js';
 import { EventsView } from './ui/EventsView.js';
 import { RenownView } from './ui/RenownView.js';
+import { StatsView } from './ui/StatsView.js';
 import { setLook } from './render/look.js';
 import { checkLogros } from './sim/logros.js';
 import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/splash.js';
@@ -345,6 +346,7 @@ async function start() {
   };
   const events = new EventsView(game, enterEvent);
   // Changing decor redraws the map (main zone or event board).
+  const stats = new StatsView(game);
   const renown = new RenownView(game, (profile) => {
     if (!board) return showZone(view.zone);
     setLook(profile, REGION_OF_ZONE[board.zone]);
@@ -587,7 +589,7 @@ async function start() {
         sound.milestone();
       });
       // Inside an event board, the keeper does not show main-game hints.
-      for (const view of [panel, chain, money, goals, research, zones, events, renown, eventBar, ...(board ? [] : [chatter])]) safely(() => view.update());
+      for (const view of [panel, chain, money, goals, research, zones, events, renown, stats, eventBar, ...(board ? [] : [chatter])]) safely(() => view.update());
       // The calendar, while open (v5.7), follows the clock: time of day, season and the event clock.
       if (!calendar.hidden) safely(() => showCalendar(board ? board.game.state : active.state));
     }
@@ -629,7 +631,7 @@ async function start() {
   document.addEventListener('visibilitychange', () => (document.hidden ? onHide() : onShow()));
   window.addEventListener('pagehide', persist);
 
-  bindMenu(game, sound, music, () => active, grandFinale);
+  bindMenu(game, sound, music, () => active, grandFinale, stats);
   bindDevOptions(game, () => active);
   // (v5.9.1) The secret region's names show up in the icon tooltips once it has opened.
   bindIconTips(() => REGIONS.some((r) => r.secret && regionState(game.state, r.id)));
@@ -672,7 +674,7 @@ async function applyOffline(game, seconds, region = null, profile = game.state.p
 }
 
 // getActive: currently viewed region state (its second ending and restart).
-function bindMenu(game, sound, music, getActive, grandFinale) {
+function bindMenu(game, sound, music, getActive, grandFinale, stats) {
   const menu = document.getElementById('menu');
   // SFX and music volume (v3.66), from 0 (muted) to 100.
   const slider = (key, flag, icons, apply) => {
@@ -730,6 +732,11 @@ function bindMenu(game, sound, music, getActive, grandFinale) {
     menu.hidden = false;
   });
   document.getElementById('finale-btn').addEventListener('click', grandFinale);
+  // Statistics (v5.10), opened on the region being viewed.
+  document.getElementById('stats-btn').addEventListener('click', () => {
+    menu.hidden = true;
+    stats.open(getActive().state.region ?? 'cafetero');
+  });
   document.getElementById('close-menu').addEventListener('click', () => (menu.hidden = true));
   const about = document.getElementById('about');
   document.getElementById('about-btn').addEventListener('click', () => {

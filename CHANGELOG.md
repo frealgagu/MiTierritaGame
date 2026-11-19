@@ -1,6 +1,7 @@
 # Changelog
 
-## v5.10.0 — Special zone prices
+## v5.10.0 — Statistics and special zone prices
+- **📊 Statistics:** a new button in ⚙️ shows every count in the game: time played, coins earned, products sold and produced, Renown, Prestige, achievements, medals and stickers; and per region, the run, restarts, times completed, years lived, coins, each event with its rounds and medals, and what was sold and produced of each product. Those at their cap show «++» or «∞».
 - **⭐ Special zone:** sale prices follow the series 2⁰, 2⁵, 2¹⁰ … 2³⁵ (×32 from one station to the next). The last four sell for ×2, ×2, ×4 and ×4 more, and their upgrade cost and the cost of building the next station go up in the same proportion. The whole zone now takes about 25 hours of play.
 
 ## v5.9.1 — Icon names in the special zone
