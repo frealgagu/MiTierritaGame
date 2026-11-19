@@ -1,6 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
+import { World } from '../src/core/World.js';
+import { profileOf } from '../src/sim/renown.js';
+import { newGame, cafeOf } from './helpers/game.js';
 import { EVENTS, EVENT_ACTIONS_BY_ID, EVENT_OF_ZONE, MEDALS } from '../src/data/events.js';
 import { EVENT_COOLDOWN, boardObjective, buyAction, createEventState, endEvent, eventDef, eventObjective, eventProgress, eventStatus, finishEvent, medalFor, quoteAction, restartEvent, startEvent, supplyFraction, SUPPLY_TRICKLE } from '../src/sim/events.js';
 import { createInitialState } from '../src/sim/state.js';
@@ -35,23 +38,27 @@ function complete(board, buy) {
   for (const a of eventDef(board).actions) buyAction(board, a.id);
 }
 
-// Main save with Santander open: in Eje Cafetero, Finca, Trapiche, and Lechería have
-// their event stations; in Santander, Guayabera has its own.
+// The whole game's save with Santander open: in Eje Cafetero, Finca, Trapiche, and Lechería have their event stations;
+// in Santander, Guayabera has its own. `game` keeps the country clock and the slots (core/World.js), `s` is the whole
+// game's save (profile and slots) and `cafe` Eje Cafetero's (v5.13).
 function twoRegions() {
-  const game = new Game();
-  const s = game.state;
-  for (const z of ['trapiche', 'lecheria']) game.unlockZone(z);
-  for (const def of EVENTS.filter((d) => ['finca', 'trapiche', 'lecheria'].includes(d.zone))) for (const id of def.stations) s.stations[id] ??= createStationState();
+  const s = newGame();
+  const game = new World(s);
+  const cafeGame = new Game(cafeOf(s));
+  const cafe = cafeGame.state;
+  for (const z of ['trapiche', 'lecheria']) cafeGame.unlockZone(z);
+  for (const def of EVENTS.filter((d) => ['finca', 'trapiche', 'lecheria'].includes(d.zone))) for (const id of def.stations) cafe.stations[id] ??= createStationState();
   const san = createInitialState(undefined, 'santander');
   san.clockOffset = 0;
   for (const id of EVENT_OF_ZONE.guayabera.stations) san.stations[id] ??= createStationState();
-  s.regions = { santander: san };
-  return { game, s, san };
+  s.regions.santander = san;
+  return { game, s, cafe, san };
 }
 
 test('two slots for the whole game, never from the same region (v3.30)', () => {
   const game = new Game();
   const s = game.state;
+  profileOf(s);
   assert.equal(eventStatus(s, 'finca').kind, 'locked', 'until their stations are built');
   assert.equal(eventStatus(s, 'trapiche'), null, 'closed zone');
   const two = twoRegions();
@@ -132,6 +139,7 @@ test('restarting begins the same challenge from scratch; finishing without winni
 test('meeting the objective secures the medal; the event is won by having the three upgrades (v3.7)', () => {
   const game = new Game();
   const s = game.state;
+  profileOf(s);
   buildAll(s);
   const board = startEvent(s, 'finca');
   complete(board, false);
@@ -197,6 +205,7 @@ test(`the event purchases go in order, are paid with the board's coins and remov
 test('Renown, medals and the board in play are not lost on restart, which adds 10 ⭐ (v3.12)', () => {
   const main = new Game();
   const s = main.state;
+  profileOf(s); // a lone region save carrying the player's profile
   s.profile.renown = 7;
   s.profile.medals.broca = { best: 'silver', count: { silver: 1 } };
   buildAll(s);
@@ -367,13 +376,13 @@ test('a board that was in play before v3.72 ends with the challenge it had', asy
 });
 
 test('events without gold come out first and those with gold at the end (v3.72)', () => {
-  const { game, s } = twoRegions();
+  const { game, s, cafe } = twoRegions();
   game.step(0.1);
   // Finca and Trapiche already played: Finca with gold, Trapiche with silver, and Finca longer ago.
   for (const id of ['broca', 'molienda', 'feria']) s.profile.medals[id] = { best: 'gold', count: { gold: 1 } };
   s.profile.medals.molienda.best = 'silver';
-  s.events.last = { finca: 10, trapiche: 20, lecheria: 30 };
-  s.events.count = { finca: 1, trapiche: 1, lecheria: 1 };
+  cafe.events.last = { finca: 10, trapiche: 20, lecheria: 30 };
+  cafe.events.count = { finca: 1, trapiche: 1, lecheria: 1 };
   s.events.slots = [null, { zone: 'guayabera' }];
   game.step(0.1);
   assert.equal(s.events.slots[0].zone, 'trapiche', 'the one without gold, even if the Finca has gone unplayed longer');
@@ -390,6 +399,7 @@ test('with gold in the whole region events no longer come out on their own and, 
   const { eventsOf, regionEvents, quoteOnDemand, buyOnDemand, startOnDemand, refillSlots } = await import('../src/sim/events.js');
   const game = new Game();
   const s = game.state;
+  profileOf(s);
   s.regionDone = true;
   for (const z of Object.keys(s.zones)) s.zones[z].unlocked = true;
   s.profile.medals = Object.fromEntries(regionEvents('cafetero').map((e) => [e.id, { best: 'gold', count: { gold: 1 } }]));

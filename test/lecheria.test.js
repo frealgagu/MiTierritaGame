@@ -159,7 +159,7 @@ test('a v1.1 save with the Trapiche complete opens the Lechería and the route',
   delete old.stats.imported;
   const store = { 'mitierrita.save': JSON.stringify(old) };
   globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
-  const s = loadGame();
+  const s = loadGame().regions.cafetero;
   delete globalThis.localStorage;
   assert.equal(s.zones.lecheria.unlocked, true);
   assert.ok(s.stations.pasture, 'the Potrero produces');

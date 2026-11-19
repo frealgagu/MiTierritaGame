@@ -1,6 +1,8 @@
 import { Application } from 'pixi.js';
 import { Game } from './core/Game.js';
-import { clearSave, exportSave, importSave, loadGame, saveGame } from './core/SaveSystem.js';
+import { World } from './core/World.js';
+import { createGameState } from './sim/state.js';
+import { clearSave, exportSave, importSave, loadGame, saveGame, saveTooNew, storedSaveTooNew } from './core/SaveSystem.js';
 import { formatDuration, formatNumber } from './core/format.js';
 import { clockOf } from './sim/calendar.js';
 import { Scene } from './render/Scene.js';
@@ -77,29 +79,31 @@ async function start() {
   document.getElementById('app').appendChild(app.canvas);
 
   const saved = loadGame();
-  const game = new Game(saved ?? undefined);
-  // Regions (v3.0): the main save (Eje Cafetero) stores the others, each with its own Game, and
-  // all produce simultaneously.
+  // (v5.13) The whole game's save (profile, settings, event slots, country clock) holds every region, Eje Cafetero
+  // included; `game` keeps its clock and slots running (core/World.js) and each region has its own Game.
+  const game = new World(saved ?? createGameState());
   const root = game.state;
   // A save that already completed Pueblo before v3.0, or (v5.5) one whose reset just completed the special
   // zone's condition: it opens on load, with a notice once the game is on screen.
   for (const id of openRegions(root)) {
     if (REGIONS_BY_ID[id].special) setTimeout(() => toast(t('⭐ ¡Se abrió la zona especial: {region}!', { region: `${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name}` }), 6000), 2500);
   }
-  const games = { cafetero: game };
-  for (const id of Object.keys(root.regions ?? {})) games[id] = new Game(root.regions[id]);
+  const games = {};
+  for (const id of Object.keys(root.regions)) games[id] = new Game(root.regions[id]);
   const gameOf = (zoneId) => games[REGION_OF_ZONE[zoneId]];
   // Selected decor, applied before rendering anything.
   setLook(root.profile);
   // Dev speed multiplier persists on resume, including for away time calculations.
   game.timeScale = savedSpeed();
   const away = saved ? (Date.now() - saved.savedAt) / 1000 : 0;
-  const offline = saved ? await applyOffline(game, away) : null;
-  // Other regions too (each has its own coins: notified separately).
+  // Time away: the country clock, then every region (Eje Cafetero's summary in the welcome window, the others
+  // notified separately).
+  if (saved) game.catchUp(away, offlineCapSeconds(root, root.profile));
+  const offline = saved ? await applyOffline(games.cafetero, away, null, root.profile) : null;
   const regionOffline = [];
   for (const [id, g] of Object.entries(games)) {
     if (id === 'cafetero' || !saved) continue;
-    const r = await applyOffline(g, away, REGIONS_BY_ID[id], game.state.profile);
+    const r = await applyOffline(g, away, REGIONS_BY_ID[id], root.profile);
     if (r) regionOffline.push([id, r]);
   }
 
@@ -390,13 +394,12 @@ async function start() {
   // region with x2 production (other regions stay untouched).
   const restart = (g) => {
     resetting = true;
-    if (g === game) saveGame(restartState(root));
-    else {
-      root.regions[g.state.region] = restartState(g.state, Date.now(), root.profile);
-      // Open in the restarted region (v3.72), on its first zone.
-      root.settings.zone = root.regions[g.state.region].settings.zone;
-      saveGame(root);
-    }
+    // (v5.13) Every region, Eje Cafetero included, restarts the same way: only its own save is replaced.
+    const region = g.state.region ?? 'cafetero';
+    root.regions[region] = restartState(g.state, Date.now(), root.profile);
+    // Open in the restarted region (v3.72), on its first zone.
+    root.settings.zone = root.regions[region].settings.zone;
+    saveGame(root);
     location.reload();
   };
   // Grand finale (v5.9): over the whole game, with the game's music quiet while it plays.
@@ -510,6 +513,8 @@ async function start() {
   });
 
   hideSplash();
+  // (v5.13) A save from a newer version stays untouched (core/SaveSystem.js: saveGame): say why it is not here.
+  if (!saved && storedSaveTooNew()) toast(t('⛔ Tu partida es de una versión más nueva del juego: actualiza el juego para seguirla. Mientras tanto no se guarda nada.'), 15000);
   if (offline) showWelcome(offline, () => sound.coin());
   for (const [id, r] of regionOffline) toast(t('{region} también siguió trabajando: +💰 {coins}', { region: `${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name}`, coins: formatNumber(r.coins) }), 5000);
   // How to play stays on top (welcome modal stays beneath for afterwards).
@@ -537,7 +542,8 @@ async function start() {
   app.ticker.add((ticker) => {
     if (catching) return;
     const dt = ticker.deltaMS / 1000;
-    // All regions produce simultaneously (at dev options speed).
+    // The country clock and event slots, then all regions produce simultaneously (at dev options speed).
+    safely(() => game.update(dt));
     for (const g of Object.values(games)) {
       g.timeScale = game.timeScale;
       safely(() => g.update(dt));
@@ -615,10 +621,11 @@ async function start() {
     hiddenAt = null;
     catching = true;
     try {
-      const r = await applyOffline(game, away);
+      game.catchUp(away, offlineCapSeconds(root, root.profile));
+      const r = await applyOffline(games.cafetero, away, null, root.profile);
       for (const [id, g] of Object.entries(games)) {
         if (id === 'cafetero') continue;
-        const rr = await applyOffline(g, away, REGIONS_BY_ID[id], game.state.profile);
+        const rr = await applyOffline(g, away, REGIONS_BY_ID[id], root.profile);
         if (rr) toast(t('{region} también siguió trabajando: +💰 {coins}', { region: `${REGIONS_BY_ID[id].icon} ${REGIONS_BY_ID[id].name}`, coins: formatNumber(rr.coins) }), 5000);
       }
       if (r) showWelcome(r, () => sound.coin());
@@ -664,7 +671,7 @@ async function start() {
 // (multiplying away time made startup catch-up take far too long).
 // Chunked with splash progress bar (on a phone, 24 h catch-up can take several seconds).
 // profile: player profile (v3.7: offline hours apply across all regions).
-async function applyOffline(game, seconds, region = null, profile = game.state.profile) {
+async function applyOffline(game, seconds, region, profile) {
   if (seconds < MIN_OFFLINE_S) return null;
   const cap = offlineCapSeconds(game.state, profile);
   splashOffline(seconds, cap, region);
@@ -773,7 +780,8 @@ function bindMenu(game, sound, music, getActive, grandFinale, stats) {
     if (content === null) return;
     const state = importSave(content);
     if (!state) {
-      msg.textContent = t('⛔ Ese archivo no es una partida válida de Encantos de Mi Tierrita.');
+      // (v5.13) A backup from a newer version of the game is refused with its own reason.
+      msg.textContent = saveTooNew(content) ? t('⛔ Esa copia es de una versión más nueva del juego: actualiza el juego para abrirla.') : t('⛔ Ese archivo no es una partida válida de Encantos de Mi Tierrita.');
       return;
     }
     resetting = true;
@@ -783,7 +791,7 @@ function bindMenu(game, sound, music, getActive, grandFinale, stats) {
   document.getElementById('import-btn').addEventListener('click', () => {
     const state = importSave(text.value);
     if (!state) {
-      msg.textContent = t('⛔ Ese texto no es una partida válida de Encantos de Mi Tierrita.');
+      msg.textContent = saveTooNew(text.value) ? t('⛔ Esa copia es de una versión más nueva del juego: actualiza el juego para abrirla.') : t('⛔ Ese texto no es una partida válida de Encantos de Mi Tierrita.');
       return;
     }
     resetting = true;

@@ -14,6 +14,7 @@ import { maxLevel } from '../sim/rules.js';
 import { upgradeTarget } from '../sim/upgrades.js';
 import { zoneBoostTargets } from '../sim/zoneBoost.js';
 import { cappedPrestige, cappedRenown } from './capped.js';
+import { regionStates } from '../sim/regions.js';
 
 export const medalLine = (obj) => t('🥇 hasta {gold} · 🥈 hasta {silver} · 🥉 después', { gold: formatClock(obj.medals[0]), silver: formatClock(obj.medals[1]) });
 
@@ -209,7 +210,7 @@ export class EventsView {
     // after reset album, achievements, and hours remained even without an active event); badge count
     // shows those ready to start.
     const p = this.game.state.profile ?? {};
-    const progress = p.renown > 0 || p.history?.length > 0 || Object.keys(p.logros ?? {}).length > 0 || (this.game.state.legacy?.resets ?? 0) > 0;
+    const progress = p.renown > 0 || p.history?.length > 0 || Object.keys(p.logros ?? {}).length > 0 || regionStates(this.game.state).some((st) => (st.legacy?.resets ?? 0) > 0);
     this.btn.hidden = !progress && !statuses.some((st) => st.kind !== 'locked');
     // (v4.7.3) Only startable ones: a won event still open (goal met and all 3 upgrades) no
     // longer counts.

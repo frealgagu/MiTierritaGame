@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.13.0 — The Coffee Region, a region like the others
+- **New save format (10):** the save is now the whole game's and the Coffee Region is one more region, like the others. Restarting it only changes its own data; your profile, settings, event slots, the country clock and the other regions are left alone. Older saves convert by themselves when opened.
+- **The country clock** has its own counter and never goes back to zero.
+- **Backups:** a backup made with a newer version of the game says to update instead of opening half-way, and a newer save is never overwritten.
+
 ## v5.12.0 — Whole-game totals
 - **📊 The whole game:** products sold and produced are now counters of their own that keep growing even when a product sits at its run cap, without restarting: sold up to 999No++ and produced up to 999Dc++. Saved games start with what they already had. The ⚙️ menu shows the same.
 - **📊 Per region:** in the current run, each product counts what was sold up to 999Sp++ and what was produced up to 999Oc++.

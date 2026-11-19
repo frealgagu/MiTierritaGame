@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## v5.13.0 — L’Axe du café, une région comme les autres
+- **Nouveau format de sauvegarde (10) :** la sauvegarde est maintenant celle du jeu entier et l’Axe du café est une région de plus, comme les autres. Le recommencer ne change que ce qui lui appartient ; ton profil, les réglages, les créneaux d’événements, l’horloge du pays et les autres régions ne sont pas touchés. Les anciennes sauvegardes se convertissent toutes seules à l’ouverture.
+- **L’horloge du pays** a son propre compteur et ne revient jamais à zéro.
+- **Sauvegardes :** une copie faite avec une version plus récente du jeu demande de mettre à jour au lieu de s’ouvrir à moitié, et une sauvegarde plus récente n’est jamais écrasée.
+
 ## v5.12.0 — Totaux de tout le jeu
 - **📊 Tout le jeu :** les produits vendus et fabriqués sont maintenant des compteurs à part qui continuent de monter même quand un produit est à son plafond de partie, sans recommencer : vendus jusqu’à 999No++ et fabriqués jusqu’à 999Dc++. Les sauvegardes partent de ce qu’elles avaient déjà. Le menu ⚙️ affiche la même chose.
 - **📊 Par région :** dans la partie en cours, chaque produit compte le vendu jusqu’à 999Sp++ et le fabriqué jusqu’à 999Oc++.

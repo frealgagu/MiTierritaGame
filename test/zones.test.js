@@ -99,7 +99,7 @@ test('a v1.0 save loads with the zones and, if the Finca was complete, opens the
     hints: [], settings: { sound: true }, research: ['abono'], goals: { claimed: ['g01', 'abono', 'final'] }, zoneComplete: true,
   };
   store.set('mitierrita.save', JSON.stringify(v4));
-  const state = loadGame();
+  const state = loadGame().regions.cafetero;
   assert.equal(state.zones.finca.dispatch.level, 12);
   assert.equal(state.zones.finca.warehouse.cherry, 7);
   assert.equal(state.zones.finca.complete, true);

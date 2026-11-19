@@ -4,7 +4,10 @@ import { ROUTES } from '../data/routes.js';
 import { REGIONS_BY_ID } from '../data/regions.js';
 import { sourceOf } from './chain.js';
 
-export const SAVE_VERSION = 9;
+// Save format. Up to 9 the save was Eje Cafetero's own, holding the whole game's data and the other regions. 10
+// (v5.13): the save is the whole game (`createGameState`) and every region, Eje Cafetero included, is a child in
+// `regions`. core/SaveSystem.js converts older formats step by step and refuses newer ones.
+export const SAVE_VERSION = 10;
 
 // Warehouse, Willys, and dispatch level of a zone.
 export function createZoneState(unlocked = false) {
@@ -36,22 +39,37 @@ export function createInitialState(now = Date.now(), regionId = 'cafetero') {
     // (v5.12) Everything sold and produced in this run, whatever the per-product caps (sim/totals.js).
     counted: { sold: 0, produced: 0 },
     hints: [], // already shown notices
-    settings: { sound: true, music: true },
     research: [], // purchased research ids
     goals: { claimed: [] }, // objetivos cobrados
     regionDone: false, // region's final zone completed at least once (v3.8: preserved on reset)
     mastered: false, // second ending: all stations at level 100
     legacy: { resets: 0 }, // resets with ×2 production (up to 60, v4.0)
-    // Events (v2.0): active zone boards and last completion timestamp.
-    // Slots (v3.30: two game-wide, in root save), last played per zone, and
-    // play count (see sim/events.js).
-    events: { boards: {}, slots: [null, null], last: {}, count: {}, global: true },
-    // Preserved across reset (v2.0): Renown ⭐, medals, finished events. Belongs to
-    // player, not region: stored only in Eje Cafetero save.
-    ...(regionId === 'cafetero' && { profile: { renown: 0, renownTotal: 0, medals: {}, history: [] } }),
-    // (v5.11) The root save never needs the v4.6 wipe of the old Bogotá (core/SaveSystem.js: resetOldBogota). Before,
-    // a restart of Eje Cafetero lost this flag and the next load wiped the current Bogotá.
-    ...(regionId === 'cafetero' && { bogotaNet: true }),
+    // Events (v2.0): the region's open boards, last played and rounds per event (see sim/events.js). The two
+    // game-wide slots live in the whole game's save.
+    events: { boards: {}, last: {}, count: {} },
+    settings: { zone: first },
+  };
+}
+
+// The whole game's save (format 10, v5.13). Everything that belongs to the player and not to a region lives here,
+// so restarting a region (Eje Cafetero included) never touches it:
+//   playTime + clockOffset: the country clock (clockOf), which never restarts; every region's clock matches it.
+//   profile: Renown, Prestige, medals, achievements, album, decor, purchases, banked runs and the game's totals.
+//   settings: volumes, language, travel and event options, the zone being viewed.
+//   events.slots: the two game-wide event slots.   regions: every open region's save, Eje Cafetero first.
+//   bogotaNet: the v4.6 Bogotá migration is not needed (core/SaveSystem.js: resetOldBogota).
+export const GLOBAL_KEYS = ['version', 'savedAt', 'playTime', 'clockOffset', 'profile', 'settings', 'events', 'regions', 'bogotaNet'];
+export function createGameState(now = Date.now()) {
+  return {
+    version: SAVE_VERSION,
+    savedAt: now,
+    playTime: 0,
+    clockOffset: 0,
+    profile: { renown: 0, renownTotal: 0, medals: {}, history: [] },
+    settings: { sound: true, music: true, zone: 'finca' },
+    events: { slots: [null, null], global: true },
+    regions: { cafetero: createInitialState(now, 'cafetero') },
+    bogotaNet: true,
   };
 }
 

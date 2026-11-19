@@ -114,7 +114,6 @@ test('starting over: everything from scratch, with production doubled and the pr
   s.mastered = true;
   s.playTime = 36000;
   s.totalEarned = 1e20;
-  s.settings.music = false;
   s.hints.push('wetmill');
   const next = restartState(s);
   assert.equal(next.legacy.resets, 2);
@@ -126,8 +125,7 @@ test('starting over: everything from scratch, with production doubled and the pr
   assert.deepEqual(Object.keys(next.stations), ['farm']);
   assert.equal(next.zones.trapiche.unlocked, false);
   assert.deepEqual(next.research, []);
-  assert.equal(next.settings.music, false);
-  assert.equal(next.settings.zone, 'finca');
+  assert.equal(next.settings.zone, 'finca', 'the settings belong to the whole game (v5.13): the region keeps only its zone');
   assert.ok(next.hints.includes('wetmill'));
   // And Finca produces double... of double.
   const g = new Game(next);
@@ -142,7 +140,7 @@ test('a v1.5 save loads without a multiplier and without the second ending', asy
   delete old.mastered;
   const store = { 'mitierrita.save': JSON.stringify(old) };
   globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
-  const s = loadGame();
+  const s = loadGame().regions.cafetero;
   delete globalThis.localStorage;
   assert.equal(legacyMult(s), 1);
   assert.equal(s.mastered, false);
@@ -277,10 +275,10 @@ test('coins have a ceiling of 1000 Dc, shown as 999Dc++ (v3.68.3, v5.9)', async 
 
 test('on starting another region over, the game opens in it and not in the Cafetal (v3.72)', async () => {
   const { startZone } = await import('../src/sim/legacy.js');
-  const { createInitialState } = await import('../src/sim/state.js');
-  const root = createInitialState(0);
-  root.zones.trapiche.unlocked = true;
-  root.regions = { santander: createInitialState(0, 'santander') };
+  const { createInitialState, createGameState } = await import('../src/sim/state.js');
+  const root = createGameState(0);
+  root.regions.cafetero.zones.trapiche.unlocked = true;
+  root.regions.santander = createInitialState(0, 'santander');
   // Santander freshly reset: only its first zone open; Barichara was being viewed.
   assert.equal(startZone(root, 'barichara'), 'guayabera');
   assert.equal(startZone(root, 'guayabera'), 'guayabera');

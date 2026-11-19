@@ -163,7 +163,7 @@ test('a v1.4 save with the Maizal complete opens the Pueblo', async () => {
   for (const id of PUEBLO_ROUTES) delete old.routes[id];
   const store = { 'mitierrita.save': JSON.stringify(old) };
   globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
-  const s = loadGame();
+  const s = loadGame().regions.cafetero;
   delete globalThis.localStorage;
   assert.equal(s.zones.pueblo.unlocked, true);
   assert.ok(s.stations.coffee_house, 'the Casa del café is on the plaza');

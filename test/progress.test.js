@@ -78,9 +78,9 @@ test('the quality seal raises the price of the bags', () => {
 });
 
 test('offline hours belong to the player: 2 h and +2 h per level with Renown, up to 24 h (v3.7)', async () => {
-  const { buyOffline, offlineHours, OFFLINE_COSTS } = await import('../src/sim/renown.js');
+  const { buyOffline, offlineHours, OFFLINE_COSTS, profileOf } = await import('../src/sim/renown.js');
   const game = new Game();
-  const profile = game.state.profile;
+  const profile = profileOf(game.state); // a lone region save carrying the player's profile
   assert.equal(offlineCapSeconds(game.state), 2 * 3600);
   assert.equal(buyOffline(profile), false, 'without Renown it cannot be bought');
   profile.renown = 1000;

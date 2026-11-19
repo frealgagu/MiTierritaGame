@@ -95,7 +95,7 @@ test('a v0.1 save loads in v0.2', async () => {
     jeep: { phase: 'idle', t: 0, waited: 0, load: {} }, stats: { produced: {}, sold: { cherry: 30 } },
   };
   store.set('mitierrita.save', JSON.stringify(v1));
-  const game = new Game(loadGame());
+  const game = new Game(loadGame().regions.cafetero);
   assert.equal(game.state.stations.farm.level, 7);
   assert.equal(game.state.stations.farm.input, 0);
   assert.equal(game.state.mules[0].to, 'warehouse');
@@ -113,7 +113,7 @@ test('a v0.2 save loads in v0.3 with mule drivers', async () => {
     jeep: { phase: 'idle', t: 0, waited: 0, load: {} }, stats: { produced: {}, sold: {} }, hints: ['wetmill'],
   };
   localStorage.setItem('mitierrita.save', JSON.stringify(v2));
-  const game = new Game(loadGame());
+  const game = new Game(loadGame().regions.cafetero);
   assert.equal(game.state.stations.wetmill.transport.level, 1);
   assert.equal(game.state.mules[0].phase, 'go');
   run(game, 10);

@@ -74,8 +74,8 @@ test('a save from before v3.11 rebuilds its total Renown earned', async () => {
   const { ALBUM } = await import('../src/data/album.js');
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
-  const root = createInitialState(0);
-  delete root.profile.renownTotal;
+  // A format 9 save (until v5.12): Eje Cafetero's own, holding the player's profile.
+  const root = { ...createInitialState(0), version: 9, profile: { renown: 0, medals: {}, history: [] } };
   root.profile.renown = 1;
   root.profile.history = [{ event: 'broca', round: 1, medal: 'gold' }, { event: 'molienda', round: 1, medal: 'bronze' }];
   root.profile.logros = { pueblo: 1, maestro: 2 }; // 2 + (4 + 8)

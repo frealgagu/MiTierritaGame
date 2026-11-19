@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v5.13.0 — El Eje Cafetero, una región como las demás
+- **Partida guardada nueva (formato 10):** la partida es ahora la del juego completo y el Eje Cafetero es una región más, igual que las otras. Volver a empezarlo solo cambia lo suyo; tu perfil, los ajustes, los cupos de eventos, el reloj del país y las demás regiones no se tocan. Las partidas anteriores se convierten solas al abrirlas.
+- **El reloj del país** tiene su propio contador y nunca vuelve a cero.
+- **Copias de seguridad:** una copia hecha con una versión más nueva del juego avisa que hay que actualizar, en vez de abrirse a medias, y una partida más nueva nunca se sobrescribe.
+
 ## v5.12.0 — Totales de todo el juego
 - **📊 Todo el juego:** los productos vendidos y producidos son ahora contadores propios que siguen subiendo aunque un producto ya esté en su tope de la partida, sin necesidad de reiniciar: vendidos hasta 999No++ y producidos hasta 999Dc++. Las partidas guardadas empiezan con lo que ya llevaban. El menú ⚙️ muestra lo mismo.
 - **📊 Por región:** en la partida actual, cada producto cuenta lo vendido hasta 999Sp++ y lo producido hasta 999Oc++.

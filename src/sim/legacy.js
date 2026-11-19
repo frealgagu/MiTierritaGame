@@ -19,6 +19,7 @@ import { RESTART_RENOWN, gainRenown, profileOf } from './renown.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { tk } from '../i18n/index.js'; // labels translated where displayed (GoalsView)
 import { CAPS } from '../data/caps.js';
+import { regionState } from './regions.js';
 
 const zoneStations = (z) => [...z.chain, ...z.plots.map((p) => p.stationId)];
 // Playable stations across all regions: chains and branches (Compostera).
@@ -87,29 +88,29 @@ export function restartState(state, now = Date.now(), profile = null) {
   // appended to an unbounded completed runs log).
   next.legacy = { resets: Math.min(CAPS.resets, (state.legacy?.resets ?? 0) + 1) };
   next.clockOffset = clockOf(state);
-  next.settings = { ...state.settings, zone: region.zones[0] };
+  next.settings = { zone: region.zones[0] };
   next.hints = [...(state.hints ?? [])];
-  // Other regions (stored only in Eje Cafetero root save) stay intact.
-  if (state.regions) next.regions = state.regions;
+  // (v5.13) A region save never holds the others: they live in the whole game's save (sim/state.js:
+  // createGameState), which a restart does not touch. A lone region save restarts on its own (tests).
   // Region's second Willys (v3.9) and work shift (v3.10) persist.
   if (state.willys2) next.willys2 = true;
   if (state.chivas) next.chivas = state.chivas; // faster chivas (v4.2)
   if (state.workLevel) next.workLevel = state.workLevel;
   // Region already cleared once (v3.8): its events keep spawning across all zones.
   next.regionDone = Boolean(state.regionDone || state.zones[region.zones.at(-1)]?.complete);
-  // Persistent across reset (v2.0): Renown, medals, album, decoration, achievements; current run
-  // stats fold into achievements (v2.3). Only Eje Cafetero save holds profile.
-  // Events stay untouched (v3.12): active boards, slots (with event or 2-year cooldown),
-  // and history. (Until v3.11 active board was lost.)
+  // Persistent across reset (v2.0): Renown, medals, album, decoration, achievements (the player's profile, in the
+  // whole game's save, v5.13); current run stats fold into achievements (v2.3).
+  // Events stay untouched (v3.12): active boards, last played and rounds. (Until v3.11 active board was lost.) The
+  // game-wide slots are in the whole game's save; a lone region save keeps its own (tests).
   const ev = state.events ?? {};
   next.events = {
     boards: structuredClone(ev.boards ?? {}),
-    slots: [0, 1].map((i) => ev.slots?.[i] ?? null),
     last: { ...ev.last },
     count: { ...ev.count },
-    ...(ev.global ? { global: true } : {}),
+    ...(ev.slots && { slots: [0, 1].map((i) => ev.slots[i] ?? null), global: true }),
   };
-  // Each reset awards Renown (v3.11).
+  // Each reset awards Renown (v3.11). The profile comes from the whole game's save; a lone region save that carries
+  // its own (tests) keeps it.
   if (state.profile) {
     next.profile = structuredClone(state.profile);
     bankRun(state, profileOf(next));
@@ -130,7 +131,7 @@ export function restartState(state, now = Date.now(), profile = null) {
 //   root: root save (Eje Cafetero, with other regions in root.regions)
 export function startZone(root, zone) {
   const regionOfZone = (z) => REGIONS.find((r) => r.zones.includes(z));
-  const stateOf = (r) => (r.id === (root.region ?? 'cafetero') ? root : root.regions?.[r.id]);
+  const stateOf = (r) => regionState(root, r.id);
   const open = (z) => {
     const r = regionOfZone(z);
     return Boolean(r && stateOf(r)?.zones?.[z]?.unlocked);

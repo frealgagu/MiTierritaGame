@@ -5,7 +5,7 @@ import { Game } from '../src/core/Game.js';
 import { exportSave, importSave } from '../src/core/SaveSystem.js';
 import { EVENTS, EVENT_OF_ZONE } from '../src/data/events.js';
 import { boardObjective, buyAction, eventDef, finishEvent, endEvent, startEvent } from '../src/sim/events.js';
-import { gainRenown } from '../src/sim/renown.js';
+import { gainRenown, profileOf } from '../src/sim/renown.js';
 import { bankRun, metric } from '../src/sim/logros.js';
 import { capCoins } from '../src/sim/modifiers.js';
 import { createStationState } from '../src/sim/production.js';
@@ -40,6 +40,7 @@ test('Renown, Prestige and per-product counters stop at their caps (v5.9)', () =
 
 test('finished runs keep adding past the run cap up to the all-runs cap, and the years counter stops at its cap (v5.10)', () => {
   const s = new Game().state;
+  s.profile = profileOf(s); // a lone region save carrying the player's profile (v5.13: it lives in the whole game's save)
   s.stats.sold.coffee_bag = CAPS.run.sold;
   bankRun(s, s.profile);
   bankRun(s, s.profile);
@@ -56,6 +57,7 @@ test('finished runs keep adding past the run cap up to the all-runs cap, and the
 test('the event history keeps only the last finished event, and medals per kind stop at their cap (v5.9)', () => {
   const game = new Game();
   const s = game.state;
+  profileOf(s);
   for (const id of EVENT_OF_ZONE.finca.stations) s.stations[id] ??= createStationState();
   const def = EVENTS.find((d) => d.zone === 'finca');
   s.profile.medals[def.id] = { best: 'gold', count: { gold: CAPS.medalsPerKind } };
@@ -76,6 +78,7 @@ test('the event history keeps only the last finished event, and medals per kind 
 
 test('loading a save trims the history and brings counters down to their caps (v5.9)', () => {
   const s = new Game().state;
+  profileOf(s);
   s.profile.history = Array.from({ length: 50 }, (_, i) => ({ event: 'broca', round: i + 1, medal: 'gold', time: 60 }));
   s.profile.renown = CAPS.renown * 5;
   s.profile.renownTotal = CAPS.prestige * 5;

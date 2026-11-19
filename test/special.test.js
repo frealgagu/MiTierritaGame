@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
-import { createInitialState } from '../src/sim/state.js';
+import { createGameState, createInitialState } from '../src/sim/state.js';
 import { SPECIAL_FROM, isOpen, openRegions, openSpecial, regionState, specialProgress } from '../src/sim/regions.js';
 import { REGIONS_BY_ID, shownRegions } from '../src/data/regions.js';
 import { RESEARCH } from '../src/data/research.js';
@@ -16,10 +16,9 @@ const SPECIAL = REGIONS_BY_ID.sanandres;
 
 // Main save with every other region open and at its second ending (or reset).
 function allReady() {
-  const root = createInitialState(0);
-  root.regions = {};
+  const root = createGameState(0);
   for (const r of SPECIAL_FROM) {
-    const st = r.id === 'cafetero' ? root : (root.regions[r.id] = createInitialState(0, r.id));
+    const st = (root.regions[r.id] ??= createInitialState(0, r.id));
     st.mastered = true;
   }
   return root;

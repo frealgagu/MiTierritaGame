@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
+import { World } from '../src/core/World.js';
+import { newGame } from './helpers/game.js';
 import { EVENTS, eventKey } from '../src/data/events.js';
 import { REGIONS, REGION_OF_ZONE } from '../src/data/regions.js';
 import { CAPS } from '../src/data/caps.js';
@@ -10,8 +12,8 @@ import { maxedRegion } from './helpers/maxed.js';
 
 // Every region that has events, with everything built and at level 100, so every event is ready.
 function wholeCountry() {
-  const root = maxedRegion('cafetero');
-  const withEvents = REGIONS.filter((r) => r.id !== 'cafetero' && EVENTS.some((e) => REGION_OF_ZONE[e.zone] === r.id));
+  const root = newGame();
+  const withEvents = REGIONS.filter((r) => EVENTS.some((e) => REGION_OF_ZONE[e.zone] === r.id));
   root.regions = Object.fromEntries(withEvents.map((r) => [r.id, maxedRegion(r.id)]));
   return root;
 }
@@ -34,7 +36,7 @@ function sane(board, key) {
 
 test('with events without waiting, every event of the game runs at the same time without failing (v5.9)', () => {
   const root = wholeCountry();
-  const game = new Game(root);
+  const game = new World(root);
   game.step(0.1);
   root.profile.renown = FREE_EVENTS_COST;
   assert.ok(buyFreeEvents(root.profile));
@@ -92,5 +94,5 @@ test('with events without waiting, every event of the game runs at the same time
   for (const def of EVENTS) assert.equal(eventStatus(root, eventKey(def))?.kind, 'available', eventKey(def));
   for (const def of EVENTS) assert.ok(startEvent(root, eventKey(def)), eventKey(def));
   for (let i = 0; i < 10; i++) game.step(0.5);
-  assert.ok(Number.isFinite(root.coins));
+  assert.ok(Object.values(root.regions).every((st) => Number.isFinite(st.coins)));
 });

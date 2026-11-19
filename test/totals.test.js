@@ -9,7 +9,7 @@ import { clockOf } from '../src/sim/calendar.js';
 import { count, gameTotals } from '../src/sim/totals.js';
 import { capCoins } from '../src/sim/modifiers.js';
 
-const reload = (s) => importSave(exportSave(s));
+import { newGame, cafeOf, reload, format9 } from './helpers/game.js';
 
 test('the whole game counts what is produced, as it is produced (v5.12)', () => {
   const game = new Game();
@@ -32,14 +32,17 @@ test('the whole game keeps counting while a product sits at its run cap (v5.12)'
 });
 
 test('restarting Eje Cafetero or another region keeps the totals and the time played (v5.12)', () => {
-  let root = reload(new Game().state);
-  root.regions = { santander: createInitialState(Date.now(), 'santander') };
-  root.counted = { sold: 5e20, produced: 7e20 };
+  let root = newGame(Date.now());
+  root.regions.santander = createInitialState(Date.now(), 'santander');
+  cafeOf(root).counted = { sold: 5e20, produced: 7e20 };
   root.regions.santander.counted = { sold: 1e20, produced: 2e20 };
   root.playTime = 3600 * 50;
+  cafeOf(root).playTime = 3600 * 50;
+  root = reload(root);
   const before = gameTotals(root);
   const time = clockOf(root);
-  root = reload(restartState(root));
+  root.regions.cafetero = restartState(cafeOf(root), Date.now(), root.profile);
+  root = reload(root);
   assert.deepEqual(gameTotals(root), before, 'after restarting Eje Cafetero');
   assert.equal(clockOf(root), time, 'the time played does not go back to 0');
   root.regions.santander = restartState(root.regions.santander, Date.now(), root.profile);
@@ -48,14 +51,13 @@ test('restarting Eje Cafetero or another region keeps the totals and the time pl
 });
 
 test('an older save starts its totals from what it already had (v5.12)', () => {
-  const s = reload(new Game().state);
+  const s = format9(0, []);
   delete s.counted;
-  delete s.profile.totals;
   s.stats.sold = { coffee_bag: 30 };
   s.stats.produced = { cherry: 100, washed: 20 };
   s.profile.lifetime = { sold: { coffee_bag: 1000 }, produced: { cherry: 5000 }, earned: 0, playTime: 0 };
   const loaded = reload(s);
-  assert.deepEqual(loaded.counted, { sold: 30, produced: 120 });
+  assert.deepEqual(cafeOf(loaded).counted, { sold: 30, produced: 120 });
   assert.deepEqual(loaded.profile.totals, { sold: 1000, produced: 5000 });
   assert.deepEqual([gameTotals(loaded).sold, gameTotals(loaded).produced], [1030, 5120]);
 });

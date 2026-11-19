@@ -1,4 +1,5 @@
 import { test } from 'node:test';
+import { profileOf } from '../src/sim/renown.js';
 import assert from 'node:assert/strict';
 import { createInitialState } from '../src/sim/state.js';
 import { unlockStation } from '../src/sim/upgrades.js';
@@ -15,6 +16,7 @@ const bus = { emit: () => {} };
 
 function finca(coins) {
   const s = createInitialState(0);
+  profileOf(s); // a lone region save carrying the player's profile
   s.coins = 1e12;
   for (const id of ZONES_BY_ID.finca.chain) unlockStation(s, id, bus);
   s.coins = coins;

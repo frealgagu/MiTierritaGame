@@ -88,7 +88,7 @@ test('a v1.3 save with the Cacaotal complete opens the Maizal', async () => {
   delete old.routes.mantequilla;
   const store = { 'mitierrita.save': JSON.stringify(old) };
   globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
-  const s = loadGame();
+  const s = loadGame().regions.cafetero;
   delete globalThis.localStorage;
   assert.equal(s.zones.maizal.unlocked, true);
   assert.ok(s.stations.cornfield);

@@ -129,6 +129,6 @@ test('an older save: restarts stay at the cap (60) and without the log of each g
   globalThis.localStorage = { getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v), removeItem: (k) => delete store[k] };
   const s = loadGame();
   delete globalThis.localStorage;
-  assert.deepEqual(s.legacy, { resets: 60 });
+  assert.deepEqual(s.regions.cafetero.legacy, { resets: 60 });
   assert.deepEqual(s.regions.llanos.legacy, { resets: 3 });
 });

@@ -64,7 +64,9 @@ export class Game {
     for (const zone of ZONE_LIST) if (this.state.zones[zone.id]?.unlocked) stepJeep(this.state, zone.id, dt, this.bus);
     for (const route of ROUTES) stepRoute(this.state, route.id, dt, this.bus);
     if (this.state.event) stepSupply(this.state, dt);
-    else if ((this.state.region ?? 'cafetero') === 'cafetero') refillSlots(this.state); // event slots (v3.30: global across the whole game)
+    // A lone region save (no whole-game save around it, as in tests) still fills its own event slots; in the game
+    // the slots belong to the whole game and core/World.js fills them (v5.13).
+    else if (!this.world && this.state.events?.slots) refillSlots(this.state);
     // Map status alerts (waiting, full warehouse...) are only for visual display: during offline catch-up they are
     // unnecessary (they do not affect production) and skipping them speeds up launch (v3.65.1).
     if (!this.offline) stepAlerts(this.state, dt);

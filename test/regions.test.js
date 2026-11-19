@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { Game } from '../src/core/Game.js';
+import { newGame, cafeOf, format9 } from './helpers/game.js';
 import { createInitialState } from '../src/sim/state.js';
 import { openRegions, regionState } from '../src/sim/regions.js';
 import { restartState, stationsOf, checkMastery } from '../src/sim/legacy.js';
@@ -44,8 +45,8 @@ test(`Santander opens upon completing the Pueblo, with the country's calendar`, 
 });
 
 test('every region has its second ending and its restart, without touching the others', () => {
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
+  const root = newGame();
+  cafeOf(root).zones.pueblo.complete = true;
   openRegions(root);
   const s = regionState(root, 'santander');
   for (const id of stationsOf(s)) s.stations[id] = { ...(s.stations[id] ?? {}), level: 100, transport: { level: 100 } };
@@ -72,18 +73,20 @@ test('every region has its second ending and its restart, without touching the o
   assert.equal(next.legacy.resets, 1);
   assert.equal(clockOf(next), clockOf(s), 'the calendar continues');
   assert.ok(!next.profile);
-  // Resetting Eje Cafetero preserves Santander.
+  // Resetting Eje Cafetero preserves Santander, the profile and the country clock (v5.13: only its own save changes).
   root.regions.santander = next;
-  const root2 = restartState(root);
-  assert.equal(root2.regions.santander, next);
-  assert.equal(clockOf(root2), clockOf(root));
+  const profile = root.profile;
+  root.regions.cafetero = restartState(cafeOf(root), 0, root.profile);
+  assert.equal(root.regions.santander, next);
+  assert.equal(root.profile, profile);
+  assert.equal(clockOf(cafeOf(root)), clockOf(root));
 });
 
 test('the game is saved and loaded with its regions', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
+  const root = newGame();
+  cafeOf(root).zones.pueblo.complete = true;
   openRegions(root);
   root.regions.santander.coins = 1234;
   saveGame(root);
@@ -254,14 +257,12 @@ test(`the Hormigas open with the Hato complete and sell souvenirs with the Fique
 test(`a Santander save with the Weavers' association saved as «tejedoras» loads with its new id`, () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
-  openRegions(root);
+  const root = format9();
   root.research.push('tejedoras'); // Pueblo's Tejedoras de fique: they remain
   root.regions.santander.research.push('tejedoras');
   saveGame(root);
   const back = loadGame();
-  assert.ok(back.research.includes('tejedoras'));
+  assert.ok(cafeOf(back).research.includes('tejedoras'));
   // (v3.7: Asociación de tejedoras no longer exists: its hours moved to profile and coins were refunded.)
   assert.deepEqual(back.regions.santander.research, []);
 });
@@ -269,10 +270,7 @@ test(`a Santander save with the Weavers' association saved as «tejedoras» load
 test('loading a v3.6 save, offline hours move to the profile and the coins are returned (v3.7)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
-  openRegions(root);
-  delete root.profile.offlineLevel;
+  const root = format9();
   root.research.push('capataz', 'abono'); // 2 + 3 = 5 h
   const s = root.regions.santander;
   s.research.push('mayordomo_s', 'veguero', 'asociacion_tejedoras'); // 2 + 3 + 3 + 4 = 12 h
@@ -280,7 +278,7 @@ test('loading a v3.6 save, offline hours move to the profile and the coins are r
   saveGame(root);
   const back = loadGame();
   assert.equal(back.profile.offlineLevel, 5, `it starts with Santander's 12 h`);
-  assert.deepEqual(back.research, ['abono']);
+  assert.deepEqual(cafeOf(back).research, ['abono']);
   assert.deepEqual(back.regions.santander.research, []);
   assert.equal(back.regions.santander.coins, 10000 + 300000 + 3000000);
 });
@@ -315,34 +313,32 @@ test('loading a v3.6 save, the events already played move to the slot system (v3
   const { eventStatus } = await import('../src/sim/events.js');
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
-  const root = createInitialState(0);
+  const root = format9(0, []);
   root.events = { boards: {}, done: { finca: 2 } };
   root.profile.history = [{ event: 'broca', year: 1, medal: 'gold', time: 600 }, { event: 'broca', year: 2, medal: 'silver', time: 900 }];
   saveGame(root);
   const back = loadGame();
-  assert.equal(back.events.done, undefined);
+  assert.equal(cafeOf(back).events.done, undefined);
   assert.deepEqual(back.events.slots, [null, null]);
-  assert.equal(back.events.count.finca, 2, 'the borer was already played twice: challenge 3 is next');
-  assert.ok(back.events.last.finca >= 0);
+  assert.equal(cafeOf(back).events.count.finca, 2, 'the borer was already played twice: challenge 3 is next');
+  assert.ok(cafeOf(back).events.last.finca >= 0);
   assert.equal(eventStatus(back, 'finca').round, 3);
 });
 
 test('a save already restarted or with the last zone complete loads with the region finished (v3.8)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
-  openRegions(root);
-  const old = restartState(root);
+  const old = format9();
+  old.legacy = { resets: 1 };
   delete old.regionDone;
   old.regions.santander.zones.barichara.complete = true;
   delete old.regions.santander.regionDone;
   saveGame(old);
   const back = loadGame();
-  assert.equal(back.regionDone, true, 'it had already been restarted');
+  assert.equal(cafeOf(back).regionDone, true, 'it had already been restarted');
   assert.equal(back.regions.santander.regionDone, true, 'Barichara complete');
-  saveGame(createInitialState(0));
-  assert.equal(loadGame().regionDone, false);
+  saveGame(newGame());
+  assert.equal(cafeOf(loadGame()).regionDone, false);
 });
 
 test('with the Eje Cafetero already finished, Santander opens even if after restarting the Pueblo is not complete (v3.8.1)', () => {
@@ -434,14 +430,12 @@ test('album, decoration, achievements and workday belong to each region; Renown,
 test('a v3.9 save moves the decoration to the Eje Cafetero and the workday to each region (v3.10)', () => {
   const mem = {};
   globalThis.localStorage = { getItem: (k) => mem[k] ?? null, setItem: (k, v) => (mem[k] = v), removeItem: (k) => delete mem[k] };
-  const root = createInitialState(0);
-  root.zones.pueblo.complete = true;
-  openRegions(root);
+  const root = format9();
   root.profile.decor = { owned: ['willys:rojo'], chosen: { willys: 'rojo' } };
   root.profile.workLevel = 2;
   saveGame(root);
   const back = loadGame();
-  assert.equal(back.workLevel, 2);
+  assert.equal(cafeOf(back).workLevel, 2);
   assert.equal(back.regions.santander.workLevel, 2);
   assert.equal(back.profile.workLevel, undefined);
   return import('../src/sim/renown.js').then(({ chosenDecor }) => {

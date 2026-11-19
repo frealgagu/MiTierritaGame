@@ -230,4 +230,6 @@ export default {
   "⏱️ Tiempo jugado en esta partida": "⏱️ Temps de jeu dans cette partie",
   "📦 Productos de esta partida": "📦 Produits de cette partie",
   "Todavía no hay productos en esta partida.": "Pas encore de produits dans cette partie.",
+  "⛔ Esa copia es de una versión más nueva del juego: actualiza el juego para abrirla.": "⛔ Cette sauvegarde vient d’une version plus récente du jeu : mets le jeu à jour pour l’ouvrir.",
+  "⛔ Tu partida es de una versión más nueva del juego: actualiza el juego para seguirla. Mientras tanto no se guarda nada.": "⛔ Ta partie vient d’une version plus récente du jeu : mets le jeu à jour pour la continuer. En attendant, rien n’est enregistré.",
 };

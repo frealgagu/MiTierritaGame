@@ -20,8 +20,22 @@ const KEY = 'mitierrita.save';
 export function saveGame(state) {
   state.savedAt = Date.now();
   try {
+    // (v5.13) Never overwrite a save written by a newer version of the game (an outdated copy of the game opened
+    // after an update): that save could not be opened here and would be lost. Its format is the first field.
+    const stored = /^\{"version":(\d+)/.exec(localStorage.getItem(KEY) ?? '')?.[1];
+    if (stored && Number(stored) > SAVE_VERSION) return false;
     localStorage.setItem(KEY, JSON.stringify(state));
     return true;
+  } catch {
+    return false;
+  }
+}
+
+// (v5.13) The save in this browser comes from a newer version of the game (see saveGame).
+export function storedSaveTooNew() {
+  try {
+    const v = /^\{"version":(\d+)/.exec(localStorage.getItem(KEY) ?? '')?.[1];
+    return Boolean(v) && Number(v) > SAVE_VERSION;
   } catch {
     return false;
   }
@@ -50,11 +64,67 @@ export function clearSave() {
   }
 }
 
-// Backfill missing fields with defaults when loading saves from older versions.
+// Brings any save up to the current format (sim/state.js: SAVE_VERSION), step by step:
+//   up to 9: the save was Eje Cafetero's own, holding the whole game's data and the other regions (v3.0 to v5.12).
+//            Each region is brought up to date (migrateRegion), then the player's data (migrateProfile), then
+//   9 -> 10: Eje Cafetero moves into `regions` like the others and the save becomes the whole game's (toFormat10).
+//   10: each region and the player's data are brought up to date.
+// A save from a newer format (a backup from an updated phone) is refused: null, see saveTooNew.
 function migrate(data) {
   if (typeof data !== 'object' || data === null) return null;
   if ((data.version ?? 0) > SAVE_VERSION) return null;
-  // Each region is stored as a separate sub-state inside the Eje Cafetero save (v3.0).
+  const regions = Object.fromEntries(Object.entries(data.regions ?? {}).map(([id, st]) => [id, migrateRegion(st)]));
+  if (isGameSave(data)) {
+    const game = { ...data, regions };
+    game.playTime ??= 0;
+    game.clockOffset ??= 0;
+    game.settings ??= { sound: true, music: true, zone: 'finca' };
+    game.events = { slots: data.events?.slots ?? [null, null], global: true };
+    return migrateProfile(game);
+  }
+  const old = migrateRegion(data);
+  old.regions = regions;
+  return toFormat10(migrateProfile(old));
+}
+
+// Format 10 and later: the whole game's save (no stations of its own, regions inside).
+const isGameSave = (data) => (data.version ?? 0) >= 10 && !data.stations && Boolean(data.regions);
+
+// Region saves of a save in either shape (a format 9 save is itself Eje Cafetero's).
+const regionSaves = (save) => (save.stations ? [save, ...Object.values(save.regions ?? {})] : Object.values(save.regions ?? {}));
+
+// 9 -> 10 (v5.13): what belongs to the whole game stays in the save; everything else was Eje Cafetero's own and
+// becomes its region save, like any other region. The country clock carries on: the save and Eje Cafetero keep
+// the same playTime and clockOffset, so every clock still shows the same date.
+function toFormat10(old) {
+  const { version, savedAt, profile, settings = {}, events = {}, regions = {}, bogotaNet, ...cafetero } = old;
+  const { slots, global, ...regionEvents } = events;
+  const zone = REGIONS_BY_ID.cafetero.zones.includes(settings.zone) ? settings.zone : REGIONS_BY_ID.cafetero.zones[0];
+  return {
+    version: SAVE_VERSION,
+    savedAt,
+    playTime: cafetero.playTime ?? 0,
+    clockOffset: cafetero.clockOffset ?? 0,
+    profile,
+    settings,
+    events: { slots: slots ?? [null, null], global: true },
+    regions: { cafetero: { version: SAVE_VERSION, savedAt, ...cafetero, region: 'cafetero', clockOffset: cafetero.clockOffset ?? 0, events: regionEvents, settings: { zone } }, ...regions },
+    bogotaNet: bogotaNet ?? true,
+  };
+}
+
+// A save written by a newer version of the game (format above SAVE_VERSION): it cannot be opened here.
+export function saveTooNew(text) {
+  try {
+    return (JSON.parse(decodeURIComponent(escape(atob(text.trim())))).version ?? 0) > SAVE_VERSION;
+  } catch {
+    return false;
+  }
+}
+
+// One region's save brought up to date (any format).
+function migrateRegion(data) {
+  // Each region is stored as a separate sub-state (v3.0).
   const region = data.region ?? 'cafetero';
   const base = createInitialState(data.savedAt, region);
   // v1/v2 -> v3: stations gain input buffer, status, and carriers; mules gain origin, destination, and phase.
@@ -121,7 +191,7 @@ function migrate(data) {
     zones.pueblo.unlocked = true;
     stations.coffee_house ??= createStationState();
   }
-  return migrateProfile(finish(data, base, stations, zones, mules));
+  return finish(data, base, stations, zones, mules);
 }
 
 // Legacy research items that added offline hours (before v3.7), with their costs and hours.
@@ -163,7 +233,7 @@ function resetOldBogota(root) {
 // Player profile migrations (applied on the main save after migrating all regions).
 function migrateProfile(root) {
   resetOldBogota(root);
-  const all = [root, ...Object.values(root.regions ?? {})];
+  const all = regionSaves(root);
   // v3.6 -> v3.7: offline hours move to the profile. Nobody loses hours: profile starts with the
   // highest regional total, and coins spent on those removed research items are refunded.
   if (root.profile && root.profile.offlineLevel === undefined) {
@@ -228,6 +298,7 @@ function migrateProfile(root) {
     playing.slice(0, 2).forEach((zone, i) => (root.events.slots[i] = { zone }));
   }
   for (const st of all) if (st !== root) delete st.events.slots;
+  for (const st of all) if (st !== root) delete st.events.global;
   // v5.9: counters stop at their caps (data/caps.js), and the event history keeps only the last event.
   // Runs after the older migrations above, which still read the whole history.
   const p = root.profile;
@@ -280,8 +351,6 @@ function finish(data, base, stations, zones, mules) {
     goals: { ...base.goals, ...data.goals, claimed },
     // (v5.11) Only what the save says: a new save has it from the start, an old one gets it from resetOldBogota.
     bogotaNet: data.bogotaNet,
-    // Text backup (for transferring a save to another device).
-    ...(data.regions && { regions: Object.fromEntries(Object.entries(data.regions).map(([id, st]) => [id, migrate(st)])) }),
     version: SAVE_VERSION,
   };
 }
@@ -296,7 +365,9 @@ export function exportSave(state) {
 export function importSave(text) {
   try {
     const data = JSON.parse(decodeURIComponent(escape(atob(text.trim()))));
-    if (!data.stations?.farm || typeof data.coins !== 'number') return null;
+    // Eje Cafetero's farm and coins: in the save itself up to format 9, in its region save from format 10.
+    const cafetero = isGameSave(data) ? data.regions.cafetero : data;
+    if (!cafetero?.stations?.farm || typeof cafetero.coins !== 'number') return null;
     return migrate(data);
   } catch {
     return null;

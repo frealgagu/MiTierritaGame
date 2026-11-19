@@ -4,11 +4,14 @@ import { REGIONS, REGIONS_BY_ID } from '../data/regions.js';
 import { createInitialState } from './state.js';
 import { clockOf } from './calendar.js';
 
-// Save for a region (root for Eje Cafetero), or null if not yet unlocked.
+// Save for a region, or null if not yet unlocked. (v5.13) Eje Cafetero is a region like the others, in
+// root.regions; a lone region save (no `regions`, as in some tests) answers for itself.
 export function regionState(root, regionId) {
-  if (regionId === 'cafetero') return root;
-  return root.regions?.[regionId] ?? null;
+  if (!root.regions) return (root.region ?? 'cafetero') === regionId ? root : null;
+  return root.regions[regionId] ?? null;
 }
+// Every region save in the game (v5.13: Eje Cafetero is one of them, not the root).
+export const regionStates = (root) => (root.regions ? Object.values(root.regions) : [root]);
 
 // Unlocks regions whose condition is met (completing a zone in another region). Returns
 // unlocked list. New region follows country calendar from unlock day onward.

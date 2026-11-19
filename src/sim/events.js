@@ -29,6 +29,7 @@ import { WithArticle, withArticle } from '../data/lore.js';
 import { gainRenown, profileOf } from './renown.js';
 import { LEGACY_OBJECTIVES } from './legacyObjectives.js';
 import { LANG, t } from '../i18n/index.js';
+import { regionState, regionStates } from './regions.js';
 
 export const EVENT_SLOTS = 2;
 export const EVENT_COOLDOWN = 2 * YEAR_DAYS * DAY_LENGTH; // 2 game years (4 h 16 min; until v3.29, 3)
@@ -49,15 +50,16 @@ export function boardObjective(board) {
   return old ? old[(boardRound(board) - 1) % old.length] : def.objective;
 }
 
-// Save events, filling missing defaults.
+// A region save's events, filling missing defaults: open boards, last played and rounds per event.
 export function eventsOf(state) {
   const ev = (state.events ??= {});
   ev.boards ??= {};
-  ev.slots ??= Array(EVENT_SLOTS).fill(null);
   ev.last ??= {};
   ev.count ??= {};
   return ev;
 }
+// The two game-wide slots (v3.30), in the whole game's save (v5.13; a lone region save keeps its own, in tests).
+export const slotsOf = (root) => ((root.events ??= {}).slots ??= Array(EVENT_SLOTS).fill(null));
 
 // Next challenge for zone (1, 2, 3…).
 export const nextRound = (state, zoneId) => Math.min(CAPS.eventRound, (eventsOf(state).count[zoneId] ?? 0) + 1);
@@ -74,17 +76,15 @@ export const afterDone = (root, def) => !def.after || def.after.every((id) => ro
 const zoneOfKey = (key) => EVENT_OF_ZONE[key]?.zone ?? key;
 const regionOfKey = (key) => REGION_OF_ZONE[zoneOfKey(key)];
 export function ownerOf(root, zoneId) {
-  const region = regionOfKey(zoneId);
-  if ((root.region ?? 'cafetero') === region) return root;
-  return region === 'cafetero' ? null : root.regions?.[region] ?? null;
+  return regionState(root, regionOfKey(zoneId));
 }
-const statesOf = (root) => [root, ...Object.values(root.regions ?? {})];
+const statesOf = regionStates;
 
 // Fills open slots and clears expired 2-year cooldowns. Called by root save each tick.
 // paso (core/Game.js).
 export function refillSlots(root) {
   if (root.event || hasFreeEvents(root.profile)) return;
-  const slots = eventsOf(root).slots;
+  const slots = slotsOf(root);
   const now = clockOf(root);
   for (let i = 0; i < slots.length; i++) if (slots[i]?.until !== undefined && now >= slots[i].until) slots[i] = null;
   if (!slots.includes(null)) return;
@@ -168,7 +168,7 @@ export function startOnDemand(root, key) {
 
 // When next 2-year cooldown expires (country clock), or null.
 export function nextSlotAt(root) {
-  const waits = eventsOf(root).slots.filter((x) => x?.until !== undefined).map((x) => x.until);
+  const waits = slotsOf(root).filter((x) => x?.until !== undefined).map((x) => x.until);
   return waits.length ? Math.min(...waits) : null;
 }
 
@@ -186,7 +186,7 @@ export function eventStatus(root, zoneId) {
   if (!afterDone(root, def)) return { kind: 'locked', def, round: nextRound(state, zoneId), after: true };
   if (!ready(state, def)) return { kind: 'locked', def, round: nextRound(state, zoneId) };
   // (v5.9) Events without waiting: any ready event, at any time.
-  if (hasFreeEvents(root.profile) || eventsOf(root).slots.some((x) => x?.zone === zoneId)) return { kind: 'available', def, round: nextRound(state, zoneId) };
+  if (hasFreeEvents(root.profile) || slotsOf(root).some((x) => x?.zone === zoneId)) return { kind: 'available', def, round: nextRound(state, zoneId) };
   return { kind: 'waiting', def, round: nextRound(state, zoneId), nextAt: nextSlotAt(root) };
 }
 
@@ -225,12 +225,12 @@ let fastEvents = false;
 export function setFastEvents(on, root = null) {
   fastEvents = Boolean(on);
   // Waiting cooldowns clear immediately.
-  if (fastEvents && root) for (const x of eventsOf(root).slots) if (x?.until !== undefined) x.until = Math.min(x.until, clockOf(root) + 1);
+  if (fastEvents && root) for (const x of slotsOf(root)) if (x?.until !== undefined) x.until = Math.min(x.until, clockOf(root) + 1);
 }
 
 // Event cooldown slot stays empty for 2 years (unslotted legacy boards free none).
 function coolDown(root, zoneId) {
-  const slots = eventsOf(root).slots;
+  const slots = slotsOf(root);
   const k = slots.findIndex((x) => x?.zone === zoneId);
   if (k >= 0) slots[k] = { until: clockOf(root) + (fastEvents ? 1 : EVENT_COOLDOWN) };
 }
