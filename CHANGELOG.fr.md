@@ -1,5 +1,8 @@
 # Journal des modifications
 
+## v5.10.0 — Prix de la zone spéciale
+- **⭐ Zone spéciale :** les prix de vente suivent la série 2⁰, 2⁵, 2¹⁰ … 2³⁵ (×32 d’une station à la suivante). Les quatre dernières vendent ×2, ×2, ×4 et ×4 plus cher, et leur coût d’amélioration et celui de construire la station suivante augmentent dans la même proportion. La zone complète prend maintenant environ 25 heures de jeu.
+
 ## v5.9.1 — Noms des icônes dans la zone spéciale
 - **Correctif :** dans la zone spéciale, toucher une icône de la chaîne ou du panneau d’une station affiche de nouveau son nom.
 

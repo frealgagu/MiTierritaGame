@@ -1,5 +1,8 @@
 # Registro de alterações
 
+## v5.10.0 — Preços da zona especial
+- **⭐ Zona especial:** os preços de venda seguem a série 2⁰, 2⁵, 2¹⁰ … 2³⁵ (×32 de uma estação para a seguinte). As quatro últimas vendem ×2, ×2, ×4 e ×4 mais caro, e o custo de melhoria delas e o de construir a estação seguinte sobem na mesma proporção. A zona completa agora leva umas 25 horas de jogo.
+
 ## v5.9.1 — Nomes dos ícones na zona especial
 - **Correção:** na zona especial, tocar em um ícone da cadeia ou do painel de uma estação volta a mostrar o nome dele.
 

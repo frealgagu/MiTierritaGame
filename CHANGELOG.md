@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.10.0 — Special zone prices
+- **⭐ Special zone:** sale prices follow the series 2⁰, 2⁵, 2¹⁰ … 2³⁵ (×32 from one station to the next). The last four sell for ×2, ×2, ×4 and ×4 more, and their upgrade cost and the cost of building the next station go up in the same proportion. The whole zone now takes about 25 hours of play.
+
 ## v5.9.1 — Icon names in the special zone
 - **Fix:** in the special zone, tapping an icon in the chain or in a station's panel shows its name again.
 

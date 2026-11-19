@@ -17,9 +17,12 @@ import { ICON } from './icons.js';
 // with the even player (`npm run balance -- 30 parejo` with BALANCE_REGION=sanandres): each station takes about
 // 3 hours (level 100 in ~1h45, its ×32 in ~45 min more, and the next station in ~30 min), 24 hours in all. Without
 // the ×32 the first station alone takes over 16 hours (see docs/GDD.md).
+// (v5.10) Sale prices follow 2⁰, 2⁵, 2¹⁰… 2³⁵ (×32 per station); the last four went up ×2, ×2, ×4 and ×4, and so
+// did their upgrade base and the build cost of the station after each one (paid with its income). The island now
+// takes about 25 h 20 min with the even player.
 const SA = {
-  base: [0.125, 5.2, 101, 1720, 53700, 819000, 26000000, 430000000],
-  unlock: [0, 1e8, 1.9e9, 3.3e10, 4.1e11, 6.55e12, 1.1e14, 2.2e15],
+  base: [0.125, 5.2, 101, 1720, 107400, 1638000, 104000000, 1720000000],
+  unlock: [0, 1e8, 1.9e9, 3.3e10, 4.1e11, 1.31e13, 2.2e14, 8.8e15],
 };
 
 export const STATIONS = [
