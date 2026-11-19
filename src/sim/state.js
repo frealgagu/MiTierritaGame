@@ -33,6 +33,8 @@ export function createInitialState(now = Date.now(), regionId = 'cafetero') {
     routes: Object.fromEntries(ROUTES.filter((r) => routeRegion(r) === regionId).map((r) => [r.id, createRouteState()])),
     mules: [], // { id, productId, amount, from, to, phase: 'go' | 'back', t, duration }
     stats: { produced: {}, sold: {}, imported: {} },
+    // (v5.12) Everything sold and produced in this run, whatever the per-product caps (sim/totals.js).
+    counted: { sold: 0, produced: 0 },
     hints: [], // already shown notices
     settings: { sound: true, music: true },
     research: [], // purchased research ids

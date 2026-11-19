@@ -4,7 +4,7 @@ import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { toast } from './toast.js';
 import { VICTORY } from '../data/victory.js';
 import { LANG, t } from '../i18n/index.js';
-import { cappedCoins, cappedRunTime, cappedStat } from './capped.js';
+import { cappedCoins, cappedRun, cappedRunTime } from './capped.js';
 
 // Welcome-back modal with earnings while the game was closed.
 // maxed: offline hours are already at their top level, so the Renown hint is left out.
@@ -39,7 +39,7 @@ export function showVictory(state, zoneId, onGo, opened = [], open = null) {
   const next = ZONES_BY_ID[zoneId].next ?? (region ? region.zones[0] : null);
   document.getElementById('victory-title').textContent = v.title;
   document.getElementById('victory-text').innerHTML = v.text;
-  document.getElementById('victory-stats').textContent = t('Tiempo jugado: {time} · Ganado en total: 💰 {coins} · {stat}: {n}', { time: cappedRunTime(state.playTime), coins: cappedCoins(state.totalEarned), stat: v.stat[0], n: cappedStat(state.stats.sold[v.stat[1]] ?? 0) });
+  document.getElementById('victory-stats').textContent = t('Tiempo jugado: {time} · Ganado en total: 💰 {coins} · {stat}: {n}', { time: cappedRunTime(state.playTime), coins: cappedCoins(state.totalEarned), stat: v.stat[0], n: cappedRun('sold', state.stats.sold[v.stat[1]] ?? 0) });
   const soon = document.getElementById('victory-next');
   const go = document.getElementById('victory-go');
   const stay = document.getElementById('victory-ok');

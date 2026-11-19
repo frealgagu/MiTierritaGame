@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.12.0 — Whole-game totals
+- **📊 The whole game:** products sold and produced are now counters of their own that keep growing even when a product sits at its run cap, without restarting: sold up to 999No++ and produced up to 999Dc++. Saved games start with what they already had. The ⚙️ menu shows the same.
+- **📊 Per region:** in the current run, each product counts what was sold up to 999Sp++ and what was produced up to 999Oc++.
+- **Fix:** the whole game's time played (⚙️ and Statistics) no longer goes back to zero when the Coffee Region restarts; it follows the country clock.
+
 ## v5.11.0 — Statistics caps and the Vélez sign
 - **📊 Statistics:** new caps. For the whole game, products sold and produced add up every run of every region up to 999Oc++; Prestige reaches 9.999++ and medals of each kind 99++. In each region, years lived reach 99++, the current run's time shows ∞ from 100 h, research reads «done / total», each event counts up to 29++ rounds and 9++ medals of each kind, and products show the current run up to 999Sp++. The ⚙️ menu shows the same totals.
 - **🎖️ Medal achievements:** they ask for 1, 4 and 10 medals per event of the region (Bogotá: 7, 28 and 70; single-event ones: 1, 4 and 10).

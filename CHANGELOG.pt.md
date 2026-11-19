@@ -1,5 +1,10 @@
 # Registro de alterações
 
+## v5.12.0 — Totais do jogo todo
+- **📊 O jogo todo:** os produtos vendidos e produzidos agora são contadores próprios que continuam subindo mesmo quando um produto já está no teto da partida, sem precisar recomeçar: vendidos até 999No++ e produzidos até 999Dc++. Os jogos salvos começam com o que já tinham. O menu ⚙️ mostra o mesmo.
+- **📊 Por região:** na partida atual, cada produto conta o vendido até 999Sp++ e o produzido até 999Oc++.
+- **Correção:** o tempo jogado do jogo todo (⚙️ e Estatísticas) não volta mais a zero ao recomeçar o Eixo Cafeeiro; segue o relógio do país.
+
 ## v5.11.0 — Tetos das estatísticas e placa de Vélez
 - **📊 Estatísticas:** novos tetos. No jogo todo, os produtos vendidos e produzidos somam todas as partidas de todas as regiões até 999Oc++; o Prestígio chega a 9.999++ e as medalhas de cada tipo a 99++. Em cada região, os anos vividos chegam a 99++, o tempo da partida atual mostra ∞ a partir de 100 h, as pesquisas aparecem como «feitas / total», cada evento conta até 29++ rodadas e 9++ medalhas de cada tipo, e os produtos mostram a partida atual até 999Sp++. O menu ⚙️ mostra os mesmos totais.
 - **🎖️ Conquistas de medalhas:** pedem 1, 4 e 10 medalhas por evento da região (Bogotá: 7, 28 e 70; as de um só evento: 1, 4 e 10).

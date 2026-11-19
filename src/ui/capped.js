@@ -7,9 +7,9 @@ export const cappedNumber = (value, max) => capped(value, max, formatNumber);
 // Small counts (Renown, Prestige): exact, with thousands separators.
 export const cappedCount = (value, max) => capped(value, max, formatCount);
 export const cappedCoins = (value) => cappedNumber(value, CAPS.coins);
-export const cappedStat = (value) => cappedNumber(value, CAPS.stat);
-// (v5.10) A product over every run, or the whole game's products.
-export const cappedStatTotal = (value) => cappedNumber(value, CAPS.statTotal);
+// (v5.12) A product in the current run (kind: sold or produced), and the whole game's products.
+export const cappedRun = (kind, value) => cappedNumber(value, CAPS.run[kind]);
+export const cappedTotal = (kind, value) => cappedNumber(value, CAPS.total[kind]);
 export const cappedRenown = (value) => cappedCount(value, CAPS.renown);
 export const cappedPrestige = (value) => cappedCount(value, CAPS.prestige);
 // Time played: the usual duration, or «∞» from the cap on.

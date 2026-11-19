@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## v5.12.0 — Totaux de tout le jeu
+- **📊 Tout le jeu :** les produits vendus et fabriqués sont maintenant des compteurs à part qui continuent de monter même quand un produit est à son plafond de partie, sans recommencer : vendus jusqu’à 999No++ et fabriqués jusqu’à 999Dc++. Les sauvegardes partent de ce qu’elles avaient déjà. Le menu ⚙️ affiche la même chose.
+- **📊 Par région :** dans la partie en cours, chaque produit compte le vendu jusqu’à 999Sp++ et le fabriqué jusqu’à 999Oc++.
+- **Correctif :** le temps de jeu de tout le jeu (⚙️ et Statistiques) ne revient plus à zéro quand on recommence l’Axe du café ; il suit l’horloge du pays.
+
 ## v5.11.0 — Plafonds des statistiques et panneau de Vélez
 - **📊 Statistiques :** nouveaux plafonds. Pour tout le jeu, les produits vendus et fabriqués additionnent toutes les parties de toutes les régions jusqu’à 999Oc++ ; le Prestige atteint 9.999++ et les médailles de chaque type 99++. Dans chaque région, les années vécues atteignent 99++, le temps de la partie en cours affiche ∞ à partir de 100 h, les recherches s’affichent « faites / total », chaque événement compte jusqu’à 29++ manches et 9++ médailles de chaque type, et les produits montrent la partie en cours jusqu’à 999Sp++. Le menu ⚙️ affiche les mêmes totaux.
 - **🎖️ Succès de médailles :** ils demandent 1, 4 et 10 médailles par événement de la région (Bogotá : 7, 28 et 70 ; ceux d’un seul événement : 1, 4 et 10).

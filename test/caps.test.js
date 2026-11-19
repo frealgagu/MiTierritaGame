@@ -29,26 +29,26 @@ test('Renown, Prestige and per-product counters stop at their caps (v5.9)', () =
   assert.equal(profile.renown, CAPS.renown);
   assert.equal(profile.renownTotal, CAPS.prestige);
   const s = new Game().state;
-  s.stats.sold.coffee_bag = CAPS.stat * 3;
-  s.stats.produced.cherry = CAPS.stat * 2;
+  s.stats.sold.coffee_bag = CAPS.run.sold * 3;
+  s.stats.produced.cherry = CAPS.run.produced * 2;
   s.totalEarned = CAPS.coins * 2;
   capCoins(s);
-  assert.equal(s.stats.sold.coffee_bag, CAPS.stat);
-  assert.equal(s.stats.produced.cherry, CAPS.stat);
+  assert.equal(s.stats.sold.coffee_bag, CAPS.run.sold);
+  assert.equal(s.stats.produced.cherry, CAPS.run.produced);
   assert.equal(s.totalEarned, CAPS.coins);
 });
 
 test('finished runs keep adding past the run cap up to the all-runs cap, and the years counter stops at its cap (v5.10)', () => {
   const s = new Game().state;
-  s.stats.sold.coffee_bag = CAPS.stat;
+  s.stats.sold.coffee_bag = CAPS.run.sold;
   bankRun(s, s.profile);
   bankRun(s, s.profile);
-  assert.equal(s.profile.lifetime.sold.coffee_bag, 2 * CAPS.stat, 'restarts count');
-  assert.equal(metric(s, 'sold:coffee_bag'), 3 * CAPS.stat);
-  s.profile.lifetime.sold.coffee_bag = CAPS.statTotal - 1;
+  assert.equal(s.profile.lifetime.sold.coffee_bag, 2 * CAPS.run.sold, 'restarts count');
+  assert.equal(metric(s, 'sold:coffee_bag'), 3 * CAPS.run.sold);
+  s.profile.lifetime.sold.coffee_bag = CAPS.total.sold - 1;
   bankRun(s, s.profile);
-  assert.equal(s.profile.lifetime.sold.coffee_bag, CAPS.statTotal);
-  assert.equal(metric(s, 'sold:coffee_bag'), CAPS.statTotal);
+  assert.equal(s.profile.lifetime.sold.coffee_bag, CAPS.total.sold);
+  assert.equal(metric(s, 'sold:coffee_bag'), CAPS.total.sold);
   s.playTime = 1e12;
   assert.equal(metric(s, 'years'), CAPS.years);
 });
@@ -80,14 +80,14 @@ test('loading a save trims the history and brings counters down to their caps (v
   s.profile.renown = CAPS.renown * 5;
   s.profile.renownTotal = CAPS.prestige * 5;
   s.profile.medals.broca = { best: 'gold', count: { gold: CAPS.medalsPerKind * 2 } };
-  s.profile.lifetime = { sold: { coffee_bag: CAPS.statTotal * 4 }, produced: {}, earned: CAPS.lifetimeEarned * 4, playTime: 0 };
+  s.profile.lifetime = { sold: { coffee_bag: CAPS.total.sold * 4 }, produced: {}, earned: CAPS.lifetimeEarned * 4, playTime: 0 };
   const loaded = importSave(exportSave(s));
   assert.equal(loaded.profile.history.length, 1);
   assert.equal(loaded.profile.history[0].round, 50, 'the last one is kept');
   assert.equal(loaded.profile.renown, CAPS.renown);
   assert.equal(loaded.profile.renownTotal, CAPS.prestige);
   assert.equal(loaded.profile.medals.broca.count.gold, CAPS.medalsPerKind);
-  assert.equal(loaded.profile.lifetime.sold.coffee_bag, CAPS.statTotal);
+  assert.equal(loaded.profile.lifetime.sold.coffee_bag, CAPS.total.sold);
   assert.equal(loaded.profile.lifetime.earned, CAPS.lifetimeEarned);
 });
 
@@ -120,10 +120,12 @@ test('restarts, the run number and the completed / second-ending counts stop at 
   assert.equal(metric(s, 'endings'), 60, 'not 61');
 });
 
-test('the v5.10 caps read as agreed: products 999Sp++ per run and 999Oc++ over every run, run time ∞ from 100 h', async () => {
-  const { cappedStat, cappedStatTotal, cappedRunTime, cappedPlayTime } = await import('../src/ui/capped.js');
-  assert.equal(cappedStat(CAPS.stat), '999Sp++');
-  assert.equal(cappedStatTotal(CAPS.statTotal), '999Oc++');
+test('the v5.12 product caps read as agreed, and run time ∞ from 100 h', async () => {
+  const { cappedRun, cappedTotal, cappedRunTime, cappedPlayTime } = await import('../src/ui/capped.js');
+  assert.equal(cappedRun('sold', CAPS.run.sold), '999Sp++');
+  assert.equal(cappedRun('produced', CAPS.run.produced), '999Oc++');
+  assert.equal(cappedTotal('sold', CAPS.total.sold), '999No++');
+  assert.equal(cappedTotal('produced', CAPS.total.produced), '999Dc++');
   assert.equal(cappedRunTime(CAPS.runHours * 3600), '∞');
   assert.notEqual(cappedRunTime(99 * 3600), '∞');
   assert.notEqual(cappedPlayTime(CAPS.runHours * 3600), '∞', 'the whole game still goes to 1000 h');

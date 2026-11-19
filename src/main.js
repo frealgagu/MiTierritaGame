@@ -16,7 +16,8 @@ import { showCalendar } from './ui/calendar.js';
 import { Chatter } from './ui/Chatter.js';
 import { EventsView } from './ui/EventsView.js';
 import { RenownView } from './ui/RenownView.js';
-import { StatsView, gameTotals } from './ui/StatsView.js';
+import { StatsView } from './ui/StatsView.js';
+import { gameTotals } from './sim/totals.js';
 import { setLook } from './render/look.js';
 import { checkLogros } from './sim/logros.js';
 import { hideSplash, setSplashProgress, splashOffline, splashWait } from './ui/splash.js';
@@ -49,7 +50,7 @@ import { Sound } from './audio/Sound.js';
 import { Music } from './audio/Music.js';
 import { playGrandFinale } from './ui/GrandFinale.js';
 import { checkFinaleLogro, finaleDue, finaleUnlocked } from './sim/finale.js';
-import { cappedCoins, cappedPlayTime, cappedStatTotal } from './ui/capped.js';
+import { cappedCoins, cappedPlayTime, cappedTotal } from './ui/capped.js';
 
 const AUTOSAVE_MS = 10_000;
 const MIN_OFFLINE_S = 30;
@@ -720,9 +721,9 @@ function bindMenu(game, sound, music, getActive, grandFinale, stats) {
     // Across all regions and (v5.10) every run, the same numbers as 📊 Statistics › The whole game.
     const { sold, earned } = gameTotals(s);
     document.getElementById('menu-stats').innerHTML = [
-      t('⏱️ Tiempo jugado: <b>{time}</b>', { time: cappedPlayTime(s.playTime) }),
+      t('⏱️ Tiempo jugado: <b>{time}</b>', { time: cappedPlayTime(clockOf(s)) }),
       t('💰 Ganado en total: <b>{coins}</b>', { coins: cappedCoins(earned) }),
-      t('📦 Productos vendidos: <b>{n}</b>', { n: cappedStatTotal(sold) }),
+      t('📦 Productos vendidos: <b>{n}</b>', { n: cappedTotal('sold', sold) }),
     ].map((li) => `<li>${li}</li>`).join('');
     // The grand finale (v5.9), once every achievement is complete.
     document.getElementById('finale-btn').hidden = !finaleUnlocked(s.profile);

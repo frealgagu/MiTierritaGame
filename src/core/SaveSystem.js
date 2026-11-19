@@ -136,6 +136,8 @@ const OLD_OFFLINE_RESEARCH = {
 // (v5.11) Restarting Eje Cafetero used to drop the `bogotaNet` flag (a fresh root save), so the next load wiped a
 // current Bogota and the medals of six of its events. The flag is now part of every new root save, and a Bogota is only
 // wiped when it really is the old one: a claimed goal or a product that no longer exists (the old goals were bz01…).
+const sumOf = (obj) => Object.values(obj ?? {}).reduce((a, b) => a + b, 0);
+
 const OLD_BOGOTA_EVENTS = ['aguacero_chorro', 'navidad_septima', 'festival_zona_g', 'pico_placa', 'ventarron_usaquen', 'paro_camionero'];
 const isOldBogota = (st) =>
   (st.goals?.claimed ?? []).some((id) => !GOALS_BY_ID[id]) ||
@@ -229,6 +231,11 @@ function migrateProfile(root) {
   // v5.9: counters stop at their caps (data/caps.js), and the event history keeps only the last event.
   // Runs after the older migrations above, which still read the whole history.
   const p = root.profile;
+  // (v5.12) The whole game's totals start from every finished run already banked in the regions' totals.
+  if (p && !p.totals) {
+    const lives = [p.lifetime, ...Object.values(p.lifetimes ?? {})].filter(Boolean);
+    p.totals = Object.fromEntries(['sold', 'produced'].map((k) => [k, Math.min(CAPS.total[k], lives.reduce((n, life) => n + sumOf(life[k]), 0))]));
+  }
   if (p) {
     p.history = (p.history ?? []).slice(-CAPS.history);
     p.renown = Math.min(CAPS.renown, p.renown ?? 0);
@@ -236,7 +243,7 @@ function migrateProfile(root) {
     for (const rec of Object.values(p.medals ?? {})) for (const k in rec.count ?? {}) rec.count[k] = Math.min(CAPS.medalsPerKind, rec.count[k]);
     for (const life of [p.lifetime, ...Object.values(p.lifetimes ?? {})]) {
       if (!life) continue;
-      for (const kind of ['sold', 'produced']) for (const id in life[kind] ?? {}) life[kind][id] = Math.min(CAPS.statTotal, life[kind][id]);
+      for (const kind of ['sold', 'produced']) for (const id in life[kind] ?? {}) life[kind][id] = Math.min(CAPS.total[kind], life[kind][id]);
       life.earned = Math.min(CAPS.lifetimeEarned, life.earned ?? 0);
     }
   }
@@ -266,6 +273,8 @@ function finish(data, base, stations, zones, mules) {
     routes,
     mules,
     stats: { ...base.stats, ...data.stats },
+    // (v5.12) A run saved before its own count starts from what its products add up to.
+    counted: data.counted ?? { sold: sumOf(data.stats?.sold), produced: sumOf(data.stats?.produced) },
     // Other regions, each with its own independent game state.
     legacy: { resets: Math.min(CAPS.resets, data.legacy?.resets ?? 0) },
     goals: { ...base.goals, ...data.goals, claimed },

@@ -50,7 +50,8 @@ export function capCoins(state) {
   if (state.totalEarned > MAX_COINS) state.totalEarned = MAX_COINS;
   for (const kind of ['sold', 'produced', 'imported']) {
     const stats = state.stats?.[kind];
-    if (stats) for (const id in stats) if (stats[id] > CAPS.stat) stats[id] = CAPS.stat;
+    const max = CAPS.run[kind];
+    if (stats) for (const id in stats) if (stats[id] > max) stats[id] = max;
   }
 }
 // Product of a single research effect type (v4.1.1: displayed in income breakdown).

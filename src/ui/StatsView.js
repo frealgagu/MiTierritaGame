@@ -10,11 +10,13 @@ import { REGION_OF_ZONE } from '../data/regions.js';
 import { formatCount, formatMult } from '../core/format.js';
 import { t } from '../i18n/index.js';
 import { finaleProgress } from '../sim/finale.js';
-import { lifetimeOf, metric } from '../sim/logros.js';
+import { metric } from '../sim/logros.js';
 import { legacyMult } from '../sim/modifiers.js';
 import { openRegionStates } from '../sim/regions.js';
 import { profileOf } from '../sim/renown.js';
-import { cappedCoins, cappedCount, cappedPlayTime, cappedPrestige, cappedRenown, cappedRunTime, cappedStat, cappedStatTotal } from './capped.js';
+import { cappedCoins, cappedCount, cappedPlayTime, cappedPrestige, cappedRenown, cappedRun, cappedRunTime, cappedTotal } from './capped.js';
+import { gameTotals } from '../sim/totals.js';
+import { clockOf } from '../sim/calendar.js';
 import { RESEARCH } from '../data/research.js';
 import { GRAN_FINAL_LOGRO } from '../data/logros.js';
 
@@ -22,22 +24,6 @@ const KINDS = ['gold', 'silver', 'bronze'];
 const sum = (obj) => Object.values(obj ?? {}).reduce((a, b) => a + b, 0);
 const row = (label, value) => `<div class="stats-row"><span>${label}</span><b>${value}</b></div>`;
 const card = (title, rows) => `<div class="logro stats-card"><div class="logro-head"><b>${title}</b></div>${rows}</div>`;
-
-// What a region sold or produced, finished runs plus the current one, summed over its products.
-const regionTotal = (state, profile, kind) => sum(lifetimeOf(profile, state.region ?? 'cafetero')[kind]) + sum(state.stats[kind]);
-
-// The whole game (v5.10): every run of every region, its own count with its own cap (1 No for products). The ⚙️
-// menu shows the same numbers.
-export function gameTotals(root) {
-  const profile = profileOf(root);
-  const open = openRegionStates(root);
-  const total = (kind) => Math.min(CAPS.statTotal, open.reduce((n, { state }) => n + regionTotal(state, profile, kind), 0));
-  return {
-    earned: Math.min(CAPS.lifetimeEarned, open.reduce((n, { state }) => n + metric(state, 'earned', profile), 0)),
-    sold: total('sold'),
-    produced: total('produced'),
-  };
-}
 
 export class StatsView {
   constructor(game) {
@@ -89,10 +75,11 @@ export class StatsView {
     const events = EVENTS.filter((def) => regions.includes(REGION_OF_ZONE[def.zone]));
     const stickers = ALBUM.filter((pg) => regions.includes(pg.region)).flatMap((pg) => pg.stickers);
     return card(t('🇨🇴 Todo el juego'), [
-      row(t('⏱️ Tiempo jugado'), cappedPlayTime(root.playTime)),
+      // (v5.12) The country clock: it never restarts (before, it was Eje Cafetero's run and went back to 0 with it).
+      row(t('⏱️ Tiempo jugado'), cappedPlayTime(clockOf(root))),
       row(t('💰 Ganado en total'), cappedCoins(earned)),
-      row(t('📦 Productos vendidos'), cappedStatTotal(sold)),
-      row(t('🏭 Productos producidos'), cappedStatTotal(produced)),
+      row(t('📦 Productos vendidos'), cappedTotal('sold', sold)),
+      row(t('🏭 Productos producidos'), cappedTotal('produced', produced)),
       row(t('⭐ Renombre'), cappedRenown(profile.renown ?? 0)),
       row(t('🏆 Prestigio'), cappedPrestige(profile.renownTotal ?? 0)),
       row(t('🏆 Logros completos'), `${formatCount(logros.have)} / ${formatCount(logros.total)}${finale ? ' · 🎉' : ''}`),
@@ -140,7 +127,7 @@ export class StatsView {
     const productRows = products
       .map(([id, p]) => ({ p, sold: state.stats.sold[id] ?? 0, produced: state.stats.produced[id] ?? 0 }))
       .filter((x) => x.sold || x.produced)
-      .map(({ p, sold, produced }) => `<tr><td>${p.icon} ${p.name}</td><td>${cappedStat(produced)}</td><td>${cappedStat(sold)}</td></tr>`)
+      .map(({ p, sold, produced }) => `<tr><td>${p.icon} ${p.name}</td><td>${cappedRun('produced', produced)}</td><td>${cappedRun('sold', sold)}</td></tr>`)
       .join('');
     const productsCard = card(t('📦 Productos de esta partida'), productRows
       ? `<table class="stats-table"><thead><tr><th></th><th>${t('Producidos')}</th><th>${t('Vendidos')}</th></tr></thead><tbody>${productRows}</tbody></table>`

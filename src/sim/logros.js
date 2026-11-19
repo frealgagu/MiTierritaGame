@@ -9,6 +9,7 @@ import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { YEAR_DAYS, DAY_LENGTH } from './calendar.js';
 import { gainRenown, pageDone, profileOf } from './renown.js';
 import { CAPS, capAdd } from '../data/caps.js';
+import { bankTotals } from './totals.js';
 
 const YEAR = YEAR_DAYS * DAY_LENGTH;
 
@@ -24,9 +25,10 @@ export function lifetimeOf(profile, region = 'cafetero') {
 export function bankRun(state, profile) {
   const life = lifetimeOf(profile, state.region);
   for (const kind of ['sold', 'produced']) {
-    for (const [id, n] of Object.entries(state.stats?.[kind] ?? {})) life[kind][id] = capAdd(life[kind][id], n, CAPS.statTotal);
+    for (const [id, n] of Object.entries(state.stats?.[kind] ?? {})) life[kind][id] = capAdd(life[kind][id], n, CAPS.total[kind]);
   }
   life.earned = capAdd(life.earned, state.totalEarned ?? 0, CAPS.lifetimeEarned);
+  bankTotals(state, profile);
   life.playTime += state.playTime ?? 0;
 }
 
@@ -44,7 +46,7 @@ export function metric(state, name, profile = profileOf(state)) {
   switch (kind) {
     case 'sold':
     case 'produced':
-      return Math.min(CAPS.statTotal, (life[kind][product] ?? 0) + (state.stats[kind][product] ?? 0));
+      return Math.min(CAPS.total[kind], (life[kind][product] ?? 0) + (state.stats[kind][product] ?? 0));
     case 'earned':
       return Math.min(CAPS.lifetimeEarned, life.earned + state.totalEarned);
     case 'years':

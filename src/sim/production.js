@@ -5,6 +5,7 @@ import { capMult, consumeCompost, speedMult } from './modifiers.js';
 import { CALENDAR, clockOf, resting, seasonOf } from './calendar.js';
 import { fleetOf } from './fleet.js';
 import { joinOf } from './chain.js';
+import { count } from './totals.js';
 
 export function createStationState() {
   return { level: 1, input: 0, buffer: 0, byBuffer: 0, fuel: 0, imported: {}, joined: {}, progress: 0, sinceDeparture: 0, idle: 0, status: 'working', waiting: null, transport: { level: 1 } };
@@ -101,12 +102,14 @@ export function stepStation(state, id, dt, bus) {
   s.input -= cycles * need;
   s.buffer += cycles * outAmt;
   state.stats.produced[outId] = (state.stats.produced[outId] ?? 0) + cycles * outAmt;
+  count(state, 'produced', cycles * outAmt);
   if (def.by) {
     // Byproduct (pulp): stored separately; if unused, overflows when full.
     const [[byId, byAmt]] = Object.entries(def.by);
     s.byBuffer = Math.min(stationBufferCap(def, s.level, capMult(state, id)), (s.byBuffer ?? 0) + cycles * byAmt);
     // (v4.6) Also counts toward produced totals: byproduct goals exist (Bogotá chicharrón).
     state.stats.produced[byId] = (state.stats.produced[byId] ?? 0) + cycles * byAmt;
+    count(state, 'produced', cycles * byAmt);
   }
   if (id === 'wetmill') consumeCompost(state, cycles * outAmt);
   if (def.fuel && s.fuel > 0) s.fuel = Math.max(0, s.fuel - cycles * def.fuel.perCycle);

@@ -15,6 +15,7 @@ import { stepAlerts } from '../sim/alerts.js';
 import { clockOf, workOf, workSeconds } from '../sim/calendar.js';
 import { boardObjective, eventItems, refillSlots, secureMedal, stepSupply } from '../sim/events.js';
 import { buildAll, buyZoneBoost } from '../sim/zoneBoost.js';
+import { count } from '../sim/totals.js';
 
 export const TICK = 0.1; // s, simulation advances at 10 ticks/s
 // s of game time actually simulated on resume; the rest is extrapolated. Until v3.65 this was 2 h: with a
@@ -23,7 +24,7 @@ export const TICK = 0.1; // s, simulation advances at 10 ticks/s
 const MAX_SIMULATED = 30 * 60;
 
 // Extrapolated portion of offline time.
-const snapshot = (s) => ({ coins: s.coins, totalEarned: s.totalEarned, sold: { ...s.stats.sold }, produced: { ...s.stats.produced }, imported: { ...s.stats.imported } });
+const snapshot = (s) => ({ coins: s.coins, totalEarned: s.totalEarned, sold: { ...s.stats.sold }, produced: { ...s.stats.produced }, imported: { ...s.stats.imported }, counted: { ...s.counted } });
 const INCOME_WINDOW = 60; // s window used to compute coins/s
 
 export class Game {
@@ -131,6 +132,8 @@ export class Game {
       for (const kind of ['sold', 'produced', 'imported']) {
         for (const [id, n] of Object.entries(after[kind])) s.stats[kind][id] = n + (n - (mark[kind][id] ?? 0)) * k;
       }
+      // (v5.12) The whole game's counts grow with the extrapolated part too.
+      for (const kind of ['sold', 'produced']) count(s, kind, ((after.counted[kind] ?? 0) - (mark.counted[kind] ?? 0)) * k);
       s.playTime += rest;
       capCoins(s);
     }

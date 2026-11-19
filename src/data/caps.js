@@ -9,11 +9,13 @@ const BIG = 1e36;
 export const CAPS = {
   // Coins: balance and coins earned in the current run of a region.
   coins: BIG,
-  // (v5.10) Sold, produced and imported per product in the current run of a region: 1 Oc, shown «999Sp++».
-  stat: 1e27,
-  // (v5.10) Each product summed over every run of a region, and the whole game's products sold or produced
-  // (Statistics, ⚙️): 1 No, shown «999Oc++». Restarts keep adding up to it.
-  statTotal: 1e30,
+  // (v5.12) Per product in the current run of a region: sold 1 Oc («999Sp++»), produced and imported 1 No
+  // («999Oc++»).
+  run: { sold: 1e27, produced: 1e30, imported: 1e30 },
+  // (v5.12) The whole game's products (Statistics › The whole game, ⚙️): sold 1 Dc («999No++»), produced 1000 Dc
+  // («999Dc++»). Their own counters, which keep growing while a product sits at its run cap and never depend on one
+  // region (see sim/totals.js). Each product summed over every run of its region (achievements) shares these caps.
+  total: { sold: 1e33, produced: 1e36 },
   // Coins earned summed over finished runs of a region.
   lifetimeEarned: BIG,
   // Game years lived in a region (achievement «A whole life»). The calendar keeps running; only the

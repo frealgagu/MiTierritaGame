@@ -3,6 +3,7 @@ import { dispatchCapacity } from './rules.js';
 import { sumValues } from './state.js';
 import { dispatchMult, jeepCount, productValue, saleValue } from './modifiers.js';
 import { routeReserve } from './routes.js';
+import { count } from './totals.js';
 
 // What Willys can sell: warehouse stock minus reserve waiting for outbound routes.
 export function sellableStock(state, zoneId, reserve = routeReserve(state, zoneId)) {
@@ -57,6 +58,7 @@ function stepOne(state, zoneId, j, k, dt, bus) {
     for (const [id, amount] of Object.entries(j.load)) {
       coins += amount * saleValue(state, id);
       state.stats.sold[id] = (state.stats.sold[id] ?? 0) + amount;
+      count(state, 'sold', amount);
     }
     state.coins += coins;
     state.totalEarned += coins;
