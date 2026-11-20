@@ -24,20 +24,20 @@ From the mountain bean to a container bound for the port: build production chain
 ☕ START ON THE COFFEE FARM
 Grow coffee in the Coffee Region. The cherry is washed at the Wet Mill, dried in the drying house, hulled, roasted, ground and packed. Muleteers carry each product to the next station and the Willys jeep sells it in town.
 
-🗺️ TRAVEL SEVEN REGIONS
-The Coffee Region, Santander, the Caribbean Coast, Boyacá, the Eastern Plains, the Pacific Coast and the Amazon: 42 zones inspired by real places such as Salento, Barichara, Cartagena, Villa de Leyva, Villavicencio, Buenaventura and Leticia. Each one makes something different: panela, cacao, arepas, bocadillo, the sombrero vueltiao, ruanas, Ráquira pottery, casabe and much more.
+🗺️ TRAVEL TEN REGIONS
+The Coffee Region, Santander, the Caribbean Coast, Boyacá, the Eastern Plains, the Pacific Coast, the Amazon, Tolima Grande, Cundinamarca and Bogotá: 55 zones inspired by real places such as Salento, Barichara, Cartagena, Villa de Leyva, Villavicencio, Buenaventura, Leticia, Neiva and Zipaquirá. Each one makes something different: panela, cacao, arepas, bocadillo, the sombrero vueltiao, ruanas, Ráquira pottery, casabe, lechona, flowers from the Savanna and much more. And at the end, a special zone to discover.
 
 🔗 THINK IN CHAINS
 A chain only moves as fast as its slowest station. Upgrade stations and transport, connect zones with chiva routes, research improvements and complete goals. The game suggests what to upgrade next and shows you where production slows down.
 
 🏅 EVENTS, ALBUM AND ACHIEVEMENTS
-Fight the coffee borer, get through the big sugar-cane grinding, take your cattle to the fair and win medals. Fill the sticker album with fun facts about each region and decorate your zones.
+Fight the coffee borer, get through the big sugar-cane grinding, take your cattle to the fair and win medals. Fill the sticker album with fun facts about each region, decorate your zones and complete every achievement to watch the grand finale.
 
 🌎 LEARN WHILE YOU PLAY
 Every product, every trade and every place is inspired by the real Colombia. The people of each zone tell you how things are made, with their own way of speaking.
 
 🎶 ORIGINAL MUSIC
-Bambuco, guabina, cumbia, torbellino, joropo, chirimía and Amazon cumbia: each region has its own music, composed for the game.
+Bambuco, guabina, cumbia, torbellino, joropo, chirimía, Amazon cumbia, sanjuanero, pasillo and danza: each region has its own music, composed for the game.
 
 ✨ MADE WITH LOVE
 • Keeps producing while you're away.
@@ -56,7 +56,7 @@ Bambuco, guabina, cumbia, torbellino, joropo, chirimía and Amazon cumbia: each 
 | App icon | `store/icon-512.png` (the same as in Spanish) | 512 × 512 |
 | Feature graphic | `store/feature-graphic-en.png` | 1024 × 500 |
 
-Suggested order: the farm, the station (Roaster), the chain, the Hat Workshop (Caribbean Coast), the map of Colombia and the zone list. They are regenerated with `node tools/play-screenshots.mjs store/screenshots-en en`.
+Suggested order: the farm, the station (Roaster), the chain, the Hat Workshop (Caribbean Coast), the map of La Costa (the Caribbean Coast) and the zone list. They are regenerated with `node tools/play-screenshots.mjs store/screenshots-en en`.
 
 ## In-app products (*Monetize → Products → One-time products*, English translation of each)
 
@@ -66,10 +66,14 @@ Suggested order: the farm, the station (Roaster), the chain, the Hat Workshop (C
 | `arepa` | An arepa | Buy an arepa for the person who makes the game. It gives nothing inside the game. Thank you! |
 | `almuerzo` | A lunch | Buy lunch for the person who makes the game. It gives nothing inside the game. Thank you! |
 
-## Release notes (v3.70)
+## Release notes (v5.16.0)
 
 ```
 <en-US>
-The game is now available in French! Choose it in ⚙️ Menu › 🌐 Language; phones set to French use it from the start. Everything is translated: stations, products, zones, events, album, achievements and fun facts. The game now speaks Spanish, English, Portuguese and French.
+• Leftover byproducts are now sold instead of thrown away. Pulp, bagasse and compost have a price.
+• You can now stop stations in events too.
+• Station panel: long notices are no longer cut off, and the figures no longer disappear on small phones.
+• Grand finale: its own button on the left once you finish the special zone, with a window showing how many achievements are left.
+• Statistics: the region list no longer closes by itself.
 </en-US>
 ```

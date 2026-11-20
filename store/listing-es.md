@@ -24,26 +24,27 @@ Del grano de la montaña a un contenedor rumbo al puerto: construye cadenas de p
 ☕ EMPIEZA EN LA FINCA
 Siembra café en el Eje Cafetero. La cereza se lava en el Beneficiadero, se seca en la marquesina, se trilla, se tuesta, se muele y se empaca. Los arrieros llevan cada producto a la siguiente estación y el Willys lo vende en el pueblo.
 
-🗺️ RECORRE SIETE REGIONES
-Eje Cafetero, Santander, La Costa, Boyacá, Los Llanos, la Costa Pacífica y el Amazonas: 42 zonas inspiradas en lugares reales, como Salento, Barichara, Cartagena, Villa de Leyva, Villavicencio, Buenaventura y Leticia. En cada una se produce algo distinto: panela, cacao, arepas, bocadillo, sombrero vueltiao, ruanas, cerámica de Ráquira, casabe y mucho más.
+🗺️ RECORRE DIEZ REGIONES
+Eje Cafetero, Santander, La Costa, Boyacá, Los Llanos, la Costa Pacífica, el Amazonas, el Tolima Grande, Cundinamarca y Bogotá: 55 zonas inspiradas en lugares reales, como Salento, Barichara, Cartagena, Villa de Leyva, Villavicencio, Buenaventura, Leticia, Neiva y Zipaquirá. En cada una se produce algo distinto: panela, cacao, arepas, bocadillo, sombrero vueltiao, ruanas, cerámica de Ráquira, casabe, lechona, flores de la Sabana y mucho más. Y al final, una zona especial por descubrir.
 
 🔗 PIENSA EN CADENA
 La cadena va tan rápido como su estación más lenta. Mejora estaciones y transportes, une zonas con rutas, investiga mejoras y cumple objetivos. El juego te sugiere qué subir y te muestra dónde se frena la producción.
 
 🏅 EVENTOS, ÁLBUM Y LOGROS
-Enfrenta la broca, saca adelante la gran molienda, lleva tu ganado a la feria y gana medallas. Llena el álbum de láminas con datos curiosos de cada región y decora tus zonas.
+Enfrenta la broca, saca adelante la gran molienda, lleva tu ganado a la feria y gana medallas. Llena el álbum de láminas con datos curiosos de cada región, decora tus zonas y completa todos los logros para ver el gran final.
 
 🌎 APRENDE JUGANDO
 Cada producto, cada oficio y cada lugar está inspirado en la Colombia real. Las personas de cada zona te cuentan cómo se hacen las cosas.
 
 🎶 MÚSICA PROPIA
-Bambuco, guabina, cumbia, torbellino, joropo, chirimía y cumbia amazónica: cada región tiene su música, compuesta para el juego.
+Bambuco, guabina, cumbia, torbellino, joropo, chirimía, cumbia amazónica, sanjuanero, pasillo y danza: cada región tiene su música, compuesta para el juego.
 
 ✨ HECHO CON CARIÑO
 • Sigue produciendo mientras no juegas.
 • Funciona sin internet.
 • Sin publicidad y sin recoger datos personales.
 • Apto para toda la familia.
+• En español, inglés, portugués y francés.
 • Si te gusta, puedes invitar un tinto a quien lo hace (opcional y sin ventajas en el juego).
 ```
 
@@ -57,7 +58,7 @@ Bambuco, guabina, cumbia, torbellino, joropo, chirimía y cumbia amazónica: cad
 
 The listings in other languages (texts, screenshots and feature graphic) are in `store/listing-en.md` (English), `store/listing-pt.md` (Brazilian Portuguese) and `store/listing-fr.md` (French).
 
-Suggested order of the screenshots: the farm, the station (Tostadora), the chain, El Sombrero (La Costa), the map of Colombia and the zone picker. They are regenerated with `tools/play-screenshots.mjs`.
+Suggested order of the screenshots: the farm, the station (Tostadora), the chain, El Sombrero (La Costa), the map of La Costa (the Caribbean Coast) and the zone picker. They are regenerated with `tools/play-screenshots.mjs`.
 
 ## Category and contact
 
@@ -93,3 +94,15 @@ Suggested order of the screenshots: the farm, the station (Tostadora), the chain
 | `tinto` | Un tinto | Invita un tinto a quien hace el juego. No da nada dentro del juego. ¡Gracias! | US$0,99 |
 | `arepa` | Una arepa | Invita una arepa a quien hace el juego. No da nada dentro del juego. ¡Gracias! | US$2,99 |
 | `almuerzo` | Un almuerzo | Invita un almuerzo a quien hace el juego. No da nada dentro del juego. ¡Gracias! | US$4,99 |
+
+## Release notes (v5.16.0)
+
+```
+<es-419>
+• Los subproductos que sobran ahora se venden en vez de botarse. La pulpa, el bagazo y el compost tienen precio.
+• Ya puedes detener estaciones también en los eventos.
+• Panel de la estación: los avisos largos ya no salen cortados ni desaparecen las cifras en teléfonos pequeños.
+• Gran final: botón propio a la izquierda al terminar la zona especial, con una ventana que dice cuántos logros faltan.
+• Estadísticas: la lista de regiones ya no se cierra sola.
+</es-419>
+```
