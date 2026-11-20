@@ -2,7 +2,7 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { RESEARCH } from '../data/research.js';
 import { dispatchRate, maxLevel, stationRate } from './rules.js';
-import { BY_CHILDREN, BY_ROUTES, JOIN_FROM, PARENT, branchShare, chainOf, consumers, isStopped, joinOf, perCycleOf, sourceOf, suppliersOf, zoneOf } from './chain.js';
+import { BY_CHILDREN, BY_ROUTES, FUEL_CHILDREN, JOIN_FROM, PARENT, branchShare, chainOf, consumers, isStopped, joinOf, perCycleOf, sourceOf, suppliersOf, zoneOf } from './chain.js';
 import { routeActive, routeRate, routeStations, stationImportRate } from './routes.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { exportsOf, pendingRoutes, teamCapacity } from './transport.js';
@@ -87,6 +87,27 @@ function analyze(state, zoneId, withExports, depth, memo) {
     return cycles * perCycleOf(id, product);
   };
 
+  // What takes a byproduct outside the chain (per s): the station that burns it as fuel, at full tilt, and the
+  // Compostera, which only composts what the Beneficiadero's coffee will spend.
+  const sideUse = (id, output) => {
+    let use = 0;
+    for (const c of FUEL_CHILDREN[id] ?? []) {
+      if (!state.stations[c] || isStopped(state, c)) continue;
+      // It burns one share per cycle, and it cannot cycle faster than its input arrives.
+      const def = STATIONS_BY_ID[c];
+      const fed = def.in?.[Object.keys(STATIONS_BY_ID[id].out)[0]] ? output / Object.values(def.in)[0] : Infinity;
+      use += Math.min(cycleRate(c), fed) * def.fuel.perCycle;
+    }
+    const by = Object.keys(STATIONS_BY_ID[id].by)[0];
+    for (const [c, def] of Object.entries(STATIONS_BY_ID)) {
+      if (!def.side || !def.in?.[by] || !state.stations[c] || isStopped(state, c)) continue;
+      const cycles = stationRate(def, state.stations[c].level) * speedMult(state, c);
+      const spent = id === 'wetmill' ? (byRate[id] * STATIONS_BY_ID.wetmill.out.washed) / Object.values(STATIONS_BY_ID.wetmill.by)[0] / WASHED_PER_COMPOST : cycles;
+      use += Math.min(cycles, spent) * def.in[by];
+    }
+    return use;
+  };
+
   const pass = () => {
     const rows = [];
     let toWarehouse = 0;
@@ -154,10 +175,19 @@ function analyze(state, zoneId, withExports, depth, memo) {
         }
       }
       // Byproduct (v4.0): flows via chute. First what its routes demand; next zone stations using
-      // it, proportional to each station's capacity; surplus sells if routed (open or not), otherwise
-      // discarded.
+      // it, proportional to each station's capacity; the surplus is sold at the warehouse (v5.15: with or without a
+      // route). `byLost` is what the zone's stations leave unused when there is no route for it: sold raw, and
+      // still the sign of a consumer that cannot keep up.
       const byKids = (BY_CHILDREN[id] ?? []).filter((c) => ids.includes(c) && !isStopped(state, c));
       const byRoutes = BY_ROUTES[id] ?? [];
+      if (def.by && !(byKids.length || byRoutes.length)) {
+        // Nobody in the chain takes it: all sold, minus what is burnt as fuel or composted (v5.15).
+        const left = Math.max(0, byRate[id] - sideUse(id, output));
+        if (left > 0) {
+          toWarehouse += left;
+          flows.push({ product: Object.keys(def.by)[0], units: left, value: value(Object.keys(def.by)[0]), leaf: false });
+        }
+      }
       if (def.by && (byKids.length || byRoutes.length)) {
         const byId = Object.keys(def.by)[0];
         const open = routes ? byRoutes.filter((r) => routeActive(state, r.id)) : [];
@@ -174,7 +204,7 @@ function analyze(state, zoneId, withExports, depth, memo) {
         const left = byRate[id] - toRoutes - used;
         row.byOutput = byRate[id];
         row.byLost = byRoutes.length ? 0 : left;
-        row.bySold = byRoutes.length ? left : 0;
+        row.bySold = left;
         if (row.bySold > 0) {
           toWarehouse += left;
           // Anything carried by a route (plus its warehouse reserve) is not sold locally.

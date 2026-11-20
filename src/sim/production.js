@@ -125,10 +125,11 @@ export function stepStation(state, id, dt, bus) {
   bus.emit('produced', { stationId: id, productId: outId, amount: cycles * outAmt });
 }
 
-// Stops or resumes a station (v5.14). Kept in the region's save until the region restarts.
+// Stops or resumes a station (v5.14). Kept in the region's save until the region restarts; on an event board
+// (v5.15) it is kept with the board until the event is played again.
 export function setStopped(state, id, on) {
   const s = state.stations[id];
-  if (!s || state.event) return false;
+  if (!s) return false;
   if (on) s.stopped = true;
   else delete s.stopped;
   return true;

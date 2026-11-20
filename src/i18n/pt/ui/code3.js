@@ -23,7 +23,7 @@ export default {
   '(para {route})': '(para {route})',
   'Su parte para {route} se vende hasta que abra {zone}.': 'A parte para {route} é vendida até abrir {zone}.',
   '✅ Trabajando. Las mulas llevan el producto a {where}': '✅ Trabalhando. As mulas levam o produto para {where}',
-  '✅ Compost de sobra: todo lo que vende la Finca vale +{pct}.': '✅ Composto de sobra: tudo o que a Fazenda vende vale +{pct}.',
+  '✅ Compost de sobra: todo lo que vende la Finca vale +{pct} y el que sobra se vende.': '✅ Composto de sobra: tudo o que a Fazenda vende vale +{pct}, e o que sobra é vendido.',
   '⏸️ Sin pulpa: el Beneficiadero está detenido (patio lleno). Mejora sus arrieros o la estación siguiente.': '⏸️ Sem polpa: o Despolpador está parado (pátio cheio). Melhore seus tropeiros ou a estação seguinte.',
   '⏸️ Esperando pulpa del Beneficiadero.': '⏸️ Esperando polpa do Despolpador.',
   '⚠️ El Beneficiadero gasta más compost del que se produce: el bono solo dura parte del tiempo (+{pct} en promedio). Mejora la Compostera.': '⚠️ O Despolpador gasta mais composto do que se produz: o bônus só dura parte do tempo (+{pct} em média). Melhore a Composteira.',

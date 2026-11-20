@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## v5.15.0 — Los subproductos se venden y las estaciones se detienen en los eventos
+- **💰 Los subproductos se venden:** el segundo producto de una estación (suero costeño, cáscara de café, cuero de cerdo, fresa de segunda, bloque de sal, chicharrón, caldo de costilla…) se botaba cuando ninguna estación lo usaba. Ahora lo que sobra va a la bodega y se vende.
+- **La pulpa, el bagazo y el compost tienen precio:** pulpa 1 💰, bagazo 5 💰 y compost 5 💰. La Compostera y la Hornilla toman primero su parte; solo se vende el resto. Una Compostera con el patio lleno ya no se detiene: vende el compost que le sobra.
+- **⏹️ Detener estaciones también en los eventos:** el interruptor ya funciona en los tableros de evento, y la estación sigue detenida al salir del evento y volver.
+- **Panel de la estación:** el interruptor pasó arriba, junto al botón de cerrar, y los avisos largos ya no salen cortados. En teléfonos pequeños o acostados las cifras ya no se cortan ni desaparecen.
+- **🎉 Gran final:** tiene su propio botón junto a Objetivos, Investigaciones y Zonas, en vez del que estaba en el menú ⚙️.
+- **📊 Estadísticas:** la lista de regiones ya no se cierra sola mientras eliges una región.
+
 ## v5.14.0 — Detener una estación
 - **⏹️ Detener una estación:** en el panel de la estación, el interruptor junto a su estado detiene o reanuda su producción. Mientras está detenida no produce y sus arrieros no salen; lo que le llegaba va a las otras estaciones que lo usan o se vende en la bodega. Sigue detenida al cerrar el juego y vuelve a andar al volver a empezar su región.
 - **Se nota:** ⏹️ sobre el edificio en el mapa, en gris en la cadena, y las estaciones siguientes y los objetivos que dependen de ella lo avisan.

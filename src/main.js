@@ -582,6 +582,8 @@ async function start() {
           toast(t('🏅 ¡Todos los eventos de {region} con {medal} o mejor! +{renown} ⭐ de Renombre', { region: REGIONS_BY_ID[b.region].name, medal: `${MEDALS[b.medal].icon} ${MEDALS[b.medal].name}`, renown: b.renown }), 5000);
           sound.milestone();
         }
+        // Its side button (v5.15) appears with the last achievement and stays.
+        document.getElementById('finale-btn').hidden = !finaleUnlocked(root.profile);
         // The last achievement opens the grand finale (v5.9): it plays by itself once, when no window is open.
         if (finaleDue(root.profile) && !board && !document.querySelector('.modal:not([hidden])')) {
           root.profile.grandFinaleSeen = true;
@@ -733,10 +735,9 @@ function bindMenu(game, sound, music, getActive, grandFinale, stats) {
       t('💰 Ganado en total: <b>{coins}</b>', { coins: cappedCoins(earned) }),
       t('📦 Productos vendidos: <b>{n}</b>', { n: cappedTotal('sold', sold) }),
     ].map((li) => `<li>${li}</li>`).join('');
-    // The grand finale (v5.9), once every achievement is complete.
-    document.getElementById('finale-btn').hidden = !finaleUnlocked(s.profile);
     menu.hidden = false;
   });
+  // The grand finale (v5.9) has its own side button (v5.15), shown once every achievement is complete (see the loop).
   document.getElementById('finale-btn').addEventListener('click', grandFinale);
   // Statistics (v5.10), opened on the region being viewed.
   document.getElementById('stats-btn').addEventListener('click', () => {

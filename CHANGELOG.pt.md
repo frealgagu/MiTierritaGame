@@ -1,5 +1,13 @@
 # Registro de alterações
 
+## v5.15.0 — Os subprodutos são vendidos e as estações param nos eventos
+- **💰 Os subprodutos são vendidos:** o segundo produto de uma estação (soro costeño, casca de café, couro de porco, morango de segunda, bloco de sal, torresmo, caldo de costela…) era jogado fora quando nenhuma estação o usava. Agora o que sobra vai para o armazém e é vendido.
+- **A polpa, o bagaço e o composto têm preço:** polpa 1 💰, bagaço 5 💰 e composto 5 💰. A Composteira e a Fornalha pegam primeiro a sua parte; só o resto é vendido. Uma Composteira com o pátio cheio não para mais: vende o composto que sobra.
+- **⏹️ Parar estações também nos eventos:** o interruptor agora funciona nos tabuleiros de evento, e a estação continua parada ao sair do evento e voltar.
+- **Painel da estação:** o interruptor foi para cima, ao lado do botão de fechar, e os avisos longos não saem mais cortados. Em celulares pequenos ou deitados os números não são mais cortados nem somem.
+- **🎉 Grande final:** tem seu próprio botão ao lado de Objetivos, Pesquisas e Zonas, em vez do que ficava no menu ⚙️.
+- **📊 Estatísticas:** a lista de regiões não fecha mais sozinha enquanto você escolhe uma região.
+
 ## v5.14.0 — Parar uma estação
 - **⏹️ Parar uma estação:** no painel da estação, o interruptor ao lado do status para ou retoma a produção. Enquanto parada não produz e seus tropeiros não saem; o que chegava a ela vai para as outras estações que o usam ou é vendido no armazém. Continua parada ao fechar o jogo e volta a funcionar ao recomeçar a região.
 - **Dá para ver:** ⏹️ sobre o prédio no mapa, em cinza na cadeia, e as estações seguintes e os objetivos que dependem dela avisam.

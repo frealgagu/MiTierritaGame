@@ -10,6 +10,7 @@ import { restartRegion } from '../src/sim/legacy.js';
 import { stoppedFor } from '../src/sim/goals.js';
 import { createEventState } from '../src/sim/events.js';
 import { EVENTS } from '../src/data/events.js';
+import { STATIONS_BY_ID } from '../src/data/stations.js';
 import { CALENDAR } from '../src/sim/calendar.js';
 import { newGame, cafeOf, reload } from './helpers/game.js';
 
@@ -79,7 +80,7 @@ test('what a stopped station would get goes to the other stations that use it, o
   assert.deepEqual(a.rows.find((r) => r.id === 'pasteurizer').children, ['cheesery', 'arequipe_pot']);
 });
 
-test('the stop is saved with the region and cleared when the region restarts; not in events (v5.14)', () => {
+test('the stop is saved with the region and cleared when the region restarts; an event board keeps its own (v5.15)', () => {
   const { root, game } = finca();
   game.setStopped('dryer', true);
   const back = reload(root);
@@ -87,7 +88,16 @@ test('the stop is saved with the region and cleared when the region restarts; no
   restartRegion(back, 'cafetero');
   assert.ok(Object.values(cafeOf(back).stations).every((st) => !st.stopped));
   const board = createEventState(EVENTS.find((d) => d.zone === 'finca'), 1);
-  assert.equal(setStopped(board, Object.keys(board.stations)[0], true), false, 'an event board cannot stop its stations');
+  // An event board stops its stations too (v5.15), and keeps them stopped while the board lasts (it is saved as it is).
+  const first = Object.keys(board.stations)[0];
+  assert.equal(setStopped(board, first, true), true);
+  const made = { ...board.stats.produced };
+  const ev = new Game(board);
+  run(ev, 60);
+  assert.deepEqual(Object.keys(ev.state.stats.produced).filter((p) => (ev.state.stats.produced[p] ?? 0) > (made[p] ?? 0) && p in STATIONS_BY_ID[first].out), [], 'stopped, it makes nothing');
+  assert.equal(JSON.parse(JSON.stringify(board)).stations[first].stopped, true, 'kept in the board as saved');
+  assert.equal(setStopped(board, first, false), true);
+  assert.equal(board.stations[first].stopped, undefined);
 });
 
 test('a goal held back by a stopped station names it (v5.14)', () => {

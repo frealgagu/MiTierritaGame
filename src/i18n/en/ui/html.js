@@ -11,6 +11,7 @@ export default {
   Objetivos: 'Goals',
   Investigaciones: 'Upgrades',
   Zonas: 'Zones',
+  'Gran final': 'Grand finale',
   '⏸️ Pausar': '⏸️ Pause',
   '🔄 Reiniciar': '🔄 Restart',
   '🏁 Terminar': '🏁 End',

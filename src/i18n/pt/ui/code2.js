@@ -158,7 +158,7 @@ export default {
   '⏸️ Falta {p}: construye {station}.': '⏸️ Falta {p}: construa {station}.',
   '{p} de {station}: llegan {n}/s.': '{p} de {station}: chegam {n}/s.',
   'Además saca {n} de {p}, que pasan por la canaleta a {stations}.': 'Também tira {n} de {p}, que passam pela calha até {stations}.',
-  '🗑️ {n} se desechan: {stations} no da abasto.': '🗑️ {n} são descartados: {stations} não dá conta.',
+  '💰 {n} se venden sin procesar: {stations} no da abasto.': '💰 {n} são vendidos sem processar: {stations} não dá conta.',
   'Acercar': 'Aproximar',
   'Alejar': 'Afastar',
   '🔒 Sale cuando ganes medalla en los otros eventos de {zone}.': '🔒 Sai quando você ganhar medalha nos outros eventos de {zone}.',

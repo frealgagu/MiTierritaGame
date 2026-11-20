@@ -23,7 +23,7 @@ export default {
   '(para {route})': '(pour {route})',
   'Su parte para {route} se vende hasta que abra {zone}.': 'Sa part pour {route} est vendue jusqu’à l’ouverture de {zone}.',
   '✅ Trabajando. Las mulas llevan el producto a {where}': '✅ Au travail. Les mules portent le produit vers {where}',
-  '✅ Compost de sobra: todo lo que vende la Finca vale +{pct}.': '✅ Compost en abondance : tout ce que vend la Ferme vaut +{pct}.',
+  '✅ Compost de sobra: todo lo que vende la Finca vale +{pct} y el que sobra se vende.': '✅ Compost en abondance : tout ce que vend la Ferme vaut +{pct}, et le surplus est vendu.',
   '⏸️ Sin pulpa: el Beneficiadero está detenido (patio lleno). Mejora sus arrieros o la estación siguiente.': '⏸️ Pas de pulpe : le Dépulpeur est arrêté (cour pleine). Améliore ses muletiers ou la station suivante.',
   '⏸️ Esperando pulpa del Beneficiadero.': '⏸️ En attente de pulpe du Dépulpeur.',
   '⚠️ El Beneficiadero gasta más compost del que se produce: el bono solo dura parte del tiempo (+{pct} en promedio). Mejora la Compostera.': '⚠️ Le Dépulpeur consomme plus de compost qu’il ne s’en produit : le bonus ne dure qu’une partie du temps (+{pct} en moyenne). Améliore le Composteur.',

@@ -19,7 +19,7 @@ import {
   milestoneBoost,
 } from '../sim/rules.js';
 import { sumValues } from '../sim/state.js';
-import { busyMules, dockStock, exportsOf, pendingRoutes, slowConsumers, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
+import { busyMules, dockStock, sideKeep, exportsOf, pendingRoutes, slowConsumers, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
 import { analyzeChain, expectedCompostValue, routeFlow } from '../sim/analysis.js';
 import { COMPOST_VALUE, compostValueBoost, jeepCount, muleSpeedMult, saleValue } from '../sim/modifiers.js';
 import { BY_CHILDREN, JOIN_FROM, PARENT, branchShare, consumers, isStopped, zoneOf } from '../sim/chain.js';
@@ -121,23 +121,22 @@ export class StationPanel {
   // Panel has fixed height (tallest view) and each block its own height: leftover space stays
   // below stats, with notice and buttons pinned at bottom. Prevents jumping when
   // switching tabs or updating text.
-  // stoppable: the status line starts with the switch that stops or resumes the station (v5.14).
+  // stoppable: the head carries the switch that stops or resumes the station (v5.14). It sits beside the close
+  // button (v5.15) so the status line keeps its whole width: beside the switch, long notices were cut on phones.
   frame({ icon, title, subtitle, tabs = '', recipe, rows, milestone = '', modes = '', button, stoppable = false }) {
-    const status = stoppable
-      ? `<div class="status-line with-switch" data-ref="statusBox">
-        <button class="stop-switch" data-stop role="switch" data-ref="stopSwitch"><span class="track"><span class="knob"></span></span><span data-ref="stopLabel"></span></button>
-        <span class="msg" data-ref="status"></span></div>`
-      : '<div class="status-line" data-ref="status"></div>';
+    const stop = stoppable
+      ? '<button class="stop-switch" data-stop role="switch" data-ref="stopSwitch"><span class="track"><span class="knob"></span></span><span class="stop-label" data-ref="stopLabel"></span></button>'
+      : '';
     return `
       <div class="panel-head">
         <div class="panel-icon">${icon}</div>
         <div class="panel-title"><h3 data-fit>${title}</h3><p data-fit data-ref="subtitle">${subtitle}</p></div>
-        <button class="close-btn" data-close aria-label="${t('Cerrar')}">✕</button>
+        ${stop}<button class="close-btn" data-close aria-label="${t('Cerrar')}">✕</button>
       </div>
       ${tabs ? `<div class="tabs">${tabs}</div>` : ''}
       <div class="recipe small" data-fit>${recipe}</div>
       <div class="stats">${rows}</div>
-      ${status}
+      <div class="status-line" data-ref="status"></div>
       ${milestone ? `<div class="milestone">${milestone}</div>` : ''}
       ${modes ? `<div class="modes">${modes}</div>` : ''}
       ${button}`;
@@ -160,7 +159,7 @@ export class StationPanel {
         <div class="bar"><div data-ref="milestoneBar"></div></div>`,
       modes: info.fixed ? '' : MODES.map((m) => `<button class="mode" data-mode="${m.key}">${m.key === 'max' ? t('Máx') : m.label}</button>`).join(''),
       button: '<button class="btn buy" data-buy><span data-ref="buyLabel"></span><span data-ref="buyCost"></span></button>',
-      stoppable: Boolean(info.stoppable) && !this.game.state.event,
+      stoppable: Boolean(info.stoppable),
     });
     this.collectRefs();
     this.el.querySelector('[data-buy]').addEventListener('click', () => {
@@ -270,7 +269,7 @@ export class StationPanel {
   // Dynamic texts: refit to container when changed.
   setStatus(status) {
     setFitted(this.refs.status, status.text);
-    (this.refs.statusBox ?? this.refs.status).classList.toggle('bad', status.bad);
+    this.refs.status.classList.toggle('bad', status.bad);
   }
 
   // The stop switch (v5.14): on while the station works, off («⏹️ Stopped») once stopped; the panel dims its figures.
@@ -286,7 +285,7 @@ export class StationPanel {
     const label = stopped ? t('⏹️ Detenida') : t('En marcha');
     if (this.refs.stopLabel.textContent === label) return;
     this.refs.stopLabel.textContent = label;
-    fit(this.refs.status); // the switch changed width: the text beside it refits
+    fit(this.refs.stopLabel);
   }
 
   update() {
@@ -588,7 +587,8 @@ const pct = (mult) => `${Math.round((mult - 1) * 100)} %`;
 function composterStatus(state, st) {
   const bonus = expectedCompostValue(state);
   const a = alerts(st);
-  if (a.blocked) return { text: t('✅ Compost de sobra: todo lo que vende la Finca vale +{pct}.', { pct: pct(COMPOST_VALUE) }), bad: false };
+  // With its yard full, what it goes on making is sold (v5.15); only a full warehouse halts it.
+  if (a.blocked || st.buffer >= sideKeep(state, 'composter') - 1e-6) return { text: t('✅ Compost de sobra: todo lo que vende la Finca vale +{pct} y el que sobra se vende.', { pct: pct(COMPOST_VALUE) }), bad: false };
   if (a.starved) {
     const w = state.stations.wetmill;
     if (alerts(w).blocked) return { text: t('⏸️ Sin pulpa: el Beneficiadero está detenido (patio lleno). Mejora sus arrieros o la estación siguiente.'), bad: true };

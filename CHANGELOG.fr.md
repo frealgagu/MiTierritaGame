@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## v5.15.0 — Les sous-produits se vendent et les stations s’arrêtent pendant les événements
+- **💰 Les sous-produits se vendent :** le second produit d’une station (crème aigre costeña, cosse de café, couenne de porc, fraises de second choix, bloc de sel, chicharrón, bouillon de côtes…) était jeté quand aucune station ne l’utilisait. Désormais, ce qui reste part à l’entrepôt et se vend.
+- **La pulpe, la bagasse et le compost ont un prix :** pulpe 1 💰, bagasse 5 💰 et compost 5 💰. Le Composteur et le Four à panela prennent d’abord leur part ; seul le reste est vendu. Un Composteur à la cour pleine ne s’arrête plus : il vend son compost en trop.
+- **⏹️ Arrêter les stations aussi pendant les événements :** l’interrupteur fonctionne sur les plateaux d’événement, et la station reste à l’arrêt quand on quitte l’événement et qu’on y revient.
+- **Panneau de la station :** l’interrupteur est passé en haut, à côté du bouton de fermeture, et les longs avis ne sont plus coupés. Sur les petits téléphones ou à l’horizontale, les chiffres ne sont plus coupés et ne disparaissent plus.
+- **🎉 Grand final :** il a son propre bouton à côté d’Objectifs, Recherches et Zones, au lieu de celui du menu ⚙️.
+- **📊 Statistiques :** la liste des régions ne se ferme plus toute seule pendant qu’on choisit une région.
+
 ## v5.14.0 — Arrêter une station
 - **⏹️ Arrêter une station :** dans le panneau de la station, l’interrupteur à côté de son état arrête ou relance sa production. À l’arrêt, elle ne produit rien et ses muletiers ne partent pas ; ce qui lui arrivait va aux autres stations qui l’utilisent ou se vend à l’entrepôt. Elle reste à l’arrêt quand on ferme le jeu et repart quand sa région recommence.
 - **Ça se voit :** ⏹️ au-dessus du bâtiment sur la carte, en gris dans la chaîne, et les stations suivantes et les objectifs qui en dépendent le signalent.

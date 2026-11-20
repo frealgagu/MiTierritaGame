@@ -55,11 +55,21 @@ export class StatsView {
     if (!this.modal.hidden) this.render();
   }
 
+  // Three blocks, each redrawn only when its own text changes: the whole game, the region list and the region. The
+  // list is rarely redrawn (v5.15): redrawing it with the numbers, several times a second, closed it while the
+  // player was choosing a region.
   render() {
-    const html = this.generalHtml() + this.regionHtml();
-    if (html === this.html) return;
+    if (!this.blocks) {
+      this.body.innerHTML = '<div class="stats-block"></div>'.repeat(3);
+      this.blocks = [...this.body.children];
+      this.htmls = [];
+    }
+    const { select, cards } = this.regionHtml();
     const top = this.body.scrollTop;
-    this.body.innerHTML = this.html = html;
+    [this.generalHtml(), select, cards].forEach((html, k) => {
+      if (html === this.htmls[k]) return;
+      this.blocks[k].innerHTML = this.htmls[k] = html;
+    });
     this.body.scrollTop = top;
   }
 
@@ -132,6 +142,6 @@ export class StatsView {
     const productsCard = card(t('📦 Productos de esta partida'), productRows
       ? `<table class="stats-table"><thead><tr><th></th><th>${t('Producidos')}</th><th>${t('Vendidos')}</th></tr></thead><tbody>${productRows}</tbody></table>`
       : `<p>${t('Todavía no hay productos en esta partida.')}</p>`);
-    return select + general + eventsCard + productsCard;
+    return { select, cards: general + eventsCard + productsCard };
   }
 }

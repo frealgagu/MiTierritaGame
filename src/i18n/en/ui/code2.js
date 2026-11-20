@@ -158,7 +158,7 @@ export default {
   '⏸️ Falta {p}: construye {station}.': '⏸️ Missing {p}: build {station}.',
   '{p} de {station}: llegan {n}/s.': '{p} from {station}: {n}/s arrive.',
   'Además saca {n} de {p}, que pasan por la canaleta a {stations}.': 'It also yields {n} of {p}, which flow down the chute to {stations}.',
-  '🗑️ {n} se desechan: {stations} no da abasto.': '🗑️ {n} are thrown away: {stations} can’t keep up.',
+  '💰 {n} se venden sin procesar: {stations} no da abasto.': '💰 {n} are sold unprocessed: {stations} can’t keep up.',
   'Acercar': 'Zoom in',
   'Alejar': 'Zoom out',
   '🔒 Sale cuando ganes medalla en los otros eventos de {zone}.': '🔒 It comes up when you win a medal in the other events of {zone}.',

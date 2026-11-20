@@ -1,6 +1,7 @@
 // Complete product catalog (see docs/GDD.md §4b).
 // Later zones scale higher (×5 in Trapiche) since they start with prior zones' economy.
-// `value` is base sale price in coins; 0 = not sold directly (byproduct or finale).
+// `value` is base sale price in coins; 0 = not sold directly (finale). Byproducts sell too (v5.15), below the price of
+// the main product of the station that makes them.
 // `color` colors mule sacks and icons.
 // `icon`: emoji or custom icon (`ICON` from game font) when no fitting emoji exists.
 import { ICON } from './icons.js';
@@ -18,18 +19,18 @@ export const PRODUCTS = {
   // Zone 1 · La Finca
   cherry: { name: 'Cereza de café', zone: 'finca', value: 1, icon: ICON.cherry, color: 0xd7263d },
   washed: { name: 'Café lavado', zone: 'finca', value: 3, icon: ICON.washed, color: 0xe9d8a6 },
-  pulp: { name: 'Pulpa', zone: 'finca', value: 0, icon: ICON.pulp, color: 0x9b2335 },
+  pulp: { name: 'Pulpa', zone: 'finca', value: 1, icon: ICON.pulp, color: 0x9b2335 },
   parchment: { name: 'Café pergamino', zone: 'finca', value: 6, icon: ICON.parchment, color: 0xcfae7a },
   green: { name: 'Café verde', zone: 'finca', value: 10, icon: ICON.greenCoffee, color: 0x8fae5d },
   roasted: { name: 'Café tostado', zone: 'finca', value: 30, icon: ICON.roastedCoffee, color: 0x6b3e26 },
   ground: { name: 'Café molido', zone: 'finca', value: 45, icon: ICON.groundCoffee, color: 0x4a2a1a },
   coffee_bag: { name: 'Bolsa de café', zone: 'finca', value: 250, icon: ICON.coffeeBag, color: 0xc8643b },
-  compost: { name: 'Compost', zone: 'finca', value: 0, icon: ICON.compost, color: 0x5b4636 },
+  compost: { name: 'Compost', zone: 'finca', value: 5, icon: ICON.compost, color: 0x5b4636 },
 
   // Zone 2 · El Trapiche
   cane: { name: 'Caña', zone: 'trapiche', value: 10, icon: '🎋', color: 0x9cc65b },
   guarapo: { name: 'Guarapo', zone: 'trapiche', value: 25, icon: ICON.guarapo, color: 0xd8e2a0 },
-  bagasse: { name: 'Bagazo', zone: 'trapiche', value: 0, icon: ICON.bagasse, color: 0xd9c38c },
+  bagasse: { name: 'Bagazo', zone: 'trapiche', value: 5, icon: ICON.bagasse, color: 0xd9c38c },
   melado: { name: 'Melado', zone: 'trapiche', value: 60, icon: '🍯', color: 0xc98a2b },
   panela: { name: 'Panela', zone: 'trapiche', value: 150, icon: ICON.panela, color: 0xb5651d },
   panela_powder: { name: 'Panela pulverizada', zone: 'trapiche', value: 250, icon: ICON.panelaPowder, color: 0xe8b23a },

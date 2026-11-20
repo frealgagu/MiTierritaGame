@@ -2,10 +2,10 @@ import { STATIONS_BY_ID } from '../data/stations.js';
 import { ZONES_BY_ID, ZONE_LIST } from '../data/zones/index.js';
 import { muleCount, muleLoad, stationBufferCap, stationInputCap, stationOutputRate, stationRate, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
-import { BY_CHILDREN, BY_ROUTES, CHILDREN, ROAD_POS, chainOf, consumers, joinOf, perCycleOf, zoneOf, zoneUnlocked } from './chain.js';
+import { BY_CHILDREN, BY_ROUTES, CHILDREN, FUEL_CHILDREN, ROAD_POS, chainOf, consumers, joinOf, perCycleOf, zoneOf, zoneUnlocked } from './chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { ROUTE_STOCK, routeActive, routeCapacity, routeRate, routeReserve } from './routes.js';
-import { inputSpace } from './production.js';
+import { inputSpace, stepFuel } from './production.js';
 import { capMult, dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
 import { resting } from './calendar.js';
 import { addMule, countFleet, endFleet, fleetOf } from './fleet.js';
@@ -20,6 +20,9 @@ const MIN_LEG = 1; // s per trip segment
 // Diversions only use warehouse while more than this fraction stays free: so cheap
 // overflowing items never crowd out final-chain products.
 export const DIVERT_RESERVE = 0.3;
+// A byproduct nobody uses is sold too (v5.15), but only while the warehouse is under this share of its capacity: the
+// rest of the room stays for what the mules bring, so cheap leftovers never crowd out the main products.
+export const BY_SALE_FILL = 0.4;
 
 // One-way trip seconds between two points on a zone chain.
 // `to` may be another station or 'warehouse' (`from`'s zone warehouse).
@@ -280,15 +283,15 @@ function sendMule(state, from, to, amount, bus) {
 
 // Byproducts (v4.0): extra output alongside main product (Beneficiadero pulp) travels
 // via chute, no mules. First to warehouse reserved for its routes (like
-// primary outputs, v3.67); next to local consuming stations (primary or combined),
-// emptiest first; leftovers with a route (open or not) sell at warehouse. Unused stocks fill yard then overflow.
-// Unusable surpluses stack in byproduct yard and overflow when full.
+// primary outputs, v3.67); next to local consuming stations (primary, combined or as fuel),
+// emptiest first; leftovers are sold at the warehouse (v5.15: every byproduct, not only those with a route; before,
+// one without a route was thrown away once its yard filled). What does not fit in the warehouse stays in the
+// byproduct yard and overflows when that is full.
 export function stepByproducts(state) {
   for (const [id, src] of Object.entries(state.stations)) {
     if (!(src.byBuffer > 1e-9)) continue;
     const kids = (BY_CHILDREN[id] ?? []).filter((c) => state.stations[c] && !state.stations[c].stopped);
     const routes = BY_ROUTES[id] ?? [];
-    if (!kids.length && !routes.length) continue;
     const product = Object.keys(STATIONS_BY_ID[id].by)[0];
     const wh = state.zones[zoneOf(id)].warehouse;
     const toWarehouse = (n) => {
@@ -314,9 +317,36 @@ export function stepByproducts(state) {
       else st.input += move;
       src.byBuffer -= move;
     }
-    if (routes.length && src.byBuffer > 1e-9) {
-      const n = Math.min(src.byBuffer, warehouseSpace(state, zoneOf(id)) - DIVERT_RESERVE * warehouseCap(state, zoneOf(id)));
+    // The station that burns it as fuel (Hornilla) takes its share before anything is sold.
+    for (const c of FUEL_CHILDREN[id] ?? []) if (state.stations[c]) stepFuel(state, c);
+    if (src.byBuffer > 1e-9) {
+      const zoneId = zoneOf(id);
+      const keep = routes.length ? DIVERT_RESERVE : 1 - BY_SALE_FILL;
+      const n = Math.min(src.byBuffer, warehouseSpace(state, zoneId) - keep * warehouseCap(state, zoneId));
       if (n > 1e-9) toWarehouse(n);
     }
+  }
+  stepSideSurplus(state);
+}
+
+// A side station (Compostera) keeps its product in its own yard, where the zone spends it. With the yard full, what
+// it goes on making is sold at the warehouse (v5.15) instead of halting it: the yard stays one cycle short of full.
+export const sideKeep = (state, id) => {
+  const def = STATIONS_BY_ID[id];
+  return stationBufferCap(def, state.stations[id].level, capMult(state, id)) - Object.values(def.out)[0];
+};
+function stepSideSurplus(state) {
+  for (const [id, st] of Object.entries(state.stations)) {
+    const def = STATIONS_BY_ID[id];
+    if (!def.side) continue;
+    const extra = st.buffer - sideKeep(state, id);
+    if (extra <= 1e-9) continue;
+    const zoneId = zoneOf(id);
+    const n = Math.min(extra, warehouseSpace(state, zoneId) - (1 - BY_SALE_FILL) * warehouseCap(state, zoneId));
+    if (n <= 1e-9) continue;
+    const product = Object.keys(def.out)[0];
+    const wh = state.zones[zoneId].warehouse;
+    wh[product] = (wh[product] ?? 0) + n;
+    st.buffer -= n;
   }
 }

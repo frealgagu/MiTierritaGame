@@ -23,7 +23,7 @@ export default {
   '(para {route})': '(for {route})',
   'Su parte para {route} se vende hasta que abra {zone}.': 'Its share for {route} is sold until {zone} opens.',
   '✅ Trabajando. Las mulas llevan el producto a {where}': '✅ Working. The mules carry the product to {where}',
-  '✅ Compost de sobra: todo lo que vende la Finca vale +{pct}.': '✅ Plenty of compost: everything the Farm sells is worth +{pct}.',
+  '✅ Compost de sobra: todo lo que vende la Finca vale +{pct} y el que sobra se vende.': '✅ Plenty of compost: everything the Farm sells is worth +{pct}, and the spare compost is sold.',
   '⏸️ Sin pulpa: el Beneficiadero está detenido (patio lleno). Mejora sus arrieros o la estación siguiente.': '⏸️ No pulp: the Wet Mill has stopped (yard full). Upgrade its muleteers or the next station.',
   '⏸️ Esperando pulpa del Beneficiadero.': '⏸️ Waiting for pulp from the Wet Mill.',
   '⚠️ El Beneficiadero gasta más compost del que se produce: el bono solo dura parte del tiempo (+{pct} en promedio). Mejora la Compostera.': '⚠️ The Wet Mill uses more compost than is produced: the bonus only lasts part of the time (+{pct} on average). Upgrade the Compost Bin.',

@@ -158,7 +158,7 @@ export default {
   '⏸️ Falta {p}: construye {station}.': '⏸️ Il manque {p} : construis {station}.',
   '{p} de {station}: llegan {n}/s.': '{p} de {station} : il arrive {n}/s.',
   'Además saca {n} de {p}, que pasan por la canaleta a {stations}.': 'Elle sort aussi {n} de {p}, qui passent par la rigole jusqu’à {stations}.',
-  '🗑️ {n} se desechan: {stations} no da abasto.': '🗑️ {n} sont jetés : {stations} ne suit pas.',
+  '💰 {n} se venden sin procesar: {stations} no da abasto.': '💰 {n} sont vendus sans transformation : {stations} ne suit pas.',
   'Acercar': 'Zoomer',
   'Alejar': 'Dézoomer',
   '🔒 Sale cuando ganes medalla en los otros eventos de {zone}.': '🔒 Arrive quand tu auras gagné une médaille dans les autres événements de {zone}.',

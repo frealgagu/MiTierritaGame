@@ -73,6 +73,10 @@ for (const zone of ZONE_LIST) {
   }
 }
 
+// Stations that burn a station's byproduct as fuel (Hornilla with the Molienda's bagazo).
+export const FUEL_CHILDREN = {};
+for (const [id, def] of Object.entries(STATIONS_BY_ID)) if (def.fuel) (FUEL_CHILDREN[def.fuel.from] ??= []).push(id);
+
 // Routes within zone taking each station's byproduct (v4.0: palm kernel from Prensa).
 export const BY_ROUTES = Object.fromEntries(
   Object.keys(STATIONS_BY_ID)

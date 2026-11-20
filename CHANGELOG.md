@@ -1,5 +1,13 @@
 # Changelog
 
+## v5.15.0 — Byproducts are sold, and stations stop in events
+- **💰 Byproducts are sold:** the second product of a station (costeño sour cream, coffee husk, pig skin, second-grade strawberries, salt blocks, chicharrón, rib broth…) used to be thrown away when no station used it. Now whatever is left over goes to the warehouse and is sold.
+- **Pulp, bagasse and compost have a price:** pulp 1 💰, bagasse 5 💰 and compost 5 💰. The Compost Bin and the Furnace take their share first; only the rest is sold. A Compost Bin with a full yard no longer halts: it sells its spare compost.
+- **⏹️ Stop stations in events too:** the switch now works on event boards, and a station stays stopped when you leave the event and come back.
+- **Station panel:** the switch moved to the top, beside the close button, so long notices are no longer cut off. On small or sideways phones the figures no longer get cut or disappear.
+- **🎉 Grand finale:** it has its own button beside Goals, Upgrades and Zones, instead of the one in the ⚙️ menu.
+- **📊 Statistics:** the region list no longer closes by itself while you are choosing a region.
+
 ## v5.14.0 — Stop a station
 - **⏹️ Stop a station:** in the station's panel, the switch beside its status stops or resumes its production. While stopped it makes nothing and its muleteers stay home; what it used to get goes to the other stations that use it or is sold at the warehouse. It stays stopped when you close the game and runs again when its region starts over.
 - **You can see it:** ⏹️ over the building on the map, greyed out in the chain, and the stations after it and the goals that depend on it say so.

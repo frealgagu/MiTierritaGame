@@ -11,6 +11,7 @@ export default {
   Objetivos: 'Objetivos',
   Investigaciones: 'Pesquisas',
   Zonas: 'Zonas',
+  'Gran final': 'Grande final',
   '⏸️ Pausar': '⏸️ Pausar',
   '🔄 Reiniciar': '🔄 Reiniciar',
   '🏁 Terminar': '🏁 Encerrar',
