@@ -773,6 +773,8 @@ export class Scene {
 // Only for persistent faults (see alerts.js): brief balanced waits aren't flagged.
 export function statusIcon(state, id) {
   const st = state.stations[id];
+  // Stopped by the player (v5.14): shown day and night, it is a choice and not a fault.
+  if (st?.stopped && !state.event) return '⏹️';
   if (!st || resting(state)) return null; // at night all stations rest: nothing to warn
   // On event board, pest icon over afflicted station until controlled (v2.0).
   if (state.event && eventPenalty(state, id) < 0.999) return EVENTS_BY_ID[state.event.id].icon;

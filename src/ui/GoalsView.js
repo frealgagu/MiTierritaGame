@@ -1,7 +1,8 @@
 import { formatMult, formatNumber } from '../core/format.js';
 import { GOALS_BY_ZONE } from '../data/goals.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
-import { activeGoals, claimableGoals, goalProgress, goalText } from '../sim/goals.js';
+import { activeGoals, claimableGoals, goalProgress, goalText, stoppedFor } from '../sim/goals.js';
+import { STATIONS_BY_ID } from '../data/stations.js';
 import { finalZone, masteryParts } from '../sim/legacy.js';
 import { t } from '../i18n/index.js';
 import { regionOf } from '../data/regions.js';
@@ -75,7 +76,7 @@ export class GoalsView {
     const atMax = (state.keep?.resets ?? 0) >= MAX_LEGACY_RESETS;
     const master = !g && finished ? (atMax ? maxCard(state) : masteryCard(state, true)) : null;
     this.tracker.hidden = !g && !master;
-    const trackerHtml = g ? goalCard(g, gProgress, true) : master;
+    const trackerHtml = g ? goalCard(g, gProgress, true, stoppedFor(state, g)) : master;
     if (trackerHtml && trackerHtml !== this.trackerHtml) {
       this.tracker.innerHTML = this.trackerHtml = trackerHtml;
       this.trackerFit = false;
@@ -99,7 +100,7 @@ export class GoalsView {
     const claimed = new Set(state.goals.claimed);
     const html = `
       <p class="goals-count">${ZONES_BY_ID[zone].icon} ${ZONES_BY_ID[zone].name} · ${t('{done} de {total} cobrados', { done, total: list.length })}</p>
-      ${list.map((goal) => (claimed.has(goal.id) ? claimedCard(goal) : goalCard(goal, goalProgress(state, goal), false))).join('')}
+      ${list.map((goal) => (claimed.has(goal.id) ? claimedCard(goal) : goalCard(goal, goalProgress(state, goal), false, stoppedFor(state, goal)))).join('')}
       ${done === list.length ? `<p class="goals-count">${t('¡Completaste todos los objetivos de {zone}!', { zone: ZONES_BY_ID[zone].name })}</p>` : ''}
       ${finished ? masteryCard(state, false) : ''}`;
     if (html !== this.html) {
@@ -138,7 +139,9 @@ function masteryCard(state, compact) {
     </div>`;
 }
 
-function goalCard(goal, p, compact) {
+// stopped (v5.14): a station the goal depends on that the player stopped (or null), to say so.
+function goalCard(goal, p, compact, stopped = null) {
+  const warn = stopped && !p.done ? t('⏹️ {station} no está en marcha.', { station: STATIONS_BY_ID[stopped].name }) : '';
   const pct = Math.round((p.current / p.target) * 100);
   const showCount = p.target > 1;
   const reward = goal.final ? t('🚩 Final de la zona') : `+${formatNumber(goal.reward)} 💰`;
@@ -147,11 +150,12 @@ function goalCard(goal, p, compact) {
     : `<span class="goal-reward">${reward}</span>`;
   return `
     <div class="goal ${p.done ? 'done' : ''} ${goal.final ? 'final' : ''} ${compact ? 'compact' : ''}">
-      <div class="goal-text">${p.done ? '✅' : '🎯'} ${goalText(goal)}</div>
+      <div class="goal-text">${p.done ? '✅' : warn ? '⏹️' : '🎯'} ${goalText(goal)}</div>
       <div class="goal-row">
         <div class="bar"><div style="width:${pct}%"></div></div>
         ${showCount ? `<span class="goal-count">${formatNumber(p.current)} / ${formatNumber(p.target)}</span>` : ''}
       </div>
+      ${warn && !compact ? `<div class="goal-warn">${warn}</div>` : ''}
       <div class="goal-foot">${action}</div>
     </div>`;
 }

@@ -284,6 +284,7 @@ function detailOf(state, a, rows, sel, zone) {
   const st = state.stations[id];
   const icon = outIcon(id);
   const lines = [];
+  if (st.stopped && !state.event) lines.push(`<span class="lost">${t('⏹️ Detenida: no produce y sus arrieros no salen. Para reanudarla, abre el edificio.')}</span>`);
   lines.push(row.incoming === null
     ? t('Produce <b>{n}</b>.', { n: `${formatRate(row.output)} ${icon}/s` })
     : t('Recibe {in}/s y procesa hasta {cap}/s → <b>{out}</b>.', { in: formatRate(row.incoming), cap: formatRate(row.capacity), out: `${formatRate(row.output)} ${icon}/s` }));
@@ -394,7 +395,8 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
     id.startsWith('lane:')
       ? []
       : [
-          ...(rows[id]?.children ?? []).filter((c) => PARENT[c] === id && inSet(c)),
+          // (Every built station it feeds, a stopped one too, v5.14: the flow's `children` skip those.)
+          ...(rows[id] ? (CHILDREN[id] ?? []).filter((c) => rows[c] && PARENT[c] === id && inSet(c)) : []),
           ...(rows[id] ? byKids(id) : []),
           ...locked.filter((l) => PARENT[l] === id),
           ...(rows[id] ? sides.filter((s) => STATIONS_BY_ID[s].requires === id) : []),
@@ -544,9 +546,11 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
       continue;
     }
     const hotLink = a.bottleneck === `${id}:transport`;
-    nodes.push(`<button class="dg-node ${a.bottleneck === id ? 'hot' : ''} ${hotLink ? 'hot-link' : ''} ${b.w < NARROW ? 'narrow' : ''} ${sel(id)}" data-pick="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">
+    // (v5.14) A station the player stopped: greyed out, with ⏹️ before its level.
+    const stopped = Boolean(state.stations[id].stopped) && !state.event;
+    nodes.push(`<button class="dg-node ${a.bottleneck === id ? 'hot' : ''} ${hotLink ? 'hot-link' : ''} ${stopped ? 'stopped' : ''} ${b.w < NARROW ? 'narrow' : ''} ${sel(id)}" data-pick="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">
       <span class="dg-icon">${def.icon}</span><span class="dg-name">${def.name}</span>
-      <span class="dg-meta">${t('Nv')} ${state.stations[id].level}</span></button>`);
+      <span class="dg-meta">${stopped ? '⏹️ ' : ''}${t('Nv')} ${state.stations[id].level}</span></button>`);
     // Stations feeding another station (v3.66): a 📦 tag leads to the warehouse and shows direct sales
     // (in orange if caused by the next station not keeping up).
     if (kidsOf(id).length || row.children.length) {

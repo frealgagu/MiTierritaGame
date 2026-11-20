@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.14.0 — Stop a station
+- **⏹️ Stop a station:** in the station's panel, the switch beside its status stops or resumes its production. While stopped it makes nothing and its muleteers stay home; what it used to get goes to the other stations that use it or is sold at the warehouse. It stays stopped when you close the game and runs again when its region starts over.
+- **You can see it:** ⏹️ over the building on the map, greyed out in the chain, and the stations after it and the goals that depend on it say so.
+
 ## v5.13.0 — The Coffee Region, a region like the others
 - **New save format (10):** the save is now the whole game's and the Coffee Region is one more region, like the others. Restarting it only changes its own data; your profile, settings, events (slots, boards in play and rounds), the country clock and the other regions are left alone. Older saves convert by themselves when opened.
 - **The country clock** has its own counter and never goes back to zero: it is the only one, and every region reads its date from it.

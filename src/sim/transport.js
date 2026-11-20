@@ -196,6 +196,8 @@ function dispatchFrom(state, id, dt, bus) {
   const level = s.transport.level;
   s.sinceDeparture += dt;
   s.waiting = null;
+  // A stopped station's mules stay home (v5.14); those already on the road finish their trip.
+  if (s.stopped) return;
   // Empty yard or all mules busy: nobody leaves (skip load math).
   if (s.buffer <= 0) return;
   if (busyMules(state, id) >= muleCount(level)) {
@@ -284,7 +286,7 @@ function sendMule(state, from, to, amount, bus) {
 export function stepByproducts(state) {
   for (const [id, src] of Object.entries(state.stations)) {
     if (!(src.byBuffer > 1e-9)) continue;
-    const kids = (BY_CHILDREN[id] ?? []).filter((c) => state.stations[c]);
+    const kids = (BY_CHILDREN[id] ?? []).filter((c) => state.stations[c] && !state.stations[c].stopped);
     const routes = BY_ROUTES[id] ?? [];
     if (!kids.length && !routes.length) continue;
     const product = Object.keys(STATIONS_BY_ID[id].by)[0];

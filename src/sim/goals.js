@@ -1,7 +1,7 @@
 import { GOALS, GOALS_BY_ZONE } from '../data/goals.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { createSourceState } from './production.js';
-import { sourceOf } from './chain.js';
+import { JOIN_FROM, PARENT, chainOf, isStopped, sourceOf } from './chain.js';
 import { STATIONS, STATIONS_BY_ID, DISPATCH } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { RESEARCH_BY_ID } from '../data/research.js';
@@ -182,4 +182,24 @@ export function claimGoal(state, id, bus) {
   }
   bus.emit('goalClaimed', { goal, zone: zoneId });
   return true;
+}
+
+// (v5.14) A stopped station a goal depends on, to warn about it (or null): for a product, the stations that make it
+// and every one upstream of them (and, for an import, the stations it goes to); for an income, any in the zone.
+const MAKERS = {};
+for (const def of STATIONS) for (const p of [...Object.keys(def.out ?? {}), ...Object.keys(def.by ?? {})]) (MAKERS[p] ??= []).push(def.id);
+export function stoppedFor(state, goal) {
+  if (state.event) return null;
+  if (goal.type === 'income') return chainOf(goal.zone).find((id) => isStopped(state, id)) ?? null;
+  if (!['sold', 'produced', 'imported'].includes(goal.type)) return null;
+  const seen = new Set();
+  const walk = (id) => {
+    if (!id || seen.has(id)) return;
+    seen.add(id);
+    walk(PARENT[id]);
+    for (const from of Object.values(JOIN_FROM[id] ?? {})) walk(from);
+  };
+  for (const id of MAKERS[goal.product] ?? []) walk(id);
+  if (goal.type === 'imported') for (const def of STATIONS) if (def.imports?.some((imp) => imp.product === goal.product)) seen.add(def.id);
+  return [...seen].find((id) => isStopped(state, id)) ?? null;
 }

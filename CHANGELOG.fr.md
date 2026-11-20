@@ -1,5 +1,9 @@
 # Journal des modifications
 
+## v5.14.0 — Arrêter une station
+- **⏹️ Arrêter une station :** dans le panneau de la station, l’interrupteur à côté de son état arrête ou relance sa production. À l’arrêt, elle ne produit rien et ses muletiers ne partent pas ; ce qui lui arrivait va aux autres stations qui l’utilisent ou se vend à l’entrepôt. Elle reste à l’arrêt quand on ferme le jeu et repart quand sa région recommence.
+- **Ça se voit :** ⏹️ au-dessus du bâtiment sur la carte, en gris dans la chaîne, et les stations suivantes et les objectifs qui en dépendent le signalent.
+
 ## v5.13.0 — L’Axe du café, une région comme les autres
 - **Nouveau format de sauvegarde (10) :** la sauvegarde est maintenant celle du jeu entier et l’Axe du café est une région de plus, comme les autres. Le recommencer ne change que ce qui lui appartient ; ton profil, les réglages, les événements (créneaux, plateaux en cours et manches), l’horloge du pays et les autres régions ne sont pas touchés. Les anciennes sauvegardes se convertissent toutes seules à l’ouverture.
 - **L’horloge du pays** a son propre compteur et ne revient jamais à zéro : c’est la seule, et toutes les régions y prennent leur date.

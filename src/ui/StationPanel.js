@@ -22,7 +22,7 @@ import { sumValues } from '../sim/state.js';
 import { busyMules, dockStock, exportsOf, pendingRoutes, slowConsumers, legTime, normalDest, productionMult, teamCapacity, teamLoad } from '../sim/transport.js';
 import { analyzeChain, expectedCompostValue, routeFlow } from '../sim/analysis.js';
 import { COMPOST_VALUE, compostValueBoost, jeepCount, muleSpeedMult, saleValue } from '../sim/modifiers.js';
-import { BY_CHILDREN, JOIN_FROM, PARENT, branchShare, consumers, zoneOf } from '../sim/chain.js';
+import { BY_CHILDREN, JOIN_FROM, PARENT, branchShare, consumers, isStopped, zoneOf } from '../sim/chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { jeepResting } from '../sim/dispatch.js';
 import { routeActive, routeCapacity, routeOrigin, routeRate, routeReserve, routeStations, stationImportRate, tripTimeOf } from '../sim/routes.js';
@@ -121,7 +121,13 @@ export class StationPanel {
   // Panel has fixed height (tallest view) and each block its own height: leftover space stays
   // below stats, with notice and buttons pinned at bottom. Prevents jumping when
   // switching tabs or updating text.
-  frame({ icon, title, subtitle, tabs = '', recipe, rows, milestone = '', modes = '', button }) {
+  // stoppable: the status line starts with the switch that stops or resumes the station (v5.14).
+  frame({ icon, title, subtitle, tabs = '', recipe, rows, milestone = '', modes = '', button, stoppable = false }) {
+    const status = stoppable
+      ? `<div class="status-line with-switch" data-ref="statusBox">
+        <button class="stop-switch" data-stop role="switch" data-ref="stopSwitch"><span class="track"><span class="knob"></span></span><span data-ref="stopLabel"></span></button>
+        <span class="msg" data-ref="status"></span></div>`
+      : '<div class="status-line" data-ref="status"></div>';
     return `
       <div class="panel-head">
         <div class="panel-icon">${icon}</div>
@@ -131,7 +137,7 @@ export class StationPanel {
       ${tabs ? `<div class="tabs">${tabs}</div>` : ''}
       <div class="recipe small" data-fit>${recipe}</div>
       <div class="stats">${rows}</div>
-      <div class="status-line" data-ref="status"></div>
+      ${status}
       ${milestone ? `<div class="milestone">${milestone}</div>` : ''}
       ${modes ? `<div class="modes">${modes}</div>` : ''}
       ${button}`;
@@ -154,10 +160,15 @@ export class StationPanel {
         <div class="bar"><div data-ref="milestoneBar"></div></div>`,
       modes: info.fixed ? '' : MODES.map((m) => `<button class="mode" data-mode="${m.key}">${m.key === 'max' ? t('Máx') : m.label}</button>`).join(''),
       button: '<button class="btn buy" data-buy><span data-ref="buyLabel"></span><span data-ref="buyCost"></span></button>',
+      stoppable: Boolean(info.stoppable) && !this.game.state.event,
     });
     this.collectRefs();
     this.el.querySelector('[data-buy]').addEventListener('click', () => {
       this.game.buy(info.upgradeId, this.mode);
+      this.update();
+    });
+    this.el.querySelector('[data-stop]')?.addEventListener('click', () => {
+      this.game.setStopped(this.id, !isStopped(this.game.state, this.id));
       this.update();
     });
     for (const btn of this.el.querySelectorAll('[data-tab]')) {
@@ -259,7 +270,23 @@ export class StationPanel {
   // Dynamic texts: refit to container when changed.
   setStatus(status) {
     setFitted(this.refs.status, status.text);
-    this.refs.status.classList.toggle('bad', status.bad);
+    (this.refs.statusBox ?? this.refs.status).classList.toggle('bad', status.bad);
+  }
+
+  // The stop switch (v5.14): on while the station works, off («⏹️ Stopped») once stopped; the panel dims its figures.
+  setSwitch(state) {
+    const sw = this.refs.stopSwitch;
+    const stopped = isStopped(state, this.id);
+    this.el.classList.toggle('stopped', Boolean(sw) && stopped);
+    if (!sw) return;
+    sw.classList.toggle('on', !stopped);
+    sw.classList.toggle('off', stopped);
+    sw.setAttribute('aria-checked', String(!stopped));
+    sw.title = stopped ? t('Reanudar la producción') : t('Detener la producción');
+    const label = stopped ? t('⏹️ Detenida') : t('En marcha');
+    if (this.refs.stopLabel.textContent === label) return;
+    this.refs.stopLabel.textContent = label;
+    fit(this.refs.status); // the switch changed width: the text beside it refits
   }
 
   update() {
@@ -299,6 +326,7 @@ export class StationPanel {
       r[`${row.key}Next`].textContent = next;
       fit(r[row.key].closest('.stat'));
     }
+    this.setSwitch(state);
     this.setStatus(info.status(state));
 
     // In an event there are no milestones beyond level 50 (v3.10.1).
@@ -406,6 +434,7 @@ function stationInfo(id) {
     facts: FACTS[id],
     milestoneWhat: t('velocidad'),
     upgradeId: id,
+    stoppable: true,
     tabs: !def.side,
     level: (s) => s.stations[id].level,
     rows,
@@ -465,7 +494,11 @@ const restText = (state) => t('{when} no se trabaja: la jornada sigue a las {hou
 function stationStatus(state, id) {
   const st = state.stations[id];
   const def = STATIONS_BY_ID[id];
+  // Stopped by the player (v5.14), and what that means for the stations around it.
+  if (isStopped(state, id)) return { text: t('No produce y sus arrieros no salen. Lo que le llegaba va a otras estaciones o se vende.'), bad: true };
   if (resting(state)) return { text: restText(state), bad: false };
+  const feeder = [PARENT[id], ...Object.values(JOIN_FROM[id] ?? {})].find((from) => from && isStopped(state, from));
+  if (feeder) return { text: t('⏹️ {station} no está en marcha: no le llega producto.', { station: nameOf(feeder) }), bad: false };
   // In an event (v3.12), what slows it down and output rate, with next upgrade.
   const h = eventHandicaps(state).find((x) => x.station === id && x.pct < 1);
   if (h) {

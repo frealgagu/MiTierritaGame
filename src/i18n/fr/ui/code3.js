@@ -232,4 +232,12 @@ export default {
   "Todavía no hay productos en esta partida.": "Pas encore de produits dans cette partie.",
   "⛔ Esa copia es de una versión más nueva del juego: actualiza el juego para abrirla.": "⛔ Cette sauvegarde vient d’une version plus récente du jeu : mets le jeu à jour pour l’ouvrir.",
   "⛔ Tu partida es de una versión más nueva del juego: actualiza el juego para seguirla. Mientras tanto no se guarda nada.": "⛔ Ta partie vient d’une version plus récente du jeu : mets le jeu à jour pour la continuer. En attendant, rien n’est enregistré.",
+  "⏹️ Detenida: no produce y sus arrieros no salen. Para reanudarla, abre el edificio.": "⏹️ À l’arrêt : elle ne produit pas et ses muletiers ne partent pas. Pour la relancer, ouvre le bâtiment.",
+  "⏹️ {station} no está en marcha.": "⏹️ {station} n’est pas en marche.",
+  "Reanudar la producción": "Relancer la production",
+  "Detener la producción": "Arrêter la production",
+  "⏹️ Detenida": "⏹️ À l’arrêt",
+  "En marcha": "En marche",
+  "No produce y sus arrieros no salen. Lo que le llegaba va a otras estaciones o se vende.": "Ne produit rien et ses muletiers ne partent pas. Ce qui lui arrivait va à d’autres stations ou se vend.",
+  "⏹️ {station} no está en marcha: no le llega producto.": "⏹️ {station} n’est pas en marche : aucun produit n’arrive.",
 };

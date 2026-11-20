@@ -232,4 +232,12 @@ export default {
   "Todavía no hay productos en esta partida.": "Ainda não há produtos nesta partida.",
   "⛔ Esa copia es de una versión más nueva del juego: actualiza el juego para abrirla.": "⛔ Essa cópia é de uma versão mais nova do jogo: atualize o jogo para abri-la.",
   "⛔ Tu partida es de una versión más nueva del juego: actualiza el juego para seguirla. Mientras tanto no se guarda nada.": "⛔ Seu jogo é de uma versão mais nova: atualize o jogo para continuar. Enquanto isso, nada é salvo.",
+  "⏹️ Detenida: no produce y sus arrieros no salen. Para reanudarla, abre el edificio.": "⏹️ Parada: não produz e seus tropeiros não saem. Para retomá-la, abra o prédio.",
+  "⏹️ {station} no está en marcha.": "⏹️ {station} não está funcionando.",
+  "Reanudar la producción": "Retomar a produção",
+  "Detener la producción": "Parar a produção",
+  "⏹️ Detenida": "⏹️ Parada",
+  "En marcha": "Funcionando",
+  "No produce y sus arrieros no salen. Lo que le llegaba va a otras estaciones o se vende.": "Não produz e seus tropeiros não saem. O que chegava a ela vai para outras estações ou é vendido.",
+  "⏹️ {station} no está en marcha: no le llega producto.": "⏹️ {station} não está funcionando: não chega produto.",
 };

@@ -64,7 +64,9 @@ export function routeRate(state, routeId, level) {
 }
 
 // Remaining input capacity at a destination station.
+// A stopped station (v5.14) asks for nothing: the route waits and its origin sells the rest.
 function stationSpace(state, r, id) {
+  if (state.stations[id].stopped) return 0;
   const def = STATIONS_BY_ID[id];
   const imp = routeImport(r, id);
   const cap = stationImportCap(def, state.stations[id].level, speedMult(state, id), imp);

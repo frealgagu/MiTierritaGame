@@ -45,6 +45,13 @@ export function harvestFactor(state, def) {
 export function stepStation(state, id, dt, bus) {
   const def = STATIONS_BY_ID[id];
   const s = state.stations[id];
+  // Stopped by the player (v5.14): no work at all; a cycle in progress waits until it is resumed.
+  if (s.stopped) {
+    s.status = 'stopped';
+    s.missing = null;
+    s.idle = 0;
+    return;
+  }
   // No work at night: in-progress cycles finish at dawn.
   if (resting(state)) {
     s.status = 'resting';
@@ -116,6 +123,15 @@ export function stepStation(state, id, dt, bus) {
   for (const imp of def.imports ?? []) s.imported[imp.product] = Math.max(0, s.imported[imp.product] - cycles * imp.perCycle);
   for (const j of def.joins ?? []) s.joined[j.product] = Math.max(0, s.joined[j.product] - cycles * j.perCycle);
   bus.emit('produced', { stationId: id, productId: outId, amount: cycles * outAmt });
+}
+
+// Stops or resumes a station (v5.14). Kept in the region's save until the region restarts.
+export function setStopped(state, id, on) {
+  const s = state.stations[id];
+  if (!s || state.event) return false;
+  if (on) s.stopped = true;
+  else delete s.stopped;
+  return true;
 }
 
 // Free input space, including en-route cargo. `product`: cargo being delivered (primary

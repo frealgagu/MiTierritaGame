@@ -232,4 +232,12 @@ export default {
   "Todavía no hay productos en esta partida.": "No products yet this run.",
   "⛔ Esa copia es de una versión más nueva del juego: actualiza el juego para abrirla.": "⛔ That backup is from a newer version of the game: update the game to open it.",
   "⛔ Tu partida es de una versión más nueva del juego: actualiza el juego para seguirla. Mientras tanto no se guarda nada.": "⛔ Your game is from a newer version: update the game to continue it. Meanwhile nothing is saved.",
+  "⏹️ Detenida: no produce y sus arrieros no salen. Para reanudarla, abre el edificio.": "⏹️ Stopped: it does not produce and its muleteers stay home. To resume it, open the building.",
+  "⏹️ {station} no está en marcha.": "⏹️ {station} is not running.",
+  "Reanudar la producción": "Resume production",
+  "Detener la producción": "Stop production",
+  "⏹️ Detenida": "⏹️ Stopped",
+  "En marcha": "Running",
+  "No produce y sus arrieros no salen. Lo que le llegaba va a otras estaciones o se vende.": "It does not produce and its muleteers stay home. What it used to get goes to other stations or is sold.",
+  "⏹️ {station} no está en marcha: no le llega producto.": "⏹️ {station} is not running: no product arrives.",
 };

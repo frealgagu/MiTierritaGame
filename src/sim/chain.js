@@ -102,9 +102,13 @@ export function zoneUnlocked(state, zoneId) {
   return Boolean(state.zones[zoneId]?.unlocked);
 }
 
-// Built stations fed by this one (empty if output goes to zone warehouse).
+// A station the player stopped (v5.14): it neither produces nor sends out its mules, and nothing new is sent to it:
+// what it would receive goes to the other stations that use it or is sold at the warehouse.
+export const isStopped = (state, id) => Boolean(state.stations[id]?.stopped);
+
+// Built stations fed by this one (empty if output goes to zone warehouse). A stopped one takes nothing (v5.14).
 export function consumers(state, id) {
-  return (CHILDREN[id] ?? []).filter((c) => isUnlocked(state, c));
+  return (CHILDREN[id] ?? []).filter((c) => isUnlocked(state, c) && !isStopped(state, c));
 }
 
 // Neighborhoods (v4.5, Bogotá): zone may have parallel build chains each in sequence

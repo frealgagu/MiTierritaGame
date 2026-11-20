@@ -2,7 +2,7 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { RESEARCH } from '../data/research.js';
 import { dispatchRate, maxLevel, stationRate } from './rules.js';
-import { BY_CHILDREN, BY_ROUTES, JOIN_FROM, PARENT, branchShare, chainOf, consumers, joinOf, perCycleOf, sourceOf, suppliersOf, zoneOf } from './chain.js';
+import { BY_CHILDREN, BY_ROUTES, JOIN_FROM, PARENT, branchShare, chainOf, consumers, isStopped, joinOf, perCycleOf, sourceOf, suppliersOf, zoneOf } from './chain.js';
 import { routeActive, routeRate, routeStations, stationImportRate } from './routes.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { exportsOf, pendingRoutes, teamCapacity } from './transport.js';
@@ -49,6 +49,7 @@ function analyze(state, zoneId, withExports, depth, memo) {
   let byRate = {}; // byproduct generated per station (per s), e.g. Molienda bagazo
   // Station cycles per second, including research and fuel.
   const cycleRate = (id) => {
+    if (isStopped(state, id)) return 0; // stopped by the player (v5.14)
     const def = STATIONS_BY_ID[id];
     let rate = stationRate(def, state.stations[id].level) * speedMult(state, id);
     if (def.fuel) {
@@ -155,7 +156,7 @@ function analyze(state, zoneId, withExports, depth, memo) {
       // Byproduct (v4.0): flows via chute. First what its routes demand; next zone stations using
       // it, proportional to each station's capacity; surplus sells if routed (open or not), otherwise
       // discarded.
-      const byKids = (BY_CHILDREN[id] ?? []).filter((c) => ids.includes(c));
+      const byKids = (BY_CHILDREN[id] ?? []).filter((c) => ids.includes(c) && !isStopped(state, c));
       const byRoutes = BY_ROUTES[id] ?? [];
       if (def.by && (byKids.length || byRoutes.length)) {
         const byId = Object.keys(def.by)[0];
@@ -283,8 +284,10 @@ function analyze(state, zoneId, withExports, depth, memo) {
     // (Share awaiting an unopened route is not a shortfall: sold in the meantime.)
     const shortfall = row.children.length ? row.output - row.toNext - (row.reserved ?? 0) : row.lost;
     // Byproduct discarded because consumers can't keep up (v4.0): lagging consumer.
-    if (shortfall <= row.output * LOSS && row.byLost > row.byOutput * LOSS) {
-      const kids = BY_CHILDREN[row.id].filter((c) => state.stations[c]);
+    // (A stopped consumer is not one to upgrade: what it leaves is the player's choice, v5.14.)
+    const byKids = BY_CHILDREN[row.id]?.filter((c) => state.stations[c] && !isStopped(state, c)) ?? [];
+    if (shortfall <= row.output * LOSS && row.byLost > row.byOutput * LOSS && byKids.length) {
+      const kids = byKids;
       bottleneck = kids.reduce((low, c) => (state.stations[c].level < state.stations[low].level ? c : low));
       break;
     }
@@ -331,12 +334,12 @@ function slowestConsumer(state, children, rows) {
   return children.reduce((low, c) => (state.stations[c].level < state.stations[low].level ? c : low));
 }
 
-// Demand by a route's stations at full speed (u/s) and per station.
-const routeDemandRate = (state, routeId) =>
-  routeStations(state, routeId).reduce((n, id) => n + stationImportRate(state, ROUTES_BY_ID[routeId], id), 0);
+// Demand by a route's stations at full speed (u/s) and per station. A stopped station asks for nothing (v5.14).
+const importRateOf = (state, routeId, id) => (isStopped(state, id) ? 0 : stationImportRate(state, ROUTES_BY_ID[routeId], id));
+const routeDemandRate = (state, routeId) => routeStations(state, routeId).reduce((n, id) => n + importRateOf(state, routeId, id), 0);
 export function routeShare(state, routeId, id) {
   const total = routeDemandRate(state, routeId);
-  return total > 0 ? stationImportRate(state, ROUTES_BY_ID[routeId], id) / total : 0;
+  return total > 0 ? importRateOf(state, routeId, id) / total : 0;
 }
 
 // Units/s moved by a route: what target stations consume at full speed, capped by vehicle capacity

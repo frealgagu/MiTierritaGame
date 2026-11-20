@@ -1,6 +1,6 @@
 import { EventBus } from './EventBus.js';
 import { createInitialState } from '../sim/state.js';
-import { stepComposter, stepFuel, stepStation } from '../sim/production.js';
+import { setStopped, stepComposter, stepFuel, stepStation } from '../sim/production.js';
 import { ZONE_LIST } from '../data/zones/index.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { stepByproducts, stepMules } from '../sim/transport.js';
@@ -231,6 +231,11 @@ export class Game {
 
   unlock(id) {
     return unlockStation(this.state, id, this.bus);
+  }
+
+  // Stops or resumes a station's production (v5.14).
+  setStopped(id, on) {
+    return setStopped(this.state, id, on);
   }
 
   quoteResearch(id) {

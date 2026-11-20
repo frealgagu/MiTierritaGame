@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v5.14.0 — Detener una estación
+- **⏹️ Detener una estación:** en el panel de la estación, el interruptor junto a su estado detiene o reanuda su producción. Mientras está detenida no produce y sus arrieros no salen; lo que le llegaba va a las otras estaciones que lo usan o se vende en la bodega. Sigue detenida al cerrar el juego y vuelve a andar al volver a empezar su región.
+- **Se nota:** ⏹️ sobre el edificio en el mapa, en gris en la cadena, y las estaciones siguientes y los objetivos que dependen de ella lo avisan.
+
 ## v5.13.0 — El Eje Cafetero, una región como las demás
 - **Partida guardada nueva (formato 10):** la partida es ahora la del juego completo y el Eje Cafetero es una región más, igual que las otras. Volver a empezarlo solo cambia lo suyo; tu perfil, los ajustes, los eventos (cupos, tableros en juego y rondas), el reloj del país y las demás regiones no se tocan. Las partidas anteriores se convierten solas al abrirlas.
 - **El reloj del país** tiene su propio contador y nunca vuelve a cero: es el único, y todas las regiones toman de él su fecha.

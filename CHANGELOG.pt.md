@@ -1,5 +1,9 @@
 # Registro de alterações
 
+## v5.14.0 — Parar uma estação
+- **⏹️ Parar uma estação:** no painel da estação, o interruptor ao lado do status para ou retoma a produção. Enquanto parada não produz e seus tropeiros não saem; o que chegava a ela vai para as outras estações que o usam ou é vendido no armazém. Continua parada ao fechar o jogo e volta a funcionar ao recomeçar a região.
+- **Dá para ver:** ⏹️ sobre o prédio no mapa, em cinza na cadeia, e as estações seguintes e os objetivos que dependem dela avisam.
+
 ## v5.13.0 — O Eixo Cafeeiro, uma região como as outras
 - **Novo formato de jogo salvo (10):** o jogo salvo agora é o do jogo inteiro e o Eixo Cafeeiro é mais uma região, igual às outras. Recomeçá-lo só muda o que é dele; seu perfil, os ajustes, os eventos (vagas, tabuleiros em jogo e rodadas), o relógio do país e as outras regiões não são tocados. Os jogos salvos anteriores se convertem sozinhos ao abrir.
 - **O relógio do país** tem seu próprio contador e nunca volta a zero: é o único, e todas as regiões tiram dele a sua data.
