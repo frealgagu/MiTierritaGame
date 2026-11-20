@@ -4,7 +4,9 @@ import { LOGROS } from '../src/data/logros.js';
 import { REGIONS } from '../src/data/regions.js';
 import { PEOPLE } from '../src/data/lore.js';
 import { FINALE_LINES, FINALE_TEXT } from '../src/data/finale.js';
-import { finaleDue, finaleProgress, finaleUnlocked } from '../src/sim/finale.js';
+import { finaleButtonShown, finaleDue, finaleProgress, finaleUnlocked } from '../src/sim/finale.js';
+import { openSpecial } from '../src/sim/regions.js';
+import { newGame } from './helpers/game.js';
 import en from '../src/i18n/en/content/finale.js';
 import pt from '../src/i18n/pt/content/finale.js';
 import fr from '../src/i18n/fr/content/finale.js';
@@ -50,4 +52,21 @@ test('the grand finale is one more achievement, paid once, outside the count it 
   assert.deepEqual(checkFinaleLogro(profile), [], 'only once');
   assert.equal(profile.renown, GRAN_FINAL_LOGRO.reward[0]);
   assert.ok(finaleUnlocked(profile), 'its own tier does not change the count');
+});
+
+test('the grand finale button shows once the special zone is finished, or with every achievement (v5.16)', () => {
+  const root = newGame();
+  assert.equal(finaleButtonShown(root), false, 'not at the start');
+  const id = openSpecial(root, 0);
+  assert.ok(id, 'the special zone opens');
+  assert.equal(finaleButtonShown(root), false, 'open is not finished');
+  root.regions[id].mastered = true;
+  assert.equal(finaleButtonShown(root), true, 'its second ending shows the button');
+  root.regions[id].mastered = false;
+  root.regions[id].keep.resets = 1;
+  assert.equal(finaleButtonShown(root), true, 'and it stays after restarting the special zone');
+  // Without the special zone, every achievement is enough.
+  const other = newGame();
+  other.profile.logros = Object.fromEntries(LOGROS.map((l) => [l.id, l.tiers.length]));
+  assert.equal(finaleButtonShown(other), true);
 });

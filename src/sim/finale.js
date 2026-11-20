@@ -3,7 +3,7 @@
 // achievements tab.
 import { GRAN_FINAL_LOGRO, LOGROS } from '../data/logros.js';
 import { gainRenown } from './renown.js';
-import { REGIONS_BY_ID } from '../data/regions.js';
+import { REGIONS, REGIONS_BY_ID } from '../data/regions.js';
 
 // Achievements that count: those of released regions (a hidden, work-in-progress or developer-only region
 // would make the finale impossible).
@@ -20,6 +20,17 @@ export function finaleProgress(profile) {
 }
 
 export const finaleUnlocked = (profile) => finaleProgress(profile).ready;
+
+// Whether its side button shows (v5.16): once the special zone is finished (its second ending, or a restart of it,
+// so the button does not go away with the new run), which is where the game tells how the finale is reached; and
+// in any case once the finale is unlocked.
+export function finaleButtonShown(root) {
+  const profile = root.profile;
+  if (finaleUnlocked(profile)) return true;
+  const special = REGIONS.find((r) => r.special);
+  const st = special && root.regions?.[special.id];
+  return Boolean(st && (st.mastered || st.keep?.resets > 0));
+}
 
 // Whether it is due to play by itself: unlocked and not seen yet.
 export const finaleDue = (profile) => !profile?.grandFinaleSeen && finaleUnlocked(profile);

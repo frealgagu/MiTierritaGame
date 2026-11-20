@@ -51,7 +51,8 @@ import { LANG, LANGS, saveLang, t } from './i18n/index.js';
 import { Sound } from './audio/Sound.js';
 import { Music } from './audio/Music.js';
 import { playGrandFinale } from './ui/GrandFinale.js';
-import { checkFinaleLogro, finaleDue, finaleUnlocked } from './sim/finale.js';
+import { checkFinaleLogro, finaleButtonShown, finaleDue } from './sim/finale.js';
+import { FinaleInfo } from './ui/finaleInfo.js';
 import { cappedCoins, cappedPlayTime, cappedTotal } from './ui/capped.js';
 
 const AUTOSAVE_MS = 10_000;
@@ -424,6 +425,9 @@ async function start() {
     });
   };
   renown.onFinale = grandFinale;
+  // Its side button (v5.15) opens its own window (v5.16): what is left, and the button that plays it.
+  const finaleInfo = new FinaleInfo(() => root.profile, grandFinale);
+  document.getElementById('finale-btn').addEventListener('click', () => finaleInfo.open());
   const mastery = (g = active) => showMastery(g.state, () => restart(g), { profile: root.profile, onFinale: grandFinale });
   // Regions whose condition was just met start producing right away, each with its own Game.
   const openNew = () => {
@@ -582,8 +586,9 @@ async function start() {
           toast(t('🏅 ¡Todos los eventos de {region} con {medal} o mejor! +{renown} ⭐ de Renombre', { region: REGIONS_BY_ID[b.region].name, medal: `${MEDALS[b.medal].icon} ${MEDALS[b.medal].name}`, renown: b.renown }), 5000);
           sound.milestone();
         }
-        // Its side button (v5.15) appears with the last achievement and stays.
-        document.getElementById('finale-btn').hidden = !finaleUnlocked(root.profile);
+        // Its side button (v5.15) shows once the special zone is finished (v5.16), and its window follows the count.
+        document.getElementById('finale-btn').hidden = !finaleButtonShown(root);
+        finaleInfo.update();
         // The last achievement opens the grand finale (v5.9): it plays by itself once, when no window is open.
         if (finaleDue(root.profile) && !board && !document.querySelector('.modal:not([hidden])')) {
           root.profile.grandFinaleSeen = true;
@@ -737,8 +742,6 @@ function bindMenu(game, sound, music, getActive, grandFinale, stats) {
     ].map((li) => `<li>${li}</li>`).join('');
     menu.hidden = false;
   });
-  // The grand finale (v5.9) has its own side button (v5.15), shown once every achievement is complete (see the loop).
-  document.getElementById('finale-btn').addEventListener('click', grandFinale);
   // Statistics (v5.10), opened on the region being viewed.
   document.getElementById('stats-btn').addEventListener('click', () => {
     menu.hidden = true;

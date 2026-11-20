@@ -1,5 +1,8 @@
 # Registro de alterações
 
+## v5.16.0 — A janela do grande final
+- **🎉 Grande final:** o botão da esquerda aparece assim que você termina a zona especial. Ele abre uma janela que diz quantas conquistas faltam; o botão «Ver o grande final» fica desativado até você ter todas, e então a mensagem muda e o botão é ativado.
+
 ## v5.15.0 — Os subprodutos são vendidos e as estações param nos eventos
 - **💰 Os subprodutos são vendidos:** o segundo produto de uma estação (soro costeño, casca de café, couro de porco, morango de segunda, bloco de sal, torresmo, caldo de costela…) era jogado fora quando nenhuma estação o usava. Agora o que sobra vai para o armazém e é vendido.
 - **A polpa, o bagaço e o composto têm preço:** polpa 1 💰, bagaço 5 💰 e composto 5 💰. A Composteira e a Fornalha pegam primeiro a sua parte; só o resto é vendido. Uma Composteira com o pátio cheio não para mais: vende o composto que sobra.

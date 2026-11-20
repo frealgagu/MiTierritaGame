@@ -207,6 +207,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .milestone-top { display: flex; align-items: center; gap: 8px; height: 1.6rem; }
 .milestone-top > span:last-child { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; }
 .bar { height: 10px; border-radius: 999px; background: var(--paper-2); border: 2px solid var(--ink); overflow: hidden; margin-top: 4px; }
+#finale-info .bar { align-self: stretch; width: 100%; margin: 4px 0 12px; } /* (v5.16) the centred window would shrink it */
 .bar > div { height: 100%; background: linear-gradient(90deg, #f6b26b, var(--yellow)); width: 0%; transition: width 0.2s; }
 
 .modes { display: flex; gap: 6px; margin-bottom: 8px; height: var(--btn-h-sm); }

@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.16.0 — La ventana del gran final
+- **🎉 Gran final:** su botón de la izquierda aparece desde que terminas la zona especial. Abre una ventana que te dice cuántos logros faltan; el botón «Ver el gran final» está deshabilitado hasta que los tengas todos, y entonces cambia el mensaje y se activa.
+
 ## v5.15.0 — Los subproductos se venden y las estaciones se detienen en los eventos
 - **💰 Los subproductos se venden:** el segundo producto de una estación (suero costeño, cáscara de café, cuero de cerdo, fresa de segunda, bloque de sal, chicharrón, caldo de costilla…) se botaba cuando ninguna estación lo usaba. Ahora lo que sobra va a la bodega y se vende.
 - **La pulpa, el bagazo y el compost tienen precio:** pulpa 1 💰, bagazo 5 💰 y compost 5 💰. La Compostera y la Hornilla toman primero su parte; solo se vende el resto. Una Compostera con el patio lleno ya no se detiene: vende el compost que le sobra.

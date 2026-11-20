@@ -45,7 +45,8 @@
     <section id="panel" class="panel" hidden></section>
 
     <div id="side" class="side">
-      <!-- (v5.15) The grand finale, once every achievement is complete (it used to be a button in the menu): at the top of the column, above Events. -->
+      <!-- The grand finale (v5.15: it used to be a button in the menu), at the top of the column, above Events. Shown
+           (v5.16) once the special zone is finished; it opens the window that says what is left (#finale-info). -->
       <button id="finale-btn" class="side-btn" aria-label="Gran final" title="Gran final" hidden>🎉</button>
       <button id="events-btn" class="side-btn" aria-label="Eventos" title="Eventos" hidden>🏅<span id="events-badge" class="badge" hidden></span></button>
       <button id="goals-btn" class="side-btn" aria-label="Objetivos" title="Objetivos">📋<span id="goals-badge" class="badge" hidden></span></button>
@@ -142,6 +143,19 @@
         <p id="mastery-finale" hidden></p>
         <button id="mastery-restart" class="btn buy"></button>
         <button id="mastery-ok" class="btn">Seguir en esta partida</button>
+      </div>
+    </div>
+
+    <!-- (v5.16) The grand finale's own window, opened by its side button: how many achievements are left, and the
+         button that plays it once they are all complete. -->
+    <div id="finale-info" class="modal" hidden>
+      <div class="modal-card center victory">
+        <div class="victory-icon">🎉</div>
+        <h2>Gran final</h2>
+        <p id="finale-info-text"></p>
+        <div class="bar"><div id="finale-info-bar"></div></div>
+        <button id="finale-info-go" class="btn buy"></button>
+        <button id="finale-info-ok" class="btn"></button>
       </div>
     </div>
 

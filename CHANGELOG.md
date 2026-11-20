@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.16.0 — The grand finale's own window
+- **🎉 Grand finale:** its button on the left now shows as soon as you finish the special zone. It opens a window that tells you how many achievements are left; the «Watch the grand finale» button stays disabled until you have them all, and then the message changes and the button turns on.
+
 ## v5.15.0 — Byproducts are sold, and stations stop in events
 - **💰 Byproducts are sold:** the second product of a station (costeño sour cream, coffee husk, pig skin, second-grade strawberries, salt blocks, chicharrón, rib broth…) used to be thrown away when no station used it. Now whatever is left over goes to the warehouse and is sold.
 - **Pulp, bagasse and compost have a price:** pulp 1 💰, bagasse 5 💰 and compost 5 💰. The Compost Bin and the Furnace take their share first; only the rest is sold. A Compost Bin with a full yard no longer halts: it sells its spare compost.

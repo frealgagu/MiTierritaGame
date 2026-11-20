@@ -1,5 +1,8 @@
 # Journal des modifications
 
+## v5.16.0 — La fenêtre du grand final
+- **🎉 Grand final :** son bouton à gauche apparaît dès que tu termines la zone spéciale. Il ouvre une fenêtre qui indique combien de succès il manque ; le bouton « Voir le grand final » reste désactivé jusqu’à ce que tu les aies tous, puis le message change et le bouton s’active.
+
 ## v5.15.0 — Les sous-produits se vendent et les stations s’arrêtent pendant les événements
 - **💰 Les sous-produits se vendent :** le second produit d’une station (crème aigre costeña, cosse de café, couenne de porc, fraises de second choix, bloc de sel, chicharrón, bouillon de côtes…) était jeté quand aucune station ne l’utilisait. Désormais, ce qui reste part à l’entrepôt et se vend.
 - **La pulpe, la bagasse et le compost ont un prix :** pulpe 1 💰, bagasse 5 💰 et compost 5 💰. Le Composteur et le Four à panela prennent d’abord leur part ; seul le reste est vendu. Un Composteur à la cour pleine ne s’arrête plus : il vend son compost en trop.
