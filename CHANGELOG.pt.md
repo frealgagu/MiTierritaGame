@@ -1,5 +1,8 @@
 # Registro de alterações
 
+## v5.16.1 — Ajustes
+- Ajustes e melhorias.
+
 ## v5.16.0 — A janela do grande final
 - **🎉 Grande final:** o botão da esquerda aparece assim que você termina a zona especial. Ele abre uma janela que diz quantas conquistas faltam; o botão «Ver o grande final» fica desativado até você ter todas, e então a mensagem muda e o botão é ativado.
 

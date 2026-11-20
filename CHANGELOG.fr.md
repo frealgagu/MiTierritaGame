@@ -1,5 +1,8 @@
 # Journal des modifications
 
+## v5.16.1 — Ajustements
+- Ajustements et améliorations.
+
 ## v5.16.0 — La fenêtre du grand final
 - **🎉 Grand final :** son bouton à gauche apparaît dès que tu termines la zone spéciale. Il ouvre une fenêtre qui indique combien de succès il manque ; le bouton « Voir le grand final » reste désactivé jusqu’à ce que tu les aies tous, puis le message change et le bouton s’active.
 

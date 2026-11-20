@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.16.1 — Tweaks
+- Tweaks and improvements.
+
 ## v5.16.0 — The grand finale's own window
 - **🎉 Grand finale:** its button on the left now shows as soon as you finish the special zone. It opens a window that tells you how many achievements are left; the «Watch the grand finale» button stays disabled until you have them all, and then the message changes and the button turns on.
 

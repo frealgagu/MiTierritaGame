@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.16.1 — Ajustes
+- Ajustes y mejoras.
+
 ## v5.16.0 — La ventana del gran final
 - **🎉 Gran final:** su botón de la izquierda aparece desde que terminas la zona especial. Abre una ventana que te dice cuántos logros faltan; el botón «Ver el gran final» está deshabilitado hasta que los tengas todos, y entonces cambia el mensaje y se activa.
 
