@@ -210,7 +210,8 @@ export class RenownView {
     const l = GRAN_FINAL_LOGRO;
     const { have, total } = finaleProgress(profile);
     const done = (profile.logros?.[l.id] ?? 0) >= l.tiers.length;
-    const line = done ? t('✅ Completo') : `${l.text} · ${have} / ${total} · +${l.reward[0]} ⭐`;
+    // (v5.16.4) Once complete it still says what it was.
+    const line = done ? `✅ ${l.text}` : `${l.text} · ${have} / ${total} · +${l.reward[0]} ⭐`;
     const watch = done ? `<button class="btn buy" data-finale type="button">${t('🎉 Ver el gran final')}</button>` : '';
     return `<div class="logro"><div class="logro-head"><b>${l.icon} ${l.name}</b><span class="logro-stars">${done ? '★' : '☆'}</span></div><p>${line}</p><div class="bar"><div style="width:${done ? 100 : (100 * have) / total}%"></div></div>${watch}</div>`;
   }
@@ -223,7 +224,8 @@ export class RenownView {
       const stars = l.tiers.map((_, k) => (k < tier ? '★' : '☆')).join('');
       const next = l.tiers[tier];
       const n = (x) => formatNumber(Math.floor(x));
-      const line = next === undefined ? t('✅ Completo') : `${l.text.replace('{n}', n(next))} · ${n(Math.min(value, next))} / ${n(next)} · +${l.reward[tier]} ⭐`;
+      // (v5.16.4) A complete achievement still says what it asked for, at its last tier.
+      const line = next === undefined ? `✅ ${l.text.replace('{n}', n(l.tiers.at(-1)))}` : `${l.text.replace('{n}', n(next))} · ${n(Math.min(value, next))} / ${n(next)} · +${l.reward[tier]} ⭐`;
       const pct = next === undefined ? 100 : (100 * Math.min(value, next)) / next;
       return `<div class="logro"><div class="logro-head"><b>${l.icon} ${l.name}</b><span class="logro-stars">${stars}</span></div><p>${line}</p><div class="bar"><div style="width:${pct}%"></div></div></div>`;
     }).join('');

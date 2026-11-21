@@ -25,7 +25,8 @@ import { CAPS } from '../data/caps.js';
 import { CHIVA_STEPS, OFFLINE_COSTS, WORK_COSTS } from '../sim/renown.js';
 import { formatNumber } from '../core/format.js';
 import { cappedCoins, cappedCount, cappedPlayTime, cappedPrestige, cappedRenown, cappedRun, cappedRunTime, cappedTotal } from '../ui/capped.js';
-import { joinTime, parseAmount, plainAmount, splitTime } from './numbers.js';
+import { countAmount, joinTime, parseAmount, plainAmount, shortAmount, splitTime } from './numbers.js';
+import { MAX_LEVEL } from '../sim/rules.js';
 
 let root = null; // the whole game's save being edited
 let fileName = '';
@@ -49,27 +50,40 @@ const html = (tag, attrs, markup) => Object.assign(el(tag, attrs), { innerHTML: 
 
 // A number box: plain numbers, the game's suffixes (20K, 1,5Dc) or 1e30. When it loses focus the value is kept and
 // shown beside it the way the game shows it (`show`), e.g. «999Dc++» at the cap.
+//   max, min: (v5.16.4) a value past them is brought back to them (870765 medals → 10, a negative → 0).
+//   notation: how the box shows the number while not being edited: 'big' in the game's notation (123M, 1Dc),
+//             'count' whole with thousands separators (10.000), 'plain' as typed (the Advanced tab). The exact
+//             number is kept, and shown in full while the box has the focus.
 //   onSet(value) runs after the value is stored (to tick «Built», for instance).
-function numberField(label, get, set, show = formatNumber, { onSet, min = 0, title } = {}) {
+const NOTATION = { big: shortAmount, count: countAmount, plain: plainAmount };
+function numberField(label, get, set, show = formatNumber, { onSet, min = 0, max = Infinity, notation = 'plain', title } = {}) {
   const out = el('output', { class: 'shown' }, show(get() ?? 0));
-  const input = el('input', { type: 'text', inputmode: 'decimal', value: plainAmount(get() ?? 0, decimalOf()), 'aria-label': label, title });
+  const shown = () => NOTATION[notation](get() ?? 0, decimalOf());
+  const input = el('input', { type: 'text', inputmode: 'decimal', value: shown(), 'aria-label': label, title });
+  input.addEventListener('focus', () => (input.value = plainAmount(get() ?? 0, decimalOf())));
+  input.addEventListener('blur', () => (input.value = shown()));
   input.addEventListener('change', () => {
-    const n = parseAmount(input.value, decimalOf());
-    if (!Number.isFinite(n) || n < min) {
+    let n = parseAmount(input.value, decimalOf());
+    if (!Number.isFinite(n)) {
       input.classList.add('bad');
       input.title = t('No es un número válido: se deja el anterior.');
       input.value = plainAmount(get() ?? 0, decimalOf());
       setTimeout(() => input.classList.remove('bad'), 1500);
       return;
     }
+    n = Math.min(max, Math.max(min, n));
     input.title = title ?? '';
     set(n);
-    input.value = plainAmount(n, decimalOf());
-    out.textContent = show(n);
+    if (document.activeElement !== input) input.value = shown();
+    out.textContent = show(get() ?? 0);
     onSet?.(n);
   });
   return el('label', { class: 'field number' }, el('span', { class: 'name' }, label), input, out);
 }
+// The caps of the game's counters (data/caps.js) and its levels, for the boxes of the forms.
+const BIG = (max) => ({ max, notation: 'big' });
+const COUNT = (max) => ({ max, notation: 'count' });
+const LEVEL = { min: 1, max: MAX_LEVEL, notation: 'count' };
 
 // Hours, minutes and seconds; shown beside like the game (∞ from its cap).
 function timeField(label, get, set, show = cappedRunTime) {
@@ -232,10 +246,10 @@ function general() {
     section(
       t('🌎 Todo el juego'),
       timeField(t('⏱️ Reloj del país (tiempo jugado)'), () => root.playTime, (v) => (root.playTime = v), cappedPlayTime),
-      numberField(t('⭐ Renombre'), () => p.renown, (v) => (p.renown = v), cappedRenown),
-      numberField(t('🏆 Prestigio'), () => p.renownTotal, (v) => (p.renownTotal = v), cappedPrestige),
-      numberField(t('📦 Productos vendidos'), () => p.totals.sold, (v) => (p.totals.sold = v), (v) => cappedTotal('sold', v)),
-      numberField(t('🏭 Productos producidos'), () => p.totals.produced, (v) => (p.totals.produced = v), (v) => cappedTotal('produced', v)),
+      numberField(t('⭐ Renombre'), () => p.renown, (v) => (p.renown = Math.round(v)), cappedRenown, COUNT(CAPS.renown)),
+      numberField(t('🏆 Prestigio'), () => p.renownTotal, (v) => (p.renownTotal = Math.round(v)), cappedPrestige, COUNT(CAPS.prestige)),
+      numberField(t('📦 Productos vendidos'), () => p.totals.sold, (v) => (p.totals.sold = v), (v) => cappedTotal('sold', v), BIG(CAPS.total.sold)),
+      numberField(t('🏭 Productos producidos'), () => p.totals.produced, (v) => (p.totals.produced = v), (v) => cappedTotal('produced', v), BIG(CAPS.total.produced)),
     ),
     section(
       t('🛒 Compras con Renombre'),
@@ -314,9 +328,9 @@ function events() {
                 (rec(e.id).count ??= {})[k] = Math.round(v);
                 if (!v) delete p.medals[e.id].count[k];
                 tidy(e.id);
-              }, (v) => cappedCount(v, CAPS.medalsPerKind)),
+              }, (v) => cappedCount(v, CAPS.medalsPerKind), COUNT(CAPS.medalsPerKind)),
             ),
-            numberField(t('🔁 Rondas jugadas'), () => ev.count[eventKey(e)] ?? 0, (v) => (v ? (ev.count[eventKey(e)] = Math.round(v)) : delete ev.count[eventKey(e)]), (v) => cappedCount(v, CAPS.eventRound)),
+            numberField(t('🔁 Rondas jugadas'), () => ev.count[eventKey(e)] ?? 0, (v) => (v ? (ev.count[eventKey(e)] = Math.round(v)) : delete ev.count[eventKey(e)]), (v) => cappedCount(v, CAPS.eventRound), COUNT(CAPS.eventRound)),
           ),
         ),
       ),
@@ -338,16 +352,16 @@ function region(regionId) {
   wrap.append(
     section(
       t('🧺 Esta partida'),
-      numberField(t('💰 Monedas'), () => s.coins, (v) => (s.coins = v), cappedCoins),
-      numberField(t('💰 Ganado en esta partida'), () => s.totalEarned, (v) => (s.totalEarned = v), cappedCoins),
+      numberField(t('💰 Monedas'), () => s.coins, (v) => (s.coins = v), cappedCoins, BIG(CAPS.coins)),
+      numberField(t('💰 Ganado en esta partida'), () => s.totalEarned, (v) => (s.totalEarned = v), cappedCoins, BIG(CAPS.coins)),
       timeField(t('⏱️ Tiempo jugado en esta partida'), () => s.playTime, (v) => (s.playTime = v)),
-      numberField(t('📦 Vendidos en esta partida (todos los productos)'), () => s.counted.sold, (v) => (s.counted.sold = v), formatNumber),
-      numberField(t('🏭 Producidos en esta partida (todos los productos)'), () => s.counted.produced, (v) => (s.counted.produced = v), formatNumber),
+      numberField(t('📦 Vendidos en esta partida (todos los productos)'), () => s.counted.sold, (v) => (s.counted.sold = v), (v) => cappedTotal('sold', v), BIG(CAPS.total.sold)),
+      numberField(t('🏭 Producidos en esta partida (todos los productos)'), () => s.counted.produced, (v) => (s.counted.produced = v), (v) => cappedTotal('produced', v), BIG(CAPS.total.produced)),
       checkField(t('🏅 Segundo final (todo al nivel 100)'), () => s.mastered, (v) => (s.mastered = v)),
     ),
     section(
       t('🔁 Lo que conserva al volver a empezar'),
-      numberField(t('🔁 Reinicios'), () => keep.resets, (v) => (keep.resets = Math.round(v)), String),
+      numberField(t('🔁 Reinicios'), () => keep.resets, (v) => (keep.resets = Math.round(v)), String, COUNT(CAPS.resets)),
       checkField(t('🚩 Región completada alguna vez'), () => keep.done, (v) => (keep.done = v)),
       checkField(t('🚙 Segundo Willys'), () => keep.willys2, (v) => (v ? (keep.willys2 = true) : delete keep.willys2)),
       selectField(t('🚌 Chivas'), [['', t('Cada 60 s')], ...CHIVA_STEPS.map((c) => [c.every, t('Cada {n} s', { n: c.every })])], () => keep.chivas ?? '', (v) => (v ? (keep.chivas = Number(v)) : delete keep.chivas)),
@@ -355,7 +369,7 @@ function region(regionId) {
     ),
   );
   const routes = ROUTES.filter((r) => routeRegion(r) === regionId && s.routes?.[r.id]);
-  if (routes.length) wrap.append(section(t('🚌 Rutas'), routes.map((r) => numberField(`${r.icon} ${r.name}`, () => s.routes[r.id].level, (v) => (s.routes[r.id].level = Math.max(1, Math.round(v))), String, { min: 1 }))));
+  if (routes.length) wrap.append(section(t('🚌 Rutas'), routes.map((r) => numberField(`${r.icon} ${r.name}`, () => s.routes[r.id].level, (v) => (s.routes[r.id].level = Math.round(v)), String, LEVEL))));
   wrap.append(section(t('🗺️ Zonas'), def.zones.map((z) => lazy(`${ZONES_BY_ID[z].icon} ${ZONES_BY_ID[z].name}`, () => zone(s, z)))));
   if (regionId !== 'cafetero') {
     wrap.append(
@@ -385,7 +399,7 @@ function zone(s, zoneId) {
   const openBox = checkField(t('Abierta'), () => z.unlocked, open);
   box.append(
     el('div', { class: 'row' }, openBox, checkField(t('Completada'), () => z.complete, (v) => (z.complete = v))),
-    numberField(t('🚙 Nivel de la bodega y el Willys'), () => z.dispatch.level, (v) => (z.dispatch.level = Math.max(1, Math.round(v))), String, { min: 1 }),
+    numberField(t('🚙 Nivel de la bodega y el Willys'), () => z.dispatch.level, (v) => (z.dispatch.level = Math.round(v)), String, LEVEL),
   );
   for (const id of stationsOf(zoneId)) box.append(station(s, id, () => (openBox.querySelector('input').checked = z.unlocked), open));
   const research = RESEARCH.filter((r) => r.zone === zoneId);
@@ -434,8 +448,8 @@ function station(s, id, syncZone, openZone) {
     el(
       'div',
       { class: 'row' },
-      numberField(t('Nivel'), () => st()?.level ?? 0, (v) => (v ? (build(), (st().level = Math.max(1, Math.round(v)))) : null), String),
-      numberField(t('Arrieros'), () => st()?.transport.level ?? 0, (v) => (v ? (build(), (st().transport.level = Math.max(1, Math.round(v)))) : null), String),
+      numberField(t('Nivel'), () => st()?.level ?? 0, (v) => (v ? (build(), (st().level = Math.max(1, Math.round(v)))) : null), String, COUNT(MAX_LEVEL)),
+      numberField(t('Arrieros'), () => st()?.transport.level ?? 0, (v) => (v ? (build(), (st().transport.level = Math.max(1, Math.round(v)))) : null), String, COUNT(MAX_LEVEL)),
       checkField(t('⏹️ Detenida'), () => st()?.stopped, (v) => (v ? (build(), (st().stopped = true)) : st() && delete st().stopped)),
     ),
     ...productsOf(id).map((p) =>
@@ -443,8 +457,8 @@ function station(s, id, syncZone, openZone) {
         'div',
         { class: 'product' },
         el('span', { class: 'pname' }, `${PRODUCTS[p].icon} ${PRODUCTS[p].name}`),
-        numberField(t('Vendidos'), () => s.stats.sold[p] ?? 0, (v) => (v ? (s.stats.sold[p] = v) : delete s.stats.sold[p]), (v) => cappedRun('sold', v), { onSet: whenNonZero }),
-        numberField(t('Producidos'), () => s.stats.produced[p] ?? 0, (v) => (v ? (s.stats.produced[p] = v) : delete s.stats.produced[p]), (v) => cappedRun('produced', v), { onSet: whenNonZero }),
+        numberField(t('Vendidos'), () => s.stats.sold[p] ?? 0, (v) => (v ? (s.stats.sold[p] = v) : delete s.stats.sold[p]), (v) => cappedRun('sold', v), { onSet: whenNonZero, ...BIG(CAPS.run.sold) }),
+        numberField(t('Producidos'), () => s.stats.produced[p] ?? 0, (v) => (v ? (s.stats.produced[p] = v) : delete s.stats.produced[p]), (v) => cappedRun('produced', v), { onSet: whenNonZero, ...BIG(CAPS.run.produced) }),
       ),
     ),
   );

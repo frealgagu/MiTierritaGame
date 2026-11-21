@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { joinTime, parseAmount, plainAmount, splitTime } from '../src/editor/numbers.js';
+import { countAmount, joinTime, parseAmount, plainAmount, shortAmount, splitTime } from '../src/editor/numbers.js';
 import { exportSave, importSave } from '../src/core/SaveSystem.js';
 import { newGame, cafeOf } from './helpers/game.js';
 
@@ -31,6 +31,23 @@ test('what the save editor writes back into a box reads again as the same number
   assert.equal(plainAmount(3.413536957880123e29, ','), '3,41354e29', 'six significant digits at most');
   assert.deepEqual(splitTime(3 * 3600 + 25 * 60 + 7.4), { h: 3, m: 25, s: 7 });
   assert.equal(joinTime({ h: 156, m: 20, s: 3 }), 156 * 3600 + 20 * 60 + 3);
+});
+
+test('the save editor shows products and coins in the game notation and counters in full, both readable again (v5.16.4)', () => {
+  assert.equal(shortAmount(123456789, ','), '123M');
+  assert.equal(shortAmount(1e33, ','), '1Dc');
+  assert.equal(shortAmount(1e36, ','), '1000Dc', 'the coins cap');
+  assert.equal(shortAmount(1e27, ','), '1Oc');
+  assert.equal(shortAmount(1.5e33, ','), '1,5Dc');
+  assert.equal(shortAmount(1.5e33, '.'), '1.5Dc');
+  assert.equal(shortAmount(5000, ','), '5K', 'no trailing zeros');
+  assert.equal(shortAmount(999999, ','), '1M', 'rounds up to the next suffix');
+  assert.equal(shortAmount(42, ','), '42');
+  assert.equal(countAmount(10000, ','), '10.000');
+  assert.equal(countAmount(10000, '.'), '10,000');
+  for (const [n, d] of [[1e33, ','], [1e36, '.'], [1.5e33, ','], [5000, ','], [42, '.']]) assert.equal(parseAmount(shortAmount(n, d), d), n, `${n}`);
+  assert.equal(parseAmount(countAmount(10000, ','), ','), 10000);
+  assert.equal(parseAmount(countAmount(10000, '.'), '.'), 10000);
 });
 
 test('a save changed the way the editor does it exports and opens in the game (v5.17)', () => {

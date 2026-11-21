@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.16.4 — Logros que dicen qué eran
+- **🏆 Logros:** un logro completo sigue diciendo qué pedía (✅ Vende 10,0M bolsas de café), y el del gran final también.
+
 ## v5.16.3 — Compost a la venta
 - **Compost:** con el patio lleno, la Compostera sigue trabajando y vende en la bodega lo que la Finca no gasta. En una partida grande se detenía y no vendía nada.
 

@@ -1,5 +1,8 @@
 # Journal des modifications
 
+## v5.16.4 — Des succès qui disent ce qu’ils étaient
+- **🏆 Succès :** un succès terminé dit toujours ce qu’il demandait (✅ Vends 10,0M sachets de café), et celui du grand final aussi.
+
 ## v5.16.3 — Du compost à vendre
 - **Compost :** cour pleine, le Composteur continue de travailler et vend à l’entrepôt ce que la Ferme n’utilise pas. Dans une grande partie, il s’arrêtait et ne vendait rien.
 

@@ -1,5 +1,8 @@
 # Registro de alterações
 
+## v5.16.4 — Conquistas que dizem o que eram
+- **🏆 Conquistas:** uma conquista completa continua dizendo o que pedia (✅ Venda 10,0M pacotes de café), e a do grande final também.
+
 ## v5.16.3 — Composto à venda
 - **Composto:** com o pátio cheio, a Composteira continua trabalhando e vende no armazém o que a Fazenda não gasta. Num jogo grande ela parava e não vendia nada.
 

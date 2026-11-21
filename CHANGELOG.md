@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.16.4 — Achievements that say what they were
+- **🏆 Achievements:** a complete achievement still says what it asked for (✅ Sell 10.0M bags of coffee), and so does the grand finale's.
+
 ## v5.16.3 — Compost for sale
 - **Compost:** with its yard full, the Compost Bin keeps working and sells at the warehouse what the Farm does not use. In a big game it used to stop and sell nothing.
 
