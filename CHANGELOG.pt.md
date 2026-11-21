@@ -1,5 +1,8 @@
 # Registro de alterações
 
+## v5.16.2 — Para onde vão os subprodutos
+- **🔗 Cadeia:** um subproduto que nenhuma estação da sua zona usa (o couro fresco da Desossa, por exemplo) agora diz para onde vai: sua rota o leva para a outra zona, ou é vendido no armazém até essa zona abrir.
+
 ## v5.16.1 — Ajustes
 - Ajustes e melhorias.
 

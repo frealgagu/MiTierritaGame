@@ -75,6 +75,8 @@ jobs:
       - run: if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
       - run: npm test
       - run: npm run build
+      # (v5.17) The save editor, a web-only page at ./editor/ (dist/editor): not in the app, which builds on its own.
+      - run: npm run build:editor
       # (v4.7.3) Give each publish its own cache key: includes commit SHA so web and app update
       # even when package.json version or public/sw.js CACHE weren't bumped.
       - run: sha="${{ needs.prepare.outputs.sha }}"; sed -i -E "s/const CACHE = '([^']+)';/const CACHE = '\1-${sha::7}';/" dist/sw.js && grep -m1 "const CACHE" dist/sw.js

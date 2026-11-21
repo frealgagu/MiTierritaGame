@@ -1,12 +1,14 @@
 {
   "name": "encantos-mi-tierrita",
   "private": true,
-  "version": "5.16.1",
+  "version": "5.16.2",
   "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 3000",
+    "dev:editor": "vite --config editor/vite.config.js --host 0.0.0.0 --port 3001",
     "build": "vite build",
+    "build:editor": "vite build --config editor/vite.config.js",
     "preview": "vite preview",
     "test": "node --test",
     "build:artifact": "vite build && node tools/artifact-page.mjs",

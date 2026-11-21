@@ -3,5 +3,6 @@
 import part1 from './code1.js';
 import part2 from './code2.js';
 import part3 from './code3.js';
+import editor from './editor.js';
 
-export default { ...part1, ...part2, ...part3 };
+export default { ...part1, ...part2, ...part3, ...editor };

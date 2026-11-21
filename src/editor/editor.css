@@ -1,0 +1,123 @@
+/* Save editor (v5.17): the game's paper look, its fonts and its drawn icons. */
+@font-face {
+  font-family: 'Fredoka';
+  src: url('../assets/fredoka-latin.woff2') format('woff2');
+  font-weight: 300 700;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Fredoka';
+  src: url('../assets/fredoka-latin-ext.woff2') format('woff2');
+  font-weight: 300 700;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'MiTierrita Icons';
+  src: url('../assets/mitierrita-icons.woff2') format('woff2');
+  unicode-range: U+E000-E3FF, U+00A9, U+00AE, U+200D, U+203C, U+2049, U+2122, U+2139, U+231A-23FF, U+24C2, U+25AA-25FE, U+2600-27BF, U+2B06, U+2B1B-2B55, U+3030, U+303D, U+3297, U+3299, U+FE0F, U+1F000-1FAFF;
+  font-display: block;
+}
+
+:root {
+  --ink: #3a2418;
+  --ink-2: #7a5a46;
+  --paper: #fff8ec;
+  --paper-2: #f3e6cf;
+  --line: #d9c4a3;
+  --green: #2e9a63;
+  --red: #b3261e;
+  --bg: #e9dcc3;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'MiTierrita Icons', 'Fredoka', system-ui, sans-serif;
+  font-size: 15px;
+}
+#app { max-width: 1100px; margin: 0 auto; padding: 16px; }
+h1 { margin: 0; font-size: 1.5rem; }
+h2 { margin: 0 0 10px; font-size: 1.1rem; }
+p { margin: 4px 0; }
+.top { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+.brand { flex: 1 1 320px; }
+.brand p { color: var(--ink-2); font-size: 0.9rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn, select, input, textarea {
+  font: inherit;
+  color: inherit;
+}
+.btn {
+  border: 2px solid var(--ink);
+  background: var(--paper-2);
+  border-radius: 12px;
+  padding: 7px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn.primary { background: var(--green); color: #fff; }
+.btn.danger { background: #fde2e4; color: var(--red); border-color: var(--red); margin-top: 8px; }
+.btn:disabled { opacity: 0.45; cursor: default; }
+select, input[type='text'], input[type='number'], textarea {
+  border: 1.5px solid var(--line);
+  background: #fff;
+  border-radius: 8px;
+  padding: 5px 7px;
+}
+input.bad { border-color: var(--red); background: #fde2e4; }
+.message { margin: 8px 0; padding: 8px 12px; border-radius: 10px; background: #e3f2df; color: #1f6b3b; }
+.message.bad { background: #fde2e4; color: var(--red); }
+.loaded { color: var(--ink-2); font-size: 0.85rem; }
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding: 6px 0 10px; }
+.tab { flex: none; border: 2px solid var(--ink); background: var(--paper); border-radius: 999px; padding: 6px 12px; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.tab.active { background: #ffd95a; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; align-items: start; }
+.card { background: var(--paper); border: 2px solid var(--ink); border-radius: 16px; padding: 12px 14px; min-width: 0; }
+.card.empty { text-align: center; padding: 30px; }
+.grid > .card:has(.zone), .grid > .card:has(.tree), .grid > .card:has(textarea) { grid-column: 1 / -1; }
+
+.field { display: flex; align-items: center; gap: 8px; padding: 4px 0; flex-wrap: wrap; }
+.field .name { flex: 1 1 140px; min-width: 0; }
+/* A number: its name, the box and, beside it, how the game shows it (on one line, even on a phone). */
+.field.number { display: grid; grid-template-columns: minmax(0, 1fr) 130px 76px; gap: 6px; flex-wrap: nowrap; }
+.field.number input { width: 100%; text-align: right; }
+.field .shown { min-width: 0; color: var(--ink-2); font-weight: 600; overflow-wrap: anywhere; font-size: 0.9rem; }
+.field.check { gap: 6px; }
+.field.check .name { flex: 0 1 auto; }
+.field.time .hms { display: flex; gap: 4px; }
+.field.time input { width: 70px; text-align: right; }
+.field.time .unit { display: flex; align-items: center; gap: 2px; }
+.field.text input { flex: 1 1 200px; }
+.row { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: center; }
+.row .field.number { grid-template-columns: auto 80px 50px; }
+.rows { display: grid; gap: 2px; }
+
+details.group { border-top: 1px solid var(--line); padding: 4px 0; }
+details.group > summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+fieldset { border: 1.5px solid var(--line); border-radius: 12px; margin: 8px 0; padding: 6px 10px 8px; min-width: 0; }
+legend { font-weight: 600; padding: 0 4px; }
+fieldset.list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0 12px; }
+.list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0 12px; }
+fieldset.page { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0 12px; }
+.station.off { background: #f4efe6; }
+.station.off .row, .station.off .product { opacity: 0.55; }
+.station .built { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+.station .built small { color: var(--ink-2); font-weight: 400; }
+.product { display: grid; grid-template-columns: minmax(120px, 1fr) auto auto; gap: 0 12px; align-items: center; border-top: 1px dashed var(--line); margin-top: 4px; padding-top: 2px; }
+.product .field .name { flex: 0 0 auto; }
+.product .field.number { grid-template-columns: auto 120px 70px; }
+.tree { padding-left: 14px; border-left: 2px solid var(--line); }
+.tree details.group { border-top: none; }
+.hint { color: var(--ink-2); font-size: 0.85rem; }
+textarea.json { width: 100%; min-height: 360px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; }
+
+@media (max-width: 600px) {
+  #app { padding: 10px; }
+  .grid { grid-template-columns: 1fr; }
+  .field.number { grid-template-columns: minmax(0, 1fr) 110px 70px; }
+  .product { grid-template-columns: 1fr; }
+  .product .field.number { grid-template-columns: minmax(0, 1fr) 110px 70px; }
+}

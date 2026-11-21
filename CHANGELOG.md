@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.16.2 — Where byproducts go
+- **🔗 Chain:** a byproduct that no station of its zone uses (the fresh hide from the Butchering, for instance) now says where it goes: its route takes it to the other zone, or it is sold at the warehouse until that zone opens.
+
 ## v5.16.1 — Tweaks
 - Tweaks and improvements.
 

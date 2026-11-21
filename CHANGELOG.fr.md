@@ -1,5 +1,8 @@
 # Journal des modifications
 
+## v5.16.2 — Où vont les sous-produits
+- **🔗 Chaîne :** un sous-produit qu’aucune station de sa zone n’utilise (le cuir frais de la Découpe, par exemple) dit maintenant où il va : sa route l’emporte vers l’autre zone, ou il se vend à l’entrepôt jusqu’à l’ouverture de cette zone.
+
 ## v5.16.1 — Ajustements
 - Ajustements et améliorations.
 
