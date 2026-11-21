@@ -3,12 +3,12 @@ import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { PRODUCTS } from '../data/products.js';
 import { analyzeChain, expectedCompostValue } from '../sim/analysis.js';
 import { hasBelt } from '../sim/rules.js';
-import { BY_CHILDREN, CHILDREN, JOIN_FROM, PARENT, branchShare, buildableStations, chainOf } from '../sim/chain.js';
+import { BY_CHILDREN, BY_ROUTES, CHILDREN, JOIN_FROM, PARENT, branchShare, buildableStations, chainOf } from '../sim/chain.js';
 import { ROUTES_BY_ID } from '../data/routes.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { pendingRoutes, slowConsumers } from '../sim/transport.js';
-import { routeOrigin } from '../sim/routes.js';
-import { withArticle } from '../data/lore.js';
+import { routeActive, routeOrigin } from '../sim/routes.js';
+import { WithArticle, withArticle } from '../data/lore.js';
 import { saleValue } from '../sim/modifiers.js';
 import { listJoin, t } from '../i18n/index.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
@@ -302,7 +302,19 @@ function detailOf(state, a, rows, sel, zone) {
   if (row.byOutput !== undefined) {
     const by = PRODUCTS[Object.keys(def.by)[0]];
     const kidsBy = BY_CHILDREN[id].filter((c) => rows[c]);
-    lines.push(t('Además saca {n} de {p}, que pasan por la canaleta a {stations}.', { n: `${formatRate(row.byOutput)} ${by.icon}/s`, p: by.name.toLowerCase(), stations: listNames(kidsBy) }));
+    const n = `${formatRate(row.byOutput)} ${by.icon}/s`;
+    const p = by.name.toLowerCase();
+    // Where it goes: stations of this zone down the chute, a route to another zone (fresh hide to La Talabartería),
+    // or, with neither, the warehouse (v5.16.2: until then this read «… down the chute to .»).
+    lines.push(kidsBy.length ? t('Además saca {n} de {p}, que pasan por la canaleta a {stations}.', { n, p, stations: listNames(kidsBy) }) : t('Además saca {n} de {p}.', { n, p }));
+    const byRoutes = BY_ROUTES[id] ?? [];
+    for (const r of byRoutes) {
+      const zoneName = ZONES_BY_ID[r.to].name;
+      lines.push(routeActive(state, r.id)
+        ? t('{route} lo lleva a {zone}.', { route: WithArticle(r.name), zone: zoneName })
+        : t('Cuando abra {zone}, {route} lo llevará allá; mientras tanto se vende en la bodega.', { zone: zoneName, route: withArticle(r.name) }));
+    }
+    if (!kidsBy.length && !byRoutes.length) lines.push(t('Se vende en la bodega.'));
     if (row.byLost > 0.005) lines.push(`<span class="lost">${t('💰 {n} se venden sin procesar: {stations} no da abasto.', { n: `${formatRate(row.byLost)} ${by.icon}/s`, stations: listNames(kidsBy) })}</span>`);
   }
   // Haulers: how much they carry and where.

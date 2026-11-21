@@ -240,4 +240,8 @@ export default {
   "En marcha": "En marche",
   "No produce y sus arrieros no salen. Lo que le llegaba va a otras estaciones o se vende.": "Ne produit rien et ses muletiers ne partent pas. Ce qui lui arrivait va à d’autres stations ou se vend.",
   "⏹️ {station} no está en marcha: no le llega producto.": "⏹️ {station} n’est pas en marche : aucun produit n’arrive.",
+  "Además saca {n} de {p}.": "Elle sort aussi {n} de {p}.",
+  "{route} lo lleva a {zone}.": "{route} l’emporte à {zone}.",
+  "Cuando abra {zone}, {route} lo llevará allá; mientras tanto se vende en la bodega.": "Quand {zone} ouvrira, {route} l’y emportera ; en attendant, il se vend à l’entrepôt.",
+  "Se vende en la bodega.": "Il se vend à l’entrepôt.",
 };

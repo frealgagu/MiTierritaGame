@@ -26,6 +26,9 @@ export let LANG = 'es';
 export function t(text, vars) {
   let s = dict?.[text] ?? text;
   if (vars) s = s.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
+  // Spanish contracts «a el» and «de el» (a name with its article dropped into «a {station}»): «al Adobadero»,
+  // «del Adobadero». Only the lowercase article: «de El Hato llanero» keeps it, as a name.
+  if (vars && LANG === 'es') s = s.replace(/\b([Aa]) el /g, '$1l ').replace(/\b([Dd])e el /g, '$1el ');
   return s;
 }
 

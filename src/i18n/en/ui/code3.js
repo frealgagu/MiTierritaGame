@@ -240,4 +240,8 @@ export default {
   "En marcha": "Running",
   "No produce y sus arrieros no salen. Lo que le llegaba va a otras estaciones o se vende.": "It does not produce and its muleteers stay home. What it used to get goes to other stations or is sold.",
   "⏹️ {station} no está en marcha: no le llega producto.": "⏹️ {station} is not running: no product arrives.",
+  "Además saca {n} de {p}.": "It also yields {n} of {p}.",
+  "{route} lo lleva a {zone}.": "{route} takes it to {zone}.",
+  "Cuando abra {zone}, {route} lo llevará allá; mientras tanto se vende en la bodega.": "Once {zone} opens, {route} will take it there; meanwhile it is sold at the warehouse.",
+  "Se vende en la bodega.": "It is sold at the warehouse.",
 };
