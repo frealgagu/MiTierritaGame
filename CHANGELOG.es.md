@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.16.3 — Compost a la venta
+- **Compost:** con el patio lleno, la Compostera sigue trabajando y vende en la bodega lo que la Finca no gasta. En una partida grande se detenía y no vendía nada.
+
 ## v5.16.2 — Adónde van los subproductos
 - **🔗 Cadena:** un subproducto que no usa ninguna estación de su zona (el cuero fresco del Desposte, por ejemplo) ahora dice adónde va: su ruta lo lleva a la otra zona, o se vende en la bodega hasta que esa zona abra.
 - **Textos:** «al» y «del» en vez de «a el» y «de el» delante de los nombres de las estaciones.

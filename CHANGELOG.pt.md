@@ -1,5 +1,8 @@
 # Registro de alterações
 
+## v5.16.3 — Composto à venda
+- **Composto:** com o pátio cheio, a Composteira continua trabalhando e vende no armazém o que a Fazenda não gasta. Num jogo grande ela parava e não vendia nada.
+
 ## v5.16.2 — Para onde vão os subprodutos
 - **🔗 Cadeia:** um subproduto que nenhuma estação da sua zona usa (o couro fresco da Desossa, por exemplo) agora diz para onde vai: sua rota o leva para a outra zona, ou é vendido no armazém até essa zona abrir.
 

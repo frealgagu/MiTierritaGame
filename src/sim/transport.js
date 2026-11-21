@@ -330,23 +330,28 @@ export function stepByproducts(state) {
 }
 
 // A side station (Compostera) keeps its product in its own yard, where the zone spends it. With the yard full, what
-// it goes on making is sold at the warehouse (v5.15) instead of halting it: the yard stays one cycle short of full.
-export const sideKeep = (state, id) => {
-  const def = STATIONS_BY_ID[id];
-  return stationBufferCap(def, state.stations[id].level, capMult(state, id)) - Object.values(def.out)[0];
-};
+// it goes on making is sold at the warehouse (v5.15) instead of halting it. (v5.16.3) It keeps working at its full
+// pace while the warehouse has room for the surplus (`sideSaleRoom`, used by stepStation): until then it halted
+// with a full yard and only made what the Finca spent, and in a big game the «one cycle short» left nothing to sell.
+export const sideKeep = (state, id) => stationBufferCap(STATIONS_BY_ID[id], state.stations[id].level, capMult(state, id));
+export function sideSaleRoom(state, id) {
+  const zoneId = zoneOf(id);
+  return Math.max(0, warehouseSpace(state, zoneId) - (1 - BY_SALE_FILL) * warehouseCap(state, zoneId));
+}
 function stepSideSurplus(state) {
-  for (const [id, st] of Object.entries(state.stations)) {
-    const def = STATIONS_BY_ID[id];
-    if (!def.side) continue;
-    const extra = st.buffer - sideKeep(state, id);
-    if (extra <= 1e-9) continue;
-    const zoneId = zoneOf(id);
-    const n = Math.min(extra, warehouseSpace(state, zoneId) - (1 - BY_SALE_FILL) * warehouseCap(state, zoneId));
-    if (n <= 1e-9) continue;
-    const product = Object.keys(def.out)[0];
-    const wh = state.zones[zoneId].warehouse;
-    wh[product] = (wh[product] ?? 0) + n;
-    st.buffer -= n;
-  }
+  for (const id of Object.keys(state.stations)) sellSideSurplus(state, id);
+}
+// What a side station has over its full yard goes to the warehouse (run right after it works, too).
+export function sellSideSurplus(state, id) {
+  const st = state.stations[id];
+  const def = STATIONS_BY_ID[id];
+  if (!st || !def.side) return;
+  const extra = st.buffer - sideKeep(state, id);
+  if (extra <= 0) return;
+  const n = Math.min(extra, sideSaleRoom(state, id));
+  if (n <= 0) return;
+  const product = Object.keys(def.out)[0];
+  const wh = state.zones[zoneOf(id)].warehouse;
+  wh[product] = (wh[product] ?? 0) + n;
+  st.buffer -= n;
 }

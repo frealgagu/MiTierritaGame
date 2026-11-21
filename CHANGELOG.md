@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.16.3 — Compost for sale
+- **Compost:** with its yard full, the Compost Bin keeps working and sells at the warehouse what the Farm does not use. In a big game it used to stop and sell nothing.
+
 ## v5.16.2 — Where byproducts go
 - **🔗 Chain:** a byproduct that no station of its zone uses (the fresh hide from the Butchering, for instance) now says where it goes: its route takes it to the other zone, or it is sold at the warehouse until that zone opens.
 

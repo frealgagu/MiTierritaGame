@@ -63,6 +63,20 @@ test('the Compostera keeps its yard for the Finca and sells the compost that no 
   assert.ok(s.stats.sold.compost > 0, 'the spare compost is sold');
 });
 
+test('in a big game the Compostera, with its yard full, keeps working and sells what the Finca does not spend (v5.16.3)', () => {
+  // The owner's late game: everything at level 100 and ×2⁶⁰. The yard held «one cycle short of full», which at these
+  // numbers rounds to nothing: the Compostera only made what the Finca spent and no compost was ever sold.
+  const { game, s } = cafe(['wetmill', 'dryer', 'composter']);
+  s.keep.resets = 60;
+  for (const st of Object.values(s.stations)) st.level = st.transport.level = 100;
+  for (const z of Object.values(s.zones)) z.dispatch.level = 100;
+  run(game, 300);
+  const made = s.stats.produced.compost;
+  assert.ok(made > 1e15, 'huge numbers');
+  assert.ok(s.stats.sold.compost > made * 0.2, `the surplus is sold (${s.stats.sold.compost} of ${made})`);
+  assert.ok(s.stations.composter.buffer > 0, 'and the Finca keeps its bonus');
+});
+
 test('the Hornilla takes its bagazo before any is sold', () => {
   const { game, s } = cafe(['cane_mill'], ['trapiche']);
   run(game, 300);

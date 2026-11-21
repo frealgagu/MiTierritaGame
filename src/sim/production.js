@@ -5,6 +5,7 @@ import { capMult, consumeCompost, speedMult } from './modifiers.js';
 import { CALENDAR, clockOf, resting, seasonOf } from './calendar.js';
 import { fleetOf } from './fleet.js';
 import { joinOf } from './chain.js';
+import { sellSideSurplus, sideSaleRoom } from './transport.js';
 import { count } from './totals.js';
 
 export function createStationState() {
@@ -67,7 +68,8 @@ export function stepStation(state, id, dt, bus) {
   }
   const [[outId, outAmt]] = Object.entries(def.out);
   const need = def.in ? Object.values(def.in)[0] : 0;
-  const space = stationBufferCap(def, s.level, capMult(state, id)) - s.buffer;
+  // (v5.16.3) A side station (Compostera) also has the room the warehouse has for its surplus (transport.js).
+  const space = stationBufferCap(def, s.level, capMult(state, id)) - s.buffer + (def.side ? sideSaleRoom(state, id) : 0);
   const byLocal = need ? Math.floor(s.input / need) : Infinity;
   let byInput = byLocal;
   s.missing = null;
@@ -168,4 +170,5 @@ export function stepFuel(state, id) {
 export function stepComposter(state, dt, bus) {
   if (!state.stations.composter) return;
   stepStation(state, 'composter', dt, bus);
+  sellSideSurplus(state, 'composter'); // its surplus leaves the yard at once (v5.16.3)
 }
