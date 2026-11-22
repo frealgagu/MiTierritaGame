@@ -7,6 +7,7 @@ import { MAX_LEGACY_RESETS } from '../sim/modifiers.js';
 import { openSpecial } from '../sim/regions.js';
 import { saveGame } from '../core/SaveSystem.js';
 import { t } from '../i18n/index.js';
+import { mainFiesta, setFiestaDate } from '../sim/fiestas.js';
 
 // Developer options, hidden in the menu: revealed by tapping the version 7 times.
 // Time scale, allow negative balance, and simulate second-ending resets (power-of-2 production
@@ -63,6 +64,18 @@ export function bindDevOptions(game, getActive = () => game) {
     setCredit(prefs.credit);
     store(prefs);
     toast(prefs.credit ? t('💸 Saldo negativo permitido: compra lo que quieras') : t('💰 Solo se compra con lo que hay'));
+  });
+
+  // (v5.17) Another date for the real calendar's fiestas, to see each one without waiting for it. Empty: today.
+  const date = document.getElementById('dev-date');
+  date.value = (prefs.visible && prefs.date) || '';
+  setFiestaDate(date.value || null);
+  date.addEventListener('change', () => {
+    prefs.date = date.value || null;
+    setFiestaDate(prefs.date);
+    store(prefs);
+    const main = mainFiesta();
+    toast(main ? `${main.fiesta.icon} ${t(main.fiesta.name)}` : t('📅 Sin fiesta en esa fecha'));
   });
 
   // Consecutive events (v4.7.2): test all events without waiting 2 years per slot.
@@ -156,6 +169,9 @@ export function bindDevOptions(game, getActive = () => game) {
     setCredit(false);
     events.checked = prefs.events = false;
     setFastEvents(false);
+    date.value = '';
+    prefs.date = null;
+    setFiestaDate(null);
     store(prefs);
     setScale(1);
   });

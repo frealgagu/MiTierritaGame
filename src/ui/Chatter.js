@@ -1,3 +1,4 @@
+import { fiestasOn, today } from '../sim/fiestas.js';
 import { FACTS, PEOPLE, WELCOME, WithArticle, withArticle } from '../data/lore.js';
 import { formatNumber } from '../core/format.js';
 import { nextToUnlock } from '../sim/chain.js';
@@ -49,6 +50,9 @@ export function talk(zone, lines) {
   toast(`${p.icon} ${p.name}: ${lines[i]}${lines.length > 1 ? ` (${i + 1}/${lines.length})` : ''}`, 7000, { speech: true, now: true });
 }
 
+// Fiesta greetings already said today (zone and date): not saved, so a new day greets again.
+const greeted = new Set();
+
 export class Chatter {
   // root: main save, with event slots (v3.30).
   constructor(game, getZone, root = () => game.state) {
@@ -75,6 +79,15 @@ export class Chatter {
       return;
     }
     const now = performance.now();
+    // (v5.17) The real calendar's fiestas: each zone's person greets once a day while one lasts (sim/fiestas.js).
+    for (const { fiesta } of fiestasOn()) {
+      const said = `${fiesta.id}:${today().toDateString()}:${zone}`;
+      if (greeted.has(said)) continue;
+      greeted.add(said);
+      say(zone, t(fiesta.greeting), 7000);
+      this.lastAny = now;
+      return;
+    }
     const season = seasonOf(clockOf(state));
     if (season !== this.season) {
       this.season = season;

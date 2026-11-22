@@ -122,4 +122,6 @@ export default {
   '📂 Importar desde archivo': '📂 Import from file',
   "⭐ Abrir la zona especial": "⭐ Open the special zone",
   "📊 Estadísticas": "📊 Statistics",
+  "Fecha de las fiestas": "Fiesta date",
+  "Simula otra fecha para ver las fiestas del calendario (vacío: la de hoy)": "Simulates another date to see the calendar's fiestas (empty: today's)",
 };

@@ -10751,6 +10751,70 @@ def icons_js():
     (ROOT / 'src/data/icons.js').write_text(src)
 
 
+
+# ---------- Fiestas (v5.17): the date's decorations and greetings ----------
+
+def e_xmas_tree():
+    """Christmas tree: three green tiers, a gold star on top, colored baubles and a brown trunk."""
+    layers = [(OUTLINE, [rect(42, 80, 16, 16)]), ('#8d5a32', [rect(44.4, 82, 11.2, 12)])]
+    for top, w, y in [(52, 40, 86), (32, 32, 64), (14, 24, 44)]:
+        layers += shape([(50, top), (50 + w, y), (50 - w, y)], '#2e7d32', 2.4)
+    layers.append(('#43a047', [poly(50, 18, 60, 40, 50, 36), poly(50, 36, 68, 60, 50, 56), poly(50, 56, 78, 82, 50, 78)]))
+    layers += shape(star_pts(50, 13, 11, 4.6), GOLD, 2)
+    for x, y, c in [(38, 42, '#e53935'), (60, 54, '#1e88e5'), (34, 70, '#fdd835'), (64, 76, '#e53935'), (48, 64, '#ffffff')]:
+        layers += oval(x, y, 3.6, 3.6, c, d=1.4)
+    return layers
+
+
+def e_candle():
+    """Candle (noche de velitas): white candle with a flame and its glow."""
+    layers = [('#fff3c4', [ellipse(50, 26, 20, 24)])]
+    layers += [(OUTLINE, ['M 50 6 Q 64 24 56 36 Q 50 42 44 36 Q 36 24 50 6 Z']), ('#ff9800', ['M 50 9.5 Q 61.5 24 54.4 34.4 Q 50 39 45.6 34.4 Q 38.5 24 50 9.5 Z']), ('#ffeb3b', ['M 50 20 Q 56 28 52.6 33 Q 50 35.4 47.4 33 Q 44 28 50 20 Z'])]
+    layers += [(OUTLINE, [rect(48.6, 34, 2.8, 8)])]
+    layers += shape([(34, 42), (66, 42), (66, 92), (34, 92)], '#fafafa', 2.4)
+    layers.append(('#e0e0e0', [rect(56, 44, 8, 46)]))
+    layers += shape([(26, 90), (74, 90), (70, 98), (30, 98)], '#c9a35a', 2)
+    return layers
+
+
+def e_pumpkin():
+    """Halloween pumpkin: orange ribbed pumpkin with a carved face and a green stem."""
+    layers = oval(50, 58, 42, 34, '#fb8c00', d=2.6)
+    layers.append(('#ef6c00', [ellipse(32, 58, 9, 30), ellipse(68, 58, 9, 30), ellipse(50, 58, 8, 33)]))
+    layers.append(('#ffa726', [ellipse(50, 58, 4, 31)]))
+    layers += bar(50, 26, 56, 10, 6, '#558b2f')
+    layers.append(('#4e2a00', [poly(32, 50, 42, 50, 37, 40), poly(58, 50, 68, 50, 63, 40), poly(46, 60, 54, 60, 50, 54),
+                               'M 28 68 L 72 68 Q 66 84 50 84 Q 34 84 28 68 Z']))
+    layers.append(('#fb8c00', [rect(40, 66, 6, 7), rect(54, 66, 6, 7), rect(46, 77, 8, 8)]))
+    return layers
+
+
+def e_accordion():
+    """Accordion (vallenato): two wooden ends with buttons and a pleated red bellows."""
+    layers = shape([(30, 22), (70, 22), (70, 82), (30, 82)], '#c62828', 2.4)
+    for x in range(34, 70, 8):
+        layers.append(('#8e0000', [rect(x, 22, 3, 60)]))
+    layers += shape([(8, 16), (32, 18), (32, 86), (8, 88)], '#6d4c41', 2.4)
+    layers += shape([(68, 18), (92, 16), (92, 88), (68, 86)], '#6d4c41', 2.4)
+    layers.append(('#fff8e1', [circle(15, 30, 3), circle(25, 30, 3), circle(15, 44, 3), circle(25, 44, 3), circle(15, 58, 3), circle(25, 58, 3), circle(15, 72, 3), circle(25, 72, 3)]))
+    layers.append((GOLD, [circle(76, 34, 3.4), circle(85, 42, 3.4), circle(76, 50, 3.4), circle(85, 58, 3.4), circle(76, 66, 3.4), circle(85, 74, 3.4)]))
+    return layers
+
+
+def heart_path(cx, cy, s):
+    """Heart outline centered at (cx, cy), size s."""
+    return (f'M {cx:.2f} {cy + 0.9 * s:.2f} C {cx - 1.3 * s:.2f} {cy + 0.05 * s:.2f} {cx - 1.05 * s:.2f} {cy - 0.95 * s:.2f} {cx - 0.5 * s:.2f} {cy - 0.95 * s:.2f} '
+            f'C {cx - 0.2 * s:.2f} {cy - 0.95 * s:.2f} {cx:.2f} {cy - 0.7 * s:.2f} {cx:.2f} {cy - 0.45 * s:.2f} '
+            f'C {cx:.2f} {cy - 0.7 * s:.2f} {cx + 0.2 * s:.2f} {cy - 0.95 * s:.2f} {cx + 0.5 * s:.2f} {cy - 0.95 * s:.2f} '
+            f'C {cx + 1.05 * s:.2f} {cy - 0.95 * s:.2f} {cx + 1.3 * s:.2f} {cy + 0.05 * s:.2f} {cx:.2f} {cy + 0.9 * s:.2f} Z')
+
+
+def e_two_hearts():
+    """Two hearts (amor y amistad): a big red one and a small pink one."""
+    layers = [(OUTLINE, [heart_path(40, 56, 34)]), ('#e53935', [heart_path(40, 56, 30)]), ('#ef9a9a', [ellipse(28, 42, 6, 4, -30)])]
+    layers += [(OUTLINE, [heart_path(74, 26, 20)]), ('#f06292', [heart_path(74, 26, 16.6)])]
+    return layers
+
 # Emojis drawn in the game's own style: each keeps its exact codepoint (or sequence) so strings never change.
 _ALBUM = {name: make for code, name, make in ICONS}
 for _seq, _make in [
@@ -10776,6 +10840,7 @@ for _seq, _make in [
     ('🎵', e_music), ('🎣', e_fishing), ('🚿', e_shower), ('🧊', e_ice), ('🪟', e_window), ('✝️', e_cross), ('🎨', e_palette), ('🎏', e_windsock),
     ('💼', e_briefcase), ('📊', e_bar_chart), ('💾', e_floppy), ('📂', e_folder_open), ('📣', e_bullhorn), ('📻', e_radio), ('🤠', e_cowboy), ('🧍', standing), ('🦳', e_hair_white), ('🦱', e_hair_curly),
     ('🇨🇴', e_flag_co), ('🇬🇧', e_flag_gb), ('🇧🇷', e_flag_br), ('🇫🇷', e_flag_fr),
+    ('🎄', e_xmas_tree), ('🕯️', e_candle), ('🎃', e_pumpkin), ('🪗', e_accordion), ('💕', e_two_hearts),
 ]:
     emoji(_seq, _make)
 for _seq, _name in [
@@ -10785,6 +10850,7 @@ for _seq, _name in [
     ('⛪', 'plaza_pueblo'), ('🏛️', 'ibague_musical'), ('🏜️', 'desierto_tatacoa'), ('🌵', 'cardon'), ('🌅', 'atardecer_llanero'), ('🏊', 'hoyos_tatacoa'),
     ('🔭', 'observatorio'), ('🎭', 'pelazon'), ('🪁', 'cometas'), ('🎉', 'fiesta_sanpedro'), ('🥁', 'tambora'), ('💃', 'currulao'), ('💃🏽', 'currulao'),
     ('🌹', 'rosa'), ('🧺', 'canasto'), ('🏺', 'vasija_guane'), ('👒', 'aguadeno'), ('♨️', 'termales'),
+    ('🏰', 'murallas'), ('💐', 'arreglo_floral'), ('🎆', 'castillo_polvora'),
 ]:
     emoji(_seq, _ALBUM[_name])
 

@@ -1,3 +1,4 @@
+import { current } from '../sim/fiestas.js';
 import { formatMult, formatRate } from '../core/format.js';
 import { DISPATCH, STATIONS_BY_ID } from '../data/stations.js';
 import { pendingUpgrade, recommendUpgrade, upgradeLevel } from '../sim/analysis.js';
@@ -72,7 +73,9 @@ export class HUD {
     } else {
       if (hour !== undefined) setText(this.clock, clockLabel(hour));
       const season = seasonOf(clockOf(s));
-      setText(this.season, `${season.icon} ${season.short}`);
+      // (v5.17) Today's fiesta, with its icon before the season.
+      const fiesta = current().main?.fiesta;
+      setText(this.season, `${fiesta ? `${fiesta.icon} ` : ''}${season.icon} ${season.short}`);
     }
     const zone = this.getZone();
     // Recommendation checks multiple zones (routes) and is costly: run at most once per second.

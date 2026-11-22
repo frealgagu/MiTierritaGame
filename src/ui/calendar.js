@@ -6,7 +6,9 @@ import { EVENTS_BY_ID } from '../data/events.js';
 import { eventClock } from '../sim/events.js';
 import { formatClock } from './EventBar.js';
 import { decimal } from '../core/format.js';
-import { listJoin, t } from '../i18n/index.js';
+import { LANG, listJoin, t } from '../i18n/index.js';
+import { fiestasOn, mainFiesta, nextFiesta } from '../sim/fiestas.js';
+import { FIESTA_BONUS } from '../data/fiestas.js';
 
 const pct = (m) => (m === 1 ? t('normal') : `${m > 1 ? '+' : '−'}${Math.round(Math.abs(m - 1) * 100)} %`);
 
@@ -34,6 +36,7 @@ export function showCalendar(state) {
   document.getElementById('calendar-work').textContent = workSentence(workBlocks(extra), true);
   // Mitaca belongs to Eje Cafetero.
   document.querySelector('#calendar .calendar-fact').hidden = state.region !== 'cafetero';
+  document.getElementById('calendar-fiesta').textContent = fiestaLine();
   const list = document.getElementById('calendar-seasons');
   list.replaceChildren(
     ...SEASONS.map((s) => {
@@ -48,6 +51,21 @@ export function showCalendar(state) {
       return li;
     }),
   );
+}
+
+// (v5.17) The real calendar's fiesta: today's (until when, and its bonus for every region) or the next one.
+const LOCALES = { es: 'es-CO', en: 'en-GB', pt: 'pt-BR', fr: 'fr-FR' };
+export const fiestaDate = (date) => date.toLocaleDateString(LOCALES[LANG] ?? 'es-CO', { day: 'numeric', month: 'long' });
+export function fiestaLine() {
+  const main = mainFiesta();
+  if (main) {
+    const f = main.fiesta;
+    const others = fiestasOn().filter((x) => x.fiesta !== f).map((x) => `${x.fiesta.icon} ${t(x.fiesta.name)}`);
+    const line = t('{fiesta}: hasta el {date}. Todas las regiones producen {mult}.', { fiesta: `${f.icon} ${t(f.name)}`, date: fiestaDate(main.end), mult: `×${decimal(FIESTA_BONUS[f.kind])}` });
+    return others.length ? `${line} ${t('También: {list}.', { list: listJoin(others) })}` : line;
+  }
+  const next = nextFiesta();
+  return next ? t('Próxima fiesta: {fiesta}, el {date} (en {n} días).', { fiesta: `${next.fiesta.icon} ${t(next.fiesta.name)}`, date: fiestaDate(next.start), n: next.days }) : '';
 }
 
 // Work hours (v3.8) formatted on one line: «6:00 to 12:00 and 14:00 to 22:00», merging adjacent blocks.

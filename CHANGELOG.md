@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.17.0 — Colombia's fiestas
+- **🎉 Fiestas from the real calendar** (your phone's date, no permissions needed): Christmas lights, the Night of the Little Candles, Christmas, New Year's Eve, Epiphany, Carnivals, Holy Week, Mother's Day, Independence Day, the Battle of Boyacá, Halloween and more.
+- **December dresses up every zone:** colored lights on every building, a Christmas tree, the manger (with the Three Wise Men on 6 January), candles and lanterns along the paths, the old-year doll and fireworks at night.
+- **The people of each zone greet you** on fiesta days.
+- **Fiesta bonus:** every region produces ×1.25 during the big fiestas and ×1.10 during the others, like a season (not in events). The 🕐 calendar shows today's fiesta or the next one.
+- **💰 Income:** small multipliers show their decimals (summer ×1.2 used to read ×1).
+
 ## v5.16.4 — Achievements that say what they were
 - **🏆 Achievements:** a complete achievement still says what it asked for (✅ Sell 10.0M bags of coffee), and so does the grand finale's.
 

@@ -1,5 +1,12 @@
 # Journal des modifications
 
+## v5.17.0 — Les fêtes de Colombie
+- **🎉 Fêtes du calendrier réel** (la date de ton téléphone, sans autorisation) : illuminations de Noël, Nuit des petites bougies, Noël, Saint-Sylvestre, Épiphanie, carnavals, Semaine sainte, fête des mères, 20 juillet, bataille de Boyacá, Halloween et plus encore.
+- **Décembre décore chaque zone :** des lumières de couleur sur chaque bâtiment, un sapin de Noël, la crèche (avec les Rois mages le 6 janvier), des bougies et des lanternes le long des chemins, la poupée de la vieille année et des feux d’artifice la nuit.
+- **Les gens de chaque zone te saluent** les jours de fête.
+- **Bonus de fête :** toutes les régions produisent ×1,25 pendant les grandes fêtes et ×1,10 pendant les autres, comme une saison (pas dans les événements). Le calendrier 🕐 montre la fête du jour ou la prochaine.
+- **💰 Revenus :** les petits multiplicateurs affichent leurs décimales (l’été ×1,2 affichait ×1).
+
 ## v5.16.4 — Des succès qui disent ce qu’ils étaient
 - **🏆 Succès :** un succès terminé dit toujours ce qu’il demandait (✅ Vends 10,0M sachets de café), et celui du grand final aussi.
 

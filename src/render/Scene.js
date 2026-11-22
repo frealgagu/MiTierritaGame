@@ -37,6 +37,7 @@ import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
 import { routeActive, routeCapacity, tripTimeOf } from '../sim/routes.js';
 import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
 import { DayNight } from './DayNight.js';
+import { FiestaDecor } from './Fiesta.js';
 import { Weather } from './Weather.js';
 import { t } from '../i18n/index.js';
 
@@ -194,6 +195,8 @@ export class Scene {
     }
 
     this.dayNight = new DayNight(this);
+    // (v5.17) The real calendar's fiestas: lights, tree, manger, candles, fireworks… (render/Fiesta.js).
+    this.fiesta = new FiestaDecor(this);
     // Pointer arrow showing what to tap (see HUD.guideTarget).
     this.guide = new Graphics();
     this.guide.poly([-12, -18, 12, -18, 0, 0]).fill(0xffe066).stroke({ width: 3, color: 0x3a2418 });
@@ -495,6 +498,7 @@ export class Scene {
     this.pets.setCounts(LOOK.pets?.cats ?? 0, LOOK.pets?.parrots ?? 0);
     this.pets.update(dt, this.time);
     this.eventArt?.update(dt, this.time, state);
+    this.fiesta.update(dt, this.time, this.dayNight.light);
     this.updateAmbient(dt);
     this.effects.update(dt);
     this.weather.update(dt, state.event ? null : clockOf(state), this.app.screen.width, this.app.screen.height);

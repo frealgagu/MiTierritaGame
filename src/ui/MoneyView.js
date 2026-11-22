@@ -1,7 +1,8 @@
 // 💰 Income breakdown (v4.1.1): tapping top-bar coins shows what the viewed region earns per second,
 // zone by zone; what the Willys sells in the current zone (rate, price, and what goes unsold)
 // and its multipliers. In an event, shows board breakdown.
-import { formatNumber, formatRate } from '../core/format.js';
+import { current } from '../sim/fiestas.js';
+import { decimal, formatNumber, formatRate } from '../core/format.js';
 import { PRODUCTS } from '../data/products.js';
 import { ZONES_BY_ID } from '../data/zones/index.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
@@ -13,7 +14,8 @@ import { t } from '../i18n/index.js';
 const SHOW = 0.0005; // below this (u/s) omitted from list
 
 const row = (left, right, cls = '') => `<div class="money-row ${cls}"><span>${left}</span><b>${right}</b></div>`;
-const mult = (x) => `×${formatNumber(x)}`;
+// Small multipliers keep their decimals (×1,2 in summer, ×1,25 in a fiesta; before v5.17 they read «×1»).
+const mult = (x) => (x < 1000 ? `×${decimal(String(Math.round(x * 100) / 100))}` : `×${formatNumber(x)}`);
 
 export class MoneyView {
   constructor(game, getZone) {
@@ -80,6 +82,9 @@ export class MoneyView {
     if (!s.event) {
       const season = seasonOf(clockOf(s));
       if (season.mult !== 1) mults.push(row(`${season.icon} ${season.name}`, mult(season.mult)));
+      // (v5.17) Today's fiesta of the real calendar.
+      const fiesta = current();
+      if (fiesta.main) mults.push(row(`${fiesta.main.fiesta.icon} ${t(fiesta.main.fiesta.name)}`, mult(fiesta.mult)));
     }
     const speed = researchMult(s, 'zoneSpeed', zone);
     if (speed !== 1) mults.push(row(t('🔬 Investigaciones de la zona: producción y Willys'), mult(speed)));

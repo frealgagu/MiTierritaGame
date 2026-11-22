@@ -1,5 +1,12 @@
 # Registro de alterações
 
+## v5.17.0 — As festas da Colômbia
+- **🎉 Festas do calendário real** (a data do seu celular, sem permissões): iluminação de Natal, Noite das Velinhas, Natal, Réveillon, Dia de Reis, carnavais, Semana Santa, Dia das Mães, 20 de julho, Batalha de Boyacá, Halloween e mais.
+- **Dezembro enfeita cada zona:** luzes coloridas em cada prédio, árvore de Natal, presépio (com os Reis Magos em 6 de janeiro), velas e lanternas nos caminhos, o boneco do ano velho e fogos à noite.
+- **O pessoal de cada zona te cumprimenta** nos dias de festa.
+- **Bônus de festa:** todas as regiões produzem ×1,25 nas festas grandes e ×1,10 nas outras, como uma estação (não nos eventos). O calendário 🕐 mostra a festa de hoje ou a próxima.
+- **💰 Renda:** os multiplicadores pequenos mostram seus decimais (o verão ×1,2 dizia ×1).
+
 ## v5.16.4 — Conquistas que dizem o que eram
 - **🏆 Conquistas:** uma conquista completa continua dizendo o que pedia (✅ Venda 10,0M pacotes de café), e a do grande final também.
 

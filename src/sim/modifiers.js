@@ -4,6 +4,7 @@ import { RESEARCH_BY_ID } from '../data/research.js';
 import { PRODUCTS } from '../data/products.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { seasonMult } from './calendar.js';
+import { fiestaMult } from './fiestas.js';
 import { EVENTS_BY_ID, EVENT_ACTIONS_BY_ID } from '../data/events.js';
 import { offlineHours } from './renown.js';
 
@@ -64,8 +65,9 @@ export const nextLegacyMult = (state) => 2 ** Math.min((state.keep?.resets ?? 0)
 // speed so chain stays balanced. On event board (v2.0), event penalty per station
 // (borer drops Cafetal to 40 %).
 const eventSpeed = (state, stationId) => (state.event ? EVENTS_BY_ID[state.event.id].speed?.[stationId] ?? 1 : 1);
+// (v5.17) The real calendar's fiestas raise it too (sim/fiestas.js), like a season, but not on event boards.
 export const speedMult = (state, stationId) =>
-  product(state, 'stationSpeed', stationId) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone) * legacyMult(state) * seasonMult(state) * eventSpeed(state, stationId);
+  product(state, 'stationSpeed', stationId) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone) * legacyMult(state) * seasonMult(state) * fiestaMult(state) * eventSpeed(state, stationId);
 // Yards and inputs: scale with resets plus zone Mastery and Supremacy, and (v5.4) with `stationCap` research: the
 // special zone's ×32 speed-ups also grow their station's yard and input, or they would fill in half a second.
 export const capMult = (state, stationId) => legacyMult(state) * product(state, 'zoneSpeed', STATIONS_BY_ID[stationId].zone) * product(state, 'stationCap', stationId);

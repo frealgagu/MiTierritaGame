@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v5.17.0 — Las fiestas de Colombia
+- **🎉 Fiestas del calendario real** (la fecha de tu teléfono, sin permisos): alumbrado navideño, Noche de las Velitas, Navidad, Año Viejo, Día de Reyes, carnavales, Semana Santa, Día de la Madre, 20 de julio, Batalla de Boyacá, Halloween y más.
+- **Diciembre decora cada zona:** luces de colores en cada edificio, árbol de Navidad, pesebre (con los Reyes Magos el 6 de enero), velas y faroles en los caminos, el muñeco de año viejo y pólvora en la noche.
+- **La gente de cada zona te saluda** en los días de fiesta.
+- **Bono de fiesta:** todas las regiones producen ×1,25 en las fiestas grandes y ×1,10 en las demás, como una temporada (no en los eventos). El calendario 🕐 muestra la fiesta de hoy o la próxima.
+- **💰 Ingresos:** los multiplicadores pequeños muestran sus decimales (el verano ×1,2 decía ×1).
+
 ## v5.16.4 — Logros que dicen qué eran
 - **🏆 Logros:** un logro completo sigue diciendo qué pedía (✅ Vende 10,0M bolsas de café), y el del gran final también.
 

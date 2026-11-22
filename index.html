@@ -232,6 +232,10 @@
             <span>Permitir saldo negativo: compra lo que quieras y lo que falte queda como deuda</span>
           </label>
           <div class="dev-row">
+            <label for="dev-date">Fecha de las fiestas</label>
+            <input id="dev-date" type="date" title="Simula otra fecha para ver las fiestas del calendario (vacío: la de hoy)" />
+          </div>
+          <div class="dev-row">
             <button id="dev-special" class="btn small">⭐ Abrir la zona especial</button>
           </div>
           <div class="modal-actions">
@@ -394,6 +398,7 @@
         <div id="calendar-country">
         <p class="chain-help"><b id="calendar-work">Se trabaja de 6:00 a 12:00 y 14:00 a 20:00</b>: a la hora del almuerzo y de noche las estaciones descansan y los arrieros no salen (el Willys y las chivas sí). Con Renombre ⭐ se compran más horas de trabajo. Un día dura 8 minutos y el año tiene 16 días, en cuatro temporadas de 4 días que cambian la producción de todas las estaciones a la vez:</p>
         <ul id="calendar-seasons" class="calendar-seasons"></ul>
+        <p id="calendar-fiesta" class="calendar-fiesta"></p>
         <p class="chain-help calendar-fact">💡 En el Eje Cafetero hay dos cosechas al año: la grande y la <b>mitaca</b>, una cosecha más pequeña que llega unos seis meses después.</p>
         </div>
       </div>
