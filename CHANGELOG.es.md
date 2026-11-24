@@ -1,5 +1,13 @@
 # Registro de cambios
 
+## v5.20.0 — La plaza de las fiestas
+- **🔽 Minimizar:** el botón «Salir» de la barra del evento ahora se llama «Minimizar», porque el evento sigue andando mientras juegas en otra parte.
+- **Noches en la plaza de las fiestas:** la plaza tiene sus propios días y noches, así que se ven encendidas las velas, los faroles y las luces de Navidad (la producción no se detiene).
+- **Edificios propios:** la Cerería y el Molino de maíz tienen su propio dibujo en la plaza.
+- **🎶 Villancicos:** la Noche de las Velitas suena con «Los peces en el río» y la novena de Navidad con «Tutaina», con flauta, guitarra, tiple, pandereta y maracas (también en la página de descargas de música).
+- **Aviso:** cuando empieza un evento de temporada, el personaje de la zona te invita a la plaza.
+- **🎉 Álbum Fiestas de Colombia:** cada lámina tiene ahora su propia ilustración.
+
 ## v5.19.0 — Eventos de temporada
 - **🎉 Eventos de temporada en la plaza de las fiestas:** llegan con las fiestas de Colombia, en sus fechas reales, como última sección de 🏅 Eventos. Los primeros: 🕯️ la Noche de las Velitas (desde el 6 de diciembre) y 🎄 la novena de Navidad (desde el 16 de diciembre).
 - **Eventos largos y sin medallas:** unas tres horas de producción, y siguen andando mientras juegas en otra parte. Después de la fiesta quedan 30 días para terminarlos; pueden quedar varios pendientes a la vez.

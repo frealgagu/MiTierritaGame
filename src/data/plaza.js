@@ -47,7 +47,7 @@ const plaza = (id, seed, fiesta, chain, decor) => ({
   icon: '🎉',
   chain,
   decor, // what render/Fiesta.js draws on it, whatever the date
-  farm: { stationId: chain[0], x: 2, y: 2, w: 6, h: 6 },
+  farm: { stationId: chain[0], x: 2, y: 2, w: 6, h: 6, look: fiesta }, // look: its first station's art (render/Stations.js)
   plots: chain.slice(1).map((stationId, k) => ({ stationId, ...SPOTS[k] })),
 });
 

@@ -797,7 +797,7 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .volume-icon { font-size: 1.15rem; text-align: center; }
 .volume-row input[type='range'] { width: 100%; accent-color: var(--ink); }
 .volume-row b { text-align: right; font-variant-numeric: tabular-nums; }
-/* ⏸️ Pause or 🚪 Exit events (v3.67.4). */
+/* ⏸️ Pause or 🔽 Minimize events (v3.67.4; «🚪 Exit» until v5.19). */
 .option-row { display: grid; grid-template-columns: 1.6em minmax(0, 1fr) auto; align-items: center; gap: 8px; font-weight: 600; }
 .option-hint { margin: -2px 0 0 calc(1.6em + 8px); font-size: 0.85rem; color: var(--muted); }
 .option-row select { min-width: 0; max-width: 62vw; font: inherit; font-weight: 500; color: var(--ink); background: var(--paper); border: 2px solid var(--paper-2); border-radius: 10px; padding: 4px 6px; }

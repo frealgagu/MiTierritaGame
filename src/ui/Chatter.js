@@ -1,4 +1,5 @@
 import { fiestasOn, today } from '../sim/fiestas.js';
+import { seasonOf as seasonEventsOf, seasonStatuses, ymd } from '../sim/seasonEvents.js';
 import { FACTS, PEOPLE, WELCOME, WithArticle, withArticle } from '../data/lore.js';
 import { formatNumber } from '../core/format.js';
 import { nextToUnlock } from '../sim/chain.js';
@@ -85,6 +86,18 @@ export class Chatter {
       if (greeted.has(said)) continue;
       greeted.add(said);
       say(zone, t(fiesta.greeting), 7000);
+      this.lastAny = now;
+      return;
+    }
+    // (v5.20) A season event that opened: the person of the zone on screen invites to the plaza, once per edition.
+    const root = this.root();
+    const fiestas = seasonEventsOf(root);
+    for (const st of seasonStatuses(root)) {
+      if (st.kind !== 'available' || st.grace) continue;
+      const edition = ymd(st.edition.start);
+      if ((fiestas.told ??= {})[st.fiesta.id] === edition) continue;
+      fiestas.told[st.fiesta.id] = edition;
+      say(zone, t('{icon} ¡Empezó el evento de la plaza: {event}! Toque 🏅 Eventos y vamos a la plaza de las fiestas.', { icon: st.def.icon, event: st.def.name }), 8000);
       this.lastAny = now;
       return;
     }

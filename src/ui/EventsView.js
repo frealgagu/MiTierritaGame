@@ -16,7 +16,7 @@ import { zoneBoostTargets } from '../sim/zoneBoost.js';
 import { cappedPrestige, cappedRenown } from './capped.js';
 import { regionStates } from '../sim/regions.js';
 import { daysBetween, fiestaMonth, fiestasWithoutEvent, hasSticker, nextSeason, seasonReady, seasonStatuses } from '../sim/seasonEvents.js';
-import { FIESTAS_BY_ID, FIESTA_PAGES } from '../data/fiestas.js';
+import { FIESTAS_BY_ID, FIESTA_ART, FIESTA_PAGES } from '../data/fiestas.js';
 import { today } from '../sim/fiestas.js';
 import { fiestaDate } from './calendar.js';
 import { LANG } from '../i18n/index.js';
@@ -125,14 +125,14 @@ export class EventsView {
       }
       let foot;
       // (v4.7.3) On open events, elapsed time, whether everything is at max board level (50), and whether
-      // each board was left running (🚪 Exit) or paused (⏸️ Pause). (v5.7.1) The button has three fixed
+      // each board was left running (🔽 Minimize) or paused (⏸️ Pause). (v5.7.1) The button has three fixed
       // columns (action, clock and state) so it looks the same at any width; «everything at max» moved
       // to the line above it.
       const maxed = st.board && boardMaxed(st.board, def.zone);
       const maxedText = maxed ? t('⬆ Todo al {n}', { n: maxLevel(st.board) }) : '';
       const playBtn = (label) => {
         const away = st.board.event.away !== undefined;
-        return `<button class="btn buy event-play" data-play="${eventKey(def)}"><span class="event-play-row"><span class="event-play-label">${label}</span><span class="event-play-clock">⏱ ${live(formatClock(boardClockNow(st.board, s)))}</span><span class="event-play-state">${away ? t('🚪 corriendo') : t('⏸️ pausado')}</span></span></button>`;
+        return `<button class="btn buy event-play" data-play="${eventKey(def)}"><span class="event-play-row"><span class="event-play-label">${label}</span><span class="event-play-clock">⏱ ${live(formatClock(boardClockNow(st.board, s)))}</span><span class="event-play-state">${away ? t('🔽 minimizado') : t('⏸️ pausado')}</span></span></button>`;
       };
       if (st.kind === 'won') {
         const m = MEDALS[st.board.event.medal];
@@ -192,7 +192,7 @@ export class EventsView {
       const prize = (st.board ? st.board.event.season.prize : !hasSticker(profile, fiesta.id)) ? t('🏷️ Premio: la lámina {fiesta} del álbum 🎉 Fiestas de Colombia.', { fiesta: `${fiesta.icon} ${t(fiesta.name)}` }) : t('🏷️ Ya tienes su lámina: se juega por el gusto, sin premio.');
       const key = `fiesta:${fiesta.id}`;
       let foot;
-      const playBtn = (label) => `<button class="btn buy event-play" data-play="${key}"><span class="event-play-row"><span class="event-play-label">${label}</span><span class="event-play-clock">⏱ ${live(formatClock(boardClockNow(st.board, s)))}</span><span class="event-play-state">${t('🚪 corriendo')}</span></span></button>`;
+      const playBtn = (label) => `<button class="btn buy event-play" data-play="${key}"><span class="event-play-row"><span class="event-play-label">${label}</span><span class="event-play-clock">⏱ ${live(formatClock(boardClockNow(st.board, s)))}</span><span class="event-play-state">${t('🔽 minimizado')}</span></span></button>`;
       if (st.kind === 'won') foot = `<p>${t('🏁 ¡Objetivo cumplido!')}</p>${playBtn(t('Ver y terminar'))}`;
       else if (st.kind === 'active') foot = playBtn(t('Seguir'));
       else foot = `<button class="btn buy" data-play="${key}">${t('Jugar')}</button>`;
@@ -280,7 +280,7 @@ function seasonCalendarHtml(profile) {
     const name = new Date(2026, k, 1).toLocaleDateString(MONTHS[LANG] ?? 'es-CO', { month: 'short' }).replace('.', '');
     const here = ids.filter((id) => fiestaMonth(id) === k + 1).map((id) => {
       const f = FIESTAS_BY_ID[id];
-      return `<span class="season-sticker ${hasSticker(profile, id) ? 'got' : ''}" title="${t(f.name)}">${f.icon}</span>`;
+      return `<span class="season-sticker ${hasSticker(profile, id) ? 'got' : ''}" title="${t(f.name)}">${FIESTA_ART[id]}</span>`;
     });
     return `<li><small>${name}</small><span>${here.join('') || '·'}</span></li>`;
   });

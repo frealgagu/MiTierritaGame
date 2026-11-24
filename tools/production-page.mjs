@@ -65,6 +65,19 @@ const regions = REGIONS.map((r) => ({
   }),
 }));
 
+// (v5.20) La plaza de las fiestas: its own tab after the regions, one table per season event (boards go up to level 50).
+import { PLAZA_STATIONS, PLAZA_ZONES, SEASON_EVENTS } from '../src/data/plaza.js';
+regions.push({
+  id: 'fiestas',
+  name: 'La plaza de las fiestas',
+  icon: '🎉',
+  hidden: false,
+  zones: PLAZA_ZONES.map((zone) => {
+    const ev = SEASON_EVENTS.find((e) => e.zone === zone.id);
+    return { id: zone.id, name: `${ev.name} (evento de temporada, hasta el nivel 50)`, icon: ev.icon, stations: zone.chain.map((id) => station(PLAZA_STATIONS.find((s) => s.id === id))) };
+  }),
+});
+
 const font = fs.readFileSync(new URL('../src/assets/mitierrita-icons.woff2', import.meta.url)).toString('base64');
 const css = fs.readFileSync(new URL('../src/ui/styles.css', import.meta.url), 'utf8');
 const range = /MiTierrita Icons'[\s\S]*?unicode-range: ([^;]+);/.exec(css)[1];

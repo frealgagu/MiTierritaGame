@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## v5.20.0 — La place des fêtes
+- **🔽 Réduire :** le bouton « Sortir » de la barre de l’événement s’appelle maintenant « Réduire », car l’événement continue pendant que tu joues ailleurs.
+- **Des nuits sur la place des fêtes :** la place a ses propres jours et ses propres nuits, et les bougies, les lanternes et les lumières de Noël s’allument (la production ne s’arrête pas).
+- **Des bâtiments à elle :** la Ciergerie et le Moulin à maïs ont leur propre dessin sur la place.
+- **🎶 Chants de Noël :** la Nuit des petites bougies joue « Los peces en el río » et la neuvaine de Noël « Tutaina », avec flûte, guitare, tiple, tambourin et maracas (aussi sur la page de téléchargement de la musique).
+- **Annonce :** quand un événement de saison commence, le personnage de la zone t’invite sur la place.
+- **🎉 Album Fêtes de Colombie :** chaque vignette a maintenant sa propre illustration.
+
 ## v5.19.0 — Événements de saison
 - **🎉 Événements de saison sur la place des fêtes :** ils arrivent avec les fêtes de Colombie, à leurs vraies dates, dans la dernière section de 🏅 Événements. Les premiers : 🕯️ la Nuit des petites bougies (dès le 6 décembre) et 🎄 la neuvaine de Noël (dès le 16 décembre).
 - **Des événements longs, sans médailles :** environ trois heures de production, et ils continuent de tourner pendant que tu joues ailleurs. Après la fête, il reste 30 jours pour les terminer ; plusieurs peuvent attendre en même temps.

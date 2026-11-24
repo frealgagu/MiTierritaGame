@@ -1,5 +1,13 @@
 # Registro de alterações
 
+## v5.20.0 — A praça das festas
+- **🔽 Minimizar:** o botão «Sair» da barra do evento agora se chama «Minimizar», porque o evento continua rodando enquanto você joga em outro lugar.
+- **Noites na praça das festas:** a praça tem seus próprios dias e noites, então as velas, as lanternas e as luzes de Natal aparecem acesas (a produção não para).
+- **Prédios próprios:** a Cereria e o Moinho de milho têm seu próprio desenho na praça.
+- **🎶 Canções de Natal:** a Noite das Velinhas toca «Los peces en el río» e a novena de Natal toca «Tutaina», com flauta, violão, tiple, pandeiro e maracas (também na página de downloads de música).
+- **Aviso:** quando começa um evento de temporada, o personagem da zona te convida para a praça.
+- **🎉 Álbum Festas da Colômbia:** cada figurinha agora tem sua própria ilustração.
+
 ## v5.19.0 — Eventos de temporada
 - **🎉 Eventos de temporada na praça das festas:** chegam com as festas da Colômbia, nas datas reais, como última seção de 🏅 Eventos. Os primeiros: 🕯️ a Noite das Velinhas (a partir de 6 de dezembro) e 🎄 a novena de Natal (a partir de 16 de dezembro).
 - **Eventos longos e sem medalhas:** cerca de três horas de produção, e continuam rodando enquanto você joga em outro lugar. Depois da festa ainda há 30 dias para terminá-los; vários podem ficar pendentes ao mesmo tempo.

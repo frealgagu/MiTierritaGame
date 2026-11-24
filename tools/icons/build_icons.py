@@ -9937,6 +9937,178 @@ def empanada_cangrejo():
     return layers
 
 
+
+# ---------- Fiestas de Colombia stickers (v5.20): one per big fiesta, won in its season event ----------
+
+def fx_heart(cx, cy, s):
+    """Heart outline centered at (cx, cy), size s (same as heart_path, needed before ICONS)."""
+    return (f'M {cx:.2f} {cy + 0.9 * s:.2f} C {cx - 1.3 * s:.2f} {cy + 0.05 * s:.2f} {cx - 1.05 * s:.2f} {cy - 0.95 * s:.2f} {cx - 0.5 * s:.2f} {cy - 0.95 * s:.2f} '
+            f'C {cx - 0.2 * s:.2f} {cy - 0.95 * s:.2f} {cx:.2f} {cy - 0.7 * s:.2f} {cx:.2f} {cy - 0.45 * s:.2f} '
+            f'C {cx:.2f} {cy - 0.7 * s:.2f} {cx + 0.2 * s:.2f} {cy - 0.95 * s:.2f} {cx + 0.5 * s:.2f} {cy - 0.95 * s:.2f} '
+            f'C {cx + 1.05 * s:.2f} {cy - 0.95 * s:.2f} {cx + 1.3 * s:.2f} {cy + 0.05 * s:.2f} {cx:.2f} {cy + 0.9 * s:.2f} Z')
+
+
+def fx_star(cx, cy, r1, r2, n=5, rot=-90):
+    out = []
+    for i in range(2 * n):
+        r = r1 if i % 2 == 0 else r2
+        a = math.radians(rot + i * 180 / n)
+        out.append((cx + r * math.cos(a), cy + r * math.sin(a)))
+    return out
+
+
+def fiesta_negros_blancos():
+    """Negros y Blancos (Pasto): a reveler's face painted half black, half white, with talcum clouds and confetti."""
+    layers = [(OUTLINE, [circle(50, 54, 34)]), ('#3e2723', [f'M 50 22.4 A 31.6 31.6 0 0 0 50 85.6 Z']), ('#fafafa', [f'M 50 22.4 A 31.6 31.6 0 0 1 50 85.6 Z'])]
+    layers += [('#ffffff', [circle(38, 48, 5.6)]), ('#3e2723', [circle(62, 48, 5.6)]), (OUTLINE, [circle(38, 48, 2.6), circle(62, 48, 2.6)])]
+    layers += [(OUTLINE, ['M 34 64 Q 50 80 66 64 Q 50 72 34 64 Z']), ('#e53935', ['M 38 66.4 Q 50 76 62 66.4 Q 50 70.6 38 66.4 Z'])]
+    layers += [('#eceff1', [circle(78, 18, 8), circle(88, 26, 6), circle(70, 12, 5), circle(14, 20, 5), circle(22, 14, 4)])]
+    layers += [(c, [rect(x, y, 4, 2.4, r)]) for x, y, r, c in [(10, 40, 20, '#e53935'), (86, 46, -30, '#fdd835'), (12, 76, 40, '#1e88e5'), (84, 80, -10, '#43a047'), (30, 8, 15, '#8e24aa')]]
+    return layers
+
+
+def fiesta_barranquilla():
+    """Carnaval de Barranquilla: the marimonda mask, with its big ears, long trunk and patched cloth."""
+    layers = oval(18, 40, 14, 18, '#1e88e5', rot=-20) + oval(82, 40, 14, 18, '#e53935', rot=20)
+    layers += [('#fdd835', [ellipse(18, 40, 7, 10, -20)]), ('#43a047', [ellipse(82, 40, 7, 10, 20)])]
+    layers += oval(50, 44, 28, 30, '#fdd835')
+    layers += [('#e53935', ['M 22 44 Q 22 18 50 15 L 50 44 Z']), ('#1e88e5', ['M 78 44 Q 78 18 50 15 L 50 44 Z'])]
+    layers += [(OUTLINE, [circle(38, 40, 7), circle(62, 40, 7)]), ('#ffffff', [circle(38, 40, 5), circle(62, 40, 5)]), (OUTLINE, [circle(39, 41, 2), circle(61, 41, 2)])]
+    layers += [(OUTLINE, ['M 44 52 Q 50 48 56 52 L 56 80 Q 56 96 66 94 L 66 99 Q 50 101 46 84 Z']), ('#43a047', ['M 46.4 53.4 Q 50 51 53.6 53.4 L 53.6 80 Q 53.6 94.6 63.6 96.6 Q 50 98 48.4 84 Z'])]
+    layers += [('#ffffff', [rect(47, 60 + 8 * k, 6, 2) for k in range(3)])]
+    return layers
+
+
+def fiesta_vallenato():
+    """Festival Vallenato: the three instruments, accordion, caja drum and guacharaca."""
+    layers = shape([(36, 14), (78, 14), (78, 54), (36, 54)], '#c62828', 2.2)
+    layers.append(('#8e0000', [rect(x, 14, 2.6, 40) for x in range(40, 76, 7)]))
+    layers += shape([(22, 10), (38, 12), (38, 56), (22, 58)], '#6d4c41', 2.2) + shape([(76, 12), (92, 10), (92, 58), (76, 56)], '#6d4c41', 2.2)
+    layers.append(('#fff8e1', [circle(30, 20 + 9 * k, 2.6) for k in range(5)]))
+    layers.append((GOLD, [circle(84, 20 + 9 * k, 2.6) for k in range(5)]))
+    # Caja: a small drum.
+    layers += oval(30, 84, 22, 8, '#8d5a32') + shape([(8, 70), (52, 70), (52, 84), (8, 84)], '#a1693f', 2)
+    layers += oval(30, 70, 22, 8, '#f5deb3')
+    layers.append(('#5d4037', [rib(10 + 6 * k, 72, 13 + 6 * k, 84, 1.2) for k in range(7)]))
+    # Guacharaca: ribbed cane and its fork.
+    layers += bar(58, 92, 94, 64, 7, '#c8a165')
+    layers.append(('#8d6e63', [rib(62 + 4 * k, 86 - 3.1 * k, 64 + 4 * k, 91 - 3.1 * k, 1) for k in range(8)]))
+    layers += bar(62, 60, 92, 84, 2, '#9e9e9e')
+    return layers
+
+
+def fiesta_dia_madre():
+    """Día de la Madre: a bouquet of flowers tied with a ribbon and a heart-shaped card."""
+    layers = shape([(30, 56), (70, 56), (56, 96), (44, 96)], '#fff3e0', 2.2)
+    layers.append(('#ffe0b2', [poly(50, 58, 68, 58, 55, 94, 50, 94)]))
+    layers += [('#558b2f', [rib(50, 58, 34, 30, 2), rib(50, 58, 66, 30, 2), rib(50, 58, 50, 24, 2)])]
+    for cx, cy, c, d in [(30, 30, '#e91e63', '#f8bbd0'), (70, 30, '#ffb300', '#fff59d'), (50, 22, '#e53935', '#ffcdd2'), (40, 44, '#8e24aa', '#e1bee7'), (60, 44, '#f06292', '#fce4ec')]:
+        layers += [(OUTLINE, [circle(cx + 7 * math.cos(a), cy + 7 * math.sin(a), 6) for a in [i * math.pi * 2 / 5 for i in range(5)]])]
+        layers += [(c, [circle(cx + 7 * math.cos(a), cy + 7 * math.sin(a), 4.6) for a in [i * math.pi * 2 / 5 for i in range(5)]]), (d, [circle(cx, cy, 3.4)])]
+    layers += [(OUTLINE, [rect(36, 64, 28, 7)]), ('#e53935', [rect(37.4, 65.4, 25.2, 4.2)])]
+    layers += [(OUTLINE, [fx_heart(82, 76, 16)]), ('#ef5350', [fx_heart(82, 76, 13)]), ('#ffffff', [ellipse(76, 70, 3, 2, -30)])]
+    return layers
+
+
+def fiesta_san_pedro():
+    """San Juan y San Pedro: a sanjuanero dancer's wide flowered skirt and her straw hat."""
+    layers = shape([(50, 40), (90, 92), (10, 92)], '#fafafa', 2.4)
+    layers.append(('#e53935', ['M 10 92 Q 50 82 90 92 L 88 86 Q 50 76 12 86 Z']))
+    for x, y, c in [(36, 70, '#e53935'), (56, 64, '#fdd835'), (66, 80, '#e91e63'), (28, 84, '#1e88e5'), (48, 82, '#43a047')]:
+        layers += [(c, [circle(x + 3.4 * math.cos(a), y + 3.4 * math.sin(a), 2.4) for a in [i * math.pi * 2 / 5 for i in range(5)]]), ('#fff59d', [circle(x, y, 1.4)])]
+    layers += shape([(42, 26), (58, 26), (56, 44), (44, 44)], '#e53935', 2)
+    layers += oval(50, 22, 30, 8, '#f3d27a') + oval(50, 16, 14, 9, '#e8c063')
+    layers.append(('#c62828', [rect(36, 18, 28, 3.4)]))
+    return layers
+
+
+def fiesta_independencia():
+    """20 de julio: the flower vase of Llorente, cracked, with a tricolor flag beside it."""
+    layers = bar(78, 96, 78, 18, 3, '#8d6e63')
+    layers += [(OUTLINE, [rect(78, 16, 20, 18)]), ('#fdd835', [rect(79.4, 17.4, 17.2, 7.6)]), ('#1e88e5', [rect(79.4, 25, 17.2, 3.8)]), ('#e53935', [rect(79.4, 28.8, 17.2, 3.8)])]
+    layers += [(OUTLINE, ['M 30 30 Q 18 30 18 50 Q 18 76 34 90 L 58 90 Q 74 76 74 50 Q 74 30 62 30 Q 66 22 60 18 L 32 18 Q 26 22 30 30 Z'])]
+    layers += [('#fafafa', ['M 31.6 31.6 Q 21 32 21 50 Q 21 74 35.4 87.4 L 56.6 87.4 Q 71 74 71 50 Q 71 32 60.4 31.6 Q 63.6 23 58.6 20.4 L 33.4 20.4 Q 28.4 23 31.6 31.6 Z'])]
+    layers += [('#1e88e5', [rect(22, 48, 48, 3), rect(24, 66, 44, 3)]), ('#90caf9', [circle(34, 58, 3), circle(46, 58, 3), circle(58, 58, 3)])]
+    layers += [(OUTLINE, [poly(44, 31, 48, 42, 42, 50, 47, 60, 43, 68, 45, 68, 49, 60, 44, 50, 50, 42, 46, 31)])]
+    return layers
+
+
+def fiesta_batalla_boyaca():
+    """Batalla de Boyacá: the little stone bridge over the Teatinos river, with the flag on top."""
+    layers = [('#64b5f6', [rect(4, 78, 92, 14)]), ('#bbdefb', [rect(14, 84, 14, 2), rect(60, 86, 18, 2)])]
+    layers += [(OUTLINE, ['M 6 80 L 6 52 L 94 52 L 94 80 L 70 80 Q 70 60 50 60 Q 30 60 30 80 Z'])]
+    layers += [('#bcaaa4', ['M 8.4 77.6 L 8.4 54.4 L 91.6 54.4 L 91.6 77.6 L 72.4 77.6 Q 72 57.6 50 57.6 Q 28 57.6 27.6 77.6 Z'])]
+    layers += [('#8d6e63', [rect(8.4, 54.4, 83.2, 4)] + [rect(14 + 14 * k, 64, 1.2, 8) for k in range(6) if k not in (2, 3)])]
+    layers += [(OUTLINE, [rect(4, 46, 92, 7)]), ('#d7ccc8', [rect(5.4, 47.4, 89.2, 4.2)])]
+    layers += bar(50, 46, 50, 8, 3, '#6d4c41')
+    layers += [(OUTLINE, [rect(50, 6, 30, 22)]), ('#fdd835', [rect(51.4, 7.4, 27.2, 9.6)]), ('#1e88e5', [rect(51.4, 17, 27.2, 4.8)]), ('#e53935', [rect(51.4, 21.8, 27.2, 4.8)])]
+    return layers
+
+
+def fiesta_amor_amistad():
+    """Amor y Amistad: the secret friend's gift, a wrapped box with a bow and a heart tag."""
+    layers = shape([(14, 48), (74, 48), (74, 94), (14, 94)], '#e53935', 2.4)
+    layers += shape([(10, 36), (78, 36), (78, 50), (10, 50)], '#ef5350', 2.2)
+    layers += [('#fdd835', [rect(39, 36, 10, 58)]), ('#fbc02d', [rect(47, 36, 2, 58)])]
+    layers += [(OUTLINE, ['M 44 36 Q 22 14 26 30 Q 28 38 44 36 Z', 'M 44 36 Q 66 14 62 30 Q 60 38 44 36 Z']), ('#fdd835', ['M 44 34 Q 26 18 28.6 30 Q 30.4 36 44 34 Z', 'M 44 34 Q 62 18 59.4 30 Q 57.6 36 44 34 Z'])]
+    layers += [('#ffffff', [rib(74, 60, 84, 54, 1)]), (OUTLINE, [fx_heart(86, 66, 13)]), ('#f48fb1', [fx_heart(86, 66, 10.4)])]
+    layers += [(OUTLINE, [fx_heart(84, 18, 10)]), ('#e91e63', [fx_heart(84, 18, 7.6)])]
+    return layers
+
+
+def fiesta_halloween():
+    """Halloween: a pumpkin bucket full of sweets, the children's «triqui triqui»."""
+    layers = bar(24, 40, 50, 14, 3, '#5d4037') + bar(76, 40, 50, 14, 3, '#5d4037')
+    for x, y, c in [(38, 36, '#e53935'), (52, 32, '#43a047'), (64, 38, '#1e88e5'), (46, 40, '#fdd835')]:
+        layers += oval(x, y, 7, 5, c, rot=20, d=1.6)
+        layers.append((c, [poly(x - 7, y, x - 12, y - 4, x - 12, y + 4), poly(x + 7, y, x + 12, y - 4, x + 12, y + 4)]))
+    layers += oval(50, 66, 36, 28, '#fb8c00', d=2.6)
+    layers.append(('#ef6c00', [ellipse(32, 66, 8, 25), ellipse(68, 66, 8, 25)]))
+    layers.append(('#4e2a00', [poly(34, 60, 44, 60, 39, 50), poly(56, 60, 66, 60, 61, 50), 'M 32 72 L 68 72 Q 62 86 50 86 Q 38 86 32 72 Z']))
+    layers.append(('#fb8c00', [rect(42, 70, 5, 6), rect(53, 70, 5, 6)]))
+    return layers
+
+
+def fiesta_cartagena():
+    """Independencia de Cartagena: a garita of the walls with Cartagena's red, yellow and green flag."""
+    layers = [(OUTLINE, [rect(4, 70, 92, 26)]), ('#d7b98a', [rect(5.6, 71.6, 88.8, 22.8)]), ('#c4a372', [rect(10 + 18 * k, 80 + 6 * (k % 2), 12, 1.4) for k in range(5)])]
+    layers += shape([(30, 40), (60, 40), (60, 72), (30, 72)], '#f0d9b0', 2.2)
+    layers += [(OUTLINE, ['M 26 40 Q 45 14 64 40 Z']), ('#e8c896', ['M 29 38.6 Q 45 18 61 38.6 Z'])]
+    layers += [(OUTLINE, [rect(41, 50, 8, 14)]), ('#5d4037', [rect(42.2, 51.2, 5.6, 11.6)])]
+    layers += bar(45, 20, 45, 6, 2, '#6d4c41') + bar(72, 70, 72, 14, 2.4, '#6d4c41')
+    layers += [(OUTLINE, [rect(72, 12, 26, 20)]), ('#d32f2f', [rect(73.2, 13.2, 23.6, 17.6)]), ('#fdd835', [rect(76, 16, 18, 12)]), ('#2e7d32', [rect(79, 18.4, 12, 7.2)]), ('#ffffff', [pts(fx_star(85, 22, 3, 1.3, 8))])]
+    return layers
+
+
+def fiesta_velitas():
+    """Noche de las Velitas: three lit candles in paper lanterns on the sidewalk, at night."""
+    layers = [(OUTLINE, [rect(2, 80, 96, 14)]), ('#bdb5a6', [rect(3.4, 81.4, 93.2, 11.2)])]
+    for x, c, h in [(20, '#ef9a9a', 30), (50, '#fff59d', 40), (80, '#90caf9', 30)]:
+        top = 80 - h
+        layers += [('#fff3c4', [ellipse(x, top - 6, 13, 13)])]
+        layers += shape([(x - 10, top), (x + 10, top), (x + 12, 82), (x - 12, 82)], c, 2)
+        layers.append(('#ffffff', [rect(x - 3, top + 6, 6, 70 - h)]))
+        layers += [(OUTLINE, [f'M {x} {top - 14} Q {x + 6} {top - 6} {x + 2.6} {top} L {x - 2.6} {top} Q {x - 6} {top - 6} {x} {top - 14} Z']), ('#ffb300', [f'M {x} {top - 11} Q {x + 4} {top - 5} {x + 1.4} {top - 1.2} L {x - 1.4} {top - 1.2} Q {x - 4} {top - 5} {x} {top - 11} Z'])]
+    layers += [('#fdd835', [pts(fx_star(12, 12, 5, 2)), pts(fx_star(88, 10, 4, 1.6)), pts(fx_star(64, 18, 3, 1.2))])]
+    return layers
+
+
+def fiesta_navidad():
+    """Navidad: the novena plate, diamonds of natilla and golden buñuelos, with a sprig of holly."""
+    layers = oval(50, 72, 46, 20, '#eceff1') + [('#ffffff', [ellipse(50, 70, 36, 14)])]
+    for x, y in [(30, 66), (44, 74), (36, 58)]:
+        layers += shape([(x, y - 9), (x + 9, y), (x, y + 9), (x - 9, y)], '#c98a3a', 1.8)
+        layers.append(('#e0a85c', [poly(x, y - 6, x + 6, y, x, y)]))
+        layers.append(('#5d4037', [circle(x, y, 1.2)]))
+    for x, y in [(62, 60), (72, 70), (58, 74), (68, 52)]:
+        layers += oval(x, y, 8, 8, '#d9a441', d=1.8)
+        layers.append(('#f0c870', [ellipse(x - 2.4, y - 2.4, 3, 2.4, -30)]))
+    layers += [(OUTLINE, [leaf(50, 30, 30, 18, 6), leaf(50, 30, 70, 16, 6)]), ('#2e7d32', [leaf(50, 30, 32, 19, 4.4), leaf(50, 30, 68, 17, 4.4)])]
+    layers += oval(46, 30, 3.6, 3.6, '#e53935', d=1.2) + oval(54, 31, 3.6, 3.6, '#e53935', d=1.2) + oval(50, 25, 3.6, 3.6, '#e53935', d=1.2)
+    return layers
+
+
+
 ICONS = [
     (0xE001, 'cherry', cherry),
     (0xE002, 'guarapo', guarapo),
@@ -10581,6 +10753,19 @@ ICONS = [
     (0xE26C, 'goleta', goleta),
     (0xE26D, 'pan_coco', pan_coco),
     (0xE26E, 'empanada_cangrejo', empanada_cangrejo),
+    # Fiestas de Colombia (v5.20)
+    (0xE26F, 'fiesta_negros_blancos', fiesta_negros_blancos),
+    (0xE270, 'fiesta_barranquilla', fiesta_barranquilla),
+    (0xE271, 'fiesta_vallenato', fiesta_vallenato),
+    (0xE272, 'fiesta_dia_madre', fiesta_dia_madre),
+    (0xE273, 'fiesta_san_pedro', fiesta_san_pedro),
+    (0xE274, 'fiesta_independencia', fiesta_independencia),
+    (0xE275, 'fiesta_batalla_boyaca', fiesta_batalla_boyaca),
+    (0xE276, 'fiesta_amor_amistad', fiesta_amor_amistad),
+    (0xE277, 'fiesta_halloween', fiesta_halloween),
+    (0xE278, 'fiesta_cartagena', fiesta_cartagena),
+    (0xE279, 'fiesta_velitas', fiesta_velitas),
+    (0xE27A, 'fiesta_navidad', fiesta_navidad),
 ]
 
 

@@ -12,6 +12,7 @@
 //   greeting: what a zone's person says once a day while it lasts. Texts are the Spanish i18n keys (tk).
 //   sticker: (v5.19) a big fiesta's sticker text in the «Fiestas de Colombia» album, won in its season event.
 import { tk } from '../i18n/index.js';
+import { ICON } from './icons.js';
 
 export const FIESTA_BONUS = { big: 1.25, decor: 1.1 };
 
@@ -130,3 +131,19 @@ export const FIESTA_PAGES = [
   { id: 'fiestas_2', icon: '🎄', name: tk('Segundo semestre'), stickers: ['batalla_boyaca', 'amor_amistad', 'halloween', 'cartagena', 'velitas', 'navidad'] },
 ];
 
+// (v5.20) Each sticker's own art in the game's icon font (tools/icons/build_icons.py), as the regions' albums have;
+// the fiesta's emoji stays for texts and greetings.
+export const FIESTA_ART = {
+  negros_blancos: ICON.fiestaNegrosBlancos,
+  barranquilla: ICON.fiestaBarranquilla,
+  vallenato: ICON.fiestaVallenato,
+  dia_madre: ICON.fiestaDiaMadre,
+  san_pedro: ICON.fiestaSanPedro,
+  independencia: ICON.fiestaIndependencia,
+  batalla_boyaca: ICON.fiestaBatallaBoyaca,
+  amor_amistad: ICON.fiestaAmorAmistad,
+  halloween: ICON.fiestaHalloween,
+  cartagena: ICON.fiestaCartagena,
+  velitas: ICON.fiestaVelitas,
+  navidad: ICON.fiestaNavidad,
+};

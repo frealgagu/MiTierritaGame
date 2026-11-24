@@ -91,4 +91,11 @@ export default {
   "Se gana en su evento de temporada, desde el {date}.": "Won in its season event, from {date}.",
   "Su evento llega en una próxima versión ({date}).": "Its event comes in a future version ({date}).",
   "Una lámina por cada fiesta grande del año. No se compran: se ganan en los eventos de temporada (🏅 Eventos), en sus fechas reales. No cuentan para los logros ni para el gran final.": "One sticker for each big fiesta of the year. They are not bought: they are won in the season events (🏅 Events), on their real dates. They don’t count for achievements or the grand finale.",
+  // v5.20
+  "⏱️ Reloj del evento": "⏱️ Event clock",
+  "🏁 Objetivo cumplido": "🏁 Objective met",
+  "🎉 Fiestas": "🎉 Fiestas",
+  "Las láminas del álbum Fiestas de Colombia y los eventos de temporada abiertos.": "The stickers of the Fiestas of Colombia album and the open season events.",
+  "No hay eventos de temporada abiertos.": "There are no open season events.",
+  "{icon} ¡Empezó el evento de la plaza: {event}! Toque 🏅 Eventos y vamos a la plaza de las fiestas.": "{icon} The square’s event has started: {event}! Tap 🏅 Events and let’s go to the Fiesta Square.",
 };

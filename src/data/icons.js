@@ -625,6 +625,18 @@ export const ICON = {
   goleta: '\uE26C', // Schooner: wooden two-masted sailing ship that once linked the islands and the coast
   panCoco: '\uE26D', // Coconut bread: round golden island loaves with a split coconut beside them
   empanadaCangrejo: '\uE26E', // Crab patty: half-moon golden crab empanadas with a lime wedge and a crab claw
+  fiestaNegrosBlancos: '\uE26F', // Negros y Blancos (Pasto): a reveler's face painted half black, half white, with talcum clouds and confetti
+  fiestaBarranquilla: '\uE270', // Carnaval de Barranquilla: the marimonda mask, with its big ears, long trunk and patched cloth
+  fiestaVallenato: '\uE271', // Festival Vallenato: the three instruments, accordion, caja drum and guacharaca
+  fiestaDiaMadre: '\uE272', // Día de la Madre: a bouquet of flowers tied with a ribbon and a heart-shaped card
+  fiestaSanPedro: '\uE273', // San Juan y San Pedro: a sanjuanero dancer's wide flowered skirt and her straw hat
+  fiestaIndependencia: '\uE274', // 20 de julio: the flower vase of Llorente, cracked, with a tricolor flag beside it
+  fiestaBatallaBoyaca: '\uE275', // Batalla de Boyacá: the little stone bridge over the Teatinos river, with the flag on top
+  fiestaAmorAmistad: '\uE276', // Amor y Amistad: the secret friend's gift, a wrapped box with a bow and a heart tag
+  fiestaHalloween: '\uE277', // Halloween: a pumpkin bucket full of sweets, the children's «triqui triqui»
+  fiestaCartagena: '\uE278', // Independencia de Cartagena: a garita of the walls with Cartagena's red, yellow and green flag
+  fiestaVelitas: '\uE279', // Noche de las Velitas: three lit candles in paper lanterns on the sidewalk, at night
+  fiestaNavidad: '\uE27A', // Navidad: the novena plate, diamonds of natilla and golden buñuelos, with a sprig of holly
 };
 
 export const ICON_FONT = 'MiTierrita Icons';

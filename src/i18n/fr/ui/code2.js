@@ -18,7 +18,7 @@ export default {
   '⏳ Espera turno: {when}.': '⏳ Attend son tour : {when}.',
   '🏁 ¡Ganado con {medal}! Entra a verlo y toca 🏁 Terminar evento para cerrarlo.': '🏁 Gagné en {medal} ! Entre pour le voir et touche 🏁 Terminer l’événement pour le fermer.',
   'Ver y terminar': 'Voir et terminer',
-  '🚪 corriendo': '🚪 en cours',
+  '🔽 minimizado': '🔽 réduit',
   '⏸️ pausado': '⏸️ en pause',
   '✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.': '✅ {icon} Médaille assurée. Pour terminer, achète les améliorations qui manquent.',
   Jugar: 'Jouer',

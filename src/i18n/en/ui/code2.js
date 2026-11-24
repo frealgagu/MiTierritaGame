@@ -18,7 +18,7 @@ export default {
   '⏳ Espera turno: {when}.': '⏳ Waiting its turn: {when}.',
   '🏁 ¡Ganado con {medal}! Entra a verlo y toca 🏁 Terminar evento para cerrarlo.': '🏁 Won with {medal}! Go in to see it and tap 🏁 End event to close it.',
   'Ver y terminar': 'See and end',
-  '🚪 corriendo': '🚪 running',
+  '🔽 minimizado': '🔽 minimized',
   '⏸️ pausado': '⏸️ paused',
   '✅ {icon} Medalla asegurada. Para terminar, compra las mejoras que faltan.': '✅ {icon} Medal secured. To finish, buy the upgrades that are missing.',
   Jugar: 'Play',

@@ -455,8 +455,9 @@ export class Scene {
   update(dt) {
     this.time += dt;
     const state = this.game.state;
-    // Event board stays at mid-morning (independent clock).
-    this.dayNight.update(state.event ? EVENT_DAYTIME : clockOf(state));
+    // Event board stays at mid-morning (independent clock). (v5.20) La plaza de las fiestas has its own days and
+    // nights from its board clock, only drawn (production never stops), so its candles and lights glow at night.
+    this.dayNight.update(this.zone.season ? state.playTime : state.event ? EVENT_DAYTIME : clockOf(state));
     this.background.update(dt, this.camera);
     this.terrain.update(this.time);
     this.farm.sync(state);

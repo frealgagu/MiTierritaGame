@@ -335,8 +335,10 @@ async function start() {
     eg.timeScale = game.timeScale;
     for (const type of ['levelUp', 'unlocked', 'research']) eg.bus.on(type, () => (hud.recDirty = true));
     board = { zone: zoneId, key, game: eg, season };
-    // La plaza de las fiestas belongs to no region: it wears Eje Cafetero's decor.
+    // La plaza de las fiestas belongs to no region: it wears Eje Cafetero's decor, and (v5.20) plays its fiesta's
+    // villancico (audio/songs.js); going back to the map plays the region's music again (showZone).
     setLook(root.profile, season ? 'cafetero' : REGION_OF_ZONE[zoneId]);
+    if (season) music.setRegion(season);
     scene = new Scene(app, eg, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
     scene.onBackground = () => panel.id && panel.close();
@@ -359,9 +361,9 @@ async function start() {
     // With all three event upgrades bought, victory triggers on the next frame and shows its modal.
     if (r.secured && !allActionsBought(state)) {
       const m = MEDALS[state.event.medal];
-      toast(t('🚪 El evento siguió {time} sin ti: ¡{icon} medalla de {medal} asegurada! Para terminarlo, compra las mejoras que faltan.', { time: formatDuration(r.seconds), icon: m.icon, medal: m.name }), 6000);
+      toast(t('🔽 El evento siguió {time} sin ti: ¡{icon} medalla de {medal} asegurada! Para terminarlo, compra las mejoras que faltan.', { time: formatDuration(r.seconds), icon: m.icon, medal: m.name }), 6000);
       sound.milestone();
-    } else toast(t('🚪 El evento siguió {time} sin ti.', { time: formatDuration(r.seconds) }), 4000);
+    } else toast(t('🔽 El evento siguió {time} sin ti.', { time: formatDuration(r.seconds) }), 4000);
   };
   const leaveBoard = () => {
     // Leave mode (via button or switching zones): board keeps running from now using the country

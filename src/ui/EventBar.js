@@ -104,11 +104,11 @@ export class EventBar {
     if (game) this.paint();
   }
 
-  // ⏸️ Pause or 🚪 Exit, depending on the menu toggle.
+  // ⏸️ Pause or 🔽 Minimize (v5.20; until then 🚪 Exit), depending on the menu toggle.
   paintExit() {
     // (v5.19) A season event never pauses.
     const season = Boolean(this.game && eventDef(this.game.state).season);
-    this.pauseBtn.textContent = season || this.exitMode() === 'leave' ? t('🚪 Salir') : t('⏸️ Pausar');
+    this.pauseBtn.textContent = season || this.exitMode() === 'leave' ? t('🔽 Minimizar') : t('⏸️ Pausar');
   }
 
   paint() {

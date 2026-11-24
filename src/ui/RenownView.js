@@ -16,7 +16,7 @@ import { t } from '../i18n/index.js';
 import { cappedPrestige, cappedRenown } from './capped.js';
 import { finaleProgress } from '../sim/finale.js';
 import { REGIONS } from '../data/regions.js';
-import { FIESTAS_BY_ID, FIESTA_PAGES } from '../data/fiestas.js';
+import { FIESTAS_BY_ID, FIESTA_ART, FIESTA_PAGES } from '../data/fiestas.js';
 import { hasSticker, seasonEventOf } from '../sim/seasonEvents.js';
 import { fiestaDate } from './calendar.js';
 import { windowIn, today } from '../sim/fiestas.js';
@@ -220,12 +220,12 @@ export class RenownView {
     const cards = page.stickers
       .map((id) => {
         const f = FIESTAS_BY_ID[id];
-        if (hasSticker(profile, id)) return `<div class="sticker"><div class="big">${f.icon}</div><b>${t(f.name)}</b><p>${t(f.sticker)}</p></div>`;
+        if (hasSticker(profile, id)) return `<div class="sticker"><div class="big">${FIESTA_ART[id]}</div><b>${t(f.name)}</b><p>${t(f.sticker)}</p></div>`;
         // When: its next first day (this year's, or next year's if it already went by).
         const [start] = windowIn(f.dates, now.getFullYear());
         const when = fiestaDate(start < new Date(now.getFullYear(), now.getMonth(), now.getDate()) ? windowIn(f.dates, now.getFullYear() + 1)[0] : start);
         const how = seasonEventOf(id) ? t('Se gana en su evento de temporada, desde el {date}.', { date: when }) : t('Su evento llega en una próxima versión ({date}).', { date: when });
-        return `<div class="sticker empty"><div class="big">${f.icon}</div><b>${t(f.name)}</b><p>${how}</p></div>`;
+        return `<div class="sticker empty"><div class="big">${FIESTA_ART[id]}</div><b>${t(f.name)}</b><p>${how}</p></div>`;
       })
       .join('');
     return `<div class="album-pages">${pages}</div><div class="album-head"><span>${page.icon} ${t(page.name)}</span><span>${have} / ${page.stickers.length}${have === page.stickers.length ? ' ✅' : ` · ${t('llena: +{n} ⭐', { n: PAGE_BONUS })}`}</span></div><div class="album-grid">${cards}</div>`;

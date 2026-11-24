@@ -6,6 +6,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
 import { REGIONS } from '../src/data/regions.js';
+import { FIESTAS_BY_ID } from '../src/data/fiestas.js';
 import { EFFECTS } from './audio-list.mjs';
 import { PUBLIC, SONGS, SPOILERS, fileOf } from './music-export.mjs';
 
@@ -16,28 +17,28 @@ const seconds = (path) => Math.round(Number(execFileSync('ffprobe', ['-v', 'erro
 
 const T = {
   es: {
-    spoilers: '⚠️ Spoilers', spoilerNote: 'La música del final del juego: la zona especial y el gran final. No la abras hasta terminar el juego.', spoilerOpen: 'Mostrar la música del final', special: 'Zona especial', finale: 'Gran final',
+    spoilers: '⚠️ Spoilers', spoilerNote: 'La música del final del juego: la zona especial y el gran final. No la abras hasta terminar el juego.', spoilerOpen: 'Mostrar la música del final', special: 'Zona especial', finale: 'Gran final', plaza: 'Plaza de las fiestas',
     title: 'Música y sonidos', lead: 'La música y los efectos de sonido de <b>Encantos de Mi Tierrita</b>, compuestos para el juego y tocados por él con instrumentos sintetizados. En <b>MP3</b> para escuchar y en <b>MIDI</b> para tocarlos o hacer arreglos.',
     midiNote: 'El MIDI trae cada instrumento en su pista, con el tempo y el compás de la pieza; suena con los instrumentos del programa que lo abra, así que no es igual al del juego.',
     music: '🎶 Música', effects: '🔔 Efectos de sonido', all: '⬇️ Descargar todo (.zip)', back: '← Volver al juego', play: 'Escuchar', stop: 'Parar',
     credit: 'Música y sonidos hechos con código por frealgagu para el juego.', effectsNote: 'Los que son notas (monedas, campanas…) también van en MIDI; los demás son ruido (fuego, viento, el Willys) y solo están en MP3.',
   },
   en: {
-    spoilers: '⚠️ Spoilers', spoilerNote: 'The music of the end of the game: the special zone and the grand finale. Do not open it until you finish the game.', spoilerOpen: 'Show the music of the end', special: 'Special zone', finale: 'Grand finale',
+    spoilers: '⚠️ Spoilers', spoilerNote: 'The music of the end of the game: the special zone and the grand finale. Do not open it until you finish the game.', spoilerOpen: 'Show the music of the end', special: 'Special zone', finale: 'Grand finale', plaza: 'Fiesta Square',
     title: 'Music and sounds', lead: 'The music and sound effects of <b>Encantos de Mi Tierrita</b>, composed for the game and played by it with synthesized instruments. In <b>MP3</b> to listen to and in <b>MIDI</b> to play them or make arrangements.',
     midiNote: 'Each MIDI file has every instrument on its own track, with the tempo and time signature of the piece; it plays with the instruments of the program you open it with, so it does not sound exactly like the game.',
     music: '🎶 Music', effects: '🔔 Sound effects', all: '⬇️ Download everything (.zip)', back: '← Back to the game', play: 'Play', stop: 'Stop',
     credit: 'Music and sounds made with code by frealgagu for the game.', effectsNote: 'The ones made of notes (coins, bells…) also come in MIDI; the rest are noise (fire, wind, the Willys) and are only in MP3.',
   },
   pt: {
-    spoilers: '⚠️ Spoilers', spoilerNote: 'A música do final do jogo: a zona especial e o grande final. Não abra antes de terminar o jogo.', spoilerOpen: 'Mostrar a música do final', special: 'Zona especial', finale: 'Grande final',
+    spoilers: '⚠️ Spoilers', spoilerNote: 'A música do final do jogo: a zona especial e o grande final. Não abra antes de terminar o jogo.', spoilerOpen: 'Mostrar a música do final', special: 'Zona especial', finale: 'Grande final', plaza: 'Praça das festas',
     title: 'Música e sons', lead: 'A música e os efeitos sonoros de <b>Encantos de Mi Tierrita</b>, compostos para o jogo e tocados por ele com instrumentos sintetizados. Em <b>MP3</b> para ouvir e em <b>MIDI</b> para tocar ou fazer arranjos.',
     midiNote: 'O MIDI traz cada instrumento na sua faixa, com o andamento e o compasso da peça; ele soa com os instrumentos do programa que o abrir, então não é igual ao do jogo.',
     music: '🎶 Música', effects: '🔔 Efeitos sonoros', all: '⬇️ Baixar tudo (.zip)', back: '← Voltar ao jogo', play: 'Ouvir', stop: 'Parar',
     credit: 'Música e sons feitos com código por frealgagu para o jogo.', effectsNote: 'Os que são notas (moedas, sinos…) também vêm em MIDI; os outros são ruído (fogo, vento, o Willys) e estão só em MP3.',
   },
   fr: {
-    spoilers: '⚠️ Spoilers', spoilerNote: 'La musique de la fin du jeu : la zone spéciale et le grand final. Ne l’ouvre pas avant d’avoir fini le jeu.', spoilerOpen: 'Afficher la musique de la fin', special: 'Zone spéciale', finale: 'Grand final',
+    spoilers: '⚠️ Spoilers', spoilerNote: 'La musique de la fin du jeu : la zone spéciale et le grand final. Ne l’ouvre pas avant d’avoir fini le jeu.', spoilerOpen: 'Afficher la musique de la fin', special: 'Zone spéciale', finale: 'Grand final', plaza: 'Place des fêtes',
     title: 'Musique et sons', lead: 'La musique et les effets sonores d’<b>Encantos de Mi Tierrita</b>, composés pour le jeu et joués par lui avec des instruments synthétisés. En <b>MP3</b> pour les écouter et en <b>MIDI</b> pour les jouer ou les arranger.',
     midiNote: 'Le MIDI contient chaque instrument sur sa piste, avec le tempo et la mesure du morceau ; il sonne avec les instruments du programme qui l’ouvre, donc pas exactement comme dans le jeu.',
     music: '🎶 Musique', effects: '🔔 Effets sonores', all: '⬇️ Tout télécharger (.zip)', back: '← Revenir au jeu', play: 'Écouter', stop: 'Arrêter',
@@ -57,10 +58,11 @@ for (const region of PUBLIC) {
     names[lang] = s?.[region]?.[0] ?? SONGS[region].name;
     instruments[lang] = s?.[region]?.[1] ?? SONGS[region].instruments;
     // (v5.9) Spoilers: the special zone is not named, and the grand finale is not a region.
-    regionName[lang] = region === 'granfinal' ? T[lang].finale : region === 'sanandres' ? T[lang].special : r?.[region] ?? REGIONS.find((x) => x.id === region).name;
+    // (v5.20) La plaza de las fiestas' villancicos (one per season event) are not a region either.
+    regionName[lang] = region === 'granfinal' ? T[lang].finale : region === 'sanandres' ? T[lang].special : FIESTAS_BY_ID[region] ? T[lang].plaza : r?.[region] ?? REGIONS.find((x) => x.id === region).name;
   }
   // Custom game icons (from its font, in the Unicode Private Use Area) don't render here: use an emoji.
-  const icon = region === 'granfinal' ? '🎉' : region === 'sanandres' ? '⭐' : REGIONS.find((x) => x.id === region).icon;
+  const icon = region === 'granfinal' ? '🎉' : region === 'sanandres' ? '⭐' : FIESTAS_BY_ID[region]?.icon ?? REGIONS.find((x) => x.id === region).icon;
   songs.push({ file, names, instruments, region: regionName, icon: /[\uE000-\uF8FF]/.test(icon) ? '🐜' : icon, seconds: seconds(`${DIR}${file}.mp3`), spoiler: SPOILERS.includes(region) });
 }
 const effects = EFFECTS.map(([file, , midi, names]) => {

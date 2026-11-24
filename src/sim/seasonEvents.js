@@ -6,8 +6,9 @@
 //     away (it never pauses), but has no medals, upgrades or handicap;
 //   - meeting the objective wins the fiesta's sticker (profile.fiestas) the first time; later years can be played
 //     again with no prize. A full page of the «Fiestas de Colombia» album pays its Renown like any page.
-// What the whole game keeps (root save): events.season = { boards: { fiesta: board }, done: { fiesta: 'YYYY-MM-DD' } }
-// (the first day of the last edition won), and profile.fiestas (the stickers).
+// What the whole game keeps (root save): events.season = { boards: { fiesta: board }, done: { fiesta: 'YYYY-MM-DD' }
+// (the first day of the last edition won), told: { fiesta: 'YYYY-MM-DD' } (the edition whose opening the zone's
+// person already announced, ui/Chatter.js, v5.20) }, and profile.fiestas (the stickers).
 import { FIESTAS_BY_ID, FIESTA_PAGES } from '../data/fiestas.js';
 import { SEASON_EVENT_OF_FIESTA } from '../data/plaza.js';
 import { PAGE_BONUS } from '../data/album.js';

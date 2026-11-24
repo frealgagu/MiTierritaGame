@@ -468,10 +468,29 @@ export class FarmView extends StationView {
   // guayacán trees, benches, streetlamps, and crowd. Milestones add tables and floors.
   drawPlaza(g, tier, rng) {
     const { x, y, w, h } = this.zoneFarm;
-    this.lights = drawCoffeeHouse(g, x, y, tier, PLAZA_HOUSE[this.zoneStyle ?? 'pueblo']);
+    const look = PLAZA_HOUSE[this.zoneFarm.look ?? this.zoneStyle ?? 'pueblo'];
+    this.lights = drawCoffeeHouse(g, x, y, tier, look);
     // Umbrella tables outside café: origin of popping single-origin coffee.
     const tables = [[0.6, 2.6], [1.5, 2.7], [2.6, 0.6], [2.7, 1.5], [2.5, 2.5], [0.6, 3.5], [3.5, 0.6]].slice(0, 3 + Math.min(tier, 4));
     for (const [tx, ty] of tables) {
+      // (v5.20) In La plaza de las fiestas: candle racks or sacks of corn instead of café tables.
+      if (look.props) {
+        const p = iso(x + tx, y + ty);
+        shadow(g, p.x, p.y + 1, 12, 5);
+        if (look.props === 'candles') {
+          g.rect(p.x - 9, p.y - 22, 2, 22).fill(PAL.woodDark);
+          g.rect(p.x + 7, p.y - 22, 2, 22).fill(PAL.woodDark);
+          g.rect(p.x - 9, p.y - 23, 18, 2).fill(PAL.wood);
+          for (let k = 0; k < 5; k++) g.roundRect(p.x - 6.5 + k * 3, p.y - 21, 2, 9 + (k % 2) * 2, 1).fill(0xfffde7).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
+        } else {
+          for (const [dx, dy] of [[-5, 0], [5, 0], [0, -6]]) {
+            g.ellipse(p.x + dx, p.y + dy - 5, 6, 5.5).fill(PAL.sack).stroke(OUTLINE);
+            g.ellipse(p.x + dx, p.y + dy - 9, 3.5, 1.8).fill(0xf6d36b);
+          }
+        }
+        this.bushes.push({ x: p.x, y: p.y + 4 });
+        continue;
+      }
       const p = iso(x + tx, y + ty);
       shadow(g, p.x, p.y + 1, 12, 5);
       g.rect(p.x - 1, p.y - 22, 2, 22).fill(0x555555);
@@ -541,6 +560,10 @@ const PLAZA_HOUSE = {
   // Special zone (v5.5): turquoise island house with white gingerbread trim and a mango awning.
   sanandres: { wall: 0x4dd0e1, trims: [0xffffff, 0xfdd835, 0xf48fb1, 0xffffff, 0x8e44ad, 0xffd700], awning: 0xf4a261, sign: 'cup' },
   leticia: { wall: 0x8fd3c4, trims: [0x7b1fa2, 0xf2c14e, 0x2e7d32, 0x7b1fa2, 0xe5737f, 0xffd700], awning: 0x7b1fa2, sign: 'icecream' },
+  // La plaza de las fiestas (v5.20): the Cerería (cream, candle sign, candle racks outside) and the corn mill (white,
+  // corn sign, millstone and corn sacks outside), chosen by the plaza's `look`.
+  velitas: { wall: 0xfff3c4, trims: [0xb71c1c, 0x2e7d32, 0xf9a825, 0xb71c1c, 0x8e44ad, 0xffd700], awning: 0xb71c1c, sign: 'candle', props: 'candles' },
+  navidad: { wall: 0xfbf8f1, trims: [0x2e7d32, 0xc62828, 0xf9a825, 0x2e7d32, 0x8e44ad, 0xffd700], awning: 0x2e7d32, sign: 'corn', props: 'corn' },
 };
 
 function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
@@ -574,6 +597,13 @@ function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
   if (look.sign === 'icecream') {
     g.poly([s.x - 3, s.y - 1, s.x + 3, s.y - 1, s.x, s.y + 5]).fill(0xe0a95a);
     g.circle(s.x, s.y - 2.5, 3.4).fill(0x7b1fa2);
+  } else if (look.sign === 'candle') {
+    g.rect(s.x - 2, s.y - 3, 4, 8).fill(0xfffde7);
+    g.ellipse(s.x, s.y - 5, 1.6, 2.6).fill(0xffb300);
+  } else if (look.sign === 'corn') {
+    g.ellipse(s.x, s.y + 0.5, 3, 5.5).fill(0xf6d36b);
+    g.poly([s.x - 1, s.y + 5, s.x - 7, s.y - 2, s.x - 3, s.y + 6]).fill(0x7cb342);
+    g.poly([s.x + 1, s.y + 5, s.x + 7, s.y - 2, s.x + 3, s.y + 6]).fill(0x7cb342);
   } else if (look.sign === 'sweet') {
     g.rect(s.x - 7, s.y - 3, 14, 6).fill(PRODUCTS.bocadillo.color);
     g.rect(s.x - 7, s.y + 1, 14, 1.5).fill(0xfce4ec);

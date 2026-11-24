@@ -27,6 +27,8 @@ import { formatNumber } from '../core/format.js';
 import { cappedCoins, cappedCount, cappedPlayTime, cappedPrestige, cappedRenown, cappedRun, cappedRunTime, cappedTotal } from '../ui/capped.js';
 import { countAmount, joinTime, parseAmount, plainAmount, shortAmount, splitTime } from './numbers.js';
 import { MAX_LEVEL } from '../sim/rules.js';
+import { FIESTAS_BY_ID, FIESTA_ART, FIESTA_PAGES } from '../data/fiestas.js';
+import { seasonEventOf, seasonOf } from '../sim/seasonEvents.js';
 
 let root = null; // the whole game's save being edited
 let fileName = '';
@@ -308,7 +310,7 @@ function events() {
     const r = p.medals[id];
     if (r && !r.best && !kinds.some((k) => r.count?.[k])) delete p.medals[id];
   };
-  return el(
+  const grid = el(
     'div',
     { class: 'grid' },
     REGIONS.filter((r) => EVENTS.some((e) => REGIONS_BY_ID[r.id].zones.includes(e.zone))).map((r) =>
@@ -335,6 +337,37 @@ function events() {
         ),
       ),
     ),
+  );
+  grid.append(fiestas());
+  return grid;
+}
+
+// (v5.20) The season events (La plaza de las fiestas): the «Fiestas de Colombia» stickers won and every board still
+// open, with its coins, clock and stations.
+function fiestas() {
+  const p = root.profile;
+  p.fiestas ??= [];
+  const season = seasonOf(root);
+  const stickers = FIESTA_PAGES.map((pg) =>
+    el('fieldset', { class: 'page' }, el('legend', {}, `${pg.icon} ${t(pg.name)}`), pg.stickers.map((id) => checkField(`${FIESTA_ART[id]} ${t(FIESTAS_BY_ID[id].name)}`, () => p.fiestas.includes(id), (v) => (p.fiestas = v ? [...new Set([...p.fiestas, id])] : p.fiestas.filter((x) => x !== id))))),
+  );
+  const boards = Object.entries(season.boards).map(([id, board]) => {
+    const def = seasonEventOf(id);
+    return el(
+      'fieldset',
+      { class: 'event' },
+      el('legend', {}, `${def.icon} ${def.name}`),
+      numberField(t('💰 Monedas'), () => board.coins, (v) => (board.coins = v), cappedCoins, BIG(CAPS.coins)),
+      timeField(t('⏱️ Reloj del evento'), () => board.playTime, (v) => (board.playTime = v)),
+      checkField(t('🏁 Objetivo cumplido'), () => board.event.done, (v) => (v ? (board.event.done = true) : delete board.event.done)),
+      ...def.stations.map((sid) => station(board, sid, () => {}, () => {})),
+    );
+  });
+  return section(
+    t('🎉 Fiestas'),
+    el('p', { class: 'hint' }, t('Las láminas del álbum Fiestas de Colombia y los eventos de temporada abiertos.')),
+    el('div', { class: 'rows' }, stickers),
+    ...(boards.length ? boards : [el('p', { class: 'hint' }, t('No hay eventos de temporada abiertos.'))]),
   );
 }
 

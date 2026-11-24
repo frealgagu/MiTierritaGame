@@ -12,4 +12,7 @@ export default {
   bogota: ['La Candelaria Danza', 'bandola, tiple and guitar'],
   "sanandres": ["Green Moon Calypso", "steel pan, guitar, washtub bass, maracas and bongos"],
   granfinal: ["Fiesta of All Colombia", "euphonium, clarinets, gaita, harp, tiple, steel pan, tambora, llamador and guacharaca"],
+  // La plaza de las fiestas (v5.20)
+  velitas: ["The Fish in the River", "flute, guitar, tiple, tambourine and maracas"],
+  navidad: ["Tutaina", "flute, guitar, tiple, tambourine and maracas"],
 };

@@ -622,7 +622,89 @@ export const GRAN_FINAL = {
   ],
 };
 
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO };
+// (v5.20) La plaza de las fiestas: traditional villancicos (public domain), one per season event, in the
+// `villancico` style (compose.js). Noche de las Velitas: «Los peces en el río», Spanish carol, in E minor and 2/4
+// (verse twice, then the chorus).
+const PECES = {
+  name: 'Los peces en el río',
+  instruments: 'flauta, guitarra, tiple, pandereta y maracas',
+  bpm: 88,
+  beats: 2,
+  style: 'villancico',
+  chords: [
+    'Em', 'Em', 'B7', 'B7', 'B7', 'B7', 'Em', 'Em',
+    'Em', 'Em', 'B7', 'B7', 'B7', 'B7', 'Em', 'Em',
+    'Em', 'Em', 'Em', 'B7', 'B7', 'B7', 'B7', 'Em',
+    'Em', 'Em', 'Em', 'B7', 'B7', 'B7', 'B7', 'Em',
+  ],
+  melody: [
+    [[0, 2, 'G5'], [2, 1, 'G5'], [3, 1, 'G5']],
+    [[0, 2, 'G5'], [2, 1, 'F#5'], [3, 1, 'E5']],
+    [[0, 1, 'F#5'], [1, 1, 'E5'], [2, 1, 'F#5'], [3, 1, 'D#5']],
+    [[0, 2, 'B4']],
+    [[0, 2, 'A5'], [2, 1, 'A5'], [3, 1, 'A5']],
+    [[0, 2, 'A5'], [2, 1, 'G5'], [3, 1, 'F#5']],
+    [[0, 1, 'G5'], [1, 1, 'F#5'], [2, 1, 'G5'], [3, 1, 'F#5']],
+    [[0, 2, 'E5']],
+    [[0, 2, 'G5'], [2, 1, 'G5'], [3, 1, 'G5']],
+    [[0, 2, 'G5'], [2, 1, 'F#5'], [3, 1, 'E5']],
+    [[0, 1, 'F#5'], [1, 1, 'E5'], [2, 1, 'F#5'], [3, 1, 'D#5']],
+    [[0, 2, 'B4']],
+    [[0, 2, 'A5'], [2, 1, 'A5'], [3, 1, 'A5']],
+    [[0, 2, 'A5'], [2, 1, 'G5'], [3, 1, 'F#5']],
+    [[0, 1, 'G5'], [1, 1, 'F#5'], [2, 1, 'G5'], [3, 1, 'F#5']],
+    [[0, 2, 'E5']],
+    [[0, 1, 'G5'], [1, 1, 'G5'], [2, 1, 'G5'], [3, 1, 'G5']],
+    [[0, 2, 'G5'], [2, 1, 'G5'], [3, 1, 'G5']],
+    [[0, 1, 'A5'], [1, 1, 'G5'], [2, 1, 'A5'], [3, 1, 'G5']],
+    [[0, 1, 'F#5'], [1, 1, 'F#5']],
+    [[0, 1, 'A5'], [1, 1, 'G5'], [2, 1, 'A5'], [3, 1, 'G5']],
+    [[0, 2, 'F#5'], [2, 1, 'F#5'], [3, 1, 'E5']],
+    [[0, 1, 'D#5'], [1, 1, 'E5'], [2, 1, 'F#5'], [3, 1, 'G5']],
+    [[0, 1, 'E5'], [1, 1, 'E5']],
+    [[0, 2, 'G5'], [2, 1, 'G5'], [3, 1, 'G5']],
+    [[0, 2, 'G5'], [2, 1, 'G5'], [3, 1, 'G5']],
+    [[0, 1, 'A5'], [1, 1, 'G5'], [2, 1, 'A5'], [3, 1, 'G5']],
+    [[0, 2, 'F#5']],
+    [[0, 1, 'A5'], [1, 1, 'G5'], [2, 1, 'A5'], [3, 1, 'G5']],
+    [[0, 2, 'F#5'], [2, 1, 'F#5'], [3, 1, 'E5']],
+    [[0, 1, 'D#5'], [1, 1, 'E5'], [2, 1, 'F#5'], [3, 1, 'G5']],
+    [[0, 2, 'E5']],
+  ],
+};
+
+// Novena de Navidad: «Tutaina», carol sung in Colombia's novenas (traditional, from Spain), in G major and 3/4: the
+// verse («Los pastores de Belén…») twice, then the chorus («Tutaina tuturumá…»).
+const TUTAINA = {
+  name: 'Tutaina',
+  instruments: 'flauta, guitarra, tiple, pandereta y maracas',
+  bpm: 104,
+  style: 'villancico',
+  chords: [
+    'G', 'C', 'D7', 'G', 'G', 'C', 'D7', 'G',
+    'G', 'G', 'D7', 'D7', 'G', 'G', 'D7', 'G',
+  ],
+  melody: [
+    [[0, 1, 'D4'], [1, 1, 'G4'], [2, 1, 'G4'], [3, 1, 'G4'], [4, 1, 'A4'], [5, 1, 'B4']],
+    [[0, 3, 'C5'], [3, 1, 'C5'], [4, 1, 'D5'], [5, 1, 'D5']],
+    [[0, 1, 'D5'], [1, 1, 'C5'], [2, 1, 'B4'], [3, 1, 'A4'], [4, 2, 'G4']],
+    [[0, 4, 'G4'], [5, 1, 'D4']],
+    [[0, 1, 'D4'], [1, 1, 'G4'], [2, 1, 'G4'], [3, 1, 'G4'], [4, 1, 'A4'], [5, 1, 'B4']],
+    [[0, 3, 'C5'], [3, 1, 'C5'], [4, 1, 'D5'], [5, 1, 'D5']],
+    [[0, 1, 'D5'], [1, 1, 'C5'], [2, 1, 'B4'], [3, 1, 'A4'], [4, 2, 'G4']],
+    [[0, 6, 'G4']],
+    [[0, 1, 'B4'], [1, 1, 'B4'], [2, 1, 'B4'], [3, 1, 'A4'], [4, 1, 'G4'], [5, 1, 'A4']],
+    [[0, 4, 'B4']],
+    [[0, 1, 'C5'], [1, 1, 'C5'], [2, 1, 'C5'], [3, 1, 'B4'], [4, 1, 'A4'], [5, 1, 'B4']],
+    [[0, 2, 'C5'], [2, 2, 'A4']],
+    [[0, 1, 'B4'], [1, 1, 'B4'], [2, 1, 'B4'], [3, 1, 'A4'], [4, 1, 'G4'], [5, 1, 'A4']],
+    [[0, 2, 'B4'], [2, 1, 'A4'], [3, 1, 'B4'], [4, 2, 'C5']],
+    [[0, 1, 'A4'], [1, 1, 'A4'], [2, 1, 'A4'], [3, 1, 'G4'], [4, 1, 'F#4'], [5, 1, 'A4']],
+    [[0, 4, 'G4']],
+  ],
+};
+
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA };
 
 // Chords: root pitch class and intervals (semitones above root).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };

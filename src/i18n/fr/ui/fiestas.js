@@ -91,4 +91,11 @@ export default {
   "Se gana en su evento de temporada, desde el {date}.": "Se gagne dans son événement de saison, à partir du {date}.",
   "Su evento llega en una próxima versión ({date}).": "Son événement arrive dans une prochaine version ({date}).",
   "Una lámina por cada fiesta grande del año. No se compran: se ganan en los eventos de temporada (🏅 Eventos), en sus fechas reales. No cuentan para los logros ni para el gran final.": "Une vignette pour chaque grande fête de l’année. Elles ne s’achètent pas : elles se gagnent dans les événements de saison (🏅 Événements), à leurs vraies dates. Elles ne comptent ni pour les succès ni pour le grand final.",
+  // v5.20
+  "⏱️ Reloj del evento": "⏱️ Horloge de l’événement",
+  "🏁 Objetivo cumplido": "🏁 Objectif atteint",
+  "🎉 Fiestas": "🎉 Fêtes",
+  "Las láminas del álbum Fiestas de Colombia y los eventos de temporada abiertos.": "Les vignettes de l’album Fêtes de Colombie et les événements de saison ouverts.",
+  "No hay eventos de temporada abiertos.": "Aucun événement de saison ouvert.",
+  "{icon} ¡Empezó el evento de la plaza: {event}! Toque 🏅 Eventos y vamos a la plaza de las fiestas.": "{icon} L’événement de la place a commencé : {event} ! Touche 🏅 Événements et allons sur la place des fêtes.",
 };

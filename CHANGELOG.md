@@ -1,5 +1,13 @@
 # Changelog
 
+## v5.20.0 — Fiesta Square
+- **🔽 Minimize:** the event bar's «Leave» button is now «Minimize», since the event keeps going while you play elsewhere.
+- **Nights in the Fiesta Square:** the square has its own days and nights, so the candles, lanterns and Christmas lights glow (production never stops).
+- **Its own buildings:** the Candle shop and the Corn mill each have their own look in the square.
+- **🎶 Carols:** the Night of the Little Candles plays «Los peces en el río» and the Christmas novena plays «Tutaina», with flute, guitar, tiple, tambourine and maracas (also on the music download page).
+- **Notice:** when a season event starts, the zone's person invites you to the square.
+- **🎉 Fiestas of Colombia album:** each sticker now has its own illustration.
+
 ## v5.19.0 — Season events
 - **🎉 Season events in the Fiesta Square:** they arrive with Colombia's fiestas, on their real dates, as the last section of 🏅 Events. First up: 🕯️ the Night of the Little Candles (from 6 December) and 🎄 the Christmas novena (from 16 December).
 - **Long events with no medals:** about three hours of production, and they keep running while you play elsewhere. After the fiesta there are 30 more days to finish them; several can be pending at once.
