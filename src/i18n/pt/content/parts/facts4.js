@@ -114,4 +114,12 @@ export default {
   hoyo_soplador: ["No Hoyo Soplador o mar sai disparado por um buraco no coral."],
   snorkel_piscinita: ["Em La Piscinita, em West View, os peixes nadam junto aos banhistas."],
   mirador_la_loma: ["A Igreja Batista de La Loma, de 1844, é a mais antiga da ilha."],
+  // La plaza de las fiestas (v5.19)
+  velitas_cereria: ["As velas da Noite das Velinhas são feitas de parafina com pavio de algodão.", "Em 7 de dezembro acendem-se velas em honra à Imaculada Conceição."],
+  velitas_faroles: ["As lanternas são feitas de papel colorido sobre uma armação de arame ou de guadua.", "Em Quimbaya, no Quindío, há um Festival de Velas e Lanternas com bairros inteiros decorados."],
+  velitas_calle: ["A Noite das Velinhas abre a temporada de Natal na Colômbia.", "As famílias saem às calçadas para acender velas e dividir natilla e buñuelos."],
+  navidad_molino: ["A natilla e os buñuelos colombianos são feitos com milho: amido ou farinha.", "Em muitas casas o milho da natilla é moído num moinho manual."],
+  navidad_natilla: ["A natilla é mexida num tacho com rapadura, leite e canela até ficar firme.", "Mexer a natilla leva horas: por isso a família se reveza."],
+  navidad_bunuelos: ["O buñuelo leva queijo costeño ralado e é frito em óleo bem quente.", "Um bom buñuelo fica redondo e vira sozinho no óleo."],
+  navidad_novena: ["A novena de Natal é rezada de 16 a 24 de dezembro.", "Em cada noite de novena cantam-se canções de Natal com pandeiros e maracas."],
 };

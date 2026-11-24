@@ -1,5 +1,5 @@
 import { STATIONS_BY_ID } from '../data/stations.js';
-import { ZONES_BY_ID, ZONE_LIST } from '../data/zones/index.js';
+import { ZONES_BY_ID, ALL_ZONES as ZONE_LIST } from '../data/zones/index.js';
 import { muleCount, muleLoad, stationBufferCap, stationInputCap, stationOutputRate, stationRate, warehouseCapacity } from './rules.js';
 import { sumValues } from './state.js';
 import { BY_CHILDREN, BY_ROUTES, CHILDREN, FUEL_CHILDREN, ROAD_POS, chainOf, consumers, joinOf, perCycleOf, zoneOf, zoneUnlocked } from './chain.js';

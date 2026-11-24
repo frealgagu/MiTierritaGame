@@ -28,6 +28,8 @@ import { SONGS } from '../audio/songs.js';
 import { VICTORY } from '../data/victory.js';
 import { PETS } from '../sim/renown.js';
 import { FINALE_LINES, FINALE_TEXT } from '../data/finale.js';
+import { PLAZA_STATIONS, PLAZA_ZONES, SEASON_EVENTS } from '../data/plaza.js';
+import { t } from './index.js';
 
 // Sets `fields` on each item in `items` (by id) from `texts[id]`: a single string
 // (the first field) or an array (in order; null keeps the Spanish original).
@@ -56,7 +58,11 @@ function applyKeyed(obj, texts, fields) {
 }
 
 export function applyContent(c) {
-  patch(STATIONS, c.stations, ['name']);
+  patch([...STATIONS, ...PLAZA_STATIONS], c.stations, ['name']);
+  // (v5.19) La plaza de las fiestas' zones and season events: their texts are UI phrases (tk in data/plaza.js), and
+  // the dictionary is already loaded when this runs.
+  for (const z of PLAZA_ZONES) Object.assign(z, { name: t(z.name), exitText: t(z.exitText) });
+  for (const e of SEASON_EVENTS) Object.assign(e, { name: t(e.name), intro: t(e.intro) });
   applyKeyed(PRODUCTS, c.products, ['name']);
   patch(PRODUCT_ZONES, c.productZones, ['name']);
   patch(RESEARCH, c.research, ['name', 'desc']);

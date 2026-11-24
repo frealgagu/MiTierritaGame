@@ -1,5 +1,5 @@
 // Zone chains: station ordering and position along mule road.
-import { ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
+import { ALL_ZONES as ZONE_LIST, ZONES_BY_ID } from '../data/zones/index.js';
 import { STATIONS_BY_ID } from '../data/stations.js';
 import { pathLength, projectOnPath } from '../core/path.js';
 import { ROUTES } from '../data/routes.js';

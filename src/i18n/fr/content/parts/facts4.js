@@ -114,4 +114,12 @@ export default {
   hoyo_soplador: ["Au Hoyo Soplador, la mer jaillit par un trou dans le corail."],
   snorkel_piscinita: ["À La Piscinita, à West View, les poissons nagent près des baigneurs."],
   mirador_la_loma: ["L’église baptiste de La Loma, de 1844, est la plus ancienne de l’île."],
+  // La plaza de las fiestas (v5.19)
+  velitas_cereria: ["Les bougies de la Nuit des petites bougies sont en paraffine avec une mèche de coton.", "Le 7 décembre, on allume des bougies en l’honneur de l’Immaculée Conception."],
+  velitas_faroles: ["Les lanternes sont faites de papier coloré sur une armature de fil de fer ou de guadua.", "À Quimbaya, dans le Quindío, un Festival des bougies et des lanternes décore des quartiers entiers."],
+  velitas_calle: ["La Nuit des petites bougies ouvre la saison de Noël en Colombie.", "Les familles sortent sur les trottoirs allumer des bougies et partager natilla et buñuelos."],
+  navidad_molino: ["La natilla et les buñuelos colombiens se font avec du maïs : fécule ou farine.", "Dans beaucoup de maisons, le maïs de la natilla est moulu au moulin à main."],
+  navidad_natilla: ["La natilla se remue dans un chaudron avec de la panela, du lait et de la cannelle jusqu’à prendre.", "Remuer la natilla prend des heures : toute la famille se relaie."],
+  navidad_bunuelos: ["Le buñuelo contient du fromage costeño râpé et se frit dans une huile bien chaude.", "Un bon buñuelo sort bien rond et se retourne tout seul dans l’huile."],
+  navidad_novena: ["La neuvaine de Noël se prie du 16 au 24 décembre.", "Chaque soir de neuvaine, on chante des chants de Noël avec tambourins et maracas."],
 };

@@ -16,6 +16,13 @@ import { t } from '../i18n/index.js';
 import { cappedPrestige, cappedRenown } from './capped.js';
 import { finaleProgress } from '../sim/finale.js';
 import { REGIONS } from '../data/regions.js';
+import { FIESTAS_BY_ID, FIESTA_PAGES } from '../data/fiestas.js';
+import { hasSticker, seasonEventOf } from '../sim/seasonEvents.js';
+import { fiestaDate } from './calendar.js';
+import { windowIn, today } from '../sim/fiestas.js';
+
+// (v5.19) The «🎉 Fiestas de Colombia» album, in the album tab's list after the regions.
+const FIESTAS_ALBUM = 'fiestas';
 
 const hex = (c) => `#${c.toString(16).padStart(6, '0')}`;
 
@@ -140,15 +147,22 @@ export class RenownView {
     for (const btn of this.modal.querySelectorAll('[data-renown-tab]')) btn.classList.toggle('active', btn.dataset.renownTab === this.tab);
     // Viewed region selector (when more than one is open).
     const open = openRegionStates(this.game.state);
-    this.regions.hidden = open.length < 2;
+    // (v5.19) The album tab also lists the fiestas' album; the other tabs go back to a region.
+    const fiestas = this.tab === 'album';
+    if (!fiestas && this.region === FIESTAS_ALBUM) this.region = open[0]?.region.id ?? 'cafetero';
+    this.regions.hidden = open.length < 2 && !fiestas;
     // (v5.8) A drop-down instead of a 3×3 grid of buttons with cut names. Options carry only the name:
     // the phone's own list may not draw the game's icon font; the chosen region's icon goes beside it.
-    const current = open.find(({ region }) => region.id === this.region)?.region;
-    const regions = `<span>${current?.icon ?? ''}</span><select data-renown-select aria-label="${t('Región')}">${open.map(({ region }) => `<option value="${region.id}" ${region.id === this.region ? 'selected' : ''}>${region.name}</option>`).join('')}</select>`;
+    const current = this.region === FIESTAS_ALBUM ? { icon: '🎉' } : open.find(({ region }) => region.id === this.region)?.region;
+    const fiestaOption = fiestas ? `<option value="${FIESTAS_ALBUM}" ${this.region === FIESTAS_ALBUM ? 'selected' : ''}>${t('Fiestas de Colombia')}</option>` : '';
+    const regions = `<span>${current?.icon ?? ''}</span><select data-renown-select aria-label="${t('Región')}">${open.map(({ region }) => `<option value="${region.id}" ${region.id === this.region ? 'selected' : ''}>${region.name}</option>`).join('')}${fiestaOption}</select>`;
     if (regions !== this.regionsHtml) this.regions.innerHTML = this.regionsHtml = regions;
     const help = document.getElementById('renown-help');
     if (this.tab === 'album') {
-      help.textContent = t('Cada región tiene su álbum. Cada lámina cuesta Renombre y tú eliges cuál pegar; al llenar una página ganas {n} ⭐.', { n: PAGE_BONUS });
+      help.textContent =
+        this.region === FIESTAS_ALBUM
+          ? t('Una lámina por cada fiesta grande del año. No se compran: se ganan en los eventos de temporada (🏅 Eventos), en sus fechas reales. No cuentan para los logros ni para el gran final.')
+          : t('Cada región tiene su álbum. Cada lámina cuesta Renombre y tú eliges cuál pegar; al llenar una página ganas {n} ⭐.', { n: PAGE_BONUS });
       this.setBody(this.albumHtml(profile));
     } else if (this.tab === 'offline') {
       help.textContent = t('La jornada es de cada región; las horas sin conexión valen para todas. Nada de esto se pierde al volver a empezar.');
@@ -177,6 +191,7 @@ export class RenownView {
   }
 
   albumHtml(profile) {
+    if (this.region === FIESTAS_ALBUM) return this.fiestasHtml(profile);
     const album = albumOf(this.region);
     // A newly opened region (v3.15) includes its album after its zones.
     if (!album.length) return `<p class="event-soon">${t('El álbum de {region} llega pronto.', { region: REGIONS_BY_ID[this.region].name })}</p>`;
@@ -192,6 +207,28 @@ export class RenownView {
       })
       .join('');
     return `${this.willysHtml(profile)}${this.chivasHtml(profile)}<div class="album-pages">${pages}</div><div class="album-head"><span>${page.icon} ${page.name}</span><span>${have} / ${page.stickers.length}${have === page.stickers.length ? ' ✅' : ` · ${t('llena: +{n} ⭐', { n: PAGE_BONUS })}`}</span></div><div class="album-grid">${cards}</div>`;
+  }
+
+  // (v5.19) The fiestas' stickers are not bought: each is won in its season event, on its real dates. A full page
+  // pays its Renown like any other.
+  fiestasHtml(profile) {
+    if (!FIESTA_PAGES.some((pg) => pg.id === this.page)) this.page = FIESTA_PAGES[0].id;
+    const pages = FIESTA_PAGES.map((pg) => `<button data-page="${pg.id}" class="${pg.id === this.page ? 'on' : ''} ${pg.stickers.every((id) => hasSticker(profile, id)) ? 'full' : ''}" title="${t(pg.name)}">${pg.icon}</button>`).join('');
+    const page = FIESTA_PAGES.find((pg) => pg.id === this.page);
+    const have = page.stickers.filter((id) => hasSticker(profile, id)).length;
+    const now = today();
+    const cards = page.stickers
+      .map((id) => {
+        const f = FIESTAS_BY_ID[id];
+        if (hasSticker(profile, id)) return `<div class="sticker"><div class="big">${f.icon}</div><b>${t(f.name)}</b><p>${t(f.sticker)}</p></div>`;
+        // When: its next first day (this year's, or next year's if it already went by).
+        const [start] = windowIn(f.dates, now.getFullYear());
+        const when = fiestaDate(start < new Date(now.getFullYear(), now.getMonth(), now.getDate()) ? windowIn(f.dates, now.getFullYear() + 1)[0] : start);
+        const how = seasonEventOf(id) ? t('Se gana en su evento de temporada, desde el {date}.', { date: when }) : t('Su evento llega en una próxima versión ({date}).', { date: when });
+        return `<div class="sticker empty"><div class="big">${f.icon}</div><b>${t(f.name)}</b><p>${how}</p></div>`;
+      })
+      .join('');
+    return `<div class="album-pages">${pages}</div><div class="album-head"><span>${page.icon} ${t(page.name)}</span><span>${have} / ${page.stickers.length}${have === page.stickers.length ? ' ✅' : ` · ${t('llena: +{n} ⭐', { n: PAGE_BONUS })}`}</span></div><div class="album-grid">${cards}</div>`;
   }
 
   logrosHtml() {

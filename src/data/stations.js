@@ -12,6 +12,7 @@
 //             (a full year's yield), storing `store` s of output in pantry yard
 
 import { ICON } from './icons.js';
+import { PLAZA_STATIONS } from './plaza.js';
 
 // Special zone prices (v5.4), per station in chain order: upgrade base (haulers cost half) and build cost. Calibrated
 // with the even player (`npm run balance -- 30 parejo` with BALANCE_REGION=sanandres): each station takes about
@@ -633,7 +634,8 @@ export const STATIONS = [
   { id: 'mirador_la_loma', zone: 'sanandres', name: 'Mirador de La Loma', icon: ICON.iglesiaLoma, in: { buceo: 2 }, out: { tour_isla: 1 }, cycle: 64, unlockCost: SA.unlock[7], upgradeBase: SA.base[7], growth: 1.15, release: '5.4' },
 ];
 
-export const STATIONS_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));
+// (v5.19) With La plaza de las fiestas' stations, which belong to no region (data/plaza.js).
+export const STATIONS_BY_ID = Object.fromEntries([...STATIONS, ...PLAZA_STATIONS].map((s) => [s.id, s]));
 
 // Warehouse + Dispatch (Willys). One per zone; upgrade prices defined in zone data.
 export const DISPATCH = {

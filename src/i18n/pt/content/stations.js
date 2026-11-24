@@ -375,4 +375,12 @@ export default {
   hoyo_soplador: "Hoyo Soplador",
   snorkel_piscinita: "Snorkel em La Piscinita",
   mirador_la_loma: "Mirante de La Loma",
+  // La plaza de las fiestas (v5.19)
+  velitas_cereria: "Cereria",
+  velitas_faroles: "Oficina de lanternas",
+  velitas_calle: "Rua das velinhas",
+  navidad_molino: "Moinho de milho",
+  navidad_natilla: "Tacho de natilla",
+  navidad_bunuelos: "Fritura de buñuelos",
+  navidad_novena: "Mesa da novena",
 };

@@ -15,6 +15,11 @@ import { upgradeTarget } from '../sim/upgrades.js';
 import { zoneBoostTargets } from '../sim/zoneBoost.js';
 import { cappedPrestige, cappedRenown } from './capped.js';
 import { regionStates } from '../sim/regions.js';
+import { daysBetween, fiestaMonth, fiestasWithoutEvent, hasSticker, nextSeason, seasonReady, seasonStatuses } from '../sim/seasonEvents.js';
+import { FIESTAS_BY_ID, FIESTA_PAGES } from '../data/fiestas.js';
+import { today } from '../sim/fiestas.js';
+import { fiestaDate } from './calendar.js';
+import { LANG } from '../i18n/index.js';
 
 export const medalLine = (obj) => t('🥇 hasta {gold} · 🥈 hasta {silver} · 🥉 después', { gold: formatClock(obj.medals[0]), silver: formatClock(obj.medals[1]) });
 
@@ -170,7 +175,43 @@ export class EventsView {
         return `<div class="zones-group events-group">${head}${folded ? '' : g.cards.join('')}</div>`;
       })
       .join('');
-    this.paint(`${freeEventsHtml(profile)}${html}<p class="event-soon">${t('Cada zona que abras trae su evento.')}</p>${medalsHtml(profile)}`);
+    this.paint(`${freeEventsHtml(profile)}${html}<p class="event-soon">${t('Cada zona que abras trae su evento.')}</p>${this.seasonHtml()}${medalsHtml(profile)}`);
+  }
+
+  // (v5.19) «🎉 Season events», the last section: the fiestas' events going on now or in their days of grace, the next
+  // one, and the year's stickers on a 12-month calendar. They belong to no region (sim/seasonEvents.js).
+  seasonHtml() {
+    const s = this.game.state;
+    const profile = s.profile;
+    const now = today();
+    const card = (st) => {
+      const { def, fiesta } = st;
+      const title = `<h3><span>${def.icon} ${def.name}</span><span>${hasSticker(profile, fiesta.id) ? fiesta.icon : ''}</span></h3>`;
+      const when = st.grace ? t('🕐 Ya pasó la fiesta, pero aún quedan {n} días para jugarlo.', { n: live(String(st.left)) }) : t('🎉 Evento actual · la fiesta termina en {n} días.', { n: live(String(daysBetween(now, st.edition.end) + 1)) });
+      if (st.kind === 'completed') return `<div class="event-card locked">${title}<p>${t('✅ Cumplido este año. Vuelve con la fiesta del año que viene.')}</p></div>`;
+      const prize = (st.board ? st.board.event.season.prize : !hasSticker(profile, fiesta.id)) ? t('🏷️ Premio: la lámina {fiesta} del álbum 🎉 Fiestas de Colombia.', { fiesta: `${fiesta.icon} ${t(fiesta.name)}` }) : t('🏷️ Ya tienes su lámina: se juega por el gusto, sin premio.');
+      const key = `fiesta:${fiesta.id}`;
+      let foot;
+      const playBtn = (label) => `<button class="btn buy event-play" data-play="${key}"><span class="event-play-row"><span class="event-play-label">${label}</span><span class="event-play-clock">⏱ ${live(formatClock(boardClockNow(st.board, s)))}</span><span class="event-play-state">${t('🚪 corriendo')}</span></span></button>`;
+      if (st.kind === 'won') foot = `<p>${t('🏁 ¡Objetivo cumplido!')}</p>${playBtn(t('Ver y terminar'))}`;
+      else if (st.kind === 'active') foot = playBtn(t('Seguir'));
+      else foot = `<button class="btn buy" data-play="${key}">${t('Jugar')}</button>`;
+      return `<div class="event-card" data-ekey="${key}">
+        ${title}
+        <p>${when}</p>
+        <p class="clamp" style="--lines: 2">${def.intro}</p>${moreButton()}
+        <p class="event-year">${objectiveText(def.objective)}.<br>${prize}</p>
+        ${foot}
+      </div>`;
+    };
+    const cards = seasonStatuses(s, now).map(card);
+    const soon = fiestasWithoutEvent(now).map((f) => `<p class="event-soon">${t('{fiesta}: es su fiesta, pero su evento llega en una próxima versión.', { fiesta: `${f.icon} ${t(f.name)}` })}</p>`);
+    const next = nextSeason(now);
+    const nextLine = next ? `<p class="event-soon">${t('Próximo evento: {fiesta}, el {date} (en {n} días).', { fiesta: `${next.fiesta.icon} ${t(next.fiesta.name)}`, date: fiestaDate(next.start), n: next.days })}${next.def ? '' : ` ${t('Su evento llega en una próxima versión.')}`}</p>` : '';
+    const current = cards.length ? '' : `<p class="event-soon">${t('Ahora no hay ningún evento de temporada.')}</p>`;
+    return `<div class="zones-group events-group season-events"><h3 class="season-head">🎉 ${t('Eventos de temporada')}</h3>
+      <p class="chain-help">${t('Llegan con las fiestas de Colombia, en sus fechas reales, a la plaza de las fiestas. Son largos y siguen andando mientras juegas en otra parte; no tienen medallas: al cumplir el objetivo ganas la lámina de la fiesta. Después de la fiesta quedan {n} días para terminarlos.', { n: 30 })}</p>
+      ${current}${cards.join('')}${soon.join('')}${nextLine}${seasonCalendarHtml(profile)}</div>`;
   }
 
   // Redraws only what changed (v5.7): when only the clocks and countdowns moved, it rewrites
@@ -211,12 +252,14 @@ export class EventsView {
     // shows those ready to start.
     const p = this.game.state.profile;
     const progress = p.renown > 0 || p.history?.length > 0 || Object.keys(p.logros ?? {}).length > 0 || regionStates(this.game.state).some((st) => st.keep.resets > 0);
-    this.btn.hidden = !progress && !statuses.some((st) => st.kind !== 'locked');
+    // (v5.19) Season events can be played from the start of the game.
+    const season = seasonStatuses(this.game.state);
+    this.btn.hidden = !progress && !statuses.some((st) => st.kind !== 'locked') && !season.length;
     // (v4.7.3) Only startable ones: a won event still open (goal met and all 3 upgrades) no
     // longer counts.
     // (v5.9) With events without waiting every ready event is available: only those still without gold count.
     const free = hasFreeEvents(p);
-    const ready = statuses.filter((st) => st.kind === 'available' && (!free || p.medals?.[st.def.id]?.best !== 'gold')).length;
+    const ready = statuses.filter((st) => st.kind === 'available' && (!free || p.medals?.[st.def.id]?.best !== 'gold')).length + seasonReady(this.game.state);
     this.badge.hidden = ready === 0;
     this.badge.textContent = ready;
     // Open (v5.7): clocks, countdowns and newly available events refresh on their own.
@@ -227,6 +270,22 @@ export class EventsView {
 // Texts that change every second (board clocks, time until a slot frees up).
 const LIVE = /<span data-live>([^<]*)<\/span>/g;
 const live = (text) => `<span data-live>${text}</span>`;
+
+// (v5.19) The year's fiestas with a sticker, month by month: each sticker in color once won, in gray until then.
+const MONTHS = { es: 'es-CO', en: 'en-GB', pt: 'pt-BR', fr: 'fr-FR' };
+function seasonCalendarHtml(profile) {
+  const ids = FIESTA_PAGES.flatMap((p) => p.stickers);
+  const have = ids.filter((id) => hasSticker(profile, id)).length;
+  const months = Array.from({ length: 12 }, (_, k) => {
+    const name = new Date(2026, k, 1).toLocaleDateString(MONTHS[LANG] ?? 'es-CO', { month: 'short' }).replace('.', '');
+    const here = ids.filter((id) => fiestaMonth(id) === k + 1).map((id) => {
+      const f = FIESTAS_BY_ID[id];
+      return `<span class="season-sticker ${hasSticker(profile, id) ? 'got' : ''}" title="${t(f.name)}">${f.icon}</span>`;
+    });
+    return `<li><small>${name}</small><span>${here.join('') || '·'}</span></li>`;
+  });
+  return `<div class="season-calendar"><p>${t('🏷️ Láminas de fiestas: {n} de {total}', { n: have, total: ids.length })}</p><ul>${months.join('')}</ul></div>`;
+}
 
 // Events without waiting (v5.9): the purchase card on top of the list, or a short line once owned.
 function freeEventsHtml(profile) {

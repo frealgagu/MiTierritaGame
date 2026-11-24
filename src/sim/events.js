@@ -299,9 +299,10 @@ export const boardClockNow = (board, root) => Math.min((board.playTime ?? 0) + a
 // Once goal is met, medal locks in with timestamp (`at`, board time unless
 // given; up to 999:59). Returns true if newly locked.
 export function secureMedal(board, at = board.playTime) {
-  if (board.event.medal || eventProgress(board) < 1 - 1e-9) return false;
+  if (board.event.medal || board.event.time !== undefined || eventProgress(board) < 1 - 1e-9) return false;
   board.event.time = Math.min(at, EVENT_CLOCK_MAX);
-  board.event.medal = medalFor(boardObjective(board), board.event.time);
+  // (v5.19) A season event has no medals: only the time it was met (sim/seasonEvents.js).
+  if (!eventDef(board).season) board.event.medal = medalFor(boardObjective(board), board.event.time);
   return true;
 }
 

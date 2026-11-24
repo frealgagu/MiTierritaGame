@@ -55,7 +55,11 @@ import { ZONE53 } from './zone53_cocina.js';
 import { ZONE54 } from './zone54_zipaquira.js';
 import { ZONE55 } from './zone55_bogota.js';
 import { ZONE56 } from './zone56_sanandres.js';
+import { PLAZA_ZONES } from '../plaza.js';
 
 // All regions (each zone states its own; without `region`, it belongs to Eje Cafetero).
 export const ZONE_LIST = [ZONE1, ZONE2, ZONE3, ZONE4, ZONE5, ZONE6, ZONE7, ZONE8, ZONE9, ZONE10, ZONE11, ZONE12, ZONE13, ZONE14, ZONE15, ZONE16, ZONE17, ZONE18, ZONE19, ZONE20, ZONE21, ZONE22, ZONE23, ZONE24, ZONE25, ZONE26, ZONE27, ZONE28, ZONE29, ZONE30, ZONE31, ZONE32, ZONE33, ZONE34, ZONE35, ZONE36, ZONE37, ZONE38, ZONE39, ZONE40, ZONE41, ZONE42, ZONE43, ZONE44, ZONE45, ZONE46, ZONE47, ZONE48, ZONE49, ZONE50, ZONE51, ZONE52, ZONE53, ZONE54, ZONE55, ZONE56];
-export const ZONES_BY_ID = Object.fromEntries(ZONE_LIST.map((z) => [z.id, z]));
+// (v5.19) Every zone that can be played: the regions' and La plaza de las fiestas' (one per season event, in no
+// region: data/plaza.js). Lists of the main game use ZONE_LIST; the simulation and the chains, ALL_ZONES.
+export const ALL_ZONES = [...ZONE_LIST, ...PLAZA_ZONES];
+export const ZONES_BY_ID = Object.fromEntries(ALL_ZONES.map((z) => [z.id, z]));

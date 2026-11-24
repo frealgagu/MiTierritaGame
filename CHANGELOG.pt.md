@@ -1,5 +1,12 @@
 # Registro de alterações
 
+## v5.19.0 — Eventos de temporada
+- **🎉 Eventos de temporada na praça das festas:** chegam com as festas da Colômbia, nas datas reais, como última seção de 🏅 Eventos. Os primeiros: 🕯️ a Noite das Velinhas (a partir de 6 de dezembro) e 🎄 a novena de Natal (a partir de 16 de dezembro).
+- **Eventos longos e sem medalhas:** cerca de três horas de produção, e continuam rodando enquanto você joga em outro lugar. Depois da festa ainda há 30 dias para terminá-los; vários podem ficar pendentes ao mesmo tempo.
+- **🎉 Álbum Festas da Colômbia:** ao cumprir o objetivo você ganha a figurinha da festa, num álbum novo (Álbum › Festas da Colômbia) com duas páginas de seis e um calendário de 12 meses. A página completa paga seu Renome. Não contam para as conquistas nem para o grande final; a cada ano o evento volta, sem prêmio.
+- **Festas:** a Semana Santa e a Feira das Flores agora só decoram (×1,10) e o Dia do Amor e da Amizade é festa grande (×1,25): doze festas grandes, quase uma por mês.
+- **Melhoria recomendada:** uma estação que junta dois ramos não é mais recomendada quando é o outro ramo que não dá conta.
+
 ## v5.18.0 — Nada se perde
 - **🔥 A Fornalha queima o bagaço:** o bagaço da Moenda agora é uma de suas entradas. Sem bagaço ela para; no mesmo nível ela gasta tudo, então o Engenho só vende sua rapadura.
 - **🚌 Nova Rota do composto:** o composto da Composteira aduba o Cacaual, cujas árvores precisam dele para dar cacau. O resto mantém o bônus de +30 % da Fazenda.

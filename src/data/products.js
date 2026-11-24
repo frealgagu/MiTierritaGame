@@ -5,6 +5,7 @@
 // `color` colors mule sacks and icons.
 // `icon`: emoji or custom icon (`ICON` from game font) when no fitting emoji exists.
 import { ICON } from './icons.js';
+import { PLAZA_PRODUCTS } from './plaza.js';
 
 export const ZONES = [
   { id: 'finca', name: 'La Finca', release: '0.1' },
@@ -506,3 +507,5 @@ export const PRODUCTS = {
   buceo: { name: 'Buceo con los peces', zone: 'sanandres', value: 1073741824, icon: ICON.snorkel, color: 0x118ab2 },
   tour_isla: { name: 'Tour de la isla', zone: 'sanandres', value: 34359738368, icon: ICON.iglesiaLoma, color: 0x06d6a0 },
 };
+// (v5.19) La plaza de las fiestas' products (data/plaza.js).
+Object.assign(PRODUCTS, PLAZA_PRODUCTS);

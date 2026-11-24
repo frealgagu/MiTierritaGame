@@ -375,4 +375,12 @@ export default {
   hoyo_soplador: "Hoyo Soplador blowhole",
   snorkel_piscinita: "Snorkeling at La Piscinita",
   mirador_la_loma: "La Loma lookout",
+  // La plaza de las fiestas (v5.19)
+  velitas_cereria: "Candle shop",
+  velitas_faroles: "Lantern workshop",
+  velitas_calle: "Street of little candles",
+  navidad_molino: "Corn mill",
+  navidad_natilla: "Natilla pot",
+  navidad_bunuelos: "Buñuelo fryer",
+  navidad_novena: "Novena table",
 };

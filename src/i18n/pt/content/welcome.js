@@ -58,4 +58,7 @@ export default {
   bogota: 'Bem-vindo a Bogotá, sumercé! Aqui não se planta nada: tudo chega do país de carreta. Vamos começar com um tinto em La Candelaria.',
   // Special zone (v5.4)
   sanandres: "Welcome, amigo, bem-vindo a San Andrés! Aqui o mar tem sete cores, e o tour da ilha começa no aeroporto.",
+  // La plaza de las fiestas (v5.19)
+  plaza_velitas: "Chegou a Noite das Velinhas! Acenda a Cereria e vamos encher todas as ruas de lanternas.",
+  plaza_navidad: "A novena começou! Moa o milho, que hoje à noite tem natilla e buñuelos para todos.",
 };

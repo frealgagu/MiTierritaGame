@@ -375,4 +375,12 @@ export default {
   hoyo_soplador: "Hoyo Soplador",
   snorkel_piscinita: "Snorkeling à La Piscinita",
   mirador_la_loma: "Belvédère de La Loma",
+  // La plaza de las fiestas (v5.19)
+  velitas_cereria: "Ciergerie",
+  velitas_faroles: "Atelier de lanternes",
+  velitas_calle: "Rue des petites bougies",
+  navidad_molino: "Moulin à maïs",
+  navidad_natilla: "Chaudron de natilla",
+  navidad_bunuelos: "Friterie de buñuelos",
+  navidad_novena: "Table de la neuvaine",
 };

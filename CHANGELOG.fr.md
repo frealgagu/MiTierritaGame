@@ -1,5 +1,12 @@
 # Journal des modifications
 
+## v5.19.0 — Événements de saison
+- **🎉 Événements de saison sur la place des fêtes :** ils arrivent avec les fêtes de Colombie, à leurs vraies dates, dans la dernière section de 🏅 Événements. Les premiers : 🕯️ la Nuit des petites bougies (dès le 6 décembre) et 🎄 la neuvaine de Noël (dès le 16 décembre).
+- **Des événements longs, sans médailles :** environ trois heures de production, et ils continuent de tourner pendant que tu joues ailleurs. Après la fête, il reste 30 jours pour les terminer ; plusieurs peuvent attendre en même temps.
+- **🎉 Album Fêtes de Colombie :** en atteignant l’objectif, tu gagnes la vignette de la fête, dans un nouvel album (Album › Fêtes de Colombie) avec deux pages de six et un calendrier de 12 mois. Une page complète rapporte son Renom. Elles ne comptent ni pour les succès ni pour le grand final ; chaque année l’événement revient, sans prix.
+- **Fêtes :** la Semaine sainte et la Fête des fleurs ne font plus que décorer (×1,10) et la fête de l’Amour et de l’Amitié devient une grande fête (×1,25) : douze grandes fêtes, presque une par mois.
+- **Amélioration recommandée :** une station qui réunit deux branches n’est plus recommandée quand c’est l’autre branche qui ne suit pas.
+
 ## v5.18.0 — Rien ne se perd
 - **🔥 Le Four à panela brûle la bagasse :** la bagasse du Broyeur de canne est maintenant l’une de ses entrées. Sans bagasse il s’arrête ; au même niveau il l’utilise toute, donc le Moulin à canne ne vend que sa panela.
 - **🚌 Nouvelle Route du compost :** le compost du Composteur fertilise la Cacaoyère, dont les arbres en ont besoin pour donner des cabosses. Le reste garde le bonus de +30 % de la Ferme.

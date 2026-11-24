@@ -27,6 +27,7 @@ import { EventBar, formatClock } from './ui/EventBar.js';
 import { MoneyView } from './ui/MoneyView.js';
 import { EVENT_COOLDOWN, allActionsBought, awaySeconds, checkMedalBonus, endEvent, finishEvent, restartEvent, startEvent, startOnDemand } from './sim/events.js';
 import { MEDALS } from './data/events.js';
+import { endSeason, finishSeason, restartSeason, startSeason, sweepSeason } from './sim/seasonEvents.js';
 import { REGIONS, REGIONS_BY_ID, REGION_OF_ZONE } from './data/regions.js';
 import { openRegions, regionState } from './sim/regions.js';
 import { bindNative, isNativeApp } from './native.js';
@@ -245,6 +246,16 @@ async function start() {
   };
   const restartBoard = () => {
     if (!board || board.game.state.event.done) return;
+    // (v5.19) A season event: the same edition from scratch.
+    if (board.season) {
+      const key = board.key;
+      return confirmEvent('🔄', t('¿Reiniciar el evento?'), t('Vuelve a empezar este mismo evento desde cero: monedas, niveles y reloj.'), t('🔄 Reiniciar'), () => {
+        restartSeason(game.state, board.season);
+        leaveBoard();
+        enterEvent(key);
+        toast(t('🔄 El evento empezó de nuevo.'), 2500);
+      });
+    }
     confirmEvent('🔄', t('¿Reiniciar el evento?'), t('Vuelve a empezar este mismo reto desde cero: monedas, niveles, compras y reloj. Si ya tenías la medalla asegurada, también se borra.'), t('🔄 Reiniciar'), () => {
       const zone = board.key;
       restartEvent(game.state, zone);
@@ -255,6 +266,20 @@ async function start() {
   };
   const endBoard = () => {
     if (!board) return;
+    // (v5.19) A season event: once won it just closes; before, what it made is lost, but it can start again while
+    // its days last.
+    if (board.season) {
+      const fiesta = board.season;
+      const close = () => {
+        endSeason(game.state, fiesta);
+        exitEvent();
+      };
+      if (board.game.state.event.done) return close();
+      return confirmEvent('🏁', t('¿Terminar el evento?'), t('Se pierde lo que llevas. Mientras duren sus días puedes empezarlo otra vez desde cero.'), t('🏁 Terminar sin ganar'), () => {
+        close();
+        toast(t('🏁 Evento terminado.'), 3000);
+      });
+    }
     const zone = board.key;
     const close = () => {
       endEvent(game.state, zone);
@@ -296,8 +321,10 @@ async function start() {
   // A zone event is stored in its own region save (v3.6: Santander also has events);
   // global slots live on the main save (v3.30).
   const enterEvent = (zoneId) => {
+    // (v5.19) A season event's key is «fiesta:<fiesta>» (sim/seasonEvents.js).
+    const season = zoneId.startsWith('fiesta:') ? zoneId.slice(7) : null;
     // (v4.7.3) Or, on a region with gold on all events and on-demand unlocked, Play again.
-    const state = startEvent(game.state, zoneId) ?? startOnDemand(game.state, zoneId);
+    const state = season ? startSeason(game.state, season) : startEvent(game.state, zoneId) ?? startOnDemand(game.state, zoneId);
     if (!state) return;
     // zoneId acts as the event key (v4.5: Bogota has multiple events in the same zone); map uses its zone.
     const key = zoneId;
@@ -307,8 +334,9 @@ async function start() {
     const eg = new Game(state);
     eg.timeScale = game.timeScale;
     for (const type of ['levelUp', 'unlocked', 'research']) eg.bus.on(type, () => (hud.recDirty = true));
-    board = { zone: zoneId, key, game: eg };
-    setLook(root.profile, REGION_OF_ZONE[zoneId]);
+    board = { zone: zoneId, key, game: eg, season };
+    // La plaza de las fiestas belongs to no region: it wears Eje Cafetero's decor.
+    setLook(root.profile, season ? 'cafetero' : REGION_OF_ZONE[zoneId]);
     scene = new Scene(app, eg, sound, ZONES_BY_ID[zoneId]);
     scene.onSelect = select;
     scene.onBackground = () => panel.id && panel.close();
@@ -338,7 +366,8 @@ async function start() {
   const leaveBoard = () => {
     // Leave mode (via button or switching zones): board keeps running from now using the country
     // clock; Pause mode freezes it (v3.67.4).
-    if (exitMode() === 'leave') board.game.state.event.away = clockOf(game.state);
+    // (v5.19) A season event never pauses: it is long and keeps going while you play elsewhere.
+    if (exitMode() === 'leave' || board.season) board.game.state.event.away = clockOf(game.state);
     board = null;
     useGame(active);
     document.body.classList.remove('event-mode');
@@ -383,6 +412,25 @@ async function start() {
       t('{event}: cumpliste el objetivo en {time} y compraste las tres mejoras.\n+{renown} ⭐ de Renombre (tienes {total}).\nEste cupo de eventos queda libre en 2 años del juego (unas {cooldown}).', { event: `${r.def.icon} ${r.def.name}`, time: formatClock(r.time), renown: m.renown, total: game.state.profile.renown, cooldown: formatDuration(EVENT_COOLDOWN) });
     const modal = document.getElementById('event-result');
     // End event or keep inspecting the board (v3.30): can pause, closes on End event.
+    document.getElementById('event-result-ok').onclick = () => {
+      modal.hidden = true;
+      endBoard();
+    };
+    document.getElementById('event-result-watch').onclick = () => (modal.hidden = true);
+    modal.hidden = false;
+    sound.milestone();
+  };
+
+  // (v5.19) A season event won: the sticker of its fiesta (the first time) or just the fiesta, with no prize.
+  const showSeasonResult = (r) => {
+    const fiesta = `${r.fiesta.icon} ${t(r.fiesta.name)}`;
+    document.getElementById('event-result-medal').textContent = r.fiesta.icon;
+    document.getElementById('event-result-title').textContent = r.sticker ? t('¡Lámina ganada!') : t('¡Evento cumplido!');
+    const lines = [t('{event}: cumpliste el objetivo en {time}.', { event: `${r.def.icon} ${r.def.name}`, time: formatClock(r.time) })];
+    lines.push(r.sticker ? t('La lámina {fiesta} ya está en el álbum 🎉 Fiestas de Colombia.', { fiesta }) : t('Ya tenías la lámina {fiesta}: este año se jugó por el gusto.', { fiesta }));
+    if (r.bonus) lines.push(t('📖 ¡Página llena! +{n} ⭐ de Renombre', { n: r.bonus }));
+    document.getElementById('event-result-text').textContent = lines.join('\n');
+    const modal = document.getElementById('event-result');
     document.getElementById('event-result-ok').onclick = () => {
       modal.hidden = true;
       endBoard();
@@ -557,6 +605,15 @@ async function start() {
       if (!board) return;
       board.game.timeScale = game.timeScale;
       board.game.update(dt);
+      // (v5.19) A season event is won as soon as its objective is met: its sticker, the first time.
+      if (board.season) {
+        const won = finishSeason(game.state, board.season);
+        if (won) {
+          eventBar.paint();
+          showSeasonResult(won);
+        }
+        return;
+      }
       const r = finishEvent(game.state, board.key);
       // v3.7: reaching the goal secures the medal; event completes once all three upgrades are bought.
       if (r?.secured) {
@@ -602,6 +659,13 @@ async function start() {
         toast(won.length > 1 ? t('🏆 {n} logros: +{stars} ⭐ de Renombre', { n: won.length, stars }) : t('🏆 {logro} (nivel {tier}): +{stars} ⭐ de Renombre', { logro: `${w.logro.icon} ${w.logro.name}`, tier: w.tier, stars }), 4000);
         sound.milestone();
       });
+      // (v5.19) Season events whose days of grace are over close; if one is on screen, back to the map.
+      safely(() => {
+        for (const f of sweepSeason(game.state)) {
+          if (board?.season === f.id) exitEvent();
+          toast(t('{fiesta}: se acabaron sus días y el evento se cerró sin terminar. Vuelve el año que viene.', { fiesta: `${f.icon} ${t(f.name)}` }), 6000);
+        }
+      });
       // Inside an event board, the keeper does not show main-game hints.
       for (const view of [panel, chain, money, goals, research, zones, events, renown, stats, eventBar, ...(board ? [] : [chatter])]) safely(() => view.update());
       // The calendar, while open (v5.7), follows the clock: time of day, season and the event clock.
@@ -618,7 +682,7 @@ async function start() {
   const onHide = () => {
     hiddenAt ??= Date.now();
     // With Leave mode, open boards also tick while the app is closed (v3.67.4).
-    if (board && exitMode() === 'leave') board.game.state.event.away ??= clockOf(game.state);
+    if (board && (exitMode() === 'leave' || board.season)) board.game.state.event.away ??= clockOf(game.state);
     persist();
   };
   // On resume, catch up elapsed progress once (even if both page and native hooks fire). While

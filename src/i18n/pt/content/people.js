@@ -58,4 +58,7 @@ export default {
   bogota: ['Doña Clemencia', 'a do café de La Candelaria'],
   // Special zone (v5.4)
   sanandres: ["Mister Livingston", "o guia raizal da ilha"],
+  // La plaza de las fiestas (v5.19)
+  plaza_velitas: ["Dona Celmira", "a da comissão de festas"],
+  plaza_navidad: ["Dona Celmira", "a da comissão de festas"],
 };

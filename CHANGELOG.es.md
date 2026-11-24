@@ -1,5 +1,12 @@
 # Registro de cambios
 
+## v5.19.0 — Eventos de temporada
+- **🎉 Eventos de temporada en la plaza de las fiestas:** llegan con las fiestas de Colombia, en sus fechas reales, como última sección de 🏅 Eventos. Los primeros: 🕯️ la Noche de las Velitas (desde el 6 de diciembre) y 🎄 la novena de Navidad (desde el 16 de diciembre).
+- **Eventos largos y sin medallas:** unas tres horas de producción, y siguen andando mientras juegas en otra parte. Después de la fiesta quedan 30 días para terminarlos; pueden quedar varios pendientes a la vez.
+- **🎉 Álbum Fiestas de Colombia:** al cumplir el objetivo ganas la lámina de la fiesta, en un álbum nuevo (Álbum › Fiestas de Colombia) con dos páginas de seis y un calendario de 12 meses. La página llena paga su Renombre. No cuentan para los logros ni para el gran final; cada año el evento vuelve, sin premio.
+- **Fiestas:** la Semana Santa y la Feria de las Flores ahora solo decoran (×1,10) y Amor y Amistad es fiesta grande (×1,25): doce fiestas grandes, casi una por mes.
+- **Mejora recomendada:** una estación que junta dos ramas ya no se recomienda cuando es la otra rama la que no alcanza.
+
 ## v5.18.0 — Nada se pierde
 - **🔥 La Hornilla quema el bagazo:** el bagazo de la Molienda ahora es una de sus entradas. Sin bagazo se detiene; al mismo nivel lo gasta todo, así que el Trapiche solo vende su panela.
 - **🚌 Nueva Ruta del abono:** el compost de la Compostera abona el Cacaotal, cuyos árboles lo necesitan para dar mazorcas. El resto mantiene el bono de +30 % de la Finca.

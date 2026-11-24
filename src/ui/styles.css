@@ -593,6 +593,16 @@ button:focus-visible, .tracker:focus-visible { outline: 3px solid var(--yellow);
 .event-card .btn { width: 100%; }
 .event-card.locked { opacity: 0.65; }
 .event-soon { font-size: 0.9rem; opacity: 0.8; text-align: center; margin: 6px 0; }
+/* Season events (v5.19): the last section of the Events window, with the year's fiesta stickers month by month. */
+.season-events { margin-top: 12px; }
+.season-head { margin: 4px 0; font-size: 1.05rem; }
+.season-calendar { margin-top: 8px; border: 2px solid var(--ink); border-radius: 12px; padding: 6px 8px; background: var(--paper-2); }
+.season-calendar p { margin: 0 0 6px; font-weight: 700; text-align: center; }
+.season-calendar ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.season-calendar li { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 3px 0; border-radius: 8px; background: var(--paper); min-width: 0; }
+.season-calendar li small { font-size: 0.7rem; opacity: 0.75; text-transform: capitalize; }
+.season-sticker { font-size: 1.15rem; filter: grayscale(1); opacity: 0.4; }
+.season-sticker.got { filter: none; opacity: 1; }
 .event-bar {
   position: fixed;
   left: max(12px, env(safe-area-inset-left, 0px));
@@ -658,7 +668,7 @@ body.event-mode .tracker, body.event-mode .legacy-chip { display: none !importan
 .album-pages button { flex: 1; padding: 6px 0; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper-2); font-size: 1.2rem; position: relative; }
 .album-pages button.on { background: var(--yellow); }
 .album-pages button.full::after { content: '✓'; position: absolute; top: -6px; right: -4px; font-size: 0.7rem; background: var(--green); color: #fff; border-radius: 999px; padding: 0 4px; }
-.album-head { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 8px; }
+.album-head { display: flex; justify-content: space-between; gap: 8px; font-weight: 700; margin-bottom: 8px; }
 .album-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .sticker { border: 2px solid var(--ink); border-radius: 12px; padding: 8px; background: #fffaf0; text-align: center; display: flex; flex-direction: column; gap: 4px; min-height: 150px; }
 .sticker .big { font-size: 2.4rem; line-height: 1.1; }

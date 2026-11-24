@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.19.0 — Season events
+- **🎉 Season events in the Fiesta Square:** they arrive with Colombia's fiestas, on their real dates, as the last section of 🏅 Events. First up: 🕯️ the Night of the Little Candles (from 6 December) and 🎄 the Christmas novena (from 16 December).
+- **Long events with no medals:** about three hours of production, and they keep running while you play elsewhere. After the fiesta there are 30 more days to finish them; several can be pending at once.
+- **🎉 Fiestas of Colombia album:** meeting the objective wins the fiesta's sticker, in a new album (Album › Fiestas of Colombia) with two pages of six and a 12-month calendar. A full page pays its Renown. They count for no achievement or the grand finale; each year the event comes back with no prize.
+- **Fiestas:** Holy Week and the Flower Festival now only decorate (×1.10) and Love and Friendship Day is a big fiesta (×1.25): twelve big fiestas, nearly one a month.
+- **Recommended upgrade:** a station that combines two branches no longer gets recommended when it is the other branch that falls short.
+
 ## v5.18.0 — Nothing goes to waste
 - **🔥 The Furnace burns the bagasse:** the Cane Press's bagasse is now one of its inputs. Without bagasse it stops; at the same level it uses all of it, so the Sugar Mill sells only its panela.
 - **🚌 New Compost route:** the Compost Bin's compost fertilizes the Cacao Grove, whose trees need it to give pods. The rest keeps the Farm's +30 % bonus.

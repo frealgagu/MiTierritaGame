@@ -9265,6 +9265,168 @@ const DRAW = {
     };
     this.animate(0, 0);
   },
+
+  // --- La plaza de las fiestas (v5.19) ---
+  // Lantern workshop (Velitas): open shed with colored paper lanterns hanging from the beam and a worktable with
+  // paper and wire frames; the lanterns glow at night.
+  velitas_faroles(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    const H = 24 + ctx.up;
+    box(g, x0 + 0.3, y0 + 0.7, 1.6, 0.5, 9, PAL.wood);
+    const colors = [0xe53935, 0xffb300, 0x43a047, 0x1e88e5, 0x8e24aa, 0xff7043];
+    for (let k = 0; k < 4; k++) {
+      const p = iso(x0 + 0.5 + k * 0.38, y0 + 0.95, 9);
+      g.rect(p.x - 4, p.y - 2, 8, 2).fill(colors[(k + 2) % colors.length]);
+    }
+    for (const [px, py] of [[0, 0], [2.1, 0], [0, 1.4], [2.1, 1.4]]) box(g, x0 + px, y0 + py, 0.12, 0.12, H, PAL.wood);
+    gableRoof(g, x0, y0, 2.22, 1.52, H, 12, PAL.roof, PAL.wood);
+    // Lanterns hanging along the front, more at each milestone.
+    const n = 3 + Math.min(ctx.tier, 3);
+    for (let k = 0; k < n; k++) {
+      const p = iso(x0 + 0.2 + (k * 1.8) / (n - 1), y0 + 1.6, H - 4);
+      g.moveTo(p.x, p.y - 4).lineTo(p.x, p.y).stroke({ width: 0.8, color: 0x3a2418 });
+      g.roundRect(p.x - 3.5, p.y, 7, 9, 3).fill(colors[k % colors.length]).stroke({ width: 0.8, color: 0x3a2418, alpha: 0.6 });
+      g.rect(p.x - 2, p.y - 1, 4, 1.5).fill(0x3a2418);
+      this.lights.push({ x: p.x, y: p.y + 4, r: 14, color: colors[k % colors.length] });
+    }
+    this.roofTop = iso(x0 + 1.1, y0 + 0.75, H + 12);
+  },
+
+  // Street of little candles (Velitas): two house fronts facing a sidewalk lined with candles in paper lanterns,
+  // and a string of lights across; every candle glows at night and flickers.
+  velitas_calle(g, x, y, ctx) {
+    const H = house(this, g, x + 0.25, y + 0.25, 1.2, 1.3, 24, ctx, { wall: 0xfff3d6 });
+    door(g, x + 0.25, y + 0.25, 1.3, 0.6, 15, ctx.trim);
+    const H2 = house(this, g, x + 1.6, y + 0.25, 1.15, 1.3, 22, ctx, { wall: 0xb8e0f5 });
+    door(g, x + 1.6, y + 0.25, 1.3, 0.55, 14, ctx.trim);
+    // Sidewalk.
+    g.poly(isoPoly([[x + 0.2, y + 1.65], [x + 2.85, y + 1.65], [x + 2.85, y + 2.15], [x + 0.2, y + 2.15]])).fill(0xd9d2c3).stroke({ width: 1, color: 0x3a2418, alpha: 0.4 });
+    // Candles in little paper lanterns along the curb.
+    const flames = [];
+    const n = 6 + Math.min(ctx.tier, 4) * 2;
+    for (let k = 0; k < n; k++) {
+      const p = iso(x + 0.3 + (k * 2.45) / (n - 1), y + 2.05);
+      g.roundRect(p.x - 2.2, p.y - 6, 4.4, 6, 1).fill(k % 3 === 0 ? 0xffcc80 : k % 3 === 1 ? 0xef9a9a : 0xfff59d).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+      flames.push(p);
+      this.lights.push({ x: p.x, y: p.y - 5, r: 10, color: 0xffb74d });
+    }
+    // String of lights between the two roofs.
+    const a = iso(x + 0.3, y + 1.55, H - 2);
+    const b = iso(x + 2.7, y + 1.55, H2 - 2);
+    g.moveTo(a.x, a.y).quadraticCurveTo((a.x + b.x) / 2, (a.y + b.y) / 2 + 10, b.x, b.y).stroke({ width: 1, color: 0x3a2418, alpha: 0.7 });
+    const fire = new Graphics();
+    this.anim.addChild(fire);
+    this.animate = (time, clock) => {
+      fire.clear();
+      for (const [k, p] of flames.entries()) {
+        const f = 1 + Math.sin(clock * 9 + k * 1.7) * 0.2;
+        fire.ellipse(p.x, p.y - 7.5, 1.3 * f, 2.4 * f).fill(0xffb300);
+        fire.ellipse(p.x, p.y - 7, 0.6, 1.2).fill(0xfff8e1);
+      }
+    };
+    this.animate(0, 0);
+  },
+
+  // Natilla pot (Navidad): open kitchen with a big copper paila over a wood fire and someone stirring it with a
+  // long wooden paddle; it steams while working.
+  navidad_natilla(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const H = 24 + ctx.up;
+    for (const [px, py] of [[0, 0], [2.3, 0], [0, 1.5], [2.3, 1.5]]) box(g, x0 + px, y0 + py, 0.12, 0.12, H, PAL.wood);
+    gableRoof(g, x0, y0, 2.42, 1.62, H, 12, PAL.roof, PAL.wood);
+    // Brick stove and the paila.
+    box(g, x0 + 0.5, y0 + 0.4, 1.2, 0.9, 8, 0xb5653a);
+    const c = iso(x0 + 1.1, y0 + 0.85, 8);
+    g.ellipse(c.x, c.y, 17, 8.5).fill(0xb87333).stroke(OUTLINE);
+    g.ellipse(c.x, c.y - 1, 14, 6.5).fill(PRODUCTS.natilla.color);
+    const fireAt = iso(x0 + 1.1, y0 + 1.32, 2);
+    g.ellipse(fireAt.x, fireAt.y, 5, 2.5).fill(0x3a2418);
+    this.lights.push({ x: fireAt.x, y: fireAt.y - 2, r: 16, color: 0xff7043 });
+    // Bowls of natilla cooling on a side table.
+    box(g, x0 + 1.9, y0 + 0.9, 0.5, 0.5, 8, PAL.wood);
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) {
+      const p = iso(x0 + 2.0 + (k % 2) * 0.22, y0 + 1.0 + Math.floor(k / 2) * 0.22, 8);
+      g.ellipse(p.x, p.y, 3.5, 1.8).fill(0xffffff).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+      g.ellipse(p.x, p.y - 0.5, 2.6, 1.2).fill(PRODUCTS.natilla.color);
+    }
+    this.smokePoints.push({ x: c.x, y: c.y - 6 });
+    const stir = new Graphics();
+    this.anim.addChild(stir);
+    const cook = iso(x0 + 1.1, y0 + 1.5);
+    this.animate = (time) => {
+      stir.clear();
+      worker(stir, cook.x + 10, cook.y + 4, PAL.balconyRed);
+      const a = Math.sin(time * 3) * 6;
+      stir.moveTo(cook.x + 7, cook.y - 10).lineTo(c.x + a, c.y - 2).stroke({ width: 1.8, color: PAL.woodDark });
+    };
+    this.animate(0);
+    this.roofTop = iso(x0 + 1.2, y0 + 0.8, H + 12);
+  },
+
+  // Buñuelo fryer (Navidad): a street stall with a pot of hot oil, golden buñuelos in a basket and a striped
+  // awning; the oil bubbles while working.
+  navidad_bunuelos(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.4;
+    fleaStall(this, g, x0, y0, ctx, 0xc62828, [PRODUCTS.bunuelo.color, PRODUCTS.bunuelo.color, 0xffffff, PRODUCTS.bunuelo.color, 0xffe082], 2.2);
+    // Fryer on a burner in front of the stall.
+    box(g, x0 + 0.6, y0 + 1.55, 0.6, 0.5, 7, 0x455a64);
+    const pot = iso(x0 + 0.9, y0 + 1.8, 7);
+    g.ellipse(pot.x, pot.y - 3, 9, 4.5).fill(0x37474f).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 4, 7, 3.2).fill(0xd4a017);
+    // Basket of buñuelos.
+    const bk = iso(x0 + 1.7, y0 + 1.85);
+    g.ellipse(bk.x, bk.y - 3, 9, 4.5).fill(0xc8a165).stroke(OUTLINE);
+    for (let k = 0; k < 5 + Math.min(ctx.tier, 3); k++) g.circle(bk.x - 6 + (k % 4) * 4, bk.y - 5 - Math.floor(k / 4) * 3, 2.4).fill(PRODUCTS.bunuelo.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+    const oil = new Graphics();
+    this.anim.addChild(oil);
+    this.animate = (time) => {
+      oil.clear();
+      for (let k = 0; k < 4; k++) {
+        const f = (time * 1.3 + k / 4) % 1;
+        oil.circle(pot.x - 5 + k * 3.3, pot.y - 4 - f * 2, 0.6 + f * 1.4).fill({ color: 0xfff3c4, alpha: 0.8 * (1 - f) });
+      }
+      for (let k = 0; k < 2; k++) oil.circle(pot.x - 2 + k * 4, pot.y - 5, 2.2).fill(PRODUCTS.bunuelo.color);
+    };
+    this.animate(0);
+  },
+
+  // Novena table (Navidad): a long table set outdoors with natilla and buñuelos, a Christmas tree beside it, a
+  // string of lights over it and the neighbors' chairs; the tree and the lights glow at night.
+  navidad_novena(g, x, y, ctx) {
+    const H = house(this, g, x + 0.25, y + 0.25, 2.4, 1.0, 24, ctx, { wall: 0xfff3d6 });
+    door(g, x + 0.25, y + 0.25, 1.0, 1.2, 15, ctx.trim);
+    windowOnFront(this, g, x + 0.25, y + 0.25, 1.0, 0.5, 8, 0xfff59d);
+    windowOnFront(this, g, x + 0.25, y + 0.25, 1.0, 1.9, 8, 0xfff59d);
+    // Long table with plates.
+    box(g, x + 0.5, y + 1.6, 1.8, 0.5, 8, 0xffffff);
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 3); k++) {
+      const p = iso(x + 0.65 + k * 0.27, y + 1.85, 8);
+      g.ellipse(p.x, p.y, 3.4, 1.7).fill(0xffffff).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+      g.ellipse(p.x - 1, p.y - 0.5, 1.6, 0.9).fill(PRODUCTS.natilla.color);
+      g.circle(p.x + 1.3, p.y - 1, 1.2).fill(PRODUCTS.bunuelo.color);
+    }
+    // Little Christmas tree at the corner.
+    const tr = iso(x + 2.6, y + 1.9);
+    g.rect(tr.x - 1.5, tr.y - 5, 3, 5).fill(PAL.woodDark);
+    for (const [w, top] of [[10, 20], [8, 15], [6, 10]]) g.poly([tr.x - w, tr.y - top + 12, tr.x + w, tr.y - top + 12, tr.x, tr.y - top - 4]).fill(0x2e7d32).stroke({ width: 0.8, color: 0x1b5e20 });
+    g.star(tr.x, tr.y - 25, 5, 3, 1.4).fill(0xffd54f);
+    const balls = [0xe53935, 0xffd54f, 0x1e88e5, 0xffffff];
+    for (let k = 0; k < 6; k++) {
+      const bx = tr.x - 6 + (k * 2.4) % 12;
+      const by = tr.y - 6 - k * 2.6;
+      g.circle(bx, by, 1.3).fill(balls[k % balls.length]);
+      this.lights.push({ x: bx, y: by, r: 6, color: balls[k % balls.length] });
+    }
+    // String of colored lights along the eave.
+    for (let k = 0; k < 8; k++) {
+      const p = iso(x + 0.35 + k * 0.3, y + 1.27, H - 1);
+      g.circle(p.x, p.y + (k % 2), 1.4).fill(balls[k % balls.length]);
+      this.lights.push({ x: p.x, y: p.y, r: 7, color: balls[k % balls.length] });
+    }
+  },
 };
 
 // Tolima Grande (v4.0): stations sharing artwork from other regions.

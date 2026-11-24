@@ -19,6 +19,7 @@
 // second plus 9 % (challenging, achievable for attentive player); silver is 5 minutes more.
 // 5 minutes more.
 import { ICON } from './icons.js';
+import { SEASON_EVENTS } from './plaza.js';
 
 // Six challenge types (v3.72), one per zone in each region, in order:
 //   cadena: sell final product (whole chain down to dispatch)
@@ -1326,7 +1327,9 @@ export const EVENTS = [
   },
 ];
 
-export const EVENTS_BY_ID = Object.fromEntries(EVENTS.map((e) => [e.id, e]));
+// (v5.19) With the season events of La plaza de las fiestas (data/plaza.js), which are not in EVENTS: they have no
+// slot, medal or region, and sim/seasonEvents.js opens them by the real date.
+export const EVENTS_BY_ID = Object.fromEntries([...EVENTS, ...SEASON_EVENTS].map((e) => [e.id, e]));
 // Event key (v4.5): zone id, or in multi-event zone (Bogotá) event `key`. Slots, boards, and
 // play counts store by this key; matching zone id elsewhere keeps legacy saves compatible.
 export const eventKey = (def) => def.key ?? def.zone;

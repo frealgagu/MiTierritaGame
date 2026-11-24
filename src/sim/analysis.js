@@ -295,6 +295,20 @@ function analyze(state, zoneId, withExports, depth, memo) {
   if (joiners.length) {
     limit = Object.fromEntries(joiners.map((r) => [r.id, { cycles: r.cycles, binding: r.joinLimited ?? Object.keys(STATIONS_BY_ID[r.id].in)[0] }]));
     ({ rows, toWarehouse, flows, exported } = pass());
+    // (v5.19) The second pass runs each combiner at the cycles its scarcest input allows, so it no longer finds it
+    // short of anything: keep which combined input held it back, or the station before it would point at the
+    // combiner itself (the Mesa de la novena waiting on buñuelos, raised again and again for nothing).
+    // Only for a maker on a branch of its own, beside the combiner's chain (when it is upstream, as in Paipa,
+    // raising the chain above reaches it anyway).
+    const upstream = (id, of) => {
+      for (let p = PARENT[of]; p; p = PARENT[p]) if (p === id) return true;
+      return false;
+    };
+    for (const r of rows) {
+      const binding = limit[r.id]?.binding;
+      const from = binding && JOIN_FROM[r.id]?.[binding];
+      if (from && !r.joinLimited && !upstream(from, r.id)) r.joinLimited = binding;
+    }
   }
 
   const dispatch = dispatchRate(state.zones[zoneId].dispatch.level, dispatchMult(state, zoneId)) * jeepCount(state);

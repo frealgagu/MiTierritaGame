@@ -388,4 +388,12 @@ export default {
   vuelta_isla: "Ride around the island",
   buceo: "Swim with the fish",
   tour_isla: "Island tour",
+  // La plaza de las fiestas (v5.19)
+  vela: "Candle",
+  farol: "Paper lantern",
+  calle_iluminada: "Lit-up street",
+  harina_maiz: "Corn flour",
+  natilla: "Natilla",
+  bunuelo: "Buñuelo",
+  novena: "Novena plate",
 };

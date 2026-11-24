@@ -1,6 +1,9 @@
 // Event board HUD bar (v2.0): goal, event clock, medals, and event upgrades
 // (each requires the previous).
-import { formatNumber } from '../core/format.js';
+import { formatDuration, formatNumber } from '../core/format.js';
+import { FIESTAS_BY_ID } from '../data/fiestas.js';
+import { today } from '../sim/fiestas.js';
+import { daysBetween } from '../sim/seasonEvents.js';
 import { allActionsBought, buyAction, boardObjective, EVENT_CLOCK_MAX, eventClock, eventDef, eventHandicaps, eventItems, eventProgress, handicapText, medalFor, quoteAction } from '../sim/events.js';
 import { EVENT_ACTIONS_BY_ID, MEDALS } from '../data/events.js';
 import { PRODUCTS } from '../data/products.js';
@@ -103,12 +106,15 @@ export class EventBar {
 
   // ⏸️ Pause or 🚪 Exit, depending on the menu toggle.
   paintExit() {
-    this.pauseBtn.textContent = this.exitMode() === 'leave' ? t('🚪 Salir') : t('⏸️ Pausar');
+    // (v5.19) A season event never pauses.
+    const season = Boolean(this.game && eventDef(this.game.state).season);
+    this.pauseBtn.textContent = season || this.exitMode() === 'leave' ? t('🚪 Salir') : t('⏸️ Pausar');
   }
 
   paint() {
     const board = this.game.state;
     const def = eventDef(board);
+    if (def.season) return this.paintSeason(board, def);
     const obj = boardObjective(board);
     const items = eventItems(board);
     setFitted(document.getElementById('event-title'), `${def.icon} ${def.name}`);
@@ -154,6 +160,50 @@ export class EventBar {
     this.actions.innerHTML = def.actions
       .map((a, k) => `<button class="event-action ${states[k]}" data-action="${a.id}"><b>${a.icon} ${a.name}</b>${states[k] === 'owned' ? t('✓ listo') : `💰 ${formatNumber(a.cost)}`}</button>`)
       .join('');
+  }
+
+  // (v5.19) A season event (sim/seasonEvents.js): no medals, upgrades or handicap; the clock, the objective, how long
+  // it will take at this pace, its prize and the days it has left.
+  paintSeason(board, def) {
+    const items = eventItems(board);
+    const done = Boolean(board.event.done);
+    setFitted(document.getElementById('event-title'), `${def.icon} ${def.name}`);
+    document.getElementById('event-clock').textContent = `⏱ ${formatClock(done ? board.event.time : eventClock(board))}`;
+    this.restartBtn.disabled = done;
+    this.endBtn.textContent = done ? t('🏁 Terminar evento') : t('🏁 Terminar');
+    setFitted(document.getElementById('event-goal'), done ? t('🏁 ¡Objetivo cumplido!') : t('Produce:'), 0.6);
+    const rows = items.map((i) => {
+      const p = PRODUCTS[i.product];
+      const ok = i.have >= i.need;
+      return `<li class="${ok ? 'ok' : ''}"><span>${p.icon} ${p.name}</span><b>${ok ? '✓ ' : ''}${formatNumber(Math.floor(Math.min(i.have, i.need)))} / ${formatNumber(i.need)}</b></li>`;
+    });
+    while (rows.length < 3) rows.push('<li></li>');
+    const list = rows.join('');
+    if (list !== this.itemsHtml) document.getElementById('event-items').innerHTML = this.itemsHtml = list;
+    document.getElementById('event-fill').style.width = `${100 * eventProgress(board)}%`;
+    document.getElementById('event-handicap').hidden = true;
+    // At this pace: from what was made over the last minute of the board's clock.
+    const have = items.reduce((n, i) => n + Math.min(i.have, i.need), 0);
+    const need = items.reduce((n, i) => n + i.need, 0);
+    const now = board.playTime;
+    if (this.paceBoard !== board) {
+      this.paceBoard = board;
+      this.pace = [];
+    }
+    if (!this.pace.length || now - this.pace.at(-1)[0] >= 1) this.pace.push([now, have]);
+    while (this.pace.length > 2 && now - this.pace[0][0] > 60) this.pace.shift();
+    const [t0, h0] = this.pace[0];
+    const rate = now - t0 >= 5 ? (have - h0) / (now - t0) : 0;
+    const fiesta = FIESTAS_BY_ID[board.event.season.fiesta];
+    const [y, m, d] = board.event.season.until.split('-').map(Number);
+    const left = Math.max(0, daysBetween(today(), new Date(y, m - 1, d)) + 1);
+    const pace = done ? '' : rate > 0 ? t('a este ritmo, {time}', { time: formatDuration((need - have) / rate) }) : t('mejora las estaciones para avanzar');
+    const prize = !board.event.season.prize ? t('lámina ya ganada') : t('premio: lámina {icon}', { icon: fiesta.icon });
+    setFitted(document.getElementById('event-medals'), [pace, prize, done ? '' : t('quedan {n} días', { n: left })].filter(Boolean).join(' · '));
+    if (this.drawn !== 'season') {
+      this.drawn = 'season';
+      this.actions.innerHTML = '';
+    }
   }
 
   update() {

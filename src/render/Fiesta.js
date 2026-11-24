@@ -35,7 +35,8 @@ export class FiestaDecor {
 
   // Rebuilds when the date's decorations or the built stations change.
   sync() {
-    const decor = decorOn(today());
+    // (v5.19) La plaza de las fiestas wears its fiesta's decorations whatever the date.
+    const decor = this.scene.zone.decor ? new Set(this.scene.zone.decor) : decorOn(today());
     const built = Object.entries(this.scene.stations).filter(([, v]) => !(v instanceof PlotView)).map(([id]) => id);
     const key = `${[...decor].sort().join(',')}|${built.sort().join(',')}`;
     if (key === this.key) return;

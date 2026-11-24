@@ -4,6 +4,7 @@
 //   zones: ordered (first opens with region; each unlocks the next)
 //   unlock: unlock condition ({ region, zone }: completing that zone in that region)
 import { ICON } from './icons.js';
+import { PLAZA_ZONES } from './plaza.js';
 
 export const REGIONS = [
   { id: 'cafetero', name: 'Eje Cafetero', icon: '☕', zones: ['finca', 'trapiche', 'lecheria', 'cacaotal', 'maizal', 'pueblo'], music: 'cafetero', unlock: null },
@@ -119,8 +120,11 @@ export const REGIONS = [
   },
 ];
 
-export const REGIONS_BY_ID = Object.fromEntries(REGIONS.map((r) => [r.id, r]));
-export const REGION_OF_ZONE = Object.fromEntries(REGIONS.flatMap((r) => r.zones.map((z) => [z, r.id])));
+// (v5.19) La plaza de las fiestas, where the season events are played: a region only to the simulation (an event
+// board is a region's save), never listed, shown on the map or counted (it is not in REGIONS).
+export const FIESTA_REGION = { id: 'fiestas', name: 'La plaza de las fiestas', icon: '🎉', zones: PLAZA_ZONES.map((z) => z.id), music: 'cafetero', unlock: null, hidden: true, season: true };
+export const REGIONS_BY_ID = Object.fromEntries([...REGIONS, FIESTA_REGION].map((r) => [r.id, r]));
+export const REGION_OF_ZONE = Object.fromEntries([...REGIONS, FIESTA_REGION].flatMap((r) => r.zones.map((z) => [z, r.id])));
 export const regionOf = (state) => REGIONS_BY_ID[state.region];
 // Regions a list may name (v5.4): a secret region only once it has opened in this save.
 export const shownRegions = (opened) => REGIONS.filter((r) => !r.secret || opened(r.id));

@@ -122,7 +122,7 @@ export function goalText(goal) {
 // First uncollected goals in a zone, in order.
 export function activeGoals(state, zoneId = 'finca') {
   if (!state.zones[zoneId]?.unlocked) return [];
-  return GOALS_BY_ZONE[zoneId].filter((g) => !state.goals.claimed.includes(g.id)).slice(0, VISIBLE_GOALS);
+  return (GOALS_BY_ZONE[zoneId] ?? []).filter((g) => !state.goals.claimed.includes(g.id)).slice(0, VISIBLE_GOALS);
 }
 
 // Claimable goals (v3.57): met and unclaimed; zone finale only once visible at front.
@@ -130,7 +130,7 @@ function claimable(state, goal, zoneId) {
   if (state.goals.claimed.includes(goal.id) || !goalProgress(state, goal).done) return false;
   return !goal.final || activeGoals(state, zoneId).includes(goal);
 }
-export const claimableGoals = (state, zoneId) => (state.zones[zoneId]?.unlocked ? GOALS_BY_ZONE[zoneId].filter((g) => claimable(state, g, zoneId)) : []);
+export const claimableGoals = (state, zoneId) => (state.zones[zoneId]?.unlocked ? (GOALS_BY_ZONE[zoneId] ?? []).filter((g) => claimable(state, g, zoneId)) : []);
 
 // «Claim all» (v3.57): all met zone goals except finale (claimed separately with modal).
 // Claiming one can satisfy another (coin goals): loops until none remain.

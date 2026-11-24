@@ -114,4 +114,12 @@ export default {
   hoyo_soplador: ["At the Hoyo Soplador, the sea shoots up through a hole in the coral."],
   snorkel_piscinita: ["At La Piscinita, in West View, fish swim right next to swimmers."],
   mirador_la_loma: ["La Loma’s Baptist Church, from 1844, is the oldest on the island."],
+  // La plaza de las fiestas (v5.19)
+  velitas_cereria: ["The candles for the Night of the Little Candles are made of paraffin with a cotton wick.", "On 7 December candles are lit in honor of the Immaculate Conception."],
+  velitas_faroles: ["Lanterns are made of colored paper on a frame of wire or guadua bamboo.", "Quimbaya, in Quindío, holds a Candle and Lantern Festival with whole neighborhoods decorated."],
+  velitas_calle: ["The Night of the Little Candles opens the Christmas season in Colombia.", "Families go out onto the sidewalks to light candles and share natilla and buñuelos."],
+  navidad_molino: ["Colombian natilla and buñuelos are made with corn: cornstarch or corn flour.", "In many homes the corn for the natilla is ground in a hand mill."],
+  navidad_natilla: ["Natilla is stirred in a big pot with panela, milk and cinnamon until it sets.", "Stirring the natilla takes hours, so the family takes turns."],
+  navidad_bunuelos: ["Buñuelos have grated costeño cheese and are fried in very hot oil.", "A good buñuelo comes out round and turns over by itself in the oil."],
+  navidad_novena: ["The Christmas novena is prayed from 16 to 24 December.", "Every night of the novena there are carols with tambourines and maracas."],
 };

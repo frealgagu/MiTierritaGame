@@ -58,7 +58,7 @@ export class GoalsView {
     const ready = claimableGoals(state, zone);
     // (v4.7) Also the already-met finale even if not yet first in queue: otherwise badge read one too low
     // and collecting earlier goals caused it to repeat when the finale reached the front.
-    const won = state.zones[zone]?.unlocked ? GOALS_BY_ZONE[zone].filter((x) => !state.goals.claimed.includes(x.id) && goalProgress(state, x).done) : [];
+    const won = state.zones[zone]?.unlocked ? (GOALS_BY_ZONE[zone] ?? []).filter((x) => !state.goals.claimed.includes(x.id) && goalProgress(state, x).done) : [];
     this.badge.hidden = won.length === 0;
     this.badge.textContent = won.length;
 
@@ -88,7 +88,7 @@ export class GoalsView {
     }
 
     if (this.modal.hidden) return;
-    const list = GOALS_BY_ZONE[zone];
+    const list = GOALS_BY_ZONE[zone] ?? []; // (La plaza de las fiestas has none, v5.19)
     const done = list.filter((g) => state.goals.claimed.includes(g.id)).length;
     // «Claim all» (v3.57): all completed zone goals, even unshown ones; finale handled separately.
     const bulk = ready.filter((g) => !g.final);
