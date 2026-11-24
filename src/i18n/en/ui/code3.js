@@ -244,4 +244,13 @@ export default {
   "{route} lo lleva a {zone}.": "{route} takes it to {zone}.",
   "Cuando abra {zone}, {route} lo llevará allá; mientras tanto se vende en la bodega.": "Once {zone} opens, {route} will take it there; meanwhile it is sold at the warehouse.",
   "Se vende en la bodega.": "It is sold at the warehouse.",
+  "{route} lleva <b>{n}</b> a {zone}.": "{route} takes <b>{n}</b> to {zone}.",
+  "El bono gasta <b>{n}</b> (uno por cada {k} cafés lavados).": "The bonus uses <b>{n}</b> (one for every {k} washed coffees).",
+  "📦 {n} sobran y se venden en la bodega.": "📦 {n} are left over and sold at the warehouse.",
+  "Aprovecha la pulpa del Beneficiadero: abono para el Cacaotal y bono a las ventas": "Makes use of the Wet Mill's pulp: fertilizer for the Cacao Grove and a bonus on sales",
+  "Abonado con compost de la Finca, da {p}": "Fertilized with compost from the Farm, it gives {p}",
+  "⏸️ Falta compost: construye la Compostera en la Finca, junto al Beneficiadero.": "⏸️ No compost: build the Compost Bin on the Farm, next to the Wet Mill.",
+  "✅ Compost de sobra: abona el Cacaotal, todo lo que vende la Finca vale +{pct} y el que sobra se vende.": "✅ Plenty of compost: it fertilizes the Cacao Grove, everything the Farm sells is worth +{pct}, and the spare compost is sold.",
+  "⚠️ No alcanza el compost: primero se abona el Cacaotal y el bono solo dura parte del tiempo (+{pct} en promedio). Mejora la Compostera.": "⚠️ Not enough compost: the Cacao Grove is fertilized first and the bonus only lasts part of the time (+{pct} on average). Upgrade the Compost Bin.",
+  "✅ Produciendo compost: abona el Cacaotal y todo lo que vende la Finca vale +{pct}.": "✅ Making compost: it fertilizes the Cacao Grove and everything the Farm sells is worth +{pct}.",
 };

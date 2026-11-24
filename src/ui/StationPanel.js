@@ -203,7 +203,7 @@ export class StationPanel {
     this.el.innerHTML = this.frame({
       icon: def.icon,
       title: def.name,
-      subtitle: def.side ? t('Rama opcional: aprovecha la pulpa del Beneficiadero') : t('Siguiente paso de la cadena'),
+      subtitle: def.side ? t('Aprovecha la pulpa del Beneficiadero: abono para el Cacaotal y bono a las ventas') : t('Siguiente paso de la cadena'),
       recipe: `${[...(inId ? [recipe(def.in)] : []), ...(def.joins ?? []).map((j) => `${j.perCycle} ${PRODUCTS[j.product].icon}`), ...(def.imports ?? []).map((imp) => `${imp.perCycle} ${PRODUCTS[imp.product].icon}${ROUTES_BY_ID[imp.route].icon}`)].join(' + ')} <span>➜</span> ${recipe(def.out)}`,
       rows,
       button: `<button class="btn buy" data-unlock><span>${t('Construir')}</span><span data-ref="unlockCost"></span></button>`,
@@ -424,6 +424,9 @@ function stationInfo(id) {
         ? t('Convierte {a} en {b} y {c}', { a: PRODUCTS[inId].name.toLowerCase(), b: out.name.toLowerCase(), c: PRODUCTS[byId].name.toLowerCase() })
         : inId
       ? t('Convierte {a} en {b}', { a: PRODUCTS[inId].name.toLowerCase(), b: out.name.toLowerCase() })
+      : def.imports?.some((imp) => imp.product === 'compost')
+        // (v5.18) The cacao trees, fertilized with the Finca's compost.
+        ? t('Abonado con compost de la Finca, da {p}', { p: out.name.toLowerCase() })
       : def.imports
         ? t('Convierte {a} de otras zonas en {b}', { a: listProducts(def.imports), b: out.name.toLowerCase() })
         : t('Fuente ilimitada de {p}', { p: out.name.toLowerCase() }),
@@ -539,6 +542,8 @@ function stationStatus(state, id) {
   if (lacking) {
     const r = ROUTES_BY_ID[lacking];
     const imp = PRODUCTS[r.product];
+    // (v5.18) The Cacaotal's compost: first of all, the Finca needs its Compostera.
+    if (r.product === 'compost' && !state.stations.composter) return { text: t('⏸️ Falta compost: construye la Compostera en la Finca, junto al Beneficiadero.'), bad: true };
     const routeShort = routeRate(state, r.id) < routeFlow(state, r.id) * 1.02 + 1e-9;
     return {
       text: routeShort
@@ -588,14 +593,20 @@ function composterStatus(state, st) {
   const bonus = expectedCompostValue(state);
   const a = alerts(st);
   // With its yard full, what it goes on making is sold (v5.15); only a full warehouse halts it.
-  if (a.blocked || st.buffer >= sideKeep(state, 'composter') - 1e-6) return { text: t('✅ Compost de sobra: todo lo que vende la Finca vale +{pct} y el que sobra se vende.', { pct: pct(COMPOST_VALUE) }), bad: false };
+  // (v5.18) With the Ruta del abono open, its compost goes to the Cacaotal first.
+  const route = routeActive(state, 'abono');
+  if (a.blocked || st.buffer >= sideKeep(state, 'composter') - 1e-6) {
+    return { text: route ? t('✅ Compost de sobra: abona el Cacaotal, todo lo que vende la Finca vale +{pct} y el que sobra se vende.', { pct: pct(COMPOST_VALUE) }) : t('✅ Compost de sobra: todo lo que vende la Finca vale +{pct} y el que sobra se vende.', { pct: pct(COMPOST_VALUE) }), bad: false };
+  }
   if (a.starved) {
     const w = state.stations.wetmill;
     if (alerts(w).blocked) return { text: t('⏸️ Sin pulpa: el Beneficiadero está detenido (patio lleno). Mejora sus arrieros o la estación siguiente.'), bad: true };
     return { text: t('⏸️ Esperando pulpa del Beneficiadero.'), bad: false };
   }
-  if (bonus < COMPOST_VALUE - 0.005) return { text: t('⚠️ El Beneficiadero gasta más compost del que se produce: el bono solo dura parte del tiempo (+{pct} en promedio). Mejora la Compostera.', { pct: pct(bonus) }), bad: true };
-  return { text: t('✅ Produciendo compost: todo lo que vende la Finca vale +{pct}.', { pct: pct(COMPOST_VALUE) }), bad: false };
+  if (bonus < COMPOST_VALUE - 0.005) {
+    return { text: route ? t('⚠️ No alcanza el compost: primero se abona el Cacaotal y el bono solo dura parte del tiempo (+{pct} en promedio). Mejora la Compostera.', { pct: pct(bonus) }) : t('⚠️ El Beneficiadero gasta más compost del que se produce: el bono solo dura parte del tiempo (+{pct} en promedio). Mejora la Compostera.', { pct: pct(bonus) }), bad: true };
+  }
+  return { text: route ? t('✅ Produciendo compost: abona el Cacaotal y todo lo que vende la Finca vale +{pct}.', { pct: pct(COMPOST_VALUE) }) : t('✅ Produciendo compost: todo lo que vende la Finca vale +{pct}.', { pct: pct(COMPOST_VALUE) }), bad: false };
 }
 
 // Inter-zone route: Chiva bringing imported product. `station`: station whose panel owns this

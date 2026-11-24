@@ -9,7 +9,7 @@ import { ZONES_BY_ID } from '../data/zones/index.js';
 import { pendingRoutes, slowConsumers } from '../sim/transport.js';
 import { routeActive, routeOrigin } from '../sim/routes.js';
 import { WithArticle, withArticle } from '../data/lore.js';
-import { saleValue } from '../sim/modifiers.js';
+import { WASHED_PER_COMPOST, saleValue } from '../sim/modifiers.js';
 import { listJoin, t } from '../i18n/index.js';
 import { REGIONS_BY_ID, REGION_OF_ZONE } from '../data/regions.js';
 import { buyZoneBoostUnlock, planZoneBoost, previewBuild, quoteZoneBoostUnlock, ZONE_BOOST_COST, zoneBoostStatus } from '../sim/zoneBoost.js';
@@ -272,7 +272,7 @@ function detailOf(state, a, rows, sel, zone) {
   if (def.side && state.stations[id]) {
     return `
       <div class="cd-head"><span class="cd-icon">${def.icon}</span><b>${def.name}</b> <small>${t('Nv')} ${state.stations[id].level}</small></div>
-      <p>${sideText(state, id)}</p>
+      <p>${sideText(state, id, row)}</p>
       <div class="cd-actions"><button class="btn buy" data-open="${id}">${t('🏗️ Ir al edificio')}</button></div>`;
   }
   if (!row) {
@@ -386,11 +386,21 @@ const NARROW = 118; // narrower than this, card stacks icon on top and name belo
 
 // What a side branch does: Compostera turns Beneficiadero pulp into fertilizer and everything
 // Finca sells fetches more.
-const sideText = (state, id) => {
+const sideText = (state, id, row) => {
   const def = STATIONS_BY_ID[id];
   const from = STATIONS_BY_ID[def.requires];
   const bonus = Math.round((expectedCompostValue(state) - 1) * 100);
-  return t('Recibe {in} de {from} y la vuelve {out}: todo lo que vende la zona vale <b>+{n} %</b>.', { in: Object.keys(def.in).map((p) => `${PRODUCTS[p].icon} ${PRODUCTS[p].name.toLowerCase()}`).join(', '), from: withArticle(from.name), out: PRODUCTS[Object.keys(def.out)[0]].name.toLowerCase(), n: bonus });
+  const out = PRODUCTS[Object.keys(def.out)[0]];
+  const text = t('Recibe {in} de {from} y la vuelve {out}: todo lo que vende la zona vale <b>+{n} %</b>.', { in: Object.keys(def.in).map((p) => `${PRODUCTS[p].icon} ${PRODUCTS[p].name.toLowerCase()}`).join(', '), from: withArticle(from.name), out: out.name.toLowerCase(), n: bonus });
+  // (v5.18) Where its compost goes: first its route (the Ruta del abono), then the bonus; what is left is sold.
+  if (!row?.side) return text;
+  const lines = [text];
+  for (const r of (row.exports ?? []).map((x) => ROUTES_BY_ID[x])) {
+    lines.push(t('{route} lleva <b>{n}</b> a {zone}.', { route: WithArticle(r.name), n: `${formatRate(row.toRoutes)} ${out.icon}/s`, zone: ZONES_BY_ID[r.to].name }));
+  }
+  lines.push(t('El bono gasta <b>{n}</b> (uno por cada {k} cafés lavados).', { n: `${formatRate(row.spent)} ${out.icon}/s`, k: WASHED_PER_COMPOST }));
+  if (row.diverted > 0.005) lines.push(t('📦 {n} sobran y se venden en la bodega.', { n: `${formatRate(row.diverted)} ${out.icon}/s` }));
+  return lines.join('<br>');
 };
 
 // only: with neighborhoods (v4.5), stations of the visible one; the rest are omitted.
@@ -503,6 +513,8 @@ function diagram(state, a, rows, locked, zone, width, selected, only = null) {
       const built = Boolean(state.stations[id]);
       const mid = p.bottom + GAP / 2;
       pipe(`M ${p.cx} ${p.bottom} V ${mid} H ${b.cx} V ${b.top}`, built ? 'flow' : 'locked', Object.keys(def.in ?? {})[0]);
+      // (v5.18) What arrives down the chute (the pulp), like any other link.
+      if (row) flow(b.cx, (mid + b.top) / 2, PRODUCTS[Object.keys(def.in)[0]].icon, row.incoming, false);
       nodes.push(
         built
           ? `<button class="dg-node dg-side ${b.w < NARROW ? 'narrow' : ''} ${sel(id)}" data-pick="${id}" style="left:${b.left}px;top:${b.top}px;width:${b.w}px">

@@ -1,6 +1,7 @@
 // routes em português: [nome, veículo, aba]. A chiva é o ônibus colorido do interior colombiano.
 export default {
   panela: ['Rota da rapadura', 'Chiva', 'Rapadura'],
+  abono: ['Rota do composto', 'Chiva', 'Composto'],
   panela_cacao: ['Rota da rapadura ao Cacaual', 'Chiva', 'Rapadura'],
   leche: ['Rota do leite', 'Chiva leiteira', 'Leite'],
   queso: ['Rota do queijo', 'Chiva', 'Queijo'],

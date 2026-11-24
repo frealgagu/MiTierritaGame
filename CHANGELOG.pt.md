@@ -1,5 +1,10 @@
 # Registro de alterações
 
+## v5.18.0 — Nada se perde
+- **🔥 A Fornalha queima o bagaço:** o bagaço da Moenda agora é uma de suas entradas. Sem bagaço ela para; no mesmo nível ela gasta tudo, então o Engenho só vende sua rapadura.
+- **🚌 Nova Rota do composto:** o composto da Composteira aduba o Cacaual, cujas árvores precisam dele para dar cacau. O resto mantém o bônus de +30 % da Fazenda.
+- **Sua partida:** se o Cacaual já estiver aberto, você recebe a Composteira no nível do Despolpador e a rota no nível dos cacaueiros.
+
 ## v5.17.0 — As festas da Colômbia
 - **🎉 Festas do calendário real** (a data do seu celular, sem permissões): iluminação de Natal, Noite das Velinhas, Natal, Réveillon, Dia de Reis, carnavais, Semana Santa, Dia das Mães, 20 de julho, Batalha de Boyacá, Halloween e mais.
 - **Dezembro enfeita cada zona:** luzes coloridas em cada prédio, árvore de Natal, presépio (com os Reis Magos em 6 de janeiro), velas e lanternas nos caminhos, o boneco do ano velho e fogos à noite.

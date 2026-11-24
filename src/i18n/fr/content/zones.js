@@ -1,10 +1,10 @@
 // zones en français : [nom, panneau de sortie, { route : panneau de la route }]. Le nom n’a pas d’article,
 // comme un nom de lieu («depuis Laiterie») ; les panneaux, texte fixe, ont la bonne contraction («Vers la Laiterie»).
 export default {
-  finca: ['Ferme', null, { cafe: 'Café vers Salento ➜' }],
+  finca: ['Ferme', null, { cafe: 'Café vers Salento ➜', abono: 'Compost vers la Cacaoyère ➜' }],
   trapiche: ['Moulin à canne', null, { panela: 'Vers la Laiterie ➜', panela_cacao: 'Vers la Cacaoyère ➜', panela_pueblo: 'Vers Salento ➜' }],
   lecheria: ['Laiterie', null, { panela: '⬅ Du Moulin à canne', leche: 'Vers la Cacaoyère ➜', queso: 'Fromage vers le Champ de maïs ⬇', mantequilla: 'Beurre vers le Champ de maïs ⬇', arequipe: 'Arequipe vers Salento ➜' }],
-  cacaotal: ['Cacaoyère', null, { panela_cacao: '⬅ Panela du Moulin à canne', leche: '⬅ Lait de la Laiterie', chocolatinas: 'Barres de chocolat vers Salento ➜', chocolate_mesa: 'Chocolat vers Salento ⬇' }],
+  cacaotal: ['Cacaoyère', null, { abono: '⬇ Compost de la Ferme', panela_cacao: '⬅ Panela du Moulin à canne', leche: '⬅ Lait de la Laiterie', chocolatinas: 'Barres de chocolat vers Salento ➜', chocolate_mesa: 'Chocolat vers Salento ⬇' }],
   maizal: ['Champ de maïs', null, { queso: '⬅ Fromage de la Laiterie', mantequilla: '⬅ Beurre', arepas: 'Vers Salento ➜' }],
   pueblo: ['Salento', 'Vers Buenaventura ➜', { cafe: '⬅ Café de la Ferme', panela_pueblo: '⬅ Panela du Moulin à canne', chocolatinas: '⬅ Barres de chocolat', chocolate_mesa: '⬅ Chocolat de la Cacaoyère', arepas: 'Arepas du Champ de maïs ⬆', arequipe: 'Arequipe de la Laiterie ⬆' }],
   guayabera: ['Goyaveraie', 'Vers Vélez ➜', { bocadillo: 'Bocadillo vers le Ranch ➜', dulces: 'Vers Barichara ➜' }],

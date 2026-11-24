@@ -1,10 +1,10 @@
 // zones em português: [nome, placa de saída, { rota: placa da estrada }]. O nome vai sem artigo, como nome de
 // lugar («vindo de Leiteria»); nas placas, que são texto fixo, vai com a contração certa («Para a Leiteria»).
 export default {
-  finca: ['Fazenda', null, { cafe: 'Café para Salento ➜' }],
+  finca: ['Fazenda', null, { cafe: 'Café para Salento ➜', abono: 'Composto para o Cacaual ➜' }],
   trapiche: ['Engenho', null, { panela: 'Para a Leiteria ➜', panela_cacao: 'Para o Cacaual ➜', panela_pueblo: 'Para Salento ➜' }],
   lecheria: ['Leiteria', null, { panela: '⬅ Do Engenho', leche: 'Para o Cacaual ➜', queso: 'Queijo para o Milharal ⬇', mantequilla: 'Manteiga para o Milharal ⬇', arequipe: 'Doce de leite para Salento ➜' }],
-  cacaotal: ['Cacaual', null, { panela_cacao: '⬅ Rapadura do Engenho', leche: '⬅ Leite da Leiteria', chocolatinas: 'Chocolates para Salento ➜', chocolate_mesa: 'Chocolate para Salento ⬇' }],
+  cacaotal: ['Cacaual', null, { abono: '⬇ Composto da Fazenda', panela_cacao: '⬅ Rapadura do Engenho', leche: '⬅ Leite da Leiteria', chocolatinas: 'Chocolates para Salento ➜', chocolate_mesa: 'Chocolate para Salento ⬇' }],
   maizal: ['Milharal', null, { queso: '⬅ Queijo da Leiteria', mantequilla: '⬅ Manteiga', arepas: 'Para Salento ➜' }],
   pueblo: ['Salento', 'Para Buenaventura ➜', { cafe: '⬅ Café da Fazenda', panela_pueblo: '⬅ Rapadura do Engenho', chocolatinas: '⬅ Chocolates', chocolate_mesa: '⬅ Chocolate do Cacaual', arepas: 'Arepas do Milharal ⬆', arequipe: 'Doce de leite da Leiteria ⬆' }],
   guayabera: ['Goiabeira', 'Para Vélez ➜', { bocadillo: 'Goiabada para a Fazenda de gado ➜', dulces: 'Para Barichara ➜' }],

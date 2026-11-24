@@ -1,6 +1,7 @@
 // routes en inglés: [nombre, vehículo, pestaña]. La chiva es el bus de colores del campo colombiano.
 export default {
   panela: ['Panela route', 'Chiva', 'Panela'],
+  abono: ['Compost route', 'Chiva', 'Compost'],
   panela_cacao: ['Panela route to the Cacao Grove', 'Chiva', 'Panela'],
   leche: ['Milk route', 'Milk chiva', 'Milk'],
   queso: ['Cheese route', 'Chiva', 'Cheese'],

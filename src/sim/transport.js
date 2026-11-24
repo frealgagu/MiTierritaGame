@@ -4,7 +4,7 @@ import { muleCount, muleLoad, stationBufferCap, stationInputCap, stationOutputRa
 import { sumValues } from './state.js';
 import { BY_CHILDREN, BY_ROUTES, CHILDREN, FUEL_CHILDREN, ROAD_POS, chainOf, consumers, joinOf, perCycleOf, zoneOf, zoneUnlocked } from './chain.js';
 import { ROUTES, ROUTES_BY_ID } from '../data/routes.js';
-import { ROUTE_STOCK, routeActive, routeCapacity, routeRate, routeReserve } from './routes.js';
+import { ROUTE_STOCK, routeActive, routeCapacity, routeImport, routeRate, routeReserve, routeStations } from './routes.js';
 import { inputSpace, stepFuel } from './production.js';
 import { capMult, dispatchMult, muleSpeedMult, speedMult } from './modifiers.js';
 import { resting } from './calendar.js';
@@ -342,10 +342,29 @@ function stepSideSurplus(state) {
   for (const id of Object.keys(state.stations)) sellSideSurplus(state, id);
 }
 // What a side station has over its full yard goes to the warehouse (run right after it works, too).
+// (v5.18) Its routes come first (the Ruta del abono): what they will carry leaves the yard for the warehouse before the
+// bonus spends any, since a source left without compost stops a whole zone.
+const SIDE_ROUTES = Object.fromEntries(
+  Object.values(STATIONS_BY_ID)
+    .filter((def) => def.side)
+    .map((def) => [def.id, ROUTES.filter((r) => r.from === def.zone && r.product === Object.keys(def.out)[0])]),
+);
 export function sellSideSurplus(state, id) {
   const st = state.stations[id];
   const def = STATIONS_BY_ID[id];
   if (!st || !def.side) return;
+  for (const r of SIDE_ROUTES[id]) {
+    if (!routeActive(state, r.id)) continue;
+    // From the top half of the yard, so the chiva's big loads never empty it and the bonus never skips a beat
+    // (what it does not spend would be left over); all of it if a station of the route is running out.
+    const urgent = routeStations(state, r.id).some((s) => (state.stations[s].imported?.[r.product] ?? 0) < routeImport(r, s).perCycle);
+    const spare = urgent ? st.buffer : st.buffer - sideKeep(state, id) / 2;
+    const n = Math.min(spare, exportSpace(state, r.id).space);
+    if (n <= 1e-9) continue;
+    const wh = state.zones[zoneOf(id)].warehouse;
+    wh[r.product] = (wh[r.product] ?? 0) + n;
+    st.buffer -= n;
+  }
   const extra = st.buffer - sideKeep(state, id);
   if (extra <= 0) return;
   const n = Math.min(extra, sideSaleRoom(state, id));

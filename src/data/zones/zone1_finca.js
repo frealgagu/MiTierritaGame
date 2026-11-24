@@ -36,6 +36,8 @@ export const ZONE1 = {
   // Road for the Coffee Route: leaves the warehouse toward El Pueblo (v1.5).
   routes: {
     cafe: { road: [[24.5, 17.2], [24.5, 14.5], [25.9, 14.5]], sign: [24.2, 13.3], text: 'Café a Salento ➜' },
+    // (v5.18) The compost the bonus does not need goes to fertilize the cacao trees.
+    abono: { road: [[24.3, 18.5], [25.9, 18.5]], sign: [25.1, 19.6], text: 'Abono al Cacaotal ➜' },
   },
   unlockedBy: null, // available from the start
   next: 'trapiche', // zone unlocked upon completing this one

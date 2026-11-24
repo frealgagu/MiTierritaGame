@@ -89,7 +89,7 @@ export const offlineCapSeconds = (profile) => offlineHours(profile) * 3600;
 // Consumes 1 compost per 8 coffees washed by Beneficiadero, which supplies pulp for 2:
 // Compostera at half Beneficiadero level already suffices; raising Cafetal won't burn faster.
 export const COMPOST_VALUE = 1.3;
-export const WASHED_PER_COMPOST = 8;
+export const WASHED_PER_COMPOST = 2; // (v5.18; until then 8: half the compost was left over and sold)
 
 export function compostValueBoost(state) {
   return (state.stations.composter?.buffer ?? 0) > 0 ? COMPOST_VALUE : 1;

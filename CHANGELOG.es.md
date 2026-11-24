@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v5.18.0 — Nada se pierde
+- **🔥 La Hornilla quema el bagazo:** el bagazo de la Molienda ahora es una de sus entradas. Sin bagazo se detiene; al mismo nivel lo gasta todo, así que el Trapiche solo vende su panela.
+- **🚌 Nueva Ruta del abono:** el compost de la Compostera abona el Cacaotal, cuyos árboles lo necesitan para dar mazorcas. El resto mantiene el bono de +30 % de la Finca.
+- **Tu partida:** si el Cacaotal ya está abierto, recibes la Compostera al nivel del Beneficiadero y la ruta al nivel de los cacaos.
+
 ## v5.17.0 — Las fiestas de Colombia
 - **🎉 Fiestas del calendario real** (la fecha de tu teléfono, sin permisos): alumbrado navideño, Noche de las Velitas, Navidad, Año Viejo, Día de Reyes, carnavales, Semana Santa, Día de la Madre, 20 de julio, Batalla de Boyacá, Halloween y más.
 - **Diciembre decora cada zona:** luces de colores en cada edificio, árbol de Navidad, pesebre (con los Reyes Magos el 6 de enero), velas y faroles en los caminos, el muñeco de año viejo y pólvora en la noche.

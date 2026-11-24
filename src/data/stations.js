@@ -36,13 +36,16 @@ export const STATIONS = [
   { id: 'packer', zone: 'finca', name: 'Empacadora', icon: '📦', in: { ground: 4 }, out: { coffee_bag: 1 }, cycle: 32, unlockCost: 30000, upgradeBase: 100, growth: 1.15, release: '0.2' },
   // Side branch: Beneficiadero pulp travels directly via chute (no mules) and compost
   // increases sale value of everything Finca sells while stocked (see sim/modifiers.js).
-  { id: 'composter', zone: 'finca', name: 'Compostera', icon: '🪱', in: { pulp: 4 }, out: { compost: 1 }, cycle: 16, unlockCost: 1500, upgradeBase: 10, growth: 1.15, release: '1.0', side: true, requires: 'wetmill' },
+  // (v5.18) One compost per pulp, at the Beneficiadero's pace: half goes to the Cacaotal by the Ruta del abono (first),
+  // half to the bonus (one compost per two washed coffees), so at equal levels none is left to sell.
+  { id: 'composter', zone: 'finca', name: 'Compostera', icon: '🪱', in: { pulp: 1 }, out: { compost: 1 }, cycle: 4, unlockCost: 1500, upgradeBase: 10, growth: 1.15, release: '1.0', side: true, requires: 'wetmill' },
 
   // Zone 2 · El Trapiche
   { id: 'canefield', zone: 'trapiche', name: 'Cañaduzal', icon: '🎋', infinite: true, out: { cane: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 50, growth: 1.15, release: '1.1' },
   { id: 'cane_mill', zone: 'trapiche', name: 'Molienda', icon: '⚙️', in: { cane: 1 }, out: { guarapo: 1 }, by: { bagasse: 1 }, cycle: 2, unlockCost: 5000, upgradeBase: 80, growth: 1.15, release: '1.1' },
-  // Molienda bagazo travels straight to Hornilla as fuel: while stocked, runs ×2.
-  { id: 'furnace', zone: 'trapiche', name: 'Hornilla', icon: '🔥', in: { guarapo: 2 }, out: { melado: 1 }, fuel: { product: 'bagasse', from: 'cane_mill', perCycle: 1, boost: 2 }, cycle: 4, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '1.1' },
+  // (v5.18) Molienda bagazo travels straight to the Hornilla by chute and is a required input: two per cycle, one per
+  // guarapo, all the Molienda makes. Every 2 s (until v5.17 bagazo was optional fuel: every 4 s, ×2 while stocked).
+  { id: 'furnace', zone: 'trapiche', name: 'Hornilla', icon: '🔥', in: { guarapo: 2 }, joins: [{ product: 'bagasse', perCycle: 2, from: 'cane_mill' }], out: { melado: 1 }, cycle: 2, unlockCost: 25000, upgradeBase: 120, growth: 1.15, release: '1.1' },
   { id: 'molds', zone: 'trapiche', name: 'Gaveras', icon: '🧱', in: { melado: 2 }, out: { panela: 1 }, cycle: 8, unlockCost: 80000, upgradeBase: 200, growth: 1.15, release: '1.1' },
   { id: 'pulverizer', zone: 'trapiche', name: 'Pulverizadora', icon: '🌀', in: { panela: 1 }, out: { panela_powder: 1 }, cycle: 8, unlockCost: 250000, upgradeBase: 350, growth: 1.15, release: '1.1' },
 
@@ -61,7 +64,9 @@ export const STATIONS = [
   // Lechería pasteurized milk (see data/routes.js). Across equal-level zones, Paila, Mesa, and
   // Chocolatería take ¾ of Trapiche's panela, and Chocolatería takes Pasteurizadora's reserved 1/4.
   // reserve.
-  { id: 'cacao_grove', zone: 'cacaotal', name: 'Cacaotal', icon: '🌳', infinite: true, out: { cacao_pod: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '1.3' },
+  // (v5.18) The cacao trees are fertilized with the Finca's compost (Ruta del abono): one per cycle of four pods, the
+  // same pace of pods as before (one every 2 s). No compost, no pods.
+  { id: 'cacao_grove', zone: 'cacaotal', name: 'Cacaotal', icon: '🌳', imports: [{ product: 'compost', perCycle: 1, route: 'abono' }], out: { cacao_pod: 4 }, cycle: 8, unlockCost: 0, upgradeBase: 1500, growth: 1.15, release: '1.3' },
   { id: 'fermenter', zone: 'cacaotal', name: 'Cajones de fermentación', icon: '📦', in: { cacao_pod: 2 }, out: { cacao_fermented: 1 }, cycle: 4, unlockCost: 2000000, upgradeBase: 2000, growth: 1.15, release: '1.3' },
   { id: 'cacao_dryer', zone: 'cacaotal', name: 'Secadero', icon: '☀️', in: { cacao_fermented: 1 }, out: { cacao_dry: 1 }, cycle: 4, unlockCost: 5000000, upgradeBase: 3000, growth: 1.15, release: '1.3' },
   { id: 'cacao_roaster', zone: 'cacaotal', name: 'Tostador de cacao', icon: '🔥', in: { cacao_dry: 1 }, out: { cacao_roasted: 1 }, cycle: 4, unlockCost: 12000000, upgradeBase: 4500, growth: 1.15, release: '1.3' },

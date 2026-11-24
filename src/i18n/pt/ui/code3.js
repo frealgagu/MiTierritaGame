@@ -244,4 +244,13 @@ export default {
   "{route} lo lleva a {zone}.": "{route} o leva até {zone}.",
   "Cuando abra {zone}, {route} lo llevará allá; mientras tanto se vende en la bodega.": "Quando {zone} abrir, {route} vai levá-lo até lá; enquanto isso, é vendido no armazém.",
   "Se vende en la bodega.": "É vendido no armazém.",
+  "{route} lleva <b>{n}</b> a {zone}.": "{route} leva <b>{n}</b> para {zone}.",
+  "El bono gasta <b>{n}</b> (uno por cada {k} cafés lavados).": "O bônus gasta <b>{n}</b> (um para cada {k} cafés lavados).",
+  "📦 {n} sobran y se venden en la bodega.": "📦 {n} sobram e são vendidos no armazém.",
+  "Aprovecha la pulpa del Beneficiadero: abono para el Cacaotal y bono a las ventas": "Aproveita a polpa do Despolpador: adubo para o Cacaual e bônus nas vendas",
+  "Abonado con compost de la Finca, da {p}": "Adubado com composto da Fazenda, dá {p}",
+  "⏸️ Falta compost: construye la Compostera en la Finca, junto al Beneficiadero.": "⏸️ Falta composto: construa a Composteira na Fazenda, ao lado do Despolpador.",
+  "✅ Compost de sobra: abona el Cacaotal, todo lo que vende la Finca vale +{pct} y el que sobra se vende.": "✅ Composto de sobra: aduba o Cacaual, tudo o que a Fazenda vende vale +{pct}, e o que sobra é vendido.",
+  "⚠️ No alcanza el compost: primero se abona el Cacaotal y el bono solo dura parte del tiempo (+{pct} en promedio). Mejora la Compostera.": "⚠️ O composto não chega: primeiro se aduba o Cacaual e o bônus só dura parte do tempo (+{pct} em média). Melhore a Composteira.",
+  "✅ Produciendo compost: abona el Cacaotal y todo lo que vende la Finca vale +{pct}.": "✅ Produzindo composto: aduba o Cacaual e tudo o que a Fazenda vende vale +{pct}.",
 };

@@ -1,9 +1,9 @@
 // zones en inglés: [nombre, letrero de salida, { ruta: letrero de la carretera }].
 export default {
-  finca: ['The Farm', null, { cafe: 'Coffee to Salento ➜' }],
+  finca: ['The Farm', null, { cafe: 'Coffee to Salento ➜', abono: 'Compost to the Cacao Grove ➜' }],
   trapiche: ['The Sugar Mill', null, { panela: 'To the Dairy ➜', panela_cacao: 'To the Cacao Grove ➜', panela_pueblo: 'To Salento ➜' }],
   lecheria: ['The Dairy', null, { panela: '⬅ From the Sugar Mill', leche: 'To the Cacao Grove ➜', queso: 'Cheese to the Cornfield ⬇', mantequilla: 'Butter to the Cornfield ⬇', arequipe: 'Arequipe to Salento ➜' }],
-  cacaotal: ['The Cacao Grove', null, { panela_cacao: '⬅ Panela from the Sugar Mill', leche: '⬅ Milk from the Dairy', chocolatinas: 'Chocolate bars to Salento ➜', chocolate_mesa: 'Chocolate to Salento ⬇' }],
+  cacaotal: ['The Cacao Grove', null, { abono: '⬇ Compost from the Farm', panela_cacao: '⬅ Panela from the Sugar Mill', leche: '⬅ Milk from the Dairy', chocolatinas: 'Chocolate bars to Salento ➜', chocolate_mesa: 'Chocolate to Salento ⬇' }],
   maizal: ['The Cornfield', null, { queso: '⬅ Cheese from the Dairy', mantequilla: '⬅ Butter', arepas: 'To Salento ➜' }],
   pueblo: ['Salento', 'To Buenaventura ➜', { cafe: '⬅ Coffee from the Farm', panela_pueblo: '⬅ Panela from the Sugar Mill', chocolatinas: '⬅ Chocolate bars', chocolate_mesa: '⬅ Chocolate from the Cacao Grove', arepas: 'Arepas from the Cornfield ⬆', arequipe: 'Arequipe from the Dairy ⬆' }],
   guayabera: ['The Guava Orchard', 'To Vélez ➜', { bocadillo: 'Bocadillo to the Ranch ➜', dulces: 'To Barichara ➜' }],

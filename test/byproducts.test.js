@@ -77,16 +77,19 @@ test('in a big game the Compostera, with its yard full, keeps working and sells 
   assert.ok(s.stations.composter.buffer > 0, 'and the Finca keeps its bonus');
 });
 
-test('the Hornilla takes its bagazo before any is sold', () => {
+test('the Hornilla takes all the bagazo the Molienda makes: none is left to sell (v5.18)', () => {
   const { game, s } = cafe(['cane_mill'], ['trapiche']);
   run(game, 300);
   assert.ok(s.stats.sold.bagasse > 10, 'with no Hornilla, the bagazo is sold');
   assert.ok(game.unlock('furnace'));
   s.stations.furnace.level = s.stations.furnace.transport.level = 20;
+  run(game, 60); // the leftovers already in the warehouse go first
   const before = s.stats.sold.bagasse;
+  const made = s.stats.produced.bagasse;
   run(game, 300);
-  assert.ok(s.stations.furnace.fuel > 0, 'the Hornilla has fuel');
-  assert.ok(s.stats.sold.bagasse > before, 'and what it does not burn is sold');
+  assert.ok(s.stats.produced.melado > 0);
+  const sold = s.stats.sold.bagasse - before;
+  assert.ok(sold < (s.stats.produced.bagasse - made) * 0.05, `the Hornilla takes it all (${sold} of ${s.stats.produced.bagasse - made} sold)`);
 });
 
 test('leftover byproducts never take more than their share of the warehouse', () => {

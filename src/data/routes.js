@@ -21,6 +21,23 @@ export const ROUTES = [
     growth: 1.15,
     release: '1.2',
   },
+  // (v5.18) The Finca's compost fertilizes the cacao trees.
+  {
+    id: 'abono',
+    name: 'Ruta del abono',
+    vehicle: 'Chiva',
+    icon: '🚌',
+    product: 'compost',
+    from: 'finca',
+    to: 'cacaotal',
+    stations: ['cacao_grove'],
+    tab: 'Abono',
+    tripTime: 60,
+    maxWait: 10,
+    costBase: 3000,
+    growth: 1.15,
+    release: '5.18',
+  },
   {
     id: 'panela_cacao',
     name: 'Ruta de la panela al Cacaotal',

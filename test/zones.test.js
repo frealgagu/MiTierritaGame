@@ -50,7 +50,7 @@ test('the Trapiche chain makes powdered panela', () => {
   assert.ok((game.state.stats.sold.panela_powder ?? 0) > 0);
 });
 
-test(`the Molienda's bagasse feeds the Hornilla and speeds it up ×2`, () => {
+test(`the Hornilla needs the Molienda's bagazo: two per cycle, one per guarapo; without it, it stops (v5.18)`, () => {
   const setup = (withFuel) => {
     const game = withTrapiche();
     game.unlock('cane_mill');
@@ -69,13 +69,15 @@ test(`the Molienda's bagasse feeds the Hornilla and speeds it up ×2`, () => {
   const none = setup(false);
   run(fuel, 200);
   run(none, 200);
-  assert.ok(fuel.state.stations.furnace.fuel > 0 || fuel.state.stats.produced.melado > 0);
-  const ratio = fuel.state.stats.produced.melado / none.state.stats.produced.melado;
-  assert.ok(ratio > 1.6, `syrup with bagasse / without bagasse = ${ratio.toFixed(2)}`);
-  // Analysis also counts fuel: with Molienda providing plenty of bagazo, ×2.
+  assert.ok(fuel.state.stats.produced.melado > 0, 'with bagazo it cooks');
+  assert.equal(none.state.stats.produced.melado ?? 0, 0, 'without bagazo it stops');
+  assert.deepEqual(STATIONS_BY_ID.furnace.joins, [{ product: 'bagasse', perCycle: 2, from: 'cane_mill' }]);
+  assert.equal(STATIONS_BY_ID.furnace.fuel, undefined, 'no longer a fuel');
+  // In the analysis, every 2 s: as fast as it was with the bagazo boost (every 4 s, ×2).
   const furnace = analyzeChain(fuel.state, 'trapiche').rows.find((r) => r.id === 'furnace');
   const base = stationRate(STATIONS_BY_ID.furnace, 5) * STATIONS_BY_ID.furnace.in.guarapo;
-  assert.ok(Math.abs(furnace.capacity - 2 * base) < 1e-9, `capacity ${furnace.capacity} vs base ${base}`);
+  assert.ok(Math.abs(furnace.capacity - base) < 1e-9, `capacity ${furnace.capacity} vs ${base}`);
+  assert.equal(STATIONS_BY_ID.furnace.cycle, 2);
 });
 
 test('every zone has its warehouse, its dispatch and its recommendation', () => {

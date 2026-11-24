@@ -364,9 +364,23 @@ function finish(data, base, stations, zones, mules) {
   for (const id of Object.keys(base.routes)) routes[id] = { ...createRouteState(), ...data.routes?.[id] };
   // station; start them at that station level so existing saves do not stall.
   // Before v1.0.1 research goals stored the research ID directly.
+  // (v5.18: the Ruta del abono too.)
   for (const r of ROUTES) {
-    if (r.release !== '4.0' || !routes[r.id] || !data.routes || data.routes[r.id]) continue;
+    if (!['4.0', '5.18'].includes(r.release) || !routes[r.id] || !data.routes || data.routes[r.id]) continue;
     routes[r.id].level = Math.max(1, ...r.stations.map((id) => stations[id]?.level ?? 0));
+  }
+  // v5.18: in a save from before the Ruta del abono with the Cacaotal open, its cacao trees now need the Finca's compost:
+  // the Compostera is built, or raised, to the Beneficiadero's level, so the Cacaotal does not stop.
+  if (data.routes && !data.routes.abono && zones.cacaotal?.unlocked && stations.wetmill) {
+    stations.composter ??= createStationState();
+    stations.composter.level = Math.max(stations.composter.level, stations.wetmill.level);
+    stations.composter.transport.level = Math.max(stations.composter.transport.level, stations.wetmill.transport?.level ?? 1);
+  }
+  // v5.18: the Hornilla's bagazo, until then fuel, is its combined input.
+  const furnace = stations.furnace;
+  if (furnace?.fuel) {
+    furnace.joined = { ...furnace.joined, bagasse: (furnace.joined?.bagasse ?? 0) + furnace.fuel };
+    delete furnace.fuel;
   }
   // v4.0: cap restarts at 60 and drop the per-run history log.
   const OLD_GOAL_IDS = { abono: 'g05', herraduras: 'g12', sello: 'g26' };

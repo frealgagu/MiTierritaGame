@@ -26,6 +26,8 @@ function withCacaotal(level = 30) {
     game.unlockZone(z);
     for (const id of chainOf(z).slice(1)) assert.ok(game.unlock(id), id);
   }
+  // (v5.18) The cacao trees' compost: the Finca's Beneficiadero and Compostera.
+  for (const id of ['wetmill', 'composter']) assert.ok(game.unlock(id), id);
   for (const id of Object.keys(s.stations)) {
     s.stations[id].level = level;
     s.stations[id].transport.level = level;

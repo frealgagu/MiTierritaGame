@@ -24,6 +24,7 @@ function withPueblo(level = 30) {
     for (const id of chainOf(z).slice(1)) assert.ok(game.unlock(id), id);
   }
   for (const id of chainOf('finca').slice(1)) game.unlock(id);
+  game.unlock('composter'); // (v5.18) the Cacaotal's compost
   for (const st of Object.values(s.stations)) {
     st.level = level;
     st.transport.level = level;

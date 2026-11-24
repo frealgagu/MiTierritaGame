@@ -244,4 +244,13 @@ export default {
   "{route} lo lleva a {zone}.": "{route} l’emporte à {zone}.",
   "Cuando abra {zone}, {route} lo llevará allá; mientras tanto se vende en la bodega.": "Quand {zone} ouvrira, {route} l’y emportera ; en attendant, il se vend à l’entrepôt.",
   "Se vende en la bodega.": "Il se vend à l’entrepôt.",
+  "{route} lleva <b>{n}</b> a {zone}.": "{route} emporte <b>{n}</b> vers {zone}.",
+  "El bono gasta <b>{n}</b> (uno por cada {k} cafés lavados).": "Le bonus consomme <b>{n}</b> (un pour {k} cafés lavés).",
+  "📦 {n} sobran y se venden en la bodega.": "📦 {n} sont en trop et vendus à l’entrepôt.",
+  "Aprovecha la pulpa del Beneficiadero: abono para el Cacaotal y bono a las ventas": "Valorise la pulpe du Dépulpeur : engrais pour la Cacaoyère et bonus sur les ventes",
+  "Abonado con compost de la Finca, da {p}": "Fertilisé avec le compost de la Ferme, il donne {p}",
+  "⏸️ Falta compost: construye la Compostera en la Finca, junto al Beneficiadero.": "⏸️ Pas de compost : construis le Composteur à la Ferme, près du Dépulpeur.",
+  "✅ Compost de sobra: abona el Cacaotal, todo lo que vende la Finca vale +{pct} y el que sobra se vende.": "✅ Compost en abondance : il fertilise la Cacaoyère, tout ce que vend la Ferme vaut +{pct}, et le surplus est vendu.",
+  "⚠️ No alcanza el compost: primero se abona el Cacaotal y el bono solo dura parte del tiempo (+{pct} en promedio). Mejora la Compostera.": "⚠️ Pas assez de compost : la Cacaoyère est fertilisée d’abord et le bonus ne dure qu’une partie du temps (+{pct} en moyenne). Améliore le Composteur.",
+  "✅ Produciendo compost: abona el Cacaotal y todo lo que vende la Finca vale +{pct}.": "✅ Compost en production : il fertilise la Cacaoyère et tout ce que vend la Ferme vaut +{pct}.",
 };

@@ -40,7 +40,9 @@ export function analyzeChain(state, zoneId = 'finca', { exports: withExports = t
 
 function analyze(state, zoneId, withExports, depth, memo) {
   const routes = depth < MAX_ROUTE_DEPTH;
-  const ids = chainOf(zoneId).filter((id) => state.stations[id]);
+  // (v5.18) With the zone's side stations (the Compostera) after its chain: the pulp they take is not sold.
+  const sides = (ZONES_BY_ID[zoneId].plots ?? []).map((p) => p.stationId).filter((id) => STATIONS_BY_ID[id]?.side);
+  const ids = [...chainOf(zoneId), ...sides].filter((id) => state.stations[id]);
 
   // Expected sale price: on Finca, includes compost bonus sustainable by Compostera.
   const compost = zoneId === 'finca' ? expectedCompostValue(state) : 1;
@@ -155,6 +157,21 @@ function analyze(state, zoneId, withExports, depth, memo) {
       const exportsHere = routes ? exportsOf(state, id) : [];
       const transport = teamCapacity(state, id);
       const row = { id, incoming, capacity, output, transport, children, exports: exportsHere.map((r) => r.id), next: children[0] ?? null, toNext: 0, diverted: 0, lost: 0, cycles };
+      // (v5.18) A side station (the Compostera): its product goes first to its routes (the Ruta del abono), then to its
+      // zone's bonus (one compost per two washed coffees, sim/modifiers.js); only what is left is sold.
+      if (def.side) {
+        const out = routes ? ROUTES.filter((r) => r.from === zoneId && r.product === outId && routeActive(state, r.id)) : [];
+        const toRoutes = Math.min(output, out.reduce((n, r) => n + Math.min(routeDemandRate(state, r.id), routeRate(state, r.id)), 0));
+        if (toRoutes > 0) exported[outId] = (exported[outId] ?? 0) + toRoutes;
+        const washed = rows.find((r) => r.id === 'wetmill')?.output ?? 0;
+        const spent = Math.min(output - toRoutes, washed / WASHED_PER_COMPOST);
+        const left = Math.max(0, output - toRoutes - spent);
+        Object.assign(row, { side: true, toRoutes, spent, exports: out.map((r) => r.id), transport: output, diverted: left });
+        toWarehouse += left;
+        flows.push({ product: outId, units: left, value: value(outId), leaf: false });
+        rows.push(row);
+        continue;
+      }
       if (def.joins) {
         row.joined = Object.fromEntries(def.joins.map((j) => [j.product, joinedIn[id]?.[j.product] ?? 0]));
         row.joinLimited = joinLimited;
@@ -405,7 +422,10 @@ export function expectedCompostValue(state) {
   const wetCycles = Math.min(stationRate(STATIONS_BY_ID.wetmill, w.level) * speedMult(state, 'wetmill'), farmOut / STATIONS_BY_ID.wetmill.in.cherry);
   if (wetCycles <= 0) return 1;
   const demand = (wetCycles * STATIONS_BY_ID.wetmill.out.washed) / WASHED_PER_COMPOST; // compost/s
-  const supply = Math.min(stationRate(STATIONS_BY_ID.composter, c.level) * speedMult(state, 'composter'), wetCycles / STATIONS_BY_ID.composter.in.pulp);
+  const made = Math.min(stationRate(STATIONS_BY_ID.composter, c.level) * speedMult(state, 'composter'), (wetCycles * STATIONS_BY_ID.wetmill.by.pulp) / STATIONS_BY_ID.composter.in.pulp) * STATIONS_BY_ID.composter.out.compost;
+  // (v5.18) The Ruta del abono takes its share first.
+  const route = routeActive(state, 'abono') ? Math.min(routeDemandRate(state, 'abono'), routeRate(state, 'abono')) : 0;
+  const supply = Math.max(0, made - route);
   return 1 + (COMPOST_VALUE - 1) * Math.min(1, supply / demand);
 }
 

@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## v5.18.0 — Rien ne se perd
+- **🔥 Le Four à panela brûle la bagasse :** la bagasse du Broyeur de canne est maintenant l’une de ses entrées. Sans bagasse il s’arrête ; au même niveau il l’utilise toute, donc le Moulin à canne ne vend que sa panela.
+- **🚌 Nouvelle Route du compost :** le compost du Composteur fertilise la Cacaoyère, dont les arbres en ont besoin pour donner des cabosses. Le reste garde le bonus de +30 % de la Ferme.
+- **Ta partie :** si la Cacaoyère est déjà ouverte, tu reçois le Composteur au niveau du Dépulpeur et la route au niveau des cacaoyers.
+
 ## v5.17.0 — Les fêtes de Colombie
 - **🎉 Fêtes du calendrier réel** (la date de ton téléphone, sans autorisation) : illuminations de Noël, Nuit des petites bougies, Noël, Saint-Sylvestre, Épiphanie, carnavals, Semaine sainte, fête des mères, 20 juillet, bataille de Boyacá, Halloween et plus encore.
 - **Décembre décore chaque zone :** des lumières de couleur sur chaque bâtiment, un sapin de Noël, la crèche (avec les Rois mages le 6 janvier), des bougies et des lanternes le long des chemins, la poupée de la vieille année et des feux d’artifice la nuit.

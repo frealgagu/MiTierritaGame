@@ -29,6 +29,8 @@ export const ZONE4 = {
   // Roads along which the routes arrive, up to the Table and the Chocolatería.
   routes: {
     panela_cacao: { road: [[25.9, 13.5], [20.3, 13.5]], sign: [24.2, 12.3], text: '⬅ Panela del Trapiche' },
+    // (v5.18) The Finca's compost, down from the top edge straight to the cacao trees.
+    abono: { road: [[5.5, 0.1], [5.5, 1.7]], sign: [7.2, 0.9], text: '⬇ Abono de la Finca' },
     leche: { road: [[25.9, 15.5], [20.3, 15.5]], sign: [24.6, 14.6], text: '⬅ Leche de la Lechería' },
     // Both chocolates leave the warehouse toward El Pueblo (v1.5).
     chocolatinas: { road: [[24.2, 17.5], [25.9, 17.5]], sign: [25.3, 16.6], text: 'Chocolatinas a Salento ➜' },

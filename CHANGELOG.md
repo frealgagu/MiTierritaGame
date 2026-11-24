@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.18.0 — Nothing goes to waste
+- **🔥 The Furnace burns the bagasse:** the Cane Press's bagasse is now one of its inputs. Without bagasse it stops; at the same level it uses all of it, so the Sugar Mill sells only its panela.
+- **🚌 New Compost route:** the Compost Bin's compost fertilizes the Cacao Grove, whose trees need it to give pods. The rest keeps the Farm's +30 % bonus.
+- **Your game:** if the Cacao Grove is already open, you get the Compost Bin at the Wet Mill's level and the route at the cacao trees' level.
+
 ## v5.17.0 — Colombia's fiestas
 - **🎉 Fiestas from the real calendar** (your phone's date, no permissions needed): Christmas lights, the Night of the Little Candles, Christmas, New Year's Eve, Epiphany, Carnivals, Holy Week, Mother's Day, Independence Day, the Battle of Boyacá, Halloween and more.
 - **December dresses up every zone:** colored lights on every building, a Christmas tree, the manger (with the Three Wise Men on 6 January), candles and lanterns along the paths, the old-year doll and fireworks at night.

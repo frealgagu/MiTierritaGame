@@ -50,6 +50,7 @@ test('at the same level, mule drivers carry everything their station makes (in t
         st.transport.level = level;
       }
       for (const row of analyzeChain(game.state).rows) {
+        if (row.side) continue; // (v5.18) the Compostera has no mule drivers: its compost goes down the chute
         assert.ok(row.transport >= row.output * 1.2, `${row.id} lv ${level}: they carry ${row.transport} of ${row.output}`);
       }
     }

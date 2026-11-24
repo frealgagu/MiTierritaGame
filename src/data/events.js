@@ -107,7 +107,7 @@ export const EVENTS = [
     stations: ['cacao_grove', 'fermenter', 'cacao_dryer', 'cacao_roaster', 'cacao_mill', 'chocolate_table', 'chocolatier'],
     level: 10,
     coins: 1000000,
-    supply: { panela_powder: 0, milk: 1 },
+    supply: { panela_powder: 0, milk: 1, compost: 1 }, // (v5.18) the cacao trees' compost arrives as usual
     stock: { panela_powder: 60 },
     actions: [
       { id: 'derrumbe_mulas', icon: '🐴', name: 'Mulas por el monte', desc: 'Unas mulas pasan la panela por el monte: llega una cuarta parte de la que se necesita.', cost: 1000000, effect: { type: 'supply', product: 'panela_powder', fraction: 0.25 } },
