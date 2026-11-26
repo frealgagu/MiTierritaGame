@@ -39,7 +39,7 @@ test('the plaza\'s products and stations never reuse a region\'s id: they would 
 });
 
 test('the plaza belongs to no region: its zones and events stay out of the main game lists (v5.19)', () => {
-  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre']);
+  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro']);
   for (const z of PLAZA_ZONES) assert.ok(!ZONE_LIST.includes(z));
   for (const r of REGIONS) for (const z of PLAZA_ZONES) assert.ok(!r.zones.includes(z.id));
   for (const e of SEASON_EVENTS) assert.ok(!EVENTS.includes(e));
@@ -132,7 +132,7 @@ test('season boards and stickers survive the save; no fiesta bonus on the board 
   assert.equal(fiestaMult(back.events.season.boards.velitas), 1);
 });
 
-test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre and San Pedro (no event yet) (v5.19)', () => {
+test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre, San Pedro and the 20 de julio (no event yet) (v5.19)', () => {
   const n = nextSeason(day(2026, 11, 24));
   assert.equal(n.fiesta.id, 'velitas');
   assert.equal(n.days, 12);
@@ -151,7 +151,23 @@ test('the next season event: Velitas from late November, Negros y Blancos after 
   assert.ok(may.def, 'Mother\'s Day too (v5.21)');
   const june = nextSeason(day(2027, 5, 20));
   assert.equal(june.fiesta.id, 'san_pedro');
-  assert.equal(june.def, null);
+  assert.ok(june.def, 'San Pedro too (v5.21)');
+  const july = nextSeason(day(2027, 7, 1));
+  assert.equal(july.fiesta.id, 'independencia');
+  assert.equal(july.def, null);
+});
+
+test('San Juan y San Pedro (v5.21): 20–30 June with 30 days of grace, streamers and fireworks on the map', () => {
+  const root = newGame();
+  assert.equal(seasonStatus(root, 'san_pedro', day(2027, 6, 19)), null);
+  assert.equal(seasonStatus(root, 'san_pedro', day(2027, 6, 20)).kind, 'available');
+  assert.equal(seasonStatus(root, 'san_pedro', day(2027, 7, 30)).grace, true);
+  assert.equal(seasonStatus(root, 'san_pedro', day(2027, 7, 31)), null);
+  assert.ok(decorOn(day(2027, 6, 25)).has('fireworks'));
+  const board = startSeason(root, 'san_pedro', day(2027, 6, 21));
+  assert.deepEqual(Object.keys(board.stations), ['sp_lenero', 'sp_asado', 'sp_achiras', 'sp_tablado']);
+  meet(board);
+  assert.equal(finishSeason(root, 'san_pedro').sticker, true);
 });
 
 test('Día de la Madre (v5.21): the Friday to the second Sunday of May with 30 days of grace, flowers on the map', () => {

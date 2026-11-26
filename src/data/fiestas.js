@@ -47,7 +47,7 @@ export const FIESTAS = [
     sticker: tk('Serenata con mariachis, flores y almuerzo en familia el segundo domingo de mayo.'),
   },
   {
-    id: 'san_pedro', icon: '🎉', kind: 'big', dates: { from: [6, 20], to: [6, 30] },
+    id: 'san_pedro', icon: '🎉', kind: 'big', dates: { from: [6, 20], to: [6, 30] }, decor: ['streamers', 'fireworks'],
     name: tk('Fiestas de San Juan y San Pedro'),
     greeting: tk('🎉 ¡Son las fiestas de San Juan y San Pedro! En el Huila y el Tolima suena el bambuco.'),
     sticker: tk('En Neiva se baila el sanjuanero y se come asado huilense.'),

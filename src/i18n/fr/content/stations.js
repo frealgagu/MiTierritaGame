@@ -399,4 +399,8 @@ export default {
   dm_floristeria: "Fleuriste",
   dm_cocina: "Cuisine du déjeuner",
   dm_mesa: "Table familiale",
+  sp_lenero: "Bûcheron",
+  sp_asado: "Four de l’asado huilense",
+  sp_achiras: "Four à achiras",
+  sp_tablado: "Estrade du sanjuanero",
 };

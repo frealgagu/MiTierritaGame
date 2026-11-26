@@ -19,4 +19,5 @@ export default {
   barranquilla: ["Cumbia de la Bataille de fleurs", "gaita, guacharaca, llamador, tambora et tambor alegre"],
   vallenato: ["Paseo de la scène", "accordéon, caja, guacharaca et basse"],
   dia_madre: ["Pasillo pour maman", "bandola, tiple et guitare"],
+  san_pedro: ["Rajaleña de l’estrade", "tiple, guitare, bandola, tambora et carrasca"],
 };

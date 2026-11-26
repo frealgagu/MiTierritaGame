@@ -65,4 +65,5 @@ export default {
   plaza_barranquilla: "Quem vive é quem aproveita! Chegou o carnaval de Barranquilla: vamos entalhar máscaras e dançar.",
   plaza_vallenato: "Chegou o Festival Vallenato! Pegue o acordeão, a caixa e a guacharaca, que hoje se escolhe um rei.",
   plaza_dia_madre: "Feliz Dia das Mães! Hoje a família toda almoça junta e tem serenata para as mamães.",
+  plaza_san_pedro: "Chegaram as festas de São Pedro! Acenda os fornos, que tem asado huilense, achiras e sanjuanero.",
 };

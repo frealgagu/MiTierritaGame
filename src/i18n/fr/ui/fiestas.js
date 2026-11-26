@@ -107,4 +107,6 @@ export default {
   "En Valledupar se busca al nuevo rey vallenato: enseña a los aprendices de la escuela, forma acordeoneros, cajeros y guacharaqueros, y súbelos juntos a la tarima Francisco el Hombre.": "Valledupar cherche le nouveau roi du vallenato : instruis les apprentis de l’école, forme des accordéonistes et des joueurs de caja et de guacharaca, et fais-les monter ensemble sur la scène Francisco el Hombre.",
   "El Día de la Madre": "La fête des Mères",
   "El segundo domingo de mayo toda la familia celebra a las mamás: haz el mercado en la plaza, arma los ramos de flores, cocina el almuerzo de domingo y llévalo todo a la mesa, con serenata.": "Le deuxième dimanche de mai, toute la famille fête les mamans : fais le marché sur la place, compose les bouquets, cuisine le déjeuner du dimanche et apporte tout à table, avec une sérénade.",
+  "Las fiestas de San Juan y San Pedro": "Les fêtes de la Saint-Jean et de la Saint-Pierre",
+  "En el Huila y el Tolima se baila el sanjuanero: trae la leña, prende los hornos de barro del asado huilense y de las achiras, y sírvelos en el tablado mientras las parejas bailan.": "Dans le Huila et le Tolima, on danse le sanjuanero : apporte le bois, allume les fours en terre de l’asado huilense et des achiras, et sers-les sur l’estrade pendant que les couples dansent.",
 };

@@ -9790,6 +9790,98 @@ const DRAW = {
     this.animate(0);
     this.roofTop = iso(x0 + 1.25, y0 + 0.65, H + 8);
   },
+
+  // --- San Juan y San Pedro (v5.21) ---
+  // Clay oven of the asado huilense: a big dome of clay under a shed, the pork roasting inside and smoke rising.
+  sp_asado(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const H = 22 + ctx.up;
+    for (const [px, py] of [[0, 0], [2.3, 0], [0, 1.5], [2.3, 1.5]]) box(g, x0 + px, y0 + py, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, 2.4, 1.6, H, 10, PAL.roof, PAL.wood);
+    const c = iso(x0 + 1.2, y0 + 0.9);
+    g.ellipse(c.x, c.y, 22, 11).fill(0x8d4a2b).stroke(OUTLINE);
+    g.moveTo(c.x - 20, c.y).quadraticCurveTo(c.x, c.y - 34, c.x + 20, c.y).fill(0xb5653a).stroke(OUTLINE);
+    g.moveTo(c.x - 7, c.y + 3).quadraticCurveTo(c.x, c.y - 11, c.x + 7, c.y + 3).fill(0x2b1a10);
+    this.lights.push({ x: c.x, y: c.y - 2, r: 18, color: 0xff7043 });
+    this.smokePoints.push({ x: c.x + 6, y: c.y - 24 });
+    // Pots of marinated pork waiting.
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) {
+      const p = iso(x0 + 0.3 + k * 0.45, y0 + 1.85);
+      g.roundRect(p.x - 4, p.y - 6, 8, 6, 1.5).fill(0x616161).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x, p.y - 6, 4, 1.4).fill(0xc0392b);
+    }
+    this.roofTop = iso(x0 + 1.2, y0 + 0.8, H + 10);
+  },
+
+  // Achira oven: a small clay oven and a table with achiras on bijao leaves, the baker taking out a tray.
+  sp_achiras(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    const c = iso(x0 + 0.8, y0 + 0.8);
+    g.ellipse(c.x, c.y, 15, 7.5).fill(0x8d4a2b).stroke(OUTLINE);
+    g.moveTo(c.x - 13, c.y).quadraticCurveTo(c.x, c.y - 24, c.x + 13, c.y).fill(0xc68a5b).stroke(OUTLINE);
+    g.moveTo(c.x - 5, c.y + 2).quadraticCurveTo(c.x, c.y - 8, c.x + 5, c.y + 2).fill(0x2b1a10);
+    this.lights.push({ x: c.x, y: c.y - 1, r: 14, color: 0xff8a65 });
+    box(g, x0 + 1.3, y0 + 0.9, 1.0, 0.6, 9, PAL.wood);
+    const leaf = iso(x0 + 1.8, y0 + 1.2, 9);
+    g.ellipse(leaf.x, leaf.y, 12, 4.5).fill(0x689f38);
+    for (let k = 0; k < 5 + Math.min(ctx.tier, 3); k++) g.ellipse(leaf.x - 8 + (k % 4) * 5, leaf.y - 1 - Math.floor(k / 4) * 2, 2.2, 1.3).fill(PRODUCTS.achiras_sampedro.color).stroke({ width: 0.4, color: 0x3a2418, alpha: 0.5 });
+    const baker = new Graphics();
+    this.anim.addChild(baker);
+    const b = iso(x0 + 1.0, y0 + 1.9);
+    this.animate = (time) => {
+      const reach = Math.sin(time * 2) * 3;
+      baker.clear();
+      worker(baker, b.x, b.y, 0xf2c14e);
+      baker.rect(b.x - 10 + reach, b.y - 15, 10, 1.6).fill(0x6d4c41);
+      baker.rect(b.x - 12 + reach, b.y - 17, 5, 2).fill(0xe8b860);
+    };
+    this.animate(0);
+  },
+
+  // Tablado del sanjuanero: a wooden stage with red and yellow bunting where a couple dances the sanjuanero, her
+  // wide skirt swirling and his straw hat in hand.
+  sp_tablado(g, x, y, ctx) {
+    const x0 = x + 0.25;
+    const y0 = y + 0.35;
+    box(g, x0, y0, 2.5, 1.5, 8, 0xa1693f);
+    for (let k = 0; k < 6; k++) {
+      const a = iso(x0 + k * 0.5, y0 + 1.5, 8);
+      g.rect(a.x - 0.4, a.y, 0.8, 8).fill(0x6d4c41);
+    }
+    for (const [px, py] of [[0, 0], [2.4, 0]]) box(g, x0 + px, y0 + py, 0.1, 0.1, 30 + ctx.up, PAL.woodDark);
+    const a = iso(x0 + 0.05, y0 + 0.05, 30 + ctx.up);
+    const b = iso(x0 + 2.45, y0 + 0.05, 30 + ctx.up);
+    const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 + 8 };
+    g.moveTo(a.x, a.y).quadraticCurveTo(mid.x, mid.y, b.x, b.y).stroke({ width: 1, color: 0x5d4037 });
+    for (let k = 0; k < 8; k++) {
+      const tt = (k + 0.5) / 8;
+      const px = (1 - tt) * (1 - tt) * a.x + 2 * (1 - tt) * tt * mid.x + tt * tt * b.x;
+      const py = (1 - tt) * (1 - tt) * a.y + 2 * (1 - tt) * tt * mid.y + tt * tt * b.y;
+      g.poly([px - 2.5, py, px + 2.5, py, px, py + 5]).fill(k % 2 ? 0xd7263d : 0xf2c14e);
+    }
+    const couple = new Graphics();
+    this.anim.addChild(couple);
+    const c = iso(x0 + 1.25, y0 + 0.75, 8);
+    this.animate = (time) => {
+      const turn = Math.sin(time * 3);
+      couple.clear();
+      // She: white blouse and a wide flowered skirt that swirls.
+      const sx = c.x - 6 + turn * 3;
+      couple.poly([sx - 9 - Math.abs(turn) * 3, c.y, sx + 9 + Math.abs(turn) * 3, c.y, sx + 2, c.y - 12, sx - 2, c.y - 12]).fill(0xfafafa).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      for (let k = 0; k < 4; k++) couple.circle(sx - 6 + k * 4, c.y - 3, 1.4).fill([0xd7263d, 0xf2c14e, 0x1e88e5, 0x2f7d4f][k]);
+      couple.roundRect(sx - 3, c.y - 19, 6, 8, 2).fill(0xfafafa);
+      couple.circle(sx, c.y - 21.5, 2.8).fill(0x6d4c32);
+      couple.circle(sx + 2.5, c.y - 23, 1.4).fill(0xd7263d);
+      // He: white shirt, red scarf, straw hat in hand.
+      const hx = c.x + 7 - turn * 3;
+      worker(couple, hx, c.y, 0xfafafa);
+      couple.rect(hx - 3, c.y - 17, 6, 1.6).fill(0xd7263d);
+      couple.ellipse(hx + 6, c.y - 18 + turn * 2, 5, 1.6).fill(0xf3d27a);
+    };
+    this.animate(0);
+  },
 };
 
 // Tolima Grande (v4.0): stations sharing artwork from other regions.

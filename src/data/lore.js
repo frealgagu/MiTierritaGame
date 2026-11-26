@@ -459,6 +459,11 @@ export const FACTS = {
   dm_floristeria: ["Colombia es el segundo exportador de flores del mundo, después de los Países Bajos.", "La Sabana de Bogotá y el oriente de Antioquia son las grandes regiones de flores del país."],
   dm_cocina: ["El almuerzo de domingo en familia puede ser ajiaco, sancocho o bandeja paisa, según la región.", "Muchas familias se reúnen en la casa de la abuela para el almuerzo."],
   dm_mesa: ["En muchas ciudades las mamás reciben serenata con mariachis o un trío de guitarras.", "Una serenata empieza de noche, debajo de la ventana, para despertar a quien se celebra."],
+  // San Juan y San Pedro (v5.21)
+  sp_lenero: ["Las fiestas de San Juan y San Pedro se celebran en junio en el Huila y el Tolima.", "En Neiva se celebra el Festival Folclórico y Reinado Nacional del Bambuco."],
+  sp_asado: ["El asado huilense es cerdo adobado con naranja agria y especias, asado en horno de barro.", "El asado se acompaña con arepa oreja de perro y insulso."],
+  sp_achiras: ["Las achiras son bizcochos de almidón de achira y queso, típicos del Huila.", "Las achiras se hornean en horno de barro y se venden en hojas de bijao."],
+  sp_tablado: ["El sanjuanero huilense es el baile insignia del Huila: la pareja se coquetea con el sombrero y el pañuelo.", "El rajaleña es un canto pícaro de coplas que se improvisan en las fiestas."],
 };
 
 // Speaker announcing milestones per zone (key events, not every toast).
@@ -528,6 +533,7 @@ export const PEOPLE = {
   plaza_barranquilla: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_vallenato: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_dia_madre: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
+  plaza_san_pedro: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
 };
 
 // Opening line when entering a zone for the first time.
@@ -598,6 +604,7 @@ export const WELCOME = {
   plaza_barranquilla: '¡Quien lo vive es quien lo goza! Llegó el carnaval de Barranquilla: a tallar máscaras y a bailar.',
   plaza_vallenato: '¡Llegó el Festival Vallenato! A sacar el acordeón, la caja y la guacharaca, que hoy se elige rey.',
   plaza_dia_madre: '¡Feliz Día de la Madre! Hoy toda la familia almuerza junta y hay serenata para las mamás.',
+  plaza_san_pedro: '¡Llegaron las fiestas de San Pedro! Prenda los hornos, que hay asado huilense, achiras y sanjuanero.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

@@ -142,4 +142,9 @@ export default {
   dm_floristeria: ["A Colômbia é o segundo exportador de flores do mundo, depois dos Países Baixos.", "A Savana de Bogotá e o leste de Antioquia são as grandes regiões de flores do país."],
   dm_cocina: ["O almoço de domingo em família pode ser ajiaco, sancocho ou bandeja paisa, conforme a região.", "Muitas famílias se reúnem na casa da avó para o almoço."],
   dm_mesa: ["Em muitas cidades as mães recebem serenata com mariachis ou um trio de violões.", "Uma serenata começa à noite, embaixo da janela, para acordar quem é celebrada."],
+  // San Juan y San Pedro (v5.21)
+  sp_lenero: ["As festas de São João e São Pedro são celebradas em junho no Huila e no Tolima.", "Em Neiva acontece o Festival Folclórico e Reinado Nacional do Bambuco."],
+  sp_asado: ["O asado huilense é carne de porco temperada com laranja-azeda e especiarias, assada em forno de barro.", "O asado é servido com arepa oreja de perro e insulso."],
+  sp_achiras: ["As achiras são biscoitos de amido de achira e queijo, típicos do Huila.", "As achiras são assadas em forno de barro e vendidas em folhas de bijao."],
+  sp_tablado: ["O sanjuanero huilense é a dança símbolo do Huila: o casal flerta com o chapéu e o lenço.", "O rajaleña é um canto malicioso de versos improvisados nas festas."],
 };

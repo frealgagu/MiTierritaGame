@@ -482,6 +482,15 @@ export class FarmView extends StationView {
           g.rect(p.x + 7, p.y - 22, 2, 22).fill(PAL.woodDark);
           g.rect(p.x - 9, p.y - 23, 18, 2).fill(PAL.wood);
           for (let k = 0; k < 5; k++) g.roundRect(p.x - 6.5 + k * 3, p.y - 21, 2, 9 + (k % 2) * 2, 1).fill(0xfffde7).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
+        } else if (look.props === 'firewood') {
+          for (let row = 0; row < 3; row++) {
+            for (let k = 0; k < 4 - row; k++) {
+              const lx = p.x - 7 + row * 2.4 + k * 4.6;
+              const ly = p.y - 3 - row * 4;
+              g.ellipse(lx, ly, 2.4, 2).fill(0x8d6e63).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+              g.ellipse(lx, ly, 1.2, 1).fill(0xd7b98a);
+            }
+          }
         } else if (look.props === 'flowers') {
           const colors = [0xe91e63, 0xfdd835, 0xffffff, 0xe53935, 0x8e24aa];
           for (const [dx, dy] of [[-5, 0], [5, 0], [0, -5]]) {
@@ -599,6 +608,8 @@ const PLAZA_HOUSE = {
   vallenato: { wall: 0xfbf8f1, trims: [0xc62828, 0x2e7d32, 0xfdd835, 0xc62828, 0x8e44ad, 0xffd700], awning: 0xc62828, sign: 'accordion', props: 'hammocks' },
   // (v5.21) The market of the plaza on Mother's Day: a pink house with a flower sign and buckets of flowers outside.
   dia_madre: { wall: 0xfce4ec, trims: [0xe91e63, 0x43a047, 0xfdd835, 0xe91e63, 0x8e44ad, 0xffd700], awning: 0xe91e63, sign: 'flower', props: 'flowers' },
+  // (v5.21) The woodcutter of San Pedro: a white house with a straw-hat sign and piles of firewood outside.
+  san_pedro: { wall: 0xfbf8f1, trims: [0xd7263d, 0xf2c14e, 0x2f7d4f, 0xd7263d, 0x8e44ad, 0xffd700], awning: 0xd7263d, sign: 'hat', props: 'firewood' },
   barranquilla: { wall: 0xfdd835, trims: [0xe53935, 0x1e88e5, 0x43a047, 0xe53935, 0x8e24aa, 0xffd700], awning: 0x1e88e5, sign: 'carnival', props: 'masks' },
 };
 
@@ -641,6 +652,10 @@ function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
     g.poly([s.x, s.y - 4.6, s.x - 7, s.y, s.x, s.y + 4.6]).fill(0x212121);
     g.circle(s.x - 3, s.y - 0.6, 1.1).fill(0xfafafa);
     g.circle(s.x + 3, s.y - 0.6, 1.1).fill(0x212121);
+  } else if (look.sign === 'hat') {
+    g.ellipse(s.x, s.y + 1.5, 8, 2.4).fill(0xf3d27a);
+    g.ellipse(s.x, s.y - 1, 4, 3).fill(0xe8c063);
+    g.rect(s.x - 4, s.y - 0.5, 8, 1.2).fill(0xd7263d);
   } else if (look.sign === 'flower') {
     for (let k = 0; k < 5; k++) {
       const a = (k / 5) * Math.PI * 2;

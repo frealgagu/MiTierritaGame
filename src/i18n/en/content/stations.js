@@ -399,4 +399,8 @@ export default {
   dm_floristeria: "Florist",
   dm_cocina: "Lunch kitchen",
   dm_mesa: "Family table",
+  sp_lenero: "Woodcutter",
+  sp_asado: "Asado huilense oven",
+  sp_achiras: "Achira oven",
+  sp_tablado: "Sanjuanero stage",
 };

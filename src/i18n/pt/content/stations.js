@@ -399,4 +399,8 @@ export default {
   dm_floristeria: "Floricultura",
   dm_cocina: "Cozinha do almoço",
   dm_mesa: "Mesa da família",
+  sp_lenero: "Lenhador",
+  sp_asado: "Forno do asado huilense",
+  sp_achiras: "Forno de achiras",
+  sp_tablado: "Tablado do sanjuanero",
 };

@@ -142,4 +142,9 @@ export default {
   dm_floristeria: ["La Colombie est le deuxième exportateur de fleurs au monde, après les Pays-Bas.", "La Savane de Bogotá et l’est d’Antioquia sont les grandes régions de fleurs du pays."],
   dm_cocina: ["Le déjeuner du dimanche en famille peut être un ajiaco, un sancocho ou une bandeja paisa, selon la région.", "Beaucoup de familles se retrouvent chez la grand-mère pour le déjeuner."],
   dm_mesa: ["Dans beaucoup de villes, les mamans reçoivent une sérénade de mariachis ou d’un trio de guitares.", "Une sérénade commence la nuit, sous la fenêtre, pour réveiller celle qu’on fête."],
+  // San Juan y San Pedro (v5.21)
+  sp_lenero: ["Les fêtes de la Saint-Jean et de la Saint-Pierre se célèbrent en juin dans le Huila et le Tolima.", "Neiva accueille le Festival folklorique et le Concours national du bambuco."],
+  sp_asado: ["L’asado huilense est du porc mariné à l’orange amère et aux épices, rôti au four en terre.", "L’asado se sert avec l’arepa oreja de perro et l’insulso."],
+  sp_achiras: ["Les achiras sont des biscuits d’amidon d’achira et de fromage, typiques du Huila.", "Les achiras cuisent au four en terre et se vendent sur des feuilles de bijao."],
+  sp_tablado: ["Le sanjuanero huilense est la danse emblématique du Huila : le couple se courtise avec le chapeau et le foulard.", "Le rajaleña est un chant coquin de couplets improvisés pendant les fêtes."],
 };

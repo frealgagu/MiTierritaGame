@@ -65,4 +65,5 @@ export default {
   plaza_barranquilla: ["Doña Celmira", "the festivities committee lady"],
   plaza_vallenato: ["Doña Celmira", "the festivities committee lady"],
   plaza_dia_madre: ["Doña Celmira", "the festivities committee lady"],
+  plaza_san_pedro: ["Doña Celmira", "the festivities committee lady"],
 };

@@ -107,4 +107,6 @@ export default {
   "En Valledupar se busca al nuevo rey vallenato: enseña a los aprendices de la escuela, forma acordeoneros, cajeros y guacharaqueros, y súbelos juntos a la tarima Francisco el Hombre.": "Valledupar is looking for the new vallenato king: teach the school’s apprentices, train accordionists and caja and guacharaca players, and bring them together onto the Francisco el Hombre stage.",
   "El Día de la Madre": "Mother’s Day",
   "El segundo domingo de mayo toda la familia celebra a las mamás: haz el mercado en la plaza, arma los ramos de flores, cocina el almuerzo de domingo y llévalo todo a la mesa, con serenata.": "On the second Sunday of May the whole family celebrates moms: shop at the square’s market, make the bouquets, cook the Sunday lunch and bring it all to the table, with a serenade.",
+  "Las fiestas de San Juan y San Pedro": "The feasts of Saint John and Saint Peter",
+  "En el Huila y el Tolima se baila el sanjuanero: trae la leña, prende los hornos de barro del asado huilense y de las achiras, y sírvelos en el tablado mientras las parejas bailan.": "In Huila and Tolima they dance the sanjuanero: bring the firewood, light the clay ovens for the asado huilense and the achiras, and serve them on the stage while the couples dance.",
 };

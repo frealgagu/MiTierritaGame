@@ -63,6 +63,8 @@ export const PLAZA_ZONES = [
   plaza('plaza_vallenato', 1424, 'vallenato', ['vall_escuela', 'vall_acordeon', 'vall_caja', 'vall_tarima'], ['streamers', 'notes']),
   // (v5.21) Mother's Day: flowers along the paths and at every door.
   plaza('plaza_dia_madre', 1507, 'dia_madre', ['dm_mercado', 'dm_floristeria', 'dm_cocina', 'dm_mesa'], ['flowers']),
+  // (v5.21) San Juan y San Pedro: bunting by day and fireworks (the «castillo») at night.
+  plaza('plaza_san_pedro', 1620, 'san_pedro', ['sp_lenero', 'sp_asado', 'sp_achiras', 'sp_tablado'], ['streamers', 'fireworks']),
 ];
 
 // Same prices and paces as the Finca's first stations (data/stations.js).
@@ -101,6 +103,12 @@ export const PLAZA_STATIONS = [
   station('dm_floristeria', 'plaza_dia_madre', 'Floristería', '💐', { in: { mercado_madre: 1 }, out: { ramo: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('dm_cocina', 'plaza_dia_madre', 'Cocina del almuerzo', '🍲', { in: { mercado_madre: 1 }, out: { almuerzo_madre: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('dm_mesa', 'plaza_dia_madre', 'Mesa familiar', '🍽️', { in: { ramo: 1 }, joins: [{ product: 'almuerzo_madre', perCycle: 1, from: 'dm_cocina' }], out: { celebracion_madre: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
+  // (v5.21) 🎉 San Juan y San Pedro (Huila and Tolima): firewood for the clay ovens of the asado huilense and of the
+  // achiras, served on the stage where the sanjuanero is danced. The same paces and prices as the Navidad.
+  station('sp_lenero', 'plaza_san_pedro', 'Leñero', '🪵', { infinite: true, out: { lena_sampedro: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, release: '5.21' }),
+  station('sp_asado', 'plaza_san_pedro', 'Horno del asado huilense', '🥩', { in: { lena_sampedro: 1 }, out: { asado_sampedro: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('sp_achiras', 'plaza_san_pedro', 'Horno de achiras', '🔥', { in: { lena_sampedro: 1 }, out: { achiras_sampedro: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('sp_tablado', 'plaza_san_pedro', 'Tablado del sanjuanero', '💃', { in: { asado_sampedro: 1 }, joins: [{ product: 'achiras_sampedro', perCycle: 1, from: 'sp_achiras' }], out: { fiesta_sampedrina: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
 ];
 
 export const PLAZA_PRODUCTS = {
@@ -127,6 +135,10 @@ export const PLAZA_PRODUCTS = {
   ramo: { name: 'Ramo de flores', zone: 'plaza_dia_madre', value: 3, icon: '💐', color: 0xe91e63 },
   almuerzo_madre: { name: 'Almuerzo de domingo', zone: 'plaza_dia_madre', value: 3, icon: '🍲', color: 0xf4a259 },
   celebracion_madre: { name: 'Almuerzo con serenata', zone: 'plaza_dia_madre', value: 10, icon: ICON.fiestaDiaMadre, color: 0xf06292 },
+  lena_sampedro: { name: 'Leña', zone: 'plaza_san_pedro', value: 1, icon: '🪵', color: 0x8d6e63 },
+  asado_sampedro: { name: 'Asado huilense', zone: 'plaza_san_pedro', value: 3, icon: '🥩', color: 0xc0392b },
+  achiras_sampedro: { name: 'Achiras', zone: 'plaza_san_pedro', value: 3, icon: ICON.bizcochos, color: 0xe8b860 },
+  fiesta_sampedrina: { name: 'Fiesta sampedrina', zone: 'plaza_san_pedro', value: 10, icon: ICON.fiestaSanPedro, color: 0xe53935 },
 };
 
 // The season events. `fiesta`: its fiesta (data/fiestas.js); `season`: played in the plaza, not in a region.
@@ -217,6 +229,20 @@ export const SEASON_EVENTS = [
     coins: 0,
     actions: [],
     objective: { kind: 'produced', items: { celebracion_madre: 240000 } },
+  },
+  {
+    id: 'fiesta_san_pedro',
+    fiesta: 'san_pedro',
+    season: true,
+    zone: 'plaza_san_pedro',
+    icon: '🎉',
+    name: tk('Las fiestas de San Juan y San Pedro'),
+    intro: tk('En el Huila y el Tolima se baila el sanjuanero: trae la leña, prende los hornos de barro del asado huilense y de las achiras, y sírvelos en el tablado mientras las parejas bailan.'),
+    stations: ['sp_lenero', 'sp_asado', 'sp_achiras', 'sp_tablado'],
+    level: 1,
+    coins: 0,
+    actions: [],
+    objective: { kind: 'produced', items: { fiesta_sampedrina: 240000 } },
   },
 ];
 export const SEASON_EVENT_OF_FIESTA = Object.fromEntries(SEASON_EVENTS.map((e) => [e.fiesta, e]));

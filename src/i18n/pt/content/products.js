@@ -412,4 +412,8 @@ export default {
   ramo: "Buquê de flores",
   almuerzo_madre: "Almoço de domingo",
   celebracion_madre: "Almoço com serenata",
+  lena_sampedro: "Lenha",
+  asado_sampedro: "Asado huilense",
+  achiras_sampedro: "Achiras",
+  fiesta_sampedrina: "Festa de São Pedro",
 };

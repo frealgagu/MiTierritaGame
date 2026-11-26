@@ -66,4 +66,5 @@ export default {
   plaza_barranquilla: "Those who live it are those who enjoy it! The Barranquilla carnival is here: let’s carve masks and dance.",
   plaza_vallenato: "The Vallenato Festival is here! Bring out the accordion, the caja and the guacharaca: today a king is chosen.",
   plaza_dia_madre: "Happy Mother’s Day! Today the whole family has lunch together and there’s a serenade for the moms.",
+  plaza_san_pedro: "The San Pedro fiestas are here! Light the ovens: there’s asado huilense, achiras and sanjuanero.",
 };

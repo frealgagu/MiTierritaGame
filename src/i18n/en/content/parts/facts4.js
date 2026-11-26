@@ -142,4 +142,9 @@ export default {
   dm_floristeria: ["Colombia is the world’s second flower exporter, after the Netherlands.", "The Bogotá Savanna and eastern Antioquia are the country’s great flower regions."],
   dm_cocina: ["The family Sunday lunch may be ajiaco, sancocho or bandeja paisa, depending on the region.", "Many families gather at grandma’s house for lunch."],
   dm_mesa: ["In many cities mothers get a serenade with mariachis or a guitar trio.", "A serenade starts at night, under the window, to wake the person being celebrated."],
+  // San Juan y San Pedro (v5.21)
+  sp_lenero: ["The feasts of Saint John and Saint Peter are celebrated in June in Huila and Tolima.", "Neiva holds the National Bambuco Folk Festival and Pageant."],
+  sp_asado: ["Asado huilense is pork marinated with sour orange and spices, roasted in a clay oven.", "The asado is served with arepa oreja de perro and insulso."],
+  sp_achiras: ["Achiras are biscuits made of achira starch and cheese, typical of Huila.", "Achiras are baked in clay ovens and sold on bijao leaves."],
+  sp_tablado: ["The sanjuanero huilense is Huila’s signature dance: the couple flirts with the hat and the scarf.", "Rajaleña is a cheeky song of verses improvised during the fiestas."],
 };

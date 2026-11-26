@@ -24,7 +24,7 @@ const ARTIST = 'Encantos de Mi Tierrita';
 // Every track: one per region, plus the grand finale's (v5.9) and La plaza de las fiestas' villancicos (v5.20).
 export const SONGS = { ...REGION_SONGS, granfinal: GRAN_FINAL };
 // Order in the game and each file name.
-export const ORDER = ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima', 'cundinamarca', 'bogota', 'sanandres', 'granfinal', 'velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre'];
+export const ORDER = ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima', 'cundinamarca', 'bogota', 'sanandres', 'granfinal', 'velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro'];
 // Included on the downloads page: excludes regions still hidden in the game (v4.4.10: Bogotá). Since v5.9 the
 // special zone and the grand finale are included too, but as spoilers (see SPOILERS).
 export const PUBLIC = ORDER.filter((id) => !REGIONS_BY_ID[id]?.hidden);
