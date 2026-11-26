@@ -137,4 +137,9 @@ export default {
   vall_acordeon: ["The accordion came to Colombia from Germany at the end of the 19th century.", "Every year the festival chooses the Vallenato King, the best accordionist."],
   vall_caja: ["The caja vallenata is a small drum of African origin.", "The guacharaca is a ridged cane scraped with a wire fork."],
   vall_tarima: ["The festival stage is named Francisco el Hombre, after the minstrel who beat the devil playing the accordion.", "The Vallenato Legend Festival has been held in Valledupar since 1968."],
+  // Día de la Madre (v5.21)
+  dm_mercado: ["In Colombia Mother’s Day is celebrated on the second Sunday of May.", "It is one of the busiest days of the year for restaurant lunches."],
+  dm_floristeria: ["Colombia is the world’s second flower exporter, after the Netherlands.", "The Bogotá Savanna and eastern Antioquia are the country’s great flower regions."],
+  dm_cocina: ["The family Sunday lunch may be ajiaco, sancocho or bandeja paisa, depending on the region.", "Many families gather at grandma’s house for lunch."],
+  dm_mesa: ["In many cities mothers get a serenade with mariachis or a guitar trio.", "A serenade starts at night, under the window, to wake the person being celebrated."],
 };

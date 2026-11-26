@@ -1,11 +1,12 @@
 # Changelog
 
-## v5.21.0 — Carnivals and vallenato
+## v5.21.0 — Fiestas of the first half of the year
 - **🎨 New season event: the Carnival of Blacks and Whites** (from 2 January, playable until 6 February): sew the costumes, paint the troupes black on the Day of Blacks, cover them in talc on the Day of Whites and bring them to the floats of the Great Parade. Its sticker is the first of the 🎉 Fiestas of Colombia album.
 - **🎶 «Son del carnaval»:** an original son sureño with quena, charango, guitar and bombo drum plays in its square (also on the music download page).
 - **The map dresses up for Pasto's carnival** from 2 to 7 January: bunting and streamers on every building and clouds of talc along the paths.
 - **🎭 New season event: the Barranquilla Carnival** (in February, on its Easter-relative dates, with 30 more days to play): carve the masks, dress the marimondas and the congos and bring them dancing to the floats of the Battle of Flowers. In its square plays «Cumbia de la Batalla de Flores», an original cumbia, and the map fills with bunting and falling confetti during the carnival.
 - **🪗 New season event: the Vallenato Legend Festival** (24 to 30 April, with 30 more days to play): teach the music school's apprentices, train accordionists and caja and guacharaca players, and bring them together onto the Francisco el Hombre stage. In its square plays «Paseo de la tarima», an original paseo vallenato with accordion, caja and guacharaca, and music notes float over the map during the festival.
+- **💐 New season event: Mother's Day** (the weekend of the second Sunday of May, with 30 more days to play): shop at the square's market, make the bouquets, cook the Sunday lunch and bring it all to the family table, with a serenade. In its square plays «Pasillo para mamá», an original serenade pasillo, and pots of flowers line the map's paths and doors.
 
 ## v5.20.0 — Fiesta Square
 - **🔽 Minimize:** the event bar's «Leave» button is now «Minimize», since the event keeps going while you play elsewhere.

@@ -395,4 +395,8 @@ export default {
   vall_acordeon: "House of the accordion",
   vall_caja: "Caja and guacharaca",
   vall_tarima: "Francisco el Hombre stage",
+  dm_mercado: "Square market",
+  dm_floristeria: "Florist",
+  dm_cocina: "Lunch kitchen",
+  dm_mesa: "Family table",
 };

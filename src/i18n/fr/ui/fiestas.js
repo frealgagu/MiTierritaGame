@@ -105,4 +105,6 @@ export default {
   "¡Quien lo vive es quien lo goza! Talla las máscaras, viste a las marimondas y a los congos y llévalos juntos a bailar en las carrozas de la Batalla de Flores.": "Qui le vit, c’est qui en profite ! Sculpte les masques, habille les marimondas et les congos et emmène-les danser ensemble sur les chars de la Bataille de fleurs.",
   "El Festival de la Leyenda Vallenata": "Le Festival de la Légende vallenata",
   "En Valledupar se busca al nuevo rey vallenato: enseña a los aprendices de la escuela, forma acordeoneros, cajeros y guacharaqueros, y súbelos juntos a la tarima Francisco el Hombre.": "Valledupar cherche le nouveau roi du vallenato : instruis les apprentis de l’école, forme des accordéonistes et des joueurs de caja et de guacharaca, et fais-les monter ensemble sur la scène Francisco el Hombre.",
+  "El Día de la Madre": "La fête des Mères",
+  "El segundo domingo de mayo toda la familia celebra a las mamás: haz el mercado en la plaza, arma los ramos de flores, cocina el almuerzo de domingo y llévalo todo a la mesa, con serenata.": "Le deuxième dimanche de mai, toute la famille fête les mamans : fais le marché sur la place, compose les bouquets, cuisine le déjeuner du dimanche et apporte tout à table, avec une sérénade.",
 };

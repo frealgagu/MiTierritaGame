@@ -64,4 +64,5 @@ export default {
   plaza_negros_blancos: "Chegou o carnaval de Pasto! Tire as fantasias, que aqui ninguém escapa do talco.",
   plaza_barranquilla: "Quem vive é quem aproveita! Chegou o carnaval de Barranquilla: vamos entalhar máscaras e dançar.",
   plaza_vallenato: "Chegou o Festival Vallenato! Pegue o acordeão, a caixa e a guacharaca, que hoje se escolhe um rei.",
+  plaza_dia_madre: "Feliz Dia das Mães! Hoje a família toda almoça junta e tem serenata para as mamães.",
 };

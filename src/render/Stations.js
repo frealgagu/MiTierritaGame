@@ -482,6 +482,12 @@ export class FarmView extends StationView {
           g.rect(p.x + 7, p.y - 22, 2, 22).fill(PAL.woodDark);
           g.rect(p.x - 9, p.y - 23, 18, 2).fill(PAL.wood);
           for (let k = 0; k < 5; k++) g.roundRect(p.x - 6.5 + k * 3, p.y - 21, 2, 9 + (k % 2) * 2, 1).fill(0xfffde7).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
+        } else if (look.props === 'flowers') {
+          const colors = [0xe91e63, 0xfdd835, 0xffffff, 0xe53935, 0x8e24aa];
+          for (const [dx, dy] of [[-5, 0], [5, 0], [0, -5]]) {
+            g.poly([p.x + dx - 4, p.y + dy - 8, p.x + dx + 4, p.y + dy - 8, p.x + dx + 3, p.y + dy, p.x + dx - 3, p.y + dy]).fill(0x90a4ae).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+            for (let k = 0; k < 4; k++) g.circle(p.x + dx - 3 + k * 2, p.y + dy - 10 - (k % 2) * 2, 1.8).fill(colors[(k + Math.floor(rng() * 5)) % 5]);
+          }
         } else if (look.props === 'hammocks') {
           g.rect(p.x - 12, p.y - 22, 2, 22).fill(PAL.woodDark);
           g.rect(p.x + 10, p.y - 22, 2, 22).fill(PAL.woodDark);
@@ -591,6 +597,8 @@ const PLAZA_HOUSE = {
   // (v5.21) Barranquilla's mask workshop: a yellow house with a carnival-mask sign and racks of painted masks.
   // (v5.21) Valledupar's music school: a white house with an accordion sign and hammocks hung outside.
   vallenato: { wall: 0xfbf8f1, trims: [0xc62828, 0x2e7d32, 0xfdd835, 0xc62828, 0x8e44ad, 0xffd700], awning: 0xc62828, sign: 'accordion', props: 'hammocks' },
+  // (v5.21) The market of the plaza on Mother's Day: a pink house with a flower sign and buckets of flowers outside.
+  dia_madre: { wall: 0xfce4ec, trims: [0xe91e63, 0x43a047, 0xfdd835, 0xe91e63, 0x8e44ad, 0xffd700], awning: 0xe91e63, sign: 'flower', props: 'flowers' },
   barranquilla: { wall: 0xfdd835, trims: [0xe53935, 0x1e88e5, 0x43a047, 0xe53935, 0x8e24aa, 0xffd700], awning: 0x1e88e5, sign: 'carnival', props: 'masks' },
 };
 
@@ -633,6 +641,12 @@ function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
     g.poly([s.x, s.y - 4.6, s.x - 7, s.y, s.x, s.y + 4.6]).fill(0x212121);
     g.circle(s.x - 3, s.y - 0.6, 1.1).fill(0xfafafa);
     g.circle(s.x + 3, s.y - 0.6, 1.1).fill(0x212121);
+  } else if (look.sign === 'flower') {
+    for (let k = 0; k < 5; k++) {
+      const a = (k / 5) * Math.PI * 2;
+      g.circle(s.x + Math.cos(a) * 3, s.y + Math.sin(a) * 3, 2).fill(0xe91e63);
+    }
+    g.circle(s.x, s.y, 1.6).fill(0xfdd835);
   } else if (look.sign === 'accordion') {
     g.rect(s.x - 7, s.y - 4, 3, 8).fill(0x6d4c41);
     g.rect(s.x + 4, s.y - 4, 3, 8).fill(0x6d4c41);

@@ -64,4 +64,5 @@ export default {
   plaza_negros_blancos: ["Dona Celmira", "a da comissão de festas"],
   plaza_barranquilla: ["Dona Celmira", "a da comissão de festas"],
   plaza_vallenato: ["Dona Celmira", "a da comissão de festas"],
+  plaza_dia_madre: ["Dona Celmira", "a da comissão de festas"],
 };

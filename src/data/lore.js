@@ -454,6 +454,11 @@ export const FACTS = {
   vall_acordeon: ["El acordeón llegó a Colombia desde Alemania a finales del siglo XIX.", "En el festival se elige cada año al Rey Vallenato, el mejor acordeonero."],
   vall_caja: ["La caja vallenata es un tambor pequeño de origen africano.", "La guacharaca es una caña con ranuras que se raspa con un tenedor de alambre."],
   vall_tarima: ["La tarima del festival se llama Francisco el Hombre, por el juglar que venció al diablo tocando acordeón.", "El Festival de la Leyenda Vallenata se celebra en Valledupar desde 1968."],
+  // Día de la Madre (v5.21)
+  dm_mercado: ["En Colombia el Día de la Madre se celebra el segundo domingo de mayo.", "Es uno de los días con más almuerzos en restaurantes de todo el año."],
+  dm_floristeria: ["Colombia es el segundo exportador de flores del mundo, después de los Países Bajos.", "La Sabana de Bogotá y el oriente de Antioquia son las grandes regiones de flores del país."],
+  dm_cocina: ["El almuerzo de domingo en familia puede ser ajiaco, sancocho o bandeja paisa, según la región.", "Muchas familias se reúnen en la casa de la abuela para el almuerzo."],
+  dm_mesa: ["En muchas ciudades las mamás reciben serenata con mariachis o un trío de guitarras.", "Una serenata empieza de noche, debajo de la ventana, para despertar a quien se celebra."],
 };
 
 // Speaker announcing milestones per zone (key events, not every toast).
@@ -522,6 +527,7 @@ export const PEOPLE = {
   plaza_negros_blancos: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_barranquilla: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_vallenato: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
+  plaza_dia_madre: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
 };
 
 // Opening line when entering a zone for the first time.
@@ -591,6 +597,7 @@ export const WELCOME = {
   plaza_negros_blancos: '¡Llegó el carnaval de Pasto! Saque los disfraces, que aquí nadie se salva del talco.',
   plaza_barranquilla: '¡Quien lo vive es quien lo goza! Llegó el carnaval de Barranquilla: a tallar máscaras y a bailar.',
   plaza_vallenato: '¡Llegó el Festival Vallenato! A sacar el acordeón, la caja y la guacharaca, que hoy se elige rey.',
+  plaza_dia_madre: '¡Feliz Día de la Madre! Hoy toda la familia almuerza junta y hay serenata para las mamás.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

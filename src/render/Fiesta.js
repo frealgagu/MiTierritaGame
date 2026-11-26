@@ -9,6 +9,7 @@
 //   talc:      (v5.21) puffs of talcum powder drifting up along the paths, by day.
 //   confetti:  (v5.21) bits of colored paper falling over the paths (Carnaval de Barranquilla).
 //   notes:     (v5.21) music notes rising over the paths (Festival Vallenato).
+//   flowers:   (v5.21) pots of flowers along the paths and beside every door (Día de la Madre).
 import { Container, Graphics, Sprite } from 'pixi.js';
 import { iso, depth } from './iso.js';
 import { PAL } from './palette.js';
@@ -64,6 +65,7 @@ export class FiestaDecor {
     if (spot && decor.has('manger')) this.manger(spot.gx + 1.6, spot.gy + 0.2, decor.has('kings'));
     if (decor.has('old_year')) this.oldYear();
     if (decor.has('streamers')) this.streamers();
+    if (decor.has('flowers')) this.flowers();
     this.fireworks = decor.has('fireworks');
     this.talc = decor.has('talc');
     this.confetti = decor.has('confetti');
@@ -169,6 +171,31 @@ export class FiestaDecor {
         const x0 = corner.x - 4 + k * 4;
         g.moveTo(x0, corner.y).bezierCurveTo(x0 + 4, corner.y + 5, x0 - 4, corner.y + 9, x0 + 2, corner.y + 14).stroke({ width: 1.4, color: c });
       }
+    }
+  }
+
+  // Flower pots on both sides of the mule path, every few tiles, and one beside each building.
+  flowers() {
+    const colors = [0xe91e63, 0xfdd835, 0xffffff, 0xe53935, 0x8e24aa, 0xff7043];
+    const pot = (gx, gy, k) => {
+      const g = this.add(new Graphics(), gx, gy);
+      const p = iso(gx, gy);
+      g.poly([p.x - 3.5, p.y - 6, p.x + 3.5, p.y - 6, p.x + 2.6, p.y, p.x - 2.6, p.y]).fill(0xb5512e).stroke({ width: 0.6, color: OUTLINE, alpha: 0.7 });
+      g.circle(p.x, p.y - 8.5, 3.6).fill(0x4e8a33);
+      for (let i = 0; i < 3; i++) g.circle(p.x - 2.4 + i * 2.4, p.y - 9.5 - (i % 2) * 2, 1.6).fill(colors[(k + i) % colors.length]);
+    };
+    const road = this.scene.zone.muleRoad;
+    const len = pathLength(road);
+    let k = 0;
+    for (let s = 1.2; s < len - 0.6; s += 2.4) {
+      const p = pointAt(road, s / len);
+      const d = Math.hypot(p.dx, p.dy) || 1;
+      for (const side of [-1, 1]) pot(p.gx + (-p.dy / d) * 0.65 * side, p.gy + (p.dx / d) * 0.65 * side, k++);
+    }
+    for (const view of Object.values(this.scene.stations)) {
+      if (view instanceof PlotView) continue;
+      const { x, y, h } = view.foot;
+      pot(x + 0.2, y + h + 0.25, k++);
     }
   }
 

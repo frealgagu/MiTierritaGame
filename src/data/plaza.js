@@ -61,6 +61,8 @@ export const PLAZA_ZONES = [
   plaza('plaza_barranquilla', 1347, 'barranquilla', ['baq_mascaras', 'baq_marimondas', 'baq_congos', 'baq_batalla'], ['streamers', 'confetti']),
   // (v5.21) Valledupar's festival: bunting and music notes rising over the paths.
   plaza('plaza_vallenato', 1424, 'vallenato', ['vall_escuela', 'vall_acordeon', 'vall_caja', 'vall_tarima'], ['streamers', 'notes']),
+  // (v5.21) Mother's Day: flowers along the paths and at every door.
+  plaza('plaza_dia_madre', 1507, 'dia_madre', ['dm_mercado', 'dm_floristeria', 'dm_cocina', 'dm_mesa'], ['flowers']),
 ];
 
 // Same prices and paces as the Finca's first stations (data/stations.js).
@@ -93,6 +95,12 @@ export const PLAZA_STATIONS = [
   station('vall_acordeon', 'plaza_vallenato', 'Casa del acordeón', '🪗', { in: { aprendiz: 1 }, out: { acordeonero: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('vall_caja', 'plaza_vallenato', 'Caja y guacharaca', '🥁', { in: { aprendiz: 1 }, out: { percusionista: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('vall_tarima', 'plaza_vallenato', 'Tarima Francisco el Hombre', '🎤', { in: { acordeonero: 1 }, joins: [{ product: 'percusionista', perCycle: 1, from: 'vall_caja' }], out: { cancion_vallenata: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
+  // (v5.21) 💐 Día de la Madre: the market basket becomes a bouquet at the florist's and lunch in the kitchen, and both
+  // reach the family table. The same paces and prices as the Navidad.
+  station('dm_mercado', 'plaza_dia_madre', 'Mercado de la plaza', '🧺', { infinite: true, out: { mercado_madre: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, release: '5.21' }),
+  station('dm_floristeria', 'plaza_dia_madre', 'Floristería', '💐', { in: { mercado_madre: 1 }, out: { ramo: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('dm_cocina', 'plaza_dia_madre', 'Cocina del almuerzo', '🍲', { in: { mercado_madre: 1 }, out: { almuerzo_madre: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('dm_mesa', 'plaza_dia_madre', 'Mesa familiar', '🍽️', { in: { ramo: 1 }, joins: [{ product: 'almuerzo_madre', perCycle: 1, from: 'dm_cocina' }], out: { celebracion_madre: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
 ];
 
 export const PLAZA_PRODUCTS = {
@@ -115,6 +123,10 @@ export const PLAZA_PRODUCTS = {
   acordeonero: { name: 'Acordeonero', zone: 'plaza_vallenato', value: 3, icon: '🪗', color: 0xc62828 },
   percusionista: { name: 'Cajero y guacharaquero', zone: 'plaza_vallenato', value: 3, icon: '🥁', color: 0x8d5a32 },
   cancion_vallenata: { name: 'Canción vallenata', zone: 'plaza_vallenato', value: 10, icon: ICON.fiestaVallenato, color: 0xfdd835 },
+  mercado_madre: { name: 'Canasta del mercado', zone: 'plaza_dia_madre', value: 1, icon: '🧺', color: 0xc8a165 },
+  ramo: { name: 'Ramo de flores', zone: 'plaza_dia_madre', value: 3, icon: '💐', color: 0xe91e63 },
+  almuerzo_madre: { name: 'Almuerzo de domingo', zone: 'plaza_dia_madre', value: 3, icon: '🍲', color: 0xf4a259 },
+  celebracion_madre: { name: 'Almuerzo con serenata', zone: 'plaza_dia_madre', value: 10, icon: ICON.fiestaDiaMadre, color: 0xf06292 },
 };
 
 // The season events. `fiesta`: its fiesta (data/fiestas.js); `season`: played in the plaza, not in a region.
@@ -191,6 +203,20 @@ export const SEASON_EVENTS = [
     coins: 0,
     actions: [],
     objective: { kind: 'produced', items: { cancion_vallenata: 240000 } },
+  },
+  {
+    id: 'fiesta_dia_madre',
+    fiesta: 'dia_madre',
+    season: true,
+    zone: 'plaza_dia_madre',
+    icon: '💐',
+    name: tk('El Día de la Madre'),
+    intro: tk('El segundo domingo de mayo toda la familia celebra a las mamás: haz el mercado en la plaza, arma los ramos de flores, cocina el almuerzo de domingo y llévalo todo a la mesa, con serenata.'),
+    stations: ['dm_mercado', 'dm_floristeria', 'dm_cocina', 'dm_mesa'],
+    level: 1,
+    coins: 0,
+    actions: [],
+    objective: { kind: 'produced', items: { celebracion_madre: 240000 } },
   },
 ];
 export const SEASON_EVENT_OF_FIESTA = Object.fromEntries(SEASON_EVENTS.map((e) => [e.fiesta, e]));

@@ -18,4 +18,5 @@ export default {
   negros_blancos: ["Carnival Son", "quena, charango, guitar and bombo drum"],
   barranquilla: ["Battle of Flowers Cumbia", "gaita flutes, guacharaca, llamador, tambora and tambor alegre"],
   vallenato: ["Paseo of the Stage", "accordion, caja drum, guacharaca and bass"],
+  dia_madre: ["Pasillo for Mom", "bandola, tiple and guitar"],
 };

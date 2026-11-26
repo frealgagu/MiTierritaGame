@@ -137,4 +137,9 @@ export default {
   vall_acordeon: ["O acordeão chegou à Colômbia vindo da Alemanha no fim do século XIX.", "Todo ano o festival escolhe o Rei Vallenato, o melhor acordeonista."],
   vall_caja: ["A caixa vallenata é um tambor pequeno de origem africana.", "A guacharaca é uma cana com ranhuras raspada com um garfo de arame."],
   vall_tarima: ["O palco do festival se chama Francisco el Hombre, pelo menestrel que venceu o diabo tocando acordeão.", "O Festival da Lenda Vallenata é celebrado em Valledupar desde 1968."],
+  // Día de la Madre (v5.21)
+  dm_mercado: ["Na Colômbia o Dia das Mães é celebrado no segundo domingo de maio.", "É um dos dias com mais almoços em restaurantes do ano."],
+  dm_floristeria: ["A Colômbia é o segundo exportador de flores do mundo, depois dos Países Baixos.", "A Savana de Bogotá e o leste de Antioquia são as grandes regiões de flores do país."],
+  dm_cocina: ["O almoço de domingo em família pode ser ajiaco, sancocho ou bandeja paisa, conforme a região.", "Muitas famílias se reúnem na casa da avó para o almoço."],
+  dm_mesa: ["Em muitas cidades as mães recebem serenata com mariachis ou um trio de violões.", "Uma serenata começa à noite, embaixo da janela, para acordar quem é celebrada."],
 };

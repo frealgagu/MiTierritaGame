@@ -18,4 +18,5 @@ export default {
   negros_blancos: ["Son du carnaval", "quena, charango, guitare et bombo"],
   barranquilla: ["Cumbia de la Bataille de fleurs", "gaita, guacharaca, llamador, tambora et tambor alegre"],
   vallenato: ["Paseo de la scène", "accordéon, caja, guacharaca et basse"],
+  dia_madre: ["Pasillo pour maman", "bandola, tiple et guitare"],
 };

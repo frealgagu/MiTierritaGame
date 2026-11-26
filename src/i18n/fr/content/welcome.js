@@ -64,4 +64,5 @@ export default {
   plaza_negros_blancos: "Le carnaval de Pasto est arrivé ! Sors les costumes : ici, personne n’échappe au talc.",
   plaza_barranquilla: "Qui le vit, c’est qui en profite ! Le carnaval de Barranquilla est arrivé : sculptons des masques et dansons.",
   plaza_vallenato: "Le Festival vallenato est arrivé ! Sors l’accordéon, la caja et la guacharaca : aujourd’hui on élit un roi.",
+  plaza_dia_madre: "Bonne fête des Mères ! Aujourd’hui toute la famille déjeune ensemble et il y a une sérénade pour les mamans.",
 };

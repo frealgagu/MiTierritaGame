@@ -1,11 +1,12 @@
 # Journal des modifications
 
-## v5.21.0 — Carnavals et vallenato
+## v5.21.0 — Les fêtes du premier semestre
 - **🎨 Nouvel événement de saison : le Carnaval des Noirs et des Blancs** (dès le 2 janvier, jouable jusqu’au 6 février) : couds les costumes, peins les troupes en noir le Jour des Noirs, couvre-les de talc le Jour des Blancs et mène-les aux chars du Grand Défilé. Sa vignette est la première de l’album 🎉 Fêtes de Colombie.
 - **🎶 « Son du carnaval » :** un son sureño original avec quena, charango, guitare et bombo joue sur sa place (aussi sur la page de téléchargement de la musique).
 - **La carte se pare pour le carnaval de Pasto** du 2 au 7 janvier : fanions et serpentins sur chaque bâtiment et nuages de talc sur les chemins.
 - **🎭 Nouvel événement de saison : le Carnaval de Barranquilla** (en février, à ses dates liées à Pâques, avec 30 jours de plus pour y jouer) : sculpte les masques, habille les marimondas et les congos et emmène-les danser sur les chars de la Bataille de fleurs. Sur sa place joue « Cumbia de la Bataille de fleurs », une cumbia originale, et pendant le carnaval la carte se remplit de fanions et de confettis qui tombent.
 - **🪗 Nouvel événement de saison : le Festival de la Légende vallenata** (du 24 au 30 avril, avec 30 jours de plus pour y jouer) : instruis les apprentis de l’école, forme des accordéonistes et des joueurs de caja et de guacharaca, et fais-les monter ensemble sur la scène Francisco el Hombre. Sur sa place joue « Paseo de la scène », un paseo vallenato original avec accordéon, caja et guacharaca, et pendant le festival des notes de musique flottent sur la carte.
+- **💐 Nouvel événement de saison : la fête des Mères** (le week-end du deuxième dimanche de mai, avec 30 jours de plus pour y jouer) : fais le marché sur la place, compose les bouquets, cuisine le déjeuner du dimanche et apporte tout à la table familiale, avec une sérénade. Sur sa place joue « Pasillo pour maman », un pasillo de sérénade original, et des pots de fleurs bordent les chemins et les portes de la carte.
 
 ## v5.20.0 — La place des fêtes
 - **🔽 Réduire :** le bouton « Sortir » de la barre de l’événement s’appelle maintenant « Réduire », car l’événement continue pendant que tu joues ailleurs.

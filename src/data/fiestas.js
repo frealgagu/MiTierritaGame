@@ -41,7 +41,7 @@ export const FIESTAS = [
     sticker: tk('Acordeón, caja y guacharaca: en Valledupar se corona al rey vallenato.'),
   },
   {
-    id: 'dia_madre', icon: '💐', kind: 'big', dates: { month: 5, weekday: 0, nth: 2, before: 2, after: 0 },
+    id: 'dia_madre', icon: '💐', kind: 'big', dates: { month: 5, weekday: 0, nth: 2, before: 2, after: 0 }, decor: ['flowers'],
     name: tk('Día de la Madre'),
     greeting: tk('💐 ¡Feliz Día de la Madre! Hay serenata y almuerzo en familia.'),
     sticker: tk('Serenata con mariachis, flores y almuerzo en familia el segundo domingo de mayo.'),

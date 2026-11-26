@@ -9701,6 +9701,95 @@ const DRAW = {
     this.animate(0);
     this.roofTop = iso(x0 + 1.3, y0 + 0.8, H + 10);
   },
+
+  // --- Día de la Madre (v5.21) ---
+  // Floristería: an awning stall full of buckets of flowers, with the florist tying a bouquet.
+  dm_floristeria(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.35;
+    const colors = [0xe91e63, 0xfdd835, 0xffffff, 0xe53935, 0x8e24aa];
+    fleaStall(this, g, x0, y0, ctx, 0xe91e63, colors, 2.2);
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 2); k++) {
+      const p = iso(x0 + 0.3 + k * 0.4, y0 + 1.75);
+      g.poly([p.x - 4, p.y - 8, p.x + 4, p.y - 8, p.x + 3, p.y, p.x - 3, p.y]).fill(0x90a4ae).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+      g.rect(p.x - 0.5, p.y - 13, 1, 5).fill(0x558b2f);
+      for (let f = 0; f < 4; f++) g.circle(p.x - 3 + f * 2, p.y - 11 - (f % 2) * 2.5, 1.9).fill(colors[(k + f) % colors.length]);
+    }
+    const florist = new Graphics();
+    this.anim.addChild(florist);
+    const c = iso(x0 + 1.9, y0 + 2.2);
+    this.animate = (time) => {
+      florist.clear();
+      worker(florist, c.x, c.y, 0xf06292);
+      const tilt = Math.sin(time * 3) * 2;
+      for (let f = 0; f < 3; f++) florist.circle(c.x + 5 + f * 2 + tilt, c.y - 16 - f, 1.8).fill(colors[f]);
+      florist.rect(c.x + 6 + tilt, c.y - 14, 1.2, 5).fill(0x558b2f);
+    };
+    this.animate(0);
+  },
+
+  // Cocina del almuerzo: a kitchen house with a big pot of sancocho over a wood fire in the yard, steaming while
+  // working.
+  dm_cocina(g, x, y, ctx) {
+    const H = house(this, g, x + 0.25, y + 0.25, 2.0, 1.1, 24, ctx, { wall: 0xfff8e1 });
+    door(g, x + 0.25, y + 0.25, 1.1, 0.5, 15, ctx.trim);
+    windowOnFront(this, g, x + 0.25, y + 0.25, 1.1, 1.5, 8, 0xffffff);
+    box(g, x + 1.9, y + 0.4, 0.25, 0.25, H + 16, 0xb5653a);
+    const top = iso(x + 2.02, y + 0.52, H + 16);
+    this.smokePoints.push({ x: top.x, y: top.y - 4 });
+    const pot = iso(x + 1.4, y + 2.1, 6);
+    const fire = iso(x + 1.4, y + 2.1);
+    g.ellipse(fire.x, fire.y, 9, 4).fill(0x3e2723);
+    for (const dx of [-7, 0, 7]) g.rect(fire.x + dx - 1, fire.y - 6, 2, 6).fill(0x424242);
+    g.roundRect(pot.x - 10, pot.y - 12, 20, 12, 3).fill(0x616161).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 12, 10, 3.6).fill(0xf4a259);
+    this.lights.push({ x: fire.x, y: fire.y - 3, r: 16, color: 0xff7043 });
+    const steam = new Graphics();
+    this.anim.addChild(steam);
+    this.animate = (time) => {
+      steam.clear();
+      for (let i = 0; i < 3; i++) {
+        const f = (time * 0.5 + i / 3) % 1;
+        steam.circle(pot.x + Math.sin((f + i) * 5) * 3, pot.y - 16 - f * 20, 2.5 + f * 3).fill({ color: 0xffffff, alpha: 0.5 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Mesa familiar: a long table under an awning with lunch and a vase of flowers, and a trio of musicians with
+  // guitars giving the serenade.
+  dm_mesa(g, x, y, ctx) {
+    const x0 = x + 0.25;
+    const y0 = y + 0.3;
+    const H = 22 + ctx.up;
+    for (const [px, py] of [[0, 0], [2.4, 0], [0, 1.2], [2.4, 1.2]]) box(g, x0 + px, y0 + py, 0.1, 0.1, H, PAL.wood);
+    gableRoof(g, x0, y0, 2.5, 1.3, H, 8, 0xf8bbd0, 0xf8bbd0, 0.1);
+    box(g, x0 + 0.3, y0 + 0.4, 1.9, 0.5, 8, 0xffffff);
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 3); k++) {
+      const p = iso(x0 + 0.45 + k * 0.3, y0 + 0.65, 8);
+      g.ellipse(p.x, p.y, 3.4, 1.7).fill(0xffffff).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+      g.ellipse(p.x, p.y - 0.5, 2.2, 1).fill(0xf4a259);
+    }
+    const vase = iso(x0 + 1.25, y0 + 0.62, 8);
+    g.rect(vase.x - 2, vase.y - 6, 4, 6).fill(0x4fc3f7);
+    for (let f = 0; f < 5; f++) g.circle(vase.x - 4 + f * 2, vase.y - 8 - (f % 2) * 2, 1.8).fill([0xe91e63, 0xfdd835, 0xffffff, 0xe53935, 0x8e24aa][f]);
+    const trio = new Graphics();
+    this.anim.addChild(trio);
+    const spots = [0.6, 1.25, 1.9].map((k) => iso(x0 + k, y0 + 1.75));
+    this.animate = (time) => {
+      trio.clear();
+      spots.forEach((p, k) => {
+        const strum = Math.sin(time * 6 + k) * 1.2;
+        worker(trio, p.x, p.y, 0x263238);
+        trio.ellipse(p.x, p.y - 23, 6, 1.6).fill(0x263238);
+        trio.ellipse(p.x + 1, p.y - 12, 4, 3).fill(0xa1693f);
+        trio.rect(p.x + 3, p.y - 17, 5, 1.2).fill(0x6d4c41);
+        trio.rect(p.x - 1 + strum, p.y - 13, 1.4, 3).fill(0xc68e5e);
+      });
+    };
+    this.animate(0);
+    this.roofTop = iso(x0 + 1.25, y0 + 0.65, H + 8);
+  },
 };
 
 // Tolima Grande (v4.0): stations sharing artwork from other regions.

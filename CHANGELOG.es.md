@@ -1,11 +1,12 @@
 # Registro de cambios
 
-## v5.21.0 — Carnavales y vallenato
+## v5.21.0 — Las fiestas del primer semestre
 - **🎨 Nuevo evento de temporada: el Carnaval de Negros y Blancos** (desde el 2 de enero, se puede jugar hasta el 6 de febrero): cose los disfraces, pinta de negro a las comparsas el Día de Negros, llénalas de talco el Día de Blancos y súbelas a las carrozas del Gran Desfile. Su lámina es la primera del álbum 🎉 Fiestas de Colombia.
 - **🎶 «Son del carnaval»:** un son sureño original con quena, charango, guitarra y bombo suena en su plaza (también en la página de descargas de música).
 - **El mapa se viste para el carnaval de Pasto** del 2 al 7 de enero: banderines y serpentinas en cada edificio y nubes de talco en los caminos.
 - **🎭 Nuevo evento de temporada: el Carnaval de Barranquilla** (en febrero, en sus fechas según la Pascua, con 30 días más para jugarlo): talla las máscaras, viste a las marimondas y a los congos y llévalos a bailar a las carrozas de la Batalla de Flores. En su plaza suena «Cumbia de la Batalla de Flores», una cumbia original, y durante el carnaval el mapa se llena de banderines y de papelillo que cae.
 - **🪗 Nuevo evento de temporada: el Festival de la Leyenda Vallenata** (del 24 al 30 de abril, con 30 días más para jugarlo): enseña a los aprendices de la escuela, forma acordeoneros, cajeros y guacharaqueros, y súbelos juntos a la tarima Francisco el Hombre. En su plaza suena «Paseo de la tarima», un paseo vallenato original con acordeón, caja y guacharaca, y durante el festival flotan notas musicales sobre el mapa.
+- **💐 Nuevo evento de temporada: el Día de la Madre** (el fin de semana del segundo domingo de mayo, con 30 días más para jugarlo): haz el mercado en la plaza, arma los ramos, cocina el almuerzo de domingo y llévalo todo a la mesa familiar, con serenata. En su plaza suena «Pasillo para mamá», un pasillo de serenata original, y el mapa se llena de materas con flores en los caminos y las puertas.
 
 ## v5.20.0 — La plaza de las fiestas
 - **🔽 Minimizar:** el botón «Salir» de la barra del evento ahora se llama «Minimizar», porque el evento sigue andando mientras juegas en otra parte.

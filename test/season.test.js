@@ -30,8 +30,16 @@ test('twelve big fiestas, one sticker each, on two pages of six; Semana Santa an
   assert.equal(FIESTAS_BY_ID.amor_amistad.kind, 'big');
 });
 
+test('the plaza\'s products and stations never reuse a region\'s id: they would overwrite it (v5.21)', async () => {
+  const { STATIONS } = await import('../src/data/stations.js');
+  const { PLAZA_PRODUCTS, PLAZA_STATIONS } = await import('../src/data/plaza.js');
+  const productsSrc = (await import('node:fs')).readFileSync(new URL('../src/data/products.js', import.meta.url), 'utf8');
+  for (const id of Object.keys(PLAZA_PRODUCTS)) assert.ok(!new RegExp(`^  ${id}: \\{`, 'm').test(productsSrc), `product ${id} already exists in a region`);
+  for (const s of PLAZA_STATIONS) assert.ok(!STATIONS.some((x) => x.id === s.id), `station ${s.id} already exists in a region`);
+});
+
 test('the plaza belongs to no region: its zones and events stay out of the main game lists (v5.19)', () => {
-  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato']);
+  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre']);
   for (const z of PLAZA_ZONES) assert.ok(!ZONE_LIST.includes(z));
   for (const r of REGIONS) for (const z of PLAZA_ZONES) assert.ok(!r.zones.includes(z.id));
   for (const e of SEASON_EVENTS) assert.ok(!EVENTS.includes(e));
@@ -124,7 +132,7 @@ test('season boards and stickers survive the save; no fiesta bonus on the board 
   assert.equal(fiestaMult(back.events.season.boards.velitas), 1);
 });
 
-test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato and the Día de la Madre (no event yet) (v5.19)', () => {
+test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre and San Pedro (no event yet) (v5.19)', () => {
   const n = nextSeason(day(2026, 11, 24));
   assert.equal(n.fiesta.id, 'velitas');
   assert.equal(n.days, 12);
@@ -140,7 +148,24 @@ test('the next season event: Velitas from late November, Negros y Blancos after 
   assert.ok(spring.def, 'the Vallenato too (v5.21)');
   const may = nextSeason(day(2027, 5, 1));
   assert.equal(may.fiesta.id, 'dia_madre');
-  assert.equal(may.def, null);
+  assert.ok(may.def, 'Mother\'s Day too (v5.21)');
+  const june = nextSeason(day(2027, 5, 20));
+  assert.equal(june.fiesta.id, 'san_pedro');
+  assert.equal(june.def, null);
+});
+
+test('Día de la Madre (v5.21): the Friday to the second Sunday of May with 30 days of grace, flowers on the map', () => {
+  const root = newGame();
+  // 2027: the second Sunday of May is the 9th.
+  assert.equal(seasonStatus(root, 'dia_madre', day(2027, 5, 6)), null);
+  assert.equal(seasonStatus(root, 'dia_madre', day(2027, 5, 7)).kind, 'available');
+  assert.equal(seasonStatus(root, 'dia_madre', day(2027, 6, 8)).grace, true);
+  assert.equal(seasonStatus(root, 'dia_madre', day(2027, 6, 9)), null);
+  assert.ok(decorOn(day(2027, 5, 9)).has('flowers'));
+  const board = startSeason(root, 'dia_madre', day(2027, 5, 8));
+  assert.deepEqual(Object.keys(board.stations), ['dm_mercado', 'dm_floristeria', 'dm_cocina', 'dm_mesa']);
+  meet(board);
+  assert.equal(finishSeason(root, 'dia_madre').sticker, true);
 });
 
 test('Festival Vallenato (v5.21): 24–30 April with 30 days of grace, streamers and music notes on the map', () => {

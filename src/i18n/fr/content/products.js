@@ -408,4 +408,8 @@ export default {
   acordeonero: "Accordéoniste",
   percusionista: "Joueur de caja et de guacharaca",
   cancion_vallenata: "Chanson vallenata",
+  mercado_madre: "Panier du marché",
+  ramo: "Bouquet de fleurs",
+  almuerzo_madre: "Déjeuner du dimanche",
+  celebracion_madre: "Déjeuner avec sérénade",
 };

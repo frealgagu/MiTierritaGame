@@ -853,7 +853,56 @@ const PASEO_TARIMA = {
   ],
 };
 
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA };
+// (v5.21) Día de la Madre: «Pasillo para mamá», an original serenade pasillo in G major with an E minor middle,
+// 3/4, with bandola, tiple and guitar (the Andean pasillo style).
+const PASILLO_MAMA = {
+  name: 'Pasillo para mamá',
+  instruments: 'bandola, tiple y guitarra',
+  bpm: 112,
+  style: 'pasillo',
+  chords: [
+    'G', 'D7', 'C', 'Am', 'D7', 'D7', 'C', 'G',
+    'G', 'G', 'C', 'Am', 'G', 'D7', 'G', 'D7',
+    'D7', 'G', 'Em', 'Em', 'Am', 'Am', 'D7', 'D7',
+    'G', 'D7', 'C', 'C', 'G', 'D7', 'G', 'G',
+  ],
+  melody: [
+    [[0, 2, 'B4'], [2, 2, 'D5'], [4, 2, 'G5']],
+    [[0, 3, 'F#5'], [3, 1, 'E5'], [4, 2, 'D5']],
+    [[0, 2, 'C5'], [2, 2, 'E5'], [4, 2, 'A5']],
+    [[0, 3, 'G5'], [3, 1, 'F#5'], [4, 2, 'E5']],
+    [[0, 2, 'D5'], [2, 2, 'F#5'], [4, 2, 'A5']],
+    [[0, 3, 'C6'], [3, 1, 'B5'], [4, 2, 'A5']],
+    [[0, 2, 'G5'], [2, 2, 'F#5'], [4, 2, 'E5']],
+    [[0, 4, 'D5'], [4, 2, 'D5']],
+    [[0, 2, 'B4'], [2, 2, 'D5'], [4, 2, 'G5']],
+    [[0, 3, 'B5'], [3, 1, 'A5'], [4, 2, 'G5']],
+    [[0, 2, 'C5'], [2, 2, 'E5'], [4, 2, 'G5']],
+    [[0, 3, 'A5'], [3, 1, 'G5'], [4, 2, 'E5']],
+    [[0, 2, 'D5'], [2, 2, 'G5'], [4, 2, 'B5']],
+    [[0, 3, 'A5'], [3, 1, 'C6'], [4, 2, 'F#5']],
+    [[0, 6, 'G5']],
+    [[4, 1, 'D5'], [5, 1, 'E5']],
+    [[0, 2, 'F#5'], [2, 2, 'G5'], [4, 2, 'A5']],
+    [[0, 3, 'B5'], [3, 1, 'A5'], [4, 2, 'G5']],
+    [[0, 2, 'E5'], [2, 2, 'G5'], [4, 2, 'B5']],
+    [[0, 4, 'A5'], [4, 2, 'E5']],
+    [[0, 2, 'C5'], [2, 2, 'E5'], [4, 2, 'A5']],
+    [[0, 3, 'G5'], [3, 1, 'F#5'], [4, 2, 'E5']],
+    [[0, 2, 'D5'], [2, 2, 'F#5'], [4, 2, 'A5']],
+    [[0, 4, 'G5'], [4, 2, 'F#5']],
+    [[0, 2, 'B4'], [2, 2, 'D5'], [4, 2, 'G5']],
+    [[0, 3, 'F#5'], [3, 1, 'E5'], [4, 2, 'D5']],
+    [[0, 2, 'C5'], [2, 2, 'E5'], [4, 2, 'A5']],
+    [[0, 3, 'G5'], [3, 1, 'E5'], [4, 2, 'C5']],
+    [[0, 2, 'B4'], [2, 2, 'D5'], [4, 2, 'G5']],
+    [[0, 3, 'A5'], [3, 1, 'G5'], [4, 2, 'F#5']],
+    [[0, 6, 'G5']],
+    [],
+  ],
+};
+
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA };
 
 // Chords: root pitch class and intervals (semitones above root).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };

@@ -395,4 +395,8 @@ export default {
   vall_acordeon: "Maison de l’accordéon",
   vall_caja: "Caja et guacharaca",
   vall_tarima: "Scène Francisco el Hombre",
+  dm_mercado: "Marché de la place",
+  dm_floristeria: "Fleuriste",
+  dm_cocina: "Cuisine du déjeuner",
+  dm_mesa: "Table familiale",
 };
