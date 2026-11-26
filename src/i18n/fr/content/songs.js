@@ -16,4 +16,5 @@ export default {
   velitas: ["Les poissons dans la rivière", "flûte, guitare, tiple, tambourin et maracas"],
   navidad: ["Tutaina", "flûte, guitare, tiple, tambourin et maracas"],
   negros_blancos: ["Son du carnaval", "quena, charango, guitare et bombo"],
+  barranquilla: ["Cumbia de la Bataille de fleurs", "gaita, guacharaca, llamador, tambora et tambor alegre"],
 };

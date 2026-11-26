@@ -400,4 +400,8 @@ export default {
   comparsa_negra: "Troupe des noirs",
   comparsa_blanca: "Troupe des blancs",
   desfile: "Char du défilé",
+  mascara: "Masque",
+  marimonda: "Marimonda",
+  congo: "Congo",
+  batalla_flores: "Char de la Bataille de fleurs",
 };

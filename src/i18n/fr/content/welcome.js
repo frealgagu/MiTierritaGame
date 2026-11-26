@@ -62,4 +62,5 @@ export default {
   plaza_velitas: "La Nuit des petites bougies est arrivée ! Allume la Ciergerie et remplissons toutes les rues de lanternes.",
   plaza_navidad: "La neuvaine a commencé ! Mouds le maïs : ce soir, natilla et buñuelos pour tout le monde.",
   plaza_negros_blancos: "Le carnaval de Pasto est arrivé ! Sors les costumes : ici, personne n’échappe au talc.",
+  plaza_barranquilla: "Qui le vit, c’est qui en profite ! Le carnaval de Barranquilla est arrivé : sculptons des masques et dansons.",
 };

@@ -7,6 +7,7 @@
 //   old_year: the stuffed «año viejo» doll in a chair by the warehouse.   fireworks: bursts in the night sky.
 //   streamers: (v5.21) paper bunting and curled streamers on every building (Carnaval de Negros y Blancos).
 //   talc:      (v5.21) puffs of talcum powder drifting up along the paths, by day.
+//   confetti:  (v5.21) bits of colored paper falling over the paths (Carnaval de Barranquilla).
 import { Container, Graphics, Sprite } from 'pixi.js';
 import { iso, depth } from './iso.js';
 import { PAL } from './palette.js';
@@ -37,7 +38,9 @@ export class FiestaDecor {
     this.air.zIndex = 1e9;
     scene.objects.addChild(this.air);
     this.talc = false;
+    this.confetti = false;
     this.puffs = [];
+    this.bits = [];
     this.sync();
   }
 
@@ -60,6 +63,7 @@ export class FiestaDecor {
     if (decor.has('streamers')) this.streamers();
     this.fireworks = decor.has('fireworks');
     this.talc = decor.has('talc');
+    this.confetti = decor.has('confetti');
   }
 
   clear() {
@@ -71,7 +75,9 @@ export class FiestaDecor {
     this.sparks = [];
     this.sky.clear();
     this.talc = false;
+    this.confetti = false;
     this.puffs = [];
+    this.bits = [];
     this.air.clear();
   }
 
@@ -158,6 +164,13 @@ export class FiestaDecor {
         g.moveTo(x0, corner.y).bezierCurveTo(x0 + 4, corner.y + 5, x0 - 4, corner.y + 9, x0 + 2, corner.y + 14).stroke({ width: 1.4, color: c });
       }
     }
+  }
+
+  // A bit of confetti falling over a random point of the mule path.
+  bit() {
+    const p = pointAt(this.scene.zone.muleRoad, Math.random());
+    const s = iso(p.gx + (Math.random() - 0.5) * 3, p.gy + (Math.random() - 0.5) * 3, 60);
+    this.bits.push({ x: s.x, y: s.y, life: 2.2, phase: Math.random() * 6, color: BULBS[Math.floor(Math.random() * BULBS.length)] });
   }
 
   // A puff of talc rising from a random point of the mule path.
@@ -310,9 +323,16 @@ export class FiestaDecor {
       const on = Math.floor(time * 1.6) % 2;
       for (const gl of this.glows) gl.sprite.alpha = gl.phase === on ? 1 : 0.45;
     }
-    if (this.talc) {
-      if (light < 0.5 && Math.random() < dt * 2.5) this.puff();
+    if (this.talc || this.confetti) {
+      if (this.talc && light < 0.5 && Math.random() < dt * 2.5) this.puff();
+      if (this.confetti && Math.random() < dt * 6) this.bit();
       this.air.clear();
+      this.bits = this.bits.filter((s) => (s.life -= dt) > 0);
+      for (const s of this.bits) {
+        s.y += dt * 22;
+        s.x += Math.sin(s.life * 6 + s.phase) * dt * 12;
+        this.air.rect(s.x, s.y, 2.4, 1.4 + Math.abs(Math.sin(s.life * 8 + s.phase)) * 1.6).fill({ color: s.color, alpha: Math.min(1, s.life) });
+      }
       this.puffs = this.puffs.filter((s) => (s.life -= dt) > 0);
       for (const s of this.puffs) {
         const f = 1 - s.life / s.max;

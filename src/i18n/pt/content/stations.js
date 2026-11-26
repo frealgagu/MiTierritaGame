@@ -387,4 +387,8 @@ export default {
   nyb_negros: "Dia dos Negros",
   nyb_blancos: "Dia dos Brancos",
   nyb_desfile: "Grande Desfile",
+  baq_mascaras: "Oficina de máscaras",
+  baq_marimondas: "Casa das marimondas",
+  baq_congos: "Casa dos congos",
+  baq_batalla: "Batalha de Flores",
 };

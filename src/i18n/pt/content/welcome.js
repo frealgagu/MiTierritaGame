@@ -62,4 +62,5 @@ export default {
   plaza_velitas: "Chegou a Noite das Velinhas! Acenda a Cereria e vamos encher todas as ruas de lanternas.",
   plaza_navidad: "A novena começou! Moa o milho, que hoje à noite tem natilla e buñuelos para todos.",
   plaza_negros_blancos: "Chegou o carnaval de Pasto! Tire as fantasias, que aqui ninguém escapa do talco.",
+  plaza_barranquilla: "Quem vive é quem aproveita! Chegou o carnaval de Barranquilla: vamos entalhar máscaras e dançar.",
 };

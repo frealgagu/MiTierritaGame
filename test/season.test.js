@@ -31,7 +31,7 @@ test('twelve big fiestas, one sticker each, on two pages of six; Semana Santa an
 });
 
 test('the plaza belongs to no region: its zones and events stay out of the main game lists (v5.19)', () => {
-  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos']);
+  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla']);
   for (const z of PLAZA_ZONES) assert.ok(!ZONE_LIST.includes(z));
   for (const r of REGIONS) for (const z of PLAZA_ZONES) assert.ok(!r.zones.includes(z.id));
   for (const e of SEASON_EVENTS) assert.ok(!EVENTS.includes(e));
@@ -124,7 +124,7 @@ test('season boards and stickers survive the save; no fiesta bonus on the board 
   assert.equal(fiestaMult(back.events.season.boards.velitas), 1);
 });
 
-test('the next season event: Velitas from late November, Negros y Blancos after Christmas, Barranquilla (no event yet) after it (v5.19)', () => {
+test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, then the Vallenato (no event yet) (v5.19)', () => {
   const n = nextSeason(day(2026, 11, 24));
   assert.equal(n.fiesta.id, 'velitas');
   assert.equal(n.days, 12);
@@ -134,7 +134,25 @@ test('the next season event: Velitas from late November, Negros y Blancos after 
   assert.ok(after.def, 'its event arrived in v5.21');
   const later = nextSeason(day(2027, 1, 10));
   assert.equal(later.fiesta.id, 'barranquilla');
-  assert.equal(later.def, null);
+  assert.ok(later.def, 'its event arrived in v5.21 too');
+  const spring = nextSeason(day(2027, 2, 10));
+  assert.equal(spring.fiesta.id, 'vallenato');
+  assert.equal(spring.def, null);
+});
+
+test('Carnaval de Barranquilla (v5.21): its event on the Easter-relative dates with 30 days of grace, streamers and confetti on the map', () => {
+  const root = newGame();
+  // 2027: Easter is 28 March, so the carnival runs 3–9 February.
+  assert.equal(seasonStatus(root, 'barranquilla', day(2027, 2, 2)), null);
+  assert.equal(seasonStatus(root, 'barranquilla', day(2027, 2, 3)).kind, 'available');
+  assert.equal(seasonStatus(root, 'barranquilla', day(2027, 3, 11)).grace, true);
+  assert.equal(seasonStatus(root, 'barranquilla', day(2027, 3, 12)), null);
+  assert.ok(decorOn(day(2027, 2, 5)).has('confetti'));
+  assert.ok(decorOn(day(2027, 2, 5)).has('streamers'));
+  const board = startSeason(root, 'barranquilla', day(2027, 2, 4));
+  assert.deepEqual(Object.keys(board.stations), ['baq_mascaras', 'baq_marimondas', 'baq_congos', 'baq_batalla']);
+  meet(board);
+  assert.equal(finishSeason(root, 'barranquilla').sticker, true);
 });
 
 test('Negros y Blancos (v5.21): its event from 2 January with 30 days of grace, and streamers and talc on the map', () => {

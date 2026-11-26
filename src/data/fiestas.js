@@ -24,7 +24,7 @@ export const FIESTAS = [
     sticker: tk('El 5 de enero se pintan de negro y el 6 de blanco: en Pasto nadie se salva del talco.'),
   },
   {
-    id: 'barranquilla', icon: '🎭', kind: 'big', dates: { easter: [-53, -47] },
+    id: 'barranquilla', icon: '🎭', kind: 'big', dates: { easter: [-53, -47] }, decor: ['streamers', 'confetti'],
     name: tk('Carnaval de Barranquilla'),
     greeting: tk('🎭 ¡Llegó el Carnaval de Barranquilla! Quien lo vive es quien lo goza.'),
     sticker: tk('La Batalla de Flores, la marimonda y el garabato: patrimonio de la humanidad.'),

@@ -57,6 +57,8 @@ export const PLAZA_ZONES = [
   plaza('plaza_navidad', 1224, 'navidad', ['navidad_molino', 'navidad_natilla', 'navidad_bunuelos', 'navidad_novena'], ['lights', 'tree', 'manger']),
   // (v5.21) Pasto's carnival: paper streamers over the streets and clouds of talcum powder.
   plaza('plaza_negros_blancos', 1302, 'negros_blancos', ['nyb_disfraces', 'nyb_negros', 'nyb_blancos', 'nyb_desfile'], ['streamers', 'talc']),
+  // (v5.21) Barranquilla's carnival: bunting, streamers and falling confetti.
+  plaza('plaza_barranquilla', 1347, 'barranquilla', ['baq_mascaras', 'baq_marimondas', 'baq_congos', 'baq_batalla'], ['streamers', 'confetti']),
 ];
 
 // Same prices and paces as the Finca's first stations (data/stations.js).
@@ -77,6 +79,12 @@ export const PLAZA_STATIONS = [
   station('nyb_negros', 'plaza_negros_blancos', 'Día de Negros', '🖤', { in: { disfraz: 1 }, out: { comparsa_negra: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('nyb_blancos', 'plaza_negros_blancos', 'Día de Blancos', '🤍', { in: { disfraz: 1 }, out: { comparsa_blanca: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('nyb_desfile', 'plaza_negros_blancos', 'Gran Desfile', '🎊', { in: { comparsa_negra: 1 }, joins: [{ product: 'comparsa_blanca', perCycle: 1, from: 'nyb_blancos' }], out: { desfile: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
+  // (v5.21) 🎭 Carnaval de Barranquilla: masks carved in the workshop become marimondas and congos, who dance together
+  // in the Batalla de Flores. The same paces and prices as the Navidad.
+  station('baq_mascaras', 'plaza_barranquilla', 'Taller de máscaras', '🎭', { infinite: true, out: { mascara: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, release: '5.21' }),
+  station('baq_marimondas', 'plaza_barranquilla', 'Casa de las marimondas', '🐘', { in: { mascara: 1 }, out: { marimonda: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('baq_congos', 'plaza_barranquilla', 'Casa de los congos', '🌺', { in: { mascara: 1 }, out: { congo: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('baq_batalla', 'plaza_barranquilla', 'Batalla de Flores', '💃', { in: { marimonda: 1 }, joins: [{ product: 'congo', perCycle: 1, from: 'baq_congos' }], out: { batalla_flores: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
 ];
 
 export const PLAZA_PRODUCTS = {
@@ -91,6 +99,10 @@ export const PLAZA_PRODUCTS = {
   comparsa_negra: { name: 'Comparsa de negros', zone: 'plaza_negros_blancos', value: 3, icon: '🖤', color: 0x263238 },
   comparsa_blanca: { name: 'Comparsa de blancos', zone: 'plaza_negros_blancos', value: 3, icon: '🤍', color: 0xf5f5f5 },
   desfile: { name: 'Carroza del desfile', zone: 'plaza_negros_blancos', value: 10, icon: ICON.fiestaNegrosBlancos, color: 0xfdd835 },
+  mascara: { name: 'Máscara', zone: 'plaza_barranquilla', value: 1, icon: '🎭', color: 0xfdd835 },
+  marimonda: { name: 'Marimonda', zone: 'plaza_barranquilla', value: 3, icon: '🐘', color: 0x1e88e5 },
+  congo: { name: 'Congo', zone: 'plaza_barranquilla', value: 3, icon: '🌺', color: 0xe53935 },
+  batalla_flores: { name: 'Carroza de la Batalla de Flores', zone: 'plaza_barranquilla', value: 10, icon: ICON.fiestaBarranquilla, color: 0x43a047 },
 };
 
 // The season events. `fiesta`: its fiesta (data/fiestas.js); `season`: played in the plaza, not in a region.
@@ -139,6 +151,20 @@ export const SEASON_EVENTS = [
     coins: 0,
     actions: [],
     objective: { kind: 'produced', items: { desfile: 240000 } },
+  },
+  {
+    id: 'fiesta_barranquilla',
+    fiesta: 'barranquilla',
+    season: true,
+    zone: 'plaza_barranquilla',
+    icon: '🎭',
+    name: tk('El Carnaval de Barranquilla'),
+    intro: tk('¡Quien lo vive es quien lo goza! Talla las máscaras, viste a las marimondas y a los congos y llévalos juntos a bailar en las carrozas de la Batalla de Flores.'),
+    stations: ['baq_mascaras', 'baq_marimondas', 'baq_congos', 'baq_batalla'],
+    level: 1,
+    coins: 0,
+    actions: [],
+    objective: { kind: 'produced', items: { batalla_flores: 240000 } },
   },
 ];
 export const SEASON_EVENT_OF_FIESTA = Object.fromEntries(SEASON_EVENTS.map((e) => [e.fiesta, e]));

@@ -482,6 +482,15 @@ export class FarmView extends StationView {
           g.rect(p.x + 7, p.y - 22, 2, 22).fill(PAL.woodDark);
           g.rect(p.x - 9, p.y - 23, 18, 2).fill(PAL.wood);
           for (let k = 0; k < 5; k++) g.roundRect(p.x - 6.5 + k * 3, p.y - 21, 2, 9 + (k % 2) * 2, 1).fill(0xfffde7).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
+        } else if (look.props === 'masks') {
+          g.rect(p.x - 1, p.y - 26, 2, 26).fill(PAL.woodDark);
+          g.rect(p.x - 10, p.y - 25, 20, 2).fill(PAL.wood);
+          const colors = [0x1e88e5, 0xe53935, 0x43a047, 0xfdd835];
+          for (const [dx, dy, k] of [[-6, -19, 0], [6, -19, 1], [-6, -10, 2], [6, -10, 3]]) {
+            g.ellipse(p.x + dx, p.y + dy, 4.5, 3.6).fill(colors[(k + Math.floor(rng() * 4)) % 4]).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+            g.circle(p.x + dx - 1.6, p.y + dy - 0.6, 0.9).fill(0xffffff);
+            g.circle(p.x + dx + 1.6, p.y + dy - 0.6, 0.9).fill(0xffffff);
+          }
         } else if (look.props === 'costumes') {
           g.rect(p.x - 9, p.y - 24, 2, 24).fill(0x555555);
           g.rect(p.x + 7, p.y - 24, 2, 24).fill(0x555555);
@@ -572,6 +581,8 @@ const PLAZA_HOUSE = {
   navidad: { wall: 0xfbf8f1, trims: [0x2e7d32, 0xc62828, 0xf9a825, 0x2e7d32, 0x8e44ad, 0xffd700], awning: 0x2e7d32, sign: 'corn', props: 'corn' },
   // (v5.21) The costume workshop of Pasto's carnival: a mask sign and racks of colorful costumes outside.
   negros_blancos: { wall: 0xfff8e1, trims: [0x8e24aa, 0xe53935, 0x1e88e5, 0xfdd835, 0x43a047, 0xffd700], awning: 0x8e24aa, sign: 'mask', props: 'costumes' },
+  // (v5.21) Barranquilla's mask workshop: a yellow house with a carnival-mask sign and racks of painted masks.
+  barranquilla: { wall: 0xfdd835, trims: [0xe53935, 0x1e88e5, 0x43a047, 0xe53935, 0x8e24aa, 0xffd700], awning: 0x1e88e5, sign: 'carnival', props: 'masks' },
 };
 
 function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
@@ -613,6 +624,11 @@ function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
     g.poly([s.x, s.y - 4.6, s.x - 7, s.y, s.x, s.y + 4.6]).fill(0x212121);
     g.circle(s.x - 3, s.y - 0.6, 1.1).fill(0xfafafa);
     g.circle(s.x + 3, s.y - 0.6, 1.1).fill(0x212121);
+  } else if (look.sign === 'carnival') {
+    g.ellipse(s.x, s.y, 7.5, 4.6).fill(0xfdd835);
+    g.ellipse(s.x - 3.5, s.y - 0.6, 2.2, 1.4).fill(0xe53935);
+    g.ellipse(s.x + 3.5, s.y - 0.6, 2.2, 1.4).fill(0x1e88e5);
+    g.poly([s.x - 1, s.y + 0.5, s.x + 1, s.y + 0.5, s.x, s.y + 4.6]).fill(0x43a047);
   } else if (look.sign === 'corn') {
     g.ellipse(s.x, s.y + 0.5, 3, 5.5).fill(0xf6d36b);
     g.poly([s.x - 1, s.y + 5, s.x - 7, s.y - 2, s.x - 3, s.y + 6]).fill(0x7cb342);

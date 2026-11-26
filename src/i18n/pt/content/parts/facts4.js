@@ -127,4 +127,9 @@ export default {
   nyb_negros: ["Em 5 de janeiro, o Dia dos Negros, todos pintam o rosto com cosmético preto.", "O Dia dos Negros lembra um dia de liberdade que os escravizados pediram em 1607."],
   nyb_blancos: ["Em 6 de janeiro, o Dia dos Brancos, o talco e a espuma branca voam pela cidade toda.", "Em 4 de janeiro chega a Pasto a Família Castañeda, uma comparsa que lembra uns viajantes de 1928."],
   nyb_desfile: ["O Grande Desfile percorre a Senda do Carnaval com carros alegóricos gigantes de papel machê.", "O 3 de janeiro é o Canto à Terra, com música e danças dos Andes."],
+  // Carnaval de Barranquilla (v5.21)
+  baq_mascaras: ["O Carnaval de Barranquilla é Patrimônio Oral e Imaterial da Humanidade desde 2003.", "Muitas máscaras do carnaval são entalhadas em madeira em Galapa, perto de Barranquilla."],
+  baq_marimondas: ["A marimonda tem orelhas grandes e um nariz comprido: nasceu para zombar dos poderosos.", "A marimonda dança com um apito e pulos, com a roupa do avesso."],
+  baq_congos: ["Os congos usam turbantes altos com flores e espelhos, e dançam com um bastão de madeira.", "A dança do Congo Grande é uma das mais antigas do carnaval."],
+  baq_batalla: ["A Batalha de Flores é o desfile de carros alegóricos que abre o carnaval, desde 1903.", "A Rainha do Carnaval vai no primeiro carro da Batalha de Flores."],
 };

@@ -9523,6 +9523,98 @@ const DRAW = {
     this.animate(0);
     this.roofTop = iso(x0 + 1.2, y0 + 0.8, 8 + 2 * size + 20);
   },
+
+  // --- Carnaval de Barranquilla (v5.21) ---
+  // Marimondas: a house with a blue porch where marimonda masks (big ears, long trunk nose) hang to dry, and a
+  // marimonda dancing in front.
+  baq_marimondas(g, x, y, ctx) {
+    const H = house(this, g, x + 0.3, y + 0.25, 2.3, 1.1, 24, ctx, { wall: 0x90caf9 });
+    door(g, x + 0.3, y + 0.25, 1.1, 1.15, 15, ctx.trim);
+    const masks = 2 + Math.min(ctx.tier, 3);
+    for (let k = 0; k < masks; k++) {
+      const p = iso(x + 0.5 + k * 0.42, y + 1.37, H - 8);
+      g.ellipse(p.x - 5, p.y + 1, 2.4, 3.4).fill(0xe53935);
+      g.ellipse(p.x + 5, p.y + 1, 2.4, 3.4).fill(0xe53935);
+      g.ellipse(p.x, p.y + 1, 4.4, 5).fill(0x1e88e5).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.circle(p.x - 1.6, p.y, 1).fill(0xffffff);
+      g.circle(p.x + 1.6, p.y, 1).fill(0xffffff);
+      g.moveTo(p.x, p.y + 2).quadraticCurveTo(p.x + 1, p.y + 9, p.x + 4, p.y + 9).stroke({ width: 1.6, color: 0x43a047 });
+    }
+    const dancer = new Graphics();
+    this.anim.addChild(dancer);
+    const c = iso(x + 1.5, y + 2.2);
+    this.animate = (time) => {
+      const hop = Math.abs(Math.sin(time * 5)) * 3;
+      dancer.clear();
+      worker(dancer, c.x, c.y - hop, 0xe53935);
+      dancer.ellipse(c.x, c.y - 20.5 - hop, 4, 4.4).fill(0x1e88e5);
+      dancer.ellipse(c.x - 4.5, c.y - 21 - hop, 2, 3).fill(0xe53935);
+      dancer.ellipse(c.x + 4.5, c.y - 21 - hop, 2, 3).fill(0xe53935);
+      dancer.moveTo(c.x, c.y - 19 - hop).quadraticCurveTo(c.x + 1, c.y - 12 - hop, c.x + 4, c.y - 12 - hop).stroke({ width: 1.4, color: 0x43a047 });
+    };
+    this.animate(0);
+  },
+
+  // Congos: an awning stall with the congos' tall flowered turbans and a congo dancer with his turban and mirrors.
+  baq_congos(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.35;
+    fleaStall(this, g, x0, y0, ctx, 0xe53935, [0xe53935, 0xfdd835, 0x43a047, 0x1e88e5, 0xff7043], 2.2);
+    const turban = (gr, px, py) => {
+      gr.poly([px - 4, py, px + 4, py, px + 3, py - 12, px - 3, py - 12]).fill(0xfafafa).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      for (const [dx, dy, c] of [[-2, -4, 0xe53935], [2, -7, 0xfdd835], [-1, -10, 0x1e88e5]]) gr.circle(px + dx, py + dy, 1.6).fill(c);
+      gr.circle(px, py - 13, 2).fill(0x43a047);
+    };
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) {
+      const p = iso(x0 + 0.4 + k * 0.45, y0 + 1.75);
+      turban(g, p.x, p.y - 2);
+    }
+    const dancer = new Graphics();
+    this.anim.addChild(dancer);
+    const c = iso(x0 + 1.9, y0 + 2.2);
+    this.animate = (time) => {
+      const sway = Math.sin(time * 4) * 2;
+      dancer.clear();
+      worker(dancer, c.x + sway, c.y, 0xfdd835);
+      turban(dancer, c.x + sway, c.y - 22);
+    };
+    this.animate(0);
+  },
+
+  // Batalla de Flores: a float covered in flowers with a giant marimonda head and dancers on it; the head sways while
+  // working.
+  baq_batalla(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.5;
+    box(g, x0, y0, 2.4, 1.6, 8, 0x43a047);
+    for (const [wx, wy] of [[0.3, 1.6], [2.1, 1.6]]) {
+      const p = iso(x0 + wx, y0 + wy, 2);
+      g.circle(p.x, p.y, 4.5).fill(0x3e2723).stroke(OUTLINE);
+      g.circle(p.x, p.y, 1.6).fill(0x9e9e9e);
+    }
+    const colors = [0xe53935, 0xfdd835, 0xff7043, 0xf06292, 0xffffff];
+    for (let k = 0; k < 14 + ctx.tier * 3; k++) {
+      const p = iso(x0 + 0.1 + ((k * 0.37) % 2.3), y0 + 1.55, 2 + ((k * 3) % 6));
+      g.circle(p.x, p.y, 1.8).fill(colors[k % colors.length]);
+    }
+    const head = new Graphics();
+    this.anim.addChild(head);
+    const c = iso(x0 + 1.2, y0 + 0.8, 8);
+    const size = 12 + Math.min(ctx.tier, 3) * 2;
+    this.animate = (time) => {
+      const sway = Math.sin(time * 2) * 3;
+      const cy = c.y - size - 6;
+      head.clear();
+      head.ellipse(c.x - size + sway, cy, size * 0.45, size * 0.7).fill(0xe53935).stroke(OUTLINE);
+      head.ellipse(c.x + size + sway, cy, size * 0.45, size * 0.7).fill(0xe53935).stroke(OUTLINE);
+      head.circle(c.x + sway, cy, size).fill(0x1e88e5).stroke(OUTLINE);
+      head.circle(c.x - size * 0.4 + sway, cy - size * 0.2, size * 0.2).fill(0xffffff);
+      head.circle(c.x + size * 0.4 + sway, cy - size * 0.2, size * 0.2).fill(0xffffff);
+      head.moveTo(c.x + sway, cy + size * 0.1).quadraticCurveTo(c.x + sway + 3, cy + size * 1.3, c.x + sway + size * 0.8, cy + size * 1.2).stroke({ width: 3, color: 0x43a047 });
+    };
+    this.animate(0);
+    this.roofTop = iso(x0 + 1.2, y0 + 0.8, 8 + 2 * size + 14);
+  },
 };
 
 // Tolima Grande (v4.0): stations sharing artwork from other regions.

@@ -444,6 +444,11 @@ export const FACTS = {
   nyb_negros: ["El 5 de enero, Día de Negros, todos se pintan la cara con cosmético negro.", "El Día de Negros recuerda un día de libertad que pidieron los esclavizados en 1607."],
   nyb_blancos: ["El 6 de enero, Día de Blancos, el talco y la espuma blanca vuelan por toda la ciudad.", "El 4 de enero llega a Pasto la Familia Castañeda, una comparsa que recuerda a unos viajeros de 1928."],
   nyb_desfile: ["El Gran Desfile recorre la Senda del Carnaval con carrozas gigantes de papel maché.", "El 3 de enero es el Canto a la Tierra, con música y danzas de los Andes."],
+  // Carnaval de Barranquilla (v5.21)
+  baq_mascaras: ["El Carnaval de Barranquilla es Patrimonio Oral e Inmaterial de la Humanidad desde 2003.", "Muchas máscaras del carnaval se tallan en madera en Galapa, junto a Barranquilla."],
+  baq_marimondas: ["La marimonda tiene orejas grandes y una nariz larga: nació para burlarse de los poderosos.", "La marimonda baila con un pito y saltos, con la ropa al revés."],
+  baq_congos: ["Los congos llevan turbantes altos con flores y espejos, y bailan con un palo de madera.", "La danza del Congo Grande es una de las más antiguas del carnaval."],
+  baq_batalla: ["La Batalla de Flores es el desfile de carrozas que abre el carnaval, desde 1903.", "La Reina del Carnaval va en la primera carroza de la Batalla de Flores."],
 };
 
 // Speaker announcing milestones per zone (key events, not every toast).
@@ -510,6 +515,7 @@ export const PEOPLE = {
   plaza_velitas: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_navidad: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_negros_blancos: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
+  plaza_barranquilla: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
 };
 
 // Opening line when entering a zone for the first time.
@@ -577,6 +583,7 @@ export const WELCOME = {
   plaza_velitas: '¡Llegó la noche de las velitas! Prenda la Cerería y llenemos de faroles todas las calles.',
   plaza_navidad: '¡Ya empezó la novena! Muela el maíz, que esta noche hay natilla y buñuelos para todos.',
   plaza_negros_blancos: '¡Llegó el carnaval de Pasto! Saque los disfraces, que aquí nadie se salva del talco.',
+  plaza_barranquilla: '¡Quien lo vive es quien lo goza! Llegó el carnaval de Barranquilla: a tallar máscaras y a bailar.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

@@ -101,4 +101,6 @@ export default {
   // v5.21
   "El Carnaval de Negros y Blancos": "The Carnival of Blacks and Whites",
   "En Pasto el carnaval llega con el año nuevo: cose los disfraces, pinta de negro a las comparsas el 5 de enero, llénalas de talco el 6 y súbelas a las carrozas del Gran Desfile.": "In Pasto the carnival arrives with the new year: sew the costumes, paint the troupes black on 5 January, cover them in talc on the 6th and get them onto the floats of the Great Parade.",
+  "El Carnaval de Barranquilla": "The Barranquilla Carnival",
+  "¡Quien lo vive es quien lo goza! Talla las máscaras, viste a las marimondas y a los congos y llévalos juntos a bailar en las carrozas de la Batalla de Flores.": "Those who live it are those who enjoy it! Carve the masks, dress the marimondas and the congos and take them dancing together on the floats of the Battle of Flowers.",
 };

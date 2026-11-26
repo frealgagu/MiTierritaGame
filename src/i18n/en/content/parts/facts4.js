@@ -127,4 +127,9 @@ export default {
   nyb_negros: ["On 5 January, the Day of Blacks, everyone paints their face with black cosmetic paint.", "The Day of Blacks recalls a day of freedom the enslaved asked for in 1607."],
   nyb_blancos: ["On 6 January, the Day of Whites, talcum powder and white foam fly all over the city.", "On 4 January the Castañeda Family arrives in Pasto, a comparsa that recalls some travelers of 1928."],
   nyb_desfile: ["The Great Parade goes along the Carnival Path with giant papier-mâché floats.", "3 January is the Song to the Earth, with music and dances of the Andes."],
+  // Carnaval de Barranquilla (v5.21)
+  baq_mascaras: ["The Barranquilla Carnival has been a Masterpiece of the Oral and Intangible Heritage of Humanity since 2003.", "Many carnival masks are carved in wood in Galapa, next to Barranquilla."],
+  baq_marimondas: ["The marimonda has big ears and a long nose: it was born to mock the powerful.", "The marimonda dances with a whistle and leaps, wearing its clothes inside out."],
+  baq_congos: ["The congos wear tall turbans with flowers and mirrors, and dance with a wooden stick.", "The Congo Grande dance is one of the oldest of the carnival."],
+  baq_batalla: ["The Battle of Flowers is the parade of floats that opens the carnival, since 1903.", "The Carnival Queen rides on the first float of the Battle of Flowers."],
 };

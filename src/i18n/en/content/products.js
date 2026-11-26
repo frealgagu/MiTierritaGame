@@ -400,4 +400,8 @@ export default {
   comparsa_negra: "Black troupe",
   comparsa_blanca: "White troupe",
   desfile: "Parade float",
+  mascara: "Mask",
+  marimonda: "Marimonda",
+  congo: "Congo",
+  batalla_flores: "Battle of Flowers float",
 };

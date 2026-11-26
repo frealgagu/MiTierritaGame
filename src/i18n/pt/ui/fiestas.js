@@ -101,4 +101,6 @@ export default {
   // v5.21
   "El Carnaval de Negros y Blancos": "O Carnaval de Negros e Brancos",
   "En Pasto el carnaval llega con el año nuevo: cose los disfraces, pinta de negro a las comparsas el 5 de enero, llénalas de talco el 6 y súbelas a las carrozas del Gran Desfile.": "Em Pasto o carnaval chega com o ano novo: costure as fantasias, pinte as comparsas de preto no dia 5 de janeiro, encha-as de talco no dia 6 e suba-as nos carros do Grande Desfile.",
+  "El Carnaval de Barranquilla": "O Carnaval de Barranquilla",
+  "¡Quien lo vive es quien lo goza! Talla las máscaras, viste a las marimondas y a los congos y llévalos juntos a bailar en las carrozas de la Batalla de Flores.": "Quem vive é quem aproveita! Entalhe as máscaras, vista as marimondas e os congos e leve-os para dançar juntos nos carros da Batalha de Flores.",
 };
