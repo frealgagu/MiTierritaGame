@@ -951,7 +951,57 @@ const RAJALENA = {
   ],
 };
 
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA, san_pedro: RAJALENA };
+// (v5.21) 20 de julio: «Marcha del 20 de julio», an original march for a town band in F major with a D minor trio,
+// 4/4, with the chirimía's band (clarinet, euphonium, tambora, snare drum and cymbals).
+const MARCHA_JULIO = {
+  name: 'Marcha del 20 de julio',
+  instruments: 'clarinete, bombardino, tambora, redoblante y platillos',
+  bpm: 112,
+  beats: 4,
+  style: 'chirimia',
+  chords: [
+    'F', 'F', 'C7', 'C7', 'C7', 'C7', 'F', 'F',
+    'F', 'F7', 'A#', 'A#', 'F', 'C7', 'F', 'F',
+    'Dm', 'Dm', 'A7', 'A7', 'A7', 'A7', 'Dm', 'Dm',
+    'A#', 'A#', 'F', 'F', 'C7', 'C7', 'F', 'C7',
+  ],
+  melody: [
+    [[0, 2, 'C5'], [2, 1, 'F5'], [3, 1, 'F5'], [4, 2, 'A5'], [6, 2, 'F5']],
+    [[0, 3, 'C6'], [3, 1, 'A5'], [4, 4, 'F5']],
+    [[0, 2, 'G5'], [2, 1, 'A5'], [3, 1, 'A#5'], [4, 2, 'C6'], [6, 2, 'G5']],
+    [[0, 4, 'E5'], [4, 2, 'C5'], [6, 2, 'E5']],
+    [[0, 2, 'G5'], [2, 1, 'G5'], [3, 1, 'G5'], [4, 2, 'A#5'], [6, 2, 'G5']],
+    [[0, 3, 'E5'], [3, 1, 'F5'], [4, 4, 'G5']],
+    [[0, 2, 'A5'], [2, 2, 'G5'], [4, 2, 'F5'], [6, 2, 'E5']],
+    [[0, 6, 'F5']],
+    [[0, 2, 'C5'], [2, 1, 'F5'], [3, 1, 'F5'], [4, 2, 'A5'], [6, 2, 'F5']],
+    [[0, 3, 'C6'], [3, 1, 'A5'], [4, 4, 'D#5']],
+    [[0, 2, 'D5'], [2, 2, 'F5'], [4, 2, 'A#5'], [6, 2, 'F5']],
+    [[0, 4, 'D5'], [4, 4, 'F5']],
+    [[0, 2, 'C5'], [2, 2, 'F5'], [4, 2, 'A5'], [6, 2, 'C6']],
+    [[0, 2, 'A#5'], [2, 2, 'G5'], [4, 2, 'E5'], [6, 2, 'G5']],
+    [[0, 6, 'F5']],
+    [[4, 2, 'C5'], [6, 2, 'E5']],
+    [[0, 2, 'F5'], [2, 1, 'E5'], [3, 1, 'F5'], [4, 2, 'A5'], [6, 2, 'D5']],
+    [[0, 4, 'D5'], [4, 2, 'E5'], [6, 2, 'F5']],
+    [[0, 2, 'E5'], [2, 1, 'C#5'], [3, 1, 'E5'], [4, 2, 'G5'], [6, 2, 'A4']],
+    [[0, 4, 'A4'], [4, 2, 'C#5'], [6, 2, 'E5']],
+    [[0, 2, 'G5'], [2, 1, 'F5'], [3, 1, 'E5'], [4, 2, 'C#5'], [6, 2, 'E5']],
+    [[0, 4, 'A5'], [4, 2, 'G5'], [6, 2, 'E5']],
+    [[0, 2, 'F5'], [2, 2, 'E5'], [4, 2, 'D5'], [6, 2, 'C#5']],
+    [[0, 6, 'D5']],
+    [[0, 2, 'D5'], [2, 2, 'F5'], [4, 2, 'A#5'], [6, 2, 'F5']],
+    [[0, 4, 'A#5'], [4, 2, 'A5'], [6, 2, 'G5']],
+    [[0, 2, 'A5'], [2, 2, 'F5'], [4, 2, 'C5'], [6, 2, 'F5']],
+    [[0, 4, 'A5'], [4, 4, 'F5']],
+    [[0, 2, 'G5'], [2, 2, 'A#5'], [4, 2, 'A5'], [6, 2, 'G5']],
+    [[0, 2, 'E5'], [2, 2, 'G5'], [4, 2, 'C6'], [6, 2, 'A#5']],
+    [[0, 6, 'F5']],
+    [],
+  ],
+};
+
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA, san_pedro: RAJALENA, independencia: MARCHA_JULIO };
 
 // Chords: root pitch class and intervals (semitones above root).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };

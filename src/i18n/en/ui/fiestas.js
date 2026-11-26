@@ -109,4 +109,6 @@ export default {
   "El segundo domingo de mayo toda la familia celebra a las mamás: haz el mercado en la plaza, arma los ramos de flores, cocina el almuerzo de domingo y llévalo todo a la mesa, con serenata.": "On the second Sunday of May the whole family celebrates moms: shop at the square’s market, make the bouquets, cook the Sunday lunch and bring it all to the table, with a serenade.",
   "Las fiestas de San Juan y San Pedro": "The feasts of Saint John and Saint Peter",
   "En el Huila y el Tolima se baila el sanjuanero: trae la leña, prende los hornos de barro del asado huilense y de las achiras, y sírvelos en el tablado mientras las parejas bailan.": "In Huila and Tolima they dance the sanjuanero: bring the firewood, light the clay ovens for the asado huilense and the achiras, and serve them on the stage while the couples dance.",
+  "El 20 de julio": "The 20th of July",
+  "Se celebra el Grito de Independencia y no puede faltar una bandera en cada ventana: teje la tela, cose banderas y escarapelas y llévalas al desfile del 20 de julio con la banda del colegio.": "The Cry of Independence is celebrated and there must be a flag in every window: weave the cloth, sew flags and rosettes and take them to the 20th of July parade with the school band.",
 };

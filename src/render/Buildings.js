@@ -9882,6 +9882,72 @@ const DRAW = {
     };
     this.animate(0);
   },
+
+  // --- 20 de julio (v5.21) ---
+  // Taller de banderas: an awning stall with Colombian flags hanging to dry and a seamstress at her machine.
+  ind_banderas(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.35;
+    fleaStall(this, g, x0, y0, ctx, 0x003893, [0xfcd116, 0x003893, 0xce1126, 0xfcd116, 0x003893], 2.2);
+    // drawFlag clears its Graphics, so each flag has its own.
+    const spots = Array.from({ length: 2 + Math.min(ctx.tier, 2) }, (_, k) => iso(x0 + 0.3 + k * 0.5, y0 + 1.9, 2));
+    const flags = spots.map(() => this.anim.addChild(new Graphics()));
+    const seamstress = this.anim.addChild(new Graphics());
+    const seam = iso(x0 + 1.9, y0 + 2.2);
+    this.animate = (time, clock) => {
+      spots.forEach((p, k) => drawFlag(flags[k], p.x, p.y, clock + k));
+      seamstress.clear();
+      worker(seamstress, seam.x, seam.y, 0xce1126);
+      seamstress.rect(seam.x - 7, seam.y - 12, 8, 4).fill(0x37474f);
+      seamstress.rect(seam.x - 6, seam.y - 14 - Math.abs(Math.sin(time * 10)) * 1.5, 1, 3).fill(0xb0bec5);
+    };
+    this.animate(0, 0);
+  },
+
+  // Taller de escarapelas: a house with tricolor rosettes pinned on a board at the door.
+  ind_escarapelas(g, x, y, ctx) {
+    const H = house(this, g, x + 0.25, y + 0.25, 2.2, 1.1, 24, ctx, { wall: 0xfff8e1 });
+    door(g, x + 0.25, y + 0.25, 1.1, 1.6, 15, ctx.trim);
+    windowOnFront(this, g, x + 0.25, y + 0.25, 1.1, 0.5, 8, 0xffffff);
+    const board = iso(x + 1.0, y + 1.38, 4);
+    g.rect(board.x - 12, board.y - 16, 24, 14).fill(0x8d6e63).stroke(OUTLINE);
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 3); k++) {
+      const cx = board.x - 8 + (k % 3) * 8;
+      const cy = board.y - 12 + Math.floor(k / 3) * 7;
+      g.circle(cx, cy, 3.2).fill(0xce1126);
+      g.circle(cx, cy, 2.2).fill(0x003893);
+      g.circle(cx, cy, 1.2).fill(0xfcd116);
+    }
+    this.roofTop = iso(x + 1.35, y + 0.8, H + 16);
+  },
+
+  // Desfile del 20 de julio: a reviewing stand with a big flag on its pole and the school band marching in front,
+  // drum and bass drum included.
+  ind_desfile(g, x, y, ctx) {
+    const x0 = x + 0.25;
+    const y0 = y + 0.25;
+    box(g, x0, y0, 2.4, 1.0, 10, 0xeceff1);
+    for (let k = 0; k < 3; k++) box(g, x0, y0 + 0.2 + k * 0.25, 2.4, 0.06, 12 + k * 3, [0xfcd116, 0x003893, 0xce1126][k]);
+    box(g, x0 + 2.4, y0 + 0.4, 0.08, 0.08, 46 + ctx.up, 0x9e9e9e);
+    const flag = new Graphics();
+    const band = new Graphics();
+    this.anim.addChild(flag, band);
+    const pole = iso(x0 + 2.44, y0 + 0.44, 46 + ctx.up);
+    const marchers = [0.4, 1.0, 1.6, 2.2].map((k) => iso(x0 + k, y0 + 2.0));
+    this.animate = (time, clock) => {
+      drawFlag(flag, pole.x, pole.y + 18, clock);
+      band.clear();
+      marchers.forEach((p, k) => {
+        const step = Math.sin(time * 6 + k * 1.5) * 1.5;
+        worker(band, p.x, p.y - Math.abs(step), 0x003893);
+        band.rect(p.x - 3, p.y - 26 - Math.abs(step), 6, 3).fill(0xce1126);
+        if (k === 1) band.ellipse(p.x, p.y - 12 - Math.abs(step), 5, 4).fill(0xfafafa).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+        if (k === 3) band.rect(p.x + 3, p.y - 16 - Math.abs(step), 5, 2).fill(0xfdd835);
+      });
+    };
+    this.animate(0, 0);
+    this.roofTop = null;
+  },
 };
 
 // Tolima Grande (v4.0): stations sharing artwork from other regions.

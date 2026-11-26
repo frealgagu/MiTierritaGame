@@ -53,7 +53,7 @@ export const FIESTAS = [
     sticker: tk('En Neiva se baila el sanjuanero y se come asado huilense.'),
   },
   {
-    id: 'independencia', icon: '🇨🇴', kind: 'big', dates: { from: [7, 18], to: [7, 21] },
+    id: 'independencia', icon: '🇨🇴', kind: 'big', dates: { from: [7, 18], to: [7, 21] }, decor: ['flags'],
     name: tk('Día de la Independencia'),
     greeting: tk('🇨🇴 ¡Feliz 20 de julio! Hay banderas en cada ventana por la Independencia.'),
     sticker: tk('El 20 de julio de 1810 empezó la Independencia con el florero de Llorente.'),

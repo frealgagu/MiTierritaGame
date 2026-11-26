@@ -416,4 +416,8 @@ export default {
   asado_sampedro: "Asado huilense",
   achiras_sampedro: "Achiras",
   fiesta_sampedrina: "San Pedro feast",
+  tela_patria: "Tricolor cloth",
+  bandera_patria: "Colombian flag",
+  escarapela: "Rosette",
+  desfile_patrio: "20th of July parade",
 };

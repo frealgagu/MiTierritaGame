@@ -39,7 +39,7 @@ test('the plaza\'s products and stations never reuse a region\'s id: they would 
 });
 
 test('the plaza belongs to no region: its zones and events stay out of the main game lists (v5.19)', () => {
-  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro']);
+  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro', 'independencia']);
   for (const z of PLAZA_ZONES) assert.ok(!ZONE_LIST.includes(z));
   for (const r of REGIONS) for (const z of PLAZA_ZONES) assert.ok(!r.zones.includes(z.id));
   for (const e of SEASON_EVENTS) assert.ok(!EVENTS.includes(e));
@@ -132,7 +132,7 @@ test('season boards and stickers survive the save; no fiesta bonus on the board 
   assert.equal(fiestaMult(back.events.season.boards.velitas), 1);
 });
 
-test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre, San Pedro and the 20 de julio (no event yet) (v5.19)', () => {
+test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre, San Pedro, the 20 de julio and Boyacá (no event yet) (v5.19)', () => {
   const n = nextSeason(day(2026, 11, 24));
   assert.equal(n.fiesta.id, 'velitas');
   assert.equal(n.days, 12);
@@ -154,7 +154,23 @@ test('the next season event: Velitas from late November, Negros y Blancos after 
   assert.ok(june.def, 'San Pedro too (v5.21)');
   const july = nextSeason(day(2027, 7, 1));
   assert.equal(july.fiesta.id, 'independencia');
-  assert.equal(july.def, null);
+  assert.ok(july.def, 'the 20 de julio too (v5.21)');
+  const august = nextSeason(day(2027, 7, 25));
+  assert.equal(august.fiesta.id, 'batalla_boyaca');
+  assert.equal(august.def, null);
+});
+
+test('20 de julio (v5.21): 18–21 July with 30 days of grace, flags on every building', () => {
+  const root = newGame();
+  assert.equal(seasonStatus(root, 'independencia', day(2027, 7, 17)), null);
+  assert.equal(seasonStatus(root, 'independencia', day(2027, 7, 18)).kind, 'available');
+  assert.equal(seasonStatus(root, 'independencia', day(2027, 8, 20)).grace, true);
+  assert.equal(seasonStatus(root, 'independencia', day(2027, 8, 21)), null);
+  assert.ok(decorOn(day(2027, 7, 20)).has('flags'));
+  const board = startSeason(root, 'independencia', day(2027, 7, 19));
+  assert.deepEqual(Object.keys(board.stations), ['ind_telar', 'ind_banderas', 'ind_escarapelas', 'ind_desfile']);
+  meet(board);
+  assert.equal(finishSeason(root, 'independencia').sticker, true);
 });
 
 test('San Juan y San Pedro (v5.21): 20–30 June with 30 days of grace, streamers and fireworks on the map', () => {

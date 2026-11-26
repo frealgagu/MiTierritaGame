@@ -147,4 +147,9 @@ export default {
   sp_asado: ["O asado huilense é carne de porco temperada com laranja-azeda e especiarias, assada em forno de barro.", "O asado é servido com arepa oreja de perro e insulso."],
   sp_achiras: ["As achiras são biscoitos de amido de achira e queijo, típicos do Huila.", "As achiras são assadas em forno de barro e vendidas em folhas de bijao."],
   sp_tablado: ["O sanjuanero huilense é a dança símbolo do Huila: o casal flerta com o chapéu e o lenço.", "O rajaleña é um canto malicioso de versos improvisados nas festas."],
+  // 20 de julio (v5.21)
+  ind_telar: ["Em 20 de julho de 1810 começou em Santafé de Bogotá o caminho para a Independência da Colômbia.", "Nesse dia formou-se a Junta Suprema de Governo, o primeiro governo crioulo."],
+  ind_banderas: ["A bandeira da Colômbia é amarela, azul e vermelha: o amarelo ocupa a metade.", "Nas datas pátrias é costume hastear a bandeira em cada casa."],
+  ind_escarapelas: ["A roseta tricolor é usada no peito nos dias pátrios.", "O vaso de Llorente, que iniciou a briga de 20 de julho, está no Museu da Independência."],
+  ind_desfile: ["Em 20 de julho há desfiles militares e de escolas com bandas marciais.", "As bandas marciais tocam caixas, bumbos, liras e cornetas."],
 };

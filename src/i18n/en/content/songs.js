@@ -20,4 +20,5 @@ export default {
   vallenato: ["Paseo of the Stage", "accordion, caja drum, guacharaca and bass"],
   dia_madre: ["Pasillo for Mom", "bandola, tiple and guitar"],
   san_pedro: ["Rajaleña of the Stage", "tiple, guitar, bandola, tambora and carrasca"],
+  independencia: ["20th of July March", "clarinet, euphonium, tambora, snare drum and cymbals"],
 };

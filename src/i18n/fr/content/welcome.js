@@ -66,4 +66,5 @@ export default {
   plaza_vallenato: "Le Festival vallenato est arrivé ! Sors l’accordéon, la caja et la guacharaca : aujourd’hui on élit un roi.",
   plaza_dia_madre: "Bonne fête des Mères ! Aujourd’hui toute la famille déjeune ensemble et il y a une sérénade pour les mamans.",
   plaza_san_pedro: "Les fêtes de la Saint-Pierre sont arrivées ! Allume les fours : il y a de l’asado huilense, des achiras et du sanjuanero.",
+  plaza_independencia: "Joyeux 20 juillet ! Il faut un drapeau à chaque fenêtre et la fanfare prête pour le défilé.",
 };

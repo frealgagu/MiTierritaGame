@@ -403,4 +403,8 @@ export default {
   sp_asado: "Asado huilense oven",
   sp_achiras: "Achira oven",
   sp_tablado: "Sanjuanero stage",
+  ind_telar: "Loom",
+  ind_banderas: "Flag workshop",
+  ind_escarapelas: "Rosette workshop",
+  ind_desfile: "20th of July parade",
 };

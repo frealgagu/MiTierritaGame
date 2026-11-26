@@ -403,4 +403,8 @@ export default {
   sp_asado: "Four de l’asado huilense",
   sp_achiras: "Four à achiras",
   sp_tablado: "Estrade du sanjuanero",
+  ind_telar: "Métier à tisser",
+  ind_banderas: "Atelier des drapeaux",
+  ind_escarapelas: "Atelier des cocardes",
+  ind_desfile: "Défilé du 20 juillet",
 };

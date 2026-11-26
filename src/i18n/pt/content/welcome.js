@@ -66,4 +66,5 @@ export default {
   plaza_vallenato: "Chegou o Festival Vallenato! Pegue o acordeão, a caixa e a guacharaca, que hoje se escolhe um rei.",
   plaza_dia_madre: "Feliz Dia das Mães! Hoje a família toda almoça junta e tem serenata para as mamães.",
   plaza_san_pedro: "Chegaram as festas de São Pedro! Acenda os fornos, que tem asado huilense, achiras e sanjuanero.",
+  plaza_independencia: "Feliz 20 de julho! Tem que pôr uma bandeira em cada janela e preparar a banda para o desfile.",
 };

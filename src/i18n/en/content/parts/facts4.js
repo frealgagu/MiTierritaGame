@@ -147,4 +147,9 @@ export default {
   sp_asado: ["Asado huilense is pork marinated with sour orange and spices, roasted in a clay oven.", "The asado is served with arepa oreja de perro and insulso."],
   sp_achiras: ["Achiras are biscuits made of achira starch and cheese, typical of Huila.", "Achiras are baked in clay ovens and sold on bijao leaves."],
   sp_tablado: ["The sanjuanero huilense is Huila’s signature dance: the couple flirts with the hat and the scarf.", "Rajaleña is a cheeky song of verses improvised during the fiestas."],
+  // 20 de julio (v5.21)
+  ind_telar: ["On 20 July 1810 the road to Colombia’s Independence began in Santafé de Bogotá.", "That day the Supreme Government Junta was formed, the first criollo government."],
+  ind_banderas: ["Colombia’s flag is yellow, blue and red: the yellow takes up half.", "On national holidays it is customary to fly the flag at every house."],
+  ind_escarapelas: ["The tricolor rosette is worn on the chest on national holidays.", "Llorente’s flower vase, which started the quarrel of 20 July, is in the Independence Museum."],
+  ind_desfile: ["On 20 July there are military and school parades with marching bands.", "Marching bands play snare drums, bass drums, glockenspiels and bugles."],
 };

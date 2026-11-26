@@ -464,6 +464,11 @@ export const FACTS = {
   sp_asado: ["El asado huilense es cerdo adobado con naranja agria y especias, asado en horno de barro.", "El asado se acompaña con arepa oreja de perro y insulso."],
   sp_achiras: ["Las achiras son bizcochos de almidón de achira y queso, típicos del Huila.", "Las achiras se hornean en horno de barro y se venden en hojas de bijao."],
   sp_tablado: ["El sanjuanero huilense es el baile insignia del Huila: la pareja se coquetea con el sombrero y el pañuelo.", "El rajaleña es un canto pícaro de coplas que se improvisan en las fiestas."],
+  // 20 de julio (v5.21)
+  ind_telar: ["El 20 de julio de 1810 empezó en Santafé de Bogotá el camino a la Independencia de Colombia.", "Ese día se formó la Junta Suprema de Gobierno, el primer gobierno criollo."],
+  ind_banderas: ["La bandera de Colombia es amarilla, azul y roja: el amarillo ocupa la mitad.", "En las fechas patrias es costumbre izar la bandera en cada casa."],
+  ind_escarapelas: ["La escarapela tricolor se lleva en el pecho los días patrios.", "El florero de Llorente, que inició la pelea del 20 de julio, está en el Museo de la Independencia."],
+  ind_desfile: ["El 20 de julio hay desfiles militares y de colegios con bandas de guerra.", "Las bandas de guerra tocan redoblantes, bombos, liras y cornetas."],
 };
 
 // Speaker announcing milestones per zone (key events, not every toast).
@@ -534,6 +539,7 @@ export const PEOPLE = {
   plaza_vallenato: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_dia_madre: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_san_pedro: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
+  plaza_independencia: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
 };
 
 // Opening line when entering a zone for the first time.
@@ -605,6 +611,7 @@ export const WELCOME = {
   plaza_vallenato: '¡Llegó el Festival Vallenato! A sacar el acordeón, la caja y la guacharaca, que hoy se elige rey.',
   plaza_dia_madre: '¡Feliz Día de la Madre! Hoy toda la familia almuerza junta y hay serenata para las mamás.',
   plaza_san_pedro: '¡Llegaron las fiestas de San Pedro! Prenda los hornos, que hay asado huilense, achiras y sanjuanero.',
+  plaza_independencia: '¡Feliz 20 de julio! Hay que poner una bandera en cada ventana y alistar la banda para el desfile.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

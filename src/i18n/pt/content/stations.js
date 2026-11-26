@@ -403,4 +403,8 @@ export default {
   sp_asado: "Forno do asado huilense",
   sp_achiras: "Forno de achiras",
   sp_tablado: "Tablado do sanjuanero",
+  ind_telar: "Tear",
+  ind_banderas: "Oficina de bandeiras",
+  ind_escarapelas: "Oficina de rosetas",
+  ind_desfile: "Desfile de 20 de julho",
 };

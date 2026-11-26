@@ -65,6 +65,8 @@ export const PLAZA_ZONES = [
   plaza('plaza_dia_madre', 1507, 'dia_madre', ['dm_mercado', 'dm_floristeria', 'dm_cocina', 'dm_mesa'], ['flowers']),
   // (v5.21) San Juan y San Pedro: bunting by day and fireworks (the «castillo») at night.
   plaza('plaza_san_pedro', 1620, 'san_pedro', ['sp_lenero', 'sp_asado', 'sp_achiras', 'sp_tablado'], ['streamers', 'fireworks']),
+  // (v5.21) 20 de julio: Colombian flags on every building and tricolor bunting.
+  plaza('plaza_independencia', 1718, 'independencia', ['ind_telar', 'ind_banderas', 'ind_escarapelas', 'ind_desfile'], ['flags']),
 ];
 
 // Same prices and paces as the Finca's first stations (data/stations.js).
@@ -109,6 +111,12 @@ export const PLAZA_STATIONS = [
   station('sp_asado', 'plaza_san_pedro', 'Horno del asado huilense', '🥩', { in: { lena_sampedro: 1 }, out: { asado_sampedro: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('sp_achiras', 'plaza_san_pedro', 'Horno de achiras', '🔥', { in: { lena_sampedro: 1 }, out: { achiras_sampedro: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('sp_tablado', 'plaza_san_pedro', 'Tablado del sanjuanero', '💃', { in: { asado_sampedro: 1 }, joins: [{ product: 'achiras_sampedro', perCycle: 1, from: 'sp_achiras' }], out: { fiesta_sampedrina: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
+  // (v5.21) 🇨🇴 Día de la Independencia: cloth from the loom becomes flags and rosettes for the 20 de julio parade.
+  // The same paces and prices as the Navidad.
+  station('ind_telar', 'plaza_independencia', 'Telar', '🧵', { infinite: true, out: { tela_patria: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, release: '5.21' }),
+  station('ind_banderas', 'plaza_independencia', 'Taller de banderas', '🇨🇴', { in: { tela_patria: 1 }, out: { bandera_patria: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('ind_escarapelas', 'plaza_independencia', 'Taller de escarapelas', '🎗️', { in: { tela_patria: 1 }, out: { escarapela: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('ind_desfile', 'plaza_independencia', 'Desfile del 20 de julio', '🥁', { in: { bandera_patria: 1 }, joins: [{ product: 'escarapela', perCycle: 1, from: 'ind_escarapelas' }], out: { desfile_patrio: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
 ];
 
 export const PLAZA_PRODUCTS = {
@@ -138,6 +146,10 @@ export const PLAZA_PRODUCTS = {
   lena_sampedro: { name: 'Leña', zone: 'plaza_san_pedro', value: 1, icon: '🪵', color: 0x8d6e63 },
   asado_sampedro: { name: 'Asado huilense', zone: 'plaza_san_pedro', value: 3, icon: '🥩', color: 0xc0392b },
   achiras_sampedro: { name: 'Achiras', zone: 'plaza_san_pedro', value: 3, icon: ICON.bizcochos, color: 0xe8b860 },
+  tela_patria: { name: 'Tela tricolor', zone: 'plaza_independencia', value: 1, icon: '🧵', color: 0xfdd835 },
+  bandera_patria: { name: 'Bandera de Colombia', zone: 'plaza_independencia', value: 3, icon: '🇨🇴', color: 0xfcd116 },
+  escarapela: { name: 'Escarapela', zone: 'plaza_independencia', value: 3, icon: '🎗️', color: 0xce1126 },
+  desfile_patrio: { name: 'Desfile del 20 de julio', zone: 'plaza_independencia', value: 10, icon: ICON.fiestaIndependencia, color: 0x003893 },
   fiesta_sampedrina: { name: 'Fiesta sampedrina', zone: 'plaza_san_pedro', value: 10, icon: ICON.fiestaSanPedro, color: 0xe53935 },
 };
 
@@ -243,6 +255,20 @@ export const SEASON_EVENTS = [
     coins: 0,
     actions: [],
     objective: { kind: 'produced', items: { fiesta_sampedrina: 240000 } },
+  },
+  {
+    id: 'fiesta_independencia',
+    fiesta: 'independencia',
+    season: true,
+    zone: 'plaza_independencia',
+    icon: '🇨🇴',
+    name: tk('El 20 de julio'),
+    intro: tk('Se celebra el Grito de Independencia y no puede faltar una bandera en cada ventana: teje la tela, cose banderas y escarapelas y llévalas al desfile del 20 de julio con la banda del colegio.'),
+    stations: ['ind_telar', 'ind_banderas', 'ind_escarapelas', 'ind_desfile'],
+    level: 1,
+    coins: 0,
+    actions: [],
+    objective: { kind: 'produced', items: { desfile_patrio: 240000 } },
   },
 ];
 export const SEASON_EVENT_OF_FIESTA = Object.fromEntries(SEASON_EVENTS.map((e) => [e.fiesta, e]));

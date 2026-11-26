@@ -147,4 +147,9 @@ export default {
   sp_asado: ["L’asado huilense est du porc mariné à l’orange amère et aux épices, rôti au four en terre.", "L’asado se sert avec l’arepa oreja de perro et l’insulso."],
   sp_achiras: ["Les achiras sont des biscuits d’amidon d’achira et de fromage, typiques du Huila.", "Les achiras cuisent au four en terre et se vendent sur des feuilles de bijao."],
   sp_tablado: ["Le sanjuanero huilense est la danse emblématique du Huila : le couple se courtise avec le chapeau et le foulard.", "Le rajaleña est un chant coquin de couplets improvisés pendant les fêtes."],
+  // 20 de julio (v5.21)
+  ind_telar: ["Le 20 juillet 1810 commença à Santafé de Bogotá le chemin vers l’Indépendance de la Colombie.", "Ce jour-là fut formée la Junte suprême de gouvernement, le premier gouvernement créole."],
+  ind_banderas: ["Le drapeau de la Colombie est jaune, bleu et rouge : le jaune en occupe la moitié.", "Les jours de fête nationale, on hisse le drapeau à chaque maison."],
+  ind_escarapelas: ["La cocarde tricolore se porte sur la poitrine les jours de fête nationale.", "Le vase de Llorente, qui déclencha la dispute du 20 juillet, est au Musée de l’Indépendance."],
+  ind_desfile: ["Le 20 juillet, il y a des défilés militaires et scolaires avec des fanfares.", "Les fanfares jouent caisses claires, grosses caisses, lyres et clairons."],
 };

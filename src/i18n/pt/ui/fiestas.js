@@ -109,4 +109,6 @@ export default {
   "El segundo domingo de mayo toda la familia celebra a las mamás: haz el mercado en la plaza, arma los ramos de flores, cocina el almuerzo de domingo y llévalo todo a la mesa, con serenata.": "No segundo domingo de maio a família toda celebra as mamães: faça a feira na praça, monte os buquês, cozinhe o almoço de domingo e leve tudo à mesa, com serenata.",
   "Las fiestas de San Juan y San Pedro": "As festas de São João e São Pedro",
   "En el Huila y el Tolima se baila el sanjuanero: trae la leña, prende los hornos de barro del asado huilense y de las achiras, y sírvelos en el tablado mientras las parejas bailan.": "No Huila e no Tolima se dança o sanjuanero: traga a lenha, acenda os fornos de barro do asado huilense e das achiras, e sirva-os no tablado enquanto os casais dançam.",
+  "El 20 de julio": "O 20 de julho",
+  "Se celebra el Grito de Independencia y no puede faltar una bandera en cada ventana: teje la tela, cose banderas y escarapelas y llévalas al desfile del 20 de julio con la banda del colegio.": "Celebra-se o Grito de Independência e não pode faltar uma bandeira em cada janela: teça o tecido, costure bandeiras e rosetas e leve-as ao desfile de 20 de julho com a banda da escola.",
 };

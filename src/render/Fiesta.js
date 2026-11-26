@@ -10,6 +10,7 @@
 //   confetti:  (v5.21) bits of colored paper falling over the paths (Carnaval de Barranquilla).
 //   notes:     (v5.21) music notes rising over the paths (Festival Vallenato).
 //   flowers:   (v5.21) pots of flowers along the paths and beside every door (Día de la Madre).
+//   flags:     (v5.21) a Colombian flag on every building and tricolor bunting (20 de julio, 7 de agosto).
 import { Container, Graphics, Sprite } from 'pixi.js';
 import { iso, depth } from './iso.js';
 import { PAL } from './palette.js';
@@ -66,6 +67,7 @@ export class FiestaDecor {
     if (decor.has('old_year')) this.oldYear();
     if (decor.has('streamers')) this.streamers();
     if (decor.has('flowers')) this.flowers();
+    if (decor.has('flags')) this.flags();
     this.fireworks = decor.has('fireworks');
     this.talc = decor.has('talc');
     this.confetti = decor.has('confetti');
@@ -171,6 +173,34 @@ export class FiestaDecor {
         const x0 = corner.x - 4 + k * 4;
         g.moveTo(x0, corner.y).bezierCurveTo(x0 + 4, corner.y + 5, x0 - 4, corner.y + 9, x0 + 2, corner.y + 14).stroke({ width: 1.4, color: c });
       }
+    }
+  }
+
+  // A small Colombian flag on a pole at the corner of every building and the warehouse, with tricolor bunting.
+  flags() {
+    const TRI = [0xfcd116, 0x003893, 0xce1126];
+    for (const view of Object.values(this.scene.stations)) {
+      if (view instanceof PlotView || view instanceof FarmView) continue;
+      const { x, y, w, h } = view.foot;
+      const z = view instanceof WarehouseView ? 34 : 30;
+      const left = iso(x + 0.15, y + h, z);
+      const corner = iso(x + w, y + h, z);
+      const g = this.add(new Graphics(), x + w, y + h + 0.1);
+      const mid = { x: (left.x + corner.x) / 2, y: (left.y + corner.y) / 2 + 6 };
+      g.moveTo(left.x, left.y).quadraticCurveTo(mid.x, mid.y, corner.x, corner.y).stroke({ width: 1, color: 0x5d4037 });
+      const n = Math.max(3, Math.round(Math.hypot(corner.x - left.x, corner.y - left.y) / 7));
+      for (let i = 0; i < n; i++) {
+        const tt = (i + 0.4) / n;
+        const px = (1 - tt) * (1 - tt) * left.x + 2 * (1 - tt) * tt * mid.x + tt * tt * corner.x;
+        const py = (1 - tt) * (1 - tt) * left.y + 2 * (1 - tt) * tt * mid.y + tt * tt * corner.y;
+        g.poly([px - 2.5, py, px + 2.5, py, px, py + 5]).fill(TRI[i % 3]);
+      }
+      // The flag on its pole.
+      const base = iso(x + w + 0.1, y + h + 0.1);
+      g.rect(base.x - 0.6, base.y - 40, 1.2, 40).fill(0x9e9e9e);
+      g.rect(base.x + 0.6, base.y - 40, 12, 3.5).fill(TRI[0]);
+      g.rect(base.x + 0.6, base.y - 36.5, 12, 1.8).fill(TRI[1]);
+      g.rect(base.x + 0.6, base.y - 34.7, 12, 1.8).fill(TRI[2]);
     }
   }
 
