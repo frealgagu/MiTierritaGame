@@ -428,4 +428,8 @@ export default {
   dulces_amistad: "Boîte de bonbons",
   tarjeta_amistad: "Carte d’amour et d’amitié",
   regalo_amistad: "Cadeau d’ami secret",
+  ahuyama: "Citrouille ahuyama",
+  calabaza_tallada: "Citrouille sculptée",
+  dulce_ahuyama: "Dulce de ahuyama",
+  triqui_triqui: "Sac du triqui triqui",
 };

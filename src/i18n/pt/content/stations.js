@@ -415,4 +415,8 @@ export default {
   aa_dulceria: "Docería",
   aa_tarjetas: "Loja de cartões",
   aa_amigo: "Amigo secreto",
+  hw_huerta: "Horta de abóboras",
+  hw_calabazas: "Oficina de abóboras",
+  hw_dulce: "Cozinha do doce de ahuyama",
+  hw_triqui: "Triqui triqui",
 };

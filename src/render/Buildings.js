@@ -10130,6 +10130,98 @@ const DRAW = {
     };
     this.animate(0);
   },
+
+  // --- Halloween (v5.21) ---
+  // Taller de calabazas: a shed with a table of pumpkins being carved and the finished jack-o'-lanterns lit inside.
+  hw_calabazas(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    const H = 22 + ctx.up;
+    for (const [px, py] of [[0, 0], [2.1, 0], [0, 1.4], [2.1, 1.4]]) box(g, x0 + px, y0 + py, 0.12, 0.12, H, PAL.wood);
+    gableRoof(g, x0, y0, 2.22, 1.52, H, 12, 0x4a148c, PAL.wood);
+    box(g, x0 + 0.3, y0 + 0.6, 1.6, 0.5, 8, PAL.wood);
+    const lantern = (px, py, z, lit) => {
+      const p = iso(px, py, z);
+      g.ellipse(p.x, p.y - 4, 5.5, 4.4).fill(0xfb8c00).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.rect(p.x - 0.6, p.y - 10, 1.2, 2.4).fill(0x558b2f);
+      if (!lit) return;
+      g.poly([p.x - 3, p.y - 5, p.x - 1.2, p.y - 5, p.x - 2.1, p.y - 6.6]).fill(0xffeb3b);
+      g.poly([p.x + 1.2, p.y - 5, p.x + 3, p.y - 5, p.x + 2.1, p.y - 6.6]).fill(0xffeb3b);
+      g.rect(p.x - 2.4, p.y - 3.4, 4.8, 1.2).fill(0xffeb3b);
+      this.lights.push({ x: p.x, y: p.y - 4, r: 12, color: 0xffa000 });
+    };
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 2); k++) lantern(x0 + 0.45 + k * 0.35, y0 + 0.85, 8, k % 2 === 0);
+    for (let k = 0; k < 2; k++) lantern(x0 + 0.5 + k * 1.2, y0 + 1.9, 0, true);
+    const carver = new Graphics();
+    this.anim.addChild(carver);
+    const c = iso(x0 + 1.1, y0 + 1.5);
+    this.animate = (time) => {
+      carver.clear();
+      worker(carver, c.x, c.y, 0x2e7d32);
+      carver.rect(c.x + 3, c.y - 15 + Math.sin(time * 8) * 1.5, 5, 1.2).fill(0xb0bec5);
+    };
+    this.animate(0);
+    this.roofTop = iso(x0 + 1.1, y0 + 0.75, H + 12);
+  },
+
+  // Cocina del dulce de ahuyama: a kitchen with a pot of pumpkin and panela sweet bubbling over the stove.
+  hw_dulce(g, x, y, ctx) {
+    const H = house(this, g, x + 0.25, y + 0.25, 2.0, 1.1, 24, ctx, { wall: 0xfff3e0 });
+    door(g, x + 0.25, y + 0.25, 1.1, 0.5, 15, ctx.trim);
+    windowOnFront(this, g, x + 0.25, y + 0.25, 1.1, 1.5, 8, 0xffcc80);
+    box(g, x + 1.9, y + 0.4, 0.25, 0.25, H + 16, 0xb5653a);
+    const top = iso(x + 2.02, y + 0.52, H + 16);
+    this.smokePoints.push({ x: top.x, y: top.y - 4 });
+    box(g, x + 0.9, y + 1.7, 1.0, 0.6, 7, 0xb5653a);
+    const pot = iso(x + 1.4, y + 2.0, 7);
+    g.ellipse(pot.x, pot.y, 13, 6).fill(0xb87333).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 1, 10.5, 4.6).fill(0xffa726);
+    const bubbles = new Graphics();
+    this.anim.addChild(bubbles);
+    this.animate = (time) => {
+      bubbles.clear();
+      for (let k = 0; k < 4; k++) {
+        const f = (time * 1.2 + k / 4) % 1;
+        bubbles.circle(pot.x - 6 + k * 4, pot.y - 2 - f * 3, 0.8 + f * 1.4).fill({ color: 0xffe0b2, alpha: 0.9 * (1 - f) });
+      }
+    };
+    this.animate(0);
+  },
+
+  // Triqui triqui: a house door with a lit pumpkin on the step and children in costumes (a ghost, a witch and a
+  // superhero) waiting for sweets with their bags.
+  hw_triqui(g, x, y, ctx) {
+    const H = house(this, g, x + 0.3, y + 0.25, 2.3, 1.0, 24, ctx, { wall: 0xd1c4e9 });
+    door(g, x + 0.3, y + 0.25, 1.0, 1.15, 15, 0x4a148c);
+    const step = iso(x + 1.6, y + 1.4);
+    g.ellipse(step.x, step.y - 4, 5, 4).fill(0xfb8c00).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    g.rect(step.x - 2.4, step.y - 4, 4.8, 1.2).fill(0xffeb3b);
+    this.lights.push({ x: step.x, y: step.y - 4, r: 14, color: 0xffa000 });
+    const kids = new Graphics();
+    this.anim.addChild(kids);
+    const spots = [0.7, 1.3, 1.9].slice(0, 2 + Math.min(ctx.tier, 1)).map((k) => iso(x + k, y + 2.2));
+    this.animate = (time) => {
+      kids.clear();
+      spots.forEach((p, k) => {
+        const hop = Math.abs(Math.sin(time * 4 + k * 2)) * 2;
+        const y0 = p.y - hop;
+        if (k === 0) {
+          kids.moveTo(p.x - 5, y0).quadraticCurveTo(p.x, y0 - 26, p.x + 5, y0).fill(0xfafafa).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+          kids.circle(p.x - 1.6, y0 - 15, 0.9).fill(0x212121);
+          kids.circle(p.x + 1.6, y0 - 15, 0.9).fill(0x212121);
+        } else if (k === 1) {
+          worker(kids, p.x, y0, 0x4a148c);
+          kids.poly([p.x - 6, y0 - 21, p.x + 6, y0 - 21, p.x, y0 - 32]).fill(0x212121);
+        } else {
+          worker(kids, p.x, y0, 0xe53935);
+          kids.poly([p.x - 3, y0 - 17, p.x - 9, y0 - 6, p.x - 3, y0 - 10]).fill(0x1e88e5);
+        }
+        kids.rect(p.x + 4, y0 - 10, 4, 5).fill(0xfb8c00);
+      });
+    };
+    this.animate(0);
+    this.roofTop = iso(x + 1.45, y + 0.75, H + 16);
+  },
 };
 
 // Tolima Grande (v4.0): stations sharing artwork from other regions.

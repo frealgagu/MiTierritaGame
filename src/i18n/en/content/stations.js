@@ -415,4 +415,8 @@ export default {
   aa_dulceria: "Sweet shop",
   aa_tarjetas: "Card shop",
   aa_amigo: "Secret friend",
+  hw_huerta: "Pumpkin patch",
+  hw_calabazas: "Pumpkin carving shed",
+  hw_dulce: "Dulce de ahuyama kitchen",
+  hw_triqui: "Triqui triqui",
 };

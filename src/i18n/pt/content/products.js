@@ -428,4 +428,8 @@ export default {
   dulces_amistad: "Caixa de doces",
   tarjeta_amistad: "Cartão de amor e amizade",
   regalo_amistad: "Presente de amigo secreto",
+  ahuyama: "Abóbora ahuyama",
+  calabaza_tallada: "Abóbora entalhada",
+  dulce_ahuyama: "Doce de ahuyama",
+  triqui_triqui: "Saco do triqui triqui",
 };

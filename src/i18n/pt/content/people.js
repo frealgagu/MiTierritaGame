@@ -69,4 +69,5 @@ export default {
   plaza_independencia: ["Dona Celmira", "a da comissão de festas"],
   plaza_batalla_boyaca: ["Dona Celmira", "a da comissão de festas"],
   plaza_amor_amistad: ["Dona Celmira", "a da comissão de festas"],
+  plaza_halloween: ["Dona Celmira", "a da comissão de festas"],
 };

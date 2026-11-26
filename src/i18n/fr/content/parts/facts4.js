@@ -162,4 +162,9 @@ export default {
   aa_dulceria: ["Le cadeau le plus courant de l’ami secret, ce sont les bonbons et les chocolats.", "Pendant la semaine, l’ami secret laisse des bonbons sans dire qui il est."],
   aa_tarjetas: ["Les cartes s’écrivent à la main, parfois avec un poème.", "En septembre, les papeteries se remplissent de cœurs et de ballons."],
   aa_amigo: ["L’ami secret se tire au sort entre collègues, camarades de classe ou en famille.", "À la fin de la semaine, chacun découvre qui était son ami secret."],
+  // Halloween (v5.21)
+  hw_huerta: ["En Colombie, le 31 octobre est aussi la Journée des enfants.", "L’ahuyama est la citrouille colombienne : on la mange en soupes, en veloutés et en confiseries."],
+  hw_calabazas: ["Les citrouilles sculptées avec une bougie à l’intérieur viennent d’une tradition irlandaise.", "Dans beaucoup de quartiers, les maisons se décorent de citrouilles, de toiles d’araignée et de chauves-souris."],
+  hw_dulce: ["Le dulce de ahuyama se cuit avec de la panela, de la cannelle et des clous de girofle.", "En Colombie, les confiseries de fruits maison se font dans des chaudrons en cuivre."],
+  hw_triqui: ["« Triqui, triqui, Halloween, je veux des bonbons pour moi ! », chantent les enfants de porte en porte.", "Les centres commerciaux et les résidences organisent des parcours pour que les enfants demandent des bonbons."],
 };

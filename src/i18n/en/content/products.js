@@ -428,4 +428,8 @@ export default {
   dulces_amistad: "Box of sweets",
   tarjeta_amistad: "Love and friendship card",
   regalo_amistad: "Secret friend gift",
+  ahuyama: "Ahuyama pumpkin",
+  calabaza_tallada: "Carved pumpkin",
+  dulce_ahuyama: "Dulce de ahuyama",
+  triqui_triqui: "Triqui triqui bag",
 };

@@ -69,4 +69,5 @@ export default {
   plaza_independencia: "Joyeux 20 juillet ! Il faut un drapeau à chaque fenêtre et la fanfare prête pour le défilé.",
   plaza_batalla_boyaca: "Aujourd’hui, on se souvient de la bataille de Boyacá ! Il faut nourrir la troupe et préparer les chevaux pour passer le pont.",
   plaza_amor_amistad: "Bonne fête de l’Amour et de l’Amitié ! Les amis secrets sont tirés : emballons des bonbons et écrivons des cartes.",
+  plaza_halloween: "Halloween est arrivé ! Les enfants ont leurs déguisements : sculptons des citrouilles et préparons les bonbons du triqui triqui.",
 };

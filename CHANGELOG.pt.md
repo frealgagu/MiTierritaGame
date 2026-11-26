@@ -11,6 +11,7 @@
 - **🇨🇴 Novo evento de temporada: o 20 de julho** (de 18 a 21 de julho, com mais 30 dias para jogar): teça o tecido, costure bandeiras e rosetas e leve-as ao desfile com a banda da escola. Na sua praça toca «Marcha de 20 de julho», uma marcha original para banda de cidade, e em cada prédio do mapa tremula uma bandeira da Colômbia.
 - **🌉 Novo evento de temporada: a Batalha de Boyacá** (de 5 a 8 de agosto, com mais 30 dias para jogar): junte as provisões da vereda, cozinhe as rações da tropa, prepare os cavalos dos lanceiros e faça todos cruzarem a Ponte de Boyacá. Na sua praça toca «Torbellino da ponte», um torbellino original, e as bandeiras voltam a tremular no mapa.
 - **💕 Novo evento de temporada: Amor e Amizade** (a semana do terceiro sábado de setembro, com mais 30 dias para jogar): corte o papel de presente, monte as caixas de doces, escreva os cartões e entregue os presentes do amigo secreto. Na sua praça toca «Dança do amigo secreto», uma danza original, e corações flutuam sobre o mapa.
+- **🎃 Novo evento de temporada: Halloween** (de 25 de outubro a 1º de novembro, com mais 30 dias para jogar): colha as ahuyamas, entalhe as abóboras com sua vela, cozinhe o doce de ahuyama e encha os sacos do «triqui triqui» das crianças. Na sua praça toca «Cumbia das fantasias», uma cumbia original, e à noite as abóboras entalhadas iluminam os caminhos do mapa.
 
 ## v5.20.0 — A praça das festas
 - **🔽 Minimizar:** o botão «Sair» da barra do evento agora se chama «Minimizar», porque o evento continua rodando enquanto você joga em outro lugar.

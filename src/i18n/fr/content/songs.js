@@ -23,4 +23,5 @@ export default {
   independencia: ["Marche du 20 juillet", "clarinette, euphonium, tambora, caisse claire et cymbales"],
   batalla_boyaca: ["Torbellino du pont", "tiple, requinto, guitare et chucho"],
   amor_amistad: ["Danza de l’ami secret", "bandola, tiple et guitare"],
+  halloween: ["Cumbia des déguisements", "guitare électrique, basse, clavier, maracas et manguaré"],
 };

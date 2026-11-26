@@ -12,6 +12,7 @@
 //   flowers:   (v5.21) pots of flowers along the paths and beside every door (Día de la Madre).
 //   flags:     (v5.21) a Colombian flag on every building and tricolor bunting (20 de julio, 7 de agosto).
 //   hearts:    (v5.21) hearts floating up over the paths (Amor y Amistad).
+//   pumpkins:  (v5.21) carved pumpkins along the paths and at every door, lit at night (Halloween).
 import { Container, Graphics, Sprite } from 'pixi.js';
 import { iso, depth } from './iso.js';
 import { PAL } from './palette.js';
@@ -69,6 +70,7 @@ export class FiestaDecor {
     if (decor.has('streamers')) this.streamers();
     if (decor.has('flowers')) this.flowers();
     if (decor.has('flags')) this.flags();
+    if (decor.has('pumpkins')) this.pumpkins();
     this.fireworks = decor.has('fireworks');
     this.talc = decor.has('talc');
     this.confetti = decor.has('confetti');
@@ -176,6 +178,35 @@ export class FiestaDecor {
         const x0 = corner.x - 4 + k * 4;
         g.moveTo(x0, corner.y).bezierCurveTo(x0 + 4, corner.y + 5, x0 - 4, corner.y + 9, x0 + 2, corner.y + 14).stroke({ width: 1.4, color: c });
       }
+    }
+  }
+
+  // Carved pumpkins on both sides of the mule path and one at each building's door, glowing at night.
+  pumpkins() {
+    const pumpkin = (gx, gy, k) => {
+      const g = this.add(new Graphics(), gx, gy);
+      const p = iso(gx, gy);
+      const r = 3.4 + (k % 3) * 0.6;
+      g.ellipse(p.x, p.y - r, r * 1.3, r).fill(0xfb8c00).stroke({ width: 0.6, color: OUTLINE, alpha: 0.7 });
+      g.rect(p.x - 0.5, p.y - 2 * r - 1.6, 1, 2).fill(0x558b2f);
+      g.poly([p.x - 2.4, p.y - r - 0.6, p.x - 0.8, p.y - r - 0.6, p.x - 1.6, p.y - r - 2]).fill(0xffeb3b);
+      g.poly([p.x + 0.8, p.y - r - 0.6, p.x + 2.4, p.y - r - 0.6, p.x + 1.6, p.y - r - 2]).fill(0xffeb3b);
+      g.rect(p.x - 1.8, p.y - r + 0.8, 3.6, 0.9).fill(0xffeb3b);
+      this.glow(p.x, p.y - r, 10, 0xffa000, k % 2);
+    };
+    const road = this.scene.zone.muleRoad;
+    const len = pathLength(road);
+    let k = 0;
+    for (let s = 1.2; s < len - 0.6; s += 2.8) {
+      const p = pointAt(road, s / len);
+      const d = Math.hypot(p.dx, p.dy) || 1;
+      const side = k % 2 ? 1 : -1;
+      pumpkin(p.gx + (-p.dy / d) * 0.65 * side, p.gy + (p.dx / d) * 0.65 * side, k++);
+    }
+    for (const view of Object.values(this.scene.stations)) {
+      if (view instanceof PlotView) continue;
+      const { x, y, h } = view.foot;
+      pumpkin(x + 0.35, y + h + 0.3, k++);
     }
   }
 

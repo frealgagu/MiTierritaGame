@@ -415,4 +415,8 @@ export default {
   aa_dulceria: "Confiserie",
   aa_tarjetas: "Boutique de cartes",
   aa_amigo: "Ami secret",
+  hw_huerta: "Potager de citrouilles",
+  hw_calabazas: "Atelier des citrouilles",
+  hw_dulce: "Cuisine du dulce de ahuyama",
+  hw_triqui: "Triqui triqui",
 };

@@ -71,6 +71,8 @@ export const PLAZA_ZONES = [
   plaza('plaza_batalla_boyaca', 1819, 'batalla_boyaca', ['bb_vereda', 'bb_cocina', 'bb_caballeriza', 'bb_puente'], ['flags']),
   // (v5.21) Amor y Amistad: hearts floating up over the paths.
   plaza('plaza_amor_amistad', 1913, 'amor_amistad', ['aa_papeleria', 'aa_dulceria', 'aa_tarjetas', 'aa_amigo'], ['hearts']),
+  // (v5.21) Halloween: carved pumpkins along the paths, lit at night.
+  plaza('plaza_halloween', 2031, 'halloween', ['hw_huerta', 'hw_calabazas', 'hw_dulce', 'hw_triqui'], ['pumpkins']),
 ];
 
 // Same prices and paces as the Finca's first stations (data/stations.js).
@@ -133,6 +135,12 @@ export const PLAZA_STATIONS = [
   station('aa_dulceria', 'plaza_amor_amistad', 'Dulcería', '🍬', { in: { papel_regalo: 1 }, out: { dulces_amistad: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('aa_tarjetas', 'plaza_amor_amistad', 'Tarjetería', '💌', { in: { papel_regalo: 1 }, out: { tarjeta_amistad: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('aa_amigo', 'plaza_amor_amistad', 'Amigo secreto', '🎁', { in: { dulces_amistad: 1 }, joins: [{ product: 'tarjeta_amistad', perCycle: 1, from: 'aa_tarjetas' }], out: { regalo_amistad: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
+  // (v5.21) 🎃 Halloween (and Children's Day): pumpkins from the garden are carved into lanterns and cooked into dulce de
+  // ahuyama, and both go out with the children for the «triqui triqui». The same paces and prices as the Navidad.
+  station('hw_huerta', 'plaza_halloween', 'Huerta de ahuyamas', '🎃', { infinite: true, out: { ahuyama: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, release: '5.21' }),
+  station('hw_calabazas', 'plaza_halloween', 'Taller de calabazas', '🕯️', { in: { ahuyama: 1 }, out: { calabaza_tallada: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('hw_dulce', 'plaza_halloween', 'Cocina del dulce de ahuyama', '🍯', { in: { ahuyama: 1 }, out: { dulce_ahuyama: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('hw_triqui', 'plaza_halloween', 'Triqui triqui', '👻', { in: { calabaza_tallada: 1 }, joins: [{ product: 'dulce_ahuyama', perCycle: 1, from: 'hw_dulce' }], out: { triqui_triqui: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
 ];
 
 export const PLAZA_PRODUCTS = {
@@ -174,6 +182,10 @@ export const PLAZA_PRODUCTS = {
   dulces_amistad: { name: 'Caja de dulces', zone: 'plaza_amor_amistad', value: 3, icon: '🍬', color: 0xe91e63 },
   tarjeta_amistad: { name: 'Tarjeta de amor y amistad', zone: 'plaza_amor_amistad', value: 3, icon: '💌', color: 0xef5350 },
   regalo_amistad: { name: 'Regalo de amigo secreto', zone: 'plaza_amor_amistad', value: 10, icon: ICON.fiestaAmorAmistad, color: 0xd32f2f },
+  ahuyama: { name: 'Ahuyama', zone: 'plaza_halloween', value: 1, icon: '🎃', color: 0xfb8c00 },
+  calabaza_tallada: { name: 'Calabaza tallada', zone: 'plaza_halloween', value: 3, icon: '🕯️', color: 0xef6c00 },
+  dulce_ahuyama: { name: 'Dulce de ahuyama', zone: 'plaza_halloween', value: 3, icon: '🍯', color: 0xffa726 },
+  triqui_triqui: { name: 'Bolsa del triqui triqui', zone: 'plaza_halloween', value: 10, icon: ICON.fiestaHalloween, color: 0x6a1b9a },
   fiesta_sampedrina: { name: 'Fiesta sampedrina', zone: 'plaza_san_pedro', value: 10, icon: ICON.fiestaSanPedro, color: 0xe53935 },
 };
 
@@ -321,6 +333,20 @@ export const SEASON_EVENTS = [
     coins: 0,
     actions: [],
     objective: { kind: 'produced', items: { regalo_amistad: 240000 } },
+  },
+  {
+    id: 'fiesta_halloween',
+    fiesta: 'halloween',
+    season: true,
+    zone: 'plaza_halloween',
+    icon: '🎃',
+    name: tk('Halloween'),
+    intro: tk('Los niños salen disfrazados a pedir dulces: recoge las ahuyamas de la huerta, talla las calabazas con su vela, cocina el dulce de ahuyama y llena las bolsas del «¡triqui triqui!» casa por casa.'),
+    stations: ['hw_huerta', 'hw_calabazas', 'hw_dulce', 'hw_triqui'],
+    level: 1,
+    coins: 0,
+    actions: [],
+    objective: { kind: 'produced', items: { triqui_triqui: 240000 } },
   },
 ];
 export const SEASON_EVENT_OF_FIESTA = Object.fromEntries(SEASON_EVENTS.map((e) => [e.fiesta, e]));

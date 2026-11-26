@@ -69,4 +69,5 @@ export default {
   plaza_independencia: "Feliz 20 de julho! Tem que pôr uma bandeira em cada janela e preparar a banda para o desfile.",
   plaza_batalla_boyaca: "Hoje se lembra a Batalha de Boyacá! Tem que alimentar a tropa e preparar os cavalos para cruzar a ponte.",
   plaza_amor_amistad: "Feliz Dia do Amor e da Amizade! O amigo secreto já foi sorteado: vamos embrulhar doces e escrever cartões.",
+  plaza_halloween: "Chegou o Halloween! As crianças já têm as fantasias: vamos entalhar abóboras e preparar os doces do triqui triqui.",
 };

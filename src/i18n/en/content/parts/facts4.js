@@ -162,4 +162,9 @@ export default {
   aa_dulceria: ["The most common secret-friend gift is sweets and chocolates.", "During the week the secret friend leaves sweets without saying who they are."],
   aa_tarjetas: ["Cards are written by hand and sometimes with a poem.", "In September stationers fill up with hearts and balloons."],
   aa_amigo: ["The secret friend is drawn among workmates, classmates or family.", "At the end of the week everyone finds out who their secret friend was."],
+  // Halloween (v5.21)
+  hw_huerta: ["In Colombia 31 October is also Children’s Day.", "The ahuyama is the Colombian pumpkin: it is eaten in soups, creams and sweets."],
+  hw_calabazas: ["Pumpkins carved with a candle inside come from an Irish tradition.", "In many neighborhoods houses are decorated with pumpkins, cobwebs and bats."],
+  hw_dulce: ["Dulce de ahuyama is cooked with panela, cinnamon and cloves.", "In Colombia homemade fruit sweets are made in copper pots."],
+  hw_triqui: ["“Triqui, triqui, Halloween, I want sweets for me!” is what children sing from door to door.", "Shopping centers and housing estates organize routes for children to ask for sweets."],
 };

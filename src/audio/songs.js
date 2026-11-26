@@ -1100,7 +1100,57 @@ const DANZA_AMIGO = {
   ],
 };
 
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA, san_pedro: RAJALENA, independencia: MARCHA_JULIO, batalla_boyaca: TORBELLINO_PUENTE, amor_amistad: DANZA_AMIGO };
+// (v5.21) Halloween: «Cumbia de los disfraces», an original playful cumbia in A minor, 4/4, with the Amazon band
+// (electric guitar, bass, keyboard, maracas and manguaré; compose.js: amazonica).
+const CUMBIA_DISFRACES = {
+  name: 'Cumbia de los disfraces',
+  instruments: 'guitarra eléctrica, bajo, teclado, maracas y manguaré',
+  bpm: 112,
+  beats: 4,
+  style: 'amazonica',
+  chords: [
+    'Am', 'Am', 'G', 'G', 'F', 'F', 'E7', 'E7',
+    'Am', 'Am', 'G', 'G', 'F', 'E7', 'Am', 'E7',
+    'C', 'C', 'G', 'G', 'Am', 'Am', 'E7', 'E7',
+    'F', 'F', 'C', 'C', 'Dm', 'E7', 'Am', 'E7',
+  ],
+  melody: [
+    [[0, 2, 'A4'], [2, 1, 'C5'], [3, 1, 'E5'], [4, 2, 'A5'], [6, 2, 'G5']],
+    [[0, 2, 'E5'], [2, 2, 'C5'], [4, 4, 'A4']],
+    [[0, 2, 'B4'], [2, 1, 'D5'], [3, 1, 'G5'], [4, 2, 'B5'], [6, 2, 'A5']],
+    [[0, 2, 'G5'], [2, 2, 'D5'], [4, 4, 'B4']],
+    [[0, 2, 'C5'], [2, 1, 'F5'], [3, 1, 'A5'], [4, 2, 'C6'], [6, 2, 'A5']],
+    [[0, 2, 'F5'], [2, 2, 'A5'], [4, 4, 'C5']],
+    [[0, 2, 'B4'], [2, 1, 'E5'], [3, 1, 'G#5'], [4, 2, 'B5'], [6, 2, 'G#5']],
+    [[0, 4, 'E5'], [4, 2, 'D5'], [6, 2, 'B4']],
+    [[0, 2, 'A4'], [2, 1, 'C5'], [3, 1, 'E5'], [4, 2, 'A5'], [6, 2, 'G5']],
+    [[0, 2, 'E5'], [2, 2, 'C5'], [4, 4, 'A4']],
+    [[0, 2, 'B4'], [2, 1, 'D5'], [3, 1, 'G5'], [4, 2, 'B5'], [6, 2, 'A5']],
+    [[0, 2, 'G5'], [2, 2, 'D5'], [4, 4, 'B4']],
+    [[0, 2, 'C5'], [2, 1, 'F5'], [3, 1, 'A5'], [4, 2, 'F5'], [6, 2, 'C5']],
+    [[0, 2, 'B4'], [2, 1, 'E5'], [3, 1, 'G#5'], [4, 2, 'B5'], [6, 2, 'G#5']],
+    [[0, 6, 'A5']],
+    [[4, 2, 'E5'], [6, 2, 'G5']],
+    [[0, 2, 'G5'], [2, 1, 'E5'], [3, 1, 'G5'], [4, 2, 'C6'], [6, 2, 'G5']],
+    [[0, 4, 'E5'], [4, 2, 'G5'], [6, 2, 'E5']],
+    [[0, 2, 'D5'], [2, 1, 'B4'], [3, 1, 'D5'], [4, 2, 'G5'], [6, 2, 'D5']],
+    [[0, 4, 'B4'], [4, 2, 'D5'], [6, 2, 'G5']],
+    [[0, 2, 'A5'], [2, 1, 'E5'], [3, 1, 'C5'], [4, 2, 'E5'], [6, 2, 'A5']],
+    [[0, 4, 'C6'], [4, 2, 'B5'], [6, 2, 'A5']],
+    [[0, 2, 'G#5'], [2, 1, 'E5'], [3, 1, 'B4'], [4, 2, 'E5'], [6, 2, 'G#5']],
+    [[0, 4, 'B5'], [4, 2, 'A5'], [6, 2, 'G#5']],
+    [[0, 2, 'A5'], [2, 1, 'F5'], [3, 1, 'C5'], [4, 2, 'F5'], [6, 2, 'A5']],
+    [[0, 4, 'C6'], [4, 4, 'A5']],
+    [[0, 2, 'G5'], [2, 1, 'E5'], [3, 1, 'C5'], [4, 2, 'E5'], [6, 2, 'G5']],
+    [[0, 4, 'C5'], [4, 4, 'E5']],
+    [[0, 2, 'F5'], [2, 1, 'D5'], [3, 1, 'A4'], [4, 2, 'D5'], [6, 2, 'F5']],
+    [[0, 2, 'E5'], [2, 1, 'B4'], [3, 1, 'G#4'], [4, 2, 'B4'], [6, 2, 'E5']],
+    [[0, 6, 'A4']],
+    [],
+  ],
+};
+
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA, san_pedro: RAJALENA, independencia: MARCHA_JULIO, batalla_boyaca: TORBELLINO_PUENTE, amor_amistad: DANZA_AMIGO, halloween: CUMBIA_DISFRACES };
 
 // Chords: root pitch class and intervals (semitones above root).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };

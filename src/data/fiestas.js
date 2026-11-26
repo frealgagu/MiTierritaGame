@@ -81,7 +81,7 @@ export const FIESTAS = [
     sticker: tk('En septiembre se juega al amigo secreto y se regalan dulces y detalles.'),
   },
   {
-    id: 'halloween', icon: '🎃', kind: 'big', dates: { from: [10, 25], to: [11, 1] },
+    id: 'halloween', icon: '🎃', kind: 'big', dates: { from: [10, 25], to: [11, 1] }, decor: ['pumpkins'],
     name: tk('Halloween'),
     greeting: tk('🎃 ¡Llegó Halloween! Los niños salen disfrazados a pedir dulces.'),
     sticker: tk('El 31 de octubre los niños salen disfrazados a pedir: «¡Triqui, triqui, Halloween!».'),

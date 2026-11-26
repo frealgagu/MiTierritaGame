@@ -39,7 +39,7 @@ test('the plaza\'s products and stations never reuse a region\'s id: they would 
 });
 
 test('the plaza belongs to no region: its zones and events stay out of the main game lists (v5.19)', () => {
-  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro', 'independencia', 'batalla_boyaca', 'amor_amistad']);
+  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro', 'independencia', 'batalla_boyaca', 'amor_amistad', 'halloween']);
   for (const z of PLAZA_ZONES) assert.ok(!ZONE_LIST.includes(z));
   for (const r of REGIONS) for (const z of PLAZA_ZONES) assert.ok(!r.zones.includes(z.id));
   for (const e of SEASON_EVENTS) assert.ok(!EVENTS.includes(e));
@@ -132,7 +132,7 @@ test('season boards and stickers survive the save; no fiesta bonus on the board 
   assert.equal(fiestaMult(back.events.season.boards.velitas), 1);
 });
 
-test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre, San Pedro, the 20 de julio, Boyacá, Amor y Amistad and Halloween (no event yet) (v5.19)', () => {
+test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre, San Pedro, the 20 de julio, Boyacá, Amor y Amistad, Halloween and Cartagena (no event yet) (v5.19)', () => {
   const n = nextSeason(day(2026, 11, 24));
   assert.equal(n.fiesta.id, 'velitas');
   assert.equal(n.days, 12);
@@ -163,7 +163,23 @@ test('the next season event: Velitas from late November, Negros y Blancos after 
   assert.ok(september.def, 'Amor y Amistad too (v5.21)');
   const october = nextSeason(day(2027, 10, 1));
   assert.equal(october.fiesta.id, 'halloween');
-  assert.equal(october.def, null);
+  assert.ok(october.def, 'Halloween too (v5.21)');
+  const november = nextSeason(day(2027, 11, 2));
+  assert.equal(november.fiesta.id, 'cartagena');
+  assert.equal(november.def, null);
+});
+
+test('Halloween (v5.21): 25 October to 1 November with 30 days of grace, pumpkins on the map', () => {
+  const root = newGame();
+  assert.equal(seasonStatus(root, 'halloween', day(2027, 10, 24)), null);
+  assert.equal(seasonStatus(root, 'halloween', day(2027, 10, 25)).kind, 'available');
+  assert.equal(seasonStatus(root, 'halloween', day(2027, 12, 1)).grace, true);
+  assert.equal(seasonStatus(root, 'halloween', day(2027, 12, 2)), null);
+  assert.ok(decorOn(day(2027, 10, 31)).has('pumpkins'));
+  const board = startSeason(root, 'halloween', day(2027, 10, 26));
+  assert.deepEqual(Object.keys(board.stations), ['hw_huerta', 'hw_calabazas', 'hw_dulce', 'hw_triqui']);
+  meet(board);
+  assert.equal(finishSeason(root, 'halloween').sticker, true);
 });
 
 test('Amor y Amistad (v5.21): the week of the third Saturday of September with 30 days of grace, hearts on the map', () => {

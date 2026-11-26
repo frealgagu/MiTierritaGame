@@ -479,6 +479,11 @@ export const FACTS = {
   aa_dulceria: ["El regalo más común del amigo secreto son los dulces y los chocolates.", "Durante la semana el amigo secreto deja dulces sin decir quién es."],
   aa_tarjetas: ["Las tarjetas se escriben a mano y a veces con un poema.", "En septiembre las papelerías se llenan de corazones y globos."],
   aa_amigo: ["El amigo secreto se sortea entre compañeros de trabajo, de colegio o de familia.", "Al final de la semana se revela quién era el amigo secreto de cada uno."],
+  // Halloween (v5.21)
+  hw_huerta: ["En Colombia el 31 de octubre también es el Día de los Niños.", "La ahuyama es la calabaza colombiana: se come en sopas, cremas y dulces."],
+  hw_calabazas: ["Las calabazas talladas con una vela adentro vienen de una tradición irlandesa.", "En muchos barrios las casas se decoran con calabazas, telarañas y murciélagos."],
+  hw_dulce: ["El dulce de ahuyama se cocina con panela, canela y clavos.", "En Colombia los dulces caseros de frutas se hacen en paila de cobre."],
+  hw_triqui: ["«¡Triqui, triqui, Halloween, quiero dulces para mí!» es lo que cantan los niños de puerta en puerta.", "Los centros comerciales y los conjuntos organizan recorridos para que los niños pidan dulces."],
 };
 
 // Speaker announcing milestones per zone (key events, not every toast).
@@ -552,6 +557,7 @@ export const PEOPLE = {
   plaza_independencia: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_batalla_boyaca: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_amor_amistad: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
+  plaza_halloween: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
 };
 
 // Opening line when entering a zone for the first time.
@@ -626,6 +632,7 @@ export const WELCOME = {
   plaza_independencia: '¡Feliz 20 de julio! Hay que poner una bandera en cada ventana y alistar la banda para el desfile.',
   plaza_batalla_boyaca: '¡Hoy se recuerda la Batalla de Boyacá! Hay que alimentar a la tropa y alistar los caballos para cruzar el puente.',
   plaza_amor_amistad: '¡Feliz Amor y Amistad! Ya se sorteó el amigo secreto: a envolver dulces y escribir tarjetas.',
+  plaza_halloween: '¡Llegó Halloween! Los niños ya tienen sus disfraces: a tallar calabazas y a preparar los dulces del triqui triqui.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

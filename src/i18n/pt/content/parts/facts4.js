@@ -162,4 +162,9 @@ export default {
   aa_dulceria: ["O presente mais comum do amigo secreto são doces e chocolates.", "Durante a semana o amigo secreto deixa doces sem dizer quem é."],
   aa_tarjetas: ["Os cartões são escritos à mão e às vezes com um poema.", "Em setembro as papelarias se enchem de corações e balões."],
   aa_amigo: ["O amigo secreto é sorteado entre colegas de trabalho, de escola ou da família.", "No fim da semana revela-se quem era o amigo secreto de cada um."],
+  // Halloween (v5.21)
+  hw_huerta: ["Na Colômbia o 31 de outubro também é o Dia das Crianças.", "A ahuyama é a abóbora colombiana: come-se em sopas, cremes e doces."],
+  hw_calabazas: ["As abóboras entalhadas com uma vela dentro vêm de uma tradição irlandesa.", "Em muitos bairros as casas são decoradas com abóboras, teias de aranha e morcegos."],
+  hw_dulce: ["O doce de ahuyama é cozido com rapadura, canela e cravo.", "Na Colômbia os doces caseiros de frutas são feitos em tacho de cobre."],
+  hw_triqui: ["«Triqui, triqui, Halloween, quero doces para mim!» é o que as crianças cantam de porta em porta.", "Shoppings e condomínios organizam percursos para as crianças pedirem doces."],
 };
