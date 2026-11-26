@@ -26,7 +26,7 @@ const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + 
 // Whole days from `a` to `b` (both local dates).
 export const daysBetween = (a, b) => Math.round((midnight(b) - midnight(a)) / DAY);
 
-// The season event of a fiesta, if it has one yet (the others come in later versions).
+// The season event of a fiesta (every big one has one since v5.21), or null.
 export const seasonEventOf = (fiestaId) => SEASON_EVENT_OF_FIESTA[fiestaId] ?? null;
 // Fiestas with a season event, in calendar order.
 export const seasonFiestas = () => Object.keys(SEASON_EVENT_OF_FIESTA).map((id) => FIESTAS_BY_ID[id]);
@@ -163,7 +163,7 @@ export function sweepSeason(root, date = today()) {
   return closed;
 }
 
-// The next fiesta with a sticker (a big one) to begin after `date`, with or without its event yet:
+// The next fiesta with a sticker (a big one) to begin after `date`:
 // { fiesta, start, days, def }.
 export function nextSeason(date = today()) {
   const day = midnight(date);
@@ -178,18 +178,6 @@ export function nextSeason(date = today()) {
     }
   }
   return best && { ...best, days: daysBetween(day, best.start), def: seasonEventOf(best.fiesta.id) };
-}
-
-// Big fiestas going on today that have no event yet (to say it comes in a later version).
-export function fiestasWithoutEvent(date = today()) {
-  const day = midnight(date);
-  return FIESTA_PAGES.flatMap((p) => p.stickers)
-    .map((id) => FIESTAS_BY_ID[id])
-    .filter((f) => !seasonEventOf(f.id))
-    .filter((f) => [day.getFullYear(), day.getFullYear() - 1].some((y) => {
-      const [start, end] = windowIn(f.dates, y);
-      return day >= start && day <= end;
-    }));
 }
 
 // (v5.21) The first day of a fiesta's edition open on `date` (in its days or its grace), else of its next one: the

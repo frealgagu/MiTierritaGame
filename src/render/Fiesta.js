@@ -13,6 +13,11 @@
 //   flags:     (v5.21) a Colombian flag on every building and tricolor bunting (20 de julio, 7 de agosto).
 //   hearts:    (v5.21) hearts floating up over the paths (Amor y Amistad).
 //   pumpkins:  (v5.21) carved pumpkins along the paths and at every door, lit at night (Halloween).
+//   palms:     (v5.21) purple drapes on every building and woven palm fronds at every door (Semana Santa).
+//   procession:(v5.21) a «paso» on its bearers' shoulders, with flowers, candles and hooded nazarenos ahead.
+//   silleta:   (v5.21) a silletero carrying a round silleta of flowers on his back, and another on its stand
+//              (Feria de las Flores, with the flower pots).
+//   kites:     (v5.21) kites flying high over the zone on long strings, by day (August, the month of the winds).
 import { Container, Graphics, Sprite } from 'pixi.js';
 import { iso, depth } from './iso.js';
 import { PAL } from './palette.js';
@@ -48,6 +53,7 @@ export class FiestaDecor {
     this.puffs = [];
     this.bits = [];
     this.tunes = [];
+    this.kiteList = [];
     this.sync();
   }
 
@@ -71,6 +77,11 @@ export class FiestaDecor {
     if (decor.has('flowers')) this.flowers();
     if (decor.has('flags')) this.flags();
     if (decor.has('pumpkins')) this.pumpkins();
+    if (decor.has('palms')) this.palms();
+    const spot2 = decor.has('procession') || decor.has('silleta') ? this.freeSpot() : null;
+    if (spot2 && decor.has('procession')) this.procession(spot2.gx, spot2.gy);
+    if (spot2 && decor.has('silleta')) this.silleta(spot2.gx, spot2.gy);
+    if (decor.has('kites')) this.kites();
     this.fireworks = decor.has('fireworks');
     this.talc = decor.has('talc');
     this.confetti = decor.has('confetti');
@@ -90,6 +101,7 @@ export class FiestaDecor {
     this.confetti = false;
     this.notes = false;
     this.hearts = false;
+    this.kiteList = [];
     this.puffs = [];
     this.bits = [];
     this.tunes = [];
@@ -263,6 +275,116 @@ export class FiestaDecor {
     }
   }
 
+  // Semana Santa: a purple drape along the front edges of every building and the warehouse, and a bundle of woven
+  // palm fronds (the Palm Sunday «ramos») beside each door.
+  palms() {
+    const PURPLE = 0x6a1b9a;
+    const drape = (g, a, b, sag) => {
+      const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 + sag };
+      g.moveTo(a.x, a.y).quadraticCurveTo(mid.x, mid.y, b.x, b.y).lineTo(a.x, a.y).fill(PURPLE).stroke({ width: 0.6, color: OUTLINE, alpha: 0.6 });
+      g.moveTo(a.x, a.y).quadraticCurveTo(mid.x, mid.y, b.x, b.y).stroke({ width: 1, color: 0xfdd835, alpha: 0.9 });
+    };
+    const frond = (gx, gy) => {
+      const g = this.add(new Graphics(), gx, gy);
+      const p = iso(gx, gy);
+      for (const [dx, h] of [[-2.5, 13], [0, 16], [2.5, 12]]) {
+        g.moveTo(p.x, p.y).quadraticCurveTo(p.x + dx * 1.6, p.y - h * 0.6, p.x + dx * 2.2, p.y - h).stroke({ width: 1.6, color: 0xc0ca33 });
+      }
+      g.rect(p.x - 1.6, p.y - 4, 3.2, 1.4).fill(0xffffff);
+    };
+    for (const view of Object.values(this.scene.stations)) {
+      if (view instanceof PlotView) continue;
+      const { x, y, w, h } = view.foot;
+      if (!(view instanceof FarmView)) {
+        const z = view instanceof WarehouseView ? 34 : 30;
+        const g = this.add(new Graphics(), x + w, y + h + 0.1);
+        drape(g, iso(x + 0.15, y + h, z), iso(x + w, y + h, z), 7);
+        drape(g, iso(x + w, y + h, z), iso(x + w, y + 0.15, z), 7);
+      }
+      frond(x + 0.35, y + h + 0.3);
+    }
+  }
+
+  // Semana Santa: a «paso» (a float with a robed figure among white flowers and candles) carried by four bearers, with
+  // two hooded nazarenos in purple walking ahead.
+  procession(gx, gy) {
+    const g = this.add(new Graphics(), gx + 1.6, gy + 0.8);
+    const p = iso(gx + 1, gy + 0.4);
+    // The bearers under the float.
+    for (const dx of [-12, -4, 4, 12]) {
+      g.rect(p.x + dx - 2, p.y - 12, 4, 12).fill(0x37474f);
+      g.circle(p.x + dx, p.y - 14, 2).fill(0xffe0b2);
+    }
+    // The float: a gilded platform with flowers and four candles.
+    g.poly([p.x - 18, p.y - 16, p.x + 18, p.y - 16, p.x + 16, p.y - 21, p.x - 16, p.y - 21]).fill(0xc9a227).stroke({ width: 0.8, color: OUTLINE });
+    for (let i = 0; i < 7; i++) g.circle(p.x - 13 + i * 4.3, p.y - 22.5 - (i % 2), 1.8).fill(0xffffff);
+    for (const dx of [-15, -8, 8, 15]) {
+      g.rect(p.x + dx - 0.8, p.y - 30, 1.6, 8).fill(0xfafafa);
+      g.ellipse(p.x + dx, p.y - 31.5, 1, 1.8).fill(0xffa726);
+      this.glow(p.x + dx, p.y - 31, 10, 0xffcc80, dx > 0 ? 1 : 0);
+    }
+    // The robed figure.
+    g.poly([p.x - 5, p.y - 22, p.x, p.y - 40, p.x + 5, p.y - 22]).fill(0x4a148c).stroke({ width: 0.7, color: OUTLINE });
+    g.circle(p.x, p.y - 41.5, 2.4).fill(0xd7a77a);
+    // Two nazarenos ahead, in pointed purple hoods, each with a candle.
+    for (const [k, d] of [[0, -1.3], [1, -2.2]]) {
+      const n = this.add(new Graphics(), gx + d + 1, gy + 0.6 + k * 0.5);
+      const q = iso(gx + d + 1, gy + 0.6 + k * 0.5);
+      n.poly([q.x - 4, q.y, q.x - 2, q.y - 12, q.x + 2, q.y - 12, q.x + 4, q.y]).fill(0x6a1b9a).stroke({ width: 0.6, color: OUTLINE });
+      n.poly([q.x - 2.4, q.y - 12, q.x, q.y - 22, q.x + 2.4, q.y - 12]).fill(0x6a1b9a).stroke({ width: 0.6, color: OUTLINE });
+      n.rect(q.x - 1.4, q.y - 16, 1, 1).fill(OUTLINE);
+      n.rect(q.x + 0.4, q.y - 16, 1, 1).fill(OUTLINE);
+      n.rect(q.x + 3.6, q.y - 14, 1.2, 7).fill(0xfafafa);
+      n.ellipse(q.x + 4.2, q.y - 15.2, 0.8, 1.5).fill(0xffa726);
+      this.glow(q.x + 4.2, q.y - 15, 9, 0xffcc80, k);
+    }
+  }
+
+  // Feria de las Flores: a silletero in white with his hat, carrying a round silleta of flowers on his back, and
+  // another silleta on its wooden stand beside him.
+  silleta(gx, gy) {
+    const COLORS = [0xe91e63, 0xfdd835, 0xffffff, 0xe53935, 0x8e24aa, 0xff7043, 0x1e88e5];
+    const round = (g, cx, cy, r, k0) => {
+      g.circle(cx, cy, r + 1.5).fill(0x8d6e63).stroke({ width: 0.8, color: OUTLINE });
+      g.circle(cx, cy, r).fill(0x4e8a33);
+      let k = k0;
+      for (let ring = r - 2; ring > 0; ring -= 3) {
+        const n = Math.max(1, Math.round((2 * Math.PI * ring) / 3.2));
+        for (let i = 0; i < n; i++) g.circle(cx + Math.cos((i / n) * 2 * Math.PI) * ring, cy + Math.sin((i / n) * 2 * Math.PI) * ring, 1.5).fill(COLORS[k++ % COLORS.length]);
+      }
+      g.circle(cx, cy, 1.6).fill(COLORS[(k0 + 3) % COLORS.length]);
+    };
+    // The silleta on its stand.
+    const a = this.add(new Graphics(), gx + 1, gy + 0.4);
+    const p = iso(gx + 1, gy + 0.4);
+    a.rect(p.x - 7, p.y - 8, 1.5, 8).fill(0x6d4c41);
+    a.rect(p.x + 5.5, p.y - 8, 1.5, 8).fill(0x6d4c41);
+    round(a, p.x, p.y - 19, 11, 0);
+    // The silletero walking, the silleta strapped to his back (drawn behind him).
+    const b = this.add(new Graphics(), gx + 2.4, gy + 0.9);
+    const q = iso(gx + 2.4, gy + 0.9);
+    round(b, q.x + 5, q.y - 24, 10, 3);
+    b.rect(q.x - 3, q.y - 9, 2.4, 9).fill(0x5d4037);
+    b.rect(q.x + 0.6, q.y - 9, 2.4, 9).fill(0x5d4037);
+    b.roundRect(q.x - 4, q.y - 20, 8, 12, 2).fill(0xfafafa).stroke({ width: 0.7, color: OUTLINE });
+    b.rect(q.x - 4, q.y - 13, 8, 1.4).fill(0xc62828);
+    b.circle(q.x, q.y - 23, 2.6).fill(0xd7a77a);
+    b.ellipse(q.x, q.y - 25, 6, 1.6).fill(0x3e2723);
+    b.ellipse(q.x, q.y - 26.5, 3, 2).fill(0x3e2723);
+  }
+
+  // August kites: a few kites high over the stretch the camera frames first (from the source to the warehouse), on
+  // long strings held from the ground; they sway in update().
+  kites() {
+    const { farm, warehouse: wh } = this.scene.zone;
+    const colors = [[0xe53935, 0xfdd835], [0x1e88e5, 0xffffff], [0x43a047, 0xff7043], [0x8e24aa, 0xfdd835]];
+    this.kiteList = [0.1, 0.4, 0.7, 0.95].map((f, k) => {
+      const gx = farm.x + (wh.x - farm.x) * f + (k % 2 ? 3 : -3);
+      const gy = farm.y + (wh.y - farm.y) * f + (k % 2 ? -3 : 3);
+      return { hand: iso(gx + 3, gy + 3, 4), kite: iso(gx, gy, 150 + (k % 2) * 40), colors: colors[k], phase: k * 1.7 };
+    });
+  }
+
   // A bit of confetti falling over a random point of the mule path.
   bit() {
     const p = pointAt(this.scene.zone.muleRoad, Math.random());
@@ -429,7 +551,7 @@ export class FiestaDecor {
       const on = Math.floor(time * 1.6) % 2;
       for (const gl of this.glows) gl.sprite.alpha = gl.phase === on ? 1 : 0.45;
     }
-    if (this.talc || this.confetti || this.notes || this.hearts) {
+    if (this.talc || this.confetti || this.notes || this.hearts || this.kiteList.length) {
       if (this.hearts && Math.random() < dt * 1.5) this.tune('heart');
       if (this.talc && light < 0.5 && Math.random() < dt * 2.5) this.puff();
       if (this.confetti && Math.random() < dt * 6) this.bit();
@@ -455,6 +577,23 @@ export class FiestaDecor {
         s.y += dt * 22;
         s.x += Math.sin(s.life * 6 + s.phase) * dt * 12;
         this.air.rect(s.x, s.y, 2.4, 1.4 + Math.abs(Math.sin(s.life * 8 + s.phase)) * 1.6).fill({ color: s.color, alpha: Math.min(1, s.life) });
+      }
+      // Kites (v5.21), by day: each sways and dips on its string, its tail of bows waving below it.
+      if (light < 0.5) {
+        for (const k of this.kiteList) {
+          const x = k.kite.x + Math.sin(time * 0.8 + k.phase) * 10;
+          const y = k.kite.y + Math.sin(time * 1.3 + k.phase) * 5;
+          this.air.moveTo(k.hand.x, k.hand.y).quadraticCurveTo((k.hand.x + x) / 2 + 14, (k.hand.y + y) / 2 + 18, x, y + 12).stroke({ width: 0.7, color: 0x5d4037, alpha: 0.6 });
+          this.air.poly([x, y - 16, x + 11, y, x, y + 12, x - 11, y]).fill(k.colors[0]).stroke({ width: 1, color: OUTLINE, alpha: 0.8 });
+          this.air.poly([x, y - 16, x + 11, y, x, y]).fill(k.colors[1]);
+          this.air.poly([x, y, x - 11, y, x, y + 12]).fill(k.colors[1]);
+          this.air.moveTo(x, y - 16).lineTo(x, y + 12).moveTo(x - 11, y).lineTo(x + 11, y).stroke({ width: 0.8, color: 0x5d4037, alpha: 0.7 });
+          for (let i = 1; i <= 5; i++) {
+            const tx = x + Math.sin(time * 3 + k.phase + i) * 4;
+            const ty = y + 12 + i * 7;
+            this.air.poly([tx - 3, ty - 1.8, tx + 3, ty + 1.8, tx + 3, ty - 1.8, tx - 3, ty + 1.8]).fill(k.colors[i % 2]);
+          }
+        }
       }
       this.puffs = this.puffs.filter((s) => (s.life -= dt) > 0);
       for (const s of this.puffs) {

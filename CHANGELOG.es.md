@@ -14,6 +14,7 @@
 - **🎃 Nuevo evento de temporada: Halloween** (del 25 de octubre al 1 de noviembre, con 30 días más para jugarlo): recoge las ahuyamas, talla las calabazas con su vela, cocina el dulce de ahuyama y llena las bolsas del «triqui triqui» de los niños. En su plaza suena «Cumbia de los disfraces», una cumbia original, y de noche las calabazas talladas iluminan los caminos del mapa.
 - **🏰 Nuevo evento de temporada: las fiestas de la Independencia de Cartagena** (del 9 al 12 de noviembre, con 30 días más para jugarlo): baja los cocos, prepara las cocadas de las palenqueras y el agua de coco, y repártelos a las comparsas del Cabildo de Getsemaní. En su plaza suena «Porro del cabildo», un porro original, con banderines de día y pólvora de noche.
 - **🎉 Todas las fiestas grandes tienen ya su evento:** se pueden ganar las doce láminas del álbum Fiestas de Colombia.
+- **✝️🌺🪁 Decoración para las demás fiestas:** en Semana Santa los edificios se visten con telas moradas y ramos de palma en las puertas, y pasa una procesión con su paso y sus nazarenos; en la Feria de las Flores hay macetas y un silletero con su silleta; y todo agosto, el mes de los vientos, vuelan cometas sobre cada zona.
 - **🏷️ El calendario de láminas** (🏅 Eventos) ahora muestra dos tiras, una por página del álbum, sin cajas por mes: cada lámina sobre el día en que empieza su fiesta.
 
 ## v5.20.0 — La plaza de las fiestas

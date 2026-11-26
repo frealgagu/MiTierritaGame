@@ -7,7 +7,7 @@
 //   dates: when, inclusive: { from: [month, day], to: [month, day] } (it may cross the new year), relative to Easter
 //          { easter: [first, last] } in days, or around the nth weekday of a month { month, weekday (0 = Sunday), nth,
 //          before, after } (the days before and after it).
-//   decor: what the map shows (render/Fiesta.js draws the ones it knows; the rest come in later versions), from its
+//   decor: what the map shows (render/Fiesta.js; every fiesta has its own since v5.21), from its
 //          `decorDates` when they are longer than the fiesta itself (the manger stays until the Día de Reyes).
 //   greeting: what a zone's person says once a day while it lasts. Texts are the Spanish i18n keys (tk).
 //   sticker: (v5.19) a big fiesta's sticker text in the «Fiestas de Colombia» album, won in its season event.
@@ -30,7 +30,7 @@ export const FIESTAS = [
     sticker: tk('La Batalla de Flores, la marimonda y el garabato: patrimonio de la humanidad.'),
   },
   {
-    id: 'semana_santa', icon: '✝️', kind: 'decor', dates: { easter: [-7, 0] },
+    id: 'semana_santa', icon: '✝️', kind: 'decor', dates: { easter: [-7, 0] }, decor: ['palms', 'procession'],
     name: tk('Semana Santa'),
     greeting: tk('✝️ Es Semana Santa: palmas el domingo de Ramos, procesiones y pescado en la mesa.'),
   },
@@ -59,12 +59,12 @@ export const FIESTAS = [
     sticker: tk('El 20 de julio de 1810 empezó la Independencia con el florero de Llorente.'),
   },
   {
-    id: 'cometas', icon: '🪁', kind: 'decor', dates: { from: [8, 1], to: [8, 31] },
+    id: 'cometas', icon: '🪁', kind: 'decor', dates: { from: [8, 1], to: [8, 31] }, decor: ['kites'],
     name: tk('Mes de las cometas'),
     greeting: tk('🪁 ¡Llegó agosto, el mes de los vientos! Es tiempo de elevar cometas.'),
   },
   {
-    id: 'feria_flores', icon: '🌺', kind: 'decor', dates: { from: [8, 1], to: [8, 10] },
+    id: 'feria_flores', icon: '🌺', kind: 'decor', dates: { from: [8, 1], to: [8, 10] }, decor: ['flowers', 'silleta'],
     name: tk('Feria de las Flores'),
     greeting: tk('🌺 Es la Feria de las Flores: los silleteros cargan jardines enteros en la espalda.'),
   },

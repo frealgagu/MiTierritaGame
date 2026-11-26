@@ -17,9 +17,8 @@ import { cappedPrestige, cappedRenown } from './capped.js';
 import { finaleProgress } from '../sim/finale.js';
 import { REGIONS } from '../data/regions.js';
 import { FIESTAS_BY_ID, FIESTA_ART, FIESTA_PAGES } from '../data/fiestas.js';
-import { hasSticker, seasonEventOf } from '../sim/seasonEvents.js';
+import { editionDay, hasSticker } from '../sim/seasonEvents.js';
 import { fiestaDate } from './calendar.js';
-import { windowIn, today } from '../sim/fiestas.js';
 
 // (v5.19) The «🎉 Fiestas de Colombia» album, in the album tab's list after the regions.
 const FIESTAS_ALBUM = 'fiestas';
@@ -216,15 +215,12 @@ export class RenownView {
     const pages = FIESTA_PAGES.map((pg) => `<button data-page="${pg.id}" class="${pg.id === this.page ? 'on' : ''} ${pg.stickers.every((id) => hasSticker(profile, id)) ? 'full' : ''}" title="${t(pg.name)}">${pg.icon}</button>`).join('');
     const page = FIESTA_PAGES.find((pg) => pg.id === this.page);
     const have = page.stickers.filter((id) => hasSticker(profile, id)).length;
-    const now = today();
     const cards = page.stickers
       .map((id) => {
         const f = FIESTAS_BY_ID[id];
         if (hasSticker(profile, id)) return `<div class="sticker"><div class="big">${FIESTA_ART[id]}</div><b>${t(f.name)}</b><p>${t(f.sticker)}</p></div>`;
-        // When: its next first day (this year's, or next year's if it already went by).
-        const [start] = windowIn(f.dates, now.getFullYear());
-        const when = fiestaDate(start < new Date(now.getFullYear(), now.getMonth(), now.getDate()) ? windowIn(f.dates, now.getFullYear() + 1)[0] : start);
-        const how = seasonEventOf(id) ? t('Se gana en su evento de temporada, desde el {date}.', { date: when }) : t('Su evento llega en una próxima versión ({date}).', { date: when });
+        // When: the first day of its open edition, else of its next one (the same date as the Events window's calendar).
+        const how = t('Se gana en su evento de temporada, desde el {date}.', { date: fiestaDate(editionDay(id)) });
         return `<div class="sticker empty"><div class="big">${FIESTA_ART[id]}</div><b>${t(f.name)}</b><p>${how}</p></div>`;
       })
       .join('');

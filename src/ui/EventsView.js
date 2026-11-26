@@ -15,7 +15,7 @@ import { upgradeTarget } from '../sim/upgrades.js';
 import { zoneBoostTargets } from '../sim/zoneBoost.js';
 import { cappedPrestige, cappedRenown } from './capped.js';
 import { regionStates } from '../sim/regions.js';
-import { daysBetween, editionDay, fiestasWithoutEvent, hasSticker, nextSeason, seasonReady, seasonStatuses } from '../sim/seasonEvents.js';
+import { daysBetween, editionDay, hasSticker, nextSeason, seasonReady, seasonStatuses } from '../sim/seasonEvents.js';
 import { FIESTAS_BY_ID, FIESTA_ART, FIESTA_PAGES } from '../data/fiestas.js';
 import { today } from '../sim/fiestas.js';
 import { fiestaDate } from './calendar.js';
@@ -205,13 +205,12 @@ export class EventsView {
       </div>`;
     };
     const cards = seasonStatuses(s, now).map(card);
-    const soon = fiestasWithoutEvent(now).map((f) => `<p class="event-soon">${t('{fiesta}: es su fiesta, pero su evento llega en una próxima versión.', { fiesta: `${f.icon} ${t(f.name)}` })}</p>`);
     const next = nextSeason(now);
-    const nextLine = next ? `<p class="event-soon">${t('Próximo evento: {fiesta}, el {date} (en {n} días).', { fiesta: `${next.fiesta.icon} ${t(next.fiesta.name)}`, date: fiestaDate(next.start), n: next.days })}${next.def ? '' : ` ${t('Su evento llega en una próxima versión.')}`}</p>` : '';
+    const nextLine = next ? `<p class="event-soon">${t('Próximo evento: {fiesta}, el {date} (en {n} días).', { fiesta: `${next.fiesta.icon} ${t(next.fiesta.name)}`, date: fiestaDate(next.start), n: next.days })}</p>` : '';
     const current = cards.length ? '' : `<p class="event-soon">${t('Ahora no hay ningún evento de temporada.')}</p>`;
     return `<div class="zones-group events-group season-events"><h3 class="season-head">🎉 ${t('Eventos de temporada')}</h3>
       <p class="chain-help">${t('Llegan con las fiestas de Colombia, en sus fechas reales, a la plaza de las fiestas. Son largos y siguen andando mientras juegas en otra parte; no tienen medallas: al cumplir el objetivo ganas la lámina de la fiesta. Después de la fiesta quedan {n} días para terminarlos.', { n: 30 })}</p>
-      ${current}${cards.join('')}${soon.join('')}${nextLine}${seasonCalendarHtml(profile)}</div>`;
+      ${current}${cards.join('')}${nextLine}${seasonCalendarHtml(profile)}</div>`;
   }
 
   // Redraws only what changed (v5.7): when only the clocks and countdowns moved, it rewrites

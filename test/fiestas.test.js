@@ -111,3 +111,16 @@ test('every fiesta has its icon, name and greeting, and a window inside the year
     assert.equal(n, 1, `${f.id} starts once a year`);
   }
 });
+
+test('every fiesta dresses the map up, and the map knows how to draw each decoration (v5.21)', async () => {
+  const { readFileSync } = await import('node:fs');
+  const drawn = readFileSync(new URL('../src/render/Fiesta.js', import.meta.url), 'utf8');
+  for (const f of FIESTAS) {
+    assert.ok(f.decor?.length, `${f.id} has decorations`);
+    for (const d of f.decor) assert.ok(drawn.includes(`decor.has('${d}')`), `${d} (${f.id}) is drawn`);
+  }
+  // Semana Santa 2027 (Palm Sunday 21 March to Easter 28 March); August: the kites, and the Feria de las Flores.
+  assert.deepEqual([...decorOn(day('2027-03-25'))].sort(), ['palms', 'procession']);
+  assert.deepEqual([...decorOn(day('2027-08-03'))].sort(), ['flowers', 'kites', 'silleta']);
+  assert.deepEqual([...decorOn(day('2027-08-20'))], ['kites']);
+});
