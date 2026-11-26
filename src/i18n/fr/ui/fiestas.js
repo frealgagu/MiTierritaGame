@@ -98,4 +98,7 @@ export default {
   "Las láminas del álbum Fiestas de Colombia y los eventos de temporada abiertos.": "Les vignettes de l’album Fêtes de Colombie et les événements de saison ouverts.",
   "No hay eventos de temporada abiertos.": "Aucun événement de saison ouvert.",
   "{icon} ¡Empezó el evento de la plaza: {event}! Toque 🏅 Eventos y vamos a la plaza de las fiestas.": "{icon} L’événement de la place a commencé : {event} ! Touche 🏅 Événements et allons sur la place des fêtes.",
+  // v5.21
+  "El Carnaval de Negros y Blancos": "Le Carnaval des Noirs et des Blancs",
+  "En Pasto el carnaval llega con el año nuevo: cose los disfraces, pinta de negro a las comparsas el 5 de enero, llénalas de talco el 6 y súbelas a las carrozas del Gran Desfile.": "À Pasto, le carnaval arrive avec la nouvelle année : couds les costumes, peins les troupes en noir le 5 janvier, couvre-les de talc le 6 et fais-les monter sur les chars du Grand Défilé.",
 };

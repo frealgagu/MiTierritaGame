@@ -439,6 +439,11 @@ export const FACTS = {
   navidad_natilla: ["La natilla se revuelve en una paila con panela, leche y canela hasta que cuaja.", "Revolver la natilla toma horas: por eso se turnan entre la familia."],
   navidad_bunuelos: ["El buñuelo lleva queso costeño rallado y se fríe en aceite bien caliente.", "Un buen buñuelo queda redondo y da vueltas solo en el aceite."],
   navidad_novena: ["La novena de aguinaldos se reza del 16 al 24 de diciembre.", "En cada noche de novena se cantan villancicos con panderetas y maracas."],
+  // Carnaval de Negros y Blancos (v5.21)
+  nyb_disfraces: ["El Carnaval de Negros y Blancos es Patrimonio Cultural Inmaterial de la Humanidad desde 2009.", "Los disfraces y las carrozas de Pasto se hacen a mano con papel maché, durante meses."],
+  nyb_negros: ["El 5 de enero, Día de Negros, todos se pintan la cara con cosmético negro.", "El Día de Negros recuerda un día de libertad que pidieron los esclavizados en 1607."],
+  nyb_blancos: ["El 6 de enero, Día de Blancos, el talco y la espuma blanca vuelan por toda la ciudad.", "El 4 de enero llega a Pasto la Familia Castañeda, una comparsa que recuerda a unos viajeros de 1928."],
+  nyb_desfile: ["El Gran Desfile recorre la Senda del Carnaval con carrozas gigantes de papel maché.", "El 3 de enero es el Canto a la Tierra, con música y danzas de los Andes."],
 };
 
 // Speaker announcing milestones per zone (key events, not every toast).
@@ -504,6 +509,7 @@ export const PEOPLE = {
   // La plaza de las fiestas (v5.19): the same person in every plaza.
   plaza_velitas: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_navidad: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
+  plaza_negros_blancos: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
 };
 
 // Opening line when entering a zone for the first time.
@@ -570,6 +576,7 @@ export const WELCOME = {
   // La plaza de las fiestas (v5.19)
   plaza_velitas: '¡Llegó la noche de las velitas! Prenda la Cerería y llenemos de faroles todas las calles.',
   plaza_navidad: '¡Ya empezó la novena! Muela el maíz, que esta noche hay natilla y buñuelos para todos.',
+  plaza_negros_blancos: '¡Llegó el carnaval de Pasto! Saque los disfraces, que aquí nadie se salva del talco.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

@@ -396,4 +396,8 @@ export default {
   natilla: "Natilla",
   bunuelo: "Buñuelo",
   novena: "Novena plate",
+  disfraz: "Costume",
+  comparsa_negra: "Black troupe",
+  comparsa_blanca: "White troupe",
+  desfile: "Parade float",
 };

@@ -5,6 +5,8 @@
 //   kings:    the three wise men arriving at the manger (Día de Reyes).
 //   candles:  candles and paper lanterns along the mule path and the road (Noche de las Velitas).
 //   old_year: the stuffed «año viejo» doll in a chair by the warehouse.   fireworks: bursts in the night sky.
+//   streamers: (v5.21) paper bunting and curled streamers on every building (Carnaval de Negros y Blancos).
+//   talc:      (v5.21) puffs of talcum powder drifting up along the paths, by day.
 import { Container, Graphics, Sprite } from 'pixi.js';
 import { iso, depth } from './iso.js';
 import { PAL } from './palette.js';
@@ -30,6 +32,12 @@ export class FiestaDecor {
     this.sky = new Graphics();
     this.sky.blendMode = 'add';
     scene.lights.addChild(this.sky);
+    // Talc clouds (v5.21): above the map, by day too.
+    this.air = new Graphics();
+    this.air.zIndex = 1e9;
+    scene.objects.addChild(this.air);
+    this.talc = false;
+    this.puffs = [];
     this.sync();
   }
 
@@ -49,7 +57,9 @@ export class FiestaDecor {
     if (spot && decor.has('tree')) this.tree(spot.gx, spot.gy);
     if (spot && decor.has('manger')) this.manger(spot.gx + 1.6, spot.gy + 0.2, decor.has('kings'));
     if (decor.has('old_year')) this.oldYear();
+    if (decor.has('streamers')) this.streamers();
     this.fireworks = decor.has('fireworks');
+    this.talc = decor.has('talc');
   }
 
   clear() {
@@ -60,6 +70,9 @@ export class FiestaDecor {
     this.fireworks = false;
     this.sparks = [];
     this.sky.clear();
+    this.talc = false;
+    this.puffs = [];
+    this.air.clear();
   }
 
   add(g, gx, gy) {
@@ -108,6 +121,51 @@ export class FiestaDecor {
       this.garland(g, left, corner, 7, 0);
       this.garland(g, corner, right, 7, 3);
     }
+  }
+
+  // A drooping line of paper pennants from a to b (screen points), in carnival colors.
+  bunting(g, a, b, sag, k0 = 0) {
+    const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 + sag };
+    g.moveTo(a.x, a.y).quadraticCurveTo(mid.x, mid.y, b.x, b.y).stroke({ width: 1, color: 0x5d4037, alpha: 0.9 });
+    const n = Math.max(3, Math.round(Math.hypot(b.x - a.x, b.y - a.y) / 7));
+    for (let i = 0; i < n; i++) {
+      const at = (t) => ({
+        x: (1 - t) * (1 - t) * a.x + 2 * (1 - t) * t * mid.x + t * t * b.x,
+        y: (1 - t) * (1 - t) * a.y + 2 * (1 - t) * t * mid.y + t * t * b.y,
+      });
+      const p = at(i / n);
+      const q = at((i + 0.8) / n);
+      g.poly([p.x, p.y, q.x, q.y, (p.x + q.x) / 2, (p.y + q.y) / 2 + 6]).fill(BULBS[(i + k0) % BULBS.length]).stroke({ width: 0.5, color: OUTLINE, alpha: 0.5 });
+    }
+  }
+
+  // Carnival bunting along the two front edges of every building and the warehouse, with curled streamers.
+  streamers() {
+    for (const view of Object.values(this.scene.stations)) {
+      if (view instanceof PlotView || view instanceof FarmView) continue;
+      const { x, y, w, h } = view.foot;
+      const z = view instanceof WarehouseView ? 34 : 30;
+      const left = iso(x + 0.15, y + h, z);
+      const corner = iso(x + w, y + h, z);
+      const right = iso(x + w, y + 0.15, z);
+      const g = this.add(new Graphics(), x + w, y + h + 0.1);
+      this.bunting(g, left, corner, 6, 0);
+      this.bunting(g, corner, right, 6, 2);
+      // Curled streamers hanging from the corner.
+      for (let k = 0; k < 3; k++) {
+        const c = BULBS[(k * 2) % BULBS.length];
+        const x0 = corner.x - 4 + k * 4;
+        g.moveTo(x0, corner.y).bezierCurveTo(x0 + 4, corner.y + 5, x0 - 4, corner.y + 9, x0 + 2, corner.y + 14).stroke({ width: 1.4, color: c });
+      }
+    }
+  }
+
+  // A puff of talc rising from a random point of the mule path.
+  puff() {
+    const road = this.scene.zone.muleRoad;
+    const p = pointAt(road, Math.random());
+    const s = iso(p.gx + (Math.random() - 0.5) * 1.5, p.gy + (Math.random() - 0.5) * 1.5, 6);
+    this.puffs.push({ x: s.x, y: s.y, r: 3 + Math.random() * 3, life: 1.6 + Math.random() * 0.8, max: 2.4, drift: (Math.random() - 0.5) * 10 });
   }
 
   // Candles on the ground and paper lanterns on short sticks, on both sides of the mule path and the road.
@@ -251,6 +309,17 @@ export class FiestaDecor {
     if (this.glows.length) {
       const on = Math.floor(time * 1.6) % 2;
       for (const gl of this.glows) gl.sprite.alpha = gl.phase === on ? 1 : 0.45;
+    }
+    if (this.talc) {
+      if (light < 0.5 && Math.random() < dt * 2.5) this.puff();
+      this.air.clear();
+      this.puffs = this.puffs.filter((s) => (s.life -= dt) > 0);
+      for (const s of this.puffs) {
+        const f = 1 - s.life / s.max;
+        s.y -= dt * 14;
+        s.x += dt * s.drift;
+        this.air.circle(s.x, s.y, s.r * (1 + f * 2.5)).fill({ color: 0xffffff, alpha: 0.55 * (1 - f) });
+      }
     }
     if (!this.fireworks) return;
     // Fireworks: a burst every second or so at night (the lights layer only shows at night).

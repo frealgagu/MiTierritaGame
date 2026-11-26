@@ -484,9 +484,37 @@ function renderVillancico(buf, index) {
   for (const [e, n, note] of song.melody[index] ?? []) blow(buf, at(e), freqOf(midi(note)), n * eighth * 0.9, 0.16, 0.1);
 }
 
+// Son sureño (v5.21, Carnaval de Negros y Blancos, Pasto): Andean dance in 3/4 with a lilting 6/8 feel. Quena
+// melody (breathy blown flute), charango strumming every eighth, guitar bass and the bombo (big drum) on 1 and the
+// and-of-2.
+function renderSonSureno(buf, index) {
+  const { song, beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const { root, tones } = parseChord(song.chords[index]);
+  const at = (e) => t0 + e * eighth + (rng() - 0.5) * 0.008;
+  buf.voice = 'bass';
+  pluck(buf, at(0), freqOf(above(root, 40)), beat * 1.4, { amp: 0.45, t60: 1.8, bright: 0.25, pan: -0.15, pos: 0.3 });
+  pluck(buf, at(3), freqOf(above((root + 7) % 12, 40)), beat * 1.2, { amp: 0.32, t60: 1.6, bright: 0.25, pan: -0.15, pos: 0.3 });
+  buf.voice = 'bombo';
+  drum(buf, at(0), 95, 55, 0.22, 0.42, -0.05, 0.25);
+  drum(buf, at(3), 90, 55, 0.18, 0.3, -0.05, 0.25);
+  drum(buf, at(5), 120, 80, 0.06, 0.12, -0.05, 0.6);
+  buf.voice = 'charango';
+  const charango = tones.slice(0, 4).map((pc) => above(pc, 67)).sort((a, b) => a - b);
+  for (let e = 0; e < 6; e++) strum(buf, at(e), charango, eighth * 0.6, { amp: e === 0 || e === 3 ? 0.07 : 0.045, t60: 0.5, bright: 0.9, pan: 0.4, pos: 0.1 }, e % 2 === 1);
+  buf.voice = 'guitar';
+  const guitar = tones.map((pc) => above(pc, 55)).sort((a, b) => a - b);
+  strum(buf, at(2), guitar, eighth * 0.9, { amp: 0.1, t60: 1, bright: 0.45, pan: -0.35 });
+  strum(buf, at(4), guitar, eighth * 0.9, { amp: 0.09, t60: 1, bright: 0.45, pan: -0.35 });
+  buf.voice = 'melody';
+  for (const [e, n, note] of song.melody[index] ?? []) blow(buf, at(e), freqOf(midi(note)), n * eighth * 0.9, 0.17, 0.12);
+}
+
 export function renderBar(buf, index) {
   if (buf.song.style === 'granfinal') return renderGranFinal(buf, index);
   if (buf.song.style === 'villancico') return renderVillancico(buf, index);
+  if (buf.song.style === 'sonsureno') return renderSonSureno(buf, index);
   if (buf.song.style === 'calipso') return renderCalipso(buf, index);
   if (buf.song.style === 'cumbia') return renderCumbia(buf, index);
   if (buf.song.style === 'torbellino') return renderTorbellino(buf, index);

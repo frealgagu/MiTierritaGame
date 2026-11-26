@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.21.0 — Carnival of Blacks and Whites
+- **🎨 New season event: the Carnival of Blacks and Whites** (from 2 January, playable until 6 February): sew the costumes, paint the troupes black on the Day of Blacks, cover them in talc on the Day of Whites and bring them to the floats of the Great Parade. Its sticker is the first of the 🎉 Fiestas of Colombia album.
+- **🎶 «Son del carnaval»:** an original son sureño with quena, charango, guitar and bombo drum plays in its square (also on the music download page).
+- **The map dresses up for Pasto's carnival** from 2 to 7 January: bunting and streamers on every building and clouds of talc along the paths.
+
 ## v5.20.0 — Fiesta Square
 - **🔽 Minimize:** the event bar's «Leave» button is now «Minimize», since the event keeps going while you play elsewhere.
 - **Nights in the Fiesta Square:** the square has its own days and nights, so the candles, lanterns and Christmas lights glow (production never stops).

@@ -122,4 +122,9 @@ export default {
   navidad_natilla: ["A natilla é mexida num tacho com rapadura, leite e canela até ficar firme.", "Mexer a natilla leva horas: por isso a família se reveza."],
   navidad_bunuelos: ["O buñuelo leva queijo costeño ralado e é frito em óleo bem quente.", "Um bom buñuelo fica redondo e vira sozinho no óleo."],
   navidad_novena: ["A novena de Natal é rezada de 16 a 24 de dezembro.", "Em cada noite de novena cantam-se canções de Natal com pandeiros e maracas."],
+  // Carnaval de Negros y Blancos (v5.21)
+  nyb_disfraces: ["O Carnaval de Negros e Brancos é Patrimônio Cultural Imaterial da Humanidade desde 2009.", "As fantasias e os carros alegóricos de Pasto são feitos à mão em papel machê, durante meses."],
+  nyb_negros: ["Em 5 de janeiro, o Dia dos Negros, todos pintam o rosto com cosmético preto.", "O Dia dos Negros lembra um dia de liberdade que os escravizados pediram em 1607."],
+  nyb_blancos: ["Em 6 de janeiro, o Dia dos Brancos, o talco e a espuma branca voam pela cidade toda.", "Em 4 de janeiro chega a Pasto a Família Castañeda, uma comparsa que lembra uns viajantes de 1928."],
+  nyb_desfile: ["O Grande Desfile percorre a Senda do Carnaval com carros alegóricos gigantes de papel machê.", "O 3 de janeiro é o Canto à Terra, com música e danças dos Andes."],
 };

@@ -704,7 +704,56 @@ const TUTAINA = {
   ],
 };
 
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA };
+// (v5.21) Carnaval de Negros y Blancos: «Son del carnaval», an original son sureño from Nariño in E minor and 3/4
+// (lilting 6/8 feel), with quena, charango, guitar and bombo (compose.js: sonsureno). A: Em–D–C–B7; B: G–D–Em–B7.
+const SON_CARNAVAL = {
+  name: 'Son del carnaval',
+  instruments: 'quena, charango, guitarra y bombo',
+  bpm: 112,
+  style: 'sonsureno',
+  chords: [
+    'Em', 'Em', 'D', 'D', 'C', 'C', 'B7', 'B7',
+    'Em', 'Em', 'D', 'D', 'C', 'B7', 'Em', 'Em',
+    'G', 'G', 'D', 'D', 'Em', 'Em', 'B7', 'B7',
+    'G', 'G', 'D', 'D', 'C', 'B7', 'Em', 'Em',
+  ],
+  melody: [
+    [[0, 2, 'E5'], [2, 1, 'G5'], [3, 1, 'F#5'], [4, 2, 'E5']],
+    [[0, 1, 'D5'], [1, 1, 'E5'], [2, 2, 'G5'], [4, 2, 'B5']],
+    [[0, 2, 'A5'], [2, 1, 'F#5'], [3, 1, 'D5'], [4, 2, 'F#5']],
+    [[0, 3, 'A5'], [3, 1, 'G5'], [4, 2, 'F#5']],
+    [[0, 2, 'G5'], [2, 1, 'E5'], [3, 1, 'C5'], [4, 2, 'E5']],
+    [[0, 1, 'G5'], [1, 1, 'F#5'], [2, 2, 'E5'], [4, 2, 'C5']],
+    [[0, 2, 'B4'], [2, 1, 'D#5'], [3, 1, 'F#5'], [4, 2, 'A5']],
+    [[0, 4, 'B5'], [4, 2, 'B4']],
+    [[0, 2, 'E5'], [2, 1, 'G5'], [3, 1, 'F#5'], [4, 2, 'E5']],
+    [[0, 1, 'D5'], [1, 1, 'E5'], [2, 2, 'G5'], [4, 2, 'B5']],
+    [[0, 2, 'A5'], [2, 1, 'F#5'], [3, 1, 'D5'], [4, 2, 'F#5']],
+    [[0, 2, 'A5'], [2, 2, 'G5'], [4, 2, 'F#5']],
+    [[0, 2, 'E5'], [2, 1, 'G5'], [3, 1, 'E5'], [4, 2, 'C5']],
+    [[0, 2, 'B4'], [2, 1, 'D#5'], [3, 1, 'F#5'], [4, 2, 'D#5']],
+    [[0, 6, 'E5']],
+    [[4, 1, 'B4'], [5, 1, 'D5']],
+    [[0, 2, 'G5'], [2, 1, 'B5'], [3, 1, 'A5'], [4, 2, 'G5']],
+    [[0, 1, 'F#5'], [1, 1, 'G5'], [2, 2, 'A5'], [4, 2, 'B5']],
+    [[0, 2, 'A5'], [2, 1, 'F#5'], [3, 1, 'D5'], [4, 2, 'A5']],
+    [[0, 3, 'F#5'], [3, 1, 'E5'], [4, 2, 'D5']],
+    [[0, 2, 'E5'], [2, 1, 'G5'], [3, 1, 'B5'], [4, 2, 'G5']],
+    [[0, 1, 'F#5'], [1, 1, 'G5'], [2, 2, 'E5'], [4, 2, 'B4']],
+    [[0, 2, 'D#5'], [2, 1, 'F#5'], [3, 1, 'A5'], [4, 2, 'F#5']],
+    [[0, 4, 'B4'], [4, 1, 'B4'], [5, 1, 'D5']],
+    [[0, 2, 'G5'], [2, 1, 'B5'], [3, 1, 'A5'], [4, 2, 'G5']],
+    [[0, 1, 'F#5'], [1, 1, 'G5'], [2, 2, 'A5'], [4, 2, 'B5']],
+    [[0, 2, 'A5'], [2, 1, 'F#5'], [3, 1, 'D5'], [4, 2, 'A5']],
+    [[0, 3, 'F#5'], [3, 1, 'E5'], [4, 2, 'D5']],
+    [[0, 2, 'G5'], [2, 1, 'E5'], [3, 1, 'C5'], [4, 2, 'E5']],
+    [[0, 2, 'B4'], [2, 1, 'D#5'], [3, 1, 'F#5'], [4, 2, 'A5']],
+    [[0, 6, 'E5']],
+    [],
+  ],
+};
+
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL };
 
 // Chords: root pitch class and intervals (semitones above root).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };

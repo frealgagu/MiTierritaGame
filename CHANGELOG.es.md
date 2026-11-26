@@ -1,5 +1,10 @@
 # Registro de cambios
 
+## v5.21.0 — Carnaval de Negros y Blancos
+- **🎨 Nuevo evento de temporada: el Carnaval de Negros y Blancos** (desde el 2 de enero, se puede jugar hasta el 6 de febrero): cose los disfraces, pinta de negro a las comparsas el Día de Negros, llénalas de talco el Día de Blancos y súbelas a las carrozas del Gran Desfile. Su lámina es la primera del álbum 🎉 Fiestas de Colombia.
+- **🎶 «Son del carnaval»:** un son sureño original con quena, charango, guitarra y bombo suena en su plaza (también en la página de descargas de música).
+- **El mapa se viste para el carnaval de Pasto** del 2 al 7 de enero: banderines y serpentinas en cada edificio y nubes de talco en los caminos.
+
 ## v5.20.0 — La plaza de las fiestas
 - **🔽 Minimizar:** el botón «Salir» de la barra del evento ahora se llama «Minimizar», porque el evento sigue andando mientras juegas en otra parte.
 - **Noches en la plaza de las fiestas:** la plaza tiene sus propios días y noches, así que se ven encendidas las velas, los faroles y las luces de Navidad (la producción no se detiene).

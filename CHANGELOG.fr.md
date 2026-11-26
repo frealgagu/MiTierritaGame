@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## v5.21.0 — Carnaval des Noirs et des Blancs
+- **🎨 Nouvel événement de saison : le Carnaval des Noirs et des Blancs** (dès le 2 janvier, jouable jusqu’au 6 février) : couds les costumes, peins les troupes en noir le Jour des Noirs, couvre-les de talc le Jour des Blancs et mène-les aux chars du Grand Défilé. Sa vignette est la première de l’album 🎉 Fêtes de Colombie.
+- **🎶 « Son du carnaval » :** un son sureño original avec quena, charango, guitare et bombo joue sur sa place (aussi sur la page de téléchargement de la musique).
+- **La carte se pare pour le carnaval de Pasto** du 2 au 7 janvier : fanions et serpentins sur chaque bâtiment et nuages de talc sur les chemins.
+
 ## v5.20.0 — La place des fêtes
 - **🔽 Réduire :** le bouton « Sortir » de la barre de l’événement s’appelle maintenant « Réduire », car l’événement continue pendant que tu joues ailleurs.
 - **Des nuits sur la place des fêtes :** la place a ses propres jours et ses propres nuits, et les bougies, les lanternes et les lumières de Noël s’allument (la production ne s’arrête pas).

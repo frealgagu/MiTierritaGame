@@ -51,8 +51,11 @@ test('December: lights, Velitas, Christmas, New Year\'s Eve and Epiphany, across
   assert.deepEqual([...decorOn(day('2026-12-07'))].sort(), ['candles', 'lights', 'tree']);
   assert.deepEqual([...decorOn(day('2026-12-27'))].sort(), ['lights', 'manger', 'tree']);
   assert.deepEqual([...decorOn(day('2026-12-31'))].sort(), ['fireworks', 'lights', 'manger', 'old_year', 'tree']);
-  assert.deepEqual([...decorOn(day('2027-01-06'))].sort(), ['kings', 'lights', 'manger', 'tree']);
-  assert.equal(decorOn(day('2027-01-07')).size, 0);
+  // (v5.21) It is also Negros y Blancos: streamers and talc.
+  assert.deepEqual([...decorOn(day('2027-01-06'))].sort(), ['kings', 'lights', 'manger', 'streamers', 'talc', 'tree']);
+  // Christmas is over on the 7th; the carnival of Pasto lasts until that day (v5.21), and then nothing.
+  assert.deepEqual([...decorOn(day('2027-01-07'))].sort(), ['streamers', 'talc']);
+  assert.equal(decorOn(day('2027-01-08')).size, 0);
 });
 
 test('the bonus: ×1.25 in a big fiesta, ×1.10 in one with decorations only, the largest when they overlap (v5.17)', () => {

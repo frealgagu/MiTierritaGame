@@ -62,4 +62,5 @@ export default {
   // La plaza de las fiestas (v5.19)
   plaza_velitas: "The Night of the Little Candles is here! Fire up the Candle shop and let's fill every street with lanterns.",
   plaza_navidad: "The novena has started! Grind the corn: tonight there's natilla and buñuelos for everyone.",
+  plaza_negros_blancos: "Pasto’s carnival is here! Bring out the costumes: nobody escapes the talc here.",
 };

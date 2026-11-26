@@ -40,10 +40,10 @@ test('the Willys carries 10 at level 1', () => {
   assert.equal(dispatchCapacity(10), (10 + 45) * 2);
 });
 
-test('full catalog: 381 products and 368 stations with valid recipes, plus La plaza de las fiestas\' 7 and 7 (v5.19)', () => {
-  assert.equal(Object.keys(PRODUCTS).length, 381 + 7);
+test('full catalog: 381 products and 368 stations with valid recipes, plus La plaza de las fiestas\' 11 and 11 (v5.19, v5.21)', () => {
+  assert.equal(Object.keys(PRODUCTS).length, 381 + 11);
   assert.equal(STATIONS.length, 368);
-  assert.equal(PLAZA_STATIONS.length, 7);
+  assert.equal(PLAZA_STATIONS.length, 11);
   for (const s of [...STATIONS, ...PLAZA_STATIONS]) {
     for (const id of Object.keys({ ...s.in, ...s.out, ...s.by, ...s.boost })) {
       assert.ok(PRODUCTS[id], `${s.id} uses an unknown product: ${id}`);

@@ -98,4 +98,7 @@ export default {
   "Las láminas del álbum Fiestas de Colombia y los eventos de temporada abiertos.": "As figurinhas do álbum Festas da Colômbia e os eventos de temporada abertos.",
   "No hay eventos de temporada abiertos.": "Não há eventos de temporada abertos.",
   "{icon} ¡Empezó el evento de la plaza: {event}! Toque 🏅 Eventos y vamos a la plaza de las fiestas.": "{icon} Começou o evento da praça: {event}! Toque em 🏅 Eventos e vamos à praça das festas.",
+  // v5.21
+  "El Carnaval de Negros y Blancos": "O Carnaval de Negros e Brancos",
+  "En Pasto el carnaval llega con el año nuevo: cose los disfraces, pinta de negro a las comparsas el 5 de enero, llénalas de talco el 6 y súbelas a las carrozas del Gran Desfile.": "Em Pasto o carnaval chega com o ano novo: costure as fantasias, pinte as comparsas de preto no dia 5 de janeiro, encha-as de talco no dia 6 e suba-as nos carros do Grande Desfile.",
 };

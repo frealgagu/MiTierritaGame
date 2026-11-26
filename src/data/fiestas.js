@@ -18,7 +18,7 @@ export const FIESTA_BONUS = { big: 1.25, decor: 1.1 };
 
 export const FIESTAS = [
   {
-    id: 'negros_blancos', icon: '🎨', kind: 'big', dates: { from: [1, 2], to: [1, 7] },
+    id: 'negros_blancos', icon: '🎨', kind: 'big', dates: { from: [1, 2], to: [1, 7] }, decor: ['streamers', 'talc'],
     name: tk('Carnaval de Negros y Blancos'),
     greeting: tk('🎨 ¡Es el Carnaval de Negros y Blancos! En Pasto se juega con talco y pintura negra.'),
     sticker: tk('El 5 de enero se pintan de negro y el 6 de blanco: en Pasto nadie se salva del talco.'),

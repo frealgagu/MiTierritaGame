@@ -8,7 +8,7 @@ import { REGIONS } from '../src/data/regions.js';
 import { ZONE_LIST } from '../src/data/zones/index.js';
 import { editionOf, endSeason, finishSeason, nextSeason, restartSeason, seasonOf, seasonReady, seasonStatus, startSeason, sweepSeason } from '../src/sim/seasonEvents.js';
 import { eventItems, refillSlots, slotsOf } from '../src/sim/events.js';
-import { fiestaMult } from '../src/sim/fiestas.js';
+import { decorOn, fiestaMult } from '../src/sim/fiestas.js';
 import { Game } from '../src/core/Game.js';
 import { play } from '../tools/event-bots.js';
 import { newGame, reload } from './helpers/game.js';
@@ -31,7 +31,7 @@ test('twelve big fiestas, one sticker each, on two pages of six; Semana Santa an
 });
 
 test('the plaza belongs to no region: its zones and events stay out of the main game lists (v5.19)', () => {
-  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad']);
+  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos']);
   for (const z of PLAZA_ZONES) assert.ok(!ZONE_LIST.includes(z));
   for (const r of REGIONS) for (const z of PLAZA_ZONES) assert.ok(!r.zones.includes(z.id));
   for (const e of SEASON_EVENTS) assert.ok(!EVENTS.includes(e));
@@ -124,14 +124,31 @@ test('season boards and stickers survive the save; no fiesta bonus on the board 
   assert.equal(fiestaMult(back.events.season.boards.velitas), 1);
 });
 
-test('the next season event: Velitas from late November, Negros y Blancos (no event yet) after Christmas (v5.19)', () => {
+test('the next season event: Velitas from late November, Negros y Blancos after Christmas, Barranquilla (no event yet) after it (v5.19)', () => {
   const n = nextSeason(day(2026, 11, 24));
   assert.equal(n.fiesta.id, 'velitas');
   assert.equal(n.days, 12);
   assert.ok(n.def);
   const after = nextSeason(day(2026, 12, 26));
   assert.equal(after.fiesta.id, 'negros_blancos');
-  assert.equal(after.def, null);
+  assert.ok(after.def, 'its event arrived in v5.21');
+  const later = nextSeason(day(2027, 1, 10));
+  assert.equal(later.fiesta.id, 'barranquilla');
+  assert.equal(later.def, null);
+});
+
+test('Negros y Blancos (v5.21): its event from 2 January with 30 days of grace, and streamers and talc on the map', () => {
+  const root = newGame();
+  assert.equal(seasonStatus(root, 'negros_blancos', day(2027, 1, 1)), null);
+  assert.equal(seasonStatus(root, 'negros_blancos', day(2027, 1, 2)).kind, 'available');
+  assert.equal(seasonStatus(root, 'negros_blancos', day(2027, 2, 6)).grace, true);
+  assert.equal(seasonStatus(root, 'negros_blancos', day(2027, 2, 7)), null);
+  assert.deepEqual([...decorOn(day(2027, 1, 5))].filter((d) => ['streamers', 'talc'].includes(d)).sort(), ['streamers', 'talc']);
+  assert.ok(!decorOn(day(2027, 1, 8)).has('talc'));
+  const board = startSeason(root, 'negros_blancos', day(2027, 1, 3));
+  assert.deepEqual(Object.keys(board.stations), ['nyb_disfraces', 'nyb_negros', 'nyb_blancos', 'nyb_desfile']);
+  meet(board);
+  assert.equal(finishSeason(root, 'negros_blancos').sticker, true);
 });
 
 test('a season board runs on its own and its stations balance: the Mesa de la novena waits on nobody (v5.19)', () => {

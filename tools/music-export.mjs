@@ -24,7 +24,7 @@ const ARTIST = 'Encantos de Mi Tierrita';
 // Every track: one per region, plus the grand finale's (v5.9) and La plaza de las fiestas' villancicos (v5.20).
 export const SONGS = { ...REGION_SONGS, granfinal: GRAN_FINAL };
 // Order in the game and each file name.
-export const ORDER = ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima', 'cundinamarca', 'bogota', 'sanandres', 'granfinal', 'velitas', 'navidad'];
+export const ORDER = ['cafetero', 'santander', 'costa', 'boyaca', 'llanos', 'pacifico', 'amazonas', 'tolima', 'cundinamarca', 'bogota', 'sanandres', 'granfinal', 'velitas', 'navidad', 'negros_blancos'];
 // Included on the downloads page: excludes regions still hidden in the game (v4.4.10: Bogotá). Since v5.9 the
 // special zone and the grand finale are included too, but as spoilers (see SPOILERS).
 export const PUBLIC = ORDER.filter((id) => !REGIONS_BY_ID[id]?.hidden);
@@ -35,7 +35,7 @@ const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().rep
 export const fileOf = (region) => `${ORDER.indexOf(region) + 1}-${slug(SONGS[region].name)}`;
 
 // Each voice in compose.js: track name, General MIDI program, and if percussion, the channel 10 note.
-const MELODY = { granfinal: ['Clarinete', 71], bambuco: ['Bandola', 25], cumbia: ['Gaita', 73], torbellino: ['Requinto', 25], joropo: ['Arpa llanera', 46], chirimia: ['Clarinete', 71], amazonica: ['Guitarra eléctrica', 27], sanjuanero: ['Bandola', 25], pasillo: ['Bandola', 25], danza: ['Bandola', 25], calipso: ['Tambor metálico', 114], villancico: ['Flauta', 73] };
+const MELODY = { granfinal: ['Clarinete', 71], bambuco: ['Bandola', 25], cumbia: ['Gaita', 73], torbellino: ['Requinto', 25], joropo: ['Arpa llanera', 46], chirimia: ['Clarinete', 71], amazonica: ['Guitarra eléctrica', 27], sanjuanero: ['Bandola', 25], pasillo: ['Bandola', 25], danza: ['Bandola', 25], calipso: ['Tambor metálico', 114], villancico: ['Flauta', 73], sonsureno: ['Quena', 75] };
 function voiceOf(style, voice, ev) {
   switch (voice) {
     case 'melody': return { name: MELODY[style][0], program: MELODY[style][1] };
@@ -56,6 +56,8 @@ function voiceOf(style, voice, ev) {
     case 'chucho': return { name: 'Chucho', perc: 70 };
     case 'maracas': return { name: 'Maracas', perc: 70 };
     case 'pandereta': return { name: 'Pandereta', perc: 54 };
+    case 'bombo': return { name: 'Bombo', perc: 36 };
+    case 'charango': return { name: 'Charango', program: 25 };
     case 'carrasca': return { name: 'Carrasca', perc: 73 };
     case 'snare': return { name: 'Redoblante', perc: 38 };
     case 'cymbal': return { name: 'Platillos', perc: 49 };

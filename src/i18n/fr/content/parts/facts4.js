@@ -122,4 +122,9 @@ export default {
   navidad_natilla: ["La natilla se remue dans un chaudron avec de la panela, du lait et de la cannelle jusqu’à prendre.", "Remuer la natilla prend des heures : toute la famille se relaie."],
   navidad_bunuelos: ["Le buñuelo contient du fromage costeño râpé et se frit dans une huile bien chaude.", "Un bon buñuelo sort bien rond et se retourne tout seul dans l’huile."],
   navidad_novena: ["La neuvaine de Noël se prie du 16 au 24 décembre.", "Chaque soir de neuvaine, on chante des chants de Noël avec tambourins et maracas."],
+  // Carnaval de Negros y Blancos (v5.21)
+  nyb_disfraces: ["Le Carnaval des Noirs et des Blancs est Patrimoine culturel immatériel de l’humanité depuis 2009.", "Les costumes et les chars de Pasto sont faits à la main en papier mâché, pendant des mois."],
+  nyb_negros: ["Le 5 janvier, Jour des Noirs, tout le monde se peint le visage avec du maquillage noir.", "Le Jour des Noirs rappelle un jour de liberté demandé par les esclaves en 1607."],
+  nyb_blancos: ["Le 6 janvier, Jour des Blancs, le talc et la mousse blanche volent dans toute la ville.", "Le 4 janvier arrive à Pasto la Famille Castañeda, une comparsa qui rappelle des voyageurs de 1928."],
+  nyb_desfile: ["Le Grand Défilé parcourt la Voie du Carnaval avec des chars géants en papier mâché.", "Le 3 janvier, c’est le Chant à la Terre, avec la musique et les danses des Andes."],
 };

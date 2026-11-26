@@ -61,4 +61,5 @@ export default {
   // La plaza de las fiestas (v5.19)
   plaza_velitas: ["Dona Celmira", "a da comissão de festas"],
   plaza_navidad: ["Dona Celmira", "a da comissão de festas"],
+  plaza_negros_blancos: ["Dona Celmira", "a da comissão de festas"],
 };

@@ -1,5 +1,10 @@
 # Registro de alterações
 
+## v5.21.0 — Carnaval de Negros e Brancos
+- **🎨 Novo evento de temporada: o Carnaval de Negros e Brancos** (a partir de 2 de janeiro, dá para jogar até 6 de fevereiro): costure as fantasias, pinte as comparsas de preto no Dia dos Negros, encha-as de talco no Dia dos Brancos e leve-as aos carros do Grande Desfile. Sua figurinha é a primeira do álbum 🎉 Festas da Colômbia.
+- **🎶 «Son do carnaval»:** um son sureño original com quena, charango, violão e bombo toca na sua praça (também na página de downloads de música).
+- **O mapa se enfeita para o carnaval de Pasto** de 2 a 7 de janeiro: bandeirinhas e serpentinas em cada prédio e nuvens de talco nos caminhos.
+
 ## v5.20.0 — A praça das festas
 - **🔽 Minimizar:** o botão «Sair» da barra do evento agora se chama «Minimizar», porque o evento continua rodando enquanto você joga em outro lugar.
 - **Noites na praça das festas:** a praça tem seus próprios dias e noites, então as velas, as lanternas e as luzes de Natal aparecem acesas (a produção não para).

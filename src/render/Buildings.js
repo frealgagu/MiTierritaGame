@@ -9427,6 +9427,102 @@ const DRAW = {
       this.lights.push({ x: p.x, y: p.y, r: 7, color: balls[k % balls.length] });
     }
   },
+
+  // --- Carnaval de Negros y Blancos (v5.21) ---
+  // Día de Negros: an awning stall with pots of black cosmetic paint and painted revelers in line; the paint
+  // brushes move while working.
+  nyb_negros(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.35;
+    fleaStall(this, g, x0, y0, ctx, 0x212121, [0x212121, 0x37474f, 0x212121, 0x455a64, 0x212121], 2.2);
+    // Pots of paint in front.
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 2); k++) {
+      const p = iso(x0 + 0.3 + k * 0.4, y0 + 1.75);
+      g.roundRect(p.x - 3.5, p.y - 6, 7, 6, 1.5).fill(0x8d6e63).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x, p.y - 6, 3.5, 1.4).fill(0x111111);
+    }
+    // Revelers with black-painted faces.
+    const crowd = new Graphics();
+    this.anim.addChild(crowd);
+    const spots = [0.6, 1.3, 2.0].map((k) => iso(x0 + k, y0 + 2.35));
+    this.animate = (time) => {
+      crowd.clear();
+      spots.forEach((p, k) => {
+        worker(crowd, p.x, p.y, [0xe53935, 0x1e88e5, 0xfdd835][k]);
+        crowd.circle(p.x, p.y - 20.5, 2.8).fill(0x111111);
+        crowd.rect(p.x + 3, p.y - 15 - Math.abs(Math.sin(time * 4 + k)) * 4, 1.2, 6).fill(0x5d4037);
+      });
+    };
+    this.animate(0);
+  },
+
+  // Día de Blancos: an open shed with sacks of talcum and a cloud of talc rising over the comparsa.
+  nyb_blancos(g, x, y, ctx) {
+    const x0 = x + 0.35;
+    const y0 = y + 0.35;
+    const H = 24 + ctx.up;
+    for (const [px, py] of [[0, 0], [2.1, 0], [0, 1.4], [2.1, 1.4]]) box(g, x0 + px, y0 + py, 0.12, 0.12, H, PAL.wood);
+    gableRoof(g, x0, y0, 2.22, 1.52, H, 12, 0xeceff1, PAL.wood);
+    for (const [bx, by, z] of [[0.4, 0.6, 0], [0.9, 0.6, 0], [1.4, 0.6, 0], [0.65, 0.6, 9], [1.15, 0.6, 9]].slice(0, 3 + Math.min(ctx.tier, 2))) {
+      const p = iso(x0 + bx, y0 + by, z);
+      g.ellipse(p.x, p.y - 4, 7, 5.5).fill(0xfafafa).stroke(OUTLINE);
+      g.ellipse(p.x, p.y - 8, 3.5, 1.8).fill(0xe0e0e0);
+    }
+    const cloud = new Graphics();
+    this.anim.addChild(cloud);
+    const c = iso(x0 + 1.1, y0 + 2.0);
+    this.animate = (time) => {
+      cloud.clear();
+      worker(cloud, c.x - 8, c.y + 2, 0x8e24aa);
+      worker(cloud, c.x + 8, c.y + 4, 0x43a047);
+      for (let k = 0; k < 7; k++) {
+        const f = (time * 0.5 + k / 7) % 1;
+        cloud.circle(c.x + Math.sin(k * 2.3 + time) * 12, c.y - 18 - f * 26, 4 + f * 7).fill({ color: 0xffffff, alpha: 0.75 * (1 - f) });
+      }
+    };
+    this.animate(0);
+    this.roofTop = iso(x0 + 1.1, y0 + 0.75, H + 12);
+  },
+
+  // Gran Desfile: a carnival float on wheels with a big papier-mâché figure (a laughing face, half black and half
+  // white) and colored streamers; the figure nods while working.
+  nyb_desfile(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.5;
+    box(g, x0, y0, 2.4, 1.6, 8, 0x8e24aa);
+    for (const [wx, wy] of [[0.3, 1.6], [2.1, 1.6]]) {
+      const p = iso(x0 + wx, y0 + wy, 2);
+      g.circle(p.x, p.y, 4.5).fill(0x3e2723).stroke(OUTLINE);
+      g.circle(p.x, p.y, 1.6).fill(0x9e9e9e);
+    }
+    // Skirt of streamers around the platform.
+    const colors = [0xe53935, 0xfdd835, 0x1e88e5, 0x43a047, 0xff7043];
+    for (let k = 0; k < 10; k++) {
+      const a = iso(x0 + 0.1 + k * 0.23, y0 + 1.6, 7);
+      g.rect(a.x - 1, a.y, 2, 6).fill(colors[k % colors.length]);
+    }
+    const figure = new Graphics();
+    this.anim.addChild(figure);
+    const c = iso(x0 + 1.2, y0 + 0.8, 8);
+    const size = 13 + Math.min(ctx.tier, 3) * 2;
+    this.animate = (time) => {
+      const nod = Math.sin(time * 2) * 2;
+      figure.clear();
+      const cy = c.y - size - 6 + nod;
+      figure.circle(c.x, cy, size).fill(0xfafafa);
+      // The left half painted black (Día de Negros), the right white with talc (Día de Blancos).
+      figure.moveTo(c.x, cy - size).arc(c.x, cy, size, -Math.PI / 2, Math.PI / 2, true).closePath().fill(0x212121);
+      figure.circle(c.x, cy, size).stroke(OUTLINE);
+      figure.circle(c.x - size * 0.4, c.y - size * 1.2 - 6 + nod, 2.2).fill(0xfafafa);
+      figure.circle(c.x + size * 0.4, c.y - size * 1.2 - 6 + nod, 2.2).fill(0x212121);
+      figure.ellipse(c.x, c.y - size * 0.7 - 6 + nod, size * 0.45, size * 0.2).fill(0xe53935);
+      // Hat with a pompom.
+      figure.poly([c.x - size * 0.7, c.y - size * 1.85 - 6 + nod, c.x + size * 0.7, c.y - size * 1.85 - 6 + nod, c.x, c.y - size * 2.7 - 6 + nod]).fill(0xfdd835).stroke(OUTLINE);
+      figure.circle(c.x, c.y - size * 2.7 - 6 + nod, 2.6).fill(0xe53935);
+    };
+    this.animate(0);
+    this.roofTop = iso(x0 + 1.2, y0 + 0.8, 8 + 2 * size + 20);
+  },
 };
 
 // Tolima Grande (v4.0): stations sharing artwork from other regions.

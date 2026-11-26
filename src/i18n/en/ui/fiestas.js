@@ -98,4 +98,7 @@ export default {
   "Las láminas del álbum Fiestas de Colombia y los eventos de temporada abiertos.": "The stickers of the Fiestas of Colombia album and the open season events.",
   "No hay eventos de temporada abiertos.": "There are no open season events.",
   "{icon} ¡Empezó el evento de la plaza: {event}! Toque 🏅 Eventos y vamos a la plaza de las fiestas.": "{icon} The square’s event has started: {event}! Tap 🏅 Events and let’s go to the Fiesta Square.",
+  // v5.21
+  "El Carnaval de Negros y Blancos": "The Carnival of Blacks and Whites",
+  "En Pasto el carnaval llega con el año nuevo: cose los disfraces, pinta de negro a las comparsas el 5 de enero, llénalas de talco el 6 y súbelas a las carrozas del Gran Desfile.": "In Pasto the carnival arrives with the new year: sew the costumes, paint the troupes black on 5 January, cover them in talc on the 6th and get them onto the floats of the Great Parade.",
 };

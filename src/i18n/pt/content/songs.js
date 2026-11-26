@@ -15,4 +15,5 @@ export default {
   // La plaza de las fiestas (v5.20)
   velitas: ["Os peixes no rio", "flauta, violão, tiple, pandeiro e maracas"],
   navidad: ["Tutaina", "flauta, violão, tiple, pandeiro e maracas"],
+  negros_blancos: ["Son do carnaval", "quena, charango, violão e bombo"],
 };

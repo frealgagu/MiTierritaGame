@@ -61,4 +61,5 @@ export default {
   // La plaza de las fiestas (v5.19)
   plaza_velitas: "Chegou a Noite das Velinhas! Acenda a Cereria e vamos encher todas as ruas de lanternas.",
   plaza_navidad: "A novena começou! Moa o milho, que hoje à noite tem natilla e buñuelos para todos.",
+  plaza_negros_blancos: "Chegou o carnaval de Pasto! Tire as fantasias, que aqui ninguém escapa do talco.",
 };

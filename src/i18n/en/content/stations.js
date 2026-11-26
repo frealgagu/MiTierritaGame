@@ -383,4 +383,8 @@ export default {
   navidad_natilla: "Natilla pot",
   navidad_bunuelos: "Buñuelo fryer",
   navidad_novena: "Novena table",
+  nyb_disfraces: "Costume workshop",
+  nyb_negros: "Day of Blacks",
+  nyb_blancos: "Day of Whites",
+  nyb_desfile: "Great Parade",
 };

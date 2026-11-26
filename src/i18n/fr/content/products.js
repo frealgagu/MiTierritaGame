@@ -396,4 +396,8 @@ export default {
   natilla: "Natilla",
   bunuelo: "Buñuelo",
   novena: "Assiette de la neuvaine",
+  disfraz: "Costume",
+  comparsa_negra: "Troupe des noirs",
+  comparsa_blanca: "Troupe des blancs",
+  desfile: "Char du défilé",
 };

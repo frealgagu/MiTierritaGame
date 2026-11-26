@@ -383,4 +383,8 @@ export default {
   navidad_natilla: "Chaudron de natilla",
   navidad_bunuelos: "Friterie de buñuelos",
   navidad_novena: "Table de la neuvaine",
+  nyb_disfraces: "Atelier des costumes",
+  nyb_negros: "Jour des Noirs",
+  nyb_blancos: "Jour des Blancs",
+  nyb_desfile: "Grand Défilé",
 };

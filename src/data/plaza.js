@@ -8,6 +8,7 @@
 //   SEASON_EVENTS: one per fiesta with a plaza. Long events (about 3 hours of production played sensibly) with no
 //   medals, upgrades or handicap: meeting the objective wins the fiesta's sticker (data/fiestas.js: FIESTA_PAGES).
 import { tk } from '../i18n/index.js';
+import { ICON } from './icons.js';
 
 // The plaza's layout, Salento's (zone6_pueblo.js): the square with the first station in one corner and the others
 // along the mule road down to the warehouse.
@@ -54,6 +55,8 @@ const plaza = (id, seed, fiesta, chain, decor) => ({
 export const PLAZA_ZONES = [
   plaza('plaza_velitas', 1207, 'velitas', ['velitas_cereria', 'velitas_faroles', 'velitas_calle'], ['lights', 'candles']),
   plaza('plaza_navidad', 1224, 'navidad', ['navidad_molino', 'navidad_natilla', 'navidad_bunuelos', 'navidad_novena'], ['lights', 'tree', 'manger']),
+  // (v5.21) Pasto's carnival: paper streamers over the streets and clouds of talcum powder.
+  plaza('plaza_negros_blancos', 1302, 'negros_blancos', ['nyb_disfraces', 'nyb_negros', 'nyb_blancos', 'nyb_desfile'], ['streamers', 'talc']),
 ];
 
 // Same prices and paces as the Finca's first stations (data/stations.js).
@@ -68,6 +71,12 @@ export const PLAZA_STATIONS = [
   station('navidad_natilla', 'plaza_navidad', 'Paila de natilla', '🍮', { in: { harina_maiz: 1 }, out: { natilla: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8 }),
   station('navidad_bunuelos', 'plaza_navidad', 'Fritanga de buñuelos', '🧆', { in: { harina_maiz: 1 }, out: { bunuelo: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8 }),
   station('navidad_novena', 'plaza_navidad', 'Mesa de la novena', '🎄', { in: { natilla: 1 }, joins: [{ product: 'bunuelo', perCycle: 1, from: 'navidad_bunuelos' }], out: { novena: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12 }),
+  // (v5.21) 🎨 Carnaval de Negros y Blancos: costumes for the comparsas, painted black on the 5th of January and
+  // covered in talcum on the 6th, meet in the great parade. The same paces and prices as the Navidad.
+  station('nyb_disfraces', 'plaza_negros_blancos', 'Taller de disfraces', '🎭', { infinite: true, out: { disfraz: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, release: '5.21' }),
+  station('nyb_negros', 'plaza_negros_blancos', 'Día de Negros', '🖤', { in: { disfraz: 1 }, out: { comparsa_negra: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('nyb_blancos', 'plaza_negros_blancos', 'Día de Blancos', '🤍', { in: { disfraz: 1 }, out: { comparsa_blanca: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('nyb_desfile', 'plaza_negros_blancos', 'Gran Desfile', '🎊', { in: { comparsa_negra: 1 }, joins: [{ product: 'comparsa_blanca', perCycle: 1, from: 'nyb_blancos' }], out: { desfile: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
 ];
 
 export const PLAZA_PRODUCTS = {
@@ -78,6 +87,10 @@ export const PLAZA_PRODUCTS = {
   natilla: { name: 'Natilla', zone: 'plaza_navidad', value: 3, icon: '🍮', color: 0xc98a3a },
   bunuelo: { name: 'Buñuelo', zone: 'plaza_navidad', value: 3, icon: '🧆', color: 0xd9a441 },
   novena: { name: 'Plato de novena', zone: 'plaza_navidad', value: 10, icon: '🎶', color: 0x2e7d32 },
+  disfraz: { name: 'Disfraz', zone: 'plaza_negros_blancos', value: 1, icon: '👗', color: 0xab47bc },
+  comparsa_negra: { name: 'Comparsa de negros', zone: 'plaza_negros_blancos', value: 3, icon: '🖤', color: 0x263238 },
+  comparsa_blanca: { name: 'Comparsa de blancos', zone: 'plaza_negros_blancos', value: 3, icon: '🤍', color: 0xf5f5f5 },
+  desfile: { name: 'Carroza del desfile', zone: 'plaza_negros_blancos', value: 10, icon: ICON.fiestaNegrosBlancos, color: 0xfdd835 },
 };
 
 // The season events. `fiesta`: its fiesta (data/fiestas.js); `season`: played in the plaza, not in a region.
@@ -112,6 +125,20 @@ export const SEASON_EVENTS = [
     coins: 0,
     actions: [],
     objective: { kind: 'produced', items: { novena: 240000 } },
+  },
+  {
+    id: 'fiesta_negros_blancos',
+    fiesta: 'negros_blancos',
+    season: true,
+    zone: 'plaza_negros_blancos',
+    icon: '🎨',
+    name: tk('El Carnaval de Negros y Blancos'),
+    intro: tk('En Pasto el carnaval llega con el año nuevo: cose los disfraces, pinta de negro a las comparsas el 5 de enero, llénalas de talco el 6 y súbelas a las carrozas del Gran Desfile.'),
+    stations: ['nyb_disfraces', 'nyb_negros', 'nyb_blancos', 'nyb_desfile'],
+    level: 1,
+    coins: 0,
+    actions: [],
+    objective: { kind: 'produced', items: { desfile: 240000 } },
   },
 ];
 export const SEASON_EVENT_OF_FIESTA = Object.fromEntries(SEASON_EVENTS.map((e) => [e.fiesta, e]));
