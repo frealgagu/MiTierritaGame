@@ -6,7 +6,7 @@ import { EVENTS } from '../src/data/events.js';
 import { PAGE_BONUS } from '../src/data/album.js';
 import { REGIONS } from '../src/data/regions.js';
 import { ZONE_LIST } from '../src/data/zones/index.js';
-import { editionOf, endSeason, finishSeason, nextSeason, restartSeason, seasonOf, seasonReady, seasonStatus, startSeason, sweepSeason } from '../src/sim/seasonEvents.js';
+import { editionDay, editionOf, endSeason, finishSeason, nextSeason, restartSeason, seasonOf, seasonReady, seasonStatus, startSeason, sweepSeason } from '../src/sim/seasonEvents.js';
 import { eventItems, refillSlots, slotsOf } from '../src/sim/events.js';
 import { decorOn, fiestaMult, windowIn } from '../src/sim/fiestas.js';
 import { Game } from '../src/core/Game.js';
@@ -337,3 +337,23 @@ for (const def of SEASON_EVENTS) {
     assert.ok(t > 2.5 * 3600 && t < 3.5 * 3600, `${(t / 3600).toFixed(2)} h`);
   });
 }
+
+test("the stickers' calendar dates each sticker by its open edition, else by its next one (v5.21)", () => {
+  const d = (y, m, day) => new Date(y, m - 1, day);
+  const same = (a, b) => assert.equal(a.getTime(), b.getTime());
+  // Before its days: this year's.
+  same(editionDay('cartagena', d(2027, 3, 1)), d(2027, 11, 9));
+  // In its days of grace: the open edition, though its first day went by.
+  same(editionDay('cartagena', d(2027, 12, 7)), d(2027, 11, 9));
+  // Once the grace ended: next year's.
+  same(editionDay('cartagena', d(2027, 12, 20)), d(2028, 11, 9));
+  // Across new year: Negros y Blancos on Dec 20 is the coming January's.
+  same(editionDay('negros_blancos', d(2026, 12, 20)), d(2027, 1, 2));
+  // A moving fiesta: the Carnival follows Easter (Feb 6, 2027 → its week from the 3rd).
+  same(editionDay('barranquilla', d(2026, 12, 20)), windowIn(FIESTAS_BY_ID.barranquilla.dates, 2027)[0]);
+  // Every sticker gets a date in the coming year.
+  for (const id of FIESTA_PAGES.flatMap((p) => p.stickers)) {
+    const day = editionDay(id, d(2026, 12, 20));
+    assert.ok(day > d(2026, 10, 1) && day < d(2027, 12, 20), id);
+  }
+});

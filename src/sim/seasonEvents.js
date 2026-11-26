@@ -192,8 +192,15 @@ export function fiestasWithoutEvent(date = today()) {
     }));
 }
 
-// The month (1–12) a fiesta's sticker goes in, in the 12-month calendar: its first day this year.
-export const fiestaMonth = (fiestaId, year = today().getFullYear()) => windowIn(FIESTAS_BY_ID[fiestaId].dates, year)[0].getMonth() + 1;
+// (v5.21) The first day of a fiesta's edition open on `date` (in its days or its grace), else of its next one: the
+// date the stickers' calendar shows under each sticker.
+export function editionDay(fiestaId, date = today()) {
+  const open = editionOf(fiestaId, date);
+  if (open) return open.start;
+  const day = midnight(date);
+  const [start] = windowIn(FIESTAS_BY_ID[fiestaId].dates, day.getFullYear());
+  return start >= day ? start : windowIn(FIESTAS_BY_ID[fiestaId].dates, day.getFullYear() + 1)[0];
+}
 
 // Season events that can be started now (for the Events button's badge).
 export const seasonReady = (root, date = today()) => seasonStatuses(root, date).filter((st) => st.kind === 'available').length;

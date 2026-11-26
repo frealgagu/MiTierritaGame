@@ -14,6 +14,7 @@
 - **🎃 Novo evento de temporada: Halloween** (de 25 de outubro a 1º de novembro, com mais 30 dias para jogar): colha as ahuyamas, entalhe as abóboras com sua vela, cozinhe o doce de ahuyama e encha os sacos do «triqui triqui» das crianças. Na sua praça toca «Cumbia das fantasias», uma cumbia original, e à noite as abóboras entalhadas iluminam os caminhos do mapa.
 - **🏰 Novo evento de temporada: as festas da Independência de Cartagena** (de 9 a 12 de novembro, com mais 30 dias para jogar): derrube os cocos, prepare as cocadas das palenqueiras e a água de coco, e distribua-as às comparsas do Cabildo de Getsemaní. Na sua praça toca «Porro do cabildo», um porro original, com bandeirinhas de dia e fogos à noite.
 - **🎉 Todas as festas grandes já têm seu evento:** dá para ganhar as doze figurinhas do álbum Festas da Colômbia.
+- **🏷️ O calendário de figurinhas** (🏅 Eventos) agora mostra duas faixas, uma por página do álbum, sem caixas por mês: cada figurinha sobre o dia em que começa a sua festa.
 
 ## v5.20.0 — A praça das festas
 - **🔽 Minimizar:** o botão «Sair» da barra do evento agora se chama «Minimizar», porque o evento continua rodando enquanto você joga em outro lugar.

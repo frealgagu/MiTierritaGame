@@ -15,7 +15,7 @@ import { upgradeTarget } from '../sim/upgrades.js';
 import { zoneBoostTargets } from '../sim/zoneBoost.js';
 import { cappedPrestige, cappedRenown } from './capped.js';
 import { regionStates } from '../sim/regions.js';
-import { daysBetween, fiestaMonth, fiestasWithoutEvent, hasSticker, nextSeason, seasonReady, seasonStatuses } from '../sim/seasonEvents.js';
+import { daysBetween, editionDay, fiestasWithoutEvent, hasSticker, nextSeason, seasonReady, seasonStatuses } from '../sim/seasonEvents.js';
 import { FIESTAS_BY_ID, FIESTA_ART, FIESTA_PAGES } from '../data/fiestas.js';
 import { today } from '../sim/fiestas.js';
 import { fiestaDate } from './calendar.js';
@@ -271,20 +271,23 @@ export class EventsView {
 const LIVE = /<span data-live>([^<]*)<\/span>/g;
 const live = (text) => `<span data-live>${text}</span>`;
 
-// (v5.19) The year's fiestas with a sticker, month by month: each sticker in color once won, in gray until then.
-const MONTHS = { es: 'es-CO', en: 'en-GB', pt: 'pt-BR', fr: 'fr-FR' };
+// (v5.19) The year's fiestas with a sticker: (v5.21) one strip per album page, with no month boxes, each sticker
+// in color once won, in gray until then, over the first day of its open (or next) edition.
+const LOCALES = { es: 'es-CO', en: 'en-GB', pt: 'pt-BR', fr: 'fr-FR' };
+// '13 sept', '2 Jan', '13 set', '2 janv': day and short month, without 'de' or the abbreviation's dot.
+const shortDay = (d) => d.toLocaleDateString(LOCALES[LANG] ?? 'es-CO', { day: 'numeric', month: 'short' }).replace(/ de /g, ' ').replace('.', '');
 function seasonCalendarHtml(profile) {
   const ids = FIESTA_PAGES.flatMap((p) => p.stickers);
   const have = ids.filter((id) => hasSticker(profile, id)).length;
-  const months = Array.from({ length: 12 }, (_, k) => {
-    const name = new Date(2026, k, 1).toLocaleDateString(MONTHS[LANG] ?? 'es-CO', { month: 'short' }).replace('.', '');
-    const here = ids.filter((id) => fiestaMonth(id) === k + 1).map((id) => {
+  const pages = FIESTA_PAGES.map((page) => {
+    const got = page.stickers.filter((id) => hasSticker(profile, id)).length;
+    const stickers = page.stickers.map((id) => {
       const f = FIESTAS_BY_ID[id];
-      return `<span class="season-sticker ${hasSticker(profile, id) ? 'got' : ''}" title="${t(f.name)}">${FIESTA_ART[id]}</span>`;
+      return `<li title="${t(f.name)}"><span class="season-sticker ${hasSticker(profile, id) ? 'got' : ''}">${FIESTA_ART[id]}</span><small>${shortDay(editionDay(id))}</small></li>`;
     });
-    return `<li><small>${name}</small><span>${here.join('') || '·'}</span></li>`;
+    return `<h4><span>${page.icon} ${t(page.name)}</span><span>${got} / ${page.stickers.length}</span></h4><ul>${stickers.join('')}</ul>`;
   });
-  return `<div class="season-calendar"><p>${t('🏷️ Láminas de fiestas: {n} de {total}', { n: have, total: ids.length })}</p><ul>${months.join('')}</ul></div>`;
+  return `<div class="season-calendar"><p>${t('🏷️ Láminas de fiestas: {n} de {total}', { n: have, total: ids.length })}</p>${pages.join('')}</div>`;
 }
 
 // Events without waiting (v5.9): the purchase card on top of the list, or a short line once owned.

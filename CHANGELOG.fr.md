@@ -14,6 +14,7 @@
 - **🎃 Nouvel événement de saison : Halloween** (du 25 octobre au 1er novembre, avec 30 jours de plus pour y jouer) : récolte les ahuyamas, sculpte les citrouilles avec leur bougie, cuisine le dulce de ahuyama et remplis les sacs du « triqui triqui » des enfants. Sur sa place joue « Cumbia des déguisements », une cumbia originale, et la nuit les citrouilles sculptées éclairent les chemins de la carte.
 - **🏰 Nouvel événement de saison : les fêtes de l’Indépendance de Carthagène** (du 9 au 12 novembre, avec 30 jours de plus pour y jouer) : descends les noix de coco, prépare les cocadas des palenqueras et l’eau de coco, et distribue-les aux troupes du Cabildo de Getsemaní. Sur sa place joue « Porro du cabildo », un porro original, avec des fanions le jour et des feux d’artifice la nuit.
 - **🎉 Toutes les grandes fêtes ont désormais leur événement :** les douze vignettes de l’album Fêtes de Colombie peuvent être gagnées.
+- **🏷️ Le calendrier des vignettes** (🏅 Événements) montre désormais deux bandes, une par page de l’album, sans cases par mois : chaque vignette au-dessus du jour où commence sa fête.
 
 ## v5.20.0 — La place des fêtes
 - **🔽 Réduire :** le bouton « Sortir » de la barre de l’événement s’appelle maintenant « Réduire », car l’événement continue pendant que tu joues ailleurs.
