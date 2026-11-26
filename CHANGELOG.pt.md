@@ -1,10 +1,11 @@
 # Registro de alterações
 
-## v5.21.0 — Os carnavais
+## v5.21.0 — Carnavais e vallenato
 - **🎨 Novo evento de temporada: o Carnaval de Negros e Brancos** (a partir de 2 de janeiro, dá para jogar até 6 de fevereiro): costure as fantasias, pinte as comparsas de preto no Dia dos Negros, encha-as de talco no Dia dos Brancos e leve-as aos carros do Grande Desfile. Sua figurinha é a primeira do álbum 🎉 Festas da Colômbia.
 - **🎶 «Son do carnaval»:** um son sureño original com quena, charango, violão e bombo toca na sua praça (também na página de downloads de música).
 - **O mapa se enfeita para o carnaval de Pasto** de 2 a 7 de janeiro: bandeirinhas e serpentinas em cada prédio e nuvens de talco nos caminhos.
 - **🎭 Novo evento de temporada: o Carnaval de Barranquilla** (em fevereiro, nas datas conforme a Páscoa, com mais 30 dias para jogar): entalhe as máscaras, vista as marimondas e os congos e leve-os para dançar nos carros da Batalha de Flores. Na sua praça toca «Cumbia da Batalha de Flores», uma cumbia original, e durante o carnaval o mapa se enche de bandeirinhas e confete caindo.
+- **🪗 Novo evento de temporada: o Festival da Lenda Vallenata** (de 24 a 30 de abril, com mais 30 dias para jogar): ensine os aprendizes da escola, forme acordeonistas, caixeiros e guacharaqueiros, e suba-os juntos ao palco Francisco el Hombre. Na sua praça toca «Paseo do palco», um paseo vallenato original com acordeão, caixa e guacharaca, e durante o festival notas musicais flutuam sobre o mapa.
 
 ## v5.20.0 — A praça das festas
 - **🔽 Minimizar:** o botão «Sair» da barra do evento agora se chama «Minimizar», porque o evento continua rodando enquanto você joga em outro lugar.

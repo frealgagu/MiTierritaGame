@@ -64,4 +64,5 @@ export default {
   plaza_navidad: "The novena has started! Grind the corn: tonight there's natilla and buñuelos for everyone.",
   plaza_negros_blancos: "Pasto’s carnival is here! Bring out the costumes: nobody escapes the talc here.",
   plaza_barranquilla: "Those who live it are those who enjoy it! The Barranquilla carnival is here: let’s carve masks and dance.",
+  plaza_vallenato: "The Vallenato Festival is here! Bring out the accordion, the caja and the guacharaca: today a king is chosen.",
 };

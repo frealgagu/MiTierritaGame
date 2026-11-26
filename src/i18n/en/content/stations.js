@@ -391,4 +391,8 @@ export default {
   baq_marimondas: "House of the marimondas",
   baq_congos: "House of the congos",
   baq_batalla: "Battle of Flowers",
+  vall_escuela: "Vallenato school",
+  vall_acordeon: "House of the accordion",
+  vall_caja: "Caja and guacharaca",
+  vall_tarima: "Francisco el Hombre stage",
 };

@@ -391,4 +391,8 @@ export default {
   baq_marimondas: "Casa das marimondas",
   baq_congos: "Casa dos congos",
   baq_batalla: "Batalha de Flores",
+  vall_escuela: "Escola vallenata",
+  vall_acordeon: "Casa do acordeão",
+  vall_caja: "Caixa e guacharaca",
+  vall_tarima: "Palco Francisco el Hombre",
 };

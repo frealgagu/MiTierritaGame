@@ -17,4 +17,5 @@ export default {
   navidad: ["Tutaina", "flute, guitar, tiple, tambourine and maracas"],
   negros_blancos: ["Carnival Son", "quena, charango, guitar and bombo drum"],
   barranquilla: ["Battle of Flowers Cumbia", "gaita flutes, guacharaca, llamador, tambora and tambor alegre"],
+  vallenato: ["Paseo of the Stage", "accordion, caja drum, guacharaca and bass"],
 };

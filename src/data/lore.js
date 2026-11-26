@@ -449,6 +449,11 @@ export const FACTS = {
   baq_marimondas: ["La marimonda tiene orejas grandes y una nariz larga: nació para burlarse de los poderosos.", "La marimonda baila con un pito y saltos, con la ropa al revés."],
   baq_congos: ["Los congos llevan turbantes altos con flores y espejos, y bailan con un palo de madera.", "La danza del Congo Grande es una de las más antiguas del carnaval."],
   baq_batalla: ["La Batalla de Flores es el desfile de carrozas que abre el carnaval, desde 1903.", "La Reina del Carnaval va en la primera carroza de la Batalla de Flores."],
+  // Festival de la Leyenda Vallenata (v5.21)
+  vall_escuela: ["El vallenato es Patrimonio Cultural Inmaterial de la Humanidad desde 2015.", "En Valledupar hay escuelas donde los niños aprenden vallenato desde pequeños."],
+  vall_acordeon: ["El acordeón llegó a Colombia desde Alemania a finales del siglo XIX.", "En el festival se elige cada año al Rey Vallenato, el mejor acordeonero."],
+  vall_caja: ["La caja vallenata es un tambor pequeño de origen africano.", "La guacharaca es una caña con ranuras que se raspa con un tenedor de alambre."],
+  vall_tarima: ["La tarima del festival se llama Francisco el Hombre, por el juglar que venció al diablo tocando acordeón.", "El Festival de la Leyenda Vallenata se celebra en Valledupar desde 1968."],
 };
 
 // Speaker announcing milestones per zone (key events, not every toast).
@@ -516,6 +521,7 @@ export const PEOPLE = {
   plaza_navidad: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_negros_blancos: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_barranquilla: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
+  plaza_vallenato: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
 };
 
 // Opening line when entering a zone for the first time.
@@ -584,6 +590,7 @@ export const WELCOME = {
   plaza_navidad: '¡Ya empezó la novena! Muela el maíz, que esta noche hay natilla y buñuelos para todos.',
   plaza_negros_blancos: '¡Llegó el carnaval de Pasto! Saque los disfraces, que aquí nadie se salva del talco.',
   plaza_barranquilla: '¡Quien lo vive es quien lo goza! Llegó el carnaval de Barranquilla: a tallar máscaras y a bailar.',
+  plaza_vallenato: '¡Llegó el Festival Vallenato! A sacar el acordeón, la caja y la guacharaca, que hoy se elige rey.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

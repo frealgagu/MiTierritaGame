@@ -803,7 +803,57 @@ const CUMBIA_CARNAVAL = {
   ],
 };
 
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL };
+// (v5.21) Festival de la Leyenda Vallenata: «Paseo de la tarima», an original paseo vallenato in D major with a
+// B minor middle, 4/4, with accordion, caja and guacharaca (compose.js: vallenato).
+const PASEO_TARIMA = {
+  name: 'Paseo de la tarima',
+  instruments: 'acordeón, caja, guacharaca y bajo',
+  bpm: 112,
+  beats: 4,
+  style: 'vallenato',
+  chords: [
+    'D', 'D', 'A7', 'A7', 'A7', 'A7', 'D', 'D',
+    'D7', 'G', 'G', 'D', 'D', 'A7', 'D', 'A7',
+    'Bm', 'Bm', 'F#7', 'F#7', 'Bm', 'G', 'A7', 'A7',
+    'D', 'D', 'G', 'D', 'Em', 'A7', 'D', 'A7',
+  ],
+  melody: [
+    [[0, 2, 'F#5'], [2, 2, 'A5'], [4, 2, 'A5'], [6, 2, 'F#5']],
+    [[0, 2, 'E5'], [2, 2, 'D5'], [4, 4, 'F#5']],
+    [[0, 2, 'E5'], [2, 2, 'G5'], [4, 2, 'G5'], [6, 2, 'E5']],
+    [[0, 2, 'C#5'], [2, 2, 'E5'], [4, 4, 'A4']],
+    [[0, 2, 'A4'], [2, 2, 'C#5'], [4, 2, 'E5'], [6, 2, 'G5']],
+    [[0, 2, 'F#5'], [2, 2, 'E5'], [4, 4, 'C#5']],
+    [[0, 2, 'D5'], [2, 2, 'F#5'], [4, 2, 'A5'], [6, 2, 'F#5']],
+    [[0, 6, 'D5']],
+    [[0, 2, 'A4'], [2, 2, 'D5'], [4, 2, 'F#5'], [6, 2, 'A5']],
+    [[0, 2, 'B5'], [2, 2, 'A5'], [4, 4, 'G5']],
+    [[0, 2, 'G5'], [2, 2, 'B5'], [4, 2, 'A5'], [6, 2, 'G5']],
+    [[0, 2, 'F#5'], [2, 2, 'E5'], [4, 4, 'D5']],
+    [[0, 2, 'F#5'], [2, 2, 'A5'], [4, 2, 'F#5'], [6, 2, 'D5']],
+    [[0, 2, 'E5'], [2, 2, 'G5'], [4, 2, 'E5'], [6, 2, 'C#5']],
+    [[0, 6, 'D5']],
+    [[4, 2, 'A4'], [6, 2, 'C#5']],
+    [[0, 2, 'D5'], [2, 2, 'F#5'], [4, 2, 'B5'], [6, 2, 'A5']],
+    [[0, 2, 'F#5'], [2, 2, 'D5'], [4, 4, 'B4']],
+    [[0, 2, 'C#5'], [2, 2, 'E5'], [4, 2, 'A#5'], [6, 2, 'F#5']],
+    [[0, 2, 'E5'], [2, 2, 'C#5'], [4, 4, 'A#4']],
+    [[0, 2, 'B4'], [2, 2, 'D5'], [4, 2, 'F#5'], [6, 2, 'B5']],
+    [[0, 2, 'B5'], [2, 2, 'G5'], [4, 4, 'D5']],
+    [[0, 2, 'C#5'], [2, 2, 'E5'], [4, 2, 'A5'], [6, 2, 'G5']],
+    [[0, 6, 'E5']],
+    [[0, 2, 'F#5'], [2, 2, 'A5'], [4, 2, 'A5'], [6, 2, 'F#5']],
+    [[0, 2, 'E5'], [2, 2, 'D5'], [4, 4, 'F#5']],
+    [[0, 2, 'G5'], [2, 2, 'B5'], [4, 2, 'A5'], [6, 2, 'G5']],
+    [[0, 2, 'F#5'], [2, 2, 'E5'], [4, 4, 'D5']],
+    [[0, 2, 'E5'], [2, 2, 'G5'], [4, 2, 'B5'], [6, 2, 'G5']],
+    [[0, 2, 'E5'], [2, 2, 'C#5'], [4, 2, 'A4'], [6, 2, 'C#5']],
+    [[0, 6, 'D5']],
+    [],
+  ],
+};
+
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA };
 
 // Chords: root pitch class and intervals (semitones above root).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };

@@ -511,10 +511,42 @@ function renderSonSureno(buf, index) {
   for (const [e, n, note] of song.melody[index] ?? []) blow(buf, at(e), freqOf(midi(note)), n * eighth * 0.9, 0.17, 0.12);
 }
 
+// Paseo vallenato (v5.21, Festival de la Leyenda Vallenata): 4/4 with the three instruments of the conjunto. The
+// accordion sings the melody (reed timbre doubled a third below, with a little bellows shake on long notes), the caja
+// marks 1 and 3 with a slap on the and-of-2 and the and-of-4, the guacharaca scrapes every eighth, and the bass
+// plays root and fifth.
+function renderVallenato(buf, index) {
+  const { song, beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const { root, tones } = parseChord(song.chords[index]);
+  const at = (e) => t0 + e * eighth + (rng() - 0.5) * 0.008;
+  buf.voice = 'bass';
+  pluck(buf, at(0), freqOf(above(root, 40)), beat * 1.2, { amp: 0.45, t60: 1.6, bright: 0.25, pan: -0.15, pos: 0.3 });
+  pluck(buf, at(4), freqOf(above((root + 7) % 12, 40)), beat * 1.2, { amp: 0.35, t60: 1.6, bright: 0.25, pan: -0.15, pos: 0.3 });
+  buf.voice = 'caja';
+  for (const [e, amp] of [[0, 0.3], [3, 0.16], [4, 0.26], [7, 0.16]]) drum(buf, at(e), 210, 150, e % 4 ? 0.05 : 0.09, amp, 0.2, e % 4 ? 0.7 : 0.35);
+  buf.voice = 'guacharaca';
+  for (let e = 0; e < 8; e++) scrape(buf, at(e), eighth * (e % 2 ? 0.35 : 0.7), e % 2 ? 0.03 : 0.055, -0.4);
+  buf.voice = 'melody';
+  const third = (m) => tones.map((pc) => m - (((m - pc) % 12) + 12) % 12).filter((x) => x < m).sort((a, b) => b - a)[0] ?? m - 4;
+  for (const [e, n, note] of song.melody[index] ?? []) {
+    const m = midi(note);
+    const dur = n * eighth * 0.95;
+    const shake = n >= 4 ? 1 + 0.004 * Math.sin(index + e) : 1;
+    reed(buf, at(e), freqOf(m) * shake, dur, 0.11, 0.1);
+    reed(buf, at(e) + 0.003, freqOf(third(m)), dur, 0.06, 0.15);
+  }
+  buf.voice = 'chords';
+  const chord = tones.map((pc) => above(pc, 57)).sort((a, b) => a - b);
+  for (const e of [1, 3, 5, 7]) for (const m of chord) reed(buf, at(e), freqOf(m), eighth * 0.45, 0.02, -0.1);
+}
+
 export function renderBar(buf, index) {
   if (buf.song.style === 'granfinal') return renderGranFinal(buf, index);
   if (buf.song.style === 'villancico') return renderVillancico(buf, index);
   if (buf.song.style === 'sonsureno') return renderSonSureno(buf, index);
+  if (buf.song.style === 'vallenato') return renderVallenato(buf, index);
   if (buf.song.style === 'calipso') return renderCalipso(buf, index);
   if (buf.song.style === 'cumbia') return renderCumbia(buf, index);
   if (buf.song.style === 'torbellino') return renderTorbellino(buf, index);

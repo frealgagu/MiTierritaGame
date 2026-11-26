@@ -8,6 +8,7 @@
 //   streamers: (v5.21) paper bunting and curled streamers on every building (Carnaval de Negros y Blancos).
 //   talc:      (v5.21) puffs of talcum powder drifting up along the paths, by day.
 //   confetti:  (v5.21) bits of colored paper falling over the paths (Carnaval de Barranquilla).
+//   notes:     (v5.21) music notes rising over the paths (Festival Vallenato).
 import { Container, Graphics, Sprite } from 'pixi.js';
 import { iso, depth } from './iso.js';
 import { PAL } from './palette.js';
@@ -39,8 +40,10 @@ export class FiestaDecor {
     scene.objects.addChild(this.air);
     this.talc = false;
     this.confetti = false;
+    this.notes = false;
     this.puffs = [];
     this.bits = [];
+    this.tunes = [];
     this.sync();
   }
 
@@ -64,6 +67,7 @@ export class FiestaDecor {
     this.fireworks = decor.has('fireworks');
     this.talc = decor.has('talc');
     this.confetti = decor.has('confetti');
+    this.notes = decor.has('notes');
   }
 
   clear() {
@@ -76,8 +80,10 @@ export class FiestaDecor {
     this.sky.clear();
     this.talc = false;
     this.confetti = false;
+    this.notes = false;
     this.puffs = [];
     this.bits = [];
+    this.tunes = [];
     this.air.clear();
   }
 
@@ -171,6 +177,13 @@ export class FiestaDecor {
     const p = pointAt(this.scene.zone.muleRoad, Math.random());
     const s = iso(p.gx + (Math.random() - 0.5) * 3, p.gy + (Math.random() - 0.5) * 3, 60);
     this.bits.push({ x: s.x, y: s.y, life: 2.2, phase: Math.random() * 6, color: BULBS[Math.floor(Math.random() * BULBS.length)] });
+  }
+
+  // A music note rising from a random point of the mule path.
+  tune() {
+    const p = pointAt(this.scene.zone.muleRoad, Math.random());
+    const s = iso(p.gx + (Math.random() - 0.5) * 2, p.gy + (Math.random() - 0.5) * 2, 10);
+    this.tunes.push({ x: s.x, y: s.y, life: 3, phase: Math.random() * 6, color: [0x5d4037, 0xc62828, 0x1e88e5][Math.floor(Math.random() * 3)] });
   }
 
   // A puff of talc rising from a random point of the mule path.
@@ -323,10 +336,20 @@ export class FiestaDecor {
       const on = Math.floor(time * 1.6) % 2;
       for (const gl of this.glows) gl.sprite.alpha = gl.phase === on ? 1 : 0.45;
     }
-    if (this.talc || this.confetti) {
+    if (this.talc || this.confetti || this.notes) {
       if (this.talc && light < 0.5 && Math.random() < dt * 2.5) this.puff();
       if (this.confetti && Math.random() < dt * 6) this.bit();
+      if (this.notes && Math.random() < dt * 1.5) this.tune();
       this.air.clear();
+      this.tunes = this.tunes.filter((s) => (s.life -= dt) > 0);
+      for (const s of this.tunes) {
+        s.y -= dt * 12;
+        const x = s.x + Math.sin(s.life * 3 + s.phase) * 4;
+        const a = Math.min(1, s.life, (3 - s.life) * 2);
+        this.air.ellipse(x, s.y, 2.6, 2).fill({ color: s.color, alpha: a });
+        this.air.rect(x + 1.8, s.y - 9, 1.2, 9).fill({ color: s.color, alpha: a });
+        this.air.rect(x + 1.8, s.y - 9, 4, 1.4).fill({ color: s.color, alpha: a });
+      }
       this.bits = this.bits.filter((s) => (s.life -= dt) > 0);
       for (const s of this.bits) {
         s.y += dt * 22;

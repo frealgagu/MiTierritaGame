@@ -132,4 +132,9 @@ export default {
   baq_marimondas: ["La marimonda a de grandes oreilles et un long nez : elle est née pour se moquer des puissants.", "La marimonda danse avec un sifflet et des sauts, les vêtements à l’envers."],
   baq_congos: ["Les congos portent de hauts turbans avec des fleurs et des miroirs, et dansent avec un bâton de bois.", "La danse du Congo Grande est l’une des plus anciennes du carnaval."],
   baq_batalla: ["La Bataille de fleurs est le défilé de chars qui ouvre le carnaval, depuis 1903.", "La Reine du Carnaval monte sur le premier char de la Bataille de fleurs."],
+  // Festival de la Leyenda Vallenata (v5.21)
+  vall_escuela: ["Le vallenato est Patrimoine culturel immatériel de l’humanité depuis 2015.", "À Valledupar, il y a des écoles où les enfants apprennent le vallenato dès leur plus jeune âge."],
+  vall_acordeon: ["L’accordéon est arrivé d’Allemagne en Colombie à la fin du XIXe siècle.", "Chaque année, le festival élit le Roi du vallenato, le meilleur accordéoniste."],
+  vall_caja: ["La caja vallenata est un petit tambour d’origine africaine.", "La guacharaca est une canne rainurée qu’on gratte avec une fourchette en fil de fer."],
+  vall_tarima: ["La scène du festival s’appelle Francisco el Hombre, du nom du ménestrel qui vainquit le diable à l’accordéon.", "Le Festival de la Légende vallenata a lieu à Valledupar depuis 1968."],
 };

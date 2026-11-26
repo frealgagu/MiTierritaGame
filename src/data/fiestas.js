@@ -35,7 +35,7 @@ export const FIESTAS = [
     greeting: tk('✝️ Es Semana Santa: palmas el domingo de Ramos, procesiones y pescado en la mesa.'),
   },
   {
-    id: 'vallenato', icon: '🪗', kind: 'big', dates: { from: [4, 24], to: [4, 30] },
+    id: 'vallenato', icon: '🪗', kind: 'big', dates: { from: [4, 24], to: [4, 30] }, decor: ['streamers', 'notes'],
     name: tk('Festival de la Leyenda Vallenata'),
     greeting: tk('🪗 En Valledupar suenan los acordeones: ¡es el Festival de la Leyenda Vallenata!'),
     sticker: tk('Acordeón, caja y guacharaca: en Valledupar se corona al rey vallenato.'),

@@ -404,4 +404,8 @@ export default {
   marimonda: "Marimonda",
   congo: "Congo",
   batalla_flores: "Carro da Batalha de Flores",
+  aprendiz: "Aprendiz de música",
+  acordeonero: "Acordeonista",
+  percusionista: "Caixeiro e guacharaqueiro",
+  cancion_vallenata: "Canção vallenata",
 };

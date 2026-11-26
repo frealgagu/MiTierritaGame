@@ -31,7 +31,7 @@ test('twelve big fiestas, one sticker each, on two pages of six; Semana Santa an
 });
 
 test('the plaza belongs to no region: its zones and events stay out of the main game lists (v5.19)', () => {
-  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla']);
+  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato']);
   for (const z of PLAZA_ZONES) assert.ok(!ZONE_LIST.includes(z));
   for (const r of REGIONS) for (const z of PLAZA_ZONES) assert.ok(!r.zones.includes(z.id));
   for (const e of SEASON_EVENTS) assert.ok(!EVENTS.includes(e));
@@ -124,7 +124,7 @@ test('season boards and stickers survive the save; no fiesta bonus on the board 
   assert.equal(fiestaMult(back.events.season.boards.velitas), 1);
 });
 
-test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, then the Vallenato (no event yet) (v5.19)', () => {
+test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato and the Día de la Madre (no event yet) (v5.19)', () => {
   const n = nextSeason(day(2026, 11, 24));
   assert.equal(n.fiesta.id, 'velitas');
   assert.equal(n.days, 12);
@@ -137,7 +137,23 @@ test('the next season event: Velitas from late November, Negros y Blancos after 
   assert.ok(later.def, 'its event arrived in v5.21 too');
   const spring = nextSeason(day(2027, 2, 10));
   assert.equal(spring.fiesta.id, 'vallenato');
-  assert.equal(spring.def, null);
+  assert.ok(spring.def, 'the Vallenato too (v5.21)');
+  const may = nextSeason(day(2027, 5, 1));
+  assert.equal(may.fiesta.id, 'dia_madre');
+  assert.equal(may.def, null);
+});
+
+test('Festival Vallenato (v5.21): 24–30 April with 30 days of grace, streamers and music notes on the map', () => {
+  const root = newGame();
+  assert.equal(seasonStatus(root, 'vallenato', day(2027, 4, 23)), null);
+  assert.equal(seasonStatus(root, 'vallenato', day(2027, 4, 24)).kind, 'available');
+  assert.equal(seasonStatus(root, 'vallenato', day(2027, 5, 30)).grace, true);
+  assert.equal(seasonStatus(root, 'vallenato', day(2027, 5, 31)), null);
+  assert.ok(decorOn(day(2027, 4, 26)).has('notes'));
+  const board = startSeason(root, 'vallenato', day(2027, 4, 25));
+  assert.deepEqual(Object.keys(board.stations), ['vall_escuela', 'vall_acordeon', 'vall_caja', 'vall_tarima']);
+  meet(board);
+  assert.equal(finishSeason(root, 'vallenato').sticker, true);
 });
 
 test('Carnaval de Barranquilla (v5.21): its event on the Easter-relative dates with 30 days of grace, streamers and confetti on the map', () => {

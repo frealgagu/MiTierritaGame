@@ -9615,6 +9615,92 @@ const DRAW = {
     this.animate(0);
     this.roofTop = iso(x0 + 1.2, y0 + 0.8, 8 + 2 * size + 14);
   },
+
+  // --- Festival de la Leyenda Vallenata (v5.21) ---
+  // Casa del acordeón: a house with a mango tree in front and an accordionist playing on a stool in its shade; the
+  // bellows open and close while working.
+  vall_acordeon(g, x, y, ctx) {
+    house(this, g, x + 0.25, y + 0.25, 2.0, 1.1, 24, ctx, { wall: 0xfff3e0 });
+    door(g, x + 0.25, y + 0.25, 1.1, 1.0, 15, ctx.trim);
+    windowOnFront(this, g, x + 0.25, y + 0.25, 1.1, 0.4, 8, 0xffffff);
+    // Mango tree.
+    const tr = iso(x + 2.55, y + 1.0);
+    g.rect(tr.x - 2, tr.y - 18, 4, 18).fill(0x6d4c41);
+    for (const [dx, dy, r] of [[-9, -24, 10], [8, -25, 10], [0, -33, 12], [-3, -20, 8]]) g.circle(tr.x + dx, tr.y + dy, r).fill(0x2e7d32);
+    for (const [dx, dy] of [[-6, -22], [5, -28], [9, -19]].slice(0, 1 + Math.min(ctx.tier, 2))) g.ellipse(tr.x + dx, tr.y + dy, 2, 2.6).fill(0xffb300);
+    const player = new Graphics();
+    this.anim.addChild(player);
+    const c = iso(x + 1.5, y + 2.2);
+    this.animate = (time) => {
+      const open = 3 + Math.sin(time * 5) * 2.5;
+      player.clear();
+      player.rect(c.x - 5, c.y - 6, 10, 6).fill(PAL.wood);
+      worker(player, c.x, c.y - 4, 0xfafafa);
+      player.ellipse(c.x, c.y - 26, 6, 1.6).fill(0xe8c063);
+      player.rect(c.x - 6 - open, c.y - 17, 3, 8).fill(0x5d4037);
+      player.rect(c.x - 3 - open, c.y - 16.5, 6 + 2 * open, 7).fill(0xc62828);
+      player.rect(c.x + 3 + open, c.y - 17, 3, 8).fill(0x5d4037);
+    };
+    this.animate(0);
+  },
+
+  // Caja y guacharaca: an awning stall with caja drums and guacharacas for sale, and a cajero drumming.
+  vall_caja(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.35;
+    fleaStall(this, g, x0, y0, ctx, 0x2e7d32, [0x8d5a32, 0xc8a165, 0x8d5a32, 0xc8a165, 0x8d5a32], 2.2);
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) {
+      const p = iso(x0 + 0.4 + k * 0.45, y0 + 1.75);
+      g.rect(p.x - 4, p.y - 8, 8, 8).fill(0xa1693f).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      g.ellipse(p.x, p.y - 8, 4, 1.6).fill(0xf5deb3).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+    }
+    const drummer = new Graphics();
+    this.anim.addChild(drummer);
+    const c = iso(x0 + 1.9, y0 + 2.2);
+    this.animate = (time) => {
+      const hit = Math.abs(Math.sin(time * 8)) * 3;
+      drummer.clear();
+      drummer.rect(c.x - 5, c.y - 9, 10, 9).fill(0xa1693f);
+      drummer.ellipse(c.x, c.y - 9, 5, 2).fill(0xf5deb3);
+      worker(drummer, c.x + 7, c.y + 2, 0xfdd835);
+      drummer.rect(c.x + 1, c.y - 13 - hit, 6, 1.6).fill(0x6d4c41);
+    };
+    this.animate(0);
+  },
+
+  // Tarima Francisco el Hombre: a stage with a roof and a banner where the conjunto plays (accordion, caja and
+  // guacharaca); colored lights at night.
+  vall_tarima(g, x, y, ctx) {
+    const x0 = x + 0.2;
+    const y0 = y + 0.3;
+    box(g, x0, y0, 2.6, 1.6, 7, 0x8d6e63);
+    const H = 30 + ctx.up;
+    for (const [px, py] of [[0, 0], [2.5, 0], [0, 1.5], [2.5, 1.5]]) box(g, x0 + px, y0 + py, 0.1, 0.1, H, 0x455a64);
+    gableRoof(g, x0, y0, 2.6, 1.6, H, 10, 0xc62828, 0xfdd835, 0.1);
+    const a = iso(x0 + 0.2, y0 + 1.6, H - 2);
+    const b = iso(x0 + 2.4, y0 + 1.6, H - 2);
+    g.poly([a.x, a.y, b.x, b.y, b.x, b.y + 7, a.x, a.y + 7]).fill(0xfdd835).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+    const colors = [0xe53935, 0x43a047, 0x1e88e5, 0xfdd835];
+    for (let k = 0; k < 6; k++) {
+      const p = iso(x0 + 0.2 + k * 0.44, y0 + 1.62, H - 3);
+      this.lights.push({ x: p.x, y: p.y, r: 9, color: colors[k % colors.length] });
+    }
+    const band = new Graphics();
+    this.anim.addChild(band);
+    const spots = [0.6, 1.3, 2.0].map((k) => iso(x0 + k, y0 + 1.0, 7));
+    this.animate = (time) => {
+      band.clear();
+      spots.forEach((p, k) => {
+        const bob = Math.abs(Math.sin(time * 4 + k)) * 1.5;
+        worker(band, p.x, p.y - bob, [0xfafafa, 0xe53935, 0x1e88e5][k]);
+        if (k === 0) band.rect(p.x - 5, p.y - 16 - bob, 10, 7).fill(0xc62828);
+        if (k === 1) band.rect(p.x - 4, p.y - 12 - bob, 8, 7).fill(0xa1693f);
+        if (k === 2) band.rect(p.x + 2, p.y - 18 - bob, 2, 12).fill(0xc8a165);
+      });
+    };
+    this.animate(0);
+    this.roofTop = iso(x0 + 1.3, y0 + 0.8, H + 10);
+  },
 };
 
 // Tolima Grande (v4.0): stations sharing artwork from other regions.

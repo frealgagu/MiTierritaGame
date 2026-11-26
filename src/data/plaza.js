@@ -59,6 +59,8 @@ export const PLAZA_ZONES = [
   plaza('plaza_negros_blancos', 1302, 'negros_blancos', ['nyb_disfraces', 'nyb_negros', 'nyb_blancos', 'nyb_desfile'], ['streamers', 'talc']),
   // (v5.21) Barranquilla's carnival: bunting, streamers and falling confetti.
   plaza('plaza_barranquilla', 1347, 'barranquilla', ['baq_mascaras', 'baq_marimondas', 'baq_congos', 'baq_batalla'], ['streamers', 'confetti']),
+  // (v5.21) Valledupar's festival: bunting and music notes rising over the paths.
+  plaza('plaza_vallenato', 1424, 'vallenato', ['vall_escuela', 'vall_acordeon', 'vall_caja', 'vall_tarima'], ['streamers', 'notes']),
 ];
 
 // Same prices and paces as the Finca's first stations (data/stations.js).
@@ -85,6 +87,12 @@ export const PLAZA_STATIONS = [
   station('baq_marimondas', 'plaza_barranquilla', 'Casa de las marimondas', '🐘', { in: { mascara: 1 }, out: { marimonda: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('baq_congos', 'plaza_barranquilla', 'Casa de los congos', '🌺', { in: { mascara: 1 }, out: { congo: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('baq_batalla', 'plaza_barranquilla', 'Batalla de Flores', '💃', { in: { marimonda: 1 }, joins: [{ product: 'congo', perCycle: 1, from: 'baq_congos' }], out: { batalla_flores: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
+  // (v5.21) 🪗 Festival de la Leyenda Vallenata: the music school's apprentices become accordionists and caja and
+  // guacharaca players, who play together on the Francisco el Hombre stage. The same paces and prices as the Navidad.
+  station('vall_escuela', 'plaza_vallenato', 'Escuela vallenata', '🎵', { infinite: true, out: { aprendiz: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, release: '5.21' }),
+  station('vall_acordeon', 'plaza_vallenato', 'Casa del acordeón', '🪗', { in: { aprendiz: 1 }, out: { acordeonero: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('vall_caja', 'plaza_vallenato', 'Caja y guacharaca', '🥁', { in: { aprendiz: 1 }, out: { percusionista: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('vall_tarima', 'plaza_vallenato', 'Tarima Francisco el Hombre', '🎤', { in: { acordeonero: 1 }, joins: [{ product: 'percusionista', perCycle: 1, from: 'vall_caja' }], out: { cancion_vallenata: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
 ];
 
 export const PLAZA_PRODUCTS = {
@@ -103,6 +111,10 @@ export const PLAZA_PRODUCTS = {
   marimonda: { name: 'Marimonda', zone: 'plaza_barranquilla', value: 3, icon: '🐘', color: 0x1e88e5 },
   congo: { name: 'Congo', zone: 'plaza_barranquilla', value: 3, icon: '🌺', color: 0xe53935 },
   batalla_flores: { name: 'Carroza de la Batalla de Flores', zone: 'plaza_barranquilla', value: 10, icon: ICON.fiestaBarranquilla, color: 0x43a047 },
+  aprendiz: { name: 'Aprendiz de música', zone: 'plaza_vallenato', value: 1, icon: '🎵', color: 0xffb300 },
+  acordeonero: { name: 'Acordeonero', zone: 'plaza_vallenato', value: 3, icon: '🪗', color: 0xc62828 },
+  percusionista: { name: 'Cajero y guacharaquero', zone: 'plaza_vallenato', value: 3, icon: '🥁', color: 0x8d5a32 },
+  cancion_vallenata: { name: 'Canción vallenata', zone: 'plaza_vallenato', value: 10, icon: ICON.fiestaVallenato, color: 0xfdd835 },
 };
 
 // The season events. `fiesta`: its fiesta (data/fiestas.js); `season`: played in the plaza, not in a region.
@@ -165,6 +177,20 @@ export const SEASON_EVENTS = [
     coins: 0,
     actions: [],
     objective: { kind: 'produced', items: { batalla_flores: 240000 } },
+  },
+  {
+    id: 'fiesta_vallenato',
+    fiesta: 'vallenato',
+    season: true,
+    zone: 'plaza_vallenato',
+    icon: '🪗',
+    name: tk('El Festival de la Leyenda Vallenata'),
+    intro: tk('En Valledupar se busca al nuevo rey vallenato: enseña a los aprendices de la escuela, forma acordeoneros, cajeros y guacharaqueros, y súbelos juntos a la tarima Francisco el Hombre.'),
+    stations: ['vall_escuela', 'vall_acordeon', 'vall_caja', 'vall_tarima'],
+    level: 1,
+    coins: 0,
+    actions: [],
+    objective: { kind: 'produced', items: { cancion_vallenata: 240000 } },
   },
 ];
 export const SEASON_EVENT_OF_FIESTA = Object.fromEntries(SEASON_EVENTS.map((e) => [e.fiesta, e]));

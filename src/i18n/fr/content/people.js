@@ -63,4 +63,5 @@ export default {
   plaza_navidad: ["Doña Celmira", "la dame du comité des fêtes"],
   plaza_negros_blancos: ["Doña Celmira", "la dame du comité des fêtes"],
   plaza_barranquilla: ["Doña Celmira", "la dame du comité des fêtes"],
+  plaza_vallenato: ["Doña Celmira", "la dame du comité des fêtes"],
 };

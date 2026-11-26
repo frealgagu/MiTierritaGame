@@ -132,4 +132,9 @@ export default {
   baq_marimondas: ["The marimonda has big ears and a long nose: it was born to mock the powerful.", "The marimonda dances with a whistle and leaps, wearing its clothes inside out."],
   baq_congos: ["The congos wear tall turbans with flowers and mirrors, and dance with a wooden stick.", "The Congo Grande dance is one of the oldest of the carnival."],
   baq_batalla: ["The Battle of Flowers is the parade of floats that opens the carnival, since 1903.", "The Carnival Queen rides on the first float of the Battle of Flowers."],
+  // Festival de la Leyenda Vallenata (v5.21)
+  vall_escuela: ["Vallenato has been an Intangible Cultural Heritage of Humanity since 2015.", "In Valledupar there are schools where children learn vallenato from a young age."],
+  vall_acordeon: ["The accordion came to Colombia from Germany at the end of the 19th century.", "Every year the festival chooses the Vallenato King, the best accordionist."],
+  vall_caja: ["The caja vallenata is a small drum of African origin.", "The guacharaca is a ridged cane scraped with a wire fork."],
+  vall_tarima: ["The festival stage is named Francisco el Hombre, after the minstrel who beat the devil playing the accordion.", "The Vallenato Legend Festival has been held in Valledupar since 1968."],
 };

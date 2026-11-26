@@ -63,4 +63,5 @@ export default {
   plaza_navidad: "A novena começou! Moa o milho, que hoje à noite tem natilla e buñuelos para todos.",
   plaza_negros_blancos: "Chegou o carnaval de Pasto! Tire as fantasias, que aqui ninguém escapa do talco.",
   plaza_barranquilla: "Quem vive é quem aproveita! Chegou o carnaval de Barranquilla: vamos entalhar máscaras e dançar.",
+  plaza_vallenato: "Chegou o Festival Vallenato! Pegue o acordeão, a caixa e a guacharaca, que hoje se escolhe um rei.",
 };
