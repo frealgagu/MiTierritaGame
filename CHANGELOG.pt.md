@@ -12,6 +12,8 @@
 - **🌉 Novo evento de temporada: a Batalha de Boyacá** (de 5 a 8 de agosto, com mais 30 dias para jogar): junte as provisões da vereda, cozinhe as rações da tropa, prepare os cavalos dos lanceiros e faça todos cruzarem a Ponte de Boyacá. Na sua praça toca «Torbellino da ponte», um torbellino original, e as bandeiras voltam a tremular no mapa.
 - **💕 Novo evento de temporada: Amor e Amizade** (a semana do terceiro sábado de setembro, com mais 30 dias para jogar): corte o papel de presente, monte as caixas de doces, escreva os cartões e entregue os presentes do amigo secreto. Na sua praça toca «Dança do amigo secreto», uma danza original, e corações flutuam sobre o mapa.
 - **🎃 Novo evento de temporada: Halloween** (de 25 de outubro a 1º de novembro, com mais 30 dias para jogar): colha as ahuyamas, entalhe as abóboras com sua vela, cozinhe o doce de ahuyama e encha os sacos do «triqui triqui» das crianças. Na sua praça toca «Cumbia das fantasias», uma cumbia original, e à noite as abóboras entalhadas iluminam os caminhos do mapa.
+- **🏰 Novo evento de temporada: as festas da Independência de Cartagena** (de 9 a 12 de novembro, com mais 30 dias para jogar): derrube os cocos, prepare as cocadas das palenqueiras e a água de coco, e distribua-as às comparsas do Cabildo de Getsemaní. Na sua praça toca «Porro do cabildo», um porro original, com bandeirinhas de dia e fogos à noite.
+- **🎉 Todas as festas grandes já têm seu evento:** dá para ganhar as doze figurinhas do álbum Festas da Colômbia.
 
 ## v5.20.0 — A praça das festas
 - **🔽 Minimizar:** o botão «Sair» da barra do evento agora se chama «Minimizar», porque o evento continua rodando enquanto você joga em outro lugar.

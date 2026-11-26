@@ -70,4 +70,5 @@ export default {
   plaza_batalla_boyaca: "Hoje se lembra a Batalha de Boyacá! Tem que alimentar a tropa e preparar os cavalos para cruzar a ponte.",
   plaza_amor_amistad: "Feliz Dia do Amor e da Amizade! O amigo secreto já foi sorteado: vamos embrulhar doces e escrever cartões.",
   plaza_halloween: "Chegou o Halloween! As crianças já têm as fantasias: vamos entalhar abóboras e preparar os doces do triqui triqui.",
+  plaza_cartagena: "Chegaram as festas de Cartagena! Derrube os cocos, que as palenqueiras e o Cabildo nos esperam.",
 };

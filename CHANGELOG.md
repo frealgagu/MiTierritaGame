@@ -12,6 +12,8 @@
 - **🌉 New season event: the Battle of Boyacá** (5 to 8 August, with 30 more days to play): gather the vereda's provisions, cook the troops' rations, ready the lancers' horses and get everyone across the Boyacá Bridge. In its square plays «Torbellino del puente», an original torbellino, and the flags fly again on the map.
 - **💕 New season event: Love and Friendship** (the week of the third Saturday of September, with 30 more days to play): cut the wrapping paper, fill the boxes of sweets, write the cards and deliver the secret friend's gifts. In its square plays «Danza del amigo secreto», an original danza, and hearts float over the map.
 - **🎃 New season event: Halloween** (25 October to 1 November, with 30 more days to play): pick the ahuyamas, carve the pumpkins with their candle, cook the dulce de ahuyama and fill the children's «triqui triqui» bags. In its square plays «Cumbia de los disfraces», an original cumbia, and carved pumpkins light up the map's paths at night.
+- **🏰 New season event: the Cartagena Independence fiestas** (9 to 12 November, with 30 more days to play): bring down the coconuts, make the palenqueras' cocadas and the coconut water, and hand them out to the troupes of the Cabildo de Getsemaní. In its square plays «Porro del cabildo», an original porro, with bunting by day and fireworks at night.
+- **🎉 Every big fiesta now has its event:** all twelve stickers of the Fiestas of Colombia album can be won.
 
 ## v5.20.0 — Fiesta Square
 - **🔽 Minimize:** the event bar's «Leave» button is now «Minimize», since the event keeps going while you play elsewhere.

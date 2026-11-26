@@ -70,4 +70,5 @@ export default {
   plaza_batalla_boyaca: ["Doña Celmira", "la dame du comité des fêtes"],
   plaza_amor_amistad: ["Doña Celmira", "la dame du comité des fêtes"],
   plaza_halloween: ["Doña Celmira", "la dame du comité des fêtes"],
+  plaza_cartagena: ["Doña Celmira", "la dame du comité des fêtes"],
 };

@@ -419,4 +419,8 @@ export default {
   hw_calabazas: "Pumpkin carving shed",
   hw_dulce: "Dulce de ahuyama kitchen",
   hw_triqui: "Triqui triqui",
+  ctg_palmar: "Coconut palm grove",
+  ctg_palenqueras: "Palenqueras’ cocadas",
+  ctg_coco: "Coconut water stand",
+  ctg_cabildo: "Cabildo de Getsemaní",
 };

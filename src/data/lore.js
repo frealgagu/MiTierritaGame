@@ -484,6 +484,11 @@ export const FACTS = {
   hw_calabazas: ["Las calabazas talladas con una vela adentro vienen de una tradición irlandesa.", "En muchos barrios las casas se decoran con calabazas, telarañas y murciélagos."],
   hw_dulce: ["El dulce de ahuyama se cocina con panela, canela y clavos.", "En Colombia los dulces caseros de frutas se hacen en paila de cobre."],
   hw_triqui: ["«¡Triqui, triqui, Halloween, quiero dulces para mí!» es lo que cantan los niños de puerta en puerta.", "Los centros comerciales y los conjuntos organizan recorridos para que los niños pidan dulces."],
+  // Independencia de Cartagena (v5.21)
+  ctg_palmar: ["Cartagena se declaró independiente de España el 11 de noviembre de 1811.", "Fue la primera ciudad de la Nueva Granada en declarar la independencia absoluta."],
+  ctg_palenqueras: ["Las palenqueras vienen de San Basilio de Palenque, el primer pueblo libre de América.", "Llevan en la cabeza una ponchera con frutas y cocadas, con vestidos de colores."],
+  ctg_coco: ["El agua de coco se bebe directamente del coco verde, abierto con machete.", "En la costa también se hace limonada de coco y arroz con coco."],
+  ctg_cabildo: ["El Cabildo de Getsemaní es un desfile de comparsas y disfraces por el barrio de Getsemaní.", "En las fiestas de noviembre también se elige a la Señorita Colombia en Cartagena."],
 };
 
 // Speaker announcing milestones per zone (key events, not every toast).
@@ -558,6 +563,7 @@ export const PEOPLE = {
   plaza_batalla_boyaca: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_amor_amistad: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_halloween: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
+  plaza_cartagena: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
 };
 
 // Opening line when entering a zone for the first time.
@@ -633,6 +639,7 @@ export const WELCOME = {
   plaza_batalla_boyaca: '¡Hoy se recuerda la Batalla de Boyacá! Hay que alimentar a la tropa y alistar los caballos para cruzar el puente.',
   plaza_amor_amistad: '¡Feliz Amor y Amistad! Ya se sorteó el amigo secreto: a envolver dulces y escribir tarjetas.',
   plaza_halloween: '¡Llegó Halloween! Los niños ya tienen sus disfraces: a tallar calabazas y a preparar los dulces del triqui triqui.',
+  plaza_cartagena: '¡Llegaron las fiestas de Cartagena! Baje los cocos, que las palenqueras y el Cabildo nos esperan.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

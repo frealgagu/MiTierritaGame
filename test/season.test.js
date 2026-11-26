@@ -8,7 +8,7 @@ import { REGIONS } from '../src/data/regions.js';
 import { ZONE_LIST } from '../src/data/zones/index.js';
 import { editionOf, endSeason, finishSeason, nextSeason, restartSeason, seasonOf, seasonReady, seasonStatus, startSeason, sweepSeason } from '../src/sim/seasonEvents.js';
 import { eventItems, refillSlots, slotsOf } from '../src/sim/events.js';
-import { decorOn, fiestaMult } from '../src/sim/fiestas.js';
+import { decorOn, fiestaMult, windowIn } from '../src/sim/fiestas.js';
 import { Game } from '../src/core/Game.js';
 import { play } from '../tools/event-bots.js';
 import { newGame, reload } from './helpers/game.js';
@@ -39,7 +39,7 @@ test('the plaza\'s products and stations never reuse a region\'s id: they would 
 });
 
 test('the plaza belongs to no region: its zones and events stay out of the main game lists (v5.19)', () => {
-  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro', 'independencia', 'batalla_boyaca', 'amor_amistad', 'halloween']);
+  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro', 'independencia', 'batalla_boyaca', 'amor_amistad', 'halloween', 'cartagena']);
   for (const z of PLAZA_ZONES) assert.ok(!ZONE_LIST.includes(z));
   for (const r of REGIONS) for (const z of PLAZA_ZONES) assert.ok(!r.zones.includes(z.id));
   for (const e of SEASON_EVENTS) assert.ok(!EVENTS.includes(e));
@@ -61,7 +61,7 @@ test('a season event: play it, win the sticker; next year again with no prize (v
   const on = day(2026, 12, 7);
   assert.equal(seasonStatus(root, 'velitas', on).kind, 'available');
   assert.equal(seasonStatus(root, 'velitas', on).grace, false);
-  assert.equal(seasonReady(root, on), 1);
+  assert.equal(seasonReady(root, on), 2, 'the Velitas, and Cartagena in its days of grace (v5.21)');
   assert.equal(seasonStatus(root, 'navidad', on), null, 'Christmas has not started');
   const board = startSeason(root, 'velitas', on);
   assert.equal(board.event.season.prize, true);
@@ -132,7 +132,7 @@ test('season boards and stickers survive the save; no fiesta bonus on the board 
   assert.equal(fiestaMult(back.events.season.boards.velitas), 1);
 });
 
-test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre, San Pedro, the 20 de julio, Boyacá, Amor y Amistad, Halloween and Cartagena (no event yet) (v5.19)', () => {
+test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre, San Pedro, the 20 de julio, Boyacá, Amor y Amistad, Halloween and Cartagena (v5.19)', () => {
   const n = nextSeason(day(2026, 11, 24));
   assert.equal(n.fiesta.id, 'velitas');
   assert.equal(n.days, 12);
@@ -166,7 +166,37 @@ test('the next season event: Velitas from late November, Negros y Blancos after 
   assert.ok(october.def, 'Halloween too (v5.21)');
   const november = nextSeason(day(2027, 11, 2));
   assert.equal(november.fiesta.id, 'cartagena');
-  assert.equal(november.def, null);
+  assert.ok(november.def, 'Cartagena too (v5.21): every big fiesta has its event');
+});
+
+test('Independencia de Cartagena (v5.21): 9–12 November with 30 days of grace, streamers and fireworks on the map', () => {
+  const root = newGame();
+  assert.equal(seasonStatus(root, 'cartagena', day(2027, 11, 8)), null);
+  assert.equal(seasonStatus(root, 'cartagena', day(2027, 11, 9)).kind, 'available');
+  assert.equal(seasonStatus(root, 'cartagena', day(2027, 12, 12)).grace, true);
+  assert.equal(seasonStatus(root, 'cartagena', day(2027, 12, 13)), null);
+  assert.ok(decorOn(day(2027, 11, 11)).has('fireworks'));
+  const board = startSeason(root, 'cartagena', day(2027, 11, 10));
+  assert.deepEqual(Object.keys(board.stations), ['ctg_palmar', 'ctg_palenqueras', 'ctg_coco', 'ctg_cabildo']);
+  meet(board);
+  assert.equal(finishSeason(root, 'cartagena').sticker, true);
+});
+
+test('all twelve stickers can be won: every big fiesta has its season event, and winning them all fills both pages (v5.21)', () => {
+  const root = newGame();
+  const ids = FIESTA_PAGES.flatMap((p) => p.stickers);
+  assert.deepEqual(ids.filter((id) => !SEASON_EVENTS.some((e) => e.fiesta === id)), []);
+  const renown = root.profile.renown;
+  for (const id of ids) {
+    // Its first day, this year or the next.
+    const fiesta = FIESTAS_BY_ID[id];
+    const date = [2027, 2028].map((y) => windowIn(fiesta.dates, y)[0]).find(Boolean);
+    const board = startSeason(root, id, date);
+    meet(board);
+    finishSeason(root, id);
+  }
+  assert.equal(root.profile.fiestas.length, 12);
+  assert.equal(root.profile.renown, renown + 2 * PAGE_BONUS);
 });
 
 test('Halloween (v5.21): 25 October to 1 November with 30 days of grace, pumpkins on the map', () => {

@@ -419,4 +419,8 @@ export default {
   hw_calabazas: "Atelier des citrouilles",
   hw_dulce: "Cuisine du dulce de ahuyama",
   hw_triqui: "Triqui triqui",
+  ctg_palmar: "Palmeraie de cocotiers",
+  ctg_palenqueras: "Cocadas des palenqueras",
+  ctg_coco: "Stand d’eau de coco",
+  ctg_cabildo: "Cabildo de Getsemaní",
 };

@@ -419,4 +419,8 @@ export default {
   hw_calabazas: "Oficina de abóboras",
   hw_dulce: "Cozinha do doce de ahuyama",
   hw_triqui: "Triqui triqui",
+  ctg_palmar: "Palmeiral de cocos",
+  ctg_palenqueras: "Cocadas das palenqueiras",
+  ctg_coco: "Barraca de água de coco",
+  ctg_cabildo: "Cabildo de Getsemaní",
 };

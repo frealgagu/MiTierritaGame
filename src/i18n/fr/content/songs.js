@@ -24,4 +24,5 @@ export default {
   batalla_boyaca: ["Torbellino du pont", "tiple, requinto, guitare et chucho"],
   amor_amistad: ["Danza de l’ami secret", "bandola, tiple et guitare"],
   halloween: ["Cumbia des déguisements", "guitare électrique, basse, clavier, maracas et manguaré"],
+  cartagena: ["Porro du cabildo", "clarinette, euphonium, tambora, caisse claire et cymbales"],
 };

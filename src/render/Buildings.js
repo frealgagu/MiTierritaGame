@@ -10222,6 +10222,98 @@ const DRAW = {
     this.animate(0);
     this.roofTop = iso(x + 1.45, y + 0.75, H + 16);
   },
+
+  // --- Independencia de Cartagena (v5.21) ---
+  // Cocadas de las palenqueras: a palenquera in her bright dress with a basin of cocadas and fruit on her head, by a
+  // table of cocadas under a palm.
+  ctg_palenqueras(g, x, y, ctx) {
+    box(g, x + 0.4, y + 0.6, 1.6, 0.6, 8, PAL.wood);
+    for (let k = 0; k < 4 + Math.min(ctx.tier, 3); k++) {
+      const p = iso(x + 0.55 + (k % 4) * 0.35, y + 0.85 + Math.floor(k / 4) * 0.2, 8);
+      g.ellipse(p.x, p.y - 1, 3, 1.8).fill(PRODUCTS.cocada_fiesta.color).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+    }
+    const palm = iso(x + 2.5, y + 0.6);
+    palmAt(g, palm.x, palm.y, 40);
+    const woman = new Graphics();
+    this.anim.addChild(woman);
+    const c = iso(x + 1.3, y + 2.1);
+    this.animate = (time) => {
+      const sway = Math.sin(time * 2) * 1.2;
+      woman.clear();
+      woman.poly([c.x - 8 + sway, c.y, c.x + 8 + sway, c.y, c.x + 3, c.y - 12, c.x - 3, c.y - 12]).fill(0xfdd835).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+      woman.rect(c.x - 8 + sway, c.y - 4, 16, 2).fill(0xd32f2f);
+      woman.rect(c.x - 8 + sway, c.y - 8, 16, 2).fill(0x1e88e5);
+      woman.roundRect(c.x - 3, c.y - 19, 6, 8, 2).fill(0xd32f2f);
+      woman.circle(c.x, c.y - 21.5, 2.8).fill(0x5d4037);
+      woman.ellipse(c.x, c.y - 26, 9, 2.4).fill(0xeceff1).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+      for (const [dx, col] of [[-5, 0xfdd835], [-1.5, 0xe53935], [2, 0x7cb342], [5, 0xff9800]]) woman.circle(c.x + dx, c.y - 28.5, 1.9).fill(col);
+    };
+    this.animate(0);
+  },
+
+  // Puesto de agua de coco: a cart full of green coconuts under a striped umbrella and the vendor opening one.
+  ctg_coco(g, x, y, ctx) {
+    const x0 = x + 0.5;
+    const y0 = y + 0.6;
+    box(g, x0, y0, 1.6, 0.9, 9, 0x2e7d32);
+    for (const [wx, wy] of [[0.2, 0.9], [1.4, 0.9]]) {
+      const p = iso(x0 + wx, y0 + wy, 3);
+      g.circle(p.x, p.y, 4).fill(0x3e2723).stroke(OUTLINE);
+    }
+    for (let k = 0; k < 5 + Math.min(ctx.tier, 3); k++) {
+      const p = iso(x0 + 0.25 + (k % 4) * 0.35, y0 + 0.3 + Math.floor(k / 4) * 0.3, 9);
+      g.circle(p.x, p.y - 2.6, 3).fill(0x7cb342).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.5 });
+    }
+    const pole = iso(x0 + 0.8, y0 + 0.45, 9);
+    g.rect(pole.x - 0.8, pole.y - 30, 1.6, 30).fill(0x9e9e9e);
+    for (let k = 0; k < 6; k++) {
+      const a0 = (k / 6) * Math.PI;
+      const a1 = ((k + 1) / 6) * Math.PI;
+      g.poly([pole.x, pole.y - 38, pole.x - Math.cos(a0) * 20, pole.y - 28 + Math.sin(a0) * 3, pole.x - Math.cos(a1) * 20, pole.y - 28 + Math.sin(a1) * 3]).fill(k % 2 ? 0xffffff : 0xd32f2f);
+    }
+    const vendor = new Graphics();
+    this.anim.addChild(vendor);
+    const v = iso(x0 + 1.9, y0 + 1.3);
+    this.animate = (time) => {
+      const chop = Math.abs(Math.sin(time * 5)) * 4;
+      vendor.clear();
+      worker(vendor, v.x, v.y, 0xfafafa);
+      vendor.ellipse(v.x, v.y - 23, 5.5, 1.6).fill(0xf3d27a);
+      vendor.circle(v.x - 6, v.y - 12, 3).fill(0x7cb342);
+      vendor.rect(v.x + 3, v.y - 18 - chop, 1.4, 8).fill(0xb0bec5);
+    };
+    this.animate(0);
+  },
+
+  // Cabildo de Getsemaní: a stretch of the city wall with its garita, and a comparsa dancing past with drums,
+  // Cartagena's red, yellow and green flag at the front.
+  ctg_cabildo(g, x, y, ctx) {
+    box(g, x + 0.2, y + 0.2, 2.6, 0.7, 16, 0xd7b98a);
+    for (let k = 0; k < 6; k++) box(g, x + 0.25 + k * 0.45, y + 0.2, 0.25, 0.7, 20, 0xc4a372);
+    box(g, x + 2.2, y + 0.1, 0.6, 0.6, 26, 0xe8c896);
+    const dome = iso(x + 2.5, y + 0.4, 26);
+    g.moveTo(dome.x - 7, dome.y).quadraticCurveTo(dome.x, dome.y - 14, dome.x + 7, dome.y).fill(0xe8c896).stroke(OUTLINE);
+    const troupe = new Graphics();
+    this.anim.addChild(troupe);
+    const n = 3 + Math.min(ctx.tier, 2);
+    this.animate = (time) => {
+      troupe.clear();
+      for (let k = 0; k < n; k++) {
+        const f = (time * 0.12 + k / n) % 1;
+        const p = iso(x + 0.3 + f * 2.4, y + 1.9);
+        const hop = Math.abs(Math.sin(time * 6 + k)) * 2;
+        if (k === 0) {
+          troupe.rect(p.x + 3, p.y - 30 - hop, 1, 26).fill(0x6d4c41);
+          troupe.rect(p.x + 4, p.y - 30 - hop, 11, 9).fill(0xd32f2f);
+          troupe.rect(p.x + 6, p.y - 28 - hop, 7, 5).fill(0xfdd835);
+          troupe.rect(p.x + 8, p.y - 27 - hop, 3, 3).fill(0x2e7d32);
+        }
+        worker(troupe, p.x, p.y - hop, [0xd32f2f, 0xfdd835, 0x2e7d32, 0x1e88e5, 0xff7043][k % 5]);
+        if (k % 2) troupe.rect(p.x - 5, p.y - 13 - hop, 5, 6).fill(0xa1693f);
+      }
+    };
+    this.animate(0);
+  },
 };
 
 // Tolima Grande (v4.0): stations sharing artwork from other regions.

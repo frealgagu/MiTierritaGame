@@ -87,7 +87,7 @@ export const FIESTAS = [
     sticker: tk('El 31 de octubre los niños salen disfrazados a pedir: «¡Triqui, triqui, Halloween!».'),
   },
   {
-    id: 'cartagena', icon: '🏰', kind: 'big', dates: { from: [11, 9], to: [11, 12] },
+    id: 'cartagena', icon: '🏰', kind: 'big', dates: { from: [11, 9], to: [11, 12] }, decor: ['streamers', 'fireworks'],
     name: tk('Independencia de Cartagena'),
     greeting: tk('🏰 ¡Fiestas de la Independencia de Cartagena! Hay bandas y desfiles en la ciudad amurallada.'),
     sticker: tk('El 11 de noviembre de 1811 Cartagena se declaró independiente.'),

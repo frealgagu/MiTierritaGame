@@ -167,4 +167,9 @@ export default {
   hw_calabazas: ["Les citrouilles sculptées avec une bougie à l’intérieur viennent d’une tradition irlandaise.", "Dans beaucoup de quartiers, les maisons se décorent de citrouilles, de toiles d’araignée et de chauves-souris."],
   hw_dulce: ["Le dulce de ahuyama se cuit avec de la panela, de la cannelle et des clous de girofle.", "En Colombie, les confiseries de fruits maison se font dans des chaudrons en cuivre."],
   hw_triqui: ["« Triqui, triqui, Halloween, je veux des bonbons pour moi ! », chantent les enfants de porte en porte.", "Les centres commerciaux et les résidences organisent des parcours pour que les enfants demandent des bonbons."],
+  // Independencia de Cartagena (v5.21)
+  ctg_palmar: ["Carthagène se déclara indépendante de l’Espagne le 11 novembre 1811.", "Ce fut la première ville de la Nouvelle-Grenade à déclarer l’indépendance absolue."],
+  ctg_palenqueras: ["Les palenqueras viennent de San Basilio de Palenque, le premier village libre des Amériques.", "Elles portent sur la tête une bassine de fruits et de cocadas, en robes colorées."],
+  ctg_coco: ["L’eau de coco se boit directement dans la noix verte, ouverte à la machette.", "Sur la côte, on fait aussi de la limonade de coco et du riz au coco."],
+  ctg_cabildo: ["Le Cabildo de Getsemaní est un défilé de troupes et de déguisements dans le quartier de Getsemaní.", "Les fêtes de novembre couronnent aussi Miss Colombie à Carthagène."],
 };

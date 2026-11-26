@@ -39,7 +39,7 @@ const SPOTS = [
   { x: 13, y: 7 },
   { x: 17, y: 13 },
 ];
-const plaza = (id, seed, fiesta, chain, decor) => ({
+const plaza = (id, seed, fiesta, chain, decor, look = fiesta) => ({
   ...LAYOUT,
   id,
   seed,
@@ -48,7 +48,7 @@ const plaza = (id, seed, fiesta, chain, decor) => ({
   icon: '🎉',
   chain,
   decor, // what render/Fiesta.js draws on it, whatever the date
-  farm: { stationId: chain[0], x: 2, y: 2, w: 6, h: 6, look: fiesta }, // look: its first station's art (render/Stations.js)
+  farm: { stationId: chain[0], x: 2, y: 2, w: 6, h: 6, look }, // look: its first station's art (render/Stations.js)
   plots: chain.slice(1).map((stationId, k) => ({ stationId, ...SPOTS[k] })),
 });
 
@@ -73,6 +73,9 @@ export const PLAZA_ZONES = [
   plaza('plaza_amor_amistad', 1913, 'amor_amistad', ['aa_papeleria', 'aa_dulceria', 'aa_tarjetas', 'aa_amigo'], ['hearts']),
   // (v5.21) Halloween: carved pumpkins along the paths, lit at night.
   plaza('plaza_halloween', 2031, 'halloween', ['hw_huerta', 'hw_calabazas', 'hw_dulce', 'hw_triqui'], ['pumpkins']),
+  // (v5.21) Independencia de Cartagena: bunting by day and fireworks at night. Its look is not Cartagena's café (the
+  // region's zone already has that one) but the palenqueras' coconut palms.
+  plaza('plaza_cartagena', 2111, 'cartagena', ['ctg_palmar', 'ctg_palenqueras', 'ctg_coco', 'ctg_cabildo'], ['streamers', 'fireworks'], 'cartagena_fiesta'),
 ];
 
 // Same prices and paces as the Finca's first stations (data/stations.js).
@@ -141,6 +144,12 @@ export const PLAZA_STATIONS = [
   station('hw_calabazas', 'plaza_halloween', 'Taller de calabazas', '🕯️', { in: { ahuyama: 1 }, out: { calabaza_tallada: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('hw_dulce', 'plaza_halloween', 'Cocina del dulce de ahuyama', '🍯', { in: { ahuyama: 1 }, out: { dulce_ahuyama: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('hw_triqui', 'plaza_halloween', 'Triqui triqui', '👻', { in: { calabaza_tallada: 1 }, joins: [{ product: 'dulce_ahuyama', perCycle: 1, from: 'hw_dulce' }], out: { triqui_triqui: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
+  // (v5.21) 🏰 Independencia de Cartagena: coconuts from the palm grove become the palenqueras' cocadas and coconut
+  // water, handed out along the Cabildo de Getsemaní. The same paces and prices as the Navidad.
+  station('ctg_palmar', 'plaza_cartagena', 'Palmar de cocos', '🌴', { infinite: true, out: { coco_fiesta: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, release: '5.21' }),
+  station('ctg_palenqueras', 'plaza_cartagena', 'Cocadas de las palenqueras', '👒', { in: { coco_fiesta: 1 }, out: { cocada_fiesta: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('ctg_coco', 'plaza_cartagena', 'Puesto de agua de coco', '🥥', { in: { coco_fiesta: 1 }, out: { agua_coco: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('ctg_cabildo', 'plaza_cartagena', 'Cabildo de Getsemaní', '🥁', { in: { cocada_fiesta: 1 }, joins: [{ product: 'agua_coco', perCycle: 1, from: 'ctg_coco' }], out: { cabildo: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
 ];
 
 export const PLAZA_PRODUCTS = {
@@ -186,6 +195,10 @@ export const PLAZA_PRODUCTS = {
   calabaza_tallada: { name: 'Calabaza tallada', zone: 'plaza_halloween', value: 3, icon: '🕯️', color: 0xef6c00 },
   dulce_ahuyama: { name: 'Dulce de ahuyama', zone: 'plaza_halloween', value: 3, icon: '🍯', color: 0xffa726 },
   triqui_triqui: { name: 'Bolsa del triqui triqui', zone: 'plaza_halloween', value: 10, icon: ICON.fiestaHalloween, color: 0x6a1b9a },
+  coco_fiesta: { name: 'Coco de la costa', zone: 'plaza_cartagena', value: 1, icon: ICON.coconut, color: 0x7cb342 },
+  cocada_fiesta: { name: 'Cocadas de palenquera', zone: 'plaza_cartagena', value: 3, icon: ICON.cocada, color: 0xa0612d },
+  agua_coco: { name: 'Agua de coco', zone: 'plaza_cartagena', value: 3, icon: '🥥', color: 0xe8f5e9 },
+  cabildo: { name: 'Comparsa del Cabildo', zone: 'plaza_cartagena', value: 10, icon: ICON.fiestaCartagena, color: 0xd32f2f },
   fiesta_sampedrina: { name: 'Fiesta sampedrina', zone: 'plaza_san_pedro', value: 10, icon: ICON.fiestaSanPedro, color: 0xe53935 },
 };
 
@@ -347,6 +360,20 @@ export const SEASON_EVENTS = [
     coins: 0,
     actions: [],
     objective: { kind: 'produced', items: { triqui_triqui: 240000 } },
+  },
+  {
+    id: 'fiesta_cartagena',
+    fiesta: 'cartagena',
+    season: true,
+    zone: 'plaza_cartagena',
+    icon: '🏰',
+    name: tk('Las fiestas de la Independencia de Cartagena'),
+    intro: tk('En noviembre Cartagena celebra su independencia con el Cabildo de Getsemaní: baja los cocos del palmar, prepara las cocadas de las palenqueras y el agua de coco, y repártelos a las comparsas que bailan por la ciudad amurallada.'),
+    stations: ['ctg_palmar', 'ctg_palenqueras', 'ctg_coco', 'ctg_cabildo'],
+    level: 1,
+    coins: 0,
+    actions: [],
+    objective: { kind: 'produced', items: { cabildo: 240000 } },
   },
 ];
 export const SEASON_EVENT_OF_FIESTA = Object.fromEntries(SEASON_EVENTS.map((e) => [e.fiesta, e]));

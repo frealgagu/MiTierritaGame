@@ -432,4 +432,8 @@ export default {
   calabaza_tallada: "Abóbora entalhada",
   dulce_ahuyama: "Doce de ahuyama",
   triqui_triqui: "Saco do triqui triqui",
+  coco_fiesta: "Coco da costa",
+  cocada_fiesta: "Cocadas de palenqueira",
+  agua_coco: "Água de coco",
+  cabildo: "Comparsa do Cabildo",
 };

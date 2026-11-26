@@ -482,6 +482,12 @@ export class FarmView extends StationView {
           g.rect(p.x + 7, p.y - 22, 2, 22).fill(PAL.woodDark);
           g.rect(p.x - 9, p.y - 23, 18, 2).fill(PAL.wood);
           for (let k = 0; k < 5; k++) g.roundRect(p.x - 6.5 + k * 3, p.y - 21, 2, 9 + (k % 2) * 2, 1).fill(0xfffde7).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
+        } else if (look.props === 'coconuts') {
+          for (let k = 0; k < 6; k++) {
+            const dx = -6 + (k % 3) * 6 + (k >= 3 ? 3 : 0);
+            const dy = k >= 3 ? -5 : 0;
+            g.circle(p.x + dx, p.y + dy - 4, 3.4).fill(k % 2 ? 0x7cb342 : 0x6d4c41).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+          }
         } else if (look.props === 'pumpkins') {
           for (const [dx, dy, r] of [[-5, 0, 4.6], [5, 0, 4], [0, -5, 4.2]]) {
             g.ellipse(p.x + dx, p.y + dy - r, r * 1.3, r).fill(0xfb8c00).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
@@ -644,6 +650,9 @@ const PLAZA_HOUSE = {
   amor_amistad: { wall: 0xfce4ec, trims: [0xd32f2f, 0xf06292, 0xfdd835, 0xd32f2f, 0x8e44ad, 0xffd700], awning: 0xd32f2f, sign: 'heart', props: 'gifts' },
   // (v5.21) The pumpkin garden of Halloween: an orange house with a pumpkin sign and piles of ahuyamas outside.
   halloween: { wall: 0xffe0b2, trims: [0x6a1b9a, 0xef6c00, 0x2e7d32, 0x6a1b9a, 0x8e44ad, 0xffd700], awning: 0x6a1b9a, sign: 'pumpkin', props: 'pumpkins' },
+  // (v5.21) The coconut palm grove of Cartagena's fiestas: a blue colonial house with a coconut sign and piles of
+  // coconuts outside.
+  cartagena_fiesta: { wall: 0x81d4fa, trims: [0xd32f2f, 0xfdd835, 0x2e7d32, 0xd32f2f, 0x8e44ad, 0xffd700], awning: 0xd32f2f, sign: 'coconut', props: 'coconuts' },
   barranquilla: { wall: 0xfdd835, trims: [0xe53935, 0x1e88e5, 0x43a047, 0xe53935, 0x8e24aa, 0xffd700], awning: 0x1e88e5, sign: 'carnival', props: 'masks' },
 };
 
@@ -686,6 +695,11 @@ function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
     g.poly([s.x, s.y - 4.6, s.x - 7, s.y, s.x, s.y + 4.6]).fill(0x212121);
     g.circle(s.x - 3, s.y - 0.6, 1.1).fill(0xfafafa);
     g.circle(s.x + 3, s.y - 0.6, 1.1).fill(0x212121);
+  } else if (look.sign === 'coconut') {
+    g.circle(s.x, s.y, 4.4).fill(0x6d4c41);
+    g.circle(s.x - 1.4, s.y - 1, 0.8).fill(0x3e2723);
+    g.circle(s.x + 1.2, s.y - 1, 0.8).fill(0x3e2723);
+    g.circle(s.x, s.y + 1, 0.8).fill(0x3e2723);
   } else if (look.sign === 'pumpkin') {
     g.ellipse(s.x, s.y + 0.5, 6.5, 4.6).fill(0xfb8c00);
     g.rect(s.x - 0.8, s.y - 5.5, 1.6, 2.4).fill(0x558b2f);

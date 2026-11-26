@@ -167,4 +167,9 @@ export default {
   hw_calabazas: ["As abóboras entalhadas com uma vela dentro vêm de uma tradição irlandesa.", "Em muitos bairros as casas são decoradas com abóboras, teias de aranha e morcegos."],
   hw_dulce: ["O doce de ahuyama é cozido com rapadura, canela e cravo.", "Na Colômbia os doces caseiros de frutas são feitos em tacho de cobre."],
   hw_triqui: ["«Triqui, triqui, Halloween, quero doces para mim!» é o que as crianças cantam de porta em porta.", "Shoppings e condomínios organizam percursos para as crianças pedirem doces."],
+  // Independencia de Cartagena (v5.21)
+  ctg_palmar: ["Cartagena declarou-se independente da Espanha em 11 de novembro de 1811.", "Foi a primeira cidade de Nova Granada a declarar a independência absoluta."],
+  ctg_palenqueras: ["As palenqueras vêm de San Basilio de Palenque, o primeiro povoado livre da América.", "Levam na cabeça uma bacia com frutas e cocadas, com vestidos coloridos."],
+  ctg_coco: ["A água de coco se bebe direto do coco verde, aberto com facão.", "Na costa também se faz limonada de coco e arroz com coco."],
+  ctg_cabildo: ["O Cabildo de Getsemaní é um desfile de comparsas e fantasias pelo bairro de Getsemaní.", "Nas festas de novembro também se elege a Miss Colômbia em Cartagena."],
 };

@@ -12,6 +12,8 @@
 - **🌉 Nuevo evento de temporada: la Batalla de Boyacá** (del 5 al 8 de agosto, con 30 días más para jugarlo): recoge las provisiones de la vereda, cocina las raciones de la tropa, alista los caballos de los lanceros y haz que todos crucen el Puente de Boyacá. En su plaza suena «Torbellino del puente», un torbellino original, y las banderas vuelven a ondear en el mapa.
 - **💕 Nuevo evento de temporada: Amor y Amistad** (la semana del tercer sábado de septiembre, con 30 días más para jugarlo): corta el papel de regalo, arma las cajas de dulces, escribe las tarjetas y entrega los regalos del amigo secreto. En su plaza suena «Danza del amigo secreto», una danza original, y flotan corazones sobre el mapa.
 - **🎃 Nuevo evento de temporada: Halloween** (del 25 de octubre al 1 de noviembre, con 30 días más para jugarlo): recoge las ahuyamas, talla las calabazas con su vela, cocina el dulce de ahuyama y llena las bolsas del «triqui triqui» de los niños. En su plaza suena «Cumbia de los disfraces», una cumbia original, y de noche las calabazas talladas iluminan los caminos del mapa.
+- **🏰 Nuevo evento de temporada: las fiestas de la Independencia de Cartagena** (del 9 al 12 de noviembre, con 30 días más para jugarlo): baja los cocos, prepara las cocadas de las palenqueras y el agua de coco, y repártelos a las comparsas del Cabildo de Getsemaní. En su plaza suena «Porro del cabildo», un porro original, con banderines de día y pólvora de noche.
+- **🎉 Todas las fiestas grandes tienen ya su evento:** se pueden ganar las doce láminas del álbum Fiestas de Colombia.
 
 ## v5.20.0 — La plaza de las fiestas
 - **🔽 Minimizar:** el botón «Salir» de la barra del evento ahora se llama «Minimizar», porque el evento sigue andando mientras juegas en otra parte.

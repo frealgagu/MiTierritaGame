@@ -167,4 +167,9 @@ export default {
   hw_calabazas: ["Pumpkins carved with a candle inside come from an Irish tradition.", "In many neighborhoods houses are decorated with pumpkins, cobwebs and bats."],
   hw_dulce: ["Dulce de ahuyama is cooked with panela, cinnamon and cloves.", "In Colombia homemade fruit sweets are made in copper pots."],
   hw_triqui: ["“Triqui, triqui, Halloween, I want sweets for me!” is what children sing from door to door.", "Shopping centers and housing estates organize routes for children to ask for sweets."],
+  // Independencia de Cartagena (v5.21)
+  ctg_palmar: ["Cartagena declared its independence from Spain on 11 November 1811.", "It was the first city of New Granada to declare absolute independence."],
+  ctg_palenqueras: ["The palenqueras come from San Basilio de Palenque, the first free town in the Americas.", "They carry a basin of fruit and cocadas on their heads, in colorful dresses."],
+  ctg_coco: ["Coconut water is drunk straight from the green coconut, opened with a machete.", "On the coast they also make coconut lemonade and coconut rice."],
+  ctg_cabildo: ["The Cabildo de Getsemaní is a parade of troupes and costumes through the Getsemaní neighborhood.", "The November fiestas also crown Miss Colombia in Cartagena."],
 };
