@@ -68,4 +68,5 @@ export default {
   plaza_san_pedro: ["Doña Celmira", "the festivities committee lady"],
   plaza_independencia: ["Doña Celmira", "the festivities committee lady"],
   plaza_batalla_boyaca: ["Doña Celmira", "the festivities committee lady"],
+  plaza_amor_amistad: ["Doña Celmira", "the festivities committee lady"],
 };

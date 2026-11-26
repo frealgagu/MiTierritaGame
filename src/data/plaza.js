@@ -69,6 +69,8 @@ export const PLAZA_ZONES = [
   plaza('plaza_independencia', 1718, 'independencia', ['ind_telar', 'ind_banderas', 'ind_escarapelas', 'ind_desfile'], ['flags']),
   // (v5.21) 7 de agosto: flags, like the 20 de julio.
   plaza('plaza_batalla_boyaca', 1819, 'batalla_boyaca', ['bb_vereda', 'bb_cocina', 'bb_caballeriza', 'bb_puente'], ['flags']),
+  // (v5.21) Amor y Amistad: hearts floating up over the paths.
+  plaza('plaza_amor_amistad', 1913, 'amor_amistad', ['aa_papeleria', 'aa_dulceria', 'aa_tarjetas', 'aa_amigo'], ['hearts']),
 ];
 
 // Same prices and paces as the Finca's first stations (data/stations.js).
@@ -125,6 +127,12 @@ export const PLAZA_STATIONS = [
   station('bb_cocina', 'plaza_batalla_boyaca', 'Cocina de campaña', '🍲', { in: { provisiones: 1 }, out: { racion: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('bb_caballeriza', 'plaza_batalla_boyaca', 'Caballeriza de los lanceros', '🐎', { in: { provisiones: 1 }, out: { caballeria: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('bb_puente', 'plaza_batalla_boyaca', 'Puente de Boyacá', '🌉', { in: { racion: 1 }, joins: [{ product: 'caballeria', perCycle: 1, from: 'bb_caballeriza' }], out: { victoria_boyaca: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
+  // (v5.21) 💕 Amor y Amistad: wrapping paper from the stationer's becomes boxes of sweets and cards, exchanged as the
+  // secret friend's gift. The same paces and prices as the Navidad.
+  station('aa_papeleria', 'plaza_amor_amistad', 'Papelería', '🎀', { infinite: true, out: { papel_regalo: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, release: '5.21' }),
+  station('aa_dulceria', 'plaza_amor_amistad', 'Dulcería', '🍬', { in: { papel_regalo: 1 }, out: { dulces_amistad: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('aa_tarjetas', 'plaza_amor_amistad', 'Tarjetería', '💌', { in: { papel_regalo: 1 }, out: { tarjeta_amistad: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('aa_amigo', 'plaza_amor_amistad', 'Amigo secreto', '🎁', { in: { dulces_amistad: 1 }, joins: [{ product: 'tarjeta_amistad', perCycle: 1, from: 'aa_tarjetas' }], out: { regalo_amistad: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
 ];
 
 export const PLAZA_PRODUCTS = {
@@ -162,6 +170,10 @@ export const PLAZA_PRODUCTS = {
   racion: { name: 'Ración de la tropa', zone: 'plaza_batalla_boyaca', value: 3, icon: '🍲', color: 0xd9a441 },
   caballeria: { name: 'Lanceros a caballo', zone: 'plaza_batalla_boyaca', value: 3, icon: '🐎', color: 0x6d4c41 },
   victoria_boyaca: { name: 'Paso del puente', zone: 'plaza_batalla_boyaca', value: 10, icon: ICON.fiestaBatallaBoyaca, color: 0xfcd116 },
+  papel_regalo: { name: 'Papel de regalo', zone: 'plaza_amor_amistad', value: 1, icon: '🎀', color: 0xf48fb1 },
+  dulces_amistad: { name: 'Caja de dulces', zone: 'plaza_amor_amistad', value: 3, icon: '🍬', color: 0xe91e63 },
+  tarjeta_amistad: { name: 'Tarjeta de amor y amistad', zone: 'plaza_amor_amistad', value: 3, icon: '💌', color: 0xef5350 },
+  regalo_amistad: { name: 'Regalo de amigo secreto', zone: 'plaza_amor_amistad', value: 10, icon: ICON.fiestaAmorAmistad, color: 0xd32f2f },
   fiesta_sampedrina: { name: 'Fiesta sampedrina', zone: 'plaza_san_pedro', value: 10, icon: ICON.fiestaSanPedro, color: 0xe53935 },
 };
 
@@ -295,6 +307,20 @@ export const SEASON_EVENTS = [
     coins: 0,
     actions: [],
     objective: { kind: 'produced', items: { victoria_boyaca: 240000 } },
+  },
+  {
+    id: 'fiesta_amor_amistad',
+    fiesta: 'amor_amistad',
+    season: true,
+    zone: 'plaza_amor_amistad',
+    icon: '💕',
+    name: tk('Amor y Amistad'),
+    intro: tk('Es la semana del amigo secreto: corta el papel de regalo, arma las cajas de dulces, escribe las tarjetas y entrega cada regalo sin que nadie adivine quién lo manda.'),
+    stations: ['aa_papeleria', 'aa_dulceria', 'aa_tarjetas', 'aa_amigo'],
+    level: 1,
+    coins: 0,
+    actions: [],
+    objective: { kind: 'produced', items: { regalo_amistad: 240000 } },
   },
 ];
 export const SEASON_EVENT_OF_FIESTA = Object.fromEntries(SEASON_EVENTS.map((e) => [e.fiesta, e]));

@@ -1,6 +1,6 @@
 # Registro de cambios
 
-## v5.21.0 — Las fiestas del primer semestre
+## v5.21.0 — Las fiestas del año
 - **🎨 Nuevo evento de temporada: el Carnaval de Negros y Blancos** (desde el 2 de enero, se puede jugar hasta el 6 de febrero): cose los disfraces, pinta de negro a las comparsas el Día de Negros, llénalas de talco el Día de Blancos y súbelas a las carrozas del Gran Desfile. Su lámina es la primera del álbum 🎉 Fiestas de Colombia.
 - **🎶 «Son del carnaval»:** un son sureño original con quena, charango, guitarra y bombo suena en su plaza (también en la página de descargas de música).
 - **El mapa se viste para el carnaval de Pasto** del 2 al 7 de enero: banderines y serpentinas en cada edificio y nubes de talco en los caminos.
@@ -10,6 +10,7 @@
 - **🎉 Nuevo evento de temporada: las fiestas de San Juan y San Pedro** (del 20 al 30 de junio, con 30 días más para jugarlo): trae la leña, prende los hornos de barro del asado huilense y de las achiras, y sírvelos en el tablado donde se baila el sanjuanero. En su plaza suena «Rajaleña del tablado», un sanjuanero original, y hay banderines de día y pólvora de noche.
 - **🇨🇴 Nuevo evento de temporada: el 20 de julio** (del 18 al 21 de julio, con 30 días más para jugarlo): teje la tela, cose banderas y escarapelas y llévalas al desfile con la banda del colegio. En su plaza suena «Marcha del 20 de julio», una marcha original para banda de pueblo, y en cada edificio del mapa ondea una bandera de Colombia.
 - **🌉 Nuevo evento de temporada: la Batalla de Boyacá** (del 5 al 8 de agosto, con 30 días más para jugarlo): recoge las provisiones de la vereda, cocina las raciones de la tropa, alista los caballos de los lanceros y haz que todos crucen el Puente de Boyacá. En su plaza suena «Torbellino del puente», un torbellino original, y las banderas vuelven a ondear en el mapa.
+- **💕 Nuevo evento de temporada: Amor y Amistad** (la semana del tercer sábado de septiembre, con 30 días más para jugarlo): corta el papel de regalo, arma las cajas de dulces, escribe las tarjetas y entrega los regalos del amigo secreto. En su plaza suena «Danza del amigo secreto», una danza original, y flotan corazones sobre el mapa.
 
 ## v5.20.0 — La plaza de las fiestas
 - **🔽 Minimizar:** el botón «Salir» de la barra del evento ahora se llama «Minimizar», porque el evento sigue andando mientras juegas en otra parte.

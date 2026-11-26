@@ -157,4 +157,9 @@ export default {
   bb_cocina: ["A tropa comia mazamorra, batatas e carne seca durante a Campanha Libertadora.", "O exército cruzou o páramo de Pisba antes de chegar a Boyacá."],
   bb_caballeriza: ["Os lanceiros llaneros foram decisivos no Pântano de Vargas, dias antes de Boyacá.", "Juan José Rondón comandou a carga dos catorze lanceiros no Pântano de Vargas."],
   bb_puente: ["A Ponte de Boyacá cruza o rio Teatinos; ali foi travada a batalha.", "Todo 7 de agosto a Colômbia celebra o Dia do Exército."],
+  // Amor y Amistad (v5.21)
+  aa_papeleria: ["Na Colômbia o Dia do Amor e da Amizade é celebrado em setembro, não em fevereiro.", "É celebrado no terceiro sábado de setembro desde os anos sessenta."],
+  aa_dulceria: ["O presente mais comum do amigo secreto são doces e chocolates.", "Durante a semana o amigo secreto deixa doces sem dizer quem é."],
+  aa_tarjetas: ["Os cartões são escritos à mão e às vezes com um poema.", "Em setembro as papelarias se enchem de corações e balões."],
+  aa_amigo: ["O amigo secreto é sorteado entre colegas de trabalho, de escola ou da família.", "No fim da semana revela-se quem era o amigo secreto de cada um."],
 };

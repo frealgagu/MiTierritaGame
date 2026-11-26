@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.21.0 — Fiestas of the first half of the year
+## v5.21.0 — The year's fiestas
 - **🎨 New season event: the Carnival of Blacks and Whites** (from 2 January, playable until 6 February): sew the costumes, paint the troupes black on the Day of Blacks, cover them in talc on the Day of Whites and bring them to the floats of the Great Parade. Its sticker is the first of the 🎉 Fiestas of Colombia album.
 - **🎶 «Son del carnaval»:** an original son sureño with quena, charango, guitar and bombo drum plays in its square (also on the music download page).
 - **The map dresses up for Pasto's carnival** from 2 to 7 January: bunting and streamers on every building and clouds of talc along the paths.
@@ -10,6 +10,7 @@
 - **🎉 New season event: the feasts of Saint John and Saint Peter** (20 to 30 June, with 30 more days to play): bring the firewood, light the clay ovens for the asado huilense and the achiras, and serve them on the stage where the sanjuanero is danced. In its square plays «Rajaleña del tablado», an original sanjuanero, and there is bunting by day and fireworks at night.
 - **🇨🇴 New season event: the 20th of July** (18 to 21 July, with 30 more days to play): weave the cloth, sew flags and rosettes and take them to the parade with the school band. In its square plays «Marcha del 20 de julio», an original march for a town band, and a Colombian flag flies on every building of the map.
 - **🌉 New season event: the Battle of Boyacá** (5 to 8 August, with 30 more days to play): gather the vereda's provisions, cook the troops' rations, ready the lancers' horses and get everyone across the Boyacá Bridge. In its square plays «Torbellino del puente», an original torbellino, and the flags fly again on the map.
+- **💕 New season event: Love and Friendship** (the week of the third Saturday of September, with 30 more days to play): cut the wrapping paper, fill the boxes of sweets, write the cards and deliver the secret friend's gifts. In its square plays «Danza del amigo secreto», an original danza, and hearts float over the map.
 
 ## v5.20.0 — Fiesta Square
 - **🔽 Minimize:** the event bar's «Leave» button is now «Minimize», since the event keeps going while you play elsewhere.

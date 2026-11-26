@@ -157,4 +157,9 @@ export default {
   bb_cocina: ["Les troupes mangeaient de la mazamorra, des pommes de terre et de la viande séchée pendant la Campagne libératrice.", "L’armée traversa le páramo de Pisba avant d’arriver à Boyacá."],
   bb_caballeriza: ["Les lanciers llaneros furent décisifs au marais de Vargas, quelques jours avant Boyacá.", "Juan José Rondón mena la charge des quatorze lanciers au marais de Vargas."],
   bb_puente: ["Le pont de Boyacá franchit la rivière Teatinos ; c’est là que se livra la bataille.", "Chaque 7 août, la Colombie célèbre le Jour de l’armée."],
+  // Amor y Amistad (v5.21)
+  aa_papeleria: ["En Colombie, la fête de l’Amour et de l’Amitié se célèbre en septembre, pas en février.", "On la célèbre le troisième samedi de septembre depuis les années soixante."],
+  aa_dulceria: ["Le cadeau le plus courant de l’ami secret, ce sont les bonbons et les chocolats.", "Pendant la semaine, l’ami secret laisse des bonbons sans dire qui il est."],
+  aa_tarjetas: ["Les cartes s’écrivent à la main, parfois avec un poème.", "En septembre, les papeteries se remplissent de cœurs et de ballons."],
+  aa_amigo: ["L’ami secret se tire au sort entre collègues, camarades de classe ou en famille.", "À la fin de la semaine, chacun découvre qui était son ami secret."],
 };

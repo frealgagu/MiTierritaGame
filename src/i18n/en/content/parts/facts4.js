@@ -157,4 +157,9 @@ export default {
   bb_cocina: ["The troops ate mazamorra, potatoes and dried meat during the Liberation Campaign.", "The army crossed the Pisba páramo before reaching Boyacá."],
   bb_caballeriza: ["The llanero lancers were decisive at the Pantano de Vargas, days before Boyacá.", "Juan José Rondón led the charge of the fourteen lancers at the Pantano de Vargas."],
   bb_puente: ["The Boyacá Bridge crosses the Teatinos river; the battle was fought there.", "Every 7 August Colombia celebrates Army Day."],
+  // Amor y Amistad (v5.21)
+  aa_papeleria: ["In Colombia Love and Friendship Day is celebrated in September, not in February.", "It has been celebrated on the third Saturday of September since the sixties."],
+  aa_dulceria: ["The most common secret-friend gift is sweets and chocolates.", "During the week the secret friend leaves sweets without saying who they are."],
+  aa_tarjetas: ["Cards are written by hand and sometimes with a poem.", "In September stationers fill up with hearts and balloons."],
+  aa_amigo: ["The secret friend is drawn among workmates, classmates or family.", "At the end of the week everyone finds out who their secret friend was."],
 };

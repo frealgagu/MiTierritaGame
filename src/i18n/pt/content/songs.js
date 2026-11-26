@@ -22,4 +22,5 @@ export default {
   san_pedro: ["Rajaleña do tablado", "tiple, violão, bandola, tambora e carrasca"],
   independencia: ["Marcha de 20 de julho", "clarinete, bombardino, tambora, caixa e pratos"],
   batalla_boyaca: ["Torbellino da ponte", "tiple, requinto, violão e chucho"],
+  amor_amistad: ["Dança do amigo secreto", "bandola, tiple e violão"],
 };

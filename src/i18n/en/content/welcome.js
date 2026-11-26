@@ -69,4 +69,5 @@ export default {
   plaza_san_pedro: "The San Pedro fiestas are here! Light the ovens: there’s asado huilense, achiras and sanjuanero.",
   plaza_independencia: "Happy 20th of July! We need a flag in every window and the band ready for the parade.",
   plaza_batalla_boyaca: "Today we remember the Battle of Boyacá! We must feed the troops and ready the horses to cross the bridge.",
+  plaza_amor_amistad: "Happy Love and Friendship Day! The secret friends are drawn: let’s wrap sweets and write cards.",
 };

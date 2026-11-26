@@ -424,4 +424,8 @@ export default {
   racion: "Troop ration",
   caballeria: "Mounted lancers",
   victoria_boyaca: "Crossing of the bridge",
+  papel_regalo: "Wrapping paper",
+  dulces_amistad: "Box of sweets",
+  tarjeta_amistad: "Love and friendship card",
+  regalo_amistad: "Secret friend gift",
 };

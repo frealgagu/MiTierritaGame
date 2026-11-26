@@ -1,6 +1,6 @@
 # Journal des modifications
 
-## v5.21.0 — Les fêtes du premier semestre
+## v5.21.0 — Les fêtes de l’année
 - **🎨 Nouvel événement de saison : le Carnaval des Noirs et des Blancs** (dès le 2 janvier, jouable jusqu’au 6 février) : couds les costumes, peins les troupes en noir le Jour des Noirs, couvre-les de talc le Jour des Blancs et mène-les aux chars du Grand Défilé. Sa vignette est la première de l’album 🎉 Fêtes de Colombie.
 - **🎶 « Son du carnaval » :** un son sureño original avec quena, charango, guitare et bombo joue sur sa place (aussi sur la page de téléchargement de la musique).
 - **La carte se pare pour le carnaval de Pasto** du 2 au 7 janvier : fanions et serpentins sur chaque bâtiment et nuages de talc sur les chemins.
@@ -10,6 +10,7 @@
 - **🎉 Nouvel événement de saison : les fêtes de la Saint-Jean et de la Saint-Pierre** (du 20 au 30 juin, avec 30 jours de plus pour y jouer) : apporte le bois, allume les fours en terre de l’asado huilense et des achiras, et sers-les sur l’estrade où l’on danse le sanjuanero. Sur sa place joue « Rajaleña de l’estrade », un sanjuanero original, avec des fanions le jour et des feux d’artifice la nuit.
 - **🇨🇴 Nouvel événement de saison : le 20 juillet** (du 18 au 21 juillet, avec 30 jours de plus pour y jouer) : tisse le tissu, couds des drapeaux et des cocardes et apporte-les au défilé avec la fanfare de l’école. Sur sa place joue « Marche du 20 juillet », une marche originale pour fanfare de village, et un drapeau colombien flotte sur chaque bâtiment de la carte.
 - **🌉 Nouvel événement de saison : la bataille de Boyacá** (du 5 au 8 août, avec 30 jours de plus pour y jouer) : rassemble les provisions du hameau, cuisine les rations de la troupe, prépare les chevaux des lanciers et fais traverser tout le monde par le pont de Boyacá. Sur sa place joue « Torbellino du pont », un torbellino original, et les drapeaux flottent de nouveau sur la carte.
+- **💕 Nouvel événement de saison : l’Amour et l’Amitié** (la semaine du troisième samedi de septembre, avec 30 jours de plus pour y jouer) : découpe le papier cadeau, remplis les boîtes de bonbons, écris les cartes et livre les cadeaux de l’ami secret. Sur sa place joue « Danza de l’ami secret », une danza originale, et des cœurs flottent sur la carte.
 
 ## v5.20.0 — La place des fêtes
 - **🔽 Réduire :** le bouton « Sortir » de la barre de l’événement s’appelle maintenant « Réduire », car l’événement continue pendant que tu joues ailleurs.

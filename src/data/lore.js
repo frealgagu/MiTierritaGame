@@ -474,6 +474,11 @@ export const FACTS = {
   bb_cocina: ["La tropa comía mazamorra, papas y carne seca durante la Campaña Libertadora.", "El ejército cruzó el páramo de Pisba antes de llegar a Boyacá."],
   bb_caballeriza: ["Los lanceros llaneros fueron decisivos en el Pantano de Vargas, días antes de Boyacá.", "Juan José Rondón dirigió la carga de los catorce lanceros en el Pantano de Vargas."],
   bb_puente: ["El Puente de Boyacá cruza el río Teatinos; allí se libró la batalla.", "Cada 7 de agosto se celebra en Colombia el Día del Ejército."],
+  // Amor y Amistad (v5.21)
+  aa_papeleria: ["En Colombia el Día del Amor y la Amistad se celebra en septiembre, no en febrero.", "Se celebra el tercer sábado de septiembre desde los años sesenta."],
+  aa_dulceria: ["El regalo más común del amigo secreto son los dulces y los chocolates.", "Durante la semana el amigo secreto deja dulces sin decir quién es."],
+  aa_tarjetas: ["Las tarjetas se escriben a mano y a veces con un poema.", "En septiembre las papelerías se llenan de corazones y globos."],
+  aa_amigo: ["El amigo secreto se sortea entre compañeros de trabajo, de colegio o de familia.", "Al final de la semana se revela quién era el amigo secreto de cada uno."],
 };
 
 // Speaker announcing milestones per zone (key events, not every toast).
@@ -546,6 +551,7 @@ export const PEOPLE = {
   plaza_san_pedro: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_independencia: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_batalla_boyaca: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
+  plaza_amor_amistad: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
 };
 
 // Opening line when entering a zone for the first time.
@@ -619,6 +625,7 @@ export const WELCOME = {
   plaza_san_pedro: '¡Llegaron las fiestas de San Pedro! Prenda los hornos, que hay asado huilense, achiras y sanjuanero.',
   plaza_independencia: '¡Feliz 20 de julio! Hay que poner una bandera en cada ventana y alistar la banda para el desfile.',
   plaza_batalla_boyaca: '¡Hoy se recuerda la Batalla de Boyacá! Hay que alimentar a la tropa y alistar los caballos para cruzar el puente.',
+  plaza_amor_amistad: '¡Feliz Amor y Amistad! Ya se sorteó el amigo secreto: a envolver dulces y escribir tarjetas.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

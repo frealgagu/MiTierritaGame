@@ -75,7 +75,7 @@ export const FIESTAS = [
     sticker: tk('El 7 de agosto de 1819 el ejército libertador ganó en el Puente de Boyacá.'),
   },
   {
-    id: 'amor_amistad', icon: '💕', kind: 'big', dates: { month: 9, weekday: 6, nth: 3, before: 5, after: 1 },
+    id: 'amor_amistad', icon: '💕', kind: 'big', dates: { month: 9, weekday: 6, nth: 3, before: 5, after: 1 }, decor: ['hearts'],
     name: tk('Amor y Amistad'),
     greeting: tk('💕 ¡Feliz Amor y Amistad! Es semana de amigo secreto.'),
     sticker: tk('En septiembre se juega al amigo secreto y se regalan dulces y detalles.'),

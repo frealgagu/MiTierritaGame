@@ -39,7 +39,7 @@ test('the plaza\'s products and stations never reuse a region\'s id: they would 
 });
 
 test('the plaza belongs to no region: its zones and events stay out of the main game lists (v5.19)', () => {
-  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro', 'independencia', 'batalla_boyaca']);
+  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro', 'independencia', 'batalla_boyaca', 'amor_amistad']);
   for (const z of PLAZA_ZONES) assert.ok(!ZONE_LIST.includes(z));
   for (const r of REGIONS) for (const z of PLAZA_ZONES) assert.ok(!r.zones.includes(z.id));
   for (const e of SEASON_EVENTS) assert.ok(!EVENTS.includes(e));
@@ -132,7 +132,7 @@ test('season boards and stickers survive the save; no fiesta bonus on the board 
   assert.equal(fiestaMult(back.events.season.boards.velitas), 1);
 });
 
-test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre, San Pedro, the 20 de julio, Boyacá and Amor y Amistad (no event yet) (v5.19)', () => {
+test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre, San Pedro, the 20 de julio, Boyacá, Amor y Amistad and Halloween (no event yet) (v5.19)', () => {
   const n = nextSeason(day(2026, 11, 24));
   assert.equal(n.fiesta.id, 'velitas');
   assert.equal(n.days, 12);
@@ -160,7 +160,24 @@ test('the next season event: Velitas from late November, Negros y Blancos after 
   assert.ok(august.def, 'Boyacá too (v5.21)');
   const september = nextSeason(day(2027, 8, 20));
   assert.equal(september.fiesta.id, 'amor_amistad');
-  assert.equal(september.def, null);
+  assert.ok(september.def, 'Amor y Amistad too (v5.21)');
+  const october = nextSeason(day(2027, 10, 1));
+  assert.equal(october.fiesta.id, 'halloween');
+  assert.equal(october.def, null);
+});
+
+test('Amor y Amistad (v5.21): the week of the third Saturday of September with 30 days of grace, hearts on the map', () => {
+  const root = newGame();
+  // 2027: the third Saturday of September is the 18th: Monday 13th to Sunday 19th.
+  assert.equal(seasonStatus(root, 'amor_amistad', day(2027, 9, 12)), null);
+  assert.equal(seasonStatus(root, 'amor_amistad', day(2027, 9, 13)).kind, 'available');
+  assert.equal(seasonStatus(root, 'amor_amistad', day(2027, 10, 19)).grace, true);
+  assert.equal(seasonStatus(root, 'amor_amistad', day(2027, 10, 20)), null);
+  assert.ok(decorOn(day(2027, 9, 18)).has('hearts'));
+  const board = startSeason(root, 'amor_amistad', day(2027, 9, 14));
+  assert.deepEqual(Object.keys(board.stations), ['aa_papeleria', 'aa_dulceria', 'aa_tarjetas', 'aa_amigo']);
+  meet(board);
+  assert.equal(finishSeason(root, 'amor_amistad').sticker, true);
 });
 
 test('Batalla de Boyacá (v5.21): 5–8 August with 30 days of grace, flags on every building', () => {

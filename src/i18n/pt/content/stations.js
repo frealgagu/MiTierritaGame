@@ -411,4 +411,8 @@ export default {
   bb_cocina: "Cozinha de campanha",
   bb_caballeriza: "Estrebaria dos lanceiros",
   bb_puente: "Ponte de Boyacá",
+  aa_papeleria: "Papelaria",
+  aa_dulceria: "Docería",
+  aa_tarjetas: "Loja de cartões",
+  aa_amigo: "Amigo secreto",
 };

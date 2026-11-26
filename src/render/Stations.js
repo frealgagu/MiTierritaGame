@@ -482,6 +482,14 @@ export class FarmView extends StationView {
           g.rect(p.x + 7, p.y - 22, 2, 22).fill(PAL.woodDark);
           g.rect(p.x - 9, p.y - 23, 18, 2).fill(PAL.wood);
           for (let k = 0; k < 5; k++) g.roundRect(p.x - 6.5 + k * 3, p.y - 21, 2, 9 + (k % 2) * 2, 1).fill(0xfffde7).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
+        } else if (look.props === 'gifts') {
+          const colors = [0xe53935, 0xf06292, 0x1e88e5, 0xfdd835, 0x43a047];
+          for (const [dx, dy, w, h] of [[-6, 0, 8, 7], [4, 0, 9, 8], [-1, -8, 7, 6]]) {
+            const c = colors[Math.floor(rng() * 5)];
+            g.rect(p.x + dx - w / 2, p.y + dy - h, w, h).fill(c).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+            g.rect(p.x + dx - 0.7, p.y + dy - h, 1.4, h).fill(0xfdd835);
+            g.circle(p.x + dx, p.y + dy - h - 1, 1.6).fill(0xfdd835);
+          }
         } else if (look.props === 'potatoes') {
           for (const [dx, dy] of [[-5, 0], [5, 0], [0, -6]]) {
             g.ellipse(p.x + dx, p.y + dy - 5, 6, 5.5).fill(PAL.sack).stroke(OUTLINE);
@@ -626,6 +634,8 @@ const PLAZA_HOUSE = {
   independencia: { wall: 0xfbf8f1, trims: [0x003893, 0xce1126, 0xfcd116, 0x003893, 0x8e44ad, 0xffd700], awning: 0x003893, sign: 'flag', props: 'cloth' },
   // (v5.21) The vereda's farm on the 7 de agosto: a whitewashed house with a flag sign and sacks of potatoes.
   batalla_boyaca: { wall: 0xfbf8f1, trims: [0x2f7d4f, 0xce1126, 0xfcd116, 0x2f7d4f, 0x8e44ad, 0xffd700], awning: 0x2f7d4f, sign: 'flag', props: 'potatoes' },
+  // (v5.21) The stationer's of Amor y Amistad: a pink house with a heart sign and stacks of wrapped gifts.
+  amor_amistad: { wall: 0xfce4ec, trims: [0xd32f2f, 0xf06292, 0xfdd835, 0xd32f2f, 0x8e44ad, 0xffd700], awning: 0xd32f2f, sign: 'heart', props: 'gifts' },
   barranquilla: { wall: 0xfdd835, trims: [0xe53935, 0x1e88e5, 0x43a047, 0xe53935, 0x8e24aa, 0xffd700], awning: 0x1e88e5, sign: 'carnival', props: 'masks' },
 };
 
@@ -668,6 +678,10 @@ function drawCoffeeHouse(g, x, y, tier, look = PLAZA_HOUSE.pueblo) {
     g.poly([s.x, s.y - 4.6, s.x - 7, s.y, s.x, s.y + 4.6]).fill(0x212121);
     g.circle(s.x - 3, s.y - 0.6, 1.1).fill(0xfafafa);
     g.circle(s.x + 3, s.y - 0.6, 1.1).fill(0x212121);
+  } else if (look.sign === 'heart') {
+    g.circle(s.x - 2.2, s.y - 1.5, 2.6).fill(0xe53935);
+    g.circle(s.x + 2.2, s.y - 1.5, 2.6).fill(0xe53935);
+    g.poly([s.x - 4.6, s.y - 0.6, s.x + 4.6, s.y - 0.6, s.x, s.y + 4.6]).fill(0xe53935);
   } else if (look.sign === 'flag') {
     g.rect(s.x - 7, s.y - 4.5, 14, 4.5).fill(0xfcd116);
     g.rect(s.x - 7, s.y, 14, 2.3).fill(0x003893);

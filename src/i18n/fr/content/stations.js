@@ -411,4 +411,8 @@ export default {
   bb_cocina: "Cuisine de campagne",
   bb_caballeriza: "Écurie des lanciers",
   bb_puente: "Pont de Boyacá",
+  aa_papeleria: "Papeterie",
+  aa_dulceria: "Confiserie",
+  aa_tarjetas: "Boutique de cartes",
+  aa_amigo: "Ami secret",
 };

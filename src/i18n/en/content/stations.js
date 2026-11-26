@@ -411,4 +411,8 @@ export default {
   bb_cocina: "Camp kitchen",
   bb_caballeriza: "Lancers’ stable",
   bb_puente: "Boyacá Bridge",
+  aa_papeleria: "Stationer’s",
+  aa_dulceria: "Sweet shop",
+  aa_tarjetas: "Card shop",
+  aa_amigo: "Secret friend",
 };

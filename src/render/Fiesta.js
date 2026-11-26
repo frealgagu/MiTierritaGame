@@ -11,6 +11,7 @@
 //   notes:     (v5.21) music notes rising over the paths (Festival Vallenato).
 //   flowers:   (v5.21) pots of flowers along the paths and beside every door (Día de la Madre).
 //   flags:     (v5.21) a Colombian flag on every building and tricolor bunting (20 de julio, 7 de agosto).
+//   hearts:    (v5.21) hearts floating up over the paths (Amor y Amistad).
 import { Container, Graphics, Sprite } from 'pixi.js';
 import { iso, depth } from './iso.js';
 import { PAL } from './palette.js';
@@ -72,6 +73,7 @@ export class FiestaDecor {
     this.talc = decor.has('talc');
     this.confetti = decor.has('confetti');
     this.notes = decor.has('notes');
+    this.hearts = decor.has('hearts');
   }
 
   clear() {
@@ -85,6 +87,7 @@ export class FiestaDecor {
     this.talc = false;
     this.confetti = false;
     this.notes = false;
+    this.hearts = false;
     this.puffs = [];
     this.bits = [];
     this.tunes = [];
@@ -237,10 +240,12 @@ export class FiestaDecor {
   }
 
   // A music note rising from a random point of the mule path.
-  tune() {
+  // kind 'heart' (v5.21): a red or pink heart instead.
+  tune(kind = 'note') {
     const p = pointAt(this.scene.zone.muleRoad, Math.random());
     const s = iso(p.gx + (Math.random() - 0.5) * 2, p.gy + (Math.random() - 0.5) * 2, 10);
-    this.tunes.push({ x: s.x, y: s.y, life: 3, phase: Math.random() * 6, color: [0x5d4037, 0xc62828, 0x1e88e5][Math.floor(Math.random() * 3)] });
+    const colors = kind === 'heart' ? [0xe53935, 0xf06292, 0xd81b60] : [0x5d4037, 0xc62828, 0x1e88e5];
+    this.tunes.push({ x: s.x, y: s.y, life: 3, phase: Math.random() * 6, kind, color: colors[Math.floor(Math.random() * 3)] });
   }
 
   // A puff of talc rising from a random point of the mule path.
@@ -393,7 +398,8 @@ export class FiestaDecor {
       const on = Math.floor(time * 1.6) % 2;
       for (const gl of this.glows) gl.sprite.alpha = gl.phase === on ? 1 : 0.45;
     }
-    if (this.talc || this.confetti || this.notes) {
+    if (this.talc || this.confetti || this.notes || this.hearts) {
+      if (this.hearts && Math.random() < dt * 1.5) this.tune('heart');
       if (this.talc && light < 0.5 && Math.random() < dt * 2.5) this.puff();
       if (this.confetti && Math.random() < dt * 6) this.bit();
       if (this.notes && Math.random() < dt * 1.5) this.tune();
@@ -403,6 +409,12 @@ export class FiestaDecor {
         s.y -= dt * 12;
         const x = s.x + Math.sin(s.life * 3 + s.phase) * 4;
         const a = Math.min(1, s.life, (3 - s.life) * 2);
+        if (s.kind === 'heart') {
+          this.air.circle(x - 1.8, s.y - 1.4, 2.3).fill({ color: s.color, alpha: a });
+          this.air.circle(x + 1.8, s.y - 1.4, 2.3).fill({ color: s.color, alpha: a });
+          this.air.poly([x - 4, s.y - 0.6, x + 4, s.y - 0.6, x, s.y + 4]).fill({ color: s.color, alpha: a });
+          continue;
+        }
         this.air.ellipse(x, s.y, 2.6, 2).fill({ color: s.color, alpha: a });
         this.air.rect(x + 1.8, s.y - 9, 1.2, 9).fill({ color: s.color, alpha: a });
         this.air.rect(x + 1.8, s.y - 9, 4, 1.4).fill({ color: s.color, alpha: a });

@@ -424,4 +424,8 @@ export default {
   racion: "Ration de la troupe",
   caballeria: "Lanciers à cheval",
   victoria_boyaca: "Passage du pont",
+  papel_regalo: "Papier cadeau",
+  dulces_amistad: "Boîte de bonbons",
+  tarjeta_amistad: "Carte d’amour et d’amitié",
+  regalo_amistad: "Cadeau d’ami secret",
 };

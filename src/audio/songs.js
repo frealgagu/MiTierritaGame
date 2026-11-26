@@ -1050,7 +1050,57 @@ const TORBELLINO_PUENTE = {
   ],
 };
 
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA, san_pedro: RAJALENA, independencia: MARCHA_JULIO, batalla_boyaca: TORBELLINO_PUENTE };
+// (v5.21) Amor y Amistad: «Danza del amigo secreto», an original danza in C major with an A minor middle, 2/4, with
+// bandola, tiple and guitar (the habanera rhythm of compose.js: danza).
+const DANZA_AMIGO = {
+  name: 'Danza del amigo secreto',
+  instruments: 'bandola, tiple y guitarra',
+  bpm: 76,
+  beats: 2,
+  style: 'danza',
+  chords: [
+    'C', 'C', 'G7', 'G7', 'Dm', 'G7', 'G7', 'C',
+    'C', 'C', 'F', 'F', 'C', 'G7', 'C', 'E7',
+    'Am', 'Am', 'E7', 'E7', 'Dm', 'E7', 'E7', 'Am',
+    'C', 'C', 'F', 'C', 'G7', 'G7', 'C', 'G7',
+  ],
+  melody: [
+    [[0, 1, 'G4'], [1, 1, 'C5'], [2, 2, 'E5']],
+    [[0, 3, 'D5'], [3, 1, 'C5']],
+    [[0, 1, 'B4'], [1, 1, 'D5'], [2, 2, 'G5']],
+    [[0, 3, 'F5'], [3, 1, 'E5']],
+    [[0, 1, 'D5'], [1, 1, 'F5'], [2, 2, 'A5']],
+    [[0, 2, 'G5'], [2, 1, 'F5'], [3, 1, 'D5']],
+    [[0, 1, 'E5'], [1, 1, 'G5'], [2, 1, 'F5'], [3, 1, 'D5']],
+    [[0, 4, 'C5']],
+    [[0, 1, 'G4'], [1, 1, 'C5'], [2, 2, 'E5']],
+    [[0, 3, 'G5'], [3, 1, 'E5']],
+    [[0, 1, 'F5'], [1, 1, 'A5'], [2, 2, 'C6']],
+    [[0, 3, 'A5'], [3, 1, 'F5']],
+    [[0, 1, 'E5'], [1, 1, 'G5'], [2, 2, 'C6']],
+    [[0, 2, 'B5'], [2, 1, 'A5'], [3, 1, 'F5']],
+    [[0, 4, 'E5']],
+    [[2, 1, 'E5'], [3, 1, 'G#5']],
+    [[0, 1, 'A5'], [1, 1, 'E5'], [2, 2, 'C5']],
+    [[0, 3, 'E5'], [3, 1, 'A4']],
+    [[0, 1, 'G#4'], [1, 1, 'B4'], [2, 2, 'E5']],
+    [[0, 3, 'D5'], [3, 1, 'B4']],
+    [[0, 1, 'D5'], [1, 1, 'F5'], [2, 2, 'A5']],
+    [[0, 2, 'G#5'], [2, 1, 'F5'], [3, 1, 'D5']],
+    [[0, 1, 'C5'], [1, 1, 'E5'], [2, 1, 'B4'], [3, 1, 'D5']],
+    [[0, 4, 'A4']],
+    [[0, 1, 'G4'], [1, 1, 'C5'], [2, 2, 'E5']],
+    [[0, 3, 'D5'], [3, 1, 'C5']],
+    [[0, 1, 'F5'], [1, 1, 'A5'], [2, 2, 'F5']],
+    [[0, 3, 'E5'], [3, 1, 'C5']],
+    [[0, 1, 'D5'], [1, 1, 'F5'], [2, 2, 'B5']],
+    [[0, 2, 'A5'], [2, 1, 'G5'], [3, 1, 'F5']],
+    [[0, 4, 'E5']],
+    [[0, 2, 'D5'], [2, 2, 'C5']],
+  ],
+};
+
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA, san_pedro: RAJALENA, independencia: MARCHA_JULIO, batalla_boyaca: TORBELLINO_PUENTE, amor_amistad: DANZA_AMIGO };
 
 // Chords: root pitch class and intervals (semitones above root).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };

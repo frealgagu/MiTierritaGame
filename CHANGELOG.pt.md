@@ -1,6 +1,6 @@
 # Registro de alterações
 
-## v5.21.0 — As festas do primeiro semestre
+## v5.21.0 — As festas do ano
 - **🎨 Novo evento de temporada: o Carnaval de Negros e Brancos** (a partir de 2 de janeiro, dá para jogar até 6 de fevereiro): costure as fantasias, pinte as comparsas de preto no Dia dos Negros, encha-as de talco no Dia dos Brancos e leve-as aos carros do Grande Desfile. Sua figurinha é a primeira do álbum 🎉 Festas da Colômbia.
 - **🎶 «Son do carnaval»:** um son sureño original com quena, charango, violão e bombo toca na sua praça (também na página de downloads de música).
 - **O mapa se enfeita para o carnaval de Pasto** de 2 a 7 de janeiro: bandeirinhas e serpentinas em cada prédio e nuvens de talco nos caminhos.
@@ -10,6 +10,7 @@
 - **🎉 Novo evento de temporada: as festas de São João e São Pedro** (de 20 a 30 de junho, com mais 30 dias para jogar): traga a lenha, acenda os fornos de barro do asado huilense e das achiras, e sirva-os no tablado onde se dança o sanjuanero. Na sua praça toca «Rajaleña do tablado», um sanjuanero original, e há bandeirinhas de dia e fogos à noite.
 - **🇨🇴 Novo evento de temporada: o 20 de julho** (de 18 a 21 de julho, com mais 30 dias para jogar): teça o tecido, costure bandeiras e rosetas e leve-as ao desfile com a banda da escola. Na sua praça toca «Marcha de 20 de julho», uma marcha original para banda de cidade, e em cada prédio do mapa tremula uma bandeira da Colômbia.
 - **🌉 Novo evento de temporada: a Batalha de Boyacá** (de 5 a 8 de agosto, com mais 30 dias para jogar): junte as provisões da vereda, cozinhe as rações da tropa, prepare os cavalos dos lanceiros e faça todos cruzarem a Ponte de Boyacá. Na sua praça toca «Torbellino da ponte», um torbellino original, e as bandeiras voltam a tremular no mapa.
+- **💕 Novo evento de temporada: Amor e Amizade** (a semana do terceiro sábado de setembro, com mais 30 dias para jogar): corte o papel de presente, monte as caixas de doces, escreva os cartões e entregue os presentes do amigo secreto. Na sua praça toca «Dança do amigo secreto», uma danza original, e corações flutuam sobre o mapa.
 
 ## v5.20.0 — A praça das festas
 - **🔽 Minimizar:** o botão «Sair» da barra do evento agora se chama «Minimizar», porque o evento continua rodando enquanto você joga em outro lugar.

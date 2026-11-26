@@ -10043,6 +10043,93 @@ const DRAW = {
     this.animate(0, 0);
     this.roofTop = null;
   },
+
+  // --- Amor y Amistad (v5.21) ---
+  // Dulcería: an awning stall with jars of sweets and boxes being wrapped.
+  aa_dulceria(g, x, y, ctx) {
+    const x0 = x + 0.4;
+    const y0 = y + 0.35;
+    const colors = [0xe91e63, 0xfdd835, 0x43a047, 0x1e88e5, 0xff7043];
+    fleaStall(this, g, x0, y0, ctx, 0xe91e63, colors, 2.2);
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 2); k++) {
+      const p = iso(x0 + 0.3 + k * 0.4, y0 + 1.75);
+      g.roundRect(p.x - 3.5, p.y - 9, 7, 9, 2).fill({ color: 0xe3f2fd, alpha: 0.85 }).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.5 });
+      for (let f = 0; f < 4; f++) g.circle(p.x - 1.6 + (f % 2) * 3.2, p.y - 2 - Math.floor(f / 2) * 3, 1.3).fill(colors[(k + f) % colors.length]);
+      g.rect(p.x - 3.5, p.y - 10.5, 7, 1.6).fill(0xd32f2f);
+    }
+    const seller = new Graphics();
+    this.anim.addChild(seller);
+    const c = iso(x0 + 1.9, y0 + 2.2);
+    this.animate = (time) => {
+      seller.clear();
+      worker(seller, c.x, c.y, 0xf06292);
+      const turn = Math.sin(time * 3) * 1.5;
+      seller.rect(c.x + 3, c.y - 14 + turn, 7, 5).fill(0xe53935);
+      seller.rect(c.x + 6, c.y - 14 + turn, 1.2, 5).fill(0xfdd835);
+    };
+    this.animate(0);
+  },
+
+  // Tarjetería: a house with a window full of cards and a red mailbox at the door.
+  aa_tarjetas(g, x, y, ctx) {
+    const H = house(this, g, x + 0.25, y + 0.25, 2.2, 1.1, 24, ctx, { wall: 0xfff8e1 });
+    door(g, x + 0.25, y + 0.25, 1.1, 1.6, 15, ctx.trim);
+    const win = iso(x + 0.9, y + 1.36, 6);
+    g.rect(win.x - 12, win.y - 12, 22, 12).fill(0xffffff).stroke(OUTLINE);
+    const colors = [0xef5350, 0xf48fb1, 0xfdd835, 0x90caf9];
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 2); k++) {
+      const cx = win.x - 9 + (k % 4) * 5.5;
+      const cy = win.y - 9 + Math.floor(k / 4) * 5;
+      g.rect(cx, cy, 4.4, 3.4).fill(colors[k % 4]);
+      g.circle(cx + 2.2, cy + 1.7, 0.9).fill(0xffffff);
+    }
+    const box2 = iso(x + 2.65, y + 1.6);
+    g.rect(box2.x - 1, box2.y - 10, 2, 10).fill(0x616161);
+    g.roundRect(box2.x - 4, box2.y - 17, 8, 8, 3).fill(0xd32f2f).stroke(OUTLINE);
+    this.roofTop = iso(x + 1.35, y + 0.8, H + 16);
+  },
+
+  // Amigo secreto: a table under a heart-shaped arch where friends exchange gifts, one hugging the other.
+  aa_amigo(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.4;
+    box(g, x0 + 0.3, y0 + 0.3, 1.8, 0.6, 8, 0xffffff);
+    const colors = [0xe53935, 0xf06292, 0x1e88e5, 0xfdd835, 0x43a047];
+    for (let k = 0; k < 3 + Math.min(ctx.tier, 3); k++) {
+      const p = iso(x0 + 0.45 + k * 0.3, y0 + 0.6, 8);
+      g.rect(p.x - 3, p.y - 6, 6, 6).fill(colors[k % colors.length]).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
+      g.rect(p.x - 0.6, p.y - 6, 1.2, 6).fill(0xfdd835);
+    }
+    // The arch of hearts.
+    const l = iso(x0 + 0.1, y0 + 0.3, 0);
+    const r = iso(x0 + 2.3, y0 + 0.3, 0);
+    g.rect(l.x - 1, l.y - 34, 2, 34).fill(PAL.woodDark);
+    g.rect(r.x - 1, r.y - 34, 2, 34).fill(PAL.woodDark);
+    g.moveTo(l.x, l.y - 34).quadraticCurveTo((l.x + r.x) / 2, (l.y + r.y) / 2 - 50, r.x, r.y - 34).stroke({ width: 2, color: 0xf06292 });
+    for (let k = 0; k < 7; k++) {
+      const tt = (k + 0.5) / 7;
+      const mx = (l.x + r.x) / 2;
+      const my = (l.y + r.y) / 2 - 50;
+      const px = (1 - tt) * (1 - tt) * l.x + 2 * (1 - tt) * tt * mx + tt * tt * r.x;
+      const py = (1 - tt) * (1 - tt) * (l.y - 34) + 2 * (1 - tt) * tt * my + tt * tt * (r.y - 34);
+      g.circle(px - 1.4, py - 1, 1.8).fill(0xe53935);
+      g.circle(px + 1.4, py - 1, 1.8).fill(0xe53935);
+      g.poly([px - 3.2, py - 0.4, px + 3.2, py - 0.4, px, py + 3]).fill(0xe53935);
+    }
+    const friends = new Graphics();
+    this.anim.addChild(friends);
+    const a = iso(x0 + 0.9, y0 + 1.6);
+    const b = iso(x0 + 1.6, y0 + 1.6);
+    this.animate = (time) => {
+      const near = (Math.sin(time * 1.5) + 1) * 2.5;
+      friends.clear();
+      worker(friends, a.x + near, a.y, 0x1e88e5);
+      worker(friends, b.x - near, b.y, 0xf06292);
+      friends.rect(a.x + near + 3, a.y - 14, 6, 5).fill(0xe53935);
+      friends.rect(a.x + near + 5.4, a.y - 14, 1.2, 5).fill(0xfdd835);
+    };
+    this.animate(0);
+  },
 };
 
 // Tolima Grande (v4.0): stations sharing artwork from other regions.
