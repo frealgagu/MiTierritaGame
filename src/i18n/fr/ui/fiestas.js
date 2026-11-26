@@ -111,4 +111,6 @@ export default {
   "En el Huila y el Tolima se baila el sanjuanero: trae la leña, prende los hornos de barro del asado huilense y de las achiras, y sírvelos en el tablado mientras las parejas bailan.": "Dans le Huila et le Tolima, on danse le sanjuanero : apporte le bois, allume les fours en terre de l’asado huilense et des achiras, et sers-les sur l’estrade pendant que les couples dansent.",
   "El 20 de julio": "Le 20 juillet",
   "Se celebra el Grito de Independencia y no puede faltar una bandera en cada ventana: teje la tela, cose banderas y escarapelas y llévalas al desfile del 20 de julio con la banda del colegio.": "On fête le Cri d’indépendance et il faut un drapeau à chaque fenêtre : tisse le tissu, couds des drapeaux et des cocardes et apporte-les au défilé du 20 juillet avec la fanfare de l’école.",
+  "La Batalla de Boyacá": "La bataille de Boyacá",
+  "Se recuerda el 7 de agosto de 1819: las veredas de Boyacá alimentaron al ejército libertador. Recoge las provisiones, cocina las raciones, alista los caballos de los lanceros y haz que todos crucen el Puente de Boyacá.": "On se souvient du 7 août 1819 : les hameaux de Boyacá nourrirent l’armée de libération. Rassemble les provisions, cuisine les rations, prépare les chevaux des lanciers et fais traverser tout le monde par le pont de Boyacá.",
 };

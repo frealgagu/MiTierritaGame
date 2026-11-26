@@ -152,4 +152,9 @@ export default {
   ind_banderas: ["Colombia’s flag is yellow, blue and red: the yellow takes up half.", "On national holidays it is customary to fly the flag at every house."],
   ind_escarapelas: ["The tricolor rosette is worn on the chest on national holidays.", "Llorente’s flower vase, which started the quarrel of 20 July, is in the Independence Museum."],
   ind_desfile: ["On 20 July there are military and school parades with marching bands.", "Marching bands play snare drums, bass drums, glockenspiels and bugles."],
+  // Batalla de Boyacá (v5.21)
+  bb_vereda: ["The Battle of Boyacá, on 7 August 1819, sealed the independence of New Granada.", "The peasants of Boyacá gave food, horses and ruanas to the liberating army."],
+  bb_cocina: ["The troops ate mazamorra, potatoes and dried meat during the Liberation Campaign.", "The army crossed the Pisba páramo before reaching Boyacá."],
+  bb_caballeriza: ["The llanero lancers were decisive at the Pantano de Vargas, days before Boyacá.", "Juan José Rondón led the charge of the fourteen lancers at the Pantano de Vargas."],
+  bb_puente: ["The Boyacá Bridge crosses the Teatinos river; the battle was fought there.", "Every 7 August Colombia celebrates Army Day."],
 };

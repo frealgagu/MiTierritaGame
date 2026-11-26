@@ -152,4 +152,9 @@ export default {
   ind_banderas: ["A bandeira da Colômbia é amarela, azul e vermelha: o amarelo ocupa a metade.", "Nas datas pátrias é costume hastear a bandeira em cada casa."],
   ind_escarapelas: ["A roseta tricolor é usada no peito nos dias pátrios.", "O vaso de Llorente, que iniciou a briga de 20 de julho, está no Museu da Independência."],
   ind_desfile: ["Em 20 de julho há desfiles militares e de escolas com bandas marciais.", "As bandas marciais tocam caixas, bumbos, liras e cornetas."],
+  // Batalla de Boyacá (v5.21)
+  bb_vereda: ["A Batalha de Boyacá, em 7 de agosto de 1819, selou a independência de Nova Granada.", "Os camponeses de Boyacá deram comida, cavalos e ruanas ao exército libertador."],
+  bb_cocina: ["A tropa comia mazamorra, batatas e carne seca durante a Campanha Libertadora.", "O exército cruzou o páramo de Pisba antes de chegar a Boyacá."],
+  bb_caballeriza: ["Os lanceiros llaneros foram decisivos no Pântano de Vargas, dias antes de Boyacá.", "Juan José Rondón comandou a carga dos catorze lanceiros no Pântano de Vargas."],
+  bb_puente: ["A Ponte de Boyacá cruza o rio Teatinos; ali foi travada a batalha.", "Todo 7 de agosto a Colômbia celebra o Dia do Exército."],
 };

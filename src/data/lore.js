@@ -469,6 +469,11 @@ export const FACTS = {
   ind_banderas: ["La bandera de Colombia es amarilla, azul y roja: el amarillo ocupa la mitad.", "En las fechas patrias es costumbre izar la bandera en cada casa."],
   ind_escarapelas: ["La escarapela tricolor se lleva en el pecho los días patrios.", "El florero de Llorente, que inició la pelea del 20 de julio, está en el Museo de la Independencia."],
   ind_desfile: ["El 20 de julio hay desfiles militares y de colegios con bandas de guerra.", "Las bandas de guerra tocan redoblantes, bombos, liras y cornetas."],
+  // Batalla de Boyacá (v5.21)
+  bb_vereda: ["La Batalla de Boyacá, el 7 de agosto de 1819, selló la independencia de la Nueva Granada.", "Los campesinos de Boyacá le dieron comida, caballos y ruanas al ejército libertador."],
+  bb_cocina: ["La tropa comía mazamorra, papas y carne seca durante la Campaña Libertadora.", "El ejército cruzó el páramo de Pisba antes de llegar a Boyacá."],
+  bb_caballeriza: ["Los lanceros llaneros fueron decisivos en el Pantano de Vargas, días antes de Boyacá.", "Juan José Rondón dirigió la carga de los catorce lanceros en el Pantano de Vargas."],
+  bb_puente: ["El Puente de Boyacá cruza el río Teatinos; allí se libró la batalla.", "Cada 7 de agosto se celebra en Colombia el Día del Ejército."],
 };
 
 // Speaker announcing milestones per zone (key events, not every toast).
@@ -540,6 +545,7 @@ export const PEOPLE = {
   plaza_dia_madre: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_san_pedro: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
   plaza_independencia: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
+  plaza_batalla_boyaca: { icon: '👩🏽', name: 'Doña Celmira', role: 'la de la junta de festejos' },
 };
 
 // Opening line when entering a zone for the first time.
@@ -612,6 +618,7 @@ export const WELCOME = {
   plaza_dia_madre: '¡Feliz Día de la Madre! Hoy toda la familia almuerza junta y hay serenata para las mamás.',
   plaza_san_pedro: '¡Llegaron las fiestas de San Pedro! Prenda los hornos, que hay asado huilense, achiras y sanjuanero.',
   plaza_independencia: '¡Feliz 20 de julio! Hay que poner una bandera en cada ventana y alistar la banda para el desfile.',
+  plaza_batalla_boyaca: '¡Hoy se recuerda la Batalla de Boyacá! Hay que alimentar a la tropa y alistar los caballos para cruzar el puente.',
 };
 
 // «el Beneficiadero», «la Quesera», «las Gaveras», «los Cajones de fermentación».

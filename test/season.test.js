@@ -39,7 +39,7 @@ test('the plaza\'s products and stations never reuse a region\'s id: they would 
 });
 
 test('the plaza belongs to no region: its zones and events stay out of the main game lists (v5.19)', () => {
-  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro', 'independencia']);
+  assert.deepEqual(SEASON_EVENTS.map((e) => e.fiesta), ['velitas', 'navidad', 'negros_blancos', 'barranquilla', 'vallenato', 'dia_madre', 'san_pedro', 'independencia', 'batalla_boyaca']);
   for (const z of PLAZA_ZONES) assert.ok(!ZONE_LIST.includes(z));
   for (const r of REGIONS) for (const z of PLAZA_ZONES) assert.ok(!r.zones.includes(z.id));
   for (const e of SEASON_EVENTS) assert.ok(!EVENTS.includes(e));
@@ -132,7 +132,7 @@ test('season boards and stickers survive the save; no fiesta bonus on the board 
   assert.equal(fiestaMult(back.events.season.boards.velitas), 1);
 });
 
-test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre, San Pedro, the 20 de julio and Boyacá (no event yet) (v5.19)', () => {
+test('the next season event: Velitas from late November, Negros y Blancos after Christmas, then Barranquilla, the Vallenato, the Día de la Madre, San Pedro, the 20 de julio, Boyacá and Amor y Amistad (no event yet) (v5.19)', () => {
   const n = nextSeason(day(2026, 11, 24));
   assert.equal(n.fiesta.id, 'velitas');
   assert.equal(n.days, 12);
@@ -157,7 +157,23 @@ test('the next season event: Velitas from late November, Negros y Blancos after 
   assert.ok(july.def, 'the 20 de julio too (v5.21)');
   const august = nextSeason(day(2027, 7, 25));
   assert.equal(august.fiesta.id, 'batalla_boyaca');
-  assert.equal(august.def, null);
+  assert.ok(august.def, 'Boyacá too (v5.21)');
+  const september = nextSeason(day(2027, 8, 20));
+  assert.equal(september.fiesta.id, 'amor_amistad');
+  assert.equal(september.def, null);
+});
+
+test('Batalla de Boyacá (v5.21): 5–8 August with 30 days of grace, flags on every building', () => {
+  const root = newGame();
+  assert.equal(seasonStatus(root, 'batalla_boyaca', day(2027, 8, 4)), null);
+  assert.equal(seasonStatus(root, 'batalla_boyaca', day(2027, 8, 5)).kind, 'available');
+  assert.equal(seasonStatus(root, 'batalla_boyaca', day(2027, 9, 7)).grace, true);
+  assert.equal(seasonStatus(root, 'batalla_boyaca', day(2027, 9, 8)), null);
+  assert.ok(decorOn(day(2027, 8, 7)).has('flags'));
+  const board = startSeason(root, 'batalla_boyaca', day(2027, 8, 6));
+  assert.deepEqual(Object.keys(board.stations), ['bb_vereda', 'bb_cocina', 'bb_caballeriza', 'bb_puente']);
+  meet(board);
+  assert.equal(finishSeason(root, 'batalla_boyaca').sticker, true);
 });
 
 test('20 de julio (v5.21): 18–21 July with 30 days of grace, flags on every building', () => {

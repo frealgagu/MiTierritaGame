@@ -67,6 +67,8 @@ export const PLAZA_ZONES = [
   plaza('plaza_san_pedro', 1620, 'san_pedro', ['sp_lenero', 'sp_asado', 'sp_achiras', 'sp_tablado'], ['streamers', 'fireworks']),
   // (v5.21) 20 de julio: Colombian flags on every building and tricolor bunting.
   plaza('plaza_independencia', 1718, 'independencia', ['ind_telar', 'ind_banderas', 'ind_escarapelas', 'ind_desfile'], ['flags']),
+  // (v5.21) 7 de agosto: flags, like the 20 de julio.
+  plaza('plaza_batalla_boyaca', 1819, 'batalla_boyaca', ['bb_vereda', 'bb_cocina', 'bb_caballeriza', 'bb_puente'], ['flags']),
 ];
 
 // Same prices and paces as the Finca's first stations (data/stations.js).
@@ -117,6 +119,12 @@ export const PLAZA_STATIONS = [
   station('ind_banderas', 'plaza_independencia', 'Taller de banderas', '🇨🇴', { in: { tela_patria: 1 }, out: { bandera_patria: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('ind_escarapelas', 'plaza_independencia', 'Taller de escarapelas', '🎗️', { in: { tela_patria: 1 }, out: { escarapela: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
   station('ind_desfile', 'plaza_independencia', 'Desfile del 20 de julio', '🥁', { in: { bandera_patria: 1 }, joins: [{ product: 'escarapela', perCycle: 1, from: 'ind_escarapelas' }], out: { desfile_patrio: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
+  // (v5.21) 🌉 Batalla de Boyacá: the farms of the vereda feed the soldiers in the camp kitchen and the lancers'
+  // horses in the stable, and both cross the Puente de Boyacá. The same paces and prices as the Navidad.
+  station('bb_vereda', 'plaza_batalla_boyaca', 'Vereda de provisiones', '🥔', { infinite: true, out: { provisiones: 1 }, cycle: 2, unlockCost: 0, upgradeBase: 5, release: '5.21' }),
+  station('bb_cocina', 'plaza_batalla_boyaca', 'Cocina de campaña', '🍲', { in: { provisiones: 1 }, out: { racion: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('bb_caballeriza', 'plaza_batalla_boyaca', 'Caballeriza de los lanceros', '🐎', { in: { provisiones: 1 }, out: { caballeria: 1 }, cycle: 4, unlockCost: 50, upgradeBase: 8, release: '5.21' }),
+  station('bb_puente', 'plaza_batalla_boyaca', 'Puente de Boyacá', '🌉', { in: { racion: 1 }, joins: [{ product: 'caballeria', perCycle: 1, from: 'bb_caballeriza' }], out: { victoria_boyaca: 1 }, cycle: 4, unlockCost: 250, upgradeBase: 12, release: '5.21' }),
 ];
 
 export const PLAZA_PRODUCTS = {
@@ -150,6 +158,10 @@ export const PLAZA_PRODUCTS = {
   bandera_patria: { name: 'Bandera de Colombia', zone: 'plaza_independencia', value: 3, icon: '🇨🇴', color: 0xfcd116 },
   escarapela: { name: 'Escarapela', zone: 'plaza_independencia', value: 3, icon: '🎗️', color: 0xce1126 },
   desfile_patrio: { name: 'Desfile del 20 de julio', zone: 'plaza_independencia', value: 10, icon: ICON.fiestaIndependencia, color: 0x003893 },
+  provisiones: { name: 'Provisiones', zone: 'plaza_batalla_boyaca', value: 1, icon: '🥔', color: 0xc8a165 },
+  racion: { name: 'Ración de la tropa', zone: 'plaza_batalla_boyaca', value: 3, icon: '🍲', color: 0xd9a441 },
+  caballeria: { name: 'Lanceros a caballo', zone: 'plaza_batalla_boyaca', value: 3, icon: '🐎', color: 0x6d4c41 },
+  victoria_boyaca: { name: 'Paso del puente', zone: 'plaza_batalla_boyaca', value: 10, icon: ICON.fiestaBatallaBoyaca, color: 0xfcd116 },
   fiesta_sampedrina: { name: 'Fiesta sampedrina', zone: 'plaza_san_pedro', value: 10, icon: ICON.fiestaSanPedro, color: 0xe53935 },
 };
 
@@ -269,6 +281,20 @@ export const SEASON_EVENTS = [
     coins: 0,
     actions: [],
     objective: { kind: 'produced', items: { desfile_patrio: 240000 } },
+  },
+  {
+    id: 'fiesta_batalla_boyaca',
+    fiesta: 'batalla_boyaca',
+    season: true,
+    zone: 'plaza_batalla_boyaca',
+    icon: '🌉',
+    name: tk('La Batalla de Boyacá'),
+    intro: tk('Se recuerda el 7 de agosto de 1819: las veredas de Boyacá alimentaron al ejército libertador. Recoge las provisiones, cocina las raciones, alista los caballos de los lanceros y haz que todos crucen el Puente de Boyacá.'),
+    stations: ['bb_vereda', 'bb_cocina', 'bb_caballeriza', 'bb_puente'],
+    level: 1,
+    coins: 0,
+    actions: [],
+    objective: { kind: 'produced', items: { victoria_boyaca: 240000 } },
   },
 ];
 export const SEASON_EVENT_OF_FIESTA = Object.fromEntries(SEASON_EVENTS.map((e) => [e.fiesta, e]));

@@ -21,4 +21,5 @@ export default {
   dia_madre: ["Pasillo para a mamãe", "bandola, tiple e violão"],
   san_pedro: ["Rajaleña do tablado", "tiple, violão, bandola, tambora e carrasca"],
   independencia: ["Marcha de 20 de julho", "clarinete, bombardino, tambora, caixa e pratos"],
+  batalla_boyaca: ["Torbellino da ponte", "tiple, requinto, violão e chucho"],
 };

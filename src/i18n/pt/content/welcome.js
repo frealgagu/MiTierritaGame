@@ -67,4 +67,5 @@ export default {
   plaza_dia_madre: "Feliz Dia das Mães! Hoje a família toda almoça junta e tem serenata para as mamães.",
   plaza_san_pedro: "Chegaram as festas de São Pedro! Acenda os fornos, que tem asado huilense, achiras e sanjuanero.",
   plaza_independencia: "Feliz 20 de julho! Tem que pôr uma bandeira em cada janela e preparar a banda para o desfile.",
+  plaza_batalla_boyaca: "Hoje se lembra a Batalha de Boyacá! Tem que alimentar a tropa e preparar os cavalos para cruzar a ponte.",
 };

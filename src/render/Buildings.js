@@ -9948,6 +9948,101 @@ const DRAW = {
     this.animate(0, 0);
     this.roofTop = null;
   },
+
+  // --- Batalla de Boyacá (v5.21) ---
+  // Cocina de campaña: a canvas tent with a cauldron of mazamorra over the fire and a soldier stirring it.
+  bb_cocina(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const a = iso(x0, y0 + 1.5);
+    const b = iso(x0 + 2.4, y0 + 1.5);
+    const c = iso(x0 + 2.4, y0);
+    const top = iso(x0 + 1.2, y0 + 0.75, 30 + ctx.up);
+    g.poly([a.x, a.y, b.x, b.y, top.x, top.y]).fill(0xd7ccc8).stroke(OUTLINE);
+    g.poly([b.x, b.y, c.x, c.y, top.x, top.y]).fill(0xbcaaa4).stroke(OUTLINE);
+    g.poly([a.x + (top.x - a.x) * 0.35, a.y + (top.y - a.y) * 0.35, b.x + (top.x - b.x) * 0.35, b.y + (top.y - b.y) * 0.35, top.x, top.y]).fill(0x8d6e63);
+    const pot = iso(x0 + 1.2, y0 + 2.1, 6);
+    const fire = iso(x0 + 1.2, y0 + 2.1);
+    g.ellipse(fire.x, fire.y, 9, 4).fill(0x3e2723);
+    for (const dx of [-7, 0, 7]) g.rect(fire.x + dx - 1, fire.y - 6, 2, 6).fill(0x424242);
+    g.roundRect(pot.x - 9, pot.y - 11, 18, 11, 3).fill(0x37474f).stroke(OUTLINE);
+    g.ellipse(pot.x, pot.y - 11, 9, 3.2).fill(0xe8c063);
+    this.lights.push({ x: fire.x, y: fire.y - 3, r: 16, color: 0xff7043 });
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) {
+      const p = iso(x0 + 0.2 + k * 0.35, y0 + 2.6);
+      g.ellipse(p.x, p.y - 4, 5, 4.5).fill(PAL.sack).stroke(OUTLINE);
+    }
+    const cook = new Graphics();
+    this.anim.addChild(cook);
+    const s = iso(x0 + 1.9, y0 + 2.3);
+    this.animate = (time) => {
+      cook.clear();
+      worker(cook, s.x, s.y, 0x1e3a6e);
+      cook.moveTo(s.x - 3, s.y - 12).lineTo(pot.x + Math.sin(time * 3) * 4, pot.y - 11).stroke({ width: 1.6, color: PAL.woodDark });
+    };
+    this.animate(0);
+  },
+
+  // Caballeriza de los lanceros: an open stable with the lancers' horses, one led out with its lance-bearer.
+  bb_caballeriza(g, x, y, ctx) {
+    const x0 = x + 0.3;
+    const y0 = y + 0.3;
+    const H = 22 + ctx.up;
+    for (const [px, py] of [[0, 0], [2.3, 0], [0, 1.2], [2.3, 1.2]]) box(g, x0 + px, y0 + py, 0.12, 0.12, H, PAL.wood);
+    gableRoof(g, x0, y0, 2.42, 1.32, H, 10, PAL.roof, PAL.wood);
+    const horse = (gr, px, py, color, flip = 1) => {
+      gr.ellipse(px, py - 10, 8, 4.5).fill(color).stroke({ width: 0.6, color: 0x3a2418, alpha: 0.6 });
+      for (const dx of [-5, -2, 2, 5]) gr.rect(px + dx - 0.7, py - 7, 1.4, 7).fill(color);
+      gr.poly([px + 6 * flip, py - 12, px + 11 * flip, py - 20, px + 13 * flip, py - 17, px + 8 * flip, py - 9]).fill(color);
+      gr.rect(px - 9 * flip - (flip < 0 ? 1.4 : 0), py - 12, 1.4, 7).fill(0x3e2723);
+    };
+    const colors = [0x6d4c41, 0x3e2723, 0xbcaaa4, 0x8d6e63];
+    for (let k = 0; k < 2 + Math.min(ctx.tier, 2); k++) horse(g, iso(x0 + 0.4 + k * 0.55, y0 + 0.7).x, iso(x0 + 0.4 + k * 0.55, y0 + 0.7).y, colors[k % 4]);
+    const led = new Graphics();
+    this.anim.addChild(led);
+    const p = iso(x0 + 1.2, y0 + 2.2);
+    this.animate = (time) => {
+      const walk = Math.sin(time * 2) * 6;
+      led.clear();
+      horse(led, p.x + walk, p.y, 0x5d4037, walk >= 0 ? 1 : -1);
+      worker(led, p.x + walk - 12, p.y + 1, 0x1e3a6e);
+      led.rect(p.x + walk - 10, p.y - 30, 1, 24).fill(0x8d6e63);
+      led.poly([p.x + walk - 10.5, p.y - 30, p.x + walk - 8.5, p.y - 30, p.x + walk - 9.5, p.y - 35]).fill(0x9e9e9e);
+    };
+    this.animate(0);
+    this.roofTop = iso(x0 + 1.2, y0 + 0.6, H + 10);
+  },
+
+  // Puente de Boyacá: the little stone bridge over the Teatinos stream, with the flag at one end and soldiers crossing.
+  bb_puente(g, x, y, ctx) {
+    // The stream across the plot.
+    g.poly(isoPoly([[x + 1.1, y + 0.05], [x + 1.9, y + 0.05], [x + 1.9, y + 2.95], [x + 1.1, y + 2.95]])).fill(0x64b5f6);
+    g.poly(isoPoly([[x + 1.3, y + 0.05], [x + 1.45, y + 0.05], [x + 1.45, y + 2.95], [x + 1.3, y + 2.95]])).fill({ color: 0xbbdefb, alpha: 0.7 });
+    // The bridge: a deck over an arch, from one bank to the other.
+    box(g, x + 0.5, y + 1.1, 2.0, 0.8, 10, 0xbcaaa4);
+    const a0 = iso(x + 1.2, y + 1.9, 0);
+    const a1 = iso(x + 1.8, y + 1.9, 0);
+    g.moveTo(a0.x, a0.y).quadraticCurveTo((a0.x + a1.x) / 2, (a0.y + a1.y) / 2 - 14, a1.x, a1.y).fill(0x546e7a);
+    box(g, x + 0.5, y + 1.05, 2.0, 0.1, 14, 0xd7ccc8);
+    box(g, x + 0.5, y + 1.85, 2.0, 0.1, 14, 0xd7ccc8);
+    box(g, x + 2.5, y + 0.6, 0.08, 0.08, 40 + ctx.up, 0x6d4c41);
+    const flag = new Graphics();
+    const troops = new Graphics();
+    this.anim.addChild(flag, troops);
+    const pole = iso(x + 2.54, y + 0.64, 40 + ctx.up);
+    this.animate = (time, clock) => {
+      drawFlag(flag, pole.x, pole.y + 18, clock);
+      troops.clear();
+      for (let k = 0; k < 3; k++) {
+        const f = ((time * 0.15 + k / 3) % 1);
+        const p = iso(x + 0.6 + f * 1.8, y + 1.5, 10);
+        worker(troops, p.x, p.y, 0x1e3a6e);
+        troops.rect(p.x - 3, p.y - 25, 6, 2.4).fill(0xce1126);
+      }
+    };
+    this.animate(0, 0);
+    this.roofTop = null;
+  },
 };
 
 // Tolima Grande (v4.0): stations sharing artwork from other regions.

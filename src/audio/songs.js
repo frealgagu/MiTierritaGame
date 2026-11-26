@@ -1001,7 +1001,56 @@ const MARCHA_JULIO = {
   ],
 };
 
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA, san_pedro: RAJALENA, independencia: MARCHA_JULIO };
+// (v5.21) Batalla de Boyacá: «Torbellino del puente», an original torbellino in D major with a B minor middle, 3/4,
+// with Boyacá's band (tiple, requinto, guitar and chucho; compose.js: torbellino).
+const TORBELLINO_PUENTE = {
+  name: 'Torbellino del puente',
+  instruments: 'tiple, requinto, guitarra y chucho',
+  bpm: 126,
+  style: 'torbellino',
+  chords: [
+    'D', 'D', 'A7', 'A7', 'A7', 'A7', 'D', 'D',
+    'D', 'D', 'G', 'G', 'D', 'A7', 'D', 'D',
+    'Bm', 'Bm', 'F#7', 'F#7', 'F#7', 'F#7', 'Bm', 'Bm',
+    'G', 'G', 'D', 'D', 'A7', 'A7', 'D', 'A7',
+  ],
+  melody: [
+    [[0, 1, 'A4'], [1, 1, 'D5'], [2, 1, 'F#5'], [3, 1, 'A5'], [4, 2, 'F#5']],
+    [[0, 1, 'E5'], [1, 1, 'F#5'], [2, 1, 'G5'], [3, 1, 'F#5'], [4, 2, 'E5']],
+    [[0, 1, 'C#5'], [1, 1, 'E5'], [2, 1, 'A5'], [3, 1, 'G5'], [4, 2, 'E5']],
+    [[0, 3, 'C#5'], [3, 1, 'D5'], [4, 2, 'E5']],
+    [[0, 1, 'A5'], [1, 1, 'G5'], [2, 1, 'E5'], [3, 1, 'C#5'], [4, 2, 'A4']],
+    [[0, 1, 'B4'], [1, 1, 'C#5'], [2, 1, 'E5'], [3, 1, 'G5'], [4, 2, 'F#5']],
+    [[0, 1, 'F#5'], [1, 1, 'A5'], [2, 1, 'F#5'], [3, 1, 'E5'], [4, 2, 'D5']],
+    [[0, 4, 'D5'], [4, 1, 'A4'], [5, 1, 'C#5']],
+    [[0, 1, 'D5'], [1, 1, 'F#5'], [2, 1, 'A5'], [3, 1, 'F#5'], [4, 2, 'D5']],
+    [[0, 1, 'E5'], [1, 1, 'F#5'], [2, 1, 'A5'], [3, 1, 'B5'], [4, 2, 'A5']],
+    [[0, 1, 'B5'], [1, 1, 'A5'], [2, 1, 'G5'], [3, 1, 'B5'], [4, 2, 'D5']],
+    [[0, 3, 'G5'], [3, 1, 'F#5'], [4, 2, 'E5']],
+    [[0, 1, 'F#5'], [1, 1, 'A5'], [2, 1, 'D5'], [3, 1, 'F#5'], [4, 2, 'A5']],
+    [[0, 1, 'G5'], [1, 1, 'E5'], [2, 1, 'C#5'], [3, 1, 'E5'], [4, 2, 'G5']],
+    [[0, 6, 'D5']],
+    [[4, 1, 'D5'], [5, 1, 'F#5']],
+    [[0, 1, 'B5'], [1, 1, 'A5'], [2, 1, 'F#5'], [3, 1, 'D5'], [4, 2, 'B4']],
+    [[0, 1, 'C#5'], [1, 1, 'D5'], [2, 1, 'F#5'], [3, 1, 'B5'], [4, 2, 'F#5']],
+    [[0, 1, 'A#4'], [1, 1, 'C#5'], [2, 1, 'F#5'], [3, 1, 'E5'], [4, 2, 'C#5']],
+    [[0, 3, 'A#4'], [3, 1, 'C#5'], [4, 2, 'F#5']],
+    [[0, 1, 'E5'], [1, 1, 'C#5'], [2, 1, 'A#4'], [3, 1, 'C#5'], [4, 2, 'E5']],
+    [[0, 1, 'F#5'], [1, 1, 'E5'], [2, 1, 'C#5'], [3, 1, 'A#4'], [4, 2, 'F#4']],
+    [[0, 1, 'B4'], [1, 1, 'D5'], [2, 1, 'F#5'], [3, 1, 'D5'], [4, 2, 'B4']],
+    [[0, 4, 'B4'], [4, 1, 'D5'], [5, 1, 'F#5']],
+    [[0, 1, 'G5'], [1, 1, 'B5'], [2, 1, 'G5'], [3, 1, 'D5'], [4, 2, 'B4']],
+    [[0, 3, 'D5'], [3, 1, 'E5'], [4, 2, 'G5']],
+    [[0, 1, 'F#5'], [1, 1, 'A5'], [2, 1, 'F#5'], [3, 1, 'D5'], [4, 2, 'A4']],
+    [[0, 3, 'D5'], [3, 1, 'E5'], [4, 2, 'F#5']],
+    [[0, 1, 'E5'], [1, 1, 'G5'], [2, 1, 'A5'], [3, 1, 'G5'], [4, 2, 'E5']],
+    [[0, 1, 'C#5'], [1, 1, 'E5'], [2, 1, 'G5'], [3, 1, 'E5'], [4, 2, 'C#5']],
+    [[0, 6, 'D5']],
+    [[4, 1, 'A4'], [5, 1, 'C#5']],
+  ],
+};
+
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: TUTAINA, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA, san_pedro: RAJALENA, independencia: MARCHA_JULIO, batalla_boyaca: TORBELLINO_PUENTE };
 
 // Chords: root pitch class and intervals (semitones above root).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };

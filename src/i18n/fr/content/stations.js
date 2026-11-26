@@ -407,4 +407,8 @@ export default {
   ind_banderas: "Atelier des drapeaux",
   ind_escarapelas: "Atelier des cocardes",
   ind_desfile: "Défilé du 20 juillet",
+  bb_vereda: "Ferme des provisions",
+  bb_cocina: "Cuisine de campagne",
+  bb_caballeriza: "Écurie des lanciers",
+  bb_puente: "Pont de Boyacá",
 };

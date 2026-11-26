@@ -420,4 +420,8 @@ export default {
   bandera_patria: "Colombian flag",
   escarapela: "Rosette",
   desfile_patrio: "20th of July parade",
+  provisiones: "Provisions",
+  racion: "Troop ration",
+  caballeria: "Mounted lancers",
+  victoria_boyaca: "Crossing of the bridge",
 };

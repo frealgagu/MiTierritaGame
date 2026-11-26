@@ -482,6 +482,11 @@ export class FarmView extends StationView {
           g.rect(p.x + 7, p.y - 22, 2, 22).fill(PAL.woodDark);
           g.rect(p.x - 9, p.y - 23, 18, 2).fill(PAL.wood);
           for (let k = 0; k < 5; k++) g.roundRect(p.x - 6.5 + k * 3, p.y - 21, 2, 9 + (k % 2) * 2, 1).fill(0xfffde7).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.4 });
+        } else if (look.props === 'potatoes') {
+          for (const [dx, dy] of [[-5, 0], [5, 0], [0, -6]]) {
+            g.ellipse(p.x + dx, p.y + dy - 5, 6, 5.5).fill(PAL.sack).stroke(OUTLINE);
+            for (let k = 0; k < 3; k++) g.ellipse(p.x + dx - 2.5 + k * 2.5, p.y + dy - 9.5, 1.6, 1.2).fill(0xa1887f);
+          }
         } else if (look.props === 'cloth') {
           for (const [dx, dy, c] of [[-5, 0, 0xfcd116], [5, 0, 0x003893], [0, -5, 0xce1126]]) {
             g.ellipse(p.x + dx - 5, p.y + dy - 3, 2.4, 3).fill(c).stroke({ width: 0.5, color: 0x3a2418, alpha: 0.6 });
@@ -619,6 +624,8 @@ const PLAZA_HOUSE = {
   san_pedro: { wall: 0xfbf8f1, trims: [0xd7263d, 0xf2c14e, 0x2f7d4f, 0xd7263d, 0x8e44ad, 0xffd700], awning: 0xd7263d, sign: 'hat', props: 'firewood' },
   // (v5.21) The loom of the 20 de julio: a white house with a flag sign and rolls of yellow, blue and red cloth.
   independencia: { wall: 0xfbf8f1, trims: [0x003893, 0xce1126, 0xfcd116, 0x003893, 0x8e44ad, 0xffd700], awning: 0x003893, sign: 'flag', props: 'cloth' },
+  // (v5.21) The vereda's farm on the 7 de agosto: a whitewashed house with a flag sign and sacks of potatoes.
+  batalla_boyaca: { wall: 0xfbf8f1, trims: [0x2f7d4f, 0xce1126, 0xfcd116, 0x2f7d4f, 0x8e44ad, 0xffd700], awning: 0x2f7d4f, sign: 'flag', props: 'potatoes' },
   barranquilla: { wall: 0xfdd835, trims: [0xe53935, 0x1e88e5, 0x43a047, 0xe53935, 0x8e24aa, 0xffd700], awning: 0x1e88e5, sign: 'carnival', props: 'masks' },
 };
 

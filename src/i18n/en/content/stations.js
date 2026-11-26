@@ -407,4 +407,8 @@ export default {
   ind_banderas: "Flag workshop",
   ind_escarapelas: "Rosette workshop",
   ind_desfile: "20th of July parade",
+  bb_vereda: "Provisions farm",
+  bb_cocina: "Camp kitchen",
+  bb_caballeriza: "Lancers’ stable",
+  bb_puente: "Boyacá Bridge",
 };

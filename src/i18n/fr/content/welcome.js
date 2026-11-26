@@ -67,4 +67,5 @@ export default {
   plaza_dia_madre: "Bonne fête des Mères ! Aujourd’hui toute la famille déjeune ensemble et il y a une sérénade pour les mamans.",
   plaza_san_pedro: "Les fêtes de la Saint-Pierre sont arrivées ! Allume les fours : il y a de l’asado huilense, des achiras et du sanjuanero.",
   plaza_independencia: "Joyeux 20 juillet ! Il faut un drapeau à chaque fenêtre et la fanfare prête pour le défilé.",
+  plaza_batalla_boyaca: "Aujourd’hui, on se souvient de la bataille de Boyacá ! Il faut nourrir la troupe et préparer les chevaux pour passer le pont.",
 };

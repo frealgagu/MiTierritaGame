@@ -111,4 +111,6 @@ export default {
   "En el Huila y el Tolima se baila el sanjuanero: trae la leña, prende los hornos de barro del asado huilense y de las achiras, y sírvelos en el tablado mientras las parejas bailan.": "In Huila and Tolima they dance the sanjuanero: bring the firewood, light the clay ovens for the asado huilense and the achiras, and serve them on the stage while the couples dance.",
   "El 20 de julio": "The 20th of July",
   "Se celebra el Grito de Independencia y no puede faltar una bandera en cada ventana: teje la tela, cose banderas y escarapelas y llévalas al desfile del 20 de julio con la banda del colegio.": "The Cry of Independence is celebrated and there must be a flag in every window: weave the cloth, sew flags and rosettes and take them to the 20th of July parade with the school band.",
+  "La Batalla de Boyacá": "The Battle of Boyacá",
+  "Se recuerda el 7 de agosto de 1819: las veredas de Boyacá alimentaron al ejército libertador. Recoge las provisiones, cocina las raciones, alista los caballos de los lanceros y haz que todos crucen el Puente de Boyacá.": "We remember 7 August 1819: Boyacá’s villages fed the liberating army. Gather the provisions, cook the rations, ready the lancers’ horses and get everyone across the Boyacá Bridge.",
 };

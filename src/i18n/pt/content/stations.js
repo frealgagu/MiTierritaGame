@@ -407,4 +407,8 @@ export default {
   ind_banderas: "Oficina de bandeiras",
   ind_escarapelas: "Oficina de rosetas",
   ind_desfile: "Desfile de 20 de julho",
+  bb_vereda: "Vereda das provisões",
+  bb_cocina: "Cozinha de campanha",
+  bb_caballeriza: "Estrebaria dos lanceiros",
+  bb_puente: "Ponte de Boyacá",
 };

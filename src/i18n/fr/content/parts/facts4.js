@@ -152,4 +152,9 @@ export default {
   ind_banderas: ["Le drapeau de la Colombie est jaune, bleu et rouge : le jaune en occupe la moitié.", "Les jours de fête nationale, on hisse le drapeau à chaque maison."],
   ind_escarapelas: ["La cocarde tricolore se porte sur la poitrine les jours de fête nationale.", "Le vase de Llorente, qui déclencha la dispute du 20 juillet, est au Musée de l’Indépendance."],
   ind_desfile: ["Le 20 juillet, il y a des défilés militaires et scolaires avec des fanfares.", "Les fanfares jouent caisses claires, grosses caisses, lyres et clairons."],
+  // Batalla de Boyacá (v5.21)
+  bb_vereda: ["La bataille de Boyacá, le 7 août 1819, scella l’indépendance de la Nouvelle-Grenade.", "Les paysans de Boyacá donnèrent nourriture, chevaux et ruanas à l’armée de libération."],
+  bb_cocina: ["Les troupes mangeaient de la mazamorra, des pommes de terre et de la viande séchée pendant la Campagne libératrice.", "L’armée traversa le páramo de Pisba avant d’arriver à Boyacá."],
+  bb_caballeriza: ["Les lanciers llaneros furent décisifs au marais de Vargas, quelques jours avant Boyacá.", "Juan José Rondón mena la charge des quatorze lanciers au marais de Vargas."],
+  bb_puente: ["Le pont de Boyacá franchit la rivière Teatinos ; c’est là que se livra la bataille.", "Chaque 7 août, la Colombie célèbre le Jour de l’armée."],
 };

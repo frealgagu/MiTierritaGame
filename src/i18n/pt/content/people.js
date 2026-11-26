@@ -67,4 +67,5 @@ export default {
   plaza_dia_madre: ["Dona Celmira", "a da comissão de festas"],
   plaza_san_pedro: ["Dona Celmira", "a da comissão de festas"],
   plaza_independencia: ["Dona Celmira", "a da comissão de festas"],
+  plaza_batalla_boyaca: ["Dona Celmira", "a da comissão de festas"],
 };

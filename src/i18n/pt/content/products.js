@@ -420,4 +420,8 @@ export default {
   bandera_patria: "Bandeira da Colômbia",
   escarapela: "Roseta",
   desfile_patrio: "Desfile de 20 de julho",
+  provisiones: "Provisões",
+  racion: "Ração da tropa",
+  caballeria: "Lanceiros a cavalo",
+  victoria_boyaca: "Travessia da ponte",
 };

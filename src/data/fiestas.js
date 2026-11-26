@@ -69,7 +69,7 @@ export const FIESTAS = [
     greeting: tk('🌺 Es la Feria de las Flores: los silleteros cargan jardines enteros en la espalda.'),
   },
   {
-    id: 'batalla_boyaca', icon: '🌉', kind: 'big', dates: { from: [8, 5], to: [8, 8] },
+    id: 'batalla_boyaca', icon: '🌉', kind: 'big', dates: { from: [8, 5], to: [8, 8] }, decor: ['flags'],
     name: tk('Batalla de Boyacá'),
     greeting: tk('🌉 El 7 de agosto se recuerda la Batalla de Boyacá, en el Puente de Boyacá.'),
     sticker: tk('El 7 de agosto de 1819 el ejército libertador ganó en el Puente de Boyacá.'),

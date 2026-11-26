@@ -9,6 +9,7 @@
 - **💐 New season event: Mother's Day** (the weekend of the second Sunday of May, with 30 more days to play): shop at the square's market, make the bouquets, cook the Sunday lunch and bring it all to the family table, with a serenade. In its square plays «Pasillo para mamá», an original serenade pasillo, and pots of flowers line the map's paths and doors.
 - **🎉 New season event: the feasts of Saint John and Saint Peter** (20 to 30 June, with 30 more days to play): bring the firewood, light the clay ovens for the asado huilense and the achiras, and serve them on the stage where the sanjuanero is danced. In its square plays «Rajaleña del tablado», an original sanjuanero, and there is bunting by day and fireworks at night.
 - **🇨🇴 New season event: the 20th of July** (18 to 21 July, with 30 more days to play): weave the cloth, sew flags and rosettes and take them to the parade with the school band. In its square plays «Marcha del 20 de julio», an original march for a town band, and a Colombian flag flies on every building of the map.
+- **🌉 New season event: the Battle of Boyacá** (5 to 8 August, with 30 more days to play): gather the vereda's provisions, cook the troops' rations, ready the lancers' horses and get everyone across the Boyacá Bridge. In its square plays «Torbellino del puente», an original torbellino, and the flags fly again on the map.
 
 ## v5.20.0 — Fiesta Square
 - **🔽 Minimize:** the event bar's «Leave» button is now «Minimize», since the event keeps going while you play elsewhere.
