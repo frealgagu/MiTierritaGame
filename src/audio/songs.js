@@ -1211,6 +1211,75 @@ const PORRO_CABILDO = {
   ],
 };
 
+// (v5.21.2 trial) Halloween candidates, in the `macabro` style (compose.js).
+// «En la gruta del rey de la montaña» (Edvard Grieg, Peer Gynt, 1875, public domain), in E minor and 4/4: the theme
+// twice, its answer in the dominant, then the theme again with the celesta and the timpani and once more with the
+// whole band.
+const REY_MONTANA = {
+  name: 'En la gruta del rey de la montaña',
+  instruments: 'fagot, clarinete, celesta, cuerdas en pizzicato y timbales',
+  bpm: 132,
+  style: 'macabro',
+  chords: [
+    'Em', 'Em', 'Em', 'Em', 'Em', 'Em', 'Em', 'Em',
+    'B7', 'B7', 'B7', 'B7',
+    'Em', 'Em', 'Em', 'Em', 'Em', 'Em', 'Em', 'Em',
+  ],
+  levels: [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3],
+  melody: [],
+};
+{
+  const a = [
+    [[0, 1, 'E4'], [1, 1, 'F#4'], [2, 1, 'G4'], [3, 1, 'A4'], [4, 1, 'B4'], [5, 1, 'G4'], [6, 2, 'B4']],
+    [[0, 1, 'A#4'], [1, 1, 'F#4'], [2, 2, 'A#4'], [4, 1, 'A4'], [5, 1, 'F4'], [6, 2, 'A4']],
+    [[0, 1, 'E4'], [1, 1, 'F#4'], [2, 1, 'G4'], [3, 1, 'A4'], [4, 1, 'B4'], [5, 1, 'G4'], [6, 1, 'B4'], [7, 1, 'E5']],
+    [[0, 1, 'D5'], [1, 1, 'B4'], [2, 1, 'G4'], [3, 1, 'B4'], [4, 4, 'D5']],
+  ];
+  const b = [
+    [[0, 1, 'B4'], [1, 1, 'C#5'], [2, 1, 'D#5'], [3, 1, 'E5'], [4, 1, 'F#5'], [5, 1, 'D#5'], [6, 2, 'F#5']],
+    [[0, 1, 'G5'], [1, 1, 'D#5'], [2, 2, 'G5'], [4, 1, 'F#5'], [5, 1, 'D#5'], [6, 2, 'F#5']],
+    [[0, 1, 'B4'], [1, 1, 'C#5'], [2, 1, 'D#5'], [3, 1, 'E5'], [4, 1, 'F#5'], [5, 1, 'D#5'], [6, 2, 'F#5']],
+    [[0, 1, 'G5'], [1, 1, 'D#5'], [2, 2, 'G5'], [4, 4, 'F#5']],
+  ];
+  REY_MONTANA.melody = [...a, ...a, ...b, ...a, ...a];
+}
+
+// «Triqui triqui», an original children's round on the Halloween chant («Triqui triqui Halloween, quiero dulces para
+// mí, si no hay dulces para mí, se le crece la nariz»), in A minor and 4/4: two bars of footsteps, the chant (one
+// line a bar) three times, growing, with a ghostly answer over a descending bass before the last time.
+const TRIQUI_TRIQUI = {
+  name: 'Triqui triqui',
+  instruments: 'fagot, clarinete, celesta, cuerdas en pizzicato y timbales',
+  bpm: 116,
+  style: 'macabro',
+  chords: [
+    'Am', 'E7',
+    'Am', 'E7', 'Am', 'E7',
+    'Am', 'E7', 'Am', 'E7',
+    'Am', 'G', 'F', 'E7',
+    'Am', 'E7', 'Am', 'E7',
+    'Am',
+  ],
+  levels: [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3],
+  melody: [],
+};
+{
+  const chant = [
+    [[0, 1, 'E5'], [1, 1, 'E5'], [2, 1, 'C5'], [3, 1, 'E5'], [4, 1, 'D5'], [5, 1, 'B4'], [6, 2, 'A4']],
+    [[0, 1, 'C5'], [1, 1, 'C5'], [2, 1, 'A4'], [3, 1, 'C5'], [4, 1, 'B4'], [5, 1, 'G#4'], [6, 2, 'E4']],
+    [[0, 1, 'A4'], [1, 1, 'B4'], [2, 1, 'C5'], [3, 1, 'D5'], [4, 1, 'E5'], [5, 1, 'F5'], [6, 2, 'E5']],
+    [[0, 1, 'F5'], [1, 1, 'E5'], [2, 1, 'D5'], [3, 1, 'C5'], [4, 1, 'B4'], [5, 1, 'G#4'], [6, 2, 'A4']],
+  ];
+  const ghost = [
+    [[0, 3, 'E5'], [3, 1, 'F5'], [4, 4, 'E5']],
+    [[0, 3, 'D5'], [3, 1, 'E5'], [4, 4, 'D5']],
+    [[0, 3, 'C5'], [3, 1, 'D5'], [4, 2, 'C5'], [6, 2, 'A4']],
+    [[0, 2, 'B4'], [2, 2, 'G#4'], [4, 4, 'E4']],
+  ];
+  TRIQUI_TRIQUI.melody = [[], [], ...chant, ...chant, ...ghost, ...chant, [[0, 2, 'A4'], [2, 2, 'E4'], [4, 2, 'A4']]];
+}
+
+export const HALLOWEEN_TRIALS = { rey: REY_MONTANA, triqui: TRIQUI_TRIQUI };
 export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: NOCHE_DE_PAZ, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA, san_pedro: RAJALENA, independencia: MARCHA_JULIO, batalla_boyaca: TORBELLINO_PUENTE, amor_amistad: DANZA_AMIGO, halloween: CUMBIA_DISFRACES, cartagena: PORRO_CABILDO };
 
 // Chords: root pitch class and intervals (semitones above root).

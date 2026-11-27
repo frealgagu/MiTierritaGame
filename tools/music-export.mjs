@@ -35,7 +35,7 @@ const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().rep
 export const fileOf = (region) => `${ORDER.indexOf(region) + 1}-${slug(SONGS[region].name)}`;
 
 // Each voice in compose.js: track name, General MIDI program, and if percussion, the channel 10 note.
-const MELODY = { granfinal: ['Clarinete', 71], bambuco: ['Bandola', 25], cumbia: ['Gaita', 73], torbellino: ['Requinto', 25], joropo: ['Arpa llanera', 46], chirimia: ['Clarinete', 71], amazonica: ['Guitarra eléctrica', 27], sanjuanero: ['Bandola', 25], pasillo: ['Bandola', 25], danza: ['Bandola', 25], calipso: ['Tambor metálico', 114], villancico: ['Flauta', 73], sonsureno: ['Quena', 75], vallenato: ['Acordeón', 21] };
+const MELODY = { granfinal: ['Clarinete', 71], bambuco: ['Bandola', 25], cumbia: ['Gaita', 73], torbellino: ['Requinto', 25], joropo: ['Arpa llanera', 46], chirimia: ['Clarinete', 71], amazonica: ['Guitarra eléctrica', 27], sanjuanero: ['Bandola', 25], pasillo: ['Bandola', 25], danza: ['Bandola', 25], calipso: ['Tambor metálico', 114], villancico: ['Flauta', 73], sonsureno: ['Quena', 75], vallenato: ['Acordeón', 21], macabro: ['Clarinete', 71] };
 function voiceOf(style, voice, ev) {
   switch (voice) {
     case 'melody': return { name: MELODY[style][0], program: MELODY[style][1] };
@@ -44,8 +44,12 @@ function voiceOf(style, voice, ev) {
     case 'fanfare': return { name: 'Bombardino 2', program: 58 };
     case 'steel': return { name: 'Tambor metálico', program: 114 };
     case 'gaita': return { name: 'Gaita', program: 73 };
-    case 'bass': return style === 'chirimia' || style === 'granfinal' ? { name: 'Bombardino', program: 58 } : style === 'amazonica' ? { name: 'Bajo', program: 33 } : { name: 'Bajo', program: 32 };
+    case 'bass': return style === 'macabro' ? { name: 'Contrabajo en pizzicato', program: 45 } : style === 'chirimia' || style === 'granfinal' ? { name: 'Bombardino', program: 58 } : style === 'amazonica' ? { name: 'Bajo', program: 33 } : { name: 'Bajo', program: 32 };
     case 'guitar': return { name: 'Guitarra', program: 24 };
+    case 'pizz': return { name: 'Cuerdas en pizzicato', program: 45 };
+    case 'bassoon': return { name: 'Fagot', program: 70 };
+    case 'bells': return { name: 'Celesta', program: 8 };
+    case 'timpani': return { name: 'Timbales', perc: 41 };
     case 'tiple': return { name: 'Tiple', program: 25 };
     case 'cuatro': return { name: 'Cuatro', program: 24 };
     case 'keys': return { name: 'Teclado', program: 4 };

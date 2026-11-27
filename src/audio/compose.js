@@ -541,7 +541,50 @@ function renderVallenato(buf, index) {
   for (const e of [1, 3, 5, 7]) for (const m of chord) reed(buf, at(e), freqOf(m), eighth * 0.45, 0.02, -0.1);
 }
 
+// Macabro (v5.21.2 trial, Halloween): a spooky-playful 4/4 (eighths 0..7) for a bassoon and clarinet band. Low
+// pizzicato «footsteps» on the beats (root and fifth), pizzicato chords on the off-beats, the bassoon on the tune an
+// octave below the written notes, the clarinet on the notes, the celesta an octave above, and the timpani building
+// up. `levels` (per bar, 0..3) sets how many join: 0 bassoon and footsteps only; 1 clarinet and off-beat chords;
+// 2 celesta and timpani on 1 and 3; 3 timpani on every beat and a cymbal at its first bar.
+function renderMacabro(buf, index) {
+  const { song, beat, rng } = buf;
+  const eighth = beat / 2;
+  const t0 = (index * buf.bar) / buf.sr;
+  const level = song.levels?.[index] ?? 1;
+  const { root, tones } = parseChord(song.chords[index]);
+  const at = (e) => t0 + e * eighth + (rng() - 0.5) * 0.006;
+  buf.voice = 'bass';
+  [[0, root], [2, (root + 7) % 12], [4, root], [6, (root + 7) % 12]].forEach(([e, pc], k) => pluck(buf, at(e), freqOf(above(pc, 40)), eighth * 0.5, { amp: k % 2 ? 0.3 : 0.38, t60: 0.35, bright: 0.3, pan: -0.15, pos: 0.25 }));
+  if (level >= 1) {
+    buf.voice = 'pizz';
+    const chord = tones.map((pc) => above(pc, 57)).sort((a, b) => a - b);
+    for (const e of [1, 3, 5, 7]) strum(buf, at(e), chord, eighth * 0.3, { amp: 0.06, t60: 0.25, bright: 0.6, pan: 0.3, pos: 0.15 });
+  }
+  if (level >= 2) {
+    buf.voice = 'timpani';
+    for (const e of level >= 3 ? [0, 2, 4, 6] : [0, 4]) drum(buf, at(e), 80, 52, 0.3, level >= 3 ? 0.3 : 0.22, 0, 0.08);
+  }
+  if (level >= 3 && (song.levels?.[index - 1] ?? 0) < 3) {
+    buf.voice = 'cymbal';
+    cymbal(buf, at(0), 0.16, 0, 0.6);
+  }
+  for (const [e, n, note] of song.melody[index] ?? []) {
+    const m = midi(note);
+    buf.voice = 'bassoon';
+    brass(buf, at(e), freqOf(m - 12), n * eighth * 0.8, level ? 0.1 : 0.13, -0.1);
+    if (level >= 1) {
+      buf.voice = 'melody';
+      reed(buf, at(e), freqOf(m), n * eighth * 0.8, 0.15, 0.1);
+    }
+    if (level >= 2) {
+      buf.voice = 'bells';
+      steel(buf, at(e), freqOf(m + 12), n * eighth * 0.8, 0.06, 0.35);
+    }
+  }
+}
+
 export function renderBar(buf, index) {
+  if (buf.song.style === 'macabro') return renderMacabro(buf, index);
   if (buf.song.style === 'granfinal') return renderGranFinal(buf, index);
   if (buf.song.style === 'villancico') return renderVillancico(buf, index);
   if (buf.song.style === 'sonsureno') return renderSonSureno(buf, index);
