@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.21.2 — In the Hall of the Mountain King
+- **🎃 New music for Halloween:** its square now plays «In the Hall of the Mountain King» (Grieg, 1875) with bassoon, clarinet, celesta, pizzicato strings and timpani, growing louder each time round, in place of «Cumbia de los disfraces».
+
 ## v5.21.1 — Silent Night
 - **🎄 «Silent Night» for Christmas:** the novena's square now plays «Noche de paz» (Gruber, 1818) with flute, guitar, tiple, tambourine and maracas, in place of «Tutaina».
 - **🕯️ «Los peces en el río»** for the Velitas sounds lighter, without the bass or the tiple.

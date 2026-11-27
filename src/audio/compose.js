@@ -541,7 +541,7 @@ function renderVallenato(buf, index) {
   for (const e of [1, 3, 5, 7]) for (const m of chord) reed(buf, at(e), freqOf(m), eighth * 0.45, 0.02, -0.1);
 }
 
-// Macabro (v5.21.2 trial, Halloween): a spooky-playful 4/4 (eighths 0..7) for a bassoon and clarinet band. Low
+// Macabro (v5.21.2, Halloween): a spooky-playful 4/4 (eighths 0..7) for a bassoon and clarinet band. Low
 // pizzicato «footsteps» on the beats (root and fifth), pizzicato chords on the off-beats, the bassoon on the tune an
 // octave below the written notes, the clarinet on the notes, the celesta an octave above, and the timpani building
 // up. `levels` (per bar, 0..3) sets how many join: 0 bassoon and footsteps only; 1 clarinet and off-beat chords;

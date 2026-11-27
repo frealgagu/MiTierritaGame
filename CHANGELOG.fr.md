@@ -1,5 +1,8 @@
 # Journal des modifications
 
+## v5.21.2 — Dans l’antre du roi de la montagne
+- **🎃 Nouvelle musique pour Halloween :** sur sa place joue désormais « Dans l’antre du roi de la montagne » (Grieg, 1875) avec basson, clarinette, célesta, cordes en pizzicato et timbales, de plus en plus fort, à la place de « Cumbia des déguisements ».
+
 ## v5.21.1 — Douce nuit
 - **🎄 « Douce nuit » pour Noël :** sur la place de la neuvaine joue désormais « Noche de paz » (Gruber, 1818) avec flûte, guitare, tiple, tambourin et maracas, à la place de « Tutaina ».
 - **🕯️ « Les poissons dans la rivière »** des Velitas sonne plus léger, sans la basse ni le tiple.

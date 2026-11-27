@@ -1,5 +1,8 @@
 # Registro de cambios
 
+## v5.21.2 — En la gruta del rey de la montaña
+- **🎃 Nueva música para Halloween:** en su plaza ahora suena «En la gruta del rey de la montaña» (Grieg, 1875) con fagot, clarinete, celesta, cuerdas en pizzicato y timbales, cada vez más fuerte, en lugar de «Cumbia de los disfraces».
+
 ## v5.21.1 — Noche de paz
 - **🎄 «Noche de paz» para la Navidad:** en la plaza de la novena ahora suena «Noche de paz» (Gruber, 1818) con flauta, guitarra, tiple, pandereta y maracas, en lugar de «Tutaina».
 - **🕯️ «Los peces en el río»** de las Velitas suena más liviano, sin el bajo ni el tiple.

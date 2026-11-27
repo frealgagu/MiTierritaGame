@@ -1110,56 +1110,6 @@ const DANZA_AMIGO = {
   ],
 };
 
-// (v5.21) Halloween: «Cumbia de los disfraces», an original playful cumbia in A minor, 4/4, with the Amazon band
-// (electric guitar, bass, keyboard, maracas and manguaré; compose.js: amazonica).
-const CUMBIA_DISFRACES = {
-  name: 'Cumbia de los disfraces',
-  instruments: 'guitarra eléctrica, bajo, teclado, maracas y manguaré',
-  bpm: 112,
-  beats: 4,
-  style: 'amazonica',
-  chords: [
-    'Am', 'Am', 'G', 'G', 'F', 'F', 'E7', 'E7',
-    'Am', 'Am', 'G', 'G', 'F', 'E7', 'Am', 'E7',
-    'C', 'C', 'G', 'G', 'Am', 'Am', 'E7', 'E7',
-    'F', 'F', 'C', 'C', 'Dm', 'E7', 'Am', 'E7',
-  ],
-  melody: [
-    [[0, 2, 'A4'], [2, 1, 'C5'], [3, 1, 'E5'], [4, 2, 'A5'], [6, 2, 'G5']],
-    [[0, 2, 'E5'], [2, 2, 'C5'], [4, 4, 'A4']],
-    [[0, 2, 'B4'], [2, 1, 'D5'], [3, 1, 'G5'], [4, 2, 'B5'], [6, 2, 'A5']],
-    [[0, 2, 'G5'], [2, 2, 'D5'], [4, 4, 'B4']],
-    [[0, 2, 'C5'], [2, 1, 'F5'], [3, 1, 'A5'], [4, 2, 'C6'], [6, 2, 'A5']],
-    [[0, 2, 'F5'], [2, 2, 'A5'], [4, 4, 'C5']],
-    [[0, 2, 'B4'], [2, 1, 'E5'], [3, 1, 'G#5'], [4, 2, 'B5'], [6, 2, 'G#5']],
-    [[0, 4, 'E5'], [4, 2, 'D5'], [6, 2, 'B4']],
-    [[0, 2, 'A4'], [2, 1, 'C5'], [3, 1, 'E5'], [4, 2, 'A5'], [6, 2, 'G5']],
-    [[0, 2, 'E5'], [2, 2, 'C5'], [4, 4, 'A4']],
-    [[0, 2, 'B4'], [2, 1, 'D5'], [3, 1, 'G5'], [4, 2, 'B5'], [6, 2, 'A5']],
-    [[0, 2, 'G5'], [2, 2, 'D5'], [4, 4, 'B4']],
-    [[0, 2, 'C5'], [2, 1, 'F5'], [3, 1, 'A5'], [4, 2, 'F5'], [6, 2, 'C5']],
-    [[0, 2, 'B4'], [2, 1, 'E5'], [3, 1, 'G#5'], [4, 2, 'B5'], [6, 2, 'G#5']],
-    [[0, 6, 'A5']],
-    [[4, 2, 'E5'], [6, 2, 'G5']],
-    [[0, 2, 'G5'], [2, 1, 'E5'], [3, 1, 'G5'], [4, 2, 'C6'], [6, 2, 'G5']],
-    [[0, 4, 'E5'], [4, 2, 'G5'], [6, 2, 'E5']],
-    [[0, 2, 'D5'], [2, 1, 'B4'], [3, 1, 'D5'], [4, 2, 'G5'], [6, 2, 'D5']],
-    [[0, 4, 'B4'], [4, 2, 'D5'], [6, 2, 'G5']],
-    [[0, 2, 'A5'], [2, 1, 'E5'], [3, 1, 'C5'], [4, 2, 'E5'], [6, 2, 'A5']],
-    [[0, 4, 'C6'], [4, 2, 'B5'], [6, 2, 'A5']],
-    [[0, 2, 'G#5'], [2, 1, 'E5'], [3, 1, 'B4'], [4, 2, 'E5'], [6, 2, 'G#5']],
-    [[0, 4, 'B5'], [4, 2, 'A5'], [6, 2, 'G#5']],
-    [[0, 2, 'A5'], [2, 1, 'F5'], [3, 1, 'C5'], [4, 2, 'F5'], [6, 2, 'A5']],
-    [[0, 4, 'C6'], [4, 4, 'A5']],
-    [[0, 2, 'G5'], [2, 1, 'E5'], [3, 1, 'C5'], [4, 2, 'E5'], [6, 2, 'G5']],
-    [[0, 4, 'C5'], [4, 4, 'E5']],
-    [[0, 2, 'F5'], [2, 1, 'D5'], [3, 1, 'A4'], [4, 2, 'D5'], [6, 2, 'F5']],
-    [[0, 2, 'E5'], [2, 1, 'B4'], [3, 1, 'G#4'], [4, 2, 'B4'], [6, 2, 'E5']],
-    [[0, 6, 'A4']],
-    [],
-  ],
-};
-
 // (v5.21) Independencia de Cartagena: «Porro del cabildo», an original porro for a brass band from the Caribbean,
 // in F major with a D minor middle, 4/4 (compose.js: chirimia; the porro's band is the same: clarinet, euphonium,
 // bass drum, snare drum and cymbals).
@@ -1211,14 +1161,16 @@ const PORRO_CABILDO = {
   ],
 };
 
-// (v5.21.2 trial) Halloween candidates, in the `macabro` style (compose.js).
-// «En la gruta del rey de la montaña» (Edvard Grieg, Peer Gynt, 1875, public domain), in E minor and 4/4: the theme
+// (v5.21.2) Halloween: «En la gruta del rey de la montaña» (Edvard Grieg, Peer Gynt, 1875, public domain), in place
+// of «Cumbia de los disfraces», in the `macabro` style (compose.js) without the footsteps, in E minor and 4/4: the theme
 // twice, its answer in the dominant, then the theme again with the celesta and the timpani and once more with the
 // whole band.
 const REY_MONTANA = {
   name: 'En la gruta del rey de la montaña',
   instruments: 'fagot, clarinete, celesta, cuerdas en pizzicato y timbales',
+  bass: false,
   bpm: 132,
+  beats: 4,
   style: 'macabro',
   chords: [
     'Em', 'Em', 'Em', 'Em', 'Em', 'Em', 'Em', 'Em',
@@ -1244,43 +1196,7 @@ const REY_MONTANA = {
   REY_MONTANA.melody = [...a, ...a, ...b, ...a, ...a];
 }
 
-// «Triqui triqui», an original children's round on the Halloween chant («Triqui triqui Halloween, quiero dulces para
-// mí, si no hay dulces para mí, se le crece la nariz»), in A minor and 4/4: two bars of footsteps, the chant (one
-// line a bar) three times, growing, with a ghostly answer over a descending bass before the last time.
-const TRIQUI_TRIQUI = {
-  name: 'Triqui triqui',
-  instruments: 'fagot, clarinete, celesta, cuerdas en pizzicato y timbales',
-  bpm: 116,
-  style: 'macabro',
-  chords: [
-    'Am', 'E7',
-    'Am', 'E7', 'Am', 'E7',
-    'Am', 'E7', 'Am', 'E7',
-    'Am', 'G', 'F', 'E7',
-    'Am', 'E7', 'Am', 'E7',
-    'Am',
-  ],
-  levels: [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3],
-  melody: [],
-};
-{
-  const chant = [
-    [[0, 1, 'E5'], [1, 1, 'E5'], [2, 1, 'C5'], [3, 1, 'E5'], [4, 1, 'D5'], [5, 1, 'B4'], [6, 2, 'A4']],
-    [[0, 1, 'C5'], [1, 1, 'C5'], [2, 1, 'A4'], [3, 1, 'C5'], [4, 1, 'B4'], [5, 1, 'G#4'], [6, 2, 'E4']],
-    [[0, 1, 'A4'], [1, 1, 'B4'], [2, 1, 'C5'], [3, 1, 'D5'], [4, 1, 'E5'], [5, 1, 'F5'], [6, 2, 'E5']],
-    [[0, 1, 'F5'], [1, 1, 'E5'], [2, 1, 'D5'], [3, 1, 'C5'], [4, 1, 'B4'], [5, 1, 'G#4'], [6, 2, 'A4']],
-  ];
-  const ghost = [
-    [[0, 3, 'E5'], [3, 1, 'F5'], [4, 4, 'E5']],
-    [[0, 3, 'D5'], [3, 1, 'E5'], [4, 4, 'D5']],
-    [[0, 3, 'C5'], [3, 1, 'D5'], [4, 2, 'C5'], [6, 2, 'A4']],
-    [[0, 2, 'B4'], [2, 2, 'G#4'], [4, 4, 'E4']],
-  ];
-  TRIQUI_TRIQUI.melody = [[], [], ...chant, ...chant, ...ghost, ...chant, [[0, 2, 'A4'], [2, 2, 'E4'], [4, 2, 'A4']]];
-}
-
-export const HALLOWEEN_TRIALS = { rey: REY_MONTANA, triqui: TRIQUI_TRIQUI };
-export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: NOCHE_DE_PAZ, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA, san_pedro: RAJALENA, independencia: MARCHA_JULIO, batalla_boyaca: TORBELLINO_PUENTE, amor_amistad: DANZA_AMIGO, halloween: CUMBIA_DISFRACES, cartagena: PORRO_CABILDO };
+export const SONGS = { cafetero: BAMBUCO, santander: GUABINA, costa: CUMBIA, boyaca: TORBELLINO, llanos: JOROPO, pacifico: CHIRIMIA, amazonas: AMAZONICA, tolima: SANJUANERO, cundinamarca: PASILLO, bogota: DANZA, sanandres: CALIPSO, velitas: PECES, navidad: NOCHE_DE_PAZ, negros_blancos: SON_CARNAVAL, barranquilla: CUMBIA_CARNAVAL, vallenato: PASEO_TARIMA, dia_madre: PASILLO_MAMA, san_pedro: RAJALENA, independencia: MARCHA_JULIO, batalla_boyaca: TORBELLINO_PUENTE, amor_amistad: DANZA_AMIGO, halloween: REY_MONTANA, cartagena: PORRO_CABILDO };
 
 // Chords: root pitch class and intervals (semitones above root).
 const ROOTS = { C: 0, 'C#': 1, D: 2, 'D#': 3, E: 4, F: 5, 'F#': 6, G: 7, 'G#': 8, A: 9, 'A#': 10, B: 11 };

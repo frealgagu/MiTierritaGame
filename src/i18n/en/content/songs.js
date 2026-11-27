@@ -23,6 +23,6 @@ export default {
   independencia: ["20th of July March", "clarinet, euphonium, tambora, snare drum and cymbals"],
   batalla_boyaca: ["Torbellino of the Bridge", "tiple, requinto, guitar and chucho"],
   amor_amistad: ["Secret Friend Danza", "bandola, tiple and guitar"],
-  halloween: ["Costume Cumbia", "electric guitar, bass, keyboard, maracas and manguaré"],
+  halloween: ["In the Hall of the Mountain King", "bassoon, clarinet, celesta, pizzicato strings and timpani"],
   cartagena: ["Porro of the Cabildo", "clarinet, euphonium, tambora, snare drum and cymbals"],
 };

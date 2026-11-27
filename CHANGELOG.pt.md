@@ -1,5 +1,8 @@
 # Registro de alterações
 
+## v5.21.2 — Na gruta do rei da montanha
+- **🎃 Nova música para o Halloween:** na sua praça agora toca «Na gruta do rei da montanha» (Grieg, 1875) com fagote, clarinete, celesta, cordas em pizzicato e tímpanos, cada vez mais forte, no lugar de «Cumbia das fantasias».
+
 ## v5.21.1 — Noite feliz
 - **🎄 «Noite feliz» para o Natal:** na praça da novena agora toca «Noche de paz» (Gruber, 1818) com flauta, violão, tiple, pandeiro e maracas, no lugar de «Tutaina».
 - **🕯️ «Os peixes no rio»** das Velitas soa mais leve, sem o baixo nem o tiple.

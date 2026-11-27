@@ -23,6 +23,6 @@ export default {
   independencia: ["Marcha de 20 de julho", "clarinete, bombardino, tambora, caixa e pratos"],
   batalla_boyaca: ["Torbellino da ponte", "tiple, requinto, violão e chucho"],
   amor_amistad: ["Dança do amigo secreto", "bandola, tiple e violão"],
-  halloween: ["Cumbia das fantasias", "guitarra elétrica, baixo, teclado, maracas e manguaré"],
+  halloween: ["Na gruta do rei da montanha", "fagote, clarinete, celesta, cordas em pizzicato e tímpanos"],
   cartagena: ["Porro do cabildo", "clarinete, bombardino, tambora, caixa e pratos"],
 };
