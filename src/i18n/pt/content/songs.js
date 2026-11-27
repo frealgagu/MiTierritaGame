@@ -13,8 +13,8 @@ export default {
   "sanandres": ["Calipso da Lua Verde", "steel pan, violão, tináfono, maracas e bongôs"],
   granfinal: ["Festa de toda a Colômbia", "bombardino, clarinetes, gaita, harpa, tiple, steel pan, tambora, llamador e guacharaca"],
   // La plaza de las fiestas (v5.20)
-  velitas: ["Os peixes no rio", "flauta, violão, tiple, pandeiro e maracas"],
-  navidad: ["Tutaina", "flauta, violão, tiple, pandeiro e maracas"],
+  velitas: ["Os peixes no rio", "flauta, violão, pandeiro e maracas"],
+  navidad: ["Noite feliz", "flauta, violão, pandeiro e maracas"],
   negros_blancos: ["Son do carnaval", "quena, charango, violão e bombo"],
   barranquilla: ["Cumbia da Batalha de Flores", "gaita, guacharaca, llamador, tambora e tambor alegre"],
   vallenato: ["Paseo do palco", "acordeão, caixa, guacharaca e baixo"],

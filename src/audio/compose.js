@@ -443,8 +443,8 @@ function renderCalipso(buf, index) {
 
 // Renders measure `index`: bass, guitar, tiple, and melody.
 // Villancico (v5.20, La plaza de las fiestas): the novena's carols. Flute melody (the children's recorders),
-// guitar bass and strums, tiple chops, maracas on every eighth and the pandereta (tambourine) on the beats. Works in
-// 2/4 or 3/4 (`beats`).
+// guitar strums, maracas on every eighth and the pandereta (tambourine) on the beats (v5.21.1: no tiple, no bass).
+// Works in 2/4 or 3/4 (`beats`).
 function jingle(buf, at, amp, pan) {
   hit(buf, at, 0.18, amp);
   const { rng } = buf;
@@ -463,19 +463,11 @@ function renderVillancico(buf, index) {
   const eighth = beat / 2;
   const beats = song.beats ?? 3;
   const t0 = (index * buf.bar) / buf.sr;
-  const { root, tones } = parseChord(song.chords[index]);
+  const { tones } = parseChord(song.chords[index]);
   const at = (e) => t0 + e * eighth + (rng() - 0.5) * 0.008;
-  buf.voice = 'bass';
-  pluck(buf, at(0), freqOf(above(root, 40)), beat * 0.9, { amp: 0.45, t60: 1.8, bright: 0.25, pan: -0.15, pos: 0.3 });
-  pluck(buf, at(2), freqOf(above((root + 7) % 12, 40)), beat * 0.9, { amp: 0.3, t60: 1.6, bright: 0.25, pan: -0.15, pos: 0.3 });
-  if (beats === 3) pluck(buf, at(4), freqOf(above((root + 4) % 12, 40)), beat * 0.9, { amp: 0.26, t60: 1.6, bright: 0.25, pan: -0.15, pos: 0.3 });
   buf.voice = 'guitar';
   const guitar = tones.map((pc) => above(pc, 55)).sort((a, b) => a - b);
   for (let b = 0; b < beats; b++) strum(buf, at(b * 2), guitar, eighth * 0.9, { amp: b ? 0.11 : 0.14, t60: 1, bright: 0.45, pan: -0.35 });
-  buf.voice = 'tiple';
-  const tiple = tones.slice(0, 4).map((pc) => above(pc, 64)).sort((a, b) => a - b);
-  const courses = tiple.flatMap((m, k) => (k < 3 ? [m - 12, m, m + 0.04] : [m, m + 0.04]));
-  for (let b = 0; b < beats; b++) strum(buf, at(b * 2 + 1), courses, 0.11, { amp: 0.05, t60: 0.7, bright: 0.8, pan: 0.35, pos: 0.12 }, true);
   buf.voice = 'maracas';
   for (let e = 0; e < beats * 2; e++) scrape(buf, at(e), eighth * 0.35, e % 2 ? 0.025 : 0.04, e % 2 ? -0.45 : 0.45);
   buf.voice = 'pandereta';
