@@ -553,8 +553,9 @@ function renderMacabro(buf, index) {
   const level = song.levels?.[index] ?? 1;
   const { root, tones } = parseChord(song.chords[index]);
   const at = (e) => t0 + e * eighth + (rng() - 0.5) * 0.006;
+  // Footsteps, unless the piece goes without them (`bass: false`).
   buf.voice = 'bass';
-  [[0, root], [2, (root + 7) % 12], [4, root], [6, (root + 7) % 12]].forEach(([e, pc], k) => pluck(buf, at(e), freqOf(above(pc, 40)), eighth * 0.5, { amp: k % 2 ? 0.3 : 0.38, t60: 0.35, bright: 0.3, pan: -0.15, pos: 0.25 }));
+  if (song.bass !== false) [[0, root], [2, (root + 7) % 12], [4, root], [6, (root + 7) % 12]].forEach(([e, pc], k) => pluck(buf, at(e), freqOf(above(pc, 40)), eighth * 0.5, { amp: k % 2 ? 0.3 : 0.38, t60: 0.35, bright: 0.3, pan: -0.15, pos: 0.25 }));
   if (level >= 1) {
     buf.voice = 'pizz';
     const chord = tones.map((pc) => above(pc, 57)).sort((a, b) => a - b);
