@@ -674,10 +674,11 @@ const PECES = {
 };
 
 // Novena de Navidad (v5.21.1, in place of «Tutaina»): «Noche de paz» («Stille Nacht», Franz Xaver Gruber, 1818,
-// public domain), in G major and 3/4, the whole verse once.
+// public domain), in G major and 3/4, the whole verse once, with the tiple (Los peces goes without it).
 const NOCHE_DE_PAZ = {
   name: 'Noche de paz',
-  instruments: 'flauta, guitarra, pandereta y maracas',
+  instruments: 'flauta, guitarra, tiple, pandereta y maracas',
+  tiple: true,
   bpm: 80,
   style: 'villancico',
   chords: [

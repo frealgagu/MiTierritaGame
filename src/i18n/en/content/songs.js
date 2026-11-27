@@ -14,7 +14,7 @@ export default {
   granfinal: ["Fiesta of All Colombia", "euphonium, clarinets, gaita, harp, tiple, steel pan, tambora, llamador and guacharaca"],
   // La plaza de las fiestas (v5.20)
   velitas: ["The Fish in the River", "flute, guitar, tambourine and maracas"],
-  navidad: ["Silent Night", "flute, guitar, tambourine and maracas"],
+  navidad: ["Silent Night", "flute, guitar, tiple, tambourine and maracas"],
   negros_blancos: ["Carnival Son", "quena, charango, guitar and bombo drum"],
   barranquilla: ["Battle of Flowers Cumbia", "gaita flutes, guacharaca, llamador, tambora and tambor alegre"],
   vallenato: ["Paseo of the Stage", "accordion, caja drum, guacharaca and bass"],

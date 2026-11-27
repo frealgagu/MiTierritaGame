@@ -1,5 +1,9 @@
 # Journal des modifications
 
+## v5.21.1 — Douce nuit
+- **🎄 « Douce nuit » pour Noël :** sur la place de la neuvaine joue désormais « Noche de paz » (Gruber, 1818) avec flûte, guitare, tiple, tambourin et maracas, à la place de « Tutaina ».
+- **🕯️ « Les poissons dans la rivière »** des Velitas sonne plus léger, sans la basse ni le tiple.
+
 ## v5.21.0 — Les fêtes de l’année
 - **🎨 Nouvel événement de saison : le Carnaval des Noirs et des Blancs** (dès le 2 janvier, jouable jusqu’au 6 février) : couds les costumes, peins les troupes en noir le Jour des Noirs, couvre-les de talc le Jour des Blancs et mène-les aux chars du Grand Défilé. Sa vignette est la première de l’album 🎉 Fêtes de Colombie.
 - **🎶 « Son du carnaval » :** un son sureño original avec quena, charango, guitare et bombo joue sur sa place (aussi sur la page de téléchargement de la musique).

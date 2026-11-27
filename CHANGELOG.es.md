@@ -1,5 +1,9 @@
 # Registro de cambios
 
+## v5.21.1 — Noche de paz
+- **🎄 «Noche de paz» para la Navidad:** en la plaza de la novena ahora suena «Noche de paz» (Gruber, 1818) con flauta, guitarra, tiple, pandereta y maracas, en lugar de «Tutaina».
+- **🕯️ «Los peces en el río»** de las Velitas suena más liviano, sin el bajo ni el tiple.
+
 ## v5.21.0 — Las fiestas del año
 - **🎨 Nuevo evento de temporada: el Carnaval de Negros y Blancos** (desde el 2 de enero, se puede jugar hasta el 6 de febrero): cose los disfraces, pinta de negro a las comparsas el Día de Negros, llénalas de talco el Día de Blancos y súbelas a las carrozas del Gran Desfile. Su lámina es la primera del álbum 🎉 Fiestas de Colombia.
 - **🎶 «Son del carnaval»:** un son sureño original con quena, charango, guitarra y bombo suena en su plaza (también en la página de descargas de música).

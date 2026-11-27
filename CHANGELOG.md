@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.21.1 — Silent Night
+- **🎄 «Silent Night» for Christmas:** the novena's square now plays «Noche de paz» (Gruber, 1818) with flute, guitar, tiple, tambourine and maracas, in place of «Tutaina».
+- **🕯️ «Los peces en el río»** for the Velitas sounds lighter, without the bass or the tiple.
+
 ## v5.21.0 — The year's fiestas
 - **🎨 New season event: the Carnival of Blacks and Whites** (from 2 January, playable until 6 February): sew the costumes, paint the troupes black on the Day of Blacks, cover them in talc on the Day of Whites and bring them to the floats of the Great Parade. Its sticker is the first of the 🎉 Fiestas of Colombia album.
 - **🎶 «Son del carnaval»:** an original son sureño with quena, charango, guitar and bombo drum plays in its square (also on the music download page).

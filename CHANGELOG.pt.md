@@ -1,5 +1,9 @@
 # Registro de alterações
 
+## v5.21.1 — Noite feliz
+- **🎄 «Noite feliz» para o Natal:** na praça da novena agora toca «Noche de paz» (Gruber, 1818) com flauta, violão, tiple, pandeiro e maracas, no lugar de «Tutaina».
+- **🕯️ «Os peixes no rio»** das Velitas soa mais leve, sem o baixo nem o tiple.
+
 ## v5.21.0 — As festas do ano
 - **🎨 Novo evento de temporada: o Carnaval de Negros e Brancos** (a partir de 2 de janeiro, dá para jogar até 6 de fevereiro): costure as fantasias, pinte as comparsas de preto no Dia dos Negros, encha-as de talco no Dia dos Brancos e leve-as aos carros do Grande Desfile. Sua figurinha é a primeira do álbum 🎉 Festas da Colômbia.
 - **🎶 «Son do carnaval»:** um son sureño original com quena, charango, violão e bombo toca na sua praça (também na página de downloads de música).
