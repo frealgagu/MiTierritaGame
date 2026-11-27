@@ -468,6 +468,13 @@ function renderVillancico(buf, index) {
   buf.voice = 'guitar';
   const guitar = tones.map((pc) => above(pc, 55)).sort((a, b) => a - b);
   for (let b = 0; b < beats; b++) strum(buf, at(b * 2), guitar, eighth * 0.9, { amp: b ? 0.11 : 0.14, t60: 1, bright: 0.45, pan: -0.35 });
+  // Tiple chops on the off-beats, only for a piece that asks for it (`tiple: true`).
+  if (song.tiple) {
+    buf.voice = 'tiple';
+    const tiple = tones.slice(0, 4).map((pc) => above(pc, 64)).sort((a, b) => a - b);
+    const courses = tiple.flatMap((m, k) => (k < 3 ? [m - 12, m, m + 0.04] : [m, m + 0.04]));
+    for (let b = 0; b < beats; b++) strum(buf, at(b * 2 + 1), courses, 0.11, { amp: 0.05, t60: 0.7, bright: 0.8, pan: 0.35, pos: 0.12 }, true);
+  }
   buf.voice = 'maracas';
   for (let e = 0; e < beats * 2; e++) scrape(buf, at(e), eighth * 0.35, e % 2 ? 0.025 : 0.04, e % 2 ? -0.45 : 0.45);
   buf.voice = 'pandereta';
